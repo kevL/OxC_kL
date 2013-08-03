@@ -517,5 +517,4 @@ bool Game::isQuitting() const
 	return _quit;
 }
 
-
 }

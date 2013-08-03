@@ -112,5 +112,4 @@ void ScannerState::think ()
 	_timerAnimate->think(this, 0);
 }
 
-
 }

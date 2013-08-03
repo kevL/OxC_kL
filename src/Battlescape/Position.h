@@ -87,5 +87,4 @@ inline YAML::Emitter& operator<< (YAML::Emitter& out, const Position& pos)
 
 }
 
-
 #endif

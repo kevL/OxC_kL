@@ -108,11 +108,13 @@ void MiniMapState::handle(Action *action)
 	{
 		if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
 		{
-			btnLevelUpClick(action);
+//kL			btnLevelUpClick(action);
+			btnLevelDownClick(action);		// kL
 		}
 		else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN)
 		{
-			btnLevelDownClick(action);
+//kL			btnLevelDownClick(action);
+			btnLevelUpClick(action);		// kL
 		}
 	}
 }
@@ -164,4 +166,5 @@ void MiniMapState::think ()
 	State::think();
 	_timerAnimate->think(this, 0);
 }
+
 }

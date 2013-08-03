@@ -154,5 +154,4 @@ void AbortMissionState::btnCancelClick(Action *)
 	_game->popState();
 }
 
-
 }

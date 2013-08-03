@@ -708,6 +708,7 @@ void Tile::addSmoke(int smoke)
 		{
 			_smoke += smoke;
 		}
+
 		_animationOffset = RNG::generate(0,3);
 		addOverlap();
 	}
@@ -769,6 +770,7 @@ void Tile::removeItem(BattleItem *item)
 			break;
 		}
 	}
+
 	item->setTile(0);
 }
 
@@ -780,6 +782,7 @@ int Tile::getTopItemSprite()
 {
 	int biggestWeight = -1;
 	int biggestItem = -1;
+
 	for (std::vector<BattleItem*>::iterator i = _inventory.begin(); i != _inventory.end(); ++i)
 	{
 		if ((*i)->getRules()->getWeight() > biggestWeight)
@@ -788,6 +791,7 @@ int Tile::getTopItemSprite()
 			biggestItem = (*i)->getRules()->getFloorSprite();
 		}
 	}
+
 	return biggestItem;
 }
 
@@ -798,26 +802,24 @@ int Tile::getTopItemSprite()
  */
 void Tile::prepareNewTurn()
 {
-	// we've recieved new smoke in this turn, but we're not on fire, average out the smoke.
+	// we've received new smoke in this turn, but we're not on fire, average out the smoke.
 	if ( _overlaps != 0 && _smoke != 0 && _fire == 0)
 	{
-		_smoke = std::max(0, std::min((_smoke / _overlaps)- 1, 15));
+		_smoke = std::max(0, std::min((_smoke / _overlaps) - 1, 15));
 	}
-	// if we still have smoke/fire
-	if (_smoke)
+
+	if (_smoke) // if we still have smoke/fire
 	{
 		if (_unit && !_unit->isOut())
 		{
 			if (_fire)
 			{
-				// this is how we avoid hitting the same unit multiple times.
-				if (_unit->getArmor()->getSize() == 1 || !_unit->tookFireDamage())
+				if (_unit->getArmor()->getSize() == 1 || !_unit->tookFireDamage()) // this is how we avoid hitting the same unit multiple times.
 				{
 					_unit->toggleFireDamage();
-					// _smoke becomes our damage value
-					_unit->damage(Position(0, 0, 0), _smoke, DT_IN, true);
-					// try to set the unit on fire.
-					if ( RNG::generate(0, 100) < 40 * _unit->getArmor()->getDamageModifier(DT_IN))
+					_unit->damage(Position(0, 0, 0), _smoke, DT_IN, true); // _smoke becomes our damage value
+
+					if (RNG::generate(0, 100) < 40 * _unit->getArmor()->getDamageModifier(DT_IN)) // try to set the unit on fire.
 					{
 						int burnTime = RNG::generate(0, int(5 * _unit->getArmor()->getDamageModifier(DT_IN)));
 						if (_unit->getFire() < burnTime)
@@ -827,14 +829,11 @@ void Tile::prepareNewTurn()
 					}
 				}
 			}
-			// no fire: must be smoke
-			else
+			else // no fire: must be smoke
 			{
-				// aliens don't breathe
-				if (_unit->getOriginalFaction() != FACTION_HOSTILE)
+				if (_unit->getOriginalFaction() != FACTION_HOSTILE) // aliens don't breathe
 				{
-					// try to knock this guy out.
-					if (_unit->getArmor()->getDamageModifier(DT_SMOKE) > 0.0 && _unit->getArmor()->getSize() == 1)
+					if (_unit->getArmor()->getDamageModifier(DT_SMOKE) > 0.0 && _unit->getArmor()->getSize() == 1) // try to knock this guy out.
 					{
 						_unit->damage(Position(0,0,0), (_smoke / 4) + 1, DT_SMOKE, true);
 					}
@@ -842,6 +841,7 @@ void Tile::prepareNewTurn()
 			}
 		}
 	}
+
 	_overlaps = 0;
 }
 

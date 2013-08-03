@@ -115,18 +115,20 @@ void InteractiveSurface::handle(Action *action, State *state)
 				_isHovered = true;
 				mouseIn(action, state);
 			}
-				if (_listButton && action->getDetails()->type == SDL_MOUSEMOTION)
+
+			if (_listButton && action->getDetails()->type == SDL_MOUSEMOTION)
+			{
+				_buttonsPressed = SDL_GetMouseState(0, 0);
+				for (Uint8 i = 1; i <= NUM_BUTTONS; ++i)
 				{
-					_buttonsPressed = SDL_GetMouseState(0, 0);
-					for (Uint8 i = 1; i <= NUM_BUTTONS; ++i)
+					if (isButtonPressed(i))
 					{
-						if (isButtonPressed(i))
-						{
-							action->getDetails()->button.button = i;
-							mousePress(action, state);
-						}
+						action->getDetails()->button.button = i;
+						mousePress(action, state);
 					}
 				}
+			}
+
 			mouseOver(action, state);
 		}
 		else
@@ -143,6 +145,7 @@ void InteractiveSurface::handle(Action *action, State *state)
 						{
 							setButtonPressed(i, false);
 						}
+
 						action->getDetails()->button.button = i;
 						mouseRelease(action, state);
 					}
@@ -231,6 +234,7 @@ void InteractiveSurface::mousePress(Action *action, State *state)
 {
 	std::map<Uint8, ActionHandler>::iterator allHandler = _press.find(0);
 	std::map<Uint8, ActionHandler>::iterator oneHandler = _press.find(action->getDetails()->button.button);
+
 	if (allHandler != _press.end())
 	{
 		ActionHandler handler = allHandler->second;
@@ -259,6 +263,7 @@ void InteractiveSurface::mouseRelease(Action *action, State *state)
 		ActionHandler handler = allHandler->second;
 		(state->*handler)(action);
 	}
+
 	if (oneHandler != _release.end())
 	{
 		ActionHandler handler = oneHandler->second;
@@ -282,6 +287,7 @@ void InteractiveSurface::mouseClick(Action *action, State *state)
 		ActionHandler handler = allHandler->second;
 		(state->*handler)(action);
 	}
+
 	if (oneHandler != _click.end())
 	{
 		ActionHandler handler = oneHandler->second;
@@ -345,11 +351,13 @@ void InteractiveSurface::keyboardPress(Action *action, State *state)
 {
 	std::map<SDLKey, ActionHandler>::iterator allHandler = _keyPress.find(SDLK_UNKNOWN);
 	std::map<SDLKey, ActionHandler>::iterator oneHandler = _keyPress.find(action->getDetails()->key.keysym.sym);
+
 	if (allHandler != _keyPress.end())
 	{
 		ActionHandler handler = allHandler->second;
 		(state->*handler)(action);
 	}
+
 	// Check if Ctrl, Alt and Shift aren't pressed
 	bool mod = ((action->getDetails()->key.keysym.mod & (KMOD_CTRL|KMOD_ALT|KMOD_SHIFT)) != 0);
 	if (oneHandler != _keyPress.end() && !mod)
@@ -370,11 +378,13 @@ void InteractiveSurface::keyboardRelease(Action *action, State *state)
 {
 	std::map<SDLKey, ActionHandler>::iterator allHandler = _keyRelease.find(SDLK_UNKNOWN);
 	std::map<SDLKey, ActionHandler>::iterator oneHandler = _keyRelease.find(action->getDetails()->key.keysym.sym);
+
 	if (allHandler != _keyRelease.end())
 	{
 		ActionHandler handler = allHandler->second;
 		(state->*handler)(action);
 	}
+
 	// Check if Ctrl, Alt and Shift aren't pressed
 	bool mod = ((action->getDetails()->key.keysym.mod & (KMOD_CTRL|KMOD_ALT|KMOD_SHIFT)) != 0);
 	if (oneHandler != _keyRelease.end() && !mod)

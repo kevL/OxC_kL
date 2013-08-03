@@ -49,7 +49,6 @@ namespace OpenXcom
  */
 ExplosionBState::ExplosionBState(BattlescapeGame *parent, Position center, BattleItem *item, BattleUnit *unit, Tile *tile, bool lowerWeapon) : BattleState(parent), _unit(unit), _center(center), _item(item), _tile(tile), _power(0), _areaOfEffect(false), _lowerWeapon(lowerWeapon)
 {
-
 }
 
 /**
@@ -57,7 +56,6 @@ ExplosionBState::ExplosionBState(BattlescapeGame *parent, Position center, Battl
  */
 ExplosionBState::~ExplosionBState()
 {
-
 }
 
 /**
@@ -73,11 +71,11 @@ void ExplosionBState::init()
 		// heavy explosions, incendiary, smoke or stun bombs create AOE explosions
 		// all the rest hits one point:
 		// AP, melee (stun or AP), laser, plasma, acid
-		_areaOfEffect = _item->getRules()->getBattleType() != BT_MELEE && 
-						(_item->getRules()->getDamageType() == DT_HE 
-						|| _item->getRules()->getDamageType() == DT_IN 
-						|| _item->getRules()->getDamageType() == DT_SMOKE
-						|| _item->getRules()->getDamageType() == DT_STUN);
+		_areaOfEffect = _item->getRules()->getBattleType() != BT_MELEE
+				&& (_item->getRules()->getDamageType() == DT_HE 
+					|| _item->getRules()->getDamageType() == DT_IN 
+					|| _item->getRules()->getDamageType() == DT_SMOKE
+					|| _item->getRules()->getDamageType() == DT_STUN);
 	}
 	else if (_tile)
 	{
@@ -90,27 +88,29 @@ void ExplosionBState::init()
 		_areaOfEffect = true;
 	}
 	
-	Tile *t = _parent->getSave()->getTile(Position(_center.x/16, _center.y/16, _center.z/24));
+	Tile *t = _parent->getSave()->getTile(Position(_center.x / 16, _center.y / 16, _center.z / 24));
 	if (_areaOfEffect)
 	{
 		if (_power)
 		{
-			for (int i = 0; i < _power/5; i++)
+			for (int i = 0; i < _power / 5; i++)
 			{
-				int X = RNG::generate(-_power/2,_power/2);
-				int Y = RNG::generate(-_power/2,_power/2);
+				int X = RNG::generate(-_power / 2,_power / 2);
+				int Y = RNG::generate(-_power / 2,_power / 2);
 				Position p = _center;
 				p.x += X; p.y += Y;
 				Explosion *explosion = new Explosion(p, RNG::generate(0,6), true);
-				// add the explosion on the map
-				_parent->getMap()->getExplosions()->insert(explosion);
+
+				_parent->getMap()->getExplosions()->insert(explosion); // add the explosion on the map
 			}
+
 			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED);
-			// explosion sound
-			if (_power <= 80)
+
+			if (_power <= 80) // explosion sound
 				_parent->getResourcePack()->getSound("BATTLE.CAT", 12)->play();
 			else
 				_parent->getResourcePack()->getSound("BATTLE.CAT", 5)->play();
+
 			if (t->isDiscovered(0))
 				_parent->getMap()->getCamera()->centerOnPosition(t->getPosition());
 		}
@@ -119,17 +119,17 @@ void ExplosionBState::init()
 			_parent->popState();
 		}
 	}
-	else
-	// create a bullet hit
+	else // create a bullet hit
 	{
 		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED/2);
+
 		bool hit = (_item->getRules()->getBattleType() == BT_MELEE || _item->getRules()->getBattleType() == BT_PSIAMP);
 		Explosion *explosion = new Explosion(_center, _item->getRules()->getHitAnimation(), false, hit);
 		_parent->getMap()->getExplosions()->insert(explosion);
-		// bullet hit sound
-		_parent->getResourcePack()->getSound("BATTLE.CAT", _item->getRules()->getHitSound())->play();
+
+		_parent->getResourcePack()->getSound("BATTLE.CAT", _item->getRules()->getHitSound())->play(); // bullet hit sound
 		if (hit && t->getVisible())
-			_parent->getMap()->getCamera()->centerOnPosition(Position(_center.x/16, _center.y/16, _center.z/24));
+			_parent->getMap()->getCamera()->centerOnPosition(Position(_center.x / 16, _center.y / 16, _center.z / 24));
 	}
 }
 
@@ -142,12 +142,15 @@ void ExplosionBState::think()
 	for (std::set<Explosion*>::const_iterator i = _parent->getMap()->getExplosions()->begin(), inext = i; i != _parent->getMap()->getExplosions()->end(); i = inext)
 	{
 		++inext;
+
 		if(!(*i)->animate())
 		{
 			_parent->getMap()->getExplosions()->erase((*i));
+
 			if (_parent->getMap()->getExplosions()->empty())
 			{
 				explode();
+
 				return;
 			}
 		}
@@ -165,6 +168,7 @@ void ExplosionBState::explode()
 {
 	bool terrainExplosion = false;
 	SavedBattleGame *save = _parent->getSave();
+
 	// after the animation is done, the real explosion/hit takes place
 	if (_item)
 	{
@@ -189,11 +193,13 @@ void ExplosionBState::explode()
 			}
 		}
 	}
+
 	if (_tile)
 	{
 		save->getTileEngine()->explode(_center, _power, DT_HE, _power/10);
 		terrainExplosion = true;
 	}
+
 	if (!_tile && !_item)
 	{
 		// explosion not caused by terrain or an item, must be by a unit (cyberdisc)
@@ -209,6 +215,7 @@ void ExplosionBState::explode()
 	{
 		_unit->aim(false);
 	}
+
 	_parent->getMap()->cacheUnits();
 	_parent->popState();
 

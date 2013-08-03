@@ -365,21 +365,21 @@ static struct AudioSequence
 			{
 				switch(command)
 				{
-				case 0x200:
-					Log(LOG_DEBUG) << "Playing gmintro1";
-					m = rp->getMusic("GMINTRO1");
-					m->play(1);
+					case 0x200:
+						Log(LOG_DEBUG) << "Playing gmintro1";
+						m = rp->getMusic("GMINTRO1");
+						m->play(1);
 					break;
-				case 0x201:
-					Log(LOG_DEBUG) << "Playing gmintro2";
-					m = rp->getMusic("GMINTRO2");
-					m->play(1);
+					case 0x201:
+						Log(LOG_DEBUG) << "Playing gmintro2";
+						m = rp->getMusic("GMINTRO2");
+						m->play(1);
 					break;
-				case 0x202:
-					Log(LOG_DEBUG) << "Playing gmintro3";
-					m = rp->getMusic("GMINTRO3");
-					m->play(1);
-					Mix_HookMusicFinished(musicDone);
+					case 0x202:
+						Log(LOG_DEBUG) << "Playing gmintro3";
+						m = rp->getMusic("GMINTRO3");
+						m->play(1);
+						Mix_HookMusicFinished(musicDone);
 					break;
 				}		
 			}
@@ -395,6 +395,7 @@ static struct AudioSequence
 					soundInFile *sf = (*sounds) + command;
 					int channel = trackPosition % 4; // use at most four channels to play sound effects
 					Log(LOG_DEBUG) << "playing: " << sf->catFile << ":" << sf->sound << " for index " << command; 
+
 					s = rp->getSound(sf->catFile, sf->sound);
 					if (s)
 					{
@@ -405,11 +406,11 @@ static struct AudioSequence
 					else Log(LOG_DEBUG) << "Couldn't play " << sf->catFile << ":" << sf->sound;
 				}
 			}
+
 			++trackPosition;
 		}
 	}
 } *audioSequence;
-
 
 static void audioHandler()
 {
@@ -426,104 +427,118 @@ void StartState::think()
 
 	switch (_load)
 	{
-	case LOADING_STARTED:
-		try
-		{
-			Log(LOG_INFO) << "Loading ruleset...";
-			_game->loadRuleset();
-			Log(LOG_INFO) << "Ruleset loaded successfully.";
-			Log(LOG_INFO) << "Loading resources...";
-			_game->setResourcePack(new XcomResourcePack(_game->getRuleset()->getExtraSprites(), _game->getRuleset()->getExtraSounds()));
-			Log(LOG_INFO) << "Resources loaded successfully.";
-			std::vector<std::string> langs = Language::getList(0);
-			if (langs.empty())
-			{
-				throw Exception("No languages available");
-			}
-			_load = LOADING_SUCCESSFUL;
-
-			// loading done? let's play intro!
-			std::string introFile = CrossPlatform::getDataFile("UFOINTRO/UFOINT.FLI");
-			if (Options::getBool("playIntro") && CrossPlatform::fileExists(introFile))
-			{
-				audioSequence = new AudioSequence(_game->getResourcePack());
-				Flc::flc.realscreen = _game->getScreen();
-				Flc::FlcInit(introFile.c_str());
-				Flc::flc.dx = (Options::getInt("baseXResolution") - 320) / 2;
-				Flc::flc.dy = (Options::getInt("baseYResolution") - 200) / 2;
-				Flc::flc.loop = 0; // just the one time, please
-				Flc::FlcMain(&audioHandler);
-				Flc::FlcDeInit();
-				delete audioSequence;
-
-
-				// fade out!
-				Mix_FadeOutChannel(-1, 45*20);
-				if (Mix_GetMusicType(0) != MUS_MID) { Mix_FadeOutMusic(45*20); } // SDL_Mixer has trouble with native midi and volume on windows, which is the most likely use case, so f@%# it.
-				else { Mix_HaltMusic(); }
-
-				SDL_Color pal[256];
-				SDL_Color pal2[256];
-				memcpy(pal, _game->getScreen()->getPalette(), sizeof(SDL_Color) * 256);
-				for (int i = 20; i > 0; --i)
-				{
-					SDL_Event event;
-					if (SDL_PollEvent(&event) && event.type == SDL_KEYDOWN) break;
-					for (int color = 0; color < 256; ++color)
-					{
-						pal2[color].r = (((int)pal[color].r) * i) / 20;
-						pal2[color].g = (((int)pal[color].g) * i) / 20;
-						pal2[color].b = (((int)pal[color].b) * i) / 20;
-					}
-					_game->getScreen()->setPalette(pal2, 0, 256, true);
-					_game->getScreen()->flip();
-					SDL_Delay(45);
-				}
-				_game->getScreen()->clear();
-				_game->getScreen()->flip();
-
-				_game->setVolume(Options::getInt("soundVolume"), Options::getInt("musicVolume"));
-
-				Mix_HaltChannel(-1);
-			}
-		}
-		catch (Exception &e)
-		{
-			_load = LOADING_FAILED;
-			_surface->clear();
-			_surface->drawString(1, 9, "ERROR:", 2);
-			_surface->drawString(1, 17, e.what(), 2);
-			_surface->drawString(1, 49, "Make sure you installed OpenXcom", 1);
-			_surface->drawString(1, 57, "correctly.", 1);
-			_surface->drawString(1, 73, "Check the requirements and", 1);
-			_surface->drawString(1, 81, "documentation for more details.", 1);
-			_surface->drawString(75, 183, "Press any key to quit", 1);
-			Log(LOG_ERROR) << e.what();
-		}
-		break;
-	case LOADING_NONE:
-		_load = LOADING_STARTED;
-		break;
-	case LOADING_SUCCESSFUL:
-		Log(LOG_INFO) << "OpenXcom started successfully!";
-		if (Options::getString("language").empty())
-		{
-			_game->setState(new LanguageState(_game));
-		}
-		else
-		{
+		case LOADING_STARTED:
 			try
 			{
-				_game->loadLanguage(Options::getString("language"));
-				_game->setState(new MainMenuState(_game));
+				Log(LOG_INFO) << "Loading ruleset...";
+				_game->loadRuleset();
+
+				Log(LOG_INFO) << "Ruleset loaded successfully.";
+				Log(LOG_INFO) << "Loading resources...";
+				_game->setResourcePack(new XcomResourcePack(_game->getRuleset()->getExtraSprites(), _game->getRuleset()->getExtraSounds()));
+
+				Log(LOG_INFO) << "Resources loaded successfully.";
+				std::vector<std::string> langs = Language::getList(0);
+
+				if (langs.empty())
+				{
+					throw Exception("No languages available");
+				}
+
+				_load = LOADING_SUCCESSFUL;
+
+				// loading done? let's play intro!
+				std::string introFile = CrossPlatform::getDataFile("UFOINTRO/UFOINT.FLI");
+				if (Options::getBool("playIntro") && CrossPlatform::fileExists(introFile))
+				{
+					audioSequence = new AudioSequence(_game->getResourcePack());
+					Flc::flc.realscreen = _game->getScreen();
+					Flc::FlcInit(introFile.c_str());
+					Flc::flc.dx = (Options::getInt("baseXResolution") - 320) / 2;
+					Flc::flc.dy = (Options::getInt("baseYResolution") - 200) / 2;
+					Flc::flc.loop = 0; // just the one time, please
+					Flc::FlcMain(&audioHandler);
+					Flc::FlcDeInit();
+
+					delete audioSequence;
+
+					// fade out!
+					Mix_FadeOutChannel(-1, 45*20);
+
+					// SDL_Mixer has trouble with native midi and volume on windows, which is the most likely use case, so f@%# it.
+					if (Mix_GetMusicType(0) != MUS_MID) { Mix_FadeOutMusic(45*20); }
+					else { Mix_HaltMusic(); }
+
+					SDL_Color pal[256];
+					SDL_Color pal2[256];
+					memcpy(pal, _game->getScreen()->getPalette(), sizeof (SDL_Color) * 256);
+
+					for (int i = 20; i > 0; --i)
+					{
+						SDL_Event event;
+
+						if (SDL_PollEvent(&event) && event.type == SDL_KEYDOWN) break;
+
+						for (int color = 0; color < 256; ++color)
+						{
+							pal2[color].r = (((int)pal[color].r) * i) / 20;
+							pal2[color].g = (((int)pal[color].g) * i) / 20;
+							pal2[color].b = (((int)pal[color].b) * i) / 20;
+						}
+
+						_game->getScreen()->setPalette(pal2, 0, 256, true);
+						_game->getScreen()->flip();
+						SDL_Delay(45);
+					}
+
+					_game->getScreen()->clear();
+					_game->getScreen()->flip();
+
+					_game->setVolume(Options::getInt("soundVolume"), Options::getInt("musicVolume"));
+
+					Mix_HaltChannel(-1);
+				}
 			}
-			catch (Exception)
+
+			catch (Exception &e)
+			{
+				_load = LOADING_FAILED;
+				_surface->clear();
+				_surface->drawString(1, 9, "ERROR:", 2);
+				_surface->drawString(1, 17, e.what(), 2);
+				_surface->drawString(1, 49, "Make sure you installed OpenXcom", 1);
+				_surface->drawString(1, 57, "correctly.", 1);
+				_surface->drawString(1, 73, "Check the requirements and", 1);
+				_surface->drawString(1, 81, "documentation for more details.", 1);
+				_surface->drawString(75, 183, "Press any key to quit", 1);
+
+				Log(LOG_ERROR) << e.what();
+			}
+		break;
+		case LOADING_NONE:
+			_load = LOADING_STARTED;
+		break;
+		case LOADING_SUCCESSFUL:
+			Log(LOG_INFO) << "OpenXcom started successfully!";
+
+			if (Options::getString("language").empty())
 			{
 				_game->setState(new LanguageState(_game));
 			}
-		}
+			else
+			{
+				try
+				{
+					_game->loadLanguage(Options::getString("language"));
+					_game->setState(new MainMenuState(_game));
+				}
+				catch (Exception)
+				{
+					_game->setState(new LanguageState(_game));
+				}
+			}
 		break;
-	default:
+		default:
 		break;
 	}
 }
@@ -543,4 +558,3 @@ void StartState::handle(Action *action)
 }
 
 }
-

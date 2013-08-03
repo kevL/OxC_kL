@@ -295,6 +295,7 @@ void loadArgs(int argc, char** args)
 							break;
 						}
 					}
+
 					if(!found)
 					{
 						Log(LOG_WARNING) << "Unknown option: " << argname;
@@ -342,10 +343,12 @@ bool showHelp(int argc, char** args)
 			if (argname == "help" || argname == "?")
 			{
 				std::cout << help.str();
+
 				return true;
 			}
 		}
 	}
+
 	return false;
 }
 
@@ -360,6 +363,7 @@ bool init(int argc, char** args)
 {
 	if (showHelp(argc, args))
 		return false;
+
 	createDefault();
 	loadArgs(argc, args);
 	setFolders();
@@ -368,24 +372,30 @@ bool init(int argc, char** args)
 	std::string s = getUserFolder();
 	s += "openxcom.log";
 	Logger::logFile() = s;
+
 	FILE *file = fopen(Logger::logFile().c_str(), "w");
 	if(!file)
 	{
 		std::stringstream error;
 		error << "Error: invalid User Folder " << _userFolder << std::endl;
 		std::cout << error.str();
+
 		return false;
 	}
+
 	fflush(file);
 	fclose(file);
 	Log(LOG_INFO) << "Data folder is: " << _dataFolder;
+
 	for (std::vector<std::string>::iterator i = _dataList.begin(); i != _dataList.end(); ++i)
 	{
 		Log(LOG_INFO) << *i;
 	}
+
 	Log(LOG_INFO) << "User folder is: " << _userFolder;
 	Log(LOG_INFO) << "Config folder is: " << _configFolder;
 	Log(LOG_INFO) << "Options loaded successfully.";
+
 	return true;
 }
 
@@ -401,7 +411,8 @@ void setFolders()
         _dataList = CrossPlatform::findDataFolders();
         // Missing data folder is handled in StartState
     }
-    if (_userFolder == "")
+
+	if (_userFolder == "")
     {
         std::vector<std::string> user = CrossPlatform::findUserFolders();
         _configFolder = CrossPlatform::findConfigFolder();
@@ -476,15 +487,18 @@ void load(const std::string &filename)
 {
 	std::string s = _configFolder + filename + ".cfg";
 	std::ifstream fin(s.c_str());
+
 	if (!fin)
 	{
 		//throw Exception(filename + ".cfg" + "not found");
 		return;
 	}
+
 	YAML::Parser parser(fin);
 	YAML::Node doc;
 
 	parser.GetNextDocument(doc);
+
 	const YAML::Node *options = doc.FindValue("options");
 	if (!options)
 	{
@@ -523,8 +537,10 @@ void save(const std::string &filename)
 	if (!sav)
 	{
 		Log(LOG_WARNING) << "Failed to save " << filename << ".cfg";
+
 		return;
 	}
+
 	YAML::Emitter out;
 
 	out << YAML::BeginMap;
@@ -599,6 +615,7 @@ int getInt(const std::string& id)
 		ss << std::dec << _options[id];
 		ss >> std::dec >> value;
 	}
+
 	return value;
 }
 
@@ -613,6 +630,7 @@ bool getBool(const std::string& id)
 	bool value;
 	ss << std::boolalpha << _options[id];
 	ss >> std::boolalpha >> value;
+
 	return value;
 }
 

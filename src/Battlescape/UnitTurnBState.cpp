@@ -39,7 +39,6 @@ namespace OpenXcom
  */
 UnitTurnBState::UnitTurnBState(BattlescapeGame *parent, BattleAction action) : BattleState(parent, action), _unit(0), _turret(false)
 {
-
 }
 
 /**
@@ -47,13 +46,13 @@ UnitTurnBState::UnitTurnBState(BattlescapeGame *parent, BattleAction action) : B
  */
 UnitTurnBState::~UnitTurnBState()
 {
-
 }
 
 void UnitTurnBState::init()
 {
 	_unit = _action.actor;
 	_action.TU = 0;
+
 	if (_unit->getFaction() == FACTION_PLAYER)
 		_parent->setStateInterval(Options::getInt("battleXcomSpeed"));
 	else
@@ -68,21 +67,23 @@ void UnitTurnBState::init()
 	{
 		if (_action.type == BA_NONE)
 		{
-			// try to open a door
-			int door = _parent->getTileEngine()->unitOpensDoor(_unit, true);
+			int door = _parent->getTileEngine()->unitOpensDoor(_unit, true); // try to open a door
 			if (door == 0)
 			{
 				_parent->getResourcePack()->getSound("BATTLE.CAT", 3)->play(); // normal door
 			}
+
 			if (door == 1)
 			{
 				_parent->getResourcePack()->getSound("BATTLE.CAT", RNG::generate(20,21))->play(); // ufo door
 			}
+
 			if (door == 4)
 			{
 				_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
 			}
 		}
+
 		_parent->popState();
 	}
 }
@@ -95,6 +96,7 @@ void UnitTurnBState::think()
 	{
 		_unit->abortTurn();
 		_parent->popState();
+
 		return;
 	}
 
@@ -105,10 +107,15 @@ void UnitTurnBState::think()
 		_parent->getTileEngine()->calculateFOV(_unit);
 		_unit->setCache(0);
 		_parent->getMap()->cacheUnit(_unit);
-		if (_unit->getFaction() == _parent->getSave()->getSide() && _parent->getPanicHandled() && _action.type == BA_NONE && _unit->getUnitsSpottedThisTurn().size() > unitSpotted)
+
+		if (_unit->getFaction() == _parent->getSave()->getSide()
+			&& _parent->getPanicHandled()
+			&& _action.type == BA_NONE
+			&& _unit->getUnitsSpottedThisTurn().size() > unitSpotted)
 		{
 			_unit->abortTurn();
 		}
+
 		if (_unit->getStatus() == STATUS_STANDING)
 		{
 			_parent->popState();

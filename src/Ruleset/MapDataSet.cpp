@@ -199,7 +199,7 @@ void MapDataSet::loadData()
 		to->setFlammable((int)mcd.Flammable);
 		to->setFuel((int)mcd.Fuel);
 		to->setExplosive((int)mcd.HE_Strength);
-		to->setMiniMapIndex (mcd.ScanG);
+		to->setMiniMapIndex(mcd.ScanG);
 
 		for (int layer = 0; layer < 12; layer++)
 		{
@@ -215,6 +215,7 @@ void MapDataSet::loadData()
 			else if (objNumber == 1)
 				MapDataSet::_scorchedTile = to;
 		}
+
 		objNumber++;
 	}
 

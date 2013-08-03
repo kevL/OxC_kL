@@ -233,4 +233,5 @@ void Window::draw()
 		_bg->blit(this);
 	}
 }
+
 }

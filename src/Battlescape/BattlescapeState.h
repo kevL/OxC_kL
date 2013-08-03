@@ -87,7 +87,9 @@ private:
 public:
 	void selectNextPlayerUnit(bool checkReselect, bool setReselect);
 	void selectPreviousPlayerUnit(bool checkReselect);
-	static const int DEFAULT_ANIM_SPEED = 100;
+//kL	static const int DEFAULT_ANIM_SPEED = 100;
+//	static const int DEFAULT_ANIM_SPEED = 192;		// kL
+	static const int DEFAULT_ANIM_SPEED = 56;		// kL_test
 	/// Creates the Battlescape state.
 	BattlescapeState(Game *game);
 	/// Cleans up the Battlescape state.

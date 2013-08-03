@@ -32,7 +32,6 @@ namespace OpenXcom
  */
 SurfaceSet::SurfaceSet(int width, int height) : _width(width), _height(height), _frames()
 {
-
 }
 
 /**
@@ -274,4 +273,5 @@ std::map<int, Surface*> *SurfaceSet::getFrames()
 {
 	return &_frames;
 }
+
 }

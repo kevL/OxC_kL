@@ -511,11 +511,13 @@ void BattleUnit::startWalking(int direction, const Position &destination, Tile *
 		_direction = direction;
 		_status = STATUS_WALKING;
 	}
+
 	bool floorFound = false;
 	if (!_tile->hasNoFloor(tileBelowMe))
 	{
 		floorFound = true;
 	}
+
 	if (!floorFound || direction >= Pathfinding::DIR_UP)
 	{
 		_status = STATUS_FLYING;
@@ -557,6 +559,7 @@ void BattleUnit::keepWalking(Tile *tileBelowMe, bool cache)
 				middle = 1;
 		}
 	}
+
 	if (!cache)
 	{
 		_pos = _destination;
@@ -579,11 +582,14 @@ void BattleUnit::keepWalking(Tile *tileBelowMe, bool cache)
 		{
 			_floating = false;
 		}
+
 		// we officially reached our destination tile
 		_status = STATUS_STANDING;
 		_walkPhase = 0;
 		_verticalDirection = 0;
-		if (_faceDirection >= 0) {
+
+		if (_faceDirection >= 0)
+		{
 			// Finish strafing move facing the correct way.
 			_direction = _faceDirection;
 			_faceDirection = -1;
@@ -596,9 +602,8 @@ void BattleUnit::keepWalking(Tile *tileBelowMe, bool cache)
 		}
 		else
 		{
-			// sectoids actually have less motion points
-			// but instead of create yet another variable, 
-			// I used the height of the unit instead (logical)
+			// sectoids actually have less motion points but instead of create yet
+			// another variable, I used the height of the unit instead (logical)
 			if (getStandHeight() > 16)
 				_motionPoints += 4;
 			else
@@ -609,7 +614,7 @@ void BattleUnit::keepWalking(Tile *tileBelowMe, bool cache)
 	_cacheInvalid = cache;
 }
 
-/*
+/**
  * Gets the walking phase for animation and sound.
  * return phase will always go from 0-7
  */
@@ -618,7 +623,7 @@ int BattleUnit::getWalkingPhase() const
 	return _walkPhase % 8;
 }
 
-/*
+/**
  * Gets the walking phase for diagonal walking.
  * return phase this will be 0 or 8
  */
@@ -633,7 +638,7 @@ int BattleUnit::getDiagonalWalkingPhase() const
  */
 void BattleUnit::lookAt(const Position &point, bool turret)
 {
-	int dir = getDirectionTo (point);
+	int dir = getDirectionTo(point);
 
 	if (turret)
 	{
@@ -663,7 +668,9 @@ void BattleUnit::lookAt(int direction, bool force)
 {
 	if (!force)
 	{
-		if (direction < 0 || direction >= 8) return;
+		if (direction < 0 || direction >= 8)
+			return;
+
 		_toDirection = direction;
 		if (_toDirection != _direction)
 		{
@@ -689,8 +696,10 @@ void BattleUnit::turn(bool turret)
 		if (_directionTurret == _toDirectionTurret)
 		{
 			abortTurn();
+
 			return;
 		}
+
 		a = _toDirectionTurret - _directionTurret;
 	}
 	else
@@ -698,45 +707,78 @@ void BattleUnit::turn(bool turret)
 		if (_direction == _toDirection)
 		{
 			abortTurn();
+
 			return;
 		}
+
 		a = _toDirection - _direction;
 	}
 
-	if (a != 0) {
-		if (a > 0) {
-			if (a <= 4) {
-				if (!turret) {
+	if (a != 0)
+	{
+		if (a > 0)
+		{
+			if (a <= 4)
+			{
+				if (!turret)
+				{
 					if (_turretType > -1)
 						_directionTurret++;
+
 					_direction++;
-				} else _directionTurret++;
-			} else {
-				if (!turret) {
-					if (_turretType > -1)
-						_directionTurret--;
-					_direction--;
-				} else _directionTurret--;
+				}
+				else _directionTurret++;
 			}
-		} else {
-			if (a > -4) {
-				if (!turret) {
+			else
+			{
+				if (!turret)
+				{
 					if (_turretType > -1)
 						_directionTurret--;
+
 					_direction--;
-				} else _directionTurret--;
-			} else {
-				if (!turret) {
-					if (_turretType > -1)
-						_directionTurret++;
-					_direction++;
-				} else _directionTurret++;
+				}
+				else _directionTurret--;
 			}
 		}
-		if (_direction < 0) _direction = 7;
-		if (_direction > 7) _direction = 0;
-		if (_directionTurret < 0) _directionTurret = 7;
-		if (_directionTurret > 7) _directionTurret = 0;
+		else
+		{
+			if (a > -4)
+			{
+				if (!turret)
+				{
+					if (_turretType > -1)
+						_directionTurret--;
+
+					_direction--;
+				}
+				else _directionTurret--;
+			}
+			else
+			{
+				if (!turret)
+				{
+					if (_turretType > -1)
+						_directionTurret++;
+
+					_direction++;
+				}
+				else _directionTurret++;
+			}
+		}
+
+		if (_direction < 0)
+			_direction = 7;
+
+		if (_direction > 7)
+			_direction = 0;
+
+		if (_directionTurret < 0)
+			_directionTurret = 7;
+
+		if (_directionTurret > 7)
+			_directionTurret = 0;
+
 		if (_visible || _faction == FACTION_PLAYER)
 			_cacheInvalid = true;
 	}
@@ -1335,14 +1377,14 @@ double BattleUnit::getFiringAccuracy(BattleActionType actionType, BattleItem *it
 	result *= (double)(weaponAcc/100.0);
 
 	if (_kneeled)
-		result *= 1.15;
+		result *= 1.16;
 
 	if (item->getRules()->isTwoHanded())
 	{
 		// two handed weapon, means one hand should be empty
 		if (getItem("STR_RIGHT_HAND") != 0 && getItem("STR_LEFT_HAND") != 0)
 		{
-			result *= 0.80;
+			result *= 0.79;
 		}
 	}
 

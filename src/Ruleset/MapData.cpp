@@ -27,7 +27,6 @@ namespace OpenXcom
 */
 MapData::MapData(MapDataSet *dataset) : _dataset(dataset)
 {
-
 }
 
 /**
@@ -35,7 +34,6 @@ MapData::MapData(MapDataSet *dataset) : _dataset(dataset)
 */
 MapData::~MapData()
 {
-
 }
 
 /**
@@ -155,17 +153,13 @@ int MapData::getBlock(ItemDamageType type) const
 {
 	switch (type)
 	{
-	case DT_NONE:
-		return _block[1];
-	case DT_HE:
-		return _block[2];
-	case DT_SMOKE:
-		return _block[3];
-	case DT_IN:
-		return _block[4];
-	case DT_STUN:
-		return _block[5];
-	default:
+		case DT_NONE:	return _block[1];
+		case DT_HE:		return _block[2];
+		case DT_SMOKE:	return _block[3];
+		case DT_IN:		return _block[4];
+		case DT_STUN:	return _block[5];
+
+		default:
 		break;
 	}
 
@@ -247,16 +241,14 @@ int MapData::getTUCost(MovementType movementType) const
 {
 	switch (movementType)
 	{
-	case MT_WALK:
-		return _TUWalk;
-		break;
-	case MT_FLY:
-		return _TUFly;
-		break;
-	case MT_SLIDE:
-		return _TUSlide;
+		case MT_WALK:	return _TUWalk;
+		case MT_FLY:	return _TUFly;
+		case MT_SLIDE:	return _TUSlide;
+
+		default:
 		break;
 	}
+
 	return 0;
 }
 
@@ -504,4 +496,5 @@ void MapData::setTUSlide(const int TUSlide)
 {
 	_TUSlide = TUSlide;
 }
+
 }

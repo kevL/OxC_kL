@@ -29,6 +29,8 @@
     <ConfigurationType>Application</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
+    <UseOfMfc>false</UseOfMfc>
+    <UseOfAtl>false</UseOfAtl>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -155,9 +157,10 @@
       <OmitFramePointers>true</OmitFramePointers>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
+      <CompileAs>Default</CompileAs>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>yaml-cpp.lib;SDL_image.lib;SDL_mixer.lib;SDL_gfx.lib;SDLmain.lib;SDL.lib;SDL_gfx.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>yaml-cpp.lib;SDL.lib;SDLmain.lib;SDL_gfx.lib;SDL_image.lib;SDL_mixer.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(ProjectDir)..\deps\lib\$(Platform);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
@@ -168,10 +171,24 @@
       </DataExecutionPrevention>
       <TargetMachine>MachineX86</TargetMachine>
       <Profile>false</Profile>
+      <ForceFileOutput>
+      </ForceFileOutput>
+      <IgnoreSpecificDefaultLibraries>
+      </IgnoreSpecificDefaultLibraries>
+      <ShowProgress>LinkVerboseLib</ShowProgress>
+      <ManifestFile>$(IntDir)$(TargetName)$(TargetExt).intermediate.manifest</ManifestFile>
+      <TurnOffAssemblyGeneration>false</TurnOffAssemblyGeneration>
+      <Version>$(Version)kL</Version>
     </Link>
     <PostBuildEvent>
       <Command>copy /y "$(ProjectDir)..\deps\lib\$(Platform)\*.dll" "$(ProjectDir)..\bin\$(Platform)\"</Command>
     </PostBuildEvent>
+    <Manifest>
+      <OutputManifestFile>$(TargetPath).manifest</OutputManifestFile>
+    </Manifest>
+    <ManifestResourceCompile>
+      <ResourceOutputFileName>$(IntDir)$(TargetName)$(TargetExt).embed.manifest.res</ResourceOutputFileName>
+    </ManifestResourceCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>

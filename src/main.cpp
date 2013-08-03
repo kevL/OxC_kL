@@ -42,8 +42,8 @@ using namespace OpenXcom;
 
 Game *game = 0;
 
-// If you can't tell what the main() is for you should have your
-// programming license revoked...
+// If you can't tell what the main() is for you
+// should have your programming license revoked...
 int main(int argc, char** args)
 {
 #ifndef _DEBUG
@@ -55,8 +55,10 @@ int main(int argc, char** args)
 #endif
 		if (!Options::init(argc, args))
 			return EXIT_SUCCESS;
+
 		std::stringstream title;
-		title << "OpenXcom " << OPENXCOM_VERSION_SHORT << OPENXCOM_VERSION_GIT;
+//kL		title << "OpenXcom " << OPENXCOM_VERSION_SHORT << OPENXCOM_VERSION_GIT;
+		title << "openXcom " << OPENXCOM_VERSION_SHORT << OPENXCOM_VERSION_GIT;		// kL
 		game = new Game(title.str());
 		game->setVolume(Options::getInt("soundVolume"), Options::getInt("musicVolume"));
 		game->setState(new StartState(game));

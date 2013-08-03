@@ -160,7 +160,6 @@ AdvancedOptionsState::AdvancedOptionsState(Game *game) : State(game)
  */
 AdvancedOptionsState::~AdvancedOptionsState()
 {
-	
 }
 
 /**
@@ -173,10 +172,12 @@ void AdvancedOptionsState::btnOkClick(Action *)
 	{
 		Options::setBool((*i).first, (*i).second);
 	}
+
 	for (std::vector<std::pair<std::string, int> >::iterator i = _settingIntSet.begin(); i != _settingIntSet.end(); ++i)
 	{
 		Options::setInt((*i).first, (*i).second);
 	}
+
 	_game->popState();
 }
 
@@ -222,6 +223,7 @@ void AdvancedOptionsState::btnDefaultClick(Action *)
 		{
 			_lstOptions->setCellText(sel, 1, L"0");
 		}
+
 		++sel;
 	}
 }
@@ -243,29 +245,29 @@ void AdvancedOptionsState::lstOptionsClick(Action *)
 		// this is purely future-proofing.
 		switch (intSel)
 		{
-		case 0: // pathfinding setting
-			if (_settingIntSet.at(intSel).second == 3)
-			{
-				increment = -3;
-			}
-			_settingIntSet.at(intSel).second += increment;
-			ss << updatePathString(intSel).c_str();
+			case 0: // pathfinding setting
+				if (_settingIntSet.at(intSel).second == 3)
+				{
+					increment = -3;
+				}
+				_settingIntSet.at(intSel).second += increment;
+				ss << updatePathString(intSel).c_str();
 			break;
-		case 1: // explosion height
-			if (_settingIntSet.at(intSel).second == 3)
-			{
-				increment = -3;
-			}
-			_settingIntSet.at(intSel).second += increment;
-			ss << _settingIntSet.at(intSel).second;
+			case 1: // explosion height
+				if (_settingIntSet.at(intSel).second == 3)
+				{
+					increment = -3;
+				}
+				_settingIntSet.at(intSel).second += increment;
+				ss << _settingIntSet.at(intSel).second;
 			break;
-		case 2: // autosave
-			_settingIntSet.at(intSel).second = ++_settingIntSet.at(intSel).second % 4;
-			ss << _settingIntSet.at(intSel).second;
+			case 2: // autosave
+				_settingIntSet.at(intSel).second = ++_settingIntSet.at(intSel).second % 4;
+				ss << _settingIntSet.at(intSel).second;
 			break;
-		default:
-			_settingIntSet.at(intSel).second += increment;
-			ss << _settingIntSet.at(intSel).second;
+			default:
+				_settingIntSet.at(intSel).second += increment;
+				ss << _settingIntSet.at(intSel).second;
 			break;
 		}
 		settingText = ss.str();
@@ -314,4 +316,5 @@ std::wstring AdvancedOptionsState::updatePathString(int sel)
 	}
 	return L"";
 }
+
 }

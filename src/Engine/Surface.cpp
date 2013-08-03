@@ -305,7 +305,6 @@ void Surface::loadBdy(const std::string &filename)
 	imgFile.close();
 }
 
-
 /**
  * Clears the entire contents of the surface, resulting
  * in a blank image.
@@ -650,6 +649,7 @@ void Surface::setPixel(int x, int y, Uint8 pixel)
 	{
 		return;
 	}
+
 	((Uint8 *)_surface->pixels)[y * _surface->pitch + x * _surface->format->BytesPerPixel] = pixel;
 }
 
@@ -684,6 +684,7 @@ Uint8 Surface::getPixel(int x, int y) const
 	{
 		return 0;
 	}
+
 	return ((Uint8 *)_surface->pixels)[y * _surface->pitch + x * _surface->format->BytesPerPixel];
 }
 
@@ -806,7 +807,6 @@ void Surface::paletteRestore()
  */
 struct ColorReplace
 {
-	
 	/**
 	* Function used by ShaderDraw in Surface::blitNShade
 	* set shade and replace color in that surface
@@ -827,7 +827,6 @@ struct ColorReplace
 				dest = newColor | newShade;
 		}
 	}
-	
 };
 
 /**
@@ -856,7 +855,6 @@ struct StandartShade
 				dest = (src&(15<<4)) | newShade;
 		}
 	}
-	
 };
 
 

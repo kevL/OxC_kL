@@ -44,7 +44,6 @@ Cursor::Cursor(int width, int height, int x, int y) : Surface(width, height, x, 
  */
 Cursor::~Cursor()
 {
-
 }
 
 /**
@@ -90,6 +89,7 @@ void Cursor::draw()
 	int x1 = 0, y1 = 0, x2 = getWidth() - 1, y2 = getHeight() - 1;
 
 	lock();
+
 	for (int i = 0; i < 4; ++i)
 	{
 		drawLine(x1, y1, x1, y2, color);
@@ -100,7 +100,9 @@ void Cursor::draw()
 		x2--;
 		color++;
 	}
+
 	this->setPixel(4, 8, --color);
+
 	unlock();
 }
 

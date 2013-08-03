@@ -42,7 +42,6 @@ namespace OpenXcom
  */
 State::State(Game *game) : _game(game), _surfaces(), _screen(true)
 {
-
 }
 
 /**
@@ -183,7 +182,7 @@ void State::blit()
 void State::hideAll()
 {
 	for (std::vector<Surface*>::iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
-			(*i)->setHidden(true);
+		(*i)->setHidden(true);
 }
 
 /**
@@ -267,4 +266,5 @@ void State::lowerAllSurfaces()
 		}
 	}
 }
+
 }

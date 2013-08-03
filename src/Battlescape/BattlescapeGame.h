@@ -112,7 +112,7 @@ public:
 	/// Checks for casualties in battle.
 	void checkForCasualties(BattleItem *murderweapon, BattleUnit *murderer, bool hiddenExplosion = false, bool terrainExplosion = false);
 	/// Checks if a unit panics.
-	void checkForPanic(BattleUnit *unit);
+//kL	void checkForPanic(BattleUnit *unit);
 	/// Check reserved tu.
 	bool checkReservedTU(BattleUnit *bu, int tu, bool justChecking = false);
 	/// Handles unit AI.

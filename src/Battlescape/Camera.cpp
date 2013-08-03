@@ -90,11 +90,13 @@ void Camera::mousePress(Action *action, State *)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
 	{
-		up();
+//kL		up();
+		down();		// kL
 	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN)
 	{
-		down();
+//kL		down();
+		up();		// kL
 	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_LEFT && Options::getInt("battleScrollType") == SCROLL_TRIGGER)
 	{

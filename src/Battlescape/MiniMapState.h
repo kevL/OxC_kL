@@ -38,7 +38,7 @@ class MiniMapState : public State
 	InteractiveSurface * _surface;
 	MiniMapView * _miniMapView;
 	Text * _txtLevel;
-	Timer *_timerAnimate;
+	Timer * _timerAnimate;
 	/// Handle Minimap animation
 	void animate();
 public:
@@ -57,6 +57,7 @@ public:
 	/// Handle timers
 	void think ();
 };
+
 }
 
 #endif

@@ -142,7 +142,8 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 			(*i)["position"][2] >> pos.z;
 			getTile(pos)->load((*i));
 		}
-	} else 
+	}
+	else 
 	{
 		// load key to how the tile data was saved
 		Tile::SerializationKey serKey;
@@ -156,10 +157,12 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 		node["tileIDSize"] >> serKey._mapDataID;
 		node["tileSetIDSize"] >> serKey._mapDataSetID;
 		node["totalTiles"] >> totalTiles;
-        if (const YAML::Node *boolFieldsNode = node.FindValue("tileBoolFieldsSize")) 
+
+		if (const YAML::Node *boolFieldsNode = node.FindValue("tileBoolFieldsSize")) 
         {
             *boolFieldsNode >> serKey.boolFields;
-        } else
+        }
+		else
         {
             serKey.boolFields = 1; // boolean flags used to be stored in an unmentioned byte (Uint8) :|
         }
@@ -210,8 +213,10 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 			// create a new Unit.
 			b = new BattleUnit(rule->getUnit(type), faction, a, rule->getArmor(armor), savedGame->getDifficulty());
 		}
+
 		b->load(*i);
 		_units.push_back(b);
+
 		if (faction == FACTION_PLAYER)
 		{
 			if (b->getId() == selectedUnit)
@@ -224,6 +229,7 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 				std::string state;
 				BattleAIState *aiState;
 				(*ai)["state"] >> state;
+
 				if (state == "PATROL")
 				{
 					aiState = new PatrolBAIState(this, b, 0);
@@ -236,11 +242,13 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 				{
 					continue;
 				}
+
 				aiState->load((*ai));
 				b->setAIState(aiState);
 			}
 		}
 	}
+
 	// it does what it says it does.
 	updateExposedUnits();
 	// matches up tiles and units
@@ -251,11 +259,13 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 		std::string type;
 		(*i)["type"] >> type;
 		(*i)["id"] >> _itemId;
+
 		if (type != "0")
 		{
 			BattleItem *item = new BattleItem(rule->getItem(type), &_itemId);
 			item->load(*i);
 			(*i)["inventoryslot"] >> type;
+
 			if (type != "NULL")
 				item->setSlot(rule->getInventory(type));
 			(*i)["owner"] >> a;
@@ -281,9 +291,11 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 				(*i)["position"][0] >> pos.x;
 				(*i)["position"][1] >> pos.y;
 				(*i)["position"][2] >> pos.z;
+
 				if (pos.x != -1)
 					getTile(pos)->addItem(item, rule->getInventory("STR_GROUND"));
 			}
+
 			_items.push_back(item);
 		}
 	}
@@ -305,6 +317,7 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 			}
 		}
 	}
+
 	if (node.FindValue("objectiveDestroyed"))
 	{
 		node["objectiveDestroyed"] >> _objectiveDestroyed;
@@ -321,6 +334,7 @@ void SavedBattleGame::loadMapResources(Game *game)
 	for (std::vector<MapDataSet*>::const_iterator i = _mapDataSets.begin(); i != _mapDataSets.end(); ++i)
 	{
 		(*i)->loadData();
+
 		if (game->getRuleset()->getMCDPatch((*i)->getName()))
 		{
 			game->getRuleset()->getMCDPatch((*i)->getName())->modifyData(*i);
@@ -355,10 +369,12 @@ void SavedBattleGame::loadMapResources(Game *game)
 void SavedBattleGame::save(YAML::Emitter &out) const
 {
 	out << YAML::BeginMap;
+
 	if (_objectiveDestroyed)
 	{
 		out << YAML::Key << "objectiveDestroyed" << YAML::Value << _objectiveDestroyed;
 	}
+
 	out << YAML::Key << "width" << YAML::Value << _mapsize_x;
 	out << YAML::Key << "length" << YAML::Value << _mapsize_y;
 	out << YAML::Key << "height" << YAML::Value << _mapsize_z;
@@ -373,7 +389,9 @@ void SavedBattleGame::save(YAML::Emitter &out) const
 	{
 		out << (*i)->getName();
 	}
+
 	out << YAML::EndSeq;
+
 #if 0
 	out << YAML::Key << "tiles" << YAML::Value;
 	out << YAML::BeginSeq;
@@ -411,35 +429,41 @@ void SavedBattleGame::save(YAML::Emitter &out) const
 			tileDataSize -= Tile::serializationKey.totalBytes;
 		}
 	}
+
 	out << YAML::Key << "totalTiles" << YAML::Value << tileDataSize / Tile::serializationKey.totalBytes; // not strictly necessary, just convenient
 	out << YAML::Key << "binTiles" << YAML::Value << YAML::Binary(tileData, tileDataSize);
     free(tileData);
-
 
 #endif
 
 	out << YAML::Key << "nodes" << YAML::Value;
 	out << YAML::BeginSeq;
+
 	for (std::vector<Node*>::const_iterator i = _nodes.begin(); i != _nodes.end(); ++i)
 	{
 		(*i)->save(out);
 	}
+
 	out << YAML::EndSeq;
 
 	out << YAML::Key << "units" << YAML::Value;
 	out << YAML::BeginSeq;
+
 	for (std::vector<BattleUnit*>::const_iterator i = _units.begin(); i != _units.end(); ++i)
 	{
 		(*i)->save(out);
 	}
+
 	out << YAML::EndSeq;
 
 	out << YAML::Key << "items" << YAML::Value;
 	out << YAML::BeginSeq;
+
 	for (std::vector<BattleItem*>::const_iterator i = _items.begin(); i != _items.end(); ++i)
 	{
 		(*i)->save(out);
 	}
+
 	out << YAML::EndSeq;
 
 	out << YAML::EndMap;
@@ -468,6 +492,7 @@ void SavedBattleGame::initMap(int mapsize_x, int mapsize_y, int mapsize_z)
 		{
 			delete _tiles[i];
 		}
+
 		delete[] _tiles;
 
 		for (std::vector<Node*>::iterator i = _nodes.begin(); i != _nodes.end(); ++i)
@@ -478,18 +503,18 @@ void SavedBattleGame::initMap(int mapsize_x, int mapsize_y, int mapsize_z)
 		_nodes.clear();
 		_mapDataSets.clear();
 	}
+
+	/* create tile objects */
 	_mapsize_x = mapsize_x;
 	_mapsize_y = mapsize_y;
 	_mapsize_z = mapsize_z;
 	_tiles = new Tile*[_mapsize_z * _mapsize_y * _mapsize_x];
-	/* create tile objects */
 	for (int i = 0; i < _mapsize_z * _mapsize_y * _mapsize_x; ++i)
 	{
 		Position pos;
 		getTileCoords(i, &pos.x, &pos.y, &pos.z);
 		_tiles[i] = new Tile(pos);
 	}
-
 }
 
 /**
@@ -589,7 +614,6 @@ void SavedBattleGame::getTileCoords(int index, int *x, int *y, int *z) const
 	*x = (index % (_mapsize_y * _mapsize_x)) % _mapsize_x;
 }
 
-
 /**
  * Gets the currently selected unit
  * @return pointer to BattleUnit.
@@ -630,20 +654,25 @@ BattleUnit *SavedBattleGame::selectPreviousPlayerUnit(bool checkReselect)
 			if ( !checkReselect || ((*i)->reselectAllowed()))
 				break;
 		}
+
 		if ((*i) == _selectedUnit)
 		{
 			bPrev = true;
 		}
+
 		if (i == _units.begin())
 		{
 			i = _units.end();
 			wraps++;
 		}
+
 		--i;
+
 		// back to where we started... no more units found
 		if (wraps == 3)
 		{
 			_selectedUnit = 0;
+
 			return _selectedUnit;
 		}
 	}
@@ -671,8 +700,7 @@ BattleUnit *SavedBattleGame::selectNextPlayerUnit(bool checkReselect, bool setRe
 	{
 		bNext = true;
 	}
-	else
-	if (setReselect)
+	else if (setReselect)
 	{
 		_selectedUnit->dontReselect();
 	}
@@ -684,20 +712,24 @@ BattleUnit *SavedBattleGame::selectNextPlayerUnit(bool checkReselect, bool setRe
 			if ( !checkReselect || ((*i)->reselectAllowed()))
 				break;
 		}
+
 		if ((*i) == _selectedUnit)
 		{
 			bNext = true;
 		}
+
 		++i;
 		if (i == _units.end())
 		{
 			i = _units.begin();
 			wraps++;
 		}
+
 		// back to where we started... no more units found
 		if (wraps == 2)
 		{
 			_selectedUnit = 0;
+
 			return _selectedUnit;
 		}
 	}
@@ -725,7 +757,6 @@ BattleUnit *SavedBattleGame::selectUnit(const Position& pos)
 	{
 		return bu;
 	}
-
 }
 
 /**
@@ -834,10 +865,12 @@ void SavedBattleGame::endTurn()
 		prepareNewTurn();
 		_turn++;
 		_side = FACTION_PLAYER;
+
 		if (_lastSelectedUnit && !_lastSelectedUnit->isOut())
 			_selectedUnit = _lastSelectedUnit;
 		else
 			selectNextPlayerUnit();
+
 		while (_selectedUnit && _selectedUnit->getFaction() != FACTION_PLAYER)
 			selectNextPlayerUnit();
 	}
@@ -850,6 +883,7 @@ void SavedBattleGame::endTurn()
 			(*i)->setTurnsExposed((*i)->getTurnsExposed() - 1);
 			updateExposedUnits();
 		}
+
 		if (_side == FACTION_PLAYER && _turn == 20 && (*i)->getFaction() == FACTION_PLAYER && !(*i)->isOut())
 		{
 			(*i)->setTurnsExposed(-1);
@@ -863,6 +897,7 @@ void SavedBattleGame::endTurn()
 		{
 			(*i)->prepareNewTurn();
 		}
+
 		if ((*i)->getFaction() != FACTION_PLAYER)
 		{
 			(*i)->setVisible(false);
@@ -922,6 +957,7 @@ void SavedBattleGame::resetUnitTiles()
 			{
 				(*i)->getTile()->setUnit(0); // XXX XXX XXX doesn't this fail to clear 3 out of 4 tiles for 2x2 units?
 			}
+
 			int size = (*i)->getArmor()->getSize() - 1;
 			for (int x = size; x >= 0; x--)
 			{
@@ -933,6 +969,7 @@ void SavedBattleGame::resetUnitTiles()
 			}
 
 		}
+
 		if ((*i)->getFaction() == FACTION_PLAYER)
 		{
 			(*i)->setVisible(true);
@@ -981,8 +1018,7 @@ void SavedBattleGame::removeItem(BattleItem *item)
 		}
 	}
 
-	/*
-	for (int i = 0; i < _mapsize_x * _mapsize_y * _mapsize_z; ++i)
+/*	for (int i = 0; i < _mapsize_x * _mapsize_y * _mapsize_z; ++i)
 	{
 		for (std::vector<BattleItem*>::iterator it = _tiles[i]->getInventory()->begin(); it != _tiles[i]->getInventory()->end(); )
 		{
@@ -993,9 +1029,7 @@ void SavedBattleGame::removeItem(BattleItem *item)
 			}
 			++it;
 		}
-	}
-	*/
-
+	} */
 }
 
 /**
@@ -1060,19 +1094,20 @@ Node *SavedBattleGame::getSpawnNode(int nodeRank, BattleUnit *unit)
 
 	for (std::vector<Node*>::iterator i = getNodes()->begin(); i != getNodes()->end(); ++i)
 	{
-		if ((*i)->getRank() == nodeRank										// ranks must match
-			&& (!((*i)->getType() & Node::TYPE_SMALL) 
+		if ((*i)->getRank() == nodeRank								// ranks must match
+			&& (!((*i)->getType() & Node::TYPE_SMALL)
 				|| unit->getArmor()->getSize() == 1)				// the small unit bit is not set or the unit is small
-			&& (!((*i)->getType() & Node::TYPE_FLYING) 
-				|| unit->getArmor()->getMovementType() == MT_FLY)// the flying unit bit is not set or the unit can fly
-			&& (*i)->getPriority() > 0										// priority 0 is no spawnplace
-			&& setUnitPosition(unit, (*i)->getPosition(), true))		// check if not already occupied
+			&& (!((*i)->getType() & Node::TYPE_FLYING)
+				|| unit->getArmor()->getMovementType() == MT_FLY)	// the flying unit bit is not set or the unit can fly
+			&& (*i)->getPriority() > 0								// priority 0 is no spawnplace
+			&& setUnitPosition(unit, (*i)->getPosition(), true))	// check if not already occupied
 		{
 			if ((*i)->getPriority() > highestPriority)
 			{
 				highestPriority = (*i)->getPriority();
-				compliantNodes.clear(); // drop the last nodes, as we found a higher priority now
+				compliantNodes.clear();								// drop the last nodes, as we found a higher priority now
 			}
+
 			if ((*i)->getPriority() == highestPriority)
 			{
 				compliantNodes.push_back((*i));
@@ -1109,60 +1144,70 @@ Node *SavedBattleGame::getPatrolNode(bool scout, BattleUnit *unit, Node *fromNod
 	
 	for (int i = 0; i < end; ++i)
 	{
-			if (!scout && fromNode->getNodeLinks()->at(i) < 1) continue;
-			Node *n = getNodes()->at(scout ? i : fromNode->getNodeLinks()->at(i));
-			if ((n->getFlags() > 0 || n->getRank() > 0 || scout)										// for non-scouts we find a node with a desirability above 0
-			    && (!(n->getType() & Node::TYPE_SMALL) 
-					|| unit->getArmor()->getSize() == 1)				// the small unit bit is not set or the unit is small
-				&& (!(n->getType() & Node::TYPE_FLYING) 
-					|| unit->getArmor()->getMovementType() == MT_FLY)// the flying unit bit is not set or the unit can fly
-				&& !n->isAllocated() // check if not allocated
-				&& !(n->getType() & Node::TYPE_DANGEROUS)   // don't go there if an alien got shot there; stupid behavior like that 
-				&& setUnitPosition(unit, n->getPosition(), true)	// check if not already occupied
-				&& getTile(n->getPosition()) && !getTile(n->getPosition())->getFire() // you are not a firefighter; do not patrol into fire
-				&& (!scout || n != fromNode)	// scouts push forward
-				&& n->getPosition().x > 0 && n->getPosition().y > 0)
-			{
-				if (!preferred 
-					|| (preferred->getRank() == Node::nodeRank[unit->getRankInt()][0] && preferred->getFlags() < n->getFlags())
-					|| preferred->getFlags() < n->getFlags()) preferred = n;
-				compliantNodes.push_back(n);
-			}
+		if (!scout && fromNode->getNodeLinks()->at(i) < 1) continue;
+
+		Node *n = getNodes()->at(scout ? i : fromNode->getNodeLinks()->at(i));
+
+		if ((n->getFlags() > 0
+				|| n->getRank() > 0
+				|| scout)											// for non-scouts we find a node with a desirability above 0
+			&& (!(n->getType() & Node::TYPE_SMALL)
+				|| unit->getArmor()->getSize() == 1)				// the small unit bit is not set or the unit is small
+			&& (!(n->getType() & Node::TYPE_FLYING)
+				|| unit->getArmor()->getMovementType() == MT_FLY)	// the flying unit bit is not set or the unit can fly
+			&& !n->isAllocated()									// check if not allocated
+			&& !(n->getType() & Node::TYPE_DANGEROUS)				// don't go there if an alien got shot there; stupid behavior like that 
+			&& setUnitPosition(unit, n->getPosition(), true)		// check if not already occupied
+			&& getTile(n->getPosition())
+			&& !getTile(n->getPosition())->getFire()				// you are not a firefighter; do not patrol into fire
+			&& (!scout
+				|| n != fromNode)									// scouts push forward
+			&& n->getPosition().x > 0
+			&& n->getPosition().y > 0)
+		{
+			if (!preferred 
+				|| (preferred->getRank() == Node::nodeRank[unit->getRankInt()][0] && preferred->getFlags() < n->getFlags())
+				|| preferred->getFlags() < n->getFlags()) preferred = n;
+			compliantNodes.push_back(n);
+		}
 	}
 
 	if (compliantNodes.empty())
 	{ 
 		if (Options::getBool("traceAI")) { Log(LOG_INFO) << (scout ? "Scout " : "Guard ") << "found no patrol node! XXX XXX XXX"; }
+
 		if (unit->getArmor()->getSize() > 1 && !scout) 
 		{
 			return getPatrolNode(true, unit, fromNode); // move dammit
-		} else return 0; 
+		}
+		else return 0; 
 	}
 	
 	if (scout)
 	{
-		// scout picks a random destination:
-		return compliantNodes[RNG::generate(0, compliantNodes.size() - 1)];
-	} else
+		return compliantNodes[RNG::generate(0, compliantNodes.size() - 1)]; // scout picks a random destination
+	}
+	else
 	{
 		if (!preferred) return 0;
+
 		// non-scout patrols to highest value unoccupied node that's not fromNode
 		if (Options::getBool("traceAI")) { Log(LOG_INFO) << "Choosing node flagged " << preferred->getFlags(); }
+
 		return preferred;
 	}
 }
 
 /**
  * New turn preparations. Like fire and smoke spreading.
- * @return True when objective destroyed by fire
+ * @return True when objective destroyed by fire	// kL, not.
  */
 void SavedBattleGame::prepareNewTurn()
 {
 	std::vector<Tile*> tilesOnFire;
 	std::vector<Tile*> tilesOnSmoke;
 
-	// prepare a list of tiles on fire
-	for (int i = 0; i < _mapsize_x * _mapsize_y * _mapsize_z; ++i)
+	for (int i = 0; i < _mapsize_x * _mapsize_y * _mapsize_z; ++i) // prepare a list of tiles on fire
 	{
 		if (getTiles()[i]->getFire() > 0)
 		{
@@ -1170,38 +1215,31 @@ void SavedBattleGame::prepareNewTurn()
 		}
 	}
 
-	// first: fires spread
-	for (std::vector<Tile*>::iterator i = tilesOnFire.begin(); i != tilesOnFire.end(); ++i)
+	for (std::vector<Tile*>::iterator i = tilesOnFire.begin(); i != tilesOnFire.end(); ++i) // first: fires spread
 	{
-		// if we haven't added fire here this turn
-		if ((*i)->getOverlaps() == 0)
+		if ((*i)->getOverlaps() == 0) // if we haven't added fire here this turn
 		{
-			// reduce the fire timer
-			(*i)->setFire((*i)->getFire() -1);
+			(*i)->setFire((*i)->getFire() -1); // reduce the fire timer
 
-			// if we're still burning
-			if ((*i)->getFire())
+			if ((*i)->getFire()) // if we're still burning
 			{
-				// propegate in four cardinal directions (0, 2, 4, 6)
-				for (int dir = 0; dir <= 6; dir += 2)
+				for (int dir = 0; dir <= 6; dir += 2) // propagate in four cardinal directions (0, 2, 4, 6)
 				{
 					Position pos;
 					Pathfinding::directionToVector(dir, &pos);
 					Tile *t = getTile((*i)->getPosition() + pos);
-					// if there's no wall blocking the path of the flames...
-					if (t && getTileEngine()->horizontalBlockage((*i), t, DT_IN) == 0)
+
+					if (t && getTileEngine()->horizontalBlockage((*i), t, DT_IN) == 0) // if there's no wall blocking the path of the flames...
 					{
-						// attempt to set this tile on fire
-						t->ignite((*i)->getSmoke());
+						t->ignite((*i)->getSmoke()); // attempt to set this tile on fire
 					}
 				}
 			}
-			// fire has burnt out
-			else
+			else // fire has burnt out
 			{
 				(*i)->setSmoke(0);
-				// burn this tile, and any object in it, if it's not fireproof/indestructible.
-				if ((*i)->getMapData(MapData::O_OBJECT))
+
+				if ((*i)->getMapData(MapData::O_OBJECT)) // burn this tile, and any object in it, if it's not fireproof/indestructible.
 				{
 					if ((*i)->getMapData(MapData::O_OBJECT)->getFlammable() != 255 && (*i)->getMapData(MapData::O_OBJECT)->getArmor() != 255)
 					{
@@ -1209,6 +1247,7 @@ void SavedBattleGame::prepareNewTurn()
 						{
 							_objectiveDestroyed = true;
 						}
+
 						if ((*i)->destroy(MapData::O_FLOOR))
 						{
 							_objectiveDestroyed = true;
@@ -1229,8 +1268,7 @@ void SavedBattleGame::prepareNewTurn()
 		}
 	}
 
-	// prepare a list of tiles on fire/with smoke in them (smoke acts as fire intensity)
-	for (int i = 0; i < _mapsize_x * _mapsize_y * _mapsize_z; ++i)
+	for (int i = 0; i < _mapsize_x * _mapsize_y * _mapsize_z; ++i) // prepare a list of tiles on fire/with smoke in them (smoke acts as fire intensity)
 	{
 		if (getTiles()[i]->getSmoke() > 0)
 		{
@@ -1238,28 +1276,23 @@ void SavedBattleGame::prepareNewTurn()
 		}
 	}
 
-	// now make the smoke spread.
-	for (std::vector<Tile*>::iterator i = tilesOnSmoke.begin(); i != tilesOnSmoke.end(); ++i)
+	for (std::vector<Tile*>::iterator i = tilesOnSmoke.begin(); i != tilesOnSmoke.end(); ++i) // now make the smoke spread.
 	{
-		// smoke and fire follow slightly different rules.
-		if ((*i)->getFire() == 0)
+		if ((*i)->getFire() == 0) // smoke and fire follow slightly different rules.
 		{
-			// reduce the smoke counter
-			(*i)->setSmoke((*i)->getSmoke() - 1);
-			// if we're still smoking
-			if ((*i)->getSmoke())
+			(*i)->setSmoke((*i)->getSmoke() - 1); // reduce the smoke counter
+
+			if ((*i)->getSmoke()) // if we're still smoking
 			{
-				// spread in four cardinal directions
-				for (int dir = 0; dir <= 6; dir += 2)
+				for (int dir = 0; dir <= 6; dir += 2) // spread in four cardinal directions
 				{
 					Position pos;
 					Pathfinding::directionToVector(dir, &pos);
 					Tile *t = getTile((*i)->getPosition() + pos);
-					// as long as there are no walls blocking us
-					if (t && getTileEngine()->horizontalBlockage((*i), t, DT_SMOKE) == 0)
+					if (t && getTileEngine()->horizontalBlockage((*i), t, DT_SMOKE) == 0) // as long as there are no walls blocking us
 					{
-						// only add smoke to empty tiles, or tiles with no fire, and smoke that was added this turn
-						if (t->getSmoke() == 0 || (t->getFire() == 0 && t->getOverlaps() != 0))
+						if (t->getSmoke() == 0 || (t->getFire() == 0 && t->getOverlaps() != 0)) // only add smoke to empty tiles, or tiles with no fire,
+																								// and smoke that was added this turn
 						{
 							t->addSmoke((*i)->getSmoke());
 						}
@@ -1269,16 +1302,14 @@ void SavedBattleGame::prepareNewTurn()
 		}
 		else
 		{
-			// smoke from fire spreads upwards one level if there's no floor blocking it.
-			Position pos = Position(0,0,1);
+			Position pos = Position(0,0,1); // smoke from fire spreads upwards one level if there's no floor blocking it.
 			Tile *t = getTile((*i)->getPosition() + pos);
 			if (t && t->hasNoFloor(*i))
 			{
-				// only add smoke equal to half the intensity of the fire
-				t->addSmoke((*i)->getSmoke()/2);
+				t->addSmoke((*i)->getSmoke()/2); // only add smoke equal to half the intensity of the fire
 			}
-			// then it spreads in the four cardinal directions.
-			for (int dir = 0; dir <= 6; dir += 2)
+
+			for (int dir = 0; dir <= 6; dir += 2) // then it spreads in the four cardinal directions.
 			{
 				Pathfinding::directionToVector(dir, &pos);
 				t = getTile((*i)->getPosition() + pos);
@@ -1292,23 +1323,23 @@ void SavedBattleGame::prepareNewTurn()
 
 	if (!tilesOnFire.empty() || !tilesOnSmoke.empty())
 	{
-		// do damage to units, average out the smoke, etc.
-		for (int i = 0; i < _mapsize_x * _mapsize_y * _mapsize_z; ++i)
+		for (int i = 0; i < _mapsize_x * _mapsize_y * _mapsize_z; ++i) // do damage to units, average out the smoke, etc.
 		{
 			if (getTiles()[i]->getSmoke() != 0)
 				getTiles()[i]->prepareNewTurn();
 		}
-		// fires could have been started, stopped or smoke could reveal/conceal units.
-		getTileEngine()->calculateTerrainLighting();
+
+		getTileEngine()->calculateTerrainLighting(); // fires could have been started, stopped or smoke could reveal/conceal units.
 	}
 
 	reviveUnconsciousUnits();
-
 }
 
 /**
  * Units that are unconscious but shouldn't are revived, they need a tile to stand on. The unit's current position could be occupied.
  * We will search in all directions for a free tile, if not found, the unit stays unconscious...
+ *
+ * kL, does this still need a check to see if the unit revives *on a floor* (if not, drop him/her down to a floor tile)
  */
 void SavedBattleGame::reviveUnconsciousUnits()
 {
@@ -1327,15 +1358,18 @@ void SavedBattleGame::reviveUnconsciousUnits()
 					}
 				}
 			}
-			if((*i)->getStatus() == STATUS_UNCONSCIOUS && (*i)->getStunlevel() < (*i)->getHealth() && (*i)->getHealth() > 0)
+
+			if ((*i)->getStatus() == STATUS_UNCONSCIOUS && (*i)->getStunlevel() < (*i)->getHealth() && (*i)->getHealth() > 0)
 			{
 				if (placeUnitNearPosition((*i), originalPosition))
 				{
 					// recover from unconscious
 					(*i)->turn(false); // makes the unit stand up again
 					(*i)->setCache(0);
+
 					getTileEngine()->calculateFOV((*i));
 					getTileEngine()->calculateUnitLighting();
+
 					removeUnconsciousBodyItem((*i));
 					break;
 				}
@@ -1345,8 +1379,8 @@ void SavedBattleGame::reviveUnconsciousUnits()
 }
 
 /**
-  *   Remove the body item that corresponds to the unit
-  */
+ * Remove the body item that corresponds to the unit
+ */
 void SavedBattleGame::removeUnconsciousBodyItem(BattleUnit *bu)
 {
 	// remove the unconscious body item corresponding to this unit
@@ -1357,9 +1391,11 @@ void SavedBattleGame::removeUnconsciousBodyItem(BattleUnit *bu)
 			removeItem((*it));
 			break;
 		}
+
 		++it;
 	}
 }
+
 /**
  * Function handles the placement of units on the map. This handles large units that are placed on multiple tiles.
  * @return Whether the unit could be successfully placed or not.
@@ -1368,8 +1404,7 @@ bool SavedBattleGame::setUnitPosition(BattleUnit *bu, const Position &position, 
 {
 	int size = bu->getArmor()->getSize() - 1;
 
-	// first check if the tiles are occupied
-	for (int x = size; x >= 0; x--)
+	for (int x = size; x >= 0; x--) // first check if the tiles are occupied
 	{
 		for (int y = size; y >= 0; y--)
 		{
@@ -1401,6 +1436,7 @@ bool SavedBattleGame::setUnitPosition(BattleUnit *bu, const Position &position, 
 			{
 				bu->setPosition(position + Position(x,y,0));
 			}
+
 			getTile(position + Position(x,y,0))->setUnit(bu, getTile(position + Position(x,y,-1)));
 		}
 	}
@@ -1469,21 +1505,24 @@ std::vector<BattleUnit*> *SavedBattleGame::getExposedUnits()
 int SavedBattleGame::getSpottingUnits(BattleUnit* unit) const
 {
 	int spotting = 0;
-	for (std::vector<BattleUnit*>::const_iterator i = unit->getVisibleUnits()->begin(); i != unit->getVisibleUnits()->end(); ++i) // cheating! perhaps only consider visible units here
-	{																															// k
+	// cheating! perhaps only consider visible units here
+	for (std::vector<BattleUnit*>::const_iterator i = unit->getVisibleUnits()->begin(); i != unit->getVisibleUnits()->end(); ++i)
+	{
+		// k
 		std::vector<BattleUnit*>::iterator find = std::find((*i)->getVisibleUnits()->begin(), (*i)->getVisibleUnits()->end(), unit);
 		if (find != (*i)->getVisibleUnits()->end())
 			++spotting;
 	}
+
 	return spotting;
 }
 
 
 /**
  * @brief Check whether anyone on a particular faction is looking at *unit
- * 
+ *
  * Similar to getSpottingUnits() but returns a bool and stops searching if one positive hit is found.
- * 
+ *
  * @param faction A faction, of course
  * @param unit Whom to spot
  * @return true when the unit can be seen
@@ -1495,8 +1534,10 @@ bool SavedBattleGame::eyesOnTarget(UnitFaction faction, BattleUnit* unit)
 		if ((*i)->getFaction() != faction) continue;
 		
 		std::vector<BattleUnit*> *vis = (*i)->getVisibleUnits();
-		if (std::find(vis->begin(), vis->end(), unit) != vis->end()) return true;
-		// aliens know the location of all XCom agents sighted by all other aliens due to sharing locations over their space-walkie-talkies				
+
+		if (std::find(vis->begin(), vis->end(), unit) != vis->end())
+			return true;
+		// aliens know the location of all XCom agents sighted by all other aliens due to sharing locations over their space-walkie-talkies
 	}
 
 	return false;
@@ -1513,11 +1554,13 @@ bool SavedBattleGame::addFallingUnit(BattleUnit* unit)
 			add = false;
 		}
 	}
+
 	if (add)
 	{
 		_fallingUnits.push_front(unit);
 		_unitsFalling = true;
 	}
+
 	return add;
 }
 
@@ -1561,6 +1604,7 @@ BattleUnit* SavedBattleGame::getHighestRankedXCom()
 			}
 		}
 	}
+
 	return highest;
 }
 
@@ -1575,15 +1619,15 @@ int SavedBattleGame::getMoraleModifier(BattleUnit* unit)
 		{
 			switch (leader->getRankInt())
 			{
-			case 5:
-				result += 25;
-			case 4:
-				result += 10;
-			case 3:
-				result += 5;
-			case 2:
-				result += 10;
-			default:
+				case 5:
+					result += 25;
+				case 4:
+					result += 10;
+				case 3:
+					result += 5;
+				case 2:
+					result += 10;
+				default:
 				break;
 			}
 		}
@@ -1592,18 +1636,19 @@ int SavedBattleGame::getMoraleModifier(BattleUnit* unit)
 	{
 		switch (unit->getRankInt())
 		{
-		case 5:
-			result += 25;
-		case 4:
-			result += 20;
-		case 3:
-			result += 10;
-		case 2:
-			result += 20;
-		default:
+			case 5:
+				result += 25;
+			case 4:
+				result += 20;
+			case 3:
+				result += 10;
+			case 2:
+				result += 20;
+			default:
 			break;
 		}
 	}
+
 	return result;
 }
 
@@ -1641,6 +1686,7 @@ bool SavedBattleGame::placeUnitNearPosition(BattleUnit *unit, Position entryPoin
 			return true;
 		}
 	}
+
 	return false;
 }
 
@@ -1659,4 +1705,5 @@ void SavedBattleGame::resetTiles()
 		_tiles[i]->setDiscovered(false, 2);
 	}
 }
+
 }

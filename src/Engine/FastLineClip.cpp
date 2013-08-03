@@ -406,8 +406,9 @@ int FastLineClip::LineClip(double *x0, double *y0, double *x1, double *y1)
       *x0= FC_xn;  *y0= FC_yn;
       *x1= FC_xk;  *y1= FC_yk;
    }
-   return (visible);
-}
 
+
+   return visible;
+}
 
 }

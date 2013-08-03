@@ -183,7 +183,6 @@ SavedGameState::SavedGameState(Game *game, bool geo, bool showMsg) : State(game)
  */
 SavedGameState::~SavedGameState()
 {
-
 }
 
 /**

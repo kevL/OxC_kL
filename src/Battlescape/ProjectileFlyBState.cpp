@@ -48,18 +48,18 @@ ProjectileFlyBState::ProjectileFlyBState(BattlescapeGame *parent, BattleAction a
 {
 }
 
+/**
+ *
+ */
 ProjectileFlyBState::ProjectileFlyBState(BattlescapeGame *parent, BattleAction action) : BattleState(parent, action), _unit(0), _ammo(0), _projectileItem(0), _origin(action.actor->getPosition()), _projectileImpact(0), _initialized(false)
 {
-	;
 }
-
 
 /**
  * Deletes the ProjectileFlyBState.
  */
 ProjectileFlyBState::~ProjectileFlyBState()
 {
-
 }
 
 /**
@@ -78,12 +78,14 @@ void ProjectileFlyBState::init()
 	if (!weapon) // can't shoot without weapon
 	{
 		_parent->popState();
+
 		return;
 	}
 
 	if (!_parent->getSave()->getTile(_action.target)) // invalid target position
 	{
 		_parent->popState();
+
 		return;
 	}
 
@@ -91,6 +93,7 @@ void ProjectileFlyBState::init()
 	{
 		_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
 		_parent->popState();
+
 		return;
 	}
 
@@ -102,6 +105,7 @@ void ProjectileFlyBState::init()
 	{
 		// something went wrong - we can't shoot when dead or unconscious
 		_parent->popState();
+
 		return;
 	}
 
@@ -113,6 +117,7 @@ void ProjectileFlyBState::init()
 		{
 			_unit->setTimeUnits(_unit->getTimeUnits() + _unit->getActionTUs(_action.type, _action.weapon));
 			_parent->popState();
+
 			return;
 		}
 	}
@@ -128,55 +133,66 @@ void ProjectileFlyBState::init()
 
 	switch (_action.type)
 	{
-	case BA_SNAPSHOT:
-	case BA_AIMEDSHOT:
-	case BA_AUTOSHOT:
-	case BA_LAUNCH:
-		if (_ammo == 0)
-		{
-			_action.result = "STR_NO_AMMUNITION_LOADED";
-			_parent->popState();
-			return;
-		}
-		if (_ammo->getAmmoQuantity() == 0)
-		{
-			_action.result = "STR_NO_ROUNDS_LEFT";
-			_parent->popState();
-			return;
-		}
-		if (weapon->getRules()->getRange() != 0 && _parent->getTileEngine()->distance(_action.actor->getPosition(), _action.target) > weapon->getRules()->getRange())
-		{
-			// out of range
-			_action.result = "STR_OUT_OF_RANGE";
-			_parent->popState();
-			return;
-		}
+		case BA_SNAPSHOT:
+		case BA_AIMEDSHOT:
+		case BA_AUTOSHOT:
+		case BA_LAUNCH:
+			if (_ammo == 0)
+			{
+				_action.result = "STR_NO_AMMUNITION_LOADED";
+				_parent->popState();
+
+				return;
+			}
+
+			if (_ammo->getAmmoQuantity() == 0)
+			{
+				_action.result = "STR_NO_ROUNDS_LEFT";
+				_parent->popState();
+
+				return;
+			}
+
+			if (weapon->getRules()->getRange() != 0 && _parent->getTileEngine()->distance(_action.actor->getPosition(), _action.target) > weapon->getRules()->getRange())
+			{
+				// out of range
+				_action.result = "STR_OUT_OF_RANGE";
+				_parent->popState();
+
+				return;
+			}
 		break;
-	case BA_THROW:
-		if (!validThrowRange(&_action))
-		{
-			// out of range
-			_action.result = "STR_OUT_OF_RANGE";
-			_parent->popState();
-			return;
-		}
-		_projectileItem = weapon;
+		case BA_THROW:
+			if (!validThrowRange(&_action))
+			{
+				// out of range
+				_action.result = "STR_OUT_OF_RANGE";
+				_parent->popState();
+
+				return;
+			}
+			_projectileItem = weapon;
 		break;
-	case BA_HIT:
-		if (!_parent->getTileEngine()->validMeleeRange(_action.actor->getPosition(), _action.actor->getDirection(), _action.actor, 0))
-		{
-			_action.result = "STR_THERE_IS_NO_ONE_THERE";
-			_parent->popState();
-			return;
-		}
+		case BA_HIT:
+			if (!_parent->getTileEngine()->validMeleeRange(_action.actor->getPosition(), _action.actor->getDirection(), _action.actor, 0))
+			{
+				_action.result = "STR_THERE_IS_NO_ONE_THERE";
+				_parent->popState();
+
+				return;
+			}
 		break;
-	case BA_PANIC:
-	case BA_MINDCONTROL:
-		_parent->statePushFront(new ExplosionBState(_parent, Position((_action.target.x*16)+8,(_action.target.y*16)+8,(_action.target.z*24)+10), weapon, _action.actor));
-		return;
-	default:
-		_parent->popState();
-		return;
+		case BA_PANIC:
+		case BA_MINDCONTROL:
+			_parent->statePushFront(new ExplosionBState(_parent, Position((_action.target.x*16)+8,(_action.target.y*16)+8,(_action.target.z*24)+10), weapon, _action.actor));
+
+			return;
+		break;
+		default:
+			_parent->popState();
+
+			return;
+		break;
 	}
 
 	createNewProjectile();
@@ -225,6 +241,7 @@ bool ProjectileFlyBState::createNewProjectile()
 			_parent->getMap()->setProjectile(0);
 			_action.result = "STR_UNABLE_TO_THROW_HERE";
 			_parent->popState();
+
 			return false;
 		}
 	}
@@ -235,9 +252,11 @@ bool ProjectileFlyBState::createNewProjectile()
 			// set the soldier in an aiming position
 			_unit->aim(true);
 			_parent->getMap()->cacheUnit(_unit);
+
 			// and we have a lift-off
 			if (_action.weapon->getRules()->getFireSound() != -1)
 				_parent->getResourcePack()->getSound("BATTLE.CAT", _action.weapon->getRules()->getFireSound())->play();
+
 			if (!_parent->getSave()->getDebugMode() && _action.type != BA_LAUNCH && _ammo->spendBullet() == false)
 			{
 				_parent->getSave()->removeItem(_ammo);
@@ -251,6 +270,7 @@ bool ProjectileFlyBState::createNewProjectile()
 			_parent->getMap()->setProjectile(0);
 			_action.result = "STR_NO_LINE_OF_FIRE";
 			_parent->popState();
+
 			return false;
 		}
 	}
@@ -262,9 +282,11 @@ bool ProjectileFlyBState::createNewProjectile()
 				// set the soldier in an aiming position
 				_unit->aim(true);
 				_parent->getMap()->cacheUnit(_unit);
+
 				// and we have a lift-off
 				if (_action.weapon->getRules()->getFireSound() != -1)
 					_parent->getResourcePack()->getSound("BATTLE.CAT", _action.weapon->getRules()->getFireSound())->play();
+
 				if (!_parent->getSave()->getDebugMode() && _action.type != BA_LAUNCH && _ammo->spendBullet() == false)
 				{
 					_parent->getSave()->removeItem(_ammo);
@@ -278,6 +300,7 @@ bool ProjectileFlyBState::createNewProjectile()
 			_parent->getMap()->setProjectile(0);
 			_action.result = "STR_NO_LINE_OF_FIRE";
 			_parent->popState();
+
 			return false;
 		}
 	}
@@ -305,20 +328,23 @@ void ProjectileFlyBState::think()
 			{
 				_parent->getMap()->getCamera()->setMapOffset(_action.cameraPosition);
 			}
+
 			if (_action.type != BA_PANIC && _action.type != BA_MINDCONTROL)
 			{
 				_parent->getTileEngine()->checkReactionFire(_unit);
 			}
+
 			if (!_action.actor->isOut())
 			{
 				_unit->abortTurn();
 			}
+
 			_parent->popState();
 		}
 	}
 	else
 	{
-		if(!_parent->getMap()->getProjectile()->move())
+		if (!_parent->getMap()->getProjectile()->move())
 		{
 			// impact !
 			if (_action.type == BA_THROW)
@@ -360,12 +386,12 @@ void ProjectileFlyBState::think()
 				{
 					int offset = 0;
 					// explosions impact not inside the voxel but two steps back (projectiles generally move 2 voxels at a time)
-					if (_ammo && (
-						_ammo->getRules()->getDamageType() == DT_HE ||
-						_ammo->getRules()->getDamageType() == DT_IN))
+					if (_ammo
+						&& (_ammo->getRules()->getDamageType() == DT_HE || _ammo->getRules()->getDamageType() == DT_IN))
 					{
 						offset = -2;
 					}
+
 					_parent->statePushFront(new ExplosionBState(_parent, _parent->getMap()->getProjectile()->getPosition(offset), _ammo, _action.actor, 0, (_action.type != BA_AUTOSHOT || _action.autoShotCounter == 3|| !_action.weapon->getAmmoItem())));
 
 					// if the unit burns floortiles, burn floortiles
@@ -403,7 +429,7 @@ void ProjectileFlyBState::think()
 	}
 }
 
-/*
+/**
  * Flying projectiles cannot be cancelled.
  * but they can be "skipped"
  */
@@ -418,7 +444,7 @@ void ProjectileFlyBState::cancel()
 	}
 }
 
-/*
+/**
  * Validate the throwing range.
  * @return true when range is valid.
  */

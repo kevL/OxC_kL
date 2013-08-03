@@ -435,6 +435,7 @@ void BattlescapeState::think()
 			_battleGame->think();
 			_animTimer->think(this, 0);
 			_gameTimer->think(this, 0);
+
 			if (popped)
 			{
 				_battleGame->handleNonTargetAction();
@@ -447,6 +448,7 @@ void BattlescapeState::think()
 			_game->pushState(*_popups.begin());
 			_popups.erase(_popups.begin());
 			popped = true;
+
 			return;
 		}
 	}
@@ -464,11 +466,14 @@ void BattlescapeState::mapOver(Action *action)
 		// the mouse-release event is missed for any reason.
 		// (checking: is the dragScroll-mouse-button still pressed?)
 		// However if the SDL is also missed the release event, then it is to no avail :(
-		if (0==(SDL_GetMouseState(0,0)&SDL_BUTTON(_save->getDragButton()))) { // so we missed again the mouse-release :(
+		if (0 == (SDL_GetMouseState(0,0)&SDL_BUTTON(_save->getDragButton()))) // so we missed again the mouse-release :(
+		{
 			// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
 			if ((!mouseMovedOverThreshold) && (SDL_GetTicks() - mouseScrollingStartTime <= ((Uint32)_save->getDragTimeTolerance())))
 				_map->getCamera()->setMapOffset(mapOffsetBeforeMouseScrolling);
+
 			isMouseScrolled = isMouseScrolling = false;
+
 			return;
 		}
 
@@ -481,6 +486,7 @@ void BattlescapeState::mapOver(Action *action)
 			SDL_WarpMouse(xBeforeMouseScrolling, yBeforeMouseScrolling);
 			SDL_EventState(SDL_MOUSEMOTION, SDL_ENABLE);
 		}
+
 		// Check the threshold
 		totalMouseMoveX += action->getDetails()->motion.xrel;
 		totalMouseMoveY += action->getDetails()->motion.yrel;
@@ -495,7 +501,9 @@ void BattlescapeState::mapOver(Action *action)
 				-action->getDetails()->motion.yrel, false);
 
 			// We don't want to look the mouse-cursor jumping :)
-			action->getDetails()->motion.x=xBeforeMouseScrolling; action->getDetails()->motion.y=yBeforeMouseScrolling;
+			action->getDetails()->motion.x = xBeforeMouseScrolling;
+			action->getDetails()->motion.y = yBeforeMouseScrolling;
+
 			_game->getCursor()->handle(action);
 		}
 		else
@@ -517,7 +525,12 @@ void BattlescapeState::mapPress(Action *action)
 	// don't handle mouseclicks below 140, because they are in the buttons area (it overlaps with map surface)
 	int my = int(action->getAbsoluteYMouse());
 	int mx = int(action->getAbsoluteXMouse());
-	if ( my > _icons->getY() && my < _icons->getY()+_icons->getHeight() && mx > _icons->getX() && mx < _icons->getX()+_icons->getWidth()) return;
+	if (my > _icons->getY()
+		&& my < _icons->getY()+_icons->getHeight()
+		&& mx > _icons->getX()
+		&& mx < _icons->getX()+_icons->getWidth())
+
+		return;
 
 	if (Options::getInt("battleScrollType") == SCROLL_DRAG)
 	{
@@ -545,12 +558,15 @@ void BattlescapeState::mapClick(Action *action)
 	// the mouse-release event is missed for any reason.
 	// However if the SDL is also missed the release event, then it is to no avail :(
 	// (this part handles the release if it is missed and now an other button is used)
-	if (isMouseScrolling) {
+	if (isMouseScrolling)
+	{
 		if (action->getDetails()->button.button != _save->getDragButton()
-		&& 0==(SDL_GetMouseState(0,0)&SDL_BUTTON(_save->getDragButton()))) { // so we missed again the mouse-release :(
+			&& 0 == (SDL_GetMouseState(0,0)&SDL_BUTTON(_save->getDragButton()))) // so we missed again the mouse-release :(
+		{
 			// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
 			if ((!mouseMovedOverThreshold) && (SDL_GetTicks() - mouseScrollingStartTime <= ((Uint32)_save->getDragTimeTolerance())))
 				_map->getCamera()->setMapOffset(mapOffsetBeforeMouseScrolling);
+
 			isMouseScrolled = isMouseScrolling = false;
 		}
 	}
@@ -559,13 +575,17 @@ void BattlescapeState::mapClick(Action *action)
 	if (isMouseScrolling)
 	{
 		// While scrolling, other buttons are ineffective
-		if (action->getDetails()->button.button == _save->getDragButton()) isMouseScrolling = false; else return;
+		if (action->getDetails()->button.button == _save->getDragButton()) isMouseScrolling = false;
+		else return;
+
 		// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
-		if ((!mouseMovedOverThreshold) && (SDL_GetTicks() - mouseScrollingStartTime <= ((Uint32)_save->getDragTimeTolerance())))
+		if ((!mouseMovedOverThreshold)
+			&& (SDL_GetTicks() - mouseScrollingStartTime <= ((Uint32)_save->getDragTimeTolerance())))
 		{
 			isMouseScrolled = false;
 			_map->getCamera()->setMapOffset(mapOffsetBeforeMouseScrolling);
 		}
+
 		if (isMouseScrolled) return;
 	}
 
@@ -581,8 +601,12 @@ void BattlescapeState::mapClick(Action *action)
 	// don't handle mouseclicks below 140, because they are in the buttons area (it overlaps with map surface)
 	int my = int(action->getAbsoluteYMouse());
 	int mx = int(action->getAbsoluteXMouse());
-	if ( my > _icons->getY() && my < _icons->getY()+_icons->getHeight() && mx > _icons->getX() && mx < _icons->getX()+_icons->getWidth()) return;
+	if (my > _icons->getY()
+		&& my < _icons->getY()+_icons->getHeight()
+		&& mx > _icons->getX()
+		&& mx < _icons->getX()+_icons->getWidth())
 
+		return;
 
 	// don't accept leftclicks if there is no cursor or there is an action busy
 	if (_map->getCursorType() == CT_NONE || _battleGame->isBusy()) return;
@@ -599,7 +623,8 @@ void BattlescapeState::mapClick(Action *action)
 
 	if (_save->getTile(pos) != 0) // don't allow to click into void
 	{
-		if ((action->getDetails()->button.button == SDL_BUTTON_RIGHT || (action->getDetails()->button.button == SDL_BUTTON_LEFT && (SDL_GetModState() & KMOD_ALT) != 0)) && playableUnitSelected())
+		if ((action->getDetails()->button.button == SDL_BUTTON_RIGHT || (action->getDetails()->button.button == SDL_BUTTON_LEFT
+			&& (SDL_GetModState() & KMOD_ALT) != 0)) && playableUnitSelected())
 		{
 			_battleGame->secondaryAction(pos);
 		}
@@ -815,6 +840,7 @@ void BattlescapeState::btnEndTurnClick(Action *)
 	if (allowButtons())
 		_battleGame->requestEndTurn();
 }
+
 /**
  * Abort game.
  * @param action Pointer to an action.
@@ -847,6 +873,7 @@ void BattlescapeState::btnStatsClick(Action *action)
 				// on the stats button when the mouse is on the scroll-border
 				b = false;
 		}
+
 		if (b) popup(new UnitInfoState(_game, _save->getSelectedUnit()));
 	}
 }
@@ -858,6 +885,7 @@ void BattlescapeState::btnStatsClick(Action *action)
 void BattlescapeState::btnLeftHandItemClick(Action *)
 {
 	if (_battleGame->getCurrentAction()->type != BA_NONE) return;
+
 	if (playableUnitSelected())
 	{
 		_save->getSelectedUnit()->setActiveHand("STR_LEFT_HAND");
@@ -1020,6 +1048,7 @@ void BattlescapeState::updateSoldierInfo()
 	_btnRightHandItem->setVisible(playableUnit);
 	_numAmmoLeft->setVisible(playableUnit);
 	_numAmmoRight->setVisible(playableUnit);
+
 	if (!playableUnit)
 	{
 		_txtName->setText(L"");
@@ -1028,6 +1057,7 @@ void BattlescapeState::updateSoldierInfo()
 	}
 
 	_txtName->setText(battleUnit->getName(_game->getLanguage(), false));
+
 	Soldier *soldier = _game->getSavedGame()->getSoldier(battleUnit->getId());
 	if (soldier != 0)
 	{
@@ -1038,6 +1068,7 @@ void BattlescapeState::updateSoldierInfo()
 	{
 		_rank->clear();
 	}
+
 	_numTimeUnits->setValue(battleUnit->getTimeUnits());
 	_barTimeUnits->setMax(battleUnit->getStats()->tu);
 	_barTimeUnits->setValue(battleUnit->getTimeUnits());
@@ -1067,6 +1098,7 @@ void BattlescapeState::updateSoldierInfo()
 				_numAmmoLeft->setValue(0);
 		}
 	}
+
 	BattleItem *rightHandItem = battleUnit->getItem("STR_RIGHT_HAND");
 	_btnRightHandItem->clear();
 	_numAmmoRight->setVisible(false);
@@ -1084,6 +1116,7 @@ void BattlescapeState::updateSoldierInfo()
 	}
 
 	_save->getTileEngine()->calculateFOV(_save->getSelectedUnit());
+
 	int j = 0;
 	for (std::vector<BattleUnit*>::iterator i = battleUnit->getVisibleUnits()->begin(); i != battleUnit->getVisibleUnits()->end(); ++i)
 	{
@@ -1335,12 +1368,16 @@ void BattlescapeState::SaveAIMap()
 			r.x = x * r.w;
 			r.y = y * r.h;
 
-			if (t->getTUCost(MapData::O_FLOOR, MT_FLY) != 255 && t->getTUCost(MapData::O_OBJECT, MT_FLY) != 255 && _save->getTileEngine()->surveyXComThreatToTile(t, tilePos, unit) && t->soldiersVisible != Tile::NOT_CALCULATED)
+			if (t->getTUCost(MapData::O_FLOOR, MT_FLY) != 255
+				&& t->getTUCost(MapData::O_OBJECT, MT_FLY) != 255
+				&& _save->getTileEngine()->surveyXComThreatToTile(t, tilePos, unit)
+				&& t->soldiersVisible != Tile::NOT_CALCULATED)
 			{
 				int e = (t->totalExposure * 255) / expMax;
 				SDL_FillRect(img, &r, SDL_MapRGB(img->format, e, 255-e, 0x20));
 				characterRGBA(img, r.x, r.y, t->soldiersVisible > 9 ? '*' : ('0'+t->soldiersVisible), 0x7f, 0x7f, 0x7f, 0x7f);
-			} else
+			}
+			else
 			{
 				if (!t->getUnit()) SDL_FillRect(img, &r, SDL_MapRGB(img->format, 0x50, 0x50, 0x50)); // gray for blocked tile
 			}
@@ -1352,33 +1389,34 @@ void BattlescapeState::SaveAIMap()
 				BattleUnit *wat = t->getUnit();
 				if (wat) 
 				{
-					switch(wat->getFaction())
+					switch (wat->getFaction())
 					{
-					case FACTION_HOSTILE:
-						// #4080C0 is Volutar Blue
-						characterRGBA(img, r.x, r.y, (tilePos.z - z) ? 'a' : 'A', 0x40, 0x80, 0xC0, 0xff);
-						break;
-					case FACTION_PLAYER:
-						characterRGBA(img, r.x, r.y, (tilePos.z - z) ? 'x' : 'X', 255, 255, 127, 0xff);
-						break;
-					case FACTION_NEUTRAL:
-						characterRGBA(img, r.x, r.y, (tilePos.z - z) ? 'c' : 'C', 255, 127, 127, 0xff);
-						break;
+						case FACTION_HOSTILE:
+							// #4080C0 is Volutar Blue
+							characterRGBA(img, r.x, r.y, (tilePos.z - z) ? 'a' : 'A', 0x40, 0x80, 0xC0, 0xff);
+							break;
+						case FACTION_PLAYER:
+							characterRGBA(img, r.x, r.y, (tilePos.z - z) ? 'x' : 'X', 255, 255, 127, 0xff);
+							break;
+						case FACTION_NEUTRAL:
+							characterRGBA(img, r.x, r.y, (tilePos.z - z) ? 'c' : 'C', 255, 127, 127, 0xff);
+							break;
 					}
 					break;
 				}
+
 				pos.z--;
 				if (z > 0 && !t->hasNoFloor(_save->getTile(pos))) break; // no seeing through floors
 			}
 
 			if (t->getMapData(MapData::O_NORTHWALL) && t->getMapData(MapData::O_NORTHWALL)->getTUCost(MT_FLY) == 255)
 			{
-				lineRGBA(img, r.x, r.y, r.x+r.w, r.y, 0x50, 0x50, 0x50, 255);
+				lineRGBA(img, r.x, r.y, r.x + r.w, r.y, 0x50, 0x50, 0x50, 255);
 			}
 			
 			if (t->getMapData(MapData::O_WESTWALL) && t->getMapData(MapData::O_WESTWALL)->getTUCost(MT_FLY) == 255)
 			{
-				lineRGBA(img, r.x, r.y, r.x, r.y+r.h, 0x50, 0x50, 0x50, 255);
+				lineRGBA(img, r.x, r.y, r.x, r.y + r.h, 0x50, 0x50, 0x50, 255);
 			}
 		}
 	}
@@ -1394,6 +1432,7 @@ void BattlescapeState::SaveAIMap()
 	{
 		ss.str("");
 		ss << Options::getUserFolder() << "AIExposure" << std::setfill('0') << std::setw(3) << i << ".png";
+
 		i++;
 	}
 	while (CrossPlatform::fileExists(ss.str()));
@@ -1418,7 +1457,7 @@ void BattlescapeState::SaveVoxelView()
 	{0,0,0, 224,224,224,  192,224,255,  255,224,192, 128,255,128, 192,0,255,  0,0,0, 255,255,255,  224,192,0,  255,64,128 };
 
 	BattleUnit * bu = _save->getSelectedUnit();
-	if (bu==0) return; //no unit selected
+	if (bu == 0) return; //no unit selected
 	std::vector<Position> _trajectory;
 
 	double ang_x,ang_y;
@@ -1455,16 +1494,14 @@ void BattlescapeState::SaveVoxelView()
 					|| (tile->isDiscovered(0) && test == 2)
 					|| (tile->isDiscovered(1) && test == 3)
 					|| (tile->isDiscovered(2) && (test == 1 || test == 4))
-					|| test==5
-					)
+					|| test == 5)
 				{
-					if (test==5)
+					if (test == 5)
 					{
 						if (tile->getUnit())
 						{
 							if (tile->getUnit()->getFaction()==FACTION_NEUTRAL) test=9;
-							else
-							if (tile->getUnit()->getFaction()==FACTION_PLAYER) test=8;
+							else if (tile->getUnit()->getFaction()==FACTION_PLAYER) test=8;
 						}
 						else
 						{
@@ -1472,11 +1509,11 @@ void BattlescapeState::SaveVoxelView()
 							if (tile && tile->getUnit())
 							{
 								if (tile->getUnit()->getFaction()==FACTION_NEUTRAL) test=9;
-								else
-								if (tile->getUnit()->getFaction()==FACTION_PLAYER) test=8;
+								else if (tile->getUnit()->getFaction()==FACTION_PLAYER) test=8;
 							}
 						}
 					}
+
 					hitPos = Position(_trajectory.at(0).x, _trajectory.at(0).y, _trajectory.at(0).z);
 					dist = sqrt((double)((hitPos.x-originVoxel.x)*(hitPos.x-originVoxel.x)
 						+ (hitPos.y-originVoxel.y)*(hitPos.y-originVoxel.y)
@@ -1499,15 +1536,19 @@ void BattlescapeState::SaveVoxelView()
 				{
 					dist*=0.9;
 				}
+
 				if (hitPos.y%16==15)
 				{
 					dist*=0.9;
 				}
+
 				if (hitPos.z%24==23)
 				{
 					dist*=0.9;
 				}
+
 				if (dist > 1) dist = 1;
+
 				if (tile) dist *= (16 - (float)tile->getShade())/16; 
 			}
 			
@@ -1522,6 +1563,7 @@ void BattlescapeState::SaveVoxelView()
 	{
 		ss.str("");
 		ss << Options::getUserFolder() << "fpslook" << std::setfill('0') << std::setw(3) << i << ".png";
+
 		i++;
 	}
 	while (CrossPlatform::fileExists(ss.str()));
@@ -1556,23 +1598,24 @@ void BattlescapeState::SaveVoxelMap()
 			{
 				int test = _save->getTileEngine()->voxelCheck(Position(x,y,z*2),0,0) +1;
 				float dist=1;
+
 				if (x%16==15)
 				{
 					dist*=0.9f;
 				}
+
 				if (y%16==15)
 				{
 					dist*=0.9f;
 				}
 
-				if (test==5)
+				if (test == 5)
 				{
 					tile = _save->getTile(Position(x/16, y/16, z/12));
 					if (tile->getUnit())
 					{
 						if (tile->getUnit()->getFaction()==FACTION_NEUTRAL) test=9;
-						else
-						if (tile->getUnit()->getFaction()==FACTION_PLAYER) test=8;
+						else if (tile->getUnit()->getFaction()==FACTION_PLAYER) test=8;
 					}
 					else
 					{
@@ -1580,8 +1623,7 @@ void BattlescapeState::SaveVoxelMap()
 						if (tile && tile->getUnit())
 						{
 							if (tile->getUnit()->getFaction()==FACTION_NEUTRAL) test=9;
-							else
-							if (tile->getUnit()->getFaction()==FACTION_PLAYER) test=8;
+							else if (tile->getUnit()->getFaction()==FACTION_PLAYER) test=8;
 						}
 					}
 				}
@@ -1601,7 +1643,6 @@ void BattlescapeState::SaveVoxelMap()
 			Log(LOG_ERROR) << "Saving to PNG failed: " << lodepng_error_text(error);
 		}
 	}
-	return;
 }
 
 
@@ -1625,10 +1666,12 @@ void BattlescapeState::finishBattle(bool abort, int inExitArea)
 {
 	_game->getCursor()->setVisible(true);
 	std::string nextStage = "";
+
 	if (_save->getMissionType() != "STR_UFO_GROUND_ASSAULT" && _save->getMissionType() != "STR_UFO_CRASH_RECOVERY")
 	{
 		nextStage = _game->getRuleset()->getDeployment(_save->getMissionType())->getNextStage();
 	}
+
 	if (nextStage != "" && inExitArea)
 	{
 		// if there is a next mission stage + we have people in exit area OR we killed all aliens, load the next stage
@@ -1646,11 +1689,13 @@ void BattlescapeState::finishBattle(bool abort, int inExitArea)
 		_animTimer->stop();
 		_gameTimer->stop();
 		_game->popState();
+
 		if (abort || (!abort  && inExitArea == 0))
 		{
 			// abort was done or no player is still alive
 			// this concludes to defeat when in mars or mars landing mission
-			if ((_save->getMissionType() == "STR_MARS_THE_FINAL_ASSAULT" || _save->getMissionType() == "STR_MARS_CYDONIA_LANDING") && _game->getSavedGame()->getMonthsPassed() > -1)
+			if ((_save->getMissionType() == "STR_MARS_THE_FINAL_ASSAULT" || _save->getMissionType() == "STR_MARS_CYDONIA_LANDING")
+				&& _game->getSavedGame()->getMonthsPassed() > -1)
 			{
 				_game->pushState (new DefeatState(_game));
 			}
@@ -1663,7 +1708,8 @@ void BattlescapeState::finishBattle(bool abort, int inExitArea)
 		{
 			// no abort was done and at least a player is still alive
 			// this concludes to victory when in mars mission
-			if (_save->getMissionType() == "STR_MARS_THE_FINAL_ASSAULT" && _game->getSavedGame()->getMonthsPassed() > -1)
+			if (_save->getMissionType() == "STR_MARS_THE_FINAL_ASSAULT"
+				&& _game->getSavedGame()->getMonthsPassed() > -1)
 			{
 				_game->pushState (new VictoryState(_game));
 			}
@@ -1672,6 +1718,7 @@ void BattlescapeState::finishBattle(bool abort, int inExitArea)
 				_game->pushState(new DebriefingState(_game));
 			}
 		}
+
 		_game->getCursor()->setColor(Palette::blockOffset(15)+12);
 		_game->getFpsCounter()->setColor(Palette::blockOffset(15)+12);
 	}
@@ -1715,14 +1762,17 @@ void BattlescapeState::mouseInIcons(Action * /* action */)
 {
 	_mouseOverIcons = true;
 }
+
 void BattlescapeState::mouseOutIcons(Action * /* action */)
 {
 	_mouseOverIcons = false;
 }
+
 bool BattlescapeState::getMouseOverIcons() const
 {
 	return _mouseOverIcons;
 }
+
 bool BattlescapeState::allowButtons() const
 {
 	return (_save->getSide() == FACTION_PLAYER || _save->getDebugMode()) && _map->getProjectile() == 0;
@@ -1766,4 +1816,5 @@ void BattlescapeState::btnZeroTUsClick(Action *action)
 		}
 	}
 }
+
 }
