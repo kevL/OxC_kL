@@ -161,7 +161,8 @@ void MiniMapView::draw()
 	drawLine(centerX + CELL_WIDTH, centerY + CELL_HEIGHT,
 		 centerX + xOffset, centerY + yOffset,
 		 color); // bottom right
-*/ // kL end.
+*/
+	// kL begin:
 	drawLine(centerX - CELL_WIDTH -1, centerY - CELL_HEIGHT -1,
 		 centerX - xOffset -1, centerY - yOffset -1,
 		 color); // top left
@@ -173,7 +174,7 @@ void MiniMapView::draw()
 		 color); // bottom left
 	drawLine(centerX + CELL_WIDTH -1, centerY + CELL_HEIGHT -1,
 		 centerX + xOffset -1, centerY + yOffset -1,
-		 color); // bottom right
+		 color); // bottom right // kL end.
 }
 
 /**
