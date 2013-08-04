@@ -963,19 +963,30 @@ void TileEngine::calculateFOV(const Position &position)
  */
 bool TileEngine::checkReactionFire(BattleUnit *unit)
 {
+	Log(LOG_INFO) << "Battlescape/TileEngine.cpp checkReactionFire() vs." << (unit->getId());	// kL
+
 	// reaction fire only triggered when the actioning unit is of the currently playing side
 	if (unit->getFaction() != _save->getSide())
 	{
+		Log(LOG_INFO) << ". vs getSide() = invalid";	// kL
+
 		return false;
 	}
 
-	std::vector<BattleUnit *> spotters = getSpottingUnits(unit);
+//kL	std::vector<BattleUnit *> spotters = getSpottingUnits(unit);
 	bool result = false;
 
 	// not mind controlled, or controlled by the player
+	// kL. If spotted unit is not mind controlled,
+	// or is mind controlled but not an alien;
+	// ie, never reaction fire on a mind-controlled xCom soldier;
+	// SHOOT!!!!
 	if (unit->getFaction() == unit->getOriginalFaction()
 		|| unit->getFaction() != FACTION_HOSTILE)
 	{
+		Log(LOG_INFO) << ". Target = VALID";	// kL
+
+		std::vector<BattleUnit *> spotters = getSpottingUnits(unit);	// kL
 		BattleUnit *reactor = getReactor(spotters, unit);
 /*kL		if (reactor != unit)
 		{
@@ -991,11 +1002,9 @@ bool TileEngine::checkReactionFire(BattleUnit *unit)
 					break;
 			}
 		} */
-		for (int i = 0; i < 20; i++) // kL_start
-						// while (i <= total.spotters) But for now,
-						// since I don't know the finer pts of c++
-						// let's say maximum 20 loops.
-						// Or, GetIsObjectValid(getReactor())...
+//		for (std::vector<BattleUnit *>::iterator i = spotters.begin(); i != spotters.end(); ++i)	// kL, from getReactor() below...
+		for (size_t i = 0; i < spotters.size(); i++) // kL_start
+//		for (short i = 0; i < 20; i++) // kL_start
 		{
 			if (reactor == unit) continue;
 
@@ -1017,17 +1026,18 @@ bool TileEngine::checkReactionFire(BattleUnit *unit)
 std::vector<BattleUnit *> TileEngine::getSpottingUnits(BattleUnit* unit)
 {
 	std::vector<BattleUnit*> spotters;
+
 	for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 	{
-		if (!(*i)->isOut() &&															// not dead/unconscious
-			(*i)->getFaction() != _save->getSide() &&									// not a friend
-			distance(unit->getPosition(), (*i)->getPosition()) <= MAX_VIEW_DISTANCE)	// closer than 20 tiles
+		if (!(*i)->isOut()																// not dead/unconscious
+			&& (*i)->getFaction() != _save->getSide()									// not a friend
+			&& distance(unit->getPosition(), (*i)->getPosition()) <= MAX_VIEW_DISTANCE)	// closer than 20 tiles
 		{
 			AggroBAIState *aggro = dynamic_cast<AggroBAIState*>((*i)->getCurrentAIState());
 			bool gotHit = (aggro != 0 && aggro->getWasHit());
 
-			if (((*i)->checkViewSector(unit->getPosition()) || gotHit) &&	// can actually see the target Tile, or we got hit
-				visible(*i, unit->getTile()))								// can actually see the unit
+			if (((*i)->checkViewSector(unit->getPosition()) || gotHit)	// can actually see the target Tile, or we got hit
+				&& visible(*i, unit->getTile()))						// can actually see the unit
 			{
 				if ((*i)->getFaction() == FACTION_PLAYER)
 				{
@@ -1036,8 +1046,8 @@ std::vector<BattleUnit *> TileEngine::getSpottingUnits(BattleUnit* unit)
 
 				(*i)->addToVisibleUnits(unit);
 
-				if (_save->getSide() != FACTION_NEUTRAL &&	// no reaction on civilian turn.
-					canMakeSnap(*i, unit))
+				if (_save->getSide() != FACTION_NEUTRAL		// no reaction on civilian turn.
+					&& canMakeSnap(*i, unit))
 				{
 					spotters.push_back(*i);
 				}
@@ -1061,9 +1071,10 @@ BattleUnit* TileEngine::getReactor(std::vector<BattleUnit *> spotters, BattleUni
 
 	for (std::vector<BattleUnit *>::iterator i = spotters.begin(); i != spotters.end(); ++i)
 	{
-		if (!(*i)->isOut() &&
-			canMakeSnap(*i, unit) &&
-			(*i)->getReactionScore() > bestScore)
+		if (!(*i)->isOut()
+			&& canMakeSnap(*i, unit)
+			&& (*i)->getReactionScore() > bestScore
+			&& *i != bu)	// kL, stop unit from reacting twice (unless target uses more TU, hopefully)
 		{
 			bestScore = (*i)->getReactionScore();
 			bu = *i;
@@ -1098,8 +1109,8 @@ bool TileEngine::canMakeSnap(BattleUnit *unit, BattleUnit *target)
 	if (weapon
 		&& ((weapon->getRules()->getBattleType() == BT_MELEE	// has a melee weapon and is in melee range
 			&& validMeleeRange(unit, target, unit->getDirection())
-			&& unit->getTimeUnits() > unit->getActionTUs(BA_HIT, weapon)) ||
-		(weapon->getRules()->getBattleType() != BT_MELEE		// has a gun capable of snap shot with ammo
+			&& unit->getTimeUnits() > unit->getActionTUs(BA_HIT, weapon))
+		|| (weapon->getRules()->getBattleType() != BT_MELEE		// has a gun capable of snap shot with ammo
 			&& weapon->getRules()->getTUSnap()
 			&& weapon->getAmmoItem()
 			&& unit->getTimeUnits() > unit->getActionTUs(BA_SNAPSHOT, weapon))))
@@ -1127,19 +1138,32 @@ bool TileEngine::tryReactionSnap(BattleUnit *unit, BattleUnit *target)
 	action.cameraPosition = _save->getBattleState()->getMap()->getCamera()->getMapOffset();
 	action.actor = unit;
 	action.weapon = unit->getMainHandWeapon();
-	// reaction fire is ALWAYS snap shot.
-	action.type = BA_SNAPSHOT;
-	// unless we're a melee unit.
-	if (action.weapon->getRules()->getBattleType() == BT_MELEE)
+
+	action.type = BA_SNAPSHOT; // reaction fire is ALWAYS snap shot.
+	if (action.weapon->getRules()->getBattleType() == BT_MELEE) // unless we're a melee unit.
 	{
 		action.type = BA_HIT;
 	}
+
 	action.target = target->getPosition();
 	action.TU = unit->getActionTUs(action.type, action.weapon);
 
-	if (action.weapon && action.weapon->getAmmoItem() && action.weapon->getAmmoItem()->getAmmoQuantity() && unit->getTimeUnits() >= action.TU)
+	if (action.weapon && action.weapon->getAmmoItem()
+		&& action.weapon->getAmmoItem()->getAmmoQuantity()
+		&& unit->getTimeUnits() >= action.TU)
 	{
 		action.targeting = true;
+
+		// kL begin (taken from immediately below):
+		if (target->getFaction() == FACTION_HOSTILE) // kL. hostile units will go into an "aggro" state when they get shot at.
+		{											 // (may be redundant with I'm-hit-Jim code)
+			AggroBAIState *aggro = dynamic_cast<AggroBAIState*>(target->getCurrentAIState());
+			if (aggro == 0)
+			{
+				aggro = new AggroBAIState(_save, target); // CAREFUL, this needs to be deleted somewhere/how!!!!!
+				target->setAIState(aggro);
+			}
+		} // kL_end.
 
 		if (unit->getFaction() == FACTION_HOSTILE) // hostile units will go into an "aggro" state when they react.
 		{
@@ -1155,8 +1179,8 @@ bool TileEngine::tryReactionSnap(BattleUnit *unit, BattleUnit *target)
 				aggro->setAggroTarget(target);
 			}
 
-			if (action.weapon->getAmmoItem()->getRules()->getExplosionRadius() &&
-				aggro->explosiveEfficacy(action.target, unit, action.weapon->getAmmoItem()->getRules()->getExplosionRadius(), -1) == false)
+			if (action.weapon->getAmmoItem()->getRules()->getExplosionRadius()
+				&& aggro->explosiveEfficacy(action.target, unit, action.weapon->getAmmoItem()->getRules()->getExplosionRadius(), -1) == false)
 			{
 				// don't shoot. it's too early in the game or we'll kill ourselves or someone we care about
 				// this will cause the alien to NOT actually fire, but allow the loop to continue in case someone else CAN.
@@ -1168,6 +1192,7 @@ bool TileEngine::tryReactionSnap(BattleUnit *unit, BattleUnit *target)
 		if (unit->spendTimeUnits(unit->getActionTUs(action.type, action.weapon)) && action.targeting)
 		{
 			action.TU = 0;
+
 			_save->getBattleState()->getBattleGame()->statePushBack(new UnitTurnBState(_save->getBattleState()->getBattleGame(), action));
 			_save->getBattleState()->getBattleGame()->statePushBack(new ProjectileFlyBState(_save->getBattleState()->getBattleGame(), action));
 		}
@@ -2550,6 +2575,7 @@ bool TileEngine::psiAttack(BattleAction *action)
 			victim->setTimeUnits(victim->getStats()->tu);
 			victim->allowReselect();
 			victim->abortTurn(); // resets unit status to STANDING
+
 			// if all units from either faction are mind controlled - auto-end the mission.
 			if (Options::getBool("battleAutoEnd") && Options::getBool("allowPsionicCapture"))
 			{

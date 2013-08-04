@@ -120,7 +120,6 @@ public:
 	void nextStage();
 	/// Find a spot near a friend to spawn at
 	bool placeUnitNearFriend(BattleUnit *unit);
-
 };
 
 }

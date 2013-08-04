@@ -685,6 +685,7 @@ void Inventory::mouseClick(Action *action, State *state)
 			{
 				int x = (int)floor(action->getAbsoluteXMouse()) - _dx,
 					y = (int)floor(action->getAbsoluteYMouse()) - _dy;
+
 				RuleInventory *slot = getSlotInPosition(&x, &y);
 				if (slot != 0)
 				{
@@ -692,23 +693,33 @@ void Inventory::mouseClick(Action *action, State *state)
 					{
 						x += _groundOffset;
 					}
+
 					BattleItem *item = _selUnit->getItem(slot, x, y);
 					if (item != 0)
 					{
 						BattleType itemType = item->getRules()->getBattleType();
 						if (BT_GRENADE == itemType || BT_PROXIMITYGRENADE == itemType)
 						{
-							if (0 == item->getExplodeTurn())
+							if (0 == item->getExplodeTurn()) // Prime that grenade!
 							{
-								// Prime that grenade!
 								if (BT_PROXIMITYGRENADE == itemType) item->setExplodeTurn(1);
 								else _game->pushState(new PrimeGrenadeState(_game, 0, true, item));
 							}
-							else item->setExplodeTurn(0);  // Unprime the grenade
+							else item->setExplodeTurn(0); // Unprime the grenade
 						}
 					}
 				}
+				else // kL_begin:
+				{
+					// Closes the window on right-click.
+					_game->popState();
+				} // kL_end. - from Battlescape/MiniMapView.cpp, void MiniMapView::mouseClick (Action *action, State *state)
 			}
+			else // kL_begin:
+			{
+				// Closes the window on right-click.
+				_game->popState();
+			} // kL_end. - from Battlescape/MiniMapView.cpp, void MiniMapView::mouseClick (Action *action, State *state)
 		}
 		else
 		{
@@ -716,10 +727,11 @@ void Inventory::mouseClick(Action *action, State *state)
 			{
 				_stackLevel[_selItem->getSlotX()][_selItem->getSlotY()] += 1;
 			}
-			// Return item to original position
-			setSelectedItem(0);
+
+			setSelectedItem(0); // Return item to original position
 		}
 	}
+
 	InteractiveSurface::mouseClick(action, state);
 }
 
@@ -870,12 +882,12 @@ bool Inventory::fitItem(RuleInventory *newSlot, BattleItem *item, std::string &w
 			}
 		}
 	}
+
 	return placed;
 }
 
 /**
  * check if two items can be stacked on one another
- *
  */
 bool Inventory::canBeStacked(BattleItem *itemA, BattleItem *itemB)
 {
@@ -897,4 +909,5 @@ bool Inventory::canBeStacked(BattleItem *itemA, BattleItem *itemB)
 		itemA->getUnit() == 0 && itemB->getUnit() == 0);
 
 }
+
 }

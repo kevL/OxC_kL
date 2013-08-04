@@ -315,7 +315,10 @@ bool AggroBAIState::explosiveEfficacy(Position targetPos, BattleUnit *attackingU
 	BattleUnit *target = _game->getTile(targetPos)->getUnit();
 	for (std::vector<BattleUnit*>::iterator i = _game->getUnits()->begin(); i != _game->getUnits()->end(); ++i)
 	{
-		if (!(*i)->isOut() && (*i) != attackingUnit && (*i)->getPosition().z == targetPos.z && _game->getTileEngine()->distance((*i)->getPosition(), targetPos) <= radius)
+		if (!(*i)->isOut()
+			&& (*i) != attackingUnit
+			&& (*i)->getPosition().z == targetPos.z
+			&& _game->getTileEngine()->distance((*i)->getPosition(), targetPos) <= radius)
 		{
 			Position voxelPosA = Position ((targetPos.x * 16)+8, (targetPos.y * 16)+8, (targetPos.z * 24)+12);
 			Position voxelPosB = Position (((*i)->getPosition().x * 16)+8, ((*i)->getPosition().y * 16)+8, ((*i)->getPosition().z * 24)+12);
@@ -337,7 +340,7 @@ bool AggroBAIState::explosiveEfficacy(Position targetPos, BattleUnit *attackingU
 	// spice things up a bit by adding a random number based on difficulty level
 	efficacy += RNG::generate(0, diff + 1) - RNG::generate(0,2);
 //kL	if (efficacy > 0 || enemiesAffected >= 10)
-	if (efficacy > 0 || enemiesAffected >= 7)		// kL
+	if (efficacy > 0 || enemiesAffected >= 3)		// kL
 		return true;
 
 	return false;

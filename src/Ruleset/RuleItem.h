@@ -184,7 +184,6 @@ public:
 	int getRange() const;
 	/// how fast does a projectile fired from this weapon travel?
 	int getBulletSpeed() const;
-
 };
 
 }

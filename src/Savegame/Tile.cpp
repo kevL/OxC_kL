@@ -595,6 +595,7 @@ void Tile::ignite(int power)
 		{
 			power = 0;
 		}
+
 		if (power > RNG::generate(0, 100))
 		{
 			if (_fire == 0)
@@ -616,7 +617,7 @@ void Tile::ignite(int power)
 void Tile::animate()
 {
 	int newframe;
-	for (int i=0; i < 4; ++i)
+	for (int i = 0; i < 4; ++i)
 	{
 		if (_objects[i])
 		{
@@ -624,15 +625,18 @@ void Tile::animate()
 			{
 				continue;
 			}
+
 			newframe = _currentFrame[i] + 1;
 			if (_objects[i]->isUFODoor() && _objects[i]->getSpecialType() == START_POINT && newframe == 3)
 			{
 				newframe = 7;
 			}
+
 			if (newframe == 8)
 			{
 				newframe = 0;
 			}
+
 			_currentFrame[i] = newframe;
 		}
 	}
@@ -661,6 +665,7 @@ void Tile::setUnit(BattleUnit *unit, Tile *tileBelow)
 	{
 		unit->setTile(this, tileBelow);
 	}
+
 	_unit = unit;
 }
 

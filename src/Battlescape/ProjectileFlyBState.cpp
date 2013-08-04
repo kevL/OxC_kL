@@ -318,7 +318,10 @@ void ProjectileFlyBState::think()
 	/* TODO refactoring : store the projectile in this state, instead of getting it from the map each time? */
 	if (_parent->getMap()->getProjectile() == 0)
 	{
-		if (_action.type == BA_AUTOSHOT && _action.autoShotCounter < 3 && !_action.actor->isOut() && _ammo->getAmmoQuantity() != 0)
+		if (_action.type == BA_AUTOSHOT
+			&& _action.autoShotCounter < 3
+			&& !_action.actor->isOut()
+			&& _ammo->getAmmoQuantity() != 0)
 		{
 			createNewProjectile();
 		}
@@ -356,7 +359,10 @@ void ProjectileFlyBState::think()
 				BattleItem *item = _parent->getMap()->getProjectile()->getItem();
 				_parent->getResourcePack()->getSound("BATTLE.CAT", 38)->play();
 
-				if (Options::getBool("battleInstantGrenade") && item->getRules()->getBattleType() == BT_GRENADE && item->getExplodeTurn() != 0 && item->getExplodeTurn() <= _parent->getSave()->getTurn())
+				if (Options::getBool("battleInstantGrenade")
+					&& item->getRules()->getBattleType() == BT_GRENADE
+					&& item->getExplodeTurn() != 0
+					&& item->getExplodeTurn() <= _parent->getSave()->getTurn())
 				{
 					// it's a hot grenade to explode immediately
 					_parent->statePushFront(new ExplosionBState(_parent, _parent->getMap()->getProjectile()->getPosition(-1), item, _action.actor));
@@ -366,7 +372,9 @@ void ProjectileFlyBState::think()
 					_parent->dropItem(pos, item);
 				}
 			}
-			else if (_action.type == BA_LAUNCH && _action.waypoints.size() > 1 && _projectileImpact == -1)
+			else if (_action.type == BA_LAUNCH
+				&& _action.waypoints.size() > 1
+				&& _projectileImpact == -1)
 			{
 				_origin = _action.waypoints.front();
 				_action.waypoints.pop_front();
@@ -376,7 +384,8 @@ void ProjectileFlyBState::think()
 			}
 			else
 			{
-				if (_ammo && _action.type == BA_LAUNCH && _ammo->spendBullet() == false)
+				if (_ammo && _action.type == BA_LAUNCH
+					&& _ammo->spendBullet() == false)
 				{
 					_parent->getSave()->removeItem(_ammo);
 					_action.weapon->setAmmoItem(0);
@@ -387,12 +396,14 @@ void ProjectileFlyBState::think()
 					int offset = 0;
 					// explosions impact not inside the voxel but two steps back (projectiles generally move 2 voxels at a time)
 					if (_ammo
-						&& (_ammo->getRules()->getDamageType() == DT_HE || _ammo->getRules()->getDamageType() == DT_IN))
+						&& (_ammo->getRules()->getDamageType() == DT_HE
+							|| _ammo->getRules()->getDamageType() == DT_IN))
 					{
 						offset = -2;
 					}
 
-					_parent->statePushFront(new ExplosionBState(_parent, _parent->getMap()->getProjectile()->getPosition(offset), _ammo, _action.actor, 0, (_action.type != BA_AUTOSHOT || _action.autoShotCounter == 3|| !_action.weapon->getAmmoItem())));
+					_parent->statePushFront(new ExplosionBState(_parent, _parent->getMap()->getProjectile()->getPosition(offset), _ammo, _action.actor, 0,
+														(_action.type != BA_AUTOSHOT || _action.autoShotCounter == 3 || !_action.weapon->getAmmoItem())));
 
 					// if the unit burns floortiles, burn floortiles
 					if (_unit->getSpecialAbility() == SPECAB_BURNFLOOR)
@@ -403,7 +414,8 @@ void ProjectileFlyBState::think()
 					if (_projectileImpact == 4)
 					{
 						BattleUnit *victim = _parent->getSave()->getTile(_parent->getMap()->getProjectile()->getPosition(offset) / Position(16,16,24))->getUnit();
-						if (victim && !victim->isOut() && victim->getFaction() == FACTION_HOSTILE)
+						if (victim && !victim->isOut()
+							&& victim->getFaction() == FACTION_HOSTILE)
 						{
 							AggroBAIState *aggro = dynamic_cast<AggroBAIState*>(victim->getCurrentAIState());
 							if (aggro == 0)
@@ -411,12 +423,15 @@ void ProjectileFlyBState::think()
 								aggro = new AggroBAIState(_parent->getSave(), victim);
 								victim->setAIState(aggro);
 							}
+
 							aggro->setAggroTarget(_action.actor);
 							aggro->setWasHit(true);
 						}
 					}
 				}
-				else if (_action.type != BA_AUTOSHOT || _action.autoShotCounter == 3 || !_action.weapon->getAmmoItem())
+				else if (_action.type != BA_AUTOSHOT
+					|| _action.autoShotCounter == 3
+					|| !_action.weapon->getAmmoItem())
 				{
 					_unit->aim(false);
 					_parent->getMap()->cacheUnits();
@@ -424,6 +439,7 @@ void ProjectileFlyBState::think()
 			}
 
 			delete _parent->getMap()->getProjectile();
+
 			_parent->getMap()->setProjectile(0);
 		}
 	}

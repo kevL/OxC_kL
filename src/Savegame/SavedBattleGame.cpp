@@ -845,16 +845,19 @@ void SavedBattleGame::endTurn()
 	else if (_side == FACTION_HOSTILE)
 	{
 		_side = FACTION_NEUTRAL;
+
 		// if there is no neutral team, we skip this and instantly prepare the new turn for the player
 		if (selectNextPlayerUnit() == 0)
 		{
 			prepareNewTurn();
 			_turn++;
 			_side = FACTION_PLAYER;
+
 			if (_lastSelectedUnit && !_lastSelectedUnit->isOut())
 				_selectedUnit = _lastSelectedUnit;
 			else
 				selectNextPlayerUnit();
+
 			while (_selectedUnit && _selectedUnit->getFaction() != FACTION_PLAYER)
 				selectNextPlayerUnit();
 		}
@@ -1409,7 +1412,9 @@ bool SavedBattleGame::setUnitPosition(BattleUnit *bu, const Position &position, 
 		for (int y = size; y >= 0; y--)
 		{
 			Tile *t = getTile(position + Position(x,y,0));
-			if (t == 0 || (t->getUnit() != 0 && t->getUnit() != bu) || t->getTUCost(MapData::O_OBJECT, bu->getArmor()->getMovementType()) == 255)
+			if (t == 0
+				|| (t->getUnit() != 0 && t->getUnit() != bu)
+				|| t->getTUCost(MapData::O_OBJECT, bu->getArmor()->getMovementType()) == 255)
 			{
 				return false;
 			}
