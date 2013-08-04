@@ -44,7 +44,7 @@ namespace OpenXcom
 /**
  * Sets up an UnitWalkBState.
  */
-UnitWalkBState::UnitWalkBState(BattlescapeGame *parent, BattleAction action, const Position finalFacing, const bool pathfindForFinalTurn) : BattleState(parent, action), _unit(0), _pf(0), _terrain(0), _falling(false), _beforeFirstStep(false), _finalFacing(finalFacing), _pathfindForFinalTurn(pathfindForFinalTurn), _numUnitsSpotted(0), _preMovementCost(0)
+UnitWalkBState::UnitWalkBState(BattlescapeGame *parent, BattleAction action) : BattleState(parent, action), _unit(0), _pf(0), _terrain(0), _falling(false), _beforeFirstStep(false), _numUnitsSpotted(0), _preMovementCost(0)
 {
 }
 
@@ -526,11 +526,6 @@ void UnitWalkBState::postPathProcedures()
 	_action.TU = 0;
 	if (_unit->getFaction() != FACTION_PLAYER)
 	{
-		Position voxelPosA = Position((_finalFacing.x * 16)+8, (_finalFacing.y * 16)+8, (_finalFacing.z * 24)+12);
-		Position voxelPosB = Position((_unit->getPosition().x * 16)+8, (_unit->getPosition().y * 16)+8, (_unit->getPosition().z * 24)+12);
-
-		int visibility = _parent->getTileEngine()->calculateLine(voxelPosA, voxelPosB, false, 0, _unit, false);
-
 		if (_unit->getCharging() != 0)
 		{
 			_unit->lookAt(_unit->getCharging()->getPosition() + Position(_unit->getArmor()->getSize()-1, _unit->getArmor()->getSize()-1, 0), false);
@@ -551,36 +546,24 @@ void UnitWalkBState::postPathProcedures()
 				_parent->statePushBack(new ProjectileFlyBState(_parent, action));
 			}
 		}
-		// check that _finalFacing points to a valid tile; out of bounds value indicates no final turn
-		else if (_parent->getSave()->getTile(_finalFacing) != 0
-			&& (visibility == -1 || visibility == 4))
+		else if (_unit->_hidingForTurn)
 		{
-			if (_pathfindForFinalTurn)
+			int dir = _unit->getDirection() + 4;
+			if (dir >= 8)
 			{        
-				// if we can't see the target, try to face where they might come from        
-				_pf->abortPath();
-				_pf->calculate(_unit, _finalFacing, _parent->getSave()->getTile(_finalFacing)->getUnit());
-
-				if (_pf->getStartDirection() != -1)
-				{
-					_unit->lookAt(_pf->getStartDirection(), false);
-				}
-				else
-				{
-					_unit->lookAt(_finalFacing);
-				}
-
-				_pf->abortPath();
+				dir -= 8;
 			}
-			else
+
+			_unit->lookAt(dir);
+			while (_unit->getStatus() == STATUS_TURNING && _unit->getVisibleUnits()->empty())
 			{
-				// this duplicated call looks weird but let's not run the pathfinding code if we don't have to; lookAt(), otoh, is very cheap
-				_unit->lookAt(_finalFacing);
+				_unit->turn();
+				_parent->getTileEngine()->calculateFOV(_unit);
 			}
 
-			// cheat-turn by recommendation of warboy; use no time-units to face our foes in battle and such
-			while (_unit->getStatus() == STATUS_TURNING)
-				_unit->turn();
+			_unit->abortTurn();
+			_unit->setCache(0);
+			_parent->getMap()->cacheUnit(_unit);
 		}
 	}
 	else if (!_parent->getPanicHandled())

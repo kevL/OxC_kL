@@ -1348,7 +1348,7 @@ void BattlescapeState::SaveAIMap()
 			if (!t) continue;
 			if (!t->isDiscovered(2)) continue;
 			
-			if (_save->getTileEngine()->surveyXComThreatToTile(t, tilePos, unit) && t->totalExposure > expMax) expMax = t->totalExposure;
+			_save->getTileEngine()->surveyXComThreatToTile(t, tilePos, unit);
 		}
 	}
 	
@@ -1373,8 +1373,7 @@ void BattlescapeState::SaveAIMap()
 				&& _save->getTileEngine()->surveyXComThreatToTile(t, tilePos, unit)
 				&& t->soldiersVisible != Tile::NOT_CALCULATED)
 			{
-				int e = (t->totalExposure * 255) / expMax;
-				SDL_FillRect(img, &r, SDL_MapRGB(img->format, e, 255-e, 0x20));
+				SDL_FillRect(img, &r, SDL_MapRGB(img->format, 255, 0, 0x20));
 				characterRGBA(img, r.x, r.y, t->soldiersVisible > 9 ? '*' : ('0'+t->soldiersVisible), 0x7f, 0x7f, 0x7f, 0x7f);
 			}
 			else

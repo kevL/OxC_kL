@@ -185,7 +185,7 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 	
 	_tuReserved = BA_NONE;
 
-	if (unit->getTimeUnits() <= 5)
+	if (unit->getTimeUnits() <= 5 || unit->_hidingForTurn)
 	{
 		if (_save->selectNextPlayerUnit(true, true) == 0)
 		{
@@ -245,14 +245,11 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 	}
 
 	_AIActionCounter++;
-	if (_AIActionCounter == 1 && _playedAggroSound)
+	if(_AIActionCounter == 1)
 	{
 		_playedAggroSound = false;
-	}
+		unit->_hidingForTurn = false;
 
-	if (_AIActionCounter == 1)
-	{
-		unit->_hidingForTurn = 0;
 		if (_save->getTraceSetting()) { Log(LOG_INFO) << "#" << unit->getId() << "--" << unit->getType(); }
 	}
 
@@ -262,7 +259,7 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 	// psionic or blaster launcher units may attack remotely
 	// in bonus round, need to be in "aggro" state to hide; what was that about refactoring?
 	// also make sure you're in aggro state if you see units, even if you haven't taken a step yet
-	if ((unit->getStats()->psiSkill && _save->getExposedUnits()->size() > 0)
+	if ((unit->getStats()->psiSkill)
 		|| (unit->getMainHandWeapon() && unit->getMainHandWeapon()->getRules()->isWaypoint())
         || (unit->getVisibleUnits()->size() != 0)
 		|| (unit->_hidingForTurn))
@@ -287,6 +284,7 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 		unit->setAIState(new PatrolBAIState(_save, unit, 0));
 		ai = unit->getCurrentAIState();
 		unit->think(&action);	
+		aggro = 0;
 	}
 
 	if (!unit->getMainHandWeapon() || !unit->getMainHandWeapon()->getAmmoItem())
@@ -298,7 +296,7 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 		}
 	}
 
-	if (dynamic_cast<AggroBAIState*>(ai) != 0)
+	if (aggro != 0)
 	{
 		_tuReserved = BA_NONE;
 		if (unit->getAggroSound() != -1 && !_playedAggroSound)
@@ -324,28 +322,7 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 			if (pbai) unit->setAIState(new PatrolBAIState(_save, unit, 0)); // can't reach destination, pick someplace else to walk toward
 		}
 
-		Position finalFacing(0, 0, INT_MAX);
-		bool usePathfinding = false;
-
-		if (unit->_hidingForTurn && _AIActionCounter > 2)
-		{
-			if (_save->getTile(action.target) && _save->getTile(action.target)->soldiersVisible > 0)
-			{
-				finalFacing = _save->getTile(action.target)->closestSoldierPos; // be ready for the nearest spotting unit for our destination
-				usePathfinding = false;
-				if (_save->getTraceSetting()) { Log(LOG_INFO) << "setting final facing direction for closest soldier, "
-													<< finalFacing.x << "," << finalFacing.y << "," << finalFacing.z; }
-			}
-			else if (aggro != 0)
-			{
-				finalFacing = aggro->getLastKnownPosition(); // or else be ready for our aggro target
-				usePathfinding = true;
-				if (_save->getTraceSetting()) { Log(LOG_INFO) << "setting final facing direction for aggro target via pathfinding, "
-																<< finalFacing.x << "," << finalFacing.y << "," << finalFacing.z; }
-			}
-		}
-
-		statePushBack(new UnitWalkBState(this, action, finalFacing, usePathfinding));
+		statePushBack(new UnitWalkBState(this, action));
 	}
 
 	if (action.type == BA_SNAPSHOT
@@ -378,7 +355,6 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 			bool success = _save->getTileEngine()->psiAttack(&action);
 			if (success && action.type == BA_MINDCONTROL)
 			{
-				_save->updateExposedUnits();
 				// show a little infobox with the name of the unit and "... is under alien control"
 				std::wstringstream ss;
 				ss << _save->getTile(action.target)->getUnit()->getName(_parentState->getGame()->getLanguage())
@@ -998,7 +974,7 @@ void BattlescapeGame::popState()
 			if (_save->getSide() != FACTION_PLAYER && !_debugPlay)
 			{
 				const int AIActionLimit = (action.actor->getMainHandWeapon() && action.actor->getMainHandWeapon()->getRules()->getBattleType() == BT_MELEE) ? 9 : 2;
-				// AI does two (or three?) things per unit + hides?, before switching to the next, or it got killed before doing the second thing
+				 // AI does three things per unit, before switching to the next, or it got killed before doing the second thing
 				// melee get more because chryssalids and reapers need to attack many times to be scary
 				if (_AIActionCounter > AIActionLimit || _save->getSelectedUnit() == 0 || _save->getSelectedUnit()->isOut())
 				{
