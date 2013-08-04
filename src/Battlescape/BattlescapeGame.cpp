@@ -224,6 +224,8 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 		}
 	}
 
+	unit->setVisible(false);
+
 	_save->getTileEngine()->calculateFOV(unit->getPosition()); // might need this populate _visibleUnit for a newly-created alien
         // it might also help chryssalids realize they've zombified someone and need to move on
 		// it should also hide units when they've killed the guy spotting them
@@ -253,7 +255,6 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 	// also make sure you're in aggro state if you see units, even if you haven't taken a step yet
 	if ((unit->getStats()->psiSkill && _save->getExposedUnits()->size() > 0)
 		|| (unit->getMainHandWeapon() && unit->getMainHandWeapon()->getRules()->isWaypoint())
-		|| (_AIActionCounter > 2)
         || (unit->getVisibleUnits()->size() != 0)
 		|| (unit->_hidingForTurn))
 	{
@@ -2099,9 +2100,16 @@ void BattlescapeGame::tallyUnits(int &liveAliens, int &liveSoldiers, bool conver
 					liveAliens++;
 				}
 			}
-			else if ((*j)->getOriginalFaction() == FACTION_PLAYER && (*j)->getFaction() == FACTION_PLAYER)
+			else if ((*j)->getOriginalFaction() == FACTION_PLAYER)
 			{
-				liveSoldiers++;
+				if ((*j)->getFaction() == FACTION_PLAYER)
+				{
+					liveSoldiers++;
+				}
+				else
+				{
+					liveAliens++;
+				}
 			}
 		}
 	}
