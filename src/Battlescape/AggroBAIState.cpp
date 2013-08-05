@@ -229,7 +229,7 @@ void AggroBAIState::think(BattleAction *action)
 		}
 	}
 
-	if (takeCoverAssessment(action))
+	if (takeCoverAssessment(action) && _coverAction->type != BA_RETHINK)
 	{
 		_unit->_hidingForTurn = true;
 
