@@ -709,11 +709,6 @@ void Inventory::mouseClick(Action *action, State *state)
 						}
 					}
 				}
-				else // kL_begin:
-				{
-					// Closes the window on right-click.
-					_game->popState();
-				} // kL_end. - from Battlescape/MiniMapView.cpp, void MiniMapView::mouseClick (Action *action, State *state)
 			}
 			else // kL_begin:
 			{

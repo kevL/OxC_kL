@@ -904,10 +904,12 @@ bool TileEngine::checkReactionFire(BattleUnit *unit)
 					break;
 			}
 		} */
-//		for (std::vector<BattleUnit *>::iterator i = spotters.begin(); i != spotters.end(); ++i)	// kL, from getReactor() below...
-		for (size_t i = 0; i < spotters.size(); i++) // kL_start
+		for (std::vector<BattleUnit *>::iterator i = spotters.begin(); i != spotters.end(); ++i)	// kL, from getReactor() below...
+//		for (size_t i = 0; i < spotters.size(); i++) // kL_start
 //		for (short i = 0; i < 20; i++) // kL_start
 		{
+			Log(LOG_INFO) << ". . shooter : " << (reactor->getId());		// kL
+
 			if (reactor == unit) continue;
 
 			if (tryReactionSnap(reactor, unit))

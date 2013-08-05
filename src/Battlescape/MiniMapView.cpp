@@ -252,7 +252,9 @@ void MiniMapView::mouseClick (Action *action, State *state)
 			if ((!mouseMovedOverThreshold)
 				&& (SDL_GetTicks() - mouseScrollingStartTime <= ((Uint32)_battleGame->getDragTimeTolerance())))
 			{
-				_camera->centerOnPosition(posBeforeMouseScrolling); _redraw = true;
+				_camera->centerOnPosition(posBeforeMouseScrolling);
+
+				_redraw = true;
 			}
 
 			isMouseScrolled = isMouseScrolling = false;
@@ -272,6 +274,7 @@ void MiniMapView::mouseClick (Action *action, State *state)
 		{
 			isMouseScrolled = false;
 			_camera->centerOnPosition(posBeforeMouseScrolling);
+
 			_redraw = true;
 		}
 
@@ -291,6 +294,7 @@ void MiniMapView::mouseClick (Action *action, State *state)
 		int newX = _camera->getCenterPosition().x + xOff;
 		int newY = _camera->getCenterPosition().y + yOff;
 		_camera->centerOnPosition(Position(newX,newY,_camera->getViewLevel()));
+
 		_redraw = true;
 	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)

@@ -361,6 +361,7 @@ void Camera::scrollXY(int x, int y, bool redraw)
 	while (true);
 
 	_map->refreshSelectorPosition();
+
 	if (redraw) _map->draw();
 }
 
@@ -374,6 +375,7 @@ void Camera::jumpXY(int x, int y)
 {
 	_mapOffset.x += x;
 	_mapOffset.y += y;
+
 	convertScreenToMap((_screenWidth / 2), (_visibleMapHeight / 2), &_center.x, &_center.y);
 }
 
@@ -387,6 +389,7 @@ void Camera::up()
 	{
 		_mapOffset.z++;
 		_mapOffset.y += _spriteHeight / 2;
+
 		_map->draw();
 	}
 }
@@ -400,6 +403,7 @@ void Camera::down()
 	{
 		_mapOffset.z--;
 		_mapOffset.y -= _spriteHeight / 2;
+
 		_map->draw();
 	}
 }
@@ -412,6 +416,7 @@ void Camera::setViewLevel(int viewlevel)
 {
 	_mapOffset.z = viewlevel;
 	minMaxInt(&_mapOffset.z, 0, _mapsize_z-1);
+
 	_map->draw();
 }
 
@@ -424,15 +429,18 @@ void Camera::setViewLevel(int viewlevel)
 void Camera::centerOnPosition(const Position &mapPos, bool redraw)
 {
 	Position screenPos;
+
 	_center = mapPos;
 	minMaxInt(&_center.x, -1, _mapsize_y);
 	minMaxInt(&_center.y, -1, _mapsize_x);
 	convertMapToScreen(_center, &screenPos);
 
-	_mapOffset.x = -(screenPos.x - (_screenWidth / 2));
-	_mapOffset.y = -(screenPos.y - (_visibleMapHeight / 2));
-
+//kL	_mapOffset.x = -(screenPos.x - (_screenWidth / 2));
+//kL	_mapOffset.y = -(screenPos.y - (_visibleMapHeight / 2));
+	_mapOffset.x = -(screenPos.x - (_screenWidth / 2) +16);			// kL
+	_mapOffset.y = -(screenPos.y - (_visibleMapHeight / 2) +16);	// kL
 	_mapOffset.z = _center.z;
+
 	if (redraw) _map->draw();
 }
 
@@ -442,6 +450,7 @@ void Camera::centerOnPosition(const Position &mapPos, bool redraw)
 Position Camera::getCenterPosition()
 {
 	_center.z = _mapOffset.z;
+
 	return _center;
 }
 
