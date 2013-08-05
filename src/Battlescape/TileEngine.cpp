@@ -908,12 +908,15 @@ bool TileEngine::checkReactionFire(BattleUnit *unit)
 //		for (size_t i = 0; i < spotters.size(); i++) // kL_start
 //		for (short i = 0; i < 20; i++) // kL_start
 		{
-			Log(LOG_INFO) << ". . shooter : " << (reactor->getId());		// kL
+			Log(LOG_INFO) << ". . Test shooter : " << (reactor->getId());		// kL
 
 			if (reactor == unit) continue;
 
 			if (tryReactionSnap(reactor, unit))
+			{
+				Log(LOG_INFO) << ". . Snap by : " << (reactor->getId());		// kL
 				result = true;
+			}
 
 			reactor = getReactor(spotters, unit);
 		} // kL_end.
