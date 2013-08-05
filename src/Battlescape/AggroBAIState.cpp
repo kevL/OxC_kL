@@ -80,6 +80,7 @@ AggroBAIState::~AggroBAIState()
 void AggroBAIState::load(const YAML::Node &node)
 {
 	int targetID;
+
 	node["aggrotarget"] >> targetID;
 	if (targetID != -1)
 	{
@@ -89,6 +90,7 @@ void AggroBAIState::load(const YAML::Node &node)
 				_aggroTarget = (*j);
 		}
 	}
+
 	node["lastKnownTarget"] >> targetID;
 	if (targetID != -1)
 	{
@@ -98,6 +100,7 @@ void AggroBAIState::load(const YAML::Node &node)
 				_lastKnownTarget = (*j);
 		}
 	}
+
 	node["lastKnownPosition"][0] >> _lastKnownPosition.x;
 	node["lastKnownPosition"][1] >> _lastKnownPosition.y;
 	node["lastKnownPosition"][2] >> _lastKnownPosition.z;
@@ -123,6 +126,7 @@ void AggroBAIState::save(YAML::Emitter &out) const
 	{
 		out << YAML::Key << "aggrotarget" << YAML::Value << -1;
 	}
+
 	if (_lastKnownTarget)
 	{
 		out << YAML::Key << "lastKnownTarget" << YAML::Value << _lastKnownTarget->getId();
@@ -131,6 +135,7 @@ void AggroBAIState::save(YAML::Emitter &out) const
 	{
 		out << YAML::Key << "lastKnownTarget" << YAML::Value << -1;
 	}
+
 	out << YAML::Key << "lastKnownPosition" << YAML::Value << YAML::Flow;
 	out << YAML::BeginSeq << _lastKnownPosition.x << _lastKnownPosition.y << _lastKnownPosition.z << YAML::EndSeq;
 	out << YAML::Key << "timesNotSeen" << YAML::Value << _timesNotSeen;
@@ -143,7 +148,7 @@ void AggroBAIState::save(YAML::Emitter &out) const
  */
 void AggroBAIState::enter()
 {
-	// ROOOAARR !
+	// I am lion, hear Me ROOOAARR!!!!
 }
 
 /**
@@ -196,20 +201,22 @@ void AggroBAIState::think(BattleAction *action)
 		_charge = false;
 	}
 
-	if (_traceAI) { Log(LOG_INFO) << "AggroBAIState::think() #" << action->number << (_charge ? " [charging]": " ") << (_aggroTarget ? " [aggroTarget]:": " ") << (_aggroTarget ? _aggroTarget->getId() : -1); }
+	if (_traceAI) { Log(LOG_INFO) << "AggroBAIState::think() #" << action->number << (_charge ? " [charging]" : " ")
+						<< (_aggroTarget ? " [aggroTarget]:" : " ") << (_aggroTarget ? _aggroTarget->getId() : -1); }
 	/* Aggro is mainly either shooting a target or running towards it (melee).
-	   If we do no action here - we assume we lost aggro and will go back to patrol state.
-	*/
+	   If we do no action here - we assume we lost aggro and will go back to patrol state. */
 	
 	action->weapon = _unit->getMainHandWeapon();
 
 	// the living weapon rule here doubles for "being a terrorist"
-	if (_coverCharge == 0 && !(_unit->getOriginalFaction() == FACTION_PLAYER || _unit->getUnitRules()->isLivingWeapon()))
+	if (_coverCharge == 0
+		&& !(_unit->getOriginalFaction() == FACTION_PLAYER || _unit->getUnitRules()->isLivingWeapon()))
 	{
 		_coverAction->actor = action->actor;
 		_coverAction->number = action->number;
 		_coverAction->weapon = action->weapon;
 		takeCoverAction(_coverAction);
+
 		_unit->setCoverReserve(_coverCharge);
 	}
 
@@ -241,7 +248,9 @@ void AggroBAIState::think(BattleAction *action)
 		action->type = _coverAction->type;
 		_unit->setCoverReserve(0);
 	}
-	else if (_unit->getGrenadeFromBelt() && (action->type == BA_SNAPSHOT || action->type == BA_AUTOSHOT) && RNG::generate(0,4 - (action->diff / 2)) == 0)
+	else if (_unit->getGrenadeFromBelt()
+		&& (action->type == BA_SNAPSHOT || action->type == BA_AUTOSHOT)
+		&& RNG::generate(0,4 - (action->diff / 2)) == 0)
 	{
 		grenadeAction(action);
 	}
