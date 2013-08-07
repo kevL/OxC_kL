@@ -549,10 +549,7 @@ void UnitWalkBState::postPathProcedures()
 		else if (_unit->_hidingForTurn)
 		{
 			int dir = _unit->getDirection() + 4;
-			if (dir >= 8)
-			{        
-				dir -= 8;
-			}
+			if (dir >= 8) dir -= 8;
 
 			_unit->lookAt(dir);
 			while (_unit->getStatus() == STATUS_TURNING && _unit->getVisibleUnits()->empty())
@@ -560,7 +557,6 @@ void UnitWalkBState::postPathProcedures()
 				_unit->turn();
 				_parent->getTileEngine()->calculateFOV(_unit);
 			}
-
 			_unit->abortTurn();
 			_unit->setCache(0);
 			_parent->getMap()->cacheUnit(_unit);

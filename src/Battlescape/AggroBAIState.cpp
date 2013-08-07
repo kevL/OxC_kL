@@ -51,16 +51,16 @@ int AggroBAIState::_randomTileSearchAge = 0xBAD; // data not good yet
 AggroBAIState::AggroBAIState(SavedBattleGame *game, BattleUnit *unit) : BattleAIState(game, unit), _aggroTarget(0), _lastKnownTarget(0), _timesNotSeen(0), _coverCharge(0), _charge(false), _wasHit(false)
 {
 	_traceAI = _game->getTraceSetting();
-    if (_randomTileSearch.size() == 0)
-    {
-        _randomTileSearch.resize(11*11); // this is currently regenerating this structure once for every alien. Perhaps store it persistently instead?
+	if (_randomTileSearch.size() == 0)
+	{
+		_randomTileSearch.resize(11*11); // this is currently regenerating this structure once for every alien. Perhaps store it persistently instead?
 
-        for (int i = 0; i < 121; ++i)
-        {
-            _randomTileSearch[i].x = ((i%11) - 5);
-	        _randomTileSearch[i].y = ((i/11) - 5); 
-        }
-    }
+		for (int i = 0; i < 121; ++i)
+		{
+			_randomTileSearch[i].x = ((i%11) - 5);
+			_randomTileSearch[i].y = ((i/11) - 5); 
+		}
+	}
 
 	_coverAction = new BattleAction();
 }
@@ -576,7 +576,7 @@ void AggroBAIState::takeCoverAction(BattleAction *action)
 	Tile *tile = 0;
 
 	const bool civ = _unit->getFaction() == FACTION_NEUTRAL;
-
+					
 	// weights of various factors in choosing a tile to which to withdraw
 	const int EXPOSURE_PENALTY = civ ? -20 : 20;
 	const int FIRE_PENALTY = 40;
@@ -768,13 +768,13 @@ void AggroBAIState::stalkingAction(BattleAction *action)
 
 	// lets go looking where we've last seen him
 	action->target = _lastKnownPosition;
-			action->type = BA_WALK;
+	action->type = BA_WALK;
 
-			if (action->weapon && action->weapon->getRules()->getBattleType() == BT_MELEE)
-			{
-				action->actor->setCharging(_game->getTile(_lastKnownPosition)->getUnit());
-			}
-		}
+	if (action->weapon && action->weapon->getRules()->getBattleType() == BT_MELEE)
+	{
+		action->actor->setCharging(_game->getTile(_lastKnownPosition)->getUnit());
+	}
+}
 
 /*
  * should we take cover from our current target?
@@ -818,7 +818,6 @@ bool AggroBAIState::takeCoverAssessment(BattleAction *action)
 	if (action->type == BA_MINDCONTROL || action->type == BA_PANIC)
 		takeCover = false;
 
-
 	if (action->type == BA_RETHINK)
 	{
 		if (!_unit->getVisibleUnits()->empty())
@@ -838,7 +837,7 @@ bool AggroBAIState::takeCoverAssessment(BattleAction *action)
 	}
 	else
 	{
-		if(action->type != BA_RETHINK && action->type != BA_WALK)
+		if (action->type != BA_RETHINK && action->type != BA_WALK)
 		{
 			// enough time units to shoot?
 			int tu = action->actor->getActionTUs(action->type, action->weapon);

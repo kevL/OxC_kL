@@ -284,7 +284,7 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 		_parentState->debug(L"Rethink");
 		unit->setAIState(new PatrolBAIState(_save, unit, 0));
 		ai = unit->getCurrentAIState();
-		unit->think(&action);	
+		unit->think(&action);
 		aggro = 0;
 	}
 
@@ -326,7 +326,6 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 			PatrolBAIState *pbai = dynamic_cast<PatrolBAIState*>(unit->getCurrentAIState());
 			if (pbai) unit->setAIState(new PatrolBAIState(_save, unit, 0)); // can't reach destination, pick someplace else to walk toward
 		}
-
 		statePushBack(new UnitWalkBState(this, action));
 	}
 

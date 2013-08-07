@@ -874,7 +874,7 @@ void SavedBattleGame::endTurn()
 		while (_selectedUnit && _selectedUnit->getFaction() != FACTION_PLAYER)
 			selectNextPlayerUnit();
 	}
-	
+
 	if (_side == FACTION_PLAYER)
 	{
 		int liveSoldiers, liveAliens;

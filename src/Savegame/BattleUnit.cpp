@@ -1527,6 +1527,7 @@ void BattleUnit::allowReselect()
 	_dontReselect = false;
 }
 
+
 /**
  * Check whether reselecting this unit is allowed.
  * @return bool

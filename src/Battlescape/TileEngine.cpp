@@ -391,12 +391,12 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 bool TileEngine::surveyXComThreatToTile(Tile *tile, Position &tilePos, BattleUnit *queryingUnit)
 {
 	if (tile->soldiersVisible != -1) return true; // already calculated this turn
-
+	
 	if (!_save->setUnitPosition(queryingUnit, tilePos, true)) 
 	{
 		return false;
 	}
-	
+
 	tile->soldiersVisible = 0; // we're actually not updating the other three tiles of a 2x2 unit because the AI code is going to ignore them anyway for now
 	tile->closestSoldierDSqr = INT_MAX;
 	tile->closestAlienDSqr = INT_MAX;
@@ -430,7 +430,7 @@ bool TileEngine::surveyXComThreatToTile(Tile *tile, Position &tilePos, BattleUni
 
 		if ((*i)->getFaction() == FACTION_HOSTILE && dsqr < tile->closestAlienDSqr) tile->closestAlienDSqr = dsqr;
 	}
-	
+
 	if (tile->soldiersVisible == 0)
 	{
 		tile->closestSoldierDSqr = -1; 
