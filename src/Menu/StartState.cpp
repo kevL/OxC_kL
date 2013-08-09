@@ -357,12 +357,15 @@ static struct AudioSequence
 
 	void operator ()()
 	{
+	
+
 		while (Flc::flc.FrameCount >= introSoundTrack[trackPosition].frameNumber)
 		{
 			int command = introSoundTrack[trackPosition].sound;
 
 			if (command & 0x200)
 			{
+#ifndef __NO_MUSIC
 				switch(command)
 				{
 					case 0x200:
@@ -381,7 +384,8 @@ static struct AudioSequence
 						m->play(1);
 						Mix_HookMusicFinished(musicDone);
 					break;
-				}		
+				}
+#endif		
 			}
 			else if (command & 0x400)
 			{
@@ -409,6 +413,7 @@ static struct AudioSequence
 
 			++trackPosition;
 		}
+
 	}
 } *audioSequence;
 
@@ -432,14 +437,13 @@ void StartState::think()
 			{
 				Log(LOG_INFO) << "Loading ruleset...";
 				_game->loadRuleset();
-
 				Log(LOG_INFO) << "Ruleset loaded successfully.";
+
 				Log(LOG_INFO) << "Loading resources...";
 				_game->setResourcePack(new XcomResourcePack(_game->getRuleset()->getExtraSprites(), _game->getRuleset()->getExtraSounds()));
-
 				Log(LOG_INFO) << "Resources loaded successfully.";
-				std::vector<std::string> langs = Language::getList(0);
 
+				std::vector<std::string> langs = Language::getList(0);
 				if (langs.empty())
 				{
 					throw Exception("No languages available");
@@ -447,9 +451,11 @@ void StartState::think()
 
 				_load = LOADING_SUCCESSFUL;
 
+
 				// loading done? let's play intro!
 				std::string introFile = CrossPlatform::getDataFile("UFOINTRO/UFOINT.FLI");
-				if (Options::getBool("playIntro") && CrossPlatform::fileExists(introFile))
+				std::string introSoundFile = CrossPlatform::getDataFile("SOUND/INTRO.CAT");
+				if (Options::getBool("playIntro") && CrossPlatform::fileExists(introFile) && CrossPlatform::fileExists(introSoundFile))
 				{
 					audioSequence = new AudioSequence(_game->getResourcePack());
 					Flc::flc.realscreen = _game->getScreen();
@@ -462,12 +468,14 @@ void StartState::think()
 
 					delete audioSequence;
 
+#ifndef __NO_MUSIC
 					// fade out!
 					Mix_FadeOutChannel(-1, 45*20);
 
 					// SDL_Mixer has trouble with native midi and volume on windows, which is the most likely use case, so f@%# it.
 					if (Mix_GetMusicType(0) != MUS_MID) { Mix_FadeOutMusic(45*20); }
 					else { Mix_HaltMusic(); }
+#endif
 
 					SDL_Color pal[256];
 					SDL_Color pal2[256];
@@ -496,7 +504,9 @@ void StartState::think()
 
 					_game->setVolume(Options::getInt("soundVolume"), Options::getInt("musicVolume"));
 
+#ifndef __NO_MUSIC
 					Mix_HaltChannel(-1);
+#endif
 				}
 			}
 

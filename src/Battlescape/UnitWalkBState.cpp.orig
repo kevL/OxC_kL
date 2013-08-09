@@ -32,7 +32,6 @@
 #include "../Savegame/Tile.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Sound.h"
-#include "../Engine/RNG.h"
 #include "../Engine/Options.h"
 #include "../Ruleset/Armor.h"
 #include "../Engine/Logger.h"
@@ -55,6 +54,9 @@ UnitWalkBState::~UnitWalkBState()
 {
 }
 
+/**
+ * Initializes the state.
+ */
 void UnitWalkBState::init()
 {
 	_unit = _action.actor;
@@ -74,6 +76,9 @@ void UnitWalkBState::init()
 	}
 }
 
+/**
+ * Runs state functionality every cycle.
+ */
 void UnitWalkBState::think()
 {
 	bool unitSpotted = false;
@@ -150,6 +155,10 @@ void UnitWalkBState::think()
 			}
 
 			_falling = largeCheck && _unit->getPosition().z != 0 && _unit->getTile()->hasNoFloor(tileBelow) && _unit->getArmor()->getMovementType() != MT_FLY && _unit->getWalkingPhase() == 0;
+<<<<<<< HEAD
+=======
+
+>>>>>>> master
 			if (_falling)
 			{
 				for (int x = _unit->getArmor()->getSize() - 1; x >= 0; --x)
@@ -441,7 +450,7 @@ void UnitWalkBState::think()
 				if (_unit->spendEnergy(energy))
 				{
 					Tile *tileBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(0,0,-1));
-					_unit->startWalking(dir, destination, tileBelow, onScreen);					
+					_unit->startWalking(dir, destination, tileBelow, onScreen);
 					_beforeFirstStep = false;
 				}
 			}
@@ -478,7 +487,7 @@ void UnitWalkBState::think()
 		}
 
 		_unit->turn();
-		
+
 		// calculateFOV is unreliable for setting the unitSpotted bool, as it can be called from various other places
 		// in the code, ie: doors opening, and this messes up the result.
 		_terrain->calculateFOV(_unit);
@@ -510,7 +519,11 @@ void UnitWalkBState::think()
 }
 
 /**
+<<<<<<< HEAD
  * Abort unit walking.
+=======
+ * Aborts unit walking.
+>>>>>>> master
  */
 void UnitWalkBState::cancel()
 {
@@ -519,7 +532,11 @@ void UnitWalkBState::cancel()
 }
 
 /**
+<<<<<<< HEAD
  * Handle some calculations when the path is finished.
+=======
+ * Handles some calculations when the path is finished.
+>>>>>>> master
  */
 void UnitWalkBState::postPathProcedures()
 {
@@ -549,11 +566,7 @@ void UnitWalkBState::postPathProcedures()
 		else if (_unit->_hidingForTurn)
 		{
 			int dir = _unit->getDirection() + 4;
-			if (dir >= 8)
-<<<<<<< HEAD
-			{        
-				dir -= 8;
-			}
+			if (dir >= 8) dir -= 8;
 
 			_unit->lookAt(dir);
 			while (_unit->getStatus() == STATUS_TURNING && _unit->getVisibleUnits()->empty())
@@ -561,18 +574,6 @@ void UnitWalkBState::postPathProcedures()
 				_unit->turn();
 				_parent->getTileEngine()->calculateFOV(_unit);
 			}
-
-=======
-			{
-				dir -= 8;
-			}
-			_unit->lookAt(dir);
-			while (_unit->getStatus() == STATUS_TURNING && _unit->getVisibleUnits()->empty())
-			{
-				_unit->turn();
-				_parent->getTileEngine()->calculateFOV(_unit);
-			}
->>>>>>> 09bed41701e2b001aff2ba8165fd36df109c3de3
 			_unit->abortTurn();
 			_unit->setCache(0);
 			_parent->getMap()->cacheUnit(_unit);
@@ -593,8 +594,8 @@ void UnitWalkBState::postPathProcedures()
 		_parent->popState();
 }
 
-/*
- * Handle some calculations when the walking finished.
+/**
+ * Handles some calculations when the walking is finished.
  */
 void UnitWalkBState::setNormalWalkSpeed()
 {
@@ -605,8 +606,8 @@ void UnitWalkBState::setNormalWalkSpeed()
 }
 
 
-/*
- * Handle the stepping sounds.
+/**
+ * Handles the stepping sounds.
  */
 void UnitWalkBState::playMovementSound()
 {

@@ -26,7 +26,6 @@
 #include "../Engine/Game.h"
 #include "../Engine/SurfaceSet.h"
 #include "../Resource/ResourcePack.h"
-#include "../Savegame/SavedGame.h"
 #include "../Ruleset/Armor.h"
 #include <sstream>
 
@@ -39,21 +38,21 @@ const int MAX_FRAME		= 2;
 
 /**
  * Initializes all the elements in the MiniMapView.
- * @param w the MiniMapView width
- * @param h the MiniMapView height
- * @param x the MiniMapView x origin
- * @param y the MiniMapView y origin
+ * @param w The MiniMapView width.
+ * @param h The MiniMapView height.
+ * @param x The MiniMapView x origin.
+ * @param y The MiniMapView y origin.
  * @param game Pointer to the core game.
  * @param camera The Battlescape camera.
- * @param battleGame Pointer to the SavedBattleGame
-*/
+ * @param battleGame Pointer to the SavedBattleGame.
+ */
 MiniMapView::MiniMapView(int w, int h, int x, int y, Game * game, Camera * camera, SavedBattleGame * battleGame) : InteractiveSurface(w, h, x, y), _game(game), _camera(camera), _battleGame(battleGame), _frame(0), isMouseScrolling(false), isMouseScrolled(false)
 {
 	_set = _game->getResourcePack()->getSurfaceSet("SCANG.DAT");
 }
 
 /**
- * Draw the minimap
+ * Draws the minimap.
  */
 void MiniMapView::draw()
 {
@@ -178,8 +177,8 @@ void MiniMapView::draw()
 }
 
 /**
- * Increment the displayed level
- * @return new display level
+ * Increments the displayed level.
+ * @return New display level.
  */
 int MiniMapView::up()
 {
@@ -190,8 +189,8 @@ int MiniMapView::up()
 }
 
 /**
- * Decrement the displayed level
- * @return new display level
+ * Decrements the displayed level.
+ * @return New display level.
  */
 int MiniMapView::down()
 {
@@ -201,10 +200,10 @@ int MiniMapView::down()
 }
 
 /**
- * Handle press on the minimap. Enter to mouse-moving mode when right button is used
+ * Handles mouse presses on the minimap. Enters mouse-moving mode when the right button is used.
  * @param action Pointer to an action.
  * @param state State that the action handlers belong to.
-*/
+ */
 void MiniMapView::mousePress(Action *action, State *state)
 {
 	InteractiveSurface::mousePress(action, state);
@@ -231,10 +230,10 @@ void MiniMapView::mousePress(Action *action, State *state)
 }
 
 /**
- * Handle click on the minimap. Will change the camera center to the clicked point
+ * Handles mouse clicks on the minimap. Will change the camera center to the clicked point.
  * @param action Pointer to an action.
  * @param state State that the action handlers belong to.
-*/
+ */
 void MiniMapView::mouseClick (Action *action, State *state)
 {
 	InteractiveSurface::mouseClick(action, state);
@@ -305,11 +304,11 @@ void MiniMapView::mouseClick (Action *action, State *state)
 }
 
 /**
- * Handle moving over the minimap.
- * Will change the camera center when mouse moved in mouse-moving mode
+ * Handles moving over the minimap.
+ * Will change the camera center when the mouse is moved in mouse-moving mode.
  * @param action Pointer to an action.
  * @param state State that the action handlers belong to.
-*/
+ */
 void MiniMapView::mouseOver(Action *action, State *state)
 {
 	InteractiveSurface::mouseOver(action, state);
@@ -405,11 +404,11 @@ void MiniMapView::mouseOver(Action *action, State *state)
 }
 
 /**
- * Handle moving in to the minimap.
- * Stops the mouse-scrolling mode, if it's left on
+ * Handles moving into the minimap.
+ * Stops the mouse-scrolling mode, if it's left on.
  * @param action Pointer to an action.
  * @param state State that the action handlers belong to.
-*/
+ */
 void MiniMapView::mouseIn(Action *action, State *state)
 {
 	InteractiveSurface::mouseIn(action, state);
@@ -420,8 +419,8 @@ void MiniMapView::mouseIn(Action *action, State *state)
 }
 
 /**
- * Update minimap animation
-*/
+ * Updates the minimap animation.
+ */
 void MiniMapView::animate()
 {
 	_frame++;
