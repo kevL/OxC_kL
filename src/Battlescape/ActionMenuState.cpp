@@ -131,7 +131,6 @@ ActionMenuState::ActionMenuState(Game *game, BattleAction *action, int x, int y)
 	{
 		addItem(BA_USE, "STR_USE_MIND_PROBE", &id);
 	}
-
 }
 
 /**
@@ -139,7 +138,6 @@ ActionMenuState::ActionMenuState(Game *game, BattleAction *action, int x, int y)
  */
 ActionMenuState::~ActionMenuState()
 {
-
 }
 
 /**
@@ -152,15 +150,27 @@ void ActionMenuState::addItem(BattleActionType ba, const std::string &name, int 
 {
 	std::wstringstream ss1, ss2;
 	int acc = (int)floor(_action->actor->getFiringAccuracy(ba, _action->weapon) * 100);
+
 	if (ba == BA_THROW)
 		acc = (int)floor(_action->actor->getThrowingAccuracy() * 100);
+
 	int tu = _action->actor->getActionTUs(ba, _action->weapon);
 
-	if (ba == BA_THROW || ba == BA_AIMEDSHOT || ba == BA_SNAPSHOT || ba == BA_AUTOSHOT || ba == BA_LAUNCH || ba == BA_HIT)
+	if (ba == BA_THROW
+		|| ba == BA_AIMEDSHOT
+		|| ba == BA_SNAPSHOT
+		|| ba == BA_AUTOSHOT
+		|| ba == BA_LAUNCH
+		|| ba == BA_HIT)
+	{
 		ss1 << _game->getLanguage()->getString("STR_ACC") << acc << "%";
+	}
+
 	ss2 << _game->getLanguage()->getString("STR_TUS") << tu;
+
 	_actionMenu[*id]->setAction(ba, _game->getLanguage()->getString(name), ss1.str(), ss2.str(), tu);
 	_actionMenu[*id]->setVisible(true);
+
 	(*id)++;
 }
 

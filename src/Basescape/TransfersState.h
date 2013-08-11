@@ -31,8 +31,7 @@ class Text;
 class TextList;
 
 /**
- * Transfers window that displays all
- * the items currently in-transit to a base.
+ * Transfers window that displays all the items currently in-transit to a base.
  */
 class TransfersState : public State
 {

@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef ARESAME_H
 #define ARESAME_H
 
@@ -23,9 +24,9 @@
 #include <cmath>
 
 template <class _Tx>
-inline bool AreSame(const _Tx& l, const _Tx& r) {
-  return std::fabs(l-r) <= std::numeric_limits<_Tx>::epsilon();
+inline bool AreSame(const _Tx& l, const _Tx& r)
+{
+	return std::fabs(l-r) <= std::numeric_limits<_Tx>::epsilon();
 }
 
 #endif
-

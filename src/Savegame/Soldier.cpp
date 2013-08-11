@@ -70,6 +70,7 @@ Soldier::Soldier(RuleSoldier *rules, Armor *armor, const std::vector<SoldierName
 			_look = (SoldierLook)RNG::generate(0,3);
 		}
 	}
+
 	if (id != 0)
 	{
 		_id = id;
@@ -95,6 +96,7 @@ Soldier::~Soldier()
 void Soldier::load(const YAML::Node &node, const Ruleset *rule)
 {
 	int a = 0;
+
 	node["id"] >> _id;
 	std::string name;
 	node["name"] >> name;
@@ -114,15 +116,23 @@ void Soldier::load(const YAML::Node &node, const Ruleset *rule)
 	node["armor"] >> armor;
 	_armor = rule->getArmor(armor);
 	node["psiTraining"] >> _psiTraining;
-	try {
+
+	try
+	{
 		node["improvement"] >> _improvement;
 	}
-	catch (YAML::Exception &e) {
+	catch (YAML::Exception &e)
+	{
 		_improvement = 0;
 	}
+
 	if (const YAML::Node *layoutNode = node.FindValue("equipmentLayout"))
+	{
 		for (YAML::Iterator i = layoutNode->begin(); i != layoutNode->end(); ++i)
+		{
 			_equipmentLayout.push_back(new EquipmentLayoutItem(*i));
+		}
+	}
 }
 
 /**
@@ -137,11 +147,14 @@ void Soldier::save(YAML::Emitter &out) const
 	out << YAML::Key << "initialStats" << YAML::Value << _initialStats;
 	out << YAML::Key << "currentStats" << YAML::Value << _currentStats;
 	out << YAML::Key << "rank" << YAML::Value << _rank;
+
 	if (_craft != 0)
 	{
 		out << YAML::Key << "craft" << YAML::Value;
+
 		_craft->saveId(out);
 	}
+
 	out << YAML::Key << "gender" << YAML::Value << _gender;
 	out << YAML::Key << "look" << YAML::Value << _look;
 	out << YAML::Key << "missions" << YAML::Value << _missions;
@@ -150,14 +163,20 @@ void Soldier::save(YAML::Emitter &out) const
 	out << YAML::Key << "armor" << YAML::Value << _armor->getType();
 	out << YAML::Key << "psiTraining" << YAML::Value << _psiTraining;
 	out << YAML::Key << "improvement" << YAML::Value << _improvement;
+
 	if (!_equipmentLayout.empty())
 	{
 		out << YAML::Key << "equipmentLayout" << YAML::Value;
 		out << YAML::BeginSeq;
+
 		for (std::vector<EquipmentLayoutItem*>::const_iterator j = _equipmentLayout.begin(); j != _equipmentLayout.end(); ++j)
+		{
 			(*j)->save(out);
+		}
+
 		out << YAML::EndSeq;
 	}
+
 	out << YAML::EndMap;
 }
 
@@ -219,6 +238,7 @@ std::wstring Soldier::getCraftString(Language *lang) const
 	{
 		s = _craft->getName(lang);
 	}
+
 	return s;
 }
 
@@ -231,21 +251,16 @@ std::string Soldier::getRankString() const
 {
 	switch (_rank)
 	{
-	case RANK_ROOKIE:
-		return "STR_ROOKIE";
-	case RANK_SQUADDIE:
-		return "STR_SQUADDIE";
-	case RANK_SERGEANT:
-		return "STR_SERGEANT";
-	case RANK_CAPTAIN:
-		return "STR_CAPTAIN";
-	case RANK_COLONEL:
-		return "STR_COLONEL";
-	case RANK_COMMANDER:
-		return "STR_COMMANDER";
-	default:
+		case RANK_ROOKIE:		return "STR_ROOKIE";
+		case RANK_SQUADDIE:		return "STR_SQUADDIE";
+		case RANK_SERGEANT:		return "STR_SERGEANT";
+		case RANK_CAPTAIN:		return "STR_CAPTAIN";
+		case RANK_COLONEL:		return "STR_COLONEL";
+		case RANK_COMMANDER:	return "STR_COMMANDER";
+		default:
 		break;
 	}
+
 	return "";
 }
 
@@ -378,6 +393,7 @@ bool Soldier::isPromoted()
 {
 	bool promoted = _recentlyPromoted;
 	_recentlyPromoted = false;
+
 	return promoted;
 }
 
@@ -446,21 +462,23 @@ std::vector<EquipmentLayoutItem*> *Soldier::getEquipmentLayout()
 void Soldier::trainPsi()
 {
 	_improvement = 0;
+
 	// -10 days - tolerance threshold for switch from anytimePsiTraining option.
 	// If soldier has psiskill -10..-1, he was trained 20..59 days. 81.7% probability, he was trained more that 30 days.
 	if (_currentStats.psiSkill < -10 + _rules->getMinStats().psiSkill)
 		_currentStats.psiSkill = _rules->getMinStats().psiSkill;
-	else if(_currentStats.psiSkill <= _rules->getMaxStats().psiSkill)
+	else if (_currentStats.psiSkill <= _rules->getMaxStats().psiSkill)
 	{
 		int max = _rules->getMaxStats().psiSkill + _rules->getMaxStats().psiSkill / 2;
 		_improvement = RNG::generate(_rules->getMaxStats().psiSkill, max);
 	}
-	else if(_currentStats.psiSkill <= (_rules->getStatCaps().psiSkill / 2))
+	else if (_currentStats.psiSkill <= (_rules->getStatCaps().psiSkill / 2))
 		_improvement = RNG::generate(5, 12);
-	else if(_currentStats.psiSkill < _rules->getStatCaps().psiSkill)
+	else if (_currentStats.psiSkill < _rules->getStatCaps().psiSkill)
 		_improvement = RNG::generate(1, 3);
+
 	_currentStats.psiSkill += _improvement;
-	if(_currentStats.psiSkill > 100)
+	if (_currentStats.psiSkill > 100)
 		_currentStats.psiSkill = 100;
 }
 
@@ -472,12 +490,14 @@ void Soldier::trainPsi1Day()
 	if (!_psiTraining)
 	{
 		_improvement = 0;
+
 		return;
 	}
 
 	if (_currentStats.psiSkill > 0) // yes, 0. _rules->getMinStats().psiSkill was wrong.
 	{
-		if (8 * 100 >= _currentStats.psiSkill * RNG::generate(1, 100) && _currentStats.psiSkill < _rules->getStatCaps().psiSkill)
+		if (8 * 100 >= _currentStats.psiSkill * RNG::generate(1, 100)
+			&& _currentStats.psiSkill < _rules->getStatCaps().psiSkill)
 		{
 			++_improvement;
 			++_currentStats.psiSkill;
@@ -518,4 +538,5 @@ int Soldier::getImprovement()
 {
 	return _improvement;
 }
+
 }

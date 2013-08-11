@@ -1143,6 +1143,7 @@ Node *SavedBattleGame::getPatrolNode(bool scout, BattleUnit *unit, Node *fromNod
 	if (fromNode == 0)
 	{
 		if (Options::getBool("traceAI")) { Log(LOG_INFO) << "This alien got lost. :("; }
+
 		fromNode = getNodes()->at(RNG::generate(0, getNodes()->size() - 1));
 	}
 
@@ -1572,14 +1573,17 @@ bool SavedBattleGame::getUnitsFalling() const
 {
 	return _unitsFalling;
 }
+
 bool SavedBattleGame::getStrafeSetting() const
 {
 	return _strafeEnabled;
 }
+
 bool SavedBattleGame::getSneakySetting() const
 {
 	return _sneaky;
 }
+
 bool SavedBattleGame::getTraceSetting() const
 {
 	return _traceAI;

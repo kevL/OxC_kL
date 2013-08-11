@@ -299,7 +299,7 @@ public:
 	/// Check if unit eligible for squaddie promotion.
 	bool postMissionProcedures(SavedGame *geoscape);
 	/// Get the sprite index for the minimap
-	int getMiniMapSpriteIndex () const;
+	int getMiniMapSpriteIndex() const;
 	/// Set the turret type. -1 is no turret.
 	void setTurretType(int turretType);
 	/// Get the turret type. -1 is no turret.
@@ -309,7 +309,7 @@ public:
 	/// Heal one fatal wound
 	void heal(int part, int healAmount, int healthAmount);
 	/// Give pain killers to this unit
-	void painKillers ();
+	void painKillers();
 	/// Give stimulant to this unit
 	void stimulant (int energy, int stun);
 	/// Get motion points for the motion scanner.
@@ -385,7 +385,7 @@ public:
 	/// Set how many turns this unit will be exposed for.
 	void setTurnsExposed (int turns);
 	/// Set how many turns this unit will be exposed for.
-	int getTurnsExposed () const;
+	int getTurnsExposed() const;
 	/// Get this unit's original faction
 	UnitFaction getOriginalFaction() const;
 	/// call this after the default copy constructor deletes the cache?

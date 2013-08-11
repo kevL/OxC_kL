@@ -144,10 +144,12 @@ PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base),
 	std::wstringstream ss;
 	ss << _base->getTotalSoldiers();
 	_lstItems->addRow(4, _game->getLanguage()->getString("STR_SOLDIER").c_str(), Text::formatFunding(_game->getRuleset()->getSoldierCost() * 2).c_str(), ss.str().c_str(), L"0");
+
 	_qtys.push_back(0);
 	std::wstringstream ss2;
 	ss2 << _base->getTotalScientists();
 	_lstItems->addRow(4, _game->getLanguage()->getString("STR_SCIENTIST").c_str(), Text::formatFunding(_game->getRuleset()->getScientistCost() * 2).c_str(), ss2.str().c_str(), L"0");
+
 	_qtys.push_back(0);
 	std::wstringstream ss3;
 	ss3 << _base->getTotalEngineers();
@@ -157,37 +159,48 @@ PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base),
 	for (std::vector<std::string>::const_iterator i = crafts.begin(); i != crafts.end(); ++i)
 	{
 		RuleCraft *rule = _game->getRuleset()->getCraft(*i);
-		if (rule->getBuyCost() > 0 && _game->getSavedGame()->isResearched(rule->getRequirements()))
+		if (rule->getBuyCost() > 0
+			&& _game->getSavedGame()->isResearched(rule->getRequirements()))
 		{
 			_crafts.push_back(*i);
 			_qtys.push_back(0);
+
 			int crafts = 0;
 			for (std::vector<Craft*>::iterator c = _base->getCrafts()->begin(); c != _base->getCrafts()->end(); ++c)
 			{
 				if ((*c)->getRules()->getType() == *i)
 					crafts++;
 			}
+
 			std::wstringstream ss4;
 			ss4 << crafts;
 			_lstItems->addRow(4, _game->getLanguage()->getString(*i).c_str(), Text::formatFunding(rule->getBuyCost()).c_str(), ss4.str().c_str(), L"0");
 		}
 	}
+
 	std::vector<std::string> items = _game->getRuleset()->getItemsList();
+
 	const std::vector<std::string> &cweapons = _game->getRuleset()->getCraftWeaponsList();
 	for (std::vector<std::string>::const_iterator i = cweapons.begin(); i != cweapons.end(); ++i)
 	{
 		// Special handling for treating craft weapons as items
 		RuleCraftWeapon *rule = _game->getRuleset()->getCraftWeapon(*i);
-		RuleItem *launcher = _game->getRuleset()->getItem(rule->getLauncherItem());
-		RuleItem *clip = _game->getRuleset()->getItem(rule->getClipItem());
-		if (launcher != 0 && launcher->getBuyCost() > 0 && !isExcluded(launcher->getType()))
+//kL		RuleItem *launcher = _game->getRuleset()->getItem(rule->getLauncherItem());
+//kL		RuleItem *clip = _game->getRuleset()->getItem(rule->getClipItem());
+
+		RuleItem *launcher = _game->getRuleset()->getItem(rule->getLauncherItem());		// kL
+		if (launcher != 0
+			&& launcher->getBuyCost() > 0
+			&& !isExcluded(launcher->getType()))
 		{
 			_items.push_back(launcher->getType());
 			_qtys.push_back(0);
+
 			std::wstringstream ss5;
 			ss5 << _base->getItems()->getItem(launcher->getType());
 			std::wstring item = _game->getLanguage()->getString(launcher->getType());
 			_lstItems->addRow(4, item.c_str(), Text::formatFunding(launcher->getBuyCost()).c_str(), ss5.str().c_str(), L"0");
+
 			for (std::vector<std::string>::iterator j = items.begin(); j != items.end(); ++j)
 			{
 				if (*j == launcher->getType())
@@ -197,15 +210,18 @@ PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base),
 				}
 			}
 		}
+
+		RuleItem *clip = _game->getRuleset()->getItem(rule->getClipItem());		// kL
 		if (clip != 0 && clip->getBuyCost() > 0 && !isExcluded(clip->getType()))
 		{
 			_items.push_back(clip->getType());
 			_qtys.push_back(0);
 			std::wstringstream ss5;
-			ss5 << _base->getItems()->getItem(clip->getType());
+			ss5 << _base->getItems()->getItem(clip->getType());	// TODO: add items from transfers & crafts (kL)
 			std::wstring item = _game->getLanguage()->getString(clip->getType());
 			item.insert(0, L"  ");
 			_lstItems->addRow(4, item.c_str(), Text::formatFunding(clip->getBuyCost()).c_str(), ss5.str().c_str(), L"0");
+
 			for (std::vector<std::string>::iterator j = items.begin(); j != items.end(); ++j)
 			{
 				if (*j == clip->getType())
@@ -216,26 +232,75 @@ PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base),
 			}
 		}
 	}
+
 	for (std::vector<std::string>::const_iterator i = items.begin(); i != items.end(); ++i)
 	{
 		RuleItem *rule = _game->getRuleset()->getItem(*i);
+
 		if (rule->getBuyCost() > 0 && !isExcluded(*i))
 		{
 			_items.push_back(*i);
 			_qtys.push_back(0);
+
 			std::wstringstream ss5;
-			ss5 << _base->getItems()->getItem(*i);
+			ss5 << _base->getItems()->getItem(*i);	// TODO: add items from transfers & crafts (kL)
+
+			// kL_begin:
+/*			int tQty = _base->getItems()->getItem(*i);
+
+//			std::vector<std::string> transit = _game->getRuleset()->getItemsList();
+//			for (std::vector<std::string>::const_iterator j = transit.begin(); j != transit.end(); ++j)
+//			std::vector<Transfer*>::iterator transit = _base->getTransfers();
+			for (std::vector<Transfer*>::iterator transit = _base->getTransfers()->begin(); transit != _base->getTransfers()->end(); ++transit)
+			{
+				if (_game->getRuleset()->getItem(i) == _base->getTransfers())
+				{
+					tQty += _base->getItems()->getItem(*j);
+				}
+			} */
+//			int total = _base->getItems()->getItem(*i);
+
+//			total += _base->Base::getTransfers()->*Transfer::getQuantity()->getItem(*i);
+//			total += items->*Transfer::getQuantity();
+
+//			for (std::vector<Transfer*>::iterator j = _base->getTransfers()->begin(); j != _base->getTransfers()->end(); ++j)
+//			for (std::vector<std::string>::const_iterator j = items.begin(); j != items.end(); ++j)
+//			{
+//				RuleItem *rule2 = _game->getRuleset()->getItem(*j);
+
+//				Transfer *k;
+//				total += (*k)->*Transfer::getQuantity();
+//			}
+			/* for (std::vector<Transfer*>::iterator j = _base->getTransfers()->begin(); j != _base->getTransfers()->end(); ++j)
+			{
+//				RuleItem *rule = _game->getRuleset()->getItem(*i);
+
+//				if (rule->getBuyCost() > 0 && !isExcluded(*i))
+//				if (j == i)
+				{
+//					total += (*j)->getQuantity();
+					total += _base->getTransfers()->Transfer::getQuantity();
+				}
+			} */
+			
+//			ss5 << tQty;
+			// kL_end.
+
+
 			std::wstring item = _game->getLanguage()->getString(*i);
+
 			if (rule->getBattleType() == BT_AMMO)
 			{
 				item.insert(0, L"  ");
 			}
+
 			_lstItems->addRow(4, item.c_str(), Text::formatFunding(rule->getBuyCost()).c_str(), ss5.str().c_str(), L"0");
 		}
 	}
 
 	_timerInc = new Timer(250);
 	_timerInc->onTimer((StateHandler)&PurchaseState::increase);
+
 	_timerDec = new Timer(250);
 	_timerDec->onTimer((StateHandler)&PurchaseState::decrease);
 }
@@ -268,6 +333,7 @@ void PurchaseState::think()
 bool PurchaseState::isExcluded(std::string item)
 {
 	std::vector<std::string> excludes = Options::getPurchaseExclusions();
+
 	bool exclude = false;
 	for (std::vector<std::string>::const_iterator s = excludes.begin(); s != excludes.end(); ++s)
 	{
@@ -277,6 +343,7 @@ bool PurchaseState::isExcluded(std::string item)
 			break;
 		}
 	}
+
 	return exclude;
 }
 
@@ -287,36 +354,36 @@ bool PurchaseState::isExcluded(std::string item)
 void PurchaseState::btnOkClick(Action *)
 {
 	_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds() - _total);
+
 	for (unsigned int i = 0; i < _qtys.size(); ++i)
 	{
 		if (_qtys[i] > 0)
 		{
-			// Buy soldiers
-			if (i == 0)
+			if (i == 0) // Buy soldiers
 			{
 				for (int s = 0; s < _qtys[i]; s++)
 				{
 					Transfer *t = new Transfer(_game->getRuleset()->getPersonnelTime());
 					t->setSoldier(new Soldier(_game->getRuleset()->getSoldier("XCOM"), _game->getRuleset()->getArmor("STR_NONE_UC"), &_game->getRuleset()->getPools(), _game->getSavedGame()->getId("STR_SOLDIER")));
+
 					_base->getTransfers()->push_back(t);
 				}
 			}
-			// Buy scientists
-			else if (i == 1)
+			else if (i == 1) // Buy scientists
 			{
 				Transfer *t = new Transfer(_game->getRuleset()->getPersonnelTime());
 				t->setScientists(_qtys[i]);
+
 				_base->getTransfers()->push_back(t);
 			}
-			// Buy engineers
-			else if (i == 2)
+			else if (i == 2) // Buy engineers
 			{
 				Transfer *t = new Transfer(_game->getRuleset()->getPersonnelTime());
 				t->setEngineers(_qtys[i]);
+
 				_base->getTransfers()->push_back(t);
 			}
-			// Buy crafts
-			else if (i >= 3 && i < 3 + _crafts.size())
+			else if (i >= 3 && i < 3 + _crafts.size()) // Buy crafts
 			{
 				for (int c = 0; c < _qtys[i]; c++)
 				{
@@ -325,19 +392,21 @@ void PurchaseState::btnOkClick(Action *)
 					Craft *craft = new Craft(rc, _base, _game->getSavedGame()->getId(_crafts[i - 3]));
 					craft->setStatus("STR_REFUELLING");
 					t->setCraft(craft);
+
 					_base->getTransfers()->push_back(t);
 				}
 			}
-			// Buy items
-			else
+			else // Buy items
 			{
 				RuleItem *ri = _game->getRuleset()->getItem(_items[i - 3 - _crafts.size()]);
 				Transfer *t = new Transfer(ri->getTransferTime());
 				t->setItems(_items[i - 3 - _crafts.size()], _qtys[i]);
+
 				_base->getTransfers()->push_back(t);
 			}
 		}
 	}
+
 	_game->popState();
 }
 
@@ -357,7 +426,12 @@ void PurchaseState::btnCancelClick(Action *)
 void PurchaseState::lstItemsLeftArrowPress(Action *action)
 {
 	_sel = _lstItems->getSelectedRow();
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT && !_timerInc->isRunning()) _timerInc->start();
+
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT
+		&& !_timerInc->isRunning())
+	{
+		_timerInc->start();
+	}
 }
 
 /**
@@ -379,10 +453,13 @@ void PurchaseState::lstItemsLeftArrowRelease(Action *action)
  */
 void PurchaseState::lstItemsLeftArrowClick(Action *action)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT) increaseByValue(INT_MAX);
+	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+		increaseByValue(INT_MAX);
+
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
 		increaseByValue(1);
+
 		_timerInc->setInterval(250);
 		_timerDec->setInterval(250);
 	}
@@ -395,7 +472,12 @@ void PurchaseState::lstItemsLeftArrowClick(Action *action)
 void PurchaseState::lstItemsRightArrowPress(Action *action)
 {
 	_sel = _lstItems->getSelectedRow();
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT && !_timerDec->isRunning()) _timerDec->start();
+
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT
+		&& !_timerDec->isRunning())
+	{
+		_timerDec->start();
+	}
 }
 
 /**
@@ -417,10 +499,13 @@ void PurchaseState::lstItemsRightArrowRelease(Action *action)
  */
 void PurchaseState::lstItemsRightArrowClick(Action *action)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT) decreaseByValue(INT_MAX);
+	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+		decreaseByValue(INT_MAX);
+
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
 		decreaseByValue(1);
+
 		_timerInc->setInterval(250);
 		_timerDec->setInterval(250);
 	}
@@ -433,10 +518,12 @@ void PurchaseState::lstItemsRightArrowClick(Action *action)
 void PurchaseState::lstItemsMousePress(Action *action)
 {
 	_sel = _lstItems->getSelectedRow();
+
 	if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
 	{
 		_timerInc->stop();
 		_timerDec->stop();
+
 		if (_allowChangeListValuesByMouseWheel
 			&& action->getAbsoluteXMouse() >= _lstItems->getArrowsLeftEdge()
 			&& action->getAbsoluteXMouse() <= _lstItems->getArrowsRightEdge())
@@ -448,6 +535,7 @@ void PurchaseState::lstItemsMousePress(Action *action)
 	{
 		_timerInc->stop();
 		_timerDec->stop();
+
 		if (_allowChangeListValuesByMouseWheel
 			&& action->getAbsoluteXMouse() >= _lstItems->getArrowsLeftEdge()
 			&& action->getAbsoluteXMouse() <= _lstItems->getArrowsRightEdge())
@@ -463,28 +551,23 @@ void PurchaseState::lstItemsMousePress(Action *action)
  */
 int PurchaseState::getPrice()
 {
-	// Soldier cost
-	if (_sel == 0)
+	if (_sel == 0) // Soldier cost
 	{
 		return _game->getRuleset()->getSoldierCost() * 2;
 	}
-	// Scientist cost
-	else if (_sel == 1)
+	else if (_sel == 1) // Scientist cost
 	{
 		return _game->getRuleset()->getScientistCost() * 2;
 	}
-	// Engineer cost
-	else if (_sel == 2)
+	else if (_sel == 2) // Engineer cost
 	{
 		return _game->getRuleset()->getEngineerCost() * 2;
 	}
-	// Craft cost
-	else if (_sel >= 3 && _sel < 3 + _crafts.size())
+	else if (_sel >= 3 && _sel < 3 + _crafts.size()) // Craft cost
 	{
 		return _game->getRuleset()->getCraft(_crafts[_sel - 3])->getBuyCost();
 	}
-	// Item cost
-	else
+	else // Item cost
 	{
 		return _game->getRuleset()->getItem(_items[_sel - 3 - _crafts.size()])->getBuyCost();
 	}
@@ -497,16 +580,18 @@ void PurchaseState::increase()
 {
 	_timerDec->setInterval(50);
 	_timerInc->setInterval(50);
+
 	increaseByValue(1);
 }
 
 /**
- * Increases the quantity of the selected item to buy by "change".
- * @param change How much we want to add.
+ * Increases the quantity of the selected item to buy.
+ * @param change How many we want to add.
  */
 void PurchaseState::increaseByValue(int change)
 {
 	if (0 >= change) return;
+
 	if (_total + getPrice() > _game->getSavedGame()->getFunds())
 	{
 		_timerInc->stop();
@@ -531,6 +616,7 @@ void PurchaseState::increaseByValue(int change)
 	{
 		int maxByMoney = (_game->getSavedGame()->getFunds() - _total) / getPrice();
 		change = std::min(maxByMoney, change);
+
 		if (_sel <= 2)
 		{
 			// Personnel count
@@ -551,16 +637,22 @@ void PurchaseState::increaseByValue(int change)
 			float storesNeededPerItem = _game->getRuleset()->getItem(_items[_sel - 3 - _crafts.size()])->getSize();
 			float freeStores = (float)(_base->getAvailableStores() - _base->getUsedStores()) - _iQty;
 			int maxByStores;
-			if ( AreSame(storesNeededPerItem, 0.f) ) {
-        maxByStores = INT_MAX;
-      } else {
-        maxByStores = floor(freeStores / storesNeededPerItem);
-      }
+			if (AreSame(storesNeededPerItem, 0.f))
+			{
+		        maxByStores = INT_MAX;
+			}
+			else
+			{
+				maxByStores = floor(freeStores / storesNeededPerItem);
+			}
+
 			change = std::min(maxByStores, change);
 			_iQty += ((float)(change)) * storesNeededPerItem;
 		}
+
 		_qtys[_sel] += change;
 		_total += getPrice() * change;
+
 		updateItemStrings();
 	}
 }
@@ -572,25 +664,36 @@ void PurchaseState::decrease()
 {
 	_timerInc->setInterval(50);
 	_timerDec->setInterval(50);
+
 	decreaseByValue(1);
 }
 
 /**
- * Decreases the quantity of the selected item to buy by "change".
- * @param change how much we want to add.
+ * Decreases the quantity of the selected item to buy.
+ * @param change how many we want to subtract.
  */
 void PurchaseState::decreaseByValue(int change)
 {
 	if (0 >= change || 0 >= _qtys[_sel]) return;
+
 	change = std::min(_qtys[_sel], change);
-	// Personnel count
-	if (_sel <= 2) _pQty -= change;
-	// Craft count
-	else if (_sel >= 3 && _sel < 3 + _crafts.size()) _cQty -= change;
-	// Item count
-	else _iQty -= _game->getRuleset()->getItem(_items[_sel - 3 - _crafts.size()])->getSize() * ((float)(change));
+
+	if (_sel <= 2) // Personnel count
+	{
+		_pQty -= change;
+	}
+	else if (_sel >= 3 && _sel < 3 + _crafts.size()) // Craft count
+	{
+		_cQty -= change;
+	}
+	else // Item count
+	{
+		_iQty -= _game->getRuleset()->getItem(_items[_sel - 3 - _crafts.size()])->getSize() * ((float)(change));
+	}
+
 	_qtys[_sel] -= change;
 	_total -= getPrice() * change;
+
 	updateItemStrings();
 }
 
@@ -602,6 +705,7 @@ void PurchaseState::updateItemStrings()
 	std::wstring s = _game->getLanguage()->getString("STR_COST_OF_PURCHASES");
 	s += L'\x01' + Text::formatFunding(_total);
 	_txtPurchases->setText(s);
+
 	std::wstringstream ss;
 	ss << _qtys[_sel];
 	_lstItems->setCellText(_sel, 3, ss.str());

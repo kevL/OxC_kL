@@ -66,35 +66,35 @@ TransferBaseState::TransferBaseState(Game *game, Base *base) : State(game), _bas
 	centerAllSurfaces();
 
 	// Set up objects
-	_window->setColor(Palette::blockOffset(13)+5);
+	_window->setColor(Palette::blockOffset(13) + 5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 
-	_btnCancel->setColor(Palette::blockOffset(13)+5);
+	_btnCancel->setColor(Palette::blockOffset(13) + 5);
 	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL"));
 	_btnCancel->onMouseClick((ActionHandler)&TransferBaseState::btnCancelClick);
 	_btnCancel->onKeyboardPress((ActionHandler)&TransferBaseState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
 
-	_txtTitle->setColor(Palette::blockOffset(13)+5);
+	_txtTitle->setColor(Palette::blockOffset(13) + 5);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(_game->getLanguage()->getString("STR_SELECT_DESTINATION_BASE"));
 
-	_txtFunds->setColor(Palette::blockOffset(13)+5);
+	_txtFunds->setColor(Palette::blockOffset(13) + 5);
 	_txtFunds->setSecondaryColor(Palette::blockOffset(13));
 	std::wstring s = _game->getLanguage()->getString("STR_CURRENT_FUNDS");
 	s += L'\x01' + Text::formatFunding(_game->getSavedGame()->getFunds());
 	_txtFunds->setText(s);
 
-	_txtName->setColor(Palette::blockOffset(13)+5);
+	_txtName->setColor(Palette::blockOffset(13) + 5);
 	_txtName->setText(_game->getLanguage()->getString("STR_NAME"));
 	_txtName->setBig();
 
-	_txtArea->setColor(Palette::blockOffset(13)+5);
+	_txtArea->setColor(Palette::blockOffset(13) + 5);
 	_txtArea->setText(_game->getLanguage()->getString("STR_AREA"));
 	_txtArea->setBig();
 
-	_lstBases->setColor(Palette::blockOffset(15)+1);
-	_lstBases->setArrowColor(Palette::blockOffset(13)+5);
+	_lstBases->setColor(Palette::blockOffset(15) + 1);
+	_lstBases->setArrowColor(Palette::blockOffset(13) + 5);
 	_lstBases->setColumns(2, 130, 116);
 	_lstBases->setSelectable(true);
 	_lstBases->setBackground(_window);
@@ -106,8 +106,8 @@ TransferBaseState::TransferBaseState(Game *game, Base *base) : State(game), _bas
 	{
 		if ((*i) != _base)
 		{
-			// Get area
-			std::wstring area = L"";
+			std::wstring area = L""; // Get area
+
 			for (std::vector<Region*>::iterator j = _game->getSavedGame()->getRegions()->begin(); j != _game->getSavedGame()->getRegions()->end(); ++j)
 			{
 				if ((*j)->getRules()->insideRegion((*i)->getLongitude(), (*i)->getLatitude()))
@@ -118,8 +118,9 @@ TransferBaseState::TransferBaseState(Game *game, Base *base) : State(game), _bas
 			}
 
 			_lstBases->addRow(2, (*i)->getName().c_str(), area.c_str());
-			_lstBases->setCellColor(row, 1, Palette::blockOffset(13)+5);
+			_lstBases->setCellColor(row, 1, Palette::blockOffset(13) + 5);
 			_bases.push_back(*i);
+
 			row++;
 		}
 	}

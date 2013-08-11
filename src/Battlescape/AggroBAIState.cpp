@@ -314,8 +314,15 @@ bool AggroBAIState::explosiveEfficacy(Position targetPos, BattleUnit *attackingU
 		efficacy -= 3;
 
 	// we don't want to ruin our own base, but we do want to ruin XCom's day.
-	if (_game->getMissionType() == "STR_ALIEN_BASE_ASSAULT") efficacy -= 3;
-	else if (_game->getMissionType() == "STR_BASE_DEFENSE" || _game->getMissionType() == "STR_TERROR_MISSION") efficacy += 3;
+	if (_game->getMissionType() == "STR_ALIEN_BASE_ASSAULT")
+	{
+		efficacy -= 3;
+	}
+	else if (_game->getMissionType() == "STR_BASE_DEFENSE"
+		|| _game->getMissionType() == "STR_TERROR_MISSION")
+	{
+		efficacy += 3;
+	}
 
 
 	BattleUnit *target = _game->getTile(targetPos)->getUnit();
@@ -755,7 +762,7 @@ void AggroBAIState::takeCoverAction(BattleAction *action)
 		_game->getTile(action->target)->setMarkerColor(13);
 	}
 
-	if (bestTileScore <= -100000) 
+	if (bestTileScore <= -100000)
 	{
 		coverFound = false;
 		action->type = BA_RETHINK; // do something, just don't look dumbstruck :P
@@ -783,6 +790,7 @@ void AggroBAIState::stalkingAction(BattleAction *action)
 		// we lost aggro - going back to patrol state
 		_charge = 0;
 		_unit->setCharging(0);
+
 		return;
 	}
 

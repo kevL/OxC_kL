@@ -112,7 +112,8 @@ void ProjectileFlyBState::init()
 	if (_unit->getFaction() != _parent->getSave()->getSide())
 	{
 		// no ammo or target is dead: give the time units back and cancel the shot.
-		if (_ammo == 0 || !_parent->getSave()->getTile(_action.target)->getUnit() || _parent->getSave()->getTile(_action.target)->getUnit()->isOut())
+		if (_ammo == 0 || !_parent->getSave()->getTile(_action.target)->getUnit()
+			|| _parent->getSave()->getTile(_action.target)->getUnit()->isOut())
 		{
 			_unit->setTimeUnits(_unit->getTimeUnits() + _unit->getActionTUs(_action.type, _action.weapon));
 			_parent->popState();
@@ -237,6 +238,7 @@ bool ProjectileFlyBState::createNewProjectile()
 		{
 			// unable to throw here
 			delete projectile;
+
 			_parent->getMap()->setProjectile(0);
 			_action.result = "STR_UNABLE_TO_THROW_HERE";
 			_parent->popState();
@@ -256,7 +258,9 @@ bool ProjectileFlyBState::createNewProjectile()
 			if (_action.weapon->getRules()->getFireSound() != -1)
 				_parent->getResourcePack()->getSound("BATTLE.CAT", _action.weapon->getRules()->getFireSound())->play();
 
-			if (!_parent->getSave()->getDebugMode() && _action.type != BA_LAUNCH && _ammo->spendBullet() == false)
+			if (!_parent->getSave()->getDebugMode()
+				&& _action.type != BA_LAUNCH
+				&& _ammo->spendBullet() == false)
 			{
 				_parent->getSave()->removeItem(_ammo);
 				_action.weapon->setAmmoItem(0);
@@ -266,6 +270,7 @@ bool ProjectileFlyBState::createNewProjectile()
 		{
 			// no line of fire
 			delete projectile;
+
 			_parent->getMap()->setProjectile(0);
 			_action.result = "STR_NO_LINE_OF_FIRE";
 			_parent->popState();
@@ -286,7 +291,9 @@ bool ProjectileFlyBState::createNewProjectile()
 				if (_action.weapon->getRules()->getFireSound() != -1)
 					_parent->getResourcePack()->getSound("BATTLE.CAT", _action.weapon->getRules()->getFireSound())->play();
 
-				if (!_parent->getSave()->getDebugMode() && _action.type != BA_LAUNCH && _ammo->spendBullet() == false)
+				if (!_parent->getSave()->getDebugMode()
+					&& _action.type != BA_LAUNCH
+					&& _ammo->spendBullet() == false)
 				{
 					_parent->getSave()->removeItem(_ammo);
 					_action.weapon->setAmmoItem(0);
@@ -296,6 +303,7 @@ bool ProjectileFlyBState::createNewProjectile()
 		{
 			// no line of fire
 			delete projectile;
+
 			_parent->getMap()->setProjectile(0);
 			_action.result = "STR_NO_LINE_OF_FIRE";
 			_parent->popState();
@@ -348,8 +356,7 @@ void ProjectileFlyBState::think()
 	{
 		if (!_parent->getMap()->getProjectile()->move())
 		{
-			// impact !
-			if (_action.type == BA_THROW)
+			if (_action.type == BA_THROW) // impact !
 			{
 				Position pos = _parent->getMap()->getProjectile()->getPosition(-1);
 				pos.x /= 16;
@@ -378,6 +385,7 @@ void ProjectileFlyBState::think()
 				_origin = _action.waypoints.front();
 				_action.waypoints.pop_front();
 				_action.target = _action.waypoints.front();
+
 				// launch the next projectile in the waypoint cascade
 				_parent->statePushNext(new ProjectileFlyBState(_parent, _action, _origin));
 			}
@@ -454,8 +462,8 @@ void ProjectileFlyBState::cancel()
 	{
 		_parent->getMap()->getProjectile()->skipTrajectory();
 		Position p = _parent->getMap()->getProjectile()->getPosition();
-		if (!_parent->getMap()->getCamera()->isOnScreen(Position(p.x/16, p.y/16, p.z/24)))
-			_parent->getMap()->getCamera()->centerOnPosition(Position(p.x/16, p.y/16, p.z/24));
+		if (!_parent->getMap()->getCamera()->isOnScreen(Position(p.x / 16, p.y / 16, p.z / 24)))
+			_parent->getMap()->getCamera()->centerOnPosition(Position(p.x / 16, p.y / 16, p.z / 24));
 	}
 }
 

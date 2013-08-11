@@ -48,6 +48,7 @@ private:
 	void minMaxInt(int *value, const int minValue, const int maxValue) const;
 	Map *_map;
 	bool _mouseScroll, _keyboardScroll;
+
 public:
 	static const int SCROLL_BORDER = 5;
 	static const int SCROLL_DIAGONAL_EDGE = 60;
@@ -108,5 +109,6 @@ public:
 	/// Checks if map coordinates X,Y,Z are on screen.
 	bool isOnScreen(const Position &mapPos) const;
 };
+
 }
 #endif

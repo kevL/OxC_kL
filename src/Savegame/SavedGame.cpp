@@ -110,35 +110,44 @@ SavedGame::~SavedGame()
 	{
 		delete *i;
 	}
+
 	for (std::vector<Region*>::iterator i = _regions.begin(); i != _regions.end(); ++i)
 	{
 		delete *i;
 	}
+
 	for (std::vector<Base*>::iterator i = _bases.begin(); i != _bases.end(); ++i)
 	{
 		delete *i;
 	}
+
 	for (std::vector<Ufo*>::iterator i = _ufos.begin(); i != _ufos.end(); ++i)
 	{
 		delete *i;
 	}
+
 	for (std::vector<Waypoint*>::iterator i = _waypoints.begin(); i != _waypoints.end(); ++i)
 	{
 		delete *i;
 	}
+
 	for (std::vector<TerrorSite*>::iterator i = _terrorSites.begin(); i != _terrorSites.end(); ++i)
 	{
 		delete *i;
 	}
+
 	for (std::vector<AlienBase*>::iterator i = _alienBases.begin(); i != _alienBases.end(); ++i)
  	{
 		delete *i;
 	}
+
 	delete _alienStrategy;
+
 	for (std::vector<AlienMission*>::iterator i = _activeMissions.begin(); i != _activeMissions.end(); ++i)
 	{
 		delete *i;
 	}
+
 	delete _battleGame;
 }
 
@@ -749,34 +758,36 @@ void SavedGame::setBattleGame(SavedBattleGame *battleGame)
 void SavedGame::addFinishedResearch (const RuleResearch * r, const Ruleset * ruleset)
 {
 	std::vector<const RuleResearch *>::const_iterator itDiscovered = std::find(_discovered.begin (), _discovered.end (), r);
-	if(itDiscovered == _discovered.end())
+	if (itDiscovered == _discovered.end())
 	{
 		_discovered.push_back(r);
 		removePoppedResearch(r);
 		addResearchScore(r->getPoints());
 	}
-	if(ruleset)
+	if (ruleset)
 	{
 		std::vector<RuleResearch*> availableResearch;
-		for(std::vector<Base*>::const_iterator it = _bases.begin (); it != _bases.end (); ++it)
+		for (std::vector<Base*>::const_iterator it = _bases.begin (); it != _bases.end (); ++it)
 		{
 			getDependableResearchBasic(availableResearch, r, ruleset, *it);
 		}
-		for(std::vector<RuleResearch*>::iterator it = availableResearch.begin (); it != availableResearch.end (); ++it)
+
+		for (std::vector<RuleResearch*>::iterator it = availableResearch.begin (); it != availableResearch.end (); ++it)
 		{
-			if((*it)->getCost() == 0 && (*it)->getRequirements().size() == 0)
+			if ((*it)->getCost() == 0 && (*it)->getRequirements().size() == 0)
 			{
 				addFinishedResearch(*it, ruleset);
 			}
-			else if((*it)->getCost() == 0)
+			else if ((*it)->getCost() == 0)
 			{
 				int entry(0);
-				for(std::vector<std::string>::const_iterator iter = (*it)->getRequirements().begin (); iter != (*it)->getRequirements().end (); ++iter)
+				for (std::vector<std::string>::const_iterator iter = (*it)->getRequirements().begin (); iter != (*it)->getRequirements().end (); ++iter)
 				{
-					if((*it)->getRequirements().at(entry) == (*iter))
+					if ((*it)->getRequirements().at(entry) == (*iter))
 					{
 						addFinishedResearch(*it, ruleset);
 					}
+
 					entry++;
 				}
 			}
@@ -812,6 +823,7 @@ void SavedGame::getAvailableResearchProjects (std::vector<RuleResearch *> & proj
 			unlocked.push_back(ruleset->getResearch(*itUnlocked));
 		}
 	}
+
 	for(std::vector<std::string>::const_iterator iter = researchProjects.begin (); iter != researchProjects.end (); ++iter)
 	{
 		RuleResearch *research = ruleset->getResearch(*iter);
@@ -844,6 +856,7 @@ void SavedGame::getAvailableResearchProjects (std::vector<RuleResearch *> & proj
 						}
 					}
 				}
+
 				std::vector<std::string>::const_iterator leaderCheck = std::find(research->getUnlocked().begin(), research->getUnlocked().end(), "STR_LEADER_PLUS");
 				std::vector<std::string>::const_iterator cmnderCheck = std::find(research->getUnlocked().begin(), research->getUnlocked().end(), "STR_CYDONIA_DEP");
 				
@@ -873,10 +886,12 @@ void SavedGame::getAvailableResearchProjects (std::vector<RuleResearch *> & proj
 		{
 			continue;
 		}
+
 		if (research->needItem() && base->getItems()->getItem(research->getName ()) == 0)
 		{
 			continue;
 		}
+
 		if (research->getRequirements().size() != 0)
 		{
 			size_t tally(0);
@@ -888,9 +903,11 @@ void SavedGame::getAvailableResearchProjects (std::vector<RuleResearch *> & proj
 					tally++;
 				}
 			}
+
 			if(tally != research->getRequirements().size())
 			continue;
 		}
+
 		projects.push_back (research);
 	}
 }
@@ -911,14 +928,16 @@ void SavedGame::getAvailableProductions (std::vector<RuleManufacture *> & produc
 		++iter)
 	{
 		RuleManufacture *m = ruleset->getManufacture(*iter);
-		if(!isResearched(m->getRequirements()))
+		if (!isResearched(m->getRequirements()))
 		{
 		 	continue;
 		}
-		if(std::find_if(baseProductions.begin (), baseProductions.end (), equalProduction(m)) != baseProductions.end ())
+
+		if (std::find_if(baseProductions.begin (), baseProductions.end (), equalProduction(m)) != baseProductions.end ())
 		{
 			continue;
 		}
+
 		productions.push_back(m);
 	}
 }
@@ -934,7 +953,7 @@ bool SavedGame::isResearchAvailable (RuleResearch * r, const std::vector<const R
 	std::vector<std::string> deps = r->getDependencies();
 	const std::vector<const RuleResearch *> & discovered(getDiscoveredResearch());
 	bool liveAlien = ruleset->getUnit(r->getName()) != 0;
-	if(std::find(unlocked.begin (), unlocked.end (), r) != unlocked.end ())
+	if (std::find(unlocked.begin (), unlocked.end (), r) != unlocked.end ())
 	{
 		return true;
 	}
@@ -949,6 +968,7 @@ bool SavedGame::isResearchAvailable (RuleResearch * r, const std::vector<const R
 					return true;
 				}
 			}
+
 			std::vector<std::string>::const_iterator leaderCheck = std::find(r->getUnlocked().begin(), r->getUnlocked().end(), "STR_LEADER_PLUS");
 			std::vector<std::string>::const_iterator cmnderCheck = std::find(r->getUnlocked().begin(), r->getUnlocked().end(), "STR_CYDONIA_DEP");
 				
@@ -994,9 +1014,9 @@ bool SavedGame::isResearchAvailable (RuleResearch * r, const std::vector<const R
 void SavedGame::getDependableResearch (std::vector<RuleResearch *> & dependables, const RuleResearch *research, const Ruleset * ruleset, Base * base) const
 {
 	getDependableResearchBasic(dependables, research, ruleset, base);
-	for(std::vector<const RuleResearch *>::const_iterator iter = _discovered.begin (); iter != _discovered.end (); ++iter)
+	for (std::vector<const RuleResearch *>::const_iterator iter = _discovered.begin (); iter != _discovered.end (); ++iter)
 	{
-		if((*iter)->getCost() == 0)
+		if ((*iter)->getCost() == 0)
 		{
 			if (std::find((*iter)->getDependencies().begin (), (*iter)->getDependencies().end (), research->getName()) != (*iter)->getDependencies().end ())
 			{
@@ -1017,6 +1037,7 @@ void SavedGame::getDependableResearchBasic (std::vector<RuleResearch *> & depend
 {
 	std::vector<RuleResearch *> possibleProjects;
 	getAvailableResearchProjects(possibleProjects, ruleset, base);
+
 	for(std::vector<RuleResearch *>::iterator iter = possibleProjects.begin (); iter != possibleProjects.end (); ++iter)
 	{
 		if (std::find((*iter)->getDependencies().begin (), (*iter)->getDependencies().end (), research->getName()) != (*iter)->getDependencies().end ()
@@ -1044,8 +1065,10 @@ void SavedGame::getDependableManufacture (std::vector<RuleManufacture *> & depen
 	for(std::vector<std::string>::const_iterator iter = mans.begin (); iter != mans.end (); ++iter)
 	{
 		RuleManufacture *m = ruleset->getManufacture(*iter);
+
 		const std::vector<std::string> &reqs = m->getRequirements();
-		if(isResearched(m->getRequirements()) && std::find(reqs.begin(), reqs.end(), research->getName()) != reqs.end())
+		if (isResearched(m->getRequirements())
+			&& std::find(reqs.begin(), reqs.end(), research->getName()) != reqs.end())
 		{
 			dependables.push_back(m);
 		}
@@ -1090,6 +1113,7 @@ bool SavedGame::isResearched(const std::vector<std::string> &research) const
 				break;
 			}
 		}
+
 		if (matches.empty())
 			return true;
 	}
@@ -1114,6 +1138,7 @@ Soldier *SavedGame::getSoldier(int id) const
 			}
 		}
 	}
+
 	return 0;
 }
 
@@ -1129,6 +1154,7 @@ bool SavedGame::handlePromotions()
 	{
 		soldiersTotal += (*i)->getSoldiers()->size();
 	}
+
 	Soldier *highestRanked = 0;
 
 	// now determine the number of positions we have of each rank,
@@ -1143,6 +1169,7 @@ bool SavedGame::handlePromotions()
 		highestRanked->promoteRank();
 		soldiersPromoted++;
 	}
+
 	inspectSoldiers(&highestRanked, &filledPositions, RANK_COLONEL);
 	inspectSoldiers(&highestRanked, &filledPositions2, RANK_CAPTAIN);
 	if (filledPositions < (soldiersTotal / 23) && filledPositions2 > 0)
@@ -1150,6 +1177,7 @@ bool SavedGame::handlePromotions()
 		highestRanked->promoteRank();
 		soldiersPromoted++;
 	}
+
 	inspectSoldiers(&highestRanked, &filledPositions, RANK_CAPTAIN);
 	inspectSoldiers(&highestRanked, &filledPositions2, RANK_SERGEANT);
 	if (filledPositions < (soldiersTotal / 11) && filledPositions2 > 0)
@@ -1157,6 +1185,7 @@ bool SavedGame::handlePromotions()
 		highestRanked->promoteRank();
 		soldiersPromoted++;
 	}
+
 	inspectSoldiers(&highestRanked, &filledPositions, RANK_SERGEANT);
 	inspectSoldiers(&highestRanked, &filledPositions2, RANK_SQUADDIE);
 	if (filledPositions < (soldiersTotal / 5) && filledPositions2 > 0)
@@ -1191,7 +1220,8 @@ void SavedGame::inspectSoldiers(Soldier **highestRanked, size_t *total, int rank
 				int v2 = v1 + 3*( s->tu + 2*( s->firing ) );
 				int v3 = v2 + s->melee + s->throwing + s->strength;
 				if (s->psiSkill > 0) v3 += s->psiStrength + 2 * s->psiSkill;
-				int score = v3 + 10 * ( (*j)->getMissions() + (*j)->getKills() );
+
+				int score = v3 + 10 * ((*j)->getMissions() + (*j)->getKills());
 				if (score > highestScore)
 				{
 					highestScore = score;
@@ -1241,6 +1271,7 @@ public:
 	{
 		return mis->getRegion() == _region && mis->getType() == _type;
 	}
+
 private:
 
 	const std::string &_region;
@@ -1258,6 +1289,7 @@ AlienMission *SavedGame::getAlienMission(const std::string &region, const std::s
 	std::vector<AlienMission*>::const_iterator ii = std::find_if(_activeMissions.begin(), _activeMissions.end(), matchRegionAndType(region, type));
 	if (ii == _activeMissions.end())
 		return 0;
+
 	return *ii;
 }
 
@@ -1317,6 +1349,7 @@ public:
 	ContainsPoint(double lon, double lat) : _lon(lon), _lat(lat) { /* Empty by design. */ }
 	/// Check is the region contains the stored point.
 	bool operator()(const Region *region) const { return region->getRules()->insideRegion(_lon, _lat); }
+
 private:
 	double _lon, _lat;
 };
@@ -1334,6 +1367,7 @@ Region *SavedGame::locateRegion(double lon, double lat) const
 	{
 		return *found;
 	}
+
 	return 0;
 }
 

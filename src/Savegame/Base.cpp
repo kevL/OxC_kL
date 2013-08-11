@@ -321,8 +321,7 @@ std::vector<Craft*> *Base::getCrafts()
 }
 
 /**
- * Returns the list of transfers destined
- * to this base.
+ * Returns the list of transfers destined to this base.
  * @return Pointer to the transfer list.
  */
 std::vector<Transfer*> *Base::getTransfers()

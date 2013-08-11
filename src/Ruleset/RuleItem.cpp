@@ -296,6 +296,7 @@ void RuleItem::load(const YAML::Node &node, int modIndex, int listOrder)
 			i.second() >> _bulletSpeed;
 		}
 	}
+
 	if (!_listOrder)
 	{
 		_listOrder = listOrder;
@@ -309,6 +310,7 @@ void RuleItem::load(const YAML::Node &node, int modIndex, int listOrder)
 void RuleItem::save(YAML::Emitter &out) const
 {
 	out << YAML::BeginMap;
+
 	out << YAML::Key << "type" << YAML::Value << _type;
 	out << YAML::Key << "name" << YAML::Value << _name;
 	out << YAML::Key << "requires" << YAML::Value << _requires;
@@ -360,6 +362,7 @@ void RuleItem::save(YAML::Emitter &out) const
 	out << YAML::Key << "arcingShot" << YAML::Value << _arcingShot;
 	out << YAML::Key << "attraction" << YAML::Value << _attraction;
 	out << YAML::Key << "bulletSpeed" << YAML::Value << _bulletSpeed;
+
 	out << YAML::EndMap;
 }
 

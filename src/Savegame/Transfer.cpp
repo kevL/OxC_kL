@@ -56,6 +56,7 @@ Transfer::~Transfer()
 void Transfer::load(const YAML::Node &node, Base *base, const Ruleset *rule)
 {
 	node["hours"] >> _hours;
+
 	if (const YAML::Node *pName = node.FindValue("soldier"))
 	{
 		_soldier = new Soldier(rule->getSoldier("XCOM"), rule->getArmor("STR_NONE_UC"));
@@ -81,6 +82,7 @@ void Transfer::load(const YAML::Node &node, Base *base, const Ruleset *rule)
 	{
 		*pName >> _engineers;
 	}
+
 	node["delivered"] >> _delivered;
 }
 
@@ -198,6 +200,7 @@ std::wstring Transfer::getName(Language *lang) const
 	{
 		return lang->getString("STR_ENGINEERS");
 	}
+
 	return lang->getString(_itemId);
 }
 
@@ -229,6 +232,7 @@ int Transfer::getQuantity() const
 	{
 		return _engineers;
 	}
+
 	return 1;
 }
 
@@ -254,6 +258,7 @@ TransferType Transfer::getType() const
 	{
 		return TRANSFER_ENGINEER;
 	}
+
 	return TRANSFER_ITEM;
 }
 
@@ -289,6 +294,7 @@ void Transfer::advance(Base *base)
 		{
 			base->setEngineers(base->getEngineers() + _engineers);
 		}
+
 		_delivered = true;
 	}
 }

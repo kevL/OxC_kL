@@ -121,9 +121,9 @@ void Camera::mouseRelease(Action *action, State *)
 		int posX = action->getXMouse();
 		int posY = action->getYMouse();
 		if ((posX < (SCROLL_BORDER * action->getXScale()) && posX > 0)
-			|| (posX > (_screenWidth - SCROLL_BORDER) * action->getXScale())
-			|| (posY < (SCROLL_BORDER * action->getYScale()) && posY > 0)
-			|| (posY > (_screenHeight - SCROLL_BORDER) * action->getYScale()))
+				|| (posX > (_screenWidth - SCROLL_BORDER) * action->getXScale())
+				|| (posY < (SCROLL_BORDER * action->getYScale()) && posY > 0)
+				|| (posY > (_screenHeight - SCROLL_BORDER) * action->getYScale()))
 			// A cheap hack to avoid handling this event as a click
 			// on the map when the mouse is on the scroll-border
 			action->getDetails()->button.button = 0;
@@ -148,77 +148,77 @@ void Camera::mouseOver(Action *action, State *)
 		int posY = action->getYMouse();
 		int scrollSpeed = Options::getInt("battleScrollSpeed");
 
-		//left scroll
-		if (posX < (SCROLL_BORDER * action->getXScale()) && posX >= 0)
+//kL		if (posX < (SCROLL_BORDER * action->getXScale()) && posX >= 0) // left scroll
+		if (posX < (SCROLL_BORDER * action->getXScale())) // left scroll		// kL
 		{
 			_scrollMouseX = scrollSpeed;
+
 			// if close to top or bottom, also scroll diagonally
-			//downleft
-			if (posY < (SCROLL_DIAGONAL_EDGE * action->getYScale()) && posY >= 0)
+//kL			if (posY < (SCROLL_DIAGONAL_EDGE * action->getYScale()) && posY >= 0) // down left
+			if (posY < (SCROLL_DIAGONAL_EDGE * action->getYScale())) // down left		// kL
 			{
-				_scrollMouseY = scrollSpeed/2;
+				_scrollMouseY = scrollSpeed / 2;
 			}
-			//upleft
-			else if (posY > (_screenHeight - SCROLL_DIAGONAL_EDGE) * action->getYScale())
+			else if (posY > (_screenHeight - SCROLL_DIAGONAL_EDGE) * action->getYScale()) // up left
 			{
-				_scrollMouseY = -scrollSpeed/2;
+				_scrollMouseY = -scrollSpeed / 2;
 			}
+			else _scrollMouseY = 0;		// kL
 		}
-		//right scroll
-		else if (posX > (_screenWidth - SCROLL_BORDER) * action->getXScale())
+		else if (posX > (_screenWidth - SCROLL_BORDER) * action->getXScale()) // right scroll
 		{
 			_scrollMouseX = -scrollSpeed;
+
 			// if close to top or bottom, also scroll diagonally
-			//downright
-			if (posY <= (SCROLL_DIAGONAL_EDGE * action->getYScale()) && posY >= 0)
+//kL			if (posY <= (SCROLL_DIAGONAL_EDGE * action->getYScale()) && posY >= 0) // down right
+			if (posY < (SCROLL_DIAGONAL_EDGE * action->getYScale())) // down right		// kL
 			{
-				_scrollMouseY = scrollSpeed/2;
+				_scrollMouseY = scrollSpeed / 2;
 			}
-			//upright
-			else if (posY > (_screenHeight - SCROLL_DIAGONAL_EDGE) * action->getYScale())
+			else if (posY > (_screenHeight - SCROLL_DIAGONAL_EDGE) * action->getYScale()) // up right
 			{
-				_scrollMouseY = -scrollSpeed/2;
+				_scrollMouseY = -scrollSpeed / 2;
 			}
+			else _scrollMouseY = 0;		// kL
 		}
 		else if (posX)
 		{
 			_scrollMouseX = 0;
 		}
 
-		//up
-		if (posY < (SCROLL_BORDER * action->getYScale()) && posY >= 0)
+//kL		if (posY < (SCROLL_BORDER * action->getYScale()) && posY >= 0) // up scroll
+		if (posY < (SCROLL_BORDER * action->getYScale())) // up scroll		// kL
 		{
 			_scrollMouseY = scrollSpeed;
+
 			// if close to left or right edge, also scroll diagonally
-			//up left
-			if (posX < (SCROLL_DIAGONAL_EDGE * action->getXScale()) && posX > 0)
+//kL			if (posX < (SCROLL_DIAGONAL_EDGE * action->getXScale()) && posX > 0) // up left
+			if (posX < (SCROLL_DIAGONAL_EDGE * action->getXScale())) // up left		// kL
 			{
 				_scrollMouseX = scrollSpeed;
-				_scrollMouseY /=2;
+				_scrollMouseY /= 2;
 			}
-			//up right
-			else if (posX > (_screenWidth - SCROLL_DIAGONAL_EDGE) * action->getXScale())
+			else if (posX > (_screenWidth - SCROLL_DIAGONAL_EDGE) * action->getXScale()) // up right
 			{
 				_scrollMouseX = -scrollSpeed;
-				_scrollMouseY /=2;
+				_scrollMouseY /= 2;
 			}
 		}
-		//down
-		else if (posY > (_screenHeight- SCROLL_BORDER) * action->getYScale())
+		else if (posY > (_screenHeight - SCROLL_BORDER) * action->getYScale()) // down scroll
 		{
 			_scrollMouseY = -scrollSpeed;
+
 			// if close to left or right edge, also scroll diagonally
-			//down left
-			if (posX < (SCROLL_DIAGONAL_EDGE * action->getXScale()) && posX >= 0)
+//kL			if (posX < (SCROLL_DIAGONAL_EDGE * action->getXScale()) && posX >= 0) // down left
+			if (posX < (SCROLL_DIAGONAL_EDGE * action->getXScale())) // down left		// kL
 			{
 				_scrollMouseX = scrollSpeed;
-				_scrollMouseY /=2;
+				_scrollMouseY /= 2;
 			}
-			//down right
-			else if (posX > (_screenWidth - SCROLL_DIAGONAL_EDGE) * action->getXScale())
+			else if (posX > (_screenWidth - SCROLL_DIAGONAL_EDGE) * action->getXScale()) // down right
 			{
 				_scrollMouseX = -scrollSpeed;
-				_scrollMouseY /=2;
+				_scrollMouseY /= 2;
 			}
 		}
 		else if (posY && _scrollMouseX == 0)
@@ -226,11 +226,14 @@ void Camera::mouseOver(Action *action, State *)
 			_scrollMouseY = 0;
 		}
 
-		if ((_scrollMouseX || _scrollMouseY) && !_scrollMouseTimer->isRunning() && !_scrollKeyTimer->isRunning())
+		if ((_scrollMouseX || _scrollMouseY)
+			&& !_scrollMouseTimer->isRunning()
+			&& !_scrollKeyTimer->isRunning())
 		{
 			_scrollMouseTimer->start();
 		}
-		else if ((!_scrollMouseX && !_scrollMouseY) && _scrollMouseTimer->isRunning())
+		else if ((!_scrollMouseX && !_scrollMouseY)
+			&& _scrollMouseTimer->isRunning())
 		{
 			_scrollMouseTimer->stop();
 		}
@@ -249,8 +252,9 @@ void Camera::keyboardPress(Action *action, State *)
 		return;
 	}
 
+	int scrollSpeed = Options::getInt("battleScrollSpeed");		// kL
 	int key = action->getDetails()->key.keysym.sym;
-	int scrollSpeed = Options::getInt("battleScrollSpeed");
+//kL	int scrollSpeed = Options::getInt("battleScrollSpeed");
 	if (key == Options::getInt("keyBattleLeft"))
 	{
 		_scrollKeyX = scrollSpeed;
@@ -268,11 +272,14 @@ void Camera::keyboardPress(Action *action, State *)
 		_scrollKeyY = -scrollSpeed;
 	}
 
-	if ((_scrollKeyX || _scrollKeyY) && !_scrollKeyTimer->isRunning() && !_scrollMouseTimer->isRunning())
+	if ((_scrollKeyX || _scrollKeyY)
+		&& !_scrollKeyTimer->isRunning()
+		&& !_scrollMouseTimer->isRunning())
 	{
 		_scrollKeyTimer->start();
 	}
-	else if ((!_scrollKeyX && !_scrollKeyY) && _scrollKeyTimer->isRunning())
+	else if ((!_scrollKeyX && !_scrollKeyY)
+		&& _scrollKeyTimer->isRunning())
 	{
 		_scrollKeyTimer->stop();
 	}
@@ -308,11 +315,15 @@ void Camera::keyboardRelease(Action *action, State *)
 		_scrollKeyY = 0;
 	}
 
-	if ((_scrollKeyX || _scrollKeyY) && !_scrollKeyTimer->isRunning() && !_scrollMouseTimer->isRunning())
+	if ((_scrollKeyX || _scrollKeyY)
+		&& !_scrollKeyTimer->isRunning()
+		&& !_scrollMouseTimer->isRunning())
 	{
 		_scrollKeyTimer->start();
 	}
-	else if ((!_scrollKeyX && !_scrollKeyY) && _scrollKeyTimer->isRunning())
+	else if ((!_scrollKeyX
+		&& !_scrollKeyY)
+		&& _scrollKeyTimer->isRunning())
 	{
 		_scrollKeyTimer->stop();
 	}
@@ -352,10 +363,10 @@ void Camera::scrollXY(int x, int y, bool redraw)
 		// Handling map bounds...
 		// Ok, this is a prototype, it should be optimized.
 		// Actually this should be calculated instead of slow-approximation.
-		if (_center.x < 0)             { _mapOffset.x -= 2; _mapOffset.y -= 1; continue; }
-		if (_center.x > _mapsize_x -1) { _mapOffset.x += 2; _mapOffset.y += 1; continue; }
-		if (_center.y < 0)             { _mapOffset.x += 2; _mapOffset.y -= 1; continue; }
-		if (_center.y > _mapsize_y -1) { _mapOffset.x -= 2; _mapOffset.y += 1; continue; }
+		if (_center.x < 0)				{ _mapOffset.x -= 2; _mapOffset.y -= 1; continue; }
+		if (_center.x > _mapsize_x -1)	{ _mapOffset.x += 2; _mapOffset.y += 1; continue; }
+		if (_center.y < 0)				{ _mapOffset.x += 2; _mapOffset.y -= 1; continue; }
+		if (_center.y > _mapsize_y -1)	{ _mapOffset.x -= 2; _mapOffset.y += 1; continue; }
 		break;
 	}
 	while (true);
@@ -439,6 +450,7 @@ void Camera::centerOnPosition(const Position &mapPos, bool redraw)
 //kL	_mapOffset.y = -(screenPos.y - (_visibleMapHeight / 2));
 	_mapOffset.x = -(screenPos.x - (_screenWidth / 2) +16);			// kL
 	_mapOffset.y = -(screenPos.y - (_visibleMapHeight / 2) +16);	// kL
+//	_mapOffset.y = -(screenPos.y - (_visibleMapHeight / 2) +24);	// kL
 	_mapOffset.z = _center.z;
 
 	if (redraw) _map->draw();
@@ -585,6 +597,7 @@ bool Camera::isOnScreen(const Position &mapPos) const
 	convertMapToScreen(mapPos, &screenPos);
 	screenPos.x += _mapOffset.x;
 	screenPos.y += _mapOffset.y;
+
 	return screenPos.x >= -24
 		&& screenPos.x <= _screenWidth + 24
 		&& screenPos.y >= -32

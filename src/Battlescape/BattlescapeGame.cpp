@@ -459,7 +459,9 @@ void BattlescapeGame::endTurn()
 	{
 		for (std::vector<BattleItem*>::iterator it = _save->getTiles()[i]->getInventory()->begin(); it != _save->getTiles()[i]->getInventory()->end(); )
 		{
-			if ((*it)->getRules()->getBattleType() == BT_GRENADE && (*it)->getExplodeTurn() > 0 && (*it)->getExplodeTurn() <= _save->getTurn())  // it's a grenade to explode now
+			if ((*it)->getRules()->getBattleType() == BT_GRENADE
+				&& (*it)->getExplodeTurn() > 0
+				&& (*it)->getExplodeTurn() <= _save->getTurn())  // it's a grenade to explode now
 			{
 				p.x = _save->getTiles()[i]->getPosition().x*16 + 8;
 				p.y = _save->getTiles()[i]->getPosition().y*16 + 8;
@@ -486,6 +488,13 @@ void BattlescapeGame::endTurn()
 
 		return;
 	}
+
+	/* kL_begin: from Savegame/BattleUnit.cpp, void BattleUnit::prepareNewTurn()
+	if (!_hitByFire && _fire > 0) // suffer from fire
+	{
+		_health -= _armor->getDamageModifier(DT_IN) * RNG::generate(5, 10);
+		_fire--;
+	} */
 
 	// if all units from either faction are killed - the mission is over.
 	int liveAliens = 0;
@@ -554,7 +563,9 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 {
 	for (std::vector<BattleUnit*>::iterator j = _save->getUnits()->begin(); j != _save->getUnits()->end(); ++j)
 	{
-		if ((*j)->getHealth() == 0 && (*j)->getStatus() != STATUS_DEAD && (*j)->getStatus() != STATUS_COLLAPSING)
+		if ((*j)->getHealth() == 0
+			&& (*j)->getStatus() != STATUS_DEAD
+			&& (*j)->getStatus() != STATUS_COLLAPSING)
 		{
 			BattleUnit *victim = (*j);
 
@@ -565,8 +576,8 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 				int modifier = murderer->getFaction() == FACTION_PLAYER ? _save->getMoraleModifier() : 100;
 
 				// if there is a known murderer, he will get a morale bonus if he is of a different faction (what with neutral?)
-				if ((victim->getOriginalFaction() == FACTION_PLAYER && murderer->getFaction() == FACTION_HOSTILE) ||
-					(victim->getOriginalFaction() == FACTION_HOSTILE && murderer->getFaction() == FACTION_PLAYER))
+				if ((victim->getOriginalFaction() == FACTION_PLAYER && murderer->getFaction() == FACTION_HOSTILE)
+					|| (victim->getOriginalFaction() == FACTION_HOSTILE && murderer->getFaction() == FACTION_PLAYER))
 				{
 					murderer->moraleChange(20 * modifier / 100);
 				}
@@ -615,7 +626,8 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 
 								for (std::vector<BattleUnit*>::iterator h = _save->getUnits()->begin(); h != _save->getUnits()->end(); ++h)
 								{
-									if ((*h)->getFaction() == FACTION_HOSTILE && !(*h)->isOut() && (*h) != victim)
+									if ((*h)->getFaction() == FACTION_HOSTILE
+										&& !(*h)->isOut() && (*h) != victim)
 									{
 										int d = _save->getTileEngine()->distanceSq(victim->getPosition(), (*h)->getPosition());
 										if (d < closest)
@@ -800,7 +812,9 @@ void BattlescapeGame::setupCursor()
 		{
 			getMap()->setCursorType(CT_THROW);
 		}
-		else if (_currentAction.type == BA_MINDCONTROL || _currentAction.type == BA_PANIC || _currentAction.type == BA_USE)
+		else if (_currentAction.type == BA_MINDCONTROL
+			|| _currentAction.type == BA_PANIC
+			|| _currentAction.type == BA_USE)
 		{
 			getMap()->setCursorType(CT_PSI);
 		}
@@ -1184,13 +1198,16 @@ bool BattlescapeGame::handlePanickingPlayer()
 }
 
 /**
- * Common function for hanlding panicking units.
+ * Common function for handling panicking units.
  * @return False when unit not in panicking mode.
  */
 bool BattlescapeGame::handlePanickingUnit(BattleUnit *unit)
 {
 	UnitStatus status = unit->getStatus();
 	if (status != STATUS_PANICKING && status != STATUS_BERSERK) return false;
+
+//	Log(LOG_INFO) << "unit Panic/Berserk : " << unit->getId() << " / " << unit->getMorale();		// kL
+
 
 	unit->setVisible(true);
 	getMap()->getCamera()->centerOnPosition(unit->getPosition());
@@ -1212,7 +1229,7 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit *unit)
 
 	unit->abortTurn(); // makes the unit go to status STANDING :p
 
-	int flee = RNG::generate(0,100);
+	int flee = RNG::generate(0, 100);
 	BattleAction ba;
 	ba.actor = unit;
 
@@ -1235,7 +1252,7 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit *unit)
 
 				unit->setCache(0);
 
-				ba.target = Position(unit->getPosition().x + RNG::generate(-5,5), unit->getPosition().y + RNG::generate(-5,5), unit->getPosition().z);
+				ba.target = Position(unit->getPosition().x + RNG::generate(-5, 5), unit->getPosition().y + RNG::generate(-5, 5), unit->getPosition().z);
 				if (_save->getTile(ba.target)) // only walk towards it when the place exists
 				{
 					_save->getPathfinding()->calculate(ba.actor, ba.target);
@@ -1300,6 +1317,9 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit *unit)
 	// Time units can only be reset after everything else occurs
 	statePushBack(new UnitPanicBState(this, ba.actor));
 	unit->moraleChange(+15);
+
+//	Log(LOG_INFO) << "unit Panic/Berserk : " << unit->getId() << " / " << unit->getMorale();		// kL
+
 
 	return true;
 }

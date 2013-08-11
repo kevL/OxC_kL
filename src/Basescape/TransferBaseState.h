@@ -32,8 +32,7 @@ class TextList;
 class Base;
 
 /**
- * Window that lets the player pick the base
- * to transfer items to.
+ * Window that lets the player pick the base to transfer items to.
  */
 class TransferBaseState : public State
 {

@@ -1328,9 +1328,9 @@ double BattleUnit::getFiringAccuracy(BattleActionType actionType, BattleItem *it
 	else if (actionType == BA_AUTOSHOT)
 		weaponAcc = item->getRules()->getAccuracyAuto();
 	else if (actionType == BA_HIT)
-		return (double)(item->getRules()->getAccuracyMelee()/100.0);
+		return (double)(item->getRules()->getAccuracyMelee() / 100.0);
 
-	result *= (double)(weaponAcc/100.0);
+	result *= (double)(weaponAcc / 100.0);
 
 	if (_kneeled)
 		result *= 1.16;
@@ -1354,13 +1354,13 @@ double BattleUnit::getFiringAccuracy(BattleActionType actionType, BattleItem *it
  */
 double BattleUnit::getAccuracyModifier()
 {
-	double result = ((double)_health/(double)getStats()->health);
+	double result = ((double)_health / (double)getStats()->health);
 
 	int wounds = _fatalWounds[BODYPART_HEAD] + _fatalWounds[BODYPART_RIGHTARM];
 	if (wounds > 9)
 		wounds = 9;
 
-	result *= 1 + (-0.1*wounds);
+	result *= 1 + (-0.1 * wounds);
 
 	return result;
 }
@@ -1437,20 +1437,20 @@ void BattleUnit::prepareNewTurn()
 	int TURecovery = getStats()->tu; // recover TUs
 
 	float encumbrance = (float)getStats()->strength / (float)getCarriedWeight();
-	if (encumbrance < 1)
+	if (encumbrance < 1.f)
 	{
-	  TURecovery = int(encumbrance * TURecovery);
+		TURecovery = int(encumbrance * TURecovery);
 	}
 
 	// Each fatal wound to the left or right leg reduces the soldier's TUs by 10%.
-	TURecovery -= (TURecovery * (_fatalWounds[BODYPART_LEFTLEG]+_fatalWounds[BODYPART_RIGHTLEG] * 10))/100;
+	TURecovery -= (TURecovery * (_fatalWounds[BODYPART_LEFTLEG] + _fatalWounds[BODYPART_RIGHTLEG] * 10)) / 100;
 	setTimeUnits(TURecovery);
 
 	if (!isOut()) // recover energy
 	{
 		int ENRecovery = getStats()->tu / 3;
 		// Each fatal wound to the body reduces the soldier's energy recovery by 10%.
-		ENRecovery -= (_energy * (_fatalWounds[BODYPART_TORSO] * 10))/100;
+		ENRecovery -= (_energy * (_fatalWounds[BODYPART_TORSO] * 10)) / 100;
 		_energy += ENRecovery;
 
 		if (_energy > getStats()->stamina)
@@ -1459,6 +1459,7 @@ void BattleUnit::prepareNewTurn()
 
 	_health -= getFatalWounds(); // suffer from fatal wounds
 
+/*kL, this should happen at the end of Turn (see BattlescapeGame.cpp, void BattlescapeGame::endTurn() */
 	if (!_hitByFire && _fire > 0) // suffer from fire
 	{
 		_health -= _armor->getDamageModifier(DT_IN) * RNG::generate(5, 10);
@@ -1481,9 +1482,9 @@ void BattleUnit::prepareNewTurn()
 	if (!isOut())
 	{
 		int chance = 100 - (2 * getMorale());
-		if (RNG::generate(1,100) <= chance)
+		if (RNG::generate(1, 100) <= chance)
 		{
-			int type = RNG::generate(0,100);
+			int type = RNG::generate(0, 100);
 			// 33% chance of berserk, panic can mean freeze or flee, but that is determined later
 			_status = (type <= 33 ? STATUS_BERSERK : STATUS_PANICKING);
 		}
@@ -1942,15 +1943,22 @@ bool BattleUnit::postMissionProcedures(SavedGame *geoscape)
 	{
 		if (s->getRank() == RANK_ROOKIE)
 			s->promoteRank();
-		int v;
-		v = caps.tu - stats->tu;
-		if (v > 0) stats->tu += RNG::generate(0, v/10 + 2);
+
+		int v = caps.tu - stats->tu;
+//kL		if (v > 0) stats->tu += RNG::generate(0, v/10 + 2);
+		if (v > 0) stats->tu += RNG::generate(0, v/10 + 2) -1;		// kL
+
 		v = caps.health - stats->health;
-		if (v > 0) stats->health += RNG::generate(0, v/10 + 2);
+//kL		if (v > 0) stats->health += RNG::generate(0, v/10 + 2);
+		if (v > 0) stats->health += RNG::generate(0, v/10 + 2) -1;		// kL
+
 		v = caps.strength - stats->strength;
-		if (v > 0) stats->strength += RNG::generate(0, v/10 + 2);
+//kL		if (v > 0) stats->strength += RNG::generate(0, v/10 + 2);
+		if (v > 0) stats->strength += RNG::generate(0, v/10 + 2) -1;		// kL
+
 		v = caps.stamina - stats->stamina;
-		if (v > 0) stats->stamina += RNG::generate(0, v/10 + 2);
+//kL		if (v > 0) stats->stamina += RNG::generate(0, v/10 + 2);
+		if (v > 0) stats->stamina += RNG::generate(0, v/10 + 2) -1;		// kL
 
 		return true;
 	}
@@ -2603,4 +2611,5 @@ int BattleUnit::getCoverReserve()
 {
 	return _coverReserve;
 }
+
 }

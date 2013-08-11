@@ -187,7 +187,6 @@ public:
 	bool getKneelReserved();
 	/// Attempts a psionic attack on an enemy we "know of".
 	bool psiAction(BattleAction *action);
-
 };
 
 }
