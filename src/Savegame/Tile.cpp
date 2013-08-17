@@ -489,26 +489,34 @@ bool Tile::destroy(int part)
 	{
 		if (_objects[part]->isGravLift())
 			return false;
+
 		_objective = _objects[part]->getSpecialType() == MUST_DESTROY;
 		MapData *originalPart = _objects[part];
+
 		int originalMapDataSetID = _mapDataSetID[part];
 		setMapData(0, -1, -1, part);
+
 		if (originalPart->getDieMCD())
 		{
 			MapData *dead = originalPart->getDataset()->getObjects()->at(originalPart->getDieMCD());
 			setMapData(dead, originalPart->getDieMCD(), originalMapDataSetID, dead->getObjectType());
 		}
+
 		if (originalPart->getExplosive())
 		{
 			setExplosive(originalPart->getExplosive());
 		}
 	}
+
 	/* check if the floor on the lowest level is gone */
-	if (part == MapData::O_FLOOR && getPosition().z == 0 && _objects[MapData::O_FLOOR] == 0)
+	if (part == MapData::O_FLOOR
+		&& getPosition().z == 0
+		&& _objects[MapData::O_FLOOR] == 0)
 	{
 		/* replace with scorched earth */
 		setMapData(MapDataSet::getScorchedEarthTile(), 1, 0, MapData::O_FLOOR);
 	}
+
 	return _objective;
 }
 

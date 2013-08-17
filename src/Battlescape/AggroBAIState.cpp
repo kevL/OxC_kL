@@ -184,13 +184,14 @@ void AggroBAIState::think(BattleAction *action)
 		_unit->abortTurn();
 		_unit->setCache(0);
 		_game->getBattleState()->getMap()->cacheUnit(_unit);
+
 		_wasHit = false;
 	}
 
 	if (_lastKnownTarget && _lastKnownTarget->isOut())
 	{
 		_lastKnownTarget = 0;
-		_lastKnownPosition = Position(0,0,-1);
+		_lastKnownPosition = Position(0, 0, -1);
 	}
 
 	_aggroTarget = 0;
@@ -198,6 +199,7 @@ void AggroBAIState::think(BattleAction *action)
 	if (_unit->getCharging() && _unit->getCharging()->isOut())
 	{
 		_unit->setCharging(0);
+
 		_charge = false;
 	}
 
@@ -223,6 +225,7 @@ void AggroBAIState::think(BattleAction *action)
 	if (action->weapon)
 	{
 		_aggroTarget = 0;
+
 		if (action->weapon->getRules()->getBattleType() == BT_MELEE)
 		{
 			meleeAction(action);
@@ -250,7 +253,7 @@ void AggroBAIState::think(BattleAction *action)
 	}
 	else if (_unit->getGrenadeFromBelt()
 		&& (action->type == BA_SNAPSHOT || action->type == BA_AUTOSHOT)
-		&& RNG::generate(0,4 - (action->diff / 2)) == 0)
+		&& RNG::generate(0, 4 - (action->diff / 2)) == 0)
 	{
 		grenadeAction(action);
 	}
@@ -333,8 +336,8 @@ bool AggroBAIState::explosiveEfficacy(Position targetPos, BattleUnit *attackingU
 			&& (*i)->getPosition().z == targetPos.z
 			&& _game->getTileEngine()->distance((*i)->getPosition(), targetPos) <= radius)
 		{
-			Position voxelPosA = Position ((targetPos.x * 16)+8, (targetPos.y * 16)+8, (targetPos.z * 24)+12);
-			Position voxelPosB = Position (((*i)->getPosition().x * 16)+8, ((*i)->getPosition().y * 16)+8, ((*i)->getPosition().z * 24)+12);
+			Position voxelPosA = Position ((targetPos.x * 16) + 8, (targetPos.y * 16) + 8, (targetPos.z * 24) + 12);
+			Position voxelPosB = Position (((*i)->getPosition().x * 16) + 8, ((*i)->getPosition().y * 16) + 8, ((*i)->getPosition().z * 24) + 12);
 
 			int collidesWith = _game->getTileEngine()->calculateLine(voxelPosA, voxelPosB, false, 0, target, true, false, *i);
 			if (collidesWith == 4)
@@ -408,7 +411,8 @@ void AggroBAIState::meleeAction(BattleAction *action)
 
 	if (_traceAI && _aggroTarget)
 	{
-		Log(LOG_INFO) << "AggroBAIState::meleeAction:" << " [target]: " << (_aggroTarget->getId()) << " at: "  << action->target.x << "," << action->target.y << "," << _aggroTarget->getId();
+		Log(LOG_INFO) << "AggroBAIState::meleeAction:" << " [target]: " << (_aggroTarget->getId())
+			<< " at: "  << action->target.x << "," << action->target.y << "," << _aggroTarget->getId();
 		Log(LOG_INFO) << "CHARGE!";		// kL
 	}
 //kL	if (_traceAI && _aggroTarget) { Log(LOG_INFO) << "CHARGE!"; }
@@ -466,8 +470,8 @@ void AggroBAIState::wayPointAction(BattleAction *action)
 			LastPosition = CurrentPosition;
 			_game->getPathfinding()->directionToVector(PathDirection, &DirectionVector);
 			CurrentPosition = CurrentPosition + DirectionVector;
-			Position voxelPosA ((CurrentPosition.x * 16)+8, (CurrentPosition.y * 16)+8, (CurrentPosition.z * 24)+12);
-			Position voxelPosb ((LastWayPoint.x * 16)+8, (LastWayPoint.y * 16)+8, (LastWayPoint.z * 24)+12);
+			Position voxelPosA ((CurrentPosition.x * 16) + 8, (CurrentPosition.y * 16) + 8, (CurrentPosition.z * 24) + 12);
+			Position voxelPosb ((LastWayPoint.x * 16) + 8, (LastWayPoint.y * 16) + 8, (LastWayPoint.z * 24) + 12);
 			CollidesWith = _game->getTileEngine()->calculateLine(voxelPosA, voxelPosb, false, 0, _unit, true);
 			if (CollidesWith > -1 && CollidesWith < 4)
 			{
@@ -488,7 +492,8 @@ void AggroBAIState::wayPointAction(BattleAction *action)
 		}
 
 		action->target = action->waypoints.front();
-		if ((int) action->waypoints.size() > 6 + (action->diff * 2) || LastWayPoint != _aggroTarget->getPosition())
+		if ((int) action->waypoints.size() > 6 + (action->diff * 2)
+			|| LastWayPoint != _aggroTarget->getPosition())
 		{
 			action->type = BA_RETHINK;
 		}
@@ -503,10 +508,11 @@ void AggroBAIState::wayPointAction(BattleAction *action)
  */
 void AggroBAIState::projectileAction(BattleAction *action)
 {
-	if(action->weapon->getRules()->isWaypoint())
+	if (action->weapon->getRules()->isWaypoint())
 	{
 		if (action->actor->getType() != "SOLDIER")
 			wayPointAction(action);
+
 		return;
 	}
 
@@ -516,10 +522,14 @@ void AggroBAIState::projectileAction(BattleAction *action)
 	{
 		_timesNotSeen = 0;
 		_lastKnownPosition = _aggroTarget->getPosition();
+
 		action->target = _aggroTarget->getPosition();
-		if((action->actor->getFaction() == FACTION_PLAYER && _aggroTarget->getFaction() == FACTION_HOSTILE) || action->actor->getFaction() == FACTION_HOSTILE)
+		if ((action->actor->getFaction() == FACTION_PLAYER
+				&& _aggroTarget->getFaction() == FACTION_HOSTILE)
+			|| action->actor->getFaction() == FACTION_HOSTILE)
 		{
-			if (!action->weapon->getAmmoItem()->getRules()->getExplosionRadius() || explosiveEfficacy(_aggroTarget->getPosition(), _unit, action->weapon->getAmmoItem()->getRules()->getExplosionRadius(), action->diff))
+			if (!action->weapon->getAmmoItem()->getRules()->getExplosionRadius()
+				|| explosiveEfficacy(_aggroTarget->getPosition(), _unit, action->weapon->getAmmoItem()->getRules()->getExplosionRadius(), action->diff))
 			{
 				selectFireMethod(action);
 			}
@@ -539,7 +549,7 @@ void AggroBAIState::grenadeAction(BattleAction *action)
 	if (explosiveEfficacy(_aggroTarget->getPosition(), _unit, grenade->getRules()->getExplosionRadius(), action->diff))
 	{
 		int tu = 4; // 4TUs for picking up the grenade
-		if(_unit->getFaction() == FACTION_HOSTILE)
+		if (_unit->getFaction() == FACTION_HOSTILE)
 		{
 			tu += _unit->getActionTUs(BA_PRIME, grenade);
 			tu += _unit->getActionTUs(BA_THROW, grenade);
@@ -569,32 +579,43 @@ void AggroBAIState::grenadeAction(BattleAction *action)
 void AggroBAIState::takeCoverAction(BattleAction *action)
 {
 	selectNearestTarget();
+
 	if (!_aggroTarget)
 	{
 		action->type = BA_RETHINK;
+
 		return;
 	}
+
 	Uint32 start = SDL_GetTicks();
+
 	++_randomTileSearchAge;
 	if (_randomTileSearchAge > 10) // shuffle the search pattern after an arbitrary number of uses
 	{
 		std::random_shuffle(_randomTileSearch.begin(), _randomTileSearch.end());
 		_randomTileSearchAge = 0;
 	}
+
 	int unitsSpottingMe =_game->getSpottingUnits(action->actor);
+
 	action->type = BA_WALK;
+
 	int currentTilePreference = 15;
 	int tries = -1;
 	bool coverFound = false;
+
 	int dir = _unit->getDirectionTo(_aggroTarget->getPosition()) + 4;
 	if (dir >= 8) dir -= 8;
+
 	int dist = _game->getTileEngine()->distance(_unit->getPosition(), _aggroTarget->getPosition());
     dist = dist ? dist : 1; // division by zero paranoia
+
 	Position runOffset;
 	_game->getPathfinding()->directionToVector(dir, &runOffset);
 
 	int bestTileScore = -100000;
 	int score = -100000;
+
 	Position bestTile(0, 0, 0);
 
 	Tile *tile = 0;
@@ -694,7 +715,8 @@ void AggroBAIState::takeCoverAction(BattleAction *action)
 		}
 		else
 		{
-			if (std::find(reachable.begin(), reachable.end(), _game->getTileIndex(tile->getPosition()))  == reachable.end()) continue; // just ignore unreachable tiles
+			if (std::find(reachable.begin(), reachable.end(), _game->getTileIndex(tile->getPosition()))  == reachable.end())
+				continue; // just ignore unreachable tiles
 
 			_game->getTileEngine()->surveyXComThreatToTile(tile, action->target, _unit);
 						
@@ -733,15 +755,17 @@ void AggroBAIState::takeCoverAction(BattleAction *action)
 			// calculate TUs to tile; we could be getting this from findReachable() somehow but that would break something for sure...
 			_game->getPathfinding()->calculate(_unit, action->target, 0, tu);
 
-			int TUBonus = (_unit->getTimeUnits() - (_game->getPathfinding()->getTotalTUCost()+4));
+			int TUBonus = (_unit->getTimeUnits() - (_game->getPathfinding()->getTotalTUCost() + 4));
 			TUBonus = TUBonus > (EXPOSURE_PENALTY - 1) ? (EXPOSURE_PENALTY - 1) : TUBonus;
-			if (tile->soldiersVisible == 0 && action->number > 2) score += TUBonus;
+			if (tile->soldiersVisible == 0 && action->number > 2)
+				score += TUBonus;
 
 			if (score > bestTileScore && _game->getPathfinding()->getStartDirection() != -1)
 			{
 				bestTileScore = score;
 				bestTile = action->target;
 				_coverCharge = _game->getPathfinding()->getTotalTUCost();
+
 				if (_traceAI)
 				{
 					tile->setMarkerColor(score < 0 ? 7 : (score < FAST_PASS_THRESHOLD/2 ? 10 : (score < FAST_PASS_THRESHOLD ? 4 : 5)));
@@ -751,13 +775,19 @@ void AggroBAIState::takeCoverAction(BattleAction *action)
 			}
 
 			_game->getPathfinding()->abortPath();
-			if (bestTileScore > FAST_PASS_THRESHOLD) coverFound = true; // good enough, gogogo
+
+			if (bestTileScore > FAST_PASS_THRESHOLD)
+				coverFound = true; // good enough, gogogo
 		}
 	}
+
 	action->target = bestTile;
+
 	if (_traceAI)
 	{
-		Log(LOG_INFO) << _unit->getId() << " Taking cover with score " << bestTileScore << " after " << tries << " tries, " << _game->getTileEngine()->distance(_unit->getPosition(), bestTile) << " squares or so away. Time: " << (SDL_GetTicks() - start) << " Action #" << action->number;
+		Log(LOG_INFO) << _unit->getId() << " Taking cover with score " << bestTileScore
+			<< " after " << tries << " tries, " << _game->getTileEngine()->distance(_unit->getPosition(), bestTile)
+			<< " squares or so away. Time: " << (SDL_GetTicks() - start) << " Action #" << action->number;
 		// Log(LOG_INFO) << "Walking " << _game->getTileEngine()->distance(_unit->getPosition(), bestTile) << " squares or so.";
 		_game->getTile(action->target)->setMarkerColor(13);
 	}

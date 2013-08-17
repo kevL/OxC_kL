@@ -338,7 +338,8 @@ int BattleUnit::getId() const
  */
 void BattleUnit::setPosition(const Position& pos, bool updateLastPos)
 {
-	if (updateLastPos) { _lastPos = _pos; }
+	if (updateLastPos)
+		_lastPos = _pos;
 
 	_pos = pos;
 }
@@ -537,7 +538,7 @@ void BattleUnit::keepWalking(Tile *tileBelowMe, bool cache)
 		_walkPhase = 0;
 		_verticalDirection = 0;
 
-		if (_faceDirection >= 0)
+		if (_faceDirection > -1)
 		{
 			// Finish strafing move facing the correct way.
 			_direction = _faceDirection;
@@ -610,14 +611,14 @@ void BattleUnit::lookAt(const Position &point, bool turret)
 }
 
 /**
- * Look at a direction.
+ * Look a direction.
  * @param direction
  */
 void BattleUnit::lookAt(int direction, bool force)
 {
 	if (!force)
 	{
-		if (direction < 0 || direction >= 8)
+		if (direction < 0 || direction > 7)
 			return;
 
 		_toDirection = direction;
@@ -848,8 +849,8 @@ void BattleUnit::aim(bool aiming)
 }
 
 /**
- * Returns the soldier's amount of time units.
- * @return Time units.
+ * Calculates the Map facing direction from a position to a point.
+ * @return direction to a point (0-7)
  */
 int BattleUnit::getDirectionTo(const Position &point) const
 {
@@ -857,7 +858,7 @@ int BattleUnit::getDirectionTo(const Position &point) const
 	double oy = point.y - _pos.y;
 	double angle = atan2(ox, -oy);
 	// divide the pie in 4 angles each at 1/8th before each quarter
-	double pie[4] = {(M_PI_4 * 4.0) - M_PI_4 / 2.0, (M_PI_4 * 3.0) - M_PI_4 / 2.0, (M_PI_4 * 2.0) - M_PI_4 / 2.0, (M_PI_4 * 1.0) - M_PI_4 / 2.0};
+	double pie[4] = { (M_PI_4 * 4.0) - M_PI_4 / 2.0, (M_PI_4 * 3.0) - M_PI_4 / 2.0, (M_PI_4 * 2.0) - M_PI_4 / 2.0, (M_PI_4 * 1.0) - M_PI_4 / 2.0 };
 	int dir = 0;
 
 	if (angle > pie[0] || angle < -pie[0])
@@ -986,7 +987,7 @@ int BattleUnit::damage(const Position &relative, int power, ItemDamageType type,
 				}
 			}
 
-			switch((relativeDirection - _direction) % 8)
+			switch ((relativeDirection - _direction) % 8)
 			{
 				case 0:	side = SIDE_FRONT; 										break;
 				case 1:	side = RNG::generate(0,2) < 2 ? SIDE_FRONT:SIDE_RIGHT; 	break;
@@ -997,13 +998,14 @@ int BattleUnit::damage(const Position &relative, int power, ItemDamageType type,
 				case 6:	side = SIDE_LEFT; 										break;
 				case 7:	side = RNG::generate(0,2) < 2 ? SIDE_FRONT:SIDE_LEFT; 	break;
 			}
+
 			if (relative.z > getHeight())
 			{
 				bodypart = BODYPART_HEAD;
 			}
 			else if (relative.z > 4)
 			{
-				switch(side)
+				switch (side)
 				{
 					case SIDE_LEFT:		bodypart = BODYPART_LEFTARM;	break;
 					case SIDE_RIGHT:	bodypart = BODYPART_RIGHTARM;	break;
@@ -1012,7 +1014,7 @@ int BattleUnit::damage(const Position &relative, int power, ItemDamageType type,
 			}
 			else
 			{
-				switch(side)
+				switch (side)
 				{
 					case SIDE_LEFT: 	bodypart = BODYPART_LEFTLEG; 	break;
 					case SIDE_RIGHT:	bodypart = BODYPART_RIGHTLEG; 	break;
@@ -1051,18 +1053,18 @@ int BattleUnit::damage(const Position &relative, int power, ItemDamageType type,
 				if (isWoundable()) // fatal wounds
 				{
 					if (RNG::generate(0, 10) < power)
-						_fatalWounds[bodypart] += RNG::generate(1,3);
+						_fatalWounds[bodypart] += RNG::generate(1, 3);
 
 					if (_fatalWounds[bodypart])
 						moraleChange(-_fatalWounds[bodypart]);
 				}
 
-				setArmor(getArmor(side) - (power/10) - 1, side); // armor damage
+				setArmor(getArmor(side) - (power / 10) - 1, side); // armor damage
 			}
 		}
 	}
 
-	return power < 0 ? 0:power;
+	return power < 0 ? 0 : power;
 }
 
 /**
@@ -1096,6 +1098,7 @@ void BattleUnit::startFalling()
 void BattleUnit::keepFalling()
 {
 	_fallPhase++;
+
 	int endFrame = 3;
 	if (_spawnUnit != "" && _specab != SPECAB_RESPAWN)
 	{
@@ -1207,6 +1210,7 @@ bool BattleUnit::spendEnergy(int tu)
 	if (eu <= _energy)
 	{
 		_energy -= eu;
+
 		return true;
 	}
 	else
@@ -2063,7 +2067,7 @@ void BattleUnit::heal(int part, int healAmount, int healthAmount)
 	if (part < 0 || part > 5)
 		return;
 
-	if(!_fatalWounds[part])
+	if (!_fatalWounds[part])
 		return;
 
 	_fatalWounds[part] -= healAmount;
@@ -2076,7 +2080,7 @@ void BattleUnit::heal(int part, int healAmount, int healthAmount)
 /**
  * Restore soldier morale
  */
-void BattleUnit::painKillers ()
+void BattleUnit::painKillers()
 {
 	int lostHealth = getStats()->health - _health;
 	if (lostHealth > _moraleRestored)
@@ -2091,13 +2095,13 @@ void BattleUnit::painKillers ()
  * @param energy The amount of energy to add
  * @param s The amount of stun level to reduce
  */
-void BattleUnit::stimulant (int energy, int s)
+void BattleUnit::stimulant(int energy, int stun)
 {
 	_energy += energy;
 	if (_energy > getStats()->stamina)
 		_energy = getStats()->stamina;
 
-	healStun (s);
+	healStun(stun);
 }
 
 /**
@@ -2473,7 +2477,7 @@ int BattleUnit::getTurnsExposed () const
 }
 
 /**
- * Get This unit's original Faction.
+ * Get this unit's original Faction.
  * @return original faction
  */
 UnitFaction BattleUnit::getOriginalFaction() const
@@ -2481,7 +2485,9 @@ UnitFaction BattleUnit::getOriginalFaction() const
 	return _originalFaction;
 }
 
-/// invalidate cache; call after copying object :(
+/*
+ * Invalidate cache; call after copying object :(
+ */
 void BattleUnit::invalidateCache()
 {
 	for (int i = 0; i < 5; ++i) { _cache[i] = 0; }
@@ -2489,21 +2495,33 @@ void BattleUnit::invalidateCache()
 	_cacheInvalid = true;
 }
 
+/*
+ * 
+ */
 std::vector<BattleUnit *> BattleUnit::getUnitsSpottedThisTurn()
 {
 	return _unitsSpottedThisTurn;
 }
 
+/*
+ * 
+ */
 void BattleUnit::setRankInt(int rank)
 {
 	_rankInt = rank;
 }
 
+/*
+ * 
+ */
 int BattleUnit::getRankInt() const
 {
 	return _rankInt;
 }
 
+/*
+ * 
+ */
 void BattleUnit::deriveRank()
 {
 	if (_faction == FACTION_PLAYER)
@@ -2518,7 +2536,7 @@ void BattleUnit::deriveRank()
 }
 
 /*
- * this function checks if a tile is visible, using maths.
+ * This function checks if a tile is visible, using maths.
  * @param pos the position to check against
  * @return what the maths decide
  */
@@ -2570,7 +2588,7 @@ bool BattleUnit::checkViewSector(Position pos) const
 }
 
 /*
- * common function to adjust a unit's stats according to difficulty setting.
+ * Common function to adjust a unit's stats according to difficulty setting.
  */
 void BattleUnit::adjustStats(const int diff)
 {
@@ -2587,7 +2605,7 @@ void BattleUnit::adjustStats(const int diff)
 }
 
 /*
- * did this unit already take fire damage this turn?
+ * Did this unit already take fire damage this turn?
  * (used to avoid damaging large units multiple times.)
  */
 bool BattleUnit::tookFireDamage() const
@@ -2596,20 +2614,109 @@ bool BattleUnit::tookFireDamage() const
 }
 
 /*
- * toggle the state of the fire damage tracking boolean.
+ * Toggle the state of the fire damage tracking boolean.
  */
 void BattleUnit::toggleFireDamage()
 {
 	_hitByFire = !_hitByFire;
 }
 
+/*
+ * 
+ */
 void BattleUnit::setCoverReserve(int reserve)
 {
 	_coverReserve = reserve;
 }
+
+/*
+ * 
+ */
 int BattleUnit::getCoverReserve()
 {
 	return _coverReserve;
 }
+
+// kL_begin:
+/*
+ * Starts the death spin.
+ */
+void BattleUnit::deathPirouette()
+{
+//	Log(LOG_INFO) << "BattleUnit::deathPirouette()" << " [target]: " << (getId());
+
+	_status = STATUS_TURNING;
+	_spinPhase = 0;
+	_cacheInvalid = true;
+}
+
+/*
+ * Continues the death spin.
+ */
+void BattleUnit::deathPirContinue()
+{
+//	Log(LOG_INFO) << "BattleUnit::deathPirContinue()" << " [target]: " << (getId());
+
+	int d = _direction;
+	if (3 == d) // if facing player, 1 rotation left
+	{
+//		Log(LOG_INFO) << ". d_init = " << d;
+		if (3 == _spinPhase || 4 == _spinPhase) // start = 0, BattleUnit::deathPirouette()
+		{
+//			Log(LOG_INFO) << ". . _spinPhase = " << _spinPhase << " [ return ]";
+			 _spinPhase = -1; // end.
+
+			 return;
+		}
+		else if (1 == _spinPhase)
+		{
+			_spinPhase = 3; // 2nd CW rotation
+		}
+		else if (2 == _spinPhase)
+		{
+			_spinPhase = 4; // 2nd CCW rotation
+		}
+	}
+
+	if (0 == _spinPhase)
+	{
+		if (-1 < d && d < 4)
+		{
+			_spinPhase = 1; // 1st CW rotation
+		}
+		else
+		{
+			_spinPhase = 2; // 1st CCW rotation
+		}
+	}
+
+	if (1 == _spinPhase || 3 == _spinPhase)
+	{
+		d++;
+		if (8 == d) d = 0;
+	}
+	else
+	{
+		d--;
+		if (-1 == d) d = 7;
+	}
+
+
+//	Log(LOG_INFO) << ". d_final = " << d;
+	setDirection(d);
+
+	_status = STATUS_TURNING;
+	_cacheInvalid = true;
+}
+
+/*
+ * Regulates the death spin.
+ * @ return int that tracks deathspin rotations
+ */
+int BattleUnit::getSpinPhase()
+{
+	return _spinPhase;
+}
+// kL_end.
 
 }

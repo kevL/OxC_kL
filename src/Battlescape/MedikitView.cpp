@@ -53,7 +53,8 @@ const std::string PARTS_STRING[6] =
  * @param partTxt A pointer to a Text. Will be updated with the selected body part.
  * @param woundTxt A pointer to a Text. Will be updated with the amount of fatal wound.
  */
-MedikitView::MedikitView (int w, int h, int x, int y, Game * game, BattleUnit *unit, Text *partTxt, Text *woundTxt) : InteractiveSurface(w, h, x, y), _game(game), _selectedPart(0), _unit(unit), _partTxt(partTxt), _woundTxt(woundTxt)
+MedikitView::MedikitView (int w, int h, int x, int y, Game * game, BattleUnit *unit, Text *partTxt, Text *woundTxt)
+	: InteractiveSurface(w, h, x, y), _game(game), _selectedPart(0), _unit(unit), _partTxt(partTxt), _woundTxt(woundTxt)
 {
 	_redraw = true;
 }
@@ -72,17 +73,21 @@ void MedikitView::draw()
 	for (int i = 0; i < set->getTotalFrames(); i++)
 	{
 		int wound = _unit->getFatalWound(i);
+
 		Surface * surface = set->getFrame (i);
 		int baseColor = wound ? red : 0;
 		surface->blitNShade(this, Surface::getX(), Surface::getY(), 0, false, baseColor);
 	}
+
 	this->unlock();
 
 	_redraw = false;
+
 	if (_selectedPart == -1)
 	{
 		return;
 	}
+
 	ss << _game->getLanguage()->getString(PARTS_STRING[_selectedPart]);
 	ss1 << fatal_wound;
 	_partTxt->setText(ss.str());
@@ -97,8 +102,10 @@ void MedikitView::draw()
 void MedikitView::mouseClick (Action *action, State *)
 {
 	SurfaceSet *set = _game->getResourcePack()->getSurfaceSet("MEDIBITS.DAT");
+
 	int x = action->getRelativeXMouse() / action->getXScale();
 	int y = action->getRelativeYMouse() / action->getYScale();
+
 	for (int i = 0; i < set->getTotalFrames(); i++)
 	{
 		Surface * surface = set->getFrame (i);
@@ -119,4 +126,5 @@ int MedikitView::getSelectedPart() const
 {
 	return _selectedPart;
 }
+
 }

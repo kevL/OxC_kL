@@ -428,7 +428,7 @@ void BattleItem::setUnit(BattleUnit *unit)
  * Set the heal quantity of item
  * @param heal the new heal quantity
  */
-void BattleItem::setHealQuantity (int heal)
+void BattleItem::setHealQuantity(int heal)
 {
 	_heal = heal;
 }
@@ -437,7 +437,7 @@ void BattleItem::setHealQuantity (int heal)
  * Get the heal quantity of item
  * @return The new heal quantity
  */
-int BattleItem::getHealQuantity () const
+int BattleItem::getHealQuantity() const
 {
 	return _heal;
 }
@@ -446,7 +446,7 @@ int BattleItem::getHealQuantity () const
  * Set the pain killer quantity of item
  * @param pk the new pain killer quantity
  */
-void BattleItem::setPainKillerQuantity (int pk)
+void BattleItem::setPainKillerQuantity(int pk)
 {
 	_painKiller = pk;
 }
@@ -455,7 +455,7 @@ void BattleItem::setPainKillerQuantity (int pk)
  * Get the pain killer quantity of item
  * @return The new pain killer quantity
  */
-int BattleItem::getPainKillerQuantity () const
+int BattleItem::getPainKillerQuantity() const
 {
 	return _painKiller;
 }
@@ -464,7 +464,7 @@ int BattleItem::getPainKillerQuantity () const
  * Set the stimulant quantity of item
  * @param stimulant the new stimulant quantity
  */
-void BattleItem::setStimulantQuantity (int stimulant)
+void BattleItem::setStimulantQuantity(int stimulant)
 {
 	_stimulant = stimulant;
 }
@@ -473,7 +473,7 @@ void BattleItem::setStimulantQuantity (int stimulant)
  * Get the stimulant quantity of item
  * @return The new stimulant quantity
  */
-int BattleItem::getStimulantQuantity () const
+int BattleItem::getStimulantQuantity() const
 {
 	return _stimulant;
 }
@@ -482,7 +482,7 @@ int BattleItem::getStimulantQuantity () const
  * Set the XCOM property flag. This is to determine at debriefing what goes into base/craft
  * @param bool
  */
-void BattleItem::setXCOMProperty (bool flag)
+void BattleItem::setXCOMProperty(bool flag)
 {
 	_XCOMProperty = flag;
 }
@@ -490,7 +490,7 @@ void BattleItem::setXCOMProperty (bool flag)
  * Get the XCOM property flag. This is to determine at debriefing what goes into base/craft
  * @return bool
  */
-bool BattleItem::getXCOMProperty () const
+bool BattleItem::getXCOMProperty() const
 {
 	return _XCOMProperty;
 }

@@ -138,11 +138,13 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	_numAmmoLeft = new NumberText(30, 5, _icons->getX() + 8, _icons->getY() + 5);
 	_btnRightHandItem = new InteractiveSurface(32, 48, _icons->getX() + 280, _icons->getY() + 5);
 	_numAmmoRight = new NumberText(30, 5, _icons->getX() + 280, _icons->getY() + 5);
+
 	for (int i = 0; i < 10; ++i)
 	{
 		_btnVisibleUnit[i] = new InteractiveSurface(15, 12, _icons->getX() + iconsWidth - 20, _icons->getY() - 16 - (i * 13));
 		_numVisibleUnit[i] = new NumberText(15, 12, _icons->getX() + iconsWidth - 14 , _icons->getY() - 12 - (i * 13));
 	}
+
 	_numVisibleUnit[9]->setX(304); // center number 10
 	_warning = new WarningMessage(224, 24, _icons->getX() + 48, _icons->getY() + 32);
 	_btnLaunch = new InteractiveSurface(32, 24, game->getScreen()->getWidth() / game->getScreen()->getXScale() - 32, 0);
@@ -160,7 +162,7 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	_barEnergy = new Bar(102, 3, _icons->getX() + 170, _icons->getY() + 45);
 
 	_numHealth = new NumberText(15, 5, _icons->getX() + 136, _icons->getY() + 50);
-	_barHealth= new Bar(102, 3, _icons->getX() + 170, _icons->getY() + 49);
+	_barHealth = new Bar(102, 3, _icons->getX() + 170, _icons->getY() + 49);
 
 	_numMorale = new NumberText(15, 5, _icons->getX() + 154, _icons->getY() + 50);
 	_barMorale = new Bar(102, 3, _icons->getX() + 170, _icons->getY() + 53);
@@ -233,11 +235,13 @@ BattlescapeState::BattlescapeState(Game *game) : State(game), _popups()
 	add(_numAmmoLeft);
 	add(_btnRightHandItem);
 	add(_numAmmoRight);
+
 	for (int i = 0; i < 10; ++i)
 	{
 		add(_btnVisibleUnit[i]);
 		add(_numVisibleUnit[i]);
 	}
+
 	add(_warning);
 	add(_txtDebug);
 	add(_btnLaunch);
@@ -416,6 +420,7 @@ void BattlescapeState::init()
 	{
 		_battleGame->setupCursor();
 		_map->getCamera()->centerOnPosition(_save->getSelectedUnit()->getPosition());
+
 		firstInit = false;
 	}
 }
@@ -1399,13 +1404,13 @@ void BattlescapeState::saveAIMap()
 						case FACTION_HOSTILE:
 							// #4080C0 is Volutar Blue
 							characterRGBA(img, r.x, r.y, (tilePos.z - z) ? 'a' : 'A', 0x40, 0x80, 0xC0, 0xff);
-							break;
+						break;
 						case FACTION_PLAYER:
 							characterRGBA(img, r.x, r.y, (tilePos.z - z) ? 'x' : 'X', 255, 255, 127, 0xff);
-							break;
+						break;
 						case FACTION_NEUTRAL:
 							characterRGBA(img, r.x, r.y, (tilePos.z - z) ? 'c' : 'C', 255, 127, 127, 0xff);
-							break;
+						break;
 					}
 					break;
 				}
@@ -1830,6 +1835,7 @@ void BattlescapeState::btnZeroTUsClick(Action *action)
 		ev.button.button = SDL_BUTTON_LEFT;
 		Action a = Action(&ev, 0.0, 0.0);
 		action->getSender()->mousePress(&a, this);
+
 		if (_battleGame->getSave()->getSelectedUnit())
 		{
 			_battleGame->getSave()->getSelectedUnit()->setTimeUnits(0);

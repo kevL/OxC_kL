@@ -156,18 +156,22 @@ void Map::draw()
 	projectileInFOV = _save->getDebugMode();
 	if (_projectile)
 	{
-		t = _save->getTile(Position(_projectile->getPosition(0).x/16, _projectile->getPosition(0).y/16, _projectile->getPosition(0).z/24));
-		if (_save->getSide() == FACTION_PLAYER || (t && t->getVisible()))
+		t = _save->getTile(Position(_projectile->getPosition(0).x / 16, _projectile->getPosition(0).y / 16, _projectile->getPosition(0).z / 24));
+		if (_save->getSide() == FACTION_PLAYER
+			|| (t && t->getVisible()))
 		{
 			projectileInFOV = true;
 		}
 	}
+
 	explosionInFOV = _save->getDebugMode();
 	if (!_explosions.empty())
 	{
 		std::set<Explosion*>::iterator i = _explosions.begin();
-		t = _save->getTile(Position((*i)->getPosition().x/16, (*i)->getPosition().y/16, (*i)->getPosition().z/24));
-		if (t && (((*i)->isBig() && t->isDiscovered(0)) || t->getVisible()))
+		t = _save->getTile(Position((*i)->getPosition().x / 16, (*i)->getPosition().y / 16, (*i)->getPosition().z / 24));
+		if (t
+			&& (((*i)->isBig() && t->isDiscovered(0))
+				|| t->getVisible()))
 		{
 			explosionInFOV = true;
 		}

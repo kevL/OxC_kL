@@ -1122,7 +1122,8 @@ Node *SavedBattleGame::getSpawnNode(int nodeRank, BattleUnit *unit)
 		}
 	}
 	
-	if (compliantNodes.empty()) return 0;
+	if (compliantNodes.empty())
+		return 0;
 
 	int n = RNG::generate(0, compliantNodes.size() - 1);
 
@@ -1493,7 +1494,7 @@ int SavedBattleGame::getDragPixelTolerance() const
 }
 
 /**
- * Gets the Number of units that can see this a given unit.
+ * Gets the Number of units that can see this given unit.
  * @param unit The unit to check for visibility.
  * @return number of spotting units.
  */

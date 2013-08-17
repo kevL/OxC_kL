@@ -61,6 +61,7 @@ private:
 	bool _retaliationTarget;
 	std::vector<Vehicle*> _vehicles;
 	std::vector<BaseFacility*> _defenses;
+
 public:
 	/// Creates a new base.
 	Base(const Ruleset *rule);
@@ -69,11 +70,11 @@ public:
 	/// Loads the base from YAML.
 	void load(const YAML::Node& node, SavedGame *save, bool newGame, bool newBattleGame = false);
 	/// Saves the base to YAML.
-	void save(YAML::Emitter& out) const;
+	void save(YAML::Emitter &out) const;
 	/// Saves the base's ID to YAML.
-	void saveId(YAML::Emitter& out) const;
+	void saveId(YAML::Emitter &out) const;
 	/// Gets the base's name.
-	std::wstring getName(Language* lang = 0) const;
+	std::wstring getName(Language *lang = 0) const;
 	/// Sets the base's name.
 	void setName(const std::wstring &name);
 	/// Gets the base's facilities.
@@ -155,17 +156,17 @@ public:
 	/// Gets the base's total monthly maintenance.
 	int getMonthlyMaintenace() const;
 	/// Get the list of base's ResearchProject
-	const std::vector<ResearchProject *> & getResearch() const;
+	const std::vector<ResearchProject*> &getResearch() const;
 	/// Add a new ResearchProject to the Base
-	void addResearch(ResearchProject *);
+	void addResearch(ResearchProject*);
 	/// Remove a ResearchProject from the Base
-	void removeResearch(ResearchProject *);
+	void removeResearch(ResearchProject*);
 	/// Add a new Production to Base
-	void addProduction (Production * p);
+	void addProduction(Production *p);
 	/// Remove a Base Production's
-	void removeProduction (Production * p);
+	void removeProduction(Production *p);
 	/// Get the list of Base Production's
-	const std::vector<Production *> & getProductions () const;
+	const std::vector<Production*> &getProductions() const;
 	/// Checks if this base is hyper-wave equipped.
 	bool getHyperDetection() const;
 	/// Gets the base's used psi lab space.

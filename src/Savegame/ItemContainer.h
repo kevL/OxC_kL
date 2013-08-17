@@ -37,6 +37,7 @@ class ItemContainer
 {
 private:
 	std::map<std::string, int> _qty;
+
 public:
 	/// Creates an empty item container.
 	ItemContainer();

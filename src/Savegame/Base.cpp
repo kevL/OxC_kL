@@ -61,30 +61,46 @@ Base::~Base()
 	{
 		delete *i;
 	}
+
 	for (std::vector<Soldier*>::iterator i = _soldiers.begin(); i != _soldiers.end(); ++i)
 	{
 		delete *i;
 	}
+
 	for (std::vector<Craft*>::iterator i = _crafts.begin(); i != _crafts.end(); ++i)
 	{
 		for (std::vector<Vehicle*>::iterator j = (*i)->getVehicles()->begin(); j != (*i)->getVehicles()->end(); ++j)
+		{
 			for (std::vector<Vehicle*>::iterator k = _vehicles.begin(); k != _vehicles.end(); ++k)
-				if ((*k)==(*j)) { _vehicles.erase(k); break; } // to avoid calling a vehicle's desctructor twice
+			{
+				if ((*k) == (*j)) // to avoid calling a vehicle's destructor twice
+				{
+					_vehicles.erase(k);
+					break;
+				}
+			}
+		}
+
 		delete *i;
 	}
+
 	for (std::vector<Transfer*>::iterator i = _transfers.begin(); i != _transfers.end(); ++i)
 	{
 		delete *i;
 	}
+
 	for (std::vector<Production *>::iterator i = _productions.begin (); i != _productions.end (); ++i)
 	{
 		delete *i;
 	}
+
 	delete _items;
+
 	for (std::vector<ResearchProject*>::iterator i = _research.begin(); i != _research.end(); ++i)
 	{
 		delete *i;
 	}
+
 	for (std::vector<Vehicle*>::iterator i = _vehicles.begin(); i != _vehicles.end(); ++i)
 	{
 		delete *i;
@@ -386,15 +402,18 @@ bool Base::detect(Target *target) const
 	double distance = getDistance(target);
 	for (std::vector<BaseFacility*>::const_iterator i = _facilities.begin(); i != _facilities.end(); ++i)
 	{
-		if ((*i)->getBuildTime() == 0 && (*i)->getRules()->getRadarRange() * (1 / 60.0) * (M_PI / 180) >= distance)
+		if ((*i)->getBuildTime() == 0
+			&& (*i)->getRules()->getRadarRange() * (1 / 60.0) * (M_PI / 180) >= distance)
 		{
 			if ((*i)->getRules()->isHyperwave())
 			{
 				return true;
 			}
+
 			chance += (*i)->getRules()->getRadarChance();
 		}
 	}
+
 	if (chance == 0)
 		return false;
 
@@ -404,8 +423,9 @@ bool Base::detect(Target *target) const
 		chance = (chance * 100 + u->getVisibility()) / 100;
 	}
 
-	int detection = RNG::generate(0, 100);
-	return (detection < chance);
+//kL	int detection = RNG::generate(0, 100);
+//kL	return (detection < chance);
+	return RNG::generate(0, 100) < chance;		// kL
 }
 
 /**
@@ -429,8 +449,7 @@ bool Base::insideRadarRange(Target *target) const
 }
 
 /**
- * Returns the amount of soldiers contained
- * in the base without any assignments.
+ * Returns the amount of soldiers contained in the base without any assignments.
  * @param checkCombatReadiness does what it says on the tin.
  * @return Number of soldiers.
  */
@@ -449,12 +468,12 @@ int Base::getAvailableSoldiers(bool checkCombatReadiness) const
 			total++;
 		}
 	}
+
 	return total;
 }
 
 /**
- * Returns the total amount of soldiers contained
- * in the base.
+ * Returns the total amount of soldiers contained in the base.
  * @return Number of soldiers.
  */
 int Base::getTotalSoldiers() const
@@ -467,12 +486,12 @@ int Base::getTotalSoldiers() const
 			total += (*i)->getQuantity();
 		}
 	}
+
 	return total;
 }
 
 /**
- * Returns the amount of scientists contained
- * in the base without any assignments.
+ * Returns the amount of scientists contained in the base without any assignments.
  * @return Number of scientists.
  */
 int Base::getAvailableScientists() const
@@ -481,8 +500,7 @@ int Base::getAvailableScientists() const
 }
 
 /**
- * Returns the total amount of scientists contained
- * in the base.
+ * Returns the total amount of scientists contained in the base.
  * @return Number of scientists.
  */
 int Base::getTotalScientists() const
@@ -495,19 +513,18 @@ int Base::getTotalScientists() const
 			total += (*i)->getQuantity();
 		}
 	}
-	const std::vector<ResearchProject *> & research (getResearch());
-	for (std::vector<ResearchProject *>::const_iterator itResearch = research.begin ();
-		 itResearch != research.end ();
-		 ++itResearch)
+
+	const std::vector<ResearchProject*>&research(getResearch());
+	for (std::vector<ResearchProject*>::const_iterator itResearch = research.begin(); itResearch != research.end(); ++itResearch)
 	{
-		total += (*itResearch)->getAssigned ();
+		total += (*itResearch)->getAssigned();
 	}
+
 	return total;
 }
 
 /**
- * Returns the amount of engineers contained
- * in the base without any assignments.
+ * Returns the amount of engineers contained in the base without any assignments.
  * @return Number of engineers.
  */
 int Base::getAvailableEngineers() const
@@ -516,8 +533,7 @@ int Base::getAvailableEngineers() const
 }
 
 /**
- * Returns the total amount of engineers contained
- * in the base.
+ * Returns the total amount of engineers contained in the base.
  * @return Number of engineers.
  */
 int Base::getTotalEngineers() const
@@ -530,16 +546,17 @@ int Base::getTotalEngineers() const
 			total += (*i)->getQuantity();
 		}
 	}
+
 	for (std::vector<Production *>::const_iterator iter = _productions.begin (); iter != _productions.end (); ++iter)
 	{
 		total += (*iter)->getAssignedEngineers();
 	}
+
 	return total;
 }
 
 /**
- * Returns the amount of living quarters used up
- * by personnel in the base.
+ * Returns the amount of living quarters used up by personnel in the base.
  * @return Living space.
  */
 int Base::getUsedQuarters() const
@@ -548,8 +565,7 @@ int Base::getUsedQuarters() const
 }
 
 /**
- * Returns the total amount of living quarters
- * available in the base.
+ * Returns the total amount of living quarters available in the base.
  * @return Living space.
  */
 int Base::getAvailableQuarters() const
@@ -562,12 +578,12 @@ int Base::getAvailableQuarters() const
 			total += (*i)->getRules()->getPersonnel();
 		}
 	}
+
 	return total;
 }
 
 /**
- * Returns the amount of stores used up
- * by equipment in the base.
+ * Returns the amount of stores used up by equipment in the base.
  * @return Storage space.
  */
 int Base::getUsedStores() const
@@ -581,6 +597,7 @@ int Base::getUsedStores() const
 			total += (*j)->getRules()->getSize();
 		}
 	}
+
 	for (std::vector<Transfer*>::const_iterator i = _transfers.begin(); i != _transfers.end(); ++i)
 	{
 		if ((*i)->getType() == TRANSFER_ITEM)
@@ -588,12 +605,12 @@ int Base::getUsedStores() const
 			total += (*i)->getQuantity() * _rule->getItem((*i)->getItems())->getSize();
 		}
 	}
+
 	return (int)floor(total);
 }
 
 /**
- * Returns the total amount of stores
- * available in the base.
+ * Returns the total amount of stores available in the base.
  * @return Storage space.
  */
 int Base::getAvailableStores() const
@@ -606,12 +623,12 @@ int Base::getAvailableStores() const
 			total += (*i)->getRules()->getStorage();
 		}
 	}
+
 	return total;
 }
 
 /**
- * Returns the amount of laboratories used up
- * by research projects in the base.
+ * Returns the amount of laboratories used up by research projects in the base.
  * @return Laboratory space.
  */
 int Base::getUsedLaboratories() const
@@ -624,12 +641,12 @@ int Base::getUsedLaboratories() const
 	{
 		usedLabSpace += (*itResearch)->getAssigned ();
 	}
+
 	return usedLabSpace;
 }
 
 /**
- * Returns the total amount of laboratories
- * available in the base.
+ * Returns the total amount of laboratories available in the base.
  * @return Laboratory space.
  */
 int Base::getAvailableLaboratories() const
@@ -642,12 +659,12 @@ int Base::getAvailableLaboratories() const
 			total += (*i)->getRules()->getLaboratories();
 		}
 	}
+
 	return total;
 }
 
 /**
- * Returns the amount of workshops used up
- * by manufacturing projects in the base.
+ * Returns the amount of workshops used up by manufacturing projects in the base.
  * @return Storage space.
  */
 int Base::getUsedWorkshops() const
@@ -657,12 +674,12 @@ int Base::getUsedWorkshops() const
 	{
 		usedWorkShop += ((*iter)->getAssignedEngineers() + (*iter)->getRules()->getRequiredSpace ());
 	}
+
 	return usedWorkShop;
 }
 
 /**
- * Returns the total amount of workshops
- * available in the base.
+ * Returns the total amount of workshops available in the base.
  * @return Workshop space.
  */
 int Base::getAvailableWorkshops() const
@@ -675,12 +692,12 @@ int Base::getAvailableWorkshops() const
 			total += (*i)->getRules()->getWorkshops();
 		}
 	}
+
 	return total;
 }
 
 /**
- * Returns the amount of hangars used up
- * by crafts in the base.
+ * Returns the amount of hangars used up by crafts in the base.
  * @return Storage space.
  */
 int Base::getUsedHangars() const
@@ -693,6 +710,7 @@ int Base::getUsedHangars() const
 			total += (*i)->getQuantity();
 		}
 	}
+
 	for (std::vector<Production*>::const_iterator i = _productions.begin(); i != _productions.end(); ++i)
 	{
 		if ((*i)->getRules()->getCategory() == "STR_CRAFT")
@@ -700,12 +718,12 @@ int Base::getUsedHangars() const
 			total += ((*i)->getAmountTotal() - (*i)->getAmountProduced());
 		}
 	}
+
 	return total;
 }
 
 /**
- * Returns the total amount of hangars
- * available in the base.
+ * Returns the total amount of hangars available in the base.
  * @return Number of hangars.
  */
 int Base::getAvailableHangars() const
@@ -718,6 +736,7 @@ int Base::getAvailableHangars() const
 			total += (*i)->getRules()->getCrafts();
 		}
 	}
+
 	return total;
 }
 
@@ -725,7 +744,7 @@ int Base::getAvailableHangars() const
  * Return laboratories space not used by a ResearchProject
  * @return laboratories space not used by a ResearchProject
 */
-int Base::getFreeLaboratories () const
+int Base::getFreeLaboratories() const
 {
 	return getAvailableLaboratories() - getUsedLaboratories();
 }
@@ -734,7 +753,7 @@ int Base::getFreeLaboratories () const
  * Return workshop space not used by a Production
  * @return workshop space not used by a Production
 */
-int Base::getFreeWorkshops () const
+int Base::getFreeWorkshops() const
 {
 	return getAvailableWorkshops() - getUsedWorkshops();
 }
@@ -747,12 +766,11 @@ int Base::getAllocatedScientists() const
 {
 	int total = 0;
 	const std::vector<ResearchProject *> & research (getResearch());
-	for (std::vector<ResearchProject *>::const_iterator itResearch = research.begin ();
-		 itResearch != research.end ();
-		 ++itResearch)
+	for (std::vector<ResearchProject *>::const_iterator itResearch = research.begin (); itResearch != research.end (); ++itResearch)
 	{
 		total += (*itResearch)->getAssigned ();
 	}
+
 	return total;
 }
 
@@ -767,6 +785,7 @@ int Base::getAllocatedEngineers() const
 	{
 		total += (*iter)->getAssignedEngineers();
 	}
+
 	return total;
 }
 
@@ -785,6 +804,7 @@ int Base::getDefenseValue() const
 			total += (*i)->getRules()->getDefenseValue();
 		}
 	}
+
 	return total;
 }
 
@@ -798,11 +818,13 @@ int Base::getShortRangeDetection() const
 	int total = 0;
 	for (std::vector<BaseFacility*>::const_iterator i = _facilities.begin(); i != _facilities.end(); ++i)
 	{
-		if ((*i)->getBuildTime() == 0 && (*i)->getRules()->getRadarRange() == 1500)
+		if ((*i)->getBuildTime() == 0
+			&& (*i)->getRules()->getRadarRange() == 1500)
 		{
 			total++;
 		}
 	}
+
 	return total;
 }
 
@@ -821,6 +843,7 @@ int Base::getLongRangeDetection() const
 			total++;
 		}
 	}
+
 	return total;
 }
 
@@ -840,6 +863,7 @@ int Base::getCraftCount(const std::string &craft) const
 			total++;
 		}
 	}
+
 	return total;
 }
 
@@ -855,6 +879,7 @@ int Base::getCraftMaintenance() const
 	{
 		total += (*i)->getRules()->getRentCost();
 	}
+
 	return total;
 }
 
@@ -869,6 +894,7 @@ int Base::getPersonnelMaintenance() const
 	total += _soldiers.size() * _rule->getSoldierCost();
 	total += getTotalEngineers() * _rule->getEngineerCost();
 	total += getTotalScientists() * _rule->getScientistCost();
+
 	return total;
 }
 
@@ -887,6 +913,7 @@ int Base::getFacilityMaintenance() const
 			total += (*i)->getRules()->getMonthlyCost();
 		}
 	}
+
 	return total;
 }
 
@@ -904,7 +931,7 @@ int Base::getMonthlyMaintenace() const
  * Returns the list of all base's ResearchProject
  * @return list of base's ResearchProject
 */
-const std::vector<ResearchProject *> & Base::getResearch() const
+const std::vector<ResearchProject*> &Base::getResearch() const
 {
 	return _research;
 }
@@ -913,7 +940,7 @@ const std::vector<ResearchProject *> & Base::getResearch() const
  * Add a new Production to the Base
  * @param p A pointer to a Production
 */
-void Base::addProduction (Production * p)
+void Base::addProduction (Production *p)
 {
 	_productions.push_back(p);
 }
@@ -922,7 +949,7 @@ void Base::addProduction (Production * p)
  * Add A new ResearchProject to Base
  * @param project The project to add
 */
-void Base::addResearch(ResearchProject * project)
+void Base::addResearch(ResearchProject *project)
 {
 	_research.push_back(project);
 }
@@ -931,11 +958,12 @@ void Base::addResearch(ResearchProject * project)
  * Remove a ResearchProject from base
  * @param project the project to remove
 */
-void Base::removeResearch(ResearchProject * project)
+void Base::removeResearch(ResearchProject *project)
 {
 	_scientists += project->getAssigned();
-	std::vector<ResearchProject *>::iterator iter = std::find (_research.begin (), _research.end (), project);
-	if(iter != _research.end ())
+
+	std::vector<ResearchProject*>::iterator iter = std::find(_research.begin(), _research.end(), project);
+	if (iter != _research.end ())
 	{
 		_research.erase(iter);
 	}
@@ -945,10 +973,11 @@ void Base::removeResearch(ResearchProject * project)
  * Remove a Production from the Base
  * @param p A pointer to a Production
 */
-void Base::removeProduction (Production * p)
+void Base::removeProduction(Production *p)
 {
 	_engineers += p->getAssignedEngineers();
-	std::vector<Production *>::iterator iter = std::find (_productions.begin (), _productions.end (), p);
+
+	std::vector<Production*>::iterator iter = std::find(_productions.begin(), _productions.end(), p);
 	if (iter != _productions.end ())
 	{
 		_productions.erase(iter);
@@ -959,11 +988,10 @@ void Base::removeProduction (Production * p)
  * Get the list of Base Production's
  * @return the list of Base Production's
  */
-const std::vector<Production *> & Base::getProductions () const
+const std::vector<Production*> &Base::getProductions() const
 {
 	return _productions;
 }
-
 
 /**
  * Returns whether or not this base
@@ -974,11 +1002,13 @@ bool Base::getHyperDetection() const
 {
 	for (std::vector<BaseFacility*>::const_iterator i = _facilities.begin(); i != _facilities.end(); ++i)
 	{
-		if ((*i)->getBuildTime() == 0 && (*i)->getRules()->isHyperwave())
+		if ((*i)->getBuildTime() == 0
+			&& (*i)->getRules()->isHyperwave())
 		{
 			return true;
 		}		
 	}
+
 	return false;
 }
 
@@ -997,6 +1027,7 @@ int Base::getAvailablePsiLabs() const
 			total += (*i)->getRules()->getPsiLaboratories();
 		}
 	}
+
 	return total;
 }
 
@@ -1015,6 +1046,7 @@ int Base::getUsedPsiLabs() const
 			total ++;
 		}
 	}
+
 	return total;
 }
 
@@ -1033,27 +1065,31 @@ int Base::getUsedContainment() const
 			total += (i)->second;
 		}
 	}
+
 	for (std::vector<Transfer*>::const_iterator i = _transfers.begin(); i != _transfers.end(); ++i)
 	{
 		if ((*i)->getType() == TRANSFER_ITEM)
 		{
-			if(_rule->getItem((*i)->getItems())->getAlien())
+			if (_rule->getItem((*i)->getItems())->getAlien())
 			{
 				total += (*i)->getQuantity();
 			}
 		}
 	}
+
 	if (Options::getBool("alienContainmentLimitEnforced"))
 	{
 		for (std::vector<ResearchProject*>::const_iterator i = _research.begin(); i != _research.end(); ++i)
 		{
 			const RuleResearch *projRules = (*i)->getRules();
-			if (projRules->needItem() && _rule->getUnit(projRules->getName()))
+			if (projRules->needItem()
+				&& _rule->getUnit(projRules->getName()))
 			{
 				++total;
 			}
 		}
 	}
+
 	return total;
 }
 
@@ -1072,6 +1108,7 @@ int Base::getAvailableContainment() const
 			total += (*i)->getRules()->getAliens();
 		}
 	}
+
 	return total;
 }
 
@@ -1129,10 +1166,10 @@ bool isMindShield::operator()(const BaseFacility *facility) const
 {
 	if (facility->getBuildTime() != 0)
 	{
-		// Still building this
-		return false;
+		return false; // Still building this
 	}
-	return (facility->getRules()->isMindShield());
+
+	return facility->getRules()->isMindShield();
 }
 
 /**
@@ -1151,8 +1188,9 @@ struct isCompleted: public std::unary_function<BaseFacility*, bool>
  */
 bool isCompleted::operator()(const BaseFacility *facility) const
 {
-	return (facility->getBuildTime() == 0);
+	return facility->getBuildTime() == 0;
 }
+
 /**
  * Calculate the detection chance of this base.
  * Big bases without mindshields are easier to detect.
@@ -1165,31 +1203,40 @@ unsigned Base::getDetectionChance() const
 	return (completedFacilities / 6 + 15) / (mindShields + 1);
 }
 
+/**
+ * 
+ * @param int
+ */
 int Base::getGravShields() const
 {
 	int total = 0;
 	for (std::vector<BaseFacility*>::const_iterator i = _facilities.begin(); i != _facilities.end(); ++i)
 	{
-		if ((*i)->getBuildTime() == 0 && (*i)->getRules()->isGravShield())
+		if ((*i)->getBuildTime() == 0
+			&& (*i)->getRules()->isGravShield())
 		{
 			++total;
 		}
 	}
+
 	return total;
 }
 
 void Base::setupDefenses()
 {
 	_defenses.clear();
+
 	for (std::vector<BaseFacility*>::const_iterator i = _facilities.begin(); i != _facilities.end(); ++i)
 	{
-		if ((*i)->getBuildTime() == 0 && (*i)->getRules()->getDefenseValue())
+		if ((*i)->getBuildTime() == 0
+			&& (*i)->getRules()->getDefenseValue())
 		{
 			_defenses.push_back(*i);
 		}
 	}
 
 	_vehicles.clear();
+
 	// add vehicles that are in the crafts of the base, if it's not out
 	for (std::vector<Craft*>::iterator c = getCrafts()->begin(); c != getCrafts()->end(); ++c)
 	{
@@ -1205,33 +1252,47 @@ void Base::setupDefenses()
 	// add vehicles left on the base
 	for (std::map<std::string, int>::iterator i = _items->getContents()->begin(); i != _items->getContents()->end(); )
 	{
-		std::string itemId=(i)->first;
-		int iqty=(i)->second;
+		std::string itemId = (i)->first;
+		int iqty = (i)->second;
+
 		RuleItem *rule = _rule->getItem(itemId);
 		if (rule->isFixed())
 		{
 			if (rule->getClipSize() == -1) // so this vehicle does not need ammo
 			{
-				for (int j=0; j<iqty; ++j) _vehicles.push_back(new Vehicle(rule, 255));
+				for (int j = 0; j < iqty; ++j)
+				{
+					_vehicles.push_back(new Vehicle(rule, 255));
+				}
+
 				_items->removeItem(itemId, iqty);
 			}
 			else // so this vehicle needs ammo
 			{
 				RuleItem *ammo = _rule->getItem(rule->getCompatibleAmmo()->front());
+
 				int baqty = _items->getItem(ammo->getType()); // Ammo Quantity for this vehicle-type on the base
-				if (0 >= baqty || 0 >= iqty) { ++i; continue; }
+				if (0 >= baqty || 0 >= iqty)
+				{
+					++i;
+					continue;
+				}
+
 				int canBeAdded = std::min(iqty, baqty);
 				int newAmmoPerVehicle = std::min(baqty / canBeAdded, ammo->getClipSize());;
 				int remainder = 0;
+
 				if (ammo->getClipSize() > newAmmoPerVehicle) remainder = baqty - (canBeAdded * newAmmoPerVehicle);
 				int newAmmo;
-				for (int j=0; j<canBeAdded; ++j)
+				for (int j = 0; j < canBeAdded; ++j)
 				{
 					newAmmo = newAmmoPerVehicle;
 					if (j<remainder) ++newAmmo;
+
 					_vehicles.push_back(new Vehicle(rule, newAmmo));
 					_items->removeItem(ammo->getType(), newAmmo);
 				}
+
 				_items->removeItem(itemId, canBeAdded);
 			}
 
@@ -1255,4 +1316,5 @@ std::vector<Vehicle*> *Base::getVehicles()
 {
 	return &_vehicles;
 }
+
 }

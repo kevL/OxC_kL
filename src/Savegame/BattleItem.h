@@ -110,21 +110,21 @@ public:
 	/// Sets the corpse's unit.
 	void setUnit(BattleUnit *unit);
 	/// Set medikit Heal quantity
-	void setHealQuantity (int heal);
+	void setHealQuantity(int heal);
 	/// Get medikit heal quantity
-	int getHealQuantity () const;
+	int getHealQuantity() const;
 	/// Set medikit pain killers quantity
-	void setPainKillerQuantity (int pk);
+	void setPainKillerQuantity(int pk);
 	/// Get medikit pain killers quantity
-	int getPainKillerQuantity () const;
+	int getPainKillerQuantity() const;
 	/// Set medikit stimulant quantity
-	void setStimulantQuantity (int stimulant);
+	void setStimulantQuantity(int stimulant);
 	/// Get medikit stimulant quantity
-	int getStimulantQuantity () const;
+	int getStimulantQuantity() const;
 	/// Set xcom property flag
-	void setXCOMProperty (bool flag);
+	void setXCOMProperty(bool flag);
 	/// Get xcom property flag
-	bool getXCOMProperty () const;
+	bool getXCOMProperty() const;
 	/// get the flag representing "not dropped on player turn"
 	bool getTurnFlag() const;
 	/// set the flag representing "not dropped on player turn"

@@ -38,7 +38,6 @@ ImageButton::ImageButton(int width, int height, int x, int y) : InteractiveSurfa
  */
 ImageButton::~ImageButton()
 {
-
 }
 
 /**
@@ -93,6 +92,7 @@ void ImageButton::mousePress(Action *action, State *state)
 		_inverted = true;
 		invert(_color + 3);
 	}
+
 	InteractiveSurface::mousePress(action, state);
 }
 
@@ -108,6 +108,7 @@ void ImageButton::mouseRelease(Action *action, State *state)
 		_inverted = false;
 		invert(_color + 3);
 	}
+
 	InteractiveSurface::mouseRelease(action, state);
 }
 

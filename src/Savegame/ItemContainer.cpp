@@ -66,10 +66,12 @@ void ItemContainer::addItem(const std::string &id, int qty)
 	{
 		return;
 	}
+
 	if (_qty.find(id) == _qty.end())
 	{
 		_qty[id] = 0;
 	}
+
 	_qty[id] += qty;
 }
 
@@ -84,6 +86,7 @@ void ItemContainer::removeItem(const std::string &id, int qty)
 	{
 		return;
 	}
+
 	if (qty < _qty[id])
 	{
 		_qty[id] -= qty;

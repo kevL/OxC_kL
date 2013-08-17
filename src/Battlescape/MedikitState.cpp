@@ -133,27 +133,31 @@ MedikitState::MedikitState (Game * game, BattleUnit * targetUnit, BattleAction *
 		current.h = 100;
 		current.x = 67;
 		current.y = 44;
-		_surface->drawRect(&current, Palette::blockOffset(15)+15);
+
+		_surface->drawRect(&current, Palette::blockOffset(15) + 15);
 	}
+
 	_partTxt = new Text(50, 15, 90, 120);
 	_woundTxt = new Text(10, 15, 145, 120);
 	_medikitView = new MedikitView(52, 58, 95, 60, _game, _targetUnit, _partTxt, _woundTxt);
-	InteractiveSurface *endButton = new InteractiveSurface(20, 20,
-							       220, 140);
 
+	InteractiveSurface *endButton = new InteractiveSurface(20, 20, 220, 140);
 	InteractiveSurface *stimulantButton = new MedikitButton(84);
-
 	InteractiveSurface *pkButton = new MedikitButton(48);
 	InteractiveSurface *healButton = new MedikitButton(120);
+
 	_pkText = new MedikitTxt (50);
 	_stimulantTxt = new MedikitTxt (85);
 	_healTxt = new MedikitTxt (120);
+
 	add(_surface);
 	add(_medikitView);
 	add(endButton);
+
 	add(new MedikitTitle (37, _game->getLanguage()->getString("STR_PAIN_KILLER")));
 	add(new MedikitTitle (73, _game->getLanguage()->getString("STR_STIMULANT")));
 	add(new MedikitTitle (109, _game->getLanguage()->getString("STR_HEAL")));
+
 	add(healButton);
 	add(stimulantButton);
 	add(pkButton);
@@ -173,11 +177,13 @@ MedikitState::MedikitState (Game * game, BattleUnit * targetUnit, BattleAction *
 	_partTxt->setHighContrast(true);
 	_woundTxt->setColor(Palette::blockOffset(2));
 	_woundTxt->setHighContrast(true);
+
 	endButton->onMouseClick((ActionHandler)&MedikitState::onEndClick);
 	endButton->onKeyboardPress((ActionHandler)&MedikitState::onEndClick, (SDLKey)Options::getInt("keyCancel"));
 	healButton->onMouseClick((ActionHandler)&MedikitState::onHealClick);
 	stimulantButton->onMouseClick((ActionHandler)&MedikitState::onStimulantClick);
 	pkButton->onMouseClick((ActionHandler)&MedikitState::onPainKillerClick);
+
 	update();
 }
 
@@ -188,7 +194,9 @@ MedikitState::MedikitState (Game * game, BattleUnit * targetUnit, BattleAction *
 void MedikitState::handle(Action *action)
 {
 	State::handle(action);
-	if (action->getDetails()->type == SDL_MOUSEBUTTONDOWN && action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+
+	if (action->getDetails()->type == SDL_MOUSEBUTTONDOWN
+		&& action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
 		_game->popState();
 	}
@@ -209,22 +217,38 @@ void MedikitState::onEndClick(Action *)
  */
 void MedikitState::onHealClick(Action *)
 {
-	int heal = _item->getHealQuantity();
 	RuleItem *rule = _item->getRules();
+
+	int heal = _item->getHealQuantity();
 	if (heal == 0)
 	{
 		return;
 	}
+
 	if (_unit->spendTimeUnits (rule->getTUUse()))
 	{
 		_targetUnit->heal(_medikitView->getSelectedPart(), rule->getHealAmount(), rule->getHealthAmount());
 		_item->setHealQuantity(--heal);
+
 		_medikitView->invalidate();
 		update();
+
+		// kL_begin:
+		// - from Stimulant, below
+		if (_targetUnit->getStatus() == STATUS_UNCONSCIOUS
+			&& _targetUnit->getStunlevel() < _targetUnit->getHealth())
+//kL			&& _targetUnit->getHealth() > 0)
+		{
+			_targetUnit->setTimeUnits(0);
+
+//kL			_game->popState();
+		}
+		// kL_end.
 	}
 	else
 	{
 		_action->result = "STR_NOT_ENOUGH_TIME_UNITS";
+
 		_game->popState();
 	}
 }
@@ -235,28 +259,35 @@ void MedikitState::onHealClick(Action *)
  */
 void MedikitState::onStimulantClick(Action *)
 {
-	int stimulant = _item->getStimulantQuantity();
 	RuleItem *rule = _item->getRules();
+
+	int stimulant = _item->getStimulantQuantity();
 	if (stimulant == 0)
 	{
 		return;
 	}
+
 	if (_unit->spendTimeUnits (rule->getTUUse()))
 	{
 		_targetUnit->stimulant(rule->getEnergy(), rule->getStun());
 		_item->setStimulantQuantity(--stimulant);
+
 		update();
 
 		// if the unit has revived we quit this screen automatically
-		if (_targetUnit->getStatus() == STATUS_UNCONSCIOUS && _targetUnit->getStunlevel() < _targetUnit->getHealth() && _targetUnit->getHealth() > 0)
+		if (_targetUnit->getStatus() == STATUS_UNCONSCIOUS
+			&& _targetUnit->getStunlevel() < _targetUnit->getHealth())
+//kL			&& _targetUnit->getHealth() > 0)
 		{
 			_targetUnit->setTimeUnits(0);
+
 			_game->popState();
 		}
 	}
 	else
 	{
 		_action->result = "STR_NOT_ENOUGH_TIME_UNITS";
+
 		_game->popState();
 	}
 }
@@ -267,16 +298,19 @@ void MedikitState::onStimulantClick(Action *)
  */
 void MedikitState::onPainKillerClick(Action *)
 {
-	int pk = _item->getPainKillerQuantity();
 	RuleItem *rule = _item->getRules();
+
+	int pk = _item->getPainKillerQuantity();
 	if (pk == 0)
 	{
 		return;
 	}
+
 	if (_unit->spendTimeUnits (rule->getTUUse()))
 	{
 		_targetUnit->painKillers();
 		_item->setPainKillerQuantity(--pk);
+
 		update();
 	}
 	else

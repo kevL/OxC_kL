@@ -300,10 +300,8 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 								visibleUnit->setVisible(true);
 							}
 
-							if ((visibleUnit->getFaction() == FACTION_HOSTILE
-								&& unit->getFaction() != FACTION_HOSTILE)
-									|| (visibleUnit->getFaction() != FACTION_HOSTILE
-									&& unit->getFaction() == FACTION_HOSTILE))
+							if ((visibleUnit->getFaction() == FACTION_HOSTILE && unit->getFaction() != FACTION_HOSTILE)
+								|| (visibleUnit->getFaction() != FACTION_HOSTILE && unit->getFaction() == FACTION_HOSTILE))
 							{
 								unit->addToVisibleUnits(visibleUnit);
 								unit->addToVisibleTiles(visibleUnit->getTile());
@@ -339,7 +337,8 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 
 										// mark every tile of line as visible (as in original)
 										// this is needed because of bresenham narrow stroke. 
-										_save->getTile(posi)->setVisible(+1);
+//kL										_save->getTile(posi)->setVisible(+1);
+										_save->getTile(posi)->setVisible(1);		// kL
 										_save->getTile(posi)->setDiscovered(true, 2);
 
 										// walls to the east or south of a visible tile, we see that too
@@ -360,8 +359,8 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 		}
 	}
 
-	// we only react when there are at least the same amount of visible units as before AND the checksum is different
-	// this way we stop if there are the same amount of visible units, but a different unit is seen
+	// we only react when there are at least the same amount of visible units as before AND the checksum is different;
+	// this way we stop if there are the same amount of visible units, but a different unit is seen,
 	// or we stop if there are more visible units seen
 	if (unit->getUnitsSpottedThisTurn().size() > oldNumVisibleUnits
 		&& unit->getVisibleUnits()->size() > 0)
@@ -450,7 +449,7 @@ bool TileEngine::surveyXComThreatToTile(Tile *tile, Position &tilePos, BattleUni
 }
 
 /**
- * Gets the origin voxel of a unit's eyesight (from just one eye or something? Why is it x+7??
+ * Gets the origin voxel of a unit's eyesight (from just one eye or something? Why is it x+7?? (kL_note: yeh, why x+7?)
  * @param currentUnit The watcher.
  * @return Approximately an eyeball voxel.
  */
@@ -458,7 +457,8 @@ Position TileEngine::getSightOriginVoxel(BattleUnit *currentUnit)
 {
 	// determine the origin and target voxels for the raytrace
 	Position originVoxel;
-	originVoxel = Position((currentUnit->getPosition().x * 16) + 7, (currentUnit->getPosition().y * 16) + 8, currentUnit->getPosition().z*24);
+//kL	originVoxel = Position((currentUnit->getPosition().x * 16) + 7, (currentUnit->getPosition().y * 16) + 8, currentUnit->getPosition().z * 24);
+	originVoxel = Position((currentUnit->getPosition().x * 16) + 8, (currentUnit->getPosition().y * 16) + 8, currentUnit->getPosition().z * 24);		// kL
 	originVoxel.z += -_save->getTile(currentUnit->getPosition())->getTerrainLevel();
 	originVoxel.z += currentUnit->getHeight() + currentUnit->getFloatHeight() - 1; // one voxel lower (eye level)
 
@@ -2264,7 +2264,7 @@ int TileEngine::calculateParabola(const Position& origin, const Position& target
 	fi *= accuracy;
 	te *= accuracy;
 
-	double zA = sqrt(ro)*curvature;
+	double zA = sqrt(ro) * curvature;
 	double zK = 4.0 * zA / ro / ro;
 
 	int x = origin.x;
@@ -2283,8 +2283,7 @@ int TileEngine::calculateParabola(const Position& origin, const Position& target
 			trajectory->push_back(Position(x, y, z));
 		}
 
-		//passes through this point?
-		int result = voxelCheck(Position(x, y, z), excludeUnit);
+		int result = voxelCheck(Position(x, y, z), excludeUnit); // passes through this point?
 		if (result != -1)
 		{
 			if (!storeTrajectory && trajectory != 0)
@@ -2388,7 +2387,7 @@ int TileEngine::voxelCheck(const Position& voxel, BattleUnit *excludeUnit, bool 
 	}
 
 	// first we check terrain voxel data, not to allow 2x2 units stick through walls
-	for (int i=0; i < 4; ++i)
+	for (int i = 0; i < 4; ++i)
 	{
 		MapData *mp = tile->getMapData(i);
 		if (tile->isUfoDoorOpen(i))
@@ -2716,16 +2715,28 @@ int TileEngine::faceWindow(const Position &position)
 	static const Position oneTileSouth = Position(0, 1, 0);
 
 	Tile *tile = _save->getTile(position);
-	if (tile && tile->getMapData(MapData::O_NORTHWALL) && tile->getMapData(MapData::O_NORTHWALL)->getBlock(DT_NONE)==0) return 0;
+	if (tile
+		&& tile->getMapData(MapData::O_NORTHWALL)
+		&& tile->getMapData(MapData::O_NORTHWALL)->getBlock(DT_NONE) == 0)
+	return 0;
 
 	tile = _save->getTile(position + oneTileEast);
-	if (tile && tile->getMapData(MapData::O_WESTWALL) && tile->getMapData(MapData::O_WESTWALL)->getBlock(DT_NONE)==0) return 2;
+	if (tile
+		&& tile->getMapData(MapData::O_WESTWALL)
+		&& tile->getMapData(MapData::O_WESTWALL)->getBlock(DT_NONE) == 0)
+	return 2;
 
 	tile = _save->getTile(position + oneTileSouth);
-	if (tile && tile->getMapData(MapData::O_NORTHWALL) && tile->getMapData(MapData::O_NORTHWALL)->getBlock(DT_NONE)==0) return 4;
+	if (tile
+		&& tile->getMapData(MapData::O_NORTHWALL)
+		&& tile->getMapData(MapData::O_NORTHWALL)->getBlock(DT_NONE) == 0)
+	return 4;
 
 	tile = _save->getTile(position);
-	if (tile && tile->getMapData(MapData::O_WESTWALL) && tile->getMapData(MapData::O_WESTWALL)->getBlock(DT_NONE)==0) return 6;
+	if (tile
+		&& tile->getMapData(MapData::O_WESTWALL)
+		&& tile->getMapData(MapData::O_WESTWALL)->getBlock(DT_NONE) == 0)
+	return 6;
 
 	return -1;
 }
@@ -2741,8 +2752,8 @@ bool TileEngine::validateThrow(BattleAction *action)
 	bool foundCurve = false;
 	Position origin = action->actor->getPosition();
 	std::vector<Position> _trajectory;
-	// object blocking - can't throw here
-	if (action->type == BA_THROW
+
+	if (action->type == BA_THROW // object blocking - can't throw here
 		&& _save->getTile(action->target)
 		&& _save->getTile(action->target)->getMapData(MapData::O_OBJECT)
 		&& _save->getTile(action->target)->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) == 255)
@@ -2780,7 +2791,10 @@ bool TileEngine::validateThrow(BattleAction *action)
 	while (!foundCurve && curvature < 5.0)
 	{
 		int check = calculateParabola(originVoxel, targetVoxel, false, &_trajectory, action->actor, curvature, 1.0);
-		if (check != 5 && (int)_trajectory.at(0).x/16 == (int)targetVoxel.x/16 && (int)_trajectory.at(0).y/16 == (int)targetVoxel.y/16 && (int)_trajectory.at(0).z/24 == (int)targetVoxel.z/24)
+		if (check != 5
+			&& (int)_trajectory.at(0).x / 16 == (int)targetVoxel.x / 16
+			&& (int)_trajectory.at(0).y / 16 == (int)targetVoxel.y / 16
+			&& (int)_trajectory.at(0).z / 24 == (int)targetVoxel.z / 24)
 		{
 			foundCurve = true;
 		}

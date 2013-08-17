@@ -688,7 +688,7 @@ void RuleItem::drawHandSprite(SurfaceSet *texture, Surface *surface) const
  * Get the heal quantity of item
  * @return The new heal quantity
  */
-int RuleItem::getHealQuantity () const
+int RuleItem::getHealQuantity() const
 {
 	return _heal;
 }
@@ -697,7 +697,7 @@ int RuleItem::getHealQuantity () const
  * Get the pain killer quantity of item
  * @return The new pain killer quantity
  */
-int RuleItem::getPainKillerQuantity () const
+int RuleItem::getPainKillerQuantity() const
 {
 	return _painKiller;
 }
@@ -706,7 +706,7 @@ int RuleItem::getPainKillerQuantity () const
  * Get the stimulant quantity of item
  * @return The new stimulant quantity
  */
-int RuleItem::getStimulantQuantity () const
+int RuleItem::getStimulantQuantity() const
 {
 	return _stimulant;
 }
@@ -715,7 +715,7 @@ int RuleItem::getStimulantQuantity () const
  * Get the amount of fatal wound healed per usage
  * @return The amount of fatal wound healed
  */
-int RuleItem::getHealAmount () const
+int RuleItem::getHealAmount() const
 {
 	return _healAmount;
 }
@@ -724,7 +724,7 @@ int RuleItem::getHealAmount () const
  * Get the amount of health added to wounded soldier health
  * @return The amount of health to add
  */
-int RuleItem::getHealthAmount () const
+int RuleItem::getHealthAmount() const
 {
 	return _healthAmount;
 }
@@ -733,7 +733,7 @@ int RuleItem::getHealthAmount () const
  * Get the amount of energy added to soldier energy
  * @return The amount of energy to add
  */
-int RuleItem::getEnergy () const
+int RuleItem::getEnergy() const
 {
 	return _energy;
 }
@@ -742,7 +742,7 @@ int RuleItem::getEnergy () const
  * Get the amount of stun removed to soldier stun level
  * @return The amount of stun to remove
  */
-int RuleItem::getStun () const
+int RuleItem::getStun() const
 {
 	return _stun;
 }
@@ -764,6 +764,7 @@ int RuleItem::getTUUse() const
 int RuleItem::getExplosionRadius() const
 {
 	int radius = 0;
+
 	if (_blastRadius == -1)
 	{
 		if (_damageType == DT_IN)

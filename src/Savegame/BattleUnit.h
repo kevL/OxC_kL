@@ -71,6 +71,7 @@ private:
 	Position _destination;
 	UnitStatus _status;
 	int _walkPhase, _fallPhase;
+	int _spinPhase;		// kL
 	std::vector<BattleUnit *> _visibleUnits, _unitsSpottedThisTurn;
 	std::vector<Tile *> _visibleTiles;
 	int _tu, _energy, _health, _morale, _stunlevel;
@@ -311,7 +312,7 @@ public:
 	/// Give pain killers to this unit
 	void painKillers();
 	/// Give stimulant to this unit
-	void stimulant (int energy, int stun);
+	void stimulant(int energy, int stun);
 	/// Get motion points for the motion scanner.
 	int getMotionPoints() const;
 	/// Gets the unit's armor.
@@ -383,7 +384,7 @@ public:
 	/// Get the carried weight in strength units.
 	int getCarriedWeight(BattleItem *draggingItem = 0) const;
 	/// Set how many turns this unit will be exposed for.
-	void setTurnsExposed (int turns);
+	void setTurnsExposed(int turns);
 	/// Set how many turns this unit will be exposed for.
 	int getTurnsExposed() const;
 	/// Get this unit's original faction
@@ -414,6 +415,12 @@ public:
 	void toggleFireDamage();
 	void setCoverReserve(int reserve);
 	int getCoverReserve();
+
+	// kL_begin:
+	void deathPirouette();
+	void deathPirContinue();
+	int getSpinPhase();
+	// kL_end.
 };
 
 }

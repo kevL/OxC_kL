@@ -78,7 +78,7 @@ void UnitTurnBState::init()
 
 			if (door == 1)
 			{
-				_parent->getResourcePack()->getSound("BATTLE.CAT", RNG::generate(20,21))->play(); // ufo door
+				_parent->getResourcePack()->getSound("BATTLE.CAT", RNG::generate(20, 21))->play(); // ufo door
 			}
 
 			if (door == 4)
@@ -98,7 +98,9 @@ void UnitTurnBState::think()
 {
 	const int tu = _unit->getFaction() == _parent->getSave()->getSide() ? 1 : 0; // one turn is 1 tu unless during reaction fire.
 
-	if (_unit->getFaction() == _parent->getSave()->getSide() && _parent->getPanicHandled() && _parent->checkReservedTU(_unit, tu) == false)
+	if (_unit->getFaction() == _parent->getSave()->getSide()
+		&& _parent->getPanicHandled()
+		&& _parent->checkReservedTU(_unit, tu) == false)
 	{
 		_unit->abortTurn();
 		_parent->popState();
@@ -108,16 +110,51 @@ void UnitTurnBState::think()
 
 	if (_unit->spendTimeUnits(tu))
 	{
-		size_t unitSpotted = _unit->getUnitsSpottedThisTurn().size();
+//kL		size_t unitSpotted = _unit->getUnitsSpottedThisTurn().size();
+		size_t unitsSpotted = _unit->getUnitsSpottedThisTurn().size();
 		_unit->turn(_turret);
 		_parent->getTileEngine()->calculateFOV(_unit);
 		_unit->setCache(0);
 		_parent->getMap()->cacheUnit(_unit);
 
-		if (_unit->getFaction() == _parent->getSave()->getSide()
+		// kL_begin:
+		bool notMC = _unit->getFaction() == _parent->getSave()->getSide();
+		bool anotherone = false;
+
+		// CRASH_start:
+		/* SavedBattleGame *bunit;
+		for (std::vector<BattleUnit*>::iterator b = bunit->getUnits()->begin(); b != bunit->getUnits()->end(); ++b)
+		{
+//			if ((*b)->getFaction() == FACTION_PLAYER
+//				&& (*b)->getOriginalFaction() == FACTION_PLAYER
+			if (notMC
+				&& (*b)->getUnitsSpottedThisTurn().size() > unitsSpotted)
+			{
+				anotherone = true;
+			}
+		} */ // CRASH_end.
+		// kL_end.
+
+//kL		if (_unit->getFaction() == _parent->getSave()->getSide()
+		if (notMC														// kL
 			&& _parent->getPanicHandled()
 			&& _action.type == BA_NONE
-			&& _unit->getUnitsSpottedThisTurn().size() > unitSpotted)
+//			&& (_action.type == BA_NONE || BA_TURN || BA_WALK)			// kL
+//kL			&& _unit->getUnitsSpottedThisTurn().size() > unitSpotted)
+			&& _unit->getUnitsSpottedThisTurn().size() > unitsSpotted	// kL, is this screwing up? (see also, UnitWalkBState.cpp)
+																		// ie. abortTurn() gets called even if enemy unit is *already spotted*
+																		// bool BattleUnit::addToVisibleUnits(BattleUnit *unit)
+																		// and
+																		// calculateFOV() both involve adding new visible units...
+																		// oh, and by the way, a similar routine should go into standing up from kneeling position.
+																		// because that *won't* abortTurn if standing spots a new unit (soldier continues to move
+																		// if previously told to) .. something in Denmark ..
+																		//
+																		// ah. This does not abort if the *same* xCom soldier has already seen the new alien, and
+																		// 'rediscovers' it. But if a new xCom soldier uncovers an already seen alien, it aborts.
+																		// Does this mean that a vector of _unitsSpottedThisTurn is being created per soldier???
+																		// then, how would I cycle through *all* xCom to prevent this abortion?
+			&& !anotherone)												// kL
 		{
 			_unit->abortTurn();
 		}
@@ -130,6 +167,7 @@ void UnitTurnBState::think()
 	else if (_parent->getPanicHandled())
 	{
 		_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
+
 		_unit->abortTurn();
 		_parent->popState();
 	}

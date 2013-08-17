@@ -48,10 +48,12 @@ namespace OpenXcom
  * @param damageType Type of damage that caused the death.
  * @param noSound Whether to disable the death sound.
  */
-UnitDieBState::UnitDieBState(BattlescapeGame *parent, BattleUnit *unit, ItemDamageType damageType, bool noSound) : BattleState(parent), _unit(unit), _damageType(damageType), _noSound(noSound)
+UnitDieBState::UnitDieBState(BattlescapeGame *parent, BattleUnit *unit, ItemDamageType damageType, bool noSound)
+	: BattleState(parent), _unit(unit), _damageType(damageType), _noSound(noSound)
 {
 	// don't show the "fall to death" animation when a unit is blasted with explosives or he is already unconscious
-	if (_damageType == DT_HE || _unit->getStatus() == STATUS_UNCONSCIOUS)
+//kL	if (_damageType == DT_HE || _unit->getStatus() == STATUS_UNCONSCIOUS)
+	if (_unit->getStatus() == STATUS_UNCONSCIOUS)		// kL, see what happens...
 	{
 		_unit->startFalling();
 
@@ -63,11 +65,31 @@ UnitDieBState::UnitDieBState(BattlescapeGame *parent, BattleUnit *unit, ItemDama
 	else
 	{
 		if (_unit->getFaction() == FACTION_PLAYER)
+		{
 			_parent->getMap()->setUnitDying(true);
-		_parent->getMap()->getCamera()->centerOnPosition(_unit->getPosition());
-		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED);
-		_originalDir = _unit->getDirection();
-		_unit->lookAt(3); // unit goes into status TURNING to prepare for a nice dead animation
+		}
+
+		// kL_note: stop centering, but I should do a 'get is tile visible' else they twirl in darkness....
+//kL		_parent->getMap()->getCamera()->centerOnPosition(_unit->getPosition());
+		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED / 2);
+
+		// kL_note: this is only necessary when spawning a chryssalid from a zombie. See below
+//kL		_originalDir = _unit->getDirection();
+		// kL_note: replaced w/ Savegame/BattleUnit.cpp, BattleUnit::deathPirouette()
+//kL		_unit->lookAt(3); // unit goes into status TURNING to prepare for a nice dead animation
+
+		// kL_begin:
+		if (!_unit->getSpawnUnit().empty())
+		{
+			_originalDir = _unit->getDirection(); // facing for zombie->Chryssalid spawns. See above
+		}
+		else //if (_parent->getMap()->getCamera()->isOnScreen(_unit->getPosition()))
+		{
+//			_unit->setDirection(unit->getDirection());	// safety?
+			_unit->deathPirouette();					// death animation spin
+		}
+		// else -> might need something to make units offscreen actually collapse here.
+		// kL_end.
 	}
 
 	_unit->clearVisibleTiles();
@@ -79,7 +101,7 @@ UnitDieBState::UnitDieBState(BattlescapeGame *parent, BattleUnit *unit, ItemDama
         std::vector<Node *> *nodes = _parent->getSave()->getNodes();
         if (!nodes) return; // this better not happen.
 
-        for (std::vector<Node*>::iterator  n = nodes->begin(); n != nodes->end(); ++n)
+        for (std::vector<Node*>::iterator n = nodes->begin(); n != nodes->end(); ++n)
         {
             if (_parent->getSave()->getTileEngine()->distanceSq((*n)->getPosition(), _unit->getPosition()) < 4)
             {
@@ -94,7 +116,6 @@ UnitDieBState::UnitDieBState(BattlescapeGame *parent, BattleUnit *unit, ItemDama
  */
 UnitDieBState::~UnitDieBState()
 {
-
 }
 
 void UnitDieBState::init()
@@ -109,7 +130,14 @@ void UnitDieBState::think()
 {
 	if (_unit->getStatus() == STATUS_TURNING)
 	{
-		_unit->turn();
+		// kL_begin:
+		if (_unit->getSpinPhase() > -1)
+		{
+			_unit->deathPirContinue();	// continue death animation spin
+		}
+		else
+		// kL_end.
+			_unit->turn();
 	}
 	else if (_unit->getStatus() == STATUS_STANDING)
 	{
@@ -127,20 +155,23 @@ void UnitDieBState::think()
 
 	if (_unit->getStatus() == STATUS_DEAD || _unit->getStatus() == STATUS_UNCONSCIOUS)
 	{
-
 		if (!_noSound && _damageType == DT_HE && _unit->getStatus() != STATUS_UNCONSCIOUS)
 		{
 			playDeathSound();
 		}
+
 		if (_unit->getStatus() == STATUS_UNCONSCIOUS && _unit->getSpecialAbility() == SPECAB_EXPLODEONDEATH)
 		{
 			_unit->instaKill();
 		}
+
 		_parent->getMap()->setUnitDying(false);
+
 		if (_unit->getTurnsExposed())
 		{
 			_unit->setTurnsExposed(255);
 		}
+
 		if (!_unit->getSpawnUnit().empty())
 		{
 			// converts the dead zombie to a chryssalid
@@ -151,8 +182,10 @@ void UnitDieBState::think()
 		{
 			convertUnitToCorpse();
 		}
+
 		_parent->getTileEngine()->calculateUnitLighting();
 		_parent->popState();
+
 		if (_unit->getOriginalFaction() == FACTION_PLAYER && _unit->getSpawnUnit().empty())
 		{
 			Game *game = _parent->getSave()->getBattleState()->getGame();
@@ -181,6 +214,7 @@ void UnitDieBState::think()
 				game->pushState(new InfoboxOKState(game, ss.str()));
 			}
 		}
+
 		// if all units from either faction are killed - auto-end the mission.
 		if (Options::getBool("battleAutoEnd"))
 		{
@@ -194,6 +228,7 @@ void UnitDieBState::think()
 			}
 		}
 	}
+
 	_parent->getMap()->cacheUnit(_unit);
 }
 
@@ -216,12 +251,14 @@ void UnitDieBState::convertUnitToCorpse()
 	int size = _unit->getArmor()->getSize() - 1;
 	BattleItem *itemToKeep = 0;
 	bool dropItems = !Options::getBool("weaponSelfDestruction") || (_unit->getOriginalFaction() != FACTION_HOSTILE || _unit->getStatus() == STATUS_UNCONSCIOUS);
+
 	// move inventory from unit to the ground for non-large units
 	if (size == 0 && dropItems)
 	{
 		for (std::vector<BattleItem*>::iterator i = _unit->getInventory()->begin(); i != _unit->getInventory()->end(); ++i)
 		{
 			_parent->dropItem(_unit->getPosition(), (*i));
+
 			if (!(*i)->getRules()->isFixed())
 			{
 				(*i)->setOwner(0);
@@ -232,6 +269,7 @@ void UnitDieBState::convertUnitToCorpse()
 			}
 		}
 	}
+
 	_unit->getInventory()->clear();
 
 	if (itemToKeep != 0)
@@ -261,7 +299,8 @@ void UnitDieBState::convertUnitToCorpse()
 				BattleItem *corpse = new BattleItem(_parent->getRuleset()->getItem(ss.str()),_parent->getSave()->getCurrentItemId());
 				corpse->setUnit(_unit);
 				_parent->getSave()->getTile(lastPosition + Position(x,y,0))->setUnit(0);
-				_parent->dropItem(lastPosition + Position(x,y,0), corpse, true);
+				_parent->dropItem(lastPosition + Position(x, y, 0), corpse, true);
+
 				i++;
 			}
 		}
@@ -274,13 +313,15 @@ void UnitDieBState::convertUnitToCorpse()
  */
 void UnitDieBState::playDeathSound()
 {
-	if ((_unit->getType() == "SOLDIER" && _unit->getGender() == GENDER_MALE) || _unit->getType() == "MALE_CIVILIAN")
+	if ((_unit->getType() == "SOLDIER" && _unit->getGender() == GENDER_MALE)
+		|| _unit->getType() == "MALE_CIVILIAN")
 	{
-		_parent->getResourcePack()->getSound("BATTLE.CAT", RNG::generate(41,43))->play();
+		_parent->getResourcePack()->getSound("BATTLE.CAT", RNG::generate(41, 43))->play();
 	}
-	else if ((_unit->getType() == "SOLDIER" && _unit->getGender() == GENDER_FEMALE) || _unit->getType() == "FEMALE_CIVILIAN")
+	else if ((_unit->getType() == "SOLDIER" && _unit->getGender() == GENDER_FEMALE)
+		|| _unit->getType() == "FEMALE_CIVILIAN")
 	{
-		_parent->getResourcePack()->getSound("BATTLE.CAT", RNG::generate(44,46))->play();
+		_parent->getResourcePack()->getSound("BATTLE.CAT", RNG::generate(44, 46))->play();
 	}
 	else
 	{

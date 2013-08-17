@@ -277,7 +277,7 @@ void BattlescapeGenerator::nextStage()
  */
 void BattlescapeGenerator::run()
 {
-	AlienDeployment *ruleDeploy = _game->getRuleset()->getDeployment(_ufo?_ufo->getRules()->getType():_save->getMissionType());
+	AlienDeployment *ruleDeploy = _game->getRuleset()->getDeployment(_ufo ? _ufo->getRules()->getType() : _save->getMissionType());
 
 	ruleDeploy->getDimensions(&_mapsize_x, &_mapsize_y, &_mapsize_z);
 
@@ -404,10 +404,10 @@ void BattlescapeGenerator::run()
 					continue;
 				for (std::map<std::string, int>::iterator i = (*c)->getItems()->getContents()->begin(); i != (*c)->getItems()->getContents()->end(); ++i)
 				{
-					for (int count=0; count < i->second; count++)
+					for (int count = 0; count < i->second; count++)
 					{
 						_craftInventoryTile->addItem(new BattleItem(_game->getRuleset()->getItem(i->first), _save->getCurrentItemId()),
-							_game->getRuleset()->getInventory("STR_GROUND"));
+																					_game->getRuleset()->getInventory("STR_GROUND"));
 					}
 				}
 			}
@@ -464,7 +464,8 @@ void BattlescapeGenerator::run()
 		}
 	}
 
-	if (_save->getMissionType() == "STR_ALIEN_BASE_ASSAULT" || _save->getMissionType() == "STR_MARS_THE_FINAL_ASSAULT")
+	if (_save->getMissionType() == "STR_ALIEN_BASE_ASSAULT"
+		|| _save->getMissionType() == "STR_MARS_THE_FINAL_ASSAULT")
 	{
 		for (int i = 0; i < _save->getMapSizeXYZ(); ++i)
 		{
@@ -473,7 +474,9 @@ void BattlescapeGenerator::run()
 					|| (_save->getTiles()[i]->getPosition().z == 1
 						&& _save->getTiles()[i]->getMapData(MapData::O_FLOOR)->isGravLift()
 						&& _save->getTiles()[i]->getMapData(MapData::O_OBJECT))))
+			{
 				_save->getTiles()[i]->setDiscovered(true, 2);
+			}
 		}
 	}
 
@@ -513,8 +516,8 @@ void BattlescapeGenerator::addXCOMVehicle(Vehicle *v)
 
 /**
  * Adds a soldier to the game and places him on a free spawnpoint.
- * Spawnpoints are either tiles in case of an XCom craft that landed.
- * Or they are mapnodes in case there's no craft.
+ * Spawnpoints are either tiles in case of an XCom craft that landed
+ * or they are mapnodes in case there's no craft.
  * @param soldier Pointer to the Soldier.
  * @return Pointer to the spawned unit.
  */
@@ -531,7 +534,7 @@ BattleUnit *BattlescapeGenerator::addXCOMUnit(BattleUnit *unit)
 		{
 			_save->setUnitPosition(unit, node->getPosition());
 			_craftInventoryTile = _save->getTile(node->getPosition());
-			unit->setDirection(RNG::generate(0,7));
+			unit->setDirection(RNG::generate(0, 7));
 			_save->getUnits()->push_back(unit);
 			_save->getTileEngine()->calculateFOV(unit);
 			unit->deriveRank();
@@ -543,7 +546,7 @@ BattleUnit *BattlescapeGenerator::addXCOMUnit(BattleUnit *unit)
 			if (placeUnitNearFriend(unit))
 			{
 				_craftInventoryTile = _save->getTile(unit->getPosition());
-				unit->setDirection(RNG::generate(0,7));
+				unit->setDirection(RNG::generate(0, 7));
 				_save->getUnits()->push_back(unit);
 				_save->getTileEngine()->calculateFOV(unit);
 				unit->deriveRank();
@@ -600,11 +603,11 @@ void BattlescapeGenerator::deployAliens(AlienRace *race, AlienDeployment *deploy
 	{
 		std::string alienName = race->getMember((*d).alienRank);
 
-		int quantity = (*d).lowQty + RNG::generate(0, (*d).dQty);									// beginner/experienced
+		int quantity = (*d).lowQty + RNG::generate(0, (*d).dQty);										// beginner/experienced
 		if ( _game->getSavedGame()->getDifficulty() > DIFF_EXPERIENCED )
-			quantity = (*d).lowQty+(((*d).highQty-(*d).lowQty)/2) + RNG::generate(0, (*d).dQty);	// veteran/genius
+			quantity = (*d).lowQty + (((*d).highQty - (*d).lowQty) / 2) + RNG::generate(0, (*d).dQty);	// veteran/genius
 		else if ( _game->getSavedGame()->getDifficulty() > DIFF_GENIUS )
-			quantity = (*d).highQty + RNG::generate(0, (*d).dQty);									// super
+			quantity = (*d).highQty + RNG::generate(0, (*d).dQty);										// super
 
 		for (int i = 0; i < quantity; i++)
 		{
@@ -675,8 +678,11 @@ BattleUnit *BattlescapeGenerator::addAlien(Unit *rules, int alienRank, bool outs
 
 		int dir = _save->getTileEngine()->faceWindow(node->getPosition());
 		Position craft = _game->getSavedGame()->getSavedBattle()->getUnits()->at(0)->getPosition();
-		if (_save->getTileEngine()->distance(node->getPosition(), craft) <= 20
-			&& RNG::generate(0,100) < 20 * difficulty)
+		// Warboy is a MEANIE!!!
+//kL		if (_save->getTileEngine()->distance(node->getPosition(), craft) <= 20
+//kL			&& RNG::generate(0, 100) < 20 * difficulty)
+		if (_save->getTileEngine()->distance(node->getPosition(), craft) <= 23	// kL
+			&& RNG::generate(0, 99) < 19 * difficulty)							// kL
 		{
 			dir = unit->getDirectionTo(craft);
 		}
@@ -684,7 +690,7 @@ BattleUnit *BattlescapeGenerator::addAlien(Unit *rules, int alienRank, bool outs
 		if (dir != -1)
 			unit->setDirection(dir);
 		else
-			unit->setDirection(RNG::generate(0,7));
+			unit->setDirection(RNG::generate(0, 7));
 
 		if (!difficulty)
 		{
@@ -719,7 +725,7 @@ BattleUnit *BattlescapeGenerator::addCivilian(Unit *rules)
 	{
 		_save->setUnitPosition(unit, node->getPosition());
 		unit->setAIState(new PatrolBAIState(_game->getSavedGame()->getSavedBattle(), unit, node));
-		unit->setDirection(RNG::generate(0,7));
+		unit->setDirection(RNG::generate(0, 7));
 
 		// we only add a unit if it has a node to spawn on.
 		// (stops them spawning at 0,0,0)
@@ -728,7 +734,7 @@ BattleUnit *BattlescapeGenerator::addCivilian(Unit *rules)
 	else if (placeUnitNearFriend(unit))
 	{
 		unit->setAIState(new PatrolBAIState(_game->getSavedGame()->getSavedBattle(), unit, node));
-		unit->setDirection(RNG::generate(0,7));
+		unit->setDirection(RNG::generate(0, 7));
 		_save->getUnits()->push_back(unit);
 	}
 	else

@@ -70,6 +70,7 @@ private:
 	enum TransferType getType(unsigned selected) const;
 	/// Gets item Index.
 	int getItemIndex(unsigned selected) const;
+
 public:
 	/// Creates the Transfer Items state.
 	TransferItemsState(Game *game, Base *baseFrom, Base *baseTo);

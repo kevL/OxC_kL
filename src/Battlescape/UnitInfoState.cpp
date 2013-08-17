@@ -377,7 +377,6 @@ UnitInfoState::UnitInfoState(Game *game, BattleUnit *unit) : State(game), _unit(
  */
 UnitInfoState::~UnitInfoState()
 {
-
 }
 
 /**

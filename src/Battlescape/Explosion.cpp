@@ -30,7 +30,6 @@ namespace OpenXcom
  */
 Explosion::Explosion(Position position, int startFrame, bool big, bool hit) : _position(position), _currentFrame(startFrame), _startFrame(startFrame), _big(big), _hit(hit)
 {
-
 }
 
 /**
@@ -38,7 +37,6 @@ Explosion::Explosion(Position position, int startFrame, bool big, bool hit) : _p
  */
 Explosion::~Explosion()
 {
-
 }
 
 /**

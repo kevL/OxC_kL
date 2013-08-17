@@ -102,6 +102,7 @@ protected:
 	void loadFile(const std::string &filename);
 	/// Loads all ruleset files from a directory.
 	void loadFiles(const std::string &dirname);
+
 public:
 	/// Creates a blank ruleset.
 	Ruleset();

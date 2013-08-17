@@ -251,11 +251,11 @@ PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base),
 //			std::vector<std::string> transit = _game->getRuleset()->getItemsList();
 //			for (std::vector<std::string>::const_iterator j = transit.begin(); j != transit.end(); ++j)
 //			std::vector<Transfer*>::iterator transit = _base->getTransfers();
-			for (std::vector<Transfer*>::iterator transit = _base->getTransfers()->begin(); transit != _base->getTransfers()->end(); ++transit)
+			for (std::vector<Transfer*>::const_iterator transit = _base->getTransfers()->begin(); transit != _base->getTransfers()->end(); ++transit)
 			{
-				if (_game->getRuleset()->getItem(i) == _base->getTransfers())
+				if (_game->getRuleset()->getItem(*i) == _base->getTransfers())
 				{
-					tQty += _base->getItems()->getItem(*j);
+					tQty += _base->getItems()->getItem(*transit);
 				}
 			} */
 //			int total = _base->getItems()->getItem(*i);

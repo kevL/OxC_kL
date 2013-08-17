@@ -24,7 +24,6 @@ namespace OpenXcom
 
 Node::Node() : _id(0), _segment(0), _type(0), _rank(0), _flags(0), _reserved(0), _priority(0), _allocated(false)
 {
-
 }
 
 /**
@@ -49,19 +48,16 @@ Node::~Node()
 {
 }
 
-
-
-
-const int Node::nodeRank[8][7] = { { 4, 3, 5, 8, 7, 2, 0 }, // commander
-	{ 4, 3, 5, 8, 7, 2, 0 }, // leader
-	{ 5, 4, 3, 2, 7, 8, 0 }, //engineer
-	{ 7, 6, 2, 8, 3, 4, 0 }, //medic
-	{ 3, 4, 5, 2, 7, 8, 0 }, //navigator
-	{ 2, 5, 3, 4, 6, 8, 0 }, //soldier
-	{ 2, 5, 3, 4, 6, 8, 0 }, //terrorist
-	{ 2, 5, 3, 4, 6, 8, 0 }  }; //also terrorist
-
-
+const int Node::nodeRank[8][7] = {
+	{ 4, 3, 5, 8, 7, 2, 0 },	// commander
+	{ 4, 3, 5, 8, 7, 2, 0 },	// leader
+	{ 5, 4, 3, 2, 7, 8, 0 },	// engineer
+	{ 7, 6, 2, 8, 3, 4, 0 },	// medic
+	{ 3, 4, 5, 2, 7, 8, 0 },	// navigator
+	{ 2, 5, 3, 4, 6, 8, 0 },	// soldier
+	{ 2, 5, 3, 4, 6, 8, 0 },	// terrorist
+	{ 2, 5, 3, 4, 6, 8, 0 }		// also terrorist
+};
 
 /**
  * Loads the UFO from a YAML file.
@@ -89,6 +85,7 @@ void Node::load(const YAML::Node &node)
 void Node::save(YAML::Emitter &out) const
 {
 	out << YAML::BeginMap;
+
 	out << YAML::Key << "id" << YAML::Value << _id;
 	out << YAML::Key << "position" << YAML::Value << _pos;
 	//out << YAML::Key << "segment" << YAML::Value << _segment;
@@ -99,6 +96,7 @@ void Node::save(YAML::Emitter &out) const
 	out << YAML::Key << "priority" << YAML::Value << _priority;
 	out << YAML::Key << "allocated" << YAML::Value << _allocated;
 	out << YAML::Key << "links" << YAML::Value << YAML::Flow << _nodeLinks;
+
 	out << YAML::EndMap;
 }
 
@@ -186,6 +184,5 @@ void Node::setType(int type)
 {
     _type = type;
 }
-
 
 }

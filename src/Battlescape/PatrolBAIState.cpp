@@ -59,10 +59,12 @@ void PatrolBAIState::load(const YAML::Node &node)
 	int fromnodeID, tonodeID;
 	node["fromnode"] >> fromnodeID;
 	node["tonode"] >> tonodeID;
+
 	if (fromnodeID != -1)
 	{
 		_fromNode = _game->getNodes()->at(fromnodeID);
 	}
+
 	if (tonodeID != -1)
 	{
 		_toNode = _game->getNodes()->at(tonodeID);
@@ -77,6 +79,7 @@ void PatrolBAIState::save(YAML::Emitter &out) const
 {
 	out << YAML::BeginMap;
 	out << YAML::Key << "state" << YAML::Value << "PATROL";
+
 	if (_fromNode)
 	{
 		out << YAML::Key << "fromnode" << YAML::Value << _fromNode->getID();
@@ -85,6 +88,7 @@ void PatrolBAIState::save(YAML::Emitter &out) const
 	{
 		out << YAML::Key << "fromnode" << YAML::Value << -1;
 	}
+
 	if (_toNode)
 	{
 		out << YAML::Key << "tonode" << YAML::Value << _toNode->getID();
@@ -93,6 +97,7 @@ void PatrolBAIState::save(YAML::Emitter &out) const
 	{
 		out << YAML::Key << "tonode" << YAML::Value << -1;
 	}
+
 	out << YAML::EndMap;
 }
 
@@ -138,6 +143,7 @@ void PatrolBAIState::think(BattleAction *action)
 		{
 			Log(LOG_INFO) << "PatrolBAIState::think()? Better not... #" << action->number;
 		}
+
 		return;
 	}
 
@@ -145,29 +151,33 @@ void PatrolBAIState::think(BattleAction *action)
 	{
 		Log(LOG_INFO) << "PatrolBAIState::think() #" << action->number;
 	}
-	
-	
+
 	if (_toNode != 0 && _unit->getPosition() == _toNode->getPosition())
 	{
 		if (_traceAI)
 		{
 			Log(LOG_INFO) << "Patrol destination reached!";
 		}
+
 		// destination reached
 		// take a peek through window before walking to the next node
 		int dir = _game->getTileEngine()->faceWindow(_unit->getPosition());
 		if (dir != -1 && dir != _unit->getDirection())
 		{
 			_unit->lookAt(dir);
+
 			while (_unit->getStatus() == STATUS_TURNING)
 			{
 				_unit->turn();
 			}
+
 			action->TU = 0; // tus are already decreased while walking
+
 			if (_unit->getFaction() == FACTION_NEUTRAL) 
 			{
 				_unit->_hidingForTurn = true; // pretend to be terrified by all the soldiers and tanks rolling down your street or through your yard
 			}
+
 			return;
 		}
 		else
@@ -197,6 +207,7 @@ void PatrolBAIState::think(BattleAction *action)
 			}
 		}
 	}
+
 	int triesLeft = 20;
 	while (_toNode == 0 && triesLeft)
 	{
@@ -213,8 +224,11 @@ void PatrolBAIState::think(BattleAction *action)
 			}
 			// after turn 20 or if the morale is low, everyone moves out the UFO and scout
 			// also anyone standing in fire should also probably move
-			if (_game->getTurn() > 20 || (aliensAlive < 2 && _game->getTurn() > 10) || !_fromNode || _fromNode->getRank() == 0 || 
-				(_game->getTile(_unit->getPosition()) && _game->getTile(_unit->getPosition())->getFire()))
+			if (_game->getTurn() > 20
+				|| (aliensAlive < 2 && _game->getTurn() > 10)
+				|| !_fromNode
+				|| _fromNode->getRank() == 0
+				||  (_game->getTile(_unit->getPosition()) && _game->getTile(_unit->getPosition())->getFire()))
 			{
 				scout = true;
 			}
@@ -225,16 +239,19 @@ void PatrolBAIState::think(BattleAction *action)
 		}
 
 		// in base defense missions, the smaller aliens walk towards target nodes - or if there, shoot objects around them
-		if (_game->getMissionType() == "STR_BASE_DEFENSE" && _unit->getArmor()->getSize() == 1)
+		if (_game->getMissionType() == "STR_BASE_DEFENSE"
+			&& _unit->getArmor()->getSize() == 1)
 		{
 			// can i shoot an object?
-			if (_fromNode->isTarget() && _unit->getMainHandWeapon() && _unit->getMainHandWeapon()->getAmmoItem()->getRules()->getDamageType() != DT_HE)
+			if (_fromNode->isTarget()
+				&& _unit->getMainHandWeapon()
+				&& _unit->getMainHandWeapon()->getAmmoItem()->getRules()->getDamageType() != DT_HE)
 			{
 				// scan this room for objects to destroy
-				int x = (_unit->getPosition().x/10)*10;
-				int y = (_unit->getPosition().y/10)*10;
-				for (int i = x; i < x+9; i++)
-				for (int j = y; j < y+9; j++)
+				int x = (_unit->getPosition().x / 10) * 10;
+				int y = (_unit->getPosition().y / 10) * 10;
+				for (int i = x; i < x + 9; i++)
+				for (int j = y; j < y + 9; j++)
 				{
 					MapData *md = _game->getTile(Position(i, j, 1))->getMapData(MapData::O_OBJECT);
 					if (md && md->getDieMCD() && md->getArmor() < 60 )
@@ -244,11 +261,13 @@ void PatrolBAIState::think(BattleAction *action)
 						action->weapon = action->actor->getMainHandWeapon();
 						action->type = BA_SNAPSHOT;
 						action->TU = action->actor->getActionTUs(action->type, action->weapon);
+
 						_unit->lookAt(action->target);
 						while (_unit->getStatus() == STATUS_TURNING)
 						{
 							_unit->turn();
 						}
+
 						return;
 					}
 				}
@@ -263,7 +282,7 @@ void PatrolBAIState::think(BattleAction *action)
 					{
 						node = *i;
 						int d = _game->getTileEngine()->distanceSq(_unit->getPosition(), node->getPosition());
-						if (!_toNode ||  (d < closest && node != _fromNode))
+						if (!_toNode || (d < closest && node != _fromNode))
 						{
 							_toNode = node;
 							closest = d;
@@ -290,6 +309,7 @@ void PatrolBAIState::think(BattleAction *action)
 			{
 				_toNode = 0;
 			}
+
 			_game->getPathfinding()->abortPath();
 		}
 	}
@@ -300,11 +320,13 @@ void PatrolBAIState::think(BattleAction *action)
 		action->actor = _unit;
 		action->type = BA_WALK;
 		action->target = _toNode->getPosition();
+
 		_unit->lookAt(action->target);
 		while (_unit->getStatus() == STATUS_TURNING)
 		{
 			_unit->turn();
 		}
+
 		action->TU = 0; // tus are already decreased while walking
 	}
 	else

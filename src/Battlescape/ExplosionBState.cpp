@@ -69,6 +69,7 @@ void ExplosionBState::init()
 	if (_item)
 	{
 		_power = _item->getRules()->getPower();
+
 		// heavy explosions, incendiary, smoke or stun bombs create AOE explosions
 		// all the rest hits one point:
 		// AP, melee (stun or AP), laser, plasma, acid
@@ -98,9 +99,10 @@ void ExplosionBState::init()
 			{
 				int X = RNG::generate(-_power / 2,_power / 2);
 				int Y = RNG::generate(-_power / 2,_power / 2);
+
 				Position p = _center;
 				p.x += X; p.y += Y;
-				Explosion *explosion = new Explosion(p, RNG::generate(0,6), true);
+				Explosion *explosion = new Explosion(p, RNG::generate(0, 6), true);
 
 				_parent->getMap()->getExplosions()->insert(explosion); // add the explosion on the map
 			}
@@ -122,13 +124,16 @@ void ExplosionBState::init()
 	}
 	else // create a bullet hit
 	{
-		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED/2);
+//kL		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED / 2);
+		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED * 2/3);		// kL
 
 		bool hit = (_item->getRules()->getBattleType() == BT_MELEE || _item->getRules()->getBattleType() == BT_PSIAMP);
 		Explosion *explosion = new Explosion(_center, _item->getRules()->getHitAnimation(), false, hit);
+
 		_parent->getMap()->getExplosions()->insert(explosion);
 
 		_parent->getResourcePack()->getSound("BATTLE.CAT", _item->getRules()->getHitSound())->play(); // bullet hit sound
+
 		if (hit && t->getVisible())
 			_parent->getMap()->getCamera()->centerOnPosition(Position(_center.x / 16, _center.y / 16, _center.z / 24));
 	}
@@ -144,7 +149,7 @@ void ExplosionBState::think()
 	{
 		++inext;
 
-		if(!(*i)->animate())
+		if (!(*i)->animate())
 		{
 			_parent->getMap()->getExplosions()->erase((*i));
 
@@ -189,7 +194,10 @@ void ExplosionBState::explode()
 		{
 			BattleUnit *victim = save->getTileEngine()->hit(_center, _power, _item->getRules()->getDamageType(), _unit);
 			// check if this unit turns others into zombies
-			if (!_unit->getZombieUnit().empty() && victim && victim->getArmor()->getSize() == 1 && victim->getSpawnUnit().empty())
+			if (!_unit->getZombieUnit().empty()
+				&& victim
+				&& victim->getArmor()->getSize() == 1
+				&& victim->getSpawnUnit().empty())
 			{
 				// converts the victim to a zombie on death
 				victim->setSpecialAbility(SPECAB_RESPAWN);

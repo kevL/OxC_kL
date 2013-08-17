@@ -66,18 +66,19 @@ namespace OpenXcom
 /**
  * Creates a ruleset with blank sets of rules.
  */
-Ruleset::Ruleset() : _costSoldier(0), _costEngineer(0), _costScientist(0), _timePersonnel(0), _modIndex(0), _facilityListOrder(0), _craftListOrder(0), _itemListOrder(0), _researchListOrder(0),  _manufactureListOrder(0), _ufopaediaListOrder(0)
+Ruleset::Ruleset()
+	: _costSoldier(0), _costEngineer(0), _costScientist(0), _timePersonnel(0), _modIndex(0), _facilityListOrder(0),
+	_craftListOrder(0), _itemListOrder(0), _researchListOrder(0),  _manufactureListOrder(0), _ufopaediaListOrder(0)
 {
-    // Check in which data dir the folder is stored
-    std::string path = CrossPlatform::getDataFolder("SoldierName/");
-	// Add soldier names
-	std::vector<std::string> names = CrossPlatform::getFolderContents(path, "nam");
+	std::string path = CrossPlatform::getDataFolder("SoldierName/"); // Check in which data dir the folder is stored
 
+	std::vector<std::string> names = CrossPlatform::getFolderContents(path, "nam"); // Add soldier names
 	for (std::vector<std::string>::iterator i = names.begin(); i != names.end(); ++i)
 	{
-		std::string file = (*i).substr(0, (*i).length()-4);
+		std::string file = (*i).substr(0, (*i).length() - 4);
 		SoldierNamePool *pool = new SoldierNamePool();
 		pool->load(file);
+
 		_names.push_back(pool);
 	}
 }
@@ -91,98 +92,122 @@ Ruleset::~Ruleset()
 	{
 		delete *i;
 	}
+
 	for (std::map<std::string, RuleCountry*>::iterator i = _countries.begin(); i != _countries.end(); ++i)
 	{
 		delete i->second;
 	}
+
 	for (std::map<std::string, RuleRegion*>::iterator i = _regions.begin(); i != _regions.end(); ++i)
 	{
 		delete i->second;
 	}
+
 	for (std::map<std::string, RuleBaseFacility*>::iterator i = _facilities.begin(); i != _facilities.end(); ++i)
 	{
 		delete i->second;
 	}
+
 	for (std::map<std::string, RuleCraft*>::iterator i = _crafts.begin(); i != _crafts.end(); ++i)
 	{
 		delete i->second;
 	}
+
 	for (std::map<std::string, RuleCraftWeapon*>::iterator i = _craftWeapons.begin(); i != _craftWeapons.end(); ++i)
 	{
 		delete i->second;
 	}
+
 	for (std::map<std::string, RuleItem*>::iterator i = _items.begin(); i != _items.end(); ++i)
 	{
 		delete i->second;
 	}
+
 	for (std::map<std::string, RuleUfo*>::iterator i = _ufos.begin(); i != _ufos.end(); ++i)
 	{
 		delete i->second;
 	}
+
 	for (std::map<std::string, RuleTerrain*>::iterator i = _terrains.begin(); i != _terrains.end(); ++i)
 	{
 		delete i->second;
 	}
+
 	for (std::map<std::string, MapDataSet*>::iterator i = _mapDataSets.begin(); i != _mapDataSets.end(); ++i)
 	{
 		delete i->second;
 	}
+
 	for (std::map<std::string, RuleSoldier*>::iterator i = _soldiers.begin(); i != _soldiers.end(); ++i)
 	{
 		delete i->second;
 	}
+
 	for (std::map<std::string, Unit*>::iterator i = _units.begin(); i != _units.end(); ++i)
 	{
 		delete i->second;
 	}
+
 	for (std::map<std::string, AlienRace*>::iterator i = _alienRaces.begin(); i != _alienRaces.end(); ++i)
 	{
 		delete i->second;
 	}
+
 	for (std::map<std::string, AlienDeployment*>::iterator i = _alienDeployments.begin(); i != _alienDeployments.end(); ++i)
 	{
 		delete i->second;
 	}
+
 	for (std::map<std::string, Armor*>::iterator i = _armors.begin(); i != _armors.end(); ++i)
 	{
 		delete i->second;
 	}
+
 	for (std::map<std::string, ArticleDefinition*>::iterator i = _ufopaediaArticles.begin(); i != _ufopaediaArticles.end(); ++i)
 	{
 		delete i->second;
 	}
+
 	for (std::map<std::string, RuleInventory*>::iterator i = _invs.begin(); i != _invs.end(); ++i)
 	{
 		delete i->second;
 	}
+
 	for (std::map<std::string, RuleResearch *>::const_iterator i = _research.begin (); i != _research.end (); ++i)
 	{
 		delete i->second;
 	}
+
 	for (std::map<std::string, RuleManufacture *>::const_iterator i = _manufacture.begin (); i != _manufacture.end (); ++i)
 	{
 		delete i->second;
 	}
+
 	for (std::map<std::string, UfoTrajectory *>::const_iterator i = _ufoTrajectories.begin (); i != _ufoTrajectories.end (); ++i)
 	{
 		delete i->second;
 	}
+
 	for (std::map<std::string, RuleAlienMission *>::const_iterator i = _alienMissions.begin (); i != _alienMissions.end (); ++i)
 	{
 		delete i->second;
 	}
+
 	for (std::map<std::string, MCDPatch *>::const_iterator i = _MCDPatches.begin (); i != _MCDPatches.end (); ++i)
 	{
 		delete i->second;
 	}
+
 	for (std::vector<std::pair<std::string, ExtraSprites *> >::const_iterator i = _extraSprites.begin (); i != _extraSprites.end (); ++i)
 	{
 		delete i->second;
 	}
+
 	for (std::vector<std::pair<std::string, ExtraSounds *> >::const_iterator i = _extraSounds.begin (); i != _extraSounds.end (); ++i)
 	{
 		delete i->second;
 	}
+
 	for (std::map<std::string, ExtraStrings *>::const_iterator i = _extraStrings.begin (); i != _extraStrings.end (); ++i)
 	{
 		delete i->second;
@@ -214,6 +239,7 @@ void Ruleset::loadFile(const std::string &filename)
 	{
 		throw Exception(filename + " not found");
 	}
+
 	YAML::Parser parser(fin);
 	YAML::Node doc;
 
@@ -228,6 +254,7 @@ void Ruleset::loadFile(const std::string &filename)
 			{
 				std::string type;
 				(*j)["type"] >> type;
+
 				RuleCountry *rule;
 				if (_countries.find(type) != _countries.end())
 				{
@@ -239,6 +266,7 @@ void Ruleset::loadFile(const std::string &filename)
 					_countries[type] = rule;
 					_countriesIndex.push_back(type);
 				}
+
 				rule->load(*j);
 			}
 		}
@@ -248,6 +276,7 @@ void Ruleset::loadFile(const std::string &filename)
 			{
 				std::string type;
 				(*j)["type"] >> type;
+
 				RuleRegion *rule;
 				if (_regions.find(type) != _regions.end())
 				{
@@ -259,6 +288,7 @@ void Ruleset::loadFile(const std::string &filename)
 					_regions[type] = rule;
 					_regionsIndex.push_back(type);
 				}
+
 				rule->load(*j);
 			}
 		}
@@ -268,6 +298,7 @@ void Ruleset::loadFile(const std::string &filename)
 			{
 				std::string type;
 				(*j)["type"] >> type;
+
 				RuleBaseFacility *rule;
 				if (_facilities.find(type) != _facilities.end())
 				{
@@ -279,6 +310,7 @@ void Ruleset::loadFile(const std::string &filename)
 					_facilities[type] = rule;
 					_facilitiesIndex.push_back(type);
 				}
+
 				_facilityListOrder += 100;
 				rule->load(*j, _modIndex, _facilityListOrder);
 			}
@@ -289,6 +321,7 @@ void Ruleset::loadFile(const std::string &filename)
 			{
 				std::string type;
 				(*j)["type"] >> type;
+
 				RuleCraft *rule;
 				if (_crafts.find(type) != _crafts.end())
 				{
@@ -300,6 +333,7 @@ void Ruleset::loadFile(const std::string &filename)
 					_crafts[type] = rule;
 					_craftsIndex.push_back(type);
 				}
+
 				_craftListOrder += 100;
 				rule->load(*j, this, _modIndex, _craftListOrder);
 			}
@@ -310,6 +344,7 @@ void Ruleset::loadFile(const std::string &filename)
 			{
 				std::string type;
 				(*j)["type"] >> type;
+
 				RuleCraftWeapon *rule;
 				if (_craftWeapons.find(type) != _craftWeapons.end())
 				{
@@ -321,6 +356,7 @@ void Ruleset::loadFile(const std::string &filename)
 					_craftWeapons[type] = rule;
 					_craftWeaponsIndex.push_back(type);
 				}
+
 				rule->load(*j, _modIndex);
 			}
 		}
@@ -330,6 +366,7 @@ void Ruleset::loadFile(const std::string &filename)
 			{
 				std::string type;
 				(*j)["type"] >> type;
+
 				RuleItem *rule;
 				if (_items.find(type) != _items.end())
 				{
@@ -341,6 +378,7 @@ void Ruleset::loadFile(const std::string &filename)
 					_items[type] = rule;
 					_itemsIndex.push_back(type);
 				}
+
 				_itemListOrder += 100;
 				rule->load(*j, _modIndex, _itemListOrder);
 			}
@@ -351,6 +389,7 @@ void Ruleset::loadFile(const std::string &filename)
 			{
 				std::string type;
 				(*j)["type"] >> type;
+
 				RuleUfo *rule;
 				if (_ufos.find(type) != _ufos.end())
 				{
@@ -362,6 +401,7 @@ void Ruleset::loadFile(const std::string &filename)
 					_ufos[type] = rule;
 					_ufosIndex.push_back(type);
 				}
+
 				rule->load(*j, this);
 			}
 		}
@@ -371,6 +411,7 @@ void Ruleset::loadFile(const std::string &filename)
 			{
 				std::string type;
 				(*j)["id"] >> type;
+
 				RuleInventory *rule;
 				if (_invs.find(type) != _invs.end())
 				{
@@ -381,6 +422,7 @@ void Ruleset::loadFile(const std::string &filename)
 					rule = new RuleInventory(type);
 					_invs[type] = rule;
 				}
+
 				rule->load(*j);
 			}
 		}
@@ -390,6 +432,7 @@ void Ruleset::loadFile(const std::string &filename)
 			{
 				std::string type;
 				(*j)["name"] >> type;
+
 				RuleTerrain *rule;
 				if (_terrains.find(type) != _terrains.end())
 				{
@@ -401,6 +444,7 @@ void Ruleset::loadFile(const std::string &filename)
 					_terrains[type] = rule;
 					_terrainIndex.push_back(type);
 				}
+
 				rule->load(*j, this);
 			}
 		}
@@ -410,6 +454,7 @@ void Ruleset::loadFile(const std::string &filename)
 			{
 				std::string type;
 				(*j)["type"] >> type;
+
 				Armor *rule;
 				if (_armors.find(type) != _armors.end())
 				{
@@ -421,6 +466,7 @@ void Ruleset::loadFile(const std::string &filename)
 					_armors[type] = rule;
 					_armorsIndex.push_back(type);
 				}
+
 				rule->load(*j);
 			}
 		}
@@ -430,6 +476,7 @@ void Ruleset::loadFile(const std::string &filename)
 			{
 				std::string type;
 				(*j)["type"] >> type;
+
 				RuleSoldier *rule;
 				if (_soldiers.find(type) != _soldiers.end())
 				{
@@ -440,6 +487,7 @@ void Ruleset::loadFile(const std::string &filename)
 					rule = new RuleSoldier(type);
 					_soldiers[type] = rule;
 				}
+
 				rule->load(*j);
 			}
 		}
@@ -449,6 +497,7 @@ void Ruleset::loadFile(const std::string &filename)
 			{
 				std::string type;
 				(*j)["type"] >> type;
+
 				Unit *rule;
 				if (_units.find(type) != _units.end())
 				{
@@ -459,6 +508,7 @@ void Ruleset::loadFile(const std::string &filename)
 					rule = new Unit(type, "", "");
 					_units[type] = rule;
 				}
+
 				rule->load(*j);
 			}
 		}
@@ -468,6 +518,7 @@ void Ruleset::loadFile(const std::string &filename)
 			{
 				std::string type;
 				(*j)["id"] >> type;
+
 				AlienRace *rule;
 				if (_alienRaces.find(type) != _alienRaces.end())
 				{
@@ -479,6 +530,7 @@ void Ruleset::loadFile(const std::string &filename)
 					_alienRaces[type] = rule;
 					_aliensIndex.push_back(type);
 				}
+
 				rule->load(*j);
 			}
 		}
@@ -488,6 +540,7 @@ void Ruleset::loadFile(const std::string &filename)
 			{
 				std::string type;
 				(*j)["type"] >> type;
+
 				AlienDeployment *rule;
 				if (_alienDeployments.find(type) != _alienDeployments.end())
 				{
@@ -499,6 +552,7 @@ void Ruleset::loadFile(const std::string &filename)
 					_alienDeployments[type] = rule;
 					_deploymentsIndex.push_back(type);
 				}
+
 				rule->load(*j);
 			}
 		}
@@ -508,6 +562,7 @@ void Ruleset::loadFile(const std::string &filename)
 			{
 				std::string type;
 				(*j)["name"] >> type;
+
 				RuleResearch *rule;
 				if (_research.find(type) != _research.end())
 				{
@@ -519,6 +574,7 @@ void Ruleset::loadFile(const std::string &filename)
 					_research[type] = rule;
 					_researchIndex.push_back(type);
 				}
+
 				_researchListOrder += 100;
 				rule->load(*j, _researchListOrder);
 			}
@@ -529,6 +585,7 @@ void Ruleset::loadFile(const std::string &filename)
 			{
 				std::string type;
 				(*j)["name"] >> type;
+
 				RuleManufacture *rule;
 				if (_manufacture.find(type) != _manufacture.end())
 				{
@@ -540,6 +597,7 @@ void Ruleset::loadFile(const std::string &filename)
 					_manufacture[type] = rule;
 					_manufactureIndex.push_back(type);
 				}
+
 				_manufactureListOrder += 100;
 				rule->load(*j, _manufactureListOrder);
 			}
@@ -550,6 +608,7 @@ void Ruleset::loadFile(const std::string &filename)
 			{
 				std::string id;
 				(*j)["id"] >> id;
+
 				ArticleDefinition *rule;
 				if (_ufopaediaArticles.find(id) != _ufopaediaArticles.end())
 				{
@@ -561,20 +620,24 @@ void Ruleset::loadFile(const std::string &filename)
 					(*j)["type_id"] >> type;
 					switch ((UfopaediaTypeId)type)
 					{
-					case UFOPAEDIA_TYPE_CRAFT: rule = new ArticleDefinitionCraft(); break;
-					case UFOPAEDIA_TYPE_CRAFT_WEAPON: rule = new ArticleDefinitionCraftWeapon(); break;
-					case UFOPAEDIA_TYPE_VEHICLE: rule = new ArticleDefinitionVehicle(); break;
-					case UFOPAEDIA_TYPE_ITEM: rule = new ArticleDefinitionItem(); break;
-					case UFOPAEDIA_TYPE_ARMOR: rule = new ArticleDefinitionArmor(); break;
-					case UFOPAEDIA_TYPE_BASE_FACILITY: rule = new ArticleDefinitionBaseFacility(); break;
-					case UFOPAEDIA_TYPE_TEXTIMAGE: rule = new ArticleDefinitionTextImage(); break;
-					case UFOPAEDIA_TYPE_TEXT: rule = new ArticleDefinitionText(); break;
-					case UFOPAEDIA_TYPE_UFO: rule = new ArticleDefinitionUfo(); break;
-					default: rule = 0; break;
+						case UFOPAEDIA_TYPE_CRAFT:			rule = new ArticleDefinitionCraft();		break;
+						case UFOPAEDIA_TYPE_CRAFT_WEAPON:	rule = new ArticleDefinitionCraftWeapon();	break;
+						case UFOPAEDIA_TYPE_VEHICLE:		rule = new ArticleDefinitionVehicle();		break;
+						case UFOPAEDIA_TYPE_ITEM:			rule = new ArticleDefinitionItem();			break;
+						case UFOPAEDIA_TYPE_ARMOR:			rule = new ArticleDefinitionArmor();		break;
+						case UFOPAEDIA_TYPE_BASE_FACILITY:	rule = new ArticleDefinitionBaseFacility();	break;
+						case UFOPAEDIA_TYPE_TEXTIMAGE:		rule = new ArticleDefinitionTextImage();	break;
+						case UFOPAEDIA_TYPE_TEXT:			rule = new ArticleDefinitionText();			break;
+						case UFOPAEDIA_TYPE_UFO:			rule = new ArticleDefinitionUfo();			break;
+						default:
+							rule = 0;
+						break;
 					}
+
 					_ufopaediaArticles[id] = rule;
 					_ufopaediaIndex.push_back(id);
 				}
+
 				_ufopaediaListOrder += 100;
 				rule->load(*j, _ufopaediaListOrder);
 			}
@@ -714,6 +777,7 @@ void Ruleset::loadFile(const std::string &filename)
 			}
 		}
 	}
+
 	fin.close();
 
 	_modIndex += 1000;
@@ -726,7 +790,6 @@ void Ruleset::loadFile(const std::string &filename)
 void Ruleset::loadFiles(const std::string &dirname)
 {
 	std::vector<std::string> names = CrossPlatform::getFolderContents(dirname, "rul");
-
 	for (std::vector<std::string>::iterator i = names.begin(); i != names.end(); ++i)
 	{
 		loadFile(dirname + *i);
@@ -751,143 +814,183 @@ void Ruleset::save(const std::string &filename) const
 	out << YAML::BeginMap;
 	out << YAML::Key << "countries" << YAML::Value;
 	out << YAML::BeginSeq;
+
 	for (std::map<std::string, RuleCountry*>::const_iterator i = _countries.begin(); i != _countries.end(); ++i)
 	{
 		i->second->save(out);
 	}
+
 	out << YAML::EndSeq;
 	out << YAML::Key << "regions" << YAML::Value;
 	out << YAML::BeginSeq;
+
 	for (std::map<std::string, RuleRegion*>::const_iterator i = _regions.begin(); i != _regions.end(); ++i)
 	{
 		i->second->save(out);
 	}
+
 	out << YAML::EndSeq;
 	out << YAML::Key << "facilities" << YAML::Value;
 	out << YAML::BeginSeq;
+
 	for (std::map<std::string, RuleBaseFacility*>::const_iterator i = _facilities.begin(); i != _facilities.end(); ++i)
 	{
 		i->second->save(out);
 	}
+
 	out << YAML::EndSeq;
 	out << YAML::Key << "crafts" << YAML::Value;
 	out << YAML::BeginSeq;
+
 	for (std::map<std::string, RuleCraft*>::const_iterator i = _crafts.begin(); i != _crafts.end(); ++i)
 	{
 		i->second->save(out);
 	}
+
 	out << YAML::EndSeq;
 	out << YAML::Key << "craftWeapons" << YAML::Value;
 	out << YAML::BeginSeq;
+
 	for (std::map<std::string, RuleCraftWeapon*>::const_iterator i = _craftWeapons.begin(); i != _craftWeapons.end(); ++i)
 	{
 		i->second->save(out);
 	}
+
 	out << YAML::EndSeq;
 	out << YAML::Key << "items" << YAML::Value;
 	out << YAML::BeginSeq;
+
 	for (std::map<std::string, RuleItem*>::const_iterator i = _items.begin(); i != _items.end(); ++i)
 	{
 		i->second->save(out);
 	}
+
 	out << YAML::EndSeq;
 	out << YAML::Key << "ufos" << YAML::Value;
 	out << YAML::BeginSeq;
+
 	for (std::map<std::string, RuleUfo*>::const_iterator i = _ufos.begin(); i != _ufos.end(); ++i)
 	{
 		i->second->save(out);
 	}
+
 	out << YAML::EndSeq;
 	out << YAML::Key << "invs" << YAML::Value;
 	out << YAML::BeginSeq;
+
 	for (std::map<std::string, RuleInventory*>::const_iterator i = _invs.begin(); i != _invs.end(); ++i)
 	{
 		i->second->save(out);
 	}
+
 	out << YAML::EndSeq;
 	out << YAML::Key << "terrains" << YAML::Value;
 	out << YAML::BeginSeq;
+
 	for (std::map<std::string, RuleTerrain*>::const_iterator i = _terrains.begin(); i != _terrains.end(); ++i)
 	{
 		i->second->save(out);
 	}
+
 	out << YAML::EndSeq;
 	out << YAML::Key << "armors" << YAML::Value;
 	out << YAML::BeginSeq;
+
 	for (std::map<std::string, Armor*>::const_iterator i = _armors.begin(); i != _armors.end(); ++i)
 	{
 		i->second->save(out);
 	}
+
 	out << YAML::EndSeq;
 	out << YAML::Key << "soldiers" << YAML::Value;
 	out << YAML::BeginSeq;
+
 	for (std::map<std::string, RuleSoldier*>::const_iterator i = _soldiers.begin(); i != _soldiers.end(); ++i)
 	{
 		i->second->save(out);
 	}
+
 	out << YAML::EndSeq;
 	out << YAML::Key << "units" << YAML::Value;
 	out << YAML::BeginSeq;
+
 	for (std::map<std::string, Unit*>::const_iterator i = _units.begin(); i != _units.end(); ++i)
 	{
 		i->second->save(out);
 	}
+
 	out << YAML::EndSeq;
 	out << YAML::Key << "alienRaces" << YAML::Value;
 	out << YAML::BeginSeq;
+
 	for (std::map<std::string, AlienRace*>::const_iterator i = _alienRaces.begin(); i != _alienRaces.end(); ++i)
 	{
 		i->second->save(out);
 	}
+
 	out << YAML::EndSeq;
 	out << YAML::Key << "alienDeployments" << YAML::Value;
 	out << YAML::BeginSeq;
+
 	for (std::map<std::string, AlienDeployment*>::const_iterator i = _alienDeployments.begin(); i != _alienDeployments.end(); ++i)
 	{
 		i->second->save(out);
 	}
+
 	out << YAML::EndSeq;
 	out << YAML::Key << "research" << YAML::Value;
 	out << YAML::BeginSeq;
+
 	for (std::map<std::string, RuleResearch*>::const_iterator i = _research.begin(); i != _research.end(); ++i)
 	{
 		i->second->save(out);
 	}
+
 	out << YAML::EndSeq;
 	out << YAML::Key << "manufacture" << YAML::Value;
 	out << YAML::BeginSeq;
+
 	for (std::map<std::string, RuleManufacture*>::const_iterator i = _manufacture.begin(); i != _manufacture.end(); ++i)
 	{
 		i->second->save(out);
 	}
+
 	out << YAML::EndSeq;
 	out << YAML::Key << "ufopaedia" << YAML::Value;
 	out << YAML::BeginSeq;
+
 	for (std::map<std::string, ArticleDefinition*>::const_iterator i = _ufopaediaArticles.begin(); i != _ufopaediaArticles.end(); ++i)
 	{
 		i->second->save(out);
 	}
+
 	out << YAML::EndSeq;
 	out << YAML::Key << "ufoTrajectories" << YAML::Value;
 	out << YAML::BeginSeq;
+
 	for (std::map<std::string, UfoTrajectory*>::const_iterator i = _ufoTrajectories.begin(); i != _ufoTrajectories.end(); ++i)
 	{
 		i->second->save(out);
 	}
+
 	out << YAML::EndSeq;
 	out << YAML::Key << "alienMissions" << YAML::Value;
 	out << YAML::BeginSeq;
+
 	for (std::map<std::string, RuleAlienMission*>::const_iterator i = _alienMissions.begin(); i != _alienMissions.end(); ++i)
 	{
 		i->second->save(out);
 	}
+
 	out << YAML::EndSeq;
 	out << YAML::Key << "alienItemLevels" << YAML::Value;
 	out << YAML::BeginSeq;
+
 	for ( std::vector<std::vector<int> >::const_iterator i = _alienItemLevels.begin(); i != _alienItemLevels.end(); ++i)
 	{
 		out << *i;
 	}
+
 	out << YAML::EndSeq;
 	/*out << YAML::Key << "startingBase" << YAML::Value;
 	_startingBase->save(out);*/
@@ -895,6 +998,7 @@ void Ruleset::save(const std::string &filename) const
 	out << YAML::Key << "costEngineer" << YAML::Value << _costEngineer;
 	out << YAML::Key << "costScientist" << YAML::Value << _costScientist;
 	out << YAML::Key << "timePersonnel" << YAML::Value << _timePersonnel;
+
 	out << YAML::EndMap;
 	sav << out.c_str();
 	sav.close();
@@ -913,12 +1017,14 @@ SavedGame *Ruleset::newSave() const
 	{
 		save->getCountries()->push_back(new Country(getCountry(*i)));
 	}
+
 	// Adjust funding to total $6M
 	int missing = ((6000 - save->getCountryFunding()/1000) / (int)save->getCountries()->size()) * 1000;
 	for (std::vector<Country*>::iterator i = save->getCountries()->begin(); i != save->getCountries()->end(); ++i)
 	{
 		(*i)->setFunding((*i)->getFunding().back() + missing);
 	}
+
 	save->setFunds(save->getCountryFunding());
 
 	// Add regions
@@ -933,6 +1039,7 @@ SavedGame *Ruleset::newSave() const
 	{
 		ids[*i] = 1;
 	}
+
 	ids["STR_UFO"] = 1;
 	ids["STR_LANDING_SITE"] = 1;
 	ids["STR_CRASH_SITE"] = 1;
@@ -941,6 +1048,7 @@ SavedGame *Ruleset::newSave() const
 	ids["STR_ALIEN_BASE"] = 1;
 	ids["STR_SOLDIER"] = 1;
 	ids["ALIEN_MISSIONS"] = 1;
+
 	save->initIds(ids);
 
 	// Set up starting base
@@ -959,6 +1067,7 @@ SavedGame *Ruleset::newSave() const
 	{
 		(*pName) >> soldiers;
 	}
+
 	for (int i = 0; i < soldiers; ++i)
 	{
 		Soldier *soldier = new Soldier(getSoldier("XCOM"), getArmor("STR_NONE_UC"), &_names, save->getId("STR_SOLDIER"));
@@ -967,8 +1076,7 @@ SavedGame *Ruleset::newSave() const
 	}
 
 	save->getBases()->push_back(base);
-	// Setup alien strategy
-	save->getAlienStrategy().init(this);
+	save->getAlienStrategy().init(this); // Setup alien strategy
 
 	save->getTime()->load(*_startingTime);
 
@@ -1539,13 +1647,17 @@ void Ruleset::sortLists()
 		{
 			++offset;
 		}
+
 		list[getItem(*i)->getListOrder() + offset] = *i;
 	}
+
 	_itemsIndex.clear();
+
 	for (std::map<int, std::string>::const_iterator i = list.begin(); i != list.end(); ++i)
 	{
 		_itemsIndex.push_back(i->second);
 	}
+
 	list.clear();
 	offset = 0;
 
@@ -1555,13 +1667,16 @@ void Ruleset::sortLists()
 		{
 			++offset;
 		}
+
 		list[getCraft(*i)->getListOrder() + offset] = *i;
 	}
+
 	_craftsIndex.clear();
 	for (std::map<int, std::string>::const_iterator i = list.begin(); i != list.end(); ++i)
 	{
 		_craftsIndex.push_back(i->second);
 	}
+
 	list.clear();
 	offset = 0;
 	
@@ -1571,13 +1686,17 @@ void Ruleset::sortLists()
 		{
 			++offset;
 		}
+
 		list[getBaseFacility(*i)->getListOrder() + offset] = *i;
 	}
+
 	_facilitiesIndex.clear();
+
 	for (std::map<int, std::string>::const_iterator i = list.begin(); i != list.end(); ++i)
 	{
 		_facilitiesIndex.push_back(i->second);
 	}
+
 	list.clear();
 	offset = 0;
 	
@@ -1587,13 +1706,17 @@ void Ruleset::sortLists()
 		{
 			++offset;
 		}
+
 		list[getItem(getCraftWeapon(*i)->getLauncherItem())->getListOrder() + offset] = *i;
 	}
+
 	_craftWeaponsIndex.clear();
+
 	for (std::map<int, std::string>::const_iterator i = list.begin(); i != list.end(); ++i)
 	{
 		_craftWeaponsIndex.push_back(i->second);
 	}
+
 	list.clear();
 	offset = 0;
 	
@@ -1606,6 +1729,7 @@ void Ruleset::sortLists()
 			{
 				++offset;
 			}
+
 			list[getItem(getArmor(*i)->getStoreItem())->getListOrder() + offset] = *i;
 		}
 		else
@@ -1614,11 +1738,14 @@ void Ruleset::sortLists()
 			alternateEntry += 1;
 		}
 	}
+
 	_armorsIndex.clear();
+
 	for (std::map<int, std::string>::const_iterator i = list.begin(); i != list.end(); ++i)
 	{
 		_armorsIndex.push_back(i->second);
 	}
+
 	list.clear();
 	offset = 0;
 	
@@ -1628,13 +1755,17 @@ void Ruleset::sortLists()
 		{
 			++offset;
 		}
+
 		list[getUfopaediaArticle(*i)->getListOrder() + offset] = *i;
 	}
+
 	_ufopaediaIndex.clear();
+
 	for (std::map<int, std::string>::const_iterator i = list.begin(); i != list.end(); ++i)
 	{
 		_ufopaediaIndex.push_back(i->second);
 	}
+
 	list.clear();
 	offset = 0;
 	
@@ -1644,13 +1775,17 @@ void Ruleset::sortLists()
 		{
 			++offset;
 		}
+
 		list[getResearch(*i)->getListOrder() + offset] = *i;
 	}
+
 	_researchIndex.clear();
+
 	for (std::map<int, std::string>::const_iterator i = list.begin(); i != list.end(); ++i)
 	{
 		_researchIndex.push_back(i->second);
 	}
+
 	list.clear();
 	offset = 0;
 	
@@ -1660,14 +1795,19 @@ void Ruleset::sortLists()
 		{
 			++offset;
 		}
+
 		list[getManufacture(*i)->getListOrder() + offset] = *i;
 	}
+
 	_manufactureIndex.clear();
+
 	for (std::map<int, std::string>::const_iterator i = list.begin(); i != list.end(); ++i)
 	{
 		_manufactureIndex.push_back(i->second);
 	}
+
 	list.clear();
 	offset = 0;
 }
+
 }

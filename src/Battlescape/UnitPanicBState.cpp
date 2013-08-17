@@ -55,6 +55,7 @@ void UnitPanicBState::think()
 	{
 		_unit->setTimeUnits(0);
 	}
+
 	_parent->popState();
 }
 
