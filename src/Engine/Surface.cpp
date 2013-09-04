@@ -342,7 +342,11 @@ void Surface::clear()
 	square.y = 0;
 	square.w = getWidth();
 	square.h = getHeight();
-	if (_surface->flags & SDL_SWSURFACE) memset(_surface->pixels, 0, _surface->h*_surface->pitch);
+
+	if (_surface->flags & SDL_SWSURFACE)
+	{
+		memset(_surface->pixels, 0, _surface->h*_surface->pitch);
+	}
 	else SDL_FillRect(_surface, &square, 0);
 }
 
@@ -431,7 +435,6 @@ void Surface::invert(Uint8 mid)
  */
 void Surface::think()
 {
-
 }
 
 /**
@@ -457,11 +460,11 @@ void Surface::blit(Surface *surface)
 {
 	if (_visible && !_hidden)
 	{
-		if (_redraw)
-			draw();
+		if (_redraw) draw();
 
 		SDL_Rect* cropper;
 		SDL_Rect target;
+
 		if (_crop.w == 0 && _crop.h == 0)
 		{
 			cropper = 0;
@@ -470,6 +473,7 @@ void Surface::blit(Surface *surface)
 		{
 			cropper = &_crop;
 		}
+
 		target.x = getX();
 		target.y = getY();
 		SDL_BlitSurface(_surface, cropper, surface->getSurface(), &target);
@@ -490,6 +494,7 @@ void Surface::copy(Surface *surface)
 	from.y = getY() - surface->getY();
 	from.w = getWidth();
 	from.h = getHeight();
+
 	SDL_BlitSurface(surface->getSurface(), &from, _surface, 0);
 }
 
@@ -755,7 +760,7 @@ struct ColorReplace
 	*/
 	static inline void func(Uint8& dest, const Uint8& src, const int& shade, const int& newColor, const int&)
 	{
-		if(src)
+		if (src)
 		{
 			const int newShade = (src&15) + shade;
 			if (newShade > 15)
@@ -783,7 +788,7 @@ struct StandartShade
 	*/
 	static inline void func(Uint8& dest, const Uint8& src, const int& shade, const int&, const int&)
 	{
-		if(src)
+		if (src)
 		{
 			const int newShade = (src&15) + shade;
 			if (newShade > 15)
@@ -794,8 +799,6 @@ struct StandartShade
 		}
 	}
 };
-
-
 
 /**
  * Specific blit function to blit battlescape terrain data in different shades in a fast way.
@@ -811,13 +814,14 @@ struct StandartShade
 void Surface::blitNShade(Surface *surface, int x, int y, int off, bool half, int newBaseColor)
 {
 	ShaderMove<Uint8> src(this, x, y);
-	if(half)
+	if (half)
 	{
 		GraphSubset g = src.getDomain();
 		g.beg_x = g.end_x/2;
 		src.setDomain(g);
 	}
-	if(newBaseColor)
+
+	if (newBaseColor)
 	{
 		--newBaseColor;
 		newBaseColor <<= 4;
