@@ -167,11 +167,7 @@ BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor, in
 	
 }
 
-<<<<<<< HEAD
 	
-=======
-
->>>>>>> 09bed41701e2b001aff2ba8165fd36df109c3de3
 /**
  *
  */
@@ -189,26 +185,23 @@ BattleUnit::~BattleUnit()
  */
 void BattleUnit::load(const YAML::Node &node)
 {
-	int a = 0;
-
-	node["id"] >> _id;
-	node["faction"] >> a;
-	_faction = (UnitFaction)a;
-	node["status"] >> a;
-	_status = (UnitStatus)a;
-	node["position"] >> _pos;
-	node["direction"] >> _direction;
-	node["directionTurret"] >> _directionTurret;
-	node["tu"] >> _tu;
-	node["health"] >> _health;
-	node["stunlevel"] >> _stunlevel;
-	node["energy"] >> _energy;
-	node["morale"] >> _morale;
-	node["kneeled"] >> _kneeled;
-	node["floating"] >> _floating;
+	_id = node["id"].as<int>(_id);
+	_faction = _originalFaction = (UnitFaction)node["faction"].as<int>(_faction);
+	_status = (UnitStatus)node["status"].as<int>(_status);
+	_pos = node["position"].as<Position>(_pos);
+	_direction = _toDirection = node["direction"].as<int>(_direction);
+	_directionTurret = _toDirectionTurret = node["directionTurret"].as<int>(_directionTurret);
+	_tu = node["tu"].as<int>(_tu);
+	_health = node["health"].as<int>(_health);
+	_stunlevel = node["stunlevel"].as<int>(_stunlevel);
+	_energy = node["energy"].as<int>(_energy);
+	_morale = node["morale"].as<int>(_morale);
+	_kneeled = node["kneeled"].as<bool>(_kneeled);
+	_floating = node["floating"].as<bool>(_floating);
 	for (int i=0; i < 5; i++)
-		node["armor"][i] >> _currentArmor[i];
+		_currentArmor[i] = node["armor"][i].as<int>(_currentArmor[i]);
 	for (int i=0; i < 6; i++)
+<<<<<<< HEAD
 		node["fatalWounds"][i] >> _fatalWounds[i];
 	node["fire"] >> _fire;
 	node["expBravery"] >> _expBravery;
@@ -257,10 +250,31 @@ void BattleUnit::load(const YAML::Node &node)
 	_charging = 0;
 	_toDirection = _direction;
 	_toDirectionTurret = _directionTurret;
+=======
+		_fatalWounds[i] = node["fatalWounds"][i].as<int>(_fatalWounds[i]);
+	_fire = node["fire"].as<int>(_fire);
+	_expBravery = node["expBravery"].as<int>(_expBravery);
+	_expReactions = node["expReactions"].as<int>(_expReactions);
+	_expFiring = node["expFiring"].as<int>(_expFiring);
+	_expThrowing = node["expThrowing"].as<int>(_expThrowing);
+	_expPsiSkill = node["expPsiSkill"].as<int>(_expPsiSkill);
+	_expMelee = node["expMelee"].as<int>(_expMelee);
+	_turretType = node["turretType"].as<int>(_turretType);
+	_visible = node["visible"].as<bool>(_visible);
+	_turnsExposed = node["turnsExposed"].as<int>(_turnsExposed);
+	_killedBy = (UnitFaction)node["killedBy"].as<int>(_killedBy);
+	_moraleRestored = node["moraleRestored"].as<int>(_moraleRestored);
+	_rankInt = node["rankInt"].as<int>(_rankInt);
+	_originalFaction = (UnitFaction)node["originalFaction"].as<int>(_originalFaction);
+	_kills = node["kills"].as<int>(_kills);
+	_dontReselect = node["dontReselect"].as<bool>(_dontReselect);
+	_charging = 0;
+>>>>>>> master
 }
 
 /**
  * Saves the soldier to a YAML file.
+<<<<<<< HEAD
  * @param out YAML emitter.
  */
 void BattleUnit::save(YAML::Emitter &out) const
@@ -309,22 +323,64 @@ void BattleUnit::save(YAML::Emitter &out) const
 	out << YAML::Key << "rankInt" << YAML::Value << _rankInt;
 	out << YAML::Key << "moraleRestored" << YAML::Value << _moraleRestored;
 
+=======
+ * @return YAML node.
+ */
+YAML::Node BattleUnit::save() const
+{
+	YAML::Node node;
+
+	node["id"] = _id;
+	node["faction"] = (int)_faction;
+	node["soldierId"] = _id;
+	node["genUnitType"] = _type;
+	node["genUnitArmor"] = _armor->getType();
+	node["name"] = Language::wstrToUtf8(getName(0));
+	node["status"] = (int)_status;
+	node["position"] = _pos;
+	node["direction"] = _direction;
+	node["directionTurret"] = _directionTurret;
+	node["tu"] = _tu;
+	node["health"] = _health;
+	node["stunlevel"] = _stunlevel;
+	node["energy"] = _energy;
+	node["morale"] = _morale;
+	node["kneeled"] = _kneeled;
+	node["floating"] = _floating;
+	for (int i=0; i < 5; i++) node["armor"].push_back(_currentArmor[i]);
+	for (int i=0; i < 6; i++) node["fatalWounds"].push_back(_fatalWounds[i]);
+	node["fire"] = _fire;
+	node["expBravery"] = _expBravery;
+	node["expReactions"] = _expReactions;
+	node["expFiring"] = _expFiring;
+	node["expThrowing"] = _expThrowing;
+	node["expPsiSkill"] = _expPsiSkill;
+	node["expMelee"] = _expMelee;
+	node["turretType"] = _turretType;
+	node["visible"] = _visible;
+	node["turnsExposed"] = _turnsExposed;
+	node["rankInt"] = _rankInt;
+	node["moraleRestored"] = _moraleRestored;
+>>>>>>> master
 	if (getCurrentAIState())
 	{
-		out << YAML::Key << "AI" << YAML::Value;
-		getCurrentAIState()->save(out);
+		node["AI"] = getCurrentAIState()->save();
 	}
+<<<<<<< HEAD
 
 	out << YAML::Key << "killedBy" << YAML::Value << _killedBy;
 
+=======
+	node["killedBy"] = (int)_killedBy;
+>>>>>>> master
 	if (_originalFaction != _faction)
-		out << YAML::Key << "originalFaction" << YAML::Value << _originalFaction;
+		node["originalFaction"] = (int)_originalFaction;
 	if (_kills)
-		out << YAML::Key << "kills" << YAML::Value << _kills;
+		node["kills"] = _kills;
 	if (_faction == FACTION_PLAYER && _dontReselect)
-		out << YAML::Key << "dontReselect" << YAML::Value << _dontReselect;
+		node["dontReselect"] = _dontReselect;
 
-	out << YAML::EndMap;
+	return node;
 }
 
 /**
@@ -342,7 +398,8 @@ int BattleUnit::getId() const
  */
 void BattleUnit::setPosition(const Position& pos, bool updateLastPos)
 {
-	if (updateLastPos) { _lastPos = _pos; }
+	if (updateLastPos)
+		_lastPos = _pos;
 
 	_pos = pos;
 }
@@ -541,7 +598,7 @@ void BattleUnit::keepWalking(Tile *tileBelowMe, bool cache)
 		_walkPhase = 0;
 		_verticalDirection = 0;
 
-		if (_faceDirection >= 0)
+		if (_faceDirection > -1)
 		{
 			// Finish strafing move facing the correct way.
 			_direction = _faceDirection;
@@ -614,14 +671,14 @@ void BattleUnit::lookAt(const Position &point, bool turret)
 }
 
 /**
- * Look at a direction.
+ * Look a direction.
  * @param direction
  */
 void BattleUnit::lookAt(int direction, bool force)
 {
 	if (!force)
 	{
-		if (direction < 0 || direction >= 8)
+		if (direction < 0 || direction > 7)
 			return;
 
 		_toDirection = direction;
@@ -852,8 +909,8 @@ void BattleUnit::aim(bool aiming)
 }
 
 /**
- * Returns the soldier's amount of time units.
- * @return Time units.
+ * Calculates the Map facing direction from a position to a point.
+ * @return direction to a point (0-7)
  */
 int BattleUnit::getDirectionTo(const Position &point) const
 {
@@ -861,7 +918,7 @@ int BattleUnit::getDirectionTo(const Position &point) const
 	double oy = point.y - _pos.y;
 	double angle = atan2(ox, -oy);
 	// divide the pie in 4 angles each at 1/8th before each quarter
-	double pie[4] = {(M_PI_4 * 4.0) - M_PI_4 / 2.0, (M_PI_4 * 3.0) - M_PI_4 / 2.0, (M_PI_4 * 2.0) - M_PI_4 / 2.0, (M_PI_4 * 1.0) - M_PI_4 / 2.0};
+	double pie[4] = { (M_PI_4 * 4.0) - M_PI_4 / 2.0, (M_PI_4 * 3.0) - M_PI_4 / 2.0, (M_PI_4 * 2.0) - M_PI_4 / 2.0, (M_PI_4 * 1.0) - M_PI_4 / 2.0 };
 	int dir = 0;
 
 	if (angle > pie[0] || angle < -pie[0])
@@ -990,7 +1047,7 @@ int BattleUnit::damage(const Position &relative, int power, ItemDamageType type,
 				}
 			}
 
-			switch((relativeDirection - _direction) % 8)
+			switch ((relativeDirection - _direction) % 8)
 			{
 				case 0:	side = SIDE_FRONT; 										break;
 				case 1:	side = RNG::generate(0,2) < 2 ? SIDE_FRONT:SIDE_RIGHT; 	break;
@@ -1001,13 +1058,14 @@ int BattleUnit::damage(const Position &relative, int power, ItemDamageType type,
 				case 6:	side = SIDE_LEFT; 										break;
 				case 7:	side = RNG::generate(0,2) < 2 ? SIDE_FRONT:SIDE_LEFT; 	break;
 			}
+
 			if (relative.z > getHeight())
 			{
 				bodypart = BODYPART_HEAD;
 			}
 			else if (relative.z > 4)
 			{
-				switch(side)
+				switch (side)
 				{
 					case SIDE_LEFT:		bodypart = BODYPART_LEFTARM;	break;
 					case SIDE_RIGHT:	bodypart = BODYPART_RIGHTARM;	break;
@@ -1016,7 +1074,7 @@ int BattleUnit::damage(const Position &relative, int power, ItemDamageType type,
 			}
 			else
 			{
-				switch(side)
+				switch (side)
 				{
 					case SIDE_LEFT: 	bodypart = BODYPART_LEFTLEG; 	break;
 					case SIDE_RIGHT:	bodypart = BODYPART_RIGHTLEG; 	break;
@@ -1055,18 +1113,18 @@ int BattleUnit::damage(const Position &relative, int power, ItemDamageType type,
 				if (isWoundable()) // fatal wounds
 				{
 					if (RNG::generate(0, 10) < power)
-						_fatalWounds[bodypart] += RNG::generate(1,3);
+						_fatalWounds[bodypart] += RNG::generate(1, 3);
 
 					if (_fatalWounds[bodypart])
 						moraleChange(-_fatalWounds[bodypart]);
 				}
 
-				setArmor(getArmor(side) - (power/10) - 1, side); // armor damage
+				setArmor(getArmor(side) - (power / 10) - 1, side); // armor damage
 			}
 		}
 	}
 
-	return power < 0 ? 0:power;
+	return power < 0 ? 0 : power;
 }
 
 /**
@@ -1100,6 +1158,7 @@ void BattleUnit::startFalling()
 void BattleUnit::keepFalling()
 {
 	_fallPhase++;
+
 	int endFrame = 3;
 	if (_spawnUnit != "" && _specab != SPECAB_RESPAWN)
 	{
@@ -1211,6 +1270,7 @@ bool BattleUnit::spendEnergy(int tu)
 	if (eu <= _energy)
 	{
 		_energy -= eu;
+
 		return true;
 	}
 	else
@@ -1332,9 +1392,9 @@ double BattleUnit::getFiringAccuracy(BattleActionType actionType, BattleItem *it
 	else if (actionType == BA_AUTOSHOT)
 		weaponAcc = item->getRules()->getAccuracyAuto();
 	else if (actionType == BA_HIT)
-		return (double)(item->getRules()->getAccuracyMelee()/100.0);
+		return (double)(item->getRules()->getAccuracyMelee() / 100.0);
 
-	result *= (double)(weaponAcc/100.0);
+	result *= (double)(weaponAcc / 100.0);
 
 	if (_kneeled)
 		result *= 1.16;
@@ -1358,13 +1418,13 @@ double BattleUnit::getFiringAccuracy(BattleActionType actionType, BattleItem *it
  */
 double BattleUnit::getAccuracyModifier()
 {
-	double result = ((double)_health/(double)getStats()->health);
+	double result = ((double)_health / (double)getStats()->health);
 
 	int wounds = _fatalWounds[BODYPART_HEAD] + _fatalWounds[BODYPART_RIGHTARM];
 	if (wounds > 9)
 		wounds = 9;
 
-	result *= 1 + (-0.1*wounds);
+	result *= 1 + (-0.1 * wounds);
 
 	return result;
 }
@@ -1441,20 +1501,20 @@ void BattleUnit::prepareNewTurn()
 	int TURecovery = getStats()->tu; // recover TUs
 
 	float encumbrance = (float)getStats()->strength / (float)getCarriedWeight();
-	if (encumbrance < 1)
+	if (encumbrance < 1.f)
 	{
-	  TURecovery = int(encumbrance * TURecovery);
+		TURecovery = int(encumbrance * TURecovery);
 	}
 
 	// Each fatal wound to the left or right leg reduces the soldier's TUs by 10%.
-	TURecovery -= (TURecovery * (_fatalWounds[BODYPART_LEFTLEG]+_fatalWounds[BODYPART_RIGHTLEG] * 10))/100;
+	TURecovery -= (TURecovery * (_fatalWounds[BODYPART_LEFTLEG] + _fatalWounds[BODYPART_RIGHTLEG] * 10)) / 100;
 	setTimeUnits(TURecovery);
 
 	if (!isOut()) // recover energy
 	{
 		int ENRecovery = getStats()->tu / 3;
 		// Each fatal wound to the body reduces the soldier's energy recovery by 10%.
-		ENRecovery -= (_energy * (_fatalWounds[BODYPART_TORSO] * 10))/100;
+		ENRecovery -= (_energy * (_fatalWounds[BODYPART_TORSO] * 10)) / 100;
 		_energy += ENRecovery;
 
 		if (_energy > getStats()->stamina)
@@ -1463,6 +1523,7 @@ void BattleUnit::prepareNewTurn()
 
 	_health -= getFatalWounds(); // suffer from fatal wounds
 
+/*kL, this should happen at the end of Turn (see BattlescapeGame.cpp, void BattlescapeGame::endTurn() */
 	if (!_hitByFire && _fire > 0) // suffer from fire
 	{
 		_health -= _armor->getDamageModifier(DT_IN) * RNG::generate(5, 10);
@@ -1485,9 +1546,9 @@ void BattleUnit::prepareNewTurn()
 	if (!isOut())
 	{
 		int chance = 100 - (2 * getMorale());
-		if (RNG::generate(1,100) <= chance)
+		if (RNG::generate(1, 100) <= chance)
 		{
-			int type = RNG::generate(0,100);
+			int type = RNG::generate(0, 100);
 			// 33% chance of berserk, panic can mean freeze or flee, but that is determined later
 			_status = (type <= 33 ? STATUS_BERSERK : STATUS_PANICKING);
 		}
@@ -1531,10 +1592,7 @@ void BattleUnit::allowReselect()
 	_dontReselect = false;
 }
 
-<<<<<<< HEAD
-=======
 
->>>>>>> 09bed41701e2b001aff2ba8165fd36df109c3de3
 /**
  * Check whether reselecting this unit is allowed.
  * @return bool
@@ -1949,15 +2007,22 @@ bool BattleUnit::postMissionProcedures(SavedGame *geoscape)
 	{
 		if (s->getRank() == RANK_ROOKIE)
 			s->promoteRank();
-		int v;
-		v = caps.tu - stats->tu;
-		if (v > 0) stats->tu += RNG::generate(0, v/10 + 2);
+
+		int v = caps.tu - stats->tu;
+//kL		if (v > 0) stats->tu += RNG::generate(0, v/10 + 2);
+		if (v > 0) stats->tu += RNG::generate(0, v/10 + 2) -1;		// kL
+
 		v = caps.health - stats->health;
-		if (v > 0) stats->health += RNG::generate(0, v/10 + 2);
+//kL		if (v > 0) stats->health += RNG::generate(0, v/10 + 2);
+		if (v > 0) stats->health += RNG::generate(0, v/10 + 2) -1;		// kL
+
 		v = caps.strength - stats->strength;
-		if (v > 0) stats->strength += RNG::generate(0, v/10 + 2);
+//kL		if (v > 0) stats->strength += RNG::generate(0, v/10 + 2);
+		if (v > 0) stats->strength += RNG::generate(0, v/10 + 2) -1;		// kL
+
 		v = caps.stamina - stats->stamina;
-		if (v > 0) stats->stamina += RNG::generate(0, v/10 + 2);
+//kL		if (v > 0) stats->stamina += RNG::generate(0, v/10 + 2);
+		if (v > 0) stats->stamina += RNG::generate(0, v/10 + 2) -1;		// kL
 
 		return true;
 	}
@@ -2062,7 +2127,7 @@ void BattleUnit::heal(int part, int healAmount, int healthAmount)
 	if (part < 0 || part > 5)
 		return;
 
-	if(!_fatalWounds[part])
+	if (!_fatalWounds[part])
 		return;
 
 	_fatalWounds[part] -= healAmount;
@@ -2075,7 +2140,7 @@ void BattleUnit::heal(int part, int healAmount, int healthAmount)
 /**
  * Restore soldier morale
  */
-void BattleUnit::painKillers ()
+void BattleUnit::painKillers()
 {
 	int lostHealth = getStats()->health - _health;
 	if (lostHealth > _moraleRestored)
@@ -2090,13 +2155,13 @@ void BattleUnit::painKillers ()
  * @param energy The amount of energy to add
  * @param s The amount of stun level to reduce
  */
-void BattleUnit::stimulant (int energy, int s)
+void BattleUnit::stimulant(int energy, int stun)
 {
 	_energy += energy;
 	if (_energy > getStats()->stamina)
 		_energy = getStats()->stamina;
 
-	healStun (s);
+	healStun(stun);
 }
 
 /**
@@ -2472,7 +2537,7 @@ int BattleUnit::getTurnsExposed () const
 }
 
 /**
- * Get This unit's original Faction.
+ * Get this unit's original Faction.
  * @return original faction
  */
 UnitFaction BattleUnit::getOriginalFaction() const
@@ -2480,7 +2545,9 @@ UnitFaction BattleUnit::getOriginalFaction() const
 	return _originalFaction;
 }
 
-/// invalidate cache; call after copying object :(
+/*
+ * Invalidate cache; call after copying object :(
+ */
 void BattleUnit::invalidateCache()
 {
 	for (int i = 0; i < 5; ++i) { _cache[i] = 0; }
@@ -2488,21 +2555,33 @@ void BattleUnit::invalidateCache()
 	_cacheInvalid = true;
 }
 
+/*
+ * 
+ */
 std::vector<BattleUnit *> BattleUnit::getUnitsSpottedThisTurn()
 {
 	return _unitsSpottedThisTurn;
 }
 
+/*
+ * 
+ */
 void BattleUnit::setRankInt(int rank)
 {
 	_rankInt = rank;
 }
 
+/*
+ * 
+ */
 int BattleUnit::getRankInt() const
 {
 	return _rankInt;
 }
 
+/*
+ * 
+ */
 void BattleUnit::deriveRank()
 {
 	if (_faction == FACTION_PLAYER)
@@ -2517,7 +2596,7 @@ void BattleUnit::deriveRank()
 }
 
 /*
- * this function checks if a tile is visible, using maths.
+ * This function checks if a tile is visible, using maths.
  * @param pos the position to check against
  * @return what the maths decide
  */
@@ -2569,7 +2648,7 @@ bool BattleUnit::checkViewSector(Position pos) const
 }
 
 /*
- * common function to adjust a unit's stats according to difficulty setting.
+ * Common function to adjust a unit's stats according to difficulty setting.
  */
 void BattleUnit::adjustStats(const int diff)
 {
@@ -2586,7 +2665,7 @@ void BattleUnit::adjustStats(const int diff)
 }
 
 /*
- * did this unit already take fire damage this turn?
+ * Did this unit already take fire damage this turn?
  * (used to avoid damaging large units multiple times.)
  */
 bool BattleUnit::tookFireDamage() const
@@ -2595,19 +2674,109 @@ bool BattleUnit::tookFireDamage() const
 }
 
 /*
- * toggle the state of the fire damage tracking boolean.
+ * Toggle the state of the fire damage tracking boolean.
  */
 void BattleUnit::toggleFireDamage()
 {
 	_hitByFire = !_hitByFire;
 }
 
+/*
+ * 
+ */
 void BattleUnit::setCoverReserve(int reserve)
 {
 	_coverReserve = reserve;
 }
+
+/*
+ * 
+ */
 int BattleUnit::getCoverReserve()
 {
 	return _coverReserve;
 }
+
+// kL_begin:
+/*
+ * Starts the death spin.
+ */
+void BattleUnit::deathPirouette()
+{
+//	Log(LOG_INFO) << "BattleUnit::deathPirouette()" << " [target]: " << (getId());
+
+	_status = STATUS_TURNING;
+	_spinPhase = 0;
+	_cacheInvalid = true;
+}
+
+/*
+ * Continues the death spin.
+ */
+void BattleUnit::deathPirContinue()
+{
+//	Log(LOG_INFO) << "BattleUnit::deathPirContinue()" << " [target]: " << (getId());
+
+	int d = _direction;
+	if (3 == d) // if facing player, 1 rotation left
+	{
+//		Log(LOG_INFO) << ". d_init = " << d;
+		if (3 == _spinPhase || 4 == _spinPhase) // start = 0, BattleUnit::deathPirouette()
+		{
+//			Log(LOG_INFO) << ". . _spinPhase = " << _spinPhase << " [ return ]";
+			 _spinPhase = -1; // end.
+
+			 return;
+		}
+		else if (1 == _spinPhase)
+		{
+			_spinPhase = 3; // 2nd CW rotation
+		}
+		else if (2 == _spinPhase)
+		{
+			_spinPhase = 4; // 2nd CCW rotation
+		}
+	}
+
+	if (0 == _spinPhase)
+	{
+		if (-1 < d && d < 4)
+		{
+			_spinPhase = 1; // 1st CW rotation
+		}
+		else
+		{
+			_spinPhase = 2; // 1st CCW rotation
+		}
+	}
+
+	if (1 == _spinPhase || 3 == _spinPhase)
+	{
+		d++;
+		if (8 == d) d = 0;
+	}
+	else
+	{
+		d--;
+		if (-1 == d) d = 7;
+	}
+
+
+//	Log(LOG_INFO) << ". d_final = " << d;
+	setDirection(d);
+
+	_status = STATUS_TURNING;
+	_cacheInvalid = true;
+}
+
+/*
+ * Regulates the death spin.
+ * @ return int that tracks deathspin rotations
+ */
+int BattleUnit::getSpinPhase()
+{
+	return _spinPhase;
+}
+// kL_end.
+
 }
