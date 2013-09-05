@@ -26,6 +26,7 @@ namespace OpenXcom
 {
 
 enum SpecialAbility { SPECAB_NONE = 0, SPECAB_EXPLODEONDEATH, SPECAB_BURNFLOOR, SPECAB_RESPAWN };
+
 /**
  * This struct holds some plain unit attribute data together.
  */
@@ -107,6 +108,7 @@ namespace YAML
 		static Node encode(const OpenXcom::UnitStats& rhs)
 		{
 			Node node;
+
 			node["tu"] = rhs.tu;
 			node["stamina"] = rhs.stamina;
 			node["health"] = rhs.health;
@@ -118,13 +120,13 @@ namespace YAML
 			node["psiStrength"] = rhs.psiStrength;
 			node["psiSkill"] = rhs.psiSkill;
 			node["melee"] = rhs.melee;
+
 			return node;
 		}
 
 		static bool decode(const Node& node, OpenXcom::UnitStats& rhs)
 		{
-			if (!node.IsMap())
-				return false;
+			if (!node.IsMap()) return false;
 
 			rhs.tu = node["tu"].as<int>(rhs.tu);
 			rhs.stamina = node["stamina"].as<int>(rhs.stamina);
@@ -137,6 +139,7 @@ namespace YAML
 			rhs.psiStrength = node["psiStrength"].as<int>(rhs.psiStrength);
 			rhs.psiSkill = node["psiSkill"].as<int>(rhs.psiSkill);
 			rhs.melee = node["melee"].as<int>(rhs.melee);
+
 			return true;
 		}
 	};

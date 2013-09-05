@@ -118,6 +118,7 @@ namespace YAML
 			node.push_back(rhs.lonMax);
 			node.push_back(rhs.latMin);
 			node.push_back(rhs.latMax);
+
 			return node;
 		}
 
@@ -130,6 +131,7 @@ namespace YAML
 			rhs.lonMax = node[1].as<double>();
 			rhs.latMin = node[2].as<double>();
 			rhs.latMax = node[3].as<double>();
+
 			return true;
 		}
 	};
@@ -141,6 +143,7 @@ namespace YAML
 		{
 			Node node;
 			node = rhs.areas;
+
 			return node;
 		}
 
@@ -150,6 +153,7 @@ namespace YAML
 				return false;
 
 			rhs.areas = node.as< std::vector<OpenXcom::MissionArea> >(rhs.areas);
+
 			return true;
 		}
 	};

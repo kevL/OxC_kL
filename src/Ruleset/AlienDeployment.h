@@ -99,6 +99,7 @@ namespace YAML
 		{
 			Node node;
 			node = rhs.items;
+
 			return node;
 		}
 
@@ -108,6 +109,7 @@ namespace YAML
 				return false;
 
 			rhs.items = node.as< std::vector<std::string> >(rhs.items);
+
 			return true;
 		}
 	};

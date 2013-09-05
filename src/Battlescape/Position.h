@@ -39,31 +39,32 @@ public:
 	/// Copy constructor.
 	Position(const Position& pos) : x(pos.x), y(pos.y), z(pos.z) {};
 
-	Position& operator=(const Position& pos) { x = pos.x; y = pos.y; z = pos.z; return *this; }
+	Position& operator = (const Position& pos) { x = pos.x; y = pos.y; z = pos.z; return *this; }
 
-	Position operator+(const Position& pos) const { return Position(x + pos.x, y + pos.y, z + pos.z); }
-	Position& operator+=(const Position& pos) { x+=pos.x; y+=pos.y; z+=pos.z; return *this; }
+	Position operator + (const Position& pos) const { return Position(x + pos.x, y + pos.y, z + pos.z); }
+	Position& operator += (const Position& pos) { x+=pos.x; y+=pos.y; z+=pos.z; return *this; }
 
-	Position operator-(const Position& pos) const { return Position(x - pos.x, y - pos.y, z - pos.z); }
-	Position& operator-=(const Position& pos) { x-=pos.x; y-=pos.y; z-=pos.z; return *this; }
+	Position operator - (const Position& pos) const { return Position(x - pos.x, y - pos.y, z - pos.z); }
+	Position& operator -= (const Position& pos) { x-=pos.x; y-=pos.y; z-=pos.z; return *this; }
 
-	Position operator*(const Position& pos) const { return Position(x * pos.x, y * pos.y, z * pos.z); }
-	Position& operator*=(const Position& pos) { x*=pos.x; y*=pos.y; z*=pos.z; return *this; }
-	Position operator*(const int v) const { return Position(x * v, y * v, z * v); }
-	Position& operator*=(const int v) { x*=v; y*=v; z*=v; return *this; }
+	Position operator * (const Position& pos) const { return Position(x * pos.x, y * pos.y, z * pos.z); }
+	Position& operator *= (const Position& pos) { x*=pos.x; y*=pos.y; z*=pos.z; return *this; }
+	Position operator * (const int v) const { return Position(x * v, y * v, z * v); }
+	Position& operator *= (const int v) { x*=v; y*=v; z*=v; return *this; }
 	
-	Position operator/(const Position& pos) const { return Position(x / pos.x, y / pos.y, z / pos.z); }
-	Position& operator/=(const Position& pos) { x/=pos.x; y/=pos.y; z/=pos.z; return *this; }
+	Position operator / (const Position& pos) const { return Position(x / pos.x, y / pos.y, z / pos.z); }
+	Position& operator /= (const Position& pos) { x/=pos.x; y/=pos.y; z/=pos.z; return *this; }
 
-    Position operator/(const int v) const { return Position(x / v, y / v, z / v); }
+    Position operator / (const int v) const { return Position(x / v, y / v, z / v); }
 
 	/// == operator
-    bool operator== (const Position& pos) const
+    bool operator == (const Position& pos) const
 	{
 		return x == pos.x && y == pos.y && z == pos.z;
 	}
+
 	/// != operator
-    bool operator!= (const Position& pos) const
+    bool operator != (const Position& pos) const
 	{
 		return x != pos.x || y != pos.y || z != pos.z;
 	}
@@ -85,6 +86,7 @@ namespace YAML
 			node.push_back(rhs.x);
 			node.push_back(rhs.y);
 			node.push_back(rhs.z);
+
 			return node;
 		}
 
@@ -96,6 +98,7 @@ namespace YAML
 			rhs.x = node[0].as<int>();
 			rhs.y = node[1].as<int>();
 			rhs.z = node[2].as<int>();
+
 			return true;
 		}
 	};
