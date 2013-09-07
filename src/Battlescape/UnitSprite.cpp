@@ -44,10 +44,10 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-UnitSprite::UnitSprite(int width, int height, int x, int y) : Surface(width, height, x, y), _unit(0), _itemA(0), _itemB(0), _unitSurface(0), _itemSurfaceA(0), _itemSurfaceB(0), _part(0), _animationFrame(0)
+UnitSprite::UnitSprite(int width, int height, int x, int y)
+	: Surface(width, height, x, y), _unit(0), _itemA(0), _itemB(0),
+	_unitSurface(0), _itemSurfaceA(0), _itemSurfaceB(0), _part(0), _animationFrame(0)
 {
-
-
 }
 
 /**
@@ -55,7 +55,6 @@ UnitSprite::UnitSprite(int width, int height, int x, int y) : Surface(width, hei
  */
 UnitSprite::~UnitSprite()
 {
-
 }
 
 /**
@@ -90,13 +89,14 @@ void UnitSprite::setBattleUnit(BattleUnit *unit, int part)
  */
 void UnitSprite::setBattleItem(BattleItem *item)
 {
-	if(item)
+	if (item)
 	{
 		if(item->getSlot()->getId() == "STR_RIGHT_HAND")
 			_itemA = item;
 		if(item->getSlot()->getId() == "STR_LEFT_HAND")
 			_itemB = item;
 	}
+
 	_redraw = true;
 }
 
@@ -113,17 +113,16 @@ struct ColorFace
 	static const Uint8 Face = 6 << 4;
 	static inline void func(Uint8& src, const Uint8& hair_color, const Uint8& face_color, int, int)
 	{
-		if((src & ColorGroup) == Hair)
+		if ((src & ColorGroup) == Hair)
 		{
 			src = hair_color + (src & ColorShade);
 		}
-		else if((src & ColorGroup) == Face)
+		else if ((src & ColorGroup) == Face)
 		{
 			src = face_color + (src & ColorShade);
 		}
 	}
 };
-
 
 }
 
@@ -142,41 +141,42 @@ void UnitSprite::setAnimationFrame(int frame)
 void UnitSprite::draw()
 {
 	Surface::draw();
+
 	_drawingRoutine = _unit->getArmor()->getDrawingRoutine();
 	switch (_drawingRoutine)
 	{
-	case 0:
-		drawRoutine0();
+		case 0:
+			drawRoutine0();
 		break;
-	case 1:
-		drawRoutine1();
+		case 1:
+			drawRoutine1();
 		break;
-	case 2:
-		drawRoutine2();
+		case 2:
+			drawRoutine2();
 		break;
-	case 3:
-		drawRoutine3();
+		case 3:
+			drawRoutine3();
 		break;
-	case 4:
-		drawRoutine4();
+		case 4:
+			drawRoutine4();
 		break;
-	case 5:
-		drawRoutine5();
+		case 5:
+			drawRoutine5();
 		break;
-	case 6:
-		drawRoutine6();
+		case 6:
+			drawRoutine6();
 		break;
-	case 7:
-		drawRoutine7();
+		case 7:
+			drawRoutine7();
 		break;
-	case 8:
-		drawRoutine8();
+		case 8:
+			drawRoutine8();
 		break;
-	case 9:
-		drawRoutine9();
+		case 9:
+			drawRoutine9();
 		break;
-	case 10: // muton
-		drawRoutine0();
+		case 10: // muton
+			drawRoutine0();
 		break;
 	}
 
@@ -222,35 +222,37 @@ void UnitSprite::drawRoutine0()
 	{
 		torso = _unitSurface->getFrame(die + _unit->getFallingPhase());
 		torso->blit(this);
-		if(_unit->getGeoscapeSoldier())
+		if (_unit->getGeoscapeSoldier())
 		{
 			SoldierLook look = _unit->getGeoscapeSoldier()->getLook();
 
-			if(look)
+			if (look)
 			{
 				Uint8 face_color = ColorFace::Face;
 				Uint8 hair_color = ColorFace::Hair;
-				switch(look)
+				switch (look)
 				{
 					case LOOK_BLONDE:
-						break;
+					break;
 					case LOOK_BROWNHAIR:
 						hair_color = (10<<4) + 4;
-						break;
+					break;
 					case LOOK_ORIENTAL:
 						face_color = 10<<4;
 						hair_color = (15<<4) + 5;
-						break;
+					break;
 					case LOOK_AFRICAN:
 						face_color = (10<<4) + 3;
 						hair_color = (10<<4) + 6;
-						break;
+					break;
 				}
+
 				lock();
 				ShaderDraw<ColorFace>(ShaderSurface(this), ShaderScalar(hair_color), ShaderScalar(face_color));
 				unlock();
 			}
 		}
+
 		return;
 	}
 
@@ -295,6 +297,7 @@ void UnitSprite::drawRoutine0()
 		{
 			legs = _unitSurface->getFrame(legsStand + _unit->getDirection());
 		}
+
 		leftArm = _unitSurface->getFrame(larmStand + _unit->getDirection());
 		rightArm = _unitSurface->getFrame(rarmStand + _unit->getDirection());
 	}
@@ -307,7 +310,7 @@ void UnitSprite::drawRoutine0()
 		// draw handob item
 		if (_unit->getStatus() == STATUS_AIMING && _itemA->getRules()->isTwoHanded())
 		{
-			int dir = (_unit->getDirection() + 2)%8;
+			int dir = (_unit->getDirection() + 2) % 8;
 			itemA = _itemSurfaceA->getFrame(_itemA->getRules()->getHandSprite() + dir);
 			itemA->setX(offX[_unit->getDirection()]);
 			itemA->setY(offY[_unit->getDirection()]);
@@ -315,9 +318,9 @@ void UnitSprite::drawRoutine0()
 		else
 		{
 			itemA = _itemSurfaceA->getFrame(_itemA->getRules()->getHandSprite() + _unit->getDirection());
-			if(_drawingRoutine == 10)
+			if (_drawingRoutine == 10)
 			{
-				if(_itemA->getRules()->isTwoHanded())
+				if (_itemA->getRules()->isTwoHanded())
 				{
 					itemA->setX(offX3[_unit->getDirection()]);
 					itemA->setY(offY3[_unit->getDirection()]);
@@ -350,17 +353,16 @@ void UnitSprite::drawRoutine0()
 		}
 		else
 		{
-			if(_drawingRoutine == 10)
+			if (_drawingRoutine == 10)
 				rightArm = _unitSurface->getFrame(rarm2H + _unit->getDirection()); // missing/wrong arms on muton here, investigate spriteset
 			else
 				rightArm = _unitSurface->getFrame(rarm1H + _unit->getDirection());
 		}
 
-
 		// the fixed arm(s) have to be animated up/down when walking
 		if (_unit->getStatus() == STATUS_WALKING)
 		{
-			if(_drawingRoutine == 10)
+			if (_drawingRoutine == 10)
 			{
 				itemA->setY(itemA->getY() + alternateyoffWalk[_unit->getWalkingPhase()]);
 				rightArm->setY(alternateyoffWalk[_unit->getWalkingPhase()]);
@@ -376,14 +378,15 @@ void UnitSprite::drawRoutine0()
 			}
 		}
 	}
-	//if we are left handed or dual wielding...
-	if(_itemB)
+
+	// if we are left handed or dual wielding...
+	if (_itemB)
 	{
 		leftArm = _unitSurface->getFrame(larm2H + _unit->getDirection());
 		itemB = _itemSurfaceB->getFrame(_itemB->getRules()->getHandSprite() + _unit->getDirection());
 		if (!_itemB->getRules()->isTwoHanded())
 		{
-			if(_drawingRoutine == 10)
+			if (_drawingRoutine == 10)
 			{
 				itemB->setX(offX4[_unit->getDirection()]);
 				itemB->setY(offY4[_unit->getDirection()]);
@@ -405,7 +408,7 @@ void UnitSprite::drawRoutine0()
 		{
 			int dir = (_unit->getDirection() + 2)%8;
 			itemB = _itemSurfaceB->getFrame(_itemB->getRules()->getHandSprite() + dir);
-			if(_drawingRoutine == 10)
+			if (_drawingRoutine == 10)
 			{
 				itemB->setX(offX7[_unit->getDirection()]);
 				itemB->setY(offY7[_unit->getDirection()]);
@@ -420,7 +423,7 @@ void UnitSprite::drawRoutine0()
 
 		if (_unit->getStatus() == STATUS_WALKING)
 		{
-			if(_drawingRoutine == 10)
+			if (_drawingRoutine == 10)
 			{
 				leftArm->setY(alternateyoffWalk[_unit->getWalkingPhase()]);
 				itemB->setY(itemB->getY() + alternateyoffWalk[_unit->getWalkingPhase()]);
@@ -436,6 +439,7 @@ void UnitSprite::drawRoutine0()
 			}
 		}
 	}
+
 	// offset everything but legs when kneeled
 	if (_unit->isKneeled())
 	{
@@ -466,6 +470,7 @@ void UnitSprite::drawRoutine0()
 	Surface *newLegs = new Surface(*legs);
 	Surface *newLeftArm = new Surface(*leftArm);
 	Surface *newRightArm = new Surface(*rightArm);
+
 	if(_unit->getGeoscapeSoldier())
 	{
 		SoldierLook look = _unit->getGeoscapeSoldier()->getLook();
@@ -477,25 +482,27 @@ void UnitSprite::drawRoutine0()
 			switch(look)
 			{
 				case LOOK_BLONDE:
-					break;
+				break;
 				case LOOK_BROWNHAIR:
 					hair_color = (10<<4) + 4;
-					break;
+				break;
 				case LOOK_ORIENTAL:
 					face_color = 10<<4;
 					hair_color = (15<<4) + 5;
-					break;
+				break;
 				case LOOK_AFRICAN:
 					face_color = (10<<4) + 3;
 					hair_color = (10<<4) + 6;
-					break;
+				break;
 			}
+
 			lock();
 			ShaderDraw<ColorFace>(ShaderSurface(newLeftArm), ShaderScalar(hair_color), ShaderScalar(face_color));
 			ShaderDraw<ColorFace>(ShaderSurface(newRightArm), ShaderScalar(hair_color), ShaderScalar(face_color));
 			ShaderDraw<ColorFace>(ShaderSurface(newTorso), ShaderScalar(hair_color), ShaderScalar(face_color));
 			ShaderDraw<ColorFace>(ShaderSurface(newLegs), ShaderScalar(hair_color), ShaderScalar(face_color));
 			unlock();
+
 			torso = newTorso;
 			legs = newLegs;
 			leftArm = newLeftArm;
@@ -506,42 +513,105 @@ void UnitSprite::drawRoutine0()
 	// blit order depends on unit direction, and whether we are holding a 2 handed weapon.
 	switch (_unit->getDirection())
 	{
-	case 0: itemA?itemA->blit(this):void(); itemB?itemB->blit(this):void(); leftArm->blit(this); legs->blit(this); torso->blit(this); rightArm->blit(this); break;
-	case 1: leftArm->blit(this); legs->blit(this); itemB?itemB->blit(this):void(); torso->blit(this); itemA?itemA->blit(this):void(); rightArm->blit(this); break;
-	case 2: leftArm->blit(this); legs->blit(this); itemB?itemB->blit(this):void(); torso->blit(this); itemA?itemA->blit(this):void(); rightArm->blit(this); break;
-	case 3:
-		if (_unit->getStatus() != STATUS_AIMING  && ((_itemA && _itemA->getRules()->isTwoHanded()) || (_itemB && _itemB->getRules()->isTwoHanded())))
-		{
-			legs->blit(this); torso->blit(this); leftArm->blit(this); itemA?itemA->blit(this):void(); itemB?itemB->blit(this):void(); rightArm->blit(this);
-		}
-		else
-		{
-			legs->blit(this); torso->blit(this); leftArm->blit(this); rightArm->blit(this); itemA?itemA->blit(this):void(); itemB?itemB->blit(this):void();
-		}
+		case 0: itemA ? itemA->blit(this) : void();
+			itemB ? itemB->blit(this) : void();
+			leftArm->blit(this);
+			legs->blit(this);
+			torso->blit(this);
+			rightArm->blit(this);
 		break;
-	case 4:	legs->blit(this); rightArm->blit(this); torso->blit(this); leftArm->blit(this); itemA?itemA->blit(this):void(); itemB?itemB->blit(this):void();	break;
-	case 5:
-		if (_unit->getStatus() != STATUS_AIMING  && ((_itemA && _itemA->getRules()->isTwoHanded()) || (_itemB && _itemB->getRules()->isTwoHanded())))
-		{
-			rightArm->blit(this); legs->blit(this); torso->blit(this); leftArm->blit(this); itemA?itemA->blit(this):void(); itemB?itemB->blit(this):void();
-		}
-		else
-		{
-			rightArm->blit(this); legs->blit(this); itemA?itemA->blit(this):void(); itemB?itemB->blit(this):void(); torso->blit(this); leftArm->blit(this);
-		}
+		case 1: leftArm->blit(this);
+			legs->blit(this);
+			itemB ? itemB->blit(this) : void();
+			torso->blit(this);
+			itemA ? itemA->blit(this) : void();
+			rightArm->blit(this);
 		break;
-	case 6: rightArm->blit(this); legs->blit(this); itemA?itemA->blit(this):void(); itemB?itemB->blit(this):void(); torso->blit(this); leftArm->blit(this); break;
-	case 7:
-		if (_unit->getStatus() != STATUS_AIMING  && ((_itemA && _itemA->getRules()->isTwoHanded()) || (_itemB && _itemB->getRules()->isTwoHanded())))
-		{
-			rightArm->blit(this); itemA?itemA->blit(this):void(); itemB?itemB->blit(this):void(); leftArm->blit(this); legs->blit(this); torso->blit(this);
-		}
-		else
-		{
-			itemA?itemA->blit(this):void(); itemB?itemB->blit(this):void(); leftArm->blit(this); rightArm->blit(this); legs->blit(this); torso->blit(this);
-		}
+		case 2: leftArm->blit(this);
+			legs->blit(this);
+			itemB ? itemB->blit(this) : void();
+			torso->blit(this);
+			itemA ? itemA->blit(this) : void();
+			rightArm->blit(this);
+		break;
+		case 3:
+			if (_unit->getStatus() != STATUS_AIMING
+				&& ((_itemA && _itemA->getRules()->isTwoHanded()) || (_itemB && _itemB->getRules()->isTwoHanded())))
+			{
+				legs->blit(this);
+				torso->blit(this);
+				leftArm->blit(this);
+				itemA ? itemA->blit(this) : void();
+				itemB ? itemB->blit(this) : void();
+				rightArm->blit(this);
+			}
+			else
+			{
+				legs->blit(this);
+				torso->blit(this);
+				leftArm->blit(this);
+				rightArm->blit(this);
+				itemA ? itemA->blit(this) : void();
+				itemB ? itemB->blit(this) : void();
+			}
+		break;
+		case 4:	legs->blit(this);
+			rightArm->blit(this);
+			torso->blit(this);
+			leftArm->blit(this);
+			itemA ? itemA->blit(this) : void();
+			itemB ? itemB->blit(this) : void();
+		break;
+		case 5:
+			if (_unit->getStatus() != STATUS_AIMING
+				&& ((_itemA && _itemA->getRules()->isTwoHanded()) || (_itemB && _itemB->getRules()->isTwoHanded())))
+			{
+				rightArm->blit(this);
+				legs->blit(this);
+				torso->blit(this);
+				leftArm->blit(this);
+				itemA ? itemA->blit(this) : void();
+				itemB ? itemB->blit(this) : void();
+			}
+			else
+			{
+				rightArm->blit(this);
+				legs->blit(this);
+				itemA ? itemA->blit(this) : void();
+				itemB ? itemB->blit(this) : void();
+				torso->blit(this);
+				leftArm->blit(this);
+			}
+		break;
+		case 6: rightArm->blit(this);
+			legs->blit(this);
+			itemA ? itemA->blit(this) : void();
+			itemB ? itemB->blit(this) : void();
+			torso->blit(this);
+			leftArm->blit(this);
+		break;
+		case 7:
+			if (_unit->getStatus() != STATUS_AIMING
+				&& ((_itemA && _itemA->getRules()->isTwoHanded()) || (_itemB && _itemB->getRules()->isTwoHanded())))
+			{
+				rightArm->blit(this);
+				itemA ? itemA->blit(this) : void();
+				itemB ? itemB->blit(this) : void();
+				leftArm->blit(this);
+				legs->blit(this);torso->blit(this);
+			}
+			else
+			{
+				itemA ? itemA->blit(this) : void();
+				itemB ? itemB->blit(this) : void();
+				leftArm->blit(this);
+				rightArm->blit(this);
+				legs->blit(this);
+				torso->blit(this);
+			}
 		break;
 	}
+
 	delete(newTorso);
 	delete(newLegs);
 	delete(newLeftArm);
@@ -576,12 +646,13 @@ void UnitSprite::drawRoutine1()
 	{
 		torso = _unitSurface->getFrame(die + _unit->getFallingPhase());
 		torso->blit(this);
+
 		return;
 	}
 
-
 	leftArm = _unitSurface->getFrame(larm + _unit->getDirection());
 	rightArm = _unitSurface->getFrame(rarm + _unit->getDirection());
+
 	// when walking, torso(fixed sprite) has to be animated up/down
 	if (_unit->getStatus() == STATUS_WALKING)
 	{
@@ -676,14 +747,14 @@ void UnitSprite::drawRoutine1()
 	// blit order depends on unit direction.
 	switch (_unit->getDirection())
 	{
-	case 0: itemA?itemA->blit(this):void(); itemB?itemB->blit(this):void(); leftArm->blit(this); torso->blit(this); rightArm->blit(this); break;
-	case 1: leftArm->blit(this); torso->blit(this); rightArm->blit(this); itemA?itemA->blit(this):void(); itemB?itemB->blit(this):void(); break;
-	case 2: leftArm->blit(this); torso->blit(this); rightArm->blit(this); itemA?itemA->blit(this):void(); itemB?itemB->blit(this):void();  break;
-	case 3:	torso->blit(this); leftArm->blit(this); rightArm->blit(this); itemA?itemA->blit(this):void(); itemB?itemB->blit(this):void(); break;
-	case 4:	torso->blit(this); leftArm->blit(this); rightArm->blit(this); itemA?itemA->blit(this):void(); itemB?itemB->blit(this):void(); break;
-	case 5:	rightArm->blit(this); torso->blit(this); leftArm->blit(this); itemA?itemA->blit(this):void(); itemB?itemB->blit(this):void(); break;
-	case 6: rightArm->blit(this); itemA?itemA->blit(this):void(); itemB?itemB->blit(this):void(); torso->blit(this); leftArm->blit(this); break;
-	case 7:	rightArm->blit(this); itemA?itemA->blit(this):void(); itemB?itemB->blit(this):void(); leftArm->blit(this); torso->blit(this); break;
+		case 0: itemA?itemA->blit(this):void(); itemB?itemB->blit(this):void(); leftArm->blit(this); torso->blit(this); rightArm->blit(this); break;
+		case 1: leftArm->blit(this); torso->blit(this); rightArm->blit(this); itemA?itemA->blit(this):void(); itemB?itemB->blit(this):void(); break;
+		case 2: leftArm->blit(this); torso->blit(this); rightArm->blit(this); itemA?itemA->blit(this):void(); itemB?itemB->blit(this):void();  break;
+		case 3:	torso->blit(this); leftArm->blit(this); rightArm->blit(this); itemA?itemA->blit(this):void(); itemB?itemB->blit(this):void(); break;
+		case 4:	torso->blit(this); leftArm->blit(this); rightArm->blit(this); itemA?itemA->blit(this):void(); itemB?itemB->blit(this):void(); break;
+		case 5:	rightArm->blit(this); torso->blit(this); leftArm->blit(this); itemA?itemA->blit(this):void(); itemB?itemB->blit(this):void(); break;
+		case 6: rightArm->blit(this); itemA?itemA->blit(this):void(); itemB?itemB->blit(this):void(); torso->blit(this); leftArm->blit(this); break;
+		case 7:	rightArm->blit(this); itemA?itemA->blit(this):void(); itemB?itemB->blit(this):void(); leftArm->blit(this); torso->blit(this); break;
 	}
 }
 
@@ -703,6 +774,7 @@ void UnitSprite::drawRoutine2()
 	{
 		hoverTank = 32;
 	}
+
 	const int offX[8] = { -2, -7, -5, 0, 5, 7, 2, 0 }; // hovertank offsets
 	const int offy[8] = { -1, -3, -4, -5, -4, -3, -1, -1 }; // hovertank offsets
 
@@ -731,11 +803,11 @@ void UnitSprite::drawRoutine2()
 			turretOffsetX += offX[_unit->getDirection()];
 			turretOffsetY += offy[_unit->getDirection()];
 		}
+
 		s->setX(turretOffsetX);
 		s->setY(turretOffsetY);
 		s->blit(this);
 	}
-
 }
 
 /**
@@ -776,6 +848,7 @@ void UnitSprite::drawRoutine4()
 	}
 
 	Surface *s = 0, *itemA = 0, *itemB = 0;
+
 	const int stand = 0, walk = 8, die = 72;
 	const int offX[8] = { 8, 10, 7, 4, -9, -11, -7, -3 }; // for the weapons
 	const int offY[8] = { -6, -3, 0, 2, 0, -4, -7, -9 }; // for the weapons
@@ -794,10 +867,10 @@ void UnitSprite::drawRoutine4()
 	{
 		s = _unitSurface->getFrame(die + _unit->getFallingPhase());
 		s->blit(this);
+
 		return;
 	}
-	else
-	if (_unit->getStatus() == STATUS_WALKING)
+	else if (_unit->getStatus() == STATUS_WALKING)
 	{
 		s = _unitSurface->getFrame(walk + (8 * _unit->getDirection()) + _unit->getWalkingPhase());
 	}
@@ -808,7 +881,7 @@ void UnitSprite::drawRoutine4()
 
 	sortRifles();
 
-	if(_itemA && !_itemA->getRules()->isFixed())
+	if (_itemA && !_itemA->getRules()->isFixed())
 	{
 		// draw handob item
 		if (_unit->getStatus() == STATUS_AIMING && _itemA->getRules()->isTwoHanded())
@@ -820,23 +893,23 @@ void UnitSprite::drawRoutine4()
 		}
 		else
 		{
-			if(_itemA->getSlot()->getId() == "STR_RIGHT_HAND")
+			if (_itemA->getSlot()->getId() == "STR_RIGHT_HAND")
 			{
-			itemA = _itemSurfaceA->getFrame(_itemA->getRules()->getHandSprite() + _unit->getDirection());
-			itemA->setX(0);
-			itemA->setY(0);
+				itemA = _itemSurfaceA->getFrame(_itemA->getRules()->getHandSprite() + _unit->getDirection());
+				itemA->setX(0);
+				itemA->setY(0);
 			}
 			else
 			{
-			itemA = _itemSurfaceA->getFrame(_itemA->getRules()->getHandSprite() + _unit->getDirection());
-			itemA->setX(offX2[_unit->getDirection()]);
-			itemA->setY(offY2[_unit->getDirection()]);
+				itemA = _itemSurfaceA->getFrame(_itemA->getRules()->getHandSprite() + _unit->getDirection());
+				itemA->setX(offX2[_unit->getDirection()]);
+				itemA->setY(offY2[_unit->getDirection()]);
 			}
 		}
 	}
 
 	//if we are dual wielding...
-	if(_itemB && !_itemB->getRules()->isFixed())
+	if (_itemB && !_itemB->getRules()->isFixed())
 	{
 		itemB = _itemSurfaceB->getFrame(_itemB->getRules()->getHandSprite() + _unit->getDirection());
 		if (!_itemB->getRules()->isTwoHanded())
@@ -861,14 +934,14 @@ void UnitSprite::drawRoutine4()
 
 	switch (_unit->getDirection())
 	{
-	case 0: itemB?itemB->blit(this):void(); itemA?itemA->blit(this):void(); s->blit(this); break;
-	case 1: itemB?itemB->blit(this):void(); s->blit(this); itemA?itemA->blit(this):void(); break;
-	case 2: s->blit(this); itemB?itemB->blit(this):void(); itemA?itemA->blit(this):void(); break;
-	case 3: s->blit(this); itemA?itemA->blit(this):void(); itemB?itemB->blit(this):void(); break;
-	case 4: s->blit(this); itemA?itemA->blit(this):void(); itemB?itemB->blit(this):void(); break;
-	case 5: itemA?itemA->blit(this):void(); s->blit(this); itemB?itemB->blit(this):void(); break;
-	case 6: itemA?itemA->blit(this):void(); s->blit(this); itemB?itemB->blit(this):void(); break;
-	case 7: itemA?itemA->blit(this):void(); itemB?itemB->blit(this):void(); s->blit(this); break;
+		case 0: itemB?itemB->blit(this):void(); itemA?itemA->blit(this):void(); s->blit(this); break;
+		case 1: itemB?itemB->blit(this):void(); s->blit(this); itemA?itemA->blit(this):void(); break;
+		case 2: s->blit(this); itemB?itemB->blit(this):void(); itemA?itemA->blit(this):void(); break;
+		case 3: s->blit(this); itemA?itemA->blit(this):void(); itemB?itemB->blit(this):void(); break;
+		case 4: s->blit(this); itemA?itemA->blit(this):void(); itemB?itemB->blit(this):void(); break;
+		case 5: itemA?itemA->blit(this):void(); s->blit(this); itemB?itemB->blit(this):void(); break;
+		case 6: itemA?itemA->blit(this):void(); s->blit(this); itemB?itemB->blit(this):void(); break;
+		case 7: itemA?itemA->blit(this):void(); itemB?itemB->blit(this):void(); s->blit(this); break;
 	}
 }
 
@@ -903,6 +976,7 @@ void UnitSprite::drawRoutine5()
 void UnitSprite::drawRoutine6()
 {
 	Surface *torso = 0, *legs = 0, *leftArm = 0, *rightArm = 0, *itemA = 0, *itemB = 0;
+
 	// magic numbers
 	const int Torso = 24, legsStand = 16, die = 96;
 	const int larmStand = 0, rarmStand = 8, rarm1H = 99, larm2H = 107, rarm2H = 115, rarmShoot = 123;
@@ -927,6 +1001,7 @@ void UnitSprite::drawRoutine6()
 	{
 		torso = _unitSurface->getFrame(die + _unit->getFallingPhase());
 		torso->blit(this);
+
 		return;
 	}
 
@@ -934,14 +1009,13 @@ void UnitSprite::drawRoutine6()
 		leftArm = _unitSurface->getFrame(larmStand + _unit->getDirection());
 		rightArm = _unitSurface->getFrame(rarmStand + _unit->getDirection());
 
-
 	// when walking, torso(fixed sprite) has to be animated up/down
 	if (_unit->getStatus() == STATUS_WALKING)
 	{
 		int xoffWalk = 0;
-		if(_unit->getDirection() < 3)
+		if (_unit->getDirection() < 3)
 			xoffWalk = xoffWalka[_unit->getWalkingPhase()];
-		if(_unit->getDirection() < 7 && _unit->getDirection() > 3)
+		if (_unit->getDirection() < 7 && _unit->getDirection() > 3)
 			xoffWalk = xoffWalkb[_unit->getWalkingPhase()];
 		torso->setY(yoffWalk[_unit->getWalkingPhase()]);
 		torso->setX(xoffWalk);
@@ -1005,6 +1079,7 @@ void UnitSprite::drawRoutine6()
 				leftArm->setY(yoffWalk[_unit->getWalkingPhase()]);
 		}
 	}
+
 	//if we are left handed or dual wielding...
 	if(_itemB)
 	{
@@ -1039,6 +1114,7 @@ void UnitSprite::drawRoutine6()
 				rightArm->setY(yoffWalk[_unit->getWalkingPhase()]);
 		}
 	}
+
 	// offset everything but legs when kneeled
 	if (_unit->getStatus() != STATUS_WALKING)
 	{
@@ -1050,14 +1126,14 @@ void UnitSprite::drawRoutine6()
 	// blit order depends on unit direction.
 	switch (_unit->getDirection())
 	{
-	case 0: itemA?itemA->blit(this):void(); itemB?itemB->blit(this):void(); leftArm->blit(this); legs->blit(this); torso->blit(this); rightArm->blit(this); break;
-	case 1: leftArm->blit(this); legs->blit(this); itemB?itemB->blit(this):void(); torso->blit(this); itemA?itemA->blit(this):void(); rightArm->blit(this); break;
-	case 2: leftArm->blit(this); legs->blit(this); torso->blit(this); rightArm->blit(this); itemA?itemA->blit(this):void(); itemB?itemB->blit(this):void(); break;
-	case 3: legs->blit(this); torso->blit(this); leftArm->blit(this); rightArm->blit(this); itemA?itemA->blit(this):void(); itemB?itemB->blit(this):void();	break;
-	case 4:	rightArm->blit(this); legs->blit(this); torso->blit(this); leftArm->blit(this); itemA?itemA->blit(this):void(); itemB?itemB->blit(this):void(); break;
-	case 5:	rightArm->blit(this); legs->blit(this); torso->blit(this); leftArm->blit(this); itemA?itemA->blit(this):void(); itemB?itemB->blit(this):void(); break;
-	case 6: rightArm->blit(this); legs->blit(this); itemA?itemA->blit(this):void(); itemB?itemB->blit(this):void(); torso->blit(this); leftArm->blit(this); break;
-	case 7:	itemA?itemA->blit(this):void(); itemB?itemB->blit(this):void(); leftArm->blit(this); rightArm->blit(this); legs->blit(this); torso->blit(this); break;
+		case 0: itemA?itemA->blit(this):void(); itemB?itemB->blit(this):void(); leftArm->blit(this); legs->blit(this); torso->blit(this); rightArm->blit(this); break;
+		case 1: leftArm->blit(this); legs->blit(this); itemB?itemB->blit(this):void(); torso->blit(this); itemA?itemA->blit(this):void(); rightArm->blit(this); break;
+		case 2: leftArm->blit(this); legs->blit(this); torso->blit(this); rightArm->blit(this); itemA?itemA->blit(this):void(); itemB?itemB->blit(this):void(); break;
+		case 3: legs->blit(this); torso->blit(this); leftArm->blit(this); rightArm->blit(this); itemA?itemA->blit(this):void(); itemB?itemB->blit(this):void();	break;
+		case 4:	rightArm->blit(this); legs->blit(this); torso->blit(this); leftArm->blit(this); itemA?itemA->blit(this):void(); itemB?itemB->blit(this):void(); break;
+		case 5:	rightArm->blit(this); legs->blit(this); torso->blit(this); leftArm->blit(this); itemA?itemA->blit(this):void(); itemB?itemB->blit(this):void(); break;
+		case 6: rightArm->blit(this); legs->blit(this); itemA?itemA->blit(this):void(); itemB?itemB->blit(this):void(); torso->blit(this); leftArm->blit(this); break;
+		case 7:	itemA?itemA->blit(this):void(); itemB?itemB->blit(this):void(); leftArm->blit(this); rightArm->blit(this); legs->blit(this); torso->blit(this); break;
 	}
 }
 
@@ -1066,8 +1142,8 @@ void UnitSprite::drawRoutine6()
  */
 void UnitSprite::drawRoutine7()
 {
-
 	Surface *torso = 0, *legs = 0, *leftArm = 0, *rightArm = 0;
+
 	// magic numbers
 	const int Torso = 24, legsStand = 16, die = 224;
 	const int larmStand = 0, rarmStand = 8;
@@ -1086,12 +1162,11 @@ void UnitSprite::drawRoutine7()
 	{
 		torso = _unitSurface->getFrame(die + _unit->getFallingPhase());
 		torso->blit(this);
+
 		return;
 	}
 
-
 	torso = _unitSurface->getFrame(Torso + _unit->getDirection());
-
 
 	// when walking, torso(fixed sprite) has to be animated up/down
 	if (_unit->getStatus() == STATUS_WALKING)
@@ -1107,6 +1182,7 @@ void UnitSprite::drawRoutine7()
 		legs = _unitSurface->getFrame(legsStand + _unit->getDirection());
 		leftArm = _unitSurface->getFrame(larmStand + _unit->getDirection());
 		rightArm = _unitSurface->getFrame(rarmStand + _unit->getDirection());
+
 		leftArm->setY(0);
 		rightArm->setY(0);
 		torso->setY(0);
@@ -1115,14 +1191,14 @@ void UnitSprite::drawRoutine7()
 	// blit order depends on unit direction
 	switch (_unit->getDirection())
 	{
-	case 0: leftArm->blit(this); legs->blit(this); torso->blit(this); rightArm->blit(this); break;
-	case 1: leftArm->blit(this); legs->blit(this); torso->blit(this); rightArm->blit(this); break;
-	case 2: leftArm->blit(this); legs->blit(this); torso->blit(this); rightArm->blit(this); break;
-	case 3: legs->blit(this); torso->blit(this); leftArm->blit(this); rightArm->blit(this); break;
-	case 4: rightArm->blit(this); legs->blit(this); torso->blit(this); leftArm->blit(this); break;
-	case 5: rightArm->blit(this); legs->blit(this); torso->blit(this); leftArm->blit(this); break;
-	case 6: rightArm->blit(this); legs->blit(this); torso->blit(this); leftArm->blit(this); break;
-	case 7: leftArm->blit(this); rightArm->blit(this); legs->blit(this); torso->blit(this); break;
+		case 0: leftArm->blit(this); legs->blit(this); torso->blit(this); rightArm->blit(this); break;
+		case 1: leftArm->blit(this); legs->blit(this); torso->blit(this); rightArm->blit(this); break;
+		case 2: leftArm->blit(this); legs->blit(this); torso->blit(this); rightArm->blit(this); break;
+		case 3: legs->blit(this); torso->blit(this); leftArm->blit(this); rightArm->blit(this); break;
+		case 4: rightArm->blit(this); legs->blit(this); torso->blit(this); leftArm->blit(this); break;
+		case 5: rightArm->blit(this); legs->blit(this); torso->blit(this); leftArm->blit(this); break;
+		case 6: rightArm->blit(this); legs->blit(this); torso->blit(this); leftArm->blit(this); break;
+		case 7: leftArm->blit(this); rightArm->blit(this); legs->blit(this); torso->blit(this); break;
 	}
 }
 
@@ -1132,6 +1208,7 @@ void UnitSprite::drawRoutine7()
 void UnitSprite::drawRoutine8()
 {
 	Surface *legs = 0;
+
 	// magic numbers
 	const int Body = 0, aim = 5, die = 6;
 	const int Pulsate[8] = { 0, 1, 2, 3, 4, 3, 2, 1 };
@@ -1191,6 +1268,7 @@ void UnitSprite::sortRifles()
 			{
 				_itemA = _itemB;
 			}
+
 			_itemB = 0;
 		}
 		else if (_unit->getStatus() != STATUS_AIMING)

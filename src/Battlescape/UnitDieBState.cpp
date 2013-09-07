@@ -72,15 +72,15 @@ UnitDieBState::UnitDieBState(BattlescapeGame *parent, BattleUnit *unit, ItemDama
 
 		// kL_note: stop centering, but I should do a 'get is tile visible' else they twirl in darkness....
 //kL		_parent->getMap()->getCamera()->centerOnPosition(_unit->getPosition());
-		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED / 2);
+		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED / 4);
 
 		// kL_note: this is only necessary when spawning a chryssalid from a zombie. See below
-//kL		_originalDir = _unit->getDirection();
+		_originalDir = _unit->getDirection();
 		// kL_note: replaced w/ Savegame/BattleUnit.cpp, BattleUnit::deathPirouette()
 //kL		_unit->lookAt(3); // unit goes into status TURNING to prepare for a nice dead animation
 
 		// kL_begin:
-		if (!_unit->getSpawnUnit().empty())
+		if (!_unit->getSpawnUnit().empty())	// nb. getSpawnUnit() is defined in both 'battleunit.cpp' & 'unit.cpp'
 		{
 			_originalDir = _unit->getDirection(); // facing for zombie->Chryssalid spawns. See above
 		}
@@ -89,6 +89,10 @@ UnitDieBState::UnitDieBState(BattlescapeGame *parent, BattleUnit *unit, ItemDama
 //			_unit->setDirection(unit->getDirection());	// safety?
 			_unit->deathPirouette();					// death animation spin
 		}
+		/* if (_unit->getSpawnUnit().empty())
+		{
+			_unit->deathPirouette();					// death animation spin
+		} */
 		// else -> might need something to make units offscreen actually collapse here.
 		// kL_end.
 	}

@@ -38,7 +38,6 @@ Unit::Unit(const std::string &type, std::string race, std::string rank) : _type(
  */
 Unit::~Unit()
 {
-
 }
 
 /**

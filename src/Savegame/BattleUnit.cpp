@@ -1062,6 +1062,7 @@ void BattleUnit::keepFalling()
 	if (_fallPhase == endFrame)
 	{
 		_fallPhase--;
+
 		if (_health == 0)
 			_status = STATUS_DEAD;
 		else

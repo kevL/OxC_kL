@@ -1105,32 +1105,47 @@ void Map::cacheUnits()
  */
 void Map::cacheUnit(BattleUnit *unit)
 {
+//	Log(LOG_INFO) << "cacheUnit() : " << unit->getId();	// kL
+
 	UnitSprite *unitSprite = new UnitSprite(_spriteWidth, _spriteHeight, 0, 0);
 	unitSprite->setPalette(this->getPalette());
-	bool invalid, dummy;
+//kL	bool invalid, dummy;
+	bool invalid = false;	// kL
+	bool dummy = false;		// kL
 	int numOfParts = unit->getArmor()->getSize() == 1 ? 1 : unit->getArmor()->getSize() * 2;
 
 	unit->getCache(&invalid);
 	if (invalid)
 	{
+//		Log(LOG_INFO) << ". (invalid)";	// kL
+
 		// 1 or 4 iterations, depending on unit size
 		for (int i = 0; i < numOfParts; i++)
 		{
+//			Log(LOG_INFO) << ". . i = " << i;	// kL
+
 			Surface *cache = unit->getCache(&dummy, i);
 			if (!cache) // no cache created yet
 			{
+//				Log(LOG_INFO) << ". . . (!cache)";	// kL
+
 				cache = new Surface(_spriteWidth, _spriteHeight);
 				cache->setPalette(this->getPalette());
+
+//				Log(LOG_INFO) << ". . . end (!cache)";	// kL
 			}
 
+//			Log(LOG_INFO) << ". . setBattleUnit()";	// kL
 			unitSprite->setBattleUnit(unit, i);
 
+//			Log(LOG_INFO) << ". . getItem()";	// kL
 			BattleItem *rhandItem = unit->getItem("STR_RIGHT_HAND");
 			BattleItem *lhandItem = unit->getItem("STR_LEFT_HAND");
 			if (rhandItem)
 			{
 				unitSprite->setBattleItem(rhandItem);
 			}
+
 			if (lhandItem)
 			{
 				unitSprite->setBattleItem(lhandItem);
@@ -1141,17 +1156,29 @@ void Map::cacheUnit(BattleUnit *unit)
 				unitSprite->setBattleItem(0);
 			}
 
+//			Log(LOG_INFO) << ". . setSurfaces()";	// kL
 			unitSprite->setSurfaces(_res->getSurfaceSet(unit->getArmor()->getSpriteSheet()),
 									_res->getSurfaceSet("HANDOB.PCK"),
 									_res->getSurfaceSet("HANDOB2.PCK"));
+//			Log(LOG_INFO) << ". . setAnimationFrame()";	// kL
 			unitSprite->setAnimationFrame(_animFrame);
+//			Log(LOG_INFO) << ". . clear()";	// kL
 			cache->clear();
+
+//			Log(LOG_INFO) << ". . blit() : cache = " << cache;	// kL
 			unitSprite->blit(cache);
+//			Log(LOG_INFO) << ". . blit() Ok";	// kL
+
+//			Log(LOG_INFO) << ". . setCache()";	// kL
 			unit->setCache(cache, i);
 		}
+
+//		Log(LOG_INFO) << ". end (invalid)";	// kL
 	}
 
 	delete unitSprite;
+
+//	Log(LOG_INFO) << "exit cacheUnit() : " << unit->getId();	// kL
 }
 
 /**

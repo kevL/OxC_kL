@@ -1947,6 +1947,7 @@ int TileEngine::unitOpensDoor(BattleUnit *unit, bool rClick, int dir)
 					if (door != -1)
 					{
 						part = i->second;
+
 						if (door == 1)
 						{
 							checkAdjacentDoors(unit->getPosition() + Position(x,y,z) + i->first, i->second);

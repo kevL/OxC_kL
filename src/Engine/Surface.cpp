@@ -56,7 +56,9 @@ namespace OpenXcom
 #include <ppcinline/exec.h>
 #endif 
  
-Surface::Surface(int width, int height, int x, int y, int bpp) : _x(x), _y(y), _visible(true), _hidden(false), _redraw(false), _originalColors(0), _misalignedPixelBuffer(0), _alignedBuffer(0)
+Surface::Surface(int width, int height, int x, int y, int bpp)
+	: _x(x), _y(y), _visible(true), _hidden(false), _redraw(false),
+	_originalColors(0), _misalignedPixelBuffer(0), _alignedBuffer(0)
 {
 	//_surface = SDL_CreateRGBSurface(SDL_SWSURFACE, width, height, 8, 0, 0, 0, 0);
 	int pitch = (bpp/8) * ((width+15)& ~0xF);
@@ -458,6 +460,8 @@ void Surface::draw()
  */
 void Surface::blit(Surface *surface)
 {
+//	Log(LOG_INFO) << "blit()";	// kL
+
 	if (_visible && !_hidden)
 	{
 		if (_redraw) draw();
@@ -476,6 +480,7 @@ void Surface::blit(Surface *surface)
 
 		target.x = getX();
 		target.y = getY();
+
 		SDL_BlitSurface(_surface, cropper, surface->getSurface(), &target);
 	}
 }
