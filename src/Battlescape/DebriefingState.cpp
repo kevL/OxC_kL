@@ -679,8 +679,8 @@ void DebriefingState::prepareDebriefing()
 		}
 	}
 
-	if (((playerInExitArea == 0 && aborted) || (playersSurvived == 0))
-		&& craft != 0)
+	if (craft != 0
+		&& ((playerInExitArea == 0 && aborted) || playersSurvived == 0))
 	{
 		addStat("STR_XCOM_CRAFT_LOST", 1, -craft->getRules()->getScore());
 		for (std::vector<Soldier*>::iterator i = base->getSoldiers()->begin(); i != base->getSoldiers()->end();)
@@ -709,7 +709,9 @@ void DebriefingState::prepareDebriefing()
 		return;
 	}
 
-	if (aborted && battle->getMissionType() == "STR_BASE_DEFENSE" && base->getCrafts()->size() > 0)
+	if (aborted
+		&& battle->getMissionType() == "STR_BASE_DEFENSE"
+		&& !base->getCrafts()->empty())
 	{
 		for(std::vector<Craft*>::iterator i = base->getCrafts()->begin(); i != base->getCrafts()->end(); ++i)
 		{

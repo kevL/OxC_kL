@@ -713,7 +713,6 @@ void SavedGame::addFinishedResearch (const RuleResearch * r, const Ruleset * rul
 		removePoppedResearch(r);
 		addResearchScore(r->getPoints());
 	}
-
 	if (ruleset)
 	{
 		std::vector<RuleResearch*> availableResearch;
@@ -724,7 +723,11 @@ void SavedGame::addFinishedResearch (const RuleResearch * r, const Ruleset * rul
 
 		for (std::vector<RuleResearch*>::iterator it = availableResearch.begin (); it != availableResearch.end (); ++it)
 		{
-			if ((*it)->getCost() == 0 && (*it)->getRequirements().empty())
+<<<<<<< HEAD
+			if ((*it)->getCost() == 0 && (*it)->getRequirements().size() == 0)
+=======
+			if((*it)->getCost() == 0 && (*it)->getRequirements().empty())
+>>>>>>> master
 			{
 				addFinishedResearch(*it, ruleset);
 			}

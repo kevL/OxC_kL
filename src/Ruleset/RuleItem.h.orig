@@ -56,8 +56,7 @@ private:
 	bool _twoHanded, _waypoint, _fixedWeapon;
 	int _invWidth, _invHeight;
 	int _painKiller, _heal, _stimulant;
-	int _healAmount, _healthAmount;
-	int _stun, _energy;
+	int _woundRecovery, _healthRecovery, _stunRecovery, _energyRecovery;
 	int _tuUse;
 	int _recoveryPoints;
 	int _armor;
@@ -141,39 +140,33 @@ public:
 	int getClipSize() const;
 	/// Draws the item's hand sprite onto a surface.
 	void drawHandSprite(SurfaceSet *texture, Surface *surface) const;
-<<<<<<< HEAD
-	/// Get medikit heal quantity
-	int getHealQuantity() const;
-	/// Get medikit pain killer quantity
-	int getPainKillerQuantity() const;
-	/// Get medikit stimulant quantity
-	int getStimulantQuantity() const;
-	/// Get medikit heal amount per shot
-	int getHealAmount() const;
-	/// Get medikit health amount per shot
-	int getHealthAmount() const;
-	/// Get medikit energy amount per shot
-	int getEnergy() const;
-	/// Get medikit stun amount per shot
-	int getStun() const;
-	/// Get use Time Unit use
-=======
 	/// Gets the medikit heal quantity.
-	int getHealQuantity () const;
+	int getHealQuantity() const;
 	/// Gets the medikit pain killer quantity.
-	int getPainKillerQuantity () const;
+	int getPainKillerQuantity() const;
 	/// Gets the medikit stimulant quantity.
-	int getStimulantQuantity () const;
+<<<<<<< HEAD
+	int getStimulantQuantity() const;
 	/// Gets the medikit heal amount per shot.
-	int getHealAmount () const;
+	int getHealAmount() const;
 	/// Gets the medikit health amount per shot.
-	int getHealthAmount () const;
+	int getHealthAmount() const;
 	/// Gets the medikit energy amount per shot.
-	int getEnergy () const;
+	int getEnergy() const;
 	/// Gets the medikit stun amount per shot.
-	int getStun () const;
-	/// Gets the Time Unit use.
+	int getStun() const;
+=======
+	int getStimulantQuantity () const;
+	/// Gets the medikit wound healed per shot.
+	int getWoundRecovery () const;
+	/// Gets the medikit health recovered per shot.
+	int getHealthRecovery () const;
+	/// Gets the medikit energy recovered per shot.
+	int getEnergyRecovery () const;
+	/// Gets the medikit stun recovered per shot.
+	int getStunRecovery () const;
 >>>>>>> master
+	/// Gets the Time Unit use.
 	int getTUUse() const;
 	/// Gets the max explosion radius.
 	int getExplosionRadius() const;

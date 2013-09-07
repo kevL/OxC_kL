@@ -77,11 +77,11 @@ BattleUnit::BattleUnit(Soldier *soldier, UnitFaction faction) : _faction(faction
 
 	switch (soldier->getRank())
 	{
-		case RANK_SERGEANT:  rankbonus =  1; break;
-		case RANK_CAPTAIN:   rankbonus =  3; break;
-		case RANK_COLONEL:   rankbonus =  6; break;
-		case RANK_COMMANDER: rankbonus = 10; break;
-		default:             rankbonus =  0; break;
+		case RANK_SERGEANT:		rankbonus =	1;	break;
+		case RANK_CAPTAIN:		rankbonus =	3;	break;
+		case RANK_COLONEL:		rankbonus =	6;	break;
+		case RANK_COMMANDER:	rankbonus =	10;	break;
+		default:				rankbonus =	0;	break;
 	}
 
 	_value = 20 + soldier->getMissions() + rankbonus;
@@ -96,10 +96,8 @@ BattleUnit::BattleUnit(Soldier *soldier, UnitFaction faction) : _faction(faction
 	_currentArmor[SIDE_RIGHT] = _armor->getSideArmor();
 	_currentArmor[SIDE_REAR] = _armor->getRearArmor();
 	_currentArmor[SIDE_UNDER] = _armor->getUnderArmor();
-	for (int i = 0; i < 6; ++i)
-		_fatalWounds[i] = 0;
-	for (int i = 0; i < 5; ++i)
-		_cache[i] = 0;
+	for (int i = 0; i < 6; ++i) _fatalWounds[i] = 0;
+	for (int i = 0; i < 5; ++i) _cache[i] = 0;
 
 	_activeHand = "STR_RIGHT_HAND";
 
@@ -126,10 +124,12 @@ BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor, in
 	_rank = unit->getRank();
 	_race = unit->getRace();
 	_stats = *unit->getStats();
+
 	if (faction == FACTION_HOSTILE)
 	{
 		adjustStats(diff);
 	}
+
 	_standHeight = unit->getStandHeight();
 	_kneelHeight = unit->getKneelHeight();
 	_floatHeight = unit->getFloatHeight();
@@ -156,18 +156,14 @@ BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor, in
 	_currentArmor[SIDE_RIGHT] = _armor->getSideArmor();
 	_currentArmor[SIDE_REAR] = _armor->getRearArmor();
 	_currentArmor[SIDE_UNDER] = _armor->getUnderArmor();
-	for (int i = 0; i < 6; ++i)
-		_fatalWounds[i] = 0;
-	for (int i = 0; i < 5; ++i)
-		_cache[i] = 0;
+	for (int i = 0; i < 6; ++i) _fatalWounds[i] = 0;
+	for (int i = 0; i < 5; ++i) _cache[i] = 0;
 
 	_activeHand = "STR_RIGHT_HAND";
-	
+
 	lastCover = Position(-1, -1, -1);
-	
 }
 
-	
 /**
  *
  */
@@ -198,60 +194,13 @@ void BattleUnit::load(const YAML::Node &node)
 	_morale = node["morale"].as<int>(_morale);
 	_kneeled = node["kneeled"].as<bool>(_kneeled);
 	_floating = node["floating"].as<bool>(_floating);
-	for (int i=0; i < 5; i++)
+
+	for (int i = 0; i < 5; i++)
 		_currentArmor[i] = node["armor"][i].as<int>(_currentArmor[i]);
-	for (int i=0; i < 6; i++)
-<<<<<<< HEAD
-		node["fatalWounds"][i] >> _fatalWounds[i];
-	node["fire"] >> _fire;
-	node["expBravery"] >> _expBravery;
-	node["expReactions"] >> _expReactions;
-	node["expFiring"] >> _expFiring;
-	node["expThrowing"] >> _expThrowing;
-	node["expPsiSkill"] >> _expPsiSkill;
-	node["expMelee"] >> _expMelee;
-	node["turretType"] >> _turretType;
-	node["visible"] >> _visible;
-	node["turnsExposed"] >> _turnsExposed;
-	node["killedBy"] >> a;
 
-	_killedBy = (UnitFaction)a;
-
-	if (const YAML::Node *pName = node.FindValue("moraleRestored"))
-	{
-		(*pName) >> _moraleRestored;
-	}
-
-	if (const YAML::Node *pName = node.FindValue("rankInt"))
-	{
-		(*pName) >> _rankInt;
-	}
-
-	if (const YAML::Node *pName = node.FindValue("originalFaction"))
-	{
-		(*pName) >> a;
-		_originalFaction = (UnitFaction)a;
-	}
-	else
-	{
-		_originalFaction = _faction;
-	}
-
-	if (const YAML::Node *pName = node.FindValue("kills"))
-	{
-		(*pName) >> _kills;
-	}
-
-	if (const YAML::Node *pName = node.FindValue("dontReselect"))
-	{
-		(*pName) >> _dontReselect;
-	}
-
-	_charging = 0;
-	_toDirection = _direction;
-	_toDirectionTurret = _directionTurret;
-=======
+	for (int i = 0; i < 6; i++)
 		_fatalWounds[i] = node["fatalWounds"][i].as<int>(_fatalWounds[i]);
+
 	_fire = node["fire"].as<int>(_fire);
 	_expBravery = node["expBravery"].as<int>(_expBravery);
 	_expReactions = node["expReactions"].as<int>(_expReactions);
@@ -269,61 +218,10 @@ void BattleUnit::load(const YAML::Node &node)
 	_kills = node["kills"].as<int>(_kills);
 	_dontReselect = node["dontReselect"].as<bool>(_dontReselect);
 	_charging = 0;
->>>>>>> master
 }
 
 /**
  * Saves the soldier to a YAML file.
-<<<<<<< HEAD
- * @param out YAML emitter.
- */
-void BattleUnit::save(YAML::Emitter &out) const
-{
-	out << YAML::BeginMap;
-
-	out << YAML::Key << "id" << YAML::Value << _id;
-	out << YAML::Key << "faction" << YAML::Value << _faction;
-	out << YAML::Key << "soldierId" << YAML::Value << _id;
-	out << YAML::Key << "genUnitType" << YAML::Value << _type;
-	out << YAML::Key << "genUnitArmor" << YAML::Value << _armor->getType();
-	out << YAML::Key << "name" << YAML::Value << Language::wstrToUtf8(getName(0));
-	out << YAML::Key << "status" << YAML::Value << _status;
-	out << YAML::Key << "position" << YAML::Value << _pos;
-	out << YAML::Key << "direction" << YAML::Value << _direction;
-	out << YAML::Key << "directionTurret" << YAML::Value << _directionTurret;
-	out << YAML::Key << "tu" << YAML::Value << _tu;
-	out << YAML::Key << "health" << YAML::Value << _health;
-	out << YAML::Key << "stunlevel" << YAML::Value << _stunlevel;
-	out << YAML::Key << "energy" << YAML::Value << _energy;
-	out << YAML::Key << "morale" << YAML::Value << _morale;
-	out << YAML::Key << "kneeled" << YAML::Value << _kneeled;
-	out << YAML::Key << "floating" << YAML::Value << _floating;
-	out << YAML::Key << "armor" << YAML::Value;
-	out << YAML::Flow << YAML::BeginSeq;
-
-	for (int i=0; i < 5; i++) out << _currentArmor[i];
-
-	out << YAML::EndSeq;
-	out << YAML::Key << "fatalWounds" << YAML::Value;
-	out << YAML::Flow << YAML::BeginSeq;
-
-	for (int i=0; i < 6; i++) out << _fatalWounds[i];
-
-	out << YAML::EndSeq;
-	out << YAML::Key << "fire" << YAML::Value << _fire;
-	out << YAML::Key << "expBravery" << YAML::Value << _expBravery;
-	out << YAML::Key << "expReactions" << YAML::Value << _expReactions;
-	out << YAML::Key << "expFiring" << YAML::Value << _expFiring;
-	out << YAML::Key << "expThrowing" << YAML::Value << _expThrowing;
-	out << YAML::Key << "expPsiSkill" << YAML::Value << _expPsiSkill;
-	out << YAML::Key << "expMelee" << YAML::Value << _expMelee;
-	out << YAML::Key << "turretType" << YAML::Value << _turretType;
-	out << YAML::Key << "visible" << YAML::Value << _visible;
-	out << YAML::Key << "turnsExposed" << YAML::Value << _turnsExposed;
-	out << YAML::Key << "rankInt" << YAML::Value << _rankInt;
-	out << YAML::Key << "moraleRestored" << YAML::Value << _moraleRestored;
-
-=======
  * @return YAML node.
  */
 YAML::Node BattleUnit::save() const
@@ -347,8 +245,8 @@ YAML::Node BattleUnit::save() const
 	node["morale"] = _morale;
 	node["kneeled"] = _kneeled;
 	node["floating"] = _floating;
-	for (int i=0; i < 5; i++) node["armor"].push_back(_currentArmor[i]);
-	for (int i=0; i < 6; i++) node["fatalWounds"].push_back(_fatalWounds[i]);
+	for (int i = 0; i < 5; i++) node["armor"].push_back(_currentArmor[i]);
+	for (int i = 0; i < 6; i++) node["fatalWounds"].push_back(_fatalWounds[i]);
 	node["fire"] = _fire;
 	node["expBravery"] = _expBravery;
 	node["expReactions"] = _expReactions;
@@ -361,18 +259,14 @@ YAML::Node BattleUnit::save() const
 	node["turnsExposed"] = _turnsExposed;
 	node["rankInt"] = _rankInt;
 	node["moraleRestored"] = _moraleRestored;
->>>>>>> master
+
 	if (getCurrentAIState())
 	{
 		node["AI"] = getCurrentAIState()->save();
 	}
-<<<<<<< HEAD
 
-	out << YAML::Key << "killedBy" << YAML::Value << _killedBy;
-
-=======
 	node["killedBy"] = (int)_killedBy;
->>>>>>> master
+
 	if (_originalFaction != _faction)
 		node["originalFaction"] = (int)_originalFaction;
 	if (_kills)
@@ -1168,6 +1062,7 @@ void BattleUnit::keepFalling()
 	if (_fallPhase == endFrame)
 	{
 		_fallPhase--;
+
 		if (_health == 0)
 			_status = STATUS_DEAD;
 		else
@@ -2119,19 +2014,23 @@ int BattleUnit::getFatalWound(int part) const
 /**
  * Heal a fatal wound of the soldier
  * @param part the body part to heal
- * @param healAmount the amount of fatal wound healed
+ * @param woundAmount the amount of fatal wound healed
  * @param healthAmount The amount of health to add to soldier health
  */
-void BattleUnit::heal(int part, int healAmount, int healthAmount)
+void BattleUnit::heal(int part, int woundAmount, int healthAmount)
 {
 	if (part < 0 || part > 5)
 		return;
 
 	if (!_fatalWounds[part])
 		return;
+<<<<<<< HEAD
 
 	_fatalWounds[part] -= healAmount;
 
+=======
+	_fatalWounds[part] -= woundAmount;
+>>>>>>> master
 	_health += healthAmount;
 	if (_health > getStats()->health)
 		_health = getStats()->health;
@@ -2443,7 +2342,7 @@ int BattleUnit::getAggroSound() const
 }
 
 /**
- * Set a specific number of timeunits.
+ * Set a specific number of energy.
  * @param tu
  */
 void BattleUnit::setEnergy(int energy)
