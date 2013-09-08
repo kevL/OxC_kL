@@ -166,10 +166,14 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 
 	_tuReserved = BA_NONE;
 
+	// AI does three things per unit, before switching to the next, or it got killed before doing the second thing
+	// melee get more because chryssalids and reapers need to attack many times to be scary
+	const int AIActionLimit = (unit->getMainHandWeapon() && unit->getMainHandWeapon()->getRules()->getBattleType() == BT_MELEE) ? 9 : 2;
 	if (unit->getTimeUnits() <= 5
 		|| (unit->_hidingForTurn
 			&& unit->getPosition() == unit->lastCover
-			&& _AIActionCounter >= 2))
+			&& _AIActionCounter >= 2)
+		|| _AIActionCounter > AIActionLimit)
 	{
 		if (_save->selectNextPlayerUnit(true, true) == 0)
 		{
@@ -989,12 +993,7 @@ void BattlescapeGame::popState()
 
 			if (_save->getSide() != FACTION_PLAYER && !_debugPlay)
 			{
-				const int AIActionLimit = (action.actor->getMainHandWeapon() && action.actor->getMainHandWeapon()->getRules()->getBattleType() == BT_MELEE) ? 9 : 2;
-				 // AI does three things per unit, before switching to the next, or it got killed before doing the second thing
-				// melee get more because chryssalids and reapers need to attack many times to be scary
-				if (_AIActionCounter > AIActionLimit
-					|| _save->getSelectedUnit() == 0 
-					| _save->getSelectedUnit()->isOut())
+				if (_save->getSelectedUnit() == 0 || _save->getSelectedUnit()->isOut())
 				{
 					if (_save->getSelectedUnit())
 					{
@@ -2185,14 +2184,22 @@ BattleActionType BattlescapeGame::getReservedAction()
 void BattlescapeGame::tallyUnits(int &liveAliens, int &liveSoldiers, bool convert)
 {
 	bool psiCapture = Options::getBool("allowPsionicCapture");
+
+	if (convert)
+	{
+		for (std::vector<BattleUnit*>::iterator j = _save->getUnits()->begin(); j != _save->getUnits()->end(); ++j)
+		{
+			if ((*j)->getHealth() > 0 && (*j)->getSpecialAbility() == SPECAB_RESPAWN)
+			{
+				(*j)->setSpecialAbility(SPECAB_NONE);
+				convertUnit((*j), (*j)->getSpawnUnit());
+				j = _save->getUnits()->begin();
+			}
+		}
+	}
+
 	for (std::vector<BattleUnit*>::iterator j = _save->getUnits()->begin(); j != _save->getUnits()->end(); ++j)
 	{
-		if (convert && (*j)->getHealth() > 0 && (*j)->getSpecialAbility() == SPECAB_RESPAWN)
-		{
-			(*j)->setSpecialAbility(SPECAB_NONE);
-			convertUnit((*j), (*j)->getSpawnUnit());
-		}
-
 		if (!(*j)->isOut())
 		{
 			if ((*j)->getOriginalFaction() == FACTION_HOSTILE)
