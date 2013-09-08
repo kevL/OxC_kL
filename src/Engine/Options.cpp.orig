@@ -130,7 +130,7 @@ void createDefault()
 	setBool("allowPsionicCapture", false);
 	setBool("borderless", false);
 	setBool("captureMouse", false);
-	setBool("battleTooltips", true);
+	setBool("battleTooltips", false);
 
 	// new battle mode data
 	setInt("NewBattleMission", 0);
@@ -392,10 +392,14 @@ bool init(int argc, char** args)
 	fflush(file);
 	fclose(file);
 	Log(LOG_INFO) << "Data folder is: " << _dataFolder;
+<<<<<<< HEAD
 
+=======
+	Log(LOG_INFO) << "Data search is: ";
+>>>>>>> master
 	for (std::vector<std::string>::iterator i = _dataList.begin(); i != _dataList.end(); ++i)
 	{
-		Log(LOG_INFO) << *i;
+		Log(LOG_INFO) << "- " << *i;
 	}
 
 	Log(LOG_INFO) << "User folder is: " << _userFolder;
@@ -412,10 +416,10 @@ bool init(int argc, char** args)
  */
 void setFolders()
 {
-    if (_dataFolder == "")
+	_dataList = CrossPlatform::findDataFolders();
+    if (_dataFolder != "")
     {
-        _dataList = CrossPlatform::findDataFolders();
-        // Missing data folder is handled in StartState
+		_dataList.insert(_dataList.begin(), _dataFolder);
     }
 
 	if (_userFolder == "")
@@ -492,39 +496,10 @@ void updateOptions()
 void load(const std::string &filename)
 {
 	std::string s = _configFolder + filename + ".cfg";
-<<<<<<< HEAD
-	std::ifstream fin(s.c_str());
-
-	if (!fin)
-	{
-		//throw Exception(filename + ".cfg" + "not found");
-		return;
-	}
-
-	YAML::Parser parser(fin);
-	YAML::Node doc;
-
-	parser.GetNextDocument(doc);
-
-	const YAML::Node *options = doc.FindValue("options");
-	if (!options)
-	{
-		options = &doc;
-	}
-
-	for (YAML::Iterator i = options->begin(); i != options->end(); ++i)
-	{
-		std::string key, value;
-		i.first() >> key;
-		i.second() >> value;
-		_options[key] = value;
-	}
-
-	if (const YAML::Node *pName = doc.FindValue("purchaseexclusions"))
-	{
-		(*pName) >> _purchaseexclusions;
-=======
 	try
+
+
+
 	{
 		YAML::Node doc = YAML::LoadFile(s);
 		for (YAML::const_iterator i = doc["options"].begin(); i != doc["options"].end(); ++i)
@@ -533,7 +508,6 @@ void load(const std::string &filename)
 		}
 		_purchaseexclusions = doc["purchaseexclusions"].as< std::vector<std::string> >(_purchaseexclusions);
 		_rulesets = doc["rulesets"].as< std::vector<std::string> >(_rulesets);
->>>>>>> master
 	}
 	catch (YAML::Exception e)
 	{

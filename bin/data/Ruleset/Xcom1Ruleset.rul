@@ -1426,7 +1426,7 @@ items:
     invHeight: 3
     turretType: 4
   - type: STR_HWP_FUSION_BOMB
-    size: 6
+    size: 0.6
     costSell: 31500
     transferTime: 48
     weight: 1
@@ -1853,7 +1853,7 @@ items:
     painKiller: 10
     heal: 10
     stimulant: 10
-    woundRcovery: 1
+    woundRecovery: 1
     healthRecovery: 3
     stunRecovery: 4
     energyRecovery: 10
