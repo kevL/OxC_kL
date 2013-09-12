@@ -359,6 +359,7 @@ bool Inventory::overlapItems(BattleItem *item, RuleInventory *slot, int x, int y
 			}
 		}
 	}
+
 	return false;
 }
 
@@ -377,6 +378,7 @@ RuleInventory *Inventory::getSlotInPosition(int *x, int *y) const
 			return i->second;
 		}
 	}
+
 	return 0;
 }
 
@@ -408,6 +410,7 @@ void Inventory::setSelectedItem(BattleItem *item)
 		}
 		_selItem->getRules()->drawHandSprite(_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"), _selection);
 	}
+
 	drawItems();
 }
 
@@ -430,6 +433,7 @@ void Inventory::blit(Surface *surface)
 	_items->blit(this);
 	_selection->blit(this);
 	_warning->blit(this);
+
 	Surface::blit(surface);
 }
 
@@ -442,6 +446,7 @@ void Inventory::mouseOver(Action *action, State *state)
 {
 	_selection->setX((int)floor(action->getAbsoluteXMouse()) - _selection->getWidth()/2 - _dx);
 	_selection->setY((int)floor(action->getAbsoluteYMouse()) - _selection->getHeight()/2 - _dy);
+
 	InteractiveSurface::mouseOver(action, state);
 }
 
@@ -456,11 +461,13 @@ void Inventory::mouseClick(Action *action, State *state)
 	{
 		if (_selUnit == 0)
 			return;
+
 		// Pickup item
 		if (_selItem == 0)
 		{
 			int x = (int)floor(action->getAbsoluteXMouse()) - _dx,
 				y = (int)floor(action->getAbsoluteYMouse()) - _dy;
+
 			RuleInventory *slot = getSlotInPosition(&x, &y);
 			if (slot != 0)
 			{
@@ -468,12 +475,14 @@ void Inventory::mouseClick(Action *action, State *state)
 				{
 					x += _groundOffset;
 				}
+
 				BattleItem *item = _selUnit->getItem(slot, x, y);
 				if (item != 0)
 				{
 					if ((SDL_GetModState() & KMOD_CTRL))
 					{
 						RuleInventory *newSlot = _game->getRuleset()->getInventory("STR_GROUND");
+
 						std::string warning = "STR_NOT_ENOUGH_SPACE";
 						bool placed = false;
 
@@ -481,24 +490,24 @@ void Inventory::mouseClick(Action *action, State *state)
 						{
 							switch (item->getRules()->getBattleType())
 							{
-							case BT_FIREARM:
-								newSlot = _game->getRuleset()->getInventory("STR_RIGHT_HAND");
+								case BT_FIREARM:
+									newSlot = _game->getRuleset()->getInventory("STR_RIGHT_HAND");
 								break;
-							case BT_MINDPROBE:
-							case BT_PSIAMP:
-							case BT_MELEE:
-							case BT_CORPSE:
-								newSlot = _game->getRuleset()->getInventory("STR_LEFT_HAND");
+								case BT_MINDPROBE:
+								case BT_PSIAMP:
+								case BT_MELEE:
+								case BT_CORPSE:
+									newSlot = _game->getRuleset()->getInventory("STR_LEFT_HAND");
 								break;
-							default:
-								if (item->getRules()->getInventoryHeight() > 2)
-								{
-									newSlot = _game->getRuleset()->getInventory("STR_BACK_PACK");
-								}
-								else
-								{
-									newSlot = _game->getRuleset()->getInventory("STR_BELT");
-								}
+								default:
+									if (item->getRules()->getInventoryHeight() > 2)
+									{
+										newSlot = _game->getRuleset()->getInventory("STR_BACK_PACK");
+									}
+									else
+									{
+										newSlot = _game->getRuleset()->getInventory("STR_BELT");
+									}
 								break;
 							}
 						}
@@ -518,9 +527,11 @@ void Inventory::mouseClick(Action *action, State *state)
 									{
 										continue;
 									}
+
 									placed = fitItem(newSlot, item, warning);
 								}
 							}
+
 							if (!placed)
 							{
 								_stackLevel[item->getSlotX()][item->getSlotY()] += 1;
@@ -562,6 +573,7 @@ void Inventory::mouseClick(Action *action, State *state)
 		{
 			int x = _selection->getX() + (RuleInventory::HAND_W - _selItem->getRules()->getInventoryWidth()) * RuleInventory::SLOT_W/2 + RuleInventory::SLOT_W/2,
 				y = _selection->getY() + (RuleInventory::HAND_H - _selItem->getRules()->getInventoryHeight()) * RuleInventory::SLOT_H/2 + RuleInventory::SLOT_H/2;
+
 			RuleInventory *slot = getSlotInPosition(&x, &y);
 			if (slot != 0)
 			{
@@ -569,22 +581,24 @@ void Inventory::mouseClick(Action *action, State *state)
 				{
 					x += _groundOffset;
 				}
+
 				BattleItem *item = _selUnit->getItem(slot, x, y);
 
 				bool canStack = slot->getType() == INV_GROUND && canBeStacked(item, _selItem);
 
-				// Put item in empty slot, or stack it, if possible.
-				if (item == 0 || item == _selItem || canStack)
+				if (item == 0 || item == _selItem || canStack) // Put item in empty slot, or stack it, if possible.
 				{
 					if (!overlapItems(_selItem, slot, x, y) && slot->fitItemInSlot(_selItem->getRules(), x, y))
 					{
 						if (!_tu || _selUnit->spendTimeUnits(_selItem->getSlot()->getCost(slot)))
 						{
 							moveItem(_selItem, slot, x, y);
+
 							if (slot->getType() == INV_GROUND)
 							{
 								_stackLevel[x][y] += 1;
 							}
+
 							setSelectedItem(0);
 							_game->getResourcePack()->getSound("BATTLE.CAT", 38)->play();
 						}
@@ -608,8 +622,7 @@ void Inventory::mouseClick(Action *action, State *state)
 						}
 					}
 				}
-				// Put item in weapon
-				else
+				else // Put item in weapon
 				{
 					bool wrong = true;
 					for (std::vector<std::string>::iterator i = item->getRules()->getCompatibleAmmo()->begin(); i != item->getRules()->getCompatibleAmmo()->end(); ++i)
@@ -620,6 +633,7 @@ void Inventory::mouseClick(Action *action, State *state)
 							break;
 						}
 					}
+
 					if (wrong)
 					{
 						_warning->showMessage(_game->getLanguage()->getString("STR_WRONG_AMMUNITION_FOR_THIS_WEAPON"));
@@ -637,6 +651,7 @@ void Inventory::mouseClick(Action *action, State *state)
 							_selItem->moveToOwner(0);
 							setSelectedItem(0);
 							_game->getResourcePack()->getSound("BATTLE.CAT", 17)->play();
+
 							if (item->getSlot()->getType() == INV_GROUND)
 							{
 								arrangeGround(false);
@@ -654,10 +669,12 @@ void Inventory::mouseClick(Action *action, State *state)
 				// try again, using the position of the mouse cursor, not the item (slightly more intuitive for stacking)
 				x = (int)floor(action->getAbsoluteXMouse())-_dx;
 				y = (int)floor(action->getAbsoluteYMouse())-_dy;
+
 				slot = getSlotInPosition(&x, &y);
 				if (slot != 0 && slot->getType() == INV_GROUND)
 				{
 					x += _groundOffset;
+
 					BattleItem *item = _selUnit->getItem(slot, x, y);
 					if (canBeStacked(item, _selItem))
 					{

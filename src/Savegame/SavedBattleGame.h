@@ -140,7 +140,9 @@ public:
 	{
 		if (pos.x < 0 || pos.y < 0 || pos.z < 0
 			|| pos.x >= _mapsize_x || pos.y >= _mapsize_y || pos.z >= _mapsize_z)
+		{
 			return 0;
+		}
 
 		return _tiles[getTileIndex(pos)];
 	}

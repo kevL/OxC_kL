@@ -57,10 +57,13 @@ struct BattleAction
 	int diff;
 	int autoShotCounter;
 	Position cameraPosition;
-    bool desperate; // ignoring newly-spotted units
-    bool reckless; // ignoring reaction fire!
-    int number; // first action of turn, second, etc.?
-	BattleAction() : type(BA_NONE), actor(0), weapon(0), TU(0), targeting(false), value(0), result(""), strafe(false), run(false), diff(0), autoShotCounter(0), cameraPosition(0, 0, -1), desperate(false), reckless(false) { }
+    bool desperate;	// ignoring newly-spotted units
+    bool reckless;	// ignoring reaction fire!
+    int number;		// first action of turn, second, etc.?
+	BattleAction()
+		: type(BA_NONE), actor(0), weapon(0), TU(0), targeting(false), value(0),
+		result(""), strafe(false), run(false), diff(0), autoShotCounter(0),
+		cameraPosition(0, 0, -1), desperate(false), reckless(false) { }
 };
 
 /**

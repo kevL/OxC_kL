@@ -41,6 +41,7 @@ class BattleItem;
 class Timer;
 class WarningMessage;
 class BattlescapeGame;
+class TurnCounter;		// kL
 
 /**
  * Battlescape screen which shows the tactical battle.
@@ -83,7 +84,12 @@ private:
 	void handleItemClick(BattleItem *item);
 	/// Shifts the red colors of the visible unit buttons backgrounds.
 	void blinkVisibleUnitButtons();
+	TurnCounter *_turnCounter;	// kL
 public:
+	BattlescapeState(Game *game);
+	/// Cleans up the Battlescape state.
+	~BattlescapeState();
+	/// Initilizes the battlescapestate.
 	/// Selects the next soldier.
 	void selectNextPlayerUnit(bool checkReselect, bool setReselect);
 	/// Selects the previous soldier.
@@ -91,10 +97,6 @@ public:
 //kL	static const int DEFAULT_ANIM_SPEED = 100;
 	static const int DEFAULT_ANIM_SPEED = 90;		// kL
 	/// Creates the Battlescape state.
-	BattlescapeState(Game *game);
-	/// Cleans up the Battlescape state.
-	~BattlescapeState();
-	/// Initilizes the battlescapestate.
 	void init();
 	/// Runs the timers and handles popups.
 	void think();
@@ -208,6 +210,8 @@ public:
 	void txtTooltipIn(Action *action);
 	/// Handler for hiding tooltip.
 	void txtTooltipOut(Action *action);
+	/// kL. Gets the TurnCounter.
+//	TurnCounter *getTurnCounter() const;	// kL
 };
 
 }

@@ -32,7 +32,6 @@ namespace OpenXcom
  */
 Bar::Bar(int width, int height, int x, int y) : Surface(width, height, x, y), _color(0), _color2(0), _scale(0), _max(0), _value(0), _value2(0), _invert(false), _secondOnTop(true)
 {
-
 }
 
 /**
@@ -177,8 +176,7 @@ void Bar::setInvert(bool invert)
 }
 
 /**
- * Draws the bordered bar filled according
- * to its values.
+ * Draws the bordered bar filled according to its values.
  */
 void Bar::draw()
 {

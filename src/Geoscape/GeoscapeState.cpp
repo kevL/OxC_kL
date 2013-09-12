@@ -409,7 +409,9 @@ void GeoscapeState::handle(Action *action)
 	if (action->getDetails()->type == SDL_KEYDOWN)
 	{
 		// "ctrl-d" - enable debug mode
-		if (Options::getBool("debug") && action->getDetails()->key.keysym.sym == SDLK_d && (SDL_GetModState() & KMOD_CTRL) != 0)
+		if (Options::getBool("debug")
+			&& action->getDetails()->key.keysym.sym == SDLK_d
+			&& (SDL_GetModState() &KMOD_CTRL) != 0)
 		{
 			_game->getSavedGame()->setDebugMode();
 			if (_game->getSavedGame()->getDebugMode())
@@ -422,17 +424,25 @@ void GeoscapeState::handle(Action *action)
 			}
 		}
 		// quick save and quick load
-		else if (action->getDetails()->key.keysym.sym == Options::getInt("keyQuickSave") && Options::getInt("autosave") == 1)
+		else if (action->getDetails()->key.keysym.sym == Options::getInt("keyQuickSave")
+			&& Options::getInt("autosave") == 1)
+		{
 			_game->pushState(new SaveState(_game, true, true));
-		else if (action->getDetails()->key.keysym.sym == Options::getInt("keyQuickLoad") && Options::getInt("autosave") == 1)
+		}
+		else if (action->getDetails()->key.keysym.sym == Options::getInt("keyQuickLoad")
+			&& Options::getInt("autosave") == 1)
+		{
 			_game->pushState(new LoadState(_game, true, true));
+		}
 	}
+
 	if(!_dogfights.empty())
 	{
 		for(std::vector<DogfightState*>::iterator it = _dogfights.begin(); it != _dogfights.end(); ++it)
 		{
 			(*it)->handle(action);
 		}
+
 		_minimizedDogfights = minimizedDogfightsCount();
 	}
 }
@@ -464,8 +474,10 @@ void GeoscapeState::init()
 		{
 			_game->getResourcePack()->getRandomMusic("GMGEO")->play();
 		}
+
 		_music = true;
 	}
+
 	_globe->unsetNewBaseHover();
 }
 
@@ -486,7 +498,11 @@ void GeoscapeState::think()
 		determineAlienMissions(true);
 		_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds() - _game->getSavedGame()->getBaseMaintenance());
 	}
-	if(_popups.empty() && _dogfights.empty() && (!_zoomInEffectTimer->isRunning() || _zoomInEffectDone) && (!_zoomOutEffectTimer->isRunning() || _zoomOutEffectDone))
+
+	if (_popups.empty()
+		&& _dogfights.empty()
+		&& (!_zoomInEffectTimer->isRunning() || _zoomInEffectDone)
+		&& (!_zoomOutEffectTimer->isRunning() || _zoomOutEffectDone))
 	{
 		// Handle timers
 		_timer->think(this, 0);
@@ -497,6 +513,7 @@ void GeoscapeState::think()
 		{
 			handleDogfights();
 		}
+
 		if(!_popups.empty())
 		{
 			// Handle popups
@@ -505,7 +522,10 @@ void GeoscapeState::think()
 			_popups.erase(_popups.begin());
 		}
 	}
-	if (_battleMusic && _dogfights.empty() && !_dogfightStartTimer->isRunning())
+
+	if (_battleMusic
+		&& _dogfights.empty()
+		&& !_dogfightStartTimer->isRunning())
 	{
 		_battleMusic = false;
 		musicStop();

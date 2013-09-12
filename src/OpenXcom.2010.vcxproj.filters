@@ -778,6 +778,7 @@
     <ClCompile Include="Savegame\SerializationHelper.cpp">
       <Filter>Savegame</Filter>
     </ClCompile>
+    <ClCompile Include="Interface\TurnCounter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -1578,6 +1579,7 @@
     <ClInclude Include="Ruleset\ExtraSounds.h">
       <Filter>Ruleset</Filter>
     </ClInclude>
+    <ClInclude Include="Interface\TurnCounter.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="OpenXcom.rc" />

@@ -65,6 +65,7 @@ InventoryState::InventoryState(Game *game, bool tu, BattlescapeState *parent) : 
 	_soldier = new Surface(320, 200, 0, 0);
 	_txtName = new Text(200, 16, 36, 6);
 	_txtTus = new Text(40, 9, 245, _showMoreStatsInInventoryView ? 32 : 24);
+
 	if (_showMoreStatsInInventoryView)
 	{
 		_txtWeight = new Text(70, 9, 245, 24);
@@ -73,6 +74,7 @@ InventoryState::InventoryState(Game *game, bool tu, BattlescapeState *parent) : 
 		_txtPSkill = new Text(40, 9, 245, 48);
 		_txtPStr = new Text(40, 9, 245, 56);
 	}
+
 	_txtItem = new Text(140, 9, 128, 140);
 	_txtAmmo = new Text(66, 24, 254, 64);
 	_btnOk = new InteractiveSurface(35, 22, 237, 1);
@@ -88,6 +90,7 @@ InventoryState::InventoryState(Game *game, bool tu, BattlescapeState *parent) : 
 	add(_soldier);
 	add(_txtName);
 	add(_txtTus);
+
 	if (_showMoreStatsInInventoryView)
 	{
 		add(_txtWeight);
@@ -96,6 +99,7 @@ InventoryState::InventoryState(Game *game, bool tu, BattlescapeState *parent) : 
 		add(_txtPSkill);
 		add(_txtPStr);
 	}
+
 	add(_txtItem);
 	add(_txtAmmo);
 	add(_btnOk);
@@ -172,7 +176,6 @@ InventoryState::InventoryState(Game *game, bool tu, BattlescapeState *parent) : 
  */
 InventoryState::~InventoryState()
 {
-
 }
 
 /**
@@ -182,6 +185,7 @@ void InventoryState::init()
 {
 	if (_parent)
 		_parent->getMap()->getCamera()->centerOnPosition(_battleGame->getSelectedUnit()->getPosition());
+
 	BattleUnit *unit = _battleGame->getSelectedUnit();
 
 	unit->setCache(0);
@@ -190,6 +194,7 @@ void InventoryState::init()
 
 	_txtName->setText(unit->getName(_game->getLanguage()));
 	_inv->setSelectedUnit(unit);
+
 	Soldier *s = _game->getSavedGame()->getSoldier(unit->getId());
 	if (s)
 	{
@@ -203,19 +208,26 @@ void InventoryState::init()
 			look += "M";
 		else
 			look += "F";
+
 		if (s->getLook() == LOOK_BLONDE)
 			look += "0";
+
 		if (s->getLook() == LOOK_BROWNHAIR)
 			look += "1";
+
 		if (s->getLook() == LOOK_ORIENTAL)
 			look += "2";
+
 		if (s->getLook() == LOOK_AFRICAN)
 			look += "3";
+
 		look += ".SPK";
+
 		if (!CrossPlatform::fileExists(CrossPlatform::getDataFile("UFOGRAPH/" + look)) && !_game->getResourcePack()->getSurface(look))
 		{
 			look = s->getArmor()->getSpriteInventory() + ".SPK";
 		}
+
 		_game->getResourcePack()->getSurface(look)->blit(_soldier);
 	}
 	else
@@ -253,6 +265,7 @@ void InventoryState::init()
 			_txtPStr->setText(L"");
 		}
 	}
+
 	updateStats();
 }
 
@@ -265,9 +278,11 @@ void InventoryState::updateStats()
 	if (_showMoreStatsInInventoryView)
 	{
 		int Weight = unit->getCarriedWeight(_inv->getSelectedItem());
+
 		std::wstringstream ss;
 		ss << _game->getLanguage()->getString("STR_WEIGHT") << L'\x01' << Weight << " /" << unit->getStats()->strength;
 		_txtWeight->setText(ss.str());
+
 		if (Weight > unit->getStats()->strength)
 			_txtWeight->setSecondaryColor(Palette::blockOffset(2));
 		else _txtWeight->setSecondaryColor(Palette::blockOffset(1));
@@ -276,6 +291,7 @@ void InventoryState::updateStats()
 	{
 		std::wstringstream ss;
 		ss << _game->getLanguage()->getString("STR_TUS") << L'\x01' << unit->getTimeUnits();
+
 		_txtTus->setText(ss.str());
 	}
 }
@@ -297,6 +313,7 @@ void InventoryState::saveEquipmentLayout()
 		{
 			for (std::vector<EquipmentLayoutItem*>::iterator j = layoutItems->begin(); j != layoutItems->end(); ++j)
 				delete *j;
+
 			layoutItems->clear();
 		}
 
@@ -305,8 +322,11 @@ void InventoryState::saveEquipmentLayout()
 		for (std::vector<BattleItem*>::iterator j = (*i)->getInventory()->begin(); j != (*i)->getInventory()->end(); ++j)
 		{
 			std::string ammo;
-			if ((*j)->needsAmmo() && 0 != (*j)->getAmmoItem()) ammo = (*j)->getAmmoItem()->getRules()->getType();
-			else ammo = "NONE";
+			if ((*j)->needsAmmo() && 0 != (*j)->getAmmoItem())
+				ammo = (*j)->getAmmoItem()->getRules()->getType();
+			else
+				ammo = "NONE";
+
 			layoutItems->push_back(new EquipmentLayoutItem(
 				(*j)->getRules()->getType(),
 				(*j)->getSlot()->getId(),
@@ -328,15 +348,21 @@ void InventoryState::btnOkClick(Action *)
 {
 	if (_inv->getSelectedItem() != 0)
 		return;
+
 	_game->popState();
+
 	if (!_tu)
 	{
 		saveEquipmentLayout();
 		_battleGame->resetUnitTiles();
+
 		for (std::vector<BattleUnit*>::iterator i = _battleGame->getUnits()->begin(); i != _battleGame->getUnits()->end(); ++i)
+		{
 			if ((*i)->getFaction() == _battleGame->getSide())
 				(*i)->prepareNewTurn();
+		}
 	}
+
 	if (_battleGame->getTileEngine())
 	{
 		_battleGame->getTileEngine()->applyGravity(_battleGame->getSelectedUnit()->getTile());
@@ -353,10 +379,12 @@ void InventoryState::btnPrevClick(Action *)
 {
 	if (_inv->getSelectedItem() != 0)
 		return;
+
 	if (_parent)
 		_parent->selectPreviousPlayerUnit(false);
 	else
 		_battleGame->selectPreviousPlayerUnit(false);
+
 	// skip large units
 	while (_battleGame->getSelectedUnit()->getArmor()->getSize() > 1
 		|| _battleGame->getSelectedUnit()->getRankString() == "STR_LIVE_TERRORIST")
@@ -366,6 +394,7 @@ void InventoryState::btnPrevClick(Action *)
 		else
 			_battleGame->selectPreviousPlayerUnit(false);
 	}
+
 	init();
 }
 
@@ -377,10 +406,12 @@ void InventoryState::btnNextClick(Action *)
 {
 	if (_inv->getSelectedItem() != 0)
 		return;
+
 	if (_parent)
 		_parent->selectNextPlayerUnit(false, false);
 	else
 		_battleGame->selectNextPlayerUnit(false, false);
+
 	// skip large units
 	while (_battleGame->getSelectedUnit()->getArmor()->getSize() > 1 
 		|| _battleGame->getSelectedUnit()->getRankString() == "STR_LIVE_TERRORIST")
@@ -390,6 +421,7 @@ void InventoryState::btnNextClick(Action *)
 		else
 			_battleGame->selectNextPlayerUnit(false, false);
 	}
+
 	init();
 }
 
@@ -399,14 +431,16 @@ void InventoryState::btnNextClick(Action *)
  */
 void InventoryState::btnUnloadClick(Action *)
 {
-	if (_inv->getSelectedItem() != 0 && _inv->getSelectedItem()->getAmmoItem() != 0 && _inv->getSelectedItem()->needsAmmo())
+	if (_inv->getSelectedItem() != 0
+		&& _inv->getSelectedItem()->getAmmoItem() != 0
+		&& _inv->getSelectedItem()->needsAmmo())
 	{
 		_inv->unload();
 		_txtItem->setText(L"");
 		_txtAmmo->setText(L"");
 		_selAmmo->clear();
-		updateStats();
 
+		updateStats();
 	}
 }
 
@@ -435,9 +469,11 @@ void InventoryState::btnRankClick(Action *)
 void InventoryState::invClick(Action *)
 {
 	BattleItem *item = _inv->getSelectedItem();
+
 	_txtItem->setText(L"");
 	_txtAmmo->setText(L"");
 	_selAmmo->clear();
+
 	if (item != 0)
 	{
 		if (item->getUnit() && item->getUnit()->getStatus() == STATUS_UNCONSCIOUS)
@@ -455,29 +491,38 @@ void InventoryState::invClick(Action *)
 				_txtItem->setText(_game->getLanguage()->getString("STR_ALIEN_ARTIFACT"));
 			}
 		}
+
 		std::wstringstream ss;
+
 		if (item->getAmmoItem() != 0 && item->needsAmmo())
 		{
 			ss << _game->getLanguage()->getString("STR_AMMO_ROUNDS_LEFT") << L'\x01' << item->getAmmoItem()->getAmmoQuantity();
+
 			SDL_Rect r;
 			r.x = 0;
 			r.y = 0;
 			r.w = RuleInventory::HAND_W * RuleInventory::SLOT_W;
 			r.h = RuleInventory::HAND_H * RuleInventory::SLOT_H;
+
 			_selAmmo->drawRect(&r, Palette::blockOffset(0)+8);
+
 			r.x++;
 			r.y++;
 			r.w -= 2;
 			r.h -= 2;
+
 			_selAmmo->drawRect(&r, 0);
+
 			item->getAmmoItem()->getRules()->drawHandSprite(_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"), _selAmmo);
 		}
 		else if (item->getAmmoQuantity() != 0 && item->needsAmmo())
 		{
 			ss << _game->getLanguage()->getString("STR_AMMO_ROUNDS_LEFT") << L'\x01' << item->getAmmoQuantity();
 		}
+
 		_txtAmmo->setText(ss.str());
 	}
+
 	updateStats();
 }
 
@@ -488,7 +533,6 @@ void InventoryState::invClick(Action *)
 void InventoryState::handle(Action *action)
 {
 	State::handle(action);
-
 
 #ifndef __MORPHOS__	
 	if (action->getDetails()->type == SDL_MOUSEBUTTONDOWN)

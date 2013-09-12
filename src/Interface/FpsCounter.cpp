@@ -35,12 +35,14 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-FpsCounter::FpsCounter(int width, int height, int x, int y) : Surface(width, height, x, y), _frames(0)
+FpsCounter::FpsCounter(int width, int height, int x, int y)
+//kL	: Surface(width, height, x, y), _frames(0)
+	: Surface(width, height, x, y + 12), _frames(0)		// kL
 {
 	_visible = Options::getBool("fpsCounter");
 
 	_timer = new Timer(1000);
-	_timer->onTimer((SurfaceHandler)&FpsCounter::update);
+	_timer->onTimer((SurfaceHandler) &FpsCounter::update);
 	_timer->start();
 
 	_text = new NumberText(width, height, x, y);
@@ -83,7 +85,8 @@ void FpsCounter::setColor(Uint8 color)
  */
 void FpsCounter::handle(Action *action)
 {
-	if (action->getDetails()->type == SDL_KEYDOWN && action->getDetails()->key.keysym.sym == Options::getInt("keyFps"))
+	if (action->getDetails()->type == SDL_KEYDOWN
+		&& action->getDetails()->key.keysym.sym == Options::getInt("keyFps"))
 	{
 		_visible = !_visible;
 		Options::setBool("fpsCounter", _visible);

@@ -775,6 +775,7 @@ UnitFaction SavedBattleGame::getSide() const
  */
 int SavedBattleGame::getTurn() const
 {
+//	Log(LOG_INFO) << ". getTurn()";	// kL
 	return _turn;
 }
 
@@ -808,7 +809,6 @@ void SavedBattleGame::endTurn()
 			while (_selectedUnit && _selectedUnit->getFaction() != FACTION_PLAYER)
 				selectNextPlayerUnit();
 		}
-
 	}
 	else if (_side == FACTION_NEUTRAL)
 	{

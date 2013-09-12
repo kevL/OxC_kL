@@ -69,7 +69,8 @@ bool BattlescapeGame::_debugPlay = false;
  * @param save Pointer to the save game.
  * @param parentState Pointer to the parent battlescape state.
  */
-BattlescapeGame::BattlescapeGame(SavedBattleGame *save, BattlescapeState *parentState) : _save(save), _parentState(parentState), _playedAggroSound(false), _endTurnRequested(false), _kneelReserved(false)
+BattlescapeGame::BattlescapeGame(SavedBattleGame *save, BattlescapeState *parentState)
+	: _save(save), _parentState(parentState), _playedAggroSound(false), _endTurnRequested(false), _kneelReserved(false)
 {
 	_tuReserved = BA_NONE;
 	_playerTUReserved = BA_NONE;
@@ -724,7 +725,8 @@ void BattlescapeGame::handleNonTargetAction()
 {
 	if (!_currentAction.targeting)
 	{
-		if (_currentAction.type == BA_PRIME && _currentAction.value > -1)
+		if (_currentAction.type == BA_PRIME
+			&& _currentAction.value > -1)
 		{
 			if (_currentAction.actor->spendTimeUnits(_currentAction.TU))
 			{
@@ -736,13 +738,15 @@ void BattlescapeGame::handleNonTargetAction()
 			}
 		}
 
-		if (_currentAction.type == BA_USE || _currentAction.type == BA_LAUNCH)
+		if (_currentAction.type == BA_USE
+			|| _currentAction.type == BA_LAUNCH)
 		{
 			if (_currentAction.result.length() > 0)
 			{
 				_parentState->warning(_currentAction.result);
 				_currentAction.result = "";
 			}
+
 			_save->reviveUnconsciousUnits();
 		}
 
@@ -766,16 +770,19 @@ void BattlescapeGame::handleNonTargetAction()
 						for (int y = 0; y != _currentAction.actor->getArmor()->getSize(); ++y)
 						{
 							tile = _save->getTile(Position(_currentAction.actor->getPosition().x + x, _currentAction.actor->getPosition().y + y, _currentAction.actor->getPosition().z) + p);
-							if (tile->getUnit() && tile->getUnit() != _currentAction.actor)
+							if (tile->getUnit()
+								&& tile->getUnit() != _currentAction.actor)
 							{
 								Position voxel = Position(tile->getPosition().x * 16,tile->getPosition().y * 16,tile->getPosition().z * 24);
 								voxel.x += 8;voxel.y += 8;voxel.z += 8;
+
 								statePushNext(new ExplosionBState(this, voxel, _currentAction.weapon, _currentAction.actor));
 								break;
 							}
 						}
 
-						if (tile->getUnit() && tile->getUnit() != _currentAction.actor)
+						if (tile->getUnit()
+							&& tile->getUnit() != _currentAction.actor)
 							break;
 					}
 				}
@@ -2296,7 +2303,9 @@ bool BattlescapeGame::psiAction(BattleAction *action)
 
 		if (!target || !chanceToAttack) return false;
 
-		if (!unit->getVisibleUnits()->empty() && unit->getMainHandWeapon() && unit->getMainHandWeapon()->getAmmoItem())
+		if (!unit->getVisibleUnits()->empty()
+			&& unit->getMainHandWeapon()
+			&& unit->getMainHandWeapon()->getAmmoItem())
 		{
 			if (unit->getMainHandWeapon()->getAmmoItem()->getRules()->getPower() >= chanceToAttack)
 			{

@@ -387,6 +387,7 @@
     <ClCompile Include="Interface\TextEdit.cpp" />
     <ClCompile Include="Interface\TextList.cpp" />
     <ClCompile Include="Interface\ToggleTextButton.cpp" />
+    <ClCompile Include="Interface\TurnCounter.cpp" />
     <ClCompile Include="Interface\Window.cpp" />
     <ClCompile Include="lodepng.cpp" />
     <ClCompile Include="main.cpp" />
@@ -661,6 +662,7 @@
     <ClInclude Include="Interface\TextEdit.h" />
     <ClInclude Include="Interface\TextList.h" />
     <ClInclude Include="Interface\ToggleTextButton.h" />
+    <ClInclude Include="Interface\TurnCounter.h" />
     <ClInclude Include="Interface\Window.h" />
     <ClInclude Include="lodepng.h" />
     <ClInclude Include="Menu\AdvancedOptionsState.h" />

@@ -1866,11 +1866,11 @@ bool BattleUnit::postMissionProcedures(SavedGame *geoscape)
 	const UnitStats caps = s->getRules()->getStatCaps();
 	int healthLoss = stats->health - _health;
 
-	s->setWoundRecovery(RNG::generate((healthLoss*0.5),(healthLoss*1.5)));
+	s->setWoundRecovery(RNG::generate((healthLoss * 0.5),(healthLoss * 1.5)));
 
 	if (_expBravery && stats->bravery < caps.bravery)
 	{
-		if (_expBravery > RNG::generate(0,10)) stats->bravery += 10;
+		if (_expBravery > RNG::generate(0, 10)) stats->bravery += 10;
 	}
 
 	if (_expReactions && stats->reactions < caps.reactions)
@@ -1904,20 +1904,21 @@ bool BattleUnit::postMissionProcedures(SavedGame *geoscape)
 			s->promoteRank();
 
 		int v = caps.tu - stats->tu;
+
 //kL		if (v > 0) stats->tu += RNG::generate(0, v/10 + 2);
-		if (v > 0) stats->tu += RNG::generate(0, v/10 + 2) -1;		// kL
+		if (v > 0) stats->tu += RNG::generate(0, (v / 10) + 2) -1;		// kL
 
 		v = caps.health - stats->health;
 //kL		if (v > 0) stats->health += RNG::generate(0, v/10 + 2);
-		if (v > 0) stats->health += RNG::generate(0, v/10 + 2) -1;		// kL
+		if (v > 0) stats->health += RNG::generate(0, (v / 10) + 2) -1;		// kL
 
 		v = caps.strength - stats->strength;
 //kL		if (v > 0) stats->strength += RNG::generate(0, v/10 + 2);
-		if (v > 0) stats->strength += RNG::generate(0, v/10 + 2) -1;		// kL
+		if (v > 0) stats->strength += RNG::generate(0, (v / 10) + 2) -1;		// kL
 
 		v = caps.stamina - stats->stamina;
 //kL		if (v > 0) stats->stamina += RNG::generate(0, v/10 + 2);
-		if (v > 0) stats->stamina += RNG::generate(0, v/10 + 2) -1;		// kL
+		if (v > 0) stats->stamina += RNG::generate(0, (v / 10) + 2) -1;		// kL
 
 		return true;
 	}
@@ -1944,7 +1945,7 @@ int BattleUnit::improveStat(int exp)
 		}
 	}
 
-	return (int)(tier/2.0 + RNG::generate(0.0, tier));
+	return (int)((tier / 2.0) + RNG::generate(0.0, tier));
 }
 
 /*

@@ -35,6 +35,7 @@
 
 namespace OpenXcom
 {
+
 namespace Options
 {
 
@@ -53,6 +54,7 @@ std::vector<std::string> _purchaseexclusions;
 void createDefault()
 {
 	_options.clear();
+
 #ifdef DINGOO
 	setInt("displayWidth", 320);
 	setInt("displayHeight", 200);
@@ -66,6 +68,7 @@ void createDefault()
 	setBool("asyncBlit", true);
 	setInt("keyboardMode", KEYBOARD_ON);
 #endif
+
 	setBool("anytimePsiTraining", false);
 	setBool("playIntro", true);
 	setInt("maxFrameSkip", 8);
@@ -85,8 +88,10 @@ void createDefault()
 	setBool("debug", false);
 	setBool("debugUi", false);
 	setBool("mute", false);
-	setInt("soundVolume", MIX_MAX_VOLUME);
-	setInt("musicVolume", MIX_MAX_VOLUME);
+//kL	setInt("soundVolume", MIX_MAX_VOLUME);
+//kL	setInt("musicVolume", MIX_MAX_VOLUME);
+	setInt("soundVolume", 28);		// kL
+	setInt("musicVolume", 75);		// kL
 	setString("language", "");
 	setInt("battleScrollSpeed", 12); // 4, 8, 12, 16, 24
 	setInt("battleScrollType", SCROLL_AUTO);
@@ -108,7 +113,8 @@ void createDefault()
 	setBool("allowChangeListValuesByMouseWheel", false); // It applies only for lists, not for scientists/engineers screen
 	setInt("autosave", 0);
 	setInt("changeValueByMouseWheel", 10);
-	setInt("audioSampleRate", 22050);
+//kL	setInt("audioSampleRate", 22050);
+	setInt("audioSampleRate", 11025);		// kL
 	setInt("audioBitDepth", 16);
 	setInt("pauseMode", 0);
 	setBool("alienContainmentLimitEnforced", false);
@@ -130,7 +136,8 @@ void createDefault()
 	setBool("allowPsionicCapture", false);
 	setBool("borderless", false);
 	setBool("captureMouse", false);
-	setBool("battleTooltips", false);
+//kL	setBool("battleTooltips", true);
+	setBool("battleTooltips", false);		// kL
 
 	// new battle mode data
 	setInt("NewBattleMission", 0);
@@ -289,7 +296,7 @@ void loadArgs(int argc, char** args)
 				{
 					// case insensitive lookup of the argument
 					bool found = false;
-					for(std::map<std::string, std::string>::iterator it = _options.begin(); it != _options.end(); ++it)
+					for (std::map<std::string, std::string>::iterator it = _options.begin(); it != _options.end(); ++it)
 					{
  						std::string option = it->first;
 						std::transform(option.begin(), option.end(), option.begin(), ::tolower);
@@ -302,7 +309,7 @@ void loadArgs(int argc, char** args)
 						}
 					}
 
-					if(!found)
+					if (!found)
 					{
 						Log(LOG_WARNING) << "Unknown option: " << argname;
 					}
@@ -335,6 +342,7 @@ bool showHelp(int argc, char** args)
 	help << "-help" << std::endl;
 	help << "-?" << std::endl;
 	help << "        show command-line help" << std::endl;
+
 	for (int i = 1; i < argc; ++i)
 	{
 		std::string arg = args[i];
@@ -345,6 +353,7 @@ bool showHelp(int argc, char** args)
 				argname = arg.substr(2, arg.length()-1);
 			else
 				argname = arg.substr(1, arg.length()-1);
+
 			std::transform(argname.begin(), argname.end(), argname.begin(), ::tolower);
 			if (argname == "help" || argname == "?")
 			{
@@ -380,7 +389,7 @@ bool init(int argc, char** args)
 	Logger::logFile() = s;
 
 	FILE *file = fopen(Logger::logFile().c_str(), "w");
-	if(!file)
+	if (!file)
 	{
 		std::stringstream error;
 		error << "Error: invalid User Folder " << _userFolder << std::endl;
@@ -460,8 +469,7 @@ void setFolders()
  */
 void updateOptions()
 {
-	// Load existing options
-	if (CrossPlatform::folderExists(_configFolder))
+	if (CrossPlatform::folderExists(_configFolder)) // Load existing options
 	{
 		try
 		{
@@ -472,8 +480,7 @@ void updateOptions()
 			Log(LOG_ERROR) << e.what();
 		}
 	}
-	// Create config folder and save options
-	else
+	else // Create config folder and save options
 	{
 		CrossPlatform::createFolder(_configFolder);
 		save();
@@ -493,16 +500,15 @@ void updateOptions()
 void load(const std::string &filename)
 {
 	std::string s = _configFolder + filename + ".cfg";
+
 	try
-
-
-
 	{
 		YAML::Node doc = YAML::LoadFile(s);
 		for (YAML::const_iterator i = doc["options"].begin(); i != doc["options"].end(); ++i)
 		{
 			_options[i->first.as<std::string>()] = i->second.as<std::string>();
 		}
+
 		_purchaseexclusions = doc["purchaseexclusions"].as< std::vector<std::string> >(_purchaseexclusions);
 		_rulesets = doc["rulesets"].as< std::vector<std::string> >(_rulesets);
 	}
@@ -670,4 +676,5 @@ std::vector<std::string> getPurchaseExclusions()
 }
 
 }
+
 }

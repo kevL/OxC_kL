@@ -237,6 +237,7 @@ Uint8 NumberText::getColor() const
 void NumberText::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 {
 	Surface::setPalette(colors, firstcolor, ncolors);
+
 	for (int i = 0; i < 10; ++i)
 	{
 		_chars[i]->setPalette(colors, firstcolor, ncolors);
@@ -253,11 +254,13 @@ void NumberText::draw()
 	ss << _value;
 	std::string s = ss.str();
 	int x = 0;
+
 	for (std::string::iterator i = s.begin(); i != s.end(); ++i)
 	{
 		_chars[*i - '0']->setX(x);
 		_chars[*i - '0']->setY(0);
 		_chars[*i - '0']->blit(this);
+
 		x += _chars[*i - '0']->getWidth() + 1;
 	}
 

@@ -125,7 +125,7 @@ void ExplosionBState::init()
 	else // create a bullet hit
 	{
 //kL		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED / 2);
-		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED * 2/3);		// kL
+		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED * 3 / 4);		// kL
 
 		bool hit = (_item->getRules()->getBattleType() == BT_MELEE || _item->getRules()->getBattleType() == BT_PSIAMP);
 		Explosion *explosion = new Explosion(_center, _item->getRules()->getHitAnimation(), false, hit);

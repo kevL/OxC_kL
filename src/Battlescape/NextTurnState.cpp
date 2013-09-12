@@ -29,6 +29,7 @@
 #include "DebriefingState.h"
 #include "../Interface/Cursor.h"
 #include "BattlescapeState.h"
+#include "../Interface/TurnCounter.h"	// kL
 
 namespace OpenXcom
 {
@@ -39,7 +40,8 @@ namespace OpenXcom
  * @param battleGame Pointer to the saved game.
  * @param state Pointer to the Battlescape state.
  */
-NextTurnState::NextTurnState(Game *game, SavedBattleGame *battleGame, BattlescapeState *state) : State(game), _battleGame(battleGame), _state(state)
+NextTurnState::NextTurnState(Game *game, SavedBattleGame *battleGame, BattlescapeState *state)
+	: State(game), _battleGame(battleGame), _state(state)
 {
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
@@ -72,6 +74,7 @@ NextTurnState::NextTurnState(Game *game, SavedBattleGame *battleGame, Battlescap
 	_txtTurn->setAlign(ALIGN_CENTER);
 	_txtTurn->setHighContrast(true);
 	std::wstringstream ss;
+	Log(LOG_INFO) << ". Next Turn : " << _battleGame->getTurn();
 	ss << _game->getLanguage()->getString("STR_TURN") << L" " << _battleGame->getTurn();
 	_txtTurn->setText(ss.str());
 
@@ -80,7 +83,7 @@ NextTurnState::NextTurnState(Game *game, SavedBattleGame *battleGame, Battlescap
 	_txtSide->setAlign(ALIGN_CENTER);
 	_txtSide->setHighContrast(true);
 	ss.str(L"");
-	ss << _game->getLanguage()->getString("STR_SIDE") << _game->getLanguage()->getString((_battleGame->getSide() == FACTION_PLAYER?"STR_XCOM":"STR_ALIENS"));
+	ss << _game->getLanguage()->getString("STR_SIDE") << _game->getLanguage()->getString((_battleGame->getSide() == FACTION_PLAYER ? "STR_XCOM" : "STR_ALIENS"));
 	_txtSide->setText(ss.str());
 
 	_txtMessage->setColor(Palette::blockOffset(0));
@@ -97,7 +100,6 @@ NextTurnState::NextTurnState(Game *game, SavedBattleGame *battleGame, Battlescap
  */
 NextTurnState::~NextTurnState()
 {
-
 }
 
 /**
@@ -108,12 +110,14 @@ void NextTurnState::handle(Action *action)
 {
 	State::handle(action);
 
-	if (action->getDetails()->type == SDL_KEYDOWN || action->getDetails()->type == SDL_MOUSEBUTTONDOWN)
+	if (action->getDetails()->type == SDL_KEYDOWN
+		|| action->getDetails()->type == SDL_MOUSEBUTTONDOWN)
 	{
 		_game->popState();
 
 		int liveAliens = 0;
 		int liveSoldiers = 0;
+
 		_state->getBattleGame()->tallyUnits(liveAliens, liveSoldiers, false);
 		if (liveAliens == 0 || liveSoldiers == 0)
 		{
@@ -122,6 +126,9 @@ void NextTurnState::handle(Action *action)
 		else
 		{
 			_state->btnCenterClick(0);
+
+//			_turnCounter->update();		// kL
+//			_turnCounter->draw();		// kL
 		}
 	}
 }

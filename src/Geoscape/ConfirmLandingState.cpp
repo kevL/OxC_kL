@@ -130,25 +130,31 @@ void ConfirmLandingState::btnYesClick(Action *)
 {
 	_game->popState();
 	_state->musicStop();
+
 	Ufo* u = dynamic_cast<Ufo*>(_craft->getDestination());
 	TerrorSite* t = dynamic_cast<TerrorSite*>(_craft->getDestination());
 	AlienBase* b = dynamic_cast<AlienBase*>(_craft->getDestination());
+
 	size_t month = _game->getSavedGame()->getMonthsPassed();
-	if (month > _game->getRuleset()->getAlienItemLevels().size()-1)
-		month = _game->getRuleset()->getAlienItemLevels().size()-1;
+	if (month > _game->getRuleset()->getAlienItemLevels().size() - 1)
+		month = _game->getRuleset()->getAlienItemLevels().size() - 1;
 
 	SavedBattleGame *bgame = new SavedBattleGame();
 	_game->getSavedGame()->setBattleGame(bgame);
+
 	BattlescapeGenerator bgen = BattlescapeGenerator(_game);
+
 	bgen.setWorldTexture(_texture);
 	bgen.setWorldShade(_shade);
 	bgen.setCraft(_craft);
+
 	if (u != 0)
 	{
-		if(u->getStatus() == Ufo::CRASHED)
+		if (u->getStatus() == Ufo::CRASHED)
 			bgame->setMissionType("STR_UFO_CRASH_RECOVERY");
 		else
 			bgame->setMissionType("STR_UFO_GROUND_ASSAULT");
+
 		bgen.setUfo(u);
 		bgen.setAlienRace(u->getAlienRace());
 	}
@@ -168,8 +174,10 @@ void ConfirmLandingState::btnYesClick(Action *)
 	{
 		throw Exception("No mission available!");
 	}
-	bgen.setAlienItemlevel(_game->getRuleset()->getAlienItemLevels().at(month).at(RNG::generate(0,9)));
+
+	bgen.setAlienItemlevel(_game->getRuleset()->getAlienItemLevels().at(month).at(RNG::generate(0, 9)));
 	bgen.run();
+
 	_game->pushState(new BriefingState(_game, _craft));
 }
 

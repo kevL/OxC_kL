@@ -33,7 +33,10 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-Text::Text(int width, int height, int x, int y) : Surface(width, height, x, y), _big(0), _small(0), _font(0), _text(L""), _wrap(false), _invert(false), _contrast(false), _align(ALIGN_LEFT), _valign(ALIGN_TOP), _color(0), _color2(0)
+Text::Text(int width, int height, int x, int y)
+	: Surface(width, height, x, y), _big(0), _small(0), _font(0), _text(L""),
+	_wrap(false), _invert(false), _contrast(false),
+	_align(ALIGN_LEFT), _valign(ALIGN_TOP), _color(0), _color2(0)
 {
 }
 
@@ -60,7 +63,7 @@ std::wstring Text::formatFunding(int funds)
 	setlocale (LC_MONETARY,""); // see http://www.cplusplus.com/reference/clocale/localeconv/
 	setlocale (LC_CTYPE,""); // this is necessary for mbstowcs to work correctly
 	struct lconv * lc;
-	lc=localeconv();
+	lc = localeconv();
 	std::wstring thousands_sep = Language::cpToWstr(lc->mon_thousands_sep);
 
 	bool negative = false;
@@ -69,18 +72,21 @@ std::wstring Text::formatFunding(int funds)
 		negative = true;
 		funds = -funds;
 	}
+
 	std::wstringstream ss;
 	ss << funds;
 	std::wstring s = ss.str();
+
 	size_t spacer = s.size() - 3;
 	while (spacer > 0 && spacer < s.size())
 	{
 		s.insert(spacer, thousands_sep);
 		spacer -= 3;
 	}
+
 	s.insert(0, L"$");
-	if (negative)
-		s.insert(0, L"-");
+	if (negative) s.insert(0, L"-");
+
 	return s;
 }
 
@@ -95,6 +101,7 @@ std::wstring Text::formatPercentage(int value)
 	std::wstringstream ss;
 	ss << value;
 	ss << "%";
+
 	return ss.str();
 }
 
@@ -137,6 +144,7 @@ void Text::setFonts(Font *big, Font *small)
 	_big = big;
 	_small = small;
 	_font = _small;
+
 	processText();
 }
 
@@ -286,6 +294,7 @@ int Text::getTextHeight() const
 	{
 		height += *i;
 	}
+
 	return height;
 }
 
@@ -303,6 +312,7 @@ int Text::getTextWidth() const
 			width = *i;
 		}
 	}
+
 	return width;
 }
 
@@ -337,8 +347,7 @@ void Text::processText()
 	// Go through the text character by character
 	for (std::wstring::iterator c = s->begin(); c <= s->end(); ++c)
 	{
-		// End of the line
-		if (c == s->end() || *c == L'\n' || *c == 2)
+		if (c == s->end() || *c == L'\n' || *c == 2) // End of the line
 		{
 			// Add line measurements for alignment later
 			_lineWidth.push_back(width);
@@ -353,16 +362,14 @@ void Text::processText()
 			else if (*c == 2)
 				font = _small;
 		}
-		// Keep track of spaces for wordwrapping
-		else if (*c == L' ')
+		else if (*c == L' ') // Keep track of spaces for wordwrapping
 		{
 			space = c;
 			width += font->getWidth() / 2;
 			word = 0;
 			start = false;
 		}
-		// Keep track of the width of the last line and word
-		else if (*c != 1)
+		else if (*c != 1) // Keep track of the width of the last line and word
 		{
 			int charWidth;
 
@@ -399,6 +406,7 @@ void Text::processText()
 void Text::draw()
 {
 	Surface::draw();
+
 	if (_text.empty() || _font == 0)
 	{
 		return;
@@ -408,11 +416,13 @@ void Text::draw()
 	if (Options::getBool("debugUi"))
 	{
 		SDL_Rect r;
+
 		r.w = getWidth();
 		r.h = getHeight();
 		r.x = 0;
 		r.y = 0;
 		this->drawRect(&r, 5);
+
 		r.w-=2;
 		r.h-=2;
 		r.x++;
@@ -432,27 +442,27 @@ void Text::draw()
 
 	switch (_valign)
 	{
-	case ALIGN_TOP:
-		y = 0;
+		case ALIGN_TOP:
+			y = 0;
 		break;
-	case ALIGN_MIDDLE:
-		y = (getHeight() - height) / 2;
+		case ALIGN_MIDDLE:
+			y = (getHeight() - height) / 2;
 		break;
-	case ALIGN_BOTTOM:
-		y = getHeight() - height;
+		case ALIGN_BOTTOM:
+			y = getHeight() - height;
 		break;
 	}
 
 	switch (_align)
 	{
-	case ALIGN_LEFT:
-		x = 0;
+		case ALIGN_LEFT:
+			x = 0;
 		break;
-	case ALIGN_CENTER:
-		x = (getWidth() - _lineWidth[line]) / 2;
+		case ALIGN_CENTER:
+			x = (getWidth() - _lineWidth[line]) / 2;
 		break;
-	case ALIGN_RIGHT:
-		x = (getWidth() - _lineWidth[line]) - 1;
+		case ALIGN_RIGHT:
+			x = (getWidth() - _lineWidth[line]) - 1;
 		break;
 	}
 
@@ -484,18 +494,20 @@ void Text::draw()
 		{
 			line++;
 			y += font->getHeight() + font->getSpacing();
+
 			switch (_align)
 			{
-			case ALIGN_LEFT:
-				x = 0;
+				case ALIGN_LEFT:
+					x = 0;
 				break;
-			case ALIGN_CENTER:
-				x = (getWidth() - _lineWidth[line]) / 2;
+				case ALIGN_CENTER:
+					x = (getWidth() - _lineWidth[line]) / 2;
 				break;
-			case ALIGN_RIGHT:
-				x = getWidth() - _lineWidth[line];
+				case ALIGN_RIGHT:
+					x = getWidth() - _lineWidth[line];
 				break;
 			}
+
 			if (*c == 2)
 			{
 				font->getSurface()->paletteRestore();

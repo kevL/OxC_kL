@@ -39,7 +39,8 @@ Sound *Window::soundPopup[3] = {0, 0, 0};
  * @param y Y position in pixels.
  * @param popup Popup animation.
  */
-Window::Window(State *state, int width, int height, int x, int y, WindowPopup popup) : Surface(width, height, x, y), _bg(0), _color(0), _popup(popup), _popupStep(0.0), _state(state), _contrast(false), _screen(false)
+Window::Window(State *state, int width, int height, int x, int y, WindowPopup popup)
+	: Surface(width, height, x, y), _bg(0), _color(0), _popup(popup), _popupStep(0.0), _state(state), _contrast(false), _screen(false)
 {
 	_timer = new Timer(10);
 	_timer->onTimer((SurfaceHandler)&Window::popup);
@@ -133,7 +134,7 @@ void Window::think()
  */
 void Window::popup()
 {
-	if ( AreSame(_popupStep, 0.0) )
+	if (AreSame(_popupStep, 0.0))
 	{
 		int sound = RNG::generate(0, 2);
 		if (soundPopup[sound] != 0)
@@ -141,6 +142,7 @@ void Window::popup()
 			soundPopup[sound]->play();
 		}
 	}
+
 	if (_popupStep < 1.0)
 	{
 		_popupStep += POPUP_SPEED;
@@ -155,6 +157,7 @@ void Window::popup()
 		_popupStep = 1.0;
 		_timer->stop();
 	}
+
 	_redraw = true;
 }
 
@@ -179,6 +182,7 @@ void Window::draw()
 		square.x = 0;
 		square.w = getWidth();
 	}
+
 	if (_popup == POPUP_VERTICAL || _popup == POPUP_BOTH)
 	{
 		square.y = (int)((getHeight() - getHeight() * _popupStep) / 2);
@@ -198,8 +202,7 @@ void Window::draw()
 	Uint8 color = _color + 3 * mul;
 
 	int limit = 5;
-	if (_bg == 0)
-		limit++;
+	if (_bg == 0) limit++;
 	for (int i = 0; i < limit; ++i)
 	{
 		drawRect(&square, color);
@@ -207,10 +210,13 @@ void Window::draw()
 			color -= 1 * mul;
 		else
 			color += 1 * mul;
+
 		if (i == 4)
 			color += 2 * mul;
+
 		square.x++;
 		square.y++;
+
 		if (square.w >= 2)
 			square.w -= 2;
 		else
@@ -230,6 +236,7 @@ void Window::draw()
 		_bg->getCrop()->h = square.h ;
 		_bg->setX(square.x);
 		_bg->setY(square.y);
+
 		_bg->blit(this);
 	}
 }

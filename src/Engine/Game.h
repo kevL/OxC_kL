@@ -34,6 +34,7 @@ class ResourcePack;
 class SavedGame;
 class Ruleset;
 class FpsCounter;
+//class TurnCounter;	// kL
 
 /**
  * The core of the game engine, manages the game's entire contents and structure.
@@ -54,6 +55,7 @@ private:
 	Ruleset *_rules;
 	bool _quit, _init;
 	FpsCounter *_fpsCounter;
+//	TurnCounter *_turnCounter;	// kL
 	bool _mouseActive;
 
 #ifdef __MORPHOS__		
@@ -78,6 +80,8 @@ public:
 	Cursor *getCursor() const;
 	/// Gets the FpsCounter.
 	FpsCounter *getFpsCounter() const;
+	/// kL. Gets the TurnCounter.
+//	TurnCounter *getTurnCounter() const;	// kL
 	/// Sets the game's 8bpp palette.
 	void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
 	/// Resets the state stack to a new state.

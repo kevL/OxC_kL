@@ -30,6 +30,7 @@
 #include "Logger.h"
 #include "../Interface/Cursor.h"
 #include "../Interface/FpsCounter.h"
+//#include "../Interface/TurnCounter.h"	// kL
 #include "../Resource/ResourcePack.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Savegame/SavedGame.h"
@@ -49,7 +50,9 @@ namespace OpenXcom
  * creates the display screen and sets up the cursor.
  * @param title Title of the game window.
  */
-Game::Game(const std::string &title) : _screen(0), _cursor(0), _lang(0), _states(), _deleted(), _res(0), _save(0), _rules(0), _quit(false), _init(false), _mouseActive(true)
+Game::Game(const std::string &title)
+	: _screen(0), _cursor(0), _lang(0), _states(), _deleted(), _res(0),
+	_save(0), _rules(0), _quit(false), _init(false), _mouseActive(true)
 {
 	// Initialize SDL
 	if (SDL_Init(SDL_INIT_VIDEO) < 0)
@@ -86,6 +89,7 @@ Game::Game(const std::string &title) : _screen(0), _cursor(0), _lang(0), _states
 				Mix_AllocateChannels(16);
 			}
 		}
+
 		Log(LOG_INFO) << "SDL_mixer initialized successfully.";
 	}
 
@@ -118,7 +122,8 @@ Game::Game(const std::string &title) : _screen(0), _cursor(0), _lang(0), _states
 	// Create display
 	Screen::BASE_WIDTH = Options::getInt("baseXResolution");
 	Screen::BASE_HEIGHT = Options::getInt("baseYResolution");
-	_screen = new Screen(Options::getInt("displayWidth"), Options::getInt("displayHeight"), 0, Options::getBool("fullscreen"), Options::getInt("windowedModePositionX"), Options::getInt("windowedModePositionY"));
+	_screen = new Screen(Options::getInt("displayWidth"), Options::getInt("displayHeight"), 0,
+		Options::getBool("fullscreen"), Options::getInt("windowedModePositionX"), Options::getInt("windowedModePositionY"));
 
 	// Create cursor
 	_cursor = new Cursor(9, 13);
@@ -126,6 +131,11 @@ Game::Game(const std::string &title) : _screen(0), _cursor(0), _lang(0), _states
 
 	// Create fps counter
 	_fpsCounter = new FpsCounter(15, 5, 0, 0);
+
+	// kL_begin:
+	// Create turn counter
+//	_turnCounter = new TurnCounter(75, 5, 0, 0); // wide enough to fit the address..
+	// kL_end.
 
 	// Create blank language
 	_lang = new Language();
@@ -141,7 +151,9 @@ Game::Game(const std::string &title) : _screen(0), _cursor(0), _lang(0), _states
  */
 Game::~Game()
 {
-	if (_save != 0 && _save->getMonthsPassed() >= 0 && Options::getInt("autosave") == 3)
+	if (_save != 0
+		&& _save->getMonthsPassed() >= 0
+		&& Options::getInt("autosave") == 3)
 	{
 		SaveState *ss = new SaveState(this, true, false);
 		delete ss;
@@ -161,6 +173,7 @@ Game::~Game()
 	delete _save;
 	delete _screen;
 	delete _fpsCounter;
+//	delete _turnCounter;		// kL
 
 	Mix_CloseAudio();
 
@@ -249,6 +262,7 @@ void Game::run()
 					_screen->handle(&action);
 					_cursor->handle(&action);
 					_fpsCounter->handle(&action);
+//					_turnCounter->handle(&action);	// kL
 					_states.back()->handle(&action);
 				break;
 			}
@@ -259,6 +273,7 @@ void Game::run()
 		{
 			// Process logic
 			_fpsCounter->think();
+//			_turnCounter->think();	// kL
 			_states.back()->think();
 
 			if (_init)
@@ -270,7 +285,7 @@ void Game::run()
 				{
 					--i;
 				}
-				while(i != _states.begin() && !(*i)->isScreen());
+				while (i != _states.begin() && !(*i)->isScreen());
 
 				for (; i != _states.end(); ++i)
 				{
@@ -278,6 +293,7 @@ void Game::run()
 				}
 
 				_fpsCounter->blit(_screen->getSurface());
+//				_turnCounter->blit(_screen->getSurface());	// kL
 				_cursor->blit(_screen->getSurface());
 			}
 
@@ -297,10 +313,10 @@ void Game::run()
 				SDL_Delay(1); 
 #endif
 
-			break; //Save CPU from going 100%
+			break; // Save CPU from going 100%
 			case SLOWED:
 			case PAUSED:
-				SDL_Delay(100); //More slowing down.
+				SDL_Delay(100); // More slowing down.
 			break;
 		}
 	}
@@ -359,6 +375,18 @@ FpsCounter *Game::getFpsCounter() const
 	return _fpsCounter;
 }
 
+// kL_begin:
+/**
+ * Returns the TurnCounter used by the game.
+ * @return Pointer to the TurnCounter.
+ */
+//TurnCounter *Game::getTurnCounter() const
+/* TurnCounter *BattlescapeState::getTurnCounter() const
+{
+	return _turnCounter;
+} */
+// kL_end.
+
 /**
  * Replaces a certain amount of colors in the palettes of the game's
  * screen and resources.
@@ -373,6 +401,7 @@ void Game::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 	_cursor->draw();
 
 	_fpsCounter->setPalette(colors, firstcolor, ncolors);
+//	_turnCounter->setPalette(colors, firstcolor, ncolors);	// kL
 
 	if (_res != 0)
 	{

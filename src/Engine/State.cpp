@@ -77,6 +77,7 @@ void State::add(Surface *surface)
 	TextList *tl = dynamic_cast<TextList*>(surface);
 	WarningMessage *wm = dynamic_cast<WarningMessage*>(surface);
 	BaseView *bv = dynamic_cast<BaseView*>(surface);
+
 	if (t)
 	{
 		t->setFonts(_game->getResourcePack()->getFont("Big.fnt"), _game->getResourcePack()->getFont("Small.fnt"));
@@ -119,9 +120,8 @@ bool State::isScreen() const
 }
 
 /**
- * Toggles the full-screen flag. Used by windows to
- * keep the previous screen is display while the window
- * is still "popping up".
+ * Toggles the full-screen flag. Used by windows to keep the previous
+ * screen in display while the window is still "popping up".
  */
 void State::toggleScreen()
 {

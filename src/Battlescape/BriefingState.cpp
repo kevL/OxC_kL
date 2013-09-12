@@ -45,28 +45,32 @@ namespace OpenXcom
  * @param craft Pointer to the craft in the mission.
  * @param base Pointer to the base in the mission.
  */
-BriefingState::BriefingState(Game *game, Craft *craft, Base *base) : State(game)
+BriefingState::BriefingState(Game *game, Craft *craft, Base *base) :
+	State(game)
 {
 	_screen = false;
+
 	// Create objects
-	_window = new Window(this, 320, 200, 0, 0);
-	_btnOk = new TextButton(120, 18, 100, 164);
-	_txtTitle = new Text(300, 16, 16, 24);
-	_txtTarget = new Text(300, 16, 16, 40);
-	_txtCraft = new Text(300, 16, 16, 56);
-	_txtBriefing = new Text(274, 64, 16, 72);
+	_window			= new Window(this, 320, 200, 0, 0);
+	_btnOk			= new TextButton(120, 18, 100, 164);
+	_txtTitle		= new Text(300, 16, 16, 24);
+	_txtTarget		= new Text(300, 16, 16, 40);
+	_txtCraft		= new Text(300, 16, 16, 56);
+	_txtBriefing	= new Text(274, 64, 16, 72);
 
 	std::string mission = _game->getSavedGame()->getSavedBattle()->getMissionType();
 
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
 
 	// Set palette
-	if (mission == "STR_TERROR_MISSION" || mission == "STR_BASE_DEFENSE")
+	if (mission == "STR_TERROR_MISSION"
+		|| mission == "STR_BASE_DEFENSE")
 	{
 		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)), Palette::backPos, 16);
 		_game->getResourcePack()->getMusic("GMENBASE")->play();
 	}
-	else if (mission == "STR_MARS_CYDONIA_LANDING" || mission == "STR_MARS_THE_FINAL_ASSAULT")
+	else if (mission == "STR_MARS_CYDONIA_LANDING"
+		|| mission == "STR_MARS_THE_FINAL_ASSAULT")
 	{
 		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
 		_game->getResourcePack()->getMusic("GMNEWMAR")->play();
@@ -80,17 +84,22 @@ BriefingState::BriefingState(Game *game, Craft *craft, Base *base) : State(game)
 	add(_window);
 	add(_btnOk);
 	add(_txtTitle);
-	if (mission == "STR_ALIEN_BASE_ASSAULT" || mission == "STR_MARS_CYDONIA_LANDING")
+
+	if (mission == "STR_ALIEN_BASE_ASSAULT"
+		|| mission == "STR_MARS_CYDONIA_LANDING")
 	{
 		_txtCraft->setY(40);
 		_txtBriefing->setY(56);
 		_txtTarget->setVisible(false);
 	}
+
 	add(_txtTarget);
+
 	if (mission == "STR_MARS_THE_FINAL_ASSAULT")
 	{
 		_txtCraft->setVisible(false);
 	}
+
 	add(_txtCraft);
 	add(_txtBriefing);
 
@@ -101,6 +110,7 @@ BriefingState::BriefingState(Game *game, Craft *craft, Base *base) : State(game)
 
 	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
+
 	_btnOk->onMouseClick((ActionHandler)&BriefingState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&BriefingState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
 	_btnOk->onKeyboardPress((ActionHandler)&BriefingState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
@@ -113,6 +123,7 @@ BriefingState::BriefingState(Game *game, Craft *craft, Base *base) : State(game)
 
 	_txtCraft->setColor(Palette::blockOffset(8)+5);
 	_txtCraft->setBig();
+
 	std::wstringstream ss;
 	if (craft)
 	{
@@ -127,13 +138,15 @@ BriefingState::BriefingState(Game *game, Craft *craft, Base *base) : State(game)
 	{
 		ss << _game->getLanguage()->getString("STR_BASE_UC_") << base->getName();
 	}
+
 	_txtCraft->setText(ss.str());
 
 	_txtBriefing->setColor(Palette::blockOffset(8)+5);
 	_txtBriefing->setWordWrap(true);
 
 	// Show respective mission briefing
-	if (mission == "STR_ALIEN_BASE_ASSAULT" || mission == "STR_MARS_THE_FINAL_ASSAULT")
+	if (mission == "STR_ALIEN_BASE_ASSAULT"
+		|| mission == "STR_MARS_THE_FINAL_ASSAULT")
 	{
 		_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 	}
@@ -143,14 +156,14 @@ BriefingState::BriefingState(Game *game, Craft *craft, Base *base) : State(game)
 	}
 
 	_txtTitle->setText(_game->getLanguage()->getString(mission));
+
 	std::stringstream briefingtext;
 	briefingtext << mission.c_str() << "_BRIEFING";
 	_txtBriefing->setText(_game->getLanguage()->getString(briefingtext.str()));
 
 	if (mission == "STR_BASE_DEFENSE")
 	{
-		// And make sure the base is unmarked.
-		base->setRetaliationTarget(false);
+		base->setRetaliationTarget(false); // And make sure the base is unmarked.
 	}
 }
 
@@ -159,7 +172,6 @@ BriefingState::BriefingState(Game *game, Craft *craft, Base *base) : State(game)
  */
 BriefingState::~BriefingState()
 {
-
 }
 
 /**
@@ -169,7 +181,9 @@ BriefingState::~BriefingState()
 void BriefingState::btnOkClick(Action *)
 {
 	_game->popState();
-	BattlescapeState *bs = new BattlescapeState(_game);
+
+	BattlescapeState *bs = new BattlescapeState(_game); // <- ah there it is! kL_note.
+
 	_game->pushState(bs);
 	_game->getSavedGame()->getSavedBattle()->setBattleState(bs);
 	_game->pushState(new NextTurnState(_game, _game->getSavedGame()->getSavedBattle(), bs));

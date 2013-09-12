@@ -320,24 +320,24 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, size_t soldier) : Sta
  */
 SoldierInfoState::~SoldierInfoState()
 {
-
 }
 
 /**
- * Updates soldier stats when
- * the soldier changes.
+ * Updates soldier stats when the soldier changes.
  */
 void SoldierInfoState::init()
 {
-	if(_base->getSoldiers()->empty())
+	if (_base->getSoldiers()->empty())
 	{
 		_game->popState();
 		return;
 	}
-	if(_soldier == _base->getSoldiers()->size())
+
+	if (_soldier == _base->getSoldiers()->size())
 	{
 		_soldier = 0;
 	}
+
 	Soldier *s = _base->getSoldiers()->at(_soldier);
 	_edtSoldier->setText(s->getName());
 	UnitStats *initial = s->getInitStats();
@@ -348,26 +348,87 @@ void SoldierInfoState::init()
 	texture->getFrame(s->getRankSprite())->setY(0);
 	texture->getFrame(s->getRankSprite())->blit(_rank);
 
+
 	std::wstringstream ss;
 	ss << current->tu;
 	_numTimeUnits->setText(ss.str());
-	_barTimeUnits->setMax(current->tu);
+
+	// kL_begin:
+	if (current->tu > initial->tu)
+	{
+		_barTimeUnits->setMax(current->tu);
+	}
+	else
+		_barTimeUnits->setMax(initial->tu);
+	// kL_end.
+//kL	_barTimeUnits->setMax(current->tu);
+
 	_barTimeUnits->setValue(current->tu);
-	_barTimeUnits->setValue2(initial->tu);
+
+	// kL_begin:
+	if (current->tu > initial->tu)
+	{
+		_barTimeUnits->setValue2(initial->tu);
+	}
+	else
+		_barTimeUnits->setValue2(current->tu);
+	// kL_end.
+//kL	_barTimeUnits->setValue2(initial->tu);
+
 
 	std::wstringstream ss2;
 	ss2 << current->stamina;
 	_numStamina->setText(ss2.str());
-	_barStamina->setMax(current->stamina);
+
+	// kL_begin:
+	if (current->stamina > initial->stamina)
+	{
+		_barStamina->setMax(current->stamina);
+	}
+	else
+		_barStamina->setMax(initial->stamina);
+	// kL_end.
+//kL	_barStamina->setMax(current->stamina);
+
 	_barStamina->setValue(current->stamina);
-	_barStamina->setValue2(initial->stamina);
+
+	// kL_begin:
+	if (current->stamina > initial->stamina)
+	{
+		_barStamina->setValue2(initial->stamina);
+	}
+	else
+		_barStamina->setValue2(current->stamina);
+	// kL_end.
+//kL	_barStamina->setValue2(initial->stamina);
+
 
 	std::wstringstream ss3;
 	ss3 << current->health;
 	_numHealth->setText(ss3.str());
-	_barHealth->setMax(current->health);
+
+	// kL_begin:
+	if (current->health > initial->health)
+	{
+		_barHealth->setMax(current->health);
+	}
+	else
+		_barHealth->setMax(initial->health);
+	// kL_end.
+//kL	_barHealth->setMax(current->health);
+
 	_barHealth->setValue(current->health);
-	_barHealth->setValue2(initial->health);
+
+	// kL_begin:
+	if (current->health > initial->health)
+	{
+		_barHealth->setValue2(initial->health);
+	}
+	else
+		_barHealth->setValue2(current->health);
+	// kL_end.
+//kL	_barHealth->setValue2(initial->health);
+
 
 	std::wstringstream ss4;
 	ss4 << current->bravery;
@@ -400,9 +461,28 @@ void SoldierInfoState::init()
 	std::wstringstream ss8;
 	ss8 << current->strength;
 	_numStrength->setText(ss8.str());
-	_barStrength->setMax(current->strength);
+
+	// kL_begin:
+	if (current->strength > initial->strength)
+	{
+		_barStrength->setMax(current->strength);
+	}
+	else
+		_barStrength->setMax(initial->strength);
+	// kL_end.
+//kL	_barStrength->setMax(current->strength);
+
 	_barStrength->setValue(current->strength);
-	_barStrength->setValue2(initial->strength);
+
+	// kL_begin:
+	if (current->strength > initial->strength)
+	{
+		_barStrength->setValue2(initial->strength);
+	}
+	else
+		_barStrength->setValue2(current->strength);
+	// kL_end.
+//kL	_barStrength->setValue2(initial->strength);
 
 	std::wstring wsArmor;
 	std::string armorType = s->getArmor()->getType();
@@ -439,6 +519,7 @@ void SoldierInfoState::init()
 		ss12 << _game->getLanguage()->getString("STR_NONE_UC");
 	else
 		ss12 << s->getCraft()->getName(_game->getLanguage());
+
 	_txtCraft->setText(ss12.str());
 
 	if (s->getWoundRecovery() > 0)
@@ -454,7 +535,7 @@ void SoldierInfoState::init()
 
 	_txtPsionic->setVisible(s->isInPsiTraining());
 
-	if(current->psiSkill > 0)
+	if (current->psiSkill > 0)
 	{
 		std::wstringstream ss14;
 		ss14 << current->psiStrength;
@@ -496,8 +577,8 @@ void SoldierInfoState::init()
  */
 void SoldierInfoState::edtSoldierKeyPress(Action *action)
 {
-	if (action->getDetails()->key.keysym.sym == SDLK_RETURN ||
-		action->getDetails()->key.keysym.sym == SDLK_KP_ENTER)
+	if (action->getDetails()->key.keysym.sym == SDLK_RETURN
+		|| action->getDetails()->key.keysym.sym == SDLK_KP_ENTER)
 	{
 		_base->getSoldiers()->at(_soldier)->setName(_edtSoldier->getText());
 	}
@@ -521,10 +602,12 @@ void SoldierInfoState::btnPrevClick(Action *)
 {
 	_edtSoldier->deFocus();
 	_base->getSoldiers()->at(_soldier)->setName(_edtSoldier->getText());
+
 	if (_soldier == 0)
 		_soldier = _base->getSoldiers()->size() - 1;
 	else
 		_soldier--;
+
 	init();
 }
 
@@ -536,9 +619,11 @@ void SoldierInfoState::btnNextClick(Action *)
 {
 	_edtSoldier->deFocus();
 	_base->getSoldiers()->at(_soldier)->setName(_edtSoldier->getText());
+
 	_soldier++;
 	if (_soldier >= _base->getSoldiers()->size())
 		_soldier = 0;
+
 	init();
 }
 
@@ -550,7 +635,10 @@ void SoldierInfoState::btnArmorClick(Action *)
 {	
 	_edtSoldier->deFocus();
 	_base->getSoldiers()->at(_soldier)->setName(_edtSoldier->getText());
-	if (!_base->getSoldiers()->at(_soldier)->getCraft() || (_base->getSoldiers()->at(_soldier)->getCraft() && _base->getSoldiers()->at(_soldier)->getCraft()->getStatus() != "STR_OUT"))
+
+	if (!_base->getSoldiers()->at(_soldier)->getCraft()
+		|| (_base->getSoldiers()->at(_soldier)->getCraft()
+			&& _base->getSoldiers()->at(_soldier)->getCraft()->getStatus() != "STR_OUT"))
 	{
 		_game->pushState(new SoldierArmorState(_game, _base, _soldier));
 	}

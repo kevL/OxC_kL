@@ -99,6 +99,7 @@ void AggroBAIState::load(const YAML::Node &node)
 				_lastKnownTarget = (*j);
 		}
 	}
+
 	_lastKnownPosition = node["lastKnownPosition"].as<Position>(_lastKnownPosition);
 	_timesNotSeen = node["timesNotSeen"].as<int>(_timesNotSeen);
 	_charge = node["charge"].as<bool>(_charge);
@@ -133,6 +134,7 @@ YAML::Node AggroBAIState::save() const
 	node["lastKnownPosition"] = _lastKnownPosition;
 	node["timesNotSeen"] = _timesNotSeen;
 	node["charge"] = _charge;
+
 	return node;
 }
 
@@ -287,6 +289,7 @@ void AggroBAIState::setAggroTarget(BattleUnit *unit)
 bool AggroBAIState::explosiveEfficacy(Position targetPos, BattleUnit *attackingUnit, int radius, int diff)
 {
 	// i hate the player and i want him dead, but i don't want to piss him off.
+	// kL_note: am i sure I want this!!
 	if (_game->getTurn() < 3)
 		return false;
 
