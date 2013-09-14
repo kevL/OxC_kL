@@ -40,7 +40,10 @@ namespace OpenXcom
  * By default states are full-screen.
  * @param game Pointer to the core game.
  */
-State::State(Game *game) : _game(game), _surfaces(), _screen(true)
+State::State(Game *game) :
+	_game(game),
+	_surfaces(),
+	_screen(true)
 {
 }
 
@@ -56,14 +59,12 @@ State::~State()
 }
 
 /**
- * Adds a new child surface for the state to take care of,
- * giving it the game's display palette. Once associated,
- * the state handles all of the surface's behaviour
- * and management automatically.
- * @param surface Child surface.
- * @note Since visible elements can overlap one another,
- * they have to be added in ascending Z-Order to be blitted
- * correctly onto the screen.
+ * Adds a new child surface for the state to take care of, giving
+ * it the game's display palette. Once associated, the state handles
+ * all of the surface's behaviour and management automatically.
+ * @param surface, Child surface.
+ * @note, Since visible elements can overlap one another, they have to
+ * be added in ascending Z-Order to be blitted correctly onto the screen.
  */
 void State::add(Surface *surface)
 {
@@ -71,12 +72,12 @@ void State::add(Surface *surface)
 	surface->setPalette(_game->getScreen()->getPalette());
 
 	// Set default fonts
-	Text *t = dynamic_cast<Text*>(surface);
-	TextButton *tb = dynamic_cast<TextButton*>(surface);
-	TextEdit *te = dynamic_cast<TextEdit*>(surface);
-	TextList *tl = dynamic_cast<TextList*>(surface);
-	WarningMessage *wm = dynamic_cast<WarningMessage*>(surface);
-	BaseView *bv = dynamic_cast<BaseView*>(surface);
+	Text *t				= dynamic_cast<Text*>(surface);
+	TextButton *tb		= dynamic_cast<TextButton*>(surface);
+	TextEdit *te		= dynamic_cast<TextEdit*>(surface);
+	TextList *tl		= dynamic_cast<TextList*>(surface);
+	WarningMessage *wm	= dynamic_cast<WarningMessage*>(surface);
+	BaseView *bv		= dynamic_cast<BaseView*>(surface);
 
 	if (t)
 	{

@@ -70,7 +70,8 @@ ActionMenuState::ActionMenuState(Game *game, BattleAction *action, int x, int y)
 	}
 
 	// priming
-	if ((weapon->getBattleType() == BT_GRENADE || weapon->getBattleType() == BT_PROXIMITYGRENADE)
+	if ((weapon->getBattleType() == BT_GRENADE
+			|| weapon->getBattleType() == BT_PROXIMITYGRENADE)
 		&& _action->weapon->getExplodeTurn() == 0)
 	{
 		addItem(BA_PRIME, "STR_PRIME_GRENADE", &id);
@@ -100,18 +101,16 @@ ActionMenuState::ActionMenuState(Game *game, BattleAction *action, int x, int y)
 	}
 	else if (weapon->getBattleType() == BT_MELEE)
 	{
-		// stun rod
-		if (weapon->getDamageType() == DT_STUN)
+		if (weapon->getDamageType() == DT_STUN)		// stun rod
 		{
 			addItem(BA_HIT, "STR_STUN", &id);
 		}
 		else
-		// melee weapon
 		{
-			addItem(BA_HIT, "STR_HIT_MELEE", &id);
+			addItem(BA_HIT, "STR_HIT_MELEE", &id);	// melee weapon
 		}
 	}
-	// special items
+	/** special items */
 	else if (weapon->getBattleType() == BT_MEDIKIT)
 	{
 		addItem(BA_USE, "STR_USE_MEDI_KIT", &id);
@@ -179,7 +178,8 @@ void ActionMenuState::addItem(BattleActionType ba, const std::string &name, int 
 void ActionMenuState::handle(Action *action)
 {
 	State::handle(action);
-	if (action->getDetails()->type == SDL_MOUSEBUTTONDOWN && action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+	if (action->getDetails()->type == SDL_MOUSEBUTTONDOWN
+		&& action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
 		_game->popState();
 	}
@@ -195,7 +195,7 @@ void ActionMenuState::btnActionMenuItemClick(Action *action)
 	RuleItem *weapon = _action->weapon->getRules();
 
 	// got to find out which button was pressed
-	for (size_t i = 0; i < sizeof(_actionMenu)/sizeof(_actionMenu[0]) && btnID == -1; ++i)
+	for (size_t i = 0; i < sizeof(_actionMenu) / sizeof(_actionMenu[0]) && btnID == -1; ++i)
 	{
 		if (action->getSender() == _actionMenu[i])
 		{
@@ -205,8 +205,9 @@ void ActionMenuState::btnActionMenuItemClick(Action *action)
 
 	if (btnID != -1)
 	{
-		_action->type = _actionMenu[btnID]->getAction();
 		_action->TU = _actionMenu[btnID]->getTUs();
+
+		_action->type = _actionMenu[btnID]->getAction();
 		if (_action->type == BA_PRIME)
 		{
 			if (weapon->getBattleType() == BT_PROXIMITYGRENADE)
@@ -219,30 +220,42 @@ void ActionMenuState::btnActionMenuItemClick(Action *action)
 				_game->pushState(new PrimeGrenadeState(_game, _action, false, 0));
 			}
 		}
-		else if (_action->type == BA_USE && weapon->getBattleType() == BT_MEDIKIT)
+		else if (_action->type == BA_USE
+			&& weapon->getBattleType() == BT_MEDIKIT)
 		{
 			BattleUnit *targetUnit = NULL;
+
 			std::vector<BattleUnit*> *const units (_game->getSavedGame()->getSavedBattle()->getUnits());
-			for(std::vector<BattleUnit*>::const_iterator i = units->begin (); i != units->end () && !targetUnit; ++i)
+			for (std::vector<BattleUnit*>::const_iterator i = units->begin (); i != units->end () && !targetUnit; ++i)
 			{
 				// we can heal a unit that is at the same position, unconscious and healable(=woundable)
-				if ((*i)->getPosition() == _action->actor->getPosition() && *i != _action->actor && (*i)->getStatus () == STATUS_UNCONSCIOUS && (*i)->isWoundable())
+				if ((*i)->getPosition() == _action->actor->getPosition()
+					&& *i != _action->actor
+					&& (*i)->getStatus () == STATUS_UNCONSCIOUS
+					&& (*i)->isWoundable())
 				{
 					targetUnit = *i;
 				}
 			}
+
 			if (!targetUnit)
 			{
 				Position p;
 				Pathfinding::directionToVector(_action->actor->getDirection(), &p);
+
 				Tile * tile (_game->getSavedGame()->getSavedBattle()->getTile(_action->actor->getPosition() + p));
-				if (tile != 0 && tile->getUnit() && tile->getUnit()->isWoundable())
+				if (tile != 0
+					&& tile->getUnit()
+					&& tile->getUnit()->isWoundable())
+				{
 					targetUnit = tile->getUnit();
+				}
 			}
+
 			if (targetUnit)
 			{
 				_game->popState();
-				_game->pushState (new MedikitState (_game, targetUnit, _action));
+				_game->pushState(new MedikitState(_game, targetUnit, _action));
 			}
 			else
 			{
@@ -250,13 +263,14 @@ void ActionMenuState::btnActionMenuItemClick(Action *action)
 				_game->popState();
 			}
 		}
-		else if (_action->type == BA_USE && weapon->getBattleType() == BT_SCANNER)
+		else if (_action->type == BA_USE
+			&& weapon->getBattleType() == BT_SCANNER)
 		{
 			// spend TUs first, then show the scanner
-			if (_action->actor->spendTimeUnits (_action->TU))
+			if (_action->actor->spendTimeUnits(_action->TU))
 			{
 				_game->popState();
-				_game->pushState (new ScannerState (_game, _action));
+				_game->pushState(new ScannerState(_game, _action));
 			}
 			else
 			{
@@ -271,7 +285,9 @@ void ActionMenuState::btnActionMenuItemClick(Action *action)
 			{
 				_action->result = "STR_NOT_ENOUGH_TIME_UNITS";
 			}
-			else if (_action->weapon->getAmmoItem() ==0 || (_action->weapon->getAmmoItem() && _action->weapon->getAmmoItem()->getAmmoQuantity() == 0))
+			else if (_action->weapon->getAmmoItem() == 0
+				|| (_action->weapon->getAmmoItem()
+					&& _action->weapon->getAmmoItem()->getAmmoQuantity() == 0))
 			{
 				_action->result = "STR_NO_AMMUNITION_LOADED";
 			}
@@ -279,24 +295,25 @@ void ActionMenuState::btnActionMenuItemClick(Action *action)
 			{
 				_action->targeting = true;
 			}
+
 			_game->popState();
 		}
-		else if ((_action->type == BA_STUN || _action->type == BA_HIT) && weapon->getBattleType() == BT_MELEE)
+		else if ((_action->type == BA_STUN
+				|| _action->type == BA_HIT)
+			&& weapon->getBattleType() == BT_MELEE)
 		{
 
-			if (!_game->getSavedGame()->getSavedBattle()->getTileEngine()->validMeleeRange(
-				_action->actor->getPosition(),
-				_action->actor->getDirection(),
-				_action->actor,
-				0))
+			if (!_game->getSavedGame()->getSavedBattle()->getTileEngine()->validMeleeRange(_action->actor->getPosition(), _action->actor->getDirection(), _action->actor, 0))
 			{
 				_action->result = "STR_THERE_IS_NO_ONE_THERE";
 			}
+
 			_game->popState();
 		}
 		else
 		{
 			_action->targeting = true;
+
 			_game->popState();
 		}
 	}

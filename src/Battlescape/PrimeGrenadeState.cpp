@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "PrimeGrenadeState.h"
 #include <sstream>
 #include <cmath>
@@ -30,6 +31,7 @@
 #include "../Savegame/BattleItem.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/SavedBattleGame.h"
+#include "WarningMessage.h"		// kL
 
 namespace OpenXcom
 {
@@ -39,21 +41,27 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param action Pointer to  the action.
  */
-PrimeGrenadeState::PrimeGrenadeState(Game *game, BattleAction *action, bool inInventoryView, BattleItem *grenadeInInventory) : State(game), _action(action), _inInventoryView(inInventoryView), _grenadeInInventory(grenadeInInventory)
+PrimeGrenadeState::PrimeGrenadeState(Game *game, BattleAction *action, bool inInventoryView, BattleItem *grenadeInInventory)
+	: State(game), _action(action), _inInventoryView(inInventoryView), _grenadeInInventory(grenadeInInventory)
 {
 	_screen = false;
 
 	// Create objects
-	_title = new Text(192, 24, 65, 45);
-	_window = new Window(this, 192, 27, 65, 37);
-	_bg = new Surface(192, 93, 65, 45);
+	_title		= new Text(192, 24, 65, 45);
+	_window		= new Window(this, 192, 27, 65, 37);
+	_bg			= new Surface(192, 93, 65, 45);
+	_warning	= new WarningMessage(224, 24, 48, 176);		// kL
+
+	_warning->setFonts(_game->getResourcePack()->getFont("Big.fnt"), _game->getResourcePack()->getFont("Small.fnt"));	// kL
+	_warning->setColor(Palette::blockOffset(2));																		// kL
+	_warning->setTextColor(Palette::blockOffset(1) - 1);																// kL
 
 	int x = 67;
 	int y = 69;
 	for (int i = 0; i < 24; ++i)
 	{
-		_button[i] = new InteractiveSurface(22, 22, x-1+((i%8)*24), y-4+((i/8)*25));
-		_number[i] = new Text(20, 20, x+((i%8)*24), y+((i/8)*25));
+		_button[i] = new InteractiveSurface(22, 22, x - 1 + ((i % 8) * 24), y - 4 + ((i / 8) * 25));
+		_number[i] = new Text(20, 20, x + ((i % 8) * 24), y + ((i / 8) * 25));
 	}
 
 	// Set up objects
@@ -107,11 +115,11 @@ PrimeGrenadeState::PrimeGrenadeState(Game *game, BattleAction *action, bool inIn
 }
 
 /**
- *
+ * Deletes the Prime Grenade window object.
  */
 PrimeGrenadeState::~PrimeGrenadeState()
 {
-
+	delete _warning;	// kL
 }
 
 /**
@@ -121,13 +129,15 @@ PrimeGrenadeState::~PrimeGrenadeState()
 void PrimeGrenadeState::handle(Action *action)
 {
 	State::handle(action);
-	if (action->getDetails()->type == SDL_MOUSEBUTTONDOWN && action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+
+	if (action->getDetails()->type == SDL_MOUSEBUTTONDOWN
+		&& action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
 		if (!_inInventoryView) _action->value = -1;
+
 		_game->popState();
 	}
 }
-
 
 /**
  * Executes the action corresponding to this action menu item.
@@ -140,7 +150,9 @@ void PrimeGrenadeState::btnClick(Action *action)
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
 		if (!_inInventoryView) _action->value = btnID;
+
 		_game->popState();
+
 		return;
 	}
 
@@ -155,10 +167,19 @@ void PrimeGrenadeState::btnClick(Action *action)
 
 	if (btnID != -1)
 	{
-		if (_inInventoryView) _grenadeInInventory->setExplodeTurn(1 + btnID);
-		else _action->value = btnID;
-		_game->popState();
-		if (!_inInventoryView) _game->popState();
+		if (_inInventoryView)
+		{
+			_grenadeInInventory->setExplodeTurn(1 + btnID);
+//			_warning->showMessage(_game->getLanguage()->getString("STR_GRENADE_IS_ACTIVATED"));		// kL
+		}
+		else
+		{
+			_action->value = btnID;
+		}
+
+		_game->popState(); // kL_note: get rid of the Timer menu
+
+		if (!_inInventoryView) _game->popState(); // kL_note: get rid of the Action menu.
 	}
 }
 

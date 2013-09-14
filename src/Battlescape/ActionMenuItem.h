@@ -36,32 +36,32 @@ class Text;
  */
 class ActionMenuItem : public InteractiveSurface
 {
-private:
-	int _id;
-	bool _highlighted;
-	BattleActionType _action;
-	int _tu;
-	Text *_txtDescription, *_txtAcc, *_txtTU;
-public:
-	/// Creates a new ActionMenuItem.
-	ActionMenuItem(int id, Font *big, Font *small, int x, int y);
-	/// Cleans up the ActionMenuItem.
-	~ActionMenuItem();
-	/// Assigns an action to it.
-	void setAction(BattleActionType action, std::wstring description, std::wstring accuracy, std::wstring timeunits, int tu);
-	/// Gets the assigned action.
-	BattleActionType getAction() const;
-	/// Gets the assigned action TUs.
-	int getTUs() const;
-	/// Sets the palettes.
-	void setPalette(SDL_Color *colors, int firstcolor, int ncolors);
-	/// Redraws it.
-	void draw();
-	/// Processes a mouse hover in event.
-	void mouseIn(Action *action, State *state);
-	/// Processes a mouse hover out event.
-	void mouseOut(Action *action, State *state);
+	public:
+		/// Creates a new ActionMenuItem.
+		ActionMenuItem(int id, Font *big, Font *small, int x, int y);
+		/// Cleans up the ActionMenuItem.
+		~ActionMenuItem();
+		/// Assigns an action to it.
+		void setAction(BattleActionType action, std::wstring description, std::wstring accuracy, std::wstring timeunits, int tu);
+		/// Gets the assigned action.
+		BattleActionType getAction() const;
+		/// Gets the assigned action TUs.
+		int getTUs() const;
+		/// Sets the palettes.
+		void setPalette(SDL_Color *colors, int firstcolor, int ncolors);
+		/// Redraws it.
+		void draw();
+		/// Processes a mouse hover in event.
+		void mouseIn(Action *action, State *state);
+		/// Processes a mouse hover out event.
+		void mouseOut(Action *action, State *state);
 
+	private:
+		int _id;
+		bool _highlighted;
+		BattleActionType _action;
+		int _tu;
+		Text *_txtDescription, *_txtAcc, *_txtTU;
 };
 
 }

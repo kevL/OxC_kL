@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http:///www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_PRIMEGRENADESTATE_H
 #define OPENXCOM_PRIMEGRENADESTATE_H
 
@@ -30,31 +31,33 @@ class Text;
 class InteractiveSurface;
 class Window;
 class Surface;
+class WarningMessage;	// kL
 
 /**
- * Window that allows the player
- * to set the timer of an explosive.
+ * Window that allows the player to set the timer of an explosive.
  */
 class PrimeGrenadeState : public State
 {
-private:
-	BattleAction *_action;
-	bool _inInventoryView;
-	BattleItem *_grenadeInInventory;
-	Text *_number[24];
-	Text *_title;
-	Window *_window;
-	InteractiveSurface *_button[24];
-	Surface *_bg;
-public:
-	/// Creates the Prime Grenade state.
-	PrimeGrenadeState(Game *game, BattleAction *action, bool inInventoryView, BattleItem *grenadeInInventory);
-	/// Cleans up the Prime Grenade state.
-	~PrimeGrenadeState();
-	/// Handler for right-clicking anything.
-	void handle(Action *action);
-	/// Handler for clicking a button.
-	void btnClick(Action *action);
+	public:
+		/// Creates the Prime Grenade state.
+		PrimeGrenadeState(Game *game, BattleAction *action, bool inInventoryView, BattleItem *grenadeInInventory);
+		/// Cleans up the Prime Grenade state.
+		~PrimeGrenadeState();
+		/// Handler for right-clicking anything.
+		void handle(Action *action);
+		/// Handler for clicking a button.
+		void btnClick(Action *action);
+
+	private:
+		BattleAction *_action;
+		bool _inInventoryView;
+		BattleItem *_grenadeInInventory;
+		Text *_number[24];
+		Text *_title;
+		Window *_window;
+		InteractiveSurface *_button[24];
+		Surface *_bg;
+		WarningMessage *_warning;		// kL
 };
 
 }

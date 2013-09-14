@@ -61,30 +61,30 @@ InventoryState::InventoryState(Game *game, bool tu, BattlescapeState *parent) : 
 	_showMoreStatsInInventoryView = Options::getBool("showMoreStatsInInventoryView");
 
 	// Create objects
-	_bg = new Surface(320, 200, 0, 0);
-	_soldier = new Surface(320, 200, 0, 0);
-	_txtName = new Text(200, 16, 36, 6);
-	_txtTus = new Text(40, 9, 245, _showMoreStatsInInventoryView ? 32 : 24);
+	_bg			= new Surface(320, 200, 0, 0);
+	_soldier	= new Surface(320, 200, 0, 0);
+	_txtName	= new Text(200, 16, 36, 6);
+	_txtTus		= new Text(40, 9, 245, _showMoreStatsInInventoryView ? 32 : 24);
 
 	if (_showMoreStatsInInventoryView)
 	{
-		_txtWeight = new Text(70, 9, 245, 24);
-		_txtFAcc = new Text(40, 9, 245, 32);
-		_txtReact = new Text(40, 9, 245, 40);
-		_txtPSkill = new Text(40, 9, 245, 48);
-		_txtPStr = new Text(40, 9, 245, 56);
+		_txtWeight	= new Text(70, 9, 245, 24);
+		_txtFAcc	= new Text(40, 9, 245, 32);
+		_txtReact	= new Text(40, 9, 245, 40);
+		_txtPSkill	= new Text(40, 9, 245, 48);
+		_txtPStr	= new Text(40, 9, 245, 56);
 	}
 
-	_txtItem = new Text(140, 9, 128, 140);
-	_txtAmmo = new Text(66, 24, 254, 64);
-	_btnOk = new InteractiveSurface(35, 22, 237, 1);
-	_btnPrev = new InteractiveSurface(23, 22, 273, 1);
-	_btnNext = new InteractiveSurface(23, 22, 297, 1);
-	_btnUnload = new InteractiveSurface(32, 25, 288, 32);
-	_btnGround = new InteractiveSurface(32, 15, 289, 137);
-	_btnRank = new InteractiveSurface(26, 23, 0, 0);
-	_selAmmo = new Surface(RuleInventory::HAND_W * RuleInventory::SLOT_W, RuleInventory::HAND_H * RuleInventory::SLOT_H, 272, 88);
-	_inv = new Inventory(_game, 320, 200, 0, 0);
+	_txtItem	= new Text(140, 9, 128, 140);
+	_txtAmmo	= new Text(66, 24, 254, 64);
+	_btnOk		= new InteractiveSurface(35, 22, 237, 1);
+	_btnPrev	= new InteractiveSurface(23, 22, 273, 1);
+	_btnNext	= new InteractiveSurface(23, 22, 297, 1);
+	_btnUnload	= new InteractiveSurface(32, 25, 288, 32);
+	_btnGround	= new InteractiveSurface(32, 15, 289, 137);
+	_btnRank	= new InteractiveSurface(26, 23, 0, 0);
+	_selAmmo	= new Surface(RuleInventory::HAND_W * RuleInventory::SLOT_W, RuleInventory::HAND_H * RuleInventory::SLOT_H, 272, 88);
+	_inv		= new Inventory(_game, 320, 200, 0, 0);
 
 	add(_bg);
 	add(_soldier);

@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "WarningMessage.h"
 #include <SDL.h>
 #include <string>
@@ -104,7 +105,9 @@ void WarningMessage::showMessage(const std::wstring &msg)
 	_text->setText(msg);
 	_fade = 0;
 	_redraw = true;
+
 	setVisible(true);
+
 	_timer->start();
 }
 
@@ -121,11 +124,13 @@ void WarningMessage::think()
  */
 void WarningMessage::fade()
 {
-	_fade++;
 	_redraw = true;
+
+	_fade++;
 	if (_fade == 24)
 	{
 		setVisible(false);
+
 		_timer->stop();
 	}
 }
