@@ -41,14 +41,21 @@ namespace OpenXcom
  * @param state Pointer to the Battlescape state.
  */
 NextTurnState::NextTurnState(Game *game, SavedBattleGame *battleGame, BattlescapeState *state)
-	: State(game), _battleGame(battleGame), _state(state)
+// NextTurnState::NextTurnState(Game *game, SavedBattleGame *battleGame, BattlescapeState *state, TurnCounter* turnCounter)		// kL
+	:
+	State(game),
+	_battleGame(battleGame),
+	_state(state)
+//	_turnCounter(turnCounter)		// kL
 {
+	Log(LOG_INFO) << "Create NextTurnState";		// kL
+
 	// Create objects
-	_window = new Window(this, 320, 200, 0, 0);
-	_txtTitle = new Text(320, 16, 0, 68);
-	_txtTurn = new Text(320, 16, 0, 92);
-	_txtSide = new Text(320, 16, 0, 108);
-	_txtMessage = new Text(320, 16, 0, 132);
+	_window		= new Window(this, 320, 200, 0, 0);
+	_txtTitle	= new Text(320, 16, 0, 68);
+	_txtTurn	= new Text(320, 16, 0, 92);
+	_txtSide	= new Text(320, 16, 0, 108);
+	_txtMessage	= new Text(320, 16, 0, 132);
 
 	add(_window);
 	add(_txtTitle);
@@ -74,7 +81,7 @@ NextTurnState::NextTurnState(Game *game, SavedBattleGame *battleGame, Battlescap
 	_txtTurn->setAlign(ALIGN_CENTER);
 	_txtTurn->setHighContrast(true);
 	std::wstringstream ss;
-	Log(LOG_INFO) << ". Next Turn : " << _battleGame->getTurn();
+	Log(LOG_INFO) << ". SavedBattleGame::getTurn() : " << _battleGame->getTurn();	// kL
 	ss << _game->getLanguage()->getString("STR_TURN") << L" " << _battleGame->getTurn();
 	_txtTurn->setText(ss.str());
 
@@ -93,6 +100,8 @@ NextTurnState::NextTurnState(Game *game, SavedBattleGame *battleGame, Battlescap
 	_txtMessage->setText(_game->getLanguage()->getString("STR_PRESS_BUTTON_TO_CONTINUE"));
 
 	_state->clearMouseScrollingState();
+
+	_turnCounter->update(_battleGame->getTurn());		// kL
 }
 
 /**
@@ -100,6 +109,9 @@ NextTurnState::NextTurnState(Game *game, SavedBattleGame *battleGame, Battlescap
  */
 NextTurnState::~NextTurnState()
 {
+	Log(LOG_INFO) << "Delete NextTurnState";		// kL
+
+//	delete _turnCounter;							// kL
 }
 
 /**
@@ -127,6 +139,7 @@ void NextTurnState::handle(Action *action)
 		{
 			_state->btnCenterClick(0);
 
+//			Log(LOG_INFO) << ". call TC_update";		// kL
 //			_turnCounter->update();		// kL
 //			_turnCounter->draw();		// kL
 		}

@@ -50,9 +50,14 @@ namespace OpenXcom
  * @param noSound Whether to disable the death sound.
  */
 UnitDieBState::UnitDieBState(BattlescapeGame *parent, BattleUnit *unit, ItemDamageType damageType, bool noSound)
-	: BattleState(parent), _unit(unit), _damageType(damageType), _noSound(noSound)
+	:
+	BattleState(parent),
+	_unit(unit),
+	_damageType(damageType),
+	_noSound(noSound)
 {
 	// don't show the "fall to death" animation when a unit is blasted with explosives or he is already unconscious
+	// kL_note: yeah absolutely show it!!!
 //kL	if (_damageType == DT_HE || _unit->getStatus() == STATUS_UNCONSCIOUS)
 	if (_unit->getStatus() == STATUS_UNCONSCIOUS)		// kL, see what happens...
 	{
@@ -70,7 +75,7 @@ UnitDieBState::UnitDieBState(BattlescapeGame *parent, BattleUnit *unit, ItemDama
 			_parent->getMap()->setUnitDying(true);
 		}
 
-		// kL_note: stop centering, but I should do a 'get is tile visible' else they twirl in darkness....
+		// kL_note: stop centering, but I should do a 'get is tile visible' else they may twirl in darkness....
 //kL		_parent->getMap()->getCamera()->centerOnPosition(_unit->getPosition());
 		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED * 2 / 7);
 
@@ -87,7 +92,7 @@ UnitDieBState::UnitDieBState(BattlescapeGame *parent, BattleUnit *unit, ItemDama
 		else //if (_parent->getMap()->getCamera()->isOnScreen(_unit->getPosition()))
 		{
 //			_unit->setDirection(unit->getDirection());	// safety?
-			_unit->deathPirouette();					// death animation spin
+			_unit->initDeathSpin();					// death animation spin, Savegame/BattleUnit.cpp
 		}
 		/* if (_unit->getSpawnUnit().empty())
 		{
@@ -138,7 +143,7 @@ void UnitDieBState::think()
 		// kL_begin:
 		if (_unit->getSpinPhase() > -1)
 		{
-			_unit->deathPirContinue();	// continue death animation spin
+			_unit->contDeathSpin();	// continue death animation spin
 		}
 		else
 		// kL_end.

@@ -26,7 +26,10 @@
 //#include "NumberText.h"
 //#include "../Savegame/SavedBattleGame.h"		// kL
 //#include "../Battlescape/BattlescapeState.h"	// kL
-//#include "../Battlescape/BattlescapeGame.h"		// kL
+//#include "../Battlescape/BattlescapeGame.h"	// kL
+
+//#include <typeinfo>
+//using namespace std;
 
 namespace OpenXcom
 {
@@ -38,11 +41,15 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-TurnCounter::TurnCounter(int width, int height, int x, int y, int tCount)//, SavedBattleGame battleGame)
+TurnCounter::TurnCounter(int width, int height, int x, int y)//, SavedBattleGame battleGame)
 //	: Surface(width, height, x, y)//, BattlescapeGame()//, _battleGame(&battleGame)
-	: tCount(0)
+//	:
+//	_tCount(0)
 {
-//	tCount = 0;
+	Log(LOG_INFO) << "Create TurnCounter";		// kL
+
+//	_tCount = 0;
+
 //	_visible = Options::getBool("fpsCounter");
 //	_visible = true;
 
@@ -59,6 +66,7 @@ TurnCounter::TurnCounter(int width, int height, int x, int y, int tCount)//, Sav
  */
 TurnCounter::~TurnCounter()
 {
+	Log(LOG_INFO) << "Delete TurnCounter";		// kL
 //	delete _text;
 //	delete _timer;
 }
@@ -66,17 +74,22 @@ TurnCounter::~TurnCounter()
 /**
  * Updates the Turn.
  */
-void TurnCounter::update()
+void TurnCounter::update(int t)
 {
-	Log(LOG_INFO) << ". pre Battle Turn";
+//	Log(LOG_INFO) << ". pre Battle Turn";
 
 //	tCount++;
 
-	Log(LOG_INFO) << ". Battle Turn : " << tCount;
+	Log(LOG_INFO) << ". TurnCounter::update() : " << t;
 
+//	_tCount = t;
+	int _tCount = t;
+//	_tCount = const_cast<int&> (t);
+//	_tCount = &t;
 
-//	int fps = (int)floor((double)_frames / _timer->getTime() * 1000);
-//	_text->setValue(fps);
+//	setCount(t);
+
+	Log(LOG_INFO) << ". TurnCounter::update() END : " << _tCount;
 
 //	SavedBattleGame turn;
 //	unsigned int t = turn.getTurn();
@@ -94,6 +107,23 @@ void TurnCounter::update()
 
 //	_turncount = 0;
 //	_redraw = true;
+}
+
+/**
+ * 
+ */
+void TurnCounter::setCount(int t)
+{
+	Log(LOG_INFO) << ". TurnCounter::setCount() : " << t;
+//	Log(LOG_INFO) << ". . typeof (t) : " << typeid(t).name();
+//	Log(LOG_INFO) << ". . typeof (_tCount) : " << typeid(_tCount).name();
+
+//	Uint8 TEMP = (unsigned char)t;
+//	Log(LOG_INFO) << ". . typeof (TEMP) : " << typeid(TEMP).name();
+
+//	_tCount = (unsigned char)t;
+
+	Log(LOG_INFO) << ". TurnCounter::setCount() END";
 }
 
 /**

@@ -22,6 +22,7 @@
 
 //#include "../Engine/Surface.h"
 
+
 namespace OpenXcom
 {
 
@@ -37,13 +38,24 @@ namespace OpenXcom
  */
 class TurnCounter// : public Surface//, public SavedBattleGame//, public BattlescapeGame
 {
+	private:
+//		Uint8 _tCount;
+		void setCount(int t);
+
+//		NumberText *_text;
+	//	int t = 0;
+	//	Timer *_timer;
+//		SavedBattleGame* _sbgame;
+	//	BattlescapeGame *_bsgame;
+
 	public:
 		/// Creates a new Turn counter linked to a game.
-		TurnCounter(int width, int height, int x, int y, int tCount);//, SavedBattleGame battleGame);
+		TurnCounter(int width, int height, int x, int y);//, SavedBattleGame battleGame);
 		/// Cleans up all the Turn counter resources.
 		~TurnCounter();
 		// Updates Turn counter.
-		void update();
+		void update(int t);
+//		Uint8 _tCount;
 
 		/// Sets the Turn counter's palette.
 /*		void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
@@ -55,14 +67,6 @@ class TurnCounter// : public Surface//, public SavedBattleGame//, public Battles
 		void think();
 		/// Draws the Turn counter.
 		void draw(); */
-
-	private:
-		int tCount;
-//		NumberText *_text;
-	//	int t = 0;
-	//	Timer *_timer;
-//		SavedBattleGame *_sbgame;
-	//	BattlescapeGame *_bsgame;
 };
 
 }

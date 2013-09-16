@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "TextList.h"
 #include <cstdarg>
 #include <cmath>
@@ -23,6 +24,7 @@
 #include "../Engine/Font.h"
 #include "../Engine/Palette.h"
 #include "ArrowButton.h"
+
 
 namespace OpenXcom
 {
@@ -35,12 +37,36 @@ namespace OpenXcom
  * @param y Y position in pixels.
  */
 TextList::TextList(int width, int height, int x, int y)
-	: InteractiveSurface(width, height, x, y),
-	_texts(), _columns(), _big(0), _small(0), _font(0), _scroll(0), _visibleRows(0), _color(0),
-	_dot(false), _selectable(false), _condensed(false), _contrast(false),
-	_selRow(0), _bg(0), _selector(0), _margin(0), _scrolling(true),
-	_arrowLeft(), _arrowRight(), _arrowPos(-1), _scrollPos(4), _arrowType(ARROW_VERTICAL),
-	_leftClick(0), _leftPress(0), _leftRelease(0), _rightClick(0), _rightPress(0), _rightRelease(0)
+	:
+	InteractiveSurface(width, height, x, y),
+	_texts(),
+	_columns(),
+	_big(0),
+	_small(0),
+	_font(0),
+	_scroll(0),
+	_visibleRows(0),
+	_color(0),
+	_dot(false),
+	_selectable(false),
+	_condensed(false),
+	_contrast(false),
+	_selRow(0),
+	_bg(0),
+	_selector(0),
+	_margin(0),
+	_scrolling(true),
+	_arrowLeft(),
+	_arrowRight(),
+	_arrowPos(-1),
+	_scrollPos(4),
+	_arrowType(ARROW_VERTICAL),
+	_leftClick(0),
+	_leftPress(0),
+	_leftRelease(0),
+	_rightClick(0),
+	_rightPress(0),
+	_rightRelease(0)
 {
 	_allowScrollOnArrowButtons = true;
 	_up = new ArrowButton(ARROW_BIG_UP, 13, 14, getX() + getWidth() + _scrollPos, getY() + 1);
@@ -523,8 +549,7 @@ void TextList::setCondensed(bool condensed)
 }
 
 /**
- * Returns the currently selected row if the text
- * list is selectable.
+ * Returns the currently selected row if the text list is selectable.
  * @return Selected row.
  */
 int TextList::getSelectedRow() const

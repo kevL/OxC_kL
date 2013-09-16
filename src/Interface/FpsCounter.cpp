@@ -36,8 +36,10 @@ namespace OpenXcom
  * @param y Y position in pixels.
  */
 FpsCounter::FpsCounter(int width, int height, int x, int y)
-//kL	: Surface(width, height, x, y), _frames(0)
-	: Surface(width, height, x, y + 12), _frames(0)		// kL
+	:
+//kL	Surface(width, height, x, y),
+	Surface(width, height, x, y + 12),
+	_frames(0)		// kL
 {
 	_visible = Options::getBool("fpsCounter");
 

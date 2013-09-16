@@ -125,16 +125,17 @@ void ExplosionBState::init()
 	else // create a bullet hit
 	{
 //kL		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED / 2);
-		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED * 3 / 4);		// kL
+		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED * 5 / 7);		// kL
 
-		bool hit = (_item->getRules()->getBattleType() == BT_MELEE || _item->getRules()->getBattleType() == BT_PSIAMP);
+		bool hit = _item->getRules()->getBattleType() == BT_MELEE || _item->getRules()->getBattleType() == BT_PSIAMP;
 		Explosion *explosion = new Explosion(_center, _item->getRules()->getHitAnimation(), false, hit);
 
 		_parent->getMap()->getExplosions()->insert(explosion);
 
 		_parent->getResourcePack()->getSound("BATTLE.CAT", _item->getRules()->getHitSound())->play(); // bullet hit sound
 
-		if (hit && t->getVisible())
+		if (hit)
+//kL			&& t->getVisible())
 			_parent->getMap()->getCamera()->centerOnPosition(Position(_center.x / 16, _center.y / 16, _center.z / 24));
 	}
 }
@@ -181,7 +182,8 @@ void ExplosionBState::explode()
 	// after the animation is done, the real explosion/hit takes place
 	if (_item)
 	{
-		if (!_unit && _item->getPreviousOwner())
+		if (!_unit
+			&& _item->getPreviousOwner())
 		{
 			_unit = _item->getPreviousOwner();
 		}
@@ -193,8 +195,8 @@ void ExplosionBState::explode()
 		else
 		{
 			BattleUnit *victim = save->getTileEngine()->hit(_center, _power, _item->getRules()->getDamageType(), _unit);
-			// check if this unit turns others into zombies
-			if (!_unit->getZombieUnit().empty()
+
+			if (!_unit->getZombieUnit().empty() // check if this unit turns others into zombies
 				&& victim
 				&& victim->getArmor()->getSize() == 1
 				&& victim->getSpawnUnit().empty())
@@ -223,7 +225,9 @@ void ExplosionBState::explode()
 	_parent->checkForCasualties(_item, _unit, false, terrainExplosion);
 
 	// if this explosion was caused by a unit shooting, now it's the time to put the gun down
-	if (_unit && !_unit->isOut() && _lowerWeapon)
+	if (_unit
+		&& !_unit->isOut()
+		&& _lowerWeapon)
 	{
 		_unit->aim(false);
 	}
@@ -239,7 +243,9 @@ void ExplosionBState::explode()
 		_parent->statePushFront(new ExplosionBState(_parent, p, 0, _unit, t));
 	}
 
-	if (_item && (_item->getRules()->getBattleType() == BT_GRENADE || _item->getRules()->getBattleType() == BT_PROXIMITYGRENADE))
+	if (_item
+		&& (_item->getRules()->getBattleType() == BT_GRENADE
+			|| _item->getRules()->getBattleType() == BT_PROXIMITYGRENADE))
 	{
 		for (std::vector<BattleItem*>::iterator j = _parent->getSave()->getItems()->begin(); j != _parent->getSave()->getItems()->end(); ++j)
 		{
@@ -247,6 +253,7 @@ void ExplosionBState::explode()
 			{
 				delete *j;
 				_parent->getSave()->getItems()->erase(j);
+
 				break;
 			}
 		}

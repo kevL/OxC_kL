@@ -586,13 +586,16 @@ std::wstring Language::getName() const
 const LocalizedText &Language::getString(const std::string &id) const
 {
 	static LocalizedText hack(L"");
-	if (id.empty())
-		return hack;
+
+	if (id.empty()) return hack;
+
 	std::map<std::string, LocalizedText>::const_iterator s = _strings.find(id);
 	if (s == _strings.end())
 	{
 		Log(LOG_WARNING) << id << " not found in " << Options::getString("language");
+
 		hack = LocalizedText(utf8ToWstr(id));
+
 		return hack;
 	}
 	else

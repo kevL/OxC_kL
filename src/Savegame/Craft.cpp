@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #define _USE_MATH_DEFINES
 #include "Craft.h"
 #include <cmath>
@@ -36,6 +37,7 @@
 #include "Vehicle.h"
 #include "../Ruleset/RuleItem.h"
 
+
 namespace OpenXcom
 {
 
@@ -46,17 +48,34 @@ namespace OpenXcom
  * @param base Pointer to base of origin.
  * @param ids List of craft IDs (Leave NULL for no ID).
  */
-Craft::Craft(RuleCraft *rules, Base *base, int id) : MovingTarget(), _rules(rules), _base(base), _id(0), _fuel(0), _damage(0), _interceptionOrder(0), _weapons(), _status("STR_READY"), _lowFuel(false), _inBattlescape(false), _inDogfight(false), _name(L"")
+Craft::Craft(RuleCraft* rules, Base* base, int id)
+	:
+	MovingTarget(),
+	_rules(rules),
+	_base(base),
+	_id(0),
+	_fuel(0),
+	_damage(0),
+	_interceptionOrder(0),
+	_weapons(),
+	_status("STR_READY"),
+	_lowFuel(false),
+	_inBattlescape(false),
+	_inDogfight(false),
+	_name(L"")
 {
 	_items = new ItemContainer();
+
 	if (id != 0)
 	{
 		_id = id;
 	}
+
 	for (int i = 0; i < _rules->getWeapons(); ++i)
 	{
 		_weapons.push_back(0);
 	}
+
 	setBase(base);
 }
 
@@ -69,7 +88,9 @@ Craft::~Craft()
 	{
 		delete *i;
 	}
+
 	delete _items;
+
 	for (std::vector<Vehicle*>::iterator i = _vehicles.begin(); i != _vehicles.end(); ++i)
 	{
 		delete *i;
@@ -84,14 +105,17 @@ Craft::~Craft()
 void Craft::load(const YAML::Node &node, const Ruleset *rule, SavedGame *save)
 {
 	MovingTarget::load(node);
-	_id = node["id"].as<int>(_id);
-	_fuel = node["fuel"].as<int>(_fuel);
-	_damage = node["damage"].as<int>(_damage);
+
+	_id		= node["id"].as<int>(_id);
+	_fuel	= node["fuel"].as<int>(_fuel);
+	_damage	= node["damage"].as<int>(_damage);
 
 	if (const YAML::Node &dest = node["dest"])
 	{
 		std::string type = dest["type"].as<std::string>();
+
 		int id = dest["id"].as<int>();
+
 		if (type == "STR_BASE")
 		{
 			returnToBase();
@@ -148,8 +172,9 @@ void Craft::load(const YAML::Node &node, const Ruleset *rule, SavedGame *save)
 		std::string type = (*i)["type"].as<std::string>();
 		if (type != "0")
 		{
-			CraftWeapon *w = new CraftWeapon(rule->getCraftWeapon(type), 0);
+			CraftWeapon* w = new CraftWeapon(rule->getCraftWeapon(type), 0);
 			w->load(*i);
+
 			_weapons[j++] = w;
 		}
 	}
@@ -158,20 +183,22 @@ void Craft::load(const YAML::Node &node, const Ruleset *rule, SavedGame *save)
 	for (YAML::const_iterator i = node["vehicles"].begin(); i != node["vehicles"].end(); ++i)
 	{
 		std::string type = (*i)["type"].as<std::string>();
-		Vehicle *v = new Vehicle(rule->getItem(type), 0);
+		Vehicle* v = new Vehicle(rule->getItem(type), 0);
 		v->load(*i);
 		_vehicles.push_back(v);
 	}
-	_status = node["status"].as<std::string>(_status);
-	_lowFuel = node["lowFuel"].as<bool>(_lowFuel);
-	_inBattlescape = node["inBattlescape"].as<bool>(_inBattlescape);
-	_interceptionOrder = node["interceptionOrder"].as<int>(_interceptionOrder);
+
+	_status				= node["status"].as<std::string>(_status);
+	_lowFuel			= node["lowFuel"].as<bool>(_lowFuel);
+	_inBattlescape		= node["inBattlescape"].as<bool>(_inBattlescape);
+	_interceptionOrder	= node["interceptionOrder"].as<int>(_interceptionOrder);
+
 	if (const YAML::Node name = node["name"])
 	{
 		_name = Language::utf8ToWstr(name.as<std::string>());
 	}
-	if (_inBattlescape)
-		setSpeed(0);
+
+	if (_inBattlescape) setSpeed(0);
 }
 
 /**
@@ -181,13 +208,16 @@ void Craft::load(const YAML::Node &node, const Ruleset *rule, SavedGame *save)
 YAML::Node Craft::save() const
 {
 	YAML::Node node = MovingTarget::save();
-	node["type"] = _rules->getType();
-	node["id"] = _id;
-	node["fuel"] = _fuel;
-	node["damage"] = _damage;
+
+	node["type"]	= _rules->getType();
+	node["id"]		= _id;
+	node["fuel"]	= _fuel;
+	node["damage"]	= _damage;
+
 	for (std::vector<CraftWeapon*>::const_iterator i = _weapons.begin(); i != _weapons.end(); ++i)
 	{
 		YAML::Node subnode;
+
 		if (*i != 0)
 		{
 			subnode = (*i)->save();
@@ -196,21 +226,30 @@ YAML::Node Craft::save() const
 		{
 			subnode["type"] = "0";
 		}
+
 		node["weapons"].push_back(subnode);
 	}
+
 	node["items"] = _items->save();
+
 	for (std::vector<Vehicle*>::const_iterator i = _vehicles.begin(); i != _vehicles.end(); ++i)
 	{
 		node["vehicles"].push_back((*i)->save());
 	}
+
 	node["status"] = _status;
+
 	if (_lowFuel)
 		node["lowFuel"] = _lowFuel;
+
 	if (_inBattlescape)
 		node["inBattlescape"] = _inBattlescape;
+
 	node["interceptionOrder"] = _interceptionOrder;
+
 	if (!_name.empty())
 		node["name"] = Language::wstrToUtf8(_name);
+
 	return node;
 }
 
@@ -223,6 +262,7 @@ YAML::Node Craft::saveId() const
 	YAML::Node node = MovingTarget::saveId();
 	node["type"] = _rules->getType();
 	node["id"] = _id;
+
 	return node;
 }
 
@@ -244,6 +284,7 @@ void Craft::setRules(RuleCraft *rules)
 {
 	_rules = rules;
 	_weapons.clear();
+
 	for (int i = 0; i < _rules->getWeapons(); ++i)
 	{
 		_weapons.push_back(0);
@@ -272,8 +313,10 @@ std::wstring Craft::getName(Language *lang) const
 	{
 		std::wstringstream name;
 		name << lang->getString(_rules->getType()) << "-" << _id;
+
 		return name.str();
 	}
+
 	return _name;
 }
 

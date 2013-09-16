@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #define _USE_MATH_DEFINES
 #include <cmath>
 #include <sstream>
@@ -85,6 +86,7 @@
 #include "../Menu/LoadState.h"
 #include "../Interface/TurnCounter.h"	// kL
 
+
 namespace OpenXcom
 {
 
@@ -93,13 +95,18 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  */
 BattlescapeState::BattlescapeState(Game *game)
-	: State(game), _popups()
+	:
+	State(game),
+	_popups()
 {
+	Log(LOG_INFO) << "Create BattlescapeState";		// kL
 //	game->getScreen()->setScale(1.0);
+
 	int screenWidth = Options::getInt("baseXResolution");
 	int screenHeight = Options::getInt("baseYResolution");
 	int iconsWidth = 320;
 	int iconsHeight = 56;
+
 	_mouseOverIcons = false;
 
 	// Create buttonbar - this should be on the centerbottom of the screen
@@ -108,6 +115,7 @@ BattlescapeState::BattlescapeState(Game *game)
 	// Create the battlemap view
 	// the actual map height is the total height minus the height of the buttonbar
 	int visibleMapHeight = screenHeight - iconsHeight;
+
 	_map				= new Map(_game, screenWidth, screenHeight, 0, 0, visibleMapHeight);
 
 	_numLayers			= new NumberText(3, 5, _icons->getX() + 232, _icons->getY() + 6);
@@ -184,7 +192,7 @@ BattlescapeState::BattlescapeState(Game *game)
 //	BattlescapeState *bs;
 //	_turnCounter = new TurnCounter(75, 5, 0, 0, _save); // wide enough to fit the address..
 	Log(LOG_INFO) << ". new TurnCounter";
-	_turnCounter = new TurnCounter(70, 5, 0, 0, 0);//, *(_battleGame->getSave())); // wide enough to fit the address..
+	_turnCounter = new TurnCounter(70, 5, 0, 0);//, *(_battleGame->getSave())); // wide enough to fit the address..
 	Log(LOG_INFO) << ". new TurnCounter DONE";
 //	_turnCounter->setPalette(colors, firstcolor, ncolors);
 	// kL_end.
@@ -520,6 +528,8 @@ BattlescapeState::BattlescapeState(Game *game)
  */
 BattlescapeState::~BattlescapeState()
 {
+	Log(LOG_INFO) << "Delete BattlescapeState";		// kL
+
 	delete _animTimer;
 	delete _gameTimer;
 	delete _battleGame;
@@ -782,7 +792,7 @@ void BattlescapeState::mapClick(Action *action)
 //kL			&& playableUnitSelected())
 		if (playableUnitSelected()																						// kL
 			&& (action->getDetails()->button.button == SDL_BUTTON_RIGHT													// kL
-				|| (action->getDetails()->button.button == SDL_BUTTON_LEFT && SDL_GetModState() &KMOD_ALT) != 0))		// kL
+				|| (action->getDetails()->button.button == SDL_BUTTON_LEFT && SDL_GetModState() & KMOD_ALT) != 0))		// kL
 		{
 			_battleGame->secondaryAction(pos);
 		}
@@ -1346,7 +1356,8 @@ void BattlescapeState::blinkVisibleUnitButtons()
 void BattlescapeState::handleItemClick(BattleItem *item)
 {
 	// make sure there is an item, and the battlescape is in an idle state
-	if (item && !_battleGame->isBusy())
+	if (item
+		&& !_battleGame->isBusy())
 	{
 		if (_game->getSavedGame()->isResearched(item->getRules()->getRequirements())
 			|| _save->getSelectedUnit()->getOriginalFaction() == FACTION_HOSTILE)
@@ -1722,8 +1733,8 @@ void BattlescapeState::saveVoxelView()
 
 					hitPos = Position(_trajectory.at(0).x, _trajectory.at(0).y, _trajectory.at(0).z);
 					dist = sqrt((double)((hitPos.x-originVoxel.x)*(hitPos.x-originVoxel.x)
-						+ (hitPos.y-originVoxel.y)*(hitPos.y-originVoxel.y)
-						+ (hitPos.z-originVoxel.z)*(hitPos.z-originVoxel.z)) );
+							+ (hitPos.y-originVoxel.y)*(hitPos.y-originVoxel.y)
+							+ (hitPos.z-originVoxel.z)*(hitPos.z-originVoxel.z)) );
 					black = false;
 				}
 			}
@@ -1734,28 +1745,28 @@ void BattlescapeState::saveVoxelView()
 			}
 			else
 			{
-				if (dist>1000) dist=1000;
-				if (dist<1) dist=1;
-				dist = (1000-(log(dist))*140)/700;//140
+				if (dist > 1000) dist = 1000;
+				if (dist < 1) dist = 1;
+				dist = (1000 - (log(dist)) * 140) / 700;
 
-				if (hitPos.x%16==15)
+				if (hitPos.x % 16 == 15)
 				{
-					dist*=0.9;
+					dist *= 0.9;
 				}
 
-				if (hitPos.y%16==15)
+				if (hitPos.y % 16 == 15)
 				{
-					dist*=0.9;
+					dist *= 0.9;
 				}
 
-				if (hitPos.z%24==23)
+				if (hitPos.z % 24 == 23)
 				{
-					dist*=0.9;
+					dist *= 0.9;
 				}
 
 				if (dist > 1) dist = 1;
 
-				if (tile) dist *= (16 - (float)tile->getShade())/16;
+				if (tile) dist *= (16 - (float)tile->getShade()) / 16;
 			}
 
 			image.push_back((int)((float)(pal[test*3+0])*dist));

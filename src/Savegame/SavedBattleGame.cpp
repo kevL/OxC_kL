@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include <assert.h>
 #include <vector>
 #include <deque>
@@ -45,29 +46,48 @@
 #include "../Engine/Logger.h"
 #include "SerializationHelper.h"
 
+
 namespace OpenXcom
 {
 
 /**
  * Initializes a brand new battlescape saved game.
  */
-SavedBattleGame::SavedBattleGame() : _battleState(0), _mapsize_x(0), _mapsize_y(0),
-                                     _mapsize_z(0),   _tiles(), _selectedUnit(0),
-                                     _lastSelectedUnit(0), _nodes(), _units(),
-                                     _items(), _pathfinding(0), _tileEngine(0),
-                                     _missionType(""), _globalShade(0), _side(FACTION_PLAYER),
-                                     _turn(1), _debugMode(false), _aborted(false),
-                                     _itemId(0), _objectiveDestroyed(false), _fallingUnits(),
-                                     _unitsFalling(false), _strafeEnabled(false), _sneaky(false),
-                                     _traceAI(false)
+SavedBattleGame::SavedBattleGame()
+	:
+	_battleState(0),
+	_mapsize_x(0),
+	_mapsize_y(0),
+	_mapsize_z(0),
+	_tiles(),
+	_selectedUnit(0),
+	_lastSelectedUnit(0),
+	_nodes(),
+	_units(),
+	_items(),
+	_pathfinding(0),
+	_tileEngine(0),
+	_missionType(""),
+	_globalShade(0),
+	_side(FACTION_PLAYER),
+	_turn(1),
+	_debugMode(false),
+	_aborted(false),
+	_itemId(0),
+	_objectiveDestroyed(false),
+	_fallingUnits(),
+	_unitsFalling(false),
+	_strafeEnabled(false),
+	_sneaky(false),
+	_traceAI(false)
 {
-	_dragButton = Options::getInt("battleScrollDragButton");
-	_dragInvert = Options::getBool("battleScrollDragInvert");
-	_dragTimeTolerance = Options::getInt("battleScrollDragTimeTolerance");
-	_dragPixelTolerance = Options::getInt("battleScrollDragPixelTolerance");
-	_strafeEnabled = Options::getBool("strafe");
-	_sneaky = Options::getBool("sneakyAI");
-	_traceAI = Options::getBool("traceAI");
+	_dragButton			= Options::getInt("battleScrollDragButton");
+	_dragInvert			= Options::getBool("battleScrollDragInvert");
+	_dragTimeTolerance	= Options::getInt("battleScrollDragTimeTolerance");
+	_dragPixelTolerance	= Options::getInt("battleScrollDragPixelTolerance");
+	_strafeEnabled		= Options::getBool("strafe");
+	_sneaky				= Options::getBool("sneakyAI");
+	_traceAI			= Options::getBool("traceAI");
 }
 
 /**
@@ -250,6 +270,7 @@ void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* sav
 				{
 					item->moveToOwner(*bu);
 				}
+
 				if ((*bu)->getId() == unit)
 				{
 					item->setUnit(*bu);
@@ -355,7 +376,6 @@ YAML::Node SavedBattleGame::save() const
 	}
 
 #if 0
-
 	for (int i = 0; i < _mapsize_z * _mapsize_y * _mapsize_x; ++i)
 	{
 		if (!_tiles[i]->isVoid())
@@ -363,7 +383,6 @@ YAML::Node SavedBattleGame::save() const
 			node["tiles"].push_back(_tiles[i]->save());
 		}
 	}
-
 #else
 	// first, write out the field sizes we're going to use to write the tile data
 	node["tileIndexSize"] = Tile::serializationKey.index;
@@ -654,9 +673,11 @@ BattleUnit *SavedBattleGame::selectNextPlayerUnit(bool checkReselect, bool setRe
 
 	do
 	{
-		if (bNext && (*i)->getFaction() == _side && !(*i)->isOut())
+		if (bNext
+			&& (*i)->getFaction() == _side &&
+			!(*i)->isOut())
 		{
-			if ( !checkReselect || ((*i)->reselectAllowed()))
+			if (!checkReselect || ((*i)->reselectAllowed()))
 				break;
 		}
 
@@ -786,8 +807,12 @@ void SavedBattleGame::endTurn()
 {
 	if (_side == FACTION_PLAYER)
 	{
-		if (_selectedUnit && _selectedUnit->getOriginalFaction() == FACTION_PLAYER)
+		if (_selectedUnit
+			&& _selectedUnit->getOriginalFaction() == FACTION_PLAYER)
+		{
 			_lastSelectedUnit = _selectedUnit;
+		}
+
 		_side = FACTION_HOSTILE;
 	}
 	else if (_side == FACTION_HOSTILE)
@@ -801,13 +826,19 @@ void SavedBattleGame::endTurn()
 			_turn++;
 			_side = FACTION_PLAYER;
 
-			if (_lastSelectedUnit && !_lastSelectedUnit->isOut())
+			if (_lastSelectedUnit
+				&& !_lastSelectedUnit->isOut())
+			{
 				_selectedUnit = _lastSelectedUnit;
+			}
 			else
 				selectNextPlayerUnit();
 
-			while (_selectedUnit && _selectedUnit->getFaction() != FACTION_PLAYER)
+			while (_selectedUnit
+				&& _selectedUnit->getFaction() != FACTION_PLAYER)
+			{
 				selectNextPlayerUnit();
+			}
 		}
 	}
 	else if (_side == FACTION_NEUTRAL)
@@ -816,13 +847,19 @@ void SavedBattleGame::endTurn()
 		_turn++;
 		_side = FACTION_PLAYER;
 
-		if (_lastSelectedUnit && !_lastSelectedUnit->isOut())
+		if (_lastSelectedUnit
+			&& !_lastSelectedUnit->isOut())
+		{
 			_selectedUnit = _lastSelectedUnit;
+		}
 		else
 			selectNextPlayerUnit();
 
-		while (_selectedUnit && _selectedUnit->getFaction() != FACTION_PLAYER)
+		while (_selectedUnit
+			&& _selectedUnit->getFaction() != FACTION_PLAYER)
+		{
 			selectNextPlayerUnit();
+		}
 	}
 
 	if (_side == FACTION_PLAYER)
@@ -834,12 +871,14 @@ void SavedBattleGame::endTurn()
 		// update the "number of turns since last spotted"
 		for (std::vector<BattleUnit*>::iterator i = _units.begin(); i != _units.end(); ++i)
 		{
-			if ((*i)->getTurnsExposed() < 255 && _side == FACTION_PLAYER)
+			if ((*i)->getTurnsExposed() < 255)
+//kL				&& _side == FACTION_PLAYER)
 			{
 				(*i)->setTurnsExposed((*i)->getTurnsExposed() +	1);
 			}
-			if (_side == FACTION_PLAYER
-				&& (*i)->getFaction() == FACTION_PLAYER
+
+			if (//kL _side == FACTION_PLAYER &&
+				(*i)->getFaction() == FACTION_PLAYER
 				&& !(*i)->isOut()
 				&& (_turn >= 20 || liveAliens < 2))
 			{
@@ -865,8 +904,7 @@ void SavedBattleGame::endTurn()
 	// re-run calculateFOV() *after* all aliens have been set not-visible
 	_tileEngine->recalculateFOV();
 
-	if (_side != FACTION_PLAYER)
-		selectNextPlayerUnit();
+	if (_side != FACTION_PLAYER) selectNextPlayerUnit();
 }
 
 /**
@@ -918,7 +956,8 @@ void SavedBattleGame::resetUnitTiles()
 	{
 		if (!(*i)->isOut())
 		{
-			if ((*i)->getTile() && (*i)->getTile()->getUnit() == (*i))
+			if ((*i)->getTile()
+				&& (*i)->getTile()->getUnit() == (*i))
 			{
 				(*i)->getTile()->setUnit(0); // XXX XXX XXX doesn't this fail to clear 3 out of 4 tiles for 2x2 units?
 			}
@@ -1135,7 +1174,9 @@ Node *SavedBattleGame::getPatrolNode(bool scout, BattleUnit *unit, Node *fromNod
 			if (!preferred 
 				|| (preferred->getRank() == Node::nodeRank[unit->getRankInt()][0] && preferred->getFlags() < n->getFlags())
 				|| preferred->getFlags() < n->getFlags()) preferred = n;
-			compliantNodes.push_back(n);
+			{
+				compliantNodes.push_back(n);
+			}
 		}
 	}
 
@@ -1185,7 +1226,7 @@ void SavedBattleGame::prepareNewTurn()
 	{
 		if ((*i)->getOverlaps() == 0) // if we haven't added fire here this turn
 		{
-			(*i)->setFire((*i)->getFire() -1); // reduce the fire timer
+			(*i)->setFire((*i)->getFire() - 1); // reduce the fire timer
 
 			if ((*i)->getFire()) // if we're still burning
 			{
@@ -1195,7 +1236,8 @@ void SavedBattleGame::prepareNewTurn()
 					Pathfinding::directionToVector(dir, &pos);
 					Tile *t = getTile((*i)->getPosition() + pos);
 
-					if (t && getTileEngine()->horizontalBlockage((*i), t, DT_IN) == 0) // if there's no wall blocking the path of the flames...
+					if (t
+						&& getTileEngine()->horizontalBlockage((*i), t, DT_IN) == 0) // if there's no wall blocking the path of the flames...
 					{
 						t->ignite((*i)->getSmoke()); // attempt to set this tile on fire
 					}
@@ -1207,7 +1249,8 @@ void SavedBattleGame::prepareNewTurn()
 
 				if ((*i)->getMapData(MapData::O_OBJECT)) // burn this tile, and any object in it, if it's not fireproof/indestructible.
 				{
-					if ((*i)->getMapData(MapData::O_OBJECT)->getFlammable() != 255 && (*i)->getMapData(MapData::O_OBJECT)->getArmor() != 255)
+					if ((*i)->getMapData(MapData::O_OBJECT)->getFlammable() != 255
+						&& (*i)->getMapData(MapData::O_OBJECT)->getArmor() != 255)
 					{
 						if ((*i)->destroy(MapData::O_OBJECT))
 						{
@@ -1222,7 +1265,8 @@ void SavedBattleGame::prepareNewTurn()
 				}
 				else if ((*i)->getMapData(MapData::O_FLOOR))
 				{
-					if ((*i)->getMapData(MapData::O_FLOOR)->getFlammable() != 255 && (*i)->getMapData(MapData::O_FLOOR)->getArmor() != 255)
+					if ((*i)->getMapData(MapData::O_FLOOR)->getFlammable() != 255
+						&& (*i)->getMapData(MapData::O_FLOOR)->getArmor() != 255)
 					{
 						if ((*i)->destroy(MapData::O_FLOOR))
 						{
@@ -1292,7 +1336,9 @@ void SavedBattleGame::prepareNewTurn()
 		for (int i = 0; i < _mapsize_x * _mapsize_y * _mapsize_z; ++i) // do damage to units, average out the smoke, etc.
 		{
 			if (getTiles()[i]->getSmoke() != 0)
+			{
 				getTiles()[i]->prepareNewTurn();
+			}
 		}
 
 		getTileEngine()->calculateTerrainLighting(); // fires could have been started, stopped or smoke could reveal/conceal units.
@@ -1408,12 +1454,12 @@ bool SavedBattleGame::setUnitPosition(BattleUnit *bu, const Position &position, 
 	{
 		for (int y = size; y >= 0; y--)
 		{
-			if (x==0 && y==0)
+			if (x == 0 && y == 0)
 			{
 				bu->setPosition(position + Position(x,y,0));
 			}
 
-			getTile(position + Position(x,y,0))->setUnit(bu, getTile(position + Position(x,y,-1)));
+			getTile(position + Position(x, y, 0))->setUnit(bu, getTile(position + Position(x, y, -1)));
 		}
 	}
 
@@ -1496,8 +1542,11 @@ bool SavedBattleGame::eyesOnTarget(UnitFaction faction, BattleUnit* unit)
 		std::vector<BattleUnit*> *vis = (*i)->getVisibleUnits();
 
 		if (std::find(vis->begin(), vis->end(), unit) != vis->end())
+		{
 			return true;
-		// aliens know the location of all XCom agents sighted by all other aliens due to sharing locations over their space-walkie-talkies
+			// aliens know the location of all XCom agents sighted by all other
+			// aliens due to sharing locations over their space-walkie-talkies
+		}
 	}
 
 	return false;
@@ -1590,9 +1639,11 @@ BattleUnit* SavedBattleGame::getHighestRankedXCom()
 	BattleUnit* highest = 0;
 	for (std::vector<BattleUnit*>::iterator j = _units.begin(); j != _units.end(); ++j)
 	{
-		if ((*j)->getOriginalFaction() == FACTION_PLAYER && !(*j)->isOut())
+		if ((*j)->getOriginalFaction() == FACTION_PLAYER
+			&& !(*j)->isOut())
 		{
-			if (highest == 0 || (*j)->getRankInt() > highest->getRankInt())
+			if (highest == 0
+				|| (*j)->getRankInt() > highest->getRankInt())
 			{
 				highest = *j;
 			}
@@ -1628,6 +1679,7 @@ int SavedBattleGame::getMoraleModifier(BattleUnit* unit)
 					result += 5;
 				case 2:
 					result += 10;
+
 				default:
 				break;
 			}
@@ -1645,6 +1697,7 @@ int SavedBattleGame::getMoraleModifier(BattleUnit* unit)
 				result += 10;
 			case 2:
 				result += 20;
+
 			default:
 			break;
 		}
@@ -1670,6 +1723,7 @@ bool SavedBattleGame::placeUnitNearPosition(BattleUnit *unit, Position entryPoin
 	{
 		Position offset;
 		getPathfinding()->directionToVector(dir, &offset);
+
 		Tile *t = getTile(entryPoint + offset);
 		if (t && !getPathfinding()->isBlocked(getTile(entryPoint), t, dir, 0)
 			&& setUnitPosition(unit, entryPoint + offset))

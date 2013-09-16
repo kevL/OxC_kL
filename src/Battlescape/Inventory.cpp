@@ -163,11 +163,13 @@ void Inventory::drawGrid()
 		else if (i->second->getType() == INV_HAND)
 		{
 			SDL_Rect r;
+
 			r.x = i->second->getX();
 			r.y = i->second->getY();
 			r.w = RuleInventory::HAND_W * RuleInventory::SLOT_W;
 			r.h = RuleInventory::HAND_H * RuleInventory::SLOT_H;
 			_grid->drawRect(&r, color);
+
 			r.x++;
 			r.y++;
 			r.w -= 2;
@@ -181,11 +183,13 @@ void Inventory::drawGrid()
 				for (int y = i->second->getY(); y <= 200; y += RuleInventory::SLOT_H)
 				{
 					SDL_Rect r;
+
 					r.x = x;
 					r.y = y;
 					r.w = RuleInventory::SLOT_W + 1;
 					r.h = RuleInventory::SLOT_H + 1;
 					_grid->drawRect(&r, color);
+
 					r.x++;
 					r.y++;
 					r.w -= 2;
@@ -755,6 +759,7 @@ void Inventory::mouseClick(Action *action, State *state)
 									item->setExplodeTurn(1);
 								}
 								else
+									// kL_note: This is where activation warning for nonProxy preBattle grenades goes...
 									_game->pushState(new PrimeGrenadeState(_game, 0, true, item));
 							}
 							else item->setExplodeTurn(0); // Unprime the grenade

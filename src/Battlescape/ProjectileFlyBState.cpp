@@ -401,8 +401,8 @@ void ProjectileFlyBState::think()
 
 				if (_projectileImpact != 5) // out of map
 				{
-					int offset = 0;
 					// explosions impact not inside the voxel but two steps back (projectiles generally move 2 voxels at a time)
+					int offset = 0;
 					if (_ammo
 						&& (_ammo->getRules()->getDamageType() == DT_HE
 							|| _ammo->getRules()->getDamageType() == DT_IN))

@@ -34,28 +34,29 @@ class BattleUnit;
  */
 class UnitDieBState : public BattleState
 {
-private:
-	BattleUnit *_unit;
-	ItemDamageType _damageType;
-	bool _noSound;
-	int _originalDir;
-public:
-	/// Creates a new UnitDieBState class
-	UnitDieBState(BattlescapeGame *parent, BattleUnit *unit, ItemDamageType damageType, bool noSound);
-	/// Cleans up the UnitDieBState.
-	~UnitDieBState();
-	/// Initializes the state.
-	void init();
-	/// Handles a cancels request.
-	void cancel();
-	/// Runs state functionality every cycle.
-	void think();
-	/// Gets the result of the state.
-	std::string getResult() const;
-	/// Converts a unit to a corpse.
-	void convertUnitToCorpse();
-	/// Plays the death sound.
-	void playDeathSound();
+	private:
+		BattleUnit *_unit;
+		ItemDamageType _damageType;
+		bool _noSound;
+		int _originalDir;
+
+	public:
+		/// Creates a new UnitDieBState class
+		UnitDieBState(BattlescapeGame *parent, BattleUnit *unit, ItemDamageType damageType, bool noSound);
+		/// Cleans up the UnitDieBState.
+		~UnitDieBState();
+		/// Initializes the state.
+		void init();
+		/// Handles a cancels request.
+		void cancel();
+		/// Runs state functionality every cycle.
+		void think();
+		/// Gets the result of the state.
+		std::string getResult() const;
+		/// Converts a unit to a corpse.
+		void convertUnitToCorpse();
+		/// Plays the death sound.
+		void playDeathSound();
 };
 
 }

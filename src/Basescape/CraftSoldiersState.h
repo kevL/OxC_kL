@@ -16,10 +16,12 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_CRAFTSOLDIERSSTATE_H
 #define OPENXCOM_CRAFTSOLDIERSSTATE_H
 
 #include "../Engine/State.h"
+
 
 namespace OpenXcom
 {
@@ -34,31 +36,39 @@ class Base;
  * Select Squad screen that lets the player
  * pick the soldiers to assign to a craft.
  */
-class CraftSoldiersState : public State
+class CraftSoldiersState
+	:
+	public State
 {
-private:
-	TextButton *_btnOk;
-	Window *_window;
-	Text *_txtTitle, *_txtName, *_txtRank, *_txtCraft, *_txtAvailable, *_txtUsed;
-	TextList *_lstSoldiers;
+	private:
+//kL		TextButton *_btnOk;
+		TextButton *_btnOk, *_btnUnload;	// kL
+		Window *_window;
+		Text *_txtTitle, *_txtName, *_txtRank, *_txtCraft, *_txtAvailable, *_txtUsed;
+		TextList *_lstSoldiers;
 
-	Base *_base;
-	size_t _craft;
-public:
-	/// Creates the Craft Soldiers state.
-	CraftSoldiersState(Game *game, Base *base, size_t craft);
-	/// Cleans up the Craft Soldiers state.
-	~CraftSoldiersState();
-	/// Handler for clicking the OK button.
-	void btnOkClick(Action *action);
-	/// Shows Soldiers in a list.
-	void populateList();
-	/// Handler for clicking the Soldiers reordering button.
-	void lstItemsLeftArrowClick(Action *action);
-	/// Handler for clicking the Soldiers reordering button.
-	void lstItemsRightArrowClick(Action *action);
-	/// Handler for clicking the Soldiers list.
-	void lstSoldiersClick(Action *action);
+		Base *_base;
+		size_t _craft;
+
+	public:
+		/// Creates the Craft Soldiers state.
+		CraftSoldiersState(Game *game, Base *base, size_t craft);
+		/// Cleans up the Craft Soldiers state.
+		~CraftSoldiersState();
+
+		/// Handler for clicking the OK button.
+		void btnOkClick(Action *action);
+		/// Handler for clicking the Unload button.
+		void btnUnloadClick(Action *action);
+
+		/// Shows Soldiers in a list.
+		void populateList();
+		/// Handler for clicking the Soldiers reordering button.
+		void lstItemsLeftArrowClick(Action *action);
+		/// Handler for clicking the Soldiers reordering button.
+		void lstItemsRightArrowClick(Action *action);
+		/// Handler for clicking the Soldiers list.
+		void lstSoldiersClick(Action *action);
 };
 
 }

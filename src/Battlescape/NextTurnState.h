@@ -16,10 +16,12 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_NEXTTURNSTATE_H
 #define OPENXCOM_NEXTTURNSTATE_H
 
 #include "../Engine/State.h"
+
 
 namespace OpenXcom
 {
@@ -35,19 +37,20 @@ class TurnCounter;		// kL
  */
 class NextTurnState : public State
 {
-private:
-	Window *_window;
-	Text *_txtTitle, *_txtTurn, *_txtSide, *_txtMessage;
-	SavedBattleGame *_battleGame;
-	BattlescapeState *_state;
-	TurnCounter *_turnCounter;	// kL
-public:
-	/// Creates the Next Turn state.
-	NextTurnState(Game *game, SavedBattleGame *battleGame, BattlescapeState *state);
-	/// Cleans up the Next Turn state.
-	~NextTurnState();
-	/// Handler for clicking anything.
-	void handle(Action *action);
+	private:
+		Window *_window;
+		Text *_txtTitle, *_txtTurn, *_txtSide, *_txtMessage;
+		SavedBattleGame *_battleGame;
+		BattlescapeState *_state;
+		TurnCounter* _turnCounter;	// kL
+
+	public:
+		/// Creates the Next Turn state.
+		NextTurnState(Game *game, SavedBattleGame *battleGame, BattlescapeState *state);
+		/// Cleans up the Next Turn state.
+		~NextTurnState();
+		/// Handler for clicking anything.
+		void handle(Action *action);
 };
 
 }

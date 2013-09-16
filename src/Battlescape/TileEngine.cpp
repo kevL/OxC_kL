@@ -1244,7 +1244,7 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 		power /= 2;
 	}
 
-	int vertdec = 1000; //default flat explosion
+	int vertdec = 1000; // default flat explosion
 
 	int exHeight = Options::getInt("battleExplosionHeight");
 	if (exHeight < 0) exHeight = 0;
@@ -1300,11 +1300,14 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 				{
 					power_ -= (horizontalBlockage(origin, dest, type) + verticalBlockage(origin, dest, type)) * 2;
 					power_ -= 10; // explosive damage decreases by 10 per tile
-					if (origin->getPosition().z != tileZ) power_ -= vertdec; //3d explosion factor
+					if (origin->getPosition().z != tileZ) // 3d explosion factor
+						power_ -= vertdec;
+
 					if (type == DT_IN)
 					{
 						int dir;
 						Pathfinding::vectorToDirection(origin->getPosition() - dest->getPosition(), dir);
+
 						if (dir != -1 && dir %2) power_ -= 5; // diagonal movement costs an extra 50% for fire.
 					}
 				}
@@ -1327,6 +1330,7 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 							{
 								dest->getUnit()->damage(Position(0, 0, 0), (int)(RNG::generate(power_/2.0, power_*1.5)), type);
 							}
+
 							for (std::vector<BattleItem*>::iterator it = dest->getInventory()->begin(); it != dest->getInventory()->end(); ++it)
 							{
 								if ((*it)->getUnit())
@@ -1343,6 +1347,7 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 							{
 								dest->getUnit()->damage(Position(0, 0, 0), (int)(RNG::generate(power_/2.0, power_*1.5)), type);
 							}
+
 							bool done = false;
 							while (!done)
 							{
@@ -1351,8 +1356,12 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 								{
 									if (power_ > (*it)->getRules()->getArmor())
 									{
-										if ((*it)->getUnit() && (*it)->getUnit()->getStatus() == STATUS_UNCONSCIOUS)
+										if ((*it)->getUnit()
+											&& (*it)->getUnit()->getStatus() == STATUS_UNCONSCIOUS)
+										{
 											(*it)->getUnit()->instaKill();
+										}
+
 										_save->removeItem((*it));
 										break;
 									}
@@ -1365,9 +1374,8 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 							}
 						}
 
-						if (type == DT_SMOKE)
+						if (type == DT_SMOKE) // smoke from explosions always stay 6 to 14 turns - power of a smoke grenade is 60
 						{
-							// smoke from explosions always stay 6 to 14 turns - power of a smoke grenade is 60
 							if (dest->getSmoke() < 10)
 							{
 								dest->setFire(0);
@@ -1375,7 +1383,8 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 							}
 						}
 
-						if (type == DT_IN && !dest->isVoid())
+						if (type == DT_IN
+							&& !dest->isVoid())
 						{
 							if (dest->getFire() == 0)
 							{
@@ -1384,11 +1393,15 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 							}
 
 							if (dest->getUnit())
+							// kL_note: fire damage is also caused by BattlescapeGame::endTurn() -- but previously by BattleUnit::prepareNewTurn()!!
 							{
 								float resistance = dest->getUnit()->getArmor()->getDamageModifier(DT_IN);
 								if (resistance > 0.0)
 								{
-									dest->getUnit()->damage(Position(0, 0, 12-dest->getTerrainLevel()), RNG::generate(5, 10), DT_IN, true);
+									Log(LOG_INFO) << ". do Tile Fire : " << dest->getUnit()->getId();
+//kL									dest->getUnit()->damage(Position(0, 0, 12-dest->getTerrainLevel()), RNG::generate(5, 10), DT_IN, true);
+									dest->getUnit()->damage(Position(0, 0, 12-dest->getTerrainLevel()), RNG::generate(3, 9), DT_IN, true);		// kL
+
 									int burnTime = RNG::generate(0, int(5 * resistance));
 									if (dest->getUnit()->getFire() < burnTime)
 									{
@@ -1398,15 +1411,17 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 							}
 						}
 
-						if (unit && dest->getUnit() && dest->getUnit()->getFaction() != unit->getFaction())
+						if (unit
+							&& dest->getUnit()
+							&& dest->getUnit()->getFaction() != unit->getFaction())
 						{
 							unit->addFiringExp();
 						}
 
 					}
 				}
-				origin = dest;
 
+				origin = dest;
 				l++;
 			}
 		}
