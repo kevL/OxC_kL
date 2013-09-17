@@ -280,7 +280,6 @@ BattlescapeState::BattlescapeState(Game *game)
 	_game->getResourcePack()->getSurfaceSet("SPICONS.DAT")->getFrame(1)->blit(_btnPsi);
 
 	// Set up objects
-
 	_save = _game->getSavedGame()->getSavedBattle();
 	_map->init();
 	_map->onMouseOver((ActionHandler)&BattlescapeState::mapOver);
@@ -558,6 +557,7 @@ void BattlescapeState::init()
 
 		firstInit = false;
 	}
+	_txtTooltip->setText(L"");
 }
 
 /**
@@ -1017,7 +1017,10 @@ void BattlescapeState::btnHelpClick(Action *)
 void BattlescapeState::btnEndTurnClick(Action *)
 {
 	if (allowButtons())
+	{
+		_txtTooltip->setText(L"");
 		_battleGame->requestEndTurn();
+	}
 }
 
 /**
@@ -2065,7 +2068,7 @@ void BattlescapeState::btnZeroTUsClick(Action *action)
 */
 void BattlescapeState::txtTooltipIn(Action *action)
 {
-	if (Options::getBool("battleTooltips"))
+	if (allowButtons() && Options::getBool("battleTooltips"))
 	{
 		_currentTooltip = action->getSender()->getTooltip();
 		_txtTooltip->setText(_game->getLanguage()->getString(_currentTooltip));
@@ -2078,7 +2081,7 @@ void BattlescapeState::txtTooltipIn(Action *action)
 */
 void BattlescapeState::txtTooltipOut(Action *action)
 {
-	if (Options::getBool("battleTooltips"))
+	if (allowButtons() && Options::getBool("battleTooltips"))
 	{
 		if (_currentTooltip == action->getSender()->getTooltip())
 		{

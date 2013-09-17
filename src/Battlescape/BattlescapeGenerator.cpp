@@ -373,7 +373,9 @@ void BattlescapeGenerator::deployXCOM()
 	{
 		for (std::vector<Vehicle*>::iterator i = _craft->getVehicles()->begin(); i != _craft->getVehicles()->end(); ++i)
 		{
-			addXCOMVehicle(*i);
+			BattleUnit *unit = addXCOMVehicle(*i);
+			if (unit && !_save->getSelectedUnit())
+				_save->setSelectedUnit(unit);
 		}
 	}
 	else if (_base != 0)
@@ -381,7 +383,9 @@ void BattlescapeGenerator::deployXCOM()
 		// add vehicles that are in the base inventory
 		for (std::vector<Vehicle*>::iterator i = _base->getVehicles()->begin(); i != _base->getVehicles()->end(); ++i)
 		{
-			addXCOMVehicle(*i);
+			BattleUnit *unit = addXCOMVehicle(*i);
+			if (unit && !_save->getSelectedUnit())
+				_save->setSelectedUnit(unit);
 		}
 	}
 
@@ -504,8 +508,9 @@ void BattlescapeGenerator::deployXCOM()
  * Adds an XCom vehicle to the game.
  * Sets the correct turret depending on the ammo type.
  * @param v Pointer to the Vehicle.
+ * @return Pointer to the spawned unit.
  */
-void BattlescapeGenerator::addXCOMVehicle(Vehicle *v)
+BattleUnit *BattlescapeGenerator::addXCOMVehicle(Vehicle *v)
 {
 	std::string vehicle = v->getRules()->getType();
 	Unit *rule = _game->getRuleset()->getUnit(vehicle);
@@ -523,6 +528,7 @@ void BattlescapeGenerator::addXCOMVehicle(Vehicle *v)
 
 		unit->setTurretType(v->getRules()->getTurretType());
 	}
+	return unit;
 }
 
 /**

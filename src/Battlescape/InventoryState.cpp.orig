@@ -183,7 +183,12 @@ InventoryState::~InventoryState()
  */
 void InventoryState::init()
 {
+<<<<<<< HEAD
+	if (_parent)
+		_parent->getMap()->getCamera()->centerOnPosition(_battleGame->getSelectedUnit()->getPosition());
 
+=======
+>>>>>>> master
 	BattleUnit *unit = _battleGame->getSelectedUnit();
 
 	// no selected unit, close inventory
@@ -401,9 +406,26 @@ void InventoryState::btnPrevClick(Action *)
 {
 	if (_inv->getSelectedItem() != 0)
 		return;
+<<<<<<< HEAD
 
+	if (_parent)
+		_parent->selectPreviousPlayerUnit(false);
+	else
+		_battleGame->selectPreviousPlayerUnit(false);
+
+	// skip large units
+	while (_battleGame->getSelectedUnit()->getArmor()->getSize() > 1
+		|| _battleGame->getSelectedUnit()->getRankString() == "STR_LIVE_TERRORIST")
+	{
+		if (_parent)
+			_parent->selectPreviousPlayerUnit(false);
+		else
+			_battleGame->selectPreviousPlayerUnit(false);
+	}
+
+=======
 	selectPreviousUnit();
-
+>>>>>>> master
 	init();
 }
 
@@ -415,9 +437,26 @@ void InventoryState::btnNextClick(Action *)
 {
 	if (_inv->getSelectedItem() != 0)
 		return;
+<<<<<<< HEAD
 
+	if (_parent)
+		_parent->selectNextPlayerUnit(false, false);
+	else
+		_battleGame->selectNextPlayerUnit(false, false);
+
+	// skip large units
+	while (_battleGame->getSelectedUnit()->getArmor()->getSize() > 1 
+		|| _battleGame->getSelectedUnit()->getRankString() == "STR_LIVE_TERRORIST")
+	{
+		if (_parent)
+			_parent->selectNextPlayerUnit(false, false);
+		else
+			_battleGame->selectNextPlayerUnit(false, false);
+	}
+
+=======
 	selectNextUnit();
-
+>>>>>>> master
 	init();
 }
 
@@ -435,7 +474,10 @@ void InventoryState::btnUnloadClick(Action *)
 		_txtItem->setText(L"");
 		_txtAmmo->setText(L"");
 		_selAmmo->clear();
+<<<<<<< HEAD
 
+=======
+>>>>>>> master
 		updateStats();
 	}
 }
