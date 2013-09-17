@@ -16,10 +16,12 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_SACKSOLDIERSTATE_H
 #define OPENXCOM_SACKSOLDIERSTATE_H
 
 #include "../Engine/State.h"
+
 
 namespace OpenXcom
 {
@@ -31,27 +33,30 @@ class Window;
 class Text;
 
 /**
- * Window shown when the player tries to
- * sack a soldier.
+ * Window shown when the player tries to sack a soldier.
  */
-class SackSoldierState : public State
+class SackSoldierState
+	:
+	public State
 {
-private:
-	Base *_base;
-	Soldier *_soldier;
+	private:
+		Base* _base;
+		Soldier* _soldier;
 
-	TextButton *_btnOk, *_btnCancel;
-	Window *_window;
-	Text *_txtTitle, *_txtSoldier;
-public:
-	/// Creates the Sack Soldier state.
-	SackSoldierState(Game *game, Base *base, Soldier *soldier);
-	/// Cleans up the Sack Soldier state.
-	~SackSoldierState();
-	/// Handler for clicking the OK button.
-	void btnOkClick(Action *action);
-	/// Handler for clicking the Cancel button.
-	void btnCancelClick(Action *action);
+		TextButton* _btnOk, * _btnCancel;
+		Window* _window;
+		Text* _txtTitle, * _txtSoldier;
+
+	public:
+		/// Creates the Sack Soldier state.
+		SackSoldierState(Game* game, Base* base, Soldier* soldier);
+		/// Cleans up the Sack Soldier state.
+		~SackSoldierState();
+
+		/// Handler for clicking the OK button.
+		void btnOkClick(Action* action);
+		/// Handler for clicking the Cancel button.
+		void btnCancelClick(Action* action);
 };
 
 }

@@ -38,6 +38,7 @@
 #include "../Engine/Logger.h"
 #include "UnitFallBState.h"
 
+
 namespace OpenXcom
 {
 
@@ -45,8 +46,15 @@ namespace OpenXcom
  * Sets up an UnitWalkBState.
  */
 UnitWalkBState::UnitWalkBState(BattlescapeGame *parent, BattleAction action)
-	: BattleState(parent, action), _unit(0), _pf(0), _terrain(0), _falling(false),
-	_beforeFirstStep(false), _numUnitsSpotted(0), _preMovementCost(0)
+	:
+	BattleState(parent, action),
+	_unit(0),
+	_pf(0),
+	_terrain(0),
+	_falling(false),
+	_beforeFirstStep(false),
+	_numUnitsSpotted(0),
+	_preMovementCost(0)
 {
 }
 
@@ -112,7 +120,7 @@ void UnitWalkBState::think()
 		}
 	}
 
-	Tile *tileBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(0, 0, -1));
+	Tile* tileBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(0, 0, -1));
 
 	if (_unit->isOut())
 	{
@@ -149,7 +157,7 @@ void UnitWalkBState::think()
 			{
 				for (int y = size; y >= 0; y--)
 				{
-					Tile *otherTileBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(x, y, -1));
+					Tile* otherTileBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(x, y, -1));
 					if (!_parent->getSave()->getTile(_unit->getPosition() + Position(x, y, 0))->hasNoFloor(otherTileBelow)
 						|| _unit->getArmor()->getMovementType() == MT_FLY)
 					{
@@ -180,7 +188,7 @@ void UnitWalkBState::think()
 				{
 					for (int y = _unit->getArmor()->getSize() - 1; y >= 0; --y)
 					{
-						Tile *otherTileBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(x, y, -1));
+						Tile* otherTileBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(x, y, -1));
 						if (otherTileBelow
 							&& otherTileBelow->getUnit())
 						{
@@ -198,13 +206,11 @@ void UnitWalkBState::think()
 /*kL			if (!_parent->getMap()->getCamera()->isOnScreen(_unit->getPosition())
 				&& _unit->getFaction() != FACTION_PLAYER
 				&& _unit->getVisible()) */
-			// kL_begin:
-			// Let's try this, maintain camera focus centered on Visible aliens during (un)hidden movement
-			if (_unit->getVisible() && _unit->getFaction() != FACTION_PLAYER)
+			// kL_note: Let's try this, maintain camera focus centered on Visible aliens during (un)hidden movement
+			if (_unit->getVisible() && _unit->getFaction() != FACTION_PLAYER)		// kL
 			{
 				_parent->getMap()->getCamera()->centerOnPosition(_unit->getPosition());
 			}
-			// kL_end.
 
 			// if the unit changed level, camera changes level with
 			_parent->getMap()->getCamera()->setViewLevel(_unit->getPosition().z);
@@ -218,7 +224,7 @@ void UnitWalkBState::think()
 			{
 				_unit->getTile()->ignite(1);
 
-				Position here = (_unit->getPosition() * Position(16, 16, 24)) + Position(8, 8, -(_unit->getTile()->getTerrainLevel()));
+				Position here = (_unit->getPosition() * Position(16, 16, 24)) + Position(8, 8, - (_unit->getTile()->getTerrainLevel()));
 				_parent->getTileEngine()->hit(here, _unit->getStats()->strength, DT_IN, _unit);
 			}
 
@@ -244,7 +250,7 @@ void UnitWalkBState::think()
 					{
 						for (int ty = -1; ty < 2; ty++)
 						{
-							Tile *t = _parent->getSave()->getTile(_unit->getPosition() + Position(x, y, 0) + Position(tx, ty, 0));
+							Tile* t = _parent->getSave()->getTile(_unit->getPosition() + Position(x, y, 0) + Position(tx, ty, 0));
 							if (t)
 							{
 								for (std::vector<BattleItem*>::iterator i = t->getInventory()->begin(); i != t->getInventory()->end(); ++i)
@@ -272,7 +278,7 @@ void UnitWalkBState::think()
 				}
 			}
 
-			// kL_note: I think this is the place to stop my soldiers from stopping vs. already-seen alien units.
+			// kL_note: I think this is the place to stop my soldiers from halting vs. already-seen alien units.
 			// ie, do a check for !_alreadySpotted ( more cases are further down below )
 			unitSpotted = (_parent->getPanicHandled() && _numUnitsSpotted != _unit->getUnitsSpottedThisTurn().size());	// kL, from above.
 			if (unitSpotted)
@@ -725,8 +731,8 @@ void UnitWalkBState::playMovementSound()
 	{
 		if (_unit->getStatus() == STATUS_WALKING)
 		{
-			Tile *tile = _unit->getTile();
-			Tile *tileBelow = _parent->getSave()->getTile(tile->getPosition() + Position(0, 0, -1));
+			Tile* tile = _unit->getTile();
+			Tile* tileBelow = _parent->getSave()->getTile(tile->getPosition() + Position(0, 0, -1));
 
 			// play footstep sound 1
 			if (_unit->getWalkingPhase() == 3)

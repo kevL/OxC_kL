@@ -16,10 +16,12 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_SOLDIERINFOSTATE_H
 #define OPENXCOM_SOLDIERINFOSTATE_H
 
 #include "../Engine/State.h"
+
 
 namespace OpenXcom
 {
@@ -35,39 +37,43 @@ class Bar;
  * Soldier Info screen that shows all the
  * info of a specific soldier.
  */
-class SoldierInfoState : public State
+class SoldierInfoState
+	:
+	public State
 {
-private:
-	Base *_base;
-	size_t _soldier;
+	private:
+		Base* _base;
+		size_t _soldier;
 
-	Surface *_bg, *_rank;
-	TextButton *_btnOk, *_btnPrev, *_btnNext, *_btnArmor, *_btnSack;
-	Text *_txtArmor, *_txtRank, *_txtMissions, *_txtKills, *_txtCraft, *_txtRecovery, *_txtPsionic;
-	TextEdit *_edtSoldier;
+		Surface* _bg, * _rank;
+		TextButton* _btnOk, * _btnPrev, * _btnNext, * _btnArmor, * _btnSack;
+		Text* _txtArmor, * _txtRank, * _txtMissions, * _txtKills, * _txtCraft, * _txtRecovery, * _txtPsionic;
+		TextEdit* _edtSoldier;
 
-	Text *_txtTimeUnits, *_txtStamina, *_txtHealth, *_txtBravery, *_txtReactions, *_txtFiring, *_txtThrowing, *_txtStrength, *_txtPsiStrength, *_txtPsiSkill;
-	Text *_numTimeUnits, *_numStamina, *_numHealth, *_numBravery, *_numReactions, *_numFiring, *_numThrowing, *_numStrength, *_numPsiStrength, *_numPsiSkill;
-	Bar *_barTimeUnits, *_barStamina, *_barHealth, *_barBravery, *_barReactions, *_barFiring, *_barThrowing, *_barStrength, *_barPsiStrength, *_barPsiSkill;
-public:
-	/// Creates the Soldier Info state.
-	SoldierInfoState(Game *game, Base *base, size_t soldier);
-	/// Cleans up the Soldier Info state.
-	~SoldierInfoState();
-	/// Updates the soldier info.
-	void init();
-	/// Handler for pressing a key on the Name edit.
-	void edtSoldierKeyPress(Action *action);
-	/// Handler for clicking the OK button.
-	void btnOkClick(Action *action);
-	/// Handler for clicking the Previous button.
-	void btnPrevClick(Action *action);
-	/// Handler for clicking the Next button.
-	void btnNextClick(Action *action);
-	/// Handler for clicking the Armor button.
-	void btnArmorClick(Action *action);
-	/// Handler for clicking the Sack button.
-	void btnSackClick(Action *action);
+		Text* _txtTimeUnits, * _txtStamina, * _txtHealth, * _txtBravery, * _txtReactions, * _txtFiring, * _txtThrowing, * _txtStrength, * _txtPsiStrength, * _txtPsiSkill;
+		Text* _numTimeUnits, * _numStamina, * _numHealth, * _numBravery, * _numReactions, * _numFiring, * _numThrowing, * _numStrength, * _numPsiStrength, * _numPsiSkill;
+		Bar* _barTimeUnits, * _barStamina, * _barHealth, * _barBravery, * _barReactions, * _barFiring, * _barThrowing, * _barStrength, * _barPsiStrength, * _barPsiSkill;
+
+	public:
+		/// Creates the Soldier Info state.
+		SoldierInfoState(Game* game, Base* base, size_t soldier);
+		/// Cleans up the Soldier Info state.
+		~SoldierInfoState();
+
+		/// Updates the soldier info.
+		void init();
+		/// Handler for pressing a key on the Name edit.
+		void edtSoldierKeyPress(Action* action);
+		/// Handler for clicking the OK button.
+		void btnOkClick(Action* action);
+		/// Handler for clicking the Previous button.
+		void btnPrevClick(Action* action);
+		/// Handler for clicking the Next button.
+		void btnNextClick(Action* action);
+		/// Handler for clicking the Armor button.
+		void btnArmorClick(Action* action);
+		/// Handler for clicking the Sack button.
+		void btnSackClick(Action* action);
 };
 
 }

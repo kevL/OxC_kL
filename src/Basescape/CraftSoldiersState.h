@@ -59,7 +59,9 @@ class CraftSoldiersState
 		/// Handler for clicking the OK button.
 		void btnOkClick(Action *action);
 		/// Handler for clicking the Unload button.
-		void btnUnloadClick(Action *action);
+		/// * NB: This relies on no two transport craft having the same name!!!!!
+		/// * See, void CraftInfoState::edtCraftKeyPress(Action* action) etc.
+		void btnUnloadClick(Action *action);	// kL
 
 		/// Shows Soldiers in a list.
 		void populateList();

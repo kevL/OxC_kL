@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "StoresState.h"
 #include <sstream>
 #include "../Engine/Game.h"
@@ -33,6 +34,7 @@
 #include "../Ruleset/RuleItem.h"
 #include "../Savegame/ItemContainer.h"
 
+
 namespace OpenXcom
 {
 
@@ -41,7 +43,10 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
  */
-StoresState::StoresState(Game *game, Base *base) : State(game), _base(base)
+StoresState::StoresState(Game* game, Base* base)
+	:
+	State(game),
+	_base(base)
 {
 	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
@@ -71,9 +76,9 @@ StoresState::StoresState(Game *game, Base *base) : State(game), _base(base)
 
 	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
-	_btnOk->onMouseClick((ActionHandler)&StoresState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&StoresState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
-	_btnOk->onKeyboardPress((ActionHandler)&StoresState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onMouseClick((ActionHandler) &StoresState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler) &StoresState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
+	_btnOk->onKeyboardPress((ActionHandler) &StoresState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
@@ -102,9 +107,11 @@ StoresState::StoresState(Game *game, Base *base) : State(game), _base(base)
 		if (qty > 0)
 		{
 			RuleItem *rule = _game->getRuleset()->getItem(*i);
+
 			std::wstringstream ss, ss2;
 			ss << qty;
 			ss2 << qty * rule->getSize();
+
 			_lstStores->addRow(3, _game->getLanguage()->getString(*i).c_str(), ss.str().c_str(), ss2.str().c_str());
 		}
 	}
@@ -115,14 +122,13 @@ StoresState::StoresState(Game *game, Base *base) : State(game), _base(base)
  */
 StoresState::~StoresState()
 {
-
 }
 
 /**
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void StoresState::btnOkClick(Action *)
+void StoresState::btnOkClick(Action* )
 {
 	_game->popState();
 }

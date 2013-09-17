@@ -178,7 +178,10 @@ std::string wstring_to_string(const std::wstring& wstr)
 Edit: As Emilio Garavaglia pointed it out, it works only if the characters are ASCII, otherwise it will loose information. */
 
 /**
- * Unloads all soldiers from all craft.
+ * Unloads all soldiers from current transport craft.
+ * NB: This relies on no two transport craft having the same name!!!!!
+ * See, void CraftInfoState::edtCraftKeyPress(Action* action) etc.
+ *
  * @param action, Pointer to an action.
  */
 void CraftSoldiersState::btnUnloadClick(Action* )
@@ -186,7 +189,7 @@ void CraftSoldiersState::btnUnloadClick(Action* )
 	Craft* c = _base->getCrafts()->at(_craft);
 	std::wstring craft1 = c->getName(_game->getLanguage());
 
-	// iterate over all soldiers at Base, if onboard "Craft* c" take them off
+	// iterate over all soldiers at Base
 	for (std::vector<Soldier*>::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); ++i)
 	{
 		if ((*i)->getCraft() == c) // if soldier is on this Craft, unload them
@@ -195,12 +198,12 @@ void CraftSoldiersState::btnUnloadClick(Action* )
 		}
 	}
 
-	// iterate over all listRows and change their stringText and lineColor, if onboard "Craft* c"
+	// iterate over all listRows and change their stringText and lineColor
 	Uint8 color;
 	for (int r = 0; r < _base->getSoldiers()->size(); ++r)
 	{
 		std::wstring craft2 = _lstSoldiers->getCellText(r, 2);
-		if (craft2 == craft1)
+		if (craft2 == craft1) // if row pertains to this craft
 		{
 			_lstSoldiers->setCellText(r, 2, _game->getLanguage()->getString("STR_NONE_UC"));
 

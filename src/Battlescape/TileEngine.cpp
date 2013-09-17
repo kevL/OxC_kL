@@ -880,7 +880,7 @@ void TileEngine::calculateFOV(const Position &position)
  * @param unit The unit to check reaction fire upon.
  * @return True if reaction fire took place.
  */
-bool TileEngine::checkReactionFire(BattleUnit *unit)
+bool TileEngine::checkReactionFire(BattleUnit* unit)
 {
 	//Log(LOG_INFO) << "Battlescape/TileEngine.cpp checkReactionFire() vs." << (unit->getId());	// kL
 
@@ -892,7 +892,7 @@ bool TileEngine::checkReactionFire(BattleUnit *unit)
 		return false;
 	}
 
-//kL	std::vector<BattleUnit *> spotters = getSpottingUnits(unit);
+//kL	std::vector<BattleUnit *> spotters = getSpottingUnits(unit);	// kL_note: move below
 	bool result = false;
 
 	// not mind controlled, or controlled by the player
@@ -905,8 +905,8 @@ bool TileEngine::checkReactionFire(BattleUnit *unit)
 	{
 //		Log(LOG_INFO) << ". Target = VALID";	// kL
 
-		std::vector<BattleUnit *> spotters = getSpottingUnits(unit);	// kL
-		BattleUnit *reactor = getReactor(spotters, unit);
+		std::vector<BattleUnit* > spotters = getSpottingUnits(unit);	// kL, from above.
+		BattleUnit* reactor = getReactor(spotters, unit);
 /*kL		if (reactor != unit)
 		{
 			while (true)
@@ -921,9 +921,8 @@ bool TileEngine::checkReactionFire(BattleUnit *unit)
 					break;
 			}
 		} */
-		for (std::vector<BattleUnit *>::iterator i = spotters.begin(); i != spotters.end(); ++i)	// kL, from getReactor() below...
-//		for (size_t i = 0; i < spotters.size(); i++) // kL_start
-//		for (short i = 0; i < 20; i++) // kL_start
+		// kL_begin:
+		for (std::vector<BattleUnit* >::iterator i = spotters.begin(); i != spotters.end(); ++i)
 		{
 //			Log(LOG_INFO) << ". . Test shooter : " << (reactor->getId());		// kL
 
@@ -936,7 +935,8 @@ bool TileEngine::checkReactionFire(BattleUnit *unit)
 			}
 
 			reactor = getReactor(spotters, unit);
-		} // kL_end.
+		}
+		// kL_end.
 	}
 
 	return result;
@@ -988,17 +988,17 @@ std::vector<BattleUnit *> TileEngine::getSpottingUnits(BattleUnit* unit)
  * @param unit The unit to check scores against.
  * @return The unit with the highest reactions.
  */
-BattleUnit* TileEngine::getReactor(std::vector<BattleUnit *> spotters, BattleUnit *unit)
+BattleUnit* TileEngine::getReactor(std::vector<BattleUnit* > spotters, BattleUnit* unit)
 {
 	int bestScore = -1;
-	BattleUnit *bu = 0;
+	BattleUnit* bu = 0;
 
-	for (std::vector<BattleUnit *>::iterator i = spotters.begin(); i != spotters.end(); ++i)
+	for (std::vector<BattleUnit* >::iterator i = spotters.begin(); i != spotters.end(); ++i)
 	{
 		if (!(*i)->isOut()
-			&& canMakeSnap(*i, unit)
+			&& canMakeSnap((*i), unit)
 			&& (*i)->getReactionScore() > bestScore
-			&& *i != bu)	// kL, stop unit from reacting twice (unless target uses more TU, hopefully)
+			&& (*i) != bu)	// kL, stop unit from reacting twice (unless target uses more TU, hopefully)
 		{
 			bestScore = (*i)->getReactionScore();
 			bu = *i;
@@ -1026,9 +1026,9 @@ BattleUnit* TileEngine::getReactor(std::vector<BattleUnit *> spotters, BattleUni
  * @param target The unit to check sight TO.
  * @return True if the target is valid.
  */
-bool TileEngine::canMakeSnap(BattleUnit *unit, BattleUnit *target)
+bool TileEngine::canMakeSnap(BattleUnit* unit, BattleUnit* target)
 {
-	BattleItem *weapon = unit->getMainHandWeapon();
+	BattleItem* weapon = unit->getMainHandWeapon();
 	// has a weapon
 	if (weapon
 		&& ((weapon->getRules()->getBattleType() == BT_MELEE	// has a melee weapon and is in melee range

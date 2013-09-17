@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "SoldierInfoState.h"
 #include <sstream>
 #include "../Engine/Game.h"
@@ -39,6 +40,7 @@
 #include "SoldierArmorState.h"
 #include "SackSoldierState.h"
 
+
 namespace OpenXcom
 {
 
@@ -48,64 +50,74 @@ namespace OpenXcom
  * @param base Pointer to the base to get info from.
  * @param soldier ID of the selected soldier.
  */
-SoldierInfoState::SoldierInfoState(Game *game, Base *base, size_t soldier) : State(game), _base(base), _soldier(soldier)
+SoldierInfoState::SoldierInfoState(Game* game, Base* base, size_t soldier)
+	:
+	State(game),
+	_base(base),
+	_soldier(soldier)
 {
 	// Create objects
-	_bg = new Surface(320, 200, 0, 0);
-	_rank = new Surface(26, 23, 4, 4);
-	_btnPrev = new TextButton(28, 14, 0, 33);
-	_btnOk = new TextButton(48, 14, 30, 33);
-	_btnNext = new TextButton(28, 14, 80, 33);
-	_btnArmor = new TextButton(110, 14, 130, 33);	// (60, 14, 130, 33);
-	_edtSoldier = new TextEdit(200, 16, 40, 9);
-	_btnSack = new TextButton(60, 14, 260, 33); 	// (60, 14, 248, 10);
-//	_txtArmor = new Text(120, 9, 194, 38);
-	_txtRank = new Text(130, 9, 0, 48);
-	_txtMissions = new Text(100, 9, 130, 48);
-	_txtKills = new Text(100, 9, 230, 48);
-	_txtCraft = new Text(130, 9, 0, 56);
-	_txtRecovery = new Text(180, 9, 130, 56);
-	_txtPsionic = new Text(150, 9, 0, 66);
+	_bg				= new Surface(320, 200, 0, 0);
+	_rank			= new Surface(26, 23, 4, 4);
+	_btnPrev		= new TextButton(28, 14, 0, 33);
+	_btnOk			= new TextButton(48, 14, 30, 33);
+	_btnNext		= new TextButton(28, 14, 80, 33);
 
-	_txtTimeUnits = new Text(120, 9, 6, 82);
-	_numTimeUnits = new Text(18, 9, 131, 82);
-	_barTimeUnits = new Bar(170, 7, 150, 82);
+	_txtArmor		= new Text(30, 11, 130, 35);			// kL. reinstating this!
+//kL	_btnArmor		= new TextButton(110, 14, 130, 33);	// (60, 14, 130, 33);
+	_btnArmor		= new TextButton(70, 14, 164, 33);		// kL
 
-	_txtStamina = new Text(120, 9, 6, 94);
-	_numStamina = new Text(18, 9, 131, 94);
-	_barStamina = new Bar(170, 7, 150, 94);
+	_edtSoldier		= new TextEdit(200, 16, 40, 9);
+//kL	_btnSack		= new TextButton(60, 14, 260, 33);	// (60, 14, 248, 10);
+	_btnSack		= new TextButton(44, 15, 268, 8); 		// kL
+//	_txtArmor		= new Text(120, 9, 194, 38);
 
-	_txtHealth = new Text(120, 9, 6, 106);
-	_numHealth = new Text(18, 9, 131, 106);
-	_barHealth = new Bar(170, 7, 150, 106);
+	_txtRank		= new Text(130, 9, 0, 48);
+	_txtMissions	= new Text(100, 9, 130, 48);
+	_txtKills		= new Text(100, 9, 230, 48);
+	_txtCraft		= new Text(130, 9, 0, 56);
+	_txtRecovery	= new Text(180, 9, 130, 56);
+	_txtPsionic		= new Text(150, 9, 0, 66);
 
-	_txtBravery = new Text(120, 9, 6, 118);
-	_numBravery = new Text(18, 9, 131, 118);
-	_barBravery = new Bar(170, 7, 150, 118);
+	_txtTimeUnits	= new Text(120, 9, 6, 82);
+	_numTimeUnits	= new Text(18, 9, 131, 82);
+	_barTimeUnits	= new Bar(170, 7, 150, 82);
 
-	_txtReactions = new Text(120, 9, 6, 130);
-	_numReactions = new Text(18, 9, 131, 130);
-	_barReactions = new Bar(170, 7, 150, 130);
+	_txtStamina		= new Text(120, 9, 6, 94);
+	_numStamina		= new Text(18, 9, 131, 94);
+	_barStamina		= new Bar(170, 7, 150, 94);
 
-	_txtFiring = new Text(120, 9, 6, 142);
-	_numFiring = new Text(18, 9, 131, 142);
-	_barFiring = new Bar(170, 7, 150, 142);
+	_txtHealth		= new Text(120, 9, 6, 106);
+	_numHealth		= new Text(18, 9, 131, 106);
+	_barHealth		= new Bar(170, 7, 150, 106);
 
-	_txtThrowing = new Text(120, 9, 6, 154);
-	_numThrowing = new Text(18, 9, 131, 154);
-	_barThrowing = new Bar(170, 7, 150, 154);
+	_txtBravery		= new Text(120, 9, 6, 118);
+	_numBravery		= new Text(18, 9, 131, 118);
+	_barBravery		= new Bar(170, 7, 150, 118);
 
-	_txtStrength = new Text(120, 9, 6, 166);
-	_numStrength = new Text(18, 9, 131, 166);
-	_barStrength = new Bar(170, 7, 150, 166);
+	_txtReactions	= new Text(120, 9, 6, 130);
+	_numReactions	= new Text(18, 9, 131, 130);
+	_barReactions	= new Bar(170, 7, 150, 130);
+
+	_txtFiring		= new Text(120, 9, 6, 142);
+	_numFiring		= new Text(18, 9, 131, 142);
+	_barFiring		= new Bar(170, 7, 150, 142);
+
+	_txtThrowing	= new Text(120, 9, 6, 154);
+	_numThrowing	= new Text(18, 9, 131, 154);
+	_barThrowing	= new Bar(170, 7, 150, 154);
+
+	_txtStrength	= new Text(120, 9, 6, 166);
+	_numStrength	= new Text(18, 9, 131, 166);
+	_barStrength	= new Bar(170, 7, 150, 166);
 	
-	_txtPsiStrength = new Text(120, 9, 6, 178);
-	_numPsiStrength = new Text(18, 9, 131, 178);
-	_barPsiStrength = new Bar(170, 7, 150, 178);
+	_txtPsiStrength	= new Text(120, 9, 6, 178);
+	_numPsiStrength	= new Text(18, 9, 131, 178);
+	_barPsiStrength	= new Bar(170, 7, 150, 178);
 	
-	_txtPsiSkill = new Text(120, 9, 6, 190);
-	_numPsiSkill = new Text(18, 9, 131, 190);
-	_barPsiSkill = new Bar(170, 7, 150, 190);
+	_txtPsiSkill	= new Text(120, 9, 6, 190);
+	_numPsiSkill	= new Text(18, 9, 131, 190);
+	_barPsiSkill	= new Bar(170, 7, 150, 190);
 
 	add(_bg);
 	add(_rank);
@@ -115,7 +127,7 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, size_t soldier) : Sta
 	add(_btnArmor);
 	add(_edtSoldier);
 	add(_btnSack);
-//	add(_txtArmor);
+	add(_txtArmor);		// kL_note: reinstating this!
 	add(_txtRank);
 	add(_txtMissions);
 	add(_txtKills);
@@ -170,30 +182,31 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, size_t soldier) : Sta
 
 	_btnOk->setColor(Palette::blockOffset(15)+6);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
-	_btnOk->onMouseClick((ActionHandler)&SoldierInfoState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&SoldierInfoState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onMouseClick((ActionHandler) &SoldierInfoState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler) &SoldierInfoState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_btnPrev->setColor(Palette::blockOffset(15)+6);
 	_btnPrev->setText(L"<<");
-	_btnPrev->onMouseClick((ActionHandler)&SoldierInfoState::btnPrevClick);
+	_btnPrev->onMouseClick((ActionHandler) &SoldierInfoState::btnPrevClick);
 
 	_btnNext->setColor(Palette::blockOffset(15)+6);
 	_btnNext->setText(L">>");
-	_btnNext->onMouseClick((ActionHandler)&SoldierInfoState::btnNextClick);
+	_btnNext->onMouseClick((ActionHandler) &SoldierInfoState::btnNextClick);
 
 	_btnArmor->setColor(Palette::blockOffset(15)+6);
-	_btnArmor->setText(_game->getLanguage()->getString("STR_ARMOR"));
-	_btnArmor->onMouseClick((ActionHandler)&SoldierInfoState::btnArmorClick);
+//kL	_btnArmor->setText(_game->getLanguage()->getString("STR_ARMOR"));
+	_btnArmor->onMouseClick((ActionHandler) &SoldierInfoState::btnArmorClick);
 
 	_edtSoldier->setColor(Palette::blockOffset(13)+10);
 	_edtSoldier->setBig();
-	_edtSoldier->onKeyboardPress((ActionHandler)&SoldierInfoState::edtSoldierKeyPress);
+	_edtSoldier->onKeyboardPress((ActionHandler) &SoldierInfoState::edtSoldierKeyPress);
 
 	_btnSack->setColor(Palette::blockOffset(15)+6);
 	_btnSack->setText(_game->getLanguage()->getString("STR_SACK"));
-	_btnSack->onMouseClick((ActionHandler)&SoldierInfoState::btnSackClick);
+	_btnSack->onMouseClick((ActionHandler) &SoldierInfoState::btnSackClick);
 
-//	_txtArmor->setColor(Palette::blockOffset(13));
+	_txtArmor->setColor(Palette::blockOffset(13));		// kL_note: reinstating this!
+	_txtArmor->setText(_game->getLanguage()->getString("STR_ARMOR"));		// kL
 
 	_txtRank->setColor(Palette::blockOffset(13)+10);
 	_txtRank->setSecondaryColor(Palette::blockOffset(13));
@@ -212,7 +225,6 @@ SoldierInfoState::SoldierInfoState(Game *game, Base *base, size_t soldier) : Sta
 
 	_txtPsionic->setColor(Palette::blockOffset(15)+1);
 	_txtPsionic->setText(_game->getLanguage()->getString("STR_IN_PSIONIC_TRAINING"));
-
 
 	_txtTimeUnits->setColor(Palette::blockOffset(15)+1);
 	_txtTimeUnits->setText(_game->getLanguage()->getString("STR_TIME_UNITS"));
@@ -330,6 +342,7 @@ void SoldierInfoState::init()
 	if (_base->getSoldiers()->empty())
 	{
 		_game->popState();
+
 		return;
 	}
 
@@ -338,21 +351,20 @@ void SoldierInfoState::init()
 		_soldier = 0;
 	}
 
-	Soldier *s = _base->getSoldiers()->at(_soldier);
+	Soldier* s = _base->getSoldiers()->at(_soldier);
 	_edtSoldier->setText(s->getName());
-	UnitStats *initial = s->getInitStats();
-	UnitStats *current = s->getCurrentStats();
+	UnitStats* initial = s->getInitStats();
+	UnitStats* current = s->getCurrentStats();
 
-	SurfaceSet *texture = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
+	SurfaceSet* texture = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
 	texture->getFrame(s->getRankSprite())->setX(0);
 	texture->getFrame(s->getRankSprite())->setY(0);
 	texture->getFrame(s->getRankSprite())->blit(_rank);
 
-
 	std::wstringstream ss;
 	ss << current->tu;
 	_numTimeUnits->setText(ss.str());
-
+//kL	_barTimeUnits->setMax(current->tu);
 	// kL_begin:
 	if (current->tu > initial->tu)
 	{
@@ -361,10 +373,8 @@ void SoldierInfoState::init()
 	else
 		_barTimeUnits->setMax(initial->tu);
 	// kL_end.
-//kL	_barTimeUnits->setMax(current->tu);
-
 	_barTimeUnits->setValue(current->tu);
-
+//kL	_barTimeUnits->setValue2(initial->tu);
 	// kL_begin:
 	if (current->tu > initial->tu)
 	{
@@ -373,13 +383,11 @@ void SoldierInfoState::init()
 	else
 		_barTimeUnits->setValue2(current->tu);
 	// kL_end.
-//kL	_barTimeUnits->setValue2(initial->tu);
-
 
 	std::wstringstream ss2;
 	ss2 << current->stamina;
 	_numStamina->setText(ss2.str());
-
+//kL	_barStamina->setMax(current->stamina);
 	// kL_begin:
 	if (current->stamina > initial->stamina)
 	{
@@ -388,10 +396,8 @@ void SoldierInfoState::init()
 	else
 		_barStamina->setMax(initial->stamina);
 	// kL_end.
-//kL	_barStamina->setMax(current->stamina);
-
 	_barStamina->setValue(current->stamina);
-
+//kL	_barStamina->setValue2(initial->stamina);
 	// kL_begin:
 	if (current->stamina > initial->stamina)
 	{
@@ -400,13 +406,11 @@ void SoldierInfoState::init()
 	else
 		_barStamina->setValue2(current->stamina);
 	// kL_end.
-//kL	_barStamina->setValue2(initial->stamina);
-
 
 	std::wstringstream ss3;
 	ss3 << current->health;
 	_numHealth->setText(ss3.str());
-
+//kL	_barHealth->setMax(current->health);
 	// kL_begin:
 	if (current->health > initial->health)
 	{
@@ -415,10 +419,8 @@ void SoldierInfoState::init()
 	else
 		_barHealth->setMax(initial->health);
 	// kL_end.
-//kL	_barHealth->setMax(current->health);
-
 	_barHealth->setValue(current->health);
-
+//kL	_barHealth->setValue2(initial->health);
 	// kL_begin:
 	if (current->health > initial->health)
 	{
@@ -427,8 +429,6 @@ void SoldierInfoState::init()
 	else
 		_barHealth->setValue2(current->health);
 	// kL_end.
-//kL	_barHealth->setValue2(initial->health);
-
 
 	std::wstringstream ss4;
 	ss4 << current->bravery;
@@ -461,7 +461,7 @@ void SoldierInfoState::init()
 	std::wstringstream ss8;
 	ss8 << current->strength;
 	_numStrength->setText(ss8.str());
-
+//kL	_barStrength->setMax(current->strength);
 	// kL_begin:
 	if (current->strength > initial->strength)
 	{
@@ -470,10 +470,8 @@ void SoldierInfoState::init()
 	else
 		_barStrength->setMax(initial->strength);
 	// kL_end.
-//kL	_barStrength->setMax(current->strength);
-
 	_barStrength->setValue(current->strength);
-
+//kL	_barStrength->setValue2(initial->strength);
 	// kL_begin:
 	if (current->strength > initial->strength)
 	{
@@ -482,19 +480,18 @@ void SoldierInfoState::init()
 	else
 		_barStrength->setValue2(current->strength);
 	// kL_end.
-//kL	_barStrength->setValue2(initial->strength);
 
 	std::wstring wsArmor;
 	std::string armorType = s->getArmor()->getType();
-	if (armorType == "STR_NONE_UC")
+/*kL	if (armorType == "STR_NONE_UC")
 	{
 		wsArmor.reserve(15);
 		wsArmor = _game->getLanguage()->getString("STR_ARMOR");
 		wsArmor += L"> ";
 		wsArmor += _game->getLanguage()->getString(armorType);
 	}
-	else
-		wsArmor = _game->getLanguage()->getString(armorType);
+	else */
+	wsArmor = _game->getLanguage()->getString(armorType);
 
 	_btnArmor->setText(wsArmor);
 //	_txtArmor->setText(_game->getLanguage()->getString(s->getArmor()->getType()));
@@ -575,7 +572,7 @@ void SoldierInfoState::init()
  * Changes the soldier's name.
  * @param action Pointer to an action.
  */
-void SoldierInfoState::edtSoldierKeyPress(Action *action)
+void SoldierInfoState::edtSoldierKeyPress(Action* action)
 {
 	if (action->getDetails()->key.keysym.sym == SDLK_RETURN
 		|| action->getDetails()->key.keysym.sym == SDLK_KP_ENTER)
@@ -588,7 +585,7 @@ void SoldierInfoState::edtSoldierKeyPress(Action *action)
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void SoldierInfoState::btnOkClick(Action *)
+void SoldierInfoState::btnOkClick(Action* )
 {
 	_base->getSoldiers()->at(_soldier)->setName(_edtSoldier->getText());
 	_game->popState();
@@ -598,7 +595,7 @@ void SoldierInfoState::btnOkClick(Action *)
  * Goes to the previous soldier.
  * @param action Pointer to an action.
  */
-void SoldierInfoState::btnPrevClick(Action *)
+void SoldierInfoState::btnPrevClick(Action* )
 {
 	_edtSoldier->deFocus();
 	_base->getSoldiers()->at(_soldier)->setName(_edtSoldier->getText());
@@ -615,7 +612,7 @@ void SoldierInfoState::btnPrevClick(Action *)
  * Goes to the next soldier.
  * @param action Pointer to an action.
  */
-void SoldierInfoState::btnNextClick(Action *)
+void SoldierInfoState::btnNextClick(Action* )
 {
 	_edtSoldier->deFocus();
 	_base->getSoldiers()->at(_soldier)->setName(_edtSoldier->getText());
@@ -631,8 +628,8 @@ void SoldierInfoState::btnNextClick(Action *)
  * Shows the Select Armor window.
  * @param action Pointer to an action.
  */
-void SoldierInfoState::btnArmorClick(Action *)
-{	
+void SoldierInfoState::btnArmorClick(Action* )
+{
 	_edtSoldier->deFocus();
 	_base->getSoldiers()->at(_soldier)->setName(_edtSoldier->getText());
 
@@ -648,7 +645,7 @@ void SoldierInfoState::btnArmorClick(Action *)
  * Shows the Sack Soldier window.
  * @param action Pointer to an action.
  */
-void SoldierInfoState::btnSackClick(Action *)
+void SoldierInfoState::btnSackClick(Action* )
 {
 	Soldier *soldier = _base->getSoldiers()->at(_soldier);
 	_game->pushState(new SackSoldierState(_game, _base, soldier));

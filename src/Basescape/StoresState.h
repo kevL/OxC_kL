@@ -16,10 +16,12 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_STORESSTATE_H
 #define OPENXCOM_STORESSTATE_H
 
 #include "../Engine/State.h"
+
 
 namespace OpenXcom
 {
@@ -34,22 +36,26 @@ class TextList;
  * Stores window that displays all
  * the items currently stored in a base.
  */
-class StoresState : public State
+class StoresState
+	:
+	public State
 {
-private:
-	Base *_base;
+	private:
+		Base* _base;
 
-	TextButton *_btnOk;
-	Window *_window;
-	Text *_txtTitle, *_txtItem, *_txtQuantity, *_txtSpaceUsed;
-	TextList *_lstStores;
-public:
-	/// Creates the Stores state.
-	StoresState(Game *game, Base *base);
-	/// Cleans up the Stores state.
-	~StoresState();
-	/// Handler for clicking the OK button.
-	void btnOkClick(Action *action);
+		TextButton* _btnOk;
+		Window* _window;
+		Text* _txtTitle, * _txtItem, * _txtQuantity, * _txtSpaceUsed;
+		TextList* _lstStores;
+
+	public:
+		/// Creates the Stores state.
+		StoresState(Game* game, Base* base);
+		/// Cleans up the Stores state.
+		~StoresState();
+
+		/// Handler for clicking the OK button.
+		void btnOkClick(Action *action);
 };
 
 }

@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "BriefingState.h"
 #include "BattlescapeState.h"
 #include "../Engine/Game.h"
@@ -36,6 +37,7 @@
 #include <sstream>
 #include "../Engine/Options.h"
 
+
 namespace OpenXcom
 {
 
@@ -45,7 +47,8 @@ namespace OpenXcom
  * @param craft Pointer to the craft in the mission.
  * @param base Pointer to the base in the mission.
  */
-BriefingState::BriefingState(Game *game, Craft *craft, Base *base) :
+BriefingState::BriefingState(Game* game, Craft* craft, Base* base)
+	:
 	State(game)
 {
 	_screen = false;
@@ -56,7 +59,8 @@ BriefingState::BriefingState(Game *game, Craft *craft, Base *base) :
 	_txtTitle		= new Text(300, 16, 16, 24);
 	_txtTarget		= new Text(300, 16, 16, 40);
 	_txtCraft		= new Text(300, 16, 16, 56);
-	_txtBriefing	= new Text(274, 64, 16, 72);
+//kL	_txtBriefing	= new Text(274, 64, 16, 72);
+	_txtBriefing	= new Text(274, 80, 16, 72);	// kL
 
 	std::string mission = _game->getSavedGame()->getSavedBattle()->getMissionType();
 
@@ -112,8 +116,8 @@ BriefingState::BriefingState(Game *game, Craft *craft, Base *base) :
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
 
 	_btnOk->onMouseClick((ActionHandler)&BriefingState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&BriefingState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
-	_btnOk->onKeyboardPress((ActionHandler)&BriefingState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onKeyboardPress((ActionHandler) &BriefingState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
+	_btnOk->onKeyboardPress((ActionHandler) &BriefingState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(8)+5);
 	_txtTitle->setBig();
@@ -178,11 +182,11 @@ BriefingState::~BriefingState()
  * Closes the window.
  * @param action Pointer to an action.
  */
-void BriefingState::btnOkClick(Action *)
+void BriefingState::btnOkClick(Action* )
 {
 	_game->popState();
 
-	BattlescapeState *bs = new BattlescapeState(_game); // <- ah there it is! kL_note.
+	BattlescapeState* bs = new BattlescapeState(_game); // <- ah there it is! kL_note.
 
 	_game->pushState(bs);
 	_game->getSavedGame()->getSavedBattle()->setBattleState(bs);

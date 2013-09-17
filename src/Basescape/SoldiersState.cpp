@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "SoldiersState.h"
 #include <string>
 #include "../Engine/Game.h"
@@ -34,6 +35,7 @@
 #include "../Ruleset/RuleCraft.h"
 #include "SoldierInfoState.h"
 
+
 namespace OpenXcom
 {
 
@@ -42,19 +44,22 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
  */
-SoldiersState::SoldiersState(Game *game, Base *base) : State(game), _base(base)
+SoldiersState::SoldiersState(Game* game, Base* base)
+	:
+	State(game),
+	_base(base)
 {
 	bool isPsiBtnVisible = Options::getBool("anytimePsiTraining") && _base->getAvailablePsiLabs() > 0;
 
 	// Create objects
-	_window = new Window(this, 320, 200, 0, 0);
-	_btnOk = new TextButton(isPsiBtnVisible? 148:288, 16, isPsiBtnVisible? 164:16, 176);
-	_btnPsiTraining = new TextButton(148, 16, 8, 176);
-	_txtTitle = new Text(310, 16, 5, 8);
-	_txtName = new Text(114, 9, 16, 32);
-	_txtRank = new Text(102, 9, 130, 32);
-	_txtCraft = new Text(82, 9, 222, 32);
-	_lstSoldiers = new TextList(288, 128, 8, 40);
+	_window			= new Window(this, 320, 200, 0, 0);
+	_btnOk			= new TextButton(isPsiBtnVisible? 148:288, 16, isPsiBtnVisible? 164:16, 176);
+	_btnPsiTraining	= new TextButton(148, 16, 8, 176);
+	_txtTitle		= new Text(310, 16, 5, 8);
+	_txtName		= new Text(114, 9, 16, 32);
+	_txtRank		= new Text(102, 9, 130, 32);
+	_txtCraft		= new Text(82, 9, 222, 32);
+	_lstSoldiers	= new TextList(288, 128, 8, 40);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)), Palette::backPos, 16);
@@ -76,12 +81,12 @@ SoldiersState::SoldiersState(Game *game, Base *base) : State(game), _base(base)
 
 	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
-	_btnOk->onMouseClick((ActionHandler)&SoldiersState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&SoldiersState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onMouseClick((ActionHandler) &SoldiersState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler) &SoldiersState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_btnPsiTraining->setColor(Palette::blockOffset(13)+10);
 	_btnPsiTraining->setText(_game->getLanguage()->getString("STR_PSIONIC_TRAINING"));
-	_btnPsiTraining->onMouseClick((ActionHandler)&SoldiersState::btnPsiTrainingClick);
+	_btnPsiTraining->onMouseClick((ActionHandler) &SoldiersState::btnPsiTrainingClick);
 	_btnPsiTraining->setVisible(isPsiBtnVisible);
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
@@ -104,7 +109,7 @@ SoldiersState::SoldiersState(Game *game, Base *base) : State(game), _base(base)
 	_lstSoldiers->setSelectable(true);
 	_lstSoldiers->setBackground(_window);
 	_lstSoldiers->setMargin(8);
-	_lstSoldiers->onMouseClick((ActionHandler)&SoldiersState::lstSoldiersClick);
+	_lstSoldiers->onMouseClick((ActionHandler) &SoldiersState::lstSoldiersClick);
 }
 
 /**
@@ -112,7 +117,6 @@ SoldiersState::SoldiersState(Game *game, Base *base) : State(game), _base(base)
  */
 SoldiersState::~SoldiersState()
 {
-
 }
 
 /**
@@ -121,15 +125,18 @@ SoldiersState::~SoldiersState()
  */
 void SoldiersState::init()
 {
-	int row = 0;
 	_lstSoldiers->clearList();
+
+	int row = 0;
 	for (std::vector<Soldier*>::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); ++i)
 	{
 		_lstSoldiers->addRow(3, (*i)->getName().c_str(), _game->getLanguage()->getString((*i)->getRankString()).c_str(), (*i)->getCraftString(_game->getLanguage()).c_str());
+
 		if ((*i)->getCraft() == 0)
 		{
 			_lstSoldiers->setRowColor(row, Palette::blockOffset(15)+6);
 		}
+
 		row++;
 	}
 }
@@ -138,7 +145,7 @@ void SoldiersState::init()
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void SoldiersState::btnOkClick(Action *)
+void SoldiersState::btnOkClick(Action* )
 {
 	_game->popState();
 }
@@ -147,7 +154,7 @@ void SoldiersState::btnOkClick(Action *)
  * Opens the Psionic Training screen.
  * @param action Pointer to an action.
  */
-void SoldiersState::btnPsiTrainingClick(Action *)
+void SoldiersState::btnPsiTrainingClick(Action* )
 {
 	_game->pushState(new AllocatePsiTrainingState(_game, _base));
 }
@@ -156,7 +163,7 @@ void SoldiersState::btnPsiTrainingClick(Action *)
  * Shows the selected soldier's info.
  * @param action Pointer to an action.
  */
-void SoldiersState::lstSoldiersClick(Action *)
+void SoldiersState::lstSoldiersClick(Action* )
 {
 	_game->pushState(new SoldierInfoState(_game, _base, _lstSoldiers->getSelectedRow()));
 }

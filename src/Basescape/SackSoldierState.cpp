@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "SackSoldierState.h"
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
@@ -31,6 +32,7 @@
 #include "../Savegame/SavedGame.h"
 #include "../Ruleset/Armor.h"
 
+
 namespace OpenXcom
 {
 
@@ -40,16 +42,20 @@ namespace OpenXcom
  * @param base Pointer to the base to get info from.
  * @param soldier Pointer to the soldier to sack.
  */
-SackSoldierState::SackSoldierState(Game *game, Base *base, Soldier *soldier) : State(game), _base(base), _soldier(soldier)
+SackSoldierState::SackSoldierState(Game* game, Base* base, Soldier* soldier)
+	:
+	State(game),
+	_base(base),
+	_soldier(soldier)
 {
 	_screen = false;
 
 	// Create objects
-	_window = new Window(this, 152, 80, 84, 60);
-	_btnOk = new TextButton(44, 16, 100, 115);
-	_btnCancel = new TextButton(44, 16, 176, 115);
-	_txtTitle = new Text(142, 9, 89, 75);
-	_txtSoldier = new Text(142, 9, 89, 85);
+	_window		= new Window(this, 152, 80, 84, 60);
+	_btnOk		= new TextButton(44, 16, 100, 115);
+	_btnCancel	= new TextButton(44, 16, 176, 115);
+	_txtTitle	= new Text(142, 9, 89, 75);
+	_txtSoldier	= new Text(142, 9, 89, 85);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
@@ -68,13 +74,13 @@ SackSoldierState::SackSoldierState(Game *game, Base *base, Soldier *soldier) : S
 
 	_btnOk->setColor(Palette::blockOffset(15)+6);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
-	_btnOk->onMouseClick((ActionHandler)&SackSoldierState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&SackSoldierState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
+	_btnOk->onMouseClick((ActionHandler) &SackSoldierState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler) &SackSoldierState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
 
 	_btnCancel->setColor(Palette::blockOffset(15)+6);
 	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL_UC"));
-	_btnCancel->onMouseClick((ActionHandler)&SackSoldierState::btnCancelClick);
-	_btnCancel->onKeyboardPress((ActionHandler)&SackSoldierState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnCancel->onMouseClick((ActionHandler) &SackSoldierState::btnCancelClick);
+	_btnCancel->onKeyboardPress((ActionHandler) &SackSoldierState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setAlign(ALIGN_CENTER);
@@ -90,7 +96,6 @@ SackSoldierState::SackSoldierState(Game *game, Base *base, Soldier *soldier) : S
  */
 SackSoldierState::~SackSoldierState()
 {
-
 }
 
 /**
@@ -98,21 +103,23 @@ SackSoldierState::~SackSoldierState()
  * to the previous screen.
  * @param action Pointer to an action.
  */
-void SackSoldierState::btnOkClick(Action *)
+void SackSoldierState::btnOkClick(Action* )
 {
-	if(_soldier->getArmor()->getStoreItem() != "STR_NONE")
+	if (_soldier->getArmor()->getStoreItem() != "STR_NONE")
 	{
 		_base->getItems()->addItem(_soldier->getArmor()->getStoreItem());
 	}
-	for (std::vector<Soldier*>::iterator s = _base->getSoldiers()->begin(); s != _base->getSoldiers()->end(); ++s)
+
+	for (std::vector<Soldier* >::iterator s = _base->getSoldiers()->begin(); s != _base->getSoldiers()->end(); ++s)
 	{
-		if (*s == _soldier)
+		if ((*s) == _soldier)
 		{
 			_base->getSoldiers()->erase(s);
 			break;
 		}
 	}
-	delete(_soldier);
+
+	delete _soldier;
 	_game->popState();
 }
 
@@ -120,7 +127,7 @@ void SackSoldierState::btnOkClick(Action *)
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void SackSoldierState::btnCancelClick(Action *)
+void SackSoldierState::btnCancelClick(Action* )
 {
 	_game->popState();
 }

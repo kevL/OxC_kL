@@ -16,10 +16,12 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http:///www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_CONFIRMDESTINATIONSTATE_H
 #define OPENXCOM_CONFIRMDESTINATIONSTATE_H
 
 #include "../Engine/State.h"
+
 
 namespace OpenXcom
 {
@@ -31,26 +33,29 @@ class Craft;
 class Target;
 
 /**
- * Window that allows the player
- * to confirm a craft's new destination.
+ * Window that allows the player to confirm a craft's new destination.
  */
-class ConfirmDestinationState : public State
+class ConfirmDestinationState
+	:
+	public State
 {
-private:
-	Craft *_craft;
-	Target *_target;
-	Window *_window;
-	Text *_txtTarget;
-	TextButton *_btnOk, *_btnCancel;
-public:
-	/// Creates the Confirm Destination state.
-	ConfirmDestinationState(Game *game, Craft *craft, Target *target);
-	/// Cleans up the Confirm Destination state.
-	~ConfirmDestinationState();
-	/// Handler for clicking the OK button.
-	void btnOkClick(Action *action);
-	/// Handler for clicking the Cancel button.
-	void btnCancelClick(Action *action);
+	private:
+		Craft* _craft;
+		Target* _target;
+		Window* _window;
+		Text* _txtTarget;
+		TextButton* _btnOk, * _btnCancel;
+
+	public:
+		/// Creates the Confirm Destination state.
+		ConfirmDestinationState(Game* game, Craft* craft, Target* target);
+		/// Cleans up the Confirm Destination state.
+		~ConfirmDestinationState();
+
+		/// Handler for clicking the OK button.
+		void btnOkClick(Action* action);
+		/// Handler for clicking the Cancel button.
+		void btnCancelClick(Action* action);
 };
 
 }

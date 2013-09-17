@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "ConfirmLandingState.h"
 #include <sstream>
 #include "../Engine/RNG.h"
@@ -41,6 +42,7 @@
 #include "../Engine/Exception.h"
 #include "../Engine/Options.h"
 
+
 namespace OpenXcom
 {
 
@@ -52,18 +54,24 @@ namespace OpenXcom
  * @param shade Shade of the landing site.
  * @param state Pointer to Geoscape.
  */
-ConfirmLandingState::ConfirmLandingState(Game *game, Craft *craft, int texture, int shade, GeoscapeState *state) : State(game), _craft(craft), _texture(texture), _shade(shade), _state(state)
+ConfirmLandingState::ConfirmLandingState(Game* game, Craft* craft, int texture, int shade, GeoscapeState* state)
+	:
+	State(game),
+	_craft(craft),
+	_texture(texture),
+	_shade(shade),
+	_state(state)
 {
 	_screen = false;
 
 	// Create objects
-	_window = new Window(this, 216, 160, 20, 20, POPUP_BOTH);
-	_btnYes = new TextButton(80, 20, 40, 150);
-	_btnNo = new TextButton(80, 20, 136, 150);
-	_txtCraft = new Text(206, 16, 25, 40);
-	_txtTarget = new Text(206, 32, 25, 88);
-	_txtReady = new Text(206, 32, 25, 56);
-	_txtBegin = new Text(206, 16, 25, 130);
+	_window		= new Window(this, 216, 160, 20, 20, POPUP_BOTH);
+	_btnYes		= new TextButton(80, 20, 40, 150);
+	_btnNo		= new TextButton(80, 20, 136, 150);
+	_txtCraft	= new Text(206, 16, 25, 40);
+	_txtTarget	= new Text(206, 32, 25, 88);
+	_txtReady	= new Text(206, 32, 25, 56);
+	_txtBegin	= new Text(206, 16, 25, 130);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(3)), Palette::backPos, 16);
@@ -84,13 +92,13 @@ ConfirmLandingState::ConfirmLandingState(Game *game, Craft *craft, int texture, 
 
 	_btnYes->setColor(Palette::blockOffset(8)+5);
 	_btnYes->setText(_game->getLanguage()->getString("STR_YES"));
-	_btnYes->onMouseClick((ActionHandler)&ConfirmLandingState::btnYesClick);
-	_btnYes->onKeyboardPress((ActionHandler)&ConfirmLandingState::btnYesClick, (SDLKey)Options::getInt("keyOk"));
+	_btnYes->onMouseClick((ActionHandler) &ConfirmLandingState::btnYesClick);
+	_btnYes->onKeyboardPress((ActionHandler) &ConfirmLandingState::btnYesClick, (SDLKey)Options::getInt("keyOk"));
 
 	_btnNo->setColor(Palette::blockOffset(8)+5);
 	_btnNo->setText(_game->getLanguage()->getString("STR_NO"));
-	_btnNo->onMouseClick((ActionHandler)&ConfirmLandingState::btnNoClick);
-	_btnNo->onKeyboardPress((ActionHandler)&ConfirmLandingState::btnNoClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnNo->onMouseClick((ActionHandler) &ConfirmLandingState::btnNoClick);
+	_btnNo->onKeyboardPress((ActionHandler) &ConfirmLandingState::btnNoClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtCraft->setColor(Palette::blockOffset(8)+10);
 	_txtCraft->setBig();
@@ -119,27 +127,26 @@ ConfirmLandingState::ConfirmLandingState(Game *game, Craft *craft, int texture, 
  */
 ConfirmLandingState::~ConfirmLandingState()
 {
-
 }
 
 /**
  * Enters the mission.
  * @param action Pointer to an action.
  */
-void ConfirmLandingState::btnYesClick(Action *)
+void ConfirmLandingState::btnYesClick(Action* )
 {
 	_game->popState();
 	_state->musicStop();
 
-	Ufo* u = dynamic_cast<Ufo*>(_craft->getDestination());
-	TerrorSite* t = dynamic_cast<TerrorSite*>(_craft->getDestination());
-	AlienBase* b = dynamic_cast<AlienBase*>(_craft->getDestination());
+	Ufo* u = dynamic_cast<Ufo* >(_craft->getDestination());
+	TerrorSite* t = dynamic_cast<TerrorSite* >(_craft->getDestination());
+	AlienBase* b = dynamic_cast<AlienBase* >(_craft->getDestination());
 
 	size_t month = _game->getSavedGame()->getMonthsPassed();
 	if (month > _game->getRuleset()->getAlienItemLevels().size() - 1)
 		month = _game->getRuleset()->getAlienItemLevels().size() - 1;
 
-	SavedBattleGame *bgame = new SavedBattleGame();
+	SavedBattleGame* bgame = new SavedBattleGame();
 	_game->getSavedGame()->setBattleGame(bgame);
 
 	BattlescapeGenerator bgen = BattlescapeGenerator(_game);
@@ -185,7 +192,7 @@ void ConfirmLandingState::btnYesClick(Action *)
  * Returns the craft to base and closes the window.
  * @param action Pointer to an action.
  */
-void ConfirmLandingState::btnNoClick(Action *)
+void ConfirmLandingState::btnNoClick(Action* )
 {
 	_craft->returnToBase();
 	_game->popState();
