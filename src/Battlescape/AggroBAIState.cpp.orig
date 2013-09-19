@@ -51,7 +51,7 @@ int AggroBAIState::_randomTileSearchAge = 0xBAD; // data not good yet
 AggroBAIState::AggroBAIState(SavedBattleGame *game, BattleUnit *unit) : BattleAIState(game, unit), _aggroTarget(0), _lastKnownTarget(0), _timesNotSeen(0), _coverCharge(0), _charge(false), _wasHit(false)
 {
 	_traceAI = _game->getTraceSetting();
-	if (_randomTileSearch.size() == 0)
+	if (_randomTileSearch.empty())
 	{
 		_randomTileSearch.resize(11*11); // this is currently regenerating this structure once for every alien. Perhaps store it persistently instead?
 
@@ -79,13 +79,8 @@ AggroBAIState::~AggroBAIState()
  */
 void AggroBAIState::load(const YAML::Node &node)
 {
-<<<<<<< HEAD
-	int targetID;
-
-	node["aggrotarget"] >> targetID;
-=======
 	int targetID = node["aggrotarget"].as<int>();
->>>>>>> master
+
 	if (targetID != -1)
 	{
 		for (std::vector<BattleUnit*>::iterator j = _game->getUnits()->begin(); j != _game->getUnits()->end(); ++j)
@@ -94,12 +89,8 @@ void AggroBAIState::load(const YAML::Node &node)
 				_aggroTarget = (*j);
 		}
 	}
-<<<<<<< HEAD
 
-	node["lastKnownTarget"] >> targetID;
-=======
 	targetID = node["lastKnownTarget"].as<int>();
->>>>>>> master
 	if (targetID != -1)
 	{
 		for (std::vector<BattleUnit*>::iterator j = _game->getUnits()->begin(); j != _game->getUnits()->end(); ++j)
@@ -108,20 +99,10 @@ void AggroBAIState::load(const YAML::Node &node)
 				_lastKnownTarget = (*j);
 		}
 	}
-<<<<<<< HEAD
 
-	node["lastKnownPosition"][0] >> _lastKnownPosition.x;
-	node["lastKnownPosition"][1] >> _lastKnownPosition.y;
-	node["lastKnownPosition"][2] >> _lastKnownPosition.z;
-	node["timesNotSeen"] >> _timesNotSeen;
-
-	_charge = false;
-	if (const YAML::Node *chargeNode = node.FindValue("charge")) *chargeNode >> _charge;
-=======
 	_lastKnownPosition = node["lastKnownPosition"].as<Position>(_lastKnownPosition);
 	_timesNotSeen = node["timesNotSeen"].as<int>(_timesNotSeen);
 	_charge = node["charge"].as<bool>(_charge);
->>>>>>> master
 }
 
 /**
@@ -149,19 +130,12 @@ YAML::Node AggroBAIState::save() const
 	{
 		node["lastKnownTarget"] = -1;
 	}
-<<<<<<< HEAD
 
-	out << YAML::Key << "lastKnownPosition" << YAML::Value << YAML::Flow;
-	out << YAML::BeginSeq << _lastKnownPosition.x << _lastKnownPosition.y << _lastKnownPosition.z << YAML::EndSeq;
-	out << YAML::Key << "timesNotSeen" << YAML::Value << _timesNotSeen;
-	out << YAML::Key << "charge" << YAML::Value << _charge;
-	out << YAML::EndMap;
-=======
 	node["lastKnownPosition"] = _lastKnownPosition;
 	node["timesNotSeen"] = _timesNotSeen;
 	node["charge"] = _charge;
+
 	return node;
->>>>>>> master
 }
 
 /**
@@ -315,6 +289,7 @@ void AggroBAIState::setAggroTarget(BattleUnit *unit)
 bool AggroBAIState::explosiveEfficacy(Position targetPos, BattleUnit *attackingUnit, int radius, int diff)
 {
 	// i hate the player and i want him dead, but i don't want to piss him off.
+	// kL_note: am i sure I want this!!
 	if (_game->getTurn() < 3)
 		return false;
 
@@ -1036,15 +1011,19 @@ void AggroBAIState::selectFireMethod(BattleAction *action)
 		if (tuAuto && currentTU >= action->actor->getActionTUs(BA_AUTOSHOT, action->weapon))
 		{
 			action->type = BA_AUTOSHOT;
-			return;
 		}
+<<<<<<< HEAD
 
 		if (!tuSnap || currentTU < action->actor->getActionTUs(BA_SNAPSHOT, action->weapon))
+=======
+		else if (!tuSnap || currentTU < action->actor->getActionTUs(BA_SNAPSHOT, action->weapon))
+>>>>>>> master
 		{
 			if (tuAimed && currentTU >= action->actor->getActionTUs(BA_AIMEDSHOT, action->weapon))
 			{
 				action->type = BA_AIMEDSHOT;
 			}
+<<<<<<< HEAD
 
 			return;
 		}
@@ -1054,10 +1033,20 @@ void AggroBAIState::selectFireMethod(BattleAction *action)
 	}
 
 	if (distance > 12)
+=======
+		}
+		else
+		{
+			action->type = BA_SNAPSHOT;
+		}
+	}
+	else if (distance > 12)
+>>>>>>> master
 	{
 		if (tuAimed && currentTU >= action->actor->getActionTUs(BA_AIMEDSHOT, action->weapon))
 		{
 			action->type = BA_AIMEDSHOT;
+<<<<<<< HEAD
 
 			return;
 		}
@@ -1087,6 +1076,25 @@ void AggroBAIState::selectFireMethod(BattleAction *action)
 	}
 
 	if (tuAuto && currentTU >= action->actor->getActionTUs(BA_AUTOSHOT, action->weapon))
+=======
+		}
+		else if (distance < 20
+			  && tuSnap
+			  && currentTU >= action->actor->getActionTUs(BA_SNAPSHOT, action->weapon))
+		{
+			action->type = BA_SNAPSHOT;
+		}
+	}
+	else if (tuSnap && currentTU >= action->actor->getActionTUs(BA_SNAPSHOT, action->weapon))
+	{
+			action->type = BA_SNAPSHOT;
+	}
+	else if (tuAimed && currentTU >= action->actor->getActionTUs(BA_AIMEDSHOT, action->weapon))
+	{
+			action->type = BA_AIMEDSHOT;
+	}
+	else if ( tuAuto && currentTU >= action->actor->getActionTUs(BA_AUTOSHOT, action->weapon) )
+>>>>>>> master
 	{
 			action->type = BA_AUTOSHOT;
 	}

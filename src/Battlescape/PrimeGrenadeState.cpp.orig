@@ -41,26 +41,38 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param action Pointer to  the action.
  */
-PrimeGrenadeState::PrimeGrenadeState(Game* game, BattleAction* action, bool inInventoryView, BattleItem* grenadeInInventory)
-	:
-	State(game),
-	_action(action),
-	_inInventoryView(inInventoryView),
-	_grenadeInInventory(grenadeInInventory)
+PrimeGrenadeState::PrimeGrenadeState(Game *game, BattleAction *action, bool inInventoryView, BattleItem *grenadeInInventory)
+	: State(game), _action(action), _inInventoryView(inInventoryView), _grenadeInInventory(grenadeInInventory)
 {
 	_screen = false;
 
 	// Create objects
-	_title	= new Text(192, 24, 65, 44);
-	_frame	= new Frame(192, 27, 65, 37);
-	_bg		= new Surface(192, 93, 65, 45);
+<<<<<<< HEAD
+	_title		= new Text(192, 24, 65, 45);
+	_window		= new Window(this, 192, 27, 65, 37);
+	_bg			= new Surface(192, 93, 65, 45);
+	_warning	= new WarningMessage(224, 24, 48, 176);		// kL
+
+	_warning->setFonts(_game->getResourcePack()->getFont("Big.fnt"), _game->getResourcePack()->getFont("Small.fnt"));	// kL
+	_warning->setColor(Palette::blockOffset(2));																		// kL
+	_warning->setTextColor(Palette::blockOffset(1) - 1);																// kL
+=======
+	_title = new Text(192, 24, 65, 44);
+	_frame = new Frame(192, 27, 65, 37);
+	_bg = new Surface(192, 93, 65, 45);
+>>>>>>> master
 
 	int x = 67;
 	int y = 68;
 	for (int i = 0; i < 24; ++i)
 	{
-		_button[i] = new InteractiveSurface(22, 22, x - 1 + ((i %8) * 24), y - 4 + ((i / 8) * 25));
-		_number[i] = new Text(20, 20, x + ((i %8) * 24), y - 1 + ((i / 8) * 25));
+<<<<<<< HEAD
+		_button[i] = new InteractiveSurface(22, 22, x - 1 + ((i % 8) * 24), y - 4 + ((i / 8) * 25));
+		_number[i] = new Text(20, 20, x + ((i % 8) * 24), y + ((i / 8) * 25));
+=======
+		_button[i] = new InteractiveSurface(22, 22, x-1+((i%8)*24), y-4+((i/8)*25));
+		_number[i] = new Text(20, 20, x+((i%8)*24), y-1+((i/8)*25));
+>>>>>>> master
 	}
 
 	// Set up objects
@@ -88,7 +100,7 @@ PrimeGrenadeState::PrimeGrenadeState(Game* game, BattleAction* action, bool inIn
 	for (int i = 0; i < 24; ++i)
 	{
 		add(_button[i]);
-		_button[i]->onMouseClick((ActionHandler)& PrimeGrenadeState::btnClick);
+		_button[i]->onMouseClick((ActionHandler)&PrimeGrenadeState::btnClick);
 		square.x = 0;
 		square.y = 0;
 		square.w = _button[i]->getWidth();
@@ -120,6 +132,7 @@ PrimeGrenadeState::PrimeGrenadeState(Game* game, BattleAction* action, bool inIn
  */
 PrimeGrenadeState::~PrimeGrenadeState()
 {
+	delete _warning;	// kL
 }
 
 /**

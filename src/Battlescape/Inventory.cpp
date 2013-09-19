@@ -767,11 +767,12 @@ void Inventory::mouseClick(Action *action, State *state)
 					}
 				}
 			}
-			else // kL_begin:
+			// kL_begin:
+			else
 			{
-				// Closes the window on right-click.
-				_game->popState();
-			} // kL_end. - from Battlescape/MiniMapView.cpp, void MiniMapView::mouseClick (Action *action, State *state)
+				_game->popState(); // Closes the inventory window on right-click (if not in preBattle equip screen!)
+			}
+			// kL_end. - from Battlescape/MiniMapView.cpp, void MiniMapView::mouseClick (Action *action, State *state)
 		}
 		else
 		{
@@ -798,7 +799,7 @@ bool Inventory::unload()
 	for (std::vector<BattleItem*>::iterator i = _selUnit->getInventory()->begin(); i != _selUnit->getInventory()->end(); ++i)
 	{
 		if ((*i)->getSlot()->getType() == INV_HAND
-			&& (*i) != _selItem)
+			&& *i != _selItem)
 		{
 			return false;
 		}

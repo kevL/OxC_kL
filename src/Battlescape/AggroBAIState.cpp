@@ -997,7 +997,7 @@ void AggroBAIState::meleeAttack(BattleAction *action)
  * Selects a fire method based on range, time units, and time units reserved for cover.
  * @param action Pointer to an action.
  */
-void AggroBAIState::selectFireMethod(BattleAction *action)
+void AggroBAIState::selectFireMethod(BattleAction* action)
 {
 	int distance = _game->getTileEngine()->distance(_unit->getPosition(), action->target);
 	action->type = BA_RETHINK;
@@ -1008,60 +1008,51 @@ void AggroBAIState::selectFireMethod(BattleAction *action)
 
 	if (distance < 4)
 	{
-		if (tuAuto && currentTU >= action->actor->getActionTUs(BA_AUTOSHOT, action->weapon))
+		if (tuAuto
+			&& currentTU >= action->actor->getActionTUs(BA_AUTOSHOT, action->weapon))
 		{
 			action->type = BA_AUTOSHOT;
-			return;
 		}
-
-		if (!tuSnap || currentTU < action->actor->getActionTUs(BA_SNAPSHOT, action->weapon))
+		else if (!tuSnap
+			|| currentTU < action->actor->getActionTUs(BA_SNAPSHOT, action->weapon))
 		{
-			if (tuAimed && currentTU >= action->actor->getActionTUs(BA_AIMEDSHOT, action->weapon))
+			if (tuAimed 
+				&& currentTU >= action->actor->getActionTUs(BA_AIMEDSHOT, action->weapon))
 			{
 				action->type = BA_AIMEDSHOT;
 			}
-
-			return;
 		}
-		action->type = BA_SNAPSHOT;
-
-		return;
+		else
+		{
+			action->type = BA_SNAPSHOT;
+		}
 	}
-
-	if (distance > 12)
+	else if (distance > 12)
 	{
-		if (tuAimed && currentTU >= action->actor->getActionTUs(BA_AIMEDSHOT, action->weapon))
+		if (tuAimed
+			&& currentTU >= action->actor->getActionTUs(BA_AIMEDSHOT, action->weapon))
 		{
 			action->type = BA_AIMEDSHOT;
-
-			return;
 		}
-
-		if (distance < 20
+		else if (distance < 20
 			&& tuSnap
 			&& currentTU >= action->actor->getActionTUs(BA_SNAPSHOT, action->weapon))
 		{
 			action->type = BA_SNAPSHOT;
-
-			return;
 		}
 	}
-
-	if (tuSnap && currentTU >= action->actor->getActionTUs(BA_SNAPSHOT, action->weapon))
+	else if (tuSnap
+		&& currentTU >= action->actor->getActionTUs(BA_SNAPSHOT, action->weapon))
 	{
 			action->type = BA_SNAPSHOT;
-
-			return;
 	}
-
-	if (tuAimed && currentTU >= action->actor->getActionTUs(BA_AIMEDSHOT, action->weapon))
+	else if (tuAimed
+		&& currentTU >= action->actor->getActionTUs(BA_AIMEDSHOT, action->weapon))
 	{
 			action->type = BA_AIMEDSHOT;
-
-			return;
 	}
-
-	if (tuAuto && currentTU >= action->actor->getActionTUs(BA_AUTOSHOT, action->weapon))
+	else if (tuAuto
+		&& currentTU >= action->actor->getActionTUs(BA_AUTOSHOT, action->weapon))
 	{
 			action->type = BA_AUTOSHOT;
 	}

@@ -886,6 +886,14 @@ void BattlescapeState::btnKneelClick(Action *)
 			Log(LOG_INFO) << "BattlescapeState::btnKneelClick()";
 			_battleGame->kneel(bu);
 		}
+
+		// update any path preview if unit kneels
+		if (_battleGame->getPathfinding()->isPathPreviewed() && bu->isKneeled())
+		{
+			_battleGame->getPathfinding()->calculate(_battleGame->getCurrentAction()->actor, _battleGame->getCurrentAction()->target);
+			_battleGame->getPathfinding()->removePreview();
+			_battleGame->getPathfinding()->previewPath();
+		}
 	}
 }
 
