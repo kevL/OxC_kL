@@ -154,7 +154,7 @@ void UnitSprite::setAnimationFrame(int frame)
  */
 void UnitSprite::draw()
 {
-	Surface::draw();
+ 	Surface::draw();
 
 	_drawingRoutine = _unit->getArmor()->getDrawingRoutine();
 	switch (_drawingRoutine)
@@ -364,6 +364,7 @@ void UnitSprite::drawRoutine0()
 		if (_itemA->getRules()->isTwoHanded())
 		{
 			leftArm = _unitSurface->getFrame(larm2H + _unit->getDirection());
+
 			if (_unit->getStatus() == STATUS_AIMING)
 			{
 				rightArm = _unitSurface->getFrame(rarmShoot + _unit->getDirection());
@@ -375,8 +376,8 @@ void UnitSprite::drawRoutine0()
 		}
 		else
 		{
-			if (_drawingRoutine == 10)
-				rightArm = _unitSurface->getFrame(rarm2H + _unit->getDirection()); // missing/wrong arms on muton here, investigate spriteset
+			if (_drawingRoutine == 10) // missing/wrong arms on muton here, investigate spriteset
+				rightArm = _unitSurface->getFrame(rarm2H + _unit->getDirection());
 			else
 				rightArm = _unitSurface->getFrame(rarm1H + _unit->getDirection());
 		}
@@ -386,15 +387,17 @@ void UnitSprite::drawRoutine0()
 		{
 			if (_drawingRoutine == 10)
 			{
-				itemA->setY(itemA->getY() + alternateyoffWalk[_unit->getWalkingPhase()]);
 				rightArm->setY(alternateyoffWalk[_unit->getWalkingPhase()]);
+
+				itemA->setY(itemA->getY() + alternateyoffWalk[_unit->getWalkingPhase()]);
 				if (_itemA->getRules()->isTwoHanded())
 					leftArm->setY(alternateyoffWalk[_unit->getWalkingPhase()]);
 			}
 			else
 			{
-				itemA->setY(itemA->getY() + yoffWalk[_unit->getWalkingPhase()]);
 				rightArm->setY(yoffWalk[_unit->getWalkingPhase()]);
+
+				itemA->setY(itemA->getY() + yoffWalk[_unit->getWalkingPhase()]);
 				if (_itemA->getRules()->isTwoHanded())
 					leftArm->setY(yoffWalk[_unit->getWalkingPhase()]);
 			}
@@ -405,6 +408,7 @@ void UnitSprite::drawRoutine0()
 	if (_itemB)
 	{
 		leftArm = _unitSurface->getFrame(larm2H + _unit->getDirection());
+
 		itemB = _itemSurfaceB->getFrame(_itemB->getRules()->getHandSprite() + _unit->getDirection());
 		if (!_itemB->getRules()->isTwoHanded())
 		{
@@ -423,13 +427,16 @@ void UnitSprite::drawRoutine0()
 		{
 			itemB->setX(0);
 			itemB->setY(0);
+
 			rightArm = _unitSurface->getFrame(rarm2H + _unit->getDirection());
 		}
 
-		if (_unit->getStatus() == STATUS_AIMING && _itemB->getRules()->isTwoHanded())
+		if (_unit->getStatus() == STATUS_AIMING
+			&& _itemB->getRules()->isTwoHanded())
 		{
-			int dir = (_unit->getDirection() + 2)%8;
+			int dir = (_unit->getDirection() + 2) %8;
 			itemB = _itemSurfaceB->getFrame(_itemB->getRules()->getHandSprite() + dir);
+
 			if (_drawingRoutine == 10)
 			{
 				itemB->setX(offX7[_unit->getDirection()]);
@@ -440,6 +447,7 @@ void UnitSprite::drawRoutine0()
 				itemB->setX(offX6[_unit->getDirection()]);
 				itemB->setY(offY6[_unit->getDirection()]);
 			}
+
 			rightArm = _unitSurface->getFrame(rarmShoot + _unit->getDirection());
 		}
 
@@ -468,8 +476,8 @@ void UnitSprite::drawRoutine0()
 		leftArm->setY(offYKneel);
 		rightArm->setY(offYKneel);
 		torso->setY(offYKneel);
-		itemA?itemA->setY(itemA->getY() + offYKneel):void();
-		itemB?itemB->setY(itemB->getY() + offYKneel):void();
+		itemA ? itemA->setY(itemA->getY() + offYKneel) : void();
+		itemB ? itemB->setY(itemB->getY() + offYKneel) : void();
 	}
 	else if (_unit->getStatus() != STATUS_WALKING)
 	{
@@ -489,10 +497,10 @@ void UnitSprite::drawRoutine0()
 		itemB->setY(itemB->getY() + (22 - _unit->getStandHeight()));
 	}
 
-	Surface *newTorso		= new Surface(*torso);
-	Surface *newLegs		= new Surface(*legs);
-	Surface *newLeftArm		= new Surface(*leftArm);
-	Surface *newRightArm	= new Surface(*rightArm);
+	Surface* newTorso		= new Surface(* torso);
+	Surface* newLegs		= new Surface(* legs);
+	Surface* newLeftArm		= new Surface(* leftArm);
+	Surface* newRightArm	= new Surface(* rightArm);
 
 	if (_unit->getGeoscapeSoldier())
 	{
@@ -562,7 +570,10 @@ void UnitSprite::drawRoutine0()
 		break;
 		case 3:
 			if (_unit->getStatus() != STATUS_AIMING
-				&& ((_itemA && _itemA->getRules()->isTwoHanded()) || (_itemB && _itemB->getRules()->isTwoHanded())))
+				&& ((_itemA
+						&& _itemA->getRules()->isTwoHanded())
+					|| (_itemB
+						&& _itemB->getRules()->isTwoHanded())))
 			{
 				legs->blit(this);
 				torso->blit(this);
@@ -591,7 +602,10 @@ void UnitSprite::drawRoutine0()
 		break;
 		case 5:
 			if (_unit->getStatus() != STATUS_AIMING
-				&& ((_itemA && _itemA->getRules()->isTwoHanded()) || (_itemB && _itemB->getRules()->isTwoHanded())))
+				&& ((_itemA
+						&& _itemA->getRules()->isTwoHanded())
+					|| (_itemB
+						&& _itemB->getRules()->isTwoHanded())))
 			{
 				rightArm->blit(this);
 				legs->blit(this);
@@ -620,7 +634,10 @@ void UnitSprite::drawRoutine0()
 		break;
 		case 7:
 			if (_unit->getStatus() != STATUS_AIMING
-				&& ((_itemA && _itemA->getRules()->isTwoHanded()) || (_itemB && _itemB->getRules()->isTwoHanded())))
+				&& ((_itemA
+						&& _itemA->getRules()->isTwoHanded())
+					|| (_itemB
+						&& _itemB->getRules()->isTwoHanded())))
 			{
 				rightArm->blit(this);
 				itemA ? itemA->blit(this) : void();
@@ -640,10 +657,10 @@ void UnitSprite::drawRoutine0()
 		break;
 	}
 
-	delete(newTorso);
-	delete(newLegs);
-	delete(newLeftArm);
-	delete(newRightArm);
+	delete newTorso;
+	delete newLegs;
+	delete newLeftArm;
+	delete newRightArm;
 }
 
 

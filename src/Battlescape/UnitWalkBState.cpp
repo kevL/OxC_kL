@@ -106,22 +106,26 @@ void UnitWalkBState::think()
 	if (_unit->isKneeled())
 //		&& !current->getMapData(MapData::O_FLOOR)->isGravLift()) // kL_note: and not on GravLift
 	{
-		if (_parent->kneel(_unit))
+		if (_unit->getStatus() == STATUS_WALKING	// kL
+			|| _unit->getStatus() == STATUS_FLYING)	// kL
 		{
-			Log(LOG_INFO) << "UnitWalkBState::think(), knelt";		// kL
-			_unit->setCache(0);
-			_terrain->calculateFOV(_unit);
-			_parent->getMap()->cacheUnit(_unit);
+			if (_parent->kneel(_unit))
+			{
+				Log(LOG_INFO) << "UnitWalkBState::think(), knelt";		// kL
+				_unit->setCache(0);
+				_terrain->calculateFOV(_unit);
+				_parent->getMap()->cacheUnit(_unit);
 
-			return;
-		}
-		else
-		{
-			_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
-			_pf->abortPath();
-			_parent->popState();
+				return;
+			}
+			else
+			{
+				_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
+				_pf->abortPath();
+				_parent->popState();
 
-			return;
+				return;
+			}
 		}
 	}
 
@@ -138,7 +142,7 @@ void UnitWalkBState::think()
 	if (_unit->getStatus() == STATUS_WALKING
 		|| _unit->getStatus() == STATUS_FLYING)
 	{
-		Log(LOG_INFO) << "STATUS_WALKING : " << _unit->getId();	// kL
+		Log(LOG_INFO) << "STATUS_WALKING or FLYING : " << _unit->getId();	// kL
 
 		if (_parent->getSave()->getTile(_unit->getDestination())->getUnit() == 0  // next tile must be not occupied
 			// kL_note: and, if not flying, the position directly below the tile must not be occupied...
@@ -340,7 +344,7 @@ void UnitWalkBState::think()
 	if (_unit->getStatus() == STATUS_STANDING
 		|| _unit->getStatus() == STATUS_PANICKING)
 	{
-		Log(LOG_INFO) << "STATUS_STANDING : " << _unit->getId();	// kL
+		Log(LOG_INFO) << "STATUS_STANDING or PANICKING : " << _unit->getId();	// kL
 
 		// check if we did spot new units
 		if (unitSpotted
@@ -539,19 +543,19 @@ void UnitWalkBState::think()
 				dir = Pathfinding::DIR_DOWN;
 			}
 
-			if (_unit->getTimeUnits() >= tu)	// kL
+//			if (_unit->getTimeUnits() >= tu)	// kL: not necessary, check'd above.
+//			{
+			if (_unit->spendTimeUnits(tu))
 			{
-				if (_unit->spendTimeUnits(tu))
+				if (_unit->spendEnergy(energy))
 				{
-					if (_unit->spendEnergy(energy))
-					{
-						Tile* tileBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(0, 0, -1));
-						_unit->startWalking(dir, destination, tileBelow, onScreen);
+					Tile* tileBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(0, 0, -1));
+					_unit->startWalking(dir, destination, tileBelow, onScreen);
 
-						_beforeFirstStep = false;
-					}
+					_beforeFirstStep = false;
 				}
 			}
+//			}
 
 			// make sure the unit sprites are up to date
 			if (onScreen)

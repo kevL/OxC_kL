@@ -479,12 +479,29 @@ UnitStatus BattleUnit::getStatus() const
  */
 void BattleUnit::startWalking(int direction, const Position& destination, Tile* tileBelow, bool cache)
 {
+	// kL_begin:
+	// if on GravLift...
+	bool keepCrouch = false;
+	// kL_end.
+
 	if (direction >= Pathfinding::DIR_UP)
 	{
-		Log(LOG_INFO) << "BattleUnit::startWalking(), STATUS_FLYING";		// kL
+		Log(LOG_INFO) << "BattleUnit::startWalking(), DIR_UP or DIR_DOWN";		// kL
 
-		_verticalDirection = direction;
-		_status = STATUS_FLYING;
+		if (!isKneeled())	// kL
+		{
+			Log(LOG_INFO) << ". STATUS_FLYING";		// kL
+
+			_verticalDirection = direction;
+			_status = STATUS_FLYING;
+		}
+		else
+		{
+			Log(LOG_INFO) << ". maintain STATUS_";		// kL
+
+			_direction = direction;		// kL
+			keepCrouch = true;			// kL
+		}
 	}
 	else
 	{
@@ -500,7 +517,8 @@ void BattleUnit::startWalking(int direction, const Position& destination, Tile* 
 		floorFound = true;
 	}
 
-	if (!floorFound || direction >= Pathfinding::DIR_UP)
+	if ((!floorFound || direction >= Pathfinding::DIR_UP)
+		&& !keepCrouch)	// kL
 	{
 		_status = STATUS_FLYING;
 		_floating = true;
@@ -514,7 +532,11 @@ void BattleUnit::startWalking(int direction, const Position& destination, Tile* 
 	_destination = destination;
 	_lastPos = _pos;
 	_cacheInvalid = cache;
-	_kneeled = false;
+
+	if (!keepCrouch)	// kL
+	{
+		_kneeled = false;
+	}
 }
 
 /**
@@ -535,8 +557,8 @@ void BattleUnit::keepWalking(Tile *tileBelow, bool cache)
 	else
 	{
 		// diagonal walking takes double the steps
-		middle = 4 + 4 * (_direction % 2);
-		end = 8 + 8 * (_direction % 2);
+		middle = 4 + 4 * (_direction %2);
+		end = 8 + 8 * (_direction %2);
 
 		if (_armor->getSize() > 1)
 		{
@@ -1690,7 +1712,7 @@ bool BattleUnit::getVisible() const
 }
 
 /**
- * Sets the unit's tile it's standing on
+ * Sets the tile that unit's standing on
  * @param tile
  */
 void BattleUnit::setTile(Tile* tile, Tile* tileBelow)
