@@ -46,7 +46,7 @@ namespace OpenXcom
  * @param soldier Pointer to the Soldier.
  * @param faction Which faction the units belongs to.
  */
-BattleUnit::BattleUnit(Soldier *soldier, UnitFaction faction)
+BattleUnit::BattleUnit(Soldier* soldier, UnitFaction faction)
 	:
 	_faction(faction),
 	_originalFaction(faction),
@@ -100,7 +100,7 @@ BattleUnit::BattleUnit(Soldier *soldier, UnitFaction faction)
 	_floatHeight = soldier->getRules()->getFloatHeight();
 	_deathSound = 0; // this one is hardcoded
 	_aggroSound = -1;
-	_moveSound = -1;  // this one is hardcoded
+	_moveSound = -1; // this one is hardcoded
 	_intelligence = 2;
 	_aggression = 1;
 	_specab = SPECAB_NONE;
@@ -149,7 +149,7 @@ BattleUnit::BattleUnit(Soldier *soldier, UnitFaction faction)
  * @param faction Which faction the units belongs to.
  * @param difficulty level (for stat adjustement)
  */
-BattleUnit::BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor, int diff)
+BattleUnit::BattleUnit(Unit* unit, UnitFaction faction, int id, Armor* armor, int diff)
 	:
 	_faction(faction),
 	_originalFaction(faction),
@@ -399,6 +399,7 @@ const Position& BattleUnit::getDestination() const
 
 /**
  * Changes the BattleUnit's direction. Only used for initial unit placement.
+ * kL_note: and positioning soldier when revived from unconscious status (see MedikitState).
  * @param direction
  */
 void BattleUnit::setDirection(int direction)
@@ -476,21 +477,25 @@ UnitStatus BattleUnit::getStatus() const
  * @param direction Which way to walk.
  * @param destination The position we should end up on.
  */
-void BattleUnit::startWalking(int direction, const Position &destination, Tile *tileBelowMe, bool cache)
+void BattleUnit::startWalking(int direction, const Position& destination, Tile* tileBelow, bool cache)
 {
 	if (direction >= Pathfinding::DIR_UP)
 	{
+		Log(LOG_INFO) << "BattleUnit::startWalking(), STATUS_FLYING";		// kL
+
 		_verticalDirection = direction;
 		_status = STATUS_FLYING;
 	}
 	else
 	{
+		Log(LOG_INFO) << "BattleUnit::startWalking(), STATUS_WALKING";		// kL
+
 		_direction = direction;
 		_status = STATUS_WALKING;
 	}
 
 	bool floorFound = false;
-	if (!_tile->hasNoFloor(tileBelowMe))
+	if (!_tile->hasNoFloor(tileBelow))
 	{
 		floorFound = true;
 	}
@@ -515,8 +520,12 @@ void BattleUnit::startWalking(int direction, const Position &destination, Tile *
 /**
  * This will increment the walking phase.
  */
-void BattleUnit::keepWalking(Tile *tileBelowMe, bool cache)
+void BattleUnit::keepWalking(Tile *tileBelow, bool cache)
 {
+	Log(LOG_INFO) << "BattleUnit::keepWalking()";		// kL
+
+	_walkPhase++;
+
 	int middle, end;
 	if (_verticalDirection)
 	{
@@ -544,7 +553,6 @@ void BattleUnit::keepWalking(Tile *tileBelowMe, bool cache)
 		end = 1;
 	}
 
-	_walkPhase++;
 	if (_walkPhase == middle)
 	{
 		// we assume we reached our destination tile
@@ -554,15 +562,17 @@ void BattleUnit::keepWalking(Tile *tileBelowMe, bool cache)
 
 	if (_walkPhase >= end)
 	{
-		if (_floating && !_tile->hasNoFloor(tileBelowMe))
-		{
-			_floating = false;
-		}
+		Log(LOG_INFO) << "BattleUnit::keepWalking(), STATUS_STANDING";		// kL
 
 		// we officially reached our destination tile
 		_status = STATUS_STANDING;
 		_walkPhase = 0;
 		_verticalDirection = 0;
+
+		if (_floating && !_tile->hasNoFloor(tileBelow))
+		{
+			_floating = false;
+		}
 
 		if (_faceDirection > -1)
 		{
@@ -578,8 +588,8 @@ void BattleUnit::keepWalking(Tile *tileBelowMe, bool cache)
 		}
 		else
 		{
-			// sectoids actually have less motion points but instead of create yet
-			// another variable, I used the height of the unit instead (logical)
+			// sectoids actually have less motion points but instead of creating
+			// yet another variable, use the height of the unit instead
 			if (getStandHeight() > 16)
 				_motionPoints += 4;
 			else
@@ -596,12 +606,12 @@ void BattleUnit::keepWalking(Tile *tileBelowMe, bool cache)
  */
 int BattleUnit::getWalkingPhase() const
 {
-	return _walkPhase % 8;
+	return _walkPhase %8;
 }
 
 /**
  * Gets the walking phase for diagonal walking.
- * return phase this will be 0 or 8
+ * return phase, This will be 0 or 8, due to rounding of ints down.
  */
 int BattleUnit::getDiagonalWalkingPhase() const
 {
@@ -837,6 +847,8 @@ Surface *BattleUnit::getCache(bool *invalid, int part) const
  */
 void BattleUnit::kneel(bool kneeled)
 {
+	Log(LOG_INFO) << "BattleUnit::kneel()" ;	// kL
+//	_status = STATUS_KNEELING;		// kL
 	_kneeled = kneeled;
 	_cacheInvalid = true;
 }
@@ -1307,7 +1319,7 @@ void BattleUnit::clearVisibleUnits()
 }
 
 /**
- * Add this unit to the list of visible tiles. Returns true if this is a new one.
+ * Add this unit to the list of visible tiles. Returns true [if this is a new one?].
  * @param tile
  * @return
  */
@@ -1671,11 +1683,10 @@ bool BattleUnit::getVisible() const
  * Sets the unit's tile it's standing on
  * @param tile
  */
-void BattleUnit::setTile(Tile *tile, Tile *tileBelow)
+void BattleUnit::setTile(Tile* tile, Tile* tileBelow)
 {
 	_tile = tile;
-	if (!_tile)
-		return;
+	if (!_tile) return;
 
 	// unit could have changed from flying to walking or vice versa
 	if (_status == STATUS_WALKING
@@ -1698,7 +1709,7 @@ void BattleUnit::setTile(Tile *tile, Tile *tileBelow)
  * Gets the unit's tile.
  * @return Tile
  */
-Tile *BattleUnit::getTile() const
+Tile* BattleUnit::getTile() const
 {
 	return _tile;
 }
@@ -2173,7 +2184,7 @@ Armor *BattleUnit::getArmor() const
 
 /**
  * Get unit's name.
- * An aliens name is the translation of it's race and rank.
+ * An alien's name is the translation of its race and rank.
  * hence the language pointer needed.
  * @param lang Pointer to language.
  * @return name Widecharstring of the unit's name.
@@ -2310,7 +2321,7 @@ int BattleUnit::getAggression() const
 }
 
 /**
-/// Get the units's special ability.
+/// Get the unit's special ability.
  */
 int BattleUnit::getSpecialAbility() const
 {
@@ -2318,7 +2329,7 @@ int BattleUnit::getSpecialAbility() const
 }
 
 /**
-/// Get the units's special ability.
+/// Get the unit's special ability.
  */
 void BattleUnit::setSpecialAbility(SpecialAbility specab)
 {
@@ -2353,15 +2364,25 @@ void BattleUnit::setSpawnUnit(std::string spawnUnit)
 }
 
 /**
-/// Get the units's rank string.
+ * Get the unit's rank string.
  */
 std::string BattleUnit::getRankString() const
 {
 	return _rank;
 }
 
+// kL_begin:
 /**
-/// Get the geoscape-soldier object.
+ * Get the unit's race string.
+ */
+std::string BattleUnit::getRaceString() const
+{
+	return _race;
+}
+// kL_end.
+
+/**
+ * Get the geoscape-soldier object.
  */
 Soldier *BattleUnit::getGeoscapeSoldier() const
 {
@@ -2369,7 +2390,7 @@ Soldier *BattleUnit::getGeoscapeSoldier() const
 }
 
 /**
-/// Add a kill to the counter.
+ * Add a kill to the counter.
  */
 void BattleUnit::addKillCount()
 {
@@ -2377,7 +2398,7 @@ void BattleUnit::addKillCount()
 }
 
 /**
-/// Get unit type.
+ * Get unit type.
  */
 std::string BattleUnit::getType() const
 {
@@ -2385,11 +2406,12 @@ std::string BattleUnit::getType() const
 }
 
 /**
-/// Set unit's active hand.
+ * Set unit's active hand.
  */
-void BattleUnit::setActiveHand(const std::string &hand)
+void BattleUnit::setActiveHand(const std::string& hand)
 {
-	if (_activeHand != hand) _cacheInvalid = true;
+	if (_activeHand != hand)
+		_cacheInvalid = true;
 
 	_activeHand = hand;
 }

@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #define _USE_MATH_DEFINES
 #include <cmath>
 #include "UnitSprite.h"
@@ -34,6 +35,7 @@
 #include "../Engine/ShaderDraw.h"
 #include "../Engine/ShaderMove.h"
 
+
 namespace OpenXcom
 {
 
@@ -45,8 +47,16 @@ namespace OpenXcom
  * @param y Y position in pixels.
  */
 UnitSprite::UnitSprite(int width, int height, int x, int y)
-	: Surface(width, height, x, y), _unit(0), _itemA(0), _itemB(0),
-	_unitSurface(0), _itemSurfaceA(0), _itemSurfaceB(0), _part(0), _animationFrame(0)
+	:
+	Surface(width, height, x, y),
+	_unit(0),
+	_itemA(0),
+	_itemB(0),
+	_unitSurface(0),
+	_itemSurfaceA(0),
+	_itemSurfaceB(0),
+	_part(0),
+	_animationFrame(0)
 {
 }
 
@@ -63,11 +73,12 @@ UnitSprite::~UnitSprite()
  * @param itemSurfaceA Pointer to the item surface set.
  * @param itemSurfaceB Pointer to the item surface set.
  */
-void UnitSprite::setSurfaces(SurfaceSet *unitSurface, SurfaceSet *itemSurfaceA, SurfaceSet *itemSurfaceB)
+void UnitSprite::setSurfaces(SurfaceSet* unitSurface, SurfaceSet* itemSurfaceA, SurfaceSet* itemSurfaceB)
 {
 	_unitSurface = unitSurface;
 	_itemSurfaceA = itemSurfaceA;
 	_itemSurfaceB = itemSurfaceB;
+
 	_redraw = true;
 }
 
@@ -76,23 +87,25 @@ void UnitSprite::setSurfaces(SurfaceSet *unitSurface, SurfaceSet *itemSurfaceA, 
  * @param unit Pointer to the BattleUnit.
  * @param part The part number for large units.
  */
-void UnitSprite::setBattleUnit(BattleUnit *unit, int part)
+void UnitSprite::setBattleUnit(BattleUnit* unit, int part)
 {
 	_unit = unit;
-	_redraw = true;
 	_part = part;
+
+	_redraw = true;
 }
 
 /**
  * Links this sprite to a BattleItem to get the data for rendering.
  * @param item Pointer to the BattleItem.
  */
-void UnitSprite::setBattleItem(BattleItem *item)
+void UnitSprite::setBattleItem(BattleItem* item)
 {
 	if (item)
 	{
 		if(item->getSlot()->getId() == "STR_RIGHT_HAND")
 			_itemA = item;
+
 		if(item->getSlot()->getId() == "STR_LEFT_HAND")
 			_itemB = item;
 	}
@@ -134,6 +147,7 @@ void UnitSprite::setAnimationFrame(int frame)
 {
 	_animationFrame = frame;
 }
+
 /**
  * Draws a unit, using the drawing rules of the unit.
  * This function is called by Map, for each unit on the screen.
@@ -179,7 +193,6 @@ void UnitSprite::draw()
 			drawRoutine0();
 		break;
 	}
-
 }
 
 /**
@@ -195,7 +208,7 @@ void UnitSprite::drawRoutine0()
 	}
 	// kL_end.
 
-	Surface *torso = 0, *legs = 0, *leftArm = 0, *rightArm = 0, *itemA = 0, *itemB = 0;
+	Surface* torso = 0, * legs = 0, * leftArm = 0, * rightArm = 0, * itemA = 0, * itemB = 0;
 
 	// magic numbers
 	const int maleTorso = 32, femaleTorso = 267, legsStand = 16, legsKneel = 24, die = 264, legsFloat = 275;
@@ -286,7 +299,7 @@ void UnitSprite::drawRoutine0()
 	if (_unit->getStatus() == STATUS_WALKING)
 	{
 		torso->setY(yoffWalk[_unit->getWalkingPhase()]);
-		if(_drawingRoutine == 10)
+		if (_drawingRoutine == 10)
 			torso->setY(alternateyoffWalk[_unit->getWalkingPhase()]);
 		legs = _unitSurface->getFrame(legsWalk[_unit->getDirection()] + _unit->getWalkingPhase());
 		leftArm = _unitSurface->getFrame(larmWalk[_unit->getDirection()] + _unit->getWalkingPhase());

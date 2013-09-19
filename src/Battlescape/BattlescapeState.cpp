@@ -883,6 +883,7 @@ void BattlescapeState::btnKneelClick(Action *)
 		BattleUnit *bu = _save->getSelectedUnit();
 		if (bu)
 		{
+			Log(LOG_INFO) << "BattlescapeState::btnKneelClick()";
 			_battleGame->kneel(bu);
 		}
 	}
@@ -1192,7 +1193,8 @@ void BattlescapeState::btnPersonalLightingClick(Action *)
 }
 
 /**
- * Determines whether a playable unit is selected. Normally only player side units can be selected, but in debug mode one can play with aliens too :)
+ * Determines whether a playable unit is selected. Normally only player side
+ * units can be selected, but in debug mode one can play with aliens too :)
  * Is used to see if stats can be displayed and action buttons will work.
  * @return Whether a playable unit is selected.
  */

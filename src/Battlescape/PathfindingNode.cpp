@@ -29,7 +29,6 @@ namespace OpenXcom
  */
 PathfindingNode::PathfindingNode(Position pos) : _pos(pos), _openentry(0)
 {
-
 }
 
 /**
@@ -37,7 +36,6 @@ PathfindingNode::PathfindingNode(Position pos) : _pos(pos), _openentry(0)
  */
 PathfindingNode::~PathfindingNode()
 {
-
 }
 
 /**
@@ -132,6 +130,5 @@ void PathfindingNode::connect(int tuCost, PathfindingNode* prevNode, int prevDir
 	_prevDir = prevDir;
 	_tuGuess = 0;
 }
-
 
 }

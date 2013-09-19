@@ -406,15 +406,18 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
  */
 bool BattlescapeGame::kneel(BattleUnit *bu)
 {
+	Log(LOG_INFO) << "BattlescapeGame::kneel()" ;	// kL
+
 	int tu = bu->isKneeled() ? 8 : 4;
+
 	if (bu->getType() == "SOLDIER"
-		&& !bu->isFloating()
+		&& !bu->isFloating()		// kL_note: This prevents flying soldiers from 'kneeling' .....
 		&& checkReservedTU(bu, tu))
 	{
 		if (bu->spendTimeUnits(tu))
 		{
 			bu->kneel(!bu->isKneeled());
-			getTileEngine()->calculateFOV(bu); // kneeling or standing up can reveal new terrain or units. I guess. kL_note: yep!
+			getTileEngine()->calculateFOV(bu);
 			getMap()->cacheUnits();
 			_parentState->updateSoldierInfo();
 			getTileEngine()->checkReactionFire(bu);
@@ -1649,21 +1652,21 @@ void BattlescapeGame::psiButtonAction()
 void BattlescapeGame::moveUpDown(BattleUnit *unit, int dir)
 {
 	_currentAction.target = unit->getPosition();
-
 	if (dir == Pathfinding::DIR_UP)
-	{
 		_currentAction.target.z++;
-	}
 	else
-	{
 		_currentAction.target.z--;
-	}
 
 	getMap()->setCursorType(CT_NONE);
 	_parentState->getGame()->getCursor()->setVisible(false);
 
-	if (_save->getSelectedUnit()->isKneeled())
+	// kL_note: taking this out so I can go up/down *kneeled* on GravLifts. <- bork! not what i was looking for
+	// might be a problem with soldiers in flying suits, later...
+	if (_save->getSelectedUnit()->isKneeled()
+//		&& not on GravLift)		// kL
+		)
 	{
+		Log(LOG_INFO) << "BattlescapeGame::moveUpDown()" ;	// kL
 		kneel(_save->getSelectedUnit());
 	}
 
@@ -1899,7 +1902,6 @@ void BattlescapeGame::findItem(BattleAction *action)
 	if (action->actor->getRankString() != "STR_TERRORIST")								// terrorists don't have hands.
 	{
 		BattleItem *targetItem = surveyItems(action);									// pick the best available item
-
 		if (targetItem && worthTaking(targetItem, action))								// make sure it's worth taking
 		{
 			if (targetItem->getTile()->getPosition() == action->actor->getPosition())	// if we're already standing on it...
@@ -1921,7 +1923,6 @@ void BattlescapeGame::findItem(BattleAction *action)
 		}
 	}
 }
-
 
 /**
  * Searches through items on the map that were dropped
@@ -1963,7 +1964,6 @@ BattleItem *BattlescapeGame::surveyItems(BattleAction *action)
 
 	return targetItem;
 }
-
 
 /**
  * Assesses whether this item is worth trying to pick up, taking into account how many units we see,

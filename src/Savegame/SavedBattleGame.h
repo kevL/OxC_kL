@@ -137,7 +137,7 @@ class SavedBattleGame
 		 * @param pos Map position.
 		 * @return Pointer to the tile at that position.
 		 */
-		inline Tile *getTile(const Position& pos) const
+		inline Tile* getTile(const Position &pos) const
 		{
 			if (pos.x < 0 || pos.y < 0 || pos.z < 0
 				|| pos.x >= _mapsize_x || pos.y >= _mapsize_y || pos.z >= _mapsize_z)

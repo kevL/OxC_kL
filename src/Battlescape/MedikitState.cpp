@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "MedikitState.h"
 #include "MedikitView.h"
 #include "../Engine/InteractiveSurface.h"
@@ -34,6 +35,7 @@
 #include <sstream>
 #include "../Engine/Options.h"
 
+
 namespace OpenXcom
 {
 
@@ -47,17 +49,20 @@ std::wstring toString (type t)
 {
 	std::wstringstream ss;
 	ss << t;
+
 	return ss.str();
 }
 
 /**
  * Helper class for the medikit title.
  */
-class MedikitTitle : public Text
+class MedikitTitle
+	:
+	public Text
 {
-public:
-	/// Creates a medikit title.
-	MedikitTitle(int y, const std::wstring & title);
+	public:
+		/// Creates a medikit title.
+		MedikitTitle(int y, const std::wstring &title);
 };
 
 /**
@@ -65,7 +70,9 @@ public:
  * @param y The title's y origin.
  * @param title The title.
  */
-MedikitTitle::MedikitTitle (int y, const std::wstring & title) : Text (60, 16, 192, y)
+MedikitTitle::MedikitTitle (int y, const std::wstring & title)
+	:
+	Text (60, 16, 192, y)
 {
 	this->setText(title);
 	this->setHighContrast(true);
@@ -75,18 +82,22 @@ MedikitTitle::MedikitTitle (int y, const std::wstring & title) : Text (60, 16, 1
 /**
  * Helper class for the medikit value.
  */
-class MedikitTxt : public Text
+class MedikitTxt
+	:
+	public Text
 {
-public:
-	/// Creates a medikit text.
-	MedikitTxt(int y);
+	public:
+		/// Creates a medikit text.
+		MedikitTxt(int y);
 };
 
 /**
  * Initializes a Medikit text.
  * @param y The text's y origin.
  */
-MedikitTxt::MedikitTxt(int y) : Text(30, 22, 220, y)
+MedikitTxt::MedikitTxt(int y)
+	:
+	Text(30, 22, 220, y)
 {
 	// Note: we can't set setBig here. The needed font is only set when added to State
 	this->setColor(Palette::blockOffset(1));
@@ -98,18 +109,22 @@ MedikitTxt::MedikitTxt(int y) : Text(30, 22, 220, y)
 /**
  * Helper class for the medikit button.
  */
-class MedikitButton : public InteractiveSurface
+class MedikitButton
+	:
+	public InteractiveSurface
 {
-public:
-	/// Creates a medikit button.
-	MedikitButton(int y);
+	public:
+		/// Creates a medikit button.
+		MedikitButton(int y);
 };
 
 /**
  * Initializes a Medikit button.
  * @param y The button's y origin.
  */
-MedikitButton::MedikitButton(int y) : InteractiveSurface(30, 20, 190, y)
+MedikitButton::MedikitButton(int y)
+	:
+	InteractiveSurface(30, 20, 190, y)
 {
 }
 
@@ -119,7 +134,11 @@ MedikitButton::MedikitButton(int y) : InteractiveSurface(30, 20, 190, y)
  * @param targetUnit The wounded unit.
  * @param action The healing action.
  */
-MedikitState::MedikitState (Game * game, BattleUnit * targetUnit, BattleAction *action) : State (game), _targetUnit(targetUnit), _action(action)
+MedikitState::MedikitState(Game* game, BattleUnit* targetUnit, BattleAction* action)
+	:
+	State(game),
+	_targetUnit(targetUnit),
+	_action(action)
 {
 	_unit = action->actor;
 	_item = action->weapon;
@@ -128,27 +147,28 @@ MedikitState::MedikitState (Game * game, BattleUnit * targetUnit, BattleAction *
 	if (Screen::getDY() > 50)
 	{
 		_screen = false;
+
 		SDL_Rect current;
 		current.w = 190;
 		current.h = 100;
 		current.x = 67;
 		current.y = 44;
 
-		_surface->drawRect(&current, Palette::blockOffset(15) + 15);
+		_surface->drawRect(&current, Palette::blockOffset(15)+15);
 	}
 
-	_partTxt = new Text(50, 15, 90, 120);
-	_woundTxt = new Text(10, 15, 145, 120);
-	_medikitView = new MedikitView(52, 58, 95, 60, _game, _targetUnit, _partTxt, _woundTxt);
+	_partTxt		= new Text(50, 15, 90, 120);
+	_woundTxt		= new Text(10, 15, 145, 120);
+	_medikitView	= new MedikitView(52, 58, 95, 60, _game, _targetUnit, _partTxt, _woundTxt);
 
-	InteractiveSurface *endButton = new InteractiveSurface(20, 20, 220, 140);
-	InteractiveSurface *stimulantButton = new MedikitButton(84);
-	InteractiveSurface *pkButton = new MedikitButton(48);
-	InteractiveSurface *healButton = new MedikitButton(120);
+	InteractiveSurface* endButton		= new InteractiveSurface(20, 20, 220, 140);
+	InteractiveSurface* stimulantButton	= new MedikitButton(84);
+	InteractiveSurface* pkButton		= new MedikitButton(48);
+	InteractiveSurface* healButton		= new MedikitButton(120);
 
-	_pkText = new MedikitTxt (50);
-	_stimulantTxt = new MedikitTxt (85);
-	_healTxt = new MedikitTxt (120);
+	_pkText			= new MedikitTxt (50);
+	_stimulantTxt	= new MedikitTxt (85);
+	_healTxt		= new MedikitTxt (120);
 
 	add(_surface);
 	add(_medikitView);
@@ -178,11 +198,11 @@ MedikitState::MedikitState (Game * game, BattleUnit * targetUnit, BattleAction *
 	_woundTxt->setColor(Palette::blockOffset(2));
 	_woundTxt->setHighContrast(true);
 
-	endButton->onMouseClick((ActionHandler)&MedikitState::onEndClick);
-	endButton->onKeyboardPress((ActionHandler)&MedikitState::onEndClick, (SDLKey)Options::getInt("keyCancel"));
-	healButton->onMouseClick((ActionHandler)&MedikitState::onHealClick);
-	stimulantButton->onMouseClick((ActionHandler)&MedikitState::onStimulantClick);
-	pkButton->onMouseClick((ActionHandler)&MedikitState::onPainKillerClick);
+	endButton->onMouseClick((ActionHandler) &MedikitState::onEndClick);
+	endButton->onKeyboardPress((ActionHandler) &MedikitState::onEndClick, (SDLKey)Options::getInt("keyCancel"));
+	healButton->onMouseClick((ActionHandler) &MedikitState::onHealClick);
+	stimulantButton->onMouseClick((ActionHandler) &MedikitState::onStimulantClick);
+	pkButton->onMouseClick((ActionHandler) &MedikitState::onPainKillerClick);
 
 	update();
 }
@@ -191,7 +211,7 @@ MedikitState::MedikitState (Game * game, BattleUnit * targetUnit, BattleAction *
  * Closes the window on right-click.
  * @param action Pointer to an action.
  */
-void MedikitState::handle(Action *action)
+void MedikitState::handle(Action* action)
 {
 	State::handle(action);
 
@@ -206,7 +226,7 @@ void MedikitState::handle(Action *action)
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void MedikitState::onEndClick(Action *)
+void MedikitState::onEndClick(Action* )
 {
 	_game->popState();
 }
@@ -215,9 +235,9 @@ void MedikitState::onEndClick(Action *)
  * Handler for clicking on the heal button.
  * @param action Pointer to an action.
  */
-void MedikitState::onHealClick(Action *)
+void MedikitState::onHealClick(Action* )
 {
-	RuleItem *rule = _item->getRules();
+	RuleItem* rule = _item->getRules();
 
 	int heal = _item->getHealQuantity();
 	if (heal == 0)
@@ -229,17 +249,18 @@ void MedikitState::onHealClick(Action *)
 	{
 		_targetUnit->heal(_medikitView->getSelectedPart(), rule->getWoundRecovery(), rule->getHealthRecovery());
 		_item->setHealQuantity(--heal);
-
 		_medikitView->invalidate();
+
 		update();
 
 		// kL_begin:
-		// - from Stimulant, below
+		// - similar to Stimulant code below
 		if (_targetUnit->getStatus() == STATUS_UNCONSCIOUS
 			&& _targetUnit->getStunlevel() < _targetUnit->getHealth())
 //kL			&& _targetUnit->getHealth() > 0)
 		{
 			_targetUnit->setTimeUnits(0);
+			_targetUnit->setDirection(RNG::generate(0, 7));
 
 //kL			_game->popState();
 		}
@@ -248,7 +269,6 @@ void MedikitState::onHealClick(Action *)
 	else
 	{
 		_action->result = "STR_NOT_ENOUGH_TIME_UNITS";
-
 		_game->popState();
 	}
 }
@@ -257,16 +277,15 @@ void MedikitState::onHealClick(Action *)
  * Handler for clicking on the stimulant button.
  * @param action Pointer to an action.
  */
-void MedikitState::onStimulantClick(Action *)
+void MedikitState::onStimulantClick(Action* )
 {
-	RuleItem *rule = _item->getRules();
-
 	int stimulant = _item->getStimulantQuantity();
 	if (stimulant == 0)
 	{
 		return;
 	}
 
+	RuleItem* rule = _item->getRules();
 	if (_unit->spendTimeUnits (rule->getTUUse()))
 	{
 		_targetUnit->stimulant(rule->getEnergyRecovery(), rule->getStunRecovery());
@@ -280,6 +299,7 @@ void MedikitState::onStimulantClick(Action *)
 //kL			&& _targetUnit->getHealth() > 0)
 		{
 			_targetUnit->setTimeUnits(0);
+			_targetUnit->setDirection(RNG::generate(0, 7));		// kL
 
 			_game->popState();
 		}
@@ -287,7 +307,6 @@ void MedikitState::onStimulantClick(Action *)
 	else
 	{
 		_action->result = "STR_NOT_ENOUGH_TIME_UNITS";
-
 		_game->popState();
 	}
 }
@@ -296,17 +315,16 @@ void MedikitState::onStimulantClick(Action *)
  * Handler for clicking on the pain killer button.
  * @param action Pointer to an action.
  */
-void MedikitState::onPainKillerClick(Action *)
+void MedikitState::onPainKillerClick(Action* )
 {
-	RuleItem *rule = _item->getRules();
-
 	int pk = _item->getPainKillerQuantity();
 	if (pk == 0)
 	{
 		return;
 	}
 
-	if (_unit->spendTimeUnits (rule->getTUUse()))
+	RuleItem* rule = _item->getRules();
+	if (_unit->spendTimeUnits(rule->getTUUse()))
 	{
 		_targetUnit->painKillers();
 		_item->setPainKillerQuantity(--pk);

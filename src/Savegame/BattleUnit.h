@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_BATTLEUNIT_H
 #define OPENXCOM_BATTLEUNIT_H
 
@@ -27,6 +28,7 @@
 #include "../Ruleset/Unit.h"
 #include "../Ruleset/MapData.h"
 #include "Soldier.h"
+
 
 namespace OpenXcom
 {
@@ -48,6 +50,7 @@ class PatrolBAIState;
 
 enum UnitStatus
 {
+//	STATUS_KNEELING,	// kL
 	STATUS_STANDING,
 	STATUS_WALKING,
 	STATUS_FLYING,
@@ -97,26 +100,26 @@ class BattleUnit
 		UnitFaction _killedBy;
 		int _id;
 		Position _pos;
-		Tile *_tile;
+		Tile* _tile;
 		Position _lastPos;
 		int _direction, _toDirection;
 		int _directionTurret, _toDirectionTurret;
 		int _verticalDirection;
 		Position _destination;
 		UnitStatus _status;
-		int _walkPhase, _fallPhase;
-		int _spinPhase;		// kL
-		std::vector<BattleUnit *> _visibleUnits, _unitsSpottedThisTurn;
-		std::vector<Tile *> _visibleTiles;
+//kL		int _walkPhase, _fallPhase;
+		int _walkPhase, _fallPhase, _spinPhase;		// kL
+		std::vector<BattleUnit* > _visibleUnits, _unitsSpottedThisTurn;
+		std::vector<Tile* > _visibleTiles;
 		int _tu, _energy, _health, _morale, _stunlevel;
 		bool _kneeled, _floating, _dontReselect;
 		int _currentArmor[5];
 		int _fatalWounds[6];
 		int _fire;
-		std::vector<BattleItem*> _inventory;
-		BattleAIState *_currentAIState;
+		std::vector<BattleItem* > _inventory;
+		BattleAIState* _currentAIState;
 		bool _visible;
-		Surface *_cache[5];
+		Surface* _cache[5];
 		bool _cacheInvalid;
 		int _expBravery, _expReactions, _expFiring, _expThrowing, _expPsiSkill, _expMelee;
 		int improveStat(int exp);
@@ -126,7 +129,7 @@ class BattleUnit
 		bool _hitByFire;
 		int _moraleRestored;
 		int _coverReserve;
-		BattleUnit *_charging;
+		BattleUnit* _charging;
 		int _turnsExposed;
 		std::string _zombieUnit, _spawnUnit;
 		std::string _activeHand;
@@ -141,33 +144,35 @@ class BattleUnit
 		int _value, _deathSound, _aggroSound, _moveSound;
 		int _intelligence, _aggression;
 		SpecialAbility _specab;
-		Armor *_armor;
+		Armor* _armor;
 		SoldierGender _gender;
-		Soldier *_geoscapeSoldier;
+		Soldier* _geoscapeSoldier;
 		std::vector<int> _loftempsSet;
-		Unit *_unitRules;
+		Unit* _unitRules;
 		int _rankInt;
 		int _turretType;
 
 	public:
 		static const int MAX_SOLDIER_ID = 1000000;
+
 		/// Creates a BattleUnit.
-		BattleUnit(Soldier *soldier, UnitFaction faction);
-		BattleUnit(Unit *unit, UnitFaction faction, int id, Armor *armor, int diff);
+		BattleUnit(Soldier* soldier, UnitFaction faction);
+		BattleUnit(Unit* unit, UnitFaction faction, int id, Armor* armor, int diff);
 		/// Cleans up the BattleUnit.
 		~BattleUnit();
+
 		/// Loads the unit from YAML.
-		void load(const YAML::Node& node);
+		void load(const YAML::Node &node);
 		/// Saves the unit to YAML.
 		YAML::Node save() const;
 		/// Gets the BattleUnit's ID.
 		int getId() const;
 		/// Sets the unit's position
-		void setPosition(const Position& pos, bool updateLastPos = true);
+		void setPosition(const Position &pos, bool updateLastPos = true);
 		/// Gets the unit's position.
-		const Position& getPosition() const;
+		const Position &getPosition() const;
 		/// Gets the unit's position.
-		const Position& getLastPosition() const;
+		const Position &getLastPosition() const;
 		/// Sets the unit's direction 0-7.
 		void setDirection(int direction);
 		/// Sets the unit's face direction (only used by strafing moves)
@@ -185,9 +190,9 @@ class BattleUnit
 		/// Gets the unit's status.
 		UnitStatus getStatus() const;
 		/// Start the walkingPhase
-		void startWalking(int direction, const Position &destination, Tile *tileBelowMe, bool cache);
+		void startWalking(int direction, const Position &destination, Tile* tileBelow, bool cache);
 		/// Increase the walkingPhase
-		void keepWalking(Tile *tileBelowMe, bool cache);
+		void keepWalking(Tile* tileBelow, bool cache);
 		/// Gets the walking phase for animation and sound
 		int getWalkingPhase() const;
 		/// Gets the walking phase for diagonal walking
@@ -207,9 +212,9 @@ class BattleUnit
 		/// Gets the unit's faction.
 		UnitFaction getFaction() const;
 		/// Set the cached flag.
-		void setCache(Surface *cache, int part = 0);
+		void setCache(Surface* cache, int part = 0);
 		/// If this unit is cached on the battlescape.
-		Surface *getCache(bool *invalid, int part = 0) const;
+		Surface* getCache(bool* invalid, int part = 0) const;
 		/// Kneel down.
 		void kneel(bool kneeled);
 		/// Is kneeled?
@@ -243,7 +248,7 @@ class BattleUnit
 		/// The unit is out - either dead or unconscious.
 		bool isOut() const;
 		/// Get the number of time units a certain action takes.
-		int getActionTUs(BattleActionType actionType, BattleItem *item);
+		int getActionTUs(BattleActionType actionType, BattleItem* item);
 		/// Spend time units if it can.
 		bool spendTimeUnits(int tu);
 		/// Spend energy if it can.
@@ -251,19 +256,19 @@ class BattleUnit
 		/// Set time units.
 		void setTimeUnits(int tu);
 		/// Add unit to visible units.
-		bool addToVisibleUnits(BattleUnit *unit);
+		bool addToVisibleUnits(BattleUnit* unit);
 		/// Get the list of visible units.
-		std::vector<BattleUnit*> *getVisibleUnits();
+		std::vector<BattleUnit* >* getVisibleUnits();
 		/// Clear visible units.
 		void clearVisibleUnits();
 		/// Add unit to visible tiles.
-		bool addToVisibleTiles(Tile *tile);
+		bool addToVisibleTiles(Tile* tile);
 		/// Get the list of visible tiles.
-		std::vector<Tile*> *getVisibleTiles();
+		std::vector<Tile* >* getVisibleTiles();
 		/// Clear visible tiles.
 		void clearVisibleTiles();
 		/// Calculate firing accuracy.
-		double getFiringAccuracy(BattleActionType actionType, BattleItem *item);
+		double getFiringAccuracy(BattleActionType actionType, BattleItem* item);
 		/// Calculate accuracy modifier.
 		double getAccuracyModifier();
 		/// Calculate throwing accuracy.
@@ -291,29 +296,29 @@ class BattleUnit
 		/// Get fire.
 		int getFire() const;
 		/// Get the list of items in the inventory.
-		std::vector<BattleItem*> *getInventory();
+		std::vector<BattleItem* >* getInventory();
 		/// Let AI do their thing.
-		void think(BattleAction *action);
+		void think(BattleAction* action);
 		/// Get current AI state.
-		BattleAIState *getCurrentAIState() const;
+		BattleAIState* getCurrentAIState() const;
 		/// Set next AI State
-		void setAIState(BattleAIState *aiState);
+		void setAIState(BattleAIState* aiState);
 		/// Set whether this unit is visible
 		void setVisible(bool flag);
 		/// Get whether this unit is visible
 		bool getVisible() const;
 		/// Sets the unit's tile it's standing on
-		void setTile(Tile *tile, Tile *tileBelow = 0);
+		void setTile(Tile* tile, Tile* tileBelow = 0);
 		/// Gets the unit's tile.
-		Tile *getTile() const;
+		Tile* getTile() const;
 		/// Gets the item in the specified slot.
-		BattleItem *getItem(RuleInventory *slot, int x = 0, int y = 0) const;
+		BattleItem* getItem(RuleInventory* slot, int x = 0, int y = 0) const;
 		/// Gets the item in the specified slot.
-		BattleItem *getItem(const std::string &slot, int x = 0, int y = 0) const;
+		BattleItem* getItem(const std::string &slot, int x = 0, int y = 0) const;
 		/// Gets the item in the main hand.
-		BattleItem *getMainHandWeapon(bool quickest = true) const;
+		BattleItem* getMainHandWeapon(bool quickest = true) const;
 		/// Gets a grenade from the belt, if any.
-		BattleItem *getGrenadeFromBelt() const;
+		BattleItem* getGrenadeFromBelt() const;
 		/// Reloads righthand weapon if needed.
 		bool checkAmmo();
 		/// Check if this unit is in the exit area
@@ -333,7 +338,7 @@ class BattleUnit
 		/// Adds one to the melee exp counter.
 		void addMeleeExp();
 		/// Check if unit eligible for squaddie promotion.
-		bool postMissionProcedures(SavedGame *geoscape);
+		bool postMissionProcedures(SavedGame* geoscape);
 		/// Get the sprite index for the minimap
 		int getMiniMapSpriteIndex() const;
 		/// Set the turret type. -1 is no turret.
@@ -351,11 +356,11 @@ class BattleUnit
 		/// Get motion points for the motion scanner.
 		int getMotionPoints() const;
 		/// Gets the unit's armor.
-		Armor *getArmor() const;
+		Armor* getArmor() const;
 		/// Gets the unit's name.
-		std::wstring getName(Language *lang, bool debugAppendId = false) const;
+		std::wstring getName(Language* lang, bool debugAppendId = false) const;
 		/// Gets the unit's stats.
-		UnitStats *getStats();
+		UnitStats* getStats();
 		/// Get the unit's stand height.
 		int getStandHeight() const;
 		/// Get the unit's kneel height.
@@ -376,14 +381,16 @@ class BattleUnit
 		int getIntelligence() const;
 		/// Get the unit's aggression.
 		int getAggression() const;
-		/// Get the units's special ability.
+		/// Get the unit's special ability.
 		int getSpecialAbility() const;
-		/// Set the units's special ability.
+		/// Set the unit's special ability.
 		void setSpecialAbility(SpecialAbility specab);
-		/// Get the units's rank string.
+		/// Get the unit's rank string.
 		std::string getRankString() const;
+		/// Get the unit's race string.
+		std::string getRaceString() const;		// kL
 		/// Get the geoscape-soldier object.
-		Soldier *getGeoscapeSoldier() const;
+		Soldier* getGeoscapeSoldier() const;
 		/// Add a kill to the counter.
 		void addKillCount();
 		/// Get unit type.
@@ -413,11 +420,11 @@ class BattleUnit
 		/// Set the faction that killed this unit.
 		void killedBy(UnitFaction f);
 		/// Set the units we are charging towards.
-		void setCharging(BattleUnit *chargeTarget);
+		void setCharging(BattleUnit* chargeTarget);
 		/// Get the units we are charging towards.
-		BattleUnit *getCharging();
+		BattleUnit* getCharging();
 		/// Get the carried weight in strength units.
-		int getCarriedWeight(BattleItem *draggingItem = 0) const;
+		int getCarriedWeight(BattleItem* draggingItem = 0) const;
 		/// Set how many turns this unit will be exposed for.
 		void setTurnsExposed(int turns);
 		/// Set how many turns this unit will be exposed for.
@@ -427,7 +434,7 @@ class BattleUnit
 		/// call this after the default copy constructor deletes the cache?
 		void invalidateCache();
 	
-		Unit *getUnitRules() const
+		Unit* getUnitRules() const
 		{
 			return _unitRules;
 		}
@@ -436,7 +443,7 @@ class BattleUnit
 		bool _hidingForTurn; // don't zone out and start patrolling again
 		Position lastCover;
 		/// get the vector of units we've seen this turn.
-		std::vector<BattleUnit *> getUnitsSpottedThisTurn();
+		std::vector<BattleUnit* > getUnitsSpottedThisTurn();
 		/// set the rank integer
 		void setRankInt(int rank);
 		/// get the rank integer

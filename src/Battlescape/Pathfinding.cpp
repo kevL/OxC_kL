@@ -122,7 +122,8 @@ void Pathfinding::calculate(BattleUnit *unit, Position endPosition, BattleUnit *
 	}
 
 	// check if we have floor, else lower destination (for non flying units only, because otherwise they never reached this place)
-	while (canFallDown(destinationTile, _unit->getArmor()->getSize()) && _movementType != MT_FLY)
+	while (canFallDown(destinationTile, _unit->getArmor()->getSize())
+		&& _movementType != MT_FLY)
 	{
 		endPosition.z--;
 		destinationTile = _save->getTile(endPosition);
@@ -155,14 +156,18 @@ void Pathfinding::calculate(BattleUnit *unit, Position endPosition, BattleUnit *
 			}
 		}
 	}
+
 	// Strafing move allowed only to adjacent squares on same z. "Same z" rule mainly to simplify walking render.
-	_strafeMove = _save->getStrafeSetting() && (SDL_GetModState() & KMOD_CTRL) != 0 && (startPosition.z == endPosition.z) && 
-							(abs(startPosition.x - endPosition.x) <= 1) && (abs(startPosition.y - endPosition.y) <= 1);
+	_strafeMove = _save->getStrafeSetting()
+		&& SDL_GetModState() &KMOD_CTRL != 0
+		&& startPosition.z == endPosition.z
+		&& abs(startPosition.x - endPosition.x) <= 1
+		&& abs(startPosition.y - endPosition.y) <= 1;
 
 	// look for a possible fast and accurate bresenham path and skip A*
 	if (startPosition.z == endPosition.z && bresenhamPath(startPosition,endPosition, target, sneak))
 	{
-		std::reverse(_path.begin(), _path.end()); //paths are stored in reverse order
+		std::reverse(_path.begin(), _path.end()); // paths are stored in reverse order
 		return;
 	}
 	else
@@ -170,6 +175,7 @@ void Pathfinding::calculate(BattleUnit *unit, Position endPosition, BattleUnit *
 		_path.clear(); // if bresenham failed, we shouldn't keep the path it was attempting, in case A* fails too.
 		_totalTUCost = 0;
 	}
+
 	// Now try through A*.
 	if (!aStarPath(startPosition, endPosition, target, sneak, maxTUCost))
 	{
@@ -305,7 +311,7 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 			}
 
 			// this will later be used to re-cast the start tile again.
-			Position verticalOffset (0, 0, 0);
+			Position verticalOffset(0, 0, 0);
 
 			// if we are on a stairs try to go up a level
 			if (direction < DIR_UP
@@ -386,9 +392,9 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 				numberOfPartsFalling++;
 				if (numberOfPartsFalling == (size+1) * (size+1))
 				{
-					*endPosition = startPosition + Position(0,0,-1);
+					*endPosition = startPosition + Position(0, 0, -1);
 					destinationTile = _save->getTile(*endPosition + offset);
-					belowDestination = _save->getTile(*endPosition + Position(x,y,-1));
+					belowDestination = _save->getTile(*endPosition + Position(x, y, -1));
 					fellDown = true;
 					direction = DIR_DOWN;
 				}
@@ -456,7 +462,8 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 			if (direction < DIR_UP
 				&& direction & 1)
 			{
-				wallcost /= 2;
+				// kL_note: Try taking this out.. check diagonal TU values.
+//kL				wallcost /= 2;
 				cost = (int)((double)cost * 1.5);
 			}
 
@@ -467,7 +474,6 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 						&& destinationTile->getUnit()->getFaction() == FACTION_HOSTILE
 						&& destinationTile->getUnit() != _unit)
 					|| destinationTile->getFire() > 0))
-				cost += 32; // try to find a better path, but don't exclude this path entirely.
 
 			// Strafing costs +1 for forwards-ish or sidewards, propose +2 for backwards-ish directions
 			// Maybe if flying then it makes no difference?
@@ -481,7 +487,8 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 				}
 				else
 				{
-					if (std::min(abs(8 + direction - _unit->getDirection()), std::min( abs(_unit->getDirection() - direction), abs(8 + _unit->getDirection() - direction))) > 2) {
+					if (std::min(abs(8 + direction - _unit->getDirection()), std::min(abs(_unit->getDirection() - direction), abs(8 + _unit->getDirection() - direction))) > 2)
+					{
 						// Strafing backwards-ish currently unsupported, turn it off and continue.
 						_strafeMove = false;
 					}
@@ -503,21 +510,29 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 	// for bigger sized units, check the path between part 1,1 and part 0,0 at end position
 	if (size)
 	{
-		totalCost /= (size+1)*(size+1);
-		Tile *startTile = _save->getTile(*endPosition + Position(1,1,0));
-		Tile *destinationTile = _save->getTile(*endPosition);
+		totalCost /= (size+1) * (size+1);
+
+		Tile* startTile = _save->getTile(*endPosition + Position(1, 1, 0));
+		Tile* destinationTile = _save->getTile(*endPosition);
+
 		int tmpDirection = 7;
-
 		if (isBlocked(startTile, destinationTile, tmpDirection, target))
+		{
 			return 255;
-
-		if (!fellDown && abs(startTile->getTerrainLevel() - destinationTile->getTerrainLevel()) > 10)
+		}
+		else	// kL
+		if (!fellDown
+			&& abs(startTile->getTerrainLevel() - destinationTile->getTerrainLevel()) > 10)
+		{
 			return 255;
-
+		}
+		else	// kL
 		// also check if we change level, that there are two parts changing level,
 		// so a big sized unit can not go up a small sized stairs
 		if (numberOfPartsChangingHeight == 1)
+		{
 			return 255;
+		}
 	}
 
 	if (missile)
@@ -581,6 +596,7 @@ int Pathfinding::getStartDirection()
 int Pathfinding::dequeuePath()
 {
 	if (_path.empty()) return -1;
+
 	int last_element = _path.back();
 	_path.pop_back();
 
@@ -801,7 +817,7 @@ bool Pathfinding::canFallDown(Tile *here)
 	if (here->getPosition().z == 0)
 		return false;
 
-	Tile* tileBelow = _save->getTile(here->getPosition() - Position (0,0,1));
+	Tile* tileBelow = _save->getTile(here->getPosition() - Position(0,0,1));
 
 	return here->hasNoFloor(tileBelow);
 }
@@ -896,8 +912,8 @@ bool Pathfinding::validateUpDown(BattleUnit *bu, Position startPosition, const i
 	if (startTile->getMapData(MapData::O_FLOOR)
 		&& destinationTile
 		&& destinationTile->getMapData(MapData::O_FLOOR)
-		&& (startTile->getMapData(MapData::O_FLOOR)->isGravLift()
-			&& destinationTile->getMapData(MapData::O_FLOOR)->isGravLift()))
+		&& startTile->getMapData(MapData::O_FLOOR)->isGravLift()
+		&& destinationTile->getMapData(MapData::O_FLOOR)->isGravLift())
 	{
 		return true;
 	}
@@ -1246,6 +1262,6 @@ void Pathfinding::setUnit(BattleUnit* unit)
 	{
 		_movementType = MT_WALK;
 	}
-};
+}
 
 }

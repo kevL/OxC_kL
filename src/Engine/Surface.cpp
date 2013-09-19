@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "Surface.h"
 #include "Screen.h"
 #include "ShaderDraw.h"
@@ -27,14 +28,18 @@
 #include "Exception.h"
 #include "ShaderMove.h"
 #include <stdlib.h>
+
 #ifdef _WIN32
 #include <malloc.h>
 #endif
+
 #if defined(__MINGW32__) && !defined(__MINGW64_VERSION_MAJOR)
 #define _aligned_malloc __mingw_aligned_malloc
 #define _aligned_free   __mingw_aligned_free
 #endif //MINGW
+
 #include "Language.h"
+
 
 namespace OpenXcom
 {
@@ -57,14 +62,20 @@ namespace OpenXcom
 #endif 
  
 Surface::Surface(int width, int height, int x, int y, int bpp)
-	: _x(x), _y(y), _visible(true), _hidden(false), _redraw(false),
-	_originalColors(0), _misalignedPixelBuffer(0), _alignedBuffer(0)
+	:
+	_x(x),
+	_y(y),
+	_visible(true),
+	_hidden(false),
+	_redraw(false),
+	_originalColors(0),
+	_misalignedPixelBuffer(0),
+	_alignedBuffer(0)
 {
 	//_surface = SDL_CreateRGBSurface(SDL_SWSURFACE, width, height, 8, 0, 0, 0, 0);
-	int pitch = (bpp/8) * ((width+15)& ~0xF);
+	int pitch = (bpp / 8) * ((width + 15)& ~0xF);
 
 #ifndef _WIN32
-
 	#ifdef __MORPHOS__
 
 	_alignedBuffer = calloc( pitch * height * (bpp/8), 1 );
@@ -80,7 +91,6 @@ Surface::Surface(int width, int height, int x, int y, int bpp)
 		throw Exception(strerror(rc));
 	}
 	#endif
-	
 #else
 	// of course Windows has to be difficult about this!
 	_alignedBuffer = _aligned_malloc(pitch*height*(bpp/8), 16);
@@ -141,6 +151,7 @@ Surface::~Surface()
 #else
 	if (_alignedBuffer) free(_alignedBuffer);
 #endif
+
 	SDL_FreeSurface(_surface);
 }
 
@@ -154,7 +165,7 @@ Surface::~Surface()
 void Surface::loadScr(const std::string &filename)
 {
 	// Load file and put pixels in surface
-	std::ifstream imgFile (filename.c_str(), std::ios::in | std::ios::binary);
+	std::ifstream imgFile(filename.c_str(), std::ios::in | std::ios::binary);
 	if (!imgFile)
 	{
 		throw Exception(filename + " not found");
@@ -166,7 +177,7 @@ void Surface::loadScr(const std::string &filename)
 	Uint8 value;
 	int x = 0, y = 0;
 
-	while (imgFile.read((char*)&value, 1))
+	while (imgFile.read((char*)& value, 1))
 	{
 		setPixelIterative(&x, &y, value);
 	}
@@ -195,6 +206,7 @@ void Surface::loadImage(const std::string &filename)
 #else
 	if (_alignedBuffer) free(_alignedBuffer); 
 #endif
+
 	_alignedBuffer = 0;
 	SDL_FreeSurface(_surface);
 	_surface = 0;
@@ -220,7 +232,7 @@ void Surface::loadImage(const std::string &filename)
  * @param filename Filename of the SPK image.
  * @sa http://www.ufopaedia.org/index.php?title=Image_Formats#SPK
  */
-void Surface::loadSpk(const std::string &filename)
+void Surface::loadSpk(const std::string& filename)
 {
 	// Load file and put pixels in surface
 	std::ifstream imgFile (filename.c_str(), std::ios::in | std::ios::binary);
@@ -236,7 +248,7 @@ void Surface::loadSpk(const std::string &filename)
 	Uint8 value;
 	int x = 0, y = 0;
 
-	while (imgFile.read((char*)&flag, sizeof(flag)))
+	while (imgFile.read((char*)& flag, sizeof(flag)))
 	{
 	#if SDL_BYTEORDER == SDL_BIG_ENDIAN
 		flag = SDL_Swap16( flag );
@@ -244,7 +256,7 @@ void Surface::loadSpk(const std::string &filename)
 	
 		if (flag == 65535)
 		{
-			imgFile.read((char*)&flag, sizeof(flag));
+			imgFile.read((char*)& flag, sizeof(flag));
 			
 	#if SDL_BYTEORDER == SDL_BIG_ENDIAN
 		flag = SDL_Swap16( flag );
@@ -257,7 +269,7 @@ void Surface::loadSpk(const std::string &filename)
 		}
 		else if (flag == 65534)
 		{
-			imgFile.read((char*)&flag, sizeof(flag));
+			imgFile.read((char*)& flag, sizeof(flag));
 			
 	#if SDL_BYTEORDER == SDL_BIG_ENDIAN
 		flag = SDL_Swap16( flag );
@@ -265,7 +277,7 @@ void Surface::loadSpk(const std::string &filename)
 			
 			for (int i = 0; i < flag * 2; ++i)
 			{
-				imgFile.read((char*)&value, 1);
+				imgFile.read((char*)& value, 1);
 				setPixelIterative(&x, &y, value);
 			}
 		}
@@ -284,7 +296,7 @@ void Surface::loadSpk(const std::string &filename)
  * @param filename Filename of the BDY image.
  * @sa http://www.ufopaedia.org/index.php?title=Image_Formats#BDY
  */
-void Surface::loadBdy(const std::string &filename)
+void Surface::loadBdy(const std::string& filename)
 {
 	// Load file and put pixels in surface
 	std::ifstream imgFile (filename.c_str(), std::ios::in | std::ios::binary);
@@ -301,12 +313,12 @@ void Surface::loadBdy(const std::string &filename)
 	int x = 0, y = 0;
 	int currentRow = 0;
 
-	while (imgFile.read((char*)&dataByte, sizeof(dataByte)))
+	while (imgFile.read((char*)& dataByte, sizeof(dataByte)))
 	{
 		if (dataByte >= 129)
 		{
 			pixelCnt = 257 - (int)dataByte;
-			imgFile.read((char*)&dataByte, sizeof(dataByte));
+			imgFile.read((char*)& dataByte, sizeof(dataByte));
 			currentRow = y;
 			for (int i = 0; i < pixelCnt; ++i)
 			{
@@ -316,11 +328,11 @@ void Surface::loadBdy(const std::string &filename)
 		}
 		else
 		{
-			pixelCnt = 1 + (int)dataByte;
+			pixelCnt = 1 + (int) dataByte;
 			currentRow = y;
 			for (int i = 0; i < pixelCnt; ++i)
 			{
-				imgFile.read((char*)&dataByte, sizeof(dataByte));
+				imgFile.read((char*)& dataByte, sizeof(dataByte));
 				if (currentRow == y) // avoid overscan into next row
 					setPixelIterative(&x, &y, dataByte);
 			}
@@ -347,7 +359,7 @@ void Surface::clear()
 
 	if (_surface->flags & SDL_SWSURFACE)
 	{
-		memset(_surface->pixels, 0, _surface->h*_surface->pitch);
+		memset(_surface->pixels, 0, _surface->h * _surface->pitch);
 	}
 	else SDL_FillRect(_surface, &square, 0);
 }
@@ -414,7 +426,7 @@ void Surface::invert(Uint8 mid)
 	// Lock the surface
 	lock();
 
-	for (int x = 0, y = 0; x < getWidth() && y < getHeight();)
+	for (int x = 0, y = 0; x < getWidth() && y < getHeight(); )
 	{
 		Uint8 pixel = getPixel(x, y);
 		if (pixel > 0)
@@ -458,7 +470,7 @@ void Surface::draw()
  * that is blitted.
  * @param surface Pointer to surface to blit onto.
  */
-void Surface::blit(Surface *surface)
+void Surface::blit(Surface* surface)
 {
 //	Log(LOG_INFO) << "blit()";	// kL
 
@@ -492,7 +504,7 @@ void Surface::blit(Surface *surface)
  * effects over another surface without modifying the original.
  * @param surface Pointer to surface to copy from.
  */
-void Surface::copy(Surface *surface)
+void Surface::copy(Surface* surface)
 {
 	SDL_Rect from;
 	from.x = getX() - surface->getX();
@@ -508,7 +520,7 @@ void Surface::copy(Surface *surface)
  * @param rect Pointer to Rect.
  * @param color Color of the rectangle.
  */
-void Surface::drawRect(SDL_Rect *rect, Uint8 color)
+void Surface::drawRect(SDL_Rect* rect, Uint8 color)
 {
 	SDL_FillRect(_surface, rect, color);
 }
@@ -545,7 +557,7 @@ void Surface::drawCircle(Sint16 x, Sint16 y, Sint16 r, Uint8 color)
  * @param n Number of points.
  * @param color Color of the polygon.
  */
-void Surface::drawPolygon(Sint16 *x, Sint16 *y, int n, Uint8 color)
+void Surface::drawPolygon(Sint16* x, Sint16* y, int n, Uint8 color)
 {
 	filledPolygonColor(_surface, x, y, n, Palette::getRGBA(getPalette(), color));
 }
@@ -559,7 +571,7 @@ void Surface::drawPolygon(Sint16 *x, Sint16 *y, int n, Uint8 color)
  * @param dx X offset of texture relative to the screen.
  * @param dy Y offset of texture relative to the screen.
  */
-void Surface::drawTexturedPolygon(Sint16 *x, Sint16 *y, int n, Surface *texture, int dx, int dy)
+void Surface::drawTexturedPolygon(Sint16* x, Sint16* y, int n, Surface* texture, int dx, int dy)
 {
 	texturedPolygon(_surface, x, y, n, texture->getSurface(), dx, dy);
 }
@@ -571,7 +583,7 @@ void Surface::drawTexturedPolygon(Sint16 *x, Sint16 *y, int n, Surface *texture,
  * @param s Character string to draw.
  * @param color Color of string.
  */
-void Surface::drawString(Sint16 x, Sint16 y, const char *s, Uint8 color)
+void Surface::drawString(Sint16 x, Sint16 y, const char* s, Uint8 color)
 {
 	stringColor(_surface, x, y, s, Palette::getRGBA(getPalette(), color));
 }
@@ -647,7 +659,7 @@ void Surface::resetCrop()
  * Returns the cropping rectangle for this surface.
  * @return Pointer to the cropping rectangle.
  */
-SDL_Rect *Surface::getCrop()
+SDL_Rect* Surface::getCrop()
 {
 	return &_crop;
 }
@@ -658,7 +670,7 @@ SDL_Rect *Surface::getCrop()
  * @param firstcolor Offset of the first color to replace.
  * @param ncolors Amount of colors to replace.
  */
-void Surface::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
+void Surface::setPalette(SDL_Color* colors, int firstcolor, int ncolors)
 {
 	SDL_SetColors(_surface, colors, firstcolor, ncolors);
 }
@@ -710,16 +722,16 @@ void Surface::paletteShift(int off, int mul, int mid)
 	int ncolors = _surface->format->palette->ncolors;
 
 	// store the original palette
-	_originalColors = (SDL_Color *)malloc(sizeof(SDL_Color) * ncolors);
+	_originalColors = (SDL_Color* )malloc(sizeof(SDL_Color)* ncolors);
 
 	// create a temporary new palette
-	SDL_Color *newColors = (SDL_Color *)malloc(sizeof(SDL_Color) * ncolors);
+	SDL_Color* newColors = (SDL_Color* )malloc(sizeof(SDL_Color)* ncolors);
 
 	// do the color shift - while storing the original colors too
 	for (int i = 0; i < ncolors; i++)
 	{
 		int inverseOffset = mid ? 2 * (mid - i) : 0;
-		int j = (i * mul + off + inverseOffset + ncolors) % ncolors;
+		int j = (i * mul + off + inverseOffset + ncolors) %ncolors;
 
 		_originalColors[i].r = getPalette()[i].r;
 		_originalColors[i].g = getPalette()[i].g;
@@ -816,7 +828,7 @@ struct StandartShade
  * @param half some tiles are blitted only the right half
  * @param newBaseColor Attention: the actual color + 1, because 0 is no new base color.
  */
-void Surface::blitNShade(Surface *surface, int x, int y, int off, bool half, int newBaseColor)
+void Surface::blitNShade(Surface* surface, int x, int y, int off, bool half, int newBaseColor)
 {
 	ShaderMove<Uint8> src(this, x, y);
 	if (half)

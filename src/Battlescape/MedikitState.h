@@ -16,11 +16,13 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_MEDIKITSTATE_H
 #define OPENXCOM_MEDIKITSTATE_H
 
 #include "../Engine/State.h"
 #include "BattlescapeGame.h"
+
 
 namespace OpenXcom
 {
@@ -34,30 +36,35 @@ class BattleUnit;
 /**
  * The Medikit User Interface. Medikit is an item for healing a soldier.
  */
-class MedikitState : public State
+class MedikitState
+	:
+	public State
 {
-	InteractiveSurface *_surface;
-	MedikitView *_medikitView;
-	Text *_pkText, *_stimulantTxt,  *_healTxt, *_partTxt, *_woundTxt;
-	BattleUnit * _targetUnit, *_unit;
-	BattleItem *_item;
-	BattleAction *_action;
+	InteractiveSurface* _surface;
+	MedikitView* _medikitView;
+	Text* _pkText, * _stimulantTxt, * _healTxt, * _partTxt, * _woundTxt;
+	BattleUnit* _targetUnit, * _unit;
+	BattleItem* _item;
+	BattleAction* _action;
+
 	/// Handler for the end button.
-	void onEndClick(Action * action);
+	void onEndClick(Action* action);
 	/// Handler for the heal button.
-	void onHealClick(Action * action);
+	void onHealClick(Action* action);
 	/// Handler for the stimulant button.
-	void onStimulantClick(Action * action);
+	void onStimulantClick(Action* action);
 	/// Handler for the pain killer button.
-	void onPainKillerClick(Action * action);
+	void onPainKillerClick(Action* action);
 	/// Updates the medikit interface.
 	void update();
+
 public:
 	/// Creates the MedikitState.
-	MedikitState (Game * game, BattleUnit * targetUnit, BattleAction *action);
+	MedikitState(Game* game, BattleUnit* targetUnit, BattleAction* action);
 	/// Handler for right-clicking anything.
-	void handle(Action *action);
+	void handle(Action* action);
 };
+
 }
 
 #endif

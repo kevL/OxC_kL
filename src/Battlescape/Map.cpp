@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #define _USE_MATH_DEFINES
 #include <cmath>
 #include <fstream>
@@ -49,6 +50,7 @@
 #include "../Engine/Options.h"
 #include "../Interface/NumberText.h"
 
+
 /*
   1) Map origin is top corner.
   2) X axis goes downright. (width of the map)
@@ -74,9 +76,25 @@ namespace OpenXcom
  * @param y Y position in pixels.
  * @param visibleMapHeight Current visible map height.
  */
-Map::Map(Game *game, int width, int height, int x, int y, int visibleMapHeight) : InteractiveSurface(width, height, x, y), _game(game), _arrow(0), _selectorX(0), _selectorY(0), _mouseX(0), _mouseY(0), _cursorType(CT_NORMAL), _cursorSize(1), _animFrame(0), _launch(false), _visibleMapHeight(visibleMapHeight), _unitDying(false)
+Map::Map(Game* game, int width, int height, int x, int y, int visibleMapHeight)
+	:
+	InteractiveSurface(width, height, x, y),
+	_game(game),
+	_arrow(0),
+	_selectorX(0),
+	_selectorY(0),
+	_mouseX(0),
+	_mouseY(0),
+	_cursorType(CT_NORMAL),
+	_cursorSize(1),
+	_animFrame(0),
+	_launch(false),
+	_visibleMapHeight(visibleMapHeight),
+	_unitDying(false)
+
 {
 	_previewSetting = Options::getInt("battleNewPreviewPath");
+
 	if (Options::getBool("traceAI"))
 	{
 		// turn everything on because we want to see the markers.
@@ -129,9 +147,13 @@ void Map::init()
 	_arrow = new Surface(9, 9);
 	_arrow->setPalette(this->getPalette());
 	_arrow->lock();
-	for (int y = 0; y < 9;++y)
+ 	for (int y = 0; y < 9; ++y)
+	{
 		for (int x = 0; x < 9; ++x)
-			_arrow->setPixel(x, y, pixels[x+(y*9)]);
+		{
+			_arrow->setPixel(x, y, pixels[x + (y * 9)]);
+		}
+	}
 	_arrow->unlock();
 
 	_projectile = 0;
@@ -554,7 +576,7 @@ void Map::drawTerrain(Surface *surface)
 						// the part is 0 for small units, large units have parts 1,2 & 3 depending on the relative x/y position of this tile vs the actual unit position.
 						int part = 0;
 						part += tile->getPosition().x - unit->getPosition().x;
-						part += (tile->getPosition().y - unit->getPosition().y)*2;
+						part += (tile->getPosition().y - unit->getPosition().y) * 2;
 
 						tmpSurface = unit->getCache(&invalid, part);
 						if (tmpSurface)
@@ -573,17 +595,20 @@ void Map::drawTerrain(Surface *surface)
 					}
 
 					// if we can see through the floor, draw the soldier below it if it is on stairs
-					Tile *tileBelow = _save->getTile(mapPosition + Position(0, 0, -1));
+					Tile* tileBelow = _save->getTile(mapPosition + Position(0, 0, -1));
 					if (itZ > 0 && tile->hasNoFloor(tileBelow))
 					{
-						BattleUnit *tunit = _save->selectUnit(Position(itX, itY, itZ-1));
-						Tile *ttile = _save->getTile(Position(itX, itY, itZ-1));
-						if (tunit && tunit->getVisible() && ttile->getTerrainLevel() < 0 && ttile->isDiscovered(2))
+						BattleUnit* tunit = _save->selectUnit(Position(itX, itY, itZ-1));
+						Tile* ttile = _save->getTile(Position(itX, itY, itZ-1));
+						if (tunit
+							&& tunit->getVisible()
+							&& ttile->getTerrainLevel() < 0
+							&& ttile->isDiscovered(2))
 						{
 							// the part is 0 for small units, large units have parts 1,2 & 3 depending on the relative x/y position of this tile vs the actual unit position.
 							int part = 0;
 							part += ttile->getPosition().x - tunit->getPosition().x;
-							part += (ttile->getPosition().y - tunit->getPosition().y)*2;
+							part += (ttile->getPosition().y - tunit->getPosition().y) * 2;
 
 							tmpSurface = tunit->getCache(&invalid, part);
 							if (tmpSurface)
@@ -792,7 +817,9 @@ void Map::drawTerrain(Surface *surface)
 	}
 
 	unit = (BattleUnit*)_save->getSelectedUnit();
-	if (unit && (_save->getSide() == FACTION_PLAYER || _save->getDebugMode()) && unit->getPosition().z <= _camera->getViewLevel())
+	if (unit
+		&& (_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
+		&& unit->getPosition().z <= _camera->getViewLevel())
 	{
 		_camera->convertMapToScreen(unit->getPosition(), &screenPosition);
 		screenPosition += _camera->getMapOffset();
@@ -957,14 +984,14 @@ void Map::getSelectorPosition(Position *pos) const
  * @param unit Pointer to BattleUnit.
  * @param offset Pointer to the offset to return the calculation.
  */
-void Map::calculateWalkingOffset(BattleUnit *unit, Position *offset)
+void Map::calculateWalkingOffset(BattleUnit* unit, Position* offset)
 {
 	int offsetX[8] = { 1, 1, 1, 0, -1, -1, -1, 0 };
 	int offsetY[8] = { 1, 0, -1, -1, -1, 0, 1, 1 };
 	int phase = unit->getWalkingPhase() + unit->getDiagonalWalkingPhase();
 	int dir = unit->getDirection();
-	int midphase = 4 + 4 * (dir % 2);
-	int endphase = 8 + 8 * (dir % 2);
+	int midphase = 4 + 4 * (dir %2);
+	int endphase = 8 + 8 * (dir %2);
 	int size = unit->getArmor()->getSize();
 
 	if (size > 1)
@@ -980,7 +1007,7 @@ void Map::calculateWalkingOffset(BattleUnit *unit, Position *offset)
 		midphase = 4;
 		endphase = 8;
 	}
-	else if ((unit->getStatus() == STATUS_WALKING || unit->getStatus() == STATUS_FLYING))
+	else if (unit->getStatus() == STATUS_WALKING || unit->getStatus() == STATUS_FLYING)
 	{
 		if (phase < midphase)
 		{
@@ -1018,7 +1045,7 @@ void Map::calculateWalkingOffset(BattleUnit *unit, Position *offset)
 		else
 		{
 			// from phase 4 onwards the unit behind the scenes already is on the destination tile
-			// we have to get it's last position to calculate the correct offset
+			// we have to get its last position to calculate the correct offset
 			int fromLevel = getTerrainLevel(unit->getLastPosition(), size);
 			int toLevel = getTerrainLevel(unit->getDestination(), size);
 
@@ -1103,15 +1130,15 @@ void Map::cacheUnits()
  * Check if a certain unit needs to be redrawn.
  * @param unit Pointer to battleUnit.
  */
-void Map::cacheUnit(BattleUnit *unit)
+void Map::cacheUnit(BattleUnit* unit)
 {
 //	Log(LOG_INFO) << "cacheUnit() : " << unit->getId();	// kL
 
-	UnitSprite *unitSprite = new UnitSprite(_spriteWidth, _spriteHeight, 0, 0);
+	UnitSprite* unitSprite = new UnitSprite(_spriteWidth, _spriteHeight, 0, 0);
 	unitSprite->setPalette(this->getPalette());
-//kL	bool invalid, dummy;
-	bool invalid = false;	// kL
-	bool dummy = false;		// kL
+	bool invalid, dummy;
+//	bool invalid = false;	// kL
+//	bool dummy = false;		// kL
 	int numOfParts = unit->getArmor()->getSize() == 1 ? 1 : unit->getArmor()->getSize() * 2;
 
 	unit->getCache(&invalid);
@@ -1139,8 +1166,8 @@ void Map::cacheUnit(BattleUnit *unit)
 			unitSprite->setBattleUnit(unit, i);
 
 //			Log(LOG_INFO) << ". . getItem()";	// kL
-			BattleItem *rhandItem = unit->getItem("STR_RIGHT_HAND");
-			BattleItem *lhandItem = unit->getItem("STR_LEFT_HAND");
+			BattleItem* rhandItem = unit->getItem("STR_RIGHT_HAND");
+			BattleItem* lhandItem = unit->getItem("STR_LEFT_HAND");
 			if (rhandItem)
 			{
 				unitSprite->setBattleItem(rhandItem);

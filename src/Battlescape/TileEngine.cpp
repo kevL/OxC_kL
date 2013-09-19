@@ -1079,7 +1079,8 @@ bool TileEngine::tryReactionSnap(BattleUnit *unit, BattleUnit *target)
 		action.targeting = true;
 
 		// kL begin (taken from immediately below):
-		if (target->getFaction() == FACTION_HOSTILE) // kL. hostile units will go into an "aggro" state when they get shot at.
+		// kL_note: lets remove this for now.....
+/*		if (target->getFaction() == FACTION_HOSTILE) // kL. hostile units will go into an "aggro" state when they get shot at.
 		{											 // (may be redundant with I'm-hit-Jim code) doesn't seem to be working as intended...
 			AggroBAIState *aggro = dynamic_cast<AggroBAIState*>(target->getCurrentAIState());
 			if (aggro == 0)
@@ -1087,7 +1088,7 @@ bool TileEngine::tryReactionSnap(BattleUnit *unit, BattleUnit *target)
 				aggro = new AggroBAIState(_save, target); // CAREFUL, this needs to be deleted somewhere/how!!!!!
 				target->setAIState(aggro);
 			}
-		} // kL_end.
+		} */ // kL_end.
 
 		if (unit->getFaction() == FACTION_HOSTILE) // hostile units will go into an "aggro" state when they react.
 		{
@@ -2400,8 +2401,9 @@ int TileEngine::voxelCheck(const Position& voxel, BattleUnit *excludeUnit, bool 
 		&& tile->getMapData(MapData::O_FLOOR)
 		&& tile->getMapData(MapData::O_FLOOR)->isGravLift())
 	{
-		Tile *tileBelow = _save->getTile(tile->getPosition() + Position(0,0,-1));
-		if (tileBelow && tileBelow->getMapData(MapData::O_FLOOR)
+		Tile *tileBelow = _save->getTile(tile->getPosition() + Position(0, 0, -1));
+		if (tileBelow
+			&& tileBelow->getMapData(MapData::O_FLOOR)
 			&& !tileBelow->getMapData(MapData::O_FLOOR)->isGravLift())
 		{
 			return 0;
