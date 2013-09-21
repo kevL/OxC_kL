@@ -165,29 +165,26 @@ void Pathfinding::calculate(BattleUnit *unit, Position endPosition, BattleUnit *
 		}
 	}
 
-	// kL_begin_TEST:
+	/* kL_begin_TEST:
 		if (_save->getStrafeSetting()) Log(LOG_INFO)					<< "strafe Option true";
-		if (SDL_GetModState()&KMOD_CTRL != 0) Log(LOG_INFO)				<< "strafe Ctrl true";
-		if (SDL_GetModState()& KMOD_CTRL != 0) Log(LOG_INFO)			<< "strafe Ctrl true";
-		if (SDL_GetModState() &KMOD_CTRL != 0) Log(LOG_INFO)			<< "strafe Ctrl true";
-		if (SDL_GetModState() & KMOD_CTRL != 0) Log(LOG_INFO)			<< "strafe Ctrl true";
+		if ((SDL_GetModState()&KMOD_CTRL) != 0) Log(LOG_INFO)			<< "strafe Ctrl true";
 		if (startPosition.z == endPosition.z) Log(LOG_INFO)				<< "strafe z-level true";
 		if (abs(startPosition.x - endPosition.x) <= 1) Log(LOG_INFO)	<< "strafe Pos.x true";
 		if (abs(startPosition.y - endPosition.y) <= 1) Log(LOG_INFO)	<< "strafe Pos.y true";
-	// kL_end_TEST.
+	*/// kL_end_TEST.
 
 	// Strafing move allowed only to adjacent squares on same z. "Same z" rule mainly to simplify walking render.
 	_strafeMove = _save->getStrafeSetting()
-		&& SDL_GetModState()&KMOD_CTRL != 0
+		&& (SDL_GetModState()& KMOD_CTRL) != 0
 		&& startPosition.z == endPosition.z
 		&& abs(startPosition.x - endPosition.x) <= 1
 		&& abs(startPosition.y - endPosition.y) <= 1;
-	if (_strafeMove)
+/*	if (_strafeMove)
 	{
 		Log(LOG_INFO) << "Pathfinding::calculate() _strafeMove VALID";		// kL
 	}
 	else
-		Log(LOG_INFO) << "Pathfinding::calculate() _strafeMove INVALID";	// kL
+		Log(LOG_INFO) << "Pathfinding::calculate() _strafeMove INVALID"; */	// kL
 
 	// look for a possible fast and accurate bresenham path and skip A*
 	if (startPosition.z == endPosition.z && bresenhamPath(startPosition,endPosition, target, sneak))
@@ -292,30 +289,35 @@ bool Pathfinding::aStarPath(const Position &startPosition, const Position &endPo
  * @param missile Is this a guided missile?
  * @return TU cost or 255 if movement is impossible.
  */
-int Pathfinding::getTUCost(const Position &startPosition, int direction, Position *endPosition, BattleUnit *unit, BattleUnit *target, bool missile)
+int Pathfinding::getTUCost(const Position& startPosition, int direction, Position* endPosition, BattleUnit* unit, BattleUnit* target, bool missile)
 {
 	_unit = unit;
+	int size = _unit->getArmor()->getSize() - 1;
+
 	directionToVector(direction, endPosition);
 	*endPosition += startPosition;
+
 	bool fellDown = false;
 	bool triedStairs = false;
-	int size = _unit->getArmor()->getSize() - 1;
-	int cost = 0;
+
 	int numberOfPartsGoingUp = 0;
 	int numberOfPartsGoingDown = 0;
 	int numberOfPartsFalling = 0;
 	int numberOfPartsChangingHeight = 0;
+
+	int cost = 0;
 	int totalCost = 0;
 
 	for (int x = 0; x <= size; ++x)
 	{
 		for (int y = 0; y <= size; ++y)
 		{
-			Position offset = Position (x, y, 0);
-			Tile *startTile = _save->getTile(startPosition + offset);
-			Tile *destinationTile = _save->getTile(*endPosition + offset);
-			Tile *belowDestination = _save->getTile(*endPosition + offset + Position(0,0,-1));
-			Tile *aboveDestination = _save->getTile(*endPosition + offset + Position(0,0,1));
+			Position offset = Position(x, y, 0);
+
+			Tile* startTile			= _save->getTile(startPosition + offset);
+			Tile* destinationTile	= _save->getTile(*endPosition + offset);
+			Tile* belowDestination	= _save->getTile(*endPosition + offset + Position(0, 0, -1));
+			Tile* aboveDestination	= _save->getTile(*endPosition + offset + Position(0, 0, 1));
 
 			// this means the destination is probably outside the map
 			if (startTile == 0 || destinationTile == 0)
@@ -325,7 +327,7 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 			if (isBlocked(destinationTile, MapData::O_FLOOR, target) || isBlocked(destinationTile, MapData::O_OBJECT, target))
 				return 255;
 
-			if (direction < DIR_UP && startTile->getTerrainLevel() > - 16)
+			if (direction < DIR_UP && startTile->getTerrainLevel() > -16)
 			{
 				// check if we can go this way
 				if (isBlocked(startTile, destinationTile, direction, target))
@@ -350,7 +352,7 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 					verticalOffset.z++;
 					endPosition->z++;
 					destinationTile = _save->getTile(*endPosition + offset);
-					belowDestination = _save->getTile(*endPosition + Position(x,y,-1));
+					belowDestination = _save->getTile(*endPosition + Position(x, y, -1));
 
 					triedStairs = true;
 				}
@@ -362,11 +364,11 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 				&& belowDestination->getTerrainLevel() <= -12)
 			{
 				numberOfPartsGoingDown++;
-				if (numberOfPartsGoingDown == (size + 1)*(size + 1))
+				if (numberOfPartsGoingDown == (size + 1) * (size + 1))
 				{
 					endPosition->z--;
 					destinationTile = _save->getTile(*endPosition + offset);
-					belowDestination = _save->getTile(*endPosition + Position(x,y,-1));
+					belowDestination = _save->getTile(*endPosition + Position(x, y, -1));
 
 					fellDown = true;
 				}
@@ -377,7 +379,9 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 				&& belowDestination->getUnit() != unit)
 			{
 				// 2 or more voxels poking into this tile = no go
-				if (belowDestination->getUnit()->getHeight() + belowDestination->getUnit()->getFloatHeight() - belowDestination->getTerrainLevel() > 26)
+				if (belowDestination->getUnit()->getHeight()
+					+ belowDestination->getUnit()->getFloatHeight()
+					- belowDestination->getTerrainLevel() > 26)
 				{
 					return 255;
 				}
@@ -494,11 +498,15 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 
 			cost += wallcost;
 
+
+			// kL_note: wtf.....
 			if (_unit->getFaction() == FACTION_HOSTILE
 				&& ((destinationTile->getUnit()
 						&& destinationTile->getUnit()->getFaction() == FACTION_HOSTILE
 						&& destinationTile->getUnit() != _unit)
 					|| destinationTile->getFire() > 0))
+
+
 
 			// Strafing costs +1 for forwards-ish or sidewards, propose +2 for backwards-ish directions
 			// Maybe if flying then it makes no difference?
@@ -545,16 +553,14 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 		{
 			return 255;
 		}
-		else	// kL
-		if (!fellDown
+		else if (!fellDown
 			&& abs(startTile->getTerrainLevel() - destinationTile->getTerrainLevel()) > 10)
 		{
 			return 255;
 		}
-		else	// kL
 		// also check if we change level, that there are two parts changing level,
 		// so a big sized unit can not go up a small sized stairs
-		if (numberOfPartsChangingHeight == 1)
+		else if (numberOfPartsChangingHeight == 1)
 		{
 			return 255;
 		}
