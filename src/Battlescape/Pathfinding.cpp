@@ -611,7 +611,7 @@ void Pathfinding::vectorToDirection(const Position& vector, int& dir)
 
 /**
  * Checks whether a path is ready and gives the first direction.
- * @return Direction where the unit needs to go next, -1 if it's the end of the path.
+ * @return, Direction where the unit needs to go next, -1 if it's the end of the path.
  */
 int Pathfinding::getStartDirection()
 {
@@ -986,15 +986,21 @@ bool Pathfinding::previewPath(bool bRemove)
 
 	Position pos = _unit->getPosition();
 	Position destination;
-	Pathfinding* pf;	// kL
+
+//	Pathfinding* pf;								// kL
+//	int dir = pf->getStartDirection();				// kL
+//	Log(LOG_INFO) << "Pathfinding::previewPath() StartDirection = " << dir;	// kL
 
 	int tus = _unit->getTimeUnits();
-	if (_unit->isKneeled()
+	if (_unit->isKneeled())
 //		&& !pf->validateUpDown(_unit, _unit->getPosition(), pf->DIR_UP)		// kL
 //		&& !pf->validateUpDown(_unit, _unit->getPosition(), pf->DIR_DOWN))	// kL
-		&& !pf->DIR_UP		// kL
-		&& !pf->DIR_DOWN)	// kL
+//		&& !pf->DIR_UP)		// kL
+//		&& !pf->DIR_DOWN)	// kL
+//		&& dir > -1 && dir < 8)	// ie. *not* up or down
 	{
+//		Log(LOG_INFO) << ". kneeled, and path UpDown INVALID";	// kL
+
 		tus -= 8;
 	}
 
@@ -1034,7 +1040,7 @@ bool Pathfinding::previewPath(bool bRemove)
 		{
 			for (int y = size; y >= 0; y--)
 			{
-				Tile *tile = _save->getTile(pos + Position(x,y,0));
+				Tile* tile = _save->getTile(pos + Position(x, y, 0));
 				if (!bRemove)
 				{
 					if (i == _path.rend() - 1)

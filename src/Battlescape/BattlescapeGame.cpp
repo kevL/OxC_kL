@@ -498,7 +498,7 @@ void BattlescapeGame::endTurn()
 		_health -= _armor->getDamageModifier(DT_IN) * RNG::generate(5, 10);
 		_fire--;
 	} */
-	for (std::vector<BattleUnit*>::iterator j = _save->getUnits()->begin(); j != _save->getUnits()->end(); ++j)
+	for (std::vector<BattleUnit* >::iterator j = _save->getUnits()->begin(); j != _save->getUnits()->end(); ++j)
 	{
 		if (_save->getSide() == (*j)->getFaction())
 		{
@@ -518,15 +518,7 @@ void BattlescapeGame::endTurn()
 		}
 	}
 	// that just might work...
-
-/*	BattleUnit *bunit;
-	if (bunit->tookFireDamage()
-		&& bunit->getFire())
-	{
-		(*bunit)->setHealth(9);
-	} */
 	// kL_end.
-
 
 	// if all units from either faction are killed - the mission is over.
 	int liveAliens = 0;
@@ -583,28 +575,28 @@ void BattlescapeGame::endTurn()
 	_endTurnRequested = false;
 }
 
-
 /**
  * Checks for casualties and adjusts morale accordingly.
- * @param murderweapon Need to know this, for a HE explosion there is an instant death.
- * @param murderer This is needed for credits for the kill.
- * @param hiddenExplosion Set to true for the explosions of UFO Power sources at start of battlescape.
- * @param terrainExplosion Set to true for the explosions of terrain.
+ * @param murderweapon, Need to know this, for a HE explosion there is an instant death.
+ * @param murderer, This is needed for credits for the kill.
+ * @param hiddenExplosion, Set to true for the explosions of UFO Power sources at start of battlescape.
+ * @param terrainExplosion, Set to true for the explosions of terrain.
  */
-void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *murderer, bool hiddenExplosion, bool terrainExplosion)
+void BattlescapeGame::checkForCasualties(BattleItem* murderweapon, BattleUnit* murderer, bool hiddenExplosion, bool terrainExplosion)
 {
-	for (std::vector<BattleUnit*>::iterator j = _save->getUnits()->begin(); j != _save->getUnits()->end(); ++j)
+	for (std::vector<BattleUnit* >::iterator j = _save->getUnits()->begin(); j != _save->getUnits()->end(); ++j)
 	{
 		if ((*j)->getHealth() == 0
 			&& (*j)->getStatus() != STATUS_DEAD
 			&& (*j)->getStatus() != STATUS_COLLAPSING)
 		{
-			BattleUnit *victim = (*j);
+			BattleUnit* victim = *j;
 
 			if (murderer)
 			{
 				murderer->addKillCount();
 				victim->killedBy(murderer->getFaction());
+
 				int modifier = murderer->getFaction() == FACTION_PLAYER ? _save->getMoraleModifier() : 100;
 
 				// if there is a known murderer, he will get a morale bonus if he is of a different faction (what with neutral?)
@@ -641,7 +633,7 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 				int loserMod = victim->getFaction() == FACTION_HOSTILE ? 100 : _save->getMoraleModifier();
 				int winnerMod = victim->getFaction() == FACTION_HOSTILE ? _save->getMoraleModifier() : 100;
 
-				for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
+				for (std::vector<BattleUnit* >::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 				{
 					if (!(*i)->isOut()
 						&& (*i)->getArmor()->getSize() == 1)
@@ -657,19 +649,19 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 								&& victim->getFaction() == FACTION_HOSTILE)
 							{
 								int closest = 1000000;
-								BattleUnit *revenger = 0;
+								BattleUnit* revenger = 0;
 								bool revenge = RNG::generate(0, 99) < 50;
 
-								for (std::vector<BattleUnit*>::iterator h = _save->getUnits()->begin(); h != _save->getUnits()->end(); ++h)
+								for (std::vector<BattleUnit* >::iterator h = _save->getUnits()->begin(); h != _save->getUnits()->end(); ++h)
 								{
 									if ((*h)->getFaction() == FACTION_HOSTILE
 										&& !(*h)->isOut()
-										&& (*h) != victim)
+										&& *h != victim)
 									{
 										int d = _save->getTileEngine()->distanceSq(victim->getPosition(), (*h)->getPosition());
 										if (d < closest)
 										{
-											revenger = (*h);
+											revenger = *h;
 											closest = d;
 										}
 									}
@@ -682,7 +674,7 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 									&& (revenger->getAggression() == 2
 										|| (revenger->getAggression() == 1 && revenge)))
 								{
-									AggroBAIState *aggro = dynamic_cast<AggroBAIState*>(revenger->getCurrentAIState());
+									AggroBAIState* aggro = dynamic_cast<AggroBAIState* >(revenger->getCurrentAIState());
 									if (aggro == 0)
 									{
 										aggro = new AggroBAIState(_save, revenger);
@@ -703,23 +695,23 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 
 			if (murderweapon)
 			{
-				statePushNext(new UnitDieBState(this, (*j), murderweapon->getRules()->getDamageType(), false));
+				statePushNext(new UnitDieBState(this, *j, murderweapon->getRules()->getDamageType(), false));
 			}
 			else
 			{
 				if (hiddenExplosion) // this is instant death from UFO powersources, without screaming sounds
 				{
-					statePushNext(new UnitDieBState(this, (*j), DT_HE, true)); 
+					statePushNext(new UnitDieBState(this, *j, DT_HE, true)); 
 				}
 				else
 				{
 					if (terrainExplosion)
 					{
-						statePushNext(new UnitDieBState(this, (*j), DT_HE, false));
+						statePushNext(new UnitDieBState(this, *j, DT_HE, false));
 					}
 					else // no murderer, and no terrain explosion, must be fatal wounds
 					{
-						statePushNext(new UnitDieBState(this, (*j), DT_NONE, false));  // DT_NONE = STR_HAS_DIED_FROM_A_FATAL_WOUND
+						statePushNext(new UnitDieBState(this, *j, DT_NONE, false));  // DT_NONE = STR_HAS_DIED_FROM_A_FATAL_WOUND
 					}
 				}
 			}
@@ -728,7 +720,7 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 				&& (*j)->getSpecialAbility() == SPECAB_RESPAWN)
 			{
 				(*j)->setSpecialAbility(SPECAB_NONE);
-				convertUnit((*j), (*j)->getSpawnUnit());
+				convertUnit(*j, (*j)->getSpawnUnit());
 			}
 		}
 		else if ((*j)->getStunlevel() >= (*j)->getHealth()
@@ -737,11 +729,11 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
 			&& (*j)->getStatus() != STATUS_COLLAPSING
 			&& (*j)->getStatus() != STATUS_TURNING)
 		{
-			statePushNext(new UnitDieBState(this, (*j), DT_STUN, true));
+			statePushNext(new UnitDieBState(this, *j, DT_STUN, true));
 		}
 	}
 
-	BattleUnit *bu = _save->getSelectedUnit();
+	BattleUnit* bu = _save->getSelectedUnit();
 
 	if (_save->getSide() == FACTION_PLAYER)
 	{
@@ -754,7 +746,7 @@ void BattlescapeGame::checkForCasualties(BattleItem *murderweapon, BattleUnit *m
  */
 void BattlescapeGame::showInfoBoxQueue()
 {
-	for (std::vector<InfoboxOKState*>::iterator i = _infoboxQueue.begin(); i != _infoboxQueue.end(); ++i)
+	for (std::vector<InfoboxOKState* >::iterator i = _infoboxQueue.begin(); i != _infoboxQueue.end(); ++i)
 	{
 		_parentState->getGame()->pushState(*i);
 	}

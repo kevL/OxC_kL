@@ -1632,25 +1632,25 @@ bool SavedBattleGame::getTraceSetting() const
 
 /**
  * Gets the highest ranked, living XCom unit.
- * @return The highest ranked, living XCom unit.
+ * @return, The highest ranked, living XCom unit.
  */
 BattleUnit* SavedBattleGame::getHighestRankedXCom()
 {
-	BattleUnit* highest = 0;
-	for (std::vector<BattleUnit*>::iterator j = _units.begin(); j != _units.end(); ++j)
+	BattleUnit* leader = 0;
+	for (std::vector<BattleUnit* >::iterator j = _units.begin(); j != _units.end(); ++j)
 	{
 		if ((*j)->getOriginalFaction() == FACTION_PLAYER
 			&& !(*j)->isOut())
 		{
-			if (highest == 0
-				|| (*j)->getRankInt() > highest->getRankInt())
+			if (leader == 0
+				|| (*j)->getRankInt() > leader->getRankInt())
 			{
-				highest = *j;
+				leader = *j;
 			}
 		}
 	}
 
-	return highest;
+	return leader;
 }
 
 /**
@@ -1666,7 +1666,7 @@ int SavedBattleGame::getMoraleModifier(BattleUnit* unit)
 
 	if (unit == 0)
 	{
-		BattleUnit *leader = getHighestRankedXCom();
+		BattleUnit* leader = getHighestRankedXCom();
 		if (leader)
 		{
 			switch (leader->getRankInt())

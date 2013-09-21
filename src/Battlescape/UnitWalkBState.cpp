@@ -109,13 +109,21 @@ void UnitWalkBState::think()
 	bool onScreen = (_unit->getVisible()
 		&& _parent->getMap()->getCamera()->isOnScreen(_unit->getPosition()));
 
+	int dir = _pf->getStartDirection();		// kL: also below, in STATUS_STANDING!
+	Log(LOG_INFO) << ". StartDirection = " << dir;	// kL
+
 	if (_unit->isKneeled()
-		&& !_pf->validateUpDown(_unit, _unit->getPosition(), _pf->DIR_UP)		// kL
-		&& !_pf->validateUpDown(_unit, _unit->getPosition(), _pf->DIR_DOWN))	// kL
+//		&& !_pf->validateUpDown(_unit, _unit->getPosition(), _pf->DIR_UP)		// kL
+//		&& !_pf->validateUpDown(_unit, _unit->getPosition(), _pf->DIR_DOWN))	// kL
+//		&& !_pf->DIR_UP			// kL
+//		&& !_pf->DIR_DOWN)		// kL
+		&& dir > -1 && dir < 8)	// kL: ie. *not* up or down
 	{
+		Log(LOG_INFO) << ". kneeled, and path UpDown INVALID";	// kL
+
 		if (_parent->kneel(_unit))
 		{
-			Log(LOG_INFO) << ". Stand up";	// kL
+			Log(LOG_INFO) << ". . Stand up";	// kL
 
 			_unit->setCache(0);
 			_terrain->calculateFOV(_unit);
@@ -131,6 +139,10 @@ void UnitWalkBState::think()
 
 			return;
 		}
+	}
+	else if (_unit->isKneeled())
+	{
+		Log(LOG_INFO) << ". kneeled, and path UpDown VALID";	// kL
 	}
 
 //kL_below	Tile* tileBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(0, 0, -1));
