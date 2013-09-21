@@ -168,11 +168,11 @@ class BattleUnit
 		/// Gets the BattleUnit's ID.
 		int getId() const;
 		/// Sets the unit's position
-		void setPosition(const Position &pos, bool updateLastPos = true);
+		void setPosition(const Position& pos, bool updateLastPos = true);
 		/// Gets the unit's position.
-		const Position &getPosition() const;
+		const Position& getPosition() const;
 		/// Gets the unit's position.
-		const Position &getLastPosition() const;
+		const Position& getLastPosition() const;
 		/// Sets the unit's direction 0-7.
 		void setDirection(int direction);
 		/// Sets the unit's face direction (only used by strafing moves)
@@ -190,7 +190,7 @@ class BattleUnit
 		/// Gets the unit's status.
 		UnitStatus getStatus() const;
 		/// Start the walkingPhase
-		void startWalking(int direction, const Position &destination, Tile* tileBelow, bool cache);
+		void startWalking(int direction, const Position& destination, Tile* tileBelow, bool cache);
 		/// Increase the walkingPhase
 		void keepWalking(Tile* tileBelow, bool cache);
 		/// Gets the walking phase for animation and sound

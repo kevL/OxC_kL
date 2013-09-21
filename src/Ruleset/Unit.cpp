@@ -16,7 +16,9 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "Unit.h"
+
 
 namespace OpenXcom
 {
@@ -27,9 +29,26 @@ namespace OpenXcom
  * @param race String defining the race.
  * @param rank String defining the rank.
  */
-Unit::Unit(const std::string &type, std::string race, std::string rank) : _type(type), _race(race), _rank(rank), _stats(), _armor(""), _standHeight(0), _kneelHeight(0), _floatHeight(0),
-																		_value(0), _deathSound(0), _aggroSound(-1), _moveSound(-1), _intelligence(0), _aggression(0), _specab(SPECAB_NONE),
-																		_zombieUnit(""), _spawnUnit(""), _livingWeapon(false)
+Unit::Unit(const std::string& type, std::string race, std::string rank)
+	:
+	_type(type),
+	_race(race),
+	_rank(rank),
+	_stats(),
+	_armor(""),
+	_standHeight(0),
+	_kneelHeight(0),
+	_floatHeight(0),
+	_value(0),
+	_deathSound(0),
+	_aggroSound(-1),
+	_moveSound(-1),
+	_intelligence(0),
+	_aggression(0),
+	_specab(SPECAB_NONE),
+	_zombieUnit(""),
+	_spawnUnit(""),
+	_livingWeapon(false)
 {
 }
 
@@ -46,24 +65,24 @@ Unit::~Unit()
  */
 void Unit::load(const YAML::Node &node)
 {
-	_type = node["type"].as<std::string>(_type);
-	_race = node["race"].as<std::string>(_race);
-	_rank = node["rank"].as<std::string>(_rank);
-	_stats = node["stats"].as<UnitStats>(_stats);
-	_armor = node["armor"].as<std::string>(_armor);
-	_standHeight = node["standHeight"].as<int>(_standHeight);
-	_kneelHeight = node["kneelHeight"].as<int>(_kneelHeight);
-	_floatHeight = node["floatHeight"].as<int>(_floatHeight);
-	_value = node["value"].as<int>(_value);
-	_deathSound = node["deathSound"].as<int>(_deathSound);
-	_aggroSound = node["aggroSound"].as<int>(_aggroSound);
-	_moveSound = node["moveSound"].as<int>(_moveSound);
-	_intelligence = node["intelligence"].as<int>(_intelligence);
-	_aggression = node["aggression"].as<int>(_aggression);
-	_specab = (SpecialAbility)node["specab"].as<int>(_specab);
-	_zombieUnit = node["zombieUnit"].as<std::string>(_zombieUnit);
-	_spawnUnit = node["spawnUnit"].as<std::string>(_spawnUnit);
-	_livingWeapon = node["livingWeapon"].as<bool>(_livingWeapon);
+	_type			= node["type"].as<std::string>(_type);
+	_race			= node["race"].as<std::string>(_race);
+	_rank			= node["rank"].as<std::string>(_rank);
+	_stats			= node["stats"].as<UnitStats>(_stats);
+	_armor			= node["armor"].as<std::string>(_armor);
+	_standHeight	= node["standHeight"].as<int>(_standHeight);
+	_kneelHeight	= node["kneelHeight"].as<int>(_kneelHeight);
+	_floatHeight	= node["floatHeight"].as<int>(_floatHeight);
+	_value			= node["value"].as<int>(_value);
+	_deathSound		= node["deathSound"].as<int>(_deathSound);
+	_aggroSound		= node["aggroSound"].as<int>(_aggroSound);
+	_moveSound		= node["moveSound"].as<int>(_moveSound);
+	_intelligence	= node["intelligence"].as<int>(_intelligence);
+	_aggression		= node["aggression"].as<int>(_aggression);
+	_specab			= (SpecialAbility)node["specab"].as<int>(_specab);
+	_zombieUnit		= node["zombieUnit"].as<std::string>(_zombieUnit);
+	_spawnUnit		= node["spawnUnit"].as<std::string>(_spawnUnit);
+	_livingWeapon	= node["livingWeapon"].as<bool>(_livingWeapon);
 }
 
 /**
@@ -80,7 +99,7 @@ std::string Unit::getType() const
  * Returns the unit's stats data object.
  * @return The unit's stats.
  */
-UnitStats *Unit::getStats()
+UnitStats* Unit::getStats()
 {
 	return &_stats;
 }

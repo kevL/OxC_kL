@@ -404,7 +404,7 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
  * @param bu Pointer to a unit.
  * @return If the action succeeded.
  */
-bool BattlescapeGame::kneel(BattleUnit *bu)
+bool BattlescapeGame::kneel(BattleUnit* bu)
 {
 	Log(LOG_INFO) << "BattlescapeGame::kneel()" ;	// kL
 
@@ -1650,7 +1650,7 @@ void BattlescapeGame::psiButtonAction()
  * @param unit The unit.
  * @param dir Direction DIR_UP or DIR_DOWN.
  */
-void BattlescapeGame::moveUpDown(BattleUnit *unit, int dir)
+void BattlescapeGame::moveUpDown(BattleUnit* unit, int dir)
 {
 	_currentAction.target = unit->getPosition();
 	if (dir == Pathfinding::DIR_UP)
@@ -1663,13 +1663,13 @@ void BattlescapeGame::moveUpDown(BattleUnit *unit, int dir)
 
 	// kL_note: taking this out so I can go up/down *kneeled* on GravLifts. <- bork! not what i was looking for
 	// might be a problem with soldiers in flying suits, later...
-	if (_save->getSelectedUnit()->isKneeled()
+/*kL	if (_save->getSelectedUnit()->isKneeled())
 //		&& not on GravLift)		// kL
-		)
 	{
 		Log(LOG_INFO) << "BattlescapeGame::moveUpDown()" ;	// kL
+
 		kneel(_save->getSelectedUnit());
-	}
+	} */
 
 	_save->getPathfinding()->calculate(_currentAction.actor, _currentAction.target);
 

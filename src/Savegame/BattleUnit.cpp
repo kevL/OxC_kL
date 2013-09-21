@@ -62,6 +62,7 @@ BattleUnit::BattleUnit(Soldier* soldier, UnitFaction faction)
 	_verticalDirection(0),
 	_status(STATUS_STANDING),
 	_walkPhase(0),
+//	_walkPhase(-1),		// kL
 	_fallPhase(0),
 	_spinPhase(-1),		// kL
 	_kneeled(false),
@@ -479,29 +480,17 @@ UnitStatus BattleUnit::getStatus() const
  */
 void BattleUnit::startWalking(int direction, const Position& destination, Tile* tileBelow, bool cache)
 {
-	// kL_begin:
-	// if on GravLift...
-	bool keepCrouch = false;
-	// kL_end.
+	_walkPhase = 0;
+	_destination = destination;
+	_lastPos = _pos;
+	_cacheInvalid = cache;
 
 	if (direction >= Pathfinding::DIR_UP)
 	{
-		Log(LOG_INFO) << "BattleUnit::startWalking(), DIR_UP or DIR_DOWN";		// kL
+		Log(LOG_INFO) << "BattleUnit::startWalking(), STATUS_FLYING";		// kL
 
-		if (!isKneeled())	// kL
-		{
-			Log(LOG_INFO) << ". STATUS_FLYING";		// kL
-
-			_verticalDirection = direction;
-			_status = STATUS_FLYING;
-		}
-		else
-		{
-			Log(LOG_INFO) << ". maintain STATUS_";		// kL
-
-			_direction = direction;		// kL
-			keepCrouch = true;			// kL
-		}
+		_verticalDirection = direction;
+		_status = STATUS_FLYING;
 	}
 	else
 	{
@@ -509,16 +498,13 @@ void BattleUnit::startWalking(int direction, const Position& destination, Tile* 
 
 		_direction = direction;
 		_status = STATUS_WALKING;
+
+		_kneeled = false;			// kL
 	}
 
-	bool floorFound = false;
-	if (!_tile->hasNoFloor(tileBelow))
-	{
-		floorFound = true;
-	}
+//kL	_kneeled = false;
 
-	if ((!floorFound || direction >= Pathfinding::DIR_UP)
-		&& !keepCrouch)	// kL
+	if ((_tile->hasNoFloor(tileBelow) || direction >= Pathfinding::DIR_UP))
 	{
 		_status = STATUS_FLYING;
 		_floating = true;
@@ -527,22 +513,12 @@ void BattleUnit::startWalking(int direction, const Position& destination, Tile* 
 	{
 		_floating = false;
 	}
-
-	_walkPhase = 0;
-	_destination = destination;
-	_lastPos = _pos;
-	_cacheInvalid = cache;
-
-	if (!keepCrouch)	// kL
-	{
-		_kneeled = false;
-	}
 }
 
 /**
  * This will increment the walking phase.
  */
-void BattleUnit::keepWalking(Tile *tileBelow, bool cache)
+void BattleUnit::keepWalking(Tile* tileBelow, bool cache)
 {
 	Log(LOG_INFO) << "BattleUnit::keepWalking()";		// kL
 
@@ -584,11 +560,12 @@ void BattleUnit::keepWalking(Tile *tileBelow, bool cache)
 
 	if (_walkPhase >= end)
 	{
-		Log(LOG_INFO) << "BattleUnit::keepWalking(), STATUS_STANDING";		// kL
+		Log(LOG_INFO) << "BattleUnit::keepWalking(), end : STATUS_STANDING";		// kL
 
 		// we officially reached our destination tile
 		_status = STATUS_STANDING;
 		_walkPhase = 0;
+//		_walkPhase = -1;		// kL
 		_verticalDirection = 0;
 
 		if (_floating && !_tile->hasNoFloor(tileBelow))
@@ -871,6 +848,7 @@ void BattleUnit::kneel(bool kneeled)
 {
 	Log(LOG_INFO) << "BattleUnit::kneel()" ;	// kL
 //	_status = STATUS_KNEELING;		// kL
+
 	_kneeled = kneeled;
 	_cacheInvalid = true;
 }

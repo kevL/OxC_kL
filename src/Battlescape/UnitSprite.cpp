@@ -295,9 +295,14 @@ void UnitSprite::drawRoutine0()
 		torso = _unitSurface->getFrame(maleTorso + _unit->getDirection());
 	}
 
+	bool isWalking = _unit->getStatus() == STATUS_WALKING;
+	bool isKneeled = _unit->isKneeled();
+
 	// when walking, torso(fixed sprite) has to be animated up/down
-	if (_unit->getStatus() == STATUS_WALKING)
+	if (isWalking)
 	{
+		Log(LOG_INFO) << "UnitSprite::drawRoutine0() : " << _unit->getId() << " STATUS_WALKING";	// kL
+
 		torso->setY(yoffWalk[_unit->getWalkingPhase()]);
 		if (_drawingRoutine == 10)
 			torso->setY(alternateyoffWalk[_unit->getWalkingPhase()]);
@@ -307,16 +312,22 @@ void UnitSprite::drawRoutine0()
 	}
 	else
 	{
-		if (_unit->isKneeled())
+		if (isKneeled)
 		{
+			Log(LOG_INFO) << "UnitSprite::drawRoutine0() : " << _unit->getId() << " isKneeled";	// kL
+
 			legs = _unitSurface->getFrame(legsKneel + _unit->getDirection());
 		}
 		else if (_unit->isFloating() && _unit->getArmor()->getMovementType() == MT_FLY)
 		{
+			Log(LOG_INFO) << "UnitSprite::drawRoutine0() : " << _unit->getId() << " isFloating in FlyingSuit";	// kL
+
 			legs = _unitSurface->getFrame(legsFloat + _unit->getDirection());
 		}
 		else
 		{
+			Log(LOG_INFO) << "UnitSprite::drawRoutine0() : " << _unit->getId() << " etc.";	// kL
+
 			legs = _unitSurface->getFrame(legsStand + _unit->getDirection());
 		}
 
@@ -383,7 +394,7 @@ void UnitSprite::drawRoutine0()
 		}
 
 		// the fixed arm(s) have to be animated up/down when walking
-		if (_unit->getStatus() == STATUS_WALKING)
+		if (isWalking)
 		{
 			if (_drawingRoutine == 10)
 			{
@@ -451,7 +462,7 @@ void UnitSprite::drawRoutine0()
 			rightArm = _unitSurface->getFrame(rarmShoot + _unit->getDirection());
 		}
 
-		if (_unit->getStatus() == STATUS_WALKING)
+		if (isWalking)
 		{
 			if (_drawingRoutine == 10)
 			{
@@ -471,7 +482,7 @@ void UnitSprite::drawRoutine0()
 	}
 
 	// offset everything but legs when kneeled
-	if (_unit->isKneeled())
+	if (isKneeled)
 	{
 		leftArm->setY(offYKneel);
 		rightArm->setY(offYKneel);
@@ -479,7 +490,7 @@ void UnitSprite::drawRoutine0()
 		itemA ? itemA->setY(itemA->getY() + offYKneel) : void();
 		itemB ? itemB->setY(itemB->getY() + offYKneel) : void();
 	}
-	else if (_unit->getStatus() != STATUS_WALKING)
+	else if (!isWalking)
 	{
 		leftArm->setY(0);
 		rightArm->setY(0);

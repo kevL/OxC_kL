@@ -82,6 +82,7 @@ void Pathfinding::calculate(BattleUnit *unit, Position endPosition, BattleUnit *
 {
 	_totalTUCost = 0;
 	_path.clear();
+
 	// i'm DONE with these out of bounds errors.
 	if (endPosition.x > _save->getMapSizeX() - unit->getArmor()->getSize()
 		|| endPosition.y > _save->getMapSizeY() - unit->getArmor()->getSize()
@@ -94,18 +95,24 @@ void Pathfinding::calculate(BattleUnit *unit, Position endPosition, BattleUnit *
 	bool sneak = _save->getSneakySetting() && unit->getFaction() == FACTION_HOSTILE;
 
 	Position startPosition = unit->getPosition();
+
 	_movementType = unit->getArmor()->getMovementType();
 	if (target != 0 && maxTUCost == -1)  // pathfinding for missile
 	{
 		_movementType = MT_FLY;
 		maxTUCost = 10000;
 	}
+
 	_unit = unit;
 
 	Tile *destinationTile = _save->getTile(endPosition);
 
 	// check if destination is not blocked
-	if (isBlocked(destinationTile, MapData::O_FLOOR, target) || isBlocked(destinationTile, MapData::O_OBJECT, target)) return;
+	if (isBlocked(destinationTile, MapData::O_FLOOR, target)
+		|| isBlocked(destinationTile, MapData::O_OBJECT, target))
+	{
+		return;
+	}
 
 	// the following check avoids that the unit walks behind the stairs if we click behind the stairs to make it go up the stairs.
 	// it only works if the unit is on one of the 2 tiles on the stairs, or on the tile right in front of the stairs.
@@ -115,7 +122,8 @@ void Pathfinding::calculate(BattleUnit *unit, Position endPosition, BattleUnit *
 		destinationTile = _save->getTile(endPosition);
 	}
 
-	while (endPosition.z != _save->getMapSizeZ() && destinationTile->getTerrainLevel() == -24)
+	while (endPosition.z != _save->getMapSizeZ()
+		&& destinationTile->getTerrainLevel() == -24)
 	{
 		endPosition.z++;
 		destinationTile = _save->getTile(endPosition);
@@ -157,12 +165,29 @@ void Pathfinding::calculate(BattleUnit *unit, Position endPosition, BattleUnit *
 		}
 	}
 
+	// kL_begin_TEST:
+		if (_save->getStrafeSetting()) Log(LOG_INFO)					<< "strafe Option true";
+		if (SDL_GetModState()&KMOD_CTRL != 0) Log(LOG_INFO)				<< "strafe Ctrl true";
+		if (SDL_GetModState()& KMOD_CTRL != 0) Log(LOG_INFO)			<< "strafe Ctrl true";
+		if (SDL_GetModState() &KMOD_CTRL != 0) Log(LOG_INFO)			<< "strafe Ctrl true";
+		if (SDL_GetModState() & KMOD_CTRL != 0) Log(LOG_INFO)			<< "strafe Ctrl true";
+		if (startPosition.z == endPosition.z) Log(LOG_INFO)				<< "strafe z-level true";
+		if (abs(startPosition.x - endPosition.x) <= 1) Log(LOG_INFO)	<< "strafe Pos.x true";
+		if (abs(startPosition.y - endPosition.y) <= 1) Log(LOG_INFO)	<< "strafe Pos.y true";
+	// kL_end_TEST.
+
 	// Strafing move allowed only to adjacent squares on same z. "Same z" rule mainly to simplify walking render.
 	_strafeMove = _save->getStrafeSetting()
-		&& SDL_GetModState() &KMOD_CTRL != 0
+		&& SDL_GetModState()&KMOD_CTRL != 0
 		&& startPosition.z == endPosition.z
 		&& abs(startPosition.x - endPosition.x) <= 1
 		&& abs(startPosition.y - endPosition.y) <= 1;
+	if (_strafeMove)
+	{
+		Log(LOG_INFO) << "Pathfinding::calculate() _strafeMove VALID";		// kL
+	}
+	else
+		Log(LOG_INFO) << "Pathfinding::calculate() _strafeMove INVALID";	// kL
 
 	// look for a possible fast and accurate bresenham path and skip A*
 	if (startPosition.z == endPosition.z && bresenhamPath(startPosition,endPosition, target, sneak))
@@ -543,14 +568,14 @@ int Pathfinding::getTUCost(const Position &startPosition, int direction, Positio
 
 /**
  * Converts direction to a vector. Direction starts north = 0 and goes clockwise.
- * @param direction Source direction.
- * @param vector Pointer to a position (which acts as a vector).
+ * @param direction, Source direction
+ * @param vector, Pointer to a position (which acts as a vector)
  */
-void Pathfinding::directionToVector(const int direction, Position *vector)
+void Pathfinding::directionToVector(int const direction, Position* vector)
 {
-	int x[10] = {0, 1, 1, 1, 0, -1, -1, -1,0,0};
-	int y[10] = {-1, -1, 0, 1, 1, 1, 0, -1,0,0};
-	int z[10] = {0, 0, 0, 0, 0, 0, 0, 0, 1, -1};
+	int x[10] = {  0,  1,  1,  1,  0, -1, -1, -1,  0,  0 };
+	int y[10] = { -1, -1,  0,  1,  1,  1,  0, -1,  0,  0 };
+	int z[10] = {  0,  0,  0,  0,  0,  0,  0,  0,  1, -1 };
 
 	vector->x = x[direction];
 	vector->y = y[direction];
@@ -559,17 +584,18 @@ void Pathfinding::directionToVector(const int direction, Position *vector)
 
 /**
  * Converts direction to a vector. Direction starts north = 0 and goes clockwise.
- * @param vector Pointer to a position (which acts as a vector).
- * @return Direction
+ * @param vector, Reference to a position (which acts as a vector)
+ * @param dir, Reference to a direction
  */
-void Pathfinding::vectorToDirection(const Position &vector, int &dir)
+void Pathfinding::vectorToDirection(const Position& vector, int& dir)
 {
 	dir = -1;
-	int x[8] = {0, 1, 1, 1, 0, -1, -1, -1};
-	int y[8] = {-1, -1, 0, 1, 1, 1, 0, -1};
+	int x[8] = {  0,  1,  1,  1,  0, -1, -1, -1 };
+	int y[8] = { -1, -1,  0,  1,  1,  1,  0, -1 };
 	for (int i = 0; i < 8; ++i)
 	{
-		if (x[i] == vector.x && y[i] == vector.y)
+		if (x[i] == vector.x
+			&& y[i] == vector.y)
 		{
 			dir = i;
 
@@ -895,20 +921,22 @@ bool Pathfinding::isOnStairs(const Position &startPosition, const Position &endP
 }
 
 /**
- * Checks, for the up/down button, if the movement is valid. Either there is a grav lift or the unit can fly and there are no obstructions.
+ * Checks, for the up/down button, if the movement is valid. Either there
+ * is a grav lift or the unit can fly and there are no obstructions.
  * @param bu Pointer to unit.
  * @param startPosition Unit starting position.
  * @param direction Up or Down
  * @return bool Whether it's valid.
  */
-bool Pathfinding::validateUpDown(BattleUnit *bu, Position startPosition, const int direction)
+bool Pathfinding::validateUpDown(BattleUnit* bu, Position startPosition, int const direction)
 {
 	Position endPosition;
 	directionToVector(direction, &endPosition);
 	endPosition += startPosition;
-	Tile *startTile = _save->getTile(startPosition);
-	Tile *belowStart = _save->getTile(startPosition + Position(0,0,-1));
-	Tile *destinationTile = _save->getTile(endPosition);
+
+	Tile* startTile = _save->getTile(startPosition);
+	Tile* destinationTile = _save->getTile(endPosition);
+
 	if (startTile->getMapData(MapData::O_FLOOR)
 		&& destinationTile
 		&& destinationTile->getMapData(MapData::O_FLOOR)
@@ -917,19 +945,18 @@ bool Pathfinding::validateUpDown(BattleUnit *bu, Position startPosition, const i
 	{
 		return true;
 	}
-	else
+	else if (bu->getArmor()->getMovementType() == MT_FLY)
 	{
-		if (bu->getArmor()->getMovementType() == MT_FLY)
+		Tile* belowStart = _save->getTile(startPosition + Position(0, 0, -1));
+
+		if ((direction == DIR_UP
+				&& destinationTile
+				&& !destinationTile->getMapData(MapData::O_FLOOR)) // flying up only possible when there is no roof
+			|| (direction == DIR_DOWN
+				&& destinationTile
+				&& startTile->hasNoFloor(belowStart))) // falling down only possible when there is no floor
 		{
-			if ((direction == DIR_UP
-					&& destinationTile
-					&& !destinationTile->getMapData(MapData::O_FLOOR)) // flying up only possible when there is no roof
-				|| (direction == DIR_DOWN
-					&& destinationTile
-					&& startTile->hasNoFloor(belowStart))) // falling down only possible when there is no floor
-			{
-				return true;
-			}
+			return true;
 		}
 	}
 
@@ -1173,43 +1200,47 @@ bool Pathfinding::bresenhamPath(const Position& origin, const Position& target, 
  * @param tuMax The maximum cost of the path to each tile.
  * @return An array of reachable tiles, sorted in ascending order of cost. The first tile is the start location.
  */
-std::vector<int> Pathfinding::findReachable(BattleUnit *unit, int tuMax)
+std::vector<int> Pathfinding::findReachable(BattleUnit* unit, int tuMax)
 {
-	const Position &start = unit->getPosition();
+	const Position& start = unit->getPosition();
 
 	for (std::vector<PathfindingNode>::iterator it = _nodes.begin(); it != _nodes.end(); ++it)
 	{
 		it->reset();
 	}
 
-	PathfindingNode *startNode = getNode(start);
+	PathfindingNode* startNode = getNode(start);
 	startNode->connect(0, 0, 0);
 	PathfindingOpenSet unvisited;
 	unvisited.push(startNode);
-	std::vector<PathfindingNode*> reachable;
+	std::vector<PathfindingNode* > reachable;
 
 	while (!unvisited.empty())
 	{
-		PathfindingNode *currentNode = unvisited.pop();
+		PathfindingNode* currentNode = unvisited.pop();
 		Position const &currentPos = currentNode->getPosition();
 
-		// Try all reachable neighbours.
-		for (int direction = 0; direction < 10; direction++)
+		for (int direction = 0; direction < 10; direction++)	// Try all reachable neighbours.
 		{
 			Position nextPos;
+
 			int tuCost = getTUCost(currentPos, direction, &nextPos, unit, 0, false);
-			if (tuCost == 255) // Skip unreachable / blocked
+			if (tuCost == 255)									// Skip unreachable / blocked
 				continue;
-			if (currentNode->getTUCost(false) + tuCost > tuMax) // Run out of TUs
+
+			if (currentNode->getTUCost(false) + tuCost > tuMax)	// Run out of TUs
 				continue;
-			PathfindingNode *nextNode = getNode(nextPos);
-			if (nextNode->isChecked()) // Our algorithm means this node is already at minimum cost.
+
+			PathfindingNode* nextNode = getNode(nextPos);
+			if (nextNode->isChecked())							// Our algorithm means this node is already at minimum cost.
 				continue;
+
 			int totalTuCost = currentNode->getTUCost(false) + tuCost;
-			// If this node is unvisited or visited from a better path.
-			if (!nextNode->inOpenSet() || nextNode->getTUCost(false) > totalTuCost)
+			if (!nextNode->inOpenSet()
+				|| nextNode->getTUCost(false) > totalTuCost)	// If this node is unvisited or visited from a better path.
 			{
 				nextNode->connect(totalTuCost, currentNode, direction);
+
 				unvisited.push(nextNode);
 			}
 		}
@@ -1221,7 +1252,8 @@ std::vector<int> Pathfinding::findReachable(BattleUnit *unit, int tuMax)
 	std::sort(reachable.begin(), reachable.end(), MinNodeCosts());
 	std::vector<int> tiles;
 	tiles.reserve(reachable.size());
-	for (std::vector<PathfindingNode*>::const_iterator it = reachable.begin(); it != reachable.end(); ++it)
+
+	for (std::vector<PathfindingNode* >::const_iterator it = reachable.begin(); it != reachable.end(); ++it)
 	{
 		tiles.push_back(_save->getTileIndex((*it)->getPosition()));
 	}
@@ -1263,5 +1295,18 @@ void Pathfinding::setUnit(BattleUnit* unit)
 		_movementType = MT_WALK;
 	}
 }
+
+// kL_begin:
+/**
+ * Gets if _unit is moving from a GravLift tile to a GravLift tile.
+ * @return, True if so
+ */
+bool Pathfinding::isGravLift() const
+{
+// Use
+	// bool Pathfinding::validateUpDown(BattleUnit* bu, Position startPosition, int const direction)
+// above.
+}
+// kL_end.
 
 }

@@ -174,7 +174,7 @@ void Map::think()
 void Map::draw()
 {
 	Surface::draw();
-	Tile *t;
+	Tile* t;
 
 	projectileInFOV = _save->getDebugMode();
 	if (_projectile)
@@ -190,7 +190,7 @@ void Map::draw()
 	explosionInFOV = _save->getDebugMode();
 	if (!_explosions.empty())
 	{
-		std::set<Explosion*>::iterator i = _explosions.begin();
+		std::set<Explosion* >::iterator i = _explosions.begin();
 		t = _save->getTile(Position((*i)->getPosition().x / 16, (*i)->getPosition().y / 16, (*i)->getPosition().z / 24));
 		if (t
 			&& (((*i)->isBig() && t->isDiscovered(0))
@@ -250,7 +250,7 @@ void Map::drawTerrain(Surface *surface)
 	int beginZ = 0, endZ = _camera->getShowAllLayers()?_save->getMapSizeZ() - 1:_camera->getViewLevel();
 	Position mapPosition, screenPosition, bulletPositionScreen;
 	int bulletLowX=16000, bulletLowY=16000, bulletLowZ=16000, bulletHighX=0, bulletHighY=0, bulletHighZ=0;
-	int dummy;
+	int d;
 	BattleUnit *unit = 0;
 	bool invalid;
 	int tileShade, wallShade, tileColor;
@@ -350,10 +350,10 @@ void Map::drawTerrain(Surface *surface)
 	}
 
 	// get corner map coordinates to give rough boundaries in which tiles to redraw are
-	_camera->convertScreenToMap(0, 0, &beginX, &dummy);
-	_camera->convertScreenToMap(surface->getWidth(), 0, &dummy, &beginY);
-	_camera->convertScreenToMap(surface->getWidth(), surface->getHeight(), &endX, &dummy);
-	_camera->convertScreenToMap(0, surface->getHeight(), &dummy, &endY);
+	_camera->convertScreenToMap(0, 0, &beginX, &d);
+	_camera->convertScreenToMap(surface->getWidth(), 0, &d, &beginY);
+	_camera->convertScreenToMap(surface->getWidth(), surface->getHeight(), &endX, &d);
+	_camera->convertScreenToMap(0, surface->getHeight(), &d, &endY);
 	beginY -= (_camera->getViewLevel() * 2);
 	beginX -= (_camera->getViewLevel() * 2);
 	if (beginX < 0)
@@ -1120,7 +1120,7 @@ CursorType Map::getCursorType() const
  */
 void Map::cacheUnits()
 {
-	for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
+	for (std::vector<BattleUnit* >::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 	{
 		cacheUnit(*i);
 	}
@@ -1136,9 +1136,9 @@ void Map::cacheUnit(BattleUnit* unit)
 
 	UnitSprite* unitSprite = new UnitSprite(_spriteWidth, _spriteHeight, 0, 0);
 	unitSprite->setPalette(this->getPalette());
-	bool invalid, dummy;
+	bool invalid, d;
 //	bool invalid = false;	// kL
-//	bool dummy = false;		// kL
+//	bool d = false;		// kL
 	int numOfParts = unit->getArmor()->getSize() == 1 ? 1 : unit->getArmor()->getSize() * 2;
 
 	unit->getCache(&invalid);
@@ -1151,7 +1151,7 @@ void Map::cacheUnit(BattleUnit* unit)
 		{
 //			Log(LOG_INFO) << ". . i = " << i;	// kL
 
-			Surface *cache = unit->getCache(&dummy, i);
+			Surface* cache = unit->getCache(&d, i);
 			if (!cache) // no cache created yet
 			{
 //				Log(LOG_INFO) << ". . . (!cache)";	// kL
