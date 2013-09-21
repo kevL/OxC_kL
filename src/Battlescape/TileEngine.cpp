@@ -907,9 +907,9 @@ bool TileEngine::checkReactionFire(BattleUnit* unit)
 
 		std::vector<BattleUnit* > spotters = getSpottingUnits(unit);	// kL, from above.
 		BattleUnit* reactor = getReactor(spotters, unit);
-/*kL		if (reactor != unit)
+		if (reactor != unit)
 		{
-			while (true)
+/*			while (true)
 			{
 				if (!tryReactionSnap(reactor, unit))
 					break;
@@ -919,24 +919,24 @@ bool TileEngine::checkReactionFire(BattleUnit* unit)
 //kL				result = true;
 				if (reactor == unit)
 					break;
-			}
-		} */
-		// kL_begin:
-		for (std::vector<BattleUnit* >::iterator i = spotters.begin(); i != spotters.end(); ++i)
-		{
-//			Log(LOG_INFO) << ". . Test shooter : " << (reactor->getId());		// kL
-
-			if (reactor == unit) continue;
-
-			if (tryReactionSnap(reactor, unit))
+			} */
+			// kL_begin:
+			for (std::vector<BattleUnit* >::iterator i = spotters.begin(); i != spotters.end(); ++i)
 			{
-//				Log(LOG_INFO) << ". . Snap by : " << (reactor->getId());		// kL
-				result = true;
-			}
+//				Log(LOG_INFO) << ". . Test shooter : " << (reactor->getId());		// kL
 
-			reactor = getReactor(spotters, unit);
+				if (reactor == unit) continue;
+
+				if (tryReactionSnap(reactor, unit))
+				{
+//					Log(LOG_INFO) << ". . Snap by : " << (reactor->getId());		// kL
+					result = true;
+				}
+
+				reactor = getReactor(spotters, unit);
+			}
+			// kL_end.
 		}
-		// kL_end.
 	}
 
 	return result;
@@ -997,8 +997,8 @@ BattleUnit* TileEngine::getReactor(std::vector<BattleUnit* > spotters, BattleUni
 	{
 		if (!(*i)->isOut()
 			&& canMakeSnap((*i), unit)
-			&& (*i)->getReactionScore() > bestScore
-			&& (*i) != bu)	// kL, stop unit from reacting twice (unless target uses more TU, hopefully)
+			&& (*i)->getReactionScore() > bestScore)
+//			&& (*i) != bu)	// kL, stop unit from reacting twice (unless target uses more TU, hopefully)
 		{
 			bestScore = (*i)->getReactionScore();
 			bu = *i;
