@@ -498,15 +498,14 @@ int Pathfinding::getTUCost(const Position& startPosition, int direction, Positio
 
 			cost += wallcost;
 
-
-			// kL_note: wtf.....
 			if (_unit->getFaction() == FACTION_HOSTILE
 				&& ((destinationTile->getUnit()
 						&& destinationTile->getUnit()->getFaction() == FACTION_HOSTILE
 						&& destinationTile->getUnit() != _unit)
 					|| destinationTile->getFire() > 0))
-
-
+			{
+				cost += 32; // try to find a better path, but don't exclude this path entirely.
+			}
 
 			// Strafing costs +1 for forwards-ish or sidewards, propose +2 for backwards-ish directions
 			// Maybe if flying then it makes no difference?
@@ -987,33 +986,49 @@ bool Pathfinding::previewPath(bool bRemove)
 
 	Position pos = _unit->getPosition();
 	Position destination;
+	Pathfinding* pf;	// kL
+
 	int tus = _unit->getTimeUnits();
-	if (_unit->isKneeled())
+	if (_unit->isKneeled()
+//		&& !pf->validateUpDown(_unit, _unit->getPosition(), pf->DIR_UP)		// kL
+//		&& !pf->validateUpDown(_unit, _unit->getPosition(), pf->DIR_DOWN))	// kL
+		&& !pf->DIR_UP		// kL
+		&& !pf->DIR_DOWN)	// kL
 	{
 		tus -= 8;
 	}
+
 	int energy = _unit->getEnergy();
 	int size = _unit->getArmor()->getSize() - 1;
 	int total = 0;
 	bool switchBack = false;
+
 	if (_save->getBattleState()->getBattleGame()->getReservedAction() == BA_NONE)
 	{
 		switchBack = true;
 		_save->getBattleState()->getBattleGame()->setTUReserved(BA_AUTOSHOT);
 	}
-	bool running = (SDL_GetModState() & KMOD_CTRL) != 0 && _unit->getArmor()->getSize() == 1 && _path.size() > 1;
+
+	bool running = (SDL_GetModState() & KMOD_CTRL) != 0
+		&& _unit->getArmor()->getSize() == 1
+		&& _path.size() > 1;
+
 	for (std::vector<int>::reverse_iterator i = _path.rbegin(); i != _path.rend(); ++i)
 	{
 		int dir = *i;
 		int tu = getTUCost(pos, dir, &destination, _unit, 0, false); // gets tu cost, but also gets the destination position.
+
 		if (running)
 		{
 			tu *= 0.75;
 		}
+
 		energy -= tu / 2;
 		tus -= tu;
 		total += tu;
+
 		bool reserve = _save->getBattleState()->getBattleGame()->checkReservedTU(_unit, total, true);
+
 		pos = destination;
 		for (int x = size; x >= 0; x--)
 		{
@@ -1038,10 +1053,12 @@ bool Pathfinding::previewPath(bool bRemove)
 					tile->setPreview(-1);
 					tile->setTUMarker(0);
 				}
-				tile->setMarkerColor(bRemove?0:((tus>=0 && energy>=0)?(reserve?4:10):3));
+
+				tile->setMarkerColor(bRemove ? 0 : ((tus >= 0 && energy >= 0) ? (reserve ? 4 : 10) : 3));
 			}
 		}
 	}
+
 	if (switchBack)
 	{
 		_save->getBattleState()->getBattleGame()->setTUReserved(BA_NONE);

@@ -1420,7 +1420,7 @@ void SavedBattleGame::removeUnconsciousBodyItem(BattleUnit *bu)
  * @param testOnly If true then just checks if the unit can be placed at the position.
  * @return True if the unit could be successfully placed.
  */
-bool SavedBattleGame::setUnitPosition(BattleUnit *bu, const Position &position, bool testOnly)
+bool SavedBattleGame::setUnitPosition(BattleUnit* bu, const Position& position, bool testOnly)
 {
 	int size = bu->getArmor()->getSize() - 1;
 
@@ -1428,7 +1428,7 @@ bool SavedBattleGame::setUnitPosition(BattleUnit *bu, const Position &position, 
 	{
 		for (int y = size; y >= 0; y--)
 		{
-			Tile *t = getTile(position + Position(x,y,0));
+			Tile* t = getTile(position + Position(x, y, 0));
 			if (t == 0
 				|| (t->getUnit() != 0 && t->getUnit() != bu)
 				|| t->getTUCost(MapData::O_OBJECT, bu->getArmor()->getMovementType()) == 255)
@@ -1450,13 +1450,13 @@ bool SavedBattleGame::setUnitPosition(BattleUnit *bu, const Position &position, 
 
 	if (testOnly) return true;
 
-	for (int x = size; x >= 0; x--)
+	for (int x = size; x >= 0; x--) // set the unit in position
 	{
 		for (int y = size; y >= 0; y--)
 		{
 			if (x == 0 && y == 0)
 			{
-				bu->setPosition(position + Position(x,y,0));
+				bu->setPosition(position + Position(x, y, 0));
 			}
 
 			getTile(position + Position(x, y, 0))->setUnit(bu, getTile(position + Position(x, y, -1)));
