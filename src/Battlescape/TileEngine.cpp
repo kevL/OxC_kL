@@ -925,8 +925,7 @@ bool TileEngine::checkReactionFire(BattleUnit* unit)
 			{
 //				Log(LOG_INFO) << ". . Test shooter : " << (reactor->getId());		// kL
 
-				if (reactor == unit) continue;
-
+//				if (reactor == unit) continue;
 				if (tryReactionSnap(reactor, unit))
 				{
 //					Log(LOG_INFO) << ". . Snap by : " << (reactor->getId());		// kL
@@ -934,6 +933,7 @@ bool TileEngine::checkReactionFire(BattleUnit* unit)
 				}
 
 				reactor = getReactor(spotters, unit);
+				if (reactor == unit) break;
 			}
 			// kL_end.
 		}
