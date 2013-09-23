@@ -150,13 +150,13 @@ BattlescapeState::BattlescapeState(Game* game)
 	_btnRightHandItem	= new InteractiveSurface(32, 48, _icons->getX() + 280, _icons->getY() + 5);
 	_numAmmoRight		= new NumberText(30, 5, _icons->getX() + 280, _icons->getY() + 4);
 
-	for (int i = 0; i < 10; ++i)
+	for (int i = 0; i < VISIBLE_MAX; ++i)
 	{
 		_btnVisibleUnit[i] = new InteractiveSurface(15, 12, _icons->getX() + iconsWidth - 20, _icons->getY() - 16 - (i * 13));
 		_numVisibleUnit[i] = new NumberText(15, 12, _icons->getX() + iconsWidth - 14 , _icons->getY() - 12 - (i * 13));
 	}
 
-	_numVisibleUnit[9]->setX(304); // center number 10
+	_numVisibleUnit[9]->setX(_numVisibleUnit[9]->getX() - 2); // center number 10
 
 	_warning	= new WarningMessage(224, 24, _icons->getX() + 48, _icons->getY() + 32);
 
@@ -273,7 +273,7 @@ BattlescapeState::BattlescapeState(Game* game)
 	add(_btnRightHandItem);
 	add(_numAmmoRight);
 
-	for (int i = 0; i < 10; ++i)
+	for (int i = 0; i < VISIBLE_MAX; ++i)
 	{
 		add(_btnVisibleUnit[i]);
 		add(_numVisibleUnit[i]);
@@ -444,7 +444,7 @@ BattlescapeState::BattlescapeState(Game* game)
 	_btnStats->onKeyboardPress((ActionHandler)&BattlescapeState::btnReloadClick, (SDLKey)Options::getInt("keyBattleReload"));
 	_btnStats->onKeyboardPress((ActionHandler)&BattlescapeState::btnPersonalLightingClick, (SDLKey)Options::getInt("keyBattlePersonalLighting"));
 
-	for (int i = 0; i < 10; ++i)
+	for (int i = 0; i < VISIBLE_MAX; ++i)
 	{
 		std::stringstream key, tooltip;
 
@@ -1118,7 +1118,7 @@ void BattlescapeState::btnVisibleUnitClick(Action *action)
 	int btnID = -1;
 
 	// got to find out which button was pressed
-	for (int i = 0; i < 10 && btnID == -1; ++i)
+	for (int i = 0; i < VISIBLE_MAX && btnID == -1; ++i)
 	{
 		if (action->getSender() == _btnVisibleUnit[i])
 		{
@@ -1218,7 +1218,7 @@ void BattlescapeState::updateSoldierInfo()
 {
 	BattleUnit *battleUnit = _save->getSelectedUnit();
 
-	for (int i = 0; i < 10; ++i)
+	for (int i = 0; i < VISIBLE_MAX; ++i)
 	{
 		_btnVisibleUnit[i]->setVisible(false);
 		_numVisibleUnit[i]->setVisible(false);
@@ -1316,7 +1316,7 @@ void BattlescapeState::updateSoldierInfo()
 	_save->getTileEngine()->calculateFOV(_save->getSelectedUnit());
 
 	int j = 0;
-	for (std::vector<BattleUnit*>::iterator i = battleUnit->getVisibleUnits()->begin(); i != battleUnit->getVisibleUnits()->end(); ++i)
+	for (std::vector<BattleUnit*>::iterator i = battleUnit->getVisibleUnits()->begin(); i != battleUnit->getVisibleUnits()->end() && j < VISIBLE_MAX; ++i)
 	{
 		_btnVisibleUnit[j]->setVisible(true);
 		_numVisibleUnit[j]->setVisible(true);
@@ -1346,7 +1346,7 @@ void BattlescapeState::blinkVisibleUnitButtons()
 	square2.w = 13;
 	square2.h = 10;
 
-	for (int i = 0; i < 10;  ++i)
+	for (int i = 0; i < VISIBLE_MAX;  ++i)
 	{
 		if (_btnVisibleUnit[i]->getVisible() == true)
 		{
