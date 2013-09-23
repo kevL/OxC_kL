@@ -20,53 +20,47 @@
 #ifndef OPENXCOM_TURNCOUNTER_H
 #define OPENXCOM_TURNCOUNTER_H
 
-//#include "../Engine/Surface.h"
+#include "../Engine/Surface.h"
 
 
 namespace OpenXcom
 {
 
-//class NumberText;
-//class Timer;
-//class Action;
-//class SavedBattleGame;
-//class BattlescapeState;
-//class BattlescapeGame;
+class NumberText;
+class SavedBattleGame;
+//class NextTurnState;
 
 /**
  * Gets Battlescape turn and displays it in a NumberText surface.
  */
-class TurnCounter// : public Surface//, public SavedBattleGame//, public BattlescapeGame
+class TurnCounter
+	:
+	public Surface
 {
 	private:
-//		Uint8 _tCount;
-		void setCount(int t);
-
-//		NumberText *_text;
-	//	int t = 0;
-	//	Timer *_timer;
-//		SavedBattleGame* _sbgame;
-	//	BattlescapeGame *_bsgame;
+		NumberText* _text;
+		SavedBattleGame* _sbgame;
+//		NextTurnState* _next;
+		int _tCount;
 
 	public:
 		/// Creates a new Turn counter linked to a game.
-		TurnCounter(int width, int height, int x, int y);//, SavedBattleGame battleGame);
+		TurnCounter(int width, int height, int x, int y);
 		/// Cleans up all the Turn counter resources.
 		~TurnCounter();
-		// Updates Turn counter.
-		void update(int t);
-//		Uint8 _tCount;
 
-		/// Sets the Turn counter's palette.
-/*		void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
 		/// Sets the TurnCounter's color.
 		void setColor(Uint8 color);
-		/// Handles keyboard events.
-	//	void handle(Action *action);
-		/// Advances frame counter.
-		void think();
+		/// Sets the turn that the TurnCounter will display.
+		void setTurnCount(int t);
+		/// Updates Turn counter.
+//		void update(int t);
+		void update();
+
+		/// Sets the Turn counter's palette.
+		void setPalette(SDL_Color* colors, int firstcolor = 0, int ncolors = 256);
 		/// Draws the Turn counter.
-		void draw(); */
+		void draw();
 };
 
 }

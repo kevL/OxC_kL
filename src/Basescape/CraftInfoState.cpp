@@ -56,6 +56,8 @@ CraftInfoState::CraftInfoState(Game* game, Base* base, size_t craft)
 	_base(base),
 	_craft(craft)
 {
+	Log(LOG_INFO) << "Create CraftInfoState";
+
 	// Create objects
 	_window		= new Window(this, 320, 200, 0, 0, POPUP_BOTH);
 	_btnOk		= new TextButton(64, 24, 128, 168);
@@ -169,6 +171,7 @@ CraftInfoState::CraftInfoState(Game* game, Base* base, size_t craft)
  */
 CraftInfoState::~CraftInfoState()
 {
+	Log(LOG_INFO) << "Delete CraftInfoState";
 }
 
 /**

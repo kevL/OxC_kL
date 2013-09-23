@@ -16,7 +16,9 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #define _USE_MATH_DEFINES
+
 #include <cmath>
 #include <sstream>
 #include <typeinfo>
@@ -59,6 +61,7 @@
 #include "UnitFallBState.h"
 #include "../Engine/Logger.h"
 
+
 namespace OpenXcom
 {
 
@@ -69,7 +72,7 @@ bool BattlescapeGame::_debugPlay = false;
  * @param save Pointer to the save game.
  * @param parentState Pointer to the parent battlescape state.
  */
-BattlescapeGame::BattlescapeGame(SavedBattleGame *save, BattlescapeState *parentState)
+BattlescapeGame::BattlescapeGame(SavedBattleGame* save, BattlescapeState* parentState)
 	:
 	_save(save),
 	_parentState(parentState),
@@ -77,6 +80,8 @@ BattlescapeGame::BattlescapeGame(SavedBattleGame *save, BattlescapeState *parent
 	_endTurnRequested(false),
 	_kneelReserved(false)
 {
+	Log(LOG_INFO) << "Create BattlescapeGame";
+
 	_tuReserved = BA_NONE;
 	_playerTUReserved = BA_NONE;
 	_debugPlay = false;
@@ -95,6 +100,7 @@ BattlescapeGame::BattlescapeGame(SavedBattleGame *save, BattlescapeState *parent
  */
 BattlescapeGame::~BattlescapeGame()
 {
+	Log(LOG_INFO) << "Delete BattlescapeGame";
 }
 
 /**
@@ -584,6 +590,17 @@ void BattlescapeGame::endTurn()
  */
 void BattlescapeGame::checkForCasualties(BattleItem* murderweapon, BattleUnit* murderer, bool hiddenExplosion, bool terrainExplosion)
 {
+	// kL_begin: This might crash the (battlescape) game.
+	if (murderer)
+	{
+		Log(LOG_INFO) << "BattlescapeGame::checkForCasualties() murderer = " << murderer->getId();
+	}
+	else
+	{
+		Log(LOG_INFO) << "BattlescapeGame::checkForCasualties() murderer = NULL ";
+	}
+	// kL_end.
+
 	for (std::vector<BattleUnit* >::iterator j = _save->getUnits()->begin(); j != _save->getUnits()->end(); ++j)
 	{
 		if ((*j)->getHealth() == 0
@@ -597,7 +614,7 @@ void BattlescapeGame::checkForCasualties(BattleItem* murderweapon, BattleUnit* m
 				murderer->addKillCount();
 				victim->killedBy(murderer->getFaction());
 
-				int modifier = murderer->getFaction() == FACTION_PLAYER ? _save->getMoraleModifier() : 100;
+				int modif = murderer->getFaction() == FACTION_PLAYER ? _save->getMoraleModifier() : 100;
 
 				// if there is a known murderer, he will get a morale bonus if he is of a different faction (what with neutral?)
 				if ((victim->getOriginalFaction() == FACTION_PLAYER
@@ -605,20 +622,21 @@ void BattlescapeGame::checkForCasualties(BattleItem* murderweapon, BattleUnit* m
 					|| (victim->getOriginalFaction() == FACTION_HOSTILE
 						&& murderer->getFaction() == FACTION_PLAYER))
 				{
-					murderer->moraleChange(20 * modifier / 100);
+//kL					murderer->moraleChange(20 * modif / 100);
+					murderer->moraleChange(10 * modif / 100);		// kL ( double what rest of squad gets )
 				}
 
 				// murderer will get a penalty with friendly fire
 				if (victim->getOriginalFaction() == murderer->getOriginalFaction())
 				{
-					murderer->moraleChange(-(2000 / modifier));
+					murderer->moraleChange(-(2000 / modif));
 				}
 
 				if (victim->getOriginalFaction() == FACTION_NEUTRAL)
 				{
 					if (murderer->getOriginalFaction() == FACTION_PLAYER)
 					{
-						murderer->moraleChange(-(1000 / modifier));
+						murderer->moraleChange(-(1000 / modif));
 					}
 					else
 					{
@@ -629,9 +647,9 @@ void BattlescapeGame::checkForCasualties(BattleItem* murderweapon, BattleUnit* m
 
 			if (victim->getFaction() != FACTION_NEUTRAL)
 			{
-				int modifier = _save->getMoraleModifier(victim);
-				int loserMod = victim->getFaction() == FACTION_HOSTILE ? 100 : _save->getMoraleModifier();
-				int winnerMod = victim->getFaction() == FACTION_HOSTILE ? _save->getMoraleModifier() : 100;
+				int modif = _save->getMoraleModifier(victim);
+				int loserModif = victim->getFaction() == FACTION_HOSTILE ? 100 : _save->getMoraleModifier();
+				int winnerModif = victim->getFaction() == FACTION_HOSTILE ? _save->getMoraleModifier() : 100;
 
 				for (std::vector<BattleUnit* >::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 				{
@@ -641,7 +659,7 @@ void BattlescapeGame::checkForCasualties(BattleItem* murderweapon, BattleUnit* m
 						if ((*i)->getOriginalFaction() == victim->getOriginalFaction()) // the losing squad all get a morale loss
 						{
 							int bravery = (110 - (*i)->getStats()->bravery) / 10;
-							(*i)->moraleChange(-(modifier * 200 * bravery / loserMod / 100));
+							(*i)->moraleChange(-(modif * 200 * bravery / loserModif / 100));
 
 							// revenge procedure:
 							// if the victim is hostile, the nearest other hostile will aggro if he wasn't already
@@ -687,13 +705,13 @@ void BattlescapeGame::checkForCasualties(BattleItem* murderweapon, BattleUnit* m
 						}
 						else // the winning squad all get a morale increase
 						{
-							(*i)->moraleChange(10 * winnerMod / 100);
+							(*i)->moraleChange(10 * winnerModif / 100);
 						}
 					}
 				}
 			}
 
-			if (murderweapon)
+			if (murderweapon) // kL_note: This is where units get sent to DEATH!
 			{
 				statePushNext(new UnitDieBState(this, *j, murderweapon->getRules()->getDamageType(), false));
 			}
@@ -729,7 +747,7 @@ void BattlescapeGame::checkForCasualties(BattleItem* murderweapon, BattleUnit* m
 			&& (*j)->getStatus() != STATUS_COLLAPSING
 			&& (*j)->getStatus() != STATUS_TURNING)
 		{
-			statePushNext(new UnitDieBState(this, *j, DT_STUN, true));
+			statePushNext(new UnitDieBState(this, *j, DT_STUN, true)); // kL_note: This is where units get set to STUNNED
 		}
 	}
 

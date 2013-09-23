@@ -51,6 +51,8 @@ BriefingState::BriefingState(Game* game, Craft* craft, Base* base)
 	:
 	State(game)
 {
+	Log(LOG_INFO) << "Create BriefingState";
+
 	_screen = false;
 
 	// Create objects
@@ -176,6 +178,7 @@ BriefingState::BriefingState(Game* game, Craft* craft, Base* base)
  */
 BriefingState::~BriefingState()
 {
+	Log(LOG_INFO) << "Delete BriefingState";
 }
 
 /**

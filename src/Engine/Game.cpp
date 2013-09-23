@@ -16,12 +16,15 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "Game.h"
+
 #ifdef _WIN32
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <SDL_syswm.h>
 #endif
+
 #include <sstream>
 #include <SDL_mixer.h>
 #include "State.h"
@@ -30,7 +33,6 @@
 #include "Logger.h"
 #include "../Interface/Cursor.h"
 #include "../Interface/FpsCounter.h"
-//#include "../Interface/TurnCounter.h"	// kL
 #include "../Resource/ResourcePack.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Savegame/SavedGame.h"
@@ -42,6 +44,7 @@
 #include "CrossPlatform.h"
 #include "../Menu/SaveState.h"
 
+
 namespace OpenXcom
 {
 
@@ -50,10 +53,22 @@ namespace OpenXcom
  * creates the display screen and sets up the cursor.
  * @param title Title of the game window.
  */
-Game::Game(const std::string &title)
-	: _screen(0), _cursor(0), _lang(0), _states(), _deleted(), _res(0),
-	_save(0), _rules(0), _quit(false), _init(false), _mouseActive(true)
+Game::Game(const std::string& title)
+	:
+	_screen(0),
+	_cursor(0),
+	_lang(0),
+	_states(),
+	_deleted(),
+	_res(0),
+	_save(0),
+	_rules(0),
+	_quit(false),
+	_init(false),
+	_mouseActive(true)
 {
+	Log(LOG_INFO) << "Create Game";
+
 	// Initialize SDL
 	if (SDL_Init(SDL_INIT_VIDEO) < 0)
 	{
@@ -96,7 +111,7 @@ Game::Game(const std::string &title)
 	// trap the mouse inside the window
 	if (Options::getBool("captureMouse"))
 	{
-		SDL_WM_GrabInput( SDL_GRAB_ON );
+		SDL_WM_GrabInput(SDL_GRAB_ON);
 	}
 
 	// Set the window caption
@@ -122,8 +137,12 @@ Game::Game(const std::string &title)
 	// Create display
 	Screen::BASE_WIDTH = Options::getInt("baseXResolution");
 	Screen::BASE_HEIGHT = Options::getInt("baseYResolution");
-	_screen = new Screen(Options::getInt("displayWidth"), Options::getInt("displayHeight"), 0,
-		Options::getBool("fullscreen"), Options::getInt("windowedModePositionX"), Options::getInt("windowedModePositionY"));
+	_screen = new Screen(
+			Options::getInt("displayWidth"),
+			Options::getInt("displayHeight"), 0,
+			Options::getBool("fullscreen"),
+			Options::getInt("windowedModePositionX"),
+			Options::getInt("windowedModePositionY"));
 
 	// Create cursor
 	_cursor = new Cursor(9, 13);
@@ -131,11 +150,6 @@ Game::Game(const std::string &title)
 
 	// Create fps counter
 	_fpsCounter = new FpsCounter(15, 5, 0, 0);
-
-	// kL_begin:
-	// Create turn counter
-//	_turnCounter = new TurnCounter(75, 5, 0, 0); // wide enough to fit the address..
-	// kL_end.
 
 	// Create blank language
 	_lang = new Language();
@@ -151,11 +165,13 @@ Game::Game(const std::string &title)
  */
 Game::~Game()
 {
+	Log(LOG_INFO) << "Delete Game";
+
 	if (_save != 0
 		&& _save->getMonthsPassed() >= 0
 		&& Options::getInt("autosave") == 3)
 	{
-		SaveState *ss = new SaveState(this, true, false);
+		SaveState* ss = new SaveState(this, true, false);
 		delete ss;
 	}
 
@@ -173,7 +189,6 @@ Game::~Game()
 	delete _save;
 	delete _screen;
 	delete _fpsCounter;
-//	delete _turnCounter;		// kL
 
 	Mix_CloseAudio();
 
@@ -187,9 +202,29 @@ Game::~Game()
  */
 void Game::run()
 {
-	enum ApplicationState { RUNNING = 0, SLOWED = 1, PAUSED = 2 } runningState = RUNNING;
-	static const ApplicationState kbFocusRun[4] = { RUNNING, RUNNING, SLOWED, PAUSED };
-	static const ApplicationState stateRun[4] = { SLOWED, PAUSED, PAUSED, PAUSED };
+	enum ApplicationState
+	{
+		RUNNING = 0,
+		SLOWED = 1,
+		PAUSED = 2
+	}
+	runningState = RUNNING;
+
+	static const ApplicationState kbFocusRun[4] =
+	{
+		RUNNING,
+		RUNNING,
+		SLOWED,
+		PAUSED
+	};
+
+	static const ApplicationState stateRun[4] =
+	{
+		SLOWED,
+		PAUSED,
+		PAUSED,
+		PAUSED
+	};
 
 	int pauseMode = Options::getInt("pauseMode");
 	if (pauseMode > 3) pauseMode = 3;
@@ -262,7 +297,6 @@ void Game::run()
 					_screen->handle(&action);
 					_cursor->handle(&action);
 					_fpsCounter->handle(&action);
-//					_turnCounter->handle(&action);	// kL
 					_states.back()->handle(&action);
 				break;
 			}
@@ -273,7 +307,6 @@ void Game::run()
 		{
 			// Process logic
 			_fpsCounter->think();
-//			_turnCounter->think();	// kL
 			_states.back()->think();
 
 			if (_init)
@@ -293,7 +326,6 @@ void Game::run()
 				}
 
 				_fpsCounter->blit(_screen->getSurface());
-//				_turnCounter->blit(_screen->getSurface());	// kL
 				_cursor->blit(_screen->getSurface());
 			}
 
@@ -352,7 +384,7 @@ void Game::setVolume(int sound, int music)
  * Returns the display screen used by the game.
  * @return Pointer to the screen.
  */
-Screen *Game::getScreen() const
+Screen* Game::getScreen() const
 {
 	return _screen;
 }
@@ -361,7 +393,7 @@ Screen *Game::getScreen() const
  * Returns the mouse cursor used by the game.
  * @return Pointer to the cursor.
  */
-Cursor *Game::getCursor() const
+Cursor* Game::getCursor() const
 {
 	return _cursor;
 }
@@ -370,22 +402,10 @@ Cursor *Game::getCursor() const
  * Returns the FpsCounter used by the game.
  * @return Pointer to the FpsCounter.
  */
-FpsCounter *Game::getFpsCounter() const
+FpsCounter* Game::getFpsCounter() const
 {
 	return _fpsCounter;
 }
-
-// kL_begin:
-/**
- * Returns the TurnCounter used by the game.
- * @return Pointer to the TurnCounter.
- */
-//TurnCounter *Game::getTurnCounter() const
-/* TurnCounter *BattlescapeState::getTurnCounter() const
-{
-	return _turnCounter;
-} */
-// kL_end.
 
 /**
  * Replaces a certain amount of colors in the palettes of the game's
@@ -394,14 +414,13 @@ FpsCounter *Game::getFpsCounter() const
  * @param firstcolor Offset of the first color to replace.
  * @param ncolors Amount of colors to replace.
  */
-void Game::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
+void Game::setPalette(SDL_Color* colors, int firstcolor, int ncolors)
 {
 	_screen->setPalette(colors, firstcolor, ncolors);
 	_cursor->setPalette(colors, firstcolor, ncolors);
 	_cursor->draw();
 
 	_fpsCounter->setPalette(colors, firstcolor, ncolors);
-//	_turnCounter->setPalette(colors, firstcolor, ncolors);	// kL
 
 	if (_res != 0)
 	{
@@ -415,7 +434,7 @@ void Game::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
  * like in one-way transitions.
  * @param state Pointer to the new state.
  */
-void Game::setState(State *state)
+void Game::setState(State* state)
 {
 	while (!_states.empty())
 	{
@@ -432,7 +451,7 @@ void Game::setState(State *state)
  * The new state will be used once the next game cycle starts.
  * @param state Pointer to the new state.
  */
-void Game::pushState(State *state)
+void Game::pushState(State* state)
 {
 	_states.push_back(state);
 
@@ -457,7 +476,7 @@ void Game::popState()
  * Returns the language currently in use by the game.
  * @return Pointer to the language.
  */
-Language *Game::getLanguage() const
+Language* Game::getLanguage() const
 {
 	return _lang;
 }
@@ -466,7 +485,7 @@ Language *Game::getLanguage() const
  * Changes the language currently in use by the game.
  * @param filename Filename of the language file.
  */
-void Game::loadLanguage(const std::string &filename)
+void Game::loadLanguage(const std::string& filename)
 {
 	std::stringstream ss, ss2;
 	ss << "Language/" << filename << ".lng";
@@ -492,7 +511,7 @@ void Game::loadLanguage(const std::string &filename)
  * Returns the resource pack currently in use by the game.
  * @return Pointer to the resource pack.
  */
-ResourcePack *Game::getResourcePack() const
+ResourcePack* Game::getResourcePack() const
 {
 	return _res;
 }
@@ -501,7 +520,7 @@ ResourcePack *Game::getResourcePack() const
  * Sets a new resource pack for the game to use.
  * @param res Pointer to the resource pack.
  */
-void Game::setResourcePack(ResourcePack *res)
+void Game::setResourcePack(ResourcePack* res)
 {
 	_res = res;
 }
@@ -510,7 +529,7 @@ void Game::setResourcePack(ResourcePack *res)
  * Returns the saved game currently in use by the game.
  * @return Pointer to the saved game.
  */
-SavedGame *Game::getSavedGame() const
+SavedGame* Game::getSavedGame() const
 {
 	return _save;
 }
@@ -519,7 +538,7 @@ SavedGame *Game::getSavedGame() const
  * Sets a new saved game for the game to use.
  * @param save Pointer to the saved game.
  */
-void Game::setSavedGame(SavedGame *save)
+void Game::setSavedGame(SavedGame* save)
 {
 	delete _save;
 	_save = save;
@@ -529,7 +548,7 @@ void Game::setSavedGame(SavedGame *save)
  * Returns the ruleset currently in use by the game.
  * @return Pointer to the ruleset.
  */
-Ruleset *Game::getRuleset() const
+Ruleset* Game::getRuleset() const
 {
 	return _rules;
 }
@@ -567,7 +586,7 @@ void Game::setMouseActive(bool active)
  * @brief Returns whether current state is *state
  * @param state The state to test against the stack state
  */
-bool Game::isState(State *state) const
+bool Game::isState(State* state) const
 {
 	return !_states.empty() && _states.back() == state;
 }

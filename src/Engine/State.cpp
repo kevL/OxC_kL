@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "State.h"
 #include "InteractiveSurface.h"
 #include "Game.h"
@@ -32,6 +33,7 @@
 #include "../Basescape/BaseView.h"
 #include "../Battlescape/WarningMessage.h"
 
+
 namespace OpenXcom
 {
 
@@ -40,11 +42,13 @@ namespace OpenXcom
  * By default states are full-screen.
  * @param game Pointer to the core game.
  */
-State::State(Game *game) :
+State::State(Game* game)
+	:
 	_game(game),
 	_surfaces(),
 	_screen(true)
 {
+//	Log(LOG_INFO) << "Create State";
 }
 
 /**
@@ -52,6 +56,8 @@ State::State(Game *game) :
  */
 State::~State()
 {
+//	Log(LOG_INFO) << "Delete State";
+
 	for (std::vector<Surface*>::iterator i = _surfaces.begin(); i < _surfaces.end(); ++i)
 	{
 		delete *i;
@@ -66,7 +72,7 @@ State::~State()
  * @note, Since visible elements can overlap one another, they have to
  * be added in ascending Z-Order to be blitted correctly onto the screen.
  */
-void State::add(Surface *surface)
+void State::add(Surface* surface)
 {
 	// Set palette
 	surface->setPalette(_game->getScreen()->getPalette());

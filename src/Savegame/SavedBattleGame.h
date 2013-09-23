@@ -213,7 +213,7 @@ class SavedBattleGame
 		/// Adds this unit to the vector of falling units.
 		bool addFallingUnit(BattleUnit* unit);
 		/// Gets the vector of falling units.
-		std::list<BattleUnit*> *getFallingUnits();
+		std::list<BattleUnit* >* getFallingUnits();
 		/// Toggles the switch that says "there are units falling, start the fall state".
 		void setUnitsFalling(bool fall);
 		/// Checks the status of the switch that says "there are units falling".

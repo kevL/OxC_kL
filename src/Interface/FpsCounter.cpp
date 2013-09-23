@@ -38,13 +38,15 @@ namespace OpenXcom
 FpsCounter::FpsCounter(int width, int height, int x, int y)
 	:
 //kL	Surface(width, height, x, y),
-	Surface(width, height, x, y + 12),
-	_frames(0)		// kL
+	Surface(width, height, x + 1, y + 12),	// kL
+	_frames(0)								// kL
 {
+	Log(LOG_INFO) << "Create FpsCounter";
+
 	_visible = Options::getBool("fpsCounter");
 
 	_timer = new Timer(1000);
-	_timer->onTimer((SurfaceHandler) &FpsCounter::update);
+	_timer->onTimer((SurfaceHandler)& FpsCounter::update);
 	_timer->start();
 
 	_text = new NumberText(width, height, x, y);
@@ -56,6 +58,8 @@ FpsCounter::FpsCounter(int width, int height, int x, int y)
  */
 FpsCounter::~FpsCounter()
 {
+	Log(LOG_INFO) << "Delete FpsCounter";
+
 	delete _text;
 	delete _timer;
 }
@@ -66,7 +70,7 @@ FpsCounter::~FpsCounter()
  * @param firstcolor Offset of the first color to replace.
  * @param ncolors Amount of colors to replace.
  */
-void FpsCounter::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
+void FpsCounter::setPalette(SDL_Color* colors, int firstcolor, int ncolors)
 {
 	Surface::setPalette(colors, firstcolor, ncolors);
 	_text->setPalette(colors, firstcolor, ncolors);
@@ -85,7 +89,7 @@ void FpsCounter::setColor(Uint8 color)
  * Shows / hides the FPS counter.
  * @param action Pointer to an action.
  */
-void FpsCounter::handle(Action *action)
+void FpsCounter::handle(Action* action)
 {
 	if (action->getDetails()->type == SDL_KEYDOWN
 		&& action->getDetails()->key.keysym.sym == Options::getInt("keyFps"))

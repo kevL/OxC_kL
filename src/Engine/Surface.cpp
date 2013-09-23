@@ -72,6 +72,8 @@ Surface::Surface(int width, int height, int x, int y, int bpp)
 	_misalignedPixelBuffer(0),
 	_alignedBuffer(0)
 {
+//	Log(LOG_INFO) << "Create Surface 1";
+
 	//_surface = SDL_CreateRGBSurface(SDL_SWSURFACE, width, height, 8, 0, 0, 0, 0);
 	int pitch = (bpp / 8) * ((width + 15)& ~0xF);
 
@@ -125,6 +127,8 @@ Surface::Surface(int width, int height, int x, int y, int bpp)
  */
 Surface::Surface(const Surface& other)
 {
+//	Log(LOG_INFO) << "Create Surface 2";
+
 	_surface = SDL_ConvertSurface(other._surface, other._surface->format, other._surface->flags);
 	_x = other._x;
 	_y = other._y;
@@ -145,6 +149,7 @@ Surface::Surface(const Surface& other)
  */
 Surface::~Surface()
 {
+//	Log(LOG_INFO) << "Delete Surface";
 	//if (_misalignedPixelBuffer) _surface->pixels = _misalignedPixelBuffer;
 #ifdef _WIN32
 	if (_alignedBuffer) _aligned_free(_alignedBuffer);

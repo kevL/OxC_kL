@@ -16,11 +16,13 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_MONTHLYREPORTSTATE_H
 #define OPENXCOM_MONTHLYREPORTSTATE_H
 
 #include "../Engine/State.h"
 #include <string>
+
 
 namespace OpenXcom
 {
@@ -36,24 +38,26 @@ class Globe;
  */
 class MonthlyReportState : public State
 {
-private:
-	TextButton *_btnOk;
-	Window *_window;
-	Text *_txtTitle, *_txtMonth, *_txtRating, *_txtChange, *_txtDesc, *_txtFailure;
-	bool _psi, _gameOver;
-	int _ratingTotal, _fundingDiff, _lastMonthsRating;
-	std::vector<std::string> _happyList, _sadList, _pactList;
-	Globe *_globe;
-public:
-	/// Creates the Monthly Report state.
-	MonthlyReportState(Game *game, bool psi, Globe *globe);
-	/// Cleans up the Monthly Report state.
-	~MonthlyReportState();
-	/// Updates the palette.
-	void init();
-	/// Handler for clicking the OK button.
-	void btnOkClick(Action *action);
-	void CalculateChanges();
+	private:
+		TextButton* _btnOk;
+		Window* _window;
+		Text* _txtTitle, * _txtMonth, * _txtRating, * _txtChange, * _txtDesc, * _txtFailure;
+		bool _psi, _gameOver;
+		int _ratingTotal, _fundingDiff, _lastMonthsRating;
+		std::vector<std::string> _happyList, _sadList, _pactList;
+		Globe* _globe;
+
+	public:
+		/// Creates the Monthly Report state.
+		MonthlyReportState(Game* game, bool psi, Globe* globe);
+		/// Cleans up the Monthly Report state.
+		~MonthlyReportState();
+
+		/// Updates the palette.
+		void init();
+		/// Handler for clicking the OK button.
+		void btnOkClick(Action* action);
+		void CalculateChanges();
 };
 
 }

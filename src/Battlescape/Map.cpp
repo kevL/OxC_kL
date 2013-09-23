@@ -93,6 +93,8 @@ Map::Map(Game* game, int width, int height, int x, int y, int visibleMapHeight)
 	_unitDying(false)
 
 {
+	Log(LOG_INFO) << "Create Map";
+
 	_previewSetting = Options::getInt("battleNewPreviewPath");
 
 	if (Options::getBool("traceAI"))
@@ -119,6 +121,8 @@ Map::Map(Game* game, int width, int height, int x, int y, int visibleMapHeight)
  */
 Map::~Map()
 {
+	Log(LOG_INFO) << "Delete Map";
+
 	delete _scrollMouseTimer;
 	delete _scrollKeyTimer;
 	delete _arrow;

@@ -18,47 +18,33 @@
  */
 
 #include "TurnCounter.h"
-//#include <cmath>
-//#include "../Engine/Palette.h"
-//#include "../Engine/Action.h"
-//#include "../Engine/Timer.h"
-//#include "../Engine/Options.h"
-//#include "NumberText.h"
-//#include "../Savegame/SavedBattleGame.h"		// kL
-//#include "../Battlescape/BattlescapeState.h"	// kL
-//#include "../Battlescape/BattlescapeGame.h"	// kL
+#include "NumberText.h"
+#include "../Savegame/SavedBattleGame.h"
+//#include "../Battlescape/NextTurnState.h"
+#include "../Engine/Palette.h"
 
-//#include <typeinfo>
-//using namespace std;
 
 namespace OpenXcom
 {
 
 /**
  * Creates a Turn counter of the specified size.
- * @param width Width in pixels.
- * @param height Height in pixels.
- * @param x X position in pixels.
- * @param y Y position in pixels.
+ * @param width, Width in pixels.
+ * @param height, Height in pixels.
+ * @param x, X position in pixels.
+ * @param y, Y position in pixels.
  */
-TurnCounter::TurnCounter(int width, int height, int x, int y)//, SavedBattleGame battleGame)
-//	: Surface(width, height, x, y)//, BattlescapeGame()//, _battleGame(&battleGame)
-//	:
-//	_tCount(0)
+TurnCounter::TurnCounter(int width, int height, int x, int y)
+	:
+	Surface(width, height, x + 1, y + 1),
+	_tCount(10)
 {
-	Log(LOG_INFO) << "Create TurnCounter";		// kL
+	Log(LOG_INFO) << "Create TurnCounter";
 
-//	_tCount = 0;
+	_visible = true;
 
-//	_visible = Options::getBool("fpsCounter");
-//	_visible = true;
-
-//	_timer = new Timer(1000);
-//	_timer->onTimer((SurfaceHandler) &TurnCounter::update);
-//	_timer->start();
-
-//	_text = new NumberText(width, height, x, y);
-//	setColor(Palette::blockOffset(15)+12);
+	_text = new NumberText(width, height, x, y);
+	setColor(Palette::blockOffset(15)+12);
 }
 
 /**
@@ -66,64 +52,49 @@ TurnCounter::TurnCounter(int width, int height, int x, int y)//, SavedBattleGame
  */
 TurnCounter::~TurnCounter()
 {
-	Log(LOG_INFO) << "Delete TurnCounter";		// kL
-//	delete _text;
-//	delete _timer;
+	Log(LOG_INFO) << "Delete TurnCounter";
+
+	delete _text;
 }
 
 /**
- * Updates the Turn.
+ * Sets the text color of the counter.
+ * @param color The color to set.
  */
-void TurnCounter::update(int t)
+void TurnCounter::setColor(Uint8 color)
 {
-//	Log(LOG_INFO) << ". pre Battle Turn";
+	_text->setColor(color);
+}
 
-//	tCount++;
+/**
+ * Sets the turn that the TurnCounter will display.
+ */
+void TurnCounter::setTurnCount(int t)
+{
+	_tCount = t;
+}
+		
+/**
+ * Updates the Turn display.
+ */
+// void TurnCounter::update(int t)
+void TurnCounter::update()
+{
+/*	unsigned int tCount = (unsigned int)t;
 
 	Log(LOG_INFO) << ". TurnCounter::update() : " << t;
+	Log(LOG_INFO) << ". TurnCounter::update() : " << tCount;
 
-//	_tCount = t;
-	int _tCount = t;
-//	_tCount = const_cast<int&> (t);
-//	_tCount = &t;
+//	_text->setValue((int&)t);
+	_text->setValue(tCount); */
 
-//	setCount(t);
+//	_text->setValue(_tCount);
+	Log(LOG_INFO) << ". TurnCounter::update() attempting update!";
 
-	Log(LOG_INFO) << ". TurnCounter::update() END : " << _tCount;
+//	_tCount = _sbgame->getTurn();	// crash..
+	_text->setValue(_tCount);
 
-//	SavedBattleGame turn;
-//	unsigned int t = turn.getTurn();
-
-//	SavedBattleGame *_bgame;
-//	int t = SavedBattleGame::getTurn();
-//	BattlescapeGame _bsgame;
-//	Log(LOG_INFO) << ". pre Battle Turn : " << _bsgame->getSave()->getTurn();
-//	Log(LOG_INFO) << ". Battle Turn : " << _sbgame->getTurn();
-//	int t = _battleGame->getTurn();
-//	int t = (int)(_bsgame->getSave()->getTurn());
-//	Log(LOG_INFO) << ". Battle Turn : " << t;
-
-//	_text->setValue(t);
-
-//	_turncount = 0;
-//	_redraw = true;
-}
-
-/**
- * 
- */
-void TurnCounter::setCount(int t)
-{
-	Log(LOG_INFO) << ". TurnCounter::setCount() : " << t;
-//	Log(LOG_INFO) << ". . typeof (t) : " << typeid(t).name();
-//	Log(LOG_INFO) << ". . typeof (_tCount) : " << typeid(_tCount).name();
-
-//	Uint8 TEMP = (unsigned char)t;
-//	Log(LOG_INFO) << ". . typeof (TEMP) : " << typeid(TEMP).name();
-
-//	_tCount = (unsigned char)t;
-
-	Log(LOG_INFO) << ". TurnCounter::setCount() END";
+	_redraw = true;
 }
 
 /**
@@ -132,51 +103,19 @@ void TurnCounter::setCount(int t)
  * @param firstcolor Offset of the first color to replace.
  * @param ncolors Amount of colors to replace.
  */
-/* void TurnCounter::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
+void TurnCounter::setPalette(SDL_Color* colors, int firstcolor, int ncolors)
 {
 	Surface::setPalette(colors, firstcolor, ncolors);
 	_text->setPalette(colors, firstcolor, ncolors);
-} */
-
-/**
- * Sets the text color of the counter.
- * @param color The color to set.
- */
-/* void TurnCounter::setColor(Uint8 color)
-{
-	_text->setColor(color);
-} */
-
-/**
- * Shows / hides the Turn counter.
- * @param action Pointer to an action.
- */
-/* void TurnCounter::handle(Action *action)
-{
-	if (action->getDetails()->type == SDL_KEYDOWN
-		&& action->getDetails()->key.keysym.sym == Options::getInt("keyFps"))
-	{
-		_visible = !_visible;
-		Options::setBool("fpsCounter", _visible);
-	}
-} */
-
-/**
- * Advances turn counter.
- */
-/* void TurnCounter::think()
-{
-//	_turncount++;
-//	_timer->think(0, this);
-} */
+}
 
 /**
  * Draws the Turn counter.
  */
-/* void TurnCounter::draw()
+void TurnCounter::draw()
 {
 	Surface::draw();
 	_text->blit(this);
-} */
+}
 
 }

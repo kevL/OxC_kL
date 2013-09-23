@@ -58,6 +58,7 @@ UnitSprite::UnitSprite(int width, int height, int x, int y)
 	_part(0),
 	_animationFrame(0)
 {
+//	Log(LOG_INFO) << "Create UnitSprite";
 }
 
 /**
@@ -65,6 +66,7 @@ UnitSprite::UnitSprite(int width, int height, int x, int y)
  */
 UnitSprite::~UnitSprite()
 {
+//	Log(LOG_INFO) << "Delete UnitSprite";
 }
 
 /**
@@ -301,7 +303,7 @@ void UnitSprite::drawRoutine0()
 	// when walking, torso(fixed sprite) has to be animated up/down
 	if (isWalking)
 	{
-		Log(LOG_INFO) << "UnitSprite::drawRoutine0() : " << _unit->getId() << " STATUS_WALKING";	// kL
+//		Log(LOG_INFO) << "UnitSprite::drawRoutine0() : " << _unit->getId() << " STATUS_WALKING";	// kL
 
 		torso->setY(yoffWalk[_unit->getWalkingPhase()]);
 		if (_drawingRoutine == 10)
@@ -314,19 +316,19 @@ void UnitSprite::drawRoutine0()
 	{
 		if (isKneeled)
 		{
-			Log(LOG_INFO) << "UnitSprite::drawRoutine0() : " << _unit->getId() << " isKneeled";	// kL
+//			Log(LOG_INFO) << "UnitSprite::drawRoutine0() : " << _unit->getId() << " isKneeled";	// kL
 
 			legs = _unitSurface->getFrame(legsKneel + _unit->getDirection());
 		}
 		else if (_unit->isFloating() && _unit->getArmor()->getMovementType() == MT_FLY)
 		{
-			Log(LOG_INFO) << "UnitSprite::drawRoutine0() : " << _unit->getId() << " isFloating in FlyingSuit";	// kL
+//			Log(LOG_INFO) << "UnitSprite::drawRoutine0() : " << _unit->getId() << " isFloating in FlyingSuit";	// kL
 
 			legs = _unitSurface->getFrame(legsFloat + _unit->getDirection());
 		}
 		else
 		{
-			Log(LOG_INFO) << "UnitSprite::drawRoutine0() : " << _unit->getId() << " etc.";	// kL
+//			Log(LOG_INFO) << "UnitSprite::drawRoutine0() : " << _unit->getId() << " etc.";	// kL
 
 			legs = _unitSurface->getFrame(legsStand + _unit->getDirection());
 		}

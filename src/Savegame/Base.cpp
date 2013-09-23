@@ -360,10 +360,10 @@ void Base::setEngineers(int engineers)
 /**
  * Returns if a certain target is covered by the base's
  * radar range, taking in account the range and chance.
- * @param target Pointer to target to compare.
- * @return True if it's within range, False otherwise.
+ * @param target, Pointer to target to compare.
+ * @return, True if it's within range, False otherwise.
  */
-bool Base::detect(Target *target) const
+bool Base::detect(Target* target) const
 {
 	int chance = 0;
 	double distance = getDistance(target);
@@ -384,7 +384,7 @@ bool Base::detect(Target *target) const
 	if (chance == 0)
 		return false;
 
-	Ufo *u = dynamic_cast<Ufo*>(target);
+	Ufo* u = dynamic_cast<Ufo* >(target);
 	if (u != 0)
 	{
 		chance = (chance * 100 + u->getVisibility()) / 100;
@@ -392,7 +392,7 @@ bool Base::detect(Target *target) const
 
 //kL	int detection = RNG::generate(0, 100);
 //kL	return (detection < chance);
-	return RNG::generate(0, 100) < chance;		// kL
+	return RNG::generate(0, 99) < chance;		// kL
 }
 
 /**

@@ -94,7 +94,7 @@ namespace OpenXcom
  * Initializes all the elements in the Battlescape screen.
  * @param game Pointer to the core game.
  */
-BattlescapeState::BattlescapeState(Game *game)
+BattlescapeState::BattlescapeState(Game* game)
 	:
 	State(game),
 	_popups()
@@ -184,18 +184,22 @@ BattlescapeState::BattlescapeState(Game *game)
 	_txtDebug		= new Text(300, 10, 20, 0);
 	_txtTooltip		= new Text(300, 10, _icons->getX() + 2, _icons->getY() - 10);
 
-	_reserve = _btnReserveNone;
-
 	// kL_begin:
-	// Create turn counter
-//	BattlescapeState *bs = new BattlescapeState(_game);
-//	BattlescapeState *bs;
-//	_turnCounter = new TurnCounter(75, 5, 0, 0, _save); // wide enough to fit the address..
-	Log(LOG_INFO) << ". new TurnCounter";
-	_turnCounter = new TurnCounter(70, 5, 0, 0);//, *(_battleGame->getSave())); // wide enough to fit the address..
-	Log(LOG_INFO) << ". new TurnCounter DONE";
-//	_turnCounter->setPalette(colors, firstcolor, ncolors);
+	// create TurnCounter
+//	Log(LOG_INFO) << ". new TurnCounter";
+	_turnCounter	= new TurnCounter(30, 5, 0, 0);		// kL
+//	Log(LOG_INFO) << ". new TurnCounter DONE";
+
+//	add(_turnCounter);
+
+//	_turnCounter->setColor(Palette::blockOffset(9));
+
+//	_turnCounter->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
+//	getTurnCounter()->setColor(Palette::blockOffset(9));
+
 	// kL_end.
+
+	_reserve = _btnReserveNone;
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_4")->getColors());
@@ -220,11 +224,15 @@ BattlescapeState::BattlescapeState(Game *game)
 						{	3,		3,		6,		0	}
 						};
 
-	_game->setPalette(color, Palette::backPos+16, 16);
+	_game->setPalette(color, Palette::backPos + 16, 16);
+//	_turnCounter->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_4")->getColors());	// kL
 
 	// Fix system colors
 	_game->getCursor()->setColor(Palette::blockOffset(9));
 	_game->getFpsCounter()->setColor(Palette::blockOffset(9));
+
+	_turnCounter->setColor(Palette::blockOffset(9));	// kL
+	add(_turnCounter);									// kL
 
 	add(_map);
 	add(_icons);
@@ -288,8 +296,8 @@ BattlescapeState::BattlescapeState(Game *game)
 	_map->onMouseIn((ActionHandler)&BattlescapeState::mapIn);
 
 	// there is some cropping going on here, because the icons image is 320x200 while we only need the bottom of it.
-	Surface *s = _game->getResourcePack()->getSurface("ICONS.PCK");
-	SDL_Rect *r = s->getCrop();
+	Surface* s = _game->getResourcePack()->getSurface("ICONS.PCK");
+	SDL_Rect* r = s->getCrop();
 	r->x = 0;
 	r->y = 200 - iconsHeight;
 	r->w = iconsWidth;
@@ -526,7 +534,7 @@ BattlescapeState::~BattlescapeState()
 	delete _animTimer;
 	delete _gameTimer;
 	delete _battleGame;
-	delete _turnCounter;		// kL
+//	delete _turnCounter;		// kL
 }
 
 /**
@@ -534,14 +542,16 @@ BattlescapeState::~BattlescapeState()
  */
 void BattlescapeState::init()
 {
+//	Log(LOG_INFO) << "BattlescapeState::init()";		// kL
+
 	_map->focus();
 	_map->cacheUnits();
 	_map->draw();
 	_battleGame->init();
 
-	updateSoldierInfo();
+	_turnCounter->draw();		// kL
 
-//	_turnCounter->update();		// kL
+	updateSoldierInfo();
 
 	if (firstInit
 		&& playableUnitSelected())
@@ -551,6 +561,7 @@ void BattlescapeState::init()
 
 		firstInit = false;
 	}
+
 	_txtTooltip->setText(L"");
 }
 
@@ -570,16 +581,6 @@ void BattlescapeState::think()
 			_battleGame->think();
 			_animTimer->think(this, 0);
 			_gameTimer->think(this, 0);
-
-//			_turnCounter->think();		// kL
-//				_turnCounter->blit(_screen->getSurface());	// kL
-
-//			_turnCounter->update();		// kL
-//			_turnCounter->draw();		// kL
-//	Log(LOG_INFO) << ". pre Battle Turn";
-//	SavedBattleGame *truc;
-//	int t = truc->getTurn();
-//	Log(LOG_INFO) << ". Battle Turn : " << t;
 
 			if (popped)
 			{
@@ -1017,12 +1018,17 @@ void BattlescapeState::btnHelpClick(Action *)
  * so all ongoing actions, like explosions are finished first before really switching turn.
  * @param action Pointer to an action.
  */
-void BattlescapeState::btnEndTurnClick(Action *)
+void BattlescapeState::btnEndTurnClick(Action* )
 {
 	if (allowButtons())
 	{
 		_txtTooltip->setText(L"");
 		_battleGame->requestEndTurn();
+
+//		SavedBattleGame sbg;						// kL
+//		_turnCounter->update(sbg.getTurn());		// kL
+		_turnCounter->update();						// kL
+//		_turnCounter->blit(_screen->getSurface());	// kL
 	}
 }
 
@@ -2021,7 +2027,8 @@ bool BattlescapeState::getMouseOverIcons() const
  */
 bool BattlescapeState::allowButtons() const
 {
-	return (_save->getSide() == FACTION_PLAYER || _save->getDebugMode()) && _map->getProjectile() == 0;
+	return (_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
+		&& _map->getProjectile() == 0;
 }
 
 /**
@@ -2099,10 +2106,10 @@ void BattlescapeState::txtTooltipOut(Action *action)
  * Returns the TurnCounter used by the game.
  * @return Pointer to the TurnCounter.
  */
-/* TurnCounter *BattlescapeState::getTurnCounter() const
+TurnCounter* BattlescapeState::getTurnCounter() const
 {
 	return _turnCounter;
-} */
+}
 // kL_end.
 
 }

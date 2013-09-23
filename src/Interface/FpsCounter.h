@@ -22,6 +22,7 @@
 
 #include "../Engine/Surface.h"
 
+
 namespace OpenXcom
 {
 
@@ -30,32 +31,35 @@ class Timer;
 class Action;
 
 /**
- * Counts the amount of frames each second
- * and displays them in a NumberText surface.
+ * Counts the amount of frames each second and displays them in a NumberText surface.
  */
-class FpsCounter : public Surface
+class FpsCounter
+	:
+	public Surface
 {
-private:
-	NumberText *_text;
-	Timer *_timer;
-	int _frames;
-public:
-	/// Creates a new FPS counter linked to a game.
-	FpsCounter(int width, int height, int x, int y);
-	/// Cleans up all the FPS counter resources.
-	~FpsCounter();
-	/// Sets the FPS counter's palette.
-	void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
-	/// Sets the FpsCounter's color.
-	void setColor(Uint8 color);
-	/// Handles keyboard events.
-	void handle(Action *action);
-	/// Advances frame counter.
-	void think();
-	// Updates FPS counter.
-	void update();
-	/// Draws the FPS counter.
-	void draw();
+	private:
+		NumberText* _text;
+		Timer* _timer;
+		int _frames;
+
+	public:
+		/// Creates a new FPS counter linked to a game.
+		FpsCounter(int width, int height, int x, int y);
+		/// Cleans up all the FPS counter resources.
+		~FpsCounter();
+
+		/// Sets the FPS counter's palette.
+		void setPalette(SDL_Color* colors, int firstcolor = 0, int ncolors = 256);
+		/// Sets the FpsCounter's color.
+		void setColor(Uint8 color);
+		/// Handles keyboard events.
+		void handle(Action* action);
+		/// Advances frame counter.
+		void think();
+		// Updates FPS counter.
+		void update();
+		/// Draws the FPS counter.
+		void draw();
 };
 
 }

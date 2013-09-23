@@ -89,6 +89,7 @@ BattlescapeGenerator::BattlescapeGenerator(Game* game)
 	_alienRace(""),
 	_alienItemLevel(0)
 {
+	Log(LOG_INFO) << "Create BattlescapeGenerator";
 }
 
 /**
@@ -96,6 +97,7 @@ BattlescapeGenerator::BattlescapeGenerator(Game* game)
  */
 BattlescapeGenerator::~BattlescapeGenerator()
 {
+	Log(LOG_INFO) << "Delete BattlescapeGenerator";
 }
 
 /**

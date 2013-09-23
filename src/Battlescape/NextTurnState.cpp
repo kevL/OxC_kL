@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "NextTurnState.h"
 #include <sstream>
 #include "../Engine/Game.h"
@@ -29,7 +30,8 @@
 #include "DebriefingState.h"
 #include "../Interface/Cursor.h"
 #include "BattlescapeState.h"
-#include "../Interface/TurnCounter.h"	// kL
+//#include "../Interface/TurnCounter.h"	// kL
+
 
 namespace OpenXcom
 {
@@ -40,15 +42,13 @@ namespace OpenXcom
  * @param battleGame Pointer to the saved game.
  * @param state Pointer to the Battlescape state.
  */
-NextTurnState::NextTurnState(Game *game, SavedBattleGame *battleGame, BattlescapeState *state)
-// NextTurnState::NextTurnState(Game *game, SavedBattleGame *battleGame, BattlescapeState *state, TurnCounter* turnCounter)		// kL
+NextTurnState::NextTurnState(Game* game, SavedBattleGame* battleGame, BattlescapeState* state)
 	:
 	State(game),
 	_battleGame(battleGame),
 	_state(state)
-//	_turnCounter(turnCounter)		// kL
 {
-	Log(LOG_INFO) << "Create NextTurnState";		// kL
+	Log(LOG_INFO) << "Create NextTurnState";	// kL
 
 	// Create objects
 	_window		= new Window(this, 320, 200, 0, 0);
@@ -81,7 +81,7 @@ NextTurnState::NextTurnState(Game *game, SavedBattleGame *battleGame, Battlescap
 	_txtTurn->setAlign(ALIGN_CENTER);
 	_txtTurn->setHighContrast(true);
 	std::wstringstream ss;
-	Log(LOG_INFO) << ". SavedBattleGame::getTurn() : " << _battleGame->getTurn();	// kL
+	Log(LOG_INFO) << ". NextTurnState -> SavedBattleGame::getTurn() : " << _battleGame->getTurn();	// kL
 	ss << _game->getLanguage()->getString("STR_TURN") << L" " << _battleGame->getTurn();
 	_txtTurn->setText(ss.str());
 
@@ -100,8 +100,6 @@ NextTurnState::NextTurnState(Game *game, SavedBattleGame *battleGame, Battlescap
 	_txtMessage->setText(_game->getLanguage()->getString("STR_PRESS_BUTTON_TO_CONTINUE"));
 
 	_state->clearMouseScrollingState();
-
-	_turnCounter->update(_battleGame->getTurn());		// kL
 }
 
 /**
@@ -110,15 +108,13 @@ NextTurnState::NextTurnState(Game *game, SavedBattleGame *battleGame, Battlescap
 NextTurnState::~NextTurnState()
 {
 	Log(LOG_INFO) << "Delete NextTurnState";		// kL
-
-//	delete _turnCounter;							// kL
 }
 
 /**
  * Closes the window.
  * @param action Pointer to an action.
  */
-void NextTurnState::handle(Action *action)
+void NextTurnState::handle(Action* action)
 {
 	State::handle(action);
 
@@ -139,9 +135,7 @@ void NextTurnState::handle(Action *action)
 		{
 			_state->btnCenterClick(0);
 
-//			Log(LOG_INFO) << ". call TC_update";		// kL
-//			_turnCounter->update();		// kL
-//			_turnCounter->draw();		// kL
+//			_turnCounter->setTurnCount(_battleGame->getTurn());		// kL
 		}
 	}
 }

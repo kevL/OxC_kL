@@ -81,6 +81,8 @@ SavedBattleGame::SavedBattleGame()
 	_sneaky(false),
 	_traceAI(false)
 {
+	Log(LOG_INFO) << "Create SavedBattleGame";
+
 	_dragButton			= Options::getInt("battleScrollDragButton");
 	_dragInvert			= Options::getBool("battleScrollDragInvert");
 	_dragTimeTolerance	= Options::getInt("battleScrollDragTimeTolerance");
@@ -95,6 +97,8 @@ SavedBattleGame::SavedBattleGame()
  */
 SavedBattleGame::~SavedBattleGame()
 {
+	Log(LOG_INFO) << "Delete SavedBattleGame";
+
 	for (int i = 0; i < _mapsize_z * _mapsize_y * _mapsize_x; ++i)
 	{
 		delete _tiles[i];
@@ -792,7 +796,7 @@ UnitFaction SavedBattleGame::getSide() const
 
 /**
  * Gets the current turn number.
- * @return The current turn.
+ * @return, The current turn.
  */
 int SavedBattleGame::getTurn() const
 {
@@ -1632,11 +1636,13 @@ bool SavedBattleGame::getTraceSetting() const
 
 /**
  * Gets the highest ranked, living XCom unit.
+ * kL_note: I think this might check *both* factions....
  * @return, The highest ranked, living XCom unit.
  */
 BattleUnit* SavedBattleGame::getHighestRankedXCom()
 {
 	BattleUnit* leader = 0;
+
 	for (std::vector<BattleUnit* >::iterator j = _units.begin(); j != _units.end(); ++j)
 	{
 		if ((*j)->getOriginalFaction() == FACTION_PLAYER
@@ -1664,45 +1670,60 @@ int SavedBattleGame::getMoraleModifier(BattleUnit* unit)
 {
 	int result = 100;
 
-	if (unit == 0)
+	if (unit == 0) // leadership Bonus
 	{
 		BattleUnit* leader = getHighestRankedXCom();
 		if (leader)
 		{
 			switch (leader->getRankInt())
 			{
-				case 5:
-					result += 25;
-				case 4:
-					result += 10;
-				case 3:
-					result += 5;
-				case 2:
-					result += 10;
+				case 5:					// commander
+//kL					result += 25;	// 150
+					result += 15;		// 135 kL, per ufoPedia.org
+				case 4:					// colonel
+//kL					result += 10;	// 125
+					result += 5;		// 120 kL, per ufoPedia.org
+				case 3:					// captain
+					result += 5;		// 115
+				case 2:					// sergeant
+					result += 10;		// 110
 
 				default:
 				break;
 			}
+
+			Log(LOG_INFO) << "SavedBattleGame::getMoraleModifier() leaderBonus = " << result;
 		}
 	}
-	else if (unit->getFaction() == FACTION_PLAYER)
+	else if (unit->getFaction() == FACTION_PLAYER) // morale Loss when 'unit' slain
 	{
 		switch (unit->getRankInt())
 		{
-			case 5:
-				result += 25;
-			case 4:
-				result += 20;
-			case 3:
-				result += 10;
-			case 2:
-				result += 20;
+			case 5:					// commander
+//kL				result += 25;	// 175 (stock)
+				result += 30;		// 200 kL
+			case 4:					// colonel
+//kL				result += 20;	// 150 (stock)
+				result += 25;		// 170 kL
+			case 3:					// captain
+//kL				result += 10;	// 130 (stock)
+				result += 20;		// 145 kL
+			case 2:					// sergeant
+//kL				result += 20;	// 120 (stock)
+				result += 10;		// 125 kL
+			// kL_begin:
+			case 1:					// squaddie
+				result += 15;		// 115 kL
+			// kL_end.
 
 			default:
 			break;
 		}
+
+		Log(LOG_INFO) << "SavedBattleGame::getMoraleModifier() penaltyRank = " << result;
 	}
 
+//	Log(LOG_INFO) << "SavedBattleGame::getMoraleModifier() = " << result;
 	return result;
 }
 

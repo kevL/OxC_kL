@@ -42,35 +42,35 @@ class CraftSoldiersState
 {
 	private:
 //kL		TextButton *_btnOk;
-		TextButton *_btnOk, *_btnUnload;	// kL
-		Window *_window;
-		Text *_txtTitle, *_txtName, *_txtRank, *_txtCraft, *_txtAvailable, *_txtUsed;
-		TextList *_lstSoldiers;
+		TextButton* _btnOk, * _btnUnload;	// kL
+		Window* _window;
+		Text* _txtTitle, * _txtName, * _txtRank, * _txtCraft, * _txtAvailable, * _txtUsed;
+		TextList* _lstSoldiers;
 
-		Base *_base;
+		Base* _base;
 		size_t _craft;
 
 	public:
 		/// Creates the Craft Soldiers state.
-		CraftSoldiersState(Game *game, Base *base, size_t craft);
+		CraftSoldiersState(Game* game, Base* base, size_t craft);
 		/// Cleans up the Craft Soldiers state.
 		~CraftSoldiersState();
 
 		/// Handler for clicking the OK button.
-		void btnOkClick(Action *action);
+		void btnOkClick(Action* action);
 		/// Handler for clicking the Unload button.
 		/// * NB: This relies on no two transport craft having the same name!!!!!
 		/// * See, void CraftInfoState::edtCraftKeyPress(Action* action) etc.
-		void btnUnloadClick(Action *action);	// kL
+		void btnUnloadClick(Action* action);	// kL
 
 		/// Shows Soldiers in a list.
 		void populateList();
 		/// Handler for clicking the Soldiers reordering button.
-		void lstItemsLeftArrowClick(Action *action);
+		void lstItemsLeftArrowClick(Action* action);
 		/// Handler for clicking the Soldiers reordering button.
-		void lstItemsRightArrowClick(Action *action);
+		void lstItemsRightArrowClick(Action* action);
 		/// Handler for clicking the Soldiers list.
-		void lstSoldiersClick(Action *action);
+		void lstSoldiersClick(Action* action);
 };
 
 }

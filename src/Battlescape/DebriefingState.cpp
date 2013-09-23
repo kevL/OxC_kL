@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "DebriefingState.h"
 #include "CannotReequipState.h"
 #include "../Engine/Game.h"
@@ -56,6 +57,7 @@
 #include "../Interface/Cursor.h"
 #include "../Engine/Options.h"
 
+
 namespace OpenXcom
 {
 
@@ -63,23 +65,30 @@ namespace OpenXcom
  * Initializes all the elements in the Debriefing screen.
  * @param game Pointer to the core game.
  */
-DebriefingState::DebriefingState(Game *game) : State(game), _region(0), _country(0), _noContainment(false), _destroyBase(false)
+DebriefingState::DebriefingState(Game* game)
+	:
+	State(game),
+	_region(0),
+	_country(0),
+	_noContainment(false),
+	_destroyBase(false)
 {
 	// Restore the cursor in case something weird happened
 	_game->getCursor()->setVisible(true);
 	_containmentLimit = Options::getBool("alienContainmentLimitEnforced") ? 1 : 0;
+
 	// Create objects
-	_window = new Window(this, 320, 200, 0, 0);
-	_btnOk = new TextButton(40, 12, 16, 180);
-	_txtTitle = new Text(280, 16, 16, 8);
-	_txtItem = new Text(180, 9, 16, 24);
-	_txtQuantity = new Text(60, 9, 200, 24);
-	_txtScore = new Text(55, 9, 260, 24);
-	_txtRecovery = new Text(180, 9, 16, 60);
-	_txtRating = new Text(120, 9, 64, 180);
-	_lstStats = new TextList(280, 80, 16, 32);
-	_lstRecovery = new TextList(280, 80, 16, 32);
-	_lstTotal = new TextList(280, 9, 16, 12);
+	_window			= new Window(this, 320, 200, 0, 0);
+	_btnOk			= new TextButton(40, 12, 16, 180);
+	_txtTitle		= new Text(280, 16, 16, 8);
+	_txtItem		= new Text(180, 9, 16, 24);
+	_txtQuantity	= new Text(60, 9, 200, 24);
+	_txtScore		= new Text(55, 9, 260, 24);
+	_txtRecovery	= new Text(180, 9, 16, 60);
+	_txtRating		= new Text(120, 9, 64, 180);
+	_lstStats		= new TextList(280, 80, 16, 32);
+	_lstRecovery	= new TextList(280, 80, 16, 32);
+	_lstTotal		= new TextList(280, 9, 16, 12);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
@@ -172,6 +181,7 @@ DebriefingState::DebriefingState(Game *game) : State(game), _region(0), _country
 	{
 		_region->addActivityXcom(total);
 	}
+
 	if (_country)
 	{
 		_country->addActivityXcom(total);
@@ -199,11 +209,13 @@ DebriefingState::DebriefingState(Game *game) : State(game), _region(0), _country
 	{
 		rating += _game->getLanguage()->getString("STR_RATING_POOR");
 	}
-	else if (total <= 200)
+//kL	else if (total <= 200)
+	else if (total <= 500)		// kL
 	{
 		rating += _game->getLanguage()->getString("STR_RATING_OK");
 	}
-	else if (total <= 500)
+// kL	else if (total <= 500)
+	else if (total <= 1000)		// kL
 	{
 		rating += _game->getLanguage()->getString("STR_RATING_GOOD");
 	}
@@ -211,6 +223,7 @@ DebriefingState::DebriefingState(Game *game) : State(game), _region(0), _country
 	{
 		rating += _game->getLanguage()->getString("STR_RATING_EXCELLENT");
 	}
+
 	_txtRating->setText(rating);
 
 	// Set music
@@ -226,10 +239,12 @@ DebriefingState::~DebriefingState()
 	{
 		_game->getSavedGame()->setBattleGame(0);
 	}
+
 	for (std::vector<DebriefingStat*>::iterator i = _stats.begin(); i != _stats.end(); ++i)
 	{
 		delete *i;
 	}
+
 	_rounds.clear();
 }
 
@@ -241,6 +256,7 @@ void DebriefingState::btnOkClick(Action *)
 {
 	_game->getSavedGame()->setBattleGame(0);
 	_game->popState();
+
 	if (_game->getSavedGame()->getMonthsPassed() == -1)
 	{
 		_game->setState(new MainMenuState(_game));
@@ -251,10 +267,12 @@ void DebriefingState::btnOkClick(Action *)
 		{
 			_game->pushState(new PromotionsState(_game));
 		}
+
 		if (!_missingItems.empty())
 		{
 			_game->pushState(new CannotReequipState(_game, _missingItems));
 		}
+
 		if (_noContainment)
 		{
 			_game->pushState (new NoContainmentState(_game));
@@ -284,15 +302,22 @@ void DebriefingState::addStat(const std::string &name, int quantity, int score)
 /**
  * Clears the alien base from supply missions that use it.
  */
-class ClearAlienBase: public std::unary_function<AlienMission *, void>
+class ClearAlienBase: public std::unary_function<AlienMission*, void>
 {
-public:
-	/// Remembers the base.
-	ClearAlienBase(const AlienBase *base) : _base(base) { /* Empty by design. */ }
-	/// Clears the base if required.
-	void operator()(AlienMission *am) const;
-private:
-	const AlienBase *_base;
+	private:
+		const AlienBase* _base;
+
+	public:
+		/// Remembers the base.
+		ClearAlienBase(const AlienBase* base)
+			:
+			_base(base)
+			{
+				/* Empty by design. */
+			}
+
+		/// Clears the base if required.
+		void operator()(AlienMission* am) const;
 };
 
 /**
@@ -478,7 +503,8 @@ void DebriefingState::prepareDebriefing()
 			{
 				if (destroyAlienBase)
 				{
-					addStat("STR_ALIEN_BASE_CONTROL_DESTROYED", 1, 500);
+//kL					addStat("STR_ALIEN_BASE_CONTROL_DESTROYED", 1, 500);
+					addStat("STR_ALIEN_BASE_CONTROL_DESTROYED", 1, 350);		// kL
 					success = true;
 					// Take care to remove supply missions for this base.
 					std::for_each(save->getAlienMissions().begin(), save->getAlienMissions().end(),

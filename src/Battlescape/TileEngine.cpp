@@ -882,7 +882,7 @@ void TileEngine::calculateFOV(const Position &position)
  */
 bool TileEngine::checkReactionFire(BattleUnit* unit)
 {
-	//Log(LOG_INFO) << "Battlescape/TileEngine.cpp checkReactionFire() vs." << (unit->getId());	// kL
+//	Log(LOG_INFO) << "Battlescape/TileEngine.cpp checkReactionFire() vs." << unit->getId();	// kL
 
 	// reaction fire only triggered when the actioning unit is of the currently playing side
 	if (unit->getFaction() != _save->getSide())
@@ -906,14 +906,24 @@ bool TileEngine::checkReactionFire(BattleUnit* unit)
 //		Log(LOG_INFO) << ". Target = VALID";	// kL
 
 		std::vector<BattleUnit* > spotters = getSpottingUnits(unit);	// kL, from above.
+
+//		Log(LOG_INFO) << ". # spotters = " << spotters.size();		// kL
+
 		BattleUnit* reactor = getReactor(spotters, unit);
 		if (reactor != unit)
 		{
 /*			while (true)
 			{
 				if (!tryReactionSnap(reactor, unit))
+				{
+//					Log(LOG_INFO) << ". . no Snap by : " << reactor->getId();		// kL
 					break;
-				else result = true;		// kL
+				}
+				else	// kL
+				{
+//					Log(LOG_INFO) << ". . Snap by : " << reactor->getId();		// kL
+					result = true;		// kL
+				}
 
 				reactor = getReactor(spotters, unit);
 //kL				result = true;
@@ -923,20 +933,24 @@ bool TileEngine::checkReactionFire(BattleUnit* unit)
 			// kL_begin:
 			for (std::vector<BattleUnit* >::iterator i = spotters.begin(); i != spotters.end(); ++i)
 			{
-//				Log(LOG_INFO) << ". . Test shooter : " << (reactor->getId());		// kL
-
 //				if (reactor == unit) continue;
 				if (tryReactionSnap(reactor, unit))
 				{
-//					Log(LOG_INFO) << ". . Snap by : " << (reactor->getId());		// kL
+//					Log(LOG_INFO) << ". . Snap by : " << reactor->getId();		// kL
 					result = true;
 				}
 
 				reactor = getReactor(spotters, unit);
-				if (reactor == unit) break;
+				if (reactor == unit)
+				{
+//					Log(LOG_INFO) << ". . . unit has regained Initiative !";		// kL
+
+					break;
+				}
 			}
 			// kL_end.
 		}
+//		else Log(LOG_INFO) << ". . Reactor == unit, EXIT false";		// kL
 	}
 
 	return result;
@@ -950,6 +964,8 @@ bool TileEngine::checkReactionFire(BattleUnit* unit)
 std::vector<BattleUnit *> TileEngine::getSpottingUnits(BattleUnit* unit)
 {
 	std::vector<BattleUnit*> spotters;
+
+//	Log(LOG_INFO) << "getSpottingUnits() " << (unit)->getId() << " : " << (unit)->getReactionScore();		// kL
 
 	for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 	{
@@ -973,6 +989,8 @@ std::vector<BattleUnit *> TileEngine::getSpottingUnits(BattleUnit* unit)
 				if (_save->getSide() != FACTION_NEUTRAL		// no reaction on civilian turn.
 					&& canMakeSnap(*i, unit))
 				{
+//					Log(LOG_INFO) << "getSpottingUnits() " << (*i)->getId() << " : " << (*i)->getReactionScore();		// kL
+
 					spotters.push_back(*i);
 				}
 			}

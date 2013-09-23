@@ -16,7 +16,9 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #define _USE_MATH_DEFINES
+
 #include "BattleUnit.h"
 #include "BattleItem.h"
 #include <cmath>
@@ -37,6 +39,7 @@
 #include "../Ruleset/RuleSoldier.h"
 #include "Tile.h"
 #include "SavedGame.h"
+
 
 namespace OpenXcom
 {
@@ -194,6 +197,8 @@ BattleUnit::BattleUnit(Unit* unit, UnitFaction faction, int id, Armor* armor, in
 	_turretType(-1),
 	_hidingForTurn(false)
 {
+//	Log(LOG_INFO) << "Create BattleUnit";
+
 	_type = unit->getType();
 	_rank = unit->getRank();
 	_race = unit->getRace();
@@ -245,6 +250,8 @@ BattleUnit::BattleUnit(Unit* unit, UnitFaction faction, int id, Armor* armor, in
  */
 BattleUnit::~BattleUnit()
 {
+//	Log(LOG_INFO) << "Delete BattleUnit";
+
 	for (int i = 0; i < 5; ++i)
 	{
 		if (_cache[i]) delete _cache[i];
@@ -480,6 +487,8 @@ UnitStatus BattleUnit::getStatus() const
  */
 void BattleUnit::startWalking(int direction, const Position& destination, Tile* tileBelow, bool cache)
 {
+	Log(LOG_INFO) << "BattleUnit::startWalking()";		// kL
+
 	_walkPhase = 0;
 	_destination = destination;
 	_lastPos = _pos;
@@ -487,14 +496,14 @@ void BattleUnit::startWalking(int direction, const Position& destination, Tile* 
 
 	if (direction >= Pathfinding::DIR_UP)
 	{
-		Log(LOG_INFO) << "BattleUnit::startWalking(), STATUS_FLYING";		// kL
+//		Log(LOG_INFO) << "BattleUnit::startWalking(), STATUS_FLYING";		// kL
 
 		_verticalDirection = direction;
 		_status = STATUS_FLYING;
 	}
 	else
 	{
-		Log(LOG_INFO) << "BattleUnit::startWalking(), STATUS_WALKING";		// kL
+//		Log(LOG_INFO) << "BattleUnit::startWalking(), STATUS_WALKING";		// kL
 
 		_direction = direction;
 		_status = STATUS_WALKING;
@@ -520,9 +529,9 @@ void BattleUnit::startWalking(int direction, const Position& destination, Tile* 
  */
 void BattleUnit::keepWalking(Tile* tileBelow, bool cache)
 {
-	Log(LOG_INFO) << "BattleUnit::keepWalking()";		// kL
-
 	_walkPhase++;
+	Log(LOG_INFO) << "BattleUnit::keepWalking() _walkPhase = " << _walkPhase;		// kL
+
 
 	int middle, end;
 	if (_verticalDirection)
@@ -560,7 +569,7 @@ void BattleUnit::keepWalking(Tile* tileBelow, bool cache)
 
 	if (_walkPhase >= end)
 	{
-		Log(LOG_INFO) << "BattleUnit::keepWalking(), end : STATUS_STANDING";		// kL
+		Log(LOG_INFO) << ". STATUS_STANDING end";		// kL
 
 		// we officially reached our destination tile
 		_status = STATUS_STANDING;
@@ -1534,11 +1543,11 @@ void BattleUnit::prepareNewTurn()
 	if (!isOut())
 	{
 		int chance = 100 - (2 * getMorale());
-		if (RNG::generate(1, 100) <= chance)
+		if (RNG::generate(0, 99) <= chance)
 		{
-			int type = RNG::generate(0, 100);
+			int type = RNG::generate(0, 99);
 			// 33% chance of berserk, panic can mean freeze or flee, but that is determined later
-			_status = (type <= 33 ? STATUS_BERSERK : STATUS_PANICKING);
+			_status = (type < 33 ? STATUS_BERSERK : STATUS_PANICKING);
 		}
 		else // successfully avoided panic
 		{
@@ -1559,9 +1568,12 @@ void BattleUnit::moraleChange(int change)
 {
 	if (!isFearable()) return;
 
+	Log(LOG_INFO) << "BattleUnit::moraleChange() unitID = " << getId() << " delta = " << change ;		// kL
+
 	_morale += change;
-	if (_morale > 100)	_morale = 100;
-	if (_morale < 0)	_morale = 0;
+
+	if (_morale > 100) _morale = 100;
+	if (_morale < 0) _morale = 0;
 }
 
 /**
