@@ -1571,7 +1571,11 @@ void BattleUnit::prepareNewTurn()
  */
 void BattleUnit::moraleChange(int change)
 {
-	if (!isFearable()) return;
+	if (!isFearable()
+		&& change < 0)		// kL
+	{
+		return;
+	}
 
 	Log(LOG_INFO) << "BattleUnit::moraleChange() unitID = " << getId() << " delta = " << change ;		// kL
 
@@ -2161,6 +2165,8 @@ void BattleUnit::heal(int part, int woundAmount, int healthAmount)
 	_health += healthAmount;
 	if (_health > getStats()->health)
 		_health = getStats()->health;
+
+	moraleChange(healthAmount);		// kL
 }
 
 /**

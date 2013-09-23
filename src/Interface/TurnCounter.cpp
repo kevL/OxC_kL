@@ -34,10 +34,12 @@ namespace OpenXcom
  * @param x, X position in pixels.
  * @param y, Y position in pixels.
  */
-TurnCounter::TurnCounter(int width, int height, int x, int y)
+TurnCounter::TurnCounter(int width, int height, int x, int y, SavedBattleGame* battleGame)
 	:
 	Surface(width, height, x + 1, y + 1),
-	_tCount(10)
+	_tCount(1),
+	_sbgame(battleGame)
+//	node(node["turn"].as<int>())
 {
 	Log(LOG_INFO) << "Create TurnCounter";
 
@@ -45,6 +47,28 @@ TurnCounter::TurnCounter(int width, int height, int x, int y)
 
 	_text = new NumberText(width, height, x, y);
 	setColor(Palette::blockOffset(15)+12);
+
+	_text->setValue(_tCount);
+//	_text->setValue((unsigned int)_sbgame->getTurn());
+//	_text->setValue((unsigned int)getSavedTurn(node["turn"]));
+/*	int t = getSavedTurn();
+	Log(LOG_INFO) << "t = " << t;
+	if (t < 1)
+	{
+		Log(LOG_INFO) << "Create TurnCounter, tCount = " << _tCount;
+
+//		_text->setValue((unsigned int)_tCount);
+	}
+	else
+	{
+		_tCount = t;
+		Log(LOG_INFO) << "Create TurnCounter, t = " << t;
+
+//		_text->setValue((unsigned int)getSavedTurn());
+//		_text->setValue((unsigned int)t);
+	}
+
+	_text->setValue((unsigned int)_tCount); */
 }
 
 /**
@@ -69,29 +93,35 @@ void TurnCounter::setColor(Uint8 color)
 /**
  * Sets the turn that the TurnCounter will display.
  */
-void TurnCounter::setTurnCount(int t)
+/* void TurnCounter::setTurnCount(int t)
 {
 	_tCount = t;
-}
+} */
 		
+/**
+ * Gets the turn from a saved game file.
+ */
+// int TurnCounter::getSavedTurn(const YAML::Node& node)
+/* int TurnCounter::getSavedTurn()
+{
+//	YAML::Node& node = node["turn"].as<int>();
+
+//	_tCount = node["turn"].as<int>(_tCount);
+	return node["turn"].as<int>();
+} */
+
 /**
  * Updates the Turn display.
  */
 // void TurnCounter::update(int t)
 void TurnCounter::update()
 {
-/*	unsigned int tCount = (unsigned int)t;
+//	_tCount = (unsigned int)_sbgame->getTurn();
 
-	Log(LOG_INFO) << ". TurnCounter::update() : " << t;
-	Log(LOG_INFO) << ". TurnCounter::update() : " << tCount;
+	_tCount++;
+	Log(LOG_INFO) << ". TurnCounter::update() attempting update! turn = " << _tCount;
 
-//	_text->setValue((int&)t);
-	_text->setValue(tCount); */
-
-//	_text->setValue(_tCount);
-	Log(LOG_INFO) << ". TurnCounter::update() attempting update!";
-
-//	_tCount = _sbgame->getTurn();	// crash..
+//	_text->setValue((unsigned int)_tCount);
 	_text->setValue(_tCount);
 
 	_redraw = true;

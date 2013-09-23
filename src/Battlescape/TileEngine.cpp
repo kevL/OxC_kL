@@ -1156,37 +1156,38 @@ bool TileEngine::tryReactionSnap(BattleUnit *unit, BattleUnit *target)
  * @param unit The unit that caused the explosion.
  * @return The Unit that got hit.
  */
-BattleUnit *TileEngine::hit(const Position &center, int power, ItemDamageType type, BattleUnit *unit)
+BattleUnit* TileEngine::hit(const Position& center, int power, ItemDamageType type, BattleUnit* unit)
 {
-	Tile *tile = _save->getTile(Position(center.x/16, center.y/16, center.z/24));
-	if(!tile)
+	Tile* tile = _save->getTile(Position(center.x / 16, center.y / 16, center.z / 24));
+	if (!tile)
 	{
 		return 0;
 	}
 
-	BattleUnit *bu = tile->getUnit();
-
+	BattleUnit* bu = tile->getUnit();
 	int adjustedDamage = 0;
+
 	const int part = voxelCheck(center, unit);
 	if (part >= 0 && part <= 3)
 	{
 		// power 25% to 75%
-		const int rndPower = RNG::generate(power/4, (power*3)/4); //RNG::boxMuller(power, power/6)
+		const int rndPower = RNG::generate(power / 4, (power * 3) / 4); // RNG::boxMuller(power, power/6)
 		if (tile->damage(part, rndPower))
 			_save->setObjectiveDestroyed(true);
 	}
 	else if (part == 4)
 	{
 		// power 0 - 200%
-		const int rndPower = RNG::generate(0, power*2); // RNG::boxMuller(power, power/3)
+		const int rndPower = RNG::generate(0, power * 2); // RNG::boxMuller(power, power/3)
 		int verticaloffset = 0;
+
 		if (!bu)
 		{
 			// it's possible we have a unit below the actual tile, when he stands on a stairs and sticks his head out to the next tile
-			Tile *below = _save->getTile(Position(center.x/16, center.y/16, (center.z/24)-1));
+			Tile* below = _save->getTile(Position(center.x / 16, center.y / 16, (center.z / 24) - 1));
 			if (below)
 			{
-				BattleUnit *buBelow = below->getUnit();
+				BattleUnit* buBelow = below->getUnit();
 				if (buBelow)
 				{
 					bu = buBelow;
@@ -1211,9 +1212,11 @@ BattleUnit *TileEngine::hit(const Position &center, int power, ItemDamageType ty
 
 			if (bu->getSpecialAbility() == SPECAB_EXPLODEONDEATH
 				&& !bu->isOut()
-				&& (bu->getHealth() == 0 || bu->getStunlevel() >= bu->getHealth()))
+				&& (bu->getHealth() == 0
+					|| bu->getStunlevel() >= bu->getHealth()))
 			{
-				if (type != DT_STUN && type != DT_HE)
+				if (type != DT_STUN
+					&& type != DT_HE)
 				{
 					Position p = Position(bu->getPosition().x * 16, bu->getPosition().y * 16, bu->getPosition().z * 24);
 					_save->getBattleState()->getBattleGame()->statePushNext(new ExplosionBState(_save->getBattleState()->getBattleGame(), p, 0, bu, 0));

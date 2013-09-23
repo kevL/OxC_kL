@@ -50,16 +50,16 @@ class Ruleset;
 class SavedBattleGame
 {
 	private:
-		BattlescapeState *_battleState;
+		BattlescapeState* _battleState;
 		int _mapsize_x, _mapsize_y, _mapsize_z;
-		std::vector<MapDataSet*> _mapDataSets;
-		Tile **_tiles;
-		BattleUnit *_selectedUnit, *_lastSelectedUnit;
-		std::vector<Node*> _nodes;
-		std::vector<BattleUnit*> _units;
-		std::vector<BattleItem*> _items;
-		Pathfinding *_pathfinding;
-		TileEngine *_tileEngine;
+		std::vector<MapDataSet* > _mapDataSets;
+		Tile** _tiles;
+		BattleUnit* _selectedUnit, * _lastSelectedUnit;
+		std::vector<Node* > _nodes;
+		std::vector<BattleUnit* > _units;
+		std::vector<BattleItem* > _items;
+		Pathfinding* _pathfinding;
+		TileEngine* _tileEngine;
 		std::string _missionType;
 		int _globalShade;
 		UnitFaction _side;
@@ -67,13 +67,13 @@ class SavedBattleGame
 		bool _debugMode;
 		bool _aborted;
 		int _itemId;
-		Uint8 _dragButton;  // this is a cache for Options::getString("battleScrollDragButton")
-		bool _dragInvert;  // this is a cache for Options::getString("battleScrollDragInvert")
-		int _dragTimeTolerance;  // this is a cache for Options::getInt("battleScrollDragTimeTolerance")
-		int _dragPixelTolerance;  // this is a cache for Options::getInt("battleScrollDragPixelTolerance")
+		Uint8 _dragButton;			// this is a cache for Options::getString("battleScrollDragButton")
+		bool _dragInvert;			// this is a cache for Options::getString("battleScrollDragInvert")
+		int _dragTimeTolerance;		// this is a cache for Options::getInt("battleScrollDragTimeTolerance")
+		int _dragPixelTolerance;	// this is a cache for Options::getInt("battleScrollDragPixelTolerance")
 		bool _objectiveDestroyed;
-		std::vector<BattleUnit*> _exposedUnits;
-		std::list<BattleUnit*> _fallingUnits;
+		std::vector<BattleUnit* > _exposedUnits;
+		std::list<BattleUnit* > _fallingUnits;
 		bool _unitsFalling, _strafeEnabled, _sneaky, _traceAI;
 
 	public:
@@ -81,18 +81,19 @@ class SavedBattleGame
 		SavedBattleGame();
 		/// Cleans up the saved game.
 		~SavedBattleGame();
+
 		/// Loads a saved battle game from YAML.
-		void load(const YAML::Node& node, Ruleset *rule, SavedGame* savedGame);
+		void load(const YAML::Node& node, Ruleset* rule, SavedGame* savedGame);
 		/// Saves a saved battle game to YAML.
 		YAML::Node save() const;
 		/// Sets the dimensions of the map and initializes it.
 		void initMap(int mapsize_x, int mapsize_y, int mapsize_z);
 		/// Initialises the pathfinding and tileengine.
-		void initUtilities(ResourcePack *res);
+		void initUtilities(ResourcePack* res);
 		/// Gets the game's mapdatafiles.
-		std::vector<MapDataSet*> *getMapDataSets();
+		std::vector<MapDataSet* >* getMapDataSets();
 		/// Sets the mission type.
-		void setMissionType(const std::string &missionType);
+		void setMissionType(const std::string& missionType);
 		/// Gets the mission type.
 		std::string getMissionType() const;
 		/// Sets the global shade.
@@ -100,13 +101,13 @@ class SavedBattleGame
 		/// Gets the global shade.
 		int getGlobalShade() const;
 		/// Gets a pointer to the tiles, a tile is the smallest component of battlescape.
-		Tile **getTiles() const;
+		Tile** getTiles() const;
 		/// Gets a pointer to the list of nodes.
-		std::vector<Node*> *getNodes();
+		std::vector<Node* >* getNodes();
 		/// Gets a pointer to the list of items.
-		std::vector<BattleItem*> *getItems();
+		std::vector<BattleItem* >* getItems();
 		/// Gets a pointer to the list of units.
-		std::vector<BattleUnit*> *getUnits();
+		std::vector<BattleUnit* >* getUnits();
 		/// Gets terrain size x.
 		int getMapSizeX() const;
 		/// Gets terrain size y.
@@ -128,7 +129,7 @@ class SavedBattleGame
 		}
 
 		/// Converts a tile index to its coordinates.
-		void getTileCoords(int index, int *x, int *y, int *z) const;
+		void getTileCoords(int index, int* x, int* y, int* z) const;
 
 		/**
 		 * Gets the Tile at a given position on the map.
@@ -137,7 +138,7 @@ class SavedBattleGame
 		 * @param pos Map position.
 		 * @return Pointer to the tile at that position.
 		 */
-		inline Tile* getTile(const Position &pos) const
+		inline Tile* getTile(const Position& pos) const
 		{
 			if (pos.x < 0 || pos.y < 0 || pos.z < 0
 				|| pos.x >= _mapsize_x || pos.y >= _mapsize_y || pos.z >= _mapsize_z)
@@ -149,19 +150,19 @@ class SavedBattleGame
 		}
 
 		/// Gets the currently selected unit.
-		BattleUnit *getSelectedUnit() const;
+		BattleUnit* getSelectedUnit() const;
 		/// Sets the currently selected unit.
-		void setSelectedUnit(BattleUnit *unit);
+		void setSelectedUnit(BattleUnit* unit);
 		/// Selects the previous soldier.
-		BattleUnit *selectPreviousPlayerUnit(bool checkReselect = false);
+		BattleUnit* selectPreviousPlayerUnit(bool checkReselect = false);
 		/// Selects the next soldier.
-		BattleUnit *selectNextPlayerUnit(bool checkReselect = false, bool setReselect = false);
+		BattleUnit* selectNextPlayerUnit(bool checkReselect = false, bool setReselect = false);
 		/// Selects the unit with position on map.
-		BattleUnit *selectUnit(const Position& pos);
+		BattleUnit* selectUnit(const Position& pos);
 		/// Gets the pathfinding object.
-		Pathfinding *getPathfinding() const;
+		Pathfinding* getPathfinding() const;
 		/// Gets a pointer to the tileengine.
-		TileEngine *getTileEngine() const;
+		TileEngine* getTileEngine() const;
 		/// Gets the playing side.
 		UnitFaction getSide() const;
 		/// Gets the turn number.
@@ -173,11 +174,11 @@ class SavedBattleGame
 		/// Gets debug mode.
 		bool getDebugMode() const;
 		/// Load map resources.
-		void loadMapResources(Game *game);
+		void loadMapResources(Game* game);
 		/// Resets tiles units are standing on
 		void resetUnitTiles();
 		/// Removes an item from the game.
-		void removeItem(BattleItem *item);
+		void removeItem(BattleItem* item);
 		/// Sets whether the mission was aborted.
 		void setAborted(bool flag);
 		/// Checks if the mission was aborted.
@@ -187,19 +188,19 @@ class SavedBattleGame
 		/// Checks if the objective is detroyed.
 		bool isObjectiveDestroyed();
 		/// Gets the current item ID.
-		int *getCurrentItemId();
+		int* getCurrentItemId();
 		/// Gets a spawn node.
-		Node *getSpawnNode(int nodeRank, BattleUnit *unit);
+		Node* getSpawnNode(int nodeRank, BattleUnit* unit);
 		/// Gets a patrol node.
-		Node *getPatrolNode(bool scout, BattleUnit *unit, Node *fromNode);
+		Node* getPatrolNode(bool scout, BattleUnit* unit, Node* fromNode);
 		/// Carries out new turn preparations.
 		void prepareNewTurn();
 		/// Revives unconscious units (healthcheck).
 		void reviveUnconsciousUnits();
 		/// Removes the body item that corresponds to the unit.
-		void removeUnconsciousBodyItem(BattleUnit *bu);
+		void removeUnconsciousBodyItem(BattleUnit* bu);
 		/// Sets or tries to set a unit of a certain size on a certain position of the map.
-		bool setUnitPosition(BattleUnit *bu, const Position &position, bool testOnly = false);
+		bool setUnitPosition(BattleUnit* bu, const Position& position, bool testOnly = false);
 		/// Gets DragButton.
 		Uint8 getDragButton() const;
 		/// Gets DragInverted.
@@ -225,9 +226,9 @@ class SavedBattleGame
 		/// Checks the traceAI setting.
 		bool getTraceSetting() const;
 		/// Gets a pointer to the BattlescapeState.
-		BattlescapeState *getBattleState();
+		BattlescapeState* getBattleState();
 		/// Sets the pointer to the BattlescapeState.
-		void setBattleState(BattlescapeState *bs);
+		void setBattleState(BattlescapeState* bs);
 		/// Gets the highest ranked, living XCom unit.
 		BattleUnit* getHighestRankedXCom();
 		/// Gets the morale modifier for XCom based on the highest ranked, living XCom unit, or the modifier for the unit passed to this function.
@@ -235,7 +236,7 @@ class SavedBattleGame
 		/// Checks whether a particular faction has eyes on *unit (whether any unit on that faction sees *unit).
 		bool eyesOnTarget(UnitFaction faction, BattleUnit* unit);
 		/// Attempts to place a unit on or near entryPoint.
-		bool placeUnitNearPosition(BattleUnit *unit, Position entryPoint);
+		bool placeUnitNearPosition(BattleUnit* unit, Position entryPoint);
 		/// Resets the turn counter.
 		void resetTurnCounter();
 		/// Resets the visibility of all tiles on the map.

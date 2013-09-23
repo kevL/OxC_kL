@@ -72,6 +72,7 @@ class BattlescapeState
 		Bar* _barTimeUnits, * _barEnergy, * _barHealth, * _barMorale;
 		Timer* _animTimer, * _gameTimer;
 		SavedBattleGame* _save;
+//		SavedBattleGame _TCsave;		// kL
 		Text* _txtDebug, * _txtTooltip;
 		std::vector<State* > _popups;
 		BattlescapeGame* _battleGame;

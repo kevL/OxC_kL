@@ -16,12 +16,14 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_AGGROBAISTATE_H
 #define OPENXCOM_AGGROBAISTATE_H
 
 #include "BattleAIState.h"
 #include "Position.h"
 #include <vector>
+
 
 namespace OpenXcom
 {
@@ -33,66 +35,76 @@ class BattlescapeState;
 /**
  * This class is used by the BattleUnit AI.
  */
-class AggroBAIState : public BattleAIState
+class AggroBAIState
+	:
+	public BattleAIState
 {
-protected:
-	BattleUnit *_aggroTarget;
-	BattleUnit *_lastKnownTarget;
-	Position _lastKnownPosition;
-	int _timesNotSeen, _coverCharge;
-	static std::vector<Position> _randomTileSearch;
-	static int _randomTileSearchAge;
-	bool _charge, _traceAI, _wasHit;
-	BattleAction *_coverAction;
-public:
-	/// Creates a new AggroBAIState linked to the game and a certain unit.
-	AggroBAIState(SavedBattleGame *game, BattleUnit *unit);
-	/// Cleans up the AggroBAIState.
-	~AggroBAIState();
-	/// Loads the AI state from YAML.
-	void load(const YAML::Node& node);
-	/// Saves the AI state to YAML.
-	YAML::Node save() const;
-	/// Enters the state.
-	void enter();
-	/// Exits the state.
-	void exit();
-	/// Runs state functionality every AI cycle.
-	void think(BattleAction *action);
-	/// Sets aggro target, triggered by reaction fire.
-	void setAggroTarget(BattleUnit *unit);
-	/// Gets the aggro target, for savegame.
-	BattleUnit *getAggroTarget() const { return _aggroTarget; }
-	/// Gets the last known location of target, for turning.
-	Position getLastKnownPosition() const { return _lastKnownPosition; }
-	/// Decides if we should throw a grenade/launch a missile to this position.
-	bool explosiveEfficacy(Position targetPos, BattleUnit *attackingUnit, int radius, int diff);
-	/// Attempts to take a melee attack/charge an enemy we can see.
-	void meleeAction(BattleAction *action);
-	/// Attempts to fire a waypoint projectile at an enemy we, or one of our teammates sees.
-	void wayPointAction(BattleAction *action);
-	/// Attempts to fire at an enemy we can see.
-	void projectileAction(BattleAction *action);
-	/// Attempts to throw a grenade at an enemy (or group of enemies) we can see.
-	void grenadeAction(BattleAction *action);
-	/// Attempts to find cover, and move toward it.
-	void takeCoverAction(BattleAction *action);
-	/// Attempts to track down an enemy we have lost sight of.
-	void stalkingAction(BattleAction *action);
-	/// Assesses whether we should we take cover.
-	bool takeCoverAssessment(BattleAction *action);
-	/// Selects the nearest target we can see.
-	void selectNearestTarget();
-	/// Selects the nearest moveable relative to a target.
-	bool selectPointNearTarget(BattleAction *action, BattleUnit *target, int maxTUs);
-	/// Performs a melee attack action.
-	void meleeAttack(BattleAction *action);
-	/// Selects a fire method.
-	void selectFireMethod(BattleAction *action);
-	/// Sets whether the unit was hit.
-	void setWasHit(bool wasHit);
-	/// Gets whether the unit was hit.
-	bool getWasHit();
+	protected:
+		BattleUnit* _aggroTarget;
+		BattleUnit* _lastKnownTarget;
+		Position _lastKnownPosition;
+		int _timesNotSeen, _coverCharge;
+		static std::vector<Position> _randomTileSearch;
+		static int _randomTileSearchAge;
+		bool _charge, _traceAI, _wasHit;
+		BattleAction* _coverAction;
+
+	public:
+		/// Creates a new AggroBAIState linked to the game and a certain unit.
+		AggroBAIState(SavedBattleGame* game, BattleUnit* unit);
+		/// Cleans up the AggroBAIState.
+		~AggroBAIState();
+
+		/// Loads the AI state from YAML.
+		void load(const YAML::Node& node);
+		/// Saves the AI state to YAML.
+		YAML::Node save() const;
+		/// Enters the state.
+		void enter();
+		/// Exits the state.
+		void exit();
+		/// Runs state functionality every AI cycle.
+		void think(BattleAction* action);
+		/// Sets aggro target, triggered by reaction fire.
+		void setAggroTarget(BattleUnit* unit);
+		/// Gets the aggro target, for savegame.
+		BattleUnit* getAggroTarget() const
+		{
+			return _aggroTarget;
+		}
+		/// Gets the last known location of target, for turning.
+		Position getLastKnownPosition() const
+		{
+			return _lastKnownPosition;
+		}
+		/// Decides if we should throw a grenade/launch a missile to this position.
+		bool explosiveEfficacy(Position targetPos, BattleUnit* attackingUnit, int radius, int diff);
+		/// Attempts to take a melee attack/charge an enemy we can see.
+		void meleeAction(BattleAction* action);
+		/// Attempts to fire a waypoint projectile at an enemy we, or one of our teammates sees.
+		void wayPointAction(BattleAction* action);
+		/// Attempts to fire at an enemy we can see.
+		void projectileAction(BattleAction* action);
+		/// Attempts to throw a grenade at an enemy (or group of enemies) we can see.
+		void grenadeAction(BattleAction* action);
+		/// Attempts to find cover, and move toward it.
+		void takeCoverAction(BattleAction* action);
+		/// Attempts to track down an enemy we have lost sight of.
+		void stalkingAction(BattleAction* action);
+		/// Assesses whether we should we take cover.
+		bool takeCoverAssessment(BattleAction* action);
+		/// Selects the nearest target we can see.
+		void selectNearestTarget();
+		/// Selects the nearest moveable relative to a target.
+		bool selectPointNearTarget(BattleAction* action, BattleUnit* target, int maxTUs);
+		/// Performs a melee attack action.
+		void meleeAttack(BattleAction* action);
+		/// Selects a fire method.
+		void selectFireMethod(BattleAction* action);
+		/// Sets whether the unit was hit.
+		void setWasHit(bool wasHit);
+		/// Gets whether the unit was hit.
+		bool getWasHit();
 };
 
 }

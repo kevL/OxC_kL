@@ -130,7 +130,7 @@ SavedBattleGame::~SavedBattleGame()
  * @param rule for the saved game.
  * @param savedGame Pointer to saved game.
  */
-void SavedBattleGame::load(const YAML::Node &node, Ruleset *rule, SavedGame* savedGame)
+void SavedBattleGame::load(const YAML::Node& node, Ruleset* rule, SavedGame* savedGame)
 {
 	_mapsize_x = node["width"].as<int>(_mapsize_x);
 	_mapsize_y = node["length"].as<int>(_mapsize_y);
@@ -881,10 +881,15 @@ void SavedBattleGame::endTurn()
 				(*i)->setTurnsExposed((*i)->getTurnsExposed() +	1);
 			}
 
+			Uint8 rand = RNG::generate(0, 9);		// kL
 			if (//kL _side == FACTION_PLAYER &&
 				(*i)->getFaction() == FACTION_PLAYER
 				&& !(*i)->isOut()
-				&& (_turn >= 20 || liveAliens < 2))
+//kL				&& (_turn >= 20 || liveAliens < 2))
+				&& (_turn >= 16 + rand || liveAliens < 2))		// kL
+				// kL_note: above will reset TurnsExposed randomly on any turn
+				// between 16 and 25... it needs a 'static' variable tracking this
+				// if it should be set only once.
 			{
 				(*i)->setTurnsExposed(0);
 			}
@@ -1686,7 +1691,12 @@ int SavedBattleGame::getMoraleModifier(BattleUnit* unit)
 				case 3:					// captain
 					result += 5;		// 115
 				case 2:					// sergeant
-					result += 10;		// 110
+//kL					result += 10;	// 110
+					result += 5;		// 110
+				// kL_begin:
+				case 1:					// squaddie
+					result += 5;		// 105 kL
+				// kL_end.
 
 				default:
 				break;

@@ -16,7 +16,9 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #define _USE_MATH_DEFINES
+
 #include <cmath>
 #include <climits>
 #include <algorithm>
@@ -37,6 +39,7 @@
 #include "../Ruleset/Armor.h"
 #include "../Resource/ResourcePack.h"
 
+
 namespace OpenXcom
 {
 
@@ -48,17 +51,26 @@ int AggroBAIState::_randomTileSearchAge = 0xBAD; // data not good yet
  * @param game Pointer to the game.
  * @param unit Pointer to the unit.
  */
-AggroBAIState::AggroBAIState(SavedBattleGame *game, BattleUnit *unit) : BattleAIState(game, unit), _aggroTarget(0), _lastKnownTarget(0), _timesNotSeen(0), _coverCharge(0), _charge(false), _wasHit(false)
+AggroBAIState::AggroBAIState(SavedBattleGame* game, BattleUnit* unit)
+	:
+	BattleAIState(game, unit),
+	_aggroTarget(0),
+	_lastKnownTarget(0),
+	_timesNotSeen(0),
+	_coverCharge(0),
+	_charge(false),
+	_wasHit(false)
 {
 	_traceAI = _game->getTraceSetting();
+
 	if (_randomTileSearch.empty())
 	{
-		_randomTileSearch.resize(11*11); // this is currently regenerating this structure once for every alien. Perhaps store it persistently instead?
+		_randomTileSearch.resize(11 * 11); // this is currently regenerating this structure once for every alien. Perhaps store it persistently instead?
 
 		for (int i = 0; i < 121; ++i)
 		{
-			_randomTileSearch[i].x = ((i%11) - 5);
-			_randomTileSearch[i].y = ((i/11) - 5); 
+			_randomTileSearch[i].x = ((i %11) - 5);
+			_randomTileSearch[i].y = ((i / 11) - 5); 
 		}
 	}
 
@@ -75,7 +87,7 @@ AggroBAIState::~AggroBAIState()
 
 /**
  * Loads the AI state from a YAML file.
- * @param node YAML node.
+ * @param node, YAML node.
  */
 void AggroBAIState::load(const YAML::Node &node)
 {
@@ -158,7 +170,7 @@ void AggroBAIState::exit()
  * AI cycle.
  * @param action (possible) AI action to execute after thinking is done.
  */
-void AggroBAIState::think(BattleAction *action)
+void AggroBAIState::think(BattleAction* action)
 {
 	// design choices thus far force me to derive the difficulty this way.
 	action->diff = (int)(_game->getBattleState()->getGame()->getSavedGame()->getDifficulty());
@@ -271,7 +283,7 @@ void AggroBAIState::think(BattleAction *action)
  * Until it forgets about it and goes back to patrolling.
  * @param unit Pointer to the unit.
  */
-void AggroBAIState::setAggroTarget(BattleUnit *unit)
+void AggroBAIState::setAggroTarget(BattleUnit* unit)
 {
 	_timesNotSeen = 0;
 	_lastKnownTarget = unit;
@@ -286,12 +298,17 @@ void AggroBAIState::setAggroTarget(BattleUnit *unit)
  * @param diff Game difficulty.
  * @return True if it is worthwile creating an explosion in the target position.
  */
-bool AggroBAIState::explosiveEfficacy(Position targetPos, BattleUnit *attackingUnit, int radius, int diff)
+bool AggroBAIState::explosiveEfficacy(Position targetPos, BattleUnit* attackingUnit, int radius, int diff)
 {
 	// i hate the player and i want him dead, but i don't want to piss him off.
-	// kL_note: am i sure I want this!!
-	if (_game->getTurn() < 3)
-		return false;
+	// kL_note: am i sure I want this!! later: I'm not so sure getTurn()
+	// returns the actual turn, when not used in SavedBattleGame........
+	// I've been getting "1" or "0"
+	// which may be why I haven't gotten hit by *any* grenades yet!!
+	// TAKE IT OUT..
+
+//	if (_game->getTurn() < 2)	// kL
+//kL		return false;
 
 	if (diff == -1)
 	{

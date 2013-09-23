@@ -187,7 +187,8 @@ BattlescapeState::BattlescapeState(Game* game)
 	// kL_begin:
 	// create TurnCounter
 //	Log(LOG_INFO) << ". new TurnCounter";
-	_turnCounter	= new TurnCounter(30, 5, 0, 0);		// kL
+//	_TCsave = _game->getSavedGame()->getSavedBattle();
+	_turnCounter	= new TurnCounter(65, 5, 0, 0, _save);		// kL
 //	Log(LOG_INFO) << ". new TurnCounter DONE";
 
 //	add(_turnCounter);

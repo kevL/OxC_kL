@@ -16,16 +16,18 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "EquipmentLayoutItem.h"
+
 
 namespace OpenXcom
 {
 
 /**
  * Initializes a new soldier-equipment layout item from YAML.
- * @param node YAML node.
+ * @param node, YAML node.
  */
-EquipmentLayoutItem::EquipmentLayoutItem(const YAML::Node &node)
+EquipmentLayoutItem::EquipmentLayoutItem(const YAML::Node& node)
 {
 	load(node);
 }
@@ -39,7 +41,14 @@ EquipmentLayoutItem::EquipmentLayoutItem(const YAML::Node &node)
  * @param ammoItem The ammo has to be loaded into the item. (it's type)
  * @param explodeTurn The turn when the item explodes. (if it's an activated grenade-type)
  */
-EquipmentLayoutItem::EquipmentLayoutItem(std::string itemType, std::string slot, int slotX, int slotY, std::string ammoItem, int explodeTurn) : _itemType(itemType), _slot(slot), _slotX(slotX), _slotY(slotY), _ammoItem(ammoItem), _explodeTurn(explodeTurn)
+EquipmentLayoutItem::EquipmentLayoutItem(std::string itemType, std::string slot, int slotX, int slotY, std::string ammoItem, int explodeTurn)
+	:
+	_itemType(itemType),
+	_slot(slot),
+	_slotX(slotX),
+	_slotY(slotY),
+	_ammoItem(ammoItem),
+	_explodeTurn(explodeTurn)
 {
 }
 
@@ -110,12 +119,12 @@ int EquipmentLayoutItem::getExplodeTurn() const
  */
 void EquipmentLayoutItem::load(const YAML::Node &node)
 {
-	_itemType = node["itemType"].as<std::string>(_itemType);
-	_slot = node["slot"].as<std::string>(_slot);
-	_slotX = node["slotX"].as<int>(_slotX);
-	_slotY = node["slotY"].as<int>(_slotY);
-	_ammoItem = node["ammoItem"].as<std::string>(_ammoItem);
-	_explodeTurn = node["explodeTurn"].as<int>(_explodeTurn);
+	_itemType		= node["itemType"].as<std::string>(_itemType);
+	_slot			= node["slot"].as<std::string>(_slot);
+	_slotX			= node["slotX"].as<int>(_slotX);
+	_slotY			= node["slotY"].as<int>(_slotY);
+	_ammoItem		= node["ammoItem"].as<std::string>(_ammoItem);
+	_explodeTurn	= node["explodeTurn"].as<int>(_explodeTurn);
 }
 
 /**
@@ -125,12 +134,14 @@ void EquipmentLayoutItem::load(const YAML::Node &node)
 YAML::Node EquipmentLayoutItem::save() const
 {
 	YAML::Node node;
-	node["itemType"] = _itemType;
-	node["slot"] = _slot;
-	node["slotX"] = _slotX;
-	node["slotY"] = _slotY;
-	node["ammoItem"] = _ammoItem;
-	node["explodeTurn"] = _explodeTurn;
+
+	node["itemType"]	= _itemType;
+	node["slot"]		= _slot;
+	node["slotX"]		= _slotX;
+	node["slotY"]		= _slotY;
+	node["ammoItem"]	= _ammoItem;
+	node["explodeTurn"]	= _explodeTurn;
+
 	return node;
 }
 
