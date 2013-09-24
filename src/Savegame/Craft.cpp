@@ -478,7 +478,7 @@ int Craft::getNumVehicles() const
  */
 std::vector<CraftWeapon* >* Craft::getWeapons()
 {
-	return & _weapons;
+	return &_weapons;
 }
 
 /**
@@ -496,7 +496,7 @@ ItemContainer* Craft::getItems()
  */
 std::vector<Vehicle* >* Craft::getVehicles()
 {
-	return & _vehicles;
+	return &_vehicles;
 }
 
 /**
@@ -736,6 +736,7 @@ void Craft::refuel()
 	if (_fuel >= _rules->getMaxFuel())
 	{
 		_status = "STR_READY";
+//		setLowFuel(false);		// kL &redv
 
 		for (std::vector<CraftWeapon* >::iterator i = _weapons.begin(); i != _weapons.end(); ++i)
 		{

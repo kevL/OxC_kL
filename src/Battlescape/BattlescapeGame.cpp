@@ -144,6 +144,7 @@ void BattlescapeGame::think()
 			if (!_playerPanicHandled)
 			{
 				_playerPanicHandled = handlePanickingPlayer();
+				_save->getBattleState()->updateSoldierInfo();
 			}
 		}
 

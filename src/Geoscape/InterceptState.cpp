@@ -190,7 +190,8 @@ void InterceptState::lstCraftsClick(Action* )
 {
 	Craft* c = _crafts[_lstCrafts->getSelectedRow()];
 //kL	if (c->getStatus() != "STR_OUT" && (c->getStatus() == "STR_READY" || Options::getBool("craftLaunchAlways")))
-	if (c->getStatus() == "STR_READY")		// kL
+	if (c->getStatus() == "STR_READY")
+//		 && !c->getLowFuel())		// kL &redv, https://github.com/redv/OpenXcom/commit/17a8c31e0ccb82c2c9a737eb31537816f6350b73
 	{
 		_game->popState();
 //kL		_game->pushState(new SelectDestinationState(_game, c, _globe));

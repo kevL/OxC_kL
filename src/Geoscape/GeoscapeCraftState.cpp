@@ -302,6 +302,15 @@ GeoscapeCraftState::GeoscapeCraftState(Game* game, Craft* craft, Globe* globe, W
 		_btnTarget->setVisible(false);
 		_btnPatrol->setVisible(false);
 	}
+
+	// kL_begin: set Base button visibility FALSE for already-Based crafts.
+	if (_craft->getStatus() == "STR_READY"
+		|| _craft->getStatus() == "STR_REPAIRS"
+		|| _craft->getStatus() == "STR_REFUELLING"
+		|| _craft->getStatus() == "STR_REARMING")
+	{
+		_btnCenter->setVisible(false);
+	}
 }
 
 /**
