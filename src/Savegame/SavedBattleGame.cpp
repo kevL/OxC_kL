@@ -81,7 +81,7 @@ SavedBattleGame::SavedBattleGame()
 	_sneaky(false),
 	_traceAI(false)
 {
-	Log(LOG_INFO) << "Create SavedBattleGame";
+//	Log(LOG_INFO) << "Create SavedBattleGame";
 
 	_dragButton			= Options::getInt("battleScrollDragButton");
 	_dragInvert			= Options::getBool("battleScrollDragInvert");
@@ -97,7 +97,7 @@ SavedBattleGame::SavedBattleGame()
  */
 SavedBattleGame::~SavedBattleGame()
 {
-	Log(LOG_INFO) << "Delete SavedBattleGame";
+//	Log(LOG_INFO) << "Delete SavedBattleGame";
 
 	for (int i = 0; i < _mapsize_z * _mapsize_y * _mapsize_x; ++i)
 	{
@@ -1702,7 +1702,7 @@ int SavedBattleGame::getMoraleModifier(BattleUnit* unit)
 				break;
 			}
 
-			Log(LOG_INFO) << "SavedBattleGame::getMoraleModifier() leaderBonus = " << result;
+//			Log(LOG_INFO) << "SavedBattleGame::getMoraleModifier() leaderBonus = " << result;
 		}
 	}
 	else if (unit->getFaction() == FACTION_PLAYER) // morale Loss when 'unit' slain
@@ -1730,7 +1730,7 @@ int SavedBattleGame::getMoraleModifier(BattleUnit* unit)
 			break;
 		}
 
-		Log(LOG_INFO) << "SavedBattleGame::getMoraleModifier() penaltyRank = " << result;
+//		Log(LOG_INFO) << "SavedBattleGame::getMoraleModifier() penaltyRank = " << result;
 	}
 
 //	Log(LOG_INFO) << "SavedBattleGame::getMoraleModifier() = " << result;

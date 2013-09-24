@@ -16,11 +16,13 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_BATTLESTATE_H
 #define OPENXCOM_BATTLESTATE_H
 
 #include <string>
 #include "BattlescapeGame.h"
+
 
 namespace OpenXcom
 {
@@ -33,24 +35,26 @@ class BattlescapeGame;
  */
 class BattleState
 {
-protected:
-	BattlescapeGame *_parent;
-	BattleAction _action;
-public:
-	/// Creates a new BattleState linked to the game.
-	BattleState(BattlescapeGame *parent, BattleAction action);
-	/// Creates a new BattleState linked to the game.
-	BattleState(BattlescapeGame *parent);
-	/// Cleans up the BattleState.
-	virtual ~BattleState();
-	/// Initializes the state.
-	virtual void init();
-	/// Handles a cancel request.
-	virtual void cancel();
-	/// Runs state functionality every cycle.
-	virtual void think();
-	/// Gets a copy of the action.
-	BattleAction getAction() const;
+	protected:
+		BattlescapeGame* _parent;
+		BattleAction _action;
+
+	public:
+		/// Creates a new BattleState linked to the game.
+		BattleState(BattlescapeGame* parent, BattleAction action);
+		/// Creates a new BattleState linked to the game.
+		BattleState(BattlescapeGame* parent);
+		/// Cleans up the BattleState.
+		virtual ~BattleState();
+
+		/// Initializes the state.
+		virtual void init();
+		/// Handles a cancel request.
+		virtual void cancel();
+		/// Runs state functionality every cycle.
+		virtual void think();
+		/// Gets a copy of the action.
+		BattleAction getAction() const;
 };
 
 }

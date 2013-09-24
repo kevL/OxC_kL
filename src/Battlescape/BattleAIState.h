@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_BATTLEAISTATE_H
 #define OPENXCOM_BATTLEAISTATE_H
 
@@ -33,24 +34,26 @@ class BattleUnit;
  */
 class BattleAIState
 {
-protected:
-	SavedBattleGame *_game;
-	BattleUnit *_unit;
-public:
-	/// Creates a new BattleAIState linked to the game and a certain unit.
-	BattleAIState(SavedBattleGame *game, BattleUnit *unit);
-	/// Cleans up the BattleAIState.
-	virtual ~BattleAIState();
-	/// Loads the AI state from YAML.
-	virtual void load(const YAML::Node& node);
-	/// Saves the AI state to YAML.
-	virtual YAML::Node save() const;
-	/// Enters the state.
-	virtual void enter();
-	/// Exits the state.
-	virtual void exit();
-	/// Runs state functionality every AI cycle.
-	virtual void think(BattleAction *action);
+	protected:
+		SavedBattleGame* _game;
+		BattleUnit* _unit;
+
+	public:
+		/// Creates a new BattleAIState linked to the game and a certain unit.
+		BattleAIState(SavedBattleGame* game, BattleUnit* unit);
+		/// Cleans up the BattleAIState.
+		virtual ~BattleAIState();
+
+		/// Loads the AI state from YAML.
+		virtual void load(const YAML::Node& node);
+		/// Saves the AI state to YAML.
+		virtual YAML::Node save() const;
+		/// Enters the state.
+		virtual void enter();
+		/// Exits the state.
+		virtual void exit();
+		/// Runs state functionality every AI cycle.
+		virtual void think(BattleAction* action);
 };
 
 }

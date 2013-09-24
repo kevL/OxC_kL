@@ -16,7 +16,9 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "BattleState.h"
+
 
 namespace OpenXcom
 {
@@ -26,29 +28,31 @@ namespace OpenXcom
  * @param parent Pointer to the parent state.
  * @param action Struct containing info about the action.
  */
-BattleState::BattleState(BattlescapeGame *parent, BattleAction action) : _parent(parent), _action(action)
+BattleState::BattleState(BattlescapeGame* parent, BattleAction action)
+	:
+	_parent(parent),
+	_action(action)
 {
-
 }
 
 /**
  * Sets up a BattleState.
  * @param parent Pointer to the parent state.
  */
-BattleState::BattleState(BattlescapeGame *parent) : _parent(parent)
+BattleState::BattleState(BattlescapeGame* parent)
+	:
+	_parent(parent)
 {
 	_action.result = "";
 	_action.targeting = false;
 	_action.TU = 0;
 }
 
-
 /**
  * Deletes the BattleState.
  */
 BattleState::~BattleState()
 {
-
 }
 
 /**
@@ -56,7 +60,6 @@ BattleState::~BattleState()
  */
 void BattleState::init()
 {
-
 }
 
 /**
@@ -64,7 +67,6 @@ void BattleState::init()
  */
 void BattleState::cancel()
 {
-
 }
 
 /**
@@ -73,7 +75,6 @@ void BattleState::cancel()
  */
 void BattleState::think()
 {
-
 }
 
 /**

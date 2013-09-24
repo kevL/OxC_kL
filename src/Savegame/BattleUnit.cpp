@@ -492,7 +492,7 @@ UnitStatus BattleUnit::getStatus() const
  */
 void BattleUnit::startWalking(int direction, const Position& destination, Tile* tileBelow, bool cache)
 {
-	Log(LOG_INFO) << "BattleUnit::startWalking()";		// kL
+//	Log(LOG_INFO) << "BattleUnit::startWalking()";		// kL
 
 	_walkPhase = 0;
 	_destination = destination;
@@ -535,7 +535,7 @@ void BattleUnit::startWalking(int direction, const Position& destination, Tile* 
 void BattleUnit::keepWalking(Tile* tileBelow, bool cache)
 {
 	_walkPhase++;
-	Log(LOG_INFO) << "BattleUnit::keepWalking() _walkPhase = " << _walkPhase;		// kL
+//	Log(LOG_INFO) << "BattleUnit::keepWalking() _walkPhase = " << _walkPhase;		// kL
 
 
 	int middle, end;
@@ -574,7 +574,7 @@ void BattleUnit::keepWalking(Tile* tileBelow, bool cache)
 
 	if (_walkPhase >= end)
 	{
-		Log(LOG_INFO) << ". STATUS_STANDING end";		// kL
+//		Log(LOG_INFO) << ". STATUS_STANDING end";		// kL
 
 		// we officially reached our destination tile
 		_status = STATUS_STANDING;
@@ -992,7 +992,7 @@ int BattleUnit::getMorale() const
  * @param type
  * @return damage done after adjustment
  */
-int BattleUnit::damage(const Position &relative, int power, ItemDamageType type, bool ignoreArmor)
+int BattleUnit::damage(const Position& relative, int power, ItemDamageType type, bool ignoreArmor)
 {
 	UnitSide side = SIDE_FRONT;
 	UnitBodyPart bodypart = BODYPART_TORSO;
@@ -1039,7 +1039,7 @@ int BattleUnit::damage(const Position &relative, int power, ItemDamageType type,
 				}
 			}
 
-			switch ((relativeDirection - _direction) % 8)
+			switch ((relativeDirection - _direction) %8)
 			{
 				case 0:	side = SIDE_FRONT; 										break;
 				case 1:	side = RNG::generate(0,2) < 2 ? SIDE_FRONT:SIDE_RIGHT; 	break;
@@ -1436,7 +1436,7 @@ double BattleUnit::getAccuracyModifier()
  */
 double BattleUnit::getThrowingAccuracy()
 {
-	return (double)(getStats()->throwing/100.0) * getAccuracyModifier();
+	return (double)(getStats()->throwing / 100.0) * getAccuracyModifier();
 }
 
 /**
@@ -1577,7 +1577,7 @@ void BattleUnit::moraleChange(int change)
 		return;
 	}
 
-	Log(LOG_INFO) << "BattleUnit::moraleChange() unitID = " << getId() << " delta = " << change ;		// kL
+//	Log(LOG_INFO) << "BattleUnit::moraleChange() unitID = " << getId() << " delta = " << change ;		// kL
 
 	_morale += change;
 

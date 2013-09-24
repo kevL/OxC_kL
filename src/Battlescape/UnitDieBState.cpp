@@ -39,6 +39,7 @@
 #include "InfoboxOKState.h"
 #include "../Savegame/Node.h"
 
+
 namespace OpenXcom
 {
 
@@ -49,7 +50,7 @@ namespace OpenXcom
  * @param damageType Type of damage that caused the death.
  * @param noSound Whether to disable the death sound.
  */
-UnitDieBState::UnitDieBState(BattlescapeGame *parent, BattleUnit *unit, ItemDamageType damageType, bool noSound)
+UnitDieBState::UnitDieBState(BattlescapeGame* parent, BattleUnit* unit, ItemDamageType damageType, bool noSound)
 	:
 	BattleState(parent),
 	_unit(unit),
@@ -59,7 +60,7 @@ UnitDieBState::UnitDieBState(BattlescapeGame *parent, BattleUnit *unit, ItemDama
 	// don't show the "fall to death" animation when a unit is blasted with explosives or he is already unconscious
 	// kL_note: yeah absolutely show it!!!
 //kL	if (_damageType == DT_HE || _unit->getStatus() == STATUS_UNCONSCIOUS)
-	if (_unit->getStatus() == STATUS_UNCONSCIOUS)		// kL, see what happens...
+/*kL	if (_unit->getStatus() == STATUS_UNCONSCIOUS)		// kL, see what happens...
 	{
 		_unit->startFalling();
 
@@ -68,7 +69,7 @@ UnitDieBState::UnitDieBState(BattlescapeGame *parent, BattleUnit *unit, ItemDama
 			_unit->keepFalling();
 		}
 	}
-	else
+	else */
 	{
 		if (_unit->getFaction() == FACTION_PLAYER)
 		{
@@ -108,10 +109,10 @@ UnitDieBState::UnitDieBState(BattlescapeGame *parent, BattleUnit *unit, ItemDama
 
     if (_unit->getFaction() == FACTION_HOSTILE)
     {
-        std::vector<Node *> *nodes = _parent->getSave()->getNodes();
+        std::vector<Node* >* nodes = _parent->getSave()->getNodes();
         if (!nodes) return; // this better not happen.
 
-        for (std::vector<Node*>::iterator n = nodes->begin(); n != nodes->end(); ++n)
+        for (std::vector<Node* >::iterator n = nodes->begin(); n != nodes->end(); ++n)
         {
             if (_parent->getSave()->getTileEngine()->distanceSq((*n)->getPosition(), _unit->getPosition()) < 4)
             {
@@ -165,12 +166,15 @@ void UnitDieBState::think()
 
 	if (_unit->isOut())
 	{
-		if (!_noSound && _damageType == DT_HE && _unit->getStatus() != STATUS_UNCONSCIOUS)
+		if (!_noSound
+			&& _damageType == DT_HE
+			&& _unit->getStatus() != STATUS_UNCONSCIOUS)
 		{
 			playDeathSound();
 		}
 
-		if (_unit->getStatus() == STATUS_UNCONSCIOUS && _unit->getSpecialAbility() == SPECAB_EXPLODEONDEATH)
+		if (_unit->getStatus() == STATUS_UNCONSCIOUS
+			&& _unit->getSpecialAbility() == SPECAB_EXPLODEONDEATH)
 		{
 			_unit->instaKill();
 		}
@@ -185,7 +189,7 @@ void UnitDieBState::think()
 		if (!_unit->getSpawnUnit().empty())
 		{
 			// converts the dead zombie to a chryssalid
-			BattleUnit *newUnit = _parent->convertUnit(_unit, _unit->getSpawnUnit());
+			BattleUnit* newUnit = _parent->convertUnit(_unit, _unit->getSpawnUnit());
 			newUnit->lookAt(_originalDir);
 		}
 		else
@@ -196,9 +200,10 @@ void UnitDieBState::think()
 		_parent->getTileEngine()->calculateUnitLighting();
 		_parent->popState();
 
-		if (_unit->getOriginalFaction() == FACTION_PLAYER && _unit->getSpawnUnit().empty())
+		if (_unit->getOriginalFaction() == FACTION_PLAYER
+			&& _unit->getSpawnUnit().empty())
 		{
-			Game *game = _parent->getSave()->getBattleState()->getGame();
+			Game* game = _parent->getSave()->getBattleState()->getGame();
 			if (_unit->getStatus() == STATUS_DEAD)
 			{
 				if (_damageType == DT_NONE)
@@ -255,17 +260,21 @@ void UnitDieBState::cancel()
 void UnitDieBState::convertUnitToCorpse()
 {
 	_parent->getSave()->getBattleState()->showPsiButton(false);
-	// in case the unit was unconscious
-	_parent->getSave()->removeUnconsciousBodyItem(_unit);
+	_parent->getSave()->removeUnconsciousBodyItem(_unit); // in case the unit was unconscious
+
 	Position lastPosition = _unit->getPosition();
+
 	int size = _unit->getArmor()->getSize() - 1;
+
 	BattleItem *itemToKeep = 0;
-	bool dropItems = !Options::getBool("weaponSelfDestruction") || (_unit->getOriginalFaction() != FACTION_HOSTILE || _unit->getStatus() == STATUS_UNCONSCIOUS);
+
+	bool dropItems = !Options::getBool("weaponSelfDestruction")
+			|| (_unit->getOriginalFaction() != FACTION_HOSTILE || _unit->getStatus() == STATUS_UNCONSCIOUS);
 
 	// move inventory from unit to the ground for non-large units
 	if (size == 0 && dropItems)
 	{
-		for (std::vector<BattleItem*>::iterator i = _unit->getInventory()->begin(); i != _unit->getInventory()->end(); ++i)
+		for (std::vector<BattleItem* >::iterator i = _unit->getInventory()->begin(); i != _unit->getInventory()->end(); ++i)
 		{
 			_parent->dropItem(_unit->getPosition(), (*i));
 
@@ -292,7 +301,7 @@ void UnitDieBState::convertUnitToCorpse()
 
 	if (size == 0)
 	{
-		BattleItem *corpse = new BattleItem(_parent->getRuleset()->getItem(_unit->getArmor()->getCorpseItem()),_parent->getSave()->getCurrentItemId());
+		BattleItem* corpse = new BattleItem(_parent->getRuleset()->getItem(_unit->getArmor()->getCorpseItem()),_parent->getSave()->getCurrentItemId());
 		corpse->setUnit(_unit);
 		_parent->dropItem(_unit->getPosition(), corpse, true);
 		_parent->getSave()->getTile(lastPosition)->setUnit(0);
@@ -308,14 +317,13 @@ void UnitDieBState::convertUnitToCorpse()
 				ss << _unit->getArmor()->getCorpseItem() << i;
 				BattleItem *corpse = new BattleItem(_parent->getRuleset()->getItem(ss.str()),_parent->getSave()->getCurrentItemId());
 				corpse->setUnit(_unit);
-				_parent->getSave()->getTile(lastPosition + Position(x,y,0))->setUnit(0);
+				_parent->getSave()->getTile(lastPosition + Position(x, y, 0))->setUnit(0);
 				_parent->dropItem(lastPosition + Position(x, y, 0), corpse, true);
 
 				i++;
 			}
 		}
 	}
-
 }
 
 /**

@@ -16,11 +16,13 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_INTERCEPTSTATE_H
 #define OPENXCOM_INTERCEPTSTATE_H
 
 #include <vector>
 #include "../Engine/State.h"
+
 
 namespace OpenXcom
 {
@@ -37,25 +39,32 @@ class Craft;
  * Intercept window that lets the player launch
  * crafts into missions from the Geoscape.
  */
-class InterceptState : public State
+class InterceptState
+	:
+	public State
 {
-private:
-	TextButton *_btnCancel;
-	Window *_window;
-	Text *_txtTitle, *_txtCraft, *_txtStatus, *_txtBase, *_txtWeapons;
-	TextList *_lstCrafts;
-	Globe *_globe;
-	Base *_base;
-	std::vector<Craft*> _crafts;
-public:
-	/// Creates the Intercept state.
-	InterceptState(Game *game, Globe *globe, Base *base = 0);
-	/// Cleans up the Intercept state.
-	~InterceptState();
-	/// Handler for clicking the Cancel button.
-	void btnCancelClick(Action *action);
-	/// Handler for clicking the Crafts list.
-	void lstCraftsClick(Action *action);
+	private:
+		TextButton* _btnCancel;
+		Window* _window;
+		Text* _txtTitle, * _txtCraft, * _txtStatus, * _txtBase, * _txtWeapons;
+		TextList* _lstCrafts;
+		Globe* _globe;
+		Base* _base;
+		std::vector<Craft* > _crafts;
+
+	public:
+		/// Creates the Intercept state.
+		InterceptState(Game* game, Globe* globe, Base* base = 0);
+		/// Cleans up the Intercept state.
+		~InterceptState();
+
+		/// Handler for clicking the Cancel button.
+		void btnCancelClick(Action* action);
+		/// Handler for clicking the Crafts list.
+		void lstCraftsClick(Action* action);
+		/// Handler for right clicking the Crafts list.
+		/// https://github.com/cfailde/OpenXcom/commit/5d4dfa699b5d0d54be8b1709c40eccfb1c48eb58
+//		void lstCraftsRightClick(Action* action);
 };
 
 }

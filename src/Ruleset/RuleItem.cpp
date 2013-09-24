@@ -640,7 +640,6 @@ bool RuleItem::isRecoverable() const
 	return _recover;
 }
 
-
 /**
  * Returns the item's Turret Type.
  * @return The turret index (-1 for no turret).

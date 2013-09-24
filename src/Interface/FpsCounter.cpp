@@ -41,7 +41,7 @@ FpsCounter::FpsCounter(int width, int height, int x, int y)
 	Surface(width, height, x + 1, y + 12),	// kL
 	_frames(0)								// kL
 {
-	Log(LOG_INFO) << "Create FpsCounter";
+//	Log(LOG_INFO) << "Create FpsCounter";
 
 	_visible = Options::getBool("fpsCounter");
 
@@ -58,7 +58,7 @@ FpsCounter::FpsCounter(int width, int height, int x, int y)
  */
 FpsCounter::~FpsCounter()
 {
-	Log(LOG_INFO) << "Delete FpsCounter";
+//	Log(LOG_INFO) << "Delete FpsCounter";
 
 	delete _text;
 	delete _timer;

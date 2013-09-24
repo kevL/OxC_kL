@@ -16,7 +16,9 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "Explosion.h"
+
 
 namespace OpenXcom
 {
@@ -28,7 +30,13 @@ namespace OpenXcom
  * @param big Flag to indicate it is a bullet hit (false), or a real explosion (true).
  * @param hit True for melee and psi attacks.
  */
-Explosion::Explosion(Position position, int startFrame, bool big, bool hit) : _position(position), _currentFrame(startFrame), _startFrame(startFrame), _big(big), _hit(hit)
+Explosion::Explosion(Position position, int startFrame, bool big, bool hit)
+	:
+	_position(position),
+	_currentFrame(startFrame),
+	_startFrame(startFrame),
+	_big(big),
+	_hit(hit)
 {
 }
 

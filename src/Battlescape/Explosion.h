@@ -16,10 +16,12 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_EXPLOSION_H
 #define OPENXCOM_EXPLOSION_H
 
 #include "Position.h"
+
 
 namespace OpenXcom
 {
@@ -30,25 +32,26 @@ namespace OpenXcom
  */
 class Explosion
 {
-private:
-	Position _position;
-	int _currentFrame, _startFrame;
-	bool _big, _hit;
-public:
-	/// Creates a new Explosion.
-	Explosion(Position _position, int startFrame, bool big, bool hit = false);
-	/// Cleans up the Explosion.
-	~Explosion();
-	/// Moves the Explosion on one frame.
-	bool animate();
-	/// Gets the current position in voxel space.
-	Position getPosition() const;
-	/// Gets the current frame.
-	int getCurrentFrame() const;
-	/// Checks if this is a real explosion.
-	bool isBig() const;
-	/// Checks if this is a melee or psi hit.
-	bool isHit() const;
+	private:
+		Position _position;
+		int _currentFrame, _startFrame;
+		bool _big, _hit;
+	public:
+		/// Creates a new Explosion.
+		Explosion(Position _position, int startFrame, bool big, bool hit = false);
+		/// Cleans up the Explosion.
+		~Explosion();
+
+		/// Moves the Explosion on one frame.
+		bool animate();
+		/// Gets the current position in voxel space.
+		Position getPosition() const;
+		/// Gets the current frame.
+		int getCurrentFrame() const;
+		/// Checks if this is a real explosion.
+		bool isBig() const;
+		/// Checks if this is a melee or psi hit.
+		bool isHit() const;
 };
 
 }

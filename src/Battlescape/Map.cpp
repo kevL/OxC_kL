@@ -93,7 +93,7 @@ Map::Map(Game* game, int width, int height, int x, int y, int visibleMapHeight)
 	_unitDying(false)
 
 {
-	Log(LOG_INFO) << "Create Map";
+//	Log(LOG_INFO) << "Create Map";
 
 	_previewSetting = Options::getInt("battleNewPreviewPath");
 
@@ -121,7 +121,7 @@ Map::Map(Game* game, int width, int height, int x, int y, int visibleMapHeight)
  */
 Map::~Map()
 {
-	Log(LOG_INFO) << "Delete Map";
+//	Log(LOG_INFO) << "Delete Map";
 
 	delete _scrollMouseTimer;
 	delete _scrollKeyTimer;

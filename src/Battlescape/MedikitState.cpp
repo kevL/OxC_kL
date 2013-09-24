@@ -253,7 +253,7 @@ void MedikitState::onHealClick(Action* )
 
 		update();
 
-		// kL_begin:
+		// kL_begin: onHealClick() revive & randomize facing.
 		// - similar to Stimulant code below
 		if (_targetUnit->getStatus() == STATUS_UNCONSCIOUS
 			&& _targetUnit->getStunlevel() < _targetUnit->getHealth())

@@ -34,6 +34,7 @@
 #include "../Engine/Options.h"
 #include "../Ruleset/Armor.h"
 
+
 namespace OpenXcom
 {
 
@@ -41,7 +42,10 @@ namespace OpenXcom
  * Sets up an UnitFallBState.
  * @param parent Pointer to the Battlescape.
  */
-UnitFallBState::UnitFallBState(BattlescapeGame *parent) : BattleState(parent), _terrain(0)
+UnitFallBState::UnitFallBState(BattlescapeGame* parent)
+	:
+	BattleState(parent),
+	_terrain(0)
 {
 }
 
@@ -71,7 +75,7 @@ void UnitFallBState::init()
  */
 void UnitFallBState::think()
 {
-	for (std::list<BattleUnit*>::iterator unit = _parent->getSave()->getFallingUnits()->begin(); unit != _parent->getSave()->getFallingUnits()->end();)
+	for (std::list<BattleUnit* >::iterator unit = _parent->getSave()->getFallingUnits()->begin(); unit != _parent->getSave()->getFallingUnits()->end();)
 	{
 		if ((*unit)->getStatus() == STATUS_TURNING)
 		{
@@ -91,13 +95,13 @@ void UnitFallBState::think()
 
 		bool onScreen = ((*unit)->getVisible() && _parent->getMap()->getCamera()->isOnScreen((*unit)->getPosition()));
 
-		Tile *tileBelow = _parent->getSave()->getTile((*unit)->getPosition() + Position(0, 0, -1));
+		Tile* tileBelow = _parent->getSave()->getTile((*unit)->getPosition() + Position(0, 0, -1));
 
 		for (int x = size; x >= 0; x--)
 		{
 			for (int y = size; y >= 0; y--)
 			{
-				Tile *otherTileBelow = _parent->getSave()->getTile((*unit)->getPosition() + Position(x, y, -1));
+				Tile* otherTileBelow = _parent->getSave()->getTile((*unit)->getPosition() + Position(x, y, -1));
 				if (!_parent->getSave()->getTile((*unit)->getPosition() + Position(x, y, 0))->hasNoFloor(otherTileBelow)
 					|| (*unit)->getArmor()->getMovementType() == MT_FLY)
 				{
@@ -166,8 +170,8 @@ void UnitFallBState::think()
 				{
 					for (int y = (*unit)->getArmor()->getSize() - 1; y >= 0; --y)
 					{
-						Tile *otherTileBelow = _parent->getSave()->getTile((*unit)->getPosition() + Position(x,y,-1));
-						BattleUnit *unitBelow = otherTileBelow->getUnit();
+						Tile* otherTileBelow = _parent->getSave()->getTile((*unit)->getPosition() + Position(x,y,-1));
+						BattleUnit* unitBelow = otherTileBelow->getUnit();
 						if (otherTileBelow && unitBelow)
 						{
 							int partsChecked = 0;
@@ -184,11 +188,11 @@ void UnitFallBState::think()
 									{
 										Position originalPosition(unitBelow->getPosition() + Position(x2, y2, 0));
 										otherTileBelow = _parent->getSave()->getTile(originalPosition);
-										Tile *t = _parent->getSave()->getTile(originalPosition + offset);
-										Tile *bt = _parent->getSave()->getTile(originalPosition + offset + Position(0,0,-1));
-										Tile *bu = _parent->getSave()->getTile(originalPosition + Position(0,0,-1));
-										if (t && 
-											!_parent->getSave()->getPathfinding()->isBlocked(otherTileBelow, t, dir, unitBelow)
+										Tile* t = _parent->getSave()->getTile(originalPosition + offset);
+										Tile* bt = _parent->getSave()->getTile(originalPosition + offset + Position(0,0,-1));
+										Tile* bu = _parent->getSave()->getTile(originalPosition + Position(0,0,-1));
+										if (t
+											&& !_parent->getSave()->getPathfinding()->isBlocked(otherTileBelow, t, dir, unitBelow)
 											&& (!t->hasNoFloor(bt) || unitBelow->getArmor()->getMovementType() == MT_FLY))
 										{
 											partsChecked++;
@@ -215,9 +219,12 @@ void UnitFallBState::think()
 			if (falling)
 			{
 				Position destination = (*unit)->getPosition() + Position(0,0,-1);
-				Tile *tileBelow = _parent->getSave()->getTile(destination);
+
+				Tile* tileBelow = _parent->getSave()->getTile(destination);
+
 				(*unit)->startWalking(Pathfinding::DIR_DOWN, destination, tileBelow, onScreen);
 				(*unit)->setCache(0);
+
 				_parent->getMap()->cacheUnit(*unit);
 
 				++unit;

@@ -56,7 +56,7 @@ UnitWalkBState::UnitWalkBState(BattlescapeGame* parent, BattleAction action)
 	_numUnitsSpotted(0),
 	_preMovementCost(0)
 {
-	Log(LOG_INFO) << "Create UnitWalkBState";
+//	Log(LOG_INFO) << "Create UnitWalkBState";
 }
 
 /**
@@ -64,7 +64,7 @@ UnitWalkBState::UnitWalkBState(BattlescapeGame* parent, BattleAction action)
  */
 UnitWalkBState::~UnitWalkBState()
 {
-	Log(LOG_INFO) << "Delete UnitWalkBState";
+//	Log(LOG_INFO) << "Delete UnitWalkBState";
 }
 
 /**

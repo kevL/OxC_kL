@@ -16,7 +16,9 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "BattleAIState.h"
+
 
 namespace OpenXcom
 {
@@ -26,9 +28,11 @@ namespace OpenXcom
  * @param game Pointer to the game.
  * @param unit Pointer to the unit.
  */
-BattleAIState::BattleAIState(SavedBattleGame *game, BattleUnit *unit) : _game(game), _unit(unit)
+BattleAIState::BattleAIState(SavedBattleGame* game, BattleUnit* unit)
+	:
+	_game(game),
+	_unit(unit)
 {
-
 }
 
 /**
@@ -36,14 +40,13 @@ BattleAIState::BattleAIState(SavedBattleGame *game, BattleUnit *unit) : _game(ga
  */
 BattleAIState::~BattleAIState()
 {
-
 }
 
 /**
  * Loads the AI state from a YAML file.
  * @param node YAML node.
  */
-void BattleAIState::load(const YAML::Node &)
+void BattleAIState::load(const YAML::Node& )
 {
 }
 
@@ -56,31 +59,26 @@ YAML::Node BattleAIState::save() const
 	return YAML::Node();
 }
 
-
 /**
  * Enters the current AI state.
  */
 void BattleAIState::enter()
 {
-
 }
-
 
 /**
  * Exits the current AI state.
  */
 void BattleAIState::exit()
 {
-
 }
 
 /**
  * Runs any code the state needs to keep updating every
  * AI cycle.
  */
-void BattleAIState::think(BattleAction *)
+void BattleAIState::think(BattleAction* )
 {
-
 }
 
 }

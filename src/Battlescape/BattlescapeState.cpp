@@ -99,7 +99,7 @@ BattlescapeState::BattlescapeState(Game* game)
 	State(game),
 	_popups()
 {
-	Log(LOG_INFO) << "Create BattlescapeState";		// kL
+//	Log(LOG_INFO) << "Create BattlescapeState";		// kL
 //	game->getScreen()->setScale(1.0);
 
 	int screenWidth = Options::getInt("baseXResolution");
@@ -530,7 +530,7 @@ BattlescapeState::BattlescapeState(Game* game)
  */
 BattlescapeState::~BattlescapeState()
 {
-	Log(LOG_INFO) << "Delete BattlescapeState";		// kL
+//	Log(LOG_INFO) << "Delete BattlescapeState";		// kL
 
 	delete _animTimer;
 	delete _gameTimer;

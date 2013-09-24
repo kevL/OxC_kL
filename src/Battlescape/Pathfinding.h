@@ -54,6 +54,9 @@ class Pathfinding
 		bool aStarPath(const Position& origin, const Position& target, BattleUnit* missileTarget, bool sneak = false, int maxTUCost = 1000);
 		/// Determines whether a unit can fall down from this tile.
 		bool canFallDown(Tile* destinationTile);
+		/// Checks if going one step from start to destination in the given direction requires going through a closed UFO door.
+		/// https://github.com/cfailde/OpenXcom/commit/00a6a7067502602f2d4900e7c972e79be8eb907a
+		bool isThroughClosedUfoDoor(int direction, Position start, Position destination);
 		/// Determines whether a unit can fall down from this tile.
 		bool canFallDown(Tile* destinationTile, int size);
 		BattleUnit* _unit;

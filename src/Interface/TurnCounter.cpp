@@ -41,7 +41,7 @@ TurnCounter::TurnCounter(int width, int height, int x, int y, SavedBattleGame* b
 	_sbgame(battleGame)
 //	node(node["turn"].as<int>())
 {
-	Log(LOG_INFO) << "Create TurnCounter";
+//	Log(LOG_INFO) << "Create TurnCounter";
 
 	_visible = true;
 
@@ -76,7 +76,7 @@ TurnCounter::TurnCounter(int width, int height, int x, int y, SavedBattleGame* b
  */
 TurnCounter::~TurnCounter()
 {
-	Log(LOG_INFO) << "Delete TurnCounter";
+//	Log(LOG_INFO) << "Delete TurnCounter";
 
 	delete _text;
 }
@@ -119,7 +119,7 @@ void TurnCounter::update()
 //	_tCount = (unsigned int)_sbgame->getTurn();
 
 	_tCount++;
-	Log(LOG_INFO) << ". TurnCounter::update() attempting update! turn = " << _tCount;
+//	Log(LOG_INFO) << ". TurnCounter::update() attempting update! turn = " << _tCount;
 
 //	_text->setValue((unsigned int)_tCount);
 	_text->setValue(_tCount);

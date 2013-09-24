@@ -198,9 +198,9 @@ class BattleUnit
 		/// Gets the walking phase for diagonal walking
 		int getDiagonalWalkingPhase() const;
 		/// Gets the unit's destination when walking
-		const Position &getDestination() const;
+		const Position& getDestination() const;
 		/// Look at a certain point.
-		void lookAt(const Position &point, bool turret = false);
+		void lookAt(const Position& point, bool turret = false);
 		/// Look at a certain direction.
 		void lookAt(int direction, bool force = false);
 		/// Turn to the destination direction.

@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_UNITDIEBSTATE_H
 #define OPENXCOM_UNITDIEBSTATE_H
 
@@ -23,6 +24,7 @@
 #include "../Ruleset/RuleItem.h"
 
 namespace OpenXcom
+
 {
 
 class BattlescapeGame;
@@ -32,19 +34,22 @@ class BattleUnit;
 /**
  * State for dying units.
  */
-class UnitDieBState : public BattleState
+class UnitDieBState
+	:
+	public BattleState
 {
 	private:
-		BattleUnit *_unit;
+		BattleUnit* _unit;
 		ItemDamageType _damageType;
 		bool _noSound;
 		int _originalDir;
 
 	public:
 		/// Creates a new UnitDieBState class
-		UnitDieBState(BattlescapeGame *parent, BattleUnit *unit, ItemDamageType damageType, bool noSound);
+		UnitDieBState(BattlescapeGame* parent, BattleUnit* unit, ItemDamageType damageType, bool noSound);
 		/// Cleans up the UnitDieBState.
 		~UnitDieBState();
+
 		/// Initializes the state.
 		void init();
 		/// Handles a cancels request.

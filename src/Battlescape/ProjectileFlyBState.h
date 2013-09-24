@@ -16,11 +16,13 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_PROJECTILEFLYBSTATE_H
 #define OPENXCOM_PROJECTILEFLYBSTATE_H
 
 #include "BattleState.h"
 #include "Position.h"
+
 
 namespace OpenXcom
 {
@@ -32,31 +34,35 @@ class BattleItem;
 /**
  * A projectile state.
  */
-class ProjectileFlyBState : public BattleState
+class ProjectileFlyBState
+	:
+	public BattleState
 {
-private:
-	BattleUnit *_unit;
-	BattleItem *_ammo;
-	BattleItem *_projectileItem;
-	Position _origin;
-	int _projectileImpact;
-	/// Tries to create a projectile sprite.
-	bool createNewProjectile();
-	bool _initialized;
-public:
-	/// Creates a new ProjectileFly class
-	ProjectileFlyBState(BattlescapeGame *parent, BattleAction action);
-	ProjectileFlyBState(BattlescapeGame *parent, BattleAction action, Position origin);
-	/// Cleans up the ProjectileFly.
-	~ProjectileFlyBState();
-	/// Initializes the state.
-	void init();
-	/// Handles a cancel request.
-	void cancel();
-	/// Runs state functionality every cycle.
-	void think();
-	/// Validates the throwing range.
-	static bool validThrowRange(BattleAction *action);
+	private:
+		BattleUnit* _unit;
+		BattleItem* _ammo;
+		BattleItem* _projectileItem;
+		Position _origin;
+		int _projectileImpact;
+		/// Tries to create a projectile sprite.
+		bool createNewProjectile();
+		bool _initialized;
+
+	public:
+		/// Creates a new ProjectileFly class
+		ProjectileFlyBState(BattlescapeGame* parent, BattleAction action);
+		ProjectileFlyBState(BattlescapeGame* parent, BattleAction action, Position origin);
+		/// Cleans up the ProjectileFly.
+		~ProjectileFlyBState();
+
+		/// Initializes the state.
+		void init();
+		/// Handles a cancel request.
+		void cancel();
+		/// Runs state functionality every cycle.
+		void think();
+		/// Validates the throwing range.
+		static bool validThrowRange(BattleAction* action);
 };
 
 }

@@ -80,7 +80,7 @@ BattlescapeGame::BattlescapeGame(SavedBattleGame* save, BattlescapeState* parent
 	_endTurnRequested(false),
 	_kneelReserved(false)
 {
-	Log(LOG_INFO) << "Create BattlescapeGame";
+//	Log(LOG_INFO) << "Create BattlescapeGame";
 
 	_tuReserved = BA_NONE;
 	_playerTUReserved = BA_NONE;
@@ -89,7 +89,8 @@ BattlescapeGame::BattlescapeGame(SavedBattleGame* save, BattlescapeState* parent
 	_AIActionCounter = 0;
 	_currentAction.actor = 0;
 
-	checkForCasualties(0, 0, true);
+//kL	checkForCasualties(0, 0, true);
+	checkForCasualties(0, 0, false, false);
 	cancelCurrentAction();
 	_currentAction.targeting = false;
 	_currentAction.type = BA_NONE;
@@ -100,7 +101,7 @@ BattlescapeGame::BattlescapeGame(SavedBattleGame* save, BattlescapeState* parent
  */
 BattlescapeGame::~BattlescapeGame()
 {
-	Log(LOG_INFO) << "Delete BattlescapeGame";
+//	Log(LOG_INFO) << "Delete BattlescapeGame";
 }
 
 /**
@@ -178,6 +179,7 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 	// AI does three things per unit, before switching to the next, or it got killed before doing the second thing
 	// melee get more because chryssalids and reapers need to attack many times to be scary
 	const int AIActionLimit = (unit->getMainHandWeapon() && unit->getMainHandWeapon()->getRules()->getBattleType() == BT_MELEE) ? 9 : 2;
+
 	if (unit->getTimeUnits() <= 5
 		|| (unit->_hidingForTurn
 			&& unit->getPosition() == unit->lastCover
@@ -412,7 +414,7 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
  */
 bool BattlescapeGame::kneel(BattleUnit* bu)
 {
-	Log(LOG_INFO) << "BattlescapeGame::kneel()" ;	// kL
+//	Log(LOG_INFO) << "BattlescapeGame::kneel()" ;	// kL
 
 	int tu = bu->isKneeled() ? 8 : 4;
 
@@ -590,15 +592,15 @@ void BattlescapeGame::endTurn()
  */
 void BattlescapeGame::checkForCasualties(BattleItem* murderweapon, BattleUnit* murderer, bool hiddenExplosion, bool terrainExplosion)
 {
-	// kL_begin: This might crash the (battlescape) game.
-	if (murderer)
+	// kL_begin: checkForCasualties().
+/*	if (murderer)
 	{
 		Log(LOG_INFO) << "BattlescapeGame::checkForCasualties() murderer = " << murderer->getId();
 	}
 	else
 	{
-		Log(LOG_INFO) << "BattlescapeGame::checkForCasualties() murderer = NULL ";
-	}
+		Log(LOG_INFO) << "BattlescapeGame::checkForCasualties() murderer = NULL";
+	} */
 	// kL_end.
 
 	for (std::vector<BattleUnit* >::iterator j = _save->getUnits()->begin(); j != _save->getUnits()->end(); ++j)

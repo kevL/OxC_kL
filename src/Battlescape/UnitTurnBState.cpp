@@ -37,7 +37,9 @@ namespace OpenXcom
  * @param parent Pointer to the Battlescape.
  * @param action Pointer to an action.
  */
-UnitTurnBState::UnitTurnBState(BattlescapeGame *parent, BattleAction action) : BattleState(parent, action), _unit(0), _turret(false)
+UnitTurnBState::UnitTurnBState(BattlescapeGame* parent, BattleAction action)
+	:
+	BattleState(parent, action), _unit(0), _turret(false)
 {
 }
 
@@ -75,13 +77,11 @@ void UnitTurnBState::init()
 			{
 				_parent->getResourcePack()->getSound("BATTLE.CAT", 3)->play(); // normal door
 			}
-
-			if (door == 1)
+			else if (door == 1)
 			{
 				_parent->getResourcePack()->getSound("BATTLE.CAT", RNG::generate(20, 21))->play(); // ufo door
 			}
-
-			if (door == 4)
+			else if (door == 4)
 			{
 				_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
 			}

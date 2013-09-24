@@ -285,7 +285,7 @@ bool Projectile::calculateThrow(double accuracy)
 	BattleUnit *bu = _save->getTile(_origin)->getUnit();
 	Tile *tileAbove = _save->getTile(_origin + Position(0,0,1));
 
-	if(!bu)
+	if (!bu)
 		bu = _save->getTile(Position(_origin.x, _origin.y, _origin.z-1))->getUnit();
 
 	originVoxel.z += bu->getHeight() + bu->getFloatHeight();
@@ -316,11 +316,11 @@ bool Projectile::calculateThrow(double accuracy)
 	if (_action.type != BA_THROW)
 	{
 		BattleUnit *tu = _save->getTile(_action.target)->getUnit();
-		if(!tu
+		if (!tu
 			&& _action.target.z > 0
 			&& _save->getTile(_action.target)->hasNoFloor(0))
 		{
-			tu = _save->getTile(Position(_action.target.x, _action.target.y, _action.target.z-1))->getUnit();
+			tu = _save->getTile(Position(_action.target.x, _action.target.y, _action.target.z - 1))->getUnit();
 		}
 
 		if (tu)
@@ -357,7 +357,8 @@ bool Projectile::calculateThrow(double accuracy)
 	// apply some accuracy modifiers
 	if (accuracy > 1) accuracy = 1;
 
-	static const double maxDeviation = 0.08;
+//kL	static const double maxDeviation = 0.08;
+	static const double maxDeviation = 0.07;	// kL
 	static const double minDeviation = 0;
 	double baseDeviation = (maxDeviation - (maxDeviation * accuracy)) + minDeviation;
 	double deviation = RNG::boxMuller(0, baseDeviation);
