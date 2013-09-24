@@ -912,7 +912,7 @@ bool TileEngine::checkReactionFire(BattleUnit* unit)
 		BattleUnit* reactor = getReactor(spotters, unit);
 		if (reactor != unit)
 		{
-/*			while (true)
+			while (true)
 			{
 				if (!tryReactionSnap(reactor, unit))
 				{
@@ -929,9 +929,9 @@ bool TileEngine::checkReactionFire(BattleUnit* unit)
 //kL				result = true;
 				if (reactor == unit)
 					break;
-			} */
+			}
 			// kL_begin:
-			for (std::vector<BattleUnit* >::iterator i = spotters.begin(); i != spotters.end(); ++i)
+/*			for (std::vector<BattleUnit* >::iterator i = spotters.begin(); i != spotters.end(); ++i)
 			{
 //				if (reactor == unit) continue;
 				if (tryReactionSnap(reactor, unit))
@@ -947,7 +947,7 @@ bool TileEngine::checkReactionFire(BattleUnit* unit)
 
 					break;
 				}
-			}
+			} */
 			// kL_end.
 		}
 //		else Log(LOG_INFO) << ". . Reactor == unit, EXIT false";		// kL
@@ -989,12 +989,14 @@ std::vector<BattleUnit *> TileEngine::getSpottingUnits(BattleUnit* unit)
 				if (_save->getSide() != FACTION_NEUTRAL		// no reaction on civilian turn.
 					&& canMakeSnap(*i, unit))
 				{
-//					Log(LOG_INFO) << "getSpottingUnits() " << (*i)->getId() << " : " << (*i)->getReactionScore();		// kL
+//					Log(LOG_INFO) << "getSpottingUnits() " << (*i)->getId() << " : " << (*i)->getReactionScore() << " add";		// kL
 
 					spotters.push_back(*i);
 				}
 			}
 		}
+
+//		Log(LOG_INFO) << "getSpottingUnits() " << (*i)->getId() << " : "  << (*i)->getReactionScore() << " not";		// kL
 	}
 
 	return spotters;
@@ -1013,6 +1015,8 @@ BattleUnit* TileEngine::getReactor(std::vector<BattleUnit* > spotters, BattleUni
 
 	for (std::vector<BattleUnit* >::iterator i = spotters.begin(); i != spotters.end(); ++i)
 	{
+//		Log(LOG_INFO) << "getReactor() " << (*i)->getId() << " iterate";		// kL
+
 		if (!(*i)->isOut()
 			&& canMakeSnap((*i), unit)
 			&& (*i)->getReactionScore() > bestScore)
@@ -1061,9 +1065,13 @@ bool TileEngine::canMakeSnap(BattleUnit* unit, BattleUnit* target)
 		Position scanVoxel;
 		if (canTargetUnit(&origin, target->getTile(), &scanVoxel, unit))
 		{
+//			Log(LOG_INFO) << "canMakeSnap() " << unit->getId() << " true";		// kL
+
 			return true;
 		}
 	}
+
+//	Log(LOG_INFO) << "canMakeSnap() " << unit->getId() << " false";		// kL
 
 	return false;
 }
