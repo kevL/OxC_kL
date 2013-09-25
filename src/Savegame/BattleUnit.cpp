@@ -65,7 +65,6 @@ BattleUnit::BattleUnit(Soldier* soldier, UnitFaction faction)
 	_verticalDirection(0),
 	_status(STATUS_STANDING),
 	_walkPhase(0),
-//	_walkPhase(-1),		// kL
 	_fallPhase(0),
 	_spinPhase(-1),		// kL
 	_kneeled(false),
@@ -518,7 +517,7 @@ void BattleUnit::startWalking(int direction, const Position& destination, Tile* 
 
 //kL	_kneeled = false;
 
-	if ((_tile->hasNoFloor(tileBelow) || direction >= Pathfinding::DIR_UP))
+	if (_tile->hasNoFloor(tileBelow) || direction >= Pathfinding::DIR_UP)
 	{
 		_status = STATUS_FLYING;
 		_floating = true;
@@ -864,7 +863,7 @@ Surface *BattleUnit::getCache(bool *invalid, int part) const
  */
 void BattleUnit::kneel(bool kneeled)
 {
-	Log(LOG_INFO) << "BattleUnit::kneel()" ;	// kL
+//	Log(LOG_INFO) << "BattleUnit::kneel()" ;	// kL
 //	_status = STATUS_KNEELING;		// kL
 
 	_kneeled = kneeled;
@@ -1645,7 +1644,7 @@ int BattleUnit::getFire() const
  * Get the pointer to the vector of inventory items.
  * @return pointer to vector.
  */
-std::vector<BattleItem*> *BattleUnit::getInventory()
+std::vector<BattleItem* >* BattleUnit::getInventory()
 {
 	return &_inventory;
 }
@@ -1654,7 +1653,7 @@ std::vector<BattleItem*> *BattleUnit::getInventory()
  * Let AI do their thing.
  * @param action AI action.
  */
-void BattleUnit::think(BattleAction *action)
+void BattleUnit::think(BattleAction* action)
 {
 	checkAmmo();
 	_currentAIState->think(action);
@@ -1664,12 +1663,12 @@ void BattleUnit::think(BattleAction *action)
  * Changes the current AI state.
  * @param aiState Pointer to AI state.
  */
-void BattleUnit::setAIState(BattleAIState *aiState)
+void BattleUnit::setAIState(BattleAIState* aiState)
 {
 	if (_currentAIState)
 	{
-		if (dynamic_cast<AggroBAIState*>(aiState) != 0
-			&& dynamic_cast<AggroBAIState*>(_currentAIState) != 0)
+		if (dynamic_cast<AggroBAIState* >(aiState) != 0
+			&& dynamic_cast<AggroBAIState* >(_currentAIState) != 0)
 		{
 			delete aiState;
 
@@ -1691,7 +1690,7 @@ void BattleUnit::setAIState(BattleAIState *aiState)
  * Returns the current AI state.
  * @return Pointer to AI state.
  */
-BattleAIState *BattleUnit::getCurrentAIState() const
+BattleAIState* BattleUnit::getCurrentAIState() const
 {
 	return _currentAIState;
 }
@@ -1757,14 +1756,13 @@ Tile* BattleUnit::getTile() const
 }
 
 /**
- * Checks if there's an inventory item in
- * the specified inventory position.
+ * Checks if there's an inventory item in the specified inventory position.
  * @param slot Inventory slot.
  * @param x X position in slot.
  * @param y Y position in slot.
  * @return Item in the slot, or NULL if none.
  */
-BattleItem *BattleUnit::getItem(RuleInventory *slot, int x, int y) const
+BattleItem* BattleUnit::getItem(RuleInventory* slot, int x, int y) const
 {
 	if (slot->getType() != INV_GROUND) // Soldier items
 	{
@@ -1779,7 +1777,7 @@ BattleItem *BattleUnit::getItem(RuleInventory *slot, int x, int y) const
 	}
 	else if (_tile != 0) // Ground items
 	{
-		for (std::vector<BattleItem*>::const_iterator i = _tile->getInventory()->begin(); i != _tile->getInventory()->end(); ++i)
+		for (std::vector<BattleItem* >::const_iterator i = _tile->getInventory()->begin(); i != _tile->getInventory()->end(); ++i)
 		{
 			if ((*i)->occupiesSlot(x, y))
 			{
@@ -1799,7 +1797,7 @@ BattleItem *BattleUnit::getItem(RuleInventory *slot, int x, int y) const
  * @param y Y position in slot.
  * @return Item in the slot, or NULL if none.
  */
-BattleItem *BattleUnit::getItem(const std::string &slot, int x, int y) const
+BattleItem* BattleUnit::getItem(const std::string &slot, int x, int y) const
 {
 	if (slot != "STR_GROUND") // Soldier items
 	{
@@ -1817,7 +1815,8 @@ BattleItem *BattleUnit::getItem(const std::string &slot, int x, int y) const
 	{
 		for (std::vector<BattleItem*>::const_iterator i = _tile->getInventory()->begin(); i != _tile->getInventory()->end(); ++i)
 		{
-			if ((*i)->getSlot() != 0 && (*i)->occupiesSlot(x, y))
+			if ((*i)->getSlot() != 0
+				&& (*i)->occupiesSlot(x, y))
 			{
 				return *i;
 			}
@@ -1832,10 +1831,10 @@ BattleItem *BattleUnit::getItem(const std::string &slot, int x, int y) const
 * @param quickest Wether to get the quickest weapon, default true
 * @return Pointer to item.
 */
-BattleItem *BattleUnit::getMainHandWeapon(bool quickest) const
+BattleItem* BattleUnit::getMainHandWeapon(bool quickest) const
 {
-	BattleItem *weaponRightHand = getItem("STR_RIGHT_HAND");
-	BattleItem *weaponLeftHand = getItem("STR_LEFT_HAND");
+	BattleItem* weaponRightHand = getItem("STR_RIGHT_HAND");
+	BattleItem* weaponLeftHand = getItem("STR_LEFT_HAND");
 
 	// if there is only one weapon, or only one weapon loaded (rules out grenades) it's easy:
 	if (!weaponRightHand
@@ -1869,7 +1868,7 @@ BattleItem *BattleUnit::getMainHandWeapon(bool quickest) const
 * Get a grenade from the belt (used for AI)
 * @return Pointer to item.
 */
-BattleItem *BattleUnit::getGrenadeFromBelt() const
+BattleItem* BattleUnit::getGrenadeFromBelt() const
 {
 	for (std::vector<BattleItem*>::const_iterator i = _inventory.begin(); i != _inventory.end(); ++i)
 	{
@@ -1887,7 +1886,7 @@ BattleItem *BattleUnit::getGrenadeFromBelt() const
  */
 bool BattleUnit::checkAmmo()
 {
-	BattleItem *weapon = getItem("STR_RIGHT_HAND");
+	BattleItem* weapon = getItem("STR_RIGHT_HAND");
 	if (!weapon
 		|| weapon->getAmmoItem() != 0
 		|| weapon->getRules()->getBattleType() == BT_MELEE
@@ -1904,15 +1903,15 @@ bool BattleUnit::checkAmmo()
 	}
 
 	// we have a non-melee weapon with no ammo and 15 or more TUs - we might need to look for ammo then
-	BattleItem *ammo = 0;
+	BattleItem* ammo = 0;
 	bool wrong = true;
 
-	for (std::vector<BattleItem*>::iterator i = getInventory()->begin(); i != getInventory()->end(); ++i)
+	for (std::vector<BattleItem* >::iterator i = getInventory()->begin(); i != getInventory()->end(); ++i)
 	{
-		ammo = (*i);
+		ammo = *i;
 		for (std::vector<std::string>::iterator c = weapon->getRules()->getCompatibleAmmo()->begin(); c != weapon->getRules()->getCompatibleAmmo()->end(); ++c)
 		{
-			if ((*c) == ammo->getRules()->getType())
+			if (*c == ammo->getRules()->getType())
 			{
 				wrong = false;
 				break;
@@ -1996,9 +1995,9 @@ void BattleUnit::addMeleeExp()
 * Increase the mission counter. Calculate the experience increases.
 * @return True if the soldier was eligible for squaddie promotion.
 */
-bool BattleUnit::postMissionProcedures(SavedGame *geoscape)
+bool BattleUnit::postMissionProcedures(SavedGame* geoscape)
 {
-	Soldier *s = geoscape->getSoldier(_id);
+	Soldier* s = geoscape->getSoldier(_id);
 	if (s == 0)
 	{
 		return false;
@@ -2007,11 +2006,11 @@ bool BattleUnit::postMissionProcedures(SavedGame *geoscape)
 	s->addMissionCount();
 	s->addKillCount(_kills);
 
-	UnitStats *stats = s->getCurrentStats();
+	UnitStats* stats = s->getCurrentStats();
 	const UnitStats caps = s->getRules()->getStatCaps();
 	int healthLoss = stats->health - _health;
 
-	s->setWoundRecovery(RNG::generate((healthLoss * 0.5),(healthLoss * 1.5)));
+	s->setWoundRecovery(RNG::generate(healthLoss * 0.5, healthLoss * 1.5));
 
 	if (_expBravery && stats->bravery < caps.bravery)
 	{
@@ -2097,7 +2096,7 @@ int BattleUnit::improveStat(int exp)
  * Get the unit's minimap sprite index. Used to display the unit on the minimap
  * @return the unit minimap index
  */
-int BattleUnit::getMiniMapSpriteIndex () const
+int BattleUnit::getMiniMapSpriteIndex() const
 {
 	// minimap sprite index:
 	// * 0-2   : Xcom soldier
@@ -2119,6 +2118,7 @@ int BattleUnit::getMiniMapSpriteIndex () const
 		break;
 		case FACTION_NEUTRAL:			return 6;
 		break;
+
 		default:
 			if (_armor->getSize() == 1)	return 0;
 			else						return 12;
@@ -2233,7 +2233,7 @@ Armor *BattleUnit::getArmor() const
  * @param lang Pointer to language.
  * @return name Widecharstring of the unit's name.
  */
-std::wstring BattleUnit::getName(Language *lang, bool debugAppendId) const
+std::wstring BattleUnit::getName(Language* lang, bool debugAppendId) const
 {
 	if (_type != "SOLDIER" && lang != 0)
 	{
@@ -2260,7 +2260,7 @@ std::wstring BattleUnit::getName(Language *lang, bool debugAppendId) const
   * Gets pointer to the unit's stats.
   * @return stats Pointer to the unit's stats.
   */
-UnitStats *BattleUnit::getStats()
+UnitStats* BattleUnit::getStats()
 {
 	return &_stats;
 }
@@ -2548,7 +2548,7 @@ void BattleUnit::setCharging(BattleUnit *chargeTarget)
  * Get the units we are charging towards.
  * @return Charge Target
  */
-BattleUnit *BattleUnit::getCharging()
+BattleUnit* BattleUnit::getCharging()
 {
 	return _charging;
 }
@@ -2557,7 +2557,7 @@ BattleUnit *BattleUnit::getCharging()
  * Get the units carried weight in strength units.
  * @return weight
  */
-int BattleUnit::getCarriedWeight(BattleItem *draggingItem) const
+int BattleUnit::getCarriedWeight(BattleItem* draggingItem) const
 {
 	int weight = 6;
 	for (std::vector<BattleItem*>::const_iterator i = _inventory.begin(); i != _inventory.end(); ++i)
@@ -2708,15 +2708,15 @@ bool BattleUnit::checkViewSector(Position pos) const
 void BattleUnit::adjustStats(const int diff)
 {
 	// adjust the unit's stats according to the difficulty level.
-	_stats.tu += 4 * diff * _stats.tu / 100;
-	_stats.stamina += 4 * diff * _stats.stamina / 100;
-	_stats.reactions += 6 * diff * _stats.reactions / 100;
-	_stats.strength += 2 * diff * _stats.strength / 100;
-	_stats.firing = (_stats.firing + 6 * diff * _stats.firing / 100) / (diff > 0 ? 1 : 2);
-	_stats.strength += 2 * diff * _stats.strength / 100;
-	_stats.melee += 4 * diff * _stats.melee / 100;
-	_stats.psiSkill += 4 * diff * _stats.psiSkill / 100;
-	_stats.psiStrength += 4 * diff * _stats.psiStrength / 100;
+	_stats.tu			+= 4 * diff * _stats.tu / 100;
+	_stats.stamina		+= 4 * diff * _stats.stamina / 100;
+	_stats.reactions	+= 6 * diff * _stats.reactions / 100;
+	_stats.strength		+= 2 * diff * _stats.strength / 100;
+	_stats.firing		= (_stats.firing + 6 * diff * _stats.firing / 100) / (diff > 0 ? 1 : 2);
+	_stats.strength		+= 2 * diff * _stats.strength / 100;
+	_stats.melee		+= 4 * diff * _stats.melee / 100;
+	_stats.psiSkill		+= 4 * diff * _stats.psiSkill / 100;
+	_stats.psiStrength	+= 4 * diff * _stats.psiStrength / 100;
 }
 
 /*
