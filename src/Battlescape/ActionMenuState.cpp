@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "ActionMenuState.h"
 #include <sstream>
 #include <cmath>
@@ -37,6 +38,7 @@
 #include "Pathfinding.h"
 #include "TileEngine.h"
 
+
 namespace OpenXcom
 {
 
@@ -47,7 +49,10 @@ namespace OpenXcom
  * @param x Position on the x-axis.
  * @param y position on the y-axis.
  */
-ActionMenuState::ActionMenuState(Game *game, BattleAction *action, int x, int y) : State(game), _action(action)
+ActionMenuState::ActionMenuState(Game* game, BattleAction* action, int x, int y)
+	:
+	State(game),
+	_action(action)
 {
 	_screen = false;
 
@@ -61,18 +66,16 @@ ActionMenuState::ActionMenuState(Game *game, BattleAction *action, int x, int y)
 
 	// Build up the popup menu
 	int id = 0;
-	RuleItem *weapon = _action->weapon->getRules();
+	RuleItem* weapon = _action->weapon->getRules();
 
-	// throwing (if not a fixed weapon)
-	if (!weapon->isFixed())
+	if (!weapon->isFixed()) // throwing (if not a fixed weapon)
 	{
 		addItem(BA_THROW, "STR_THROW", &id);
 	}
 
-	// priming
 	if ((weapon->getBattleType() == BT_GRENADE
 			|| weapon->getBattleType() == BT_PROXIMITYGRENADE)
-		&& _action->weapon->getExplodeTurn() == 0)
+		&& _action->weapon->getExplodeTurn() == 0) // priming
 	{
 		addItem(BA_PRIME, "STR_PRIME_GRENADE", &id);
 	}
@@ -143,7 +146,7 @@ ActionMenuState::~ActionMenuState()
  * @param name Action description.
  * @param id Pointer to the new item ID.
  */
-void ActionMenuState::addItem(BattleActionType ba, const std::string &name, int *id)
+void ActionMenuState::addItem(BattleActionType ba, const std::string& name, int* id)
 {
 	std::wstringstream ss1, ss2;
 	int acc = (int)floor(_action->actor->getFiringAccuracy(ba, _action->weapon) * 100);
@@ -175,7 +178,7 @@ void ActionMenuState::addItem(BattleActionType ba, const std::string &name, int 
  * Closes the window on right-click.
  * @param action Pointer to an action.
  */
-void ActionMenuState::handle(Action *action)
+void ActionMenuState::handle(Action* action)
 {
 	State::handle(action);
 	if (action->getDetails()->type == SDL_MOUSEBUTTONDOWN
@@ -189,12 +192,12 @@ void ActionMenuState::handle(Action *action)
  * Executes the action corresponding to this action menu item.
  * @param action Pointer to an action.
  */
-void ActionMenuState::btnActionMenuItemClick(Action *action)
+void ActionMenuState::btnActionMenuItemClick(Action* action)
 {
 	_game->getSavedGame()->getSavedBattle()->getPathfinding()->removePreview();
 
 	int btnID = -1;
-	RuleItem *weapon = _action->weapon->getRules();
+	RuleItem* weapon = _action->weapon->getRules();
 
 	// got to find out which button was pressed
 	for (size_t i = 0; i < sizeof(_actionMenu) / sizeof(_actionMenu[0]) && btnID == -1; ++i)
@@ -225,10 +228,10 @@ void ActionMenuState::btnActionMenuItemClick(Action *action)
 		else if (_action->type == BA_USE
 			&& weapon->getBattleType() == BT_MEDIKIT)
 		{
-			BattleUnit *targetUnit = NULL;
+			BattleUnit* targetUnit = NULL;
 
-			std::vector<BattleUnit*> *const units (_game->getSavedGame()->getSavedBattle()->getUnits());
-			for (std::vector<BattleUnit*>::const_iterator i = units->begin (); i != units->end () && !targetUnit; ++i)
+			std::vector<BattleUnit* >* const units (_game->getSavedGame()->getSavedBattle()->getUnits());
+			for (std::vector<BattleUnit* >::const_iterator i = units->begin (); i != units->end () && !targetUnit; ++i)
 			{
 				// we can heal a unit that is at the same position, unconscious and healable(=woundable)
 				if ((*i)->getPosition() == _action->actor->getPosition()
@@ -245,7 +248,7 @@ void ActionMenuState::btnActionMenuItemClick(Action *action)
 				Position p;
 				Pathfinding::directionToVector(_action->actor->getDirection(), &p);
 
-				Tile* tile (_game->getSavedGame()->getSavedBattle()->getTile(_action->actor->getPosition() + p));
+				Tile* tile(_game->getSavedGame()->getSavedBattle()->getTile(_action->actor->getPosition() + p));
 				if (tile != 0
 					&& tile->getUnit()
 					&& tile->getUnit()->isWoundable())
@@ -268,8 +271,7 @@ void ActionMenuState::btnActionMenuItemClick(Action *action)
 		else if (_action->type == BA_USE
 			&& weapon->getBattleType() == BT_SCANNER)
 		{
-			// spend TUs first, then show the scanner
-			if (_action->actor->spendTimeUnits(_action->TU))
+			if (_action->actor->spendTimeUnits(_action->TU)) // spend TUs first, then show the scanner
 			{
 				_game->popState();
 				_game->pushState(new ScannerState(_game, _action));
@@ -282,8 +284,7 @@ void ActionMenuState::btnActionMenuItemClick(Action *action)
 		}
 		else if (_action->type == BA_LAUNCH)
 		{
-			// check beforehand if we have enough time units
-			if (_action->TU > _action->actor->getTimeUnits())
+			if (_action->TU > _action->actor->getTimeUnits()) // check beforehand if we have enough time units
 			{
 				_action->result = "STR_NOT_ENOUGH_TIME_UNITS";
 			}

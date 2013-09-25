@@ -16,8 +16,10 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "RuleCraft.h"
 #include "RuleTerrain.h"
+
 
 namespace OpenXcom
 {
@@ -27,13 +29,30 @@ namespace OpenXcom
  * type of craft.
  * @param type String defining the type.
  */
-RuleCraft::RuleCraft(const std::string &type) :
-    _type(type), _sprite(-1), _fuelMax(0), _damageMax(0), _speedMax(0), _accel(0),
-    _weapons(0), _soldiers(0), _vehicles(0), _costBuy(0), _costRent(0), _costSell(0),
-	_refuelItem(""), _repairRate(1), _refuelRate(1), _radarRange(600), _transferTime(0),
-	_score(0), _battlescapeTerrainData(0), _spacecraft(false), _listOrder(0)
+RuleCraft::RuleCraft(const std::string& type)
+	:
+    _type(type),
+	_sprite(-1),
+	_fuelMax(0),
+	_damageMax(0),
+	_speedMax(0),
+	_accel(0),
+    _weapons(0),
+	_soldiers(0),
+	_vehicles(0),
+	_costBuy(0),
+	_costRent(0),
+	_costSell(0),
+	_refuelItem(""),
+	_repairRate(1),
+	_refuelRate(1),
+	_radarRange(600),
+	_transferTime(0),
+	_score(0),
+	_battlescapeTerrainData(0),
+	_spacecraft(false),
+	_listOrder(0)
 {
-
 }
 
 /**
@@ -51,38 +70,43 @@ RuleCraft::~RuleCraft()
  * @param modIndex A value that offsets the sounds and sprite values to avoid conflicts.
  * @param listOrder The list weight for this craft.
  */
-void RuleCraft::load(const YAML::Node &node, Ruleset *ruleset, int modIndex, int listOrder)
+void RuleCraft::load(const YAML::Node& node, Ruleset* ruleset, int modIndex, int listOrder)
 {
 	_type = node["type"].as<std::string>(_type);
 	_requires = node["requires"].as< std::vector<std::string> >(_requires);
 	_sprite = node["sprite"].as<int>(_sprite);
+
 	// this is an offset in BASEBITS.PCK, and two in INTICONS.PCK
 	if (_sprite > 4)
 		_sprite += modIndex;
-	_fuelMax = node["fuelMax"].as<int>(_fuelMax);
-	_damageMax = node["damageMax"].as<int>(_damageMax);
-	_speedMax = node["speedMax"].as<int>(_speedMax);
-	_accel = node["accel"].as<int>(_accel);
-	_weapons = node["weapons"].as<int>(_weapons);
-	_soldiers = node["soldiers"].as<int>(_soldiers);
-	_vehicles = node["vehicles"].as<int>(_vehicles);
-	_costBuy = node["costBuy"].as<int>(_costBuy);
-	_costRent = node["costRent"].as<int>(_costRent);
-	_costSell = node["costSell"].as<int>(_costSell);
-	_refuelItem = node["refuelItem"].as<std::string>(_refuelItem);
-	_repairRate = node["repairRate"].as<int>(_repairRate);
-	_refuelRate = node["refuelRate"].as<int>(_refuelRate);
-	_radarRange = node["radarRange"].as<int>(_radarRange);
-	_transferTime = node["transferTime"].as<int>(_transferTime);
-	_score = node["score"].as<int>(_score);
-	if (const YAML::Node &terrain = node["battlescapeTerrainData"])
+
+	_fuelMax		= node["fuelMax"].as<int>(_fuelMax);
+	_damageMax		= node["damageMax"].as<int>(_damageMax);
+	_speedMax		= node["speedMax"].as<int>(_speedMax);
+	_accel			= node["accel"].as<int>(_accel);
+	_weapons		= node["weapons"].as<int>(_weapons);
+	_soldiers		= node["soldiers"].as<int>(_soldiers);
+	_vehicles		= node["vehicles"].as<int>(_vehicles);
+	_costBuy		= node["costBuy"].as<int>(_costBuy);
+	_costRent		= node["costRent"].as<int>(_costRent);
+	_costSell		= node["costSell"].as<int>(_costSell);
+	_refuelItem		= node["refuelItem"].as<std::string>(_refuelItem);
+	_repairRate		= node["repairRate"].as<int>(_repairRate);
+	_refuelRate		= node["refuelRate"].as<int>(_refuelRate);
+	_radarRange		= node["radarRange"].as<int>(_radarRange);
+	_transferTime	= node["transferTime"].as<int>(_transferTime);
+	_score			= node["score"].as<int>(_score);
+
+	if (const YAML::Node& terrain = node["battlescapeTerrainData"])
 	{
-		RuleTerrain *rule = new RuleTerrain(terrain["name"].as<std::string>());
+		RuleTerrain* rule = new RuleTerrain(terrain["name"].as<std::string>());
+
 		rule->load(terrain, ruleset);
 		_battlescapeTerrainData = rule;
 	}
-	_spacecraft = node["spacecraft"].as<bool>(_spacecraft);
-	_listOrder = node["listOrder"].as<int>(_listOrder);
+
+	_spacecraft	= node["spacecraft"].as<bool>(_spacecraft);
+	_listOrder	= node["listOrder"].as<int>(_listOrder);
 	if (!_listOrder)
 	{
 		_listOrder = listOrder;
@@ -289,5 +313,5 @@ int RuleCraft::getListOrder() const
 {
 	 return _listOrder;
 }
-}
 
+}

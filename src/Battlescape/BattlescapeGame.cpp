@@ -466,7 +466,7 @@ void BattlescapeGame::endTurn()
 
 	for (int i = 0; i < _save->getMapSizeXYZ(); ++i) // check for hot grenades on the ground
 	{
-		for (std::vector<BattleItem*>::iterator it = _save->getTiles()[i]->getInventory()->begin(); it != _save->getTiles()[i]->getInventory()->end(); )
+		for (std::vector<BattleItem* >::iterator it = _save->getTiles()[i]->getInventory()->begin(); it != _save->getTiles()[i]->getInventory()->end(); )
 		{
 			if ((*it)->getRules()->getBattleType() == BT_GRENADE
 				&& (*it)->getExplodeTurn() > 0
@@ -488,12 +488,14 @@ void BattlescapeGame::endTurn()
 	}
 
 	// check for terrain explosions
-	Tile *t = _save->getTileEngine()->checkForTerrainExplosions();
+	Tile* t = _save->getTileEngine()->checkForTerrainExplosions();
 	if (t)
 	{
 		Position p = Position(t->getPosition().x * 16, t->getPosition().y * 16, t->getPosition().z * 24);
 		statePushNext(new ExplosionBState(this, p, 0, 0, t));
+
 		t = _save->getTileEngine()->checkForTerrainExplosions();
+
 		statePushBack(0);
 
 		return;
@@ -1001,12 +1003,11 @@ void BattlescapeGame::popState()
 			<< (_save->getSelectedUnit() ? _save->getSelectedUnit()->getTimeUnits() : -9999) << " TU";
 	}
 
-	bool actionFailed = false;
-
 	if (_states.empty()) return;
 
-	BattleAction action = _states.front()->getAction();
+	bool actionFailed = false;
 
+	BattleAction action = _states.front()->getAction();
 	if (action.actor
 		&& action.result.length() > 0
 		&& action.actor->getFaction() == FACTION_PLAYER
@@ -1036,9 +1037,9 @@ void BattlescapeGame::popState()
 
 			if (_save->getSide() == FACTION_PLAYER)
 			{
-				// after throwing the cursor returns to default cursor, after shooting it stays in targeting mode
-				// and the player can shoot again in the same mode (autoshot, snap, aimed)
-				if ((action.type == BA_THROW || action.type == BA_LAUNCH)
+				// after throwing, the cursor returns to default cursor, after shooting it stays in
+				// targeting mode and the player can shoot again in the same mode (autoshot/snap/aimed)
+/*kL				if ((action.type == BA_THROW || action.type == BA_LAUNCH)
 						&& !actionFailed)
 				{
 					// clean up the waypoints
@@ -1048,7 +1049,41 @@ void BattlescapeGame::popState()
 					}
 
 					cancelCurrentAction(true);
+				} */
+				// kL_begin:
+				if (!actionFailed)
+				{
+					int tu = action.actor->getTimeUnits();
+					Log(LOG_INFO) << "BattlescapeGame::popState(), tu remaining after action = " << tu;
+
+					switch (action.type)
+					{
+						case BA_LAUNCH:
+							_currentAction.waypoints.clear();
+						case BA_THROW:
+							cancelCurrentAction(true);
+						break;
+						case BA_SNAPSHOT:
+							if (tu < action.weapon->getRules()->getTUSnap())
+							{
+								cancelCurrentAction(true);
+							}
+						break;
+						case BA_AIMEDSHOT:
+							if (tu < action.weapon->getRules()->getTUAimed())
+							{
+								cancelCurrentAction(true);
+							}
+						break;
+						case BA_AUTOSHOT:
+							if (tu < action.weapon->getRules()->getTUAuto())
+							{
+								cancelCurrentAction(true);
+							}
+						break;
+					}
 				}
+				// kL_end.
 
 				_parentState->getGame()->getCursor()->setVisible(true);
 
@@ -1116,9 +1151,11 @@ void BattlescapeGame::popState()
 	if (_save->getSelectedUnit() == 0 || _save->getSelectedUnit()->isOut())
 	{
 		cancelCurrentAction();
+
+//kL		_save->setSelectedUnit(0);
+
 		getMap()->setCursorType(CT_NORMAL, 1);
 		_parentState->getGame()->getCursor()->setVisible(true);
-		_save->setSelectedUnit(0);
 	}
 
 	_parentState->updateSoldierInfo();
@@ -1417,6 +1454,7 @@ bool BattlescapeGame::cancelCurrentAction(bool bForce)
 			{
 				_currentAction.targeting = false;
 				_currentAction.type = BA_NONE;
+
 				setupCursor();
 				_parentState->getGame()->getCursor()->setVisible(true);
 
@@ -1438,7 +1476,7 @@ bool BattlescapeGame::cancelCurrentAction(bool bForce)
  * Gets a pointer to access action members directly.
  * @return Pointer to action.
  */
-BattleAction *BattlescapeGame::getCurrentAction()
+BattleAction* BattlescapeGame::getCurrentAction()
 {
 	return &_currentAction;
 }
@@ -1454,9 +1492,9 @@ bool BattlescapeGame::isBusy()
 
 /**
  * Activates primary action (left click).
- * @param pos Position on the map.
+ * @param pos, Position on the map.
  */
-void BattlescapeGame::primaryAction(const Position &pos)
+void BattlescapeGame::primaryAction(const Position& pos)
 {
 	bool bPreviewed = Options::getInt("battleNewPreviewPath") > 0;
 
@@ -1545,10 +1583,12 @@ void BattlescapeGame::primaryAction(const Position &pos)
 		}
 		else
 		{
-			_currentAction.target = pos;
 			getMap()->setCursorType(CT_NONE);
 			_parentState->getGame()->getCursor()->setVisible(false);
+
+			_currentAction.target = pos;
 			_currentAction.cameraPosition = getMap()->getCamera()->getMapOffset();
+
 			_states.push_back(new ProjectileFlyBState(this, _currentAction));
 
 			statePushFront(new UnitTurnBState(this, _currentAction)); // first of all turn towards the target
@@ -1559,8 +1599,9 @@ void BattlescapeGame::primaryAction(const Position &pos)
 	{
 		_currentAction.actor = _save->getSelectedUnit();
 
-		BattleUnit *unit = _save->selectUnit(pos);
-		if (unit && unit != _save->getSelectedUnit()
+		BattleUnit* unit = _save->selectUnit(pos);
+		if (unit
+			&& unit != _save->getSelectedUnit()
 			&& (unit->getVisible() || _debugPlay))
 		{
 			//  -= select unit =-
@@ -1580,7 +1621,9 @@ void BattlescapeGame::primaryAction(const Position &pos)
 				_save->getPathfinding()->removePreview();
 
 			_currentAction.run = false;
-			_currentAction.strafe = _save->getStrafeSetting() && (SDL_GetModState() & KMOD_CTRL) != 0 && _save->getSelectedUnit()->getTurretType() == -1;
+			_currentAction.strafe = _save->getStrafeSetting()
+					&& (SDL_GetModState() & KMOD_CTRL) != 0
+					&& _save->getSelectedUnit()->getTurretType() == -1;
 
 			if (_currentAction.strafe
 				&& _save->getTileEngine()->distance(_currentAction.actor->getPosition(), pos) > 1)

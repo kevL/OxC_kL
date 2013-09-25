@@ -60,24 +60,39 @@ GeoscapeCraftState::GeoscapeCraftState(Game* game, Craft* craft, Globe* globe, W
 
 	// Create objects
 	_window			= new Window(this, 240, 184, 8, 8, POPUP_BOTH);
+
 	_btnCenter		= new TextButton(192, 12, 32, 112);		// kL
 	_btnBase		= new TextButton(192, 12, 32, 127);
 	_btnTarget		= new TextButton(192, 12, 32, 142);
 	_btnPatrol		= new TextButton(192, 12, 32, 157);
 	_btnCancel		= new TextButton(192, 12, 32, 172);
+
 	_txtTitle		= new Text(200, 16, 32, 20);
 	_txtStatus		= new Text(210, 16, 32, 36);
-	_txtBase		= new Text(200, 9, 32, 52);
-	_txtSpeed		= new Text(200, 9, 32, 60);
-	_txtMaxSpeed	= new Text(200, 9, 32, 68);
-	_txtAltitude	= new Text(200, 9, 32, 76);
-	_txtFuel		= new Text(120, 9, 32, 84);
-	_txtDamage		= new Text(75, 9, 164, 84);
-	_txtW1Name		= new Text(120, 9, 32, 92);
-	_txtW1Ammo		= new Text(60, 9, 164, 92);
-	_txtW2Name		= new Text(120, 9, 32, 100);
-	_txtW2Ammo		= new Text(60, 9, 164, 100);
-	_txtRedirect	= new Text(230, 16, 13, 108);
+
+	// kL. move these up 1px
+	_txtBase		= new Text(200, 9, 32, 51);
+
+	_txtSpeed		= new Text(200, 9, 32, 59);
+
+	_txtMaxSpeed	= new Text(200, 9, 32, 67);
+	_txtSoldier		= new Text(200, 9, 161, 67);		// kL
+
+	_txtAltitude	= new Text(200, 9, 32, 75);
+	_txtHWP			= new Text(200, 9, 161, 75);		// kL
+
+	_txtFuel		= new Text(120, 9, 32, 83);
+	_txtDamage		= new Text(75, 9, 161, 83);			// kL: moved left 3px
+
+	_txtW1Name		= new Text(120, 9, 32, 91);
+	_txtW1Ammo		= new Text(60, 9, 161, 91);			// kL: moved left 3px
+
+	_txtW2Name		= new Text(120, 9, 32, 99);
+	_txtW2Ammo		= new Text(60, 9, 161, 99);			// kL: moved left 3px
+	// kL. end up.
+
+//kL	_txtRedirect	= new Text(230, 16, 13, 108);	// kL_note: move up horizontal w/ Base
+	_txtRedirect	= new Text(120, 16, 120, 50);		// kL: move up horizontal w/ Base
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)), Palette::backPos, 16);
@@ -93,7 +108,9 @@ GeoscapeCraftState::GeoscapeCraftState(Game* game, Craft* craft, Globe* globe, W
 	add(_txtBase);
 	add(_txtSpeed);
 	add(_txtMaxSpeed);
+	add(_txtSoldier);	// kL
 	add(_txtAltitude);
+	add(_txtHWP);		// kL
 	add(_txtFuel);
 	add(_txtDamage);
 	add(_txtW1Name);
@@ -197,8 +214,15 @@ GeoscapeCraftState::GeoscapeCraftState(Game* game, Craft* craft, Globe* globe, W
 	_txtSpeed->setColor(Palette::blockOffset(15)-1);
 	_txtSpeed->setSecondaryColor(Palette::blockOffset(8)+5);
 	std::wstringstream ss3;
+	if (_craft->isInDogfight())		// kL
+	{
+		ss3 << _game->getLanguage()->getString("STR_SPEED_") << L'\x01' << "UFO";
+	}
 	// kL_note: If in dogfight or more accurately in chase_mode, insert UFO speed.
-	ss3 << _game->getLanguage()->getString("STR_SPEED_") << L'\x01' << _craft->getSpeed();
+	else
+	{
+		ss3 << _game->getLanguage()->getString("STR_SPEED_") << L'\x01' << _craft->getSpeed();
+	}
 	_txtSpeed->setText(ss3.str());
 
 	_txtMaxSpeed->setColor(Palette::blockOffset(15)-1);
@@ -207,23 +231,54 @@ GeoscapeCraftState::GeoscapeCraftState(Game* game, Craft* craft, Globe* globe, W
 	ss4 << _game->getLanguage()->getString("STR_MAXIMUM_SPEED_UC") << L'\x01' << _craft->getRules()->getMaxSpeed();
 	_txtMaxSpeed->setText(ss4.str());
 
+	// kL_begin: GeoscapeCraftState, add #Soldier on transports.
+	_txtSoldier->setColor(Palette::blockOffset(15)-1);
+	_txtSoldier->setSecondaryColor(Palette::blockOffset(8)+5);
+	std::wstringstream ss12;
+	ss12 << _game->getLanguage()->getString("STR_SOLDIERS") << " " << L'\x01' << _craft->getNumSoldiers();
+	_txtSoldier->setText(ss12.str());
+	// kL_end.
+
 	_txtAltitude->setColor(Palette::blockOffset(15)-1);
 	_txtAltitude->setSecondaryColor(Palette::blockOffset(8)+5);
 	std::wstringstream ss5;
+	// kL_begin: GeoscapeCraftState, add #HWP on transports. ->Moved to Craft.cpp
+/*	std::string altitude;
+	if (_craft->getAltitude() == "STR_GROUND"
+		|| _craft->getStatus() == "STR_READY"
+		|| _craft->getStatus() == "STR_REPAIRS"
+		|| _craft->getStatus() == "STR_REFUELLING"
+		|| _craft->getStatus() == "STR_REARMING")
+	{
+		altitude = "STR_GROUNDED";
+	}
+	else altitude = _craft->getAltitude(); */
+	// kL_end.
+
 	std::string altitude = _craft->getAltitude() == "STR_GROUND" ? "STR_GROUNDED" : _craft->getAltitude();
-	ss5 << _game->getLanguage()->getString("STR_ALTITUDE_") << L'\x01' << _game->getLanguage()->getString(altitude);
+//	ss5 << _game->getLanguage()->getString("STR_ALTITUDE_") << L'\x01' << _game->getLanguage()->getString(altitude);	// kL
 	_txtAltitude->setText(ss5.str());
+
+	// kL_begin: GeoscapeCraftState, add #HWP on transports.
+	_txtHWP->setColor(Palette::blockOffset(15)-1);
+	_txtHWP->setSecondaryColor(Palette::blockOffset(8)+5);
+	std::wstringstream ss11;
+	ss11 << _game->getLanguage()->getString("STR_HWPS") << " " << L'\x01' << _craft->getNumVehicles();
+	_txtHWP->setText(ss11.str());
+	// kL_end.
 
 	_txtFuel->setColor(Palette::blockOffset(15)-1);
 	_txtFuel->setSecondaryColor(Palette::blockOffset(8)+5);
 	std::wstringstream ss6;
-	ss6 << _game->getLanguage()->getString("STR_FUEL") << L'\x01' << _craft->getFuelPercentage() << "%";
+//kL	ss6 << _game->getLanguage()->getString("STR_FUEL") << L'\x01' << _craft->getFuelPercentage() << "%";
+	ss6 << _game->getLanguage()->getString("STR_FUEL") << L'\x01' << _craft->getFuelPercentage();		// kL
 	_txtFuel->setText(ss6.str());
 
 	_txtDamage->setColor(Palette::blockOffset(15)-1);
 	_txtDamage->setSecondaryColor(Palette::blockOffset(8)+5);
 	std::wstringstream ss62;
-	ss62 << _game->getLanguage()->getString("STR_DAMAGE_UC_") << L'\x01' << _craft->getDamagePercentage() << "%";
+//kL	ss62 << _game->getLanguage()->getString("STR_DAMAGE_UC_") << L'\x01' << _craft->getDamagePercentage() << "%";
+	ss62 << _game->getLanguage()->getString("STR_DAMAGE_UC_") << L'\x01' << _craft->getDamagePercentage();		// kL
 	_txtDamage->setText(ss62.str());
 
 	_txtW1Name->setColor(Palette::blockOffset(15)-1);
@@ -296,21 +351,40 @@ GeoscapeCraftState::GeoscapeCraftState(Game* game, Craft* craft, Globe* globe, W
 		_btnCancel->setText(_game->getLanguage()->getString("STR_GO_TO_LAST_KNOWN_UFO_POSITION"));
 	}
 
-	if (_craft->getLowFuel())
+/*kL	if (_craft->getLowFuel())
+	{
+		_btnBase->setVisible(false);
+		_btnTarget->setVisible(false);
+		_btnPatrol->setVisible(false);
+	} */
+
+	// kL_begin: set Base button visibility FALSE for already-Based crafts.
+	if (_craft->getStatus() == "STR_READY")
+	{
+		_btnBase->setVisible(false);
+		_btnPatrol->setVisible(false);
+	}
+
+	if (_craft->getStatus() == "STR_REPAIRS"
+		|| _craft->getStatus() == "STR_REFUELLING"
+		|| _craft->getStatus() == "STR_REARMING"
+		|| _craft->getLowFuel())
 	{
 		_btnBase->setVisible(false);
 		_btnTarget->setVisible(false);
 		_btnPatrol->setVisible(false);
 	}
 
-	// kL_begin: set Base button visibility FALSE for already-Based crafts.
-	if (_craft->getStatus() == "STR_READY"
-		|| _craft->getStatus() == "STR_REPAIRS"
-		|| _craft->getStatus() == "STR_REFUELLING"
-		|| _craft->getStatus() == "STR_REARMING")
+	if (_craft->getRules()->getSoldiers() == 0)
 	{
-		_btnCenter->setVisible(false);
+		_txtSoldier->setVisible(false);
 	}
+
+	if (_craft->getRules()->getVehicles() == 0)
+	{
+		_txtHWP->setVisible(false);
+	}
+	// kL_end.
 }
 
 /**

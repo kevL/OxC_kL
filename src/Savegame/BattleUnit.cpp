@@ -635,7 +635,7 @@ int BattleUnit::getDiagonalWalkingPhase() const
  * Look at a point.
  * @param point
  */
-void BattleUnit::lookAt(const Position &point, bool turret)
+void BattleUnit::lookAt(const Position& point, bool turret)
 {
 	int dir = getDirectionTo(point);
 
@@ -655,6 +655,7 @@ void BattleUnit::lookAt(const Position &point, bool turret)
 			&& _toDirection > -1)
 		{
 			_status = STATUS_TURNING;
+			// kL_note: what about Forcing the faced direction instantly?
 		}
 	}
 }
@@ -676,10 +677,13 @@ void BattleUnit::lookAt(int direction, bool force)
 			_status = STATUS_TURNING;
 		}
 	}
-	else
+	else // force
 	{
 		_toDirection = direction;
 		_direction = direction;
+
+		Log(LOG_INFO) << "BattleUnit::lookAt() - force Status_Standing";
+		_status = STATUS_STANDING;	// kL. idk...
 	}
 }
 
@@ -904,15 +908,22 @@ void BattleUnit::aim(bool aiming)
  * Calculates the Map facing direction from a position to a point.
  * @return direction to a point (0-7)
  */
-int BattleUnit::getDirectionTo(const Position &point) const
+int BattleUnit::getDirectionTo(const Position& point) const
 {
 	double ox = point.x - _pos.x;
 	double oy = point.y - _pos.y;
 	double angle = atan2(ox, -oy);
-	// divide the pie in 4 angles each at 1/8th before each quarter
-	double pie[4] = { (M_PI_4 * 4.0) - M_PI_4 / 2.0, (M_PI_4 * 3.0) - M_PI_4 / 2.0, (M_PI_4 * 2.0) - M_PI_4 / 2.0, (M_PI_4 * 1.0) - M_PI_4 / 2.0 };
-	int dir = 0;
 
+	// divide the pie in 4 angles each at 1/8th before each quarter
+	double pie[4] =
+	{
+		(M_PI_4 * 4.0) - M_PI_4 / 2.0,
+		(M_PI_4 * 3.0) - M_PI_4 / 2.0,
+		(M_PI_4 * 2.0) - M_PI_4 / 2.0,
+		(M_PI_4 * 1.0) - M_PI_4 / 2.0
+	};
+
+	int dir = 0;
 	if (angle > pie[0] || angle < -pie[0])
 	{
 		dir = 4;

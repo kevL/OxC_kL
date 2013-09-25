@@ -145,9 +145,8 @@ std::vector<Target*> *Target::getFollowers()
 }
 
 /**
- * Returns the great circle distance to another
- * target on the globe.
- * @param target Pointer to other target.
+ * Returns the great circle distance to another target on the globe.
+ * @param target, Pointer to other target.
  * @returns Distance in radian.
  */
 double Target::getDistance(const Target *target) const

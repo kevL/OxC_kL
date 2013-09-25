@@ -186,7 +186,7 @@ void InterceptState::btnCancelClick(Action* )
  * Pick a target for the selected craft.
  * @param action Pointer to an action.
  */
-void InterceptState::lstCraftsClick(Action* )
+/* void InterceptState::lstCraftsClick(Action* )
 {
 	Craft* c = _crafts[_lstCrafts->getSelectedRow()];
 //kL	if (c->getStatus() != "STR_OUT" && (c->getStatus() == "STR_READY" || Options::getBool("craftLaunchAlways")))
@@ -203,6 +203,22 @@ void InterceptState::lstCraftsClick(Action* )
 //		_game->pushState(new GeoscapeCraftState(_game, c, _globe, 0));
 		_globe->center(c->getLongitude(), c->getLatitude());
 	} // Cf_end.
+} */
+// kL_begin: list of Intercept craft actions.
+void InterceptState::lstCraftsClick(Action* )
+{
+	Craft* c = _crafts[_lstCrafts->getSelectedRow()];
+	if (c->getStatus() == "STR_OUT")
+	{
+		_game->popState();
+		_globe->center(c->getLongitude(), c->getLatitude());
+	}
+	else
+	{
+		_game->popState();
+		_game->pushState(new GeoscapeCraftState(_game, c, _globe, 0));
+	}
 }
+// kL_end.
 
 }

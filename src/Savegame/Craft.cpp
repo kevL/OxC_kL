@@ -384,7 +384,7 @@ std::string Craft::getAltitude() const
 {
 	Ufo* u = dynamic_cast<Ufo* >(_dest);
 
-	if (u
+/*kL	if (u
 		&& u->getAltitude() != "STR_GROUND")
 	{
 		return u->getAltitude();
@@ -392,7 +392,29 @@ std::string Craft::getAltitude() const
 	else
 	{
 		return "STR_VERY_LOW";
+	} */
+	// kL_begin: Craft::getAltitude(), add strings for based xCom craft.
+	if (u)
+	{
+		if (u->getAltitude() != "STR_GROUND")
+		{
+			return u->getAltitude();
+		}
+		else return "STR_VERY_LOW";
 	}
+	else if (getStatus() == "STR_READY"
+		|| getStatus() == "STR_REPAIRS"
+		|| getStatus() == "STR_REFUELLING"
+		|| getStatus() == "STR_REARMING")
+	{
+		return "STR_GROUNDED";
+	}
+	// need to add: if xCom craft && inDogFight, return UFO altitude.
+	else
+	{
+		return "STR_VERY_LOW";
+	}
+	// kL_end.
 }
 
 /**
@@ -841,7 +863,7 @@ int Craft::getSpaceUsed() const
  * @param vehicle Vehicle type.
  * @return Number of vehicles.
  */
-int Craft::getVehicleCount(const std::string &vehicle) const
+int Craft::getVehicleCount(const std::string& vehicle) const
 {
 	int total = 0;
 
@@ -858,7 +880,7 @@ int Craft::getVehicleCount(const std::string &vehicle) const
 
 /**
  * Returns the craft's dogfight status.
- * @return Is the craft ion a dogfight?
+ * @return Is the craft in a dogfight?
  */
 bool Craft::isInDogfight() const
 {

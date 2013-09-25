@@ -16,11 +16,13 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_ACTIONMENUITEM_H
 #define OPENXCOM_ACTIONMENUITEM_H
 
 #include "../Engine/InteractiveSurface.h"
 #include "BattlescapeGame.h"
+
 
 namespace OpenXcom
 {
@@ -35,21 +37,24 @@ class Frame;
  * It shows the possible actions of an item, their TU cost and accuracy.
  * Mouse over highlights the action, when clicked the action is sent to the parent state.
  */
-class ActionMenuItem : public InteractiveSurface
+class ActionMenuItem
+	:
+	public InteractiveSurface
 {
 	private:
 		int _id;
 		bool _highlighted;
 		BattleActionType _action;
 		int _tu;
-		Frame *_frame;
-		Text *_txtDescription, *_txtAcc, *_txtTU;
+		Frame* _frame;
+		Text* _txtDescription, * _txtAcc, * _txtTU;
 
 	public:
 		/// Creates a new ActionMenuItem.
-		ActionMenuItem(int id, Font *big, Font *small, int x, int y);
+		ActionMenuItem(int id, Font* big, Font* small, int x, int y);
 		/// Cleans up the ActionMenuItem.
 		~ActionMenuItem();
+
 		/// Assigns an action to it.
 		void setAction(BattleActionType action, std::wstring description, std::wstring accuracy, std::wstring timeunits, int tu);
 		/// Gets the assigned action.
@@ -57,13 +62,13 @@ class ActionMenuItem : public InteractiveSurface
 		/// Gets the assigned action TUs.
 		int getTUs() const;
 		/// Sets the palettes.
-		void setPalette(SDL_Color *colors, int firstcolor, int ncolors);
+		void setPalette(SDL_Color* colors, int firstcolor, int ncolors);
 		/// Redraws it.
 		void draw();
 		/// Processes a mouse hover in event.
-		void mouseIn(Action *action, State *state);
+		void mouseIn(Action* action, State* state);
 		/// Processes a mouse hover out event.
-		void mouseOut(Action *action, State *state);
+		void mouseOut(Action* action, State* state);
 };
 
 }
