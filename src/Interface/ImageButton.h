@@ -16,10 +16,12 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_IMAGEBUTTON_H
 #define OPENXCOM_IMAGEBUTTON_H
 
 #include "../Engine/InteractiveSurface.h"
+
 
 namespace OpenXcom
 {
@@ -31,27 +33,31 @@ namespace OpenXcom
  * treats it as a button, inverting colors when necessary.
  * This is necessary for special buttons like in the Geoscape.
  */
-class ImageButton : public InteractiveSurface
+class ImageButton
+	:
+	public InteractiveSurface
 {
-protected:
-	Uint8 _color;
-	ImageButton **_group;
-	bool _inverted;
-public:
-	/// Creates a new image button with the specified size and position.
-	ImageButton(int width, int height, int x = 0, int y = 0);
-	/// Cleans up the image button.
-	virtual ~ImageButton();
-	/// Sets the image button's color.
-	void setColor(Uint8 color);
-	/// Gets the image button's color.
-	Uint8 getColor() const;
-	/// Sets the image button's group.
-	void setGroup(ImageButton **group);
-	/// Special handling for mouse presses.
-	void mousePress(Action *action, State *state);
-	/// Special handling for mouse releases.
-	void mouseRelease(Action *action, State *state);
+	protected:
+		Uint8 _color;
+		ImageButton** _group;
+		bool _inverted;
+
+	public:
+		/// Creates a new image button with the specified size and position.
+		ImageButton(int width, int height, int x = 0, int y = 0);
+		/// Cleans up the image button.
+		virtual ~ImageButton();
+
+		/// Sets the image button's color.
+		void setColor(Uint8 color);
+		/// Gets the image button's color.
+		Uint8 getColor() const;
+		/// Sets the image button's group.
+		void setGroup(ImageButton** group);
+		/// Special handling for mouse presses.
+		void mousePress(Action* action, State* state);
+		/// Special handling for mouse releases.
+		void mouseRelease(Action* action, State* state);
 };
 
 }

@@ -135,7 +135,7 @@ GeoscapeState::GeoscapeState(Game* game)
 	_bg				= new Surface(320, 200, screenWidth-320, screenHeight/2-100);
 	_globe			= new Globe(_game, (screenWidth-64)/2, screenHeight/2, screenWidth-64, screenHeight, 0, 0);
 
-	_btnIntercept	= new TextButton(63, 11, screenWidth-63, screenHeight/2-100);
+/*kL	_btnIntercept	= new TextButton(63, 11, screenWidth-63, screenHeight/2-100);
 	_btnBases		= new TextButton(63, 11, screenWidth-63, screenHeight/2-88);
 	_btnGraphs		= new TextButton(63, 11, screenWidth-63, screenHeight/2-76);
 	_btnUfopaedia	= new TextButton(63, 11, screenWidth-63, screenHeight/2-64);
@@ -147,7 +147,23 @@ GeoscapeState::GeoscapeState(Game* game)
 	_btn5Mins		= new TextButton(31, 13, screenWidth-63, screenHeight/2+26);
 	_btn30Mins		= new TextButton(31, 13, screenWidth-31, screenHeight/2+26);
 	_btn1Hour		= new TextButton(31, 13, screenWidth-63, screenHeight/2+40);
-	_btn1Day		= new TextButton(31, 13, screenWidth-31, screenHeight/2+40);
+	_btn1Day		= new TextButton(31, 13, screenWidth-31, screenHeight/2+40); */
+
+	// kL_begin: revert to ImageButtons.
+	_btnIntercept	= new ImageButton(63, 11, screenWidth-63, screenHeight/2-100);
+	_btnBases		= new ImageButton(63, 11, screenWidth-63, screenHeight/2-88);
+	_btnGraphs		= new ImageButton(63, 11, screenWidth-63, screenHeight/2-76);
+	_btnUfopaedia	= new ImageButton(63, 11, screenWidth-63, screenHeight/2-64);
+	_btnOptions		= new ImageButton(63, 11, screenWidth-63, screenHeight/2-52);
+	_btnFunding		= new ImageButton(63, 11, screenWidth-63, screenHeight/2-40);
+
+	_btn5Secs		= new ImageButton(31, 13, screenWidth-63, screenHeight/2+12);
+	_btn1Min		= new ImageButton(31, 13, screenWidth-31, screenHeight/2+12);
+	_btn5Mins		= new ImageButton(31, 13, screenWidth-63, screenHeight/2+26);
+	_btn30Mins		= new ImageButton(31, 13, screenWidth-31, screenHeight/2+26);
+	_btn1Hour		= new ImageButton(31, 13, screenWidth-63, screenHeight/2+40);
+	_btn1Day		= new ImageButton(31, 13, screenWidth-31, screenHeight/2+40);
+	// kL_end.
 
 	_btnRotateLeft	= new InteractiveSurface(12, 10, screenWidth-61, screenHeight/2+76);
 	_btnRotateRight	= new InteractiveSurface(12, 10, screenWidth-37, screenHeight/2+76);
@@ -233,7 +249,7 @@ GeoscapeState::GeoscapeState(Game* game)
 	// Set up objects
 	_game->getResourcePack()->getSurface("GEOBORD.SCR")->blit(_bg);
 
-	_btnIntercept->setFonts(_game->getResourcePack()->getFont("FONT_GEO_BIG"), _game->getResourcePack()->getFont("FONT_GEO_SMALL"));
+/*kL	_btnIntercept->setFonts(_game->getResourcePack()->getFont("FONT_GEO_BIG"), _game->getResourcePack()->getFont("FONT_GEO_SMALL"));
 	_btnIntercept->setColor(Palette::blockOffset(15)+6);
 	_btnIntercept->setTextColor(Palette::blockOffset(15)+5);
 	_btnIntercept->setText(tr("STR_INTERCEPT"));
@@ -321,7 +337,69 @@ GeoscapeState::GeoscapeState(Game* game)
 	_btn1Day->setTextColor(Palette::blockOffset(15) + 5);
 	_btn1Day->setText(tr("STR_1_DAY"));
 	_btn1Day->setGroup(&_timeSpeed);
+	_btn1Day->onKeyboardPress((ActionHandler)& GeoscapeState::btnTimerClick, (SDLKey)Options::getInt("keyGeoSpeed6")); */
+
+	// kL_begin: revert to ImageButtons.
+	_btnIntercept->copy(_bg);
+	_btnIntercept->setColor(Palette::blockOffset(15)+5);
+	_btnIntercept->onMouseClick((ActionHandler)& GeoscapeState::btnInterceptClick);
+	_btnIntercept->onKeyboardPress((ActionHandler)& GeoscapeState::btnInterceptClick, (SDLKey)Options::getInt("keyGeoIntercept"));
+
+	_btnBases->copy(_bg);
+	_btnBases->setColor(Palette::blockOffset(15)+5);
+	_btnBases->onMouseClick((ActionHandler)& GeoscapeState::btnBasesClick);
+	_btnBases->onKeyboardPress((ActionHandler)& GeoscapeState::btnBasesClick, (SDLKey)Options::getInt("keyGeoBases"));
+
+	_btnGraphs->copy(_bg);
+	_btnGraphs->setColor(Palette::blockOffset(15)+5);
+	_btnGraphs->onMouseClick((ActionHandler)& GeoscapeState::btnGraphsClick);
+	_btnGraphs->onKeyboardPress((ActionHandler)& GeoscapeState::btnGraphsClick, (SDLKey)Options::getInt("keyGeoGraphs"));
+
+	_btnUfopaedia->copy(_bg);
+	_btnUfopaedia->setColor(Palette::blockOffset(15)+5);
+	_btnUfopaedia->onMouseClick((ActionHandler)& GeoscapeState::btnUfopaediaClick);
+	_btnUfopaedia->onKeyboardPress((ActionHandler)& GeoscapeState::btnUfopaediaClick, (SDLKey)Options::getInt("keyGeoUfopedia"));
+
+	_btnOptions->copy(_bg);
+	_btnOptions->setColor(Palette::blockOffset(15)+5);
+	_btnOptions->onMouseClick((ActionHandler)& GeoscapeState::btnOptionsClick);
+	_btnOptions->onKeyboardPress((ActionHandler)& GeoscapeState::btnOptionsClick, (SDLKey)Options::getInt("keyGeoOptions"));
+
+	_btnFunding->copy(_bg);
+	_btnFunding->setColor(Palette::blockOffset(15)+5);
+	_btnFunding->onMouseClick((ActionHandler)& GeoscapeState::btnFundingClick);
+	_btnFunding->onKeyboardPress((ActionHandler)& GeoscapeState::btnFundingClick, (SDLKey)Options::getInt("keyGeoFunding"));
+
+	_btn5Secs->copy(_bg);
+	_btn5Secs->setColor(Palette::blockOffset(15)+5);
+	_btn5Secs->setGroup(&_timeSpeed);
+	_btn5Secs->onKeyboardPress((ActionHandler)& GeoscapeState::btnTimerClick, (SDLKey)Options::getInt("keyGeoSpeed1"));
+
+	_btn1Min->copy(_bg);
+	_btn1Min->setColor(Palette::blockOffset(15)+5);
+	_btn1Min->setGroup(&_timeSpeed);
+	_btn1Min->onKeyboardPress((ActionHandler)& GeoscapeState::btnTimerClick, (SDLKey)Options::getInt("keyGeoSpeed2"));
+
+	_btn5Mins->copy(_bg);
+	_btn5Mins->setColor(Palette::blockOffset(15)+5);
+	_btn5Mins->setGroup(&_timeSpeed);
+	_btn5Mins->onKeyboardPress((ActionHandler)& GeoscapeState::btnTimerClick, (SDLKey)Options::getInt("keyGeoSpeed3"));
+
+	_btn30Mins->copy(_bg);
+	_btn30Mins->setColor(Palette::blockOffset(15)+5);
+	_btn30Mins->setGroup(&_timeSpeed);
+	_btn30Mins->onKeyboardPress((ActionHandler)& GeoscapeState::btnTimerClick, (SDLKey)Options::getInt("keyGeoSpeed4"));
+
+	_btn1Hour->copy(_bg);
+	_btn1Hour->setColor(Palette::blockOffset(15)+5);
+	_btn1Hour->setGroup(&_timeSpeed);
+	_btn1Hour->onKeyboardPress((ActionHandler)& GeoscapeState::btnTimerClick, (SDLKey)Options::getInt("keyGeoSpeed5"));
+
+	_btn1Day->copy(_bg);
+	_btn1Day->setColor(Palette::blockOffset(15)+5);
+	_btn1Day->setGroup(&_timeSpeed);
 	_btn1Day->onKeyboardPress((ActionHandler)& GeoscapeState::btnTimerClick, (SDLKey)Options::getInt("keyGeoSpeed6"));
+	// kL_end.
 
 	_btnRotateLeft->onMousePress((ActionHandler)& GeoscapeState::btnRotateLeftPress);
 	_btnRotateLeft->onMouseRelease((ActionHandler)& GeoscapeState::btnRotateLeftRelease);

@@ -29,7 +29,8 @@ namespace OpenXcom
 
 class Surface;
 class Globe;
-class TextButton;
+//kL class TextButton;
+class ImageButton;		// kL
 class InteractiveSurface;
 class Text;
 class Timer;
@@ -49,9 +50,12 @@ class GeoscapeState
 	private:
 		Surface* _bg;
 		Globe* _globe;
-		TextButton* _btnIntercept, * _btnBases, * _btnGraphs, * _btnUfopaedia, * _btnOptions, * _btnFunding;
-		TextButton* _timeSpeed;
-		TextButton* _btn5Secs, * _btn1Min, * _btn5Mins, * _btn30Mins, * _btn1Hour, * _btn1Day;
+//kL		TextButton* _btnIntercept, * _btnBases, * _btnGraphs, * _btnUfopaedia, * _btnOptions, * _btnFunding;
+//kL		TextButton* _timeSpeed;
+//kL		TextButton* _btn5Secs, * _btn1Min, * _btn5Mins, * _btn30Mins, * _btn1Hour, * _btn1Day;
+		ImageButton* _btnIntercept, * _btnBases, * _btnGraphs, * _btnUfopaedia, * _btnOptions, * _btnFunding;	// kL
+		ImageButton* _timeSpeed;																				// kL
+		ImageButton* _btn5Secs, * _btn1Min, * _btn5Mins, * _btn30Mins, * _btn1Hour, * _btn1Day;					// kL
 		InteractiveSurface* _btnRotateLeft, * _btnRotateRight, * _btnRotateUp, * _btnRotateDown, * _btnZoomIn, * _btnZoomOut;
 		Text* _txtFunds, * _txtHour, * _txtHourSep, * _txtMin, * _txtMinSep, * _txtSec, * _txtWeekday, * _txtDay, * _txtMonth, * _txtYear;
 		Timer* _timer, * _zoomInEffectTimer, * _zoomOutEffectTimer, * _dogfightStartTimer;
