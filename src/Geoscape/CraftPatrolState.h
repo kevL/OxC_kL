@@ -16,10 +16,12 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_CRAFTPATROLSTATE_H
 #define OPENXCOM_CRAFTPATROLSTATE_H
 
 #include "../Engine/State.h"
+
 
 namespace OpenXcom
 {
@@ -29,31 +31,37 @@ class Window;
 class Text;
 class Craft;
 class Globe;
+//class GeoscapeState;	// kL
 
 /**
  * Window displayed when a craft
  * starts patrolling a waypoint.
  */
-class CraftPatrolState : public State
+class CraftPatrolState
+	:
+	public State
 {
-private:
-	Craft *_craft;
-	Globe *_globe;
+	private:
+		Craft* _craft;
+		Globe* _globe;
 
-	TextButton *_btnOk, *_btnRedirect;
-	Window *_window;
-	Text *_txtDestination, *_txtPatrolling;
-public:
-	/// Creates the Geoscape Craft state.
-	CraftPatrolState(Game *game, Craft *craft, Globe *globe);
-	/// Cleans up the Geoscape Craft state.
-	~CraftPatrolState();
-	/// Updates the palette.
-	void init();
-	/// Handler for clicking the OK button.
-	void btnOkClick(Action *action);
-	/// Handler for clicking the Redirect Craft button.
-	void btnRedirectClick(Action *action);
+		TextButton* _btnOk, * _btnRedirect;
+		Window* _window;
+		Text* _txtDestination, * _txtPatrolling;
+//		GeoscapeState* _gs;		// kL
+
+	public:
+		/// Creates the Geoscape Craft state.
+		CraftPatrolState(Game* game, Craft* craft, Globe* globe);
+		/// Cleans up the Geoscape Craft state.
+		~CraftPatrolState();
+
+		/// Updates the palette.
+		void init();
+		/// Handler for clicking the OK button.
+		void btnOkClick(Action* action);
+		/// Handler for clicking the Redirect Craft button.
+		void btnRedirectClick(Action* action);
 };
 
 }

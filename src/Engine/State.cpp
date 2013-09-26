@@ -58,7 +58,7 @@ State::~State()
 {
 //	Log(LOG_INFO) << "Delete State";
 
-	for (std::vector<Surface*>::iterator i = _surfaces.begin(); i < _surfaces.end(); ++i)
+	for (std::vector<Surface* >::iterator i = _surfaces.begin(); i < _surfaces.end(); ++i)
 	{
 		delete *i;
 	}
@@ -125,7 +125,7 @@ void State::init()
  */
 void State::think()
 {
-	for (std::vector<Surface*>::iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
+	for (std::vector<Surface* >::iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
 		(*i)->think();
 }
 
@@ -134,11 +134,11 @@ void State::think()
  * and passes them on to its InteractiveSurface child elements.
  * @param action Pointer to an action.
  */
-void State::handle(Action *action)
+void State::handle(Action* action)
 {
-	for (std::vector<Surface*>::reverse_iterator i = _surfaces.rbegin(); i != _surfaces.rend(); ++i)
+	for (std::vector<Surface* >::reverse_iterator i = _surfaces.rbegin(); i != _surfaces.rend(); ++i)
 	{
-		InteractiveSurface* j = dynamic_cast<InteractiveSurface*>(*i);
+		InteractiveSurface* j = dynamic_cast<InteractiveSurface* >(*i);
 		if (j != 0)
 			j->handle(action, this);
 	}
@@ -150,7 +150,7 @@ void State::handle(Action *action)
  */
 void State::blit()
 {
-	for (std::vector<Surface*>::iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
+	for (std::vector<Surface* >::iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
 		(*i)->blit(_game->getScreen()->getSurface());
 }
 
@@ -159,7 +159,7 @@ void State::blit()
  */
 void State::hideAll()
 {
-	for (std::vector<Surface*>::iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
+	for (std::vector<Surface* >::iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
 		(*i)->setHidden(true);
 }
 
@@ -168,7 +168,7 @@ void State::hideAll()
  */
 void State::showAll()
 {
-	for (std::vector<Surface*>::iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
+	for (std::vector<Surface* >::iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
 		(*i)->setHidden(false);
 }
 
@@ -178,9 +178,9 @@ void State::showAll()
  */
 void State::resetAll()
 {
-	for (std::vector<Surface*>::iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
+	for (std::vector<Surface* >::iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
 	{
-		InteractiveSurface *s = dynamic_cast<InteractiveSurface*>(*i);
+		InteractiveSurface* s = dynamic_cast<InteractiveSurface*>(*i);
 		if (s != 0)
 		{
 			s->unpress(this);
@@ -194,7 +194,7 @@ void State::resetAll()
  * @param id The dictionary key to search for.
  * @return A reference to the localized text.
  */
-const LocalizedText &State::tr(const std::string &id) const
+const LocalizedText& State::tr(const std::string& id) const
 {
 	return _game->getLanguage()->getString(id);
 }
@@ -206,14 +206,14 @@ const LocalizedText &State::tr(const std::string &id) const
  * @param n The number to use for the proper version.
  * @return A copy of the localized text.
  */
-LocalizedText State::tr(const std::string &id, unsigned n) const
+LocalizedText State::tr(const std::string& id, unsigned n) const
 {
 	return _game->getLanguage()->getString(id, n);
 }
 
 void State::centerAllSurfaces()
 {
-	for (std::vector<Surface*>::iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
+	for (std::vector<Surface* >::iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
 	{
 		(*i)->setX((*i)->getX() + Screen::getDX());
 		(*i)->setY((*i)->getY() + Screen::getDY());
@@ -222,7 +222,7 @@ void State::centerAllSurfaces()
 
 void State::lowerAllSurfaces()
 {
-	for (std::vector<Surface*>::iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
+	for (std::vector<Surface* >::iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
 	{
 		(*i)->setY((*i)->getY() + Screen::getDY() / 2);
 	}

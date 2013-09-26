@@ -56,7 +56,7 @@ CraftInfoState::CraftInfoState(Game* game, Base* base, size_t craft)
 	_base(base),
 	_craft(craft)
 {
-	Log(LOG_INFO) << "Create CraftInfoState";
+//	Log(LOG_INFO) << "Create CraftInfoState";
 
 	// Create objects
 	_window		= new Window(this, 320, 200, 0, 0, POPUP_BOTH);
@@ -116,33 +116,33 @@ CraftInfoState::CraftInfoState(Game* game, Base* base, size_t craft)
 
 	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
-	_btnOk->onMouseClick((ActionHandler) &CraftInfoState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler) &CraftInfoState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onMouseClick((ActionHandler)& CraftInfoState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)& CraftInfoState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_btnW1->setColor(Palette::blockOffset(13)+10);
 	_btnW1->setText(L"1");
-	_btnW1->onMouseClick((ActionHandler) &CraftInfoState::btnW1Click);
+	_btnW1->onMouseClick((ActionHandler)& CraftInfoState::btnW1Click);
 
 	_btnW2->setColor(Palette::blockOffset(13)+10);
 	_btnW2->setText(L"2");
-	_btnW2->onMouseClick((ActionHandler) &CraftInfoState::btnW2Click);
+	_btnW2->onMouseClick((ActionHandler)& CraftInfoState::btnW2Click);
 
 	_btnCrew->setColor(Palette::blockOffset(13)+10);
 	_btnCrew->setText(_game->getLanguage()->getString("STR_CREW"));
-	_btnCrew->onMouseClick((ActionHandler) &CraftInfoState::btnCrewClick);
+	_btnCrew->onMouseClick((ActionHandler)& CraftInfoState::btnCrewClick);
 
 	_btnEquip->setColor(Palette::blockOffset(13)+10);
 	_btnEquip->setText(_game->getLanguage()->getString("STR_EQUIPMENT_UC"));
-	_btnEquip->onMouseClick((ActionHandler) &CraftInfoState::btnEquipClick);
+	_btnEquip->onMouseClick((ActionHandler)& CraftInfoState::btnEquipClick);
 
 	_btnArmor->setColor(Palette::blockOffset(13)+10);
 	_btnArmor->setText(_game->getLanguage()->getString("STR_ARMOR"));
-	_btnArmor->onMouseClick((ActionHandler) &CraftInfoState::btnArmorClick);
+	_btnArmor->onMouseClick((ActionHandler)& CraftInfoState::btnArmorClick);
 
 	_edtCraft->setColor(Palette::blockOffset(13)+10);
 	_edtCraft->setBig();
 	_edtCraft->setAlign(ALIGN_CENTER);
-	_edtCraft->onKeyboardPress((ActionHandler) &CraftInfoState::edtCraftKeyPress);
+	_edtCraft->onKeyboardPress((ActionHandler)& CraftInfoState::edtCraftKeyPress);
 
 	_txtDamage->setColor(Palette::blockOffset(13)+10);
 	_txtDamage->setSecondaryColor(Palette::blockOffset(13));
@@ -172,7 +172,7 @@ CraftInfoState::CraftInfoState(Game* game, Base* base, size_t craft)
  */
 CraftInfoState::~CraftInfoState()
 {
-	Log(LOG_INFO) << "Delete CraftInfoState";
+//	Log(LOG_INFO) << "Delete CraftInfoState";
 }
 
 /**
@@ -198,8 +198,10 @@ void CraftInfoState::init()
 
 	if (c->getStatus() == "STR_REPAIRS")
 	{
-		int damageDays = (int)ceil((float)c->getDamage() / c->getRules()->getRepairRate() / 24.0f);
-		ss << L"\n(" << tr("STR_DAY", damageDays) << ")";
+//kL		int damageDays = (int)ceil((float)c->getDamage() / c->getRules()->getRepairRate() / 24.0f);
+//kL		ss << L"\n(" << tr("STR_DAY", damageDays) << ")";
+		int damageHours = (int)ceil((float)c->getDamage() / c->getRules()->getRepairRate());	// kL
+		ss << L"\n" << tr("STR_HOUR", damageHours);												// kL. Had to add new text strings to .Lng file
 	}
 
 	_txtDamage->setText(ss.str());
@@ -209,8 +211,10 @@ void CraftInfoState::init()
 
 	if (c->getStatus() == "STR_REFUELLING")
 	{
-		int fuelDays = (int) ceil((float)(c->getRules()->getMaxFuel() - c->getFuel()) / c->getRules()->getRefuelRate() / 48.0f);
-		ss2 << L"\n(" << tr("STR_DAY", fuelDays) << ")";
+//kL		int fuelDays = (int) ceil((float)(c->getRules()->getMaxFuel() - c->getFuel()) / c->getRules()->getRefuelRate() / 48.0f);
+//kL		ss2 << L"\n(" << tr("STR_DAY", fuelDays) << ")";
+		int fuelHours = (int) ceil((float)(c->getRules()->getMaxFuel() - c->getFuel()) / c->getRules()->getRefuelRate() / 2.0f);	// kL. Why was it 48 instead of 24?
+		ss2 << L"\n" << tr("STR_HOUR", fuelHours);																					// kL
 	}
 
 	_txtFuel->setText(ss2.str());
@@ -228,7 +232,7 @@ void CraftInfoState::init()
 			frame1->blit(_crew);
 		}
 
-		Surface *frame2 = texture->getFrame(40);
+		Surface* frame2 = texture->getFrame(40);
 		frame2->setY(0);
 		int x = 0;
 		for (int i = 0; i < c->getNumVehicles(); ++i, x += 10)
@@ -237,7 +241,7 @@ void CraftInfoState::init()
 			frame2->blit(_equip);
 		}
 
-		Surface *frame3 = texture->getFrame(39);
+		Surface* frame3 = texture->getFrame(39);
 		for (int i = 0; i < c->getNumEquipment(); i += 4, x += 10)
 		{
 			frame3->setX(x);

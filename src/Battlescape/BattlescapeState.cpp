@@ -18,6 +18,7 @@
  */
 
 #define _USE_MATH_DEFINES
+
 #include <cmath>
 #include <sstream>
 #include <iomanip>
@@ -879,7 +880,7 @@ void BattlescapeState::btnKneelClick(Action *)
 		BattleUnit *bu = _save->getSelectedUnit();
 		if (bu)
 		{
-			Log(LOG_INFO) << "BattlescapeState::btnKneelClick()";
+//			Log(LOG_INFO) << "BattlescapeState::btnKneelClick()";
 			_battleGame->kneel(bu);
 		}
 
@@ -1365,7 +1366,7 @@ void BattlescapeState::blinkVisibleUnitButtons()
  * Some actions result in a change of gamestate.
  * @param item Item the user clicked on (righthand/lefthand)
  */
-void BattlescapeState::handleItemClick(BattleItem *item)
+void BattlescapeState::handleItemClick(BattleItem* item)
 {
 	// make sure there is an item, and the battlescape is in an idle state
 	if (item
@@ -1375,7 +1376,7 @@ void BattlescapeState::handleItemClick(BattleItem *item)
 			|| _save->getSelectedUnit()->getOriginalFaction() == FACTION_HOSTILE)
 		{
 			_battleGame->getCurrentAction()->weapon = item;
-			popup(new ActionMenuState(_game, _battleGame->getCurrentAction(), _icons->getX(), _icons->getY()+16));
+			popup(new ActionMenuState(_game, _battleGame->getCurrentAction(), _icons->getX(), _icons->getY() + 16));
 		}
 		else
 		{
@@ -2027,15 +2028,15 @@ bool BattlescapeState::getMouseOverIcons() const
  * and while a player's units are panicking.
  * The save button is an exception as we want to still be able to save if something
  * goes wrong during the alien turn, and submit the save file for dissection.
- * @param allowSaving True, if the help button was clicked.
+ * @param allowSaving, True if the help button was clicked.
  */
 bool BattlescapeState::allowButtons(bool allowSaving) const
 {
 	return ((allowSaving
 			|| _save->getSide() == FACTION_PLAYER
 			|| _save->getDebugMode())
-		&& _battleGame->getPanicHandled()
-		&& (_map->getProjectile() == 0));
+		&& (_battleGame->getPanicHandled() || firstInit)
+		&& _map->getProjectile() == 0);
 }
 
 /**

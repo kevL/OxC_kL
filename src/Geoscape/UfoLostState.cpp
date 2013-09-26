@@ -18,7 +18,7 @@
  */
 
 #include "UfoLostState.h"
-#include "GeoscapeState.h"		// kL
+//#include "GeoscapeState.h"		// kL
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
@@ -97,7 +97,7 @@ void UfoLostState::init()
  */
 void UfoLostState::btnOkClick(Action* )
 {
-	_gs->timerReset();	// kL
+//	_gs->timerReset();	// kL
 
 	_game->popState();
 }

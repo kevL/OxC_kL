@@ -32,62 +32,66 @@
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 
+
 namespace OpenXcom
 {
 
-	ArticleStateCraft::ArticleStateCraft(Game *game, ArticleDefinitionCraft *defs, int palSwitch) : ArticleState(game, defs->id, palSwitch)
-	{
-		RuleCraft *craft = _game->getRuleset()->getCraft(defs->id);
+ArticleStateCraft::ArticleStateCraft(Game* game, ArticleDefinitionCraft* defs, int palSwitch)
+	:
+	ArticleState(game, defs->id, palSwitch)
+{
+	RuleCraft* craft = _game->getRuleset()->getCraft(defs->id);
 
-		// add screen elements
-		_txtTitle = new Text(155, 32, 5, 24);
+	// add screen elements
+	_txtTitle = new Text(155, 32, 5, 24);
 
-		// Set palette
-		_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_3")->getColors());
+	// Set palette
+	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_3")->getColors());
 
-		ArticleState::initLayout();
+	ArticleState::initLayout();
 
-		// add other elements
-		add(_txtTitle);
+	// add other elements
+	add(_txtTitle);
 
-		// Set up objects
-		_game->getResourcePack()->getSurface(defs->image_id)->blit(_bg);
-		_btnOk->setColor(Palette::blockOffset(15)-1);
-		_btnPrev->setColor(Palette::blockOffset(15)-1);
-		_btnNext->setColor(Palette::blockOffset(15)-1);
+	// Set up objects
+	_game->getResourcePack()->getSurface(defs->image_id)->blit(_bg);
+	_btnOk->setColor(Palette::blockOffset(15)-1);
+	_btnPrev->setColor(Palette::blockOffset(15)-1);
+	_btnNext->setColor(Palette::blockOffset(15)-1);
 
-		_txtTitle->setColor(Palette::blockOffset(14)+15);
-		_txtTitle->setBig();
-		_txtTitle->setWordWrap(true);
-		_txtTitle->setText(Ufopaedia::buildText(_game, defs->title));
+	_txtTitle->setColor(Palette::blockOffset(14)+15);
+	_txtTitle->setBig();
+	_txtTitle->setWordWrap(true);
+	_txtTitle->setText(Ufopaedia::buildText(_game, defs->title));
 
-		_txtInfo = new Text(defs->rect_text.width, defs->rect_text.height, defs->rect_text.x, defs->rect_text.y);
-		add(_txtInfo);
+	_txtInfo = new Text(defs->rect_text.width, defs->rect_text.height, defs->rect_text.x, defs->rect_text.y);
+	add(_txtInfo);
 
-		_txtInfo->setColor(Palette::blockOffset(14)+15);
-		_txtInfo->setWordWrap(true);
-		_txtInfo->setText(Ufopaedia::buildText(_game, defs->text));
+	_txtInfo->setColor(Palette::blockOffset(14)+15);
+	_txtInfo->setWordWrap(true);
+	_txtInfo->setText(Ufopaedia::buildText(_game, defs->text));
 
-		_txtStats = new Text(defs->rect_stats.width, defs->rect_stats.height, defs->rect_stats.x, defs->rect_stats.y);
-		add(_txtStats);
+	_txtStats = new Text(defs->rect_stats.width, defs->rect_stats.height, defs->rect_stats.x, defs->rect_stats.y);
+	add(_txtStats);
 
-		_txtStats->setColor(Palette::blockOffset(14)+15);
-		_txtStats->setSecondaryColor(Palette::blockOffset(15)+4);
+	_txtStats->setColor(Palette::blockOffset(14)+15);
+	_txtStats->setSecondaryColor(Palette::blockOffset(15)+4);
 
-		std::wstringstream ss;
-		ss << _game->getLanguage()->getString("STR_MAXIMUM_SPEED_UC") << L'\x01' << craft->getMaxSpeed() << L'\x01' << L'\n';
-		ss << _game->getLanguage()->getString("STR_ACCELERATION") << L'\x01' << craft->getAcceleration() << L'\x01' << L'\n';
-		ss << _game->getLanguage()->getString("STR_FUEL_CAPACITY") << L'\x01' << craft->getMaxFuel() << L'\x01' << L'\n';
-		ss << _game->getLanguage()->getString("STR_WEAPON_PODS") << L'\x01' << craft->getWeapons() << L'\x01' << L'\n';
-		ss << _game->getLanguage()->getString("STR_DAMAGE_CAPACITY_UC") << L'\x01' << craft->getMaxDamage() << L'\x01' << L'\n';
-		ss << _game->getLanguage()->getString("STR_CARGO_SPACE") << L'\x01' << craft->getSoldiers() << L'\x01' << L'\n';
-		ss << _game->getLanguage()->getString("STR_HWP_CAPACITY") << L'\x01' << craft->getVehicles();
-		_txtStats->setText(ss.str());
+	std::wstringstream ss;
+	ss << _game->getLanguage()->getString("STR_MAXIMUM_SPEED_UC") << L'\x01' << craft->getMaxSpeed() << L'\x01' << L'\n';
+	ss << _game->getLanguage()->getString("STR_ACCELERATION") << L'\x01' << craft->getAcceleration() << L'\x01' << L'\n';
+	ss << _game->getLanguage()->getString("STR_FUEL_CAPACITY") << L'\x01' << craft->getMaxFuel() << L'\x01' << L'\n';
+	ss << _game->getLanguage()->getString("STR_WEAPON_PODS") << L'\x01' << craft->getWeapons() << L'\x01' << L'\n';
+	ss << _game->getLanguage()->getString("STR_DAMAGE_CAPACITY_UC") << L'\x01' << craft->getMaxDamage() << L'\x01' << L'\n';
+	ss << _game->getLanguage()->getString("STR_CARGO_SPACE") << L'\x01' << craft->getSoldiers() << L'\x01' << L'\n';
+	ss << _game->getLanguage()->getString("STR_HWP_CAPACITY") << L'\x01' << craft->getVehicles();
+	_txtStats->setText(ss.str());
 
-		centerAllSurfaces();
-	}
+	centerAllSurfaces();
+}
 
-	ArticleStateCraft::~ArticleStateCraft()
-	{}
+ArticleStateCraft::~ArticleStateCraft()
+{
+}
 
 }

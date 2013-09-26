@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include <assert.h>
 
 #include "ProductionCompleteState.h"
@@ -28,6 +29,7 @@
 #include "../Interface/Text.h"
 #include "../Engine/Options.h"
 
+
 namespace OpenXcom
 {
 
@@ -38,14 +40,16 @@ namespace OpenXcom
  * @param base Base the item belongs to.
  * @param endType What ended the production.
  */
-ProductionCompleteState::ProductionCompleteState(Game *game, const std::wstring &item, const std::wstring &base, productionProgress_e endType) : State(game)
+ProductionCompleteState::ProductionCompleteState(Game* game, const std::wstring& item, const std::wstring& base, productionProgress_e endType)
+	:
+	State(game)
 {
 	_screen = false;
 
 	// Create objects
-	_window = new Window(this, 256, 160, 32, 20, POPUP_BOTH);
-	_btnOk = new TextButton(120, 18, 100, 154);
-	_txtMessage = new Text(246, 110, 37, 35);
+	_window		= new Window(this, 256, 160, 32, 20, POPUP_BOTH);
+	_btnOk		= new TextButton(120, 18, 100, 154);
+	_txtMessage	= new Text(246, 110, 37, 35);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
@@ -62,37 +66,42 @@ ProductionCompleteState::ProductionCompleteState(Game *game, const std::wstring 
 
 	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
-	_btnOk->onMouseClick((ActionHandler)&ProductionCompleteState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&ProductionCompleteState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
-	_btnOk->onKeyboardPress((ActionHandler)&ProductionCompleteState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onMouseClick((ActionHandler)& ProductionCompleteState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)& ProductionCompleteState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
+	_btnOk->onKeyboardPress((ActionHandler)& ProductionCompleteState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtMessage->setColor(Palette::blockOffset(15)-1);
 	_txtMessage->setAlign(ALIGN_CENTER);
 	_txtMessage->setVerticalAlign(ALIGN_MIDDLE);
 	_txtMessage->setBig();
 	_txtMessage->setWordWrap(true);
+
 	std::wstring s;
-	switch(endType)
+	switch (endType)
 	{
-	case PROGRESS_COMPLETE:
-		s = _game->getLanguage()->getString("STR_PRODUCTION_OF");
+		case PROGRESS_COMPLETE:
+			s = _game->getLanguage()->getString("STR_PRODUCTION_OF");
 		break;
-	case PROGRESS_NOT_ENOUGH_MONEY:
-		s = _game->getLanguage()->getString("STR_NOT_ENOUGH_MONEY_TO_PRODUCE");
+		case PROGRESS_NOT_ENOUGH_MONEY:
+			s = _game->getLanguage()->getString("STR_NOT_ENOUGH_MONEY_TO_PRODUCE");
 		break;
-	case PROGRESS_NOT_ENOUGH_MATERIALS:
-		s = _game->getLanguage()->getString("STR_NOT_ENOUGH_SPECIAL_MATERIALS_TO_PRODUCE");
+		case PROGRESS_NOT_ENOUGH_MATERIALS:
+			s = _game->getLanguage()->getString("STR_NOT_ENOUGH_SPECIAL_MATERIALS_TO_PRODUCE");
 		break;
-	default:
-		assert(false);
+
+		default:
+			assert(false);
 	}
+
 	s += item;
 	s += _game->getLanguage()->getString("STR__AT__");
 	s += base;
-	if(endType == PROGRESS_COMPLETE)
+
+	if (endType == PROGRESS_COMPLETE)
 	{
 		s += _game->getLanguage()->getString("STR_IS_COMPLETE");
 	}
+
 	_txtMessage->setText(s);
 }
 
@@ -101,7 +110,6 @@ ProductionCompleteState::ProductionCompleteState(Game *game, const std::wstring 
  */
 ProductionCompleteState::~ProductionCompleteState()
 {
-
 }
 
 /**
@@ -116,7 +124,7 @@ void ProductionCompleteState::init()
  * Closes the window.
  * @param action Pointer to an action.
  */
-void ProductionCompleteState::btnOkClick(Action *)
+void ProductionCompleteState::btnOkClick(Action* )
 {
 	_game->popState();
 }

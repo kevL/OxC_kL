@@ -53,7 +53,7 @@ CraftSoldiersState::CraftSoldiersState(Game* game, Base* base, size_t craft)
 	_base(base),
 	_craft(craft)
 {
-	Log(LOG_INFO) << "Create CraftSoldiersState";
+//	Log(LOG_INFO) << "Create CraftSoldiersState";
 
 	// Create objects
 	_window			= new Window(this, 320, 200, 0, 0);
@@ -144,7 +144,7 @@ CraftSoldiersState::CraftSoldiersState(Game* game, Base* base, size_t craft)
  */
 CraftSoldiersState::~CraftSoldiersState()
 {
-	Log(LOG_INFO) << "Delete CraftSoldiersState";
+//	Log(LOG_INFO) << "Delete CraftSoldiersState";
 }
 
 /**

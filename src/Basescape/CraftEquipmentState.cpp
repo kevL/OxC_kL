@@ -164,16 +164,16 @@ CraftEquipmentState::CraftEquipmentState(Game* game, Base* base, size_t craft)
 	_lstEquipment->setBackground(_window);
 	_lstEquipment->setMargin(8);
 	_lstEquipment->setAllowScrollOnArrowButtons(!_allowChangeListValuesByMouseWheel);
-	_lstEquipment->onLeftArrowPress((ActionHandler) &CraftEquipmentState::lstEquipmentLeftArrowPress);
-	_lstEquipment->onLeftArrowRelease((ActionHandler) &CraftEquipmentState::lstEquipmentLeftArrowRelease);
-	_lstEquipment->onLeftArrowClick((ActionHandler) &CraftEquipmentState::lstEquipmentLeftArrowClick);
-	_lstEquipment->onRightArrowPress((ActionHandler) &CraftEquipmentState::lstEquipmentRightArrowPress);
-	_lstEquipment->onRightArrowRelease((ActionHandler) &CraftEquipmentState::lstEquipmentRightArrowRelease);
-	_lstEquipment->onRightArrowClick((ActionHandler) &CraftEquipmentState::lstEquipmentRightArrowClick);
-	_lstEquipment->onMousePress((ActionHandler) &CraftEquipmentState::lstEquipmentMousePress);
+	_lstEquipment->onLeftArrowPress((ActionHandler)& CraftEquipmentState::lstEquipmentLeftArrowPress);
+	_lstEquipment->onLeftArrowRelease((ActionHandler)& CraftEquipmentState::lstEquipmentLeftArrowRelease);
+	_lstEquipment->onLeftArrowClick((ActionHandler)& CraftEquipmentState::lstEquipmentLeftArrowClick);
+	_lstEquipment->onRightArrowPress((ActionHandler)& CraftEquipmentState::lstEquipmentRightArrowPress);
+	_lstEquipment->onRightArrowRelease((ActionHandler)& CraftEquipmentState::lstEquipmentRightArrowRelease);
+	_lstEquipment->onRightArrowClick((ActionHandler)& CraftEquipmentState::lstEquipmentRightArrowClick);
+	_lstEquipment->onMousePress((ActionHandler)& CraftEquipmentState::lstEquipmentMousePress);
 
 	int row = 0;
-	const std::vector<std::string> &items = _game->getRuleset()->getItemsList();
+	const std::vector<std::string>& items = _game->getRuleset()->getItemsList();
 	for (std::vector<std::string>::const_iterator i = items.begin(); i != items.end(); ++i)
 	{
 		// CHEAP HACK TO HIDE HWP AMMO

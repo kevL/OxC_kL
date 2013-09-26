@@ -16,10 +16,12 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_INVENTORYSTATE_H
 #define OPENXCOM_INVENTORYSTATE_H
 
 #include "../Engine/State.h"
+
 
 namespace OpenXcom
 {
@@ -35,48 +37,52 @@ class BattleUnit;
 /**
  * Screen which displays soldier's inventory.
  */
-class InventoryState : public State
+class InventoryState
+	:
+	public State
 {
-private:
-	Surface *_bg, *_soldier;
-	Text *_txtName, *_txtItem, *_txtAmmo, *_txtWeight, *_txtTus, *_txtFAcc, *_txtReact, *_txtPSkill, *_txtPStr;
-	InteractiveSurface *_btnOk, *_btnPrev, *_btnNext, *_btnUnload, *_btnGround, *_btnRank;
-	Surface *_selAmmo;
-	Inventory *_inv;
-	SavedBattleGame *_battleGame;
-	bool _tu, _showMoreStatsInInventoryView;
-	BattlescapeState *_parent;
+	private:
+		Surface* _bg, * _soldier;
+		Text* _txtName, * _txtItem, * _txtAmmo, * _txtWeight, * _txtTus, * _txtFAcc, * _txtReact, * _txtPSkill, * _txtPStr;
+		InteractiveSurface* _btnOk, * _btnPrev, * _btnNext, * _btnUnload, * _btnGround, * _btnRank;
+		Surface* _selAmmo;
+		Inventory* _inv;
+		SavedBattleGame* _battleGame;
+		bool _tu, _showMoreStatsInInventoryView;
+		BattlescapeState* _parent;
 
-	bool hasInventory(BattleUnit *unit) const;
-	BattleUnit *selectPreviousUnit() const;
-	BattleUnit *selectNextUnit() const;
-public:
-	/// Creates the Inventory state.
-	InventoryState(Game *game, bool tu, BattlescapeState *parent);
-	/// Cleans up the Inventory state.
-	~InventoryState();
-	/// Updates all soldier info.
-	void init();
-	/// Updates the soldier info (Weight, TU).
-	void updateStats();
-	/// Saves the soldiers' equipment-layout.
-	void saveEquipmentLayout();
-	/// Handler for clicking the OK button.
-	void btnOkClick(Action *action);
-	/// Handler for clicking the Previous button.
-	void btnPrevClick(Action *action);
-	/// Handler for clicking the Next button.
-	void btnNextClick(Action *action);
-	/// Handler for clicking the Rank button.
-	void btnUnloadClick(Action *action);
-	/// Handler for clicking on the Ground -> button.
-	void btnGroundClick(Action *action);
-	/// Handler for clicking on the inventory.
-	void btnRankClick(Action *action);
-	/// Handler for clicking the Unload button.
-	void invClick(Action *action);
-	/// Handles keypresses.
-	void handle(Action *action);
+		bool hasInventory(BattleUnit* unit) const;
+		BattleUnit* selectPreviousUnit() const;
+		BattleUnit* selectNextUnit() const;
+
+	public:
+		/// Creates the Inventory state.
+		InventoryState(Game* game, bool tu, BattlescapeState* parent);
+		/// Cleans up the Inventory state.
+		~InventoryState();
+
+		/// Updates all soldier info.
+		void init();
+		/// Updates the soldier info (Weight, TU).
+		void updateStats();
+		/// Saves the soldiers' equipment-layout.
+		void saveEquipmentLayout();
+		/// Handler for clicking the OK button.
+		void btnOkClick(Action* action);
+		/// Handler for clicking the Previous button.
+		void btnPrevClick(Action* action);
+		/// Handler for clicking the Next button.
+		void btnNextClick(Action* action);
+		/// Handler for clicking the Rank button.
+		void btnUnloadClick(Action* action);
+		/// Handler for clicking on the Ground -> button.
+		void btnGroundClick(Action* action);
+		/// Handler for clicking on the inventory.
+		void btnRankClick(Action* action);
+		/// Handler for clicking the Unload button.
+		void invClick(Action* action);
+		/// Handles keypresses.
+		void handle(Action* action);
 };
 
 }

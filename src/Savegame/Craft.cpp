@@ -384,7 +384,7 @@ std::string Craft::getAltitude() const
 {
 	Ufo* u = dynamic_cast<Ufo* >(_dest);
 
-/*kL	if (u
+	if (u
 		&& u->getAltitude() != "STR_GROUND")
 	{
 		return u->getAltitude();
@@ -392,9 +392,9 @@ std::string Craft::getAltitude() const
 	else
 	{
 		return "STR_VERY_LOW";
-	} */
+	}
 	// kL_begin: Craft::getAltitude(), add strings for based xCom craft.
-	if (u)
+/*	if (u)
 	{
 		if (u->getAltitude() != "STR_GROUND")
 		{
@@ -413,7 +413,7 @@ std::string Craft::getAltitude() const
 	else
 	{
 		return "STR_VERY_LOW";
-	}
+	} */
 	// kL_end.
 }
 

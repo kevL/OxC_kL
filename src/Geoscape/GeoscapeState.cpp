@@ -519,8 +519,7 @@ void GeoscapeState::think()
 		&& (!_zoomInEffectTimer->isRunning() || _zoomInEffectDone)
 		&& (!_zoomOutEffectTimer->isRunning() || _zoomOutEffectDone))
 	{
-		// Handle timers
-		_timer->think(this, 0);
+		_timer->think(this, 0); // Handle timers
 	}
 	else
 	{
@@ -529,9 +528,8 @@ void GeoscapeState::think()
 			handleDogfights();
 		}
 
-		if (!_popups.empty())
+		if (!_popups.empty()) // Handle popups
 		{
-			// Handle popups
 			_globe->rotateStop();
 			_game->pushState(*_popups.begin());
 			_popups.erase(_popups.begin());
@@ -685,7 +683,10 @@ void GeoscapeState::time5Seconds()
 							&& !(*i)->getFollowers()->empty())
 						{
 							if (!((*i)->getTrajectory().getID() == "__RETALIATION_ASSAULT_RUN" && (*i)->getStatus() ==  Ufo::LANDED))
+							{
+								timerReset();	// kL
 								popup(new UfoLostState(_game, (*i)->getName(_game->getLanguage())));
+							}
 						}
 
 						if (terrorSiteCount < _game->getSavedGame()->getTerrorSites()->size())
@@ -733,6 +734,7 @@ void GeoscapeState::time5Seconds()
 
 					if (detected != (*i)->getDetected() && !(*i)->getFollowers()->empty())
 					{
+						timerReset();	// kL
 						popup(new UfoLostState(_game, (*i)->getName(_game->getLanguage())));
 					}
 				}
@@ -887,6 +889,7 @@ void GeoscapeState::time5Seconds()
 				}
 				else if (w != 0)
 				{
+					timerReset();	// kL
 					popup(new CraftPatrolState(_game, (*j), _globe));
 					(*j)->setDestination(0);
 				}
@@ -897,6 +900,7 @@ void GeoscapeState::time5Seconds()
 						// look up polygons texture
 						int texture, shade;
 						_globe->getPolygonTextureAndShade(t->getLongitude(), t->getLatitude(), &texture, &shade);
+
 						timerReset();
 						popup(new ConfirmLandingState(_game, *j, texture, shade, this));
 					}
@@ -913,8 +917,8 @@ void GeoscapeState::time5Seconds()
 						{
 							int texture, shade;
 							_globe->getPolygonTextureAndShade(b->getLongitude(), b->getLatitude(), &texture, &shade);
-							timerReset();
 
+							timerReset();
 							popup(new ConfirmLandingState(_game, *j, texture, shade, this));
 						}
 						else
@@ -1355,6 +1359,7 @@ void GeoscapeState::time30Minutes()
 						(*u)->setHyperDetected(false); // i'm not 100% sure this is correct, need verification.
 						if (!(*u)->getFollowers()->empty())
 						{
+							timerReset();	// kL
 							popup(new UfoLostState(_game, (*u)->getName(_game->getLanguage())));
 						}
 					}

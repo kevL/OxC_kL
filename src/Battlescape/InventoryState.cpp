@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "InventoryState.h"
 #include <sstream>
 #include "../Engine/Game.h"
@@ -47,6 +48,7 @@
 #include "Camera.h"
 #include "Pathfinding.h"
 
+
 namespace OpenXcom
 {
 
@@ -56,13 +58,17 @@ namespace OpenXcom
  * @param tu Inventory Time Unit mode.
  * @param parent Pointer to parent Battlescape.
  */
-InventoryState::InventoryState(Game *game, bool tu, BattlescapeState *parent) : State(game), _tu(tu), _parent(parent)
+InventoryState::InventoryState(Game* game, bool tu, BattlescapeState* parent)
+	:
+	State(game),
+	_tu(tu),
+	_parent(parent)
 {
 	_battleGame = _game->getSavedGame()->getSavedBattle();
 	_showMoreStatsInInventoryView = Options::getBool("showMoreStatsInInventoryView");
 
 	// remove any path preview if in the middle of a battlegame
-	if(tu || _game->getSavedGame()->getSavedBattle()->getDebugMode())
+	if (tu || _game->getSavedGame()->getSavedBattle()->getDebugMode())
 	{
 		_battleGame->getPathfinding()->removePreview();
 	}
@@ -162,20 +168,20 @@ InventoryState::InventoryState(Game *game, bool tu, BattlescapeState *parent) : 
 	_txtAmmo->setAlign(ALIGN_CENTER);
 	_txtAmmo->setHighContrast(true);
 
-	_btnOk->onMouseClick((ActionHandler)&InventoryState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&InventoryState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
-	_btnPrev->onMouseClick((ActionHandler)&InventoryState::btnPrevClick);
-	_btnPrev->onKeyboardPress((ActionHandler)&InventoryState::btnPrevClick, (SDLKey)Options::getInt("keyBattlePrevUnit"));
+	_btnOk->onMouseClick((ActionHandler)& InventoryState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)& InventoryState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnPrev->onMouseClick((ActionHandler)& InventoryState::btnPrevClick);
+	_btnPrev->onKeyboardPress((ActionHandler)& InventoryState::btnPrevClick, (SDLKey)Options::getInt("keyBattlePrevUnit"));
 	_btnNext->onMouseClick((ActionHandler)&InventoryState::btnNextClick);
-	_btnNext->onKeyboardPress((ActionHandler)&InventoryState::btnNextClick, (SDLKey)Options::getInt("keyBattleNextUnit"));
-	_btnUnload->onMouseClick((ActionHandler)&InventoryState::btnUnloadClick);
-	_btnGround->onMouseClick((ActionHandler)&InventoryState::btnGroundClick);
-	_btnRank->onMouseClick((ActionHandler)&InventoryState::btnRankClick);
+	_btnNext->onKeyboardPress((ActionHandler)& InventoryState::btnNextClick, (SDLKey)Options::getInt("keyBattleNextUnit"));
+	_btnUnload->onMouseClick((ActionHandler)& InventoryState::btnUnloadClick);
+	_btnGround->onMouseClick((ActionHandler)& InventoryState::btnGroundClick);
+	_btnRank->onMouseClick((ActionHandler)& InventoryState::btnRankClick);
 
 	_inv->draw();
 	_inv->setTuMode(_tu);
 	_inv->setSelectedUnit(_game->getSavedGame()->getSavedBattle()->getSelectedUnit());
-	_inv->onMouseClick((ActionHandler)&InventoryState::invClick, 0);
+	_inv->onMouseClick((ActionHandler)& InventoryState::invClick, 0);
 }
 
 /**
@@ -190,24 +196,22 @@ InventoryState::~InventoryState()
  */
 void InventoryState::init()
 {
+	BattleUnit* unit = _battleGame->getSelectedUnit();
 
-	BattleUnit *unit = _battleGame->getSelectedUnit();
-
-	// no selected unit, close inventory
-	if (unit == 0)
+	if (unit == 0) // no selected unit, close inventory
 	{
 		btnOkClick(0);
+
 		return;
 	}
-	// skip to the first unit with inventory
-	if (!hasInventory(unit))
+
+	if (!hasInventory(unit)) // skip to the first unit with inventory
 	{
-		// no available unit, close inventory
-		if (unit == selectNextUnit())
+		if (unit == selectNextUnit()) // no available unit, close inventory
 		{
-			// starting a mission with just vehicles
 			btnOkClick(0);
-			return;
+
+			return; // starting a mission with just vehicles
 		}
 		else
 		{
@@ -225,10 +229,10 @@ void InventoryState::init()
 	_txtName->setText(unit->getName(_game->getLanguage()));
 	_inv->setSelectedUnit(unit);
 
-	Soldier *s = _game->getSavedGame()->getSoldier(unit->getId());
+	Soldier* s = _game->getSavedGame()->getSoldier(unit->getId());
 	if (s)
 	{
-		SurfaceSet *texture = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
+		SurfaceSet* texture = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
 		texture->getFrame(s->getRankSprite())->setX(0);
 		texture->getFrame(s->getRankSprite())->setY(0);
 		texture->getFrame(s->getRankSprite())->blit(_btnRank);
@@ -241,19 +245,17 @@ void InventoryState::init()
 
 		if (s->getLook() == LOOK_BLONDE)
 			look += "0";
-
-		if (s->getLook() == LOOK_BROWNHAIR)
+		else if (s->getLook() == LOOK_BROWNHAIR)
 			look += "1";
-
-		if (s->getLook() == LOOK_ORIENTAL)
+		else if (s->getLook() == LOOK_ORIENTAL)
 			look += "2";
-
-		if (s->getLook() == LOOK_AFRICAN)
+		else if (s->getLook() == LOOK_AFRICAN)
 			look += "3";
 
 		look += ".SPK";
 
-		if (!CrossPlatform::fileExists(CrossPlatform::getDataFile("UFOGRAPH/" + look)) && !_game->getResourcePack()->getSurface(look))
+		if (!CrossPlatform::fileExists(CrossPlatform::getDataFile("UFOGRAPH/" + look))
+			&& !_game->getResourcePack()->getSurface(look))
 		{
 			look = s->getArmor()->getSpriteInventory() + ".SPK";
 		}
@@ -262,14 +264,15 @@ void InventoryState::init()
 	}
 	else
 	{
-		Surface *armorSurface = _game->getResourcePack()->getSurface(unit->getArmor()->getSpriteInventory());
+		Surface* armorSurface = _game->getResourcePack()->getSurface(unit->getArmor()->getSpriteInventory());
 		if (armorSurface)
 		{
 			armorSurface->blit(_soldier);
 		}
 	}
 
-	if (_showMoreStatsInInventoryView && !_tu)
+	if (_showMoreStatsInInventoryView
+		&& !_tu)
 	{
 		std::wstringstream ss2;
 		ss2 << _game->getLanguage()->getString("STR_FACCURACY") << L'\x01' << (int)(unit->getStats()->firing * unit->getAccuracyModifier());
@@ -304,7 +307,8 @@ void InventoryState::init()
  */
 void InventoryState::updateStats()
 {
-	BattleUnit *unit = _battleGame->getSelectedUnit();
+	BattleUnit* unit = _battleGame->getSelectedUnit();
+
 	if (_showMoreStatsInInventoryView)
 	{
 		int Weight = unit->getCarriedWeight(_inv->getSelectedItem());
@@ -317,6 +321,7 @@ void InventoryState::updateStats()
 			_txtWeight->setSecondaryColor(Palette::blockOffset(2));
 		else _txtWeight->setSecondaryColor(Palette::blockOffset(1));
 	}
+
 	if (_tu)
 	{
 		std::wstringstream ss;
@@ -331,17 +336,15 @@ void InventoryState::updateStats()
  */
 void InventoryState::saveEquipmentLayout()
 {
-	for (std::vector<BattleUnit*>::iterator i = _battleGame->getUnits()->begin(); i != _battleGame->getUnits()->end(); ++i)
+	for (std::vector<BattleUnit* >::iterator i = _battleGame->getUnits()->begin(); i != _battleGame->getUnits()->end(); ++i)
 	{
-		// we need X-Com soldiers only
-		if (0 == (*i)->getGeoscapeSoldier()) continue;
+		if (0 == (*i)->getGeoscapeSoldier()) continue; // we need X-Com soldiers only
 
-		std::vector<EquipmentLayoutItem*> *layoutItems = (*i)->getGeoscapeSoldier()->getEquipmentLayout();
+		std::vector<EquipmentLayoutItem* >* layoutItems = (*i)->getGeoscapeSoldier()->getEquipmentLayout();
 
-		// clear the previous save
-		if (!layoutItems->empty())
+		if (!layoutItems->empty()) // clear the previous save
 		{
-			for (std::vector<EquipmentLayoutItem*>::iterator j = layoutItems->begin(); j != layoutItems->end(); ++j)
+			for (std::vector<EquipmentLayoutItem* >::iterator j = layoutItems->begin(); j != layoutItems->end(); ++j)
 				delete *j;
 
 			layoutItems->clear();
@@ -349,7 +352,7 @@ void InventoryState::saveEquipmentLayout()
 
 		// save the soldier's items
 		// note: with using getInventory() we are skipping the ammos loaded, (they're not owned) because we handle the loaded-ammos separately (inside)
-		for (std::vector<BattleItem*>::iterator j = (*i)->getInventory()->begin(); j != (*i)->getInventory()->end(); ++j)
+		for (std::vector<BattleItem* >::iterator j = (*i)->getInventory()->begin(); j != (*i)->getInventory()->end(); ++j)
 		{
 			std::string ammo;
 			if ((*j)->needsAmmo() && 0 != (*j)->getAmmoItem())
@@ -358,23 +361,21 @@ void InventoryState::saveEquipmentLayout()
 				ammo = "NONE";
 
 			layoutItems->push_back(new EquipmentLayoutItem(
-				(*j)->getRules()->getType(),
-				(*j)->getSlot()->getId(),
-				(*j)->getSlotX(),
-				(*j)->getSlotY(),
-				ammo,
-				(*j)->getExplodeTurn()
-			));
+					(*j)->getRules()->getType(),
+					(*j)->getSlot()->getId(),
+					(*j)->getSlotX(),
+					(*j)->getSlotY(),
+					ammo,
+					(*j)->getExplodeTurn()));
 		}
 	}
-
 }
 
 /**
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void InventoryState::btnOkClick(Action *)
+void InventoryState::btnOkClick(Action* )
 {
 	if (_inv->getSelectedItem() != 0)
 		return;
@@ -386,7 +387,7 @@ void InventoryState::btnOkClick(Action *)
 		saveEquipmentLayout();
 		_battleGame->resetUnitTiles();
 
-		for (std::vector<BattleUnit*>::iterator i = _battleGame->getUnits()->begin(); i != _battleGame->getUnits()->end(); ++i)
+		for (std::vector<BattleUnit* >::iterator i = _battleGame->getUnits()->begin(); i != _battleGame->getUnits()->end(); ++i)
 		{
 			if ((*i)->getFaction() == _battleGame->getSide())
 				(*i)->prepareNewTurn();
@@ -405,7 +406,7 @@ void InventoryState::btnOkClick(Action *)
  * Selects the previous soldier.
  * @param action Pointer to an action.
  */
-void InventoryState::btnPrevClick(Action *)
+void InventoryState::btnPrevClick(Action* )
 {
 	if (_inv->getSelectedItem() != 0)
 		return;
@@ -419,7 +420,7 @@ void InventoryState::btnPrevClick(Action *)
  * Selects the next soldier.
  * @param action Pointer to an action.
  */
-void InventoryState::btnNextClick(Action *)
+void InventoryState::btnNextClick(Action* )
 {
 	if (_inv->getSelectedItem() != 0)
 		return;
@@ -433,7 +434,7 @@ void InventoryState::btnNextClick(Action *)
  * Unloads the selected weapon.
  * @param action Pointer to an action.
  */
-void InventoryState::btnUnloadClick(Action *)
+void InventoryState::btnUnloadClick(Action* )
 {
 	if (_inv->getSelectedItem() != 0
 		&& _inv->getSelectedItem()->getAmmoItem() != 0
@@ -452,7 +453,7 @@ void InventoryState::btnUnloadClick(Action *)
  * Shows more ground items / rearranges them.
  * @param action Pointer to an action.
  */
-void InventoryState::btnGroundClick(Action *)
+void InventoryState::btnGroundClick(Action* )
 {
 	_inv->arrangeGround();
 }
@@ -461,7 +462,7 @@ void InventoryState::btnGroundClick(Action *)
  * Shows the unit info screen.
  * @param action Pointer to an action.
  */
-void InventoryState::btnRankClick(Action *)
+void InventoryState::btnRankClick(Action* )
 {
 	_game->pushState(new UnitInfoState(_game, _battleGame->getSelectedUnit()));
 }
@@ -470,9 +471,9 @@ void InventoryState::btnRankClick(Action *)
  * Updates item info.
  * @param action Pointer to an action.
  */
-void InventoryState::invClick(Action *)
+void InventoryState::invClick(Action* )
 {
-	BattleItem *item = _inv->getSelectedItem();
+	BattleItem* item = _inv->getSelectedItem();
 
 	_txtItem->setText(L"");
 	_txtAmmo->setText(L"");
@@ -480,7 +481,8 @@ void InventoryState::invClick(Action *)
 
 	if (item != 0)
 	{
-		if (item->getUnit() && item->getUnit()->getStatus() == STATUS_UNCONSCIOUS)
+		if (item->getUnit()
+			&& item->getUnit()->getStatus() == STATUS_UNCONSCIOUS)
 		{
 			_txtItem->setText(item->getUnit()->getName(_game->getLanguage()));
 		}
@@ -497,8 +499,8 @@ void InventoryState::invClick(Action *)
 		}
 
 		std::wstringstream ss;
-
-		if (item->getAmmoItem() != 0 && item->needsAmmo())
+		if (item->getAmmoItem() != 0
+			&& item->needsAmmo())
 		{
 			ss << _game->getLanguage()->getString("STR_AMMO_ROUNDS_LEFT") << L'\x01' << item->getAmmoItem()->getAmmoQuantity();
 
@@ -519,7 +521,8 @@ void InventoryState::invClick(Action *)
 
 			item->getAmmoItem()->getRules()->drawHandSprite(_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"), _selAmmo);
 		}
-		else if (item->getAmmoQuantity() != 0 && item->needsAmmo())
+		else if (item->getAmmoQuantity() != 0
+			&& item->needsAmmo())
 		{
 			ss << _game->getLanguage()->getString("STR_AMMO_ROUNDS_LEFT") << L'\x01' << item->getAmmoQuantity();
 		}
@@ -534,7 +537,7 @@ void InventoryState::invClick(Action *)
  * Takes care of any events from the core game engine.
  * @param action Pointer to an action.
  */
-void InventoryState::handle(Action *action)
+void InventoryState::handle(Action* action)
 {
 	State::handle(action);
 
@@ -557,18 +560,21 @@ void InventoryState::handle(Action *action)
 * Selects the previous player unit, ignoring units without inventory.
 * @return Pointer to selected unit.
 */
-BattleUnit *InventoryState::selectPreviousUnit() const
+BattleUnit* InventoryState::selectPreviousUnit() const
 {
-	BattleUnit *unit, *current = _battleGame->getSelectedUnit();
+	BattleUnit* unit, * current = _battleGame->getSelectedUnit();
 	do
 	{
 		if (_parent)
 			_parent->selectPreviousPlayerUnit(false);
 		else
 			_battleGame->selectPreviousPlayerUnit(false);
+
 		unit = _battleGame->getSelectedUnit();
 	}
-	while (!hasInventory(unit) && unit != current);
+	while (!hasInventory(unit)
+		&& unit != current);
+
 	return unit;
 }
 
@@ -576,30 +582,32 @@ BattleUnit *InventoryState::selectPreviousUnit() const
 * Selects the next player unit, ignoring units without inventory.
 * @return Pointer to selected unit.
 */
-BattleUnit *InventoryState::selectNextUnit() const
+BattleUnit* InventoryState::selectNextUnit() const
 {
-	BattleUnit *unit, *current = _battleGame->getSelectedUnit();
+	BattleUnit* unit, * current = _battleGame->getSelectedUnit();
 	do
 	{
 		if (_parent)
 			_parent->selectNextPlayerUnit(false, false);
 		else
 			_battleGame->selectNextPlayerUnit(false, false);
+
 		unit = _battleGame->getSelectedUnit();
 	}
-	while (!hasInventory(unit) && unit != current);
+	while (!hasInventory(unit)
+		&& unit != current);
+
 	return unit;
 }
 
 /**
-* Checks if a unit has an inventory. Large units and
-* terror units don't have inventories.
+* Checks if a unit has an inventory. Large units and terror units don't have inventories.
 * @param Pointer to battle unit.
 * @return True if an inventory is available, false otherwise.
 */
-bool InventoryState::hasInventory(BattleUnit *unit) const
+bool InventoryState::hasInventory(BattleUnit* unit) const
 {
-	return ((unit->getArmor()->getSize() == 1 && unit->getRankString() != "STR_LIVE_TERRORIST") || _battleGame->getDebugMode());
+	return (unit->getArmor()->getSize() == 1 && unit->getRankString() != "STR_LIVE_TERRORIST") || _battleGame->getDebugMode();
 }
 
 }

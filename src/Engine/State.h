@@ -24,6 +24,7 @@
 #include <string>
 #include <SDL.h>
 
+
 namespace OpenXcom
 {
 
@@ -48,7 +49,7 @@ class State
 		/// Cleans up the state.
 		virtual ~State();
 		/// Adds a child element to the state.
-		void add(Surface *surface);
+		void add(Surface* surface);
 		/// Gets whether the state is a full-screen.
 		bool isScreen() const;
 		/// Toggles whether the state is a full-screen.
@@ -56,7 +57,7 @@ class State
 		/// Initializes the state.
 		virtual void init();
 		/// Handles any events.
-		virtual void handle(Action *action);
+		virtual void handle(Action* action);
 		/// Runs state functionality every cycle.
 		virtual void think();
 		/// Blits the state to the screen.
@@ -68,9 +69,9 @@ class State
 		/// Resets all the state surfaces.
 		void resetAll();
 		/// Get the localized text.
-		const LocalizedText &tr(const std::string &id) const;
+		const LocalizedText& tr(const std::string& id) const;
 		/// Get the localized text.
-		LocalizedText tr(const std::string &id, unsigned n) const;
+		LocalizedText tr(const std::string& id, unsigned n) const;
 		///
 		void centerAllSurfaces();
 		///
@@ -79,8 +80,8 @@ class State
 		friend class Timer;
 
 	protected:
-		Game *_game;
-		std::vector<Surface*> _surfaces;
+		Game* _game;
+		std::vector<Surface* > _surfaces;
 		bool _screen;
 };
 

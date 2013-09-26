@@ -181,8 +181,9 @@ void ActionMenuState::addItem(BattleActionType ba, const std::string& name, int*
 void ActionMenuState::handle(Action* action)
 {
 	State::handle(action);
-	if (action->getDetails()->type == SDL_MOUSEBUTTONDOWN
-		&& action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+//kL	if (action->getDetails()->type == SDL_MOUSEBUTTONDOWN
+//kL		&& action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)		// kL
 	{
 		_game->popState();
 	}

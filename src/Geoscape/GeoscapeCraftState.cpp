@@ -243,7 +243,7 @@ GeoscapeCraftState::GeoscapeCraftState(Game* game, Craft* craft, Globe* globe, W
 	_txtAltitude->setSecondaryColor(Palette::blockOffset(8)+5);
 	std::wstringstream ss5;
 	// kL_begin: GeoscapeCraftState, add #HWP on transports. ->Moved to Craft.cpp
-/*	std::string altitude;
+	std::string altitude;
 	if (_craft->getAltitude() == "STR_GROUND"
 		|| _craft->getStatus() == "STR_READY"
 		|| _craft->getStatus() == "STR_REPAIRS"
@@ -252,11 +252,12 @@ GeoscapeCraftState::GeoscapeCraftState(Game* game, Craft* craft, Globe* globe, W
 	{
 		altitude = "STR_GROUNDED";
 	}
-	else altitude = _craft->getAltitude(); */
+	else altitude = _craft->getAltitude();
 	// kL_end.
 
-	std::string altitude = _craft->getAltitude() == "STR_GROUND" ? "STR_GROUNDED" : _craft->getAltitude();
-//	ss5 << _game->getLanguage()->getString("STR_ALTITUDE_") << L'\x01' << _game->getLanguage()->getString(altitude);	// kL
+//kL	std::string altitude = _craft->getAltitude() == "STR_GROUND" ? "STR_GROUNDED" : _craft->getAltitude();
+//	std::string altitude = _craft->getAltitude();																		// kL
+	ss5 << _game->getLanguage()->getString("STR_ALTITUDE_") << L'\x01' << _game->getLanguage()->getString(altitude);	// kL
 	_txtAltitude->setText(ss5.str());
 
 	// kL_begin: GeoscapeCraftState, add #HWP on transports.

@@ -118,8 +118,10 @@ void NextTurnState::handle(Action* action)
 {
 	State::handle(action);
 
-	if (action->getDetails()->type == SDL_KEYDOWN
-		|| action->getDetails()->type == SDL_MOUSEBUTTONDOWN)
+//kL	if (action->getDetails()->type == SDL_KEYDOWN
+//kL		|| action->getDetails()->type == SDL_MOUSEBUTTONDOWN)
+//	if (action->getDetails()->type == SDL_MOUSEBUTTONDOWN			// kL
+	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)	// kL
 	{
 		_game->popState();
 

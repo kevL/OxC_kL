@@ -89,8 +89,8 @@ BattlescapeGame::BattlescapeGame(SavedBattleGame* save, BattlescapeState* parent
 	_AIActionCounter = 0;
 	_currentAction.actor = 0;
 
-//kL	checkForCasualties(0, 0, true);
-	checkForCasualties(0, 0, false, false);
+	checkForCasualties(0, 0, true);
+//kL	checkForCasualties(0, 0, false, false);
 	cancelCurrentAction();
 	_currentAction.targeting = false;
 	_currentAction.type = BA_NONE;
@@ -1051,10 +1051,13 @@ void BattlescapeGame::popState()
 					cancelCurrentAction(true);
 				} */
 				// kL_begin:
-				if (!actionFailed)
+/*				if (!actionFailed)
 				{
 					int tu = action.actor->getTimeUnits();
-					Log(LOG_INFO) << "BattlescapeGame::popState(), tu remaining after action = " << tu;
+//					Log(LOG_INFO) << "BattlescapeGame::popState(), tu remaining after action = " << (float)tu;
+					int totalTU = action.actor->getStats()->tu;
+//					Log(LOG_INFO) << "BattlescapeGame::popState(), Total tu = " << (float)totalTU;
+//					Log(LOG_INFO) << "BattlescapeGame::popState(), tu/Totaltu = " << (float)tu/(float)totalTU * (float)100;
 
 					switch (action.type)
 					{
@@ -1064,19 +1067,66 @@ void BattlescapeGame::popState()
 							cancelCurrentAction(true);
 						break;
 						case BA_SNAPSHOT:
-							if (tu < action.weapon->getRules()->getTUSnap())
+//							Log(LOG_INFO) << ". SnapShot, TU percent = " << (float)action.weapon->getRules()->getTUSnap();
+
+							if ((float)tu / (float)totalTU * (float)100 < (float)action.weapon->getRules()->getTUSnap())
 							{
 								cancelCurrentAction(true);
 							}
 						break;
 						case BA_AIMEDSHOT:
-							if (tu < action.weapon->getRules()->getTUAimed())
+//							Log(LOG_INFO) << ". AimedShot, TU percent = " << (float)action.weapon->getRules()->getTUAimed();
+
+							if ((float)tu / (float)totalTU * (float)100 < (float)action.weapon->getRules()->getTUAimed())
 							{
 								cancelCurrentAction(true);
 							}
 						break;
 						case BA_AUTOSHOT:
-							if (tu < action.weapon->getRules()->getTUAuto())
+//							Log(LOG_INFO) << ". AutoShot, TU percent = " << (float)action.weapon->getRules()->getTUAuto();
+
+							if ((float)tu / (float)totalTU * (float)100 < (float)action.weapon->getRules()->getTUAuto())
+							{
+								cancelCurrentAction(true);
+							}
+						break;
+					}
+				} */
+				if (!actionFailed)
+				{
+					float tu = (float)action.actor->getTimeUnits();
+//					Log(LOG_INFO) << "BattlescapeGame::popState(), tu remaining after action = " << (float)tu;
+					float totalTU = (float)action.actor->getStats()->tu;
+//					Log(LOG_INFO) << "BattlescapeGame::popState(), Total tu = " << (float)totalTU;
+//					Log(LOG_INFO) << "BattlescapeGame::popState(), tu/Totaltu = " << (float)tu/(float)totalTU * (float)100;
+
+					switch (action.type)
+					{
+						case BA_LAUNCH:
+							_currentAction.waypoints.clear();
+						case BA_THROW:
+							cancelCurrentAction(true);
+						break;
+						case BA_SNAPSHOT:
+//							Log(LOG_INFO) << ". SnapShot, TU percent = " << (float)action.weapon->getRules()->getTUSnap();
+
+							if (tu / totalTU * (float)100 < (float)action.weapon->getRules()->getTUSnap())
+							{
+								cancelCurrentAction(true);
+							}
+						break;
+						case BA_AIMEDSHOT:
+//							Log(LOG_INFO) << ". AimedShot, TU percent = " << (float)action.weapon->getRules()->getTUAimed();
+
+							if (tu / totalTU * (float)100 < (float)action.weapon->getRules()->getTUAimed())
+							{
+								cancelCurrentAction(true);
+							}
+						break;
+						case BA_AUTOSHOT:
+//							Log(LOG_INFO) << ". AutoShot, TU percent = " << (float)action.weapon->getRules()->getTUAuto();
+
+							if (tu / totalTU * (float)100 < (float)action.weapon->getRules()->getTUAuto())
 							{
 								cancelCurrentAction(true);
 							}
@@ -1096,7 +1146,8 @@ void BattlescapeGame::popState()
 
 			if (_save->getSide() != FACTION_PLAYER && !_debugPlay)
 			{
-				if (_save->getSelectedUnit() == 0 || _save->getSelectedUnit()->isOut())
+				if (_save->getSelectedUnit() == 0
+					|| _save->getSelectedUnit()->isOut())
 				{
 					if (_save->getSelectedUnit())
 					{
@@ -1106,7 +1157,8 @@ void BattlescapeGame::popState()
 
 					_AIActionCounter = 0;
 
-					if (_save->selectNextPlayerUnit(true, true) == 0 && _states.empty())
+					if (_save->selectNextPlayerUnit(true, true) == 0
+						&& _states.empty())
 					{
 						if (!_save->getDebugMode())
 						{
@@ -1148,7 +1200,8 @@ void BattlescapeGame::popState()
 	}
 
 	// the currently selected unit died or became unconscious or disappeared inexplicably
-	if (_save->getSelectedUnit() == 0 || _save->getSelectedUnit()->isOut())
+	if (_save->getSelectedUnit() == 0
+		|| _save->getSelectedUnit()->isOut())
 	{
 		cancelCurrentAction();
 

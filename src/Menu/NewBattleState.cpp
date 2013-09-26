@@ -338,11 +338,14 @@ void NewBattleState::initSave()
 	const std::vector<std::string> &items = rule->getItemsList();
 	for (std::vector<std::string>::const_iterator i = items.begin(); i != items.end(); ++i)
 	{
-		RuleItem *rule = _game->getRuleset()->getItem(*i);
-		if (rule->getBattleType() != BT_CORPSE && rule->isRecoverable())
+		RuleItem* rule = _game->getRuleset()->getItem(*i);
+		if (rule->getBattleType() != BT_CORPSE
+			&& rule->isRecoverable())
 		{
 			base->getItems()->addItem(*i, 10);
-			if (rule->getBattleType() != BT_NONE && !rule->isFixed() && (*i).substr(0, 8) != "STR_HWP_")
+			if (rule->getBattleType() != BT_NONE
+				&& !rule->isFixed()
+				&& (*i).substr(0, 8) != "STR_HWP_")
 			{
 				int amount = Options::getInt("NewBattle_" + rule->getName());
 				amount = std::max(0, std::min(amount, 100));
@@ -352,7 +355,7 @@ void NewBattleState::initSave()
 	}
 
 	// Add research
-	const std::vector<std::string> &research = rule->getResearchList();
+	const std::vector<std::string>& research = rule->getResearchList();
 	for (std::vector<std::string>::const_iterator i = research.begin(); i != research.end(); ++i)
 	{
 		save->addFinishedResearch(rule->getResearch(*i));
@@ -371,6 +374,7 @@ void NewBattleState::btnOkClick(Action *)
 	{
 		return;
 	}
+
 	_music = false;
 
 	SavedBattleGame *bgame = new SavedBattleGame();
