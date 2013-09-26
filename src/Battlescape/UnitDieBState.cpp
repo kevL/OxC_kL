@@ -90,7 +90,8 @@ UnitDieBState::UnitDieBState(BattlescapeGame* parent, BattleUnit* unit, ItemDama
 		{
 			_originalDir = _unit->getDirection(); // facing for zombie->Chryssalid spawns. See above
 		}
-		else //if (_parent->getMap()->getCamera()->isOnScreen(_unit->getPosition()))
+		else if (_unit->getVisible()
+			&& _parent->getMap()->getCamera()->isOnScreen(_unit->getPosition()))
 		{
 //			_unit->setDirection(unit->getDirection());	// safety?
 			_unit->initDeathSpin();					// death animation spin, Savegame/BattleUnit.cpp
