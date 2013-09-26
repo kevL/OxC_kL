@@ -778,16 +778,16 @@
     <ClCompile Include="Savegame\SerializationHelper.cpp">
       <Filter>Savegame</Filter>
     </ClCompile>
-<<<<<<< HEAD
     <ClCompile Include="Interface\TurnCounter.cpp" />
-=======
     <ClCompile Include="Interface\Slider.cpp">
       <Filter>Interface</Filter>
     </ClCompile>
     <ClCompile Include="Interface\Frame.cpp">
       <Filter>Interface</Filter>
     </ClCompile>
->>>>>>> master
+    <ClCompile Include="Engine\LanguagePlurality.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -1588,19 +1588,22 @@
     <ClInclude Include="Ruleset\ExtraSounds.h">
       <Filter>Ruleset</Filter>
     </ClInclude>
-<<<<<<< HEAD
-    <ClInclude Include="Interface\TurnCounter.h" />
-=======
     <ClInclude Include="Interface\Slider.h">
       <Filter>Interface</Filter>
     </ClInclude>
     <ClInclude Include="Interface\Frame.h">
       <Filter>Interface</Filter>
     </ClInclude>
->>>>>>> master
+<<<<<<< HEAD
+    <ClInclude Include="Interface\TurnCounter.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="OpenXcom.rc" />
+=======
+    <ClInclude Include="Engine\LanguagePlurality.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+>>>>>>> master
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Geoscape">
@@ -1639,5 +1642,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\media\openxcom.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="OpenXcom.rc" />
   </ItemGroup>
 </Project>

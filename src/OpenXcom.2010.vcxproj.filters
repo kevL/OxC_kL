@@ -778,12 +778,17 @@
     <ClCompile Include="Savegame\SerializationHelper.cpp">
       <Filter>Savegame</Filter>
     </ClCompile>
-    <ClCompile Include="Interface\TurnCounter.cpp" />
+    <ClCompile Include="Interface\TurnCounter.cpp">
+      <Filter>Interface</Filter>
+    </ClCompile>
     <ClCompile Include="Interface\Slider.cpp">
       <Filter>Interface</Filter>
     </ClCompile>
     <ClCompile Include="Interface\Frame.cpp">
       <Filter>Interface</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\LanguagePlurality.cpp">
+      <Filter>Engine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1591,10 +1596,12 @@
     <ClInclude Include="Interface\Frame.h">
       <Filter>Interface</Filter>
     </ClInclude>
-    <ClInclude Include="Interface\TurnCounter.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="OpenXcom.rc" />
+    <ClInclude Include="Engine\LanguagePlurality.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Interface\TurnCounter.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Geoscape">
@@ -1633,5 +1640,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\media\openxcom.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="OpenXcom.rc" />
   </ItemGroup>
 </Project>

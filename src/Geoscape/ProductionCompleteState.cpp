@@ -65,7 +65,7 @@ ProductionCompleteState::ProductionCompleteState(Game* game, const std::wstring&
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK17.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(8)+5);
-	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
+	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& ProductionCompleteState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)& ProductionCompleteState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
 	_btnOk->onKeyboardPress((ActionHandler)& ProductionCompleteState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
@@ -80,13 +80,13 @@ ProductionCompleteState::ProductionCompleteState(Game* game, const std::wstring&
 	switch (endType)
 	{
 		case PROGRESS_COMPLETE:
-			s = _game->getLanguage()->getString("STR_PRODUCTION_OF");
+			s = tr("STR_PRODUCTION_OF");
 		break;
 		case PROGRESS_NOT_ENOUGH_MONEY:
-			s = _game->getLanguage()->getString("STR_NOT_ENOUGH_MONEY_TO_PRODUCE");
+			s = tr("STR_NOT_ENOUGH_MONEY_TO_PRODUCE");
 		break;
 		case PROGRESS_NOT_ENOUGH_MATERIALS:
-			s = _game->getLanguage()->getString("STR_NOT_ENOUGH_SPECIAL_MATERIALS_TO_PRODUCE");
+			s = tr("STR_NOT_ENOUGH_SPECIAL_MATERIALS_TO_PRODUCE");
 		break;
 
 		default:
@@ -94,12 +94,12 @@ ProductionCompleteState::ProductionCompleteState(Game* game, const std::wstring&
 	}
 
 	s += item;
-	s += _game->getLanguage()->getString("STR__AT__");
+	s += tr("STR__AT__");
 	s += base;
 
 	if (endType == PROGRESS_COMPLETE)
 	{
-		s += _game->getLanguage()->getString("STR_IS_COMPLETE");
+		s += tr("STR_IS_COMPLETE");
 	}
 
 	_txtMessage->setText(s);

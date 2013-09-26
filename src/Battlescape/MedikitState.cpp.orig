@@ -45,7 +45,7 @@ namespace OpenXcom
  * @return A string representation of the value.
  */
 template<typename type>
-std::wstring toString (type t)
+std::wstring toString(type t)
 {
 	std::wstringstream ss;
 	ss << t;
@@ -62,7 +62,7 @@ class MedikitTitle
 {
 	public:
 		/// Creates a medikit title.
-		MedikitTitle(int y, const std::wstring &title);
+		MedikitTitle(int y, const std::wstring& title);
 };
 
 /**
@@ -70,7 +70,7 @@ class MedikitTitle
  * @param y The title's y origin.
  * @param title The title.
  */
-MedikitTitle::MedikitTitle (int y, const std::wstring & title)
+MedikitTitle::MedikitTitle(int y, const std::wstring& title)
 	:
 	Text (60, 16, 192, y)
 {
@@ -173,11 +173,17 @@ MedikitState::MedikitState(Game* game, BattleUnit* targetUnit, BattleAction* act
 	add(_surface);
 	add(_medikitView);
 	add(endButton);
+<<<<<<< HEAD
 
 	add(new MedikitTitle (37, _game->getLanguage()->getString("STR_PAIN_KILLER")));
 	add(new MedikitTitle (73, _game->getLanguage()->getString("STR_STIMULANT")));
 	add(new MedikitTitle (109, _game->getLanguage()->getString("STR_HEAL")));
 
+=======
+	add(new MedikitTitle (37, tr("STR_PAIN_KILLER")));
+	add(new MedikitTitle (73, tr("STR_STIMULANT")));
+	add(new MedikitTitle (109, tr("STR_HEAL")));
+>>>>>>> master
 	add(healButton);
 	add(stimulantButton);
 	add(pkButton);
@@ -253,8 +259,7 @@ void MedikitState::onHealClick(Action* )
 
 		update();
 
-<<<<<<< HEAD
-		// kL_begin:
+		// kL_begin: onHealClick() revive & randomize facing.
 		// - similar to Stimulant code below
 		if (_targetUnit->getStatus() == STATUS_UNCONSCIOUS
 			&& _targetUnit->getStunlevel() < _targetUnit->getHealth())
@@ -266,12 +271,6 @@ void MedikitState::onHealClick(Action* )
 //kL			_game->popState();
 		}
 		// kL_end.
-=======
-		if (_targetUnit->getStatus() == STATUS_UNCONSCIOUS && _targetUnit->getStunlevel() < _targetUnit->getHealth() && _targetUnit->getHealth() > 0)
-		{
-			_targetUnit->setTimeUnits(0);
-		}
->>>>>>> master
 	}
 	else
 	{
