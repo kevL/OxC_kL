@@ -16,11 +16,13 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_UFOLOSTSTATE_H
 #define OPENXCOM_UFOLOSTSTATE_H
 
 #include "../Engine/State.h"
 #include <string>
+
 
 namespace OpenXcom
 {
@@ -28,27 +30,32 @@ namespace OpenXcom
 class TextButton;
 class Window;
 class Text;
+class GeoscapeState;
 
 /**
  * Notifies the player when a targeted UFO
  * goes outside radar range.
  */
-class UfoLostState : public State
+class UfoLostState
+	:
+	public State
 {
-private:
-	TextButton *_btnOk;
-	Window *_window;
-	Text *_txtTitle;
-	std::wstring _id;
-public:
-	/// Creates the Ufo Lost state.
-	UfoLostState(Game *game, std::wstring id);
-	/// Cleans up the Ufo Lost state.
-	~UfoLostState();
-	/// Updates the palette.
-	void init();
-	/// Handler for clicking the OK button.
-	void btnOkClick(Action *action);
+	private:
+		TextButton* _btnOk;
+		Window* _window;
+		Text* _txtTitle;
+		std::wstring _id;
+		GeoscapeState* _gs;		// kL
+
+	public:
+		/// Creates the Ufo Lost state.
+		UfoLostState(Game* game, std::wstring id);
+		/// Cleans up the Ufo Lost state.
+		~UfoLostState();
+		/// Updates the palette.
+		void init();
+		/// Handler for clicking the OK button.
+		void btnOkClick(Action* action);
 };
 
 }

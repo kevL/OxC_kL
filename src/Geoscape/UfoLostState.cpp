@@ -16,7 +16,9 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "UfoLostState.h"
+#include "GeoscapeState.h"		// kL
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
@@ -34,14 +36,17 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param id Name of the UFO.
  */
-UfoLostState::UfoLostState(Game *game, std::wstring id) : State(game), _id(id)
+UfoLostState::UfoLostState(Game* game, std::wstring id)
+	:
+	State(game),
+	_id(id)
 {
 	_screen = false;
 
 	// Create objects
-	_window = new Window(this, 192, 104, 32, 48, POPUP_BOTH);
-	_btnOk = new TextButton(60, 12, 98, 112);
-	_txtTitle = new Text(160, 30, 48, 72);
+	_window		= new Window(this, 192, 104, 32, 48, POPUP_BOTH);
+	_btnOk		= new TextButton(60, 12, 98, 112);
+	_txtTitle	= new Text(160, 30, 48, 72);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)), Palette::backPos, 16);
@@ -58,9 +63,9 @@ UfoLostState::UfoLostState(Game *game, std::wstring id) : State(game), _id(id)
 
 	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
-	_btnOk->onMouseClick((ActionHandler)&UfoLostState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&UfoLostState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
-	_btnOk->onKeyboardPress((ActionHandler)&UfoLostState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onMouseClick((ActionHandler)& UfoLostState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)& UfoLostState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
+	_btnOk->onKeyboardPress((ActionHandler)& UfoLostState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(8)+5);
 	_txtTitle->setBig();
@@ -76,7 +81,6 @@ UfoLostState::UfoLostState(Game *game, std::wstring id) : State(game), _id(id)
  */
 UfoLostState::~UfoLostState()
 {
-
 }
 
 /**
@@ -91,8 +95,10 @@ void UfoLostState::init()
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void UfoLostState::btnOkClick(Action *)
+void UfoLostState::btnOkClick(Action* )
 {
+	_gs->timerReset();	// kL
+
 	_game->popState();
 }
 
