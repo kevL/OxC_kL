@@ -111,9 +111,9 @@ BattleUnit::BattleUnit(Soldier* soldier, UnitFaction faction)
 	_loftempsSet = _armor->getLoftempsSet();
 	_gender = soldier->getGender();
 	_faceDirection = -1;
+//	_spinPhase = -1;	// kL
 
 	int rankbonus = 0;
-
 	switch (soldier->getRank())
 	{
 		case RANK_SERGEANT:		rankbonus =	1;	break;
@@ -196,7 +196,7 @@ BattleUnit::BattleUnit(Unit* unit, UnitFaction faction, int id, Armor* armor, in
 	_turretType(-1),
 	_hidingForTurn(false)
 {
-//	Log(LOG_INFO) << "Create BattleUnit";
+	Log(LOG_INFO) << "Create BattleUnit";
 
 	_type = unit->getType();
 	_rank = unit->getRank();
@@ -249,7 +249,7 @@ BattleUnit::BattleUnit(Unit* unit, UnitFaction faction, int id, Armor* armor, in
  */
 BattleUnit::~BattleUnit()
 {
-//	Log(LOG_INFO) << "Delete BattleUnit";
+	Log(LOG_INFO) << "Delete BattleUnit";
 
 	for (int i = 0; i < 5; ++i)
 	{
@@ -665,6 +665,8 @@ void BattleUnit::lookAt(const Position& point, bool turret)
  */
 void BattleUnit::lookAt(int direction, bool force)
 {
+	Log(LOG_INFO) << "BattleUnit::lookAt() - " << this->getId() << " - force = " << force;
+
 	if (!force)
 	{
 		if (direction < 0 || direction > 7)
@@ -675,14 +677,16 @@ void BattleUnit::lookAt(int direction, bool force)
 		{
 			_status = STATUS_TURNING;
 		}
+//		else
+//			_status = STATUS_STANDING;	// kL
 	}
 	else // force
 	{
 		_toDirection = direction;
 		_direction = direction;
 
-		Log(LOG_INFO) << "BattleUnit::lookAt() - force Status_Standing";
-		_status = STATUS_STANDING;	// kL. idk...
+//		Log(LOG_INFO) << "BattleUnit::lookAt() - " << this->getId() << " - force Status_Standing";
+//		_status = STATUS_STANDING;	// kL. idk... seems to screw up UnitDieBDeath sequence
 	}
 }
 
@@ -769,17 +773,11 @@ void BattleUnit::turn(bool turret)
 			}
 		}
 
-		if (_direction < 0)
-			_direction = 7;
+		if		(_direction < 0) _direction = 7;
+		else if (_direction > 7) _direction = 0;
 
-		if (_direction > 7)
-			_direction = 0;
-
-		if (_directionTurret < 0)
-			_directionTurret = 7;
-
-		if (_directionTurret > 7)
-			_directionTurret = 0;
+		if		(_directionTurret < 0) _directionTurret = 7;
+		else if (_directionTurret > 7) _directionTurret = 0;
 
 		if (_visible || _faction == FACTION_PLAYER)
 			_cacheInvalid = true;
@@ -789,14 +787,13 @@ void BattleUnit::turn(bool turret)
 	{
 		 if (_toDirectionTurret == _directionTurret)
 		 {
-			// we officially reached our destination
-			_status = STATUS_STANDING;
+			_status = STATUS_STANDING; // we officially reached our destination
 		 }
 	}
 	else if (_toDirection == _direction || _status == STATUS_UNCONSCIOUS)
 	{
-		// we officially reached our destination
-		_status = STATUS_STANDING;
+		Log(LOG_INFO) << "BattleUnit::turn() " << getId() << " - STATUS_STANDING (turn has ended)";
+		_status = STATUS_STANDING; // we officially reached our destination
 	}
 }
 
@@ -1160,7 +1157,8 @@ void BattleUnit::keepFalling()
 	_fallPhase++;
 
 	int endFrame = 3;
-	if (_spawnUnit != "" && _specab != SPECAB_RESPAWN)
+	if (_spawnUnit != "" && _specab != SPECAB_RESPAWN) // <- is a Zombie! kL_note
+	// kL_note: so.. units with a spawnUnit string but not specAb 3 set get the transformation anim.
 	{
 		endFrame = 18;
 	}
@@ -1170,9 +1168,17 @@ void BattleUnit::keepFalling()
 		_fallPhase--;
 
 		if (_health == 0)
+		{
+			Log(LOG_INFO) << "BattleUnit::keepFalling() " << this->getId() << ". . STATUS_DEAD";
+
 			_status = STATUS_DEAD;
+		}
 		else
+		{
+			Log(LOG_INFO) << "BattleUnit::keepFalling() " << this->getId() << ". . STATUS_UNCONSCIOUS";
+
 			_status = STATUS_UNCONSCIOUS;
+		}
 	}
 
 	_cacheInvalid = true;
@@ -2329,35 +2335,35 @@ int BattleUnit::getMoveSound() const
 }
 
 /**
-  * Get whether the unit is affected by fatal wounds.
-  * Normally only soldiers are affected by fatal wounds.
-  * @return true or false
-  */
+ * Get whether the unit is affected by fatal wounds.
+ * Normally only soldiers are affected by fatal wounds.
+ * @return true or false
+ */
 bool BattleUnit::isWoundable() const
 {
 	return (_type == "SOLDIER");
 }
 /**
-  * Get whether the unit is affected by morale loss.
-  * Normally only small units are affected by morale loss.
-  * @return true or false
-  */
+ * Get whether the unit is affected by morale loss.
+ * Normally only small units are affected by morale loss.
+ * @return true or false
+ */
 bool BattleUnit::isFearable() const
 {
 	return (_armor->getSize() == 1);
 }
 
 /**
-  * Get the unit's intelligence. Is the number of turns AI remembers a soldiers position.
-  * @return intelligence 
-  */
+ * Get the unit's intelligence. Is the number of turns AI remembers a soldier's position.
+ * @return intelligence 
+ */
 int BattleUnit::getIntelligence() const
 {
 	return _intelligence;
 }
 
 /**
-/// Get the unit's aggression.
+ * Get the unit's aggression.
  */
 int BattleUnit::getAggression() const
 {
@@ -2365,7 +2371,7 @@ int BattleUnit::getAggression() const
 }
 
 /**
-/// Get the unit's special ability.
+ * Get the unit's special ability.
  */
 int BattleUnit::getSpecialAbility() const
 {
@@ -2373,7 +2379,7 @@ int BattleUnit::getSpecialAbility() const
 }
 
 /**
-/// Get the unit's special ability.
+ * Set the unit's special ability.
  */
 void BattleUnit::setSpecialAbility(SpecialAbility specab)
 {
@@ -2599,7 +2605,7 @@ UnitFaction BattleUnit::getOriginalFaction() const
 	return _originalFaction;
 }
 
-/*
+/**
  * Invalidate cache; call after copying object :(
  */
 void BattleUnit::invalidateCache()
@@ -2610,7 +2616,7 @@ void BattleUnit::invalidateCache()
 	_cacheInvalid = true;
 }
 
-/*
+/**
  * 
  */
 std::vector<BattleUnit* > BattleUnit::getUnitsSpottedThisTurn()
@@ -2618,7 +2624,7 @@ std::vector<BattleUnit* > BattleUnit::getUnitsSpottedThisTurn()
 	return _unitsSpottedThisTurn;
 }
 
-/*
+/**
  * 
  */
 void BattleUnit::setRankInt(int rank)
@@ -2626,7 +2632,7 @@ void BattleUnit::setRankInt(int rank)
 	_rankInt = rank;
 }
 
-/*
+/**
  * 
  */
 int BattleUnit::getRankInt() const
@@ -2634,7 +2640,7 @@ int BattleUnit::getRankInt() const
 	return _rankInt;
 }
 
-/*
+/**
  * 
  */
 void BattleUnit::deriveRank()
@@ -2650,7 +2656,7 @@ void BattleUnit::deriveRank()
 	}
 }
 
-/*
+/**
  * This function checks if a tile is visible, using maths.
  * @param pos the position to check against
  * @return what the maths decide
@@ -2702,7 +2708,7 @@ bool BattleUnit::checkViewSector(Position pos) const
 	return false;
 }
 
-/*
+/**
  * Common function to adjust a unit's stats according to difficulty setting.
  */
 void BattleUnit::adjustStats(const int diff)
@@ -2719,7 +2725,7 @@ void BattleUnit::adjustStats(const int diff)
 	_stats.psiStrength	+= 4 * diff * _stats.psiStrength / 100;
 }
 
-/*
+/**
  * Did this unit already take fire damage this turn?
  * (used to avoid damaging large units multiple times.)
  */
@@ -2728,7 +2734,7 @@ bool BattleUnit::tookFireDamage() const
 	return _hitByFire;
 }
 
-/*
+/**
  * Toggle the state of the fire damage tracking boolean.
  */
 void BattleUnit::toggleFireDamage()
@@ -2736,7 +2742,7 @@ void BattleUnit::toggleFireDamage()
 	_hitByFire = !_hitByFire;
 }
 
-/*
+/**
  * 
  */
 void BattleUnit::setCoverReserve(int reserve)
@@ -2744,7 +2750,7 @@ void BattleUnit::setCoverReserve(int reserve)
 	_coverReserve = reserve;
 }
 
-/*
+/**
  * 
  */
 int BattleUnit::getCoverReserve()
@@ -2753,24 +2759,24 @@ int BattleUnit::getCoverReserve()
 }
 
 // kL_begin:
-/*
+/**
  * Initializes a death spin. See Battlescape/UnitDieBState.cpp, constructor
  */
 void BattleUnit::initDeathSpin()
 {
-//	Log(LOG_INFO) << "BattleUnit::deathPirouette()" << " [target]: " << (getId());
+	Log(LOG_INFO) << "BattleUnit::deathPirouette()" << " [target]: " << (getId());
 
 	_status = STATUS_TURNING;
 	_spinPhase = 0;
 	_cacheInvalid = true;
 }
 
-/*
+/**
  * Continues a death spin. See Battlescape/UnitDieBState.cpp, think()
  */
 void BattleUnit::contDeathSpin()
 {
-//	Log(LOG_INFO) << "BattleUnit::deathPirContinue()" << " [target]: " << (getId());
+	Log(LOG_INFO) << "BattleUnit::contDeathSpin()" << " [target]: " << (getId());
 
 	int d = _direction;
 	if (3 == d) // if facing player, 1 rotation left
@@ -2780,6 +2786,7 @@ void BattleUnit::contDeathSpin()
 		{
 //			Log(LOG_INFO) << ". . _spinPhase = " << _spinPhase << " [ return ]";
 			 _spinPhase = -1; // end.
+			_status = STATUS_STANDING;
 
 			 return;
 		}
@@ -2820,11 +2827,10 @@ void BattleUnit::contDeathSpin()
 //	Log(LOG_INFO) << ". d_final = " << d;
 	setDirection(d);
 
-	_status = STATUS_TURNING;
 	_cacheInvalid = true;
 }
 
-/*
+/**
  * Regulates direction & duration of the death spin.
  * @ return int, Tracks deathspin rotations
  */
@@ -2833,7 +2839,31 @@ int BattleUnit::getSpinPhase()
 	return _spinPhase;
 }
 
-/*
+/**
+ * Sets the spinPhase of the unit.
+ * @ param spinphase, The spinPhase to set
+ */
+void BattleUnit::setSpinPhase(int spinphase)
+{
+	_spinPhase = spinphase;
+}
+
+/**
+ * Sets a unit's status.
+ * @ param status,
+ */
+/* void setStatus(UnitStatus status)
+{
+	UnitStatus::STATUS_DEAD = status;
+} */
+
+/// Set a unit to STATUS_UNCONSCIOUS.
+void BattleUnit::knockOut()
+{
+	_status = STATUS_UNCONSCIOUS;
+}
+
+/**
  * Sets the unit's health level.
  * @ return int, Tracks deathspin rotations
  */

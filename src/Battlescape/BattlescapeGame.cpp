@@ -171,7 +171,7 @@ void BattlescapeGame::init()
  * Handles the processing of the AI states of a unit.
  * @param unit Pointer to a unit.
  */
-void BattlescapeGame::handleAI(BattleUnit *unit)
+void BattlescapeGame::handleAI(BattleUnit* unit)
 {
 	std::wstringstream ss;
 
@@ -211,7 +211,8 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 		return;
 	}
 
-	if (unit->getMainHandWeapon() && unit->getMainHandWeapon()->getRules()->getBattleType() == BT_FIREARM)
+	if (unit->getMainHandWeapon()
+		&& unit->getMainHandWeapon()->getRules()->getBattleType() == BT_FIREARM)
 	{
 		switch (unit->getAggression())
 		{
@@ -223,6 +224,7 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 			break;
 			case 2:
 				_tuReserved = BA_SNAPSHOT;
+
 			default:
 			break;
 		}
@@ -236,7 +238,7 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 		// it should also hide units when they've killed the guy spotting them
 		// it's also for good luck
 
-    BattleAIState *ai = unit->getCurrentAIState();
+    BattleAIState* ai = unit->getCurrentAIState();
 	if (!ai)
 	{
 		// for some reason the unit had no AI routine assigned..
@@ -254,7 +256,7 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 	}
 
 	// this cast only works when ai was already AggroBAIState at heart
-	AggroBAIState *aggro = dynamic_cast<AggroBAIState*>(ai);
+	AggroBAIState* aggro = dynamic_cast<AggroBAIState* >(ai);
 
 	// psionic or blaster launcher units may attack remotely
 	// in bonus round, need to be in "aggro" state to hide; what was that about refactoring?
@@ -362,7 +364,8 @@ void BattlescapeGame::handleAI(BattleUnit *unit)
 			|| action.type == BA_PANIC)
 		{
 			bool success = _save->getTileEngine()->psiAttack(&action);
-			if (success && action.type == BA_MINDCONTROL)
+			if (success
+				&& action.type == BA_MINDCONTROL)
 			{
 				// show a little infobox with the name of the unit and "... is under alien control"
 				std::wstringstream ss;
@@ -614,6 +617,8 @@ void BattlescapeGame::checkForCasualties(BattleItem* murderweapon, BattleUnit* m
 		{
 			BattleUnit* victim = *j;
 
+			Log(LOG_INFO) << "BattlescapeGame::checkForCasualties() victim = " << victim->getId();		// kL
+
 			if (murderer)
 			{
 				murderer->addKillCount();
@@ -742,6 +747,8 @@ void BattlescapeGame::checkForCasualties(BattleItem* murderweapon, BattleUnit* m
 			if ((*j)->getHealth() > 0
 				&& (*j)->getSpecialAbility() == SPECAB_RESPAWN)
 			{
+				Log(LOG_INFO) << ". . still alive, Specab = Respawn... converting unit!";		// kL
+
 				(*j)->setSpecialAbility(SPECAB_NONE);
 				convertUnit(*j, (*j)->getSpawnUnit());
 			}
@@ -1136,7 +1143,6 @@ void BattlescapeGame::popState()
 				// kL_end.
 
 				_parentState->getGame()->getCursor()->setVisible(true);
-
 				setupCursor();
 			}
 		}
@@ -1205,7 +1211,7 @@ void BattlescapeGame::popState()
 	{
 		cancelCurrentAction();
 
-//kL		_save->setSelectedUnit(0);
+		_save->setSelectedUnit(0);
 
 		getMap()->setCursorType(CT_NORMAL, 1);
 		_parentState->getGame()->getCursor()->setVisible(true);
@@ -1817,7 +1823,7 @@ void BattlescapeGame::setTUReserved(BattleActionType tur)
  * @param newItem Bool whether this is a new item.
  * @param removeItem Bool whether to remove the item from the owner.
  */
-void BattlescapeGame::dropItem(const Position &position, BattleItem *item, bool newItem, bool removeItem)
+void BattlescapeGame::dropItem(const Position &position, BattleItem* item, bool newItem, bool removeItem)
 {
 	Position p = position;
 
@@ -1844,7 +1850,8 @@ void BattlescapeGame::dropItem(const Position &position, BattleItem *item, bool 
 	{
 		item->moveToOwner(0);
 	}
-	else if (item->getRules()->getBattleType() != BT_GRENADE && item->getRules()->getBattleType() != BT_PROXIMITYGRENADE)
+	else if (item->getRules()->getBattleType() != BT_GRENADE
+		&& item->getRules()->getBattleType() != BT_PROXIMITYGRENADE)
 	{
 		item->setOwner(0);
 	}
@@ -1864,7 +1871,7 @@ void BattlescapeGame::dropItem(const Position &position, BattleItem *item, bool 
  * @param newType The type of unit to convert to.
  * @param Pointer to the new unit.
  */
-BattleUnit *BattlescapeGame::convertUnit(BattleUnit *unit, std::string newType)
+BattleUnit* BattlescapeGame::convertUnit(BattleUnit* unit, std::string newType)
 {
 	getSave()->getBattleState()->showPsiButton(false);
 	// in case the unit was unconscious
@@ -1872,14 +1879,16 @@ BattleUnit *BattlescapeGame::convertUnit(BattleUnit *unit, std::string newType)
 
 	unit->instaKill();
 
-	if (Options::getBool("battleNotifyDeath") && unit->getFaction() == FACTION_PLAYER && unit->getOriginalFaction() == FACTION_PLAYER)
+	if (Options::getBool("battleNotifyDeath")
+		&& unit->getFaction() == FACTION_PLAYER
+		&& unit->getOriginalFaction() == FACTION_PLAYER)
 	{
 		std::wstringstream ss;
 		ss << unit->getName(_parentState->getGame()->getLanguage()) << L'\n' << _parentState->getGame()->getLanguage()->getString("STR_HAS_BEEN_KILLED", unit->getGender());
 		_parentState->getGame()->pushState(new InfoboxState(_parentState->getGame(), ss.str()));
 	}
 
-	for (std::vector<BattleItem*>::iterator i = unit->getInventory()->begin(); i != unit->getInventory()->end(); ++i)
+	for (std::vector<BattleItem* >::iterator i = unit->getInventory()->begin(); i != unit->getInventory()->end(); ++i)
 	{
 		dropItem(unit->getPosition(), (*i));
 		(*i)->setOwner(0);
@@ -1889,35 +1898,39 @@ BattleUnit *BattlescapeGame::convertUnit(BattleUnit *unit, std::string newType)
 
 	// remove unit-tile link
 	unit->setTile(0);
-
 	getSave()->getTile(unit->getPosition())->setUnit(0);
+
 	std::stringstream newArmor;
 	newArmor << getRuleset()->getUnit(newType)->getArmor();
 	std::string terroristWeapon = getRuleset()->getUnit(newType)->getRace().substr(4);
 	terroristWeapon += "_WEAPON";
-	RuleItem *newItem = getRuleset()->getItem(terroristWeapon);
+	RuleItem* newItem = getRuleset()->getItem(terroristWeapon);
 
 	int difficulty = (int)(_parentState->getGame()->getSavedGame()->getDifficulty());
 
-	BattleUnit *newUnit = new BattleUnit(getRuleset()->getUnit(newType), FACTION_HOSTILE, _save->getUnits()->back()->getId() + 1, getRuleset()->getArmor(newArmor.str()), difficulty);
+	BattleUnit* newUnit = new BattleUnit(getRuleset()->getUnit(newType), FACTION_HOSTILE, _save->getUnits()->back()->getId() + 1, getRuleset()->getArmor(newArmor.str()), difficulty);
+	// kL_note: what about setting _zombieUnit=true ? It's not generic but it's the only case, afaict
 
 	if (!difficulty)
 	{
 		newUnit->halveArmor();
 	}
 
-	getSave()->getTile(unit->getPosition())->setUnit(newUnit, _save->getTile(unit->getPosition() + Position(0,0,-1)));
+	getSave()->getTile(unit->getPosition())->setUnit(newUnit, _save->getTile(unit->getPosition() + Position(0, 0, -1)));
 	newUnit->setPosition(unit->getPosition());
 	newUnit->setDirection(3);
 	newUnit->setCache(0);
 	newUnit->setTimeUnits(0);
+
 	getSave()->getUnits()->push_back(newUnit);
 	getMap()->cacheUnit(newUnit);
 	newUnit->setAIState(new PatrolBAIState(getSave(), newUnit, 0));
-	BattleItem *bi = new BattleItem(newItem, getSave()->getCurrentItemId());
+
+	BattleItem* bi = new BattleItem(newItem, getSave()->getCurrentItemId());
 	bi->moveToOwner(newUnit);
 	bi->setSlot(getRuleset()->getInventory("STR_RIGHT_HAND"));
 	getSave()->getItems()->push_back(bi);
+
 	getTileEngine()->calculateFOV(newUnit->getPosition());
 	getTileEngine()->applyGravity(newUnit->getTile());
 //	newUnit->getCurrentAIState()->think();
@@ -1929,7 +1942,7 @@ BattleUnit *BattlescapeGame::convertUnit(BattleUnit *unit, std::string newType)
  * Gets the map.
  * @return map.
  */
-Map *BattlescapeGame::getMap()
+Map* BattlescapeGame::getMap()
 {
 	return _parentState->getMap();
 }
@@ -1938,7 +1951,7 @@ Map *BattlescapeGame::getMap()
  * Gets the save.
  * @return save.
  */
-SavedBattleGame *BattlescapeGame::getSave()
+SavedBattleGame* BattlescapeGame::getSave()
 {
 	return _save;
 }
@@ -1947,7 +1960,7 @@ SavedBattleGame *BattlescapeGame::getSave()
  * Gets the tilengine.
  * @return tilengine.
  */
-TileEngine *BattlescapeGame::getTileEngine()
+TileEngine* BattlescapeGame::getTileEngine()
 {
 	return _save->getTileEngine();
 }
@@ -1956,7 +1969,7 @@ TileEngine *BattlescapeGame::getTileEngine()
  * Gets the pathfinding.
  * @return pathfinding.
  */
-Pathfinding *BattlescapeGame::getPathfinding()
+Pathfinding* BattlescapeGame::getPathfinding()
 {
 	return _save->getPathfinding();
 }
@@ -1965,7 +1978,7 @@ Pathfinding *BattlescapeGame::getPathfinding()
  * Gets the resourcepack.
  * @return resourcepack.
  */
-ResourcePack *BattlescapeGame::getResourcePack()
+ResourcePack* BattlescapeGame::getResourcePack()
 {
 	return _parentState->getGame()->getResourcePack();
 }
@@ -1974,7 +1987,7 @@ ResourcePack *BattlescapeGame::getResourcePack()
  * Gets the ruleset.
  * @return ruleset.
  */
-const Ruleset *BattlescapeGame::getRuleset() const
+const Ruleset* BattlescapeGame::getRuleset() const
 {
 	return _parentState->getGame()->getRuleset();
 }
@@ -2333,16 +2346,19 @@ BattleActionType BattlescapeGame::getReservedAction()
  * @param &liveSoldiers The integer in which to store the live XCom tally.
  * @param convert Should we convert infected units?
  */
-void BattlescapeGame::tallyUnits(int &liveAliens, int &liveSoldiers, bool convert)
+void BattlescapeGame::tallyUnits(int& liveAliens, int& liveSoldiers, bool convert)
 {
 	bool psiCapture = Options::getBool("allowPsionicCapture");
 
 	if (convert)
 	{
-		for (std::vector<BattleUnit*>::iterator j = _save->getUnits()->begin(); j != _save->getUnits()->end(); ++j)
+		for (std::vector<BattleUnit* >::iterator j = _save->getUnits()->begin(); j != _save->getUnits()->end(); ++j)
 		{
-			if ((*j)->getHealth() > 0 && (*j)->getSpecialAbility() == SPECAB_RESPAWN)
+			if ((*j)->getHealth() > 0
+				&& (*j)->getSpecialAbility() == SPECAB_RESPAWN)
 			{
+				Log(LOG_INFO) << "BattlescapeGame::tallyUnits() " << (*j)->getId() << " : health > 0, SPECAB_RESPAWN -> converting unit!";
+
 				(*j)->setSpecialAbility(SPECAB_NONE);
 				convertUnit((*j), (*j)->getSpawnUnit());
 
@@ -2351,13 +2367,14 @@ void BattlescapeGame::tallyUnits(int &liveAliens, int &liveSoldiers, bool conver
 		}
 	}
 
-	for (std::vector<BattleUnit*>::iterator j = _save->getUnits()->begin(); j != _save->getUnits()->end(); ++j)
+	for (std::vector<BattleUnit* >::iterator j = _save->getUnits()->begin(); j != _save->getUnits()->end(); ++j)
 	{
 		if (!(*j)->isOut())
 		{
 			if ((*j)->getOriginalFaction() == FACTION_HOSTILE)
 			{
-				if (!psiCapture || (*j)->getFaction() != FACTION_PLAYER)
+				if (!psiCapture
+					|| (*j)->getFaction() != FACTION_PLAYER)
 				{
 					liveAliens++;
 				}

@@ -206,6 +206,8 @@ void ExplosionBState::explode()
 		}
 		else
 		{
+			Log(LOG_INFO) << "ExplosionBState::explode()";
+
 			BattleUnit* victim = save->getTileEngine()->hit(_center, _power, _item->getRules()->getDamageType(), _unit);
 
 			if (!_unit->getZombieUnit().empty() // check if this unit turns others into zombies
@@ -213,6 +215,7 @@ void ExplosionBState::explode()
 				&& victim->getArmor()->getSize() == 1
 				&& victim->getSpawnUnit().empty())
 			{
+				Log(LOG_INFO) << victim->getId() << ": murderer is *zombieUnit*; !spawnUnit -> specab->RESPAWN, ->zombieUnit!";
 				// converts the victim to a zombie on death
 				victim->setSpecialAbility(SPECAB_RESPAWN);
 				victim->setSpawnUnit(_unit->getZombieUnit());

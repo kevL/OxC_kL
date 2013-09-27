@@ -63,7 +63,7 @@ Unit::~Unit()
  * Loads the unit from a YAML file.
  * @param node YAML node.
  */
-void Unit::load(const YAML::Node &node)
+void Unit::load(const YAML::Node& node)
 {
 	_type			= node["type"].as<std::string>(_type);
 	_race			= node["race"].as<std::string>(_race);

@@ -580,8 +580,11 @@ void BattlescapeState::think()
 		{
 			State::think();
 
+//			Log(LOG_INFO) << "BattlescapeState::think() -> _battlegame.think()";
 			_battleGame->think();
+//			Log(LOG_INFO) << "BattlescapeState::think() -> _animTimer.think()";
 			_animTimer->think(this, 0);
+//			Log(LOG_INFO) << "BattlescapeState::think() -> _gametimer.think()";
 			_gameTimer->think(this, 0);
 
 			if (popped)

@@ -57,10 +57,10 @@ UnitDieBState::UnitDieBState(BattlescapeGame* parent, BattleUnit* unit, ItemDama
 	_damageType(damageType),
 	_noSound(noSound)
 {
+	Log(LOG_INFO) << "Create UnitDieBState";
+
 	// don't show the "fall to death" animation when a unit is blasted with explosives or he is already unconscious
-	// kL_note: yeah absolutely show it!!!
-//kL	if (_damageType == DT_HE || _unit->getStatus() == STATUS_UNCONSCIOUS)
-/*kL	if (_unit->getStatus() == STATUS_UNCONSCIOUS)		// kL, see what happens...
+/*kL	if (_damageType == DT_HE || _unit->getStatus() == STATUS_UNCONSCIOUS)
 	{
 		_unit->startFalling();
 
@@ -70,39 +70,76 @@ UnitDieBState::UnitDieBState(BattlescapeGame* parent, BattleUnit* unit, ItemDama
 		}
 	}
 	else */
+//	{
+	if (_unit->getFaction() == FACTION_PLAYER)
 	{
-		if (_unit->getFaction() == FACTION_PLAYER)
-		{
-			_parent->getMap()->setUnitDying(true);
-		}
+		_parent->getMap()->setUnitDying(true);
+	}
 
-		// kL_note: stop centering, but I should do a 'get is tile visible' else they may twirl in darkness....
-//kL		_parent->getMap()->getCamera()->centerOnPosition(_unit->getPosition());
-		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED * 2 / 7);
+	_parent->getMap()->getCamera()->centerOnPosition(_unit->getPosition());
 
 		// kL_note: this is only necessary when spawning a chryssalid from a zombie. See below
-//kL		_originalDir = _unit->getDirection();
+	_originalDir = _unit->getDirection();
+	_unit->setDirection(_originalDir);		// kL. Stop Turning f!!!
+	_unit->setSpinPhase(-1);
+
 		// kL_note: replaced w/ Savegame/BattleUnit.cpp, BattleUnit::deathPirouette()
 //kL		_unit->lookAt(3); // unit goes into status TURNING to prepare for a nice dead animation
 
-		// kL_begin:
-		if (!_unit->getSpawnUnit().empty())	// nb. getSpawnUnit() is defined in both 'battleunit.cpp' & 'unit.cpp'
+	// kL_begin:
+	_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED * 2 / 7);
+
+	if (_unit->getVisible()
+		&& _parent->getMap()->getCamera()->isOnScreen(_unit->getPosition()))
+	{
+		if (!_unit->getSpawnUnit().empty())	// nb. getSpawnUnit() is a member of both BattleUnit & Unit...
+//			&& _unit->getSpecialAbility() == 0) // this comes into play because Soldiers & Civilians, (health=0) eg, can have SpawnUnit set and SpecAb set too.
+													// but should they spin or not spin??? Did they spin because they're already dead...?
+	/*
+	_ZOMBIE_ -> nospin
+	specab: 0
+	spawnUnit: STR_CHRYSSALID_TERRORIST
+	_ChryssalidTerrorist_ -> spin!!
+	specab: 0
+	spawnUnit: ""
+	*/
+			// and don't spin a unit that has just been smitten:
+			// specab->RESPAWN, ->zombieUnit!
+//			&& !_unit->getZombieUnit().empty()		// not working.
+//			&& _unit->getSpecialAbility() == 3)		// not working.
 		{
-			_originalDir = _unit->getDirection(); // facing for zombie->Chryssalid spawns. See above
+			Log(LOG_INFO) << _unit->getId() << " is a zombie.";
+
+			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED * 8 / 7); // slow the zombie down so I can watch this....
+
+//			_originalDir = _unit->getDirection(); // facing for zombie->Chryssalid spawns. See above
+			_unit->lookAt(3); // look at the player for the transformation sequence.
+			Log(LOG_INFO) << ". . got back from lookAt() in ctor ...";
 		}
-		else if (_unit->getVisible()
-			&& _parent->getMap()->getCamera()->isOnScreen(_unit->getPosition()))
+		else //if (_unit->getVisible()
+			//&& _parent->getMap()->getCamera()->isOnScreen(_unit->getPosition()))
 		{
-//			_unit->setDirection(unit->getDirection());	// safety?
-			_unit->initDeathSpin();					// death animation spin, Savegame/BattleUnit.cpp
+			Log(LOG_INFO) << _unit->getId() << " is NOT a zombie. initiate Spin!";
+
+			_unit->initDeathSpin(); // death animation spin, Savegame/BattleUnit.cpp
 		}
-		/* if (_unit->getSpawnUnit().empty())
-		{
-			_unit->deathPirouette();					// death animation spin
-		} */
-		// else -> might need something to make units offscreen actually collapse here.
-		// kL_end.
 	}
+	else // unit is not onScreen and/or not visible.
+	{
+		if (_unit->getHealth() == 0)
+		{
+			_unit->instaKill();
+
+			if (!_noSound)
+			{
+				playDeathSound();
+			}
+		}
+		else
+			_unit->knockOut();
+	}
+	// kL_end.
+//	}
 
 	_unit->clearVisibleTiles();
 	_unit->clearVisibleUnits();
@@ -128,6 +165,7 @@ UnitDieBState::UnitDieBState(BattlescapeGame* parent, BattleUnit* unit, ItemDama
  */
 UnitDieBState::~UnitDieBState()
 {
+	Log(LOG_INFO) << "Delete UnitDieBState";
 }
 
 void UnitDieBState::init()
@@ -140,35 +178,52 @@ void UnitDieBState::init()
  */
 void UnitDieBState::think()
 {
+	Log(LOG_INFO) << "UnitDieBState::think() - " << _unit->getId();
+
 	if (_unit->getStatus() == STATUS_TURNING)
 	{
+		Log(LOG_INFO) << ". . STATUS_TURNING";
+
 		// kL_begin:
 		if (_unit->getSpinPhase() > -1)
 		{
 			_unit->contDeathSpin();	// continue death animation spin
+			Log(LOG_INFO) << ". . . . got back from contDeathSpin()";
 		}
 		else
+		{
 		// kL_end.
-			_unit->turn();
+			_unit->turn(); // -> STATUS_STANDING
+			Log(LOG_INFO) << ". . . . got back from turn()";
+		}
 	}
 	else if (_unit->getStatus() == STATUS_COLLAPSING)
 	{
-		_unit->keepFalling();
+		Log(LOG_INFO) << ". . STATUS_COLLAPSING";
+
+		_unit->keepFalling(); // -> STATUS_DEAD or STATUS_UNCONSCIOUS
 	}
 	else if (!_unit->isOut())
 	{
-		_unit->startFalling();
+		Log(LOG_INFO) << ". . !isOut";
 
-		if (!_noSound)
+		_unit->startFalling(); // -> STATUS_COLLAPSING
+
+		if (!_noSound)		// kL
 		{
 			playDeathSound();
 		}
 	}
-
+//	else		// kL*****
 	if (_unit->isOut())
 	{
+		Log(LOG_INFO) << ". . unit isOut";
+
+		// kL_note: I think this is doubling because I remarked DT_HE in the constructor. nah... Yes!
+		// but leave it in 'cause it gives a coolia .. doubling effect !!! In fact,
+		// try it for *EVERYONE** ( but it could be a cool effect that is reserved for HE deaths )
 		if (!_noSound
-			&& _damageType == DT_HE
+//kL			&& _damageType == DT_HE
 			&& _unit->getStatus() != STATUS_UNCONSCIOUS)
 		{
 			playDeathSound();
@@ -187,11 +242,13 @@ void UnitDieBState::think()
 			_unit->setTurnsExposed(255);
 		}
 
-		if (!_unit->getSpawnUnit().empty())
+		if (!_unit->getSpawnUnit().empty()) // converts the dead zombie to a chryssalid
 		{
-			// converts the dead zombie to a chryssalid
+			Log(LOG_INFO) << ". . unit is _spawnUnit -> converting !";
 			BattleUnit* newUnit = _parent->convertUnit(_unit, _unit->getSpawnUnit());
 			newUnit->lookAt(_originalDir);
+//			newUnit->lookAt(_originalDir, true);	// kL, fast turn back to original facing.
+			Log(LOG_INFO) << ". . got back from lookAt() in think ...";
 		}
 		else
 		{
@@ -267,10 +324,11 @@ void UnitDieBState::convertUnitToCorpse()
 
 	int size = _unit->getArmor()->getSize() - 1;
 
-	BattleItem *itemToKeep = 0;
+	BattleItem* itemToKeep = 0;
 
 	bool dropItems = !Options::getBool("weaponSelfDestruction")
-			|| (_unit->getOriginalFaction() != FACTION_HOSTILE || _unit->getStatus() == STATUS_UNCONSCIOUS);
+			|| _unit->getOriginalFaction() != FACTION_HOSTILE
+			|| _unit->getStatus() == STATUS_UNCONSCIOUS;
 
 	// move inventory from unit to the ground for non-large units
 	if (size == 0 && dropItems)
@@ -297,14 +355,14 @@ void UnitDieBState::convertUnitToCorpse()
 		_unit->getInventory()->push_back(itemToKeep);
 	}
 
-	// remove unit-tile link
-	_unit->setTile(0);
+	_unit->setTile(0); // remove unit-tile link
 
 	if (size == 0)
 	{
 		BattleItem* corpse = new BattleItem(_parent->getRuleset()->getItem(_unit->getArmor()->getCorpseItem()),_parent->getSave()->getCurrentItemId());
 		corpse->setUnit(_unit);
 		_parent->dropItem(_unit->getPosition(), corpse, true);
+
 		_parent->getSave()->getTile(lastPosition)->setUnit(0);
 	}
 	else
@@ -316,8 +374,9 @@ void UnitDieBState::convertUnitToCorpse()
 			{
 				std::stringstream ss;
 				ss << _unit->getArmor()->getCorpseItem() << i;
-				BattleItem *corpse = new BattleItem(_parent->getRuleset()->getItem(ss.str()),_parent->getSave()->getCurrentItemId());
+				BattleItem* corpse = new BattleItem(_parent->getRuleset()->getItem(ss.str()),_parent->getSave()->getCurrentItemId());
 				corpse->setUnit(_unit);
+
 				_parent->getSave()->getTile(lastPosition + Position(x, y, 0))->setUnit(0);
 				_parent->dropItem(lastPosition + Position(x, y, 0), corpse, true);
 

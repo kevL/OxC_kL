@@ -97,15 +97,22 @@ void UnitWalkBState::init()
  */
 void UnitWalkBState::think()
 {
-//	Log(LOG_INFO) << "UnitWalkBState::think() : " << _unit->getId() << " Phase = " << _unit->getWalkingPhase();	// kL
+	Log(LOG_INFO) << "UnitWalkBState::think() : " << _unit->getId() << " Phase = " << _unit->getWalkingPhase();	// kL
 
 	if (_unit->isOut())
 	{
+		Log(LOG_INFO) << ". . unit isOut, abort.";	// kL
+
 		_pf->abortPath();
 		_parent->popState();
 
 		return;
 	}
+	else
+	{
+		Log(LOG_INFO) << ". . unit !isOut, continue : " << _unit->getHealth();	// kL
+	}
+
 
 	bool unitSpotted = false;
 	bool onScreen = (_unit->getVisible()
@@ -166,6 +173,8 @@ void UnitWalkBState::think()
 		}
 		else if (!_falling)
 		{
+			Log(LOG_INFO) << "UnitWalkBState::think() 1";
+
 			_unit->lookAt(_unit->getDestination(), _unit->getTurretType() != -1);	// turn to undiscovered unit
 			_pf->abortPath();
 		}
@@ -482,6 +491,7 @@ void UnitWalkBState::think()
 				&& !_pf->getStrafeMove())
 			{
 //				Log(LOG_INFO) << ". pos 5";	// kL
+				Log(LOG_INFO) << "UnitWalkBState::think() 2";
 
 				_unit->lookAt(dir);
 				// kL_note: cacheUnit() etc???
@@ -511,7 +521,7 @@ void UnitWalkBState::think()
 				}
 			}
 
-//			Log(LOG_INFO) << ". pos 7";	// kL
+			Log(LOG_INFO) << ". pos 7";	// kL
 
 			for (int x = _unit->getArmor()->getSize() - 1; x >= 0; --x)
 			{
@@ -544,7 +554,7 @@ void UnitWalkBState::think()
 				}
 			}
 
-//			Log(LOG_INFO) << ". pos 8";	// kL
+			Log(LOG_INFO) << ". pos 8";	// kL
 
 			dir = _pf->dequeuePath(); // now start moving
 //kL			if (_falling) dir = _pf->DIR_DOWN;			// kL_note: set above, if it hasn't changed...
@@ -616,7 +626,7 @@ void UnitWalkBState::think()
 	// turning during walking costs no tu
 	if (_unit->getStatus() == STATUS_TURNING)
 	{
-//		Log(LOG_INFO) << "STATUS_TURNING : " << _unit->getId();	// kL
+		Log(LOG_INFO) << "STATUS_TURNING : " << _unit->getId();	// kL
 
 		// except before the first step.
 		if (_beforeFirstStep)
@@ -660,7 +670,7 @@ void UnitWalkBState::think()
 		}
 	}
 
-//	Log(LOG_INFO) << "****** think() : " << _unit->getId() << " : end ******";	// kL
+	Log(LOG_INFO) << "****** think() : " << _unit->getId() << " : end ******";	// kL
 }
 
 /**
@@ -694,6 +704,8 @@ void UnitWalkBState::postPathProcedures()
 			// Cheat: face closest xCom op based on a percentage (perhaps alien 'value' or rank)
 			// cf. void AggroBAIState::setAggroTarget(BattleUnit *unit)
 			// and bool TileEngine::calculateFOV(BattleUnit *unit)
+			Log(LOG_INFO) << "UnitWalkBState::postPathProcedures() 1";
+
 			_unit->lookAt(_unit->getCharging()->getPosition() + Position(_unit->getArmor()->getSize() - 1, _unit->getArmor()->getSize() - 1, 0), false);
 
 			while (_unit->getStatus() == STATUS_TURNING)
@@ -717,6 +729,8 @@ void UnitWalkBState::postPathProcedures()
 		{
 			int dir = _unit->getDirection() + 4;
 			if (dir >= 8) dir -= 8;
+
+			Log(LOG_INFO) << "UnitWalkBState::postPathProcedures() 2";
 
 			_unit->lookAt(dir);
 

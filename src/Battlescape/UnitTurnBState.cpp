@@ -29,6 +29,7 @@
 #include "../Engine/RNG.h"
 #include "../Engine/Options.h"
 
+
 namespace OpenXcom
 {
 

@@ -23,6 +23,6 @@
 #define OPENXCOM_VERSION_LONG "0.9.0.0"
 #define OPENXCOM_VERSION_NUMBER 0,9,0,0
 //kL #define OPENXCOM_VERSION_GIT ""
-#define OPENXCOM_VERSION_GIT " kev'L"		// kL
+#define OPENXCOM_VERSION_GIT " kevL"		// kL
 
 #endif

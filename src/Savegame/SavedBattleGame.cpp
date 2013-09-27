@@ -1407,14 +1407,14 @@ void SavedBattleGame::reviveUnconsciousUnits()
 /**
  * Removes the body item that corresponds to the unit.
  */
-void SavedBattleGame::removeUnconsciousBodyItem(BattleUnit *bu)
+void SavedBattleGame::removeUnconsciousBodyItem(BattleUnit* bu)
 {
 	// remove the unconscious body item corresponding to this unit
-	for (std::vector<BattleItem*>::iterator it = getItems()->begin(); it != getItems()->end(); )
+	for (std::vector<BattleItem* >::iterator it = getItems()->begin(); it != getItems()->end(); )
 	{
 		if ((*it)->getUnit() == bu)
 		{
-			removeItem((*it));
+			removeItem(*it);
 			break;
 		}
 

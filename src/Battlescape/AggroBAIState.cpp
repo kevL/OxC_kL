@@ -61,6 +61,8 @@ AggroBAIState::AggroBAIState(SavedBattleGame* game, BattleUnit* unit)
 	_charge(false),
 	_wasHit(false)
 {
+	Log(LOG_INFO) << "Create AggroBAIState()";
+
 	_traceAI = _game->getTraceSetting();
 
 	if (_randomTileSearch.empty())
@@ -82,6 +84,8 @@ AggroBAIState::AggroBAIState(SavedBattleGame* game, BattleUnit* unit)
  */
 AggroBAIState::~AggroBAIState()
 {
+	Log(LOG_INFO) << "Delete AggroBAIState()";
+
 	delete _coverAction;
 }
 
@@ -180,6 +184,8 @@ void AggroBAIState::think(BattleAction* action)
 	// we were hit, but we can't see who did it, try turning around...
 	if (_wasHit && _unit->getVisibleUnits()->empty())
 	{
+		Log(LOG_INFO) << "AggroBAIState::think()";
+
 		_unit->lookAt(_lastKnownPosition);
 
 		while (_unit->getStatus() == STATUS_TURNING
@@ -387,50 +393,72 @@ bool AggroBAIState::explosiveEfficacy(Position targetPos, BattleUnit* attackingU
  */
 void AggroBAIState::meleeAction(BattleAction* action)
 {
+	Log(LOG_INFO) << "AggroBAIState::meleeAction()";
+
+	if (_unit->isOut()) return;		// kL
+
 	_charge = false;
 
 	if (_aggroTarget != 0)
 	{
+		Log(LOG_INFO) << ". . _aggroTarget acquired; checking TileEngine";
+
 		if (_game->getTileEngine()->validMeleeRange(_unit, _aggroTarget, _unit->getDirection()))
 		{
+			Log(LOG_INFO) << ". . TileEngine ok, go for meleeAttack()";
+
 			meleeAttack(action);
+
 			return;
 		}
 	}
+	Log(LOG_INFO) << ". . past 1st check for _aggroTarget";
 
 	int attackCost = action->actor->getActionTUs(BA_HIT, _unit->getMainHandWeapon());
 	int chargeReserve = _unit->getTimeUnits() - attackCost;
 	int distance = (chargeReserve / 4) + 1;
 
+	// pick closest living unit that we can move to
 	for (std::vector<BattleUnit* >::iterator j = _unit->getVisibleUnits()->begin(); j != _unit->getVisibleUnits()->end(); ++j)
 	{
+		Log(LOG_INFO) << ". . looping Visible units";
+
 		int newDistance = _game->getTileEngine()->distance(_unit->getPosition(), (*j)->getPosition());
-		// pick closest living unit that we can move to
+		Log(LOG_INFO) << ". . newDistance calculated";
+
 		if (!(*j)->isOut()
 			&& (newDistance < distance || newDistance == 1))
 		{
 			if (newDistance == 1 || selectPointNearTarget(action, (*j), chargeReserve))
 			{
+				Log(LOG_INFO) << ". . _charge !!";
+
 				_aggroTarget = (*j);
 				action->type = BA_WALK;
 				_charge = true;
 				_unit->setCharging(_aggroTarget);
 				distance = newDistance;
+
+				Log(LOG_INFO) << ". . done _charge";
 			}
 		}
 	}
 
 	if (_aggroTarget != 0)
 	{
+		Log(LOG_INFO) << ". . _aggroTarget acquired; checking TileEngine";
+
 		if (_game->getTileEngine()->validMeleeRange(_unit, _aggroTarget, _unit->getDirectionTo(_aggroTarget->getPosition())))
 		{
+			Log(LOG_INFO) << ". . TileEngine ok, go for meleeAttack()";
+
 			meleeAttack(action);
 		}
 	}
 
 	if (_traceAI && _aggroTarget)
 	{
-		Log(LOG_INFO) << "AggroBAIState::meleeAction:" << " [target]: " << (_aggroTarget->getId())
+		Log(LOG_INFO) << "AggroBAIState::meleeAction:" << " [target]: " << _aggroTarget->getId()
 			<< " at: "  << action->target.x << "," << action->target.y << "," << _aggroTarget->getId();
 		Log(LOG_INFO) << "CHARGE!";		// kL
 	}
@@ -1011,6 +1039,8 @@ bool AggroBAIState::selectPointNearTarget(BattleAction* action, BattleUnit* targ
  */
 void AggroBAIState::meleeAttack(BattleAction* action)
 {
+	Log(LOG_INFO) << "AggroBAIState::meleeAttack()";
+
 	_unit->lookAt(_aggroTarget->getPosition() + Position(_unit->getArmor()->getSize() - 1, _unit->getArmor()->getSize() - 1, 0), false);
 
 	while (_unit->getStatus() == STATUS_TURNING)
@@ -1070,7 +1100,8 @@ void AggroBAIState::selectFireMethod(BattleAction* action)
 		{
 			action->type = BA_AIMEDSHOT;
 		}
-		else if (distance < 20
+//kL		else if (distance < 20
+		else if (distance < 22		// kL
 			&& tuSnap
 			&& currentTU >= action->actor->getActionTUs(BA_SNAPSHOT, action->weapon))
 		{

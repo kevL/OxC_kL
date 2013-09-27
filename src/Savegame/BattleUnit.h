@@ -466,8 +466,15 @@ class BattleUnit
 		void initDeathSpin();
 		/// Continues a death spin.
 		void contDeathSpin();
-		/// Regulates direction & duration of death spin.
+		/// Regulates direction & duration of a unit's death spin.
 		int getSpinPhase();
+		/// Sets the spinPhase of the unit.
+		void setSpinPhase(int spinphase);
+
+		/// Sets a unit's status.
+//		void setStatus(UnitStatus* status);
+		/// Set a unit to STATUS_UNCONSCIOUS.
+		void knockOut();
 
 		/// Sets the unit's health level.
 		void setHealth(int health);

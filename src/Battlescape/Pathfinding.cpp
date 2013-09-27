@@ -1399,12 +1399,12 @@ void Pathfinding::setUnit(BattleUnit* unit)
  * Gets if _unit is moving from a GravLift tile to a GravLift tile.
  * @return, True if so
  */
-bool Pathfinding::isGravLift() const
+/* bool Pathfinding::isGravLift() const
 {
 // Use
 	// bool Pathfinding::validateUpDown(BattleUnit* bu, Position startPosition, int const direction)
 // above.
-}
+} */
 // kL_end.
 
 }
