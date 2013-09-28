@@ -40,9 +40,87 @@
 
 #include "Language.h"
 
+#ifdef __MORPHOS__
+#include <ppcinline/exec.h>
+#endif
+
 
 namespace OpenXcom
 {
+
+namespace
+{
+
+/**
+ * Helper function counting pitch in bytes with 16byte padding
+ * @param bpp bytes per pixel
+ * @param width number of pixel in row
+ * @return pitch in bytes
+ */
+inline int GetPitch(int bpp, int width)
+{
+	return ((bpp/8) * width + 15) & ~0xF;
+}
+ 
+/**
+ * Helper function creating aligned buffer
+ * @param bpp bytes per pixel
+ * @param width number of pixel in row
+ * @param height number of rows
+ * @return pointer to memory
+ */
+inline void* NewAligned(int bpp, int width, int height)
+{
+	const int pitch = GetPitch(bpp, width);
+	const int total = pitch * height;
+	void* buffer = 0;
+
+#ifndef _WIN32
+	#ifdef __MORPHOS__
+
+	buffer = calloc( total, 1 );
+	if (!buffer)
+	{
+		throw Exception("Where's the memory, Lebowski?");
+	}
+
+	#else
+	int rc;
+	if ((rc = posix_memalign(&buffer, 16, total)))
+	{
+		throw Exception(strerror(rc));
+	}
+	#endif
+#else
+	// of course Windows has to be difficult about this!
+	buffer = _aligned_malloc(total, 16);
+	if (!buffer)
+	{
+		throw Exception("Where's the memory, Lebowski?");
+	}
+#endif
+
+	memset(buffer, 0, total);
+	return buffer;
+}
+
+/**
+ * Helper function release aligned memory
+ * @param buffer buffer to delete
+ */
+inline void DeleteAligned(void* buffer)
+{
+	if (buffer)
+	{
+#ifdef _WIN32
+		_aligned_free(buffer);
+#else
+		free(buffer);
+#endif
+	}
+}
+
+} //namespace
 
 /**
  * Sets up a blank 8bpp surface with the specified size and position,
@@ -56,55 +134,10 @@ namespace OpenXcom
  * @param y Y position in pixels.
  * @param bpp Bits-per-pixel depth.
  */
-
-#ifdef __MORPHOS__
-#include <ppcinline/exec.h>
-#endif 
- 
-Surface::Surface(int width, int height, int x, int y, int bpp)
-	:
-	_x(x),
-	_y(y),
-	_visible(true),
-	_hidden(false),
-	_redraw(false),
-	_originalColors(0),
-	_misalignedPixelBuffer(0),
-	_alignedBuffer(0)
+Surface::Surface(int width, int height, int x, int y, int bpp) : _x(x), _y(y), _visible(true), _hidden(false), _redraw(false), _originalColors(0), _alignedBuffer(0)
 {
-//	Log(LOG_INFO) << "Create Surface 1";
-
-	//_surface = SDL_CreateRGBSurface(SDL_SWSURFACE, width, height, 8, 0, 0, 0, 0);
-	int pitch = (bpp / 8) * ((width + 15)& ~0xF);
-
-#ifndef _WIN32
-	#ifdef __MORPHOS__
-
-	_alignedBuffer = calloc( pitch * height * (bpp/8), 1 );
-	if (!_alignedBuffer)
-	{
-		throw Exception("Where's the memory, Lebowski?");
-	}
-
-	#else
-	int rc;
-	if ((rc = posix_memalign(&_alignedBuffer, 16, pitch * height * (bpp/8))))
-	{
-		throw Exception(strerror(rc));
-	}
-	#endif
-#else
-	// of course Windows has to be difficult about this!
-	_alignedBuffer = _aligned_malloc(pitch*height*(bpp/8), 16);
-	if (!_alignedBuffer)
-	{
-		throw Exception("Where's the memory, Lebowski?");
-	}
-#endif
-	
-	memset(_alignedBuffer, 0, pitch * height * (bpp/8));
-	
-	_surface = SDL_CreateRGBSurfaceFrom(_alignedBuffer,width, height, bpp, pitch, 0, 0, 0, 0);
+	_alignedBuffer = NewAligned(bpp, width, height);
+	_surface = SDL_CreateRGBSurfaceFrom(_alignedBuffer, width, height, bpp, GetPitch(bpp, width), 0, 0, 0, 0);
 
 	if (_surface == 0)
 	{
@@ -129,7 +162,32 @@ Surface::Surface(const Surface& other)
 {
 //	Log(LOG_INFO) << "Create Surface 2";
 
-	_surface = SDL_ConvertSurface(other._surface, other._surface->format, other._surface->flags);
+	// if is native OpenXcom aligned surface
+	if(other._alignedBuffer)
+	{
+		Uint8 bpp = other._surface->format->BitsPerPixel;
+		int width = other.getWidth();
+		int height = other.getHeight();
+		int pitch = GetPitch(bpp, width);
+		_alignedBuffer = NewAligned(bpp, width, height);
+		_surface = SDL_CreateRGBSurfaceFrom(_alignedBuffer, width, height, bpp, pitch, 0, 0, 0, 0);
+		SDL_SetColorKey(_surface, SDL_SRCCOLORKEY, 0);
+		// can't call 'SetPalette' because it's a virtual function and it don't work correctly in constructor
+		// additionally it uses original colors, not temporarily ones.
+		SDL_SetColors(_surface, other._originalColors ? other._originalColors : other.getPalette(), 0, 255);
+		memcpy(_alignedBuffer, other._alignedBuffer, height*pitch);
+	}
+	else
+	{
+		_surface = SDL_ConvertSurface(other._surface, other._surface->format, other._surface->flags);
+		_alignedBuffer = 0;
+	}
+
+	if (_surface == 0)
+	{
+		throw Exception(SDL_GetError());
+	}
+
 	_x = other._x;
 	_y = other._y;
 	_crop.w = other._crop.w;
@@ -139,9 +197,9 @@ Surface::Surface(const Surface& other)
 	_visible = other._visible;
 	_hidden = other._hidden;
 	_redraw = other._redraw;
-	_originalColors = other._originalColors;
-	_misalignedPixelBuffer = 0;
-	_alignedBuffer = 0;
+	_originalColors = 0;
+	_dx = other._dx;
+	_dy = other._dy;
 }
 
 /**
@@ -150,12 +208,8 @@ Surface::Surface(const Surface& other)
 Surface::~Surface()
 {
 //	Log(LOG_INFO) << "Delete Surface";
-	//if (_misalignedPixelBuffer) _surface->pixels = _misalignedPixelBuffer;
-#ifdef _WIN32
-	if (_alignedBuffer) _aligned_free(_alignedBuffer);
-#else
-	if (_alignedBuffer) free(_alignedBuffer);
-#endif
+
+	DeleteAligned(_alignedBuffer);
 
 	SDL_FreeSurface(_surface);
 }
@@ -206,22 +260,17 @@ void Surface::loadScr(const std::string &filename)
 void Surface::loadImage(const std::string &filename)
 {
 	// Destroy current surface (will be replaced)
-#ifdef _WIN32
-	if (_alignedBuffer) _aligned_free(_alignedBuffer);
-#else
-	if (_alignedBuffer) free(_alignedBuffer); 
-#endif
+	DeleteAligned(_alignedBuffer);
 
-	_alignedBuffer = 0;
 	SDL_FreeSurface(_surface);
+	_alignedBuffer = 0;
 	_surface = 0;
-	_misalignedPixelBuffer = 0;
-	
+
 	// SDL only takes UTF-8 filenames
 	// so here's an ugly hack to match this ugly reasoning
 	std::wstring wstr = Language::cpToWstr(filename);
 	std::string utf8 = Language::wstrToUtf8(wstr);
-	
+
 	// Load file
 	_surface = IMG_Load(utf8.c_str());
 	if (!_surface)
