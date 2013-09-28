@@ -2760,7 +2760,8 @@ int BattleUnit::getCoverReserve()
 
 // kL_begin:
 /**
- * Initializes a death spin. See Battlescape/UnitDieBState.cpp, constructor
+ * Initializes a death spin.
+ * see Battlescape/UnitDieBState.cpp, ctor
  */
 void BattleUnit::initDeathSpin()
 {
@@ -2772,7 +2773,8 @@ void BattleUnit::initDeathSpin()
 }
 
 /**
- * Continues a death spin. See Battlescape/UnitDieBState.cpp, think()
+ * Continues a death spin.
+ * see Battlescape/UnitDieBState.cpp, think()
  */
 void BattleUnit::contDeathSpin()
 {
@@ -2823,16 +2825,14 @@ void BattleUnit::contDeathSpin()
 		if (-1 == d) d = 7;
 	}
 
-
 //	Log(LOG_INFO) << ". d_final = " << d;
 	setDirection(d);
-
 	_cacheInvalid = true;
 }
 
 /**
- * Regulates direction & duration of the death spin.
- * @ return int, Tracks deathspin rotations
+ * Regulates init, direction & duration of the death spin-cycle.
+ * @ return int, Tracks deathspin rotation
  */
 int BattleUnit::getSpinPhase()
 {
@@ -2840,7 +2840,7 @@ int BattleUnit::getSpinPhase()
 }
 
 /**
- * Sets the spinPhase of the unit.
+ * Sets the spinPhase of a unit.
  * @ param spinphase, The spinPhase to set
  */
 void BattleUnit::setSpinPhase(int spinphase)
@@ -2857,14 +2857,17 @@ void BattleUnit::setSpinPhase(int spinphase)
 	UnitStatus::STATUS_DEAD = status;
 } */
 
-/// Set a unit to STATUS_UNCONSCIOUS.
+/**
+ * Set a unit to STATUS_UNCONSCIOUS.
+ * @ param status,
+ */
 void BattleUnit::knockOut()
 {
 	_status = STATUS_UNCONSCIOUS;
 }
 
 /**
- * Sets the unit's health level.
+ * Sets a unit's health level.
  * @ return int, Tracks deathspin rotations
  */
 void BattleUnit::setHealth(int health)

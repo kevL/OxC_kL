@@ -87,7 +87,7 @@ UnitDieBState::UnitDieBState(BattlescapeGame* parent, BattleUnit* unit, ItemDama
 //kL		_unit->lookAt(3); // unit goes into status TURNING to prepare for a nice dead animation
 
 	// kL_begin:
-	_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED * 2 / 7);
+	_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED);
 
 	if (_unit->getVisible()
 		&& _parent->getMap()->getCamera()->isOnScreen(_unit->getPosition()))
@@ -113,7 +113,8 @@ UnitDieBState::UnitDieBState(BattlescapeGame* parent, BattleUnit* unit, ItemDama
 			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED * 8 / 7); // slow the zombie down so I can watch this....
 
 //			_originalDir = _unit->getDirection(); // facing for zombie->Chryssalid spawns. See above
-			_unit->lookAt(3); // look at the player for the transformation sequence.
+			// unit goes into status TURNING to prepare for a nice dead animation
+			_unit->lookAt(3); // else -> STATUS_STANDING (...), look at the player for the transformation sequence.
 			Log(LOG_INFO) << ". . got back from lookAt() in ctor ...";
 		}
 		else //if (_unit->getVisible()
@@ -121,7 +122,9 @@ UnitDieBState::UnitDieBState(BattlescapeGame* parent, BattleUnit* unit, ItemDama
 		{
 			Log(LOG_INFO) << _unit->getId() << " is NOT a zombie. initiate Spin!";
 
-			_unit->initDeathSpin(); // death animation spin, Savegame/BattleUnit.cpp
+			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED * 2 / 7);
+
+			_unit->initDeathSpin(); // -> STATUS_TURNING, death animation spin; Savegame/BattleUnit.cpp
 		}
 	}
 	else // unit is not onScreen and/or not visible.
@@ -187,7 +190,7 @@ void UnitDieBState::think()
 		// kL_begin:
 		if (_unit->getSpinPhase() > -1)
 		{
-			_unit->contDeathSpin();	// continue death animation spin
+			_unit->contDeathSpin(); // -> STATUS_STANDING 
 			Log(LOG_INFO) << ". . . . got back from contDeathSpin()";
 		}
 		else
@@ -201,12 +204,13 @@ void UnitDieBState::think()
 	{
 		Log(LOG_INFO) << ". . STATUS_COLLAPSING";
 
-		_unit->keepFalling(); // -> STATUS_DEAD or STATUS_UNCONSCIOUS
+		_unit->keepFalling(); // -> STATUS_DEAD or STATUS_UNCONSCIOUS ( ie. isOut() )
 	}
 	else if (!_unit->isOut())
 	{
 		Log(LOG_INFO) << ". . !isOut";
 
+		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED);
 		_unit->startFalling(); // -> STATUS_COLLAPSING
 
 		if (!_noSound)		// kL
