@@ -500,21 +500,27 @@ void UnitWalkBState::think()
 			}
 			else if (dir < _pf->DIR_UP) // now open doors (if any)
 			{
-//				Log(LOG_INFO) << ". pos 6";	// kL
+				Log(LOG_INFO) << ". open doors";	// kL
 
 				int door = _terrain->unitOpensDoor(_unit, false, dir);
 				if (door == 3)
 				{
+					Log(LOG_INFO) << ". . door #3";	// kL
+
 					return; // don't start walking yet, wait for the ufo door to open
 				}
 				else if (door == 0)
 				{
+					Log(LOG_INFO) << ". . door #0";	// kL
+
 					_parent->getResourcePack()->getSound("BATTLE.CAT", 3)->play(); // normal door
 
-					return; // kL. don't start walking yet, wait for the normal door to open
+//					return; // kL. don't start walking yet, wait for the normal door to open
 				}
 				else if (door == 1)
 				{
+					Log(LOG_INFO) << ". . door #1";	// kL
+
 					_parent->getResourcePack()->getSound("BATTLE.CAT", 20)->play(); // ufo door
 
 					return; // don't start walking yet, wait for the ufo door to open
