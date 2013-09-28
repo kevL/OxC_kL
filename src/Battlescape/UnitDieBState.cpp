@@ -76,7 +76,10 @@ UnitDieBState::UnitDieBState(BattlescapeGame* parent, BattleUnit* unit, ItemDama
 		_parent->getMap()->setUnitDying(true);
 	}
 
-	_parent->getMap()->getCamera()->centerOnPosition(_unit->getPosition());
+	if (!_parent->getMap()->getCamera()->isOnScreen(_unit->getPosition()))	// kL
+	{
+		_parent->getMap()->getCamera()->centerOnPosition(_unit->getPosition());
+	}
 
 		// kL_note: this is only necessary when spawning a chryssalid from a zombie. See below
 	_originalDir = _unit->getDirection();

@@ -205,29 +205,25 @@ TransferItemsState::TransferItemsState(Game* game, Base* baseFrom, Base* baseTo)
 			_items.push_back(*i);
 			std::wstringstream ss, ss2;
 			ss << qty;
-			ss2 << _baseTo->getItems()->getItem(*i);	// TODO: add quantity already in transit, plus on crafts at destination (kL)
+//kL			ss2 << _baseTo->getItems()->getItem(*i); // Returns the quantity of an item in the container.
 
 			// kL_begin:
-			/* int tQty = _baseTo->getItems()->getItem(*i);
+			std::wstring item = tr(*i);
 
-			for (std::vector<Transfer*>::iterator j = _baseTo->getTransfers()->begin(); j != _baseTo->getTransfers()->end(); ++j)
+			int tQty = _baseTo->getItems()->getItem(*i); // Returns the quantity of an item in the container.
+			for (std::vector<Transfer* >::const_iterator j = _baseTo->getTransfers()->begin(); j != _baseTo->getTransfers()->end(); ++j)
 			{
-//				if (_baseTo->getItems()->getItem(*i) == _baseTo->getItems()->getItem(j))
-//				if (_baseTo->getItems()->getItem(*i) == (*j)->getQuantity())
-//_baseFrom->getItems()->getItem(_items[getItemIndex(_sel)])
-//_game->getRuleset()->getItem(_items[getItemIndex(_sel)]);
-//				if ((*i)->*ItemContainer::getItem("") == (*j)->getId())
-//				if (_game->getRuleset()->getItem(_items[getItemIndex(i)]) == _baseTo->getItems()->getItem(_items[getItemIndex(j)]))
-				if (Game::getRuleset()->getItem(_items[getItemIndex(*i)]) == _baseTo->getItems()->getItem(_items[getItemIndex(j)]))
+				std::wstring trItem = (*j)->getName(_game->getLanguage());
+				if (item == trItem)
 				{
 					tQty += (*j)->getQuantity();
 				}
 			}
 
-			ss2 << tQty; */
+			ss2 << tQty;
+			_lstItems->addRow(4, item.c_str(), ss.str().c_str(), L"0", ss2.str().c_str());
 			// kL_end.
-
-			_lstItems->addRow(4, tr(*i).c_str(), ss.str().c_str(), L"0", ss2.str().c_str());
+//kL			_lstItems->addRow(4, tr(*i).c_str(), ss.str().c_str(), L"0", ss2.str().c_str());
 		}
 	}
 

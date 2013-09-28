@@ -799,7 +799,7 @@ void GeoscapeState::time5Seconds()
 
 						if (terrorSiteCount < _game->getSavedGame()->getTerrorSites()->size())
 						{
-							timerReset();	// kL
+//							timerReset();	// kL, can do in TerrorSite screen.
 
 							// kL_note: what's the *_game doing not in parenthesis??? (notice the reference though)
 							const TerrorSite& ts = *_game->getSavedGame()->getTerrorSites()->back();
