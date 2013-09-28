@@ -49,13 +49,13 @@ StoresState::StoresState(Game* game, Base* base)
 	_base(base)
 {
 	// Create objects
-	_window = new Window(this, 320, 200, 0, 0);
-	_btnOk = new TextButton(300, 16, 10, 176);
-	_txtTitle = new Text(310, 16, 5, 8);
-	_txtItem = new Text(142, 8, 10, 32);
-	_txtQuantity = new Text(88, 8, 152, 32);
-	_txtSpaceUsed = new Text(74, 8, 240, 32);
-	_lstStores = new TextList(288, 128, 8, 40);
+	_window			= new Window(this, 320, 200, 0, 0);
+	_btnOk			= new TextButton(300, 16, 10, 176);
+	_txtTitle		= new Text(310, 16, 5, 8);
+	_txtItem		= new Text(142, 8, 10, 32);
+	_txtQuantity	= new Text(88, 8, 152, 32);
+	_txtSpaceUsed	= new Text(74, 8, 240, 32);
+	_lstStores		= new TextList(288, 128, 8, 40);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
@@ -76,9 +76,9 @@ StoresState::StoresState(Game* game, Base* base)
 
 	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(tr("STR_OK"));
-	_btnOk->onMouseClick((ActionHandler) &StoresState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler) &StoresState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
-	_btnOk->onKeyboardPress((ActionHandler) &StoresState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onMouseClick((ActionHandler)& StoresState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)& StoresState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
+	_btnOk->onKeyboardPress((ActionHandler)& StoresState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
@@ -100,13 +100,13 @@ StoresState::StoresState(Game* game, Base* base)
 	_lstStores->setBackground(_window);
 	_lstStores->setMargin(2);
 
-	const std::vector<std::string> &items = _game->getRuleset()->getItemsList();
+	const std::vector<std::string>& items = _game->getRuleset()->getItemsList();
 	for (std::vector<std::string>::const_iterator i = items.begin(); i != items.end(); ++i)
 	{
 		int qty = _base->getItems()->getItem(*i);
 		if (qty > 0)
 		{
-			RuleItem *rule = _game->getRuleset()->getItem(*i);
+			RuleItem* rule = _game->getRuleset()->getItem(*i);
 
 			std::wstringstream ss, ss2;
 			ss << qty;

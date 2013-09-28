@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "TransfersState.h"
 #include <sstream>
 #include "../Engine/Game.h"
@@ -31,6 +32,7 @@
 #include "../Savegame/Base.h"
 #include "../Savegame/Transfer.h"
 
+
 namespace OpenXcom
 {
 
@@ -39,18 +41,21 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
  */
-TransfersState::TransfersState(Game *game, Base *base) : State(game), _base(base)
+TransfersState::TransfersState(Game* game, Base* base)
+	:
+	State(game),
+	_base(base)
 {
 	_screen = false;
 
 	// Create objects
-	_window = new Window(this, 320, 184, 0, 8, POPUP_BOTH);
-	_btnOk = new TextButton(288, 16, 16, 166);
-	_txtTitle = new Text(278, 16, 21, 18);
-	_txtItem = new Text(114, 8, 16, 34);
-	_txtQuantity = new Text(54, 8, 152, 34);
-	_txtArrivalTime = new Text(112, 8, 212, 34);
-	_lstTransfers = new TextList(273, 112, 14, 50);
+	_window			= new Window(this, 320, 184, 0, 8, POPUP_BOTH);
+	_btnOk			= new TextButton(288, 16, 16, 166);
+	_txtTitle		= new Text(278, 16, 21, 18);
+	_txtItem		= new Text(114, 8, 16, 34);
+	_txtQuantity	= new Text(54, 8, 152, 34);
+	_txtArrivalTime	= new Text(112, 8, 212, 34);
+	_lstTransfers	= new TextList(273, 112, 14, 50);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
@@ -71,9 +76,9 @@ TransfersState::TransfersState(Game *game, Base *base) : State(game), _base(base
 
 	_btnOk->setColor(Palette::blockOffset(15)+6);
 	_btnOk->setText(tr("STR_OK"));
-	_btnOk->onMouseClick((ActionHandler)&TransfersState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&TransfersState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
-	_btnOk->onKeyboardPress((ActionHandler)&TransfersState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onMouseClick((ActionHandler)& TransfersState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)& TransfersState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
+	_btnOk->onKeyboardPress((ActionHandler)& TransfersState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(15)+6);
 	_txtTitle->setBig();
@@ -96,7 +101,7 @@ TransfersState::TransfersState(Game *game, Base *base) : State(game), _base(base
 	_lstTransfers->setBackground(_window);
 	_lstTransfers->setMargin(2);
 
-	for (std::vector<Transfer*>::iterator i = _base->getTransfers()->begin(); i != _base->getTransfers()->end(); ++i)
+	for (std::vector<Transfer* >::iterator i = _base->getTransfers()->begin(); i != _base->getTransfers()->end(); ++i)
 	{
 		std::wstringstream ss, ss2;
 		ss << (*i)->getQuantity();
@@ -110,14 +115,13 @@ TransfersState::TransfersState(Game *game, Base *base) : State(game), _base(base
  */
 TransfersState::~TransfersState()
 {
-
 }
 
 /**
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void TransfersState::btnOkClick(Action *)
+void TransfersState::btnOkClick(Action* )
 {
 	_game->popState();
 }

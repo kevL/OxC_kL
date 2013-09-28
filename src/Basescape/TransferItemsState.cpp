@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "TransferItemsState.h"
 #include <sstream>
 #include <climits>
@@ -46,6 +47,7 @@
 #include "TransferConfirmState.h"
 #include "../Engine/Options.h"
 
+
 namespace OpenXcom
 {
 
@@ -55,7 +57,24 @@ namespace OpenXcom
  * @param baseFrom Pointer to the source base.
  * @param baseTo Pointer to the destination base.
  */
-TransferItemsState::TransferItemsState(Game *game, Base *baseFrom, Base *baseTo) : State(game), _baseFrom(baseFrom), _baseTo(baseTo), _qtys(), _soldiers(), _crafts(), _items(), _sel(0), _total(0), _pQty(0), _cQty(0), _aQty(0), _iQty(0.0f), _hasSci(0), _hasEng(0), _distance(0.0)
+TransferItemsState::TransferItemsState(Game* game, Base* baseFrom, Base* baseTo)
+	:
+	State(game),
+	_baseFrom(baseFrom),
+	_baseTo(baseTo),
+	_qtys(),
+	_soldiers(),
+	_crafts(),
+	_items(),
+	_sel(0),
+	_total(0),
+	_pQty(0),
+	_cQty(0),
+	_aQty(0),
+	_iQty(0.0f),
+	_hasSci(0),
+	_hasEng(0),
+	_distance(0.0)
 {
 	_changeValueByMouseWheel = Options::getInt("changeValueByMouseWheel");
 	_allowChangeListValuesByMouseWheel = (Options::getBool("allowChangeListValuesByMouseWheel") && _changeValueByMouseWheel);
@@ -63,15 +82,15 @@ TransferItemsState::TransferItemsState(Game *game, Base *baseFrom, Base *baseTo)
 	_canTransferCraftsWhileAirborne = Options::getBool("canTransferCraftsWhileAirborne");
 
 	// Create objects
-	_window = new Window(this, 320, 200, 0, 0);
-	_btnOk = new TextButton(148, 16, 8, 176);
-	_btnCancel = new TextButton(148, 16, 164, 176);
-	_txtTitle = new Text(310, 16, 5, 8);
-	_txtItem = new Text(130, 9, 10, 22);
-	_txtQuantity = new Text(50, 9, 150, 22);
-	_txtAmountTransfer = new Text(60, 16, 200, 22);
-	_txtAmountDestination = new Text(60, 16, 260, 22);
-	_lstItems = new TextList(287, 128, 8, 40);
+	_window					= new Window(this, 320, 200, 0, 0);
+	_btnOk					= new TextButton(148, 16, 8, 176);
+	_btnCancel				= new TextButton(148, 16, 164, 176);
+	_txtTitle				= new Text(310, 16, 5, 8);
+	_txtItem				= new Text(130, 9, 10, 22);
+	_txtQuantity			= new Text(50, 9, 150, 22);
+	_txtAmountTransfer		= new Text(60, 16, 200, 22);
+	_txtAmountDestination	= new Text(60, 16, 260, 22);
+	_lstItems				= new TextList(287, 128, 8, 40);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
@@ -94,13 +113,13 @@ TransferItemsState::TransferItemsState(Game *game, Base *baseFrom, Base *baseTo)
 
 	_btnOk->setColor(Palette::blockOffset(15)+6);
 	_btnOk->setText(tr("STR_TRANSFER"));
-	_btnOk->onMouseClick((ActionHandler)&TransferItemsState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&TransferItemsState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
+	_btnOk->onMouseClick((ActionHandler)& TransferItemsState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)& TransferItemsState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
 
 	_btnCancel->setColor(Palette::blockOffset(15)+6);
 	_btnCancel->setText(tr("STR_CANCEL"));
-	_btnCancel->onMouseClick((ActionHandler)&TransferItemsState::btnCancelClick);
-	_btnCancel->onKeyboardPress((ActionHandler)&TransferItemsState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnCancel->onMouseClick((ActionHandler)& TransferItemsState::btnCancelClick);
+	_btnCancel->onKeyboardPress((ActionHandler)& TransferItemsState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
@@ -127,15 +146,15 @@ TransferItemsState::TransferItemsState(Game *game, Base *baseFrom, Base *baseTo)
 	_lstItems->setBackground(_window);
 	_lstItems->setMargin(2);
 	_lstItems->setAllowScrollOnArrowButtons(!_allowChangeListValuesByMouseWheel);
-	_lstItems->onLeftArrowPress((ActionHandler)&TransferItemsState::lstItemsLeftArrowPress);
-	_lstItems->onLeftArrowRelease((ActionHandler)&TransferItemsState::lstItemsLeftArrowRelease);
-	_lstItems->onLeftArrowClick((ActionHandler)&TransferItemsState::lstItemsLeftArrowClick);
-	_lstItems->onRightArrowPress((ActionHandler)&TransferItemsState::lstItemsRightArrowPress);
-	_lstItems->onRightArrowRelease((ActionHandler)&TransferItemsState::lstItemsRightArrowRelease);
-	_lstItems->onRightArrowClick((ActionHandler)&TransferItemsState::lstItemsRightArrowClick);
-	_lstItems->onMousePress((ActionHandler)&TransferItemsState::lstItemsMousePress);
+	_lstItems->onLeftArrowPress((ActionHandler)& TransferItemsState::lstItemsLeftArrowPress);
+	_lstItems->onLeftArrowRelease((ActionHandler)& TransferItemsState::lstItemsLeftArrowRelease);
+	_lstItems->onLeftArrowClick((ActionHandler)& TransferItemsState::lstItemsLeftArrowClick);
+	_lstItems->onRightArrowPress((ActionHandler)& TransferItemsState::lstItemsRightArrowPress);
+	_lstItems->onRightArrowRelease((ActionHandler)& TransferItemsState::lstItemsRightArrowRelease);
+	_lstItems->onRightArrowClick((ActionHandler)& TransferItemsState::lstItemsRightArrowClick);
+	_lstItems->onMousePress((ActionHandler)& TransferItemsState::lstItemsMousePress);
 
-	for (std::vector<Soldier*>::iterator i = _baseFrom->getSoldiers()->begin(); i != _baseFrom->getSoldiers()->end(); ++i)
+	for (std::vector<Soldier* >::iterator i = _baseFrom->getSoldiers()->begin(); i != _baseFrom->getSoldiers()->end(); ++i)
 	{
 		if ((*i)->getCraft() == 0)
 		{
@@ -145,7 +164,7 @@ TransferItemsState::TransferItemsState(Game *game, Base *baseFrom, Base *baseTo)
 		}
 	}
 
-	for (std::vector<Craft*>::iterator i = _baseFrom->getCrafts()->begin(); i != _baseFrom->getCrafts()->end(); ++i)
+	for (std::vector<Craft* >::iterator i = _baseFrom->getCrafts()->begin(); i != _baseFrom->getCrafts()->end(); ++i)
 	{
 		if ((*i)->getStatus() != "STR_OUT"
 			|| (_canTransferCraftsWhileAirborne && (*i)->getFuel() >= (*i)->getFuelLimit(_baseTo)))
@@ -176,7 +195,7 @@ TransferItemsState::TransferItemsState(Game *game, Base *baseFrom, Base *baseTo)
 		_lstItems->addRow(4, tr("STR_ENGINEER").c_str(), ss.str().c_str(), L"0", ss2.str().c_str());
 	}
 
-	const std::vector<std::string> &items = _game->getRuleset()->getItemsList();
+	const std::vector<std::string>& items = _game->getRuleset()->getItemsList();
 	for (std::vector<std::string>::const_iterator i = items.begin(); i != items.end(); ++i)
 	{
 		int qty = _baseFrom->getItems()->getItem(*i);
@@ -215,9 +234,9 @@ TransferItemsState::TransferItemsState(Game *game, Base *baseFrom, Base *baseTo)
 	_distance = getDistance();
 
 	_timerInc = new Timer(250);
-	_timerInc->onTimer((StateHandler)&TransferItemsState::increase);
+	_timerInc->onTimer((StateHandler)& TransferItemsState::increase);
 	_timerDec = new Timer(250);
-	_timerDec->onTimer((StateHandler)&TransferItemsState::decrease);
+	_timerDec->onTimer((StateHandler)& TransferItemsState::decrease);
 }
 
 /**
@@ -252,7 +271,7 @@ void TransferItemsState::think()
  * Transfers the selected items.
  * @param action Pointer to an action.
  */
-void TransferItemsState::btnOkClick(Action *)
+void TransferItemsState::btnOkClick(Action* )
 {
 	_game->pushState(new TransferConfirmState(_game, _baseTo, this));
 }
@@ -271,7 +290,7 @@ void TransferItemsState::completeTransfer()
 		{
 			if (i < _soldiers.size()) // Transfer soldiers
 			{
-				for (std::vector<Soldier*>::iterator s = _baseFrom->getSoldiers()->begin(); s != _baseFrom->getSoldiers()->end(); ++s)
+				for (std::vector<Soldier* >::iterator s = _baseFrom->getSoldiers()->begin(); s != _baseFrom->getSoldiers()->end(); ++s)
 				{
 					if (*s == _soldiers[i])
 					{
@@ -280,10 +299,11 @@ void TransferItemsState::completeTransfer()
 							(*s)->setPsiTraining();
 						}
 
-						Transfer *t = new Transfer(time);
+						Transfer* t = new Transfer(time);
 						t->setSoldier(*s);
 						_baseTo->getTransfers()->push_back(t);
 						_baseFrom->getSoldiers()->erase(s);
+
 						break;
 					}
 				}
@@ -291,10 +311,10 @@ void TransferItemsState::completeTransfer()
 			else if (i >= _soldiers.size()
 				&& i < _soldiers.size() + _crafts.size()) // Transfer crafts
 			{
-				Craft *craft =  _crafts[i - _soldiers.size()];
+				Craft* craft =  _crafts[i - _soldiers.size()];
 
 				// Transfer soldiers inside craft
-				for (std::vector<Soldier*>::iterator s = _baseFrom->getSoldiers()->begin(); s != _baseFrom->getSoldiers()->end();)
+				for (std::vector<Soldier* >::iterator s = _baseFrom->getSoldiers()->begin(); s != _baseFrom->getSoldiers()->end();)
 				{
 					if ((*s)->getCraft() == craft)
 					{
@@ -304,7 +324,7 @@ void TransferItemsState::completeTransfer()
 							_baseTo->getSoldiers()->push_back(*s);
 						else
 						{
-							Transfer *t = new Transfer(time);
+							Transfer* t = new Transfer(time);
 							t->setSoldier(*s);
 							_baseTo->getTransfers()->push_back(t);
 						}
@@ -318,7 +338,7 @@ void TransferItemsState::completeTransfer()
 				}
 
 				// Transfer craft
-				for (std::vector<Craft*>::iterator c = _baseFrom->getCrafts()->begin(); c != _baseFrom->getCrafts()->end(); ++c)
+				for (std::vector<Craft* >::iterator c = _baseFrom->getCrafts()->begin(); c != _baseFrom->getCrafts()->end(); ++c)
 				{
 					if (*c == craft)
 					{
@@ -341,22 +361,24 @@ void TransferItemsState::completeTransfer()
 						}
 						else
 						{
-							Transfer *t = new Transfer(time);
+							Transfer* t = new Transfer(time);
 							t->setCraft(*c);
 							_baseTo->getTransfers()->push_back(t);
 						}
 
 						// Clear Hangar
-						for (std::vector<BaseFacility*>::iterator f = _baseFrom->getFacilities()->begin(); f != _baseFrom->getFacilities()->end(); ++f)
+						for (std::vector<BaseFacility* >::iterator f = _baseFrom->getFacilities()->begin(); f != _baseFrom->getFacilities()->end(); ++f)
 						{
 							if ((*f)->getCraft() == *c)
 							{
 								(*f)->setCraft(0);
+
 								break;
 							}
 						}
 
 						_baseFrom->getCrafts()->erase(c);
+
 						break;
 					}
 				}
@@ -365,7 +387,7 @@ void TransferItemsState::completeTransfer()
 				&& i == _soldiers.size() + _crafts.size()) // Transfer scientists
 			{
 				_baseFrom->setScientists(_baseFrom->getScientists() - _qtys[i]);
-				Transfer *t = new Transfer(time);
+				Transfer* t = new Transfer(time);
 				t->setScientists(_qtys[i]);
 
 				_baseTo->getTransfers()->push_back(t);
@@ -374,7 +396,7 @@ void TransferItemsState::completeTransfer()
 				&& i == _soldiers.size() + _crafts.size() + _hasSci) // Transfer engineers
 			{
 				_baseFrom->setEngineers(_baseFrom->getEngineers() - _qtys[i]);
-				Transfer *t = new Transfer(time);
+				Transfer* t = new Transfer(time);
 				t->setEngineers(_qtys[i]);
 
 				_baseTo->getTransfers()->push_back(t);
@@ -382,7 +404,7 @@ void TransferItemsState::completeTransfer()
 			else // Transfer items
 			{
 				_baseFrom->getItems()->removeItem(_items[getItemIndex(i)], _qtys[i]);
-				Transfer *t = new Transfer(time);
+				Transfer* t = new Transfer(time);
 				t->setItems(_items[getItemIndex(i)], _qtys[i]);
 
 				_baseTo->getTransfers()->push_back(t);
@@ -395,7 +417,7 @@ void TransferItemsState::completeTransfer()
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void TransferItemsState::btnCancelClick(Action *)
+void TransferItemsState::btnCancelClick(Action* )
 {
 	_game->popState();
 	_game->popState();
@@ -405,7 +427,7 @@ void TransferItemsState::btnCancelClick(Action *)
  * Starts increasing the item.
  * @param action Pointer to an action.
  */
-void TransferItemsState::lstItemsLeftArrowPress(Action *action)
+void TransferItemsState::lstItemsLeftArrowPress(Action* action)
 {
 	_sel = _lstItems->getSelectedRow();
 
@@ -420,7 +442,7 @@ void TransferItemsState::lstItemsLeftArrowPress(Action *action)
  * Stops increasing the item.
  * @param action Pointer to an action.
  */
-void TransferItemsState::lstItemsLeftArrowRelease(Action *action)
+void TransferItemsState::lstItemsLeftArrowRelease(Action* action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
@@ -433,7 +455,7 @@ void TransferItemsState::lstItemsLeftArrowRelease(Action *action)
  * by one on left-click; to max on right-click.
  * @param action Pointer to an action.
  */
-void TransferItemsState::lstItemsLeftArrowClick(Action *action)
+void TransferItemsState::lstItemsLeftArrowClick(Action* action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT) increaseByValue(INT_MAX);
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
@@ -449,18 +471,22 @@ void TransferItemsState::lstItemsLeftArrowClick(Action *action)
  * Starts decreasing the item.
  * @param action Pointer to an action.
  */
-void TransferItemsState::lstItemsRightArrowPress(Action *action)
+void TransferItemsState::lstItemsRightArrowPress(Action* action)
 {
 	_sel = _lstItems->getSelectedRow();
 
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT && !_timerDec->isRunning()) _timerDec->start();
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT
+		&& !_timerDec->isRunning())
+	{
+		_timerDec->start();
+	}
 }
 
 /**
  * Stops decreasing the item.
  * @param action Pointer to an action.
  */
-void TransferItemsState::lstItemsRightArrowRelease(Action *action)
+void TransferItemsState::lstItemsRightArrowRelease(Action* action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
@@ -473,7 +499,7 @@ void TransferItemsState::lstItemsRightArrowRelease(Action *action)
  * by one on left-click; to 0 on right-click.
  * @param action Pointer to an action.
  */
-void TransferItemsState::lstItemsRightArrowClick(Action *action)
+void TransferItemsState::lstItemsRightArrowClick(Action* action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 		decreaseByValue(INT_MAX);
@@ -491,7 +517,7 @@ void TransferItemsState::lstItemsRightArrowClick(Action *action)
  * Handles the mouse-wheels on the arrow-buttons.
  * @param action Pointer to an action.
  */
-void TransferItemsState::lstItemsMousePress(Action *action)
+void TransferItemsState::lstItemsMousePress(Action* action)
 {
 	_sel = _lstItems->getSelectedRow();
 
@@ -584,7 +610,11 @@ void TransferItemsState::increaseByValue(int change)
 	if (TRANSFER_ITEM == selType)
 		selItem = _game->getRuleset()->getItem(_items[getItemIndex(_sel)]);
 
-	if (0 >= change || getQuantity() <= _qtys[_sel]) return;
+	if (0 >= change
+		|| getQuantity() <= _qtys[_sel])
+	{
+		return;
+	}
 
 	// Check Living Quarters
 	if ((TRANSFER_SOLDIER == selType || TRANSFER_SCIENTIST == selType || TRANSFER_ENGINEER == selType)
@@ -598,7 +628,7 @@ void TransferItemsState::increaseByValue(int change)
 
 	if (TRANSFER_CRAFT == selType)
 	{
-		Craft *craft =  _crafts[_sel - _soldiers.size()];
+		Craft* craft =  _crafts[_sel - _soldiers.size()];
 
 		if (_cQty + 1 > _baseTo->getAvailableHangars() - _baseTo->getUsedHangars())
 		{
@@ -648,7 +678,7 @@ void TransferItemsState::increaseByValue(int change)
 	}
 	else if (TRANSFER_CRAFT == selType) // Craft count
 	{
-		Craft *craft = _crafts[_sel - _soldiers.size()];
+		Craft* craft = _crafts[_sel - _soldiers.size()];
 		_cQty++;
 		_pQty += craft->getNumSoldiers();
 		_qtys[_sel]++;
@@ -708,7 +738,7 @@ void TransferItemsState::decreaseByValue(int change)
 {
 	const enum TransferType selType = getType(_sel);
 	if (0 >= change || 0 >= _qtys[_sel]) return;
-	Craft *craft = 0;
+	Craft* craft = 0;
 	change = std::min(_qtys[_sel], change);
 
 	if (TRANSFER_SOLDIER == selType
@@ -726,7 +756,7 @@ void TransferItemsState::decreaseByValue(int change)
 	}
 	else if (TRANSFER_ITEM == selType) // Item count
 	{
-		const RuleItem * selItem = _game->getRuleset()->getItem(_items[getItemIndex(_sel)]);
+		const RuleItem* selItem = _game->getRuleset()->getItem(_items[getItemIndex(_sel)]);
 		if (!selItem->getAlien() )
 		{
 			_iQty -= selItem->getSize() * ((float)(change));

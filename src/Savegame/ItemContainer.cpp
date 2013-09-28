@@ -16,9 +16,11 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "ItemContainer.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleItem.h"
+
 
 namespace OpenXcom
 {
@@ -54,6 +56,7 @@ YAML::Node ItemContainer::save() const
 {
 	YAML::Node node;
 	node = _qty;
+
 	return node;
 }
 
@@ -62,7 +65,7 @@ YAML::Node ItemContainer::save() const
  * @param id Item ID.
  * @param qty Item quantity.
  */
-void ItemContainer::addItem(const std::string &id, int qty)
+void ItemContainer::addItem(const std::string& id, int qty)
 {
 	if (id.empty())
 	{
@@ -82,7 +85,7 @@ void ItemContainer::addItem(const std::string &id, int qty)
  * @param id Item ID.
  * @param qty Item quantity.
  */
-void ItemContainer::removeItem(const std::string &id, int qty)
+void ItemContainer::removeItem(const std::string& id, int qty)
 {
 	if (id.empty() || _qty.find(id) == _qty.end())
 	{
@@ -104,7 +107,7 @@ void ItemContainer::removeItem(const std::string &id, int qty)
  * @param id Item ID.
  * @return Item quantity.
  */
-int ItemContainer::getItem(const std::string &id) const
+int ItemContainer::getItem(const std::string& id) const
 {
 	if (id.empty())
 	{
@@ -141,13 +144,14 @@ int ItemContainer::getTotalQuantity() const
  * @param rule Pointer to ruleset.
  * @return Total item size.
  */
-double ItemContainer::getTotalSize(const Ruleset *rule) const
+double ItemContainer::getTotalSize(const Ruleset* rule) const
 {
 	double total = 0;
 	for (std::map<std::string, int>::const_iterator i = _qty.begin(); i != _qty.end(); ++i)
 	{
 		total += rule->getItem(i->first)->getSize() * i->second;
 	}
+
 	return total;
 }
 
@@ -155,7 +159,7 @@ double ItemContainer::getTotalSize(const Ruleset *rule) const
  * Returns all the items currently contained within.
  * @return List of contents.
  */
-std::map<std::string, int> *ItemContainer::getContents()
+std::map<std::string, int>* ItemContainer::getContents()
 {
 	return &_qty;
 }

@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "UfoDetectedState.h"
 #include <sstream>
 #include "../Engine/Game.h"
@@ -34,6 +35,7 @@
 #include "../Engine/Options.h"
 #include "../Savegame/AlienMission.h"
 
+
 namespace OpenXcom
 {
 
@@ -45,14 +47,21 @@ namespace OpenXcom
  * @param detected Was the UFO detected?
  * @param hyperwave Was it a hyperwave radar?
  */
-UfoDetectedState::UfoDetectedState(Game *game, Ufo *ufo, GeoscapeState *state, bool detected, bool hyperwave) : State(game), _ufo(ufo), _state(state), _hyperwave(hyperwave)
+UfoDetectedState::UfoDetectedState(Game* game, Ufo* ufo, GeoscapeState* state, bool detected, bool hyperwave)
+	:
+	State(game),
+	_ufo(ufo),
+	_state(state),
+	_hyperwave(hyperwave)
 {
 	// Generate UFO ID
 	if (_ufo->getId() == 0)
 	{
 		_ufo->setId(_game->getSavedGame()->getId("STR_UFO"));
 	}
-	if (_ufo->getAltitude() == "STR_GROUND" && _ufo->getLandId() == 0)
+
+	if (_ufo->getAltitude() == "STR_GROUND"
+		&& _ufo->getLandId() == 0)
 	{
 		_ufo->setLandId(_game->getSavedGame()->getId("STR_LANDING_SITE"));
 	}
@@ -62,19 +71,20 @@ UfoDetectedState::UfoDetectedState(Game *game, Ufo *ufo, GeoscapeState *state, b
 	// Create objects
 	if (hyperwave)
 	{
-		_window = new Window(this, 224, 180, 16, 10, POPUP_BOTH);
+		_window		= new Window(this, 224, 180, 16, 10, POPUP_BOTH);
 	}
 	else
 	{
-		_window = new Window(this, 224, 120, 16, 48, POPUP_BOTH);
+		_window		= new Window(this, 224, 120, 16, 48, POPUP_BOTH);
 	}
-	_btnCentre = new TextButton(200, 12, 28, 128);
-	_btnCancel = new TextButton(200, 12, 28, 144);
-	_txtUfo = new Text(207, 16, 28, 56);
-	_txtDetected = new Text(100, 8, 28, 72);
-	_txtHyperwave = new Text(214, 16, 21, 44);
-	_lstInfo = new TextList(207, 32, 28, 82);
-	_lstInfo2 = new TextList(207, 32, 28, 96);
+
+	_btnCentre		= new TextButton(200, 12, 28, 128);
+	_btnCancel		= new TextButton(200, 12, 28, 144);
+	_txtUfo			= new Text(207, 16, 28, 56);
+	_txtDetected	= new Text(100, 8, 28, 72);
+	_txtHyperwave	= new Text(214, 16, 21, 44);
+	_lstInfo		= new TextList(207, 32, 28, 82);
+	_lstInfo2		= new TextList(207, 32, 28, 96);
 
 	if (hyperwave)
 	{
@@ -117,13 +127,13 @@ UfoDetectedState::UfoDetectedState(Game *game, Ufo *ufo, GeoscapeState *state, b
 
 	_btnCentre->setColor(Palette::blockOffset(8)+5);
 	_btnCentre->setText(tr("STR_CENTER_ON_UFO_TIME_5_SECS"));
-	_btnCentre->onMouseClick((ActionHandler)&UfoDetectedState::btnCentreClick);
-	_btnCentre->onKeyboardPress((ActionHandler)&UfoDetectedState::btnCentreClick, (SDLKey)Options::getInt("keyOk"));
+	_btnCentre->onMouseClick((ActionHandler)& UfoDetectedState::btnCentreClick);
+	_btnCentre->onKeyboardPress((ActionHandler)& UfoDetectedState::btnCentreClick, (SDLKey)Options::getInt("keyOk"));
 
 	_btnCancel->setColor(Palette::blockOffset(8)+5);
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
-	_btnCancel->onMouseClick((ActionHandler)&UfoDetectedState::btnCancelClick);
-	_btnCancel->onKeyboardPress((ActionHandler)&UfoDetectedState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnCancel->onMouseClick((ActionHandler)& UfoDetectedState::btnCancelClick);
+	_btnCancel->onKeyboardPress((ActionHandler)& UfoDetectedState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtDetected->setColor(Palette::blockOffset(8)+5);
 	if (detected)
@@ -149,16 +159,19 @@ UfoDetectedState::UfoDetectedState(Game *game, Ufo *ufo, GeoscapeState *state, b
 	_lstInfo->setDot(true);
 	_lstInfo->addRow(2, tr("STR_SIZE_UC").c_str(), tr(_ufo->getRules()->getSize()).c_str());
 	_lstInfo->setCellColor(0, 1, Palette::blockOffset(8)+10);
+
 	std::string altitude = _ufo->getAltitude() == "STR_GROUND" ? "STR_GROUNDED" : _ufo->getAltitude();
 	_lstInfo->addRow(2, tr("STR_ALTITUDE").c_str(), tr(altitude).c_str());
 	_lstInfo->setCellColor(1, 1, Palette::blockOffset(8)+10);
 	std::string heading = _ufo->getDirection();
+
 	if (_ufo->getStatus() != Ufo::FLYING)
 	{
 		heading = "STR_NONE_UC";
 	}
 	_lstInfo->addRow(2, tr("STR_HEADING").c_str(), tr(heading).c_str());
 	_lstInfo->setCellColor(2, 1, Palette::blockOffset(8)+10);
+
 	std::wstringstream ss;
 	ss << _ufo->getSpeed();
 	_lstInfo->addRow(2, tr("STR_SPEED").c_str(), ss.str().c_str());
@@ -182,7 +195,6 @@ UfoDetectedState::UfoDetectedState(Game *game, Ufo *ufo, GeoscapeState *state, b
  */
 UfoDetectedState::~UfoDetectedState()
 {
-
 }
 
 /**
@@ -204,7 +216,7 @@ void UfoDetectedState::init()
  * Centers on the UFO and returns to the previous screen.
  * @param action Pointer to an action.
  */
-void UfoDetectedState::btnCentreClick(Action *)
+void UfoDetectedState::btnCentreClick(Action* )
 {
 	_state->timerReset();
 	_state->getGlobe()->center(_ufo->getLongitude(), _ufo->getLatitude());

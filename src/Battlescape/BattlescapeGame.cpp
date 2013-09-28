@@ -1877,6 +1877,7 @@ BattleUnit* BattlescapeGame::convertUnit(BattleUnit* unit, std::string newType)
 	// in case the unit was unconscious
 	getSave()->removeUnconsciousBodyItem(unit);
 
+//	int origDir = unit->getDirection();		// kL
 	unit->instaKill();
 
 	if (Options::getBool("battleNotifyDeath")
@@ -1919,6 +1920,8 @@ BattleUnit* BattlescapeGame::convertUnit(BattleUnit* unit, std::string newType)
 	getSave()->getTile(unit->getPosition())->setUnit(newUnit, _save->getTile(unit->getPosition() + Position(0, 0, -1)));
 	newUnit->setPosition(unit->getPosition());
 	newUnit->setDirection(3);
+//	newUnit->setDirection(origDir);		// kL
+//	this->getMap()->cacheUnit(newUnit);	// kL, try this. ... damn!
 	newUnit->setCache(0);
 	newUnit->setTimeUnits(0);
 

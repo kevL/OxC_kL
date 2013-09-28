@@ -87,10 +87,8 @@ UnitDieBState::UnitDieBState(BattlescapeGame* parent, BattleUnit* unit, ItemDama
 //kL		_unit->lookAt(3); // unit goes into status TURNING to prepare for a nice dead animation
 
 	// kL_begin:
-	_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED);
-
-	if (_unit->getVisible()
-		&& _parent->getMap()->getCamera()->isOnScreen(_unit->getPosition()))
+	if (_unit->getVisible())
+//		&& _parent->getMap()->getCamera()->isOnScreen(_unit->getPosition()))
 	{
 		if (!_unit->getSpawnUnit().empty())	// nb. getSpawnUnit() is a member of both BattleUnit & Unit...
 //			&& _unit->getSpecialAbility() == 0) // this comes into play because Soldiers & Civilians, (health=0) eg, can have SpawnUnit set and SpecAb set too.
@@ -129,6 +127,8 @@ UnitDieBState::UnitDieBState(BattlescapeGame* parent, BattleUnit* unit, ItemDama
 	}
 	else // unit is not onScreen and/or not visible.
 	{
+//		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED);
+
 		if (_unit->getHealth() == 0)
 		{
 			_unit->instaKill();
@@ -251,7 +251,10 @@ void UnitDieBState::think()
 			Log(LOG_INFO) << ". . unit is _spawnUnit -> converting !";
 			BattleUnit* newUnit = _parent->convertUnit(_unit, _unit->getSpawnUnit());
 			newUnit->lookAt(_originalDir);
-//			newUnit->lookAt(_originalDir, true);	// kL, fast turn back to original facing.
+//			newUnit->lookAt(_originalDir, true);	// kL, fast turn back to original facing. Nope...
+//			newUnit->setDirection(_originalDir);	// kL
+//			_parent->getMap()->cacheUnit(newUnit);	// kL, try this.
+
 			Log(LOG_INFO) << ". . got back from lookAt() in think ...";
 		}
 		else

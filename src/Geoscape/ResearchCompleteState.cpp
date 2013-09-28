@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "ResearchCompleteState.h"
 #include "../Engine/Game.h"
 #include "../Engine/Palette.h"
@@ -31,6 +32,7 @@
 #include <algorithm>
 #include "../Engine/Options.h"
 
+
 namespace OpenXcom
 {
 /**
@@ -38,15 +40,17 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param research Pointer to the completed research.
  */
-ResearchCompleteState::ResearchCompleteState(Game * game, const RuleResearch * research, const RuleResearch * bonus): State (game), _research(research), _bonus(bonus)
+ResearchCompleteState::ResearchCompleteState(Game* game, const RuleResearch* research, const RuleResearch* bonus)
+	:
+	State(game), _research(research), _bonus(bonus)
 {
 	_screen = false;
 
 	// Create objects
-	_window = new Window(this, 224, 140, 48, 30, POPUP_BOTH);
-	_btnOk = new TextButton(80, 16, 64, 146);
-	_btnReport = new TextButton(80, 16, 176, 146);
-	_txtTitle = new Text(224, 16, 48, 88);
+	_window		= new Window(this, 224, 140, 48, 30, POPUP_BOTH);
+	_btnOk		= new TextButton(80, 16, 64, 146);
+	_btnReport	= new TextButton(80, 16, 176, 146);
+	_txtTitle	= new Text(224, 16, 48, 88);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
@@ -89,7 +93,7 @@ void ResearchCompleteState::init()
  * return to the previous screen
  * @param action Pointer to an action.
  */
-void ResearchCompleteState::btnOkClick(Action *)
+void ResearchCompleteState::btnOkClick(Action* )
 {
 	_game->popState ();
 }
@@ -98,46 +102,53 @@ void ResearchCompleteState::btnOkClick(Action *)
  * open the Ufopaedia to the entry about the Research.
  * @param action Pointer to an action.
  */
-void ResearchCompleteState::btnReportClick(Action *)
+void ResearchCompleteState::btnReportClick(Action* )
 {
 	_game->popState();
+
 	std::string name;
 	std::string bonusName;
 	int palSwitch = 0;
-	if(_bonus)
+
+	if (_bonus)
 	{
 		if (_bonus->getLookup() == "")
 			bonusName = _bonus->getName();
 		else
 			bonusName = _bonus->getLookup();
-		ArticleDefinition *art = _game->getRuleset()->getUfopaediaArticle(bonusName);
-		switch(art->getType())
+
+		ArticleDefinition* art = _game->getRuleset()->getUfopaediaArticle(bonusName);
+		switch (art->getType())
 		{
-		case UFOPAEDIA_TYPE_BASE_FACILITY:
-			palSwitch = 1;
+			case UFOPAEDIA_TYPE_BASE_FACILITY:
+				palSwitch = 1;
 			break;
-		case UFOPAEDIA_TYPE_CRAFT:
-		case UFOPAEDIA_TYPE_TEXTIMAGE:
-		case UFOPAEDIA_TYPE_TEXT:
-		case UFOPAEDIA_TYPE_VEHICLE:
-			palSwitch = 3;
+			case UFOPAEDIA_TYPE_CRAFT:
+			case UFOPAEDIA_TYPE_TEXTIMAGE:
+			case UFOPAEDIA_TYPE_TEXT:
+			case UFOPAEDIA_TYPE_VEHICLE:
+				palSwitch = 3;
 			break;
-		case UFOPAEDIA_TYPE_ITEM:
-		case UFOPAEDIA_TYPE_CRAFT_WEAPON:
-		case UFOPAEDIA_TYPE_ARMOR:
-			palSwitch = 4;
+			case UFOPAEDIA_TYPE_ITEM:
+			case UFOPAEDIA_TYPE_CRAFT_WEAPON:
+			case UFOPAEDIA_TYPE_ARMOR:
+				palSwitch = 4;
 			break;
-		default:
+
+			default:
 			break;
 		}
+
 		Ufopaedia::openArticle(_game, bonusName, 0);
 	}
-	if(_research)
+
+	if (_research)
 	{
 		if (_research->getLookup() == "")
 			name = _research->getName ();
 		else
 			name = _research->getLookup();
+
 		Ufopaedia::openArticle(_game, name, palSwitch);
 	}
 }

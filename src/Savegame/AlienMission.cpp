@@ -429,25 +429,33 @@ void AlienMission::ufoReachedWaypoint(Ufo &ufo, Game &engine, const Globe &globe
 	{
 		// UFO landed.
 
-		if (ufo.getRules()->getType() == "STR_TERROR_SHIP" && _rule.getType() == "STR_ALIEN_TERROR" && ufo.getTrajectory().getZone(ufo.getTrajectoryPoint()) == 0)
+		if (ufo.getRules()->getType() == "STR_TERROR_SHIP"
+			&& _rule.getType() == "STR_ALIEN_TERROR"
+			&& ufo.getTrajectory().getZone(ufo.getTrajectoryPoint()) == 0)
 		{
 			// Specialized: STR_ALIEN_TERROR
 			// Remove UFO, replace with TerrorSite.
 			addScore(ufo.getLongitude(), ufo.getLatitude(), engine);
+
 			ufo.setStatus(Ufo::DESTROYED);
-			TerrorSite *terrorSite = new TerrorSite();
+
+			TerrorSite* terrorSite = new TerrorSite();
 			terrorSite->setLongitude(ufo.getLongitude());
 			terrorSite->setLatitude(ufo.getLatitude());
 			terrorSite->setId(game.getId("STR_TERROR_SITE"));
-			terrorSite->setSecondsRemaining(4 * 3600 + RNG::generate(0, 6) * 3600);
+			terrorSite->setSecondsRemaining(4 * 3600 + RNG::generate(0, 6) * 3600);	// 4 + 0to6 hrs.
 			terrorSite->setAlienRace(_race);
-			const City *city = rules.locateCity(ufo.getLongitude(), ufo.getLatitude());
+
+			const City* city = rules.locateCity(ufo.getLongitude(), ufo.getLatitude());
 			assert(city);
+
 			game.getTerrorSites()->push_back(terrorSite);
+
 			for (std::vector<Target*>::iterator t = ufo.getFollowers()->begin(); t != ufo.getFollowers()->end();)
 			{
-				Craft* c = dynamic_cast<Craft*>(*t);
-				if (c && c->getNumSoldiers() != 0)
+				Craft* c = dynamic_cast<Craft* >(*t);
+				if (c
+					&& c->getNumSoldiers() != 0)
 				{
 					c->setDestination(terrorSite);
 					t = ufo.getFollowers()->begin();

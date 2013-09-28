@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_TRANSFERSSTATE_H
 #define OPENXCOM_TRANSFERSSTATE_H
 
@@ -33,22 +34,26 @@ class TextList;
 /**
  * Transfers window that displays all the items currently in-transit to a base.
  */
-class TransfersState : public State
+class TransfersState
+	:
+	public State
 {
-private:
-	Base *_base;
+	private:
+		Base* _base;
 
-	TextButton *_btnOk;
-	Window *_window;
-	Text *_txtTitle, *_txtItem, *_txtQuantity, *_txtArrivalTime;
-	TextList *_lstTransfers;
-public:
-	/// Creates the Transfers state.
-	TransfersState(Game *game, Base *base);
-	/// Cleans up the Transfers state.
-	~TransfersState();
-	/// Handler for clicking the OK button.
-	void btnOkClick(Action *action);
+		TextButton* _btnOk;
+		Window* _window;
+		Text* _txtTitle, * _txtItem, * _txtQuantity, * _txtArrivalTime;
+		TextList* _lstTransfers;
+
+	public:
+		/// Creates the Transfers state.
+		TransfersState(Game* game, Base* base);
+		/// Cleans up the Transfers state.
+		~TransfersState();
+
+		/// Handler for clicking the OK button.
+		void btnOkClick(Action* action);
 };
 
 }

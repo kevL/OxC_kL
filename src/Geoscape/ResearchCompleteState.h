@@ -16,10 +16,13 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_RESEARCHCOMPLETESTATE
 #define OPENXCOM_RESEARCHCOMPLETESTATE
 
 #include "../Engine/State.h"
+
+
 namespace OpenXcom
 {
 class Game;
@@ -33,21 +36,28 @@ class RuleResearch;
  * Window which inform the player that a research project is finished.
  * Allow him to view information about the project(Ufopaedia).
  */
-class ResearchCompleteState : public State
+class ResearchCompleteState
+	:
+	public State
 {
-	Window *_window;
-	Text *_txtTitle;
-    TextButton *_btnReport, *_btnOk;
-	const RuleResearch * _research, * _bonus;
+	Window* _window;
+	Text* _txtTitle;
+    TextButton* _btnReport, * _btnOk;
+	const RuleResearch* _research, * _bonus;
+
 public:
 	/// Creates the EndResearch state.
-	ResearchCompleteState(Game * game, const RuleResearch * research, const RuleResearch * bonus);
+	ResearchCompleteState(Game* game, const RuleResearch* research, const RuleResearch* bonus);
+	// kL_note: WHERE IS THE DESTRUCTOR????
+
 	/// Updates the palette.
 	void init();
 	/// Handler for clicking the OK button.
-	void btnOkClick(Action *action);
+	void btnOkClick(Action* action);
 	/// Handler for clicking the Report button.
-	void btnReportClick(Action *action);
+	void btnReportClick(Action* action);
 };
+
 }
+
 #endif

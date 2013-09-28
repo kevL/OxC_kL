@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "PurchaseState.h"
 #include <sstream>
 #include <climits>
@@ -44,6 +45,7 @@
 #include "../Menu/ErrorMessageState.h"
 #include "../Ruleset/RuleCraftWeapon.h"
 
+
 namespace OpenXcom
 {
 
@@ -52,22 +54,33 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
  */
-PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base), _crafts(), _items(), _qtys(), _sel(0), _total(0), _pQty(0), _cQty(0), _iQty(0.0f)
+PurchaseState::PurchaseState(Game* game, Base* base)
+	:
+	State(game),
+	_base(base),
+	_crafts(),
+	_items(),
+	_qtys(),
+	_sel(0),
+	_total(0),
+	_pQty(0),
+	_cQty(0),
+	_iQty(0.0f)
 {
 	_changeValueByMouseWheel = Options::getInt("changeValueByMouseWheel");
 	_allowChangeListValuesByMouseWheel = (Options::getBool("allowChangeListValuesByMouseWheel") && _changeValueByMouseWheel);
 
 	// Create objects
-	_window = new Window(this, 320, 200, 0, 0);
-	_btnOk = new TextButton(148, 16, 8, 176);
-	_btnCancel = new TextButton(148, 16, 164, 176);
-	_txtTitle = new Text(310, 16, 5, 8);
-	_txtFunds = new Text(150, 9, 10, 24);
-	_txtPurchases = new Text(150, 9, 160, 24);
-	_txtItem = new Text(140, 9, 10, 32);
-	_txtCost = new Text(102, 9, 152, 32);
-	_txtQuantity = new Text(60, 9, 256, 32);
-	_lstItems = new TextList(287, 128, 8, 40);
+	_window			= new Window(this, 320, 200, 0, 0);
+	_btnOk			= new TextButton(148, 16, 8, 176);
+	_btnCancel		= new TextButton(148, 16, 164, 176);
+	_txtTitle		= new Text(310, 16, 5, 8);
+	_txtFunds		= new Text(150, 9, 10, 24);
+	_txtPurchases	= new Text(150, 9, 160, 24);
+	_txtItem		= new Text(140, 9, 10, 32);
+	_txtCost		= new Text(102, 9, 152, 32);
+	_txtQuantity	= new Text(60, 9, 256, 32);
+	_lstItems		= new TextList(287, 128, 8, 40);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
@@ -91,13 +104,13 @@ PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base),
 
 	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(tr("STR_OK"));
-	_btnOk->onMouseClick((ActionHandler)&PurchaseState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&PurchaseState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
+	_btnOk->onMouseClick((ActionHandler)& PurchaseState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)& PurchaseState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
 
 	_btnCancel->setColor(Palette::blockOffset(13)+10);
 	_btnCancel->setText(tr("STR_CANCEL"));
-	_btnCancel->onMouseClick((ActionHandler)&PurchaseState::btnCancelClick);
-	_btnCancel->onKeyboardPress((ActionHandler)&PurchaseState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnCancel->onMouseClick((ActionHandler)& PurchaseState::btnCancelClick);
+	_btnCancel->onKeyboardPress((ActionHandler)& PurchaseState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
@@ -132,13 +145,13 @@ PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base),
 	_lstItems->setBackground(_window);
 	_lstItems->setMargin(2);
 	_lstItems->setAllowScrollOnArrowButtons(!_allowChangeListValuesByMouseWheel);
-	_lstItems->onLeftArrowPress((ActionHandler)&PurchaseState::lstItemsLeftArrowPress);
-	_lstItems->onLeftArrowRelease((ActionHandler)&PurchaseState::lstItemsLeftArrowRelease);
-	_lstItems->onLeftArrowClick((ActionHandler)&PurchaseState::lstItemsLeftArrowClick);
-	_lstItems->onRightArrowPress((ActionHandler)&PurchaseState::lstItemsRightArrowPress);
-	_lstItems->onRightArrowRelease((ActionHandler)&PurchaseState::lstItemsRightArrowRelease);
-	_lstItems->onRightArrowClick((ActionHandler)&PurchaseState::lstItemsRightArrowClick);
-	_lstItems->onMousePress((ActionHandler)&PurchaseState::lstItemsMousePress);
+	_lstItems->onLeftArrowPress((ActionHandler)& PurchaseState::lstItemsLeftArrowPress);
+	_lstItems->onLeftArrowRelease((ActionHandler)& PurchaseState::lstItemsLeftArrowRelease);
+	_lstItems->onLeftArrowClick((ActionHandler)& PurchaseState::lstItemsLeftArrowClick);
+	_lstItems->onRightArrowPress((ActionHandler)& PurchaseState::lstItemsRightArrowPress);
+	_lstItems->onRightArrowRelease((ActionHandler)& PurchaseState::lstItemsRightArrowRelease);
+	_lstItems->onRightArrowClick((ActionHandler)& PurchaseState::lstItemsRightArrowClick);
+	_lstItems->onMousePress((ActionHandler)& PurchaseState::lstItemsMousePress);
 
 	_qtys.push_back(0);
 	std::wstringstream ss;
@@ -155,10 +168,10 @@ PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base),
 	ss3 << _base->getTotalEngineers();
 	_lstItems->addRow(4, tr("STR_ENGINEER").c_str(), Text::formatFunding(_game->getRuleset()->getEngineerCost() * 2).c_str(), ss3.str().c_str(), L"0");
 
-	const std::vector<std::string> &crafts = _game->getRuleset()->getCraftsList();
+	const std::vector<std::string>& crafts = _game->getRuleset()->getCraftsList();
 	for (std::vector<std::string>::const_iterator i = crafts.begin(); i != crafts.end(); ++i)
 	{
-		RuleCraft *rule = _game->getRuleset()->getCraft(*i);
+		RuleCraft* rule = _game->getRuleset()->getCraft(*i);
 		if (rule->getBuyCost() > 0
 			&& _game->getSavedGame()->isResearched(rule->getRequirements()))
 		{
@@ -166,7 +179,7 @@ PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base),
 			_qtys.push_back(0);
 
 			int crafts = 0;
-			for (std::vector<Craft*>::iterator c = _base->getCrafts()->begin(); c != _base->getCrafts()->end(); ++c)
+			for (std::vector<Craft* >::iterator c = _base->getCrafts()->begin(); c != _base->getCrafts()->end(); ++c)
 			{
 				if ((*c)->getRules()->getType() == *i)
 					crafts++;
@@ -180,15 +193,15 @@ PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base),
 
 	std::vector<std::string> items = _game->getRuleset()->getItemsList();
 
-	const std::vector<std::string> &cweapons = _game->getRuleset()->getCraftWeaponsList();
+	const std::vector<std::string>& cweapons = _game->getRuleset()->getCraftWeaponsList();
 	for (std::vector<std::string>::const_iterator i = cweapons.begin(); i != cweapons.end(); ++i)
 	{
 		// Special handling for treating craft weapons as items
-		RuleCraftWeapon *rule = _game->getRuleset()->getCraftWeapon(*i);
+		RuleCraftWeapon* rule = _game->getRuleset()->getCraftWeapon(*i);
 //kL		RuleItem *launcher = _game->getRuleset()->getItem(rule->getLauncherItem());
 //kL		RuleItem *clip = _game->getRuleset()->getItem(rule->getClipItem());
 
-		RuleItem *launcher = _game->getRuleset()->getItem(rule->getLauncherItem());		// kL
+		RuleItem* launcher = _game->getRuleset()->getItem(rule->getLauncherItem());		// kL
 		if (launcher != 0
 			&& launcher->getBuyCost() > 0
 			&& !isExcluded(launcher->getType()))
@@ -206,13 +219,16 @@ PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base),
 				if (*j == launcher->getType())
 				{
 					items.erase(j);
+
 					break;
 				}
 			}
 		}
 
-		RuleItem *clip = _game->getRuleset()->getItem(rule->getClipItem());		// kL
-		if (clip != 0 && clip->getBuyCost() > 0 && !isExcluded(clip->getType()))
+		RuleItem* clip = _game->getRuleset()->getItem(rule->getClipItem());		// kL
+		if (clip != 0
+			&& clip->getBuyCost() > 0
+			&& !isExcluded(clip->getType()))
 		{
 			_items.push_back(clip->getType());
 			_qtys.push_back(0);
@@ -227,6 +243,7 @@ PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base),
 				if (*j == clip->getType())
 				{
 					items.erase(j);
+
 					break;
 				}
 			}
@@ -235,9 +252,10 @@ PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base),
 
 	for (std::vector<std::string>::const_iterator i = items.begin(); i != items.end(); ++i)
 	{
-		RuleItem *rule = _game->getRuleset()->getItem(*i);
+		RuleItem* rule = _game->getRuleset()->getItem(*i);
 
-		if (rule->getBuyCost() > 0 && !isExcluded(*i))
+		if (rule->getBuyCost() > 0
+			&& !isExcluded(*i))
 		{
 			_items.push_back(*i);
 			_qtys.push_back(0);
@@ -245,13 +263,35 @@ PurchaseState::PurchaseState(Game *game, Base *base) : State(game), _base(base),
 			std::wstringstream ss5;
 			ss5 << _base->getItems()->getItem(*i);	// TODO: add items from transfers & crafts (kL)
 
-			// kL_begin:
-/*			int tQty = _base->getItems()->getItem(*i);
 
+
+
+
+
+//		ss3 << (*i)->getName(_game->getLanguage());
+
+	/* for (std::vector<Transfer* >::iterator i = _base->getTransfers()->begin(); i != _base->getTransfers()->end(); ++i)
+	{
+		std::wstringstream ss, ss2;
+		ss << (*i)->getQuantity();
+		ss2 << (*i)->getHours();
+		_lstTransfers->addRow(3, (*i)->getName(_game->getLanguage()).c_str(), ss.str().c_str(), ss2.str().c_str());
+	} */
+
+			// kL_begin:
+/*			std::wstring item = tr(*i);
+			int tQty = _base->getItems()->getItem(*i);
+			for (std::vector<Transfer* >::const_iterator transit = _base->getTransfers()->->begin(); transit != _base->getTransfers()->end(); ++transit)
+			{
+				std::wstring itemtrans = tr(*transit);
+				
+				if (item == tr(*transit))
+				{}
+			} */
 //			std::vector<std::string> transit = _game->getRuleset()->getItemsList();
 //			for (std::vector<std::string>::const_iterator j = transit.begin(); j != transit.end(); ++j)
 //			std::vector<Transfer*>::iterator transit = _base->getTransfers();
-			for (std::vector<Transfer*>::const_iterator transit = _base->getTransfers()->begin(); transit != _base->getTransfers()->end(); ++transit)
+/*			for (std::vector<Transfer* >::const_iterator transit = _base->getTransfers()->begin(); transit != _base->getTransfers()->end(); ++transit)
 			{
 				if (_game->getRuleset()->getItem(*i) == _base->getTransfers())
 				{
@@ -339,6 +379,7 @@ bool PurchaseState::isExcluded(std::string item)
 		if (item == *s)
 		{
 			exclude = true;
+
 			break;
 		}
 	}
@@ -350,7 +391,7 @@ bool PurchaseState::isExcluded(std::string item)
  * Purchases the selected items.
  * @param action Pointer to an action.
  */
-void PurchaseState::btnOkClick(Action *)
+void PurchaseState::btnOkClick(Action* )
 {
 	_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds() - _total);
 
@@ -362,7 +403,7 @@ void PurchaseState::btnOkClick(Action *)
 			{
 				for (int s = 0; s < _qtys[i]; s++)
 				{
-					Transfer *t = new Transfer(_game->getRuleset()->getPersonnelTime());
+					Transfer* t = new Transfer(_game->getRuleset()->getPersonnelTime());
 					t->setSoldier(new Soldier(_game->getRuleset()->getSoldier("XCOM"), _game->getRuleset()->getArmor("STR_NONE_UC"), &_game->getRuleset()->getPools(), _game->getSavedGame()->getId("STR_SOLDIER")));
 
 					_base->getTransfers()->push_back(t);
@@ -370,14 +411,14 @@ void PurchaseState::btnOkClick(Action *)
 			}
 			else if (i == 1) // Buy scientists
 			{
-				Transfer *t = new Transfer(_game->getRuleset()->getPersonnelTime());
+				Transfer* t = new Transfer(_game->getRuleset()->getPersonnelTime());
 				t->setScientists(_qtys[i]);
 
 				_base->getTransfers()->push_back(t);
 			}
 			else if (i == 2) // Buy engineers
 			{
-				Transfer *t = new Transfer(_game->getRuleset()->getPersonnelTime());
+				Transfer* t = new Transfer(_game->getRuleset()->getPersonnelTime());
 				t->setEngineers(_qtys[i]);
 
 				_base->getTransfers()->push_back(t);
@@ -386,9 +427,9 @@ void PurchaseState::btnOkClick(Action *)
 			{
 				for (int c = 0; c < _qtys[i]; c++)
 				{
-					RuleCraft *rc = _game->getRuleset()->getCraft(_crafts[i - 3]);
-					Transfer *t = new Transfer(rc->getTransferTime());
-					Craft *craft = new Craft(rc, _base, _game->getSavedGame()->getId(_crafts[i - 3]));
+					RuleCraft* rc = _game->getRuleset()->getCraft(_crafts[i - 3]);
+					Transfer* t = new Transfer(rc->getTransferTime());
+					Craft* craft = new Craft(rc, _base, _game->getSavedGame()->getId(_crafts[i - 3]));
 					craft->setStatus("STR_REFUELLING");
 					t->setCraft(craft);
 
@@ -397,8 +438,8 @@ void PurchaseState::btnOkClick(Action *)
 			}
 			else // Buy items
 			{
-				RuleItem *ri = _game->getRuleset()->getItem(_items[i - 3 - _crafts.size()]);
-				Transfer *t = new Transfer(ri->getTransferTime());
+				RuleItem* ri = _game->getRuleset()->getItem(_items[i - 3 - _crafts.size()]);
+				Transfer* t = new Transfer(ri->getTransferTime());
 				t->setItems(_items[i - 3 - _crafts.size()], _qtys[i]);
 
 				_base->getTransfers()->push_back(t);
@@ -413,7 +454,7 @@ void PurchaseState::btnOkClick(Action *)
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void PurchaseState::btnCancelClick(Action *)
+void PurchaseState::btnCancelClick(Action* )
 {
 	_game->popState();
 }
@@ -422,7 +463,7 @@ void PurchaseState::btnCancelClick(Action *)
  * Starts increasing the item.
  * @param action Pointer to an action.
  */
-void PurchaseState::lstItemsLeftArrowPress(Action *action)
+void PurchaseState::lstItemsLeftArrowPress(Action* action)
 {
 	_sel = _lstItems->getSelectedRow();
 
@@ -437,7 +478,7 @@ void PurchaseState::lstItemsLeftArrowPress(Action *action)
  * Stops increasing the item.
  * @param action Pointer to an action.
  */
-void PurchaseState::lstItemsLeftArrowRelease(Action *action)
+void PurchaseState::lstItemsLeftArrowRelease(Action* action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
@@ -450,7 +491,7 @@ void PurchaseState::lstItemsLeftArrowRelease(Action *action)
  * to max on right-click.
  * @param action Pointer to an action.
  */
-void PurchaseState::lstItemsLeftArrowClick(Action *action)
+void PurchaseState::lstItemsLeftArrowClick(Action* action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 		increaseByValue(INT_MAX);
@@ -468,7 +509,7 @@ void PurchaseState::lstItemsLeftArrowClick(Action *action)
  * Starts decreasing the item.
  * @param action Pointer to an action.
  */
-void PurchaseState::lstItemsRightArrowPress(Action *action)
+void PurchaseState::lstItemsRightArrowPress(Action* action)
 {
 	_sel = _lstItems->getSelectedRow();
 
@@ -483,7 +524,7 @@ void PurchaseState::lstItemsRightArrowPress(Action *action)
  * Stops decreasing the item.
  * @param action Pointer to an action.
  */
-void PurchaseState::lstItemsRightArrowRelease(Action *action)
+void PurchaseState::lstItemsRightArrowRelease(Action* action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
@@ -496,7 +537,7 @@ void PurchaseState::lstItemsRightArrowRelease(Action *action)
  * to 0 on right-click.
  * @param action Pointer to an action.
  */
-void PurchaseState::lstItemsRightArrowClick(Action *action)
+void PurchaseState::lstItemsRightArrowClick(Action* action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 		decreaseByValue(INT_MAX);
@@ -514,7 +555,7 @@ void PurchaseState::lstItemsRightArrowClick(Action *action)
  * Handles the mouse-wheels on the arrow-buttons.
  * @param action Pointer to an action.
  */
-void PurchaseState::lstItemsMousePress(Action *action)
+void PurchaseState::lstItemsMousePress(Action* action)
 {
 	_sel = _lstItems->getSelectedRow();
 
@@ -596,17 +637,21 @@ void PurchaseState::increaseByValue(int change)
 		_timerInc->stop();
 		_game->pushState(new ErrorMessageState(_game, "STR_NOT_ENOUGH_MONEY", Palette::blockOffset(15)+1, "BACK13.SCR", 0));
 	}
-	else if (_sel <= 2 && _pQty + 1 > _base->getAvailableQuarters() - _base->getUsedQuarters())
+	else if (_sel <= 2
+		&& _pQty + 1 > _base->getAvailableQuarters() - _base->getUsedQuarters())
 	{
 		_timerInc->stop();
 		_game->pushState(new ErrorMessageState(_game, "STR_NOT_ENOUGH_LIVING_SPACE", Palette::blockOffset(15)+1, "BACK13.SCR", 0));
 	}
-	else if (_sel >= 3 && _sel < 3 + _crafts.size() && _cQty + 1 > _base->getAvailableHangars() - _base->getUsedHangars())
+	else if (_sel >= 3
+		&& _sel < 3 + _crafts.size()
+		&& _cQty + 1 > _base->getAvailableHangars() - _base->getUsedHangars())
 	{
 		_timerInc->stop();
 		_game->pushState(new ErrorMessageState(_game, "STR_NO_FREE_HANGARS_FOR_PURCHASE", Palette::blockOffset(15)+1, "BACK13.SCR", 0));
 	}
-	else if (_sel >= 3 + _crafts.size() && _iQty + _game->getRuleset()->getItem(_items[_sel - 3 - _crafts.size()])->getSize() > _base->getAvailableStores() - _base->getUsedStores())
+	else if (_sel >= 3 + _crafts.size()
+		&& _iQty + _game->getRuleset()->getItem(_items[_sel - 3 - _crafts.size()])->getSize() > _base->getAvailableStores() - _base->getUsedStores())
 	{
 		_timerInc->stop();
 		_game->pushState(new ErrorMessageState(_game, "STR_NOT_ENOUGH_STORE_SPACE", Palette::blockOffset(15)+1, "BACK13.SCR", 0));

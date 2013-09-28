@@ -16,9 +16,11 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "TerrorSite.h"
 #include <sstream>
 #include "../Engine/Language.h"
+
 
 namespace OpenXcom
 {
@@ -26,7 +28,12 @@ namespace OpenXcom
 /**
  * Initializes a terror site.
  */
-TerrorSite::TerrorSite() : Target(), _id(0), _secondsRemaining(0), _inBattlescape(false)
+TerrorSite::TerrorSite()
+	:
+	Target(),
+	_id(0),
+	_secondsRemaining(0),
+	_inBattlescape(false)
 {
 }
 
@@ -41,13 +48,14 @@ TerrorSite::~TerrorSite()
  * Loads the terror site from a YAML file.
  * @param node YAML node.
  */
-void TerrorSite::load(const YAML::Node &node)
+void TerrorSite::load(const YAML::Node& node)
 {
 	Target::load(node);
-	_id = node["id"].as<int>(_id);
-	_secondsRemaining = node["secondsRemaining"].as<int>(_secondsRemaining);
-	_race = node["race"].as<std::string>(_race);
-	_inBattlescape = node["inBattlescape"].as<bool>(_inBattlescape);
+
+	_id					= node["id"].as<int>(_id);
+	_secondsRemaining	= node["secondsRemaining"].as<int>(_secondsRemaining);
+	_race				= node["race"].as<std::string>(_race);
+	_inBattlescape		= node["inBattlescape"].as<bool>(_inBattlescape);
 }
 
 /**
@@ -57,12 +65,14 @@ void TerrorSite::load(const YAML::Node &node)
 YAML::Node TerrorSite::save() const
 {
 	YAML::Node node = Target::save();
-	node["id"] = _id;
+
+	node["id"]						= _id;
 	if (_secondsRemaining)
-		node["secondsRemaining"] = _secondsRemaining;
-	node["race"] = _race;
+		node["secondsRemaining"]	= _secondsRemaining;
+	node["race"]					= _race;
 	if (_inBattlescape)
-		node["inBattlescape"] = _inBattlescape;
+		node["inBattlescape"]		= _inBattlescape;
+
 	return node;
 }
 
@@ -73,8 +83,10 @@ YAML::Node TerrorSite::save() const
 YAML::Node TerrorSite::saveId() const
 {
 	YAML::Node node = Target::saveId();
-	node["type"] = "STR_TERROR_SITE";
-	node["id"] = _id;
+
+	node["type"]	= "STR_TERROR_SITE";
+	node["id"]		= _id;
+
 	return node;
 }
 
@@ -101,10 +113,11 @@ void TerrorSite::setId(int id)
  * @param lang Language to get strings from.
  * @return Full name.
  */
-std::wstring TerrorSite::getName(Language *lang) const
+std::wstring TerrorSite::getName(Language* lang) const
 {
 	std::wstringstream name;
 	name << lang->getString("STR_TERROR_SITE_UC") << _id;
+
 	return name.str();
 }
 
@@ -139,7 +152,7 @@ std::string TerrorSite::getAlienRace() const
  * Changes the alien race currently residing in the terror site.
  * @param race Alien race.
  */
-void TerrorSite::setAlienRace(const std::string &race)
+void TerrorSite::setAlienRace(const std::string& race)
 {
 	_race = race;
 }
