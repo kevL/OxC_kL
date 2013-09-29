@@ -39,6 +39,7 @@
 #endif //MINGW
 
 #include "Language.h"
+
 #ifdef __MORPHOS__
 #include <ppcinline/exec.h>
 #endif
@@ -46,7 +47,6 @@
 
 namespace OpenXcom
 {
-
 
 namespace
 {
@@ -61,28 +61,7 @@ inline int GetPitch(int bpp, int width)
 {
 	return ((bpp/8) * width + 15) & ~0xF;
 }
-
-<<<<<<< HEAD
-#ifdef __MORPHOS__
-#include <ppcinline/exec.h>
-#endif 
  
-Surface::Surface(int width, int height, int x, int y, int bpp)
-	:
-	_x(x),
-	_y(y),
-	_visible(true),
-	_hidden(false),
-	_redraw(false),
-	_originalColors(0),
-	_misalignedPixelBuffer(0),
-	_alignedBuffer(0)
-{
-//	Log(LOG_INFO) << "Create Surface 1";
-
-	//_surface = SDL_CreateRGBSurface(SDL_SWSURFACE, width, height, 8, 0, 0, 0, 0);
-	int pitch = (bpp / 8) * ((width + 15)& ~0xF);
-=======
 /**
  * Helper function creating aligned buffer
  * @param bpp bytes per pixel
@@ -95,7 +74,6 @@ inline void* NewAligned(int bpp, int width, int height)
 	const int pitch = GetPitch(bpp, width);
 	const int total = pitch * height;
 	void* buffer = 0;
->>>>>>> master
 
 #ifndef _WIN32
 	#ifdef __MORPHOS__
@@ -113,19 +91,13 @@ inline void* NewAligned(int bpp, int width, int height)
 		throw Exception(strerror(rc));
 	}
 	#endif
-<<<<<<< HEAD
-=======
-
->>>>>>> master
 #else
-
 	// of course Windows has to be difficult about this!
 	buffer = _aligned_malloc(total, 16);
 	if (!buffer)
 	{
 		throw Exception("Where's the memory, Lebowski?");
 	}
-
 #endif
 
 	memset(buffer, 0, total);
@@ -188,12 +160,9 @@ Surface::Surface(int width, int height, int x, int y, int bpp) : _x(x), _y(y), _
  */
 Surface::Surface(const Surface& other)
 {
-<<<<<<< HEAD
 //	Log(LOG_INFO) << "Create Surface 2";
 
-	_surface = SDL_ConvertSurface(other._surface, other._surface->format, other._surface->flags);
-=======
-	//if is native OpenXcom aligned surface
+	// if is native OpenXcom aligned surface
 	if(other._alignedBuffer)
 	{
 		Uint8 bpp = other._surface->format->BitsPerPixel;
@@ -203,8 +172,8 @@ Surface::Surface(const Surface& other)
 		_alignedBuffer = NewAligned(bpp, width, height);
 		_surface = SDL_CreateRGBSurfaceFrom(_alignedBuffer, width, height, bpp, pitch, 0, 0, 0, 0);
 		SDL_SetColorKey(_surface, SDL_SRCCOLORKEY, 0);
-		//cant call `SetPalette` because its vitual function and it dont work correctly in constructor
-		//additionally it use original colors, not temporarily ones.
+		// can't call 'SetPalette' because it's a virtual function and it don't work correctly in constructor
+		// additionally it uses original colors, not temporarily ones.
 		SDL_SetColors(_surface, other._originalColors ? other._originalColors : other.getPalette(), 0, 255);
 		memcpy(_alignedBuffer, other._alignedBuffer, height*pitch);
 	}
@@ -218,7 +187,7 @@ Surface::Surface(const Surface& other)
 	{
 		throw Exception(SDL_GetError());
 	}
->>>>>>> master
+
 	_x = other._x;
 	_y = other._y;
 	_crop.w = other._crop.w;
@@ -238,18 +207,10 @@ Surface::Surface(const Surface& other)
  */
 Surface::~Surface()
 {
-<<<<<<< HEAD
 //	Log(LOG_INFO) << "Delete Surface";
-	//if (_misalignedPixelBuffer) _surface->pixels = _misalignedPixelBuffer;
-#ifdef _WIN32
-	if (_alignedBuffer) _aligned_free(_alignedBuffer);
-#else
-	if (_alignedBuffer) free(_alignedBuffer);
-#endif
 
-=======
 	DeleteAligned(_alignedBuffer);
->>>>>>> master
+
 	SDL_FreeSurface(_surface);
 }
 
@@ -299,17 +260,8 @@ void Surface::loadScr(const std::string &filename)
 void Surface::loadImage(const std::string &filename)
 {
 	// Destroy current surface (will be replaced)
-<<<<<<< HEAD
-#ifdef _WIN32
-	if (_alignedBuffer) _aligned_free(_alignedBuffer);
-#else
-	if (_alignedBuffer) free(_alignedBuffer); 
-#endif
-
-	_alignedBuffer = 0;
-=======
 	DeleteAligned(_alignedBuffer);
->>>>>>> master
+
 	SDL_FreeSurface(_surface);
 	_alignedBuffer = 0;
 	_surface = 0;
@@ -353,17 +305,20 @@ void Surface::loadSpk(const std::string& filename)
 
 	while (imgFile.read((char*)& flag, sizeof(flag)))
 	{
-	#if SDL_BYTEORDER == SDL_BIG_ENDIAN
-		flag = SDL_Swap16( flag );
-	#endif			
+		flag = SDL_SwapLE16(flag);
 	
 		if (flag == 65535)
 		{
+<<<<<<< HEAD
 			imgFile.read((char*)& flag, sizeof(flag));
 			
 	#if SDL_BYTEORDER == SDL_BIG_ENDIAN
 		flag = SDL_Swap16( flag );
 	#endif			
+=======
+			imgFile.read((char*)&flag, sizeof(flag));
+			flag = SDL_SwapLE16(flag);
+>>>>>>> master
 			
 			for (int i = 0; i < flag * 2; ++i)
 			{
@@ -372,11 +327,16 @@ void Surface::loadSpk(const std::string& filename)
 		}
 		else if (flag == 65534)
 		{
+<<<<<<< HEAD
 			imgFile.read((char*)& flag, sizeof(flag));
 			
 	#if SDL_BYTEORDER == SDL_BIG_ENDIAN
 		flag = SDL_Swap16( flag );
 	#endif			
+=======
+			imgFile.read((char*)&flag, sizeof(flag));
+			flag = SDL_SwapLE16(flag);
+>>>>>>> master
 			
 			for (int i = 0; i < flag * 2; ++i)
 			{

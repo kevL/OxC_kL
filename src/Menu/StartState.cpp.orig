@@ -432,6 +432,7 @@ void StartState::think()
 
 	switch (_load)
 	{
+<<<<<<< HEAD
 		case LOADING_STARTED:
 			try
 			{
@@ -448,6 +449,52 @@ void StartState::think()
 				{
 					throw Exception("No languages available");
 				}
+=======
+	case LOADING_STARTED:
+		try
+		{
+			Log(LOG_INFO) << "Loading ruleset...";
+			_game->loadRuleset();
+			Log(LOG_INFO) << "Ruleset loaded successfully.";
+			Log(LOG_INFO) << "Loading resources...";
+			_game->setResourcePack(new XcomResourcePack(_game->getRuleset()->getExtraSprites(), _game->getRuleset()->getExtraSounds()));
+			Log(LOG_INFO) << "Resources loaded successfully.";
+			Log(LOG_INFO) << "Loading language...";
+			std::string defaultLang = "en-US";
+			if (Options::getString("language").empty())
+			{
+				_game->loadLanguage(defaultLang);
+			}
+			else
+			{
+				try
+				{
+					_game->loadLanguage(Options::getString("language"));
+				}
+				catch (std::exception)
+				{
+					_game->loadLanguage(defaultLang);
+				}
+			}
+			Log(LOG_INFO) << "Language loaded successfully.";
+			_load = LOADING_SUCCESSFUL;
+
+			// loading done? let's play intro!
+			std::string introFile = CrossPlatform::getDataFile("UFOINTRO/UFOINT.FLI");
+			std::string introSoundFileDOS = CrossPlatform::getDataFile("SOUND/INTRO.CAT");
+			std::string introSoundFileWin = CrossPlatform::getDataFile("SOUND/SAMPLE3.CAT");
+			if (Options::getBool("playIntro") && CrossPlatform::fileExists(introFile) && (CrossPlatform::fileExists(introSoundFileDOS) || CrossPlatform::fileExists(introSoundFileWin)))
+			{
+				audioSequence = new AudioSequence(_game->getResourcePack());
+				Flc::flc.realscreen = _game->getScreen();
+				Flc::FlcInit(introFile.c_str());
+				Flc::flc.dx = (Options::getInt("baseXResolution") - 320) / 2;
+				Flc::flc.dy = (Options::getInt("baseYResolution") - 200) / 2;
+				Flc::flc.loop = 0; // just the one time, please
+				Flc::FlcMain(&audioHandler);
+				Flc::FlcDeInit();
+				delete audioSequence;
+>>>>>>> master
 
 				_load = LOADING_SUCCESSFUL;
 
@@ -528,23 +575,19 @@ void StartState::think()
 		case LOADING_NONE:
 			_load = LOADING_STARTED;
 		break;
+<<<<<<< HEAD
 		case LOADING_SUCCESSFUL:
 			Log(LOG_INFO) << "OpenXcom started successfully!";
 
 			if (Options::getString("language").empty())
 			{
-<<<<<<< HEAD
 				_game->setState(new LanguageState(_game));
-=======
-				_game->loadLng(Options::getString("language"));
-				_game->setState(new MainMenuState(_game));
->>>>>>> master
 			}
 			else
 			{
 				try
 				{
-					_game->loadLanguage(Options::getString("language"));
+					_game->loadLng(Options::getString("language"));
 					_game->setState(new MainMenuState(_game));
 				}
 				catch (Exception)
@@ -552,6 +595,11 @@ void StartState::think()
 					_game->setState(new LanguageState(_game));
 				}
 			}
+=======
+	case LOADING_SUCCESSFUL:
+		Log(LOG_INFO) << "OpenXcom started successfully!";
+		_game->setState(new MainMenuState(_game));
+>>>>>>> master
 		break;
 		default:
 		break;

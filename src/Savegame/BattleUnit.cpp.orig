@@ -30,7 +30,6 @@
 #include "../Engine/Logger.h"
 #include "../Battlescape/Pathfinding.h"
 #include "../Battlescape/BattleAIState.h"
-#include "../Battlescape/AggroBAIState.h"
 #include "Soldier.h"
 #include "../Ruleset/Armor.h"
 #include "../Ruleset/Unit.h"
@@ -65,7 +64,6 @@ BattleUnit::BattleUnit(Soldier* soldier, UnitFaction faction)
 	_verticalDirection(0),
 	_status(STATUS_STANDING),
 	_walkPhase(0),
-//	_walkPhase(-1),		// kL
 	_fallPhase(0),
 	_spinPhase(-1),		// kL
 	_kneeled(false),
@@ -112,9 +110,9 @@ BattleUnit::BattleUnit(Soldier* soldier, UnitFaction faction)
 	_loftempsSet = _armor->getLoftempsSet();
 	_gender = soldier->getGender();
 	_faceDirection = -1;
+//	_spinPhase = -1;	// kL
 
 	int rankbonus = 0;
-
 	switch (soldier->getRank())
 	{
 		case RANK_SERGEANT:		rankbonus =	1;	break;
@@ -197,7 +195,7 @@ BattleUnit::BattleUnit(Unit* unit, UnitFaction faction, int id, Armor* armor, in
 	_turretType(-1),
 	_hidingForTurn(false)
 {
-//	Log(LOG_INFO) << "Create BattleUnit";
+	Log(LOG_INFO) << "Create BattleUnit";
 
 	_type = unit->getType();
 	_rank = unit->getRank();
@@ -250,7 +248,7 @@ BattleUnit::BattleUnit(Unit* unit, UnitFaction faction, int id, Armor* armor, in
  */
 BattleUnit::~BattleUnit()
 {
-//	Log(LOG_INFO) << "Delete BattleUnit";
+	Log(LOG_INFO) << "Delete BattleUnit";
 
 	for (int i = 0; i < 5; ++i)
 	{
@@ -266,7 +264,6 @@ BattleUnit::~BattleUnit()
  */
 void BattleUnit::load(const YAML::Node &node)
 {
-<<<<<<< HEAD
 	_id					= node["id"].as<int>(_id);
 	_faction			= _originalFaction = (UnitFaction)node["faction"].as<int>(_faction);
 	_status				= (UnitStatus)node["status"].as<int>(_status);
@@ -297,49 +294,13 @@ void BattleUnit::load(const YAML::Node &node)
 	_kills				= node["kills"].as<int>(_kills);
 	_dontReselect		= node["dontReselect"].as<bool>(_dontReselect);
 	_charging			= 0;
+	_specab				= (SpecialAbility)node["specab"].as<int>(_specab);
+	_spawnUnit			= node["spawnUnit"].as<std::string>(_spawnUnit);
 
 	for (int i = 0; i < 5; i++)
 		_currentArmor[i]	= node["armor"][i].as<int>(_currentArmor[i]);
 	for (int i = 0; i < 6; i++)
 		_fatalWounds[i]		= node["fatalWounds"][i].as<int>(_fatalWounds[i]);
-=======
-	_id = node["id"].as<int>(_id);
-	_faction = _originalFaction = (UnitFaction)node["faction"].as<int>(_faction);
-	_status = (UnitStatus)node["status"].as<int>(_status);
-	_pos = node["position"].as<Position>(_pos);
-	_direction = _toDirection = node["direction"].as<int>(_direction);
-	_directionTurret = _toDirectionTurret = node["directionTurret"].as<int>(_directionTurret);
-	_tu = node["tu"].as<int>(_tu);
-	_health = node["health"].as<int>(_health);
-	_stunlevel = node["stunlevel"].as<int>(_stunlevel);
-	_energy = node["energy"].as<int>(_energy);
-	_morale = node["morale"].as<int>(_morale);
-	_kneeled = node["kneeled"].as<bool>(_kneeled);
-	_floating = node["floating"].as<bool>(_floating);
-	for (int i=0; i < 5; i++)
-		_currentArmor[i] = node["armor"][i].as<int>(_currentArmor[i]);
-	for (int i=0; i < 6; i++)
-		_fatalWounds[i] = node["fatalWounds"][i].as<int>(_fatalWounds[i]);
-	_fire = node["fire"].as<int>(_fire);
-	_expBravery = node["expBravery"].as<int>(_expBravery);
-	_expReactions = node["expReactions"].as<int>(_expReactions);
-	_expFiring = node["expFiring"].as<int>(_expFiring);
-	_expThrowing = node["expThrowing"].as<int>(_expThrowing);
-	_expPsiSkill = node["expPsiSkill"].as<int>(_expPsiSkill);
-	_expMelee = node["expMelee"].as<int>(_expMelee);
-	_turretType = node["turretType"].as<int>(_turretType);
-	_visible = node["visible"].as<bool>(_visible);
-	_turnsExposed = node["turnsExposed"].as<int>(_turnsExposed);
-	_killedBy = (UnitFaction)node["killedBy"].as<int>(_killedBy);
-	_moraleRestored = node["moraleRestored"].as<int>(_moraleRestored);
-	_rankInt = node["rankInt"].as<int>(_rankInt);
-	_originalFaction = (UnitFaction)node["originalFaction"].as<int>(_originalFaction);
-	_kills = node["kills"].as<int>(_kills);
-	_dontReselect = node["dontReselect"].as<bool>(_dontReselect);
-	_charging = 0;
-	_specab = (SpecialAbility)node["specab"].as<int>(_specab);
-	_spawnUnit = node["spawnUnit"].as<std::string>(_spawnUnit);
->>>>>>> master
 }
 
 /**
@@ -391,14 +352,10 @@ YAML::Node BattleUnit::save() const
 	if (_kills)
 		node["kills"]			= _kills;
 	if (_faction == FACTION_PLAYER && _dontReselect)
-<<<<<<< HEAD
 		node["dontReselect"]	= _dontReselect;
-=======
-		node["dontReselect"] = _dontReselect;
 	node["specab"] = (int)_specab;
 	if (!_spawnUnit.empty())
 		node["spawnUnit"] = _spawnUnit;
->>>>>>> master
 
 	return node;
 }
@@ -533,7 +490,7 @@ UnitStatus BattleUnit::getStatus() const
  */
 void BattleUnit::startWalking(int direction, const Position& destination, Tile* tileBelow, bool cache)
 {
-	Log(LOG_INFO) << "BattleUnit::startWalking()";		// kL
+//	Log(LOG_INFO) << "BattleUnit::startWalking()";		// kL
 
 	_walkPhase = 0;
 	_destination = destination;
@@ -559,7 +516,7 @@ void BattleUnit::startWalking(int direction, const Position& destination, Tile* 
 
 //kL	_kneeled = false;
 
-	if ((_tile->hasNoFloor(tileBelow) || direction >= Pathfinding::DIR_UP))
+	if (_tile->hasNoFloor(tileBelow) || direction >= Pathfinding::DIR_UP)
 	{
 		_status = STATUS_FLYING;
 		_floating = true;
@@ -576,7 +533,7 @@ void BattleUnit::startWalking(int direction, const Position& destination, Tile* 
 void BattleUnit::keepWalking(Tile* tileBelow, bool cache)
 {
 	_walkPhase++;
-	Log(LOG_INFO) << "BattleUnit::keepWalking() _walkPhase = " << _walkPhase;		// kL
+//	Log(LOG_INFO) << "BattleUnit::keepWalking() _walkPhase = " << _walkPhase;		// kL
 
 
 	int middle, end;
@@ -615,7 +572,7 @@ void BattleUnit::keepWalking(Tile* tileBelow, bool cache)
 
 	if (_walkPhase >= end)
 	{
-		Log(LOG_INFO) << ". STATUS_STANDING end";		// kL
+//		Log(LOG_INFO) << ". STATUS_STANDING end";		// kL
 
 		// we officially reached our destination tile
 		_status = STATUS_STANDING;
@@ -676,9 +633,13 @@ int BattleUnit::getDiagonalWalkingPhase() const
  * Look at a point.
  * @param point
  */
-void BattleUnit::lookAt(const Position &point, bool turret)
+void BattleUnit::lookAt(const Position& point, bool turret)
 {
+<<<<<<< HEAD
 	int dir = getDirectionTo(point);
+=======
+	int dir = directionTo (point);
+>>>>>>> master
 
 	if (turret)
 	{
@@ -696,6 +657,7 @@ void BattleUnit::lookAt(const Position &point, bool turret)
 			&& _toDirection > -1)
 		{
 			_status = STATUS_TURNING;
+			// kL_note: what about Forcing the faced direction instantly?
 		}
 	}
 }
@@ -706,6 +668,8 @@ void BattleUnit::lookAt(const Position &point, bool turret)
  */
 void BattleUnit::lookAt(int direction, bool force)
 {
+	Log(LOG_INFO) << "BattleUnit::lookAt() - " << this->getId() << " - force = " << force;
+
 	if (!force)
 	{
 		if (direction < 0 || direction > 7)
@@ -716,11 +680,16 @@ void BattleUnit::lookAt(int direction, bool force)
 		{
 			_status = STATUS_TURNING;
 		}
+//		else
+//			_status = STATUS_STANDING;	// kL
 	}
-	else
+	else // force
 	{
 		_toDirection = direction;
 		_direction = direction;
+
+//		Log(LOG_INFO) << "BattleUnit::lookAt() - " << this->getId() << " - force Status_Standing";
+//		_status = STATUS_STANDING;	// kL. idk... seems to screw up UnitDieBDeath sequence
 	}
 }
 
@@ -807,17 +776,11 @@ void BattleUnit::turn(bool turret)
 			}
 		}
 
-		if (_direction < 0)
-			_direction = 7;
+		if		(_direction < 0) _direction = 7;
+		else if (_direction > 7) _direction = 0;
 
-		if (_direction > 7)
-			_direction = 0;
-
-		if (_directionTurret < 0)
-			_directionTurret = 7;
-
-		if (_directionTurret > 7)
-			_directionTurret = 0;
+		if		(_directionTurret < 0) _directionTurret = 7;
+		else if (_directionTurret > 7) _directionTurret = 0;
 
 		if (_visible || _faction == FACTION_PLAYER)
 			_cacheInvalid = true;
@@ -827,14 +790,13 @@ void BattleUnit::turn(bool turret)
 	{
 		 if (_toDirectionTurret == _directionTurret)
 		 {
-			// we officially reached our destination
-			_status = STATUS_STANDING;
+			_status = STATUS_STANDING; // we officially reached our destination
 		 }
 	}
 	else if (_toDirection == _direction || _status == STATUS_UNCONSCIOUS)
 	{
-		// we officially reached our destination
-		_status = STATUS_STANDING;
+		Log(LOG_INFO) << "BattleUnit::turn() " << getId() << " - STATUS_STANDING (turn has ended)";
+		_status = STATUS_STANDING; // we officially reached our destination
 	}
 }
 
@@ -901,7 +863,7 @@ Surface *BattleUnit::getCache(bool *invalid, int part) const
  */
 void BattleUnit::kneel(bool kneeled)
 {
-	Log(LOG_INFO) << "BattleUnit::kneel()" ;	// kL
+//	Log(LOG_INFO) << "BattleUnit::kneel()" ;	// kL
 //	_status = STATUS_KNEELING;		// kL
 
 	_kneeled = kneeled;
@@ -942,18 +904,32 @@ void BattleUnit::aim(bool aiming)
 }
 
 /**
+<<<<<<< HEAD
  * Calculates the Map facing direction from a position to a point.
  * @return direction to a point (0-7)
  */
-int BattleUnit::getDirectionTo(const Position &point) const
+int BattleUnit::getDirectionTo(const Position& point) const
+=======
+ * Returns the direction from this unit to a given point.
+ * @return direction.
+ */
+int BattleUnit::directionTo(const Position &point) const
+>>>>>>> master
 {
 	double ox = point.x - _pos.x;
 	double oy = point.y - _pos.y;
 	double angle = atan2(ox, -oy);
-	// divide the pie in 4 angles each at 1/8th before each quarter
-	double pie[4] = { (M_PI_4 * 4.0) - M_PI_4 / 2.0, (M_PI_4 * 3.0) - M_PI_4 / 2.0, (M_PI_4 * 2.0) - M_PI_4 / 2.0, (M_PI_4 * 1.0) - M_PI_4 / 2.0 };
-	int dir = 0;
 
+	// divide the pie in 4 angles each at 1/8th before each quarter
+	double pie[4] =
+	{
+		(M_PI_4 * 4.0) - M_PI_4 / 2.0,
+		(M_PI_4 * 3.0) - M_PI_4 / 2.0,
+		(M_PI_4 * 2.0) - M_PI_4 / 2.0,
+		(M_PI_4 * 1.0) - M_PI_4 / 2.0
+	};
+
+	int dir = 0;
 	if (angle > pie[0] || angle < -pie[0])
 	{
 		dir = 4;
@@ -1033,7 +1009,7 @@ int BattleUnit::getMorale() const
  * @param type
  * @return damage done after adjustment
  */
-int BattleUnit::damage(const Position &relative, int power, ItemDamageType type, bool ignoreArmor)
+int BattleUnit::damage(const Position& relative, int power, ItemDamageType type, bool ignoreArmor)
 {
 	UnitSide side = SIDE_FRONT;
 	UnitBodyPart bodypart = BODYPART_TORSO;
@@ -1080,7 +1056,7 @@ int BattleUnit::damage(const Position &relative, int power, ItemDamageType type,
 				}
 			}
 
-			switch ((relativeDirection - _direction) % 8)
+			switch ((relativeDirection - _direction) %8)
 			{
 				case 0:	side = SIDE_FRONT; 										break;
 				case 1:	side = RNG::generate(0,2) < 2 ? SIDE_FRONT:SIDE_RIGHT; 	break;
@@ -1191,7 +1167,8 @@ void BattleUnit::keepFalling()
 	_fallPhase++;
 
 	int endFrame = 3;
-	if (_spawnUnit != "" && _specab != SPECAB_RESPAWN)
+	if (_spawnUnit != "" && _specab != SPECAB_RESPAWN) // <- is a Zombie! kL_note
+	// kL_note: so.. units with a spawnUnit string but not specAb 3 set get the transformation anim.
 	{
 		endFrame = 18;
 	}
@@ -1201,9 +1178,17 @@ void BattleUnit::keepFalling()
 		_fallPhase--;
 
 		if (_health == 0)
+		{
+			Log(LOG_INFO) << "BattleUnit::keepFalling() " << this->getId() << ". . STATUS_DEAD";
+
 			_status = STATUS_DEAD;
+		}
 		else
+		{
+			Log(LOG_INFO) << "BattleUnit::keepFalling() " << this->getId() << ". . STATUS_UNCONSCIOUS";
+
 			_status = STATUS_UNCONSCIOUS;
+		}
 	}
 
 	_cacheInvalid = true;
@@ -1331,19 +1316,20 @@ void BattleUnit::setTimeUnits(int tu)
 }
 
 /**
- * Add this unit to the list of visible units. Returns true if this is a new one.
- * @param unit
- * @return
+ * Add this unit to the list of visible units.
+ * @param unit, Seen unit.
+ * @return, True if this is a new one.
  */
-bool BattleUnit::addToVisibleUnits(BattleUnit *unit)
+bool BattleUnit::addToVisibleUnits(BattleUnit* unit)
 {
 	bool add = true;
 
-	for (std::vector<BattleUnit*>::iterator i = _unitsSpottedThisTurn.begin(); i != _unitsSpottedThisTurn.end();++i)
+	for (std::vector<BattleUnit* >::iterator i = _unitsSpottedThisTurn.begin(); i != _unitsSpottedThisTurn.end(); ++i)
 	{
 		if ((BattleUnit*)(*i) == unit)
 		{
 			add = false;
+
 			break;
 		}
 	}
@@ -1353,7 +1339,7 @@ bool BattleUnit::addToVisibleUnits(BattleUnit *unit)
 		_unitsSpottedThisTurn.push_back(unit);
 	}
 
-	for (std::vector<BattleUnit*>::iterator i = _visibleUnits.begin(); i != _visibleUnits.end(); ++i)
+	for (std::vector<BattleUnit* >::iterator i = _visibleUnits.begin(); i != _visibleUnits.end(); ++i)
 	{
 		if ((BattleUnit*)(*i) == unit)
 		{
@@ -1370,7 +1356,7 @@ bool BattleUnit::addToVisibleUnits(BattleUnit *unit)
  * Get the pointer to the vector of visible units.
  * @return pointer to vector.
  */
-std::vector<BattleUnit*> *BattleUnit::getVisibleUnits()
+std::vector<BattleUnit* >* BattleUnit::getVisibleUnits()
 {
 	return &_visibleUnits;
 }
@@ -1477,7 +1463,7 @@ double BattleUnit::getAccuracyModifier()
  */
 double BattleUnit::getThrowingAccuracy()
 {
-	return (double)(getStats()->throwing/100.0) * getAccuracyModifier();
+	return (double)(getStats()->throwing / 100.0) * getAccuracyModifier();
 }
 
 /**
@@ -1612,9 +1598,13 @@ void BattleUnit::prepareNewTurn()
  */
 void BattleUnit::moraleChange(int change)
 {
-	if (!isFearable()) return;
+	if (!isFearable()
+		&& change < 0)		// kL
+	{
+		return;
+	}
 
-	Log(LOG_INFO) << "BattleUnit::moraleChange() unitID = " << getId() << " delta = " << change ;		// kL
+//	Log(LOG_INFO) << "BattleUnit::moraleChange() unitID = " << getId() << " delta = " << change ;		// kL
 
 	_morale += change;
 
@@ -1671,7 +1661,7 @@ int BattleUnit::getFire() const
  * Get the pointer to the vector of inventory items.
  * @return pointer to vector.
  */
-std::vector<BattleItem*> *BattleUnit::getInventory()
+std::vector<BattleItem* >* BattleUnit::getInventory()
 {
 	return &_inventory;
 }
@@ -1680,7 +1670,7 @@ std::vector<BattleItem*> *BattleUnit::getInventory()
  * Let AI do their thing.
  * @param action AI action.
  */
-void BattleUnit::think(BattleAction *action)
+void BattleUnit::think(BattleAction* action)
 {
 	checkAmmo();
 	_currentAIState->think(action);
@@ -1690,12 +1680,13 @@ void BattleUnit::think(BattleAction *action)
  * Changes the current AI state.
  * @param aiState Pointer to AI state.
  */
-void BattleUnit::setAIState(BattleAIState *aiState)
+void BattleUnit::setAIState(BattleAIState* aiState)
 {
 	if (_currentAIState)
+<<<<<<< HEAD
 	{
-		if (dynamic_cast<AggroBAIState*>(aiState) != 0
-			&& dynamic_cast<AggroBAIState*>(_currentAIState) != 0)
+		if (dynamic_cast<AggroBAIState* >(aiState) != 0
+			&& dynamic_cast<AggroBAIState* >(_currentAIState) != 0)
 		{
 			delete aiState;
 
@@ -1704,6 +1695,9 @@ void BattleUnit::setAIState(BattleAIState *aiState)
 			// I tried using typeid but it does not produce the expected results :(
 		}
 		
+=======
+	{		
+>>>>>>> master
 		_currentAIState->exit();
 
 		delete _currentAIState;
@@ -1717,7 +1711,7 @@ void BattleUnit::setAIState(BattleAIState *aiState)
  * Returns the current AI state.
  * @return Pointer to AI state.
  */
-BattleAIState *BattleUnit::getCurrentAIState() const
+BattleAIState* BattleUnit::getCurrentAIState() const
 {
 	return _currentAIState;
 }
@@ -1783,14 +1777,13 @@ Tile* BattleUnit::getTile() const
 }
 
 /**
- * Checks if there's an inventory item in
- * the specified inventory position.
+ * Checks if there's an inventory item in the specified inventory position.
  * @param slot Inventory slot.
  * @param x X position in slot.
  * @param y Y position in slot.
  * @return Item in the slot, or NULL if none.
  */
-BattleItem *BattleUnit::getItem(RuleInventory *slot, int x, int y) const
+BattleItem* BattleUnit::getItem(RuleInventory* slot, int x, int y) const
 {
 	if (slot->getType() != INV_GROUND) // Soldier items
 	{
@@ -1805,7 +1798,7 @@ BattleItem *BattleUnit::getItem(RuleInventory *slot, int x, int y) const
 	}
 	else if (_tile != 0) // Ground items
 	{
-		for (std::vector<BattleItem*>::const_iterator i = _tile->getInventory()->begin(); i != _tile->getInventory()->end(); ++i)
+		for (std::vector<BattleItem* >::const_iterator i = _tile->getInventory()->begin(); i != _tile->getInventory()->end(); ++i)
 		{
 			if ((*i)->occupiesSlot(x, y))
 			{
@@ -1825,7 +1818,7 @@ BattleItem *BattleUnit::getItem(RuleInventory *slot, int x, int y) const
  * @param y Y position in slot.
  * @return Item in the slot, or NULL if none.
  */
-BattleItem *BattleUnit::getItem(const std::string &slot, int x, int y) const
+BattleItem* BattleUnit::getItem(const std::string &slot, int x, int y) const
 {
 	if (slot != "STR_GROUND") // Soldier items
 	{
@@ -1843,7 +1836,8 @@ BattleItem *BattleUnit::getItem(const std::string &slot, int x, int y) const
 	{
 		for (std::vector<BattleItem*>::const_iterator i = _tile->getInventory()->begin(); i != _tile->getInventory()->end(); ++i)
 		{
-			if ((*i)->getSlot() != 0 && (*i)->occupiesSlot(x, y))
+			if ((*i)->getSlot() != 0
+				&& (*i)->occupiesSlot(x, y))
 			{
 				return *i;
 			}
@@ -1858,10 +1852,10 @@ BattleItem *BattleUnit::getItem(const std::string &slot, int x, int y) const
 * @param quickest Wether to get the quickest weapon, default true
 * @return Pointer to item.
 */
-BattleItem *BattleUnit::getMainHandWeapon(bool quickest) const
+BattleItem* BattleUnit::getMainHandWeapon(bool quickest) const
 {
-	BattleItem *weaponRightHand = getItem("STR_RIGHT_HAND");
-	BattleItem *weaponLeftHand = getItem("STR_LEFT_HAND");
+	BattleItem* weaponRightHand = getItem("STR_RIGHT_HAND");
+	BattleItem* weaponLeftHand = getItem("STR_LEFT_HAND");
 
 	// if there is only one weapon, or only one weapon loaded (rules out grenades) it's easy:
 	if (!weaponRightHand
@@ -1895,7 +1889,7 @@ BattleItem *BattleUnit::getMainHandWeapon(bool quickest) const
 * Get a grenade from the belt (used for AI)
 * @return Pointer to item.
 */
-BattleItem *BattleUnit::getGrenadeFromBelt() const
+BattleItem* BattleUnit::getGrenadeFromBelt() const
 {
 	for (std::vector<BattleItem*>::const_iterator i = _inventory.begin(); i != _inventory.end(); ++i)
 	{
@@ -1913,7 +1907,7 @@ BattleItem *BattleUnit::getGrenadeFromBelt() const
  */
 bool BattleUnit::checkAmmo()
 {
-	BattleItem *weapon = getItem("STR_RIGHT_HAND");
+	BattleItem* weapon = getItem("STR_RIGHT_HAND");
 	if (!weapon
 		|| weapon->getAmmoItem() != 0
 		|| weapon->getRules()->getBattleType() == BT_MELEE
@@ -1930,15 +1924,15 @@ bool BattleUnit::checkAmmo()
 	}
 
 	// we have a non-melee weapon with no ammo and 15 or more TUs - we might need to look for ammo then
-	BattleItem *ammo = 0;
+	BattleItem* ammo = 0;
 	bool wrong = true;
 
-	for (std::vector<BattleItem*>::iterator i = getInventory()->begin(); i != getInventory()->end(); ++i)
+	for (std::vector<BattleItem* >::iterator i = getInventory()->begin(); i != getInventory()->end(); ++i)
 	{
-		ammo = (*i);
+		ammo = *i;
 		for (std::vector<std::string>::iterator c = weapon->getRules()->getCompatibleAmmo()->begin(); c != weapon->getRules()->getCompatibleAmmo()->end(); ++c)
 		{
-			if ((*c) == ammo->getRules()->getType())
+			if (*c == ammo->getRules()->getType())
 			{
 				wrong = false;
 				break;
@@ -2022,9 +2016,9 @@ void BattleUnit::addMeleeExp()
 * Increase the mission counter. Calculate the experience increases.
 * @return True if the soldier was eligible for squaddie promotion.
 */
-bool BattleUnit::postMissionProcedures(SavedGame *geoscape)
+bool BattleUnit::postMissionProcedures(SavedGame* geoscape)
 {
-	Soldier *s = geoscape->getSoldier(_id);
+	Soldier* s = geoscape->getSoldier(_id);
 	if (s == 0)
 	{
 		return false;
@@ -2033,11 +2027,11 @@ bool BattleUnit::postMissionProcedures(SavedGame *geoscape)
 	s->addMissionCount();
 	s->addKillCount(_kills);
 
-	UnitStats *stats = s->getCurrentStats();
+	UnitStats* stats = s->getCurrentStats();
 	const UnitStats caps = s->getRules()->getStatCaps();
 	int healthLoss = stats->health - _health;
 
-	s->setWoundRecovery(RNG::generate((healthLoss * 0.5),(healthLoss * 1.5)));
+	s->setWoundRecovery(RNG::generate(healthLoss * 0.5, healthLoss * 1.5));
 
 	if (_expBravery && stats->bravery < caps.bravery)
 	{
@@ -2123,7 +2117,7 @@ int BattleUnit::improveStat(int exp)
  * Get the unit's minimap sprite index. Used to display the unit on the minimap
  * @return the unit minimap index
  */
-int BattleUnit::getMiniMapSpriteIndex () const
+int BattleUnit::getMiniMapSpriteIndex() const
 {
 	// minimap sprite index:
 	// * 0-2   : Xcom soldier
@@ -2145,6 +2139,7 @@ int BattleUnit::getMiniMapSpriteIndex () const
 		break;
 		case FACTION_NEUTRAL:			return 6;
 		break;
+
 		default:
 			if (_armor->getSize() == 1)	return 0;
 			else						return 12;
@@ -2202,6 +2197,8 @@ void BattleUnit::heal(int part, int woundAmount, int healthAmount)
 	_health += healthAmount;
 	if (_health > getStats()->health)
 		_health = getStats()->health;
+
+	moraleChange(healthAmount);		// kL
 }
 
 /**
@@ -2257,7 +2254,7 @@ Armor *BattleUnit::getArmor() const
  * @param lang Pointer to language.
  * @return name Widecharstring of the unit's name.
  */
-std::wstring BattleUnit::getName(Language *lang, bool debugAppendId) const
+std::wstring BattleUnit::getName(Language* lang, bool debugAppendId) const
 {
 	if (_type != "SOLDIER" && lang != 0)
 	{
@@ -2284,7 +2281,7 @@ std::wstring BattleUnit::getName(Language *lang, bool debugAppendId) const
   * Gets pointer to the unit's stats.
   * @return stats Pointer to the unit's stats.
   */
-UnitStats *BattleUnit::getStats()
+UnitStats* BattleUnit::getStats()
 {
 	return &_stats;
 }
@@ -2353,35 +2350,35 @@ int BattleUnit::getMoveSound() const
 }
 
 /**
-  * Get whether the unit is affected by fatal wounds.
-  * Normally only soldiers are affected by fatal wounds.
-  * @return true or false
-  */
+ * Get whether the unit is affected by fatal wounds.
+ * Normally only soldiers are affected by fatal wounds.
+ * @return true or false
+ */
 bool BattleUnit::isWoundable() const
 {
 	return (_type == "SOLDIER");
 }
 /**
-  * Get whether the unit is affected by morale loss.
-  * Normally only small units are affected by morale loss.
-  * @return true or false
-  */
+ * Get whether the unit is affected by morale loss.
+ * Normally only small units are affected by morale loss.
+ * @return true or false
+ */
 bool BattleUnit::isFearable() const
 {
 	return (_armor->getSize() == 1);
 }
 
 /**
-  * Get the unit's intelligence. Is the number of turns AI remembers a soldiers position.
-  * @return intelligence 
-  */
+ * Get the unit's intelligence. Is the number of turns AI remembers a soldier's position.
+ * @return intelligence 
+ */
 int BattleUnit::getIntelligence() const
 {
 	return _intelligence;
 }
 
 /**
-/// Get the unit's aggression.
+ * Get the unit's aggression.
  */
 int BattleUnit::getAggression() const
 {
@@ -2389,7 +2386,7 @@ int BattleUnit::getAggression() const
 }
 
 /**
-/// Get the unit's special ability.
+ * Get the unit's special ability.
  */
 int BattleUnit::getSpecialAbility() const
 {
@@ -2397,7 +2394,7 @@ int BattleUnit::getSpecialAbility() const
 }
 
 /**
-/// Get the unit's special ability.
+ * Set the unit's special ability.
  */
 void BattleUnit::setSpecialAbility(SpecialAbility specab)
 {
@@ -2572,7 +2569,7 @@ void BattleUnit::setCharging(BattleUnit *chargeTarget)
  * Get the units we are charging towards.
  * @return Charge Target
  */
-BattleUnit *BattleUnit::getCharging()
+BattleUnit* BattleUnit::getCharging()
 {
 	return _charging;
 }
@@ -2581,7 +2578,7 @@ BattleUnit *BattleUnit::getCharging()
  * Get the units carried weight in strength units.
  * @return weight
  */
-int BattleUnit::getCarriedWeight(BattleItem *draggingItem) const
+int BattleUnit::getCarriedWeight(BattleItem* draggingItem) const
 {
 	int weight = 6;
 	for (std::vector<BattleItem*>::const_iterator i = _inventory.begin(); i != _inventory.end(); ++i)
@@ -2623,7 +2620,7 @@ UnitFaction BattleUnit::getOriginalFaction() const
 	return _originalFaction;
 }
 
-/*
+/**
  * Invalidate cache; call after copying object :(
  */
 void BattleUnit::invalidateCache()
@@ -2634,7 +2631,7 @@ void BattleUnit::invalidateCache()
 	_cacheInvalid = true;
 }
 
-/*
+/**
  * 
  */
 std::vector<BattleUnit* > BattleUnit::getUnitsSpottedThisTurn()
@@ -2642,7 +2639,7 @@ std::vector<BattleUnit* > BattleUnit::getUnitsSpottedThisTurn()
 	return _unitsSpottedThisTurn;
 }
 
-/*
+/**
  * 
  */
 void BattleUnit::setRankInt(int rank)
@@ -2650,7 +2647,7 @@ void BattleUnit::setRankInt(int rank)
 	_rankInt = rank;
 }
 
-/*
+/**
  * 
  */
 int BattleUnit::getRankInt() const
@@ -2658,7 +2655,7 @@ int BattleUnit::getRankInt() const
 	return _rankInt;
 }
 
-/*
+/**
  * 
  */
 void BattleUnit::deriveRank()
@@ -2674,7 +2671,7 @@ void BattleUnit::deriveRank()
 	}
 }
 
-/*
+/**
  * This function checks if a tile is visible, using maths.
  * @param pos the position to check against
  * @return what the maths decide
@@ -2726,24 +2723,24 @@ bool BattleUnit::checkViewSector(Position pos) const
 	return false;
 }
 
-/*
+/**
  * Common function to adjust a unit's stats according to difficulty setting.
  */
 void BattleUnit::adjustStats(const int diff)
 {
 	// adjust the unit's stats according to the difficulty level.
-	_stats.tu += 4 * diff * _stats.tu / 100;
-	_stats.stamina += 4 * diff * _stats.stamina / 100;
-	_stats.reactions += 6 * diff * _stats.reactions / 100;
-	_stats.strength += 2 * diff * _stats.strength / 100;
-	_stats.firing = (_stats.firing + 6 * diff * _stats.firing / 100) / (diff > 0 ? 1 : 2);
-	_stats.strength += 2 * diff * _stats.strength / 100;
-	_stats.melee += 4 * diff * _stats.melee / 100;
-	_stats.psiSkill += 4 * diff * _stats.psiSkill / 100;
-	_stats.psiStrength += 4 * diff * _stats.psiStrength / 100;
+	_stats.tu			+= 4 * diff * _stats.tu / 100;
+	_stats.stamina		+= 4 * diff * _stats.stamina / 100;
+	_stats.reactions	+= 6 * diff * _stats.reactions / 100;
+	_stats.strength		+= 2 * diff * _stats.strength / 100;
+	_stats.firing		= (_stats.firing + 6 * diff * _stats.firing / 100) / (diff > 0 ? 1 : 2);
+	_stats.strength		+= 2 * diff * _stats.strength / 100;
+	_stats.melee		+= 4 * diff * _stats.melee / 100;
+	_stats.psiSkill		+= 4 * diff * _stats.psiSkill / 100;
+	_stats.psiStrength	+= 4 * diff * _stats.psiStrength / 100;
 }
 
-/*
+/**
  * Did this unit already take fire damage this turn?
  * (used to avoid damaging large units multiple times.)
  */
@@ -2752,7 +2749,7 @@ bool BattleUnit::tookFireDamage() const
 	return _hitByFire;
 }
 
-/*
+/**
  * Toggle the state of the fire damage tracking boolean.
  */
 void BattleUnit::toggleFireDamage()
@@ -2760,7 +2757,7 @@ void BattleUnit::toggleFireDamage()
 	_hitByFire = !_hitByFire;
 }
 
-/*
+/**
  * 
  */
 void BattleUnit::setCoverReserve(int reserve)
@@ -2768,7 +2765,7 @@ void BattleUnit::setCoverReserve(int reserve)
 	_coverReserve = reserve;
 }
 
-/*
+/**
  * 
  */
 int BattleUnit::getCoverReserve()
@@ -2777,24 +2774,26 @@ int BattleUnit::getCoverReserve()
 }
 
 // kL_begin:
-/*
- * Initializes a death spin. See Battlescape/UnitDieBState.cpp, constructor
+/**
+ * Initializes a death spin.
+ * see Battlescape/UnitDieBState.cpp, ctor
  */
 void BattleUnit::initDeathSpin()
 {
-//	Log(LOG_INFO) << "BattleUnit::deathPirouette()" << " [target]: " << (getId());
+	Log(LOG_INFO) << "BattleUnit::deathPirouette()" << " [target]: " << (getId());
 
 	_status = STATUS_TURNING;
 	_spinPhase = 0;
 	_cacheInvalid = true;
 }
 
-/*
- * Continues a death spin. See Battlescape/UnitDieBState.cpp, think()
+/**
+ * Continues a death spin.
+ * see Battlescape/UnitDieBState.cpp, think()
  */
 void BattleUnit::contDeathSpin()
 {
-//	Log(LOG_INFO) << "BattleUnit::deathPirContinue()" << " [target]: " << (getId());
+	Log(LOG_INFO) << "BattleUnit::contDeathSpin()" << " [target]: " << (getId());
 
 	int d = _direction;
 	if (3 == d) // if facing player, 1 rotation left
@@ -2804,6 +2803,7 @@ void BattleUnit::contDeathSpin()
 		{
 //			Log(LOG_INFO) << ". . _spinPhase = " << _spinPhase << " [ return ]";
 			 _spinPhase = -1; // end.
+			_status = STATUS_STANDING;
 
 			 return;
 		}
@@ -2840,25 +2840,49 @@ void BattleUnit::contDeathSpin()
 		if (-1 == d) d = 7;
 	}
 
-
 //	Log(LOG_INFO) << ". d_final = " << d;
 	setDirection(d);
-
-	_status = STATUS_TURNING;
 	_cacheInvalid = true;
 }
 
-/*
- * Regulates direction & duration of the death spin.
- * @ return int, Tracks deathspin rotations
+/**
+ * Regulates init, direction & duration of the death spin-cycle.
+ * @ return int, Tracks deathspin rotation
  */
 int BattleUnit::getSpinPhase()
 {
 	return _spinPhase;
 }
 
-/*
- * Sets the unit's health level.
+/**
+ * Sets the spinPhase of a unit.
+ * @ param spinphase, The spinPhase to set
+ */
+void BattleUnit::setSpinPhase(int spinphase)
+{
+	_spinPhase = spinphase;
+}
+
+/**
+ * Sets a unit's status.
+ * @ param status,
+ */
+/* void setStatus(UnitStatus status)
+{
+	UnitStatus::STATUS_DEAD = status;
+} */
+
+/**
+ * Set a unit to STATUS_UNCONSCIOUS.
+ * @ param status,
+ */
+void BattleUnit::knockOut()
+{
+	_status = STATUS_UNCONSCIOUS;
+}
+
+/**
+ * Sets a unit's health level.
  * @ return int, Tracks deathspin rotations
  */
 void BattleUnit::setHealth(int health)
