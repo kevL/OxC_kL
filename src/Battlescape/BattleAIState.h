@@ -23,11 +23,20 @@
 #include <yaml-cpp/yaml.h>
 #include "BattlescapeGame.h"
 
+
 namespace OpenXcom
 {
 
 class SavedBattleGame;
 class BattleUnit;
+
+enum AIMode
+{
+	AI_PATROL,
+	AI_AMBUSH,
+	AI_COMBAT,
+	AI_ESCAPE
+};
 
 /**
  * This class is used by the BattleUnit AI.
@@ -35,12 +44,12 @@ class BattleUnit;
 class BattleAIState
 {
 	protected:
-		SavedBattleGame* _game;
+		SavedBattleGame* _save;
 		BattleUnit* _unit;
 
 	public:
 		/// Creates a new BattleAIState linked to the game and a certain unit.
-		BattleAIState(SavedBattleGame* game, BattleUnit* unit);
+		BattleAIState(SavedBattleGame* save, BattleUnit* unit);
 		/// Cleans up the BattleAIState.
 		virtual ~BattleAIState();
 

@@ -39,8 +39,8 @@
 #include "../Engine/Language.h"
 #include "../Engine/Game.h"
 #include "../Ruleset/RuleInventory.h"
-#include "../Battlescape/PatrolBAIState.h"
-#include "../Battlescape/AggroBAIState.h"
+#include "../Battlescape/CivilianBAIState.h"
+#include "../Battlescape/AlienBAIState.h"
 #include "../Engine/RNG.h"
 #include "../Engine/Options.h"
 #include "../Engine/Logger.h"
@@ -79,7 +79,8 @@ SavedBattleGame::SavedBattleGame()
 	_unitsFalling(false),
 	_strafeEnabled(false),
 	_sneaky(false),
-	_traceAI(false)
+	_traceAI(false),
+	_cheating(false)
 {
 //	Log(LOG_INFO) << "Create SavedBattleGame";
 
@@ -90,6 +91,13 @@ SavedBattleGame::SavedBattleGame()
 	_strafeEnabled		= Options::getBool("strafe");
 	_sneaky				= Options::getBool("sneakyAI");
 	_traceAI			= Options::getBool("traceAI");
+	
+	_tileSearch.resize(11*11);
+	for (int i = 0; i < 121; ++i)
+	{
+		_tileSearch[i].x = ((i%11) - 5);
+		_tileSearch[i].y = ((i/11) - 5); 
+	}
 }
 
 /**
@@ -226,16 +234,14 @@ void SavedBattleGame::load(const YAML::Node& node, Ruleset* rule, SavedGame* sav
 		{
 			if (const YAML::Node &ai = (*i)["AI"])
 			{
-				std::string state = ai["state"].as<std::string>();
 				BattleAIState *aiState;
-
-				if (state == "PATROL")
+				if (faction == FACTION_NEUTRAL)
 				{
-					aiState = new PatrolBAIState(this, unit, 0);
+					aiState = new CivilianBAIState(this, unit, 0);
 				}
-				else if (state == "AGGRO")
+				else if (faction == FACTION_HOSTILE)
 				{
-					aiState = new AggroBAIState(this, unit);
+					aiState = new AlienBAIState(this, unit, 0);
 				}
 				else
 				{
@@ -865,13 +871,17 @@ void SavedBattleGame::endTurn()
 			selectNextPlayerUnit();
 		}
 	}
+	int liveSoldiers, liveAliens;
+
+	_battleState->getBattleGame()->tallyUnits(liveAliens, liveSoldiers, false);
+		
+	if (_turn >= 20 || liveAliens < 2)
+	{
+		_cheating = true;
+	}
 
 	if (_side == FACTION_PLAYER)
 	{
-		int liveSoldiers, liveAliens;
-
-		_battleState->getBattleGame()->tallyUnits(liveAliens, liveSoldiers, false);
-
 		// update the "number of turns since last spotted"
 		for (std::vector<BattleUnit*>::iterator i = _units.begin(); i != _units.end(); ++i)
 		{
@@ -881,21 +891,14 @@ void SavedBattleGame::endTurn()
 				(*i)->setTurnsExposed((*i)->getTurnsExposed() +	1);
 			}
 
-			Uint8 rand = RNG::generate(0, 9);		// kL
-			if (//kL _side == FACTION_PLAYER &&
-				(*i)->getFaction() == FACTION_PLAYER
-				&& !(*i)->isOut()
-//kL				&& (_turn >= 20 || liveAliens < 2))
-				&& (_turn >= 16 + rand || liveAliens < 2))		// kL
-				// kL_note: above will reset TurnsExposed randomly on any turn
-				// between 16 and 25... it needs a 'static' variable tracking this
-				// if it should be set only once.
+			if (_cheating
+				&& (*i)->getFaction() == FACTION_PLAYER
+				&& !(*i)->isOut())
 			{
 				(*i)->setTurnsExposed(0);
 			}
 		}
 	}
-
 	// hide all aliens (VOF calculations below will turn them visible again)
 	for (std::vector<BattleUnit*>::iterator i = _units.begin(); i != _units.end(); ++i)
 	{
@@ -1184,7 +1187,13 @@ Node *SavedBattleGame::getPatrolNode(bool scout, BattleUnit *unit, Node *fromNod
 				|| (preferred->getRank() == Node::nodeRank[unit->getRankInt()][0] && preferred->getFlags() < n->getFlags())
 				|| preferred->getFlags() < n->getFlags()) preferred = n;
 			{
-				compliantNodes.push_back(n);
+				getPathfinding()->calculate(unit, n->getPosition());
+				if (getPathfinding()->getStartDirection() != -1)
+				{
+					compliantNodes.push_back(n);
+				}
+
+				getPathfinding()->abortPath();
 			}
 		}
 	}
@@ -1514,26 +1523,6 @@ int SavedBattleGame::getDragPixelTolerance() const
 }
 
 /**
- * Gets the number of units that can see the given unit.
- * @param unit The unit to check for visibility.
- * @return The number of spotting units.
- */
-int SavedBattleGame::getSpottingUnits(BattleUnit* unit) const
-{
-	int spotting = 0;
-	// cheating! perhaps only consider visible units here
-	for (std::vector<BattleUnit*>::const_iterator i = unit->getVisibleUnits()->begin(); i != unit->getVisibleUnits()->end(); ++i)
-	{
-		// k
-		std::vector<BattleUnit*>::iterator find = std::find((*i)->getVisibleUnits()->begin(), (*i)->getVisibleUnits()->end(), unit);
-		if (find != (*i)->getVisibleUnits()->end())
-			++spotting;
-	}
-
-	return spotting;
-}
-
-/**
  * @brief Checks whether anyone on a particular faction is looking at the unit.
  *
  * Similar to getSpottingUnits() but returns a bool and stops searching if one positive hit is found.
@@ -1794,4 +1783,19 @@ void SavedBattleGame::resetTiles()
 	}
 }
 
+/**
+ * @return the tilesearch vector for use in AI functions.
+ */
+const std::vector<Position> SavedBattleGame::getTileSearch()
+{
+	return _tileSearch;
+}
+
+/**
+ * is the AI allowed to cheat?
+ * @return true if cheating.
+ */
+bool SavedBattleGame::isCheating()
+{
+	return _cheating;
 }

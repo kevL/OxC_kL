@@ -92,7 +92,7 @@ void createDefault()
 //kL	setInt("musicVolume", MIX_MAX_VOLUME);
 	setInt("soundVolume", 28);		// kL
 	setInt("musicVolume", 75);		// kL
-	setString("language", "");
+	setString("language", "en-US");
 	setInt("battleScrollSpeed", 12); // 4, 8, 12, 16, 24
 	setInt("battleScrollType", SCROLL_AUTO);
 	setInt("battleScrollDragButton", SDL_BUTTON_MIDDLE);
@@ -138,6 +138,7 @@ void createDefault()
 	setBool("captureMouse", false);
 //kL	setBool("battleTooltips", true);
 	setBool("battleTooltips", false);		// kL
+	setBool("battleHairBleach", true);
 
 	// new battle mode data
 	setInt("NewBattleMission", 0);

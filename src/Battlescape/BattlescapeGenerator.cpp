@@ -58,7 +58,8 @@
 #include "../Savegame/TerrorSite.h"
 #include "../Savegame/AlienBase.h"
 #include "../Savegame/EquipmentLayoutItem.h"
-#include "PatrolBAIState.h"
+#include "CivilianBAIState.h"
+#include "AlienBAIState.h"
 #include "Pathfinding.h"
 
 
@@ -718,16 +719,16 @@ BattleUnit* BattlescapeGenerator::addAlien(Unit* rules, int alienRank, bool outs
 
 	if (node && _save->setUnitPosition(unit, node->getPosition()))
 	{
-		unit->setAIState(new PatrolBAIState(_game->getSavedGame()->getSavedBattle(), unit, node));
+		unit->setAIState(new AlienBAIState(_game->getSavedGame()->getSavedBattle(), unit, node));
 		unit->setRankInt(alienRank);
 
 		int dir = _save->getTileEngine()->faceWindow(node->getPosition());
 		Position craft = _game->getSavedGame()->getSavedBattle()->getUnits()->at(0)->getPosition();
 		// Warboy is a MEANIE!!!
-		if (_save->getTileEngine()->distance(node->getPosition(), craft) <= 23
+		if (_save->getTileEngine()->distance(node->getPosition(), craft) < 25
 			&& RNG::generate(0, 99) < 19 * difficulty)
 		{
-			dir = unit->getDirectionTo(craft);
+			dir = unit->directionTo(craft);
 		}
 
 		if (dir != -1)
@@ -767,7 +768,7 @@ BattleUnit* BattlescapeGenerator::addCivilian(Unit* rules)
 	if (node)
 	{
 		_save->setUnitPosition(unit, node->getPosition());
-		unit->setAIState(new PatrolBAIState(_game->getSavedGame()->getSavedBattle(), unit, node));
+		unit->setAIState(new CivilianBAIState(_game->getSavedGame()->getSavedBattle(), unit, node));
 		unit->setDirection(RNG::generate(0, 7));
 
 		// we only add a unit if it has a node to spawn on.
@@ -776,7 +777,7 @@ BattleUnit* BattlescapeGenerator::addCivilian(Unit* rules)
 	}
 	else if (placeUnitNearFriend(unit))
 	{
-		unit->setAIState(new PatrolBAIState(_game->getSavedGame()->getSavedBattle(), unit, node));
+		unit->setAIState(new CivilianBAIState(_game->getSavedGame()->getSavedBattle(), unit, node));
 		unit->setDirection(RNG::generate(0, 7));
 
 		_save->getUnits()->push_back(unit);

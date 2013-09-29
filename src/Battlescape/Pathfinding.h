@@ -42,7 +42,6 @@ class Pathfinding
 		SavedBattleGame* _save;
 		std::vector<PathfindingNode> _nodes;
 		int _size;
-		std::vector<int> _path;
 		MovementType _movementType;
 		/// Gets the node at certain position.
 		PathfindingNode* getNode(const Position& pos);
@@ -65,7 +64,7 @@ class Pathfinding
 		int _totalTUCost;
 
 	public:
-		/// Creates a new Pathfinding class.
+		std::vector<int> _path;
 		Pathfinding(SavedBattleGame* save);
 		/// Cleans up the Pathfinding.
 		~Pathfinding();

@@ -38,8 +38,8 @@
 #include "UnitInfoState.h"
 #include "UnitDieBState.h"
 #include "InventoryState.h"
-#include "AggroBAIState.h"
-#include "PatrolBAIState.h"
+#include "AlienBAIState.h"
+#include "CivilianBAIState.h"
 #include "Pathfinding.h"
 #include "BattlescapeGame.h"
 #include "../Engine/Game.h"
@@ -1564,7 +1564,6 @@ void BattlescapeState::saveAIMap()
 			if (!t) continue;
 			if (!t->isDiscovered(2)) continue;
 
-			_save->getTileEngine()->surveyXComThreatToTile(t, tilePos, unit);
 		}
 	}
 
@@ -1585,12 +1584,10 @@ void BattlescapeState::saveAIMap()
 			r.y = y * r.h;
 
 			if (t->getTUCost(MapData::O_FLOOR, MT_FLY) != 255
-				&& t->getTUCost(MapData::O_OBJECT, MT_FLY) != 255
-				&& _save->getTileEngine()->surveyXComThreatToTile(t, tilePos, unit)
-				&& t->soldiersVisible != Tile::NOT_CALCULATED)
+				&& t->getTUCost(MapData::O_OBJECT, MT_FLY) != 255)
 			{
 				SDL_FillRect(img, &r, SDL_MapRGB(img->format, 255, 0, 0x20));
-				characterRGBA(img, r.x, r.y, t->soldiersVisible > 9 ? '*' : ('0'+t->soldiersVisible), 0x7f, 0x7f, 0x7f, 0x7f);
+				characterRGBA(img, r.x, r.y, '*' , 0x7f, 0x7f, 0x7f, 0x7f);
 			}
 			else
 			{

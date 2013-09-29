@@ -77,7 +77,7 @@ struct BattleAction
 	int autoShotCounter;
 	Position cameraPosition;
     bool desperate;	// ignoring newly-spotted units
-    bool reckless;	// ignoring reaction fire!
+	int finalFacing;
     int number;		// first action of turn, second, etc.?
 	BattleAction()
 		:
@@ -94,7 +94,7 @@ struct BattleAction
 		autoShotCounter(0),
 		cameraPosition(0, 0, -1),
 		desperate(false),
-		reckless(false)
+		finalFacing(-1)
 		{
 		}
 };
@@ -112,6 +112,7 @@ class BattlescapeGame
 		bool _playerPanicHandled;
 		int _AIActionCounter;
 		BattleAction _currentAction;
+		bool _AISecondMove;
 
 		/// Ends the turn.
 		void endTurn();
@@ -200,8 +201,6 @@ class BattlescapeGame
 		ResourcePack* getResourcePack();
 		/// Gets the ruleset.
 		const Ruleset* getRuleset() const;
-		/// Evaluates the threats from XCom soldiers to tiles, for later use by AI.
-		void resetSituationForAI();
 		static bool _debugPlay;
 		/// Returns whether panic has been handled.
 		bool getPanicHandled()
@@ -226,8 +225,6 @@ class BattlescapeGame
 		void setKneelReserved(bool reserved);
 		/// Checks the kneel reservation setting.
 		bool getKneelReserved();
-		/// Attempts a psionic attack on an enemy we "know of".
-		bool psiAction(BattleAction* action);
 };
 
 }

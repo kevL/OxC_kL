@@ -191,11 +191,7 @@ void MapDataSet::loadData()
 		to->setFlammable((int)mcd.Flammable);
 		to->setFuel((int)mcd.Fuel);
 		to->setExplosive((int)mcd.HE_Strength);
-
-	#if SDL_BYTEORDER == SDL_BIG_ENDIAN
-	mcd.ScanG = SDL_Swap16( mcd.ScanG );
-	#endif
-
+		mcd.ScanG = SDL_SwapLE16(mcd.ScanG);
 		to->setMiniMapIndex(mcd.ScanG);
 
 		for (int layer = 0; layer < 12; layer++)
@@ -279,10 +275,7 @@ void MapDataSet::loadLOFTEMPS(const std::string &filename, std::vector<Uint16> *
 
 	while (mapFile.read((char*)&value, sizeof(value)))
 	{
-	#if SDL_BYTEORDER == SDL_BIG_ENDIAN
-	value = SDL_SwapLE16( value );
-	#endif
-
+		value = SDL_SwapLE16(value);
 		voxelData->push_back(value);
 	}
 

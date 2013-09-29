@@ -226,6 +226,7 @@ void InventoryState::init()
 	_soldier->clear();
 	_btnRank->clear();
 
+	_txtName->setBig();
 	_txtName->setText(unit->getName(_game->getLanguage()));
 	_inv->setSelectedUnit(unit);
 

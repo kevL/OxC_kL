@@ -34,6 +34,7 @@
 #include "../Ruleset/Ruleset.h"
 #include "../Engine/ShaderDraw.h"
 #include "../Engine/ShaderMove.h"
+#include "../Engine/Options.h"
 
 
 namespace OpenXcom
@@ -58,7 +59,7 @@ UnitSprite::UnitSprite(int width, int height, int x, int y)
 	_part(0),
 	_animationFrame(0)
 {
-//	Log(LOG_INFO) << "Create UnitSprite";
+	_hairBleach = Options::getBool("battleHairBleach");
 }
 
 /**
@@ -246,7 +247,7 @@ void UnitSprite::drawRoutine0()
 	{
 		torso = _unitSurface->getFrame(die + _unit->getFallingPhase());
 		torso->blit(this);
-		if (_unit->getGeoscapeSoldier())
+		if (_unit->getGeoscapeSoldier() && _hairBleach)
 		{
 			SoldierLook look = _unit->getGeoscapeSoldier()->getLook();
 
@@ -254,6 +255,7 @@ void UnitSprite::drawRoutine0()
 			{
 				Uint8 face_color = ColorFace::Face;
 				Uint8 hair_color = ColorFace::Hair;
+
 				switch (look)
 				{
 					case LOOK_BLONDE:
@@ -515,7 +517,7 @@ void UnitSprite::drawRoutine0()
 	Surface* newLeftArm		= new Surface(* leftArm);
 	Surface* newRightArm	= new Surface(* rightArm);
 
-	if (_unit->getGeoscapeSoldier())
+	if (_unit->getGeoscapeSoldier() && _hairBleach)
 	{
 		SoldierLook look = _unit->getGeoscapeSoldier()->getLook();
 		if (look)

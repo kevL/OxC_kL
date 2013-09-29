@@ -274,13 +274,15 @@ void UnitWalkBState::think()
 				_unit->setVisible(false);
 			}
 
-			Log(LOG_INFO) << ". . getVisibleUnits() pre" ;					// kL
-			std::vector<BattleUnit* >* vunits = _unit->getVisibleUnits();	// kL
-			int preVisUnits = vunits->size();								// kL
-			Log(LOG_INFO) << ". . getVisibleUnits() " << preVisUnits ;		// kL
+//			Log(LOG_INFO) << ". . getVisibleUnits() pre" ;					// kL
+//			std::vector<BattleUnit* >* vunits = _unit->getVisibleUnits();	// kL
+//			int preVisUnits = vunits->size();								// kL
+//			Log(LOG_INFO) << ". . getVisibleUnits() " << preVisUnits ;		// kL
 
 			_terrain->calculateFOV(_unit->getPosition());
-//kL: sent below.			unitSpotted = (_parent->getPanicHandled() && _numUnitsSpotted != _unit->getUnitsSpottedThisTurn().size());
+			unitSpotted = !_action.desperate
+				&& _parent->getPanicHandled()
+				&& _numUnitsSpotted != _unit->getUnitsSpottedThisTurn().size();
 
 			// check for proximity grenades (1 tile around the unit in every direction)
 			// For large units, we need to check every tile it occupies
@@ -305,8 +307,8 @@ void UnitWalkBState::think()
 										p.x = t->getPosition().x * 16 + 8;
 										p.y = t->getPosition().y * 16 + 8;
 										p.z = t->getPosition().z * 24 + t->getTerrainLevel();
-
 										_parent->statePushNext(new ExplosionBState(_parent, p, *i, (*i)->getPreviousOwner()));
+
 										t->getInventory()->erase(i);
 										_unit->setCache(0);
 										_parent->getMap()->cacheUnit(_unit);
@@ -324,19 +326,19 @@ void UnitWalkBState::think()
 
 			// kL_note: I think this is the place to stop my soldiers from halting vs. already-seen alien units.
 			// ie, do a check for !_alreadySpotted ( more cases are further down below )
-			unitSpotted = _parent->getPanicHandled()
-					&& _numUnitsSpotted != _unit->getUnitsSpottedThisTurn().size();	// kL: from above.
+//			unitSpotted = _parent->getPanicHandled()
+//					&& _numUnitsSpotted != _unit->getUnitsSpottedThisTurn().size();	// kL: from above.
 			// kL_note: this actually seems to be redundant w/ TileEngine::calculateFOV() ...
 
 			// kL_begin: recalculation of SpottedUnit.
-			int postVisUnits = vunits->size();
+/*			int postVisUnits = vunits->size();
 			if (_unit->getFaction() == FACTION_PLAYER)
 			{
 				if (postVisUnits <= preVisUnits)
 				{
 					unitSpotted = false;
 				}
-			}
+			} */
 			// kL_end.
 
 
@@ -667,7 +669,8 @@ void UnitWalkBState::think()
 		// calculateFOV() is unreliable for setting the unitSpotted bool, as it can be called from
 		// various other places in the code, ie: doors opening, and this messes up the result.
 		_terrain->calculateFOV(_unit);
-		unitSpotted = (_parent->getPanicHandled()
+		unitSpotted = !_action.desperate
+			&& _parent->getPanicHandled()
 			&& _numUnitsSpotted != _unit->getUnitsSpottedThisTurn().size());
 
 		// make sure the unit sprites are up to date
@@ -724,20 +727,17 @@ void UnitWalkBState::postPathProcedures()
 
 	if (_unit->getFaction() != FACTION_PLAYER)
 	{
+		int dir = _action.finalFacing;
 		if (_unit->getCharging() != 0)
 		{
-			// kL_notes:
+			dir = _parent->getTileEngine()->getDirectionTo(_unit->getPosition(), _unit->getCharging()->getPosition());
+			// kL_notes (pre-above):
 			// put an appropriate facing direction here
 			// don't stare at a wall. Get if aggro, face closest xCom op <- might be done somewhere already.
 			// Cheat: face closest xCom op based on a percentage (perhaps alien 'value' or rank)
 			// cf. void AggroBAIState::setAggroTarget(BattleUnit *unit)
 			// and bool TileEngine::calculateFOV(BattleUnit *unit)
 			Log(LOG_INFO) << "UnitWalkBState::postPathProcedures() 1";
-
-			_unit->lookAt(_unit->getCharging()->getPosition() + Position(_unit->getArmor()->getSize() - 1, _unit->getArmor()->getSize() - 1, 0), false);
-
-			while (_unit->getStatus() == STATUS_TURNING)
-				_unit->turn();
 
 			if (_parent->getTileEngine()->validMeleeRange(_unit, _action.actor->getCharging(), _unit->getDirection()))
 			{
@@ -755,23 +755,26 @@ void UnitWalkBState::postPathProcedures()
 		}
 		else if (_unit->_hidingForTurn)
 		{
-			int dir = _unit->getDirection() + 4;
-			if (dir >= 8) dir -= 8;
+			dir = _unit->getDirection() + 4;
+		}
 
-			Log(LOG_INFO) << "UnitWalkBState::postPathProcedures() 2";
-
+		if (dir != -1)
+		{
+			if (dir >= 8)
+			{
+				dir -= 8;
+			}
 			_unit->lookAt(dir);
 
-			while (_unit->getStatus() == STATUS_TURNING
-				&& _unit->getVisibleUnits()->empty())
+			while (_unit->getStatus() == STATUS_TURNING)
 			{
 				_unit->turn();
 				_parent->getTileEngine()->calculateFOV(_unit);
 			}
 
-			_unit->abortTurn();
 			_unit->setCache(0);
 			_parent->getMap()->cacheUnit(_unit);
+
 		}
 	}
 	else if (!_parent->getPanicHandled())

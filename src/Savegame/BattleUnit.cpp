@@ -30,7 +30,6 @@
 #include "../Engine/Logger.h"
 #include "../Battlescape/Pathfinding.h"
 #include "../Battlescape/BattleAIState.h"
-#include "../Battlescape/AggroBAIState.h"
 #include "Soldier.h"
 #include "../Ruleset/Armor.h"
 #include "../Ruleset/Unit.h"
@@ -636,7 +635,7 @@ int BattleUnit::getDiagonalWalkingPhase() const
  */
 void BattleUnit::lookAt(const Position& point, bool turret)
 {
-	int dir = getDirectionTo(point);
+	int dir = directionTo(point);
 
 	if (turret)
 	{
@@ -901,10 +900,10 @@ void BattleUnit::aim(bool aiming)
 }
 
 /**
- * Calculates the Map facing direction from a position to a point.
- * @return direction to a point (0-7)
+ * Returns the direction from this unit to a given point.
+ * @return direction.
  */
-int BattleUnit::getDirectionTo(const Position& point) const
+int BattleUnit::directionTo(const Position& point) const
 {
 	double ox = point.x - _pos.x;
 	double oy = point.y - _pos.y;
@@ -1673,17 +1672,7 @@ void BattleUnit::think(BattleAction* action)
 void BattleUnit::setAIState(BattleAIState* aiState)
 {
 	if (_currentAIState)
-	{
-		if (dynamic_cast<AggroBAIState* >(aiState) != 0
-			&& dynamic_cast<AggroBAIState* >(_currentAIState) != 0)
-		{
-			delete aiState;
-
-			return;
-			// try not to overwrite an existing aggro AI state
-			// I tried using typeid but it does not produce the expected results :(
-		}
-		
+	{		
 		_currentAIState->exit();
 
 		delete _currentAIState;
