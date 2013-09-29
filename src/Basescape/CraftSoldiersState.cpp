@@ -90,12 +90,12 @@ CraftSoldiersState::CraftSoldiersState(Game* game, Base* base, size_t craft)
 
 	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(tr("STR_OK"));
-	_btnOk->onMouseClick((ActionHandler) &CraftSoldiersState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler) &CraftSoldiersState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onMouseClick((ActionHandler)& CraftSoldiersState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)& CraftSoldiersState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_btnUnload->setColor(Palette::blockOffset(13)+10);																	// kL
 	_btnUnload->setText(_game->getLanguage()->getString("STR_UNLOAD"));													// kL
-	_btnUnload->onMouseClick((ActionHandler) &CraftSoldiersState::btnUnloadClick);										// kL
+	_btnUnload->onMouseClick((ActionHandler)& CraftSoldiersState::btnUnloadClick);										// kL
 //	_btnUnload->onKeyboardPress((ActionHandler) &CraftSoldiersState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));	// kL
 
 	_txtTitle->setColor(Palette::blockOffset(15)+6);
@@ -128,13 +128,15 @@ CraftSoldiersState::CraftSoldiersState(Game* game, Base* base, size_t craft)
 	_lstSoldiers->setColor(Palette::blockOffset(13)+10);
 	_lstSoldiers->setArrowColor(Palette::blockOffset(15)+6);
 	_lstSoldiers->setArrowColumn(192, ARROW_VERTICAL);
-	_lstSoldiers->setColumns(3, 106, 102, 72);
+//kL	_lstSoldiers->setColumns(3, 106, 102, 72);
+//	_lstSoldiers->setColumns(3, 114, 94, 72);					// kL
+	_lstSoldiers->setColumns(3, 116, 93, 71);					// kL
 	_lstSoldiers->setSelectable(true);
 	_lstSoldiers->setBackground(_window);
 	_lstSoldiers->setMargin(8);
-	_lstSoldiers->onLeftArrowClick((ActionHandler) &CraftSoldiersState::lstItemsLeftArrowClick);
-	_lstSoldiers->onRightArrowClick((ActionHandler) &CraftSoldiersState::lstItemsRightArrowClick);
-	_lstSoldiers->onMouseClick((ActionHandler) &CraftSoldiersState::lstSoldiersClick);
+	_lstSoldiers->onLeftArrowClick((ActionHandler)& CraftSoldiersState::lstItemsLeftArrowClick);
+	_lstSoldiers->onRightArrowClick((ActionHandler)& CraftSoldiersState::lstItemsRightArrowClick);
+	_lstSoldiers->onMouseClick((ActionHandler)& CraftSoldiersState::lstSoldiersClick);
 
 	populateList();
 }
@@ -234,7 +236,7 @@ void CraftSoldiersState::populateList()
 	_lstSoldiers->clearList();
 
 	int row = 0;
-	for (std::vector<Soldier*>::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); ++i)
+	for (std::vector<Soldier* >::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); ++i)
 	{
 		_lstSoldiers->addRow(3, (*i)->getName().c_str(), tr((*i)->getRankString()).c_str(), (*i)->getCraftString(_game->getLanguage()).c_str());
 
@@ -342,7 +344,7 @@ void CraftSoldiersState::lstItemsRightArrowClick(Action* action)
 }
 
 /**
- * Shows the selected soldier's info.
+ * Assigns and de-assigns soldiers from a craft.
  * @param action Pointer to an action.
  */
 void CraftSoldiersState::lstSoldiersClick(Action* action)

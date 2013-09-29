@@ -16,10 +16,12 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_ABORTMISSION_H
 #define OPENXCOM_ABORTMISSION_H
 
 #include "../Engine/State.h"
+
 
 namespace OpenXcom
 {
@@ -33,25 +35,28 @@ class BattlescapeState;
 /**
  * Screen which asks for confirmation to abort mission.
  */
-class AbortMissionState : public State
+class AbortMissionState
+	:
+	public State
 {
-private:
-	Window *_window;
-	Text *_txtInExit, *_txtOutsideExit, *_txtAbort;
-	TextButton *_btnOk, *_btnCancel;
-	SavedBattleGame *_battleGame;
-	BattlescapeState *_state;
-	int _inExitArea, _outExitArea;
-public:
-	/// Creates the Abort Mission state.
-	AbortMissionState(Game *game, SavedBattleGame *battleGame, BattlescapeState *state);
-	/// Cleans up the Abort Mission state.
-	~AbortMissionState();
-	/// Handler for clicking the OK button.
-	void btnOkClick(Action *action);
-	/// Handler for clicking the Cancel button.
-	void btnCancelClick(Action *action);
+	private:
+		Window* _window;
+		Text* _txtInExit, * _txtOutsideExit, * _txtAbort;
+		TextButton* _btnOk, * _btnCancel;
+		SavedBattleGame* _battleGame;
+		BattlescapeState* _state;
+		int _inExitArea, _outExitArea;
 
+	public:
+		/// Creates the Abort Mission state.
+		AbortMissionState(Game* game, SavedBattleGame* battleGame, BattlescapeState* state);
+		/// Cleans up the Abort Mission state.
+		~AbortMissionState();
+
+		/// Handler for clicking the OK button.
+		void btnOkClick(Action* action);
+		/// Handler for clicking the Cancel button.
+		void btnCancelClick(Action* action);
 };
 
 }

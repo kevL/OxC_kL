@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "AbortMissionState.h"
 #include <sstream>
 #include <vector>
@@ -33,6 +34,7 @@
 #include "../Ruleset/AlienDeployment.h"
 #include "../Ruleset/Ruleset.h"
 
+
 namespace OpenXcom
 {
 
@@ -42,16 +44,22 @@ namespace OpenXcom
  * @param battleGame Pointer to the saved game.
  * @param state Pointer to the Battlescape state.
  */
-AbortMissionState::AbortMissionState(Game *game, SavedBattleGame *battleGame, BattlescapeState *state) : State(game), _battleGame(battleGame), _state(state), _inExitArea(0), _outExitArea(0)
+AbortMissionState::AbortMissionState(Game* game, SavedBattleGame* battleGame, BattlescapeState* state)
+	:
+	State(game),
+	_battleGame(battleGame),
+	_state(state),
+	_inExitArea(0),
+	_outExitArea(0)
 {
 	// Create objects
-	_screen = false;
-	_window = new Window(this, 320, 144, 0, 0);
-	_txtInExit = new Text(304, 16, 16, 25);
-	_txtOutsideExit = new Text(304, 16, 16, 50);
-	_txtAbort = new Text(320, 16, 0, 75);
-	_btnOk = new TextButton(120, 16, 16, 110);
-	_btnCancel = new TextButton(120, 16, 184, 110);
+	_screen			= false;
+	_window			= new Window(this, 320, 144, 0, 0);
+	_txtInExit		= new Text(304, 16, 16, 25);
+	_txtOutsideExit	= new Text(304, 16, 16, 50);
+	_txtAbort		= new Text(320, 16, 0, 75);
+	_btnOk			= new TextButton(120, 16, 16, 110);
+	_btnCancel		= new TextButton(120, 16, 184, 110);
 
 	add(_window);
 	add(_txtInExit);
@@ -63,17 +71,20 @@ AbortMissionState::AbortMissionState(Game *game, SavedBattleGame *battleGame, Ba
 	centerAllSurfaces();
 
 	std::string nextStage = "";
-	if (_battleGame->getMissionType() != "STR_UFO_GROUND_ASSAULT" && _battleGame->getMissionType() != "STR_UFO_CRASH_RECOVERY")
+	if (_battleGame->getMissionType() != "STR_UFO_GROUND_ASSAULT"
+		&& _battleGame->getMissionType() != "STR_UFO_CRASH_RECOVERY")
 	{
 		nextStage = game->getRuleset()->getDeployment(_battleGame->getMissionType())->getNextStage();
 	}
 
 	// Calculate values
-	for (std::vector<BattleUnit*>::iterator i = _battleGame->getUnits()->begin(); i != _battleGame->getUnits()->end(); ++i)
+	for (std::vector<BattleUnit* >::iterator i = _battleGame->getUnits()->begin(); i != _battleGame->getUnits()->end(); ++i)
 	{
-		if ((*i)->getOriginalFaction() == FACTION_PLAYER && !(*i)->isOut())
+		if ((*i)->getOriginalFaction() == FACTION_PLAYER
+			&& !(*i)->isOut())
 		{
-			if ((nextStage != "" && (*i)->isInExitArea(END_POINT)) || ((*i)->isInExitArea() && nextStage == ""))
+			if ((nextStage != "" && (*i)->isInExitArea(END_POINT))
+				|| ((*i)->isInExitArea() && nextStage == ""))
 			{
 				_inExitArea++;
 			}
@@ -98,11 +109,13 @@ AbortMissionState::AbortMissionState(Game *game, SavedBattleGame *battleGame, Ba
 	_txtOutsideExit->setBig();
 	_txtOutsideExit->setHighContrast(true);
 	_txtOutsideExit->setText(tr("STR_UNITS_OUTSIDE_EXIT_AREA", _outExitArea));
+
 	if (_battleGame->getMissionType() == "STR_BASE_DEFENSE")
 	{
 		_txtInExit->setVisible(false);
 		_txtOutsideExit->setVisible(false);
 	}
+
 	_txtAbort->setColor(Palette::blockOffset(0));
 	_txtAbort->setBig();
 	_txtAbort->setAlign(ALIGN_CENTER);
@@ -112,15 +125,14 @@ AbortMissionState::AbortMissionState(Game *game, SavedBattleGame *battleGame, Ba
 	_btnOk->setColor(Palette::blockOffset(0));
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->setHighContrast(true);
-	_btnOk->onMouseClick((ActionHandler)&AbortMissionState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&AbortMissionState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
+	_btnOk->onMouseClick((ActionHandler)& AbortMissionState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)& AbortMissionState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
 
 	_btnCancel->setColor(Palette::blockOffset(0));
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->setHighContrast(true);
-	_btnCancel->onMouseClick((ActionHandler)&AbortMissionState::btnCancelClick);
-	_btnCancel->onKeyboardPress((ActionHandler)&AbortMissionState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
-
+	_btnCancel->onMouseClick((ActionHandler)& AbortMissionState::btnCancelClick);
+	_btnCancel->onKeyboardPress((ActionHandler)& AbortMissionState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
 }
 
 /**
@@ -135,7 +147,7 @@ AbortMissionState::~AbortMissionState()
  * Confirms mission abort.
  * @param action Pointer to an action.
  */
-void AbortMissionState::btnOkClick(Action *)
+void AbortMissionState::btnOkClick(Action* )
 {
 	_game->popState();
 	_battleGame->setAborted(true);
@@ -146,7 +158,7 @@ void AbortMissionState::btnOkClick(Action *)
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void AbortMissionState::btnCancelClick(Action *)
+void AbortMissionState::btnCancelClick(Action* )
 {
 	_game->popState();
 }

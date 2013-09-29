@@ -35,6 +35,12 @@
 #include "../Ruleset/RuleCraft.h"
 #include "SoldierInfoState.h"
 
+// kL_begin: taken from CraftSoldiersState...
+#include <sstream>
+#include <climits>
+#include "../Engine/Action.h"
+#include "../Engine/LocalizedText.h"
+
 
 namespace OpenXcom
 {
@@ -104,12 +110,32 @@ SoldiersState::SoldiersState(Game* game, Base* base)
 	_txtCraft->setText(tr("STR_CRAFT"));
 
 	_lstSoldiers->setColor(Palette::blockOffset(13)+10);
-	_lstSoldiers->setArrowColor(Palette::blockOffset(15)+1);
-	_lstSoldiers->setColumns(3, 114, 92, 74);
+//kL	_lstSoldiers->setArrowColor(Palette::blockOffset(15)+1);
+	_lstSoldiers->setArrowColor(Palette::blockOffset(15)+6);	// kL
+	_lstSoldiers->setArrowColumn(192, ARROW_VERTICAL);			// kL
+//kL	_lstSoldiers->setColumns(3, 114, 92, 74);					// =280
+//	_lstSoldiers->setColumns(3, 114, 94, 72);					// kL
+	_lstSoldiers->setColumns(3, 116, 93, 71);					// kL
 	_lstSoldiers->setSelectable(true);
 	_lstSoldiers->setBackground(_window);
 	_lstSoldiers->setMargin(8);
-	_lstSoldiers->onMouseClick((ActionHandler) &SoldiersState::lstSoldiersClick);
+	_lstSoldiers->onLeftArrowClick((ActionHandler)& SoldiersState::lstItemsLeftArrowClick_noCraft);		// kL
+	_lstSoldiers->onRightArrowClick((ActionHandler)& SoldiersState::lstItemsRightArrowClick_noCraft);	// kL
+	_lstSoldiers->onMouseClick((ActionHandler)& SoldiersState::lstSoldiersClick);
+
+	int kL = 1;
+
+	// kL_note: this is the CraftSoldiersState list:
+/*	_lstSoldiers->setColor(Palette::blockOffset(13)+10);
+	_lstSoldiers->setArrowColor(Palette::blockOffset(15)+6);
+	_lstSoldiers->setArrowColumn(192, ARROW_VERTICAL);
+	_lstSoldiers->setColumns(3, 106, 102, 72);
+	_lstSoldiers->setSelectable(true);
+	_lstSoldiers->setBackground(_window);
+	_lstSoldiers->setMargin(8);
+	_lstSoldiers->onLeftArrowClick((ActionHandler) &CraftSoldiersState::lstItemsLeftArrowClick);
+	_lstSoldiers->onRightArrowClick((ActionHandler) &CraftSoldiersState::lstItemsRightArrowClick);
+	_lstSoldiers->onMouseClick((ActionHandler) &CraftSoldiersState::lstSoldiersClick); */
 }
 
 /**
@@ -128,7 +154,7 @@ void SoldiersState::init()
 	_lstSoldiers->clearList();
 
 	int row = 0;
-	for (std::vector<Soldier*>::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); ++i)
+	for (std::vector<Soldier* >::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); ++i)
 	{
 		_lstSoldiers->addRow(3, (*i)->getName().c_str(), tr((*i)->getRankString()).c_str(), (*i)->getCraftString(_game->getLanguage()).c_str());
 
@@ -163,9 +189,100 @@ void SoldiersState::btnPsiTrainingClick(Action* )
  * Shows the selected soldier's info.
  * @param action Pointer to an action.
  */
-void SoldiersState::lstSoldiersClick(Action* )
+//kL void SoldiersState::lstSoldiersClick(Action* )
+void SoldiersState::lstSoldiersClick(Action* action)		// kL
 {
+	// kL: Taken from CraftSoldiersState::lstSoldiersClick()
+	double mx = action->getAbsoluteXMouse();
+	if (mx >= _lstSoldiers->getArrowsLeftEdge()
+		&& mx < _lstSoldiers->getArrowsRightEdge())
+	{
+		return;
+	} // end_kL.
+
 	_game->pushState(new SoldierInfoState(_game, _base, _lstSoldiers->getSelectedRow()));
+}
+
+/**
+ * Reorders a soldier. kL_Taken from CraftSoldiersState.
+ * @param action Pointer to an action.
+ */
+void SoldiersState::lstItemsLeftArrowClick_noCraft(Action* action)
+{
+	if (SDL_BUTTON_LEFT == action->getDetails()->button.button
+		|| SDL_BUTTON_RIGHT == action->getDetails()->button.button)
+	{
+		int row = _lstSoldiers->getSelectedRow();
+		if (row > 0)
+		{
+			Soldier* s = _base->getSoldiers()->at(row);
+
+			if (SDL_BUTTON_LEFT == action->getDetails()->button.button)
+			{
+				_base->getSoldiers()->at(row) = _base->getSoldiers()->at(row - 1);
+				_base->getSoldiers()->at(row - 1) = s;
+
+				if (row != _lstSoldiers->getScroll())
+				{
+					SDL_WarpMouse(action->getXMouse(), action->getYMouse() - static_cast<Uint16>(8 * action->getYScale()));
+				}
+				else
+				{
+					_lstSoldiers->scrollUp(false);
+				}
+			}
+			else
+			{
+				_base->getSoldiers()->erase(_base->getSoldiers()->begin() + row);
+				_base->getSoldiers()->insert(_base->getSoldiers()->begin(), s);
+			}
+		}
+
+		init();
+	}
+}
+
+/**
+ * Reorders a soldier. kL_Taken from CraftSoldiersState.
+ * @param action Pointer to an action.
+ */
+void SoldiersState::lstItemsRightArrowClick_noCraft(Action* action)
+{
+	if (SDL_BUTTON_LEFT == action->getDetails()->button.button
+		|| SDL_BUTTON_RIGHT == action->getDetails()->button.button)
+	{
+		int row = _lstSoldiers->getSelectedRow();
+		size_t numSoldiers = _base->getSoldiers()->size();
+	
+		if (0 < numSoldiers
+			&& INT_MAX >= numSoldiers
+			&& row < (int)numSoldiers - 1)
+		{
+			Soldier* s = _base->getSoldiers()->at(row);
+
+			if (SDL_BUTTON_LEFT == action->getDetails()->button.button)
+			{
+				_base->getSoldiers()->at(row) = _base->getSoldiers()->at(row + 1);
+				_base->getSoldiers()->at(row + 1) = s;
+
+				if (row != 15 + _lstSoldiers->getScroll())
+				{
+					SDL_WarpMouse(action->getXMouse(), action->getYMouse() + static_cast<Uint16>(8 * action->getYScale()));
+				}
+				else
+				{
+					_lstSoldiers->scrollDown(false);
+				}
+			}
+			else
+			{
+				_base->getSoldiers()->erase(_base->getSoldiers()->begin() + row);
+				_base->getSoldiers()->insert(_base->getSoldiers()->end(), s);
+			}
+		}
+
+		init();
+	}
 }
 
 }
