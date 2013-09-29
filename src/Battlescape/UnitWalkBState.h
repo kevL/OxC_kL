@@ -32,6 +32,7 @@ namespace OpenXcom
 class BattleUnit;
 class Pathfinding;
 class TileEngine;
+//class Soldier;		// kL
 
 /**
  * State for walking units.
@@ -55,6 +56,8 @@ class UnitWalkBState
 		void playMovementSound();
 		std::size_t _numUnitsSpotted;
 		int _preMovementCost;
+
+//		Soldier* _geoscapeSoldier;	// kL: to cycle through all seen HOSTILE units.
 
 	public:
 		/// Creates a new UnitWalkBState class.

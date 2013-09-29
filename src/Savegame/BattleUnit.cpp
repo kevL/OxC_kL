@@ -1306,19 +1306,20 @@ void BattleUnit::setTimeUnits(int tu)
 }
 
 /**
- * Add this unit to the list of visible units. Returns true if this is a new one.
- * @param unit
- * @return
+ * Add this unit to the list of visible units.
+ * @param unit, Seen unit.
+ * @return, True if this is a new one.
  */
-bool BattleUnit::addToVisibleUnits(BattleUnit *unit)
+bool BattleUnit::addToVisibleUnits(BattleUnit* unit)
 {
 	bool add = true;
 
-	for (std::vector<BattleUnit*>::iterator i = _unitsSpottedThisTurn.begin(); i != _unitsSpottedThisTurn.end();++i)
+	for (std::vector<BattleUnit* >::iterator i = _unitsSpottedThisTurn.begin(); i != _unitsSpottedThisTurn.end(); ++i)
 	{
 		if ((BattleUnit*)(*i) == unit)
 		{
 			add = false;
+
 			break;
 		}
 	}
@@ -1328,7 +1329,7 @@ bool BattleUnit::addToVisibleUnits(BattleUnit *unit)
 		_unitsSpottedThisTurn.push_back(unit);
 	}
 
-	for (std::vector<BattleUnit*>::iterator i = _visibleUnits.begin(); i != _visibleUnits.end(); ++i)
+	for (std::vector<BattleUnit* >::iterator i = _visibleUnits.begin(); i != _visibleUnits.end(); ++i)
 	{
 		if ((BattleUnit*)(*i) == unit)
 		{
@@ -1345,7 +1346,7 @@ bool BattleUnit::addToVisibleUnits(BattleUnit *unit)
  * Get the pointer to the vector of visible units.
  * @return pointer to vector.
  */
-std::vector<BattleUnit*> *BattleUnit::getVisibleUnits()
+std::vector<BattleUnit* >* BattleUnit::getVisibleUnits()
 {
 	return &_visibleUnits;
 }

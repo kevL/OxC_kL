@@ -224,8 +224,10 @@ void TileEngine::addLight(const Position &center, int power, int layer)
  * @param unit Unit to check line of sight of.
  * @return True when new aliens are spotted.
  */
-bool TileEngine::calculateFOV(BattleUnit *unit)
+bool TileEngine::calculateFOV(BattleUnit* unit)
 {
+	if (unit->isOut()) return false;	// kL: below.
+
 	size_t oldNumVisibleUnits = unit->getUnitsSpottedThisTurn().size();
 
 	Position center = unit->getPosition();
@@ -235,7 +237,8 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 
 	std::vector<Position> _trajectory;
 
-	if (_save->getStrafeSetting() && (unit->getTurretType() > -1))
+	if (_save->getStrafeSetting()
+		&& unit->getTurretType() > -1)
 	{
 		direction = unit->getTurretDirection();
 	}
@@ -253,19 +256,19 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 	unit->clearVisibleUnits();
 	unit->clearVisibleTiles();
 
-	if (unit->isOut())
-		return false;
+//kL	if (unit->isOut())
+//kL		return false;
 
 	Position pos = unit->getPosition();
 
-	if ((unit->getHeight() + unit->getFloatHeight() + -_save->getTile(unit->getPosition())->getTerrainLevel()) >= 24 + 4)
+	if (unit->getHeight() + unit->getFloatHeight() + -_save->getTile(unit->getPosition())->getTerrainLevel() >= 24 + 4)
 	{
 		++pos.z;
 	}
 
 	for (int x = 0; x <= MAX_VIEW_DISTANCE; ++x)
 	{
-		if (direction%2)
+		if (direction %2)
 		{
 			y1 = 0;
 			y2 = MAX_VIEW_DISTANCE;
@@ -285,12 +288,12 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 
 				if (distanceSqr <= MAX_VIEW_DISTANCE * MAX_VIEW_DISTANCE)
 				{
-					test.x = center.x + signX[direction]*(swap?y:x);
-					test.y = center.y + signY[direction]*(swap?x:y);
+					test.x = center.x + signX[direction] * (swap ? y : x);
+					test.y = center.y + signY[direction] * (swap ? x : y);
 
 					if (_save->getTile(test))
 					{
-						BattleUnit *visibleUnit = _save->getTile(test)->getUnit();
+						BattleUnit* visibleUnit = _save->getTile(test)->getUnit();
 						if (visibleUnit
 							&& !visibleUnit->isOut()
 							&& visible(unit, _save->getTile(test)))
@@ -338,8 +341,7 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 
 										// mark every tile of line as visible (as in original)
 										// this is needed because of bresenham narrow stroke. 
-//kL										_save->getTile(posi)->setVisible(+1);
-										_save->getTile(posi)->setVisible(1);		// kL
+										_save->getTile(posi)->setVisible(+1);
 										_save->getTile(posi)->setDiscovered(true, 2);
 
 										// walls to the east or south of a visible tile, we see that too
@@ -363,22 +365,24 @@ bool TileEngine::calculateFOV(BattleUnit *unit)
 	// we only react when there are at least the same amount of visible units as before AND the checksum is different;
 	// this way we stop if there are the same amount of visible units, but a different unit is seen,
 	// or we stop if there are more visible units seen
-	if (unit->getUnitsSpottedThisTurn().size() > oldNumVisibleUnits
-		&& !unit->getVisibleUnits()->empty())
+	if (!unit->getVisibleUnits()->empty()
+		&& unit->getUnitsSpottedThisTurn().size() > oldNumVisibleUnits)
 	{
 		// a hostile unit will aggro on the new unit if it sees one - it will not start walking
 		if (unit->getFaction() == FACTION_HOSTILE)
 		{
-			AggroBAIState *aggro = dynamic_cast<AggroBAIState*>(unit->getCurrentAIState());
+			AggroBAIState* aggro = dynamic_cast<AggroBAIState* >(unit->getCurrentAIState());
 			if (aggro == 0)
 			{
 				aggro = new AggroBAIState(_save, unit);
+
 				unit->setAIState(aggro);
 				unit->_hidingForTurn = false; // something new happened, react at will...
 			}
 
 			// just pick the first one - maybe we need to prioritize on distance to unit or other parameters?
 			aggro->setAggroTarget(unit->getVisibleUnits()->at(0));
+			// kL_note: HERE's the combat-AI begin!!!
 		}
 
 		return true;

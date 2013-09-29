@@ -707,8 +707,7 @@ void BattlescapeState::mapPress(Action *action)
 }
 
 /**
- * Processes any clicks on the map to
- * command units.
+ * Processes any clicks on the map to command units.
  * @param action Pointer to an action.
  */
 void BattlescapeState::mapClick(Action *action)
@@ -716,7 +715,7 @@ void BattlescapeState::mapClick(Action *action)
 	// The following is the workaround for a rare problem where sometimes
 	// the mouse-release event is missed for any reason.
 	// However if the SDL is also missed the release event, then it is to no avail :(
-	// (this part handles the release if it is missed and now an other button is used)
+	// (this part handles the release if it is missed and now another button is used)
 	if (isMouseScrolling)
 	{
 		if (action->getDetails()->button.button != _save->getDragButton()

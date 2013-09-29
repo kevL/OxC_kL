@@ -30,6 +30,7 @@
 #include "../Savegame/BattleItem.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/SavedBattleGame.h"
+//#include "../Savegame/Soldier.h"		// kL
 #include "../Savegame/Tile.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Sound.h"
@@ -110,11 +111,12 @@ void UnitWalkBState::think()
 	}
 	else
 	{
-		Log(LOG_INFO) << ". . unit !isOut, continue : " << _unit->getHealth();	// kL
+		Log(LOG_INFO) << ". . unit !isOut, continue - health:" << _unit->getHealth();	// kL
 	}
 
 
 	bool unitSpotted = false;
+//	int visUnits = _unit->getVisibleUnits().size();
 	bool onScreen = (_unit->getVisible()
 		&& _parent->getMap()->getCamera()->isOnScreen(_unit->getPosition()));
 
@@ -272,6 +274,11 @@ void UnitWalkBState::think()
 				_unit->setVisible(false);
 			}
 
+			Log(LOG_INFO) << ". . getVisibleUnits() pre" ;					// kL
+			std::vector<BattleUnit* >* vunits = _unit->getVisibleUnits();	// kL
+			int preVisUnits = vunits->size();								// kL
+			Log(LOG_INFO) << ". . getVisibleUnits() " << preVisUnits ;		// kL
+
 			_terrain->calculateFOV(_unit->getPosition());
 //kL: sent below.			unitSpotted = (_parent->getPanicHandled() && _numUnitsSpotted != _unit->getUnitsSpottedThisTurn().size());
 
@@ -289,7 +296,7 @@ void UnitWalkBState::think()
 							Tile* t = _parent->getSave()->getTile(_unit->getPosition() + Position(x, y, 0) + Position(tx, ty, 0));
 							if (t)
 							{
-								for (std::vector<BattleItem*>::iterator i = t->getInventory()->begin(); i != t->getInventory()->end(); ++i)
+								for (std::vector<BattleItem* >::iterator i = t->getInventory()->begin(); i != t->getInventory()->end(); ++i)
 								{
 									if ((*i)->getRules()->getBattleType() == BT_PROXIMITYGRENADE
 										&& (*i)->getExplodeTurn() > 0)
@@ -317,7 +324,22 @@ void UnitWalkBState::think()
 
 			// kL_note: I think this is the place to stop my soldiers from halting vs. already-seen alien units.
 			// ie, do a check for !_alreadySpotted ( more cases are further down below )
-			unitSpotted = (_parent->getPanicHandled() && _numUnitsSpotted != _unit->getUnitsSpottedThisTurn().size());	// kL: from above.
+			unitSpotted = _parent->getPanicHandled()
+					&& _numUnitsSpotted != _unit->getUnitsSpottedThisTurn().size();	// kL: from above.
+			// kL_note: this actually seems to be redundant w/ TileEngine::calculateFOV() ...
+
+			// kL_begin: recalculation of SpottedUnit.
+			int postVisUnits = vunits->size();
+			if (_unit->getFaction() == FACTION_PLAYER)
+			{
+				if (postVisUnits <= preVisUnits)
+				{
+					unitSpotted = false;
+				}
+			}
+			// kL_end.
+
+
 			if (unitSpotted)
 			{
 				_unit->setCache(0);

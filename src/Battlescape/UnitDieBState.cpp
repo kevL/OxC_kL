@@ -193,6 +193,8 @@ void UnitDieBState::think()
 		// kL_begin:
 		if (_unit->getSpinPhase() > -1)
 		{
+			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED * 2 / 7);
+
 			_unit->contDeathSpin(); // -> STATUS_STANDING 
 			Log(LOG_INFO) << ". . . . got back from contDeathSpin()";
 		}
@@ -213,7 +215,7 @@ void UnitDieBState::think()
 	{
 		Log(LOG_INFO) << ". . !isOut";
 
-		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED);
+		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED * 8 / 7);
 		_unit->startFalling(); // -> STATUS_COLLAPSING
 
 		if (!_noSound)		// kL
@@ -228,9 +230,9 @@ void UnitDieBState::think()
 
 		// kL_note: I think this is doubling because I remarked DT_HE in the constructor. nah... Yes!
 		// but leave it in 'cause it gives a coolia .. doubling effect !!! In fact,
-		// try it for *EVERYONE** ( but it could be a cool effect that is reserved for HE deaths )
+		// try it for *EVERYONE** ( but it could be a cool effect that is reserved for HE deaths ) <- ok.
 		if (!_noSound
-//kL			&& _damageType == DT_HE
+			&& _damageType == DT_HE
 			&& _unit->getStatus() != STATUS_UNCONSCIOUS)
 		{
 			playDeathSound();

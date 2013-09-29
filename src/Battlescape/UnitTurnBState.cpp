@@ -122,20 +122,6 @@ void UnitTurnBState::think()
 		bool notMC = _unit->getFaction() == _parent->getSave()->getSide();
 		bool anotherone = false;
 
-		// CRASH_start:
-		/* SavedBattleGame *bunit;
-		for (std::vector<BattleUnit*>::iterator b = bunit->getUnits()->begin(); b != bunit->getUnits()->end(); ++b)
-		{
-//			if ((*b)->getFaction() == FACTION_PLAYER
-//				&& (*b)->getOriginalFaction() == FACTION_PLAYER
-			if (notMC
-				&& (*b)->getUnitsSpottedThisTurn().size() > unitsSpotted)
-			{
-				anotherone = true;
-			}
-		} */ // CRASH_end.
-		// kL_end.
-
 //kL		if (_unit->getFaction() == _parent->getSave()->getSide()
 		if (notMC														// kL
 			&& _parent->getPanicHandled()

@@ -262,7 +262,7 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 	// in bonus round, need to be in "aggro" state to hide; what was that about refactoring?
 	// also make sure you're in aggro state if you see units, even if you haven't taken a step yet
 	if ((unit->getMainHandWeapon() && unit->getMainHandWeapon()->getRules()->isWaypoint())
-        || (unit->getVisibleUnits()->size() != 0))
+        || unit->getVisibleUnits()->size() != 0)
 	{
 		if (aggro == 0)
 		{
@@ -796,7 +796,7 @@ void BattlescapeGame::handleNonTargetAction()
 		{
 			if (_currentAction.actor->spendTimeUnits(_currentAction.TU))
 			{
-				_parentState->warning("STR_GRENADE_IS_ACTIVATED");
+//kL?				_parentState->warning("STR_GRENADE_IS_ACTIVATED");
 				_currentAction.weapon->setExplodeTurn(_save->getTurn() + _currentAction.value);
 				_parentState->warning("STR_GRENADE_IS_ACTIVATED");		// kL
 			}
@@ -1322,6 +1322,7 @@ bool BattlescapeGame::checkReservedTU(BattleUnit *bu, int tu, bool justChecking)
 					case BA_AIMEDSHOT:
 						_parentState->warning("STR_TIME_UNITS_RESERVED_FOR_AIMED_SHOT");
 					break;
+
 					default:
 					break;
 				}
@@ -1385,7 +1386,7 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit *unit)
 
 	unit->abortTurn(); // makes the unit go to status STANDING :p
 
-	int flee = RNG::generate(0, 100);
+	int flee = RNG::generate(0, 99);
 	BattleAction ba;
 	ba.actor = unit;
 
@@ -1555,11 +1556,15 @@ bool BattlescapeGame::isBusy()
  */
 void BattlescapeGame::primaryAction(const Position& pos)
 {
+	Log(LOG_INFO) << "BattlescapeGame::primaryAction()";
+
 	bool bPreviewed = Options::getInt("battleNewPreviewPath") > 0;
 
 	if (_currentAction.targeting
 		&& _save->getSelectedUnit())
 	{
+		Log(LOG_INFO) << ". . _currentAction.targeting";
+
 		if (_currentAction.type == BA_LAUNCH)
 		{
 			_parentState->showLaunchButton(true);
@@ -1642,6 +1647,8 @@ void BattlescapeGame::primaryAction(const Position& pos)
 		}
 		else
 		{
+			Log(LOG_INFO) << ". . . . Firing or Throwing";
+
 			getMap()->setCursorType(CT_NONE);
 			_parentState->getGame()->getCursor()->setVisible(false);
 
@@ -1656,6 +1663,8 @@ void BattlescapeGame::primaryAction(const Position& pos)
 	}
 	else
 	{
+		Log(LOG_INFO) << ". . NOT _currentAction.targeting";
+
 		_currentAction.actor = _save->getSelectedUnit();
 
 		BattleUnit* unit = _save->selectUnit(pos);
@@ -1743,7 +1752,6 @@ void BattlescapeGame::launchAction()
 	_states.push_back(new ProjectileFlyBState(this, _currentAction));
 
 	statePushFront(new UnitTurnBState(this, _currentAction)); // first of all turn towards the target
-	// kL_note: do we really want to turn toward the target for BLaunch? (not in original!)
 }
 
 /**
