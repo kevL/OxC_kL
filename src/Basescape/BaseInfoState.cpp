@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "BaseInfoState.h"
 #include <sstream>
 #include "../Engine/Game.h"
@@ -30,12 +31,13 @@
 #include "../Interface/TextEdit.h"
 #include "../Engine/Surface.h"
 #include "MiniBaseView.h"
-#include "../Savegame/SavedGame.h"
 #include "../Savegame/Base.h"
+#include "../Savegame/SavedGame.h"
 #include "MonthlyCostsState.h"
 #include "TransfersState.h"
 #include "StoresState.h"
 #include "BasescapeState.h"
+
 
 namespace OpenXcom
 {
@@ -46,61 +48,63 @@ namespace OpenXcom
  * @param base Pointer to the base to get info from.
  * @param state Pointer to the Basescape state.
  */
-BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : State(game), _base(base), _state(state)
+BaseInfoState::BaseInfoState(Game* game, Base* base, BasescapeState* state) : State(game), _base(base), _state(state)
 {
 	_containmentLimit = Options::getBool("alienContainmentLimitEnforced");
 	// Create objects
-	_bg = new Surface(320, 200, 0, 0);
-	_mini = new MiniBaseView(128, 16, 182, 8);
-	_btnOk = new TextButton(30, 14, 10, 180);
-	_btnTransfers = new TextButton(80, 14, 46, 180);
-	_btnStores = new TextButton(80, 14, 132, 180);
-	_btnMonthlyCosts = new TextButton(92, 14, 218, 180);
-	_edtBase = new TextEdit(127, 16, 8, 8);
+	_bg					= new Surface(320, 200, 0, 0);
+	_mini				= new MiniBaseView(128, 16, 182, 8);
+	_btnOk				= new TextButton(30, 14, 10, 180);
+	_btnTransfers		= new TextButton(80, 14, 46, 180);
+	_btnStores			= new TextButton(80, 14, 132, 180);
+	_btnMonthlyCosts	= new TextButton(92, 14, 218, 180);
+	_edtBase			= new TextEdit(127, 16, 8, 8);
 
-	_txtPersonnel = new Text(300, 9, 8, 30);
-	_txtSoldiers = new Text(114, 9, 8, 41);
-	_numSoldiers = new Text(40, 9, 126, 41);
-	_barSoldiers = new Bar(150, 5, 166, 43);
-	_txtEngineers = new Text(114, 9, 8, 51);
-	_numEngineers = new Text(40, 9, 126, 51);
-	_barEngineers = new Bar(150, 5, 166, 53);
-	_txtScientists = new Text(114, 9, 8, 61);
-	_numScientists = new Text(40, 9, 126, 61);
-	_barScientists = new Bar(150, 5, 166, 63);
+	_txtPersonnel		= new Text(300, 9, 8, 30);
+	_txtSoldiers		= new Text(114, 9, 8, 41);
+	_numSoldiers		= new Text(40, 9, 126, 41);
+	_barSoldiers		= new Bar(150, 5, 166, 43);
+	_txtEngineers		= new Text(114, 9, 8, 51);
+	_numEngineers		= new Text(40, 9, 126, 51);
+	_barEngineers		= new Bar(150, 5, 166, 53);
+	_txtScientists		= new Text(114, 9, 8, 61);
+	_numScientists		= new Text(40, 9, 126, 61);
+	_barScientists		= new Bar(150, 5, 166, 63);
 
-	_txtSpace = new Text(300, 9, 8, 72);
-	_txtQuarters = new Text(114, 9, 8, 83);
-	_numQuarters = new Text(40, 9, 126, 83);
-	_barQuarters = new Bar(150, 5, 166, 85);
-	_txtStores = new Text(114, 9, 8, 93);
-	_numStores = new Text(40, 9, 126, 93);
-	_barStores = new Bar(150, 5, 166, 95);
-	_txtLaboratories = new Text(114, 9, 8, 103);
-	_numLaboratories = new Text(40, 9, 126, 103);
-	_barLaboratories = new Bar(150, 5, 166, 105);
-	_txtWorkshops = new Text(114, 9, 8, 113);
-	_numWorkshops = new Text(40, 9, 126, 113);
-	_barWorkshops = new Bar(150, 5, 166, 115);
+	_txtSpace			= new Text(300, 9, 8, 72);
+	_txtQuarters		= new Text(114, 9, 8, 83);
+	_numQuarters		= new Text(40, 9, 126, 83);
+	_barQuarters		= new Bar(150, 5, 166, 85);
+	_txtStores			= new Text(114, 9, 8, 93);
+	_numStores			= new Text(40, 9, 126, 93);
+	_barStores			= new Bar(150, 5, 166, 95);
+	_txtLaboratories	= new Text(114, 9, 8, 103);
+	_numLaboratories	= new Text(40, 9, 126, 103);
+	_barLaboratories	= new Bar(150, 5, 166, 105);
+	_txtWorkshops		= new Text(114, 9, 8, 113);
+	_numWorkshops		= new Text(40, 9, 126, 113);
+	_barWorkshops		= new Bar(150, 5, 166, 115);
+
 	if (_containmentLimit)
 	{
 		_txtContainment = new Text(114, 9, 8, 123);
 		_numContainment = new Text(40, 9, 126, 123);
 		_barContainment = new Bar(150, 5, 166, 125);
 	}
-	_txtHangars = new Text(114, 9, 8, _containmentLimit ? 133 : 123);
-	_numHangars = new Text(40, 9, 126, _containmentLimit ? 133 : 123);
-	_barHangars = new Bar(150, 5, 166, _containmentLimit ? 135 : 125);
 
-	_txtDefense = new Text(114, 9, 8, _containmentLimit ? 147 : 138);
-	_numDefense = new Text(40, 9, 126, _containmentLimit ? 147 : 138);
-	_barDefense = new Bar(150, 5, 166, _containmentLimit ? 149 : 140);
-	_txtShortRange = new Text(114, 9, 8, _containmentLimit ? 157 : 153);
-	_numShortRange = new Text(40, 9, 126, _containmentLimit ? 157 : 153);
-	_barShortRange = new Bar(150, 5, 166, _containmentLimit ? 159 : 155);
-	_txtLongRange = new Text(114, 9, 8, _containmentLimit ? 167 : 163);
-	_numLongRange = new Text(40, 9, 126, _containmentLimit ? 167 : 163);
-	_barLongRange = new Bar(150, 5, 166, _containmentLimit ? 169 : 165);
+	_txtHangars			= new Text(114, 9, 8, _containmentLimit ? 133 : 123);
+	_numHangars			= new Text(40, 9, 126, _containmentLimit ? 133 : 123);
+	_barHangars			= new Bar(150, 5, 166, _containmentLimit ? 135 : 125);
+
+	_txtDefense			= new Text(114, 9, 8, _containmentLimit ? 147 : 138);
+	_numDefense			= new Text(40, 9, 126, _containmentLimit ? 147 : 138);
+	_barDefense			= new Bar(150, 5, 166, _containmentLimit ? 149 : 140);
+	_txtShortRange		= new Text(114, 9, 8, _containmentLimit ? 157 : 153);
+	_numShortRange		= new Text(40, 9, 126, _containmentLimit ? 157 : 153);
+	_barShortRange		= new Bar(150, 5, 166, _containmentLimit ? 159 : 155);
+	_txtLongRange		= new Text(114, 9, 8, _containmentLimit ? 167 : 163);
+	_numLongRange		= new Text(40, 9, 126, _containmentLimit ? 167 : 163);
+	_barLongRange		= new Bar(150, 5, 166, _containmentLimit ? 169 : 165);
 
 	add(_bg);
 	add(_mini);
@@ -134,12 +138,14 @@ BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : St
 	add(_txtWorkshops);
 	add(_numWorkshops);
 	add(_barWorkshops);
+
 	if (_containmentLimit)
 	{
 		add(_txtContainment);
 		add(_numContainment);
 		add(_barContainment);
 	}
+
 	add(_txtHangars);
 	add(_numHangars);
 	add(_barHangars);
@@ -172,31 +178,32 @@ BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : St
 		if (_game->getSavedGame()->getBases()->at(i) == _base)
 		{
 			_mini->setSelectedBase(i);
+
 			break;
 		}
 	}
-	_mini->onMouseClick((ActionHandler)&BaseInfoState::miniClick);
+	_mini->onMouseClick((ActionHandler)& BaseInfoState::miniClick);
 
 	_btnOk->setColor(Palette::blockOffset(15)+6);
 	_btnOk->setText(tr("STR_OK"));
-	_btnOk->onMouseClick((ActionHandler)&BaseInfoState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&BaseInfoState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onMouseClick((ActionHandler)& BaseInfoState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)& BaseInfoState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_btnTransfers->setColor(Palette::blockOffset(15)+6);
 	_btnTransfers->setText(tr("STR_TRANSFERS_UC"));
-	_btnTransfers->onMouseClick((ActionHandler)&BaseInfoState::btnTransfersClick);
+	_btnTransfers->onMouseClick((ActionHandler)& BaseInfoState::btnTransfersClick);
 
 	_btnStores->setColor(Palette::blockOffset(15)+6);
 	_btnStores->setText(tr("STR_STORES_UC"));
-	_btnStores->onMouseClick((ActionHandler)&BaseInfoState::btnStoresClick);
+	_btnStores->onMouseClick((ActionHandler)& BaseInfoState::btnStoresClick);
 
 	_btnMonthlyCosts->setColor(Palette::blockOffset(15)+6);
 	_btnMonthlyCosts->setText(tr("STR_MONTHLY_COSTS"));
-	_btnMonthlyCosts->onMouseClick((ActionHandler)&BaseInfoState::btnMonthlyCostsClick);
+	_btnMonthlyCosts->onMouseClick((ActionHandler)& BaseInfoState::btnMonthlyCostsClick);
 
 	_edtBase->setColor(Palette::blockOffset(15)+1);
 	_edtBase->setBig();
-	_edtBase->onKeyboardPress((ActionHandler)&BaseInfoState::edtBaseKeyPress);
+	_edtBase->onKeyboardPress((ActionHandler)& BaseInfoState::edtBaseKeyPress);
 
 
 	_txtPersonnel->setColor(Palette::blockOffset(15)+1);
@@ -312,7 +319,6 @@ BaseInfoState::BaseInfoState(Game *game, Base *base, BasescapeState *state) : St
  */
 BaseInfoState::~BaseInfoState()
 {
-
 }
 
 /**
@@ -323,11 +329,14 @@ void BaseInfoState::init()
 	_edtBase->setText(_base->getName());
 
 	std::wstringstream ss;
-	ss << _base->getAvailableSoldiers() << ":" << _base->getTotalSoldiers();
+//kL	ss << _base->getAvailableSoldiers() << ":" << _base->getTotalSoldiers();
+	ss << _base->getAvailableSoldiers(true) << ":" << _base->getTotalSoldiers();	// kL
 	_numSoldiers->setText(ss.str());
 
+
 	_barSoldiers->setMax(_base->getTotalSoldiers());
-	_barSoldiers->setValue(_base->getAvailableSoldiers());
+//kL	_barSoldiers->setValue(_base->getAvailableSoldiers());
+	_barSoldiers->setValue(_base->getAvailableSoldiers(true));		// kL
 
 	std::wstringstream ss2;
 	ss2 << _base->getAvailableEngineers() << ":" << _base->getTotalEngineers();
@@ -416,10 +425,10 @@ void BaseInfoState::init()
  * Changes the base name.
  * @param action Pointer to an action.
  */
-void BaseInfoState::edtBaseKeyPress(Action *action)
+void BaseInfoState::edtBaseKeyPress(Action* action)
 {
-	if (action->getDetails()->key.keysym.sym == SDLK_RETURN ||
-		action->getDetails()->key.keysym.sym == SDLK_KP_ENTER)
+	if (action->getDetails()->key.keysym.sym == SDLK_RETURN
+		|| action->getDetails()->key.keysym.sym == SDLK_KP_ENTER)
 	{
 		_base->setName(_edtBase->getText());
 	}
@@ -429,7 +438,7 @@ void BaseInfoState::edtBaseKeyPress(Action *action)
  * Selects a new base to display.
  * @param action Pointer to an action.
  */
-void BaseInfoState::miniClick(Action *)
+void BaseInfoState::miniClick(Action* )
 {
 	unsigned int base = _mini->getHoveredBase();
 	if (base < _game->getSavedGame()->getBases()->size())
@@ -437,6 +446,7 @@ void BaseInfoState::miniClick(Action *)
 		_mini->setSelectedBase(base);
 		_base = _game->getSavedGame()->getBases()->at(base);
 		_state->setBase(_base);
+
 		init();
 	}
 }
@@ -445,7 +455,7 @@ void BaseInfoState::miniClick(Action *)
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void BaseInfoState::btnOkClick(Action *)
+void BaseInfoState::btnOkClick(Action* )
 {
 	_base->setName(_edtBase->getText());
 	_game->popState();
@@ -455,7 +465,7 @@ void BaseInfoState::btnOkClick(Action *)
  * Goes to the Transfers window.
  * @param action Pointer to an action.
  */
-void BaseInfoState::btnTransfersClick(Action *)
+void BaseInfoState::btnTransfersClick(Action* )
 {
 	_game->pushState(new TransfersState(_game, _base));
 }
@@ -464,7 +474,7 @@ void BaseInfoState::btnTransfersClick(Action *)
  * Goes to the Stores screen.
  * @param action Pointer to an action.
  */
-void BaseInfoState::btnStoresClick(Action *)
+void BaseInfoState::btnStoresClick(Action* )
 {
 	_game->pushState(new StoresState(_game, _base));
 }
@@ -473,7 +483,7 @@ void BaseInfoState::btnStoresClick(Action *)
  * Goes to the Monthly Costs screen.
  * @param action Pointer to an action.
  */
-void BaseInfoState::btnMonthlyCostsClick(Action *)
+void BaseInfoState::btnMonthlyCostsClick(Action* )
 {
 	_game->pushState(new MonthlyCostsState(_game, _base));
 }

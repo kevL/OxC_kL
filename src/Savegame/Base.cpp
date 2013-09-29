@@ -16,7 +16,9 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #define _USE_MATH_DEFINES
+
 #include "Base.h"
 #include <cmath>
 #include <algorithm>
@@ -40,6 +42,7 @@
 #include "../Engine/RNG.h"
 #include "../Engine/Options.h"
 
+
 namespace OpenXcom
 {
 
@@ -47,7 +50,15 @@ namespace OpenXcom
  * Initializes an empty base.
  * @param rule Pointer to ruleset.
  */
-Base::Base(const Ruleset *rule) : Target(), _rule(rule), _name(L""), _scientists(0), _engineers(0), _inBattlescape(false), _retaliationTarget(false)
+Base::Base(const Ruleset* rule)
+	:
+	Target(),
+	_rule(rule),
+	_name(L""),
+	_scientists(0),
+	_engineers(0),
+	_inBattlescape(false),
+	_retaliationTarget(false)
 {
 	_items = new ItemContainer();
 }
@@ -423,14 +434,17 @@ bool Base::insideRadarRange(Target *target) const
 int Base::getAvailableSoldiers(bool checkCombatReadiness) const
 {
 	int total = 0;
-	for (std::vector<Soldier*>::const_iterator i = _soldiers.begin(); i != _soldiers.end(); ++i)
+
+	for (std::vector<Soldier* >::const_iterator i = _soldiers.begin(); i != _soldiers.end(); ++i)
 	{
-		if (!checkCombatReadiness && (*i)->getCraft() == 0)
+		if (!checkCombatReadiness
+			&& (*i)->getCraft() == 0)
 		{
 			total++;
 		}
-		else if (checkCombatReadiness && (((*i)->getCraft() != 0 && (*i)->getCraft()->getStatus() != "STR_OUT") || 
-			((*i)->getCraft() == 0 && (*i)->getWoundRecovery() == 0)))
+		else if (checkCombatReadiness
+			&& (((*i)->getCraft() != 0 && (*i)->getCraft()->getStatus() != "STR_OUT")
+				|| ((*i)->getCraft() == 0 && (*i)->getWoundRecovery() == 0)))
 		{
 			total++;
 		}
