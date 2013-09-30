@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "CraftWeaponsState.h"
 #include <sstream>
 #include <cmath>
@@ -35,6 +36,7 @@
 #include "../Savegame/ItemContainer.h"
 #include "../Savegame/Base.h"
 
+
 namespace OpenXcom
 {
 
@@ -45,19 +47,25 @@ namespace OpenXcom
  * @param craft ID of the selected craft.
  * @param weapon ID of the selected weapon.
  */
-CraftWeaponsState::CraftWeaponsState(Game *game, Base *base, size_t craft, size_t weapon) : State(game), _base(base), _craft(craft), _weapon(weapon), _weapons()
+CraftWeaponsState::CraftWeaponsState(Game* game, Base* base, size_t craft, size_t weapon)
+	:
+	State(game),
+	_base(base),
+	_craft(craft),
+	_weapon(weapon),
+	_weapons()
 {
 	_screen = false;
 
 	// Create objects
-	_window = new Window(this, 220, 160, 50, 20, POPUP_BOTH);
-	_btnCancel = new TextButton(140, 16, 90, 156);
-	_txtTitle = new Text(208, 16, 56, 28);
-	_txtArmament = new Text(76, 9, 66, 52);
-	_txtQuantity = new Text(50, 9, 145, 52);
-	_txtAmmunition = new Text(68, 9, 195, 44);
-	_txtAvailable = new Text(68, 9, 195, 52);
-	_lstWeapons = new TextList(188, 80, 58, 68);
+	_window			= new Window(this, 220, 160, 50, 20, POPUP_BOTH);
+	_btnCancel		= new TextButton(140, 16, 90, 156);
+	_txtTitle		= new Text(208, 16, 56, 28);
+	_txtArmament	= new Text(76, 9, 66, 52);
+	_txtQuantity	= new Text(50, 9, 145, 52);
+	_txtAmmunition	= new Text(68, 9, 195, 44);
+	_txtAvailable	= new Text(68, 9, 195, 52);
+	_lstWeapons		= new TextList(188, 80, 58, 68);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)), Palette::backPos, 16);
@@ -79,8 +87,8 @@ CraftWeaponsState::CraftWeaponsState(Game *game, Base *base, size_t craft, size_
 
 	_btnCancel->setColor(Palette::blockOffset(15)+6);
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
-	_btnCancel->onMouseClick((ActionHandler)&CraftWeaponsState::btnCancelClick);
-	_btnCancel->onKeyboardPress((ActionHandler)&CraftWeaponsState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnCancel->onMouseClick((ActionHandler)& CraftWeaponsState::btnCancelClick);
+	_btnCancel->onKeyboardPress((ActionHandler)& CraftWeaponsState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(15)+6);
 	_txtTitle->setBig();
@@ -109,10 +117,10 @@ CraftWeaponsState::CraftWeaponsState(Game *game, Base *base, size_t craft, size_
 	_lstWeapons->addRow(1, tr("STR_NONE_UC").c_str());
 	_weapons.push_back(0);
 
-	const std::vector<std::string> &weapons = _game->getRuleset()->getCraftWeaponsList();
+	const std::vector<std::string>& weapons = _game->getRuleset()->getCraftWeaponsList();
 	for (std::vector<std::string>::const_iterator i = weapons.begin(); i != weapons.end(); ++i)
 	{
-		RuleCraftWeapon *w = _game->getRuleset()->getCraftWeapon(*i);
+		RuleCraftWeapon* w = _game->getRuleset()->getCraftWeapon(*i);
 		if (_base->getItems()->getItem(w->getLauncherItem()) > 0)
 		{
 			_weapons.push_back(w);
@@ -122,7 +130,8 @@ CraftWeaponsState::CraftWeaponsState(Game *game, Base *base, size_t craft, size_
 			_lstWeapons->addRow(3, tr(w->getType()).c_str(), ss.str().c_str(), ss2.str().c_str());
 		}
 	}
-	_lstWeapons->onMouseClick((ActionHandler)&CraftWeaponsState::lstWeaponsClick);
+
+	_lstWeapons->onMouseClick((ActionHandler)& CraftWeaponsState::lstWeaponsClick);
 }
 
 /**
@@ -130,14 +139,13 @@ CraftWeaponsState::CraftWeaponsState(Game *game, Base *base, size_t craft, size_
  */
 CraftWeaponsState::~CraftWeaponsState()
 {
-
 }
 
 /**
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void CraftWeaponsState::btnCancelClick(Action *)
+void CraftWeaponsState::btnCancelClick(Action* )
 {
 	_game->popState();
 }
@@ -146,11 +154,10 @@ void CraftWeaponsState::btnCancelClick(Action *)
  * Equips the weapon on the craft and returns to the previous screen.
  * @param action Pointer to an action.
  */
-void CraftWeaponsState::lstWeaponsClick(Action *)
+void CraftWeaponsState::lstWeaponsClick(Action* )
 {
-	CraftWeapon *current = _base->getCrafts()->at(_craft)->getWeapons()->at(_weapon);
-	// Remove current weapon
-	if (current != 0)
+	CraftWeapon* current = _base->getCrafts()->at(_craft)->getWeapons()->at(_weapon);
+	if (current != 0) // Remove current weapon
 	{
 		_base->getItems()->addItem(current->getRules()->getLauncherItem());
 		_base->getItems()->addItem(current->getRules()->getClipItem(), (int)floor((double)current->getAmmo() / current->getRules()->getRearmRate()));
@@ -158,13 +165,14 @@ void CraftWeaponsState::lstWeaponsClick(Action *)
 		_base->getCrafts()->at(_craft)->getWeapons()->at(_weapon) = 0;
 	}
 
-	// Equip new weapon
-	if (_weapons[_lstWeapons->getSelectedRow()] != 0)
+	if (_weapons[_lstWeapons->getSelectedRow()] != 0) // Equip new weapon
 	{
-		CraftWeapon *sel = new CraftWeapon(_weapons[_lstWeapons->getSelectedRow()], 0);
+		CraftWeapon* sel = new CraftWeapon(_weapons[_lstWeapons->getSelectedRow()], 0);
 		sel->setRearming(true);
+
 		_base->getItems()->removeItem(sel->getRules()->getLauncherItem());
 		_base->getCrafts()->at(_craft)->getWeapons()->at(_weapon) = sel;
+
 		if (_base->getCrafts()->at(_craft)->getStatus() == "STR_READY")
 		{
 			_base->getCrafts()->at(_craft)->setStatus("STR_REARMING");

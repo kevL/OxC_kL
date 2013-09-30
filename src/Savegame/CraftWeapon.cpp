@@ -16,9 +16,11 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "CraftWeapon.h"
 #include "../Ruleset/RuleCraftWeapon.h"
 #include "CraftWeaponProjectile.h"
+
 
 namespace OpenXcom
 {
@@ -28,7 +30,11 @@ namespace OpenXcom
  * @param rules Pointer to ruleset.
  * @param ammo Initial ammo.
  */
-CraftWeapon::CraftWeapon(RuleCraftWeapon *rules, int ammo) : _rules(rules), _ammo(ammo), _rearming(false)
+CraftWeapon::CraftWeapon(RuleCraftWeapon* rules, int ammo)
+	:
+	_rules(rules),
+	_ammo(ammo),
+	_rearming(false)
 {
 }
 
@@ -43,10 +49,10 @@ CraftWeapon::~CraftWeapon()
  * Loads the craft weapon from a YAML file.
  * @param node YAML node.
  */
-void CraftWeapon::load(const YAML::Node &node)
+void CraftWeapon::load(const YAML::Node& node)
 {
-	_ammo = node["ammo"].as<int>(_ammo);
-	_rearming = node["rearming"].as<bool>(_rearming);
+	_ammo		= node["ammo"].as<int>(_ammo);
+	_rearming	= node["rearming"].as<bool>(_rearming);
 }
 
 /**
@@ -56,10 +62,11 @@ void CraftWeapon::load(const YAML::Node &node)
 YAML::Node CraftWeapon::save() const
 {
 	YAML::Node node;
-	node["type"] = _rules->getType();
-	node["ammo"] = _ammo;
+	node["type"]			= _rules->getType();
+	node["ammo"]			= _ammo;
 	if (_rearming)
-		node["rearming"] = _rearming;
+		node["rearming"]	= _rearming;
+
 	return node;
 }
 
@@ -67,7 +74,7 @@ YAML::Node CraftWeapon::save() const
  * Returns the ruleset for the craft weapon's type.
  * @return Pointer to ruleset.
  */
-RuleCraftWeapon *CraftWeapon::getRules() const
+RuleCraftWeapon* CraftWeapon::getRules() const
 {
 	return _rules;
 }
@@ -91,12 +98,15 @@ bool CraftWeapon::setAmmo(int ammo)
 	if (_ammo < 0)
 	{
 		_ammo = 0;
+
 		return false;
 	}
+
 	if (_ammo > _rules->getAmmoMax())
 	{
 		_ammo = _rules->getAmmoMax();
 	}
+
 	return true;
 }
 
@@ -137,12 +147,13 @@ void CraftWeapon::rearm()
  */
 CraftWeaponProjectile* CraftWeapon::fire() const
 {
-	CraftWeaponProjectile *p = new CraftWeaponProjectile();
+	CraftWeaponProjectile* p = new CraftWeaponProjectile();
 	p->setType(this->getRules()->getProjectileType());
 	p->setSpeed(this->getRules()->getProjectileSpeed());
 	p->setAccuracy(this->getRules()->getAccuracy());
 	p->setDamage(this->getRules()->getDamage());
 	p->setRange(this->getRules()->getRange());
+
 	return p;
 }
 

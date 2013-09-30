@@ -16,11 +16,13 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_CRAFTWEAPON_H
 #define OPENXCOM_CRAFTWEAPON_H
 
 #include <string>
 #include <yaml-cpp/yaml.h>
+
 
 namespace OpenXcom
 {
@@ -36,32 +38,34 @@ class CraftWeaponProjectile;
 class CraftWeapon
 {
 private:
-	RuleCraftWeapon *_rules;
+	RuleCraftWeapon* _rules;
 	int _ammo;
 	bool _rearming;
-public:
-	/// Creates a craft weapon of the specified type.
-	CraftWeapon(RuleCraftWeapon *rules, int ammo);
-	/// Cleans up the craft weapon.
-	~CraftWeapon();
-	/// Loads the craft weapon from YAML.
-	void load(const YAML::Node& node);
-	/// Saves the craft weapon to YAML.
-	YAML::Node save() const;
-	/// Gets the craft weapon's ruleset.
-	RuleCraftWeapon *getRules() const;
-	/// Gets the craft weapon's ammo.
-	int getAmmo() const;
-	/// Sets the craft weapon's ammo.
-	bool setAmmo(int ammo);
-	/// Gets the craft weapon's rearming status.
-	bool isRearming() const;
-	/// Sets the craft weapon's rearming status
-	void setRearming(bool rearming);
-	/// Rearms the craft weapon.
-	void rearm();
-	/// Fires the craft weapon. Used during dogfights.
-	CraftWeaponProjectile* fire() const;
+
+	public:
+		/// Creates a craft weapon of the specified type.
+		CraftWeapon(RuleCraftWeapon* rules, int ammo);
+		/// Cleans up the craft weapon.
+		~CraftWeapon();
+
+		/// Loads the craft weapon from YAML.
+		void load(const YAML::Node& node);
+		/// Saves the craft weapon to YAML.
+		YAML::Node save() const;
+		/// Gets the craft weapon's ruleset.
+		RuleCraftWeapon* getRules() const;
+		/// Gets the craft weapon's ammo.
+		int getAmmo() const;
+		/// Sets the craft weapon's ammo.
+		bool setAmmo(int ammo);
+		/// Gets the craft weapon's rearming status.
+		bool isRearming() const;
+		/// Sets the craft weapon's rearming status
+		void setRearming(bool rearming);
+		/// Rearms the craft weapon.
+		void rearm();
+		/// Fires the craft weapon. Used during dogfights.
+		CraftWeaponProjectile* fire() const;
 };
 
 }
