@@ -1799,3 +1799,5 @@ bool SavedBattleGame::isCheating()
 {
 	return _cheating;
 }
+
+}

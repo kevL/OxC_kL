@@ -671,7 +671,7 @@ void UnitWalkBState::think()
 		_terrain->calculateFOV(_unit);
 		unitSpotted = !_action.desperate
 			&& _parent->getPanicHandled()
-			&& _numUnitsSpotted != _unit->getUnitsSpottedThisTurn().size());
+			&& _numUnitsSpotted != _unit->getUnitsSpottedThisTurn().size();
 
 		// make sure the unit sprites are up to date
 		if (onScreen)
