@@ -1167,7 +1167,7 @@ void BattlescapeState::btnReserveClick(Action *action)
 		SDL_Event ev;
 		ev.type = SDL_MOUSEBUTTONDOWN;
 		ev.button.button = SDL_BUTTON_LEFT;
-		Action a = Action(&ev, 0.0, 0.0);
+		Action a = Action(&ev, 0.0, 0.0, 0, 0);
 		action->getSender()->mousePress(&a, this);
 
 		if		(_reserve == _btnReserveNone)	_battleGame->setTUReserved(BA_NONE);
@@ -2050,7 +2050,7 @@ void BattlescapeState::btnReserveKneelClick(Action *action)
 		ev.type = SDL_MOUSEBUTTONDOWN;
 		ev.button.button = SDL_BUTTON_LEFT;
 
-		Action a = Action(&ev, 0.0, 0.0);
+		Action a = Action(&ev, 0.0, 0.0, 0, 0);
 		action->getSender()->mousePress(&a, this);
 		_battleGame->setKneelReserved(!_battleGame->getKneelReserved());
 		_btnKneel->invert(0);
@@ -2069,7 +2069,7 @@ void BattlescapeState::btnZeroTUsClick(Action *action)
 		ev.type = SDL_MOUSEBUTTONDOWN;
 		ev.button.button = SDL_BUTTON_LEFT;
 
-		Action a = Action(&ev, 0.0, 0.0);
+		Action a = Action(&ev, 0.0, 0.0, 0, 0);
 		action->getSender()->mousePress(&a, this);
 
 		if (_battleGame->getSave()->getSelectedUnit())

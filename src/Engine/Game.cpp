@@ -257,7 +257,7 @@ void Game::run()
 			ev.motion.x = x;
 			ev.motion.y = y;
 
-			Action action = Action(&ev, _screen->getXScale(), _screen->getYScale());
+			Action action = Action(&ev, _screen->getXScale(), _screen->getYScale(), _screen->getCursorTopBlackBand(), _screen->getCursorLeftBlackBand());
 			_states.back()->handle(&action);
 		}
 
@@ -294,7 +294,7 @@ void Game::run()
 					runningState = RUNNING;			// re-gain focus on mouse-over or keypress.
 													// Go on, feed the event to others
 				default:
-					Action action = Action(&_event, _screen->getXScale(), _screen->getYScale());
+					Action action = Action(&_event, _screen->getXScale(), _screen->getYScale(), _screen->getCursorTopBlackBand(), _screen->getCursorLeftBlackBand());
 					_screen->handle(&action);
 					_cursor->handle(&action);
 					_fpsCounter->handle(&action);

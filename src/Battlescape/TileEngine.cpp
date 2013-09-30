@@ -815,10 +815,10 @@ void TileEngine::calculateFOV(const Position &position)
  */
 bool TileEngine::checkReactionFire(BattleUnit* unit)
 {
-//	Log(LOG_INFO) << "Battlescape/TileEngine.cpp checkReactionFire() vs." << unit->getId();	// kL
+	//	Log(LOG_INFO) << "Battlescape/TileEngine.cpp checkReactionFire() vs." << unit->getId();	// kL
 
-	// reaction fire only triggered when the actioning unit is of the currently playing side
-	if (unit->getFaction() != _save->getSide())
+	// reaction fire only triggered when the actioning unit is of the currently playing side, and is still on the map (alive)
+	if (unit->getFaction() != _save->getSide() || unit->getTile() == 0)
 	{
 //		Log(LOG_INFO) << ". vs getSide() = invalid";	// kL
 

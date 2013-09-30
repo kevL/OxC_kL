@@ -139,6 +139,10 @@ void createDefault()
 //kL	setBool("battleTooltips", true);
 	setBool("battleTooltips", false);		// kL
 	setBool("battleHairBleach", true);
+    setBool("keepAspectRatio", false);
+    setBool("cursorInBlackBandsInFullscreen", false);
+    setBool("cursorInBlackBandsInWindow", true);
+    setBool("cursorInBlackBandsInBorderlessWindow", false);
 
 	// new battle mode data
 	setInt("NewBattleMission", 0);
