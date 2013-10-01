@@ -38,15 +38,15 @@ class ProjectileFlyBState
 	:
 	public BattleState
 {
-	private:
-		BattleUnit* _unit;
-		BattleItem* _ammo;
-		BattleItem* _projectileItem;
-		Position _origin;
-		int _projectileImpact;
-		/// Tries to create a projectile sprite.
-		bool createNewProjectile();
-		bool _initialized;
+private:
+	BattleUnit* _unit;
+	BattleItem* _ammo;
+	BattleItem* _projectileItem;
+	Position _origin;
+	int _projectileImpact;
+	/// Tries to create a projectile sprite.
+	bool createNewProjectile();
+	bool _initialized;
 
 	public:
 		/// Creates a new ProjectileFly class

@@ -61,9 +61,11 @@ GeoscapeCraftState::GeoscapeCraftState(Game* game, Craft* craft, Globe* globe, W
 	// Create objects
 	_window			= new Window(this, 240, 184, 8, 8, POPUP_BOTH);
 
-	_btnCenter		= new TextButton(192, 12, 32, 112);		// kL
+//	_btnCenter		= new TextButton(192, 12, 32, 112);		// kL
+	_btnCenter		= new TextButton(192, 12, 32, 142);		// kL
 	_btnBase		= new TextButton(192, 12, 32, 127);
-	_btnTarget		= new TextButton(192, 12, 32, 142);
+//kL	_btnTarget		= new TextButton(192, 12, 32, 142);
+	_btnTarget		= new TextButton(192, 12, 32, 112);		// kL
 	_btnPatrol		= new TextButton(192, 12, 32, 157);
 	_btnCancel		= new TextButton(192, 12, 32, 172);
 

@@ -617,7 +617,7 @@ int SavedGame::getCountryFunding() const
  * Returns the list of world regions.
  * @return Pointer to region list.
  */
-std::vector<Region*> *SavedGame::getRegions()
+std::vector<Region* >* SavedGame::getRegions()
 {
 	return &_regions;
 }
@@ -626,7 +626,7 @@ std::vector<Region*> *SavedGame::getRegions()
  * Returns the list of player bases.
  * @return Pointer to base list.
  */
-std::vector<Base*> *SavedGame::getBases()
+std::vector<Base* >* SavedGame::getBases()
 {
 	return &_bases;
 }
@@ -635,7 +635,7 @@ std::vector<Base*> *SavedGame::getBases()
  * Returns an immutable list of player bases.
  * @return Pointer to base list.
  */
-const std::vector<Base*> *SavedGame::getBases() const
+const std::vector<Base* >* SavedGame::getBases() const
 {
 	return &_bases;
 }

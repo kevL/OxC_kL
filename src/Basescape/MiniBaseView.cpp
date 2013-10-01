@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "MiniBaseView.h"
 #include <cmath>
 #include "../Engine/SurfaceSet.h"
@@ -25,6 +26,8 @@
 #include "../Ruleset/RuleBaseFacility.h"
 #include "../Savegame/Craft.h"
 #include "../Engine/Palette.h"
+//#include "../Geoscape/GeoscapeState.h"	// kL
+
 
 namespace OpenXcom
 {
@@ -36,7 +39,13 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-MiniBaseView::MiniBaseView(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _bases(), _texture(0), _base(0), _hoverBase(0)
+MiniBaseView::MiniBaseView(int width, int height, int x, int y)
+	:
+	InteractiveSurface(width, height, x, y),
+	_bases(),
+	_texture(0),
+	_base(0),
+	_hoverBase(0)
 {
 }
 
@@ -51,7 +60,7 @@ MiniBaseView::~MiniBaseView()
  * Changes the current list of bases to display.
  * @param bases Pointer to base list to display.
  */
-void MiniBaseView::setBases(std::vector<Base*> *bases)
+void MiniBaseView::setBases(std::vector<Base* >* bases)
 {
 	_bases = bases;
 	_redraw = true;
@@ -62,7 +71,7 @@ void MiniBaseView::setBases(std::vector<Base*> *bases)
  * the various base elements.
  * @param texture Pointer to SurfaceSet to use.
  */
-void MiniBaseView::setTexture(SurfaceSet *texture)
+void MiniBaseView::setTexture(SurfaceSet* texture)
 {
 	_texture = texture;
 }
@@ -84,6 +93,9 @@ unsigned int MiniBaseView::getHoveredBase() const
 void MiniBaseView::setSelectedBase(unsigned int base)
 {
 	_base = base;
+
+//	_gs->setCurrentBase((Uint8)_base);	// kL
+
 	_redraw = true;
 }
 
@@ -113,9 +125,10 @@ void MiniBaseView::draw()
 		// Draw facilities
 		if (i < _bases->size())
 		{
-			SDL_Rect r;
 			lock();
-			for (std::vector<BaseFacility*>::iterator f = _bases->at(i)->getFacilities()->begin(); f != _bases->at(i)->getFacilities()->end(); ++f)
+
+			SDL_Rect r;
+			for (std::vector<BaseFacility* >::iterator f = _bases->at(i)->getFacilities()->begin(); f != _bases->at(i)->getFacilities()->end(); ++f)
 			{
 				int pal;
 				if ((*f)->getBuildTime() == 0)
@@ -128,23 +141,28 @@ void MiniBaseView::draw()
 				r.w = (*f)->getRules()->getSize() * 2;
 				r.h = (*f)->getRules()->getSize() * 2;
 				drawRect(&r, Palette::blockOffset(pal)+3);
+
 				r.x++;
 				r.y++;
 				r.w--;
 				r.h--;
 				drawRect(&r, Palette::blockOffset(pal)+5);
+
 				r.x--;
 				r.y--;
 				drawRect(&r, Palette::blockOffset(pal)+2);
+
 				r.x++;
 				r.y++;
 				r.w--;
 				r.h--;
 				drawRect(&r, Palette::blockOffset(pal)+3);
+
 				r.x--;
 				r.y--;
 				setPixel(r.x, r.y, Palette::blockOffset(pal)+1);
 			}
+
 			unlock();
 		}
 	}
@@ -155,7 +173,7 @@ void MiniBaseView::draw()
  * @param action Pointer to an action.
  * @param state State that the action handlers belong to.
  */
-void MiniBaseView::mouseOver(Action *action, State *state)
+void MiniBaseView::mouseOver(Action* action, State* state)
 {
 	_hoverBase = (int)floor(action->getRelativeXMouse() / ((MINI_SIZE + 2) * action->getXScale()));
 	InteractiveSurface::mouseOver(action, state);

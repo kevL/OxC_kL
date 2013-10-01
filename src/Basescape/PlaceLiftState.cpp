@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "PlaceLiftState.h"
 #include <sstream>
 #include "../Engine/Game.h"
@@ -33,6 +34,7 @@
 #include "BasescapeState.h"
 #include "SelectStartFacilityState.h"
 
+
 namespace OpenXcom
 {
 
@@ -43,11 +45,15 @@ namespace OpenXcom
  * @param globe Pointer to the Geoscape globe.
  * @param first Is this a custom starting base?
  */
-PlaceLiftState::PlaceLiftState(Game *game, Base *base, Globe *globe, bool first) : State(game), _base(base), _globe(globe), _first(first)
+PlaceLiftState::PlaceLiftState(Game* game, Base* base, Globe* globe, bool first)
+	:
+	State(game),
+	_base(base),
+	_globe(globe),_first(first)
 {
 	// Create objects
-	_view = new BaseView(192, 192, 0, 8);
-	_txtTitle = new Text(320, 9, 0, 0);
+	_view		= new BaseView(192, 192, 0, 8);
+	_txtTitle	= new Text(320, 9, 0, 0);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());
@@ -72,25 +78,27 @@ PlaceLiftState::PlaceLiftState(Game *game, Base *base, Globe *globe, bool first)
  */
 PlaceLiftState::~PlaceLiftState()
 {
-
 }
 
 /**
  * Processes clicking on facilities.
  * @param action Pointer to an action.
  */
-void PlaceLiftState::viewClick(Action *)
+void PlaceLiftState::viewClick(Action* )
 {
-	BaseFacility *fac = new BaseFacility(_game->getRuleset()->getBaseFacility("STR_ACCESS_LIFT"), _base);
+	BaseFacility* fac = new BaseFacility(_game->getRuleset()->getBaseFacility("STR_ACCESS_LIFT"), _base);
 	fac->setX(_view->getGridX());
 	fac->setY(_view->getGridY());
+
 	_base->getFacilities()->push_back(fac);
 	_game->popState();
-	BasescapeState *bState = new BasescapeState(_game, _base, _globe);
+
+	BasescapeState* bState = new BasescapeState(_game, _base, _globe);
 	_game->pushState(bState);
+
 	if (_first)
 	{
-		std::vector<OpenXcom::RuleBaseFacility*> PlaceList = _game->getRuleset()->getCustomBaseFacilities();
+		std::vector<OpenXcom::RuleBaseFacility* > PlaceList = _game->getRuleset()->getCustomBaseFacilities();
 		_game->pushState(new SelectStartFacilityState(_game, _base, bState, _globe, PlaceList));
 	}
 }

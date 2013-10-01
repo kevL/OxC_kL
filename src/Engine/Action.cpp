@@ -59,8 +59,7 @@ double Action::getYScale() const
 }
 
 /**
- * Sets this action as a mouse action with
- * the respective mouse properties.
+ * Sets this action as a mouse action with the respective mouse properties.
  * @param mouseX Mouse's X position.
  * @param mouseY Mouse's Y position.
  * @param surfaceX Surface's X position.

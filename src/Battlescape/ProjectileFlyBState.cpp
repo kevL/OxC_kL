@@ -48,13 +48,13 @@ namespace OpenXcom
  */
 ProjectileFlyBState::ProjectileFlyBState(BattlescapeGame* parent, BattleAction action, Position origin)
 	:
-	BattleState(parent, action),
-	_unit(0),
-	_ammo(0),
-	_projectileItem(0),
-	_origin(origin),
-	_projectileImpact(0),
-	_initialized(false)
+		BattleState(parent, action),
+		_unit(0),
+		_ammo(0),
+		_projectileItem(0),
+		_origin(origin),
+		_projectileImpact(0),
+		_initialized(false)
 {
 }
 
@@ -63,13 +63,13 @@ ProjectileFlyBState::ProjectileFlyBState(BattlescapeGame* parent, BattleAction a
  */
 ProjectileFlyBState::ProjectileFlyBState(BattlescapeGame* parent, BattleAction action)
 	:
-	BattleState(parent, action),
-	_unit(0),
-	_ammo(0),
-	_projectileItem(0),
-	_origin(action.actor->getPosition()),
-	_projectileImpact(0),
-	_initialized(false)
+		BattleState(parent, action),
+		_unit(0),
+		_ammo(0),
+		_projectileItem(0),
+		_origin(action.actor->getPosition()),
+		_projectileImpact(0),
+		_initialized(false)
 {
 }
 
@@ -340,8 +340,8 @@ bool ProjectileFlyBState::createNewProjectile()
 
 /**
  * Animates the projectile (moves to the next point in its trajectory).
- * If the animation is finished the projectile sprite is removed from the map,
- * and this state is finished.
+ * If the animation is finished the projectile sprite
+ * is removed from the map, and this state is finished.
  */
 void ProjectileFlyBState::think()
 {
@@ -376,19 +376,20 @@ void ProjectileFlyBState::think()
 			_parent->popState();
 		}
 	}
-	else
+	else // impact !
 	{
 		if (!_parent->getMap()->getProjectile()->move())
 		{
-			if (_action.type == BA_THROW) // impact !
+			if (_action.type == BA_THROW)
 			{
+				_parent->getResourcePack()->getSound("BATTLE.CAT", 38)->play();
+
 				Position pos = _parent->getMap()->getProjectile()->getPosition(-1);
 				pos.x /= 16;
 				pos.y /= 16;
 				pos.z /= 24;
-				BattleItem *item = _parent->getMap()->getProjectile()->getItem();
-				_parent->getResourcePack()->getSound("BATTLE.CAT", 38)->play();
 
+				BattleItem *item = _parent->getMap()->getProjectile()->getItem();
 				if (Options::getBool("battleInstantGrenade")
 					&& item->getRules()->getBattleType() == BT_GRENADE
 					&& item->getExplodeTurn() != 0
@@ -444,7 +445,7 @@ void ProjectileFlyBState::think()
 
 					if (_projectileImpact == 4)
 					{
-						BattleUnit* victim = _parent->getSave()->getTile(_parent->getMap()->getProjectile()->getPosition(offset) / Position(16,16,24))->getUnit();
+						BattleUnit* victim = _parent->getSave()->getTile(_parent->getMap()->getProjectile()->getPosition(offset) / Position(16, 16, 24))->getUnit();
 						if (victim
 							&& !victim->isOut()
 							&& victim->getFaction() == FACTION_HOSTILE)
@@ -468,7 +469,6 @@ void ProjectileFlyBState::think()
 			}
 
 			delete _parent->getMap()->getProjectile();
-
 			_parent->getMap()->setProjectile(0);
 		}
 	}

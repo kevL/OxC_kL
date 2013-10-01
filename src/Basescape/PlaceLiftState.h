@@ -16,10 +16,12 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_PLACELIFTSTATE_H
 #define OPENXCOM_PLACELIFTSTATE_H
 
 #include "../Engine/State.h"
+
 
 namespace OpenXcom
 {
@@ -33,21 +35,25 @@ class Globe;
  * Screen shown when the player has to
  * place the access lift of a base.
  */
-class PlaceLiftState : public State
+class PlaceLiftState
+	:
+	public State
 {
 private:
-	Base *_base;
-	Globe *_globe;
-	BaseView *_view;
-	Text *_txtTitle;
+	Base* _base;
+	Globe* _globe;
+	BaseView* _view;
+	Text* _txtTitle;
 	bool _first;
-public:
-	/// Creates the Place Lift state.
-	PlaceLiftState(Game *game, Base *base, Globe *globe, bool first);
-	/// Cleans up the Place Lift state.
-	~PlaceLiftState();
-	/// Handler for clicking the base view.
-	void viewClick(Action *action);
+
+	public:
+		/// Creates the Place Lift state.
+		PlaceLiftState(Game* game, Base* base, Globe* globe, bool first);
+		/// Cleans up the Place Lift state.
+		~PlaceLiftState();
+
+		/// Handler for clicking the base view.
+		void viewClick(Action* action);
 };
 
 }

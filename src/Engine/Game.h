@@ -45,24 +45,25 @@ class FpsCounter;
  */
 class Game
 {
-	private:
-		SDL_Event _event;
-		Screen* _screen;
-		Cursor* _cursor;
-		Language* _lang;
-		std::list<State* > _states, _deleted;
-		ResourcePack* _res;
-		SavedGame* _save;
-		Ruleset* _rules;
-		bool _quit, _init;
-		FpsCounter* _fpsCounter;
-		bool _mouseActive;
+private:
+	SDL_Event _event;
+	Screen* _screen;
+	Cursor* _cursor;
+	Language* _lang;
+	std::list<State* > _states, _deleted;
+	ResourcePack* _res;
+	SavedGame* _save;
+	Ruleset* _rules;
+	bool _quit, _init;
+	FpsCounter* _fpsCounter;
+	bool _mouseActive;
 
-	#ifdef __MORPHOS__		
-		Uint32 waittime;// = 1000.0f/FPS;
-		Uint32 framestarttime;// = 0;
-		Sint32 delaytime;
-	#endif
+#ifdef __MORPHOS__		
+	Uint32 waittime;// = 1000.0f/FPS;
+	Uint32 framestarttime;// = 0;
+	Sint32 delaytime;
+#endif
+
 	public:
 		/// Creates a new game and initializes SDL.
 		Game(const std::string& title);

@@ -50,48 +50,48 @@ class Base
 	:
 	public Target
 {
-	private:
-		const Ruleset *_rule;
-		std::wstring _name;
-		std::vector<BaseFacility*> _facilities;
-		std::vector<Soldier*> _soldiers;
-		std::vector<Craft*> _crafts;
-		std::vector<Transfer*> _transfers;
-		ItemContainer *_items;
-		int _scientists, _engineers;
-		std::vector<ResearchProject *> _research;
-		std::vector<Production *> _productions;
-		bool _inBattlescape;
-		bool _retaliationTarget;
-		std::vector<Vehicle*> _vehicles;
-		std::vector<BaseFacility*> _defenses;
+private:
+	const Ruleset* _rule;
+	std::wstring _name;
+	std::vector<BaseFacility* > _facilities;
+	std::vector<Soldier* > _soldiers;
+	std::vector<Craft* > _crafts;
+	std::vector<Transfer* > _transfers;
+	ItemContainer* _items;
+	int _scientists, _engineers;
+	std::vector<ResearchProject* > _research;
+	std::vector<Production* > _productions;
+	bool _inBattlescape;
+	bool _retaliationTarget;
+	std::vector<Vehicle* > _vehicles;
+	std::vector<BaseFacility* > _defenses;
 
 	public:
 		/// Creates a new base.
-		Base(const Ruleset *rule);
+		Base(const Ruleset* rule);
 		/// Cleans up the base.
 		~Base();
 
 		/// Loads the base from YAML.
-		void load(const YAML::Node& node, SavedGame *save, bool newGame, bool newBattleGame = false);
+		void load(const YAML::Node& node, SavedGame* save, bool newGame, bool newBattleGame = false);
 		/// Saves the base to YAML.
 		YAML::Node save() const;
 		/// Saves the base's ID to YAML.
 		YAML::Node saveId() const;
 		/// Gets the base's name.
-		std::wstring getName(Language *lang = 0) const;
+		std::wstring getName(Language* lang = 0) const;
 		/// Sets the base's name.
-		void setName(const std::wstring &name);
+		void setName(const std::wstring& name);
 		/// Gets the base's facilities.
-		std::vector<BaseFacility*> *getFacilities();
+		std::vector<BaseFacility* >* getFacilities();
 		/// Gets the base's soldiers.
-		std::vector<Soldier*> *getSoldiers();
+		std::vector<Soldier* >* getSoldiers();
 		/// Gets the base's crafts.
-		std::vector<Craft*> *getCrafts();
+		std::vector<Craft* >* getCrafts();
 		/// Gets the base's transfers.
-		std::vector<Transfer*> *getTransfers();
+		std::vector<Transfer* >* getTransfers();
 		/// Gets the base's items.
-		ItemContainer *getItems();
+		ItemContainer* getItems();
 		/// Gets the base's scientists.
 		int getScientists() const;
 		/// Sets the base's scientists.
@@ -101,9 +101,9 @@ class Base
 		/// Sets the base's engineers.
 		void setEngineers(int engineers);
 		/// Checks if a target is detected by the base's radar.
-		bool detect(Target *target) const;
+		bool detect(Target* target) const;
 		/// Checks if a target is inside the base's radar range.
-		bool insideRadarRange(Target *target) const;
+		bool insideRadarRange(Target* target) const;
 		/// Gets the base's available soldiers.
 		int getAvailableSoldiers(bool checkCombatReadiness = false) const;
 		/// Gets the base's total soldiers.
@@ -151,7 +151,7 @@ class Base
 		/// Gets the base's long range detection.
 		int getLongRangeDetection() const;
 		/// Gets the base's crafts of a certain type.
-		int getCraftCount(const std::string &craft) const;
+		int getCraftCount(const std::string& craft) const;
 		/// Gets the base's craft maintenance.
 		int getCraftMaintenance() const;
 		/// Gets the base's personnel maintenance.
@@ -161,17 +161,17 @@ class Base
 		/// Gets the base's total monthly maintenance.
 		int getMonthlyMaintenace() const;
 		/// Get the list of base's ResearchProject
-		const std::vector<ResearchProject*> &getResearch() const;
+		const std::vector<ResearchProject* >& getResearch() const;
 		/// Add a new ResearchProject to the Base
-		void addResearch(ResearchProject*);
+		void addResearch(ResearchProject* );
 		/// Remove a ResearchProject from the Base
-		void removeResearch(ResearchProject*);
+		void removeResearch(ResearchProject* );
 		/// Add a new Production to Base
-		void addProduction(Production *p);
+		void addProduction(Production* p);
 		/// Remove a Base Production's
-		void removeProduction(Production *p);
+		void removeProduction(Production* p);
 		/// Get the list of Base Production's
-		const std::vector<Production*> &getProductions() const;
+		const std::vector<Production* >& getProductions() const;
 		/// Checks if this base is hyper-wave equipped.
 		bool getHyperDetection() const;
 		/// Gets the base's used psi lab space.
@@ -196,9 +196,9 @@ class Base
 		int getGravShields() const;
 		void setupDefenses();
 		/// Get a list of Defensive Facilities
-		std::vector<BaseFacility*> *getDefenses();
+		std::vector<BaseFacility* >* getDefenses();
 		/// Gets the base's vehicles.
-		std::vector<Vehicle*> *getVehicles();
+		std::vector<Vehicle* >* getVehicles();
 };
 
 }

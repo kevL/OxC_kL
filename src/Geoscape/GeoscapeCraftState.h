@@ -39,18 +39,18 @@ class Waypoint;
  */
 class GeoscapeCraftState
 	:
-	public State
+		public State
 {
-	private:
-		Craft* _craft;
-		Globe* _globe;
-		Waypoint* _waypoint;
+private:
+	Craft* _craft;
+	Globe* _globe;
+	Waypoint* _waypoint;
 
-		TextButton* _btnBase, * _btnTarget, * _btnPatrol, * _btnCancel;
-		TextButton* _btnCenter;
-		Window* _window;
-		Text* _txtTitle, * _txtStatus, * _txtBase, * _txtSpeed, * _txtMaxSpeed, * _txtAltitude, * _txtFuel, * _txtDamage,
-				* _txtW1Name, * _txtW1Ammo, * _txtW2Name, * _txtW2Ammo, * _txtRedirect, * _txtHWP, * _txtSoldier;
+	TextButton* _btnBase, * _btnTarget, * _btnPatrol, * _btnCancel;
+	TextButton* _btnCenter;
+	Window* _window;
+	Text* _txtTitle, * _txtStatus, * _txtBase, * _txtSpeed, * _txtMaxSpeed, * _txtAltitude, * _txtFuel, * _txtDamage,
+			* _txtW1Name, * _txtW1Ammo, * _txtW2Name, * _txtW2Ammo, * _txtRedirect, * _txtHWP, * _txtSoldier;
 
 	public:
 		/// Creates the Geoscape Craft state.

@@ -16,10 +16,12 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_ALIENBASESTATE_H
 #define OPENXCOM_ALIENBASESTATE_H
 
 #include "../Engine/State.h"
+
 
 namespace OpenXcom
 {
@@ -34,21 +36,25 @@ class AlienBase;
 /**
  * Displays info on an alien base.
  */
-class AlienBaseState : public State
+class AlienBaseState
+	:
+	public State
 {
 private:
-	GeoscapeState *_state;
-	AlienBase *_base;
-	TextButton *_btnOk;
-	Window *_window;
-	Text *_txtTitle;
-public:
-	/// Creates the Alien Base Detected state.
-	AlienBaseState(Game *game, AlienBase *base, GeoscapeState *state);
-	/// Cleans up the Alien Base Detected state.
-	~AlienBaseState();
-	/// Handler for clicking the OK button.
-	void btnOkClick(Action *action);
+	GeoscapeState* _state;
+	AlienBase* _base;
+	TextButton* _btnOk;
+	Window* _window;
+	Text* _txtTitle;
+
+	public:
+		/// Creates the Alien Base Detected state.
+		AlienBaseState(Game* game, AlienBase* base, GeoscapeState* state);
+		/// Cleans up the Alien Base Detected state.
+		~AlienBaseState();
+
+		/// Handler for clicking the OK button.
+		void btnOkClick(Action* action);
 };
 
 }

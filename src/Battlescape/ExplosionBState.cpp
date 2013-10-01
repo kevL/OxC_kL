@@ -51,14 +51,14 @@ namespace OpenXcom
  */
 ExplosionBState::ExplosionBState(BattlescapeGame* parent, Position center, BattleItem* item, BattleUnit* unit, Tile* tile, bool lowerWeapon)
 	:
-	BattleState(parent),
-	_unit(unit),
-	_center(center),
-	_item(item),
-	_tile(tile),
-	_power(0),
-	_areaOfEffect(false),
-	_lowerWeapon(lowerWeapon)
+		BattleState(parent),
+		_unit(unit),
+		_center(center),
+		_item(item),
+		_tile(tile),
+		_power(0),
+		_areaOfEffect(false),
+		_lowerWeapon(lowerWeapon)
 {
 }
 

@@ -16,8 +16,10 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_BASESCAPESTATE_H
 #define OPENXCOM_BASESCAPESTATE_H
+
 
 #include "../Engine/State.h"
 
@@ -31,64 +33,72 @@ class TextButton;
 class TextEdit;
 class Base;
 class Globe;
+//class GeoscapeState;	// kL
 
 /**
  * Basescape screen that shows a base's layout
  * and lets the player manage their bases.
  */
-class BasescapeState : public State
+class BasescapeState
+	:
+	public State
 {
 private:
-	BaseView *_view;
-	MiniBaseView *_mini;
-	Text *_txtFacility, *_txtLocation, *_txtFunds;
-	TextEdit *_edtBase;
-	TextButton *_btnNewBase, *_btnBaseInfo, *_btnSoldiers, *_btnCrafts, *_btnFacilities, *_btnResearch, *_btnManufacture, *_btnTransfer, *_btnPurchase, *_btnSell, *_btnGeoscape;
-	Base *_base;
-	Globe *_globe;
-public:
-	/// Creates the Basescape state.
-	BasescapeState(Game *game, Base *base, Globe *globe);
-	/// Cleans up the Basescape state.
-	~BasescapeState();
-	/// Updates the base stats.
-	void init();
-	/// Sets a new base to display.
-	void setBase(Base *base);
-	/// Handler for clicking the Build New Base button.
-	void btnNewBaseClick(Action *action);
-	/// Handler for clicking the Base Information button.
-	void btnBaseInfoClick(Action *action);
-	/// Handler for clicking the Soldiers button.
-	void btnSoldiersClick(Action *action);
-	/// Handler for clicking the Equip Craft button.
-	void btnCraftsClick(Action *action);
-	/// Handler for clicking the Build Facilities button.
-	void btnFacilitiesClick(Action *action);
-	/// Handler for clicking the Research button.
-	void btnResearchClick(Action *action);
-	/// Handler for clicking the Manufacture button.
-	void btnManufactureClick(Action *action);
-	/// Handler for clicking the Purchase/Hire button.
-	void btnPurchaseClick(Action *action);
-	/// Handler for clicking the Sell/Sack button.
-	void btnSellClick(Action *action);
-	/// Handler for clicking the Transfer button.
-	void btnTransferClick(Action *action);
-	/// Handler for clicking the Geoscape button.
-	void btnGeoscapeClick(Action *action);
-	/// Handler for clicking the base view.
-	void viewLeftClick(Action *action);
-	/// Handler for right clicking the base view.
-	void viewRightClick(Action *action);
-	/// Handler for hovering the base view.
-	void viewMouseOver(Action *action);
-	/// Handler for hovering out of the base view.
-	void viewMouseOut(Action *action);
-	/// Handler for clicking the mini base view.
-	void miniClick(Action *action);
-	/// Handler for pressing a key on the Name edit.
-	void edtBaseKeyPress(Action *action);
+	BaseView* _view;
+	MiniBaseView* _mini;
+	Text* _txtFacility, * _txtLocation, * _txtFunds;
+	TextEdit* _edtBase;
+	TextButton* _btnNewBase, * _btnBaseInfo, * _btnSoldiers, * _btnCrafts, * _btnFacilities, * _btnResearch, * _btnManufacture, * _btnTransfer, * _btnPurchase, * _btnSell, * _btnGeoscape;
+	Base* _base;
+	Globe* _globe;
+//	GeoscapeState* _gs;		// kL
+
+	public:
+		/// Creates the Basescape state.
+		BasescapeState(Game* game, Base* base, Globe* globe);
+//		BasescapeState(Game* game, Base* base, Globe* globe, GeoscapeState* gs);		// kL
+		/// Cleans up the Basescape state.
+		~BasescapeState();
+
+		/// Updates the base stats.
+		void init();
+		/// Sets a new base to display.
+		void setBase(Base* base);
+//		void setBase(Base* base, bool current = false);		// kL
+		/// Handler for clicking the Build New Base button.
+		void btnNewBaseClick(Action* action);
+		/// Handler for clicking the Base Information button.
+		void btnBaseInfoClick(Action* action);
+		/// Handler for clicking the Soldiers button.
+		void btnSoldiersClick(Action* action);
+		/// Handler for clicking the Equip Craft button.
+		void btnCraftsClick(Action* action);
+		/// Handler for clicking the Build Facilities button.
+		void btnFacilitiesClick(Action* action);
+		/// Handler for clicking the Research button.
+		void btnResearchClick(Action* action);
+		/// Handler for clicking the Manufacture button.
+		void btnManufactureClick(Action* action);
+		/// Handler for clicking the Purchase/Hire button.
+		void btnPurchaseClick(Action* action);
+		/// Handler for clicking the Sell/Sack button.
+		void btnSellClick(Action* action);
+		/// Handler for clicking the Transfer button.
+		void btnTransferClick(Action* action);
+		/// Handler for clicking the Geoscape button.
+		void btnGeoscapeClick(Action* action);
+		/// Handler for clicking the base view.
+		void viewLeftClick(Action* action);
+		/// Handler for right clicking the base view.
+		void viewRightClick(Action* action);
+		/// Handler for hovering the base view.
+		void viewMouseOver(Action* action);
+		/// Handler for hovering out of the base view.
+		void viewMouseOut(Action* action);
+		/// Handler for clicking the mini base view.
+		void miniClick(Action* action);
+		/// Handler for pressing a key on the Name edit.
+		void edtBaseKeyPress(Action* action);
 };
 
 }

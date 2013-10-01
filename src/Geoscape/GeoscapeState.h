@@ -47,24 +47,29 @@ class GeoscapeState
 	:
 	public State
 {
-	private:
-		Surface* _bg;
-		Globe* _globe;
-//kL		TextButton* _btnIntercept, * _btnBases, * _btnGraphs, * _btnUfopaedia, * _btnOptions, * _btnFunding;
-//kL		TextButton* _timeSpeed;
-//kL		TextButton* _btn5Secs, * _btn1Min, * _btn5Mins, * _btn30Mins, * _btn1Hour, * _btn1Day;
-		ImageButton* _btnIntercept, * _btnBases, * _btnGraphs, * _btnUfopaedia, * _btnOptions, * _btnFunding;	// kL
-		ImageButton* _timeSpeed;																				// kL
-		ImageButton* _btn5Secs, * _btn1Min, * _btn5Mins, * _btn30Mins, * _btn1Hour, * _btn1Day;					// kL
-		InteractiveSurface* _btnRotateLeft, * _btnRotateRight, * _btnRotateUp, * _btnRotateDown, * _btnZoomIn, * _btnZoomOut;
-		Text* _txtFunds, * _txtHour, * _txtHourSep, * _txtMin, * _txtMinSep, * _txtSec, * _txtWeekday, * _txtDay, * _txtMonth, * _txtYear;
-		Timer* _timer, * _zoomInEffectTimer, * _zoomOutEffectTimer, * _dogfightStartTimer;
-		bool _pause, _music, _zoomInEffectDone, _zoomOutEffectDone, _battleMusic;
-		Text* _txtDebug;
-		std::vector<State* > _popups;
-		std::vector<DogfightState* > _dogfights, _dogfightsToBeStarted;
-		size_t _minimizedDogfights;
-		bool _showFundsOnGeoscape; // this is a cache for Options::getBool("showFundsOnGeoscape")
+private:
+	Surface* _bg;
+	Globe* _globe;
+//kL	TextButton* _btnIntercept, * _btnBases, * _btnGraphs, * _btnUfopaedia, * _btnOptions, * _btnFunding;
+//kL	TextButton* _timeSpeed;
+//kL	TextButton* _btn5Secs, * _btn1Min, * _btn5Mins, * _btn30Mins, * _btn1Hour, * _btn1Day;
+	ImageButton* _btnIntercept, * _btnBases, * _btnGraphs, * _btnUfopaedia, * _btnOptions, * _btnFunding;	// kL
+	ImageButton* _timeSpeed;																				// kL
+	ImageButton* _btn5Secs, * _btn1Min, * _btn5Mins, * _btn30Mins, * _btn1Hour, * _btn1Day;					// kL
+	InteractiveSurface* _btnRotateLeft, * _btnRotateRight, * _btnRotateUp, * _btnRotateDown, * _btnZoomIn, * _btnZoomOut;
+	Text* _txtFunds, * _txtHour, * _txtHourSep, * _txtMin, * _txtMinSep, * _txtSec, * _txtWeekday, * _txtDay, * _txtMonth, * _txtYear;
+	Timer* _timer, * _zoomInEffectTimer, * _zoomOutEffectTimer, * _dogfightStartTimer;
+	bool _pause, _music, _zoomInEffectDone, _zoomOutEffectDone, _battleMusic;
+	Text* _txtDebug;
+	std::vector<State* > _popups;
+	std::vector<DogfightState* > _dogfights, _dogfightsToBeStarted;
+	size_t _minimizedDogfights;
+	bool _showFundsOnGeoscape; // this is a cache for Options::getBool("showFundsOnGeoscape")
+
+//	Uint8 _currentBase;		// kL
+
+	/// Handle alien mission generation.
+	void determineAlienMissions(bool atGameStart = false);
 
 	public:
 		/// Creates the Geoscape state.
@@ -166,9 +171,7 @@ class GeoscapeState
 		/// Handles base defense
 		void handleBaseDefense(Base* base, Ufo* ufo);
 
-	private:
-		/// Handle alien mission generation.
-		void determineAlienMissions(bool atGameStart = false);
+//		void setCurrentBase(Uint8 curBase);	// kL
 };
 
 }

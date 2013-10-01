@@ -346,7 +346,7 @@ bool Projectile::calculateThrow(double accuracy)
 	if (accuracy > 1) accuracy = 1;
 
 //kL	static const double maxDeviation = 0.08;
-	static const double maxDeviation = 0.07;	// kL
+	static const double maxDeviation = 0.072;	// kL
 	static const double minDeviation = 0;
 	double baseDeviation = (maxDeviation - (maxDeviation * accuracy)) + minDeviation;
 	double deviation = RNG::boxMuller(0, baseDeviation);

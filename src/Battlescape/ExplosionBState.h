@@ -16,12 +16,14 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_EXPLOSIONBSTATE_H
 #define OPENXCOM_EXPLOSIONBSTATE_H
 
 #include "BattleState.h"
 #include "Position.h"
 #include <string>
+
 
 namespace OpenXcom
 {
@@ -35,31 +37,34 @@ class Tile;
  * Explosion state not only handles explosions, but also bullet impacts!
  * Refactoring tip : ImpactBState.
  */
-class ExplosionBState : public BattleState
+class ExplosionBState
+	:
+	public BattleState
 {
 private:
-	BattleUnit *_unit;
+	BattleUnit* _unit;
 	Position _center;
-	BattleItem *_item;
-	Tile *_tile;
+	BattleItem* _item;
+	Tile* _tile;
 	int _power;
 	bool _areaOfEffect, _lowerWeapon;
 	/// Calculates the effects of the explosion.
 	void explode();
-public:
-	/// Creates a new ExplosionBState class.
-	ExplosionBState(BattlescapeGame *parent, Position center, BattleItem *item, BattleUnit *unit, Tile *tile = 0, bool lowerWeapon = false);
-	/// Cleans up the ExplosionBState.
-	~ExplosionBState();
-	/// Initializes the state.
-	void init();
-	/// Handles a cancel request.
-	void cancel();
-	/// Runs state functionality every cycle.
-	void think();
-	/// Gets the result of the state.
-	std::string getResult() const;
 
+	public:
+		/// Creates a new ExplosionBState class.
+		ExplosionBState(BattlescapeGame* parent, Position center, BattleItem* item, BattleUnit* unit, Tile* tile = 0, bool lowerWeapon = false);
+		/// Cleans up the ExplosionBState.
+		~ExplosionBState();
+
+		/// Initializes the state.
+		void init();
+		/// Handles a cancel request.
+		void cancel();
+		/// Runs state functionality every cycle.
+		void think();
+		/// Gets the result of the state.
+		std::string getResult() const;
 };
 
 }

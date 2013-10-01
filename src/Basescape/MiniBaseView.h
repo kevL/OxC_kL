@@ -16,49 +16,57 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_MINIBASEVIEW_H
 #define OPENXCOM_MINIBASEVIEW_H
 
 #include <vector>
 #include "../Engine/InteractiveSurface.h"
 
+
 namespace OpenXcom
 {
 
 class Base;
 class SurfaceSet;
+//class GeoscapeState;	// kL
 
 /**
  * Mini view of a base.
  * Takes all the bases and displays their layout
  * and allows players to swap between them.
  */
-class MiniBaseView : public InteractiveSurface
+class MiniBaseView
+	:
+	public InteractiveSurface
 {
 private:
 	static const unsigned int MAX_BASES = 8;
 	static const int MINI_SIZE = 14;
 
 	std::vector<Base*> *_bases;
-	SurfaceSet *_texture;
+	SurfaceSet* _texture;
 	unsigned int _base, _hoverBase;
-public:
-	/// Creates a new mini base view at the specified position and size.
-	MiniBaseView(int width, int height, int x = 0, int y = 0);
-	/// Cleans up the mini base view.
-	~MiniBaseView();
-	/// Sets the base list to display.
-	void setBases(std::vector<Base*> *bases);
-	/// Sets the texture for the mini base view.
-	void setTexture(SurfaceSet *texture);
-	/// Gets the base the mouse is over.
-	unsigned int getHoveredBase() const;
-	/// Sets the selected base for the mini base view.
-	void setSelectedBase(unsigned int base);
-	/// Draws the mini base view.
-	void draw();
-	/// Special handling for mouse hovers.
-	void mouseOver(Action *action, State *state);
+//	GeoscapeState* _gs;					// kL
+
+	public:
+		/// Creates a new mini base view at the specified position and size.
+		MiniBaseView(int width, int height, int x = 0, int y = 0);
+		/// Cleans up the mini base view.
+		~MiniBaseView();
+
+		/// Sets the base list to display.
+		void setBases(std::vector<Base* >* bases);
+		/// Sets the texture for the mini base view.
+		void setTexture(SurfaceSet* texture);
+		/// Gets the base the mouse is over.
+		unsigned int getHoveredBase() const;
+		/// Sets the selected base for the mini base view.
+		void setSelectedBase(unsigned int base);
+		/// Draws the mini base view.
+		void draw();
+		/// Special handling for mouse hovers.
+		void mouseOver(Action* action, State* state);
 };
 
 }

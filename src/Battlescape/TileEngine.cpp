@@ -1193,8 +1193,10 @@ BattleUnit* TileEngine::hit(const Position& center, int power, ItemDamageType ty
 /**
  * Handles explosions.
  *
- * HE, smoke and fire explodes in a circular pattern on 1 level only. HE however damages floor tiles of the above level. Not the units on it.
- * HE destroys an object if its armor is lower than the explosive power, then it's HE blockage is applied for further propagation.
+ * HE, smoke and fire explodes in a circular pattern on 1 level only.
+ * HE however damages floor tiles of the above level. Not the units on it.
+ * HE destroys an object if its armor is lower than the explosive power,
+ * then its HE blockage is applied for further propagation.
  * See http://www.ufopaedia.org/index.php?title=Explosions for more info.
  * @param center, Center of the explosion in voxelspace.
  * @param power, Power of the explosion.
@@ -1432,13 +1434,16 @@ bool TileEngine::detonate(Tile* tile)
 {
 	int explosive = tile->getExplosive();
 	tile->setExplosive(0, true);
+
 	bool objective = false;
+
 	Tile* tiles[7];
-	static const int parts[7]={0,1,2,0,1,2,3};
+	static const int parts[7]={ 0, 1, 2, 0, 1, 2, 3 };
+
 	Position pos = tile->getPosition();
-	tiles[0] = _save->getTile(Position(pos.x, pos.y, pos.z+1)); //ceiling
-	tiles[1] = _save->getTile(Position(pos.x+1, pos.y, pos.z)); //east wall
-	tiles[2] = _save->getTile(Position(pos.x, pos.y+1, pos.z)); //south wall
+	tiles[0] = _save->getTile(Position(pos.x, pos.y, pos.z + 1)); //ceiling
+	tiles[1] = _save->getTile(Position(pos.x + 1, pos.y, pos.z)); //east wall
+	tiles[2] = _save->getTile(Position(pos.x, pos.y + 1, pos.z)); //south wall
 	tiles[3] = tiles[4] = tiles[5] = tiles[6] = tile;
 
 	if (explosive)
@@ -1452,7 +1457,7 @@ bool TileEngine::detonate(Tile* tile)
 
 		for (int i = 0; i < 7; ++i)
 		{
-			if(tiles[i] && tiles[i]->getMapData(parts[i]))
+			if (tiles[i] && tiles[i]->getMapData(parts[i]))
 			{
 				remainingPower = explosive;
 				while (remainingPower >= 0 && tiles[i]->getMapData(parts[i]))
@@ -1462,7 +1467,7 @@ bool TileEngine::detonate(Tile* tile)
 					{
 						int volume = 0;
 						// get the volume of the object by checking its loftemps objects.
-						for (int j=0; j < 12; j++)
+						for (int j = 0; j < 12; j++)
 						{
 							if (tiles[i]->getMapData(parts[i])->getLoftID(j) != 0)
 								++volume;
@@ -2375,23 +2380,24 @@ bool TileEngine::isVoxelVisible(const Position& voxel)
 
 /**
  * Checks if we hit a voxel.
- * @param voxel The voxel to check.
- * @param excludeUnit Don't do checks on this unit.
- * @param excludeAllUnits Don't do checks on any unit.
- * @param onlyVisible Whether to consider only visible units.
- * @param excludeAllBut If set, the only unit to be considered for ray hits.
- * @return The objectnumber(0-3) or unit(4) or out of map (5) or -1 (hit nothing).
+ * @param voxel, The voxel to check.
+ * @param excludeUnit, Don't do checks on this unit.
+ * @param excludeAllUnits, Don't do checks on any unit.
+ * @param onlyVisible, Whether to consider only visible units.
+ * @param excludeAllBut, If set, the only unit to be considered for ray hits.
+ * @return, The objectnumber(0-3) or unit(4) or out of map (5) or -1 (hit nothing).
  */
 int TileEngine::voxelCheck(const Position& voxel, BattleUnit* excludeUnit, bool excludeAllUnits, bool onlyVisible, BattleUnit* excludeAllBut)
 {
 	Tile* tile = _save->getTile(Position(voxel.x / 16, voxel.y / 16, voxel.z / 24));
+
 	// check if we are not out of the map
 	if (tile == 0 || voxel.x < 0 || voxel.y < 0 || voxel.z < 0)
 	{
 		return 5;
 	}
 
-	if (voxel.z % 24 == 0
+	if (voxel.z %24 == 0
 		&& tile->getMapData(MapData::O_FLOOR)
 		&& tile->getMapData(MapData::O_FLOOR)->isGravLift())
 	{
@@ -2414,9 +2420,9 @@ int TileEngine::voxelCheck(const Position& voxel, BattleUnit* excludeUnit, bool 
 
 		if (mp != 0)
 		{
-			int x = 15 - voxel.x % 16;
-			int y = voxel.y % 16;
-			int idx = (mp->getLoftID((voxel.z % 24) / 2) * 16) + y;
+			int x = 15 - voxel.x %16;
+			int y = voxel.y %16;
+			int idx = (mp->getLoftID((voxel.z %24) / 2) * 16) + y;
 			if (_voxelData->at(idx) & (1 << x))
 			{
 				return i;
@@ -2447,8 +2453,8 @@ int TileEngine::voxelCheck(const Position& voxel, BattleUnit* excludeUnit, bool 
 			int tz = unitpos.z * 24 + unit->getFloatHeight() + (-tile->getTerrainLevel()); // bottom
 			if ((voxel.z > tz) && (voxel.z <= tz + unit->getHeight()))
 			{
-				int x = voxel.x % 16;
-				int y = voxel.y % 16;
+				int x = voxel.x %16;
+				int y = voxel.y %16;
 				int part = 0;
 
 				if (unit->getArmor()->getSize() > 1)

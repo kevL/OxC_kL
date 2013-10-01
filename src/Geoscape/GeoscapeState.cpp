@@ -115,16 +115,17 @@ namespace OpenXcom
  */
 GeoscapeState::GeoscapeState(Game* game)
 	:
-	State(game),
-	_pause(false),
-	_music(false),
-	_zoomInEffectDone(false),
-	_zoomOutEffectDone(false),
-	_battleMusic(false),
-	_popups(),
-	_dogfights(),
-	_dogfightsToBeStarted(),
-	_minimizedDogfights(0)
+		State(game),
+		_pause(false),
+		_music(false),
+		_zoomInEffectDone(false),
+		_zoomOutEffectDone(false),
+		_battleMusic(false),
+		_popups(),
+		_dogfights(),
+		_dogfightsToBeStarted(),
+		_minimizedDogfights(0)
+//		_currentBase(0)		// kL
 {
 	int screenWidth = Options::getInt("baseXResolution");
 	int screenHeight = Options::getInt("baseYResolution");
@@ -444,43 +445,43 @@ GeoscapeState::GeoscapeState(Game* game)
 	}
 
 	if (_showFundsOnGeoscape) _txtHour->setSmall(); else _txtHour->setBig();
-	_txtHour->setColor(Palette::blockOffset(15)+4);
+	_txtHour->setColor(Palette::blockOffset(15)+5);		// kL: was +4
 	_txtHour->setAlign(ALIGN_RIGHT);
 	_txtHour->setText(L"");
 
 	if (_showFundsOnGeoscape) _txtHourSep->setSmall(); else _txtHourSep->setBig();
-	_txtHourSep->setColor(Palette::blockOffset(15)+4);
+	_txtHourSep->setColor(Palette::blockOffset(15)+5);
 	_txtHourSep->setText(L":");
 
 	if (_showFundsOnGeoscape) _txtMin->setSmall(); else _txtMin->setBig();
-	_txtMin->setColor(Palette::blockOffset(15)+4);
+	_txtMin->setColor(Palette::blockOffset(15)+5);
 	_txtMin->setText(L"");
 
 	if (_showFundsOnGeoscape) _txtMinSep->setSmall(); else _txtMinSep->setBig();
-	_txtMinSep->setColor(Palette::blockOffset(15)+4);
+	_txtMinSep->setColor(Palette::blockOffset(15)+5);
 	_txtMinSep->setText(L":");
 
 	_txtSec->setSmall();
-	_txtSec->setColor(Palette::blockOffset(15)+4);
+	_txtSec->setColor(Palette::blockOffset(15)+5);
 	_txtSec->setText(L"");
 
 	_txtWeekday->setSmall();
-	_txtWeekday->setColor(Palette::blockOffset(15)+4);
+	_txtWeekday->setColor(Palette::blockOffset(15)+5);
 	_txtWeekday->setText(L"");
 	_txtWeekday->setAlign(ALIGN_CENTER);
 
 	_txtDay->setSmall();
-	_txtDay->setColor(Palette::blockOffset(15)+4);
+	_txtDay->setColor(Palette::blockOffset(15)+5);
 	_txtDay->setText(L"");
 	_txtDay->setAlign(ALIGN_CENTER);
 
 	_txtMonth->setSmall();
-	_txtMonth->setColor(Palette::blockOffset(15)+4);
+	_txtMonth->setColor(Palette::blockOffset(15)+5);
 	_txtMonth->setText(L"");
 	_txtMonth->setAlign(ALIGN_CENTER);
 
 	_txtYear->setSmall();
-	_txtYear->setColor(Palette::blockOffset(15)+4);
+	_txtYear->setColor(Palette::blockOffset(15)+5);
 	_txtYear->setText(L"");
 	_txtYear->setAlign(ALIGN_CENTER);
 
@@ -2047,11 +2048,15 @@ void GeoscapeState::btnBasesClick(Action* )
 
 	if (!_game->getSavedGame()->getBases()->empty())
 	{
-		_game->pushState(new BasescapeState(_game, _game->getSavedGame()->getBases()->front(), _globe));
+		// kL_begin: get Current Base
+/*		if (_currentBase)
+			_game->pushState(new BasescapeState(_game, _game->getSavedGame()->getBases()->at(_currentBase), _globe, this));
+		else */ // kL_end.
+			_game->pushState(new BasescapeState(_game, _game->getSavedGame()->getBases()->front(), _globe));	// kL <- this
 	}
 	else
 	{
-		_game->pushState(new BasescapeState(_game, 0, _globe));
+		_game->pushState(new BasescapeState(_game, 0, _globe));	// kL <- this
 	}
 }
 
@@ -2471,6 +2476,9 @@ void GeoscapeState::determineAlienMissions(bool atGameStart)
 	}
 }
 
+/**
+ * 
+ */
 void GeoscapeState::btnTimerClick(Action* action)
 {
 	SDL_Event ev;
@@ -2479,5 +2487,13 @@ void GeoscapeState::btnTimerClick(Action* action)
 	Action a = Action(&ev, 0.0, 0.0, 0, 0);
 	action->getSender()->mousePress(&a, this);
 }
+
+/**
+ * kL
+ */
+/* void GeoscapeState::setCurrentBase(Uint8 curBase)
+{
+	_currentBase = curBase;
+} */
 
 }

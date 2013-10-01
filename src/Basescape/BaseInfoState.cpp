@@ -48,9 +48,14 @@ namespace OpenXcom
  * @param base Pointer to the base to get info from.
  * @param state Pointer to the Basescape state.
  */
-BaseInfoState::BaseInfoState(Game* game, Base* base, BasescapeState* state) : State(game), _base(base), _state(state)
+BaseInfoState::BaseInfoState(Game* game, Base* base, BasescapeState* state)
+	:
+	State(game),
+	_base(base),
+	_state(state)
 {
 	_containmentLimit = Options::getBool("alienContainmentLimitEnforced");
+
 	// Create objects
 	_bg					= new Surface(320, 200, 0, 0);
 	_mini				= new MiniBaseView(128, 16, 182, 8);
