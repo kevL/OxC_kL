@@ -52,13 +52,14 @@ namespace OpenXcom
  */
 Base::Base(const Ruleset* rule)
 	:
-	Target(),
-	_rule(rule),
-	_name(L""),
-	_scientists(0),
-	_engineers(0),
-	_inBattlescape(false),
-	_retaliationTarget(false)
+		Target(),
+		_rule(rule),
+		_name(L""),
+		_scientists(0),
+		_engineers(0),
+		_inBattlescape(false),
+		_retaliationTarget(false)
+//		_currentBase(0)		// kL
 {
 	_items = new ItemContainer();
 }
@@ -253,6 +254,7 @@ YAML::Node Base::save() const
 		node["productions"].push_back((*i)->save());
 	}
 	node["retaliationTarget"] = _retaliationTarget;
+
 	return node;
 }
 
@@ -265,6 +267,7 @@ YAML::Node Base::saveId() const
 	YAML::Node node = Target::saveId();
 	node["type"] = "STR_BASE";
 	node["id"] = 0;
+
 	return node;
 }
 
@@ -1289,13 +1292,32 @@ std::vector<BaseFacility*> *Base::getDefenses()
 }
 
 /**
- * Returns the list of vehicles currently equipped
- * in the base.
+ * Returns the list of vehicles currently equipped in the base.
  * @return Pointer to vehicle list.
  */
 std::vector<Vehicle*> *Base::getVehicles()
 {
 	return &_vehicles;
 }
+
+// kL_begin: set & get Current Base.
+/**
+ * Sets the last-chosen (current) base.
+ * @return Pointer to vehicle list.
+ */
+/* void Base::setCurrentBase(Uint8 currentBase)
+{
+	_currentBase = currentBase;
+} */
+
+/**
+ * Returns the list of vehicles currently equipped
+ * in the base.
+ * @return Pointer to vehicle list.
+ */
+/* Uint8 Base::getCurrentBase()
+{
+	return _currentBase;
+} */ // kL_end.
 
 }

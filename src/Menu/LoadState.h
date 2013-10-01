@@ -16,10 +16,12 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM__LOADSTATE_H
 #define OPENXCOM__LOADSTATE_H
 
 #include "SavedGameState.h"
+
 
 namespace OpenXcom
 {
@@ -28,20 +30,22 @@ namespace OpenXcom
  * Load Game screen for listing info on available
  * saved games and loading them.
  */
-class LoadState : public SavedGameState
+class LoadState
+	:
+	public SavedGameState
 {
-private:
-public:
-	/// Creates the Load Game state.
-	LoadState(Game *game, bool geo);
-	/// Creates the Quick Load Game state.
-	LoadState(Game *game, bool geo, bool showMsg);
-	/// Cleans up the Load Game state.
-	~LoadState();
-	/// Handler for clicking the Saves list.
-	void lstSavesPress(Action *action);
-	/// Quick load game.
-	void quickLoad(const std::wstring &filename16);
+	public:
+		/// Creates the Load Game state.
+		LoadState(Game* game, bool geo);
+		/// Creates the Quick Load Game state.
+		LoadState(Game* game, bool geo, bool showMsg);
+		/// Cleans up the Load Game state.
+		~LoadState();
+
+		/// Handler for clicking the Saves list.
+		void lstSavesPress(Action* action);
+		/// Quick load game.
+		void quickLoad(const std::wstring& filename16);
 };
 
 }

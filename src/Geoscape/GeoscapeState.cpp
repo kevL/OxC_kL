@@ -109,6 +109,8 @@
 namespace OpenXcom
 {
 
+unsigned int kL_currentBase = 0;
+
 /**
  * Initializes all the elements in the Geoscape screen.
  * @param game Pointer to the core game.
@@ -126,6 +128,7 @@ GeoscapeState::GeoscapeState(Game* game)
 		_dogfightsToBeStarted(),
 		_minimizedDogfights(0)
 //		_currentBase(0)		// kL
+//		_b()				// kL
 {
 	int screenWidth = Options::getInt("baseXResolution");
 	int screenHeight = Options::getInt("baseYResolution");
@@ -2049,15 +2052,44 @@ void GeoscapeState::btnBasesClick(Action* )
 	if (!_game->getSavedGame()->getBases()->empty())
 	{
 		// kL_begin: get Current Base
-/*		if (_currentBase)
-			_game->pushState(new BasescapeState(_game, _game->getSavedGame()->getBases()->at(_currentBase), _globe, this));
-		else */ // kL_end.
-			_game->pushState(new BasescapeState(_game, _game->getSavedGame()->getBases()->front(), _globe));	// kL <- this
+		Log(LOG_INFO) << "GeoscapeState::btnBasesClick() getBases !empty";
+
+		unsigned int totalBases = _game->getSavedGame()->getBases()->size();
+		Log(LOG_INFO) << ". . totalBases = " << totalBases;
+
+		if (kL_currentBase == 0
+			|| kL_currentBase >= totalBases)
+		{
+			_game->pushState(new BasescapeState(_game, _game->getSavedGame()->getBases()->front(), _globe));
+		}
+		else
+		{
+			Log(LOG_INFO) << ". . . . currentBase is VALID";
+
+			_game->pushState(new BasescapeState(_game, _game->getSavedGame()->getBases()->at(kL_currentBase), _globe));
+		}
 	}
+/*		Uint8 currentBase = getCurrentBase();
+		Log(LOG_INFO) << ". . currentBase = " << currentBase;
+		if (currentBase > 0)
+		{
+			Log(LOG_INFO) << ". . . . currentBase is VALID";
+
+			_game->pushState(new BasescapeState(_game, _game->getSavedGame()->getBases()->at(currentBase), _globe));
+		}
+		else
+		{
+			Log(LOG_INFO) << ". . . . currentBase NOT valid"; */
+
+		 // kL_end.
+
+//kL		_game->pushState(new BasescapeState(_game, _game->getSavedGame()->getBases()->front(), _globe));
 	else
 	{
-		_game->pushState(new BasescapeState(_game, 0, _globe));	// kL <- this
+		_game->pushState(new BasescapeState(_game, 0, _globe));
 	}
+
+	Log(LOG_INFO) << ". . exit btnBasesClick()";
 }
 
 /**
@@ -2488,12 +2520,24 @@ void GeoscapeState::btnTimerClick(Action* action)
 	action->getSender()->mousePress(&a, this);
 }
 
+// kL_begin: set & get Current Base.
 /**
- * kL
+ * Sets the last-chosen (current) base.
+ * @return Pointer to vehicle list.
  */
-/* void GeoscapeState::setCurrentBase(Uint8 curBase)
+/* void GeoscapeState::setCurrentBase(Uint8 currentBase)
 {
-	_currentBase = curBase;
+	_currentBase = currentBase;
 } */
+
+/**
+ * Returns the list of vehicles currently equipped
+ * in the base.
+ * @return Pointer to vehicle list.
+ */
+/* Uint8 GeoscapeState::getCurrentBase()
+{
+	return _currentBase;
+} */ // kL_end.
 
 }

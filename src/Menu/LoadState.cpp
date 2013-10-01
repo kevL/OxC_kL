@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "LoadState.h"
 #include "../Engine/Logger.h"
 #include "../Savegame/SavedGame.h"
@@ -32,6 +33,7 @@
 #include "../Battlescape/BattlescapeState.h"
 #include "DeleteGameState.h"
 
+
 namespace OpenXcom
 {
 
@@ -40,11 +42,12 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param geo True to use Geoscape palette, false to use Battlescape palette.
  */
-LoadState::LoadState(Game *game, bool geo) : SavedGameState(game, geo)
+LoadState::LoadState(Game* game, bool geo)
+	:
+		SavedGameState(game, geo)
 {
-	// Set up objects
 	_txtTitle->setText(tr("STR_SELECT_GAME_TO_LOAD"));
-	_lstSaves->onMousePress((ActionHandler)&LoadState::lstSavesPress);
+	_lstSaves->onMousePress((ActionHandler)& LoadState::lstSavesPress);
 }
 
 /**
@@ -53,7 +56,9 @@ LoadState::LoadState(Game *game, bool geo) : SavedGameState(game, geo)
  * @param geo True to use Geoscape palette, false to use Battlescape palette.
  * @param showMsg True if need to show messages like "Loading game" or "Saving game".
  */
-LoadState::LoadState(Game *game, bool geo, bool showMsg) : SavedGameState(game, geo, showMsg)
+LoadState::LoadState(Game* game, bool geo, bool showMsg)
+	:
+		SavedGameState(game, geo, showMsg)
 {
 	quickLoad(L"autosave");
 }
@@ -63,14 +68,13 @@ LoadState::LoadState(Game *game, bool geo, bool showMsg) : SavedGameState(game, 
  */
 LoadState::~LoadState()
 {
-
 }
 
 /**
  * Loads the selected save.
  * @param action Pointer to an action.
  */
-void LoadState::lstSavesPress(Action *action)
+void LoadState::lstSavesPress(Action* action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
@@ -86,7 +90,7 @@ void LoadState::lstSavesPress(Action *action)
  * Quick load game.
  * @param filename16 name of file without ".sav"
  */
-void LoadState::quickLoad(const std::wstring &filename16)
+void LoadState::quickLoad(const std::wstring& filename16)
 {
 	if (_showMsg) updateStatus("STR_LOADING_GAME");
 
@@ -96,12 +100,13 @@ void LoadState::quickLoad(const std::wstring &filename16)
 		std::string filename = Language::wstrToUtf8(filename16);
 #endif
 
-	SavedGame *s = new SavedGame();
+	SavedGame* s = new SavedGame();
 	try
 	{
 		s->load(filename, _game->getRuleset());
 		_game->setSavedGame(s);
-		_game->setState(new GeoscapeState(_game));
+//kL		_game->setState(new GeoscapeState(_game));
+		_game->setState(new GeoscapeState(_game));		// kL
 		if (_game->getSavedGame()->getSavedBattle() != 0)
 		{
 			_game->getSavedGame()->getSavedBattle()->loadMapResources(_game);
@@ -110,7 +115,7 @@ void LoadState::quickLoad(const std::wstring &filename16)
 			_game->getSavedGame()->getSavedBattle()->setBattleState(bs);
 		}
 	}
-	catch (Exception &e)
+	catch (Exception& e)
 	{
 		Log(LOG_ERROR) << e.what();
 		std::wstringstream error;
@@ -125,7 +130,7 @@ void LoadState::quickLoad(const std::wstring &filename16)
 		else
 			delete s;
 	}
-	catch (YAML::Exception &e)
+	catch (YAML::Exception& e)
 	{
 		Log(LOG_ERROR) << e.what();
 		std::wstringstream error;

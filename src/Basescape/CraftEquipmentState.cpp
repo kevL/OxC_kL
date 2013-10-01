@@ -85,7 +85,8 @@ CraftEquipmentState::CraftEquipmentState(Game* game, Base* base, size_t craft)
 	_txtAvailable	= new Text(110, 9, 16, 24);
 	_txtUsed		= new Text(110, 9, 130, 24);
 	_txtCrew		= new Text(71, 9, 244, 24);
-	_lstEquipment	= new TextList(288, 128, 8, 40);
+//kL	_lstEquipment	= new TextList(288, 128, 8, 40);
+	_lstEquipment	= new TextList(288, 130, 8, 40);	// kL
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());

@@ -95,13 +95,13 @@ void MiniBaseView::setSelectedBase(unsigned int base)
 	_base = base;
 
 //	_gs->setCurrentBase((Uint8)_base);	// kL
+	kL_currentBase = base;
 
 	_redraw = true;
 }
 
 /**
- * Draws the view of all the bases with facilities
- * in varying colors.
+ * Draws the view of all the bases with facilities in varying colors.
  */
 void MiniBaseView::draw()
 {

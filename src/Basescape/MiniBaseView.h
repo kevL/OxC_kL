@@ -48,6 +48,7 @@ private:
 	SurfaceSet* _texture;
 	unsigned int _base, _hoverBase;
 //	GeoscapeState* _gs;					// kL
+//	Base* _b;
 
 	public:
 		/// Creates a new mini base view at the specified position and size.

@@ -65,6 +65,7 @@ private:
 	bool _retaliationTarget;
 	std::vector<Vehicle* > _vehicles;
 	std::vector<BaseFacility* > _defenses;
+//	Uint8 _currentBase;		// kL
 
 	public:
 		/// Creates a new base.
@@ -199,6 +200,11 @@ private:
 		std::vector<BaseFacility* >* getDefenses();
 		/// Gets the base's vehicles.
 		std::vector<Vehicle* >* getVehicles();
+
+		// kL_begin: set & get Current Base.
+//		void setCurrentBase(Uint8 currentBase = 0);
+//		Uint8 getCurrentBase();
+		// kL_end.
 };
 
 }

@@ -46,13 +46,13 @@ namespace OpenXcom
 CraftArmorState::CraftArmorState(Game *game, Base *base, size_t craft) : State(game), _base(base), _craft(craft)
 {
 	// Create objects
-	_window = new Window(this, 320, 200, 0, 0);
-	_btnOk = new TextButton(288, 16, 16, 176);
-	_txtTitle = new Text(300, 16, 16, 7);
-	_txtName = new Text(114, 9, 16, 32);
-	_txtCraft = new Text(70, 9, 130, 32);
-	_txtArmor = new Text(100, 9, 210, 32);
-	_lstSoldiers = new TextList(288, 128, 8, 40);
+	_window			= new Window(this, 320, 200, 0, 0);
+	_btnOk			= new TextButton(288, 16, 16, 176);
+	_txtTitle		= new Text(300, 16, 16, 7);
+	_txtName		= new Text(114, 9, 16, 32);
+	_txtCraft		= new Text(70, 9, 130, 32);
+	_txtArmor		= new Text(100, 9, 210, 32);
+	_lstSoldiers	= new TextList(288, 128, 8, 40);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)), Palette::backPos, 16);

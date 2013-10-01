@@ -30,7 +30,7 @@ class Window;
 class Text;
 class SavedBattleGame;
 class BattlescapeState;
-//class TurnCounter;		// kL
+class TurnCounter;		// kL
 
 /**
  * Screen which announces the next turn.
@@ -39,12 +39,12 @@ class NextTurnState
 	:
 	public State
 {
-	private:
-		Window* _window;
-		Text* _txtTitle, * _txtTurn, * _txtSide, * _txtMessage;
-		SavedBattleGame* _battleGame;
-		BattlescapeState* _state;
-//		TurnCounter* _turnCounter;		// kL
+private:
+	Window* _window;
+	Text* _txtTitle, * _txtTurn, * _txtSide, * _txtMessage;
+	SavedBattleGame* _battleGame;
+	BattlescapeState* _state;
+	TurnCounter* _turnCounter;		// kL
 
 	public:
 		/// Creates the Next Turn state.

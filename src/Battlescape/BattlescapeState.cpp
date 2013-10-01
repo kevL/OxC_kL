@@ -97,8 +97,8 @@ namespace OpenXcom
  */
 BattlescapeState::BattlescapeState(Game* game)
 	:
-	State(game),
-	_popups()
+		State(game),
+		_popups()
 {
 //	Log(LOG_INFO) << "Create BattlescapeState";		// kL
 //	game->getScreen()->setScale(1.0);
@@ -186,19 +186,14 @@ BattlescapeState::BattlescapeState(Game* game)
 	_txtTooltip		= new Text(300, 10, _icons->getX() + 2, _icons->getY() - 10);
 
 	// kL_begin:
-	// create TurnCounter
-//	Log(LOG_INFO) << ". new TurnCounter";
-//	_TCsave = _game->getSavedGame()->getSavedBattle();
-	_turnCounter	= new TurnCounter(65, 5, 0, 0, _save);		// kL
-//	Log(LOG_INFO) << ". new TurnCounter DONE";
+	Log(LOG_INFO) << ". new TurnCounter";
+	_turnCounter	= new TurnCounter(65, 5, 0, 0);		// kL
+	Log(LOG_INFO) << ". new TurnCounter DONE";
 
 //	add(_turnCounter);
-
 //	_turnCounter->setColor(Palette::blockOffset(9));
-
 //	_turnCounter->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
 //	getTurnCounter()->setColor(Palette::blockOffset(9));
-
 	// kL_end.
 
 	_reserve = _btnReserveNone;
@@ -227,14 +222,10 @@ BattlescapeState::BattlescapeState(Game* game)
 						};
 
 	_game->setPalette(color, Palette::backPos + 16, 16);
-//	_turnCounter->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_4")->getColors());	// kL
 
 	// Fix system colors
 	_game->getCursor()->setColor(Palette::blockOffset(9));
 	_game->getFpsCounter()->setColor(Palette::blockOffset(9));
-
-	_turnCounter->setColor(Palette::blockOffset(9));	// kL
-	add(_turnCounter);									// kL
 
 	add(_map);
 	add(_icons);
@@ -288,6 +279,10 @@ BattlescapeState::BattlescapeState(Game* game)
 	_game->getResourcePack()->getSurfaceSet("SPICONS.DAT")->getFrame(0)->blit(_btnLaunch);
 	add(_btnPsi);
 	_game->getResourcePack()->getSurfaceSet("SPICONS.DAT")->getFrame(1)->blit(_btnPsi);
+
+	add(_turnCounter);									// kL
+//	_turnCounter->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_4")->getColors());	// kL
+	_turnCounter->setColor(Palette::blockOffset(9));	// kL
 
 	// Set up objects
 	_save = _game->getSavedGame()->getSavedBattle();
@@ -1024,13 +1019,10 @@ void BattlescapeState::btnEndTurnClick(Action* )
 {
 	if (allowButtons())
 	{
+//		_turnCounter->update();						// kL
+
 		_txtTooltip->setText(L"");
 		_battleGame->requestEndTurn();
-
-//		SavedBattleGame sbg;						// kL
-//		_turnCounter->update(sbg.getTurn());		// kL
-		_turnCounter->update();						// kL
-//		_turnCounter->blit(_screen->getSurface());	// kL
 	}
 }
 
@@ -1830,12 +1822,12 @@ void BattlescapeState::saveVoxelMap()
 				int test = _save->getTileEngine()->voxelCheck(Position(x,y,z*2),0,0) +1;
 				float dist=1;
 
-				if (x%16==15)
+				if (x %16==15)
 				{
 					dist*=0.9f;
 				}
 
-				if (y%16==15)
+				if (y %16==15)
 				{
 					dist*=0.9f;
 				}
@@ -2108,7 +2100,6 @@ void BattlescapeState::txtTooltipOut(Action *action)
 	}
 }
 
-// kL_begin:
 /**
  * Returns the TurnCounter used by the game.
  * @return Pointer to the TurnCounter.
@@ -2117,6 +2108,5 @@ TurnCounter* BattlescapeState::getTurnCounter() const
 {
 	return _turnCounter;
 }
-// kL_end.
 
 }

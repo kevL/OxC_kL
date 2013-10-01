@@ -27,6 +27,8 @@
 namespace OpenXcom
 {
 
+extern unsigned int kL_currentBase;
+
 class Surface;
 class Globe;
 //kL class TextButton;
@@ -67,6 +69,7 @@ private:
 	bool _showFundsOnGeoscape; // this is a cache for Options::getBool("showFundsOnGeoscape")
 
 //	Uint8 _currentBase;		// kL
+//	Base* _b;
 
 	/// Handle alien mission generation.
 	void determineAlienMissions(bool atGameStart = false);
@@ -172,6 +175,10 @@ private:
 		void handleBaseDefense(Base* base, Ufo* ufo);
 
 //		void setCurrentBase(Uint8 curBase);	// kL
+		// kL_begin: set & get Current Base.
+//		void setCurrentBase(Uint8 currentBase = 0);
+//		Uint8 getCurrentBase();
+		// kL_end.
 };
 
 }

@@ -46,16 +46,16 @@ AllocatePsiTrainingState::AllocatePsiTrainingState(Game *game, Base *base) : Sta
 {
 	_base = base;
 	// Create objects
-	_window = new Window(this, 320, 200, 0, 0);
-	_txtTitle = new Text(300, 16, 10, 8);
-	_txtRemaining = new Text(134, 10, 10, 24);
-	_txtLabSpace = new Text(16, 10, 134, 24);
-	_txtName = new Text(64, 10, 10, 40);
-	_txtPsiStrength = new Text(80, 20, 124, 32);
-	_txtPsiSkill = new Text(80, 20, 188, 32);
-	_txtTraining = new Text(48, 20, 270, 32);
-	_btnOk = new TextButton(160, 14, 80, 174);
-	_lstSoldiers = new TextList(290, 112, 8, 52);
+	_window			= new Window(this, 320, 200, 0, 0);
+	_txtTitle		= new Text(300, 16, 10, 8);
+	_txtRemaining	= new Text(134, 10, 10, 24);
+	_txtLabSpace	= new Text(16, 10, 134, 24);
+	_txtName		= new Text(64, 10, 10, 40);
+	_txtPsiStrength	= new Text(80, 20, 124, 32);
+	_txtPsiSkill	= new Text(80, 20, 188, 32);
+	_txtTraining	= new Text(48, 20, 270, 32);
+	_btnOk			= new TextButton(160, 14, 80, 174);
+	_lstSoldiers	= new TextList(290, 112, 8, 52);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());

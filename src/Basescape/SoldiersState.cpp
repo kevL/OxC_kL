@@ -123,8 +123,6 @@ SoldiersState::SoldiersState(Game* game, Base* base)
 	_lstSoldiers->onRightArrowClick((ActionHandler)& SoldiersState::lstItemsRightArrowClick_noCraft);	// kL
 	_lstSoldiers->onMouseClick((ActionHandler)& SoldiersState::lstSoldiersClick);
 
-	int kL = 1;
-
 	// kL_note: this is the CraftSoldiersState list:
 /*	_lstSoldiers->setColor(Palette::blockOffset(13)+10);
 	_lstSoldiers->setArrowColor(Palette::blockOffset(15)+6);

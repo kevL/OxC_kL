@@ -30,7 +30,7 @@
 #include "DebriefingState.h"
 #include "../Interface/Cursor.h"
 #include "BattlescapeState.h"
-//#include "../Interface/TurnCounter.h"	// kL
+#include "../Interface/TurnCounter.h"	// kL
 
 
 namespace OpenXcom
@@ -120,9 +120,14 @@ void NextTurnState::handle(Action* action)
 
 //kL	if (action->getDetails()->type == SDL_KEYDOWN
 //kL		|| action->getDetails()->type == SDL_MOUSEBUTTONDOWN)
-//	if (action->getDetails()->type == SDL_MOUSEBUTTONDOWN			// kL
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)	// kL
 	{
+//		_turnCounter->setTurnCount(kL_TurnCount);		// kL
+		kL_TurnCount = _battleGame->getTurn();	// kL
+
+		_turnCounter = _state->getTurnCounter();
+		_turnCounter->update();
+
 		_game->popState();
 
 		int liveAliens = 0;
@@ -136,8 +141,6 @@ void NextTurnState::handle(Action* action)
 		else
 		{
 			_state->btnCenterClick(0);
-
-//			_turnCounter->setTurnCount(_battleGame->getTurn());		// kL
 		}
 	}
 }
