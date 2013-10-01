@@ -174,7 +174,6 @@ void Pathfinding::calculate(BattleUnit *unit, Position endPosition, BattleUnit *
 	*/// kL_end_TEST.
 
 	// Strafing move allowed only to adjacent squares on same z. "Same z" rule mainly to simplify walking render.
-<<<<<<< HEAD
 	_strafeMove = _save->getStrafeSetting()
 		&& (SDL_GetModState()& KMOD_CTRL) != 0
 		&& startPosition.z == endPosition.z
@@ -186,10 +185,6 @@ void Pathfinding::calculate(BattleUnit *unit, Position endPosition, BattleUnit *
 	}
 	else
 		Log(LOG_INFO) << "Pathfinding::calculate() _strafeMove INVALID"; */	// kL
-=======
-	_strafeMove = _save->getStrafeSetting() && (SDL_GetModState() & KMOD_CTRL) != 0 && (startPosition.z == endPosition.z) &&
-							(abs(startPosition.x - endPosition.x) <= 1) && (abs(startPosition.y - endPosition.y) <= 1);
->>>>>>> master
 
 	// look for a possible fast and accurate bresenham path and skip A*
 	if (startPosition.z == endPosition.z && bresenhamPath(startPosition,endPosition, target, sneak))
@@ -231,8 +226,12 @@ bool Pathfinding::aStarPath(const Position &startPosition, const Position &endPo
 	start->connect(0, 0, 0, endPosition);
 	PathfindingOpenSet openList;
 	openList.push(start);
+<<<<<<< HEAD
 	bool missile = (target && maxTUCost == 10000);
 
+=======
+	bool missile = (target && maxTUCost == -1);
+>>>>>>> master
 	// if the open list is empty, we've reached the end
 	while(!openList.empty())
 	{
@@ -501,7 +500,6 @@ int Pathfinding::getTUCost(const Position& startPosition, int direction, Positio
 			}
 
 			cost += wallcost;
-<<<<<<< HEAD
 
 			if (_unit->getFaction() == FACTION_HOSTILE
 				&& ((destinationTile->getUnit()
@@ -509,13 +507,6 @@ int Pathfinding::getTUCost(const Position& startPosition, int direction, Positio
 						&& destinationTile->getUnit() != _unit)
 					|| destinationTile->getFire() > 0))
 			{
-=======
-			if (_unit->getFaction() == FACTION_HOSTILE &&
-				((destinationTile->getUnit() &&
-				destinationTile->getUnit()->getFaction() == FACTION_HOSTILE &&
-				destinationTile->getUnit() != _unit) ||
-				destinationTile->getFire() > 0))
->>>>>>> master
 				cost += 32; // try to find a better path, but don't exclude this path entirely.
 			}
 
@@ -686,18 +677,14 @@ bool Pathfinding::isBlocked(Tile *tile, const int part, BattleUnit *missileTarge
 			return true; // blocking part
 		}
 
-		Tile *tileWest = _save->getTile(tile->getPosition() + Position(-1, 0, 0));
-<<<<<<< HEAD
+		Tile* tileWest = _save->getTile(tile->getPosition() + Position(-1, 0, 0));
+		if (!tileWest)
+			return true; // do not look outside of map
+
 		if (tileWest->getMapData(MapData::O_OBJECT)
 			&& (tileWest->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALLEAST
 				|| tileWest->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALLEASTANDSOUTH))
 		{
-=======
-		if (!tileWest) return true;	// do not look outside of map
-		if (tileWest->getMapData(MapData::O_OBJECT) &&
-			(tileWest->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALLEAST ||
-			tileWest->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALLEASTANDSOUTH))
->>>>>>> master
 			return true; // blocking part
 		}
 	}
@@ -710,18 +697,14 @@ bool Pathfinding::isBlocked(Tile *tile, const int part, BattleUnit *missileTarge
 			return true; // blocking part
 		}
 
-		Tile *tileNorth = _save->getTile(tile->getPosition() + Position(0, -1, 0));
-<<<<<<< HEAD
+		Tile* tileNorth = _save->getTile(tile->getPosition() + Position(0, -1, 0));
+		if (!tileNorth)
+			return true; // do not look outside of map
+
 		if (tileNorth->getMapData(MapData::O_OBJECT)
 			&& (tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALLSOUTH
 				|| tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALLEASTANDSOUTH))
 		{
-=======
-		if (!tileNorth) return true; // do not look outside of map
-		if (tileNorth->getMapData(MapData::O_OBJECT) &&
-			(tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALLSOUTH ||
-			tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALLEASTANDSOUTH))
->>>>>>> master
 			return true; // blocking part
 		}
 	}
