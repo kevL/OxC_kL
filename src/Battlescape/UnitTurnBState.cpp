@@ -113,6 +113,7 @@ void UnitTurnBState::think()
 	{
 //kL		size_t unitSpotted = _unit->getUnitsSpottedThisTurn().size();
 		size_t unitsSpotted = _unit->getUnitsSpottedThisTurn().size();
+
 		_unit->turn(_turret);
 		_parent->getTileEngine()->calculateFOV(_unit);
 		_unit->setCache(0);

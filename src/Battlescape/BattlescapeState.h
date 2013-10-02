@@ -101,7 +101,7 @@ private:
 		/// Selects the previous soldier.
 		void selectPreviousPlayerUnit(bool checkReselect);
 //kL		static const int DEFAULT_ANIM_SPEED = 100;
-		static const int DEFAULT_ANIM_SPEED = 90;		// kL
+		static const int DEFAULT_ANIM_SPEED = 89;		// kL
 		/// Creates the Battlescape state.
 		void init();
 		/// Runs the timers and handles popups.

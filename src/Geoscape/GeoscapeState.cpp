@@ -447,8 +447,27 @@ GeoscapeState::GeoscapeState(Game* game)
 		_txtFunds->setAlign(ALIGN_CENTER);
 	}
 
+	// kL_note: colors for Geoscape palette
+	//  1= olive green
+	//  2= dark green
+	//  3= black
+	//  4= white (default for date-stuff)
+	//  5= pale white
+	//  6= light blue
+	//  7= pale blue
+	//  8= blue
+	//  9= dark blue
+	// 10= navy blue
+	// 11= bright lime
+	// 12= yellow
+	// 13= pale lime
+	// 14= dark lime
+	// 15= blue/orange?
+	// 16= hot pink
+	// 17= pale pink
+
 	if (_showFundsOnGeoscape) _txtHour->setSmall(); else _txtHour->setBig();
-	_txtHour->setColor(Palette::blockOffset(15)+5);		// kL: was +4
+	_txtHour->setColor(Palette::blockOffset(15)+5);
 	_txtHour->setAlign(ALIGN_RIGHT);
 	_txtHour->setText(L"");
 

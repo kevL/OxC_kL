@@ -2607,7 +2607,8 @@ void BattleUnit::invalidateCache()
 }
 
 /**
- * 
+ * kL_note: I believe this pertains only to individual soldiers;
+ * ie, what has *this* soldier spotted this turn.
  */
 std::vector<BattleUnit* > BattleUnit::getUnitsSpottedThisTurn()
 {

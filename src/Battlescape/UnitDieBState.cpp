@@ -214,7 +214,8 @@ void UnitDieBState::think()
 	{
 		Log(LOG_INFO) << ". . !isOut";
 
-		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED * 8 / 7);
+//		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED * 8 / 7);	// kL
+		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED);			// kL
 		_unit->startFalling(); // -> STATUS_COLLAPSING
 
 		if (!_noSound)		// kL
@@ -257,7 +258,9 @@ void UnitDieBState::think()
 			newUnit->lookAt(_originalDir);
 //			newUnit->lookAt(_originalDir, true);	// kL, fast turn back to original facing. Nope...
 //			newUnit->setDirection(_originalDir);	// kL
-//			_parent->getMap()->cacheUnit(newUnit);	// kL, try this.
+
+			newUnit->setCache(0);					// kL
+			_parent->getMap()->cacheUnit(newUnit);	// kL
 
 			Log(LOG_INFO) << ". . got back from lookAt() in think ...";
 		}
@@ -273,6 +276,7 @@ void UnitDieBState::think()
 			&& _unit->getSpawnUnit().empty())
 		{
 			Game* game = _parent->getSave()->getBattleState()->getGame();
+
 			if (_unit->getStatus() == STATUS_DEAD)
 			{
 				if (_damageType == DT_NONE)

@@ -226,9 +226,9 @@ void TileEngine::addLight(const Position &center, int power, int layer)
  */
 bool TileEngine::calculateFOV(BattleUnit* unit)
 {
-	if (unit->isOut()) return false;	// kL: below.
+//	if (unit->isOut()) return false;	// kL: below.
 
-	size_t oldNumVisibleUnits = unit->getUnitsSpottedThisTurn().size();
+	size_t preVisibleUnits = unit->getUnitsSpottedThisTurn().size();
 
 	Position center = unit->getPosition();
 	Position test;
@@ -256,12 +256,13 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 	unit->clearVisibleUnits();
 	unit->clearVisibleTiles();
 
-//kL	if (unit->isOut())
-//kL		return false;
+	if (unit->isOut()) return false;
+
 
 	Position pos = unit->getPosition();
 
-	if (unit->getHeight() + unit->getFloatHeight() + -_save->getTile(unit->getPosition())->getTerrainLevel() >= 24 + 4)
+//kL	if (unit->getHeight() + unit->getFloatHeight() + -_save->getTile(unit->getPosition())->getTerrainLevel() >= 24 + 4)
+	if (unit->getHeight() + unit->getFloatHeight() - _save->getTile(unit->getPosition())->getTerrainLevel() >= 24 + 4)		// kL
 	{
 		++pos.z;
 	}
@@ -294,6 +295,7 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 					if (_save->getTile(test))
 					{
 						BattleUnit* visibleUnit = _save->getTile(test)->getUnit();
+
 						if (visibleUnit
 							&& !visibleUnit->isOut()
 							&& visible(unit, _save->getTile(test)))
@@ -304,7 +306,7 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 								visibleUnit->setVisible(true);
 							}
 
-							if ((visibleUnit->getFaction() == FACTION_HOSTILE && unit->getFaction() != FACTION_HOSTILE)
+							if ((visibleUnit->getFaction() == FACTION_HOSTILE && unit->getFaction() != FACTION_HOSTILE)		// kL_note: or not Neutral?
 								|| (visibleUnit->getFaction() != FACTION_HOSTILE && unit->getFaction() == FACTION_HOSTILE))
 							{
 								unit->addToVisibleUnits(visibleUnit);
@@ -319,7 +321,8 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 
 						if (unit->getFaction() == FACTION_PLAYER)
 						{
-							// this sets tiles to discovered if they are in LOS - tile visibility is not calculated in voxelspace but in tilespace
+							// this sets tiles to discovered if they are in LOS -
+							// tile visibility is not calculated in voxelspace but in tilespace;
 							// large units have "4 pair of eyes"
 							int size = unit->getArmor()->getSize();
 
@@ -362,11 +365,13 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 		}
 	}
 
-	// we only react when there are at least the same amount of visible units as before AND the checksum is different;
-	// this way we stop if there are the same amount of visible units, but a different unit is seen,
-	// or we stop if there are more visible units seen
+	// We only react when there are at least the same amount of
+	// visible units as before AND the checksum is different
+	// ( kL_note: get a grip on yourself, );
+	// this way we stop if there are the same amount of visible units, but a
+	// different unit is seen, or we stop if there are more visible units seen
 	if (!unit->getVisibleUnits()->empty()
-		&& unit->getUnitsSpottedThisTurn().size() > oldNumVisibleUnits)
+		&& unit->getUnitsSpottedThisTurn().size() > preVisibleUnits)
 	{
 		return true;
 	}

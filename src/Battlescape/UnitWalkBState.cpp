@@ -116,7 +116,7 @@ void UnitWalkBState::think()
 
 
 	bool unitSpotted = false;
-//	int visUnits = _unit->getVisibleUnits().size();
+//	int visUnits = _unit->getVisibleUnits().size();		// kL?
 	bool onScreen = (_unit->getVisible()
 		&& _parent->getMap()->getCamera()->isOnScreen(_unit->getPosition()));
 
@@ -589,8 +589,6 @@ void UnitWalkBState::think()
 			dir = _pf->dequeuePath(); // now start moving
 //kL			if (_falling) dir = _pf->DIR_DOWN;			// kL_note: set above, if it hasn't changed...
 
-//			if (_unit->getTimeUnits() >= tu)	// kL: not necessary, check'd above.
-//			{
 			if (_unit->spendTimeUnits(tu))
 			{
 				if (_unit->spendEnergy(energy))
@@ -615,7 +613,6 @@ void UnitWalkBState::think()
 //					}
 				}
 			}
-//			}
 
 			// make sure the unit sprites are up to date
 			if (onScreen)

@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #define _USE_MATH_DEFINES
 #include <cmath>
 #include "Projectile.h"
@@ -40,6 +41,7 @@
 #include "../Ruleset/Armor.h"
 #include "../Engine/Game.h"
 
+
 namespace OpenXcom
 {
 
@@ -63,7 +65,6 @@ Projectile::Projectile(ResourcePack *res, SavedBattleGame *save, BattleAction ac
  */
 Projectile::~Projectile()
 {
-
 }
 
 /**
@@ -383,7 +384,7 @@ bool Projectile::calculateThrow(double accuracy)
  * @param keepRange Whether range affects accuracy.
  * @param targetTile Tile of target. Default = 0.
  */
-void Projectile::applyAccuracy(const Position& origin, Position *target, double accuracy, bool keepRange, Tile *targetTile)
+void Projectile::applyAccuracy(const Position& origin, Position* target, double accuracy, bool keepRange, Tile* targetTile)
 {
 	int xdiff = origin.x - target->x;
 	int ydiff = origin.y - target->y;
@@ -400,6 +401,7 @@ void Projectile::applyAccuracy(const Position& origin, Position *target, double 
 		if (targetTile)
 		{
 			BattleUnit* targetUnit = targetTile->getUnit();
+
 			if (targetUnit && (targetUnit->getFaction() == FACTION_HOSTILE))
 				accuracyPenalty = 0.01 * targetTile->getShade();		// Shade can be from 0 to 15
 			else
@@ -408,19 +410,41 @@ void Projectile::applyAccuracy(const Position& origin, Position *target, double 
 			// If unit is kneeled, then chance to hit them reduced by 5%.
 			// This is a compromise, because vertical deviation is 2 times less.
 			if (targetUnit && targetUnit->isKneeled())
-				accuracyPenalty += 0.05;
+//kL				accuracyPenalty += 0.05;
+				accuracyPenalty += 0.06;	// kL
 		}
 		else
 			accuracyPenalty = 0.01 * _save->getGlobalShade();	// Shade can be from 0 (day) to 15 (night).
 
-		baseDeviation = -0.15 + (_action.type == BA_AUTOSHOT ? 0.28 : 0.26) / (accuracy - accuracyPenalty + 0.25);
+//kL		baseDeviation = -0.15 + (_action.type == BA_AUTOSHOT ? 0.28 : 0.26) / (accuracy - accuracyPenalty + 0.25);
+
+		// kL_begin: modify rangedBasedAccuracy (shot-modes).
+		baseDeviation = -0.15;
+		switch (_action.type)
+		{
+			case BA_AUTOSHOT:
+				baseDeviation += 0.33 / (accuracy - accuracyPenalty + 0.25);
+			break;
+			case BA_SNAPSHOT:
+				baseDeviation += 0.28 / (accuracy - accuracyPenalty + 0.25);
+			break;
+			case BA_AIMEDSHOT:
+				baseDeviation += 0.23 / (accuracy - accuracyPenalty + 0.25);
+			break;
+
+			default:
+				baseDeviation += 0.28 / (accuracy - accuracyPenalty + 0.25);
+			break;
+		}
+		// kL_end.
 
 		// 0.02 is the min angle deviation for best accuracy (+-3s = 0.02 radian).
 		if (baseDeviation < 0.02) baseDeviation = 0.02;
 
 		// the angle deviations are spread using a normal distribution for baseDeviation (+-3s with precision 99,7%)
 		double dH = RNG::boxMuller(0.0, baseDeviation / 6.0);  // horizontal miss in radian
-		double dV = RNG::boxMuller(0.0, baseDeviation /(6.0 * 2));
+//kL		double dV = RNG::boxMuller(0.0, baseDeviation /(6.0 * 2));
+		double dV = RNG::boxMuller(0.0, baseDeviation /(6.0 * 1.8));	// kL
 		double te = atan2(double(target->y - origin.y), double(target->x - origin.x)) + dH;
 		double fi = atan2(double(target->z - origin.z), realDistance) + dV;
 		double cos_fi = cos(fi);
@@ -534,7 +558,7 @@ int Projectile::getParticle(int i) const
  * Returns 0 when there is no item thrown.
  * @return Pointer to BattleItem.
  */
-BattleItem *Projectile::getItem() const
+BattleItem* Projectile::getItem() const
 {
 	if (_action.type == BA_THROW)
 		return _action.weapon;
@@ -546,7 +570,7 @@ BattleItem *Projectile::getItem() const
  * Gets the bullet sprite.
  * @return Pointer to Surface.
  */
-Surface *Projectile::getSprite() const
+Surface* Projectile::getSprite() const
 {
 	return _sprite;
 }
