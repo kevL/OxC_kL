@@ -41,23 +41,23 @@ class UnitWalkBState
 	:
 	public BattleState
 {
-	private:
-		Position _target;
-		BattleUnit* _unit;
-		Pathfinding* _pf;
-		TileEngine* _terrain;
-		bool _falling;
-		bool _beforeFirstStep;
-		/// Handles some calculations when the path is finished.
-		void postPathProcedures();
-		/// Handles some calculations when the walking is finished.
-		void setNormalWalkSpeed();
-		/// Handles the stepping sounds.
-		void playMovementSound();
-		std::size_t _numUnitsSpotted;
-		int _preMovementCost;
+private:
+	Position _target;
+	BattleUnit* _unit;
+	Pathfinding* _pf;
+	TileEngine* _terrain;
+	bool _falling;
+	bool _beforeFirstStep;
+	/// Handles some calculations when the path is finished.
+	void postPathProcedures();
+	/// Handles some calculations when the walking is finished.
+	void setNormalWalkSpeed();
+	/// Handles the stepping sounds.
+	void playMovementSound();
+	std::size_t _unitsSpotted;
+	int _preMovementCost;
 
-//		Soldier* _geoscapeSoldier;	// kL: to cycle through all seen HOSTILE units.
+//	Soldier* _geoscapeSoldier;	// kL: to cycle through all seen HOSTILE units.
 
 	public:
 		/// Creates a new UnitWalkBState class.

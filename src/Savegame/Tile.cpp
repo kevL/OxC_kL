@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "Tile.h"
 #include "../Ruleset/MapData.h"
 #include "../Ruleset/MapDataSet.h"
@@ -29,25 +30,39 @@
 #include "../Ruleset/Armor.h"
 #include "SerializationHelper.h"
 
+
 namespace OpenXcom
 {
 
 /// How many bytes various fields use in a serialized tile. See header.
-Tile::SerializationKey Tile::serializationKey = 
-{4, // index
- 2, // _mapDataSetID, four of these
- 2, // _mapDataID, four of these
- 1, // _fire
- 1, // _smoke
- 1,	// one 8-bit bool field
- 4 + 2*4 + 2*4 + 1 + 1 + 1 // total bytes to save one tile
+Tile::SerializationKey Tile::serializationKey =
+{
+	4, // index
+	2, // _mapDataSetID, four of these
+	2, // _mapDataID, four of these
+	1, // _fire
+	1, // _smoke
+	1,	// one 8-bit bool field
+	4 + 2*4 + 2*4 + 1 + 1 + 1 // total bytes to save one tile
 };
 
 /**
 * constructor
 * @param pos Position.
 */
-Tile::Tile(const Position& pos): _smoke(0), _fire(0), _explosive(0), _pos(pos), _unit(0), _animationOffset(0), _markerColor(0), _visible(false), _preview(-1), _TUMarker(0), _overlaps(0)
+Tile::Tile(const Position& pos)
+	:
+		_smoke(0),
+		_fire(0),
+		_explosive(0),
+		_pos(pos),
+		_unit(0),
+		_animationOffset(0),
+		_markerColor(0),
+		_visible(false),
+		_preview(-1),
+		_TUMarker(0),
+		_overlaps(0)
 {
 	for (int i = 0; i < 4; ++i)
 	{
@@ -56,11 +71,13 @@ Tile::Tile(const Position& pos): _smoke(0), _fire(0), _explosive(0), _pos(pos), 
 		_mapDataSetID[i] = -1;
 		_currentFrame[i] = 0;
 	}
+
 	for (int layer = 0; layer < LIGHTLAYERS; layer++)
 	{
 		_light[layer] = 0;
 		_lastLight[layer] = -1;
 	}
+
 	for (int i = 0; i < 3; ++i)
 	{
 		_discovered[i] = false;
@@ -79,7 +96,7 @@ Tile::~Tile()
  * Load the tile from a YAML node.
  * @param node YAML node.
  */
-void Tile::load(const YAML::Node &node)
+void Tile::load(const YAML::Node& node)
 {
 	//_position = node["position"].as<Position>(_position);
 	for (int i = 0; i < 4; i++)
@@ -129,7 +146,6 @@ void Tile::loadBinary(Uint8 *buffer, Tile::SerializationKey& serKey)
 	_currentFrame[2] = (boolFields & 0x10) ? 7 : 0;
 }
 
-
 /**
  * Saves the tile to a YAML node.
  * @return YAML node.
@@ -138,15 +154,16 @@ YAML::Node Tile::save() const
 {
 	YAML::Node node;
 	node["position"] = _pos;
+
 	for (int i = 0; i < 4; i++)
 	{
 		node["mapDataID"].push_back(_mapDataID[i]);
 		node["mapDataSetID"].push_back(_mapDataSetID[i]);
 	}
-	if (_smoke)
-		node["smoke"] = _smoke;
-	if (_fire)
-		node["fire"] = _fire;
+
+	if (_smoke) node["smoke"] = _smoke;
+	if (_fire) node["fire"] = _fire;
+
 	if (_discovered[0] || _discovered[1] || _discovered[2])
 	{
 		for (int i = 0; i < 3; i++)
@@ -154,16 +171,13 @@ YAML::Node Tile::save() const
 			node["discovered"].push_back(_discovered[i]);
 		}
 	}
-	if (isUfoDoorOpen(1))
-	{
-		node["openDoorWest"] = true;
-	}
-	if (isUfoDoorOpen(2))
-	{
-		node["openDoorNorth"] = true;
-	}
+
+	if (isUfoDoorOpen(1)) node["openDoorWest"] = true;
+	if (isUfoDoorOpen(2)) node["openDoorNorth"] = true;
+
 	return node;
 }
+
 /**
  * Saves the tile to binary.
  * @param buffer pointer to buffer.
@@ -218,7 +232,12 @@ void Tile::getMapData(int *mapDataID, int *mapDataSetID, int part) const
  */
 bool Tile::isVoid() const
 {
-	return _objects[0] == 0 && _objects[1] == 0 && _objects[2] == 0 && _objects[3] == 0 && _smoke == 0 && _inventory.empty();
+	return _objects[0] == 0
+			&& _objects[1] == 0
+			&& _objects[2] == 0
+			&& _objects[3] == 0
+			&& _smoke == 0
+			&& _inventory.empty();
 }
 
 /**
@@ -301,7 +320,6 @@ int Tile::getFootstepSound(Tile *tileBelow) const
 
 	return sound;
 }
-
 
 /**
  * Open a door on this tile.
@@ -401,7 +419,6 @@ bool Tile::isDiscovered(int part) const
 	return _discovered[part];
 }
 
-
 /**
  * Reset the light amount on the tile. This is done before a light level recalculation.
  * @param layer Light is separated in 3 layers: Ambient, Static and Dynamic.
@@ -474,12 +491,12 @@ bool Tile::destroy(int part)
 		}
 	}
 
-	/* check if the floor on the lowest level is gone */
+	// check if the floor on the lowest level is gone
 	if (part == MapData::O_FLOOR
 		&& getPosition().z == 0
 		&& _objects[MapData::O_FLOOR] == 0)
 	{
-		/* replace with scorched earth */
+		// replace with scorched earth
 		setMapData(MapDataSet::getScorchedEarthTile(), 1, 0, MapData::O_FLOOR);
 	}
 
@@ -512,12 +529,15 @@ void Tile::setExplosive(int power, bool force)
 	}
 }
 
+/**
+ *
+ */
 int Tile::getExplosive() const
 {
 	return _explosive;
 }
 
-/*
+/**
  * Flammability of a tile is the lowest flammability of it's objects.
  * @return Flammability : the lower the value, the higher the chance the tile/object catches fire.
  */
@@ -537,7 +557,7 @@ int Tile::getFlammability() const
 	return flam;
 }
 
-/*
+/**
  * Fuel of a tile is the lowest flammability of it's objects.
  * @return how long to burn.
  */
@@ -556,7 +576,8 @@ int Tile::getFuel() const
 
 	return fuel;
 }
-/*
+
+/**
  * Ignite starts fire on a tile, it will burn <fuel> rounds. Fuel of a tile is the highest fuel of it's objects.
  * NOT the sum of the fuel of the objects!
  */
@@ -650,7 +671,7 @@ void Tile::setUnit(BattleUnit *unit, Tile *tileBelow)
 void Tile::setFire(int fire)
 {
 	_fire = fire;
-	_animationOffset = RNG::generate(0,3);
+	_animationOffset = RNG::generate(0, 3);
 }
 
 /**
@@ -679,7 +700,7 @@ void Tile::addSmoke(int smoke)
 			_smoke += smoke;
 		}
 
-		_animationOffset = RNG::generate(0,3);
+		_animationOffset = RNG::generate(0, 3);
 		addOverlap();
 	}
 }
@@ -691,9 +712,8 @@ void Tile::addSmoke(int smoke)
 void Tile::setSmoke(int smoke)
 {
 	_smoke = smoke;
-	_animationOffset = RNG::generate(0,3);
+	_animationOffset = RNG::generate(0, 3);
 }
-
 
 /**
  * Get the amount of turns this tile is smoking. 0 = no smoke.
@@ -789,7 +809,7 @@ void Tile::prepareNewTurn()
 					_unit->toggleFireDamage();
 					_unit->damage(Position(0, 0, 0), _smoke, DT_IN, true); // _smoke becomes our damage value
 
-					if (RNG::generate(0, 100) < 40 * _unit->getArmor()->getDamageModifier(DT_IN)) // try to set the unit on fire.
+					if (RNG::generate(0, 99) < 40 * _unit->getArmor()->getDamageModifier(DT_IN)) // try to set the unit on fire.
 					{
 						int burnTime = RNG::generate(0, int(5 * _unit->getArmor()->getDamageModifier(DT_IN)));
 						if (_unit->getFire() < burnTime)
@@ -803,7 +823,8 @@ void Tile::prepareNewTurn()
 			{
 				if (_unit->getOriginalFaction() != FACTION_HOSTILE) // aliens don't breathe
 				{
-					if (_unit->getArmor()->getDamageModifier(DT_SMOKE) > 0.0 && _unit->getArmor()->getSize() == 1) // try to knock this guy out.
+					if (_unit->getArmor()->getDamageModifier(DT_SMOKE) > 0.0
+						&& _unit->getArmor()->getSize() == 1) // try to knock this guy out.
 					{
 						_unit->damage(Position(0,0,0), (_smoke / 4) + 1, DT_SMOKE, true);
 					}
@@ -823,7 +844,6 @@ std::vector<BattleItem *> *Tile::getInventory()
 {
 	return &_inventory;
 }
-
 
 /**
  * Set the marker color on this tile.
@@ -867,7 +887,7 @@ void Tile::setPreview(int dir)
 	_preview = dir;
 }
 
-/*
+/**
  * retrieve the direction stored by the pathfinding.
  */
 int Tile::getPreview() const
@@ -875,7 +895,7 @@ int Tile::getPreview() const
 	return _preview;
 }
 
-/*
+/**
  * set the number to be displayed for pathfinding preview.
  */
 void Tile::setTUMarker(int tu)
@@ -883,7 +903,7 @@ void Tile::setTUMarker(int tu)
 	_TUMarker = tu;
 }
 
-/*
+/**
  * get the number to be displayed for pathfinding preview.
  */
 int Tile::getTUMarker() const
@@ -891,7 +911,7 @@ int Tile::getTUMarker() const
 	return _TUMarker;
 }
 
-/*
+/**
  * get the overlap value of this tile.
  */
 int Tile::getOverlaps() const
@@ -899,7 +919,7 @@ int Tile::getOverlaps() const
 	return _overlaps;
 }
 
-/*
+/**
  * increment the overlap value on this tile.
  */
 void Tile::addOverlap()

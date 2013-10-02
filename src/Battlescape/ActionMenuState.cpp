@@ -163,7 +163,8 @@ void ActionMenuState::addItem(BattleActionType ba, const std::string& name, int*
 		|| ba == BA_LAUNCH
 		|| ba == BA_HIT)
 	{
-		ss1 << tr("STR_ACC") << acc << "%";
+//kL		ss1 << tr("STR_ACC") << acc << "%";
+		ss1 << tr("STR_ACC") << acc;
 	}
 
 	ss2 << tr("STR_TUS") << tu;

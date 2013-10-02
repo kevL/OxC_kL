@@ -347,7 +347,7 @@ void UnitSprite::drawRoutine0()
 		// draw handob item
 		if (_unit->getStatus() == STATUS_AIMING && _itemA->getRules()->isTwoHanded())
 		{
-			int dir = (_unit->getDirection() + 2) % 8;
+			int dir = (_unit->getDirection() + 2) %8;
 			itemA = _itemSurfaceA->getFrame(_itemA->getRules()->getHandSprite() + dir);
 			itemA->setX(offX[_unit->getDirection()]);
 			itemA->setY(offY[_unit->getDirection()]);
@@ -741,7 +741,7 @@ void UnitSprite::drawRoutine1()
 		// draw handob item
 		if (_unit->getStatus() == STATUS_AIMING && _itemA->getRules()->isTwoHanded())
 		{
-			int dir = (_unit->getDirection() + 2) % 8;
+			int dir = (_unit->getDirection() + 2) %8;
 			itemA = _itemSurfaceA->getFrame(_itemA->getRules()->getHandSprite() + dir);
 			itemA->setX(offX[_unit->getDirection()]);
 			itemA->setY(offY[_unit->getDirection()]);
@@ -793,7 +793,7 @@ void UnitSprite::drawRoutine1()
 
 		if (_unit->getStatus() == STATUS_AIMING && _itemB->getRules()->isTwoHanded())
 		{
-			int dir = (_unit->getDirection() + 2) % 8;
+			int dir = (_unit->getDirection() + 2) %8;
 			itemB = _itemSurfaceB->getFrame(_itemB->getRules()->getHandSprite() + dir);
 			itemB->setX(offX3[_unit->getDirection()]);
 			itemB->setY(offY3[_unit->getDirection()]);
@@ -1006,7 +1006,7 @@ void UnitSprite::drawRoutine4()
 		// draw handob item
 		if (_unit->getStatus() == STATUS_AIMING && _itemA->getRules()->isTwoHanded())
 		{
-			int dir = (_unit->getDirection() + 2) % 8;
+			int dir = (_unit->getDirection() + 2) %8;
 			itemA = _itemSurfaceA->getFrame(_itemA->getRules()->getHandSprite() + dir);
 			itemA->setX(offX[_unit->getDirection()]);
 			itemA->setY(offY[_unit->getDirection()]);
@@ -1045,7 +1045,7 @@ void UnitSprite::drawRoutine4()
 
 		if (_unit->getStatus() == STATUS_AIMING && _itemB->getRules()->isTwoHanded())
 		{
-			int dir = (_unit->getDirection() + 2) % 8;
+			int dir = (_unit->getDirection() + 2) %8;
 			itemB = _itemSurfaceB->getFrame(_itemB->getRules()->getHandSprite() + dir);
 			itemB->setX(offX3[_unit->getDirection()]);
 			itemB->setY(offY3[_unit->getDirection()]);
@@ -1112,7 +1112,7 @@ void UnitSprite::drawRoutine5()
 
 	if (_unit->getStatus() == STATUS_WALKING)
 	{
-		s = _unitSurface->getFrame( 32 + (_unit->getDirection() * 16) + (_part * 4) + ((_unit->getWalkingPhase() / 2) % 4));
+		s = _unitSurface->getFrame( 32 + (_unit->getDirection() * 16) + (_part * 4) + ((_unit->getWalkingPhase() / 2) %4));
 	}
 	else
 	{
@@ -1198,7 +1198,7 @@ void UnitSprite::drawRoutine6()
 		// draw handob item
 		if (_unit->getStatus() == STATUS_AIMING && _itemA->getRules()->isTwoHanded())
 		{
-			int dir = (_unit->getDirection() + 2) % 8;
+			int dir = (_unit->getDirection() + 2) %8;
 			itemA = _itemSurfaceA->getFrame(_itemA->getRules()->getHandSprite() + dir);
 			itemA->setX(offX[_unit->getDirection()]);
 			itemA->setY(offY[_unit->getDirection()]);
@@ -1257,7 +1257,7 @@ void UnitSprite::drawRoutine6()
 
 		if (_unit->getStatus() == STATUS_AIMING && _itemB->getRules()->isTwoHanded())
 		{
-			int dir = (_unit->getDirection() + 2) % 8;
+			int dir = (_unit->getDirection() + 2) %8;
 			itemB = _itemSurfaceB->getFrame(_itemB->getRules()->getHandSprite() + dir);
 			itemB->setX(offX3[_unit->getDirection()]);
 			itemB->setY(offY3[_unit->getDirection()]);

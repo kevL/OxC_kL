@@ -116,6 +116,7 @@ NextTurnState::~NextTurnState()
  */
 void NextTurnState::handle(Action* action)
 {
+	Log(LOG_INFO) << "NextTurnState::handle()";	// kL
 	State::handle(action);
 
 //kL	if (action->getDetails()->type == SDL_KEYDOWN
@@ -143,6 +144,8 @@ void NextTurnState::handle(Action* action)
 			_state->btnCenterClick(0);
 		}
 	}
+
+	Log(LOG_INFO) << ". . handle() EXIT";	// kL
 }
 
 }

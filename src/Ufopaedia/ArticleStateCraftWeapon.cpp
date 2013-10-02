@@ -18,7 +18,6 @@
  */
 
 #include <sstream>
-
 #include "Ufopaedia.h"
 #include "ArticleStateCraftWeapon.h"
 #include "../Ruleset/ArticleDefinition.h"
@@ -33,76 +32,81 @@
 #include "../Interface/TextButton.h"
 #include "../Interface/TextList.h"
 
+
 namespace OpenXcom
 {
 
-	ArticleStateCraftWeapon::ArticleStateCraftWeapon(Game *game, ArticleDefinitionCraftWeapon *defs, int palSwitch) : ArticleState(game, defs->id, palSwitch)
-	{
-		RuleCraftWeapon *weapon = _game->getRuleset()->getCraftWeapon(defs->id);
+ArticleStateCraftWeapon::ArticleStateCraftWeapon(Game* game, ArticleDefinitionCraftWeapon* defs, int palSwitch)
+	:
+		ArticleState(game, defs->id, palSwitch)
+{
+	RuleCraftWeapon* weapon = _game->getRuleset()->getCraftWeapon(defs->id);
 
-		// add screen elements
-		_txtTitle = new Text(200, 32, 5, 24);
+	// add screen elements
+	_txtTitle = new Text(200, 32, 5, 24);
 
-		// Set palette
-		_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_4")->getColors());
+	// Set palette
+	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_4")->getColors());
 
-		ArticleState::initLayout();
+	ArticleState::initLayout();
 
-		// add other elements
-		add(_txtTitle);
+	// add other elements
+	add(_txtTitle);
 
-		// Set up objects
-		_game->getResourcePack()->getSurface(defs->image_id)->blit(_bg);
-		_btnOk->setColor(Palette::blockOffset(1));
-		_btnPrev->setColor(Palette::blockOffset(1));
-		_btnNext->setColor(Palette::blockOffset(1));
+	// Set up objects
+	_game->getResourcePack()->getSurface(defs->image_id)->blit(_bg);
+	_btnOk->setColor(Palette::blockOffset(1));
+	_btnPrev->setColor(Palette::blockOffset(1));
+	_btnNext->setColor(Palette::blockOffset(1));
 
-		_txtTitle->setColor(Palette::blockOffset(14)+15);
-		_txtTitle->setBig();
-		_txtTitle->setWordWrap(true);
-		_txtTitle->setText(Ufopaedia::buildText(_game, defs->title));
+	_txtTitle->setColor(Palette::blockOffset(14)+15);
+	_txtTitle->setBig();
+	_txtTitle->setWordWrap(true);
+	_txtTitle->setText(Ufopaedia::buildText(_game, defs->title));
 
-		_txtInfo = new Text(310, 32, 5, 160);
-		add(_txtInfo);
+	_txtInfo = new Text(310, 32, 5, 160);
+	add(_txtInfo);
 
-		_txtInfo->setColor(Palette::blockOffset(14)+15);
-		_txtInfo->setWordWrap(true);
-		_txtInfo->setText(Ufopaedia::buildText(_game, defs->text));
+	_txtInfo->setColor(Palette::blockOffset(14)+15);
+	_txtInfo->setWordWrap(true);
+	_txtInfo->setText(Ufopaedia::buildText(_game, defs->text));
 
-		_lstInfo = new TextList(250, 111, 5, 80);
-		add(_lstInfo);
+	_lstInfo = new TextList(250, 111, 5, 80);
+	add(_lstInfo);
 
-		std::wstringstream ss;
-		_lstInfo->setColor(Palette::blockOffset(14)+15);
-		_lstInfo->setColumns(2, 180, 70);
-		_lstInfo->setDot(true);
-		_lstInfo->setBig();
+	std::wstringstream ss;
+	_lstInfo->setColor(Palette::blockOffset(14)+15);
+	_lstInfo->setColumns(2, 180, 70);
+	_lstInfo->setDot(true);
+	_lstInfo->setBig();
 
-		ss.str(L"");ss.clear();
-		ss << weapon->getDamage();
+	ss.str(L"");ss.clear();
+	ss << weapon->getDamage();
 
-		_lstInfo->addRow(2, tr("STR_DAMAGE").c_str(), ss.str().c_str());
-		_lstInfo->setCellColor(0, 1, Palette::blockOffset(15)+4);
+	_lstInfo->addRow(2, tr("STR_DAMAGE").c_str(), ss.str().c_str());
+	_lstInfo->setCellColor(0, 1, Palette::blockOffset(15)+4);
 
-		ss.str(L"");ss.clear();
-		ss << weapon->getRange() << tr("STR_KM").c_str();
-		_lstInfo->addRow(2, tr("STR_RANGE").c_str(), ss.str().c_str());
-		_lstInfo->setCellColor(1, 1, Palette::blockOffset(15)+4);
+	ss.str(L"");ss.clear();
+	ss << weapon->getRange() << tr("STR_KM").c_str();
+	_lstInfo->addRow(2, tr("STR_RANGE").c_str(), ss.str().c_str());
+	_lstInfo->setCellColor(1, 1, Palette::blockOffset(15)+4);
 
-		ss.str(L"");ss.clear();
-		ss << weapon->getAccuracy() << "%";
-		_lstInfo->addRow(2, tr("STR_ACCURACY").c_str(), ss.str().c_str());
-		_lstInfo->setCellColor(2, 1, Palette::blockOffset(15)+4);
+	ss.str(L"");ss.clear();
+//kL		ss << weapon->getAccuracy() << "%";
+	ss << weapon->getAccuracy();	// kL
+	_lstInfo->addRow(2, tr("STR_ACCURACY").c_str(), ss.str().c_str());
+	_lstInfo->setCellColor(2, 1, Palette::blockOffset(15)+4);
 
-		ss.str(L"");ss.clear();
-		ss << weapon->getStandardReload() << tr("STR_S").c_str();
-		_lstInfo->addRow(2, tr("STR_RE_LOAD_TIME").c_str(), ss.str().c_str());
-		_lstInfo->setCellColor(3, 1, Palette::blockOffset(15)+4);
+	ss.str(L"");ss.clear();
+	ss << weapon->getStandardReload() << tr("STR_S").c_str();
+	_lstInfo->addRow(2, tr("STR_RE_LOAD_TIME").c_str(), ss.str().c_str());
+	_lstInfo->setCellColor(3, 1, Palette::blockOffset(15)+4);
 
-		centerAllSurfaces();
-	}
+	centerAllSurfaces();
+}
 
-	ArticleStateCraftWeapon::~ArticleStateCraftWeapon()
-	{}
+ArticleStateCraftWeapon::~ArticleStateCraftWeapon()
+{
+}
 
 }

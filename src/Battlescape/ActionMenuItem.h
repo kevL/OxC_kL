@@ -41,13 +41,13 @@ class ActionMenuItem
 	:
 	public InteractiveSurface
 {
-	private:
-		int _id;
-		bool _highlighted;
-		BattleActionType _action;
-		int _tu;
-		Frame* _frame;
-		Text* _txtDescription, * _txtAcc, * _txtTU;
+private:
+	int _id;
+	bool _highlighted;
+	BattleActionType _action;
+	int _tu;
+	Frame* _frame;
+	Text* _txtDescription, * _txtAcc, * _txtTU;
 
 	public:
 		/// Creates a new ActionMenuItem.

@@ -16,7 +16,9 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #define _USE_MATH_DEFINES
+
 #include <assert.h>
 #include <cmath>
 #include <climits>
@@ -53,14 +55,18 @@
 namespace OpenXcom
 {
 
-const int TileEngine::heightFromCenter[11] = {0,-2,+2,-4,+4,-6,+6,-8,+8,-12,+12};
+const int TileEngine::heightFromCenter[11] = { 0, -2, +2, -4, +4, -6, +6, -8, +8, -12, +12 };
 
 /**
  * Sets up a TileEngine.
  * @param save Pointer to SavedBattleGame object.
  * @param voxelData List of voxel data.
  */
-TileEngine::TileEngine(SavedBattleGame *save, std::vector<Uint16> *voxelData) : _save(save), _voxelData(voxelData), _personalLighting(true)
+TileEngine::TileEngine(SavedBattleGame* save, std::vector<Uint16>* voxelData)
+	:
+		_save(save),
+		_voxelData(voxelData),
+		_personalLighting(true)
 {
 }
 
@@ -221,8 +227,8 @@ void TileEngine::addLight(const Position &center, int power, int layer)
 
 /**
  * Calculates line of sight of a soldier.
- * @param unit Unit to check line of sight of.
- * @return True when new aliens are spotted.
+ * @param unit, Unit to check line of sight of.
+ * @return, True when new aliens are spotted.
  */
 bool TileEngine::calculateFOV(BattleUnit* unit)
 {
@@ -258,9 +264,7 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 
 	if (unit->isOut()) return false;
 
-
 	Position pos = unit->getPosition();
-
 //kL	if (unit->getHeight() + unit->getFloatHeight() + -_save->getTile(unit->getPosition())->getTerrainLevel() >= 24 + 4)
 	if (unit->getHeight() + unit->getFloatHeight() - _save->getTile(unit->getPosition())->getTerrainLevel() >= 24 + 4)		// kL
 	{
@@ -390,10 +394,11 @@ Position TileEngine::getSightOriginVoxel(BattleUnit *currentUnit)
 	Position originVoxel;
 //kL	originVoxel = Position((currentUnit->getPosition().x * 16) + 7, (currentUnit->getPosition().y * 16) + 8, currentUnit->getPosition().z * 24);
 	originVoxel = Position((currentUnit->getPosition().x * 16) + 8, (currentUnit->getPosition().y * 16) + 8, currentUnit->getPosition().z * 24);		// kL
-	originVoxel.z += -_save->getTile(currentUnit->getPosition())->getTerrainLevel();
+//kL	originVoxel.z += -_save->getTile(currentUnit->getPosition())->getTerrainLevel();
+	originVoxel.z -= _save->getTile(currentUnit->getPosition())->getTerrainLevel();		// kL
 	originVoxel.z += currentUnit->getHeight() + currentUnit->getFloatHeight() - 1; // one voxel lower (eye level)
 
-	Tile *tileAbove = _save->getTile(currentUnit->getPosition() + Position(0, 0, 1));
+	Tile* tileAbove = _save->getTile(currentUnit->getPosition() + Position(0, 0, 1));
 
 	if (currentUnit->getArmor()->getSize() > 1)
 	{
@@ -416,17 +421,20 @@ Position TileEngine::getSightOriginVoxel(BattleUnit *currentUnit)
 
 /**
  * Checks for an opposing unit on this tile.
- * @param currentUnit The watcher.
- * @param tile The tile to check for
- * @return True if visible.
+ * @param currentUnit, The watcher.
+ * @param tile, The tile to check for
+ * @return, True if visible.
  */
-bool TileEngine::visible(BattleUnit *currentUnit, Tile *tile)
+bool TileEngine::visible(BattleUnit* currentUnit, Tile* tile)
 {
 	// if there is no tile or no unit, we can't see it
 	if (!tile || !tile->getUnit())
 	{
 		return false;
 	}
+
+	if (currentUnit->getFaction() == tile->getUnit()->getFaction()) // friendlies are always seen
+		return true;
 
 	// aliens can see in the dark, xcom can see at a distance of 9 or less, further if there's enough light.
 	if (currentUnit->getFaction() == FACTION_PLAYER
@@ -435,9 +443,6 @@ bool TileEngine::visible(BattleUnit *currentUnit, Tile *tile)
 	{
 		return false;
 	}
-
-	if (currentUnit->getFaction() == tile->getUnit()->getFaction()) // friendlies are always seen
-		return true;
 
 	Position originVoxel = getSightOriginVoxel(currentUnit);
 
@@ -458,21 +463,39 @@ bool TileEngine::visible(BattleUnit *currentUnit, Tile *tile)
 		_trajectory.clear();
 
 		calculateLine(originVoxel, scanVoxel, true, &_trajectory, currentUnit);
-		Tile *t = _save->getTile(currentUnit->getPosition());
-		int visibleDistance = _trajectory.size();
+
+		Tile* t = _save->getTile(currentUnit->getPosition());
+
+/*kL		int visibleDistance = _trajectory.size();
 		for (unsigned int i = 0; i < _trajectory.size(); i++)
 		{
-			if (t != _save->getTile(Position(_trajectory.at(i).x / 16,_trajectory.at(i).y / 16, _trajectory.at(i).z / 24)))
+			if (t != _save->getTile(Position(_trajectory.at(i).x / 16, _trajectory.at(i).y / 16, _trajectory.at(i).z / 24)))
 			{
-				t = _save->getTile(Position(_trajectory.at(i).x / 16,_trajectory.at(i).y / 16, _trajectory.at(i).z / 24));
+				t = _save->getTile(Position(_trajectory.at(i).x / 16, _trajectory.at(i).y / 16, _trajectory.at(i).z / 24));
 			}
 
 			if (t->getFire() == 0)
-			{
 				visibleDistance += t->getSmoke() / 3;
-			}
 
 			if (visibleDistance > MAX_VOXEL_VIEW_DISTANCE)
+			{
+				unitSeen = false;
+				break;
+			}
+		} */
+		// kL_begin: floatify this Smoke thing.
+		float visibleDistance = (float)_trajectory.size();
+		for (unsigned int i = 0; i < _trajectory.size(); i++)
+		{
+			if (t != _save->getTile(Position(_trajectory.at(i).x / 16, _trajectory.at(i).y / 16, _trajectory.at(i).z / 24)))
+			{
+				t = _save->getTile(Position(_trajectory.at(i).x / 16, _trajectory.at(i).y / 16, _trajectory.at(i).z / 24));
+			}
+
+			visibleDistance += (float)t->getSmoke() / 3.0;
+			visibleDistance += (float)t->getFire() / 2.0;
+
+			if (visibleDistance > (float)MAX_VOXEL_VIEW_DISTANCE)
 			{
 				unitSeen = false;
 				break;
@@ -565,25 +588,30 @@ int TileEngine::checkVoxelExposure(Position *originVoxel, Tile *tile, BattleUnit
 
 /**
  * Checks for another unit available for targeting and what particular voxel.
- * @param originVoxel Voxel of trace origin (eye or gun's barrel).
- * @param tile The tile to check for.
- * @param scanVoxel is returned coordinate of hit.
- * @param excludeUnit is self (not to hit self).
- * @param potentialUnit is a hypothetical unit to draw a virtual line of fire for AI. if left blank, this function behaves normally.
- * @return True if the unit can be targetted.
+ * @param originVoxel, Voxel of trace origin (eye or gun's barrel).
+ * @param tile, The tile to check for.
+ * @param scanVoxel, is returned coordinate of hit.
+ * @param excludeUnit, is self (not to hit self).
+ * @param potentialUnit, is a hypothetical unit to draw a virtual line of fire for AI. if left blank, this function behaves normally.
+ * @return, True if the unit can be targetted.
  */
-bool TileEngine::canTargetUnit(Position *originVoxel, Tile *tile, Position *scanVoxel, BattleUnit *excludeUnit, BattleUnit *potentialUnit)
+bool TileEngine::canTargetUnit(Position* originVoxel, Tile* tile, Position* scanVoxel, BattleUnit* excludeUnit, BattleUnit* potentialUnit)
 {
-	Position targetVoxel = Position((tile->getPosition().x * 16) + 7, (tile->getPosition().y * 16) + 8, tile->getPosition().z * 24);
+//kL	Position targetVoxel = Position((tile->getPosition().x * 16) + 7, (tile->getPosition().y * 16) + 8, tile->getPosition().z * 24);
+	Position targetVoxel = Position((tile->getPosition().x * 16) + 8, (tile->getPosition().y * 16) + 8, tile->getPosition().z * 24);	// kL: there's that +7 again.
+
 	std::vector<Position> _trajectory;
+
 	bool hypothetical = potentialUnit != 0;
 	if (potentialUnit == 0)
 	{
 		potentialUnit = tile->getUnit();
-		if (potentialUnit == 0) return false; //no unit in this tile, even if it elevated and appearing in it.
+		if (potentialUnit == 0)
+			return false; // no unit in this tile, even if it elevated and appearing in it.
 	}
 
-	if (potentialUnit == excludeUnit) return false; //skip self
+	if (potentialUnit == excludeUnit)
+		return false; // skip self
 
 	int targetMinHeight = targetVoxel.z - tile->getTerrainLevel();
 	targetMinHeight += potentialUnit->getFloatHeight();
@@ -602,11 +630,11 @@ bool TileEngine::canTargetUnit(Position *originVoxel, Tile *tile, Position *scan
 
 	// vector manipulation to make scan work in view-space
 	Position relPos = targetVoxel - *originVoxel;
-	float normal = unitRadius/sqrt((float)(relPos.x * relPos.x + relPos.y * relPos.y));
-	int relX = floor(((float)relPos.y)*normal + 0.5);
-	int relY = floor(((float)-relPos.x)*normal + 0.5);
+	float normal = unitRadius / sqrt((float)(relPos.x * relPos.x + relPos.y * relPos.y));
+	int relX = floor(((float)relPos.y) * normal + 0.5);
+	int relY = floor(((float)-relPos.x) * normal + 0.5);
 
-	int sliceTargets[10]={0,0, relX,relY, -relX,-relY, relY,-relX, -relY,relX};
+	int sliceTargets[10]= { 0,0, relX,relY, -relX,-relY, relY,-relX, -relY,relX };
 
 	if (!potentialUnit->isOut())
 	{
@@ -618,20 +646,23 @@ bool TileEngine::canTargetUnit(Position *originVoxel, Tile *tile, Position *scan
 	}
 
 	targetMaxHeight += heightRange;
-	targetCenterHeight=(targetMaxHeight + targetMinHeight) / 2;
+	targetCenterHeight = (targetMaxHeight + targetMinHeight) / 2;
 	heightRange /= 2;
-	if (heightRange>10) heightRange = 10;
-	if (heightRange<=0) heightRange = 0;
+	if (heightRange > 10) heightRange = 10;
+	if (heightRange <= 0) heightRange = 0;
 
-	// scan ray from top to bottom  plus different parts of target cylinder
+	// scan ray from top to bottom plus different parts of target cylinder
 	for (int i = 0; i <= heightRange; ++i)
 	{
 		scanVoxel->z=targetCenterHeight+heightFromCenter[i];
 		for (int j = 0; j < 5; ++j)
 		{
-			if (i < (heightRange-1) && j > 2) break; // skip unnecessary checks
+			if (i < (heightRange-1) && j > 2)
+				break; // skip unnecessary checks
+
 			scanVoxel->x=targetVoxel.x + sliceTargets[j * 2];
 			scanVoxel->y=targetVoxel.y + sliceTargets[j * 2 + 1];
+
 			_trajectory.clear();
 
 			int test = calculateLine(*originVoxel, *scanVoxel, false, &_trajectory, excludeUnit, true, false, potentialUnit);
@@ -798,7 +829,7 @@ bool TileEngine::canTargetTile(Position *originVoxel, Tile *tile, int part, Posi
 /**
  * Calculates line of sight of a soldiers within range of the Position
  * (used when terrain has changed, which can reveal new parts of terrain or units).
- * @param position Position of the changed terrain.
+ * @param position, Position of the changed terrain.
  */
 void TileEngine::calculateFOV(const Position &position)
 {
@@ -896,8 +927,8 @@ bool TileEngine::checkReactionFire(BattleUnit* unit)
 
 /**
  * Creates a vector of units that can spot this unit.
- * @param unit The unit to check for spotters of.
- * @return A vector of units that can see this unit.
+ * @param unit, The unit to check for spotters of.
+ * @return, A vector of units that can see this unit.
  */
 std::vector<BattleUnit *> TileEngine::getSpottingUnits(BattleUnit* unit)
 {
@@ -916,10 +947,11 @@ std::vector<BattleUnit *> TileEngine::getSpottingUnits(BattleUnit* unit)
 			originVoxel.z -= 2;
 			Position targetVoxel;
 			AlienBAIState* aggro = dynamic_cast<AlienBAIState* >((*i)->getCurrentAIState());
-			bool gotHit = (aggro != 0 && aggro->getWasHit());
+			bool gotHit = aggro != 0 && aggro->getWasHit();
 
-			if (((*i)->checkViewSector(unit->getPosition()) || gotHit)	// can actually see the target Tile, or we got hit
-				&& canTargetUnit(&originVoxel, tile, &targetVoxel, *i))	// can actually see the unit
+			if (((*i)->checkViewSector(unit->getPosition()) || gotHit)	// spotter can actually see the target Tile, or unit got hit
+				&& canTargetUnit(&originVoxel, tile, &targetVoxel, *i)	// can actually see the unit
+				&& visible(*i, tile))									// kL: put some smoke & fire parameters in here
 			{
 				if ((*i)->getFaction() == FACTION_PLAYER)
 				{
@@ -2088,18 +2120,18 @@ int TileEngine::closeUfoDoors()
 
 /**
  * Calculates a line trajectory, using bresenham algorithm in 3D.
- * @param origin Origin (voxel??).
- * @param target Target (also voxel??).
- * @param storeTrajectory True will store the whole trajectory - otherwise it just stores the last position.
- * @param trajectory A vector of positions in which the trajectory is stored.
- * @param excludeUnit Excludes this unit in the collision detection.
- * @param doVoxelCheck Check against voxel or tile blocking? (first one for units visibility and line of fire, second one for terrain visibility).
- * @param onlyVisible Skip invisible units? used in FPS view.
- * @param excludeAllBut [Optional] The only unit to be considered for ray hits.
- * @return the objectnumber(0-3) or unit(4) or out of map (5) or -1(hit nothing).
+ * @param origin, Origin (voxel??).
+ * @param target, Target (also voxel??).
+ * @param storeTrajectory, True will store the whole trajectory - otherwise it just stores the last position.
+ * @param trajectory, A vector of positions in which the trajectory is stored.
+ * @param excludeUnit, Excludes this unit in the collision detection.
+ * @param doVoxelCheck, Check against voxel or tile blocking? (first one for units visibility and line of fire, second one for terrain visibility).
+ * @param onlyVisible, Skip invisible units? used in FPS view.
+ * @param excludeAllBut, [Optional] The only unit to be considered for ray hits.
+ * @return, The objectnumber(0-3) or unit(4) or out-of-map(5) or -1(hit nothing).
  */
 int TileEngine::calculateLine(const Position& origin, const Position& target, bool storeTrajectory, std::vector<Position>* trajectory,
-		BattleUnit* excludeUnit, bool doVoxelCheck, bool onlyVisible, BattleUnit* excludeAllBut)
+												BattleUnit* excludeUnit, bool doVoxelCheck, bool onlyVisible, BattleUnit* excludeAllBut)
 {
 	int x, x0, x1, delta_x, step_x;
 	int y, y0, y1, delta_y, step_y;

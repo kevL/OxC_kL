@@ -18,6 +18,7 @@
  */
 
 #define _USE_MATH_DEFINES
+
 #include <cmath>
 #include "Projectile.h"
 #include "TileEngine.h"
@@ -347,7 +348,7 @@ bool Projectile::calculateThrow(double accuracy)
 	if (accuracy > 1) accuracy = 1;
 
 //kL	static const double maxDeviation = 0.08;
-	static const double maxDeviation = 0.072;	// kL
+	static const double maxDeviation = 0.073;	// kL
 	static const double minDeviation = 0;
 	double baseDeviation = (maxDeviation - (maxDeviation * accuracy)) + minDeviation;
 	double deviation = RNG::boxMuller(0, baseDeviation);
@@ -403,9 +404,9 @@ void Projectile::applyAccuracy(const Position& origin, Position* target, double 
 			BattleUnit* targetUnit = targetTile->getUnit();
 
 			if (targetUnit && (targetUnit->getFaction() == FACTION_HOSTILE))
-				accuracyPenalty = 0.01 * targetTile->getShade();		// Shade can be from 0 to 15
+				accuracyPenalty = 0.01 * targetTile->getShade(); // Shade can be from 0 to 15
 			else
-				accuracyPenalty = 0.0;		// Enemy units can see in the dark.
+				accuracyPenalty = 0.0; // Enemy units can see in the dark.
 
 			// If unit is kneeled, then chance to hit them reduced by 5%.
 			// This is a compromise, because vertical deviation is 2 times less.
@@ -414,7 +415,7 @@ void Projectile::applyAccuracy(const Position& origin, Position* target, double 
 				accuracyPenalty += 0.06;	// kL
 		}
 		else
-			accuracyPenalty = 0.01 * _save->getGlobalShade();	// Shade can be from 0 (day) to 15 (night).
+			accuracyPenalty = 0.01 * _save->getGlobalShade(); // Shade can be from 0 (day) to 15 (night).
 
 //kL		baseDeviation = -0.15 + (_action.type == BA_AUTOSHOT ? 0.28 : 0.26) / (accuracy - accuracyPenalty + 0.25);
 
@@ -423,17 +424,17 @@ void Projectile::applyAccuracy(const Position& origin, Position* target, double 
 		switch (_action.type)
 		{
 			case BA_AUTOSHOT:
-				baseDeviation += 0.33 / (accuracy - accuracyPenalty + 0.25);
+				baseDeviation += 0.33 / (accuracy - accuracyPenalty + 0.24);
 			break;
 			case BA_SNAPSHOT:
-				baseDeviation += 0.28 / (accuracy - accuracyPenalty + 0.25);
+				baseDeviation += 0.28 / (accuracy - accuracyPenalty + 0.24);
 			break;
 			case BA_AIMEDSHOT:
-				baseDeviation += 0.23 / (accuracy - accuracyPenalty + 0.25);
+				baseDeviation += 0.23 / (accuracy - accuracyPenalty + 0.24);
 			break;
 
 			default:
-				baseDeviation += 0.28 / (accuracy - accuracyPenalty + 0.25);
+				baseDeviation += 0.28 / (accuracy - accuracyPenalty + 0.24);
 			break;
 		}
 		// kL_end.
@@ -442,7 +443,7 @@ void Projectile::applyAccuracy(const Position& origin, Position* target, double 
 		if (baseDeviation < 0.02) baseDeviation = 0.02;
 
 		// the angle deviations are spread using a normal distribution for baseDeviation (+-3s with precision 99,7%)
-		double dH = RNG::boxMuller(0.0, baseDeviation / 6.0);  // horizontal miss in radian
+		double dH = RNG::boxMuller(0.0, baseDeviation / 6.0); // horizontal miss in radian
 //kL		double dV = RNG::boxMuller(0.0, baseDeviation /(6.0 * 2));
 		double dV = RNG::boxMuller(0.0, baseDeviation /(6.0 * 1.8));	// kL
 		double te = atan2(double(target->y - origin.y), double(target->x - origin.x)) + dH;

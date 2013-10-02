@@ -54,10 +54,10 @@ UnitWalkBState::UnitWalkBState(BattlescapeGame* parent, BattleAction action)
 	_terrain(0),
 	_falling(false),
 	_beforeFirstStep(false),
-	_numUnitsSpotted(0),
+	_unitsSpotted(0),
 	_preMovementCost(0)
 {
-//	Log(LOG_INFO) << "Create UnitWalkBState";
+	Log(LOG_INFO) << "Create UnitWalkBState";
 }
 
 /**
@@ -65,7 +65,7 @@ UnitWalkBState::UnitWalkBState(BattlescapeGame* parent, BattleAction action)
  */
 UnitWalkBState::~UnitWalkBState()
 {
-//	Log(LOG_INFO) << "Delete UnitWalkBState";
+	Log(LOG_INFO) << "Delete UnitWalkBState";
 }
 
 /**
@@ -73,24 +73,33 @@ UnitWalkBState::~UnitWalkBState()
  */
 void UnitWalkBState::init()
 {
+	Log(LOG_INFO) << "UnitWalkBState::init()";
+
 	_unit = _action.actor;
-	_numUnitsSpotted = _unit->getUnitsSpottedThisTurn().size();
+	_unitsSpotted = _unit->getUnitsSpottedThisTurn().size();
+
 	setNormalWalkSpeed();
 	_pf = _parent->getPathfinding();
 	_terrain = _parent->getTileEngine();
 	_target = _action.target;
 
-	if (_parent->getSave()->getTraceSetting()) { Log(LOG_INFO) << "Walking from: "
+	if (_parent->getSave()->getTraceSetting())
+	{
+		Log(LOG_INFO) << "Walking from: "
 				<< _unit->getPosition().x << "," << _unit->getPosition().y << "," << _unit->getPosition().z
-				<< " to " << _target.x << "," << _target.y << "," << _target.z;}
+				<< " to " << _target.x << "," << _target.y << "," << _target.z;
+	}
 
 	int dir = _pf->getStartDirection();
 	if (!_action.strafe
 		&& dir != -1
 		&& dir != _unit->getDirection())
 	{
+		// kL_note: if unit is not facing in the direction that it's about to walk toward...
 		_beforeFirstStep = true;
 	}
+
+	Log(LOG_INFO) << "UnitWalkBState::init() EXIT";
 }
 
 /**
@@ -115,10 +124,10 @@ void UnitWalkBState::think()
 	}
 
 
-	bool unitSpotted = false;
-//	int visUnits = _unit->getVisibleUnits().size();		// kL?
-	bool onScreen = (_unit->getVisible()
-		&& _parent->getMap()->getCamera()->isOnScreen(_unit->getPosition()));
+//	int visUnits = _unit->getVisibleUnits().size();		// kL
+	bool newUnitSpotted = false;
+	bool onScreen = _unit->getVisible()
+			&& _parent->getMap()->getCamera()->isOnScreen(_unit->getPosition());
 
 	int dir = _pf->getStartDirection();		// kL: also below, in STATUS_STANDING!
 //	Log(LOG_INFO) << ". StartDirection = " << dir;	// kL
@@ -192,6 +201,7 @@ void UnitWalkBState::think()
 				for (int y = size; y >= 0; y--)
 				{
 					Tile* otherTileBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(x, y, -1));
+
 					if (!_parent->getSave()->getTile(_unit->getPosition() + Position(x, y, 0))->hasNoFloor(otherTileBelow)
 						|| _unit->getArmor()->getMovementType() == MT_FLY)
 					{
@@ -212,10 +222,10 @@ void UnitWalkBState::think()
 			}
 
 			_falling = largeCheck
-				&& _unit->getPosition().z != 0
-				&& _unit->getTile()->hasNoFloor(tileBelow)
-				&& _unit->getArmor()->getMovementType() != MT_FLY
-				&& _unit->getWalkingPhase() == 0;
+					&& _unit->getPosition().z != 0
+					&& _unit->getTile()->hasNoFloor(tileBelow)
+					&& _unit->getArmor()->getMovementType() != MT_FLY
+					&& _unit->getWalkingPhase() == 0;
 			if (_falling)
 			{
 				for (int x = _unit->getArmor()->getSize() - 1; x >= 0; --x)
@@ -223,6 +233,7 @@ void UnitWalkBState::think()
 					for (int y = _unit->getArmor()->getSize() - 1; y >= 0; --y)
 					{
 						Tile* otherTileBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(x, y, -1));
+
 						if (otherTileBelow
 							&& otherTileBelow->getUnit())
 						{
@@ -248,7 +259,7 @@ void UnitWalkBState::think()
 				_parent->getMap()->getCamera()->centerOnPosition(_unit->getPosition());
 			}
 
-			// if the unit changed level, camera changes level with
+			// if the unit changed level, camera changes level with it
 			_parent->getMap()->getCamera()->setViewLevel(_unit->getPosition().z);
 		}
 
@@ -280,9 +291,9 @@ void UnitWalkBState::think()
 //			Log(LOG_INFO) << ". . getVisibleUnits() " << preVisUnits ;		// kL
 
 			_terrain->calculateFOV(_unit->getPosition());
-			unitSpotted = !_action.desperate
+			newUnitSpotted = !_action.desperate
 				&& _parent->getPanicHandled()
-				&& _numUnitsSpotted != _unit->getUnitsSpottedThisTurn().size();
+				&& _unitsSpotted != _unit->getUnitsSpottedThisTurn().size();
 
 			// check for proximity grenades (1 tile around the unit in every direction)
 			// For large units, we need to check every tile it occupies
@@ -326,8 +337,8 @@ void UnitWalkBState::think()
 
 			// kL_note: I think this is the place to stop my soldiers from halting vs. already-seen alien units.
 			// ie, do a check for !_alreadySpotted ( more cases are further down below )
-//			unitSpotted = _parent->getPanicHandled()
-//					&& _numUnitsSpotted != _unit->getUnitsSpottedThisTurn().size();	// kL: from above.
+//			newUnitSpotted = _parent->getPanicHandled()
+//					&& _unitsSpotted != _unit->getUnitsSpottedThisTurn().size();	// kL: from above.
 			// kL_note: this actually seems to be redundant w/ TileEngine::calculateFOV() ...
 
 			// kL_begin: recalculation of SpottedUnit.
@@ -336,13 +347,13 @@ void UnitWalkBState::think()
 			{
 				if (postVisUnits <= preVisUnits)
 				{
-					unitSpotted = false;
+					newUnitSpotted = false;
 				}
 			} */
 			// kL_end.
 
 
-			if (unitSpotted)
+			if (newUnitSpotted)
 			{
 				_unit->setCache(0);
 				_parent->getMap()->cacheUnit(_unit);
@@ -397,7 +408,7 @@ void UnitWalkBState::think()
 //		Log(LOG_INFO) << "STATUS_STANDING or PANICKING : " << _unit->getId();	// kL
 
 		// check if we did spot new units
-		if (unitSpotted
+		if (newUnitSpotted
 			&& !_action.desperate
 			&& _unit->getCharging() == 0
 			&& !_falling)
@@ -663,12 +674,12 @@ void UnitWalkBState::think()
 
 		_unit->turn();
 
-		// calculateFOV() is unreliable for setting the unitSpotted bool, as it can be called from
-		// various other places in the code, ie: doors opening, and this messes up the result.
+		// calculateFOV() is unreliable for setting the newUnitSpotted bool, as it can be called from
+		// various other places in the code, ie: doors opening, and that messes up the result.
 		_terrain->calculateFOV(_unit);
-		unitSpotted = !_action.desperate
+		newUnitSpotted = !_action.desperate
 			&& _parent->getPanicHandled()
-			&& _numUnitsSpotted != _unit->getUnitsSpottedThisTurn().size();
+			&& _unitsSpotted != _unit->getUnitsSpottedThisTurn().size();
 
 		// make sure the unit sprites are up to date
 		if (onScreen)
@@ -677,7 +688,7 @@ void UnitWalkBState::think()
 			_parent->getMap()->cacheUnit(_unit);
 		}
 
-		if (unitSpotted
+		if (newUnitSpotted
 			&& !(_action.desperate || _unit->getCharging())
 			&& !_falling)
 		{

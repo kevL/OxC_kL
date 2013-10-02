@@ -28,23 +28,24 @@ namespace OpenXcom
 
 /**
  * Sets up an Action menu item.
- * @param id The unique identifier of the menu item.
- * @param big Pointer to the big font.
- * @param small Pointer to the small font.
- * @param x Position on the x-axis.
- * @param y Position on the y-asis.
+ * @param id, The unique identifier of the menu item.
+ * @param big, Pointer to the big font.
+ * @param small, Pointer to the small font.
+ * @param x, Position on the x-axis.
+ * @param y, Position on the y-asis.
  */
 ActionMenuItem::ActionMenuItem(int id, Font* big, Font* small, int x, int y)
 	:
-	InteractiveSurface(270, 40, x + 25, y - (id * 40)),
-	_id(id),
-	_highlighted(false),
-	_action(BA_NONE),
-	_tu(0)
+		InteractiveSurface(270, 40, x + 25, y - (id * 40)),
+		_id(id),
+		_highlighted(false),
+		_action(BA_NONE),
+		_tu(0)
 {
 	_frame			= new Frame(getWidth(), getHeight(), 0, 0);
 	_txtDescription	= new Text(200, 20, 10, 13);
-	_txtAcc			= new Text(100, 20, 140, 13);
+//kL	_txtAcc			= new Text(100, 20, 140, 13);
+	_txtAcc			= new Text(100, 20, 139, 13);	// kL
 	_txtTU			= new Text(80, 20, 210, 13);
 
 	_frame->setHighContrast(true);

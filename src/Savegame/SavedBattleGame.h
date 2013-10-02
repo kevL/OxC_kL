@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_SAVEDBATTLEGAME_H
 #define OPENXCOM_SAVEDBATTLEGAME_H
 
@@ -26,6 +27,7 @@
 #include <SDL.h>
 #include <yaml-cpp/yaml.h>
 #include "BattleUnit.h"
+
 
 namespace OpenXcom
 {
@@ -49,33 +51,33 @@ class Ruleset;
  */
 class SavedBattleGame
 {
-	private:
-		BattlescapeState* _battleState;
-		int _mapsize_x, _mapsize_y, _mapsize_z;
-		std::vector<MapDataSet* > _mapDataSets;
-		Tile** _tiles;
-		BattleUnit* _selectedUnit, * _lastSelectedUnit;
-		std::vector<Node* > _nodes;
-		std::vector<BattleUnit* > _units;
-		std::vector<BattleItem* > _items;
-		Pathfinding* _pathfinding;
-		TileEngine* _tileEngine;
-		std::string _missionType;
-		int _globalShade;
-		UnitFaction _side;
-		int _turn;
-		bool _debugMode;
-		bool _aborted;
-		int _itemId;
-		Uint8 _dragButton;			// this is a cache for Options::getString("battleScrollDragButton")
-		bool _dragInvert;			// this is a cache for Options::getString("battleScrollDragInvert")
-		int _dragTimeTolerance;		// this is a cache for Options::getInt("battleScrollDragTimeTolerance")
-		int _dragPixelTolerance;	// this is a cache for Options::getInt("battleScrollDragPixelTolerance")
-		bool _objectiveDestroyed;
-		std::vector<BattleUnit* > _exposedUnits;
-		std::list<BattleUnit* > _fallingUnits;
-		bool _unitsFalling, _strafeEnabled, _sneaky, _traceAI, _cheating;
-		std::vector<Position> _tileSearch;
+private:
+	BattlescapeState* _battleState;
+	int _mapsize_x, _mapsize_y, _mapsize_z;
+	std::vector<MapDataSet* > _mapDataSets;
+	Tile** _tiles;
+	BattleUnit* _selectedUnit, * _lastSelectedUnit;
+	std::vector<Node* > _nodes;
+	std::vector<BattleUnit* > _units;
+	std::vector<BattleItem* > _items;
+	Pathfinding* _pathfinding;
+	TileEngine* _tileEngine;
+	std::string _missionType;
+	int _globalShade;
+	UnitFaction _side;
+	int _turn;
+	bool _debugMode;
+	bool _aborted;
+	int _itemId;
+	Uint8 _dragButton;			// this is a cache for Options::getString("battleScrollDragButton")
+	bool _dragInvert;			// this is a cache for Options::getString("battleScrollDragInvert")
+	int _dragTimeTolerance;		// this is a cache for Options::getInt("battleScrollDragTimeTolerance")
+	int _dragPixelTolerance;	// this is a cache for Options::getInt("battleScrollDragPixelTolerance")
+	bool _objectiveDestroyed;
+	std::vector<BattleUnit* > _exposedUnits;
+	std::list<BattleUnit* > _fallingUnits;
+	bool _unitsFalling, _strafeEnabled, _sneaky, _traceAI, _cheating;
+	std::vector<Position> _tileSearch;
 
 	public:
 		/// Creates a new battle save, based on the current generic save.
@@ -240,10 +242,10 @@ class SavedBattleGame
 		void resetTurnCounter();
 		/// Resets the visibility of all tiles on the map.
 		void resetTiles();
-	/// get an 11x11 grid of positions (-10 to +10) to check.
-	const std::vector<Position> getTileSearch();
-	/// check if the AI has engaged cheat mode.
-	bool isCheating();
+		/// get an 11x11 grid of positions (-10 to +10) to check.
+		const std::vector<Position> getTileSearch();
+		/// check if the AI has engaged cheat mode.
+		bool isCheating();
 };
 
 }
