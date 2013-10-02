@@ -55,32 +55,32 @@ namespace OpenXcom
  */
 SavedBattleGame::SavedBattleGame()
 	:
-	_battleState(0),
-	_mapsize_x(0),
-	_mapsize_y(0),
-	_mapsize_z(0),
-	_tiles(),
-	_selectedUnit(0),
-	_lastSelectedUnit(0),
-	_nodes(),
-	_units(),
-	_items(),
-	_pathfinding(0),
-	_tileEngine(0),
-	_missionType(""),
-	_globalShade(0),
-	_side(FACTION_PLAYER),
-	_turn(1),
-	_debugMode(false),
-	_aborted(false),
-	_itemId(0),
-	_objectiveDestroyed(false),
-	_fallingUnits(),
-	_unitsFalling(false),
-	_strafeEnabled(false),
-	_sneaky(false),
-	_traceAI(false),
-	_cheating(false)
+		_battleState(0),
+		_mapsize_x(0),
+		_mapsize_y(0),
+		_mapsize_z(0),
+		_tiles(),
+		_selectedUnit(0),
+		_lastSelectedUnit(0),
+		_nodes(),
+		_units(),
+		_items(),
+		_pathfinding(0),
+		_tileEngine(0),
+		_missionType(""),
+		_globalShade(0),
+		_side(FACTION_PLAYER),
+		_turn(1),
+		_debugMode(false),
+		_aborted(false),
+		_itemId(0),
+		_objectiveDestroyed(false),
+		_fallingUnits(),
+		_unitsFalling(false),
+		_strafeEnabled(false),
+		_sneaky(false),
+		_traceAI(false),
+		_cheating(false)
 {
 //	Log(LOG_INFO) << "Create SavedBattleGame";
 
@@ -1092,7 +1092,7 @@ bool SavedBattleGame::isObjectiveDestroyed()
  * Gets the current item ID.
  * @return Current item ID pointer.
  */
-int *SavedBattleGame::getCurrentItemId()
+int* SavedBattleGame::getCurrentItemId()
 {
 	return &_itemId;
 }
@@ -1103,12 +1103,12 @@ int *SavedBattleGame::getCurrentItemId()
  * @param unit Pointer to the unit (to get its position).
  * @return Pointer to the chosen node.
  */
-Node *SavedBattleGame::getSpawnNode(int nodeRank, BattleUnit *unit)
+Node* SavedBattleGame::getSpawnNode(int nodeRank, BattleUnit* unit)
 {
 	int highestPriority = -1;
-	std::vector<Node*> compliantNodes;
+	std::vector<Node* > compliantNodes;
 
-	for (std::vector<Node*>::iterator i = getNodes()->begin(); i != getNodes()->end(); ++i)
+	for (std::vector<Node* >::iterator i = getNodes()->begin(); i != getNodes()->end(); ++i)
 	{
 		if ((*i)->getRank() == nodeRank								// ranks must match
 			&& (!((*i)->getType() & Node::TYPE_SMALL)
@@ -1145,10 +1145,10 @@ Node *SavedBattleGame::getSpawnNode(int nodeRank, BattleUnit *unit)
  * @param unit Pointer to the unit (to get its position).
  * @return Pointer to the choosen node.
  */
-Node *SavedBattleGame::getPatrolNode(bool scout, BattleUnit *unit, Node *fromNode)
+Node* SavedBattleGame::getPatrolNode(bool scout, BattleUnit* unit, Node* fromNode)
 {
-	std::vector<Node *> compliantNodes;
-	Node *preferred = 0;
+	std::vector<Node* > compliantNodes;
+	Node* preferred = 0;
 
 	if (fromNode == 0)
 	{
@@ -1158,13 +1158,17 @@ Node *SavedBattleGame::getPatrolNode(bool scout, BattleUnit *unit, Node *fromNod
 	}
 
 	// scouts roam all over while all others shuffle around to adjacent nodes at most:
-	const int end = scout ? getNodes()->size() : fromNode->getNodeLinks()->size();
+	int const end = scout ? getNodes()->size() : fromNode->getNodeLinks()->size();
 
 	for (int i = 0; i < end; ++i)
 	{
-		if (!scout && fromNode->getNodeLinks()->at(i) < 1) continue;
+		if (!scout
+			&& fromNode->getNodeLinks()->at(i) < 1)
+		{
+			continue;
+		}
 
-		Node *n = getNodes()->at(scout ? i : fromNode->getNodeLinks()->at(i));
+		Node* n = getNodes()->at(scout ? i : fromNode->getNodeLinks()->at(i));
 
 		if ((n->getFlags() > 0
 				|| n->getRank() > 0
@@ -1184,9 +1188,16 @@ Node *SavedBattleGame::getPatrolNode(bool scout, BattleUnit *unit, Node *fromNod
 			&& n->getPosition().y > 0)
 		{
 			if (!preferred 
-				|| (preferred->getRank() == Node::nodeRank[unit->getRankInt()][0] && preferred->getFlags() < n->getFlags())
-				|| preferred->getFlags() < n->getFlags()) preferred = n;
+				|| (preferred->getRank() == Node::nodeRank[unit->getRankInt()][0]
+					&& preferred->getFlags() < n->getFlags())
+				|| preferred->getFlags() < n->getFlags())
 			{
+				preferred = n;	// kL_note: *that was confusing* This was mushed up behind the condition-check ... leading to
+			}
+			{					// ... this.
+				// kL_note cont'd: but *this* to be even more confusing, was parsed down simply to "compliantNodes.push_back(n);"
+				// in Warboy's (Tue Oct 01 19:46:58 2013) commit to Sup/master... BUT IT DIDN'T FOLLOW THROUGH WHEN i MERGED IT
+				// INTO my fork "oXc_kL"
 				getPathfinding()->calculate(unit, n->getPosition());
 				if (getPathfinding()->getStartDirection() != -1)
 				{
@@ -1195,6 +1206,8 @@ Node *SavedBattleGame::getPatrolNode(bool scout, BattleUnit *unit, Node *fromNod
 
 				getPathfinding()->abortPath();
 			}
+			// kL_note cont'd. So maybe-really it should look like so
+//			compliantNodes.push_back(n);	// kL, from Warboy's uncommitted commit........
 		}
 	}
 
