@@ -1414,12 +1414,14 @@ void SavedBattleGame::reviveUnconsciousUnits()
 				{
 					// recover from unconscious
 					(*i)->turn(false); // makes the unit stand up again
+//kL					(*i)->kneel(false);
 					(*i)->setCache(0);
 
 					getTileEngine()->calculateFOV((*i));
 					getTileEngine()->calculateUnitLighting();
 
 					removeUnconsciousBodyItem((*i));
+
 					break;
 				}
 			}
