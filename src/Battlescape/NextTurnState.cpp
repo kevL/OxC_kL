@@ -123,6 +123,8 @@ void NextTurnState::handle(Action* action)
 //kL		|| action->getDetails()->type == SDL_MOUSEBUTTONDOWN)
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)	// kL
 	{
+		Log(LOG_INFO) << ". . . . RMB, update TurnCounter, popState & tallyUnits";	// kL
+
 //		_turnCounter->setTurnCount(kL_TurnCount);		// kL
 		kL_TurnCount = _battleGame->getTurn();	// kL
 

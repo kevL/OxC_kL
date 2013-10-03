@@ -170,7 +170,7 @@ void UnitWalkBState::think()
 	if (_unit->getStatus() == STATUS_WALKING
 		|| _unit->getStatus() == STATUS_FLYING)
 	{
-//		Log(LOG_INFO) << "STATUS_WALKING or FLYING : " << _unit->getId();	// kL
+		Log(LOG_INFO) << "STATUS_WALKING or FLYING : " << _unit->getId();	// kL
 
 		Tile* tileBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(0, 0, -1));	// kL_above
 
@@ -266,7 +266,7 @@ void UnitWalkBState::think()
 		// is the step finished?
 		if (_unit->getStatus() == STATUS_STANDING)
 		{
-//			Log(LOG_INFO) << "Hey we got to STATUS_STANDING in UnitWalkBState _WALKING or _FLYING !!!" ;	// kL
+			Log(LOG_INFO) << "Hey we got to STATUS_STANDING in UnitWalkBState _WALKING or _FLYING !!!" ;	// kL
 
 			// if the unit burns floortiles, burn floortiles
 			if (_unit->getSpecialAbility() == SPECAB_BURNFLOOR)
@@ -405,7 +405,7 @@ void UnitWalkBState::think()
 	if (_unit->getStatus() == STATUS_STANDING
 		|| _unit->getStatus() == STATUS_PANICKING)
 	{
-//		Log(LOG_INFO) << "STATUS_STANDING or PANICKING : " << _unit->getId();	// kL
+		Log(LOG_INFO) << "STATUS_STANDING or PANICKING : " << _unit->getId();	// kL
 
 		// check if we did spot new units
 		if (newUnitSpotted
@@ -414,7 +414,7 @@ void UnitWalkBState::think()
 			&& !_falling)
 		{
 			if (_parent->getSave()->getTraceSetting()) { Log(LOG_INFO) << "Uh-oh! Company!"; }
-//			Log(LOG_INFO) << "Uh-oh! STATUS_STANDING or PANICKING Company!";		// kL
+			Log(LOG_INFO) << "Uh-oh! STATUS_STANDING or PANICKING Company!";		// kL
 
 			_unit->_hidingForTurn = false; // clearly we're not hidden now
 			_parent->getMap()->cacheUnit(_unit);
@@ -438,18 +438,18 @@ void UnitWalkBState::think()
 			dir = _pf->DIR_DOWN;
 
 //		Log(LOG_INFO) << ". pos 0";			// kL
-//		Log(LOG_INFO) << "direction = " << dir;	// kL
+		Log(LOG_INFO) << "direction = " << dir;	// kL
 
 		if (dir != -1)
 		{
-//			Log(LOG_INFO) << "enter (dir!=-1) : " << _unit->getId();	// kL
+			Log(LOG_INFO) << "enter (dir!=-1) : " << _unit->getId();	// kL
 
 			if (_pf->getStrafeMove())
 			{
 				_unit->setFaceDirection(_unit->getDirection());
 			}
 
-//			Log(LOG_INFO) << ". pos 1";	// kL
+			Log(LOG_INFO) << ". pos 1";	// kL
 
 			// gets tu cost, but also gets the destination position.
 			Position destination;
@@ -466,7 +466,7 @@ void UnitWalkBState::think()
 				tu -= 32;
 			}
 
-//			Log(LOG_INFO) << ". pos 2";	// kL
+			Log(LOG_INFO) << ". pos 2";	// kL
 
 			if (_falling) tu = 0;
 			int energy = tu;
@@ -493,7 +493,7 @@ void UnitWalkBState::think()
 			}
 			else if (energy / 2 > _unit->getEnergy())
 			{
-//				Log(LOG_INFO) << ". pos 3";	// kL
+				Log(LOG_INFO) << ". pos 3";	// kL
 
 				if (_parent->getPanicHandled())
 				{
@@ -510,7 +510,7 @@ void UnitWalkBState::think()
 			else if (_parent->getPanicHandled()
 				&& _parent->checkReservedTU(_unit, tu) == false)
 			{
-//				Log(LOG_INFO) << ". pos 4";	// kL
+				Log(LOG_INFO) << ". pos 4";	// kL
 
 				_pf->abortPath();
 				_unit->setCache(0);
@@ -525,7 +525,7 @@ void UnitWalkBState::think()
 				&& dir < _pf->DIR_UP
 				&& !_pf->getStrafeMove())
 			{
-//				Log(LOG_INFO) << ". pos 5";	// kL
+				Log(LOG_INFO) << ". pos 5";	// kL
 				Log(LOG_INFO) << "UnitWalkBState::think() 2";
 
 				_unit->lookAt(dir);
@@ -598,13 +598,13 @@ void UnitWalkBState::think()
 			Log(LOG_INFO) << ". pos 8";	// kL
 
 			dir = _pf->dequeuePath(); // now start moving
-//kL			if (_falling) dir = _pf->DIR_DOWN;			// kL_note: set above, if it hasn't changed...
+			if (_falling) dir = _pf->DIR_DOWN;			// kL_note: set above, if it hasn't changed...
 
 			if (_unit->spendTimeUnits(tu))
 			{
 				if (_unit->spendEnergy(energy))
 				{
-//					Log(LOG_INFO) << ". WalkBState: spend TU & Energy";	// kL
+					Log(LOG_INFO) << ". WalkBState: spend TU & Energy";	// kL
 
 					Tile* tileBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(0, 0, -1));
 //					if (!isKneeled)															// kL
@@ -628,18 +628,18 @@ void UnitWalkBState::think()
 			// make sure the unit sprites are up to date
 			if (onScreen)
 			{
-//				Log(LOG_INFO) << ". . . onScreen -> cacheUnit()";	// kL
+				Log(LOG_INFO) << ". . . onScreen -> cacheUnit()";	// kL
 
 				if (_pf->getStrafeMove())
 				{
-//					Log(LOG_INFO) << ". . . (_pf->getStrafeMove()";	// kL
+					Log(LOG_INFO) << ". . . (_pf->getStrafeMove()";	// kL
 
 					// This is where we fake out the strafe movement direction so the unit "moonwalks"
 					int dirTemp = _unit->getDirection();
 					_unit->setDirection(_unit->getFaceDirection());
 					_unit->setDirection(dirTemp);
 
-//					Log(LOG_INFO) << ". . . end (_pf->getStrafeMove()";	// kL
+					Log(LOG_INFO) << ". . . end (_pf->getStrafeMove()";	// kL
 				}
 
 //				Log(LOG_INFO) << ". . mid (onScreen)";	// kL
@@ -649,11 +649,11 @@ void UnitWalkBState::think()
 //				Log(LOG_INFO) << ". . end (onScreen)";	// kL
 			}
 
-//			Log(LOG_INFO) << "exit (dir!=-1) : " << _unit->getId();	// kL
+			Log(LOG_INFO) << "exit (dir!=-1) : " << _unit->getId();	// kL
 		}
 		else
 		{
-//			Log(LOG_INFO) << ". . postPathProcedures()";	// kL
+			Log(LOG_INFO) << ". . postPathProcedures()";	// kL
 
 			postPathProcedures();
 
@@ -698,7 +698,7 @@ void UnitWalkBState::think()
 			}
 
 			if (_parent->getSave()->getTraceSetting()) { Log(LOG_INFO) << "Egads! A turn reveals new units! I must pause!"; }
-//			Log(LOG_INFO) << "Egads! STATUS_TURNING reveals new units!!! I must pause!";	// kL
+			Log(LOG_INFO) << "Egads! STATUS_TURNING reveals new units!!! I must pause!";	// kL
 
 			_unit->_hidingForTurn = false; // not hidden, are we...
 
@@ -729,7 +729,7 @@ void UnitWalkBState::cancel()
  */
 void UnitWalkBState::postPathProcedures()
 {
-//	Log(LOG_INFO) << "postPathProcedures() : " << _unit->getId();	// kL
+	Log(LOG_INFO) << "postPathProcedures() : " << _unit->getId();	// kL
 
 	_action.TU = 0;
 
