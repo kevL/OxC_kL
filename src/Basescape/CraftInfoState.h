@@ -39,18 +39,18 @@ class Surface;
  */
 class CraftInfoState
 	:
-	public State
+		public State
 {
-	private:
-		Base* _base;
-		size_t _craft;
+private:
+	Base* _base;
+	size_t _craft;
 
-		TextButton* _btnOk, * _btnW1, * _btnW2, * _btnCrew, * _btnEquip, * _btnArmor;
-		Window* _window;
-		TextEdit* _edtCraft;
-		Text* _txtDamage, * _txtFuel;
-		Text* _txtW1Name, * _txtW1Ammo, * _txtW1Max, * _txtW2Name, * _txtW2Ammo, * _txtW2Max;
-		Surface * _sprite, * _weapon1, * _weapon2, * _crew, * _equip;
+	TextButton* _btnOk, * _btnW1, * _btnW2, * _btnCrew, * _btnEquip, * _btnArmor;
+	Window* _window;
+	TextEdit* _edtCraft;
+	Text* _txtDamage, * _txtFuel;
+	Text* _txtW1Name, * _txtW1Ammo, * _txtW1Max, * _txtW2Name, * _txtW2Ammo, * _txtW2Max;
+	Surface * _sprite, * _weapon1, * _weapon2, * _crew, * _equip;
 
 	public:
 		/// Creates the Craft Info state.

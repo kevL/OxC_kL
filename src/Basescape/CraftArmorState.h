@@ -16,10 +16,12 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_CRAFTARMORSTATE_H
 #define OPENXCOM_CRAFTARMORSTATE_H
 
 #include "../Engine/State.h"
+
 
 namespace OpenXcom
 {
@@ -34,27 +36,31 @@ class Base;
  * Select Armor screen that lets the player
  * pick armor for the soldiers on the craft.
  */
-class CraftArmorState : public State
+class CraftArmorState
+	:
+		public State
 {
 private:
-	TextButton *_btnOk;
-	Window *_window;
-	Text *_txtTitle, *_txtName, *_txtCraft, *_txtArmor;
-	TextList *_lstSoldiers;
+	TextButton* _btnOk;
+	Window* _window;
+	Text* _txtTitle, * _txtName, * _txtCraft, * _txtArmor;
+	TextList* _lstSoldiers;
 
-	Base *_base;
+	Base* _base;
 	size_t _craft;
-public:
-	/// Creates the Craft Armor state.
-	CraftArmorState(Game *game, Base *base, size_t craft);
-	/// Cleans up the Craft Armor state.
-	~CraftArmorState();
-	/// Updates the soldier armors.
-	void init();
-	/// Handler for clicking the OK button.
-	void btnOkClick(Action *action);
-	/// Handler for clicking the Soldiers list.
-	void lstSoldiersClick(Action *action);
+
+	public:
+		/// Creates the Craft Armor state.
+		CraftArmorState(Game* game, Base* base, size_t craft);
+		/// Cleans up the Craft Armor state.
+		~CraftArmorState();
+
+		/// Updates the soldier armors.
+		void init();
+		/// Handler for clicking the OK button.
+		void btnOkClick(Action* action);
+		/// Handler for clicking the Soldiers list.
+		void lstSoldiersClick(Action* action);
 };
 
 }

@@ -51,28 +51,41 @@ namespace OpenXcom
  * @param base Pointer to the base to get info from.
  */
 SoldiersState::SoldiersState(Game* game, Base* base)
+//SoldiersState::SoldiersState(Game* game, Base* base, size_t craft)		// kL
 	:
-	State(game),
-	_base(base)
+		State(game),
+		_base(base)
+//		_craft(craft)	// kL
 {
 	bool isPsiBtnVisible = Options::getBool("anytimePsiTraining") && _base->getAvailablePsiLabs() > 0;
 
 	// Create objects
 	_window			= new Window(this, 320, 200, 0, 0);
-	_btnOk			= new TextButton(isPsiBtnVisible? 148:288, 16, isPsiBtnVisible? 164:16, 176);
-	_btnPsiTraining	= new TextButton(148, 16, 8, 176);
+
+//kL	_btnPsiTrain	= new TextButton(148, 16, 8, 176);
+	_btnPsiTrain	= new TextButton(94, 16, 16, 176);		// kL
+	_btnArmor		= new TextButton(94, 16, 113, 176);		// kL
+//kL	_btnOk			= new TextButton(isPsiBtnVisible? 148:288, 16, isPsiBtnVisible? 164:16, 176);
+	_btnOk			= new TextButton(94, 16, 210, 176);		// kL
+
 	_txtTitle		= new Text(310, 16, 5, 8);
 	_txtName		= new Text(114, 9, 16, 32);
 	_txtRank		= new Text(102, 9, 130, 32);
 	_txtCraft		= new Text(82, 9, 222, 32);
 	_lstSoldiers	= new TextList(288, 128, 8, 40);
 
+	// -from CraftEquipmentState
+//	_btnClear		= new TextButton(94, 16, 16, 176);	// kL... see official file for default values
+//	_btnInventory	= new TextButton(94, 16, 113, 176);	// kL...  "
+//	_btnOk			= new TextButton(94, 16, 210, 176);	// kL
+
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)), Palette::backPos, 16);
 
 	add(_window);
+	add(_btnPsiTrain);
+	add(_btnArmor);		// kL
 	add(_btnOk);
-	add(_btnPsiTraining);
 	add(_txtTitle);
 	add(_txtName);
 	add(_txtRank);
@@ -85,15 +98,21 @@ SoldiersState::SoldiersState(Game* game, Base* base)
 	_window->setColor(Palette::blockOffset(15)+1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK02.SCR"));
 
+	_btnPsiTrain->setColor(Palette::blockOffset(13)+10);
+	_btnPsiTrain->setText(tr("STR_PSIONIC_TRAINING"));
+	_btnPsiTrain->onMouseClick((ActionHandler) &SoldiersState::btnPsiTrainingClick);
+	_btnPsiTrain->setVisible(isPsiBtnVisible);
+
+	// kL_begin: setup Armor from Soldiers screen.
+	_btnArmor->setColor(Palette::blockOffset(13)+10);
+	_btnArmor->setText(tr("STR_ARMOR"));
+	_btnArmor->onMouseClick((ActionHandler) &SoldiersState::btnArmorClick_noCraft);
+	// kL_end.
+
 	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler) &SoldiersState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler) &SoldiersState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
-
-	_btnPsiTraining->setColor(Palette::blockOffset(13)+10);
-	_btnPsiTraining->setText(tr("STR_PSIONIC_TRAINING"));
-	_btnPsiTraining->onMouseClick((ActionHandler) &SoldiersState::btnPsiTrainingClick);
-	_btnPsiTraining->setVisible(isPsiBtnVisible);
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
@@ -181,6 +200,18 @@ void SoldiersState::btnOkClick(Action* )
 void SoldiersState::btnPsiTrainingClick(Action* )
 {
 	_game->pushState(new AllocatePsiTrainingState(_game, _base));
+}
+
+/**
+ * Goes to the Select Armor screen.
+ * kL. Taken from CraftInfoState.
+ * @param action Pointer to an action.
+ */
+void SoldiersState::btnArmorClick_noCraft(Action* )
+{
+	Log(LOG_INFO) << "SoldiersState::btnArmorClick_noCraft()";
+	_game->pushState(new CraftArmorState(_game, _base, (size_t)0)); //, _craft
+	Log(LOG_INFO) << "SoldiersState::btnArmorClick_noCraft() EXIT";
 }
 
 /**

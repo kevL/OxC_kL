@@ -346,6 +346,7 @@ const bool AlienBAIState::getWasHit()
 {
 	return _wasHit;
 }
+
 /*
  * Sets up a patrol action.
  * this is mainly going from node to node, moving about the map.

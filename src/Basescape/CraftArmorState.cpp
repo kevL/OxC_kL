@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "CraftArmorState.h"
 #include <string>
 #include "../Engine/Game.h"
@@ -34,17 +35,24 @@
 #include "../Ruleset/Armor.h"
 #include "SoldierArmorState.h"
 
+
 namespace OpenXcom
 {
 
 /**
  * Initializes all the elements in the Craft Armor screen.
- * @param game Pointer to the core game.
- * @param base Pointer to the base to get info from.
- * @param craft ID of the selected craft.
+ * @param game, Pointer to the core game.
+ * @param base, Pointer to the base to get info from.
+ * @param craft, ID of the selected craft.
  */
-CraftArmorState::CraftArmorState(Game *game, Base *base, size_t craft) : State(game), _base(base), _craft(craft)
+CraftArmorState::CraftArmorState(Game* game, Base* base, size_t craft)
+	:
+		State(game),
+		_base(base),
+		_craft(craft)
 {
+	Log(LOG_INFO) << "Create CraftArmorState";
+
 	// Create objects
 	_window			= new Window(this, 320, 200, 0, 0);
 	_btnOk			= new TextButton(288, 16, 16, 176);
@@ -73,8 +81,8 @@ CraftArmorState::CraftArmorState(Game *game, Base *base, size_t craft) : State(g
 
 	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(tr("STR_OK"));
-	_btnOk->onMouseClick((ActionHandler)&CraftArmorState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&CraftArmorState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onMouseClick((ActionHandler)& CraftArmorState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)& CraftArmorState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
@@ -94,30 +102,57 @@ CraftArmorState::CraftArmorState(Game *game, Base *base, size_t craft) : State(g
 	_lstSoldiers->setSelectable(true);
 	_lstSoldiers->setBackground(_window);
 	_lstSoldiers->setMargin(8);
-	_lstSoldiers->onMouseClick((ActionHandler)&CraftArmorState::lstSoldiersClick);
+	_lstSoldiers->onMouseClick((ActionHandler)& CraftArmorState::lstSoldiersClick);
+
 
 	int row = 0;
-	Craft *c = _base->getCrafts()->at(_craft);
-	for (std::vector<Soldier*>::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); ++i)
+
+	Craft* c;											// kL
+	bool hasCraft = _base->getCrafts()->size() > 0;		// kL
+	if (hasCraft)										// kL -> KLUDGE!!!
+		c = _base->getCrafts()->at(_craft);				// kL
+
+//kL	Craft* c = _base->getCrafts()->at(_craft);
+	for (std::vector<Soldier* >::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); ++i)
 	{
-		_lstSoldiers->addRow(3, (*i)->getName().c_str(), (*i)->getCraftString(_game->getLanguage()).c_str(), tr((*i)->getArmor()->getType()).c_str());
+		Log(LOG_INFO) << "CraftArmorState::CraftArmorState() iterate soldiers to createList";
+
+//		if (hasCraft)	// kL
+			_lstSoldiers->addRow(3, (*i)->getName().c_str(), (*i)->getCraftString(_game->getLanguage()).c_str(), tr((*i)->getArmor()->getType()).c_str());
+//		else			// kL
+//			_lstSoldiers->addRow(3, (*i)->getName().c_str(), tr("STR_NONE_UC"), tr((*i)->getArmor()->getType()).c_str());	// kL
+
+		Log(LOG_INFO) << ". . add row " << *i;
 
 		Uint8 color;
-		if ((*i)->getCraft() == c)
+//		if (_base->getCrafts()->size() > 0)		// kL
+//		{
+//			Log(LOG_INFO) << ". . . . color, Base has craft";
+
+		if ((*i)->getCraft() == c)		// kL_note: This might CTD.
 		{
+			Log(LOG_INFO) << ". . . . color, soldier is on a craft";
 			color = Palette::blockOffset(13);
 		}
 		else if ((*i)->getCraft() != 0)
 		{
+			Log(LOG_INFO) << ". . . . color, soldier is NOT on a craft";
 			color = Palette::blockOffset(15)+6;
 		}
+//		}
 		else
 		{
+			Log(LOG_INFO) << ". . . . color, Base has NO craft";
+
 			color = Palette::blockOffset(13)+10;
 		}
+
 		_lstSoldiers->setRowColor(row, color);
+
 		row++;
 	}
+
+	Log(LOG_INFO) << "CraftArmorState::CraftArmorState() EXIT";
 }
 
 /**
@@ -125,6 +160,7 @@ CraftArmorState::CraftArmorState(Game *game, Base *base, size_t craft) : State(g
  */
 CraftArmorState::~CraftArmorState()
 {
+	Log(LOG_INFO) << "Delete CraftArmorState";
 }
 
 /**
@@ -134,7 +170,7 @@ CraftArmorState::~CraftArmorState()
 void CraftArmorState::init()
 {
 	int row = 0;
-	for (std::vector<Soldier*>::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); ++i)
+	for (std::vector<Soldier* >::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); ++i)
 	{
 		_lstSoldiers->setCellText(row, 2, tr((*i)->getArmor()->getType()));
 		row++;
@@ -145,7 +181,7 @@ void CraftArmorState::init()
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void CraftArmorState::btnOkClick(Action *)
+void CraftArmorState::btnOkClick(Action* )
 {
 	_game->popState();
 }
@@ -154,11 +190,13 @@ void CraftArmorState::btnOkClick(Action *)
  * Shows the Select Armor window.
  * @param action Pointer to an action.
  */
-void CraftArmorState::lstSoldiersClick(Action *)
+void CraftArmorState::lstSoldiersClick(Action* )
 {
-	Soldier *s = _base->getSoldiers()->at(_lstSoldiers->getSelectedRow());
+	Soldier* s = _base->getSoldiers()->at(_lstSoldiers->getSelectedRow());
 	if (!(s->getCraft() && s->getCraft()->getStatus() == "STR_OUT"))
+	{
 		_game->pushState(new SoldierArmorState(_game, _base, _lstSoldiers->getSelectedRow()));
+	}
 }
 
 }

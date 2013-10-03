@@ -38,17 +38,17 @@ class Base;
  */
 class CraftSoldiersState
 	:
-	public State
+		public State
 {
-	private:
-//kL		TextButton *_btnOk;
-		TextButton* _btnOk, * _btnUnload;	// kL
-		Window* _window;
-		Text* _txtTitle, * _txtName, * _txtRank, * _txtCraft, * _txtAvailable, * _txtUsed;
-		TextList* _lstSoldiers;
+private:
+//kL	TextButton *_btnOk;
+	TextButton* _btnOk, * _btnUnload;	// kL
+	Window* _window;
+	Text* _txtTitle, * _txtName, * _txtRank, * _txtCraft, * _txtAvailable, * _txtUsed;
+	TextList* _lstSoldiers;
 
-		Base* _base;
-		size_t _craft;
+	Base* _base;
+	size_t _craft;
 
 	public:
 		/// Creates the Craft Soldiers state.

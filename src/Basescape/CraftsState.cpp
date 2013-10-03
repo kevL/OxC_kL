@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "CraftsState.h"
 #include <sstream>
 #include "../Engine/Game.h"
@@ -32,6 +33,7 @@
 #include "../Savegame/Base.h"
 #include "CraftInfoState.h"
 
+
 namespace OpenXcom
 {
 
@@ -40,19 +42,22 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
  */
-CraftsState::CraftsState(Game *game, Base *base) : State(game), _base(base)
+CraftsState::CraftsState(Game* game, Base* base)
+	:
+		State(game),
+		_base(base)
 {
 	// Create objects
-	_window = new Window(this, 320, 200, 0, 0);
-	_btnOk = new TextButton(288, 16, 16, 176);
-	_txtTitle = new Text(298, 16, 16, 8);
-	_txtBase = new Text(298, 16, 16, 24);
-	_txtName = new Text(94, 9, 16, 40);
-	_txtStatus = new Text(50, 9, 110, 40);
-	_txtWeapon = new Text(50, 16, 160, 40);
-	_txtCrew = new Text(58, 9, 210, 40);
-	_txtHwp = new Text(46, 9, 268, 40);
-	_lstCrafts = new TextList(288, 118, 8, 58);
+	_window		= new Window(this, 320, 200, 0, 0);
+	_btnOk		= new TextButton(288, 16, 16, 176);
+	_txtTitle	= new Text(298, 16, 16, 8);
+	_txtBase	= new Text(298, 16, 16, 24);
+	_txtName	= new Text(94, 9, 16, 40);
+	_txtStatus	= new Text(50, 9, 110, 40);
+	_txtWeapon	= new Text(50, 16, 160, 40);
+	_txtCrew	= new Text(58, 9, 210, 40);
+	_txtHwp		= new Text(46, 9, 268, 40);
+	_lstCrafts	= new TextList(288, 118, 8, 58);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(3)), Palette::backPos, 16);
@@ -76,8 +81,8 @@ CraftsState::CraftsState(Game *game, Base *base) : State(game), _base(base)
 
 	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(tr("STR_OK"));
-	_btnOk->onMouseClick((ActionHandler)&CraftsState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&CraftsState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onMouseClick((ActionHandler)& CraftsState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)& CraftsState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(15)+1);
 	_txtTitle->setBig();
@@ -110,7 +115,7 @@ CraftsState::CraftsState(Game *game, Base *base) : State(game), _base(base)
 	_lstCrafts->setSelectable(true);
 	_lstCrafts->setBackground(_window);
 	_lstCrafts->setMargin(8);
-	_lstCrafts->onMouseClick((ActionHandler)&CraftsState::lstCraftsClick);
+	_lstCrafts->onMouseClick((ActionHandler)& CraftsState::lstCraftsClick);
 }
 
 /**
@@ -118,7 +123,6 @@ CraftsState::CraftsState(Game *game, Base *base) : State(game), _base(base)
  */
 CraftsState::~CraftsState()
 {
-
 }
 
 /**
@@ -128,7 +132,7 @@ CraftsState::~CraftsState()
 void CraftsState::init()
 {
 	_lstCrafts->clearList();
-	for (std::vector<Craft*>::iterator i = _base->getCrafts()->begin(); i != _base->getCrafts()->end(); ++i)
+	for (std::vector<Craft* >::iterator i = _base->getCrafts()->begin(); i != _base->getCrafts()->end(); ++i)
 	{
 		std::wstringstream ss, ss2, ss3;
 		ss << (*i)->getNumWeapons() << "/" << (*i)->getRules()->getWeapons();
@@ -142,7 +146,7 @@ void CraftsState::init()
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void CraftsState::btnOkClick(Action *)
+void CraftsState::btnOkClick(Action* )
 {
 	_game->popState();
 }
@@ -151,7 +155,7 @@ void CraftsState::btnOkClick(Action *)
  * Shows the selected craft's info.
  * @param action Pointer to an action.
  */
-void CraftsState::lstCraftsClick(Action *)
+void CraftsState::lstCraftsClick(Action* )
 {
 	if (_base->getCrafts()->at(_lstCrafts->getSelectedRow())->getStatus() != "STR_OUT")
 	{

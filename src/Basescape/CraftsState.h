@@ -16,10 +16,12 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_CRAFTSSTATE_H
 #define OPENXCOM_CRAFTSSTATE_H
 
 #include "../Engine/State.h"
+
 
 namespace OpenXcom
 {
@@ -31,28 +33,31 @@ class TextList;
 class Base;
 
 /**
- * Equip Craft screen that lets the player
- * manage all the crafts in a base.
+ * Equip Craft screen that lets the player manage all the crafts in a base.
  */
-class CraftsState : public State
+class CraftsState
+	:
+		public State
 {
 private:
-	TextButton *_btnOk;
-	Window *_window;
-	Text *_txtTitle, *_txtBase, *_txtName, *_txtStatus, *_txtWeapon, *_txtCrew, *_txtHwp;
-	TextList *_lstCrafts;
-	Base *_base;
-public:
-	/// Creates the Crafts state.
-	CraftsState(Game *game, Base *base);
-	/// Cleans up the Crafts state.
-	~CraftsState();
-	/// Updates the craft info.
-	void init();
-	/// Handler for clicking the OK button.
-	void btnOkClick(Action *action);
-	/// Handler for clicking the Crafts list.
-	void lstCraftsClick(Action *action);
+	TextButton* _btnOk;
+	Window* _window;
+	Text* _txtTitle, * _txtBase, * _txtName, * _txtStatus, * _txtWeapon, * _txtCrew, * _txtHwp;
+	TextList* _lstCrafts;
+	Base* _base;
+
+	public:
+		/// Creates the Crafts state.
+		CraftsState(Game* game, Base* base);
+		/// Cleans up the Crafts state.
+		~CraftsState();
+
+		/// Updates the craft info.
+		void init();
+		/// Handler for clicking the OK button.
+		void btnOkClick(Action* action);
+		/// Handler for clicking the Crafts list.
+		void lstCraftsClick(Action* action);
 };
 
 }

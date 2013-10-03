@@ -52,9 +52,9 @@ namespace OpenXcom
  */
 CraftInfoState::CraftInfoState(Game* game, Base* base, size_t craft)
 	:
-	State(game),
-	_base(base),
-	_craft(craft)
+		State(game),
+		_base(base),
+		_craft(craft)
 {
 //	Log(LOG_INFO) << "Create CraftInfoState";
 

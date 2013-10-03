@@ -42,8 +42,9 @@ class SoldiersState
 {
 	private:
 		Base* _base;
+//		size_t _craft;		//kL
 
-		TextButton* _btnOk, * _btnPsiTraining;
+		TextButton* _btnOk, * _btnPsiTrain, * _btnArmor;	// kL: add _btnArmor
 		Window* _window;
 		Text* _txtTitle, * _txtName, * _txtRank, * _txtCraft;
 		TextList* _lstSoldiers;
@@ -51,6 +52,7 @@ class SoldiersState
 	public:
 		/// Creates the Soldiers state.
 		SoldiersState(Game* game, Base* base);
+//		SoldiersState(Game* game, Base* base, Craft* craft);		// kL
 		/// Cleans up the Soldiers state.
 		~SoldiersState();
 		/// Updates the soldier names.
@@ -62,6 +64,8 @@ class SoldiersState
 		void lstSoldiersClick(Action* action);
 		/// Handler for clicking the PsiTraining button.
 		void btnPsiTrainingClick(Action* action);
+		/// Handler for clicking the Armor button.		// kL
+		void btnArmorClick_noCraft(Action* action);		// kL
 
 		// kL_begin: re-order soldiers, taken from CraftSoldiersState.
 		/// Handler for clicking the Soldiers reordering button.

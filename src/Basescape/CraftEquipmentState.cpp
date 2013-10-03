@@ -74,10 +74,11 @@ CraftEquipmentState::CraftEquipmentState(Game* game, Base* base, size_t craft)
 
 	// Create objects
 	_window			= new Window(this, 320, 200, 0, 0);
-//kL	_btnOk			= new TextButton((craftHasACrew || isNewBattle) ? 148 : 288, 16, (craftHasACrew || isNewBattle) ? 164 : 16, 176);
-	_btnOk			= new TextButton(94, 16, 210, 176);	// kL
+
 	_btnClear		= new TextButton(94, 16, 16, 176);	// kL... see official file for default values
 	_btnInventory	= new TextButton(94, 16, 113, 176);	// kL...  "
+//kL	_btnOk			= new TextButton((craftHasACrew || isNewBattle) ? 148 : 288, 16, (craftHasACrew || isNewBattle) ? 164 : 16, 176);
+	_btnOk			= new TextButton(94, 16, 210, 176);	// kL
 
 	_txtTitle		= new Text(300, 16, 16, 7);
 	_txtItem		= new Text(144, 9, 16, 32);
@@ -92,9 +93,9 @@ CraftEquipmentState::CraftEquipmentState(Game* game, Base* base, size_t craft)
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)), Palette::backPos, 16);
 
 	add(_window);
-	add(_btnOk);
 	add(_btnClear);
 	add(_btnInventory);
+	add(_btnOk);
 	add(_txtTitle);
 	add(_txtItem);
 	add(_txtStores);
@@ -109,11 +110,6 @@ CraftEquipmentState::CraftEquipmentState(Game* game, Base* base, size_t craft)
 	_window->setColor(Palette::blockOffset(15)+1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK04.SCR"));
 
-	_btnOk->setColor(Palette::blockOffset(15)+1);
-	_btnOk->setText(tr("STR_OK"));
-	_btnOk->onMouseClick((ActionHandler) &CraftEquipmentState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler) &CraftEquipmentState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
-
 	_btnClear->setColor(Palette::blockOffset(15)+1);
 	_btnClear->setText(tr("STR_UNLOAD"));
 	_btnClear->onMouseClick((ActionHandler) &CraftEquipmentState::btnClearClick);
@@ -124,6 +120,11 @@ CraftEquipmentState::CraftEquipmentState(Game* game, Base* base, size_t craft)
 	_btnInventory->onMouseClick((ActionHandler) &CraftEquipmentState::btnInventoryClick);
 //kL	_btnInventory->setVisible(craftHasACrew && !isNewBattle);
 	_btnInventory->setVisible(craftHasACrew || isNewBattle);		// kL
+
+	_btnOk->setColor(Palette::blockOffset(15)+1);
+	_btnOk->setText(tr("STR_OK"));
+	_btnOk->onMouseClick((ActionHandler) &CraftEquipmentState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler) &CraftEquipmentState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(15)+1);
 	_txtTitle->setBig();

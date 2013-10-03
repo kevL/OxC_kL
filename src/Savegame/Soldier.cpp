@@ -189,9 +189,8 @@ void Soldier::setCraft(Craft *craft)
 }
 
 /**
- * Returns the soldier's craft string, which
- * is either the soldier's wounded status,
- * the assigned craft name, or none.
+ * Returns the soldier's craft string, which is either the
+ * soldier's wounded status, the assigned craft name, or none.
  * @param lang Language to get strings from.
  * @return Full name.
  */

@@ -49,9 +49,9 @@ namespace OpenXcom
  */
 CraftSoldiersState::CraftSoldiersState(Game* game, Base* base, size_t craft)
 	:
-	State(game),
-	_base(base),
-	_craft(craft)
+		State(game),
+		_base(base),
+		_craft(craft)
 {
 //	Log(LOG_INFO) << "Create CraftSoldiersState";
 
@@ -96,7 +96,6 @@ CraftSoldiersState::CraftSoldiersState(Game* game, Base* base, size_t craft)
 	_btnUnload->setColor(Palette::blockOffset(13)+10);																	// kL
 	_btnUnload->setText(_game->getLanguage()->getString("STR_UNLOAD"));													// kL
 	_btnUnload->onMouseClick((ActionHandler)& CraftSoldiersState::btnUnloadClick);										// kL
-//	_btnUnload->onKeyboardPress((ActionHandler) &CraftSoldiersState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));	// kL
 
 	_txtTitle->setColor(Palette::blockOffset(15)+6);
 	_txtTitle->setBig();

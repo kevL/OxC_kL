@@ -55,12 +55,12 @@ namespace OpenXcom
  */
 Inventory::Inventory(Game* game, int width, int height, int x, int y)
 	:
-	InteractiveSurface(width, height, x, y),
-	_game(game),
-	_selUnit(0),
-	_selItem(0),
-	_tu(true),
-	_groundOffset(0)
+		InteractiveSurface(width, height, x, y),
+		_game(game),
+		_selUnit(0),
+		_selItem(0),
+		_tu(true),
+		_groundOffset(0)
 {
 	_grid			= new Surface(width, height, x, y);
 	_items			= new Surface(width, height, x, y);

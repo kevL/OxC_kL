@@ -503,7 +503,7 @@ void BattlescapeGenerator::deployXCOM()
 	}
 
 	// auto-equip soldiers (only soldiers without layout)
-	for (std::vector<BattleItem* >::iterator i = _craftInventoryTile->getInventory()->begin(); i != _craftInventoryTile->getInventory()->end(); ++i)
+/*kL	for (std::vector<BattleItem* >::iterator i = _craftInventoryTile->getInventory()->begin(); i != _craftInventoryTile->getInventory()->end(); ++i)
 	{
 		addItem(*i, false);
 	}
@@ -511,7 +511,7 @@ void BattlescapeGenerator::deployXCOM()
 	for (std::vector<BattleItem*>::iterator i = _craftInventoryTile->getInventory()->begin(); i != _craftInventoryTile->getInventory()->end(); ++i)
 	{
 		addItem(*i, true);
-	}
+	} */
 
 	// clean up moved items
 	RuleInventory* ground = _game->getRuleset()->getInventory("STR_GROUND");
