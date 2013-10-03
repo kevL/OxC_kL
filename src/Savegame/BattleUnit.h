@@ -459,7 +459,7 @@ class BattleUnit
 		/// switch the state of the fire damage tracker.
 		void toggleFireDamage();
 		void setCoverReserve(int reserve);
-		int getCoverReserve();
+		int getCoverReserve() const;
 
 		// kL_begin:
 		/// Initializes a death spin.
@@ -479,6 +479,11 @@ class BattleUnit
 		/// Sets a unit's health level.
 		void setHealth(int health);
 		// kL_end.
+
+		/// Is this unit selectable?
+		bool isSelectable(UnitFaction faction, bool checkReselect, bool checkInventory) const;
+		/// Does this unit have an inventory?
+		bool hasInventory() const;
 };
 
 }

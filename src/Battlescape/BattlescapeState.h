@@ -92,17 +92,20 @@ private:
 	TurnCounter* _turnCounter;	// kL
 
 	public:
+		/// Creates the Battlescape state.
 		BattlescapeState(Game* game);
 		/// Cleans up the Battlescape state.
 		~BattlescapeState();
-		/// Initilizes the battlescapestate.
-		/// Selects the next soldier.
-		void selectNextPlayerUnit(bool checkReselect, bool setReselect);
-		/// Selects the previous soldier.
-		void selectPreviousPlayerUnit(bool checkReselect);
+
 //kL		static const int DEFAULT_ANIM_SPEED = 100;
 		static const int DEFAULT_ANIM_SPEED = 89;		// kL
-		/// Creates the Battlescape state.
+
+		/// Selects the next soldier.
+		void selectNextPlayerUnit(bool checkReselect = false, bool setReselect = false, bool checkInventory = false);
+		/// Selects the previous soldier.
+		void selectPreviousPlayerUnit(bool checkReselect = false, bool setReselect = false, bool checkInventory = false);
+
+		/// Initilizes the battlescapestate.
 		void init();
 		/// Runs the timers and handles popups.
 		void think();

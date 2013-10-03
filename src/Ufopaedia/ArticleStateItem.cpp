@@ -18,7 +18,7 @@
  */
 
 #include <sstream>
-
+#include <algorithm>
 #include "Ufopaedia.h"
 #include "ArticleStateItem.h"
 #include "../Ruleset/Ruleset.h"
@@ -40,7 +40,7 @@ namespace OpenXcom
 
 ArticleStateItem::ArticleStateItem(Game* game, ArticleDefinitionItem* defs, int palSwitch)
 	:
-	ArticleState(game, defs->id, palSwitch)
+		ArticleState(game, defs->id, palSwitch)
 {
 	RuleItem* item = _game->getRuleset()->getItem(defs->id);
 
@@ -215,12 +215,12 @@ ArticleStateItem::ArticleStateItem(Game* game, ArticleDefinitionItem* defs, int 
 			}
 			else
 			{
-				for (unsigned int i = 0; i < ammo_data->size(); ++i)
+				for (unsigned int i = 0; i < std::min(ammo_data->size(), (size_t)3); ++i)
 				{
-					ArticleDefinition *ammo_article = _game->getRuleset()->getUfopaediaArticle((*ammo_data)[i]);
+					ArticleDefinition* ammo_article = _game->getRuleset()->getUfopaediaArticle((*ammo_data)[i]);
 					if (Ufopaedia::isArticleAvailable(_game, ammo_article))
 					{
-						RuleItem *ammo_rule = _game->getRuleset()->getItem((*ammo_data)[i]);
+						RuleItem* ammo_rule = _game->getRuleset()->getItem((*ammo_data)[i]);
 						setDamageTypeText(_txtAmmoType[i], ammo_rule);
 
 						ss.str(L"");ss.clear();

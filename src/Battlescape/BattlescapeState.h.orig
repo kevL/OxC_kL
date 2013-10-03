@@ -52,46 +52,45 @@ class BattlescapeState
 	:
 	public State
 {
+private:
+	Surface* _rank;
+	InteractiveSurface* _icons;
+	Map* _map;
+	InteractiveSurface* _btnUnitUp, * _btnUnitDown, * _btnMapUp, * _btnMapDown, * _btnShowMap, * _btnKneel;
+	InteractiveSurface* _btnInventory, * _btnCenter, * _btnNextSoldier, * _btnNextStop, * _btnShowLayers, * _btnHelp;
+	InteractiveSurface* _btnEndTurn, * _btnAbort, * _btnStats, * _btnLaunch, * _btnPsi;
+	ImageButton* _reserve;
+	ImageButton* _btnReserveNone, * _btnReserveSnap, * _btnReserveAimed, * _btnReserveAuto, * _btnReserveKneel, * _btnZeroTUs;
+	InteractiveSurface* _btnLeftHandItem, * _btnRightHandItem;
+	static const int VISIBLE_MAX = 10;
+	InteractiveSurface* _btnVisibleUnit[VISIBLE_MAX];
+	NumberText* _numVisibleUnit[VISIBLE_MAX];
+	BattleUnit* _visibleUnit[VISIBLE_MAX];
+	WarningMessage* _warning;
+	Text* _txtName;
+	NumberText* _numTimeUnits, * _numEnergy, * _numHealth, * _numMorale, * _numLayers, * _numAmmoLeft, * _numAmmoRight;
+	Bar* _barTimeUnits, * _barEnergy, * _barHealth, * _barMorale;
+	Timer* _animTimer, * _gameTimer;
+	SavedBattleGame* _save;
+	Text* _txtDebug, * _txtTooltip;
+	std::vector<State* > _popups;
+	BattlescapeGame* _battleGame;
+	bool firstInit;
+	bool isMouseScrolling;
+	bool isMouseScrolled;
+	int xBeforeMouseScrolling, yBeforeMouseScrolling;
+	Position mapOffsetBeforeMouseScrolling;
+	Uint32 mouseScrollingStartTime;
+	int totalMouseMoveX, totalMouseMoveY;
+	bool mouseMovedOverThreshold;
+	bool _mouseOverIcons;
+	std::string _currentTooltip;
+	/// Popups a context sensitive list of actions the user can choose from.
+	void handleItemClick(BattleItem* item);
+	/// Shifts the red colors of the visible unit buttons backgrounds.
+	void blinkVisibleUnitButtons();
 <<<<<<< HEAD
-	private:
-		Surface* _rank;
-		InteractiveSurface* _icons;
-		Map* _map;
-		InteractiveSurface* _btnUnitUp, * _btnUnitDown, * _btnMapUp, * _btnMapDown, * _btnShowMap, * _btnKneel;
-		InteractiveSurface* _btnInventory, * _btnCenter, * _btnNextSoldier, * _btnNextStop, * _btnShowLayers, * _btnHelp;
-		InteractiveSurface* _btnEndTurn, * _btnAbort, * _btnStats, * _btnLaunch, * _btnPsi;
-		ImageButton* _reserve;
-		ImageButton* _btnReserveNone, * _btnReserveSnap, * _btnReserveAimed, * _btnReserveAuto, * _btnReserveKneel, * _btnZeroTUs;
-		InteractiveSurface* _btnLeftHandItem, * _btnRightHandItem;
-		static const int VISIBLE_MAX = 10;
-		InteractiveSurface* _btnVisibleUnit[VISIBLE_MAX];
-		NumberText* _numVisibleUnit[VISIBLE_MAX];
-		BattleUnit* _visibleUnit[VISIBLE_MAX];
-		WarningMessage* _warning;
-		Text* _txtName;
-		NumberText* _numTimeUnits, * _numEnergy, * _numHealth, * _numMorale, * _numLayers, * _numAmmoLeft, * _numAmmoRight;
-		Bar* _barTimeUnits, * _barEnergy, * _barHealth, * _barMorale;
-		Timer* _animTimer, * _gameTimer;
-		SavedBattleGame* _save;
-//		SavedBattleGame _TCsave;		// kL
-		Text* _txtDebug, * _txtTooltip;
-		std::vector<State* > _popups;
-		BattlescapeGame* _battleGame;
-		bool firstInit;
-		bool isMouseScrolling;
-		bool isMouseScrolled;
-		int xBeforeMouseScrolling, yBeforeMouseScrolling;
-		Position mapOffsetBeforeMouseScrolling;
-		Uint32 mouseScrollingStartTime;
-		int totalMouseMoveX, totalMouseMoveY;
-		bool mouseMovedOverThreshold;
-		bool _mouseOverIcons;
-		std::string _currentTooltip;
-		/// Popups a context sensitive list of actions the user can choose from.
-		void handleItemClick(BattleItem* item);
-		/// Shifts the red colors of the visible unit buttons backgrounds.
-		void blinkVisibleUnitButtons();
-		TurnCounter* _turnCounter;	// kL
+	TurnCounter* _turnCounter;	// kL
 
 	public:
 		BattlescapeState(Game* game);
@@ -103,7 +102,7 @@ class BattlescapeState
 		/// Selects the previous soldier.
 		void selectPreviousPlayerUnit(bool checkReselect);
 //kL		static const int DEFAULT_ANIM_SPEED = 100;
-		static const int DEFAULT_ANIM_SPEED = 90;		// kL
+		static const int DEFAULT_ANIM_SPEED = 89;		// kL
 		/// Creates the Battlescape state.
 		void init();
 		/// Runs the timers and handles popups.
@@ -209,7 +208,7 @@ class BattlescapeState
 		/// Checks if the mouse is over the icons.
 		bool getMouseOverIcons() const;
 		/// Is the player allowed to press buttons?
-		bool allowButtons() const;
+		bool allowButtons(bool allowSaving = false) const;
 		/// Handler for clicking the reserve TUs to kneel button.
 		void btnReserveKneelClick(Action* action);
 		/// Handler for clicking the expend all TUs button.
@@ -221,48 +220,11 @@ class BattlescapeState
 		/// kL. Gets the TurnCounter.
 		TurnCounter* getTurnCounter() const;	// kL
 =======
-private:
-	Surface *_rank;
-	InteractiveSurface *_icons;
-	Map *_map;
-	InteractiveSurface *_btnUnitUp, *_btnUnitDown, *_btnMapUp, *_btnMapDown, *_btnShowMap, *_btnKneel;
-	InteractiveSurface *_btnInventory, *_btnCenter, *_btnNextSoldier, *_btnNextStop, *_btnShowLayers, *_btnHelp;
-	InteractiveSurface *_btnEndTurn, *_btnAbort, *_btnStats, *_btnLaunch, *_btnPsi;
-	ImageButton *_reserve;
-	ImageButton *_btnReserveNone, *_btnReserveSnap, *_btnReserveAimed, *_btnReserveAuto, *_btnReserveKneel, *_btnZeroTUs;
-	InteractiveSurface *_btnLeftHandItem, *_btnRightHandItem;
-	static const int VISIBLE_MAX = 10;
-	InteractiveSurface *_btnVisibleUnit[VISIBLE_MAX];
-	NumberText *_numVisibleUnit[VISIBLE_MAX];
-	BattleUnit *_visibleUnit[VISIBLE_MAX];
-	WarningMessage *_warning;
-	Text *_txtName;
-	NumberText *_numTimeUnits, *_numEnergy, *_numHealth, *_numMorale, *_numLayers, *_numAmmoLeft, *_numAmmoRight;
-	Bar *_barTimeUnits, *_barEnergy, *_barHealth, *_barMorale;
-	Timer *_animTimer, *_gameTimer;
-	SavedBattleGame *_save;
-	Text *_txtDebug, *_txtTooltip;
-	std::vector<State*> _popups;
-	BattlescapeGame *_battleGame;
-	bool firstInit;
-	bool isMouseScrolling;
-	bool isMouseScrolled;
-	int xBeforeMouseScrolling, yBeforeMouseScrolling;
-	Position mapOffsetBeforeMouseScrolling;
-	Uint32 mouseScrollingStartTime;
-	int totalMouseMoveX, totalMouseMoveY;
-	bool mouseMovedOverThreshold;
-	bool _mouseOverIcons;
-	std::string _currentTooltip;
-	/// Popups a context sensitive list of actions the user can choose from.
-	void handleItemClick(BattleItem *item);
-	/// Shifts the red colors of the visible unit buttons backgrounds.
-	void blinkVisibleUnitButtons();
 public:
 	/// Selects the next soldier.
-	void selectNextPlayerUnit(bool checkReselect, bool setReselect);
+	void selectNextPlayerUnit(bool checkReselect = false, bool setReselect = false, bool checkInventory = false);
 	/// Selects the previous soldier.
-	void selectPreviousPlayerUnit(bool checkReselect);
+	void selectPreviousPlayerUnit(bool checkReselect = false, bool setReselect = false, bool checkInventory = false);
 	static const int DEFAULT_ANIM_SPEED = 100;
 	/// Creates the Battlescape state.
 	BattlescapeState(Game *game);

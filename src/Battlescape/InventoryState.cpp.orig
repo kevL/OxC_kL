@@ -55,14 +55,14 @@ namespace OpenXcom
 /**
  * Initializes all the elements in the Inventory screen.
  * @param game Pointer to the core game.
- * @param tu Inventory Time Unit mode.
+ * @param tu Does Inventory use up Time Units?
  * @param parent Pointer to parent Battlescape.
  */
 InventoryState::InventoryState(Game* game, bool tu, BattlescapeState* parent)
 	:
-	State(game),
-	_tu(tu),
-	_parent(parent)
+		State(game),
+		_tu(tu),
+		_parent(parent)
 {
 	_battleGame = _game->getSavedGame()->getSavedBattle();
 	_showMoreStatsInInventoryView = Options::getBool("showMoreStatsInInventoryView");
@@ -204,10 +204,26 @@ void InventoryState::init()
 
 		return;
 	}
+<<<<<<< HEAD
 
 	if (!hasInventory(unit)) // skip to the first unit with inventory
 	{
 		if (unit == selectNextUnit()) // no available unit, close inventory
+=======
+	// skip to the first unit with inventory
+	if (!unit->hasInventory())
+	{
+		if (_parent)
+		{
+			_parent->selectNextPlayerUnit(false, false, true);
+		}
+		else
+		{
+			_battleGame->selectNextPlayerUnit(false, false, true);
+		}
+		// no available unit, close inventory
+		if (_battleGame->getSelectedUnit() == 0)
+>>>>>>> master
 		{
 			btnOkClick(0);
 
@@ -226,6 +242,7 @@ void InventoryState::init()
 	_soldier->clear();
 	_btnRank->clear();
 
+	_txtName->setBig();
 	_txtName->setText(unit->getName(_game->getLanguage()));
 	_inv->setSelectedUnit(unit);
 
@@ -325,12 +342,8 @@ void InventoryState::updateStats()
 	if (_tu)
 	{
 		std::wstringstream ss;
-<<<<<<< HEAD
-		ss << _game->getLanguage()->getString("STR_TUS") << L'\x01' << unit->getTimeUnits();
-
-=======
 		ss << tr("STR_TUS") << L'\x01' << unit->getTimeUnits();
->>>>>>> master
+
 		_txtTus->setText(ss.str());
 	}
 }
@@ -413,10 +426,23 @@ void InventoryState::btnOkClick(Action* )
 void InventoryState::btnPrevClick(Action* )
 {
 	if (_inv->getSelectedItem() != 0)
+	{
 		return;
+<<<<<<< HEAD
 
 	selectPreviousUnit();
 
+=======
+	}
+	if (_parent)
+	{
+		_parent->selectPreviousPlayerUnit(false, false, true);
+	}
+	else
+	{
+		_battleGame->selectPreviousPlayerUnit(false, false, true);
+	}
+>>>>>>> master
 	init();
 }
 
@@ -427,10 +453,23 @@ void InventoryState::btnPrevClick(Action* )
 void InventoryState::btnNextClick(Action* )
 {
 	if (_inv->getSelectedItem() != 0)
+	{
 		return;
+<<<<<<< HEAD
 
 	selectNextUnit();
 
+=======
+	}
+	if (_parent)
+	{
+		_parent->selectNextPlayerUnit(false, false, true);
+	}
+	else
+	{
+		_battleGame->selectNextPlayerUnit(false, false, true);
+	}
+>>>>>>> master
 	init();
 }
 
@@ -468,7 +507,7 @@ void InventoryState::btnGroundClick(Action* )
  */
 void InventoryState::btnRankClick(Action* )
 {
-	_game->pushState(new UnitInfoState(_game, _battleGame->getSelectedUnit()));
+	_game->pushState(new UnitInfoState(_game, _battleGame->getSelectedUnit(), _parent));
 }
 
 /**
@@ -506,12 +545,8 @@ void InventoryState::invClick(Action* )
 		if (item->getAmmoItem() != 0
 			&& item->needsAmmo())
 		{
-<<<<<<< HEAD
-			ss << _game->getLanguage()->getString("STR_AMMO_ROUNDS_LEFT") << L'\x01' << item->getAmmoItem()->getAmmoQuantity();
-
-=======
 			ss << tr("STR_AMMO_ROUNDS_LEFT") << L'\x01' << item->getAmmoItem()->getAmmoQuantity();
->>>>>>> master
+
 			SDL_Rect r;
 			r.x = 0;
 			r.y = 0;
@@ -564,6 +599,7 @@ void InventoryState::handle(Action* action)
 #endif
 }
 
+<<<<<<< HEAD
 /**
 * Selects the previous player unit, ignoring units without inventory.
 * @return Pointer to selected unit.
@@ -618,4 +654,6 @@ bool InventoryState::hasInventory(BattleUnit* unit) const
 	return (unit->getArmor()->getSize() == 1 && unit->getRankString() != "STR_LIVE_TERRORIST") || _battleGame->getDebugMode();
 }
 
+=======
+>>>>>>> master
 }

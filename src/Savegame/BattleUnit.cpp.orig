@@ -635,11 +635,7 @@ int BattleUnit::getDiagonalWalkingPhase() const
  */
 void BattleUnit::lookAt(const Position& point, bool turret)
 {
-<<<<<<< HEAD
-	int dir = getDirectionTo(point);
-=======
-	int dir = directionTo (point);
->>>>>>> master
+	int dir = directionTo(point);
 
 	if (turret)
 	{
@@ -904,17 +900,10 @@ void BattleUnit::aim(bool aiming)
 }
 
 /**
-<<<<<<< HEAD
- * Calculates the Map facing direction from a position to a point.
- * @return direction to a point (0-7)
- */
-int BattleUnit::getDirectionTo(const Position& point) const
-=======
  * Returns the direction from this unit to a given point.
  * @return direction.
  */
-int BattleUnit::directionTo(const Position &point) const
->>>>>>> master
+int BattleUnit::directionTo(const Position& point) const
 {
 	double ox = point.x - _pos.x;
 	double oy = point.y - _pos.y;
@@ -1683,21 +1672,7 @@ void BattleUnit::think(BattleAction* action)
 void BattleUnit::setAIState(BattleAIState* aiState)
 {
 	if (_currentAIState)
-<<<<<<< HEAD
-	{
-		if (dynamic_cast<AggroBAIState* >(aiState) != 0
-			&& dynamic_cast<AggroBAIState* >(_currentAIState) != 0)
-		{
-			delete aiState;
-
-			return;
-			// try not to overwrite an existing aggro AI state
-			// I tried using typeid but it does not produce the expected results :(
-		}
-		
-=======
 	{		
->>>>>>> master
 		_currentAIState->exit();
 
 		delete _currentAIState;
@@ -2632,7 +2607,8 @@ void BattleUnit::invalidateCache()
 }
 
 /**
- * 
+ * kL_note: I believe this pertains only to individual soldiers;
+ * ie, what has *this* soldier spotted this turn.
  */
 std::vector<BattleUnit* > BattleUnit::getUnitsSpottedThisTurn()
 {
@@ -2673,8 +2649,8 @@ void BattleUnit::deriveRank()
 
 /**
  * This function checks if a tile is visible, using maths.
- * @param pos the position to check against
- * @return what the maths decide
+ * @param pos, the position to check against
+ * @return, what the maths decide
  */
 bool BattleUnit::checkViewSector(Position pos) const
 {
@@ -2715,6 +2691,7 @@ bool BattleUnit::checkViewSector(Position pos) const
 			if (deltaY >= 0 && deltaX <= 0)
 				return true;
 		break;
+
 		default:
 			return false;
 		break;
@@ -2764,15 +2741,20 @@ void BattleUnit::setCoverReserve(int reserve)
 {
 	_coverReserve = reserve;
 }
+<<<<<<< HEAD
 
 /**
  * 
  */
 int BattleUnit::getCoverReserve()
+=======
+int BattleUnit::getCoverReserve() const
+>>>>>>> master
 {
 	return _coverReserve;
 }
 
+<<<<<<< HEAD
 // kL_begin:
 /**
  * Initializes a death spin.
@@ -2890,5 +2872,29 @@ void BattleUnit::setHealth(int health)
 	_health = health;
 }
 // kL_end.
+=======
+/**
+ * Checks if this unit can be selected. Only alive units
+ * belonging to the faction can be selected.
+ * @param faction The faction to compare with.
+ * @param checkReselect Check if the unit is reselectable.
+ * @param checkInventory Check if the unit has an inventory.
+ * @return True if the unit can be selected, false otherwise.
+ */
+bool BattleUnit::isSelectable(UnitFaction faction, bool checkReselect, bool checkInventory) const
+{
+	return (_faction == faction && !isOut() && (!checkReselect || reselectAllowed()) && (!checkInventory || hasInventory()));
+}
+
+/**
+ * Checks if this unit has an inventory. Large units and/or
+ * terror units don't have inventories.
+ * @return True if an inventory is available, false otherwise.
+ */
+bool BattleUnit::hasInventory() const
+{
+	return (_armor->getSize() == 1 && _rank != "STR_LIVE_TERRORIST");
+}
+>>>>>>> master
 
 }

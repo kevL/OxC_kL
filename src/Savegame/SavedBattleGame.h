@@ -78,6 +78,8 @@ private:
 	std::list<BattleUnit* > _fallingUnits;
 	bool _unitsFalling, _strafeEnabled, _sneaky, _traceAI, _cheating;
 	std::vector<Position> _tileSearch;
+	/// Selects a soldier.
+	BattleUnit* selectPlayerUnit(int dir, bool checkReselect = false, bool setReselect = false, bool checkInventory = false);
 
 	public:
 		/// Creates a new battle save, based on the current generic save.
@@ -157,9 +159,9 @@ private:
 		/// Sets the currently selected unit.
 		void setSelectedUnit(BattleUnit* unit);
 		/// Selects the previous soldier.
-		BattleUnit* selectPreviousPlayerUnit(bool checkReselect = false);
+		BattleUnit* selectPreviousPlayerUnit(bool checkReselect = false, bool setReselect = false, bool checkInventory = false);
 		/// Selects the next soldier.
-		BattleUnit* selectNextPlayerUnit(bool checkReselect = false, bool setReselect = false);
+		BattleUnit* selectNextPlayerUnit(bool checkReselect = false, bool setReselect = false, bool checkInventory = false);
 		/// Selects the unit with position on map.
 		BattleUnit* selectUnit(const Position& pos);
 		/// Gets the pathfinding object.

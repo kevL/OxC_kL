@@ -2745,7 +2745,7 @@ void BattleUnit::setCoverReserve(int reserve)
 /**
  * 
  */
-int BattleUnit::getCoverReserve()
+int BattleUnit::getCoverReserve() const
 {
 	return _coverReserve;
 }
@@ -2860,12 +2860,38 @@ void BattleUnit::knockOut()
 
 /**
  * Sets a unit's health level.
- * @ return int, Tracks deathspin rotations
+ * @return True if an inventory is available, false otherwise.
  */
 void BattleUnit::setHealth(int health)
 {
 	_health = health;
 }
 // kL_end.
+
+/**
+ * Checks if this unit can be selected. Only alive units
+ * belonging to the faction can be selected.
+ * @param faction The faction to compare with.
+ * @param checkReselect Check if the unit is reselectable.
+ * @param checkInventory Check if the unit has an inventory.
+ * @return True if the unit can be selected, false otherwise.
+ */
+bool BattleUnit::isSelectable(UnitFaction faction, bool checkReselect, bool checkInventory) const
+{
+	return _faction == faction
+			&& !isOut()
+			&& (!checkReselect || reselectAllowed())
+			&& (!checkInventory || hasInventory());
+}
+
+/**
+ * Checks if this unit has an inventory. Large units and/or
+ * terror units don't have inventories.
+ * @return True if an inventory is available, false otherwise.
+ */
+bool BattleUnit::hasInventory() const
+{
+	return (_armor->getSize() == 1 && _rank != "STR_LIVE_TERRORIST");
+}
 
 }

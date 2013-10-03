@@ -672,12 +672,7 @@ void BattlescapeGame::checkForCasualties(BattleItem* murderweapon, BattleUnit* m
 			{
 				if (hiddenExplosion) // this is instant death from UFO powersources, without screaming sounds
 				{
-<<<<<<< HEAD
-					statePushNext(new UnitDieBState(this, *j, DT_HE, true)); 
-=======
-					// this is instant death from UFO powersources, without screaming sounds
-					statePushNext(new UnitDieBState(this, (*j), DT_HE, true));
->>>>>>> master
+					statePushNext(new UnitDieBState(this, *j, DT_HE, true));
 				}
 				else
 				{
@@ -1543,8 +1538,12 @@ void BattlescapeGame::primaryAction(const Position& pos)
 				if (_currentAction.actor->spendTimeUnits(_currentAction.TU))
 				{
 					_parentState->getGame()->getResourcePack()->getSound("BATTLE.CAT", _currentAction.weapon->getRules()->getHitSound())->play();
+<<<<<<< HEAD
 					_parentState->getGame()->pushState (new UnitInfoState (_parentState->getGame(), _save->selectUnit(pos)));
 
+=======
+					_parentState->getGame()->pushState (new UnitInfoState(_parentState->getGame(), _save->selectUnit(pos), _parentState));
+>>>>>>> master
 					cancelCurrentAction();
 				}
 				else
@@ -1808,16 +1807,12 @@ void BattlescapeGame::dropItem(const Position &position, BattleItem* item, bool 
 
 	_save->getTile(p)->addItem(item, getRuleset()->getInventory("STR_GROUND"));
 
-<<<<<<< HEAD
-	if (newItem)
-=======
 	if (item->getUnit())
 	{
 		item->getUnit()->setPosition(p);
 	}
 
-	if(newItem)
->>>>>>> master
+	if (newItem)
 	{
 		_save->getItems()->push_back(item);
 	}
