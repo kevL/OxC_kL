@@ -946,12 +946,14 @@ std::vector<BattleUnit *> TileEngine::getSpottingUnits(BattleUnit* unit)
 			Position originVoxel = _save->getTileEngine()->getSightOriginVoxel(*i);
 			originVoxel.z -= 2;
 			Position targetVoxel;
+
 			AlienBAIState* aggro = dynamic_cast<AlienBAIState* >((*i)->getCurrentAIState());
 			bool gotHit = aggro != 0 && aggro->getWasHit();
 
 			if (((*i)->checkViewSector(unit->getPosition()) || gotHit)	// spotter can actually see the target Tile, or unit got hit
 				&& canTargetUnit(&originVoxel, tile, &targetVoxel, *i)	// can actually see the unit
 				&& visible(*i, tile))									// kL: put some smoke & fire parameters in here
+																		// (Wb. took this out in favor of canTargetUnit(). But does that account for Smoke?)
 			{
 				if ((*i)->getFaction() == FACTION_PLAYER)
 				{

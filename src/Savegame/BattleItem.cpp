@@ -312,42 +312,46 @@ void BattleItem::setSlotY(int y)
  * @param item Item to check for overlap, or NULL if none.
  * @return True if it is covering.
  */
-bool BattleItem::occupiesSlot(int x, int y, BattleItem *item) const
+bool BattleItem::occupiesSlot(int x, int y, BattleItem* item) const
 {
 	if (item == this)
 		return false;
+
 	if (_inventorySlot->getType() == INV_HAND)
 		return true;
+
 	if (item == 0)
 	{
-		return (x >= _inventoryX && x < _inventoryX + _rules->getInventoryWidth() &&
-				y >= _inventoryY && y < _inventoryY + _rules->getInventoryHeight());
+		return (x >= _inventoryX
+				&& x < _inventoryX + _rules->getInventoryWidth()
+				&& y >= _inventoryY
+				&& y < _inventoryY + _rules->getInventoryHeight());
 	}
 	else
 	{
-		return !(x >= _inventoryX + _rules->getInventoryWidth() ||
-				x + item->getRules()->getInventoryWidth() <= _inventoryX ||
-				y >= _inventoryY + _rules->getInventoryHeight() ||
-				y + item->getRules()->getInventoryHeight() <= _inventoryY);
+		return !(x >= _inventoryX + _rules->getInventoryWidth()
+				|| x + item->getRules()->getInventoryWidth() <= _inventoryX
+				|| y >= _inventoryY + _rules->getInventoryHeight()
+				|| y + item->getRules()->getInventoryHeight() <= _inventoryY);
 	}
 }
 
 /**
  * Gets the item's ammo item.
- * @return The ammo item.
+ * @return, The ammo item.
  */
-BattleItem *BattleItem::getAmmoItem()
+BattleItem* BattleItem::getAmmoItem()
 {
 	return _ammoItem;
 }
 
 /**
  * Determines if the item uses ammo.
- * @return True if ammo is used.
+ * @return, True if ammo is used.
  */
 bool BattleItem::needsAmmo() const
 {
-	return !(_ammoItem == this); // no ammo for this weapon is needed
+	return _ammoItem != this; // no ammo for this weapon is needed
 }
 
 /**
@@ -355,13 +359,14 @@ bool BattleItem::needsAmmo() const
  * @param item The ammo item.
  * @return -2 when ammo doesn't fit, or -1 when weapon already contains ammo.
  */
-int BattleItem::setAmmoItem(BattleItem *item)
+int BattleItem::setAmmoItem(BattleItem* item)
 {
 	if (!needsAmmo()) return -2;
 
 	if (item == 0)
 	{
 		_ammoItem = 0;
+
 		return 0;
 	}
 
@@ -373,6 +378,7 @@ int BattleItem::setAmmoItem(BattleItem *item)
 		if (*i == item->getRules()->getType())
 		{
 			_ammoItem = item;
+
 			return 0;
 		}
 	}
@@ -384,7 +390,7 @@ int BattleItem::setAmmoItem(BattleItem *item)
  * Gets the item's tile.
  * @return The tile.
  */
-Tile *BattleItem::getTile() const
+Tile* BattleItem::getTile() const
 {
 	return _tile;
 }

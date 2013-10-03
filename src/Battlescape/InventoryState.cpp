@@ -60,9 +60,9 @@ namespace OpenXcom
  */
 InventoryState::InventoryState(Game* game, bool tu, BattlescapeState* parent)
 	:
-	State(game),
-	_tu(tu),
-	_parent(parent)
+		State(game),
+		_tu(tu),
+		_parent(parent)
 {
 	_battleGame = _game->getSavedGame()->getSavedBattle();
 	_showMoreStatsInInventoryView = Options::getBool("showMoreStatsInInventoryView");

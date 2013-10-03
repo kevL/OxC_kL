@@ -870,24 +870,32 @@ void BattlescapeState::btnShowMapClick(Action *)
  * Toggles the current unit's kneel/standup status.
  * @param action Pointer to an action.
  */
-void BattlescapeState::btnKneelClick(Action *)
+void BattlescapeState::btnKneelClick(Action* )
 {
 	if (allowButtons())
 	{
-		BattleUnit *bu = _save->getSelectedUnit();
+		BattleUnit* bu = _save->getSelectedUnit();
 		if (bu)
 		{
 //			Log(LOG_INFO) << "BattlescapeState::btnKneelClick()";
 			_battleGame->kneel(bu);
+
+			// update any path preview if unit kneels; kL_note: Moved up from below.
+			if (_battleGame->getPathfinding()->isPathPreviewed() && bu->isKneeled())
+			{
+				_battleGame->getPathfinding()->calculate(_battleGame->getCurrentAction()->actor, _battleGame->getCurrentAction()->target);
+				_battleGame->getPathfinding()->removePreview();
+				_battleGame->getPathfinding()->previewPath();
+			}
 		}
 
 		// update any path preview if unit kneels
-		if (_battleGame->getPathfinding()->isPathPreviewed() && bu->isKneeled())
+/*kL		if (_battleGame->getPathfinding()->isPathPreviewed() && bu->isKneeled())
 		{
 			_battleGame->getPathfinding()->calculate(_battleGame->getCurrentAction()->actor, _battleGame->getCurrentAction()->target);
 			_battleGame->getPathfinding()->removePreview();
 			_battleGame->getPathfinding()->previewPath();
-		}
+		} */
 	}
 }
 

@@ -82,11 +82,14 @@ ActionMenuState::ActionMenuState(Game* game, BattleAction* action, int x, int y)
 
 	if (weapon->getBattleType() == BT_FIREARM)
 	{
-		if (weapon->isWaypoint() || (_action->weapon->getAmmoItem() && _action->weapon->getAmmoItem()->getRules()->isWaypoint()))
+//kL		if (weapon->isWaypoint()	// kL_note: removing this might muck w/ hovertank-fusion actionMenu.
+//kL			|| (_action->weapon->getAmmoItem() && _action->weapon->getAmmoItem()->getRules()->isWaypoint()))
+		if (_action->weapon->getAmmoItem() && _action->weapon->getAmmoItem()->getRules()->isWaypoint())		// kL
 		{
 			addItem(BA_LAUNCH, "STR_LAUNCH_MISSILE", &id);
 		}
-		else
+//kL		else
+		else if (_action->weapon->getAmmoItem())	// kL
 		{
 			if (weapon->getAccuracyAuto() != 0)
 			{
