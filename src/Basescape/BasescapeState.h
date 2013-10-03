@@ -41,7 +41,7 @@ class Globe;
  */
 class BasescapeState
 	:
-	public State
+		public State
 {
 private:
 	BaseView* _view;

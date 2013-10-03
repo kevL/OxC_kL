@@ -69,7 +69,7 @@ SoldierInfoState::SoldierInfoState(Game* game, Base* base, size_t soldier)
 
 	_edtSoldier		= new TextEdit(200, 16, 40, 9);
 //kL	_btnSack		= new TextButton(60, 14, 260, 33);	// (60, 14, 248, 10);
-	_btnSack		= new TextButton(44, 15, 268, 8); 		// kL
+	_btnSack		= new TextButton(44, 16, 268, 8); 		// kL
 //	_txtArmor		= new Text(120, 9, 194, 38);
 
 	_txtRank		= new Text(130, 9, 0, 48);
@@ -182,28 +182,28 @@ SoldierInfoState::SoldierInfoState(Game* game, Base* base, size_t soldier)
 
 	_btnOk->setColor(Palette::blockOffset(15)+6);
 	_btnOk->setText(tr("STR_OK"));
-	_btnOk->onMouseClick((ActionHandler) &SoldierInfoState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler) &SoldierInfoState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onMouseClick((ActionHandler)& SoldierInfoState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)& SoldierInfoState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_btnPrev->setColor(Palette::blockOffset(15)+6);
 	_btnPrev->setText(L"<<");
-	_btnPrev->onMouseClick((ActionHandler) &SoldierInfoState::btnPrevClick);
+	_btnPrev->onMouseClick((ActionHandler)& SoldierInfoState::btnPrevClick);
 
 	_btnNext->setColor(Palette::blockOffset(15)+6);
 	_btnNext->setText(L">>");
-	_btnNext->onMouseClick((ActionHandler) &SoldierInfoState::btnNextClick);
+	_btnNext->onMouseClick((ActionHandler)& SoldierInfoState::btnNextClick);
 
 	_btnArmor->setColor(Palette::blockOffset(15)+6);
 //kL	_btnArmor->setText(tr("STR_ARMOR"));
-	_btnArmor->onMouseClick((ActionHandler) &SoldierInfoState::btnArmorClick);
+	_btnArmor->onMouseClick((ActionHandler)& SoldierInfoState::btnArmorClick);
 
 	_edtSoldier->setColor(Palette::blockOffset(13)+10);
 	_edtSoldier->setBig();
-	_edtSoldier->onKeyboardPress((ActionHandler) &SoldierInfoState::edtSoldierKeyPress);
+	_edtSoldier->onKeyboardPress((ActionHandler)& SoldierInfoState::edtSoldierKeyPress);
 
 	_btnSack->setColor(Palette::blockOffset(15)+6);
 	_btnSack->setText(tr("STR_SACK"));
-	_btnSack->onMouseClick((ActionHandler) &SoldierInfoState::btnSackClick);
+	_btnSack->onMouseClick((ActionHandler)& SoldierInfoState::btnSackClick);
 
 	_txtArmor->setColor(Palette::blockOffset(13));		// kL_note: reinstating this!
 	_txtArmor->setText(tr("STR_ARMOR"));				// kL

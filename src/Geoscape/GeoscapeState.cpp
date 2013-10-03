@@ -467,43 +467,43 @@ GeoscapeState::GeoscapeState(Game* game)
 	// 17= pale pink
 
 	if (_showFundsOnGeoscape) _txtHour->setSmall(); else _txtHour->setBig();
-	_txtHour->setColor(Palette::blockOffset(15)+5);
+	_txtHour->setColor(Palette::blockOffset(15)+3);
 	_txtHour->setAlign(ALIGN_RIGHT);
 	_txtHour->setText(L"");
 
 	if (_showFundsOnGeoscape) _txtHourSep->setSmall(); else _txtHourSep->setBig();
-	_txtHourSep->setColor(Palette::blockOffset(15)+5);
+	_txtHourSep->setColor(Palette::blockOffset(15)+3);
 	_txtHourSep->setText(L":");
 
 	if (_showFundsOnGeoscape) _txtMin->setSmall(); else _txtMin->setBig();
-	_txtMin->setColor(Palette::blockOffset(15)+5);
+	_txtMin->setColor(Palette::blockOffset(15)+3);
 	_txtMin->setText(L"");
 
 	if (_showFundsOnGeoscape) _txtMinSep->setSmall(); else _txtMinSep->setBig();
-	_txtMinSep->setColor(Palette::blockOffset(15)+5);
+	_txtMinSep->setColor(Palette::blockOffset(15)+3);
 	_txtMinSep->setText(L":");
 
 	_txtSec->setSmall();
-	_txtSec->setColor(Palette::blockOffset(15)+5);
+	_txtSec->setColor(Palette::blockOffset(15)+3);
 	_txtSec->setText(L"");
 
 	_txtWeekday->setSmall();
-	_txtWeekday->setColor(Palette::blockOffset(15)+5);
+	_txtWeekday->setColor(Palette::blockOffset(15)+3);
 	_txtWeekday->setText(L"");
 	_txtWeekday->setAlign(ALIGN_CENTER);
 
 	_txtDay->setSmall();
-	_txtDay->setColor(Palette::blockOffset(15)+5);
+	_txtDay->setColor(Palette::blockOffset(15)+3);
 	_txtDay->setText(L"");
 	_txtDay->setAlign(ALIGN_CENTER);
 
 	_txtMonth->setSmall();
-	_txtMonth->setColor(Palette::blockOffset(15)+5);
+	_txtMonth->setColor(Palette::blockOffset(15)+3);
 	_txtMonth->setText(L"");
 	_txtMonth->setAlign(ALIGN_CENTER);
 
 	_txtYear->setSmall();
-	_txtYear->setColor(Palette::blockOffset(15)+5);
+	_txtYear->setColor(Palette::blockOffset(15)+3);
 	_txtYear->setText(L"");
 	_txtYear->setAlign(ALIGN_CENTER);
 

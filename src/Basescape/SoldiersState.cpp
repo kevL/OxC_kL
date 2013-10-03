@@ -209,9 +209,9 @@ void SoldiersState::btnPsiTrainingClick(Action* )
  */
 void SoldiersState::btnArmorClick_noCraft(Action* )
 {
-	Log(LOG_INFO) << "SoldiersState::btnArmorClick_noCraft()";
+//	Log(LOG_INFO) << "SoldiersState::btnArmorClick_noCraft()";
 	_game->pushState(new CraftArmorState(_game, _base, (size_t)0)); //, _craft
-	Log(LOG_INFO) << "SoldiersState::btnArmorClick_noCraft() EXIT";
+//	Log(LOG_INFO) << "SoldiersState::btnArmorClick_noCraft() EXIT";
 }
 
 /**

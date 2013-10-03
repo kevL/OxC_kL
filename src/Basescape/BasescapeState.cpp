@@ -64,9 +64,9 @@ namespace OpenXcom
  */
 BasescapeState::BasescapeState(Game* game, Base* base, Globe* globe)
 	:
-	State(game),
-	_base(base),
-	_globe(globe)
+		State(game),
+		_base(base),
+		_globe(globe)
 {
 	// Create objects
 	_txtFacility	= new Text(192, 9, 0, 0);

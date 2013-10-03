@@ -51,7 +51,7 @@ CraftArmorState::CraftArmorState(Game* game, Base* base, size_t craft)
 		_base(base),
 		_craft(craft)
 {
-	Log(LOG_INFO) << "Create CraftArmorState";
+//	Log(LOG_INFO) << "Create CraftArmorState";
 
 	// Create objects
 	_window			= new Window(this, 320, 200, 0, 0);
@@ -115,14 +115,14 @@ CraftArmorState::CraftArmorState(Game* game, Base* base, size_t craft)
 //kL	Craft* c = _base->getCrafts()->at(_craft);
 	for (std::vector<Soldier* >::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); ++i)
 	{
-		Log(LOG_INFO) << "CraftArmorState::CraftArmorState() iterate soldiers to createList";
+//		Log(LOG_INFO) << "CraftArmorState::CraftArmorState() iterate soldiers to createList";
 
 //		if (hasCraft)	// kL
 			_lstSoldiers->addRow(3, (*i)->getName().c_str(), (*i)->getCraftString(_game->getLanguage()).c_str(), tr((*i)->getArmor()->getType()).c_str());
 //		else			// kL
 //			_lstSoldiers->addRow(3, (*i)->getName().c_str(), tr("STR_NONE_UC"), tr((*i)->getArmor()->getType()).c_str());	// kL
 
-		Log(LOG_INFO) << ". . add row " << *i;
+//		Log(LOG_INFO) << ". . add row " << *i;
 
 		Uint8 color;
 //		if (_base->getCrafts()->size() > 0)		// kL
@@ -131,18 +131,18 @@ CraftArmorState::CraftArmorState(Game* game, Base* base, size_t craft)
 
 		if ((*i)->getCraft() == c)		// kL_note: This might CTD.
 		{
-			Log(LOG_INFO) << ". . . . color, soldier is on a craft";
+//			Log(LOG_INFO) << ". . . . color, soldier is on a craft";
 			color = Palette::blockOffset(13);
 		}
 		else if ((*i)->getCraft() != 0)
 		{
-			Log(LOG_INFO) << ". . . . color, soldier is NOT on a craft";
+//			Log(LOG_INFO) << ". . . . color, soldier is NOT on a craft";
 			color = Palette::blockOffset(15)+6;
 		}
 //		}
 		else
 		{
-			Log(LOG_INFO) << ". . . . color, Base has NO craft";
+//			Log(LOG_INFO) << ". . . . color, Base has NO craft";
 
 			color = Palette::blockOffset(13)+10;
 		}
@@ -152,7 +152,7 @@ CraftArmorState::CraftArmorState(Game* game, Base* base, size_t craft)
 		row++;
 	}
 
-	Log(LOG_INFO) << "CraftArmorState::CraftArmorState() EXIT";
+//	Log(LOG_INFO) << "CraftArmorState::CraftArmorState() EXIT";
 }
 
 /**
@@ -160,7 +160,7 @@ CraftArmorState::CraftArmorState(Game* game, Base* base, size_t craft)
  */
 CraftArmorState::~CraftArmorState()
 {
-	Log(LOG_INFO) << "Delete CraftArmorState";
+//	Log(LOG_INFO) << "Delete CraftArmorState";
 }
 
 /**
