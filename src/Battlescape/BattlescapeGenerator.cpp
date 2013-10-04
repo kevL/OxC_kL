@@ -72,23 +72,23 @@ namespace OpenXcom
  */
 BattlescapeGenerator::BattlescapeGenerator(Game* game)
 	:
-	_game(game),
-	_save(game->getSavedGame()->getSavedBattle()),
-	_res(_game->getResourcePack()),
-	_craft(0),
-	_ufo(0),
-	_base(0),
-	_terror(0),
-	_terrain(0),
-	_mapsize_x(0),
-	_mapsize_y(0),
-	_mapsize_z(0),
-	_worldTexture(0),
-	_worldShade(0),
-	_unitSequence(0),
-	_craftInventoryTile(0),
-	_alienRace(""),
-	_alienItemLevel(0)
+		_game(game),
+		_save(game->getSavedGame()->getSavedBattle()),
+		_res(_game->getResourcePack()),
+		_craft(0),
+		_ufo(0),
+		_base(0),
+		_terror(0),
+		_terrain(0),
+		_mapsize_x(0),
+		_mapsize_y(0),
+		_mapsize_z(0),
+		_worldTexture(0),
+		_worldShade(0),
+		_unitSequence(0),
+		_craftInventoryTile(0),
+		_alienRace(""),
+		_alienItemLevel(0)
 {
 //	Log(LOG_INFO) << "Create BattlescapeGenerator";
 }
@@ -499,19 +499,22 @@ void BattlescapeGenerator::deployXCOM()
 	// equip soldiers based on equipment-layout
 	for (std::vector<BattleItem* >::iterator i = _craftInventoryTile->getInventory()->begin(); i != _craftInventoryTile->getInventory()->end(); ++i)
 	{
+		Log(LOG_INFO) << "BattlescapeGenerator::deployXCOM(), placeItemByLayout(*item)";
 		placeItemByLayout(*i);
 	}
 
 	// auto-equip soldiers (only soldiers without layout)
-/*kL	for (std::vector<BattleItem* >::iterator i = _craftInventoryTile->getInventory()->begin(); i != _craftInventoryTile->getInventory()->end(); ++i)
+	for (std::vector<BattleItem* >::iterator i = _craftInventoryTile->getInventory()->begin(); i != _craftInventoryTile->getInventory()->end(); ++i)
 	{
+		Log(LOG_INFO) << "BattlescapeGenerator::deployXCOM(), addItem(*item, !SecondPass)";
 		addItem(*i, false);
 	}
 
 	for (std::vector<BattleItem*>::iterator i = _craftInventoryTile->getInventory()->begin(); i != _craftInventoryTile->getInventory()->end(); ++i)
 	{
+		Log(LOG_INFO) << "BattlescapeGenerator::deployXCOM(), addItem(*item, SecondPass)";
 		addItem(*i, true);
-	} */
+	}
 
 	// clean up moved items
 	RuleInventory* ground = _game->getRuleset()->getInventory("STR_GROUND");
@@ -843,7 +846,7 @@ BattleItem* BattlescapeGenerator::placeItemByLayout(BattleItem* item)
 					}
 				}
 
-				// only place the weapon onto the soldier when its loaded with its layout-ammo (if any)
+				// only place the weapon onto the soldier when it's loaded with its layout-ammo (if any)
 				if (loaded)
 				{
 					item->moveToOwner((*i));
@@ -928,6 +931,7 @@ BattleItem* BattlescapeGenerator::addItem(BattleItem* item, bool secondPass)
 						// (this is relevant in the case of HIGH EXPLOSIVE which occupies two slot)
 						item->moveToOwner(*i);
 						item->setSlot(_game->getRuleset()->getInventory("STR_BELT"));
+
 						break;
 					}
 				}
@@ -968,6 +972,7 @@ BattleItem* BattlescapeGenerator::addItem(BattleItem* item, bool secondPass)
 						{
 							item->moveToOwner((*i));
 							item->setSlot(righthand);
+
 							break;
 						}
 					}
@@ -990,10 +995,12 @@ BattleItem* BattlescapeGenerator::addItem(BattleItem* item, bool secondPass)
 						item->setSlot(_game->getRuleset()->getInventory("STR_BELT"));
 						item->setSlotX(3);
 						item->setSlotY(0);
+
 						break;
 					}
 				}
 			break;
+
 			default:
 			break;
 		}
@@ -1011,9 +1018,9 @@ BattleItem* BattlescapeGenerator::addItem(BattleItem* item, bool secondPass)
 
 /**
  * Adds an item to the game and assigns it to a unit.
- * @param item Pointer to the Item.
- * @param unit Pointer to the Unit.
- * @return Pointer to the Item.
+ * @param item, Pointer to the Item.
+ * @param unit, Pointer to the Unit.
+ * @return, Pointer to the Item.
  */
 BattleItem* BattlescapeGenerator::addItem(RuleItem* item, BattleUnit* unit)
 {
@@ -1045,6 +1052,7 @@ BattleItem* BattlescapeGenerator::addItem(RuleItem* item, BattleUnit* unit)
 						bi->setSlotX(i);
 
 						placed = true;
+
 						break;
 					}
 				}
@@ -1061,6 +1069,7 @@ BattleItem* BattlescapeGenerator::addItem(RuleItem* item, BattleUnit* unit)
 							bi->setSlotX(i);
 
 							placed = true;
+
 							break;
 						}
 					}
@@ -1078,6 +1087,7 @@ BattleItem* BattlescapeGenerator::addItem(RuleItem* item, BattleUnit* unit)
 					bi->setSlotX(i);
 
 					placed = true;
+
 					break;
 				}
 			}
@@ -1111,6 +1121,7 @@ BattleItem* BattlescapeGenerator::addItem(RuleItem* item, BattleUnit* unit)
 				placed = true;
 			}
 		break;
+
 		default:
 		break;
 	}

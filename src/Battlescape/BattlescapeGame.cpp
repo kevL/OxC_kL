@@ -1060,7 +1060,8 @@ void BattlescapeGame::popState()
 						case BA_SNAPSHOT:
 //							Log(LOG_INFO) << ". SnapShot, TU percent = " << (float)action.weapon->getRules()->getTUSnap();
 
-							if (tu / totalTU * (float)100 < (float)action.weapon->getRules()->getTUSnap())
+//							if (tu / totalTU * (float)100 < (float)action.weapon->getRules()->getTUSnap())
+							if ((int)(tu / totalTU * 100.f) < action.weapon->getRules()->getTUSnap())
 							{
 								cancelCurrentAction(true);
 							}
@@ -1068,7 +1069,8 @@ void BattlescapeGame::popState()
 						case BA_AIMEDSHOT:
 //							Log(LOG_INFO) << ". AimedShot, TU percent = " << (float)action.weapon->getRules()->getTUAimed();
 
-							if (tu / totalTU * (float)100 < (float)action.weapon->getRules()->getTUAimed())
+//							if (tu / totalTU * (float)100 < (float)action.weapon->getRules()->getTUAimed())
+							if ((int)(tu / totalTU * 100.f) < action.weapon->getRules()->getTUAimed())
 							{
 								cancelCurrentAction(true);
 							}
@@ -1076,7 +1078,8 @@ void BattlescapeGame::popState()
 						case BA_AUTOSHOT:
 //							Log(LOG_INFO) << ". AutoShot, TU percent = " << (float)action.weapon->getRules()->getTUAuto();
 
-							if (tu / totalTU * (float)100 < (float)action.weapon->getRules()->getTUAuto())
+//							if (tu / totalTU * (float)100 < (float)action.weapon->getRules()->getTUAuto())
+							if ((int)(tu / totalTU * 100.f) < action.weapon->getRules()->getTUAuto())
 							{
 								cancelCurrentAction(true);
 							}

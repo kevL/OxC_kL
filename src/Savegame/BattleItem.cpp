@@ -16,11 +16,13 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "BattleItem.h"
 #include "BattleUnit.h"
 #include "Tile.h"
 #include "../Ruleset/RuleItem.h"
 #include "../Ruleset/RuleInventory.h"
+
 
 namespace OpenXcom
 {
@@ -30,21 +32,44 @@ namespace OpenXcom
  * @param rules Pointer to ruleset.
  * @param id The id of the item.
  */
-BattleItem::BattleItem(RuleItem *rules, int *id) : _id(*id), _rules(rules), _owner(0), _previousOwner(0), _unit(0), _tile(0), _inventorySlot(0), _inventoryX(0), _inventoryY(0), _ammoItem(0), _explodeTurn(0), _ammoQuantity(0), _painKiller(0), _heal(0), _stimulant(0), _XCOMProperty(false), _droppedOnAlienTurn(false)
+BattleItem::BattleItem(RuleItem* rules, int* id)
+	:
+		_id(*id),
+		_rules(rules),
+		_owner(0),
+		_previousOwner(0),
+		_unit(0),
+		_tile(0),
+		_inventorySlot(0),
+		_inventoryX(0),
+		_inventoryY(0),
+		_ammoItem(0),
+		_explodeTurn(0),
+		_ammoQuantity(0),
+		_painKiller(0),
+		_heal(0),
+		_stimulant(0),
+		_XCOMProperty(false),
+		_droppedOnAlienTurn(false)
 {
-	if (_rules && _rules->getBattleType() == BT_AMMO)
+	if (_rules
+		&& _rules->getBattleType() == BT_AMMO)
 	{
 		setAmmoQuantity(_rules->getClipSize());
-	} else if (_rules && _rules->getBattleType() == BT_MEDIKIT)
-	{
-		setHealQuantity (_rules->getHealQuantity ());
-		setPainKillerQuantity (_rules->getPainKillerQuantity ());
-		setStimulantQuantity (_rules->getStimulantQuantity ());
 	}
+	else if (_rules
+		&& _rules->getBattleType() == BT_MEDIKIT)
+	{
+		setHealQuantity(_rules->getHealQuantity());
+		setPainKillerQuantity(_rules->getPainKillerQuantity());
+		setStimulantQuantity(_rules->getStimulantQuantity());
+	}
+
 	(*id)++;
 
 	// weapon does not need ammo, ammo item points to weapon
-	if (_rules && _rules->getClipSize() == -1)
+	if (_rules
+		&& _rules->getClipSize() == -1)
 	{
 		_ammoItem = this;
 		setAmmoQuantity(99999);
@@ -62,16 +87,16 @@ BattleItem::~BattleItem()
  * Loads the item from a YAML file.
  * @param node YAML node.
  */
-void BattleItem::load(const YAML::Node &node)
+void BattleItem::load(const YAML::Node& node)
 {
-	_inventoryX = node["inventoryX"].as<int>(_inventoryX);
-	_inventoryY = node["inventoryY"].as<int>(_inventoryY);
-	_ammoQuantity = node["ammoqty"].as<int>(_ammoQuantity);
-	_painKiller = node["painKiller"].as<int>(_painKiller);
-	_heal = node["heal"].as<int>(_heal);
-	_stimulant = node["stimulant"].as<int>(_stimulant);
-	_explodeTurn = node["explodeTurn"].as<int>(_explodeTurn);
-	_droppedOnAlienTurn = node["droppedOnAlienTurn"].as<bool>(_droppedOnAlienTurn);
+	_inventoryX			= node["inventoryX"].as<int>(_inventoryX);
+	_inventoryY			= node["inventoryY"].as<int>(_inventoryY);
+	_ammoQuantity		= node["ammoqty"].as<int>(_ammoQuantity);
+	_painKiller			= node["painKiller"].as<int>(_painKiller);
+	_heal				= node["heal"].as<int>(_heal);
+	_stimulant			= node["stimulant"].as<int>(_stimulant);
+	_explodeTurn		= node["explodeTurn"].as<int>(_explodeTurn);
+	_droppedOnAlienTurn	= node["droppedOnAlienTurn"].as<bool>(_droppedOnAlienTurn);
 }
 
 /**
@@ -81,60 +106,36 @@ void BattleItem::load(const YAML::Node &node)
 YAML::Node BattleItem::save() const
 {
 	YAML::Node node;
-	node["id"] = _id;
-	node["type"] = _rules->getType();
-	if (_owner)
-	{
-		node["owner"] = _owner->getId();
-	}
-	else
-	{
-		node["owner"] = -1;
-	}
-	if (_unit)
-	{
-		node["unit"] = _unit->getId();
-	}
-	else
-	{
-		node["unit"] = -1;
-	}
 
-	if (_inventorySlot)
-	{
-		node["inventoryslot"] = _inventorySlot->getId();
-	}
-	else
-	{
-		node["inventoryslot"] = "NULL";
-	}
-	node["inventoryX"] = _inventoryX;
-	node["inventoryY"] = _inventoryY;
+	node["id"]											= _id;
+	node["type"]										= _rules->getType();
 
-	if (_tile)
-	{
-		node["position"] = _tile->getPosition();
-	}
-	else
-	{
-		node["position"] = Position(-1, -1, -1);
-	}
-	node["ammoqty"] = _ammoQuantity;
-	if (_ammoItem)
-	{
-		node["ammoItem"] = _ammoItem->getId();
-	}
-	else
-	{
-		node["ammoItem"] = -1;
-	}
+	if (_owner) node["owner"]							= _owner->getId();
+	else node["owner"]									= -1;
 
-	node["painKiller"] = _painKiller;
-	node["heal"] = _heal;
-	node["stimulant"] = _stimulant;
-	node["explodeTurn"] = _explodeTurn;
-	if (_droppedOnAlienTurn)
-		node["droppedOnAlienTurn"] = _droppedOnAlienTurn;
+	if (_unit) node["unit"]								= _unit->getId();
+	else node["unit"]									= -1;
+
+	if (_inventorySlot) node["inventoryslot"]			= _inventorySlot->getId();
+	else node["inventoryslot"]							= "NULL";
+
+	node["inventoryX"]									= _inventoryX;
+	node["inventoryY"]									= _inventoryY;
+
+	if (_tile) node["position"]							= _tile->getPosition();
+	else node["position"]								= Position(-1, -1, -1);
+
+	node["ammoqty"]										= _ammoQuantity;
+
+	if (_ammoItem) node["ammoItem"]						= _ammoItem->getId();
+	else node["ammoItem"]								= -1;
+
+	node["painKiller"]									= _painKiller;
+	node["heal"]										= _heal;
+	node["stimulant"]									= _stimulant;
+	node["explodeTurn"]									= _explodeTurn;
+
+	if (_droppedOnAlienTurn) node["droppedOnAlienTurn"]	= _droppedOnAlienTurn;
 
 	return node;
 }
@@ -143,7 +144,7 @@ YAML::Node BattleItem::save() const
  * Gets the ruleset for the item's type.
  * @return Pointer to ruleset.
  */
-RuleItem *BattleItem::getRules() const
+RuleItem* BattleItem::getRules() const
 {
 	return _rules;
 }
@@ -191,6 +192,7 @@ void BattleItem::setAmmoQuantity(int qty)
 bool BattleItem::spendBullet()
 {
 	_ammoQuantity--;
+
 	if (_ammoQuantity == 0)
 		return false;
 	else
@@ -201,7 +203,7 @@ bool BattleItem::spendBullet()
  * Gets the item's owner.
  * @return Pointer to Battleunit.
  */
-BattleUnit *BattleItem::getOwner() const
+BattleUnit* BattleItem::getOwner() const
 {
 	return _owner;
 }
@@ -210,7 +212,7 @@ BattleUnit *BattleItem::getOwner() const
  * Gets the item's previous owner.
  * @return Pointer to Battleunit.
  */
-BattleUnit *BattleItem::getPreviousOwner() const
+BattleUnit* BattleItem::getPreviousOwner() const
 {
 	return _previousOwner;
 }
@@ -219,7 +221,7 @@ BattleUnit *BattleItem::getPreviousOwner() const
  * Sets the item's owner.
  * @param owner Pointer to Battleunit.
  */
-void BattleItem::setOwner(BattleUnit *owner)
+void BattleItem::setOwner(BattleUnit* owner)
 {
 	_previousOwner = _owner;
 	_owner = owner;
@@ -229,17 +231,19 @@ void BattleItem::setOwner(BattleUnit *owner)
  * Removes the item from the previous owner and moves it to the new owner.
  * @param owner Pointer to Battleunit.
  */
-void BattleItem::moveToOwner(BattleUnit *owner)
+void BattleItem::moveToOwner(BattleUnit* owner)
 {
-	_previousOwner = _owner ? _owner:owner;
+	_previousOwner = _owner ? _owner : owner;
 	_owner = owner;
+
 	if (_previousOwner != 0)
 	{
-		for (std::vector<BattleItem*>::iterator i = _previousOwner->getInventory()->begin(); i != _previousOwner->getInventory()->end(); ++i)
+		for (std::vector<BattleItem* >::iterator i = _previousOwner->getInventory()->begin(); i != _previousOwner->getInventory()->end(); ++i)
 		{
-			if ((*i) == this)
+			if (*i == this)
 			{
 				_previousOwner->getInventory()->erase(i);
+
 				break;
 			}
 		}
@@ -255,7 +259,7 @@ void BattleItem::moveToOwner(BattleUnit *owner)
  * Gets the item's inventory slot.
  * @return The slot id.
  */
-RuleInventory *BattleItem::getSlot() const
+RuleInventory* BattleItem::getSlot() const
 {
 	return _inventorySlot;
 }
@@ -264,7 +268,7 @@ RuleInventory *BattleItem::getSlot() const
  * Sets the item's inventory slot.
  * @param slot The slot id.
  */
-void BattleItem::setSlot(RuleInventory *slot)
+void BattleItem::setSlot(RuleInventory* slot)
 {
 	_inventorySlot = slot;
 }
@@ -399,7 +403,7 @@ Tile* BattleItem::getTile() const
  * Sets the item's tile.
  * @param The tile.
  */
-void BattleItem::setTile(Tile *tile)
+void BattleItem::setTile(Tile* tile)
 {
 	_tile = tile;
 }
@@ -417,7 +421,7 @@ int BattleItem::getId() const
  * Gets the corpse's unit.
  * @return Pointer to BattleUnit.
  */
-BattleUnit *BattleItem::getUnit() const
+BattleUnit* BattleItem::getUnit() const
 {
 	return _unit;
 }
@@ -426,7 +430,7 @@ BattleUnit *BattleItem::getUnit() const
  * Sets the corpse's unit.
  * @param Pointer to BattleUnit.
  */
-void BattleItem::setUnit(BattleUnit *unit)
+void BattleItem::setUnit(BattleUnit* unit)
 {
 	_unit = unit;
 }
@@ -521,4 +525,5 @@ void BattleItem::setTurnFlag(bool flag)
 {
 	_droppedOnAlienTurn = flag;
 }
+
 }

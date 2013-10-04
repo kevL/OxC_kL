@@ -232,9 +232,11 @@ void TileEngine::addLight(const Position &center, int power, int layer)
  */
 bool TileEngine::calculateFOV(BattleUnit* unit)
 {
+	Log(LOG_INFO) << "TileEngine::calculateFOV() spotter = " << unit->getId();
 //	if (unit->isOut()) return false;	// kL: below.
 
 	size_t preVisibleUnits = unit->getUnitsSpottedThisTurn().size();
+	Log(LOG_INFO) << ". . . . preVisibleUnits = " << (int)preVisibleUnits;
 
 	Position center = unit->getPosition();
 	Position test;
@@ -304,6 +306,8 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 							&& !visibleUnit->isOut()
 							&& visible(unit, _save->getTile(test)))
 						{
+							Log(LOG_INFO) << ". . calculateFOV() CALLED visible(unit, testTile) spotted = " << visibleUnit->getId();
+
 							if (unit->getFaction() == FACTION_PLAYER)
 							{
 								visibleUnit->getTile()->setVisible(+1);
@@ -427,34 +431,49 @@ Position TileEngine::getSightOriginVoxel(BattleUnit *currentUnit)
  */
 bool TileEngine::visible(BattleUnit* currentUnit, Tile* tile)
 {
+	Log(LOG_INFO) << "TileEngine::visible() spotter = " << currentUnit->getId();
+
 	// if there is no tile or no unit, we can't see it
 	if (!tile || !tile->getUnit())
 	{
 		return false;
 	}
 
-	if (currentUnit->getFaction() == tile->getUnit()->getFaction()) // friendlies are always seen
+	BattleUnit* targetUnit = tile->getUnit();		// kL
+
+//	Log(LOG_INFO) << ". . . attempt to Spot = " << tile->getUnit()->getId();
+	Log(LOG_INFO) << ". . . attempt to Spot = " << targetUnit->getId();
+
+//kL	if (currentUnit->getFaction() == tile->getUnit()->getFaction()) // friendlies are always seen
+	if (currentUnit->getFaction() == targetUnit->getFaction())		// kL
+	{
+		Log(LOG_INFO) << ". . . spotted is Friend, ret TRUE";
 		return true;
+	}
 
 	// aliens can see in the dark, xcom can see at a distance of 9 or less, further if there's enough light.
 	if (currentUnit->getFaction() == FACTION_PLAYER
 		&& distance(currentUnit->getPosition(), tile->getPosition()) > 9
 		&& tile->getShade() > MAX_DARKNESS_TO_SEE_UNITS)
 	{
+		Log(LOG_INFO) << ". . too dark to see Tile, ret FALSE";
 		return false;
 	}
 
+
 	Position originVoxel = getSightOriginVoxel(currentUnit);
-
-	bool unitSeen = false;
-
 	// for large units origin voxel is in the middle
 	Position scanVoxel;
 	std::vector<Position> _trajectory;
-	unitSeen = canTargetUnit(&originVoxel, tile, &scanVoxel, currentUnit);
 
-	if (unitSeen)
+	bool unitIsSeen = false;
+
+	// kL_note: Is an intermediary object *not* obstructing viewing/targetting, when it should be??
+	unitIsSeen = canTargetUnit(&originVoxel, tile, &scanVoxel, currentUnit);
+	if (unitIsSeen)
 	{
+		Log(LOG_INFO) << ". . canTargetUnit() -> unit Seen !";
+
 		// now check if we really see it taking into account smoke tiles
 		// initial smoke "density" of a smoke grenade is around 15 per tile
 		// we do density/3 to get the decay of visibility
@@ -462,11 +481,31 @@ bool TileEngine::visible(BattleUnit* currentUnit, Tile* tile)
 		// this is traced in voxel space, with smoke affecting visibility every step of the way
 		_trajectory.clear();
 
+		// kL_note: Is this stopping at an obstructing object between currentUnit and targetUnit????
 		calculateLine(originVoxel, scanVoxel, true, &_trajectory, currentUnit);
 
-		Tile* t = _save->getTile(currentUnit->getPosition());
+		// kL_begin: visible() - Check if targetUnit is really targetUnit.
+/*		Log(LOG_INFO) << ". . . . identifying targetUnit @ end of trajectory...";
+		Tile* endTile = _save->getTile(Position(_trajectory.back().x / 16, _trajectory.back().y / 16, _trajectory.back().z / 24));
+		Log(LOG_INFO) << ". . . . got endTile, now Id unit...";
+		BattleUnit* targetUnit2;
+		if (!endTile->hasNoFloor(endTile))
+		{
+			targetUnit2 = endTile->getUnit();
+			Log(LOG_INFO) << ". . . . targetUnit2 identified, ID = " << targetUnit2->getId();
+		}
 
-/*kL		int visibleDistance = _trajectory.size();
+		if (targetUnit->getId() != targetUnit2->getId())
+		{
+			Log(LOG_INFO) << ". . . . targetUnit != targetUnit2 -> ret FALSE";
+//			unitIsSeen = false;
+			return false;
+		} */
+		// kL_end.
+
+/*kL		Tile* t = _save->getTile(currentUnit->getPosition());
+
+		int needDistance = _trajectory.size();
 		for (unsigned int i = 0; i < _trajectory.size(); i++)
 		{
 			if (t != _save->getTile(Position(_trajectory.at(i).x / 16, _trajectory.at(i).y / 16, _trajectory.at(i).z / 24)))
@@ -475,44 +514,66 @@ bool TileEngine::visible(BattleUnit* currentUnit, Tile* tile)
 			}
 
 			if (t->getFire() == 0)
-				visibleDistance += t->getSmoke() / 3;
+				needDistance += t->getSmoke() / 3;
 
-			if (visibleDistance > MAX_VOXEL_VIEW_DISTANCE)
+			if (needDistance > MAX_VOXEL_VIEW_DISTANCE)
 			{
-				unitSeen = false;
+				unitIsSeen = false;
 				break;
 			}
 		} */
+
 		// kL_begin: floatify this Smoke thing.
-		float visibleDistance = (float)_trajectory.size();
+		float needDistance = (float)_trajectory.size();
+		Log(LOG_INFO) << ". . . . needDistance = " << needDistance;
+
+		Tile* t = _save->getTile(currentUnit->getPosition());
+
 		for (unsigned int i = 0; i < _trajectory.size(); i++)
 		{
+//			Log(LOG_INFO) << ". . . . . . tracing Trajectory...";
 			if (t != _save->getTile(Position(_trajectory.at(i).x / 16, _trajectory.at(i).y / 16, _trajectory.at(i).z / 24)))
 			{
 				t = _save->getTile(Position(_trajectory.at(i).x / 16, _trajectory.at(i).y / 16, _trajectory.at(i).z / 24));
 			}
 
-			visibleDistance += (float)t->getSmoke() / 3.0;
-			visibleDistance += (float)t->getFire() / 2.0;
+			needDistance += (float)t->getSmoke() / 3.f;
+//			Log(LOG_INFO) << ". . . . . . . . -smoke : " << needDistance;
+			needDistance += (float)t->getFire() / 2.f;
+//			Log(LOG_INFO) << ". . . . . . . . -fire : " << needDistance;
 
-			if (visibleDistance > (float)MAX_VOXEL_VIEW_DISTANCE)
+			if (needDistance > (float)MAX_VOXEL_VIEW_DISTANCE)
 			{
-				unitSeen = false;
+				Log(LOG_INFO) << ". . . . Distance is too far. ret FALSE - needDistance = " << (int)needDistance;
+				unitIsSeen = false;
+
 				break;
+//				return false;
 			}
+
 		}
+
+		if (t->getUnit() != targetUnit)
+		{
+			Log(LOG_INFO) << ". . . . tileUnit != targetUnit -> ret FALSE";
+
+			unitIsSeen = false;
+//			return true;
+		}
+		// kL_end.
 	}
 
-	return unitSeen;
+	Log(LOG_INFO) << ". . unitIsSeen = " << unitIsSeen;
+	return unitIsSeen;
 }
 
 /**
  * Checks for how exposed unit is for another unit.
- * @param originVoxel Voxel of trace origin (eye or gun's barrel).
- * @param tile The tile to check for.
- * @param excludeUnit Is self (not to hit self).
- * @param excludeAllBut [Optional] is unit which is the only one to be considered for ray hits.
- * @return Degree of exposure (as percent).
+ * @param originVoxel, Voxel of trace origin (eye or gun's barrel).
+ * @param tile, The tile to check for.
+ * @param excludeUnit, Is self (not to hit self).
+ * @param excludeAllBut, [Optional] is unit which is the only one to be considered for ray hits.
+ * @return, Degree of exposure (as percent).
  */
 int TileEngine::checkVoxelExposure(Position *originVoxel, Tile *tile, BattleUnit *excludeUnit, BattleUnit *excludeAllBut)
 {
@@ -521,8 +582,11 @@ int TileEngine::checkVoxelExposure(Position *originVoxel, Tile *tile, BattleUnit
 	std::vector<Position> _trajectory;
 
 	BattleUnit *otherUnit = tile->getUnit();
-	if (otherUnit == 0) return 0; //no unit in this tile, even if it elevated and appearing in it.
-	if (otherUnit == excludeUnit) return 0; //skip self
+
+	if (otherUnit == 0)
+		return 0; // no unit in this tile, even if it elevated and appearing in it.
+	if (otherUnit == excludeUnit)
+		return 0; // skip self
 
 	int targetMinHeight = targetVoxel.z - tile->getTerrainLevel();
 	if (otherUnit)
@@ -554,20 +618,23 @@ int TileEngine::checkVoxelExposure(Position *originVoxel, Tile *tile, BattleUnit
 		heightRange = 12;
 	}
 
-	int targetMaxHeight=targetMinHeight+heightRange;
-	// scan ray from top to bottom  plus different parts of target cylinder
-	int total=0;
-	int visible=0;
+	int targetMaxHeight = targetMinHeight+heightRange;
+	// scan ray from top to bottom plus different parts of target cylinder
+	int total = 0;
+	int visible = 0;
 
 	for (int i = heightRange; i >= 0; i -= 2)
 	{
 		++total;
-		scanVoxel.z=targetMinHeight+i;
+
+		scanVoxel.z = targetMinHeight + i;
 		for (int j = 0; j < 2; ++j)
 		{
-			scanVoxel.x=targetVoxel.x + sliceTargets[j * 2];
-			scanVoxel.y=targetVoxel.y + sliceTargets[j * 2 + 1];
+			scanVoxel.x = targetVoxel.x + sliceTargets[j * 2];
+			scanVoxel.y = targetVoxel.y + sliceTargets[j * 2 + 1];
+
 			_trajectory.clear();
+
 			int test = calculateLine(*originVoxel, scanVoxel, false, &_trajectory, excludeUnit, true, false, excludeAllBut);
 			if (test == 4)
 			{
@@ -583,7 +650,7 @@ int TileEngine::checkVoxelExposure(Position *originVoxel, Tile *tile, BattleUnit
 		}
 	}
 
-	return (visible * 100) / total;
+	return visible * 100 / total;
 }
 
 /**
@@ -654,7 +721,7 @@ bool TileEngine::canTargetUnit(Position* originVoxel, Tile* tile, Position* scan
 	// scan ray from top to bottom plus different parts of target cylinder
 	for (int i = 0; i <= heightRange; ++i)
 	{
-		scanVoxel->z=targetCenterHeight+heightFromCenter[i];
+		scanVoxel->z = targetCenterHeight+heightFromCenter[i];
 		for (int j = 0; j < 5; ++j)
 		{
 			if (i < (heightRange-1) && j > 2)
@@ -808,6 +875,7 @@ bool TileEngine::canTargetTile(Position *originVoxel, Tile *tile, int part, Posi
 		{
 			scanVoxel->x = targetVoxel.x + spiralArray[i*2];
 			scanVoxel->y = targetVoxel.y + spiralArray[i*2+1];
+
 			_trajectory.clear();
 
 			int test = calculateLine(*originVoxel, *scanVoxel, false, &_trajectory, excludeUnit, true);
@@ -2174,8 +2242,8 @@ int TileEngine::calculateLine(const Position& origin, const Position& target, bo
 
 	// drift controls when to step in 'shallow' planes
 	// starting value keeps Line centred
-	drift_xy  = (delta_x / 2);
-	drift_xz  = (delta_x / 2);
+	drift_xy = (delta_x / 2);
+	drift_xz = (delta_x / 2);
 
 	// direction of line
 	step_x = 1; if (x0 > x1) { step_x = -1; }
@@ -2187,7 +2255,7 @@ int TileEngine::calculateLine(const Position& origin, const Position& target, bo
 	z = z0;
 
 	// step through longest delta (which we have swapped to x)
-	for (x = x0; x != (x1+step_x); x += step_x)
+	for (x = x0; x != x1 + step_x; x += step_x)
 	{
 		// copy position
 		cx = x;	cy = y;	cz = z;

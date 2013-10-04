@@ -16,10 +16,12 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_POSITION_H
 #define OPENXCOM_POSITION_H
 
 #include <yaml-cpp/yaml.h>
+
 
 namespace OpenXcom
 {
@@ -33,75 +35,155 @@ public:
 	int x, y, z;
 
 	/// Null position constructor.
-	Position() : x(0), y(0), z(0) {};
+	Position()
+		:
+			x(0),
+			y(0),
+			z(0)
+			{
+			};
 	/// X Y Z position constructor.
-	Position(int x_, int y_, int z_) : x(x_), y(y_), z(z_) {};
+	Position(int x_, int y_, int z_)
+		:
+			x(x_),
+			y(y_),
+			z(z_)
+			{
+			};
 	/// Copy constructor.
-	Position(const Position& pos) : x(pos.x), y(pos.y), z(pos.z) {};
+	Position(const Position& pos)
+		:
+			x(pos.x),
+			y(pos.y),
+			z(pos.z)
+			{
+			};
 
-	Position& operator = (const Position& pos) { x = pos.x; y = pos.y; z = pos.z; return *this; }
+	Position& operator= (const Position& pos)
+	{
+		x = pos.x;
+		y = pos.y;
+		z = pos.z;
+		
+		return *this;
+	}
 
-	Position operator + (const Position& pos) const { return Position(x + pos.x, y + pos.y, z + pos.z); }
-	Position& operator += (const Position& pos) { x+=pos.x; y+=pos.y; z+=pos.z; return *this; }
+	Position operator+ (const Position& pos) const
+	{
+		return Position(x + pos.x, y + pos.y, z + pos.z);
+	}
+	Position& operator+= (const Position& pos)
+	{
+		x += pos.x;
+		y += pos.y;
+		z += pos.z;
+		
+		return *this;
+	}
 
-	Position operator - (const Position& pos) const { return Position(x - pos.x, y - pos.y, z - pos.z); }
-	Position& operator -= (const Position& pos) { x-=pos.x; y-=pos.y; z-=pos.z; return *this; }
+	Position operator- (const Position& pos) const
+	{
+		return Position(x - pos.x, y - pos.y, z - pos.z);
+	}
+	Position& operator-= (const Position& pos)
+	{
+		x-=pos.x;
+		y-=pos.y;
+		z-=pos.z;
+		
+		return *this;
+	}
 
-	Position operator * (const Position& pos) const { return Position(x * pos.x, y * pos.y, z * pos.z); }
-	Position& operator *= (const Position& pos) { x*=pos.x; y*=pos.y; z*=pos.z; return *this; }
-	Position operator * (const int v) const { return Position(x * v, y * v, z * v); }
-	Position& operator *= (const int v) { x*=v; y*=v; z*=v; return *this; }
+	Position operator* (const Position& pos) const
+	{
+		return Position(x * pos.x, y * pos.y, z * pos.z);
+	}
+	Position& operator*= (const Position& pos)
+	{
+		x *= pos.x;
+		y *= pos.y;
+		z *= pos.z;
+		
+		return *this;
+	}
+	Position operator* (const int v) const
+	{
+		return Position(x * v, y * v, z * v);
+	}
+	Position& operator*= (const int v)
+	{
+		x *= v;
+		y *= v;
+		z *= v;
+		
+		return *this;
+	}
 	
-	Position operator / (const Position& pos) const { return Position(x / pos.x, y / pos.y, z / pos.z); }
-	Position& operator /= (const Position& pos) { x/=pos.x; y/=pos.y; z/=pos.z; return *this; }
+	Position operator/ (const Position& pos) const
+	{
+		return Position(x / pos.x, y / pos.y, z / pos.z);
+	}
+	Position& operator/= (const Position& pos)
+	{
+		x /= pos.x;
+		y /= pos.y;
+		z /= pos.z;
+		
+		return *this;
+	}
 
-    Position operator / (const int v) const { return Position(x / v, y / v, z / v); }
+    Position operator/ (const int v) const
+	{
+		return Position(x / v, y / v, z / v);
+	}
 
 	/// == operator
-    bool operator == (const Position& pos) const
+    bool operator== (const Position& pos) const
 	{
 		return x == pos.x && y == pos.y && z == pos.z;
 	}
 
 	/// != operator
-    bool operator != (const Position& pos) const
+    bool operator!= (const Position& pos) const
 	{
 		return x != pos.x || y != pos.y || z != pos.z;
 	}
-
 };
 
 typedef Position Vector3i;
 
 }
 
+
 namespace YAML
 {
-	template<>
-	struct convert<OpenXcom::Position>
+
+template<>
+struct convert<OpenXcom::Position>
+{
+	static Node encode(const OpenXcom::Position& rhs)
 	{
-		static Node encode(const OpenXcom::Position& rhs)
-		{
-			Node node;
-			node.push_back(rhs.x);
-			node.push_back(rhs.y);
-			node.push_back(rhs.z);
+		Node node;
+		node.push_back(rhs.x);
+		node.push_back(rhs.y);
+		node.push_back(rhs.z);
 
-			return node;
-		}
+		return node;
+	}
 
-		static bool decode(const Node& node, OpenXcom::Position& rhs)
-		{
-			if(!node.IsSequence() || node.size() != 3)
-				return false;
+	static bool decode(const Node& node, OpenXcom::Position& rhs)
+	{
+		if(!node.IsSequence() || node.size() != 3)
+			return false;
 
-			rhs.x = node[0].as<int>();
-			rhs.y = node[1].as<int>();
-			rhs.z = node[2].as<int>();
+		rhs.x = node[0].as<int>();
+		rhs.y = node[1].as<int>();
+		rhs.z = node[2].as<int>();
 
-			return true;
-		}
-	};
+		return true;
+	}
+};
+
 }
 
 #endif
