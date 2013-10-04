@@ -38,30 +38,29 @@ class BattleUnit;
  */
 class Pathfinding
 {
-	private:
-		SavedBattleGame* _save;
-		std::vector<PathfindingNode> _nodes;
-		int _size;
-		MovementType _movementType;
-		/// Gets the node at certain position.
-		PathfindingNode* getNode(const Position& pos);
-		/// Determines whether a tile blocks a certain movementType.
-		bool isBlocked(Tile* tile, const int part, BattleUnit* missileTarget, int bigWallExclusion = -1);
-		/// Tries to find a straight line path between two positions.
-		bool bresenhamPath(const Position& origin, const Position& target, BattleUnit* missileTarget, bool sneak = false, int maxTUCost = 1000);
-		/// Tries to find a path between two positions.
-		bool aStarPath(const Position& origin, const Position& target, BattleUnit* missileTarget, bool sneak = false, int maxTUCost = 1000);
-		/// Determines whether a unit can fall down from this tile.
-		bool canFallDown(Tile* destinationTile);
-		/// Checks if going one step from start to destination in the given direction requires going through a closed UFO door.
-		/// https://github.com/cfailde/OpenXcom/commit/00a6a7067502602f2d4900e7c972e79be8eb907a
-		bool isThroughClosedUfoDoor(int direction, Position start, Position destination);
-		/// Determines whether a unit can fall down from this tile.
-		bool canFallDown(Tile* destinationTile, int size);
-		BattleUnit* _unit;
-		bool _pathPreviewed;
-		bool _strafeMove;
-		int _totalTUCost;
+private:
+	SavedBattleGame* _save;
+	std::vector<PathfindingNode> _nodes;
+	int _size;
+	MovementType _movementType;
+	/// Gets the node at certain position.
+	PathfindingNode* getNode(const Position& pos);
+	/// Determines whether a tile blocks a certain movementType.
+	bool isBlocked(Tile* tile, const int part, BattleUnit* missileTarget, int bigWallExclusion = -1);
+	/// Tries to find a straight line path between two positions.
+	bool bresenhamPath(const Position& origin, const Position& target, BattleUnit* missileTarget, bool sneak = false, int maxTUCost = 1000);
+	/// Tries to find a path between two positions.
+	bool aStarPath(const Position& origin, const Position& target, BattleUnit* missileTarget, bool sneak = false, int maxTUCost = 1000);
+	/// Determines whether a unit can fall down from this tile.
+	bool canFallDown(Tile* destinationTile);
+	/// Determines whether a unit can fall down from this tile.
+	bool canFallDown(Tile* destinationTile, int size);
+	/// Determines the additional TU cost of going one step from start to destination if going through a closed UFO door.
+	int getOpeningUfoDoorCost(int direction, Position start, Position destination);
+	BattleUnit* _unit;
+	bool _pathPreviewed;
+	bool _strafeMove;
+	int _totalTUCost;
 
 	public:
 		std::vector<int> _path;
