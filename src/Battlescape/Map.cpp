@@ -78,20 +78,19 @@ namespace OpenXcom
  */
 Map::Map(Game* game, int width, int height, int x, int y, int visibleMapHeight)
 	:
-	InteractiveSurface(width, height, x, y),
-	_game(game),
-	_arrow(0),
-	_selectorX(0),
-	_selectorY(0),
-	_mouseX(0),
-	_mouseY(0),
-	_cursorType(CT_NORMAL),
-	_cursorSize(1),
-	_animFrame(0),
-	_launch(false),
-	_visibleMapHeight(visibleMapHeight),
-	_unitDying(false)
-
+		InteractiveSurface(width, height, x, y),
+		_game(game),
+		_arrow(0),
+		_selectorX(0),
+		_selectorY(0),
+		_mouseX(0),
+		_mouseY(0),
+		_cursorType(CT_NORMAL),
+		_cursorSize(1),
+		_animFrame(0),
+		_launch(false),
+		_visibleMapHeight(visibleMapHeight),
+		_unitDying(false)
 {
 //	Log(LOG_INFO) << "Create Map";
 
@@ -107,7 +106,7 @@ Map::Map(Game* game, int width, int height, int x, int y, int visibleMapHeight)
 	_spriteWidth = _res->getSurfaceSet("BLANKS.PCK")->getFrame(0)->getWidth();
 	_spriteHeight = _res->getSurfaceSet("BLANKS.PCK")->getFrame(0)->getHeight();
 	_save = _game->getSavedGame()->getSavedBattle();
-	_message = new BattlescapeMessage(320, (visibleMapHeight < 200)? visibleMapHeight : 200, Screen::getDX(), Screen::getDY());
+	_message = new BattlescapeMessage(320, visibleMapHeight < 200 ? visibleMapHeight : 200, Screen::getDX(), Screen::getDY());
 	_camera = new Camera(_spriteWidth, _spriteHeight, _save->getMapSizeX(), _save->getMapSizeY(), _save->getMapSizeZ(), this, visibleMapHeight);
 	_scrollMouseTimer = new Timer(SCROLL_INTERVAL);
 	_scrollMouseTimer->onTimer((SurfaceHandler)&Map::scrollMouse);

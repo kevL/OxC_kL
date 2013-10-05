@@ -16,10 +16,12 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "BattlescapeMessage.h"
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
 #include "../Engine/Palette.h"
+
 
 namespace OpenXcom
 {
@@ -31,13 +33,17 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-BattlescapeMessage::BattlescapeMessage(int width, int height, int x, int y) : Surface(width, height, x, y)
+BattlescapeMessage::BattlescapeMessage(int width, int height, int x, int y)
+	:
+		Surface(width, height, x, y)
 {
 	_window = new Window(0, width, height, x, y, POPUP_NONE);
 	_window->setColor(Palette::blockOffset(0));
 	_window->setHighContrast(true);
 
-	_text = new Text(width, height, x, y);
+	// 'hidden movement' text
+//kL	_text = new Text(width, height, x, y);
+	_text = new Text(width - 2, height - 6, x, y + 6);		// kL
 	_text->setColor(Palette::blockOffset(0));
 	_text->setAlign(ALIGN_CENTER);
 	_text->setVerticalAlign(ALIGN_MIDDLE);
@@ -57,7 +63,7 @@ BattlescapeMessage::~BattlescapeMessage()
  * Changes the message background.
  * @param background Pointer to background surface.
  */
-void BattlescapeMessage::setBackground(Surface *background)
+void BattlescapeMessage::setBackground(Surface* background)
 {
 	_window->setBackground(background);
 }
@@ -66,7 +72,7 @@ void BattlescapeMessage::setBackground(Surface *background)
  * Changes the message text.
  * @param message Message string.
  */
-void BattlescapeMessage::setText(const std::wstring &message)
+void BattlescapeMessage::setText(const std::wstring& message)
 {
 	_text->setText(message);
 }
@@ -78,7 +84,7 @@ void BattlescapeMessage::setText(const std::wstring &message)
  * @param big Pointer to large-size font.
  * @param small Pointer to small-size font.
  */
-void BattlescapeMessage::setFonts(Font *big, Font *small)
+void BattlescapeMessage::setFonts(Font* big, Font* small)
 {
 	_text->setFonts(big, small);
 	_text->setBig();
@@ -90,7 +96,7 @@ void BattlescapeMessage::setFonts(Font *big, Font *small)
  * @param firstcolor Offset of the first color to replace.
  * @param ncolors Amount of colors to replace.
  */
-void BattlescapeMessage::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
+void BattlescapeMessage::setPalette(SDL_Color* colors, int firstcolor, int ncolors)
 {
 	Surface::setPalette(colors, firstcolor, ncolors);
 	_window->setPalette(colors, firstcolor, ncolors);
@@ -98,9 +104,9 @@ void BattlescapeMessage::setPalette(SDL_Color *colors, int firstcolor, int ncolo
 }
 
 /**
- * Blits the warning message.
+ * Blits the battlescape message.
  */
-void BattlescapeMessage::blit(Surface *surface)
+void BattlescapeMessage::blit(Surface* surface)
 {
 	Surface::blit(surface);
 	_window->blit(surface);

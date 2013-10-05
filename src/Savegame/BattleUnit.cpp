@@ -912,14 +912,15 @@ int BattleUnit::directionTo(const Position& point) const
 	// divide the pie in 4 angles each at 1/8th before each quarter
 	double pie[4] =
 	{
-		(M_PI_4 * 4.0) - M_PI_4 / 2.0,
-		(M_PI_4 * 3.0) - M_PI_4 / 2.0,
-		(M_PI_4 * 2.0) - M_PI_4 / 2.0,
-		(M_PI_4 * 1.0) - M_PI_4 / 2.0
+		(M_PI_4 * 4.f) - M_PI_4 / 2.f,
+		(M_PI_4 * 3.f) - M_PI_4 / 2.f,
+		(M_PI_4 * 2.f) - M_PI_4 / 2.f,
+		(M_PI_4 * 1.f) - M_PI_4 / 2.f
 	};
 
 	int dir = 0;
-	if (angle > pie[0] || angle < -pie[0])
+	if (angle > pie[0]
+		|| angle < -pie[0])
 	{
 		dir = 4;
 	}
@@ -952,6 +953,7 @@ int BattleUnit::directionTo(const Position& point) const
 		dir = 0;
 	}
 
+	Log(LOG_INFO) << "BattleUnit::directionTo() dir = " << dir;
 	return dir;
 }
 
@@ -1269,10 +1271,8 @@ bool BattleUnit::spendTimeUnits(int tu)
 
 		return true;
 	}
-	else
-	{
-		return false;
-	}
+
+	return false;
 }
 
 /**

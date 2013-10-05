@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_TEXT_H
 #define OPENXCOM_TEXT_H
 
@@ -23,13 +24,25 @@
 #include <vector>
 #include <string>
 
+
 namespace OpenXcom
 {
 
 class Font;
 
-enum TextHAlign { ALIGN_LEFT, ALIGN_CENTER, ALIGN_RIGHT };
-enum TextVAlign { ALIGN_TOP, ALIGN_MIDDLE, ALIGN_BOTTOM };
+enum TextHAlign
+{
+	ALIGN_LEFT,
+	ALIGN_CENTER,
+	ALIGN_RIGHT
+};
+
+enum TextVAlign
+{
+	ALIGN_TOP,
+	ALIGN_MIDDLE,
+	ALIGN_BOTTOM
+};
 
 /**
  * Text string displayed on screen.

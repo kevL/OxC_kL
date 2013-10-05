@@ -885,6 +885,7 @@ void SavedBattleGame::endTurn()
 			}
 		}
 	}
+
 	// hide all aliens (VOF calculations below will turn them visible again)
 	for (std::vector<BattleUnit*>::iterator i = _units.begin(); i != _units.end(); ++i)
 	{
@@ -1330,7 +1331,7 @@ void SavedBattleGame::prepareNewTurn()
 		}
 		else
 		{
-			Position pos = Position(0,0,1); // smoke from fire spreads upwards one level if there's no floor blocking it.
+			Position pos = Position(0, 0, 1); // smoke from fire spreads upwards one level if there's no floor blocking it.
 			Tile *t = getTile((*i)->getPosition() + pos);
 			if (t && t->hasNoFloor(*i))
 			{

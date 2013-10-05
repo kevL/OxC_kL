@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "Text.h"
 #include <cctype>
 #include <cmath>
@@ -23,6 +24,7 @@
 #include "../Engine/Font.h"
 #include "../Engine/Options.h"
 #include "../Engine/Language.h"
+
 
 namespace OpenXcom
 {
@@ -35,9 +37,19 @@ namespace OpenXcom
  * @param y Y position in pixels.
  */
 Text::Text(int width, int height, int x, int y)
-	: Surface(width, height, x, y), _big(0), _small(0), _font(0), _text(L""),
-	_wrap(false), _invert(false), _contrast(false),
-	_align(ALIGN_LEFT), _valign(ALIGN_TOP), _color(0), _color2(0)
+	:
+		Surface(width, height, x, y),
+		_big(0),
+		_small(0),
+		_font(0),
+		_text(L""),
+		_wrap(false),
+		_invert(false),
+		_contrast(false),
+		_align(ALIGN_LEFT),
+		_valign(ALIGN_TOP),
+		_color(0),
+		_color2(0)
 {
 }
 
@@ -46,7 +58,6 @@ Text::Text(int width, int height, int x, int y)
  */
 Text::~Text()
 {
-
 }
 
 /**

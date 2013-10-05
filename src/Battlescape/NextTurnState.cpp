@@ -44,11 +44,11 @@ namespace OpenXcom
  */
 NextTurnState::NextTurnState(Game* game, SavedBattleGame* battleGame, BattlescapeState* state)
 	:
-	State(game),
-	_battleGame(battleGame),
-	_state(state)
+		State(game),
+		_battleGame(battleGame),
+		_state(state)
 {
-	Log(LOG_INFO) << "Create NextTurnState";	// kL
+//	Log(LOG_INFO) << "Create NextTurnState";	// kL
 
 	// Create objects
 	_window		= new Window(this, 320, 200, 0, 0);
@@ -107,7 +107,7 @@ NextTurnState::NextTurnState(Game* game, SavedBattleGame* battleGame, Battlescap
  */
 NextTurnState::~NextTurnState()
 {
-	Log(LOG_INFO) << "Delete NextTurnState";		// kL
+//	Log(LOG_INFO) << "Delete NextTurnState";		// kL
 }
 
 /**
@@ -116,14 +116,14 @@ NextTurnState::~NextTurnState()
  */
 void NextTurnState::handle(Action* action)
 {
-	Log(LOG_INFO) << "NextTurnState::handle()";	// kL
+//	Log(LOG_INFO) << "NextTurnState::handle()";	// kL
 	State::handle(action);
 
 //kL	if (action->getDetails()->type == SDL_KEYDOWN
 //kL		|| action->getDetails()->type == SDL_MOUSEBUTTONDOWN)
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)	// kL
 	{
-		Log(LOG_INFO) << ". . . . RMB, update TurnCounter, popState & tallyUnits";	// kL
+//		Log(LOG_INFO) << ". . . . RMB, update TurnCounter, popState & tallyUnits";	// kL
 
 //		_turnCounter->setTurnCount(kL_TurnCount);		// kL
 		kL_TurnCount = _battleGame->getTurn();	// kL
@@ -147,7 +147,7 @@ void NextTurnState::handle(Action* action)
 		}
 	}
 
-	Log(LOG_INFO) << ". . handle() EXIT";	// kL
+//	Log(LOG_INFO) << ". . handle() EXIT";	// kL
 }
 
 }

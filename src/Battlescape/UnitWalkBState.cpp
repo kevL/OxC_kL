@@ -485,8 +485,10 @@ void UnitWalkBState::think()
 				}
 
 				_pf->abortPath();
+
 				_unit->setCache(0);
 				_parent->getMap()->cacheUnit(_unit);
+
 				_parent->popState();
 
 				return;
@@ -501,8 +503,10 @@ void UnitWalkBState::think()
 				}
 
 				_pf->abortPath();
+
 				_unit->setCache(0);
 				_parent->getMap()->cacheUnit(_unit);
+
 				_parent->popState();
 
 				return;
@@ -513,6 +517,7 @@ void UnitWalkBState::think()
 				Log(LOG_INFO) << ". pos 4";	// kL
 
 				_pf->abortPath();
+
 				_unit->setCache(0);
 				_parent->getMap()->cacheUnit(_unit);
 

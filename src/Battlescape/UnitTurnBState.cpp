@@ -40,7 +40,9 @@ namespace OpenXcom
  */
 UnitTurnBState::UnitTurnBState(BattlescapeGame* parent, BattleAction action)
 	:
-	BattleState(parent, action), _unit(0), _turret(false)
+		BattleState(parent, action),
+		_unit(0),
+		_turret(false)
 {
 }
 
@@ -67,13 +69,17 @@ void UnitTurnBState::init()
 	// if the unit has a turret and we are turning during targeting, then only the turret turns
 	_turret = (_unit->getTurretType() != -1 && _action.targeting) || _action.strafe;
 
-	_unit->lookAt(_action.target, _turret);
+	_unit->lookAt(_action.target, _turret);	// kL_note: -> STATUS_TURNING
 
-	if (_unit->getStatus() != STATUS_TURNING)
+//	_unit->setCache(0);						// kL, done in UnitTurnBState::think()
+//	_parent->getMap()->cacheUnit(_unit);	// kL, done in UnitTurnBState::think()
+
+
+	if (_unit->getStatus() != STATUS_TURNING) // try to open a door
 	{
 		if (_action.type == BA_NONE)
 		{
-			int door = _parent->getTileEngine()->unitOpensDoor(_unit, true); // try to open a door
+			int door = _parent->getTileEngine()->unitOpensDoor(_unit, true);
 			if (door == 0)
 			{
 				_parent->getResourcePack()->getSound("BATTLE.CAT", 3)->play(); // normal door
@@ -97,39 +103,39 @@ void UnitTurnBState::init()
  */
 void UnitTurnBState::think()
 {
-	const int tu = _unit->getFaction() == _parent->getSave()->getSide() ? 1 : 0; // one turn is 1 tu unless during reaction fire.
+	bool thisFaction = _unit->getFaction() == _parent->getSave()->getSide();	// kL
 
-	if (_unit->getFaction() == _parent->getSave()->getSide()
+//kL	const int tu = _unit->getFaction() == _parent->getSave()->getSide() ? 1 : 0; // one turn is 1 tu unless during reaction fire.
+	const int tu = thisFaction ? 1 : 0;		// kL
+
+//kL	if (_unit->getFaction() == _parent->getSave()->getSide()
+	if (thisFaction		// kL
 		&& _parent->getPanicHandled()
 		&& _parent->checkReservedTU(_unit, tu) == false)
 	{
 		_unit->abortTurn();
 		_parent->popState();
 
-		return;
+//kL		return;
 	}
-
+	else	// kL
 	if (_unit->spendTimeUnits(tu))
 	{
 //kL		size_t unitSpotted = _unit->getUnitsSpottedThisTurn().size();
 		size_t unitsSpotted = _unit->getUnitsSpottedThisTurn().size();
 
-		_unit->turn(_turret);
+		_unit->turn(_turret);	// kL_note: -> STATUS_STANDING
 		_parent->getTileEngine()->calculateFOV(_unit);
+
 		_unit->setCache(0);
 		_parent->getMap()->cacheUnit(_unit);
 
-		// kL_begin:
-		bool notMC = _unit->getFaction() == _parent->getSave()->getSide();
-		bool anotherone = false;
-
 //kL		if (_unit->getFaction() == _parent->getSave()->getSide()
-		if (notMC														// kL
+		if (thisFaction														// kL
 			&& _parent->getPanicHandled()
 			&& _action.type == BA_NONE
-//			&& (_action.type == BA_NONE || BA_TURN || BA_WALK)			// kL
 //kL			&& _unit->getUnitsSpottedThisTurn().size() > unitSpotted)
-			&& _unit->getUnitsSpottedThisTurn().size() > unitsSpotted	// kL, is this screwing up? (see also, UnitWalkBState.cpp)
+			&& _unit->getUnitsSpottedThisTurn().size() > unitsSpotted)	// kL, is this screwing up? (see also, UnitWalkBState.cpp)
 																		// ie. abortTurn() gets called even if enemy unit is *already spotted*
 																		// bool BattleUnit::addToVisibleUnits(BattleUnit *unit)
 																		// and
@@ -142,7 +148,6 @@ void UnitTurnBState::think()
 																		// 'rediscovers' it. But if a new xCom soldier uncovers an already seen alien, it aborts.
 																		// Does this mean that a vector of _unitsSpottedThisTurn is being created per soldier???
 																		// then, how would I cycle through *all* xCom to prevent this abortion?
-			&& !anotherone)												// kL
 		{
 			_unit->abortTurn();
 		}

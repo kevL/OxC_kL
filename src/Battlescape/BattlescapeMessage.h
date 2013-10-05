@@ -16,11 +16,13 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_BATTLESCAPEMESSAGE_H
 #define OPENXCOM_BATTLESCAPEMESSAGE_H
 
 #include <string>
 #include "../Engine/Surface.h"
+
 
 namespace OpenXcom
 {
@@ -33,26 +35,30 @@ class Font;
  * Generic window used to display messages
  * over the Battlescape map.
  */
-class BattlescapeMessage : public Surface
+class BattlescapeMessage
+	:
+		public Surface
 {
 private:
-	Window *_window;
-	Text *_text;
-public:
-	/// Creates a new Battlescape message with the specified size and position.
-	BattlescapeMessage(int width, int height, int x = 0, int y = 0);
-	/// Cleans up the Battlescape message.
-	~BattlescapeMessage();
-	/// Sets the Battlescape message's background.
-	void setBackground(Surface *background);
-	/// Sets the Battlescape message's text.
-	void setText(const std::wstring &message);
-	/// Sets the Battlescape message's various fonts.
-	void setFonts(Font *big, Font *small);
-	/// Sets the Battlescape message's palette.
-	void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
-	/// Blits the warning message.
-	void blit(Surface *surface);
+	Window* _window;
+	Text* _text;
+
+	public:
+		/// Creates a new Battlescape message with the specified size and position.
+		BattlescapeMessage(int width, int height, int x = 0, int y = 0);
+		/// Cleans up the Battlescape message.
+		~BattlescapeMessage();
+
+		/// Sets the Battlescape message's background.
+		void setBackground(Surface* background);
+		/// Sets the Battlescape message's text.
+		void setText(const std::wstring& message);
+		/// Sets the Battlescape message's various fonts.
+		void setFonts(Font* big, Font* small);
+		/// Sets the Battlescape message's palette.
+		void setPalette(SDL_Color* colors, int firstcolor = 0, int ncolors = 256);
+		/// Blits the warning message.
+		void blit(Surface* surface);
 };
 
 }

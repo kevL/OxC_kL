@@ -232,11 +232,11 @@ void TileEngine::addLight(const Position &center, int power, int layer)
  */
 bool TileEngine::calculateFOV(BattleUnit* unit)
 {
-	Log(LOG_INFO) << "TileEngine::calculateFOV() spotter = " << unit->getId();
+//	Log(LOG_INFO) << "TileEngine::calculateFOV() spotter = " << unit->getId();
 //	if (unit->isOut()) return false;	// kL: below.
 
 	size_t preVisibleUnits = unit->getUnitsSpottedThisTurn().size();
-	Log(LOG_INFO) << ". . . . preVisibleUnits = " << (int)preVisibleUnits;
+//	Log(LOG_INFO) << ". . . . preVisibleUnits = " << (int)preVisibleUnits;
 
 	Position center = unit->getPosition();
 	Position test;
@@ -306,7 +306,7 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 							&& !visibleUnit->isOut()
 							&& visible(unit, _save->getTile(test)))
 						{
-							Log(LOG_INFO) << ". . calculateFOV() CALLED visible(unit, testTile) spotted = " << visibleUnit->getId();
+//							Log(LOG_INFO) << ". . calculateFOV() CALLED visible(unit, testTile) spotted = " << visibleUnit->getId();
 
 							if (unit->getFaction() == FACTION_PLAYER)
 							{
@@ -431,7 +431,7 @@ Position TileEngine::getSightOriginVoxel(BattleUnit *currentUnit)
  */
 bool TileEngine::visible(BattleUnit* currentUnit, Tile* tile)
 {
-	Log(LOG_INFO) << "TileEngine::visible() spotter = " << currentUnit->getId();
+//	Log(LOG_INFO) << "TileEngine::visible() spotter = " << currentUnit->getId();
 
 	// if there is no tile or no unit, we can't see it
 	if (!tile || !tile->getUnit())
@@ -441,13 +441,12 @@ bool TileEngine::visible(BattleUnit* currentUnit, Tile* tile)
 
 	BattleUnit* targetUnit = tile->getUnit();		// kL
 
-//	Log(LOG_INFO) << ". . . attempt to Spot = " << tile->getUnit()->getId();
-	Log(LOG_INFO) << ". . . attempt to Spot = " << targetUnit->getId();
+//	Log(LOG_INFO) << ". . . attempt to Spot = " << targetUnit->getId();
 
 //kL	if (currentUnit->getFaction() == tile->getUnit()->getFaction()) // friendlies are always seen
 	if (currentUnit->getFaction() == targetUnit->getFaction())		// kL
 	{
-		Log(LOG_INFO) << ". . . spotted is Friend, ret TRUE";
+//		Log(LOG_INFO) << ". . . spotted is Friend, ret TRUE";
 		return true;
 	}
 
@@ -456,7 +455,7 @@ bool TileEngine::visible(BattleUnit* currentUnit, Tile* tile)
 		&& distance(currentUnit->getPosition(), tile->getPosition()) > 9
 		&& tile->getShade() > MAX_DARKNESS_TO_SEE_UNITS)
 	{
-		Log(LOG_INFO) << ". . too dark to see Tile, ret FALSE";
+//		Log(LOG_INFO) << ". . too dark to see Tile, ret FALSE";
 		return false;
 	}
 
@@ -472,7 +471,7 @@ bool TileEngine::visible(BattleUnit* currentUnit, Tile* tile)
 	unitIsSeen = canTargetUnit(&originVoxel, tile, &scanVoxel, currentUnit);
 	if (unitIsSeen)
 	{
-		Log(LOG_INFO) << ". . canTargetUnit() -> unit Seen !";
+//		Log(LOG_INFO) << ". . canTargetUnit() -> unit Seen !";
 
 		// now check if we really see it taking into account smoke tiles
 		// initial smoke "density" of a smoke grenade is around 15 per tile
@@ -525,7 +524,7 @@ bool TileEngine::visible(BattleUnit* currentUnit, Tile* tile)
 
 		// kL_begin: floatify this Smoke thing.
 		float needDistance = (float)_trajectory.size();
-		Log(LOG_INFO) << ". . . . needDistance = " << needDistance;
+//		Log(LOG_INFO) << ". . . . needDistance = " << needDistance;
 
 		Tile* t = _save->getTile(currentUnit->getPosition());
 
@@ -544,7 +543,7 @@ bool TileEngine::visible(BattleUnit* currentUnit, Tile* tile)
 
 			if (needDistance > (float)MAX_VOXEL_VIEW_DISTANCE)
 			{
-				Log(LOG_INFO) << ". . . . Distance is too far. ret FALSE - needDistance = " << (int)needDistance;
+//				Log(LOG_INFO) << ". . . . Distance is too far. ret FALSE - needDistance = " << (int)needDistance;
 				unitIsSeen = false;
 
 				break;
@@ -555,7 +554,7 @@ bool TileEngine::visible(BattleUnit* currentUnit, Tile* tile)
 
 		if (t->getUnit() != targetUnit)
 		{
-			Log(LOG_INFO) << ". . . . tileUnit != targetUnit -> ret FALSE";
+//			Log(LOG_INFO) << ". . . . tileUnit != targetUnit -> ret FALSE";
 
 			unitIsSeen = false;
 //			return true;
@@ -563,7 +562,7 @@ bool TileEngine::visible(BattleUnit* currentUnit, Tile* tile)
 		// kL_end.
 	}
 
-	Log(LOG_INFO) << ". . unitIsSeen = " << unitIsSeen;
+//	Log(LOG_INFO) << ". . unitIsSeen = " << unitIsSeen;
 	return unitIsSeen;
 }
 
