@@ -172,7 +172,11 @@ Game::~Game()
 		&& _save->getMonthsPassed() >= 0
 		&& Options::getInt("autosave") == 3)
 	{
+<<<<<<< HEAD
 		SaveState* ss = new SaveState(this, true, false);
+=======
+		SaveState *ss = new SaveState(this, OPT_MENU, false);
+>>>>>>> master
 		delete ss;
 	}
 
@@ -256,12 +260,8 @@ void Game::run()
 			ev.type = SDL_MOUSEMOTION;
 			ev.motion.x = x;
 			ev.motion.y = y;
-<<<<<<< HEAD
 
-			Action action = Action(&ev, _screen->getXScale(), _screen->getYScale());
-=======
 			Action action = Action(&ev, _screen->getXScale(), _screen->getYScale(), _screen->getCursorTopBlackBand(), _screen->getCursorLeftBlackBand());
->>>>>>> master
 			_states.back()->handle(&action);
 		}
 

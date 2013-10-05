@@ -629,53 +629,7 @@ BattleUnit *SavedBattleGame::selectPreviousPlayerUnit(bool checkReselect, bool s
  */
 BattleUnit *SavedBattleGame::selectNextPlayerUnit(bool checkReselect, bool setReselect, bool checkInventory)
 {
-<<<<<<< HEAD
-	std::vector<BattleUnit*>::iterator i = _units.begin();
-	bool bPrev = false;
-	int wraps = 0;
-
-	if (_selectedUnit == 0)
-	{
-		bPrev = true;
-	}
-
-	do
-	{
-		if (bPrev && (*i)->getFaction() == _side && !(*i)->isOut())
-		{
-			if ( !checkReselect || ((*i)->reselectAllowed()))
-				break;
-		}
-
-		if ((*i) == _selectedUnit)
-		{
-			bPrev = true;
-		}
-
-		if (i == _units.begin())
-		{
-			i = _units.end();
-			wraps++;
-		}
-
-		--i;
-
-		// back to where we started... no more units found
-		if (wraps == 3)
-		{
-			_selectedUnit = 0;
-
-			return _selectedUnit;
-		}
-	}
-	while (true);
-
-	_selectedUnit = (*i);
-
-	return _selectedUnit;
-=======
 	return selectPlayerUnit(+1, checkReselect, setReselect, checkInventory);
->>>>>>> master
 }
 
 /**
@@ -686,66 +640,46 @@ BattleUnit *SavedBattleGame::selectNextPlayerUnit(bool checkReselect, bool setRe
  * @param checkInventory Whether to check if the unit has an inventory.
  * @return Pointer to new selected BattleUnit, NULL if none can be selected.
  */
-BattleUnit *SavedBattleGame::selectPlayerUnit(int dir, bool checkReselect, bool setReselect, bool checkInventory)
+BattleUnit* SavedBattleGame::selectPlayerUnit(int dir, bool checkReselect, bool setReselect, bool checkInventory)
 {
 	if (_selectedUnit != 0 && setReselect)
 	{
 		_selectedUnit->dontReselect();
 	}
+
 	if (_units.empty())
 	{
 		return 0;
 	}
 
-	std::vector<BattleUnit*>::iterator begin, end;
+	std::vector<BattleUnit* >::iterator begin, end;
 	if (dir > 0)
 	{
 		begin = _units.begin();
-		end = _units.end()-1;
+		end = _units.end() - 1;
 	}
-<<<<<<< HEAD
-	else if (setReselect)
-=======
 	else if (dir < 0)
->>>>>>> master
 	{
-		begin = _units.end()-1;
+		begin = _units.end() - 1;
 		end = _units.begin();
 	}
 
-	std::vector<BattleUnit*>::iterator i = std::find(_units.begin(), _units.end(), _selectedUnit);
+	std::vector<BattleUnit* >::iterator i = std::find(_units.begin(), _units.end(), _selectedUnit);
 	do
 	{
-<<<<<<< HEAD
-		if (bNext
-			&& (*i)->getFaction() == _side &&
-			!(*i)->isOut())
-		{
-			if (!checkReselect || ((*i)->reselectAllowed()))
-				break;
-		}
-
-		if ((*i) == _selectedUnit)
-=======
 		// no unit selected
 		if (i == _units.end())
 		{
 			i = begin;
+
 			continue;
 		}
+
 		if (i != end)
->>>>>>> master
 		{
 			i += dir;
 		}
-<<<<<<< HEAD
-
-		++i;
-		if (i == _units.end())
-=======
-		// reached the end, wrap-around
-		else
->>>>>>> master
+		else // reached the end, wrap-around
 		{
 			i = begin;
 		}
@@ -755,21 +689,18 @@ BattleUnit *SavedBattleGame::selectPlayerUnit(int dir, bool checkReselect, bool 
 		{
 			if (checkReselect && !_selectedUnit->reselectAllowed())
 				_selectedUnit = 0;
+
 			return _selectedUnit;
 		}
 		else if (_selectedUnit == 0 && i == begin)
 		{
-<<<<<<< HEAD
-			_selectedUnit = 0;
-
-=======
->>>>>>> master
 			return _selectedUnit;
 		}
 	}
 	while (!(*i)->isSelectable(_side, checkReselect, checkInventory));
 
 	_selectedUnit = (*i);
+
 	return _selectedUnit;
 }
 
@@ -954,6 +885,7 @@ void SavedBattleGame::endTurn()
 			}
 		}
 	}
+
 	// hide all aliens (VOF calculations below will turn them visible again)
 	for (std::vector<BattleUnit*>::iterator i = _units.begin(); i != _units.end(); ++i)
 	{
@@ -1217,6 +1149,7 @@ Node* SavedBattleGame::getPatrolNode(bool scout, BattleUnit* unit, Node* fromNod
 
 	for (int i = 0; i < end; ++i)
 	{
+<<<<<<< HEAD
 		if (!scout
 			&& fromNode->getNodeLinks()->at(i) < 1)
 		{
@@ -1263,6 +1196,28 @@ Node* SavedBattleGame::getPatrolNode(bool scout, BattleUnit* unit, Node* fromNod
 			} */
 			// kL_note cont'd. So maybe-really it should look like so
 			compliantNodes.push_back(n);	// kL, from Warboy's uncommitted commit........
+=======
+		if (!scout && fromNode->getNodeLinks()->at(i) < 1) continue;
+
+		Node *n = getNodes()->at(scout ? i : fromNode->getNodeLinks()->at(i));
+		if ((n->getFlags() > 0 || n->getRank() > 0 || scout)											// for non-scouts we find a node with a desirability above 0
+			&& (!(n->getType() & Node::TYPE_SMALL) || unit->getArmor()->getSize() == 1)					// the small unit bit is not set or the unit is small
+			&& (!(n->getType() & Node::TYPE_FLYING) || unit->getArmor()->getMovementType() == MT_FLY)	// the flying unit bit is not set or the unit can fly
+			&& !n->isAllocated()																		// check if not allocated
+			&& !(n->getType() & Node::TYPE_DANGEROUS)													// don't go there if an alien got shot there; stupid behavior like that
+			&& setUnitPosition(unit, n->getPosition(), true)											// check if not already occupied
+			&& getTile(n->getPosition()) && !getTile(n->getPosition())->getFire()						// you are not a firefighter; do not patrol into fire
+			&& (!scout || n != fromNode)																// scouts push forward
+			&& n->getPosition().x > 0 && n->getPosition().y > 0)
+		{
+			if (!preferred 
+				|| (preferred->getRank() == Node::nodeRank[unit->getRankInt()][0] && preferred->getFlags() < n->getFlags())
+				|| preferred->getFlags() < n->getFlags())
+			{
+				preferred = n;
+			}
+			compliantNodes.push_back(n);
+>>>>>>> master
 		}
 	}
 
@@ -1280,7 +1235,12 @@ Node* SavedBattleGame::getPatrolNode(bool scout, BattleUnit* unit, Node* fromNod
 
 	if (scout)
 	{
+<<<<<<< HEAD
 		return compliantNodes[RNG::generate(0, compliantNodes.size() - 1)]; // scout picks a random destination
+=======
+		// scout picks a random destination:
+		return compliantNodes[RNG::generate(0, compliantNodes.size() - 1)];
+>>>>>>> master
 	}
 	else
 	{
@@ -1399,7 +1359,7 @@ void SavedBattleGame::prepareNewTurn()
 		}
 		else
 		{
-			Position pos = Position(0,0,1); // smoke from fire spreads upwards one level if there's no floor blocking it.
+			Position pos = Position(0, 0, 1); // smoke from fire spreads upwards one level if there's no floor blocking it.
 			Tile *t = getTile((*i)->getPosition() + pos);
 			if (t && t->hasNoFloor(*i))
 			{

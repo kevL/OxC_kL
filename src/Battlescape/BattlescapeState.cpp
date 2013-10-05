@@ -71,7 +71,7 @@
 #include "../Ruleset/Armor.h"
 #include "../Engine/Timer.h"
 #include "WarningMessage.h"
-#include "BattlescapeOptionsState.h"
+#include "../Menu/PauseState.h"
 #include "DebriefingState.h"
 #include "../Engine/RNG.h"
 #include "InfoboxState.h"
@@ -1018,7 +1018,7 @@ void BattlescapeState::btnShowLayersClick(Action *)
 void BattlescapeState::btnHelpClick(Action *)
 {
 	if (allowButtons(true))
-		_game->pushState(new BattlescapeOptionsState(_game));
+		_game->pushState(new PauseState(_game, OPT_BATTLESCAPE));
 }
 
 /**
@@ -1515,12 +1515,12 @@ inline void BattlescapeState::handle(Action *action)
 			else if (action->getDetails()->key.keysym.sym == (SDLKey)Options::getInt("keyQuickSave")
 				&& Options::getInt("autosave") == 1)
 			{
-				_game->pushState(new SaveState(_game, false, true));
+				_game->pushState(new SaveState(_game, OPT_BATTLESCAPE, true));
 			}
 			else if (action->getDetails()->key.keysym.sym == (SDLKey)Options::getInt("keyQuickLoad")
 				&& Options::getInt("autosave") == 1)
 			{
-				_game->pushState(new LoadState(_game, false, true));
+				_game->pushState(new LoadState(_game, OPT_BATTLESCAPE, true));
 			}
 
 			// voxel view dump

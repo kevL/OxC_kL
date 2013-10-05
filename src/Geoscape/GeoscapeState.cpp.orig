@@ -52,7 +52,7 @@
 #include "../Savegame/Waypoint.h"
 #include "../Savegame/Transfer.h"
 #include "../Savegame/Soldier.h"
-#include "GeoscapeOptionsState.h"
+#include "../Menu/PauseState.h"
 #include "InterceptState.h"
 #include "../Basescape/BasescapeState.h"
 #include "GraphsState.h"
@@ -109,22 +109,26 @@
 namespace OpenXcom
 {
 
+unsigned int kL_currentBase = 0;
+
 /**
  * Initializes all the elements in the Geoscape screen.
  * @param game Pointer to the core game.
  */
 GeoscapeState::GeoscapeState(Game* game)
 	:
-	State(game),
-	_pause(false),
-	_music(false),
-	_zoomInEffectDone(false),
-	_zoomOutEffectDone(false),
-	_battleMusic(false),
-	_popups(),
-	_dogfights(),
-	_dogfightsToBeStarted(),
-	_minimizedDogfights(0)
+		State(game),
+		_pause(false),
+		_music(false),
+		_zoomInEffectDone(false),
+		_zoomOutEffectDone(false),
+		_battleMusic(false),
+		_popups(),
+		_dogfights(),
+		_dogfightsToBeStarted(),
+		_minimizedDogfights(0)
+//		_currentBase(0)		// kL
+//		_b()				// kL
 {
 	int screenWidth = Options::getInt("baseXResolution");
 	int screenHeight = Options::getInt("baseYResolution");
@@ -443,44 +447,63 @@ GeoscapeState::GeoscapeState(Game* game)
 		_txtFunds->setAlign(ALIGN_CENTER);
 	}
 
+	// kL_note: colors for Geoscape palette
+	//  1= olive green
+	//  2= dark green
+	//  3= black
+	//  4= white (default for date-stuff)
+	//  5= pale white
+	//  6= light blue
+	//  7= pale blue
+	//  8= blue
+	//  9= dark blue
+	// 10= navy blue
+	// 11= bright lime
+	// 12= yellow
+	// 13= pale lime
+	// 14= dark lime
+	// 15= blue/orange?
+	// 16= hot pink
+	// 17= pale pink
+
 	if (_showFundsOnGeoscape) _txtHour->setSmall(); else _txtHour->setBig();
-	_txtHour->setColor(Palette::blockOffset(15)+4);
+	_txtHour->setColor(Palette::blockOffset(15)+2);
 	_txtHour->setAlign(ALIGN_RIGHT);
 	_txtHour->setText(L"");
 
 	if (_showFundsOnGeoscape) _txtHourSep->setSmall(); else _txtHourSep->setBig();
-	_txtHourSep->setColor(Palette::blockOffset(15)+4);
+	_txtHourSep->setColor(Palette::blockOffset(15)+2);
 	_txtHourSep->setText(L":");
 
 	if (_showFundsOnGeoscape) _txtMin->setSmall(); else _txtMin->setBig();
-	_txtMin->setColor(Palette::blockOffset(15)+4);
+	_txtMin->setColor(Palette::blockOffset(15)+2);
 	_txtMin->setText(L"");
 
 	if (_showFundsOnGeoscape) _txtMinSep->setSmall(); else _txtMinSep->setBig();
-	_txtMinSep->setColor(Palette::blockOffset(15)+4);
+	_txtMinSep->setColor(Palette::blockOffset(15)+2);
 	_txtMinSep->setText(L":");
 
 	_txtSec->setSmall();
-	_txtSec->setColor(Palette::blockOffset(15)+4);
+	_txtSec->setColor(Palette::blockOffset(15)+2);
 	_txtSec->setText(L"");
 
 	_txtWeekday->setSmall();
-	_txtWeekday->setColor(Palette::blockOffset(15)+4);
+	_txtWeekday->setColor(Palette::blockOffset(15)+2);
 	_txtWeekday->setText(L"");
 	_txtWeekday->setAlign(ALIGN_CENTER);
 
 	_txtDay->setSmall();
-	_txtDay->setColor(Palette::blockOffset(15)+4);
+	_txtDay->setColor(Palette::blockOffset(15)+2);
 	_txtDay->setText(L"");
 	_txtDay->setAlign(ALIGN_CENTER);
 
 	_txtMonth->setSmall();
-	_txtMonth->setColor(Palette::blockOffset(15)+4);
+	_txtMonth->setColor(Palette::blockOffset(15)+2);
 	_txtMonth->setText(L"");
 	_txtMonth->setAlign(ALIGN_CENTER);
 
 	_txtYear->setSmall();
-	_txtYear->setColor(Palette::blockOffset(15)+4);
+	_txtYear->setColor(Palette::blockOffset(15)+2);
 	_txtYear->setText(L"");
 	_txtYear->setAlign(ALIGN_CENTER);
 
@@ -547,6 +570,7 @@ void GeoscapeState::handle(Action* action)
 			}
 		}
 		// quick save and quick load
+<<<<<<< HEAD
 		else if (action->getDetails()->key.keysym.sym == Options::getInt("keyQuickSave")
 			&& Options::getInt("autosave") == 1)
 		{
@@ -557,6 +581,12 @@ void GeoscapeState::handle(Action* action)
 		{
 			_game->pushState(new LoadState(_game, true, true));
 		}
+=======
+		else if (action->getDetails()->key.keysym.sym == Options::getInt("keyQuickSave") && Options::getInt("autosave") == 1)
+			_game->pushState(new SaveState(_game, OPT_GEOSCAPE, true));
+		else if (action->getDetails()->key.keysym.sym == Options::getInt("keyQuickLoad") && Options::getInt("autosave") == 1)
+			_game->pushState(new LoadState(_game, OPT_GEOSCAPE, true));
+>>>>>>> master
 	}
 
 	if(!_dogfights.empty())
@@ -1851,7 +1881,7 @@ void GeoscapeState::time1Day()
 
 	// Autosave
 	if (Options::getInt("autosave") >= 2)
-		_game->pushState(new SaveState(_game, true, false));
+		_game->pushState(new SaveState(_game, OPT_GEOSCAPE, false));
 }
 
 /**
@@ -1955,12 +1985,8 @@ void GeoscapeState::timerReset()
 {
 	SDL_Event ev;
 	ev.button.button = SDL_BUTTON_LEFT;
-<<<<<<< HEAD
-	Action act(&ev, _game->getScreen()->getXScale(), _game->getScreen()->getYScale());
-
-=======
 	Action act(&ev, _game->getScreen()->getXScale(), _game->getScreen()->getYScale(), _game->getScreen()->getCursorTopBlackBand(), _game->getScreen()->getCursorLeftBlackBand());
->>>>>>> master
+
 	_btn5Secs->mousePress(&act, this);
 }
 
@@ -2051,12 +2077,45 @@ void GeoscapeState::btnBasesClick(Action* )
 
 	if (!_game->getSavedGame()->getBases()->empty())
 	{
-		_game->pushState(new BasescapeState(_game, _game->getSavedGame()->getBases()->front(), _globe));
+		// kL_begin: get Current Base
+		Log(LOG_INFO) << "GeoscapeState::btnBasesClick() getBases !empty";
+
+		unsigned int totalBases = _game->getSavedGame()->getBases()->size();
+		Log(LOG_INFO) << ". . totalBases = " << totalBases;
+
+		if (kL_currentBase == 0
+			|| kL_currentBase >= totalBases)
+		{
+			_game->pushState(new BasescapeState(_game, _game->getSavedGame()->getBases()->front(), _globe));
+		}
+		else
+		{
+			Log(LOG_INFO) << ". . . . currentBase is VALID";
+
+			_game->pushState(new BasescapeState(_game, _game->getSavedGame()->getBases()->at(kL_currentBase), _globe));
+		}
 	}
+/*		Uint8 currentBase = getCurrentBase();
+		Log(LOG_INFO) << ". . currentBase = " << currentBase;
+		if (currentBase > 0)
+		{
+			Log(LOG_INFO) << ". . . . currentBase is VALID";
+
+			_game->pushState(new BasescapeState(_game, _game->getSavedGame()->getBases()->at(currentBase), _globe));
+		}
+		else
+		{
+			Log(LOG_INFO) << ". . . . currentBase NOT valid"; */
+
+		 // kL_end.
+
+//kL		_game->pushState(new BasescapeState(_game, _game->getSavedGame()->getBases()->front(), _globe));
 	else
 	{
 		_game->pushState(new BasescapeState(_game, 0, _globe));
 	}
+
+	Log(LOG_INFO) << ". . exit btnBasesClick()";
 }
 
 /**
@@ -2087,9 +2146,13 @@ void GeoscapeState::btnUfopaediaClick(Action* )
  */
 void GeoscapeState::btnOptionsClick(Action* )
 {
+<<<<<<< HEAD
 	timerReset();	// kL
 
 	_game->pushState(new GeoscapeOptionsState(_game));
+=======
+	_game->pushState(new PauseState(_game, OPT_GEOSCAPE));
+>>>>>>> master
 }
 
 /**
@@ -2475,6 +2538,9 @@ void GeoscapeState::determineAlienMissions(bool atGameStart)
 	}
 }
 
+/**
+ * 
+ */
 void GeoscapeState::btnTimerClick(Action* action)
 {
 	SDL_Event ev;
@@ -2483,5 +2549,25 @@ void GeoscapeState::btnTimerClick(Action* action)
 	Action a = Action(&ev, 0.0, 0.0, 0, 0);
 	action->getSender()->mousePress(&a, this);
 }
+
+// kL_begin: set & get Current Base.
+/**
+ * Sets the last-chosen (current) base.
+ * @return Pointer to vehicle list.
+ */
+/* void GeoscapeState::setCurrentBase(Uint8 currentBase)
+{
+	_currentBase = currentBase;
+} */
+
+/**
+ * Returns the list of vehicles currently equipped
+ * in the base.
+ * @return Pointer to vehicle list.
+ */
+/* Uint8 GeoscapeState::getCurrentBase()
+{
+	return _currentBase;
+} */ // kL_end.
 
 }

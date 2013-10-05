@@ -92,6 +92,7 @@ void createDefault()
 //kL	setInt("musicVolume", MIX_MAX_VOLUME);
 	setInt("soundVolume", 28);		// kL
 	setInt("musicVolume", 75);		// kL
+//kL	setString("language", "");
 	setString("language", "en-US");
 	setInt("battleScrollSpeed", 12); // 4, 8, 12, 16, 24
 	setInt("battleScrollType", SCROLL_AUTO);

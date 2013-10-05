@@ -1179,22 +1179,10 @@ Node* SavedBattleGame::getPatrolNode(bool scout, BattleUnit* unit, Node* fromNod
 					&& preferred->getFlags() < n->getFlags())
 				|| preferred->getFlags() < n->getFlags())
 			{
-				preferred = n;	// kL_note: *that was confusing* This was mushed up behind the condition-check ... leading to
+				preferred = n;
 			}
-//kL			{					// ... this.
-				// kL_note cont'd: but *this* to be even more confusing, was parsed down simply to "compliantNodes.push_back(n);"
-				// in Warboy's (Tue Oct 01 19:46:58 2013) commit to Sup/master... BUT IT DIDN'T FOLLOW THROUGH WHEN i MERGED IT
-				// INTO my fork "oXc_kL"
-/*kL				getPathfinding()->calculate(unit, n->getPosition());
-				if (getPathfinding()->getStartDirection() != -1)
-				{
-					compliantNodes.push_back(n);
-				}
 
-				getPathfinding()->abortPath();
-			} */
-			// kL_note cont'd. So maybe-really it should look like so
-			compliantNodes.push_back(n);	// kL, from Warboy's uncommitted commit........
+			compliantNodes.push_back(n);
 		}
 	}
 

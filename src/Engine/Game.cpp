@@ -172,13 +172,13 @@ Game::~Game()
 		&& _save->getMonthsPassed() >= 0
 		&& Options::getInt("autosave") == 3)
 	{
-		SaveState* ss = new SaveState(this, true, false);
+		SaveState* ss = new SaveState(this, OPT_MENU, false);
 		delete ss;
 	}
 
 	Mix_HaltChannel(-1);
 
-	for (std::list<State*>::iterator i = _states.begin(); i != _states.end(); ++i)
+	for (std::list<State* >::iterator i = _states.begin(); i != _states.end(); ++i)
 	{
 		delete *i;
 	}

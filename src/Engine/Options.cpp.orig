@@ -93,11 +93,11 @@ void createDefault()
 //kL	setInt("musicVolume", MIX_MAX_VOLUME);
 	setInt("soundVolume", 28);		// kL
 	setInt("musicVolume", 75);		// kL
-	setString("language", "");
+	setString("language", "en-US");
 =======
 	setInt("soundVolume", MIX_MAX_VOLUME);
 	setInt("musicVolume", MIX_MAX_VOLUME);
-	setString("language", "en-US");
+	setString("language", "");
 >>>>>>> master
 	setInt("battleScrollSpeed", 12); // 4, 8, 12, 16, 24
 	setInt("battleScrollType", SCROLL_AUTO);
@@ -142,13 +142,13 @@ void createDefault()
 	setBool("allowPsionicCapture", false);
 	setBool("borderless", false);
 	setBool("captureMouse", false);
-<<<<<<< HEAD
 //kL	setBool("battleTooltips", true);
 	setBool("battleTooltips", false);		// kL
-=======
-	setBool("battleTooltips", true);
 	setBool("battleHairBleach", true);
->>>>>>> master
+    setBool("keepAspectRatio", false);
+    setBool("cursorInBlackBandsInFullscreen", false);
+    setBool("cursorInBlackBandsInWindow", true);
+    setBool("cursorInBlackBandsInBorderlessWindow", false);
 
 	// new battle mode data
 	setInt("NewBattleMission", 0);

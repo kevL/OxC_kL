@@ -448,6 +448,13 @@ void TextList::setColor(Uint8 color)
 	_color = color;
 	_up->setColor(color);
 	_down->setColor(color);
+	for (std::vector< std::vector<Text*> >::iterator u = _texts.begin(); u < _texts.end(); ++u)
+	{
+		for (std::vector<Text*>::iterator v = u->begin(); v < u->end(); ++v)
+		{
+			(*v)->setColor(color);
+		}
+	}
 }
 
 /**
@@ -485,6 +492,13 @@ Uint8 TextList::getSecondaryColor() const
 void TextList::setHighContrast(bool contrast)
 {
 	_contrast = contrast;
+	for (std::vector< std::vector<Text*> >::iterator u = _texts.begin(); u < _texts.end(); ++u)
+	{
+		for (std::vector<Text*>::iterator v = u->begin(); v < u->end(); ++v)
+		{
+			(*v)->setHighContrast(contrast);
+		}
+	}
 }
 
 /**
