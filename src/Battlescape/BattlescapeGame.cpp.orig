@@ -182,8 +182,12 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 	{
 		unit->dontReselect();
 	}
+<<<<<<< HEAD
 
 	if (unit->getTimeUnits() <= 5 || _AIActionCounter >= 2)
+=======
+	if (unit->getTimeUnits() <= 5 || _AIActionCounter >= 2 || !unit->reselectAllowed())
+>>>>>>> master
 	{
 		if (_save->selectNextPlayerUnit(true, _AISecondMove) == 0)
 		{
@@ -287,7 +291,7 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 		}
 	}
 
-	if (aggro != 0)
+	if (unit->getCharging() != 0)
 	{
 		if (unit->getAggroSound() != -1
 			&& !_playedAggroSound)
@@ -1060,7 +1064,8 @@ void BattlescapeGame::popState()
 						case BA_SNAPSHOT:
 //							Log(LOG_INFO) << ". SnapShot, TU percent = " << (float)action.weapon->getRules()->getTUSnap();
 
-							if (tu / totalTU * (float)100 < (float)action.weapon->getRules()->getTUSnap())
+//							if (tu / totalTU * (float)100 < (float)action.weapon->getRules()->getTUSnap())
+							if ((int)(tu / totalTU * 100.f) < action.weapon->getRules()->getTUSnap())
 							{
 								cancelCurrentAction(true);
 							}
@@ -1068,7 +1073,8 @@ void BattlescapeGame::popState()
 						case BA_AIMEDSHOT:
 //							Log(LOG_INFO) << ". AimedShot, TU percent = " << (float)action.weapon->getRules()->getTUAimed();
 
-							if (tu / totalTU * (float)100 < (float)action.weapon->getRules()->getTUAimed())
+//							if (tu / totalTU * (float)100 < (float)action.weapon->getRules()->getTUAimed())
+							if ((int)(tu / totalTU * 100.f) < action.weapon->getRules()->getTUAimed())
 							{
 								cancelCurrentAction(true);
 							}
@@ -1076,7 +1082,8 @@ void BattlescapeGame::popState()
 						case BA_AUTOSHOT:
 //							Log(LOG_INFO) << ". AutoShot, TU percent = " << (float)action.weapon->getRules()->getTUAuto();
 
-							if (tu / totalTU * (float)100 < (float)action.weapon->getRules()->getTUAuto())
+//							if (tu / totalTU * (float)100 < (float)action.weapon->getRules()->getTUAuto())
+							if ((int)(tu / totalTU * 100.f) < action.weapon->getRules()->getTUAuto())
 							{
 								cancelCurrentAction(true);
 							}
@@ -1538,12 +1545,8 @@ void BattlescapeGame::primaryAction(const Position& pos)
 				if (_currentAction.actor->spendTimeUnits(_currentAction.TU))
 				{
 					_parentState->getGame()->getResourcePack()->getSound("BATTLE.CAT", _currentAction.weapon->getRules()->getHitSound())->play();
-<<<<<<< HEAD
-					_parentState->getGame()->pushState (new UnitInfoState (_parentState->getGame(), _save->selectUnit(pos)));
-
-=======
 					_parentState->getGame()->pushState (new UnitInfoState(_parentState->getGame(), _save->selectUnit(pos), _parentState));
->>>>>>> master
+
 					cancelCurrentAction();
 				}
 				else
@@ -1779,11 +1782,15 @@ void BattlescapeGame::requestEndTurn()
 /**
  * Sets the TU reserved type.
  * @param tur A battleactiontype.
+ * @param player is this requested by the player?
  */
-void BattlescapeGame::setTUReserved(BattleActionType tur)
+void BattlescapeGame::setTUReserved(BattleActionType tur, bool player)
 {
 	_tuReserved = tur;
-	_playerTUReserved = tur;
+	if (player)
+	{
+		_playerTUReserved = tur;
+	}
 }
 
 /**

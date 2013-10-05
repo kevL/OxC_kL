@@ -183,7 +183,9 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 		unit->dontReselect();
 	}
 
-	if (unit->getTimeUnits() <= 5 || _AIActionCounter >= 2)
+	if (unit->getTimeUnits() <= 5
+		|| _AIActionCounter >= 2
+		|| !unit->reselectAllowed())
 	{
 		if (_save->selectNextPlayerUnit(true, _AISecondMove) == 0)
 		{
@@ -287,7 +289,7 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 		}
 	}
 
-	if (aggro != 0)
+	if (unit->getCharging() != 0)
 	{
 		if (unit->getAggroSound() != -1
 			&& !_playedAggroSound)
@@ -1778,11 +1780,15 @@ void BattlescapeGame::requestEndTurn()
 /**
  * Sets the TU reserved type.
  * @param tur A battleactiontype.
+ * @param player is this requested by the player?
  */
-void BattlescapeGame::setTUReserved(BattleActionType tur)
+void BattlescapeGame::setTUReserved(BattleActionType tur, bool player)
 {
 	_tuReserved = tur;
-	_playerTUReserved = tur;
+	if (player)
+	{
+		_playerTUReserved = tur;
+	}
 }
 
 /**

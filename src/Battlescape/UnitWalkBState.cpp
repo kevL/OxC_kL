@@ -529,7 +529,9 @@ void UnitWalkBState::think()
 				Log(LOG_INFO) << "UnitWalkBState::think() 2";
 
 				_unit->lookAt(dir);
-				// kL_note: cacheUnit() etc???
+
+				_unit->setCache(0);
+				_parent->getMap()->cacheUnit(_unit);
 
 				return;
 			}
@@ -588,7 +590,12 @@ void UnitWalkBState::think()
 								// 4+ voxels poking into the tile above, we don't kick people in the head here at XCom.
 					{
 						_action.TU = 0;
-						postPathProcedures();
+						_pf->abortPath();
+
+						_unit->setCache(0);
+						_parent->getMap()->cacheUnit(_unit);
+
+						_parent->popState();
 
 						return;
 					}
@@ -736,6 +743,11 @@ void UnitWalkBState::postPathProcedures()
 	if (_unit->getFaction() != FACTION_PLAYER)
 	{
 		int dir = _action.finalFacing;
+		if (_action.finalAction)
+		{
+			_unit->dontReselect();
+		}
+
 		if (_unit->getCharging() != 0)
 		{
 			dir = _parent->getTileEngine()->getDirectionTo(_unit->getPosition(), _unit->getCharging()->getPosition());

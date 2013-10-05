@@ -76,9 +76,9 @@ struct BattleAction
 	int diff;
 	int autoShotCounter;
 	Position cameraPosition;
-<<<<<<< HEAD
     bool desperate;	// ignoring newly-spotted units
-    bool reckless;	// ignoring reaction fire!
+	int finalFacing;
+<<<<<<< HEAD
     int number;		// first action of turn, second, etc.?
 	BattleAction()
 		:
@@ -95,14 +95,13 @@ struct BattleAction
 		autoShotCounter(0),
 		cameraPosition(0, 0, -1),
 		desperate(false),
-		reckless(false)
+		finalFacing(-1)
 		{
 		}
 =======
-    bool desperate; // ignoring newly-spotted units
-	int finalFacing;
+	bool finalAction;
     int number; // first action of turn, second, etc.?
-	BattleAction() : type(BA_NONE), actor(0), weapon(0), TU(0), targeting(false), value(0), result(""), strafe(false), run(false), diff(0), autoShotCounter(0), cameraPosition(0, 0, -1), desperate(false), finalFacing(-1) { }
+	BattleAction() : type(BA_NONE), actor(0), weapon(0), TU(0), targeting(false), value(0), result(""), strafe(false), run(false), diff(0), autoShotCounter(0), cameraPosition(0, 0, -1), desperate(false), finalFacing(-1), finalAction(false), number(0) { }
 >>>>>>> master
 };
 
@@ -111,7 +110,6 @@ struct BattleAction
  */
 class BattlescapeGame
 {
-<<<<<<< HEAD
 	private:
 		SavedBattleGame* _save;
 		BattlescapeState* _parentState;
@@ -120,6 +118,7 @@ class BattlescapeGame
 		bool _playerPanicHandled;
 		int _AIActionCounter;
 		BattleAction _currentAction;
+		bool _AISecondMove;
 
 		/// Ends the turn.
 		void endTurn();
@@ -140,6 +139,7 @@ class BattlescapeGame
 		/// Cleans up the BattlescapeGame state.
 		~BattlescapeGame();
 
+<<<<<<< HEAD
 		/// Checks for units panicking or falling and so on.
 		void think();
 		/// Initializes the Battlescape game.
@@ -208,8 +208,6 @@ class BattlescapeGame
 		ResourcePack* getResourcePack();
 		/// Gets the ruleset.
 		const Ruleset* getRuleset() const;
-		/// Evaluates the threats from XCom soldiers to tiles, for later use by AI.
-		void resetSituationForAI();
 		static bool _debugPlay;
 		/// Returns whether panic has been handled.
 		bool getPanicHandled()
@@ -234,19 +232,7 @@ class BattlescapeGame
 		void setKneelReserved(bool reserved);
 		/// Checks the kneel reservation setting.
 		bool getKneelReserved();
-		/// Attempts a psionic attack on an enemy we "know of".
-		bool psiAction(BattleAction* action);
 =======
-private:
-	SavedBattleGame *_save;
-	BattlescapeState *_parentState;
-	std::list<BattleState*> _states;
-	BattleActionType _tuReserved, _playerTUReserved;
-	bool _playerPanicHandled;
-	int _AIActionCounter;
-	BattleAction _currentAction;
-	bool _AISecondMove;
-
 	/// Ends the turn.
 	void endTurn();
 	/// Picks the first soldier that is panicking.
@@ -317,7 +303,7 @@ public:
 	/// Requests the end of the turn (wait for explosions etc to really end the turn).
 	void requestEndTurn();
 	/// Sets the TU reserved type.
-	void setTUReserved(BattleActionType tur);
+	void setTUReserved(BattleActionType tur, bool player = true);
 	/// Sets up the cursor taking into account the action.
 	void setupCursor();
 	/// Gets the map.

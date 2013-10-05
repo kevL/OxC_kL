@@ -76,9 +76,10 @@ struct BattleAction
 	int diff;
 	int autoShotCounter;
 	Position cameraPosition;
-    bool desperate;	// ignoring newly-spotted units
+    bool desperate; // ignoring newly-spotted units
 	int finalFacing;
-    int number;		// first action of turn, second, etc.?
+	bool finalAction;
+    int number; // first action of turn, second, etc.?
 	BattleAction()
 		:
 		type(BA_NONE),
@@ -94,7 +95,9 @@ struct BattleAction
 		autoShotCounter(0),
 		cameraPosition(0, 0, -1),
 		desperate(false),
-		finalFacing(-1)
+		finalFacing(-1),
+		finalAction(false),
+		number(0)
 		{
 		}
 };
@@ -186,7 +189,7 @@ class BattlescapeGame
 		/// Requests the end of the turn (wait for explosions etc to really end the turn).
 		void requestEndTurn();
 		/// Sets the TU reserved type.
-		void setTUReserved(BattleActionType tur);
+		void setTUReserved(BattleActionType tur, bool player = true);
 		/// Sets up the cursor taking into account the action.
 		void setupCursor();
 		/// Gets the map.
