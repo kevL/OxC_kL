@@ -195,7 +195,7 @@ BattleUnit::BattleUnit(Unit* unit, UnitFaction faction, int id, Armor* armor, in
 	_turretType(-1),
 	_hidingForTurn(false)
 {
-	Log(LOG_INFO) << "Create BattleUnit";
+//	Log(LOG_INFO) << "Create BattleUnit";
 
 	_type = unit->getType();
 	_rank = unit->getRank();
@@ -248,7 +248,7 @@ BattleUnit::BattleUnit(Unit* unit, UnitFaction faction, int id, Armor* armor, in
  */
 BattleUnit::~BattleUnit()
 {
-	Log(LOG_INFO) << "Delete BattleUnit";
+//	Log(LOG_INFO) << "Delete BattleUnit";
 
 	for (int i = 0; i < 5; ++i)
 	{

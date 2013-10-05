@@ -2071,10 +2071,10 @@ void GeoscapeState::btnBasesClick(Action* )
 	if (!_game->getSavedGame()->getBases()->empty())
 	{
 		// kL_begin: get Current Base
-		Log(LOG_INFO) << "GeoscapeState::btnBasesClick() getBases !empty";
+//		Log(LOG_INFO) << "GeoscapeState::btnBasesClick() getBases !empty";
 
 		unsigned int totalBases = _game->getSavedGame()->getBases()->size();
-		Log(LOG_INFO) << ". . totalBases = " << totalBases;
+//		Log(LOG_INFO) << ". . totalBases = " << totalBases;
 
 		if (kL_currentBase == 0
 			|| kL_currentBase >= totalBases)
@@ -2083,7 +2083,7 @@ void GeoscapeState::btnBasesClick(Action* )
 		}
 		else
 		{
-			Log(LOG_INFO) << ". . . . currentBase is VALID";
+//			Log(LOG_INFO) << ". . . . currentBase is VALID";
 
 			_game->pushState(new BasescapeState(_game, _game->getSavedGame()->getBases()->at(kL_currentBase), _globe));
 		}
@@ -2108,7 +2108,7 @@ void GeoscapeState::btnBasesClick(Action* )
 		_game->pushState(new BasescapeState(_game, 0, _globe));
 	}
 
-	Log(LOG_INFO) << ". . exit btnBasesClick()";
+//	Log(LOG_INFO) << ". . exit btnBasesClick()";
 }
 
 /**

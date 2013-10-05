@@ -267,7 +267,8 @@ void ArticleStateItem::setDamageTypeText(Text *text_field, RuleItem *ammo_rule)
 			text_field->setText(tr("STR_LASER_BEAM").c_str());
 		break;
 		case DT_PLASMA:
-			text_field->setText(tr("STR_PLASMA_BEAM_UC").c_str());
+//kL			text_field->setText(tr("STR_PLASMA_BEAM_UC").c_str());
+			text_field->setText(tr("STR_PLASMA_BEAM_H").c_str());		// kL
 		break;
 		case DT_STUN:
 			text_field->setText(tr("STR_STUN_UC").c_str());

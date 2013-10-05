@@ -880,8 +880,7 @@ void BattlescapeState::btnKneelClick(Action* )
 //			Log(LOG_INFO) << "BattlescapeState::btnKneelClick()";
 			_battleGame->kneel(bu);
 
-			// update any path preview if unit kneels; kL_note: Moved up from below.
-			if (_battleGame->getPathfinding()->isPathPreviewed() && bu->isKneeled())
+			if (_battleGame->getPathfinding()->isPathPreviewed() && bu->isKneeled()) // kL: Moved up from below.
 			{
 				_battleGame->getPathfinding()->calculate(_battleGame->getCurrentAction()->actor, _battleGame->getCurrentAction()->target);
 				_battleGame->getPathfinding()->removePreview();
@@ -1345,6 +1344,7 @@ void BattlescapeState::blinkVisibleUnitButtons()
 	square1.y = 0;
 	square1.w = 15;
 	square1.h = 12;
+
 	SDL_Rect square2;
 	square2.x = 1;
 	square2.y = 1;
@@ -1421,7 +1421,7 @@ void BattlescapeState::setStateInterval(Uint32 interval)
  * Gets pointer to the game. Some states need this info.
  * @return Pointer to game.
  */
-Game *BattlescapeState::getGame() const
+Game* BattlescapeState::getGame() const
 {
 	return _game;
 }
@@ -1430,7 +1430,7 @@ Game *BattlescapeState::getGame() const
  * Gets pointer to the map. Some states need this info.
  * @return Pointer to map.
  */
-Map *BattlescapeState::getMap() const
+Map* BattlescapeState::getMap() const
 {
 	return _map;
 }
@@ -1439,7 +1439,7 @@ Map *BattlescapeState::getMap() const
  * Shows a debug message in the topleft corner.
  * @param message Debug message.
  */
-void BattlescapeState::debug(const std::wstring &message)
+void BattlescapeState::debug(const std::wstring& message)
 {
 	if (_save->getDebugMode())
 	{
@@ -1451,7 +1451,7 @@ void BattlescapeState::debug(const std::wstring &message)
  * Shows a warning message.
  * @param message Warning message.
  */
-void BattlescapeState::warning(const std::string &message)
+void BattlescapeState::warning(const std::string& message)
 {
 	_warning->showMessage(tr(message));
 }
@@ -1460,7 +1460,7 @@ void BattlescapeState::warning(const std::string &message)
  * Takes care of any events from the core game engine.
  * @param action Pointer to an action.
  */
-inline void BattlescapeState::handle(Action *action)
+inline void BattlescapeState::handle(Action* action)
 {
 	if (_game->getCursor()->getVisible()
 		|| action->getDetails()->button.button == SDL_BUTTON_RIGHT)
@@ -1538,7 +1538,7 @@ inline void BattlescapeState::handle(Action *action)
 void BattlescapeState::saveAIMap()
 {
 	Uint32 start = SDL_GetTicks();
-	BattleUnit *unit = _save->getSelectedUnit();
+	BattleUnit* unit = _save->getSelectedUnit();
 	if (!unit) return;
 
 	int w = _save->getMapSizeX();
@@ -1547,7 +1547,7 @@ void BattlescapeState::saveAIMap()
 
 	int expMax = 0;
 
-	SDL_Surface *img = SDL_AllocSurface(0, w * 8, h * 8, 24, 0xff, 0xff00, 0xff0000, 0);
+	SDL_Surface* img = SDL_AllocSurface(0, w * 8, h * 8, 24, 0xff, 0xff00, 0xff0000, 0);
 	Log(LOG_INFO) << "unit = " << unit->getId();
 	memset(img->pixels, 0, img->pitch * img->h);
 
@@ -1562,7 +1562,7 @@ void BattlescapeState::saveAIMap()
 		for (int x = 0; x < w; ++x)
 		{
 			tilePos.x = x;
-			Tile *t = _save->getTile(tilePos);
+			Tile* t = _save->getTile(tilePos);
 
 			if (!t) continue;
 			if (!t->isDiscovered(2)) continue;
@@ -1683,7 +1683,7 @@ void BattlescapeState::saveVoxelView()
 		255,64,128		// neutral unit
 	};	
 
-	BattleUnit * bu = _save->getSelectedUnit();
+	BattleUnit* bu = _save->getSelectedUnit();
 	if (bu == 0) return; // no unit selected
 
 	std::vector<Position> _trajectory;
@@ -1820,7 +1820,7 @@ void BattlescapeState::saveVoxelMap()
 	static const unsigned char pal[30]=
 	{255,255,255, 224,224,224,  128,160,255,  255,160,128, 128,255,128, 192,0,255,  255,255,255, 255,255,255,  224,192,0,  255,64,128 };
 
-	Tile *tile;
+	Tile* tile;
 
 	for (int z = 0; z < _save->getMapSizeZ()*12; ++z)
 	{
@@ -1885,7 +1885,7 @@ void BattlescapeState::saveVoxelMap()
  * (this prevents popups from overlapping).
  * @param state Pointer to popup state.
  */
-void BattlescapeState::popup(State *state)
+void BattlescapeState::popup(State* state)
 {
 	_popups.push_back(state);
 }
@@ -1994,7 +1994,7 @@ void BattlescapeState::clearMouseScrollingState()
 /**
  * Returns a pointer to the battlegame, in case we need its functions.
  */
-BattlescapeGame *BattlescapeState::getBattleGame()
+BattlescapeGame* BattlescapeState::getBattleGame()
 {
 	return _battleGame;
 }
@@ -2002,7 +2002,7 @@ BattlescapeGame *BattlescapeState::getBattleGame()
 /**
  * Handler for the mouse moving over the icons, disabling the tile selection cube.
  */
-void BattlescapeState::mouseInIcons(Action * /* action */)
+void BattlescapeState::mouseInIcons(Action* /* action */)
 {
 	_mouseOverIcons = true;
 }
@@ -2010,7 +2010,7 @@ void BattlescapeState::mouseInIcons(Action * /* action */)
 /**
  * Handler for the mouse going out of the icons, enabling the tile selection cube.
  */
-void BattlescapeState::mouseOutIcons(Action * /* action */)
+void BattlescapeState::mouseOutIcons(Action* /* action */)
 {
 	_mouseOverIcons = false;
 }
@@ -2045,7 +2045,7 @@ bool BattlescapeState::allowButtons(bool allowSaving) const
  * Reserves time units for kneeling.
  * @param action Pointer to an action.
  */
-void BattlescapeState::btnReserveKneelClick(Action *action)
+void BattlescapeState::btnReserveKneelClick(Action* action)
 {
 	if (allowButtons())
 	{
@@ -2064,7 +2064,7 @@ void BattlescapeState::btnReserveKneelClick(Action *action)
  * Removes all time units.
  * @param action Pointer to an action.
  */
-void BattlescapeState::btnZeroTUsClick(Action *action)
+void BattlescapeState::btnZeroTUsClick(Action* action)
 {
 	if (allowButtons())
 	{
@@ -2087,7 +2087,7 @@ void BattlescapeState::btnZeroTUsClick(Action *action)
 * Shows a tooltip for the appropriate button.
 * @param action Pointer to an action.
 */
-void BattlescapeState::txtTooltipIn(Action *action)
+void BattlescapeState::txtTooltipIn(Action* action)
 {
 	if (allowButtons() && Options::getBool("battleTooltips"))
 	{
@@ -2100,7 +2100,7 @@ void BattlescapeState::txtTooltipIn(Action *action)
 * Clears the tooltip text.
 * @param action Pointer to an action.
 */
-void BattlescapeState::txtTooltipOut(Action *action)
+void BattlescapeState::txtTooltipOut(Action* action)
 {
 	if (allowButtons() && Options::getBool("battleTooltips"))
 	{
@@ -2113,7 +2113,7 @@ void BattlescapeState::txtTooltipOut(Action *action)
 
 /**
  * Returns the TurnCounter used by the game.
- * @return Pointer to the TurnCounter.
+ * @return, Pointer to the TurnCounter.
  */
 TurnCounter* BattlescapeState::getTurnCounter() const
 {

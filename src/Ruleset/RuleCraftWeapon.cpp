@@ -16,7 +16,9 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "RuleCraftWeapon.h"
+
 
 namespace OpenXcom
 {
@@ -25,7 +27,21 @@ namespace OpenXcom
  * Creates a blank ruleset for a certain type of craft weapon.
  * @param type String defining the type.
  */
-	RuleCraftWeapon::RuleCraftWeapon(const std::string &type) : _type(type), _sprite(-1), _sound(-1), _damage(0), _range(0), _accuracy(0), _reloadCautious(0), _reloadStandard(0), _reloadAggressive(0), _ammoMax(0), _rearmRate(1), _projectileSpeed(0), _projectileType(CWPT_CANNON_ROUND)
+RuleCraftWeapon::RuleCraftWeapon(const std::string& type)
+	:
+	_type(type),
+	_sprite(-1),
+	_sound(-1),
+	_damage(0),
+	_range(0),
+	_accuracy(0),
+	_reloadCautious(0),
+	_reloadStandard(0),
+	_reloadAggressive(0),
+	_ammoMax(0),
+	_rearmRate(1),
+	_projectileSpeed(0),
+	_projectileType(CWPT_CANNON_ROUND)
 {
 }
 
@@ -41,29 +57,33 @@ RuleCraftWeapon::~RuleCraftWeapon()
  * @param node YAML node.
  * @param modIndex A value that offsets the sounds and sprite values to avoid conflicts.
  */
-void RuleCraftWeapon::load(const YAML::Node &node, int modIndex)
+void RuleCraftWeapon::load(const YAML::Node& node, int modIndex)
 {
-	_type = node["type"].as<std::string>(_type);
-	_sprite = node["sprite"].as<int>(_sprite);
+	_type				= node["type"].as<std::string>(_type);
+	_sprite				= node["sprite"].as<int>(_sprite);
+
 	// this one is an offset within INTICONS.PCK
 	if (_sprite > 5)
 		_sprite += modIndex;
-	_sound = node["sound"].as<int>(_sound);
+
+	_sound				= node["sound"].as<int>(_sound);
+
 	// 14 entries in GEO.CAT
 	if (_sound > 13)
 		_sound += modIndex;
-	_damage = node["damage"].as<int>(_damage);
-	_range = node["range"].as<int>(_range);
-	_accuracy = node["accuracy"].as<int>(_accuracy);
-	_reloadCautious = node["reloadCautious"].as<int>(_reloadCautious);
-	_reloadStandard = node["reloadStandard"].as<int>(_reloadStandard);
-	_reloadAggressive = node["reloadAggressive"].as<int>(_reloadAggressive);
-	_ammoMax = node["ammoMax"].as<int>(_ammoMax);
-	_rearmRate = node["rearmRate"].as<int>(_rearmRate);
-	_projectileType = (CraftWeaponProjectileType)node["projectileType"].as<int>(_projectileType);
-	_projectileSpeed = node["projectileSpeed"].as<int>(_projectileSpeed);
-	_launcher = node["launcher"].as<std::string>(_launcher);
-	_clip = node["clip"].as<std::string>(_clip);
+
+	_damage				= node["damage"].as<int>(_damage);
+	_range				= node["range"].as<int>(_range);
+	_accuracy			= node["accuracy"].as<int>(_accuracy);
+	_reloadCautious		= node["reloadCautious"].as<int>(_reloadCautious);
+	_reloadStandard		= node["reloadStandard"].as<int>(_reloadStandard);
+	_reloadAggressive	= node["reloadAggressive"].as<int>(_reloadAggressive);
+	_ammoMax			= node["ammoMax"].as<int>(_ammoMax);
+	_rearmRate			= node["rearmRate"].as<int>(_rearmRate);
+	_projectileType		= (CraftWeaponProjectileType)node["projectileType"].as<int>(_projectileType);
+	_projectileSpeed	= node["projectileSpeed"].as<int>(_projectileSpeed);
+	_launcher			= node["launcher"].as<std::string>(_launcher);
+	_clip				= node["clip"].as<std::string>(_clip);
 }
 
 /**
