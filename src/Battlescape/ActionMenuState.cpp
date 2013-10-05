@@ -89,7 +89,7 @@ ActionMenuState::ActionMenuState(Game* game, BattleAction* action, int x, int y)
 			addItem(BA_LAUNCH, "STR_LAUNCH_MISSILE", &id);
 		}
 //kL		else
-		else if (_action->weapon->getAmmoItem())	// kL
+		if (_action->weapon->getAmmoItem())		// kL
 		{
 			if (weapon->getAccuracyAuto() != 0)
 			{
