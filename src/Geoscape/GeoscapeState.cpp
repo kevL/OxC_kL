@@ -813,7 +813,8 @@ void GeoscapeState::time5Seconds()
 						if (detected != (*i)->getDetected()
 							&& !(*i)->getFollowers()->empty())
 						{
-							if (!((*i)->getTrajectory().getID() == "__RETALIATION_ASSAULT_RUN" && (*i)->getStatus() ==  Ufo::LANDED))
+							if (!((*i)->getTrajectory().getID() == "__RETALIATION_ASSAULT_RUN"
+								&& (*i)->getStatus() ==  Ufo::LANDED))
 							{
 								timerReset();	// kL
 								popup(new UfoLostState(_game, (*i)->getName(_game->getLanguage())));
@@ -1138,13 +1139,14 @@ class DetectXCOMBase: public std::unary_function<Ufo*, bool>
 
 /**
  * Only UFOs within detection range of the base have a chance to detect it.
- * @param ufo Pointer to the UFO attempting detection.
- * @return If the base is detected by @a ufo.
+ * @param ufo, Pointer to the UFO attempting detection.
+ * @return, If the base is detected by a ufo.
  */
 bool DetectXCOMBase::operator()(const Ufo *ufo) const
 {
 	// only UFOs on retaliation missions actively scan for bases
-	if (ufo->getMissionType() != "STR_ALIEN_RETALIATION" && !Options::getBool("aggressiveRetaliation"))
+	if (ufo->getMissionType() != "STR_ALIEN_RETALIATION"
+			&& !Options::getBool("aggressiveRetaliation"))
 		return false;
 
 	// UFOs attacking a base don't detect!
@@ -1154,12 +1156,13 @@ bool DetectXCOMBase::operator()(const Ufo *ufo) const
 	}
 
 	// UFOs have a detection range of 80 XCOM units.
-	if (_base.getDistance(ufo) >= 80 * (1 / 60.0) * (M_PI / 180.0))
+	if (_base.getDistance(ufo) >= 80 * (1 / 60.f) * (M_PI / 180.f))
 	{
 		return false;
 	}
 
-	return (int)_base.getDetectionChance() < RNG::generate(0, 100);
+//kL	return (int)_base.getDetectionChance() < RNG::generate(0, 99);
+	return RNG::generate(0, 99) < (int)_base.getDetectionChance();		// kL
 }
 
 /**
@@ -1168,7 +1171,7 @@ bool DetectXCOMBase::operator()(const Ufo *ufo) const
  */
 struct SetRetaliationTarget
 	:
-	public std::unary_function<std::map<const Region*, Base* >::value_type, void>
+		public std::unary_function<std::map<const Region*, Base* >::value_type, void>
 {
 	/// Mark as a valid retaliation target.
 	void operator()(const argument_type& iter) const

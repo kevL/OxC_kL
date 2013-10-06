@@ -48,7 +48,7 @@ class Vehicle;
  */
 class Base
 	:
-	public Target
+		public Target
 {
 private:
 	const Ruleset* _rule;
@@ -192,9 +192,11 @@ private:
 		/// Gets the retaliation status of this base.
 		bool getRetaliationTarget() const;
 		/// Get the detection chance for this base.
-		unsigned getDetectionChance() const;
+//kL		unsigned getDetectionChance() const;
+		unsigned int getDetectionChance() const;
 		/// Gets how many Grav Shields the base has
 		int getGravShields() const;
+		///
 		void setupDefenses();
 		/// Get a list of Defensive Facilities
 		std::vector<BaseFacility* >* getDefenses();

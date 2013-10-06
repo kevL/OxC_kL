@@ -1146,7 +1146,7 @@ struct isMindShield: public std::unary_function<BaseFacility*, bool>
  * @param facility Pointer to the facility to check.
  * @return If @a facility can act as a mind shield.
  */
-bool isMindShield::operator()(const BaseFacility *facility) const
+bool isMindShield::operator()(const BaseFacility* facility) const
 {
 	if (facility->getBuildTime() != 0)
 	{
@@ -1162,13 +1162,13 @@ bool isMindShield::operator()(const BaseFacility *facility) const
 struct isCompleted: public std::unary_function<BaseFacility*, bool>
 {
 	/// Check isCompleted() for @a facility.
-	bool operator()(const BaseFacility *facility) const;
+	bool operator()(const BaseFacility* facility) const;
 };
 
 /**
  * Facilities are checked for construction completion.
- * @param facility Pointer to the facility to check.
- * @return If @a facility has completed construction.
+ * @param, facility Pointer to the facility to check.
+ * @return, If @a facility has completed construction.
  */
 bool isCompleted::operator()(const BaseFacility *facility) const
 {
@@ -1178,13 +1178,25 @@ bool isCompleted::operator()(const BaseFacility *facility) const
 /**
  * Calculate the detection chance of this base.
  * Big bases without mindshields are easier to detect.
- * @return The detection chance.
+ * @return, The detection chance.
  */
-unsigned Base::getDetectionChance() const
+/*kL unsigned Base::getDetectionChance() const
 {
 	unsigned mindShields = std::count_if(_facilities.begin(), _facilities.end(), isMindShield());
 	unsigned completedFacilities = std::count_if(_facilities.begin(), _facilities.end(), isCompleted());
 	return (completedFacilities / 6 + 15) / (mindShields + 1);
+} */
+// kL_begin: rewrite getDetectionChance() using floats.
+unsigned int Base::getDetectionChance() const
+{
+	float shields = (float)std::count_if(_facilities.begin(), _facilities.end(), isMindShield());
+	float facilities = (float)std::count_if(_facilities.begin(), _facilities.end(), isCompleted());
+
+	facilities = facilities / 6.f + 10.f;
+	shields = shields * 2.f + 1.f;
+	// a Base with 30 facilities and 1 shield gets 5% per *????*
+
+	return (unsigned int)(facilities / shields);
 }
 
 /**
@@ -1259,6 +1271,7 @@ void Base::setupDefenses()
 				if (0 >= baqty || 0 >= iqty)
 				{
 					++i;
+
 					continue;
 				}
 

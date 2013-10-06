@@ -51,10 +51,10 @@ namespace OpenXcom
  */
 GeoscapeCraftState::GeoscapeCraftState(Game* game, Craft* craft, Globe* globe, Waypoint* waypoint)
 	:
-	State(game),
-	_craft(craft),
-	_globe(globe),
-	_waypoint(waypoint)
+		State(game),
+		_craft(craft),
+		_globe(globe),
+		_waypoint(waypoint)
 {
 	_screen = false;
 
@@ -167,7 +167,6 @@ GeoscapeCraftState::GeoscapeCraftState(Game* game, Craft* craft, Globe* globe, W
 		ss << tr("STR_LOW_FUEL_RETURNING_TO_BASE");
 	}
 	// kL_begin: craft string, Based
-//	else if (_craft->getDestination() == 0
 	else if (_craft->getStatus() == "STR_READY"
 				|| _craft->getStatus() == "STR_REPAIRS"
 				|| _craft->getStatus() == "STR_REFUELLING"
@@ -281,7 +280,7 @@ GeoscapeCraftState::GeoscapeCraftState(Game* game, Craft* craft, Globe* globe, W
 	_txtDamage->setSecondaryColor(Palette::blockOffset(8)+5);
 	std::wstringstream ss62;
 //kL	ss62 << tr("STR_DAMAGE_UC_") << L'\x01' << _craft->getDamagePercentage() << "%";
-	ss62 << tr("STR_DAMAGE_UC_") << L'\x01' << _craft->getDamagePercentage();		// kL
+	ss62 << tr("STR_DAMAGE_UC_") << " " << L'\x01' << _craft->getDamagePercentage();		// kL
 	_txtDamage->setText(ss62.str());
 
 	_txtW1Name->setColor(Palette::blockOffset(15)-1);
@@ -367,8 +366,7 @@ GeoscapeCraftState::GeoscapeCraftState(Game* game, Craft* craft, Globe* globe, W
 		_btnBase->setVisible(false);
 		_btnPatrol->setVisible(false);
 	}
-
-	if (_craft->getStatus() == "STR_REPAIRS"
+	else if (_craft->getStatus() == "STR_REPAIRS"
 		|| _craft->getStatus() == "STR_REFUELLING"
 		|| _craft->getStatus() == "STR_REARMING"
 		|| _craft->getLowFuel())
@@ -376,6 +374,10 @@ GeoscapeCraftState::GeoscapeCraftState(Game* game, Craft* craft, Globe* globe, W
 		_btnBase->setVisible(false);
 		_btnTarget->setVisible(false);
 		_btnPatrol->setVisible(false);
+	}
+	else if (_craft->getDestination() == (Target* )_craft->getBase())
+	{
+		_btnBase->setVisible(false);
 	}
 
 	if (_craft->getRules()->getSoldiers() == 0)
