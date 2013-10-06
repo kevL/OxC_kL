@@ -47,7 +47,7 @@ class Base;
  */
 class GeoscapeState
 	:
-	public State
+		public State
 {
 private:
 	Surface* _bg;

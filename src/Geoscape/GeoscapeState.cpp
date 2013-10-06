@@ -1117,15 +1117,17 @@ void GeoscapeState::time5Seconds()
 }
 
 /**
- * Functor that attempt to detect an XCOM base.
+ * Functor that attempts to detect an XCOM base.
  */
-class DetectXCOMBase: public std::unary_function<Ufo*, bool>
+class DetectXCOMBase
+	:
+		public std::unary_function<Ufo*, bool>
 {
 	public:
 		/// Create a detector for the given base.
 		DetectXCOMBase(const Base& base)
 			:
-			_base(base)
+				_base(base)
 			{
 				/* Empty by design.  */
 			}
@@ -1140,7 +1142,7 @@ class DetectXCOMBase: public std::unary_function<Ufo*, bool>
 /**
  * Only UFOs within detection range of the base have a chance to detect it.
  * @param ufo, Pointer to the UFO attempting detection.
- * @return, If the base is detected by a ufo.
+ * @return, If the base is detected by @a ufo.
  */
 bool DetectXCOMBase::operator()(const Ufo *ufo) const
 {

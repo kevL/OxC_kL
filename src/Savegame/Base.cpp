@@ -1192,9 +1192,14 @@ unsigned int Base::getDetectionChance() const
 	float shields = (float)std::count_if(_facilities.begin(), _facilities.end(), isMindShield());
 	float facilities = (float)std::count_if(_facilities.begin(), _facilities.end(), isCompleted());
 
-	facilities = facilities / 6.f + 10.f;
+//	facilities = facilities / 6.f + 10.f;
+	facilities = facilities / 6.f + 12.f;
 	shields = shields * 2.f + 1.f;
-	// a Base with 30 facilities and 1 shield gets 5% per *????*
+	// a Base with 30 facilities and 1 shield gets 5% per 10 min.
+	// a full Base w/ 36 facilities and no shield gets 16% per 10m.
+	// a puny Base w/ 4 facilities and no shield gets 10%
+	// a puny Base w/ 4 facilities and 1 shield gets 3%
+	// approximate; and a module != a facility. ( eg, hangar is 4 modules )
 
 	return (unsigned int)(facilities / shields);
 }
