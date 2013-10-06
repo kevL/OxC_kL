@@ -910,6 +910,16 @@ void BattlescapeState::btnInventoryClick(Action *)
 		&& (_save->getSelectedUnit()->getOriginalFaction() == FACTION_PLAYER
 			|| _save->getSelectedUnit()->getRankString() != "STR_LIVE_TERRORIST"))
 	{
+		// clean up the waypoints
+		if (_battleGame->getCurrentAction()->type == BA_LAUNCH)
+		{
+			_battleGame->getCurrentAction()->waypoints.clear();
+			_battleGame->getMap()->getWaypoints()->clear();
+			showLaunchButton(false);
+		}
+
+		_battleGame->cancelCurrentAction(true);
+
 		_game->pushState(new InventoryState(_game, !_save->getDebugMode(), this));
 	}
 }
@@ -1005,7 +1015,7 @@ void BattlescapeState::selectPreviousPlayerUnit(bool checkReselect, bool setRese
  * Shows/hides all map layers.
  * @param action Pointer to an action.
  */
-void BattlescapeState::btnShowLayersClick(Action *)
+void BattlescapeState::btnShowLayersClick(Action* )
 {
 	_numLayers->setValue(_map->getCamera()->toggleShowAllLayers());
 }
@@ -1014,7 +1024,7 @@ void BattlescapeState::btnShowLayersClick(Action *)
  * Shows options.
  * @param action Pointer to an action.
  */
-void BattlescapeState::btnHelpClick(Action *)
+void BattlescapeState::btnHelpClick(Action* )
 {
 	if (allowButtons(true))
 		_game->pushState(new PauseState(_game, OPT_BATTLESCAPE));
@@ -1040,7 +1050,7 @@ void BattlescapeState::btnEndTurnClick(Action* )
  * Aborts the game.
  * @param action Pointer to an action.
  */
-void BattlescapeState::btnAbortClick(Action *)
+void BattlescapeState::btnAbortClick(Action* )
 {
 	if (allowButtons())
 		_game->pushState(new AbortMissionState(_game, _save, this));
@@ -1050,7 +1060,7 @@ void BattlescapeState::btnAbortClick(Action *)
  * Shows the selected soldier's info.
  * @param action Pointer to an action.
  */
-void BattlescapeState::btnStatsClick(Action *action)
+void BattlescapeState::btnStatsClick(Action* action)
 {
 	if (playableUnitSelected())
 	{
@@ -1072,6 +1082,16 @@ void BattlescapeState::btnStatsClick(Action *action)
 			}
 		}
 
+		// clean up the waypoints
+		if (_battleGame->getCurrentAction()->type == BA_LAUNCH)
+		{
+			_battleGame->getCurrentAction()->waypoints.clear();
+			_battleGame->getMap()->getWaypoints()->clear();
+			showLaunchButton(false);
+		}
+
+		_battleGame->cancelCurrentAction(true);
+
 		if (b) popup(new UnitInfoState(_game, _save->getSelectedUnit(), this));
 	}
 }
@@ -1080,7 +1100,7 @@ void BattlescapeState::btnStatsClick(Action *action)
  * Shows an action popup menu. When clicked, creates the action.
  * @param action Pointer to an action.
  */
-void BattlescapeState::btnLeftHandItemClick(Action *)
+void BattlescapeState::btnLeftHandItemClick(Action* )
 {
 	if (_battleGame->getCurrentAction()->type != BA_NONE) return;
 
@@ -1099,7 +1119,7 @@ void BattlescapeState::btnLeftHandItemClick(Action *)
  * Shows an action popup menu. When clicked, create the action.
  * @param action Pointer to an action.
  */
-void BattlescapeState::btnRightHandItemClick(Action *)
+void BattlescapeState::btnRightHandItemClick(Action* )
 {
 	if (_battleGame->getCurrentAction()->type != BA_NONE) return;
 	if (playableUnitSelected())
@@ -1117,7 +1137,7 @@ void BattlescapeState::btnRightHandItemClick(Action *)
  * Centers on the unit corresponding to this button.
  * @param action Pointer to an action.
  */
-void BattlescapeState::btnVisibleUnitClick(Action *action)
+void BattlescapeState::btnVisibleUnitClick(Action* action)
 {
 	int btnID = -1;
 
@@ -1142,7 +1162,7 @@ void BattlescapeState::btnVisibleUnitClick(Action *action)
  * Launches the blaster bomb.
  * @param action Pointer to an action.
  */
-void BattlescapeState::btnLaunchClick(Action *action)
+void BattlescapeState::btnLaunchClick(Action* action)
 {
 	_battleGame->launchAction();
 	action->getDetails()->type = SDL_NOEVENT; // consume the event
@@ -1152,7 +1172,7 @@ void BattlescapeState::btnLaunchClick(Action *action)
  * Uses psionics.
  * @param action Pointer to an action.
  */
-void BattlescapeState::btnPsiClick(Action *action)
+void BattlescapeState::btnPsiClick(Action* action)
 {
 	_battleGame->psiButtonAction();
 	action->getDetails()->type = SDL_NOEVENT; // consume the event
@@ -1162,7 +1182,7 @@ void BattlescapeState::btnPsiClick(Action *action)
  * Reserves time units.
  * @param action Pointer to an action.
  */
-void BattlescapeState::btnReserveClick(Action *action)
+void BattlescapeState::btnReserveClick(Action* action)
 {
 	if (allowButtons())
 	{
@@ -1183,7 +1203,7 @@ void BattlescapeState::btnReserveClick(Action *action)
  * Reloads the weapon in hand.
  * @param action Pointer to an action.
  */
-void BattlescapeState::btnReloadClick(Action *)
+void BattlescapeState::btnReloadClick(Action* )
 {
 	if (playableUnitSelected()
 		&& _save->getSelectedUnit()->checkAmmo())
@@ -1198,7 +1218,7 @@ void BattlescapeState::btnReloadClick(Action *)
  * Toggles soldier's personal lighting (purely cosmetic).
  * @param action Pointer to an action.
  */
-void BattlescapeState::btnPersonalLightingClick(Action *)
+void BattlescapeState::btnPersonalLightingClick(Action* )
 {
 	if (allowButtons())
 		_save->getTileEngine()->togglePersonalLighting();
