@@ -63,7 +63,7 @@ class InterceptState
 		/// Handler for clicking the Crafts list.
 		void lstCraftsClick(Action* action);
 		/// Handler for right clicking the Crafts list.
-//		void lstCraftsRightClick(Action* action);
+		void lstCraftsRightClick(Action* action);
 };
 
 }
