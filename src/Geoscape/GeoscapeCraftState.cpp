@@ -280,7 +280,7 @@ GeoscapeCraftState::GeoscapeCraftState(Game* game, Craft* craft, Globe* globe, W
 	_txtDamage->setSecondaryColor(Palette::blockOffset(8)+5);
 	std::wstringstream ss62;
 //kL	ss62 << tr("STR_DAMAGE_UC_") << L'\x01' << _craft->getDamagePercentage() << "%";
-	ss62 << tr("STR_DAMAGE_UC_") << " " << L'\x01' << _craft->getDamagePercentage();		// kL
+	ss62 << tr("STR_DAMAGE_UC_") << L'\x01' << _craft->getDamagePercentage();		// kL
 	_txtDamage->setText(ss62.str());
 
 	_txtW1Name->setColor(Palette::blockOffset(15)-1);

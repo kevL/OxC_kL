@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "SavedGameState.h"
 #include "../Engine/Logger.h"
 #include "../Savegame/SavedGame.h"
@@ -31,28 +32,34 @@
 #include "../Interface/Text.h"
 #include "../Interface/TextList.h"
 
+
 namespace OpenXcom
 {
 
 /**
  * Initializes all the elements in the Saved Game screen.
- * @param game Pointer to the core game.
- * @param origin Game section that originated this state.
+ * @param game, Pointer to the core game.
+ * @param origin, Game section that originated this state.
  */
-SavedGameState::SavedGameState(Game *game, OptionsOrigin origin) : State(game), _origin(origin), _showMsg(true), _noUI(false)
+SavedGameState::SavedGameState(Game* game, OptionsOrigin origin)
+	:
+		State(game),
+		_origin(origin),
+		_showMsg(true),
+		_noUI(false)
 {
 	_screen = false;
 
 	// Create objects
-	_window = new Window(this, 320, 200, 0, 0, POPUP_BOTH);
-	_btnCancel = new TextButton(80, 16, 120, 172);
-	_txtTitle = new Text(310, 16, 5, 8);
-	_txtDelete = new Text(310, 8, 5, 24);
-	_txtName = new Text(150, 9, 16, 32);
-	_txtTime = new Text(30, 9, 184, 32);
-	_txtDate = new Text(38, 9, 214, 32);
-	_txtStatus = new Text(320, 16, 0, 92);
-	_lstSaves = new TextList(288, 120, 8, 40);
+	_window		= new Window(this, 320, 200, 0, 0, POPUP_BOTH);
+	_btnCancel	= new TextButton(80, 16, 120, 172);
+	_txtTitle	= new Text(310, 16, 5, 8);
+	_txtDelete	= new Text(310, 8, 5, 24);
+	_txtName	= new Text(150, 9, 16, 32);
+	_txtTime	= new Text(30, 9, 184, 32);
+	_txtDate	= new Text(38, 9, 214, 32);
+	_txtStatus	= new Text(320, 16, 0, 92);
+	_lstSaves	= new TextList(288, 120, 8, 40);
 
 	// Set palette
 	if (_origin != OPT_BATTLESCAPE)
@@ -76,11 +83,11 @@ SavedGameState::SavedGameState(Game *game, OptionsOrigin origin) : State(game), 
 	_window->setColor(Palette::blockOffset(8)+5);
 	_window->setBackground(game->getResourcePack()->getSurface("BACK01.SCR"));
 
-	_btnCancel->setColor(Palette::blockOffset(8) + 5);
+	_btnCancel->setColor(Palette::blockOffset(8)+5);
 
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
-	_btnCancel->onMouseClick((ActionHandler) &SavedGameState::btnCancelClick);
-	_btnCancel->onKeyboardPress((ActionHandler) &SavedGameState::btnCancelClick, (SDLKey) Options::getInt("keyCancel"));
+	_btnCancel->onMouseClick((ActionHandler)& SavedGameState::btnCancelClick);
+	_btnCancel->onKeyboardPress((ActionHandler)& SavedGameState::btnCancelClick, (SDLKey) Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setBig();
@@ -99,7 +106,9 @@ SavedGameState::SavedGameState(Game *game, OptionsOrigin origin) : State(game), 
 	_txtDate->setColor(Palette::blockOffset(15)-1);
 	_txtDate->setText(tr("STR_DATE"));
 
-	_txtStatus->setColor(Palette::blockOffset(8)+5);
+	// kL_note: This is color of Loading... from main menu.
+	_txtStatus->setColor(Palette::blockOffset(8)+5);	// kL_note: +5 = white
+//	_txtStatus->setColor(Palette::blockOffset(8)+3);	// kL. +3 = hot pink
 	_txtStatus->setBig();
 	_txtStatus->setAlign(ALIGN_CENTER);
 
@@ -113,11 +122,17 @@ SavedGameState::SavedGameState(Game *game, OptionsOrigin origin) : State(game), 
 
 /**
  * Initializes all the elements in the Saved Game screen.
- * @param game Pointer to the core game.
- * @param origin Game section that originated this state.
- * @param showMsg True if need to show messages like "Loading game" or "Saving game".
+ * kL_note: This should be the auto-Save message....
+ * @param game, Pointer to the core game.
+ * @param origin, Game section that originated this state.
+ * @param showMsg, True if need to show messages like "Loading game" or "Saving game".
  */
-SavedGameState::SavedGameState(Game *game, OptionsOrigin origin, bool showMsg) : State(game), _origin(origin), _showMsg(showMsg), _noUI(true)
+SavedGameState::SavedGameState(Game* game, OptionsOrigin origin, bool showMsg)
+	:
+		State(game),
+		_origin(origin),
+		_showMsg(showMsg),
+		_noUI(true)
 {
 	if (_showMsg)
 	{
@@ -145,6 +160,7 @@ void SavedGameState::init()
 	if (_noUI)
 	{
 		_game->popState();
+
 		return;
 	}
 
@@ -184,7 +200,7 @@ void SavedGameState::updateList()
  * Updates the status message in the center of the screen.
  * @param msg New message ID.
  */
-void SavedGameState::updateStatus(const std::string &msg)
+void SavedGameState::updateStatus(const std::string& msg)
 {
 	_txtStatus->setText(tr(msg));
 	blit();
@@ -195,7 +211,7 @@ void SavedGameState::updateStatus(const std::string &msg)
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void SavedGameState::btnCancelClick(Action *)
+void SavedGameState::btnCancelClick(Action* )
 {
 	_game->popState();
 }

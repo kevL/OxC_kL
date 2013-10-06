@@ -105,12 +105,11 @@ void LoadState::quickLoad(const std::wstring& filename16)
 	{
 		s->load(filename, _game->getRuleset());
 		_game->setSavedGame(s);
-//kL		_game->setState(new GeoscapeState(_game));
-		_game->setState(new GeoscapeState(_game));		// kL
+		_game->setState(new GeoscapeState(_game));
 		if (_game->getSavedGame()->getSavedBattle() != 0)
 		{
 			_game->getSavedGame()->getSavedBattle()->loadMapResources(_game);
-			BattlescapeState *bs = new BattlescapeState(_game);
+			BattlescapeState* bs = new BattlescapeState(_game);
 			_game->pushState(bs);
 			_game->getSavedGame()->getSavedBattle()->setBattleState(bs);
 		}
