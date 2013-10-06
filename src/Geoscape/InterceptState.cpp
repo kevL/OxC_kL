@@ -32,9 +32,9 @@
 #include "../Ruleset/RuleCraft.h"
 #include "../Savegame/SavedGame.h"
 #include "../Engine/Options.h"
-//kL #include "SelectDestinationState.h"
-#include "GeoscapeCraftState.h"		// Cf
-#include "Globe.h"					// Cf
+#include "Globe.h"
+#include "SelectDestinationState.h"
+#include "GeoscapeCraftState.h"
 
 
 namespace OpenXcom
@@ -48,10 +48,10 @@ namespace OpenXcom
  */
 InterceptState::InterceptState(Game* game, Globe* globe, Base* base)
 	:
-	State(game),
-	_globe(globe),
-	_base(base),
-	_crafts()
+		State(game),
+		_globe(globe),
+		_base(base),
+		_crafts()
 {
 	_screen = false;
 
@@ -113,6 +113,7 @@ InterceptState::InterceptState(Game* game, Globe* globe, Base* base)
 	_lstCrafts->setBackground(_window);
 	_lstCrafts->setMargin(6);
 	_lstCrafts->onMouseClick((ActionHandler)& InterceptState::lstCraftsClick);
+	_lstCrafts->onMouseClick((ActionHandler)& InterceptState::lstCraftsRightClick, SDL_BUTTON_RIGHT);
 
 	int row = 0;
 
@@ -130,7 +131,7 @@ InterceptState::InterceptState(Game* game, Globe* globe, Base* base)
 			}
 			else
 			{
-				ss << (*j)->getNumWeapons();
+				ss << 0;
 			}
 
 			ss << "/";
@@ -140,7 +141,7 @@ InterceptState::InterceptState(Game* game, Globe* globe, Base* base)
 			}
 			else
 			{
-				ss << (*j)->getNumSoldiers();
+				ss << 0;
 			}
 
 			ss << "/";
@@ -150,7 +151,7 @@ InterceptState::InterceptState(Game* game, Globe* globe, Base* base)
 			}
 			else
 			{
-				ss << (*j)->getNumVehicles();
+				ss << 0;
 			}
 
 			_crafts.push_back(*j);
@@ -189,36 +190,41 @@ void InterceptState::btnCancelClick(Action* )
 /* void InterceptState::lstCraftsClick(Action* )
 {
 	Craft* c = _crafts[_lstCrafts->getSelectedRow()];
-//kL	if (c->getStatus() != "STR_OUT" && (c->getStatus() == "STR_READY" || Options::getBool("craftLaunchAlways")))
-	if (c->getStatus() == "STR_READY")
-//		 && !c->getLowFuel())		// kL &redv, https://github.com/redv/OpenXcom/commit/17a8c31e0ccb82c2c9a737eb31537816f6350b73
+	if ((c->getStatus() != "STR_OUT" && (c->getStatus() == "STR_READY" || Options::getBool("craftLaunchAlways"))) || c->getStatus() == "STR_OUT")
 	{
 		_game->popState();
-//kL		_game->pushState(new SelectDestinationState(_game, c, _globe));
-		_game->pushState(new GeoscapeCraftState(_game, c, _globe, 0));		// kL
+		_game->pushState(new SelectDestinationState(_game, c, _globe));
 	}
-	else if (c->getStatus() == "STR_OUT") // Cfailde w/ kL changes
-	{
-		_game->popState();
-//		_game->pushState(new GeoscapeCraftState(_game, c, _globe, 0));
-		_globe->center(c->getLongitude(), c->getLatitude());
-	} // Cf_end.
 } */
 // kL_begin: list of Intercept craft actions.
 void InterceptState::lstCraftsClick(Action* )
 {
 	Craft* c = _crafts[_lstCrafts->getSelectedRow()];
-	if (c->getStatus() == "STR_OUT")
+/*	if (c->getStatus() == "STR_OUT")
 	{
 		_game->popState();
 		_globe->center(c->getLongitude(), c->getLatitude());
 	}
-	else
-	{
-		_game->popState();
-		_game->pushState(new GeoscapeCraftState(_game, c, _globe, 0));
-	}
+	else */
+//	{
+	_game->popState();
+	_game->pushState(new GeoscapeCraftState(_game, c, _globe, 0));
+//	}
 }
 // kL_end.
+
+/**
+ * Centers on the selected craft.
+ * @param action Pointer to an action.
+ */
+void InterceptState::lstCraftsRightClick(Action* )
+{
+	Craft* c = _crafts[_lstCrafts->getSelectedRow()];
+//kL	if (c->getStatus() == "STR_OUT")
+//kL	{
+	_globe->center(c->getLongitude(), c->getLatitude());
+	_game->popState();
+//kL	}
+}
 
 }
