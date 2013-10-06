@@ -16,18 +16,33 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "RuleUfo.h"
 #include "RuleTerrain.h"
+
 
 namespace OpenXcom
 {
 
 /**
- * Creates a blank ruleset for a certain
- * type of UFO.
+ * Creates a blank ruleset for a certain type of UFO.
  * @param type String defining the type.
  */
-RuleUfo::RuleUfo(const std::string &type) : _type(type), _size("STR_VERY_SMALL"), _sprite(-1), _damageMax(0), _speedMax(0), _accel(0), _power(0), _range(0), _score(0), _reload(0), _breakOffTime(0), _battlescapeTerrainData(0), _modSprite("")
+RuleUfo::RuleUfo(const std::string& type)
+	:
+		_type(type),
+		_size("STR_VERY_SMALL"),
+		_sprite(-1),
+		_damageMax(0),
+		_speedMax(0),
+		_accel(0),
+		_power(0),
+		_range(0),
+		_score(0),
+		_reload(0),
+		_breakOffTime(0),
+		_battlescapeTerrainData(0),
+		_modSprite("")
 {
 }
 
@@ -44,26 +59,28 @@ RuleUfo::~RuleUfo()
  * @param node YAML node.
  * @param ruleset Ruleset for the UFO.
  */
-void RuleUfo::load(const YAML::Node &node, Ruleset *ruleset)
+void RuleUfo::load(const YAML::Node& node, Ruleset* ruleset)
 {
-	_type = node["type"].as<std::string>(_type);
-	_size = node["size"].as<std::string>(_size);
-	_sprite = node["sprite"].as<int>(_sprite);
-	_damageMax = node["damageMax"].as<int>(_damageMax);
-	_speedMax = node["speedMax"].as<int>(_speedMax);
-	_accel = node["accel"].as<int>(_accel);
-	_power = node["power"].as<int>(_power);
-	_range = node["range"].as<int>(_range);
-	_score = node["score"].as<int>(_score);
-	_reload = node["reload"].as<int>(_reload);
-	_breakOffTime = node["breakOffTime"].as<int>(_breakOffTime);
-	if (const YAML::Node &terrain = node["battlescapeTerrainData"])
+	_type			= node["type"].as<std::string>(_type);
+	_size			= node["size"].as<std::string>(_size);
+	_sprite			= node["sprite"].as<int>(_sprite);
+	_damageMax		= node["damageMax"].as<int>(_damageMax);
+	_speedMax		= node["speedMax"].as<int>(_speedMax);
+	_accel			= node["accel"].as<int>(_accel);
+	_power			= node["power"].as<int>(_power);
+	_range			= node["range"].as<int>(_range);
+	_score			= node["score"].as<int>(_score);
+	_reload			= node["reload"].as<int>(_reload);
+	_breakOffTime	= node["breakOffTime"].as<int>(_breakOffTime);
+
+	if (const YAML::Node& terrain = node["battlescapeTerrainData"])
 	{
-		RuleTerrain *rule = new RuleTerrain(terrain["name"].as<std::string>());
+		RuleTerrain* rule = new RuleTerrain(terrain["name"].as<std::string>());
 		rule->load(terrain, ruleset);
 		_battlescapeTerrainData = rule;
 	}
-	_modSprite = node["modSprite"].as<std::string>(_modSprite);
+
+	_modSprite		= node["modSprite"].as<std::string>(_modSprite);
 }
 
 /**
@@ -112,6 +129,7 @@ int RuleUfo::getRadius() const
 	{
 		return 6;
 	}
+
 	return 0;
 }
 
@@ -189,7 +207,7 @@ int RuleUfo::getScore() const
  * Gets the terrain data needed to draw the UFO in the battlescape.
  * @return The RuleTerrain.
  */
-RuleTerrain *RuleUfo::getBattlescapeTerrainData()
+RuleTerrain* RuleUfo::getBattlescapeTerrainData()
 {
 	return _battlescapeTerrainData;
 }

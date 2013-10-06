@@ -16,11 +16,13 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_RULEUFO_H
 #define OPENXCOM_RULEUFO_H
 
 #include <string>
 #include <yaml-cpp/yaml.h>
+
 
 namespace OpenXcom
 {
@@ -40,43 +42,46 @@ private:
 	std::string _type, _size;
 	int _sprite;
 	int _damageMax, _speedMax, _accel, _power, _range, _score, _reload, _breakOffTime;
-	RuleTerrain *_battlescapeTerrainData;
+	RuleTerrain* _battlescapeTerrainData;
 	std::string _modSprite;
-public:
-	/// Creates a blank UFO ruleset.
-	RuleUfo(const std::string &type);
-	/// Cleans up the UFO ruleset.
-	~RuleUfo();
-	/// Loads UFO data from YAML.
-	void load(const YAML::Node& node, Ruleset *ruleset);
-	/// Gets the UFO's type.
-	std::string getType() const;
-	/// Gets the UFO's size.
-	std::string getSize() const;
-	/// Gets the UFO's radius.
-	int getRadius() const;
-	/// Gets the UFO's sprite.
-	int getSprite() const;
-	/// Gets the UFO's maximum damage.
-	int getMaxDamage() const;
-	/// Gets the UFO's maximum speed.
-	int getMaxSpeed() const;
-	/// Gets the UFO's acceleration.
-	int getAcceleration() const;
-	/// Gets the UFO's weapon power.
-	int getWeaponPower() const;
-	/// Gets the UFO's weapon range.
-	int getWeaponRange() const;
-	/// Gets the UFO's score.
-	int getScore() const;
-	/// Sets the battlescape terrain data ruleset for this UFO
-	RuleTerrain *getBattlescapeTerrainData();
-	/// Gets the reload time of the UFO's weapon.
-	int getWeaponReload() const;
-	/// Gets the UFO's escape time.
-	int getBreakOffTime() const;
-	/// Gets the name of the surface that represents this UFO.
-	std::string getModSprite() const;
+
+	public:
+		/// Creates a blank UFO ruleset.
+		RuleUfo(const std::string& type);
+		/// Cleans up the UFO ruleset.
+		~RuleUfo();
+
+		/// Loads UFO data from YAML.
+		void load(const YAML::Node& node, Ruleset* ruleset);
+
+		/// Gets the UFO's type.
+		std::string getType() const;
+		/// Gets the UFO's size.
+		std::string getSize() const;
+		/// Gets the UFO's radius.
+		int getRadius() const;
+		/// Gets the UFO's sprite.
+		int getSprite() const;
+		/// Gets the UFO's maximum damage.
+		int getMaxDamage() const;
+		/// Gets the UFO's maximum speed.
+		int getMaxSpeed() const;
+		/// Gets the UFO's acceleration.
+		int getAcceleration() const;
+		/// Gets the UFO's weapon power.
+		int getWeaponPower() const;
+		/// Gets the UFO's weapon range.
+		int getWeaponRange() const;
+		/// Gets the UFO's score.
+		int getScore() const;
+		/// Sets the battlescape terrain data ruleset for this UFO
+		RuleTerrain* getBattlescapeTerrainData();
+		/// Gets the reload time of the UFO's weapon.
+		int getWeaponReload() const;
+		/// Gets the UFO's escape time.
+		int getBreakOffTime() const;
+		/// Gets the name of the surface that represents this UFO.
+		std::string getModSprite() const;
 };
 
 }

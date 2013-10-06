@@ -46,7 +46,7 @@ class CraftWeaponProjectile;
  */
 class DogfightState
 	:
-	public State
+		public State
 {
 	private:
 		Timer* _animTimer, * _moveTimer, * _w1Timer, * _w2Timer, * _ufoWtimer, * _ufoEscapeTimer, * _craftDamageAnimTimer;
