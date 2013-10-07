@@ -72,23 +72,23 @@ namespace OpenXcom
  */
 BattlescapeGenerator::BattlescapeGenerator(Game* game)
 	:
-	_game(game),
-	_save(game->getSavedGame()->getSavedBattle()),
-	_res(_game->getResourcePack()),
-	_craft(0),
-	_ufo(0),
-	_base(0),
-	_terror(0),
-	_terrain(0),
-	_mapsize_x(0),
-	_mapsize_y(0),
-	_mapsize_z(0),
-	_worldTexture(0),
-	_worldShade(0),
-	_unitSequence(0),
-	_craftInventoryTile(0),
-	_alienRace(""),
-	_alienItemLevel(0)
+		_game(game),
+		_save(game->getSavedGame()->getSavedBattle()),
+		_res(_game->getResourcePack()),
+		_craft(0),
+		_ufo(0),
+		_base(0),
+		_terror(0),
+		_terrain(0),
+		_mapsize_x(0),
+		_mapsize_y(0),
+		_mapsize_z(0),
+		_worldTexture(0),
+		_worldShade(0),
+		_unitSequence(0),
+		_craftInventoryTile(0),
+		_alienRace(""),
+		_alienItemLevel(0)
 {
 //	Log(LOG_INFO) << "Create BattlescapeGenerator";
 }
@@ -499,17 +499,20 @@ void BattlescapeGenerator::deployXCOM()
 	// equip soldiers based on equipment-layout
 	for (std::vector<BattleItem* >::iterator i = _craftInventoryTile->getInventory()->begin(); i != _craftInventoryTile->getInventory()->end(); ++i)
 	{
+		Log(LOG_INFO) << "BattlescapeGenerator::deployXCOM(), placeItemByLayout(*item)";
 		placeItemByLayout(*i);
 	}
 
 	// auto-equip soldiers (only soldiers without layout)
 	for (std::vector<BattleItem* >::iterator i = _craftInventoryTile->getInventory()->begin(); i != _craftInventoryTile->getInventory()->end(); ++i)
 	{
+		Log(LOG_INFO) << "BattlescapeGenerator::deployXCOM(), addItem(*item, !SecondPass)";
 		addItem(*i, false);
 	}
 
 	for (std::vector<BattleItem*>::iterator i = _craftInventoryTile->getInventory()->begin(); i != _craftInventoryTile->getInventory()->end(); ++i)
 	{
+		Log(LOG_INFO) << "BattlescapeGenerator::deployXCOM(), addItem(*item, SecondPass)";
 		addItem(*i, true);
 	}
 
@@ -651,11 +654,22 @@ void BattlescapeGenerator::deployAliens(AlienRace* race, AlienDeployment* deploy
 	{
 		std::string alienName = race->getMember((*d).alienRank);
 
+<<<<<<< HEAD
 		int quantity = (*d).lowQty + RNG::generate(0, (*d).dQty);										// beginner/experienced
 		if ( _game->getSavedGame()->getDifficulty() > DIFF_EXPERIENCED )
 			quantity = (*d).lowQty + (((*d).highQty - (*d).lowQty) / 2) + RNG::generate(0, (*d).dQty);	// veteran/genius
 		else if ( _game->getSavedGame()->getDifficulty() > DIFF_GENIUS )
 			quantity = (*d).highQty + RNG::generate(0, (*d).dQty);										// super
+=======
+		int quantity;
+		
+		if (_game->getSavedGame()->getDifficulty() < DIFF_VETERAN)
+			quantity = (*d).lowQty + RNG::generate(0, (*d).dQty); // beginner/experienced
+		else if (_game->getSavedGame()->getDifficulty() < DIFF_SUPERHUMAN)
+			quantity = (*d).lowQty+(((*d).highQty-(*d).lowQty)/2) + RNG::generate(0, (*d).dQty); // veteran/genius
+		else
+			quantity = (*d).highQty + RNG::generate(0, (*d).dQty); // super (and beyond?)
+>>>>>>> master
 
 		for (int i = 0; i < quantity; i++)
 		{
@@ -724,18 +738,13 @@ BattleUnit* BattlescapeGenerator::addAlien(Unit* rules, int alienRank, bool outs
 
 		int dir = _save->getTileEngine()->faceWindow(node->getPosition());
 		Position craft = _game->getSavedGame()->getSavedBattle()->getUnits()->at(0)->getPosition();
-<<<<<<< HEAD
 		// Warboy is a MEANIE!!!
-		if (_save->getTileEngine()->distance(node->getPosition(), craft) <= 23
+		if (_save->getTileEngine()->distance(node->getPosition(), craft) < 25
 			&& RNG::generate(0, 99) < 19 * difficulty)
 		{
-			dir = unit->getDirectionTo(craft);
+			dir = unit->directionTo(craft);
 		}
 
-=======
-		if (_save->getTileEngine()->distance(node->getPosition(), craft) <= 20 && RNG::generate(0,100) < 20 * difficulty)
-			dir = unit->directionTo(craft);
->>>>>>> master
 		if (dir != -1)
 			unit->setDirection(dir);
 		else
@@ -773,13 +782,8 @@ BattleUnit* BattlescapeGenerator::addCivilian(Unit* rules)
 	if (node)
 	{
 		_save->setUnitPosition(unit, node->getPosition());
-<<<<<<< HEAD
-		unit->setAIState(new PatrolBAIState(_game->getSavedGame()->getSavedBattle(), unit, node));
-		unit->setDirection(RNG::generate(0, 7));
-=======
 		unit->setAIState(new CivilianBAIState(_game->getSavedGame()->getSavedBattle(), unit, node));
-		unit->setDirection(RNG::generate(0,7));
->>>>>>> master
+		unit->setDirection(RNG::generate(0, 7));
 
 		// we only add a unit if it has a node to spawn on.
 		// (stops them spawning at 0,0,0)
@@ -787,14 +791,9 @@ BattleUnit* BattlescapeGenerator::addCivilian(Unit* rules)
 	}
 	else if (placeUnitNearFriend(unit))
 	{
-<<<<<<< HEAD
-		unit->setAIState(new PatrolBAIState(_game->getSavedGame()->getSavedBattle(), unit, node));
+		unit->setAIState(new CivilianBAIState(_game->getSavedGame()->getSavedBattle(), unit, node));
 		unit->setDirection(RNG::generate(0, 7));
 
-=======
-		unit->setAIState(new CivilianBAIState(_game->getSavedGame()->getSavedBattle(), unit, node));
-		unit->setDirection(RNG::generate(0,7));
->>>>>>> master
 		_save->getUnits()->push_back(unit);
 	}
 	else
@@ -858,7 +857,7 @@ BattleItem* BattlescapeGenerator::placeItemByLayout(BattleItem* item)
 					}
 				}
 
-				// only place the weapon onto the soldier when its loaded with its layout-ammo (if any)
+				// only place the weapon onto the soldier when it's loaded with its layout-ammo (if any)
 				if (loaded)
 				{
 					item->moveToOwner((*i));
@@ -943,6 +942,7 @@ BattleItem* BattlescapeGenerator::addItem(BattleItem* item, bool secondPass)
 						// (this is relevant in the case of HIGH EXPLOSIVE which occupies two slot)
 						item->moveToOwner(*i);
 						item->setSlot(_game->getRuleset()->getInventory("STR_BELT"));
+
 						break;
 					}
 				}
@@ -983,6 +983,7 @@ BattleItem* BattlescapeGenerator::addItem(BattleItem* item, bool secondPass)
 						{
 							item->moveToOwner((*i));
 							item->setSlot(righthand);
+
 							break;
 						}
 					}
@@ -1005,10 +1006,12 @@ BattleItem* BattlescapeGenerator::addItem(BattleItem* item, bool secondPass)
 						item->setSlot(_game->getRuleset()->getInventory("STR_BELT"));
 						item->setSlotX(3);
 						item->setSlotY(0);
+
 						break;
 					}
 				}
 			break;
+
 			default:
 			break;
 		}
@@ -1026,9 +1029,9 @@ BattleItem* BattlescapeGenerator::addItem(BattleItem* item, bool secondPass)
 
 /**
  * Adds an item to the game and assigns it to a unit.
- * @param item Pointer to the Item.
- * @param unit Pointer to the Unit.
- * @return Pointer to the Item.
+ * @param item, Pointer to the Item.
+ * @param unit, Pointer to the Unit.
+ * @return, Pointer to the Item.
  */
 BattleItem* BattlescapeGenerator::addItem(RuleItem* item, BattleUnit* unit)
 {
@@ -1060,6 +1063,7 @@ BattleItem* BattlescapeGenerator::addItem(RuleItem* item, BattleUnit* unit)
 						bi->setSlotX(i);
 
 						placed = true;
+
 						break;
 					}
 				}
@@ -1076,6 +1080,7 @@ BattleItem* BattlescapeGenerator::addItem(RuleItem* item, BattleUnit* unit)
 							bi->setSlotX(i);
 
 							placed = true;
+
 							break;
 						}
 					}
@@ -1093,6 +1098,7 @@ BattleItem* BattlescapeGenerator::addItem(RuleItem* item, BattleUnit* unit)
 					bi->setSlotX(i);
 
 					placed = true;
+
 					break;
 				}
 			}
@@ -1126,6 +1132,7 @@ BattleItem* BattlescapeGenerator::addItem(RuleItem* item, BattleUnit* unit)
 				placed = true;
 			}
 		break;
+
 		default:
 		break;
 	}
