@@ -41,7 +41,7 @@ class Bar;
  */
 class BaseInfoState
 	:
-	public State
+		public State
 {
 private:
 	Base* _base;

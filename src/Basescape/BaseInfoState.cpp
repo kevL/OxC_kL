@@ -50,20 +50,29 @@ namespace OpenXcom
  */
 BaseInfoState::BaseInfoState(Game* game, Base* base, BasescapeState* state)
 	:
-	State(game),
-	_base(base),
-	_state(state)
+		State(game),
+		_base(base),
+		_state(state)
 {
 	_containmentLimit = Options::getBool("alienContainmentLimitEnforced");
 
 	// Create objects
 	_bg					= new Surface(320, 200, 0, 0);
 	_mini				= new MiniBaseView(128, 16, 182, 8);
-	_btnOk				= new TextButton(30, 14, 10, 180);
-	_btnTransfers		= new TextButton(80, 14, 46, 180);
-	_btnStores			= new TextButton(80, 14, 132, 180);
-	_btnMonthlyCosts	= new TextButton(92, 14, 218, 180);
-	_edtBase			= new TextEdit(127, 16, 8, 8);
+//kL	_btnOk				= new TextButton(30, 14, 10, 180);
+//kL	_btnTransfers		= new TextButton(80, 14, 46, 180);
+//kL	_btnStores			= new TextButton(80, 14, 132, 180);
+//kL	_btnMonthlyCosts	= new TextButton(92, 14, 218, 180);
+	_btnMonthlyCosts	= new TextButton(70, 14, 16, 179);		// kL
+	_btnTransfers		= new TextButton(70, 14, 89, 179);		// kL
+	_btnStores			= new TextButton(70, 14, 161, 179);		// kL
+	_btnOk				= new TextButton(70, 14, 234, 179);		// kL
+// 16|                               288                                |16
+// 16|0|   70      |3|      70       |2|     70       |3|    70       |0|16
+
+
+//kL	_edtBase			= new TextEdit(127, 16, 8, 8);
+	_edtBase			= new TextEdit(127, 16, 8, 9);			// kL
 
 	_txtPersonnel		= new Text(300, 9, 8, 30);
 	_txtSoldiers		= new Text(114, 9, 8, 41);
@@ -176,8 +185,10 @@ BaseInfoState::BaseInfoState(Game* game, Base* base, BasescapeState* state)
 	ss << "BACK07.SCR";
 	_game->getResourcePack()->getSurface(ss.str())->blit(_bg);
 
+
 	_mini->setTexture(_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK"));
 	_mini->setBases(_game->getSavedGame()->getBases());
+
 	for (unsigned int i = 0; i < _game->getSavedGame()->getBases()->size(); ++i)
 	{
 		if (_game->getSavedGame()->getBases()->at(i) == _base)

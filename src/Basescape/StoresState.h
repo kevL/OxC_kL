@@ -38,7 +38,7 @@ class TextList;
  */
 class StoresState
 	:
-	public State
+		public State
 {
 	private:
 		Base* _base;

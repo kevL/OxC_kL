@@ -57,15 +57,19 @@ CraftSoldiersState::CraftSoldiersState(Game* game, Base* base, size_t craft)
 
 	// Create objects
 	_window			= new Window(this, 320, 200, 0, 0);
+
 //kL	_btnOk			= new TextButton(288, 16, 16, 176);
-	_btnOk			= new TextButton(144, 16, 161, 176);	// kL
-	_btnUnload		= new TextButton(144, 16, 15, 176);		// kL
+	_btnUnload		= new TextButton(145, 16, 16, 177);		// kL
+	_btnOk			= new TextButton(145, 16, 162, 177);	// kL
+
 	_txtTitle		= new Text(300, 16, 16, 7);
+
+	_txtAvailable	= new Text(110, 9, 16, 24);
+	_txtUsed		= new Text(110, 9, 122, 24);
 	_txtName		= new Text(114, 9, 16, 32);
 	_txtRank		= new Text(102, 9, 122, 32);
 	_txtCraft		= new Text(84, 9, 224, 32);
-	_txtAvailable	= new Text(110, 9, 16, 24);
-	_txtUsed		= new Text(110, 9, 122, 24);
+
 	_lstSoldiers	= new TextList(288, 128, 8, 40);
 
 	// Set palette

@@ -58,24 +58,25 @@ CraftInfoState::CraftInfoState(Game* game, Base* base, size_t craft)
 {
 //	Log(LOG_INFO) << "Create CraftInfoState";
 
-	// Create objects
 	_window		= new Window(this, 320, 200, 0, 0, POPUP_BOTH);
-//kL	_btnOk		= new TextButton(64, 24, 128, 168);
-	_btnOk		= new TextButton(288, 16, 16, 177);		// kL
-	_btnW1		= new TextButton(24, 32, 14, 48);
-	_btnW2		= new TextButton(24, 32, 282, 48);
-	_btnCrew	= new TextButton(64, 16, 14, 96);
-	_btnEquip	= new TextButton(64, 16, 14, 120);
-	_btnArmor	= new TextButton(64, 16, 14, 144);
+
 	_edtCraft	= new TextEdit(160, 16, 80, 8);
 	_txtDamage	= new Text(82, 16, 14, 24);
 	_txtFuel	= new Text(82, 16, 228, 24);
+
+	_btnW1		= new TextButton(24, 32, 14, 48);
 	_txtW1Name	= new Text(90, 9, 46, 48);
-	_txtW1Ammo	= new Text(60, 9, 46, 64);
-	_txtW1Max	= new Text(60, 9, 46, 72);
 	_txtW2Name	= new Text(90, 9, 204, 48);
+	_btnW2		= new TextButton(24, 32, 282, 48);
+	_txtW1Ammo	= new Text(60, 9, 46, 64);
 	_txtW2Ammo	= new Text(60, 9, 204, 64);
+	_txtW1Max	= new Text(60, 9, 46, 72);
 	_txtW2Max	= new Text(60, 9, 204, 72);
+
+	_btnCrew	= new TextButton(64, 16, 14, 96);
+	_btnEquip	= new TextButton(64, 16, 14, 120);
+	_btnArmor	= new TextButton(64, 16, 14, 144);
+
 //kL	_sprite		= new Surface(32, 40, 144, 52);
 	_sprite		= new Surface(32, 38, 144, 50);		// kL
 	_weapon1	= new Surface(15, 17, 121, 63);
@@ -83,7 +84,10 @@ CraftInfoState::CraftInfoState(Game* game, Base* base, size_t craft)
 	_crew		= new Surface(220, 18, 85, 96);
 	_equip		= new Surface(220, 18, 85, 121);
 
-	// Set palette
+//kL	_btnOk		= new TextButton(64, 24, 128, 168);
+	_btnOk		= new TextButton(288, 16, 16, 177);		// kL
+
+
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(3)), Palette::backPos, 16);
 

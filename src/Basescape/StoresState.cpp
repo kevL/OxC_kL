@@ -48,16 +48,24 @@ StoresState::StoresState(Game* game, Base* base)
 		State(game),
 		_base(base)
 {
-	// Create objects
 	_window			= new Window(this, 320, 200, 0, 0);
-	_btnOk			= new TextButton(300, 16, 10, 176);
-	_txtTitle		= new Text(310, 16, 5, 8);
-	_txtItem		= new Text(142, 8, 10, 32);
-	_txtQuantity	= new Text(88, 8, 152, 32);
-	_txtSpaceUsed	= new Text(74, 8, 240, 32);
+
+//kL	_txtTitle		= new Text(310, 16, 5, 8);
+	_txtTitle		= new Text(300, 16, 11, 10);			// kL
+
+//kL	_txtItem		= new Text(142, 8, 10, 32);
+//kL	_txtQuantity	= new Text(88, 8, 152, 32);
+//kL	_txtSpaceUsed	= new Text(74, 8, 240, 32);
+	_txtItem		= new Text(142, 9, 16, 29);				// kL
+	_txtQuantity	= new Text(88, 9, 178, 29);				// kL
+	_txtSpaceUsed	= new Text(74, 9, 270, 29);				// kL
+
 	_lstStores		= new TextList(288, 128, 8, 40);
 
-	// Set palette
+//kL	_btnOk			= new TextButton(300, 16, 10, 176);
+	_btnOk			= new TextButton(288, 16, 16, 177);		// kL
+
+
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
 
 	add(_window);
@@ -70,7 +78,7 @@ StoresState::StoresState(Game* game, Base* base)
 
 	centerAllSurfaces();
 
-	// Set up objects
+
 	_window->setColor(Palette::blockOffset(13)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 
@@ -82,7 +90,7 @@ StoresState::StoresState(Game* game, Base* base)
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
-	_txtTitle->setAlign(ALIGN_CENTER);
+//kL	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_STORES"));
 
 	_txtItem->setColor(Palette::blockOffset(13)+10);
@@ -92,13 +100,15 @@ StoresState::StoresState(Game* game, Base* base)
 	_txtQuantity->setText(tr("STR_QUANTITY_UC"));
 
 	_txtSpaceUsed->setColor(Palette::blockOffset(13)+10);
-	_txtSpaceUsed->setText(tr("STR_SPACE_USED"));
+//kL	_txtSpaceUsed->setText(tr("STR_SPACE_USED"));
+	_txtSpaceUsed->setText(tr("STR_VOLUME"));		// kL
 
 	_lstStores->setColor(Palette::blockOffset(13)+10);
 	_lstStores->setColumns(3, 162, 92, 32);
 	_lstStores->setSelectable(true);
 	_lstStores->setBackground(_window);
-	_lstStores->setMargin(2);
+//kL	_lstStores->setMargin(2);
+	_lstStores->setMargin(8);		// kL
 
 	const std::vector<std::string>& items = _game->getRuleset()->getItemsList();
 	for (std::vector<std::string>::const_iterator i = items.begin(); i != items.end(); ++i)

@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "MonthlyCostsState.h"
 #include <sstream>
 #include "../Engine/Game.h"
@@ -32,6 +33,7 @@
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleCraft.h"
 
+
 namespace OpenXcom
 {
 
@@ -40,25 +42,45 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
  */
-MonthlyCostsState::MonthlyCostsState(Game *game, Base *base) : State(game), _base(base)
+MonthlyCostsState::MonthlyCostsState(Game* game, Base* base)
+	:
+		State(game),
+		_base(base)
 {
-	// Create objects
-	_window = new Window(this, 320, 200, 0, 0);
-	_btnOk = new TextButton(300, 20, 10, 170);
-//kL	_txtTitle = new Text(310, 16, 5, 12);
-	_txtTitle = new Text(300, 16, 10, 8);		// kL
-	_txtCost = new Text(80, 9, 115, 32);
-	_txtQuantity = new Text(55, 9, 195, 32);
-	_txtTotal = new Text(60, 9, 249, 32);
-	_txtRental = new Text(150, 9, 10, 48);
-	_txtSalaries = new Text(150, 9, 10, 80);
-	_txtIncome = new Text(150, 9, 10, 136);
-	_lstCrafts = new TextList(288, 24, 10, 56);
-	_lstSalaries = new TextList(300, 30, 10, 88);
-	_lstMaintenance = new TextList(300, 9, 10, 120);
-	_lstTotal = new TextList(100, 9, 205, 136);
+	_window			= new Window(this, 320, 200, 0, 0);
 
-	// Set palette
+//kL	_txtTitle = new Text(310, 16, 5, 12);
+	_txtTitle		= new Text(300, 16, 11, 10);		// kL
+
+//kL	_txtCost		= new Text(80, 9, 115, 32);
+//kL	_txtQuantity	= new Text(55, 9, 195, 32);
+//kL	_txtTotal		= new Text(60, 9, 249, 32);
+	_txtCost		= new Text(80, 9, 131, 31);			// kL
+	_txtQuantity	= new Text(55, 9, 211, 31);			// kL
+	_txtTotal		= new Text(60, 9, 255, 31);			// kL
+
+//kL	_txtRental		= new Text(150, 9, 10, 47);
+//kL	_lstCrafts		= new TextList(288, 24, 10, 56);
+	_txtRental		= new Text(150, 9, 16, 46);			// kL
+	_lstCrafts		= new TextList(288, 40, 16, 57);	// kL
+
+//kL	_txtSalaries	= new Text(150, 9, 10, 80);
+//kL	_lstSalaries	= new TextList(300, 30, 10, 88);
+	_txtSalaries	= new Text(150, 9, 16, 100);		// kL
+	_lstSalaries	= new TextList(288, 27, 16, 111);	// kL
+
+//kL	_lstMaintenance	= new TextList(300, 9, 10, 120);
+	_lstMaintenance	= new TextList(288, 9, 16, 141);	// kL
+
+//kL	_txtIncome		= new Text(150, 9, 10, 136);
+//kL	_lstTotal		= new TextList(100, 9, 205, 136);
+	_txtIncome		= new Text(150, 9, 16, 162);		// kL
+	_lstTotal		= new TextList(98, 9, 206, 162);	// kL
+
+//kL	_btnOk = new TextButton(300, 20, 10, 170);
+	_btnOk			= new TextButton(288, 16, 16, 177);	// kL
+
+
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
 
 	add(_window);
@@ -77,19 +99,19 @@ MonthlyCostsState::MonthlyCostsState(Game *game, Base *base) : State(game), _bas
 
 	centerAllSurfaces();
 
-	// Set up objects
+
 	_window->setColor(Palette::blockOffset(15)+1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(15)+1);
 	_btnOk->setText(tr("STR_OK"));
-	_btnOk->onMouseClick((ActionHandler)&MonthlyCostsState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&MonthlyCostsState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
-	_btnOk->onKeyboardPress((ActionHandler)&MonthlyCostsState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onMouseClick((ActionHandler)& MonthlyCostsState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)& MonthlyCostsState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
+	_btnOk->onKeyboardPress((ActionHandler)& MonthlyCostsState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(15)+1);
 	_txtTitle->setBig();
-	_txtTitle->setAlign(ALIGN_CENTER);
+//kL	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_MONTHLY_COSTS"));
 
 	_txtCost->setColor(Palette::blockOffset(15)+1);
@@ -109,18 +131,20 @@ MonthlyCostsState::MonthlyCostsState(Game *game, Base *base) : State(game), _bas
 
 	_txtIncome->setColor(Palette::blockOffset(13)+10);
 	std::wstringstream ss;
-	ss << tr("STR_INCOME") << L"=" << Text::formatFunding(_game->getSavedGame()->getCountryFunding());
+//kL	ss << tr("STR_INCOME") << L"=" << Text::formatFunding(_game->getSavedGame()->getCountryFunding());
+	ss << tr("STR_INCOME") << L" " << Text::formatFunding(_game->getSavedGame()->getCountryFunding());		// kL
 	_txtIncome->setText(ss.str());
 
 	_lstCrafts->setColor(Palette::blockOffset(13)+10);
 	_lstCrafts->setColumns(4, 125, 70, 44, 60);
 	_lstCrafts->setDot(true);
 
-	const std::vector<std::string> &crafts = _game->getRuleset()->getCraftsList();
+	const std::vector<std::string>& crafts = _game->getRuleset()->getCraftsList();
 	for (std::vector<std::string>::const_iterator i = crafts.begin(); i != crafts.end(); ++i)
 	{
-		RuleCraft *craft = _game->getRuleset()->getCraft(*i);
-		if (craft->getRentCost() > 0 && _game->getSavedGame()->isResearched(craft->getRequirements()))
+		RuleCraft* craft = _game->getRuleset()->getCraft(*i);
+		if (craft->getRentCost() > 0
+			&& _game->getSavedGame()->isResearched(craft->getRequirements()))
 		{
 			std::wstringstream ss2;
 			ss2 << _base->getCraftCount((*i));
@@ -159,14 +183,13 @@ MonthlyCostsState::MonthlyCostsState(Game *game, Base *base) : State(game), _bas
  */
 MonthlyCostsState::~MonthlyCostsState()
 {
-
 }
 
 /**
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void MonthlyCostsState::btnOkClick(Action *)
+void MonthlyCostsState::btnOkClick(Action* )
 {
 	_game->popState();
 }
