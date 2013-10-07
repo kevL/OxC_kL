@@ -235,6 +235,7 @@ ArticleStateItem::ArticleStateItem(Game* game, ArticleDefinitionItem* defs, int 
 		case BT_AMMO:
 		case BT_GRENADE:
 		case BT_PROXIMITYGRENADE:
+		case BT_MELEE:
 			setDamageTypeText(_txtAmmoType[0], item);
 
 			ss.str(L"");ss.clear();
@@ -272,6 +273,9 @@ void ArticleStateItem::setDamageTypeText(Text *text_field, RuleItem *ammo_rule)
 		break;
 		case DT_STUN:
 			text_field->setText(tr("STR_STUN_UC").c_str());
+		break;
+		case DT_MELEE:
+			text_field->setText(tr("STR_ARMOR_PIERCING").c_str());
 		break;
 
 		default:

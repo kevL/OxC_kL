@@ -190,6 +190,7 @@ ArticleStateItem::ArticleStateItem(Game* game, ArticleDefinitionItem* defs, int 
 		add(_imageAmmo[i]);
 	}
 
+<<<<<<< HEAD
 	switch (item->getBattleType())
 	{
 		case BT_FIREARM:
@@ -207,6 +208,35 @@ ArticleStateItem::ArticleStateItem(Game* game, ArticleDefinitionItem* defs, int 
 
 			if (item->getClipSize() == -1)
 			{
+=======
+					ss.str(L"");ss.clear();
+					ss << item->getPower();
+					_txtAmmoDamage[0]->setText(ss.str().c_str());
+				}
+				else
+				{
+					for (unsigned int i = 0; i < std::min(ammo_data->size(), (size_t)3); ++i)
+					{
+						ArticleDefinition *ammo_article = _game->getRuleset()->getUfopaediaArticle((*ammo_data)[i]);
+						if (Ufopaedia::isArticleAvailable(_game, ammo_article))
+						{
+							RuleItem *ammo_rule = _game->getRuleset()->getItem((*ammo_data)[i]);
+							setDamageTypeText(_txtAmmoType[i], ammo_rule);
+
+							ss.str(L"");ss.clear();
+							ss << ammo_rule->getPower();
+							_txtAmmoDamage[i]->setText(ss.str().c_str());
+
+							ammo_rule->drawHandSprite(_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"), _imageAmmo[i]);
+						}
+					}
+				}
+				break;
+			case BT_AMMO:
+			case BT_GRENADE:
+			case BT_PROXIMITYGRENADE:
+			case BT_MELEE:
+>>>>>>> master
 				setDamageTypeText(_txtAmmoType[0], item);
 
 				ss.str(L"");ss.clear();
@@ -253,6 +283,7 @@ void ArticleStateItem::setDamageTypeText(Text *text_field, RuleItem *ammo_rule)
 {
 	switch(ammo_rule->getDamageType())
 	{
+<<<<<<< HEAD
 		case DT_AP:
 			text_field->setText(tr("STR_ARMOR_PIERCING").c_str());
 		break;
@@ -267,7 +298,8 @@ void ArticleStateItem::setDamageTypeText(Text *text_field, RuleItem *ammo_rule)
 			text_field->setText(tr("STR_LASER_BEAM").c_str());
 		break;
 		case DT_PLASMA:
-			text_field->setText(tr("STR_PLASMA_BEAM_UC").c_str());
+//kL			text_field->setText(tr("STR_PLASMA_BEAM_UC").c_str());
+			text_field->setText(tr("STR_PLASMA_BEAM_H").c_str());		// kL
 		break;
 		case DT_STUN:
 			text_field->setText(tr("STR_STUN_UC").c_str());
@@ -276,6 +308,36 @@ void ArticleStateItem::setDamageTypeText(Text *text_field, RuleItem *ammo_rule)
 		default:
 			text_field->setText(tr("STR_UNKNOWN").c_str());
 		break;
+=======
+		switch(ammo_rule->getDamageType())
+		{
+			case DT_AP:
+				text_field->setText(tr("STR_ARMOR_PIERCING").c_str());
+				break;
+			case DT_HE:
+			case DT_SMOKE:
+				text_field->setText(tr("STR_HIGH_EXPLOSIVE_UC").c_str());
+				break;
+			case DT_IN:
+				text_field->setText(tr("STR_INCENDIARY").c_str());
+				break;
+			case DT_LASER:
+				text_field->setText(tr("STR_LASER_BEAM").c_str());
+				break;
+			case DT_PLASMA:
+				text_field->setText(tr("STR_PLASMA_BEAM_UC").c_str());
+				break;
+			case DT_STUN:
+				text_field->setText(tr("STR_STUN_UC").c_str());
+				break;
+			case DT_MELEE:
+				text_field->setText(tr("STR_ARMOR_PIERCING").c_str());
+				break;
+			default:
+				text_field->setText(tr("STR_UNKNOWN").c_str());
+				break;
+		}
+>>>>>>> master
 	}
 }
 

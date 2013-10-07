@@ -74,11 +74,11 @@ bool BattlescapeGame::_debugPlay = false;
  */
 BattlescapeGame::BattlescapeGame(SavedBattleGame* save, BattlescapeState* parentState)
 	:
-	_save(save),
-	_parentState(parentState),
-	_playedAggroSound(false),
-	_endTurnRequested(false),
-	_kneelReserved(false)
+		_save(save),
+		_parentState(parentState),
+		_playedAggroSound(false),
+		_endTurnRequested(false),
+		_kneelReserved(false)
 {
 //	Log(LOG_INFO) << "Create BattlescapeGame";
 
@@ -95,7 +95,6 @@ BattlescapeGame::BattlescapeGame(SavedBattleGame* save, BattlescapeState* parent
 	cancelCurrentAction();
 	_currentAction.targeting = false;
 	_currentAction.type = BA_NONE;
-
 }
 
 /**
@@ -182,12 +181,10 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 	{
 		unit->dontReselect();
 	}
-<<<<<<< HEAD
 
-	if (unit->getTimeUnits() <= 5 || _AIActionCounter >= 2)
-=======
-	if (unit->getTimeUnits() <= 5 || _AIActionCounter >= 2 || !unit->reselectAllowed())
->>>>>>> master
+	if (unit->getTimeUnits() <= 5
+		|| _AIActionCounter >= 2
+		|| !unit->reselectAllowed())
 	{
 		if (_save->selectNextPlayerUnit(true, _AISecondMove) == 0)
 		{
@@ -263,9 +260,13 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 
 		if (_save->getTraceSetting()) { Log(LOG_INFO) << "#" << unit->getId() << "--" << unit->getType(); }
 	}
+<<<<<<< HEAD
 
 	// this cast only works when ai was already AlienBAIState at heart
 	AlienBAIState* aggro = dynamic_cast<AlienBAIState* >(ai);
+=======
+	//AlienBAIState *aggro = dynamic_cast<AlienBAIState*>(ai); // this cast only works when ai was already AlienBAIState at heart
+>>>>>>> master
 
 	BattleAction action;
 	action.actor = unit;
@@ -467,7 +468,7 @@ void BattlescapeGame::endTurn()
 				p.y = _save->getTiles()[i]->getPosition().y * 16 + 8;
 				p.z = _save->getTiles()[i]->getPosition().z * 24 - _save->getTiles()[i]->getTerrainLevel();
 
-				statePushNext(new ExplosionBState(this, p, (*it), (*it)->getPreviousOwner()));
+				statePushNext(new ExplosionBState(this, p, *it, (*it)->getPreviousOwner()));
 				_save->removeItem((*it));
 				statePushBack(0);
 
@@ -1065,7 +1066,8 @@ void BattlescapeGame::popState()
 //							Log(LOG_INFO) << ". SnapShot, TU percent = " << (float)action.weapon->getRules()->getTUSnap();
 
 //							if (tu / totalTU * (float)100 < (float)action.weapon->getRules()->getTUSnap())
-							if ((int)(tu / totalTU * 100.f) < action.weapon->getRules()->getTUSnap())
+							if ((int)(tu / totalTU * 100.f) + 1 < action.weapon->getRules()->getTUSnap())
+//								|| action.weapon->getAmmoQuantity() < 1)
 							{
 								cancelCurrentAction(true);
 							}
@@ -1074,7 +1076,8 @@ void BattlescapeGame::popState()
 //							Log(LOG_INFO) << ". AimedShot, TU percent = " << (float)action.weapon->getRules()->getTUAimed();
 
 //							if (tu / totalTU * (float)100 < (float)action.weapon->getRules()->getTUAimed())
-							if ((int)(tu / totalTU * 100.f) < action.weapon->getRules()->getTUAimed())
+							if ((int)(tu / totalTU * 100.f) + 1 < action.weapon->getRules()->getTUAimed())
+//								|| action.weapon->getAmmoQuantity() < 1)
 							{
 								cancelCurrentAction(true);
 							}
@@ -1083,7 +1086,8 @@ void BattlescapeGame::popState()
 //							Log(LOG_INFO) << ". AutoShot, TU percent = " << (float)action.weapon->getRules()->getTUAuto();
 
 //							if (tu / totalTU * (float)100 < (float)action.weapon->getRules()->getTUAuto())
-							if ((int)(tu / totalTU * 100.f) < action.weapon->getRules()->getTUAuto())
+							if ((int)(tu / totalTU * 100.f) + 1 < action.weapon->getRules()->getTUAuto())
+//								|| action.weapon->getAmmoQuantity() < 1)
 							{
 								cancelCurrentAction(true);
 							}
@@ -1232,14 +1236,15 @@ bool BattlescapeGame::checkReservedTU(BattleUnit *bu, int tu, bool justChecking)
 		switch (effectiveTuReserved)
 		{
 			case BA_SNAPSHOT:
-				return tu + (bu->getStats()->tu / 3) < bu->getTimeUnits();		// 33%
+				return tu + (bu->getStats()->tu / 3) < bu->getTimeUnits();			// 33%
 			break;
 			case BA_AUTOSHOT:
-				return tu + ((bu->getStats()->tu / 5)*2) < bu->getTimeUnits();	// 40%
+				return tu + ((bu->getStats()->tu / 5) * 2) < bu->getTimeUnits();	// 40%
 			break;
 			case BA_AIMEDSHOT:
-				return tu + (bu->getStats()->tu / 2) < bu->getTimeUnits();		// 50%
+				return tu + (bu->getStats()->tu / 2) < bu->getTimeUnits();			// 50%
 			break;
+
 			default:
 				return tu < bu->getTimeUnits();
 			break;
@@ -1269,6 +1274,7 @@ bool BattlescapeGame::checkReservedTU(BattleUnit *bu, int tu, bool justChecking)
 					case BA_NONE:
 						_parentState->warning("STR_TIME_UNITS_RESERVED_FOR_KNEELING");
 					break;
+
 					default:
 						_parentState->warning("STR_TUS_RESERVED_FOR_KNEELING_AND_FIRING");
 					break;

@@ -381,14 +381,9 @@ GeoscapeCraftState::GeoscapeCraftState(Game* game, Craft* craft, Globe* globe, W
 	}
 
 	if (_craft->getRules()->getSoldiers() == 0)
-	{
 		_txtSoldier->setVisible(false);
-	}
-
 	if (_craft->getRules()->getVehicles() == 0)
-	{
 		_txtHWP->setVisible(false);
-	}
 	// kL_end.
 }
 

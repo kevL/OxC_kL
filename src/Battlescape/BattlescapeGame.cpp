@@ -262,7 +262,7 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 	}
 
 	// this cast only works when ai was already AlienBAIState at heart
-	AlienBAIState* aggro = dynamic_cast<AlienBAIState* >(ai);
+//	AlienBAIState* aggro = dynamic_cast<AlienBAIState* >(ai);
 
 	BattleAction action;
 	action.actor = unit;
