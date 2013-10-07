@@ -53,7 +53,13 @@ namespace OpenXcom
  * @param action An action.
  * @param origin Position the projectile originates from.
  */
-Projectile::Projectile(ResourcePack *res, SavedBattleGame *save, BattleAction action, Position origin) : _res(res), _save(save), _action(action), _origin(origin), _position(0)
+Projectile::Projectile(ResourcePack* res, SavedBattleGame* save, BattleAction action, Position origin)
+	:
+		_res(res),
+		_save(save),
+		_action(action),
+		_origin(origin),
+		_position(0)
 {
 	if (_action.weapon && _action.type == BA_THROW)
 	{
@@ -76,14 +82,14 @@ Projectile::~Projectile()
 int Projectile::calculateTrajectory(double accuracy)
 {
 	Position originVoxel, targetVoxel;
-	Tile *targetTile = 0;
+	Tile* targetTile = 0;
 	//int dirYshift[24] = {1, 3, 9, 15, 15, 13, 7, 1,  1, 1, 7, 13, 15, 15, 9, 3,  1, 2, 8, 14, 15, 14, 8, 2};
 	//int dirXshift[24] = {9, 15, 15, 13, 8, 1, 1, 3,  7, 13, 15, 15, 9, 3, 1, 1,  8, 14, 15, 14, 8, 2, 1, 2};
 	// maybe if i get around to making that function to calculate a firepoint origin for fire point estimations i'll use the array above
 	// so i'll leave it commented for the time being.
 
-	originVoxel = Position(_origin.x*16, _origin.y*16, _origin.z*24);
-	BattleUnit *bu = _action.actor;
+	originVoxel = Position(_origin.x * 16, _origin.y * 16, _origin.z * 24);
+	BattleUnit* bu = _action.actor;
 	int offset = 8 * bu->getArmor()->getSize();
 
 	// take into account soldier height and terrain level if the projectile is launched from a soldier
@@ -91,10 +97,10 @@ int Projectile::calculateTrajectory(double accuracy)
 	{
 		// calculate offset of the starting point of the projectile
 		originVoxel.z += -_save->getTile(_origin)->getTerrainLevel();
-
 		originVoxel.z += bu->getHeight() + bu->getFloatHeight();
 		originVoxel.z -= 4;
-		Tile *tileAbove = _save->getTile(_origin + Position(0,0,1));
+
+		Tile* tileAbove = _save->getTile(_origin + Position(0, 0, 1));
 
 		if (originVoxel.z >= (_origin.z + 1) * 24)
 		{
@@ -348,7 +354,7 @@ bool Projectile::calculateThrow(double accuracy)
 	if (accuracy > 1) accuracy = 1;
 
 //kL	static const double maxDeviation = 0.08;
-	static const double maxDeviation = 0.073;	// kL
+	static const double maxDeviation = 0.075;	// kL
 	static const double minDeviation = 0;
 	double baseDeviation = (maxDeviation - (maxDeviation * accuracy)) + minDeviation;
 	double deviation = RNG::boxMuller(0, baseDeviation);

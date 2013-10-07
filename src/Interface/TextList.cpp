@@ -635,10 +635,9 @@ void TextList::setArrowColor(Uint8 color)
 }
 
 /**
- * Sets the position of the column of arrow buttons
- * in the text list.
- * @param pos X in pixels (-1 to disable).
- * @param type Arrow orientation type.
+ * Sets the position of the column of arrow buttons in the text list.
+ * @param pos, X in pixels (-1 to disable).
+ * @param type, Arrow orientation type.
  */
 void TextList::setArrowColumn(int pos, ArrowOrientation type)
 {

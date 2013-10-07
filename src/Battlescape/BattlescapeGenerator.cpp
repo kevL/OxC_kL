@@ -402,7 +402,7 @@ void BattlescapeGenerator::deployXCOM()
 				_save->setSelectedUnit(unit);
 		}
 	}
-	else //kL if (_base != 0)
+	else if (_base != 0)
 	{
 		// add vehicles that are in the base inventory
 		for (std::vector<Vehicle* >::iterator i = _base->getVehicles()->begin(); i != _base->getVehicles()->end(); ++i)
@@ -799,8 +799,8 @@ BattleUnit* BattlescapeGenerator::addCivilian(Unit* rules)
 
 /**
  * Places an item on an XCom soldier based on equipment layout.
- * @param item Pointer to the Item.
- * @return Pointer to the Item.
+ * @param item, Pointer to the Item.
+ * @return, Pointer to the Item.
  */
 BattleItem* BattlescapeGenerator::placeItemByLayout(BattleItem* item)
 {
@@ -871,9 +871,9 @@ BattleItem* BattlescapeGenerator::placeItemByLayout(BattleItem* item)
 
 /**
  * Adds an item to an XCom soldier (auto-equip).
- * @param item Pointer to the Item.
- * @param secondPass Is this the second time through the equipping routine?
- * @return Pointer to the Item.
+ * @param item, Pointer to the Item.
+ * @param secondPass, Is this the second time through the equipping routine?
+ * @return, Pointer to the Item.
  */
 BattleItem* BattlescapeGenerator::addItem(BattleItem* item, bool secondPass)
 {
@@ -920,7 +920,7 @@ BattleItem* BattlescapeGenerator::addItem(BattleItem* item, bool secondPass)
 			case BT_PROXIMITYGRENADE:
 			case BT_SCANNER:
 				// find the first soldier with a free belt slot to equip grenades
-				for (std::vector<BattleUnit* >::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
+/*kL				for (std::vector<BattleUnit* >::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 				{
 					// skip the vehicles, we need only X-Com soldiers WITHOUT equipment-layout
 					if ((*i)->getArmor()->getSize() > 1 || 0 == (*i)->getGeoscapeSoldier())
@@ -937,12 +937,12 @@ BattleItem* BattlescapeGenerator::addItem(BattleItem* item, bool secondPass)
 
 						break;
 					}
-				}
+				} */
 			break;
 			case BT_FIREARM:
 			case BT_MELEE:
 				// maybe we find ammo on the ground to load it with
-				if (item->getRules()->getCompatibleAmmo()->empty()
+/*kL				if (item->getRules()->getCompatibleAmmo()->empty()
 					|| item->getAmmoItem())
 				{
 					loaded = true;
@@ -979,11 +979,11 @@ BattleItem* BattlescapeGenerator::addItem(BattleItem* item, bool secondPass)
 							break;
 						}
 					}
-				}
+				} */
 			break;
 			case BT_MEDIKIT:
 				// find the first soldier with a free belt for medikit (2 spaces)
-				for (std::vector<BattleUnit* >::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
+/*kL				for (std::vector<BattleUnit* >::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 				{
 					// skip the vehicles, we need only X-Com soldiers WITHOUT equipment-layout
 					if ((*i)->getArmor()->getSize() > 1 || 0 == (*i)->getGeoscapeSoldier())
@@ -1001,7 +1001,7 @@ BattleItem* BattlescapeGenerator::addItem(BattleItem* item, bool secondPass)
 
 						break;
 					}
-				}
+				} */
 			break;
 
 			default:

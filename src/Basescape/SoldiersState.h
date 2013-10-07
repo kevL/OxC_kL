@@ -65,13 +65,13 @@ class SoldiersState
 		/// Handler for clicking the PsiTraining button.
 		void btnPsiTrainingClick(Action* action);
 		/// Handler for clicking the Armor button.		// kL
-		void btnArmorClick_noCraft(Action* action);		// kL
+		void btnArmorClick_Soldier(Action* action);		// kL
 
 		// kL_begin: re-order soldiers, taken from CraftSoldiersState.
 		/// Handler for clicking the Soldiers reordering button.
-		void lstItemsLeftArrowClick_noCraft(Action* action);
+		void lstItemsLeftArrowClick_Soldier(Action* action);
 		/// Handler for clicking the Soldiers reordering button.
-		void lstItemsRightArrowClick_noCraft(Action* action);
+		void lstItemsRightArrowClick_Soldier(Action* action);
 		// kL_end.
 };
 

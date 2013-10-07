@@ -437,16 +437,22 @@ void Soldier::trainPsi()
 	// -10 days - tolerance threshold for switch from anytimePsiTraining option.
 	// If soldier has psiskill -10..-1, he was trained 20..59 days. 81.7% probability, he was trained more that 30 days.
 	if (_currentStats.psiSkill < -10 + _rules->getMinStats().psiSkill)
+	{
 		_currentStats.psiSkill = _rules->getMinStats().psiSkill;
+	}
 	else if (_currentStats.psiSkill <= _rules->getMaxStats().psiSkill)
 	{
 		int max = _rules->getMaxStats().psiSkill + _rules->getMaxStats().psiSkill / 2;
 		_improvement = RNG::generate(_rules->getMaxStats().psiSkill, max);
 	}
 	else if (_currentStats.psiSkill <= (_rules->getStatCaps().psiSkill / 2))
+	{
 		_improvement = RNG::generate(5, 12);
+	}
 	else if (_currentStats.psiSkill < _rules->getStatCaps().psiSkill)
+	{
 		_improvement = RNG::generate(1, 3);
+	}
 
 	_currentStats.psiSkill += _improvement;
 	if (_currentStats.psiSkill > 100)
@@ -483,7 +489,9 @@ void Soldier::trainPsi1Day()
 		}
 	}
 	else // minStats.psiSkill <= 0 && _currentStats.psiSkill == minStats.psiSkill
+	{
 		_currentStats.psiSkill -= RNG::generate(30, 60);	// set initial training from 30 to 60 days
+	}
 }
 
 /**

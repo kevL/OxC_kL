@@ -45,8 +45,8 @@ namespace OpenXcom
  */
 StoresState::StoresState(Game* game, Base* base)
 	:
-	State(game),
-	_base(base)
+		State(game),
+		_base(base)
 {
 	// Create objects
 	_window			= new Window(this, 320, 200, 0, 0);

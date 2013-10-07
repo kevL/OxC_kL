@@ -62,22 +62,24 @@ SoldiersState::SoldiersState(Game* game, Base* base)
 	// Create objects
 	_window			= new Window(this, 320, 200, 0, 0);
 
+//kL	_txtTitle		= new Text(310, 16, 5, 8);
+	_txtTitle		= new Text(300, 16, 10, 8);		// kL
+
+//kL	_txtName		= new Text(114, 9, 16, 32);
+//kL	_txtRank		= new Text(102, 9, 130, 32);
+//kL	_txtCraft		= new Text(82, 9, 222, 32);
+	_txtName		= new Text(114, 9, 16, 31);		// kL
+	_txtRank		= new Text(102, 9, 133, 31);	// kL
+	_txtCraft		= new Text(82, 9, 226, 31);		// kL
+
+//kL	_lstSoldiers	= new TextList(288, 128, 8, 40);
+	_lstSoldiers	= new TextList(288, 128, 8, 42);
+
 //kL	_btnPsiTrain	= new TextButton(148, 16, 8, 176);
-	_btnPsiTrain	= new TextButton(94, 16, 16, 176);		// kL
-	_btnArmor		= new TextButton(94, 16, 113, 176);		// kL
+	_btnPsiTrain	= new TextButton(94, 16, 16, 177);		// kL
 //kL	_btnOk			= new TextButton(isPsiBtnVisible? 148:288, 16, isPsiBtnVisible? 164:16, 176);
-	_btnOk			= new TextButton(94, 16, 210, 176);		// kL
-
-	_txtTitle		= new Text(310, 16, 5, 8);
-	_txtName		= new Text(114, 9, 16, 32);
-	_txtRank		= new Text(102, 9, 130, 32);
-	_txtCraft		= new Text(82, 9, 222, 32);
-	_lstSoldiers	= new TextList(288, 128, 8, 40);
-
-	// -from CraftEquipmentState
-//	_btnClear		= new TextButton(94, 16, 16, 176);	// kL... see official file for default values
-//	_btnInventory	= new TextButton(94, 16, 113, 176);	// kL...  "
-//	_btnOk			= new TextButton(94, 16, 210, 176);	// kL
+	_btnOk			= new TextButton(94, 16, 113, 177);		// kL
+	_btnArmor		= new TextButton(94, 16, 210, 177);		// kL
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)), Palette::backPos, 16);
@@ -100,19 +102,19 @@ SoldiersState::SoldiersState(Game* game, Base* base)
 
 	_btnPsiTrain->setColor(Palette::blockOffset(13)+10);
 	_btnPsiTrain->setText(tr("STR_PSIONIC_TRAINING"));
-	_btnPsiTrain->onMouseClick((ActionHandler) &SoldiersState::btnPsiTrainingClick);
+	_btnPsiTrain->onMouseClick((ActionHandler)& SoldiersState::btnPsiTrainingClick);
 	_btnPsiTrain->setVisible(isPsiBtnVisible);
 
 	// kL_begin: setup Armor from Soldiers screen.
 	_btnArmor->setColor(Palette::blockOffset(13)+10);
 	_btnArmor->setText(tr("STR_ARMOR"));
-	_btnArmor->onMouseClick((ActionHandler) &SoldiersState::btnArmorClick_noCraft);
+	_btnArmor->onMouseClick((ActionHandler)& SoldiersState::btnArmorClick_Soldier);
 	// kL_end.
 
 	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(tr("STR_OK"));
-	_btnOk->onMouseClick((ActionHandler) &SoldiersState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler) &SoldiersState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onMouseClick((ActionHandler)& SoldiersState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)& SoldiersState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
@@ -131,15 +133,14 @@ SoldiersState::SoldiersState(Game* game, Base* base)
 	_lstSoldiers->setColor(Palette::blockOffset(13)+10);
 //kL	_lstSoldiers->setArrowColor(Palette::blockOffset(15)+1);
 	_lstSoldiers->setArrowColor(Palette::blockOffset(15)+6);	// kL
-	_lstSoldiers->setArrowColumn(192, ARROW_VERTICAL);			// kL
-//kL	_lstSoldiers->setColumns(3, 114, 92, 74);					// =280
-//	_lstSoldiers->setColumns(3, 114, 94, 72);					// kL
-	_lstSoldiers->setColumns(3, 116, 93, 71);					// kL
+	_lstSoldiers->setArrowColumn(193, ARROW_VERTICAL);			// kL
+//kL	_lstSoldiers->setColumns(3, 114, 92, 74);				// =280
+	_lstSoldiers->setColumns(3, 117, 93, 71);					// kL
 	_lstSoldiers->setSelectable(true);
 	_lstSoldiers->setBackground(_window);
 	_lstSoldiers->setMargin(8);
-	_lstSoldiers->onLeftArrowClick((ActionHandler)& SoldiersState::lstItemsLeftArrowClick_noCraft);		// kL
-	_lstSoldiers->onRightArrowClick((ActionHandler)& SoldiersState::lstItemsRightArrowClick_noCraft);	// kL
+	_lstSoldiers->onLeftArrowClick((ActionHandler)& SoldiersState::lstItemsLeftArrowClick_Soldier);		// kL
+	_lstSoldiers->onRightArrowClick((ActionHandler)& SoldiersState::lstItemsRightArrowClick_Soldier);	// kL
 	_lstSoldiers->onMouseClick((ActionHandler)& SoldiersState::lstSoldiersClick);
 
 	// kL_note: this is the CraftSoldiersState list:
@@ -207,7 +208,7 @@ void SoldiersState::btnPsiTrainingClick(Action* )
  * kL. Taken from CraftInfoState.
  * @param action Pointer to an action.
  */
-void SoldiersState::btnArmorClick_noCraft(Action* )
+void SoldiersState::btnArmorClick_Soldier(Action* )
 {
 //	Log(LOG_INFO) << "SoldiersState::btnArmorClick_noCraft()";
 	_game->pushState(new CraftArmorState(_game, _base, (size_t)0)); //, _craft
@@ -236,7 +237,7 @@ void SoldiersState::lstSoldiersClick(Action* action)		// kL
  * Reorders a soldier. kL_Taken from CraftSoldiersState.
  * @param action Pointer to an action.
  */
-void SoldiersState::lstItemsLeftArrowClick_noCraft(Action* action)
+void SoldiersState::lstItemsLeftArrowClick_Soldier(Action* action)
 {
 	if (SDL_BUTTON_LEFT == action->getDetails()->button.button
 		|| SDL_BUTTON_RIGHT == action->getDetails()->button.button)
@@ -275,7 +276,7 @@ void SoldiersState::lstItemsLeftArrowClick_noCraft(Action* action)
  * Reorders a soldier. kL_Taken from CraftSoldiersState.
  * @param action Pointer to an action.
  */
-void SoldiersState::lstItemsRightArrowClick_noCraft(Action* action)
+void SoldiersState::lstItemsRightArrowClick_Soldier(Action* action)
 {
 	if (SDL_BUTTON_LEFT == action->getDetails()->button.button
 		|| SDL_BUTTON_RIGHT == action->getDetails()->button.button)

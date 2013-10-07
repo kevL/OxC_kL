@@ -60,7 +60,8 @@ CraftInfoState::CraftInfoState(Game* game, Base* base, size_t craft)
 
 	// Create objects
 	_window		= new Window(this, 320, 200, 0, 0, POPUP_BOTH);
-	_btnOk		= new TextButton(64, 24, 128, 168);
+//kL	_btnOk		= new TextButton(64, 24, 128, 168);
+	_btnOk		= new TextButton(288, 16, 16, 177);		// kL
 	_btnW1		= new TextButton(24, 32, 14, 48);
 	_btnW2		= new TextButton(24, 32, 282, 48);
 	_btnCrew	= new TextButton(64, 16, 14, 96);

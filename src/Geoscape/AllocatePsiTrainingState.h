@@ -16,10 +16,12 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_ALLOCATEPSITRAININGSTATE_H
 #define OPENXCOM_ALLOCATEPSITRAININGSTATE_H
 
 #include "../Engine/State.h"
+
 
 namespace OpenXcom
 {
@@ -32,34 +34,38 @@ class TextList;
 class Soldier;
 
 /**
- * Report screen shown monthly to display
- * changes in the player's performance and funding.
+ * Screen that allocates soldiers to psionic training.
  */
-class AllocatePsiTrainingState : public State
+class AllocatePsiTrainingState
+	:
+		public State
 {
 private:
-	TextButton *_btnOk;
-	Window *_window;
-	Text *_txtTitle, *_txtTraining, *_txtName, *_txtCraft, *_txtRemaining, *_txtLabSpace;
-	Text *_txtPsiStrength, *_txtPsiSkill;
+	TextButton* _btnOk;
+	Window* _window;
+//kL	Text* _txtTitle, * _txtTraining, * _txtName, * _txtCraft, * _txtRemaining, * _txtLabSpace, * _txtPsiStrength, * _txtPsiSkill;
+	Text* _txtTitle, * _txtTraining, * _txtName, * _txtCraft, * _txtLab, * _txtPsiStrength, * _txtPsiSkill;		// kL
 	TextList *_lstSoldiers;
-	std::vector<Soldier*> _soldiers;
+	std::vector<Soldier* > _soldiers;
 	unsigned int _sel;
 	int _labSpace;
-	Base *_base;
-public:
-	/// Creates the Psi Training state.
-	AllocatePsiTrainingState(Game *game, Base *base);
-	/// Cleans up the Psi Training state.
-	~AllocatePsiTrainingState();
-	/// Updates the palette.
-	void init();
-	/// Handler for clicking the OK button.
-	void btnOkClick(Action *action);
-	void btnBase1Click();
-	void lstSoldiersPress(Action *action);
-	void lstSoldiersRelease(Action *action);
-	void lstSoldiersClick(Action *action);
+	Base* _base;
+
+	public:
+		/// Creates the Psi Training state.
+		AllocatePsiTrainingState(Game* game, Base* base);
+		/// Cleans up the Psi Training state.
+		~AllocatePsiTrainingState();
+
+		/// Updates the palette.
+		void init();
+
+		/// Handler for clicking the OK button.
+		void btnOkClick(Action* action);
+		void btnBase1Click();
+		void lstSoldiersPress(Action* action);
+		void lstSoldiersRelease(Action* action);
+		void lstSoldiersClick(Action* action);
 };
 
 }

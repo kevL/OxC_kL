@@ -95,7 +95,7 @@ void TileEngine::calculateSunShading()
   * Calculates sun shading for 1 tile. Sun comes from above and is blocked by floors or objects.
   * @param tile The tile to calculate sun shading for.
   */
-void TileEngine::calculateSunShading(Tile *tile)
+void TileEngine::calculateSunShading(Tile* tile)
 {
 	const int layer = 0; // Ambient lighting layer.
 

@@ -49,16 +49,29 @@ CraftsState::CraftsState(Game* game, Base* base)
 {
 	// Create objects
 	_window		= new Window(this, 320, 200, 0, 0);
-	_btnOk		= new TextButton(288, 16, 16, 176);
-	_txtTitle	= new Text(298, 16, 16, 8);
+
+//kL	_txtTitle	= new Text(298, 16, 16, 8);
+	_txtTitle	= new Text(300, 16, 10, 8);		// kL
+
 	_txtBase	= new Text(298, 16, 16, 24);
-	_txtName	= new Text(94, 9, 16, 40);
-	_txtStatus	= new Text(50, 9, 110, 40);
-	_txtWeapon	= new Text(50, 16, 160, 40);
-	_txtCrew	= new Text(58, 9, 210, 40);
-	_txtHwp		= new Text(46, 9, 268, 40);
+
+//kL	_txtName	= new Text(94, 9, 16, 40);
+//kL	_txtStatus	= new Text(50, 9, 110, 40);
+//kL	_txtWeapon	= new Text(50, 16, 160, 40);
+//kL	_txtCrew	= new Text(58, 9, 210, 40);
+//kL	_txtHwp		= new Text(46, 9, 268, 40);
+	_txtName	= new Text(94, 8, 16, 48);		// kL
+	_txtStatus	= new Text(50, 8, 110, 48);		// kL
+	_txtWeapon	= new Text(50, 16, 160, 40);	// kL
+	_txtCrew	= new Text(58, 8, 210, 48);		// kL
+	_txtHwp		= new Text(46, 8, 268, 48);		// kL
+
 	_lstCrafts	= new TextList(288, 118, 8, 58);
 
+//	_lstCrafts->setColumns(5, 94, 65, 47, 46, 28);		// kL_TEMP
+
+//kL	_btnOk		= new TextButton(288, 16, 16, 176);
+	_btnOk		= new TextButton(288, 16, 16, 177);		// kL
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(3)), Palette::backPos, 16);
 
@@ -86,6 +99,7 @@ CraftsState::CraftsState(Game* game, Base* base)
 
 	_txtTitle->setColor(Palette::blockOffset(15)+1);
 	_txtTitle->setBig();
+	_txtTitle->setAlign(ALIGN_CENTER);		// kL
 	_txtTitle->setText(tr("STR_INTERCEPTION_CRAFT"));
 
 	_txtBase->setColor(Palette::blockOffset(15)+1);
