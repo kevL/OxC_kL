@@ -1157,6 +1157,11 @@ bool DetectXCOMBase::operator()(const Ufo *ufo) const
 		return false;
 	}
 
+	if (ufo->getStatus() != STATUS_FLYING)
+	{
+		return false;
+	}
+
 	// UFOs have a detection range of 80 XCOM units.
 	if (_base.getDistance(ufo) >= 80 * (1 / 60.f) * (M_PI / 180.f))
 	{
