@@ -700,7 +700,14 @@ bool TileEngine::canTargetUnit(Position* originVoxel, Tile* tile, Position* scan
 	int relX = floor(((float)relPos.y) * normal + 0.5);
 	int relY = floor(((float)-relPos.x) * normal + 0.5);
 
-	int sliceTargets[10]= { 0,0, relX,relY, -relX,-relY, relY,-relX, -relY,relX };
+	int sliceTargets[10] =
+	{
+		0, 0,
+		relX, relY,
+		-relX, -relY,
+		relY, -relX,
+		-relY, relX
+	};
 
 	if (!potentialUnit->isOut())
 	{
@@ -1020,7 +1027,7 @@ std::vector<BattleUnit *> TileEngine::getSpottingUnits(BattleUnit* unit)
 			if (((*i)->checkViewSector(unit->getPosition()) || gotHit)	// spotter can actually see the target Tile, or unit got hit
 				&& canTargetUnit(&originVoxel, tile, &targetVoxel, *i)	// can actually see the unit
 				&& visible(*i, tile))									// kL: put some smoke & fire parameters in here
-																		// (Wb. took this out in favor of canTargetUnit(). But does that account for Smoke?)
+																		// (Wb. took this out in favor of canTargetUnit(). But does that account for Smoke? apparently not)
 			{
 				if ((*i)->getFaction() == FACTION_PLAYER)
 				{
@@ -1104,15 +1111,22 @@ bool TileEngine::canMakeSnap(BattleUnit* unit, BattleUnit* target)
 			&& weapon->getAmmoItem()
 			&& unit->getTimeUnits() > unit->getActionTUs(BA_SNAPSHOT, weapon))))
 	{
+		Position origin = getSightOriginVoxel(unit);
+		Position scanVoxel;
+		if (canTargetUnit(&origin, target->getTile(), &scanVoxel, unit))
+
+/*kL: This is Warboy's code below, replaces condition above.
+// note that canTargetUnit() has actually already been done when
+// constructing the spotters.Vector in getSpottingUnits()
 		Position originVoxel = getSightOriginVoxel(unit);
 		originVoxel.z -= 2;
 		Position targetVoxel = getSightOriginVoxel(target);
 		targetVoxel.z -= 2;
 		std::vector<Position> trajectory;
-		if (calculateLine(originVoxel, targetVoxel, true, &trajectory, unit) == 4 &&
-			trajectory.back().x / 16 == targetVoxel.x / 16 &&
-			trajectory.back().y / 16 == targetVoxel.y / 16 &&
-			trajectory.back().z / 24 == targetVoxel.z / 24)
+		if (calculateLine(originVoxel, targetVoxel, true, &trajectory, unit) == 4
+			&& trajectory.back().x / 16 == targetVoxel.x / 16
+			&& trajectory.back().y / 16 == targetVoxel.y / 16
+			&& trajectory.back().z / 24 == targetVoxel.z / 24) */
 		{
 //			Log(LOG_INFO) << "canMakeSnap() " << unit->getId() << " true";		// kL
 
@@ -1134,8 +1148,10 @@ bool TileEngine::canMakeSnap(BattleUnit* unit, BattleUnit* target)
 bool TileEngine::tryReactionSnap(BattleUnit* unit, BattleUnit* target)
 {
 	BattleAction action;
+
 	action.cameraPosition = _save->getBattleState()->getMap()->getCamera()->getMapOffset();
 	action.actor = unit;
+
 	action.weapon = unit->getMainHandWeapon();
 	if (!action.weapon)
 	{
