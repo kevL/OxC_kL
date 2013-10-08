@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "ManufactureState.h"
 #include <sstream>
 #include "../Engine/Game.h"
@@ -37,6 +38,7 @@
 #include "ManufactureInfoState.h"
 #include <limits>
 
+
 namespace OpenXcom
 {
 
@@ -45,28 +47,53 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
  */
-ManufactureState::ManufactureState(Game *game, Base *base) : State(game), _base(base)
+ManufactureState::ManufactureState(Game* game, Base* base)
+	:
+		State(game),
+		_base(base)
 {
-	// Create objects
-	_window = new Window(this, 320, 200, 0, 0);
-	_btnNew = new TextButton(148, 16, 8, 176);
-	_btnOk = new TextButton(148, 16, 164, 176);
-	_txtTitle = new Text(310, 16, 5, 8);
-	_txtAvailable = new Text(150, 9, 8, 24);
-	_txtAllocated = new Text(150, 9, 160, 24);
-	_txtSpace = new Text(150, 9, 8, 34);
-	_txtFunds = new Text(150, 9, 160, 34);
-	_txtItem = new Text(80, 9, 10, 52);
-	_txtEngineers = new Text(56, 18, 112, 44);
-	_txtProduced = new Text(56, 18, 168, 44);
-	_txtCost = new Text(40, 27, 222, 44);
-	_txtTimeLeft = new Text(55, 18, 260, 44);
-	_lstManufacture = new TextList(307, 90, 8, 80);
+	_window			= new Window(this, 320, 200, 0, 0);
+
+/*kL	_txtTitle		= new Text(310, 16, 5, 8);
+	_txtAvailable	= new Text(150, 9, 8, 24);
+	_txtAllocated	= new Text(150, 9, 160, 24);
+	_txtSpace		= new Text(150, 9, 8, 34);
+	_txtFunds		= new Text(150, 9, 160, 34);
+	_txtItem		= new Text(80, 9, 10, 52);
+	_txtEngineers	= new Text(56, 18, 112, 44);
+	_txtProduced	= new Text(56, 18, 168, 44);
+	_txtCost		= new Text(40, 27, 222, 44);
+	_txtTimeLeft	= new Text(55, 18, 260, 44);
+	_lstManufacture	= new TextList(307, 90, 8, 80); */
+
+	// kL_begin: Manufacture graphic adjustments.
+	_txtTitle		= new Text(300, 16, 16, 10);
+
+	_txtAvailable	= new Text(140, 9, 16, 25);
+	_txtAllocated	= new Text(140, 9, 160, 25);
+
+	_txtSpace		= new Text(140, 9, 16, 34);
+	_txtFunds		= new Text(140, 9, 160, 34);
+
+	_txtItem		= new Text(120, 9, 16, 52);
+	_txtEngineers	= new Text(45, 9, 145, 44);
+	_txtProduced	= new Text(40, 9, 174, 52);
+	_txtCost		= new Text(50, 17, 216, 44);
+	_txtTimeLeft	= new Text(55, 9, 271, 52);
+//	_lstManufacture->setColumns(5, 129, 29, 42, 55, 32);
+
+	_lstManufacture	= new TextList(288, 96, 8, 70);
+	// kL_end.
+
+//kL	_btnNew			= new TextButton(148, 16, 8, 176);
+//kL	_btnOk			= new TextButton(148, 16, 164, 176);
+	_btnNew			= new TextButton(144, 16, 16, 177);		// kL
+	_btnOk			= new TextButton(144, 16, 163, 177);	// kL
+
 
 	// back up palette in case we're being called from Geoscape!
-	memcpy(_oldPalette, _game->getScreen()->getPalette(), 256*sizeof(SDL_Color));
+	memcpy(_oldPalette, _game->getScreen()->getPalette(), 256 * sizeof(SDL_Color));
 
-	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
 
@@ -87,7 +114,7 @@ ManufactureState::ManufactureState(Game *game, Base *base) : State(game), _base(
 
 	centerAllSurfaces();
 
-	// Set up objects
+
 	_window->setColor(Palette::blockOffset(15)+6);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK17.SCR"));
 
@@ -137,13 +164,16 @@ ManufactureState::ManufactureState(Game *game, Base *base) : State(game), _base(
 
 	_lstManufacture->setColor(Palette::blockOffset(13)+10);
 	_lstManufacture->setArrowColor(Palette::blockOffset(15)+9);
-	_lstManufacture->setColumns(5, 132, 17, 42, 56, 32);
-	_lstManufacture->setAlign(ALIGN_RIGHT);
-	_lstManufacture->setAlign(ALIGN_LEFT, 0);
+//kL	_lstManufacture->setColumns(5, 132, 17, 42, 56, 32);
+	_lstManufacture->setColumns(5, 129, 29, 42, 55, 32);		// kL
+//kL	_lstManufacture->setAlign(ALIGN_RIGHT);
+//kL	_lstManufacture->setAlign(ALIGN_LEFT, 0);
 	_lstManufacture->setSelectable(true);
 	_lstManufacture->setBackground(_window);
-	_lstManufacture->setMargin(1);
-	_lstManufacture->onMouseClick((ActionHandler)&ManufactureState::lstManufactureClick);
+//kL	_lstManufacture->setMargin(1);
+	_lstManufacture->setMargin(8);
+	_lstManufacture->onMouseClick((ActionHandler)& ManufactureState::lstManufactureClick);
+
 	fillProductionList();
 }
 
@@ -152,7 +182,6 @@ ManufactureState::ManufactureState(Game *game, Base *base) : State(game), _base(
  */
 ManufactureState::~ManufactureState()
 {
-
 }
 
 /**

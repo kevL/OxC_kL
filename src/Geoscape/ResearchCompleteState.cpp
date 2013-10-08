@@ -35,6 +35,7 @@
 
 namespace OpenXcom
 {
+
 /**
  * Initializes all the elements in the EndResearch screen.
  * @param game Pointer to the core game.
@@ -42,7 +43,7 @@ namespace OpenXcom
  */
 ResearchCompleteState::ResearchCompleteState(Game* game, const RuleResearch* research, const RuleResearch* bonus)
 	:
-	State(game), _research(research), _bonus(bonus)
+		State(game), _research(research), _bonus(bonus)
 {
 	_screen = false;
 

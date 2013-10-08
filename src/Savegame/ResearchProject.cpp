@@ -16,33 +16,49 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "ResearchProject.h"
 #include "../Ruleset/RuleResearch.h"
 #include "../Ruleset/Ruleset.h"
 #include <algorithm>
 
+
 namespace OpenXcom
 {
-const float PROGRESS_LIMIT_UNKNOWN = 0.333f;
-const float PROGRESS_LIMIT_POOR = 0.008f;
-const float PROGRESS_LIMIT_AVERAGE = 0.14f;
-const float PROGRESS_LIMIT_GOOD = 0.26f;
 
-ResearchProject::ResearchProject(RuleResearch * p, int c) : _project(p), _assigned(0), _spent(0), _cost(c)
+/*kL const float PROGRESS_LIMIT_UNKNOWN	= 0.333f;
+const float PROGRESS_LIMIT_POOR		= 0.008f;
+const float PROGRESS_LIMIT_AVERAGE	= 0.14f;
+const float PROGRESS_LIMIT_GOOD		= 0.26f; */
+const float PROGRESS_LIMIT_UNKNOWN	= 0.25f;	// kL
+const float PROGRESS_LIMIT_POOR		= 0.05f;	// kL
+const float PROGRESS_LIMIT_AVERAGE	= 0.25f;	// kL
+const float PROGRESS_LIMIT_GOOD		= 0.5f;		// kL
+
+ResearchProject::ResearchProject(RuleResearch* p, int c)
+	:
+		_project(p),
+		_assigned(0),
+		_spent(0),
+		_cost(c)
 {
 }
+
+// kL_note: DESTRUCTOR?
 
 /**
  * Called every day to compute time spent on this ResearchProject
  * @return true if the ResearchProject is finished
-*/
+ */
 bool ResearchProject::step()
 {
 	_spent += _assigned;
+
 	if (_spent >= getCost())
 	{
 		return true;
 	}
+
 	return false;
 }
 
@@ -50,12 +66,15 @@ bool ResearchProject::step()
  * Changes the number of scientist to the ResearchProject
  * @param nb number of scientist assigned to this ResearchProject
  */
-void ResearchProject::setAssigned (int nb)
+void ResearchProject::setAssigned(int nb)
 {
 	_assigned = nb;
 }
 
-const RuleResearch * ResearchProject::getRules () const
+/**
+ *
+ */
+const RuleResearch* ResearchProject::getRules() const
 {
 	return _project;
 }
@@ -64,7 +83,7 @@ const RuleResearch * ResearchProject::getRules () const
  * Returns the number of scientist assigned to this project
  * @return Number of assigned scientist.
  */
-int ResearchProject::getAssigned () const
+int ResearchProject::getAssigned() const
 {
 	return _assigned;
 }
@@ -73,7 +92,7 @@ int ResearchProject::getAssigned () const
  * Returns the time already spent on this project
  * @return the time already spent on this ResearchProject(in man/day)
  */
-int ResearchProject::getSpent () const
+int ResearchProject::getSpent() const
 {
 	return _spent;
 }
@@ -82,7 +101,7 @@ int ResearchProject::getSpent () const
  * Changes the cost of the ResearchProject
  * @param spent new project cost(in man/day)
  */
-void ResearchProject::setSpent (int spent)
+void ResearchProject::setSpent(int spent)
 {
 	_spent = spent;
 }
@@ -123,10 +142,11 @@ void ResearchProject::load(const YAML::Node& node)
 YAML::Node ResearchProject::save() const
 {
 	YAML::Node node;
-	node["project"] = getRules ()->getName ();
-	node["assigned"] = getAssigned ();
-	node["spent"] = getSpent ();
-	node["cost"] = getCost ();
+	node["project"]		= getRules()->getName();
+	node["assigned"]	= getAssigned();
+	node["spent"]		= getSpent();
+	node["cost"]		= getCost();
+
 	return node;
 }
 
@@ -134,9 +154,11 @@ YAML::Node ResearchProject::save() const
  * Return a string describing Research progress.
  * @return a string describing Research progress.
 */
-std::string ResearchProject::getResearchProgress () const
+std::string ResearchProject::getResearchProgress() const
 {
-	float progress = (float)getSpent () / getRules ()->getCost();
+//kL	float progress = (float)getSpent() / getRules()->getCost();
+	float progress = (float)getSpent() / (float)getRules()->getCost();	// kL
+
 	if (getAssigned () == 0)
 	{
 		return "STR_NONE";
@@ -147,8 +169,9 @@ std::string ResearchProject::getResearchProgress () const
 	}
 	else
 	{
-		float rating = (float)getAssigned ();
-		rating /= getRules ()->getCost();
+//kL		float rating = (float)getAssigned();
+//kL		rating /= getRules()->getCost();
+		float rating = (float)getAssigned() / (float)getRules()->getCost();
 		if (rating < PROGRESS_LIMIT_POOR)
 		{
 			return "STR_POOR";
@@ -161,7 +184,9 @@ std::string ResearchProject::getResearchProgress () const
 		{
 			return "STR_GOOD";
 		}
+
 		return "STR_EXCELLENT";
 	}
 }
+
 }

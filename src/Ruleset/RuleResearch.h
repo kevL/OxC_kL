@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_RULERESEARCH_H
 #define OPENXCOM_RULERESEARCH_H
 
@@ -23,8 +24,10 @@
 #include <vector>
 #include <yaml-cpp/yaml.h>
 
+
 namespace OpenXcom
 {
+
 /**
  * Represents one research project.
  * Dependency is the list of RuleResearchs which must be discovered before a RuleResearch became available.
@@ -39,37 +42,39 @@ namespace OpenXcom
  */
 class RuleResearch
 {
- private:
+private:
 	std::string _name, _lookup;
 	int _cost, _points;
 	std::vector<std::string> _dependencies, _unlocks, _getOneFree, _requires;
 	bool _needItem;
 	int _listOrder;
-public:
-	RuleResearch(const std::string & name);
-	/// Loads the research from YAML.
-	void load(const YAML::Node& node, int listOrder);
-	/// Gets time needed to discover this ResearchProject.
-	int getCost() const;
-	/// Gets the research name.
-	const std::string & getName () const;
-	/// Gets the research dependencies.
-	const std::vector<std::string> & getDependencies () const;
-	/// Checks if this ResearchProject needs a corresponding Item to be researched.
-	bool needItem() const;
-	/// Gets the list of ResearchProjects unlocked by this research.
-	const std::vector<std::string> & getUnlocked () const;
-	/// Gets the points earned for discovering this ResearchProject.
-	int getPoints() const;
-	/// Gets the list of ResearchProjects granted at random for free by this research.
-	const std::vector<std::string> & getGetOneFree() const;
-	/// Gets what to look up in the ufopedia.
-	const std::string getLookup () const;
-	/// Gets the requirements for this ResearchProject.
-	const std::vector<std::string> & getRequirements() const;
-	/// Gets the list weight for this research item.
-	int getListOrder() const;
+
+	public:
+		RuleResearch(const std::string& name);
+		/// Loads the research from YAML.
+		void load(const YAML::Node& node, int listOrder);
+		/// Gets time needed to discover this ResearchProject.
+		int getCost() const;
+		/// Gets the research name.
+		const std::string& getName() const;
+		/// Gets the research dependencies.
+		const std::vector<std::string>& getDependencies() const;
+		/// Checks if this ResearchProject needs a corresponding Item to be researched.
+		bool needItem() const;
+		/// Gets the list of ResearchProjects unlocked by this research.
+		const std::vector<std::string>& getUnlocked() const;
+		/// Gets the points earned for discovering this ResearchProject.
+		int getPoints() const;
+		/// Gets the list of ResearchProjects granted at random for free by this research.
+		const std::vector<std::string>& getGetOneFree() const;
+		/// Gets what to look up in the ufopedia.
+		const std::string getLookup() const;
+		/// Gets the requirements for this ResearchProject.
+		const std::vector<std::string>& getRequirements() const;
+		/// Gets the list weight for this research item.
+		int getListOrder() const;
 };
+
 }
 
 #endif

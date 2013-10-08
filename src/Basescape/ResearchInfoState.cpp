@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "ResearchInfoState.h"
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
@@ -46,9 +47,15 @@ namespace OpenXcom
  * @param base Pointer to the base to get info from.
  * @param rule A RuleResearch which will be used to create a new ResearchProject
  */
-ResearchInfoState::ResearchInfoState(Game *game, Base *base, RuleResearch * rule) : State(game), _base(base), _project(new ResearchProject(rule, int(rule->getCost() * OpenXcom::RNG::generate(50, 150)/100))), _rule(rule)
+ResearchInfoState::ResearchInfoState(Game* game, Base* base, RuleResearch* rule)
+	:
+		State(game),
+		_base(base),
+//kL		_project(new ResearchProject(rule, int(rule->getCost() * OpenXcom::RNG::generate(50, 150) / 100))),
+		_project(new ResearchProject(rule, int(rule->getCost() * RNG::generate(50, 150) / 100))),	// kL
+		_rule(rule)
 {
-	buildUi ();
+	buildUi();
 }
 
 /**
@@ -57,15 +64,27 @@ ResearchInfoState::ResearchInfoState(Game *game, Base *base, RuleResearch * rule
  * @param base Pointer to the base to get info from.
  * @param project A ResearchProject to modify
  */
-ResearchInfoState::ResearchInfoState(Game *game, Base *base, ResearchProject * project) : State(game), _base(base), _project(project), _rule(0)
+ResearchInfoState::ResearchInfoState(Game* game, Base* base, ResearchProject* project)
+	:
+		State(game),
+		_base(base),
+		_project(project),
+		_rule(0)
 {
-	buildUi ();
+	buildUi();
 }
+
+/**
+ * kL_begin: Cleans up the ResearchInfo state.
+ */
+ResearchInfoState::~ResearchInfoState() // not implemented yet.
+{
+} // kL_end.
 
 /**
  * Builds dialog.
  */
-void ResearchInfoState::buildUi ()
+void ResearchInfoState::buildUi()
 {
 	_changeValueByMouseWheel = Options::getInt("changeValueByMouseWheel");
 
@@ -76,8 +95,8 @@ void ResearchInfoState::buildUi ()
 	int start_x = (max_width - width) / 2;
 	int start_y = (max_height - height) / 2;
 
-	_surface = new InteractiveSurface(width, height, start_x, start_y);
-	_surface->onMouseClick((ActionHandler)&ResearchInfoState::handleWheel, 0);
+	_surface				= new InteractiveSurface(width, height, start_x, start_y);
+	_surface->onMouseClick((ActionHandler)& ResearchInfoState::handleWheel, 0);
 
 	int button_x_border = 16;
 	int button_y_border = 10;
@@ -85,20 +104,20 @@ void ResearchInfoState::buildUi ()
 	int footer_button_width = width / 2 - (4 + button_x_border);
 
 	_screen = false;
-	_window = new Window(this, width, height, start_x, start_y);
+	_window					= new Window(this, width, height, start_x, start_y);
 
-	_txtTitle = new Text(width - 2 * button_x_border, button_height, start_x + button_x_border, start_y + button_y_border);
+	_txtTitle				= new Text(width - 2 * button_x_border, button_height, start_x + button_x_border, start_y + button_y_border);
 
-	_txtAvailableScientist = new Text(width - 2 * button_x_border, button_height, start_x + button_x_border, start_y + 3*button_y_border);
-	_txtAvailableSpace = new Text(width - 2 * button_x_border, button_height, start_x + button_x_border, start_y + 4*button_y_border);
-	_txtAllocatedScientist = new Text(width - 2 * button_x_border, button_height, start_x + button_x_border, start_y + 5*button_y_border);
-	_txtMore = new Text(width - 6 * button_x_border, button_height, start_x + 2.5*button_x_border + 8, start_y + 7*button_y_border);
-	_txtLess = new Text(width - 6 * button_x_border, button_height, start_x + 2.5*button_x_border + 8, start_y + 9*button_y_border);
-	_btnCancel = new TextButton(footer_button_width, button_height, start_x + button_x_border, start_y + height - button_height - button_y_border);
-	_btnOk = new TextButton(footer_button_width, button_height, start_x + button_x_border + footer_button_width + 8, start_y + height - button_height - button_y_border);
+	_txtAvailableScientist	= new Text(width - 2 * button_x_border, button_height, start_x + button_x_border, start_y + 3*button_y_border);
+	_txtAvailableSpace		= new Text(width - 2 * button_x_border, button_height, start_x + button_x_border, start_y + 4*button_y_border);
+	_txtAllocatedScientist	= new Text(width - 2 * button_x_border, button_height, start_x + button_x_border, start_y + 5*button_y_border);
+	_txtMore				= new Text(width - 6 * button_x_border, button_height, start_x + 2.5*button_x_border + 8, start_y + 7*button_y_border);
+	_txtLess				= new Text(width - 6 * button_x_border, button_height, start_x + 2.5*button_x_border + 8, start_y + 9*button_y_border);
+	_btnCancel				= new TextButton(footer_button_width, button_height, start_x + button_x_border, start_y + height - button_height - button_y_border);
+	_btnOk					= new TextButton(footer_button_width, button_height, start_x + button_x_border + footer_button_width + 8, start_y + height - button_height - button_y_border);
 
-	_btnMore = new ArrowButton(ARROW_BIG_UP, button_x_border - 3, button_height - 2, start_x + 10*button_x_border, start_y + 7*button_y_border);
-	_btnLess = new ArrowButton(ARROW_BIG_DOWN, button_x_border - 3, button_height - 2, start_x + 10*button_x_border, start_y + 9*button_y_border);
+	_btnMore				= new ArrowButton(ARROW_BIG_UP, button_x_border - 3, button_height - 2, start_x + 10*button_x_border, start_y + 7*button_y_border);
+	_btnLess				= new ArrowButton(ARROW_BIG_DOWN, button_x_border - 3, button_height - 2, start_x + 10*button_x_border, start_y + 9*button_y_border);
 
 	add(_surface);
 	add(_window);
@@ -115,7 +134,7 @@ void ResearchInfoState::buildUi ()
 
 	centerAllSurfaces();
 
-	// Set up objects
+
 	_window->setColor(Palette::blockOffset(13)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK05.SCR"));
 	_txtTitle->setColor(Palette::blockOffset(13)+5);
@@ -145,44 +164,50 @@ void ResearchInfoState::buildUi ()
 	if (_rule)
 	{
 		_base->addResearch(_project);
-		if (_rule->needItem() &&
-				(_game->getRuleset()->getUnit(_rule->getName()) ||
-				 Options::getBool("researchedItemsWillSpent")))
+
+		if (_rule->needItem()
+			&& (_game->getRuleset()->getUnit(_rule->getName())
+				|| Options::getBool("researchedItemsWillSpent")))
 		{
 			_base->getItems()->removeItem(_rule->getName(), 1);
 		}
 	}
+
 	setAssignedScientist();
+
 	_btnMore->setColor(Palette::blockOffset(13)+5);
 	_btnLess->setColor(Palette::blockOffset(13)+5);
-	_btnMore->onMousePress((ActionHandler)&ResearchInfoState::morePress);
-	_btnMore->onMouseRelease((ActionHandler)&ResearchInfoState::moreRelease);
-	_btnMore->onMouseClick((ActionHandler)&ResearchInfoState::moreClick, 0);
-	_btnLess->onMousePress((ActionHandler)&ResearchInfoState::lessPress);
-	_btnLess->onMouseRelease((ActionHandler)&ResearchInfoState::lessRelease);
-	_btnLess->onMouseClick((ActionHandler)&ResearchInfoState::lessClick, 0);
+	_btnMore->onMousePress((ActionHandler)& ResearchInfoState::morePress);
+	_btnMore->onMouseRelease((ActionHandler)& ResearchInfoState::moreRelease);
+	_btnMore->onMouseClick((ActionHandler)& ResearchInfoState::moreClick, 0);
+	_btnLess->onMousePress((ActionHandler)& ResearchInfoState::lessPress);
+	_btnLess->onMouseRelease((ActionHandler)& ResearchInfoState::lessRelease);
+	_btnLess->onMouseClick((ActionHandler)& ResearchInfoState::lessClick, 0);
 
-	_timerMore = new Timer(250);
-	_timerMore->onTimer((StateHandler)&ResearchInfoState::more);
-	_timerLess = new Timer(250);
-	_timerLess->onTimer((StateHandler)&ResearchInfoState::less);
+	_timerMore = new Timer(250); // kL_note: SHOULD THESE TIMERS BE delete'd
+	_timerMore->onTimer((StateHandler)& ResearchInfoState::more);
+	_timerLess = new Timer(250); // kL_note: SHOULD THESE TIMERS BE delete'd
+	_timerLess->onTimer((StateHandler)& ResearchInfoState::less);
 
 	_btnOk->setColor(Palette::blockOffset(13)+10);
-	_btnOk->onMouseClick((ActionHandler)&ResearchInfoState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&ResearchInfoState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
+	_btnOk->onMouseClick((ActionHandler)& ResearchInfoState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)& ResearchInfoState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
+
 	_btnCancel->setColor(Palette::blockOffset(13)+10);
+
 	if (_rule)
 	{
 		_btnOk->setText(tr("STR_START_PROJECT"));
 		_btnCancel->setText(tr("STR_CANCEL_UC"));
-		_btnCancel->onKeyboardPress((ActionHandler)&ResearchInfoState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
+		_btnCancel->onKeyboardPress((ActionHandler)& ResearchInfoState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
 	}
 	else
 	{
 		_btnOk->setText(tr("STR_OK"));
 		_btnCancel->setText(tr("STR_CANCEL_PROJECT"));
-		_btnOk->onKeyboardPress((ActionHandler)&ResearchInfoState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+		_btnOk->onKeyboardPress((ActionHandler)& ResearchInfoState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 	}
+
 	_btnCancel->onMouseClick((ActionHandler)&ResearchInfoState::btnCancelClick);
 }
 
@@ -190,7 +215,7 @@ void ResearchInfoState::buildUi ()
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void ResearchInfoState::btnOkClick(Action *)
+void ResearchInfoState::btnOkClick(Action* )
 {
 	_game->popState();
 }
@@ -200,15 +225,16 @@ void ResearchInfoState::btnOkClick(Action *)
  * research list.
  * @param action Pointer to an action.
  */
-void ResearchInfoState::btnCancelClick(Action *)
+void ResearchInfoState::btnCancelClick(Action* )
 {
-	const RuleResearch *ruleResearch = _rule ? _rule : _project->getRules();
-	if (ruleResearch->needItem() &&
-			(_game->getRuleset()->getUnit(ruleResearch->getName()) ||
-			 Options::getBool("researchedItemsWillSpent")))
+	const RuleResearch* ruleResearch = _rule ? _rule : _project->getRules();
+	if (ruleResearch->needItem()
+		&& (_game->getRuleset()->getUnit(ruleResearch->getName())
+			|| Options::getBool("researchedItemsWillSpent")))
 	{
 		_base->getItems()->addItem(ruleResearch->getName(), 1);
 	}
+
 	_base->removeResearch(_project);
 	_game->popState();
 }
@@ -220,10 +246,13 @@ void ResearchInfoState::setAssignedScientist()
 {
 	std::wstringstream s1;
 	s1 << tr("STR_SCIENTISTS_AVAILABLE_UC") << L'\x01' << _base->getAvailableScientists();
+
 	std::wstringstream s2;
 	s2 << tr("STR_LABORATORY_SPACE_AVAILABLE_UC") << L'\x01' << _base->getFreeLaboratories();
+
 	std::wstringstream s3;
-	s3 << tr("STR_SCIENTISTS_ALLOCATED") << L'\x01' << _project->getAssigned ();
+	s3 << tr("STR_SCIENTISTS_ALLOCATED") << L'\x01' << _project->getAssigned();
+
 	_txtAvailableScientist->setText(s1.str());
 	_txtAvailableSpace->setText(s2.str());
 	_txtAllocatedScientist->setText(s3.str());
@@ -233,26 +262,29 @@ void ResearchInfoState::setAssignedScientist()
  * Increases or decreases the scientists according the mouse-wheel used.
  * @param action Pointer to an Action.
  */
-void ResearchInfoState::handleWheel(Action *action)
+void ResearchInfoState::handleWheel(Action* action)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP) moreByValue(_changeValueByMouseWheel);
-	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN) lessByValue(_changeValueByMouseWheel);
+	if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
+		moreByValue(_changeValueByMouseWheel);
+	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN)
+		lessByValue(_changeValueByMouseWheel);
 }
 
 /**
  * Starts the timeMore timer.
  * @param action Pointer to an Action.
  */
-void ResearchInfoState::morePress(Action *action)
+void ResearchInfoState::morePress(Action* action)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) _timerMore->start();
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+		_timerMore->start();
 }
 
 /**
  * Stops the timeMore timer.
  * @param action Pointer to an Action.
  */
-void ResearchInfoState::moreRelease(Action *action)
+void ResearchInfoState::moreRelease(Action* action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
@@ -266,11 +298,11 @@ void ResearchInfoState::moreRelease(Action *action)
  * one scientist on left-click, all scientists on right-click.
  * @param action Pointer to an Action.
  */
-void ResearchInfoState::moreClick(Action *action)
+void ResearchInfoState::moreClick(Action* action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 		moreByValue(std::numeric_limits<int>::max());
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+	else if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 		moreByValue(1);
 }
 
@@ -278,21 +310,22 @@ void ResearchInfoState::moreClick(Action *action)
  * Starts the timeLess timer.
  * @param action Pointer to an Action.
  */
-void ResearchInfoState::lessPress(Action *action)
+void ResearchInfoState::lessPress(Action* action)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) _timerLess->start ();
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+		_timerLess->start();
 }
 
 /**
  * Stops the timeLess timer.
  * @param action Pointer to an Action.
  */
-void ResearchInfoState::lessRelease(Action *action)
+void ResearchInfoState::lessRelease(Action* action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
 		_timerLess->setInterval(250);
-		_timerLess->stop ();
+		_timerLess->stop();
 	}
 }
 
@@ -301,11 +334,11 @@ void ResearchInfoState::lessRelease(Action *action)
  * one scientist on left-click, all scientists on right-click.
  * @param action Pointer to an Action.
  */
-void ResearchInfoState::lessClick(Action *action)
+void ResearchInfoState::lessClick(Action* action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 		lessByValue(std::numeric_limits<int>::max());
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+	else if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 		lessByValue(1);
 }
 
@@ -325,13 +358,14 @@ void ResearchInfoState::more()
 void ResearchInfoState::moreByValue(int change)
 {
 	if (0 >= change) return;
+
 	int freeScientist = _base->getAvailableScientists();
 	int freeSpaceLab = _base->getFreeLaboratories();
 	if (freeScientist > 0 && freeSpaceLab > 0)
 	{
 		change = std::min(std::min(freeScientist, freeSpaceLab), change);
-		_project->setAssigned(_project->getAssigned()+change);
-		_base->setScientists(_base->getScientists()-change);
+		_project->setAssigned(_project->getAssigned() + change);
+		_base->setScientists(_base->getScientists() - change);
 		setAssignedScientist();
 	}
 }
@@ -352,12 +386,14 @@ void ResearchInfoState::less()
 void ResearchInfoState::lessByValue(int change)
 {
 	if (0 >= change) return;
+
 	int assigned = _project->getAssigned();
 	if (assigned > 0)
 	{
 		change = std::min(assigned, change);
 		_project->setAssigned(assigned-change);
-		_base->setScientists(_base->getScientists()+change);
+		_base->setScientists(_base->getScientists() + change);
+
 		setAssignedScientist();
 	}
 }
@@ -369,7 +405,8 @@ void ResearchInfoState::think()
 {
 	State::think();
 
-	_timerLess->think (this, 0);
-	_timerMore->think (this, 0);
+	_timerLess->think(this, 0);
+	_timerMore->think(this, 0);
 }
+
 }

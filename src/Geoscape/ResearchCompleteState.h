@@ -25,6 +25,7 @@
 
 namespace OpenXcom
 {
+
 class Game;
 class Window;
 class TextButton;
@@ -38,7 +39,7 @@ class RuleResearch;
  */
 class ResearchCompleteState
 	:
-	public State
+		public State
 {
 	Window* _window;
 	Text* _txtTitle;

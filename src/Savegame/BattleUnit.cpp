@@ -2424,7 +2424,7 @@ std::string BattleUnit::getRaceString() const
 /**
  * Get the geoscape-soldier object.
  */
-Soldier *BattleUnit::getGeoscapeSoldier() const
+Soldier* BattleUnit::getGeoscapeSoldier() const
 {
 	return _geoscapeSoldier;
 }

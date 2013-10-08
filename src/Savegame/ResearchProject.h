@@ -16,13 +16,16 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_RESEARCHPROJECT_H
 #define OPENXCOM_RESEARCHPROJECT_H
 
 #include <yaml-cpp/yaml.h>
 
+
 namespace OpenXcom
 {
+
 class RuleResearch;
 class Ruleset;
 
@@ -32,34 +35,39 @@ class Ruleset;
 */
 class ResearchProject
 {
-	RuleResearch * _project;
+	RuleResearch* _project;
 	int _assigned;
 	int _spent;
 	int _cost;
-public:
-	ResearchProject(RuleResearch * p, int c = 0);
-	/// Game logic. Called every new day to compute time spent.
-	bool step();
-	/// set the number of scientist assigned to this ResearchProject
-	void setAssigned (int nb);
-	/// get the number of scientist assigned to this ResearchProject
-	int getAssigned () const;
-	/// get time already spent on this ResearchProject
-	int getSpent () const;
-	/// set time already spent on this ResearchProject
-	void setSpent (int spent);
-	/// get time cost of this ResearchProject
-	int getCost() const;
-	/// set time cost of this ResearchProject
-	void setCost(int f);
-	/// get the ResearchProject Ruleset
-	const RuleResearch * getRules () const;
-	/// load the ResearchProject from YAML
-	void load(const YAML::Node& node);
-	/// save the ResearchProject to YAML
-	YAML::Node save() const;
-	/// Get a string describing current progress.
-	std::string getResearchProgress () const;
+
+	public:
+		ResearchProject(RuleResearch* p, int c = 0);
+		// kL_note: DESTRUCTOR?
+
+		/// Game logic. Called every new day to compute time spent.
+		bool step();
+		/// set the number of scientist assigned to this ResearchProject
+		void setAssigned(int nb);
+		/// get the number of scientist assigned to this ResearchProject
+		int getAssigned() const;
+		/// get time already spent on this ResearchProject
+		int getSpent() const;
+		/// set time already spent on this ResearchProject
+		void setSpent(int spent);
+		/// get time cost of this ResearchProject
+		int getCost() const;
+		/// set time cost of this ResearchProject
+		void setCost(int f);
+		/// get the ResearchProject Ruleset
+		const RuleResearch* getRules() const;
+		/// load the ResearchProject from YAML
+		void load(const YAML::Node& node);
+		/// save the ResearchProject to YAML
+		YAML::Node save() const;
+		/// Get a string describing current progress.
+		std::string getResearchProgress() const;
 };
+
 }
+
 #endif

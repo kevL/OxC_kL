@@ -198,7 +198,8 @@ GeoscapeState::GeoscapeState(Game* game)
 	}
 
 	_timeSpeed = _btn5Secs;
-	_timer = new Timer(100);
+//kL	_timer = new Timer(100);
+	_timer = new Timer(120);	// kL
 
 	_zoomInEffectTimer	= new Timer(50);
 	_zoomOutEffectTimer	= new Timer(50);
@@ -1736,6 +1737,7 @@ void GeoscapeState::time1Day()
 		{
 			if ((*iter)->step())
 			{
+				// kL_note: creating a ResearchProject-object, vector called "finished"...
 				finished.push_back(*iter);
 			}
 		}
@@ -1743,6 +1745,8 @@ void GeoscapeState::time1Day()
 		for (std::vector<ResearchProject* >::const_iterator iter = finished.begin(); iter != finished.end(); ++iter)
 		{
 			(*i)->removeResearch(*iter);
+			// kL_note: Add Research Help here.
+			// (*i) is the currently iterating Base
 
 			RuleResearch* bonus = 0;
 			const RuleResearch* research = (*iter)->getRules();
@@ -1778,17 +1782,17 @@ void GeoscapeState::time1Day()
 					}
 				}
 
-				if (possibilities.size() !=0)
+				if (possibilities.size() != 0)
 				{
-					int pick = RNG::generate(0, possibilities.size()- 1);
+					int pick = RNG::generate(0, possibilities.size() - 1);
 					std::string sel = possibilities.at(pick);
 					bonus = _game->getRuleset()->getResearch(sel);
 
-					_game->getSavedGame()->addFinishedResearch(bonus, _game->getRuleset ());
+					_game->getSavedGame()->addFinishedResearch(bonus, _game->getRuleset());
 
 					if (bonus->getLookup() != "")
 					{
-						_game->getSavedGame()->addFinishedResearch(_game->getRuleset()->getResearch(bonus->getLookup()), _game->getRuleset ());
+						_game->getSavedGame()->addFinishedResearch(_game->getRuleset()->getResearch(bonus->getLookup()), _game->getRuleset());
 					}
 				}
 			}
@@ -1801,10 +1805,10 @@ void GeoscapeState::time1Day()
 				newResearch = 0;
 			}
 
-			_game->getSavedGame()->addFinishedResearch(research, _game->getRuleset ());
+			_game->getSavedGame()->addFinishedResearch(research, _game->getRuleset());
 			if (research->getLookup() != "")
 			{
-				_game->getSavedGame()->addFinishedResearch(_game->getRuleset()->getResearch(research->getLookup()), _game->getRuleset ());
+				_game->getSavedGame()->addFinishedResearch(_game->getRuleset()->getResearch(research->getLookup()), _game->getRuleset());
 			}
 
 			timerReset();	// kL
@@ -1831,12 +1835,13 @@ void GeoscapeState::time1Day()
 						&&  _game->getRuleset()->getUnit((*iter2)->getRules()->getName()) == 0)
 					{
 						(*j)->removeResearch(*iter2);
+
 						break;
 					}
 				}
 			}
 
-			delete(*iter);
+			delete *iter;
 		}
 
 		// Handle soldier wounds

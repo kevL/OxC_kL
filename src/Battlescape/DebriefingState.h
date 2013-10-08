@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_DEBRIEFINGSTATE_H
 #define OPENXCOM_DEBRIEFINGSTATE_H
 
@@ -23,6 +24,7 @@
 #include <string>
 #include <vector>
 #include <map>
+
 
 namespace OpenXcom
 {
@@ -38,43 +40,67 @@ class Region;
 class Country;
 class RuleItem;
 
-struct DebriefingStat { DebriefingStat(std::string _item, bool recovery) : item(_item), qty(0), score(0), recovery(recovery) {}; std::string item; int qty; int score; bool recovery; };
+struct DebriefingStat
+{
+	DebriefingStat(std::string _item, bool recovery)
+		:
+			item(_item),
+			qty(0),
+			score(0),
+			recovery(recovery)
+	{
+	};
 
-struct ReequipStat { std::string item; int qty; std::wstring craft; };
+	std::string item;
+	int qty;
+	int score;
+	bool recovery;
+};
+
+struct ReequipStat
+{
+	std::string item;
+	int qty;
+	std::wstring craft;
+};
 
 /**
  * Debriefing screen shown after a Battlescape
  * mission that displays the results.
  */
-class DebriefingState : public State
+class DebriefingState
+	:
+		public State
 {
 private:
-	Region *_region;
-	Country *_country;
-	std::vector<DebriefingStat*> _stats;
-	TextButton *_btnOk;
-	Window *_window;
-	Text *_txtTitle, *_txtItem, *_txtQuantity, *_txtScore, *_txtRecovery, *_txtRating;
-	TextList *_lstStats, *_lstRecovery, *_lstTotal;
+	Region* _region;
+	Country* _country;
+	std::vector<DebriefingStat* > _stats;
+	TextButton* _btnOk;
+	Window* _window;
+	Text* _txtTitle, * _txtItem, * _txtQuantity, * _txtScore, * _txtRecovery, * _txtRating;
+	TextList* _lstStats, * _lstRecovery, * _lstTotal;
 	std::vector<ReequipStat> _missingItems;
 	std::map<RuleItem*, int> _rounds;
 	/// Adds to the debriefing stats.
-	void addStat(const std::string &name, int quantity, int score);
+	void addStat(const std::string& name, int quantity, int score);
 	/// Prepares debriefing.
 	void prepareDebriefing();
 	/// Recovers items from the battlescape.
-	void recoverItems(std::vector<BattleItem*> *from, Base *base);
+	void recoverItems(std::vector<BattleItem* >* from, Base* base);
 	/// Reequips a craft after a mission.
-	void reequipCraft(Base *base, Craft *craft, bool vehicleItemsCanBeDestroyed);
+	void reequipCraft(Base* base, Craft* craft, bool vehicleItemsCanBeDestroyed);
 	bool _noContainment, _destroyBase;
 	int _containmentLimit;
-public:
-	/// Creates the Debriefing state.
-	DebriefingState(Game *game);
-	/// Cleans up the Debriefing state.
-	~DebriefingState();
-	/// Handler for clicking the OK button.
-	void btnOkClick(Action *action);
+
+	public:
+		/// Creates the Debriefing state.
+		DebriefingState(Game* game);
+		/// Cleans up the Debriefing state.
+		~DebriefingState();
+
+		/// Handler for clicking the OK button.
+		void btnOkClick(Action* action);
 };
 
 }

@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "ResearchState.h"
 #include <sstream>
 #include "../Engine/Game.h"
@@ -34,6 +35,7 @@
 #include "../Ruleset/RuleResearch.h"
 #include "ResearchInfoState.h"
 
+
 namespace OpenXcom
 {
 
@@ -42,25 +44,43 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
  */
-ResearchState::ResearchState(Game *game, Base *base) : State(game), _base(base)
+ResearchState::ResearchState(Game* game, Base* base)
+	:
+		State(game),
+		_base(base)
 {
-	// Create objects
-	_window = new Window(this, 320, 200, 0, 0);
-	_btnNew = new TextButton(148, 16, 8, 176);
-	_btnOk = new TextButton(148, 16, 164, 176);
-	_txtTitle = new Text(310, 16, 5, 8);
-	_txtAvailable = new Text(150, 9, 10, 24);
-	_txtAllocated = new Text(150, 9, 160, 24);
-	_txtSpace = new Text(300, 9, 10, 34);
-	_txtProject = new Text(110, 16, 10, 44);
-	_txtScientists = new Text(110, 16, 120, 44);
-	_txtProgress = new Text(80, 9, 230, 44);
-	_lstResearch = new TextList(288, 112, 8, 62);
-	
-	// back up palette in case we're being called from Geoscape!
-	memcpy(_oldPalette, _game->getScreen()->getPalette(), 256*sizeof(SDL_Color));
+	_window			= new Window(this, 320, 200, 0, 0);
 
-	// Set palette
+//kL	_txtTitle		= new Text(310, 16, 5, 8);
+	_txtTitle		= new Text(300, 16, 16, 10);			// kL
+
+//kL	_txtAvailable	= new Text(150, 9, 10, 24);
+//kL	_txtAllocated	= new Text(150, 9, 160, 24);
+	_txtAvailable	= new Text(140, 9, 16, 25);				// kL
+	_txtAllocated	= new Text(140, 9, 160, 25);			// kL
+
+//kL	_txtSpace		= new Text(300, 9, 10, 34);
+	_txtSpace		= new Text(100, 9, 16, 34);				// kL
+
+//kL	_txtProject		= new Text(110, 16, 10, 44);
+//kL	_txtScientists	= new Text(110, 16, 120, 44);
+//kL	_txtProgress	= new Text(80, 9, 230, 44);
+	_txtProject		= new Text(110, 9, 16, 47);				// kL
+	_txtScientists	= new Text(110, 9, 176, 47);			// kL
+	_txtProgress	= new Text(80, 9, 236, 47);				// kL
+
+//kL	_lstResearch	= new TextList(288, 112, 8, 62);
+	_lstResearch	= new TextList(288, 112, 8, 62);		// kL
+	
+//kL	_btnNew			= new TextButton(148, 16, 8, 176);
+//kL	_btnOk			= new TextButton(148, 16, 164, 176);
+	_btnNew			= new TextButton(145, 16, 16, 177);		// kL
+	_btnOk			= new TextButton(145, 16, 162, 177);	// kL
+
+	// back up palette in case we're being called from Geoscape!
+	memcpy(_oldPalette, _game->getScreen()->getPalette(), 256 * sizeof(SDL_Color));
+
+
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(1)), Palette::backPos, 16);
 
@@ -78,18 +98,18 @@ ResearchState::ResearchState(Game *game, Base *base) : State(game), _base(base)
 
 	centerAllSurfaces();
 
-	// Set up objects
+
 	_window->setColor(Palette::blockOffset(13)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK05.SCR"));
 
 	_btnNew->setColor(Palette::blockOffset(15)+6);
 	_btnNew->setText(tr("STR_NEW_PROJECT"));
-	_btnNew->onMouseClick((ActionHandler)&ResearchState::btnNewClick);
+	_btnNew->onMouseClick((ActionHandler)& ResearchState::btnNewClick);
 
 	_btnOk->setColor(Palette::blockOffset(15)+6);
 	_btnOk->setText(tr("STR_OK"));
-	_btnOk->onMouseClick((ActionHandler)&ResearchState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&ResearchState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onMouseClick((ActionHandler)& ResearchState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)& ResearchState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
@@ -118,11 +138,14 @@ ResearchState::ResearchState(Game *game, Base *base) : State(game), _base(base)
 
 	_lstResearch->setColor(Palette::blockOffset(15)+6);
 	_lstResearch->setArrowColor(Palette::blockOffset(13)+10);
-	_lstResearch->setColumns(3, 158, 62, 66);
+//kL	_lstResearch->setColumns(3, 158, 62, 66);
+	_lstResearch->setColumns(3, 160, 60, 68);	// kL
 	_lstResearch->setSelectable(true);
 	_lstResearch->setBackground(_window);
-	_lstResearch->setMargin(2);
-	_lstResearch->onMouseClick((ActionHandler)&ResearchState::onSelectProject);
+//kL	_lstResearch->setMargin(2);
+	_lstResearch->setMargin(8);					// kL
+	_lstResearch->onMouseClick((ActionHandler)& ResearchState::onSelectProject);
+
 	fillProjectList();
 }
 
@@ -137,7 +160,7 @@ ResearchState::~ResearchState()
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void ResearchState::btnOkClick(Action *)
+void ResearchState::btnOkClick(Action* )
 {
 	// restore palette
 	_game->setPalette(_oldPalette);
@@ -149,7 +172,7 @@ void ResearchState::btnOkClick(Action *)
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void ResearchState::btnNewClick(Action *)
+void ResearchState::btnNewClick(Action* )
 {
 	_game->pushState(new NewResearchListState(_game, _base));
 }
@@ -158,9 +181,10 @@ void ResearchState::btnNewClick(Action *)
  * Displays the list of possible ResearchProjects.
  * @param action Pointer to an action.
  */
-void ResearchState::onSelectProject(Action *)
+void ResearchState::onSelectProject(Action* )
 {
-	const std::vector<ResearchProject *> & baseProjects(_base->getResearch());
+	const std::vector<ResearchProject* >& baseProjects(_base->getResearch());
+
 	_game->pushState(new ResearchInfoState(_game, _base, baseProjects[_lstResearch->getSelectedRow()]));
 }
 
@@ -178,25 +202,31 @@ void ResearchState::init()
  */
 void ResearchState::fillProjectList()
 {
-	const std::vector<ResearchProject *> & baseProjects(_base->getResearch());
+	const std::vector<ResearchProject* >& baseProjects(_base->getResearch());
+
 	_lstResearch->clearList();
-	for(std::vector<ResearchProject *>::const_iterator iter = baseProjects.begin (); iter != baseProjects.end (); ++iter)
+
+	for (std::vector<ResearchProject* >::const_iterator iter = baseProjects.begin (); iter != baseProjects.end (); ++iter)
 	{
 		std::wstringstream sstr;
 		sstr << (*iter)->getAssigned ();
-		const RuleResearch *r = (*iter)->getRules();
+		const RuleResearch* r = (*iter)->getRules();
 
 		std::wstring wstr = tr(r->getName ());
 		_lstResearch->addRow(3, wstr.c_str(), sstr.str().c_str(), tr((*iter)->getResearchProgress()).c_str());
 	}
+
 	std::wstringstream ss;
 	ss << tr("STR_SCIENTISTS_AVAILABLE") << L'\x01' << _base->getAvailableScientists();
 	_txtAvailable->setText(ss.str());
+
 	std::wstringstream ss2;
 	ss2 << tr("STR_SCIENTISTS_ALLOCATED") << L'\x01' << _base->getAllocatedScientists();
 	_txtAllocated->setText(ss2.str());
+
 	std::wstringstream ss3;
 	ss3 << tr("STR_LABORATORY_SPACE_AVAILABLE") << L'\x01' << _base->getFreeLaboratories();
 	_txtSpace->setText(ss3.str());
 }
+
 }
