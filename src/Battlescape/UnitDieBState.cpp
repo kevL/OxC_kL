@@ -37,6 +37,7 @@
 #include "../Ruleset/Armor.h"
 #include "../Ruleset/Unit.h"
 #include "InfoboxOKState.h"
+#include "InfoboxState.h"
 #include "../Savegame/Node.h"
 
 
@@ -281,25 +282,16 @@ void UnitDieBState::think()
 			{
 				if (_damageType == DT_NONE)
 				{
-					std::wstringstream ss;
-					ss << _unit->getName(game->getLanguage()) << L'\n';
-					ss << game->getLanguage()->getString("STR_HAS_DIED_FROM_A_FATAL_WOUND", _unit->getGender());
-					game->pushState(new InfoboxOKState(game, ss.str()));
+					game->pushState(new InfoboxOKState(game, game->getLanguage()->getString("STR_HAS_DIED_FROM_A_FATAL_WOUND", _unit->getGender()).arg(_unit->getName(game->getLanguage()))));
 				}
 				else if (Options::getBool("battleNotifyDeath"))
 				{
-					std::wstringstream ss;
-					ss << _unit->getName(game->getLanguage()) << L'\n';
-					ss << game->getLanguage()->getString("STR_HAS_BEEN_KILLED", _unit->getGender());
-					game->pushState(new InfoboxOKState(game, ss.str()));
+					game->pushState(new InfoboxState(game, game->getLanguage()->getString("STR_HAS_BEEN_KILLED", _unit->getGender()).arg(_unit->getName(game->getLanguage()))));
 				}
 			}
 			else
 			{
-				std::wstringstream ss;
-				ss << _unit->getName(game->getLanguage()) << L'\n';
-				ss << game->getLanguage()->getString("STR_HAS_BECOME_UNCONSCIOUS", _unit->getGender());
-				game->pushState(new InfoboxOKState(game, ss.str()));
+				game->pushState(new InfoboxOKState(game, game->getLanguage()->getString("STR_HAS_BECOME_UNCONSCIOUS", _unit->getGender()).arg(_unit->getName(game->getLanguage()))));
 			}
 		}
 

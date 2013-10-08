@@ -100,7 +100,7 @@ StoresState::StoresState(Game* game, Base* base)
 	_txtQuantity->setText(tr("STR_QUANTITY_UC"));
 
 	_txtSpaceUsed->setColor(Palette::blockOffset(13)+10);
-//kL	_txtSpaceUsed->setText(tr("STR_SPACE_USED"));
+//kL	_txtSpaceUsed->setText(tr("STR_SPACE_USED_UC"));
 	_txtSpaceUsed->setText(tr("STR_VOLUME"));		// kL
 
 	_lstStores->setColor(Palette::blockOffset(13)+10);

@@ -203,7 +203,7 @@ void CraftInfoState::init()
 	texture->getFrame(c->getRules()->getSprite() + 33)->blit(_sprite);
 
 	std::wstringstream ss;
-	ss << tr("STR_DAMAGE_UC_") << L'\x01' << c->getDamagePercentage() << L'%';
+	ss << tr("STR_DAMAGE_UC_").arg(Text::formatPercentage(c->getDamagePercentage()));
 
 	if (c->getStatus() == "STR_REPAIRS")
 	{
@@ -216,7 +216,7 @@ void CraftInfoState::init()
 	_txtDamage->setText(ss.str());
 
 	std::wstringstream ss2;
-	ss2 << tr("STR_FUEL") << L'\x01' << c->getFuelPercentage() << L'%';
+	ss2 << tr("STR_FUEL").arg(Text::formatPercentage(c->getFuelPercentage()));
 
 	if (c->getStatus() == "STR_REFUELLING")
 	{
@@ -271,20 +271,14 @@ void CraftInfoState::init()
 		CraftWeapon* w1 = c->getWeapons()->at(0);
 		if (w1 != 0)
 		{
-			Surface *frame = texture->getFrame(w1->getRules()->getSprite() + 48);
+			Surface* frame = texture->getFrame(w1->getRules()->getSprite() + 48);
 			frame->setX(0);
 			frame->setY(0);
 			frame->blit(_weapon1);
 
 			_txtW1Name->setText(tr(w1->getRules()->getType()));
-
-			std::wstringstream ss3;
-			ss3 << tr("STR_AMMO_") << L'\x01' << w1->getAmmo();
-			_txtW1Ammo->setText(ss3.str());
-
-			std::wstringstream ss4;
-			ss4 << tr("STR_MAX") << L'\x01' << w1->getRules()->getAmmoMax();
-			_txtW1Max->setText(ss4.str());
+			_txtW1Ammo->setText(tr("STR_AMMO_").arg(w1->getAmmo()));
+			_txtW1Max->setText(tr("STR_MAX").arg(w1->getRules()->getAmmoMax()));
 		}
 		else
 		{
@@ -314,14 +308,8 @@ void CraftInfoState::init()
 			frame->blit(_weapon2);
 
 			_txtW2Name->setText(tr(w2->getRules()->getType()));
-
-			std::wstringstream ss5;
-			ss5 << tr("STR_AMMO_") << L'\x01' << w2->getAmmo();
-			_txtW2Ammo->setText(ss5.str());
-
-			std::wstringstream ss6;
-			ss6 << tr("STR_MAX") << L'\x01' << w2->getRules()->getAmmoMax();
-			_txtW2Max->setText(ss6.str());
+			_txtW2Ammo->setText(tr("STR_AMMO_").arg(w2->getAmmo()));
+			_txtW2Max->setText(tr("STR_MAX").arg(w2->getRules()->getAmmoMax()));
 		}
 		else
 		{

@@ -354,11 +354,10 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 				&& action.type == BA_MINDCONTROL)
 			{
 				// show a little infobox with the name of the unit and "... is under alien control"
-				std::wstringstream ss;
-				ss << _save->getTile(action.target)->getUnit()->getName(_parentState->getGame()->getLanguage())
-					<< L'\n' << _parentState->getGame()->getLanguage()->getString("STR_IS_UNDER_ALIEN_CONTROL");
+				Game* game = _parentState->getGame();
+				BattleUnit* unit = _save->getTile(action.target)->getUnit();
 
-				_parentState->getGame()->pushState(new InfoboxState(_parentState->getGame(), ss.str()));
+				game->pushState(new InfoboxState(game, game->getLanguage()->getString("STR_IS_UNDER_ALIEN_CONTROL", unit->getGender()).arg(unit->getName(game->getLanguage()))));
 			}
 
 			_save->removeItem(action.weapon);
@@ -369,6 +368,7 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 	{
 		_parentState->debug(L"Idle");
 		_AIActionCounter = 0;
+
 		if (_save->selectNextPlayerUnit(true, _AISecondMove) == 0)
 		{
 			if (!_save->getDebugMode())
@@ -1338,18 +1338,16 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit *unit)
 	getMap()->getCamera()->centerOnPosition(unit->getPosition());
 	_save->setSelectedUnit(unit);
 
-	std::wstringstream ss; // show a little infobox with the name of the unit and "... is panicking"
-	ss << unit->getName(_parentState->getGame()->getLanguage()) << L'\n';
+	// show a little infobox with the name of the unit and "... is panicking"
+	Game* game = _parentState->getGame();
 	if (status == STATUS_PANICKING)
 	{
-		ss << _parentState->getGame()->getLanguage()->getString("STR_HAS_PANICKED", unit->getGender());
+		game->pushState(new InfoboxState(game, game->getLanguage()->getString("STR_HAS_PANICKED", unit->getGender()).arg(unit->getName(game->getLanguage()))));
 	}
 	else
 	{
-		ss << _parentState->getGame()->getLanguage()->getString("STR_HAS_GONE_BERSERK", unit->getGender());
+		game->pushState(new InfoboxState(game, game->getLanguage()->getString("STR_HAS_GONE_BERSERK", unit->getGender()).arg(unit->getName(game->getLanguage()))));
 	}
-
-	_parentState->getGame()->pushState(new InfoboxState(_parentState->getGame(), ss.str()));
 
 	unit->abortTurn(); // makes the unit go to status STANDING :p
 
@@ -1583,19 +1581,17 @@ void BattlescapeGame::primaryAction(const Position& pos)
 				{
 					if (getTileEngine()->psiAttack(&_currentAction))
 					{
-						std::wstringstream ss; // show a little infobox if it's successful
-
+						// show a little infobox if it's successful
+						Game* game = _parentState->getGame();
 						if (_currentAction.type == BA_PANIC)
 						{
-							BattleUnit *unit = _save->getTile(_currentAction.target)->getUnit();
-							ss << unit->getName(_parentState->getGame()->getLanguage()) << L'\n' << _parentState->getGame()->getLanguage()->getString("STR_HAS_PANICKED", unit->getGender());
+							BattleUnit* unit = _save->getTile(_currentAction.target)->getUnit();
+							game->pushState(new InfoboxState(game, game->getLanguage()->getString("STR_HAS_PANICKED", unit->getGender()).arg(unit->getName(game->getLanguage()))));
 						}
 						else if (_currentAction.type == BA_MINDCONTROL)
 						{
-							ss << _parentState->getGame()->getLanguage()->getString("STR_MIND_CONTROL_SUCCESSFUL");
+							game->pushState(new InfoboxState(game, game->getLanguage()->getString("STR_MIND_CONTROL_SUCCESSFUL")));
 						}
-
-						_parentState->getGame()->pushState(new InfoboxState(_parentState->getGame(), ss.str()));
 						_parentState->updateSoldierInfo();
 
 						_currentAction.targeting = false;

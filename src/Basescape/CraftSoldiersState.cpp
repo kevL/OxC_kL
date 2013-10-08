@@ -97,9 +97,9 @@ CraftSoldiersState::CraftSoldiersState(Game* game, Base* base, size_t craft)
 	_btnOk->onMouseClick((ActionHandler)& CraftSoldiersState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)& CraftSoldiersState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 
-	_btnUnload->setColor(Palette::blockOffset(13)+10);																	// kL
-	_btnUnload->setText(_game->getLanguage()->getString("STR_UNLOAD"));													// kL
-	_btnUnload->onMouseClick((ActionHandler)& CraftSoldiersState::btnUnloadClick);										// kL
+	_btnUnload->setColor(Palette::blockOffset(13)+10);									// kL
+	_btnUnload->setText(_game->getLanguage()->getString("STR_UNLOAD"));					// kL
+	_btnUnload->onMouseClick((ActionHandler)& CraftSoldiersState::btnUnloadClick);		// kL
 
 	_txtTitle->setColor(Palette::blockOffset(15)+6);
 	_txtTitle->setBig();
@@ -118,15 +118,11 @@ CraftSoldiersState::CraftSoldiersState(Game* game, Base* base, size_t craft)
 
 	_txtAvailable->setColor(Palette::blockOffset(15)+6);
 	_txtAvailable->setSecondaryColor(Palette::blockOffset(13));
-	std::wstringstream ss2;
-	ss2 << tr("STR_SPACE_AVAILABLE") << L'\x01' << c->getSpaceAvailable();
-	_txtAvailable->setText(ss2.str());
+	_txtAvailable->setText(tr("STR_SPACE_AVAILABLE").arg(c->getSpaceAvailable()));
 
 	_txtUsed->setColor(Palette::blockOffset(15)+6);
 	_txtUsed->setSecondaryColor(Palette::blockOffset(13));
-	std::wstringstream ss3;
-	ss3 << tr("STR_SPACE_USED") << L'\x01' << c->getSpaceUsed();
-	_txtUsed->setText(ss3.str());
+	_txtUsed->setText(tr("STR_SPACE_USED").arg(c->getSpaceUsed()));
 
 	_lstSoldiers->setColor(Palette::blockOffset(13)+10);
 	_lstSoldiers->setArrowColor(Palette::blockOffset(15)+6);
@@ -220,13 +216,16 @@ void CraftSoldiersState::btnUnloadClick(Action* )
 		}
 	}
 
-	std::wstringstream ss;
+/*	std::wstringstream ss;
 	ss << _game->getLanguage()->getString("STR_SPACE_AVAILABLE") << L'\x01' << c->getSpaceAvailable();
 	_txtAvailable->setText(ss.str());
 
 	std::wstringstream ss2;
 	ss2 << _game->getLanguage()->getString("STR_SPACE_USED") << L'\x01' << c->getSpaceUsed();
-	_txtUsed->setText(ss2.str());
+	_txtUsed->setText(ss2.str()); */
+
+	_txtAvailable->setText(tr("STR_SPACE_AVAILABLE").arg(c->getSpaceAvailable()));
+	_txtUsed->setText(tr("STR_SPACE_USED").arg(c->getSpaceUsed()));
 }
 // kL_end.
 
@@ -387,13 +386,8 @@ void CraftSoldiersState::lstSoldiersClick(Action* action)
 
 	_lstSoldiers->setRowColor(row, color);
 
-	std::wstringstream ss;
-	ss << tr("STR_SPACE_AVAILABLE") << L'\x01' << c->getSpaceAvailable();
-	_txtAvailable->setText(ss.str());
-
-	std::wstringstream ss2;
-	ss2 << tr("STR_SPACE_USED") << L'\x01' << c->getSpaceUsed();
-	_txtUsed->setText(ss2.str());
+	_txtAvailable->setText(tr("STR_SPACE_AVAILABLE").arg(c->getSpaceAvailable()));
+	_txtUsed->setText(tr("STR_SPACE_USED").arg(c->getSpaceUsed()));
 }
 
 }

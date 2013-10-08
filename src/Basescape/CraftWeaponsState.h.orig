@@ -46,9 +46,10 @@ private:
 	Base* _base;
 	size_t _craft, _weapon;
 
+<<<<<<< HEAD
 	TextButton* _btnCancel;
 	Window* _window;
-	Text* _txtTitle, * _txtArmament, * _txtQuantity, * _txtAmmunition;
+	Text* _txtTitle, * _txtArmament, * _txtQuantity, * _txtAmmunition, * _txtAvailable;
 	TextList* _lstWeapons;
 	std::vector<RuleCraftWeapon* > _weapons;
 
@@ -62,6 +63,22 @@ private:
 		void btnCancelClick(Action* action);
 		/// Handler for clicking the Weapons list.
 		void lstWeaponsClick(Action* action);
+=======
+	TextButton *_btnCancel;
+	Window *_window;
+	Text *_txtTitle, *_txtArmament, *_txtQuantity, *_txtAmmunition;
+	TextList *_lstWeapons;
+	std::vector<RuleCraftWeapon*> _weapons;
+public:
+	/// Creates the Craft Weapons state.
+	CraftWeaponsState(Game *game, Base *base, size_t craft, size_t weapon);
+	/// Cleans up the Craft Weapons state.
+	~CraftWeaponsState();
+	/// Handler for clicking the Cancel button.
+	void btnCancelClick(Action *action);
+	/// Handler for clicking the Weapons list.
+	void lstWeaponsClick(Action *action);
+>>>>>>> master
 };
 
 }

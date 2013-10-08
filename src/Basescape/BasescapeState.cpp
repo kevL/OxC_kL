@@ -379,9 +379,7 @@ void BasescapeState::init()
 		}
 	}
 
-	std::wstring s = tr("STR_FUNDS");
-	s += Text::formatFunding(_game->getSavedGame()->getFunds());
-	_txtFunds->setText(s);
+	_txtFunds->setText(tr("STR_FUNDS").arg(Text::formatFunding(_game->getSavedGame()->getFunds())));
 
 	_btnNewBase->setVisible(_game->getSavedGame()->getBases()->size() < 8);
 }
@@ -597,24 +595,28 @@ void BasescapeState::viewRightClick(Action* )
  */
 void BasescapeState::viewMouseOver(Action* )
 {
-	std::wstring t;
+	std::wstringstream ss;
 
 	BaseFacility* f = _view->getSelectedFacility();
-	if (f == 0)
-		t = L"";
-	else if (f->getRules()->getCrafts() == 0 || f->getBuildTime() > 0)
-		t = tr(f->getRules()->getType());
-	else
+	if (f != 0)
 	{
-		t.reserve(31);
-		t =  tr(f->getRules()->getType());
-		t += L" ";
-		t += tr("STR_CRAFT_");
-		if (f->getCraft() != 0)
-			t += f->getCraft()->getName(_game->getLanguage());
+		if (f->getRules()->getCrafts() == 0
+			|| f->getBuildTime() > 0)
+		{
+			ss << tr(f->getRules()->getType());
+		}
+		else
+		{
+			ss << tr(f->getRules()->getType());
+
+			if (f->getCraft() != 0)
+			{
+				ss << L" " << tr("STR_CRAFT_").arg(f->getCraft()->getName(_game->getLanguage()));
+			}
+		}
 	}
 
-	_txtFacility->setText(t);
+	_txtFacility->setText(ss.str());
 }
 
 /**

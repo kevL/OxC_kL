@@ -115,12 +115,8 @@ BriefingState::BriefingState(Game* game, Craft* craft, Base* base)
 	_window->setColor(Palette::blockOffset(15)-1);
 
 	_btnOk->setColor(Palette::blockOffset(8)+5);
-<<<<<<< HEAD
-	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
-
-=======
 	_btnOk->setText(tr("STR_OK"));
->>>>>>> master
+
 	_btnOk->onMouseClick((ActionHandler)&BriefingState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler) &BriefingState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
 	_btnOk->onKeyboardPress((ActionHandler) &BriefingState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
@@ -133,8 +129,12 @@ BriefingState::BriefingState(Game* game, Craft* craft, Base* base)
 
 	_txtCraft->setColor(Palette::blockOffset(8)+5);
 	_txtCraft->setBig();
+<<<<<<< HEAD
 
 	std::wstringstream ss;
+=======
+	std::wstring s;
+>>>>>>> master
 	if (craft)
 	{
 		if (craft->getDestination())
@@ -142,14 +142,18 @@ BriefingState::BriefingState(Game* game, Craft* craft, Base* base)
 			_txtTarget->setText(craft->getDestination()->getName(_game->getLanguage()));
 		}
 
-		ss << tr("STR_CRAFT_") << craft->getName(_game->getLanguage());
+		s = tr("STR_CRAFT_").arg(craft->getName(_game->getLanguage()));
 	}
-	else if(base)
+	else if (base)
 	{
-		ss << tr("STR_BASE_UC_") << base->getName();
+		s = tr("STR_BASE_UC_").arg(base->getName());
 	}
+<<<<<<< HEAD
 
 	_txtCraft->setText(ss.str());
+=======
+	_txtCraft->setText(s);
+>>>>>>> master
 
 	_txtBriefing->setColor(Palette::blockOffset(8)+5);
 	_txtBriefing->setWordWrap(true);
@@ -165,12 +169,8 @@ BriefingState::BriefingState(Game* game, Craft* craft, Base* base)
 		_window->setBackground(_game->getResourcePack()->getSurface("BACK16.SCR"));
 	}
 
-<<<<<<< HEAD
-	_txtTitle->setText(_game->getLanguage()->getString(mission));
-
-=======
 	_txtTitle->setText(tr(mission));
->>>>>>> master
+
 	std::stringstream briefingtext;
 	briefingtext << mission.c_str() << "_BRIEFING";
 	_txtBriefing->setText(tr(briefingtext.str()));

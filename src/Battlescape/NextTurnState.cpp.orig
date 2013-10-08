@@ -30,7 +30,7 @@
 #include "DebriefingState.h"
 #include "../Interface/Cursor.h"
 #include "BattlescapeState.h"
-//#include "../Interface/TurnCounter.h"	// kL
+#include "../Interface/TurnCounter.h"	// kL
 
 
 namespace OpenXcom
@@ -44,11 +44,11 @@ namespace OpenXcom
  */
 NextTurnState::NextTurnState(Game* game, SavedBattleGame* battleGame, BattlescapeState* state)
 	:
-	State(game),
-	_battleGame(battleGame),
-	_state(state)
+		State(game),
+		_battleGame(battleGame),
+		_state(state)
 {
-	Log(LOG_INFO) << "Create NextTurnState";	// kL
+//	Log(LOG_INFO) << "Create NextTurnState";	// kL
 
 	// Create objects
 	_window		= new Window(this, 320, 200, 0, 0);
@@ -80,26 +80,26 @@ NextTurnState::NextTurnState(Game* game, SavedBattleGame* battleGame, Battlescap
 	_txtTurn->setBig();
 	_txtTurn->setAlign(ALIGN_CENTER);
 	_txtTurn->setHighContrast(true);
-	std::wstringstream ss;
 <<<<<<< HEAD
+	std::wstringstream ss;
 	Log(LOG_INFO) << ". NextTurnState -> SavedBattleGame::getTurn() : " << _battleGame->getTurn();	// kL
-	ss << _game->getLanguage()->getString("STR_TURN") << L" " << _battleGame->getTurn();
-=======
 	ss << tr("STR_TURN") << L" " << _battleGame->getTurn();
->>>>>>> master
 	_txtTurn->setText(ss.str());
+=======
+	_txtTurn->setText(tr("STR_TURN").arg(_battleGame->getTurn()));
+>>>>>>> master
 
 	_txtSide->setColor(Palette::blockOffset(0));
 	_txtSide->setBig();
 	_txtSide->setAlign(ALIGN_CENTER);
 	_txtSide->setHighContrast(true);
-	ss.str(L"");
 <<<<<<< HEAD
-	ss << _game->getLanguage()->getString("STR_SIDE") << _game->getLanguage()->getString((_battleGame->getSide() == FACTION_PLAYER ? "STR_XCOM" : "STR_ALIENS"));
-=======
-	ss << tr("STR_SIDE") << tr((_battleGame->getSide() == FACTION_PLAYER?"STR_XCOM":"STR_ALIENS"));
->>>>>>> master
+	ss.str(L"");
+	ss << tr("STR_SIDE") << tr(_battleGame->getSide() == FACTION_PLAYER ? "STR_XCOM" : "STR_ALIENS");
 	_txtSide->setText(ss.str());
+=======
+	_txtSide->setText(tr("STR_SIDE").arg(tr((_battleGame->getSide() == FACTION_PLAYER ? "STR_XCOM" : "STR_ALIENS"))));
+>>>>>>> master
 
 	_txtMessage->setColor(Palette::blockOffset(0));
 	_txtMessage->setBig();
@@ -115,7 +115,7 @@ NextTurnState::NextTurnState(Game* game, SavedBattleGame* battleGame, Battlescap
  */
 NextTurnState::~NextTurnState()
 {
-	Log(LOG_INFO) << "Delete NextTurnState";		// kL
+//	Log(LOG_INFO) << "Delete NextTurnState";		// kL
 }
 
 /**
@@ -124,13 +124,21 @@ NextTurnState::~NextTurnState()
  */
 void NextTurnState::handle(Action* action)
 {
+//	Log(LOG_INFO) << "NextTurnState::handle()";	// kL
 	State::handle(action);
 
 //kL	if (action->getDetails()->type == SDL_KEYDOWN
 //kL		|| action->getDetails()->type == SDL_MOUSEBUTTONDOWN)
-//	if (action->getDetails()->type == SDL_MOUSEBUTTONDOWN			// kL
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)	// kL
 	{
+//		Log(LOG_INFO) << ". . . . RMB, update TurnCounter, popState & tallyUnits";	// kL
+
+//		_turnCounter->setTurnCount(kL_TurnCount);		// kL
+		kL_TurnCount = _battleGame->getTurn();	// kL
+
+		_turnCounter = _state->getTurnCounter();
+		_turnCounter->update();
+
 		_game->popState();
 
 		int liveAliens = 0;
@@ -144,10 +152,10 @@ void NextTurnState::handle(Action* action)
 		else
 		{
 			_state->btnCenterClick(0);
-
-//			_turnCounter->setTurnCount(_battleGame->getTurn());		// kL
 		}
 	}
+
+//	Log(LOG_INFO) << ". . handle() EXIT";	// kL
 }
 
 }

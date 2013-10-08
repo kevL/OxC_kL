@@ -111,8 +111,7 @@ std::wstring Text::formatFunding(int funds)
 std::wstring Text::formatPercentage(int value)
 {
 	std::wstringstream ss;
-	ss << value;
-	ss << "%";
+	ss << value << "%";
 
 	return ss.str();
 }
@@ -265,6 +264,7 @@ void Text::setVerticalAlign(TextVAlign valign)
 void Text::setColor(Uint8 color)
 {
 	_color = color;
+	_color2 = color;
 	_redraw = true;
 }
 

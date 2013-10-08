@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "Text.h"
 #include <cctype>
 #include <cmath>
@@ -23,6 +24,7 @@
 #include "../Engine/Font.h"
 #include "../Engine/Options.h"
 #include "../Engine/Language.h"
+
 
 namespace OpenXcom
 {
@@ -35,9 +37,19 @@ namespace OpenXcom
  * @param y Y position in pixels.
  */
 Text::Text(int width, int height, int x, int y)
-	: Surface(width, height, x, y), _big(0), _small(0), _font(0), _text(L""),
-	_wrap(false), _invert(false), _contrast(false),
-	_align(ALIGN_LEFT), _valign(ALIGN_TOP), _color(0), _color2(0)
+	:
+		Surface(width, height, x, y),
+		_big(0),
+		_small(0),
+		_font(0),
+		_text(L""),
+		_wrap(false),
+		_invert(false),
+		_contrast(false),
+		_align(ALIGN_LEFT),
+		_valign(ALIGN_TOP),
+		_color(0),
+		_color2(0)
 {
 }
 
@@ -46,7 +58,6 @@ Text::Text(int width, int height, int x, int y)
  */
 Text::~Text()
 {
-
 }
 
 /**
@@ -100,9 +111,13 @@ std::wstring Text::formatFunding(int funds)
 std::wstring Text::formatPercentage(int value)
 {
 	std::wstringstream ss;
+<<<<<<< HEAD
 	ss << value;
 	ss << "%";
 
+=======
+	ss << value << "%";
+>>>>>>> master
 	return ss.str();
 }
 
@@ -254,6 +269,7 @@ void Text::setVerticalAlign(TextVAlign valign)
 void Text::setColor(Uint8 color)
 {
 	_color = color;
+	_color2 = color;
 	_redraw = true;
 }
 
@@ -449,13 +465,8 @@ void Text::draw()
 		case ALIGN_TOP:
 			y = 0;
 		break;
-<<<<<<< HEAD
 		case ALIGN_MIDDLE:
-			y = (getHeight() - height) / 2;
-=======
-	case ALIGN_MIDDLE:
-		y = (int)ceil((getHeight() - height) / 2.0);
->>>>>>> master
+			y = (int)ceil((getHeight() - height) / 2.0);
 		break;
 		case ALIGN_BOTTOM:
 			y = getHeight() - height;
@@ -467,13 +478,8 @@ void Text::draw()
 		case ALIGN_LEFT:
 			x = 0;
 		break;
-<<<<<<< HEAD
 		case ALIGN_CENTER:
-			x = (getWidth() - _lineWidth[line]) / 2;
-=======
-	case ALIGN_CENTER:
-		x = (int)ceil((getWidth() - _lineWidth[line]) / 2.0);
->>>>>>> master
+			x = (int)ceil((getWidth() - _lineWidth[line]) / 2.0);
 		break;
 		case ALIGN_RIGHT:
 			x = (getWidth() - _lineWidth[line]) - 1;

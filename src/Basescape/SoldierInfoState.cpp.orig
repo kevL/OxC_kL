@@ -63,13 +63,13 @@ SoldierInfoState::SoldierInfoState(Game* game, Base* base, size_t soldier)
 	_btnOk			= new TextButton(48, 14, 30, 33);
 	_btnNext		= new TextButton(28, 14, 80, 33);
 
-	_txtArmor		= new Text(30, 11, 130, 35);			// kL. reinstating this!
+	_txtArmor		= new Text(30, 9, 130, 35);				// kL. reinstating this!
 //kL	_btnArmor		= new TextButton(110, 14, 130, 33);	// (60, 14, 130, 33);
 	_btnArmor		= new TextButton(70, 14, 164, 33);		// kL
 
 	_edtSoldier		= new TextEdit(200, 16, 40, 9);
 //kL	_btnSack		= new TextButton(60, 14, 260, 33);	// (60, 14, 248, 10);
-	_btnSack		= new TextButton(44, 15, 268, 8); 		// kL
+	_btnSack		= new TextButton(44, 16, 268, 8); 		// kL
 //	_txtArmor		= new Text(120, 9, 194, 38);
 
 	_txtRank		= new Text(130, 9, 0, 48);
@@ -181,48 +181,32 @@ SoldierInfoState::SoldierInfoState(Game* game, Base* base, size_t soldier)
 	_game->getResourcePack()->getSurface("BACK06.SCR")->blit(_bg);
 
 	_btnOk->setColor(Palette::blockOffset(15)+6);
-<<<<<<< HEAD
-	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
-	_btnOk->onMouseClick((ActionHandler) &SoldierInfoState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler) &SoldierInfoState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
-=======
 	_btnOk->setText(tr("STR_OK"));
-	_btnOk->onMouseClick((ActionHandler)&SoldierInfoState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&SoldierInfoState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
->>>>>>> master
+	_btnOk->onMouseClick((ActionHandler)& SoldierInfoState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)& SoldierInfoState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_btnPrev->setColor(Palette::blockOffset(15)+6);
 	_btnPrev->setText(L"<<");
-	_btnPrev->onMouseClick((ActionHandler) &SoldierInfoState::btnPrevClick);
+	_btnPrev->onMouseClick((ActionHandler)& SoldierInfoState::btnPrevClick);
 
 	_btnNext->setColor(Palette::blockOffset(15)+6);
 	_btnNext->setText(L">>");
-	_btnNext->onMouseClick((ActionHandler) &SoldierInfoState::btnNextClick);
+	_btnNext->onMouseClick((ActionHandler)& SoldierInfoState::btnNextClick);
 
 	_btnArmor->setColor(Palette::blockOffset(15)+6);
-<<<<<<< HEAD
-//kL	_btnArmor->setText(_game->getLanguage()->getString("STR_ARMOR"));
-	_btnArmor->onMouseClick((ActionHandler) &SoldierInfoState::btnArmorClick);
-=======
-	_btnArmor->setText(tr("STR_ARMOR"));
-	_btnArmor->onMouseClick((ActionHandler)&SoldierInfoState::btnArmorClick);
->>>>>>> master
+//kL	_btnArmor->setText(tr("STR_ARMOR"));
+	_btnArmor->onMouseClick((ActionHandler)& SoldierInfoState::btnArmorClick);
 
 	_edtSoldier->setColor(Palette::blockOffset(13)+10);
 	_edtSoldier->setBig();
-	_edtSoldier->onKeyboardPress((ActionHandler) &SoldierInfoState::edtSoldierKeyPress);
+	_edtSoldier->onKeyboardPress((ActionHandler)& SoldierInfoState::edtSoldierKeyPress);
 
 	_btnSack->setColor(Palette::blockOffset(15)+6);
-<<<<<<< HEAD
-	_btnSack->setText(_game->getLanguage()->getString("STR_SACK"));
-	_btnSack->onMouseClick((ActionHandler) &SoldierInfoState::btnSackClick);
-=======
 	_btnSack->setText(tr("STR_SACK"));
-	_btnSack->onMouseClick((ActionHandler)&SoldierInfoState::btnSackClick);
->>>>>>> master
+	_btnSack->onMouseClick((ActionHandler)& SoldierInfoState::btnSackClick);
 
 	_txtArmor->setColor(Palette::blockOffset(13));		// kL_note: reinstating this!
-	_txtArmor->setText(_game->getLanguage()->getString("STR_ARMOR"));		// kL
+	_txtArmor->setText(tr("STR_ARMOR"));				// kL
 
 	_txtRank->setColor(Palette::blockOffset(13)+10);
 	_txtRank->setSecondaryColor(Palette::blockOffset(13));
@@ -327,7 +311,7 @@ SoldierInfoState::SoldierInfoState(Game* game, Base* base, size_t soldier)
 
 	_numPsiStrength->setColor(Palette::blockOffset(13));
 
-	_barPsiStrength->setColor(Palette::blockOffset(11)+4);
+	_barPsiStrength->setColor(Palette::blockOffset(11));
 	_barPsiStrength->setColor2(Palette::blockOffset(11)+4);
 	_barPsiStrength->setScale(1.0);
 	_barPsiStrength->setInvert(true);
@@ -337,7 +321,7 @@ SoldierInfoState::SoldierInfoState(Game* game, Base* base, size_t soldier)
 
 	_numPsiSkill->setColor(Palette::blockOffset(13));
 
-	_barPsiSkill->setColor(Palette::blockOffset(11)+4);
+	_barPsiSkill->setColor(Palette::blockOffset(11));
 	_barPsiSkill->setColor2(Palette::blockOffset(11)+4);
 	_barPsiSkill->setScale(1.0);
 	_barPsiSkill->setInvert(true);
@@ -499,52 +483,36 @@ void SoldierInfoState::init()
 
 	std::wstring wsArmor;
 	std::string armorType = s->getArmor()->getType();
-/*kL	if (armorType == "STR_NONE_UC")
+	if (armorType == "STR_NONE_UC")
 	{
-		wsArmor.reserve(15);
-		wsArmor = tr("STR_ARMOR");
-		wsArmor += L"> ";
-		wsArmor += tr(armorType);
+		wsArmor = tr("STR_ARMOR_").arg(tr(armorType));
 	}
-<<<<<<< HEAD
-	else */
-	wsArmor = _game->getLanguage()->getString(armorType);
-=======
 	else
 		wsArmor = tr(armorType);
->>>>>>> master
 
 	_btnArmor->setText(wsArmor);
 //	_txtArmor->setText(tr(s->getArmor()->getType()));
 
 	_btnSack->setVisible(!(s->getCraft() && s->getCraft()->getStatus() == "STR_OUT"));
 
-	std::wstringstream ss9;
-	ss9 << tr("STR_RANK_") << L'\x01' << tr(s->getRankString());
-	_txtRank->setText(ss9.str());
+	_txtRank->setText(tr("STR_RANK_").arg(tr(s->getRankString())));
+	_txtMissions->setText(tr("STR_MISSIONS").arg(s->getMissions()));
+	_txtKills->setText(tr("STR_KILLS").arg(s->getKills()));
 
-	std::wstringstream ss10;
-	ss10 << tr("STR_MISSIONS") << L'\x01' << s->getMissions();
-	_txtMissions->setText(ss10.str());
-
-	std::wstringstream ss11;
-	ss11 << tr("STR_KILLS") << L'\x01' << s->getKills();
-	_txtKills->setText(ss11.str());
-
-	std::wstringstream ss12;
-	ss12 << tr("STR_CRAFT_") << L'\x01';
+	std::wstring craft;
 	if (s->getCraft() == 0)
-		ss12 << tr("STR_NONE_UC");
+	{
+		craft = tr("STR_NONE_UC");
+	}
 	else
-		ss12 << s->getCraft()->getName(_game->getLanguage());
-
-	_txtCraft->setText(ss12.str());
+	{
+		craft = s->getCraft()->getName(_game->getLanguage());
+	}
+	_txtCraft->setText(tr("STR_CRAFT_").arg(craft));
 
 	if (s->getWoundRecovery() > 0)
 	{
-		std::wstringstream ss13;
-		ss13 << tr("STR_WOUND_RECOVERY") << L'\x01' << tr("STR_DAY", s->getWoundRecovery());
-		_txtRecovery->setText(ss13.str());
+		_txtRecovery->setText(tr("STR_WOUND_RECOVERY").arg(tr("STR_DAY", s->getWoundRecovery())));
 	}
 	else
 	{

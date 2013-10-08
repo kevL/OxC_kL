@@ -52,61 +52,46 @@ namespace OpenXcom
  */
 CraftInfoState::CraftInfoState(Game* game, Base* base, size_t craft)
 	:
-	State(game),
-	_base(base),
-	_craft(craft)
+		State(game),
+		_base(base),
+		_craft(craft)
 {
 //	Log(LOG_INFO) << "Create CraftInfoState";
 
-	// Create objects
-<<<<<<< HEAD
 	_window		= new Window(this, 320, 200, 0, 0, POPUP_BOTH);
-	_btnOk		= new TextButton(64, 24, 128, 168);
+
+//kL	_edtCraft	= new TextEdit(160, 16, 80, 8);
+	_edtCraft	= new TextEdit(160, 16, 80, 10);			// kL
+
+//kL	_txtDamage	= new Text(82, 16, 14, 24);
+//kL	_txtFuel	= new Text(82, 16, 228, 24);
+	_txtFuel	= new Text(82, 17, 14, 28);				// kL
+	_txtDamage	= new Text(82, 17, 228, 28);			// kL
+
 	_btnW1		= new TextButton(24, 32, 14, 48);
+	_txtW1Name	= new Text(90, 9, 46, 48);
+	_txtW2Name	= new Text(90, 9, 204, 48);
 	_btnW2		= new TextButton(24, 32, 282, 48);
+	_txtW1Ammo	= new Text(60, 9, 46, 64);
+	_txtW2Ammo	= new Text(60, 9, 204, 64);
+	_txtW1Max	= new Text(60, 9, 46, 72);
+	_txtW2Max	= new Text(60, 9, 204, 72);
+
 	_btnCrew	= new TextButton(64, 16, 14, 96);
 	_btnEquip	= new TextButton(64, 16, 14, 120);
 	_btnArmor	= new TextButton(64, 16, 14, 144);
-	_edtCraft	= new TextEdit(160, 16, 80, 8);
-	_txtDamage	= new Text(82, 16, 14, 24);
-	_txtFuel	= new Text(82, 16, 228, 24);
-	_txtW1Name	= new Text(90, 9, 46, 48);
-	_txtW1Ammo	= new Text(60, 9, 46, 64);
-	_txtW1Max	= new Text(60, 9, 46, 72);
-	_txtW2Name	= new Text(90, 9, 204, 48);
-	_txtW2Ammo	= new Text(60, 9, 204, 64);
-	_txtW2Max	= new Text(60, 9, 204, 72);
-//kL	_sprite		= new Surface(32, 32, 144, 52);
-	_sprite		= new Surface(32, 38, 144, 50);		// kL
+
+//kL	_sprite		= new Surface(32, 40, 144, 52);
+	_sprite		= new Surface(32, 38, 144, 50);			// kL
 	_weapon1	= new Surface(15, 17, 121, 63);
 	_weapon2	= new Surface(15, 17, 184, 63);
 	_crew		= new Surface(220, 18, 85, 96);
 	_equip		= new Surface(220, 18, 85, 121);
-=======
-	_window = new Window(this, 320, 200, 0, 0, POPUP_BOTH);
-	_btnOk = new TextButton(64, 24, 128, 168);
-	_btnW1 = new TextButton(24, 32, 14, 48);
-	_btnW2 = new TextButton(24, 32, 282, 48);
-	_btnCrew = new TextButton(64, 16, 14, 96);
-	_btnEquip = new TextButton(64, 16, 14, 120);
-	_btnArmor = new TextButton(64, 16, 14, 144);
-	_edtCraft = new TextEdit(160, 16, 80, 8);
-	_txtDamage = new Text(82, 16, 14, 24);
-	_txtFuel = new Text(82, 16, 228, 24);
-	_txtW1Name = new Text(90, 9, 46, 48);
-	_txtW1Ammo = new Text(60, 9, 46, 64);
-	_txtW1Max = new Text(60, 9, 46, 72);
-	_txtW2Name = new Text(90, 9, 204, 48);
-	_txtW2Ammo = new Text(60, 9, 204, 64);
-	_txtW2Max = new Text(60, 9, 204, 72);
-	_sprite = new Surface(32, 40, 144, 52);
-	_weapon1 = new Surface(15, 17, 121, 63);
-	_weapon2 = new Surface(15, 17, 184, 63);
-	_crew = new Surface(220, 18, 85, 96);
-	_equip = new Surface(220, 18, 85, 121);
->>>>>>> master
 
-	// Set palette
+//kL	_btnOk		= new TextButton(64, 24, 128, 168);
+	_btnOk		= new TextButton(288, 16, 16, 177);		// kL
+
+
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(3)), Palette::backPos, 16);
 
@@ -139,15 +124,9 @@ CraftInfoState::CraftInfoState(Game* game, Base* base, size_t craft)
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK14.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(13)+10);
-<<<<<<< HEAD
-	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
+	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& CraftInfoState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)& CraftInfoState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
-=======
-	_btnOk->setText(tr("STR_OK"));
-	_btnOk->onMouseClick((ActionHandler)&CraftInfoState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&CraftInfoState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
->>>>>>> master
 
 	_btnW1->setColor(Palette::blockOffset(13)+10);
 	_btnW1->setText(L"1");
@@ -158,29 +137,16 @@ CraftInfoState::CraftInfoState(Game* game, Base* base, size_t craft)
 	_btnW2->onMouseClick((ActionHandler)& CraftInfoState::btnW2Click);
 
 	_btnCrew->setColor(Palette::blockOffset(13)+10);
-<<<<<<< HEAD
-	_btnCrew->setText(_game->getLanguage()->getString("STR_CREW"));
+	_btnCrew->setText(tr("STR_CREW"));
 	_btnCrew->onMouseClick((ActionHandler)& CraftInfoState::btnCrewClick);
 
 	_btnEquip->setColor(Palette::blockOffset(13)+10);
-	_btnEquip->setText(_game->getLanguage()->getString("STR_EQUIPMENT_UC"));
+	_btnEquip->setText(tr("STR_EQUIPMENT_UC"));
 	_btnEquip->onMouseClick((ActionHandler)& CraftInfoState::btnEquipClick);
 
 	_btnArmor->setColor(Palette::blockOffset(13)+10);
-	_btnArmor->setText(_game->getLanguage()->getString("STR_ARMOR"));
-	_btnArmor->onMouseClick((ActionHandler)& CraftInfoState::btnArmorClick);
-=======
-	_btnCrew->setText(tr("STR_CREW"));
-	_btnCrew->onMouseClick((ActionHandler)&CraftInfoState::btnCrewClick);
-
-	_btnEquip->setColor(Palette::blockOffset(13)+10);
-	_btnEquip->setText(tr("STR_EQUIPMENT_UC"));
-	_btnEquip->onMouseClick((ActionHandler)&CraftInfoState::btnEquipClick);
-
-	_btnArmor->setColor(Palette::blockOffset(13)+10);
 	_btnArmor->setText(tr("STR_ARMOR"));
-	_btnArmor->onMouseClick((ActionHandler)&CraftInfoState::btnArmorClick);
->>>>>>> master
+	_btnArmor->onMouseClick((ActionHandler)& CraftInfoState::btnArmorClick);
 
 	_edtCraft->setColor(Palette::blockOffset(13)+10);
 	_edtCraft->setBig();
@@ -238,10 +204,10 @@ void CraftInfoState::init()
 
 	std::wstringstream ss;
 <<<<<<< HEAD
-	ss << _game->getLanguage()->getString("STR_DAMAGE_UC_") << L'\x01' << c->getDamagePercentage() << L'%';
+	ss << tr("STR_DAMAGE_UC_") << L'\x01' << c->getDamagePercentage() << L'%';
 
 =======
-	ss << tr("STR_DAMAGE_UC_") << L'\x01' << c->getDamagePercentage() << L'%';
+	ss << tr("STR_DAMAGE_UC_").arg(Text::formatPercentage(c->getDamagePercentage()));
 >>>>>>> master
 	if (c->getStatus() == "STR_REPAIRS")
 	{
@@ -255,10 +221,10 @@ void CraftInfoState::init()
 
 	std::wstringstream ss2;
 <<<<<<< HEAD
-	ss2 << _game->getLanguage()->getString("STR_FUEL") << L'\x01' << c->getFuelPercentage() << L'%';
+	ss2 << tr("STR_FUEL") << L'\x01' << c->getFuelPercentage() << L'%';
 
 =======
-	ss2 << tr("STR_FUEL") << L'\x01' << c->getFuelPercentage() << L'%';
+	ss2 << tr("STR_FUEL").arg(Text::formatPercentage(c->getFuelPercentage()));
 >>>>>>> master
 	if (c->getStatus() == "STR_REFUELLING")
 	{
@@ -319,14 +285,8 @@ void CraftInfoState::init()
 			frame->blit(_weapon1);
 
 			_txtW1Name->setText(tr(w1->getRules()->getType()));
-
-			std::wstringstream ss3;
-			ss3 << tr("STR_AMMO_") << L'\x01' << w1->getAmmo();
-			_txtW1Ammo->setText(ss3.str());
-
-			std::wstringstream ss4;
-			ss4 << tr("STR_MAX") << L'\x01' << w1->getRules()->getAmmoMax();
-			_txtW1Max->setText(ss4.str());
+			_txtW1Ammo->setText(tr("STR_AMMO_").arg(w1->getAmmo()));
+			_txtW1Max->setText(tr("STR_MAX").arg(w1->getRules()->getAmmoMax()));
 		}
 		else
 		{
@@ -356,14 +316,8 @@ void CraftInfoState::init()
 			frame->blit(_weapon2);
 
 			_txtW2Name->setText(tr(w2->getRules()->getType()));
-
-			std::wstringstream ss5;
-			ss5 << tr("STR_AMMO_") << L'\x01' << w2->getAmmo();
-			_txtW2Ammo->setText(ss5.str());
-
-			std::wstringstream ss6;
-			ss6 << tr("STR_MAX") << L'\x01' << w2->getRules()->getAmmoMax();
-			_txtW2Max->setText(ss6.str());
+			_txtW2Ammo->setText(tr("STR_AMMO_").arg(w2->getAmmo()));
+			_txtW2Max->setText(tr("STR_MAX").arg(w2->getRules()->getAmmoMax()));
 		}
 		else
 		{

@@ -700,7 +700,7 @@ void GeoscapeState::timeDisplay()
 	ss3 << _game->getSavedGame()->getTime()->getHour();
 	_txtHour->setText(ss3.str());
 
-	ss4 << _game->getSavedGame()->getTime()->getDay() << tr(_game->getSavedGame()->getTime()->getDayString());
+	ss4 << _game->getSavedGame()->getTime()->getDayString(_game->getLanguage());
 	_txtDay->setText(ss4.str());
 
 	_txtWeekday->setText(tr(_game->getSavedGame()->getTime()->getWeekdayString()));
@@ -1441,15 +1441,12 @@ void GeoscapeState::time30Minutes()
 					else
 //					if (!(*j)->getLowFuel())		// kL&redv, https://github.com/redv/OpenXcom/commit/17a8c31e0ccb82c2c9a737eb31537816f6350b73
 					{
-						std::wstringstream ss;
-						ss << tr("STR_NOT_ENOUGH");
-						ss << tr(item);
-						ss << tr("STR_TO_REFUEL");
-						ss << (*j)->getName(_game->getLanguage());
-						ss << tr("STR_AT_");
-						ss << (*i)->getName();
+						std::wstring msg = tr("STR_NOT_ENOUGH_ITEM_TO_REFUEL_CRAFT_AT_BASE")
+										   .arg(tr(item))
+										   .arg((*j)->getName(_game->getLanguage()))
+										   .arg((*i)->getName());
+						popup(new CraftErrorState(_game, this, msg));
 
-						popup(new CraftErrorState(_game, this, ss.str()));
 						(*j)->setStatus("STR_READY");	// <- kL_note: this looks (potentially) borky!
 
 //						(*j)->setLowFuel(true);			// kL. So try this, and add a line to Craft::refuel()
@@ -1604,15 +1601,12 @@ void GeoscapeState::time1Hour()
 				std::string s = (*j)->rearm();
 				if (s != "")
 				{
-					std::wstringstream ss;
-					ss << tr("STR_NOT_ENOUGH");
-					ss << tr(s);
-					ss << tr("STR_TO_REARM");
-					ss << (*j)->getName(_game->getLanguage());
-					ss << tr("STR_AT_");
-					ss << (*i)->getName();
+					std::wstring msg = tr("STR_NOT_ENOUGH_ITEM_TO_REARM_CRAFT_AT_BASE")
+									   .arg(tr(s))
+									   .arg((*j)->getName(_game->getLanguage()))
+									   .arg((*i)->getName());
+					popup(new CraftErrorState(_game, this, msg));
 
-					popup(new CraftErrorState(_game, this, ss.str()));
 				}
 			}
 		}
@@ -1726,7 +1720,7 @@ void GeoscapeState::time1Day()
 				if ((*j)->getBuildTime() == 0)
 				{
 					timerReset();
-					popup(new ProductionCompleteState(_game, tr((*j)->getRules()->getType()), (*i)->getName()));
+					popup(new ProductionCompleteState(_game, tr((*j)->getRules()->getType()), (*i)->getName(), PROGRESS_CONSTRUCTION));
 				}
 			}
 		}

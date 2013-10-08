@@ -49,23 +49,27 @@ namespace OpenXcom
  */
 CraftSoldiersState::CraftSoldiersState(Game* game, Base* base, size_t craft)
 	:
-	State(game),
-	_base(base),
-	_craft(craft)
+		State(game),
+		_base(base),
+		_craft(craft)
 {
 //	Log(LOG_INFO) << "Create CraftSoldiersState";
 
 	// Create objects
 	_window			= new Window(this, 320, 200, 0, 0);
+
 //kL	_btnOk			= new TextButton(288, 16, 16, 176);
-	_btnOk			= new TextButton(144, 16, 161, 176);	// kL
-	_btnUnload		= new TextButton(144, 16, 15, 176);		// kL
+	_btnUnload		= new TextButton(145, 16, 16, 177);		// kL
+	_btnOk			= new TextButton(145, 16, 162, 177);	// kL
+
 	_txtTitle		= new Text(300, 16, 16, 7);
+
+	_txtAvailable	= new Text(110, 9, 16, 24);
+	_txtUsed		= new Text(110, 9, 122, 24);
 	_txtName		= new Text(114, 9, 16, 32);
 	_txtRank		= new Text(102, 9, 122, 32);
 	_txtCraft		= new Text(84, 9, 224, 32);
-	_txtAvailable	= new Text(110, 9, 16, 24);
-	_txtUsed		= new Text(110, 9, 122, 24);
+
 	_lstSoldiers	= new TextList(288, 128, 8, 40);
 
 	// Set palette
@@ -89,20 +93,13 @@ CraftSoldiersState::CraftSoldiersState(Game* game, Base* base, size_t craft)
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK02.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(13)+10);
-<<<<<<< HEAD
-	_btnOk->setText(_game->getLanguage()->getString("STR_OK"));
-	_btnOk->onMouseClick((ActionHandler) &CraftSoldiersState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler) &CraftSoldiersState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->setText(tr("STR_OK"));
+	_btnOk->onMouseClick((ActionHandler)& CraftSoldiersState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)& CraftSoldiersState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_btnUnload->setColor(Palette::blockOffset(13)+10);																	// kL
 	_btnUnload->setText(_game->getLanguage()->getString("STR_UNLOAD"));													// kL
-	_btnUnload->onMouseClick((ActionHandler) &CraftSoldiersState::btnUnloadClick);										// kL
-//	_btnUnload->onKeyboardPress((ActionHandler) &CraftSoldiersState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));	// kL
-=======
-	_btnOk->setText(tr("STR_OK"));
-	_btnOk->onMouseClick((ActionHandler)&CraftSoldiersState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&CraftSoldiersState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
->>>>>>> master
+	_btnUnload->onMouseClick((ActionHandler)& CraftSoldiersState::btnUnloadClick);										// kL
 
 	_txtTitle->setColor(Palette::blockOffset(15)+6);
 	_txtTitle->setBig();
@@ -121,26 +118,24 @@ CraftSoldiersState::CraftSoldiersState(Game* game, Base* base, size_t craft)
 
 	_txtAvailable->setColor(Palette::blockOffset(15)+6);
 	_txtAvailable->setSecondaryColor(Palette::blockOffset(13));
-	std::wstringstream ss2;
-	ss2 << tr("STR_SPACE_AVAILABLE") << L'\x01' << c->getSpaceAvailable();
-	_txtAvailable->setText(ss2.str());
+	_txtAvailable->setText(tr("STR_SPACE_AVAILABLE").arg(c->getSpaceAvailable()));
 
 	_txtUsed->setColor(Palette::blockOffset(15)+6);
 	_txtUsed->setSecondaryColor(Palette::blockOffset(13));
-	std::wstringstream ss3;
-	ss3 << tr("STR_SPACE_USED") << L'\x01' << c->getSpaceUsed();
-	_txtUsed->setText(ss3.str());
+	_txtUsed->setText(tr("STR_SPACE_USED").arg(c->getSpaceUsed()));
 
 	_lstSoldiers->setColor(Palette::blockOffset(13)+10);
 	_lstSoldiers->setArrowColor(Palette::blockOffset(15)+6);
 	_lstSoldiers->setArrowColumn(192, ARROW_VERTICAL);
-	_lstSoldiers->setColumns(3, 106, 102, 72);
+//kL	_lstSoldiers->setColumns(3, 106, 102, 72);
+//	_lstSoldiers->setColumns(3, 114, 94, 72);					// kL
+	_lstSoldiers->setColumns(3, 116, 93, 71);					// kL
 	_lstSoldiers->setSelectable(true);
 	_lstSoldiers->setBackground(_window);
 	_lstSoldiers->setMargin(8);
-	_lstSoldiers->onLeftArrowClick((ActionHandler) &CraftSoldiersState::lstItemsLeftArrowClick);
-	_lstSoldiers->onRightArrowClick((ActionHandler) &CraftSoldiersState::lstItemsRightArrowClick);
-	_lstSoldiers->onMouseClick((ActionHandler) &CraftSoldiersState::lstSoldiersClick);
+	_lstSoldiers->onLeftArrowClick((ActionHandler)& CraftSoldiersState::lstItemsLeftArrowClick);
+	_lstSoldiers->onRightArrowClick((ActionHandler)& CraftSoldiersState::lstItemsRightArrowClick);
+	_lstSoldiers->onMouseClick((ActionHandler)& CraftSoldiersState::lstSoldiersClick);
 
 	populateList();
 }
@@ -240,7 +235,7 @@ void CraftSoldiersState::populateList()
 	_lstSoldiers->clearList();
 
 	int row = 0;
-	for (std::vector<Soldier*>::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); ++i)
+	for (std::vector<Soldier* >::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); ++i)
 	{
 		_lstSoldiers->addRow(3, (*i)->getName().c_str(), tr((*i)->getRankString()).c_str(), (*i)->getCraftString(_game->getLanguage()).c_str());
 
@@ -348,7 +343,7 @@ void CraftSoldiersState::lstItemsRightArrowClick(Action* action)
 }
 
 /**
- * Shows the selected soldier's info.
+ * Assigns and de-assigns soldiers from a craft.
  * @param action Pointer to an action.
  */
 void CraftSoldiersState::lstSoldiersClick(Action* action)
@@ -388,6 +383,7 @@ void CraftSoldiersState::lstSoldiersClick(Action* action)
 
 	_lstSoldiers->setRowColor(row, color);
 
+<<<<<<< HEAD
 	std::wstringstream ss;
 	ss << tr("STR_SPACE_AVAILABLE") << L'\x01' << c->getSpaceAvailable();
 	_txtAvailable->setText(ss.str());
@@ -395,6 +391,10 @@ void CraftSoldiersState::lstSoldiersClick(Action* action)
 	std::wstringstream ss2;
 	ss2 << tr("STR_SPACE_USED") << L'\x01' << c->getSpaceUsed();
 	_txtUsed->setText(ss2.str());
+=======
+	_txtAvailable->setText(tr("STR_SPACE_AVAILABLE").arg(c->getSpaceAvailable()));
+	_txtUsed->setText(tr("STR_SPACE_USED").arg(c->getSpaceUsed()));
+>>>>>>> master
 }
 
 }

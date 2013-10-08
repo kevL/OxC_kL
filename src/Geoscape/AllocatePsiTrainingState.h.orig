@@ -41,10 +41,18 @@ class AllocatePsiTrainingState
 		public State
 {
 private:
+<<<<<<< HEAD
 	TextButton* _btnOk;
 	Window* _window;
-	Text* _txtTitle, * _txtTraining, * _txtName, * _txtCraft, * _txtRemaining, * _txtPsiStrength, * _txtPsiSkill;
-	TextList* _lstSoldiers;
+//kL	Text* _txtTitle, * _txtTraining, * _txtName, * _txtCraft, * _txtRemaining, * _txtLabSpace, * _txtPsiStrength, * _txtPsiSkill;
+	Text* _txtTitle, * _txtTraining, * _txtName, * _txtCraft, * _txtLab, * _txtPsiStrength, * _txtPsiSkill;		// kL
+=======
+	TextButton *_btnOk;
+	Window *_window;
+	Text *_txtTitle, *_txtTraining, *_txtName, *_txtCraft, *_txtRemaining;
+	Text *_txtPsiStrength, *_txtPsiSkill;
+>>>>>>> master
+	TextList *_lstSoldiers;
 	std::vector<Soldier* > _soldiers;
 	unsigned int _sel;
 	int _labSpace;
