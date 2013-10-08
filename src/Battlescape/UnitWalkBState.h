@@ -39,7 +39,7 @@ class TileEngine;
  */
 class UnitWalkBState
 	:
-	public BattleState
+		public BattleState
 {
 private:
 	Position _target;

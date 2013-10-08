@@ -60,9 +60,13 @@ CraftInfoState::CraftInfoState(Game* game, Base* base, size_t craft)
 
 	_window		= new Window(this, 320, 200, 0, 0, POPUP_BOTH);
 
-	_edtCraft	= new TextEdit(160, 16, 80, 8);
-	_txtDamage	= new Text(82, 16, 14, 24);
-	_txtFuel	= new Text(82, 16, 228, 24);
+//kL	_edtCraft	= new TextEdit(160, 16, 80, 8);
+	_edtCraft	= new TextEdit(160, 16, 80, 10);			// kL
+
+//kL	_txtDamage	= new Text(82, 16, 14, 24);
+//kL	_txtFuel	= new Text(82, 16, 228, 24);
+	_txtFuel	= new Text(82, 17, 14, 28);				// kL
+	_txtDamage	= new Text(82, 17, 228, 28);			// kL
 
 	_btnW1		= new TextButton(24, 32, 14, 48);
 	_txtW1Name	= new Text(90, 9, 46, 48);
@@ -78,7 +82,7 @@ CraftInfoState::CraftInfoState(Game* game, Base* base, size_t craft)
 	_btnArmor	= new TextButton(64, 16, 14, 144);
 
 //kL	_sprite		= new Surface(32, 40, 144, 52);
-	_sprite		= new Surface(32, 38, 144, 50);		// kL
+	_sprite		= new Surface(32, 38, 144, 50);			// kL
 	_weapon1	= new Surface(15, 17, 121, 63);
 	_weapon2	= new Surface(15, 17, 184, 63);
 	_crew		= new Surface(220, 18, 85, 96);

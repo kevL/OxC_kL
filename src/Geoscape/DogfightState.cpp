@@ -400,6 +400,7 @@ DogfightState::DogfightState(Game* game, Globe* globe, Craft* craft, Ufo* ufo)
 	_txtDistance->setText(L"640");
 
 	_txtStatus->setColor(Palette::blockOffset(5)+9);
+	_txtStatus->setAlign(ALIGN_CENTER);		// kL
 	_txtStatus->setText(tr("STR_STANDOFF"));
 
 	SurfaceSet* set = _game->getResourcePack()->getSurfaceSet("INTICON.PCK");

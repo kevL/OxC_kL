@@ -145,9 +145,24 @@ void UnitWalkBState::think()
 		{
 //			Log(LOG_INFO) << ". . Stand up";	// kL
 
-			_unit->setCache(0);
+//kL			_unit->setCache(0);
 			_terrain->calculateFOV(_unit);
+
+			_unit->setCache(0);		// kL
 			_parent->getMap()->cacheUnit(_unit);
+
+
+			newUnitSpotted = !_action.desperate		// kL
+				&& _parent->getPanicHandled()		// kL
+//				&& _unitsSpotted != _unit->getUnitsSpottedThisTurn().size();	// kL
+				&& _unitsSpotted < _unit->getUnitsSpottedThisTurn().size();		// kL
+			if (newUnitSpotted)							// kL
+			{
+//				_unit->setCache(0);						// kL
+//				_parent->getMap()->cacheUnit(_unit);	// kL
+				_pf->abortPath();						// kL
+				_parent->popState();					// kL
+			}
 
 			return;
 		}
@@ -160,10 +175,10 @@ void UnitWalkBState::think()
 			return;
 		}
 	}
-	else if (_unit->isKneeled())
-	{
+//	else if (_unit->isKneeled())	// kL
+//	{
 //		Log(LOG_INFO) << ". kneeled, and path UpDown VALID";	// kL
-	}
+//	}
 
 //kL_below	Tile* tileBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(0, 0, -1));
 
@@ -293,7 +308,8 @@ void UnitWalkBState::think()
 			_terrain->calculateFOV(_unit->getPosition());
 			newUnitSpotted = !_action.desperate
 				&& _parent->getPanicHandled()
-				&& _unitsSpotted != _unit->getUnitsSpottedThisTurn().size();
+//kL				&& _unitsSpotted != _unit->getUnitsSpottedThisTurn().size();
+				&& _unitsSpotted < _unit->getUnitsSpottedThisTurn().size();
 
 			// check for proximity grenades (1 tile around the unit in every direction)
 			// For large units, we need to check every tile it occupies
@@ -610,7 +626,7 @@ void UnitWalkBState::think()
 			Log(LOG_INFO) << ". pos 8";	// kL
 
 			dir = _pf->dequeuePath(); // now start moving
-			if (_falling) dir = _pf->DIR_DOWN;			// kL_note: set above, if it hasn't changed...
+			if (_falling) dir = _pf->DIR_DOWN;		// kL_note: set above, if it hasn't changed...
 
 			if (_unit->spendTimeUnits(tu))
 			{
@@ -691,7 +707,8 @@ void UnitWalkBState::think()
 		_terrain->calculateFOV(_unit);
 		newUnitSpotted = !_action.desperate
 			&& _parent->getPanicHandled()
-			&& _unitsSpotted != _unit->getUnitsSpottedThisTurn().size();
+//kL			&& _unitsSpotted != _unit->getUnitsSpottedThisTurn().size();
+			&& _unitsSpotted < _unit->getUnitsSpottedThisTurn().size();		// kL
 
 		// make sure the unit sprites are up to date
 		if (onScreen)
