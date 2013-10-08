@@ -168,7 +168,7 @@ void ActionMenuState::addItem(BattleActionType ba, const std::string& name, int*
 		|| ba == BA_HIT)
 	{
 //kL		s1 = tr("STR_ACC").arg(Text::formatPercentage(acc));
-		s1 = tr("STR_ACC".arg(acc));		// kL
+		s1 = tr("STR_ACC").arg(acc);		// kL
 	}
 
 	s2 = tr("STR_TUS").arg(tu);

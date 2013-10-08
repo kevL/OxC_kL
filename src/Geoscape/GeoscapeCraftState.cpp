@@ -171,7 +171,7 @@ GeoscapeCraftState::GeoscapeCraftState(Game* game, Craft* craft, Globe* globe, W
 				|| _craft->getStatus() == "STR_REFUELLING"
 				|| _craft->getStatus() == "STR_REARMING")
 	{
-		status << tr("STR_BASED");
+		status = tr("STR_BASED");
 	}
 	// Could add "Damaged - returning to base" around here.
 	// kL_end.
