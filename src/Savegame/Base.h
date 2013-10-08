@@ -141,9 +141,9 @@ private:
 		int getFreeLaboratories () const;
 		/// Get the number of available space lab (not used by a Production)
 		int getFreeWorkshops () const;
-
+		///
 		int getAllocatedScientists() const;
-
+		///
 		int getAllocatedEngineers() const;
 		/// Gets the base's defense value.
 		int getDefenseValue() const;

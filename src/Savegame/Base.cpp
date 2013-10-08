@@ -895,7 +895,7 @@ int Base::getPersonnelMaintenance() const
 int Base::getFacilityMaintenance() const
 {
 	int total = 0;
-	for (std::vector<BaseFacility*>::const_iterator i = _facilities.begin(); i != _facilities.end(); ++i)
+	for (std::vector<BaseFacility* >::const_iterator i = _facilities.begin(); i != _facilities.end(); ++i)
 	{
 		if ((*i)->getBuildTime() == 0)
 		{
@@ -948,17 +948,400 @@ void Base::addResearch(ResearchProject* project)
 */
 void Base::removeResearch(ResearchProject* project)
 {
-	std::string projName = project->getRules()->getName();
-	Log(LOG_INFO) << "Base::removeResearch() projName = " << projName;
-
 	_scientists += project->getAssigned();
 
 	std::vector<ResearchProject* >::iterator iter = std::find(_research.begin(), _research.end(), project);
 	if (iter != _research.end())
 	{
-		// kL_note: Add Research Help here. aLien must be interrogated at same Base as project-help goes to.
-		std::string projName = project->getRules()->getName();
-		Log(LOG_INFO) << "Base::removeResearch() projName = " << projName;
+		// kL_begin: Add Research Help here. aLien must be interrogated at same Base as project-help goes to (for now).
+		std::string proj = project->getRules()->getName();
+		Log(LOG_INFO) << "Base::removeResearch() proj = " << proj;
+		// eg. Base::removeResearch() proj = STR_REAPER_CORPSE
+
+		if (proj == "STR_FLOATER_SOLDIER"
+			|| proj == "STR_SNAKEMAN_SOLDIER"
+			|| proj == "STR_MUTON_SOLDIER"
+			|| proj == "STR_SECTOID_SOLDIER"
+			|| proj == "STR_ETHEREAL_SOLDIER")
+		{
+			for (std::vector<ResearchProject* >::const_iterator iter2 = _research.begin(); iter2 != _research.end(); ++iter2)
+			{
+				std::string help = (*iter2)->getRules()->getName();
+				int spent = (*iter2)->getSpent();
+				float cost = (float)(*iter2)->getCost();
+
+				if (help == "STR_HEAVY_PLASMA"
+					|| help == "STR_PLASMA_RIFLE"
+					|| help == "STR_PLASMA_PISTOL"
+					|| help == "STR_THE_MARTIAN_SOLUTION")
+				{
+					(*iter2)->setSpent(spent + (int)(cost * 0.1f));
+
+					Log(LOG_INFO) << ". . Soldier.1 : spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.1f);
+				}
+				else if (help == "STR_ALIEN_ORIGINS")
+				{
+					(*iter2)->setSpent(spent - (int)(cost * 0.2f));
+
+					Log(LOG_INFO) << ". . Soldier.2 : spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.2f);
+				}
+				else if (help == "STR_POWER_SUIT")
+				{
+					(*iter2)->setSpent(spent - (int)(cost * 0.25f));
+
+					Log(LOG_INFO) << ". . Soldier.25 : spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.25f);
+				}
+				else if (help == "STR_HEAVY_PLASMA_CLIP"
+					|| help == "STR_PLASMA_RIFLE_CLIP"
+					|| help == "STR_PLASMA_PISTOL_CLIP")
+				{
+					(*iter2)->setSpent(spent - (int)(cost * 0.4f));
+
+					Log(LOG_INFO) << ". . Soldier.4 : spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.4f);
+				}
+				else if (help == "STR_ALIEN_GRENADE"
+					|| help == "STR_ALIEN_ENTERTAINMENT"
+					|| help == "STR_PERSONAL_ARMOR")
+				{
+					(*iter2)->setSpent(spent - (int)(cost * 0.5f));
+
+					Log(LOG_INFO) << ". . Soldier.5 : spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.5f);
+				}
+			}
+		}
+		else if (proj == "STR_FLOATER_NAVIGATOR"
+			|| proj == "STR_SNAKEMAN_NAVIGATOR"
+			|| proj == "STR_MUTON_NAVIGATOR"
+			|| proj == "STR_SECTOID_NAVIGATOR")
+		{
+			for (std::vector<ResearchProject* >::const_iterator iter2 = _research.begin(); iter2 != _research.end(); ++iter2)
+			{
+				std::string help = (*iter2)->getRules()->getName();
+				int spent = (*iter2)->getSpent();
+				float cost = (float)(*iter2)->getCost();
+
+				if (help == "STR_CYDONIA_OR_BUST"
+					|| help == "STR_POWER_SUIT")
+				{
+					(*iter2)->setSpent(spent + (int)(cost * 0.15f));
+
+					Log(LOG_INFO) << ". . Navigator.15 : spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.15f);
+				}
+				else if (help == "STR_HEAVY_PLASMA"
+					|| help == "STR_HEAVY_PLASMA_CLIP"
+					|| help == "STR_PLASMA_RIFLE"
+					|| help == "STR_PLASMA_RIFLE_CLIP"
+					|| help == "STR_PLASMA_PISTOL"
+					|| help == "STR_PLASMA_PISTOL_CLIP"
+					|| help == "STR_NEW_FIGHTER_CRAFT"
+					|| help == "STR_NEW_FIGHTER_TRANSPORTER"
+					|| help == "STR_ULTIMATE_CRAFT"
+					|| help == "STR_PLASMA_CANNON"
+					|| help == "STR_FUSION_MISSILE")
+//					|| help == "hovertank-plasma" // <-
+//					|| help == "hovertank-fusion" // <-
+				{
+					(*iter2)->setSpent(spent - (int)(cost * 0.2f));
+
+					Log(LOG_INFO) << ". . Navigator.2 : spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.2f);
+				}
+				else if (help == "STR_UFO_POWER_SOURCE"
+					|| help == "STR_UFO_CONSTRUCTION"
+					|| help == "STR_THE_MARTIAN_SOLUTION"
+					|| help == "STR_POWER_SUIT")
+				{
+					(*iter2)->setSpent(spent - (int)(cost * 0.25f));
+
+					Log(LOG_INFO) << ". . Navigator.25: spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.25f);
+				}
+				else if (help == "STR_FLYING_SUIT")
+				{
+					(*iter2)->setSpent(spent - (int)(cost * 0.3f));
+
+					Log(LOG_INFO) << ". . Navigator.3 : spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.3f);
+				}
+				else if (help == "STR_ALIEN_ORIGINS")
+				{
+					(*iter2)->setSpent(spent - (int)(cost * 0.35f));
+
+					Log(LOG_INFO) << ". . Navigator.35 : spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.35f);
+				}
+				else if (help == "STR_GRAV_SHIELD"
+					|| help == "STR_ALIEN_ALLOYS")
+				{
+					(*iter2)->setSpent(spent - (int)(cost * 0.4f));
+
+					Log(LOG_INFO) << ". . Navigator.4 : spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.4f);
+				}
+				else if (help == "STR_MOTION_SCANNER"
+					|| help == "STR_ALIEN_ENTERTAINMENT")
+				{
+					(*iter2)->setSpent(spent - (int)(cost * 0.5f));
+
+					Log(LOG_INFO) << ". . Navigator.5 : spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.5f);
+				}
+				else if (help == "STR_HYPER_WAVE_DECODER")
+				{
+					(*iter2)->setSpent(spent - (int)(cost * 0.8f));
+
+					Log(LOG_INFO) << ". . Navigator.8 : spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.8f);
+				}
+			}
+		}
+		else if (proj == "STR_FLOATER_MEDIC"
+			|| proj == "STR_SNAKEMAN_MEDIC"
+			|| proj == "STR_SECTOID_MEDIC")
+		{
+			for (std::vector<ResearchProject* >::const_iterator iter2 = _research.begin(); iter2 != _research.end(); ++iter2)
+			{
+				std::string help = (*iter2)->getRules()->getName();
+				int spent = (*iter2)->getSpent();
+				float cost = (float)(*iter2)->getCost();
+
+				if (help == "STR_THE_MARTIAN_SOLUTION")
+				{
+					(*iter2)->setSpent(spent + (int)(cost * 0.1f));
+
+					Log(LOG_INFO) << ". . Medic.1 : spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.1f);
+				}
+				else if (help == "STR_ALIEN_ORIGINS")
+				{
+					(*iter2)->setSpent(spent - (int)(cost * 0.2f));
+
+					Log(LOG_INFO) << ". . Medic.2 : spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.2f);
+				}
+				else if (help == "STR_ALIEN_REPRODUCTION")
+				{
+					(*iter2)->setSpent(spent - (int)(cost * 0.5f));
+
+					Log(LOG_INFO) << ". . Medic.5 : spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.5f);
+				}
+				else if (help == "STR_MEDI_KIT"
+					|| help == "STR_PSI_AMP"
+					|| help == "STR_SMALL_LAUNCHER"
+					|| help == "STR_STUN_BOMB"
+					|| help == "STR_MIND_PROBE"
+					|| help == "STR_ALIEN_FOOD"
+					|| help == "STR_ALIEN_SURGERY"
+					|| help == "STR_EXAMINATION_ROOM"
+					|| help == "STR_MIND_SHIELD"
+					|| help == "STR_PSI_LAB")
+				{
+					(*iter2)->setSpent(spent - (int)(cost * 0.8f));
+
+					Log(LOG_INFO) << ". . Medic.8 : spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.8f);
+				}
+			}
+		}
+		else if (proj == "STR_FLOATER_ENGINEER"
+			|| proj == "STR_SNAKEMAN_ENGINEER"
+			|| proj == "STR_MUTON_ENGINEER"
+			|| proj == "STR_SECTOID_ENGINEER")
+		{
+			for (std::vector<ResearchProject* >::const_iterator iter2 = _research.begin(); iter2 != _research.end(); ++iter2)
+			{
+				std::string help = (*iter2)->getRules()->getName();
+				int spent = (*iter2)->getSpent();
+				float cost = (float)(*iter2)->getCost();
+
+				if (help == "STR_THE_MARTIAN_SOLUTION")
+				{
+					(*iter2)->setSpent(spent + (int)(cost * 0.1f));
+
+					Log(LOG_INFO) << ". . Engineer.1 : spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.1f);
+				}
+				else if (help == "STR_ALIEN_ORIGINS"
+					|| help == "STR_SMALL_LAUNCHER"
+					|| help == "STR_STUN_BOMB")
+				{
+					(*iter2)->setSpent(spent - (int)(cost * 0.2f));
+
+					Log(LOG_INFO) << ". . Engineer.2 : spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.2f);
+				}
+				else if (help == "STR_NEW_FIGHTER_CRAFT"
+					|| help == "STR_NEW_FIGHTER_TRANSPORTER"
+					|| help == "STR_ULTIMATE_CRAFT")
+				{
+					(*iter2)->setSpent(spent - (int)(cost * 0.3f));
+
+					Log(LOG_INFO) << ". . Engineer.3 : spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.3f);
+				}
+				else if (help == "STR_MOTION_SCANNER"
+					|| help == "STR_HEAVY_PLASMA"
+					|| help == "STR_HEAVY_PLASMA_CLIP"
+					|| help == "STR_PLASMA_RIFLE"
+					|| help == "STR_PLASMA_RIFLE_CLIP"
+					|| help == "STR_PLASMA_PISTOL"
+					|| help == "STR_PLASMA_PISTOL_CLIP"
+					|| help == "STR_ALIEN_GRENADE"
+					|| help == "STR_ELERIUM_115"
+					|| help == "STR_UFO_POWER_SOURCE"
+					|| help == "STR_UFO_CONSTRUCTION"
+					|| help == "STR_ALIEN_ALLOYS"
+					|| help == "STR_PLASMA_CANNON"
+					|| help == "STR_FUSION_MISSILE"
+					|| help == "STR_PLASMA_DEFENSE"
+					|| help == "STR_FUSION_DEFENSE"
+					|| help == "STR_GRAV_SHIELD"
+					|| help == "STR_PERSONAL_ARMOR"
+					|| help == "STR_POWER_SUIT"
+					|| help == "STR_FLYING_SUIT")
+				{
+					(*iter2)->setSpent(spent - (int)(cost * 0.5f));
+
+					Log(LOG_INFO) << ". . Engineer.5 : spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.5f);
+				}
+				else if (help == "STR_BLASTER_LAUNCHER"
+					|| help == "STR_BLASTER_BOMB")
+				{
+					(*iter2)->setSpent(spent - (int)(cost * 0.7f));
+
+					Log(LOG_INFO) << ". . Engineer.7 : spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.7f);
+				}
+			}
+		}
+		else if (proj == "STR_FLOATER_LEADER"
+			|| proj == "STR_SNAKEMAN_LEADER"
+			|| proj == "STR_SECTOID_LEADER"
+			|| proj == "STR_ETHEREAL_LEADER")
+		{
+			for (std::vector<ResearchProject* >::const_iterator iter2 = _research.begin(); iter2 != _research.end(); ++iter2)
+			{
+				std::string help = (*iter2)->getRules()->getName();
+				int spent = (*iter2)->getSpent();
+				float cost = (float)(*iter2)->getCost();
+
+				if (help == "STR_NEW_FIGHTER_CRAFT"
+					|| help == "STR_NEW_FIGHTER_TRANSPORTER"
+					|| help == "STR_ULTIMATE_CRAFT")
+				{
+					(*iter2)->setSpent(spent + (int)(cost * 0.1f));
+
+					Log(LOG_INFO) << ". . Leader.1 : spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.1f);
+				}
+				else if (help == "STR_HEAVY_PLASMA"
+					|| help == "STR_HEAVY_PLASMA_CLIP"
+					|| help == "STR_PLASMA_RIFLE"
+					|| help == "STR_PLASMA_RIFLE_CLIP"
+					|| help == "STR_PLASMA_PISTOL"
+					|| help == "STR_PLASMA_PISTOL_CLIP"
+					|| help == "STR_BLASTER_BOMB"
+					|| help == "STR_SMALL_LAUNCHER"
+					|| help == "STR_STUN_BOMB"
+					|| help == "STR_ELERIUM_115"
+					|| help == "STR_ALIEN_ALLOYS"
+					|| help == "STR_PLASMA_CANNON"
+					|| help == "STR_FUSION_MISSILE"
+					|| help == "STR_CYDONIA_OR_BUST"
+					|| help == "STR_PERSONAL_ARMOR"
+					|| help == "STR_POWER_SUIT"
+					|| help == "STR_FLYING_SUIT")
+				{
+					(*iter2)->setSpent(spent - (int)(cost * 0.2f));
+
+					Log(LOG_INFO) << ". . Leader.2 : spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.2f);
+				}
+				else if (help == "STR_PSI_AMP")
+				{
+					(*iter2)->setSpent(spent - (int)(cost * 0.25f));
+
+					Log(LOG_INFO) << ". . Leader.25 : spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.25f);
+				}
+				else if (help == "STR_THE_MARTIAN_SOLUTION")
+				{
+					(*iter2)->setSpent(spent - (int)(cost * 0.3f));
+
+					Log(LOG_INFO) << ". . Leader.3 : spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.3f);
+				}
+				else if (help == "STR_ALIEN_ORIGINS")
+				{
+					(*iter2)->setSpent(spent - (int)(cost * 0.5f));
+
+					Log(LOG_INFO) << ". . Leader.5 : spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.5f);
+				}
+				else if (help == "STR_BLASTER_LAUNCHER")
+				{
+					(*iter2)->setSpent(spent - (int)(cost * 0.6f));
+
+					Log(LOG_INFO) << ". . Leader.6 : spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.6f);
+				}
+				else if (help == "STR_EXAMINATION_ROOM")
+				{
+					(*iter2)->setSpent(spent - (int)(cost * 0.8f));
+
+					Log(LOG_INFO) << ". . Leader.8 : spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.8f);
+				}
+			}
+		}
+		else if (proj == "STR_FLOATER_COMMANDER"
+			|| proj == "STR_SNAKEMAN_COMMANDER"
+			|| proj == "STR_SECTOID_COMMANDER"
+			|| proj == "STR_ETHEREAL_COMMANDER")
+		{
+			for (std::vector<ResearchProject* >::const_iterator iter2 = _research.begin(); iter2 != _research.end(); ++iter2)
+			{
+				std::string help = (*iter2)->getRules()->getName();
+				int spent = (*iter2)->getSpent();
+				float cost = (float)(*iter2)->getCost();
+
+				if (help == "STR_HEAVY_PLASMA"
+					|| help == "STR_HEAVY_PLASMA_CLIP"
+					|| help == "STR_PLASMA_RIFLE"
+					|| help == "STR_PLASMA_RIFLE_CLIP"
+					|| help == "STR_PLASMA_PISTOL"
+					|| help == "STR_PLASMA_PISTOL_CLIP"
+					|| help == "STR_SMALL_LAUNCHER"
+					|| help == "STR_STUN_BOMB"
+					|| help == "STR_NEW_FIGHTER_CRAFT"
+					|| help == "STR_NEW_FIGHTER_TRANSPORTER"
+					|| help == "STR_ULTIMATE_CRAFT"
+					|| help == "STR_PLASMA_CANNON"
+					|| help == "STR_FUSION_MISSILE")
+				{
+					(*iter2)->setSpent(spent + (int)(cost * 0.2f));
+
+					Log(LOG_INFO) << ". . Commander.2 : spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.2f);
+				}
+				else if (help == "STR_BLASTER_BOMB"
+						|| help == "STR_ELERIUM_115"
+						|| help == "STR_ALIEN_ALLOYS"
+						|| help == "STR_PERSONAL_ARMOR"
+						|| help == "STR_POWER_SUIT"
+						|| help == "STR_FLYING_SUIT")
+				{
+					(*iter2)->setSpent(spent - (int)(cost * 0.25f));
+
+					Log(LOG_INFO) << ". . Commander.25 : spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.25f);
+				}
+				else if (help == "STR_PSI_AMP"
+					|| help == "STR_CYDONIA_OR_BUST")
+				{
+					(*iter2)->setSpent(spent - (int)(cost * 0.5f));
+
+					Log(LOG_INFO) << ". . Commander.5 : spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.5f);
+				}
+				else if (help == "STR_THE_MARTIAN_SOLUTION")
+				{
+					(*iter2)->setSpent(spent - (int)(cost * 0.6f));
+
+					Log(LOG_INFO) << ". . Commander.6 : spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.6f);
+				}
+				else if (help == "STR_ALIEN_ORIGINS")
+				{
+					(*iter2)->setSpent(spent - (int)(cost * 0.7f));
+
+					Log(LOG_INFO) << ". . Commander.7 : spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.7f);
+				}
+				else if (help == "STR_BLASTER_LAUNCHER"
+					|| help == "STR_EXAMINATION_ROOM")
+				{
+					(*iter2)->setSpent(spent - (int)(cost * 0.8f));
+
+					Log(LOG_INFO) << ". . Commander.8 : spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.8f);
+				}
+			}
+		}
+		// kL_end.
 
 		_research.erase(iter);
 	}
