@@ -459,11 +459,6 @@ bool TileEngine::visible(BattleUnit* currentUnit, Tile* tile)
 		return false;
 	}
 
-<<<<<<< HEAD
-=======
-	BattleUnit *targetUnit = tile->getUnit();
-	if (currentUnit->getFaction() == targetUnit->getFaction()) return true; // friendlies are always seen
->>>>>>> master
 
 	Position originVoxel = getSightOriginVoxel(currentUnit);
 	// for large units origin voxel is in the middle
@@ -564,14 +559,7 @@ bool TileEngine::visible(BattleUnit* currentUnit, Tile* tile)
 			unitIsSeen = false;
 //			return true;
 		}
-<<<<<<< HEAD
 		// kL_end.
-=======
-		if (t->getUnit() != targetUnit)
-		{
-			unitSeen = false;
-		}
->>>>>>> master
 	}
 
 //	Log(LOG_INFO) << ". . unitIsSeen = " << unitIsSeen;
@@ -2690,8 +2678,12 @@ bool TileEngine::psiAttack(BattleAction* action)
 			victim->abortTurn(); // resets unit status to STANDING
 
 			// if all units from either faction are mind controlled - auto-end the mission.
+<<<<<<< HEAD
 			if (Options::getBool("battleAutoEnd")
 				&& Options::getBool("allowPsionicCapture"))
+=======
+			if (_save->getSide() == FACTION_PLAYER && Options::getBool("battleAutoEnd") && Options::getBool("allowPsionicCapture"))
+>>>>>>> master
 			{
 				int liveAliens = 0;
 				int liveSoldiers = 0;
@@ -2700,7 +2692,8 @@ bool TileEngine::psiAttack(BattleAction* action)
 
 				if (liveAliens == 0 || liveSoldiers == 0)
 				{
-					_save->getBattleState()->getBattleGame()->requestEndTurn();
+					_save->setSelectedUnit(0);
+					_save->getBattleState()->getBattleGame()->statePushBack(0);
 				}
 			}
 		}

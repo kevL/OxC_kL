@@ -108,14 +108,17 @@ void UnitTurnBState::think()
 	Log(LOG_INFO) << "UnitTurnBState::think()";
 	bool thisFaction = _unit->getFaction() == _parent->getSave()->getSide();	// kL
 
+<<<<<<< HEAD
 //kL	const int tu = _unit->getFaction() == _parent->getSave()->getSide() ? 1 : 0; // one turn is 1 tu unless during reaction fire.
 	const int tu = thisFaction ? 1 : 0;		// kL
 
 //kL	if (_unit->getFaction() == _parent->getSave()->getSide()
 	if (thisFaction		// kL
 		&& _parent->getPanicHandled()
-		&& !_action.targeting
-		&& !_parent->checkReservedTU(_unit, tu))
+		&& _parent->checkReservedTU(_unit, tu) == false)
+=======
+	if (_unit->getFaction() == _parent->getSave()->getSide() && _parent->getPanicHandled() && !_action.targeting && !_parent->checkReservedTU(_unit, tu))
+>>>>>>> master
 	{
 		_unit->abortTurn();
 		_parent->popState();
