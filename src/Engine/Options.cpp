@@ -144,6 +144,7 @@ void createDefault()
     setBool("cursorInBlackBandsInFullscreen", false);
     setBool("cursorInBlackBandsInWindow", true);
     setBool("cursorInBlackBandsInBorderlessWindow", false);
+	setBool("newSeedOnLoad", false);
 
 	// new battle mode data
 	setInt("NewBattleMission", 0);

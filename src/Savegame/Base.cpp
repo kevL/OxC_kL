@@ -416,9 +416,7 @@ bool Base::detect(Target* target) const
 		chance = (chance * 100 + u->getVisibility()) / 100;
 	}
 
-//kL	int detection = RNG::generate(0, 100);
-//kL	return (detection < chance);
-	return RNG::generate(0, 99) < chance;		// kL
+	return RNG::percent(chance);
 }
 
 /**

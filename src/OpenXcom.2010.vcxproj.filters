@@ -1647,7 +1647,4 @@
   <ItemGroup>
     <None Include="..\media\openxcom.ico" />
   </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="OpenXcom.rc" />
-  </ItemGroup>
 </Project>

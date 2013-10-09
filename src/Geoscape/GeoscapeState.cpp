@@ -1136,8 +1136,8 @@ class DetectXCOMBase
 		/// Attempt detection
 		bool operator()(const Ufo* ufo) const;
 
-	private:
-		const Base& _base; // !< The target base.
+private:
+	const Base& _base; // !< The target base.
 };
 
 /**
@@ -1145,32 +1145,19 @@ class DetectXCOMBase
  * @param ufo, Pointer to the UFO attempting detection.
  * @return, If the base is detected by @a ufo.
  */
-bool DetectXCOMBase::operator()(const Ufo *ufo) const
+bool DetectXCOMBase::operator()(const Ufo* ufo) const
 {
-	// only UFOs on retaliation missions actively scan for bases
-	if (ufo->getMissionType() != "STR_ALIEN_RETALIATION"
-			&& !Options::getBool("aggressiveRetaliation"))
-		return false;
+	if ((ufo->getMissionType() != "STR_ALIEN_RETALIATION"
+			&& !Options::getBool("aggressiveRetaliation"))					// only UFOs on retaliation missions actively scan for bases
+		|| ufo->getTrajectory().getID() == "__RETALIATION_ASSAULT_RUN"		// UFOs attacking a base don't detect!
+		|| ufo->isCrashed()													// Crashed UFOs don't detect!
+		|| _base.getDistance(ufo) > 80 * (1 / 60.0) * (M_PI / 180.0))		// UFOs have a detection range of 80 XCOM units.
 
-	// UFOs attacking a base don't detect!
-	if (ufo->getTrajectory().getID() == "__RETALIATION_ASSAULT_RUN")
 	{
 		return false;
 	}
 
-	if (ufo->getStatus() != STATUS_FLYING)
-	{
-		return false;
-	}
-
-	// UFOs have a detection range of 80 XCOM units.
-	if (_base.getDistance(ufo) >= 80 * (1 / 60.f) * (M_PI / 180.f))
-	{
-		return false;
-	}
-
-//kL	return (int)_base.getDetectionChance() < RNG::generate(0, 99);
-	return RNG::generate(0, 99) < (int)_base.getDetectionChance();		// kL
+	return RNG::percent(_base.getDetectionChance());
 }
 
 /**
@@ -1194,15 +1181,16 @@ struct SetRetaliationTarget
  */
 void GeoscapeState::time10Minutes()
 {
-	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
+	for (std::vector<Base* >::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
 	{
 		// Fuel consumption for XCOM craft.
-		for (std::vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); ++j)
+		for (std::vector<Craft* >::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); ++j)
 		{
 			if ((*j)->getStatus() == "STR_OUT")
 			{
 				(*j)->consumeFuel();
-				if (!(*j)->getLowFuel() && (*j)->getFuel() <= (*j)->getFuelLimit())
+				if (!(*j)->getLowFuel()
+					&& (*j)->getFuel() <= (*j)->getFuelLimit())
 				{
 					(*j)->setLowFuel(true);
 					(*j)->returnToBase();
@@ -1213,12 +1201,13 @@ void GeoscapeState::time10Minutes()
 
 				if ((*j)->getDestination() == 0)
 				{
-					for(std::vector<AlienBase*>::iterator b = _game->getSavedGame()->getAlienBases()->begin(); b != _game->getSavedGame()->getAlienBases()->end(); b++)
+					for (std::vector<AlienBase*>::iterator b = _game->getSavedGame()->getAlienBases()->begin(); b != _game->getSavedGame()->getAlienBases()->end(); b++)
 					{
-						if ((*j)->getDistance(*b) <= 1696 * (1 / 60.0) * (M_PI / 180))
+						double range = 1696 * (1 / 60.0) * (M_PI / 180);
+						if ((*j)->getDistance(*b) <= range)
 						{
 							// TODO: move the detection range to the ruleset, or use the pre-defined one (which is 600, but detection range should be 500).
-							if ((50 - ((*j)->getDistance(*b) / (1696 * (1 / 60.0) * (M_PI / 180) )) * 50 >= RNG::generate(0, 100))
+							if (RNG::percent(50 - ((*j)->getDistance(*b) / range) * 50)
 								&& !(*b)->isDiscovered())
 							{
 								(*b)->setDiscovered(true);
@@ -1687,7 +1676,7 @@ class GenerateSupplyMission
  */
 void GenerateSupplyMission::operator()(const AlienBase* base) const
 {
-	if (RNG::generate(0, 99) < 6)
+	if (RNG::percent(6))
 	{
 		// Spawn supply mission for this base.
 		const RuleAlienMission& rule = *_ruleset.getAlienMission("STR_ALIEN_SUPPLY");
@@ -1967,8 +1956,9 @@ void GeoscapeState::time1Month()
 		bool _baseDiscovered = false;
 		for (std::vector<AlienBase* >::const_iterator b = _game->getSavedGame()->getAlienBases()->begin(); b != _game->getSavedGame()->getAlienBases()->end(); ++b)
 		{
-			int number = RNG::generate(1, 100);
-			if (!(*b)->isDiscovered() && number <= 5 && !_baseDiscovered)
+			if (!(*b)->isDiscovered()
+				&& RNG::percent(5)
+				&& !_baseDiscovered)
 			{
 				(*b)->setDiscovered(true);
 				_baseDiscovered = true;

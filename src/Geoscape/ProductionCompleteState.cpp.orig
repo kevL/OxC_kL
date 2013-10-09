@@ -79,46 +79,31 @@ ProductionCompleteState::ProductionCompleteState(Game* game, const std::wstring&
 	std::wstring s;
 	switch (endType)
 	{
-<<<<<<< HEAD
-		case PROGRESS_COMPLETE:
-			s = tr("STR_PRODUCTION_OF");
-		break;
-		case PROGRESS_NOT_ENOUGH_MONEY:
-			s = tr("STR_NOT_ENOUGH_MONEY_TO_PRODUCE");
-		break;
-		case PROGRESS_NOT_ENOUGH_MATERIALS:
-			s = tr("STR_NOT_ENOUGH_SPECIAL_MATERIALS_TO_PRODUCE");
-=======
 	case PROGRESS_CONSTRUCTION:
 		s = tr("STR_CONSTRUCTION_OF_FACILITY_AT_BASE_IS_COMPLETE").arg(item).arg(base);
 		break;
-	case PROGRESS_COMPLETE:
-		s = tr("STR_PRODUCTION_OF_ITEM_AT_BASE_IS_COMPLETE").arg(item).arg(base);
+		case PROGRESS_COMPLETE:
+			s = tr("STR_PRODUCTION_OF_ITEM_AT_BASE_IS_COMPLETE").arg(item).arg(base);
 		break;
+<<<<<<< HEAD
+		case PROGRESS_NOT_ENOUGH_MONEY:
+			s = tr("STR_NOT_ENOUGH_MONEY_TO_PRODUCE_ITEM").arg(item);
+		break;
+		case PROGRESS_NOT_ENOUGH_MATERIALS:
+			s = tr("STR_NOT_ENOUGH_SPECIAL_MATERIALS_TO_PRODUCE_ITEM").arg(item);
+=======
 	case PROGRESS_NOT_ENOUGH_MONEY:
-		s = tr("STR_NOT_ENOUGH_MONEY_TO_PRODUCE_ITEM").arg(item);
+		s = tr("STR_NOT_ENOUGH_MONEY_TO_PRODUCE_ITEM_AT_BASE").arg(item).arg(base);
 		break;
 	case PROGRESS_NOT_ENOUGH_MATERIALS:
-		s = tr("STR_NOT_ENOUGH_SPECIAL_MATERIALS_TO_PRODUCE_ITEM").arg(item);
+		s = tr("STR_NOT_ENOUGH_SPECIAL_MATERIALS_TO_PRODUCE_ITEM_AT_BASE").arg(item).arg(base);
 >>>>>>> master
 		break;
 
 		default:
 			assert(false);
 	}
-<<<<<<< HEAD
 
-	s += item;
-	s += tr("STR__AT__");
-	s += base;
-
-	if (endType == PROGRESS_COMPLETE)
-	{
-		s += tr("STR_IS_COMPLETE");
-	}
-
-=======
->>>>>>> master
 	_txtMessage->setText(s);
 }
 

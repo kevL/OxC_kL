@@ -590,15 +590,19 @@ void Tile::ignite(int power)
 		{
 			power = 0;
 		}
+<<<<<<< HEAD
 
+		if (power > RNG::generate(0, 100))
+=======
 		if (RNG::percent(power))
+>>>>>>> master
 		{
 			if (_fire == 0)
 			{
 				_smoke = 15 - std::max(1, std::min((getFlammability() / 10), 12));
 				_overlaps = 1;
 				_fire = getFuel() + 1;
-				_animationOffset = RNG::generate(0, 3);
+				_animationOffset = RNG::generate(0,3);
 			}
 		}
 	}
@@ -616,16 +620,13 @@ void Tile::animate()
 	{
 		if (_objects[i])
 		{
-			if (_objects[i]->isUFODoor()
-				&& (_currentFrame[i] == 0 || _currentFrame[i] == 7)) // ufo door is static
+			if (_objects[i]->isUFODoor() && (_currentFrame[i] == 0 || _currentFrame[i] == 7)) // ufo door is static
 			{
 				continue;
 			}
 
 			newframe = _currentFrame[i] + 1;
-			if (_objects[i]->isUFODoor()
-				&& _objects[i]->getSpecialType() == START_POINT
-				&& newframe == 3)
+			if (_objects[i]->isUFODoor() && _objects[i]->getSpecialType() == START_POINT && newframe == 3)
 			{
 				newframe = 7;
 			}
@@ -796,27 +797,30 @@ int Tile::getTopItemSprite()
 void Tile::prepareNewTurn()
 {
 	// we've received new smoke in this turn, but we're not on fire, average out the smoke.
-	if (_overlaps != 0
-		&& _smoke != 0
-		&& _fire == 0)
+	if ( _overlaps != 0 && _smoke != 0 && _fire == 0)
 	{
 		_smoke = std::max(0, std::min((_smoke / _overlaps) - 1, 15));
 	}
 
 	if (_smoke) // if we still have smoke/fire
 	{
-		if (_unit
-			&& !_unit->isOut())
+		if (_unit && !_unit->isOut())
 		{
 			if (_fire)
 			{
-				if (_unit->getArmor()->getSize() == 1
-					|| !_unit->tookFireDamage()) // this is how we avoid hitting the same unit multiple times.
+				if (_unit->getArmor()->getSize() == 1 || !_unit->tookFireDamage()) // this is how we avoid hitting the same unit multiple times.
 				{
 					_unit->toggleFireDamage();
+<<<<<<< HEAD
 					_unit->damage(Position(0, 0, 0), _smoke, DT_IN, true); // _smoke becomes our damage value
 
-					if (RNG::percent(40 * _unit->getArmor()->getDamageModifier(DT_IN))) // try to set the unit on fire.
+					if (RNG::generate(0, 99) < 40 * _unit->getArmor()->getDamageModifier(DT_IN)) // try to set the unit on fire.
+=======
+					// _smoke becomes our damage value
+					_unit->damage(Position(0, 0, 0), _smoke, DT_IN, true);
+					// try to set the unit on fire.
+					if (RNG::percent(40 * _unit->getArmor()->getDamageModifier(DT_IN)))
+>>>>>>> master
 					{
 						int burnTime = RNG::generate(0, int(5 * _unit->getArmor()->getDamageModifier(DT_IN)));
 						if (_unit->getFire() < burnTime)
@@ -830,10 +834,10 @@ void Tile::prepareNewTurn()
 			{
 				if (_unit->getOriginalFaction() != FACTION_HOSTILE) // aliens don't breathe
 				{
-					if (_unit->getArmor()->getDamageModifier(DT_SMOKE) > 0.f
+					if (_unit->getArmor()->getDamageModifier(DT_SMOKE) > 0.0
 						&& _unit->getArmor()->getSize() == 1) // try to knock this guy out.
 					{
-						_unit->damage(Position(0, 0, 0), (_smoke / 4) + 1, DT_SMOKE, true);
+						_unit->damage(Position(0,0,0), (_smoke / 4) + 1, DT_SMOKE, true);
 					}
 				}
 			}
@@ -847,7 +851,7 @@ void Tile::prepareNewTurn()
  * Get the inventory on this tile.
  * @return pointer to a vector of battleitems.
  */
-std::vector<BattleItem* >* Tile::getInventory()
+std::vector<BattleItem *> *Tile::getInventory()
 {
 	return &_inventory;
 }
