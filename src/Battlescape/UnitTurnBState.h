@@ -34,15 +34,15 @@ class BattleUnit;
  */
 class UnitTurnBState
 	:
-	public BattleState
+		public BattleState
 {
-	private:
-		BattleUnit* _unit;
-		bool _turret;
+private:
+	BattleUnit* _unit;
+	bool _turret;
 
 	public:
 		/// Creates a new UnitTurnBState class
-		UnitTurnBState(BattlescapeGame *parent, BattleAction action);
+		UnitTurnBState(BattlescapeGame* parent, BattleAction action);
 		/// Cleans up the UnitTurnBState.
 		~UnitTurnBState();
 

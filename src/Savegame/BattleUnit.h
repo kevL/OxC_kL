@@ -162,7 +162,7 @@ class BattleUnit
 		~BattleUnit();
 
 		/// Loads the unit from YAML.
-		void load(const YAML::Node &node);
+		void load(const YAML::Node& node);
 		/// Saves the unit to YAML.
 		YAML::Node save() const;
 		/// Gets the BattleUnit's ID.
@@ -234,7 +234,7 @@ class BattleUnit
 		/// Gets the unit's bravery.
 		int getMorale() const;
 		/// Do damage to the unit.
-		int damage(const Position &relative, int power, ItemDamageType type, bool ignoreArmor = false);
+		int damage(const Position& relative, int power, ItemDamageType type, bool ignoreArmor = false);
 		/// Heal stun level of the unit.
 		void healStun(int power);
 		/// Gets the unit's stun level.

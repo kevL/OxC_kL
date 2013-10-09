@@ -35,9 +35,9 @@ class BattlescapeGame;
  */
 class BattleState
 {
-	protected:
-		BattlescapeGame* _parent;
-		BattleAction _action;
+protected:
+	BattlescapeGame* _parent;
+	BattleAction _action;
 
 	public:
 		/// Creates a new BattleState linked to the game.

@@ -52,9 +52,9 @@ namespace OpenXcom
  */
 SoldierInfoState::SoldierInfoState(Game* game, Base* base, size_t soldier)
 	:
-	State(game),
-	_base(base),
-	_soldier(soldier)
+		State(game),
+		_base(base),
+		_soldier(soldier)
 {
 	// Create objects
 	_bg				= new Surface(320, 200, 0, 0);
@@ -504,12 +504,12 @@ void SoldierInfoState::init()
 
 	std::wstring wsArmor;
 	std::string armorType = s->getArmor()->getType();
-	if (armorType == "STR_NONE_UC")
+/*kL	if (armorType == "STR_NONE_UC")
 	{
 		wsArmor = tr("STR_ARMOR_").arg(tr(armorType));
 	}
-	else
-		wsArmor = tr(armorType);
+	else */
+	wsArmor = tr(armorType);
 
 	_btnArmor->setText(wsArmor);
 //	_txtArmor->setText(tr(s->getArmor()->getType()));

@@ -694,36 +694,44 @@ void BattleUnit::lookAt(int direction, bool force)
  */
 void BattleUnit::turn(bool turret)
 {
-	int a = 0;
+	Log(LOG_INFO) << "BattleUnit::turn() " << getId();
+	Log(LOG_INFO) << ". . _direction = " << _direction;
+	Log(LOG_INFO) << ". . _toDirection = " << _toDirection;
+
+	int delta = 0;
 
 	if (turret)
 	{
 		if (_directionTurret == _toDirectionTurret)
 		{
+			Log(LOG_INFO) << ". . _d = _tD, abort";
 			abortTurn();
 
 			return;
 		}
 
-		a = _toDirectionTurret - _directionTurret;
+		delta = _toDirectionTurret - _directionTurret;
+		Log(LOG_INFO) << ". . delta = " << delta;
 	}
 	else
 	{
 		if (_direction == _toDirection)
 		{
+			Log(LOG_INFO) << ". . _d = _tD, abort";
 			abortTurn();
 
 			return;
 		}
 
-		a = _toDirection - _direction;
+		delta = _toDirection - _direction;
+		Log(LOG_INFO) << ". . delta = " << delta;
 	}
 
-	if (a != 0)
+	if (delta != 0) // duh
 	{
-		if (a > 0)
+		if (delta > 0)
 		{
-			if (a <= 4)
+			if (delta <= 4)
 			{
 				if (!turret)
 				{
@@ -748,7 +756,7 @@ void BattleUnit::turn(bool turret)
 		}
 		else
 		{
-			if (a > -4)
+			if (delta > -4)
 			{
 				if (!turret)
 				{
@@ -778,7 +786,10 @@ void BattleUnit::turn(bool turret)
 		if		(_directionTurret < 0) _directionTurret = 7;
 		else if (_directionTurret > 7) _directionTurret = 0;
 
-		if (_visible || _faction == FACTION_PLAYER)
+		Log(LOG_INFO) << ". . _direction = " << _direction;
+		Log(LOG_INFO) << ". . _toDirection = " << _toDirection;
+
+		if (_visible || _faction == FACTION_PLAYER) // kL_note: Faction_player should *always* be _visible...
 			_cacheInvalid = true;
 	}
 
@@ -789,7 +800,8 @@ void BattleUnit::turn(bool turret)
 			_status = STATUS_STANDING; // we officially reached our destination
 		 }
 	}
-	else if (_toDirection == _direction || _status == STATUS_UNCONSCIOUS)
+	else if (_toDirection == _direction || _status == STATUS_UNCONSCIOUS)	// kL_note: I didn't know Unconscious could turn...
+																			// learn something new every day.
 	{
 		Log(LOG_INFO) << "BattleUnit::turn() " << getId() << " - STATUS_STANDING (turn has ended)";
 		_status = STATUS_STANDING; // we officially reached our destination
@@ -826,7 +838,7 @@ UnitFaction BattleUnit::getFaction() const
  * Set to true when the unit has to be redrawn from scratch.
  * @param cache
  */
-void BattleUnit::setCache(Surface *cache, int part)
+void BattleUnit::setCache(Surface* cache, int part)
 {
 	if (cache == 0)
 	{
@@ -845,7 +857,7 @@ void BattleUnit::setCache(Surface *cache, int part)
  * @param invalid
  * @return cache
  */
-Surface *BattleUnit::getCache(bool *invalid, int part) const
+Surface* BattleUnit::getCache(bool* invalid, int part) const
 {
 	if (part < 0) part = 0;
 	*invalid = _cacheInvalid;

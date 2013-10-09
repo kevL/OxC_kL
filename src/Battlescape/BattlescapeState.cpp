@@ -755,7 +755,7 @@ void BattlescapeState::mapClick(Action *action)
 		}
 	}
 
-	// don't handle mouseclicks below 140, because they are in the buttons area (it overlaps with map surface)
+	// don't handle mouseclicks below y=140px, because they are in the buttons area (it overlaps with map surface)
 	int my = int(action->getAbsoluteYMouse());
 	int mx = int(action->getAbsoluteXMouse());
 	if (my > _icons->getY()

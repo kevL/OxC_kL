@@ -1155,6 +1155,7 @@ void BattlescapeGame::popState()
 				else
 					break;
 			}
+
 			if (_states.empty())
 			{
 				endTurn();
@@ -1190,13 +1191,13 @@ void BattlescapeGame::popState()
  * @param bu BattleUnit.
  * @return True if there are no actions pending.
  */
-bool BattlescapeGame::noActionsPending(BattleUnit *bu)
+bool BattlescapeGame::noActionsPending(BattleUnit* bu)
 {
 	if (_states.empty()) return true;
 
-	for (std::list<BattleState*>::iterator i = _states.begin(); i != _states.end(); ++i)
+	for (std::list<BattleState* >::iterator i = _states.begin(); i != _states.end(); ++i)
 	{
-		if ((*i) != 0 && (*i)->getAction().actor == bu)
+		if (*i != 0 && (*i)->getAction().actor == bu)
 			return false;
 	}
 
@@ -1218,7 +1219,7 @@ void BattlescapeGame::setStateInterval(Uint32 interval)
  * @param tu Number of time units to check.
  * @return bool Whether or not we got enough time units.
  */
-bool BattlescapeGame::checkReservedTU(BattleUnit *bu, int tu, bool justChecking)
+bool BattlescapeGame::checkReservedTU(BattleUnit* bu, int tu, bool justChecking)
 {
     BattleActionType effectiveTuReserved = _tuReserved; // avoid changing _tuReserved in this method
 
@@ -1310,7 +1311,7 @@ bool BattlescapeGame::checkReservedTU(BattleUnit *bu, int tu, bool justChecking)
  */
 bool BattlescapeGame::handlePanickingPlayer()
 {
-	for (std::vector<BattleUnit*>::iterator j = _save->getUnits()->begin(); j != _save->getUnits()->end(); ++j)
+	for (std::vector<BattleUnit* >::iterator j = _save->getUnits()->begin(); j != _save->getUnits()->end(); ++j)
 	{
 		if ((*j)->getFaction() == FACTION_PLAYER
 			&& (*j)->getOriginalFaction() == FACTION_PLAYER
@@ -1327,10 +1328,12 @@ bool BattlescapeGame::handlePanickingPlayer()
  * Common function for handling panicking units.
  * @return False when unit not in panicking mode.
  */
-bool BattlescapeGame::handlePanickingUnit(BattleUnit *unit)
+bool BattlescapeGame::handlePanickingUnit(BattleUnit* unit)
 {
 	UnitStatus status = unit->getStatus();
-	if (status != STATUS_PANICKING && status != STATUS_BERSERK) return false;
+
+	if (status != STATUS_PANICKING && status != STATUS_BERSERK)
+		return false;
 
 //	Log(LOG_INFO) << "unit Panic/Berserk : " << unit->getId() << " / " << unit->getMorale();		// kL
 
@@ -1360,7 +1363,7 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit *unit)
 		case STATUS_PANICKING: // 1/2 chance to freeze and 1/2 chance try to flee
 			if (flee <= 50)
 			{
-				BattleItem *item = unit->getItem("STR_RIGHT_HAND");
+				BattleItem* item = unit->getItem("STR_RIGHT_HAND");
 				if (item)
 				{
 					dropItem(unit->getPosition(), item, false, true);
@@ -1391,7 +1394,7 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit *unit)
 				statePushBack(new UnitTurnBState(this, ba));
 			}
 
-			for (std::vector<BattleUnit*>::iterator j = unit->getVisibleUnits()->begin(); j != unit->getVisibleUnits()->end(); ++j)
+			for (std::vector<BattleUnit* >::iterator j = unit->getVisibleUnits()->begin(); j != unit->getVisibleUnits()->end(); ++j)
 			{
 				ba.target = (*j)->getPosition();
 				statePushBack(new UnitTurnBState(this, ba));
@@ -1431,6 +1434,7 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit *unit)
 			unit->setTimeUnits(unit->getStats()->tu); // replace the TUs from shooting
 			ba.type = BA_NONE;
 		break;
+
 		default:
 		break;
 	}
@@ -1453,7 +1457,8 @@ bool BattlescapeGame::cancelCurrentAction(bool bForce)
 {
 	bool bPreviewed = Options::getInt("battleNewPreviewPath") > 0;
 
-	if (_save->getPathfinding()->removePreview() && bPreviewed) return true;
+	if (_save->getPathfinding()->removePreview() && bPreviewed)
+		return true;
 
 	if (_states.empty() || bForce)
 	{

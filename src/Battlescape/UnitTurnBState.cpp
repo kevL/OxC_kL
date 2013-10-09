@@ -58,6 +58,8 @@ UnitTurnBState::~UnitTurnBState()
  */
 void UnitTurnBState::init()
 {
+	Log(LOG_INFO) << "UnitTurnBState::init()";
+
 	_unit = _action.actor;
 	_action.TU = 0;
 
@@ -103,6 +105,7 @@ void UnitTurnBState::init()
  */
 void UnitTurnBState::think()
 {
+	Log(LOG_INFO) << "UnitTurnBState::think()";
 	bool thisFaction = _unit->getFaction() == _parent->getSave()->getSide();	// kL
 
 //kL	const int tu = _unit->getFaction() == _parent->getSave()->getSide() ? 1 : 0; // one turn is 1 tu unless during reaction fire.

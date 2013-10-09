@@ -62,11 +62,12 @@ CraftsState::CraftsState(Game* game, Base* base)
 //kL	_txtHwp		= new Text(46, 9, 268, 40);
 	_txtName	= new Text(94, 8, 16, 48);		// kL
 	_txtStatus	= new Text(50, 8, 110, 48);		// kL
-	_txtWeapon	= new Text(50, 16, 160, 40);	// kL
-	_txtCrew	= new Text(58, 8, 210, 48);		// kL
+	_txtWeapon	= new Text(50, 16, 175, 40);	// kL
+	_txtCrew	= new Text(58, 8, 222, 48);		// kL
 	_txtHwp		= new Text(46, 8, 268, 48);		// kL
 
-	_lstCrafts	= new TextList(288, 118, 8, 58);
+//kL	_lstCrafts	= new TextList(288, 118, 8, 58);
+	_lstCrafts	= new TextList(288, 112, 8, 58);		// kL
 
 //	_lstCrafts->setColumns(5, 94, 65, 47, 46, 28);		// kL_TEMP
 
