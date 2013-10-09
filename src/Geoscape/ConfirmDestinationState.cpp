@@ -46,9 +46,9 @@ namespace OpenXcom
  */
 ConfirmDestinationState::ConfirmDestinationState(Game* game, Craft* craft, Target* target)
 	:
-	State(game),
-	_craft(craft),
-	_target(target)
+		State(game),
+		_craft(craft),
+		_target(target)
 {
 	Waypoint* w = dynamic_cast<Waypoint* >(_target);
 	_screen = false;
