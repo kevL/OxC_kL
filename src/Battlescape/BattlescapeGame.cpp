@@ -1006,9 +1006,9 @@ void BattlescapeGame::popState()
 				{
 					int tu = action.actor->getTimeUnits();
 //					Log(LOG_INFO) << "BattlescapeGame::popState(), tu remaining after action = " << (float)tu;
-					int totalTU = action.actor->getStats()->tu;
-//					Log(LOG_INFO) << "BattlescapeGame::popState(), Total tu = " << (float)totalTU;
-//					Log(LOG_INFO) << "BattlescapeGame::popState(), tu/Totaltu = " << (float)tu/(float)totalTU * (float)100;
+					int statTU = action.actor->getStats()->tu;
+//					Log(LOG_INFO) << "BattlescapeGame::popState(), Total tu = " << (float)statTU;
+//					Log(LOG_INFO) << "BattlescapeGame::popState(), tu/statTU = " << (float)tu/(float)statTU * (float)100;
 
 					switch (action.type)
 					{
@@ -1020,7 +1020,7 @@ void BattlescapeGame::popState()
 						case BA_SNAPSHOT:
 //							Log(LOG_INFO) << ". SnapShot, TU percent = " << (float)action.weapon->getRules()->getTUSnap();
 
-							if ((float)tu / (float)totalTU * (float)100 < (float)action.weapon->getRules()->getTUSnap())
+							if ((float)tu / (float)statTU * (float)100 < (float)action.weapon->getRules()->getTUSnap())
 							{
 								cancelCurrentAction(true);
 							}
@@ -1028,7 +1028,7 @@ void BattlescapeGame::popState()
 						case BA_AIMEDSHOT:
 //							Log(LOG_INFO) << ". AimedShot, TU percent = " << (float)action.weapon->getRules()->getTUAimed();
 
-							if ((float)tu / (float)totalTU * (float)100 < (float)action.weapon->getRules()->getTUAimed())
+							if ((float)tu / (float)statTU * (float)100 < (float)action.weapon->getRules()->getTUAimed())
 							{
 								cancelCurrentAction(true);
 							}
@@ -1036,20 +1036,22 @@ void BattlescapeGame::popState()
 						case BA_AUTOSHOT:
 //							Log(LOG_INFO) << ". AutoShot, TU percent = " << (float)action.weapon->getRules()->getTUAuto();
 
-							if ((float)tu / (float)totalTU * (float)100 < (float)action.weapon->getRules()->getTUAuto())
+							if ((float)tu / (float)statTU * (float)100 < (float)action.weapon->getRules()->getTUAuto())
 							{
 								cancelCurrentAction(true);
 							}
 						break;
 					}
 				} */
+				// kL_note: Also do psi-attack Cancels....
 				if (!actionFailed)
 				{
-					float tu = (float)action.actor->getTimeUnits();
+//					float tu = (float)action.actor->getTimeUnits();
+					unsigned int curTU = action.actor->getTimeUnits();
 //					Log(LOG_INFO) << "BattlescapeGame::popState(), tu remaining after action = " << (float)tu;
-					float totalTU = (float)action.actor->getStats()->tu;
-//					Log(LOG_INFO) << "BattlescapeGame::popState(), Total tu = " << (float)totalTU;
-//					Log(LOG_INFO) << "BattlescapeGame::popState(), tu/Totaltu = " << (float)tu/(float)totalTU * (float)100;
+//					float statTU = (float)action.actor->getStats()->tu;
+//					Log(LOG_INFO) << "BattlescapeGame::popState(), Total tu = " << (float)statTU;
+//					Log(LOG_INFO) << "BattlescapeGame::popState(), tu/statTU = " << (float)tu/(float)statTU * (float)100;
 
 					switch (action.type)
 					{
@@ -1061,9 +1063,10 @@ void BattlescapeGame::popState()
 						case BA_SNAPSHOT:
 //							Log(LOG_INFO) << ". SnapShot, TU percent = " << (float)action.weapon->getRules()->getTUSnap();
 
-//							if (tu / totalTU * (float)100 < (float)action.weapon->getRules()->getTUSnap())
-							if ((int)(tu / totalTU * 100.f) + 1 < action.weapon->getRules()->getTUSnap())
+//							if (tu / statTU * (float)100 < (float)action.weapon->getRules()->getTUSnap())
+//							if ((int)(tu / statTU * 100.f) + 1 < action.weapon->getRules()->getTUSnap())
 //								|| action.weapon->getAmmoQuantity() < 1)
+							if (curTU < action.actor->getActionTUs(BA_SNAPSHOT, action.weapon))
 							{
 								cancelCurrentAction(true);
 							}
@@ -1071,9 +1074,10 @@ void BattlescapeGame::popState()
 						case BA_AIMEDSHOT:
 //							Log(LOG_INFO) << ". AimedShot, TU percent = " << (float)action.weapon->getRules()->getTUAimed();
 
-//							if (tu / totalTU * (float)100 < (float)action.weapon->getRules()->getTUAimed())
-							if ((int)(tu / totalTU * 100.f) + 1 < action.weapon->getRules()->getTUAimed())
+//							if (tu / statTU * (float)100 < (float)action.weapon->getRules()->getTUAimed())
+//							if ((int)(tu / statTU * 100.f) + 1 < action.weapon->getRules()->getTUAimed())
 //								|| action.weapon->getAmmoQuantity() < 1)
+							if (curTU < action.actor->getActionTUs(BA_AIMEDSHOT, action.weapon))
 							{
 								cancelCurrentAction(true);
 							}
@@ -1081,9 +1085,10 @@ void BattlescapeGame::popState()
 						case BA_AUTOSHOT:
 //							Log(LOG_INFO) << ". AutoShot, TU percent = " << (float)action.weapon->getRules()->getTUAuto();
 
-//							if (tu / totalTU * (float)100 < (float)action.weapon->getRules()->getTUAuto())
-							if ((int)(tu / totalTU * 100.f) + 1 < action.weapon->getRules()->getTUAuto())
+//							if (tu / statTU * (float)100 < (float)action.weapon->getRules()->getTUAuto())
+//							if ((int)(tu / statTU * 100.f) + 1 < action.weapon->getRules()->getTUAuto())
 //								|| action.weapon->getAmmoQuantity() < 1)
+							if (curTU < action.actor->getActionTUs(BA_AUTOSHOT, action.weapon))
 							{
 								cancelCurrentAction(true);
 							}

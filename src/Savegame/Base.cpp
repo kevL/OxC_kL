@@ -946,6 +946,7 @@ void Base::addResearch(ResearchProject* project)
 */
 void Base::removeResearch(ResearchProject* project)
 {
+	Log(LOG_INFO) << "Base::removeResearch()";
 	_scientists += project->getAssigned();
 
 	std::vector<ResearchProject* >::iterator iter = std::find(_research.begin(), _research.end(), project);
@@ -953,7 +954,7 @@ void Base::removeResearch(ResearchProject* project)
 	{
 		// kL_begin: Add Research Help here. aLien must be interrogated at same Base as project-help goes to (for now).
 		std::string proj = project->getRules()->getName();
-		Log(LOG_INFO) << "Base::removeResearch() proj = " << proj;
+		Log(LOG_INFO) << ". . proj = " << proj;
 		// eg. Base::removeResearch() proj = STR_REAPER_CORPSE
 
 		if (proj == "STR_FLOATER_SOLDIER"

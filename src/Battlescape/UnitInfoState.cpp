@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "UnitInfoState.h"
 #include <sstream>
 #include "../Savegame/BattleUnit.h"
@@ -36,6 +37,7 @@
 #include "BattlescapeGame.h"
 #include "BattlescapeState.h"
 
+
 namespace OpenXcom
 {
 
@@ -45,78 +47,82 @@ namespace OpenXcom
  * @param unit Pointer to the selected unit.
  * @param parent Pointer to parent Battlescape.
  */
-UnitInfoState::UnitInfoState(Game *game, BattleUnit *unit, BattlescapeState *parent) : State(game), _unit(unit), _parent(parent)
+UnitInfoState::UnitInfoState(Game* game, BattleUnit* unit, BattlescapeState* parent)
+	:
+		State(game),
+		_unit(unit),
+		_parent(parent)
 {
-	// Create objects
 	_bg = new Surface(320, 200, 0, 0);
 	_txtName = new Text(312, 192, 4, 4);
 
+	// kL_note: move numberUnits right 1px
 	_txtTimeUnits = new Text(120, 9, 8, 31);
-	_numTimeUnits = new Text(18, 9, 150, 31);
+	_numTimeUnits = new Text(18, 9, 151, 31);
 	_barTimeUnits = new Bar(170, 5, 170, 32);
 
 	_txtEnergy = new Text(120, 9, 8, 41);
-	_numEnergy = new Text(18, 9, 150, 41);
+	_numEnergy = new Text(18, 9, 151, 41);
 	_barEnergy = new Bar(170, 5, 170, 42);
 
 	_txtHealth = new Text(120, 9, 8, 51);
-	_numHealth = new Text(18, 9, 150, 51);
+	_numHealth = new Text(18, 9, 151, 51);
 	_barHealth = new Bar(170, 5, 170, 52);
 
 	_txtFatalWounds = new Text(120, 9, 8, 61);
-	_numFatalWounds = new Text(18, 9, 150, 61);
+	_numFatalWounds = new Text(18, 9, 151, 61);
 	_barFatalWounds = new Bar(170, 5, 170, 62);
 
 	_txtBravery = new Text(120, 9, 8, 71);
-	_numBravery = new Text(18, 9, 150, 71);
+	_numBravery = new Text(18, 9, 151, 71);
 	_barBravery = new Bar(170, 5, 170, 72);
 
 	_txtMorale = new Text(120, 9, 8, 81);
-	_numMorale = new Text(18, 9, 150, 81);
+	_numMorale = new Text(18, 9, 151, 81);
 	_barMorale = new Bar(170, 5, 170, 82);
 
 	_txtReactions = new Text(120, 9, 8, 91);
-	_numReactions = new Text(18, 9, 150, 91);
+	_numReactions = new Text(18, 9, 151, 91);
 	_barReactions = new Bar(170, 5, 170, 92);
 
 	_txtFiring = new Text(120, 9, 8, 101);
-	_numFiring = new Text(18, 9, 150, 101);
+	_numFiring = new Text(18, 9, 151, 101);
 	_barFiring = new Bar(170, 5, 170, 102);
 
 	_txtThrowing = new Text(120, 9, 8, 111);
-	_numThrowing = new Text(18, 9, 150, 111);
+	_numThrowing = new Text(18, 9, 151, 111);
 	_barThrowing = new Bar(170, 5, 170, 112);
 
 	_txtStrength = new Text(120, 9, 8, 121);
-	_numStrength = new Text(18, 9, 150, 121);
+	_numStrength = new Text(18, 9, 151, 121);
 	_barStrength = new Bar(170, 5, 170, 122);
 
 	_txtPsiStrength = new Text(120, 9, 8, 131);
-	_numPsiStrength = new Text(18, 9, 150, 131);
+	_numPsiStrength = new Text(18, 9, 151, 131);
 	_barPsiStrength = new Bar(170, 5, 170, 132);
 
 	_txtPsiSkill = new Text(120, 9, 8, 141);
-	_numPsiSkill = new Text(18, 9, 150, 141);
+	_numPsiSkill = new Text(18, 9, 151, 141);
 	_barPsiSkill = new Bar(170, 5, 170, 142);
 
 	_txtFrontArmor = new Text(120, 9, 8, 151);
-	_numFrontArmor= new Text(18, 9, 150, 151);
+	_numFrontArmor= new Text(18, 9, 151, 151);
 	_barFrontArmor = new Bar(170, 5, 170, 152);
 
 	_txtLeftArmor = new Text(120, 9, 8, 161);
-	_numLeftArmor = new Text(18, 9, 150, 161);
+	_numLeftArmor = new Text(18, 9, 151, 161);
 	_barLeftArmor = new Bar(170, 5, 170, 162);
 
 	_txtRightArmor = new Text(120, 9, 8, 171);
-	_numRightArmor = new Text(18, 9, 150, 171);
+	_numRightArmor = new Text(18, 9, 151, 171);
 	_barRightArmor = new Bar(170, 5, 170, 172);
 
 	_txtRearArmor = new Text(120, 9, 8, 181);
-	_numRearArmor = new Text(18, 9, 150, 181);
+	_numRearArmor = new Text(18, 9, 151, 181);
 	_barRearArmor = new Bar(170, 5, 170, 182);
 
 	_txtUnderArmor = new Text(120, 9, 8, 191);
-	_numUnderArmor = new Text(18, 9, 150, 191);
+	_numUnderArmor = new Text(18, 9, 151, 191);
 	_barUnderArmor = new Bar(170, 5, 170, 192);
 
 	add(_bg);
@@ -192,7 +198,7 @@ UnitInfoState::UnitInfoState(Game *game, BattleUnit *unit, BattlescapeState *par
 
 	centerAllSurfaces();
 
-	// Set up objects
+
 	_game->getResourcePack()->getSurface("UNIBORD.PCK")->blit(_bg);
 
 	_txtName->setAlign(ALIGN_CENTER);
@@ -370,7 +376,6 @@ UnitInfoState::UnitInfoState(Game *game, BattleUnit *unit, BattlescapeState *par
 
 	_barUnderArmor->setColor(Palette::blockOffset(5));
 	_barUnderArmor->setScale(1.0);
-
 }
 
 /**
@@ -393,8 +398,7 @@ void UnitInfoState::init()
 	_barTimeUnits->setValue(_unit->getTimeUnits());
 
 	ss.str(L"");
-	// aliens have their rank in their "name", soldiers don't
-	if (_unit->getType() == "SOLDIER")
+	if (_unit->getType() == "SOLDIER") // aliens have their rank in their "name", soldiers don't
 	{
 		ss << tr(_unit->getRankString());
 		ss << " ";
@@ -521,12 +525,11 @@ void UnitInfoState::init()
 	_barUnderArmor->setValue(_unit->getArmor(SIDE_UNDER));
 }
 
-
 /**
  * Closes the window on right-click.
  * @param action Pointer to an action.
  */
-void UnitInfoState::handle(Action *action)
+void UnitInfoState::handle(Action* action)
 {
 	State::handle(action);
 	//SavedBattleGame *battleGame = _game->getSavedGame()->getSavedBattle();
@@ -545,6 +548,7 @@ void UnitInfoState::handle(Action *action)
 			btnPrevClick(action);
 		}
 	}
+
 	if (action->getDetails()->type == SDL_KEYDOWN)
 	{
 		if (action->getDetails()->key.keysym.sym == Options::getInt("keyBattleNextUnit"))
@@ -566,7 +570,7 @@ void UnitInfoState::handle(Action *action)
 * Selects the previous soldier.
 * @param action Pointer to an action.
 */
-void UnitInfoState::btnPrevClick(Action *)
+void UnitInfoState::btnPrevClick(Action* )
 {
 	if (_parent)
 	{
@@ -576,6 +580,7 @@ void UnitInfoState::btnPrevClick(Action *)
 	{
 		_game->getSavedGame()->getSavedBattle()->selectPreviousPlayerUnit(false, false, true);
 	}
+
 	_unit = _game->getSavedGame()->getSavedBattle()->getSelectedUnit();
 	if (_unit != 0)
 	{
@@ -591,7 +596,7 @@ void UnitInfoState::btnPrevClick(Action *)
 * Selects the next soldier.
 * @param action Pointer to an action.
 */
-void UnitInfoState::btnNextClick(Action *)
+void UnitInfoState::btnNextClick(Action* )
 {
 	if (_parent)
 	{
@@ -601,6 +606,7 @@ void UnitInfoState::btnNextClick(Action *)
 	{
 		_game->getSavedGame()->getSavedBattle()->selectNextPlayerUnit(false, false, true);
 	}
+
 	_unit = _game->getSavedGame()->getSavedBattle()->getSelectedUnit();
 	if (_unit != 0)
 	{

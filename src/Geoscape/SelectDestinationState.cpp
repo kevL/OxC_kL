@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "SelectDestinationState.h"
 #include <cmath>
 #include "../Engine/Game.h"
@@ -37,6 +38,7 @@
 #include "ConfirmCydoniaState.h"
 #include "../Engine/Options.h"
 
+
 namespace OpenXcom
 {
 
@@ -46,7 +48,11 @@ namespace OpenXcom
  * @param craft Pointer to the craft to target.
  * @param globe Pointer to the Geoscape globe.
  */
-SelectDestinationState::SelectDestinationState(Game *game, Craft *craft, Globe *globe) : State(game), _craft(craft), _globe(globe)
+SelectDestinationState::SelectDestinationState(Game* game, Craft* craft, Globe* globe)
+	:
+		State(game),
+		_craft(craft),
+		_globe(globe)
 {
 	int dx = Screen::getDX();
 	int dy = Screen::getDY();
@@ -336,4 +342,5 @@ void SelectDestinationState::btnCydoniaClick(Action *)
 		_game->pushState(new ConfirmCydoniaState(_game, _craft));
 	}
 }
+
 }

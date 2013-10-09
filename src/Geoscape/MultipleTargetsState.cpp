@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "MultipleTargetsState.h"
 #include <sstream>
 #include "../Engine/Game.h"
@@ -37,6 +38,7 @@
 #include "TargetInfoState.h"
 #include "../Engine/Options.h"
 
+
 namespace OpenXcom
 {
 
@@ -47,7 +49,12 @@ namespace OpenXcom
  * @param craft Pointer to craft to retarget (NULL if none).
  * @param state Pointer to the Geoscape state.
  */
-MultipleTargetsState::MultipleTargetsState(Game *game, std::vector<Target*> targets, Craft *craft, GeoscapeState *state) : State(game), _targets(targets), _craft(craft), _state(state)
+MultipleTargetsState::MultipleTargetsState(Game* game, std::vector<Target* > targets, Craft* craft, GeoscapeState* state)
+	:
+		State(game),
+		_targets(targets),
+		_craft(craft),
+		_state(state)
 {
 	_screen = false;
 

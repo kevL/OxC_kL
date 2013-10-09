@@ -1222,7 +1222,7 @@ bool BattleUnit::isOut() const
  * @param item
  * @return TUs
  */
-int BattleUnit::getActionTUs(BattleActionType actionType, BattleItem *item)
+int BattleUnit::getActionTUs(BattleActionType actionType, BattleItem* item)
 {
 	if (item == 0)
 	{
@@ -1262,9 +1262,11 @@ int BattleUnit::getActionTUs(BattleActionType actionType, BattleItem *item)
 	}
 
 	// if it's a percentage, apply it to unit TUs
-	if (!item->getRules()->getFlatRate() || actionType == BA_THROW || actionType == BA_PRIME)
+	if (!item->getRules()->getFlatRate()
+		|| actionType == BA_THROW
+		|| actionType == BA_PRIME)
 	{
-		cost = (int)floor(getStats()->tu * cost / 100.0f);
+		cost = (int)floor(getStats()->tu * cost / 100.f);
 	}
 
 	return cost;

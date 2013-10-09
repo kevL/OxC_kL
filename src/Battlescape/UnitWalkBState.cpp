@@ -734,6 +734,7 @@ void UnitWalkBState::think()
 			_pf->abortPath();
 			_unit->setCache(0);
 			_parent->getMap()->cacheUnit(_unit);
+
 			_parent->popState();
 		}
 	}

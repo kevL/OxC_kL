@@ -52,8 +52,8 @@ namespace OpenXcom
  */
 ActionMenuState::ActionMenuState(Game* game, BattleAction* action, int x, int y)
 	:
-	State(game),
-	_action(action)
+		State(game),
+		_action(action)
 {
 	_screen = false;
 
