@@ -74,8 +74,8 @@ ResearchState::ResearchState(Game* game, Base* base)
 	
 //kL	_btnNew			= new TextButton(148, 16, 8, 176);
 //kL	_btnOk			= new TextButton(148, 16, 164, 176);
-	_btnNew			= new TextButton(145, 16, 16, 177);		// kL
-	_btnOk			= new TextButton(145, 16, 162, 177);	// kL
+	_btnNew			= new TextButton(144, 16, 16, 177);		// kL
+	_btnOk			= new TextButton(144, 16, 163, 177);	// kL
 
 	// back up palette in case we're being called from Geoscape!
 	memcpy(_oldPalette, _game->getScreen()->getPalette(), 256 * sizeof(SDL_Color));

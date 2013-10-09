@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "BaseNameState.h"
 #include "../Engine/Game.h"
 #include "../Engine/Action.h"
@@ -30,6 +31,7 @@
 #include "../Basescape/PlaceLiftState.h"
 #include "../Engine/Options.h"
 
+
 namespace OpenXcom
 {
 
@@ -40,19 +42,26 @@ namespace OpenXcom
  * @param globe Pointer to the Geoscape globe.
  * @param first Is this the first base in the game?
  */
-BaseNameState::BaseNameState(Game *game, Base *base, Globe *globe, bool first) : State(game), _base(base), _globe(globe), _first(first)
+BaseNameState::BaseNameState(Game* game, Base* base, Globe* globe, bool first)
+	:
+		State(game),
+		_base(base),
+		_globe(globe),
+		_first(first)
 {
 	_globe->onMouseOver(0);
 
 	_screen = false;
 
-	// Create objects
-	_window = new Window(this, 192, 80, 32, 60, POPUP_BOTH);
-	_btnOk = new TextButton(162, 12, 47, 118);
-	_txtTitle = new Text(182, 16, 37, 70);
-	_edtName = new TextEdit(127, 16, 59, 94);
 
-	// Set palette
+//kL	_window		= new Window(this, 192, 80, 32, 60, POPUP_BOTH);
+	_window		= new Window(this, 192, 88, 32, 60, POPUP_BOTH);	// kL
+	_txtTitle	= new Text(182, 16, 37, 70);
+	_edtName	= new TextEdit(127, 16, 59, 94);
+//kL	_btnOk		= new TextButton(162, 12, 47, 118);
+	_btnOk		= new TextButton(162, 16, 47, 118);		// kL
+
+
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
 
 	add(_window);
@@ -62,17 +71,17 @@ BaseNameState::BaseNameState(Game *game, Base *base, Globe *globe, bool first) :
 
 	centerAllSurfaces();
 
-	// Set up objects
+
 	_window->setColor(Palette::blockOffset(8)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(tr("STR_OK"));
-	_btnOk->onMouseClick((ActionHandler)&BaseNameState::btnOkClick);
-	//_btnOk->onKeyboardPress((ActionHandler)&BaseNameState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
-	_btnOk->onKeyboardPress((ActionHandler)&BaseNameState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onMouseClick((ActionHandler)& BaseNameState::btnOkClick);
+//	_btnOk->onKeyboardPress((ActionHandler)& BaseNameState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
+	_btnOk->onKeyboardPress((ActionHandler)& BaseNameState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 
-	//something must be in the name before it is acceptable
+	// something must be in the name before it is acceptable
 	_btnOk->setVisible(false);
 
 	_txtTitle->setColor(Palette::blockOffset(8)+5);
@@ -83,7 +92,7 @@ BaseNameState::BaseNameState(Game *game, Base *base, Globe *globe, bool first) :
 	_edtName->setColor(Palette::blockOffset(8)+5);
 	_edtName->setBig();
 	_edtName->focus();
-	_edtName->onKeyboardPress((ActionHandler)&BaseNameState::edtNameKeyPress);
+	_edtName->onKeyboardPress((ActionHandler)& BaseNameState::edtNameKeyPress);
 }
 
 /**
@@ -91,7 +100,6 @@ BaseNameState::BaseNameState(Game *game, Base *base, Globe *globe, bool first) :
  */
 BaseNameState::~BaseNameState()
 {
-
 }
 
 /**
@@ -102,11 +110,14 @@ void BaseNameState::nameBase()
 	_base->setName(_edtName->getText());
 	_game->popState();
 	_game->popState();
+
 	if (!_first)
 	{
 		_game->popState();
 	}
-	if (!_first || Options::getBool("customInitialBase") )
+
+	if (!_first
+		|| Options::getBool("customInitialBase"))
 	{
 		_game->pushState(new PlaceLiftState(_game, _base, _globe, _first));
 	}
@@ -116,12 +127,12 @@ void BaseNameState::nameBase()
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void BaseNameState::edtNameKeyPress(Action *action)
+void BaseNameState::edtNameKeyPress(Action* action)
 {
-	if (action->getDetails()->key.keysym.sym == SDLK_RETURN ||
-		action->getDetails()->key.keysym.sym == SDLK_KP_ENTER)
+	if (action->getDetails()->key.keysym.sym == SDLK_RETURN
+		|| action->getDetails()->key.keysym.sym == SDLK_KP_ENTER)
 	{
-		if(!_edtName->getText().empty())
+		if (!_edtName->getText().empty())
 		{
 			nameBase();
 		}
@@ -136,7 +147,7 @@ void BaseNameState::edtNameKeyPress(Action *action)
  * Returns to the previous screen
  * @param action Pointer to an action.
  */
-void BaseNameState::btnOkClick(Action *)
+void BaseNameState::btnOkClick(Action* )
 {
 	nameBase();
 }

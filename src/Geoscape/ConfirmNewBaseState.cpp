@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "ConfirmNewBaseState.h"
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
@@ -33,6 +34,7 @@
 #include "../Menu/ErrorMessageState.h"
 #include "../Engine/Options.h"
 
+
 namespace OpenXcom
 {
 
@@ -42,16 +44,21 @@ namespace OpenXcom
  * @param base Pointer to the base to place.
  * @param globe Pointer to the Geoscape globe.
  */
-ConfirmNewBaseState::ConfirmNewBaseState(Game *game, Base *base, Globe *globe) : State(game), _base(base), _globe(globe), _cost(0)
+ConfirmNewBaseState::ConfirmNewBaseState(Game* game, Base* base, Globe* globe)
+	:
+		State(game),
+		_base(base),
+		_globe(globe),
+		_cost(0)
 {
 	_screen = false;
 
 	// Create objects
-	_window = new Window(this, 224, 72, 16, 64);
-	_btnOk = new TextButton(54, 12, 68, 104);
-	_btnCancel = new TextButton(54, 12, 138, 104);
-	_txtCost = new Text(120, 9, 68, 80);
-	_txtArea = new Text(120, 9, 68, 90);
+	_window		= new Window(this, 224, 72, 16, 64);
+	_btnOk		= new TextButton(54, 12, 68, 104);
+	_btnCancel	= new TextButton(54, 12, 138, 104);
+	_txtCost	= new Text(120, 9, 68, 80);
+	_txtArea	= new Text(120, 9, 68, 90);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
@@ -70,21 +77,22 @@ ConfirmNewBaseState::ConfirmNewBaseState(Game *game, Base *base, Globe *globe) :
 
 	_btnOk->setColor(Palette::blockOffset(15)-1);
 	_btnOk->setText(tr("STR_OK"));
-	_btnOk->onMouseClick((ActionHandler)&ConfirmNewBaseState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&ConfirmNewBaseState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
+	_btnOk->onMouseClick((ActionHandler)& ConfirmNewBaseState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)& ConfirmNewBaseState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
 
 	_btnCancel->setColor(Palette::blockOffset(15)-1);
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
-	_btnCancel->onMouseClick((ActionHandler)&ConfirmNewBaseState::btnCancelClick);
-	_btnCancel->onKeyboardPress((ActionHandler)&ConfirmNewBaseState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnCancel->onMouseClick((ActionHandler)& ConfirmNewBaseState::btnCancelClick);
+	_btnCancel->onKeyboardPress((ActionHandler)& ConfirmNewBaseState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
 
 	std::wstring area;
-	for (std::vector<Region*>::iterator i = _game->getSavedGame()->getRegions()->begin(); i != _game->getSavedGame()->getRegions()->end(); ++i)
+	for (std::vector<Region* >::iterator i = _game->getSavedGame()->getRegions()->begin(); i != _game->getSavedGame()->getRegions()->end(); ++i)
 	{
 		if ((*i)->getRules()->insideRegion(_base->getLongitude(), _base->getLatitude()))
 		{
 			_cost = (*i)->getRules()->getBaseCost();
 			area = tr((*i)->getRules()->getType());
+
 			break;
 		}
 	}
@@ -103,14 +111,13 @@ ConfirmNewBaseState::ConfirmNewBaseState(Game *game, Base *base, Globe *globe) :
  */
 ConfirmNewBaseState::~ConfirmNewBaseState()
 {
-
 }
 
 /**
  * Go to the Place Access Lift screen.
  * @param action Pointer to an action.
  */
-void ConfirmNewBaseState::btnOkClick(Action *)
+void ConfirmNewBaseState::btnOkClick(Action* )
 {
 	if (_game->getSavedGame()->getFunds() >= _cost)
 	{
@@ -128,7 +135,7 @@ void ConfirmNewBaseState::btnOkClick(Action *)
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void ConfirmNewBaseState::btnCancelClick(Action *)
+void ConfirmNewBaseState::btnCancelClick(Action* )
 {
 	_globe->onMouseOver(0);
 	_game->popState();

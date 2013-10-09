@@ -16,10 +16,12 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_FUNDINGSTATE_H
 #define OPENXCOM_FUNDINGSTATE_H
 
 #include "../Engine/State.h"
+
 
 namespace OpenXcom
 {
@@ -33,20 +35,24 @@ class TextList;
  * Funding screen accessible from the Geoscape
  * that shows all the countries' funding.
  */
-class FundingState : public State
+class FundingState
+	:
+		public State
 {
 private:
-	TextButton *_btnOk;
-	Window *_window;
-	Text *_txtTitle, *_txtCountry, *_txtFunding, *_txtChange;
-	TextList *_lstCountries;
+	TextButton* _btnOk;
+	Window* _window;
+	Text* _txtTitle, * _txtCountry, * _txtFunding, * _txtChange;
+	TextList* _lstCountries;
+
 public:
 	/// Creates the Funding state.
-	FundingState(Game *game);
+	FundingState(Game* game);
 	/// Cleans up the Funding state.
 	~FundingState();
+
 	/// Handler for clicking the OK button.
-	void btnOkClick(Action *action);
+	void btnOkClick(Action* action);
 };
 
 }

@@ -16,10 +16,12 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http:///www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_CONFIRMNEWBASESTATE_H
 #define OPENXCOM_CONFIRMNEWBASESTATE_H
 
 #include "../Engine/State.h"
+
 
 namespace OpenXcom
 {
@@ -35,24 +37,28 @@ class Globe;
  * to confirm a new base on the globe.
  * Note: This is different from the starting base screen, BaseNameState 
  */
-class ConfirmNewBaseState : public State
+class ConfirmNewBaseState
+	:
+		public State
 {
 private:
-	Base *_base;
-	Globe *_globe;
-	Window *_window;
-	Text *_txtCost, *_txtArea;
-	TextButton *_btnOk, *_btnCancel;
+	Base* _base;
+	Globe* _globe;
+	Window* _window;
+	Text* _txtCost, * _txtArea;
+	TextButton* _btnOk, * _btnCancel;
 	int _cost;
-public:
-	/// Creates the Confirm New Base state.
-	ConfirmNewBaseState(Game *game, Base *base, Globe *globe);
-	/// Cleans up the Confirm New Base state.
-	~ConfirmNewBaseState();
-	/// Handler for clicking the OK button.
-	void btnOkClick(Action *action);
-	/// Handler for clicking the Cancel button.
-	void btnCancelClick(Action *action);
+
+	public:
+		/// Creates the Confirm New Base state.
+		ConfirmNewBaseState(Game* game, Base* base, Globe* globe);
+		/// Cleans up the Confirm New Base state.
+		~ConfirmNewBaseState();
+
+		/// Handler for clicking the OK button.
+		void btnOkClick(Action* action);
+		/// Handler for clicking the Cancel button.
+		void btnCancelClick(Action* action);
 };
 
 }

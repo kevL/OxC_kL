@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "FundingState.h"
 #include <sstream>
 #include "../Engine/Game.h"
@@ -31,6 +32,7 @@
 #include "../Savegame/SavedGame.h"
 #include "../Engine/Options.h"
 
+
 namespace OpenXcom
 {
 
@@ -38,18 +40,29 @@ namespace OpenXcom
  * Initializes all the elements in the Funding screen.
  * @param game Pointer to the core game.
  */
-FundingState::FundingState(Game *game) : State(game)
+FundingState::FundingState(Game* game)
+	:
+		State(game)
 {
 	_screen = false;
 
 	// Create objects
-	_window = new Window(this, 320, 200, 0, 0, POPUP_BOTH);
-	_btnOk = new TextButton(50, 12, 135, 180);
-	_txtTitle = new Text(320, 16, 0, 8);
-	_txtCountry = new Text(100, 9, 32, 30);
-	_txtFunding = new Text(100, 9, 140, 30);
-	_txtChange = new Text(72, 9, 240, 30);
-	_lstCountries = new TextList(260, 136, 32, 40);
+	_window			= new Window(this, 320, 200, 0, 0, POPUP_BOTH);
+//kL	_txtTitle		= new Text(320, 16, 0, 8);
+	_txtTitle		= new Text(300, 16, 10, 10);		// kL
+
+//kL	_txtCountry		= new Text(100, 9, 32, 30);
+//kL	_txtFunding		= new Text(100, 9, 140, 30);
+//kL	_txtChange		= new Text(72, 9, 240, 30);
+	_txtCountry		= new Text(100, 9, 30, 28);		// kL
+	_txtFunding		= new Text(100, 9, 138, 28);	// kL
+	_txtChange		= new Text(72, 9, 238, 28);		// kL
+
+//kL	_lstCountries	= new TextList(260, 136, 32, 40);
+	_lstCountries	= new TextList(260, 136, 30, 38);	// kL
+
+//kL	_btnOk			= new TextButton(50, 12, 135, 180);
+	_btnOk			= new TextButton(288, 16, 16, 177);		// kL
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
