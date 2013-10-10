@@ -775,18 +775,27 @@ bool TileEngine::canTargetUnit(Position* originVoxel, Tile* tile, Position* scan
  * @param excludeUnit Is self (not to hit self).
  * @return True if the tile can be targetted.
  */
-bool TileEngine::canTargetTile(Position *originVoxel, Tile *tile, int part, Position *scanVoxel, BattleUnit *excludeUnit)
+bool TileEngine::canTargetTile(Position* originVoxel, Tile* tile, int part, Position* scanVoxel, BattleUnit* excludeUnit)
 {
-	static int sliceObjectSpiral[82] = {8,8, 8,6, 10,6, 10,8, 10,10, 8,10, 6,10, 6,8, 6,6,				// first circle
+	static int sliceObjectSpiral[82] =
+	{
+		8,8, 8,6, 10,6, 10,8, 10,10, 8,10, 6,10, 6,8, 6,6,												// first circle
 		8,4, 10,4, 12,4, 12,6, 12,8, 12,10, 12,12, 10,12, 8,12, 6,12, 4,12, 4,10, 4,8, 4,6, 4,4, 6,4,	// second circle
-		8,1, 12,1, 15,1, 15,4, 15,8, 15,12, 15,15, 12,15, 8,15, 4,15, 1,15, 1,12, 1,8, 1,4, 1,1, 4,1};	// third circle
-	static int westWallSpiral[14] = {0,7, 0,9, 0,6, 0,11, 0,4, 0,13, 0,2};
-	static int northWallSpiral[14] = {7,0, 9,0, 6,0, 11,0, 4,0, 13,0, 2,0};
+		8,1, 12,1, 15,1, 15,4, 15,8, 15,12, 15,15, 12,15, 8,15, 4,15, 1,15, 1,12, 1,8, 1,4, 1,1, 4,1	// third circle
+	};
+	static int westWallSpiral[14] =
+	{
+		0,7, 0,9, 0,6, 0,11, 0,4, 0,13, 0,2
+	};
+	static int northWallSpiral[14] =
+	{
+		7,0, 9,0, 6,0, 11,0, 4,0, 13,0, 2,0
+	};
 
 	Position targetVoxel = Position((tile->getPosition().x * 16), (tile->getPosition().y * 16), tile->getPosition().z * 24);
 	std::vector<Position> _trajectory;
 
-	int *spiralArray;
+	int* spiralArray;
 	int spiralCount;
 
 	int minZ, maxZ;
@@ -826,7 +835,9 @@ bool TileEngine::canTargetTile(Position *originVoxel, Tile *tile, int part, Posi
 	{
 		for (int j = 1; j < 12; ++j)
 		{
-			if (minZfound) break;
+			if (minZfound)
+				break;
+
 			for (int i = 0; i < spiralCount; ++i)
 			{
 				int tX = spiralArray[i * 2];
@@ -837,6 +848,7 @@ bool TileEngine::canTargetTile(Position *originVoxel, Tile *tile, int part, Posi
 					{
 						minZ = j * 2;
 						minZfound = true;
+
 						break;
 					}
 				}
@@ -850,7 +862,9 @@ bool TileEngine::canTargetTile(Position *originVoxel, Tile *tile, int part, Posi
 	{
 		for (int j = 10; j >= 0; --j)
 		{
-			if (maxZfound) break;
+			if (maxZfound)
+				break;
+
 			for (int i = 0; i < spiralCount; ++i)
 			{
 				int tX = spiralArray[i * 2];
@@ -861,6 +875,7 @@ bool TileEngine::canTargetTile(Position *originVoxel, Tile *tile, int part, Posi
 					{
 						maxZ = j * 2;
 						maxZfound = true;
+
 						break;
 					}
 				}
@@ -879,8 +894,8 @@ bool TileEngine::canTargetTile(Position *originVoxel, Tile *tile, int part, Posi
 		scanVoxel->z = targetVoxel.z + centerZ + heightFromCenter[j];
 		for (int i = 0; i < spiralCount; ++i)
 		{
-			scanVoxel->x = targetVoxel.x + spiralArray[i*2];
-			scanVoxel->y = targetVoxel.y + spiralArray[i*2+1];
+			scanVoxel->x = targetVoxel.x + spiralArray[i * 2];
+			scanVoxel->y = targetVoxel.y + spiralArray[i * 2 + 1];
 
 			_trajectory.clear();
 
@@ -905,7 +920,7 @@ bool TileEngine::canTargetTile(Position *originVoxel, Tile *tile, int part, Posi
  * (used when terrain has changed, which can reveal new parts of terrain or units).
  * @param position, Position of the changed terrain.
  */
-void TileEngine::calculateFOV(const Position &position)
+void TileEngine::calculateFOV(const Position& position)
 {
 	for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 	{
@@ -914,99 +929,6 @@ void TileEngine::calculateFOV(const Position &position)
 			calculateFOV(*i);
 		}
 	}
-}
-
-/**
- * Checks if a sniper from the opposing faction sees this unit. The unit with the
- * highest reaction score will be compared with the current unit's reaction score.
- * If it's higher, a shot is fired when enough time units, a weapon and ammo are available.
- * @param unit The unit to check reaction fire upon.
- * @return True if reaction fire took place.
- */
-bool TileEngine::checkReactionFire(BattleUnit* unit)
-{
-	//	Log(LOG_INFO) << "Battlescape/TileEngine.cpp checkReactionFire() vs." << unit->getId();	// kL
-
-	// reaction fire only triggered when the actioning unit is of the currently playing side, and is still on the map (alive)
-	if (unit->getFaction() != _save->getSide() || unit->getTile() == 0)
-	{
-//		Log(LOG_INFO) << ". vs getSide() = invalid";	// kL
-
-		return false;
-	}
-
-//kL	std::vector<BattleUnit *> spotters = getSpottingUnits(unit);	// kL_note: move below
-	bool result = false;
-
-	// not mind controlled, or controlled by the player
-	// kL. If spotted unit is not mind controlled,
-	// or is mind controlled but not an alien;
-	// ie, never reaction fire on a mind-controlled xCom soldier;
-	// SHOOT!!!!
-	if (unit->getFaction() == unit->getOriginalFaction()
-		|| unit->getFaction() != FACTION_HOSTILE)
-	{
-//		Log(LOG_INFO) << ". Target = VALID";	// kL
-		std::vector<BattleUnit* > spotters = getSpottingUnits(unit);	// kL, from above.
-
-//		Log(LOG_INFO) << ". # spotters = " << spotters.size();		// kL
-
-		// get the first man up to bat.
-		BattleUnit* reactor = getReactor(spotters, unit);
-		// start iterating through the possible reactors until the current unit is the one with the highest score.
-		while (reactor != unit)
-		{
-			if (!tryReactionSnap(reactor, unit))
-			{
-//				Log(LOG_INFO) << ". . no Snap by : " << reactor->getId();		// kL
-
-//				break;															// kL
-				// can't make a reaction snapshot for whatever reason, boot this guy from the vector.
-				for (std::vector<BattleUnit* >::iterator i = spotters.begin(); i != spotters.end(); ++i)
-//			}
-//			else	// kL
-				{
-//					Log(LOG_INFO) << ". . Snap by : " << reactor->getId();		// kL
-//					result = true;		// kL
-//				}
-					if (*i == reactor)
-					{
-						spotters.erase(i);
-						break;
-					}
-//				reactor = getReactor(spotters, unit);
-//kL				result = true;
-//				if (reactor == unit)
-//					break;
-			// kL_begin:
-//			for (std::vector<BattleUnit* >::iterator i = spotters.begin(); i != spotters.end(); ++i)
-//			{
-//				if (reactor == unit) continue;
-//				if (tryReactionSnap(reactor, unit))
-//				{
-//					Log(LOG_INFO) << ". . Snap by : " << reactor->getId();		// kL
-					result = true;
-				}
-				// avoid setting result to true, but carry on, just cause one unit can't react doesn't mean the rest of the units in the vector (if any) can't
-				reactor = getReactor(spotters, unit);
-				continue;
-//				reactor = getReactor(spotters, unit);
-//				if (reactor == unit)
-//				{
-//					Log(LOG_INFO) << ". . . unit has regained Initiative !";		// kL
-
-//					break;
-				}
-			// nice shot, kid. don't get cocky.
-			reactor = getReactor(spotters, unit);
-			result = true;
-		}
-//			}
-//			// kL_end.
-//		else Log(LOG_INFO) << ". . Reactor == unit, EXIT false";		// kL
-	}
-
-	return result;
 }
 
 /**
@@ -1035,13 +957,8 @@ std::vector<BattleUnit *> TileEngine::getSpottingUnits(BattleUnit* unit)
 			bool gotHit = aggro != 0 && aggro->getWasHit();
 
 			if (((*i)->checkViewSector(unit->getPosition()) || gotHit)	// spotter can actually see the target Tile, or unit got hit
-//				&& canTargetUnit(&originVoxel, tile, &targetVoxel, *i)	// can actually see the unit
-//				&& visible(*i, tile))									// kL: put some smoke & fire parameters in here
-				// can actually target the unit
-				canTargetUnit(&originVoxel, tile, &targetVoxel, *i) &&
-																		// (Wb. took this out in favor of canTargetUnit(). But does that account for Smoke? apparently not)
-				// can actually see the unit
-				visible(*i, tile))
+				&& canTargetUnit(&originVoxel, tile, &targetVoxel, *i)	// can actually target the unit
+				&& visible(*i, tile))									// can actually see the unit
 			{
 				if ((*i)->getFaction() == FACTION_PLAYER)
 				{
@@ -1065,6 +982,187 @@ std::vector<BattleUnit *> TileEngine::getSpottingUnits(BattleUnit* unit)
 
 	return spotters;
 }
+
+/**
+ * Checks the validity of a snap shot performed here.
+ * @param unit The unit to check sight from.
+ * @param target The unit to check sight TO.
+ * @return True if the target is valid.
+ */
+bool TileEngine::canMakeSnap(BattleUnit* unit, BattleUnit* target)
+{
+	BattleItem* weapon = unit->getMainHandWeapon();
+	// has a weapon
+	if (weapon
+		&& ((weapon->getRules()->getBattleType() == BT_MELEE	// has a melee weapon and is in melee range
+			&& validMeleeRange(unit, target, unit->getDirection())
+			&& unit->getTimeUnits() > unit->getActionTUs(BA_HIT, weapon))
+		|| (weapon->getRules()->getBattleType() != BT_MELEE		// has a gun capable of snap shot with ammo
+			&& weapon->getRules()->getTUSnap()
+			&& weapon->getAmmoItem()
+			&& unit->getTimeUnits() > unit->getActionTUs(BA_SNAPSHOT, weapon))))
+	{
+		Position origin = getSightOriginVoxel(unit);
+		Position scanVoxel;
+
+//kL		if (canTargetUnit(&origin, target->getTile(), &scanVoxel, unit))
+// kL_note: This is Warboy's code below, replaces condition above.
+// note that canTargetUnit() has actually already been done when
+// constructing the spotters.Vector in getSpottingUnits()
+		Position originVoxel = getSightOriginVoxel(unit);
+		originVoxel.z -= 2;
+		Position targetVoxel = getSightOriginVoxel(target);
+		targetVoxel.z -= 2;
+		std::vector<Position> trajectory;
+		if (calculateLine(originVoxel, targetVoxel, true, &trajectory, unit) == 4
+			&& trajectory.back().x / 16 == targetVoxel.x / 16
+			&& trajectory.back().y / 16 == targetVoxel.y / 16
+			&& trajectory.back().z / 24 == targetVoxel.z / 24)
+// kL_note.
+		{
+//			Log(LOG_INFO) << "canMakeSnap() " << unit->getId() << " true";		// kL
+
+			return true;
+		}
+	}
+
+//	Log(LOG_INFO) << "canMakeSnap() " << unit->getId() << " false";		// kL
+
+	return false;
+}
+
+/**
+ * Checks if a sniper from the opposing faction sees this unit. The unit with the
+ * highest reaction score will be compared with the current unit's reaction score.
+ * If it's higher, a shot is fired when enough time units, a weapon and ammo are available.
+ * @param unit The unit to check reaction fire upon.
+ * @return True if reaction fire took place.
+ */
+bool TileEngine::checkReactionFire(BattleUnit* unit)
+{
+	//	Log(LOG_INFO) << "Battlescape/TileEngine.cpp checkReactionFire() vs." << unit->getId();
+
+	// reaction fire only triggered when the actioning unit is of the currently playing side, and is still on the map (alive)
+	if (unit->getFaction() != _save->getSide() || unit->getTile() == 0)
+	{
+//		Log(LOG_INFO) << ". vs getSide() = invalid";
+
+		return false;
+	}
+
+	bool result = false;
+
+	// not mind controlled, or controlled by the player
+	// kL. If spotted unit is not mind controlled,
+	// or is mind controlled but not an alien;
+	// ie, never reaction fire on a mind-controlled xCom soldier;
+	// SHOOT!!!!
+	if (unit->getFaction() == unit->getOriginalFaction()
+		|| unit->getFaction() != FACTION_HOSTILE)
+	{
+//		Log(LOG_INFO) << ". Target = VALID";
+		std::vector<BattleUnit* > spotters = getSpottingUnits(unit);
+
+//		Log(LOG_INFO) << ". # spotters = " << spotters.size();
+
+		// get the first man up to bat.
+		BattleUnit* reactor = getReactor(spotters, unit);
+		// start iterating through the possible reactors until the current unit is the one with the highest score.
+		while (reactor != unit)
+		{
+			if (!tryReactionSnap(reactor, unit))
+			{
+//				Log(LOG_INFO) << ". . no Snap by : " << reactor->getId();
+
+				// can't make a reaction snapshot for whatever reason, boot this guy from the vector.
+				for (std::vector<BattleUnit* >::iterator i = spotters.begin(); i != spotters.end(); ++i)
+				{
+					if (*i == reactor)
+					{
+						spotters.erase(i);
+
+						break;
+					}
+				}
+
+				// avoid setting result to true, but carry on, just cause one unit can't react doesn't mean the rest of the units in the vector (if any) can't
+				reactor = getReactor(spotters, unit);
+
+				continue;
+			}
+			else	// kL
+			{
+//				Log(LOG_INFO) << ". . Snap by : " << reactor->getId();
+				result = true;		// kL
+			}
+
+//			Log(LOG_INFO) << ". . Snap by : " << reactor->getId();
+
+			// nice shot, kid. don't get cocky.
+			reactor = getReactor(spotters, unit);
+//kL			result = true;
+		}
+	}
+
+//	Log(LOG_INFO) << ". . Reactor == unit, EXIT = " << result;
+	return result;
+}
+// kL_begin: this is my prior, working TileEngine::checkReactionFire()
+/* bool TileEngine::checkReactionFire(BattleUnit* unit)
+{
+	//	Log(LOG_INFO) << "Battlescape/TileEngine.cpp checkReactionFire() vs." << unit->getId();
+
+	// reaction fire only triggered when the actioning unit is of the currently playing side, and is still on the map (alive)
+	if (unit->getFaction() != _save->getSide() || unit->getTile() == 0)
+	{
+//		Log(LOG_INFO) << ". vs getSide() = invalid";
+
+		return false;
+	}
+
+	bool result = false;
+
+	// not mind controlled, or controlled by the player
+	// kL. If spotted unit is not mind controlled,
+	// or is mind controlled but not an alien;
+	// ie, never reaction fire on a mind-controlled xCom soldier;
+	// SHOOT!!!!
+	if (unit->getFaction() == unit->getOriginalFaction()
+		|| unit->getFaction() != FACTION_HOSTILE)
+	{
+//		Log(LOG_INFO) << ". Target = VALID";
+
+		std::vector<BattleUnit* > spotters = getSpottingUnits(unit);
+
+//		Log(LOG_INFO) << ". # spotters = " << spotters.size();
+
+		BattleUnit* reactor = getReactor(spotters, unit);
+		if (reactor != unit)
+		{
+			while (true)
+			{
+				if (!tryReactionSnap(reactor, unit))
+				{
+//					Log(LOG_INFO) << ". . no Snap by : " << reactor->getId();
+					break;
+				}
+				else
+				{
+//					Log(LOG_INFO) << ". . Snap by : " << reactor->getId();
+					result = true;
+				}
+
+				reactor = getReactor(spotters, unit);
+				if (reactor == unit)
+					break;
+			}
+		}
+//		else Log(LOG_INFO) << ". . Reactor == unit, EXIT false";
+	}
+
+	return result;
+} */
+// kL_end.
 
 /**
  * Gets the unit with the highest reaction score from the spotter vector.
@@ -1104,53 +1202,6 @@ BattleUnit* TileEngine::getReactor(std::vector<BattleUnit* > spotters, BattleUni
 	}
 
 	return bu;
-}
-
-/**
- * Checks the validity of a snap shot performed here.
- * @param unit The unit to check sight from.
- * @param target The unit to check sight TO.
- * @return True if the target is valid.
- */
-bool TileEngine::canMakeSnap(BattleUnit* unit, BattleUnit* target)
-{
-	BattleItem* weapon = unit->getMainHandWeapon();
-	// has a weapon
-	if (weapon
-		&& ((weapon->getRules()->getBattleType() == BT_MELEE	// has a melee weapon and is in melee range
-			&& validMeleeRange(unit, target, unit->getDirection())
-			&& unit->getTimeUnits() > unit->getActionTUs(BA_HIT, weapon))
-		|| (weapon->getRules()->getBattleType() != BT_MELEE		// has a gun capable of snap shot with ammo
-			&& weapon->getRules()->getTUSnap()
-			&& weapon->getAmmoItem()
-			&& unit->getTimeUnits() > unit->getActionTUs(BA_SNAPSHOT, weapon))))
-	{
-		Position origin = getSightOriginVoxel(unit);
-		Position scanVoxel;
-		if (canTargetUnit(&origin, target->getTile(), &scanVoxel, unit))
-
-/*kL: This is Warboy's code below, replaces condition above.
-// note that canTargetUnit() has actually already been done when
-// constructing the spotters.Vector in getSpottingUnits()
-		Position originVoxel = getSightOriginVoxel(unit);
-		originVoxel.z -= 2;
-		Position targetVoxel = getSightOriginVoxel(target);
-		targetVoxel.z -= 2;
-		std::vector<Position> trajectory;
-		if (calculateLine(originVoxel, targetVoxel, true, &trajectory, unit) == 4
-			&& trajectory.back().x / 16 == targetVoxel.x / 16
-			&& trajectory.back().y / 16 == targetVoxel.y / 16
-			&& trajectory.back().z / 24 == targetVoxel.z / 24) */
-		{
-//			Log(LOG_INFO) << "canMakeSnap() " << unit->getId() << " true";		// kL
-
-			return true;
-		}
-	}
-
-//	Log(LOG_INFO) << "canMakeSnap() " << unit->getId() << " false";		// kL
-
-	return false;
 }
 
 /**

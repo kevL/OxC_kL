@@ -65,24 +65,40 @@ private:
 		void calculateSunShading();
 		/// Calculates sun shading of a single tile.
 		void calculateSunShading(Tile* tile);
-		/// Calculates the field of view from a units view point.
-		bool calculateFOV(BattleUnit* unit);
-		/// Calculates the field of view within range of a certain position.
-		void calculateFOV(const Position& position);
-		/// Checks reaction fire.
-		bool checkReactionFire(BattleUnit* unit);
 		/// Recalculates lighting of the battlescape for terrain.
 		void calculateTerrainLighting();
 		/// Recalculates lighting of the battlescape for units.
 		void calculateUnitLighting();
+		/// Calculates the field of view from a units view point.
+		bool calculateFOV(BattleUnit* unit);
+		/// Calculates the field of view within range of a certain position.
+		void calculateFOV(const Position& position);
+		/// Creates a vector of units that can spot this unit.
+		std::vector<BattleUnit* > getSpottingUnits(BattleUnit* unit);
+		/// Checks validity of a snap shot to this position.
+		bool canMakeSnap(BattleUnit* unit, BattleUnit* target);
+		/// Checks reaction fire.
+		bool checkReactionFire(BattleUnit* unit);
+		/// Given a vector of spotters, and a unit, picks the spotter with the highest reaction score.
+		BattleUnit* getReactor(std::vector<BattleUnit* > spotters, BattleUnit* unit);
+		/// Tries to perform a reaction snap shot to this location.
+		bool tryReactionSnap(BattleUnit* unit, BattleUnit* target);
 		/// Handles bullet/weapon hits.
 		BattleUnit* hit(const Position& center, int power, ItemDamageType type, BattleUnit* unit);
 		/// Handles explosions.
 		void explode(const Position& center, int power, ItemDamageType type, int maxRadius, BattleUnit* unit = 0);
+		/// Blows this tile up.
+		bool detonate(Tile* tile);
 		/// Checks if a destroyed tile starts an explosion.
 		Tile* checkForTerrainExplosions();
+		/// Checks the vertical blockage of a tile.
+		int verticalBlockage(Tile* startTile, Tile* endTile, ItemDamageType type);
+		/// Checks the horizontal blockage of a tile.
+		int horizontalBlockage(Tile* startTile, Tile* endTile, ItemDamageType type);
 		/// Unit opens door?
 		int unitOpensDoor(BattleUnit* unit, bool rClick = false, int dir = -1);
+		/// Opens any doors this door is connected to.
+		void checkAdjacentDoors(Position pos, int part);
 		/// Closes ufo doors.
 		int closeUfoDoors();
 		/// Calculates a line trajectory.
@@ -101,10 +117,6 @@ private:
 		int distance(const Position& pos1, const Position& pos2) const;
 		/// Checks the distance squared between two positions.
 		int distanceSq(const Position& pos1, const Position& pos2, bool considerZ = true) const;
-		/// Checks the horizontal blockage of a tile.
-		int horizontalBlockage(Tile* startTile, Tile* endTile, ItemDamageType type);
-		/// Checks the vertical blockage of a tile.
-		int verticalBlockage(Tile* startTile, Tile* endTile, ItemDamageType type);
 		/// Attempts a panic or mind control action.
 		bool psiAttack(BattleAction* action);
 		/// Applies gravity to anything that occupy this tile.
@@ -127,20 +139,8 @@ private:
 		bool isVoxelVisible(const Position& voxel);
 		/// Checks what type of voxel occupies this space.
 		int voxelCheck(const Position& voxel, BattleUnit* excludeUnit, bool excludeAllUnits = false, bool onlyVisible = false, BattleUnit* excludeAllBut = 0);
-		/// Blows this tile up.
-		bool detonate(Tile* tile);
 		/// Validates a throwing action.
 		bool validateThrow(BattleAction* action);
-		/// Opens any doors this door is connected to.
-		void checkAdjacentDoors(Position pos, int part);
-		/// Creates a vector of units that can spot this unit.
-		std::vector<BattleUnit* > getSpottingUnits(BattleUnit* unit);
-		/// Given a vector of spotters, and a unit, picks the spotter with the highest reaction score.
-		BattleUnit* getReactor(std::vector<BattleUnit* > spotters, BattleUnit* unit);
-		/// Checks validity of a snap shot to this position.
-		bool canMakeSnap(BattleUnit* unit, BattleUnit* target);
-		/// Tries to perform a reaction snap shot to this location.
-		bool tryReactionSnap(BattleUnit* unit, BattleUnit* target);
 		/// Recalculates FOV of all units in-game.
 		void recalculateFOV();
 		/// Get direction to a certain point
