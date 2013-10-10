@@ -3067,7 +3067,7 @@ bool TileEngine::validateThrow(BattleAction* action)
 		trajectory.clear();
 	}
 
-	if (AreSame(curvature, 5.f))
+	if (AreSame(curvature, 5.0))
 	{
 		return false;
 	}

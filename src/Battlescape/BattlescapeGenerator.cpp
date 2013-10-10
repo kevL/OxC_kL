@@ -681,8 +681,11 @@ void BattlescapeGenerator::deployAliens(AlienRace* race, AlienDeployment* deploy
 
 			Unit* rule = _game->getRuleset()->getUnit(alienName);
 			BattleUnit* unit = addAlien(rule, (*d).alienRank, outside);
-//kL			int itemLevel = _game->getRuleset()->getAlienItemLevels().at(month).at(RNG::generate(0, 9));	// kL_note: this is default alienItemLevels in the ruleset.
-			int itemLevel = _game->getRuleset()->getAlienItemLevels().at(month).at(RNG::generate(0, 16));		// kL. This is for my expanded alienItemLevels in the ruleset.
+
+//			Log(LOG_INFO) << "BattlescapeGenerator::deplyAliens() do getAlienItemLevels()";
+			int itemLevel = _game->getRuleset()->getAlienItemLevels().at(month).at(RNG::generate(0, 9));	// kL_note: this is default alienItemLevels in the ruleset.
+//			int itemLevel = _game->getRuleset()->getAlienItemLevels().at(month).at(RNG::generate(0, 16));	// kL. This is for my expanded alienItemLevels in the ruleset.
+//			Log(LOG_INFO) << "BattlescapeGenerator::deplyAliens() DONE getAlienItemLevels()";
 			if (unit)
 			{
 				// terrorist alien's equipment is a special case - they are fitted with a weapon which is the alien's name with suffix _WEAPON

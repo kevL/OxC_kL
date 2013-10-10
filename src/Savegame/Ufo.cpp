@@ -483,8 +483,8 @@ bool Ufo::isDestroyed() const
 void Ufo::calculateSpeed()
 {
 	MovingTarget::calculateSpeed();
-	Log(LOG_INFO) << "Ufo::calculateSpeed(), _speedLon = " << _speedLon;
-	Log(LOG_INFO) << "Ufo::calculateSpeed(), _speedLat = " << _speedLat;
+//	Log(LOG_INFO) << "Ufo::calculateSpeed(), _speedLon = " << _speedLon;
+//	Log(LOG_INFO) << "Ufo::calculateSpeed(), _speedLat = " << _speedLat;
 
 	double x = _speedLon;
 	double y = -_speedLat;
@@ -518,18 +518,18 @@ void Ufo::calculateSpeed()
 			}
 		}
 
-		Log(LOG_INFO) << ". . _dir = " << _direction;
+//		Log(LOG_INFO) << ". . _dir = " << _direction;
 		return;
 	}
 
 	double theta = atan2(y, x); // theta is radians.
-	Log(LOG_INFO) << ". . theta(rad) = " << theta;
+//	Log(LOG_INFO) << ". . theta(rad) = " << theta;
 
 	// Convert radians to degrees so i don't go bonkers;
 	// ie. KILL IT WITH FIRE!!1@!
 	// note that this is between +/- 180 deg.
 	theta = theta * 180.f / M_PI;
-	Log(LOG_INFO) << ". . theta(deg) = " << theta;
+//	Log(LOG_INFO) << ". . theta(deg) = " << theta;
 
 	if (22.5f > theta && theta > -22.5f)
 	{
@@ -564,7 +564,7 @@ void Ufo::calculateSpeed()
 		_direction = "STR_NORTH_EAST";
 	}
 
-	Log(LOG_INFO) << ". . _dir = " << _direction;
+//	Log(LOG_INFO) << ". . _dir = " << _direction;
 }
 // kL_end.
 
