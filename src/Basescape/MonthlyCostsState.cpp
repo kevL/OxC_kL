@@ -74,8 +74,8 @@ MonthlyCostsState::MonthlyCostsState(Game* game, Base* base)
 
 //kL	_txtIncome		= new Text(150, 9, 10, 136);
 //kL	_lstTotal		= new TextList(100, 9, 205, 136);
-	_txtIncome		= new Text(150, 9, 16, 162);		// kL
-	_lstTotal		= new TextList(98, 9, 206, 162);	// kL
+	_txtIncome		= new Text(150, 9, 16, 161);		// kL
+	_lstTotal		= new TextList(98, 9, 206, 161);	// kL
 
 //kL	_btnOk = new TextButton(300, 20, 10, 170);
 	_btnOk			= new TextButton(288, 16, 16, 177);	// kL

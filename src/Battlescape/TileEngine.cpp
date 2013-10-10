@@ -2638,8 +2638,8 @@ int TileEngine::distanceSq(const Position& pos1, const Position& pos2, bool cons
 
 /**
  * Attempts a panic or mind control action.
- * @param action Pointer to an action.
- * @return Whether it failed or succeeded.
+ * @param action, Pointer to an action
+ * @return, Whether it failed or succeeded
  */
 bool TileEngine::psiAttack(BattleAction* action)
 {

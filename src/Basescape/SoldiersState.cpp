@@ -78,8 +78,8 @@ SoldiersState::SoldiersState(Game* game, Base* base)
 //kL	_btnPsiTrain	= new TextButton(148, 16, 8, 176);
 	_btnPsiTrain	= new TextButton(94, 16, 16, 177);		// kL
 //kL	_btnOk			= new TextButton(isPsiBtnVisible? 148:288, 16, isPsiBtnVisible? 164:16, 176);
-	_btnOk			= new TextButton(94, 16, 113, 177);		// kL
-	_btnArmor		= new TextButton(94, 16, 210, 177);		// kL
+	_btnArmor		= new TextButton(94, 16, 113, 177);		// kL
+	_btnOk			= new TextButton(94, 16, 210, 177);		// kL
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)), Palette::backPos, 16);

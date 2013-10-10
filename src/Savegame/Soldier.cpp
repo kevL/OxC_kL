@@ -490,7 +490,7 @@ void Soldier::trainPsi1Day()
 	}
 	else // minStats.psiSkill <= 0 && _currentStats.psiSkill == minStats.psiSkill
 	{
-		_currentStats.psiSkill -= RNG::generate(30, 60);	// set initial training from 30 to 60 days
+		_currentStats.psiSkill -= RNG::generate(30, 60); // set initial training from 30 to 60 days
 	}
 }
 

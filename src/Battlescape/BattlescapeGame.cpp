@@ -170,7 +170,7 @@ void BattlescapeGame::init()
 
 /**
  * Handles the processing of the AI states of a unit.
- * @param unit Pointer to a unit.
+ * @param unit, Pointer to a unit
  */
 void BattlescapeGame::handleAI(BattleUnit* unit)
 {

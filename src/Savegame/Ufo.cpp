@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "Ufo.h"
 #include "Craft.h"
 #include "AlienMission.h"
@@ -31,6 +32,7 @@
 #include <sstream>
 #include <algorithm>
 
+
 namespace OpenXcom
 {
 
@@ -38,23 +40,37 @@ namespace OpenXcom
  * Initializes a UFO of the specified type.
  * @param rules Pointer to ruleset.
  */
-Ufo::Ufo(RuleUfo *rules)
-  : MovingTarget(), _rules(rules), _id(0), _crashId(0), _landId(0), _damage(0), _direction("STR_NORTH")
-  , _altitude("STR_HIGH_UC"), _status(FLYING), _secondsRemaining(0)
-  , _inBattlescape(false), _shotDownByCraftId(-1), _mission(0), _trajectory(0)
-  , _detected(false), _hyperDetected(false), _shootingAt(0)
+Ufo::Ufo(RuleUfo* rules)
+	:
+		MovingTarget(),
+		_rules(rules),
+		_id(0),
+		_crashId(0),
+		_landId(0),
+		_damage(0),
+		_direction("STR_NORTH"),
+		_altitude("STR_HIGH_UC"),
+		_status(FLYING),
+		_secondsRemaining(0),
+		_inBattlescape(false),
+		_shotDownByCraftId(-1),
+		_mission(0),
+		_trajectory(0),
+		_detected(false),
+		_hyperDetected(false),
+		_shootingAt(0)
 {
 }
 
 /**
- * Make sure our mission forget's us, and we only delete targets we own (waypoints).
+ * Make sure our mission forgets us, and we only delete targets we own (waypoints).
  *
  */
 Ufo::~Ufo()
 {
-	for (std::vector<Target*>::iterator i = _followers.begin(); i != _followers.end();)
+	for (std::vector<Target* >::iterator i = _followers.begin(); i != _followers.end();)
 	{
-		Craft *c = dynamic_cast<Craft*>(*i);
+		Craft* c = dynamic_cast<Craft* >(*i);
 		if (c)
 		{
 			c->returnToBase();
@@ -65,13 +81,15 @@ Ufo::~Ufo()
 			 ++i;
 		}
 	}
+
 	if (_mission)
 	{
 		_mission->decreaseLiveUfos();
 	}
+
 	if (_dest)
 	{
-		Waypoint *wp = dynamic_cast<Waypoint*>(_dest);
+		Waypoint* wp = dynamic_cast<Waypoint* >(_dest);
 		if (wp != 0)
 		{
 			delete _dest;
@@ -83,15 +101,26 @@ Ufo::~Ufo()
 /**
  * Match AlienMission based on the unique ID.
  */
-class matchMissionID: public std::unary_function<const AlienMission *, bool>
+class matchMissionID
+	:
+		public std::unary_function<const AlienMission*, bool>
 {
-public:
-	/// Store ID for later comparisons.
-	matchMissionID(int id) : _id(id) { /* Empty by design. */ }
-	/// Match with stored ID.
-	bool operator()(const AlienMission *am) const { return am->getId() == _id; }
 private:
 	int _id;
+
+	public:
+		/// Store ID for later comparisons.
+		matchMissionID(int id)
+			:
+				_id(id)
+		{
+			/* Empty by design. */
+		}
+		/// Match with stored ID.
+		bool operator()(const AlienMission* am) const
+		{
+			return am->getId() == _id;
+		}
 };
 
 /**
@@ -100,22 +129,24 @@ private:
  * @param ruleset The game rules. Use to access the trajectory rules.
  * @param game The game data. Used to find the UFO's mission.
  */
-void Ufo::load(const YAML::Node &node, const Ruleset &ruleset, SavedGame &game)
+void Ufo::load(const YAML::Node& node, const Ruleset& ruleset, SavedGame& game)
 {
 	MovingTarget::load(node);
-	_id = _crashId = _landId = node["id"].as<int>(_id);
-	_crashId = node["crashId"].as<int>(_crashId);
-	_landId = node["landId"].as<int>(_landId);
-	_damage = node["damage"].as<int>(_damage);
-	_altitude = node["altitude"].as<std::string>(_altitude);
-	_direction = node["direction"].as<std::string>(_direction);
-	_detected = node["detected"].as<bool>(_detected);
-	_hyperDetected = node["hyperDetected"].as<bool>(_hyperDetected);
-	_secondsRemaining = node["secondsRemaining"].as<int>(_secondsRemaining);
-	_inBattlescape = node["inBattlescape"].as<bool>(_inBattlescape);
+
+	_id					= _crashId = _landId = node["id"].as<int>(_id);
+	_crashId			= node["crashId"].as<int>(_crashId);
+	_landId				= node["landId"].as<int>(_landId);
+	_damage				= node["damage"].as<int>(_damage);
+	_altitude			= node["altitude"].as<std::string>(_altitude);
+	_direction			= node["direction"].as<std::string>(_direction);
+	_detected			= node["detected"].as<bool>(_detected);
+	_hyperDetected		= node["hyperDetected"].as<bool>(_hyperDetected);
+	_secondsRemaining	= node["secondsRemaining"].as<int>(_secondsRemaining);
+	_inBattlescape		= node["inBattlescape"].as<bool>(_inBattlescape);
+
 	double lon = _lon;
 	double lat = _lat;
-	if (const YAML::Node &dest = node["dest"])
+	if (const YAML::Node& dest = node["dest"])
 	{
 		lon = dest["lon"].as<double>();
 		lat = dest["lat"].as<double>();
@@ -123,7 +154,8 @@ void Ufo::load(const YAML::Node &node, const Ruleset &ruleset, SavedGame &game)
 	_dest = new Waypoint();
 	_dest->setLongitude(lon);
 	_dest->setLatitude(lat);
-	if (const YAML::Node &status = node["status"])
+
+	if (const YAML::Node& status = node["status"])
 	{
 		_status = (UfoStatus)status.as<int>();
 	}
@@ -146,8 +178,9 @@ void Ufo::load(const YAML::Node &node, const Ruleset &ruleset, SavedGame &game)
 			_status = FLYING;
 		}
 	}
-	int missionID = node["mission"].as<int>();
-	std::vector<AlienMission *>::const_iterator found = std::find_if(game.getAlienMissions().begin(), game.getAlienMissions().end(), matchMissionID(missionID));
+
+	int missionID		= node["mission"].as<int>();
+	std::vector<AlienMission* >::const_iterator found = std::find_if(game.getAlienMissions().begin(), game.getAlienMissions().end(), matchMissionID(missionID));
 	if (found == game.getAlienMissions().end())
 	{
 		// Corrupt save file.
@@ -155,9 +188,10 @@ void Ufo::load(const YAML::Node &node, const Ruleset &ruleset, SavedGame &game)
 	}
 	_mission = *found;
 
-	std::string tid = node["trajectory"].as<std::string>();
-	_trajectory = ruleset.getUfoTrajectory(tid);
-	_trajectoryPoint = node["trajectoryPoint"].as<unsigned>(_trajectoryPoint);
+	std::string tid		= node["trajectory"].as<std::string>();
+	_trajectory			= ruleset.getUfoTrajectory(tid);
+	_trajectoryPoint	= node["trajectoryPoint"].as<unsigned>(_trajectoryPoint);
+
 	if (_inBattlescape)
 		setSpeed(0);
 }
@@ -169,31 +203,33 @@ void Ufo::load(const YAML::Node &node, const Ruleset &ruleset, SavedGame &game)
 YAML::Node Ufo::save() const
 {
 	YAML::Node node = MovingTarget::save();
-	node["type"] = _rules->getType();
-	node["id"] = _id;
+
+	node["type"]		= _rules->getType();
+	node["id"]			= _id;
 	if (_crashId)
 	{
-		node["crashId"] = _crashId;
+		node["crashId"]	= _crashId;
 	}
 	else if (_landId)
 	{
-		node["landId"] = _landId;
+		node["landId"]	= _landId;
 	}
-	node["damage"] = _damage;
-	node["altitude"] = _altitude;
-	node["direction"] = _direction;
-	node["status"] = (int)_status;
+	node["damage"]		= _damage;
+	node["altitude"]	= _altitude;
+	node["direction"]	= _direction;
+	node["status"]		= (int)_status;
 	if (_detected)
-		node["detected"] = _detected;
+		node["detected"]			= _detected;
 	if (_hyperDetected)
-		node["hyperDetected"] = _hyperDetected;
+		node["hyperDetected"]		= _hyperDetected;
 	if (_secondsRemaining)
-		node["secondsRemaining"] = _secondsRemaining;
+		node["secondsRemaining"]	= _secondsRemaining;
 	if (_inBattlescape)
-		node["inBattlescape"] = _inBattlescape;
-	node["mission"] = _mission->getId();
-	node["trajectory"] = _trajectory->getID();
-	node["trajectoryPoint"] = _trajectoryPoint;
+		node["inBattlescape"]		= _inBattlescape;
+	node["mission"]			= _mission->getId();
+	node["trajectory"]		= _trajectory->getID();
+	node["trajectoryPoint"]	= _trajectoryPoint;
+
 	return node;
 }
 
@@ -204,8 +240,10 @@ YAML::Node Ufo::save() const
 YAML::Node Ufo::saveId() const
 {
 	YAML::Node node = MovingTarget::saveId();
-	node["type"] = "STR_UFO";
-	node["id"] = _id;
+
+	node["type"]	= "STR_UFO";
+	node["id"]		= _id;
+
 	return node;
 }
 
@@ -213,7 +251,7 @@ YAML::Node Ufo::saveId() const
  * Returns the ruleset for the UFO's type.
  * @return Pointer to ruleset.
  */
-RuleUfo *Ufo::getRules() const
+RuleUfo* Ufo::getRules() const
 {
 	return _rules;
 }
@@ -242,22 +280,24 @@ void Ufo::setId(int id)
  * @param lang Language to get strings from.
  * @return Full name.
  */
-std::wstring Ufo::getName(Language *lang) const
+std::wstring Ufo::getName(Language* lang) const
 {
 	switch (_status)
 	{
-	case FLYING:
-	case DESTROYED: // Destroyed also means leaving Earth.
-		return lang->getString("STR_UFO_").arg(_id);
+		case FLYING:
+		case DESTROYED: // Destroyed also means leaving Earth.
+			return lang->getString("STR_UFO_").arg(_id);
 		break;
-	case LANDED:
-		return lang->getString("STR_LANDING_SITE_").arg(_landId);
+		case LANDED:
+			return lang->getString("STR_LANDING_SITE_").arg(_landId);
 		break;
-	case CRASHED:
-		return lang->getString("STR_CRASH_SITE_").arg(_crashId);
+		case CRASHED:
+			return lang->getString("STR_CRASH_SITE_").arg(_crashId);
 		break;
-	default:
-		return L"";
+
+		default:
+			return L"";
+		break;
 	}
 }
 
@@ -281,6 +321,7 @@ void Ufo::setDamage(int damage)
 	{
 		_damage = 0;
 	}
+
 	if (_damage >= _rules->getMaxDamage())
 	{
 		_status = DESTROYED;
@@ -353,7 +394,7 @@ std::string Ufo::getAltitude() const
  * Changes the current altitude of the UFO.
  * @param altitude Altitude.
  */
-void Ufo::setAltitude(const std::string &altitude)
+void Ufo::setAltitude(const std::string& altitude)
 {
 	_altitude = altitude;
 	if (_altitude != "STR_GROUND")
@@ -373,7 +414,7 @@ void Ufo::setAltitude(const std::string &altitude)
  */
 bool Ufo::isCrashed() const
 {
-	return (_damage > _rules->getMaxDamage() / 2);
+	return _damage > _rules->getMaxDamage() / 2;
 }
 
 /**
@@ -383,16 +424,19 @@ bool Ufo::isCrashed() const
  */
 bool Ufo::isDestroyed() const
 {
-	return (_damage >= _rules->getMaxDamage());
+	return _damage >= _rules->getMaxDamage();
 }
 
 /**
  * Calculates the direction for the UFO based
  * on the current raw speed and destination.
  */
-void Ufo::calculateSpeed()
+/*kL void Ufo::calculateSpeed()
 {
 	MovingTarget::calculateSpeed();
+	Log(LOG_INFO) << "Ufo::calculateSpeed(), _speedLon = " << _speedLon;
+	Log(LOG_INFO) << "Ufo::calculateSpeed(), _speedLat = " << _speedLat;
+
 	if (_speedLon > 0)
 	{
 		if (_speedLat > 0)
@@ -434,7 +478,95 @@ void Ufo::calculateSpeed()
 			_direction = "STR_NORTH";
 		}
 	}
+} */
+// kL_begin: Ufo::calculateSpeed() adv.
+void Ufo::calculateSpeed()
+{
+	MovingTarget::calculateSpeed();
+	Log(LOG_INFO) << "Ufo::calculateSpeed(), _speedLon = " << _speedLon;
+	Log(LOG_INFO) << "Ufo::calculateSpeed(), _speedLat = " << _speedLat;
+
+	double x = _speedLon;
+	double y = -_speedLat;
+
+	if (x == 0.f || y == 0.f)
+	{
+		if (x == 0.f && y == 0.f)
+		{
+			_direction = "STR_NONE_UC";
+		}
+		else if (x == 0.f)
+		{
+			if (y > 0.f)
+			{
+				_direction = "STR_NORTH";
+			}
+			else if (y < 0.f)
+			{
+				_direction = "STR_SOUTH";
+			}
+		}
+		else if (y == 0.f)
+		{
+			if (x > 0.f)
+			{
+				_direction = "STR_EAST";
+			}
+			else if (x < 0.f)
+			{
+				_direction = "STR_WEST";
+			}
+		}
+
+		Log(LOG_INFO) << ". . _dir = " << _direction;
+		return;
+	}
+
+	double theta = atan2(y, x); // theta is radians.
+	Log(LOG_INFO) << ". . theta(rad) = " << theta;
+
+	// Convert radians to degrees so i don't go bonkers;
+	// ie. KILL IT WITH FIRE!!1@!
+	// note that this is between +/- 180 deg.
+	theta = theta * 180.f / M_PI;
+	Log(LOG_INFO) << ". . theta(deg) = " << theta;
+
+	if (22.5f > theta && theta > -22.5f)
+	{
+		_direction = "STR_EAST";
+	}
+	else if (-22.5f > theta && theta > -67.5f)
+	{
+		_direction = "STR_SOUTH_EAST";
+	}
+	else if (-67.5f > theta && theta > -112.5f)
+	{
+		_direction = "STR_SOUTH";
+	}
+	else if (-112.5f > theta && theta > -157.5f)
+	{
+		_direction = "STR_SOUTH_WEST";
+	}
+	else if (-157.5f > theta || theta > 157.5f)
+	{
+		_direction = "STR_WEST";
+	}
+	else if (157.5f > theta && theta > 112.5f)
+	{
+		_direction = "STR_NORTH_WEST";
+	}
+	else if (112.5f > theta && theta > 67.5f)
+	{
+		_direction = "STR_NORTH";
+	}
+	else
+	{
+		_direction = "STR_NORTH_EAST";
+	}
+
+	Log(LOG_INFO) << ". . _dir = " << _direction;
 }
+// kL_end.
 
 /**
  * Moves the UFO to its destination.
@@ -443,27 +575,27 @@ void Ufo::think()
 {
 	switch (_status)
 	{
-	case FLYING:
-		move();
-		if (reachedDestination())
-		{
-			// Prevent further movement.
-			setSpeed(0);
-		}
+		case FLYING:
+			move();
+			if (reachedDestination())
+			{
+				// Prevent further movement.
+				setSpeed(0);
+			}
 		break;
-	case LANDED:
-		assert(_secondsRemaining >= 5 && "Wrong time management.");
-		_secondsRemaining -= 5;
+		case LANDED:
+			assert(_secondsRemaining >= 5 && "Wrong time management.");
+			_secondsRemaining -= 5;
 		break;
-	case CRASHED:
-		if (!_detected)
-		{
-			_detected = true;
-		}
-		// This gets handled in GeoscapeState::time30Minutes()
-		// Because the original game processes it every 30 minutes!
-	case DESTROYED:
-		// Do nothing
+		case CRASHED:
+			// This gets handled in GeoscapeState::time30Minutes()
+			// Because the original game processes it every 30 minutes!
+			if (!_detected)
+			{
+				_detected = true;
+			}
+		case DESTROYED:
+			// Do nothing
 		break;
 	}
 }
@@ -485,6 +617,7 @@ void Ufo::setInBattlescape(bool inbattle)
 {
 	if (inbattle)
 		setSpeed(0);
+
 	_inBattlescape = inbattle;
 }
 
@@ -492,7 +625,7 @@ void Ufo::setInBattlescape(bool inbattle)
  * Returns the alien race currently residing in the UFO.
  * @return Alien race.
  */
-const std::string &Ufo::getAlienRace() const
+const std::string& Ufo::getAlienRace() const
 {
 	return _mission->getRace();
 }
@@ -508,15 +641,13 @@ int Ufo::getShotDownByCraftId() const
 }
 
 /**
- * Returns a UFO's visibility to radar detection.
- * The UFO's size and altitude affect the chances
- * of it being detected by radars.
- * @return Visibility modifier.
+ * Returns a UFO's visibility to radar detection. The UFO's size and
+ * altitude affect the chances of it being detected by radars.
+ * @return, Visibility modifier.
  */
 int Ufo::getVisibility() const
 {
-	int size = 0;
-	// size = 15*(3-ufosize);
+	int size = 0; // size = 15*(3-ufosize);
 	if (_rules->getSize() == "STR_VERY_SMALL")
 		size = -30;
 	else if (_rules->getSize() == "STR_SMALL")
@@ -548,22 +679,22 @@ int Ufo::getVisibility() const
  * Returns the Mission type of the UFO.
  * @return Mission.
  */
-const std::string &Ufo::getMissionType() const
+const std::string& Ufo::getMissionType() const
 {
 	return _mission->getType();
 }
 
 /**
  * Sets the mission information of the UFO.
- * The UFO will start at the first point of the trajectory. The actual UFO
- * information is not changed here, this only sets the information kept on
- * behalf of the mission.
- * @param mission Pointer to the actual mission object.
- * @param trajectory Pointer to the actual mission trajectory.
+ * The UFO will start at the first point of the trajectory. The actual UFO information
+ * is not changed here, this only sets the information kept on behalf of the mission.
+ * @param mission, Pointer to the actual mission object.
+ * @param trajectory, Pointer to the actual mission trajectory.
  */
-void Ufo::setMissionInfo(AlienMission *mission, const UfoTrajectory *trajectory)
+void Ufo::setMissionInfo(AlienMission* mission, const UfoTrajectory* trajectory)
 {
 	assert(!_mission && mission && trajectory);
+
 	_mission = mission;
 	_mission->increaseLiveUfos();
 	_trajectoryPoint = 0;
@@ -592,40 +723,60 @@ void Ufo::setHyperDetected(bool hyperdetected)
  * Handle destination changes, making sure to delete old waypoint destinations.
  * @param dest Pointer to the new destination.
  */
-void Ufo::setDestination(Target *dest)
+void Ufo::setDestination(Target* dest)
 {
-	Waypoint *old = dynamic_cast<Waypoint*>(_dest);
+	Waypoint* old = dynamic_cast<Waypoint* >(_dest);
 	MovingTarget::setDestination(dest);
+
 	delete old;
 }
 
+/**
+ *
+ */
 int Ufo::getShootingAt() const
 {
 	return _shootingAt;
 }
 
+/**
+ *
+ */
 void Ufo::setShootingAt(int target)
 {
 	_shootingAt = target;
 }
-/// Gets the UFO's landing site ID.
+
+/**
+ * Gets the UFO's landing site ID.
+ */
 int Ufo::getLandId() const
 {
 	return _landId;
 }
-/// Sets the UFO's landing site ID.
+
+/**
+ * Sets the UFO's landing site ID.
+ */
 void Ufo::setLandId(int id)
 {
 	_landId = id;
 }
-/// Gets the UFO's crash site ID.
+
+/**
+ * Gets the UFO's crash site ID.
+ */
 int Ufo::getCrashId() const
 {
 	return _crashId;
 }
-/// Sets the UFO's crash site ID.
+
+/**
+ * Sets the UFO's crash site ID.
+ */
 void Ufo::setCrashId(int id)
 {
 	_crashId = id;
 }
+
 }

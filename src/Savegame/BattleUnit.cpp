@@ -2018,8 +2018,8 @@ bool BattleUnit::postMissionProcedures(SavedGame* geoscape)
 
 	UnitStats* stats = s->getCurrentStats();
 	const UnitStats caps = s->getRules()->getStatCaps();
-	int healthLoss = stats->health - _health;
 
+	int healthLoss = stats->health - _health;
 	s->setWoundRecovery(RNG::generate(healthLoss * 0.5, healthLoss * 1.5));
 
 	if (_expBravery && stats->bravery < caps.bravery)
@@ -2060,7 +2060,7 @@ bool BattleUnit::postMissionProcedures(SavedGame* geoscape)
 		int v = caps.tu - stats->tu;
 
 //kL		if (v > 0) stats->tu += RNG::generate(0, v/10 + 2);
-		if (v > 0) stats->tu += RNG::generate(0, (v / 10) + 2) -1;		// kL
+		if (v > 0) stats->tu += RNG::generate(0, (v / 10) + 2) -1;			// kL
 
 		v = caps.health - stats->health;
 //kL		if (v > 0) stats->health += RNG::generate(0, v/10 + 2);
@@ -2068,7 +2068,7 @@ bool BattleUnit::postMissionProcedures(SavedGame* geoscape)
 
 		v = caps.strength - stats->strength;
 //kL		if (v > 0) stats->strength += RNG::generate(0, v/10 + 2);
-		if (v > 0) stats->strength += RNG::generate(0, (v / 10) + 2) -1;		// kL
+		if (v > 0) stats->strength += RNG::generate(0, (v / 10) + 2) -1;	// kL
 
 		v = caps.stamina - stats->stamina;
 //kL		if (v > 0) stats->stamina += RNG::generate(0, v/10 + 2);

@@ -53,13 +53,13 @@ ConfirmDestinationState::ConfirmDestinationState(Game* game, Craft* craft, Targe
 	Waypoint* w = dynamic_cast<Waypoint* >(_target);
 	_screen = false;
 
-	// Create objects
 	_window		= new Window(this, 224, 72, 16, 64);
-	_btnOk		= new TextButton(50, 12, 68, 104);
-	_btnCancel	= new TextButton(50, 12, 138, 104);
+
 	_txtTarget	= new Text(214, 32, 21, 72);
 
-	// Set palette
+	_btnOk		= new TextButton(50, 12, 68, 104);
+	_btnCancel	= new TextButton(50, 12, 138, 104);
+
 	if (w != 0 && w->getId() == 0)
 	{
 		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
@@ -70,13 +70,12 @@ ConfirmDestinationState::ConfirmDestinationState(Game* game, Craft* craft, Targe
 	}
 
 	add(_window);
+	add(_txtTarget);
 	add(_btnOk);
 	add(_btnCancel);
-	add(_txtTarget);
 
 	centerAllSurfaces();
 
-	// Set up objects
 	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK12.SCR"));
 
@@ -98,7 +97,7 @@ ConfirmDestinationState::ConfirmDestinationState(Game* game, Craft* craft, Targe
 
 	if (w != 0 && w->getId() == 0)
 	{
-		_txtTarget->setText(tr("STR_TARGET").arg(tr("STR_WAY_POINT")));
+		_txtTarget->setText(tr("STR_TARGET_WAY_POINT"));
 	}
 	else
 	{
