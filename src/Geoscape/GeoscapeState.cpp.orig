@@ -199,7 +199,7 @@ GeoscapeState::GeoscapeState(Game* game)
 
 	_timeSpeed = _btn5Secs;
 //kL	_timer = new Timer(100);
-	_timer = new Timer(120);	// kL
+	_timer = new Timer(80);	// kL
 
 	_zoomInEffectTimer	= new Timer(50);
 	_zoomOutEffectTimer	= new Timer(50);
@@ -782,6 +782,7 @@ void GeoscapeState::timeAdvance()
  */
 void GeoscapeState::time5Seconds()
 {
+//	Log(LOG_INFO) << "GeoscapeState::time5Seconds()";
 	// Game over if there are no more bases.
 	if (_game->getSavedGame()->getBases()->empty())
 	{
@@ -1136,8 +1137,8 @@ class DetectXCOMBase
 		/// Attempt detection
 		bool operator()(const Ufo* ufo) const;
 
-	private:
-		const Base& _base; // !< The target base.
+private:
+	const Base& _base; // !< The target base.
 };
 
 /**
@@ -1145,43 +1146,19 @@ class DetectXCOMBase
  * @param ufo, Pointer to the UFO attempting detection.
  * @return, If the base is detected by @a ufo.
  */
-bool DetectXCOMBase::operator()(const Ufo *ufo) const
+bool DetectXCOMBase::operator()(const Ufo* ufo) const
 {
-<<<<<<< HEAD
-	// only UFOs on retaliation missions actively scan for bases
-	if (ufo->getMissionType() != "STR_ALIEN_RETALIATION"
-			&& !Options::getBool("aggressiveRetaliation"))
-		return false;
+	if ((ufo->getMissionType() != "STR_ALIEN_RETALIATION"
+			&& !Options::getBool("aggressiveRetaliation"))					// only UFOs on retaliation missions actively scan for bases
+		|| ufo->getTrajectory().getID() == "__RETALIATION_ASSAULT_RUN"		// UFOs attacking a base don't detect!
+		|| ufo->isCrashed()													// Crashed UFOs don't detect!
+		|| _base.getDistance(ufo) > 80 * (1 / 60.0) * (M_PI / 180.0))		// UFOs have a detection range of 80 XCOM units.
 
-	// UFOs attacking a base don't detect!
-	if (ufo->getTrajectory().getID() == "__RETALIATION_ASSAULT_RUN")
 	{
 		return false;
 	}
 
-	if (ufo->getStatus() != STATUS_FLYING)
-	{
-		return false;
-	}
-
-	// UFOs have a detection range of 80 XCOM units.
-	if (_base.getDistance(ufo) >= 80 * (1 / 60.f) * (M_PI / 180.f))
-	{
-		return false;
-	}
-
-//kL	return (int)_base.getDetectionChance() < RNG::generate(0, 99);
-	return RNG::generate(0, 99) < (int)_base.getDetectionChance();		// kL
-=======
-	if ((ufo->getMissionType() != "STR_ALIEN_RETALIATION" && !Options::getBool("aggressiveRetaliation")) || // only UFOs on retaliation missions actively scan for bases
-		ufo->getTrajectory().getID() == "__RETALIATION_ASSAULT_RUN" || 	                                    // UFOs attacking a base don't detect!
-		ufo->isCrashed() ||                                                                                 // Crashed UFOs don't detect!
-		_base.getDistance(ufo) >= 80 * (1 / 60.0) * (M_PI / 180.0))                                         // UFOs have a detection range of 80 XCOM units.
-	{
-		return false;
-	}
 	return RNG::percent(_base.getDetectionChance());
->>>>>>> master
 }
 
 /**
@@ -1205,15 +1182,17 @@ struct SetRetaliationTarget
  */
 void GeoscapeState::time10Minutes()
 {
-	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
+//	Log(LOG_INFO) << "GeoscapeState::time10Minutes()";
+	for (std::vector<Base* >::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
 	{
 		// Fuel consumption for XCOM craft.
-		for (std::vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); ++j)
+		for (std::vector<Craft* >::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); ++j)
 		{
 			if ((*j)->getStatus() == "STR_OUT")
 			{
 				(*j)->consumeFuel();
-				if (!(*j)->getLowFuel() && (*j)->getFuel() <= (*j)->getFuelLimit())
+				if (!(*j)->getLowFuel()
+					&& (*j)->getFuel() <= (*j)->getFuelLimit())
 				{
 					(*j)->setLowFuel(true);
 					(*j)->returnToBase();
@@ -1224,21 +1203,14 @@ void GeoscapeState::time10Minutes()
 
 				if ((*j)->getDestination() == 0)
 				{
-					for(std::vector<AlienBase*>::iterator b = _game->getSavedGame()->getAlienBases()->begin(); b != _game->getSavedGame()->getAlienBases()->end(); b++)
+					for (std::vector<AlienBase*>::iterator b = _game->getSavedGame()->getAlienBases()->begin(); b != _game->getSavedGame()->getAlienBases()->end(); b++)
 					{
-<<<<<<< HEAD
-						if ((*j)->getDistance(*b) <= 1696 * (1 / 60.0) * (M_PI / 180))
-						{
-							// TODO: move the detection range to the ruleset, or use the pre-defined one (which is 600, but detection range should be 500).
-							if ((50 - ((*j)->getDistance(*b) / (1696 * (1 / 60.0) * (M_PI / 180) )) * 50 >= RNG::generate(0, 100))
-								&& !(*b)->isDiscovered())
-=======
-						double range = (1696 * (1 / 60.0) * (M_PI / 180));
+						double range = 1696 * (1 / 60.0) * (M_PI / 180);
 						if ((*j)->getDistance(*b) <= range)
 						{
 							// TODO: move the detection range to the ruleset, or use the pre-defined one (which is 600, but detection range should be 500).
-							if (RNG::percent(50-((*j)->getDistance(*b) / range) * 50) && !(*b)->isDiscovered())
->>>>>>> master
+							if (RNG::percent(50 - ((*j)->getDistance(*b) / range) * 50)
+								&& !(*b)->isDiscovered())
 							{
 								(*b)->setDiscovered(true);
 							}
@@ -1417,8 +1389,11 @@ struct expireCrashedUfo: public std::unary_function<Ufo*, void>
  */
 void GeoscapeState::time30Minutes()
 {
+//	Log(LOG_INFO) << "GeoscapeState::time30Minutes()";
+
 	// Decrease mission countdowns
 	std::for_each(_game->getSavedGame()->getAlienMissions().begin(), _game->getSavedGame()->getAlienMissions().end(), callThink(*_game, *_globe));
+//	Log(LOG_INFO) << ". . decreased mission countdowns";
 
 	// Remove finished missions
 	for (std::vector<AlienMission* >::iterator am = _game->getSavedGame()->getAlienMissions().begin(); am != _game->getSavedGame()->getAlienMissions().end(); )
@@ -1433,9 +1408,11 @@ void GeoscapeState::time30Minutes()
 			++am;
 		}
 	}
+//	Log(LOG_INFO) << ". . removed finished missions";
 
 	// Handle crashed UFOs expiration
 	std::for_each(_game->getSavedGame()->getUfos()->begin(), _game->getSavedGame()->getUfos()->end(), expireCrashedUfo());
+//	Log(LOG_INFO) << ". . handled crashed UFO expirations";
 
 	// Handle craft maintenance and alien base detection
 	for (std::vector<Base* >::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
@@ -1482,17 +1459,21 @@ void GeoscapeState::time30Minutes()
 			}
 		}
 	}
+//	Log(LOG_INFO) << ". . handled craft maintenance & alien base detection";
 
 	// Handle UFO detection and give aliens points
 	for (std::vector<Ufo* >::iterator u = _game->getSavedGame()->getUfos()->begin(); u != _game->getSavedGame()->getUfos()->end(); ++u)
 	{
+//		Log(LOG_INFO) << ". . . . for " << *u;
 		int points = 0;
 		switch ((*u)->getStatus())
 		{
 			case Ufo::LANDED:
 				points++;
+//				Log(LOG_INFO) << ". . . . . . ufo has Landed";
 			case Ufo::FLYING:
 				points++;
+//				Log(LOG_INFO) << ". . . . . . ufo is Flying";
 
 				// Get area
 				for (std::vector<Region* >::iterator k = _game->getSavedGame()->getRegions()->begin(); k != _game->getSavedGame()->getRegions()->end(); ++k)
@@ -1503,6 +1484,7 @@ void GeoscapeState::time30Minutes()
 						break;
 					}
 				}
+//				Log(LOG_INFO) << ". . . . . . get Area done";
 
 				// Get country
 				for (std::vector<Country* >::iterator k = _game->getSavedGame()->getCountries()->begin(); k != _game->getSavedGame()->getCountries()->end(); ++k)
@@ -1513,6 +1495,7 @@ void GeoscapeState::time30Minutes()
 						break;
 					}
 				}
+//				Log(LOG_INFO) << ". . . . . . get Country done";
 
 				if (!(*u)->getDetected())
 				{
@@ -1547,6 +1530,7 @@ void GeoscapeState::time30Minutes()
 //						timerReset();	// kL. Done in UfoDetectedState
 						popup(new UfoDetectedState(_game, (*u), this, true, (*u)->getHyperDetected()));
 					}
+//					Log(LOG_INFO) << ". . . . . . . not Detected done";
 				}
 				else
 				{
@@ -1563,6 +1547,7 @@ void GeoscapeState::time30Minutes()
 						{
 							detected = detected || (*c)->detect(*u);
 						}
+//						Log(LOG_INFO) << ". . . . . . . Detected done";
 					}
 
 					if (!detected)
@@ -1575,14 +1560,17 @@ void GeoscapeState::time30Minutes()
 							timerReset();	// kL
 							popup(new UfoLostState(_game, (*u)->getName(_game->getLanguage())));
 						}
+//						Log(LOG_INFO) << ". . . . . . . not Detected done 2x";
 					}
 				}
 			break;
 			case Ufo::CRASHED:
 			case Ufo::DESTROYED:
+//				Log(LOG_INFO) << ". . . . . . ufo is Crashed or Destroyed";
 			break;
 		}
 	}
+//	Log(LOG_INFO) << ". . handled UFO detection & alien points";
 
 	// Processes TerrorSites
 	for (std::vector<TerrorSite* >::iterator ts = _game->getSavedGame()->getTerrorSites()->begin();
@@ -1598,6 +1586,7 @@ void GeoscapeState::time30Minutes()
 		}
 		// kL_note: let's score TerrorSites for alien activity every hour or half-hour....
 	}
+//	Log(LOG_INFO) << ". . processed terror sites";
 }
 
 /**
@@ -1606,6 +1595,7 @@ void GeoscapeState::time30Minutes()
  */
 void GeoscapeState::time1Hour()
 {
+//	Log(LOG_INFO) << "GeoscapeState::time1Hour()";
 	// Handle craft maintenance
 	for (std::vector<Base* >::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
 	{
@@ -1706,11 +1696,7 @@ class GenerateSupplyMission
  */
 void GenerateSupplyMission::operator()(const AlienBase* base) const
 {
-<<<<<<< HEAD
-	if (RNG::generate(0, 99) < 6)
-=======
 	if (RNG::percent(6))
->>>>>>> master
 	{
 		// Spawn supply mission for this base.
 		const RuleAlienMission& rule = *_ruleset.getAlienMission("STR_ALIEN_SUPPLY");
@@ -1732,6 +1718,7 @@ void GenerateSupplyMission::operator()(const AlienBase* base) const
  */
 void GeoscapeState::time1Day()
 {
+//	Log(LOG_INFO) << "GeoscapeState::time1Day()";
 	for (std::vector<Base* >::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
 	{
 		// Handle facility construction
@@ -1915,6 +1902,7 @@ void GeoscapeState::time1Day()
  */
 void GeoscapeState::time1Month()
 {
+//	Log(LOG_INFO) << "GeoscapeState::time1Month()";
 	_game->getSavedGame()->addMonth();
 
 	int monthsPassed = _game->getSavedGame()->getMonthsPassed();
@@ -1990,12 +1978,9 @@ void GeoscapeState::time1Month()
 		bool _baseDiscovered = false;
 		for (std::vector<AlienBase* >::const_iterator b = _game->getSavedGame()->getAlienBases()->begin(); b != _game->getSavedGame()->getAlienBases()->end(); ++b)
 		{
-<<<<<<< HEAD
-			int number = RNG::generate(1, 100);
-			if (!(*b)->isDiscovered() && number <= 5 && !_baseDiscovered)
-=======
-			if(!(*b)->isDiscovered() && RNG::percent(5) && !_baseDiscovered)
->>>>>>> master
+			if (!(*b)->isDiscovered()
+				&& RNG::percent(5)
+				&& !_baseDiscovered)
 			{
 				(*b)->setDiscovered(true);
 				_baseDiscovered = true;
@@ -2461,18 +2446,21 @@ void GeoscapeState::handleBaseDefense(Base* base, Ufo* ufo)
 
 	if (base->getAvailableSoldiers(true) > 0)
 	{
+<<<<<<< HEAD
 		size_t month = _game->getSavedGame()->getMonthsPassed();
 		if (month > _game->getRuleset()->getAlienItemLevels().size()-1)
 			month = _game->getRuleset()->getAlienItemLevels().size()-1;
 
 		SavedBattleGame* bgame = new SavedBattleGame();
+=======
+		SavedBattleGame *bgame = new SavedBattleGame();
+>>>>>>> master
 		_game->getSavedGame()->setBattleGame(bgame);
 		bgame->setMissionType("STR_BASE_DEFENSE");
 
 		BattlescapeGenerator bgen = BattlescapeGenerator(_game);
 		bgen.setBase(base);
 		bgen.setAlienRace(ufo->getAlienRace());
-		bgen.setAlienItemlevel(_game->getRuleset()->getAlienItemLevels().at(month).at(RNG::generate(0,9)));
 		bgen.run();
 
 		musicStop();

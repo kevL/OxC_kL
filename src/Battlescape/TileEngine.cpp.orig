@@ -946,6 +946,7 @@ bool TileEngine::checkReactionFire(BattleUnit* unit)
 	if (unit->getFaction() == unit->getOriginalFaction()
 		|| unit->getFaction() != FACTION_HOSTILE)
 	{
+<<<<<<< HEAD
 //		Log(LOG_INFO) << ". Target = VALID";	// kL
 
 		std::vector<BattleUnit* > spotters = getSpottingUnits(unit);	// kL, from above.
@@ -954,9 +955,16 @@ bool TileEngine::checkReactionFire(BattleUnit* unit)
 
 		BattleUnit* reactor = getReactor(spotters, unit);
 		if (reactor != unit)
+=======
+		// get the first man up to bat.
+		BattleUnit *reactor = getReactor(spotters, unit);
+		// start iterating through the possible reactors until the current unit is the one with the highest score.
+		while (reactor != unit)
+>>>>>>> master
 		{
-			while (true)
+			if (!tryReactionSnap(reactor, unit))
 			{
+<<<<<<< HEAD
 				if (!tryReactionSnap(reactor, unit))
 				{
 //					Log(LOG_INFO) << ". . no Snap by : " << reactor->getId();		// kL
@@ -992,6 +1000,24 @@ bool TileEngine::checkReactionFire(BattleUnit* unit)
 				}
 			} */
 			// kL_end.
+=======
+				// can't make a reaction snapshot for whatever reason, boot this guy from the vector.
+				for (std::vector<BattleUnit *>::iterator i = spotters.begin(); i != spotters.end(); ++i)
+				{
+					if (*i == reactor)
+					{
+						spotters.erase(i);
+						break;
+					}
+				}
+				// avoid setting result to true, but carry on, just cause one unit can't react doesn't mean the rest of the units in the vector (if any) can't
+				reactor = getReactor(spotters, unit);
+				continue;
+			}
+			// nice shot, kid. don't get cocky.
+			reactor = getReactor(spotters, unit);
+			result = true;
+>>>>>>> master
 		}
 //		else Log(LOG_INFO) << ". . Reactor == unit, EXIT false";		// kL
 	}
@@ -1020,6 +1046,7 @@ std::vector<BattleUnit *> TileEngine::getSpottingUnits(BattleUnit* unit)
 			Position originVoxel = _save->getTileEngine()->getSightOriginVoxel(*i);
 			originVoxel.z -= 2;
 			Position targetVoxel;
+<<<<<<< HEAD
 
 			AlienBAIState* aggro = dynamic_cast<AlienBAIState* >((*i)->getCurrentAIState());
 			bool gotHit = aggro != 0 && aggro->getWasHit();
@@ -1028,6 +1055,16 @@ std::vector<BattleUnit *> TileEngine::getSpottingUnits(BattleUnit* unit)
 				&& canTargetUnit(&originVoxel, tile, &targetVoxel, *i)	// can actually see the unit
 				&& visible(*i, tile))									// kL: put some smoke & fire parameters in here
 																		// (Wb. took this out in favor of canTargetUnit(). But does that account for Smoke? apparently not)
+=======
+			AlienBAIState *aggro = dynamic_cast<AlienBAIState*>((*i)->getCurrentAIState());
+			bool gotHit = (aggro != 0 && aggro->getWasHit());
+				// can actually see the target Tile, or we got hit
+			if (((*i)->checkViewSector(unit->getPosition()) || gotHit) &&
+				// can actually target the unit
+				canTargetUnit(&originVoxel, tile, &targetVoxel, *i) &&
+				// can actually see the unit
+				visible(*i, tile))
+>>>>>>> master
 			{
 				if ((*i)->getFaction() == FACTION_PLAYER)
 				{
@@ -1197,14 +1234,17 @@ bool TileEngine::tryReactionSnap(BattleUnit* unit, BattleUnit* target)
 			if (action.weapon->getAmmoItem()->getRules()->getExplosionRadius()
 				&& aggro->explosiveEfficacy(action.target, unit, action.weapon->getAmmoItem()->getRules()->getExplosionRadius(), -1) == false)
 			{
+<<<<<<< HEAD
 				// don't shoot. it's too early in the game or we'll kill ourselves or someone we care about
 				// this will cause the alien to NOT actually fire, but allow the loop to continue in case someone else CAN.
 				// the unit won't get its time units back, so it won't react again this turn
+=======
+>>>>>>> master
 				action.targeting = false;
 			}
 		}
 
-		if (action.targeting && unit->spendTimeUnits(unit->getActionTUs(action.type, action.weapon)))
+		if (action.targeting && unit->spendTimeUnits(action.TU))
 		{
 			action.TU = 0;
 
@@ -2638,8 +2678,8 @@ int TileEngine::distanceSq(const Position& pos1, const Position& pos2, bool cons
 
 /**
  * Attempts a panic or mind control action.
- * @param action Pointer to an action.
- * @return Whether it failed or succeeded.
+ * @param action, Pointer to an action
+ * @return, Whether it failed or succeeded
  */
 bool TileEngine::psiAttack(BattleAction* action)
 {
@@ -2678,12 +2718,9 @@ bool TileEngine::psiAttack(BattleAction* action)
 			victim->abortTurn(); // resets unit status to STANDING
 
 			// if all units from either faction are mind controlled - auto-end the mission.
-<<<<<<< HEAD
-			if (Options::getBool("battleAutoEnd")
+			if (_save->getSide() == FACTION_PLAYER
+				&& Options::getBool("battleAutoEnd")
 				&& Options::getBool("allowPsionicCapture"))
-=======
-			if (_save->getSide() == FACTION_PLAYER && Options::getBool("battleAutoEnd") && Options::getBool("allowPsionicCapture"))
->>>>>>> master
 			{
 				int liveAliens = 0;
 				int liveSoldiers = 0;

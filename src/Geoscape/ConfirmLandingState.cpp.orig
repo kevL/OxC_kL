@@ -65,21 +65,11 @@ ConfirmLandingState::ConfirmLandingState(Game* game, Craft* craft, int texture, 
 	_screen = false;
 
 	// Create objects
-<<<<<<< HEAD
 	_window		= new Window(this, 216, 160, 20, 20, POPUP_BOTH);
 	_btnYes		= new TextButton(80, 20, 40, 150);
 	_btnNo		= new TextButton(80, 20, 136, 150);
-	_txtCraft	= new Text(206, 16, 25, 40);
-	_txtTarget	= new Text(206, 32, 25, 88);
-	_txtReady	= new Text(206, 32, 25, 56);
-	_txtBegin	= new Text(206, 16, 25, 130);
-=======
-	_window = new Window(this, 216, 160, 20, 20, POPUP_BOTH);
-	_btnYes = new TextButton(80, 20, 40, 150);
-	_btnNo = new TextButton(80, 20, 136, 150);
 	_txtMessage = new Text(206, 48, 25, 40);
-	_txtBegin = new Text(206, 16, 25, 130);
->>>>>>> master
+	_txtBegin	= new Text(206, 16, 25, 130);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(3)), Palette::backPos, 16);
@@ -136,6 +126,7 @@ void ConfirmLandingState::btnYesClick(Action* )
 {
 	_game->popState();
 	_state->musicStop();
+<<<<<<< HEAD
 
 	Ufo* u = dynamic_cast<Ufo* >(_craft->getDestination());
 	TerrorSite* t = dynamic_cast<TerrorSite* >(_craft->getDestination());
@@ -144,6 +135,11 @@ void ConfirmLandingState::btnYesClick(Action* )
 	size_t month = _game->getSavedGame()->getMonthsPassed();
 	if (month > _game->getRuleset()->getAlienItemLevels().size() - 1)
 		month = _game->getRuleset()->getAlienItemLevels().size() - 1;
+=======
+	Ufo* u = dynamic_cast<Ufo*>(_craft->getDestination());
+	TerrorSite* t = dynamic_cast<TerrorSite*>(_craft->getDestination());
+	AlienBase* b = dynamic_cast<AlienBase*>(_craft->getDestination());
+>>>>>>> master
 
 	SavedBattleGame* bgame = new SavedBattleGame();
 	_game->getSavedGame()->setBattleGame(bgame);
@@ -180,8 +176,11 @@ void ConfirmLandingState::btnYesClick(Action* )
 	{
 		throw Exception("No mission available!");
 	}
+<<<<<<< HEAD
 
 	bgen.setAlienItemlevel(_game->getRuleset()->getAlienItemLevels().at(month).at(RNG::generate(0, 9)));
+=======
+>>>>>>> master
 	bgen.run();
 
 	_game->pushState(new BriefingState(_game, _craft));

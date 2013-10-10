@@ -947,52 +947,62 @@ bool TileEngine::checkReactionFire(BattleUnit* unit)
 		|| unit->getFaction() != FACTION_HOSTILE)
 	{
 //		Log(LOG_INFO) << ". Target = VALID";	// kL
-
 		std::vector<BattleUnit* > spotters = getSpottingUnits(unit);	// kL, from above.
 
 //		Log(LOG_INFO) << ". # spotters = " << spotters.size();		// kL
 
+		// get the first man up to bat.
 		BattleUnit* reactor = getReactor(spotters, unit);
-		if (reactor != unit)
+		// start iterating through the possible reactors until the current unit is the one with the highest score.
+		while (reactor != unit)
 		{
-			while (true)
+			if (!tryReactionSnap(reactor, unit))
 			{
-				if (!tryReactionSnap(reactor, unit))
-				{
-//					Log(LOG_INFO) << ". . no Snap by : " << reactor->getId();		// kL
-					break;
-				}
-				else	// kL
+//				Log(LOG_INFO) << ". . no Snap by : " << reactor->getId();		// kL
+
+//				break;															// kL
+				// can't make a reaction snapshot for whatever reason, boot this guy from the vector.
+				for (std::vector<BattleUnit* >::iterator i = spotters.begin(); i != spotters.end(); ++i)
+//			}
+//			else	// kL
 				{
 //					Log(LOG_INFO) << ". . Snap by : " << reactor->getId();		// kL
-					result = true;		// kL
-				}
-
-				reactor = getReactor(spotters, unit);
+//					result = true;		// kL
+//				}
+					if (*i == reactor)
+					{
+						spotters.erase(i);
+						break;
+					}
+//				reactor = getReactor(spotters, unit);
 //kL				result = true;
-				if (reactor == unit)
-					break;
-			}
+//				if (reactor == unit)
+//					break;
 			// kL_begin:
-/*			for (std::vector<BattleUnit* >::iterator i = spotters.begin(); i != spotters.end(); ++i)
-			{
+//			for (std::vector<BattleUnit* >::iterator i = spotters.begin(); i != spotters.end(); ++i)
+//			{
 //				if (reactor == unit) continue;
-				if (tryReactionSnap(reactor, unit))
-				{
+//				if (tryReactionSnap(reactor, unit))
+//				{
 //					Log(LOG_INFO) << ". . Snap by : " << reactor->getId();		// kL
 					result = true;
 				}
-
+				// avoid setting result to true, but carry on, just cause one unit can't react doesn't mean the rest of the units in the vector (if any) can't
 				reactor = getReactor(spotters, unit);
-				if (reactor == unit)
-				{
+				continue;
+//				reactor = getReactor(spotters, unit);
+//				if (reactor == unit)
+//				{
 //					Log(LOG_INFO) << ". . . unit has regained Initiative !";		// kL
 
-					break;
+//					break;
 				}
-			} */
-			// kL_end.
+			// nice shot, kid. don't get cocky.
+			reactor = getReactor(spotters, unit);
+			result = true;
 		}
+//			}
+//			// kL_end.
 //		else Log(LOG_INFO) << ". . Reactor == unit, EXIT false";		// kL
 	}
 
@@ -1025,9 +1035,13 @@ std::vector<BattleUnit *> TileEngine::getSpottingUnits(BattleUnit* unit)
 			bool gotHit = aggro != 0 && aggro->getWasHit();
 
 			if (((*i)->checkViewSector(unit->getPosition()) || gotHit)	// spotter can actually see the target Tile, or unit got hit
-				&& canTargetUnit(&originVoxel, tile, &targetVoxel, *i)	// can actually see the unit
-				&& visible(*i, tile))									// kL: put some smoke & fire parameters in here
+//				&& canTargetUnit(&originVoxel, tile, &targetVoxel, *i)	// can actually see the unit
+//				&& visible(*i, tile))									// kL: put some smoke & fire parameters in here
+				// can actually target the unit
+				canTargetUnit(&originVoxel, tile, &targetVoxel, *i) &&
 																		// (Wb. took this out in favor of canTargetUnit(). But does that account for Smoke? apparently not)
+				// can actually see the unit
+				visible(*i, tile))
 			{
 				if ((*i)->getFaction() == FACTION_PLAYER)
 				{
@@ -1197,14 +1211,11 @@ bool TileEngine::tryReactionSnap(BattleUnit* unit, BattleUnit* target)
 			if (action.weapon->getAmmoItem()->getRules()->getExplosionRadius()
 				&& aggro->explosiveEfficacy(action.target, unit, action.weapon->getAmmoItem()->getRules()->getExplosionRadius(), -1) == false)
 			{
-				// don't shoot. it's too early in the game or we'll kill ourselves or someone we care about
-				// this will cause the alien to NOT actually fire, but allow the loop to continue in case someone else CAN.
-				// the unit won't get its time units back, so it won't react again this turn
 				action.targeting = false;
 			}
 		}
 
-		if (action.targeting && unit->spendTimeUnits(unit->getActionTUs(action.type, action.weapon)))
+		if (action.targeting && unit->spendTimeUnits(action.TU))
 		{
 			action.TU = 0;
 
