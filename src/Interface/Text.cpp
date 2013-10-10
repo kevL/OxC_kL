@@ -386,6 +386,10 @@ void Text::processText()
 		}
 		else if (*c != 1) // Keep track of the width of the last line and word
 		{
+			if (font->getChar(*c) == 0)
+			{
+				*c = L'?';
+			}
 			int charWidth = font->getCharSize(*c).w;
 
 			width += charWidth;
