@@ -30,8 +30,8 @@ namespace OpenXcom
  */
 BattleState::BattleState(BattlescapeGame* parent, BattleAction action)
 	:
-	_parent(parent),
-	_action(action)
+		_parent(parent),
+		_action(action)
 {
 }
 
@@ -41,7 +41,7 @@ BattleState::BattleState(BattlescapeGame* parent, BattleAction action)
  */
 BattleState::BattleState(BattlescapeGame* parent)
 	:
-	_parent(parent)
+		_parent(parent)
 {
 	_action.result = "";
 	_action.targeting = false;

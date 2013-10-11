@@ -521,6 +521,7 @@ BattlescapeState::BattlescapeState(Game* game)
 
 //	kL_TurnCount = _save->getTurn();			// kL
 //	_turnCounter->setTurnCount(kL_TurnCount);	// kL
+//	Log(LOG_INFO) << "Create BattlescapeState DONE";
 }
 
 
@@ -614,7 +615,7 @@ void BattlescapeState::mapOver(Action *action)
 		// the mouse-release event is missed for any reason.
 		// (checking: is the dragScroll-mouse-button still pressed?)
 		// However if the SDL is also missed the release event, then it is to no avail :(
-		if (0 == SDL_GetMouseState(0, 0)&SDL_BUTTON(_save->getDragButton()))
+		if (0 == SDL_GetMouseState(0, 0) & SDL_BUTTON(_save->getDragButton()))
 		// so we missed again the mouse-release :(
 		{
 			// Check if we have to revoke the scrolling, because it
@@ -708,7 +709,7 @@ void BattlescapeState::mapPress(Action *action)
  * Processes any clicks on the map to command units.
  * @param action Pointer to an action.
  */
-void BattlescapeState::mapClick(Action *action)
+void BattlescapeState::mapClick(Action* action)
 {
 	// The following is the workaround for a rare problem where sometimes
 	// the mouse-release event is missed for any reason.
@@ -717,7 +718,7 @@ void BattlescapeState::mapClick(Action *action)
 	if (isMouseScrolling)
 	{
 		if (action->getDetails()->button.button != _save->getDragButton()
-			&& 0 == (SDL_GetMouseState(0, 0) &SDL_BUTTON(_save->getDragButton())))
+			&& 0 == (SDL_GetMouseState(0, 0) & SDL_BUTTON(_save->getDragButton())))
 			// so we missed again the mouse-release :(
 		{
 			// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
@@ -739,7 +740,7 @@ void BattlescapeState::mapClick(Action *action)
 		else return;
 
 		// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
-		if ((!mouseMovedOverThreshold)
+		if (!mouseMovedOverThreshold
 			&& SDL_GetTicks() - mouseScrollingStartTime <= (Uint32)_save->getDragTimeTolerance())
 		{
 			isMouseScrolled = false;
@@ -1243,7 +1244,7 @@ bool BattlescapeState::playableUnitSelected()
  */
 void BattlescapeState::updateSoldierInfo()
 {
-	BattleUnit *battleUnit = _save->getSelectedUnit();
+	BattleUnit* battleUnit = _save->getSelectedUnit();
 
 	for (int i = 0; i < VISIBLE_MAX; ++i)
 	{
@@ -1281,10 +1282,10 @@ void BattlescapeState::updateSoldierInfo()
 
 	_txtName->setText(battleUnit->getName(_game->getLanguage(), false));
 
-	Soldier *soldier = _game->getSavedGame()->getSoldier(battleUnit->getId());
+	Soldier* soldier = _game->getSavedGame()->getSoldier(battleUnit->getId());
 	if (soldier != 0)
 	{
-		SurfaceSet *texture = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
+		SurfaceSet* texture = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
 		texture->getFrame(soldier->getRankSprite())->blit(_rank);
 	}
 	else
@@ -1306,7 +1307,7 @@ void BattlescapeState::updateSoldierInfo()
 	_barMorale->setMax(100);
 	_barMorale->setValue(battleUnit->getMorale());
 
-	BattleItem *leftHandItem = battleUnit->getItem("STR_LEFT_HAND");
+	BattleItem* leftHandItem = battleUnit->getItem("STR_LEFT_HAND");
 	_btnLeftHandItem->clear();
 	_numAmmoLeft->setVisible(false);
 	if (leftHandItem)
@@ -1323,7 +1324,7 @@ void BattlescapeState::updateSoldierInfo()
 		}
 	}
 
-	BattleItem *rightHandItem = battleUnit->getItem("STR_RIGHT_HAND");
+	BattleItem* rightHandItem = battleUnit->getItem("STR_RIGHT_HAND");
 	_btnRightHandItem->clear();
 	_numAmmoRight->setVisible(false);
 	if (rightHandItem)
@@ -1343,7 +1344,7 @@ void BattlescapeState::updateSoldierInfo()
 	_save->getTileEngine()->calculateFOV(_save->getSelectedUnit());
 
 	int j = 0;
-	for (std::vector<BattleUnit*>::iterator i = battleUnit->getVisibleUnits()->begin(); i != battleUnit->getVisibleUnits()->end() && j < VISIBLE_MAX; ++i)
+	for (std::vector<BattleUnit* >::iterator i = battleUnit->getVisibleUnits()->begin(); i != battleUnit->getVisibleUnits()->end() && j < VISIBLE_MAX; ++i)
 	{
 		_btnVisibleUnit[j]->setVisible(true);
 		_numVisibleUnit[j]->setVisible(true);

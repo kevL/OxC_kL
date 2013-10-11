@@ -691,7 +691,7 @@ void BattlescapeGame::checkForCasualties(BattleItem* murderweapon, BattleUnit* m
 			if ((*j)->getHealth() > 0
 				&& (*j)->getSpecialAbility() == SPECAB_RESPAWN)
 			{
-				Log(LOG_INFO) << ". . still alive, Specab = Respawn... converting unit!";		// kL
+//				Log(LOG_INFO) << ". . still alive, Specab = Respawn... converting unit!";		// kL
 
 				(*j)->setSpecialAbility(SPECAB_NONE);
 				convertUnit(*j, (*j)->getSpawnUnit());
@@ -1308,8 +1308,6 @@ bool BattlescapeGame::checkReservedTU(BattleUnit* bu, int tu, bool justChecking)
 	return true;
 }
 
-
-
 /**
  * Picks the first soldier that is panicking.
  * @return True when all panicking is over.
@@ -1531,7 +1529,7 @@ bool BattlescapeGame::isBusy()
  */
 void BattlescapeGame::primaryAction(const Position& pos)
 {
-	Log(LOG_INFO) << "BattlescapeGame::primaryAction()";
+	Log(LOG_INFO) << "BattlescapeGame::primaryAction() unitID = "; // << _save->getSelectedUnit()->getId();
 
 	bool bPreviewed = Options::getInt("battleNewPreviewPath") > 0;
 
@@ -1542,6 +1540,8 @@ void BattlescapeGame::primaryAction(const Position& pos)
 
 		if (_currentAction.type == BA_LAUNCH)
 		{
+			Log(LOG_INFO) << ". . . . BA_LAUNCH";
+
 			_parentState->showLaunchButton(true);
 			_currentAction.waypoints.push_back(pos);
 			getMap()->getWaypoints()->push_back(pos);
@@ -1549,13 +1549,15 @@ void BattlescapeGame::primaryAction(const Position& pos)
 		else if (_currentAction.type == BA_USE
 			&& _currentAction.weapon->getRules()->getBattleType() == BT_MINDPROBE)
 		{
+			Log(LOG_INFO) << ". . . . BA_USE -> BT_MINDPROBE";
+
 			if (_save->selectUnit(pos)
 				&& _save->selectUnit(pos)->getFaction() != _save->getSelectedUnit()->getFaction())
 			{
 				if (_currentAction.actor->spendTimeUnits(_currentAction.TU))
 				{
 					_parentState->getGame()->getResourcePack()->getSound("BATTLE.CAT", _currentAction.weapon->getRules()->getHitSound())->play();
-					_parentState->getGame()->pushState (new UnitInfoState(_parentState->getGame(), _save->selectUnit(pos), _parentState));
+					_parentState->getGame()->pushState(new UnitInfoState(_parentState->getGame(), _save->selectUnit(pos), _parentState));
 
 					cancelCurrentAction();
 				}
@@ -1568,6 +1570,8 @@ void BattlescapeGame::primaryAction(const Position& pos)
 		else if (_currentAction.type == BA_PANIC
 			|| _currentAction.type == BA_MINDCONTROL)
 		{
+			Log(LOG_INFO) << ". . . . BA_PANIC or BA_MINDCONTROL";
+
 			if (_save->selectUnit(pos)
 				&& _save->selectUnit(pos)->getFaction() != _save->getSelectedUnit()->getFaction()
 				&& _save->selectUnit(pos)->getVisible())
@@ -1582,9 +1586,9 @@ void BattlescapeGame::primaryAction(const Position& pos)
 				_currentAction.target = pos;
 
 				// get the sound/animation started
-				getMap()->setCursorType(CT_NONE);
-				_parentState->getGame()->getCursor()->setVisible(false);
-				_currentAction.cameraPosition = getMap()->getCamera()->getMapOffset();
+//kL				getMap()->setCursorType(CT_NONE);
+//kL				_parentState->getGame()->getCursor()->setVisible(false);
+//kL				_currentAction.cameraPosition = getMap()->getCamera()->getMapOffset();
 				statePushBack(new ProjectileFlyBState(this, _currentAction));
 
 				if (_currentAction.TU <= _currentAction.actor->getTimeUnits())
@@ -1602,10 +1606,14 @@ void BattlescapeGame::primaryAction(const Position& pos)
 						{
 							game->pushState(new InfoboxState(game, game->getLanguage()->getString("STR_MIND_CONTROL_SUCCESSFUL")));
 						}
+
 						_parentState->updateSoldierInfo();
 
-						_currentAction.targeting = false;
-						_currentAction.type = BA_NONE;
+//						if (_save->getSelectedUnit()->getFaction() != FACTION_PLAYER)	// kL: do aliens even do primaryActions?
+//						{
+//kL							_currentAction.targeting = false;
+//kL							_currentAction.type = BA_NONE;
+//						}
 
 						setupCursor();
 					}
@@ -2327,7 +2335,7 @@ void BattlescapeGame::tallyUnits(int& liveAliens, int& liveSoldiers, bool conver
 			if ((*j)->getHealth() > 0
 				&& (*j)->getSpecialAbility() == SPECAB_RESPAWN)
 			{
-				Log(LOG_INFO) << "BattlescapeGame::tallyUnits() " << (*j)->getId() << " : health > 0, SPECAB_RESPAWN -> converting unit!";
+//				Log(LOG_INFO) << "BattlescapeGame::tallyUnits() " << (*j)->getId() << " : health > 0, SPECAB_RESPAWN -> converting unit!";
 
 				(*j)->setSpecialAbility(SPECAB_NONE);
 				convertUnit((*j), (*j)->getSpawnUnit());

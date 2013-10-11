@@ -87,7 +87,10 @@ ProjectileFlyBState::~ProjectileFlyBState()
  */
 void ProjectileFlyBState::init()
 {
-	if (_initialized) return;
+	if (_initialized)
+		return;
+
+
 	_initialized = true;
 
 	BattleItem* weapon = _action.weapon;

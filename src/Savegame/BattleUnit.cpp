@@ -50,47 +50,47 @@ namespace OpenXcom
  */
 BattleUnit::BattleUnit(Soldier* soldier, UnitFaction faction)
 	:
-	_faction(faction),
-	_originalFaction(faction),
-	_killedBy(faction),
-	_id(0),
-	_pos(Position()),
-	_tile(0),
-	_lastPos(Position()),
-	_direction(0),
-	_toDirection(0),
-	_directionTurret(0),
-	_toDirectionTurret(0),
-	_verticalDirection(0),
-	_status(STATUS_STANDING),
-	_walkPhase(0),
-	_fallPhase(0),
-	_spinPhase(-1),		// kL
-	_kneeled(false),
-	_floating(false),
-	_dontReselect(false),
-	_fire(0),
-	_currentAIState(0),
-	_visible(false),
-	_cacheInvalid(true),
-	_expBravery(0),
-	_expReactions(0),
-	_expFiring(0),
-	_expThrowing(0),
-	_expPsiSkill(0),
-	_expMelee(0),
-	_motionPoints(0),
-	_kills(0),
-	_hitByFire(false),
-	_moraleRestored(0),
-	_coverReserve(0),
-	_charging(0),
-	_turnsExposed(255),
-	_geoscapeSoldier(soldier),
-	_unitRules(0),
-	_rankInt(-1),
-	_turretType(-1),
-	_hidingForTurn(false)
+		_faction(faction),
+		_originalFaction(faction),
+		_killedBy(faction),
+		_id(0),
+		_pos(Position()),
+		_tile(0),
+		_lastPos(Position()),
+		_direction(0),
+		_toDirection(0),
+		_directionTurret(0),
+		_toDirectionTurret(0),
+		_verticalDirection(0),
+		_status(STATUS_STANDING),
+		_walkPhase(0),
+		_fallPhase(0),
+		_spinPhase(-1),		// kL
+		_kneeled(false),
+		_floating(false),
+		_dontReselect(false),
+		_fire(0),
+		_currentAIState(0),
+		_visible(false),
+		_cacheInvalid(true),
+		_expBravery(0),
+		_expReactions(0),
+		_expFiring(0),
+		_expThrowing(0),
+		_expPsiSkill(0),
+		_expMelee(0),
+		_motionPoints(0),
+		_kills(0),
+		_hitByFire(false),
+		_moraleRestored(0),
+		_coverReserve(0),
+		_charging(0),
+		_turnsExposed(255),
+		_geoscapeSoldier(soldier),
+		_unitRules(0),
+		_rankInt(-1),
+		_turretType(-1),
+		_hidingForTurn(false)
 {
 	_name = soldier->getName();
 	_id = soldier->getId();
@@ -153,47 +153,48 @@ BattleUnit::BattleUnit(Soldier* soldier, UnitFaction faction)
  */
 BattleUnit::BattleUnit(Unit* unit, UnitFaction faction, int id, Armor* armor, int diff)
 	:
-	_faction(faction),
-	_originalFaction(faction),
-	_killedBy(faction),
-	_id(id),
-	_pos(Position()),
-	_tile(0),
-	_lastPos(Position()),
-	_direction(0),
-	_toDirection(0),
-	_directionTurret(0),
-	_toDirectionTurret(0),
-	_verticalDirection(0),
-	_status(STATUS_STANDING),
-	_walkPhase(0),
-	_fallPhase(0),
-	_kneeled(false),
-	_floating(false),
-	_dontReselect(false),
-	_fire(0),
-	_currentAIState(0),
-	_visible(false),
-	_cacheInvalid(true),
-	_expBravery(0),
-	_expReactions(0),
-	_expFiring(0),
-	_expThrowing(0),
-	_expPsiSkill(0),
-	_expMelee(0),
-	_motionPoints(0),
-	_kills(0),
-	_hitByFire(false),
-	_moraleRestored(0),
-	_coverReserve(0),
-	_charging(0),
-	_turnsExposed(255),
-	_armor(armor),
-	_geoscapeSoldier(0),
-	_unitRules(unit),
-	_rankInt(-1),
-	_turretType(-1),
-	_hidingForTurn(false)
+		_faction(faction),
+		_originalFaction(faction),
+		_killedBy(faction),
+		_id(id),
+		_pos(Position()),
+		_tile(0),
+		_lastPos(Position()),
+		_direction(0),
+		_toDirection(0),
+		_directionTurret(0),
+		_toDirectionTurret(0),
+		_verticalDirection(0),
+		_status(STATUS_STANDING),
+		_walkPhase(0),
+		_fallPhase(0),
+		_spinPhase(-1),		// kL
+		_kneeled(false),
+		_floating(false),
+		_dontReselect(false),
+		_fire(0),
+		_currentAIState(0),
+		_visible(false),
+		_cacheInvalid(true),
+		_expBravery(0),
+		_expReactions(0),
+		_expFiring(0),
+		_expThrowing(0),
+		_expPsiSkill(0),
+		_expMelee(0),
+		_motionPoints(0),
+		_kills(0),
+		_hitByFire(false),
+		_moraleRestored(0),
+		_coverReserve(0),
+		_charging(0),
+		_turnsExposed(255),
+		_armor(armor),
+		_geoscapeSoldier(0),
+		_unitRules(unit),
+		_rankInt(-1),
+		_turretType(-1),
+		_hidingForTurn(false)
 {
 //	Log(LOG_INFO) << "Create BattleUnit";
 
@@ -262,7 +263,7 @@ BattleUnit::~BattleUnit()
  * Loads the unit from a YAML file.
  * @param node YAML node.
  */
-void BattleUnit::load(const YAML::Node &node)
+void BattleUnit::load(const YAML::Node& node)
 {
 	_id					= node["id"].as<int>(_id);
 	_faction			= _originalFaction = (UnitFaction)node["faction"].as<int>(_faction);
@@ -635,7 +636,12 @@ int BattleUnit::getDiagonalWalkingPhase() const
  */
 void BattleUnit::lookAt(const Position& point, bool turret)
 {
+	Log(LOG_INFO) << "BattleUnit::lookAt() #1 unitID = ";
+	Log(LOG_INFO) << ". . _direction = " << _direction;
+	Log(LOG_INFO) << ". . _toDirection = " << _toDirection;
+
 	int dir = directionTo(point);
+	Log(LOG_INFO) << ". . lookAt dir = " << dir;
 
 	if (turret)
 	{
@@ -664,7 +670,10 @@ void BattleUnit::lookAt(const Position& point, bool turret)
  */
 void BattleUnit::lookAt(int direction, bool force)
 {
-	Log(LOG_INFO) << "BattleUnit::lookAt() - " << this->getId() << " - force = " << force;
+	Log(LOG_INFO) << "BattleUnit::lookAt() #2 unitID = ";
+	Log(LOG_INFO) << ". . _direction = " << _direction;
+	Log(LOG_INFO) << ". . _toDirection = " << _toDirection;
+	Log(LOG_INFO) << ". . lookAt direction = " << direction;
 
 	if (!force)
 	{
@@ -694,7 +703,7 @@ void BattleUnit::lookAt(int direction, bool force)
  */
 void BattleUnit::turn(bool turret)
 {
-	Log(LOG_INFO) << "BattleUnit::turn() " << getId();
+	Log(LOG_INFO) << "BattleUnit::turn() unitID = ";
 	Log(LOG_INFO) << ". . _direction = " << _direction;
 	Log(LOG_INFO) << ". . _toDirection = " << _toDirection;
 
@@ -803,7 +812,7 @@ void BattleUnit::turn(bool turret)
 	else if (_toDirection == _direction || _status == STATUS_UNCONSCIOUS)	// kL_note: I didn't know Unconscious could turn...
 																			// learn something new every day.
 	{
-		Log(LOG_INFO) << "BattleUnit::turn() " << getId() << " - STATUS_STANDING (turn has ended)";
+		Log(LOG_INFO) << "BattleUnit::turn() " << /* getId() << */ " - STATUS_STANDING (turn has ended)";
 		_status = STATUS_STANDING; // we officially reached our destination
 	}
 }
@@ -1182,13 +1191,13 @@ void BattleUnit::keepFalling()
 
 		if (_health == 0)
 		{
-			Log(LOG_INFO) << "BattleUnit::keepFalling() " << this->getId() << ". . STATUS_DEAD";
+			Log(LOG_INFO) << "BattleUnit::keepFalling() "; //<< this->getId() << ". . STATUS_DEAD";
 
 			_status = STATUS_DEAD;
 		}
 		else
 		{
-			Log(LOG_INFO) << "BattleUnit::keepFalling() " << this->getId() << ". . STATUS_UNCONSCIOUS";
+			Log(LOG_INFO) << "BattleUnit::keepFalling() "; //<< this->getId() << ". . STATUS_UNCONSCIOUS";
 
 			_status = STATUS_UNCONSCIOUS;
 		}
@@ -1377,7 +1386,7 @@ void BattleUnit::clearVisibleUnits()
  * @param tile
  * @return
  */
-bool BattleUnit::addToVisibleTiles(Tile *tile)
+bool BattleUnit::addToVisibleTiles(Tile* tile)
 {
 	_visibleTiles.push_back(tile);
 
@@ -1388,7 +1397,7 @@ bool BattleUnit::addToVisibleTiles(Tile *tile)
  * Get the pointer to the vector of visible tiles.
  * @return pointer to vector.
  */
-std::vector<Tile*> *BattleUnit::getVisibleTiles()
+std::vector<Tile* >* BattleUnit::getVisibleTiles()
 {
 	return &_visibleTiles;
 }
@@ -1398,7 +1407,7 @@ std::vector<Tile*> *BattleUnit::getVisibleTiles()
  */
 void BattleUnit::clearVisibleTiles()
 {
-	for (std::vector<Tile*>::iterator j = _visibleTiles.begin(); j != _visibleTiles.end(); ++j)
+	for (std::vector<Tile* >::iterator j = _visibleTiles.begin(); j != _visibleTiles.end(); ++j)
 	{
 		(*j)->setVisible(-1);
 	}
@@ -1449,7 +1458,7 @@ double BattleUnit::getFiringAccuracy(BattleActionType actionType, BattleItem *it
  */
 double BattleUnit::getAccuracyModifier()
 {
-	double result = ((double)_health / (double)getStats()->health);
+	double result = (double)_health / (double)getStats()->health;
 
 	int wounds = _fatalWounds[BODYPART_HEAD] + _fatalWounds[BODYPART_RIGHTARM];
 	if (wounds > 9)
@@ -1518,7 +1527,6 @@ double BattleUnit::getReactionScore()
 
 	return score;
 }
-
 
 /**
  * Prepare for a new turn.
