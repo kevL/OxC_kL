@@ -691,9 +691,9 @@ void Ruleset::loadFiles(const std::string &dirname)
  * Generates a brand new saved game with starting data.
  * @return A new saved game.
  */
-SavedGame *Ruleset::newSave() const
+SavedGame* Ruleset::newSave() const
 {
-	SavedGame *save = new SavedGame();
+	SavedGame* save = new SavedGame();
 
 	// Add countries
 	for (std::vector<std::string>::const_iterator i = _countriesIndex.begin(); i != _countriesIndex.end(); ++i)
@@ -702,10 +702,11 @@ SavedGame *Ruleset::newSave() const
 	}
 
 	// Adjust funding to total $6M
-	int missing = ((6000 - save->getCountryFunding()/1000) / (int)save->getCountries()->size()) * 1000;
+//kL	int missing = ((6000 - save->getCountryFunding() / 1000) / (int)save->getCountries()->size()) * 1000;
 	for (std::vector<Country*>::iterator i = save->getCountries()->begin(); i != save->getCountries()->end(); ++i)
 	{
-		(*i)->setFunding((*i)->getFunding().back() + missing);
+//kL		(*i)->setFunding((*i)->getFunding().back() + missing);
+		(*i)->setFunding((*i)->getFunding().back());	// kL
 	}
 
 	save->setFunds(save->getCountryFunding());

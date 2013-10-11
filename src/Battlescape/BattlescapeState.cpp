@@ -518,6 +518,9 @@ BattlescapeState::BattlescapeState(Game* game)
 	isMouseScrolling = false;
 	isMouseScrolled = false;
 	_currentTooltip = "";
+
+//	kL_TurnCount = _save->getTurn();			// kL
+//	_turnCounter->setTurnCount(kL_TurnCount);	// kL
 }
 
 

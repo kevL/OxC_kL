@@ -16,9 +16,11 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "Country.h"
 #include "../Ruleset/RuleCountry.h"
 #include "../Engine/RNG.h"
+
 
 namespace OpenXcom
 {
@@ -28,12 +30,19 @@ namespace OpenXcom
  * @param rules Pointer to ruleset.
  * @param gen Generate new funding.
  */
-Country::Country(RuleCountry *rules, bool gen) : _rules(rules), _pact(false), _newPact(false), _funding(0), _satisfaction(2)
+Country::Country(RuleCountry* rules, bool gen)
+	:
+		_rules(rules),
+		_pact(false),
+		_newPact(false),
+		_funding(0),
+		_satisfaction(2)
 {
 	if (gen)
 	{
 		_funding.push_back(_rules->generateFunding());
 	}
+
 	_activityAlien.push_back(0);
 	_activityXcom.push_back(0);
 }
@@ -49,15 +58,17 @@ Country::~Country()
  * Loads the country from a YAML file.
  * @param node YAML node.
  */
-void Country::load(const YAML::Node &node)
+void Country::load(const YAML::Node& node)
 {
-	_funding = node["funding"].as< std::vector<int> >(_funding);
-	_activityXcom = node["activityXcom"].as< std::vector<int> >(_activityXcom);
-	_activityAlien = node["activityAlien"].as< std::vector<int> >(_activityAlien);
+	_funding		= node["funding"].as< std::vector<int> >(_funding);
+	_activityXcom	= node["activityXcom"].as< std::vector<int> >(_activityXcom);
+	_activityAlien	= node["activityAlien"].as< std::vector<int> >(_activityAlien);
+
 	if (_pact)
-		_pact = node["pact"].as<bool>(_pact);
+		_pact		= node["pact"].as<bool>(_pact);
+
 	if (_newPact)
-		_newPact = node["newPact"].as<bool>(_newPact);
+		_newPact	= node["newPact"].as<bool>(_newPact);
 }
 
 /**
@@ -67,12 +78,14 @@ void Country::load(const YAML::Node &node)
 YAML::Node Country::save() const
 {
 	YAML::Node node;
-	node["type"] = _rules->getType();
-	node["funding"] = _funding;
-	node["activityXcom"] = _activityXcom;
-	node["activityAlien"] = _activityAlien;
-	node["pact"] = _pact;
-	node["newPact"] = _newPact;
+
+	node["type"]			= _rules->getType();
+	node["funding"]			= _funding;
+	node["activityXcom"]	= _activityXcom;
+	node["activityAlien"]	= _activityAlien;
+	node["pact"]			= _pact;
+	node["newPact"]			= _newPact;
+
 	return node;
 }
 
@@ -80,7 +93,7 @@ YAML::Node Country::save() const
  * Returns the ruleset for the country's type.
  * @return Pointer to ruleset.
  */
-RuleCountry *Country::getRules() const
+RuleCountry* Country::getRules() const
 {
 	return _rules;
 }
@@ -89,14 +102,14 @@ RuleCountry *Country::getRules() const
  * Returns the country's current monthly funding.
  * @return Monthly funding.
  */
-const std::vector<int> &Country::getFunding() const
+const std::vector<int>& Country::getFunding() const
 {
 	return _funding;
 }
 
 /**
  * Changes the country's current monthly funding.
- * @param funding Monthly funding.
+ * @param funding, Monthly funding.
  */
 void Country::setFunding(int funding)
 {
@@ -111,6 +124,7 @@ int Country::getSatisfaction()
 {
 	if(_pact)
 		return 0;
+
 	return _satisfaction;
 }
 
@@ -136,7 +150,7 @@ void Country::addActivityAlien(int activity)
  * Gets the country's xcom activity level.
  * @return activity level.
  */
-const std::vector<int> &Country::getActivityXcom() const
+const std::vector<int>& Country::getActivityXcom() const
 {
 	return _activityXcom;
 }
@@ -145,7 +159,7 @@ const std::vector<int> &Country::getActivityXcom() const
  * Gets the country's alien activity level.
  * @return activity level.
  */
-const std::vector<int> &Country::getActivityAlien() const
+const std::vector<int>& Country::getActivityAlien() const
 {
 	return _activityAlien;
 }
@@ -154,17 +168,18 @@ const std::vector<int> &Country::getActivityAlien() const
  * reset all the counters,
  * calculate this month's funding,
  * set the change value for the month.
- * @param xcomTotal the council's xcom score
- * @param alienTotal the council's alien score
+ * @param xcomTotal, the council's xcom score
+ * @param alienTotal, the council's alien score
  */
 
 void Country::newMonth(int xcomTotal, int alienTotal)
 {
 	_satisfaction = 2;
+
 	int funding = getFunding().back();
 	int good = (xcomTotal / 10) + _activityXcom.back();
 	int bad = (alienTotal / 20) + _activityAlien.back();
-	int newFunding = (_funding.back()/100) * RNG::generate(5, 20);
+	int newFunding = (_funding.back() / 100) * RNG::generate(5, 20);
 
 	if (bad <= good + 30)
 	{
@@ -173,9 +188,10 @@ void Country::newMonth(int xcomTotal, int alienTotal)
 			if (RNG::generate(0, good) > bad)
 			{
 				// don't go over the cap
-				int cap = getRules()->getFundingCap()*1000;
+				int cap = getRules()->getFundingCap() * 1000;
 				if (funding + newFunding > cap)
 					newFunding = cap - funding;
+
 				if (newFunding)
 					_satisfaction = 3;
 			}
@@ -194,17 +210,16 @@ void Country::newMonth(int xcomTotal, int alienTotal)
 	}
 
 	// about to be in cahoots
-	if(_newPact && !_pact)
+	if (_newPact && !_pact)
 	{
 		_newPact = false;
 		_pact = true;
+
 		addActivityAlien(150);
 	}
 
-
-
 	// set the new funding and reset the activity meters
-	if(_pact)
+	if (_pact)
 		_funding.push_back(0);
 	else if (_satisfaction != 2)
 		_funding.push_back(funding + newFunding);
@@ -213,11 +228,12 @@ void Country::newMonth(int xcomTotal, int alienTotal)
 	
 	_activityAlien.push_back(0);
 	_activityXcom.push_back(0);
-	if(_activityAlien.size() > 12)
+
+	if (_activityAlien.size() > 12)
 		_activityAlien.erase(_activityAlien.begin());
-	if(_activityXcom.size() > 12)
+	if (_activityXcom.size() > 12)
 		_activityXcom.erase(_activityXcom.begin());
-	if(_funding.size() > 12)
+	if (_funding.size() > 12)
 		_funding.erase(_funding.begin());
 }
 
@@ -246,4 +262,5 @@ bool Country::getPact()
 {
 	return _pact;
 }
+
 }

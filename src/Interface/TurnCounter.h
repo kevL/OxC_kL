@@ -35,7 +35,7 @@ class NumberText;
  */
 class TurnCounter
 	:
-	public Surface
+		public Surface
 {
 private:
 	NumberText* _text;

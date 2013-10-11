@@ -37,7 +37,7 @@ class TurnCounter;		// kL
  */
 class NextTurnState
 	:
-	public State
+		public State
 {
 private:
 	Window* _window;

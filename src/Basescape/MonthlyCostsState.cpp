@@ -55,9 +55,10 @@ MonthlyCostsState::MonthlyCostsState(Game* game, Base* base)
 //kL	_txtCost		= new Text(80, 9, 115, 32);
 //kL	_txtQuantity	= new Text(55, 9, 195, 32);
 //kL	_txtTotal		= new Text(60, 9, 249, 32);
-	_txtCost		= new Text(80, 9, 131, 31);			// kL
+	_txtCost		= new Text(80, 9, 141, 31);			// kL
 	_txtQuantity	= new Text(55, 9, 211, 31);			// kL
 	_txtTotal		= new Text(60, 9, 255, 31);			// kL
+//	_lstCrafts->setColumns(4, 125, 70, 44, 60);			// kL_TEMP
 
 //kL	_txtRental		= new Text(150, 9, 10, 47);
 //kL	_lstCrafts		= new TextList(288, 24, 10, 56);
@@ -70,12 +71,12 @@ MonthlyCostsState::MonthlyCostsState(Game* game, Base* base)
 	_lstSalaries	= new TextList(288, 27, 16, 111);	// kL
 
 //kL	_lstMaintenance	= new TextList(300, 9, 10, 120);
-	_lstMaintenance	= new TextList(288, 9, 16, 141);	// kL
+	_lstMaintenance	= new TextList(288, 9, 16, 142);	// kL
 
 //kL	_txtIncome		= new Text(150, 9, 10, 136);
 //kL	_lstTotal		= new TextList(100, 9, 205, 136);
-	_txtIncome		= new Text(150, 9, 16, 161);		// kL
-	_lstTotal		= new TextList(98, 9, 206, 161);	// kL
+	_txtIncome		= new Text(150, 9, 16, 159);		// kL
+	_lstTotal		= new TextList(98, 9, 206, 159);	// kL
 
 //kL	_btnOk = new TextButton(300, 20, 10, 170);
 	_btnOk			= new TextButton(288, 16, 16, 177);	// kL

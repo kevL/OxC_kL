@@ -36,8 +36,8 @@ unsigned int kL_TurnCount = 1;
  */
 TurnCounter::TurnCounter(int width, int height, int x, int y)
 	:
-	Surface(width, height, x + 1, y + 1),
-	_tCount(1)
+		Surface(width, height, x + 1, y + 1),
+		_tCount(1)
 {
 	Log(LOG_INFO) << "Create TurnCounter";
 

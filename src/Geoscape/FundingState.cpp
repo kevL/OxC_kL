@@ -83,9 +83,9 @@ FundingState::FundingState(Game* game)
 
 	_btnOk->setColor(Palette::blockOffset(15)-1);
 	_btnOk->setText(tr("STR_OK"));
-	_btnOk->onMouseClick((ActionHandler)&FundingState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&FundingState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
-	_btnOk->onKeyboardPress((ActionHandler)&FundingState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onMouseClick((ActionHandler)& FundingState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)& FundingState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
+	_btnOk->onKeyboardPress((ActionHandler)& FundingState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setAlign(ALIGN_CENTER);
@@ -109,7 +109,7 @@ FundingState::FundingState(Game* game)
 	{
 		std::wstringstream ss, ss2;
 		ss << L'\x01' << Text::formatFunding((*i)->getFunding().at((*i)->getFunding().size()-1)) << L'\x01';
-		if((*i)->getFunding().size() > 1)
+		if ((*i)->getFunding().size() > 1)
 		{
 			ss2 << L'\x01';
 			int change = (*i)->getFunding().back() - (*i)->getFunding().at((*i)->getFunding().size()-2);
@@ -133,14 +133,13 @@ FundingState::FundingState(Game* game)
  */
 FundingState::~FundingState()
 {
-
 }
 
 /**
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void FundingState::btnOkClick(Action *)
+void FundingState::btnOkClick(Action* )
 {
 	_game->popState();
 }

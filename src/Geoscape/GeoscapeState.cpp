@@ -1331,7 +1331,7 @@ bool GeoscapeState::processTerrorSite(TerrorSite* ts) const
 	if (ts->getSecondsRemaining() >= 30 * 60)
 	{
 		ts->setSecondsRemaining(ts->getSecondsRemaining() - 30 * 60);
-		tsProgress = 75;
+		tsProgress = 70;
 	}
 
 	Region* region = _game->getSavedGame()->locateRegion(*ts);

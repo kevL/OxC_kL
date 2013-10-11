@@ -16,11 +16,13 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_RULECOUNTRY_H
 #define OPENXCOM_RULECOUNTRY_H
 
 #include <string>
 #include <yaml-cpp/yaml.h>
+
 
 namespace OpenXcom
 {
@@ -37,29 +39,32 @@ private:
 	int _fundingBase, _fundingCap;
 	double _labelLon, _labelLat;
 	std::vector<double> _lonMin, _lonMax, _latMin, _latMax;
-public:
-	/// Creates a blank country ruleset.
-	RuleCountry(const std::string &type);
-	/// Cleans up the country ruleset.
-	~RuleCountry();
-	/// Loads the country from YAML.
-	void load(const YAML::Node& node);
-	/// Gets the country's type.
-	std::string getType() const;
-	/// Generates the country's starting funding.
-	int generateFunding() const;
-	/// Gets the country's funding cap.
-	int getFundingCap() const;
-	/// Gets the country's label X position.
-	double getLabelLongitude() const;
-	/// Gets the country's label Y position.
-	double getLabelLatitude() const;
-	/// Checks if a point is inside the country.
-	bool insideCountry(double lon, double lat) const;
-	const std::vector<double> &getLonMax() const { return _lonMax; }
-	const std::vector<double> &getLonMin() const { return _lonMin; }
-	const std::vector<double> &getLatMax() const { return _latMax; }
-	const std::vector<double> &getLatMin() const { return _latMin; }
+
+	public:
+		/// Creates a blank country ruleset.
+		RuleCountry(const std::string& type);
+		/// Cleans up the country ruleset.
+		~RuleCountry();
+
+		/// Loads the country from YAML.
+		void load(const YAML::Node& node);
+		/// Gets the country's type.
+		std::string getType() const;
+		/// Generates the country's starting funding.
+		int generateFunding() const;
+		/// Gets the country's funding cap.
+		int getFundingCap() const;
+		/// Gets the country's label X position.
+		double getLabelLongitude() const;
+		/// Gets the country's label Y position.
+		double getLabelLatitude() const;
+		/// Checks if a point is inside the country.
+		bool insideCountry(double lon, double lat) const;
+
+		const std::vector<double>& getLonMax() const { return _lonMax; }
+		const std::vector<double>& getLonMin() const { return _lonMin; }
+		const std::vector<double>& getLatMax() const { return _latMax; }
+		const std::vector<double>& getLatMin() const { return _latMin; }
 };
 
 }

@@ -50,7 +50,7 @@ class TurnCounter;		// kL
  */
 class BattlescapeState
 	:
-	public State
+		public State
 {
 private:
 	Surface* _rank;

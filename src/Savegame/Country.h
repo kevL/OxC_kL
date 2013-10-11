@@ -16,10 +16,12 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_COUNTRY_H
 #define OPENXCOM_COUNTRY_H
 
 #include <yaml-cpp/yaml.h>
+
 
 namespace OpenXcom
 {
@@ -34,43 +36,45 @@ class RuleCountry;
 class Country
 {
 private:
-	RuleCountry *_rules;
+	RuleCountry* _rules;
 	bool _pact, _newPact;
 	std::vector<int> _funding, _activityXcom, _activityAlien;
 	int _satisfaction;
-public:
-	/// Creates a new country of the specified type.
-	Country(RuleCountry *rules, bool gen = true);
-	/// Cleans up the country.
-	~Country();
-	/// Loads the country from YAML.
-	void load(const YAML::Node& node);
-	/// Saves the country to YAML.
-	YAML::Node save() const;
-	/// Gets the country's ruleset.
-	RuleCountry *getRules() const;
-	/// Gets the country's funding.
-	const std::vector<int> &getFunding() const;
-	/// Sets the country's funding.
-	void setFunding(int funding);
-	/// get the country's satisfaction level
-	int getSatisfaction();
-	/// add xcom activity in this country
-	void addActivityXcom(int activity);
-	/// add alien activity in this country
-	void addActivityAlien(int activity);
-	/// get xcom activity to this country
-	const std::vector<int>&getActivityXcom() const;
-	/// get xcom activity to this country
-	const std::vector<int> &getActivityAlien() const;
-	/// store last month's counters, start new counters, set this month's change.
-	void newMonth(int xcomTotal, int alienTotal);
-	/// are we signing a new pact?
-	bool getNewPact();
-	/// sign a pact at the end of this month.
-	void setNewPact();
-	/// have we signed a pact?
-	bool getPact();
+
+	public:
+		/// Creates a new country of the specified type.
+		Country(RuleCountry* rules, bool gen = true);
+		/// Cleans up the country.
+		~Country();
+
+		/// Loads the country from YAML.
+		void load(const YAML::Node& node);
+		/// Saves the country to YAML.
+		YAML::Node save() const;
+		/// Gets the country's ruleset.
+		RuleCountry* getRules() const;
+		/// Gets the country's funding.
+		const std::vector<int>& getFunding() const;
+		/// Sets the country's funding.
+		void setFunding(int funding);
+		/// get the country's satisfaction level
+		int getSatisfaction();
+		/// add xcom activity in this country
+		void addActivityXcom(int activity);
+		/// add alien activity in this country
+		void addActivityAlien(int activity);
+		/// get xcom activity to this country
+		const std::vector<int>& getActivityXcom() const;
+		/// get xcom activity to this country
+		const std::vector<int>& getActivityAlien() const;
+		/// store last month's counters, start new counters, set this month's change.
+		void newMonth(int xcomTotal, int alienTotal);
+		/// are we signing a new pact?
+		bool getNewPact();
+		/// sign a pact at the end of this month.
+		void setNewPact();
+		/// have we signed a pact?
+		bool getPact();
 };
 
 }

@@ -69,75 +69,80 @@ SoldierInfoState::SoldierInfoState(Game* game, Base* base, size_t soldier)
 
 	_edtSoldier		= new TextEdit(200, 16, 40, 9);
 //kL	_btnSack		= new TextButton(60, 14, 260, 33);	// (60, 14, 248, 10);
-	_btnSack		= new TextButton(44, 16, 268, 8); 		// kL
+	_btnSack		= new TextButton(44, 16, 269, 8); 		// kL
 //	_txtArmor		= new Text(120, 9, 194, 38);
 
-	_txtRank		= new Text(130, 9, 0, 48);
+/*kL	_txtRank		= new Text(130, 9, 0, 48);
 	_txtMissions	= new Text(100, 9, 130, 48);
 	_txtKills		= new Text(100, 9, 230, 48);
 	_txtCraft		= new Text(130, 9, 0, 56);
-	_txtRecovery	= new Text(180, 9, 130, 56);
+	_txtRecovery	= new Text(180, 9, 130, 56); */
+	_txtRank		= new Text(130, 9, 0, 49);		// kL
+	_txtMissions	= new Text(100, 9, 130, 49);	// kL
+	_txtKills		= new Text(100, 9, 230, 49);	// kL
+	_txtCraft		= new Text(130, 9, 0, 57);		// kL
+	_txtRecovery	= new Text(180, 9, 130, 57);	// kL
 //kL	_txtPsionic		= new Text(150, 9, 0, 66);
-	_txtPsionic		= new Text(75, 9, 5, 66);		// kL
+	_txtPsionic		= new Text(75, 9, 5, 67);		// kL
 
 //kL	_txtTimeUnits	= new Text(120, 9, 6, 82);
 //kL	_numTimeUnits	= new Text(18, 9, 131, 82);
-	_txtTimeUnits	= new Text(120, 9, 5, 81);		// kL
-	_numTimeUnits	= new Text(18, 9, 131, 81);		// kL
+	_txtTimeUnits	= new Text(120, 9, 5, 82);		// kL
+	_numTimeUnits	= new Text(18, 9, 131, 82);		// kL
 	_barTimeUnits	= new Bar(170, 7, 150, 82);
 
 //kL	_txtStamina		= new Text(120, 9, 6, 94);
 //kL	_numStamina		= new Text(18, 9, 131, 94);
-	_txtStamina		= new Text(120, 9, 5, 93);		// kL
-	_numStamina		= new Text(18, 9, 131, 93);		// kL
+	_txtStamina		= new Text(120, 9, 5, 94);		// kL
+	_numStamina		= new Text(18, 9, 131, 94);		// kL
 	_barStamina		= new Bar(170, 7, 150, 94);
 
 //kL	_txtHealth		= new Text(120, 9, 6, 106);
 //kL	_numHealth		= new Text(18, 9, 131, 106);
-	_txtHealth		= new Text(120, 9, 6, 105);		// kL
-	_numHealth		= new Text(18, 9, 131, 105);	// kL
+	_txtHealth		= new Text(120, 9, 6, 106);		// kL
+	_numHealth		= new Text(18, 9, 131, 106);	// kL
 	_barHealth		= new Bar(170, 7, 150, 106);
 
 //kL	_txtBravery		= new Text(120, 9, 6, 118);
 //kL	_numBravery		= new Text(18, 9, 131, 118);
-	_txtBravery		= new Text(120, 9, 6, 117);		// kL
-	_numBravery		= new Text(18, 9, 131, 117);	// kL
+	_txtBravery		= new Text(120, 9, 6, 118);		// kL
+	_numBravery		= new Text(18, 9, 131, 118);	// kL
 	_barBravery		= new Bar(170, 7, 150, 118);
 
 //kL	_txtReactions	= new Text(120, 9, 6, 130);
 //kL	_numReactions	= new Text(18, 9, 131, 130);
-	_txtReactions	= new Text(120, 9, 6, 129);		// kL
-	_numReactions	= new Text(18, 9, 131, 129);	// kL
+	_txtReactions	= new Text(120, 9, 6, 130);		// kL
+	_numReactions	= new Text(18, 9, 131, 130);	// kL
 	_barReactions	= new Bar(170, 7, 150, 130);
 
 //kL	_txtFiring		= new Text(120, 9, 6, 142);
 //kL	_numFiring		= new Text(18, 9, 131, 142);
-	_txtFiring		= new Text(120, 9, 6, 141);		// kL
-	_numFiring		= new Text(18, 9, 131, 141);	// kL
+	_txtFiring		= new Text(120, 9, 6, 142);		// kL
+	_numFiring		= new Text(18, 9, 131, 142);	// kL
 	_barFiring		= new Bar(170, 7, 150, 142);
 
 //kL	_txtThrowing	= new Text(120, 9, 6, 154);
 //kL	_numThrowing	= new Text(18, 9, 131, 154);
-	_txtThrowing	= new Text(120, 9, 6, 153);		// kL
-	_numThrowing	= new Text(18, 9, 131, 153);	// kL
+	_txtThrowing	= new Text(120, 9, 6, 154);		// kL
+	_numThrowing	= new Text(18, 9, 131, 154);	// kL
 	_barThrowing	= new Bar(170, 7, 150, 154);
 
 //kL	_txtStrength	= new Text(120, 9, 6, 166);
 //kL	_numStrength	= new Text(18, 9, 131, 166);
-	_txtStrength	= new Text(120, 9, 6, 165);		// kL
-	_numStrength	= new Text(18, 9, 131, 165);	// kL
+	_txtStrength	= new Text(120, 9, 6, 166);		// kL
+	_numStrength	= new Text(18, 9, 131, 166);	// kL
 	_barStrength	= new Bar(170, 7, 150, 166);
 	
 //kL	_txtPsiStrength	= new Text(120, 9, 6, 178);
 //kL	_numPsiStrength	= new Text(18, 9, 131, 178);
-	_txtPsiStrength	= new Text(120, 9, 6, 177);		// kL
-	_numPsiStrength	= new Text(18, 9, 131, 177);	// kL
+	_txtPsiStrength	= new Text(120, 9, 6, 178);		// kL
+	_numPsiStrength	= new Text(18, 9, 131, 178);	// kL
 	_barPsiStrength	= new Bar(170, 7, 150, 178);
 	
 //kL	_txtPsiSkill	= new Text(120, 9, 6, 190);
 //kL	_numPsiSkill	= new Text(18, 9, 131, 190);
-	_txtPsiSkill	= new Text(120, 9, 6, 189);		// kL
-	_numPsiSkill	= new Text(18, 9, 131, 189);	// kL
+	_txtPsiSkill	= new Text(120, 9, 6, 190);		// kL
+	_numPsiSkill	= new Text(18, 9, 131, 190);	// kL
 	_barPsiSkill	= new Bar(170, 7, 150, 190);
 
 	add(_bg);
