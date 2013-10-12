@@ -76,7 +76,7 @@ std::wstring Text::formatFunding(int funds)
 	setlocale (LC_CTYPE,""); // this is necessary for mbstowcs to work correctly
 	struct lconv * lc;
 	lc = localeconv();
-	std::wstring thousands_sep = Language::cpToWstr(lc->mon_thousands_sep);
+	std::wstring thousands_sep = L"\xA0";// Language::cpToWstr(lc->mon_thousands_sep);
 
 	bool negative = false;
 	if (funds < 0)
@@ -362,7 +362,7 @@ void Text::processText()
 	// Go through the text character by character
 	for (std::wstring::iterator c = s->begin(); c <= s->end(); ++c)
 	{
-		if (c == s->end() || *c == L'\n' || *c == 2) // End of the line
+		if (c == s->end() || Font::isLinebreak(*c)) // End of the line
 		{
 			// Add line measurements for alignment later
 			_lineWidth.push_back(width);
@@ -373,11 +373,12 @@ void Text::processText()
 
 			if (c == s->end())
 				break;
+
 			// \x02 marks start of small text
 			else if (*c == 2)
 				font = _small;
 		}
-		else if (*c == L' ') // Keep track of spaces for wordwrapping
+		else if (Font::isSpace(*c)) // Keep track of spaces for wordwrapping
 		{
 			space = c;
 			width += font->getCharSize(*c).w;
@@ -499,11 +500,11 @@ void Text::draw()
 	// Draw each letter one by one
 	for (std::wstring::iterator c = s->begin(); c != s->end(); ++c)
 	{
-		if (*c == ' ' || *c == L'\xa0')
+		if (Font::isSpace(*c))
 		{
 			x += font->getCharSize(*c).w;
 		}
-		else if (*c == '\n' || *c == 2)
+		else if (Font::isLinebreak(*c))
 		{
 			line++;
 			y += font->getCharSize(*c).h;
@@ -521,14 +522,14 @@ void Text::draw()
 				break;
 			}
 
-			if (*c == 2)
+			if (*c == L'\x02')
 			{
 				font->getSurface()->paletteRestore();
 				font = _small;
 				font->getSurface()->paletteShift(color, mul, mid);
 			}
 		}
-		else if (*c == 1)
+		else if (*c == L'\x01')
 		{
 			font->getSurface()->paletteRestore();
 			color = (color == _color ? _color2 : _color);
