@@ -73,6 +73,7 @@
 #include "../Savegame/ResearchProject.h"
 #include "ResearchCompleteState.h"
 #include "../Ruleset/RuleResearch.h"
+#include "ResearchRequiredState.h"
 #include "NewPossibleResearchState.h"
 #include "NewPossibleManufactureState.h"
 #include "../Savegame/Production.h"
@@ -198,8 +199,8 @@ GeoscapeState::GeoscapeState(Game* game)
 	}
 
 	_timeSpeed = _btn5Secs;
-//kL	_timer = new Timer(100);
-	_timer = new Timer(80);	// kL
+	_timer = new Timer(100);
+//	_timer = new Timer(80);	// kL
 
 	_zoomInEffectTimer	= new Timer(50);
 	_zoomOutEffectTimer	= new Timer(50);
@@ -1331,7 +1332,7 @@ bool GeoscapeState::processTerrorSite(TerrorSite* ts) const
 	if (ts->getSecondsRemaining() >= 30 * 60)
 	{
 		ts->setSecondsRemaining(ts->getSecondsRemaining() - 30 * 60);
-		tsProgress = 75;
+		tsProgress = 70;
 	}
 
 	Region* region = _game->getSavedGame()->locateRegion(*ts);
@@ -1822,7 +1823,24 @@ void GeoscapeState::time1Day()
 
 			std::vector<RuleManufacture* > newPossibleManufacture;
 			_game->getSavedGame()->getDependableManufacture (newPossibleManufacture, (*iter)->getRules(), _game->getRuleset(), *i);
+<<<<<<< HEAD
 //kL			timerReset();
+=======
+			timerReset();
+			// check for possible researching weapon before clip
+			std::vector<std::string> manufactures = _game->getRuleset()->getManufactureList();
+			for (std::vector<std::string>::iterator man = manufactures.begin(); man != manufactures.end(); ++man)
+			{
+				RuleManufacture *rule = _game->getRuleset()->getManufacture(*man);
+				std::vector<std::string> req = rule->getRequirements();
+				if (rule->getCategory() == "STR_WEAPON" && std::find(req.begin(), req.end(), newResearch->getName()) != req.end() && !_game->getSavedGame()->isResearched(req))
+				{
+					popup(new ResearchRequiredState(_game, _game->getRuleset()->getItem(rule->getName())));
+					break;
+				}
+			}
+
+>>>>>>> master
 			popup(new NewPossibleResearchState(_game, *i, newPossibleResearch));
 
 			if (!newPossibleManufacture.empty())
@@ -2446,15 +2464,7 @@ void GeoscapeState::handleBaseDefense(Base* base, Ufo* ufo)
 
 	if (base->getAvailableSoldiers(true) > 0)
 	{
-<<<<<<< HEAD
-		size_t month = _game->getSavedGame()->getMonthsPassed();
-		if (month > _game->getRuleset()->getAlienItemLevels().size()-1)
-			month = _game->getRuleset()->getAlienItemLevels().size()-1;
-
 		SavedBattleGame* bgame = new SavedBattleGame();
-=======
-		SavedBattleGame *bgame = new SavedBattleGame();
->>>>>>> master
 		_game->getSavedGame()->setBattleGame(bgame);
 		bgame->setMissionType("STR_BASE_DEFENSE");
 

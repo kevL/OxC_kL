@@ -211,29 +211,29 @@ GeoscapeCraftState::GeoscapeCraftState(Game* game, Craft* craft, Globe* globe, W
 
 	_txtBase->setColor(Palette::blockOffset(15)-1);
 	_txtBase->setSecondaryColor(Palette::blockOffset(8)+5);
-	std::wstringstream ss2;
-	ss2 << tr("STR_BASE_UC_").arg(_craft->getBase()->getName());
-	_txtBase->setText(ss2.str());
+	_txtBase->setText(tr("STR_BASE_UC_").arg(_craft->getBase()->getName()));
 
 	_txtSpeed->setColor(Palette::blockOffset(15)-1);
 	_txtSpeed->setSecondaryColor(Palette::blockOffset(8)+5);
+//kL	_txtSpeed->setText(tr("STR_SPEED_").arg(_craft->getSpeed()));
+
+	// kL_begin: set craftSpeed to UFO when in chase.
 	std::wstringstream ss3;
-	if (_craft->isInDogfight())					// kL
+	if (_craft->isInDogfight())
 	{
-		ss3 << tr("STR_SPEED_").arg("UFO");		// kL
+		ss3 << tr("STR_SPEED_").arg("UFO");
 	}
 	// kL_note: If in dogfight or more accurately in chase_mode, insert UFO speed.
-	else										// kL
+	else
 	{
 		ss3 << tr("STR_SPEED_").arg(_craft->getSpeed());
 	}
 	_txtSpeed->setText(ss3.str());
+	// kL_end.
 
 	_txtMaxSpeed->setColor(Palette::blockOffset(15)-1);
 	_txtMaxSpeed->setSecondaryColor(Palette::blockOffset(8)+5);
-	std::wstringstream ss4;
-	ss4 << tr("STR_MAXIMUM_SPEED_UC").arg(_craft->getRules()->getMaxSpeed());
-	_txtMaxSpeed->setText(ss4.str());
+	_txtMaxSpeed->setText(tr("STR_MAXIMUM_SPEED_UC").arg(_craft->getRules()->getMaxSpeed()));
 
 	// kL_begin: GeoscapeCraftState, add #Soldier on transports.
 	_txtSoldier->setColor(Palette::blockOffset(15)-1);
@@ -245,8 +245,8 @@ GeoscapeCraftState::GeoscapeCraftState(Game* game, Craft* craft, Globe* globe, W
 
 	_txtAltitude->setColor(Palette::blockOffset(15)-1);
 	_txtAltitude->setSecondaryColor(Palette::blockOffset(8)+5);
-	std::wstringstream ss5;
-	// kL_begin: GeoscapeCraftState, add #HWP on transports. ->Moved to Craft.cpp
+//kL	std::string altitude = _craft->getAltitude() == "STR_GROUND" ? "STR_GROUNDED" : _craft->getAltitude();
+	// kL_begin: GeoscapeCraftState, set altitude.
 	std::string altitude;
 	if (_craft->getAltitude() == "STR_GROUND"
 		|| _craft->getStatus() == "STR_READY"
@@ -256,12 +256,10 @@ GeoscapeCraftState::GeoscapeCraftState(Game* game, Craft* craft, Globe* globe, W
 	{
 		altitude = "STR_GROUNDED";
 	}
-	else altitude = _craft->getAltitude();
+	else
+		altitude = _craft->getAltitude();
 	// kL_end.
-
-//kL	std::string altitude = _craft->getAltitude() == "STR_GROUND" ? "STR_GROUNDED" : _craft->getAltitude();
-	ss5 << tr("STR_ALTITUDE_").arg(tr(altitude));
-	_txtAltitude->setText(ss5.str());
+	_txtAltitude->setText(tr("STR_ALTITUDE_").arg(tr(altitude)));
 
 	// kL_begin: GeoscapeCraftState, add #HWP on transports.
 	_txtHWP->setColor(Palette::blockOffset(15)-1);
@@ -273,15 +271,11 @@ GeoscapeCraftState::GeoscapeCraftState(Game* game, Craft* craft, Globe* globe, W
 
 	_txtFuel->setColor(Palette::blockOffset(15)-1);
 	_txtFuel->setSecondaryColor(Palette::blockOffset(8)+5);
-	std::wstringstream ss6;
-	ss6 << tr("STR_FUEL").arg(Text::formatPercentage(_craft->getFuelPercentage()));
-	_txtFuel->setText(ss6.str());
+	_txtFuel->setText(tr("STR_FUEL").arg(Text::formatPercentage(_craft->getFuelPercentage())));
 
 	_txtDamage->setColor(Palette::blockOffset(15)-1);
 	_txtDamage->setSecondaryColor(Palette::blockOffset(8)+5);
-	std::wstringstream ss62;
-	ss62 << tr("STR_DAMAGE_UC_").arg(Text::formatPercentage(_craft->getDamagePercentage()));
-	_txtDamage->setText(ss62.str());
+	_txtDamage->setText(tr("STR_DAMAGE_UC_").arg(Text::formatPercentage(_craft->getDamagePercentage())));
 
 	_txtW1Name->setColor(Palette::blockOffset(15)-1);
 	_txtW1Name->setSecondaryColor(Palette::blockOffset(8)+5);

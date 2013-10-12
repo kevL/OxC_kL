@@ -255,11 +255,12 @@ void ArticleStateItem::setDamageTypeText(Text *text_field, RuleItem *ammo_rule)
 	switch(ammo_rule->getDamageType())
 	{
 		case DT_AP:
+		case DT_MELEE:
 			text_field->setText(tr("STR_DAMAGE_ARMOR_PIERCING").c_str());
 		break;
 		case DT_HE:
-				text_field->setText(tr("STR_DAMAGE_HIGH_EXPLOSIVE").c_str());
-				break;
+			text_field->setText(tr("STR_DAMAGE_HIGH_EXPLOSIVE").c_str());
+			break;
 		case DT_SMOKE:
 			text_field->setText(tr("STR_DAMAGE_SMOKE").c_str());
 		break;
@@ -270,14 +271,10 @@ void ArticleStateItem::setDamageTypeText(Text *text_field, RuleItem *ammo_rule)
 			text_field->setText(tr("STR_DAMAGE_LASER_BEAM").c_str());
 		break;
 		case DT_PLASMA:
-			text_field->setText(tr("STR_DAMAGE_PLASMA_BEAM_TYPE").c_str());
-//			text_field->setText(tr("STR_PLASMA_BEAM_H").c_str());		// kL
+			text_field->setText(tr("STR_DAMAGE_PLASMA_BEAM").c_str());
 		break;
 		case DT_STUN:
 			text_field->setText(tr("STR_DAMAGE_STUN").c_str());
-		break;
-		case DT_MELEE:
-			text_field->setText(tr("STR_DAMAGE_ARMOR_PIERCING").c_str());
 		break;
 
 		default:

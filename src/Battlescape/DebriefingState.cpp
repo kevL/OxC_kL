@@ -54,6 +54,7 @@
 #include <sstream>
 #include "../Menu/MainMenuState.h"
 #include "../Engine/RNG.h"
+#include "../Interface/FpsCounter.h"
 #include "../Interface/Cursor.h"
 #include "../Engine/Options.h"
 
@@ -230,6 +231,9 @@ DebriefingState::DebriefingState(Game* game)
 
 	// Set music
 	_game->getResourcePack()->getMusic("GMMARS")->play();
+
+	_game->getCursor()->setColor(Palette::blockOffset(15) + 12);
+	_game->getFpsCounter()->setColor(Palette::blockOffset(15) + 12);
 }
 
 /**

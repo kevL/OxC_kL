@@ -155,13 +155,8 @@ GeoscapeCraftState::GeoscapeCraftState(Game* game, Craft* craft, Globe* globe, W
 	_txtStatus->setColor(Palette::blockOffset(15)-1);
 	_txtStatus->setSecondaryColor(Palette::blockOffset(8)+10);
 	_txtStatus->setWordWrap(true);
-<<<<<<< HEAD
 
-	std::wstringstream ss;
-	ss << tr("STR_STATUS_") << L'\x01';
-=======
 	std::wstring status;
->>>>>>> master
 	if (_waypoint != 0)
 	{
 		status = tr("STR_INTERCEPTING_UFO").arg(_waypoint->getId());
@@ -176,7 +171,7 @@ GeoscapeCraftState::GeoscapeCraftState(Game* game, Craft* craft, Globe* globe, W
 				|| _craft->getStatus() == "STR_REFUELLING"
 				|| _craft->getStatus() == "STR_REARMING")
 	{
-		ss << tr("STR_BASED");
+		status = tr("STR_BASED");
 	}
 	// Could add "Damaged - returning to base" around here.
 	// kL_end.
@@ -211,42 +206,34 @@ GeoscapeCraftState::GeoscapeCraftState(Game* game, Craft* craft, Globe* globe, W
 			status = tr("STR_DESTINATION_UC_").arg(_craft->getDestination()->getName(_game->getLanguage()));
 		}
 	}
-<<<<<<< HEAD
 
-	_txtStatus->setText(ss.str());
-=======
 	_txtStatus->setText(tr("STR_STATUS_").arg(status));
->>>>>>> master
 
 	_txtBase->setColor(Palette::blockOffset(15)-1);
 	_txtBase->setSecondaryColor(Palette::blockOffset(8)+5);
-	std::wstringstream ss2;
-	ss2 << tr("STR_BASE_UC_").arg(_craft->getBase()->getName());
-	_txtBase->setText(ss2.str());
+	_txtBase->setText(tr("STR_BASE_UC_").arg(_craft->getBase()->getName()));
 
 	_txtSpeed->setColor(Palette::blockOffset(15)-1);
 	_txtSpeed->setSecondaryColor(Palette::blockOffset(8)+5);
-	std::wstringstream ss3;
 <<<<<<< HEAD
-	if (_craft->isInDogfight())							// kL
+	std::wstringstream ss3;
+	if (_craft->isInDogfight())					// kL
 	{
-		ss3 << tr("STR_SPEED_") << L'\x01' << "UFO";	// kL
+		ss3 << tr("STR_SPEED_").arg("UFO");		// kL
 	}
 	// kL_note: If in dogfight or more accurately in chase_mode, insert UFO speed.
-	else												// kL
+	else										// kL
 	{
-		ss3 << tr("STR_SPEED_") << L'\x01' << _craft->getSpeed();
+		ss3 << tr("STR_SPEED_").arg(_craft->getSpeed());
 	}
-=======
-	ss3 << tr("STR_SPEED_").arg(_craft->getSpeed());
->>>>>>> master
 	_txtSpeed->setText(ss3.str());
+=======
+	_txtSpeed->setText(tr("STR_SPEED_").arg(_craft->getSpeed()));
+>>>>>>> master
 
 	_txtMaxSpeed->setColor(Palette::blockOffset(15)-1);
 	_txtMaxSpeed->setSecondaryColor(Palette::blockOffset(8)+5);
-	std::wstringstream ss4;
-	ss4 << tr("STR_MAXIMUM_SPEED_UC").arg(_craft->getRules()->getMaxSpeed());
-	_txtMaxSpeed->setText(ss4.str());
+	_txtMaxSpeed->setText(tr("STR_MAXIMUM_SPEED_UC").arg(_craft->getRules()->getMaxSpeed()));
 
 	// kL_begin: GeoscapeCraftState, add #Soldier on transports.
 	_txtSoldier->setColor(Palette::blockOffset(15)-1);
@@ -258,8 +245,8 @@ GeoscapeCraftState::GeoscapeCraftState(Game* game, Craft* craft, Globe* globe, W
 
 	_txtAltitude->setColor(Palette::blockOffset(15)-1);
 	_txtAltitude->setSecondaryColor(Palette::blockOffset(8)+5);
-	std::wstringstream ss5;
 <<<<<<< HEAD
+	std::wstringstream ss5;
 	// kL_begin: GeoscapeCraftState, add #HWP on transports. ->Moved to Craft.cpp
 	std::string altitude;
 	if (_craft->getAltitude() == "STR_GROUND"
@@ -274,13 +261,12 @@ GeoscapeCraftState::GeoscapeCraftState(Game* game, Craft* craft, Globe* globe, W
 	// kL_end.
 
 //kL	std::string altitude = _craft->getAltitude() == "STR_GROUND" ? "STR_GROUNDED" : _craft->getAltitude();
-//	std::string altitude = _craft->getAltitude();																		// kL
-	ss5 << tr("STR_ALTITUDE_") << L'\x01' << tr(altitude);	// kL
+	ss5 << tr("STR_ALTITUDE_").arg(tr(altitude));
+	_txtAltitude->setText(ss5.str());
 =======
 	std::string altitude = _craft->getAltitude() == "STR_GROUND" ? "STR_GROUNDED" : _craft->getAltitude();
-	ss5 << tr("STR_ALTITUDE_").arg(tr(altitude));
+	_txtAltitude->setText(tr("STR_ALTITUDE_").arg(tr(altitude)));
 >>>>>>> master
-	_txtAltitude->setText(ss5.str());
 
 	// kL_begin: GeoscapeCraftState, add #HWP on transports.
 	_txtHWP->setColor(Palette::blockOffset(15)-1);
@@ -292,25 +278,11 @@ GeoscapeCraftState::GeoscapeCraftState(Game* game, Craft* craft, Globe* globe, W
 
 	_txtFuel->setColor(Palette::blockOffset(15)-1);
 	_txtFuel->setSecondaryColor(Palette::blockOffset(8)+5);
-	std::wstringstream ss6;
-<<<<<<< HEAD
-//kL	ss6 << tr("STR_FUEL") << L'\x01' << _craft->getFuelPercentage() << "%";
-	ss6 << tr("STR_FUEL") << L'\x01' << _craft->getFuelPercentage();		// kL
-=======
-	ss6 << tr("STR_FUEL").arg(Text::formatPercentage(_craft->getFuelPercentage()));
->>>>>>> master
-	_txtFuel->setText(ss6.str());
+	_txtFuel->setText(tr("STR_FUEL").arg(Text::formatPercentage(_craft->getFuelPercentage())));
 
 	_txtDamage->setColor(Palette::blockOffset(15)-1);
 	_txtDamage->setSecondaryColor(Palette::blockOffset(8)+5);
-	std::wstringstream ss62;
-<<<<<<< HEAD
-//kL	ss62 << tr("STR_DAMAGE_UC_") << L'\x01' << _craft->getDamagePercentage() << "%";
-	ss62 << tr("STR_DAMAGE_UC_") << L'\x01' << _craft->getDamagePercentage();		// kL
-=======
-	ss62 << tr("STR_DAMAGE_UC_").arg(Text::formatPercentage(_craft->getDamagePercentage()));
->>>>>>> master
-	_txtDamage->setText(ss62.str());
+	_txtDamage->setText(tr("STR_DAMAGE_UC_").arg(Text::formatPercentage(_craft->getDamagePercentage())));
 
 	_txtW1Name->setColor(Palette::blockOffset(15)-1);
 	_txtW1Name->setSecondaryColor(Palette::blockOffset(8)+5);
@@ -321,19 +293,9 @@ GeoscapeCraftState::GeoscapeCraftState(Game* game, Craft* craft, Globe* globe, W
 	if (_craft->getRules()->getWeapons() > 0
 		&& _craft->getWeapons()->at(0) != 0)
 	{
-<<<<<<< HEAD
 		CraftWeapon* w1 = _craft->getWeapons()->at(0);
-
-		ss7 << tr(w1->getRules()->getType());
-		_txtW1Name->setText(ss7.str());
-
-		ss8 << w1->getAmmo();
-		_txtW1Ammo->setText(ss8.str());
-=======
-		CraftWeapon *w1 = _craft->getWeapons()->at(0);
 		_txtW1Name->setText(tr("STR_WEAPON_ONE").arg(tr(w1->getRules()->getType())));
 		_txtW1Ammo->setText(tr("STR_ROUNDS_").arg(w1->getAmmo()));
->>>>>>> master
 	}
 	else
 	{
@@ -350,23 +312,13 @@ GeoscapeCraftState::GeoscapeCraftState(Game* game, Craft* craft, Globe* globe, W
 	if (_craft->getRules()->getWeapons() > 1
 		&& _craft->getWeapons()->at(1) != 0)
 	{
-<<<<<<< HEAD
 		CraftWeapon* w2 = _craft->getWeapons()->at(1);
-
-		ss9 << tr(w2->getRules()->getType());
-		_txtW2Name->setText(ss9.str());
-
-		ss10 << w2->getAmmo();
-		_txtW2Ammo->setText(ss10.str());
-=======
-		CraftWeapon *w2 = _craft->getWeapons()->at(1);
 		_txtW2Name->setText(tr("STR_WEAPON_TWO").arg(tr(w2->getRules()->getType())));
 		_txtW2Ammo->setText(tr("STR_ROUNDS_").arg(w2->getAmmo()));
->>>>>>> master
 	}
 	else
 	{
-		_txtW1Name->setText(tr("STR_WEAPON_TWO").arg(tr("STR_NONE_UC")));
+		_txtW2Name->setText(tr("STR_WEAPON_TWO").arg(tr("STR_NONE_UC")));
 		_txtW2Ammo->setVisible(false);
 	}
 
