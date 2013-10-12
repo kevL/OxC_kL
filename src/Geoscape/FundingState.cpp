@@ -49,17 +49,18 @@ FundingState::FundingState(Game* game)
 	// Create objects
 	_window			= new Window(this, 320, 200, 0, 0, POPUP_BOTH);
 //kL	_txtTitle		= new Text(320, 16, 0, 8);
-	_txtTitle		= new Text(300, 16, 10, 10);		// kL
+	_txtTitle		= new Text(300, 16, 10, 9);		// kL
 
 //kL	_txtCountry		= new Text(100, 9, 32, 30);
 //kL	_txtFunding		= new Text(100, 9, 140, 30);
 //kL	_txtChange		= new Text(72, 9, 240, 30);
-	_txtCountry		= new Text(100, 9, 30, 28);		// kL
-	_txtFunding		= new Text(100, 9, 138, 28);	// kL
-	_txtChange		= new Text(72, 9, 238, 28);		// kL
+	_txtCountry		= new Text(100, 9, 30, 25);		// kL
+	_txtFunding		= new Text(100, 9, 138, 25);	// kL
+	_txtChange		= new Text(72, 9, 238, 25);		// kL
 
 //kL	_lstCountries	= new TextList(260, 136, 32, 40);
-	_lstCountries	= new TextList(260, 136, 30, 38);	// kL
+	_lstCountries	= new TextList(260, 136, 30, 34);	// kL
+	_lstTotal		= new TextList(260, 136, 30, 174);	// kL
 
 //kL	_btnOk			= new TextButton(50, 12, 135, 180);
 	_btnOk			= new TextButton(288, 16, 16, 177);		// kL
@@ -105,7 +106,7 @@ FundingState::FundingState(Game* game)
 	_lstCountries->setSecondaryColor(Palette::blockOffset(8)+10);
 	_lstCountries->setColumns(3, 108, 100, 52);
 	_lstCountries->setDot(true);
-	for (std::vector<Country*>::iterator i = _game->getSavedGame()->getCountries()->begin(); i != _game->getSavedGame()->getCountries()->end(); ++i)
+	for (std::vector<Country* >::iterator i = _game->getSavedGame()->getCountries()->begin(); i != _game->getSavedGame()->getCountries()->end(); ++i)
 	{
 		std::wstringstream ss, ss2;
 		ss << L'\x01' << Text::formatFunding((*i)->getFunding().at((*i)->getFunding().size()-1)) << L'\x01';
@@ -122,10 +123,19 @@ FundingState::FundingState(Game* game)
 		{
 			ss2 << Text::formatFunding(0);
 		}
-		_lstCountries->addRow(3, tr((*i)->getRules()->getType()).c_str(), ss.str().c_str(), ss2.str().c_str());
+//kL		_lstCountries->addRow(3, tr((*i)->getRules()->getType()).c_str(), ss.str().c_str(), ss2.str().c_str());
 	}
 	_lstCountries->addRow(2, tr("STR_TOTAL_UC").c_str(), Text::formatFunding(_game->getSavedGame()->getCountryFunding()).c_str());
 	_lstCountries->setRowColor(_game->getSavedGame()->getCountries()->size(), Palette::blockOffset(8)+5);
+
+	// kL_begin:
+	_lstTotal->setColor(Palette::blockOffset(15)-1);
+	_lstTotal->setSecondaryColor(Palette::blockOffset(8)+10);
+	_lstTotal->setColumns(3, 108, 100, 52);
+	_lstTotal->setDot(true);
+	_lstTotal->addRow(2, tr("STR_TOTAL_UC").c_str(), Text::formatFunding(_game->getSavedGame()->getCountryFunding()).c_str());
+	_lstTotal->setRowColor(_game->getSavedGame()->getCountries()->size(), Palette::blockOffset(8)+5);
+	// kL_end.
 }
 
 /**

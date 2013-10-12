@@ -43,7 +43,7 @@ private:
 	TextButton* _btnOk;
 	Window* _window;
 	Text* _txtTitle, * _txtCountry, * _txtFunding, * _txtChange;
-	TextList* _lstCountries;
+	TextList* _lstCountries, * _lstTotal;
 
 public:
 	/// Creates the Funding state.

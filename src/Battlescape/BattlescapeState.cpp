@@ -186,9 +186,9 @@ BattlescapeState::BattlescapeState(Game* game)
 	_txtTooltip		= new Text(300, 10, _icons->getX() + 2, _icons->getY() - 10);
 
 	// kL_begin:
-	Log(LOG_INFO) << ". new TurnCounter";
+//	Log(LOG_INFO) << ". new TurnCounter";
 	_turnCounter	= new TurnCounter(65, 5, 0, 0);		// kL
-	Log(LOG_INFO) << ". new TurnCounter DONE";
+//	Log(LOG_INFO) << ". new TurnCounter DONE";
 
 //	add(_turnCounter);
 //	_turnCounter->setColor(Palette::blockOffset(9));
@@ -1572,7 +1572,7 @@ void BattlescapeState::saveAIMap()
 	int expMax = 0;
 
 	SDL_Surface* img = SDL_AllocSurface(0, w * 8, h * 8, 24, 0xff, 0xff00, 0xff0000, 0);
-	Log(LOG_INFO) << "unit = " << unit->getId();
+//	Log(LOG_INFO) << "unit = " << unit->getId();
 	memset(img->pixels, 0, img->pitch * img->h);
 
 	Position tilePos(pos);
@@ -1685,7 +1685,7 @@ void BattlescapeState::saveAIMap()
 
 	SDL_FreeSurface(img);
 
-	Log(LOG_INFO) << "saveAIMap() completed in " << SDL_GetTicks() - start << "ms.";
+//	Log(LOG_INFO) << "saveAIMap() completed in " << SDL_GetTicks() - start << "ms.";
 }
 
 /**

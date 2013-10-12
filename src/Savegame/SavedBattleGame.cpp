@@ -1663,20 +1663,28 @@ int SavedBattleGame::getMoraleModifier(BattleUnit* unit)
 		{
 			switch (leader->getRankInt())
 			{
-				case 5:					// commander
-//kL					result += 25;	// 150
-					result += 15;		// 135 kL, per ufoPedia.org
-				case 4:					// colonel
-//kL					result += 10;	// 125
-					result += 5;		// 120 kL, per ufoPedia.org
-				case 3:					// captain
-					result += 5;		// 115
-				case 2:					// sergeant
-//kL					result += 10;	// 110
-					result += 5;		// 110
+/*kL				case 5:				// commander
+					result += 25;	// 150
+				case 4:				// colonel
+					result += 10;	// 125
+				case 3:				// captain
+					result += 5;	// 115
+				case 2:				// sergeant
+					result += 10;	// 110
+*/
 				// kL_begin:
-				case 1:					// squaddie
-					result += 5;		// 105 kL
+				case 5:				// commander
+					result += 25;	// 150
+				case 4:				// colonel
+					result += 10;	// 125
+				case 3:				// captain
+					result += 5;	// 115
+				case 2:				// sergeant
+					result += 10;	// 110
+				case 1:				// squaddie
+					result += 15;	// 100
+				case 0:				// rookies...
+					result -= 15;	// 85
 				// kL_end.
 
 				default:

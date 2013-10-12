@@ -1529,7 +1529,12 @@ bool BattlescapeGame::isBusy()
  */
 void BattlescapeGame::primaryAction(const Position& pos)
 {
-	Log(LOG_INFO) << "BattlescapeGame::primaryAction() unitID = "; // << _save->getSelectedUnit()->getId();
+	std::string sUnit = "none selected";
+	if (_save->getSelectedUnit())
+	{
+		sUnit = _save->getSelectedUnit()->getId();
+	}
+	Log(LOG_INFO) << "BattlescapeGame::primaryAction() unitID = " << sUnit;
 
 	bool bPreviewed = Options::getInt("battleNewPreviewPath") > 0;
 
@@ -1616,6 +1621,7 @@ void BattlescapeGame::primaryAction(const Position& pos)
 //						}
 
 						setupCursor();
+						// kL_note: might need to put a refresh (redraw/blit) cursor here; else it 'sticks' for a moment at its previous position.
 					}
 
 					if (builtinpsi)

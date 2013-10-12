@@ -16,10 +16,12 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_BASEDEFENSESTATE_H
 #define OPENXCOM_BASEDEFENSESTATE_H
 
 #include "../Engine/State.h"
+
 
 namespace OpenXcom
 {
@@ -33,37 +35,48 @@ class TextList;
 class GeoscapeState;
 class Timer;
 
-enum BaseDefenseActionType { BDA_NONE, BDA_FIRE, BDA_RESOLVE, BDA_DESTROY, BDA_END };
+enum BaseDefenseActionType
+{
+	BDA_NONE,
+	BDA_FIRE,
+	BDA_RESOLVE,
+	BDA_DESTROY,
+	BDA_END
+};
 
 /**
  * Base Defense Screen for when ufos try to attack.
  */
-class BaseDefenseState : public State
+class BaseDefenseState
+	:
+		public State
 {
 private:
-	TextButton *_btnOk;
-	Window *_window;
-	Text *_txtTitle, *_txtInit;
-	TextList *_lstDefenses;
-	Base *_base;
-	Ufo *_ufo;
+	TextButton* _btnOk;
+	Window* _window;
+	Text* _txtTitle, * _txtInit;
+	TextList* _lstDefenses;
+	Base* _base;
+	Ufo* _ufo;
 	int _thinkcycles, _row, _passes, _gravShields, _defenses, _attacks;
 	BaseDefenseActionType _action;
-	Timer *_timer;
-	GeoscapeState *_state;
-public:
-	/// Creates the Base Defense state.
-	BaseDefenseState(Game *game, Base *base, Ufo *ufo, GeoscapeState *state);
-	/// Cleans up the Base Defense state.
-	~BaseDefenseState();
-	/// Updates the palette.
-	void init();
-	/// Handle the Timer.
-	void think();
-	/// do the next step.
-	void nextStep();
-	/// Handler for clicking the OK button.
-	void btnOkClick(Action *action);
+	Timer* _timer;
+	GeoscapeState* _state;
+
+	public:
+		/// Creates the Base Defense state.
+		BaseDefenseState(Game* game, Base* base, Ufo* ufo, GeoscapeState* state);
+		/// Cleans up the Base Defense state.
+		~BaseDefenseState();
+
+		/// Updates the palette.
+		void init();
+		/// Handle the Timer.
+		void think();
+		/// do the next step.
+		void nextStep();
+		/// Handler for clicking the OK button.
+		void btnOkClick(Action* action);
 };
 
 }

@@ -636,7 +636,7 @@ int BattleUnit::getDiagonalWalkingPhase() const
  */
 void BattleUnit::lookAt(const Position& point, bool turret)
 {
-	Log(LOG_INFO) << "BattleUnit::lookAt() #1 unitID = ";
+	Log(LOG_INFO) << "BattleUnit::lookAt() #1 unitID = " << getId();
 	Log(LOG_INFO) << ". . _direction = " << _direction;
 	Log(LOG_INFO) << ". . _toDirection = " << _toDirection;
 
@@ -670,7 +670,7 @@ void BattleUnit::lookAt(const Position& point, bool turret)
  */
 void BattleUnit::lookAt(int direction, bool force)
 {
-	Log(LOG_INFO) << "BattleUnit::lookAt() #2 unitID = ";
+	Log(LOG_INFO) << "BattleUnit::lookAt() #2 unitID = " << getId();
 	Log(LOG_INFO) << ". . _direction = " << _direction;
 	Log(LOG_INFO) << ". . _toDirection = " << _toDirection;
 	Log(LOG_INFO) << ". . lookAt direction = " << direction;
@@ -703,7 +703,7 @@ void BattleUnit::lookAt(int direction, bool force)
  */
 void BattleUnit::turn(bool turret)
 {
-	Log(LOG_INFO) << "BattleUnit::turn() unitID = ";
+	Log(LOG_INFO) << "BattleUnit::turn() unitID = " << getId();
 	Log(LOG_INFO) << ". . _direction = " << _direction;
 	Log(LOG_INFO) << ". . _toDirection = " << _toDirection;
 
@@ -812,7 +812,7 @@ void BattleUnit::turn(bool turret)
 	else if (_toDirection == _direction || _status == STATUS_UNCONSCIOUS)	// kL_note: I didn't know Unconscious could turn...
 																			// learn something new every day.
 	{
-		Log(LOG_INFO) << "BattleUnit::turn() " << /* getId() << */ " - STATUS_STANDING (turn has ended)";
+		Log(LOG_INFO) << "BattleUnit::turn() " << getId() << " - STATUS_STANDING (turn has ended)";
 		_status = STATUS_STANDING; // we officially reached our destination
 	}
 }
@@ -1191,13 +1191,13 @@ void BattleUnit::keepFalling()
 
 		if (_health == 0)
 		{
-			Log(LOG_INFO) << "BattleUnit::keepFalling() "; //<< this->getId() << ". . STATUS_DEAD";
+			Log(LOG_INFO) << "BattleUnit::keepFalling() " << getId() << ". . STATUS_DEAD";
 
 			_status = STATUS_DEAD;
 		}
 		else
 		{
-			Log(LOG_INFO) << "BattleUnit::keepFalling() "; //<< this->getId() << ". . STATUS_UNCONSCIOUS";
+			Log(LOG_INFO) << "BattleUnit::keepFalling() " << getId() << ". . STATUS_UNCONSCIOUS";
 
 			_status = STATUS_UNCONSCIOUS;
 		}
