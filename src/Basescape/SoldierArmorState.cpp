@@ -79,9 +79,9 @@ SoldierArmorState::SoldierArmorState(Game *game, Base *base, size_t soldier) : S
 	_btnCancel->onKeyboardPress((ActionHandler)&SoldierArmorState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
 
 	Soldier *s = _base->getSoldiers()->at(_soldier);
-	_txtTitle->setColor(Palette::blockOffset(13)+5);
+/*kL	_txtTitle->setColor(Palette::blockOffset(13)+5);
 	_txtTitle->setAlign(ALIGN_CENTER);
-	_txtTitle->setText(tr("STR_SELECT_ARMOR_FOR_SOLDIER").arg(s->getName()));
+	_txtTitle->setText(tr("STR_SELECT_ARMOR_FOR_SOLDIER").arg(s->getName())); */
 
 	_txtSoldier->setColor(Palette::blockOffset(13)+5);
 	_txtSoldier->setAlign(ALIGN_CENTER);

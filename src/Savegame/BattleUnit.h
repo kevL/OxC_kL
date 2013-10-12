@@ -95,62 +95,62 @@ enum UnitBodyPart
  */
 class BattleUnit
 {
-	private:
-		UnitFaction _faction, _originalFaction;
-		UnitFaction _killedBy;
-		int _id;
-		Position _pos;
-		Tile* _tile;
-		Position _lastPos;
-		int _direction, _toDirection;
-		int _directionTurret, _toDirectionTurret;
-		int _verticalDirection;
-		Position _destination;
-		UnitStatus _status;
+private:
+	UnitFaction _faction, _originalFaction;
+	UnitFaction _killedBy;
+	int _id;
+	Position _pos;
+	Tile* _tile;
+	Position _lastPos;
+	int _direction, _toDirection;
+	int _directionTurret, _toDirectionTurret;
+	int _verticalDirection;
+	Position _destination;
+	UnitStatus _status;
 //kL		int _walkPhase, _fallPhase;
-		int _walkPhase, _fallPhase, _spinPhase;		// kL
-		std::vector<BattleUnit* > _visibleUnits, _unitsSpottedThisTurn;
-		std::vector<Tile* > _visibleTiles;
-		int _tu, _energy, _health, _morale, _stunlevel;
-		bool _kneeled, _floating, _dontReselect;
-		int _currentArmor[5];
-		int _fatalWounds[6];
-		int _fire;
-		std::vector<BattleItem* > _inventory;
-		BattleAIState* _currentAIState;
-		bool _visible;
-		Surface* _cache[5];
-		bool _cacheInvalid;
-		int _expBravery, _expReactions, _expFiring, _expThrowing, _expPsiSkill, _expMelee;
-		int improveStat(int exp);
-		int _motionPoints;
-		int _kills;
-		int _faceDirection; // used only during strafeing moves
-		bool _hitByFire;
-		int _moraleRestored;
-		int _coverReserve;
-		BattleUnit* _charging;
-		int _turnsExposed;
-		std::string _zombieUnit, _spawnUnit;
-		std::string _activeHand;
+	int _walkPhase, _fallPhase, _spinPhase;		// kL
+	std::vector<BattleUnit* > _visibleUnits, _unitsSpottedThisTurn;
+	std::vector<Tile* > _visibleTiles;
+	int _tu, _energy, _health, _morale, _stunlevel;
+	bool _kneeled, _floating, _dontReselect;
+	int _currentArmor[5];
+	int _fatalWounds[6];
+	int _fire;
+	std::vector<BattleItem* > _inventory;
+	BattleAIState* _currentAIState;
+	bool _visible;
+	Surface* _cache[5];
+	bool _cacheInvalid;
+	int _expBravery, _expReactions, _expFiring, _expThrowing, _expPsiSkill, _expMelee;
+	int improveStat(int exp);
+	int _motionPoints;
+	int _kills;
+	int _faceDirection; // used only during strafeing moves
+	bool _hitByFire;
+	int _moraleRestored;
+	int _coverReserve;
+	BattleUnit* _charging;
+	int _turnsExposed;
+	std::string _zombieUnit, _spawnUnit;
+	std::string _activeHand;
 	
-		// static data
-		std::string _type;
-		std::string _rank;
-		std::string _race;
-		std::wstring _name;
-		UnitStats _stats;
-		int _standHeight, _kneelHeight, _floatHeight;
-		int _value, _deathSound, _aggroSound, _moveSound;
-		int _intelligence, _aggression;
-		SpecialAbility _specab;
-		Armor* _armor;
-		SoldierGender _gender;
-		Soldier* _geoscapeSoldier;
-		std::vector<int> _loftempsSet;
-		Unit* _unitRules;
-		int _rankInt;
-		int _turretType;
+	// static data
+	std::string _type;
+	std::string _rank;
+	std::string _race;
+	std::wstring _name;
+	UnitStats _stats;
+	int _standHeight, _kneelHeight, _floatHeight;
+	int _value, _deathSound, _aggroSound, _moveSound;
+	int _intelligence, _aggression;
+	SpecialAbility _specab;
+	Armor* _armor;
+	SoldierGender _gender;
+	Soldier* _geoscapeSoldier;
+	std::vector<int> _loftempsSet;
+	Unit* _unitRules;
+	int _rankInt;
+	int _turretType;
 
 	public:
 		static const int MAX_SOLDIER_ID = 1000000;

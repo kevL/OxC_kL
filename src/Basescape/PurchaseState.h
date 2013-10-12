@@ -41,27 +41,27 @@ class Base;
  */
 class PurchaseState
 	:
-	public State
+		public State
 {
-	private:
-		Base* _base;
+private:
+	Base* _base;
 
-		TextButton* _btnOk, * _btnCancel;
-		Window* _window;
-		Text* _txtTitle, * _txtFunds, * _txtPurchases, * _txtItem, * _txtCost, * _txtQuantity;
-		TextList* _lstItems;
-		std::vector<std::string> _crafts, _items;
-		std::vector<int> _qtys;
-		unsigned int _sel;
-		int _total, _pQty, _cQty;
-		float _iQty;
-		Timer* _timerInc, * _timerDec;
-		int _changeValueByMouseWheel;
-		bool _allowChangeListValuesByMouseWheel;
-		/// Gets selected price.
-		int getPrice();
-		/// Is it excluded in the options file?
-		bool isExcluded(std::string item);
+	TextButton* _btnOk, * _btnCancel;
+	Window* _window;
+	Text* _txtTitle, * _txtFunds, * _txtPurchases, * _txtItem, * _txtCost, * _txtQuantity;
+	TextList* _lstItems;
+	std::vector<std::string> _crafts, _items;
+	std::vector<int> _qtys;
+	unsigned int _sel;
+	int _total, _pQty, _cQty;
+	float _iQty;
+	Timer* _timerInc, * _timerDec;
+	int _changeValueByMouseWheel;
+	bool _allowChangeListValuesByMouseWheel;
+	/// Gets selected price.
+	int getPrice();
+	/// Is it excluded in the options file?
+	bool isExcluded(std::string item);
 
 	public:
 		/// Creates the Purchase state.

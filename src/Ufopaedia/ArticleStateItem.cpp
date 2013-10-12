@@ -72,7 +72,7 @@ ArticleStateItem::ArticleStateItem(Game* game, ArticleDefinitionItem* defs, int 
 
 	item->drawHandSprite(_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"), _image);
 
-	std::vector<std::string> *ammo_data = item->getCompatibleAmmo();
+	std::vector<std::string>* ammo_data = item->getCompatibleAmmo();
 
 	// SHOT STATS TABLE (for firearms only)
 	if (item->getBattleType() == BT_FIREARM)
@@ -83,13 +83,15 @@ ArticleStateItem::ArticleStateItem(Game* game, ArticleDefinitionItem* defs, int 
 		_txtShotType->setWordWrap(true);
 		_txtShotType->setText(tr("STR_SHOT_TYPE").c_str());
 
-		_txtAccuracy = new Text(50, 16, 104, 66);
+//kL		_txtAccuracy = new Text(50, 16, 104, 66);
+		_txtAccuracy = new Text(50, 16, 108, 66);		// kL
 		add(_txtAccuracy);
 		_txtAccuracy->setColor(Palette::blockOffset(14) + 15);
 		_txtAccuracy->setWordWrap(true);
 		_txtAccuracy->setText(tr("STR_ACCURACY_UC").c_str());
 
-		_txtTuCost = new Text(60, 16, 158, 66);
+//kL		_txtTuCost = new Text(60, 16, 158, 66);
+		_txtTuCost = new Text(60, 16, 160, 66);			// kL
 		add(_txtTuCost);
 		_txtTuCost->setColor(Palette::blockOffset(14)+15);
 		_txtTuCost->setWordWrap(true);
@@ -111,9 +113,13 @@ ArticleStateItem::ArticleStateItem(Game* game, ArticleDefinitionItem* defs, int 
 				tu.erase(tu.end() - 1);
 			}
 
+			std::wstring shotauto = Text::formatPercentage(item->getAccuracyAuto());	// kL
+			shotauto.erase(shotauto.end() - 1);											// kL
+
 			_lstInfo->addRow(3,
 								tr("STR_SHOT_TYPE_AUTO").c_str(),
-								Text::formatPercentage(item->getAccuracyAuto()).c_str(),
+//kL								Text::formatPercentage(item->getAccuracyAuto()).c_str(),
+								shotauto.c_str(),		// kL
 								tu.c_str());
 			_lstInfo->setCellColor(current_row, 0, Palette::blockOffset(14)+15);
 
@@ -128,9 +134,13 @@ ArticleStateItem::ArticleStateItem(Game* game, ArticleDefinitionItem* defs, int 
 				tu.erase(tu.end() - 1);
 			}
 
+			std::wstring shotsnap = Text::formatPercentage(item->getAccuracySnap());	// kL
+			shotsnap.erase(shotsnap.end() - 1);											// kL
+
 			_lstInfo->addRow(3,
 								tr("STR_SHOT_TYPE_SNAP").c_str(),
-								Text::formatPercentage(item->getAccuracySnap()).c_str(),
+//kL								Text::formatPercentage(item->getAccuracySnap()).c_str(),
+								shotsnap.c_str(),		// kL
 								tu.c_str());
 			_lstInfo->setCellColor(current_row, 0, Palette::blockOffset(14) + 15);
 
@@ -145,9 +155,13 @@ ArticleStateItem::ArticleStateItem(Game* game, ArticleDefinitionItem* defs, int 
 				tu.erase(tu.end() - 1);
 			}
 
+			std::wstring shotaimed = Text::formatPercentage(item->getAccuracyAimed());		// kL
+			shotaimed.erase(shotaimed.end() - 1);											// kL
+
 			_lstInfo->addRow(3,
 								tr("STR_SHOT_TYPE_AIMED").c_str(),
-								Text::formatPercentage(item->getAccuracyAimed()).c_str(),
+//kL								Text::formatPercentage(item->getAccuracyAimed()).c_str(),
+								shotaimed.c_str(),		// kL
 								tu.c_str());
 			_lstInfo->setCellColor(current_row, 0, Palette::blockOffset(14) + 15);
 
@@ -155,7 +169,7 @@ ArticleStateItem::ArticleStateItem(Game* game, ArticleDefinitionItem* defs, int 
 		}
 
 		// text_info is BELOW the info table
-		_txtInfo = new Text((ammo_data->size()<3 ? 300 : 180), 56, 8, 138);
+		_txtInfo = new Text((ammo_data->size() < 3 ? 300 : 180), 56, 8, 138);
 	}
 	else
 	{
@@ -175,14 +189,16 @@ ArticleStateItem::ArticleStateItem(Game* game, ArticleDefinitionItem* defs, int 
 
 	for (int i = 0; i < 3; ++i)
 	{
-		_txtAmmoType[i] = new Text(90, 9, 190, 24 + i * 49);
+//kL		_txtAmmoType[i] = new Text(90, 9, 190, 24 + i * 49);
+		_txtAmmoType[i] = new Text(90, 9, 189, 24 + i * 49);		// kL
 		add(_txtAmmoType[i]);
 		_txtAmmoType[i]->setColor(Palette::blockOffset(14)+15);
 		_txtAmmoType[i]->setAlign(ALIGN_CENTER);
 
 		_txtAmmoDamage[i] = new Text(90, 16, 190, 40 + i * 49);
 		add(_txtAmmoDamage[i]);
-		_txtAmmoDamage[i]->setColor(Palette::blockOffset(2));
+//kL		_txtAmmoDamage[i]->setColor(Palette::blockOffset(2));
+		_txtAmmoDamage[i]->setColor(Palette::blockOffset(3));		// kL
 		_txtAmmoDamage[i]->setAlign(ALIGN_CENTER);
 		_txtAmmoDamage[i]->setBig();
 
@@ -193,13 +209,15 @@ ArticleStateItem::ArticleStateItem(Game* game, ArticleDefinitionItem* defs, int 
 	switch (item->getBattleType())
 	{
 		case BT_FIREARM:
-			_txtDamage = new Text(80, 10, 200, 7);
+//kL			_txtDamage = new Text(80, 10, 200, 7);
+			_txtDamage = new Text(80, 10, 199, 7);		// kL
 			add(_txtDamage);
 			_txtDamage->setColor(Palette::blockOffset(14)+15);
 			_txtDamage->setAlign(ALIGN_CENTER);
 			_txtDamage->setText(tr("STR_DAMAGE_UC").c_str());
 
-			_txtAmmo = new Text(45, 10, 270, 7);
+//kL			_txtAmmo = new Text(45, 10, 270, 7);
+			_txtAmmo = new Text(45, 10, 271, 7);		// kL
 			add(_txtAmmo);
 			_txtAmmo->setColor(Palette::blockOffset(14)+15);
 			_txtAmmo->setAlign(ALIGN_CENTER);
@@ -209,7 +227,8 @@ ArticleStateItem::ArticleStateItem(Game* game, ArticleDefinitionItem* defs, int 
 			{
 				setDamageTypeText(_txtAmmoType[0], item);
 
-				ss.str(L"");ss.clear();
+				ss.str(L"");
+				ss.clear();
 				ss << item->getPower();
 				_txtAmmoDamage[0]->setText(ss.str().c_str());
 			}
@@ -223,7 +242,8 @@ ArticleStateItem::ArticleStateItem(Game* game, ArticleDefinitionItem* defs, int 
 						RuleItem* ammo_rule = _game->getRuleset()->getItem((*ammo_data)[i]);
 						setDamageTypeText(_txtAmmoType[i], ammo_rule);
 
-						ss.str(L"");ss.clear();
+						ss.str(L"");
+						ss.clear();
 						ss << ammo_rule->getPower();
 						_txtAmmoDamage[i]->setText(ss.str().c_str());
 
@@ -238,7 +258,8 @@ ArticleStateItem::ArticleStateItem(Game* game, ArticleDefinitionItem* defs, int 
 		case BT_MELEE:
 			setDamageTypeText(_txtAmmoType[0], item);
 
-			ss.str(L"");ss.clear();
+			ss.str(L"");
+			ss.clear();
 			ss << item->getPower();
 			_txtAmmoDamage[0]->setText(ss.str().c_str());
 		break;
@@ -250,7 +271,7 @@ ArticleStateItem::ArticleStateItem(Game* game, ArticleDefinitionItem* defs, int 
 	centerAllSurfaces();
 }
 
-void ArticleStateItem::setDamageTypeText(Text *text_field, RuleItem *ammo_rule)
+void ArticleStateItem::setDamageTypeText(Text* text_field, RuleItem* ammo_rule)
 {
 	switch(ammo_rule->getDamageType())
 	{

@@ -105,7 +105,8 @@ namespace OpenXcom
 		ss7 << armor->getUnderArmor();
 		_lstStats->addRow(2, tr("STR_UNDER_ARMOR").c_str(), ss7.str().c_str());
 		
-		_lstStats->addRow(2, tr("STR_WEAPON").c_str(), tr(defs->weapon).c_str());
+//kL		_lstStats->addRow(2, tr("STR_WEAPON").c_str(), tr(defs->weapon).c_str());
+		_lstStats->addRow(2, tr("STR_WEAPON_LC").c_str(), tr(defs->weapon).c_str());	// kL
 				
 		if (item->getClipSize() != -1)
 		{
@@ -115,7 +116,8 @@ namespace OpenXcom
 			ss8 << ammo->getPower();
 			_lstStats->addRow(2, tr("STR_WEAPON_POWER").c_str(), ss8.str().c_str());
 
-			_lstStats->addRow(2, tr("STR_AMMUNITION").c_str(), tr(ammo->getName()).c_str());
+//kL			_lstStats->addRow(2, tr("STR_AMMUNITION").c_str(), tr(ammo->getName()).c_str());
+			_lstStats->addRow(2, tr("STR_ORDNANCE_LC").c_str(), tr(ammo->getName()).c_str());	// kL
 			
 			std::wstringstream ss9;
 			ss9 << ammo->getClipSize();

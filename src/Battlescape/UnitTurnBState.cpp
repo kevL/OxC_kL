@@ -58,10 +58,10 @@ UnitTurnBState::~UnitTurnBState()
  */
 void UnitTurnBState::init()
 {
-	Log(LOG_INFO) << "UnitTurnBState::init()";
-
 	_unit = _action.actor;
 	_action.TU = 0;
+
+	Log(LOG_INFO) << "UnitTurnBState::init() unitID = " << _unit->getId();
 
 	if (_unit->getFaction() == FACTION_PLAYER)
 		_parent->setStateInterval(Options::getInt("battleXcomSpeed"));
@@ -105,7 +105,7 @@ void UnitTurnBState::init()
  */
 void UnitTurnBState::think()
 {
-	Log(LOG_INFO) << "UnitTurnBState::think()";
+	Log(LOG_INFO) << "UnitTurnBState::think() unitID = " << _unit->getId();
 	bool thisFaction = _unit->getFaction() == _parent->getSave()->getSide();	// kL
 
 //kL	const int tu = _unit->getFaction() == _parent->getSave()->getSide() ? 1 : 0; // one turn is 1 tu unless during reaction fire.

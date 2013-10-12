@@ -44,9 +44,9 @@ FundingState::FundingState(Game* game)
 	:
 		State(game)
 {
+//	Log(LOG_INFO) << "Create FundingState";
 	_screen = false;
 
-	// Create objects
 	_window			= new Window(this, 320, 200, 0, 0, POPUP_BOTH);
 //kL	_txtTitle		= new Text(320, 16, 0, 8);
 	_txtTitle		= new Text(300, 16, 10, 9);		// kL
@@ -59,13 +59,13 @@ FundingState::FundingState(Game* game)
 	_txtChange		= new Text(72, 9, 238, 25);		// kL
 
 //kL	_lstCountries	= new TextList(260, 136, 32, 40);
-	_lstCountries	= new TextList(260, 136, 30, 34);	// kL
-	_lstTotal		= new TextList(260, 136, 30, 174);	// kL
+	_lstCountries	= new TextList(260, 128, 30, 34);	// kL
+	_lstTotal		= new TextList(260, 9, 30, 165);	// kL
 
 //kL	_btnOk			= new TextButton(50, 12, 135, 180);
 	_btnOk			= new TextButton(288, 16, 16, 177);		// kL
 
-	// Set palette
+
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
 
 	add(_window);
@@ -75,10 +75,11 @@ FundingState::FundingState(Game* game)
 	add(_txtFunding);
 	add(_txtChange);
 	add(_lstCountries);
+	add(_lstTotal);
 
 	centerAllSurfaces();
 
-	// Set up objects
+
 	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 
@@ -113,7 +114,7 @@ FundingState::FundingState(Game* game)
 		if ((*i)->getFunding().size() > 1)
 		{
 			ss2 << L'\x01';
-			int change = (*i)->getFunding().back() - (*i)->getFunding().at((*i)->getFunding().size()-2);
+			int change = (*i)->getFunding().back() - (*i)->getFunding().at((*i)->getFunding().size() - 2);
 			if (change > 0)
 				ss2 << L'+';
 			ss2 << Text::formatFunding(change);
@@ -123,19 +124,20 @@ FundingState::FundingState(Game* game)
 		{
 			ss2 << Text::formatFunding(0);
 		}
-//kL		_lstCountries->addRow(3, tr((*i)->getRules()->getType()).c_str(), ss.str().c_str(), ss2.str().c_str());
-	}
-	_lstCountries->addRow(2, tr("STR_TOTAL_UC").c_str(), Text::formatFunding(_game->getSavedGame()->getCountryFunding()).c_str());
-	_lstCountries->setRowColor(_game->getSavedGame()->getCountries()->size(), Palette::blockOffset(8)+5);
 
-	// kL_begin:
-	_lstTotal->setColor(Palette::blockOffset(15)-1);
-	_lstTotal->setSecondaryColor(Palette::blockOffset(8)+10);
+		_lstCountries->addRow(3, tr((*i)->getRules()->getType()).c_str(), ss.str().c_str(), ss2.str().c_str());
+	}
+//kL	_lstCountries->addRow(2, tr("STR_TOTAL_UC").c_str(), Text::formatFunding(_game->getSavedGame()->getCountryFunding()).c_str());
+//kL	_lstCountries->setRowColor(_game->getSavedGame()->getCountries()->size(), Palette::blockOffset(8)+5);
+
+	// kL_begin: FundingState, list Total.
+	_lstTotal->setColor(Palette::blockOffset(8)+5);
 	_lstTotal->setColumns(3, 108, 100, 52);
 	_lstTotal->setDot(true);
-	_lstTotal->addRow(2, tr("STR_TOTAL_UC").c_str(), Text::formatFunding(_game->getSavedGame()->getCountryFunding()).c_str());
-	_lstTotal->setRowColor(_game->getSavedGame()->getCountries()->size(), Palette::blockOffset(8)+5);
+	_lstTotal->addRow(3, "", tr("STR_TOTAL_UC").c_str(), Text::formatFunding(_game->getSavedGame()->getCountryFunding()).c_str());
 	// kL_end.
+
+//	Log(LOG_INFO) << "Create FundingState DONE";
 }
 
 /**

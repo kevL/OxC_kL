@@ -597,31 +597,27 @@ void BattlescapeGame::checkForCasualties(BattleItem* murderweapon, BattleUnit* m
 		{
 			BattleUnit* victim = *j;
 
-			Log(LOG_INFO) << "BattlescapeGame::checkForCasualties() victim = " << victim->getId();		// kL
+			Log(LOG_INFO) << "BattlescapeGame::checkForCasualties() victim = " << victim->getId();
 
 			if (murderer)
 			{
 				murderer->addKillCount();
 				victim->killedBy(murderer->getFaction());
 
-				int modif = murderer->getFaction() == FACTION_PLAYER ? _save->getMoraleModifier() : 100;
-
-				// if there is a known murderer, he will get a morale bonus if he is of a different faction (what with neutral?)
+/*kL				int modif = murderer->getFaction() == FACTION_PLAYER ? _save->getMoraleModifier() : 100;
+				// if there is a known murderer, he will get a morale bonus if he is of a different faction
 				if ((victim->getOriginalFaction() == FACTION_PLAYER
 						&& murderer->getFaction() == FACTION_HOSTILE)
 					|| (victim->getOriginalFaction() == FACTION_HOSTILE
 						&& murderer->getFaction() == FACTION_PLAYER))
 				{
-//kL					murderer->moraleChange(20 * modif / 100);
-					murderer->moraleChange(10 * modif / 100);		// kL ( double what rest of squad gets )
+					murderer->moraleChange(20 * modif / 100);
 				}
-
 				// murderer will get a penalty with friendly fire
 				if (victim->getOriginalFaction() == murderer->getOriginalFaction())
 				{
 					murderer->moraleChange(-(2000 / modif));
 				}
-
 				if (victim->getOriginalFaction() == FACTION_NEUTRAL)
 				{
 					if (murderer->getOriginalFaction() == FACTION_PLAYER)
@@ -632,22 +628,76 @@ void BattlescapeGame::checkForCasualties(BattleItem* murderweapon, BattleUnit* m
 					{
 						murderer->moraleChange(10);
 					}
+				} */
+
+				// kL_begin: morale modification includes aliens in checkForCasualties()
+				int modif = 100;
+				if (murderer->getFaction() == FACTION_PLAYER)
+				{
+					modif = _save->getMoraleModifier();
 				}
+				else if (murderer->getFaction() == FACTION_HOSTILE)
+				{
+					modif = _save->getMoraleModifier(0, false);
+				}
+
+				// kL_begin: morale modification boost in checkForCasualties()
+				if ((victim->getOriginalFaction() == FACTION_PLAYER
+						&& murderer->getOriginalFaction() == FACTION_HOSTILE)
+					|| (victim->getOriginalFaction() == FACTION_HOSTILE
+						&& murderer->getOriginalFaction() == FACTION_PLAYER))
+				{
+					murderer->moraleChange(10 * modif / 100); // double what rest of squad gets, v.below
+				}
+
+				// kL_begin: murderer (mc'd or not) will get a penalty with friendly fire (mc'd or not)
+				// except aLiens, who don't care.....
+				if (victim->getOriginalFaction() == FACTION_PLAYER
+					&& murderer->getOriginalFaction() == FACTION_PLAYER)
+				{
+					murderer->moraleChange(-(5000 / modif));
+				}
+
+				if (victim->getOriginalFaction() == FACTION_NEUTRAL)
+				{
+					if (murderer->getOriginalFaction() == FACTION_PLAYER)
+					{
+						murderer->moraleChange(-(2000 / modif));
+					}
+					else if (murderer->getOriginalFaction() == FACTION_HOSTILE)
+					{
+						murderer->moraleChange(20);
+					}
+				}
+				// kL_end.
 			}
 
+			// kL_note: now cycle through all units...
 			if (victim->getFaction() != FACTION_NEUTRAL)
 			{
-				int modif = _save->getMoraleModifier(victim);
-				int loserModif = victim->getFaction() == FACTION_HOSTILE ? 100 : _save->getMoraleModifier();
-				int winnerModif = victim->getFaction() == FACTION_HOSTILE ? _save->getMoraleModifier() : 100;
+//kL				int modif = _save->getMoraleModifier(victim);
+//kL				int loserModif = victim->getFaction() == FACTION_HOSTILE ? 100 : _save->getMoraleModifier();
+	//kL			int winnerModif = victim->getFaction() == FACTION_HOSTILE ? _save->getMoraleModifier() : 100;
+
+				// kL_begin: group morale modifications in checkForCasualties()
+				int modif = 100;
+				if (victim->getFaction() == FACTION_HOSTILE)
+				{
+					modif = _save->getMoraleModifier(victim); // cost for losing a unit on your side
+				}
+
+				int loserModif = victim->getFaction() == FACTION_HOSTILE ? _save->getMoraleModifier(0, false) : _save->getMoraleModifier();
+				int winnerModif = victim->getFaction() == FACTION_HOSTILE ? _save->getMoraleModifier() : _save->getMoraleModifier(0, false);
+				// kL_end.
 
 				for (std::vector<BattleUnit* >::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 				{
-					if (!(*i)->isOut()
-						&& (*i)->getArmor()->getSize() == 1)
+					if (!(*i)->isOut()							// conscious
+						&& (*i)->getArmor()->getSize() == 1)	// not a tank or terror unit
 					{
-						if ((*i)->getOriginalFaction() == victim->getOriginalFaction()) // the losing squad all get a morale loss
+						if ((*i)->getOriginalFaction() == victim->getOriginalFaction()) // you killed yourself, Mc'd or not!!
 						{
+							// the losing squad all get a morale loss
 							int bravery = (110 - (*i)->getStats()->bravery) / 10;
 							(*i)->moraleChange(-(modif * 200 * bravery / loserModif / 100));
 
@@ -657,8 +707,9 @@ void BattlescapeGame::checkForCasualties(BattleItem* murderweapon, BattleUnit* m
 								murderer->setTurnsExposed(0);
 							}
 						}
-						else // the winning squad all get a morale increase
+						else
 						{
+							// the winning squad all get a morale increase
 							(*i)->moraleChange(10 * winnerModif / 100);
 						}
 					}
@@ -1530,11 +1581,11 @@ bool BattlescapeGame::isBusy()
 void BattlescapeGame::primaryAction(const Position& pos)
 {
 	std::string sUnit = "none selected";
-	if (_save->getSelectedUnit())
+/*	if (_save->getSelectedUnit())		// kL
 	{
-		sUnit = _save->getSelectedUnit()->getId();
-	}
-	Log(LOG_INFO) << "BattlescapeGame::primaryAction() unitID = " << sUnit;
+		sUnit = _save->getSelectedUnit()->getId();	// kL
+	} */
+	Log(LOG_INFO) << "BattlescapeGame::primaryAction()";// unitID = " << sUnit;		// kL
 
 	bool bPreviewed = Options::getInt("battleNewPreviewPath") > 0;
 
@@ -1593,7 +1644,7 @@ void BattlescapeGame::primaryAction(const Position& pos)
 				// get the sound/animation started
 //kL				getMap()->setCursorType(CT_NONE);
 //kL				_parentState->getGame()->getCursor()->setVisible(false);
-//kL				_currentAction.cameraPosition = getMap()->getCamera()->getMapOffset();
+				_currentAction.cameraPosition = getMap()->getCamera()->getMapOffset();
 				statePushBack(new ProjectileFlyBState(this, _currentAction));
 
 				if (_currentAction.TU <= _currentAction.actor->getTimeUnits())

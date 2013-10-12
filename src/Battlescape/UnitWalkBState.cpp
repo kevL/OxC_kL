@@ -48,14 +48,14 @@ namespace OpenXcom
  */
 UnitWalkBState::UnitWalkBState(BattlescapeGame* parent, BattleAction action)
 	:
-	BattleState(parent, action),
-	_unit(0),
-	_pf(0),
-	_terrain(0),
-	_falling(false),
-	_beforeFirstStep(false),
-	_unitsSpotted(0),
-	_preMovementCost(0)
+		BattleState(parent, action),
+		_unit(0),
+		_pf(0),
+		_terrain(0),
+		_falling(false),
+		_beforeFirstStep(false),
+		_unitsSpotted(0),
+		_preMovementCost(0)
 {
 	Log(LOG_INFO) << "Create UnitWalkBState";
 }
@@ -73,10 +73,10 @@ UnitWalkBState::~UnitWalkBState()
  */
 void UnitWalkBState::init()
 {
-	Log(LOG_INFO) << "UnitWalkBState::init()";
-
 	_unit = _action.actor;
 	_unitsSpotted = _unit->getUnitsSpottedThisTurn().size();
+
+	Log(LOG_INFO) << "UnitWalkBState::init() unitID = " << _unit->getId();
 
 	setNormalWalkSpeed();
 	_pf = _parent->getPathfinding();
