@@ -1094,6 +1094,7 @@ int BattleUnit::damage(const Position& relative, int power, ItemDamageType type,
 				{
 					case SIDE_LEFT:		bodypart = BODYPART_LEFTARM;	break;
 					case SIDE_RIGHT:	bodypart = BODYPART_RIGHTARM;	break;
+
 					default:			bodypart = BODYPART_TORSO;
 				}
 			}
@@ -1103,8 +1104,9 @@ int BattleUnit::damage(const Position& relative, int power, ItemDamageType type,
 				{
 					case SIDE_LEFT: 	bodypart = BODYPART_LEFTLEG; 	break;
 					case SIDE_RIGHT:	bodypart = BODYPART_RIGHTLEG; 	break;
+
 					default:
-						bodypart = (UnitBodyPart) RNG::generate(BODYPART_RIGHTLEG,BODYPART_LEFTLEG);
+						bodypart = (UnitBodyPart)RNG::generate(BODYPART_RIGHTLEG, BODYPART_LEFTLEG);
 				}
 			}
 		}
@@ -1247,31 +1249,33 @@ int BattleUnit::getActionTUs(BattleActionType actionType, BattleItem* item)
 	{
 		case BA_PRIME:
 			cost = 50; // maybe this should go in the ruleset
-			break;
+		break;
 		case BA_THROW:
 			cost = 25;
-			break;
+		break;
 		case BA_AUTOSHOT:
 			cost = item->getRules()->getTUAuto();
-			break;
+		break;
 		case BA_SNAPSHOT:
 			cost = item->getRules()->getTUSnap();
-			break;
+		break;
 		case BA_STUN:
 		case BA_HIT:
 			cost = item->getRules()->getTUMelee();
-			break;
+		break;
 		case BA_LAUNCH:
 		case BA_AIMEDSHOT:
 			cost = item->getRules()->getTUAimed();
-			break;
+		break;
 		case BA_USE:
 		case BA_MINDCONTROL:
 		case BA_PANIC:
 			cost = item->getRules()->getTUUse();
-			break;
+		break;
+
 		default:
 			cost = 0;
+		break;
 	}
 
 	// if it's a percentage, apply it to unit TUs
@@ -1936,14 +1940,17 @@ bool BattleUnit::checkAmmo()
 			if (*c == ammo->getRules()->getType())
 			{
 				wrong = false;
+
 				break;
 			}
 		}
 
-		if (!wrong) break;
+		if (!wrong)
+			break;
 	}
 
-	if (wrong) return false; // didn't find any compatible ammo in inventory
+	if (wrong)
+		return false; // didn't find any compatible ammo in inventory
 
 	spendTimeUnits(15);
 	weapon->setAmmoItem(ammo);
