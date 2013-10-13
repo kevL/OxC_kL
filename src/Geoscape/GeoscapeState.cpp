@@ -1831,7 +1831,8 @@ void GeoscapeState::time1Day()
 			{
 				RuleManufacture* rule = _game->getRuleset()->getManufacture(*man);
 				std::vector<std::string> req = rule->getRequirements();
-				if (rule->getCategory() == "STR_WEAPON"
+				if (newResearch
+					&& rule->getCategory() == "STR_WEAPON"
 					&& std::find(req.begin(), req.end(), newResearch->getName()) != req.end()
 					&& !_game->getSavedGame()->isResearched(req))
 				{

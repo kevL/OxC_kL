@@ -169,7 +169,7 @@ void PrimeGrenadeState::btnClick(Action *action)
 	{
 		if (_inInventoryView)
 		{
-			_grenadeInInventory->setExplodeTurn(1 + btnID);
+			_grenadeInInventory->setExplodeTurn(0 + btnID);
 //			_warning->showMessage(_game->getLanguage()->getString("STR_GRENADE_IS_ACTIVATED"));		// kL
 		}
 		else

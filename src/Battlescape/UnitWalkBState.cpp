@@ -328,7 +328,7 @@ void UnitWalkBState::think()
 								for (std::vector<BattleItem* >::iterator i = t->getInventory()->begin(); i != t->getInventory()->end(); ++i)
 								{
 									if ((*i)->getRules()->getBattleType() == BT_PROXIMITYGRENADE
-										&& (*i)->getExplodeTurn() > 0)
+										&& (*i)->getExplodeTurn() == 0)
 									{
 										Position p;
 										p.x = t->getPosition().x * 16 + 8;
@@ -336,7 +336,7 @@ void UnitWalkBState::think()
 										p.z = t->getPosition().z * 24 + t->getTerrainLevel();
 										_parent->statePushNext(new ExplosionBState(_parent, p, *i, (*i)->getPreviousOwner()));
 
-										t->getInventory()->erase(i);
+										_parent->getSave()->removeItem(*i);
 										_unit->setCache(0);
 										_parent->getMap()->cacheUnit(_unit);
 										_parent->popState();

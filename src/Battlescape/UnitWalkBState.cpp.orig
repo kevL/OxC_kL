@@ -48,14 +48,14 @@ namespace OpenXcom
  */
 UnitWalkBState::UnitWalkBState(BattlescapeGame* parent, BattleAction action)
 	:
-	BattleState(parent, action),
-	_unit(0),
-	_pf(0),
-	_terrain(0),
-	_falling(false),
-	_beforeFirstStep(false),
-	_unitsSpotted(0),
-	_preMovementCost(0)
+		BattleState(parent, action),
+		_unit(0),
+		_pf(0),
+		_terrain(0),
+		_falling(false),
+		_beforeFirstStep(false),
+		_unitsSpotted(0),
+		_preMovementCost(0)
 {
 	Log(LOG_INFO) << "Create UnitWalkBState";
 }
@@ -73,10 +73,10 @@ UnitWalkBState::~UnitWalkBState()
  */
 void UnitWalkBState::init()
 {
-	Log(LOG_INFO) << "UnitWalkBState::init()";
-
 	_unit = _action.actor;
 	_unitsSpotted = _unit->getUnitsSpottedThisTurn().size();
+
+	Log(LOG_INFO) << "UnitWalkBState::init() unitID = " << _unit->getId();
 
 	setNormalWalkSpeed();
 	_pf = _parent->getPathfinding();
@@ -325,6 +325,7 @@ void UnitWalkBState::think()
 							Tile* t = _parent->getSave()->getTile(_unit->getPosition() + Position(x, y, 0) + Position(tx, ty, 0));
 							if (t)
 							{
+<<<<<<< HEAD
 								for (std::vector<BattleItem* >::iterator i = t->getInventory()->begin(); i != t->getInventory()->end(); ++i)
 								{
 									if ((*i)->getRules()->getBattleType() == BT_PROXIMITYGRENADE
@@ -344,6 +345,20 @@ void UnitWalkBState::think()
 //kL_TEST
 										return;
 									}
+=======
+								if ((*i)->getRules()->getBattleType() == BT_PROXIMITYGRENADE && (*i)->getExplodeTurn() == 0)
+								{
+									Position p;
+									p.x = t->getPosition().x*16 + 8;
+									p.y = t->getPosition().y*16 + 8;
+									p.z = t->getPosition().z*24 + t->getTerrainLevel();
+									_parent->statePushNext(new ExplosionBState(_parent, p, (*i), (*i)->getPreviousOwner()));
+									_parent->getSave()->removeItem(*i);
+									_unit->setCache(0);
+									_parent->getMap()->cacheUnit(_unit);
+									_parent->popState();
+									return;
+>>>>>>> master
 								}
 							}
 						}
@@ -896,12 +911,8 @@ void UnitWalkBState::playMovementSound()
 		else
 		{
 			// play default flying sound
-<<<<<<< HEAD
-			if (_unit->getWalkingPhase() == 0
+			if (_unit->getWalkingPhase() == 1
 				&& !_falling)
-=======
-			if (_unit->getWalkingPhase() == 1 && !_falling)
->>>>>>> master
 			{
 				_parent->getResourcePack()->getSound("BATTLE.CAT", 15)->play();
 			}

@@ -48,13 +48,13 @@ namespace OpenXcom
  */
 ProjectileFlyBState::ProjectileFlyBState(BattlescapeGame* parent, BattleAction action, Position origin)
 	:
-	BattleState(parent, action),
-	_unit(0),
-	_ammo(0),
-	_projectileItem(0),
-	_origin(origin),
-	_projectileImpact(0),
-	_initialized(false)
+		BattleState(parent, action),
+		_unit(0),
+		_ammo(0),
+		_projectileItem(0),
+		_origin(origin),
+		_projectileImpact(0),
+		_initialized(false)
 {
 }
 
@@ -63,13 +63,13 @@ ProjectileFlyBState::ProjectileFlyBState(BattlescapeGame* parent, BattleAction a
  */
 ProjectileFlyBState::ProjectileFlyBState(BattlescapeGame* parent, BattleAction action)
 	:
-	BattleState(parent, action),
-	_unit(0),
-	_ammo(0),
-	_projectileItem(0),
-	_origin(action.actor->getPosition()),
-	_projectileImpact(0),
-	_initialized(false)
+		BattleState(parent, action),
+		_unit(0),
+		_ammo(0),
+		_projectileItem(0),
+		_origin(action.actor->getPosition()),
+		_projectileImpact(0),
+		_initialized(false)
 {
 }
 
@@ -87,7 +87,10 @@ ProjectileFlyBState::~ProjectileFlyBState()
  */
 void ProjectileFlyBState::init()
 {
-	if (_initialized) return;
+	if (_initialized)
+		return;
+
+
 	_initialized = true;
 
 	BattleItem* weapon = _action.weapon;
@@ -119,8 +122,14 @@ void ProjectileFlyBState::init()
 	_unit = _action.actor;
 	_ammo = weapon->getAmmoItem();
 
+<<<<<<< HEAD
 	if (_unit->isOut()) // something went wrong - we can't shoot when dead or unconscious
 	{
+=======
+	if (_unit->isOut() || _unit->getHealth() == 0 || _unit->getHealth() < _unit->getStunlevel())
+	{
+		// something went wrong - we can't shoot when dead or unconscious, or if we're about to fall over.
+>>>>>>> master
 		_parent->popState();
 
 		return;
@@ -253,6 +262,10 @@ bool ProjectileFlyBState::createNewProjectile()
 	{
 		if (projectile->calculateThrow(_unit->getThrowingAccuracy()))
 		{
+			if (_unit->getFaction() != FACTION_PLAYER && _projectileItem->getRules()->getBattleType() == BT_GRENADE)
+			{
+				_projectileItem->setExplodeTurn(0);
+			}
 			_projectileItem->moveToOwner(0);
 			_unit->setCache(0);
 			_parent->getMap()->cacheUnit(_unit);
@@ -340,8 +353,8 @@ bool ProjectileFlyBState::createNewProjectile()
 
 /**
  * Animates the projectile (moves to the next point in its trajectory).
- * If the animation is finished the projectile sprite is removed from the map,
- * and this state is finished.
+ * If the animation is finished the projectile sprite
+ * is removed from the map, and this state is finished.
  */
 void ProjectileFlyBState::think()
 {
@@ -376,23 +389,28 @@ void ProjectileFlyBState::think()
 			_parent->popState();
 		}
 	}
-	else
+	else // impact !
 	{
 		if (!_parent->getMap()->getProjectile()->move())
 		{
-			if (_action.type == BA_THROW) // impact !
+			if (_action.type == BA_THROW)
 			{
+				_parent->getResourcePack()->getSound("BATTLE.CAT", 38)->play();
+
 				Position pos = _parent->getMap()->getProjectile()->getPosition(-1);
 				pos.x /= 16;
 				pos.y /= 16;
 				pos.z /= 24;
-				BattleItem *item = _parent->getMap()->getProjectile()->getItem();
-				_parent->getResourcePack()->getSound("BATTLE.CAT", 38)->play();
 
+<<<<<<< HEAD
+				BattleItem *item = _parent->getMap()->getProjectile()->getItem();
 				if (Options::getBool("battleInstantGrenade")
 					&& item->getRules()->getBattleType() == BT_GRENADE
 					&& item->getExplodeTurn() != 0
 					&& item->getExplodeTurn() <= _parent->getSave()->getTurn())
+=======
+				if (Options::getBool("battleInstantGrenade") && item->getRules()->getBattleType() == BT_GRENADE && item->getExplodeTurn() == 0)
+>>>>>>> master
 				{
 					// it's a hot grenade to explode immediately
 					_parent->statePushFront(new ExplosionBState(_parent, _parent->getMap()->getProjectile()->getPosition(-1), item, _action.actor));
@@ -444,7 +462,7 @@ void ProjectileFlyBState::think()
 
 					if (_projectileImpact == 4)
 					{
-						BattleUnit* victim = _parent->getSave()->getTile(_parent->getMap()->getProjectile()->getPosition(offset) / Position(16,16,24))->getUnit();
+						BattleUnit* victim = _parent->getSave()->getTile(_parent->getMap()->getProjectile()->getPosition(offset) / Position(16, 16, 24))->getUnit();
 						if (victim
 							&& !victim->isOut()
 							&& victim->getFaction() == FACTION_HOSTILE)
@@ -455,7 +473,6 @@ void ProjectileFlyBState::think()
 								aggro->setWasHit();
 								_unit->setTurnsExposed(0);
 							}
-
 						}
 					}
 				}
@@ -469,7 +486,6 @@ void ProjectileFlyBState::think()
 			}
 
 			delete _parent->getMap()->getProjectile();
-
 			_parent->getMap()->setProjectile(0);
 		}
 	}

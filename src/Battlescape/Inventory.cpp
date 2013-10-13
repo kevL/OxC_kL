@@ -598,7 +598,7 @@ void Inventory::mouseClick(Action* action, State* state)
 					{
 						setSelectedItem(item);
 
-						if (item->getExplodeTurn() > 0)
+						if (item->getExplodeTurn() >= 0)
 						{
 							_warning->showMessage(_game->getLanguage()->getString("STR_GRENADE_IS_ACTIVATED"));
 						}
@@ -760,18 +760,18 @@ void Inventory::mouseClick(Action* action, State* state)
 						if (BT_GRENADE == itemType
 							|| BT_PROXIMITYGRENADE == itemType)
 						{
-							if (0 == item->getExplodeTurn()) // Prime that grenade!
+							if (item->getExplodeTurn() == -1) // Prime that grenade!
 							{
 								if (BT_PROXIMITYGRENADE == itemType)
 								{
-									_warning->showMessage(_game->getLanguage()->getString("STR_GRENADE_IS_ACTIVATED"));		// kL
-									item->setExplodeTurn(1);
+									_warning->showMessage(_game->getLanguage()->getString("STR_GRENADE_IS_ACTIVATED"));
+									item->setExplodeTurn(0);
 								}
 								else
 									// kL_note: This is where activation warning for nonProxy preBattle grenades goes...
 									_game->pushState(new PrimeGrenadeState(_game, 0, true, item));
 							}
-							else item->setExplodeTurn(0); // Unprime the grenade
+							else item->setExplodeTurn(-1); // Unprime the grenade
 						}
 					}
 				}
@@ -982,7 +982,7 @@ bool Inventory::canBeStacked(BattleItem* itemA, BattleItem* itemB)
 			|| (itemA->getAmmoItem() && itemB->getAmmoItem()											// or they both have ammo
 				&& itemA->getAmmoItem()->getRules() == itemB->getAmmoItem()->getRules()					// and the same ammo type
 				&& itemA->getAmmoItem()->getAmmoQuantity() == itemB->getAmmoItem()->getAmmoQuantity()))	// and the same ammo quantity
-		&& itemA->getExplodeTurn() == 0 && itemB->getExplodeTurn() == 0									// and neither is set to explode
+		&& itemA->getExplodeTurn() == -1 && itemB->getExplodeTurn() == -1								// and neither is set to explode
 		&& itemA->getUnit() == 0 && itemB->getUnit() == 0);												// and neither is a corpse or unconscious unit
 }
 

@@ -52,8 +52,8 @@ namespace OpenXcom
  */
 ActionMenuState::ActionMenuState(Game* game, BattleAction* action, int x, int y)
 	:
-	State(game),
-	_action(action)
+		State(game),
+		_action(action)
 {
 	_screen = false;
 
@@ -74,9 +74,15 @@ ActionMenuState::ActionMenuState(Game* game, BattleAction* action, int x, int y)
 		addItem(BA_THROW, "STR_THROW", &id);
 	}
 
+<<<<<<< HEAD
 	if ((weapon->getBattleType() == BT_GRENADE
 			|| weapon->getBattleType() == BT_PROXIMITYGRENADE)
 		&& _action->weapon->getExplodeTurn() == 0) // priming
+=======
+	// priming
+	if ((weapon->getBattleType() == BT_GRENADE || weapon->getBattleType() == BT_PROXIMITYGRENADE)
+		&& _action->weapon->getExplodeTurn() == -1)
+>>>>>>> master
 	{
 		addItem(BA_PRIME, "STR_PRIME_GRENADE", &id);
 	}
@@ -168,14 +174,14 @@ void ActionMenuState::addItem(BattleActionType ba, const std::string& name, int*
 		|| ba == BA_HIT)
 	{
 //kL		s1 = tr("STR_ACC").arg(Text::formatPercentage(acc));
-		s1 = tr("STR_ACC".arg(acc));		// kL
+		s1 = tr("STR_ACC").arg(acc);		// kL
 	}
 
 	s2 = tr("STR_TUS").arg(tu);
 	_actionMenu[*id]->setAction(ba, tr(name), s1, s2, tu);
 	_actionMenu[*id]->setVisible(true);
 
-	(*id)++;
+	(*id)++; // kL_note: huh.
 }
 
 /**

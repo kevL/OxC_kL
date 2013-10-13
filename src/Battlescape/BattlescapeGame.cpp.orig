@@ -170,7 +170,7 @@ void BattlescapeGame::init()
 
 /**
  * Handles the processing of the AI states of a unit.
- * @param unit Pointer to a unit.
+ * @param unit, Pointer to a unit
  */
 void BattlescapeGame::handleAI(BattleUnit* unit)
 {
@@ -354,17 +354,10 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 				&& action.type == BA_MINDCONTROL)
 			{
 				// show a little infobox with the name of the unit and "... is under alien control"
-<<<<<<< HEAD
-				std::wstringstream ss;
-				ss << _save->getTile(action.target)->getUnit()->getName(_parentState->getGame()->getLanguage())
-					<< L'\n' << _parentState->getGame()->getLanguage()->getString("STR_IS_UNDER_ALIEN_CONTROL");
+				Game* game = _parentState->getGame();
+				BattleUnit* unit = _save->getTile(action.target)->getUnit();
 
-				_parentState->getGame()->pushState(new InfoboxState(_parentState->getGame(), ss.str()));
-=======
-				Game *game = _parentState->getGame();
-				BattleUnit *unit = _save->getTile(action.target)->getUnit();
 				game->pushState(new InfoboxState(game, game->getLanguage()->getString("STR_IS_UNDER_ALIEN_CONTROL", unit->getGender()).arg(unit->getName(game->getLanguage()))));
->>>>>>> master
 			}
 
 			_save->removeItem(action.weapon);
@@ -375,6 +368,7 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 	{
 		_parentState->debug(L"Idle");
 		_AIActionCounter = 0;
+
 		if (_save->selectNextPlayerUnit(true, _AISecondMove) == 0)
 		{
 			if (!_save->getDebugMode())
@@ -462,9 +456,13 @@ void BattlescapeGame::endTurn()
 	{
 		for (std::vector<BattleItem* >::iterator it = _save->getTiles()[i]->getInventory()->begin(); it != _save->getTiles()[i]->getInventory()->end(); )
 		{
+<<<<<<< HEAD
 			if ((*it)->getRules()->getBattleType() == BT_GRENADE
 				&& (*it)->getExplodeTurn() > 0
 				&& (*it)->getExplodeTurn() <= _save->getTurn())  // it's a grenade to explode now
+=======
+			if ((*it)->getRules()->getBattleType() == BT_GRENADE && (*it)->getExplodeTurn() == 0)  // it's a grenade to explode now
+>>>>>>> master
 			{
 				p.x = _save->getTiles()[i]->getPosition().x * 16 + 8;
 				p.y = _save->getTiles()[i]->getPosition().y * 16 + 8;
@@ -480,7 +478,6 @@ void BattlescapeGame::endTurn()
 			++it;
 		}
 	}
-
 	// check for terrain explosions
 	Tile* t = _save->getTileEngine()->checkForTerrainExplosions();
 	if (t)
@@ -493,6 +490,17 @@ void BattlescapeGame::endTurn()
 		statePushBack(0);
 
 		return;
+	}
+	
+	if (_save->getSide() != FACTION_NEUTRAL)
+	{
+		for (std::vector<BattleItem*>::iterator it = _save->getItems()->begin(); it != _save->getItems()->end(); ++it)
+		{
+				if (((*it)->getRules()->getBattleType() == BT_GRENADE || (*it)->getRules()->getBattleType() == BT_PROXIMITYGRENADE) && (*it)->getExplodeTurn() > 0)
+				{
+					(*it)->setExplodeTurn((*it)->getExplodeTurn() - 1);
+				}
+		}
 	}
 
 	// kL_begin:
@@ -603,31 +611,27 @@ void BattlescapeGame::checkForCasualties(BattleItem* murderweapon, BattleUnit* m
 		{
 			BattleUnit* victim = *j;
 
-			Log(LOG_INFO) << "BattlescapeGame::checkForCasualties() victim = " << victim->getId();		// kL
+			Log(LOG_INFO) << "BattlescapeGame::checkForCasualties() victim = " << victim->getId();
 
 			if (murderer)
 			{
 				murderer->addKillCount();
 				victim->killedBy(murderer->getFaction());
 
-				int modif = murderer->getFaction() == FACTION_PLAYER ? _save->getMoraleModifier() : 100;
-
-				// if there is a known murderer, he will get a morale bonus if he is of a different faction (what with neutral?)
+/*kL				int modif = murderer->getFaction() == FACTION_PLAYER ? _save->getMoraleModifier() : 100;
+				// if there is a known murderer, he will get a morale bonus if he is of a different faction
 				if ((victim->getOriginalFaction() == FACTION_PLAYER
 						&& murderer->getFaction() == FACTION_HOSTILE)
 					|| (victim->getOriginalFaction() == FACTION_HOSTILE
 						&& murderer->getFaction() == FACTION_PLAYER))
 				{
-//kL					murderer->moraleChange(20 * modif / 100);
-					murderer->moraleChange(10 * modif / 100);		// kL ( double what rest of squad gets )
+					murderer->moraleChange(20 * modif / 100);
 				}
-
 				// murderer will get a penalty with friendly fire
 				if (victim->getOriginalFaction() == murderer->getOriginalFaction())
 				{
 					murderer->moraleChange(-(2000 / modif));
 				}
-
 				if (victim->getOriginalFaction() == FACTION_NEUTRAL)
 				{
 					if (murderer->getOriginalFaction() == FACTION_PLAYER)
@@ -638,22 +642,76 @@ void BattlescapeGame::checkForCasualties(BattleItem* murderweapon, BattleUnit* m
 					{
 						murderer->moraleChange(10);
 					}
+				} */
+
+				// kL_begin: morale modification includes aliens in checkForCasualties()
+				int modif = 100;
+				if (murderer->getFaction() == FACTION_PLAYER)
+				{
+					modif = _save->getMoraleModifier();
 				}
+				else if (murderer->getFaction() == FACTION_HOSTILE)
+				{
+					modif = _save->getMoraleModifier(0, false);
+				}
+
+				// kL_begin: morale modification boost in checkForCasualties()
+				if ((victim->getOriginalFaction() == FACTION_PLAYER
+						&& murderer->getOriginalFaction() == FACTION_HOSTILE)
+					|| (victim->getOriginalFaction() == FACTION_HOSTILE
+						&& murderer->getOriginalFaction() == FACTION_PLAYER))
+				{
+					murderer->moraleChange(10 * modif / 100); // double what rest of squad gets, v.below
+				}
+
+				// kL_begin: murderer (mc'd or not) will get a penalty with friendly fire (mc'd or not)
+				// except aLiens, who don't care.....
+				if (victim->getOriginalFaction() == FACTION_PLAYER
+					&& murderer->getOriginalFaction() == FACTION_PLAYER)
+				{
+					murderer->moraleChange(-(5000 / modif));
+				}
+
+				if (victim->getOriginalFaction() == FACTION_NEUTRAL)
+				{
+					if (murderer->getOriginalFaction() == FACTION_PLAYER)
+					{
+						murderer->moraleChange(-(2000 / modif));
+					}
+					else if (murderer->getOriginalFaction() == FACTION_HOSTILE)
+					{
+						murderer->moraleChange(20);
+					}
+				}
+				// kL_end.
 			}
 
+			// kL_note: now cycle through all units...
 			if (victim->getFaction() != FACTION_NEUTRAL)
 			{
-				int modif = _save->getMoraleModifier(victim);
-				int loserModif = victim->getFaction() == FACTION_HOSTILE ? 100 : _save->getMoraleModifier();
-				int winnerModif = victim->getFaction() == FACTION_HOSTILE ? _save->getMoraleModifier() : 100;
+//kL				int modif = _save->getMoraleModifier(victim);
+//kL				int loserModif = victim->getFaction() == FACTION_HOSTILE ? 100 : _save->getMoraleModifier();
+	//kL			int winnerModif = victim->getFaction() == FACTION_HOSTILE ? _save->getMoraleModifier() : 100;
+
+				// kL_begin: group morale modifications in checkForCasualties()
+				int modif = 100;
+				if (victim->getFaction() == FACTION_HOSTILE)
+				{
+					modif = _save->getMoraleModifier(victim); // cost for losing a unit on your side
+				}
+
+				int loserModif = victim->getFaction() == FACTION_HOSTILE ? _save->getMoraleModifier(0, false) : _save->getMoraleModifier();
+				int winnerModif = victim->getFaction() == FACTION_HOSTILE ? _save->getMoraleModifier() : _save->getMoraleModifier(0, false);
+				// kL_end.
 
 				for (std::vector<BattleUnit* >::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 				{
-					if (!(*i)->isOut()
-						&& (*i)->getArmor()->getSize() == 1)
+					if (!(*i)->isOut()							// conscious
+						&& (*i)->getArmor()->getSize() == 1)	// not a tank or terror unit
 					{
-						if ((*i)->getOriginalFaction() == victim->getOriginalFaction()) // the losing squad all get a morale loss
+						if ((*i)->getOriginalFaction() == victim->getOriginalFaction()) // you killed yourself, Mc'd or not!!
 						{
+							// the losing squad all get a morale loss
 							int bravery = (110 - (*i)->getStats()->bravery) / 10;
 							(*i)->moraleChange(-(modif * 200 * bravery / loserModif / 100));
 
@@ -663,8 +721,9 @@ void BattlescapeGame::checkForCasualties(BattleItem* murderweapon, BattleUnit* m
 								murderer->setTurnsExposed(0);
 							}
 						}
-						else // the winning squad all get a morale increase
+						else
 						{
+							// the winning squad all get a morale increase
 							(*i)->moraleChange(10 * winnerModif / 100);
 						}
 					}
@@ -697,7 +756,7 @@ void BattlescapeGame::checkForCasualties(BattleItem* murderweapon, BattleUnit* m
 			if ((*j)->getHealth() > 0
 				&& (*j)->getSpecialAbility() == SPECAB_RESPAWN)
 			{
-				Log(LOG_INFO) << ". . still alive, Specab = Respawn... converting unit!";		// kL
+//				Log(LOG_INFO) << ". . still alive, Specab = Respawn... converting unit!";		// kL
 
 				(*j)->setSpecialAbility(SPECAB_NONE);
 				convertUnit(*j, (*j)->getSpawnUnit());
@@ -746,9 +805,14 @@ void BattlescapeGame::handleNonTargetAction()
 		{
 			if (_currentAction.actor->spendTimeUnits(_currentAction.TU))
 			{
+<<<<<<< HEAD
 //kL?				_parentState->warning("STR_GRENADE_IS_ACTIVATED");
 				_currentAction.weapon->setExplodeTurn(_save->getTurn() + _currentAction.value);
 				_parentState->warning("STR_GRENADE_IS_ACTIVATED");		// kL
+=======
+				_parentState->warning("STR_GRENADE_IS_ACTIVATED");
+				_currentAction.weapon->setExplodeTurn(_currentAction.value);
+>>>>>>> master
 			}
 			else
 			{
@@ -1012,9 +1076,9 @@ void BattlescapeGame::popState()
 				{
 					int tu = action.actor->getTimeUnits();
 //					Log(LOG_INFO) << "BattlescapeGame::popState(), tu remaining after action = " << (float)tu;
-					int totalTU = action.actor->getStats()->tu;
-//					Log(LOG_INFO) << "BattlescapeGame::popState(), Total tu = " << (float)totalTU;
-//					Log(LOG_INFO) << "BattlescapeGame::popState(), tu/Totaltu = " << (float)tu/(float)totalTU * (float)100;
+					int statTU = action.actor->getStats()->tu;
+//					Log(LOG_INFO) << "BattlescapeGame::popState(), Total tu = " << (float)statTU;
+//					Log(LOG_INFO) << "BattlescapeGame::popState(), tu/statTU = " << (float)tu/(float)statTU * (float)100;
 
 					switch (action.type)
 					{
@@ -1026,7 +1090,7 @@ void BattlescapeGame::popState()
 						case BA_SNAPSHOT:
 //							Log(LOG_INFO) << ". SnapShot, TU percent = " << (float)action.weapon->getRules()->getTUSnap();
 
-							if ((float)tu / (float)totalTU * (float)100 < (float)action.weapon->getRules()->getTUSnap())
+							if ((float)tu / (float)statTU * (float)100 < (float)action.weapon->getRules()->getTUSnap())
 							{
 								cancelCurrentAction(true);
 							}
@@ -1034,7 +1098,7 @@ void BattlescapeGame::popState()
 						case BA_AIMEDSHOT:
 //							Log(LOG_INFO) << ". AimedShot, TU percent = " << (float)action.weapon->getRules()->getTUAimed();
 
-							if ((float)tu / (float)totalTU * (float)100 < (float)action.weapon->getRules()->getTUAimed())
+							if ((float)tu / (float)statTU * (float)100 < (float)action.weapon->getRules()->getTUAimed())
 							{
 								cancelCurrentAction(true);
 							}
@@ -1042,20 +1106,22 @@ void BattlescapeGame::popState()
 						case BA_AUTOSHOT:
 //							Log(LOG_INFO) << ". AutoShot, TU percent = " << (float)action.weapon->getRules()->getTUAuto();
 
-							if ((float)tu / (float)totalTU * (float)100 < (float)action.weapon->getRules()->getTUAuto())
+							if ((float)tu / (float)statTU * (float)100 < (float)action.weapon->getRules()->getTUAuto())
 							{
 								cancelCurrentAction(true);
 							}
 						break;
 					}
 				} */
+				// kL_note: Also do psi-attack Cancels....
 				if (!actionFailed)
 				{
-					float tu = (float)action.actor->getTimeUnits();
+//					float tu = (float)action.actor->getTimeUnits();
+					unsigned int curTU = action.actor->getTimeUnits();
 //					Log(LOG_INFO) << "BattlescapeGame::popState(), tu remaining after action = " << (float)tu;
-					float totalTU = (float)action.actor->getStats()->tu;
-//					Log(LOG_INFO) << "BattlescapeGame::popState(), Total tu = " << (float)totalTU;
-//					Log(LOG_INFO) << "BattlescapeGame::popState(), tu/Totaltu = " << (float)tu/(float)totalTU * (float)100;
+//					float statTU = (float)action.actor->getStats()->tu;
+//					Log(LOG_INFO) << "BattlescapeGame::popState(), Total tu = " << (float)statTU;
+//					Log(LOG_INFO) << "BattlescapeGame::popState(), tu/statTU = " << (float)tu/(float)statTU * (float)100;
 
 					switch (action.type)
 					{
@@ -1067,9 +1133,10 @@ void BattlescapeGame::popState()
 						case BA_SNAPSHOT:
 //							Log(LOG_INFO) << ". SnapShot, TU percent = " << (float)action.weapon->getRules()->getTUSnap();
 
-//							if (tu / totalTU * (float)100 < (float)action.weapon->getRules()->getTUSnap())
-							if ((int)(tu / totalTU * 100.f) + 1 < action.weapon->getRules()->getTUSnap())
+//							if (tu / statTU * (float)100 < (float)action.weapon->getRules()->getTUSnap())
+//							if ((int)(tu / statTU * 100.f) + 1 < action.weapon->getRules()->getTUSnap())
 //								|| action.weapon->getAmmoQuantity() < 1)
+							if (curTU < action.actor->getActionTUs(BA_SNAPSHOT, action.weapon))
 							{
 								cancelCurrentAction(true);
 							}
@@ -1077,9 +1144,10 @@ void BattlescapeGame::popState()
 						case BA_AIMEDSHOT:
 //							Log(LOG_INFO) << ". AimedShot, TU percent = " << (float)action.weapon->getRules()->getTUAimed();
 
-//							if (tu / totalTU * (float)100 < (float)action.weapon->getRules()->getTUAimed())
-							if ((int)(tu / totalTU * 100.f) + 1 < action.weapon->getRules()->getTUAimed())
+//							if (tu / statTU * (float)100 < (float)action.weapon->getRules()->getTUAimed())
+//							if ((int)(tu / statTU * 100.f) + 1 < action.weapon->getRules()->getTUAimed())
 //								|| action.weapon->getAmmoQuantity() < 1)
+							if (curTU < action.actor->getActionTUs(BA_AIMEDSHOT, action.weapon))
 							{
 								cancelCurrentAction(true);
 							}
@@ -1087,9 +1155,10 @@ void BattlescapeGame::popState()
 						case BA_AUTOSHOT:
 //							Log(LOG_INFO) << ". AutoShot, TU percent = " << (float)action.weapon->getRules()->getTUAuto();
 
-//							if (tu / totalTU * (float)100 < (float)action.weapon->getRules()->getTUAuto())
-							if ((int)(tu / totalTU * 100.f) + 1 < action.weapon->getRules()->getTUAuto())
+//							if (tu / statTU * (float)100 < (float)action.weapon->getRules()->getTUAuto())
+//							if ((int)(tu / statTU * 100.f) + 1 < action.weapon->getRules()->getTUAuto())
 //								|| action.weapon->getAmmoQuantity() < 1)
+							if (curTU < action.actor->getActionTUs(BA_AUTOSHOT, action.weapon))
 							{
 								cancelCurrentAction(true);
 							}
@@ -1161,6 +1230,7 @@ void BattlescapeGame::popState()
 				else
 					break;
 			}
+
 			if (_states.empty())
 			{
 				endTurn();
@@ -1196,13 +1266,13 @@ void BattlescapeGame::popState()
  * @param bu BattleUnit.
  * @return True if there are no actions pending.
  */
-bool BattlescapeGame::noActionsPending(BattleUnit *bu)
+bool BattlescapeGame::noActionsPending(BattleUnit* bu)
 {
 	if (_states.empty()) return true;
 
-	for (std::list<BattleState*>::iterator i = _states.begin(); i != _states.end(); ++i)
+	for (std::list<BattleState* >::iterator i = _states.begin(); i != _states.end(); ++i)
 	{
-		if ((*i) != 0 && (*i)->getAction().actor == bu)
+		if (*i != 0 && (*i)->getAction().actor == bu)
 			return false;
 	}
 
@@ -1224,7 +1294,7 @@ void BattlescapeGame::setStateInterval(Uint32 interval)
  * @param tu Number of time units to check.
  * @return bool Whether or not we got enough time units.
  */
-bool BattlescapeGame::checkReservedTU(BattleUnit *bu, int tu, bool justChecking)
+bool BattlescapeGame::checkReservedTU(BattleUnit* bu, int tu, bool justChecking)
 {
     BattleActionType effectiveTuReserved = _tuReserved; // avoid changing _tuReserved in this method
 
@@ -1308,15 +1378,13 @@ bool BattlescapeGame::checkReservedTU(BattleUnit *bu, int tu, bool justChecking)
 	return true;
 }
 
-
-
 /**
  * Picks the first soldier that is panicking.
  * @return True when all panicking is over.
  */
 bool BattlescapeGame::handlePanickingPlayer()
 {
-	for (std::vector<BattleUnit*>::iterator j = _save->getUnits()->begin(); j != _save->getUnits()->end(); ++j)
+	for (std::vector<BattleUnit* >::iterator j = _save->getUnits()->begin(); j != _save->getUnits()->end(); ++j)
 	{
 		if ((*j)->getFaction() == FACTION_PLAYER
 			&& (*j)->getOriginalFaction() == FACTION_PLAYER
@@ -1333,10 +1401,12 @@ bool BattlescapeGame::handlePanickingPlayer()
  * Common function for handling panicking units.
  * @return False when unit not in panicking mode.
  */
-bool BattlescapeGame::handlePanickingUnit(BattleUnit *unit)
+bool BattlescapeGame::handlePanickingUnit(BattleUnit* unit)
 {
 	UnitStatus status = unit->getStatus();
-	if (status != STATUS_PANICKING && status != STATUS_BERSERK) return false;
+
+	if (status != STATUS_PANICKING && status != STATUS_BERSERK)
+		return false;
 
 //	Log(LOG_INFO) << "unit Panic/Berserk : " << unit->getId() << " / " << unit->getMorale();		// kL
 
@@ -1344,13 +1414,8 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit *unit)
 	getMap()->getCamera()->centerOnPosition(unit->getPosition());
 	_save->setSelectedUnit(unit);
 
-<<<<<<< HEAD
-	std::wstringstream ss; // show a little infobox with the name of the unit and "... is panicking"
-	ss << unit->getName(_parentState->getGame()->getLanguage()) << L'\n';
-=======
 	// show a little infobox with the name of the unit and "... is panicking"
-	Game *game = _parentState->getGame();
->>>>>>> master
+	Game* game = _parentState->getGame();
 	if (status == STATUS_PANICKING)
 	{
 		game->pushState(new InfoboxState(game, game->getLanguage()->getString("STR_HAS_PANICKED", unit->getGender()).arg(unit->getName(game->getLanguage()))));
@@ -1359,11 +1424,6 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit *unit)
 	{
 		game->pushState(new InfoboxState(game, game->getLanguage()->getString("STR_HAS_GONE_BERSERK", unit->getGender()).arg(unit->getName(game->getLanguage()))));
 	}
-<<<<<<< HEAD
-
-	_parentState->getGame()->pushState(new InfoboxState(_parentState->getGame(), ss.str()));
-=======
->>>>>>> master
 
 	unit->abortTurn(); // makes the unit go to status STANDING :p
 
@@ -1376,7 +1436,7 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit *unit)
 		case STATUS_PANICKING: // 1/2 chance to freeze and 1/2 chance try to flee
 			if (flee <= 50)
 			{
-				BattleItem *item = unit->getItem("STR_RIGHT_HAND");
+				BattleItem* item = unit->getItem("STR_RIGHT_HAND");
 				if (item)
 				{
 					dropItem(unit->getPosition(), item, false, true);
@@ -1407,7 +1467,7 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit *unit)
 				statePushBack(new UnitTurnBState(this, ba));
 			}
 
-			for (std::vector<BattleUnit*>::iterator j = unit->getVisibleUnits()->begin(); j != unit->getVisibleUnits()->end(); ++j)
+			for (std::vector<BattleUnit* >::iterator j = unit->getVisibleUnits()->begin(); j != unit->getVisibleUnits()->end(); ++j)
 			{
 				ba.target = (*j)->getPosition();
 				statePushBack(new UnitTurnBState(this, ba));
@@ -1431,6 +1491,7 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit *unit)
 							statePushBack(new ProjectileFlyBState(this, ba));
 						}
 					}
+<<<<<<< HEAD
 					else if (ba.weapon->getRules()->getBattleType() == BT_GRENADE)
 					{
 						if (ba.weapon->getExplodeTurn() == 0)
@@ -1440,6 +1501,14 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit *unit)
 
 						ba.type = BA_THROW;
 						statePushBack(new ProjectileFlyBState(this, ba));
+=======
+				}
+				else if (ba.weapon->getRules()->getBattleType() == BT_GRENADE)
+				{
+					if (ba.weapon->getExplodeTurn() == -1)
+					{
+						ba.weapon->setExplodeTurn(0);
+>>>>>>> master
 					}
 				}
 			}
@@ -1447,6 +1516,7 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit *unit)
 			unit->setTimeUnits(unit->getStats()->tu); // replace the TUs from shooting
 			ba.type = BA_NONE;
 		break;
+
 		default:
 		break;
 	}
@@ -1469,7 +1539,8 @@ bool BattlescapeGame::cancelCurrentAction(bool bForce)
 {
 	bool bPreviewed = Options::getInt("battleNewPreviewPath") > 0;
 
-	if (_save->getPathfinding()->removePreview() && bPreviewed) return true;
+	if (_save->getPathfinding()->removePreview() && bPreviewed)
+		return true;
 
 	if (_states.empty() || bForce)
 	{
@@ -1537,7 +1608,12 @@ bool BattlescapeGame::isBusy()
  */
 void BattlescapeGame::primaryAction(const Position& pos)
 {
-	Log(LOG_INFO) << "BattlescapeGame::primaryAction()";
+	std::string sUnit = "none selected";
+/*	if (_save->getSelectedUnit())		// kL
+	{
+		sUnit = _save->getSelectedUnit()->getId();	// kL
+	} */
+	Log(LOG_INFO) << "BattlescapeGame::primaryAction()";// unitID = " << sUnit;		// kL
 
 	bool bPreviewed = Options::getInt("battleNewPreviewPath") > 0;
 
@@ -1548,6 +1624,8 @@ void BattlescapeGame::primaryAction(const Position& pos)
 
 		if (_currentAction.type == BA_LAUNCH)
 		{
+			Log(LOG_INFO) << ". . . . BA_LAUNCH";
+
 			_parentState->showLaunchButton(true);
 			_currentAction.waypoints.push_back(pos);
 			getMap()->getWaypoints()->push_back(pos);
@@ -1555,13 +1633,15 @@ void BattlescapeGame::primaryAction(const Position& pos)
 		else if (_currentAction.type == BA_USE
 			&& _currentAction.weapon->getRules()->getBattleType() == BT_MINDPROBE)
 		{
+			Log(LOG_INFO) << ". . . . BA_USE -> BT_MINDPROBE";
+
 			if (_save->selectUnit(pos)
 				&& _save->selectUnit(pos)->getFaction() != _save->getSelectedUnit()->getFaction())
 			{
 				if (_currentAction.actor->spendTimeUnits(_currentAction.TU))
 				{
 					_parentState->getGame()->getResourcePack()->getSound("BATTLE.CAT", _currentAction.weapon->getRules()->getHitSound())->play();
-					_parentState->getGame()->pushState (new UnitInfoState(_parentState->getGame(), _save->selectUnit(pos), _parentState));
+					_parentState->getGame()->pushState(new UnitInfoState(_parentState->getGame(), _save->selectUnit(pos), _parentState));
 
 					cancelCurrentAction();
 				}
@@ -1574,6 +1654,8 @@ void BattlescapeGame::primaryAction(const Position& pos)
 		else if (_currentAction.type == BA_PANIC
 			|| _currentAction.type == BA_MINDCONTROL)
 		{
+			Log(LOG_INFO) << ". . . . BA_PANIC or BA_MINDCONTROL";
+
 			if (_save->selectUnit(pos)
 				&& _save->selectUnit(pos)->getFaction() != _save->getSelectedUnit()->getFaction()
 				&& _save->selectUnit(pos)->getVisible())
@@ -1588,8 +1670,8 @@ void BattlescapeGame::primaryAction(const Position& pos)
 				_currentAction.target = pos;
 
 				// get the sound/animation started
-				getMap()->setCursorType(CT_NONE);
-				_parentState->getGame()->getCursor()->setVisible(false);
+//kL				getMap()->setCursorType(CT_NONE);
+//kL				_parentState->getGame()->getCursor()->setVisible(false);
 				_currentAction.cameraPosition = getMap()->getCamera()->getMapOffset();
 				statePushBack(new ProjectileFlyBState(this, _currentAction));
 
@@ -1597,33 +1679,28 @@ void BattlescapeGame::primaryAction(const Position& pos)
 				{
 					if (getTileEngine()->psiAttack(&_currentAction))
 					{
-<<<<<<< HEAD
-						std::wstringstream ss; // show a little infobox if it's successful
-
-=======
 						// show a little infobox if it's successful
-						Game *game = _parentState->getGame();
->>>>>>> master
+						Game* game = _parentState->getGame();
 						if (_currentAction.type == BA_PANIC)
 						{
-							BattleUnit *unit = _save->getTile(_currentAction.target)->getUnit();
+							BattleUnit* unit = _save->getTile(_currentAction.target)->getUnit();
 							game->pushState(new InfoboxState(game, game->getLanguage()->getString("STR_HAS_PANICKED", unit->getGender()).arg(unit->getName(game->getLanguage()))));
 						}
 						else if (_currentAction.type == BA_MINDCONTROL)
 						{
 							game->pushState(new InfoboxState(game, game->getLanguage()->getString("STR_MIND_CONTROL_SUCCESSFUL")));
 						}
-<<<<<<< HEAD
 
-						_parentState->getGame()->pushState(new InfoboxState(_parentState->getGame(), ss.str()));
-=======
->>>>>>> master
 						_parentState->updateSoldierInfo();
 
-						_currentAction.targeting = false;
-						_currentAction.type = BA_NONE;
+//						if (_save->getSelectedUnit()->getFaction() != FACTION_PLAYER)	// kL: do aliens even do primaryActions?
+//						{
+//kL							_currentAction.targeting = false;
+//kL							_currentAction.type = BA_NONE;
+//						}
 
 						setupCursor();
+						// kL_note: might need to put a refresh (redraw/blit) cursor here; else it 'sticks' for a moment at its previous position.
 					}
 
 					if (builtinpsi)
@@ -2343,7 +2420,7 @@ void BattlescapeGame::tallyUnits(int& liveAliens, int& liveSoldiers, bool conver
 			if ((*j)->getHealth() > 0
 				&& (*j)->getSpecialAbility() == SPECAB_RESPAWN)
 			{
-				Log(LOG_INFO) << "BattlescapeGame::tallyUnits() " << (*j)->getId() << " : health > 0, SPECAB_RESPAWN -> converting unit!";
+//				Log(LOG_INFO) << "BattlescapeGame::tallyUnits() " << (*j)->getId() << " : health > 0, SPECAB_RESPAWN -> converting unit!";
 
 				(*j)->setSpecialAbility(SPECAB_NONE);
 				convertUnit((*j), (*j)->getSpawnUnit());
