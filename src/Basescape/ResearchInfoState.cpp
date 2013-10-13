@@ -38,6 +38,7 @@
 #include <sstream>
 #include <limits>
 
+
 namespace OpenXcom
 {
 

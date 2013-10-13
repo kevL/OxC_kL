@@ -1879,7 +1879,7 @@ void GeoscapeState::time1Day()
 		if ((*i)->getAvailablePsiLabs() > 0
 			&& Options::getBool("anytimePsiTraining"))
 		{
-			for(std::vector<Soldier*>::const_iterator s = (*i)->getSoldiers()->begin(); s != (*i)->getSoldiers()->end(); ++s)
+			for (std::vector<Soldier*>::const_iterator s = (*i)->getSoldiers()->begin(); s != (*i)->getSoldiers()->end(); ++s)
 				(*s)->trainPsi1Day();
 		}
 	}
@@ -1892,6 +1892,7 @@ void GeoscapeState::time1Day()
 			if ((*k)->getRules()->insideRegion((*b)->getLongitude(), (*b)->getLatitude()))
 			{
 				(*k)->addActivityAlien(5);
+
 				break;
 			}
 		}
@@ -1901,6 +1902,7 @@ void GeoscapeState::time1Day()
 			if ((*k)->getRules()->insideCountry((*b)->getLongitude(), (*b)->getLatitude()))
 			{
 				(*k)->addActivityAlien(5);
+
 				break;
 			}
 		}

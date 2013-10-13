@@ -84,8 +84,10 @@ InventoryState::InventoryState(Game* game, bool tu, BattlescapeState* parent)
 		_txtWeight	= new Text(70, 9, 245, 24);
 		_txtFAcc	= new Text(40, 9, 245, 32);
 		_txtReact	= new Text(40, 9, 245, 40);
-		_txtPSkill	= new Text(40, 9, 245, 48);
-		_txtPStr	= new Text(40, 9, 245, 56);
+//kL		_txtPSkill	= new Text(40, 9, 245, 48);
+//kL		_txtPStr	= new Text(40, 9, 245, 56);
+		_txtPStr	= new Text(40, 9, 245, 48);		// kL
+		_txtPSkill	= new Text(40, 9, 245, 56);		// kL
 	}
 
 	_txtItem	= new Text(160, 9, 128, 140);

@@ -646,7 +646,10 @@ void BattleUnit::lookAt(const Position& point, bool turret)
 
 	if (turret)
 	{
+		Log(LOG_INFO) << ". . . . has turret.";
+
 		_toDirectionTurret = dir;
+		Log(LOG_INFO) << ". . . . . . _toDirTur = " << _toDirectionTurret;
 		if (_toDirectionTurret != _directionTurret)
 		{
 			_status = STATUS_TURNING;
@@ -655,16 +658,20 @@ void BattleUnit::lookAt(const Position& point, bool turret)
 	}
 	else
 	{
+		Log(LOG_INFO) << ". . . . NOT turret.";
+
 		_toDirection = dir;
-		if (_toDirection != _direction
-			&& _toDirection < 8
-			&& _toDirection > -1)
+		Log(LOG_INFO) << ". . . . . . _toDir = " << _toDirection;
+		if (_toDirection != _direction)
+//kL			&& _toDirection < 8
+//kL			&& _toDirection > -1)
 		{
 			_status = STATUS_TURNING;
 			Log(LOG_INFO) << ". . . . lookAt() -> STATUS_TURNING";
 			// kL_note: what about Forcing the faced direction instantly?
 		}
 	}
+	Log(LOG_INFO) << "BattleUnit::lookAt() #1, DONE";
 }
 
 /**

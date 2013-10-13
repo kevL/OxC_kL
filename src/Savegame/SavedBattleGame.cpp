@@ -1660,6 +1660,7 @@ BattleUnit* SavedBattleGame::getHighestRanked(bool xcom)
 		{
 			if (xcom)
 			{
+				Log(LOG_INFO) << "SavedBattleGame::getHighestRanked(), side is Xcom";
 				if ((*j)->getOriginalFaction() == FACTION_PLAYER)
 				{
 					if (leader == 0
@@ -1671,6 +1672,7 @@ BattleUnit* SavedBattleGame::getHighestRanked(bool xcom)
 			}
 			else if ((*j)->getOriginalFaction() == FACTION_HOSTILE)
 			{
+				Log(LOG_INFO) << "SavedBattleGame::getHighestRanked(), side is aLien";
 				if (leader == 0
 					|| (*j)->getRankInt() > leader->getRankInt())
 				{
@@ -1680,6 +1682,7 @@ BattleUnit* SavedBattleGame::getHighestRanked(bool xcom)
 		}
 	}
 
+	Log(LOG_INFO) << ". . leader = " << leader->getId();
 	return leader;
 }
 // kL_end.
@@ -1748,6 +1751,7 @@ int SavedBattleGame::getMoraleModifier(BattleUnit* unit, bool xcom)
 
 	if (unit == 0) // leadership Bonus
 	{
+		Log(LOG_INFO) << "SavedBattleGame::getMoraleModifier(), leadership Bonus";
 		if (xcom)
 		{
 			BattleUnit* leader = getHighestRanked();
@@ -1771,9 +1775,9 @@ int SavedBattleGame::getMoraleModifier(BattleUnit* unit, bool xcom)
 					default:
 					break;
 				}
-
-//				Log(LOG_INFO) << "SavedBattleGame::getMoraleModifier() leaderBonus = " << result;
 			}
+
+			Log(LOG_INFO) << ". . Xcom bonus = " << result;
 		}
 		else // alien
 		{
@@ -1798,13 +1802,14 @@ int SavedBattleGame::getMoraleModifier(BattleUnit* unit, bool xcom)
 					default:
 					break;
 				}
-
-//				Log(LOG_INFO) << "SavedBattleGame::getMoraleModifier() leaderBonus = " << result;
 			}
+
+			Log(LOG_INFO) << ". . aLien bonus = " << result;
 		}
 	}
 	else // morale Loss when 'unit' slain
 	{
+		Log(LOG_INFO) << "SavedBattleGame::getMoraleModifier(), unit slain Penalty";
 		if (unit->getOriginalFaction() == FACTION_PLAYER) // XCOM dies. (mind controlled or not)
 		{
 			switch (unit->getRankInt())
@@ -1824,7 +1829,7 @@ int SavedBattleGame::getMoraleModifier(BattleUnit* unit, bool xcom)
 				break;
 			}
 
-//			Log(LOG_INFO) << "SavedBattleGame::getMoraleModifier() penaltyRank = " << result;
+			Log(LOG_INFO) << ". . Xcom penalty = " << result;
 		}
 		else if (unit->getFaction() == FACTION_HOSTILE) // aliens or Mind Controlled XCOM dies.
 		{
@@ -1846,7 +1851,7 @@ int SavedBattleGame::getMoraleModifier(BattleUnit* unit, bool xcom)
 			}
 			// else if a mind-controlled alien dies nobody cares.
 
-//			Log(LOG_INFO) << "SavedBattleGame::getMoraleModifier() penaltyRank = " << result;
+			Log(LOG_INFO) << ". . aLien penalty = " << result;
 		}
 	}
 

@@ -44,6 +44,7 @@ UnitTurnBState::UnitTurnBState(BattlescapeGame* parent, BattleAction action)
 		_unit(0),
 		_turret(false)
 {
+	Log(LOG_INFO) << "Create UnitTurnBState";
 }
 
 /**
@@ -51,6 +52,7 @@ UnitTurnBState::UnitTurnBState(BattlescapeGame* parent, BattleAction action)
  */
 UnitTurnBState::~UnitTurnBState()
 {
+	Log(LOG_INFO) << "Delete UnitTurnBState";
 }
 
 /**

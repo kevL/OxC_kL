@@ -35,6 +35,7 @@ const float PROGRESS_LIMIT_POOR		= 0.05f;	// kL
 const float PROGRESS_LIMIT_AVERAGE	= 0.25f;	// kL
 const float PROGRESS_LIMIT_GOOD		= 0.5f;		// kL
 
+
 ResearchProject::ResearchProject(RuleResearch* p, int c)
 	:
 		_project(p),
@@ -158,33 +159,42 @@ std::string ResearchProject::getResearchProgress() const
 {
 //kL	float progress = (float)getSpent() / getRules()->getCost();
 	float progress = (float)getSpent() / (float)getRules()->getCost();	// kL
+	Log(LOG_INFO) << "ResearchProject::getResearchProgress(), progress = " << progress;
 
-	if (getAssigned () == 0)
+	if (getAssigned() == 0)
 	{
+		Log(LOG_INFO) << ". . none assigned.";
 		return "STR_NONE";
 	}
 	else if (progress < PROGRESS_LIMIT_UNKNOWN)
 	{
+		Log(LOG_INFO) << ". . progress unknown.";
 		return "STR_UNKNOWN";
 	}
 	else
 	{
 //kL		float rating = (float)getAssigned();
 //kL		rating /= getRules()->getCost();
-		float rating = (float)getAssigned() / (float)getRules()->getCost();
+		float rating = (float)getAssigned() / (float)getRules()->getCost();		// kL
+		Log(LOG_INFO) << ". . . . rating = " << rating;
+
 		if (rating < PROGRESS_LIMIT_POOR)
 		{
+			Log(LOG_INFO) << ". . . . . . progress < POOR";
 			return "STR_POOR";
 		}
 		else if (rating < PROGRESS_LIMIT_AVERAGE)
 		{
+			Log(LOG_INFO) << ". . . . . . progress < AVERAGE";
 			return "STR_AVERAGE";
 		}
 		else if (rating < PROGRESS_LIMIT_GOOD)
 		{
+			Log(LOG_INFO) << ". . . . . . progress < GOOD";
 			return "STR_GOOD";
 		}
 
+		Log(LOG_INFO) << ". . . . . . progress = EXCELLENT";
 		return "STR_EXCELLENT";
 	}
 }
