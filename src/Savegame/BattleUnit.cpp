@@ -2114,7 +2114,7 @@ int BattleUnit::improveStat(int exp)
 	return (int)((tier / 2.0) + RNG::generate(0.0, tier));
 }
 
-/*
+/**
  * Get the unit's minimap sprite index. Used to display the unit on the minimap
  * @return the unit minimap index
  */
@@ -2149,18 +2149,18 @@ int BattleUnit::getMiniMapSpriteIndex() const
 }
 
 /**
-  * Set the turret type. -1 is no turret.
-  * @param turretType
-  */
+ * Set the turret type. -1 is no turret.
+ * @param turretType
+ */
 void BattleUnit::setTurretType(int turretType)
 {
 	_turretType = turretType;
 }
 
 /**
-  * Get the turret type. -1 is no turret.
-  * @return type
-  */
+ * Get the turret type. -1 is no turret.
+ * @return type
+ */
 int BattleUnit::getTurretType() const
 {
 	return _turretType;
@@ -2210,7 +2210,7 @@ void BattleUnit::painKillers()
 	int lostHealth = getStats()->health - _health;
 	if (lostHealth > _moraleRestored)
 	{
-        _morale = std::min(100, (lostHealth - _moraleRestored + _morale));
+		_morale = std::min(100, (lostHealth - _moraleRestored + _morale));
 		_moraleRestored = lostHealth;
 	}
 }
@@ -2279,54 +2279,54 @@ std::wstring BattleUnit::getName(Language* lang, bool debugAppendId) const
 	return _name;
 }
 /**
-  * Gets pointer to the unit's stats.
-  * @return stats Pointer to the unit's stats.
-  */
+ * Gets pointer to the unit's stats.
+ * @return stats Pointer to the unit's stats.
+ */
 UnitStats* BattleUnit::getStats()
 {
 	return &_stats;
 }
 
 /**
-  * Get the unit's stand height.
-  * @return The unit's height in voxels, when standing up.
-  */
+ * Get the unit's stand height.
+ * @return The unit's height in voxels, when standing up.
+ */
 int BattleUnit::getStandHeight() const
 {
 	return _standHeight;
 }
 
 /**
-  * Get the unit's kneel height.
-  * @return The unit's height in voxels, when kneeling.
-  */
+ * Get the unit's kneel height.
+ * @return The unit's height in voxels, when kneeling.
+ */
 int BattleUnit::getKneelHeight() const
 {
 	return _kneelHeight;
 }
 
 /**
-  * Get the unit's floating elevation.
-  * @return The unit's elevation over the ground in voxels, when flying.
-  */
+ * Get the unit's floating elevation.
+ * @return The unit's elevation over the ground in voxels, when flying.
+ */
 int BattleUnit::getFloatHeight() const
 {
 	return _floatHeight;
 }
 
 /**
-  * Get the unit's loft ID. This is only one, as it is repeated over the entire height of the unit.
-  * @return The unit's line of fire template ID.
-  */
+ * Get the unit's loft ID. This is only one, as it is repeated over the entire height of the unit.
+ * @return The unit's line of fire template ID.
+ */
 int BattleUnit::getLoftemps(int entry) const
 {
 	return _loftempsSet.at(entry);
 }
 
 /**
-  * Get the unit's value. Used for score at debriefing.
-  * @return value score
-  */
+ * Get the unit's value. Used for score at debriefing.
+ * @return value score
+ */
 int BattleUnit::getValue() const
 {
 	return _value;
@@ -2359,6 +2359,7 @@ bool BattleUnit::isWoundable() const
 {
 	return (_type == "SOLDIER");
 }
+
 /**
  * Get whether the unit is affected by morale loss.
  * Normally only small units are affected by morale loss.
@@ -2917,7 +2918,7 @@ bool BattleUnit::isSelectable(UnitFaction faction, bool checkReselect, bool chec
  */
 bool BattleUnit::hasInventory() const
 {
-	return (_armor->getSize() == 1 && _rank != "STR_LIVE_TERRORIST");
+	return _armor->getSize() == 1 && _rank != "STR_LIVE_TERRORIST";
 }
 
 }
