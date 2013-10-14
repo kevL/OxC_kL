@@ -1837,13 +1837,13 @@ int SavedBattleGame::getMoraleModifier(BattleUnit* unit, bool xcom)
 			{
 				case 0:					// commander
 					result += 30;		// 200
-				case 1:					// colonel
+				case 1:					// leader
 					result += 25;		// 170
-				case 2:					// captain
+				case 2:					// engineer
 					result += 20;		// 145
-				case 3:					// sergeant
+				case 3:					// medic
 					result += 10;		// 125
-				case 4:					// squaddie
+				case 4:					// navigator
 					result += 15;		// 115
 
 				default:

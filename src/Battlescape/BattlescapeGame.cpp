@@ -608,6 +608,8 @@ void BattlescapeGame::checkForCasualties(BattleItem* murderweapon, BattleUnit* m
 		{
 			BattleUnit* victim = *j;
 
+			if (murderer)
+				Log(LOG_INFO) << "BattlescapeGame::checkForCasualties() murderer = " << murderer->getId();
 			Log(LOG_INFO) << "BattlescapeGame::checkForCasualties() victim = " << victim->getId();
 
 			if (murderer)
