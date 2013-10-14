@@ -37,14 +37,14 @@ class Target;
  */
 class ConfirmDestinationState
 	:
-	public State
+		public State
 {
-	private:
-		Craft* _craft;
-		Target* _target;
-		Window* _window;
-		Text* _txtTarget;
-		TextButton* _btnOk, * _btnCancel;
+private:
+	Craft* _craft;
+	Target* _target;
+	Window* _window;
+	Text* _txtTarget;
+	TextButton* _btnOk, * _btnCancel;
 
 	public:
 		/// Creates the Confirm Destination state.

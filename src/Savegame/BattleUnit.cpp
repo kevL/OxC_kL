@@ -639,6 +639,7 @@ void BattleUnit::lookAt(const Position& point, bool turret)
 	Log(LOG_INFO) << "BattleUnit::lookAt() #1 unitID = " << getId();
 	Log(LOG_INFO) << ". . _direction = " << _direction;
 	Log(LOG_INFO) << ". . _toDirection = " << _toDirection;
+	Log(LOG_INFO) << ". . _directionTurret = " << _directionTurret;
 	Log(LOG_INFO) << ". . _toDirectionTurret = " << _toDirectionTurret;
 
 	int dir = directionTo(point);
@@ -671,6 +672,7 @@ void BattleUnit::lookAt(const Position& point, bool turret)
 			// kL_note: what about Forcing the faced direction instantly?
 		}
 	}
+
 	Log(LOG_INFO) << "BattleUnit::lookAt() #1, DONE";
 }
 
@@ -716,6 +718,8 @@ void BattleUnit::turn(bool turret)
 	Log(LOG_INFO) << "BattleUnit::turn() unitID = " << getId();
 	Log(LOG_INFO) << ". . _direction = " << _direction;
 	Log(LOG_INFO) << ". . _toDirection = " << _toDirection;
+	Log(LOG_INFO) << ". . _directionTurret = " << _directionTurret;
+	Log(LOG_INFO) << ". . _toDirectionTurret = " << _toDirectionTurret;
 
 	int delta = 0;
 
@@ -807,6 +811,7 @@ void BattleUnit::turn(bool turret)
 
 		Log(LOG_INFO) << ". . _direction = " << _direction;
 		Log(LOG_INFO) << ". . _toDirection = " << _toDirection;
+		Log(LOG_INFO) << ". . _directionTurret = " << _directionTurret;
 		Log(LOG_INFO) << ". . _toDirectionTurret = " << _toDirectionTurret;
 
 		if (_visible || _faction == FACTION_PLAYER) // kL_note: Faction_player should *always* be _visible...
@@ -817,6 +822,7 @@ void BattleUnit::turn(bool turret)
 	{
 		 if (_toDirectionTurret == _directionTurret)
 		 {
+			Log(LOG_INFO) << "BattleUnit::turn() " << getId() << "Turret - STATUS_STANDING (turn has ended)";
 			_status = STATUS_STANDING; // we officially reached our destination
 		 }
 	}

@@ -49,10 +49,10 @@ namespace OpenXcom
  */
 UfoDetectedState::UfoDetectedState(Game* game, Ufo* ufo, GeoscapeState* state, bool detected, bool hyperwave)
 	:
-	State(game),
-	_ufo(ufo),
-	_state(state),
-	_hyperwave(hyperwave)
+		State(game),
+		_ufo(ufo),
+		_state(state),
+		_hyperwave(hyperwave)
 {
 	// Generate UFO ID
 	if (_ufo->getId() == 0)
@@ -78,13 +78,17 @@ UfoDetectedState::UfoDetectedState(Game* game, Ufo* ufo, GeoscapeState* state, b
 		_window		= new Window(this, 224, 120, 16, 48, POPUP_BOTH);
 	}
 
-	_btnCentre		= new TextButton(200, 12, 28, 128);
-	_btnCancel		= new TextButton(200, 12, 28, 144);
+//kL	_btnCentre		= new TextButton(200, 12, 28, 128);
+//kL	_btnCancel		= new TextButton(200, 12, 28, 144);
+	_txtHyperwave	= new Text(214, 16, 21, 44);
 	_txtUfo			= new Text(207, 16, 28, 56);
 	_txtDetected	= new Text(100, 8, 28, 72);
-	_txtHyperwave	= new Text(214, 16, 21, 44);
-	_lstInfo		= new TextList(207, 32, 28, 82);
+//kL	_lstInfo		= new TextList(207, 32, 28, 82);
+	_lstInfo		= new TextList(207, 33, 28, 84);		// kL
 	_lstInfo2		= new TextList(207, 32, 28, 96);
+
+	_btnCentre		= new TextButton(200, 14, 28, 126);		// kL
+	_btnCancel		= new TextButton(200, 14, 28, 144);		// kL
 
 	if (hyperwave)
 	{

@@ -106,9 +106,8 @@ SavedGameState::SavedGameState(Game* game, OptionsOrigin origin)
 	_txtDate->setColor(Palette::blockOffset(15)-1);
 	_txtDate->setText(tr("STR_DATE"));
 
-	// kL_note: This is color of Loading... from main menu.
-	_txtStatus->setColor(Palette::blockOffset(8)+5);	// kL_note: +5 = white
-//	_txtStatus->setColor(Palette::blockOffset(8)+3);	// kL. +3 = hot pink
+	// kL_note: This is color of loadGame... from main menu.
+	_txtStatus->setColor(Palette::blockOffset(8)+5);	// kL_note: +5=white; +3=hot pink ; +4=red/greenishedge
 	_txtStatus->setBig();
 	_txtStatus->setAlign(ALIGN_CENTER);
 
@@ -122,7 +121,6 @@ SavedGameState::SavedGameState(Game* game, OptionsOrigin origin)
 
 /**
  * Initializes all the elements in the Saved Game screen.
- * kL_note: This should be the auto-Save message....
  * @param game, Pointer to the core game.
  * @param origin, Game section that originated this state.
  * @param showMsg, True if need to show messages like "Loading game" or "Saving game".
@@ -143,7 +141,8 @@ SavedGameState::SavedGameState(Game* game, OptionsOrigin origin, bool showMsg)
 		_txtStatus->setAlign(ALIGN_CENTER);
 		if (origin == OPT_BATTLESCAPE)
 		{
-			_txtStatus->setColor(Palette::blockOffset(5));
+//kL			_txtStatus->setColor(Palette::blockOffset(5));
+			_txtStatus->setColor(Palette::blockOffset(5)+1);		// kL
 			_txtStatus->setHighContrast(true);
 		}
 		else

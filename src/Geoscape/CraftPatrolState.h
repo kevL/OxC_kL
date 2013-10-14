@@ -39,7 +39,7 @@ class Globe;
  */
 class CraftPatrolState
 	:
-	public State
+		public State
 {
 	private:
 		Craft* _craft;

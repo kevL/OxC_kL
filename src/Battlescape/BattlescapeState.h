@@ -98,7 +98,7 @@ private:
 		~BattlescapeState();
 
 //kL		static const int DEFAULT_ANIM_SPEED = 100;
-		static const int DEFAULT_ANIM_SPEED = 89;		// kL
+		static const int DEFAULT_ANIM_SPEED = 87;		// kL
 
 		/// Selects the next soldier.
 		void selectNextPlayerUnit(bool checkReselect = false, bool setReselect = false, bool checkInventory = false);

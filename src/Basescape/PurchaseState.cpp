@@ -96,8 +96,8 @@ PurchaseState::PurchaseState(Game* game, Base* base)
 
 	_lstItems		= new TextList(288, 128, 8, 44);
 
-	_btnOk			= new TextButton(144, 16, 16, 177);
-	_btnCancel		= new TextButton(144, 16, 163, 177);
+	_btnCancel		= new TextButton(144, 16, 16, 177);
+	_btnOk			= new TextButton(144, 16, 163, 177);
 	// kL_end.
 
 

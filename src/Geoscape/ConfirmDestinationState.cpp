@@ -51,6 +51,7 @@ ConfirmDestinationState::ConfirmDestinationState(Game* game, Craft* craft, Targe
 		_target(target)
 {
 	Waypoint* w = dynamic_cast<Waypoint* >(_target);
+
 	_screen = false;
 
 	_window		= new Window(this, 224, 72, 16, 64);

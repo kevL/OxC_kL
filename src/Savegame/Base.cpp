@@ -942,7 +942,7 @@ void Base::addResearch(ResearchProject* project)
 
 /**
  * Remove a ResearchProject from base
- * @param project the project to remove
+ * @param project, The project to remove
 */
 void Base::removeResearch(ResearchProject* project)
 {
@@ -957,6 +957,10 @@ void Base::removeResearch(ResearchProject* project)
 		Log(LOG_INFO) << ". . proj = " << proj;
 		// eg. Base::removeResearch() proj = STR_REAPER_CORPSE
 
+		std::string help;
+		int spent;
+		float cost;
+
 		if (proj == "STR_FLOATER_SOLDIER"
 			|| proj == "STR_SNAKEMAN_SOLDIER"
 			|| proj == "STR_MUTON_SOLDIER"
@@ -965,9 +969,9 @@ void Base::removeResearch(ResearchProject* project)
 		{
 			for (std::vector<ResearchProject* >::const_iterator iter2 = _research.begin(); iter2 != _research.end(); ++iter2)
 			{
-				std::string help = (*iter2)->getRules()->getName();
-				int spent = (*iter2)->getSpent();
-				float cost = (float)(*iter2)->getCost();
+				help = (*iter2)->getRules()->getName();
+				spent = (*iter2)->getSpent();
+				cost = (float)(*iter2)->getCost();
 
 				if (help == "STR_HEAVY_PLASMA"
 					|| help == "STR_PLASMA_RIFLE"
@@ -976,19 +980,19 @@ void Base::removeResearch(ResearchProject* project)
 				{
 					(*iter2)->setSpent(spent + (int)(cost * 0.1f));
 
-					Log(LOG_INFO) << ". . Soldier.1 : spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.1f);
+					Log(LOG_INFO) << ". . Soldier.1 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.1f);
 				}
 				else if (help == "STR_ALIEN_ORIGINS")
 				{
 					(*iter2)->setSpent(spent - (int)(cost * 0.2f));
 
-					Log(LOG_INFO) << ". . Soldier.2 : spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.2f);
+					Log(LOG_INFO) << ". . Soldier.2 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.2f);
 				}
 				else if (help == "STR_POWER_SUIT")
 				{
 					(*iter2)->setSpent(spent - (int)(cost * 0.25f));
 
-					Log(LOG_INFO) << ". . Soldier.25 : spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.25f);
+					Log(LOG_INFO) << ". . Soldier.25 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.25f);
 				}
 				else if (help == "STR_HEAVY_PLASMA_CLIP"
 					|| help == "STR_PLASMA_RIFLE_CLIP"
@@ -996,7 +1000,7 @@ void Base::removeResearch(ResearchProject* project)
 				{
 					(*iter2)->setSpent(spent - (int)(cost * 0.4f));
 
-					Log(LOG_INFO) << ". . Soldier.4 : spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.4f);
+					Log(LOG_INFO) << ". . Soldier.4 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.4f);
 				}
 				else if (help == "STR_ALIEN_GRENADE"
 					|| help == "STR_ALIEN_ENTERTAINMENT"
@@ -1004,7 +1008,7 @@ void Base::removeResearch(ResearchProject* project)
 				{
 					(*iter2)->setSpent(spent - (int)(cost * 0.5f));
 
-					Log(LOG_INFO) << ". . Soldier.5 : spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.5f);
+					Log(LOG_INFO) << ". . Soldier.5 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.5f);
 				}
 			}
 		}
@@ -1015,16 +1019,16 @@ void Base::removeResearch(ResearchProject* project)
 		{
 			for (std::vector<ResearchProject* >::const_iterator iter2 = _research.begin(); iter2 != _research.end(); ++iter2)
 			{
-				std::string help = (*iter2)->getRules()->getName();
-				int spent = (*iter2)->getSpent();
-				float cost = (float)(*iter2)->getCost();
+				help = (*iter2)->getRules()->getName();
+				spent = (*iter2)->getSpent();
+				cost = (float)(*iter2)->getCost();
 
 				if (help == "STR_CYDONIA_OR_BUST"
 					|| help == "STR_POWER_SUIT")
 				{
 					(*iter2)->setSpent(spent + (int)(cost * 0.15f));
 
-					Log(LOG_INFO) << ". . Navigator.15 : spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.15f);
+					Log(LOG_INFO) << ". . Navigator.15 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.15f);
 				}
 				else if (help == "STR_HEAVY_PLASMA"
 					|| help == "STR_HEAVY_PLASMA_CLIP"
@@ -1042,7 +1046,7 @@ void Base::removeResearch(ResearchProject* project)
 				{
 					(*iter2)->setSpent(spent - (int)(cost * 0.2f));
 
-					Log(LOG_INFO) << ". . Navigator.2 : spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.2f);
+					Log(LOG_INFO) << ". . Navigator.2 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.2f);
 				}
 				else if (help == "STR_UFO_POWER_SOURCE"
 					|| help == "STR_UFO_CONSTRUCTION"
@@ -1051,39 +1055,39 @@ void Base::removeResearch(ResearchProject* project)
 				{
 					(*iter2)->setSpent(spent - (int)(cost * 0.25f));
 
-					Log(LOG_INFO) << ". . Navigator.25: spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.25f);
+					Log(LOG_INFO) << ". . Navigator.25: help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.25f);
 				}
 				else if (help == "STR_FLYING_SUIT")
 				{
 					(*iter2)->setSpent(spent - (int)(cost * 0.3f));
 
-					Log(LOG_INFO) << ". . Navigator.3 : spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.3f);
+					Log(LOG_INFO) << ". . Navigator.3 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.3f);
 				}
 				else if (help == "STR_ALIEN_ORIGINS")
 				{
 					(*iter2)->setSpent(spent - (int)(cost * 0.35f));
 
-					Log(LOG_INFO) << ". . Navigator.35 : spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.35f);
+					Log(LOG_INFO) << ". . Navigator.35 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.35f);
 				}
 				else if (help == "STR_GRAV_SHIELD"
 					|| help == "STR_ALIEN_ALLOYS")
 				{
 					(*iter2)->setSpent(spent - (int)(cost * 0.4f));
 
-					Log(LOG_INFO) << ". . Navigator.4 : spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.4f);
+					Log(LOG_INFO) << ". . Navigator.4 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.4f);
 				}
 				else if (help == "STR_MOTION_SCANNER"
 					|| help == "STR_ALIEN_ENTERTAINMENT")
 				{
 					(*iter2)->setSpent(spent - (int)(cost * 0.5f));
 
-					Log(LOG_INFO) << ". . Navigator.5 : spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.5f);
+					Log(LOG_INFO) << ". . Navigator.5 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.5f);
 				}
 				else if (help == "STR_HYPER_WAVE_DECODER")
 				{
 					(*iter2)->setSpent(spent - (int)(cost * 0.8f));
 
-					Log(LOG_INFO) << ". . Navigator.8 : spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.8f);
+					Log(LOG_INFO) << ". . Navigator.8 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.8f);
 				}
 			}
 		}
@@ -1093,27 +1097,27 @@ void Base::removeResearch(ResearchProject* project)
 		{
 			for (std::vector<ResearchProject* >::const_iterator iter2 = _research.begin(); iter2 != _research.end(); ++iter2)
 			{
-				std::string help = (*iter2)->getRules()->getName();
-				int spent = (*iter2)->getSpent();
-				float cost = (float)(*iter2)->getCost();
+				help = (*iter2)->getRules()->getName();
+				spent = (*iter2)->getSpent();
+				cost = (float)(*iter2)->getCost();
 
 				if (help == "STR_THE_MARTIAN_SOLUTION")
 				{
 					(*iter2)->setSpent(spent + (int)(cost * 0.1f));
 
-					Log(LOG_INFO) << ". . Medic.1 : spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.1f);
+					Log(LOG_INFO) << ". . Medic.1 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.1f);
 				}
 				else if (help == "STR_ALIEN_ORIGINS")
 				{
 					(*iter2)->setSpent(spent - (int)(cost * 0.2f));
 
-					Log(LOG_INFO) << ". . Medic.2 : spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.2f);
+					Log(LOG_INFO) << ". . Medic.2 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.2f);
 				}
 				else if (help == "STR_ALIEN_REPRODUCTION")
 				{
 					(*iter2)->setSpent(spent - (int)(cost * 0.5f));
 
-					Log(LOG_INFO) << ". . Medic.5 : spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.5f);
+					Log(LOG_INFO) << ". . Medic.5 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.5f);
 				}
 				else if (help == "STR_MEDI_KIT"
 					|| help == "STR_PSI_AMP"
@@ -1128,7 +1132,7 @@ void Base::removeResearch(ResearchProject* project)
 				{
 					(*iter2)->setSpent(spent - (int)(cost * 0.8f));
 
-					Log(LOG_INFO) << ". . Medic.8 : spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.8f);
+					Log(LOG_INFO) << ". . Medic.8 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.8f);
 				}
 			}
 		}
@@ -1139,15 +1143,15 @@ void Base::removeResearch(ResearchProject* project)
 		{
 			for (std::vector<ResearchProject* >::const_iterator iter2 = _research.begin(); iter2 != _research.end(); ++iter2)
 			{
-				std::string help = (*iter2)->getRules()->getName();
-				int spent = (*iter2)->getSpent();
-				float cost = (float)(*iter2)->getCost();
+				help = (*iter2)->getRules()->getName();
+				spent = (*iter2)->getSpent();
+				cost = (float)(*iter2)->getCost();
 
 				if (help == "STR_THE_MARTIAN_SOLUTION")
 				{
 					(*iter2)->setSpent(spent + (int)(cost * 0.1f));
 
-					Log(LOG_INFO) << ". . Engineer.1 : spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.1f);
+					Log(LOG_INFO) << ". . Engineer.1 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.1f);
 				}
 				else if (help == "STR_ALIEN_ORIGINS"
 					|| help == "STR_SMALL_LAUNCHER"
@@ -1155,7 +1159,7 @@ void Base::removeResearch(ResearchProject* project)
 				{
 					(*iter2)->setSpent(spent - (int)(cost * 0.2f));
 
-					Log(LOG_INFO) << ". . Engineer.2 : spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.2f);
+					Log(LOG_INFO) << ". . Engineer.2 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.2f);
 				}
 				else if (help == "STR_NEW_FIGHTER_CRAFT"
 					|| help == "STR_NEW_FIGHTER_TRANSPORTER"
@@ -1163,7 +1167,7 @@ void Base::removeResearch(ResearchProject* project)
 				{
 					(*iter2)->setSpent(spent - (int)(cost * 0.3f));
 
-					Log(LOG_INFO) << ". . Engineer.3 : spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.3f);
+					Log(LOG_INFO) << ". . Engineer.3 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.3f);
 				}
 				else if (help == "STR_MOTION_SCANNER"
 					|| help == "STR_HEAVY_PLASMA"
@@ -1188,14 +1192,14 @@ void Base::removeResearch(ResearchProject* project)
 				{
 					(*iter2)->setSpent(spent - (int)(cost * 0.5f));
 
-					Log(LOG_INFO) << ". . Engineer.5 : spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.5f);
+					Log(LOG_INFO) << ". . Engineer.5 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.5f);
 				}
 				else if (help == "STR_BLASTER_LAUNCHER"
 					|| help == "STR_BLASTER_BOMB")
 				{
 					(*iter2)->setSpent(spent - (int)(cost * 0.7f));
 
-					Log(LOG_INFO) << ". . Engineer.7 : spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.7f);
+					Log(LOG_INFO) << ". . Engineer.7 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.7f);
 				}
 			}
 		}
@@ -1206,9 +1210,9 @@ void Base::removeResearch(ResearchProject* project)
 		{
 			for (std::vector<ResearchProject* >::const_iterator iter2 = _research.begin(); iter2 != _research.end(); ++iter2)
 			{
-				std::string help = (*iter2)->getRules()->getName();
-				int spent = (*iter2)->getSpent();
-				float cost = (float)(*iter2)->getCost();
+				help = (*iter2)->getRules()->getName();
+				spent = (*iter2)->getSpent();
+				cost = (float)(*iter2)->getCost();
 
 				if (help == "STR_NEW_FIGHTER_CRAFT"
 					|| help == "STR_NEW_FIGHTER_TRANSPORTER"
@@ -1216,7 +1220,7 @@ void Base::removeResearch(ResearchProject* project)
 				{
 					(*iter2)->setSpent(spent + (int)(cost * 0.1f));
 
-					Log(LOG_INFO) << ". . Leader.1 : spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.1f);
+					Log(LOG_INFO) << ". . Leader.1 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.1f);
 				}
 				else if (help == "STR_HEAVY_PLASMA"
 					|| help == "STR_HEAVY_PLASMA_CLIP"
@@ -1238,37 +1242,37 @@ void Base::removeResearch(ResearchProject* project)
 				{
 					(*iter2)->setSpent(spent - (int)(cost * 0.2f));
 
-					Log(LOG_INFO) << ". . Leader.2 : spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.2f);
+					Log(LOG_INFO) << ". . Leader.2 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.2f);
 				}
 				else if (help == "STR_PSI_AMP")
 				{
 					(*iter2)->setSpent(spent - (int)(cost * 0.25f));
 
-					Log(LOG_INFO) << ". . Leader.25 : spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.25f);
+					Log(LOG_INFO) << ". . Leader.25 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.25f);
 				}
 				else if (help == "STR_THE_MARTIAN_SOLUTION")
 				{
 					(*iter2)->setSpent(spent - (int)(cost * 0.3f));
 
-					Log(LOG_INFO) << ". . Leader.3 : spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.3f);
+					Log(LOG_INFO) << ". . Leader.3 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.3f);
 				}
 				else if (help == "STR_ALIEN_ORIGINS")
 				{
 					(*iter2)->setSpent(spent - (int)(cost * 0.5f));
 
-					Log(LOG_INFO) << ". . Leader.5 : spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.5f);
+					Log(LOG_INFO) << ". . Leader.5 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.5f);
 				}
 				else if (help == "STR_BLASTER_LAUNCHER")
 				{
 					(*iter2)->setSpent(spent - (int)(cost * 0.6f));
 
-					Log(LOG_INFO) << ". . Leader.6 : spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.6f);
+					Log(LOG_INFO) << ". . Leader.6 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.6f);
 				}
 				else if (help == "STR_EXAMINATION_ROOM")
 				{
 					(*iter2)->setSpent(spent - (int)(cost * 0.8f));
 
-					Log(LOG_INFO) << ". . Leader.8 : spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.8f);
+					Log(LOG_INFO) << ". . Leader.8 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.8f);
 				}
 			}
 		}
@@ -1279,9 +1283,9 @@ void Base::removeResearch(ResearchProject* project)
 		{
 			for (std::vector<ResearchProject* >::const_iterator iter2 = _research.begin(); iter2 != _research.end(); ++iter2)
 			{
-				std::string help = (*iter2)->getRules()->getName();
-				int spent = (*iter2)->getSpent();
-				float cost = (float)(*iter2)->getCost();
+				help = (*iter2)->getRules()->getName();
+				spent = (*iter2)->getSpent();
+				cost = (float)(*iter2)->getCost();
 
 				if (help == "STR_HEAVY_PLASMA"
 					|| help == "STR_HEAVY_PLASMA_CLIP"
@@ -1299,7 +1303,7 @@ void Base::removeResearch(ResearchProject* project)
 				{
 					(*iter2)->setSpent(spent + (int)(cost * 0.2f));
 
-					Log(LOG_INFO) << ". . Commander.2 : spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.2f);
+					Log(LOG_INFO) << ". . Commander.2 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.2f);
 				}
 				else if (help == "STR_BLASTER_BOMB"
 						|| help == "STR_ELERIUM_115"
@@ -1310,33 +1314,33 @@ void Base::removeResearch(ResearchProject* project)
 				{
 					(*iter2)->setSpent(spent - (int)(cost * 0.25f));
 
-					Log(LOG_INFO) << ". . Commander.25 : spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.25f);
+					Log(LOG_INFO) << ". . Commander.25 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.25f);
 				}
 				else if (help == "STR_PSI_AMP"
 					|| help == "STR_CYDONIA_OR_BUST")
 				{
 					(*iter2)->setSpent(spent - (int)(cost * 0.5f));
 
-					Log(LOG_INFO) << ". . Commander.5 : spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.5f);
+					Log(LOG_INFO) << ". . Commander.5 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.5f);
 				}
 				else if (help == "STR_THE_MARTIAN_SOLUTION")
 				{
 					(*iter2)->setSpent(spent - (int)(cost * 0.6f));
 
-					Log(LOG_INFO) << ". . Commander.6 : spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.6f);
+					Log(LOG_INFO) << ". . Commander.6 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.6f);
 				}
 				else if (help == "STR_ALIEN_ORIGINS")
 				{
 					(*iter2)->setSpent(spent - (int)(cost * 0.7f));
 
-					Log(LOG_INFO) << ". . Commander.7 : spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.7f);
+					Log(LOG_INFO) << ". . Commander.7 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.7f);
 				}
 				else if (help == "STR_BLASTER_LAUNCHER"
 					|| help == "STR_EXAMINATION_ROOM")
 				{
 					(*iter2)->setSpent(spent - (int)(cost * 0.8f));
 
-					Log(LOG_INFO) << ". . Commander.8 : spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.8f);
+					Log(LOG_INFO) << ". . Commander.8 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.8f);
 				}
 			}
 		}

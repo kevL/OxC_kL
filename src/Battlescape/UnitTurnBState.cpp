@@ -63,7 +63,7 @@ void UnitTurnBState::init()
 	_unit = _action.actor;
 	_action.TU = 0;
 
-	Log(LOG_INFO) << "UnitTurnBState::init() unitID = " << _unit->getId();
+	Log(LOG_INFO) << "UnitTurnBState::init() unitID = " << _unit->getId() << "_action.strafe = " << _action.strafe;
 
 	if (_unit->getFaction() == FACTION_PLAYER)
 		_parent->setStateInterval(Options::getInt("battleXcomSpeed"));
@@ -71,7 +71,10 @@ void UnitTurnBState::init()
 		_parent->setStateInterval(Options::getInt("battleAlienSpeed"));
 
 	// if the unit has a turret and we are turning during targeting, then only the turret turns
-	_turret = (_unit->getTurretType() != -1 && _action.targeting) || _action.strafe;
+//kL	_turret = (_unit->getTurretType() != -1 && _action.targeting) || _action.strafe;
+	_turret = _action.strafe					// kL
+			|| (_unit->getTurretType() != -1	// kL
+				&& _action.targeting);			// kL
 
 	_unit->lookAt(_action.target, _turret);	// kL_note: -> STATUS_TURNING
 

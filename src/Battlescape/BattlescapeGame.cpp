@@ -853,13 +853,16 @@ void BattlescapeGame::handleNonTargetAction()
 								voxel.x += 8;voxel.y += 8;voxel.z += 8;
 
 								statePushNext(new ExplosionBState(this, voxel, _currentAction.weapon, _currentAction.actor));
+
 								break;
 							}
 						}
 
 						if (tile->getUnit()
 							&& tile->getUnit() != _currentAction.actor)
+						{
 							break;
+						}
 					}
 				}
 				else
@@ -951,7 +954,7 @@ void BattlescapeGame::handleState()
  * Pushes a state to the front of the queue and starts it.
  * @param bs Battlestate.
  */
-void BattlescapeGame::statePushFront(BattleState *bs)
+void BattlescapeGame::statePushFront(BattleState* bs)
 {
 	_states.push_front(bs);
 	bs->init();
@@ -961,7 +964,7 @@ void BattlescapeGame::statePushFront(BattleState *bs)
  * Pushes a state as the next state after the current one.
  * @param bs Battlestate.
  */
-void BattlescapeGame::statePushNext(BattleState *bs)
+void BattlescapeGame::statePushNext(BattleState* bs)
 {
 	if (_states.empty())
 	{
@@ -978,7 +981,7 @@ void BattlescapeGame::statePushNext(BattleState *bs)
  * Pushes a state to the back.
  * @param bs Battlestate.
  */
-void BattlescapeGame::statePushBack(BattleState *bs)
+void BattlescapeGame::statePushBack(BattleState* bs)
 {
 	if (_states.empty())
 	{
@@ -1318,7 +1321,7 @@ bool BattlescapeGame::checkReservedTU(BattleUnit* bu, int tu, bool justChecking)
 	}
 
 	// check TUs against slowest weapon if we have two weapons
-	BattleItem *slowestWeapon = bu->getMainHandWeapon(false);
+	BattleItem* slowestWeapon = bu->getMainHandWeapon(false);
 	// if the weapon has no autoshot, reserve TUs for snapshot
 	if (bu->getActionTUs(_tuReserved, slowestWeapon) == 0
 		&& _tuReserved == BA_AUTOSHOT)
@@ -1606,6 +1609,7 @@ void BattlescapeGame::primaryAction(const Position& pos)
 		&& _save->getSelectedUnit())
 	{
 		Log(LOG_INFO) << ". . _currentAction.targeting";
+		_currentAction.strafe = false;		// kL
 
 		if (_currentAction.type == BA_LAUNCH)
 		{
@@ -1684,7 +1688,7 @@ void BattlescapeGame::primaryAction(const Position& pos)
 //kL							_currentAction.type = BA_NONE;
 //						}
 
-						setupCursor();
+//kL						setupCursor();
 						// kL_note: might need to put a refresh (redraw/blit) cursor here; else it 'sticks' for a moment at its previous position.
 					}
 
@@ -1699,6 +1703,7 @@ void BattlescapeGame::primaryAction(const Position& pos)
 		else
 		{
 			Log(LOG_INFO) << ". . . . Firing or Throwing";
+//			_currentAction.strafe = false;		// kL
 
 			getMap()->setCursorType(CT_NONE);
 			_parentState->getGame()->getCursor()->setVisible(false);
@@ -1784,6 +1789,8 @@ void BattlescapeGame::secondaryAction(const Position &pos)
 	//  -= turn to or open door =-
 	_currentAction.target = pos;
 	_currentAction.actor = _save->getSelectedUnit();
+	// kL_note: strafe gets turned off in primaryAction() above if "_save->getTileEngine()->distance(_currentAction.actor->getPosition(), pos) > 1)"
+	// not sure why it's not done here as well.
 	_currentAction.strafe = _save->getStrafeSetting() && (SDL_GetModState() & KMOD_CTRL) != 0 && _save->getSelectedUnit()->getTurretType() > -1;
 
 	statePushBack(new UnitTurnBState(this, _currentAction));

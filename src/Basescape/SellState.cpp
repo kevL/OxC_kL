@@ -95,8 +95,8 @@ SellState::SellState(Game* game, Base* base)
 
 //kL	_btnOk			= new TextButton(148, 16, 8, 176);
 //kL	_btnCancel		= new TextButton(148, 16, 164, 176);
-	_btnOk			= new TextButton(144, 16, 16, 177);		// kL
-	_btnCancel		= new TextButton(144, 16, 163, 177);	// kL
+	_btnCancel		= new TextButton(144, 16, 16, 177);	// kL
+	_btnOk			= new TextButton(144, 16, 163, 177);		// kL
 
 
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);

@@ -1674,7 +1674,7 @@ BattleUnit* SavedBattleGame::getHighestRanked(bool xcom)
 			{
 				Log(LOG_INFO) << "SavedBattleGame::getHighestRanked(), side is aLien";
 				if (leader == 0
-					|| (*j)->getRankInt() > leader->getRankInt())
+					|| (*j)->getRankInt() < leader->getRankInt())
 				{
 					leader = *j;
 				}
@@ -1760,9 +1760,9 @@ int SavedBattleGame::getMoraleModifier(BattleUnit* unit, bool xcom)
 				switch (leader->getRankInt())
 				{
 					case 5:				// commander
-						result += 25;	// 150
+						result += 15;	// 135, was 150
 					case 4:				// colonel
-						result += 10;	// 125
+						result += 5;	// 120, was 125
 					case 3:				// captain
 						result += 5;	// 115
 					case 2:				// sergeant
@@ -1795,9 +1795,9 @@ int SavedBattleGame::getMoraleModifier(BattleUnit* unit, bool xcom)
 					case 3:				// medic
 						result += 10;	// 110
 					case 4:				// navigator
-						result += 15;	// 100
+						result += 10;	// 100
 					case 5:				// soldiers...
-						result -= 15;	// 85
+						result -= 10;	// 90
 
 					default:
 					break;

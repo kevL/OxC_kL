@@ -38,7 +38,7 @@ class GeoscapeState;
  */
 class UfoDetectedState
 	:
-	public State
+		public State
 {
 	private:
 		Ufo* _ufo;

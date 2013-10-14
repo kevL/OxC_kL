@@ -80,6 +80,7 @@ struct BattleAction
 	int finalFacing;
 	bool finalAction;
     int number; // first action of turn, second, etc.?
+
 	BattleAction()
 		:
 			type(BA_NONE),
@@ -98,9 +99,10 @@ struct BattleAction
 			finalFacing(-1),
 			finalAction(false),
 			number(0)
-		{
-		}
+	{
+	}
 };
+
 
 /**
  * Battlescape game - the core game engine of the battlescape game.
@@ -116,7 +118,6 @@ private:
 	int _AIActionCounter;
 	BattleAction _currentAction;
 	bool _AISecondMove;
-
 	/// Ends the turn.
 	void endTurn();
 	/// Picks the first soldier that is panicking.
@@ -125,9 +126,11 @@ private:
 	bool handlePanickingUnit(BattleUnit* unit);
 	/// Determines whether there are any actions pending for the given unit.
 	bool noActionsPending(BattleUnit* bu);
+	///
 	std::vector<InfoboxOKState* > _infoboxQueue;
 	/// Shows the infoboxes in the queue (if any).
 	void showInfoBoxQueue();
+	///
 	bool _playedAggroSound, _endTurnRequested, _kneelReserved;
 
 	public:
@@ -159,7 +162,7 @@ private:
 		/// Checks for casualties in battle.
 		void checkForCasualties(BattleItem* murderweapon, BattleUnit* murderer, bool hiddenExplosion = false, bool terrainExplosion = false);
 		/// Checks if a unit panics.
-	//kL	void checkForPanic(BattleUnit *unit);
+//kL		void checkForPanic(BattleUnit *unit);
 		/// Checks reserved tu.
 		bool checkReservedTU(BattleUnit* bu, int tu, bool justChecking = false);
 		/// Handles unit AI.
@@ -204,6 +207,7 @@ private:
 		ResourcePack* getResourcePack();
 		/// Gets the ruleset.
 		const Ruleset* getRuleset() const;
+		///
 		static bool _debugPlay;
 		/// Returns whether panic has been handled.
 		bool getPanicHandled()
