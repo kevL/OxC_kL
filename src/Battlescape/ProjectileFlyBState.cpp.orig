@@ -34,6 +34,7 @@
 #include "../Savegame/Tile.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Sound.h"
+#include "../Ruleset/Armor.h"
 #include "../Ruleset/RuleItem.h"
 #include "../Engine/Options.h"
 #include "AlienBAIState.h"
@@ -122,14 +123,11 @@ void ProjectileFlyBState::init()
 	_unit = _action.actor;
 	_ammo = weapon->getAmmoItem();
 
-<<<<<<< HEAD
-	if (_unit->isOut()) // something went wrong - we can't shoot when dead or unconscious
-	{
-=======
-	if (_unit->isOut() || _unit->getHealth() == 0 || _unit->getHealth() < _unit->getStunlevel())
+	if (_unit->isOut()
+		|| _unit->getHealth() == 0
+		|| _unit->getHealth() < _unit->getStunlevel())
 	{
 		// something went wrong - we can't shoot when dead or unconscious, or if we're about to fall over.
->>>>>>> master
 		_parent->popState();
 
 		return;
@@ -361,11 +359,24 @@ void ProjectileFlyBState::think()
 	/* TODO refactoring : store the projectile in this state, instead of getting it from the map each time? */
 	if (_parent->getMap()->getProjectile() == 0)
 	{
+<<<<<<< HEAD
 		if (_action.type == BA_AUTOSHOT
 			&& _action.autoShotCounter < _action.weapon->getRules()->getAutoShots()
 			&& _action.autoShotCounter < 3
 			&& !_action.actor->isOut()
 			&& _ammo->getAmmoQuantity() != 0)
+=======
+		Tile *t = _parent->getSave()->getTile(_action.actor->getPosition());
+		Tile *bt = _parent->getSave()->getTile(_action.actor->getPosition() + Position(0,0,-1));
+		bool hasFloor = t && !t->hasNoFloor(bt);
+		bool unitCanFly = _action.actor->getArmor()->getMovementType() == MT_FLY;
+
+		if (_action.type == BA_AUTOSHOT
+			&& _action.autoShotCounter < _action.weapon->getRules()->getAutoShots()
+			&& !_action.actor->isOut()
+			&& _ammo->getAmmoQuantity() != 0
+			&& (hasFloor || unitCanFly))
+>>>>>>> master
 		{
 			createNewProjectile();
 		}
@@ -402,15 +413,10 @@ void ProjectileFlyBState::think()
 				pos.y /= 16;
 				pos.z /= 24;
 
-<<<<<<< HEAD
 				BattleItem *item = _parent->getMap()->getProjectile()->getItem();
 				if (Options::getBool("battleInstantGrenade")
 					&& item->getRules()->getBattleType() == BT_GRENADE
-					&& item->getExplodeTurn() != 0
-					&& item->getExplodeTurn() <= _parent->getSave()->getTurn())
-=======
-				if (Options::getBool("battleInstantGrenade") && item->getRules()->getBattleType() == BT_GRENADE && item->getExplodeTurn() == 0)
->>>>>>> master
+					&& item->getExplodeTurn() == 0)
 				{
 					// it's a hot grenade to explode immediately
 					_parent->statePushFront(new ExplosionBState(_parent, _parent->getMap()->getProjectile()->getPosition(-1), item, _action.actor));
