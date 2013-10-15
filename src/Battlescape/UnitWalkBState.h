@@ -32,7 +32,8 @@ namespace OpenXcom
 class BattleUnit;
 class Pathfinding;
 class TileEngine;
-//class Soldier;		// kL
+//class SavedBattleGame;	// kL
+//class Soldier;			// kL
 
 /**
  * State for walking units.
@@ -57,6 +58,7 @@ private:
 	std::size_t _unitsSpotted;
 	int _preMovementCost;
 
+//	SavedBattleGame _sbgame;	// kL
 //	Soldier* _geoscapeSoldier;	// kL: to cycle through all seen HOSTILE units.
 
 	public:

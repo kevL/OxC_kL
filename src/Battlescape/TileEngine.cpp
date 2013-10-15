@@ -232,8 +232,9 @@ void TileEngine::addLight(const Position &center, int power, int layer)
  */
 bool TileEngine::calculateFOV(BattleUnit* unit)
 {
-//	Log(LOG_INFO) << "TileEngine::calculateFOV() spotter = " << unit->getId();
+	Log(LOG_INFO) << "TileEngine::calculateFOV() unit = " << unit->getId();
 //	if (unit->isOut()) return false;	// kL: below.
+	bool ret = false;					// kL
 
 	size_t preVisibleUnits = unit->getUnitsSpottedThisTurn().size();
 //	Log(LOG_INFO) << ". . . . preVisibleUnits = " << (int)preVisibleUnits;
@@ -307,6 +308,10 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 							&& visible(unit, _save->getTile(test)))
 						{
 //							Log(LOG_INFO) << ". . calculateFOV() CALLED visible(unit, testTile) spotted = " << visibleUnit->getId();
+							if (!visibleUnit->getVisible())		// kL
+							{
+								ret = true;						// kL
+							}
 
 							if (unit->getFaction() == FACTION_PLAYER)
 							{
@@ -320,7 +325,8 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 								unit->addToVisibleUnits(visibleUnit);
 								unit->addToVisibleTiles(visibleUnit->getTile());
 
-								if (unit->getFaction() == FACTION_HOSTILE && visibleUnit->getFaction() != FACTION_HOSTILE)
+								if (unit->getFaction() == FACTION_HOSTILE
+									&& visibleUnit->getFaction() != FACTION_HOSTILE)
 								{
 									visibleUnit->setTurnsExposed(0);
 								}
@@ -346,6 +352,7 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 
 									if (tst > 127) // last tile is blocked thus must be cropped
 										--tsize;
+
 									for (unsigned int i = 0; i < tsize; i++)
 									{
 										Position posi = _trajectory.at(i);
@@ -373,17 +380,27 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 		}
 	}
 
+	// kL_begin: TileEngine::calculateFOV(), stop stopping my soldiers !!
+	if (unit->getFaction() == FACTION_PLAYER
+		&& ret == true)
+	{
+		Log(LOG_INFO) << "TileEngine::calculateFOV(), Player return TRUE";
+		return true;
+	}
+	else if (unit->getFaction() != FACTION_PLAYER // kL_end.
 	// We only react when there are at least the same amount of
 	// visible units as before AND the checksum is different
 	// ( kL_note: get a grip on yourself, );
 	// this way we stop if there are the same amount of visible units, but a
 	// different unit is seen, or we stop if there are more visible units seen
-	if (!unit->getVisibleUnits()->empty()
+		&& !unit->getVisibleUnits()->empty()
 		&& unit->getUnitsSpottedThisTurn().size() > preVisibleUnits)
 	{
+		Log(LOG_INFO) << "TileEngine::calculateFOV(), NOT Player return TRUE";
 		return true;
 	}
 
+	Log(LOG_INFO) << "TileEngine::calculateFOV(), return FALSE";
 	return false;
 }
 
@@ -392,7 +409,7 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
  * @param currentUnit The watcher.
  * @return Approximately an eyeball voxel.
  */
-Position TileEngine::getSightOriginVoxel(BattleUnit *currentUnit)
+Position TileEngine::getSightOriginVoxel(BattleUnit* currentUnit)
 {
 	// determine the origin and target voxels for the raytrace
 	Position originVoxel;
@@ -920,15 +937,31 @@ bool TileEngine::canTargetTile(Position* originVoxel, Tile* tile, int part, Posi
  * (used when terrain has changed, which can reveal new parts of terrain or units).
  * @param position, Position of the changed terrain.
  */
-void TileEngine::calculateFOV(const Position& position)
+/*kL void TileEngine::calculateFOV(const Position& position)
 {
-	for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
+	for (std::vector<BattleUnit* >::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 	{
 		if (distance(position, (*i)->getPosition()) < MAX_VIEW_DISTANCE)
 		{
 			calculateFOV(*i);
 		}
 	}
+} */
+// kL_begin: TileEngine::calculateFOV, stop stopping my soldiers !!
+bool TileEngine::calculateFOV(const Position& position)
+{
+	for (std::vector<BattleUnit* >::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
+	{
+		if (distance(position, (*i)->getPosition()) < MAX_VIEW_DISTANCE)
+		{
+			if (calculateFOV(*i))
+			{
+				return true;
+			}
+		}
+	}
+
+	return false;
 }
 
 /**
@@ -936,7 +969,7 @@ void TileEngine::calculateFOV(const Position& position)
  * @param unit, The unit to check for spotters of.
  * @return, A vector of units that can see this unit.
  */
-std::vector<BattleUnit *> TileEngine::getSpottingUnits(BattleUnit* unit)
+std::vector<BattleUnit* > TileEngine::getSpottingUnits(BattleUnit* unit)
 {
 //	Log(LOG_INFO) << "getSpottingUnits() " << (unit)->getId() << " : " << (unit)->getReactionScore();		// kL
 

@@ -67,40 +67,41 @@ class EquipmentLayoutItem;
  */
 class Soldier
 {
-	private:
-		std::wstring _name;
-		int _id, _improvement;
-		RuleSoldier *_rules;
-		UnitStats _initialStats, _currentStats;
-		SoldierRank _rank;
-		Craft *_craft;
-		SoldierGender _gender;
-		SoldierLook _look;
-		int _missions, _kills, _recovery;
-		bool _recentlyPromoted, _psiTraining;
-		Armor *_armor;
-		std::vector<EquipmentLayoutItem*> _equipmentLayout;
+private:
+	std::wstring _name;
+	int _id, _improvement;
+	RuleSoldier* _rules;
+	UnitStats _initialStats, _currentStats;
+	SoldierRank _rank;
+	Craft* _craft;
+	SoldierGender _gender;
+	SoldierLook _look;
+	int _missions, _kills, _recovery;
+	bool _recentlyPromoted, _psiTraining;
+	Armor* _armor;
+	std::vector<EquipmentLayoutItem* > _equipmentLayout;
 
 	public:
 		/// Creates a new soldier.
-		Soldier(RuleSoldier *rules, Armor *armor, const std::vector<SoldierNamePool*> *names = 0, int id = 0);
+		Soldier(RuleSoldier* rules, Armor* armor, const std::vector<SoldierNamePool* >* names = 0, int id = 0);
 		/// Cleans up the soldier.
 		~Soldier();
 
 		/// Loads the soldier from YAML.
-		void load(const YAML::Node& node, const Ruleset *rule);
+		void load(const YAML::Node& node, const Ruleset* rule);
 		/// Saves the soldier to YAML.
 		YAML::Node save() const;
+
 		/// Gets the soldier's name.
 		std::wstring getName() const;
 		/// Sets the soldier's name.
-		void setName(const std::wstring &name);
+		void setName(const std::wstring& name);
 		/// Gets the soldier's craft.
-		Craft *getCraft() const;
+		Craft* getCraft() const;
 		/// Sets the soldier's craft.
-		void setCraft(Craft *craft);
+		void setCraft(Craft* craft);
 		/// Gets the soldier's craft string.
-		std::wstring getCraftString(Language *lang) const;
+		std::wstring getCraftString(Language* lang) const;
 		/// Gets a string version of the soldier's rank.
 		std::string getRankString() const;
 		/// Gets a sprite version of the soldier's rank.
@@ -118,7 +119,7 @@ class Soldier
 		/// Gets the soldier's look.
 		SoldierLook getLook() const;
 		/// Gets soldier rules.
-		RuleSoldier *getRules() const;
+		RuleSoldier* getRules() const;
 		/// Gets the soldier's unique ID.
 		int getId() const;
 		/// Add a mission to the counter.
@@ -126,15 +127,15 @@ class Soldier
 		/// Add a kill to the counter.
 		void addKillCount(int count);
 		/// Get pointer to initial stats.
-		UnitStats *getInitStats();
+		UnitStats* getInitStats();
 		/// Get pointer to current stats.
-		UnitStats *getCurrentStats();
+		UnitStats* getCurrentStats();
 		/// Get whether the unit was recently promoted.
 		bool isPromoted();
 		/// Gets the soldier armor.
-		Armor *getArmor() const;
+		Armor* getArmor() const;
 		/// Sets the soldier armor.
-		void setArmor(Armor *armor);
+		void setArmor(Armor* armor);
 		/// Gets the soldier's wound recovery time.
 		int getWoundRecovery() const;
 		/// Sets the soldier's wound recovery time.
@@ -142,7 +143,7 @@ class Soldier
 		/// Heals wound recoveries.
 		void heal();
 		/// Gets the soldier's equipment-layout.
-		std::vector<EquipmentLayoutItem*> *getEquipmentLayout();
+		std::vector<EquipmentLayoutItem* >* getEquipmentLayout();
 		/// Trains a soldier's psychic stats
 		void trainPsi();
 		/// Trains a soldier's psionic abilities (anytimePsiTraining option).

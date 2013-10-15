@@ -165,6 +165,7 @@ private:
 		void load(const YAML::Node& node);
 		/// Saves the unit to YAML.
 		YAML::Node save() const;
+
 		/// Gets the BattleUnit's ID.
 		int getId() const;
 		/// Sets the unit's position
@@ -255,6 +256,10 @@ private:
 		bool spendEnergy(int tu);
 		/// Set time units.
 		void setTimeUnits(int tu);
+		/// Set whether this unit is visible
+		void setVisible(bool flag);
+		/// Get whether this unit is visible
+		bool getVisible() const;
 		/// Add unit to visible units.
 		bool addToVisibleUnits(BattleUnit* unit);
 		/// Get the list of visible units.
@@ -303,10 +308,6 @@ private:
 		BattleAIState* getCurrentAIState() const;
 		/// Set next AI State
 		void setAIState(BattleAIState* aiState);
-		/// Set whether this unit is visible
-		void setVisible(bool flag);
-		/// Get whether this unit is visible
-		bool getVisible() const;
 		/// Sets the unit's tile it's standing on
 		void setTile(Tile* tile, Tile* tileBelow = 0);
 		/// Gets the unit's tile.
@@ -433,7 +434,7 @@ private:
 		UnitFaction getOriginalFaction() const;
 		/// call this after the default copy constructor deletes the cache?
 		void invalidateCache();
-	
+		///
 		Unit* getUnitRules() const
 		{
 			return _unitRules;
@@ -458,7 +459,9 @@ private:
 		bool tookFireDamage() const;
 		/// switch the state of the fire damage tracker.
 		void toggleFireDamage();
+		///
 		void setCoverReserve(int reserve);
+		///
 		int getCoverReserve() const;
 
 		// kL_begin:

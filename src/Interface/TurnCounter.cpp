@@ -20,6 +20,7 @@
 #include "TurnCounter.h"
 #include "NumberText.h"
 #include "../Engine/Palette.h"
+//#include "../Savegame/SavedBattleGame.h"
 
 
 namespace OpenXcom
@@ -46,6 +47,7 @@ TurnCounter::TurnCounter(int width, int height, int x, int y)
 	_text = new NumberText(width, height, x, y);
 	setColor(Palette::blockOffset(15)+12);
 
+//	_text->setValue(_sbgame->getTurn());
 	_text->setValue(kL_TurnCount);
 //	_text->setValue(_tCount);
 }

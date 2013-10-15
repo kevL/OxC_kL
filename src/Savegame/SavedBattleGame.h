@@ -74,7 +74,7 @@ private:
 	int _dragTimeTolerance;		// this is a cache for Options::getInt("battleScrollDragTimeTolerance")
 	int _dragPixelTolerance;	// this is a cache for Options::getInt("battleScrollDragPixelTolerance")
 	bool _objectiveDestroyed;
-	std::vector<BattleUnit* > _exposedUnits;
+//kL	std::vector<BattleUnit* > _exposedUnits;
 	std::list<BattleUnit* > _fallingUnits;
 	bool _unitsFalling, _strafeEnabled, _sneaky, _traceAI, _cheating;
 	std::vector<Position> _tileSearch;
@@ -91,6 +91,7 @@ private:
 		void load(const YAML::Node& node, Ruleset* rule, SavedGame* savedGame);
 		/// Saves a saved battle game to YAML.
 		YAML::Node save() const;
+
 		/// Sets the dimensions of the map and initializes it.
 		void initMap(int mapsize_x, int mapsize_y, int mapsize_z);
 		/// Initialises the pathfinding and tileengine.
@@ -241,7 +242,7 @@ private:
 		/// Gets the morale modifier based on the highest ranked, living xcom/alien unit, or for a unit passed into this function.
 		int getMoraleModifier(BattleUnit* unit = 0, bool xcom = true);	// kL
 		/// Checks whether a particular faction has eyes on *unit (whether any unit on that faction sees *unit).
-		bool eyesOnTarget(UnitFaction faction, BattleUnit* unit);
+//kL		bool eyesOnTarget(UnitFaction faction, BattleUnit* unit);
 		/// Attempts to place a unit on or near entryPoint.
 		bool placeUnitNearPosition(BattleUnit* unit, Position entryPoint);
 		/// Resets the turn counter.

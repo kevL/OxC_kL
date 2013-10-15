@@ -72,7 +72,8 @@ private:
 		/// Calculates the field of view from a units view point.
 		bool calculateFOV(BattleUnit* unit);
 		/// Calculates the field of view within range of a certain position.
-		void calculateFOV(const Position& position);
+//kL		void calculateFOV(const Position& position);
+		bool calculateFOV(const Position& position);	// kL
 		/// Creates a vector of units that can spot this unit.
 		std::vector<BattleUnit* > getSpottingUnits(BattleUnit* unit);
 		/// Checks validity of a snap shot to this position.

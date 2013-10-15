@@ -122,7 +122,7 @@ void UnitTurnBState::think()
 		&& !_action.targeting
 		&& !_parent->checkReservedTU(_unit, tu))
 	{
-		_unit->abortTurn();
+		_unit->abortTurn();		// -> STATUS_STANDING.
 		_parent->popState();
 
 //kL		return;
@@ -134,30 +134,27 @@ void UnitTurnBState::think()
 		size_t unitsSpotted = _unit->getUnitsSpottedThisTurn().size();
 
 		_unit->turn(_turret);	// kL_note: -> STATUS_STANDING
-		_parent->getTileEngine()->calculateFOV(_unit);
+//kL		_parent->getTileEngine()->calculateFOV(_unit);
+		bool newVis = _parent->getTileEngine()->calculateFOV(_unit);	// kL
 
 		_unit->setCache(0);
 		_parent->getMap()->cacheUnit(_unit);
 
 //kL		if (_unit->getFaction() == _parent->getSave()->getSide()
-		if (thisFaction														// kL
-			&& _parent->getPanicHandled()
-			&& _action.type == BA_NONE
-//kL			&& _unit->getUnitsSpottedThisTurn().size() > unitSpotted)
-			&& _unit->getUnitsSpottedThisTurn().size() > unitsSpotted)	// kL, is this screwing up? (see also, UnitWalkBState.cpp)
-																		// ie. abortTurn() gets called even if enemy unit is *already spotted*
-																		// bool BattleUnit::addToVisibleUnits(BattleUnit *unit)
-																		// and
-																		// calculateFOV() both involve adding new visible units...
-																		// oh, and by the way, a similar routine should go into standing up from kneeling position.
-																		// because that *won't* abortTurn if standing spots a new unit (soldier continues to move
-																		// if previously told to) .. something in Denmark ..
-																		//
-																		// ah. This does not abort if the *same* xCom soldier has already seen the new alien, and
-																		// 'rediscovers' it. But if a new xCom soldier uncovers an already seen alien, it aborts.
-																		// Does this mean that a vector of _unitsSpottedThisTurn is being created per soldier???
-																		// then, how would I cycle through *all* xCom to prevent this abortion?
+		if ((newVis
+				&& _unit->getFaction() == FACTION_PLAYER)
+			|| (thisFaction												// kL
+				&& _parent->getPanicHandled()
+				&& _action.type == BA_NONE
+//kL				&& _unit->getUnitsSpottedThisTurn().size() > unitSpotted)
+				&& _unit->getUnitsSpottedThisTurn().size() > unitsSpotted	// kL
+				&& _unit->getFaction() != FACTION_PLAYER))					// kL
 		{
+			if (_unit->getFaction() == FACTION_PLAYER)
+				Log(LOG_INFO) << ". . newVis = TRUE, Abort turn";
+			else if (_unit->getFaction() != FACTION_PLAYER)
+				Log(LOG_INFO) << ". . newUnitSpotted = TRUE, Abort turn";
+
 			_unit->abortTurn();
 		}
 

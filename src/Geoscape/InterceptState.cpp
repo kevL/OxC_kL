@@ -56,14 +56,25 @@ InterceptState::InterceptState(Game* game, Globe* globe, Base* base)
 	_screen = false;
 
 	// Create objects
-	_window		= new Window(this, 320, 140, 0, 30, POPUP_HORIZONTAL);
-	_btnCancel	= new TextButton(288, 16, 16, 146);
-	_txtTitle	= new Text(300, 16, 10, 46);
+//kL	_window		= new Window(this, 320, 140, 0, 30, POPUP_HORIZONTAL);
+	_window		= new Window(this, 320, 142, 0, 30, POPUP_HORIZONTAL);	// kL
+
+//kL	_txtTitle	= new Text(300, 16, 10, 46);
+	_txtTitle	= new Text(300, 16, 10, 40);		// kL
+
+/*kL	_txtWeapons	= new Text(80, 16, 238, 62);
 	_txtCraft	= new Text(86, 9, 14, 70);
 	_txtStatus	= new Text(70, 9, 100, 70);
 	_txtBase	= new Text(80, 9, 170, 70);
-	_txtWeapons	= new Text(80, 16, 238, 62);
-	_lstCrafts	= new TextList(288, 64, 8, 78);
+	_lstCrafts	= new TextList(288, 64, 8, 78); */
+	_txtWeapons	= new Text(80, 16, 238, 57);		// kL
+	_txtCraft	= new Text(86, 9, 14, 65);			// kL
+	_txtStatus	= new Text(70, 9, 100, 65);			// kL
+	_txtBase	= new Text(80, 9, 170, 65);			// kL
+
+	_lstCrafts	= new TextList(288, 72, 8, 76);		// kL
+
+	_btnCancel	= new TextButton(288, 14, 16, 151);	// kL, ...
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)), Palette::backPos, 16);

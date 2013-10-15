@@ -92,6 +92,8 @@ BattleUnit::BattleUnit(Soldier* soldier, UnitFaction faction)
 		_turretType(-1),
 		_hidingForTurn(false)
 {
+	Log(LOG_INFO) << "Create BattleUnit 1";
+
 	_name = soldier->getName();
 	_id = soldier->getId();
 	_type = "SOLDIER";
@@ -144,6 +146,7 @@ BattleUnit::BattleUnit(Soldier* soldier, UnitFaction faction)
 	_activeHand = "STR_RIGHT_HAND";
 
 	lastCover = Position(-1, -1, -1);
+	Log(LOG_INFO) << "Create BattleUnit, DONE";
 }
 
 /**
@@ -197,7 +200,7 @@ BattleUnit::BattleUnit(Unit* unit, UnitFaction faction, int id, Armor* armor, in
 		_turretType(-1),
 		_hidingForTurn(false)
 {
-//	Log(LOG_INFO) << "Create BattleUnit";
+	Log(LOG_INFO) << "Create BattleUnit 2";
 
 	_type = unit->getType();
 	_rank = unit->getRank();
@@ -244,6 +247,8 @@ BattleUnit::BattleUnit(Unit* unit, UnitFaction faction, int id, Armor* armor, in
 	_activeHand = "STR_RIGHT_HAND";
 
 	lastCover = Position(-1, -1, -1);
+
+	Log(LOG_INFO) << "Create BattleUnit, DONE";
 }
 
 /**
@@ -251,7 +256,7 @@ BattleUnit::BattleUnit(Unit* unit, UnitFaction faction, int id, Armor* armor, in
  */
 BattleUnit::~BattleUnit()
 {
-//	Log(LOG_INFO) << "Delete BattleUnit";
+	Log(LOG_INFO) << "Delete BattleUnit";
 
 	for (int i = 0; i < 5; ++i)
 	{
@@ -1351,6 +1356,31 @@ void BattleUnit::setTimeUnits(int tu)
 }
 
 /**
+ * Set whether this unit is visible.
+ * @param flag
+ */
+void BattleUnit::setVisible(bool flag)
+{
+	_visible = flag;
+}
+
+/**
+ * Get whether this unit is visible.
+ * @return flag
+ */
+bool BattleUnit::getVisible() const
+{
+	if (getFaction() == FACTION_PLAYER)
+	{
+		return true;
+	}
+	else
+	{
+		return _visible;
+	}
+}
+
+/**
  * Add this unit to the list of visible units.
  * @param unit, Seen unit.
  * @return, True if this is a new one.
@@ -1734,31 +1764,6 @@ void BattleUnit::setAIState(BattleAIState* aiState)
 BattleAIState* BattleUnit::getCurrentAIState() const
 {
 	return _currentAIState;
-}
-
-/**
- * Set whether this unit is visible.
- * @param flag
- */
-void BattleUnit::setVisible(bool flag)
-{
-	_visible = flag;
-}
-
-/**
- * Get whether this unit is visible.
- * @return flag
- */
-bool BattleUnit::getVisible() const
-{
-	if (getFaction() == FACTION_PLAYER)
-	{
-		return true;
-	}
-	else
-	{
-		return _visible;
-	}
 }
 
 /**

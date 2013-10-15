@@ -67,43 +67,45 @@ enum GameDifficulty
  */
 class SavedGame
 {
-	private:
-		GameDifficulty _difficulty;
-		GameTime *_time;
-		std::vector<int> _funds, _maintenance, _researchScores;
-		double _globeLon, _globeLat;
-		int _globeZoom;
-		std::map<std::string, int> _ids;
-		std::vector<Country*> _countries;
-		std::vector<Region*> _regions;
-		std::vector<Base*> _bases;
-		std::vector<Ufo*> _ufos;
-		std::vector<Waypoint*> _waypoints;
-		std::vector<TerrorSite*> _terrorSites;
-		std::vector<AlienBase*> _alienBases;
-		AlienStrategy *_alienStrategy;
-		SavedBattleGame *_battleGame;
-		std::vector<const RuleResearch *> _discovered;
-		std::vector<AlienMission*> _activeMissions;
-		bool _debug, _warned, _detail, _radarLines;
-		int _monthsPassed;
-		std::string _graphRegionToggles;
-		std::string _graphCountryToggles;
-		std::string _graphFinanceToggles;
-		std::vector<const RuleResearch *> _poppedResearch;
+private:
+	GameDifficulty _difficulty;
+	GameTime* _time;
+	std::vector<int> _funds, _maintenance, _researchScores;
+	double _globeLon, _globeLat;
+	int _globeZoom;
+	std::map<std::string, int> _ids;
+	std::vector<Country* > _countries;
+	std::vector<Region* > _regions;
+	std::vector<Base* > _bases;
+	std::vector<Ufo* > _ufos;
+	std::vector<Waypoint* > _waypoints;
+	std::vector<TerrorSite* > _terrorSites;
+	std::vector<AlienBase* > _alienBases;
+	AlienStrategy* _alienStrategy;
+	SavedBattleGame* _battleGame;
+	std::vector<const RuleResearch* > _discovered;
+	std::vector<AlienMission* > _activeMissions;
+	bool _debug, _warned, _detail, _radarLines;
+	int _monthsPassed;
+	std::string _graphRegionToggles;
+	std::string _graphCountryToggles;
+	std::string _graphFinanceToggles;
+	std::vector<const RuleResearch* > _poppedResearch;
+	void getDependableResearchBasic(std::vector<RuleResearch* >& dependables, const RuleResearch* research, const Ruleset* ruleset, Base* base) const;
 
-		void getDependableResearchBasic (std::vector<RuleResearch *> & dependables, const RuleResearch *research, const Ruleset * ruleset, Base * base) const;
 	public:
 		/// Creates a new saved game.
 		SavedGame();
 		/// Cleans up the saved game.
 		~SavedGame();
+
 		/// Gets list of saves in the user directory.
-		static void getList(TextList *list, Language *lang);
+		static void getList(TextList* list, Language* lang);
 		/// Loads a saved game from YAML.
-		void load(const std::string &filename, Ruleset *rule);
+		void load(const std::string& filename, Ruleset* rule);
 		/// Saves a saved game to YAML.
-		void save(const std::string &filename) const;
+		void save(const std::string& filename) const;
+
 		/// Gets game difficulty.
 		GameDifficulty getDifficulty() const;
 		/// Sets game difficulty.
@@ -111,7 +113,7 @@ class SavedGame
 		/// Gets the current funds.
 		int getFunds() const;
 		/// Gets the list of funds from previous months.
-		const std::vector<int> &getFundsList() const;
+		const std::vector<int>& getFundsList() const;
 		/// Sets new funds.
 		void setFunds(int funds);
 		/// Gets the current globe longitude.
@@ -129,61 +131,61 @@ class SavedGame
 		/// Handles monthly funding.
 		void monthlyFunding();
 		/// Gets the current game time.
-		GameTime *getTime() const;
+		GameTime* getTime() const;
 		/// Sets the current game time.
 		void setTime(GameTime time);
 		/// Gets the current ID for an object.
-		int getId(const std::string &name);
+		int getId(const std::string& name);
 		/// Initializes te IDs list.
-		void initIds(const std::map<std::string, int> &ids);
+		void initIds(const std::map<std::string, int>& ids);
 		/// Gets the list of countries.
-		std::vector<Country*> *getCountries();
+		std::vector<Country* >* getCountries();
 		/// Gets the total country funding.
 		int getCountryFunding() const;
 		/// Gets the list of regions.
-		std::vector<Region*> *getRegions();
+		std::vector<Region* >* getRegions();
 		/// Gets the list of bases.
-		std::vector<Base*> *getBases();
+		std::vector<Base* >* getBases();
 		/// Gets the list of bases.
-		const std::vector<Base*> *getBases() const;
+		const std::vector<Base* >* getBases() const;
 		/// Gets the total base maintenance.
 		int getBaseMaintenance() const;
 		/// Gets the list of UFOs.
-		std::vector<Ufo*> *getUfos();
+		std::vector<Ufo* >* getUfos();
 		/// Gets the list of waypoints.
-		std::vector<Waypoint*> *getWaypoints();
+		std::vector<Waypoint* >* getWaypoints();
 		/// Gets the list of terror sites.
-		std::vector<TerrorSite*> *getTerrorSites();
+		std::vector<TerrorSite* >* getTerrorSites();
 		/// Gets the current battle game.
-		SavedBattleGame *getSavedBattle();
+		SavedBattleGame* getSavedBattle();
 		/// Sets the current battle game.
-		void setBattleGame(SavedBattleGame *battleGame);
+		void setBattleGame(SavedBattleGame* battleGame);
 		/// Add a finished ResearchProject
-		void addFinishedResearch(const RuleResearch * r, const Ruleset * ruleset = NULL);
+		void addFinishedResearch(const RuleResearch* r, const Ruleset* ruleset = NULL);
 		/// Get the list of already discovered research projects
-		const std::vector<const RuleResearch *> & getDiscoveredResearch() const;
+		const std::vector<const RuleResearch* >& getDiscoveredResearch() const;
 		/// Get the list of ResearchProject which can be researched in a Base
-		void getAvailableResearchProjects(std::vector<RuleResearch *> & projects, const Ruleset * ruleset, Base * base) const;
+		void getAvailableResearchProjects(std::vector<RuleResearch* >& projects, const Ruleset* ruleset, Base* base) const;
 		/// Get the list of Productions which can be manufactured in a Base
-		void getAvailableProductions(std::vector<RuleManufacture *> & productions, const Ruleset * ruleset, Base * base) const;
+		void getAvailableProductions(std::vector<RuleManufacture* >& productions, const Ruleset* ruleset, Base* base) const;
 		/// Get the list of newly available research projects once a research has been completed.
-		void getDependableResearch(std::vector<RuleResearch *> & dependables, const RuleResearch *research, const Ruleset * ruleset, Base * base) const;
+		void getDependableResearch(std::vector<RuleResearch* >& dependables, const RuleResearch* research, const Ruleset* ruleset, Base* base) const;
 		/// Get the list of newly available manufacture projects once a research has been completed.
-		void getDependableManufacture (std::vector<RuleManufacture *> & dependables, const RuleResearch *research, const Ruleset * ruleset, Base * base) const;
+		void getDependableManufacture(std::vector<RuleManufacture* >& dependables, const RuleResearch* research, const Ruleset* ruleset, Base* base) const;
 		/// Check whether a ResearchProject can be researched
-		bool isResearchAvailable(RuleResearch * r, const std::vector<const RuleResearch *> & unlocked, const Ruleset * ruleset) const;
+		bool isResearchAvailable(RuleResearch* r, const std::vector<const RuleResearch* >& unlocked, const Ruleset* ruleset) const;
 		/// Gets if a research has been unlocked.
-		bool isResearched(const std::string &research) const;
+		bool isResearched(const std::string& research) const;
 		/// Gets if a list of research has been unlocked.
-		bool isResearched(const std::vector<std::string> &research) const;
+		bool isResearched(const std::vector<std::string>& research) const;
 		/// Gets the soldier matching this ID.
-		Soldier *getSoldier(int id) const;
+		Soldier* getSoldier(int id) const;
 		/// Handles the higher promotions.
 		bool handlePromotions();
 		/// Checks how many soldiers of a rank exist and which one has the highest score.
-		void inspectSoldiers(Soldier **highestRanked, size_t *total, int rank);
+		void inspectSoldiers(Soldier** highestRanked, size_t* total, int rank);
 		///  Returns the list of alien bases.
-		std::vector<AlienBase*> *getAlienBases();
+		std::vector<AlienBase* >* getAlienBases();
 		/// Sets debug mode.
 		void setDebugMode();
 		/// Gets debug mode.
@@ -199,33 +201,45 @@ class SavedGame
 		/// sets whether or not the player has been warned
 		void setWarned(bool warned);
 		/// Full access to the alien strategy data.
-		AlienStrategy &getAlienStrategy() { return *_alienStrategy; }
+		AlienStrategy& getAlienStrategy()
+		{
+			return *_alienStrategy;
+		}
 		/// Read-only access to the alien strategy data.
-		const AlienStrategy &getAlienStrategy() const { return *_alienStrategy; }
+		const AlienStrategy& getAlienStrategy() const
+		{
+			return *_alienStrategy;
+		}
 		/// Full access to the current alien missions.
-		std::vector<AlienMission*> &getAlienMissions() { return _activeMissions; }
+		std::vector<AlienMission* >& getAlienMissions()
+		{
+			return _activeMissions;
+		}
 		/// Read-only access to the current alien missions.
-		const std::vector<AlienMission*> &getAlienMissions() const { return _activeMissions; }
+		const std::vector<AlienMission* >& getAlienMissions() const
+		{
+			return _activeMissions;
+		}
 		/// Gets a mission matching region and type.
-		AlienMission *getAlienMission(const std::string &region, const std::string &type) const;
+		AlienMission* getAlienMission(const std::string& region, const std::string& type) const;
 		/// Locate a region containing a position.
-		Region *locateRegion(double lon, double lat) const;
+		Region* locateRegion(double lon, double lat) const;
 		/// Locate a region containing a Target.
-		Region *locateRegion(const Target &target) const;
+		Region* locateRegion(const Target& target) const;
 		/// Return the month counter.
 		int getMonthsPassed() const;
 		/// Return the GraphRegionToggles.
-		const std::string &getGraphRegionToggles() const;
+		const std::string& getGraphRegionToggles() const;
 		/// Return the GraphCountryToggles.
-		const std::string &getGraphCountryToggles() const;
+		const std::string& getGraphCountryToggles() const;
 		/// Return the GraphFinanceToggles.
-		const std::string &getGraphFinanceToggles() const;
+		const std::string& getGraphFinanceToggles() const;
 		/// Sets the GraphRegionToggles.
-		void setGraphRegionToggles(const std::string &value);
+		void setGraphRegionToggles(const std::string& value);
 		/// Sets the GraphCountryToggles.
-		void setGraphCountryToggles(const std::string &value);
+		void setGraphCountryToggles(const std::string& value);
 		/// Sets the GraphFinanceToggles.
-		void setGraphFinanceToggles(const std::string &value);
+		void setGraphFinanceToggles(const std::string& value);
 		/// Increment the month counter.
 		void addMonth();
 		/// toggle the current state of the radar line drawing

@@ -29,6 +29,7 @@ namespace OpenXcom
 extern unsigned int kL_TurnCount;
 
 class NumberText;
+//class SavedBattleGame;
 
 /**
  * Gets Battlescape turn and displays it in a NumberText surface.
@@ -40,6 +41,7 @@ class TurnCounter
 private:
 	NumberText* _text;
 	unsigned int _tCount;
+//	SavedBattleGame* _sbgame;
 
 	public:
 		/// Creates a new Turn counter linked to a game.

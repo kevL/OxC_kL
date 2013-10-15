@@ -52,7 +52,7 @@ ResearchState::ResearchState(Game* game, Base* base)
 	_window			= new Window(this, 320, 200, 0, 0);
 
 //kL	_txtTitle		= new Text(310, 16, 5, 8);
-	_txtTitle		= new Text(300, 16, 16, 10);			// kL
+	_txtTitle		= new Text(300, 16, 16, 9);				// kL
 
 //kL	_txtAvailable	= new Text(150, 9, 10, 24);
 //kL	_txtAllocated	= new Text(150, 9, 160, 24);

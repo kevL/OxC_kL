@@ -51,16 +51,16 @@ StoresState::StoresState(Game* game, Base* base)
 	_window			= new Window(this, 320, 200, 0, 0);
 
 //kL	_txtTitle		= new Text(310, 16, 5, 8);
-	_txtTitle		= new Text(300, 16, 11, 10);			// kL
+	_txtTitle		= new Text(300, 16, 10, 9);			// kL
 
 //kL	_txtItem		= new Text(142, 8, 10, 32);
 //kL	_txtQuantity	= new Text(88, 8, 152, 32);
 //kL	_txtSpaceUsed	= new Text(74, 8, 240, 32);
-	_txtItem		= new Text(142, 9, 16, 29);				// kL
-	_txtQuantity	= new Text(88, 9, 178, 29);				// kL
-	_txtSpaceUsed	= new Text(74, 9, 270, 29);				// kL
+	_txtItem		= new Text(142, 9, 16, 25);			// kL
+	_txtQuantity	= new Text(88, 9, 178, 25);			// kL
+	_txtSpaceUsed	= new Text(74, 9, 270, 25);			// kL
 
-	_lstStores		= new TextList(288, 128, 8, 40);
+	_lstStores		= new TextList(288, 136, 8, 36);
 
 //kL	_btnOk			= new TextButton(300, 16, 10, 176);
 	_btnOk			= new TextButton(288, 16, 16, 177);		// kL

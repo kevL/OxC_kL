@@ -60,7 +60,7 @@ FundingState::FundingState(Game* game)
 
 //kL	_lstCountries	= new TextList(260, 136, 32, 40);
 	_lstCountries	= new TextList(260, 128, 30, 34);	// kL
-	_lstTotal		= new TextList(260, 9, 30, 165);	// kL
+	_lstTotal		= new TextList(265, 9, 30, 165);	// kL
 
 //kL	_btnOk			= new TextButton(50, 12, 135, 180);
 	_btnOk			= new TextButton(288, 16, 16, 177);		// kL
@@ -132,7 +132,7 @@ FundingState::FundingState(Game* game)
 
 	// kL_begin: FundingState, list Total.
 	_lstTotal->setColor(Palette::blockOffset(8)+5);
-	_lstTotal->setColumns(3, 108, 100, 52);
+	_lstTotal->setColumns(3, 108, 100, 57);
 	_lstTotal->setDot(true);
 	_lstTotal->addRow(3, "", tr("STR_TOTAL_UC").c_str(), Text::formatFunding(_game->getSavedGame()->getCountryFunding()).c_str());
 	// kL_end.

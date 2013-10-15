@@ -465,6 +465,7 @@ void BattlescapeGame::endTurn()
 
 				statePushNext(new ExplosionBState(this, p, *it, (*it)->getPreviousOwner()));
 				_save->removeItem((*it));
+
 				statePushBack(0);
 
 				return;
@@ -473,6 +474,7 @@ void BattlescapeGame::endTurn()
 			++it;
 		}
 	}
+
 	// check for terrain explosions
 	Tile* t = _save->getTileEngine()->checkForTerrainExplosions();
 	if (t)

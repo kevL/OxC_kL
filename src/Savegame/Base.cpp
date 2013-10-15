@@ -1010,6 +1010,10 @@ void Base::removeResearch(ResearchProject* project)
 
 					Log(LOG_INFO) << ". . Soldier.5 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.5f);
 				}
+
+				// always takes an extra day to complete (and guards vs. potential code-flow bork!)
+				if ((*iter2)->getSpent() < 1)
+					(*iter2)->setSpent(1);
 			}
 		}
 		else if (proj == "STR_FLOATER_NAVIGATOR"
@@ -1089,6 +1093,10 @@ void Base::removeResearch(ResearchProject* project)
 
 					Log(LOG_INFO) << ". . Navigator.8 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.8f);
 				}
+
+				// always takes an extra day to complete (and guards vs. potential code-flow bork!)
+				if ((*iter2)->getSpent() < 1)
+					(*iter2)->setSpent(1);
 			}
 		}
 		else if (proj == "STR_FLOATER_MEDIC"
@@ -1134,6 +1142,10 @@ void Base::removeResearch(ResearchProject* project)
 
 					Log(LOG_INFO) << ". . Medic.8 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.8f);
 				}
+
+				// always takes an extra day to complete (and guards vs. potential code-flow bork!)
+				if ((*iter2)->getSpent() < 1)
+					(*iter2)->setSpent(1);
 			}
 		}
 		else if (proj == "STR_FLOATER_ENGINEER"
@@ -1201,6 +1213,10 @@ void Base::removeResearch(ResearchProject* project)
 
 					Log(LOG_INFO) << ". . Engineer.7 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.7f);
 				}
+
+				// always takes an extra day to complete (and guards vs. potential code-flow bork!)
+				if ((*iter2)->getSpent() < 1)
+					(*iter2)->setSpent(1);
 			}
 		}
 		else if (proj == "STR_FLOATER_LEADER"
@@ -1274,6 +1290,10 @@ void Base::removeResearch(ResearchProject* project)
 
 					Log(LOG_INFO) << ". . Leader.8 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.8f);
 				}
+
+				// always takes an extra day to complete (and guards vs. potential code-flow bork!)
+				if ((*iter2)->getSpent() < 1)
+					(*iter2)->setSpent(1);
 			}
 		}
 		else if (proj == "STR_FLOATER_COMMANDER"
@@ -1342,6 +1362,10 @@ void Base::removeResearch(ResearchProject* project)
 
 					Log(LOG_INFO) << ". . Commander.8 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.8f);
 				}
+
+				// always takes an extra day to complete (and guards vs. potential code-flow bork!)
+				if ((*iter2)->getSpent() < 1)
+					(*iter2)->setSpent(1);
 			}
 		}
 		// kL_end.

@@ -67,7 +67,7 @@ ManufactureState::ManufactureState(Game* game, Base* base)
 	_lstManufacture	= new TextList(307, 90, 8, 80); */
 
 	// kL_begin: Manufacture graphic adjustments.
-	_txtTitle		= new Text(300, 16, 16, 10);
+	_txtTitle		= new Text(300, 16, 16, 9);
 
 	_txtAvailable	= new Text(140, 9, 16, 25);
 	_txtAllocated	= new Text(140, 9, 160, 25);
