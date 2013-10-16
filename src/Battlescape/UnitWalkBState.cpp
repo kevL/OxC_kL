@@ -293,10 +293,12 @@ void UnitWalkBState::think()
 			// kL_note: This calculates or 'refreshes' the Field of View
 			// of all units within maximum distance (20 tiles) of this unit.
 			_terrain->calculateFOV(_unit->getPosition());
+//kL			unitSpotted = (!_falling && !_action.desperate && _parent->getPanicHandled() && _numUnitsSpotted != _unit->getUnitsSpottedThisTurn().size());
 
 			newVis = _terrain->calculateFOV(_unit)			// kL
 				&& _unit->getFaction() == FACTION_PLAYER;	// kL
-			newUnitSpotted = !_action.desperate
+			newUnitSpotted = !_falling
+				&& !_action.desperate
 				&& _parent->getPanicHandled()
 //kL				&& _unitsSpotted != _unit->getUnitsSpottedThisTurn().size();
 				&& _unitsSpotted < _unit->getUnitsSpottedThisTurn().size()		// kL
@@ -677,9 +679,10 @@ void UnitWalkBState::think()
 		// calculateFOV() is unreliable for setting the newUnitSpotted bool, as it can be called from
 		// various other places in the code, ie: doors opening (& explosions/terrain destruction?), and that messes up the result.
 //kL		_terrain->calculateFOV(_unit);
+//kL		unitSpotted = (!_falling && !_action.desperate && _parent->getPanicHandled() && _numUnitsSpotted != _unit->getUnitsSpottedThisTurn().size());
 		newVis = _terrain->calculateFOV(_unit)								// kL
 			&& _unit->getFaction() == FACTION_PLAYER;						// kL
-		newUnitSpotted = //kL !_action.desperate &&
+		newUnitSpotted = //kL !!_falling && _action.desperate &&
 			_parent->getPanicHandled()
 //kL			&& _unitsSpotted != _unit->getUnitsSpottedThisTurn().size();
 			&& _unitsSpotted < _unit->getUnitsSpottedThisTurn().size()		// kL

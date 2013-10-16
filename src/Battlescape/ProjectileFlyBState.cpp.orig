@@ -258,12 +258,15 @@ bool ProjectileFlyBState::createNewProjectile()
 	_projectileImpact = -1;
 	if (_action.type == BA_THROW)
 	{
-		if (projectile->calculateThrow(_unit->getThrowingAccuracy()))
+		_projectileImpact = projectile->calculateThrow(_unit->getThrowingAccuracy());
+		if (_projectileImpact != -1)
 		{
-			if (_unit->getFaction() != FACTION_PLAYER && _projectileItem->getRules()->getBattleType() == BT_GRENADE)
+			if (_unit->getFaction() != FACTION_PLAYER
+				&& _projectileItem->getRules()->getBattleType() == BT_GRENADE)
 			{
 				_projectileItem->setExplodeTurn(0);
 			}
+
 			_projectileItem->moveToOwner(0);
 			_unit->setCache(0);
 			_parent->getMap()->cacheUnit(_unit);
@@ -284,7 +287,8 @@ bool ProjectileFlyBState::createNewProjectile()
 	}
 	else if (_action.weapon->getRules()->getArcingShot()) // special code for the "spit" trajectory
 	{
-		if (projectile->calculateThrow(_unit->getFiringAccuracy(_action.type, _action.weapon)))
+		_projectileImpact = projectile->calculateThrow(_unit->getFiringAccuracy(_action.type, _action.weapon));
+		if (_projectileImpact != -1)
 		{
 			_unit->aim(true); // set the soldier in an aiming position
 			_parent->getMap()->cacheUnit(_unit);
@@ -359,15 +363,8 @@ void ProjectileFlyBState::think()
 	/* TODO refactoring : store the projectile in this state, instead of getting it from the map each time? */
 	if (_parent->getMap()->getProjectile() == 0)
 	{
-<<<<<<< HEAD
-		if (_action.type == BA_AUTOSHOT
-			&& _action.autoShotCounter < _action.weapon->getRules()->getAutoShots()
-			&& _action.autoShotCounter < 3
-			&& !_action.actor->isOut()
-			&& _ammo->getAmmoQuantity() != 0)
-=======
-		Tile *t = _parent->getSave()->getTile(_action.actor->getPosition());
-		Tile *bt = _parent->getSave()->getTile(_action.actor->getPosition() + Position(0,0,-1));
+		Tile* t = _parent->getSave()->getTile(_action.actor->getPosition());
+		Tile* bt = _parent->getSave()->getTile(_action.actor->getPosition() + Position(0,0,-1));
 		bool hasFloor = t && !t->hasNoFloor(bt);
 		bool unitCanFly = _action.actor->getArmor()->getMovementType() == MT_FLY;
 
@@ -376,7 +373,6 @@ void ProjectileFlyBState::think()
 			&& !_action.actor->isOut()
 			&& _ammo->getAmmoQuantity() != 0
 			&& (hasFloor || unitCanFly))
->>>>>>> master
 		{
 			createNewProjectile();
 		}
@@ -412,6 +408,19 @@ void ProjectileFlyBState::think()
 				pos.x /= 16;
 				pos.y /= 16;
 				pos.z /= 24;
+<<<<<<< HEAD
+=======
+				if (pos.y > _parent->getSave()->getMapSizeY())
+				{
+					pos.y--;
+				}
+				if (pos.x > _parent->getSave()->getMapSizeX())
+				{
+					pos.x--;
+				}
+				BattleItem *item = _parent->getMap()->getProjectile()->getItem();
+				_parent->getResourcePack()->getSound("BATTLE.CAT", 38)->play();
+>>>>>>> master
 
 				BattleItem *item = _parent->getMap()->getProjectile()->getItem();
 				if (Options::getBool("battleInstantGrenade")

@@ -16,7 +16,9 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #define _USE_MATH_DEFINES
+
 #include <cmath>
 #include "Projectile.h"
 #include "TileEngine.h"
@@ -40,6 +42,7 @@
 #include "../Ruleset/Armor.h"
 #include "../Engine/Game.h"
 
+
 namespace OpenXcom
 {
 
@@ -50,7 +53,13 @@ namespace OpenXcom
  * @param action An action.
  * @param origin Position the projectile originates from.
  */
-Projectile::Projectile(ResourcePack *res, SavedBattleGame *save, BattleAction action, Position origin) : _res(res), _save(save), _action(action), _origin(origin), _position(0)
+Projectile::Projectile(ResourcePack* res, SavedBattleGame* save, BattleAction action, Position origin)
+	:
+		_res(res),
+		_save(save),
+		_action(action),
+		_origin(origin),
+		_position(0)
 {
 	if (_action.weapon && _action.type == BA_THROW)
 	{
@@ -63,7 +72,6 @@ Projectile::Projectile(ResourcePack *res, SavedBattleGame *save, BattleAction ac
  */
 Projectile::~Projectile()
 {
-
 }
 
 /**
@@ -74,38 +82,25 @@ Projectile::~Projectile()
 int Projectile::calculateTrajectory(double accuracy)
 {
 	Position originVoxel, targetVoxel;
-	Tile *targetTile = 0;
+	Tile* targetTile = 0;
 	//int dirYshift[24] = {1, 3, 9, 15, 15, 13, 7, 1,  1, 1, 7, 13, 15, 15, 9, 3,  1, 2, 8, 14, 15, 14, 8, 2};
 	//int dirXshift[24] = {9, 15, 15, 13, 8, 1, 1, 3,  7, 13, 15, 15, 9, 3, 1, 1,  8, 14, 15, 14, 8, 2, 1, 2};
 	// maybe if i get around to making that function to calculate a firepoint origin for fire point estimations i'll use the array above
 	// so i'll leave it commented for the time being.
 
-	originVoxel = Position(_origin.x*16, _origin.y*16, _origin.z*24);
-	BattleUnit *bu = _action.actor;
-<<<<<<< HEAD
-
-	if (bu->getArmor()->getSize() > 1)
-	{
-		offset = 16;
-	}
-	else if(_action.weapon == _action.weapon->getOwner()->getItem("STR_LEFT_HAND")
-		&& !_action.weapon->getRules()->isTwoHanded())
-	{
-		offset = 8;
-	}
-=======
+	originVoxel = Position(_origin.x * 16, _origin.y * 16, _origin.z * 24);
+	BattleUnit* bu = _action.actor;
 	int offset = 8 * bu->getArmor()->getSize();
->>>>>>> master
 
 	// take into account soldier height and terrain level if the projectile is launched from a soldier
 	if (_action.actor->getPosition() == _origin)
 	{
 		// calculate offset of the starting point of the projectile
 		originVoxel.z += -_save->getTile(_origin)->getTerrainLevel();
-
 		originVoxel.z += bu->getHeight() + bu->getFloatHeight();
 		originVoxel.z -= 4;
-		Tile *tileAbove = _save->getTile(_origin + Position(0,0,1));
+
+		Tile* tileAbove = _save->getTile(_origin + Position(0, 0, 1));
 
 		if (originVoxel.z >= (_origin.z + 1) * 24)
 		{
@@ -123,19 +118,10 @@ int Projectile::calculateTrajectory(double accuracy)
 				originVoxel.z -= 4;
 			}
 		}
-<<<<<<< HEAD
 
-		direction = bu->getDirection();
-		if (bu->getTurretType() != -1)
-			direction = bu->getTurretDirection();
-
-		originVoxel.x += dirXshift[direction+offset] * bu->getArmor()->getSize();
-		originVoxel.y += dirYshift[direction+offset] * bu->getArmor()->getSize();
-=======
 		// originally used the dirXShift and dirYShift as detailed above, this however results in MUCH more predictable results.
 		originVoxel.x += offset;
 		originVoxel.y += offset;
->>>>>>> master
 	}
 	else
 	{
@@ -276,7 +262,7 @@ int Projectile::calculateTrajectory(double accuracy)
  * @param accuracy The unit's accuracy.
  * @return True when a trajectory is possible.
  */
-bool Projectile::calculateThrow(double accuracy)
+int Projectile::calculateThrow(double accuracy)
 {
 	Position originVoxel, targetVoxel;
 	bool foundCurve = false;
@@ -361,22 +347,24 @@ bool Projectile::calculateThrow(double accuracy)
 
 	if (AreSame(curvature, 5.0))
 	{
-		return false;
+		return -1;
 	}
 
 	// apply some accuracy modifiers
 	if (accuracy > 1) accuracy = 1;
 
 //kL	static const double maxDeviation = 0.08;
-	static const double maxDeviation = 0.07;	// kL
+	static const double maxDeviation = 0.075;	// kL
 	static const double minDeviation = 0;
 	double baseDeviation = (maxDeviation - (maxDeviation * accuracy)) + minDeviation;
 	double deviation = RNG::boxMuller(0, baseDeviation);
 
+	int retValue = -1;
+
 	_trajectory.clear();
 
 	// finally do a line calculation and store this trajectory.
-	_save->getTileEngine()->calculateParabola(originVoxel, targetVoxel, true, &_trajectory, bu, curvature, 1.0 + deviation);
+	retValue = _save->getTileEngine()->calculateParabola(originVoxel, targetVoxel, true, &_trajectory, bu, curvature, 1.0 + deviation);
 
 	Position endPoint = _trajectory.at(_trajectory.size() - 1);
 	endPoint.x /= 16;
@@ -389,12 +377,21 @@ bool Projectile::calculateThrow(double accuracy)
 		&& _save->getTile(endPoint)->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) == 255)
 	{
 		_trajectory.clear();
+<<<<<<< HEAD
 
+=======
+		retValue = -1;
+>>>>>>> master
 		// finally do a line calculation and store this trajectory.
-		_save->getTileEngine()->calculateParabola(originVoxel, targetVoxel, true, &_trajectory, bu, curvature, 1.0);
+		retValue = _save->getTileEngine()->calculateParabola(originVoxel, targetVoxel, true, &_trajectory, bu, curvature, 1.0);
 	}
 
+<<<<<<< HEAD
 	return true;
+=======
+
+	return retValue;
+>>>>>>> master
 }
 
 /**
@@ -405,7 +402,7 @@ bool Projectile::calculateThrow(double accuracy)
  * @param keepRange Whether range affects accuracy.
  * @param targetTile Tile of target. Default = 0.
  */
-void Projectile::applyAccuracy(const Position& origin, Position *target, double accuracy, bool keepRange, Tile *targetTile)
+void Projectile::applyAccuracy(const Position& origin, Position* target, double accuracy, bool keepRange, Tile* targetTile)
 {
 	int xdiff = origin.x - target->x;
 	int ydiff = origin.y - target->y;
@@ -422,27 +419,50 @@ void Projectile::applyAccuracy(const Position& origin, Position *target, double 
 		if (targetTile)
 		{
 			BattleUnit* targetUnit = targetTile->getUnit();
+
 			if (targetUnit && (targetUnit->getFaction() == FACTION_HOSTILE))
-				accuracyPenalty = 0.01 * targetTile->getShade();		// Shade can be from 0 to 15
+				accuracyPenalty = 0.01 * targetTile->getShade(); // Shade can be from 0 to 15
 			else
-				accuracyPenalty = 0.0;		// Enemy units can see in the dark.
+				accuracyPenalty = 0.0; // Enemy units can see in the dark.
 
 			// If unit is kneeled, then chance to hit them reduced by 5%.
 			// This is a compromise, because vertical deviation is 2 times less.
 			if (targetUnit && targetUnit->isKneeled())
-				accuracyPenalty += 0.05;
+//kL				accuracyPenalty += 0.05;
+				accuracyPenalty += 0.06;	// kL
 		}
 		else
-			accuracyPenalty = 0.01 * _save->getGlobalShade();	// Shade can be from 0 (day) to 15 (night).
+			accuracyPenalty = 0.01 * _save->getGlobalShade(); // Shade can be from 0 (day) to 15 (night).
 
-		baseDeviation = -0.15 + (_action.type == BA_AUTOSHOT ? 0.28 : 0.26) / (accuracy - accuracyPenalty + 0.25);
+//kL		baseDeviation = -0.15 + (_action.type == BA_AUTOSHOT ? 0.28 : 0.26) / (accuracy - accuracyPenalty + 0.25);
+
+		// kL_begin: modify rangedBasedAccuracy (shot-modes).
+		baseDeviation = -0.15;
+		switch (_action.type)
+		{
+			case BA_AUTOSHOT:
+				baseDeviation += 0.33 / (accuracy - accuracyPenalty + 0.24);
+			break;
+			case BA_SNAPSHOT:
+				baseDeviation += 0.28 / (accuracy - accuracyPenalty + 0.24);
+			break;
+			case BA_AIMEDSHOT:
+				baseDeviation += 0.23 / (accuracy - accuracyPenalty + 0.24);
+			break;
+
+			default:
+				baseDeviation += 0.28 / (accuracy - accuracyPenalty + 0.24);
+			break;
+		}
+		// kL_end.
 
 		// 0.02 is the min angle deviation for best accuracy (+-3s = 0.02 radian).
 		if (baseDeviation < 0.02) baseDeviation = 0.02;
 
 		// the angle deviations are spread using a normal distribution for baseDeviation (+-3s with precision 99,7%)
-		double dH = RNG::boxMuller(0.0, baseDeviation / 6.0);  // horizontal miss in radian
-		double dV = RNG::boxMuller(0.0, baseDeviation /(6.0 * 2));
+		double dH = RNG::boxMuller(0.0, baseDeviation / 6.0); // horizontal miss in radian
+//kL		double dV = RNG::boxMuller(0.0, baseDeviation /(6.0 * 2));
+		double dV = RNG::boxMuller(0.0, baseDeviation /(6.0 * 1.8));	// kL
 		double te = atan2(double(target->y - origin.y), double(target->x - origin.x)) + dH;
 		double fi = atan2(double(target->z - origin.z), realDistance) + dV;
 		double cos_fi = cos(fi);
@@ -556,7 +576,7 @@ int Projectile::getParticle(int i) const
  * Returns 0 when there is no item thrown.
  * @return Pointer to BattleItem.
  */
-BattleItem *Projectile::getItem() const
+BattleItem* Projectile::getItem() const
 {
 	if (_action.type == BA_THROW)
 		return _action.weapon;
@@ -568,7 +588,7 @@ BattleItem *Projectile::getItem() const
  * Gets the bullet sprite.
  * @return Pointer to Surface.
  */
-Surface *Projectile::getSprite() const
+Surface* Projectile::getSprite() const
 {
 	return _sprite;
 }

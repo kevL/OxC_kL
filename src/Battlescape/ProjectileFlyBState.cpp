@@ -258,7 +258,8 @@ bool ProjectileFlyBState::createNewProjectile()
 	_projectileImpact = -1;
 	if (_action.type == BA_THROW)
 	{
-		if (projectile->calculateThrow(_unit->getThrowingAccuracy()))
+		_projectileImpact = projectile->calculateThrow(_unit->getThrowingAccuracy());
+		if (_projectileImpact != -1)
 		{
 			if (_unit->getFaction() != FACTION_PLAYER
 				&& _projectileItem->getRules()->getBattleType() == BT_GRENADE)
@@ -286,7 +287,8 @@ bool ProjectileFlyBState::createNewProjectile()
 	}
 	else if (_action.weapon->getRules()->getArcingShot()) // special code for the "spit" trajectory
 	{
-		if (projectile->calculateThrow(_unit->getFiringAccuracy(_action.type, _action.weapon)))
+		_projectileImpact = projectile->calculateThrow(_unit->getFiringAccuracy(_action.type, _action.weapon));
+		if (_projectileImpact != -1)
 		{
 			_unit->aim(true); // set the soldier in an aiming position
 			_parent->getMap()->cacheUnit(_unit);
@@ -407,6 +409,14 @@ void ProjectileFlyBState::think()
 				pos.y /= 16;
 				pos.z /= 24;
 
+				if (pos.y > _parent->getSave()->getMapSizeY())
+				{
+					pos.y--;
+				}
+				if (pos.x > _parent->getSave()->getMapSizeX())
+				{
+					pos.x--;
+				}
 				BattleItem *item = _parent->getMap()->getProjectile()->getItem();
 				if (Options::getBool("battleInstantGrenade")
 					&& item->getRules()->getBattleType() == BT_GRENADE
