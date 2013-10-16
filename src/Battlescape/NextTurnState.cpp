@@ -30,7 +30,8 @@
 #include "DebriefingState.h"
 #include "../Interface/Cursor.h"
 #include "BattlescapeState.h"
-#include "../Interface/TurnCounter.h"	// kL
+#include "../Interface/TurnCounter.h"	// kL, global 'kL_TurnCount'
+#include "Map.h"						// kL, global 'kL_FirstReveal'
 
 
 namespace OpenXcom
@@ -48,7 +49,7 @@ NextTurnState::NextTurnState(Game* game, SavedBattleGame* battleGame, Battlescap
 		_battleGame(battleGame),
 		_state(state)
 {
-//	Log(LOG_INFO) << "Create NextTurnState";	// kL
+	Log(LOG_INFO) << "Create NextTurnState";
 
 	// Create objects
 	_window		= new Window(this, 320, 200, 0, 0);
@@ -96,6 +97,9 @@ NextTurnState::NextTurnState(Game* game, SavedBattleGame* battleGame, Battlescap
 	_txtMessage->setText(tr("STR_PRESS_BUTTON_TO_CONTINUE"));
 
 	_state->clearMouseScrollingState();
+
+	kL_FirstReveal = true;		// kL
+	Log(LOG_INFO) << ". . kL_FirstReveal = " << kL_FirstReveal;
 }
 
 /**
@@ -103,7 +107,7 @@ NextTurnState::NextTurnState(Game* game, SavedBattleGame* battleGame, Battlescap
  */
 NextTurnState::~NextTurnState()
 {
-//	Log(LOG_INFO) << "Delete NextTurnState";		// kL
+	Log(LOG_INFO) << "Delete NextTurnState";
 }
 
 /**
@@ -121,8 +125,8 @@ void NextTurnState::handle(Action* action)
 	{
 //		Log(LOG_INFO) << ". . . . RMB, update TurnCounter, popState & tallyUnits";	// kL
 
-//		_turnCounter->setTurnCount(kL_TurnCount);		// kL
-		kL_TurnCount = _battleGame->getTurn();	// kL
+//		_turnCounter->setTurnCount(kL_TurnCount);	// kL
+		kL_TurnCount = _battleGame->getTurn();		// kL
 
 		_turnCounter = _state->getTurnCounter();
 		_turnCounter->update();

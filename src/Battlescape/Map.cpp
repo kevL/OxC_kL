@@ -67,6 +67,8 @@
 namespace OpenXcom
 {
 
+bool kL_FirstReveal = true;		// kL
+
 /**
  * Sets up a map with the specified size and position.
  * @param game Pointer to the core game.
@@ -205,28 +207,43 @@ void Map::draw()
 		}
 	}
 
+//	Log(LOG_INFO) << ". . kL_FirstReveal = " << kL_FirstReveal;
+//	Log(LOG_INFO) << ". . _reveal = " << _reveal;
+
 	if ((_save->getSelectedUnit() && _save->getSelectedUnit()->getVisible())
 		|| _unitDying
 		|| _save->getSelectedUnit() == 0
 		|| _save->getDebugMode()
 		|| projectileInFOV
 		|| explosionInFOV
-		|| _reveal)		// kL
+		|| (_reveal && !kL_FirstReveal))	// kL
 	{
+//		Log(LOG_INFO) << ". . . . drawTerrain()";
+
 		// kL_begin: Map::draw, do aLien reveaL.
 		if (!_reveal)
 		{
-			_reveal = 5600;
+			_reveal = 3;
+//			Log(LOG_INFO) << ". . drawTerrain() _reveal = " << _reveal;
 		}
 		else
+		{
 			_reveal--;
+//			Log(LOG_INFO) << ". . drawTerrain() _reveal = " << _reveal;
+		}
 		// kL_end.
 
 		drawTerrain(this);
 	}
 	else // "hidden movement"
 	{
-//		_reveal = 0;	// kL
+//		Log(LOG_INFO) << ". . . . blit( hidden movement )";
+//		Log(LOG_INFO) << ". . . . kL_FirstReveal, set FALSE";
+//		Log(LOG_INFO) << ". . . . _reveal, set 0 ";
+
+		kL_FirstReveal = false;		// kL
+		_reveal = 0;				// kL
+
 		_message->blit(this);
 	}
 }

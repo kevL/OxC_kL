@@ -28,6 +28,8 @@
 namespace OpenXcom
 {
 
+extern bool kL_FirstReveal;		// kL
+
 class ResourcePack;
 class SavedBattleGame;
 class Surface;
