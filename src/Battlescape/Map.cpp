@@ -90,7 +90,8 @@ Map::Map(Game* game, int width, int height, int x, int y, int visibleMapHeight)
 		_animFrame(0),
 		_launch(false),
 		_visibleMapHeight(visibleMapHeight),
-		_unitDying(false)
+		_unitDying(false),
+		_reveal(0)
 {
 //	Log(LOG_INFO) << "Create Map";
 
@@ -106,6 +107,7 @@ Map::Map(Game* game, int width, int height, int x, int y, int visibleMapHeight)
 	_spriteWidth = _res->getSurfaceSet("BLANKS.PCK")->getFrame(0)->getWidth();
 	_spriteHeight = _res->getSurfaceSet("BLANKS.PCK")->getFrame(0)->getHeight();
 	_save = _game->getSavedGame()->getSavedBattle();
+	// kL_note: "hidden movement" screen
 	_message = new BattlescapeMessage(320, visibleMapHeight < 200 ? visibleMapHeight : 200, Screen::getDX(), Screen::getDY());
 	_camera = new Camera(_spriteWidth, _spriteHeight, _save->getMapSizeX(), _save->getMapSizeY(), _save->getMapSizeZ(), this, visibleMapHeight);
 	_scrollMouseTimer = new Timer(SCROLL_INTERVAL);
@@ -208,12 +210,23 @@ void Map::draw()
 		|| _save->getSelectedUnit() == 0
 		|| _save->getDebugMode()
 		|| projectileInFOV
-		|| explosionInFOV)
+		|| explosionInFOV
+		|| _reveal)		// kL
 	{
+		// kL_begin: Map::draw, do aLien reveaL.
+		if (!_reveal)
+		{
+			_reveal = 5600;
+		}
+		else
+			_reveal--;
+		// kL_end.
+
 		drawTerrain(this);
 	}
-	else
+	else // "hidden movement"
 	{
+//		_reveal = 0;	// kL
 		_message->blit(this);
 	}
 }
@@ -919,6 +932,7 @@ void Map::mouseOver(Action *action, State *state)
 	_camera->mouseOver(action, state);
 	_mouseX = (int)action->getAbsoluteXMouse();
 	_mouseY = (int)action->getAbsoluteYMouse();
+
 	setSelectorPosition(_mouseX, _mouseY);
 }
 
@@ -933,7 +947,8 @@ void Map::setSelectorPosition(int mx, int my)
 	int oldX = _selectorX, oldY = _selectorY;
 
 	if (!mx && !my) return; // cursor is offscreen
-	_camera->convertScreenToMap(mx, my + _spriteHeight/4, &_selectorX, &_selectorY);
+
+	_camera->convertScreenToMap(mx, my + _spriteHeight / 4, &_selectorX, &_selectorY);
 
 	if (oldX != _selectorX || oldY != _selectorY)
 	{

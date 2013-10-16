@@ -59,22 +59,22 @@ namespace OpenXcom
  */
 TransferItemsState::TransferItemsState(Game* game, Base* baseFrom, Base* baseTo)
 	:
-	State(game),
-	_baseFrom(baseFrom),
-	_baseTo(baseTo),
-	_qtys(),
-	_soldiers(),
-	_crafts(),
-	_items(),
-	_sel(0),
-	_total(0),
-	_pQty(0),
-	_cQty(0),
-	_aQty(0),
-	_iQty(0.0f),
-	_hasSci(0),
-	_hasEng(0),
-	_distance(0.0)
+		State(game),
+		_baseFrom(baseFrom),
+		_baseTo(baseTo),
+		_qtys(),
+		_soldiers(),
+		_crafts(),
+		_items(),
+		_sel(0),
+		_total(0),
+		_pQty(0),
+		_cQty(0),
+		_aQty(0),
+		_iQty(0.0f),
+		_hasSci(0),
+		_hasEng(0),
+		_distance(0.0)
 {
 	_changeValueByMouseWheel = Options::getInt("changeValueByMouseWheel");
 	_allowChangeListValuesByMouseWheel = (Options::getBool("allowChangeListValuesByMouseWheel") && _changeValueByMouseWheel);
@@ -83,14 +83,31 @@ TransferItemsState::TransferItemsState(Game* game, Base* baseFrom, Base* baseTo)
 
 	// Create objects
 	_window					= new Window(this, 320, 200, 0, 0);
-	_btnOk					= new TextButton(148, 16, 8, 176);
+
+/*kL	_btnOk					= new TextButton(148, 16, 8, 176);
 	_btnCancel				= new TextButton(148, 16, 164, 176);
 	_txtTitle				= new Text(310, 16, 5, 8);
 	_txtItem				= new Text(130, 9, 10, 22);
 	_txtQuantity			= new Text(50, 9, 150, 22);
 	_txtAmountTransfer		= new Text(60, 16, 200, 22);
 	_txtAmountDestination	= new Text(60, 16, 260, 22);
-	_lstItems				= new TextList(287, 128, 8, 40);
+	_lstItems				= new TextList(287, 128, 8, 40); */
+
+	// kL_begin: TransferItemsState(), surface adj.
+	_txtTitle				= new Text(310, 16, 5, 9);
+
+	_txtItem				= new Text(128, 9, 16, 24);
+	_txtQuantity			= new Text(35, 9, 141, 24);
+	_txtAmountTransfer		= new Text(60, 9, 187, 24);
+	_txtAmountDestination	= new Text(63, 9, 246, 24);
+
+//	_lstItems->setColumns(4, 144, 56, 40, 20);		// TEMP!
+
+	_lstItems				= new TextList(288, 136, 8, 34);
+
+	_btnCancel				= new TextButton(144, 16, 16, 177);
+	_btnOk					= new TextButton(144, 16, 163, 177);
+	// kL_end.
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
@@ -142,11 +159,14 @@ TransferItemsState::TransferItemsState(Game* game, Base* baseFrom, Base* baseTo)
 
 	_lstItems->setColor(Palette::blockOffset(15)+1);
 	_lstItems->setArrowColor(Palette::blockOffset(13)+10);
-	_lstItems->setArrowColumn(193, ARROW_VERTICAL);
-	_lstItems->setColumns(4, 162, 58, 40, 20);
+//kL	_lstItems->setArrowColumn(193, ARROW_VERTICAL);
+	_lstItems->setArrowColumn(181, ARROW_VERTICAL);		// kL
+//kL	_lstItems->setColumns(4, 162, 58, 40, 20);
+	_lstItems->setColumns(4, 144, 56, 31, 20);		// kL
 	_lstItems->setSelectable(true);
 	_lstItems->setBackground(_window);
-	_lstItems->setMargin(2);
+//kL	_lstItems->setMargin(2);
+	_lstItems->setMargin(8);		// kL
 	_lstItems->setAllowScrollOnArrowButtons(!_allowChangeListValuesByMouseWheel);
 	_lstItems->onLeftArrowPress((ActionHandler)& TransferItemsState::lstItemsLeftArrowPress);
 	_lstItems->onLeftArrowRelease((ActionHandler)& TransferItemsState::lstItemsLeftArrowRelease);

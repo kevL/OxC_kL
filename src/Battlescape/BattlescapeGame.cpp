@@ -691,18 +691,19 @@ void BattlescapeGame::checkForCasualties(BattleItem* murderweapon, BattleUnit* m
 			if (victim->getFaction() != FACTION_NEUTRAL)
 			{
 //kL				int modif = _save->getMoraleModifier(victim);
-//kL				int loserModif = victim->getFaction() == FACTION_HOSTILE ? 100 : _save->getMoraleModifier();
-	//kL			int winnerModif = victim->getFaction() == FACTION_HOSTILE ? _save->getMoraleModifier() : 100;
+//kL				int loseMod = victim->getFaction() == FACTION_HOSTILE ? 100 : _save->getMoraleModifier();
+	//kL			int winMod = victim->getFaction() == FACTION_HOSTILE ? _save->getMoraleModifier() : 100;
 
 				// kL_begin: group morale modifications in checkForCasualties()
 				int modif = 100;
-				if (victim->getFaction() == FACTION_HOSTILE)
-				{
-					modif = _save->getMoraleModifier(victim); // cost for losing a unit on your side
-				}
+//				if (victim->getFaction() == FACTION_HOSTILE)
+//				{
+				modif = _save->getMoraleModifier(victim); // penalty for losing a unit on your side
+//				}
 
-				int loserModif = victim->getFaction() == FACTION_HOSTILE ? _save->getMoraleModifier(0, false) : _save->getMoraleModifier();
-				int winnerModif = victim->getFaction() == FACTION_HOSTILE ? _save->getMoraleModifier() : _save->getMoraleModifier(0, false);
+				// these two are for group bonuses (loseMod mitigates the loss of modif, winMod enhances modif)
+				int loseMod = victim->getFaction() == FACTION_HOSTILE ? _save->getMoraleModifier(0, false) : _save->getMoraleModifier();
+				int winMod = victim->getFaction() == FACTION_HOSTILE ? _save->getMoraleModifier() : _save->getMoraleModifier(0, false);
 				// kL_end.
 
 				for (std::vector<BattleUnit* >::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
@@ -714,7 +715,7 @@ void BattlescapeGame::checkForCasualties(BattleItem* murderweapon, BattleUnit* m
 						{
 							// the losing squad all get a morale loss
 							int bravery = (110 - (*i)->getStats()->bravery) / 10;
-							(*i)->moraleChange(-(modif * 200 * bravery / loserModif / 100));
+							(*i)->moraleChange(-(modif * 200 * bravery / loseMod / 100));
 
 							if (victim->getFaction() == FACTION_HOSTILE
 								&& murderer)
@@ -725,7 +726,7 @@ void BattlescapeGame::checkForCasualties(BattleItem* murderweapon, BattleUnit* m
 						else
 						{
 							// the winning squad all get a morale increase
-							(*i)->moraleChange(10 * winnerModif / 100);
+							(*i)->moraleChange(10 * winMod / 100);
 						}
 					}
 				}

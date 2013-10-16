@@ -598,7 +598,7 @@ void BattlescapeState::think()
 			_popups.erase(_popups.begin());
 			popped = true;
 
-			return;
+//kL			return;
 		}
 	}
 }

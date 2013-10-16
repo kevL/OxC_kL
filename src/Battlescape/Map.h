@@ -52,35 +52,39 @@ enum CursorType
 /**
  * Interactive map of the battlescape.
  */
-class Map : public InteractiveSurface
+class Map
+	:
+		public InteractiveSurface
 {
-	private:
-		static const int SCROLL_INTERVAL = 20;
-		static const int BULLET_SPRITES = 35;
-		Timer* _scrollMouseTimer, * _scrollKeyTimer;
-		Game* _game;
-		SavedBattleGame* _save;
-		ResourcePack* _res;
-		Surface* _arrow;
-		int _spriteWidth, _spriteHeight;
-		int _selectorX, _selectorY;
-		int _mouseX, _mouseY;
-		CursorType _cursorType;
-		int _cursorSize;
-		int _animFrame;
-		Projectile* _projectile;
-		bool projectileInFOV;
-		std::set<Explosion *> _explosions;
-		bool explosionInFOV;
-		bool _launch;
-		BattlescapeMessage* _message;
-		Camera* _camera;
-		int _visibleMapHeight;
-		void drawTerrain(Surface* surface);
-		int getTerrainLevel(Position pos, int size);
-		std::vector<Position> _waypoints;
-		bool _unitDying;
-		int _previewSetting;
+private:
+	static const int SCROLL_INTERVAL = 20;
+	static const int BULLET_SPRITES = 35;
+	Timer* _scrollMouseTimer, * _scrollKeyTimer;
+	Game* _game;
+	SavedBattleGame* _save;
+	ResourcePack* _res;
+	Surface* _arrow;
+	int _spriteWidth, _spriteHeight;
+	int _selectorX, _selectorY;
+	int _mouseX, _mouseY;
+	CursorType _cursorType;
+	int _cursorSize;
+	int _animFrame;
+	Projectile* _projectile;
+	bool projectileInFOV;
+	std::set<Explosion *> _explosions;
+	bool explosionInFOV;
+	bool _launch;
+	BattlescapeMessage* _message;
+	Camera* _camera;
+	int _visibleMapHeight;
+	void drawTerrain(Surface* surface);
+	int getTerrainLevel(Position pos, int size);
+	std::vector<Position> _waypoints;
+	bool _unitDying;
+	int _previewSetting;
+	int _reveal;	// kL
+
 	public:
 		/// Creates a new map at the specified position and size.
 		Map(Game* game, int width, int height, int x, int y, int visibleMapHeight);

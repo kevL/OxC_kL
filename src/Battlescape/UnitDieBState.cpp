@@ -53,10 +53,10 @@ namespace OpenXcom
  */
 UnitDieBState::UnitDieBState(BattlescapeGame* parent, BattleUnit* unit, ItemDamageType damageType, bool noSound)
 	:
-	BattleState(parent),
-	_unit(unit),
-	_damageType(damageType),
-	_noSound(noSound)
+		BattleState(parent),
+		_unit(unit),
+		_damageType(damageType),
+		_noSound(noSound)
 {
 	Log(LOG_INFO) << "Create UnitDieBState";
 

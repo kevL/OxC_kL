@@ -16,10 +16,12 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "Timer.h"
 #include "Game.h"
 #include "Options.h"
 #include <assert.h>
+
 
 namespace OpenXcom
 {
@@ -28,6 +30,7 @@ namespace
 {
 	
 const Uint32 accurate = 4;
+
 Uint32 slowTick()
 {
 	static Uint32 old_time = SDL_GetTicks();
@@ -41,6 +44,7 @@ Uint32 slowTick()
 
 } // namespace
 
+
 Uint32 Timer::gameSlowSpeed = 1;
 int Timer::maxFrameSkip = 8; // this is a pretty good default at 60FPS. 
 
@@ -49,7 +53,14 @@ int Timer::maxFrameSkip = 8; // this is a pretty good default at 60FPS.
  * Initializes a new timer with a set interval.
  * @param interval Time interval in milliseconds.
  */
-Timer::Timer(Uint32 interval, bool frameSkipping) : _start(0), _interval(interval), _running(false), _frameSkipping(frameSkipping), _state(0), _surface(0)
+Timer::Timer(Uint32 interval, bool frameSkipping)
+	:
+		_start(0),
+		_interval(interval),
+		_running(false),
+		_frameSkipping(frameSkipping),
+		_state(0),
+		_surface(0)
 {
 	Timer::maxFrameSkip = Options::getInt("maxFrameSkip");
 }
@@ -113,12 +124,12 @@ void Timer::think(State* state, Surface* surface)
 	// must be signed to permit negative numbers
 	Sint64 now = slowTick();
 	// this is used to make sure we stop calling *_state on *state in the loop once *state has been popped and deallocated
-	Game *game = state ? state->_game : 0;
+	Game* game = state ? state->_game : 0;
 //	assert(!game || game->isState(state));
 
 	if (_running)
 	{
-		if ((now - _frameSkipStart) >= _interval)
+		if (now - _frameSkipStart >= _interval)
 		{
 			for (int i = 0; i < maxFrameSkip && isRunning() && (now - _frameSkipStart) >= _interval; ++i)
 			{
@@ -140,7 +151,9 @@ void Timer::think(State* state, Surface* surface)
 			}
 
 			_start = slowTick();
-			if (_start > _frameSkipStart) _frameSkipStart = _start; // don't play animations in ffwd to catch up :P
+
+			if (_start > _frameSkipStart)
+				_frameSkipStart = _start; // don't play animations in ffwd to catch up :P
 		}
 	}
 }

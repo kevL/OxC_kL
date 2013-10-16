@@ -515,7 +515,7 @@ void Inventory::mouseClick(Action* action, State* state)
 				{
 					if (SDL_GetModState() & KMOD_CTRL)
 					{
-						RuleInventory *newSlot = _game->getRuleset()->getInventory("STR_GROUND");
+						RuleInventory* newSlot = _game->getRuleset()->getInventory("STR_GROUND");
 
 						std::string warning = "STR_NOT_ENOUGH_SPACE";
 						bool placed = false;

@@ -405,6 +405,53 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 }
 
 /**
+ * Calculates line of sight of all units within range of the Position
+ * (used when terrain has changed, which can reveal new parts of terrain or units).
+ * @param position, Position of the changed terrain.
+ */
+/*kL void TileEngine::calculateFOV(const Position& position)
+{
+	for (std::vector<BattleUnit* >::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
+	{
+		if (distance(position, (*i)->getPosition()) < MAX_VIEW_DISTANCE)
+		{
+			calculateFOV(*i);
+		}
+	}
+} */
+// kL_begin: TileEngine::calculateFOV, stop stopping my soldiers !!
+bool TileEngine::calculateFOV(const Position& position)
+{
+	for (std::vector<BattleUnit* >::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
+	{
+		if (distance(position, (*i)->getPosition()) < MAX_VIEW_DISTANCE)
+		{
+			Log(LOG_INFO) << "calculateFOV(pos.), Refresh view for unitID = " << (*i)->getId();
+			if (calculateFOV(*i))
+			{
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
+
+/**
+ * Recalculates FOV of all units in-game.
+ */
+void TileEngine::recalculateFOV()
+{
+	for (std::vector<BattleUnit* >::iterator bu = _save->getUnits()->begin(); bu != _save->getUnits()->end(); ++bu)
+	{
+		if ((*bu)->getTile() != 0)
+		{
+			calculateFOV(*bu);
+		}
+	}
+}
+
+/**
  * Gets the origin voxel of a unit's eyesight (from just one eye or something? Why is it x+7?? (kL_note: yeh, why x+7?)
  * @param currentUnit The watcher.
  * @return Approximately an eyeball voxel.
@@ -925,38 +972,6 @@ bool TileEngine::canTargetTile(Position* originVoxel, Tile* tile, int part, Posi
 				{
 					return true;
 				}
-			}
-		}
-	}
-
-	return false;
-}
-
-/**
- * Calculates line of sight of a soldiers within range of the Position
- * (used when terrain has changed, which can reveal new parts of terrain or units).
- * @param position, Position of the changed terrain.
- */
-/*kL void TileEngine::calculateFOV(const Position& position)
-{
-	for (std::vector<BattleUnit* >::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
-	{
-		if (distance(position, (*i)->getPosition()) < MAX_VIEW_DISTANCE)
-		{
-			calculateFOV(*i);
-		}
-	}
-} */
-// kL_begin: TileEngine::calculateFOV, stop stopping my soldiers !!
-bool TileEngine::calculateFOV(const Position& position)
-{
-	for (std::vector<BattleUnit* >::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
-	{
-		if (distance(position, (*i)->getPosition()) < MAX_VIEW_DISTANCE)
-		{
-			if (calculateFOV(*i))
-			{
-				return true;
 			}
 		}
 	}
@@ -3106,20 +3121,6 @@ bool TileEngine::validateThrow(BattleAction* action)
 	}
 
 	return ProjectileFlyBState::validThrowRange(action);
-}
-
-/**
- * Recalculates FOV of all units in-game.
- */
-void TileEngine::recalculateFOV()
-{
-	for (std::vector<BattleUnit* >::iterator bu = _save->getUnits()->begin(); bu != _save->getUnits()->end(); ++bu)
-	{
-		if ((*bu)->getTile() != 0)
-		{
-			calculateFOV(*bu);
-		}
-	}
 }
 
 /**

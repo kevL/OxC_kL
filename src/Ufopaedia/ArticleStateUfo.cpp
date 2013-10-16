@@ -33,105 +33,111 @@
 #include "../Interface/TextButton.h"
 #include "../Interface/TextList.h"
 
+
 namespace OpenXcom
 {
 
-	ArticleStateUfo::ArticleStateUfo(Game *game, ArticleDefinitionUfo *defs, int palSwitch) : ArticleState(game, defs->id, palSwitch)
+ArticleStateUfo::ArticleStateUfo(Game* game, ArticleDefinitionUfo* defs, int palSwitch)
+	:
+		ArticleState(game, defs->id, palSwitch)
+{
+	RuleUfo* ufo = _game->getRuleset()->getUfo(defs->id);
+
+	// add screen elements
+	_txtTitle = new Text(155, 32, 5, 24);
+
+	// Set palette
+	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
+
+	ArticleState::initLayout();
+
+	// add other elements
+	add(_txtTitle);
+
+	// Set up objects
+	_game->getResourcePack()->getSurface("BACK11.SCR")->blit(_bg);
+	_btnOk->setColor(Palette::blockOffset(8)+5);
+	_btnPrev->setColor(Palette::blockOffset(8)+5);
+	_btnNext->setColor(Palette::blockOffset(8)+5);
+
+	_txtTitle->setColor(Palette::blockOffset(8)+5);
+	_txtTitle->setBig();
+	_txtTitle->setWordWrap(true);
+	_txtTitle->setText(Ufopaedia::buildText(_game, defs->title));
+
+	_image = new Surface(160, 52, 160, 6);
+	add(_image);
+
+	Surface *graphic = _game->getResourcePack()->getSurface("INTERWIN.DAT");
+	graphic->setX(0);
+	graphic->setY(0);
+	graphic->getCrop()->x = 0;
+	graphic->getCrop()->y = 0;
+	graphic->getCrop()->w = 160;
+	graphic->getCrop()->h = 52;
+	_image->drawRect(graphic->getCrop(), 15);
+/*
+	graphic->getCrop()->y = 96;
+	graphic->getCrop()->h = 15;
+	graphic->blit(_image);
+	graphic->setY(67);
+	graphic->getCrop()->y = 111;
+	graphic->getCrop()->h = 29;
+	graphic->blit(_image);
+*/
+	if (ufo->getModSprite() == "")
 	{
-		RuleUfo *ufo = _game->getRuleset()->getUfo(defs->id);
-
-		// add screen elements
-		_txtTitle = new Text(155, 32, 5, 24);
-
-		// Set palette
-		_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
-
-		ArticleState::initLayout();
-
-		// add other elements
-		add(_txtTitle);
-
-		// Set up objects
-		_game->getResourcePack()->getSurface("BACK11.SCR")->blit(_bg);
-		_btnOk->setColor(Palette::blockOffset(8)+5);
-		_btnPrev->setColor(Palette::blockOffset(8)+5);
-		_btnNext->setColor(Palette::blockOffset(8)+5);
-
-		_txtTitle->setColor(Palette::blockOffset(8)+5);
-		_txtTitle->setBig();
-		_txtTitle->setWordWrap(true);
-		_txtTitle->setText(Ufopaedia::buildText(_game, defs->title));
-
-		_image = new Surface(160, 52, 160, 6);
-		add(_image);
-
-		Surface *graphic = _game->getResourcePack()->getSurface("INTERWIN.DAT");
+		graphic->getCrop()->y = 140 + 52 * ufo->getSprite();
+		graphic->getCrop()->h = 52;
+	}
+	else
+	{
+		graphic = _game->getResourcePack()->getSurface(ufo->getModSprite());
 		graphic->setX(0);
 		graphic->setY(0);
-		graphic->getCrop()->x = 0;
-		graphic->getCrop()->y = 0;
-		graphic->getCrop()->w = 160;
-		graphic->getCrop()->h = 52;
-		_image->drawRect(graphic->getCrop(), 15);
-/*
-		graphic->getCrop()->y = 96;
-		graphic->getCrop()->h = 15;
-		graphic->blit(_image);
-		graphic->setY(67);
-		graphic->getCrop()->y = 111;
-		graphic->getCrop()->h = 29;
-		graphic->blit(_image);
-*/
-		if (ufo->getModSprite() == "")
-		{
-			graphic->getCrop()->y = 140 + 52 * ufo->getSprite();
-			graphic->getCrop()->h = 52;
-		}
-		else
-		{
-			graphic = _game->getResourcePack()->getSurface(ufo->getModSprite());
-			graphic->setX(0);
-			graphic->setY(0);
-		}
-		graphic->blit(_image);
-
-		_txtInfo = new Text(300, 50, 10, 140);
-		add(_txtInfo);
-
-		_txtInfo->setColor(Palette::blockOffset(8)+5);
-		_txtInfo->setWordWrap(true);
-		_txtInfo->setText(Ufopaedia::buildText(_game, defs->text));
-
-		_lstInfo = new TextList(300, 64, 10, 68);
-		add(_lstInfo);
-
-		centerAllSurfaces();
-
-		_lstInfo->setColor(Palette::blockOffset(8)+5);
-		_lstInfo->setColumns(2, 200, 100);
-//		_lstInfo->setCondensed(true);
-		_lstInfo->setBig();
-		_lstInfo->setDot(true);
-
-		std::wstringstream ss;
-		ss.str(L"");ss.clear();
-		ss << ufo->getMaxDamage();
-		_lstInfo->addRow(2, tr("STR_DAMAGE_CAPACITY").c_str(), ss.str().c_str());
-
-		ss.str(L"");ss.clear();
-		ss << ufo->getWeaponPower();
-		_lstInfo->addRow(2, tr("STR_WEAPON_POWER").c_str(), ss.str().c_str());
-
-		ss.str(L"");ss.clear();
-		ss << ufo->getWeaponRange();
-		_lstInfo->addRow(2, tr("STR_WEAPON_RANGE").c_str(), ss.str().c_str());
-
-		_lstInfo->addRow(2, tr("STR_MAXIMUM_SPEED").c_str(), tr("STR_KNOTS").arg(ufo->getMaxSpeed()).c_str());
-
-		_lstInfo->draw();
 	}
+	graphic->blit(_image);
 
-	ArticleStateUfo::~ArticleStateUfo()
-	{}
+	_txtInfo = new Text(300, 50, 10, 140);
+	add(_txtInfo);
+
+	_txtInfo->setColor(Palette::blockOffset(8)+5);
+	_txtInfo->setWordWrap(true);
+	_txtInfo->setText(Ufopaedia::buildText(_game, defs->text));
+
+	_lstInfo = new TextList(300, 64, 10, 68);
+
+	add(_lstInfo);
+
+
+	centerAllSurfaces();
+
+	_lstInfo->setColor(Palette::blockOffset(8)+5);
+	_lstInfo->setColumns(2, 200, 100);
+//		_lstInfo->setCondensed(true);
+	_lstInfo->setBig();
+	_lstInfo->setDot(true);
+
+	std::wstringstream ss;
+	ss.str(L"");ss.clear();
+	ss << ufo->getMaxDamage();
+	_lstInfo->addRow(2, tr("STR_DAMAGE_CAPACITY").c_str(), ss.str().c_str());
+
+	ss.str(L"");ss.clear();
+	ss << ufo->getWeaponPower();
+	_lstInfo->addRow(2, tr("STR_WEAPON_POWER").c_str(), ss.str().c_str());
+
+	ss.str(L"");ss.clear();
+	ss << ufo->getWeaponRange();
+	_lstInfo->addRow(2, tr("STR_WEAPON_RANGE").c_str(), ss.str().c_str());
+
+	_lstInfo->addRow(2, tr("STR_MAXIMUM_SPEED").c_str(), tr("STR_KNOTS").arg(ufo->getMaxSpeed()).c_str());
+
+	_lstInfo->draw();
+}
+
+ArticleStateUfo::~ArticleStateUfo()
+{
+}
 
 }

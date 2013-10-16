@@ -384,7 +384,7 @@ void InventoryState::btnOkClick(Action* )
 
 	_game->popState();
 
-	if (!_tu)
+	if (!_tu) // pre-Battle inventory equip.
 	{
 		saveEquipmentLayout();
 		_battleGame->resetUnitTiles();

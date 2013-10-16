@@ -16,12 +16,14 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_TIMER_H
 #define OPENXCOM_TIMER_H
 
 #include <SDL.h>
 #include "State.h"
 #include "Surface.h"
+
 
 namespace OpenXcom
 {
@@ -36,9 +38,9 @@ typedef void (Surface::* SurfaceHandler)();
  */
 class Timer
 {
-public:
-	static int maxFrameSkip;
-	static Uint32 gameSlowSpeed;
+	public:
+		static int maxFrameSkip;
+		static Uint32 gameSlowSpeed;
 	
 private:
 	Uint32 _start;
@@ -48,29 +50,32 @@ private:
 	bool _frameSkipping;
 	StateHandler _state;
 	SurfaceHandler _surface;
-public:
-	/// Creates a stopped timer.
-	Timer(Uint32 interval, bool frameSkipping = false);
-	/// Cleans up the timer.
-	~Timer();
-	/// Starts the timer.
-	void start();
-	/// Stops the timer.
-	void stop();
-	/// Gets the current time interval.
-	Uint32 getTime() const;
-	/// Gets if the timer's running.
-	bool isRunning() const;
-	/// Advances the timer.
-	void think(State* state, Surface* surface);
-	/// Sets the timer's interval.
-	void setInterval(Uint32 interval);
-	/// Hooks a state action handler to the timer interval.
-	void onTimer(StateHandler handler);
-	/// Hooks a surface action handler to the timer interval.
-	void onTimer(SurfaceHandler handler);
-	/// Turns frame skipping on or off
-	void setFrameSkipping(bool skip);
+
+	public:
+		/// Creates a stopped timer.
+		Timer(Uint32 interval, bool frameSkipping = false);
+		/// Cleans up the timer.
+		~Timer();
+
+		/// Starts the timer.
+		void start();
+		/// Stops the timer.
+		void stop();
+
+		/// Gets the current time interval.
+		Uint32 getTime() const;
+		/// Gets if the timer's running.
+		bool isRunning() const;
+		/// Advances the timer.
+		void think(State* state, Surface* surface);
+		/// Sets the timer's interval.
+		void setInterval(Uint32 interval);
+		/// Hooks a state action handler to the timer interval.
+		void onTimer(StateHandler handler);
+		/// Hooks a surface action handler to the timer interval.
+		void onTimer(SurfaceHandler handler);
+		/// Turns frame skipping on or off
+		void setFrameSkipping(bool skip);
 };
 
 }

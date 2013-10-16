@@ -71,9 +71,15 @@ private:
 		void calculateUnitLighting();
 		/// Calculates the field of view from a units view point.
 		bool calculateFOV(BattleUnit* unit);
-		/// Calculates the field of view within range of a certain position.
+		/// Calculates Field of View, including line of sight of all units within range of the Position
 //kL		void calculateFOV(const Position& position);
 		bool calculateFOV(const Position& position);	// kL
+		/// Recalculates FOV of all units in-game.
+		void recalculateFOV();
+		/// Gets the origin voxel of a unit's eyesight.
+		Position getSightOriginVoxel(BattleUnit* currentUnit);
+		/// Checks visibility of a unit on this tile.
+		bool visible(BattleUnit* currentUnit, Tile* tile);
 		/// Creates a vector of units that can spot this unit.
 		std::vector<BattleUnit* > getSpottingUnits(BattleUnit* unit);
 		/// Checks validity of a snap shot to this position.
@@ -108,10 +114,6 @@ private:
 		/// Calculates a parabola trajectory.
 		int calculateParabola(const Position& origin, const Position& target, bool storeTrajectory,
 						std::vector<Position>* trajectory, BattleUnit* excludeUnit, double curvature, double accuracy);
-		/// Gets the origin voxel of a unit's eyesight.
-		Position getSightOriginVoxel(BattleUnit* currentUnit);
-		/// Checks visibility of a unit on this tile.
-		bool visible(BattleUnit* currentUnit, Tile* tile);
 		/// Turn XCom soldier's personal lighting on or off.
 		void togglePersonalLighting();
 		/// Checks the distance between two positions.
@@ -142,8 +144,6 @@ private:
 		int voxelCheck(const Position& voxel, BattleUnit* excludeUnit, bool excludeAllUnits = false, bool onlyVisible = false, BattleUnit* excludeAllBut = 0);
 		/// Validates a throwing action.
 		bool validateThrow(BattleAction* action);
-		/// Recalculates FOV of all units in-game.
-		void recalculateFOV();
 		/// Get direction to a certain point
 		int getDirectionTo(const Position& origin, const Position& target) const;
 };

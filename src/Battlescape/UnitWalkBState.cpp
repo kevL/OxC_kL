@@ -142,7 +142,7 @@ void UnitWalkBState::think()
 
 		if (_parent->kneel(_unit))
 		{
-//			Log(LOG_INFO) << ". . Stand up";
+			Log(LOG_INFO) << ". . Stand up";
 
 //kL			_terrain->calculateFOV(_unit);
 			newVis = _terrain->calculateFOV(_unit);		// kL
@@ -290,9 +290,12 @@ void UnitWalkBState::think()
 				_unit->setVisible(false);
 			}
 
-//kL			_terrain->calculateFOV(_unit->getPosition());
-			newVis = _terrain->calculateFOV(_unit->getPosition())				// kL
-				&& _unit->getFaction() == FACTION_PLAYER;						// kL
+			// kL_note: This calculates or 'refreshes' the Field of View
+			// of all units within maximum distance (20 tiles) of this unit.
+			_terrain->calculateFOV(_unit->getPosition());
+
+			newVis = _terrain->calculateFOV(_unit)			// kL
+				&& _unit->getFaction() == FACTION_PLAYER;	// kL
 			newUnitSpotted = !_action.desperate
 				&& _parent->getPanicHandled()
 //kL				&& _unitsSpotted != _unit->getUnitsSpottedThisTurn().size();
@@ -393,16 +396,15 @@ void UnitWalkBState::think()
 
 		newVis = _terrain->calculateFOV(_unit)								// kL
 			&& _unit->getFaction() == FACTION_PLAYER;						// kL
-		newUnitSpotted = !_action.desperate									// kL
-			&& _parent->getPanicHandled()									// kL
+		newUnitSpotted = // !_action.desperate &&							// kL
+			_parent->getPanicHandled()										// kL
 			&& _unitsSpotted < _unit->getUnitsSpottedThisTurn().size()		// kL
 			&& _unit->getFaction() != FACTION_PLAYER;						// kL
 
 		// check if we did spot new units
 		if ((newVis															// kL
-			|| (newUnitSpotted
-				&& !_action.desperate
-				&& _unit->getCharging() == 0))
+				|| (newUnitSpotted
+					&& !(_action.desperate || _unit->getCharging())))
 			&& !_falling)
 		{
 //			if (_parent->getSave()->getTraceSetting()) { Log(LOG_INFO) << "Uh-oh! Company!"; }
@@ -427,7 +429,7 @@ void UnitWalkBState::think()
 		}
 		else
 //kL			_parent->setStateInterval(0);
-			_parent->setStateInterval(11);		// kL
+			_parent->setStateInterval(1);		// kL
 			// kL_note: mute footstep sounds. Trying...
 
 		int dir = _pf->getStartDirection();
@@ -677,11 +679,11 @@ void UnitWalkBState::think()
 //kL		_terrain->calculateFOV(_unit);
 		newVis = _terrain->calculateFOV(_unit)								// kL
 			&& _unit->getFaction() == FACTION_PLAYER;						// kL
-		newUnitSpotted = !_action.desperate
-			&& _parent->getPanicHandled()
+		newUnitSpotted = //kL !_action.desperate &&
+			_parent->getPanicHandled()
 //kL			&& _unitsSpotted != _unit->getUnitsSpottedThisTurn().size();
 			&& _unitsSpotted < _unit->getUnitsSpottedThisTurn().size()		// kL
-			&& newUnitSpotted;												// kL
+			&& _unit->getFaction() != FACTION_PLAYER;						// kL
 
 		// make sure the unit sprites are up to date
 		if (onScreen)
@@ -690,10 +692,10 @@ void UnitWalkBState::think()
 			_parent->getMap()->cacheUnit(_unit);
 		}
 
-		if (newVis		// kL
-			|| (newUnitSpotted
-				&& !(_action.desperate || _unit->getCharging())
-				&& !_falling))
+		if ((newVis		// kL
+				|| (newUnitSpotted
+					&& !(_action.desperate || _unit->getCharging())))
+			&& !_falling)
 		{
 			if (_beforeFirstStep)
 			{

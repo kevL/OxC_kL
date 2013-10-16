@@ -79,7 +79,7 @@ DebriefingState::DebriefingState(Game* game)
 	_containmentLimit = Options::getBool("alienContainmentLimitEnforced") ? 1 : 0;
 
 
-	_window			= new Window(this, 320, 200, 0, 0);
+/*kL	_window			= new Window(this, 320, 200, 0, 0);
 	_btnOk			= new TextButton(40, 12, 16, 180);
 	_txtTitle		= new Text(280, 16, 16, 8);
 	_txtItem		= new Text(180, 9, 16, 24);
@@ -89,7 +89,25 @@ DebriefingState::DebriefingState(Game* game)
 	_txtRating		= new Text(120, 9, 64, 180);
 	_lstStats		= new TextList(280, 80, 16, 32);
 	_lstRecovery	= new TextList(280, 80, 16, 32);
+	_lstTotal		= new TextList(280, 9, 16, 12); */
+
+	_window			= new Window(this, 320, 200, 0, 0);
+
+	_txtTitle		= new Text(280, 16, 16, 8);
+
 	_lstTotal		= new TextList(280, 9, 16, 12);
+
+	_txtItem		= new Text(180, 9, 16, 24);
+	_txtQuantity	= new Text(60, 9, 200, 24);
+	_txtScore		= new Text(55, 9, 260, 24);
+
+	_lstStats		= new TextList(280, 80, 16, 32);
+	_lstRecovery	= new TextList(280, 80, 16, 32);
+
+	_txtRecovery	= new Text(180, 9, 16, 60);
+
+	_btnOk			= new TextButton(42, 14, 16, 178);
+	_txtRating		= new Text(120, 9, 64, 180);
 
 
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());

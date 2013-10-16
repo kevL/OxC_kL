@@ -82,9 +82,10 @@ UfoDetectedState::UfoDetectedState(Game* game, Ufo* ufo, GeoscapeState* state, b
 //kL	_btnCancel		= new TextButton(200, 12, 28, 144);
 	_txtHyperwave	= new Text(214, 16, 21, 44);
 	_txtUfo			= new Text(207, 16, 28, 56);
-	_txtDetected	= new Text(100, 8, 28, 72);
+//kL	_txtDetected	= new Text(100, 8, 28, 72);
+	_txtDetected	= new Text(100, 8, 28, 73);				// kL
 //kL	_lstInfo		= new TextList(207, 32, 28, 82);
-	_lstInfo		= new TextList(207, 33, 28, 84);		// kL
+	_lstInfo		= new TextList(207, 33, 28, 85);		// kL
 	_lstInfo2		= new TextList(207, 32, 28, 96);
 
 	_btnCentre		= new TextButton(200, 14, 28, 126);		// kL
