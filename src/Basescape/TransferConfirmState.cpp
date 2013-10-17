@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "TransferConfirmState.h"
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
@@ -28,6 +29,7 @@
 #include "../Savegame/Base.h"
 #include "TransferItemsState.h"
 
+
 namespace OpenXcom
 {
 
@@ -37,19 +39,31 @@ namespace OpenXcom
  * @param base Pointer to the destination base.
  * @param state Pointer to the Transfer state.
  */
-TransferConfirmState::TransferConfirmState(Game *game, Base *base, TransferItemsState *state) : State(game), _base(base), _state(state)
+TransferConfirmState::TransferConfirmState(Game* game, Base* base, TransferItemsState* state)
+	:
+		State(game),
+		_base(base),
+		_state(state)
 {
 	_screen = false;
 
-	// Create objects
-	_window = new Window(this, 320, 80, 0, 60);
-	_btnCancel = new TextButton(128, 16, 176, 115);
-	_btnOk = new TextButton(128, 16, 16, 115);
-	_txtTitle = new Text(310, 16, 5, 75);
-	_txtCost = new Text(60, 16, 110, 95);
-	_txtTotal = new Text(100, 16, 170, 95);
 
-	// Set palette
+	_window		= new Window(this, 320, 80, 0, 60);
+
+//kL	_txtTitle	= new Text(310, 16, 5, 75);
+	_txtTitle	= new Text(310, 16, 5, 72);				// kL
+
+//kL	_txtCost	= new Text(60, 16, 110, 95);
+//kL	_txtTotal	= new Text(100, 16, 170, 95);
+	_txtCost	= new Text(60, 16, 110, 93);			// kL
+	_txtTotal	= new Text(100, 16, 170, 93);			// kL
+
+//kL	_btnOk		= new TextButton(128, 16, 16, 115);
+//kL	_btnCancel	= new TextButton(128, 16, 176, 115);
+	_btnCancel	= new TextButton(144, 16, 16, 115);		// kL
+	_btnOk		= new TextButton(144, 16, 163, 115);	// kL
+
+
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
 
 	add(_window);
@@ -61,19 +75,19 @@ TransferConfirmState::TransferConfirmState(Game *game, Base *base, TransferItems
 
 	centerAllSurfaces();
 
-	// Set up objects
+
 	_window->setColor(Palette::blockOffset(13)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 
 	_btnCancel->setColor(Palette::blockOffset(15)+6);
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
-	_btnCancel->onMouseClick((ActionHandler)&TransferConfirmState::btnCancelClick);
-	_btnCancel->onKeyboardPress((ActionHandler)&TransferConfirmState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnCancel->onMouseClick((ActionHandler)& TransferConfirmState::btnCancelClick);
+	_btnCancel->onKeyboardPress((ActionHandler)& TransferConfirmState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_btnOk->setColor(Palette::blockOffset(15)+6);
 	_btnOk->setText(tr("STR_OK"));
-	_btnOk->onMouseClick((ActionHandler)&TransferConfirmState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&TransferConfirmState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
+	_btnOk->onMouseClick((ActionHandler)& TransferConfirmState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)& TransferConfirmState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
@@ -100,7 +114,7 @@ TransferConfirmState::~TransferConfirmState()
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void TransferConfirmState::btnCancelClick(Action *)
+void TransferConfirmState::btnCancelClick(Action* )
 {
 	_game->popState();
 }
@@ -109,7 +123,7 @@ void TransferConfirmState::btnCancelClick(Action *)
  * Completes the transfer.
  * @param action Pointer to an action.
  */
-void TransferConfirmState::btnOkClick(Action *)
+void TransferConfirmState::btnOkClick(Action* )
 {
 	_state->completeTransfer();
 	_game->popState();

@@ -1693,6 +1693,10 @@ void BattlescapeGame::primaryAction(const Position& pos)
 
 //kL						setupCursor();
 						// kL_note: might need to put a refresh (redraw/blit) cursor here; else it 'sticks' for a moment at its previous position.
+//						_parentState->getMap()->refreshSelectorPosition();			// kL
+
+//						getMap()->setCursorType(CT_NONE);							// kL
+						_parentState->getGame()->getCursor()->setVisible(false);	// kL
 					}
 
 					if (builtinpsi)

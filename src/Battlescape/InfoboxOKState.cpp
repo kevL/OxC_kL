@@ -78,7 +78,6 @@ InfoboxOKState::InfoboxOKState(Game *game, const std::wstring &msg) : State(game
  */
 InfoboxOKState::~InfoboxOKState()
 {
-
 }
 
 /**
