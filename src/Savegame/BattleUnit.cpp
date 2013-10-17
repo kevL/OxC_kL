@@ -92,27 +92,33 @@ BattleUnit::BattleUnit(Soldier* soldier, UnitFaction faction)
 		_turretType(-1),
 		_hidingForTurn(false)
 {
-	Log(LOG_INFO) << "Create BattleUnit 1";
+	Log(LOG_INFO) << "Create BattleUnit 1 : soldier";
 
-	_name = soldier->getName();
-	_id = soldier->getId();
-	_type = "SOLDIER";
-	_rank = soldier->getRankString();
-	_stats = *soldier->getCurrentStats();
-	_standHeight = soldier->getRules()->getStandHeight();
-	_kneelHeight = soldier->getRules()->getKneelHeight();
-	_floatHeight = soldier->getRules()->getFloatHeight();
-	_deathSound = 0; // this one is hardcoded
-	_aggroSound = -1;
-	_moveSound = -1; // this one is hardcoded
-	_intelligence = 2;
-	_aggression = 1;
-	_specab = SPECAB_NONE;
-	_armor = soldier->getArmor();
-	_stats += *_armor->getStats();	// armors may modify effective stats
-	_loftempsSet = _armor->getLoftempsSet();
-	_gender = soldier->getGender();
-	_faceDirection = -1;
+	_name			= soldier->getName();
+	_id				= soldier->getId();
+	_type			= "SOLDIER";
+	_rank			= soldier->getRankString();
+	_stats			= *soldier->getCurrentStats();
+
+/*	if (faction == FACTION_HOSTILE)
+	{
+		adjustStats(diff);
+	} */ // kL stuff. from 2nd cTor below; trying to resolve no stat increase per difficulty on reloading a BattleSave...
+
+	_standHeight	= soldier->getRules()->getStandHeight();
+	_kneelHeight	= soldier->getRules()->getKneelHeight();
+	_floatHeight	= soldier->getRules()->getFloatHeight();
+	_deathSound		= 0; // this one is hardcoded
+	_aggroSound		= -1;
+	_moveSound		= -1; // this one is hardcoded
+	_intelligence	= 2;
+	_aggression		= 1;
+	_specab			= SPECAB_NONE;
+	_armor			= soldier->getArmor();
+	_stats			+= *_armor->getStats();	// armors may modify effective stats
+	_loftempsSet	= _armor->getLoftempsSet();
+	_gender			= soldier->getGender();
+	_faceDirection	= -1;
 //	_spinPhase = -1;	// kL
 
 	int rankbonus = 0;
@@ -126,13 +132,13 @@ BattleUnit::BattleUnit(Soldier* soldier, UnitFaction faction)
 		default:				rankbonus =	0;	break;
 	}
 
-	_value = 20 + soldier->getMissions() + rankbonus;
+	_value		= 20 + soldier->getMissions() + rankbonus;
 
-	_tu = _stats.tu;
-	_energy = _stats.stamina;
-	_health = _stats.health;
-	_morale = 100;
-	_stunlevel = 0;
+	_tu			= _stats.tu;
+	_energy		= _stats.stamina;
+	_health		= _stats.health;
+	_morale		= 100;
+	_stunlevel	= 0;
 
 	_currentArmor[SIDE_FRONT]	= _armor->getFrontArmor();
 	_currentArmor[SIDE_LEFT]	= _armor->getSideArmor();
@@ -200,40 +206,40 @@ BattleUnit::BattleUnit(Unit* unit, UnitFaction faction, int id, Armor* armor, in
 		_turretType(-1),
 		_hidingForTurn(false)
 {
-	Log(LOG_INFO) << "Create BattleUnit 2";
+	Log(LOG_INFO) << "Create BattleUnit 2 : alien";
 
-	_type = unit->getType();
-	_rank = unit->getRank();
-	_race = unit->getRace();
-	_stats = *unit->getStats();
+	_type	= unit->getType();
+	_rank	= unit->getRank();
+	_race	= unit->getRace();
+	_stats	= *unit->getStats();
 
 	if (faction == FACTION_HOSTILE)
 	{
 		adjustStats(diff);
 	}
 
-	_standHeight = unit->getStandHeight();
-	_kneelHeight = unit->getKneelHeight();
-	_floatHeight = unit->getFloatHeight();
-	_loftempsSet = _armor->getLoftempsSet();
-	_deathSound = unit->getDeathSound();
-	_aggroSound = unit->getAggroSound();
-	_moveSound = unit->getMoveSound();
-	_intelligence = unit->getIntelligence();
-	_aggression = unit->getAggression();
-	_specab = (SpecialAbility) unit->getSpecialAbility();
-	_zombieUnit = unit->getZombieUnit();
-	_spawnUnit = unit->getSpawnUnit();
-	_value = unit->getValue();
-	_gender = GENDER_MALE;
-	_faceDirection = -1;
-	_stats += *_armor->getStats();	// armors may modify effective stats
+	_standHeight	= unit->getStandHeight();
+	_kneelHeight	= unit->getKneelHeight();
+	_floatHeight	= unit->getFloatHeight();
+	_loftempsSet	= _armor->getLoftempsSet();
+	_deathSound		= unit->getDeathSound();
+	_aggroSound		= unit->getAggroSound();
+	_moveSound		= unit->getMoveSound();
+	_intelligence	= unit->getIntelligence();
+	_aggression		= unit->getAggression();
+	_specab			= (SpecialAbility) unit->getSpecialAbility();
+	_zombieUnit		= unit->getZombieUnit();
+	_spawnUnit		= unit->getSpawnUnit();
+	_value			= unit->getValue();
+	_gender			= GENDER_MALE;
+	_faceDirection	= -1;
+	_stats			+= *_armor->getStats();	// armors may modify effective stats
 
-	_tu = _stats.tu;
-	_energy = _stats.stamina;
-	_health = _stats.health;
-	_morale = 100;
-	_stunlevel = 0;
+	_tu			= _stats.tu;
+	_energy		= _stats.stamina;
+	_health		= _stats.health;
+	_morale		= 100;
+	_stunlevel	= 0;
 
 	_currentArmor[SIDE_FRONT]	= _armor->getFrontArmor();
 	_currentArmor[SIDE_LEFT]	= _armor->getSideArmor();
@@ -353,17 +359,13 @@ YAML::Node BattleUnit::save() const
 	for (int i = 0; i < 5; i++) node["armor"].push_back(_currentArmor[i]);
 	for (int i = 0; i < 6; i++) node["fatalWounds"].push_back(_fatalWounds[i]);
 
-	if (getCurrentAIState())
-		node["AI"]				= getCurrentAIState()->save();
-	if (_originalFaction != _faction)
-		node["originalFaction"] = (int)_originalFaction;
-	if (_kills)
-		node["kills"]			= _kills;
-	if (_faction == FACTION_PLAYER && _dontReselect)
-		node["dontReselect"]	= _dontReselect;
-	node["specab"] = (int)_specab;
-	if (!_spawnUnit.empty())
-		node["spawnUnit"] = _spawnUnit;
+	if (getCurrentAIState()) node["AI"]							= getCurrentAIState()->save();
+	if (_originalFaction != _faction) node["originalFaction"]	= (int)_originalFaction;
+	if (_kills) node["kills"]									= _kills;
+	if (_faction == FACTION_PLAYER
+		&& _dontReselect) node["dontReselect"]					= _dontReselect;
+	node["specab"]												= (int)_specab;
+	if (!_spawnUnit.empty()) node["spawnUnit"]					= _spawnUnit;
 
 	return node;
 }
@@ -1477,6 +1479,7 @@ void BattleUnit::clearVisibleTiles()
  */
 double BattleUnit::getFiringAccuracy(BattleActionType actionType, BattleItem *item)
 {
+	Log(LOG_INFO) << "BattleUnit::getFiringAccuracy(), unitID " << getId() << " /  getStats()->firing" << getStats()->firing;
 	double result = (double)(getStats()->firing / 100.0);
 
 	double weaponAcc = item->getRules()->getAccuracySnap();
@@ -2311,6 +2314,9 @@ std::wstring BattleUnit::getName(Language* lang, bool debugAppendId) const
  */
 UnitStats* BattleUnit::getStats()
 {
+	Log(LOG_INFO) << "UnitStats* BattleUnit::getStats(), unitID = " << getId();
+//	adjustStats(3);		// kL, should be gameDifficulty in there <-
+
 	return &_stats;
 }
 
@@ -2763,12 +2769,21 @@ void BattleUnit::adjustStats(const int diff)
 	_stats.tu			+= 4 * diff * _stats.tu / 100;
 	_stats.stamina		+= 4 * diff * _stats.stamina / 100;
 	_stats.reactions	+= 6 * diff * _stats.reactions / 100;
-	_stats.strength		+= 2 * diff * _stats.strength / 100;
+//kL	_stats.strength		+= 2 * diff * _stats.strength / 100;
 	_stats.firing		= (_stats.firing + 6 * diff * _stats.firing / 100) / (diff > 0 ? 1 : 2);
 	_stats.strength		+= 2 * diff * _stats.strength / 100;
 	_stats.melee		+= 4 * diff * _stats.melee / 100;
 	_stats.psiSkill		+= 4 * diff * _stats.psiSkill / 100;
 	_stats.psiStrength	+= 4 * diff * _stats.psiStrength / 100;
+
+	Log(LOG_INFO) << "BattleUnit::adjustStats(), _stats.tu = " << _stats.tu;
+	Log(LOG_INFO) << "BattleUnit::adjustStats(), _stats.stamina = " << _stats.stamina;
+	Log(LOG_INFO) << "BattleUnit::adjustStats(), _stats.reactions = " << _stats.reactions;
+	Log(LOG_INFO) << "BattleUnit::adjustStats(), _stats.firing = " << _stats.firing;
+	Log(LOG_INFO) << "BattleUnit::adjustStats(), _stats.strength = " << _stats.strength;
+	Log(LOG_INFO) << "BattleUnit::adjustStats(), _stats.melee = " << _stats.melee;
+	Log(LOG_INFO) << "BattleUnit::adjustStats(), _stats.psiSkill = " << _stats.psiSkill;
+	Log(LOG_INFO) << "BattleUnit::adjustStats(), _stats.psiStrength = " << _stats.psiStrength;
 }
 
 /**

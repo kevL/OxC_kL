@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "AbandonGameState.h"
 #include <sstream>
 #include "../Engine/Game.h"
@@ -30,6 +31,7 @@
 #include "../Engine/Options.h"
 #include "SaveState.h"
 
+
 namespace OpenXcom
 {
 
@@ -38,7 +40,10 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param origin Game section that originated this state.
  */
-AbandonGameState::AbandonGameState(Game *game, OptionsOrigin origin) : State(game), _origin(origin)
+AbandonGameState::AbandonGameState(Game* game, OptionsOrigin origin)
+	:
+		State(game),
+		_origin(origin)
 {
 	_screen = false;
 
@@ -52,11 +57,15 @@ AbandonGameState::AbandonGameState(Game *game, OptionsOrigin origin) : State(gam
 		x = 52;
 	}
 
-	// Create objects
-	_window = new Window(this, 216, 160, x, 20, POPUP_BOTH);
-	_btnYes = new TextButton(50, 20, x+18, 140);
-	_btnNo = new TextButton(50, 20, x+148, 140);
-	_txtTitle = new Text(206, 15, x+5, 70);
+
+	_window		= new Window(this, 216, 160, x, 20, POPUP_BOTH);
+//kL	_txtTitle	= new Text(206, 15, x + 5, 70);
+	_txtTitle	= new Text(206, 15, x + 5, 71);				// kL
+
+//kL	_btnYes		= new TextButton(50, 20, x + 18, 140);
+//kL	_btnNo		= new TextButton(50, 20, x + 148, 140);
+	_btnNo		= new TextButton(55, 20, x + 18, 137);		// kL
+	_btnYes		= new TextButton(55, 20, x + 143, 137);		// kL
 
 	add(_window);
 	add(_btnYes);
@@ -65,19 +74,19 @@ AbandonGameState::AbandonGameState(Game *game, OptionsOrigin origin) : State(gam
 
 	centerAllSurfaces();
 
-	// Set up objects
+
 	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
 	_btnYes->setColor(Palette::blockOffset(15)-1);
 	_btnYes->setText(tr("STR_YES"));
-	_btnYes->onMouseClick((ActionHandler)&AbandonGameState::btnYesClick);
-	_btnYes->onKeyboardPress((ActionHandler)&AbandonGameState::btnYesClick, (SDLKey)Options::getInt("keyOk"));
+	_btnYes->onMouseClick((ActionHandler)& AbandonGameState::btnYesClick);
+	_btnYes->onKeyboardPress((ActionHandler)& AbandonGameState::btnYesClick, (SDLKey)Options::getInt("keyOk"));
 
 	_btnNo->setColor(Palette::blockOffset(15)-1);
 	_btnNo->setText(tr("STR_NO"));
-	_btnNo->onMouseClick((ActionHandler)&AbandonGameState::btnNoClick);
-	_btnNo->onKeyboardPress((ActionHandler)&AbandonGameState::btnNoClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnNo->onMouseClick((ActionHandler)& AbandonGameState::btnNoClick);
+	_btnNo->onKeyboardPress((ActionHandler)& AbandonGameState::btnNoClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setAlign(ALIGN_CENTER);
@@ -102,11 +111,11 @@ AbandonGameState::~AbandonGameState()
  * Goes back to the Main Menu.
  * @param action Pointer to an action.
  */
-void AbandonGameState::btnYesClick(Action *)
+void AbandonGameState::btnYesClick(Action* )
 {
 	if (Options::getInt("autosave") == 3)
 	{
-		SaveState *ss = new SaveState(_game, _origin, false);
+		SaveState* ss = new SaveState(_game, _origin, false);
 		delete ss;
 	}
 
@@ -118,7 +127,7 @@ void AbandonGameState::btnYesClick(Action *)
  * Closes the window.
  * @param action Pointer to an action.
  */
-void AbandonGameState::btnNoClick(Action *)
+void AbandonGameState::btnNoClick(Action* )
 {
 	_game->popState();
 }

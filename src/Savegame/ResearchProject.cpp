@@ -208,35 +208,37 @@ YAML::Node ResearchProject::save() const
 std::string ResearchProject::getResearchProgress() const
 {
 	float progress = (float)getSpent() / (float)getRules()->getCost();
-	Log(LOG_INFO) << "ResearchProject::getResearchProgress(), progress = " << progress;
+//	Log(LOG_INFO) << "ResearchProject::getResearchProgress(), progress = " << progress;
+//	Log(LOG_INFO) << "ResearchProject::getResearchProgress(), getSpent() = " << getSpent();
+//	Log(LOG_INFO) << "ResearchProject::getResearchProgress(), getRules()->getCost() = " << getRules()->getCost();
 
 	if (getAssigned() == 0)
 	{
-		Log(LOG_INFO) << ". . none assigned.";
+//		Log(LOG_INFO) << ". . none assigned.";
 		return "STR_NONE";
 	}
 	else if (progress < PROGRESS_LIMIT_UNKNOWN) // 0.1f
 	{
-		Log(LOG_INFO) << ". . progress < unknown.";
+//		Log(LOG_INFO) << ". . progress < unknown.";
 		return "STR_UNKNOWN";
 	}
 	else if (progress < PROGRESS_LIMIT_POOR)
 	{
-		Log(LOG_INFO) << ". . . . . . progress < POOR";
+//		Log(LOG_INFO) << ". . . . . . progress < POOR";
 		return "STR_POOR";
 	}
 	else if (progress < PROGRESS_LIMIT_AVERAGE) // 0.25f
 	{
-		Log(LOG_INFO) << ". . . . . . progress < AVERAGE";
+//		Log(LOG_INFO) << ". . . . . . progress < AVERAGE";
 		return "STR_AVERAGE";
 	}
 	else if (progress < PROGRESS_LIMIT_GOOD) // 0.5f
 	{
-		Log(LOG_INFO) << ". . . . . . progress < GOOD";
+//		Log(LOG_INFO) << ". . . . . . progress < GOOD";
 		return "STR_GOOD";
 	}
 
-	Log(LOG_INFO) << ". . . . . . progress = EXCELLENT"; // > 0.75f
+//	Log(LOG_INFO) << ". . . . . . progress = EXCELLENT"; // > 0.75f
 	return "STR_EXCELLENT";
 } // kL_end.
 

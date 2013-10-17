@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "TransferBaseState.h"
 #include <sstream>
 #include "../Engine/Game.h"
@@ -33,6 +34,7 @@
 #include "../Ruleset/RuleRegion.h"
 #include "TransferItemsState.h"
 
+
 namespace OpenXcom
 {
 
@@ -41,18 +43,25 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
  */
-TransferBaseState::TransferBaseState(Game *game, Base *base) : State(game), _base(base), _bases()
+TransferBaseState::TransferBaseState(Game* game, Base* base)
+	:
+		State(game),
+		_base(base),
+		_bases()
 {
-	// Create objects
-	_window = new Window(this, 280, 140, 20, 30);
-	_btnCancel = new TextButton(264, 16, 28, 146);
-	_txtTitle = new Text(270, 16, 25, 38);
-	_txtFunds = new Text(250, 9, 30, 54);
-	_txtName = new Text(130, 16, 28, 64);
-	_txtArea = new Text(130, 16, 160, 64);
-	_lstBases = new TextList(248, 64, 28, 80);
+	_window		= new Window(this, 280, 140, 20, 30);
+	_txtTitle	= new Text(270, 16, 25, 38);
 
-	// Set palette
+	_txtFunds	= new Text(250, 9, 30, 54);
+
+	_txtName	= new Text(130, 16, 28, 64);
+	_txtArea	= new Text(130, 16, 160, 64);
+
+	_lstBases	= new TextList(248, 64, 28, 80);
+
+	_btnCancel	= new TextButton(264, 16, 28, 146);
+
+
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)), Palette::backPos, 16);
 
 	add(_window);
@@ -65,14 +74,14 @@ TransferBaseState::TransferBaseState(Game *game, Base *base) : State(game), _bas
 
 	centerAllSurfaces();
 
-	// Set up objects
+
 	_window->setColor(Palette::blockOffset(13) + 5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 
 	_btnCancel->setColor(Palette::blockOffset(13) + 5);
 	_btnCancel->setText(tr("STR_CANCEL"));
-	_btnCancel->onMouseClick((ActionHandler)&TransferBaseState::btnCancelClick);
-	_btnCancel->onKeyboardPress((ActionHandler)&TransferBaseState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnCancel->onMouseClick((ActionHandler)& TransferBaseState::btnCancelClick);
+	_btnCancel->onKeyboardPress((ActionHandler)& TransferBaseState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(13) + 5);
 	_txtTitle->setBig();
@@ -97,16 +106,16 @@ TransferBaseState::TransferBaseState(Game *game, Base *base) : State(game), _bas
 	_lstBases->setSelectable(true);
 	_lstBases->setBackground(_window);
 	_lstBases->setMargin(2);
-	_lstBases->onMouseClick((ActionHandler)&TransferBaseState::lstBasesClick);
+	_lstBases->onMouseClick((ActionHandler)& TransferBaseState::lstBasesClick);
 
 	int row = 0;
-	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
+	for (std::vector<Base* >::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
 	{
-		if ((*i) != _base)
+		if (*i != _base)
 		{
 			std::wstring area = L""; // Get area
 
-			for (std::vector<Region*>::iterator j = _game->getSavedGame()->getRegions()->begin(); j != _game->getSavedGame()->getRegions()->end(); ++j)
+			for (std::vector<Region* >::iterator j = _game->getSavedGame()->getRegions()->begin(); j != _game->getSavedGame()->getRegions()->end(); ++j)
 			{
 				if ((*j)->getRules()->insideRegion((*i)->getLongitude(), (*i)->getLatitude()))
 				{
@@ -135,7 +144,7 @@ TransferBaseState::~TransferBaseState()
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void TransferBaseState::btnCancelClick(Action *)
+void TransferBaseState::btnCancelClick(Action* )
 {
 	_game->popState();
 }
@@ -144,7 +153,7 @@ void TransferBaseState::btnCancelClick(Action *)
  * Shows the Transfer screen for the selected base.
  * @param action Pointer to an action.
  */
-void TransferBaseState::lstBasesClick(Action *)
+void TransferBaseState::lstBasesClick(Action* )
 {
 	_game->pushState(new TransferItemsState(_game, _base, _bases[_lstBases->getSelectedRow()]));
 }

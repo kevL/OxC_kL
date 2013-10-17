@@ -231,6 +231,8 @@ void SavedGame::getList(TextList* list, Language* lang)
  */
 void SavedGame::load(const std::string& filename, Ruleset* rule)
 {
+	Log(LOG_INFO) << "SavedGame::load()";
+
 	std::string s = Options::getUserFolder() + filename + ".sav";
 
 	std::vector<YAML::Node> file = YAML::LoadAllFromFile(s);
@@ -252,7 +254,9 @@ void SavedGame::load(const std::string& filename, Ruleset* rule)
 	// Get full save data
 	YAML::Node doc = file[1];
 
-	_difficulty				= (GameDifficulty)doc["difficulty"].as<int>(_difficulty);
+	_difficulty = (GameDifficulty)doc["difficulty"].as<int>(_difficulty);
+	Log(LOG_INFO) << "SavedGame::load(), difficulty = " << _difficulty;
+
 	if (doc["rng"]
 		&& !Options::getBool("newSeedOnLoad"))
 	{

@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_ARMOR_H
 #define OPENXCOM_ARMOR_H
 
@@ -23,6 +24,7 @@
 #include <yaml-cpp/yaml.h>
 #include "MapData.h"
 #include "Unit.h"
+
 
 namespace OpenXcom
 {
@@ -36,6 +38,7 @@ class Armor
 {
 private:
 	static const int DAMAGE_TYPES = 10;
+
 	std::string _type, _spriteSheet, _spriteInv, _corpseItem, _storeItem;
 	int _frontArmor, _sideArmor, _rearArmor, _underArmor, _drawingRoutine;
 	MovementType _movementType;
@@ -43,45 +46,48 @@ private:
 	float _damageModifier[DAMAGE_TYPES];
 	std::vector<int> _loftempsSet;
 	UnitStats _stats;
-public:
-	/// Creates a blank armor ruleset.
-	Armor(const std::string &type, std::string spriteSheet, int drawingRoutine, MovementType _movementType = MT_WALK, int size = 1);
-	/// Cleans up the armor ruleset.
-	~Armor();
-	/// Loads the armor data from YAML.
-	void load(const YAML::Node& node);
-	/// Gets the armor's type.
-	std::string getType() const;
-	/// Gets the unit's sprite sheet.
-	std::string getSpriteSheet() const;
-	/// Gets the unit's inventory sprite.
-	std::string getSpriteInventory() const;
-	/// Gets the front armor level.
-	int getFrontArmor() const;
-	/// Gets the side armor level.
-	int getSideArmor() const;
-	/// Gets the rear armor level.
-	int getRearArmor() const;
-	/// Gets the under armor level.
-	int getUnderArmor() const;
-	/// Gets the corpse item.
-	std::string getCorpseItem() const;
-	/// Gets the stores item.
-	std::string getStoreItem() const;
-	/// Gets the battlescape drawing routine ID.
-	int getDrawingRoutine() const;
-	/// Gets whether the armor can fly.
-	MovementType getMovementType() const;
-	/// Gets whether this is a normal or big unit.
-	int getSize() const;
-	/// Gets damage modifier.
-	float getDamageModifier(ItemDamageType dt);
-	/// Gets loftempSet
-	std::vector<int> getLoftempsSet() const;
-	/// Gets the armor's stats.
-	UnitStats *getStats();
-	/// Gets the armor's weight.
-	int getWeight();
+
+	public:
+		/// Creates a blank armor ruleset.
+		Armor(const std::string& type, std::string spriteSheet, int drawingRoutine, MovementType _movementType = MT_WALK, int size = 1);
+		/// Cleans up the armor ruleset.
+		~Armor();
+
+		/// Loads the armor data from YAML.
+		void load(const YAML::Node& node);
+
+		/// Gets the armor's type.
+		std::string getType() const;
+		/// Gets the unit's sprite sheet.
+		std::string getSpriteSheet() const;
+		/// Gets the unit's inventory sprite.
+		std::string getSpriteInventory() const;
+		/// Gets the front armor level.
+		int getFrontArmor() const;
+		/// Gets the side armor level.
+		int getSideArmor() const;
+		/// Gets the rear armor level.
+		int getRearArmor() const;
+		/// Gets the under armor level.
+		int getUnderArmor() const;
+		/// Gets the corpse item.
+		std::string getCorpseItem() const;
+		/// Gets the stores item.
+		std::string getStoreItem() const;
+		/// Gets the battlescape drawing routine ID.
+		int getDrawingRoutine() const;
+		/// Gets whether the armor can fly.
+		MovementType getMovementType() const;
+		/// Gets whether this is a normal or big unit.
+		int getSize() const;
+		/// Gets damage modifier.
+		float getDamageModifier(ItemDamageType dt);
+		/// Gets loftempSet
+		std::vector<int> getLoftempsSet() const;
+		/// Gets the armor's stats.
+		UnitStats* getStats();
+		/// Gets the armor's weight.
+		int getWeight();
 };
 
 }

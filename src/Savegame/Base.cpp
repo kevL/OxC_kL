@@ -1012,8 +1012,8 @@ void Base::removeResearch(ResearchProject* project)
 				}
 
 				// always takes an extra day to complete (and guards vs. potential code-flow bork!)
-				if ((*iter2)->getSpent() < 1)
-					(*iter2)->setSpent(1);
+				if ((*iter2)->getSpent() > (int)cost -1)
+					(*iter2)->setSpent((int)cost -1);
 			}
 		}
 		else if (proj == "STR_FLOATER_NAVIGATOR"
@@ -1095,8 +1095,8 @@ void Base::removeResearch(ResearchProject* project)
 				}
 
 				// always takes an extra day to complete (and guards vs. potential code-flow bork!)
-				if ((*iter2)->getSpent() < 1)
-					(*iter2)->setSpent(1);
+				if ((*iter2)->getSpent() > (int)cost -1)
+					(*iter2)->setSpent((int)cost -1);
 			}
 		}
 		else if (proj == "STR_FLOATER_MEDIC"
@@ -1144,8 +1144,8 @@ void Base::removeResearch(ResearchProject* project)
 				}
 
 				// always takes an extra day to complete (and guards vs. potential code-flow bork!)
-				if ((*iter2)->getSpent() < 1)
-					(*iter2)->setSpent(1);
+				if ((*iter2)->getSpent() > (int)cost -1)
+					(*iter2)->setSpent((int)cost -1);
 			}
 		}
 		else if (proj == "STR_FLOATER_ENGINEER"
@@ -1215,8 +1215,8 @@ void Base::removeResearch(ResearchProject* project)
 				}
 
 				// always takes an extra day to complete (and guards vs. potential code-flow bork!)
-				if ((*iter2)->getSpent() < 1)
-					(*iter2)->setSpent(1);
+				if ((*iter2)->getSpent() > (int)cost -1)
+					(*iter2)->setSpent((int)cost -1);
 			}
 		}
 		else if (proj == "STR_FLOATER_LEADER"
@@ -1292,8 +1292,8 @@ void Base::removeResearch(ResearchProject* project)
 				}
 
 				// always takes an extra day to complete (and guards vs. potential code-flow bork!)
-				if ((*iter2)->getSpent() < 1)
-					(*iter2)->setSpent(1);
+				if ((*iter2)->getSpent() > (int)cost -1)
+					(*iter2)->setSpent((int)cost -1);
 			}
 		}
 		else if (proj == "STR_FLOATER_COMMANDER"
@@ -1364,8 +1364,8 @@ void Base::removeResearch(ResearchProject* project)
 				}
 
 				// always takes an extra day to complete (and guards vs. potential code-flow bork!)
-				if ((*iter2)->getSpent() < 1)
-					(*iter2)->setSpent(1);
+				if ((*iter2)->getSpent() > (int)cost -1)
+					(*iter2)->setSpent((int)cost -1);
 			}
 		}
 		// kL_end.

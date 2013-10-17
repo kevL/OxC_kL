@@ -60,11 +60,13 @@ TransfersState::TransfersState(Game* game, Base* base)
 	_txtQuantity	= new Text(54, 9, 171, 34);				// kL
 	_txtArrivalTime	= new Text(112, 9, 246, 34);			// kL
 
+//	_lstTransfers->setColumns(3, 155, 75, 37);				// kL_TEMP.
+
 //kL	_lstTransfers	= new TextList(273, 112, 14, 50);
-	_lstTransfers	= new TextList(288, 112, 14, 46);		// kL
+	_lstTransfers	= new TextList(288, 120, 0, 45);		// kL
 
 //kL	_btnOk			= new TextButton(288, 16, 16, 166);
-	_btnOk			= new TextButton(288, 16, 16, 168);		// kL
+	_btnOk			= new TextButton(288, 16, 16, 169);		// kL
 
 
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
@@ -105,10 +107,12 @@ TransfersState::TransfersState(Game* game, Base* base)
 
 	_lstTransfers->setColor(Palette::blockOffset(13)+10);
 	_lstTransfers->setArrowColor(Palette::blockOffset(15)+6);
-	_lstTransfers->setColumns(3, 155, 75, 46);
+//kL	_lstTransfers->setColumns(3, 155, 75, 37);
+	_lstTransfers->setColumns(3, 155, 75, 28);		// kL
 	_lstTransfers->setSelectable(true);
 	_lstTransfers->setBackground(_window);
-	_lstTransfers->setMargin(2);
+//kL	_lstTransfers->setMargin(2);
+	_lstTransfers->setMargin(16);	// kL
 
 	for (std::vector<Transfer* >::iterator i = _base->getTransfers()->begin(); i != _base->getTransfers()->end(); ++i)
 	{

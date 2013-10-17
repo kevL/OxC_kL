@@ -16,7 +16,9 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "Armor.h"
+
 
 namespace OpenXcom
 {
@@ -30,21 +32,39 @@ namespace OpenXcom
  * @param movementType The movement type for this armor (walk, fly or slide).
  * @param size The size of the armor. Normally this is 1 (small) or 2 (big).
  */
-Armor::Armor(const std::string &type, std::string spriteSheet, int drawingRoutine, MovementType movementType, int size) : _type(type), _spriteSheet(spriteSheet), _spriteInv(""), _corpseItem(""), _storeItem(""), _frontArmor(0), _sideArmor(0), _rearArmor(0), _underArmor(0), _drawingRoutine(drawingRoutine), _movementType(movementType), _size(size), _weight(6)
+Armor::Armor(const std::string& type, std::string spriteSheet, int drawingRoutine, MovementType movementType, int size)
+	:
+		_type(type),
+		_spriteSheet(spriteSheet),
+		_spriteInv(""),
+		_corpseItem(""),
+		_storeItem(""),
+		_frontArmor(0),
+		_sideArmor(0),
+		_rearArmor(0),
+		_underArmor(0),
+		_drawingRoutine(drawingRoutine),
+		_movementType(movementType),
+		_size(size),
+//kL		_weight(6)
+		_weight(0)		// kL
 {
-	for (int i=0; i < DAMAGE_TYPES; i++)
+	for (int i = 0; i < DAMAGE_TYPES; i++)
+	{
 		_damageModifier[i] = 1.0;
-	_stats.bravery = 0;
-	_stats.firing = 0;
-	_stats.health = 0;
-	_stats.melee = 0;
-	_stats.psiSkill = 0;
-	_stats.psiStrength = 0;
-	_stats.reactions = 0;
-	_stats.stamina = 0;
-	_stats.strength = 0;
-	_stats.tu = 0;
-	_stats.throwing = 0;
+	}
+
+	_stats.bravery		= 0;
+	_stats.firing		= 0;
+	_stats.health		= 0;
+	_stats.melee		= 0;
+	_stats.psiSkill		= 0;
+	_stats.psiStrength	= 0;
+	_stats.reactions	= 0;
+	_stats.stamina		= 0;
+	_stats.strength		= 0;
+	_stats.tu			= 0;
+	_stats.throwing		= 0;
 }
 
 /**
@@ -59,32 +79,36 @@ Armor::~Armor()
  * Loads the armor from a YAML file.
  * @param node YAML node.
  */
-void Armor::load(const YAML::Node &node)
+void Armor::load(const YAML::Node& node)
 {
-	_type = node["type"].as<std::string>(_type);
-	_spriteSheet = node["spriteSheet"].as<std::string>(_spriteSheet);
-	_spriteInv = node["spriteInv"].as<std::string>(_spriteInv);
-	_corpseItem = node["corpseItem"].as<std::string>(_corpseItem);
-	_storeItem = node["storeItem"].as<std::string>(_storeItem);
-	_frontArmor = node["frontArmor"].as<int>(_frontArmor);
-	_sideArmor = node["sideArmor"].as<int>(_sideArmor);
-	_rearArmor = node["rearArmor"].as<int>(_rearArmor);
-	_underArmor = node["underArmor"].as<int>(_underArmor);
-	_drawingRoutine = node["drawingRoutine"].as<int>(_drawingRoutine);
-	_movementType = (MovementType)node["movementType"].as<int>(_movementType);
-	_size = node["size"].as<int>(_size);
-	_weight = node["weight"].as<int>(_weight);
-	_stats = node["stats"].as<UnitStats>(_stats);
-	if (const YAML::Node &dmg = node["damageModifier"])
+	_type			= node["type"].as<std::string>(_type);
+	_spriteSheet	= node["spriteSheet"].as<std::string>(_spriteSheet);
+	_spriteInv		= node["spriteInv"].as<std::string>(_spriteInv);
+	_corpseItem		= node["corpseItem"].as<std::string>(_corpseItem);
+	_storeItem		= node["storeItem"].as<std::string>(_storeItem);
+	_frontArmor		= node["frontArmor"].as<int>(_frontArmor);
+	_sideArmor		= node["sideArmor"].as<int>(_sideArmor);
+	_rearArmor		= node["rearArmor"].as<int>(_rearArmor);
+	_underArmor		= node["underArmor"].as<int>(_underArmor);
+	_drawingRoutine	= node["drawingRoutine"].as<int>(_drawingRoutine);
+	_movementType	= (MovementType)node["movementType"].as<int>(_movementType);
+	_size			= node["size"].as<int>(_size);
+	_weight			= node["weight"].as<int>(_weight);
+	_stats			= node["stats"].as<UnitStats>(_stats);
+
+	if (const YAML::Node& dmg = node["damageModifier"])
 	{
 		for (size_t i = 0; i < dmg.size() && i < DAMAGE_TYPES; ++i)
 		{
 			_damageModifier[i] = dmg[i].as<float>();
 		}
 	}
+
 	_loftempsSet = node["loftempsSet"].as< std::vector<int> >(_loftempsSet);
 	if (node["loftemps"])
+	{
 		_loftempsSet.push_back(node["loftemps"].as<int>());
+	}
 }
 
 /**
@@ -220,7 +244,7 @@ std::vector<int> Armor::getLoftempsSet() const
   * Gets pointer to the armor's stats.
   * @return stats Pointer to the armor's stats.
   */
-UnitStats *Armor::getStats()
+UnitStats* Armor::getStats()
 {
 	return &_stats;
 }
@@ -233,4 +257,5 @@ int Armor::getWeight()
 {
 	return _weight;
 }
+
 }

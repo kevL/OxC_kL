@@ -56,17 +56,17 @@ struct UnitStats
 	public:
 		UnitStats& operator+=(const UnitStats& stats)
 		{
-			tu += stats.tu;
-			stamina += stats.stamina;
-			health += stats.health;
-			bravery += stats.bravery;
-			reactions += stats.reactions;
-			firing += stats.firing;
-			throwing += stats.throwing;
-			strength += stats.strength;
-			psiStrength += stats.psiStrength;
-			psiSkill += stats.psiSkill;
-			melee += stats.melee;
+			tu			+= stats.tu;
+			stamina		+= stats.stamina;
+			health		+= stats.health;
+			bravery		+= stats.bravery;
+			reactions	+= stats.reactions;
+			firing		+= stats.firing;
+			throwing	+= stats.throwing;
+			strength	+= stats.strength;
+			psiStrength	+= stats.psiStrength;
+			psiSkill	+= stats.psiSkill;
+			melee		+= stats.melee;
 
 			return *this;
 		}

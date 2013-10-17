@@ -142,6 +142,8 @@ SavedBattleGame::~SavedBattleGame()
  */
 void SavedBattleGame::load(const YAML::Node& node, Ruleset* rule, SavedGame* savedGame)
 {
+	Log(LOG_INFO) << "SavedBattleGame::load()";
+
 	_mapsize_x			= node["width"].as<int>(_mapsize_x);
 	_mapsize_y			= node["length"].as<int>(_mapsize_y);
 	_mapsize_z			= node["height"].as<int>(_mapsize_z);
@@ -209,6 +211,7 @@ void SavedBattleGame::load(const YAML::Node& node, Ruleset* rule, SavedGame* sav
 	{
 		UnitFaction faction = (UnitFaction)(*i)["faction"].as<int>();
 		int id = (*i)["soldierId"].as<int>();
+
 		BattleUnit* unit;
 		if (id < BattleUnit::MAX_SOLDIER_ID) // Unit is linked to a geoscape soldier
 		{
@@ -223,6 +226,7 @@ void SavedBattleGame::load(const YAML::Node& node, Ruleset* rule, SavedGame* sav
 			// create a new Unit.
 			unit = new BattleUnit(rule->getUnit(type), faction, id, rule->getArmor(armor), savedGame->getDifficulty());
 		}
+		Log(LOG_INFO) << "SavedGame::load(), difficulty = " << savedGame->getDifficulty();
 
 		unit->load(*i);
 		_units.push_back(unit);
@@ -870,7 +874,13 @@ void SavedBattleGame::endTurn()
 	int liveSoldiers, liveAliens;
 	_battleState->getBattleGame()->tallyUnits(liveAliens, liveSoldiers, false);
 
-	if (_turn >= 20 || liveAliens < 2)
+
+	// kL_begin: semi-randomize the Turn20 reveal (and the less than 3 aliens left rule).
+	Uint8 rand = RNG::generate(0, 5);
+	if (_turn > 17 + rand || liveAliens < rand)
+	// kL_end.
+
+//kL	if (_turn >= 20 || liveAliens < 2)
 	{
 		_cheating = true;
 	}
