@@ -61,27 +61,22 @@ Text::~Text()
 }
 
 /**
- * Takes an integer value and formats it as currency,
- * spacing the thousands and adding a $ sign to the front.
- * @param funds The funding value.
+ * Takes an integer value and formats it as number with separators (spacing the thousands).
+ * @param value The value.
  * @return The formatted string.
  */
-std::wstring Text::formatFunding(int funds)
+std::wstring Text::formatNumber(int value, std::wstring currency)
 {
 	// In the future, the whole setlocale thing should be removed from here.
 	// It is inconsistent with the in-game language selection: locale-specific
 	// symbols, such as thousands separators, should be determined by the game
 	// language, not by system locale.
+<<<<<<< HEAD
 	setlocale (LC_MONETARY,""); // see http://www.cplusplus.com/reference/clocale/localeconv/
 	setlocale (LC_CTYPE,""); // this is necessary for mbstowcs to work correctly
 	struct lconv * lc;
-<<<<<<< HEAD
 	lc = localeconv();
-	std::wstring thousands_sep = Language::cpToWstr(lc->mon_thousands_sep);
-=======
-	lc=localeconv();
 	std::wstring thousands_sep = L"\xA0";// Language::cpToWstr(lc->mon_thousands_sep);
->>>>>>> master
 
 	bool negative = false;
 	if (funds < 0)
@@ -90,8 +85,15 @@ std::wstring Text::formatFunding(int funds)
 		funds = -funds;
 	}
 
+=======
+	setlocale(LC_MONETARY, ""); // see http://www.cplusplus.com/reference/clocale/localeconv/
+	setlocale(LC_CTYPE, ""); // this is necessary for mbstowcs to work correctly
+	struct lconv * lc = localeconv();
+	std::wstring thousands_sep = L"\xA0";// Language::cpToWstr(lc->mon_thousands_sep);
+
+>>>>>>> master
 	std::wstringstream ss;
-	ss << funds;
+	ss << value;
 	std::wstring s = ss.str();
 
 	size_t spacer = s.size() - 3;
@@ -100,11 +102,29 @@ std::wstring Text::formatFunding(int funds)
 		s.insert(spacer, thousands_sep);
 		spacer -= 3;
 	}
+<<<<<<< HEAD
 
 	s.insert(0, L"$");
 	if (negative) s.insert(0, L"-");
 
+=======
+	if (!currency.empty())
+	{
+		s.insert((value < 0) ? 1 : 0, currency);
+	}
+>>>>>>> master
 	return s;
+}
+
+/**
+ * Takes an integer value and formats it as currency,
+ * spacing the thousands and adding a $ sign to the front.
+ * @param funds The funding value.
+ * @return The formatted string.
+ */
+std::wstring Text::formatFunding(int funds)
+{
+	return formatNumber(funds, L"$");
 }
 
 /**
@@ -367,12 +387,7 @@ void Text::processText()
 	// Go through the text character by character
 	for (std::wstring::iterator c = s->begin(); c <= s->end(); ++c)
 	{
-<<<<<<< HEAD
-		if (c == s->end() || *c == L'\n' || *c == 2) // End of the line
-=======
-		// End of the line
-		if (c == s->end() || Font::isLinebreak(*c))
->>>>>>> master
+		if (c == s->end() || Font::isLinebreak(*c)) // End of the line
 		{
 			// Add line measurements for alignment later
 			_lineWidth.push_back(width);
@@ -383,16 +398,12 @@ void Text::processText()
 
 			if (c == s->end())
 				break;
+
 			// \x02 marks start of small text
 			else if (*c == 2)
 				font = _small;
 		}
-<<<<<<< HEAD
-		else if (*c == L' ') // Keep track of spaces for wordwrapping
-=======
-		// Keep track of spaces for wordwrapping
-		else if (Font::isSpace(*c))
->>>>>>> master
+		else if (Font::isSpace(*c)) // Keep track of spaces for wordwrapping
 		{
 			space = c;
 			width += font->getCharSize(*c).w;
@@ -535,12 +546,8 @@ void Text::draw()
 					x = getWidth() - _lineWidth[line];
 				break;
 			}
-<<<<<<< HEAD
 
-			if (*c == 2)
-=======
 			if (*c == L'\x02')
->>>>>>> master
 			{
 				font->getSurface()->paletteRestore();
 				font = _small;
