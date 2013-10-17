@@ -1397,7 +1397,7 @@ void DogfightState::btnMinimizeClick(Action* )
 		&& !_craft->isDestroyed()
 		&& !_ufoBreakingOff)
 	{
-		if (_currentDist == STANDOFF_DIST)
+		if (_currentDist >= STANDOFF_DIST)
 		{
 			setMinimized(true);
 

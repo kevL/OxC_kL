@@ -771,7 +771,7 @@ void GeoscapeState::timeAdvance()
 		}
 	}
 
-	_pause = false;
+	_pause = !_dogfightsToBeStarted.empty();
 
 	timeDisplay();
 	_globe->draw();
@@ -1433,10 +1433,9 @@ void GeoscapeState::time30Minutes()
 					{
 						(*i)->getItems()->removeItem(item);
 						(*j)->refuel();
-//						(*j)->setLowFuel(false);	// kL&redv
+						(*j)->setLowFuel(false);
 					}
-					else
-//					if (!(*j)->getLowFuel())		// kL&redv, https://github.com/redv/OpenXcom/commit/17a8c31e0ccb82c2c9a737eb31537816f6350b73
+					else if (!(*j)->getLowFuel())
 					{
 						std::wstring msg = tr("STR_NOT_ENOUGH_ITEM_TO_REFUEL_CRAFT_AT_BASE")
 										   .arg(tr(item))
@@ -1444,17 +1443,10 @@ void GeoscapeState::time30Minutes()
 										   .arg((*i)->getName());
 						popup(new CraftErrorState(_game, this, msg));
 
-						(*j)->setStatus("STR_READY");	// <- kL_note: this looks (potentially) borky!
-
-//						(*j)->setLowFuel(true);			// kL. So try this, and add a line to Craft::refuel()
-
-						// kL&redv_begin:
-/*						if ((*j)->getFuel() > 0)
+						if ((*j)->getFuel() > 0)
 							(*j)->setStatus("STR_READY");
 						else
-						{
 							(*j)->setLowFuel(true);
-						} */ // kL&redv_end.
 					}
 				}
 			}

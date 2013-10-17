@@ -456,13 +456,8 @@ void BattlescapeGame::endTurn()
 	{
 		for (std::vector<BattleItem* >::iterator it = _save->getTiles()[i]->getInventory()->begin(); it != _save->getTiles()[i]->getInventory()->end(); )
 		{
-<<<<<<< HEAD
 			if ((*it)->getRules()->getBattleType() == BT_GRENADE
-				&& (*it)->getExplodeTurn() > 0
-				&& (*it)->getExplodeTurn() <= _save->getTurn())  // it's a grenade to explode now
-=======
-			if ((*it)->getRules()->getBattleType() == BT_GRENADE && (*it)->getExplodeTurn() == 0)  // it's a grenade to explode now
->>>>>>> master
+				&& (*it)->getExplodeTurn() == 0) // it's a grenade to explode now
 			{
 				p.x = _save->getTiles()[i]->getPosition().x * 16 + 8;
 				p.y = _save->getTiles()[i]->getPosition().y * 16 + 8;
@@ -470,6 +465,7 @@ void BattlescapeGame::endTurn()
 
 				statePushNext(new ExplosionBState(this, p, *it, (*it)->getPreviousOwner()));
 				_save->removeItem((*it));
+
 				statePushBack(0);
 
 				return;
@@ -478,6 +474,7 @@ void BattlescapeGame::endTurn()
 			++it;
 		}
 	}
+
 	// check for terrain explosions
 	Tile* t = _save->getTileEngine()->checkForTerrainExplosions();
 	if (t)
@@ -491,15 +488,17 @@ void BattlescapeGame::endTurn()
 
 		return;
 	}
-	
+
 	if (_save->getSide() != FACTION_NEUTRAL)
 	{
-		for (std::vector<BattleItem*>::iterator it = _save->getItems()->begin(); it != _save->getItems()->end(); ++it)
+		for (std::vector<BattleItem* >::iterator it = _save->getItems()->begin(); it != _save->getItems()->end(); ++it)
 		{
-				if (((*it)->getRules()->getBattleType() == BT_GRENADE || (*it)->getRules()->getBattleType() == BT_PROXIMITYGRENADE) && (*it)->getExplodeTurn() > 0)
-				{
-					(*it)->setExplodeTurn((*it)->getExplodeTurn() - 1);
-				}
+			if (((*it)->getRules()->getBattleType() == BT_GRENADE
+				|| (*it)->getRules()->getBattleType() == BT_PROXIMITYGRENADE)
+					&& (*it)->getExplodeTurn() > 0)
+			{
+				(*it)->setExplodeTurn((*it)->getExplodeTurn() - 1);
+			}
 		}
 	}
 
@@ -611,6 +610,8 @@ void BattlescapeGame::checkForCasualties(BattleItem* murderweapon, BattleUnit* m
 		{
 			BattleUnit* victim = *j;
 
+			if (murderer)
+				Log(LOG_INFO) << "BattlescapeGame::checkForCasualties() murderer = " << murderer->getId();
 			Log(LOG_INFO) << "BattlescapeGame::checkForCasualties() victim = " << victim->getId();
 
 			if (murderer)
@@ -690,18 +691,19 @@ void BattlescapeGame::checkForCasualties(BattleItem* murderweapon, BattleUnit* m
 			if (victim->getFaction() != FACTION_NEUTRAL)
 			{
 //kL				int modif = _save->getMoraleModifier(victim);
-//kL				int loserModif = victim->getFaction() == FACTION_HOSTILE ? 100 : _save->getMoraleModifier();
-	//kL			int winnerModif = victim->getFaction() == FACTION_HOSTILE ? _save->getMoraleModifier() : 100;
+//kL				int loseMod = victim->getFaction() == FACTION_HOSTILE ? 100 : _save->getMoraleModifier();
+	//kL			int winMod = victim->getFaction() == FACTION_HOSTILE ? _save->getMoraleModifier() : 100;
 
 				// kL_begin: group morale modifications in checkForCasualties()
 				int modif = 100;
-				if (victim->getFaction() == FACTION_HOSTILE)
-				{
-					modif = _save->getMoraleModifier(victim); // cost for losing a unit on your side
-				}
+//				if (victim->getFaction() == FACTION_HOSTILE)
+//				{
+				modif = _save->getMoraleModifier(victim); // penalty for losing a unit on your side
+//				}
 
-				int loserModif = victim->getFaction() == FACTION_HOSTILE ? _save->getMoraleModifier(0, false) : _save->getMoraleModifier();
-				int winnerModif = victim->getFaction() == FACTION_HOSTILE ? _save->getMoraleModifier() : _save->getMoraleModifier(0, false);
+				// these two are for group bonuses (loseMod mitigates the loss of modif, winMod enhances modif)
+				int loseMod = victim->getFaction() == FACTION_HOSTILE ? _save->getMoraleModifier(0, false) : _save->getMoraleModifier();
+				int winMod = victim->getFaction() == FACTION_HOSTILE ? _save->getMoraleModifier() : _save->getMoraleModifier(0, false);
 				// kL_end.
 
 				for (std::vector<BattleUnit* >::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
@@ -713,7 +715,7 @@ void BattlescapeGame::checkForCasualties(BattleItem* murderweapon, BattleUnit* m
 						{
 							// the losing squad all get a morale loss
 							int bravery = (110 - (*i)->getStats()->bravery) / 10;
-							(*i)->moraleChange(-(modif * 200 * bravery / loserModif / 100));
+							(*i)->moraleChange(-(modif * 200 * bravery / loseMod / 100));
 
 							if (victim->getFaction() == FACTION_HOSTILE
 								&& murderer)
@@ -724,7 +726,7 @@ void BattlescapeGame::checkForCasualties(BattleItem* murderweapon, BattleUnit* m
 						else
 						{
 							// the winning squad all get a morale increase
-							(*i)->moraleChange(10 * winnerModif / 100);
+							(*i)->moraleChange(10 * winMod / 100);
 						}
 					}
 				}
@@ -805,14 +807,9 @@ void BattlescapeGame::handleNonTargetAction()
 		{
 			if (_currentAction.actor->spendTimeUnits(_currentAction.TU))
 			{
-<<<<<<< HEAD
 //kL?				_parentState->warning("STR_GRENADE_IS_ACTIVATED");
-				_currentAction.weapon->setExplodeTurn(_save->getTurn() + _currentAction.value);
-				_parentState->warning("STR_GRENADE_IS_ACTIVATED");		// kL
-=======
-				_parentState->warning("STR_GRENADE_IS_ACTIVATED");
 				_currentAction.weapon->setExplodeTurn(_currentAction.value);
->>>>>>> master
+				_parentState->warning("STR_GRENADE_IS_ACTIVATED");		// kL
 			}
 			else
 			{
@@ -859,13 +856,16 @@ void BattlescapeGame::handleNonTargetAction()
 								voxel.x += 8;voxel.y += 8;voxel.z += 8;
 
 								statePushNext(new ExplosionBState(this, voxel, _currentAction.weapon, _currentAction.actor));
+
 								break;
 							}
 						}
 
 						if (tile->getUnit()
 							&& tile->getUnit() != _currentAction.actor)
+						{
 							break;
+						}
 					}
 				}
 				else
@@ -957,7 +957,7 @@ void BattlescapeGame::handleState()
  * Pushes a state to the front of the queue and starts it.
  * @param bs Battlestate.
  */
-void BattlescapeGame::statePushFront(BattleState *bs)
+void BattlescapeGame::statePushFront(BattleState* bs)
 {
 	_states.push_front(bs);
 	bs->init();
@@ -967,7 +967,7 @@ void BattlescapeGame::statePushFront(BattleState *bs)
  * Pushes a state as the next state after the current one.
  * @param bs Battlestate.
  */
-void BattlescapeGame::statePushNext(BattleState *bs)
+void BattlescapeGame::statePushNext(BattleState* bs)
 {
 	if (_states.empty())
 	{
@@ -984,7 +984,7 @@ void BattlescapeGame::statePushNext(BattleState *bs)
  * Pushes a state to the back.
  * @param bs Battlestate.
  */
-void BattlescapeGame::statePushBack(BattleState *bs)
+void BattlescapeGame::statePushBack(BattleState* bs)
 {
 	if (_states.empty())
 	{
@@ -1324,7 +1324,7 @@ bool BattlescapeGame::checkReservedTU(BattleUnit* bu, int tu, bool justChecking)
 	}
 
 	// check TUs against slowest weapon if we have two weapons
-	BattleItem *slowestWeapon = bu->getMainHandWeapon(false);
+	BattleItem* slowestWeapon = bu->getMainHandWeapon(false);
 	// if the weapon has no autoshot, reserve TUs for snapshot
 	if (bu->getActionTUs(_tuReserved, slowestWeapon) == 0
 		&& _tuReserved == BA_AUTOSHOT)
@@ -1491,24 +1491,15 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* unit)
 							statePushBack(new ProjectileFlyBState(this, ba));
 						}
 					}
-<<<<<<< HEAD
 					else if (ba.weapon->getRules()->getBattleType() == BT_GRENADE)
 					{
-						if (ba.weapon->getExplodeTurn() == 0)
+						if (ba.weapon->getExplodeTurn() == -1)
 						{
-							ba.weapon->setExplodeTurn(_save->getTurn());
+							ba.weapon->setExplodeTurn(0);
 						}
 
 						ba.type = BA_THROW;
 						statePushBack(new ProjectileFlyBState(this, ba));
-=======
-				}
-				else if (ba.weapon->getRules()->getBattleType() == BT_GRENADE)
-				{
-					if (ba.weapon->getExplodeTurn() == -1)
-					{
-						ba.weapon->setExplodeTurn(0);
->>>>>>> master
 					}
 				}
 			}
@@ -1621,6 +1612,7 @@ void BattlescapeGame::primaryAction(const Position& pos)
 		&& _save->getSelectedUnit())
 	{
 		Log(LOG_INFO) << ". . _currentAction.targeting";
+		_currentAction.strafe = false;		// kL
 
 		if (_currentAction.type == BA_LAUNCH)
 		{
@@ -1699,8 +1691,12 @@ void BattlescapeGame::primaryAction(const Position& pos)
 //kL							_currentAction.type = BA_NONE;
 //						}
 
-						setupCursor();
+//kL						setupCursor();
 						// kL_note: might need to put a refresh (redraw/blit) cursor here; else it 'sticks' for a moment at its previous position.
+//						_parentState->getMap()->refreshSelectorPosition();			// kL
+
+//						getMap()->setCursorType(CT_NONE);							// kL
+						_parentState->getGame()->getCursor()->setVisible(false);	// kL
 					}
 
 					if (builtinpsi)
@@ -1714,6 +1710,7 @@ void BattlescapeGame::primaryAction(const Position& pos)
 		else
 		{
 			Log(LOG_INFO) << ". . . . Firing or Throwing";
+//			_currentAction.strafe = false;		// kL
 
 			getMap()->setCursorType(CT_NONE);
 			_parentState->getGame()->getCursor()->setVisible(false);
@@ -1799,6 +1796,8 @@ void BattlescapeGame::secondaryAction(const Position &pos)
 	//  -= turn to or open door =-
 	_currentAction.target = pos;
 	_currentAction.actor = _save->getSelectedUnit();
+	// kL_note: strafe gets turned off in primaryAction() above if "_save->getTileEngine()->distance(_currentAction.actor->getPosition(), pos) > 1)"
+	// not sure why it's not done here as well.
 	_currentAction.strafe = _save->getStrafeSetting() && (SDL_GetModState() & KMOD_CTRL) != 0 && _save->getSelectedUnit()->getTurretType() > -1;
 
 	statePushBack(new UnitTurnBState(this, _currentAction));

@@ -662,7 +662,7 @@ void Inventory::mouseClick(Action* action, State* state)
 						}
 					}
 				}
-				else // Put item in weapon
+				else if (!item->getRules()->getCompatibleAmmo()->empty()) // Put item in weapon
 				{
 					bool wrong = true;
 					for (std::vector<std::string>::iterator i = item->getRules()->getCompatibleAmmo()->begin(); i != item->getRules()->getCompatibleAmmo()->end(); ++i)
@@ -703,6 +703,7 @@ void Inventory::mouseClick(Action* action, State* state)
 						}
 					}
 				}
+				// else swap the item positions?
 			}
 			else
 			{

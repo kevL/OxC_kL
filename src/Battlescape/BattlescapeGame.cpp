@@ -1687,11 +1687,10 @@ void BattlescapeGame::primaryAction(const Position& pos)
 
 //						if (_save->getSelectedUnit()->getFaction() != FACTION_PLAYER)	// kL: do aliens even do primaryActions?
 //						{
-//kL							_currentAction.targeting = false;
-//kL							_currentAction.type = BA_NONE;
+//							_currentAction.targeting = false;
+//							_currentAction.type = BA_NONE;
 //						}
-
-//kL						setupCursor();
+//						setupCursor();
 						// kL_note: might need to put a refresh (redraw/blit) cursor here; else it 'sticks' for a moment at its previous position.
 //						_parentState->getMap()->refreshSelectorPosition();			// kL
 

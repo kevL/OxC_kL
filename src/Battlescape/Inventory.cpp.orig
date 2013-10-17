@@ -515,7 +515,7 @@ void Inventory::mouseClick(Action* action, State* state)
 				{
 					if (SDL_GetModState() & KMOD_CTRL)
 					{
-						RuleInventory *newSlot = _game->getRuleset()->getInventory("STR_GROUND");
+						RuleInventory* newSlot = _game->getRuleset()->getInventory("STR_GROUND");
 
 						std::string warning = "STR_NOT_ENOUGH_SPACE";
 						bool placed = false;
@@ -597,12 +597,8 @@ void Inventory::mouseClick(Action* action, State* state)
 					else
 					{
 						setSelectedItem(item);
-<<<<<<< HEAD
 
-						if (item->getExplodeTurn() > 0)
-=======
 						if (item->getExplodeTurn() >= 0)
->>>>>>> master
 						{
 							_warning->showMessage(_game->getLanguage()->getString("STR_GRENADE_IS_ACTIVATED"));
 						}
@@ -666,7 +662,12 @@ void Inventory::mouseClick(Action* action, State* state)
 						}
 					}
 				}
+<<<<<<< HEAD
 				else // Put item in weapon
+=======
+				// Put item in weapon
+				else if (!item->getRules()->getCompatibleAmmo()->empty())
+>>>>>>> master
 				{
 					bool wrong = true;
 					for (std::vector<std::string>::iterator i = item->getRules()->getCompatibleAmmo()->begin(); i != item->getRules()->getCompatibleAmmo()->end(); ++i)
@@ -707,6 +708,7 @@ void Inventory::mouseClick(Action* action, State* state)
 						}
 					}
 				}
+				// else swap the item positions?
 			}
 			else
 			{
@@ -764,31 +766,18 @@ void Inventory::mouseClick(Action* action, State* state)
 						if (BT_GRENADE == itemType
 							|| BT_PROXIMITYGRENADE == itemType)
 						{
-<<<<<<< HEAD
-							if (0 == item->getExplodeTurn()) // Prime that grenade!
-=======
-							if (item->getExplodeTurn() == -1)
->>>>>>> master
+							if (item->getExplodeTurn() == -1) // Prime that grenade!
 							{
 								if (BT_PROXIMITYGRENADE == itemType)
 								{
-<<<<<<< HEAD
-									_warning->showMessage(_game->getLanguage()->getString("STR_GRENADE_IS_ACTIVATED"));		// kL
-									item->setExplodeTurn(1);
-=======
 									_warning->showMessage(_game->getLanguage()->getString("STR_GRENADE_IS_ACTIVATED"));
 									item->setExplodeTurn(0);
->>>>>>> master
 								}
 								else
 									// kL_note: This is where activation warning for nonProxy preBattle grenades goes...
 									_game->pushState(new PrimeGrenadeState(_game, 0, true, item));
 							}
-<<<<<<< HEAD
-							else item->setExplodeTurn(0); // Unprime the grenade
-=======
-							else item->setExplodeTurn(-1);  // Unprime the grenade
->>>>>>> master
+							else item->setExplodeTurn(-1); // Unprime the grenade
 						}
 					}
 				}
@@ -993,34 +982,14 @@ bool Inventory::fitItem(RuleInventory* newSlot, BattleItem* item, std::string &w
  */
 bool Inventory::canBeStacked(BattleItem* itemA, BattleItem* itemB)
 {
-<<<<<<< HEAD
 	return (itemA != 0 && itemB != 0																	// both items actually exist
 		&& itemA->getRules() == itemB->getRules()														// both items have the same ruleset
 		&& ((!itemA->getAmmoItem() && !itemB->getAmmoItem())											// either they both have no ammo
 			|| (itemA->getAmmoItem() && itemB->getAmmoItem()											// or they both have ammo
 				&& itemA->getAmmoItem()->getRules() == itemB->getAmmoItem()->getRules()					// and the same ammo type
 				&& itemA->getAmmoItem()->getAmmoQuantity() == itemB->getAmmoItem()->getAmmoQuantity()))	// and the same ammo quantity
-		&& itemA->getExplodeTurn() == 0 && itemB->getExplodeTurn() == 0									// and neither is set to explode
+		&& itemA->getExplodeTurn() == -1 && itemB->getExplodeTurn() == -1								// and neither is set to explode
 		&& itemA->getUnit() == 0 && itemB->getUnit() == 0);												// and neither is a corpse or unconscious unit
-=======
-		//both items actually exist
-	return (itemA != 0 && itemB != 0 &&
-		//both items have the same ruleset
-		itemA->getRules() == itemB->getRules() &&
-		// either they both have no ammo
-		((!itemA->getAmmoItem() && !itemB->getAmmoItem()) ||
-		// or they both have ammo
-		(itemA->getAmmoItem() && itemB->getAmmoItem() &&
-		// and the same ammo type
-		itemA->getAmmoItem()->getRules() == itemB->getAmmoItem()->getRules() &&
-		// and the same ammo quantity
-		itemA->getAmmoItem()->getAmmoQuantity() == itemB->getAmmoItem()->getAmmoQuantity())) &&
-		// and neither is set to explode
-		itemA->getExplodeTurn() == -1 && itemB->getExplodeTurn() == -1 &&
-		// and neither is a corpse or unconscious unit
-		itemA->getUnit() == 0 && itemB->getUnit() == 0);
-
->>>>>>> master
 }
 
 }

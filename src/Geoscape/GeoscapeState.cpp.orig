@@ -771,7 +771,7 @@ void GeoscapeState::timeAdvance()
 		}
 	}
 
-	_pause = false;
+	_pause = !_dogfightsToBeStarted.empty();
 
 	timeDisplay();
 	_globe->draw();
@@ -1332,7 +1332,7 @@ bool GeoscapeState::processTerrorSite(TerrorSite* ts) const
 	if (ts->getSecondsRemaining() >= 30 * 60)
 	{
 		ts->setSecondsRemaining(ts->getSecondsRemaining() - 30 * 60);
-		tsProgress = 70;
+		tsProgress = 50;
 	}
 
 	Region* region = _game->getSavedGame()->locateRegion(*ts);
@@ -1433,16 +1433,23 @@ void GeoscapeState::time30Minutes()
 					{
 						(*i)->getItems()->removeItem(item);
 						(*j)->refuel();
+<<<<<<< HEAD
 //						(*j)->setLowFuel(false);	// kL&redv
 					}
 					else
 //					if (!(*j)->getLowFuel())		// kL&redv, https://github.com/redv/OpenXcom/commit/17a8c31e0ccb82c2c9a737eb31537816f6350b73
+=======
+						(*j)->setLowFuel(false);
+					}
+					else if (!(*j)->getLowFuel())
+>>>>>>> master
 					{
 						std::wstring msg = tr("STR_NOT_ENOUGH_ITEM_TO_REFUEL_CRAFT_AT_BASE")
 										   .arg(tr(item))
 										   .arg((*j)->getName(_game->getLanguage()))
 										   .arg((*i)->getName());
 						popup(new CraftErrorState(_game, this, msg));
+<<<<<<< HEAD
 
 						(*j)->setStatus("STR_READY");	// <- kL_note: this looks (potentially) borky!
 
@@ -1455,6 +1462,12 @@ void GeoscapeState::time30Minutes()
 						{
 							(*j)->setLowFuel(true);
 						} */ // kL&redv_end.
+=======
+						if ((*j)->getFuel() > 0)
+							(*j)->setStatus("STR_READY");
+						else
+							(*j)->setLowFuel(true);
+>>>>>>> master
 					}
 				}
 			}
@@ -1831,13 +1844,10 @@ void GeoscapeState::time1Day()
 			{
 				RuleManufacture* rule = _game->getRuleset()->getManufacture(*man);
 				std::vector<std::string> req = rule->getRequirements();
-<<<<<<< HEAD
-				if (rule->getCategory() == "STR_WEAPON"
+				if (newResearch
+					&& rule->getCategory() == "STR_WEAPON"
 					&& std::find(req.begin(), req.end(), newResearch->getName()) != req.end()
 					&& !_game->getSavedGame()->isResearched(req))
-=======
-				if (newResearch && rule->getCategory() == "STR_WEAPON" && std::find(req.begin(), req.end(), newResearch->getName()) != req.end() && !_game->getSavedGame()->isResearched(req))
->>>>>>> master
 				{
 					popup(new ResearchRequiredState(_game, _game->getRuleset()->getItem(rule->getName())));
 
@@ -1882,7 +1892,7 @@ void GeoscapeState::time1Day()
 		if ((*i)->getAvailablePsiLabs() > 0
 			&& Options::getBool("anytimePsiTraining"))
 		{
-			for(std::vector<Soldier*>::const_iterator s = (*i)->getSoldiers()->begin(); s != (*i)->getSoldiers()->end(); ++s)
+			for (std::vector<Soldier*>::const_iterator s = (*i)->getSoldiers()->begin(); s != (*i)->getSoldiers()->end(); ++s)
 				(*s)->trainPsi1Day();
 		}
 	}
@@ -1895,6 +1905,7 @@ void GeoscapeState::time1Day()
 			if ((*k)->getRules()->insideRegion((*b)->getLongitude(), (*b)->getLatitude()))
 			{
 				(*k)->addActivityAlien(5);
+
 				break;
 			}
 		}
@@ -1904,6 +1915,7 @@ void GeoscapeState::time1Day()
 			if ((*k)->getRules()->insideCountry((*b)->getLongitude(), (*b)->getLatitude()))
 			{
 				(*k)->addActivityAlien(5);
+
 				break;
 			}
 		}
