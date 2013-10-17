@@ -1245,6 +1245,7 @@ bool BattlescapeState::playableUnitSelected()
 void BattlescapeState::updateSoldierInfo()
 {
 	BattleUnit* battleUnit = _save->getSelectedUnit();
+	Log(LOG_INFO) << "BattlescapeState::updateSoldierInfo(), unitID = " << _save->getSelectedUnit()->getId();
 
 	for (int i = 0; i < VISIBLE_MAX; ++i)
 	{
@@ -1294,7 +1295,9 @@ void BattlescapeState::updateSoldierInfo()
 	}
 
 	_numTimeUnits->setValue(battleUnit->getTimeUnits());
+	Log(LOG_INFO) << ". . getTimeUnits() = " << battleUnit->getTimeUnits();
 	_barTimeUnits->setMax(battleUnit->getStats()->tu);
+	Log(LOG_INFO) << ". . getStats()->tu = " << battleUnit->getStats()->tu;
 	_barTimeUnits->setValue(battleUnit->getTimeUnits());
 	_numEnergy->setValue(battleUnit->getEnergy());
 	_barEnergy->setMax(battleUnit->getStats()->stamina);

@@ -53,9 +53,21 @@ struct UnitStats
 	psiSkill,
 	melee;
 
+//	http://courses.cms.caltech.edu/cs11/material/cpp/donnie/cpp-ops.html
+/*  MyClass& MyClass::operator=(const MyClass &rhs) {
+
+    // Only do assignment if RHS is a different object from this.
+    if (this != &rhs) {
+      ... // Deallocate, allocate new space, copy values...
+    }
+
+    return *this;
+  } */
 	public:
 		UnitStats& operator+=(const UnitStats& stats)
 		{
+//			if (this != &stats)	// kL
+//			{	// kL
 			tu			+= stats.tu;
 			stamina		+= stats.stamina;
 			health		+= stats.health;
@@ -67,6 +79,7 @@ struct UnitStats
 			psiStrength	+= stats.psiStrength;
 			psiSkill	+= stats.psiSkill;
 			melee		+= stats.melee;
+//			}	// kL
 
 			return *this;
 		}

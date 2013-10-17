@@ -213,7 +213,7 @@ BattleUnit::BattleUnit(Unit* unit, UnitFaction faction, int id, Armor* armor, in
 	_race	= unit->getRace();
 	_stats	= *unit->getStats();
 
-	if (faction == FACTION_HOSTILE)
+//	if (faction == FACTION_HOSTILE)
 	{
 		adjustStats(diff);
 	}
@@ -2776,6 +2776,7 @@ void BattleUnit::adjustStats(const int diff)
 	_stats.psiSkill		+= 4 * diff * _stats.psiSkill / 100;
 	_stats.psiStrength	+= 4 * diff * _stats.psiStrength / 100;
 
+	Log(LOG_INFO) << "BattleUnit::adjustStats(), unitID = " << getId();
 	Log(LOG_INFO) << "BattleUnit::adjustStats(), _stats.tu = " << _stats.tu;
 	Log(LOG_INFO) << "BattleUnit::adjustStats(), _stats.stamina = " << _stats.stamina;
 	Log(LOG_INFO) << "BattleUnit::adjustStats(), _stats.reactions = " << _stats.reactions;
