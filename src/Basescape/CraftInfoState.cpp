@@ -61,7 +61,7 @@ CraftInfoState::CraftInfoState(Game* game, Base* base, size_t craft)
 	_window		= new Window(this, 320, 200, 0, 0, POPUP_BOTH);
 
 //kL	_edtCraft	= new TextEdit(160, 16, 80, 8);
-	_edtCraft	= new TextEdit(160, 16, 80, 10);			// kL
+	_edtCraft	= new TextEdit(160, 16, 80, 10);		// kL
 
 //kL	_txtDamage	= new Text(82, 16, 14, 24);
 //kL	_txtFuel	= new Text(82, 16, 228, 24);

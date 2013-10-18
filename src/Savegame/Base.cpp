@@ -393,17 +393,18 @@ bool Base::detect(Target* target) const
 {
 	int chance = 0;
 	double distance = getDistance(target);
-	for (std::vector<BaseFacility* >::const_iterator i = _facilities.begin(); i != _facilities.end(); ++i)
+
+	for (std::vector<BaseFacility* >::const_iterator f = _facilities.begin(); f != _facilities.end(); ++f)
 	{
-		if ((*i)->getBuildTime() == 0
-			&& (*i)->getRules()->getRadarRange() * (1 / 60.0) * (M_PI / 180) >= distance)
+		if ((*f)->getBuildTime() == 0
+			&& (double)(*f)->getRules()->getRadarRange() * (1.0 / 60.0) * (M_PI / 180.0) >= distance)
 		{
-			if ((*i)->getRules()->isHyperwave())
+			if ((*f)->getRules()->isHyperwave())
 			{
 				return true;
 			}
 
-			chance += (*i)->getRules()->getRadarChance();
+			chance += (*f)->getRules()->getRadarChance();
 		}
 	}
 
@@ -1390,8 +1391,8 @@ void Base::removeProduction(Production* p)
 }
 
 /**
- * Get the list of Base Production's
- * @return the list of Base Production's
+ * Get the list of Base Productions
+ * @return the list of Base Productions
  */
 const std::vector<Production* >& Base::getProductions() const
 {
@@ -1399,16 +1400,14 @@ const std::vector<Production* >& Base::getProductions() const
 }
 
 /**
- * Returns whether or not this base
- * is equipped with hyper-wave
- * detection facilities.
+ * Returns whether or not this base is equipped with hyper-wave detection facilities.
  */
 bool Base::getHyperDetection() const
 {
-	for (std::vector<BaseFacility* >::const_iterator i = _facilities.begin(); i != _facilities.end(); ++i)
+	for (std::vector<BaseFacility* >::const_iterator f = _facilities.begin(); f != _facilities.end(); ++f)
 	{
-		if ((*i)->getBuildTime() == 0
-			&& (*i)->getRules()->isHyperwave())
+		if ((*f)->getBuildTime() == 0
+			&& (*f)->getRules()->isHyperwave())
 		{
 			return true;
 		}		
@@ -1418,18 +1417,17 @@ bool Base::getHyperDetection() const
 }
 
 /**
- * Returns the total amount of Psi Lab Space
- * available in the base.
+ * Returns the total amount of Psi Lab Space available in the base.
  * @return Psi Lab space.
  */
 int Base::getAvailablePsiLabs() const
 {
 	int total = 0;
-	for (std::vector<BaseFacility* >::const_iterator i = _facilities.begin(); i != _facilities.end(); ++i)
+	for (std::vector<BaseFacility* >::const_iterator f = _facilities.begin(); f != _facilities.end(); ++f)
 	{
-		if ((*i)->getBuildTime() == 0)
+		if ((*f)->getBuildTime() == 0)
 		{
-			total += (*i)->getRules()->getPsiLaboratories();
+			total += (*f)->getRules()->getPsiLaboratories();
 		}
 	}
 
@@ -1437,8 +1435,7 @@ int Base::getAvailablePsiLabs() const
 }
 
 /**
- * Returns the total amount of used
- * Psi Lab Space in the base.
+ * Returns the total amount of used Psi Lab Space in the base.
  * @return used Psi Lab space.
  */
 int Base::getUsedPsiLabs() const
@@ -1456,8 +1453,7 @@ int Base::getUsedPsiLabs() const
 }
 
 /**
- * Returns the total amount of used 
- * Containment Space in the base.
+ * Returns the total amount of used Containment Space in the base.
  * @return Containment Lab space.
  */
 int Base::getUsedContainment() const
@@ -1499,8 +1495,7 @@ int Base::getUsedContainment() const
 }
 
 /**
- * Returns the total amount of Containment Space
- * available in the base.
+ * Returns the total amount of Containment Space available in the base.
  * @return Containment Lab space.
  */
 int Base::getAvailableContainment() const

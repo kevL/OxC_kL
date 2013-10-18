@@ -1474,6 +1474,7 @@ void GeoscapeState::time30Minutes()
 					if ((*k)->getRules()->insideRegion((*u)->getLongitude(), (*u)->getLatitude()))
 					{
 						(*k)->addActivityAlien(points); // one point per UFO in-flight per half hour
+
 						break;
 					}
 				}
@@ -1485,6 +1486,7 @@ void GeoscapeState::time30Minutes()
 					if ((*k)->getRules()->insideCountry((*u)->getLongitude(), (*u)->getLatitude()))
 					{
 						(*k)->addActivityAlien(points); // one point per UFO in-flight per half hour
+
 						break;
 					}
 				}
@@ -1506,8 +1508,12 @@ void GeoscapeState::time30Minutes()
 
 						for (std::vector<Craft* >::iterator c = (*b)->getCrafts()->begin(); c != (*b)->getCrafts()->end() && !detected; ++c)
 						{
-							if ((*c)->getLongitude() == (*b)->getLongitude() && (*c)->getLatitude() == (*b)->getLatitude() && (*c)->getDestination() == 0)
+							if ((*c)->getLongitude() == (*b)->getLongitude()
+								&& (*c)->getLatitude() == (*b)->getLatitude()
+								&& (*c)->getDestination() == 0)
+							{
 								continue;
+							}
 
 							if ((*c)->detect(*u))
 							{
@@ -1521,7 +1527,7 @@ void GeoscapeState::time30Minutes()
 						(*u)->setDetected(true);
 
 //						timerReset();	// kL. Done in UfoDetectedState
-						popup(new UfoDetectedState(_game, (*u), this, true, (*u)->getHyperDetected()));
+						popup(new UfoDetectedState(_game, *u, this, true, (*u)->getHyperDetected()));
 					}
 //					Log(LOG_INFO) << ". . . . . . . not Detected done";
 				}

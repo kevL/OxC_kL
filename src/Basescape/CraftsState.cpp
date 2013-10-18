@@ -53,7 +53,8 @@ CraftsState::CraftsState(Game* game, Base* base)
 //kL	_txtTitle	= new Text(298, 16, 16, 8);
 	_txtTitle	= new Text(300, 16, 10, 8);		// kL
 
-	_txtBase	= new Text(298, 16, 16, 24);
+//kL	_txtBase	= new Text(298, 16, 16, 24);
+	_txtBase	= new Text(298, 16, 16, 25);	// kL
 
 //kL	_txtName	= new Text(94, 9, 16, 40);
 //kL	_txtStatus	= new Text(50, 9, 110, 40);

@@ -16,9 +16,11 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "BaseFacility.h"
 #include "../Ruleset/RuleBaseFacility.h"
 #include "Base.h"
+
 
 namespace OpenXcom
 {
@@ -28,7 +30,14 @@ namespace OpenXcom
  * @param rules Pointer to ruleset.
  * @param base Pointer to base of origin.
  */
-BaseFacility::BaseFacility(RuleBaseFacility *rules, Base *base) : _rules(rules), _base(base), _x(-1), _y(-1), _buildTime(0), _craftForDrawing(0)
+BaseFacility::BaseFacility(RuleBaseFacility* rules, Base* base)
+	:
+		_rules(rules),
+		_base(base),
+		_x(-1),
+		_y(-1),
+		_buildTime(0),
+		_craftForDrawing(0)
 {
 }
 
@@ -43,10 +52,11 @@ BaseFacility::~BaseFacility()
  * Loads the base facility from a YAML file.
  * @param node YAML node.
  */
-void BaseFacility::load(const YAML::Node &node)
+void BaseFacility::load(const YAML::Node& node)
 {
 	_x = node["x"].as<int>(_x);
 	_y = node["y"].as<int>(_y);
+
 	_buildTime = node["buildTime"].as<int>(_buildTime);
 }
 
@@ -57,11 +67,14 @@ void BaseFacility::load(const YAML::Node &node)
 YAML::Node BaseFacility::save() const
 {
 	YAML::Node node;
-	node["type"] = _rules->getType();
-	node["x"] = _x;
-	node["y"] = _y;
+
+	node["type"]	= _rules->getType();
+	node["x"]		= _x;
+	node["y"]		= _y;
+
 	if (_buildTime != 0)
 		node["buildTime"] = _buildTime;
+
 	return node;
 }
 
@@ -69,7 +82,7 @@ YAML::Node BaseFacility::save() const
  * Returns the ruleset for the base facility's type.
  * @return Pointer to ruleset.
  */
-RuleBaseFacility *BaseFacility::getRules() const
+RuleBaseFacility* BaseFacility::getRules() const
 {
 	return _rules;
 }
@@ -143,9 +156,8 @@ void BaseFacility::build()
 }
 
 /**
- * Returns if this facility is currently being
- * used by its base.
- * @return True if it's under use, False otherwise.
+ * Returns if this facility is currently being used by its base.
+ * @return, True if it's under use, False otherwise.
  */
 bool BaseFacility::inUse() const
 {
@@ -153,20 +165,28 @@ bool BaseFacility::inUse() const
 	{
 		return false;
 	}
-	return ((_rules->getPersonnel() > 0 && _base->getAvailableQuarters() - _rules->getPersonnel() < _base->getUsedQuarters()) ||
-			(_rules->getStorage() > 0 && _base->getAvailableStores() - _rules->getStorage() < _base->getUsedStores()) ||
-			(_rules->getLaboratories() > 0 && _base->getAvailableLaboratories() - _rules->getLaboratories() < _base->getUsedLaboratories()) ||
-			(_rules->getWorkshops() > 0 && _base->getAvailableWorkshops() - _rules->getWorkshops() < _base->getUsedWorkshops()) ||
-			(_rules->getCrafts() > 0 && _base->getAvailableHangars() - _rules->getCrafts() < _base->getUsedHangars()) ||
-			(_rules->getPsiLaboratories() > 0 && _base->getAvailablePsiLabs() - _rules->getPsiLaboratories() < _base->getUsedPsiLabs()) ||
-			(_rules->getAliens() > 0 && _base->getAvailableContainment() - _rules->getAliens() < _base->getUsedContainment()));
+
+	return (_rules->getPersonnel() > 0
+			&& _base->getAvailableQuarters() - _rules->getPersonnel() < _base->getUsedQuarters())
+		|| (_rules->getStorage() > 0
+			&& _base->getAvailableStores() - _rules->getStorage() < _base->getUsedStores())
+		|| (_rules->getLaboratories() > 0
+			&& _base->getAvailableLaboratories() - _rules->getLaboratories() < _base->getUsedLaboratories())
+		|| (_rules->getWorkshops() > 0
+			&& _base->getAvailableWorkshops() - _rules->getWorkshops() < _base->getUsedWorkshops())
+		|| (_rules->getCrafts() > 0
+			&& _base->getAvailableHangars() - _rules->getCrafts() < _base->getUsedHangars())
+		|| (_rules->getPsiLaboratories() > 0
+			&& _base->getAvailablePsiLabs() - _rules->getPsiLaboratories() < _base->getUsedPsiLabs())
+		|| (_rules->getAliens() > 0
+			&& _base->getAvailableContainment() - _rules->getAliens() < _base->getUsedContainment());
 }
 
 /**
  * Gets craft, used for drawing facility.
  * @return craft
  */
-Craft *BaseFacility::getCraft() const
+Craft* BaseFacility::getCraft() const
 {
 	return _craftForDrawing;
 }
@@ -175,7 +195,7 @@ Craft *BaseFacility::getCraft() const
  * Sets craft, used for drawing facility.
  * @param craft for drawing hangar.
  */
-void BaseFacility::setCraft(Craft *craft)
+void BaseFacility::setCraft(Craft* craft)
 {
 	_craftForDrawing = craft;
 }
