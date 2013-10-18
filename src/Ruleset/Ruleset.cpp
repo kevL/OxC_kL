@@ -67,16 +67,27 @@ namespace OpenXcom
  * Creates a ruleset with blank sets of rules.
  */
 Ruleset::Ruleset()
-	: _costSoldier(0), _costEngineer(0), _costScientist(0), _timePersonnel(0), _startingTime(6, 1, 1, 1999, 12, 0, 0), _modIndex(0),
-	_facilityListOrder(0), _craftListOrder(0), _itemListOrder(0), _researchListOrder(0),  _manufactureListOrder(0), _ufopaediaListOrder(0)
+	:
+	_costSoldier(0),
+	_costEngineer(0),
+	_costScientist(0),
+	_timePersonnel(0),
+	_startingTime(6, 1, 1, 1999, 12, 0, 0),
+	_modIndex(0),
+	_facilityListOrder(0),
+	_craftListOrder(0),
+	_itemListOrder(0),
+	_researchListOrder(0),
+	_manufactureListOrder(0),
+	_ufopaediaListOrder(0)
 {
 	std::string path = CrossPlatform::getDataFolder("SoldierName/"); // Check in which data dir the folder is stored
 
 	std::vector<std::string> names = CrossPlatform::getFolderContents(path, "nam"); // Add soldier names
 	for (std::vector<std::string>::iterator i = names.begin(); i != names.end(); ++i)
 	{
-		std::string file = (*i).substr(0, (*i).length() - 4);
-		SoldierNamePool *pool = new SoldierNamePool();
+		std::string file = CrossPlatform::noExt(*i);
+		SoldierNamePool* pool = new SoldierNamePool();
 		pool->load(file);
 
 		_names.push_back(pool);

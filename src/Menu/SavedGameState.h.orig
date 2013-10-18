@@ -22,6 +22,7 @@
 
 #include "../Engine/State.h"
 #include "OptionsBaseState.h"
+#include <vector>
 #include <string>
 
 
@@ -42,18 +43,19 @@ class SavedGameState
 	public State
 {
 protected:
-<<<<<<< HEAD
 	TextButton* _btnCancel;
 	Window* _window;
 	Text* _txtTitle, * _txtName, * _txtTime, * _txtDate, * _txtStatus, * _txtDelete;
 	TextList* _lstSaves;
-	bool _geo, _showMsg, _noUI;
+	OptionsOrigin _origin;
+	bool _showMsg, _noUI;
+<<<<<<< HEAD
 
 	public:
 		/// Creates the Saved Game state.
-		SavedGameState(Game* game, bool geo);
+		SavedGameState(Game* game, OptionsOrigin origin);
 		/// Creates the Saved Game state (autosave option).
-		SavedGameState(Game* game, bool geo, bool showMsg);
+		SavedGameState(Game* game, OptionsOrigin origin, bool showMsg);
 		/// Cleans up the Saved Game state.
 		virtual ~SavedGameState();
 
@@ -66,12 +68,7 @@ protected:
 		/// Handler for clicking the Cancel button.
 		void btnCancelClick(Action* action);
 =======
-	TextButton *_btnCancel;
-	Window *_window;
-	Text *_txtTitle, *_txtName, *_txtTime, *_txtDate, *_txtStatus, *_txtDelete;
-	TextList *_lstSaves;
-	OptionsOrigin _origin;
-	bool _showMsg, _noUI;
+	std::vector<std::string> _saves;
 public:
 	/// Creates the Saved Game state.
 	SavedGameState(Game *game, OptionsOrigin origin);

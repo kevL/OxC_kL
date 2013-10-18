@@ -22,6 +22,7 @@
 
 #include "../Engine/State.h"
 #include "OptionsBaseState.h"
+#include <vector>
 #include <string>
 
 
@@ -48,6 +49,7 @@ protected:
 	TextList* _lstSaves;
 	OptionsOrigin _origin;
 	bool _showMsg, _noUI;
+	std::vector<std::string> _saves;
 
 	public:
 		/// Creates the Saved Game state.
