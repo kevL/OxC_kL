@@ -654,15 +654,13 @@ void BattlescapeGenerator::deployAliens(AlienRace* race, AlienDeployment* deploy
 	int month;
 	if (_game->getSavedGame()->getMonthsPassed() != -1)
 	{
-		month =
-		((size_t) _game->getSavedGame()->getMonthsPassed()) > _game->getRuleset()->getAlienItemLevels().size() - 1 ?  // if
-		_game->getRuleset()->getAlienItemLevels().size() - 1 :  // then
-		_game->getSavedGame()->getMonthsPassed() ;  // else
+		month = ((size_t)_game->getSavedGame()->getMonthsPassed()) > _game->getRuleset()->getAlienItemLevels().size() - 1 ? _game->getRuleset()->getAlienItemLevels().size() - 1 : _game->getSavedGame()->getMonthsPassed();
 	}
 	else
 	{
 		month = _alienItemLevel;
 	}
+
 	for (std::vector<DeploymentData>::iterator d = deployment->getDeploymentData()->begin(); d != deployment->getDeploymentData()->end(); ++d)
 	{
 		std::string alienName = race->getMember((*d).alienRank);
@@ -678,20 +676,16 @@ void BattlescapeGenerator::deployAliens(AlienRace* race, AlienDeployment* deploy
 
 		for (int i = 0; i < quantity; i++)
 		{
-<<<<<<< HEAD
 			bool outside = RNG::generate(0, 99) < (*d).percentageOutsideUfo;
 			if (_ufo == 0) outside = false;
 
 			Unit* rule = _game->getRuleset()->getUnit(alienName);
 			BattleUnit* unit = addAlien(rule, (*d).alienRank, outside);
-=======
-			bool outside = RNG::generate(0,99) < (*d).percentageOutsideUfo;
-			if (_ufo == 0)
-				outside = false;
-			Unit *rule = _game->getRuleset()->getUnit(alienName);
-			BattleUnit *unit = addAlien(rule, (*d).alienRank, outside);
-			int itemLevel = _game->getRuleset()->getAlienItemLevels().at(month).at(RNG::generate(0,9));
->>>>>>> master
+
+//			Log(LOG_INFO) << "BattlescapeGenerator::deplyAliens() do getAlienItemLevels()";
+			int itemLevel = _game->getRuleset()->getAlienItemLevels().at(month).at(RNG::generate(0, 9));	// kL_note: this is default alienItemLevels in the ruleset.
+//			int itemLevel = _game->getRuleset()->getAlienItemLevels().at(month).at(RNG::generate(0, 16));	// kL. This is for my expanded alienItemLevels in the ruleset.
+//			Log(LOG_INFO) << "BattlescapeGenerator::deplyAliens() DONE getAlienItemLevels()";
 			if (unit)
 			{
 				// terrorist alien's equipment is a special case - they are fitted with a weapon which is the alien's name with suffix _WEAPON
@@ -1982,8 +1976,18 @@ void BattlescapeGenerator::deployCivilians(int civilians)
 {
 	if (civilians)
 	{
+<<<<<<< HEAD
 		civilians = RNG::generate(0, civilians);
 		if (civilians > 0)
+=======
+		// inevitably someone will point out that ufopaedia says 0-16 civilians.
+		// to that person:  i looked at the code and it says otherwise.
+		// 0 civilians would only be a possibility if there were already 80 units,
+		// or no spawn nodes for civilians.
+		int number = RNG::generate(max/2, max);
+
+		if (number > 0)
+>>>>>>> master
 		{
 			for (int i = 0; i < civilians; ++i)
 			{
