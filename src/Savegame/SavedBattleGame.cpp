@@ -877,7 +877,7 @@ void SavedBattleGame::endTurn()
 
 	// kL_begin: semi-randomize the Turn20 reveal (and the less than 3 aliens left rule).
 	Uint8 rand = RNG::generate(0, 5);
-	if (_turn > 17 + rand || liveAliens < rand)
+	if (_turn > 17 + (int)rand || liveAliens < (int)rand)
 	// kL_end.
 
 //kL	if (_turn >= 20 || liveAliens < 2)

@@ -307,9 +307,10 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 							&& !visibleUnit->isOut()
 							&& visible(unit, _save->getTile(test)))
 						{
-//							Log(LOG_INFO) << ". . calculateFOV() CALLED visible(unit, testTile) spotted = " << visibleUnit->getId();
+							Log(LOG_INFO) << ". . calculateFOV(), test visible() spottedID = " << visibleUnit->getId();
 							if (!visibleUnit->getVisible())		// kL
 							{
+								Log(LOG_INFO) << ". . calculateFOV(), visible() TRUE";
 								ret = true;						// kL
 							}
 
