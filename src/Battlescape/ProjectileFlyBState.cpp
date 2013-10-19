@@ -138,7 +138,8 @@ void ProjectileFlyBState::init()
 		// no ammo or target is dead: give the time units back and cancel the shot.
 		if (_ammo == 0
 			|| !_parent->getSave()->getTile(_action.target)->getUnit()
-			|| _parent->getSave()->getTile(_action.target)->getUnit()->isOut())
+			|| _parent->getSave()->getTile(_action.target)->getUnit()->isOut()
+			|| _parent->getSave()->getTile(_action.target)->getUnit() != _parent->getSave()->getSelectedUnit())
 		{
 			_unit->setTimeUnits(_unit->getTimeUnits() + _unit->getActionTUs(_action.type, _action.weapon));
 			_parent->popState();
