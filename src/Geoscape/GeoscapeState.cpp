@@ -1531,7 +1531,7 @@ void GeoscapeState::time30Minutes()
 					}
 //					Log(LOG_INFO) << ". . . . . . . not Detected done";
 				}
-				else
+				else // kL_note: ufo is already detected
 				{
 					bool detected = false;
 					for (std::vector<Base* >::iterator b = _game->getSavedGame()->getBases()->begin(); b != _game->getSavedGame()->getBases()->end() && !detected; ++b)
@@ -1542,8 +1542,17 @@ void GeoscapeState::time30Minutes()
 						{
 							(*u)->setHyperDetected(true);
 						}
+
 						for (std::vector<Craft* >::iterator c = (*b)->getCrafts()->begin(); c != (*b)->getCrafts()->end() && !detected; ++c)
 						{
+							// kL_begin: Geo time30min; add negate craft detection if based. From above
+							if ((*c)->getLongitude() == (*b)->getLongitude()
+								&& (*c)->getLatitude() == (*b)->getLatitude()
+								&& (*c)->getDestination() == 0)
+							{
+								continue;
+							} // kL_end.
+
 							detected = detected || (*c)->detect(*u);
 						}
 //						Log(LOG_INFO) << ". . . . . . . Detected done";

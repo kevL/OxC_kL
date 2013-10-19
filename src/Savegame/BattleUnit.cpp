@@ -212,6 +212,17 @@ BattleUnit::BattleUnit(Unit* unit, UnitFaction faction, int id, Armor* armor, in
 	_rank	= unit->getRank();
 	_race	= unit->getRace();
 	_stats	= *unit->getStats();
+	_stats	+= *_armor->getStats();	// armors may modify effective stats
+	if (faction == FACTION_HOSTILE)
+	{
+		adjustStats(diff);
+	}
+
+	_tu			= _stats.tu;
+	_energy		= _stats.stamina;
+	_health		= _stats.health;
+	_morale		= 100;
+	_stunlevel	= 0;
 
 	_standHeight	= unit->getStandHeight();
 	_kneelHeight	= unit->getKneelHeight();
@@ -228,18 +239,6 @@ BattleUnit::BattleUnit(Unit* unit, UnitFaction faction, int id, Armor* armor, in
 	_value			= unit->getValue();
 	_gender			= GENDER_MALE;
 	_faceDirection	= -1;
-	_stats			+= *_armor->getStats();	// armors may modify effective stats
-
-	if (faction == FACTION_HOSTILE)
-	{
-		adjustStats(diff);
-	}
-
-	_tu			= _stats.tu;
-	_energy		= _stats.stamina;
-	_health		= _stats.health;
-	_morale		= 100;
-	_stunlevel	= 0;
 
 	_currentArmor[SIDE_FRONT]	= _armor->getFrontArmor();
 	_currentArmor[SIDE_LEFT]	= _armor->getSideArmor();

@@ -32,10 +32,11 @@ namespace OpenXcom
  */
 class Explosion
 {
-	private:
-		Position _position;
-		int _currentFrame, _startFrame;
-		bool _big, _hit;
+private:
+	Position _position;
+	int _currentFrame, _startFrame;
+	bool _big, _hit;
+
 	public:
 		/// Creates a new Explosion.
 		Explosion(Position _position, int startFrame, bool big, bool hit = false);

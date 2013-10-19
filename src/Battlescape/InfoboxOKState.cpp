@@ -39,9 +39,9 @@ InfoboxOKState::InfoboxOKState(Game *game, const std::wstring &msg) : State(game
 	_screen = false;
 
 	// Create objects
-	_frame = new Frame(261, 89, 30, 48);
-	_btnOk = new TextButton(120, 18, 100, 112);
-	_txtTitle = new Text(255, 61, 33, 51);
+	_frame		= new Frame(261, 89, 30, 48);
+	_btnOk		= new TextButton(120, 18, 100, 112);
+	_txtTitle	= new Text(255, 61, 33, 51);
 
 	add(_frame);
 	add(_btnOk);
@@ -57,9 +57,9 @@ InfoboxOKState::InfoboxOKState(Game *game, const std::wstring &msg) : State(game
 
 	_btnOk->setColor(Palette::blockOffset(1)-1);
 	_btnOk->setText(tr("STR_OK"));
-	_btnOk->onMouseClick((ActionHandler)&InfoboxOKState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&InfoboxOKState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
-	_btnOk->onKeyboardPress((ActionHandler)&InfoboxOKState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onMouseClick((ActionHandler)& InfoboxOKState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)& InfoboxOKState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
+	_btnOk->onKeyboardPress((ActionHandler)& InfoboxOKState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 	_btnOk->setHighContrast(true);
 
 	_txtTitle->setColor(Palette::blockOffset(1)-1);

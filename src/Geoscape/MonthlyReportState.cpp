@@ -51,27 +51,29 @@ namespace OpenXcom
  */
 MonthlyReportState::MonthlyReportState(Game* game, bool psi, Globe* globe)
 	:
-	State(game),
-	_psi(psi),
-	_gameOver(false),
-	_ratingTotal(0),
-	_fundingDiff(0),
-	_lastMonthsRating(0),
-	_happyList(0),
-	_sadList(0),
-	_pactList(0)
+		State(game),
+		_psi(psi),
+		_gameOver(false),
+		_ratingTotal(0),
+		_fundingDiff(0),
+		_lastMonthsRating(0),
+		_happyList(0),
+		_sadList(0),
+		_pactList(0)
 {
 	_globe = globe;
 
 	// Create objects
 	_window		= new Window(this, 320, 200, 0, 0);
-	_btnOk		= new TextButton(50, 12, 135, 180);
+//kL	_btnOk		= new TextButton(50, 12, 135, 180);
 	_txtTitle	= new Text(300, 16, 16, 8);
 	_txtMonth	= new Text(110, 8, 16, 24);
 	_txtRating	= new Text(180, 8, 125, 24);
 	_txtChange	= new Text(300, 8, 16, 32);
 	_txtDesc	= new Text(280, 140, 16, 40);
 	_txtFailure	= new Text(270, 180, 25, 34);
+
+	_btnOk		= new TextButton(288, 16, 16, 177);		// kL
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(3)), Palette::backPos, 16);

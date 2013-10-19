@@ -1956,14 +1956,20 @@ void BattlescapeGenerator::explodePowerSources()
 	{
 		if (_save->getTiles()[i]->getMapData(MapData::O_OBJECT)
 			&& _save->getTiles()[i]->getMapData(MapData::O_OBJECT)->getSpecialType() == UFO_POWER_SOURCE
-			&& RNG::generate(0, 99) < 75)
+//kL			&& RNG::generate(0, 99) < 75)
+			&& RNG::generate(0, 99) < 80)	// kL
 		{
 			Position pos;
 			pos.x = _save->getTiles()[i]->getPosition().x * 16;
 			pos.y = _save->getTiles()[i]->getPosition().y * 16;
 			pos.z = _save->getTiles()[i]->getPosition().z * 24 + 12;
 
-			_save->getTileEngine()->explode(pos, 180 + RNG::generate(0, 69), DT_HE, 11);
+//kL			_save->getTileEngine()->explode(pos, 180 + RNG::generate(0, 69), DT_HE, 11);
+
+			// ((x^3)/32000)+50, x= 0..200									// kL
+			int rand = RNG::generate(1, 200);								// kL
+			int power = (int)(((pow((double)rand, 3)) / 32000.0) + 50.0);	// kL
+			_save->getTileEngine()->explode(pos, power, DT_HE, 21);
 		}
 	}
 }

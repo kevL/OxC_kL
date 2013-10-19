@@ -429,11 +429,11 @@ bool Base::detect(Target* target) const
 bool Base::insideRadarRange(Target* target) const
 {
 	double range = 0;
-	for (std::vector<BaseFacility* >::const_iterator i = _facilities.begin(); i != _facilities.end(); ++i)
+	for (std::vector<BaseFacility* >::const_iterator f = _facilities.begin(); f != _facilities.end(); ++f)
 	{
-		if ((*i)->getBuildTime() == 0)
+		if ((*f)->getBuildTime() == 0)
 		{
-			range = std::max(range, (*i)->getRules()->getRadarRange() * (1 / 60.0) * (M_PI / 180));
+			range = std::max(range, (double)(*f)->getRules()->getRadarRange() * (1.0 / 60.0) * (M_PI / 180.0));
 		}
 	}
 	
