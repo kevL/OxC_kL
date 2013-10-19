@@ -139,8 +139,7 @@ private:
 
 		/**
 		 * Gets the Tile at a given position on the map.
-		 * This method is called over 50mil+ times per turn so it seems useful
-		 * to inline it.
+		 * This method is called over 50mil+ times per turn so it seems useful to inline it.
 		 * @param pos Map position.
 		 * @return Pointer to the tile at that position.
 		 */

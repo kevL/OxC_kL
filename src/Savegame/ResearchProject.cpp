@@ -37,9 +37,9 @@ const float PROGRESS_LIMIT_AVERAGE	= 0.25f;	// kL
 const float PROGRESS_LIMIT_GOOD		= 0.5f;		// kL
 */
 const float PROGRESS_LIMIT_UNKNOWN	= 0.1f;		// kL
-const float PROGRESS_LIMIT_POOR		= 0.25f;	// kL
+const float PROGRESS_LIMIT_POOR		= 0.2f;		// kL
 const float PROGRESS_LIMIT_AVERAGE	= 0.5f;		// kL
-const float PROGRESS_LIMIT_GOOD		= 0.75f;	// kL
+const float PROGRESS_LIMIT_GOOD		= 0.8f;		// kL
 
 
 ResearchProject::ResearchProject(RuleResearch* p, int c)
@@ -227,7 +227,7 @@ std::string ResearchProject::getResearchProgress() const
 //		Log(LOG_INFO) << ". . . . . . progress < POOR";
 		return "STR_POOR";
 	}
-	else if (progress < PROGRESS_LIMIT_AVERAGE) // 0.25f
+	else if (progress < PROGRESS_LIMIT_AVERAGE) // 0.2f
 	{
 //		Log(LOG_INFO) << ". . . . . . progress < AVERAGE";
 		return "STR_AVERAGE";
@@ -238,7 +238,7 @@ std::string ResearchProject::getResearchProgress() const
 		return "STR_GOOD";
 	}
 
-//	Log(LOG_INFO) << ". . . . . . progress = EXCELLENT"; // > 0.75f
+//	Log(LOG_INFO) << ". . . . . . progress = EXCELLENT"; // > 0.8f
 	return "STR_EXCELLENT";
 } // kL_end.
 

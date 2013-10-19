@@ -40,8 +40,8 @@ namespace OpenXcom
  */
 CraftErrorState::CraftErrorState(Game* game, GeoscapeState* state, const std::wstring& msg)
 	:
-	State(game),
-	_state(state)
+		State(game),
+		_state(state)
 {
 	_screen = false;
 

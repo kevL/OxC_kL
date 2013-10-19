@@ -646,7 +646,7 @@ int Ufo::getShotDownByCraftId() const
  * altitude affect the chances of it being detected by radars.
  * @return, Visibility modifier.
  */
-int Ufo::getVisibility() const
+/*kL int Ufo::getVisibility() const
 {
 	int size = 0; // size = 15*(3-ufosize);
 	if (_rules->getSize() == "STR_VERY_SMALL")
@@ -671,6 +671,35 @@ int Ufo::getVisibility() const
 		visibility = size;
 	else if (_altitude == "STR_VERY_HIGH")
 		visibility = size - 10;
+
+	return visibility;
+} */
+// kL_begin: Ufo::getVisibility() rewrite detection chances (increase...)
+int Ufo::getVisibility() const
+{
+	int size = 0; // size = 15*(3-ufosize);
+	if (_rules->getSize() == "STR_VERY_SMALL")
+		size = -300;
+	else if (_rules->getSize() == "STR_SMALL")
+		size = -150;
+	else if (_rules->getSize() == "STR_MEDIUM_UC")
+		size = 0;
+	else if (_rules->getSize() == "STR_LARGE")
+		size = 150;
+	else if (_rules->getSize() == "STR_VERY_LARGE")
+		size = 300;
+
+	int visibility = 0;
+	if (_altitude == "STR_GROUND")
+		visibility = -300;
+	else if (_altitude == "STR_VERY_LOW")
+		visibility = size - 200;
+	else if (_altitude == "STR_LOW_UC")
+		visibility = size - 100;
+	else if (_altitude == "STR_HIGH_UC")
+		visibility = size;
+	else if (_altitude == "STR_VERY_HIGH")
+		visibility = size - 100;
 
 	return visibility;
 }

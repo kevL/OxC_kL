@@ -16,7 +16,9 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "RuleBaseFacility.h"
+
 
 namespace OpenXcom
 {
@@ -26,7 +28,34 @@ namespace OpenXcom
  * type of base facility.
  * @param type String defining the type.
  */
-RuleBaseFacility::RuleBaseFacility(const std::string &type) : _type(type), _requires(), _spriteShape(-1), _spriteFacility(-1), _lift(false), _hyper(false), _mind(false), _grav(false), _size(1), _buildCost(0), _buildTime(0), _monthlyCost(0), _storage(0), _personnel(0), _aliens(0), _crafts(0), _labs(0), _workshops(0), _psiLabs(0), _radarRange(0), _radarChance(0), _defense(0), _hitRatio(0), _fireSound(0), _hitSound(0), _listOrder(0)
+RuleBaseFacility::RuleBaseFacility(const std::string& type)
+	:
+		_type(type),
+		_requires(),
+		_spriteShape(-1),
+		_spriteFacility(-1),
+		_lift(false),
+		_hyper(false),
+		_mind(false),
+		_grav(false),
+		_size(1),
+		_buildCost(0),
+		_buildTime(0),
+		_monthlyCost(0),
+		_storage(0),
+		_personnel(0),
+		_aliens(0),
+		_crafts(0),
+		_labs(0),
+		_workshops(0),
+		_psiLabs(0),
+		_radarRange(0),
+		_radarChance(0),
+		_defense(0),
+		_hitRatio(0),
+		_fireSound(0),
+		_hitSound(0),
+		_listOrder(0)
 {
 }
 
@@ -45,46 +74,43 @@ RuleBaseFacility::~RuleBaseFacility()
  */
 void RuleBaseFacility::load(const YAML::Node &node, int modIndex, int listOrder)
 {
-	_type = node["type"].as<std::string>(_type);
-	_requires = node["requires"].as< std::vector<std::string> >(_requires);
-	_spriteShape = node["spriteShape"].as<int>(_spriteShape);
-	_spriteFacility = node["spriteFacility"].as<int>(_spriteFacility);
+	_type			= node["type"].as<std::string>(_type);
+	_requires		= node["requires"].as< std::vector<std::string> >(_requires);
+	_spriteShape	= node["spriteShape"].as<int>(_spriteShape);
+	_spriteFacility	= node["spriteFacility"].as<int>(_spriteFacility);
 	// BASEBITS.PCK: 34 entries
-	if (_spriteFacility > 33)
-		_spriteFacility += modIndex;
-	_lift = node["lift"].as<bool>(_lift);
-	_hyper = node["hyper"].as<bool>(_hyper);
-	_mind = node["mind"].as<bool>(_mind);
-	_grav = node["grav"].as<bool>(_grav);
-	_size = node["size"].as<int>(_size);
-	_buildCost = node["buildCost"].as<int>(_buildCost);
-	_buildTime = node["buildTime"].as<int>(_buildTime);
-	_monthlyCost = node["monthlyCost"].as<int>(_monthlyCost);
-	_storage = node["storage"].as<int>(_storage);
-	_personnel = node["personnel"].as<int>(_personnel);
-	_aliens = node["aliens"].as<int>(_aliens);
-	_crafts = node["crafts"].as<int>(_crafts);
-	_labs = node["labs"].as<int>(_labs);
-	_workshops = node["workshops"].as<int>(_workshops);
-	_psiLabs = node["psiLabs"].as<int>(_psiLabs);
-	_radarRange = node["radarRange"].as<int>(_radarRange);
-	_radarChance = node["radarChance"].as<int>(_radarChance);
-	_defense = node["defense"].as<int>(_defense);
-	_hitRatio = node["hitRatio"].as<int>(_hitRatio);
-	_fireSound = node["fireSound"].as<int>(_fireSound);
+	if (_spriteFacility > 33) _spriteFacility += modIndex;
+
+	_lift			= node["lift"].as<bool>(_lift);
+	_hyper			= node["hyper"].as<bool>(_hyper);
+	_mind			= node["mind"].as<bool>(_mind);
+	_grav			= node["grav"].as<bool>(_grav);
+	_size			= node["size"].as<int>(_size);
+	_buildCost		= node["buildCost"].as<int>(_buildCost);
+	_buildTime		= node["buildTime"].as<int>(_buildTime);
+	_monthlyCost	= node["monthlyCost"].as<int>(_monthlyCost);
+	_storage		= node["storage"].as<int>(_storage);
+	_personnel		= node["personnel"].as<int>(_personnel);
+	_aliens			= node["aliens"].as<int>(_aliens);
+	_crafts			= node["crafts"].as<int>(_crafts);
+	_labs			= node["labs"].as<int>(_labs);
+	_workshops		= node["workshops"].as<int>(_workshops);
+	_psiLabs		= node["psiLabs"].as<int>(_psiLabs);
+	_radarRange		= node["radarRange"].as<int>(_radarRange);
+	_radarChance	= node["radarChance"].as<int>(_radarChance);
+	_defense		= node["defense"].as<int>(_defense);
+	_hitRatio		= node["hitRatio"].as<int>(_hitRatio);
+
+	_fireSound		= node["fireSound"].as<int>(_fireSound);
 	// GEO.CAT: 14 entries
-	if (_fireSound > 13)
-		_fireSound += modIndex;
-	_hitSound = node["hitSound"].as<int>(_hitSound);
+	if (_fireSound > 13) _fireSound += modIndex;
+	_hitSound		= node["hitSound"].as<int>(_hitSound);
 	// GEO.CAT: 14 entries
-	if (_hitSound > 13)
-		_hitSound += modIndex;
-	_mapName = node["mapName"].as<std::string>(_mapName);
-	_listOrder = node["listOrder"].as<int>(_listOrder);
-	if (!_listOrder)
-	{
-		_listOrder = listOrder;
-	}
+	if (_hitSound > 13) _hitSound += modIndex;
+
+	_mapName		= node["mapName"].as<std::string>(_mapName);
+	_listOrder		= node["listOrder"].as<int>(_listOrder);
+	if (!_listOrder) _listOrder = listOrder;
 }
 
 /**
@@ -353,4 +379,5 @@ int RuleBaseFacility::getListOrder() const
 {
 	return _listOrder;
 }
+
 }

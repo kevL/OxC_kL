@@ -16,13 +16,16 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http:///www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_CONFIRMCYDONIASTATE_H
 #define OPENXCOM_CONFIRMCYDONIASTATE_H
 
 #include "../Engine/State.h"
 
+
 namespace OpenXcom
 {
+
 class Craft;
 class Window;
 class Text;
@@ -32,25 +35,28 @@ class TextButton;
  * Screen that allows the player
  * to pick a target for a craft on the globe.
  */
-class ConfirmCydoniaState : public State
+class ConfirmCydoniaState
+	:
+		public State
 {
 private:
-	Window *_window;
-	Text *_txtMessage;
-	TextButton *_btnNo, *_btnYes;
-	Craft *_craft;
-public:
-	/// Creates the Select Destination state.
-	ConfirmCydoniaState(Game *game, Craft *craft);
-	/// Cleans up the Select Destination state.
-	~ConfirmCydoniaState();
-	/// Updates the palette.
-	void init();
-	/// Handler for clicking the Cancel button.
-	void btnNoClick(Action *action);
-	/// Handler for clicking the Cydonia mission button.
-	void btnYesClick(Action *action);
+	Window* _window;
+	Text* _txtMessage;
+	TextButton* _btnNo, * _btnYes;
+	Craft* _craft;
 
+	public:
+		/// Creates the Select Destination state.
+		ConfirmCydoniaState(Game* game, Craft* craft);
+		/// Cleans up the Select Destination state.
+		~ConfirmCydoniaState();
+
+		/// Updates the palette.
+		void init();
+		/// Handler for clicking the Cancel button.
+		void btnNoClick(Action* action);
+		/// Handler for clicking the Cydonia mission button.
+		void btnYesClick(Action* action);
 };
 
 }

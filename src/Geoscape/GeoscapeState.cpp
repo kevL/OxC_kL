@@ -1538,7 +1538,8 @@ void GeoscapeState::time30Minutes()
 					{
 						detected = detected || (*b)->insideRadarRange(*u);
 
-						if ((*b)->getHyperDetection())
+						if ((*b)->getHyperDetection()
+							&& (*b)->insideRadarRange(*u))	// kL
 						{
 							(*u)->setHyperDetected(true);
 						}

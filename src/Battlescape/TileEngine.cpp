@@ -307,12 +307,13 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 							&& !visibleUnit->isOut()
 							&& visible(unit, _save->getTile(test)))
 						{
-							Log(LOG_INFO) << ". . calculateFOV(), test visible() spottedID = " << visibleUnit->getId();
-							if (!visibleUnit->getVisible())		// kL
+							Log(LOG_INFO) << ". . calculateFOV(), visible() TRUE " << visibleUnit->getId();
+							if (!visibleUnit->getVisible())		// kL,  spottedID = " << visibleUnit->getId();
 							{
-								Log(LOG_INFO) << ". . calculateFOV(), visible() TRUE";
+								Log(LOG_INFO) << ". . calculateFOV(), getVisible() FALSE";
 								ret = true;						// kL
 							}
+							Log(LOG_INFO) << ". . calculateFOV(), getVisible() DONE ";
 
 							if (unit->getFaction() == FACTION_PLAYER)
 							{
@@ -496,7 +497,7 @@ Position TileEngine::getSightOriginVoxel(BattleUnit* currentUnit)
  */
 bool TileEngine::visible(BattleUnit* currentUnit, Tile* tile)
 {
-//	Log(LOG_INFO) << "TileEngine::visible() spotter = " << currentUnit->getId();
+	Log(LOG_INFO) << "TileEngine::visible() spotter = " << currentUnit->getId();
 
 	// if there is no tile or no unit, we can't see it
 	if (!tile || !tile->getUnit())
@@ -617,17 +618,49 @@ bool TileEngine::visible(BattleUnit* currentUnit, Tile* tile)
 
 		}
 
-		if (t->getUnit() != targetUnit)
+		Log(LOG_INFO) << ". . . . 1 unitIsSeen = " << unitIsSeen;
+		if (unitIsSeen)
 		{
-//			Log(LOG_INFO) << ". . . . tileUnit != targetUnit -> ret FALSE";
+			Tile* tbelow = _save->getTile(t->getPosition() + Position(0, 0, -1));
+			if (!(t->getUnit() == targetUnit
+				|| (tbelow
+					&& tbelow->getUnit()
+					&& tbelow->getUnit() == targetUnit)))
+			{
+				unitIsSeen = false;
+				Log(LOG_INFO) << ". . . . 2 unitIsSeen = " << unitIsSeen;
+			}
+		}
 
+/*		Log(LOG_INFO) << ". . . . 1 unitIsSeen = " << unitIsSeen;
+		if (unitIsSeen)
+		{
+			Tile* tbelow = _save->getTile(t->getPosition() + Position(0, 0, -1));
+			if (t->getUnit() == targetUnit
+				|| (tbelow
+					&& tbelow->getUnit()
+					&& tbelow->getUnit() == targetUnit))
+			{
+				unitIsSeen = true;
+				Log(LOG_INFO) << ". . . . 2 unitIsSeen = " << unitIsSeen;
+			}
+			else
+			{
+				unitIsSeen = false;
+				Log(LOG_INFO) << ". . . . 3 unitIsSeen = " << unitIsSeen;
+			}
+		} */
+
+/*		if (t->getUnit() != targetUnit)
+		{
+			Log(LOG_INFO) << ". . . . tileUnit != targetUnit -> ret FALSE";
 			unitIsSeen = false;
 //			return true;
-		}
+		} */
 		// kL_end.
 	}
 
-//	Log(LOG_INFO) << ". . unitIsSeen = " << unitIsSeen;
+	Log(LOG_INFO) << ". . unitIsSeen = " << unitIsSeen;
 	return unitIsSeen;
 }
 

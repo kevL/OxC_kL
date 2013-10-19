@@ -103,7 +103,7 @@ TransferItemsState::TransferItemsState(Game* game, Base* baseFrom, Base* baseTo)
 
 //	_lstItems->setColumns(4, 144, 56, 40, 20);		// TEMP!
 
-	_lstItems				= new TextList(288, 136, 8, 34);
+	_lstItems				= new TextList(288, 136, 8, 35);
 
 	_btnCancel				= new TextButton(144, 16, 16, 177);
 	_btnOk					= new TextButton(144, 16, 163, 177);
