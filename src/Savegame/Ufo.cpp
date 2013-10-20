@@ -27,7 +27,9 @@
 #include "../Ruleset/UfoTrajectory.h"
 #include "SavedGame.h"
 #include "Waypoint.h"
+#include "../aresame.h"
 #include <assert.h>
+#define _USE_MATH_DEFINES
 #include <cmath>
 #include <sstream>
 #include <algorithm>
@@ -490,13 +492,13 @@ void Ufo::calculateSpeed()
 	double y = -_speedLat;
 
 	// This section guards vs. divide-by-zero.
-	if (x == 0.f || y == 0.f)
+	if (AreSame(x, 0.0) || AreSame(y, 0.0))
 	{
-		if (x == 0.f && y == 0.f)
+		if (AreSame(x, 0.0) && AreSame(y, 0.0))
 		{
 			_direction = "STR_NONE_UC";
 		}
-		else if (x == 0.f)
+		else if (AreSame(x, 0.0))
 		{
 			if (y > 0.f)
 			{
@@ -507,7 +509,7 @@ void Ufo::calculateSpeed()
 				_direction = "STR_SOUTH";
 			}
 		}
-		else if (y == 0.f)
+		else if (AreSame(y, 0.0))
 		{
 			if (x > 0.f)
 			{

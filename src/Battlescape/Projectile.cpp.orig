@@ -273,7 +273,7 @@ int Projectile::calculateThrow(double accuracy)
 		&& _save->getTile(_action.target)->getMapData(MapData::O_OBJECT)
 		&& _save->getTile(_action.target)->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) == 255)
 	{
-		return false;
+		return -1;
 	}
 
 	originVoxel = Position(_origin.x * 16 + 8, _origin.y * 16 + 8, _origin.z * 24);
@@ -359,9 +359,8 @@ int Projectile::calculateThrow(double accuracy)
 	double baseDeviation = (maxDeviation - (maxDeviation * accuracy)) + minDeviation;
 	double deviation = RNG::boxMuller(0, baseDeviation);
 
-	int retValue = -1;
-
 	_trajectory.clear();
+	int retValue = -1;
 
 	// finally do a line calculation and store this trajectory.
 	retValue = _save->getTileEngine()->calculateParabola(originVoxel, targetVoxel, true, &_trajectory, bu, curvature, 1.0 + deviation);
@@ -378,20 +377,15 @@ int Projectile::calculateThrow(double accuracy)
 	{
 		_trajectory.clear();
 <<<<<<< HEAD
+		retValue = -1;
 
 =======
-		retValue = -1;
 >>>>>>> master
 		// finally do a line calculation and store this trajectory.
 		retValue = _save->getTileEngine()->calculateParabola(originVoxel, targetVoxel, true, &_trajectory, bu, curvature, 1.0);
 	}
 
-<<<<<<< HEAD
-	return true;
-=======
-
 	return retValue;
->>>>>>> master
 }
 
 /**

@@ -34,7 +34,8 @@
 #include "../Engine/Options.h"
 #include "Globe.h"
 #include "SelectDestinationState.h"
-#include "GeoscapeCraftState.h"
+#include "GeoscapeCraftState.h"		// kL
+#include "ConfirmDestinationState.h"
 
 
 namespace OpenXcom
@@ -45,12 +46,14 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param globe Pointer to the Geoscape globe.
  * @param base Pointer to base to show contained crafts (NULL to show all crafts).
+ * @param target Pointer to target to intercept (NULL to ask user for target).
  */
-InterceptState::InterceptState(Game* game, Globe* globe, Base* base)
+InterceptState::InterceptState(Game* game, Globe* globe, Base* base, Target* target)
 	:
 		State(game),
 		_globe(globe),
 		_base(base),
+		_target(target),
 		_crafts()
 {
 	_screen = false;
@@ -126,7 +129,7 @@ InterceptState::InterceptState(Game* game, Globe* globe, Base* base)
 	_lstCrafts->setBackground(_window);
 //kL	_lstCrafts->setMargin(6);
 	_lstCrafts->setMargin(8);		// kL
-	_lstCrafts->onMouseClick((ActionHandler)& InterceptState::lstCraftsClick);
+	_lstCrafts->onMouseClick((ActionHandler)& InterceptState::lstCraftsLeftClick);
 	_lstCrafts->onMouseClick((ActionHandler)& InterceptState::lstCraftsRightClick, SDL_BUTTON_RIGHT);
 
 	int row = 0;
@@ -201,17 +204,26 @@ void InterceptState::btnCancelClick(Action* )
  * Pick a target for the selected craft.
  * @param action Pointer to an action.
  */
-/* void InterceptState::lstCraftsClick(Action* )
+void InterceptState::lstCraftsLeftClick(Action* )
 {
 	Craft* c = _crafts[_lstCrafts->getSelectedRow()];
-	if (c->getStatus() == "STR_READY" || ((c->getStatus() == "STR_OUT" || Options::getBool("craftLaunchAlways")) && !c->getLowFuel()))
+	if (c->getStatus() == "STR_READY"
+		|| ((c->getStatus() == "STR_OUT" || Options::getBool("craftLaunchAlways"))
+			&& !c->getLowFuel()))
 	{
 		_game->popState();
-		_game->pushState(new SelectDestinationState(_game, c, _globe));
+		if (_target == 0)
+		{
+			_game->pushState(new SelectDestinationState(_game, c, _globe));
+		}
+		else
+		{
+			_game->pushState(new ConfirmDestinationState(_game, c, _target));
+		}
 	}
-} */
+}
 // kL_begin: list of Intercept craft actions.
-void InterceptState::lstCraftsClick(Action* )
+void InterceptState::lstCraftsLeftClick(Action* )
 {
 	Craft* c = _crafts[_lstCrafts->getSelectedRow()];
 /*	if (c->getStatus() == "STR_OUT")

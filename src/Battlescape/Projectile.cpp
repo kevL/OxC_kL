@@ -376,7 +376,6 @@ int Projectile::calculateThrow(double accuracy)
 		&& _save->getTile(endPoint)->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) == 255)
 	{
 		_trajectory.clear();
-		retValue = -1;
 
 		// finally do a line calculation and store this trajectory.
 		retValue = _save->getTileEngine()->calculateParabola(originVoxel, targetVoxel, true, &_trajectory, bu, curvature, 1.0);
