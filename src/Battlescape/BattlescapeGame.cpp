@@ -464,7 +464,7 @@ void BattlescapeGame::endTurn()
 				p.z = _save->getTiles()[i]->getPosition().z * 24 - _save->getTiles()[i]->getTerrainLevel();
 
 				statePushNext(new ExplosionBState(this, p, *it, (*it)->getPreviousOwner()));
-				_save->removeItem((*it));
+				_save->removeItem(*it);
 
 				statePushBack(0);
 
@@ -494,8 +494,8 @@ void BattlescapeGame::endTurn()
 		for (std::vector<BattleItem* >::iterator it = _save->getItems()->begin(); it != _save->getItems()->end(); ++it)
 		{
 			if (((*it)->getRules()->getBattleType() == BT_GRENADE
-				|| (*it)->getRules()->getBattleType() == BT_PROXIMITYGRENADE)
-					&& (*it)->getExplodeTurn() > 0)
+					|| (*it)->getRules()->getBattleType() == BT_PROXIMITYGRENADE)
+				&& (*it)->getExplodeTurn() > 0)
 			{
 				(*it)->setExplodeTurn((*it)->getExplodeTurn() - 1);
 			}

@@ -598,7 +598,7 @@ void Inventory::mouseClick(Action* action, State* state)
 					{
 						setSelectedItem(item);
 
-						if (item->getExplodeTurn() >= 0)
+						if (item->getExplodeTurn() > -1)
 						{
 							_warning->showMessage(_game->getLanguage()->getString("STR_GRENADE_IS_ACTIVATED"));
 						}

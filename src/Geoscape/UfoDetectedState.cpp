@@ -126,6 +126,7 @@ UfoDetectedState::UfoDetectedState(Game* game, Ufo* ufo, GeoscapeState* state, b
 
 	// Set up objects
 	_window->setColor(Palette::blockOffset(8)+5);
+//	_window->setColor(Palette::blockOffset(8)+6);		// kL, darker green border
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK15.SCR"));
 
 	centerAllSurfaces();
@@ -207,7 +208,8 @@ void UfoDetectedState::init()
 {
 	if (_hyperwave)
 	{
-		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)), Palette::backPos, 16);
+//kL		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)), Palette::backPos, 16);
+		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);		// kL
 	}
 	else
 	{

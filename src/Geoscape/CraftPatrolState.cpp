@@ -59,7 +59,7 @@ CraftPatrolState::CraftPatrolState(Game* game, Craft* craft, Globe* globe)
 //kL	_btnOk			= new TextButton(140, 12, 58, 144);
 //kL	_btnRedirect	= new TextButton(140, 12, 58, 160);
 	_btnOk			= new TextButton(144, 16, 58, 140);		// kL
-	_btnRedirect	= new TextButton(144, 16, 58, 160);		// kL
+	_btnRedirect	= new TextButton(144, 16, 58, 159);		// kL
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)), Palette::backPos, 16);

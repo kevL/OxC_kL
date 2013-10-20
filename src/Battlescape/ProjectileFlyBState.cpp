@@ -418,6 +418,7 @@ void ProjectileFlyBState::think()
 				{
 					pos.x--;
 				}
+
 				BattleItem *item = _parent->getMap()->getProjectile()->getItem();
 				if (Options::getBool("battleInstantGrenade")
 					&& item->getRules()->getBattleType() == BT_GRENADE

@@ -43,12 +43,12 @@ EquipmentLayoutItem::EquipmentLayoutItem(const YAML::Node& node)
  */
 EquipmentLayoutItem::EquipmentLayoutItem(std::string itemType, std::string slot, int slotX, int slotY, std::string ammoItem, int explodeTurn)
 	:
-	_itemType(itemType),
-	_slot(slot),
-	_slotX(slotX),
-	_slotY(slotY),
-	_ammoItem(ammoItem),
-	_explodeTurn(explodeTurn)
+		_itemType(itemType),
+		_slot(slot),
+		_slotX(slotX),
+		_slotY(slotY),
+		_ammoItem(ammoItem),
+		_explodeTurn(explodeTurn)
 {
 }
 

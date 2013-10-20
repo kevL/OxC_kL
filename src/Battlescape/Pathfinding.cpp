@@ -1187,7 +1187,7 @@ bool Pathfinding::removePreview()
  * @param maxTUCost Maximum time units the path can cost.
  * @return True if a path exists, false otherwise.
  */
-bool Pathfinding::bresenhamPath(const Position& origin, const Position& target, BattleUnit *targetUnit, bool sneak, int maxTUCost)
+bool Pathfinding::bresenhamPath(const Position& origin, const Position& target, BattleUnit* targetUnit, bool sneak, int maxTUCost)
 {
 	int xd[8] = {0, 1, 1, 1, 0, -1, -1, -1};
 	int yd[8] = {-1, -1, 0, 1, 1, 1, 0, -1};
@@ -1232,8 +1232,8 @@ bool Pathfinding::bresenhamPath(const Position& origin, const Position& target, 
 
 	//drift controls when to step in 'shallow' planes
 	//starting value keeps Line centred
-	drift_xy  = (delta_x / 2);
-	drift_xz  = (delta_x / 2);
+	drift_xy = (delta_x / 2);
+	drift_xz = (delta_x / 2);
 
 	//direction of line
 	step_x = 1; if (x0 > x1) { step_x = -1; }
@@ -1263,9 +1263,13 @@ bool Pathfinding::bresenhamPath(const Position& origin, const Position& target, 
 			{
 				if (xd[dir] == cx-lastPoint.x && yd[dir] == cy-lastPoint.y) break;
 			}
+
 			int tuCost = getTUCost(lastPoint, dir, &nextPoint, _unit, targetUnit, (targetUnit && maxTUCost == 10000));
 
-			if (sneak && _save->getTile(nextPoint)->getVisible()) return false;
+			if (sneak && _save->getTile(nextPoint)->getVisible())
+			{
+				return false;
+			}
 
 			// delete the following
 			bool isDiagonal = (dir&1);
@@ -1285,11 +1289,13 @@ bool Pathfinding::bresenhamPath(const Position& origin, const Position& target, 
 			{
 				return false;
 			}
-			if (targetUnit == 0 && tuCost != 255)
+			if (targetUnit == 0
+				&& tuCost != 255)
 			{
 				lastTUCost = tuCost;
 				_totalTUCost += tuCost;
 			}
+
 			lastPoint = Position(cx, cy, cz);
 		}
 

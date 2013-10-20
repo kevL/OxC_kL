@@ -329,8 +329,8 @@ void DebriefingState::addStat(const std::string& name, int quantity, int score)
  */
 class ClearAlienBase: public std::unary_function<AlienMission*, void>
 {
-	private:
-		const AlienBase* _base;
+private:
+	const AlienBase* _base;
 
 	public:
 		/// Remembers the base.
@@ -634,6 +634,7 @@ void DebriefingState::prepareDebriefing()
 							delete (*i);
 
 							base->getSoldiers()->erase(i);
+
 							break;
 						}
 					}
@@ -646,9 +647,14 @@ void DebriefingState::prepareDebriefing()
 			else if (origFaction == FACTION_NEUTRAL)
 			{
 				if ((*j)->killedBy() == FACTION_PLAYER)
+				{
 					addStat("STR_CIVILIANS_KILLED_BY_XCOM_OPERATIVES", 1, -(*j)->getValue() - (*j)->getValue() * 2 / 3);
-				else // if civilians happen to kill themselves XCOM shouldn't get penalty for it
+				}
+				else
+				{
+					// if civilians happen to kill themselves XCOM shouldn't get penalty for it
 					addStat("STR_CIVILIANS_KILLED_BY_ALIENS", 1, -(*j)->getValue());
+				}
 			}
 		}
 		else // so this unit is not dead...
@@ -994,6 +1000,7 @@ void DebriefingState::prepareDebriefing()
 				delete (*i);
 
 				_game->getSavedGame()->getBases()->erase(i);
+
 				break;
 			}
 		}
@@ -1021,6 +1028,7 @@ void DebriefingState::prepareDebriefing()
 				delete (*i);
 
 				_game->getSavedGame()->getAlienMissions().erase(i);
+
 				break;
 			}
 		}

@@ -60,10 +60,11 @@ ConfirmDestinationState::ConfirmDestinationState(Game* game, Craft* craft, Targe
 
 //kL	_btnOk		= new TextButton(50, 12, 68, 104);
 //kL	_btnCancel	= new TextButton(50, 12, 138, 104);
-	_btnCancel	= new TextButton(75, 14, 83, 103);		// kL
-	_btnOk		= new TextButton(75, 14, 162, 103);		// kL
+	_btnCancel	= new TextButton(75, 14, 51, 104);		// kL
+	_btnOk		= new TextButton(75, 14, 130, 104);		// kL
 
-	if (w != 0 && w->getId() == 0)
+	if (w != 0
+		&& w->getId() == 0)
 	{
 		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
 	}

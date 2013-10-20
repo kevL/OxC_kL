@@ -150,7 +150,7 @@ RuleItem* BattleItem::getRules() const
 }
 
 /**
- * Gets the turn to explode on. 0 = unprimed grenade
+ * Gets the turn to explode on. -1 = unprimed grenade
  * @return Explode turn.
  */
 int BattleItem::getExplodeTurn() const
