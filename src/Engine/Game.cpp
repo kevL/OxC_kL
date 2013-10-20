@@ -350,6 +350,7 @@ void Game::run()
 			case PAUSED:
 				SDL_Delay(100); // More slowing down.
 			break;
+		}
 	}
 
 	if (_save != 0

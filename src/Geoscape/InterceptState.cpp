@@ -204,7 +204,7 @@ void InterceptState::btnCancelClick(Action* )
  * Pick a target for the selected craft.
  * @param action Pointer to an action.
  */
-void InterceptState::lstCraftsLeftClick(Action* )
+/*kL void InterceptState::lstCraftsLeftClick(Action* )
 {
 	Craft* c = _crafts[_lstCrafts->getSelectedRow()];
 	if (c->getStatus() == "STR_READY"
@@ -221,7 +221,7 @@ void InterceptState::lstCraftsLeftClick(Action* )
 			_game->pushState(new ConfirmDestinationState(_game, c, _target));
 		}
 	}
-}
+} */
 // kL_begin: list of Intercept craft actions.
 void InterceptState::lstCraftsLeftClick(Action* )
 {
