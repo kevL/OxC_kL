@@ -517,7 +517,7 @@ void BattlescapeGame::endTurn()
 			if (!(*j)->tookFireDamage()
 				&& (*j)->getFire() > 0)
 			{
-				Log(LOG_INFO) << ". do Turn Fire : " << (*j)->getId();
+				//Log(LOG_INFO) << ". do Turn Fire : " << (*j)->getId();
 
 				(*j)->setFire(-1);
 				(*j)->setHealth((*j)->getHealth() - (*j)->getArmor()->getDamageModifier(DT_IN) * RNG::generate(4, 11));
@@ -611,8 +611,10 @@ void BattlescapeGame::checkForCasualties(BattleItem* murderweapon, BattleUnit* m
 			BattleUnit* victim = *j;
 
 			if (murderer)
-				Log(LOG_INFO) << "BattlescapeGame::checkForCasualties() murderer = " << murderer->getId();
-			Log(LOG_INFO) << "BattlescapeGame::checkForCasualties() victim = " << victim->getId();
+			{
+				//Log(LOG_INFO) << "BattlescapeGame::checkForCasualties() murderer = " << murderer->getId();
+			}
+			//Log(LOG_INFO) << "BattlescapeGame::checkForCasualties() victim = " << victim->getId();
 
 			if (murderer)
 			{
@@ -1603,19 +1605,19 @@ void BattlescapeGame::primaryAction(const Position& pos)
 	{
 		sUnit = _save->getSelectedUnit()->getId();	// kL
 	} */
-	Log(LOG_INFO) << "BattlescapeGame::primaryAction()";// unitID = " << sUnit;		// kL
+	//Log(LOG_INFO) << "BattlescapeGame::primaryAction()";// unitID = " << sUnit;		// kL
 
 	bool bPreviewed = Options::getInt("battleNewPreviewPath") > 0;
 
 	if (_currentAction.targeting
 		&& _save->getSelectedUnit())
 	{
-		Log(LOG_INFO) << ". . _currentAction.targeting";
+		//Log(LOG_INFO) << ". . _currentAction.targeting";
 		_currentAction.strafe = false;		// kL
 
 		if (_currentAction.type == BA_LAUNCH)
 		{
-			Log(LOG_INFO) << ". . . . BA_LAUNCH";
+			//Log(LOG_INFO) << ". . . . BA_LAUNCH";
 
 			_parentState->showLaunchButton(true);
 			_currentAction.waypoints.push_back(pos);
@@ -1624,7 +1626,7 @@ void BattlescapeGame::primaryAction(const Position& pos)
 		else if (_currentAction.type == BA_USE
 			&& _currentAction.weapon->getRules()->getBattleType() == BT_MINDPROBE)
 		{
-			Log(LOG_INFO) << ". . . . BA_USE -> BT_MINDPROBE";
+			//Log(LOG_INFO) << ". . . . BA_USE -> BT_MINDPROBE";
 
 			if (_save->selectUnit(pos)
 				&& _save->selectUnit(pos)->getFaction() != _save->getSelectedUnit()->getFaction())
@@ -1645,7 +1647,7 @@ void BattlescapeGame::primaryAction(const Position& pos)
 		else if (_currentAction.type == BA_PANIC
 			|| _currentAction.type == BA_MINDCONTROL)
 		{
-			Log(LOG_INFO) << ". . . . BA_PANIC or BA_MINDCONTROL";
+			//Log(LOG_INFO) << ". . . . BA_PANIC or BA_MINDCONTROL";
 
 			if (_save->selectUnit(pos)
 				&& _save->selectUnit(pos)->getFaction() != _save->getSelectedUnit()->getFaction()
@@ -1670,19 +1672,27 @@ void BattlescapeGame::primaryAction(const Position& pos)
 				{
 					if (getTileEngine()->psiAttack(&_currentAction))
 					{
+						//Log(LOG_INFO) << ". . . . . . Psi successful";
+
 						// show a little infobox if it's successful
 						Game* game = _parentState->getGame();
 						if (_currentAction.type == BA_PANIC)
 						{
+							//Log(LOG_INFO) << ". . . . . . . . BA_Panic";
+
 							BattleUnit* unit = _save->getTile(_currentAction.target)->getUnit();
 							game->pushState(new InfoboxState(game, game->getLanguage()->getString("STR_HAS_PANICKED", unit->getGender()).arg(unit->getName(game->getLanguage()))));
 						}
 						else if (_currentAction.type == BA_MINDCONTROL)
 						{
+							//Log(LOG_INFO) << ". . . . . . . . BA_MindControl";
+
 							game->pushState(new InfoboxState(game, game->getLanguage()->getString("STR_MIND_CONTROL_SUCCESSFUL")));
 						}
 
+						//Log(LOG_INFO) << ". . . . . . updateSoldierInfo()";
 						_parentState->updateSoldierInfo();
+						//Log(LOG_INFO) << ". . . . . . updateSoldierInfo() DONE";
 
 //						if (_save->getSelectedUnit()->getFaction() != FACTION_PLAYER)	// kL: do aliens even do primaryActions?
 //						{
@@ -1695,6 +1705,7 @@ void BattlescapeGame::primaryAction(const Position& pos)
 
 //						getMap()->setCursorType(CT_NONE);							// kL
 						_parentState->getGame()->getCursor()->setVisible(false);	// kL
+						//Log(LOG_INFO) << ". . . . . . inVisible cursor, DONE";
 					}
 
 					if (builtinpsi)
@@ -1707,7 +1718,7 @@ void BattlescapeGame::primaryAction(const Position& pos)
 		}
 		else
 		{
-			Log(LOG_INFO) << ". . . . Firing or Throwing";
+			//Log(LOG_INFO) << ". . . . Firing or Throwing";
 //			_currentAction.strafe = false;		// kL
 
 			getMap()->setCursorType(CT_NONE);
@@ -1724,7 +1735,7 @@ void BattlescapeGame::primaryAction(const Position& pos)
 	}
 	else
 	{
-		Log(LOG_INFO) << ". . NOT _currentAction.targeting";
+		//Log(LOG_INFO) << ". . NOT _currentAction.targeting";
 
 		_currentAction.actor = _save->getSelectedUnit();
 
@@ -1783,6 +1794,8 @@ void BattlescapeGame::primaryAction(const Position& pos)
 			}
 		}
 	}
+
+	//Log(LOG_INFO) << ". . primaryAction() EXIT";
 }
 
 /**

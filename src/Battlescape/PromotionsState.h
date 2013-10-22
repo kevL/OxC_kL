@@ -16,10 +16,12 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_PROMOTIONSSTATE_H
 #define OPENXCOM_PROMOTIONSSTATE_H
 
 #include "../Engine/State.h"
+
 
 namespace OpenXcom
 {
@@ -32,20 +34,24 @@ class TextList;
 /**
  * Promotions screen that displays new soldier ranks.
  */
-class PromotionsState : public State
+class PromotionsState
+	:
+		public State
 {
 private:
-	TextButton *_btnOk;
-	Window *_window;
-	Text *_txtTitle, *_txtName, *_txtRank, *_txtBase;
-	TextList *_lstSoldiers;
-public:
-	/// Creates the Promotions state.
-	PromotionsState(Game *game);
-	/// Cleans up the Promotions state.
-	~PromotionsState();
-	/// Handler for clicking the OK button.
-	void btnOkClick(Action *action);
+	TextButton* _btnOk;
+	Window* _window;
+	Text* _txtTitle, * _txtName, * _txtRank, * _txtBase;
+	TextList* _lstSoldiers;
+
+	public:
+		/// Creates the Promotions state.
+		PromotionsState(Game* game);
+		/// Cleans up the Promotions state.
+		~PromotionsState();
+
+		/// Handler for clicking the OK button.
+		void btnOkClick(Action* action);
 };
 
 }

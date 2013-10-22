@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "NewResearchListState.h"
 #include <algorithm>
 #include "../Engine/Game.h"
@@ -34,6 +35,7 @@
 #include "ResearchInfoState.h"
 #include "../Savegame/ItemContainer.h"
 
+
 namespace OpenXcom
 {
 /**
@@ -41,10 +43,13 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
  */
-NewResearchListState::NewResearchListState(Game *game, Base *base) : State(game), _base(base)
+NewResearchListState::NewResearchListState(Game* game, Base* base)
+	:
+		State(game),
+		_base(base)
 {
 	int width = 230;
-	int height = 136; //multiplicity of the 8 pixels [17x8=136]
+	int height = 136; // multiplicity of the 8 pixels [17x8=136]
 	int max_width = 320;
 	int max_height = 200;
 	int start_x = (max_width - width) / 2;
@@ -55,10 +60,23 @@ NewResearchListState::NewResearchListState(Game *game, Base *base) : State(game)
 	int button_height = 16;
 
 	_screen = false;
-	_window = new Window(this, width, height, start_x, start_y, POPUP_BOTH);
-	_btnOK = new TextButton(width - 2 * button_x_border, button_height, start_x + button_x_border, start_y + height - button_height - button_y_border);
-	_txtTitle = new Text(width - 2 * button_x_border, button_height, start_x + button_x_border, start_y + button_y_border);
-	_lstResearch = new TextList(width - 4 * button_x_border, height - 2 * button_height - 2 * button_y_border, start_x + button_x_border, start_y + button_y_border + button_height - 4);
+
+	_window			= new Window(this, width, height, start_x, start_y, POPUP_BOTH);
+
+	_txtTitle		= new Text(width - 2 * button_x_border,
+						button_height,
+						start_x + button_x_border,
+						start_y + button_y_border);
+
+	_lstResearch	= new TextList(width - 4 * button_x_border,
+						height - 2 * button_height - 2 * button_y_border,
+						start_x + button_x_border,
+						start_y + button_y_border + button_height - 4);
+
+	_btnOK			= new TextButton(width - 2 * button_x_border,
+						button_height,
+						start_x + button_x_border,
+						start_y + height - button_height - button_y_border);
 
 	add(_window);
 	add(_btnOK);
@@ -73,8 +91,8 @@ NewResearchListState::NewResearchListState(Game *game, Base *base) : State(game)
 
 	_btnOK->setColor(Palette::blockOffset(15)+6);
 	_btnOK->setText(tr("STR_OK"));
-	_btnOK->onMouseClick((ActionHandler)&NewResearchListState::btnOKClick);
-	_btnOK->onKeyboardPress((ActionHandler)&NewResearchListState::btnOKClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOK->onMouseClick((ActionHandler)& NewResearchListState::btnOKClick);
+	_btnOK->onKeyboardPress((ActionHandler)& NewResearchListState::btnOKClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setAlign(ALIGN_CENTER);
@@ -84,10 +102,11 @@ NewResearchListState::NewResearchListState(Game *game, Base *base) : State(game)
 	_lstResearch->setColumns(1, width - 4 * button_x_border);
 	_lstResearch->setSelectable(true);
 	_lstResearch->setBackground(_window);
-	_lstResearch->setMargin(2);
+//kL	_lstResearch->setMargin(2);
+	_lstResearch->setMargin(8);		// kL
 	_lstResearch->setAlign(ALIGN_CENTER);
 	_lstResearch->setArrowColor(Palette::blockOffset(13)+10);
-	_lstResearch->onMouseClick((ActionHandler)&NewResearchListState::onSelectProject);
+	_lstResearch->onMouseClick((ActionHandler)& NewResearchListState::onSelectProject);
 }
 
 /**
@@ -102,7 +121,7 @@ void NewResearchListState::init()
  * Selects the RuleResearch to work on.
  * @param action Pointer to an action.
  */
-void NewResearchListState::onSelectProject(Action *)
+void NewResearchListState::onSelectProject(Action* )
 {
 	_game->pushState(new ResearchInfoState(_game, _base, _projects[_lstResearch->getSelectedRow()]));
 }
@@ -111,7 +130,7 @@ void NewResearchListState::onSelectProject(Action *)
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void NewResearchListState::btnOKClick(Action *)
+void NewResearchListState::btnOKClick(Action* )
 {
 	_game->popState();
 }
@@ -119,17 +138,19 @@ void NewResearchListState::btnOKClick(Action *)
 /**
  * Fills the list with possible ResearchProjects.
  */
-void NewResearchListState::fillProjectList ()
+void NewResearchListState::fillProjectList()
 {
 	_projects.clear();
 	_lstResearch->clearList();
-	_game->getSavedGame()->getAvailableResearchProjects(_projects, _game->getRuleset() , _base);
-	std::vector<RuleResearch *>::iterator it = _projects.begin ();
-	while  ( it != _projects.end ())
+	_game->getSavedGame()->getAvailableResearchProjects(_projects, _game->getRuleset(), _base);
+
+	std::vector<RuleResearch* >::iterator it = _projects.begin();
+	while (it != _projects.end())
 	{
-		if((*it)->getRequirements().empty())
+		if ((*it)->getRequirements().empty())
 		{
-			_lstResearch->addRow(1, tr((*it)->getName ()).c_str());
+			_lstResearch->addRow(1, tr((*it)->getName()).c_str());
+
 			++it;
 		}
 		else
@@ -138,4 +159,5 @@ void NewResearchListState::fillProjectList ()
 		}
 	}
 }
+
 }

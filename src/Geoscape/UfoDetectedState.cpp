@@ -71,7 +71,8 @@ UfoDetectedState::UfoDetectedState(Game* game, Ufo* ufo, GeoscapeState* state, b
 	// Create objects
 	if (hyperwave)
 	{
-		_window		= new Window(this, 224, 180, 16, 10, POPUP_BOTH);
+//kL		_window		= new Window(this, 224, 180, 16, 10, POPUP_BOTH);
+		_window		= new Window(this, 224, 171, 16, 10, POPUP_BOTH);		// kL
 	}
 	else
 	{
@@ -80,15 +81,17 @@ UfoDetectedState::UfoDetectedState(Game* game, Ufo* ufo, GeoscapeState* state, b
 
 //kL	_btnCentre		= new TextButton(200, 12, 28, 128);
 //kL	_btnCancel		= new TextButton(200, 12, 28, 144);
-	_txtHyperwave	= new Text(214, 16, 21, 44);
+//kL	_txtHyperwave	= new Text(214, 16, 21, 44);
+	_txtHyperwave	= new Text(214, 16, 21, 45);			// kL
 	_txtUfo			= new Text(207, 16, 28, 56);
 //kL	_txtDetected	= new Text(100, 8, 28, 72);
 	_txtDetected	= new Text(100, 8, 28, 73);				// kL
 //kL	_lstInfo		= new TextList(207, 32, 28, 82);
+//kL	_lstInfo2		= new TextList(207, 32, 28, 96);
 	_lstInfo		= new TextList(207, 33, 28, 85);		// kL
-	_lstInfo2		= new TextList(207, 32, 28, 96);
+	_lstInfo2		= new TextList(207, 32, 28, 98);
 
-	_btnCentre		= new TextButton(200, 14, 28, 126);		// kL
+	_btnCentre		= new TextButton(200, 14, 28, 124);		// kL
 	_btnCancel		= new TextButton(200, 14, 28, 144);		// kL
 
 	if (hyperwave)

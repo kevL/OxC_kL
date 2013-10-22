@@ -16,11 +16,13 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_NEWRESEARCHLISTSTATE_H
 #define OPENXCOM_NEWRESEARCHLISTSTATE_H
 
 #include "../Engine/State.h"
 #include <vector>
+
 
 namespace OpenXcom
 {
@@ -35,26 +37,31 @@ class RuleResearch;
 /**
  * Window which displays possible research projects.
  */
-class NewResearchListState : public State
+class NewResearchListState
+	:
+		public State
 {
 private:
-	Base *_base;
-	TextButton *_btnOK;
-	Window *_window;
-	Text *_txtTitle;
-	TextList *_lstResearch;
-	void onSelectProject(Action *action);
-	std::vector<RuleResearch *> _projects;
-public:
-	/// Creates the New research list state.
-	NewResearchListState(Game *game, Base *base);
-	/// Handler for clicking the OK button.
-	void btnOKClick(Action *action);
-	/// Fills the ResearchProject list with possible ResearchProjects.
-	void fillProjectList ();
-	/// Initializes the state.
-	void init();
+	Base* _base;
+	TextButton* _btnOK;
+	Window* _window;
+	Text* _txtTitle;
+	TextList* _lstResearch;
+	void onSelectProject(Action* action);
+	std::vector<RuleResearch* > _projects;
+
+	public:
+		/// Creates the New research list state.
+		NewResearchListState(Game* game, Base* base);
+		/// Handler for clicking the OK button.
+		void btnOKClick(Action* action);
+
+		/// Fills the ResearchProject list with possible ResearchProjects.
+		void fillProjectList();
+		/// Initializes the state.
+		void init();
 };
+
 }
 
 #endif

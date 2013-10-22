@@ -16,11 +16,13 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_NOCONTAINMENTSTATE_H
 #define OPENXCOM_NOCONTAINMENTSTATE_H
 
 #include "../Engine/State.h"
 #include "DebriefingState.h"
+
 
 namespace OpenXcom
 {
@@ -33,19 +35,23 @@ class Text;
  * Screen shown when there's not enough containment
  * to capture a live alien after a mission.
  */
-class NoContainmentState : public State
+class NoContainmentState
+	:
+		public State
 {
 private:
-	TextButton *_btnOk;
-	Window *_window;
-	Text *_txtTitle;
+	TextButton* _btnOk;
+	Window* _window;
+	Text* _txtTitle;
+
 public:
 	/// Creates the No Containment state.
-	NoContainmentState(Game *game);
+	NoContainmentState(Game* game);
 	/// Cleans up the No Containment state.
 	~NoContainmentState();
+
 	/// Handler for clicking the OK button.
-	void btnOkClick(Action *action);
+	void btnOkClick(Action* action);
 };
 
 }

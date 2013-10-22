@@ -75,18 +75,26 @@ CraftEquipmentState::CraftEquipmentState(Game* game, Base* base, size_t craft)
 	// Create objects
 	_window			= new Window(this, 320, 200, 0, 0);
 
+//kL	_txtTitle		= new Text(300, 16, 16, 7);
+	_txtTitle		= new Text(300, 16, 16, 8);		// kL
+
+/*kL	_txtItem		= new Text(144, 9, 16, 32);
+	_txtStores		= new Text(150, 9, 160, 32);
+	_txtAvailable	= new Text(110, 9, 16, 24);
+	_txtUsed		= new Text(110, 9, 130, 24); */
+	_txtAvailable	= new Text(110, 9, 16, 25);
+	_txtUsed		= new Text(110, 9, 130, 25);
+
+	_txtItem		= new Text(144, 9, 16, 33);
+	_txtStores		= new Text(150, 9, 160, 33);
+//kL	_txtCrew		= new Text(71, 9, 244, 24);
+
+	_lstEquipment	= new TextList(288, 128, 8, 42);
+
 	_btnClear		= new TextButton(94, 16, 16, 176);	// kL... see official file for default values
 	_btnInventory	= new TextButton(94, 16, 113, 176);	// kL...  "
 //kL	_btnOk			= new TextButton((craftHasACrew || isNewBattle) ? 148 : 288, 16, (craftHasACrew || isNewBattle) ? 164 : 16, 176);
 	_btnOk			= new TextButton(94, 16, 210, 176);	// kL
-
-	_txtTitle		= new Text(300, 16, 16, 7);
-	_txtItem		= new Text(144, 9, 16, 32);
-	_txtStores		= new Text(150, 9, 160, 32);
-	_txtAvailable	= new Text(110, 9, 16, 24);
-	_txtUsed		= new Text(110, 9, 130, 24);
-//kL	_txtCrew		= new Text(71, 9, 244, 24);
-	_lstEquipment	= new TextList(288, 128, 8, 40);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());

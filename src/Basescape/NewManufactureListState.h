@@ -16,14 +16,17 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_NEWMANUFACTURELISTSTATE_H
 #define OPENXCOM_NEWMANUFACTURELISTSTATE_H
 
 #include "../Engine/State.h"
 #include <vector>
 
+
 namespace OpenXcom
 {
+
 class Base;
 class TextButton;
 class Window;
@@ -34,27 +37,32 @@ class RuleManufacture;
 /**
  * Screen which list possible productions.
  */
-class NewManufactureListState : public State
+class NewManufactureListState
+	:
+		public State
 {
 private:
-	Base *_base;
-	TextButton *_btnOk;
-	Window *_window;
-	Text *_txtTitle, *_txtItem, *_txtCategory;
-	TextList *_lstManufacture;
-	std::vector<RuleManufacture *> _possibleProductions;
+	Base* _base;
+	TextButton* _btnOk;
+	Window* _window;
+	Text* _txtTitle, * _txtItem, * _txtCategory;
+	TextList* _lstManufacture;
+	std::vector<RuleManufacture* > _possibleProductions;
 
-public:
-	/// Creates the state.
-	NewManufactureListState(Game *game, Base *base);
-	/// Initializes state.
-	void init ();
-	/// Handler for clicking the OK button.
-	void btnOkClick(Action * action);
-	/// Handler for clicking on the list.
-	void lstProdClick (Action * action);
-	/// Fills the list of possible productions.
-	void fillProductionList();
+	public:
+		/// Creates the state.
+		NewManufactureListState(Game* game, Base* base);
+
+		/// Initializes state.
+		void init ();
+		/// Handler for clicking the OK button.
+		void btnOkClick(Action* action);
+		/// Handler for clicking on the list.
+		void lstProdClick (Action* action);
+		/// Fills the list of possible productions.
+		void fillProductionList();
 };
+
 }
+
 #endif

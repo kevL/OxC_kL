@@ -44,7 +44,7 @@ UnitTurnBState::UnitTurnBState(BattlescapeGame* parent, BattleAction action)
 		_unit(0),
 		_turret(false)
 {
-	Log(LOG_INFO) << "Create UnitTurnBState";
+	//Log(LOG_INFO) << "Create UnitTurnBState";
 }
 
 /**
@@ -52,7 +52,7 @@ UnitTurnBState::UnitTurnBState(BattlescapeGame* parent, BattleAction action)
  */
 UnitTurnBState::~UnitTurnBState()
 {
-	Log(LOG_INFO) << "Delete UnitTurnBState";
+	//Log(LOG_INFO) << "Delete UnitTurnBState";
 }
 
 /**
@@ -63,7 +63,7 @@ void UnitTurnBState::init()
 	_unit = _action.actor;
 	_action.TU = 0;
 
-	Log(LOG_INFO) << "UnitTurnBState::init() unitID = " << _unit->getId() << "_action.strafe = " << _action.strafe;
+	//Log(LOG_INFO) << "UnitTurnBState::init() unitID = " << _unit->getId() << "_action.strafe = " << _action.strafe;
 
 	if (_unit->getFaction() == FACTION_PLAYER)
 		_parent->setStateInterval(Options::getInt("battleXcomSpeed"));
@@ -110,7 +110,7 @@ void UnitTurnBState::init()
  */
 void UnitTurnBState::think()
 {
-	Log(LOG_INFO) << "UnitTurnBState::think() unitID = " << _unit->getId();
+	//Log(LOG_INFO) << "UnitTurnBState::think() unitID = " << _unit->getId();
 	bool thisFaction = _unit->getFaction() == _parent->getSave()->getSide();	// kL
 
 //kL	const int tu = _unit->getFaction() == _parent->getSave()->getSide() ? 1 : 0; // one turn is 1 tu unless during reaction fire.
@@ -151,9 +151,13 @@ void UnitTurnBState::think()
 				&& _unit->getFaction() != FACTION_PLAYER))					// kL
 		{
 			if (_unit->getFaction() == FACTION_PLAYER)
-				Log(LOG_INFO) << ". . newVis = TRUE, Abort turn";
+			{
+				//Log(LOG_INFO) << ". . newVis = TRUE, Abort turn";
+			}
 			else if (_unit->getFaction() != FACTION_PLAYER)
-				Log(LOG_INFO) << ". . newUnitSpotted = TRUE, Abort turn";
+			{
+				//Log(LOG_INFO) << ". . newUnitSpotted = TRUE, Abort turn";
+			}
 
 			_unit->abortTurn();
 		}

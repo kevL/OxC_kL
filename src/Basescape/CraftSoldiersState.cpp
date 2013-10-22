@@ -59,8 +59,8 @@ CraftSoldiersState::CraftSoldiersState(Game* game, Base* base, size_t craft)
 	_window			= new Window(this, 320, 200, 0, 0);
 
 //kL	_btnOk			= new TextButton(288, 16, 16, 176);
-	_btnUnload		= new TextButton(145, 16, 16, 177);		// kL
-	_btnOk			= new TextButton(145, 16, 162, 177);	// kL
+	_btnUnload		= new TextButton(144, 16, 16, 177);		// kL
+	_btnOk			= new TextButton(144, 16, 163, 177);	// kL
 
 	_txtTitle		= new Text(300, 16, 16, 7);
 

@@ -63,10 +63,10 @@ BaseInfoState::BaseInfoState(Game* game, Base* base, BasescapeState* state)
 //kL	_btnTransfers		= new TextButton(80, 14, 46, 180);
 //kL	_btnStores			= new TextButton(80, 14, 132, 180);
 //kL	_btnMonthlyCosts	= new TextButton(92, 14, 218, 180);
-	_btnMonthlyCosts	= new TextButton(71, 14, 12, 179);		// kL
+	_btnMonthlyCosts	= new TextButton(71, 14, 11, 179);		// kL
 	_btnTransfers		= new TextButton(71, 14, 87, 179);		// kL
 	_btnStores			= new TextButton(71, 14, 162, 179);		// kL
-	_btnOk				= new TextButton(71, 14, 237, 179);		// kL
+	_btnOk				= new TextButton(72, 14, 237, 179);		// kL
 // 16|                               288                                |16
 // 16|0|   70      |3|      70       |2|     70       |3|    70       |0|16
 

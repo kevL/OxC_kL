@@ -16,11 +16,13 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http:///www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_INFOBOXSTATE_H
 #define OPENXCOM_INFOBOXSTATE_H
 
 #include "../Engine/State.h"
 #include "BattlescapeState.h"
+
 
 namespace OpenXcom
 {
@@ -33,20 +35,24 @@ class Frame;
 /**
  * Frame that briefly shows some info like : Yasuaki Okamoto Has Panicked. It disappears after 2 seconds.
  */
-class InfoboxState : public State
+class InfoboxState
+	:
+		public State
 {
 private:
-	Text *_text;
-	Frame *_frame;
-	Timer *_timer;
+	Text* _text;
+	Frame* _frame;
+	Timer* _timer;
+
 public:
 	static const int INFOBOX_DELAY = 2000;
 	/// Creates the Infobox state.
-	InfoboxState(Game *game, const std::wstring &msg);
+	InfoboxState(Game* game, const std::wstring& msg);
 	/// Cleans up the Infobox state.
 	~InfoboxState();
+
 	/// Handler for clicking anything.
-	void handle(Action *action);
+	void handle(Action* action);
 	/// Handles the timers.
 	void think();
 	/// Closes the window.

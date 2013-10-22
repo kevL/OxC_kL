@@ -49,7 +49,7 @@ NextTurnState::NextTurnState(Game* game, SavedBattleGame* battleGame, Battlescap
 		_battleGame(battleGame),
 		_state(state)
 {
-	Log(LOG_INFO) << "Create NextTurnState";
+	//Log(LOG_INFO) << "Create NextTurnState";
 
 	// Create objects
 	_window		= new Window(this, 320, 200, 0, 0);
@@ -82,7 +82,7 @@ NextTurnState::NextTurnState(Game* game, SavedBattleGame* battleGame, Battlescap
 	_txtTurn->setAlign(ALIGN_CENTER);
 	_txtTurn->setHighContrast(true);
 	_txtTurn->setText(tr("STR_TURN").arg(_battleGame->getTurn()));
-	Log(LOG_INFO) << ". NextTurnState -> SavedBattleGame::getTurn() : " << _battleGame->getTurn();	// kL
+	//Log(LOG_INFO) << ". NextTurnState -> SavedBattleGame::getTurn() : " << _battleGame->getTurn();	// kL
 
 	_txtSide->setColor(Palette::blockOffset(0));
 	_txtSide->setBig();
@@ -99,7 +99,7 @@ NextTurnState::NextTurnState(Game* game, SavedBattleGame* battleGame, Battlescap
 	_state->clearMouseScrollingState();
 
 	kL_FirstReveal = true;		// kL
-	Log(LOG_INFO) << ". . kL_FirstReveal = " << kL_FirstReveal;
+	//Log(LOG_INFO) << ". . kL_FirstReveal = " << kL_FirstReveal;
 }
 
 /**
@@ -107,7 +107,7 @@ NextTurnState::NextTurnState(Game* game, SavedBattleGame* battleGame, Battlescap
  */
 NextTurnState::~NextTurnState()
 {
-	Log(LOG_INFO) << "Delete NextTurnState";
+	//Log(LOG_INFO) << "Delete NextTurnState";
 }
 
 /**

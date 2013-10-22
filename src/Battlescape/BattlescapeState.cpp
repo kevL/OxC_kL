@@ -797,6 +797,7 @@ void BattlescapeState::mapClick(Action* action)
 		else if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 		{
 			_battleGame->primaryAction(pos);
+			//Log(LOG_INFO) << "BattlescapeState::mapClick(), primaryAction(pos) LMB click";
 		}
 	}
 }
@@ -1245,7 +1246,7 @@ bool BattlescapeState::playableUnitSelected()
 void BattlescapeState::updateSoldierInfo()
 {
 	BattleUnit* battleUnit = _save->getSelectedUnit();
-	Log(LOG_INFO) << "BattlescapeState::updateSoldierInfo()";
+	//Log(LOG_INFO) << "BattlescapeState::updateSoldierInfo()";
 
 	for (int i = 0; i < VISIBLE_MAX; ++i)
 	{

@@ -92,7 +92,7 @@ BattleUnit::BattleUnit(Soldier* soldier, UnitFaction faction)
 		_turretType(-1),
 		_hidingForTurn(false)
 {
-	Log(LOG_INFO) << "Create BattleUnit 1 : soldier";
+	//Log(LOG_INFO) << "Create BattleUnit 1 : soldier";
 
 	_name			= soldier->getName();
 	_id				= soldier->getId();
@@ -152,7 +152,7 @@ BattleUnit::BattleUnit(Soldier* soldier, UnitFaction faction)
 	_activeHand = "STR_RIGHT_HAND";
 
 	lastCover = Position(-1, -1, -1);
-	Log(LOG_INFO) << "Create BattleUnit, DONE";
+	//Log(LOG_INFO) << "Create BattleUnit, DONE";
 }
 
 /**
@@ -206,7 +206,7 @@ BattleUnit::BattleUnit(Unit* unit, UnitFaction faction, int id, Armor* armor, in
 		_turretType(-1),
 		_hidingForTurn(false)
 {
-	Log(LOG_INFO) << "Create BattleUnit 2 : alien";
+	//Log(LOG_INFO) << "Create BattleUnit 2 : alien";
 
 	_type	= unit->getType();
 	_rank	= unit->getRank();
@@ -253,7 +253,7 @@ BattleUnit::BattleUnit(Unit* unit, UnitFaction faction, int id, Armor* armor, in
 
 	lastCover = Position(-1, -1, -1);
 
-	Log(LOG_INFO) << "Create BattleUnit, DONE";
+	//Log(LOG_INFO) << "Create BattleUnit, DONE";
 }
 
 /**
@@ -261,7 +261,7 @@ BattleUnit::BattleUnit(Unit* unit, UnitFaction faction, int id, Armor* armor, in
  */
 BattleUnit::~BattleUnit()
 {
-	Log(LOG_INFO) << "Delete BattleUnit";
+	//Log(LOG_INFO) << "Delete BattleUnit";
 
 	for (int i = 0; i < 5; ++i)
 	{
@@ -644,44 +644,44 @@ int BattleUnit::getDiagonalWalkingPhase() const
  */
 void BattleUnit::lookAt(const Position& point, bool turret)
 {
-	Log(LOG_INFO) << "BattleUnit::lookAt() #1 unitID = " << getId();
-	Log(LOG_INFO) << ". . _direction = " << _direction;
-	Log(LOG_INFO) << ". . _toDirection = " << _toDirection;
-	Log(LOG_INFO) << ". . _directionTurret = " << _directionTurret;
-	Log(LOG_INFO) << ". . _toDirectionTurret = " << _toDirectionTurret;
+	//Log(LOG_INFO) << "BattleUnit::lookAt() #1 unitID = " << getId();
+	//Log(LOG_INFO) << ". . _direction = " << _direction;
+	//Log(LOG_INFO) << ". . _toDirection = " << _toDirection;
+	//Log(LOG_INFO) << ". . _directionTurret = " << _directionTurret;
+	//Log(LOG_INFO) << ". . _toDirectionTurret = " << _toDirectionTurret;
 
 	int dir = directionTo(point);
-	Log(LOG_INFO) << ". . lookAt() -> dir = " << dir;
+	//Log(LOG_INFO) << ". . lookAt() -> dir = " << dir;
 
 	if (turret)
 	{
-		Log(LOG_INFO) << ". . . . has turret.";
+		//Log(LOG_INFO) << ". . . . has turret.";
 
 		_toDirectionTurret = dir;
-		Log(LOG_INFO) << ". . . . . . _toDirTur = " << _toDirectionTurret;
+		//Log(LOG_INFO) << ". . . . . . _toDirTur = " << _toDirectionTurret;
 		if (_toDirectionTurret != _directionTurret)
 		{
 			_status = STATUS_TURNING;
-			Log(LOG_INFO) << ". . . . lookAt() -> STATUS_TURNING, turret.";
+			//Log(LOG_INFO) << ". . . . lookAt() -> STATUS_TURNING, turret.";
 		}
 	}
 	else
 	{
-		Log(LOG_INFO) << ". . . . NOT turret.";
+		//Log(LOG_INFO) << ". . . . NOT turret.";
 
 		_toDirection = dir;
-		Log(LOG_INFO) << ". . . . . . _toDir = " << _toDirection;
+		//Log(LOG_INFO) << ". . . . . . _toDir = " << _toDirection;
 		if (_toDirection != _direction)
 //kL			&& _toDirection < 8
 //kL			&& _toDirection > -1)
 		{
 			_status = STATUS_TURNING;
-			Log(LOG_INFO) << ". . . . lookAt() -> STATUS_TURNING";
+			//Log(LOG_INFO) << ". . . . lookAt() -> STATUS_TURNING";
 			// kL_note: what about Forcing the faced direction instantly?
 		}
 	}
 
-	Log(LOG_INFO) << "BattleUnit::lookAt() #1, DONE";
+	//Log(LOG_INFO) << "BattleUnit::lookAt() #1, DONE";
 }
 
 /**
@@ -690,10 +690,10 @@ void BattleUnit::lookAt(const Position& point, bool turret)
  */
 void BattleUnit::lookAt(int direction, bool force)
 {
-	Log(LOG_INFO) << "BattleUnit::lookAt() #2 unitID = " << getId();
-	Log(LOG_INFO) << ". . _direction = " << _direction;
-	Log(LOG_INFO) << ". . _toDirection = " << _toDirection;
-	Log(LOG_INFO) << ". . lookAt() direction = " << direction;
+	//Log(LOG_INFO) << "BattleUnit::lookAt() #2 unitID = " << getId();
+	//Log(LOG_INFO) << ". . _direction = " << _direction;
+	//Log(LOG_INFO) << ". . _toDirection = " << _toDirection;
+	//Log(LOG_INFO) << ". . lookAt() direction = " << direction;
 
 	if (!force)
 	{
@@ -723,11 +723,11 @@ void BattleUnit::lookAt(int direction, bool force)
  */
 void BattleUnit::turn(bool turret)
 {
-	Log(LOG_INFO) << "BattleUnit::turn() unitID = " << getId();
-	Log(LOG_INFO) << ". . _direction = " << _direction;
-	Log(LOG_INFO) << ". . _toDirection = " << _toDirection;
-	Log(LOG_INFO) << ". . _directionTurret = " << _directionTurret;
-	Log(LOG_INFO) << ". . _toDirectionTurret = " << _toDirectionTurret;
+	//Log(LOG_INFO) << "BattleUnit::turn() unitID = " << getId();
+	//Log(LOG_INFO) << ". . _direction = " << _direction;
+	//Log(LOG_INFO) << ". . _toDirection = " << _toDirection;
+	//Log(LOG_INFO) << ". . _directionTurret = " << _directionTurret;
+	//Log(LOG_INFO) << ". . _toDirectionTurret = " << _toDirectionTurret;
 
 	int delta = 0;
 
@@ -735,27 +735,27 @@ void BattleUnit::turn(bool turret)
 	{
 		if (_directionTurret == _toDirectionTurret)
 		{
-			Log(LOG_INFO) << ". . _d = _tD, abort";
+			//Log(LOG_INFO) << ". . _d = _tD, abort";
 			abortTurn();
 
 			return;
 		}
 
 		delta = _toDirectionTurret - _directionTurret;
-		Log(LOG_INFO) << ". . deltaTurret = " << delta;
+		//Log(LOG_INFO) << ". . deltaTurret = " << delta;
 	}
 	else
 	{
 		if (_direction == _toDirection)
 		{
-			Log(LOG_INFO) << ". . _d = _tD, abort";
+			//Log(LOG_INFO) << ". . _d = _tD, abort";
 			abortTurn();
 
 			return;
 		}
 
 		delta = _toDirection - _direction;
-		Log(LOG_INFO) << ". . delta = " << delta;
+		//Log(LOG_INFO) << ". . delta = " << delta;
 	}
 
 	if (delta != 0) // duh
@@ -817,10 +817,10 @@ void BattleUnit::turn(bool turret)
 		if		(_directionTurret < 0) _directionTurret = 7;
 		else if (_directionTurret > 7) _directionTurret = 0;
 
-		Log(LOG_INFO) << ". . _direction = " << _direction;
-		Log(LOG_INFO) << ". . _toDirection = " << _toDirection;
-		Log(LOG_INFO) << ". . _directionTurret = " << _directionTurret;
-		Log(LOG_INFO) << ". . _toDirectionTurret = " << _toDirectionTurret;
+		//Log(LOG_INFO) << ". . _direction = " << _direction;
+		//Log(LOG_INFO) << ". . _toDirection = " << _toDirection;
+		//Log(LOG_INFO) << ". . _directionTurret = " << _directionTurret;
+		//Log(LOG_INFO) << ". . _toDirectionTurret = " << _toDirectionTurret;
 
 		if (_visible || _faction == FACTION_PLAYER) // kL_note: Faction_player should *always* be _visible...
 			_cacheInvalid = true;
@@ -830,14 +830,14 @@ void BattleUnit::turn(bool turret)
 	{
 		 if (_toDirectionTurret == _directionTurret)
 		 {
-			Log(LOG_INFO) << "BattleUnit::turn() " << getId() << "Turret - STATUS_STANDING (turn has ended)";
+			//Log(LOG_INFO) << "BattleUnit::turn() " << getId() << "Turret - STATUS_STANDING (turn has ended)";
 			_status = STATUS_STANDING; // we officially reached our destination
 		 }
 	}
 	else if (_toDirection == _direction || _status == STATUS_UNCONSCIOUS)	// kL_note: I didn't know Unconscious could turn...
 																			// learn something new every day.
 	{
-		Log(LOG_INFO) << "BattleUnit::turn() " << getId() << " - STATUS_STANDING (turn has ended)";
+		//Log(LOG_INFO) << "BattleUnit::turn() " << getId() << " - STATUS_STANDING (turn has ended)";
 		_status = STATUS_STANDING; // we officially reached our destination
 	}
 }
@@ -999,7 +999,7 @@ int BattleUnit::directionTo(const Position& point) const
 		dir = 0;
 	}
 
-	Log(LOG_INFO) << "BattleUnit::directionTo() dir = " << dir;
+	//Log(LOG_INFO) << "BattleUnit::directionTo() dir = " << dir;
 	return dir;
 }
 
@@ -1096,13 +1096,13 @@ int BattleUnit::damage(const Position& relative, int power, ItemDamageType type,
 			switch ((relativeDirection - _direction) %8)
 			{
 				case 0:	side = SIDE_FRONT; 										break;
-				case 1:	side = RNG::generate(0,2) < 2 ? SIDE_FRONT:SIDE_RIGHT; 	break;
+				case 1:	side = RNG::generate(0, 2) < 2 ? SIDE_FRONT:SIDE_RIGHT;	break;
 				case 2:	side = SIDE_RIGHT; 										break;
-				case 3:	side = RNG::generate(0,2) < 2 ? SIDE_REAR:SIDE_RIGHT; 	break;
+				case 3:	side = RNG::generate(0, 2) < 2 ? SIDE_REAR:SIDE_RIGHT; 	break;
 				case 4:	side = SIDE_REAR; 										break;
-				case 5:	side = RNG::generate(0,2) < 2 ? SIDE_REAR:SIDE_LEFT; 	break;
+				case 5:	side = RNG::generate(0, 2) < 2 ? SIDE_REAR:SIDE_LEFT; 	break;
 				case 6:	side = SIDE_LEFT; 										break;
-				case 7:	side = RNG::generate(0,2) < 2 ? SIDE_FRONT:SIDE_LEFT; 	break;
+				case 7:	side = RNG::generate(0, 2) < 2 ? SIDE_FRONT:SIDE_LEFT; 	break;
 			}
 
 			if (relative.z > getHeight())
@@ -1218,13 +1218,13 @@ void BattleUnit::keepFalling()
 
 		if (_health == 0)
 		{
-			Log(LOG_INFO) << "BattleUnit::keepFalling() " << getId() << ". . STATUS_DEAD";
+			//Log(LOG_INFO) << "BattleUnit::keepFalling() " << getId() << ". . STATUS_DEAD";
 
 			_status = STATUS_DEAD;
 		}
 		else
 		{
-			Log(LOG_INFO) << "BattleUnit::keepFalling() " << getId() << ". . STATUS_UNCONSCIOUS";
+			//Log(LOG_INFO) << "BattleUnit::keepFalling() " << getId() << ". . STATUS_UNCONSCIOUS";
 
 			_status = STATUS_UNCONSCIOUS;
 		}
@@ -1478,7 +1478,7 @@ void BattleUnit::clearVisibleTiles()
  */
 double BattleUnit::getFiringAccuracy(BattleActionType actionType, BattleItem *item)
 {
-	Log(LOG_INFO) << "BattleUnit::getFiringAccuracy(), unitID " << getId() << " /  getStats()->firing" << getStats()->firing;
+	//Log(LOG_INFO) << "BattleUnit::getFiringAccuracy(), unitID " << getId() << " /  getStats()->firing" << getStats()->firing;
 	double result = (double)(getStats()->firing / 100.0);
 
 	double weaponAcc = item->getRules()->getAccuracySnap();
@@ -2313,7 +2313,7 @@ std::wstring BattleUnit::getName(Language* lang, bool debugAppendId) const
  */
 UnitStats* BattleUnit::getStats()
 {
-	Log(LOG_INFO) << "UnitStats* BattleUnit::getStats(), unitID = " << getId();
+	//Log(LOG_INFO) << "UnitStats* BattleUnit::getStats(), unitID = " << getId();
 //	adjustStats(3);		// kL, should be gameDifficulty in there <-
 
 	return &_stats;
@@ -2774,15 +2774,15 @@ void BattleUnit::adjustStats(const int diff)
 	_stats.psiSkill		+= 4 * diff * _stats.psiSkill / 100;
 	_stats.psiStrength	+= 4 * diff * _stats.psiStrength / 100;
 
-	Log(LOG_INFO) << "BattleUnit::adjustStats(), unitID = " << getId();
-	Log(LOG_INFO) << "BattleUnit::adjustStats(), _stats.tu = " << _stats.tu;
-	Log(LOG_INFO) << "BattleUnit::adjustStats(), _stats.stamina = " << _stats.stamina;
-	Log(LOG_INFO) << "BattleUnit::adjustStats(), _stats.reactions = " << _stats.reactions;
-	Log(LOG_INFO) << "BattleUnit::adjustStats(), _stats.firing = " << _stats.firing;
-	Log(LOG_INFO) << "BattleUnit::adjustStats(), _stats.strength = " << _stats.strength;
-	Log(LOG_INFO) << "BattleUnit::adjustStats(), _stats.melee = " << _stats.melee;
-	Log(LOG_INFO) << "BattleUnit::adjustStats(), _stats.psiSkill = " << _stats.psiSkill;
-	Log(LOG_INFO) << "BattleUnit::adjustStats(), _stats.psiStrength = " << _stats.psiStrength;
+	//Log(LOG_INFO) << "BattleUnit::adjustStats(), unitID = " << getId();
+	//Log(LOG_INFO) << "BattleUnit::adjustStats(), _stats.tu = " << _stats.tu;
+	//Log(LOG_INFO) << "BattleUnit::adjustStats(), _stats.stamina = " << _stats.stamina;
+	//Log(LOG_INFO) << "BattleUnit::adjustStats(), _stats.reactions = " << _stats.reactions;
+	//Log(LOG_INFO) << "BattleUnit::adjustStats(), _stats.firing = " << _stats.firing;
+	//Log(LOG_INFO) << "BattleUnit::adjustStats(), _stats.strength = " << _stats.strength;
+	//Log(LOG_INFO) << "BattleUnit::adjustStats(), _stats.melee = " << _stats.melee;
+	//Log(LOG_INFO) << "BattleUnit::adjustStats(), _stats.psiSkill = " << _stats.psiSkill;
+	//Log(LOG_INFO) << "BattleUnit::adjustStats(), _stats.psiStrength = " << _stats.psiStrength;
 }
 
 /**
@@ -2825,7 +2825,7 @@ int BattleUnit::getCoverReserve() const
  */
 void BattleUnit::initDeathSpin()
 {
-	Log(LOG_INFO) << "BattleUnit::deathPirouette()" << " [target]: " << (getId());
+	//Log(LOG_INFO) << "BattleUnit::deathPirouette()" << " [target]: " << (getId());
 
 	_status = STATUS_TURNING;
 	_spinPhase = 0;
@@ -2838,7 +2838,7 @@ void BattleUnit::initDeathSpin()
  */
 void BattleUnit::contDeathSpin()
 {
-	Log(LOG_INFO) << "BattleUnit::contDeathSpin()" << " [target]: " << (getId());
+	//Log(LOG_INFO) << "BattleUnit::contDeathSpin()" << " [target]: " << (getId());
 
 	int d = _direction;
 	if (3 == d) // if facing player, 1 rotation left

@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "NewManufactureListState.h"
 #include <algorithm>
 #include "../Interface/Window.h"
@@ -35,6 +36,7 @@
 #include "ManufactureStartState.h"
 #include "../Menu/ErrorMessageState.h"
 
+
 namespace OpenXcom
 {
 
@@ -43,24 +45,42 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
  */
-NewManufactureListState::NewManufactureListState(Game *game, Base *base) : State(game), _base(base)
+NewManufactureListState::NewManufactureListState(Game* game, Base* base)
+	:
+		State(game),
+		_base(base)
 {
-	int width = 320;
+/*kL	int width = 320;
 	int height = 140;
 	int max_width = 320;
 	int max_height = 200;
-	int start_x = (max_width - width) / 2;
-	int start_y = (max_height - height) / 2;
+	int start_x = (max_width - width) / 2;		// 0
+	int start_y = (max_height - height) / 2;	// 30
 	int button_x_border = 8;
 	int button_y_border = 8;
-	int button_height = 16;
+	int button_height = 16; */
+
 	_screen = false;
-	_window = new Window(this, width, height, start_x, start_y, POPUP_BOTH);
-	_btnOk = new TextButton (width - 2 * button_x_border, button_height, start_x + button_x_border, start_y + height - button_height - button_y_border);
-	_txtTitle = new Text (width - 2 * button_x_border, button_height, start_x + button_x_border + 2, start_y + button_y_border);
-	_txtItem = new Text (10 * button_x_border, button_height / 2, start_x + button_x_border + 2, start_y + 3 * button_y_border);
-	_txtCategory = new Text (10 * button_x_border, button_height / 2, start_x + 20.75f * button_x_border, start_y + 3 * button_y_border);
-	_lstManufacture = new TextList(width - 4 * button_x_border, height - 3.75f * button_height - 2 * button_y_border, start_x + button_x_border, start_y + 5 * button_y_border);
+
+/*kL	_window			= new Window(this, width, height, start_x, start_y, POPUP_BOTH);
+	_txtTitle		= new Text (width - 2 * button_x_border, button_height, start_x + button_x_border + 2, start_y + button_y_border);
+	_txtItem		= new Text (10 * button_x_border, button_height / 2, start_x + button_x_border + 2, start_y + 3 * button_y_border);
+	_txtCategory	= new Text (10 * button_x_border, button_height / 2, start_x + 20.75f * button_x_border, start_y + 3 * button_y_border);
+	_lstManufacture	= new TextList(width - 4 * button_x_border, height - 3.75f * button_height - 2 * button_y_border, start_x + button_x_border, start_y + 5 * button_y_border);
+	_btnOk			= new TextButton (width - 2 * button_x_border, button_height, start_x + button_x_border, start_y + height - button_height - button_y_border); */
+
+	_window			= new Window(this, 320, 140, 0, 30, POPUP_BOTH);
+
+	_txtTitle		= new Text(300, 16, 10, 39);
+
+	_txtItem		= new Text(80, 9, 16, 58);
+	_txtCategory	= new Text(80, 9, 172, 58);
+
+//	_lstManufacture->setColumns(2, 156, 130);		// TEMP.
+	_lstManufacture	= new TextList(288, 72, 8, 70);
+
+	_btnOk			= new TextButton(288, 16, 16, 147);
+
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
 
 	add(_window);
@@ -74,6 +94,7 @@ NewManufactureListState::NewManufactureListState(Game *game, Base *base) : State
 
 	_window->setColor(Palette::blockOffset(15)+1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK17.SCR"));
+
 	_txtTitle->setColor(Palette::blockOffset(15)+1);
 	_txtTitle->setText(tr("STR_PRODUCTION_ITEMS"));
 	_txtTitle->setBig();
@@ -85,18 +106,20 @@ NewManufactureListState::NewManufactureListState(Game *game, Base *base) : State
 	_txtCategory->setColor(Palette::blockOffset(15)+1);
 	_txtCategory->setText(tr("STR_CATEGORY"));
 
-	_lstManufacture->setColumns(2, int(19.5f * button_x_border), int(16.25f * button_x_border));
+//kL	_lstManufacture->setColumns(2, int(19.5f * button_x_border), int(16.25f * button_x_border));
+	_lstManufacture->setColumns(2, 156, 130);
 	_lstManufacture->setSelectable(true);
 	_lstManufacture->setBackground(_window);
-	_lstManufacture->setMargin(2);
+//kL	_lstManufacture->setMargin(2);
+	_lstManufacture->setMargin(8);		// kL
 	_lstManufacture->setColor(Palette::blockOffset(13));
 	_lstManufacture->setArrowColor(Palette::blockOffset(15)+1);
-	_lstManufacture->onMouseClick((ActionHandler)&NewManufactureListState::lstProdClick);
+	_lstManufacture->onMouseClick((ActionHandler)& NewManufactureListState::lstProdClick);
 
 	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(tr("STR_OK"));
-	_btnOk->onMouseClick((ActionHandler)&NewManufactureListState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&NewManufactureListState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onMouseClick((ActionHandler)& NewManufactureListState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)& NewManufactureListState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 }
 
 /**
@@ -120,10 +143,11 @@ void NewManufactureListState::btnOkClick(Action *)
  * Opens the Production settings screen.
  * @param action A pointer to an Action.
 */
-void NewManufactureListState::lstProdClick (Action *)
+void NewManufactureListState::lstProdClick(Action *)
 {
 	RuleManufacture *rule = _possibleProductions[_lstManufacture->getSelectedRow()];
-	if (rule->getCategory() == "STR_CRAFT" && _base->getAvailableHangars() - _base->getUsedHangars() == 0)
+	if (rule->getCategory() == "STR_CRAFT"
+		&& _base->getAvailableHangars() - _base->getUsedHangars() == 0)
 	{
 		_game->pushState(new ErrorMessageState(_game, "STR_NO_FREE_HANGARS_FOR_CRAFT_PRODUCTION", Palette::blockOffset(15)+1, "BACK17.SCR", 6));
 	}

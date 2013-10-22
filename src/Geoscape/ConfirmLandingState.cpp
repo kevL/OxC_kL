@@ -63,40 +63,41 @@ ConfirmLandingState::ConfirmLandingState(Game* game, Craft* craft, int texture, 
 		_state(state)
 {
 	_screen = false;
-
-	// Create objects
 	_window		= new Window(this, 216, 160, 20, 20, POPUP_BOTH);
+
 //kL	_btnYes		= new TextButton(80, 20, 40, 150);
 //kL	_btnNo		= new TextButton(80, 20, 136, 150);
-	_btnNo		= new TextButton(80, 20, 40, 150);		// kL
-	_btnYes		= new TextButton(80, 20, 136, 150);		// kL
-	_txtMessage = new Text(206, 64, 25, 40);
+	_txtMessage = new Text(206, 82, 25, 38);
+
 	_txtBegin	= new Text(206, 16, 25, 130);
 
-	// Set palette
+	_btnNo		= new TextButton(80, 18, 40, 151);		// kL
+	_btnYes		= new TextButton(80, 18, 136, 151);		// kL
+
+
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(3)), Palette::backPos, 16);
 
 	add(_window);
-	add(_btnYes);
-	add(_btnNo);
 	add(_txtMessage);
 	add(_txtBegin);
+	add(_btnNo);
+	add(_btnYes);
 
 	centerAllSurfaces();
 
-	// Set up objects
+
 	_window->setColor(Palette::blockOffset(8)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK15.SCR"));
 
 	_btnYes->setColor(Palette::blockOffset(8)+5);
 	_btnYes->setText(tr("STR_YES"));
-	_btnYes->onMouseClick((ActionHandler) &ConfirmLandingState::btnYesClick);
-	_btnYes->onKeyboardPress((ActionHandler) &ConfirmLandingState::btnYesClick, (SDLKey)Options::getInt("keyOk"));
+	_btnYes->onMouseClick((ActionHandler)& ConfirmLandingState::btnYesClick);
+	_btnYes->onKeyboardPress((ActionHandler)& ConfirmLandingState::btnYesClick, (SDLKey)Options::getInt("keyOk"));
 
 	_btnNo->setColor(Palette::blockOffset(8)+5);
 	_btnNo->setText(tr("STR_NO"));
-	_btnNo->onMouseClick((ActionHandler) &ConfirmLandingState::btnNoClick);
-	_btnNo->onKeyboardPress((ActionHandler) &ConfirmLandingState::btnNoClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnNo->onMouseClick((ActionHandler)& ConfirmLandingState::btnNoClick);
+	_btnNo->onKeyboardPress((ActionHandler)& ConfirmLandingState::btnNoClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtMessage->setColor(Palette::blockOffset(8)+10);
 	_txtMessage->setSecondaryColor(Palette::blockOffset(8)+5);

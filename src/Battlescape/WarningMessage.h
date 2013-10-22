@@ -16,10 +16,12 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_WARNINGMESSAGE_H
 #define OPENXCOM_WARNINGMESSAGE_H
 
 #include "../Engine/Surface.h"
+
 
 namespace OpenXcom
 {
@@ -32,27 +34,31 @@ class Font;
  * Coloured box with text inside that fades out after it is displayed.
  * Used to display warning/error messages on the Battlescape.
  */
-class WarningMessage : public Surface
+class WarningMessage
+	:
+		public Surface
 {
 private:
-	Text *_text;
-	Timer *_timer;
+	Text* _text;
+	Timer* _timer;
 	Uint8 _color, _fade;
+
 public:
 	/// Creates a new warning message with the specified size and position.
 	WarningMessage(int width, int height, int x = 0, int y = 0);
 	/// Cleans up the warning message.
 	~WarningMessage();
+
 	/// Sets the color for the warning message.
 	void setColor(Uint8 color);
 	/// Sets the text color for the warning message.
 	void setTextColor(Uint8 color);
 	/// Sets the warning message's various fonts.
-	void setFonts(Font *big, Font *small);
+	void setFonts(Font* big, Font* small);
 	/// Sets the warning message's palette.
-	void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
+	void setPalette(SDL_Color* colors, int firstcolor = 0, int ncolors = 256);
 	/// Shows the warning message.
-	void showMessage(const std::wstring &msg);
+	void showMessage(const std::wstring& msg);
 	/// Handles the timers.
 	void think();
 	/// Fades the message.

@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "PromotionsState.h"
 #include <sstream>
 #include "../Engine/Game.h"
@@ -31,6 +32,7 @@
 #include "../Savegame/Soldier.h"
 #include "../Engine/Options.h"
 
+
 namespace OpenXcom
 {
 
@@ -38,16 +40,22 @@ namespace OpenXcom
  * Initializes all the elements in the Promotions screen.
  * @param game Pointer to the core game.
  */
-PromotionsState::PromotionsState(Game *game) : State(game)
+PromotionsState::PromotionsState(Game* game)
+	:
+		State(game)
 {
 	// Create objects
-	_window = new Window(this, 320, 200, 0, 0);
-	_btnOk = new TextButton(288, 16, 16, 176);
-	_txtTitle = new Text(300, 16, 10, 8);
-	_txtName = new Text(114, 9, 16, 32);
-	_txtRank = new Text(90, 9, 130, 32);
-	_txtBase = new Text(80, 9, 220, 32);
-	_lstSoldiers = new TextList(288, 128, 8, 40);
+	_window			= new Window(this, 320, 200, 0, 0);
+	_txtTitle		= new Text(300, 16, 10, 8);
+	_txtName		= new Text(114, 9, 16, 32);
+	_txtRank		= new Text(90, 9, 130, 32);
+	_txtBase		= new Text(80, 9, 220, 32);
+//kL	_lstSoldiers	= new TextList(288, 128, 8, 40);
+	_lstSoldiers	= new TextList(288, 128, 8, 42);		// kL
+
+//kL	_btnOk			= new TextButton(288, 16, 16, 176);
+	_btnOk			= new TextButton(288, 16, 16, 177);		// kL
+
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
@@ -67,9 +75,9 @@ PromotionsState::PromotionsState(Game *game) : State(game)
 
 	_btnOk->setColor(Palette::blockOffset(15)-1);
 	_btnOk->setText(tr("STR_OK"));
-	_btnOk->onMouseClick((ActionHandler)&PromotionsState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&PromotionsState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
-	_btnOk->onKeyboardPress((ActionHandler)&PromotionsState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onMouseClick((ActionHandler)& PromotionsState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)& PromotionsState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
+	_btnOk->onKeyboardPress((ActionHandler)& PromotionsState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(8)+5);
 	_txtTitle->setText(tr("STR_PROMOTIONS"));
@@ -91,9 +99,9 @@ PromotionsState::PromotionsState(Game *game) : State(game)
 	_lstSoldiers->setBackground(_window);
 	_lstSoldiers->setMargin(8);
 
-	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
+	for (std::vector<Base* >::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
 	{
-		for (std::vector<Soldier*>::iterator j = (*i)->getSoldiers()->begin(); j != (*i)->getSoldiers()->end(); ++j)
+		for (std::vector<Soldier* >::iterator j = (*i)->getSoldiers()->begin(); j != (*i)->getSoldiers()->end(); ++j)
 		{
 			if ((*j)->isPromoted())
 			{
@@ -114,7 +122,7 @@ PromotionsState::~PromotionsState()
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void PromotionsState::btnOkClick(Action *)
+void PromotionsState::btnOkClick(Action* )
 {
 	_game->popState();
 }

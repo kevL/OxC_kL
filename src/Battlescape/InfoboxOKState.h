@@ -16,11 +16,13 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_INFOBOXOKSTATE_H
 #define OPENXCOM_INFOBOXOKSTATE_H
 
 #include "../Engine/State.h"
 #include <string>
+
 
 namespace OpenXcom
 {
@@ -32,19 +34,23 @@ class Text;
 /**
  * Notifies the player about things like soldiers going unconscious or dying from wounds.
  */
-class InfoboxOKState : public State
+class InfoboxOKState
+	:
+		public State
 {
 private:
-	TextButton *_btnOk;
-	Frame *_frame;
-	Text *_txtTitle;
-public:
-	/// Creates the InfoboxOKState.
-	InfoboxOKState(Game *game, const std::wstring &msg);
-	/// Cleans up the InfoboxOKState.
-	~InfoboxOKState();
-	/// Handler for clicking the OK button.
-	void btnOkClick(Action *action);
+	TextButton* _btnOk;
+	Frame* _frame;
+	Text* _txtTitle;
+
+	public:
+		/// Creates the InfoboxOKState.
+		InfoboxOKState(Game* game, const std::wstring& msg);
+		/// Cleans up the InfoboxOKState.
+		~InfoboxOKState();
+
+		/// Handler for clicking the OK button.
+		void btnOkClick(Action* action);
 };
 
 }

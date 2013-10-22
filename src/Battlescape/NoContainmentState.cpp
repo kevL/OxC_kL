@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "NoContainmentState.h"
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
@@ -26,6 +27,7 @@
 #include "../Interface/Text.h"
 #include "../Engine/Options.h"
 
+
 namespace OpenXcom
 {
 
@@ -33,34 +35,36 @@ namespace OpenXcom
  * Initializes all the elements in the No Containment screen.
  * @param game Pointer to the core game.
  */
-NoContainmentState::NoContainmentState(Game *game) : State(game)
+NoContainmentState::NoContainmentState(Game* game)
+	:
+		State(game)
 {
-	// Create objects
-	_window = new Window(this, 320, 200, 0, 0);
-	_btnOk = new TextButton(120, 18, 100, 174);
-	_txtTitle = new Text(220, 64, 50, 8);
+	_window		= new Window(this, 320, 200, 0, 0);
+	_txtTitle	= new Text(220, 64, 50, 8);
+	_btnOk		= new TextButton(120, 18, 100, 174);
 
-	// Set palette
+
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
 	add(_window);
-	add(_btnOk);
 	add(_txtTitle);
+	add(_btnOk);
 
 	centerAllSurfaces();
 
-	// Set up objects
+
 	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(tr("STR_OK"));
-	_btnOk->onMouseClick((ActionHandler)&NoContainmentState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&NoContainmentState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
-	_btnOk->onKeyboardPress((ActionHandler)&NoContainmentState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onMouseClick((ActionHandler)& NoContainmentState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)& NoContainmentState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
+	_btnOk->onKeyboardPress((ActionHandler)& NoContainmentState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(8)+5);
 	_txtTitle->setText(tr("STR_ALIEN_DIES_NO_ALIEN_CONTAINMENT_FACILITY"));
 	_txtTitle->setAlign(ALIGN_CENTER);
+	_txtTitle->setVerticalAlign(ALIGN_MIDDLE);	// kL
 	_txtTitle->setBig();
 	_txtTitle->setWordWrap(true);
 }
@@ -76,7 +80,7 @@ NoContainmentState::~NoContainmentState()
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void NoContainmentState::btnOkClick(Action *)
+void NoContainmentState::btnOkClick(Action* )
 {
 	_game->popState();
 }

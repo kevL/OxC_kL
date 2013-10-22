@@ -40,7 +40,7 @@ TurnCounter::TurnCounter(int width, int height, int x, int y)
 		Surface(width, height, x + 1, y + 1),
 		_tCount(1)
 {
-	Log(LOG_INFO) << "Create TurnCounter";
+	//Log(LOG_INFO) << "Create TurnCounter";
 
 	_visible = true;
 
@@ -57,7 +57,7 @@ TurnCounter::TurnCounter(int width, int height, int x, int y)
  */
 TurnCounter::~TurnCounter()
 {
-	Log(LOG_INFO) << "Delete TurnCounter";
+	//Log(LOG_INFO) << "Delete TurnCounter";
 
 	delete _text;
 }

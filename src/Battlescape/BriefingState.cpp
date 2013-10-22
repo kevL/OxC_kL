@@ -50,26 +50,33 @@ namespace OpenXcom
  */
 BriefingState::BriefingState(Game* game, Craft* craft, Base* base)
 	:
-	State(game)
+		State(game)
 {
 //	Log(LOG_INFO) << "Create BriefingState";
 
 	_screen = false;
-
-	// Create objects
 	_window			= new Window(this, 320, 200, 0, 0);
-	_btnOk			= new TextButton(120, 18, 100, 164);
-	_txtTitle		= new Text(300, 16, 16, 24);
-	_txtTarget		= new Text(300, 16, 16, 40);
-	_txtCraft		= new Text(300, 16, 16, 56);
-//kL	_txtBriefing	= new Text(274, 64, 16, 72);
-	_txtBriefing	= new Text(274, 80, 16, 72);	// kL
 
-	std::string mission = _game->getSavedGame()->getSavedBattle()->getMissionType();
+/*	_txtTitle		= new Text(300, 16, 16, 24);
+	_txtTarget		= new Text(300, 16, 16, 40);
+	_txtCraft		= new Text(300, 16, 16, 56); */
+
+	_txtTitle		= new Text(288, 16, 16, 22);	// kL
+
+	_txtTarget		= new Text(288, 16, 16, 39);	// kL
+
+	_txtCraft		= new Text(288, 16, 16, 56);	// kL
+
+//kL	_txtBriefing	= new Text(274, 64, 16, 72);
+	_txtBriefing	= new Text(288, 97, 16, 75);	// kL
+
+//kL	_btnOk			= new TextButton(120, 18, 100, 164);
+	_btnOk			= new TextButton(288, 16, 16, 177);		// kL
+
 
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
 
-	// Set palette
+	std::string mission = _game->getSavedGame()->getSavedBattle()->getMissionType();
 	if (mission == "STR_TERROR_MISSION"
 		|| mission == "STR_BASE_DEFENSE")
 	{
@@ -89,8 +96,8 @@ BriefingState::BriefingState(Game* game, Craft* craft, Base* base)
 	}
 
 	add(_window);
-	add(_btnOk);
 	add(_txtTitle);
+	add(_btnOk);
 
 	if (mission == "STR_ALIEN_BASE_ASSAULT"
 		|| mission == "STR_MARS_CYDONIA_LANDING")
@@ -99,20 +106,19 @@ BriefingState::BriefingState(Game* game, Craft* craft, Base* base)
 		_txtBriefing->setY(56);
 		_txtTarget->setVisible(false);
 	}
-
 	add(_txtTarget);
 
 	if (mission == "STR_MARS_THE_FINAL_ASSAULT")
 	{
 		_txtCraft->setVisible(false);
 	}
-
 	add(_txtCraft);
+
 	add(_txtBriefing);
 
 	centerAllSurfaces();
 
-	// Set up objects
+
 	_window->setColor(Palette::blockOffset(15)-1);
 
 	_btnOk->setColor(Palette::blockOffset(8)+5);

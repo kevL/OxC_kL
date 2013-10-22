@@ -72,7 +72,7 @@ SelectDestinationState::SelectDestinationState(Game* game, Craft* craft, Globe* 
 /*kL	_btnCancel	= new TextButton(60, 12, 110 + dx, 8);
 	_btnCydonia	= new TextButton(60, 12, 180 + dx, 8);
 	_txtTitle	= new Text(100, 16, 10 + dx, 6); */
-	_txtTitle	= new Text(100, 9, 16 + dx, 8);				// kL
+	_txtTitle	= new Text(100, 9, 16 + dx, 10);			// kL
 	_btnCancel	= new TextButton(60, 14, 98 + dx, 8);		// kL
 	_btnCydonia	= new TextButton(60, 14, 180 + dx, 8);		// kL
 

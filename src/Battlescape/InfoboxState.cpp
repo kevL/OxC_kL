@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "InfoboxState.h"
 #include <string>
 #include "../Engine/Game.h"
@@ -25,6 +26,7 @@
 #include "../Interface/Frame.h"
 #include "../Engine/Action.h"
 
+
 namespace OpenXcom
 {
 
@@ -33,22 +35,25 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param msg Message string.
  */
-InfoboxState::InfoboxState(Game *game, const std::wstring &msg) : State(game)
+InfoboxState::InfoboxState(Game* game, const std::wstring& msg)
+	:
+		State(game)
 {
 	_screen = false;
 
-	// Create objects
-	_frame = new Frame(261, 122, 34, 10);
-	_text = new Text(251, 112, 39, 15);
+
+	_frame	= new Frame(261, 122, 34, 10);
+	_text	= new Text(251, 112, 39, 15);
 
 	add(_frame);
 	add(_text);
 
 	centerAllSurfaces();
 
+
 	_frame->setHighContrast(true);
-	_frame->setColor(Palette::blockOffset(0) + 7);
-	_frame->setBackground(Palette::blockOffset(0) + 14);
+	_frame->setColor(Palette::blockOffset(0)+7);
+	_frame->setBackground(Palette::blockOffset(0)+14);
 	_frame->setThickness(9);
 
 	_text->setAlign(ALIGN_CENTER);
@@ -77,11 +82,12 @@ InfoboxState::~InfoboxState()
  * Closes the window.
  * @param action Pointer to an action.
  */
-void InfoboxState::handle(Action *action)
+void InfoboxState::handle(Action* action)
 {
 	State::handle(action);
 
-	if (action->getDetails()->type == SDL_KEYDOWN || action->getDetails()->type == SDL_MOUSEBUTTONDOWN)
+	if (action->getDetails()->type == SDL_KEYDOWN
+		|| action->getDetails()->type == SDL_MOUSEBUTTONDOWN)
 	{
 		close();
 	}

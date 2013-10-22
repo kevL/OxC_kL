@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "InfoboxOKState.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
@@ -26,6 +27,7 @@
 #include "../Interface/Cursor.h"
 #include "../Engine/Options.h"
 
+
 namespace OpenXcom
 {
 
@@ -34,11 +36,13 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param msg Message string.
  */
-InfoboxOKState::InfoboxOKState(Game *game, const std::wstring &msg) : State(game)
+InfoboxOKState::InfoboxOKState(Game* game, const std::wstring& msg)
+	:
+		State(game)
 {
 	_screen = false;
 
-	// Create objects
+
 	_frame		= new Frame(261, 89, 30, 48);
 	_btnOk		= new TextButton(120, 18, 100, 112);
 	_txtTitle	= new Text(255, 61, 33, 51);
@@ -49,7 +53,7 @@ InfoboxOKState::InfoboxOKState(Game *game, const std::wstring &msg) : State(game
 
 	centerAllSurfaces();
 
-	// Set up objects
+
 	_frame->setColor(Palette::blockOffset(6)+3);
 	_frame->setBackground(Palette::blockOffset(6)+12);
 	_frame->setThickness(3);

@@ -1691,7 +1691,7 @@ BattleUnit* SavedBattleGame::getHighestRanked(bool xcom)
 		{
 			if (xcom)
 			{
-				Log(LOG_INFO) << "SavedBattleGame::getHighestRanked(), side is Xcom";
+				//Log(LOG_INFO) << "SavedBattleGame::getHighestRanked(), side is Xcom";
 				if ((*j)->getOriginalFaction() == FACTION_PLAYER)
 				{
 					if (leader == 0
@@ -1703,7 +1703,7 @@ BattleUnit* SavedBattleGame::getHighestRanked(bool xcom)
 			}
 			else if ((*j)->getOriginalFaction() == FACTION_HOSTILE)
 			{
-				Log(LOG_INFO) << "SavedBattleGame::getHighestRanked(), side is aLien";
+				//Log(LOG_INFO) << "SavedBattleGame::getHighestRanked(), side is aLien";
 				if (leader == 0
 					|| (*j)->getRankInt() < leader->getRankInt())
 				{

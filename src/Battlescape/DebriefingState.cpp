@@ -872,8 +872,7 @@ void DebriefingState::prepareDebriefing()
 								addStat("STR_EXAMINATION_ROOM", 1, 1);		// kL
 							break;
 							case ALIEN_ALLOYS:
-//kL								addStat("STR_ALIEN_ALLOYS", 1, 1);
-								addStat("STR_ALIEN_ALLOYS", 1, 2);		// kL
+								addStat("STR_ALIEN_ALLOYS", 1, 1);
 							break;
 							case ALIEN_HABITAT:
 								addStat("STR_ALIEN_HABITAT", 1, 1);

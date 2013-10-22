@@ -56,12 +56,12 @@ ConfirmDestinationState::ConfirmDestinationState(Game* game, Craft* craft, Targe
 
 	_window		= new Window(this, 224, 72, 16, 64);
 
-	_txtTarget	= new Text(214, 32, 21, 72);
+	_txtTarget	= new Text(192, 32, 32, 72);
 
 //kL	_btnOk		= new TextButton(50, 12, 68, 104);
 //kL	_btnCancel	= new TextButton(50, 12, 138, 104);
-	_btnCancel	= new TextButton(75, 14, 51, 104);		// kL
-	_btnOk		= new TextButton(75, 14, 130, 104);		// kL
+	_btnCancel	= new TextButton(75, 14, 51, 115);		// kL
+	_btnOk		= new TextButton(75, 14, 130, 115);		// kL
 
 	if (w != 0
 		&& w->getId() == 0)

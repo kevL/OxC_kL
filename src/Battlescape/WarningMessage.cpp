@@ -23,6 +23,7 @@
 #include "../Engine/Timer.h"
 #include "../Interface/Text.h"
 
+
 namespace OpenXcom
 {
 
@@ -33,7 +34,11 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-WarningMessage::WarningMessage(int width, int height, int x, int y) : Surface(width, height, x, y), _color(0), _fade(0)
+WarningMessage::WarningMessage(int width, int height, int x, int y)
+	:
+		Surface(width, height, x, y),
+		_color(0),
+		_fade(0)
 {
 	_text = new Text(width, 9, 0, (height - 8) / 2);
 	_text->setHighContrast(true);
@@ -79,7 +84,7 @@ void WarningMessage::setTextColor(Uint8 color)
  * @param big Pointer to large-size font.
  * @param small Pointer to small-size font.
  */
-void WarningMessage::setFonts(Font *big, Font *small)
+void WarningMessage::setFonts(Font* big, Font* small)
 {
 	_text->setFonts(big, small);
 }
@@ -90,7 +95,7 @@ void WarningMessage::setFonts(Font *big, Font *small)
  * @param firstcolor Offset of the first color to replace.
  * @param ncolors Amount of colors to replace.
  */
-void WarningMessage::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
+void WarningMessage::setPalette(SDL_Color* colors, int firstcolor, int ncolors)
 {
 	Surface::setPalette(colors, firstcolor, ncolors);
 	_text->setPalette(colors, firstcolor, ncolors);
@@ -100,7 +105,7 @@ void WarningMessage::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
  * Displays the warning message.
  * @param msg Message string.
  */
-void WarningMessage::showMessage(const std::wstring &msg)
+void WarningMessage::showMessage(const std::wstring& msg)
 {
 	_text->setText(msg);
 	_fade = 0;
