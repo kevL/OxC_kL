@@ -16,10 +16,12 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_MULTIPLETARGETSSTATE_H
 #define OPENXCOM_MULTIPLETARGETSSTATE_H
 
 #include "../Engine/State.h"
+
 
 namespace OpenXcom
 {
@@ -34,7 +36,9 @@ class GeoscapeState;
 /**
  * Displays a list of possible targets.
  */
-class MultipleTargetsState : public State
+class MultipleTargetsState
+	:
+		public State
 {
 private:
 	static const int OUTER_MARGIN = 3;
@@ -42,26 +46,28 @@ private:
 	static const int BORDER = 5;
 	static const int BUTTON_HEIGHT = 16;
 
-	std::vector<Target*> _targets;
-	Craft *_craft;
-	GeoscapeState *_state;
+	std::vector<Target* > _targets;
+	Craft* _craft;
+	GeoscapeState* _state;
 
-	Window *_window;
-	TextButton *_btnCancel;
-	TextList *_lstTargets;
-public:
-	/// Creates the Multiple Targets state.
-	MultipleTargetsState(Game *game, std::vector<Target*> targets, Craft *craft, GeoscapeState *state);
-	/// Cleans up the Multiple Targets state.
-	~MultipleTargetsState();
-	/// Updates the window.
-	void init();
-	/// Popup for a target.
-	void popupTarget(Target *target);
-	/// Handler for clicking the Cancel button.
-	void btnCancelClick(Action *action);
-	/// Handler for clicking the Targets list.
-	void lstTargetsClick(Action *action);
+	Window* _window;
+	TextButton* _btnCancel;
+	TextList* _lstTargets;
+
+	public:
+		/// Creates the Multiple Targets state.
+		MultipleTargetsState(Game* game, std::vector<Target* > targets, Craft* craft, GeoscapeState* state);
+		/// Cleans up the Multiple Targets state.
+		~MultipleTargetsState();
+
+		/// Updates the window.
+		void init();
+		/// Popup for a target.
+		void popupTarget(Target* target);
+		/// Handler for clicking the Cancel button.
+		void btnCancelClick(Action* action);
+		/// Handler for clicking the Targets list.
+		void lstTargetsClick(Action* action);
 };
 
 }

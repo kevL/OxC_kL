@@ -16,10 +16,12 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_TARGETINFOSTATE_H
 #define OPENXCOM_TARGETINFOSTATE_H
 
 #include "../Engine/State.h"
+
 
 namespace OpenXcom
 {
@@ -33,21 +35,24 @@ class Target;
  * Generic window used to display all the
  * crafts targeting a certain point on the map.
  */
-class TargetInfoState : public State
+class TargetInfoState
+	:
+		public State
 {
 private:
-	Target *_target;
+	Target* _target;
+	TextButton* _btnOk;
+	Window* _window;
+	Text* _txtTitle, * _txtTargetted, * _txtFollowers;
 
-	TextButton *_btnOk;
-	Window *_window;
-	Text *_txtTitle, *_txtTargetted, *_txtFollowers;
-public:
-	/// Creates the Target Info state.
-	TargetInfoState(Game *game, Target *target);
-	/// Cleans up the Target Info state.
-	~TargetInfoState();
-	/// Handler for clicking the OK button.
-	void btnOkClick(Action *action);
+	public:
+		/// Creates the Target Info state.
+		TargetInfoState(Game* game, Target* target);
+		/// Cleans up the Target Info state.
+		~TargetInfoState();
+
+		/// Handler for clicking the OK button.
+		void btnOkClick(Action* action);
 };
 
 }

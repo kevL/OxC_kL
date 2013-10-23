@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "TargetInfoState.h"
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
@@ -27,6 +28,7 @@
 #include "../Savegame/Target.h"
 #include "../Engine/Options.h"
 
+
 namespace OpenXcom
 {
 
@@ -35,43 +37,45 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param target Pointer to the target to show info from.
  */
-TargetInfoState::TargetInfoState(Game *game, Target *target) : State(game), _target(target)
+TargetInfoState::TargetInfoState(Game* game, Target* target)
+	:
+		State(game),
+		_target(target)
 {
 	_screen = false;
 
-	// Create objects
-	_window = new Window(this, 192, 120, 32, 40, POPUP_BOTH);
-	_btnOk = new TextButton(160, 16, 48, 135);
-	_txtTitle = new Text(182, 32, 37, 46);
-	_txtTargetted = new Text(182, 8, 37, 78);
-	_txtFollowers = new Text(182, 40, 37, 88);
+	_window			= new Window(this, 192, 120, 32, 40, POPUP_BOTH);
+	_txtTitle		= new Text(182, 32, 37, 46);
+	_txtTargetted	= new Text(182, 8, 37, 78);
+	_txtFollowers	= new Text(182, 40, 37, 88);
+	_btnOk			= new TextButton(160, 16, 48, 135);
 
-	// Set palette
+
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
 
 	add(_window);
-	add(_btnOk);
 	add(_txtTitle);
 	add(_txtTargetted);
 	add(_txtFollowers);
+	add(_btnOk);
 
 	centerAllSurfaces();
 
-	// Set up objects
+
 	_window->setColor(Palette::blockOffset(8)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(tr("STR_OK"));
-	_btnOk->onMouseClick((ActionHandler)&TargetInfoState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&TargetInfoState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
-	_btnOk->onKeyboardPress((ActionHandler)&TargetInfoState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onMouseClick((ActionHandler)& TargetInfoState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)& TargetInfoState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
+	_btnOk->onKeyboardPress((ActionHandler)& TargetInfoState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(8)+10);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
-	_txtTitle->setVerticalAlign(ALIGN_MIDDLE);
-	_txtTitle->setWordWrap(true);
+//kL	_txtTitle->setVerticalAlign(ALIGN_MIDDLE);
+//kL	_txtTitle->setWordWrap(true);
 	_txtTitle->setText(_target->getName(_game->getLanguage()));
 
 	_txtTargetted->setColor(Palette::blockOffset(15)-1);
@@ -81,7 +85,7 @@ TargetInfoState::TargetInfoState(Game *game, Target *target) : State(game), _tar
 	_txtFollowers->setColor(Palette::blockOffset(15)-1);
 	_txtFollowers->setAlign(ALIGN_CENTER);
 	std::wstring s = L"";
-	for (std::vector<Target*>::iterator i = _target->getFollowers()->begin(); i != _target->getFollowers()->end(); ++i)
+	for (std::vector<Target* >::iterator i = _target->getFollowers()->begin(); i != _target->getFollowers()->end(); ++i)
 	{
 		s += (*i)->getName(_game->getLanguage());
 		s += L'\n';
@@ -94,14 +98,13 @@ TargetInfoState::TargetInfoState(Game *game, Target *target) : State(game), _tar
  */
 TargetInfoState::~TargetInfoState()
 {
-
 }
 
 /**
  * Closes the window.
  * @param action Pointer to an action.
  */
-void TargetInfoState::btnOkClick(Action *)
+void TargetInfoState::btnOkClick(Action* )
 {
 	_game->popState();
 }

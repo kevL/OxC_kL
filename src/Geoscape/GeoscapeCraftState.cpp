@@ -58,47 +58,42 @@ GeoscapeCraftState::GeoscapeCraftState(Game* game, Craft* craft, Globe* globe, W
 {
 	_screen = false;
 
-	// Create objects
 	_window			= new Window(this, 240, 184, 8, 8, POPUP_BOTH);
 
-//kL	_txtTitle		= new Text(200, 16, 32, 20);
-//kL	_txtStatus		= new Text(210, 16, 32, 36);
-	_txtTitle		= new Text(200, 16, 32, 19);			// kL
-	_txtStatus		= new Text(210, 16, 32, 37);			// kL
+//	_txtTitle		= new Text(200, 16, 32, 19);
+	_txtTitle		= new Text(216, 16, 32, 18);
 
-//	_btnCenter		= new TextButton(192, 12, 32, 112);		// kL
-	_btnCenter		= new TextButton(192, 12, 32, 142);		// kL
-	_btnBase		= new TextButton(192, 12, 32, 127);
-//kL	_btnTarget		= new TextButton(192, 12, 32, 142);
-	_btnTarget		= new TextButton(192, 12, 32, 112);		// kL
-	_btnPatrol		= new TextButton(192, 12, 32, 157);
-	_btnCancel		= new TextButton(192, 12, 32, 172);
+//	_txtStatus		= new Text(210, 16, 32, 37);
+	_txtStatus		= new Text(216, 16, 32, 35);
 
-	// kL. move these up 1px
-	_txtBase		= new Text(200, 9, 32, 51);
+	_btnBase		= new TextButton(192, 13, 32, 127);
+	_btnTarget		= new TextButton(192, 13, 32, 112);
+	_btnCenter		= new TextButton(192, 13, 32, 142);
+	_btnPatrol		= new TextButton(192, 13, 32, 157);
+	_btnCancel		= new TextButton(192, 13, 32, 172);
 
-	_txtSpeed		= new Text(200, 9, 32, 59);
+	_txtBase		= new Text(200, 9, 32, 52);
 
-	_txtMaxSpeed	= new Text(200, 9, 32, 67);
-	_txtSoldier		= new Text(200, 9, 161, 67);		// kL
+	_txtSpeed		= new Text(200, 9, 32, 60);
 
-	_txtAltitude	= new Text(200, 9, 32, 75);
-	_txtHWP			= new Text(200, 9, 161, 75);		// kL
+	_txtMaxSpeed	= new Text(200, 9, 32, 68);
+	_txtSoldier		= new Text(200, 9, 161, 68);
 
-	_txtFuel		= new Text(120, 9, 32, 83);
-	_txtDamage		= new Text(75, 9, 161, 83);			// kL: moved left 3px
+	_txtAltitude	= new Text(200, 9, 32, 76);
+	_txtHWP			= new Text(200, 9, 161, 76);
 
-	_txtW1Name		= new Text(120, 9, 32, 91);
-	_txtW1Ammo		= new Text(60, 9, 161, 91);			// kL: moved left 3px
+	_txtFuel		= new Text(120, 9, 32, 84);
+	_txtDamage		= new Text(75, 9, 161, 84);
 
-	_txtW2Name		= new Text(120, 9, 32, 99);
-	_txtW2Ammo		= new Text(60, 9, 161, 99);			// kL: moved left 3px
-	// kL. end up.
+	_txtW1Name		= new Text(120, 9, 32, 92);
+	_txtW1Ammo		= new Text(60, 9, 161, 92);
 
-//kL	_txtRedirect	= new Text(230, 16, 13, 108);	// kL_note: move up horizontal w/ Base
-	_txtRedirect	= new Text(120, 16, 120, 50);		// kL: move up horizontal w/ Base
+	_txtW2Name		= new Text(120, 9, 32, 100);
+	_txtW2Ammo		= new Text(60, 9, 161, 100);
 
-	// Set palette
+	_txtRedirect	= new Text(120, 16, 120, 50);
+
+
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)), Palette::backPos, 16);
 
 	add(_window);
@@ -112,9 +107,9 @@ GeoscapeCraftState::GeoscapeCraftState(Game* game, Craft* craft, Globe* globe, W
 	add(_txtBase);
 	add(_txtSpeed);
 	add(_txtMaxSpeed);
-	add(_txtSoldier);	// kL
+	add(_txtSoldier);
 	add(_txtAltitude);
-	add(_txtHWP);		// kL
+	add(_txtHWP);
 	add(_txtFuel);
 	add(_txtDamage);
 	add(_txtW1Name);
@@ -125,7 +120,7 @@ GeoscapeCraftState::GeoscapeCraftState(Game* game, Craft* craft, Globe* globe, W
 
 	centerAllSurfaces();
 
-	// Set up objects
+
 	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK12.SCR"));
 
@@ -151,12 +146,13 @@ GeoscapeCraftState::GeoscapeCraftState(Game* game, Craft* craft, Globe* globe, W
 	_btnCancel->onKeyboardPress((ActionHandler)& GeoscapeCraftState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
+	_txtTitle->setAlign(ALIGN_RIGHT);	// kL
 	_txtTitle->setBig();
 	_txtTitle->setText(_craft->getName(_game->getLanguage()));
 
 	_txtStatus->setColor(Palette::blockOffset(15)-1);
 	_txtStatus->setSecondaryColor(Palette::blockOffset(8)+10);
-	_txtStatus->setWordWrap(true);
+//kL	_txtStatus->setWordWrap(true);
 
 	std::wstring status;
 	if (_waypoint != 0)

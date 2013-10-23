@@ -2006,7 +2006,7 @@ void GeoscapeState::time1Month()
 		for (std::vector<AlienBase* >::const_iterator b = _game->getSavedGame()->getAlienBases()->begin(); b != _game->getSavedGame()->getAlienBases()->end(); ++b)
 		{
 			if (!(*b)->isDiscovered()
-				&& RNG::percent(5)
+				&& RNG::percent(5))
 			{
 				(*b)->setDiscovered(true);
 

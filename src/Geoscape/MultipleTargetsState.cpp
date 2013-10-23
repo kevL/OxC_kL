@@ -60,18 +60,31 @@ MultipleTargetsState::MultipleTargetsState(Game* game, std::vector<Target* > tar
 
 	if (_targets.size() > 1)
 	{
+/*	static const int OUTER_MARGIN = 3;
+	static const int INNER_MARGIN = 4;
+	static const int BORDER = 5;
+	static const int BUTTON_HEIGHT = 16; */
+
 		size_t listHeight = _targets.size() * 8;
-		int winHeight = listHeight + BUTTON_HEIGHT + OUTER_MARGIN * 2 + INNER_MARGIN + BORDER * 2;
+/*		int winHeight = listHeight + BUTTON_HEIGHT + OUTER_MARGIN * 2 + INNER_MARGIN + BORDER * 2;
 		int winY = (200 - winHeight) / 2;
 		int listY = winY + BORDER + OUTER_MARGIN;
 		int btnY = listY + listHeight + INNER_MARGIN;
-
-		// Create objects
+		
 		_window = new Window(this, 136, winHeight, 60, winY);
 		_btnCancel = new TextButton(116, BUTTON_HEIGHT, 70, btnY);
-		_lstTargets = new TextList(116, listHeight, 70, listY);
+		_lstTargets = new TextList(116, listHeight, 70, listY); */
 
-		// Set palette
+/*		int winHeight = listHeight + 36;
+		int winY = (236 - listHeight) / 2;
+		int listY = ((236 - listHeight) / 2) + 8;
+		int btnY = ((236 - listHeight) / 2) + listHeight + 12; */
+
+		_window		= new Window(this, 136, listHeight + 36, 60, 118 - listHeight / 2);
+		_btnCancel	= new TextButton(116, 16, 70, 130 + listHeight / 2);
+		_lstTargets	= new TextList(116, listHeight, 70, 126 - listHeight / 2);
+
+
 		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)), Palette::backPos, 16);
 
 		add(_window);
@@ -80,22 +93,23 @@ MultipleTargetsState::MultipleTargetsState(Game* game, std::vector<Target* > tar
 
 		centerAllSurfaces();
 
-		// Set up objects
+
 		_window->setColor(Palette::blockOffset(8)+5);
 		_window->setBackground(_game->getResourcePack()->getSurface("BACK15.SCR"));
 
 		_btnCancel->setColor(Palette::blockOffset(8)+5);
 		_btnCancel->setText(tr("STR_CANCEL_UC"));
-		_btnCancel->onMouseClick((ActionHandler)&MultipleTargetsState::btnCancelClick);
-		_btnCancel->onKeyboardPress((ActionHandler)&MultipleTargetsState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
+		_btnCancel->onMouseClick((ActionHandler)& MultipleTargetsState::btnCancelClick);
+		_btnCancel->onKeyboardPress((ActionHandler)& MultipleTargetsState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
 
 		_lstTargets->setColor(Palette::blockOffset(8)+5);
 		_lstTargets->setColumns(1, 116);
 		_lstTargets->setAlign(ALIGN_CENTER);
 		_lstTargets->setSelectable(true);
 		_lstTargets->setBackground(_window);
-		_lstTargets->onMouseClick((ActionHandler)&MultipleTargetsState::lstTargetsClick);
-		for (std::vector<Target*>::iterator i = _targets.begin(); i != _targets.end(); ++i)
+		_lstTargets->onMouseClick((ActionHandler)& MultipleTargetsState::lstTargetsClick);
+
+		for (std::vector<Target* >::iterator i = _targets.begin(); i != _targets.end(); ++i)
 		{
 			_lstTargets->addRow(1, (*i)->getName(_game->getLanguage()).c_str());
 		}
@@ -107,7 +121,6 @@ MultipleTargetsState::MultipleTargetsState(Game* game, std::vector<Target* > tar
  */
 MultipleTargetsState::~MultipleTargetsState()
 {
-
 }
 
 /**
@@ -128,14 +141,16 @@ void MultipleTargetsState::init()
  * Displays the right popup for a specific target.
  * @param target Pointer to target.
  */
-void MultipleTargetsState::popupTarget(Target *target)
+void MultipleTargetsState::popupTarget(Target* target)
 {
 	_game->popState();
+
 	if (_craft == 0)
 	{
-		Base* b = dynamic_cast<Base*>(target);
-		Craft* c = dynamic_cast<Craft*>(target);
-		Ufo* u = dynamic_cast<Ufo*>(target);
+		Craft* c = dynamic_cast<Craft* >(target);
+		Ufo* u = dynamic_cast<Ufo* >(target);
+
+		Base* b = dynamic_cast<Base* >(target);
 		if (b != 0)
 		{
 			_game->pushState(new InterceptState(_game, _state->getGlobe(), b));
@@ -163,7 +178,7 @@ void MultipleTargetsState::popupTarget(Target *target)
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void MultipleTargetsState::btnCancelClick(Action *)
+void MultipleTargetsState::btnCancelClick(Action* )
 {
 	_game->popState();
 }
@@ -172,7 +187,7 @@ void MultipleTargetsState::btnCancelClick(Action *)
  * Pick a target to display.
  * @param action Pointer to an action.
  */
-void MultipleTargetsState::lstTargetsClick(Action *)
+void MultipleTargetsState::lstTargetsClick(Action* )
 {
 	Target* t = _targets[_lstTargets->getSelectedRow()];
 	popupTarget(t);
