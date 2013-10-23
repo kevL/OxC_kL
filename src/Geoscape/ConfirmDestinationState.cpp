@@ -55,6 +55,7 @@ ConfirmDestinationState::ConfirmDestinationState(Game* game, Craft* craft, Targe
 	_screen = false;
 
 	_window		= new Window(this, 224, 72, 16, 64);
+//kL	_txtTarget	= new Text(212, 32, 22, 72);
 
 	_txtTarget	= new Text(192, 32, 32, 72);
 

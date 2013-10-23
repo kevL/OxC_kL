@@ -129,6 +129,7 @@ OptionsAdvancedState::OptionsAdvancedState(Game* game, OptionsOrigin origin)
 	_settingIntSet.push_back(std::pair<std::string, int>("battleNewPreviewPath", 0));
 	_settingIntSet.push_back(std::pair<std::string, int>("battleExplosionHeight", 0));
 	_settingIntSet.push_back(std::pair<std::string, int>("autosave", 0));
+	_settingIntSet.push_back(std::pair<std::string, int>("maxFrameSkip", 0));
 
 	for (std::vector<std::pair<std::string, int > >::iterator i = _settingIntSet.begin(); i != _settingIntSet.end(); ++i)
 	{
@@ -138,6 +139,10 @@ OptionsAdvancedState::OptionsAdvancedState(Game* game, OptionsOrigin origin)
 		if (i->first == "battleNewPreviewPath")
 		{
 			ss << updatePathString(sel - _settingBoolSet.size()).c_str();
+		}
+		else if (i->first == "maxFrameSkip")
+		{
+			ss << i->second - 1;
 		}
 		else
 		{
@@ -151,7 +156,7 @@ OptionsAdvancedState::OptionsAdvancedState(Game* game, OptionsOrigin origin)
 
 	_lstOptions->setSelectable(true);
 	_lstOptions->setBackground(_window);
-	_lstOptions->onMouseClick((ActionHandler)& OptionsAdvancedState::lstOptionsClick);
+	_lstOptions->onMousePress((ActionHandler)& OptionsAdvancedState::lstOptionsPress);
 	_lstOptions->onMouseOver((ActionHandler)& OptionsAdvancedState::lstOptionsMouseOver);
 	_lstOptions->onMouseOut((ActionHandler)& OptionsAdvancedState::lstOptionsMouseOut);
 }
@@ -194,8 +199,14 @@ void OptionsAdvancedState::btnCancelClick(Action* )
 /**
  *
  */
-void OptionsAdvancedState::lstOptionsClick(Action* )
+void OptionsAdvancedState::lstOptionsPress(Action* action)
 {
+	if (action->getDetails()->button.button != SDL_BUTTON_LEFT
+		&& action->getDetails()->button.button != SDL_BUTTON_RIGHT)
+	{
+		return;
+	}
+
 	size_t sel = _lstOptions->getSelectedRow();
 	std::wstring settingText = L"";
 	if (sel < _boolQuantity)
@@ -207,29 +218,58 @@ void OptionsAdvancedState::lstOptionsClick(Action* )
 	{
 		size_t intSel = sel - _boolQuantity;
 		int increment = 1;
-		std::wstringstream ss;
+		if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+		{
+			increment = -1;
+		}
 
-		switch (intSel) // this is purely future-proofing.
+		std::wstringstream ss;
+		switch (intSel)
 		{
 			case 0: // pathfinding setting
-				if (_settingIntSet.at(intSel).second == 3)
-				{
-					increment = -3;
-				}
 				_settingIntSet.at(intSel).second += increment;
+				if (_settingIntSet.at(intSel).second == 4)
+				{
+					_settingIntSet.at(intSel).second = 0;
+				}
+
+				if (_settingIntSet.at(intSel).second == -1)
+				{
+					_settingIntSet.at(intSel).second = 3;
+				}
+
 				ss << updatePathString(intSel).c_str();
 			break;
 			case 1: // explosion height
-				if (_settingIntSet.at(intSel).second == 3)
-				{
-					increment = -3;
-				}
 				_settingIntSet.at(intSel).second += increment;
+				if (_settingIntSet.at(intSel).second == 4)
+				{
+					_settingIntSet.at(intSel).second = 0;
+				}
+
+				if (_settingIntSet.at(intSel).second == -1)
+				{
+					_settingIntSet.at(intSel).second = 3;
+				}
 				ss << _settingIntSet.at(intSel).second;
 			break;
 			case 2: // autosave
 				_settingIntSet.at(intSel).second = ++_settingIntSet.at(intSel).second % 4;
 				ss << _settingIntSet.at(intSel).second;
+			break;
+			case 3: // frame skip
+				_settingIntSet.at(intSel).second += increment;
+				if (_settingIntSet.at(intSel).second == 12)
+				{
+					_settingIntSet.at(intSel).second = 1;
+				}
+
+				if (_settingIntSet.at(intSel).second == 0)
+				{
+					_settingIntSet.at(intSel).second = 11;
+				}
+
+				ss << _settingIntSet.at(intSel).second - 1;
 			break;
 
 			default:

@@ -164,19 +164,8 @@ Game::Game(const std::string& title)
  */
 Game::~Game()
 {
-<<<<<<< HEAD
 //	Log(LOG_INFO) << "Delete Game";
 
-	if (_save != 0
-		&& _save->getMonthsPassed() >= 0
-		&& Options::getInt("autosave") == 3)
-	{
-		SaveState* ss = new SaveState(this, OPT_MENU, false);
-		delete ss;
-	}
-
-=======
->>>>>>> master
 	Mix_HaltChannel(-1);
 
 	for (std::list<State* >::iterator i = _states.begin(); i != _states.end(); ++i)
@@ -265,10 +254,18 @@ void Game::run()
 		// Process events
 		while (SDL_PollEvent(&_event))
 		{
+			if (CrossPlatform::isQuitShortcut(_event))
+				_event.type = SDL_QUIT;
 			switch (_event.type)
 			{
+<<<<<<< HEAD
 				case SDL_QUIT: _quit = true;
 				break;
+=======
+				case SDL_QUIT:
+					_quit = true;
+					break;
+>>>>>>> master
 				case SDL_ACTIVEEVENT:
 					switch (reinterpret_cast<SDL_ActiveEvent*>(&_event)->state)
 					{
@@ -283,11 +280,21 @@ void Game::run()
 					}
 				break;
 				case SDL_VIDEORESIZE:
+<<<<<<< HEAD
 					Options::setInt("displayWidth", _event.resize.w);
 					Options::setInt("displayHeight", _event.resize.h);
 
 					_screen->setResolution(_event.resize.w, _event.resize.h);
 				break;
+=======
+					if (Options::getBool("allowResize"))
+					{
+						Options::setInt("displayWidth", _event.resize.w);
+						Options::setInt("displayHeight", _event.resize.h);
+						_screen->setResolution(_event.resize.w, _event.resize.h);
+					}
+					break;
+>>>>>>> master
 				case SDL_MOUSEMOTION:
 				case SDL_MOUSEBUTTONDOWN:
 				case SDL_MOUSEBUTTONUP:
@@ -363,10 +370,18 @@ void Game::run()
 			break;
 		}
 	}
+<<<<<<< HEAD
+
+	if (_save != 0
+		&& _save->getMonthsPassed() >= 0
+		&& Options::getInt("autosave") == 3)
+=======
 	
+	// Auto-save
 	if (_save != 0 && _save->getMonthsPassed() >= 0 && Options::getInt("autosave") == 3)
+>>>>>>> master
 	{
-		SaveState *ss = new SaveState(this, OPT_MENU, false);
+		SaveState* ss = new SaveState(this, OPT_MENU, false);
 		delete ss;
 	}
 }

@@ -65,13 +65,24 @@ MonthlyReportState::MonthlyReportState(Game* game, bool psi, Globe* globe)
 
 	// Create objects
 	_window		= new Window(this, 320, 200, 0, 0);
+
 //kL	_btnOk		= new TextButton(50, 12, 135, 180);
-	_txtTitle	= new Text(300, 16, 16, 8);
+
+//kL	_txtTitle	= new Text(300, 16, 16, 8);
+	_txtTitle	= new Text(300, 16, 10, 8);
+
 	_txtMonth	= new Text(110, 8, 16, 24);
-	_txtRating	= new Text(180, 8, 125, 24);
-	_txtChange	= new Text(300, 8, 16, 32);
-	_txtDesc	= new Text(280, 140, 16, 40);
-	_txtFailure	= new Text(270, 180, 25, 34);
+//kL	_txtRating	= new Text(180, 8, 125, 24);
+	_txtRating	= new Text(178, 8, 126, 24);
+
+//kL	_txtChange	= new Text(300, 8, 16, 32);
+	_txtChange	= new Text(288, 8, 16, 32);
+
+//kL	_txtFailure = new Text(290, 128, 15, 34);
+	_txtFailure	= new Text(288, 128, 16, 35);
+
+//kL	_txtDesc	= new Text(280, 140, 16, 40);
+	_txtDesc	= new Text(288, 140, 16, 40);
 
 	_btnOk		= new TextButton(288, 16, 16, 177);		// kL
 
@@ -134,7 +145,8 @@ MonthlyReportState::MonthlyReportState(Game* game, bool psi, Globe* globe)
 		case 10:	m = "STR_OCT"; break;
 		case 11:	m = "STR_NOV"; break;
 		case 12:	m = "STR_DEC"; break;
-	default: m = "";
+
+		default: m = "";
 	}
 
 	int difficulty_threshold = 100 * ((int)(_game->getSavedGame()->getDifficulty()) - 9);
@@ -168,8 +180,7 @@ MonthlyReportState::MonthlyReportState(Game* game, bool psi, Globe* globe)
 	_txtRating->setText(tr("STR_MONTHLY_RATING").arg(_ratingTotal).arg(rating));
 
 	std::wstringstream ss3;
-	if (_fundingDiff > 0)
-		ss3 << '+';
+	if (_fundingDiff > 0) ss3 << '+';
 	ss3 << Text::formatFunding(_fundingDiff);
 
 	_txtChange->setColor(Palette::blockOffset(15)-1);
@@ -191,7 +202,6 @@ MonthlyReportState::MonthlyReportState(Game* game, bool psi, Globe* globe)
 	{
 		satisFactionString = tr("STR_COUNCIL_IS_GENERALLY_SATISFIED");
 	}
-
 
 	if (_lastMonthsRating <= difficulty_threshold
 		&& _ratingTotal <= difficulty_threshold)
@@ -218,19 +228,24 @@ MonthlyReportState::MonthlyReportState(Game* game, bool psi, Globe* globe)
 				_pactList.erase(_pactList.begin(), _pactList.end());
 				_happyList.erase(_happyList.begin(), _happyList.end());
 				_sadList.erase(_sadList.begin(), _sadList.end());
+
 				_gameOver = true;
 			}
 			else
 			{
 				ss4 << "\n\n" << tr("STR_COUNCIL_REDUCE_DEBTS");
 				_game->getSavedGame()->setWarned(true);
+
 				resetWarning = false;
 			}
 		}
 	}
 
-	if (resetWarning && _game->getSavedGame()->getWarned())
+	if (resetWarning
+		&& _game->getSavedGame()->getWarned())
+	{
 		_game->getSavedGame()->setWarned(false);
+	}
 
 	ss4 << countryList(_happyList, "STR_COUNTRY_IS_PARTICULARLY_PLEASED", "STR_COUNTRIES_ARE_PARTICULARLY_HAPPY");
 	ss4 << countryList(_sadList, "STR_COUNTRY_IS_UNHAPPY_WITH_YOUR_ABILITY", "STR_COUNTRIES_ARE_UNHAPPY_WITH_YOUR_ABILITY");
@@ -258,21 +273,21 @@ void MonthlyReportState::init()
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void MonthlyReportState::btnOkClick(Action* )
+void MonthlyReportState::btnOkClick(Action *)
 {
 	if (!_gameOver)
 	{
 		_game->popState();
 
 		if (_psi)
-			_game->pushState (new PsiTrainingState(_game));
+			_game->pushState(new PsiTrainingState(_game));
 	}
 	else
 	{
 		if (_txtFailure->getVisible())
 		{
 			_game->popState();
-			_game->pushState (new DefeatState(_game));
+			_game->pushState(new DefeatState(_game));
 		}
 		else
 		{
@@ -307,7 +322,7 @@ void MonthlyReportState::calculateChanges()
 
 	// update activity meters, calculate a total score based
 	// on regional activity and gather last month's score
-	for (std::vector<Region*>::iterator k = _game->getSavedGame()->getRegions()->begin(); k != _game->getSavedGame()->getRegions()->end(); ++k)
+	for (std::vector<Region* >::iterator k = _game->getSavedGame()->getRegions()->begin(); k != _game->getSavedGame()->getRegions()->end(); ++k)
 	{
 		(*k)->newMonth();
 
@@ -329,7 +344,7 @@ void MonthlyReportState::calculateChanges()
 
 	// now that we have our totals we can send the relevant info to the countries
 	// and have them make their decisions weighted on the council's perspective.
-	for (std::vector<Country*>::iterator k = _game->getSavedGame()->getCountries()->begin(); k != _game->getSavedGame()->getCountries()->end(); ++k)
+	for (std::vector<Country* >::iterator k = _game->getSavedGame()->getCountries()->begin(); k != _game->getSavedGame()->getCountries()->end(); ++k)
 	{
 		// add them to the list of new pact members this is done BEFORE initiating
 		// a new month because the _newPact flag will be reset in the process
@@ -343,9 +358,9 @@ void MonthlyReportState::calculateChanges()
 
 		// and after they've made their decisions, calculate the difference,
 		// and add them to the appropriate lists.
-		_fundingDiff += (*k)->getFunding().back()-(*k)->getFunding().at((*k)->getFunding().size()-2);
+		_fundingDiff += (*k)->getFunding().back() - (*k)->getFunding().at((*k)->getFunding().size() - 2);
 
-		switch((*k)->getSatisfaction())
+		switch ((*k)->getSatisfaction())
 		{
 			case 1:
 				_sadList.push_back((*k)->getRules()->getType());
@@ -370,7 +385,7 @@ void MonthlyReportState::calculateChanges()
  * @param singular String ID to append at the end if the list is singular.
  * @param plural String ID to append at the end if the list is plural.
  */
-std::wstring MonthlyReportState::countryList(const std::vector<std::string> &countries, const std::string &singular, const std::string &plural)
+std::wstring MonthlyReportState::countryList(const std::vector<std::string>& countries, const std::string& singular, const std::string& plural)
 {
 	std::wstringstream ss;
 	if (!countries.empty())
@@ -383,15 +398,18 @@ std::wstring MonthlyReportState::countryList(const std::vector<std::string> &cou
 		else
 		{
 			LocalizedText list = tr(countries.front());
+
 			std::vector<std::string>::const_iterator i;
 			for (i = countries.begin() + 1; i < countries.end() - 1; ++i)
 			{
 				list = tr("STR_COUNTRIES_COMMA").arg(list).arg(tr(*i));
 			}
 			list = tr("STR_COUNTRIES_AND").arg(list).arg(tr(*i));
+
 			ss << tr(plural).arg(list);
 		}
 	}
+
 	return ss.str();
 }
 

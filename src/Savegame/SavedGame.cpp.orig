@@ -178,11 +178,7 @@ SavedGame::~SavedGame()
  * @param list Text list.
  * @param lang Loaded language.
  */
-<<<<<<< HEAD
-void SavedGame::getList(TextList* list, Language* lang)
-=======
-std::vector<std::string> SavedGame::getList(TextList *list, Language *lang)
->>>>>>> master
+std::vector<std::string> SavedGame::getList(TextList* list, Language* lang)
 {
 	std::vector<std::string> saves = CrossPlatform::getFolderContents(Options::getUserFolder(), "sav");
 
@@ -204,14 +200,6 @@ std::vector<std::string> SavedGame::getList(TextList *list, Language *lang)
 			saveMonth << lang->getString(time.getMonthString());
 			saveYear << time.getYear();
 
-<<<<<<< HEAD
-			std::string s = file.substr(0, file.length() - 4);
-#ifdef _WIN32
-			std::wstring wstr = Language::cpToWstr(s);
-#else
-			std::wstring wstr = Language::utf8ToWstr(s);
-#endif
-=======
 			std::wstring wstr;
 			if (doc["name"])
 			{
@@ -222,7 +210,7 @@ std::vector<std::string> SavedGame::getList(TextList *list, Language *lang)
 				std::string s = CrossPlatform::noExt(file);
 				wstr = Language::fsToWstr(s);
 			}
->>>>>>> master
+
 			list->addRow(5, wstr.c_str(), Language::utf8ToWstr(saveTime.str()).c_str(), saveDay.str().c_str(), saveMonth.str().c_str(), saveYear.str().c_str());
 		}
 		catch (Exception &e)
@@ -262,17 +250,13 @@ void SavedGame::load(const std::string& filename, Ruleset* rule)
 
 	// Get brief save info
 	YAML::Node brief = file[0];
-<<<<<<< HEAD
 
-=======
-	/*
->>>>>>> master
-	std::string version = brief["version"].as<std::string>();
+/*	std::string version = brief["version"].as<std::string>();
 	if (version != OPENXCOM_VERSION_SHORT)
 	{
 		throw Exception("Version mismatch");
-	}
-	*/
+	} */
+
 	_time->load(brief["time"]);
 	if (brief["name"])
 	{
@@ -413,22 +397,18 @@ void SavedGame::save(const std::string& filename) const
 
 	// Saves the brief game info used in the saves list
 	YAML::Node brief;
-<<<<<<< HEAD
 
+	brief["name"]		= Language::wstrToUtf8(_name);
 	brief["version"]	= OPENXCOM_VERSION_SHORT;
 	brief["build"]		= OPENXCOM_VERSION_GIT;
 	brief["time"]		= _time->save();
-=======
-	brief["name"] = Language::wstrToUtf8(_name);
-	brief["version"] = OPENXCOM_VERSION_SHORT;
-	brief["build"] = OPENXCOM_VERSION_GIT;
-	brief["time"] = _time->save();
+
 	if (_battleGame != 0)
 	{
 		brief["mission"] = _battleGame->getMissionType();
 		brief["turn"] = _battleGame->getTurn();
 	}
->>>>>>> master
+
 	out << brief;
 
 	// Saves the full game data to the save
@@ -684,10 +664,24 @@ void SavedGame::setTime(GameTime time)
  */
 int SavedGame::getId(const std::string& name)
 {
+<<<<<<< HEAD
 	int id = _ids[name];
 	_ids[name]++;
 
 	return id;
+=======
+	std::map<std::string, int>::iterator i = _ids.find(name);
+	if (i != _ids.end())
+	{
+		i->second++;
+		return i->second;
+	}
+	else
+	{
+		_ids[name] = 2;
+		return 1;
+	}
+>>>>>>> master
 }
 
 /**

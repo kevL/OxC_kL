@@ -51,27 +51,40 @@ namespace OpenXcom
  */
 MonthlyReportState::MonthlyReportState(Game* game, bool psi, Globe* globe)
 	:
-	State(game),
-	_psi(psi),
-	_gameOver(false),
-	_ratingTotal(0),
-	_fundingDiff(0),
-	_lastMonthsRating(0),
-	_happyList(0),
-	_sadList(0),
-	_pactList(0)
+		State(game),
+		_psi(psi),
+		_gameOver(false),
+		_ratingTotal(0),
+		_fundingDiff(0),
+		_lastMonthsRating(0),
+		_happyList(0),
+		_sadList(0),
+		_pactList(0)
 {
 	_globe = globe;
 
 	// Create objects
+<<<<<<< HEAD
 	_window		= new Window(this, 320, 200, 0, 0);
-	_btnOk		= new TextButton(50, 12, 135, 180);
+//kL	_btnOk		= new TextButton(50, 12, 135, 180);
 	_txtTitle	= new Text(300, 16, 16, 8);
 	_txtMonth	= new Text(110, 8, 16, 24);
 	_txtRating	= new Text(180, 8, 125, 24);
 	_txtChange	= new Text(300, 8, 16, 32);
 	_txtDesc	= new Text(280, 140, 16, 40);
 	_txtFailure	= new Text(270, 180, 25, 34);
+
+	_btnOk		= new TextButton(288, 16, 16, 177);		// kL
+=======
+	_window = new Window(this, 320, 200, 0, 0);
+	_btnOk = new TextButton(50, 12, 135, 180);
+	_txtTitle = new Text(300, 16, 16, 8);
+	_txtMonth = new Text(110, 8, 16, 24);
+	_txtRating = new Text(180, 8, 125, 24);
+	_txtChange = new Text(300, 8, 16, 32);
+	_txtDesc = new Text(280, 140, 16, 40);
+	_txtFailure = new Text(290, 128, 15, 34);
+>>>>>>> master
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(3)), Palette::backPos, 16);
@@ -120,7 +133,6 @@ MonthlyReportState::MonthlyReportState(Game* game, bool psi, Globe* globe)
 	std::string m;
 	switch (month)
 	{
-<<<<<<< HEAD
 		case 1:		m = "STR_JAN"; break;
 		case 2:		m = "STR_FEB"; break;
 		case 3:		m = "STR_MAR"; break;
@@ -133,21 +145,7 @@ MonthlyReportState::MonthlyReportState(Game* game, bool psi, Globe* globe)
 		case 10:	m = "STR_OCT"; break;
 		case 11:	m = "STR_NOV"; break;
 		case 12:	m = "STR_DEC"; break;
-=======
-	case 1: m = "STR_JAN"; break;
-	case 2: m = "STR_FEB"; break;
-	case 3: m = "STR_MAR"; break;
-	case 4: m = "STR_APR"; break;
-	case 5: m = "STR_MAY"; break;
-	case 6: m = "STR_JUN"; break;
-	case 7: m = "STR_JUL"; break;
-	case 8: m = "STR_AUG"; break;
-	case 9: m = "STR_SEP"; break;
-	case 10: m = "STR_OCT"; break;
-	case 11: m = "STR_NOV"; break;
-	case 12: m = "STR_DEC"; break;
 	default: m = "";
->>>>>>> master
 	}
 
 	int difficulty_threshold = 100 * ((int)(_game->getSavedGame()->getDifficulty()) - 9);
@@ -245,117 +243,10 @@ MonthlyReportState::MonthlyReportState(Game* game, bool psi, Globe* globe)
 	if (resetWarning && _game->getSavedGame()->getWarned())
 		_game->getSavedGame()->setWarned(false);
 
-<<<<<<< HEAD
-	if (_happyList.size())
-	{
-		ss4 << "\n\n";
-		for (std::vector<std::string>::iterator happy = _happyList.begin(); happy != _happyList.end(); ++happy)
-		{
-			ss4 << tr(*happy);
-			if (_happyList.size() > 1)
-			{
-				if (happy == _happyList.end()-2)
-				{
-					ss4 << tr("STR_AND");
-				}
-				if (_happyList.size() > 2)
-				{
-					if (happy != _happyList.end() - 1 && happy != _happyList.end() - 2)
-					{
-						ss4 << ", ";
-					}
-				}
-			}
-			if (happy == _happyList.end()-1)
-			{
-				if (_happyList.size() > 1)
-				{
-					ss4 << tr("STR_COUNTRIES_ARE_PARTICULARLY_HAPPY");	
-				}
-				else
-				{
-					ss4 << tr("STR_COUNTRY_IS_PARTICULARLY_PLEASED");
-				}
-			}
-		}
-	}
-	if (_sadList.size())
-	{
-		ss4 << "\n\n";
-		for (std::vector<std::string>::iterator sad = _sadList.begin(); sad != _sadList.end(); ++sad)
-		{
-			ss4 << tr(*sad);
-			if (_sadList.size() > 1)
-			{
-				if (sad == _sadList.end()-2)
-				{
-					ss4 << tr("STR_AND");
-				}
-				if (_sadList.size() > 2)
-				{
-					if (sad != _sadList.end() - 1 && sad != _sadList.end() - 2)
-					{
-						ss4 << ", ";
-					}
-				}
-			}
-			if (sad == _sadList.end()-1)
-			{
-				if (_sadList.size() > 1)
-				{
-					ss4 << tr("STR_COUNTRIES_ARE_UNHAPPY_WITH_YOUR_ABILITY");	
-				}
-				else
-				{
-					ss4 << tr("STR_COUNTRY_IS_UNHAPPY_WITH_YOUR_ABILITY");
-				}
-			}
-		}
-	}
-
-	if (_pactList.size())
-	{
-		ss4 << "\n\n";
-
-		for (std::vector<std::string>::iterator pact = _pactList.begin(); pact != _pactList.end(); ++pact)
-		{
-			ss4 << tr(*pact);
-
-			if (_pactList.size() > 1)
-			{
-				if (pact == _pactList.end()-2)
-				{
-					ss4 << tr("STR_AND");
-				}
-				if (_pactList.size() > 2)
-				{
-					if (pact != _pactList.end() - 1 && pact != _pactList.end() - 2)
-					{
-						ss4 << ", ";
-					}
-				}
-			}
-
-			if (pact == _pactList.end()-1)
-			{
-				if (_pactList.size() > 1)
-				{
-					ss4 << tr("STR_COUNTRIES_HAVE_SIGNED_A_SECRET_PACT");	
-				}
-				else
-				{
-					ss4 << tr("STR_COUNTRY_HAS_SIGNED_A_SECRET_PACT");
-				}
-			}
-		}
-	}
-
-=======
-	ss4 << countryList(_happyList, "STR_COUNTRY_IS_PARTICULARLY_PLEASED", "STR_COUNTRIES_ARE_PARTICULARLY_PLEASED");
+	ss4 << countryList(_happyList, "STR_COUNTRY_IS_PARTICULARLY_PLEASED", "STR_COUNTRIES_ARE_PARTICULARLY_HAPPY");
 	ss4 << countryList(_sadList, "STR_COUNTRY_IS_UNHAPPY_WITH_YOUR_ABILITY", "STR_COUNTRIES_ARE_UNHAPPY_WITH_YOUR_ABILITY");
 	ss4 << countryList(_pactList, "STR_COUNTRY_HAS_SIGNED_A_SECRET_PACT", "STR_COUNTRIES_HAVE_SIGNED_A_SECRET_PACT");
-	
->>>>>>> master
+
 	_txtDesc->setText(ss4.str());
 }
 
@@ -481,8 +372,6 @@ void MonthlyReportState::calculateChanges()
 
 	// calculate total.
 	_ratingTotal = xcomTotal - alienTotal + 400;
-<<<<<<< HEAD
-=======
 }
 
 /**
@@ -515,7 +404,6 @@ std::wstring MonthlyReportState::countryList(const std::vector<std::string> &cou
 		}
 	}
 	return ss.str();
->>>>>>> master
 }
 
 }

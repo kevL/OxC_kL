@@ -72,6 +72,7 @@ SaveState::SaveState(Game* game, OptionsOrigin origin, bool showMsg)
 	:
 		SavedGameState(game, origin, showMsg)
 {
+	game->getSavedGame()->setName(L"autosave");
 	quickSave("autosave");
 }
 

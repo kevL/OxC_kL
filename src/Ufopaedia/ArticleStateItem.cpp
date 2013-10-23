@@ -45,7 +45,7 @@ ArticleStateItem::ArticleStateItem(Game* game, ArticleDefinitionItem* defs, int 
 	RuleItem* item = _game->getRuleset()->getItem(defs->id);
 
 	// add screen elements
-	_txtTitle = new Text(150, 32, 5, 24);
+	_txtTitle = new Text(148, 32, 5, 24);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_4")->getColors());

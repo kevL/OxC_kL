@@ -1433,41 +1433,20 @@ void GeoscapeState::time30Minutes()
 					{
 						(*i)->getItems()->removeItem(item);
 						(*j)->refuel();
-<<<<<<< HEAD
-//						(*j)->setLowFuel(false);	// kL&redv
-					}
-					else
-//					if (!(*j)->getLowFuel())		// kL&redv, https://github.com/redv/OpenXcom/commit/17a8c31e0ccb82c2c9a737eb31537816f6350b73
-=======
 						(*j)->setLowFuel(false);
 					}
 					else if (!(*j)->getLowFuel())
->>>>>>> master
 					{
 						std::wstring msg = tr("STR_NOT_ENOUGH_ITEM_TO_REFUEL_CRAFT_AT_BASE")
 										   .arg(tr(item))
 										   .arg((*j)->getName(_game->getLanguage()))
 										   .arg((*i)->getName());
 						popup(new CraftErrorState(_game, this, msg));
-<<<<<<< HEAD
 
-						(*j)->setStatus("STR_READY");	// <- kL_note: this looks (potentially) borky!
-
-//						(*j)->setLowFuel(true);			// kL. So try this, and add a line to Craft::refuel()
-
-						// kL&redv_begin:
-/*						if ((*j)->getFuel() > 0)
-							(*j)->setStatus("STR_READY");
-						else
-						{
-							(*j)->setLowFuel(true);
-						} */ // kL&redv_end.
-=======
 						if ((*j)->getFuel() > 0)
 							(*j)->setStatus("STR_READY");
 						else
 							(*j)->setLowFuel(true);
->>>>>>> master
 					}
 				}
 			}
@@ -1495,6 +1474,7 @@ void GeoscapeState::time30Minutes()
 					if ((*k)->getRules()->insideRegion((*u)->getLongitude(), (*u)->getLatitude()))
 					{
 						(*k)->addActivityAlien(points); // one point per UFO in-flight per half hour
+
 						break;
 					}
 				}
@@ -1506,6 +1486,7 @@ void GeoscapeState::time30Minutes()
 					if ((*k)->getRules()->insideCountry((*u)->getLongitude(), (*u)->getLatitude()))
 					{
 						(*k)->addActivityAlien(points); // one point per UFO in-flight per half hour
+
 						break;
 					}
 				}
@@ -1527,8 +1508,12 @@ void GeoscapeState::time30Minutes()
 
 						for (std::vector<Craft* >::iterator c = (*b)->getCrafts()->begin(); c != (*b)->getCrafts()->end() && !detected; ++c)
 						{
-							if ((*c)->getLongitude() == (*b)->getLongitude() && (*c)->getLatitude() == (*b)->getLatitude() && (*c)->getDestination() == 0)
+							if ((*c)->getLongitude() == (*b)->getLongitude()
+								&& (*c)->getLatitude() == (*b)->getLatitude()
+								&& (*c)->getDestination() == 0)
+							{
 								continue;
+							}
 
 							if ((*c)->detect(*u))
 							{
@@ -1542,23 +1527,33 @@ void GeoscapeState::time30Minutes()
 						(*u)->setDetected(true);
 
 //						timerReset();	// kL. Done in UfoDetectedState
-						popup(new UfoDetectedState(_game, (*u), this, true, (*u)->getHyperDetected()));
+						popup(new UfoDetectedState(_game, *u, this, true, (*u)->getHyperDetected()));
 					}
 //					Log(LOG_INFO) << ". . . . . . . not Detected done";
 				}
-				else
+				else // kL_note: ufo is already detected
 				{
 					bool detected = false;
 					for (std::vector<Base* >::iterator b = _game->getSavedGame()->getBases()->begin(); b != _game->getSavedGame()->getBases()->end() && !detected; ++b)
 					{
 						detected = detected || (*b)->insideRadarRange(*u);
 
-						if ((*b)->getHyperDetection())
+						if ((*b)->getHyperDetection()
+							&& (*b)->insideRadarRange(*u))	// kL
 						{
 							(*u)->setHyperDetected(true);
 						}
+
 						for (std::vector<Craft* >::iterator c = (*b)->getCrafts()->begin(); c != (*b)->getCrafts()->end() && !detected; ++c)
 						{
+							// kL_begin: Geo time30min; add negate craft detection if based. From above
+							if ((*c)->getLongitude() == (*b)->getLongitude()
+								&& (*c)->getLatitude() == (*b)->getLatitude()
+								&& (*c)->getDestination() == 0)
+							{
+								continue;
+							} // kL_end.
+
 							detected = detected || (*c)->detect(*u);
 						}
 //						Log(LOG_INFO) << ". . . . . . . Detected done";
@@ -2006,8 +2001,9 @@ void GeoscapeState::time1Month()
 	popup(new MonthlyReportState(_game, psi, _globe));
 
 	// Handle Xcom Operatives discovering bases
-	if(_game->getSavedGame()->getAlienBases()->size())
+	if(!_game->getSavedGame()->getAlienBases()->empty())
 	{
+<<<<<<< HEAD
 		bool _baseDiscovered = false;
 		for (std::vector<AlienBase* >::const_iterator b = _game->getSavedGame()->getAlienBases()->begin(); b != _game->getSavedGame()->getAlienBases()->end(); ++b)
 		{
@@ -2018,7 +2014,15 @@ void GeoscapeState::time1Month()
 				(*b)->setDiscovered(true);
 				_baseDiscovered = true;
 
+=======
+		for(std::vector<AlienBase*>::const_iterator b = _game->getSavedGame()->getAlienBases()->begin(); b != _game->getSavedGame()->getAlienBases()->end(); ++b)
+		{
+			if(!(*b)->isDiscovered() && RNG::percent(5))
+			{
+				(*b)->setDiscovered(true);
+>>>>>>> master
 				popup(new AlienBaseState(_game, *b, this));
+				break;
 			}
 		}
 	}

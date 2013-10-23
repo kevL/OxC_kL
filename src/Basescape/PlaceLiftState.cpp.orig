@@ -98,7 +98,12 @@ void PlaceLiftState::viewClick(Action* )
 
 	if (_first)
 	{
+<<<<<<< HEAD
+		std::vector<OpenXcom::RuleBaseFacility* > PlaceList = _game->getRuleset()->getCustomBaseFacilities();
+		_game->pushState(new SelectStartFacilityState(_game, _base, bState, _globe, PlaceList));
+=======
 		_game->pushState(new SelectStartFacilityState(_game, _base, bState, _globe));
+>>>>>>> master
 	}
 }
 

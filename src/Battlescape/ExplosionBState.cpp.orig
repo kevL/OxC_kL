@@ -112,9 +112,15 @@ void ExplosionBState::init()
 
 				Position p = _center;
 				p.x += X; p.y += Y;
+<<<<<<< HEAD
 				Explosion* explosion = new Explosion(p, RNG::generate(0, 6), true);
 
 				_parent->getMap()->getExplosions()->insert(explosion); // add the explosion on the map
+=======
+				Explosion *explosion = new Explosion(p, RNG::generate(-3,6), true);
+				// add the explosion on the map
+				_parent->getMap()->getExplosions()->insert(explosion);
+>>>>>>> master
 			}
 
 //kL			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED);
@@ -126,8 +132,12 @@ void ExplosionBState::init()
 			else
 				_parent->getResourcePack()->getSound("BATTLE.CAT", 5)->play();
 
+<<<<<<< HEAD
 			if (t->isDiscovered(0))
 				_parent->getMap()->getCamera()->centerOnPosition(t->getPosition());
+=======
+			_parent->getMap()->getCamera()->centerOnPosition(t->getPosition(), false);
+>>>>>>> master
 		}
 		else
 		{
@@ -143,12 +153,18 @@ void ExplosionBState::init()
 		Explosion* explosion = new Explosion(_center, _item->getRules()->getHitAnimation(), false, hit);
 
 		_parent->getMap()->getExplosions()->insert(explosion);
+<<<<<<< HEAD
 
 		_parent->getResourcePack()->getSound("BATTLE.CAT", _item->getRules()->getHitSound())->play(); // bullet hit sound
 
 		if (hit
 			&& t->getVisible())
 			_parent->getMap()->getCamera()->centerOnPosition(Position(_center.x / 16, _center.y / 16, _center.z / 24));
+=======
+		// bullet hit sound
+		_parent->getResourcePack()->getSound("BATTLE.CAT", _item->getRules()->getHitSound())->play();
+		_parent->getMap()->getCamera()->centerOnPosition(t->getPosition(), false);
+>>>>>>> master
 	}
 }
 
@@ -206,7 +222,6 @@ void ExplosionBState::explode()
 		}
 		else
 		{
-<<<<<<< HEAD
 			Log(LOG_INFO) << "ExplosionBState::explode()";
 
 			BattleUnit* victim = save->getTileEngine()->hit(_center, _power, _item->getRules()->getDamageType(), _unit);
@@ -214,16 +229,8 @@ void ExplosionBState::explode()
 			if (!_unit->getZombieUnit().empty() // check if this unit turns others into zombies
 				&& victim
 				&& victim->getArmor()->getSize() == 1
-				&& victim->getSpawnUnit().empty())
-=======
-			BattleUnit *victim = save->getTileEngine()->hit(_center, _power, _item->getRules()->getDamageType(), _unit);
-			// check if this unit turns others into zombies
-			if (!_unit->getZombieUnit().empty()
-				&& victim
-				&& victim->getArmor()->getSize() == 1
 				&& victim->getSpawnUnit().empty()
 				&& victim->getSpecialAbility() == SPECAB_NONE)
->>>>>>> master
 			{
 				Log(LOG_INFO) << victim->getId() << ": murderer is *zombieUnit*; !spawnUnit -> specab->RESPAWN, ->zombieUnit!";
 				// converts the victim to a zombie on death
