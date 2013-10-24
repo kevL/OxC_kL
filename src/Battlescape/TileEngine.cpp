@@ -1074,6 +1074,8 @@ std::vector<BattleUnit* > TileEngine::getSpottingUnits(BattleUnit* unit)
 	for (std::vector<BattleUnit* >::const_iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 	{
 		if (!(*i)->isOut()																// not dead/unconscious
+			&& (*i)->getHealth() != 0													// not dying
+			&& (*i)->getStunlevel() < (*i)->getHealth()									// not about to pass out
 			&& (*i)->getFaction() != _save->getSide()									// not a friend
 			&& distance(unit->getPosition(), (*i)->getPosition()) <= MAX_VIEW_DISTANCE)	// closer than 20 tiles
 		{
@@ -1120,20 +1122,22 @@ std::vector<BattleUnit* > TileEngine::getSpottingUnits(BattleUnit* unit)
 bool TileEngine::canMakeSnap(BattleUnit* unit, BattleUnit* target)
 {
 	BattleItem* weapon = unit->getMainHandWeapon();
-	// has a weapon
-	if (weapon
-		&& ((weapon->getRules()->getBattleType() == BT_MELEE	// has a melee weapon and is in melee range
-			&& validMeleeRange(unit, target, unit->getDirection())
+
+	if (weapon																	// has a weapon
+		&& (weapon->getRules()->getBattleType() == BT_MELEE						// has a melee weapon and is in melee range
+			&& validMeleeRange(unit, target, unit->getDirection()
 			&& unit->getTimeUnits() > unit->getActionTUs(BA_HIT, weapon))
-		|| (weapon->getRules()->getBattleType() != BT_MELEE		// has a gun capable of snap shot with ammo
+		|| (weapon->getRules()->getBattleType() != BT_MELEE						// has a gun capable of snap shot with ammo
 			&& weapon->getRules()->getTUSnap()
 			&& weapon->getAmmoItem()
 			&& unit->getTimeUnits() > unit->getActionTUs(BA_SNAPSHOT, weapon))))
 	{
-		Position origin = getSightOriginVoxel(unit);
-		Position scanVoxel;
 
+/* They've come to their senses and taken all this out.
+//kL		Position origin = getSightOriginVoxel(unit);
+//kL		Position scanVoxel;
 //kL		if (canTargetUnit(&origin, target->getTile(), &scanVoxel, unit))
+
 // kL_note: This is Warboy's code below, replaces condition above.
 // note that canTargetUnit() has actually already been done when
 // constructing the spotters.Vector in getSpottingUnits()
@@ -1146,12 +1150,10 @@ bool TileEngine::canMakeSnap(BattleUnit* unit, BattleUnit* target)
 			&& trajectory.back().x / 16 == targetVoxel.x / 16
 			&& trajectory.back().y / 16 == targetVoxel.y / 16
 			&& trajectory.back().z / 24 == targetVoxel.z / 24)
-// kL_note.
-		{
-//			Log(LOG_INFO) << "canMakeSnap() " << unit->getId() << " true";		// kL
+// kL_note. */
+		//Log(LOG_INFO) << "canMakeSnap() " << unit->getId() << " true";
 
-			return true;
-		}
+		return true;
 	}
 
 //	Log(LOG_INFO) << "canMakeSnap() " << unit->getId() << " false";		// kL
@@ -1351,7 +1353,7 @@ bool TileEngine::tryReactionSnap(BattleUnit* unit, BattleUnit* target)
 		return false;
 	}
 
-	action.type = BA_SNAPSHOT;									// reaction fire is ALWAYS snap shot.
+	action.type = BA_SNAPSHOT;									// reaction fire is ALWAYS snap shot. kL_note: not true in Orig. aliens did auto at times
 	if (action.weapon->getRules()->getBattleType() == BT_MELEE)	// unless we're a melee unit.
 	{
 		action.type = BA_HIT;
@@ -2646,9 +2648,20 @@ int TileEngine::calculateParabola(const Position& origin, const Position& target
 int TileEngine::castedShade(const Position& voxel)
 {
 	int zstart = voxel.z;
-	Position tmpVoxel = voxel;
+	Position tmpCoord = voxel / Position(16, 16, 24);
+	Tile* t = _save->getTile(tmpCoord);
+	while (t
+		&& t->isVoid()
+		&& !t->getUnit())
+	{
+		zstart = tmpCoord.z * 24;
+		--tmpCoord.z;
+		t = _save->getTile(tmpCoord);
+	}
 
+	Position tmpVoxel = voxel;
 	int z;
+
 	for (z = zstart; z > 0; z--)
 	{
 		tmpVoxel.z = z;
@@ -2701,12 +2714,17 @@ bool TileEngine::isVoxelVisible(const Position& voxel)
  */
 int TileEngine::voxelCheck(const Position& voxel, BattleUnit* excludeUnit, bool excludeAllUnits, bool onlyVisible, BattleUnit* excludeAllBut)
 {
-	Tile* tile = _save->getTile(Position(voxel.x / 16, voxel.y / 16, voxel.z / 24));
+//	Tile* tile = _save->getTile(Position(voxel.x / 16, voxel.y / 16, voxel.z / 24));
+	Tile* tile = _save->getTile(voxel / Position(16, 16, 24));
 
 	// check if we are not out of the map
 	if (tile == 0 || voxel.x < 0 || voxel.y < 0 || voxel.z < 0)
 	{
 		return 5;
+	}
+	if (tile->isVoid() && tile->getUnit() == 0)
+	{
+		return -1;
 	}
 
 	if (voxel.z %24 == 0

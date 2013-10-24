@@ -40,13 +40,15 @@ class SoldiersState
 	:
 	public State
 {
-private:
-	Base* _base, * _btnMemorial;
+<<<<<<< HEAD
+	private:
+		Base* _base;
+//		size_t _craft;		//kL
 
-	TextButton* _btnOk, * _btnPsiTrain, * _btnArmor;	// kL: add _btnArmor
-	Window* _window;
-	Text* _txtTitle, * _txtName, * _txtRank, * _txtCraft, * _txtRecruited, * _txtLost;
-	TextList* _lstSoldiers;
+		TextButton* _btnOk, * _btnPsiTrain, * _btnArmor;	// kL: add _btnArmor
+		Window* _window;
+		Text* _txtTitle, * _txtName, * _txtRank, * _txtCraft;
+		TextList* _lstSoldiers;
 
 	public:
 		/// Creates the Soldiers state.
@@ -59,12 +61,12 @@ private:
 		void init();
 		/// Handler for clicking the OK button.
 		void btnOkClick(Action* action);
+		/// Handler for clicking the Soldiers list.
+		void lstSoldiersClick(Action* action);
 		/// Handler for clicking the PsiTraining button.
 		void btnPsiTrainingClick(Action* action);
 		/// Handler for clicking the Armor button.		// kL
 		void btnArmorClick_Soldier(Action* action);		// kL
-		/// Handler for clicking the Memorial button.
-		void btnMemorialClick(Action* action);
 
 		// kL_begin: re-order soldiers, taken from CraftSoldiersState.
 		/// Handler for clicking the Soldiers reordering button.
@@ -72,6 +74,29 @@ private:
 		/// Handler for clicking the Soldiers reordering button.
 		void lstItemsRightArrowClick_Soldier(Action* action);
 		// kL_end.
+=======
+private:
+	TextButton *_btnOk, *_btnPsiTraining, *_btnMemorial;
+	Window *_window;
+	Text *_txtTitle, *_txtName, *_txtRank, *_txtCraft, *_txtRecruited, *_txtLost;
+	TextList *_lstSoldiers;
+	Base *_base;
+public:
+	/// Creates the Soldiers state.
+	SoldiersState(Game *game, Base *base);
+	/// Cleans up the Soldiers state.
+	~SoldiersState();
+	/// Updates the soldier names.
+	void init();
+	/// Handler for clicking the OK button.
+	void btnOkClick(Action *action);
+	/// Handler for clicking the Psi Training button.
+	void btnPsiTrainingClick(Action *action);
+	/// Handler for clicking the Memorial button.
+	void btnMemorialClick(Action *action);
+	/// Handler for clicking the Soldiers list.
+	void lstSoldiersClick(Action *action);
+>>>>>>> master
 };
 
 }

@@ -16,29 +16,40 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_XCOMRESOURCEPACK_H
-#define OPENXCOM_XCOMRESOURCEPACK_H
+#ifndef OPENXCOM_SOLDIERMEMORIALSTATE_H
+#define OPENXCOM_SOLDIERMEMORIALSTATE_H
 
-#include "ResourcePack.h"
+#include "../Engine/State.h"
 
 namespace OpenXcom
 {
-class ExtraSprites;
-class ExtraSounds;
+
+class TextButton;
+class Window;
+class Text;
+class TextList;
+class Base;
 
 /**
- * Resource pack for the X-Com: UFO Defense game.
+ * Screen that shows all the soldiers
+ * that have died throughout the game.
  */
-class XcomResourcePack : public ResourcePack
+class SoldierMemorialState : public State
 {
+private:
+	TextButton *_btnOk;
+	Window *_window;
+	Text *_txtTitle, *_txtName, *_txtRank, *_txtDate, *_txtRecruited, *_txtLost;
+	TextList *_lstSoldiers;
 public:
-	/// Creates the X-Com ruleset.
-	XcomResourcePack(std::vector<std::pair<std::string, ExtraSprites *> > extraSprites, std::vector<std::pair<std::string, ExtraSounds *> > extraSounds);
-	/// Cleans up the X-Com ruleset.
-	~XcomResourcePack();
-	/// Loads battlescape specific resources
-	void loadBattlescapeResources();
-	bool isImageFile(std::string extension);
+	/// Creates the Soldiers state.
+	SoldierMemorialState(Game *game);
+	/// Cleans up the Soldiers state.
+	~SoldierMemorialState();
+	/// Handler for clicking the OK button.
+	void btnOkClick(Action *action);
+	/// Handler for clicking the Soldiers list.
+	void lstSoldiersClick(Action *action);
 };
 
 }

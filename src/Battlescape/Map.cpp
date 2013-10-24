@@ -180,6 +180,10 @@ void Map::think()
  */
 void Map::draw()
 {
+	if (!_redraw)
+	{
+		return;
+	}
 	Surface::draw();
 	Tile* t;
 

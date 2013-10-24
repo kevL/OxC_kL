@@ -231,8 +231,14 @@ void TileEngine::addLight(const Position& center, int power, int layer)
  * @return, True when new aliens are spotted.
  */
 bool TileEngine::calculateFOV(BattleUnit* unit)
+//bool TileEngine::calculateFOV(BattleUnit* unit, bool bPos)	// kL
 {
 	//Log(LOG_INFO) << "TileEngine::calculateFOV() unit = " << unit->getId();
+//	bool kL_Debug = false;
+//	if (unit->getId() == 1000001) kL_Debug = true;
+
+
+
 	unit->clearVisibleUnits();			// kL:below
 	unit->clearVisibleTiles();			// kL:below
 
@@ -241,7 +247,7 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 	bool ret = false;					// kL
 
 	size_t preVisibleUnits = unit->getUnitsSpottedThisTurn().size();
-	//Log(LOG_INFO) << ". . . . preVisibleUnits = " << (int)preVisibleUnits;
+	//if (kL_Debug) Log(LOG_INFO) << ". . . . preVisibleUnits = " << (int)preVisibleUnits;
 
 	Position center = unit->getPosition();
 	Position test;
@@ -312,33 +318,34 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 					if (_save->getTile(test))
 					{
 						//Log(LOG_INFO) << "inside getTile(test)";
-						BattleUnit* visibleUnit = _save->getTile(test)->getUnit(); // <- crash(unit == unit) @ z = 1;
+						BattleUnit* visibleUnit = _save->getTile(test)->getUnit();
 
-						//Log(LOG_INFO) << ". . calculateFOV(), visible() CHECK.. " << visibleUnit->getId();
+						//if (kL_Debug) Log(LOG_INFO) << ". . calculateFOV(), visible() CHECK.. " << visibleUnit->getId();
 						if (visibleUnit
 							&& !visibleUnit->isOut()
 							&& visible(unit, _save->getTile(test)))
 						{
-							//Log(LOG_INFO) << ". . calculateFOV(), visible() TRUE " << visibleUnit->getId();
+							//if (kL_Debug) Log(LOG_INFO) << ". . calculateFOV(), visible() TRUE " << visibleUnit->getId();
 							if (!visibleUnit->getVisible())		// kL,  spottedID = " << visibleUnit->getId();
 							{
 								//Log(LOG_INFO) << ". . calculateFOV(), getVisible() FALSE";
 								ret = true;						// kL
 							}
-							//Log(LOG_INFO) << ". . calculateFOV(), getVisible() = " << !ret;
+							//Log(LOG_INFO) << ". . calculateFOV(), unitID = " << unit->getId() << " visID = " << visibleUnit->getId();
+							//Log(LOG_INFO) << ". . calculateFOV(), visUnit -> getVisible() = " << !ret;
 
 							if (unit->getFaction() == FACTION_PLAYER)
 							{
-								//Log(LOG_INFO) << ". . calculateFOV(), FACTION_PLAYER, set spottedTile & spottedUnit visible";
+								//if (kL_Debug) Log(LOG_INFO) << ". . calculateFOV(), FACTION_PLAYER, set spottedTile & spottedUnit visible";
 								visibleUnit->getTile()->setVisible(+1);
 								visibleUnit->setVisible(true);
 							}
-							//Log(LOG_INFO) << ". . calculateFOV(), FACTION_PLAYER, Done";
+							//if (kL_Debug) Log(LOG_INFO) << ". . calculateFOV(), FACTION_PLAYER, Done";
 
 							if ((visibleUnit->getFaction() == FACTION_HOSTILE && unit->getFaction() != FACTION_HOSTILE)		// kL_note: or not Neutral?
 								|| (visibleUnit->getFaction() != FACTION_HOSTILE && unit->getFaction() == FACTION_HOSTILE))
 							{
-								//Log(LOG_INFO) << ". . calculateFOV(), opposite Factions, add Tile & visibleUnit to spotter's visList";
+								//if (kL_Debug) Log(LOG_INFO) << ". . calculateFOV(), opposite Factions, add Tile & visibleUnit to spotter's visList";
 
 								unit->addToVisibleUnits(visibleUnit);
 								unit->addToVisibleTiles(visibleUnit->getTile());
@@ -346,16 +353,17 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 								if (unit->getFaction() == FACTION_HOSTILE)
 //kL									&& visibleUnit->getFaction() != FACTION_HOSTILE)
 								{
-									//Log(LOG_INFO) << ". . calculateFOV(), spotted Unit FACTION_HOSTILE, setTurnsExposed()";
+									//if (kL_Debug) Log(LOG_INFO) << ". . calculateFOV(), spotted Unit FACTION_HOSTILE, setTurnsExposed()";
 									visibleUnit->setTurnsExposed(0);
 								}
 							}
+							//if (kL_Debug) Log(LOG_INFO) << ". . calculateFOV(), opposite Factions, Done";
 						}
-						//Log(LOG_INFO) << ". . calculateFOV(), opposite Factions, Done";
+						//if (kL_Debug) Log(LOG_INFO) << ". . calculateFOV(), visibleUnit EXISTS & isVis, Done";
 
 						if (unit->getFaction() == FACTION_PLAYER)
 						{
-							//Log(LOG_INFO) << ". . calculateFOV(), FACTION_PLAYER";
+							//if (kL_Debug) Log(LOG_INFO) << ". . calculateFOV(), FACTION_PLAYER";
 							// this sets tiles to discovered if they are in LOS -
 							// tile visibility is not calculated in voxelspace but in tilespace;
 							// large units have "4 pair of eyes"
@@ -419,7 +427,7 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 	if (unit->getFaction() == FACTION_PLAYER
 		&& ret == true)
 	{
-		//Log(LOG_INFO) << "TileEngine::calculateFOV(), Player return TRUE";
+		//if (kL_Debug) Log(LOG_INFO) << "TileEngine::calculateFOV(), Player return TRUE";
 		return true;
 	}
 	else if (unit->getFaction() != FACTION_PLAYER // kL_end.
@@ -431,11 +439,11 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 		&& !unit->getVisibleUnits()->empty()
 		&& unit->getUnitsSpottedThisTurn().size() > preVisibleUnits)
 	{
-		//Log(LOG_INFO) << "TileEngine::calculateFOV(), NOT Player return TRUE";
+		//if (kL_Debug) Log(LOG_INFO) << "TileEngine::calculateFOV(), NOT Player return TRUE";
 		return true;
 	}
 
-	//Log(LOG_INFO) << "TileEngine::calculateFOV(), return FALSE";
+	//if (kL_Debug) Log(LOG_INFO) << "TileEngine::calculateFOV(), return FALSE";
 	return false;
 }
 
@@ -463,6 +471,7 @@ bool TileEngine::calculateFOV(const Position& position)
 		{
 			//Log(LOG_INFO) << "calculateFOV(pos.), Refresh view for unitID = " << (*i)->getId();
 			if (calculateFOV(*i))
+//			if (calculateFOV(*i, true))		//kL
 			{
 				return true;
 			}
@@ -531,6 +540,11 @@ Position TileEngine::getSightOriginVoxel(BattleUnit* currentUnit)
 bool TileEngine::visible(BattleUnit* currentUnit, Tile* tile)
 {
 	//Log(LOG_INFO) << "TileEngine::visible() spotter = " << currentUnit->getId();
+//	bool kL_Debug = false;
+//	if (currentUnit->getId() == 1000001) kL_Debug = true;
+
+
+
 
 	// if there is no tile or no unit, we can't see it
 	if (!tile || !tile->getUnit())
@@ -540,12 +554,12 @@ bool TileEngine::visible(BattleUnit* currentUnit, Tile* tile)
 
 	BattleUnit* targetUnit = tile->getUnit();		// kL
 
-	//Log(LOG_INFO) << ". . . attempt to Spot = " << targetUnit->getId();
+	//if (kL_Debug) Log(LOG_INFO) << ". . . attempt to Spot = " << targetUnit->getId();
 
 //kL	if (currentUnit->getFaction() == tile->getUnit()->getFaction()) // friendlies are always seen
 	if (currentUnit->getFaction() == targetUnit->getFaction())		// kL
 	{
-		//Log(LOG_INFO) << ". . . spotted is Friend, ret TRUE";
+		//if (kL_Debug) Log(LOG_INFO) << ". . . spotted is Friend, ret TRUE";
 		return true;
 	}
 
@@ -558,10 +572,6 @@ bool TileEngine::visible(BattleUnit* currentUnit, Tile* tile)
 		return false;
 	}
 
-<<<<<<< HEAD
-=======
-	if (currentUnit->getFaction() == tile->getUnit()->getFaction()) return true; // friendlies are always seen
->>>>>>> master
 
 	Position originVoxel = getSightOriginVoxel(currentUnit);
 	// for large units origin voxel is in the middle
@@ -652,11 +662,9 @@ bool TileEngine::visible(BattleUnit* currentUnit, Tile* tile)
 				break;
 //				return false;
 			}
-
 		}
-<<<<<<< HEAD
 
-		//Log(LOG_INFO) << ". . . . 1 unitIsSeen = " << unitIsSeen;
+		//if (kL_Debug) Log(LOG_INFO) << ". . . . 1 unitIsSeen = " << unitIsSeen;
 		if (unitIsSeen)
 		{
 			Tile* tbelow = _save->getTile(t->getPosition() + Position(0, 0, -1));
@@ -666,7 +674,7 @@ bool TileEngine::visible(BattleUnit* currentUnit, Tile* tile)
 					&& tbelow->getUnit() == targetUnit)))
 			{
 				unitIsSeen = false;
-				//Log(LOG_INFO) << ". . . . 2 unitIsSeen = " << unitIsSeen;
+				//if (kL_Debug) Log(LOG_INFO) << ". . . . 2 unitIsSeen = " << unitIsSeen;
 			}
 		}
 
@@ -696,11 +704,9 @@ bool TileEngine::visible(BattleUnit* currentUnit, Tile* tile)
 //			return true;
 		} */
 		// kL_end.
-=======
->>>>>>> master
 	}
 
-	//Log(LOG_INFO) << ". . unitIsSeen = " << unitIsSeen;
+	//if (kL_Debug) Log(LOG_INFO) << ". . unitIsSeen = " << unitIsSeen;
 	return unitIsSeen;
 }
 
@@ -1252,6 +1258,7 @@ bool TileEngine::checkReactionFire(BattleUnit* unit)
 	if (unit->getFaction() == unit->getOriginalFaction()
 		|| unit->getFaction() != FACTION_HOSTILE)
 	{
+<<<<<<< HEAD
 //		Log(LOG_INFO) << ". Target = VALID";
 
 		std::vector<BattleUnit* > spotters = getSpottingUnits(unit);
@@ -1260,6 +1267,18 @@ bool TileEngine::checkReactionFire(BattleUnit* unit)
 
 		BattleUnit* reactor = getReactor(spotters, unit);
 		if (reactor != unit)
+=======
+			// not dead/unconscious
+		if (!(*i)->isOut() &&
+			// not dying
+			(*i)->getHealth() != 0 &&
+			// not about to pass out
+			(*i)->getStunlevel() < (*i)->getHealth() &&
+			// not a friend
+			(*i)->getFaction() != _save->getSide() &&
+			// closer than 20 tiles
+			distance(unit->getPosition(), (*i)->getPosition()) <= MAX_VIEW_DISTANCE)
+>>>>>>> master
 		{
 			while (true)
 			{
@@ -1323,7 +1342,34 @@ BattleUnit* TileEngine::getReactor(std::vector<BattleUnit* > spotters, BattleUni
 		bu = unit;
 	}
 
+<<<<<<< HEAD
 	return bu;
+=======
+/**
+ * Checks the validity of a snap shot performed here.
+ * @param unit The unit to check sight from.
+ * @param target The unit to check sight TO.
+ * @return True if the target is valid.
+ */
+bool TileEngine::canMakeSnap(BattleUnit *unit, BattleUnit *target)
+{
+	BattleItem *weapon = unit->getMainHandWeapon();
+	// has a weapon
+	if (weapon &&
+		// has a melee weapon and is in melee range
+		((weapon->getRules()->getBattleType() == BT_MELEE &&
+		validMeleeRange(unit, target, unit->getDirection()) &&
+		unit->getTimeUnits() > unit->getActionTUs(BA_HIT, weapon)) ||
+		// has a gun capable of snap shot with ammo
+		(weapon->getRules()->getBattleType() != BT_MELEE &&
+		weapon->getRules()->getTUSnap() &&
+		weapon->getAmmoItem() &&
+		unit->getTimeUnits() > unit->getActionTUs(BA_SNAPSHOT, weapon))))
+	{
+		return true;
+	}
+	return false;
+>>>>>>> master
 }
 
 /**
@@ -2640,14 +2686,31 @@ int TileEngine::calculateParabola(const Position& origin, const Position& target
 int TileEngine::castedShade(const Position& voxel)
 {
 	int zstart = voxel.z;
+	Position tmpCoord = voxel / Position(16,16,24);
+	Tile *t = _save->getTile(tmpCoord);
+	while (t && t->isVoid() && !t->getUnit())
+	{
+		zstart = tmpCoord.z* 24;
+		--tmpCoord.z;
+		t = _save->getTile(tmpCoord);
+	}
+
 	Position tmpVoxel = voxel;
 
 	int z;
+<<<<<<< HEAD
 	for (z = zstart; z > 0; z--)
 	{
 		tmpVoxel.z = z;
 		if (voxelCheck(tmpVoxel, 0) != -1)
 			break;
+=======
+
+	for (z = zstart; z>0; z--)
+	{
+		tmpVoxel.z = z;
+		if (voxelCheck(tmpVoxel, 0) != -1) break;
+>>>>>>> master
 	}
 
 	return z;
@@ -2695,12 +2758,20 @@ bool TileEngine::isVoxelVisible(const Position& voxel)
  */
 int TileEngine::voxelCheck(const Position& voxel, BattleUnit* excludeUnit, bool excludeAllUnits, bool onlyVisible, BattleUnit* excludeAllBut)
 {
+<<<<<<< HEAD
 	Tile* tile = _save->getTile(Position(voxel.x / 16, voxel.y / 16, voxel.z / 24));
 
+=======
+	Tile *tile = _save->getTile(voxel / Position(16, 16, 24));
+>>>>>>> master
 	// check if we are not out of the map
 	if (tile == 0 || voxel.x < 0 || voxel.y < 0 || voxel.z < 0)
 	{
 		return 5;
+	}
+	if (tile->isVoid() && tile->getUnit() == 0)
+	{
+		return -1;
 	}
 
 	if (voxel.z %24 == 0

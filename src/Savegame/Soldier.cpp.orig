@@ -21,6 +21,7 @@
 #include "../Engine/Language.h"
 #include "../Savegame/Craft.h"
 #include "../Savegame/EquipmentLayoutItem.h"
+#include "../Savegame/SoldierDeath.h"
 #include "../Ruleset/SoldierNamePool.h"
 #include "../Ruleset/RuleSoldier.h"
 #include "../Ruleset/Armor.h"
@@ -36,7 +37,7 @@ namespace OpenXcom
  * @param names List of name pools for soldier generation.
  * @param id Pointer to unique soldier id for soldier generation.
  */
-Soldier::Soldier(RuleSoldier *rules, Armor *armor, const std::vector<SoldierNamePool*> *names, int id) : _name(L""), _id(0), _improvement(0), _rules(rules), _initialStats(), _currentStats(), _rank(RANK_ROOKIE), _craft(0), _gender(GENDER_MALE), _look(LOOK_BLONDE), _missions(0), _kills(0), _recovery(0), _recentlyPromoted(false), _psiTraining(false), _armor(armor), _equipmentLayout()
+Soldier::Soldier(RuleSoldier *rules, Armor *armor, const std::vector<SoldierNamePool*> *names, int id) : _name(L""), _id(0), _improvement(0), _rules(rules), _initialStats(), _currentStats(), _rank(RANK_ROOKIE), _craft(0), _gender(GENDER_MALE), _look(LOOK_BLONDE), _missions(0), _kills(0), _recovery(0), _recentlyPromoted(false), _psiTraining(false), _armor(armor), _equipmentLayout(), _death(0)
 {
 	if (names != 0)
 	{
@@ -86,6 +87,7 @@ Soldier::~Soldier()
 	{
 		delete *i;
 	}
+	delete _death;
 }
 
 /**
@@ -95,45 +97,6 @@ Soldier::~Soldier()
  */
 void Soldier::load(const YAML::Node &node, const Ruleset *rule)
 {
-<<<<<<< HEAD
-	int a = 0;
-
-	node["id"] >> _id;
-	std::string name;
-	node["name"] >> name;
-	_name = Language::utf8ToWstr(name);
-	node["initialStats"] >> _initialStats;
-	node["currentStats"] >> _currentStats;
-	node["rank"] >> a;
-	_rank = (SoldierRank)a;
-	node["gender"] >> a;
-	_gender = (SoldierGender)a;
-	node["look"] >> a;
-	_look = (SoldierLook)a;
-	node["missions"] >> _missions;
-	node["kills"] >> _kills;
-	node["recovery"] >> _recovery;
-	std::string armor;
-	node["armor"] >> armor;
-	_armor = rule->getArmor(armor);
-	node["psiTraining"] >> _psiTraining;
-
-	try
-	{
-		node["improvement"] >> _improvement;
-	}
-	catch (YAML::Exception &e)
-	{
-		_improvement = 0;
-	}
-
-	if (const YAML::Node *layoutNode = node.FindValue("equipmentLayout"))
-	{
-		for (YAML::Iterator i = layoutNode->begin(); i != layoutNode->end(); ++i)
-		{
-			_equipmentLayout.push_back(new EquipmentLayoutItem(*i));
-		}
-=======
 	_id = node["id"].as<int>(_id);
 	_name = Language::utf8ToWstr(node["name"].as<std::string>());
 	_initialStats = node["initialStats"].as<UnitStats>(_initialStats);
@@ -147,11 +110,16 @@ void Soldier::load(const YAML::Node &node, const Ruleset *rule)
 	_armor = rule->getArmor(node["armor"].as<std::string>());
 	_psiTraining = node["psiTraining"].as<bool>(_psiTraining);
 	_improvement = node["improvement"].as<int>(_improvement);
+
 	if (const YAML::Node &layout = node["equipmentLayout"])
 	{
 		for (YAML::const_iterator i = layout.begin(); i != layout.end(); ++i)
 			_equipmentLayout.push_back(new EquipmentLayoutItem(*i));
->>>>>>> master
+	}
+	if (node["death"])
+	{
+		_death = new SoldierDeath();
+		_death->load(node["death"]);
 	}
 }
 
@@ -161,70 +129,43 @@ void Soldier::load(const YAML::Node &node, const Ruleset *rule)
  */
 YAML::Node Soldier::save() const
 {
-<<<<<<< HEAD
-	out << YAML::BeginMap;
-	out << YAML::Key << "id" << YAML::Value << _id;
-	out << YAML::Key << "name" << YAML::Value << Language::wstrToUtf8(_name);
-	out << YAML::Key << "initialStats" << YAML::Value << _initialStats;
-	out << YAML::Key << "currentStats" << YAML::Value << _currentStats;
-	out << YAML::Key << "rank" << YAML::Value << _rank;
-
-	if (_craft != 0)
-	{
-		out << YAML::Key << "craft" << YAML::Value;
-
-		_craft->saveId(out);
-	}
-
-	out << YAML::Key << "gender" << YAML::Value << _gender;
-	out << YAML::Key << "look" << YAML::Value << _look;
-	out << YAML::Key << "missions" << YAML::Value << _missions;
-	out << YAML::Key << "kills" << YAML::Value << _kills;
-	out << YAML::Key << "recovery" << YAML::Value << _recovery;
-	out << YAML::Key << "armor" << YAML::Value << _armor->getType();
-	out << YAML::Key << "psiTraining" << YAML::Value << _psiTraining;
-	out << YAML::Key << "improvement" << YAML::Value << _improvement;
-
-	if (!_equipmentLayout.empty())
-	{
-		out << YAML::Key << "equipmentLayout" << YAML::Value;
-		out << YAML::BeginSeq;
-
-		for (std::vector<EquipmentLayoutItem*>::const_iterator j = _equipmentLayout.begin(); j != _equipmentLayout.end(); ++j)
-		{
-			(*j)->save(out);
-		}
-
-		out << YAML::EndSeq;
-	}
-
-	out << YAML::EndMap;
-=======
 	YAML::Node node;
 	node["id"] = _id;
 	node["name"] = Language::wstrToUtf8(_name);
 	node["initialStats"] = _initialStats;
 	node["currentStats"] = _currentStats;
 	node["rank"] = (int)_rank;
+
 	if (_craft != 0)
 	{
 		node["craft"] = _craft->saveId();
 	}
+
 	node["gender"] = (int)_gender;
 	node["look"] = (int)_look;
 	node["missions"] = _missions;
 	node["kills"] = _kills;
-	node["recovery"] = _recovery;
+	if (_recovery > 0)
+		node["recovery"] = _recovery;
 	node["armor"] = _armor->getType();
-	node["psiTraining"] = _psiTraining;
+	if (_psiTraining)
+		node["psiTraining"] = _psiTraining;
 	node["improvement"] = _improvement;
+
 	if (!_equipmentLayout.empty())
 	{
 		for (std::vector<EquipmentLayoutItem*>::const_iterator i = _equipmentLayout.begin(); i != _equipmentLayout.end(); ++i)
 			node["equipmentLayout"].push_back((*i)->save());
 	}
-	return node;
+<<<<<<< HEAD
+
+=======
+	if (_death != 0)
+	{
+		node["death"] = _death->save();
+	}
 >>>>>>> master
+	return node;
 }
 
 /**
@@ -264,9 +205,8 @@ void Soldier::setCraft(Craft *craft)
 }
 
 /**
- * Returns the soldier's craft string, which
- * is either the soldier's wounded status,
- * the assigned craft name, or none.
+ * Returns the soldier's craft string, which is either the
+ * soldier's wounded status, the assigned craft name, or none.
  * @param lang Language to get strings from.
  * @return Full name.
  */
@@ -298,6 +238,7 @@ std::string Soldier::getRankString() const
 {
 	switch (_rank)
 	{
+<<<<<<< HEAD
 		case RANK_ROOKIE:		return "STR_ROOKIE";
 		case RANK_SQUADDIE:		return "STR_SQUADDIE";
 		case RANK_SERGEANT:		return "STR_SERGEANT";
@@ -309,6 +250,23 @@ std::string Soldier::getRankString() const
 	}
 
 	return "";
+=======
+	case RANK_ROOKIE:
+		return "STR_ROOKIE";
+	case RANK_SQUADDIE:
+		return "STR_SQUADDIE";
+	case RANK_SERGEANT:
+		return "STR_SERGEANT";
+	case RANK_CAPTAIN:
+		return "STR_CAPTAIN";
+	case RANK_COLONEL:
+		return "STR_COLONEL";
+	case RANK_COMMANDER:
+		return "STR_COMMANDER";
+	default:
+		return "";
+	}
+>>>>>>> master
 }
 
 /**
@@ -513,16 +471,22 @@ void Soldier::trainPsi()
 	// -10 days - tolerance threshold for switch from anytimePsiTraining option.
 	// If soldier has psiskill -10..-1, he was trained 20..59 days. 81.7% probability, he was trained more that 30 days.
 	if (_currentStats.psiSkill < -10 + _rules->getMinStats().psiSkill)
+	{
 		_currentStats.psiSkill = _rules->getMinStats().psiSkill;
+	}
 	else if (_currentStats.psiSkill <= _rules->getMaxStats().psiSkill)
 	{
 		int max = _rules->getMaxStats().psiSkill + _rules->getMaxStats().psiSkill / 2;
 		_improvement = RNG::generate(_rules->getMaxStats().psiSkill, max);
 	}
 	else if (_currentStats.psiSkill <= (_rules->getStatCaps().psiSkill / 2))
+	{
 		_improvement = RNG::generate(5, 12);
+	}
 	else if (_currentStats.psiSkill < _rules->getStatCaps().psiSkill)
+	{
 		_improvement = RNG::generate(1, 3);
+	}
 
 	_currentStats.psiSkill += _improvement;
 	if (_currentStats.psiSkill > 100)
@@ -559,7 +523,9 @@ void Soldier::trainPsi1Day()
 		}
 	}
 	else // minStats.psiSkill <= 0 && _currentStats.psiSkill == minStats.psiSkill
-		_currentStats.psiSkill -= RNG::generate(30, 60);	// set initial training from 30 to 60 days
+	{
+		_currentStats.psiSkill -= RNG::generate(30, 60); // set initial training from 30 to 60 days
+	}
 }
 
 /**
@@ -586,4 +552,38 @@ int Soldier::getImprovement()
 	return _improvement;
 }
 
+<<<<<<< HEAD
+=======
+/**
+ * Returns the soldier's death details.
+ * @return Pointer to death data. NULL if no death has occured.
+ */
+SoldierDeath *Soldier::getDeath() const
+{
+	return _death;
+}
+
+/**
+ * Kills the soldier in the Geoscape.
+ * @param death Pointer to death data.
+ */
+void Soldier::die(SoldierDeath *death)
+{
+	delete _death;
+	_death = death;
+
+	// Clean up associations
+	_craft = 0;
+	_armor = 0;
+	_psiTraining = false;
+	_recentlyPromoted = false;
+	_recovery = 0;
+	for (std::vector<EquipmentLayoutItem*>::iterator i = _equipmentLayout.begin(); i != _equipmentLayout.end(); ++i)
+	{
+		delete *i;
+	}
+	_equipmentLayout.clear();
+}
+
+>>>>>>> master
 }

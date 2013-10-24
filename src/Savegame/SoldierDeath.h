@@ -16,29 +16,36 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_XCOMRESOURCEPACK_H
-#define OPENXCOM_XCOMRESOURCEPACK_H
+#ifndef OPENXCOM_SOLDIERDEATH_H
+#define OPENXCOM_SOLDIERDEATH_H
 
-#include "ResourcePack.h"
+#include <yaml-cpp/yaml.h>
 
 namespace OpenXcom
 {
-class ExtraSprites;
-class ExtraSounds;
+
+class GameTime;
 
 /**
- * Resource pack for the X-Com: UFO Defense game.
+ * Stores info about a soldier's death.
  */
-class XcomResourcePack : public ResourcePack
+class SoldierDeath
 {
+private:
+	GameTime *_time;
 public:
-	/// Creates the X-Com ruleset.
-	XcomResourcePack(std::vector<std::pair<std::string, ExtraSprites *> > extraSprites, std::vector<std::pair<std::string, ExtraSounds *> > extraSounds);
-	/// Cleans up the X-Com ruleset.
-	~XcomResourcePack();
-	/// Loads battlescape specific resources
-	void loadBattlescapeResources();
-	bool isImageFile(std::string extension);
+	/// Creates a death.
+	SoldierDeath();
+	/// Cleans up the death.
+	~SoldierDeath();
+	/// Loads the death from YAML.
+	void load(const YAML::Node& node);
+	/// Saves the death to YAML.
+	YAML::Node save() const;
+	/// Gets the death time.
+	GameTime *getTime() const;
+	/// Sets the death time.
+	void setTime(GameTime *time);
 };
 
 }

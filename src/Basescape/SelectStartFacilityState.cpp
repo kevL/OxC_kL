@@ -30,6 +30,7 @@
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Base.h"
 #include "../Savegame/BaseFacility.h"
+#include "../Engine/Options.h"
 #include "PlaceStartFacilityState.h"
 #include "PlaceLiftState.h"
 
@@ -49,7 +50,7 @@ SelectStartFacilityState::SelectStartFacilityState(Game *game, Base *base, State
 
 	_btnOk->setText(tr("STR_RESET"));
 	_btnOk->onMouseClick((ActionHandler)&SelectStartFacilityState::btnOkClick);
-	_btnOk->onKeyboardPress(0);
+	_btnOk->onKeyboardPress(0, (SDLKey)Options::getInt("keyCancel"));
 
 	_lstFacilities->onMouseClick((ActionHandler)&SelectStartFacilityState::lstFacilitiesClick);
 

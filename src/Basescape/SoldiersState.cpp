@@ -34,7 +34,7 @@
 #include "../Savegame/Craft.h"
 #include "../Ruleset/RuleCraft.h"
 #include "SoldierInfoState.h"
-
+#include "SoldierMemorialState.h"
 // kL_begin: taken from CraftSoldiersState...
 #include <sstream>
 #include <climits>
@@ -62,6 +62,19 @@ SoldiersState::SoldiersState(Game* game, Base* base)
 	// Create objects
 	_window			= new Window(this, 320, 200, 0, 0);
 
+	if (isPsiBtnVisible)
+	{
+		_btnOk			= new TextButton(96, 16, 216, 176);
+		_btnPsiTraining	= new TextButton(96, 16, 112, 176);
+		_btnMemorial	= new TextButton(96, 16, 8, 176);
+	}
+	else
+	{
+		_btnOk			= new TextButton(148, 16, 164, 176);
+		_btnPsiTraining	= new TextButton(148, 16, 164, 176);
+		_btnMemorial	= new TextButton(148, 16, 8, 176);
+	}
+
 //kL	_txtTitle		= new Text(310, 16, 5, 8);
 	_txtTitle		= new Text(300, 16, 10, 8);		// kL
 
@@ -88,6 +101,7 @@ SoldiersState::SoldiersState(Game* game, Base* base)
 	add(_btnPsiTrain);
 	add(_btnArmor);		// kL
 	add(_btnOk);
+	add(_btnMemorial);
 	add(_txtTitle);
 	add(_txtName);
 	add(_txtRank);
@@ -115,6 +129,10 @@ SoldiersState::SoldiersState(Game* game, Base* base)
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& SoldiersState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)& SoldiersState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+
+	_btnMemorial->setColor(Palette::blockOffset(13)+10);
+	_btnMemorial->setText(tr("STR_MEMORIAL"));
+	_btnMemorial->onMouseClick((ActionHandler)&SoldiersState::btnMemorialClick);
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
@@ -210,11 +228,19 @@ void SoldiersState::btnPsiTrainingClick(Action* )
  */
 void SoldiersState::btnArmorClick_Soldier(Action* )
 {
-//	Log(LOG_INFO) << "SoldiersState::btnArmorClick_noCraft()";
-	_game->pushState(new CraftArmorState(_game, _base, (size_t)0)); //, _craft
-//	Log(LOG_INFO) << "SoldiersState::btnArmorClick_noCraft() EXIT";
+	_game->pushState(new CraftArmorState(_game, _base, (size_t)0));
 }
 
+/**
+ * Opens the Memorial screen.
+ * @param action Pointer to an action.
+ */
+void SoldiersState::btnMemorialClick(Action* )
+{
+	_game->pushState(new SoldierMemorialState(_game));
+}
+
+/**
 /**
  * Shows the selected soldier's info.
  * @param action Pointer to an action.

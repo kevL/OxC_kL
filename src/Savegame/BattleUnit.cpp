@@ -622,7 +622,7 @@ void BattleUnit::keepWalking(Tile* tileBelow, bool cache)
 
 /**
  * Gets the walking phase for animation and sound.
- * return phase will always go from 0-7
+ * @return phase will always go from 0-7
  */
 int BattleUnit::getWalkingPhase() const
 {
@@ -631,7 +631,7 @@ int BattleUnit::getWalkingPhase() const
 
 /**
  * Gets the walking phase for diagonal walking.
- * return phase, This will be 0 or 8, due to rounding of ints down.
+ * @return phase, This will be 0 or 8, due to rounding ints down
  */
 int BattleUnit::getDiagonalWalkingPhase() const
 {
@@ -1875,10 +1875,10 @@ BattleItem* BattleUnit::getItem(const std::string &slot, int x, int y) const
 }
 
 /**
-* Get the "main hand weapon" from the unit.
-* @param quickest Wether to get the quickest weapon, default true
-* @return Pointer to item.
-*/
+ * Get the "main hand weapon" from the unit.
+ * @param quickest Wether to get the quickest weapon, default true
+ * @return Pointer to item.
+ */
 BattleItem* BattleUnit::getMainHandWeapon(bool quickest) const
 {
 	BattleItem* weaponRightHand = getItem("STR_RIGHT_HAND");
@@ -1913,9 +1913,9 @@ BattleItem* BattleUnit::getMainHandWeapon(bool quickest) const
 }
 
 /**
-* Get a grenade from the belt (used for AI)
-* @return Pointer to item.
-*/
+ * Get a grenade from the belt (used for AI)
+ * @return Pointer to item.
+ */
 BattleItem* BattleUnit::getGrenadeFromBelt() const
 {
 	for (std::vector<BattleItem*>::const_iterator i = _inventory.begin(); i != _inventory.end(); ++i)
@@ -1982,9 +1982,9 @@ bool BattleUnit::checkAmmo()
 }
 
 /**
-* Check if this unit is in the exit area.
-* @return Is in the exit area?
-*/
+ * Check if this unit is in the exit area.
+ * @return Is in the exit area?
+ */
 bool BattleUnit::isInExitArea(SpecialTileType stt) const
 {
 	return _tile
@@ -1993,59 +1993,68 @@ bool BattleUnit::isInExitArea(SpecialTileType stt) const
 }
 
 /**
-* Gets the unit height taking into account kneeling/standing.
-* @return Unit's height.
-*/
+ * Gets the unit height taking into account kneeling/standing.
+ * @return Unit's height.
+ */
 int BattleUnit::getHeight() const
 {
 	return isKneeled()?getKneelHeight():getStandHeight();
 }
 
 /**
-* Adds one to the reaction exp counter.
-*/
+ * Adds one to the reaction exp counter.
+ */
 void BattleUnit::addReactionExp()
 {
 	_expReactions++;
 }
 
 /**
-* Adds one to the firing exp counter.
-*/
+ * Adds one to the firing exp counter.
+ */
 void BattleUnit::addFiringExp()
 {
 	_expFiring++;
 }
 
 /**
-* Adds one to the throwing exp counter.
-*/
+ * Adds one to the throwing exp counter.
+ */
 void BattleUnit::addThrowingExp()
 {
 	_expThrowing++;
 }
 
 /**
-* Adds one to the psionic exp counter.
-*/
+ * Adds one to the psionic exp counter.
+ */
 void BattleUnit::addPsiExp()
 {
 	_expPsiSkill++;
 }
 
 /**
-* Adds one to the melee exp counter.
-*/
+ * Adds one to the melee exp counter.
+ */
 void BattleUnit::addMeleeExp()
 {
 	_expMelee++;
 }
 
 /**
-* Check if unit eligible for squaddie promotion. If yes, promote the unit.
-* Increase the mission counter. Calculate the experience increases.
-* @return True if the soldier was eligible for squaddie promotion.
-*/
+ *
+ */
+void BattleUnit::updateGeoscapeStats(Soldier* soldier)
+{
+	soldier->addMissionCount();
+	soldier->addKillCount(_kills);
+}
+
+/**
+ * Check if unit eligible for squaddie promotion. If yes, promote the unit.
+ * Increase the mission counter. Calculate the experience increases.
+ * @return, True if the soldier was eligible for squaddie promotion.
+ */
 bool BattleUnit::postMissionProcedures(SavedGame* geoscape)
 {
 	Soldier* s = geoscape->getSoldier(_id);
@@ -2054,8 +2063,7 @@ bool BattleUnit::postMissionProcedures(SavedGame* geoscape)
 		return false;
 	}
 
-	s->addMissionCount();
-	s->addKillCount(_kills);
+	updateGeoscapeStats(s);
 
 	UnitStats* stats = s->getCurrentStats();
 	const UnitStats caps = s->getRules()->getStatCaps();
@@ -2124,10 +2132,10 @@ bool BattleUnit::postMissionProcedures(SavedGame* geoscape)
 }
 
 /**
-* Converts the number of experience to the stat increase.
-* @param Experience counter.
-* @return Stat increase.
-*/
+ * Converts the number of experience to the stat increase.
+ * @param Experience counter.
+ * @return Stat increase.
+ */
 int BattleUnit::improveStat(int exp)
 {
 	double tier = 4.0;
@@ -2666,7 +2674,7 @@ void BattleUnit::invalidateCache()
 }
 
 /**
- * kL_note: I believe this pertains only to individual soldiers;
+ * kL_note: This pertains only to individual soldiers;
  * ie, what has *this* soldier spotted this turn.
  */
 std::vector<BattleUnit* > BattleUnit::getUnitsSpottedThisTurn()
