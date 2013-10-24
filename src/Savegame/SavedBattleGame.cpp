@@ -83,7 +83,7 @@ SavedBattleGame::SavedBattleGame()
 		_cheating(false)
 //		_allVisibleUnits(0)		// kL
 {
-	Log(LOG_INFO) << "Create SavedBattleGame";
+	//Log(LOG_INFO) << "Create SavedBattleGame";
 
 	_dragButton			= Options::getInt("battleScrollDragButton");
 	_dragInvert			= Options::getBool("battleScrollDragInvert");
@@ -142,7 +142,7 @@ SavedBattleGame::~SavedBattleGame()
  */
 void SavedBattleGame::load(const YAML::Node& node, Ruleset* rule, SavedGame* savedGame)
 {
-	Log(LOG_INFO) << "SavedBattleGame::load()";
+	//Log(LOG_INFO) << "SavedBattleGame::load()";
 
 	_mapsize_x			= node["width"].as<int>(_mapsize_x);
 	_mapsize_y			= node["length"].as<int>(_mapsize_y);
@@ -226,7 +226,7 @@ void SavedBattleGame::load(const YAML::Node& node, Ruleset* rule, SavedGame* sav
 			// create a new Unit.
 			unit = new BattleUnit(rule->getUnit(type), faction, id, rule->getArmor(armor), savedGame->getDifficulty());
 		}
-		Log(LOG_INFO) << "SavedGame::load(), difficulty = " << savedGame->getDifficulty();
+		//Log(LOG_INFO) << "SavedGame::load(), difficulty = " << savedGame->getDifficulty();
 
 		unit->load(*i);
 		_units.push_back(unit);
@@ -983,7 +983,7 @@ void SavedBattleGame::resetUnitTiles()
 		if (!(*i)->isOut())
 		{
 			if ((*i)->getTile()
-				&& (*i)->getTile()->getUnit() == (*i))
+				&& (*i)->getTile()->getUnit() == *i)
 			{
 				(*i)->getTile()->setUnit(0); // XXX XXX XXX doesn't this fail to clear 3 out of 4 tiles for 2x2 units?
 			}
@@ -1713,7 +1713,7 @@ BattleUnit* SavedBattleGame::getHighestRanked(bool xcom)
 		}
 	}
 
-	Log(LOG_INFO) << ". . leader = " << leader->getId();
+	//Log(LOG_INFO) << ". . leader = " << leader->getId();
 	return leader;
 }
 // kL_end.
@@ -1782,7 +1782,7 @@ int SavedBattleGame::getMoraleModifier(BattleUnit* unit, bool xcom)
 
 	if (unit == 0) // leadership Bonus
 	{
-		Log(LOG_INFO) << "SavedBattleGame::getMoraleModifier(), leadership Bonus";
+		//Log(LOG_INFO) << "SavedBattleGame::getMoraleModifier(), leadership Bonus";
 		if (xcom)
 		{
 			BattleUnit* leader = getHighestRanked();
@@ -1808,7 +1808,7 @@ int SavedBattleGame::getMoraleModifier(BattleUnit* unit, bool xcom)
 				}
 			}
 
-			Log(LOG_INFO) << ". . Xcom bonus = " << result;
+			//Log(LOG_INFO) << ". . Xcom bonus = " << result;
 		}
 		else // alien
 		{
@@ -1830,17 +1830,19 @@ int SavedBattleGame::getMoraleModifier(BattleUnit* unit, bool xcom)
 					case 5:				// soldiers...
 						result -= 10;	// 90
 
+					// kL_note: terrorists are ranks #6 and #7
+
 					default:
 					break;
 				}
 			}
 
-			Log(LOG_INFO) << ". . aLien bonus = " << result;
+			//Log(LOG_INFO) << ". . aLien bonus = " << result;
 		}
 	}
 	else // morale Loss when 'unit' slain
 	{
-		Log(LOG_INFO) << "SavedBattleGame::getMoraleModifier(), unit slain Penalty";
+		//Log(LOG_INFO) << "SavedBattleGame::getMoraleModifier(), unit slain Penalty";
 		if (unit->getOriginalFaction() == FACTION_PLAYER) // XCOM dies. (mind controlled or not)
 		{
 			switch (unit->getRankInt())
@@ -1860,7 +1862,7 @@ int SavedBattleGame::getMoraleModifier(BattleUnit* unit, bool xcom)
 				break;
 			}
 
-			Log(LOG_INFO) << ". . Xcom penalty = " << result;
+			//Log(LOG_INFO) << ". . Xcom penalty = " << result;
 		}
 		else if (unit->getFaction() == FACTION_HOSTILE) // aliens or Mind Controlled XCOM dies.
 		{
@@ -1877,12 +1879,14 @@ int SavedBattleGame::getMoraleModifier(BattleUnit* unit, bool xcom)
 				case 4:					// navigator
 					result += 15;		// 115
 
+				// kL_note: terrorists are ranks #6 and #7 (soldiers are #5)
+
 				default:
 				break;
 			}
 			// else if a mind-controlled alien dies nobody cares.
 
-			Log(LOG_INFO) << ". . aLien penalty = " << result;
+			//Log(LOG_INFO) << ". . aLien penalty = " << result;
 		}
 	}
 

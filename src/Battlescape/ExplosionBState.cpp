@@ -208,7 +208,7 @@ void ExplosionBState::explode()
 		}
 		else
 		{
-			Log(LOG_INFO) << "ExplosionBState::explode()";
+			//Log(LOG_INFO) << "ExplosionBState::explode()";
 
 			BattleUnit* victim = save->getTileEngine()->hit(_center, _power, _item->getRules()->getDamageType(), _unit);
 
@@ -218,7 +218,7 @@ void ExplosionBState::explode()
 				&& victim->getSpawnUnit().empty()
 				&& victim->getSpecialAbility() == SPECAB_NONE)
 			{
-				Log(LOG_INFO) << victim->getId() << ": murderer is *zombieUnit*; !spawnUnit -> specab->RESPAWN, ->zombieUnit!";
+				//Log(LOG_INFO) << victim->getId() << ": murderer is *zombieUnit*; !spawnUnit -> specab->RESPAWN, ->zombieUnit!";
 				// converts the victim to a zombie on death
 				victim->setSpecialAbility(SPECAB_RESPAWN);
 				victim->setSpawnUnit(_unit->getZombieUnit());

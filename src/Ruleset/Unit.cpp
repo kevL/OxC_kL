@@ -50,7 +50,7 @@ Unit::Unit(const std::string& type, std::string race, std::string rank)
 		_spawnUnit(""),
 		_livingWeapon(false)
 {
-	Log(LOG_INFO) << "Create Unit";
+	//Log(LOG_INFO) << "Create Unit";
 }
 
 /**
@@ -58,7 +58,7 @@ Unit::Unit(const std::string& type, std::string race, std::string rank)
  */
 Unit::~Unit()
 {
-	Log(LOG_INFO) << "Delete Unit";
+	//Log(LOG_INFO) << "Delete Unit";
 }
 
 /**
@@ -67,7 +67,7 @@ Unit::~Unit()
  */
 void Unit::load(const YAML::Node& node)
 {
-	Log(LOG_INFO) << "Unit::load()";
+	//Log(LOG_INFO) << "Unit::load()";
 
 	_type			= node["type"].as<std::string>(_type);
 	_race			= node["race"].as<std::string>(_race);

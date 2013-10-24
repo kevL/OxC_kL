@@ -60,33 +60,31 @@ GeoscapeCraftState::GeoscapeCraftState(Game* game, Craft* craft, Globe* globe, W
 
 	_window			= new Window(this, 240, 184, 8, 8, POPUP_BOTH);
 
-//	_txtTitle		= new Text(200, 16, 32, 19);
-	_txtTitle		= new Text(216, 16, 32, 18);
+	_txtTitle		= new Text(216, 16, 32, 19);
 
-//	_txtStatus		= new Text(210, 16, 32, 37);
 	_txtStatus		= new Text(216, 16, 32, 35);
 
-	_btnBase		= new TextButton(192, 13, 32, 127);
-	_btnTarget		= new TextButton(192, 13, 32, 112);
-	_btnCenter		= new TextButton(192, 13, 32, 142);
-	_btnPatrol		= new TextButton(192, 13, 32, 157);
-	_btnCancel		= new TextButton(192, 13, 32, 172);
+	_btnBase		= new TextButton(192, 14, 32, 126);
+	_btnTarget		= new TextButton(192, 14, 32, 111);
+	_btnCenter		= new TextButton(192, 14, 32, 141);
+	_btnPatrol		= new TextButton(192, 14, 32, 156);
+	_btnCancel		= new TextButton(192, 14, 32, 171);
 
-	_txtBase		= new Text(200, 9, 32, 52);
+	_txtBase		= new Text(200, 9, 32, 46);
 
-	_txtSpeed		= new Text(200, 9, 32, 60);
+	_txtSpeed		= new Text(200, 9, 32, 55);
 
-	_txtMaxSpeed	= new Text(200, 9, 32, 68);
-	_txtSoldier		= new Text(200, 9, 161, 68);
+	_txtMaxSpeed	= new Text(200, 9, 32, 64);
+	_txtSoldier		= new Text(200, 9, 161, 64);
 
-	_txtAltitude	= new Text(200, 9, 32, 76);
-	_txtHWP			= new Text(200, 9, 161, 76);
+	_txtAltitude	= new Text(200, 9, 32, 73);
+	_txtHWP			= new Text(200, 9, 161, 73);
 
-	_txtFuel		= new Text(120, 9, 32, 84);
-	_txtDamage		= new Text(75, 9, 161, 84);
+	_txtFuel		= new Text(120, 9, 32, 82);
+	_txtDamage		= new Text(75, 9, 161, 82);
 
-	_txtW1Name		= new Text(120, 9, 32, 92);
-	_txtW1Ammo		= new Text(60, 9, 161, 92);
+	_txtW1Name		= new Text(120, 9, 32, 91);
+	_txtW1Ammo		= new Text(60, 9, 161, 91);
 
 	_txtW2Name		= new Text(120, 9, 32, 100);
 	_txtW2Ammo		= new Text(60, 9, 161, 100);
@@ -146,7 +144,6 @@ GeoscapeCraftState::GeoscapeCraftState(Game* game, Craft* craft, Globe* globe, W
 	_btnCancel->onKeyboardPress((ActionHandler)& GeoscapeCraftState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
-	_txtTitle->setAlign(ALIGN_RIGHT);	// kL
 	_txtTitle->setBig();
 	_txtTitle->setText(_craft->getName(_game->getLanguage()));
 

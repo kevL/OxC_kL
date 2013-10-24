@@ -71,6 +71,7 @@ private:
 		void calculateUnitLighting();
 		/// Calculates the field of view from a units view point.
 		bool calculateFOV(BattleUnit* unit);
+//		bool calculateFOV(BattleUnit* unit, bool bPos = false);		// kL
 		/// Calculates Field of View, including line of sight of all units within range of the Position
 //kL		void calculateFOV(const Position& position);
 		bool calculateFOV(const Position& position);	// kL

@@ -45,7 +45,8 @@ TargetInfoState::TargetInfoState(Game* game, Target* target)
 	_screen = false;
 
 	_window			= new Window(this, 192, 120, 32, 40, POPUP_BOTH);
-	_txtTitle		= new Text(182, 32, 37, 46);
+//kL	_txtTitle		= new Text(182, 32, 37, 46);
+	_txtTitle		= new Text(182, 32, 37, 56);	// kL
 	_txtTargetted	= new Text(182, 8, 37, 78);
 	_txtFollowers	= new Text(182, 40, 37, 88);
 	_btnOk			= new TextButton(160, 16, 48, 135);

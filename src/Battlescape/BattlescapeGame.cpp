@@ -694,7 +694,7 @@ void BattlescapeGame::checkForCasualties(BattleItem* murderweapon, BattleUnit* m
 			{
 //kL				int modif = _save->getMoraleModifier(victim);
 //kL				int loseMod = victim->getFaction() == FACTION_HOSTILE ? 100 : _save->getMoraleModifier();
-	//kL			int winMod = victim->getFaction() == FACTION_HOSTILE ? _save->getMoraleModifier() : 100;
+//kL				int winMod = victim->getFaction() == FACTION_HOSTILE ? _save->getMoraleModifier() : 100;
 
 				// kL_begin: group morale modifications in checkForCasualties()
 				int modif = 100;

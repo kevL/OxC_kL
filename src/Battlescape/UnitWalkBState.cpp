@@ -269,6 +269,7 @@ void UnitWalkBState::think()
 		}
 
 		// is the step finished?
+		// kL_note: walkPhase reset as the unit completes its transition to the next tile
 		if (_unit->getStatus() == STATUS_STANDING)
 		{
 			//Log(LOG_INFO) << "Hey we got to STATUS_STANDING in UnitWalkBState _WALKING or _FLYING !!!" ;	// kL
@@ -290,13 +291,15 @@ void UnitWalkBState::think()
 				_unit->setVisible(false);
 			}
 
+
+			newVis = _terrain->calculateFOV(_unit)			// kL
+				&& _unit->getFaction() == FACTION_PLAYER;	// kL
+
 			// kL_note: This calculates or 'refreshes' the Field of View
 			// of all units within maximum distance (20 tiles) of this unit.
 			_terrain->calculateFOV(_unit->getPosition());
 //kL			unitSpotted = (!_falling && !_action.desperate && _parent->getPanicHandled() && _numUnitsSpotted != _unit->getUnitsSpottedThisTurn().size());
 
-			newVis = _terrain->calculateFOV(_unit)			// kL
-				&& _unit->getFaction() == FACTION_PLAYER;	// kL
 			newUnitSpotted = !_falling
 				&& !_action.desperate
 				&& _parent->getPanicHandled()
@@ -439,7 +442,7 @@ void UnitWalkBState::think()
 		}
 		else
 //kL			_parent->setStateInterval(0);
-			_parent->setStateInterval(1);		// kL
+			_parent->setStateInterval(11);		// kL
 			// kL_note: mute footstep sounds. Trying...
 
 		int dir = _pf->getStartDirection();
