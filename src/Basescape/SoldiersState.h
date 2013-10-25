@@ -38,15 +38,14 @@ class Base;
  */
 class SoldiersState
 	:
-	public State
+		public State
 {
 private:
-	Base* _base, * _btnMemorial;
-
-	TextButton* _btnOk, * _btnPsiTrain, * _btnArmor;	// kL: add _btnArmor
+	TextButton* _btnOk, * _btnPsiTrain, * _btnArmor, *_btnMemorial;	// kL: add _btnArmor
 	Window* _window;
 	Text* _txtTitle, * _txtName, * _txtRank, * _txtCraft, * _txtRecruited, * _txtLost;
 	TextList* _lstSoldiers;
+	Base *_base;
 
 	public:
 		/// Creates the Soldiers state.
@@ -65,6 +64,8 @@ private:
 		void btnArmorClick_Soldier(Action* action);		// kL
 		/// Handler for clicking the Memorial button.
 		void btnMemorialClick(Action* action);
+		/// Handler for clicking the Soldiers list.
+		void lstSoldiersClick(Action *action);
 
 		// kL_begin: re-order soldiers, taken from CraftSoldiersState.
 		/// Handler for clicking the Soldiers reordering button.

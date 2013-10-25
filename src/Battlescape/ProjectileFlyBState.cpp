@@ -250,7 +250,9 @@ bool ProjectileFlyBState::createNewProjectile()
 	_parent->getMap()->setProjectile(projectile);
 
 	// set the speed of the state think cycle to 16 ms (roughly one think cycle per frame)
-	_parent->setStateInterval(1000/60);
+//kL	_parent->setStateInterval(1000/60);
+	Uint32 interval = (Uint32)(50.f / 3.f);		// kL
+	_parent->setStateInterval(interval);		// kL
 
 	// let it calculate a trajectory
 	_projectileImpact = -1;

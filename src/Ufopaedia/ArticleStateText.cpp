@@ -27,43 +27,46 @@
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 
+
 namespace OpenXcom
 {
 
-	ArticleStateText::ArticleStateText(Game *game, ArticleDefinitionText *defs, int palSwitch) : ArticleState(game, defs->id, palSwitch)
-	{
-		// add screen elements
-		_txtTitle = new Text(296, 16, 5, 23);
-		_txtInfo = new Text(296, 150, 10, 48);
+ArticleStateText::ArticleStateText(Game* game, ArticleDefinitionText* defs, int palSwitch)
+	:
+		ArticleState(game, defs->id, palSwitch)
+{
+	_txtTitle	= new Text(296, 16, 5, 23);
+	_txtInfo	= new Text(296, 150, 10, 48);
 
-		// Set palette
-		_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_3")->getColors());
-//		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)), Palette::backPos, 16);
 
-		ArticleState::initLayout();
+	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_3")->getColors());
+//	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)), Palette::backPos, 16);
 
-		// add other elements
-		add(_txtTitle);
-		add(_txtInfo);
+	ArticleState::initLayout();
 
-		centerAllSurfaces();
 
-		// Set up objects
-		_game->getResourcePack()->getSurface("BACK10.SCR")->blit(_bg);
-		_btnOk->setColor(Palette::blockOffset(5));
-		_btnPrev->setColor(Palette::blockOffset(5));
-		_btnNext->setColor(Palette::blockOffset(5));
+	add(_txtTitle);
+	add(_txtInfo);
 
-		_txtTitle->setColor(Palette::blockOffset(15)+4);
-		_txtTitle->setBig();
-		_txtTitle->setText(Ufopaedia::buildText(_game, defs->title));
+	centerAllSurfaces();
 
-		_txtInfo->setColor(Palette::blockOffset(15)-1);
-		_txtInfo->setWordWrap(true);
-		_txtInfo->setText(Ufopaedia::buildText(_game, defs->text));
-	}
 
-	ArticleStateText::~ArticleStateText()
-	{}
+	_game->getResourcePack()->getSurface("BACK10.SCR")->blit(_bg);
+	_btnOk->setColor(Palette::blockOffset(5));
+	_btnPrev->setColor(Palette::blockOffset(5));
+	_btnNext->setColor(Palette::blockOffset(5));
+
+	_txtTitle->setColor(Palette::blockOffset(15)+4);
+	_txtTitle->setBig();
+	_txtTitle->setText(Ufopaedia::buildText(_game, defs->title));
+
+	_txtInfo->setColor(Palette::blockOffset(15)-1);
+	_txtInfo->setWordWrap(true);
+	_txtInfo->setText(Ufopaedia::buildText(_game, defs->text));
+}
+
+ArticleStateText::~ArticleStateText()
+{
+}
 
 }

@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "OptionsBattlescapeState.h"
 #include <sstream>
 #include "../Engine/Game.h"
@@ -30,6 +31,7 @@
 #include "../Menu/LoadState.h"
 #include "../Menu/SaveState.h"
 
+
 namespace OpenXcom
 {
 
@@ -38,102 +40,114 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param origin Game section that originated this state.
  */
-OptionsBattlescapeState::OptionsBattlescapeState(Game *game, OptionsOrigin origin) : OptionsBaseState(game, origin)
+OptionsBattlescapeState::OptionsBattlescapeState(Game* game, OptionsOrigin origin)
+	:
+		OptionsBaseState(game, origin)
 {
 	_screen = false;
 
-	// Create objects
+
 	_window = new Window(this, 320, 200, 0, 0, POPUP_BOTH);
 	_txtTitle = new Text(320, 16, 0, 10);
 
-	_txtScrollSpeed = new Text(130, 9, 16, 32);
-	_btnScrollSpeed1 = new TextButton(22, 14, 16, 42);
-	_btnScrollSpeed2 = new TextButton(22, 18, 40, 42);
-	_btnScrollSpeed3 = new TextButton(22, 22, 64, 42);
-	_btnScrollSpeed4 = new TextButton(22, 26, 88, 42);
-	_btnScrollSpeed5 = new TextButton(22, 30, 112, 42);
+	_txtScrollSpeed		= new Text(130, 9, 16, 32);
+	_btnScrollSpeed1	= new TextButton(22, 14, 16, 42);
+	_btnScrollSpeed2	= new TextButton(22, 18, 40, 42);
+	_btnScrollSpeed3	= new TextButton(22, 22, 64, 42);
+	_btnScrollSpeed4	= new TextButton(22, 26, 88, 42);
+	_btnScrollSpeed5	= new TextButton(22, 30, 112, 42);
 
-	_txtScrollType = new Text(160, 9, 150, 32);
-	_txtTriggerScroll = new Text(130, 9, 182, 44);
-	_txtAutoScroll = new Text(130, 9, 182, 58);
-	_txtDragScroll = new Text(130, 9, 182, 72);
-	_btnScrollType1 = new TextButton(30, 12, 150, 42);
-	_btnScrollType2 = new TextButton(30, 12, 150, 56);
-	_btnScrollType3 = new TextButton(30, 12, 150, 70);
+	_txtScrollType		= new Text(160, 9, 150, 32);
+	_txtTriggerScroll	= new Text(130, 9, 182, 44);
+	_txtAutoScroll		= new Text(130, 9, 182, 58);
+	_txtDragScroll		= new Text(130, 9, 182, 72);
+	_btnScrollType1		= new TextButton(30, 12, 150, 42);
+	_btnScrollType2		= new TextButton(30, 12, 150, 56);
+	_btnScrollType3		= new TextButton(30, 12, 150, 70);
 
-	_txtFireSpeed = new Text(200, 9, 16, 84);
-	_btnFireSpeed1 = new TextButton(22, 12, 16, 94);
-	_btnFireSpeed2 = new TextButton(28, 12, 40, 94);
-	_btnFireSpeed3 = new TextButton(36, 12, 70, 94);
-	_btnFireSpeed4 = new TextButton(45, 12, 108, 94);
-	_btnFireSpeed5 = new TextButton(56, 12, 155, 94);
-	_btnFireSpeed6 = new TextButton(69, 12, 213, 94);
+	_txtFireSpeed		= new Text(200, 9, 16, 84);
+	_btnFireSpeed1		= new TextButton(22, 12, 16, 94);
+	_btnFireSpeed2		= new TextButton(28, 12, 40, 94);
+	_btnFireSpeed3		= new TextButton(36, 12, 70, 94);
+	_btnFireSpeed4		= new TextButton(45, 12, 108, 94);
+	_btnFireSpeed5		= new TextButton(56, 12, 155, 94);
+	_btnFireSpeed6		= new TextButton(69, 12, 213, 94);
 
-	_txtXcomSpeed = new Text(200, 9, 16, 114);
-	_btnXcomSpeed1 = new TextButton(22, 12, 16, 124);
-	_btnXcomSpeed2 = new TextButton(28, 12, 40, 124);
-	_btnXcomSpeed3 = new TextButton(36, 12, 70, 124);
-	_btnXcomSpeed4 = new TextButton(45, 12, 108, 124);
-	_btnXcomSpeed5 = new TextButton(56, 12, 155, 124);
-	_btnXcomSpeed6 = new TextButton(69, 12, 213, 124);
+	_txtXcomSpeed		= new Text(200, 9, 16, 114);
+	_btnXcomSpeed1		= new TextButton(22, 12, 16, 124);
+	_btnXcomSpeed2		= new TextButton(28, 12, 40, 124);
+	_btnXcomSpeed3		= new TextButton(36, 12, 70, 124);
+	_btnXcomSpeed4		= new TextButton(45, 12, 108, 124);
+	_btnXcomSpeed5		= new TextButton(56, 12, 155, 124);
+	_btnXcomSpeed6		= new TextButton(69, 12, 213, 124);
 
-	_txtAlienSpeed = new Text(200, 9, 16, 144);
-	_btnAlienSpeed1 = new TextButton(22, 12, 16, 154);
-	_btnAlienSpeed2 = new TextButton(28, 12, 40, 154);
-	_btnAlienSpeed3 = new TextButton(36, 12, 70, 154);
-	_btnAlienSpeed4 = new TextButton(45, 12, 108, 154);
-	_btnAlienSpeed5 = new TextButton(56, 12, 155, 154);
-	_btnAlienSpeed6 = new TextButton(69, 12, 213, 154);
+	_txtAlienSpeed		= new Text(200, 9, 16, 144);
+	_btnAlienSpeed1		= new TextButton(22, 12, 16, 154);
+	_btnAlienSpeed2		= new TextButton(28, 12, 40, 154);
+	_btnAlienSpeed3		= new TextButton(36, 12, 70, 154);
+	_btnAlienSpeed4		= new TextButton(45, 12, 108, 154);
+	_btnAlienSpeed5		= new TextButton(56, 12, 155, 154);
+	_btnAlienSpeed6		= new TextButton(69, 12, 213, 154);
 
-	_btnOk = new TextButton(148, 16, 8, 176);
-	_btnCancel = new TextButton(148, 16, 164, 176);
+	_btnOk				= new TextButton(148, 16, 8, 176);
+	_btnCancel			= new TextButton(148, 16, 164, 176);
+
 
 	switch (Options::getInt("battleScrollSpeed"))
 	{
-	case 4: _scrollSpeed = _btnScrollSpeed1; break;
-	case 8: _scrollSpeed = _btnScrollSpeed2; break;
-	case 12: _scrollSpeed = _btnScrollSpeed3; break;
-	case 16: _scrollSpeed = _btnScrollSpeed4; break;
-	case 20: _scrollSpeed = _btnScrollSpeed5; break;
-	default: _scrollSpeed = 0; break;
+		case 4: _scrollSpeed = _btnScrollSpeed1; break;
+		case 8: _scrollSpeed = _btnScrollSpeed2; break;
+		case 12: _scrollSpeed = _btnScrollSpeed3; break;
+		case 16: _scrollSpeed = _btnScrollSpeed4; break;
+		case 20: _scrollSpeed = _btnScrollSpeed5; break;
+
+		default: _scrollSpeed = 0; break;
 	}
+
 	switch (Options::getInt("battleScrollType"))
 	{
-	case SCROLL_TRIGGER: _scrollType = _btnScrollType1; break;
-	case SCROLL_AUTO: _scrollType = _btnScrollType2; break;
-	case SCROLL_DRAG: _scrollType = _btnScrollType3; break;
-	default: _scrollSpeed = 0; break;
+		case SCROLL_TRIGGER: _scrollType = _btnScrollType1; break;
+		case SCROLL_AUTO: _scrollType = _btnScrollType2; break;
+		case SCROLL_DRAG: _scrollType = _btnScrollType3; break;
+
+		default: _scrollSpeed = 0; break;
 	}
+
 	switch (Options::getInt("battleFireSpeed"))
 	{
-	case 2: _fireSpeed = _btnFireSpeed1; break;
-	case 4: _fireSpeed = _btnFireSpeed2; break;
-	case 6: _fireSpeed = _btnFireSpeed3; break;
-	case 8: _fireSpeed = _btnFireSpeed4; break;
-	case 10: _fireSpeed = _btnFireSpeed5; break;
-	case 12: _fireSpeed = _btnFireSpeed6; break;
-	default: _fireSpeed = 0; break;
+		case 2: _fireSpeed = _btnFireSpeed1; break;
+		case 4: _fireSpeed = _btnFireSpeed2; break;
+		case 6: _fireSpeed = _btnFireSpeed3; break;
+		case 8: _fireSpeed = _btnFireSpeed4; break;
+		case 10: _fireSpeed = _btnFireSpeed5; break;
+		case 12: _fireSpeed = _btnFireSpeed6; break;
+
+		default: _fireSpeed = 0; break;
 	}
+
 	switch (Options::getInt("battleXcomSpeed"))
 	{
-	case 40: _xcomSpeed = _btnXcomSpeed1; break;
-	case 30: _xcomSpeed = _btnXcomSpeed2; break;
-	case 20: _xcomSpeed = _btnXcomSpeed3; break;
-	case 10: _xcomSpeed = _btnXcomSpeed4; break;
-	case 5: _xcomSpeed = _btnXcomSpeed5; break;
-	case 1: _xcomSpeed = _btnXcomSpeed6; break;
-	default: _xcomSpeed = 0; break;
+		case 40: _xcomSpeed = _btnXcomSpeed1; break;
+		case 30: _xcomSpeed = _btnXcomSpeed2; break;
+		case 20: _xcomSpeed = _btnXcomSpeed3; break;
+		case 10: _xcomSpeed = _btnXcomSpeed4; break;
+		case 5: _xcomSpeed = _btnXcomSpeed5; break;
+		case 1: _xcomSpeed = _btnXcomSpeed6; break;
+
+		default: _xcomSpeed = 0; break;
 	}
+
 	switch (Options::getInt("battleAlienSpeed"))
 	{
-	case 40: _alienSpeed = _btnAlienSpeed1; break;
-	case 30: _alienSpeed = _btnAlienSpeed2; break;
-	case 20: _alienSpeed = _btnAlienSpeed3; break;
-	case 10: _alienSpeed = _btnAlienSpeed4; break;
-	case 5: _alienSpeed = _btnAlienSpeed5; break;
-	case 1: _alienSpeed = _btnAlienSpeed6; break;
-	default: _alienSpeed = 0; break;
+		case 40: _alienSpeed = _btnAlienSpeed1; break;
+		case 30: _alienSpeed = _btnAlienSpeed2; break;
+		case 20: _alienSpeed = _btnAlienSpeed3; break;
+		case 10: _alienSpeed = _btnAlienSpeed4; break;
+		case 5: _alienSpeed = _btnAlienSpeed5; break;
+		case 1: _alienSpeed = _btnAlienSpeed6; break;
+		default: _alienSpeed = 0; break;
 	}
+
 
 	add(_window);
 	add(_txtTitle);
@@ -182,7 +196,7 @@ OptionsBattlescapeState::OptionsBattlescapeState(Game *game, OptionsOrigin origi
 
 	centerAllSurfaces();
 
-	// Set up objects
+
 	_window->setColor(Palette::blockOffset(8) + 5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
@@ -321,13 +335,13 @@ OptionsBattlescapeState::OptionsBattlescapeState(Game *game, OptionsOrigin origi
 
 	_btnOk->setColor(Palette::blockOffset(8) + 5);
 	_btnOk->setText(tr("STR_OK"));
-	_btnOk->onMouseClick((ActionHandler)&OptionsBattlescapeState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&OptionsBattlescapeState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
+	_btnOk->onMouseClick((ActionHandler)& OptionsBattlescapeState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)& OptionsBattlescapeState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
 
 	_btnCancel->setColor(Palette::blockOffset(8) + 5);
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
-	_btnCancel->onMouseClick((ActionHandler) &OptionsBattlescapeState::btnCancelClick);
-	_btnCancel->onKeyboardPress((ActionHandler) &OptionsBattlescapeState::btnCancelClick, (SDLKey) Options::getInt("keyCancel"));
+	_btnCancel->onMouseClick((ActionHandler)& OptionsBattlescapeState::btnCancelClick);
+	_btnCancel->onKeyboardPress((ActionHandler)& OptionsBattlescapeState::btnCancelClick, (SDLKey) Options::getInt("keyCancel"));
 }
 
 /**
@@ -335,14 +349,13 @@ OptionsBattlescapeState::OptionsBattlescapeState(Game *game, OptionsOrigin origi
  */
 OptionsBattlescapeState::~OptionsBattlescapeState()
 {
-
 }
 
 /**
  * Saves options and returns to the previous screen.
  * @param action Pointer to an action.
  */
-void OptionsBattlescapeState::btnOkClick(Action *)
+void OptionsBattlescapeState::btnOkClick(Action* )
 {
 	if (_scrollSpeed == _btnScrollSpeed1)
 		Options::setInt("battleScrollSpeed", 4);
@@ -408,7 +421,7 @@ void OptionsBattlescapeState::btnOkClick(Action *)
 * Returns to the previous screen.
 * @param action Pointer to an action.
 */
-void OptionsBattlescapeState::btnCancelClick(Action *)
+void OptionsBattlescapeState::btnCancelClick(Action* )
 {
 	_game->popState();
 }

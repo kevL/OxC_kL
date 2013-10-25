@@ -1055,8 +1055,7 @@ void Base::removeResearch(ResearchProject* project)
 				}
 				else if (help == "STR_UFO_POWER_SOURCE"
 					|| help == "STR_UFO_CONSTRUCTION"
-					|| help == "STR_THE_MARTIAN_SOLUTION"
-					|| help == "STR_POWER_SUIT")
+					|| help == "STR_THE_MARTIAN_SOLUTION")
 				{
 					(*iter2)->setSpent(spent - (int)(cost * 0.25f));
 
@@ -1088,7 +1087,8 @@ void Base::removeResearch(ResearchProject* project)
 
 					Log(LOG_INFO) << ". . Navigator.5 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.5f);
 				}
-				else if (help == "STR_HYPER_WAVE_DECODER")
+				else if (help == "STR_HYPER_WAVE_DECODER"
+					|| help == "STR_UFO_NAVIGATION")
 				{
 					(*iter2)->setSpent(spent - (int)(cost * 0.8f));
 

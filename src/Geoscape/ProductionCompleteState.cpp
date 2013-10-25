@@ -42,7 +42,7 @@ namespace OpenXcom
  */
 ProductionCompleteState::ProductionCompleteState(Game* game, const std::wstring& item, const std::wstring& base, productionProgress_e endType)
 	:
-	State(game)
+		State(game)
 {
 	_screen = false;
 
@@ -79,21 +79,22 @@ ProductionCompleteState::ProductionCompleteState(Game* game, const std::wstring&
 	std::wstring s;
 	switch (endType)
 	{
-	case PROGRESS_CONSTRUCTION:
-		s = tr("STR_CONSTRUCTION_OF_FACILITY_AT_BASE_IS_COMPLETE").arg(item).arg(base);
+		case PROGRESS_CONSTRUCTION:
+			s = tr("STR_CONSTRUCTION_OF_FACILITY_AT_BASE_IS_COMPLETE").arg(item).arg(base);
 		break;
 		case PROGRESS_COMPLETE:
-			s = tr("STR_PRODUCTION_OF_ITEM_AT_BASE_IS_COMPLETE").arg(item).arg(base);
+				s = tr("STR_PRODUCTION_OF_ITEM_AT_BASE_IS_COMPLETE").arg(item).arg(base);
 		break;
 		case PROGRESS_NOT_ENOUGH_MONEY:
-			s = tr("STR_NOT_ENOUGH_MONEY_TO_PRODUCE_ITEM_AT_BASE").arg(item).arg(base);
+				s = tr("STR_NOT_ENOUGH_MONEY_TO_PRODUCE_ITEM_AT_BASE").arg(item).arg(base);
 		break;
 		case PROGRESS_NOT_ENOUGH_MATERIALS:
-			s = tr("STR_NOT_ENOUGH_SPECIAL_MATERIALS_TO_PRODUCE_ITEM_AT_BASE").arg(item).arg(base);
+				s = tr("STR_NOT_ENOUGH_SPECIAL_MATERIALS_TO_PRODUCE_ITEM_AT_BASE").arg(item).arg(base);
 		break;
 
 		default:
 			assert(false);
+//		break;
 	}
 
 	_txtMessage->setText(s);

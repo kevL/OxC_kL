@@ -16,11 +16,13 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_RULESOLDIER_H
 #define OPENXCOM_RULESOLDIER_H
 
 #include <string>
 #include "../Ruleset/Unit.h"
+
 
 namespace OpenXcom
 {
@@ -37,30 +39,32 @@ private:
 	UnitStats _minStats, _maxStats, _statCaps;
 	std::string _armor;
 	int _standHeight, _kneelHeight, _floatHeight;
-public:
-	/// Creates a blank unit ruleset.
-	RuleSoldier(const std::string &type);
-	/// Cleans up the unit ruleset.
-	~RuleSoldier();
-	/// Loads the unit data from YAML.
-	void load(const YAML::Node& node);
-	/// Gets the unit's type.
-	std::string getType() const;
-	/// Gets the minimum stats for the random stats generator.
-	UnitStats getMinStats() const;
-	/// Gets the maximum stats for the random stats generator.
-	UnitStats getMaxStats() const;
-	/// Gets the stat caps.
-	UnitStats getStatCaps() const;
-	/// Gets the height of the soldier when it's standing.
-	int getStandHeight() const;
-	/// Gets the height of the soldier when it's kneeling.
-	int getKneelHeight() const;
-	/// Gets the elevation of the soldier when it's flying.
-	int getFloatHeight() const;
-	/// Gets the armor name.
-	std::string getArmor() const;
 
+	public:
+		/// Creates a blank unit ruleset.
+		RuleSoldier(const std::string& type);
+		/// Cleans up the unit ruleset.
+		~RuleSoldier();
+
+		/// Loads the unit data from YAML.
+		void load(const YAML::Node& node);
+
+		/// Gets the unit's type.
+		std::string getType() const;
+		/// Gets the minimum stats for the random stats generator.
+		UnitStats getMinStats() const;
+		/// Gets the maximum stats for the random stats generator.
+		UnitStats getMaxStats() const;
+		/// Gets the stat caps.
+		UnitStats getStatCaps() const;
+		/// Gets the height of the soldier when it's standing.
+		int getStandHeight() const;
+		/// Gets the height of the soldier when it's kneeling.
+		int getKneelHeight() const;
+		/// Gets the elevation of the soldier when it's flying.
+		int getFloatHeight() const;
+		/// Gets the armor name.
+		std::string getArmor() const;
 };
 
 }

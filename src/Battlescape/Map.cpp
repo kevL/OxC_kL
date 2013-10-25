@@ -180,10 +180,12 @@ void Map::think()
  */
 void Map::draw()
 {
-	if (!_redraw)
+	// kL_note: removed setting this in BattlescapeGame::handleState().
+/*kL	if (!_redraw)
 	{
 		return;
-	}
+	} */
+
 	Surface::draw();
 	Tile* t;
 

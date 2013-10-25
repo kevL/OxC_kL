@@ -57,23 +57,21 @@ SoldiersState::SoldiersState(Game* game, Base* base)
 		_base(base)
 //		_craft(craft)	// kL
 {
-	bool isPsiBtnVisible = Options::getBool("anytimePsiTraining") && _base->getAvailablePsiLabs() > 0;
-
-	// Create objects
 	_window			= new Window(this, 320, 200, 0, 0);
 
-	if (isPsiBtnVisible)
+	bool isPsiBtnVisible = Options::getBool("anytimePsiTraining") && _base->getAvailablePsiLabs() > 0;
+/*kL	if (isPsiBtnVisible)
 	{
 		_btnOk			= new TextButton(96, 16, 216, 176);
-		_btnPsiTraining	= new TextButton(96, 16, 112, 176);
+		_btnPsiTrain	= new TextButton(96, 16, 112, 176);
 		_btnMemorial	= new TextButton(96, 16, 8, 176);
 	}
 	else
 	{
 		_btnOk			= new TextButton(148, 16, 164, 176);
-		_btnPsiTraining	= new TextButton(148, 16, 164, 176);
+		_btnPsiTrain	= new TextButton(148, 16, 164, 176);
 		_btnMemorial	= new TextButton(148, 16, 8, 176);
-	}
+	} */
 
 //kL	_txtTitle		= new Text(310, 16, 5, 8);
 	_txtTitle		= new Text(300, 16, 10, 8);		// kL
@@ -88,13 +86,15 @@ SoldiersState::SoldiersState(Game* game, Base* base)
 //kL	_lstSoldiers	= new TextList(288, 128, 8, 40);
 	_lstSoldiers	= new TextList(288, 128, 8, 42);
 
+// eulogy, psi, armor, yep.
+	_btnMemorial	= new TextButton(72, 16, 11, 177);		// kL
 //kL	_btnPsiTrain	= new TextButton(148, 16, 8, 176);
-	_btnPsiTrain	= new TextButton(94, 16, 16, 177);		// kL
+	_btnPsiTrain	= new TextButton(71, 16, 87, 177);		// kL
 //kL	_btnOk			= new TextButton(isPsiBtnVisible? 148:288, 16, isPsiBtnVisible? 164:16, 176);
-	_btnArmor		= new TextButton(94, 16, 113, 177);		// kL
-	_btnOk			= new TextButton(94, 16, 210, 177);		// kL
+	_btnArmor		= new TextButton(71, 16, 162, 177);		// kL
+	_btnOk			= new TextButton(72, 16, 237, 177);		// kL
 
-	// Set palette
+
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)), Palette::backPos, 16);
 
 	add(_window);
@@ -110,7 +110,7 @@ SoldiersState::SoldiersState(Game* game, Base* base)
 
 	centerAllSurfaces();
 
-	// Set up objects
+
 	_window->setColor(Palette::blockOffset(15)+1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK02.SCR"));
 

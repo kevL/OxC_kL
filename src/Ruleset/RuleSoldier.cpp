@@ -16,7 +16,9 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "RuleSoldier.h"
+
 
 namespace OpenXcom
 {
@@ -26,9 +28,17 @@ namespace OpenXcom
  * type of soldier.
  * @param type String defining the type.
  */
-RuleSoldier::RuleSoldier(const std::string &type) : _type(type), _minStats(), _maxStats(), _statCaps(), _armor(""), _standHeight(0), _kneelHeight(0), _floatHeight(0)
+RuleSoldier::RuleSoldier(const std::string& type)
+	:
+		_type(type),
+		_minStats(),
+		_maxStats(),
+		_statCaps(),
+		_armor(""),
+		_standHeight(0),
+		_kneelHeight(0),
+		_floatHeight(0)
 {
-
 }
 
 /**
@@ -36,23 +46,22 @@ RuleSoldier::RuleSoldier(const std::string &type) : _type(type), _minStats(), _m
  */
 RuleSoldier::~RuleSoldier()
 {
-
 }
 
 /**
  * Loads the unit from a YAML file.
  * @param node YAML node.
  */
-void RuleSoldier::load(const YAML::Node &node)
+void RuleSoldier::load(const YAML::Node& node)
 {
-	_type = node["type"].as<std::string>(_type);
-	_minStats = node["minStats"].as<UnitStats>(_minStats);
-	_maxStats = node["maxStats"].as<UnitStats>(_maxStats);
-	_statCaps = node["statCaps"].as<UnitStats>(_statCaps);
-	_armor = node["armor"].as<std::string>(_armor);
-	_standHeight = node["standHeight"].as<int>(_standHeight);
-	_kneelHeight = node["kneelHeight"].as<int>(_kneelHeight);
-	_floatHeight = node["floatHeight"].as<int>(_floatHeight);
+	_type			= node["type"].as<std::string>(_type);
+	_minStats		= node["minStats"].as<UnitStats>(_minStats);
+	_maxStats		= node["maxStats"].as<UnitStats>(_maxStats);
+	_statCaps		= node["statCaps"].as<UnitStats>(_statCaps);
+	_armor			= node["armor"].as<std::string>(_armor);
+	_standHeight	= node["standHeight"].as<int>(_standHeight);
+	_kneelHeight	= node["kneelHeight"].as<int>(_kneelHeight);
+	_floatHeight	= node["floatHeight"].as<int>(_floatHeight);
 }
 
 /**

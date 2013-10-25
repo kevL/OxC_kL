@@ -951,7 +951,8 @@ void BattlescapeGame::handleState()
 			_states.front()->think();
 		}
 
-		getMap()->invalidate(); // redraw map
+		getMap()->draw();			// kL, old code!! -> Map::draw()
+//kL		getMap()->invalidate(); // redraw map
 	}
 }
 

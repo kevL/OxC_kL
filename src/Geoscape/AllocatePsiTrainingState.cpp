@@ -146,15 +146,17 @@ AllocatePsiTrainingState::AllocatePsiTrainingState(Game* game, Base* base)
 		std::wstringstream ssSkl;
 
 		_soldiers.push_back(*s);
-		if ((*s)->getCurrentStats()->psiSkill <= 0)
+		if ((*s)->getCurrentStats()->psiSkill < 1)
 		{
-			ssSkl << "0/+0";
+//kL			ssSkl << "0/+0";
+			ssSkl << "0";		// kL
 			ssStr << tr("STR_UNKNOWN").c_str();
 		}
 		else
 		{
-			ssSkl << (*s)->getCurrentStats()->psiSkill << "/+" << (*s)->getImprovement();
-			ssStr << ((*s)->getCurrentStats()->psiStrength);
+//kL			ssSkl << (*s)->getCurrentStats()->psiSkill << "/+" << (*s)->getImprovement();
+			ssSkl << (*s)->getCurrentStats()->psiSkill;		// kL
+			ssStr << (*s)->getCurrentStats()->psiStrength;
 		}
 
 		if ((*s)->isInPsiTraining())
