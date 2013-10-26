@@ -137,10 +137,10 @@ private:
 		int getUsedHangars() const;
 		/// Gets the base's available hangars.
 		int getAvailableHangars() const;
-		/// Get the number of available space lab (not used by a ResearchProject)
+		/// Get the number of available space lab (not used by a ResearchProject).
 		int getFreeLaboratories () const;
-		/// Get the number of available space lab (not used by a Production)
-		int getFreeWorkshops () const;
+		/// Get the number of available space lab (not used by a Production).
+		int getFreeWorkshops() const;
 		///
 		int getAllocatedScientists() const;
 		///
@@ -161,17 +161,19 @@ private:
 		int getFacilityMaintenance() const;
 		/// Gets the base's total monthly maintenance.
 		int getMonthlyMaintenace() const;
-		/// Get the list of base's ResearchProject
+		/// Get the list of base's ResearchProject.
 		const std::vector<ResearchProject* >& getResearch() const;
-		/// Add a new ResearchProject to the Base
+		/// Add a new ResearchProject to the Base.
 		void addResearch(ResearchProject* );
-		/// Remove a ResearchProject from the Base
+		/// Remove a ResearchProject from the Base.
 		void removeResearch(ResearchProject* );
-		/// Add a new Production to Base
+		/// kL: Research Help ala XcomUtil.
+		void researchHelp(std::string sProject);
+		/// Add a new Production to Base.
 		void addProduction(Production* p);
-		/// Remove a Base Production's
+		/// Remove a Base's Production.
 		void removeProduction(Production* p);
-		/// Get the list of Base Production's
+		/// Get the list of Base's Production.
 		const std::vector<Production* >& getProductions() const;
 		/// Checks if this base is hyper-wave equipped.
 		bool getHyperDetection() const;
@@ -179,9 +181,9 @@ private:
 		int getUsedPsiLabs() const;
 		/// Gets the base's total available psi lab space.
 		int getAvailablePsiLabs() const;
-		/// Gets the total amount of Containment Space
+		/// Gets the total amount of Containment Space.
 		int getAvailableContainment() const;
-		/// Gets the total amount of used Containment Space
+		/// Gets the total amount of used Containment Space.
 		int getUsedContainment() const;
 		/// Sets the craft's battlescape status.
 		void setInBattlescape(bool inbattle);

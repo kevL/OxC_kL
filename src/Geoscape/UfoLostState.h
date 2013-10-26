@@ -30,7 +30,6 @@ namespace OpenXcom
 class TextButton;
 class Window;
 class Text;
-//class GeoscapeState;	// kL
 
 /**
  * Notifies the player when a targeted UFO
@@ -38,14 +37,13 @@ class Text;
  */
 class UfoLostState
 	:
-	public State
+		public State
 {
-	private:
-		TextButton* _btnOk;
-		Window* _window;
-		Text* _txtTitle;
-		std::wstring _id;
-//		GeoscapeState* _gs;		// kL
+private:
+	TextButton* _btnOk;
+	Window* _window;
+	Text* _txtTitle;
+	std::wstring _id;
 
 	public:
 		/// Creates the Ufo Lost state.

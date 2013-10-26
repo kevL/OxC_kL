@@ -383,7 +383,8 @@ void ProjectileFlyBState::think()
 				_parent->getMap()->getCamera()->setMapOffset(_action.cameraPosition);
 			}
 
-			if (_action.type != BA_PANIC && _action.type != BA_MINDCONTROL)
+			if (_action.type != BA_PANIC
+				&& _action.type != BA_MINDCONTROL)
 			{
 				_parent->getTileEngine()->checkReactionFire(_unit);
 			}
@@ -418,7 +419,7 @@ void ProjectileFlyBState::think()
 					pos.x--;
 				}
 
-				BattleItem *item = _parent->getMap()->getProjectile()->getItem();
+				BattleItem* item = _parent->getMap()->getProjectile()->getItem();
 				if (Options::getBool("battleInstantGrenade")
 					&& item->getRules()->getBattleType() == BT_GRENADE
 					&& item->getExplodeTurn() == 0)
@@ -444,7 +445,8 @@ void ProjectileFlyBState::think()
 			}
 			else
 			{
-				if (_ammo && _action.type == BA_LAUNCH
+				if (_ammo
+					&& _action.type == BA_LAUNCH
 					&& _ammo->spendBullet() == false)
 				{
 					_parent->getSave()->removeItem(_ammo);
@@ -465,7 +467,6 @@ void ProjectileFlyBState::think()
 					_parent->statePushFront(new ExplosionBState(_parent, _parent->getMap()->getProjectile()->getPosition(offset), _ammo, _action.actor, 0,
 							(_action.type != BA_AUTOSHOT || _action.autoShotCounter == _action.weapon->getRules()->getAutoShots() || !_action.weapon->getAmmoItem())));
 
-					// if the unit burns floortiles, burn floortiles
 					if (_unit->getSpecialAbility() == SPECAB_BURNFLOOR)
 					{
 						_parent->getSave()->getTile(_action.target)->ignite(15);

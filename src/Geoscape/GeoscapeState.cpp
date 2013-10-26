@@ -1155,7 +1155,7 @@ bool DetectXCOMBase::operator()(const Ufo* ufo) const
 			&& !Options::getBool("aggressiveRetaliation"))					// only UFOs on retaliation missions actively scan for bases
 		|| ufo->getTrajectory().getID() == "__RETALIATION_ASSAULT_RUN"		// UFOs attacking a base don't detect!
 		|| ufo->isCrashed()													// Crashed UFOs don't detect!
-		|| _base.getDistance(ufo) > 80 * (1 / 60.0) * (M_PI / 180.0))		// UFOs have a detection range of 80 XCOM units.
+		|| _base.getDistance(ufo) > 80.0 * (1 / 60.0) * (M_PI / 180.0))		// UFOs have a detection range of 80 XCOM units.
 
 	{
 		return false;

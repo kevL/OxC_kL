@@ -67,7 +67,7 @@
 namespace OpenXcom
 {
 
-bool kL_FirstReveal = true;		// kL
+bool kL_preReveal = true;		// kL
 
 /**
  * Sets up a map with the specified size and position.
@@ -164,6 +164,9 @@ void Map::init()
 	_arrow->unlock();
 
 	_projectile = 0;
+
+	//Log(LOG_INFO) << "Map::init(), Set _reveal FALSE";
+//	_reveal = false;	// kL
 }
 
 /**
@@ -180,6 +183,8 @@ void Map::think()
  */
 void Map::draw()
 {
+	Log(LOG_INFO) << "Map::draw()";
+
 	// kL_note: removed setting this in BattlescapeGame::handleState().
 /*kL	if (!_redraw)
 	{
@@ -213,43 +218,56 @@ void Map::draw()
 		}
 	}
 
-//	Log(LOG_INFO) << ". . kL_FirstReveal = " << kL_FirstReveal;
-//	Log(LOG_INFO) << ". . _reveal = " << _reveal;
+	Log(LOG_INFO) << ". . kL_preReveal = " << kL_preReveal;
+//	if (kL_preReveal && !_reveal)		// kL
+//	{
+//		_reveal = 250;					// kL
+	Log(LOG_INFO) << ". . . . _reveal " << _reveal;
+//	}
 
+/*kL	if ((_save->getSelectedUnit() && _save->getSelectedUnit()->getVisible())
+		|| _unitDying
+		|| _save->getSelectedUnit() == 0
+		|| _save->getDebugMode()
+		|| projectileInFOV
+		|| explosionInFOV)
+	{
+		drawTerrain(this);
+	} */
 	if ((_save->getSelectedUnit() && _save->getSelectedUnit()->getVisible())
 		|| _unitDying
 		|| _save->getSelectedUnit() == 0
 		|| _save->getDebugMode()
 		|| projectileInFOV
 		|| explosionInFOV
-		|| (_reveal && !kL_FirstReveal))	// kL
+		|| (_reveal && !kL_preReveal))
 	{
-//		Log(LOG_INFO) << ". . . . drawTerrain()";
-
-		// kL_begin: Map::draw, do aLien reveaL.
-		if (!_reveal)
+		if (_reveal && !kL_preReveal)
 		{
-			_reveal = 3;
-//			Log(LOG_INFO) << ". . drawTerrain() _reveal = " << _reveal;
+			_reveal--;
+			Log(LOG_INFO) << ". . . . . . drawTerrain() _reveal = " << _reveal;
 		}
 		else
 		{
-			_reveal--;
-//			Log(LOG_INFO) << ". . drawTerrain() _reveal = " << _reveal;
+			_reveal = 8;
+			Log(LOG_INFO) << ". . . . . . drawTerrain() Set _reveal = " << _reveal;
 		}
-		// kL_end.
 
 		drawTerrain(this);
 	}
 	else // "hidden movement"
+//	else if (kL_preReveal			// kL
+//		|| !_reveal)				// kL
 	{
-//		Log(LOG_INFO) << ". . . . blit( hidden movement )";
-//		Log(LOG_INFO) << ". . . . kL_FirstReveal, set FALSE";
-//		Log(LOG_INFO) << ". . . . _reveal, set 0 ";
+		if (kL_preReveal)				// kL
+		{
+			kL_preReveal = false;		// kL
+			_reveal = 0;				// kL
+			Log(LOG_INFO) << ". . . . . . kL_preReveal, set " << kL_preReveal;
+			Log(LOG_INFO) << ". . . . . . _reveal, set " << _reveal;
+		}
 
-		kL_FirstReveal = false;		// kL
-		_reveal = 0;				// kL
-
+		Log(LOG_INFO) << ". . . . blit( hidden movement )";
 		_message->blit(this);
 	}
 }

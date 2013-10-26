@@ -28,7 +28,7 @@
 namespace OpenXcom
 {
 
-extern bool kL_FirstReveal;		// kL
+extern bool kL_preReveal;	// kL
 
 class ResourcePack;
 class SavedBattleGame;
@@ -92,6 +92,7 @@ private:
 		Map(Game* game, int width, int height, int x, int y, int visibleMapHeight);
 		/// Cleans up the map.
 		~Map();
+
 		/// Initializes the map.
 		void init();
 		/// Handles timers.

@@ -16,11 +16,13 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #define _USE_MATH_DEFINES
 #include "Target.h"
 #include <cmath>
 #include "../Engine/Language.h"
 #include "Craft.h"
+
 
 namespace OpenXcom
 {
@@ -28,7 +30,11 @@ namespace OpenXcom
 /**
  * Initializes a target with blank coordinates.
  */
-Target::Target() : _lon(0.0), _lat(0.0), _followers()
+Target::Target()
+	:
+		_lon(0.0),
+		_lat(0.0),
+		_followers()
 {
 }
 
@@ -39,7 +45,7 @@ Target::~Target()
 {
 	for (size_t i = 0; i < _followers.size(); ++i)
 	{
-		Craft *craft = dynamic_cast<Craft*>(_followers[i]);
+		Craft* craft = dynamic_cast<Craft* >(_followers[i]);
 		if (craft)
 		{
 			craft->returnToBase();
@@ -51,7 +57,7 @@ Target::~Target()
  * Loads the target from a YAML file.
  * @param node YAML node.
  */
-void Target::load(const YAML::Node &node)
+void Target::load(const YAML::Node& node)
 {
 	_lon = node["lon"].as<double>(_lon);
 	_lat = node["lat"].as<double>(_lat);
@@ -64,8 +70,10 @@ void Target::load(const YAML::Node &node)
 YAML::Node Target::save() const
 {
 	YAML::Node node;
+
 	node["lon"] = _lon;
 	node["lat"] = _lat;
+
 	return node;
 }
 
@@ -76,8 +84,10 @@ YAML::Node Target::save() const
 YAML::Node Target::saveId() const
 {
 	YAML::Node node;
+
 	node["lon"] = _lon;
 	node["lat"] = _lat;
+
 	return node;
 }
 
@@ -101,6 +111,7 @@ void Target::setLongitude(double lon)
 	// Keep between 0 and 2xPI
 	while (_lon < 0)
 		_lon += 2 * M_PI;
+
 	while (_lon >= 2 * M_PI)
 		_lon -= 2 * M_PI;
 }
@@ -121,6 +132,7 @@ double Target::getLatitude() const
 void Target::setLatitude(double lat)
 {
 	_lat = lat;
+
 	// Keep between -PI/2 and PI/2
 	if (_lat < -M_PI/2)
 	{
@@ -146,9 +158,9 @@ std::vector<Target* >* Target::getFollowers()
 /**
  * Returns the great circle distance to another target on the globe.
  * @param target, Pointer to other target.
- * @returns Distance in radian.
+ * @return, Distance in radian.
  */
-double Target::getDistance(const Target *target) const
+double Target::getDistance(const Target* target) const
 {
 	return acos(cos(_lat) * cos(target->getLatitude()) * cos(target->getLongitude() - _lon) + sin(_lat) * sin(target->getLatitude()));
 }

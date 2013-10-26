@@ -76,9 +76,6 @@ void UnitWalkBState::init()
 	_unit = _action.actor;
 	_unitsSpotted = _unit->getUnitsSpottedThisTurn().size();
 
-//	std::vector<BattleUnit* >* allUnits;	// kL
-
-
 	//Log(LOG_INFO) << "UnitWalkBState::init() unitID = " << _unit->getId();
 
 	setNormalWalkSpeed();
@@ -86,12 +83,12 @@ void UnitWalkBState::init()
 	_terrain = _parent->getTileEngine();
 	_target = _action.target;
 
-	if (_parent->getSave()->getTraceSetting())
-	{
-		Log(LOG_INFO) << "Walking from: "
-				<< _unit->getPosition().x << "," << _unit->getPosition().y << "," << _unit->getPosition().z
-				<< " to " << _target.x << "," << _target.y << "," << _target.z;
-	}
+	//if (_parent->getSave()->getTraceSetting())
+	//{
+		// Log(LOG_INFO) << "Walking from: "
+		//		<< _unit->getPosition().x << "," << _unit->getPosition().y << "," << _unit->getPosition().z
+		//		<< " to " << _target.x << "," << _target.y << "," << _target.z;
+	//}
 
 	int dir = _pf->getStartDirection();
 	if (!_action.strafe
@@ -133,12 +130,12 @@ void UnitWalkBState::think()
 			&& _parent->getMap()->getCamera()->isOnScreen(_unit->getPosition());
 
 	int dir = _pf->getStartDirection();		// kL: also below, in STATUS_STANDING!
-//	Log(LOG_INFO) << ". StartDirection = " << dir;
+	//Log(LOG_INFO) << ". StartDirection = " << dir;
 
 	if (_unit->isKneeled()
 		&& dir > -1 && dir < 8)	// kL: ie. *not* up or down
 	{
-//		Log(LOG_INFO) << ". kneeled, and path UpDown INVALID";
+		//Log(LOG_INFO) << ". kneeled, and path UpDown INVALID";
 
 		if (_parent->kneel(_unit))
 		{
@@ -330,6 +327,7 @@ void UnitWalkBState::think()
 										p.x = t->getPosition().x * 16 + 8;
 										p.y = t->getPosition().y * 16 + 8;
 										p.z = t->getPosition().z * 24 + t->getTerrainLevel();
+
 										_parent->statePushNext(new ExplosionBState(_parent, p, *i, (*i)->getPreviousOwner()));
 
 										_parent->getSave()->removeItem(*i);
@@ -397,7 +395,7 @@ void UnitWalkBState::think()
 		}
 	}
 
-	// we are just standing around, shouldn't we be walking?
+	// we are just standing around, should we be walking......
 	if (_unit->getStatus() == STATUS_STANDING
 		|| _unit->getStatus() == STATUS_PANICKING)
 	{
@@ -416,7 +414,7 @@ void UnitWalkBState::think()
 					&& !(_action.desperate || _unit->getCharging())))
 			&& !_falling)
 		{
-//			if (_parent->getSave()->getTraceSetting()) { Log(LOG_INFO) << "Uh-oh! Company!"; }
+			//if (_parent->getSave()->getTraceSetting()) { Log(LOG_INFO) << "Uh-oh! Company!"; }
 			//Log(LOG_INFO) << "Uh-oh! STATUS_STANDING or PANICKING Company!";
 			if (_unit->getFaction() == FACTION_PLAYER)
 			{
@@ -557,13 +555,13 @@ void UnitWalkBState::think()
 				int door = _terrain->unitOpensDoor(_unit, false, dir);
 				if (door == 3)
 				{
-//					Log(LOG_INFO) << ". . door #3";
+					//Log(LOG_INFO) << ". . door #3";
 
 					return; // don't start walking yet, wait for the ufo door to open
 				}
 				else if (door == 0)
 				{
-//					Log(LOG_INFO) << ". . door #0";
+					//Log(LOG_INFO) << ". . door #0";
 
 					_parent->getResourcePack()->getSound("BATTLE.CAT", 3)->play(); // normal door
 
@@ -571,7 +569,7 @@ void UnitWalkBState::think()
 				}
 				else if (door == 1)
 				{
-//					Log(LOG_INFO) << ". . door #1";
+					//Log(LOG_INFO) << ". . door #1";
 
 					_parent->getResourcePack()->getSound("BATTLE.CAT", 20)->play(); // ufo door
 
@@ -655,11 +653,11 @@ void UnitWalkBState::think()
 				}
 				else	// kL
 				{
-//					Log(LOG_INFO) << ". . mid (onScreen)";
+					//Log(LOG_INFO) << ". . mid (onScreen)";
 					_parent->getMap()->cacheUnit(_unit);
 				}
 
-//				Log(LOG_INFO) << ". . end (onScreen)";
+				//Log(LOG_INFO) << ". . end (onScreen)";
 			}
 
 			//Log(LOG_INFO) << "exit (dir!=-1) : " << _unit->getId();
@@ -716,7 +714,7 @@ void UnitWalkBState::think()
 				_unit->spendTimeUnits(_preMovementCost);
 			}
 
-//			if (_parent->getSave()->getTraceSetting()) { Log(LOG_INFO) << "Egads! A turn reveals new units! I must pause!"; }
+			//if (_parent->getSave()->getTraceSetting()) { Log(LOG_INFO) << "Egads! A turn reveals new units! I must pause!"; }
 			//Log(LOG_INFO) << "Egads! STATUS_TURNING reveals new units!!! I must pause!";
 			if (_unit->getFaction() == FACTION_PLAYER)
 			{
@@ -882,7 +880,8 @@ void UnitWalkBState::playMovementSound()
 			}
 
 			// play footstep sound 2
-			if (_unit->getWalkingPhase() == 7)
+//kL			if (_unit->getWalkingPhase() == 7)
+			if (_unit->getWalkingPhase() == 6)		// kL
 			{
 				if (tile->getFootstepSound(tileBelow)
 					&& _unit->getRaceString() != "STR_ETHEREAL")	// kL: and not an ethereal

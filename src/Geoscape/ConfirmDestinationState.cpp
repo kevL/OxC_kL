@@ -57,7 +57,8 @@ ConfirmDestinationState::ConfirmDestinationState(Game* game, Craft* craft, Targe
 	_window		= new Window(this, 224, 72, 16, 64);
 //kL	_txtTarget	= new Text(212, 32, 22, 72);
 
-	_txtTarget	= new Text(192, 32, 32, 72);
+//kL	_txtTarget	= new Text(192, 32, 32, 72);
+	_txtTarget	= new Text(192, 32, 32, 78);
 
 //kL	_btnOk		= new TextButton(50, 12, 68, 104);
 //kL	_btnCancel	= new TextButton(50, 12, 138, 104);

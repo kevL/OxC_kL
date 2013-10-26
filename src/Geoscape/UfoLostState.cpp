@@ -38,17 +38,17 @@ namespace OpenXcom
  */
 UfoLostState::UfoLostState(Game* game, std::wstring id)
 	:
-	State(game),
-	_id(id)
+		State(game),
+		_id(id)
 {
 	_screen = false;
 
-	// Create objects
-	_window		= new Window(this, 192, 104, 32, 48, POPUP_BOTH);
-	_btnOk		= new TextButton(60, 12, 98, 112);
-	_txtTitle	= new Text(160, 30, 48, 72);
 
-	// Set palette
+	_window		= new Window(this, 192, 104, 32, 48, POPUP_BOTH);
+	_txtTitle	= new Text(160, 30, 48, 72);
+	_btnOk		= new TextButton(80, 14, 88, 114);
+
+
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)), Palette::backPos, 16);
 
 	add(_window);
@@ -57,7 +57,7 @@ UfoLostState::UfoLostState(Game* game, std::wstring id)
 
 	centerAllSurfaces();
 
-	// Set up objects
+
 	_window->setColor(Palette::blockOffset(8)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK15.SCR"));
 

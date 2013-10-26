@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "SoldierMemorialState.h"
 #include <sstream>
 #include <iomanip>
@@ -36,6 +37,7 @@
 #include "../Savegame/GameTime.h"
 #include "SoldierInfoState.h"
 
+
 namespace OpenXcom
 {
 
@@ -43,20 +45,27 @@ namespace OpenXcom
  * Initializes all the elements in the Soldier Memorial screen.
  * @param game Pointer to the core game.
  */
-SoldierMemorialState::SoldierMemorialState(Game *game) : State(game)
+SoldierMemorialState::SoldierMemorialState(Game* game)
+	:
+		State(game)
 {
-	// Create objects
-	_window = new Window(this, 320, 200, 0, 0);
-	_btnOk = new TextButton(288, 16, 16, 176);
-	_txtTitle = new Text(310, 16, 5, 8);
-	_txtName = new Text(114, 9, 16, 36);
-	_txtRank = new Text(102, 9, 130, 36);
-	_txtDate = new Text(90, 9, 214, 36);
-	_txtRecruited = new Text(110, 9, 16, 24);
-	_txtLost = new Text(110, 9, 214, 24);
-	_lstSoldiers = new TextList(288, 120, 8, 44);
+	_window			= new Window(this, 320, 200, 0, 0);
 
-	// Set palette
+	_txtTitle		= new Text(310, 16, 5, 9);
+
+	_txtRecruited	= new Text(110, 9, 16, 25);
+	_txtLost		= new Text(110, 9, 210, 25);
+
+	_txtName		= new Text(124, 9, 16, 36);
+	_txtRank		= new Text(70, 9, 140, 36);
+	_txtDate		= new Text(94, 9, 210, 36);
+
+//	_lstSoldiers->setColumns(5, 124, 70, 26, 24, 44);	// TEMP.
+	_lstSoldiers	= new TextList(288, 128, 8, 44);
+
+	_btnOk			= new TextButton(288, 16, 16, 177);
+
+
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)), Palette::backPos, 16);
 
 	_game->getResourcePack()->getMusic("GMLOSE")->play();
@@ -79,8 +88,8 @@ SoldierMemorialState::SoldierMemorialState(Game *game) : State(game)
 
 	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(tr("STR_OK"));
-	_btnOk->onMouseClick((ActionHandler)&SoldierMemorialState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&SoldierMemorialState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onMouseClick((ActionHandler)& SoldierMemorialState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)& SoldierMemorialState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
@@ -98,7 +107,7 @@ SoldierMemorialState::SoldierMemorialState(Game *game) : State(game)
 
 	int lost = _game->getSavedGame()->getDeadSoldiers()->size();
 	int recruited = lost;
-	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
+	for (std::vector<Base* >::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
 	{
 		recruited += (*i)->getTotalSoldiers();
 	}
@@ -113,15 +122,16 @@ SoldierMemorialState::SoldierMemorialState(Game *game) : State(game)
 
 	_lstSoldiers->setColor(Palette::blockOffset(15)+6);
 	_lstSoldiers->setArrowColor(Palette::blockOffset(13)+10);
-	_lstSoldiers->setColumns(5, 114, 88, 30, 30, 30);
+//kL	_lstSoldiers->setColumns(5, 114, 88, 30, 30, 30);
+	_lstSoldiers->setColumns(5, 124, 70, 26, 24, 44);		// kL
 	_lstSoldiers->setSelectable(true);
 	_lstSoldiers->setBackground(_window);
 	_lstSoldiers->setMargin(8);
-	_lstSoldiers->onMouseClick((ActionHandler)&SoldierMemorialState::lstSoldiersClick);
+	_lstSoldiers->onMouseClick((ActionHandler)& SoldierMemorialState::lstSoldiersClick);
 
-	for (std::vector<Soldier*>::reverse_iterator i = _game->getSavedGame()->getDeadSoldiers()->rbegin(); i != _game->getSavedGame()->getDeadSoldiers()->rend(); ++i)
+	for (std::vector<Soldier* >::reverse_iterator i = _game->getSavedGame()->getDeadSoldiers()->rbegin(); i != _game->getSavedGame()->getDeadSoldiers()->rend(); ++i)
 	{
-		SoldierDeath *death = (*i)->getDeath();
+		SoldierDeath* death = (*i)->getDeath();
 
 		std::wstringstream saveDay, saveMonth, saveYear;
 		saveDay << death->getTime()->getDayString(_game->getLanguage());
@@ -136,14 +146,13 @@ SoldierMemorialState::SoldierMemorialState(Game *game) : State(game)
  */
 SoldierMemorialState::~SoldierMemorialState()
 {
-
 }
 
 /**
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void SoldierMemorialState::btnOkClick(Action *)
+void SoldierMemorialState::btnOkClick(Action* )
 {
 	_game->popState();
 	_game->getResourcePack()->getRandomMusic("GMGEO")->play();
@@ -153,7 +162,7 @@ void SoldierMemorialState::btnOkClick(Action *)
  * Shows the selected soldier's info.
  * @param action Pointer to an action.
  */
-void SoldierMemorialState::lstSoldiersClick(Action *)
+void SoldierMemorialState::lstSoldiersClick(Action* )
 {
 	//_game->pushState(new SoldierInfoState(_game, _base, _lstSoldiers->getSelectedRow()));
 }

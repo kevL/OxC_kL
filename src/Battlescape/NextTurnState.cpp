@@ -31,7 +31,7 @@
 #include "../Interface/Cursor.h"
 #include "BattlescapeState.h"
 #include "../Interface/TurnCounter.h"	// kL, global 'kL_TurnCount'
-#include "Map.h"						// kL, global 'kL_FirstReveal'
+#include "Map.h"						// kL, global 'kL_preReveal'
 
 
 namespace OpenXcom
@@ -51,7 +51,7 @@ NextTurnState::NextTurnState(Game* game, SavedBattleGame* battleGame, Battlescap
 {
 	//Log(LOG_INFO) << "Create NextTurnState";
 
-	// Create objects
+
 	_window		= new Window(this, 320, 200, 0, 0);
 	_txtTitle	= new Text(320, 16, 0, 68);
 	_txtTurn	= new Text(320, 16, 0, 92);
@@ -66,7 +66,7 @@ NextTurnState::NextTurnState(Game* game, SavedBattleGame* battleGame, Battlescap
 
 	centerAllSurfaces();
 
-	// Set up objects
+
 	_window->setColor(Palette::blockOffset(0));
 	_window->setHighContrast(true);
 	_window->setBackground(_game->getResourcePack()->getSurface("TAC00.SCR"));
@@ -98,8 +98,8 @@ NextTurnState::NextTurnState(Game* game, SavedBattleGame* battleGame, Battlescap
 
 	_state->clearMouseScrollingState();
 
-	kL_FirstReveal = true;		// kL
-	//Log(LOG_INFO) << ". . kL_FirstReveal = " << kL_FirstReveal;
+	kL_preReveal = true;	// kL
+	Log(LOG_INFO) << ". . set kL_preReveal TRUE";
 }
 
 /**
@@ -116,14 +116,14 @@ NextTurnState::~NextTurnState()
  */
 void NextTurnState::handle(Action* action)
 {
-//	Log(LOG_INFO) << "NextTurnState::handle()";	// kL
+	//Log(LOG_INFO) << "NextTurnState::handle()";	// kL
 	State::handle(action);
 
 //kL	if (action->getDetails()->type == SDL_KEYDOWN
 //kL		|| action->getDetails()->type == SDL_MOUSEBUTTONDOWN)
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)	// kL
 	{
-//		Log(LOG_INFO) << ". . . . RMB, update TurnCounter, popState & tallyUnits";	// kL
+		//Log(LOG_INFO) << ". . . . RMB, update TurnCounter, popState & tallyUnits";	// kL
 
 //		_turnCounter->setTurnCount(kL_TurnCount);	// kL
 		kL_TurnCount = _battleGame->getTurn();		// kL
@@ -147,7 +147,7 @@ void NextTurnState::handle(Action* action)
 		}
 	}
 
-//	Log(LOG_INFO) << ". . handle() EXIT";	// kL
+	//Log(LOG_INFO) << ". . handle() EXIT";	// kL
 }
 
 }
