@@ -290,7 +290,7 @@ void OptionsAdvancedState::lstOptionsPress(Action* action)
 void OptionsAdvancedState::lstOptionsMouseOver(Action* )
 {
 	size_t sel = _lstOptions->getSelectedRow();
-	std::stringstream ss;
+	std::ostringstream ss;
 	std::string settingName;
 
 	if (sel < _boolQuantity)

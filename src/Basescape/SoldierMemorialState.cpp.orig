@@ -49,6 +49,7 @@ SoldierMemorialState::SoldierMemorialState(Game* game)
 	:
 		State(game)
 {
+<<<<<<< HEAD
 	_window			= new Window(this, 320, 200, 0, 0);
 
 	_txtTitle		= new Text(310, 16, 5, 9);
@@ -66,6 +67,20 @@ SoldierMemorialState::SoldierMemorialState(Game* game)
 	_btnOk			= new TextButton(288, 16, 16, 177);
 
 
+=======
+	// Create objects
+	_window = new Window(this, 320, 200, 0, 0);
+	_btnOk = new TextButton(288, 16, 16, 176);
+	_txtTitle = new Text(310, 16, 5, 8);
+	_txtName = new Text(114, 9, 16, 36);
+	_txtRank = new Text(102, 9, 130, 36);
+	_txtDate = new Text(90, 9, 214, 36);
+	_txtRecruited = new Text(150, 9, 16, 24);
+	_txtLost = new Text(150, 9, 160, 24);
+	_lstSoldiers = new TextList(288, 120, 8, 44);
+
+	// Set palette
+>>>>>>> master
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)), Palette::backPos, 16);
 
 	_game->getResourcePack()->getMusic("GMLOSE")->play();

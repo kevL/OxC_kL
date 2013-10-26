@@ -584,7 +584,6 @@ void Soldier::die(SoldierDeath* death)
 
 	// Clean up associations
 	_craft = 0;
-	_armor = 0;
 	_psiTraining = false;
 	_recentlyPromoted = false;
 	_recovery = 0;

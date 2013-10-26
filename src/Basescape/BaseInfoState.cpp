@@ -177,7 +177,7 @@ BaseInfoState::BaseInfoState(Game* game, Base* base, BasescapeState* state)
 	centerAllSurfaces();
 
 	// Set up objects
-	std::stringstream ss;
+	std::ostringstream ss;
 	if (_containmentLimit)
 	{
 		ss << "ALT";
