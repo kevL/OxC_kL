@@ -1128,6 +1128,9 @@ class DetectXCOMBase
 	:
 		public std::unary_function<Ufo*, bool>
 {
+private:
+	const Base& _base; // !< The target base.
+
 	public:
 		/// Create a detector for the given base.
 		DetectXCOMBase(const Base& base)
@@ -1140,8 +1143,6 @@ class DetectXCOMBase
 		/// Attempt detection
 		bool operator()(const Ufo* ufo) const;
 
-private:
-	const Base& _base; // !< The target base.
 };
 
 /**
