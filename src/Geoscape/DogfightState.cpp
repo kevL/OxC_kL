@@ -526,12 +526,12 @@ DogfightState::DogfightState(Game* game, Globe* globe, Craft* craft, Ufo* ufo)
 	_w2Timer->onTimer((StateHandler)& DogfightState::fireWeapon2);
 
 	_ufoWtimer->onTimer((StateHandler)& DogfightState::ufoFireWeapon);
-	_ufoFireInterval = (_ufo->getRules()->getWeaponReload() - 2 * (int)(_game->getSavedGame()->getDifficulty())) * _timeScale;
-	_ufoFireInterval = RNG::generate(0, _ufoFireInterval) + _ufoFireInterval;
+	_ufoFireInterval = (_ufo->getRules()->getWeaponReload() - (int)(_game->getSavedGame()->getDifficulty()));
+	_ufoFireInterval = (RNG::generate(0, _ufoFireInterval) + _ufoFireInterval) * _timeScale;
 	_ufoWtimer->setInterval(_ufoFireInterval);
 
 	_ufoEscapeTimer->onTimer((StateHandler)& DogfightState::ufoBreakOff);
-	int ufoBreakOffInterval = (_ufo->getRules()->getBreakOffTime() + RNG::generate(0, _ufo->getRules()->getBreakOffTime()) - 30 * (int)(_game->getSavedGame()->getDifficulty())) * _timeScale;
+	int ufoBreakOffInterval = (_ufo->getRules()->getBreakOffTime() + RNG::generate(0, _ufo->getRules()->getBreakOffTime()) - 15 * (int)(_game->getSavedGame()->getDifficulty())) * _timeScale;
 	_ufoEscapeTimer->setInterval(ufoBreakOffInterval);
 
 	_craftDamageAnimTimer->onTimer((StateHandler)& DogfightState::animateCraftDamage);
@@ -940,15 +940,21 @@ void DogfightState::move()
 					{
 						// Formula delivered by Volutar
 						int damage = RNG::generate(0, _ufo->getRules()->getWeaponPower());
-						_craft->setDamage(_craft->getDamage() + damage);
-						drawCraftDamage();
-						setStatus("STR_INTERCEPTOR_DAMAGED");
-						_game->getResourcePack()->getSound("GEO.CAT", 10)->play();
-
-						if (_mode == _btnCautious
-							&& _craft->getDamagePercentage() >= 50)
+						if (damage)
 						{
-							_targetDist = STANDOFF_DIST;
+							_craft->setDamage(_craft->getDamage() + damage);
+							drawCraftDamage();
+							setStatus("STR_INTERCEPTOR_DAMAGED");
+							_game->getResourcePack()->getSound("GEO.CAT", 10)->play();
+
+							if ((_mode == _btnCautious
+//kL								&& _craft->getDamagePercentage() >= 50)
+									&& _craft->getDamagePercentage() > 60)		// kL
+								|| (_mode == _btnNORMAL							// kL
+									&& _craft->getDamagePercentage() > 35))		// kL
+							{
+								_targetDist = STANDOFF_DIST;
+							}
 						}
 					}
 
@@ -1304,15 +1310,15 @@ void DogfightState::fireWeapon2()
  */
 void DogfightState::ufoFireWeapon()
 {
-	_ufoFireInterval = (_ufo->getRules()->getWeaponReload() - 2 * (int)(_game->getSavedGame()->getDifficulty())) * _timeScale;
-	_ufoFireInterval = RNG::generate(0, _ufoFireInterval) + _ufoFireInterval;
+	_ufoFireInterval = (_ufo->getRules()->getWeaponReload() - (int)(_game->getSavedGame()->getDifficulty()));
+	_ufoFireInterval = (RNG::generate(0, _ufoFireInterval) + _ufoFireInterval) * _timeScale;
 	_ufoWtimer->setInterval(_ufoFireInterval);
 
 	setStatus("STR_UFO_RETURN_FIRE");
 
 	CraftWeaponProjectile* p = new CraftWeaponProjectile();
 	p->setType(CWPT_PLASMA_BEAM);
-	p->setAccuracy(40);
+	p->setAccuracy(60);
 	p->setDamage(_ufo->getRules()->getWeaponPower());
 	p->setDirection(D_DOWN);
 	p->setHorizontalPosition(HP_CENTER);
@@ -1341,7 +1347,7 @@ void DogfightState::minimumDistance()
 
 	if (max == 0)
 	{
-		_targetDist = 560;
+		_targetDist = STANDOFF_DIST;
 	}
 	else
 	{
@@ -1369,7 +1375,7 @@ void DogfightState::maximumDistance()
 
 	if (min == 1000)
 	{
-		_targetDist = 560;
+		_targetDist = STANDOFF_DIST;
 	}
 	else
 	{

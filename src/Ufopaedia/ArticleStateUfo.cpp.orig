@@ -114,7 +114,7 @@ ArticleStateUfo::ArticleStateUfo(Game* game, ArticleDefinitionUfo* defs, int pal
 
 	_lstInfo->setColor(Palette::blockOffset(8)+5);
 	_lstInfo->setColumns(2, 200, 100);
-//	_lstInfo->setCondensed(true);
+//		_lstInfo->setCondensed(true);
 	_lstInfo->setBig();
 	_lstInfo->setDot(true);
 

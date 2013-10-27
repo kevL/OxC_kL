@@ -746,9 +746,10 @@ BattleUnit* BattlescapeGenerator::addAlien(Unit* rules, int alienRank, bool outs
 
 		int dir = _save->getTileEngine()->faceWindow(node->getPosition());
 		Position craft = _game->getSavedGame()->getSavedBattle()->getUnits()->at(0)->getPosition();
-		// Warboy is a MEANIE!!!
-		if (_save->getTileEngine()->distance(node->getPosition(), craft) < 25
-			&& RNG::generate(0, 99) < 19 * difficulty)
+
+//kL		if (_save->getTileEngine()->distance(node->getPosition(), craft) <= 20 && RNG::percent(20 * difficulty))
+		if (_save->getTileEngine()->distance(node->getPosition(), craft) < 25	// kL
+			&& RNG::percent(20 * difficulty))									// kL
 		{
 			dir = unit->directionTo(craft);
 		}
@@ -1981,8 +1982,8 @@ void BattlescapeGenerator::explodePowerSources()
 	{
 		if (_save->getTiles()[i]->getMapData(MapData::O_OBJECT)
 			&& _save->getTiles()[i]->getMapData(MapData::O_OBJECT)->getSpecialType() == UFO_POWER_SOURCE
-//kL			&& RNG::generate(0, 99) < 75)
-			&& RNG::generate(0, 99) < 80)	// kL
+//kL			&& RNG::percent(75))
+			&& RNG::percent(80))	// kL
 		{
 			Position pos;
 			pos.x = _save->getTiles()[i]->getPosition().x * 16;
@@ -2016,7 +2017,7 @@ void BattlescapeGenerator::deployCivilians(int civilians)
 		{
 			for (int i = 0; i < rand; ++i)
 			{
-				if (RNG::generate(0, 99) < 50)
+				if (RNG::percent(50))
 				{
 					addCivilian(_game->getRuleset()->getUnit("MALE_CIVILIAN"));
 				}

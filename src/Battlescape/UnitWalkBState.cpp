@@ -464,14 +464,10 @@ void UnitWalkBState::think()
 			Position destination;
 			int tu = _pf->getTUCost(_unit->getPosition(), dir, &destination, _unit, 0, false);
 
-			// we artificially inflate the TU cost by 32 points in getTUCost
-			// under these conditions, so we have to deflate it here.
 			if (_unit->getFaction() == FACTION_HOSTILE
-				&& ((_parent->getSave()->getTile(destination)->getUnit()
-					&& _parent->getSave()->getTile(destination)->getUnit()->getFaction() == FACTION_HOSTILE
-					&& _parent->getSave()->getTile(destination)->getUnit() != _unit)
-						|| _parent->getSave()->getTile(destination)->getFire() > 0))
+				&& _parent->getSave()->getTile(destination)->getFire() > 0)
 			{
+				// we artificially inflate the TU cost by 32 points in getTUCost under these conditions, so we have to deflate it here.
 				tu -= 32;
 			}
 

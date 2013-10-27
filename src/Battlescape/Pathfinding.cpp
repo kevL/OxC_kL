@@ -492,12 +492,8 @@ int Pathfinding::getTUCost(const Position& startPosition, int direction, Positio
 			}
 
 			cost += wallcost;
-
 			if (_unit->getFaction() == FACTION_HOSTILE
-				&& ((destinationTile->getUnit()
-						&& destinationTile->getUnit()->getFaction() == FACTION_HOSTILE
-						&& destinationTile->getUnit() != _unit)
-					|| destinationTile->getFire() > 0))
+				&& destinationTile->getFire() > 0)
 			{
 				cost += 32; // try to find a better path, but don't exclude this path entirely.
 			}
@@ -703,7 +699,7 @@ bool Pathfinding::isBlocked(Tile *tile, const int part, BattleUnit *missileTarge
 
 	if (part == MapData::O_FLOOR)
 	{
-		BattleUnit *unit = tile->getUnit();
+		BattleUnit* unit = tile->getUnit();
 		if (unit != 0)
 		{
 			if (unit == _unit
@@ -713,16 +709,27 @@ bool Pathfinding::isBlocked(Tile *tile, const int part, BattleUnit *missileTarge
 				return false;
 			}
 
-			if (_unit && _unit->getFaction() == FACTION_PLAYER && unit->getVisible()) // player know all visible units
+			if (_unit
+				&& _unit->getFaction() == FACTION_PLAYER
+				&& unit->getVisible())
+			{
+				return true; // player know all visible units
+			}
+
+			if (_unit
+				&& _unit->getFaction() == unit->getFaction())
+			{
 				return true;
+			}
 		}
 		// this whole section is devoted to making large units not take part in any kind of falling behaviour
-		else if (tile->hasNoFloor(0) && _movementType != MT_FLY)
+		else if (tile->hasNoFloor(0)
+			&& _movementType != MT_FLY)
 		{
 			Position pos = tile->getPosition();
 			while (pos.z >= 0)
 			{
-				Tile *t = _save->getTile(pos);
+				Tile* t = _save->getTile(pos);
 				BattleUnit *unit = t->getUnit();
 
 				if (unit != 0 && unit != _unit)
@@ -1100,7 +1107,7 @@ bool Pathfinding::previewPath(bool bRemove)
 	if (_save->getBattleState()->getBattleGame()->getReservedAction() == BA_NONE)
 	{
 		switchBack = true;
-		_save->getBattleState()->getBattleGame()->setTUReserved(BA_AUTOSHOT);
+		_save->getBattleState()->getBattleGame()->setTUReserved(BA_AUTOSHOT, false);
 	}
 
 	bool running = (SDL_GetModState() & KMOD_CTRL) != 0
@@ -1157,7 +1164,7 @@ bool Pathfinding::previewPath(bool bRemove)
 
 	if (switchBack)
 	{
-		_save->getBattleState()->getBattleGame()->setTUReserved(BA_NONE);
+		_save->getBattleState()->getBattleGame()->setTUReserved(BA_NONE, false);
 	}
 
 	return true;

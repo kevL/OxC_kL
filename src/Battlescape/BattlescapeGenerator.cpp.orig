@@ -746,10 +746,14 @@ BattleUnit* BattlescapeGenerator::addAlien(Unit* rules, int alienRank, bool outs
 
 		int dir = _save->getTileEngine()->faceWindow(node->getPosition());
 		Position craft = _game->getSavedGame()->getSavedBattle()->getUnits()->at(0)->getPosition();
+<<<<<<< HEAD
 		// Warboy is a MEANIE!!!
 		if (_save->getTileEngine()->distance(node->getPosition(), craft) < 25
 			&& RNG::generate(0, 99) < 19 * difficulty)
 		{
+=======
+		if (_save->getTileEngine()->distance(node->getPosition(), craft) <= 20 && RNG::percent(20 * difficulty))
+>>>>>>> master
 			dir = unit->directionTo(craft);
 		}
 
@@ -868,10 +872,7 @@ BattleItem* BattlescapeGenerator::placeItemByLayout(BattleItem* item)
 						}
 					}
 				}
-<<<<<<< HEAD
 
-=======
->>>>>>> master
 				// only place the weapon onto the soldier when it's loaded with its layout-ammo (if any)
 				if (loaded)
 				{
@@ -1026,43 +1027,29 @@ BattleItem* BattlescapeGenerator::addItem(BattleItem* item, bool secondPass)
 					}
 				} */
 			break;
-
-<<<<<<< HEAD
-			default:
-=======
-				if (!(*i)->getItem("STR_BELT",3,0))
+			case BT_FLARE:
+				// equip these on night-missions
+				if (_worldShade >= NIGHT_SHADE_LEVEL)
 				{
-					// at this point we are assuming (3,1) is not occupied already (with eg. a grenade)
-					item->moveToOwner((*i));
-					item->setSlot(_game->getRuleset()->getInventory("STR_BELT"));
-					item->setSlotX(3);
-					item->setSlotY(0);
-					break;
-				}
-			}
-			break;
-		case BT_FLARE:
-			// equip these on night-missions
-			if (_worldShade >= NIGHT_SHADE_LEVEL)
-			{
-				for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
-				{
-					// skip the vehicles
-					if ((*i)->getArmor()->getSize() > 1 || 0 == (*i)->getGeoscapeSoldier()) continue;
-
-					if (!(*i)->getItem("STR_LEFT_SHOULDER", 1,0))
+					for (std::vector<BattleUnit* >::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 					{
-						item->moveToOwner((*i));
-						item->setSlot(_game->getRuleset()->getInventory("STR_LEFT_SHOULDER"));
-						item->setSlotX(1);
-						item->setSlotY(0);
-						break;
+						// skip the vehicles
+						if ((*i)->getArmor()->getSize() > 1 || 0 == (*i)->getGeoscapeSoldier()) continue;
+
+						if (!(*i)->getItem("STR_LEFT_SHOULDER", 1,0))
+						{
+							item->moveToOwner((*i));
+							item->setSlot(_game->getRuleset()->getInventory("STR_LEFT_SHOULDER"));
+							item->setSlotX(1);
+							item->setSlotY(0);
+
+							break;
+						}
 					}
 				}
-			}
 			break;
-		default:
->>>>>>> master
+
+			default:
 			break;
 		}
 	}
@@ -1368,16 +1355,10 @@ void BattlescapeGenerator::generateMap()
 					{
 						// lots of crazy stuff here, which is for the hangars (or other large base facilities one may create)
 						std::string mapname = (*i)->getRules()->getMapName();
-<<<<<<< HEAD
-						std::stringstream newname;
+						std::ostringstream newname;
 						newname << mapname.substr(0, mapname.size() - 2); // strip of last 2 digits
 
 						int mapnum = atoi(mapname.substr(mapname.size() - 2, 2).c_str()); // get number
-=======
-						std::ostringstream newname;
-						newname << mapname.substr(0, mapname.size()-2); // strip of last 2 digits
-						int mapnum = atoi(mapname.substr(mapname.size()-2, 2).c_str()); // get number
->>>>>>> master
 						mapnum += num;
 
 						if (mapnum < 10) newname << 0;
@@ -1826,12 +1807,8 @@ int BattlescapeGenerator::loadMAP(MapBlock* mapblock, int xoff, int yoff, RuleTe
 
 	char size[3];
 	unsigned char value[4];
-<<<<<<< HEAD
 
-	std::stringstream filename;
-=======
 	std::ostringstream filename;
->>>>>>> master
 	filename << "MAPS/" << mapblock->getName() << ".MAP";
 
 	int terrainObjectID;
@@ -2007,9 +1984,13 @@ void BattlescapeGenerator::explodePowerSources()
 	for (int i = 0; i < _save->getMapSizeXYZ(); ++i)
 	{
 		if (_save->getTiles()[i]->getMapData(MapData::O_OBJECT)
+<<<<<<< HEAD
 			&& _save->getTiles()[i]->getMapData(MapData::O_OBJECT)->getSpecialType() == UFO_POWER_SOURCE
 //kL			&& RNG::generate(0, 99) < 75)
 			&& RNG::generate(0, 99) < 80)	// kL
+=======
+			&& _save->getTiles()[i]->getMapData(MapData::O_OBJECT)->getSpecialType() == UFO_POWER_SOURCE && RNG::percent(75))
+>>>>>>> master
 		{
 			Position pos;
 			pos.x = _save->getTiles()[i]->getPosition().x * 16;
@@ -2043,7 +2024,11 @@ void BattlescapeGenerator::deployCivilians(int civilians)
 		{
 			for (int i = 0; i < rand; ++i)
 			{
+<<<<<<< HEAD
 				if (RNG::generate(0, 99) < 50)
+=======
+				if (RNG::percent(50))
+>>>>>>> master
 				{
 					addCivilian(_game->getRuleset()->getUnit("MALE_CIVILIAN"));
 				}

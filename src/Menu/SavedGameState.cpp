@@ -198,7 +198,6 @@ void SavedGameState::updateList()
 {
 	_lstSaves->clearList();
 	_saves = SavedGame::getList(_lstSaves, _game->getLanguage());
-	_lstSaves->draw();
 }
 
 /**
