@@ -871,6 +871,7 @@ void UnitWalkBState::playMovementSound()
 
 			// play footstep sound 1
 			if (_unit->getWalkingPhase() == 3)
+//			if (_unit->getWalkingPhase() == 2)		// kL
 			{
 				if (tile->getFootstepSound(tileBelow)
 					&& _unit->getRaceString() != "STR_ETHEREAL")	// kL: and not an ethereal
@@ -880,8 +881,8 @@ void UnitWalkBState::playMovementSound()
 			}
 
 			// play footstep sound 2
-//kL			if (_unit->getWalkingPhase() == 7)
-			if (_unit->getWalkingPhase() == 6)		// kL
+			if (_unit->getWalkingPhase() == 7)
+//			if (_unit->getWalkingPhase() == 6)		// kL
 			{
 				if (tile->getFootstepSound(tileBelow)
 					&& _unit->getRaceString() != "STR_ETHEREAL")	// kL: and not an ethereal

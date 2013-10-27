@@ -95,7 +95,7 @@ Map::Map(Game* game, int width, int height, int x, int y, int visibleMapHeight)
 		_unitDying(false),
 		_reveal(0)
 {
-//	Log(LOG_INFO) << "Create Map";
+	//Log(LOG_INFO) << "Create Map";
 
 	_previewSetting = Options::getInt("battleNewPreviewPath");
 
@@ -108,14 +108,20 @@ Map::Map(Game* game, int width, int height, int x, int y, int visibleMapHeight)
 	_res = _game->getResourcePack();
 	_spriteWidth = _res->getSurfaceSet("BLANKS.PCK")->getFrame(0)->getWidth();
 	_spriteHeight = _res->getSurfaceSet("BLANKS.PCK")->getFrame(0)->getHeight();
+
 	_save = _game->getSavedGame()->getSavedBattle();
+
 	// kL_note: "hidden movement" screen
 	_message = new BattlescapeMessage(320, visibleMapHeight < 200 ? visibleMapHeight : 200, Screen::getDX(), Screen::getDY());
+
 	_camera = new Camera(_spriteWidth, _spriteHeight, _save->getMapSizeX(), _save->getMapSizeY(), _save->getMapSizeZ(), this, visibleMapHeight);
+
 	_scrollMouseTimer = new Timer(SCROLL_INTERVAL);
 	_scrollMouseTimer->onTimer((SurfaceHandler)&Map::scrollMouse);
+
 	_scrollKeyTimer = new Timer(SCROLL_INTERVAL);
 	_scrollKeyTimer->onTimer((SurfaceHandler)&Map::scrollKey);
+
 	_camera->setScrollTimer(_scrollMouseTimer, _scrollKeyTimer);
 }
 
@@ -124,7 +130,7 @@ Map::Map(Game* game, int width, int height, int x, int y, int visibleMapHeight)
  */
 Map::~Map()
 {
-//	Log(LOG_INFO) << "Delete Map";
+	//Log(LOG_INFO) << "Delete Map";
 
 	delete _scrollMouseTimer;
 	delete _scrollKeyTimer;
@@ -183,7 +189,7 @@ void Map::think()
  */
 void Map::draw()
 {
-	Log(LOG_INFO) << "Map::draw()";
+	//Log(LOG_INFO) << "Map::draw()";
 
 	// kL_note: removed setting this in BattlescapeGame::handleState().
 /*kL	if (!_redraw)
@@ -218,11 +224,11 @@ void Map::draw()
 		}
 	}
 
-	Log(LOG_INFO) << ". . kL_preReveal = " << kL_preReveal;
+	//Log(LOG_INFO) << ". . kL_preReveal = " << kL_preReveal;
 //	if (kL_preReveal && !_reveal)		// kL
 //	{
 //		_reveal = 250;					// kL
-	Log(LOG_INFO) << ". . . . _reveal " << _reveal;
+	//Log(LOG_INFO) << ". . . . _reveal " << _reveal;
 //	}
 
 /*kL	if ((_save->getSelectedUnit() && _save->getSelectedUnit()->getVisible())
@@ -245,12 +251,12 @@ void Map::draw()
 		if (_reveal && !kL_preReveal)
 		{
 			_reveal--;
-			Log(LOG_INFO) << ". . . . . . drawTerrain() _reveal = " << _reveal;
+			//Log(LOG_INFO) << ". . . . . . drawTerrain() _reveal = " << _reveal;
 		}
 		else
 		{
 			_reveal = 8;
-			Log(LOG_INFO) << ". . . . . . drawTerrain() Set _reveal = " << _reveal;
+			//Log(LOG_INFO) << ". . . . . . drawTerrain() Set _reveal = " << _reveal;
 		}
 
 		drawTerrain(this);
@@ -263,11 +269,11 @@ void Map::draw()
 		{
 			kL_preReveal = false;		// kL
 			_reveal = 0;				// kL
-			Log(LOG_INFO) << ". . . . . . kL_preReveal, set " << kL_preReveal;
-			Log(LOG_INFO) << ". . . . . . _reveal, set " << _reveal;
+			//Log(LOG_INFO) << ". . . . . . kL_preReveal, set " << kL_preReveal;
+			//Log(LOG_INFO) << ". . . . . . _reveal, set " << _reveal;
 		}
 
-		Log(LOG_INFO) << ". . . . blit( hidden movement )";
+		//Log(LOG_INFO) << ". . . . blit( hidden movement )";
 		_message->blit(this);
 	}
 }
@@ -1194,40 +1200,39 @@ void Map::cacheUnits()
  */
 void Map::cacheUnit(BattleUnit* unit)
 {
-//	Log(LOG_INFO) << "cacheUnit() : " << unit->getId();	// kL
+	//Log(LOG_INFO) << "cacheUnit() : " << unit->getId();
 
 	UnitSprite* unitSprite = new UnitSprite(_spriteWidth, _spriteHeight, 0, 0);
 	unitSprite->setPalette(this->getPalette());
-	bool invalid, d;
-//	bool invalid = false;	// kL
-//	bool d = false;		// kL
+	bool invalid = false;
+	bool d = false;
 	int numOfParts = unit->getArmor()->getSize() == 1 ? 1 : unit->getArmor()->getSize() * 2;
 
 	unit->getCache(&invalid);
 	if (invalid)
 	{
-//		Log(LOG_INFO) << ". (invalid)";	// kL
+		//Log(LOG_INFO) << ". (invalid)";	// kL
 
 		// 1 or 4 iterations, depending on unit size
 		for (int i = 0; i < numOfParts; i++)
 		{
-//			Log(LOG_INFO) << ". . i = " << i;	// kL
+			//Log(LOG_INFO) << ". . i = " << i;	// kL
 
 			Surface* cache = unit->getCache(&d, i);
 			if (!cache) // no cache created yet
 			{
-//				Log(LOG_INFO) << ". . . (!cache)";	// kL
+				//Log(LOG_INFO) << ". . . (!cache)";	// kL
 
 				cache = new Surface(_spriteWidth, _spriteHeight);
 				cache->setPalette(this->getPalette());
 
-//				Log(LOG_INFO) << ". . . end (!cache)";	// kL
+				//Log(LOG_INFO) << ". . . end (!cache)";	// kL
 			}
 
-//			Log(LOG_INFO) << ". . setBattleUnit()";	// kL
+			//Log(LOG_INFO) << ". . setBattleUnit()";	// kL
 			unitSprite->setBattleUnit(unit, i);
 
-//			Log(LOG_INFO) << ". . getItem()";	// kL
+			//Log(LOG_INFO) << ". . getItem()";	// kL
 			BattleItem* rhandItem = unit->getItem("STR_RIGHT_HAND");
 			BattleItem* lhandItem = unit->getItem("STR_LEFT_HAND");
 			if (rhandItem)
@@ -1245,29 +1250,29 @@ void Map::cacheUnit(BattleUnit* unit)
 				unitSprite->setBattleItem(0);
 			}
 
-//			Log(LOG_INFO) << ". . setSurfaces()";	// kL
+			//Log(LOG_INFO) << ". . setSurfaces()";	// kL
 			unitSprite->setSurfaces(_res->getSurfaceSet(unit->getArmor()->getSpriteSheet()),
 									_res->getSurfaceSet("HANDOB.PCK"),
 									_res->getSurfaceSet("HANDOB2.PCK"));
-//			Log(LOG_INFO) << ". . setAnimationFrame()";	// kL
+			//Log(LOG_INFO) << ". . setAnimationFrame()";	// kL
 			unitSprite->setAnimationFrame(_animFrame);
-//			Log(LOG_INFO) << ". . clear()";	// kL
+			//Log(LOG_INFO) << ". . clear()";	// kL
 			cache->clear();
 
-//			Log(LOG_INFO) << ". . blit() : cache = " << cache;	// kL
+			//Log(LOG_INFO) << ". . blit() : cache = " << cache;	// kL
 			unitSprite->blit(cache);
-//			Log(LOG_INFO) << ". . blit() Ok";	// kL
+			//Log(LOG_INFO) << ". . blit() Ok";	// kL
 
-//			Log(LOG_INFO) << ". . setCache()";	// kL
+			//Log(LOG_INFO) << ". . setCache()";	// kL
 			unit->setCache(cache, i);
 		}
 
-//		Log(LOG_INFO) << ". end (invalid)";	// kL
+		//Log(LOG_INFO) << ". end (invalid)";	// kL
 	}
 
 	delete unitSprite;
 
-//	Log(LOG_INFO) << "exit cacheUnit() : " << unit->getId();	// kL
+	//Log(LOG_INFO) << "exit cacheUnit() : " << unit->getId();	// kL
 }
 
 /**
