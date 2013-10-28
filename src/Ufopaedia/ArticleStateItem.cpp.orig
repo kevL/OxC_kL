@@ -44,13 +44,8 @@ ArticleStateItem::ArticleStateItem(Game* game, ArticleDefinitionItem* defs, int 
 {
 	RuleItem* item = _game->getRuleset()->getItem(defs->id);
 
-<<<<<<< HEAD
 	// add screen elements
-	_txtTitle = new Text(150, 32, 5, 24);
-=======
-		// add screen elements
-		_txtTitle = new Text(148, 32, 5, 24);
->>>>>>> master
+	_txtTitle = new Text(148, 32, 5, 24);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_4")->getColors());
@@ -112,8 +107,38 @@ ArticleStateItem::ArticleStateItem(Game* game, ArticleDefinitionItem* defs, int 
 		int current_row = 0;
 		if (item->getTUAuto() > 0)
 		{
+<<<<<<< HEAD
 			std::wstring tu = Text::formatPercentage(item->getTUAuto());
 			if (item->getFlatRate())
+=======
+			_txtShotType = new Text(100, 17, 8, 66);
+			add(_txtShotType);
+			_txtShotType->setColor(Palette::blockOffset(14)+15);
+			_txtShotType->setWordWrap(true);
+			_txtShotType->setText(tr("STR_SHOT_TYPE").c_str());
+
+			_txtAccuracy = new Text(50, 17, 104, 66);
+			add(_txtAccuracy);
+			_txtAccuracy->setColor(Palette::blockOffset(14)+15);
+			_txtAccuracy->setWordWrap(true);
+			_txtAccuracy->setText(tr("STR_ACCURACY_UC").c_str());
+
+			_txtTuCost = new Text(60, 17, 158, 66);
+			add(_txtTuCost);
+			_txtTuCost->setColor(Palette::blockOffset(14)+15);
+			_txtTuCost->setWordWrap(true);
+			_txtTuCost->setText(tr("STR_TU_COST").c_str());
+
+			_lstInfo = new TextList(204, 55, 8, 82);
+			add(_lstInfo);
+
+			_lstInfo->setColor(Palette::blockOffset(15)+4); // color for %-data!
+			_lstInfo->setColumns(3, 100, 52, 52);
+			_lstInfo->setBig();
+
+			int current_row = 0;
+			if (item->getTUAuto()>0)
+>>>>>>> master
 			{
 				tu.erase(tu.end() - 1);
 			}

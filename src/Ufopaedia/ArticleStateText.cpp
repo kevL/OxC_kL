@@ -35,7 +35,7 @@ ArticleStateText::ArticleStateText(Game* game, ArticleDefinitionText* defs, int 
 	:
 		ArticleState(game, defs->id, palSwitch)
 {
-	_txtTitle	= new Text(296, 16, 5, 23);
+	_txtTitle	= new Text(296, 17, 5, 23);
 	_txtInfo	= new Text(296, 150, 10, 48);
 
 

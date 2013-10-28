@@ -83,7 +83,7 @@ DebriefingState::DebriefingState(Game* game)
 
 /*kL	_window			= new Window(this, 320, 200, 0, 0);
 	_btnOk			= new TextButton(40, 12, 16, 180);
-	_txtTitle		= new Text(280, 16, 16, 8);
+	_txtTitle		= new Text(280, 17, 16, 8);
 	_txtItem		= new Text(180, 9, 16, 24);
 	_txtQuantity	= new Text(60, 9, 200, 24);
 	_txtScore		= new Text(55, 9, 260, 24);
@@ -95,7 +95,7 @@ DebriefingState::DebriefingState(Game* game)
 
 	_window			= new Window(this, 320, 200, 0, 0);
 
-	_txtTitle		= new Text(280, 16, 16, 8);
+	_txtTitle		= new Text(280, 17, 16, 8);
 
 	_lstTotal		= new TextList(280, 9, 16, 12);
 

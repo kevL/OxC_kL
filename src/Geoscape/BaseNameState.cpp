@@ -56,7 +56,7 @@ BaseNameState::BaseNameState(Game* game, Base* base, Globe* globe, bool first)
 
 //kL	_window		= new Window(this, 192, 80, 32, 60, POPUP_BOTH);
 	_window		= new Window(this, 192, 88, 32, 60, POPUP_BOTH);	// kL
-	_txtTitle	= new Text(182, 16, 37, 70);
+	_txtTitle	= new Text(182, 17, 37, 70);
 	_edtName	= new TextEdit(127, 16, 59, 94);
 //kL	_btnOk		= new TextButton(162, 12, 47, 118);
 	_btnOk		= new TextButton(162, 16, 47, 118);		// kL

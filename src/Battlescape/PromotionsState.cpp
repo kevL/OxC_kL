@@ -46,7 +46,7 @@ PromotionsState::PromotionsState(Game* game)
 {
 	// Create objects
 	_window			= new Window(this, 320, 200, 0, 0);
-	_txtTitle		= new Text(300, 16, 10, 8);
+	_txtTitle		= new Text(300, 17, 10, 8);
 	_txtName		= new Text(114, 9, 16, 32);
 	_txtRank		= new Text(90, 9, 130, 32);
 	_txtBase		= new Text(80, 9, 220, 32);

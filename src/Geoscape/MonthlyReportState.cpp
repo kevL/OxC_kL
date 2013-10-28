@@ -68,15 +68,15 @@ MonthlyReportState::MonthlyReportState(Game* game, bool psi, Globe* globe)
 
 //kL	_btnOk		= new TextButton(50, 12, 135, 180);
 
-//kL	_txtTitle	= new Text(300, 16, 16, 8);
-	_txtTitle	= new Text(300, 16, 10, 8);
+//kL	_txtTitle	= new Text(300, 17, 16, 8);
+	_txtTitle	= new Text(300, 17, 10, 8);
 
-	_txtMonth	= new Text(110, 8, 16, 24);
-//kL	_txtRating	= new Text(180, 8, 125, 24);
-	_txtRating	= new Text(178, 8, 126, 24);
+	_txtMonth	= new Text(110, 9, 16, 24);
+//kL	_txtRating	= new Text(180, 9, 125, 24);
+	_txtRating	= new Text(178, 9, 126, 24);
 
-//kL	_txtChange	= new Text(300, 8, 16, 32);
-	_txtChange	= new Text(288, 8, 16, 32);
+//kL	_txtChange	= new Text(300, 9, 16, 32);
+	_txtChange	= new Text(288, 9, 16, 32);
 
 //kL	_txtFailure = new Text(290, 128, 15, 34);
 	_txtFailure	= new Text(288, 128, 16, 35);

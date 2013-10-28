@@ -68,15 +68,16 @@ InventoryState::InventoryState(Game* game, bool tu, BattlescapeState* parent)
 	_showMoreStatsInInventoryView = Options::getBool("showMoreStatsInInventoryView");
 
 	// remove any path preview if in the middle of a battlegame
-	if (tu || _game->getSavedGame()->getSavedBattle()->getDebugMode())
+	if (tu
+		|| _game->getSavedGame()->getSavedBattle()->getDebugMode())
 	{
 		_battleGame->getPathfinding()->removePreview();
 	}
 
-	// Create objects
+
 	_bg			= new Surface(320, 200, 0, 0);
 	_soldier	= new Surface(320, 200, 0, 0);
-	_txtName	= new Text(200, 16, 36, 6);
+	_txtName	= new Text(200, 17, 36, 6);
 	_txtTus		= new Text(40, 9, 245, _showMoreStatsInInventoryView ? 32 : 24);
 
 	if (_showMoreStatsInInventoryView)
@@ -84,10 +85,8 @@ InventoryState::InventoryState(Game* game, bool tu, BattlescapeState* parent)
 		_txtWeight	= new Text(70, 9, 245, 24);
 		_txtFAcc	= new Text(40, 9, 245, 32);
 		_txtReact	= new Text(40, 9, 245, 40);
-//kL		_txtPSkill	= new Text(40, 9, 245, 48);
-//kL		_txtPStr	= new Text(40, 9, 245, 56);
-		_txtPStr	= new Text(40, 9, 245, 48);		// kL
-		_txtPSkill	= new Text(40, 9, 245, 56);		// kL
+		_txtPStr	= new Text(40, 9, 245, 48);
+		_txtPSkill	= new Text(40, 9, 245, 56);
 	}
 
 	_txtItem	= new Text(160, 9, 128, 140);
@@ -128,7 +127,7 @@ InventoryState::InventoryState(Game* game, bool tu, BattlescapeState* parent)
 
 	centerAllSurfaces();
 
-	// Set up objects
+
 	_game->getResourcePack()->getSurface("TAC01.SCR")->blit(_bg);
 
 	_txtName->setColor(Palette::blockOffset(4));

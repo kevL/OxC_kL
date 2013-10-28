@@ -74,7 +74,7 @@ PurchaseState::PurchaseState(Game* game, Base* base)
 	_window			= new Window(this, 320, 200, 0, 0);
 /*kL	_btnOk			= new TextButton(148, 16, 8, 176);
 	_btnCancel		= new TextButton(148, 16, 164, 176);
-	_txtTitle		= new Text(310, 16, 5, 8);
+	_txtTitle		= new Text(310, 17, 5, 8);
 	_txtFunds		= new Text(150, 9, 10, 24);
 	_txtPurchases	= new Text(150, 9, 160, 24);
 	_txtItem		= new Text(140, 9, 10, 32);
@@ -83,7 +83,7 @@ PurchaseState::PurchaseState(Game* game, Base* base)
 	_lstItems		= new TextList(287, 128, 8, 40); */
 
 	// kL_begin: PurchaseState surface adjustments.
-	_txtTitle		= new Text(310, 16, 5, 9);
+	_txtTitle		= new Text(310, 17, 5, 9);
 
 	_txtFunds		= new Text(140, 9, 16, 24);
 	_txtPurchases	= new Text(140, 9, 160, 24);

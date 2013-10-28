@@ -34,12 +34,9 @@
 #include "../Engine/Options.h"
 #include "Globe.h"
 #include "SelectDestinationState.h"
-<<<<<<< HEAD
-#include "GeoscapeCraftState.h"
-
-=======
+#include "GeoscapeCraftState.h"		// kL
 #include "ConfirmDestinationState.h"
->>>>>>> master
+
 
 namespace OpenXcom
 {
@@ -51,20 +48,18 @@ namespace OpenXcom
  * @param base Pointer to base to show contained crafts (NULL to show all crafts).
  * @param target Pointer to target to intercept (NULL to ask user for target).
  */
-<<<<<<< HEAD
-InterceptState::InterceptState(Game* game, Globe* globe, Base* base)
+InterceptState::InterceptState(Game* game, Globe* globe, Base* base, Target* target)
 	:
 		State(game),
 		_globe(globe),
 		_base(base),
+		_target(target),
 		_crafts()
-=======
-InterceptState::InterceptState(Game *game, Globe *globe, Base *base, Target *target) : State(game), _globe(globe), _base(base), _target(target), _crafts()
->>>>>>> master
 {
 	_screen = false;
 
 	// Create objects
+<<<<<<< HEAD
 //kL	_window		= new Window(this, 320, 140, 0, 30, POPUP_HORIZONTAL);
 	_window		= new Window(this, 320, 144, 0, 30, POPUP_HORIZONTAL);	// kL
 
@@ -85,6 +80,16 @@ InterceptState::InterceptState(Game *game, Globe *globe, Base *base, Target *tar
 	_lstCrafts	= new TextList(288, 72, 8, 74);		// kL
 
 	_btnCancel	= new TextButton(288, 16, 16, 151);	// kL, ...
+=======
+	_window = new Window(this, 320, 140, 0, 30, POPUP_HORIZONTAL);
+	_btnCancel = new TextButton(288, 16, 16, 146);
+	_txtTitle = new Text(300, 17, 10, 46);
+	_txtCraft = new Text(86, 9, 14, 70);
+	_txtStatus = new Text(70, 9, 100, 70);
+	_txtBase = new Text(80, 9, 170, 70);
+	_txtWeapons = new Text(80, 17, 238, 62);
+	_lstCrafts = new TextList(288, 64, 8, 78);
+>>>>>>> master
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)), Palette::backPos, 16);
@@ -133,16 +138,10 @@ InterceptState::InterceptState(Game *game, Globe *globe, Base *base, Target *tar
 	_lstCrafts->setColumns(4, 86, 60, 81, 45);		// kL
 	_lstCrafts->setSelectable(true);
 	_lstCrafts->setBackground(_window);
-<<<<<<< HEAD
 //kL	_lstCrafts->setMargin(6);
 	_lstCrafts->setMargin(8);		// kL
-	_lstCrafts->onMouseClick((ActionHandler)& InterceptState::lstCraftsClick);
+	_lstCrafts->onMouseClick((ActionHandler)& InterceptState::lstCraftsLeftClick);
 	_lstCrafts->onMouseClick((ActionHandler)& InterceptState::lstCraftsRightClick, SDL_BUTTON_RIGHT);
-=======
-	_lstCrafts->setMargin(6);
-	_lstCrafts->onMouseClick((ActionHandler)&InterceptState::lstCraftsLeftClick);
-	_lstCrafts->onMouseClick((ActionHandler)&InterceptState::lstCraftsRightClick, SDL_BUTTON_RIGHT);
->>>>>>> master
 
 	int row = 0;
 
@@ -216,14 +215,12 @@ void InterceptState::btnCancelClick(Action* )
  * Pick a target for the selected craft.
  * @param action Pointer to an action.
  */
-<<<<<<< HEAD
-/* void InterceptState::lstCraftsClick(Action* )
-=======
-void InterceptState::lstCraftsLeftClick(Action *)
->>>>>>> master
+/*kL void InterceptState::lstCraftsLeftClick(Action* )
 {
 	Craft* c = _crafts[_lstCrafts->getSelectedRow()];
-	if (c->getStatus() == "STR_READY" || ((c->getStatus() == "STR_OUT" || Options::getBool("craftLaunchAlways")) && !c->getLowFuel()))
+	if (c->getStatus() == "STR_READY"
+		|| ((c->getStatus() == "STR_OUT" || Options::getBool("craftLaunchAlways"))
+			&& !c->getLowFuel()))
 	{
 		_game->popState();
 		if (_target == 0)
@@ -237,7 +234,7 @@ void InterceptState::lstCraftsLeftClick(Action *)
 	}
 } */
 // kL_begin: list of Intercept craft actions.
-void InterceptState::lstCraftsClick(Action* )
+void InterceptState::lstCraftsLeftClick(Action* )
 {
 	Craft* c = _crafts[_lstCrafts->getSelectedRow()];
 /*	if (c->getStatus() == "STR_OUT")

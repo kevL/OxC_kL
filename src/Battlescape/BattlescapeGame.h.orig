@@ -76,62 +76,63 @@ struct BattleAction
 	int diff;
 	int autoShotCounter;
 	Position cameraPosition;
-    bool desperate;	// ignoring newly-spotted units
+    bool desperate; // ignoring newly-spotted units
 	int finalFacing;
-<<<<<<< HEAD
-    int number;		// first action of turn, second, etc.?
-	BattleAction()
-		:
-		type(BA_NONE),
-		actor(0),
-		weapon(0),
-		TU(0),
-		targeting(false),
-		value(0),
-		result(""),
-		strafe(false),
-		run(false),
-		diff(0),
-		autoShotCounter(0),
-		cameraPosition(0, 0, -1),
-		desperate(false),
-		finalFacing(-1)
-		{
-		}
-=======
 	bool finalAction;
     int number; // first action of turn, second, etc.?
-	BattleAction() : type(BA_NONE), actor(0), weapon(0), TU(0), targeting(false), value(0), result(""), strafe(false), run(false), diff(0), autoShotCounter(0), cameraPosition(0, 0, -1), desperate(false), finalFacing(-1), finalAction(false), number(0) { }
->>>>>>> master
+
+	BattleAction()
+		:
+			type(BA_NONE),
+			actor(0),
+			weapon(0),
+			TU(0),
+			targeting(false),
+			value(0),
+			result(""),
+			strafe(false),
+			run(false),
+			diff(0),
+			autoShotCounter(0),
+			cameraPosition(0, 0, -1),
+			desperate(false),
+			finalFacing(-1),
+			finalAction(false),
+			number(0)
+	{
+	}
 };
+
 
 /**
  * Battlescape game - the core game engine of the battlescape game.
  */
 class BattlescapeGame
 {
-	private:
-		SavedBattleGame* _save;
-		BattlescapeState* _parentState;
-		std::list<BattleState* > _states;
-		BattleActionType _tuReserved, _playerTUReserved;
-		bool _playerPanicHandled;
-		int _AIActionCounter;
-		BattleAction _currentAction;
-		bool _AISecondMove;
-
-		/// Ends the turn.
-		void endTurn();
-		/// Picks the first soldier that is panicking.
-		bool handlePanickingPlayer();
-		/// Common function for hanlding panicking units.
-		bool handlePanickingUnit(BattleUnit* unit);
-		/// Determines whether there are any actions pending for the given unit.
-		bool noActionsPending(BattleUnit* bu);
-		std::vector<InfoboxOKState* > _infoboxQueue;
-		/// Shows the infoboxes in the queue (if any).
-		void showInfoBoxQueue();
-		bool _playedAggroSound, _endTurnRequested, _kneelReserved;
+private:
+	SavedBattleGame* _save;
+	BattlescapeState* _parentState;
+	std::list<BattleState* > _states;
+	BattleActionType _tuReserved, _playerTUReserved;
+	bool _playerPanicHandled;
+	int _AIActionCounter;
+	BattleAction _currentAction;
+	bool _AISecondMove;
+	/// Ends the turn.
+	void endTurn();
+	/// Picks the first soldier that is panicking.
+	bool handlePanickingPlayer();
+	/// Common function for hanlding panicking units.
+	bool handlePanickingUnit(BattleUnit* unit);
+	/// Determines whether there are any actions pending for the given unit.
+	bool noActionsPending(BattleUnit* bu);
+	///
+	std::vector<InfoboxOKState* > _infoboxQueue;
+	/// Shows the infoboxes in the queue (if any).
+	void showInfoBoxQueue();
+	///
+	bool _playedAggroSound, _endTurnRequested, _kneelReserved;
+<<<<<<< HEAD
 
 	public:
 		/// Creates the BattlescapeGame state.
@@ -139,7 +140,6 @@ class BattlescapeGame
 		/// Cleans up the BattlescapeGame state.
 		~BattlescapeGame();
 
-<<<<<<< HEAD
 		/// Checks for units panicking or falling and so on.
 		void think();
 		/// Initializes the Battlescape game.
@@ -163,7 +163,7 @@ class BattlescapeGame
 		/// Checks for casualties in battle.
 		void checkForCasualties(BattleItem* murderweapon, BattleUnit* murderer, bool hiddenExplosion = false, bool terrainExplosion = false);
 		/// Checks if a unit panics.
-	//kL	void checkForPanic(BattleUnit *unit);
+//kL		void checkForPanic(BattleUnit *unit);
 		/// Checks reserved tu.
 		bool checkReservedTU(BattleUnit* bu, int tu, bool justChecking = false);
 		/// Handles unit AI.
@@ -193,7 +193,7 @@ class BattlescapeGame
 		/// Requests the end of the turn (wait for explosions etc to really end the turn).
 		void requestEndTurn();
 		/// Sets the TU reserved type.
-		void setTUReserved(BattleActionType tur);
+		void setTUReserved(BattleActionType tur, bool player = true);
 		/// Sets up the cursor taking into account the action.
 		void setupCursor();
 		/// Gets the map.
@@ -208,6 +208,7 @@ class BattlescapeGame
 		ResourcePack* getResourcePack();
 		/// Gets the ruleset.
 		const Ruleset* getRuleset() const;
+		///
 		static bool _debugPlay;
 		/// Returns whether panic has been handled.
 		bool getPanicHandled()
@@ -233,18 +234,6 @@ class BattlescapeGame
 		/// Checks the kneel reservation setting.
 		bool getKneelReserved();
 =======
-	/// Ends the turn.
-	void endTurn();
-	/// Picks the first soldier that is panicking.
-	bool handlePanickingPlayer();
-	/// Common function for hanlding panicking units.
-	bool handlePanickingUnit(BattleUnit *unit);
-	/// Determines whether there are any actions pending for the given unit.
-	bool noActionsPending(BattleUnit *bu);
-	std::vector<InfoboxOKState*> _infoboxQueue;
-	/// Shows the infoboxes in the queue (if any).
-	void showInfoBoxQueue();
-	bool _playedAggroSound, _endTurnRequested, _kneelReserved;
 public:
 	/// Creates the BattlescapeGame state.
 	BattlescapeGame(SavedBattleGame *save, BattlescapeState *parentState);
@@ -303,7 +292,7 @@ public:
 	/// Requests the end of the turn (wait for explosions etc to really end the turn).
 	void requestEndTurn();
 	/// Sets the TU reserved type.
-	void setTUReserved(BattleActionType tur, bool player = true);
+	void setTUReserved(BattleActionType tur, bool player);
 	/// Sets up the cursor taking into account the action.
 	void setupCursor();
 	/// Gets the map.
@@ -339,6 +328,8 @@ public:
 	void setKneelReserved(bool reserved);
 	/// Checks the kneel reservation setting.
 	bool getKneelReserved();
+	/// Checks for and triggers proximity grenades.
+	bool checkForProximityGrenades(BattleUnit *unit);
 >>>>>>> master
 };
 

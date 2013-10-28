@@ -73,20 +73,42 @@ CraftEquipmentState::CraftEquipmentState(Game* game, Base* base, size_t craft)
 	bool isNewBattle = game->getSavedGame()->getMonthsPassed() == -1;
 
 	// Create objects
+<<<<<<< HEAD
 	_window			= new Window(this, 320, 200, 0, 0);
+
+//kL	_txtTitle		= new Text(300, 16, 16, 7);
+	_txtTitle		= new Text(300, 16, 16, 8);		// kL
+
+/*kL	_txtItem		= new Text(144, 9, 16, 32);
+	_txtStores		= new Text(150, 9, 160, 32);
+	_txtAvailable	= new Text(110, 9, 16, 24);
+	_txtUsed		= new Text(110, 9, 130, 24); */
+	_txtAvailable	= new Text(110, 9, 16, 25);
+	_txtUsed		= new Text(110, 9, 130, 25);
+
+	_txtItem		= new Text(144, 9, 16, 33);
+	_txtStores		= new Text(150, 9, 160, 33);
+//kL	_txtCrew		= new Text(71, 9, 244, 24);
+
+	_lstEquipment	= new TextList(288, 128, 8, 42);
 
 	_btnClear		= new TextButton(94, 16, 16, 176);	// kL... see official file for default values
 	_btnInventory	= new TextButton(94, 16, 113, 176);	// kL...  "
 //kL	_btnOk			= new TextButton((craftHasACrew || isNewBattle) ? 148 : 288, 16, (craftHasACrew || isNewBattle) ? 164 : 16, 176);
 	_btnOk			= new TextButton(94, 16, 210, 176);	// kL
-
-	_txtTitle		= new Text(300, 16, 16, 7);
-	_txtItem		= new Text(144, 9, 16, 32);
-	_txtStores		= new Text(150, 9, 160, 32);
-	_txtAvailable	= new Text(110, 9, 16, 24);
-	_txtUsed		= new Text(110, 9, 130, 24);
-	_txtCrew		= new Text(71, 9, 244, 24);
-	_lstEquipment	= new TextList(288, 128, 8, 40);
+=======
+	_window = new Window(this, 320, 200, 0, 0);
+	_btnOk = new TextButton((craftHasACrew || isNewBattle)? 148:288, 16, (craftHasACrew || isNewBattle)? 164:16, 176);
+	_btnClear = new TextButton(148, 16, 8, 176);
+	_btnInventory = new TextButton(148, 16, 8, 176);
+	_txtTitle = new Text(300, 17, 16, 7);
+	_txtItem = new Text(144, 9, 16, 32);
+	_txtStores = new Text(150, 9, 160, 32);
+	_txtAvailable = new Text(110, 9, 16, 24);
+	_txtUsed = new Text(110, 9, 130, 24);
+	_txtCrew = new Text(71, 9, 244, 24);
+	_lstEquipment = new TextList(288, 128, 8, 40);
+>>>>>>> master
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());
@@ -101,7 +123,7 @@ CraftEquipmentState::CraftEquipmentState(Game* game, Base* base, size_t craft)
 	add(_txtStores);
 	add(_txtAvailable);
 	add(_txtUsed);
-	add(_txtCrew);
+//kL	add(_txtCrew);
 	add(_lstEquipment);
 
 	centerAllSurfaces();
@@ -144,11 +166,12 @@ CraftEquipmentState::CraftEquipmentState(Game* game, Base* base, size_t craft)
 	_txtUsed->setSecondaryColor(Palette::blockOffset(13));
 	_txtUsed->setText(tr("STR_SPACE_USED").arg(c->getSpaceUsed()));
 
-	_txtCrew->setColor(Palette::blockOffset(15)+1);
-	_txtCrew->setSecondaryColor(Palette::blockOffset(13));
-	std::wstringstream ss3;
-	ss3 << tr("STR_SOLDIERS_UC") << ">" << L'\x01'<< c->getNumSoldiers();
-	_txtCrew->setText(ss3.str());
+//kL	_txtCrew->setColor(Palette::blockOffset(15)+1);
+//kL	_txtCrew->setSecondaryColor(Palette::blockOffset(13));
+//kL	std::wstringstream ss3;
+//kL	ss3 << tr("STR_SOLDIERS_UC") << "> " << L'\x01'<< c->getNumSoldiers();
+//kL	_txtCrew->setText(ss3.str());
+//	_txtCrew->setText(tr("STR_SOLDIERS_UC").arg(c->getNumSoldiers()));		// kL
 
 	_lstEquipment->setColor(Palette::blockOffset(13)+10);
 	_lstEquipment->setArrowColor(Palette::blockOffset(15)+1);
@@ -469,18 +492,8 @@ void CraftEquipmentState::updateQuantity()
 	_lstEquipment->setCellText(_sel, 1, ss.str());
 	_lstEquipment->setCellText(_sel, 2, ss2.str());
 
-<<<<<<< HEAD
-	std::wstringstream ss3;
-	ss3 << tr("STR_SPACE_AVAILABLE") << L'\x01' << c->getSpaceAvailable();
-	_txtAvailable->setText(ss3.str());
-
-	std::wstringstream ss4;
-	ss4 << tr("STR_SPACE_USED") << L'\x01' << c->getSpaceUsed();
-	_txtUsed->setText(ss4.str());
-=======
 	_txtAvailable->setText(tr("STR_SPACE_AVAILABLE").arg(c->getSpaceAvailable()));
 	_txtUsed->setText(tr("STR_SPACE_USED").arg(c->getSpaceUsed()));
->>>>>>> master
 }
 
 /**
@@ -724,24 +737,12 @@ void CraftEquipmentState::btnClearClick(Action* )
 */
 void CraftEquipmentState::btnInventoryClick(Action* )
 {
-<<<<<<< HEAD
 	Craft* craft = _base->getCrafts()->at(_craft);
-
-	if (craft->getNumSoldiers() == 0)
-	{
-		std::wstringstream ss;
-		ss << craft->getName(_game->getLanguage()) << L'\n' << tr("STR_NO_CREW");
-		_game->pushState(new ErrorMessageState(_game, ss.str(), Palette::blockOffset(15)+1, "BACK04.SCR", 2));
-	}
-	else
-=======
-	Craft *craft = _base->getCrafts()->at(_craft);
 	if (craft->getNumSoldiers() != 0)
->>>>>>> master
 	{
 		_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_4")->getColors());
 
-		SavedBattleGame *bgame = new SavedBattleGame();
+		SavedBattleGame* bgame = new SavedBattleGame();
 		_game->getSavedGame()->setBattleGame(bgame);
 
 		BattlescapeGenerator bgen = BattlescapeGenerator(_game);

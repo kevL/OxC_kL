@@ -50,21 +50,22 @@ TransferBaseState::TransferBaseState(Game* game, Base* base)
 		_bases()
 {
 /*kL	_window		= new Window(this, 280, 140, 20, 30);
-	_txtTitle	= new Text(270, 16, 25, 38);
+	_txtTitle	= new Text(270, 17, 25, 38);
 	_txtFunds	= new Text(250, 9, 30, 54);
-	_txtName	= new Text(130, 16, 28, 64);
-	_txtArea	= new Text(130, 16, 160, 64);
+	_txtName	= new Text(130, 17, 28, 64);
+	_txtArea	= new Text(130, 17, 160, 64);
 	_lstBases	= new TextList(248, 64, 28, 80);
 	_btnCancel	= new TextButton(264, 16, 28, 146); */
 
 	// kL_begin:
 	_window		= new Window(this, 280, 140, 20, 30);
-	_txtTitle	= new Text(270, 16, 25, 38);
+
+	_txtTitle	= new Text(270, 17, 25, 38);
 
 	_txtFunds	= new Text(248, 9, 32, 54);
 
-	_txtName	= new Text(128, 16, 32, 65);
-	_txtArea	= new Text(128, 16, 162, 65);
+	_txtName	= new Text(128, 17, 32, 65);
+	_txtArea	= new Text(128, 17, 162, 65);
 
 //	_lstBases->setColumns(2, 128, 128);		// kL_TEMP.
 	_lstBases	= new TextList(256, 57, 24, 82);

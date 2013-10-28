@@ -52,12 +52,11 @@ PsiTrainingState::PsiTrainingState(Game* game)
 		_base7(0),
 		_base8(0)
 {
-	// Create objects
 	_window		= new Window(this, 320, 200, 0, 0);
-	_txtTitle	= new Text(300, 16, 10, 16);
+	_txtTitle	= new Text(300, 17, 10, 16);
 	_btnOk		= new TextButton(160, 14, 80, 174);
 
-	// Set palette
+
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)), Palette::backPos, 16);
 
@@ -65,7 +64,7 @@ PsiTrainingState::PsiTrainingState(Game* game)
 	add(_btnOk);
 	add(_txtTitle);
 
-	// Set up objects
+
 	_window->setColor(Palette::blockOffset(15)+6);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 

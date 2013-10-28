@@ -73,8 +73,8 @@ SellState::SellState(Game* game, Base* base)
 
 
 	_window			= new Window(this, 320, 200, 0, 0);
-//kL	_txtTitle		= new Text(310, 16, 5, 8);
-	_txtTitle		= new Text(310, 16, 5, 9);			// kL
+//kL	_txtTitle		= new Text(310, 17, 5, 8);
+	_txtTitle		= new Text(310, 17, 5, 9);			// kL
 
 	_txtSales		= new Text(140, 9, 16, 24);
 	_txtFunds		= new Text(140, 9, 160, 24);

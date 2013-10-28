@@ -52,6 +52,7 @@ ManufactureState::ManufactureState(Game* game, Base* base)
 		State(game),
 		_base(base)
 {
+<<<<<<< HEAD
 	_window			= new Window(this, 320, 200, 0, 0);
 
 /*kL	_txtTitle		= new Text(310, 16, 5, 8);
@@ -90,6 +91,23 @@ ManufactureState::ManufactureState(Game* game, Base* base)
 	_btnNew			= new TextButton(144, 16, 16, 177);		// kL
 	_btnOk			= new TextButton(144, 16, 163, 177);	// kL
 
+=======
+	// Create objects
+	_window = new Window(this, 320, 200, 0, 0);
+	_btnNew = new TextButton(148, 16, 8, 176);
+	_btnOk = new TextButton(148, 16, 164, 176);
+	_txtTitle = new Text(310, 17, 5, 8);
+	_txtAvailable = new Text(150, 9, 8, 24);
+	_txtAllocated = new Text(150, 9, 160, 24);
+	_txtSpace = new Text(150, 9, 8, 34);
+	_txtFunds = new Text(150, 9, 160, 34);
+	_txtItem = new Text(80, 9, 10, 52);
+	_txtEngineers = new Text(56, 18, 112, 44);
+	_txtProduced = new Text(56, 18, 168, 44);
+	_txtCost = new Text(44, 27, 222, 44);
+	_txtTimeLeft = new Text(55, 18, 260, 44);
+	_lstManufacture = new TextList(307, 90, 8, 80);
+>>>>>>> master
 
 	// back up palette in case we're being called from Geoscape!
 	memcpy(_oldPalette, _game->getScreen()->getPalette(), 256 * sizeof(SDL_Color));
@@ -266,11 +284,7 @@ void ManufactureState::fillProductionList()
 
 		_lstManufacture->addRow (5, tr((*iter)->getRules()->getName()).c_str(), s1.str().c_str(), s2.str().c_str(), s3.str().c_str(), s4.str().c_str());
 	}
-<<<<<<< HEAD
 
-	_lstManufacture->draw();
-=======
->>>>>>> master
 	_txtAvailable->setText(tr("STR_ENGINEERS_AVAILABLE").arg(_base->getAvailableEngineers()));
 	_txtAllocated->setText(tr("STR_ENGINEERS_ALLOCATED").arg(_base->getAllocatedEngineers()));
 	_txtSpace->setText(tr("STR_WORKSHOP_SPACE_AVAILABLE").arg(_base->getFreeWorkshops()));

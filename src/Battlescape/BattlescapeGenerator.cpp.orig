@@ -381,8 +381,7 @@ void BattlescapeGenerator::run()
 }
 
 /**
-* Deploys all the X-COM units and equipment based
-* on the Geoscape base / craft.
+* Deploys all the X-COM units and equipment based on the Geoscape base / craft.
 * @param inventoryTile The tile to place all the extra equipment on.
 */
 void BattlescapeGenerator::deployXCOM()
@@ -511,7 +510,7 @@ void BattlescapeGenerator::deployXCOM()
 		addItem(*i, false);
 	}
 
-	for (std::vector<BattleItem*>::iterator i = _craftInventoryTile->getInventory()->begin(); i != _craftInventoryTile->getInventory()->end(); ++i)
+	for (std::vector<BattleItem* >::iterator i = _craftInventoryTile->getInventory()->begin(); i != _craftInventoryTile->getInventory()->end(); ++i)
 	{
 		//Log(LOG_INFO) << "BattlescapeGenerator::deployXCOM(), addItem(*item, SecondPass)";
 		addItem(*i, true);
@@ -654,7 +653,8 @@ void BattlescapeGenerator::deployAliens(AlienRace* race, AlienDeployment* deploy
 	int month;
 	if (_game->getSavedGame()->getMonthsPassed() != -1)
 	{
-		month = ((size_t)_game->getSavedGame()->getMonthsPassed()) > _game->getRuleset()->getAlienItemLevels().size() - 1 ? _game->getRuleset()->getAlienItemLevels().size() - 1 : _game->getSavedGame()->getMonthsPassed();
+		month = (size_t)_game->getSavedGame()->getMonthsPassed() > _game->getRuleset()->getAlienItemLevels().size() - 1
+						? _game->getRuleset()->getAlienItemLevels().size() - 1 : _game->getSavedGame()->getMonthsPassed();
 	}
 	else
 	{
@@ -746,14 +746,11 @@ BattleUnit* BattlescapeGenerator::addAlien(Unit* rules, int alienRank, bool outs
 
 		int dir = _save->getTileEngine()->faceWindow(node->getPosition());
 		Position craft = _game->getSavedGame()->getSavedBattle()->getUnits()->at(0)->getPosition();
-<<<<<<< HEAD
-		// Warboy is a MEANIE!!!
-		if (_save->getTileEngine()->distance(node->getPosition(), craft) < 25
-			&& RNG::generate(0, 99) < 19 * difficulty)
+
+//kL		if (_save->getTileEngine()->distance(node->getPosition(), craft) <= 20 && RNG::percent(20 * difficulty))
+		if (_save->getTileEngine()->distance(node->getPosition(), craft) < 25	// kL
+			&& RNG::percent(20 * difficulty))									// kL
 		{
-=======
-		if (_save->getTileEngine()->distance(node->getPosition(), craft) <= 20 && RNG::percent(20 * difficulty))
->>>>>>> master
 			dir = unit->directionTo(craft);
 		}
 
@@ -827,10 +824,16 @@ BattleItem* BattlescapeGenerator::placeItemByLayout(BattleItem* item)
 	RuleInventory* ground = _game->getRuleset()->getInventory("STR_GROUND");
 	if (item->getSlot() == ground)
 	{
-		// skip flares if not dark enough
-		if (BT_FLARE == item->getRules()->getBattleType() && _worldShade < NIGHT_SHADE_LEVEL)
+<<<<<<< HEAD
+		// skip flares if not dark enough; kL_note: let's just skip flares.
+		if (BT_FLARE == item->getRules()->getBattleType())
+//kL			&& _worldShade < NIGHT_SHADE_LEVEL)
+		{
 			return item;
+		}
 
+=======
+>>>>>>> master
 		bool loaded;
 		RuleInventory* righthand = _game->getRuleset()->getInventory("STR_RIGHT_HAND");
 
@@ -1005,6 +1008,7 @@ BattleItem* BattlescapeGenerator::addItem(BattleItem* item, bool secondPass)
 					}
 				} */
 			break;
+<<<<<<< HEAD
 			case BT_MEDIKIT:
 				// find the first soldier with a free belt for medikit (2 spaces)
 /*kL				for (std::vector<BattleUnit* >::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
@@ -1026,10 +1030,28 @@ BattleItem* BattlescapeGenerator::addItem(BattleItem* item, bool secondPass)
 						break;
 					}
 				} */
+=======
+		case BT_FLARE:
+			for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
+			{
+				// skip the vehicles
+				if ((*i)->getArmor()->getSize() > 1 || 0 == (*i)->getGeoscapeSoldier()) continue;
+				if (!((*i)->getGeoscapeSoldier()->getEquipmentLayout()->empty())) continue;
+
+				if (!(*i)->getItem("STR_LEFT_SHOULDER", 1,0))
+				{
+					item->moveToOwner((*i));
+					item->setSlot(_game->getRuleset()->getInventory("STR_LEFT_SHOULDER"));
+					item->setSlotX(1);
+					item->setSlotY(0);
+					break;
+				}
+			}
+>>>>>>> master
 			break;
 			case BT_FLARE:
 				// equip these on night-missions
-				if (_worldShade >= NIGHT_SHADE_LEVEL)
+/*kL				if (_worldShade >= NIGHT_SHADE_LEVEL)
 				{
 					for (std::vector<BattleUnit* >::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 					{
@@ -1046,7 +1068,7 @@ BattleItem* BattlescapeGenerator::addItem(BattleItem* item, bool secondPass)
 							break;
 						}
 					}
-				}
+				} */
 			break;
 
 			default:
@@ -1413,8 +1435,8 @@ void BattlescapeGenerator::generateMap()
 		{
 			while (blocks[randX][randY] != NULL)
 			{
-				randX = RNG::generate(0, (_mapsize_y/10) - 1);
-				randY = RNG::generate(0, (_mapsize_x/10) - 1);
+				randX = RNG::generate(0, (_mapsize_y / 10) - 1);
+				randY = RNG::generate(0, (_mapsize_x / 10) - 1);
 			}
 
 			// add the lift
@@ -1984,13 +2006,9 @@ void BattlescapeGenerator::explodePowerSources()
 	for (int i = 0; i < _save->getMapSizeXYZ(); ++i)
 	{
 		if (_save->getTiles()[i]->getMapData(MapData::O_OBJECT)
-<<<<<<< HEAD
 			&& _save->getTiles()[i]->getMapData(MapData::O_OBJECT)->getSpecialType() == UFO_POWER_SOURCE
-//kL			&& RNG::generate(0, 99) < 75)
-			&& RNG::generate(0, 99) < 80)	// kL
-=======
-			&& _save->getTiles()[i]->getMapData(MapData::O_OBJECT)->getSpecialType() == UFO_POWER_SOURCE && RNG::percent(75))
->>>>>>> master
+//kL			&& RNG::percent(75))
+			&& RNG::percent(80))	// kL
 		{
 			Position pos;
 			pos.x = _save->getTiles()[i]->getPosition().x * 16;
@@ -2024,11 +2042,7 @@ void BattlescapeGenerator::deployCivilians(int civilians)
 		{
 			for (int i = 0; i < rand; ++i)
 			{
-<<<<<<< HEAD
-				if (RNG::generate(0, 99) < 50)
-=======
 				if (RNG::percent(50))
->>>>>>> master
 				{
 					addCivilian(_game->getRuleset()->getUnit("MALE_CIVILIAN"));
 				}

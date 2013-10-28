@@ -49,10 +49,11 @@ ResearchState::ResearchState(Game* game, Base* base)
 		State(game),
 		_base(base)
 {
+<<<<<<< HEAD
 	_window			= new Window(this, 320, 200, 0, 0);
 
 //kL	_txtTitle		= new Text(310, 16, 5, 8);
-	_txtTitle		= new Text(300, 16, 16, 10);			// kL
+	_txtTitle		= new Text(300, 16, 16, 9);				// kL
 
 //kL	_txtAvailable	= new Text(150, 9, 10, 24);
 //kL	_txtAllocated	= new Text(150, 9, 160, 24);
@@ -71,11 +72,25 @@ ResearchState::ResearchState(Game* game, Base* base)
 
 //kL	_lstResearch	= new TextList(288, 112, 8, 62);
 	_lstResearch	= new TextList(288, 112, 8, 62);		// kL
+=======
+	// Create objects
+	_window = new Window(this, 320, 200, 0, 0);
+	_btnNew = new TextButton(148, 16, 8, 176);
+	_btnOk = new TextButton(148, 16, 164, 176);
+	_txtTitle = new Text(310, 17, 5, 8);
+	_txtAvailable = new Text(150, 9, 10, 24);
+	_txtAllocated = new Text(150, 9, 160, 24);
+	_txtSpace = new Text(300, 9, 10, 34);
+	_txtProject = new Text(110, 17, 10, 44);
+	_txtScientists = new Text(110, 17, 120, 44);
+	_txtProgress = new Text(80, 9, 230, 44);
+	_lstResearch = new TextList(288, 112, 8, 62);
+>>>>>>> master
 	
 //kL	_btnNew			= new TextButton(148, 16, 8, 176);
 //kL	_btnOk			= new TextButton(148, 16, 164, 176);
-	_btnNew			= new TextButton(145, 16, 16, 177);		// kL
-	_btnOk			= new TextButton(145, 16, 162, 177);	// kL
+	_btnNew			= new TextButton(144, 16, 16, 177);		// kL
+	_btnOk			= new TextButton(144, 16, 163, 177);	// kL
 
 	// back up palette in case we're being called from Geoscape!
 	memcpy(_oldPalette, _game->getScreen()->getPalette(), 256 * sizeof(SDL_Color));
@@ -215,24 +230,10 @@ void ResearchState::fillProjectList()
 		std::wstring wstr = tr(r->getName ());
 		_lstResearch->addRow(3, wstr.c_str(), sstr.str().c_str(), tr((*iter)->getResearchProgress()).c_str());
 	}
-<<<<<<< HEAD
 
-	std::wstringstream ss;
-	ss << tr("STR_SCIENTISTS_AVAILABLE") << L'\x01' << _base->getAvailableScientists();
-	_txtAvailable->setText(ss.str());
-
-	std::wstringstream ss2;
-	ss2 << tr("STR_SCIENTISTS_ALLOCATED") << L'\x01' << _base->getAllocatedScientists();
-	_txtAllocated->setText(ss2.str());
-
-	std::wstringstream ss3;
-	ss3 << tr("STR_LABORATORY_SPACE_AVAILABLE") << L'\x01' << _base->getFreeLaboratories();
-	_txtSpace->setText(ss3.str());
-=======
 	_txtAvailable->setText(tr("STR_SCIENTISTS_AVAILABLE").arg(_base->getAvailableScientists()));
 	_txtAllocated->setText(tr("STR_SCIENTISTS_ALLOCATED").arg(_base->getAllocatedScientists()));
 	_txtSpace->setText(tr("STR_LABORATORY_SPACE_AVAILABLE").arg(_base->getFreeLaboratories()));
->>>>>>> master
 }
 
 }

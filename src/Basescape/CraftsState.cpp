@@ -50,22 +50,22 @@ CraftsState::CraftsState(Game* game, Base* base)
 	// Create objects
 	_window		= new Window(this, 320, 200, 0, 0);
 
-//kL	_txtTitle	= new Text(298, 16, 16, 8);
-	_txtTitle	= new Text(300, 16, 10, 8);		// kL
+//kL	_txtTitle	= new Text(298, 17, 16, 8);
+	_txtTitle	= new Text(300, 17, 10, 8);		// kL
 
-//kL	_txtBase	= new Text(298, 16, 16, 24);
-	_txtBase	= new Text(298, 16, 16, 25);	// kL
+//kL	_txtBase	= new Text(298, 17, 16, 24);
+	_txtBase	= new Text(298, 17, 16, 25);	// kL
 
 //kL	_txtName	= new Text(94, 9, 16, 40);
 //kL	_txtStatus	= new Text(50, 9, 110, 40);
 //kL	_txtWeapon	= new Text(50, 16, 160, 40);
 //kL	_txtCrew	= new Text(58, 9, 210, 40);
 //kL	_txtHwp		= new Text(46, 9, 268, 40);
-	_txtName	= new Text(94, 8, 16, 49);		// kL
-	_txtStatus	= new Text(50, 8, 110, 49);		// kL
-	_txtWeapon	= new Text(50, 16, 175, 41);	// kL
-	_txtCrew	= new Text(58, 8, 222, 49);		// kL
-	_txtHwp		= new Text(46, 8, 268, 49);		// kL
+	_txtName	= new Text(94, 9, 16, 49);		// kL
+	_txtStatus	= new Text(50, 9, 110, 49);		// kL
+	_txtWeapon	= new Text(50, 17, 175, 41);	// kL
+	_txtCrew	= new Text(58, 9, 222, 49);		// kL
+	_txtHwp		= new Text(46, 9, 268, 49);		// kL
 
 //kL	_lstCrafts	= new TextList(288, 118, 8, 58);
 	_lstCrafts	= new TextList(288, 112, 8, 59);		// kL

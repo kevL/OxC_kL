@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "TransferBaseState.h"
 #include <sstream>
 #include "../Engine/Game.h"
@@ -33,6 +34,7 @@
 #include "../Ruleset/RuleRegion.h"
 #include "TransferItemsState.h"
 
+
 namespace OpenXcom
 {
 
@@ -41,18 +43,49 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
  */
-TransferBaseState::TransferBaseState(Game *game, Base *base) : State(game), _base(base), _bases()
+TransferBaseState::TransferBaseState(Game* game, Base* base)
+	:
+		State(game),
+		_base(base),
+		_bases()
 {
+<<<<<<< HEAD
+/*kL	_window		= new Window(this, 280, 140, 20, 30);
+	_txtTitle	= new Text(270, 16, 25, 38);
+	_txtFunds	= new Text(250, 9, 30, 54);
+	_txtName	= new Text(130, 16, 28, 64);
+	_txtArea	= new Text(130, 16, 160, 64);
+	_lstBases	= new TextList(248, 64, 28, 80);
+	_btnCancel	= new TextButton(264, 16, 28, 146); */
+
+	// kL_begin:
+	_window		= new Window(this, 280, 140, 20, 30);
+	_txtTitle	= new Text(270, 16, 25, 38);
+
+	_txtFunds	= new Text(248, 9, 32, 54);
+
+	_txtName	= new Text(128, 16, 32, 65);
+	_txtArea	= new Text(128, 16, 162, 65);
+
+//	_lstBases->setColumns(2, 128, 128);		// kL_TEMP.
+	_lstBases	= new TextList(256, 57, 24, 82);
+
+	_btnCancel	= new TextButton(260, 16, 32, 146);
+	// kL_end.
+
+
+=======
 	// Create objects
 	_window = new Window(this, 280, 140, 20, 30);
 	_btnCancel = new TextButton(264, 16, 28, 146);
-	_txtTitle = new Text(270, 16, 25, 38);
+	_txtTitle = new Text(270, 17, 25, 38);
 	_txtFunds = new Text(250, 9, 30, 54);
-	_txtName = new Text(130, 16, 28, 64);
-	_txtArea = new Text(130, 16, 160, 64);
+	_txtName = new Text(130, 17, 28, 64);
+	_txtArea = new Text(130, 17, 160, 64);
 	_lstBases = new TextList(248, 64, 28, 80);
 
 	// Set palette
+>>>>>>> master
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)), Palette::backPos, 16);
 
 	add(_window);
@@ -65,19 +98,14 @@ TransferBaseState::TransferBaseState(Game *game, Base *base) : State(game), _bas
 
 	centerAllSurfaces();
 
-	// Set up objects
+
 	_window->setColor(Palette::blockOffset(13) + 5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 
-<<<<<<< HEAD
 	_btnCancel->setColor(Palette::blockOffset(13) + 5);
-	_btnCancel->setText(_game->getLanguage()->getString("STR_CANCEL"));
-=======
-	_btnCancel->setColor(Palette::blockOffset(13)+5);
 	_btnCancel->setText(tr("STR_CANCEL"));
->>>>>>> master
-	_btnCancel->onMouseClick((ActionHandler)&TransferBaseState::btnCancelClick);
-	_btnCancel->onKeyboardPress((ActionHandler)&TransferBaseState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnCancel->onMouseClick((ActionHandler)& TransferBaseState::btnCancelClick);
+	_btnCancel->onKeyboardPress((ActionHandler)& TransferBaseState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(13) + 5);
 	_txtTitle->setBig();
@@ -86,25 +114,14 @@ TransferBaseState::TransferBaseState(Game *game, Base *base) : State(game), _bas
 
 	_txtFunds->setColor(Palette::blockOffset(13) + 5);
 	_txtFunds->setSecondaryColor(Palette::blockOffset(13));
-	std::wstring s = tr("STR_CURRENT_FUNDS");
-	s += L'\x01' + Text::formatFunding(_game->getSavedGame()->getFunds());
-	_txtFunds->setText(s);
+	_txtFunds->setText(tr("STR_CURRENT_FUNDS").arg(Text::formatFunding(_game->getSavedGame()->getFunds())));
 
-<<<<<<< HEAD
 	_txtName->setColor(Palette::blockOffset(13) + 5);
-	_txtName->setText(_game->getLanguage()->getString("STR_NAME"));
-	_txtName->setBig();
-
-	_txtArea->setColor(Palette::blockOffset(13) + 5);
-	_txtArea->setText(_game->getLanguage()->getString("STR_AREA"));
-=======
-	_txtName->setColor(Palette::blockOffset(13)+5);
 	_txtName->setText(tr("STR_NAME"));
 	_txtName->setBig();
 
-	_txtArea->setColor(Palette::blockOffset(13)+5);
+	_txtArea->setColor(Palette::blockOffset(13) + 5);
 	_txtArea->setText(tr("STR_AREA"));
->>>>>>> master
 	_txtArea->setBig();
 
 	_lstBases->setColor(Palette::blockOffset(15) + 1);
@@ -112,17 +129,18 @@ TransferBaseState::TransferBaseState(Game *game, Base *base) : State(game), _bas
 	_lstBases->setColumns(2, 130, 116);
 	_lstBases->setSelectable(true);
 	_lstBases->setBackground(_window);
-	_lstBases->setMargin(2);
-	_lstBases->onMouseClick((ActionHandler)&TransferBaseState::lstBasesClick);
+//kL	_lstBases->setMargin(2);
+	_lstBases->setMargin(8);	// kL
+	_lstBases->onMouseClick((ActionHandler)& TransferBaseState::lstBasesClick);
 
 	int row = 0;
-	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
+	for (std::vector<Base* >::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
 	{
-		if ((*i) != _base)
+		if (*i != _base)
 		{
 			std::wstring area = L""; // Get area
 
-			for (std::vector<Region*>::iterator j = _game->getSavedGame()->getRegions()->begin(); j != _game->getSavedGame()->getRegions()->end(); ++j)
+			for (std::vector<Region* >::iterator j = _game->getSavedGame()->getRegions()->begin(); j != _game->getSavedGame()->getRegions()->end(); ++j)
 			{
 				if ((*j)->getRules()->insideRegion((*i)->getLongitude(), (*i)->getLatitude()))
 				{
@@ -151,7 +169,7 @@ TransferBaseState::~TransferBaseState()
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void TransferBaseState::btnCancelClick(Action *)
+void TransferBaseState::btnCancelClick(Action* )
 {
 	_game->popState();
 }
@@ -160,7 +178,7 @@ void TransferBaseState::btnCancelClick(Action *)
  * Shows the Transfer screen for the selected base.
  * @param action Pointer to an action.
  */
-void TransferBaseState::lstBasesClick(Action *)
+void TransferBaseState::lstBasesClick(Action* )
 {
 	_game->pushState(new TransferItemsState(_game, _base, _bases[_lstBases->getSelectedRow()]));
 }

@@ -59,19 +59,20 @@ CraftWeaponsState::CraftWeaponsState(Game* game, Base* base, size_t craft, size_
 
 	// Create objects
 	_window			= new Window(this, 220, 160, 50, 20, POPUP_BOTH);
-/*iL	_btnCancel		= new TextButton(140, 16, 90, 156);
-	_txtTitle		= new Text(208, 16, 56, 28);
+
+/*kL	_btnCancel		= new TextButton(140, 16, 90, 156);
+	_txtTitle		= new Text(208, 17, 56, 28);
 	_txtArmament	= new Text(76, 9, 66, 52);
-	_txtQuantity	= new Text(50, 9, 145, 52);
-	_txtAmmunition	= new Text(68, 16, 195, 44);
+	_txtQuantity	= new Text(50, 9, 140, 52);
+	_txtAmmunition	= new Text(68, 17, 190, 44);
 	_lstWeapons		= new TextList(188, 80, 58, 68); */
 
 	// kL_begin: CraftWeaponsState() surface adj.
-	_txtTitle		= new Text(208, 16, 60, 28);
+	_txtTitle		= new Text(208, 17, 60, 28);
 
 	_txtArmament	= new Text(76, 9, 66, 53);
 	_txtQuantity	= new Text(50, 9, 145, 32);
-	_txtAmmunition	= new Text(33, 16, 187, 45);
+	_txtAmmunition	= new Text(33, 17, 187, 45);
 //	_lstWeapons->setColumns(3, 137, 50, 33);		// TEMP!
 
 	_lstWeapons		= new TextList(188, 80, 58, 68);

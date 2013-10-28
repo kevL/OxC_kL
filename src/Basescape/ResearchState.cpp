@@ -51,8 +51,8 @@ ResearchState::ResearchState(Game* game, Base* base)
 {
 	_window			= new Window(this, 320, 200, 0, 0);
 
-//kL	_txtTitle		= new Text(310, 16, 5, 8);
-	_txtTitle		= new Text(300, 16, 16, 9);				// kL
+//kL	_txtTitle		= new Text(310, 17, 5, 8);
+	_txtTitle		= new Text(300, 17, 16, 9);				// kL
 
 //kL	_txtAvailable	= new Text(150, 9, 10, 24);
 //kL	_txtAllocated	= new Text(150, 9, 160, 24);
@@ -62,8 +62,8 @@ ResearchState::ResearchState(Game* game, Base* base)
 //kL	_txtSpace		= new Text(300, 9, 10, 34);
 	_txtSpace		= new Text(100, 9, 16, 34);				// kL
 
-//kL	_txtProject		= new Text(110, 16, 10, 44);
-//kL	_txtScientists	= new Text(110, 16, 120, 44);
+//kL	_txtProject		= new Text(110, 17, 10, 44);
+//kL	_txtScientists	= new Text(110, 17, 120, 44);
 //kL	_txtProgress	= new Text(80, 9, 230, 44);
 	_txtProject		= new Text(110, 9, 16, 47);				// kL
 	_txtScientists	= new Text(110, 9, 176, 47);			// kL

@@ -50,12 +50,12 @@ TransfersState::TransfersState(Game* game, Base* base)
 
 	_window			= new Window(this, 320, 184, 0, 8, POPUP_BOTH);
 
-//kL	_txtTitle		= new Text(278, 16, 21, 18);
-	_txtTitle		= new Text(288, 16, 16, 17);			// kL
+//kL	_txtTitle		= new Text(278, 17, 21, 18);
+	_txtTitle		= new Text(288, 17, 16, 17);			// kL
 
-//kL	_txtItem		= new Text(114, 8, 16, 34);
-//kL	_txtQuantity	= new Text(54, 8, 152, 34);
-//kL	_txtArrivalTime	= new Text(112, 8, 212, 34);
+//kL	_txtItem		= new Text(114, 9, 16, 34);
+//kL	_txtQuantity	= new Text(54, 9, 152, 34);
+//kL	_txtArrivalTime	= new Text(112, 9, 212, 34);
 	_txtItem		= new Text(114, 9, 16, 34);				// kL
 	_txtQuantity	= new Text(54, 9, 171, 34);				// kL
 	_txtArrivalTime	= new Text(112, 9, 246, 34);			// kL

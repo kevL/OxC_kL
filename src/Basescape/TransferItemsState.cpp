@@ -86,15 +86,15 @@ TransferItemsState::TransferItemsState(Game* game, Base* baseFrom, Base* baseTo)
 
 /*kL	_btnOk					= new TextButton(148, 16, 8, 176);
 	_btnCancel				= new TextButton(148, 16, 164, 176);
-	_txtTitle				= new Text(310, 16, 5, 8);
+	_txtTitle				= new Text(310, 17, 5, 8);
 	_txtItem				= new Text(130, 9, 10, 22);
 	_txtQuantity			= new Text(50, 9, 150, 22);
-	_txtAmountTransfer		= new Text(60, 16, 200, 22);
-	_txtAmountDestination	= new Text(60, 16, 260, 22);
+	_txtAmountTransfer		= new Text(60, 17, 200, 22);
+	_txtAmountDestination	= new Text(60, 17, 260, 22);
 	_lstItems				= new TextList(287, 128, 8, 40); */
 
 	// kL_begin: TransferItemsState(), surface adj.
-	_txtTitle				= new Text(310, 16, 5, 9);
+	_txtTitle				= new Text(310, 17, 5, 9);
 
 	_txtItem				= new Text(128, 9, 16, 24);
 	_txtQuantity			= new Text(35, 9, 141, 24);

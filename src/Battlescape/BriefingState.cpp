@@ -57,15 +57,15 @@ BriefingState::BriefingState(Game* game, Craft* craft, Base* base)
 	_screen = false;
 	_window			= new Window(this, 320, 200, 0, 0);
 
-/*	_txtTitle		= new Text(300, 16, 16, 24);
-	_txtTarget		= new Text(300, 16, 16, 40);
-	_txtCraft		= new Text(300, 16, 16, 56); */
+/*	_txtTitle		= new Text(300, 17, 16, 24);
+	_txtTarget		= new Text(300, 17, 16, 40);
+	_txtCraft		= new Text(300, 17, 16, 56); */
 
-	_txtTitle		= new Text(288, 16, 16, 22);	// kL
+	_txtTitle		= new Text(288, 17, 16, 22);	// kL
 
-	_txtTarget		= new Text(288, 16, 16, 39);	// kL
+	_txtTarget		= new Text(288, 17, 16, 39);	// kL
 
-	_txtCraft		= new Text(288, 16, 16, 56);	// kL
+	_txtCraft		= new Text(288, 17, 16, 56);	// kL
 
 //kL	_txtBriefing	= new Text(274, 64, 16, 72);
 	_txtBriefing	= new Text(288, 97, 16, 75);	// kL

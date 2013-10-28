@@ -48,24 +48,37 @@ StoresState::StoresState(Game* game, Base* base)
 		State(game),
 		_base(base)
 {
+<<<<<<< HEAD
 	_window			= new Window(this, 320, 200, 0, 0);
 
 //kL	_txtTitle		= new Text(310, 16, 5, 8);
-	_txtTitle		= new Text(300, 16, 11, 10);			// kL
+	_txtTitle		= new Text(300, 16, 10, 9);			// kL
 
 //kL	_txtItem		= new Text(142, 8, 10, 32);
 //kL	_txtQuantity	= new Text(88, 8, 152, 32);
 //kL	_txtSpaceUsed	= new Text(74, 8, 240, 32);
-	_txtItem		= new Text(142, 9, 16, 29);				// kL
-	_txtQuantity	= new Text(88, 9, 178, 29);				// kL
-	_txtSpaceUsed	= new Text(74, 9, 270, 29);				// kL
+	_txtItem		= new Text(142, 9, 16, 25);			// kL
+	_txtQuantity	= new Text(88, 9, 178, 25);			// kL
+	_txtSpaceUsed	= new Text(74, 9, 270, 25);			// kL
 
-	_lstStores		= new TextList(288, 128, 8, 40);
+	_lstStores		= new TextList(288, 136, 8, 36);
 
 //kL	_btnOk			= new TextButton(300, 16, 10, 176);
 	_btnOk			= new TextButton(288, 16, 16, 177);		// kL
 
 
+=======
+	// Create objects
+	_window = new Window(this, 320, 200, 0, 0);
+	_btnOk = new TextButton(300, 16, 10, 176);
+	_txtTitle = new Text(310, 17, 5, 8);
+	_txtItem = new Text(142, 9, 10, 32);
+	_txtQuantity = new Text(88, 9, 152, 32);
+	_txtSpaceUsed = new Text(74, 9, 240, 32);
+	_lstStores = new TextList(288, 128, 8, 40);
+
+	// Set palette
+>>>>>>> master
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
 
 	add(_window);
@@ -100,12 +113,8 @@ StoresState::StoresState(Game* game, Base* base)
 	_txtQuantity->setText(tr("STR_QUANTITY_UC"));
 
 	_txtSpaceUsed->setColor(Palette::blockOffset(13)+10);
-<<<<<<< HEAD
-//kL	_txtSpaceUsed->setText(tr("STR_SPACE_USED"));
+//kL	_txtSpaceUsed->setText(tr("STR_SPACE_USED_UC"));
 	_txtSpaceUsed->setText(tr("STR_VOLUME"));		// kL
-=======
-	_txtSpaceUsed->setText(tr("STR_SPACE_USED_UC"));
->>>>>>> master
 
 	_lstStores->setColor(Palette::blockOffset(13)+10);
 	_lstStores->setColumns(3, 162, 92, 32);

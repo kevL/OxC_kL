@@ -50,10 +50,9 @@ AllocatePsiTrainingState::AllocatePsiTrainingState(Game* game, Base* base)
 {
 	_base = base;
 
-	// Create objects
 	_window			= new Window(this, 320, 200, 0, 0);
 
-	_txtTitle		= new Text(300, 16, 10, 8);
+	_txtTitle		= new Text(300, 17, 10, 8);
 
 //kL	_txtRemaining	= new Text(134, 10, 10, 24);
 	_txtRemaining	= new Text(100, 8, 12, 20);			// kL

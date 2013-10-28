@@ -73,8 +73,8 @@ SoldiersState::SoldiersState(Game* game, Base* base)
 		_btnMemorial	= new TextButton(148, 16, 8, 176);
 	} */
 
-//kL	_txtTitle		= new Text(310, 16, 5, 8);
-	_txtTitle		= new Text(300, 16, 10, 8);		// kL
+//kL	_txtTitle		= new Text(310, 17, 5, 8);
+	_txtTitle		= new Text(300, 17, 10, 8);		// kL
 
 //kL	_txtName		= new Text(114, 9, 16, 32);
 //kL	_txtRank		= new Text(102, 9, 130, 32);

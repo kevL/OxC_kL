@@ -50,18 +50,18 @@ SavedGameState::SavedGameState(Game* game, OptionsOrigin origin)
 {
 	_screen = false;
 
-	// Create objects
+
 	_window		= new Window(this, 320, 200, 0, 0, POPUP_BOTH);
 	_btnCancel	= new TextButton(80, 16, 120, 172);
-	_txtTitle	= new Text(310, 16, 5, 8);
-	_txtDelete	= new Text(310, 8, 5, 24);
+	_txtTitle	= new Text(310, 17, 5, 8);
+	_txtDelete	= new Text(310, 9, 5, 24);
 	_txtName	= new Text(150, 9, 16, 32);
 	_txtTime	= new Text(30, 9, 184, 32);
 	_txtDate	= new Text(38, 9, 214, 32);
-	_txtStatus	= new Text(320, 16, 0, 92);
+	_txtStatus	= new Text(320, 17, 0, 92);
 	_lstSaves	= new TextList(288, 120, 8, 40);
 
-	// Set palette
+
 	if (_origin != OPT_BATTLESCAPE)
 	{
 		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
@@ -79,7 +79,7 @@ SavedGameState::SavedGameState(Game* game, OptionsOrigin origin)
 
 	centerAllSurfaces();
 
-	// Set up objects
+
 	_window->setColor(Palette::blockOffset(8)+5);
 	_window->setBackground(game->getResourcePack()->getSurface("BACK01.SCR"));
 

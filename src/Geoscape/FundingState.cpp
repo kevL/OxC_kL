@@ -48,8 +48,8 @@ FundingState::FundingState(Game* game)
 	_screen = false;
 
 	_window			= new Window(this, 320, 200, 0, 0, POPUP_BOTH);
-//kL	_txtTitle		= new Text(320, 16, 0, 8);
-	_txtTitle		= new Text(300, 16, 10, 9);		// kL
+//kL	_txtTitle		= new Text(320, 17, 0, 8);
+	_txtTitle		= new Text(300, 17, 10, 9);		// kL
 
 //kL	_txtCountry		= new Text(100, 9, 32, 30);
 //kL	_txtFunding		= new Text(100, 9, 140, 30);

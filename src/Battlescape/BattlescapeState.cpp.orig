@@ -443,14 +443,9 @@ BattlescapeState::BattlescapeState(Game* game)
 
 	for (int i = 0; i < VISIBLE_MAX; ++i)
 	{
-<<<<<<< HEAD
-		std::stringstream key, tooltip;
+		std::ostringstream key, tooltip;
 
 		key << "keyBattleCenterEnemy" << (i + 1);
-=======
-		std::ostringstream key, tooltip;
-		key << "keyBattleCenterEnemy" << (i+1);
->>>>>>> master
 		_btnVisibleUnit[i]->onMouseClick((ActionHandler)&BattlescapeState::btnVisibleUnitClick);
 		_btnVisibleUnit[i]->onKeyboardPress((ActionHandler)&BattlescapeState::btnVisibleUnitClick, (SDLKey)Options::getInt(key.str()));
 
@@ -487,7 +482,7 @@ BattlescapeState::BattlescapeState(Game* game)
 	_txtDebug->setColor(Palette::blockOffset(8));
 	_txtDebug->setHighContrast(true);
 
-	_txtTooltip->setColor(Palette::blockOffset(0));
+	_txtTooltip->setColor(Palette::blockOffset(0)-1);
 	_txtTooltip->setHighContrast(true);
 
 	_btnReserveNone->copy(_icons);
@@ -1203,10 +1198,21 @@ void BattlescapeState::btnReserveClick(Action* action)
 		Action a = Action(&ev, 0.0, 0.0, 0, 0);
 		action->getSender()->mousePress(&a, this);
 
+<<<<<<< HEAD
 		if		(_reserve == _btnReserveNone)	_battleGame->setTUReserved(BA_NONE);
 		else if (_reserve == _btnReserveSnap)	_battleGame->setTUReserved(BA_SNAPSHOT);
 		else if (_reserve == _btnReserveAimed)	_battleGame->setTUReserved(BA_AIMEDSHOT);
 		else if (_reserve == _btnReserveAuto)	_battleGame->setTUReserved(BA_AUTOSHOT);
+=======
+		if (_reserve == _btnReserveNone)
+			_battleGame->setTUReserved(BA_NONE, true);
+		else if (_reserve == _btnReserveSnap)
+			_battleGame->setTUReserved(BA_SNAPSHOT, true);
+		else if (_reserve == _btnReserveAimed)
+			_battleGame->setTUReserved(BA_AIMEDSHOT, true);
+		else if (_reserve == _btnReserveAuto)
+			_battleGame->setTUReserved(BA_AUTOSHOT, true);
+>>>>>>> master
 	}
 }
 

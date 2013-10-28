@@ -35,7 +35,6 @@
 #include "../Ruleset/RuleCraft.h"
 #include "SoldierInfoState.h"
 #include "SoldierMemorialState.h"
-
 // kL_begin: taken from CraftSoldiersState...
 #include <sstream>
 #include <climits>
@@ -58,11 +57,22 @@ SoldiersState::SoldiersState(Game* game, Base* base)
 		_base(base)
 //		_craft(craft)	// kL
 {
-	bool isPsiBtnVisible = Options::getBool("anytimePsiTraining") && _base->getAvailablePsiLabs() > 0;
-
-	// Create objects
-<<<<<<< HEAD
 	_window			= new Window(this, 320, 200, 0, 0);
+
+	bool isPsiBtnVisible = Options::getBool("anytimePsiTraining") && _base->getAvailablePsiLabs() > 0;
+/*kL	if (isPsiBtnVisible)
+	{
+		_btnOk			= new TextButton(96, 16, 216, 176);
+		_btnPsiTrain	= new TextButton(96, 16, 112, 176);
+		_btnMemorial	= new TextButton(96, 16, 8, 176);
+	}
+	else
+	{
+<<<<<<< HEAD
+		_btnOk			= new TextButton(148, 16, 164, 176);
+		_btnPsiTrain	= new TextButton(148, 16, 164, 176);
+		_btnMemorial	= new TextButton(148, 16, 8, 176);
+	} */
 
 //kL	_txtTitle		= new Text(310, 16, 5, 8);
 	_txtTitle		= new Text(300, 16, 10, 8);		// kL
@@ -77,44 +87,33 @@ SoldiersState::SoldiersState(Game* game, Base* base)
 //kL	_lstSoldiers	= new TextList(288, 128, 8, 40);
 	_lstSoldiers	= new TextList(288, 128, 8, 42);
 
+// eulogy, psi, armor, yep.
+	_btnMemorial	= new TextButton(72, 16, 11, 177);		// kL
 //kL	_btnPsiTrain	= new TextButton(148, 16, 8, 176);
-	_btnPsiTrain	= new TextButton(94, 16, 16, 177);		// kL
+	_btnPsiTrain	= new TextButton(71, 16, 87, 177);		// kL
 //kL	_btnOk			= new TextButton(isPsiBtnVisible? 148:288, 16, isPsiBtnVisible? 164:16, 176);
-	_btnArmor		= new TextButton(94, 16, 113, 177);		// kL
-	_btnOk			= new TextButton(94, 16, 210, 177);		// kL
+	_btnArmor		= new TextButton(71, 16, 162, 177);		// kL
+	_btnOk			= new TextButton(72, 16, 237, 177);		// kL
+
 =======
-	_window = new Window(this, 320, 200, 0, 0);
-	if (isPsiBtnVisible)
-	{
-		_btnOk = new TextButton(96, 16, 216, 176);
-		_btnPsiTraining = new TextButton(96, 16, 112, 176);
-		_btnMemorial = new TextButton(96, 16, 8, 176);
-	}
-	else
-	{
 		_btnOk = new TextButton(148, 16, 164, 176);
 		_btnPsiTraining = new TextButton(148, 16, 164, 176);
 		_btnMemorial = new TextButton(148, 16, 8, 176);
 	}
-	_txtTitle = new Text(310, 16, 5, 8);
+	_txtTitle = new Text(310, 17, 5, 8);
 	_txtName = new Text(114, 9, 16, 32);
 	_txtRank = new Text(102, 9, 130, 32);
 	_txtCraft = new Text(82, 9, 222, 32);
 	_lstSoldiers = new TextList(288, 128, 8, 40);
 >>>>>>> master
 
-	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)), Palette::backPos, 16);
 
 	add(_window);
 	add(_btnPsiTrain);
 	add(_btnArmor);		// kL
 	add(_btnOk);
-<<<<<<< HEAD
-=======
-	add(_btnPsiTraining);
 	add(_btnMemorial);
->>>>>>> master
 	add(_txtTitle);
 	add(_txtName);
 	add(_txtRank);
@@ -123,7 +122,7 @@ SoldiersState::SoldiersState(Game* game, Base* base)
 
 	centerAllSurfaces();
 
-	// Set up objects
+
 	_window->setColor(Palette::blockOffset(15)+1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK02.SCR"));
 
@@ -235,26 +234,25 @@ void SoldiersState::btnPsiTrainingClick(Action* )
 }
 
 /**
-<<<<<<< HEAD
  * Goes to the Select Armor screen.
  * kL. Taken from CraftInfoState.
  * @param action Pointer to an action.
  */
 void SoldiersState::btnArmorClick_Soldier(Action* )
 {
-//	Log(LOG_INFO) << "SoldiersState::btnArmorClick_noCraft()";
-	_game->pushState(new CraftArmorState(_game, _base, (size_t)0)); //, _craft
-//	Log(LOG_INFO) << "SoldiersState::btnArmorClick_noCraft() EXIT";
-=======
+	_game->pushState(new CraftArmorState(_game, _base, (size_t)0));
+}
+
+/**
  * Opens the Memorial screen.
  * @param action Pointer to an action.
  */
-void SoldiersState::btnMemorialClick(Action *)
+void SoldiersState::btnMemorialClick(Action* )
 {
 	_game->pushState(new SoldierMemorialState(_game));
->>>>>>> master
 }
 
+/**
 /**
  * Shows the selected soldier's info.
  * @param action Pointer to an action.

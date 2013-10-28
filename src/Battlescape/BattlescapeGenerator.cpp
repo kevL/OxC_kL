@@ -824,13 +824,6 @@ BattleItem* BattlescapeGenerator::placeItemByLayout(BattleItem* item)
 	RuleInventory* ground = _game->getRuleset()->getInventory("STR_GROUND");
 	if (item->getSlot() == ground)
 	{
-		// skip flares if not dark enough; kL_note: let's just skip flares.
-		if (BT_FLARE == item->getRules()->getBattleType())
-//kL			&& _worldShade < NIGHT_SHADE_LEVEL)
-		{
-			return item;
-		}
-
 		bool loaded;
 		RuleInventory* righthand = _game->getRuleset()->getInventory("STR_RIGHT_HAND");
 
@@ -840,6 +833,7 @@ BattleItem* BattlescapeGenerator::placeItemByLayout(BattleItem* item)
 			// skip the vehicles, we need only X-Com soldiers WITH equipment-layout
 			if ((*i)->getArmor()->getSize() > 1 || 0 == (*i)->getGeoscapeSoldier())
 				continue;
+
 			if ((*i)->getGeoscapeSoldier()->getEquipmentLayout()->empty())
 				continue;
 
@@ -1028,23 +1022,23 @@ BattleItem* BattlescapeGenerator::addItem(BattleItem* item, bool secondPass)
 				} */
 			break;
 			case BT_FLARE:
-				// equip these on night-missions
-/*kL				if (_worldShade >= NIGHT_SHADE_LEVEL)
+/*kL				for (std::vector<BattleUnit* >::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 				{
-					for (std::vector<BattleUnit* >::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
+					// skip the vehicles
+					if ((*i)->getArmor()->getSize() > 1 || 0 == (*i)->getGeoscapeSoldier())
+						continue;
+
+					if (!((*i)->getGeoscapeSoldier()->getEquipmentLayout()->empty()))
+						continue;
+
+					if (!(*i)->getItem("STR_LEFT_SHOULDER", 1,0))
 					{
-						// skip the vehicles
-						if ((*i)->getArmor()->getSize() > 1 || 0 == (*i)->getGeoscapeSoldier()) continue;
+						item->moveToOwner((*i));
+						item->setSlot(_game->getRuleset()->getInventory("STR_LEFT_SHOULDER"));
+						item->setSlotX(1);
+						item->setSlotY(0);
 
-						if (!(*i)->getItem("STR_LEFT_SHOULDER", 1,0))
-						{
-							item->moveToOwner((*i));
-							item->setSlot(_game->getRuleset()->getInventory("STR_LEFT_SHOULDER"));
-							item->setSlotX(1);
-							item->setSlotY(0);
-
-							break;
-						}
+						break;
 					}
 				} */
 			break;

@@ -56,8 +56,8 @@ CraftArmorState::CraftArmorState(Game* game, Base* base, size_t craft)
 	// Create objects
 	_window			= new Window(this, 320, 200, 0, 0);
 
-//kL	_txtTitle		= new Text(300, 16, 16, 7);
-	_txtTitle		= new Text(300, 16, 11, 10);			// kL
+//kL	_txtTitle		= new Text(300, 17, 16, 7);
+	_txtTitle		= new Text(300, 17, 11, 10);			// kL
 
 //kL	_txtName		= new Text(114, 9, 16, 32);
 //kL	_txtCraft		= new Text(70, 9, 130, 32);

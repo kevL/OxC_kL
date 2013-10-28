@@ -69,7 +69,7 @@ ConfirmLandingState::ConfirmLandingState(Game* game, Craft* craft, int texture, 
 //kL	_btnNo		= new TextButton(80, 20, 136, 150);
 	_txtMessage = new Text(206, 82, 25, 38);
 
-	_txtBegin	= new Text(206, 16, 25, 130);
+	_txtBegin	= new Text(206, 17, 25, 130);
 
 	_btnNo		= new TextButton(80, 18, 40, 151);		// kL
 	_btnYes		= new TextButton(80, 18, 136, 151);		// kL

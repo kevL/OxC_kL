@@ -60,9 +60,9 @@ GeoscapeCraftState::GeoscapeCraftState(Game* game, Craft* craft, Globe* globe, W
 
 	_window			= new Window(this, 240, 184, 8, 8, POPUP_BOTH);
 
-	_txtTitle		= new Text(216, 16, 32, 18);
+	_txtTitle		= new Text(216, 17, 32, 18);
 
-	_txtStatus		= new Text(216, 16, 32, 33);
+	_txtStatus		= new Text(216, 17, 32, 33);
 
 	_btnBase		= new TextButton(192, 15, 32, 125);
 	_btnTarget		= new TextButton(192, 15, 32, 110);
@@ -89,7 +89,7 @@ GeoscapeCraftState::GeoscapeCraftState(Game* game, Craft* craft, Globe* globe, W
 	_txtW2Name		= new Text(120, 9, 32, 99);
 	_txtW2Ammo		= new Text(60, 9, 161, 99);
 
-	_txtRedirect	= new Text(120, 16, 120, 50);
+	_txtRedirect	= new Text(120, 17, 120, 50);
 
 
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)), Palette::backPos, 16);

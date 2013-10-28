@@ -37,7 +37,6 @@ class Tile;
 class BattleItem;
 class Unit;
 class BattleAIState;
-class BattlescapeState;
 class Node;
 class Surface;
 class RuleInventory;
@@ -133,7 +132,7 @@ private:
 	int _turnsExposed;
 	std::string _zombieUnit, _spawnUnit;
 	std::string _activeHand;
-	
+
 	// static data
 	std::string _type;
 	std::string _rank;
@@ -240,6 +239,8 @@ private:
 		void healStun(int power);
 		/// Gets the unit's stun level.
 		int getStunlevel() const;
+		/// Knocks the unit out instantly.
+		void knockOut(BattlescapeGame* battle);
 		/// Start falling sequence.
 		void startFalling();
 		/// Increment the falling sequence.

@@ -47,13 +47,13 @@ ResearchCompleteState::ResearchCompleteState(Game* game, const RuleResearch* res
 {
 	_screen = false;
 
-	// Create objects
+
 	_window		= new Window(this, 224, 140, 48, 30, POPUP_BOTH);
-	_txtTitle	= new Text(224, 16, 48, 88);
+	_txtTitle	= new Text(224, 17, 48, 88);
 	_btnReport	= new TextButton(80, 16, 64, 146);
 	_btnOk		= new TextButton(80, 16, 176, 146);
 
-	// Set palette
+
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
 
 	add(_window);
@@ -63,7 +63,7 @@ ResearchCompleteState::ResearchCompleteState(Game* game, const RuleResearch* res
 
 	centerAllSurfaces();
 
-	// Set up objects
+
 	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK05.SCR"));
 

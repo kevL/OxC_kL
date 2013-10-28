@@ -49,8 +49,8 @@ MonthlyCostsState::MonthlyCostsState(Game* game, Base* base)
 {
 	_window			= new Window(this, 320, 200, 0, 0);
 
-//kL	_txtTitle = new Text(310, 16, 5, 12);
-	_txtTitle		= new Text(300, 16, 11, 10);		// kL
+//kL	_txtTitle = new Text(310, 17, 5, 12);
+	_txtTitle		= new Text(300, 17, 11, 10);		// kL
 
 //kL	_txtCost		= new Text(80, 9, 115, 32);
 //kL	_txtQuantity	= new Text(55, 9, 195, 32);

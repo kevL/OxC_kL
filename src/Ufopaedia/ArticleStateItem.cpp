@@ -77,21 +77,21 @@ ArticleStateItem::ArticleStateItem(Game* game, ArticleDefinitionItem* defs, int 
 	// SHOT STATS TABLE (for firearms only)
 	if (item->getBattleType() == BT_FIREARM)
 	{
-		_txtShotType = new Text(100, 16, 8, 66);
+		_txtShotType = new Text(100, 17, 8, 66);
 		add(_txtShotType);
 		_txtShotType->setColor(Palette::blockOffset(14) + 15);
 		_txtShotType->setWordWrap(true);
 		_txtShotType->setText(tr("STR_SHOT_TYPE").c_str());
 
-//kL		_txtAccuracy = new Text(50, 16, 104, 66);
-		_txtAccuracy = new Text(50, 16, 108, 66);		// kL
+//kL		_txtAccuracy = new Text(50, 17, 104, 66);
+		_txtAccuracy = new Text(50, 17, 108, 66);		// kL
 		add(_txtAccuracy);
 		_txtAccuracy->setColor(Palette::blockOffset(14) + 15);
 		_txtAccuracy->setWordWrap(true);
 		_txtAccuracy->setText(tr("STR_ACCURACY_UC").c_str());
 
-//kL		_txtTuCost = new Text(60, 16, 158, 66);
-		_txtTuCost = new Text(60, 16, 160, 66);			// kL
+//kL		_txtTuCost = new Text(60, 17, 158, 66);
+		_txtTuCost = new Text(60, 17, 160, 66);			// kL
 		add(_txtTuCost);
 		_txtTuCost->setColor(Palette::blockOffset(14)+15);
 		_txtTuCost->setWordWrap(true);

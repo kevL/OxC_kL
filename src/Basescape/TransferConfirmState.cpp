@@ -50,13 +50,13 @@ TransferConfirmState::TransferConfirmState(Game* game, Base* base, TransferItems
 
 	_window		= new Window(this, 320, 80, 0, 60);
 
-//kL	_txtTitle	= new Text(310, 16, 5, 75);
-	_txtTitle	= new Text(310, 16, 5, 72);				// kL
+//kL	_txtTitle	= new Text(310, 17, 5, 75);
+	_txtTitle	= new Text(310, 17, 5, 72);				// kL
 
-//kL	_txtCost	= new Text(60, 16, 110, 95);
-//kL	_txtTotal	= new Text(100, 16, 170, 95);
-	_txtCost	= new Text(60, 16, 110, 93);			// kL
-	_txtTotal	= new Text(100, 16, 170, 93);			// kL
+//kL	_txtCost	= new Text(60, 17, 110, 95);
+//kL	_txtTotal	= new Text(100, 17, 170, 95);
+	_txtCost	= new Text(60, 17, 110, 93);			// kL
+	_txtTotal	= new Text(100, 17, 170, 93);			// kL
 
 //kL	_btnOk		= new TextButton(128, 16, 16, 115);
 //kL	_btnCancel	= new TextButton(128, 16, 176, 115);

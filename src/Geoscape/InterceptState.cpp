@@ -62,10 +62,10 @@ InterceptState::InterceptState(Game* game, Globe* globe, Base* base, Target* tar
 //kL	_window		= new Window(this, 320, 140, 0, 30, POPUP_HORIZONTAL);
 	_window		= new Window(this, 320, 144, 0, 30, POPUP_HORIZONTAL);	// kL
 
-//kL	_txtTitle	= new Text(300, 16, 10, 46);
-	_txtTitle	= new Text(300, 16, 10, 40);		// kL
+//kL	_txtTitle	= new Text(300, 17, 10, 46);
+	_txtTitle	= new Text(300, 17, 10, 40);		// kL
 
-/*kL	_txtWeapons	= new Text(80, 16, 238, 62);
+/*kL	_txtWeapons	= new Text(80, 17, 238, 62);
 	_txtCraft	= new Text(86, 9, 14, 70);
 	_txtStatus	= new Text(70, 9, 100, 70);
 	_txtBase	= new Text(80, 9, 170, 70);
@@ -73,7 +73,7 @@ InterceptState::InterceptState(Game* game, Globe* globe, Base* base, Target* tar
 	_txtCraft	= new Text(86, 9, 16, 64);			// kL
 	_txtStatus	= new Text(60, 9, 102, 64);			// kL
 	_txtBase	= new Text(81, 9, 162, 64);			// kL
-	_txtWeapons	= new Text(77, 16, 243, 56);		// kL
+	_txtWeapons	= new Text(77, 17, 243, 56);		// kL
 
 //	_lstCrafts->setColumns(4, 86, 60, 81, 45);		// TEMP!
 	_lstCrafts	= new TextList(288, 72, 8, 74);		// kL

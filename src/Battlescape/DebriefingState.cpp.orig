@@ -79,6 +79,7 @@ DebriefingState::DebriefingState(Game* game)
 	// Restore the cursor in case something weird happened
 	_game->getCursor()->setVisible(true);
 	_containmentLimit = Options::getBool("alienContainmentLimitEnforced") ? 1 : 0;
+<<<<<<< HEAD
 
 
 /*kL	_window			= new Window(this, 320, 200, 0, 0);
@@ -112,6 +113,22 @@ DebriefingState::DebriefingState(Game* game)
 	_txtRating		= new Text(120, 9, 64, 180);
 
 
+=======
+	// Create objects
+	_window = new Window(this, 320, 200, 0, 0);
+	_btnOk = new TextButton(40, 12, 16, 180);
+	_txtTitle = new Text(280, 17, 16, 8);
+	_txtItem = new Text(180, 9, 16, 24);
+	_txtQuantity = new Text(60, 9, 200, 24);
+	_txtScore = new Text(55, 9, 260, 24);
+	_txtRecovery = new Text(180, 9, 16, 60);
+	_txtRating = new Text(120, 9, 64, 180);
+	_lstStats = new TextList(280, 80, 16, 32);
+	_lstRecovery = new TextList(280, 80, 16, 32);
+	_lstTotal = new TextList(280, 9, 16, 12);
+
+	// Set palette
+>>>>>>> master
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
 
@@ -633,16 +650,11 @@ void DebriefingState::prepareDebriefing()
 					{
 						if ((*i) == soldier)
 						{
-<<<<<<< HEAD
-							delete (*i);
-
-=======
 							(*j)->updateGeoscapeStats(*i);
-							SoldierDeath *death = new SoldierDeath();
+							SoldierDeath* death = new SoldierDeath();
 							death->setTime(new GameTime(*save->getTime()));
 							(*i)->die(death);
 							save->getDeadSoldiers()->push_back(*i);
->>>>>>> master
 							base->getSoldiers()->erase(i);
 
 							break;
@@ -671,19 +683,13 @@ void DebriefingState::prepareDebriefing()
 		{
 			if (origFaction == FACTION_PLAYER)
 			{
-<<<<<<< HEAD
-				// so game is not aborted or aborted and unit is on exit area
-				(*j)->postMissionProcedures(save);
-
 				if (((*j)->isInExitArea()
 						&& (battle->getMissionType() != "STR_BASE_DEFENSE" || success))
 					|| !aborted)
 				{
-=======
-				if (((*j)->isInExitArea() && (battle->getMissionType() != "STR_BASE_DEFENSE" || success)) || !aborted)
-				{ // so game is not aborted or aborted and unit is on exit area
+					// so game is not aborted or aborted and unit is on exit area
 					(*j)->postMissionProcedures(save);
->>>>>>> master
+
 					playerInExitArea++;
 
 					if (soldier != 0)
@@ -712,16 +718,11 @@ void DebriefingState::prepareDebriefing()
 						{
 							if ((*i) == soldier)
 							{
-<<<<<<< HEAD
-								delete (*i);
-
-=======
 								(*j)->updateGeoscapeStats(*i);
-								SoldierDeath *death = new SoldierDeath();
+								SoldierDeath* death = new SoldierDeath();
 								death->setTime(new GameTime(*save->getTime()));
 								(*i)->die(death);
 								save->getDeadSoldiers()->push_back(*i);
->>>>>>> master
 								base->getSoldiers()->erase(i);
 
 								break;
@@ -845,7 +846,9 @@ void DebriefingState::prepareDebriefing()
 		{
 			_txtTitle->setText(tr("STR_ALIENS_DEFEATED"));
 		}
-		else if (battle->getMissionType() == "STR_ALIEN_BASE_ASSAULT")
+		else if (battle->getMissionType() == "STR_ALIEN_BASE_ASSAULT"
+			|| battle->getMissionType() == "STR_MARS_CYDONIA_LANDING"
+			|| battle->getMissionType() == "STR_MARS_THE_FINAL_ASSAULT")
 		{
 			_txtTitle->setText(tr("STR_ALIEN_BASE_DESTROYED"));
 		}
@@ -936,7 +939,9 @@ void DebriefingState::prepareDebriefing()
 		{
 			_txtTitle->setText(tr("STR_TERROR_CONTINUES"));
 		}
-		else if (battle->getMissionType() == "STR_ALIEN_BASE_ASSAULT")
+		else if (battle->getMissionType() == "STR_ALIEN_BASE_ASSAULT"
+			|| battle->getMissionType() == "STR_MARS_CYDONIA_LANDING"
+			|| battle->getMissionType() == "STR_MARS_THE_FINAL_ASSAULT")
 		{
 			_txtTitle->setText(tr("STR_ALIEN_BASE_STILL_INTACT"));
 		}

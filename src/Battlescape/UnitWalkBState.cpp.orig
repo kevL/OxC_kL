@@ -304,6 +304,7 @@ void UnitWalkBState::think()
 				&& _unitsSpotted < _unit->getUnitsSpottedThisTurn().size()		// kL
 				&&  _unit->getFaction() != FACTION_PLAYER;						// kL
 
+<<<<<<< HEAD
 			// check for proximity grenades (1 tile around the unit in every direction)
 			// For large units, we need to check every tile it occupies
 			int size = _unit->getArmor()->getSize() - 1;
@@ -342,6 +343,12 @@ void UnitWalkBState::think()
 						}
 					}
 				}
+=======
+			if (_parent->checkForProximityGrenades(_unit))
+			{
+				_parent->popState();
+				return;
+>>>>>>> master
 			}
 
 			if (newVis		// kL
@@ -462,26 +469,12 @@ void UnitWalkBState::think()
 
 			// gets tu cost, but also gets the destination position.
 			Position destination;
-<<<<<<< HEAD
 			int tu = _pf->getTUCost(_unit->getPosition(), dir, &destination, _unit, 0, false);
 
-			// we artificially inflate the TU cost by 32 points in getTUCost
-			// under these conditions, so we have to deflate it here.
 			if (_unit->getFaction() == FACTION_HOSTILE
-				&& ((_parent->getSave()->getTile(destination)->getUnit()
-					&& _parent->getSave()->getTile(destination)->getUnit()->getFaction() == FACTION_HOSTILE
-					&& _parent->getSave()->getTile(destination)->getUnit() != _unit)
-						|| _parent->getSave()->getTile(destination)->getFire() > 0))
-=======
-			int tu = _pf->getTUCost(_unit->getPosition(), dir, &destination, _unit, 0, false); // gets tu cost, but also gets the destination position.
-			if (_unit->getFaction() == FACTION_HOSTILE &&
-				_parent->getSave()->getTile(destination)->getFire() > 0)
+				&& _parent->getSave()->getTile(destination)->getFire() > 0)
 			{
-				tu -= 32; // we artificially inflate the TU cost by 32 points in getTUCost under these conditions, so we have to deflate it here.
-			}
-			if (_falling)
->>>>>>> master
-			{
+				// we artificially inflate the TU cost by 32 points in getTUCost under these conditions, so we have to deflate it here.
 				tu -= 32;
 			}
 
@@ -880,8 +873,8 @@ void UnitWalkBState::playMovementSound()
 			Tile* tileBelow = _parent->getSave()->getTile(tile->getPosition() + Position(0, 0, -1));
 
 			// play footstep sound 1
-			if (_unit->getWalkingPhase() == 3)
-//			if (_unit->getWalkingPhase() == 2)		// kL
+//kL			if (_unit->getWalkingPhase() == 3)
+			if (_unit->getWalkingPhase() == 2)		// kL
 			{
 				if (tile->getFootstepSound(tileBelow)
 					&& _unit->getRaceString() != "STR_ETHEREAL")	// kL: and not an ethereal

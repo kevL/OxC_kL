@@ -54,7 +54,7 @@ CraftPatrolState::CraftPatrolState(Game* game, Craft* craft, Globe* globe)
 
 //kL	_txtDestination	= new Text(224, 64, 16, 48);
 	_txtDestination	= new Text(224, 64, 16, 43);			// kL
-	_txtPatrolling	= new Text(224, 16, 16, 120);
+	_txtPatrolling	= new Text(224, 17, 16, 120);
 
 //kL	_btnOk			= new TextButton(140, 12, 58, 144);
 //kL	_btnRedirect	= new TextButton(140, 12, 58, 160);

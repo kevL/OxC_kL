@@ -75,8 +75,8 @@ CraftEquipmentState::CraftEquipmentState(Game* game, Base* base, size_t craft)
 	// Create objects
 	_window			= new Window(this, 320, 200, 0, 0);
 
-//kL	_txtTitle		= new Text(300, 16, 16, 7);
-	_txtTitle		= new Text(300, 16, 16, 8);		// kL
+//kL	_txtTitle		= new Text(300, 17, 16, 7);
+	_txtTitle		= new Text(300, 17, 16, 8);		// kL
 
 /*kL	_txtItem		= new Text(144, 9, 16, 32);
 	_txtStores		= new Text(150, 9, 160, 32);

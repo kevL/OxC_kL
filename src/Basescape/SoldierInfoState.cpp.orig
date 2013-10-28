@@ -52,9 +52,9 @@ namespace OpenXcom
  */
 SoldierInfoState::SoldierInfoState(Game* game, Base* base, size_t soldier)
 	:
-	State(game),
-	_base(base),
-	_soldier(soldier)
+		State(game),
+		_base(base),
+		_soldier(soldier)
 {
 	// Create objects
 	_bg				= new Surface(320, 200, 0, 0);
@@ -69,54 +69,80 @@ SoldierInfoState::SoldierInfoState(Game* game, Base* base, size_t soldier)
 
 	_edtSoldier		= new TextEdit(200, 16, 40, 9);
 //kL	_btnSack		= new TextButton(60, 14, 260, 33);	// (60, 14, 248, 10);
-	_btnSack		= new TextButton(44, 16, 268, 8); 		// kL
+	_btnSack		= new TextButton(44, 16, 269, 8); 		// kL
 //	_txtArmor		= new Text(120, 9, 194, 38);
 
-	_txtRank		= new Text(130, 9, 0, 48);
+/*kL	_txtRank		= new Text(130, 9, 0, 48);
 	_txtMissions	= new Text(100, 9, 130, 48);
 	_txtKills		= new Text(100, 9, 230, 48);
 	_txtCraft		= new Text(130, 9, 0, 56);
-	_txtRecovery	= new Text(180, 9, 130, 56);
-	_txtPsionic		= new Text(150, 9, 0, 66);
+	_txtRecovery	= new Text(180, 9, 130, 56); */
+	_txtRank		= new Text(130, 9, 0, 49);		// kL
+	_txtMissions	= new Text(100, 9, 130, 49);	// kL
+	_txtKills		= new Text(100, 9, 230, 49);	// kL
+	_txtCraft		= new Text(130, 9, 0, 57);		// kL
+	_txtRecovery	= new Text(180, 9, 130, 57);	// kL
+//kL	_txtPsionic		= new Text(150, 9, 0, 66);
+	_txtPsionic		= new Text(75, 9, 5, 67);		// kL
 
-	_txtTimeUnits	= new Text(120, 9, 6, 82);
-	_numTimeUnits	= new Text(18, 9, 131, 82);
+//kL	_txtTimeUnits	= new Text(120, 9, 6, 82);
+//kL	_numTimeUnits	= new Text(18, 9, 131, 82);
+	_txtTimeUnits	= new Text(120, 9, 5, 82);		// kL
+	_numTimeUnits	= new Text(18, 9, 131, 82);		// kL
 	_barTimeUnits	= new Bar(170, 7, 150, 82);
 
-	_txtStamina		= new Text(120, 9, 6, 94);
-	_numStamina		= new Text(18, 9, 131, 94);
+//kL	_txtStamina		= new Text(120, 9, 6, 94);
+//kL	_numStamina		= new Text(18, 9, 131, 94);
+	_txtStamina		= new Text(120, 9, 5, 94);		// kL
+	_numStamina		= new Text(18, 9, 131, 94);		// kL
 	_barStamina		= new Bar(170, 7, 150, 94);
 
-	_txtHealth		= new Text(120, 9, 6, 106);
-	_numHealth		= new Text(18, 9, 131, 106);
+//kL	_txtHealth		= new Text(120, 9, 6, 106);
+//kL	_numHealth		= new Text(18, 9, 131, 106);
+	_txtHealth		= new Text(120, 9, 6, 106);		// kL
+	_numHealth		= new Text(18, 9, 131, 106);	// kL
 	_barHealth		= new Bar(170, 7, 150, 106);
 
-	_txtBravery		= new Text(120, 9, 6, 118);
-	_numBravery		= new Text(18, 9, 131, 118);
+//kL	_txtBravery		= new Text(120, 9, 6, 118);
+//kL	_numBravery		= new Text(18, 9, 131, 118);
+	_txtBravery		= new Text(120, 9, 6, 118);		// kL
+	_numBravery		= new Text(18, 9, 131, 118);	// kL
 	_barBravery		= new Bar(170, 7, 150, 118);
 
-	_txtReactions	= new Text(120, 9, 6, 130);
-	_numReactions	= new Text(18, 9, 131, 130);
+//kL	_txtReactions	= new Text(120, 9, 6, 130);
+//kL	_numReactions	= new Text(18, 9, 131, 130);
+	_txtReactions	= new Text(120, 9, 6, 130);		// kL
+	_numReactions	= new Text(18, 9, 131, 130);	// kL
 	_barReactions	= new Bar(170, 7, 150, 130);
 
-	_txtFiring		= new Text(120, 9, 6, 142);
-	_numFiring		= new Text(18, 9, 131, 142);
+//kL	_txtFiring		= new Text(120, 9, 6, 142);
+//kL	_numFiring		= new Text(18, 9, 131, 142);
+	_txtFiring		= new Text(120, 9, 6, 142);		// kL
+	_numFiring		= new Text(18, 9, 131, 142);	// kL
 	_barFiring		= new Bar(170, 7, 150, 142);
 
-	_txtThrowing	= new Text(120, 9, 6, 154);
-	_numThrowing	= new Text(18, 9, 131, 154);
+//kL	_txtThrowing	= new Text(120, 9, 6, 154);
+//kL	_numThrowing	= new Text(18, 9, 131, 154);
+	_txtThrowing	= new Text(120, 9, 6, 154);		// kL
+	_numThrowing	= new Text(18, 9, 131, 154);	// kL
 	_barThrowing	= new Bar(170, 7, 150, 154);
 
-	_txtStrength	= new Text(120, 9, 6, 166);
-	_numStrength	= new Text(18, 9, 131, 166);
+//kL	_txtStrength	= new Text(120, 9, 6, 166);
+//kL	_numStrength	= new Text(18, 9, 131, 166);
+	_txtStrength	= new Text(120, 9, 6, 166);		// kL
+	_numStrength	= new Text(18, 9, 131, 166);	// kL
 	_barStrength	= new Bar(170, 7, 150, 166);
 	
-	_txtPsiStrength	= new Text(120, 9, 6, 178);
-	_numPsiStrength	= new Text(18, 9, 131, 178);
+//kL	_txtPsiStrength	= new Text(120, 9, 6, 178);
+//kL	_numPsiStrength	= new Text(18, 9, 131, 178);
+	_txtPsiStrength	= new Text(120, 9, 6, 178);		// kL
+	_numPsiStrength	= new Text(18, 9, 131, 178);	// kL
 	_barPsiStrength	= new Bar(170, 7, 150, 178);
 	
-	_txtPsiSkill	= new Text(120, 9, 6, 190);
-	_numPsiSkill	= new Text(18, 9, 131, 190);
+//kL	_txtPsiSkill	= new Text(120, 9, 6, 190);
+//kL	_numPsiSkill	= new Text(18, 9, 131, 190);
+	_txtPsiSkill	= new Text(120, 9, 6, 190);		// kL
+	_numPsiSkill	= new Text(18, 9, 131, 190);	// kL
 	_barPsiSkill	= new Bar(170, 7, 150, 190);
 
 	add(_bg);
@@ -350,8 +376,13 @@ void SoldierInfoState::init()
 	{
 		_soldier = 0;
 	}
+<<<<<<< HEAD
 
 	Soldier* s = _base->getSoldiers()->at(_soldier);
+=======
+	Soldier *s = _base->getSoldiers()->at(_soldier);
+	_edtSoldier->setBig();
+>>>>>>> master
 	_edtSoldier->setText(s->getName());
 	UnitStats* initial = s->getInitStats();
 	UnitStats* current = s->getCurrentStats();
@@ -483,12 +514,12 @@ void SoldierInfoState::init()
 
 	std::wstring wsArmor;
 	std::string armorType = s->getArmor()->getType();
-	if (armorType == "STR_NONE_UC")
+/*kL	if (armorType == "STR_NONE_UC")
 	{
 		wsArmor = tr("STR_ARMOR_").arg(tr(armorType));
 	}
-	else
-		wsArmor = tr(armorType);
+	else */
+	wsArmor = tr(armorType);
 
 	_btnArmor->setText(wsArmor);
 //	_txtArmor->setText(tr(s->getArmor()->getType()));

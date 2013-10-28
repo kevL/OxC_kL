@@ -57,8 +57,7 @@ AllocatePsiTrainingState::AllocatePsiTrainingState(Game* game, Base* base)
 	_txtTitle		= new Text(300, 16, 10, 8);
 
 //kL	_txtRemaining	= new Text(134, 10, 10, 24);
-//kL	_txtLabSpace	= new Text(16, 10, 134, 24);
-	_txtLab			= new Text(100, 8, 12, 20);			// kL
+	_txtRemaining	= new Text(100, 8, 12, 20);			// kL
 
 //kL	_txtName		= new Text(64, 10, 10, 40);
 //	_txtName		= new Text(116, 10, 18, 37);		// kL
@@ -83,7 +82,7 @@ AllocatePsiTrainingState::AllocatePsiTrainingState(Game* game, Base* base)
 	_btnOk			= new TextButton(288, 16, 16, 177);	// kL
 =======
 	_window = new Window(this, 320, 200, 0, 0);
-	_txtTitle = new Text(300, 16, 10, 8);
+	_txtTitle = new Text(300, 17, 10, 8);
 	_txtRemaining = new Text(134, 10, 10, 24);
 	_txtName = new Text(64, 10, 10, 40);
 	_txtPsiStrength = new Text(80, 20, 124, 32);
@@ -101,13 +100,7 @@ AllocatePsiTrainingState::AllocatePsiTrainingState(Game* game, Base* base)
 	add(_btnOk);
 	add(_txtName);
 	add(_txtTitle);
-<<<<<<< HEAD
-//kL	add(_txtRemaining);
-//kL	add(_txtLabSpace);
-	add(_txtLab);
-=======
 	add(_txtRemaining);
->>>>>>> master
 	add(_txtPsiStrength);
 	add(_txtPsiSkill);
 	add(_txtTraining);
@@ -123,40 +116,20 @@ AllocatePsiTrainingState::AllocatePsiTrainingState(Game* game, Base* base)
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& AllocatePsiTrainingState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)& AllocatePsiTrainingState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
-	
+
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_PSIONIC_TRAINING"));
-<<<<<<< HEAD
-		
-//kL	_txtRemaining->setColor(Palette::blockOffset(13)+10);
-//kL	_txtRemaining->setText(tr("STR_REMAINING_PSI_LAB_CAPACITY"));
-	
-	_labSpace = base->getAvailablePsiLabs()-base->getUsedPsiLabs();
-	std::wstringstream ss;
-	ss << _labSpace;
-//kL	_txtLabSpace->setText(ss.str());
-//kL	_txtLabSpace->setColor(Palette::blockOffset(13));
-=======
-	
+
 	_labSpace = base->getAvailablePsiLabs() - base->getUsedPsiLabs();
 	_txtRemaining->setColor(Palette::blockOffset(13)+10);
 	_txtRemaining->setSecondaryColor(Palette::blockOffset(13));
 	_txtRemaining->setText(tr("STR_REMAINING_PSI_LAB_CAPACITY").arg(_labSpace));
->>>>>>> master
-	
-	// kL_begin: PsiLab info.
-	_txtLab->setColor(Palette::blockOffset(13)+10);
-	_txtLab->setSecondaryColor(Palette::blockOffset(13));
-	std::wstringstream ss2;
-	ss2 << tr("STR_REMAINING_PSI_LAB_CAPACITY") << L'\x01' << _labSpace;
-	_txtLab->setText(ss2.str());
-	// kL_end.
 
 	_txtName->setColor(Palette::blockOffset(13)+10);
 	_txtName->setText(tr("STR_NAME"));
-	
+
 	_txtPsiStrength->setColor(Palette::blockOffset(13)+10);
 	_txtPsiStrength->setText(tr("STR_PSIONIC__STRENGTH"));
 
@@ -179,33 +152,25 @@ AllocatePsiTrainingState::AllocatePsiTrainingState(Game* game, Base* base)
 	_lstSoldiers->onMouseRelease((ActionHandler)& AllocatePsiTrainingState::lstSoldiersRelease);
 
 	int row = 0;
-<<<<<<< HEAD
 	for (std::vector<Soldier* >::const_iterator s = base->getSoldiers()->begin(); s != base->getSoldiers()->end(); ++s)
 	{
 		std::wstringstream ssStr;
 		std::wstringstream ssSkl;
 
-=======
-	for (std::vector<Soldier*>::const_iterator s = base->getSoldiers()->begin(); s != base->getSoldiers()->end(); ++s)
-	{
-		std::wstringstream ssStr;
-		std::wstringstream ssSkl;
->>>>>>> master
 		_soldiers.push_back(*s);
-		if ((*s)->getCurrentStats()->psiSkill <= 0)
+		if ((*s)->getCurrentStats()->psiSkill < 1)
 		{
-			ssSkl << "0/+0";
+//kL			ssSkl << "0/+0";
+			ssSkl << "0";		// kL
 			ssStr << tr("STR_UNKNOWN").c_str();
 		}
 		else
 		{
-			ssSkl << (*s)->getCurrentStats()->psiSkill << "/+" << (*s)->getImprovement();
-			ssStr << ((*s)->getCurrentStats()->psiStrength);
+//kL			ssSkl << (*s)->getCurrentStats()->psiSkill << "/+" << (*s)->getImprovement();
+			ssSkl << (*s)->getCurrentStats()->psiSkill;		// kL
+			ssStr << (*s)->getCurrentStats()->psiStrength;
 		}
-<<<<<<< HEAD
 
-=======
->>>>>>> master
 		if ((*s)->isInPsiTraining())
 		{
 			_lstSoldiers->addRow(4, (*s)->getName().c_str(), ssStr.str().c_str(), ssSkl.str().c_str(), tr("STR_YES").c_str());
@@ -275,43 +240,19 @@ void AllocatePsiTrainingState::lstSoldiersClick(Action* action)
 				_lstSoldiers->setCellText(_sel, 3, tr("STR_YES").c_str());
 				_lstSoldiers->setRowColor(_sel, Palette::blockOffset(13)+5);
 				_labSpace--;
-<<<<<<< HEAD
 
-				std::wstringstream ss;
-//kL				ss << _labSpace;
-//kL				_txtLabSpace->setText(ss.str());
-
-				ss << tr("STR_REMAINING_PSI_LAB_CAPACITY") << L'\x01' << _labSpace;		// kL
-				_txtLab->setText(ss.str());												// kL
-
-=======
 				_txtRemaining->setText(tr("STR_REMAINING_PSI_LAB_CAPACITY").arg(_labSpace));
->>>>>>> master
+
 				_base->getSoldiers()->at(_sel)->setPsiTraining();
 			}
 		}
 		else
 		{
-<<<<<<< HEAD
 			_lstSoldiers->setCellText(_sel, 3, tr("STR_NO").c_str());
 			_lstSoldiers->setRowColor(_sel, Palette::blockOffset(15)+6);
 			_labSpace++;
-
-			std::wstringstream ss;
-//kL			ss << _labSpace;
-//kL			_txtLabSpace->setText(ss.str());
-
-			ss << tr("STR_REMAINING_PSI_LAB_CAPACITY") << L'\x01' << _labSpace;		// kL
-			_txtLab->setText(ss.str());												// kL
-
+			_txtRemaining->setText(tr("STR_REMAINING_PSI_LAB_CAPACITY").arg(_labSpace));
 			_base->getSoldiers()->at(_sel)->setPsiTraining();
-=======
-		_lstSoldiers->setCellText(_sel, 3, tr("STR_NO").c_str());
-		_lstSoldiers->setRowColor(_sel, Palette::blockOffset(15)+6);
-		_labSpace++;
-		_txtRemaining->setText(tr("STR_REMAINING_PSI_LAB_CAPACITY").arg(_labSpace));
-		_base->getSoldiers()->at(_sel)->setPsiTraining();
->>>>>>> master
 		}
 	}
 }
