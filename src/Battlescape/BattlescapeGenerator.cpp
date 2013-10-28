@@ -381,8 +381,7 @@ void BattlescapeGenerator::run()
 }
 
 /**
-* Deploys all the X-COM units and equipment based
-* on the Geoscape base / craft.
+* Deploys all the X-COM units and equipment based on the Geoscape base / craft.
 * @param inventoryTile The tile to place all the extra equipment on.
 */
 void BattlescapeGenerator::deployXCOM()
@@ -511,7 +510,7 @@ void BattlescapeGenerator::deployXCOM()
 		addItem(*i, false);
 	}
 
-	for (std::vector<BattleItem*>::iterator i = _craftInventoryTile->getInventory()->begin(); i != _craftInventoryTile->getInventory()->end(); ++i)
+	for (std::vector<BattleItem* >::iterator i = _craftInventoryTile->getInventory()->begin(); i != _craftInventoryTile->getInventory()->end(); ++i)
 	{
 		//Log(LOG_INFO) << "BattlescapeGenerator::deployXCOM(), addItem(*item, SecondPass)";
 		addItem(*i, true);
@@ -654,7 +653,8 @@ void BattlescapeGenerator::deployAliens(AlienRace* race, AlienDeployment* deploy
 	int month;
 	if (_game->getSavedGame()->getMonthsPassed() != -1)
 	{
-		month = ((size_t)_game->getSavedGame()->getMonthsPassed()) > _game->getRuleset()->getAlienItemLevels().size() - 1 ? _game->getRuleset()->getAlienItemLevels().size() - 1 : _game->getSavedGame()->getMonthsPassed();
+		month = (size_t)_game->getSavedGame()->getMonthsPassed() > _game->getRuleset()->getAlienItemLevels().size() - 1
+						? _game->getRuleset()->getAlienItemLevels().size() - 1 : _game->getSavedGame()->getMonthsPassed();
 	}
 	else
 	{
@@ -824,9 +824,12 @@ BattleItem* BattlescapeGenerator::placeItemByLayout(BattleItem* item)
 	RuleInventory* ground = _game->getRuleset()->getInventory("STR_GROUND");
 	if (item->getSlot() == ground)
 	{
-		// skip flares if not dark enough
-		if (BT_FLARE == item->getRules()->getBattleType() && _worldShade < NIGHT_SHADE_LEVEL)
+		// skip flares if not dark enough; kL_note: let's just skip flares.
+		if (BT_FLARE == item->getRules()->getBattleType())
+//kL			&& _worldShade < NIGHT_SHADE_LEVEL)
+		{
 			return item;
+		}
 
 		bool loaded;
 		RuleInventory* righthand = _game->getRuleset()->getInventory("STR_RIGHT_HAND");
@@ -1026,7 +1029,7 @@ BattleItem* BattlescapeGenerator::addItem(BattleItem* item, bool secondPass)
 			break;
 			case BT_FLARE:
 				// equip these on night-missions
-				if (_worldShade >= NIGHT_SHADE_LEVEL)
+/*kL				if (_worldShade >= NIGHT_SHADE_LEVEL)
 				{
 					for (std::vector<BattleUnit* >::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 					{
@@ -1043,7 +1046,7 @@ BattleItem* BattlescapeGenerator::addItem(BattleItem* item, bool secondPass)
 							break;
 						}
 					}
-				}
+				} */
 			break;
 
 			default:
@@ -1410,8 +1413,8 @@ void BattlescapeGenerator::generateMap()
 		{
 			while (blocks[randX][randY] != NULL)
 			{
-				randX = RNG::generate(0, (_mapsize_y/10) - 1);
-				randY = RNG::generate(0, (_mapsize_x/10) - 1);
+				randX = RNG::generate(0, (_mapsize_y / 10) - 1);
+				randY = RNG::generate(0, (_mapsize_x / 10) - 1);
 			}
 
 			// add the lift

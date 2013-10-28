@@ -866,8 +866,8 @@ void UnitWalkBState::playMovementSound()
 			Tile* tileBelow = _parent->getSave()->getTile(tile->getPosition() + Position(0, 0, -1));
 
 			// play footstep sound 1
-			if (_unit->getWalkingPhase() == 3)
-//			if (_unit->getWalkingPhase() == 2)		// kL
+//kL			if (_unit->getWalkingPhase() == 3)
+			if (_unit->getWalkingPhase() == 2)		// kL
 			{
 				if (tile->getFootstepSound(tileBelow)
 					&& _unit->getRaceString() != "STR_ETHEREAL")	// kL: and not an ethereal

@@ -531,7 +531,8 @@ DogfightState::DogfightState(Game* game, Globe* globe, Craft* craft, Ufo* ufo)
 	_ufoWtimer->setInterval(_ufoFireInterval);
 
 	_ufoEscapeTimer->onTimer((StateHandler)& DogfightState::ufoBreakOff);
-	int ufoBreakOffInterval = (_ufo->getRules()->getBreakOffTime() + RNG::generate(0, _ufo->getRules()->getBreakOffTime()) - 15 * (int)(_game->getSavedGame()->getDifficulty())) * _timeScale;
+	int ufoBreakOffInterval = (_ufo->getRules()->getBreakOffTime() + RNG::generate(0, _ufo->getRules()->getBreakOffTime())
+														- 15 * (int)(_game->getSavedGame()->getDifficulty())) * _timeScale;
 	_ufoEscapeTimer->setInterval(ufoBreakOffInterval);
 
 	_craftDamageAnimTimer->onTimer((StateHandler)& DogfightState::animateCraftDamage);
@@ -931,7 +932,7 @@ void DogfightState::move()
 					}
 				}
 			}
-			else if(p->getDirection() == D_DOWN) // Projectiles fired by UFO.
+			else if (p->getDirection() == D_DOWN) // Projectiles fired by UFO.
 			{
 				if (p->getGlobalType() == CWPGT_MISSILE
 					|| (p->getGlobalType() == CWPGT_BEAM && p->toBeRemoved()))
@@ -939,7 +940,8 @@ void DogfightState::move()
 					if (RNG::percent(p->getAccuracy()))
 					{
 						// Formula delivered by Volutar
-						int damage = RNG::generate(0, _ufo->getRules()->getWeaponPower());
+//kL						int damage = RNG::generate(0, _ufo->getRules()->getWeaponPower());
+						int damage = RNG::generate(10, _ufo->getRules()->getWeaponPower());		// kL
 						if (damage)
 						{
 							_craft->setDamage(_craft->getDamage() + damage);
@@ -950,7 +952,7 @@ void DogfightState::move()
 							if ((_mode == _btnCautious
 //kL								&& _craft->getDamagePercentage() >= 50)
 									&& _craft->getDamagePercentage() > 60)		// kL
-								|| (_mode == _btnNORMAL							// kL
+								|| (_mode == _btnStandard						// kL
 									&& _craft->getDamagePercentage() > 35))		// kL
 							{
 								_targetDist = STANDOFF_DIST;

@@ -39,7 +39,7 @@ class Tile;
  */
 class ExplosionBState
 	:
-	public BattleState
+		public BattleState
 {
 private:
 	BattleUnit* _unit;

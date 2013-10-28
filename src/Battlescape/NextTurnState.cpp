@@ -99,7 +99,7 @@ NextTurnState::NextTurnState(Game* game, SavedBattleGame* battleGame, Battlescap
 	_state->clearMouseScrollingState();
 
 	kL_preReveal = true;	// kL
-	Log(LOG_INFO) << ". . set kL_preReveal TRUE";
+	//Log(LOG_INFO) << ". . set kL_preReveal TRUE";
 }
 
 /**

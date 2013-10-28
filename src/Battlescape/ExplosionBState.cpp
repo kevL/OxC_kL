@@ -126,7 +126,7 @@ void ExplosionBState::init()
 			else
 				_parent->getResourcePack()->getSound("BATTLE.CAT", 5)->play();
 
-//kL			_parent->getMap()->getCamera()->centerOnPosition(t->getPosition(), false);
+			_parent->getMap()->getCamera()->centerOnPosition(t->getPosition(), false);
 		}
 		else
 		{
