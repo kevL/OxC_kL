@@ -644,7 +644,8 @@ void GeoscapeState::think()
 	{
 		_game->getSavedGame()->addMonth();
 		determineAlienMissions(true);
-		_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds() - (_game->getSavedGame()->getBaseMaintenance() - _game->getSavedGame()->getBases()->front()->getPersonnelMaintenance()));
+		_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds()
+				- (_game->getSavedGame()->getBaseMaintenance() - _game->getSavedGame()->getBases()->front()->getPersonnelMaintenance()));
 	}
 
 	if (_popups.empty()
@@ -901,7 +902,8 @@ void GeoscapeState::time5Seconds()
 		{
 			if ((*j)->isDestroyed())
 			{
-				for (std::vector<Country* >::iterator country = _game->getSavedGame()->getCountries()->begin(); country != _game->getSavedGame()->getCountries()->end(); ++country)
+				for (std::vector<Country* >::iterator country = _game->getSavedGame()->getCountries()->begin();
+											country != _game->getSavedGame()->getCountries()->end(); ++country)
 				{
 					if ((*country)->getRules()->insideCountry((*j)->getLongitude(), (*j)->getLatitude()))
 					{
@@ -1827,7 +1829,7 @@ void GeoscapeState::time1Day()
 				_game->getSavedGame()->addFinishedResearch(_game->getRuleset()->getResearch(research->getLookup()), _game->getRuleset());
 			}
 
-			timerReset();	// kL
+			timerReset();	// kL. Should this be inside both the Research/Manufacture complete scopes, like it is under Facility complete scope?
 			popup(new ResearchCompleteState(_game, newResearch, bonus));
 			std::vector<RuleResearch* > newPossibleResearch;
 			_game->getSavedGame()->getDependableResearch(newPossibleResearch, (*iter)->getRules(), _game->getRuleset(), *i);
@@ -1865,6 +1867,7 @@ void GeoscapeState::time1Day()
 				for (std::vector<ResearchProject* >::const_iterator iter2 = (*j)->getResearch().begin(); iter2 != (*j)->getResearch().end(); ++iter2)
 				{
 					if ((*iter)->getRules()->getName() == (*iter2)->getRules()->getName()
+						// kL_note: what's this, making sure a soldier doesn't have the same name as a research project?!??
 						&&  _game->getRuleset()->getUnit((*iter2)->getRules()->getName()) == 0)
 					{
 						(*j)->removeResearch(*iter2);
@@ -1902,7 +1905,8 @@ void GeoscapeState::time1Day()
 		{
 			if ((*k)->getRules()->insideRegion((*b)->getLongitude(), (*b)->getLatitude()))
 			{
-				(*k)->addActivityAlien(5);
+//kL				(*k)->addActivityAlien(5);
+				(*k)->addActivityAlien(20);		// kL
 
 				break;
 			}
@@ -1912,7 +1916,8 @@ void GeoscapeState::time1Day()
 		{
 			if ((*k)->getRules()->insideCountry((*b)->getLongitude(), (*b)->getLatitude()))
 			{
-				(*k)->addActivityAlien(5);
+//kL				(*k)->addActivityAlien(5);
+				(*k)->addActivityAlien(20);		// kL
 
 				break;
 			}
@@ -1920,7 +1925,9 @@ void GeoscapeState::time1Day()
 	}
 
 	// Handle resupply of alien bases.
-	std::for_each(_game->getSavedGame()->getAlienBases()->begin(), _game->getSavedGame()->getAlienBases()->end(), GenerateSupplyMission(*_game->getRuleset(), *_game->getSavedGame()));
+	std::for_each(_game->getSavedGame()->getAlienBases()->begin(),
+					_game->getSavedGame()->getAlienBases()->end(),
+					GenerateSupplyMission(*_game->getRuleset(), *_game->getSavedGame()));
 
 	// Autosave
 	if (Options::getInt("autosave") >= 2)
@@ -2029,7 +2036,10 @@ void GeoscapeState::timerReset()
 {
 	SDL_Event ev;
 	ev.button.button = SDL_BUTTON_LEFT;
-	Action act(&ev, _game->getScreen()->getXScale(), _game->getScreen()->getYScale(), _game->getScreen()->getCursorTopBlackBand(), _game->getScreen()->getCursorLeftBlackBand());
+	Action act(&ev, _game->getScreen()->getXScale(),
+			_game->getScreen()->getYScale(),
+			_game->getScreen()->getCursorTopBlackBand(),
+			_game->getScreen()->getCursorLeftBlackBand());
 
 	_btn5Secs->mousePress(&act, this);
 }
