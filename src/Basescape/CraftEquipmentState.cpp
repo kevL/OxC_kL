@@ -519,12 +519,12 @@ void CraftEquipmentState::moveLeftByValue(int change)
 
 	if (item->isFixed()) // Convert vehicle to item
 	{
-		if (item->getClipSize() != -1)
+		if (!item->getCompatibleAmmo()->empty())
 		{
 			// First we remove all vehicles because we want to redistribute the ammo
 			RuleItem *ammo = _game->getRuleset()->getItem(item->getCompatibleAmmo()->front());
 
-			for (std::vector<Vehicle*>::iterator i = c->getVehicles()->begin(); i != c->getVehicles()->end(); )
+			for (std::vector<Vehicle* >::iterator i = c->getVehicles()->begin(); i != c->getVehicles()->end(); )
 			{
 				if ((*i)->getRules() == item)
 				{
@@ -625,7 +625,7 @@ void CraftEquipmentState::moveRightByValue(int change)
 		{
 			change = std::min(room, change);
 
-			if (item->getClipSize() != -1)
+			if(!item->getCompatibleAmmo()->empty())
 			{
 				// We want to redistribute all the available ammo among the vehicles,
 				// so first we note the total number of vehicles we want in the craft
@@ -643,7 +643,7 @@ void CraftEquipmentState::moveRightByValue(int change)
 				int canBeAdded = std::min(newVehiclesCount, baqty);
 				if (canBeAdded > 0)
 				{
-					int newAmmoPerVehicle = std::min(baqty / canBeAdded, ammo->getClipSize());;
+					int newAmmoPerVehicle = std::min(baqty / canBeAdded, ammo->getClipSize());
 					int remainder = 0;
 
 					if (ammo->getClipSize() > newAmmoPerVehicle)
@@ -678,7 +678,7 @@ void CraftEquipmentState::moveRightByValue(int change)
 			{
 				for (int i = 0; i < change; ++i)
 				{
-					c->getVehicles()->push_back(new Vehicle(item, 255));
+					c->getVehicles()->push_back(new Vehicle(item, item->getClipSize()));
 
 					if (_game->getSavedGame()->getMonthsPassed() != -1)
 					{

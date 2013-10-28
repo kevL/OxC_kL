@@ -547,7 +547,7 @@ BattleUnit* BattlescapeGenerator::addXCOMVehicle(Vehicle* v)
 	{
 		addItem(_game->getRuleset()->getItem(vehicle), unit);
 
-		if (v->getRules()->getClipSize() != -1)
+		if(!v->getRules()->getCompatibleAmmo()->empty())
 		{
 			std::string ammo = v->getRules()->getCompatibleAmmo()->front();
 			addItem(_game->getRuleset()->getItem(ammo), unit)->setAmmoQuantity(v->getAmmo());

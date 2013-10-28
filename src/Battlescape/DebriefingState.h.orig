@@ -73,14 +73,24 @@ class DebriefingState
 		public State
 {
 private:
+<<<<<<< HEAD
 	Region* _region;
 	Country* _country;
-	Base* _base;
 	std::vector<DebriefingStat* > _stats;
 	TextButton* _btnOk;
 	Window* _window;
 	Text* _txtTitle, * _txtItem, * _txtQuantity, * _txtScore, * _txtRecovery, * _txtRating;
 	TextList* _lstStats, * _lstRecovery, * _lstTotal;
+=======
+	Region *_region;
+	Country *_country;
+	Base *_base;
+	std::vector<DebriefingStat*> _stats;
+	TextButton *_btnOk;
+	Window *_window;
+	Text *_txtTitle, *_txtItem, *_txtQuantity, *_txtScore, *_txtRecovery, *_txtRating;
+	TextList *_lstStats, *_lstRecovery, *_lstTotal;
+>>>>>>> master
 	std::vector<ReequipStat> _missingItems;
 	std::map<RuleItem*, int> _rounds;
 	/// Adds to the debriefing stats.
@@ -90,8 +100,13 @@ private:
 	/// Recovers items from the battlescape.
 	void recoverItems(std::vector<BattleItem* >* from, Base* base);
 	/// Reequips a craft after a mission.
+<<<<<<< HEAD
 	void reequipCraft(Base* base, Craft* craft, bool vehicleItemsCanBeDestroyed);
+	bool _noContainment, _destroyBase;
+=======
+	void reequipCraft(Base *base, Craft *craft, bool vehicleItemsCanBeDestroyed);
 	bool _noContainment, _manageContainment, _destroyBase;
+>>>>>>> master
 	int _containmentLimit;
 
 	public:

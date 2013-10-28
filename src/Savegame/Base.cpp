@@ -1688,11 +1688,11 @@ void Base::setupDefenses()
 		RuleItem *rule = _rule->getItem(itemId);
 		if (rule->isFixed())
 		{
-			if (rule->getClipSize() == -1) // so this vehicle does not need ammo
+			if (rule->getCompatibleAmmo()->empty()) // so this vehicle does not need ammo
 			{
 				for (int j = 0; j < iqty; ++j)
 				{
-					_vehicles.push_back(new Vehicle(rule, 255));
+					_vehicles.push_back(new Vehicle(rule, rule->getClipSize()));
 				}
 
 				_items->removeItem(itemId, iqty);

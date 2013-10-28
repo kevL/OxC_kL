@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #define _USE_MATH_DEFINES
 #include <cmath>
 #include <fstream>
@@ -36,6 +37,7 @@
 #include "../Engine/Palette.h"
 #include "../Engine/RNG.h"
 #include "../Engine/Game.h"
+#include "../Engine/Screen.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/Tile.h"
 #include "../Savegame/BattleUnit.h"
@@ -47,6 +49,7 @@
 #include "../Interface/Cursor.h"
 #include "../Engine/Options.h"
 #include "../Interface/NumberText.h"
+
 
 /*
   1) Map origin is top corner.
@@ -64,6 +67,8 @@
 namespace OpenXcom
 {
 
+bool kL_preReveal = true;		// kL
+
 /**
  * Sets up a map with the specified size and position.
  * @param game Pointer to the core game.
@@ -73,9 +78,27 @@ namespace OpenXcom
  * @param y Y position in pixels.
  * @param visibleMapHeight Current visible map height.
  */
-Map::Map(Game *game, int width, int height, int x, int y, int visibleMapHeight) : InteractiveSurface(width, height, x, y), _game(game), _arrow(0), _selectorX(0), _selectorY(0), _mouseX(0), _mouseY(0), _cursorType(CT_NORMAL), _cursorSize(1), _animFrame(0), _launch(false), _visibleMapHeight(visibleMapHeight), _unitDying(false)
+Map::Map(Game* game, int width, int height, int x, int y, int visibleMapHeight)
+	:
+		InteractiveSurface(width, height, x, y),
+		_game(game),
+		_arrow(0),
+		_selectorX(0),
+		_selectorY(0),
+		_mouseX(0),
+		_mouseY(0),
+		_cursorType(CT_NORMAL),
+		_cursorSize(1),
+		_animFrame(0),
+		_launch(false),
+		_visibleMapHeight(visibleMapHeight),
+		_unitDying(false),
+		_reveal(0)
 {
+	//Log(LOG_INFO) << "Create Map";
+
 	_previewSetting = Options::getInt("battleNewPreviewPath");
+
 	if (Options::getBool("traceAI"))
 	{
 		// turn everything on because we want to see the markers.
@@ -85,13 +108,20 @@ Map::Map(Game *game, int width, int height, int x, int y, int visibleMapHeight) 
 	_res = _game->getResourcePack();
 	_spriteWidth = _res->getSurfaceSet("BLANKS.PCK")->getFrame(0)->getWidth();
 	_spriteHeight = _res->getSurfaceSet("BLANKS.PCK")->getFrame(0)->getHeight();
+
 	_save = _game->getSavedGame()->getSavedBattle();
-	_message = new BattlescapeMessage(width, visibleMapHeight, 0, 0);
+
+	// kL_note: "hidden movement" screen
+	_message = new BattlescapeMessage(320, visibleMapHeight < 200 ? visibleMapHeight : 200, Screen::getDX(), Screen::getDY());
+
 	_camera = new Camera(_spriteWidth, _spriteHeight, _save->getMapSizeX(), _save->getMapSizeY(), _save->getMapSizeZ(), this, visibleMapHeight);
+
 	_scrollMouseTimer = new Timer(SCROLL_INTERVAL);
 	_scrollMouseTimer->onTimer((SurfaceHandler)&Map::scrollMouse);
+
 	_scrollKeyTimer = new Timer(SCROLL_INTERVAL);
 	_scrollKeyTimer->onTimer((SurfaceHandler)&Map::scrollKey);
+
 	_camera->setScrollTimer(_scrollMouseTimer, _scrollKeyTimer);
 }
 
@@ -100,6 +130,8 @@ Map::Map(Game *game, int width, int height, int x, int y, int visibleMapHeight) 
  */
 Map::~Map()
 {
+	//Log(LOG_INFO) << "Delete Map";
+
 	delete _scrollMouseTimer;
 	delete _scrollKeyTimer;
 	delete _arrow;
@@ -128,12 +160,19 @@ void Map::init()
 	_arrow = new Surface(9, 9);
 	_arrow->setPalette(this->getPalette());
 	_arrow->lock();
-	for (int y = 0; y < 9;++y)
+ 	for (int y = 0; y < 9; ++y)
+	{
 		for (int x = 0; x < 9; ++x)
-			_arrow->setPixel(x, y, pixels[x+(y*9)]);
+		{
+			_arrow->setPixel(x, y, pixels[x + (y * 9)]);
+		}
+	}
 	_arrow->unlock();
 
 	_projectile = 0;
+
+	//Log(LOG_INFO) << "Map::init(), Set _reveal FALSE";
+//	_reveal = false;	// kL
 }
 
 /**
@@ -150,30 +189,55 @@ void Map::think()
  */
 void Map::draw()
 {
+	//Log(LOG_INFO) << "Map::draw()";
+
+	// kL_note: removed setting this in BattlescapeGame::handleState().
+/*kL	if (!_redraw)
+	{
+		return;
+	} */
+
 	Surface::draw();
-	Tile *t;
+	Tile* t;
 
 	projectileInFOV = _save->getDebugMode();
 	if (_projectile)
 	{
-		t = _save->getTile(Position(_projectile->getPosition(0).x/16, _projectile->getPosition(0).y/16, _projectile->getPosition(0).z/24));
-		if (_save->getSide() == FACTION_PLAYER || (t && t->getVisible()))
+		t = _save->getTile(Position(_projectile->getPosition(0).x / 16, _projectile->getPosition(0).y / 16, _projectile->getPosition(0).z / 24));
+		if (_save->getSide() == FACTION_PLAYER
+			|| (t && t->getVisible()))
 		{
 			projectileInFOV = true;
 		}
 	}
+
 	explosionInFOV = _save->getDebugMode();
 	if (!_explosions.empty())
 	{
+<<<<<<< HEAD
+		std::set<Explosion* >::iterator i = _explosions.begin();
+		t = _save->getTile(Position((*i)->getPosition().x / 16, (*i)->getPosition().y / 16, (*i)->getPosition().z / 24));
+		if (t
+			&& (((*i)->isBig() && t->isDiscovered(0))
+				|| t->getVisible()))
+=======
 		std::set<Explosion*>::iterator i = _explosions.begin();
 		t = _save->getTile(Position((*i)->getPosition().x/16, (*i)->getPosition().y/16, (*i)->getPosition().z/24));
-		if (t && (((*i)->isBig() && t->isDiscovered(0)) || t->getVisible()))
+		if (t && ((*i)->isBig() || t->getVisible()))
+>>>>>>> master
 		{
 			explosionInFOV = true;
 		}
 	}
 
-	if ((_save->getSelectedUnit() && _save->getSelectedUnit()->getVisible())
+	//Log(LOG_INFO) << ". . kL_preReveal = " << kL_preReveal;
+//	if (kL_preReveal && !_reveal)		// kL
+//	{
+//		_reveal = 250;					// kL
+	//Log(LOG_INFO) << ". . . . _reveal " << _reveal;
+//	}
+
+/*kL	if ((_save->getSelectedUnit() && _save->getSelectedUnit()->getVisible())
 		|| _unitDying
 		|| _save->getSelectedUnit() == 0
 		|| _save->getDebugMode()
@@ -181,9 +245,41 @@ void Map::draw()
 		|| explosionInFOV)
 	{
 		drawTerrain(this);
-	}
-	else
+	} */
+	if ((_save->getSelectedUnit() && _save->getSelectedUnit()->getVisible())
+		|| _unitDying
+		|| _save->getSelectedUnit() == 0
+		|| _save->getDebugMode()
+		|| projectileInFOV
+		|| explosionInFOV
+		|| (_reveal && !kL_preReveal))
 	{
+		if (_reveal && !kL_preReveal)
+		{
+			_reveal--;
+			//Log(LOG_INFO) << ". . . . . . drawTerrain() _reveal = " << _reveal;
+		}
+		else
+		{
+			_reveal = 8;
+			//Log(LOG_INFO) << ". . . . . . drawTerrain() Set _reveal = " << _reveal;
+		}
+
+		drawTerrain(this);
+	}
+	else // "hidden movement"
+//	else if (kL_preReveal			// kL
+//		|| !_reveal)				// kL
+	{
+		if (kL_preReveal)				// kL
+		{
+			kL_preReveal = false;		// kL
+			_reveal = 0;				// kL
+			//Log(LOG_INFO) << ". . . . . . kL_preReveal, set " << kL_preReveal;
+			//Log(LOG_INFO) << ". . . . . . _reveal, set " << _reveal;
+		}
+
+		//Log(LOG_INFO) << ". . . . blit( hidden movement )";
 		_message->blit(this);
 	}
 }
@@ -204,7 +300,7 @@ void Map::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 
 	_message->setPalette(colors, firstcolor, ncolors);
 	_message->setBackground(_res->getSurface("TAC00.SCR"));
-	_message->setFonts(_res->getFont("Big.fnt"), _res->getFont("Small.fnt"));
+	_message->setFonts(_res->getFont("FONT_BIG"), _res->getFont("FONT_SMALL"));
 	_message->setText(_game->getLanguage()->getString("STR_HIDDEN_MOVEMENT"));
 }
 
@@ -223,15 +319,17 @@ void Map::drawTerrain(Surface *surface)
 	int beginZ = 0, endZ = _camera->getShowAllLayers()?_save->getMapSizeZ() - 1:_camera->getViewLevel();
 	Position mapPosition, screenPosition, bulletPositionScreen;
 	int bulletLowX=16000, bulletLowY=16000, bulletLowZ=16000, bulletHighX=0, bulletHighY=0, bulletHighZ=0;
-	int dummy;
+	int d;
 	BattleUnit *unit = 0;
 	bool invalid;
 	int tileShade, wallShade, tileColor;
-
+	static int flip = 1;
+	int _animFrameNew;
+	
 	NumberText *_numWaypid = 0;
 
 	// if we got bullet, get the highest x and y tiles to draw it on
-	if (_projectile)
+	if (_projectile && _explosions.empty())
 	{
 		int part = _projectile->getItem() ? 0 : BULLET_SPRITES-1;
 		for (int i = 0; i <= part; ++i)
@@ -323,10 +421,10 @@ void Map::drawTerrain(Surface *surface)
 	}
 
 	// get corner map coordinates to give rough boundaries in which tiles to redraw are
-	_camera->convertScreenToMap(0, 0, &beginX, &dummy);
-	_camera->convertScreenToMap(surface->getWidth(), 0, &dummy, &beginY);
-	_camera->convertScreenToMap(surface->getWidth(), surface->getHeight(), &endX, &dummy);
-	_camera->convertScreenToMap(0, surface->getHeight(), &dummy, &endY);
+	_camera->convertScreenToMap(0, 0, &beginX, &d);
+	_camera->convertScreenToMap(surface->getWidth(), 0, &d, &beginY);
+	_camera->convertScreenToMap(surface->getWidth(), surface->getHeight(), &endX, &d);
+	_camera->convertScreenToMap(0, surface->getHeight(), &d, &endY);
 	beginY -= (_camera->getViewLevel() * 2);
 	beginX -= (_camera->getViewLevel() * 2);
 	if (beginX < 0)
@@ -549,7 +647,7 @@ void Map::drawTerrain(Surface *surface)
 						// the part is 0 for small units, large units have parts 1,2 & 3 depending on the relative x/y position of this tile vs the actual unit position.
 						int part = 0;
 						part += tile->getPosition().x - unit->getPosition().x;
-						part += (tile->getPosition().y - unit->getPosition().y)*2;
+						part += (tile->getPosition().y - unit->getPosition().y) * 2;
 
 						tmpSurface = unit->getCache(&invalid, part);
 						if (tmpSurface)
@@ -568,17 +666,20 @@ void Map::drawTerrain(Surface *surface)
 					}
 
 					// if we can see through the floor, draw the soldier below it if it is on stairs
-					Tile *tileBelow = _save->getTile(mapPosition + Position(0, 0, -1));
+					Tile* tileBelow = _save->getTile(mapPosition + Position(0, 0, -1));
 					if (itZ > 0 && tile->hasNoFloor(tileBelow))
 					{
-						BattleUnit *tunit = _save->selectUnit(Position(itX, itY, itZ-1));
-						Tile *ttile = _save->getTile(Position(itX, itY, itZ-1));
-						if (tunit && tunit->getVisible() && ttile->getTerrainLevel() < 0 && ttile->isDiscovered(2))
+						BattleUnit* tunit = _save->selectUnit(Position(itX, itY, itZ-1));
+						Tile* ttile = _save->getTile(Position(itX, itY, itZ-1));
+						if (tunit
+							&& tunit->getVisible()
+							&& ttile->getTerrainLevel() < 0
+							&& ttile->isDiscovered(2))
 						{
 							// the part is 0 for small units, large units have parts 1,2 & 3 depending on the relative x/y position of this tile vs the actual unit position.
 							int part = 0;
 							part += ttile->getPosition().x - tunit->getPosition().x;
-							part += (ttile->getPosition().y - tunit->getPosition().y)*2;
+							part += (ttile->getPosition().y - tunit->getPosition().y) * 2;
 
 							tmpSurface = tunit->getCache(&invalid, part);
 							if (tmpSurface)
@@ -787,7 +888,9 @@ void Map::drawTerrain(Surface *surface)
 	}
 
 	unit = (BattleUnit*)_save->getSelectedUnit();
-	if (unit && (_save->getSide() == FACTION_PLAYER || _save->getDebugMode()) && unit->getPosition().z <= _camera->getViewLevel())
+	if (unit
+		&& (_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
+		&& unit->getPosition().z <= _camera->getViewLevel())
 	{
 		_camera->convertMapToScreen(unit->getPosition(), &screenPosition);
 		screenPosition += _camera->getMapOffset();
@@ -797,7 +900,20 @@ void Map::drawTerrain(Surface *surface)
 		{
 			offset.y += 4;
 		}
-		_arrow->blitNShade(surface, screenPosition.x + offset.x + (_spriteWidth / 2) - (_arrow->getWidth() / 2), screenPosition.y + offset.y - _arrow->getHeight() + _animFrame, 0);
+		if (flip == 1) 
+		{
+			_animFrameNew = _animFrame;
+		}
+		else 
+		{
+			_animFrameNew = 7 - _animFrame;
+		}
+		if (_animFrameNew == 7) flip = -1;
+		if (_animFrameNew == 0) flip =  1;
+		if (this->getCursorType() != CT_NONE)
+		{
+			_arrow->blitNShade(surface, screenPosition.x + offset.x + (_spriteWidth / 2) - (_arrow->getWidth() / 2), screenPosition.y + offset.y - _arrow->getHeight() + _animFrameNew, 0);
+		}
 	}
 
 	delete _numWaypid;
@@ -810,8 +926,11 @@ void Map::drawTerrain(Surface *surface)
 			_camera->convertVoxelToScreen((*i)->getPosition(), &bulletPositionScreen);
 			if ((*i)->isBig())
 			{
-				tmpSurface = _res->getSurfaceSet("X1.PCK")->getFrame((*i)->getCurrentFrame());
-				tmpSurface->blitNShade(surface, bulletPositionScreen.x - 64, bulletPositionScreen.y - 64, 0);
+				if ((*i)->getCurrentFrame() >= 0)
+				{
+					tmpSurface = _res->getSurfaceSet("X1.PCK")->getFrame((*i)->getCurrentFrame());
+					tmpSurface->blitNShade(surface, bulletPositionScreen.x - 64, bulletPositionScreen.y - 64, 0);
+				}
 			}
 			else if ((*i)->isHit())
 			{
@@ -884,6 +1003,7 @@ void Map::mouseOver(Action *action, State *state)
 	_camera->mouseOver(action, state);
 	_mouseX = (int)action->getAbsoluteXMouse();
 	_mouseY = (int)action->getAbsoluteYMouse();
+
 	setSelectorPosition(_mouseX, _mouseY);
 }
 
@@ -898,7 +1018,8 @@ void Map::setSelectorPosition(int mx, int my)
 	int oldX = _selectorX, oldY = _selectorY;
 
 	if (!mx && !my) return; // cursor is offscreen
-	_camera->convertScreenToMap(mx, my + _spriteHeight/4, &_selectorX, &_selectorY);
+
+	_camera->convertScreenToMap(mx, my + _spriteHeight / 4, &_selectorX, &_selectorY);
 
 	if (oldX != _selectorX || oldY != _selectorY)
 	{
@@ -952,14 +1073,14 @@ void Map::getSelectorPosition(Position *pos) const
  * @param unit Pointer to BattleUnit.
  * @param offset Pointer to the offset to return the calculation.
  */
-void Map::calculateWalkingOffset(BattleUnit *unit, Position *offset)
+void Map::calculateWalkingOffset(BattleUnit* unit, Position* offset)
 {
 	int offsetX[8] = { 1, 1, 1, 0, -1, -1, -1, 0 };
 	int offsetY[8] = { 1, 0, -1, -1, -1, 0, 1, 1 };
 	int phase = unit->getWalkingPhase() + unit->getDiagonalWalkingPhase();
 	int dir = unit->getDirection();
-	int midphase = 4 + 4 * (dir % 2);
-	int endphase = 8 + 8 * (dir % 2);
+	int midphase = 4 + 4 * (dir %2);
+	int endphase = 8 + 8 * (dir %2);
 	int size = unit->getArmor()->getSize();
 
 	if (size > 1)
@@ -975,7 +1096,7 @@ void Map::calculateWalkingOffset(BattleUnit *unit, Position *offset)
 		midphase = 4;
 		endphase = 8;
 	}
-	else if ((unit->getStatus() == STATUS_WALKING || unit->getStatus() == STATUS_FLYING))
+	else if (unit->getStatus() == STATUS_WALKING || unit->getStatus() == STATUS_FLYING)
 	{
 		if (phase < midphase)
 		{
@@ -1013,7 +1134,7 @@ void Map::calculateWalkingOffset(BattleUnit *unit, Position *offset)
 		else
 		{
 			// from phase 4 onwards the unit behind the scenes already is on the destination tile
-			// we have to get it's last position to calculate the correct offset
+			// we have to get its last position to calculate the correct offset
 			int fromLevel = getTerrainLevel(unit->getLastPosition(), size);
 			int toLevel = getTerrainLevel(unit->getDestination(), size);
 
@@ -1088,7 +1209,7 @@ CursorType Map::getCursorType() const
  */
 void Map::cacheUnits()
 {
-	for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
+	for (std::vector<BattleUnit* >::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 	{
 		cacheUnit(*i);
 	}
@@ -1098,64 +1219,81 @@ void Map::cacheUnits()
  * Check if a certain unit needs to be redrawn.
  * @param unit Pointer to battleUnit.
  */
-void Map::cacheUnit(BattleUnit *unit)
+void Map::cacheUnit(BattleUnit* unit)
 {
-	UnitSprite *unitSprite = new UnitSprite(_spriteWidth, _spriteHeight, 0, 0);
+	//Log(LOG_INFO) << "cacheUnit() : " << unit->getId();
+
+	UnitSprite* unitSprite = new UnitSprite(_spriteWidth, _spriteHeight, 0, 0);
 	unitSprite->setPalette(this->getPalette());
-	bool invalid, dummy;
+	bool invalid = false;
+	bool d = false;
 	int numOfParts = unit->getArmor()->getSize() == 1 ? 1 : unit->getArmor()->getSize() * 2;
 
 	unit->getCache(&invalid);
 	if (invalid)
 	{
+		//Log(LOG_INFO) << ". (invalid)";	// kL
+
 		// 1 or 4 iterations, depending on unit size
 		for (int i = 0; i < numOfParts; i++)
 		{
-			Surface *cache = unit->getCache(&dummy, i);
+			//Log(LOG_INFO) << ". . i = " << i;	// kL
+
+			Surface* cache = unit->getCache(&d, i);
 			if (!cache) // no cache created yet
 			{
+				//Log(LOG_INFO) << ". . . (!cache)";	// kL
+
 				cache = new Surface(_spriteWidth, _spriteHeight);
 				cache->setPalette(this->getPalette());
+
+				//Log(LOG_INFO) << ". . . end (!cache)";	// kL
 			}
 
+			//Log(LOG_INFO) << ". . setBattleUnit()";	// kL
 			unitSprite->setBattleUnit(unit, i);
 
-			BattleItem *rhandItem = unit->getItem("STR_RIGHT_HAND");
-			BattleItem *lhandItem = unit->getItem("STR_LEFT_HAND");
+			//Log(LOG_INFO) << ". . getItem()";	// kL
+			BattleItem* rhandItem = unit->getItem("STR_RIGHT_HAND");
+			BattleItem* lhandItem = unit->getItem("STR_LEFT_HAND");
 			if (rhandItem)
 			{
 				unitSprite->setBattleItem(rhandItem);
 			}
+
 			if (lhandItem)
 			{
 				unitSprite->setBattleItem(lhandItem);
 			}
-<<<<<<< HEAD
-			
-			if (!lhandItem && !rhandItem)
-=======
 
-			if(!lhandItem && !rhandItem)
->>>>>>> master
+			if (!lhandItem && !rhandItem)
 			{
 				unitSprite->setBattleItem(0);
 			}
 
+			//Log(LOG_INFO) << ". . setSurfaces()";	// kL
 			unitSprite->setSurfaces(_res->getSurfaceSet(unit->getArmor()->getSpriteSheet()),
 									_res->getSurfaceSet("HANDOB.PCK"),
 									_res->getSurfaceSet("HANDOB2.PCK"));
+			//Log(LOG_INFO) << ". . setAnimationFrame()";	// kL
 			unitSprite->setAnimationFrame(_animFrame);
+			//Log(LOG_INFO) << ". . clear()";	// kL
 			cache->clear();
+
+			//Log(LOG_INFO) << ". . blit() : cache = " << cache;	// kL
 			unitSprite->blit(cache);
+			//Log(LOG_INFO) << ". . blit() Ok";	// kL
+
+			//Log(LOG_INFO) << ". . setCache()";	// kL
 			unit->setCache(cache, i);
 		}
-<<<<<<< HEAD
-	}	
 
-=======
+		//Log(LOG_INFO) << ". end (invalid)";	// kL
 	}
->>>>>>> master
+
 	delete unitSprite;
+
+	//Log(LOG_INFO) << "exit cacheUnit() : " << unit->getId();	// kL
 }
 
 /**

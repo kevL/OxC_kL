@@ -108,7 +108,7 @@ namespace OpenXcom
 //kL		_lstStats->addRow(2, tr("STR_WEAPON").c_str(), tr(defs->weapon).c_str());
 		_lstStats->addRow(2, tr("STR_WEAPON_LC").c_str(), tr(defs->weapon).c_str());	// kL
 				
-		if (item->getClipSize() != -1)
+		if (!item->getCompatibleAmmo()->empty())
 		{
 			RuleItem *ammo = _game->getRuleset()->getItem(item->getCompatibleAmmo()->front());
 

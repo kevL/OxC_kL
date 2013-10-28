@@ -1198,21 +1198,10 @@ void BattlescapeState::btnReserveClick(Action* action)
 		Action a = Action(&ev, 0.0, 0.0, 0, 0);
 		action->getSender()->mousePress(&a, this);
 
-<<<<<<< HEAD
-		if		(_reserve == _btnReserveNone)	_battleGame->setTUReserved(BA_NONE);
-		else if (_reserve == _btnReserveSnap)	_battleGame->setTUReserved(BA_SNAPSHOT);
-		else if (_reserve == _btnReserveAimed)	_battleGame->setTUReserved(BA_AIMEDSHOT);
-		else if (_reserve == _btnReserveAuto)	_battleGame->setTUReserved(BA_AUTOSHOT);
-=======
-		if (_reserve == _btnReserveNone)
-			_battleGame->setTUReserved(BA_NONE, true);
-		else if (_reserve == _btnReserveSnap)
-			_battleGame->setTUReserved(BA_SNAPSHOT, true);
-		else if (_reserve == _btnReserveAimed)
-			_battleGame->setTUReserved(BA_AIMEDSHOT, true);
-		else if (_reserve == _btnReserveAuto)
-			_battleGame->setTUReserved(BA_AUTOSHOT, true);
->>>>>>> master
+		if		(_reserve == _btnReserveNone)	_battleGame->setTUReserved(BA_NONE, true);
+		else if (_reserve == _btnReserveSnap)	_battleGame->setTUReserved(BA_SNAPSHOT, true);
+		else if (_reserve == _btnReserveAimed)	_battleGame->setTUReserved(BA_AIMEDSHOT, true);
+		else if (_reserve == _btnReserveAuto)	_battleGame->setTUReserved(BA_AUTOSHOT, true);
 	}
 }
 
@@ -1329,8 +1318,12 @@ void BattlescapeState::updateSoldierInfo()
 	if (leftHandItem)
 	{
 		leftHandItem->getRules()->drawHandSprite(_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"), _btnLeftHandItem);
+<<<<<<< HEAD
 		if (leftHandItem->getRules()->getBattleType() == BT_FIREARM
 			&& leftHandItem->needsAmmo())
+=======
+		if (leftHandItem->getRules()->getBattleType() == BT_FIREARM && (leftHandItem->needsAmmo() || leftHandItem->getRules()->getClipSize() > 0))
+>>>>>>> master
 		{
 			_numAmmoLeft->setVisible(true);
 			if (leftHandItem->getAmmoItem())
@@ -1346,8 +1339,12 @@ void BattlescapeState::updateSoldierInfo()
 	if (rightHandItem)
 	{
 		rightHandItem->getRules()->drawHandSprite(_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"), _btnRightHandItem);
+<<<<<<< HEAD
 		if (rightHandItem->getRules()->getBattleType() == BT_FIREARM
 			&& rightHandItem->needsAmmo())
+=======
+		if (rightHandItem->getRules()->getBattleType() == BT_FIREARM && (rightHandItem->needsAmmo() || rightHandItem->getRules()->getClipSize() > 0))
+>>>>>>> master
 		{
 			_numAmmoRight->setVisible(true);
 			if (rightHandItem->getAmmoItem())

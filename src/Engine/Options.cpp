@@ -135,6 +135,7 @@ void createDefault()
 	setInt("windowedModePositionY", -1);
 	setBool("battleAutoEnd", false);
 	setBool("allowPsionicCapture", false);
+	setBool("psiStrengthEval", false);
 	setBool("borderless", false);
 	setBool("captureMouse", false);
 //kL	setBool("battleTooltips", true);

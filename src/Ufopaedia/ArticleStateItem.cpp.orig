@@ -77,21 +77,21 @@ ArticleStateItem::ArticleStateItem(Game* game, ArticleDefinitionItem* defs, int 
 	// SHOT STATS TABLE (for firearms only)
 	if (item->getBattleType() == BT_FIREARM)
 	{
-		_txtShotType = new Text(100, 16, 8, 66);
+		_txtShotType = new Text(100, 17, 8, 66);
 		add(_txtShotType);
 		_txtShotType->setColor(Palette::blockOffset(14) + 15);
 		_txtShotType->setWordWrap(true);
 		_txtShotType->setText(tr("STR_SHOT_TYPE").c_str());
 
-//kL		_txtAccuracy = new Text(50, 16, 104, 66);
-		_txtAccuracy = new Text(50, 16, 108, 66);		// kL
+//kL		_txtAccuracy = new Text(50, 17, 104, 66);
+		_txtAccuracy = new Text(50, 17, 108, 66);		// kL
 		add(_txtAccuracy);
 		_txtAccuracy->setColor(Palette::blockOffset(14) + 15);
 		_txtAccuracy->setWordWrap(true);
 		_txtAccuracy->setText(tr("STR_ACCURACY_UC").c_str());
 
-//kL		_txtTuCost = new Text(60, 16, 158, 66);
-		_txtTuCost = new Text(60, 16, 160, 66);			// kL
+//kL		_txtTuCost = new Text(60, 17, 158, 66);
+		_txtTuCost = new Text(60, 17, 160, 66);			// kL
 		add(_txtTuCost);
 		_txtTuCost->setColor(Palette::blockOffset(14)+15);
 		_txtTuCost->setWordWrap(true);
@@ -107,38 +107,8 @@ ArticleStateItem::ArticleStateItem(Game* game, ArticleDefinitionItem* defs, int 
 		int current_row = 0;
 		if (item->getTUAuto() > 0)
 		{
-<<<<<<< HEAD
 			std::wstring tu = Text::formatPercentage(item->getTUAuto());
 			if (item->getFlatRate())
-=======
-			_txtShotType = new Text(100, 17, 8, 66);
-			add(_txtShotType);
-			_txtShotType->setColor(Palette::blockOffset(14)+15);
-			_txtShotType->setWordWrap(true);
-			_txtShotType->setText(tr("STR_SHOT_TYPE").c_str());
-
-			_txtAccuracy = new Text(50, 17, 104, 66);
-			add(_txtAccuracy);
-			_txtAccuracy->setColor(Palette::blockOffset(14)+15);
-			_txtAccuracy->setWordWrap(true);
-			_txtAccuracy->setText(tr("STR_ACCURACY_UC").c_str());
-
-			_txtTuCost = new Text(60, 17, 158, 66);
-			add(_txtTuCost);
-			_txtTuCost->setColor(Palette::blockOffset(14)+15);
-			_txtTuCost->setWordWrap(true);
-			_txtTuCost->setText(tr("STR_TU_COST").c_str());
-
-			_lstInfo = new TextList(204, 55, 8, 82);
-			add(_lstInfo);
-
-			_lstInfo->setColor(Palette::blockOffset(15)+4); // color for %-data!
-			_lstInfo->setColumns(3, 100, 52, 52);
-			_lstInfo->setBig();
-
-			int current_row = 0;
-			if (item->getTUAuto()>0)
->>>>>>> master
 			{
 				tu.erase(tu.end() - 1);
 			}
@@ -217,6 +187,7 @@ ArticleStateItem::ArticleStateItem(Game* game, ArticleDefinitionItem* defs, int 
 	// AMMO column
 	std::wstringstream ss;
 
+<<<<<<< HEAD
 	for (int i = 0; i < 3; ++i)
 	{
 //kL		_txtAmmoType[i] = new Text(90, 9, 190, 24 + i * 49);
@@ -235,6 +206,26 @@ ArticleStateItem::ArticleStateItem(Game* game, ArticleDefinitionItem* defs, int 
 		_imageAmmo[i] = new Surface(32, 48, 280, 16 + i * 49);
 		add(_imageAmmo[i]);
 	}
+=======
+		switch (item->getBattleType())
+		{
+			case BT_FIREARM:
+				_txtDamage = new Text(80, 10, 200, 7);
+				add(_txtDamage);
+				_txtDamage->setColor(Palette::blockOffset(14)+15);
+				_txtDamage->setAlign(ALIGN_CENTER);
+				_txtDamage->setText(tr("STR_DAMAGE_UC").c_str());
+
+				_txtAmmo = new Text(45, 10, 270, 7);
+				add(_txtAmmo);
+				_txtAmmo->setColor(Palette::blockOffset(14)+15);
+				_txtAmmo->setAlign(ALIGN_CENTER);
+				_txtAmmo->setText(tr("STR_AMMO").c_str());
+
+				if (ammo_data->empty())
+				{
+					setDamageTypeText(_txtAmmoType[0], item);
+>>>>>>> master
 
 	switch (item->getBattleType())
 	{

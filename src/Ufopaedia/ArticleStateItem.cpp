@@ -223,7 +223,7 @@ ArticleStateItem::ArticleStateItem(Game* game, ArticleDefinitionItem* defs, int 
 			_txtAmmo->setAlign(ALIGN_CENTER);
 			_txtAmmo->setText(tr("STR_AMMO").c_str());
 
-			if (item->getClipSize() == -1)
+			if (ammo_data->empty())
 			{
 				setDamageTypeText(_txtAmmoType[0], item);
 

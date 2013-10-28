@@ -54,11 +54,13 @@
 #include "../Savegame/Ufo.h"
 #include "../Savegame/Vehicle.h"
 #include <sstream>
+#include "../Menu/ErrorMessageState.h"
 #include "../Menu/MainMenuState.h"
 #include "../Engine/RNG.h"
 #include "../Interface/FpsCounter.h"
 #include "../Interface/Cursor.h"
 #include "../Engine/Options.h"
+#include "../Basescape/ManageAlienContainmentState.h"
 
 
 namespace OpenXcom
@@ -68,12 +70,13 @@ namespace OpenXcom
  * Initializes all the elements in the Debriefing screen.
  * @param game Pointer to the core game.
  */
-DebriefingState::DebriefingState(Game* game)
+DebriefingState::DebriefingState(Game *game)
 	:
 		State(game),
 		_region(0),
 		_country(0),
 		_noContainment(false),
+		_manageContainment(false),
 		_destroyBase(false)
 {
 	// Restore the cursor in case something weird happened
@@ -301,7 +304,12 @@ void DebriefingState::btnOkClick(Action* )
 
 		if (_noContainment)
 		{
-			_game->pushState (new NoContainmentState(_game));
+			_game->pushState(new NoContainmentState(_game));
+		}
+		else if (_manageContainment)
+		{
+			_game->pushState(new ManageAlienContainmentState(_game, _base));
+			_game->pushState(new ErrorMessageState(_game, tr("STR_CONTAINMENT_EXCEEDED").arg(_base->getName()).c_str(), Palette::blockOffset(8)+5, "BACK01.SCR", 0));
 		}
 	}
 }
@@ -483,6 +491,8 @@ void DebriefingState::prepareDebriefing()
 			}
 		}
 	}
+
+	_base = base;
 
 	// UFO crash/landing site disappears
 	for (std::vector<Ufo* >::iterator i = save->getUfos()->begin(); i != save->getUfos()->end(); ++i)
@@ -676,14 +686,14 @@ void DebriefingState::prepareDebriefing()
 					playerInExitArea++;
 
 					if (soldier != 0)
-						recoverItems((*j)->getInventory(), base);		
+						recoverItems((*j)->getInventory(), base);
 					else // non soldier player = tank
 					{
 						base->getItems()->addItem(type);
 
 						RuleItem* tankRule = _game->getRuleset()->getItem(type);
 						BattleItem* ammoItem = (*j)->getItem("STR_RIGHT_HAND")->getAmmoItem();
-						if (tankRule->getClipSize() != -1
+						if (!tankRule->getCompatibleAmmo()->empty()
 							&& 0 != ammoItem
 							&& 0 < ammoItem->getAmmoQuantity())
 						{
@@ -745,16 +755,15 @@ void DebriefingState::prepareDebriefing()
 				{
 //kL					addStat("STR_LIVE_ALIENS_RECOVERED", 0, ((*j)->getValue() * 2) - 10); // more points if it's not researched
 					addStat("STR_LIVE_ALIENS_RECOVERED", 0, (*j)->getValue() * 3 / 2);	// kL, duplicated in function below.
-
-					if (base->getAvailableContainment() - (base->getUsedContainment() * _containmentLimit) > 0)
-					{
-						base->getItems()->addItem(type, 1);
-						// kL_note: Add Research Help here. OR AFTER INTERROGATION ( post-Researched )
-					}
-					else
+					if (base->getAvailableContainment() == 0)
 					{
 						_noContainment = true;
 						base->getItems()->addItem(corpseItem, 1);
+					}
+					else
+					{
+						base->getItems()->addItem(type, 1);
+						_manageContainment = base->getAvailableContainment() - (base->getUsedContainment() * _containmentLimit) < 0;
 					}
 				}
 				else
@@ -1100,11 +1109,11 @@ void DebriefingState::reequipCraft(Base* base, Craft* craft, bool vehicleItemsCa
 			_missingItems.push_back(stat);
 		}
 
-		if (tankRule->getClipSize() == -1)
+		if (tankRule->getCompatibleAmmo()->empty())
 		{
 			// so this tank does NOT require ammo
 			for (int j = 0; j < canBeAdded; ++j)
-				craft->getVehicles()->push_back(new Vehicle(tankRule, 255));
+				craft->getVehicles()->push_back(new Vehicle(tankRule, tankRule->getClipSize()));
 
 			base->getItems()->removeItem(i->first, canBeAdded);
 		}
@@ -1185,15 +1194,15 @@ void DebriefingState::recoverItems(std::vector<BattleItem* >* from, Base* base)
 						{
 //kL							addStat("STR_LIVE_ALIENS_RECOVERED", 0, ((*it)->getUnit()->getValue() * 2) - 10); // more points if it's not researched
 							addStat("STR_LIVE_ALIENS_RECOVERED", 0, (*it)->getUnit()->getValue() * 3 / 2);	// kL, duplicated above.
-
-							if (base->getAvailableContainment() - (base->getUsedContainment() * _containmentLimit) > 0)
-							{
-								base->getItems()->addItem((*it)->getUnit()->getType(), 1);
-							}
-							else
+							if (base->getAvailableContainment() == 0)
 							{
 								_noContainment = true;
 								base->getItems()->addItem((*it)->getRules()->getName(), 1);
+							}
+							else
+							{
+								base->getItems()->addItem((*it)->getUnit()->getType(), 1);
+								_manageContainment = (base->getAvailableContainment() - (base->getUsedContainment() * _containmentLimit) < 0);
 							}
 						}
 						else
@@ -1224,8 +1233,8 @@ void DebriefingState::recoverItems(std::vector<BattleItem* >* from, Base* base)
 					case BT_FIREARM:
 					case BT_MELEE: // It's a weapon, count any rounds left in the clip.
 					{
-						BattleItem *clip = (*it)->getAmmoItem();
-						if (clip && (*it)->getRules()->getClipSize() != -1)
+						BattleItem* clip = (*it)->getAmmoItem();
+						if (clip && clip->getRules()->getClipSize() > 0)
 						{
 							_rounds[clip->getRules()] += clip->getAmmoQuantity();
 						}

@@ -45,6 +45,7 @@
 #include "CraftsState.h"
 #include "BuildFacilitiesState.h"
 #include "ResearchState.h"
+#include "ManageAlienContainmentState.h"
 #include "ManufactureState.h"
 #include "PurchaseState.h"
 #include "SellState.h"
@@ -585,6 +586,8 @@ void BasescapeState::viewRightClick(Action* )
 		_game->pushState(new ResearchState(_game, _base));
 	else if (f->getRules()->getWorkshops() > 0)
 		_game->pushState(new ManufactureState(_game, _base));
+	else if (f->getRules()->getAliens() > 0)
+		_game->pushState(new ManageAlienContainmentState(_game, _base));
 	else if (f->getRules()->isLift() || f->getRules()->getRadarRange() > 0)
 		_game->popState();
 }

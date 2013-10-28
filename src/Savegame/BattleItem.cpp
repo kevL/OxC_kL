@@ -69,10 +69,12 @@ BattleItem::BattleItem(RuleItem* rules, int* id)
 
 	// weapon does not need ammo, ammo item points to weapon
 	if (_rules
-		&& _rules->getClipSize() == -1)
+		&& (_rules->getBattleType() == BT_FIREARM
+			|| _rules->getBattleType() == BT_MELEE)
+		&& _rules->getCompatibleAmmo()->empty())
 	{
+		setAmmoQuantity(_rules->getClipSize());
 		_ammoItem = this;
-		setAmmoQuantity(99999);
 	}
 }
 
@@ -173,6 +175,11 @@ void BattleItem::setExplodeTurn(int turn)
  */
 int BattleItem::getAmmoQuantity() const
 {
+	if (_rules->getClipSize() == -1)
+	{
+		return 255;
+	}
+
 	return _ammoQuantity;
 }
 

@@ -30,6 +30,8 @@
 #include "../Interface/Text.h"
 #include "../Interface/TextEdit.h"
 #include "../Engine/Surface.h"
+#include "../Savegame/SavedGame.h"
+#include "../Ruleset/Ruleset.h"
 #include "../Savegame/Base.h"
 #include "../Savegame/Craft.h"
 #include "../Ruleset/RuleCraft.h"
@@ -548,7 +550,7 @@ void SoldierInfoState::init()
 
 	_txtPsionic->setVisible(s->isInPsiTraining());
 
-	if (current->psiSkill > 0)
+	if (current->psiSkill > 0 || (Options::getBool("psiStrengthEval") && _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements())))
 	{
 		std::wstringstream ss14;
 		ss14 << current->psiStrength;
@@ -557,6 +559,19 @@ void SoldierInfoState::init()
 		_barPsiStrength->setValue(current->psiStrength);
 		_barPsiStrength->setValue2(initial->psiStrength);
 
+		_txtPsiStrength->setVisible(true);
+		_numPsiStrength->setVisible(true);
+		_barPsiStrength->setVisible(true);
+	}
+	else
+	{
+		_txtPsiStrength->setVisible(false);
+		_numPsiStrength->setVisible(false);
+		_barPsiStrength->setVisible(false);
+	}
+
+	if (current->psiSkill > 0)
+	{
 		std::wstringstream ss15;
 		ss15 << current->psiSkill;
 		_numPsiSkill->setText(ss15.str());
@@ -564,20 +579,12 @@ void SoldierInfoState::init()
 		_barPsiSkill->setValue(current->psiSkill);
 		_barPsiSkill->setValue2(initial->psiSkill);
 
-		_txtPsiStrength->setVisible(true);
-		_numPsiStrength->setVisible(true);
-		_barPsiStrength->setVisible(true);
-
 		_txtPsiSkill->setVisible(true);
 		_numPsiSkill->setVisible(true);
 		_barPsiSkill->setVisible(true);
 	}
 	else
 	{
-		_txtPsiStrength->setVisible(false);
-		_numPsiStrength->setVisible(false);
-		_barPsiStrength->setVisible(false);
-
 		_txtPsiSkill->setVisible(false);
 		_numPsiSkill->setVisible(false);
 		_barPsiSkill->setVisible(false);
