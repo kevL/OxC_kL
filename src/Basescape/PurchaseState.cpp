@@ -489,8 +489,10 @@ void PurchaseState::lstItemsLeftArrowClick(Action* action)
 	{
 		increaseByValue(1);
 
-		_timerInc->setInterval(250);
-		_timerDec->setInterval(250);
+//kL		_timerInc->setInterval(250);
+//kL		_timerDec->setInterval(250);
+		_timerInc->setInterval(275);		// kL
+		_timerDec->setInterval(275);		// kL
 	}
 }
 
@@ -535,8 +537,10 @@ void PurchaseState::lstItemsRightArrowClick(Action* action)
 	{
 		decreaseByValue(1);
 
-		_timerInc->setInterval(250);
-		_timerDec->setInterval(250);
+//kL		_timerInc->setInterval(250);
+//kL		_timerDec->setInterval(250);
+		_timerInc->setInterval(275);		// kL
+		_timerDec->setInterval(275);		// kL
 	}
 }
 
@@ -607,8 +611,10 @@ int PurchaseState::getPrice()
  */
 void PurchaseState::increase()
 {
-	_timerDec->setInterval(50);
-	_timerInc->setInterval(50);
+//kL	_timerDec->setInterval(50);
+//kL	_timerInc->setInterval(50);
+	_timerDec->setInterval(75);		// kL
+	_timerInc->setInterval(75);		// kL
 
 	increaseByValue(1);
 }
@@ -695,8 +701,10 @@ void PurchaseState::increaseByValue(int change)
  */
 void PurchaseState::decrease()
 {
-	_timerInc->setInterval(50);
-	_timerDec->setInterval(50);
+//kL	_timerInc->setInterval(50);
+//kL	_timerDec->setInterval(50);
+	_timerDec->setInterval(75);		// kL
+	_timerInc->setInterval(75);		// kL
 
 	decreaseByValue(1);
 }

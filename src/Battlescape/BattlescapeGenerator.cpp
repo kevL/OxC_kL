@@ -88,7 +88,8 @@ BattlescapeGenerator::BattlescapeGenerator(Game* game)
 		_unitSequence(0),
 		_craftInventoryTile(0),
 		_alienRace(""),
-		_alienItemLevel(0)
+		_alienItemLevel(0),
+		_tankPos(0)		// kL
 {
 //	Log(LOG_INFO) << "Create BattlescapeGenerator";
 }
@@ -128,6 +129,7 @@ void BattlescapeGenerator::setUfo(Ufo* ufo)
 void BattlescapeGenerator::setWorldTexture(int texture)
 {
 	if (texture < 0) texture = 0;
+
 	_worldTexture = texture;
 }
 
@@ -311,7 +313,7 @@ void BattlescapeGenerator::run()
 
 	if (ruleDeploy->getTerrain().empty())
 	{
-		double lat = 0;
+		double lat = 0.0;
 		if (_ufo) lat = _ufo->getLatitude();
 
 		_terrain = getTerrain(_worldTexture, lat);
@@ -547,7 +549,7 @@ BattleUnit* BattlescapeGenerator::addXCOMVehicle(Vehicle* v)
 	{
 		addItem(_game->getRuleset()->getItem(vehicle), unit);
 
-		if(!v->getRules()->getCompatibleAmmo()->empty())
+		if (!v->getRules()->getCompatibleAmmo()->empty())
 		{
 			std::string ammo = v->getRules()->getCompatibleAmmo()->front();
 			addItem(_game->getRuleset()->getItem(ammo), unit)->setAmmoQuantity(v->getAmmo());
@@ -600,40 +602,81 @@ BattleUnit* BattlescapeGenerator::addXCOMUnit(BattleUnit* unit)
 			}
 		}
 	}
-	else
+	else // kL_note: mission w/ transport craft
 	{
-		for (int i = 0; i < _mapsize_x * _mapsize_y * _mapsize_z; i++)
+		for (int i = 0; i < _mapsize_x * _mapsize_y * _mapsize_z; i++) // kL_note: iterate through *all* tiles
 		{
-			// to spawn an xcom soldier, there has to be a tile, with a floor, with the starting point attribute and no object in the way
-			if (_save->getTiles()[i]
-				&& _save->getTiles()[i]->getMapData(MapData::O_FLOOR)
-				&& _save->getTiles()[i]->getMapData(MapData::O_FLOOR)->getSpecialType() == START_POINT
-				&& !_save->getTiles()[i]->getMapData(MapData::O_OBJECT)
-				&& _save->getTiles()[i]->getMapData(MapData::O_FLOOR)->getTUCost(MT_WALK) < 255)
+			// to spawn an xcom soldier, there has to be a tile, with a floor,
+			// with the starting point attribute and no object in the way
+			if (_save->getTiles()[i]																		// is a tile
+				&& _save->getTiles()[i]->getMapData(MapData::O_FLOOR)										// has a floor
+				&& _save->getTiles()[i]->getMapData(MapData::O_FLOOR)->getSpecialType() == START_POINT		// is a 'start point', ie. cargo tile
+				&& !_save->getTiles()[i]->getMapData(MapData::O_OBJECT)										// no object content
+				&& _save->getTiles()[i]->getMapData(MapData::O_FLOOR)->getTUCost(MT_WALK) < 255)			// is walkable.
 			{
 				// kL_note: ground inventory goes where the first xCom unit spawns
 				if (_craftInventoryTile == 0)
+				{
 					_craftInventoryTile = _save->getTiles()[i];
+				}
 
 				// for bigger units, line them up with the first tile of the craft
-				if (unit->getArmor()->getSize() == 1
-					|| _craftInventoryTile == 0
-					|| _save->getTiles()[i]->getPosition().x == _craftInventoryTile->getPosition().x)
+				// kL_note: try the fifth tile...
+/*				if (unit->getArmor()->getSize() == 1													// is a tank
+					|| _craftInventoryTile == 0															// or no ground-inv. has been set
+					|| _save->getTiles()[i]->getPosition().x == _craftInventoryTile->getPosition().x)	// or the ground-inv. is on x-axis
 				{
-					if (_save->setUnitPosition(unit, _save->getTiles()[i]->getPosition()))
+					if (_save->setUnitPosition(unit, _save->getTiles()[i]->getPosition()))		// set unit position SUCCESS
 					{
-						_save->getUnits()->push_back(unit);
+						_save->getUnits()->push_back(unit);		// add unit to vector of Units.
 
 						if (_save->getTileEngine())
 						{
-							_save->getTileEngine()->calculateFOV(unit);
+							_save->getTileEngine()->calculateFOV(unit);		// it's all good: do Field of View for unit!
 						}
 
 						unit->deriveRank();
 
 						return unit;
 					}
+				} */
+				// kL_begin: BattlescapeGenerator, set tankPosition
+				if (unit->getArmor()->getSize() == 2
+					&& _save->getTiles()[i]->getPosition().x == _craftInventoryTile->getPosition().x)
+				{
+					_tankPos++;
+					if (_tankPos == 3
+						|| _tankPos == 5
+						|| _tankPos == 7) // up to 3 tanks.
+					{
+						if (_save->setUnitPosition(unit, _save->getTiles()[i]->getPosition()))		// set unit position SUCCESS
+						{
+							_save->getUnits()->push_back(unit);		// add unit to vector of Units.
+
+							if (_save->getTileEngine())
+							{
+								_save->getTileEngine()->calculateFOV(unit);		// it's all good: do Field of View for unit!
+							}
+
+							unit->deriveRank();
+
+							return unit;
+						}
+					}
 				}
+				else if (_save->setUnitPosition(unit, _save->getTiles()[i]->getPosition()))		// set unit position SUCCESS
+				{
+					_save->getUnits()->push_back(unit);		// add unit to vector of Units.
+
+					if (_save->getTileEngine())
+					{
+						_save->getTileEngine()->calculateFOV(unit);		// it's all good: do Field of View for unit!
+					}
+
+					unit->deriveRank();
+
+					return unit;
+				} // kL_end.
 			}
 		}
 	}

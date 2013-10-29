@@ -68,14 +68,14 @@ CraftWeaponsState::CraftWeaponsState(Game* game, Base* base, size_t craft, size_
 	_lstWeapons		= new TextList(188, 80, 58, 68); */
 
 	// kL_begin: CraftWeaponsState() surface adj.
-	_txtTitle		= new Text(208, 17, 60, 28);
+	_txtTitle		= new Text(200, 17, 60, 28);
 
-	_txtArmament	= new Text(76, 9, 66, 53);
-	_txtQuantity	= new Text(50, 9, 145, 32);
-	_txtAmmunition	= new Text(33, 17, 187, 45);
-//	_lstWeapons->setColumns(3, 137, 50, 33);		// TEMP!
+	_txtArmament	= new Text(90, 9, 66, 53);
+	_txtQuantity	= new Text(30, 9, 156, 53);
+	_txtAmmunition	= new Text(80, 9, 190, 53);
+//	_lstWeapons->setColumns(3, 94, 30, 80);		// TEMP!
 
-	_lstWeapons		= new TextList(188, 80, 58, 68);
+	_lstWeapons		= new TextList(188, 88, 58, 68);
 
 	_btnCancel		= new TextButton(140, 16, 90, 156);
 	// kL_end.
@@ -120,7 +120,7 @@ CraftWeaponsState::CraftWeaponsState(Game* game, Base* base, size_t craft, size_
 	_lstWeapons->setColor(Palette::blockOffset(13)+10);
 	_lstWeapons->setArrowColor(Palette::blockOffset(15)+6);
 //kL	_lstWeapons->setColumns(3, 94, 50, 36);
-	_lstWeapons->setColumns(3, 137, 50, 33);		// kL
+	_lstWeapons->setColumns(3, 90, 30, 80);		// kL
 	_lstWeapons->setSelectable(true);
 	_lstWeapons->setBackground(_window);
 	_lstWeapons->setMargin(8);
