@@ -1870,11 +1870,11 @@ BattleItem* BattleUnit::getItem(RuleInventory* slot, int x, int y) const
  * @param y Y position in slot.
  * @return Item in the slot, or NULL if none.
  */
-BattleItem* BattleUnit::getItem(const std::string &slot, int x, int y) const
+BattleItem* BattleUnit::getItem(const std::string& slot, int x, int y) const
 {
 	if (slot != "STR_GROUND") // Soldier items
 	{
-		for (std::vector<BattleItem*>::const_iterator i = _inventory.begin(); i != _inventory.end(); ++i)
+		for (std::vector<BattleItem* >::const_iterator i = _inventory.begin(); i != _inventory.end(); ++i)
 		{
 			if ((*i)->getSlot() != 0
 				&& (*i)->getSlot()->getId() == slot
@@ -1886,7 +1886,7 @@ BattleItem* BattleUnit::getItem(const std::string &slot, int x, int y) const
 	}
 	else if (_tile != 0) // Ground items
 	{
-		for (std::vector<BattleItem*>::const_iterator i = _tile->getInventory()->begin(); i != _tile->getInventory()->end(); ++i)
+		for (std::vector<BattleItem* >::const_iterator i = _tile->getInventory()->begin(); i != _tile->getInventory()->end(); ++i)
 		{
 			if ((*i)->getSlot() != 0
 				&& (*i)->occupiesSlot(x, y))
@@ -1910,10 +1910,13 @@ BattleItem* BattleUnit::getMainHandWeapon(bool quickest) const
 	BattleItem* weaponLeftHand = getItem("STR_LEFT_HAND");
 
 	// if there is only one weapon, or only one weapon loaded (rules out grenades) it's easy:
+	// kL_note: Lol, doesn't rule out grenades; getting a positive return with an alien holding only a grenade.
+	// Also, this is doing two runs before the AI even kicks in....
 	if (!weaponRightHand
 		|| !weaponRightHand->getAmmoItem()
 		|| !weaponRightHand->getAmmoItem()->getAmmoQuantity())
 	{
+		//Log(LOG_INFO) << "BattleUnit::getMainHandWeapon(), has leftHand weapon";
 		return weaponLeftHand;
 	}
 
@@ -1921,19 +1924,21 @@ BattleItem* BattleUnit::getMainHandWeapon(bool quickest) const
 		|| !weaponLeftHand->getAmmoItem()
 		|| !weaponLeftHand->getAmmoItem()->getAmmoQuantity())
 	{
+		//Log(LOG_INFO) << "BattleUnit::getMainHandWeapon(), has rightHand weapon";
 		return weaponRightHand;
 	}
 
+	// kL_note: two weapons:
 	// otherwise pick the one with the least snapshot TUs
 	int tuRightHand = weaponRightHand->getRules()->getTUSnap();
 	int tuLeftHand = weaponLeftHand->getRules()->getTUSnap();
 	if (tuLeftHand >= tuRightHand)
 	{
-		return quickest?weaponRightHand:weaponLeftHand;
+		return quickest ? weaponRightHand : weaponLeftHand;
 	}
 	else
 	{
-		return quickest?weaponLeftHand:weaponRightHand;
+		return quickest ? weaponLeftHand : weaponRightHand;
 	}
 }
 
@@ -1950,6 +1955,18 @@ BattleItem* BattleUnit::getGrenadeFromBelt() const
 			return *i;
 		}
 	}
+
+	// kL_begin: BattleUnit::getGrenadeFromBelt(), or hand.
+	BattleItem* handgrenade = getItem("STR_RIGHT_HAND");
+	if (!handgrenade)
+		handgrenade = getItem("STR_LEFT_HAND");
+
+	if (handgrenade
+		&& handgrenade->getRules()->getBattleType() == BT_GRENADE)
+	{
+		return handgrenade;
+	}
+	// kL_end.
 
 	return 0;
 }

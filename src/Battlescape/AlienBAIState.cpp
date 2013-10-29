@@ -62,6 +62,7 @@ AlienBAIState::AlienBAIState(SavedBattleGame* save, BattleUnit* unit, Node* node
 		_rifle(false),
 		_melee(false),
 		_blaster(false),
+		_grenade(false),	// kL
 		_wasHit(false),
 		_didPsi(false),
 		_AIMode(AI_PATROL),
@@ -160,11 +161,11 @@ void AlienBAIState::exit()
  */
 void AlienBAIState::think(BattleAction* action)
 {
-	Log(LOG_INFO) << "AlienBAIState::think()";
+	//Log(LOG_INFO) << "AlienBAIState::think(), unitID = " << _unit->getId();
 
  	action->type = BA_RETHINK;
 	action->actor = _unit;
-	action->weapon = _unit->getMainHandWeapon();
+	action->weapon = _unit->getMainHandWeapon(); // kL_note: does not return grenades.
 
 	_attackAction->diff = (int)(_save->getBattleState()->getGame()->getSavedGame()->getDifficulty());
 	_attackAction->actor = _unit;
@@ -179,10 +180,13 @@ void AlienBAIState::think(BattleAction* action)
 	_melee = false;
 	_rifle = false;
 	_blaster = false;
+	_grenade = false;	// kL
 	
 	if (_traceAI)
 	{
-		Log(LOG_INFO) << "Unit has " << _visibleEnemies << "/" << _knownEnemies << " known enemies visible, " << _spottingEnemies << " of whom are spotting him. ";
+		Log(LOG_INFO) << "Unit has " << _visibleEnemies
+				<< "/" << _knownEnemies << " known enemies visible, "
+				<< _spottingEnemies << " of whom are spotting him. ";
 
 		std::string AIMode;
 		switch (_AIMode)
@@ -204,32 +208,45 @@ void AlienBAIState::think(BattleAction* action)
 		Log(LOG_INFO) << "Currently using " << AIMode << " behaviour";
 	}
 
+	//Log(LOG_INFO) << ". . pos 1";
 	if (action->weapon)
 	{
+		//Log(LOG_INFO) << ". . has MainHandWeapon.";
+
 		if (action->weapon->getRules()->getBattleType() == BT_MELEE)
 			_melee = true;
+		else if (action->weapon->getRules()->getBattleType() == BT_GRENADE)
+			_grenade = true;
 		else if (!action->weapon->getRules()->isWaypoint())
 			_rifle = true;
 		else
 			_blaster = true;
 	}
 
+	//Log(LOG_INFO) << ". . pos 2";
 	if (_spottingEnemies
 		&& !_escapeTUs)
 	{
 		setupEscape();
 	}
 
+	//Log(LOG_INFO) << ". . pos 3";
 	if (_knownEnemies
 		&& !_melee
 		&& !_ambushTUs)
 	{
+		//Log(LOG_INFO) << ". . . . setupAmbush()";
 		setupAmbush();
+		//Log(LOG_INFO) << ". . . . setupAmbush() DONE";
 	}
 
-	setupAttack();
+	//Log(LOG_INFO) << ". . . . setupAttack()";
+	setupAttack(); // <- crash here.
+	//Log(LOG_INFO) << ". . . . setupAttack() DONE, setupPatrol()";
 	setupPatrol();
+	//Log(LOG_INFO) << ". . . . setupPatrol() DONE";
 
+	//Log(LOG_INFO) << ". . pos 4";
 	if (_psiAction->type != BA_NONE
 		&& !_didPsi)
 	{
@@ -248,6 +265,7 @@ void AlienBAIState::think(BattleAction* action)
 
 	bool evaluate = false;
 
+	//Log(LOG_INFO) << ". . pos 5";
 	if (_AIMode == AI_ESCAPE)
 	{
 		if (!_spottingEnemies
@@ -276,6 +294,7 @@ void AlienBAIState::think(BattleAction* action)
 		}
 	}
 
+	//Log(LOG_INFO) << ". . pos 6";
 	if (_AIMode == AI_COMBAT)
 	{
 		if (_attackAction->type == BA_RETHINK)
@@ -297,6 +316,7 @@ void AlienBAIState::think(BattleAction* action)
 		evaluate = true;
 	}
 
+	//Log(LOG_INFO) << ". . pos 7";
 	if (evaluate)
 	{
 		evaluateAIMode();
@@ -324,9 +344,11 @@ void AlienBAIState::think(BattleAction* action)
 		}
 	}
 	
+	//Log(LOG_INFO) << ". . pos 8";
 	switch (_AIMode)
 	{
 		case AI_ESCAPE:
+			//Log(LOG_INFO) << ". . . . AI_ESCAPE";
 			action->type = _escapeAction->type;
 			action->target = _escapeAction->target;
 			action->finalAction = true;			// end this unit's turn.
@@ -336,10 +358,12 @@ void AlienBAIState::think(BattleAction* action)
 			_save->getBattleState()->getBattleGame()->setTUReserved(BA_NONE, false);
 		break;
 		case AI_PATROL:
+			//Log(LOG_INFO) << ". . . . AI_PATROL";
 			action->type = _patrolAction->type;
 			action->target = _patrolAction->target;
 		break;
 		case AI_COMBAT:
+			//Log(LOG_INFO) << ". . . . AI_COMBAT";
 			action->type = _attackAction->type;
 			action->target = _attackAction->target;
 			action->weapon = _attackAction->weapon; // this may have changed to a grenade.
@@ -367,6 +391,7 @@ void AlienBAIState::think(BattleAction* action)
 			}
 		break;
 		case AI_AMBUSH:
+			//Log(LOG_INFO) << ". . . . AI_AMBUSH";
 			action->type = _ambushAction->type;
 			action->target = _ambushAction->target;
 			action->finalFacing = _ambushAction->finalFacing;							// face where we think our target will appear.
@@ -378,6 +403,7 @@ void AlienBAIState::think(BattleAction* action)
 		break;
 	}
 
+	//Log(LOG_INFO) << ". . pos 9";
 	if (action->type == BA_WALK)
 	{
 		if (action->target != _unit->getPosition()) // if we're moving, we'll have to re-evaluate our escape/ambush position.
@@ -391,7 +417,7 @@ void AlienBAIState::think(BattleAction* action)
 		}
 	}
 
-	Log(LOG_INFO) << "AlienBAIState::think() EXIT";
+	//Log(LOG_INFO) << "AlienBAIState::think() EXIT";
 }
 
 /**
@@ -687,6 +713,8 @@ void AlienBAIState::setupAmbush()
  */
 void AlienBAIState::setupAttack()
 {
+	//Log(LOG_INFO) << "AlienBAIState::setupAttack()";
+
 	_attackAction->type = BA_RETHINK;
 
 	// if enemies are known to us but not necessarily visible, we can attack them with a blaster launcher or psi.
@@ -705,21 +733,33 @@ void AlienBAIState::setupAttack()
 	}
 	
 	// if we CAN see someone, that makes them a viable target for "regular" attacks.
+	//Log(LOG_INFO) << ". . selectNearestTarget()";
 	if (selectNearestTarget())
 	{
+		//Log(LOG_INFO) << ". . . . selectNearestTarget()";
+
 		if (_unit->getGrenadeFromBelt())
 		{
+			//Log(LOG_INFO) << ". . . . . . grenadeAction()";
 			grenadeAction();
+			//Log(LOG_INFO) << ". . . . . . grenadeAction() DONE";
 		}
+
 		if (_melee)
 		{
+			//Log(LOG_INFO) << ". . . . . . meleeAction()";
 			meleeAction();
+			//Log(LOG_INFO) << ". . . . . . meleeAction() DONE";
 		}
+
 		if (_rifle)
 		{
+			//Log(LOG_INFO) << ". . . . . . projectileAction()";
 			projectileAction();
+			//Log(LOG_INFO) << ". . . . . . projectileAction() DONE";
 		}
 	}
+	//Log(LOG_INFO) << ". . selectNearestTarget() DONE";
 
 	if (_attackAction->type != BA_RETHINK)
 	{
@@ -1407,11 +1447,12 @@ bool AlienBAIState::findFirePoint()
 		Tile *tile = _save->getTile(pos);
 		if (tile == 0)
 			continue;
+
 		int score = 0;
 		// i should really make a function for this
-		Position origin = (pos * Position(16,16,24)) + 
+		Position origin = (pos * Position(16, 16, 24)) + 
 			// 4 because -2 is eyes and 2 below that is the rifle (or at least that's my understanding)
-			Position(8,8, _unit->getHeight() + _unit->getFloatHeight() - tile->getTerrainLevel() - 4);
+			Position(8, 8, _unit->getHeight() + _unit->getFloatHeight() - tile->getTerrainLevel() - 4);
 
 		if (_save->getTileEngine()->canTargetUnit(&origin, _aggroTarget->getTile(), &target, _unit))
 		{
@@ -1423,15 +1464,18 @@ bool AlienBAIState::findFirePoint()
 			{
 				score = BASE_SYSTEMATIC_SUCCESS - getSpottingUnits(pos) * 10;
 				score += _unit->getTimeUnits() - _save->getPathfinding()->getTotalTUCost();
+
 				if (!_aggroTarget->checkViewSector(pos))
 				{
 					score += 10;
 				}
+
 				if (score > bestScore)
 				{
 					bestScore = score;
 					_attackAction->target = pos;
 					_attackAction->finalFacing = _save->getTileEngine()->getDirectionTo(pos, _aggroTarget->getPosition());
+
 					if (score > FAST_PASS_THRESHOLD)
 					{
 						break;
@@ -1474,42 +1518,59 @@ bool AlienBAIState::findFirePoint()
  * @param diff Game difficulty.
  * @return True if it is worthwile creating an explosion in the target position.
  */
-bool AlienBAIState::explosiveEfficacy(Position targetPos, BattleUnit *attackingUnit, int radius, int diff) const
+bool AlienBAIState::explosiveEfficacy(Position targetPos, BattleUnit* attackingUnit, int radius, int diff) const
 {
 	// i hate the player and i want him dead, but i don't want to piss him off.
-	if (_save->getTurn() < 3)
-		return false;
+//kL	if (_save->getTurn() < 3) return false;
 
 	if (diff == -1)
 	{
 		diff = (int)(_save->getBattleState()->getGame()->getSavedGame()->getDifficulty());
 	}
+
 	int distance = _save->getTileEngine()->distance(attackingUnit->getPosition(), targetPos);
 	int injurylevel = attackingUnit->getStats()->health - attackingUnit->getHealth();
 	int desperation = (100 - attackingUnit->getMorale()) / 10;
 	int enemiesAffected = 0;
+
 	// if we're below 1/3 health, let's assume things are dire, and increase desperation.
-	if (injurylevel > (attackingUnit->getStats()->health / 3) * 2)
+	if (injurylevel > attackingUnit->getStats()->health / 3 * 2)
 		desperation += 3;
 
-	int efficacy = desperation + enemiesAffected;
+	int efficacy = desperation + enemiesAffected; // kL_note: no enemiesAffected yet...
+
 	if (distance <= radius)
 		efficacy -= 3;
 
 	// we don't want to ruin our own base, but we do want to ruin XCom's day.
-	if (_save->getMissionType() == "STR_ALIEN_BASE_ASSAULT") efficacy -= 3;
-	else if (_save->getMissionType() == "STR_BASE_DEFENSE" || _save->getMissionType() == "STR_TERROR_MISSION") efficacy += 3;
-
-
-	BattleUnit *target = _save->getTile(targetPos)->getUnit();
-	for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
+	if (_save->getMissionType() == "STR_ALIEN_BASE_ASSAULT")
 	{
-		if (!(*i)->isOut() && (*i) != attackingUnit && (*i)->getPosition().z == targetPos.z && _save->getTileEngine()->distance((*i)->getPosition(), targetPos) <= radius)
+		efficacy -= 3;
+	}
+	else if (_save->getMissionType() == "STR_BASE_DEFENSE"
+		|| _save->getMissionType() == "STR_TERROR_MISSION")
+	{
+		efficacy += 3;
+	}
+
+	BattleUnit* target = _save->getTile(targetPos)->getUnit();
+
+	for (std::vector<BattleUnit* >::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
+	{
+		if (!(*i)->isOut()
+			&& *i != attackingUnit
+			&& (*i)->getPosition().z == targetPos.z
+			&& _save->getTileEngine()->distance((*i)->getPosition(), targetPos) <= radius)
 		{
-			if ((*i)->getFaction() == FACTION_PLAYER && (*i)->getTurnsExposed() > _intelligence)
+			if ((*i)->getFaction() == FACTION_PLAYER
+				&& (*i)->getTurnsExposed() > _intelligence)
+			{
 				continue;
-			Position voxelPosA = Position ((targetPos.x * 16)+8, (targetPos.y * 16)+8, (targetPos.z * 24)+12);
-			Position voxelPosB = Position (((*i)->getPosition().x * 16)+8, ((*i)->getPosition().y * 16)+8, ((*i)->getPosition().z * 24)+12);
+			}
+
+			Position voxelPosA = Position((targetPos.x * 16) + 8, (targetPos.y * 16) + 8, (targetPos.z * 24) + 12);
+			Position voxelPosB = Position(((*i)->getPosition().x * 16) + 8, ((*i)->getPosition().y * 16) + 8, ((*i)->getPosition().z * 24) + 12);
+
 			int collidesWith = _save->getTileEngine()->calculateLine(voxelPosA, voxelPosB, false, 0, target, true, false, *i);
 			if (collidesWith == 4)
 			{
@@ -1519,14 +1580,21 @@ bool AlienBAIState::explosiveEfficacy(Position targetPos, BattleUnit *attackingU
 					++efficacy;
 				}
 				else if ((*i)->getFaction() == _unit->getFaction())
+				{
 					efficacy -= 2; // friendlies count double
+				}
 			}
 		}
 	}
+
 	// spice things up a bit by adding a random number based on difficulty level
-	efficacy += RNG::generate(0, diff+1) - RNG::generate(0,5);
-	if (efficacy > 0 || enemiesAffected >= 10)
+	efficacy += RNG::generate(0, diff + 1) - RNG::generate(0, 5);
+//kL	if (efficacy > 0 || enemiesAffected >= 10)
+	if (efficacy > 0
+		|| enemiesAffected >= 3)	// kL
+	{
 		return true;
+	}
 
 	return false;
 }
@@ -1682,8 +1750,11 @@ void AlienBAIState::wayPointAction()
 void AlienBAIState::projectileAction()
 {
 	_attackAction->target = _aggroTarget->getPosition();
-	if (!_attackAction->weapon->getAmmoItem()->getRules()->getExplosionRadius() ||
-		explosiveEfficacy(_aggroTarget->getPosition(), _unit, _attackAction->weapon->getAmmoItem()->getRules()->getExplosionRadius(), _attackAction->diff))
+
+	if (!_attackAction->weapon->getAmmoItem()->getRules()->getExplosionRadius()
+		|| explosiveEfficacy(_aggroTarget->getPosition(), _unit,
+				_attackAction->weapon->getAmmoItem()->getRules()->getExplosionRadius(),
+				_attackAction->diff))
 	{
 		selectFireMethod();
 	}
@@ -1782,29 +1853,36 @@ void AlienBAIState::selectFireMethod()
 void AlienBAIState::grenadeAction()
 {
 	// do we have a grenade on our belt?
-	BattleItem *grenade = _unit->getGrenadeFromBelt();
+	BattleItem* grenade = _unit->getGrenadeFromBelt();
+
 	// distance must be more than X tiles, otherwise it's too dangerous to play with explosives
 	if (explosiveEfficacy(_aggroTarget->getPosition(), _unit, grenade->getRules()->getExplosionRadius(), _attackAction->diff))
 	{
-		int tu = 4; // 4TUs for picking up the grenade
-		if(_unit->getFaction() == FACTION_HOSTILE)
+		if (_unit->getFaction() == FACTION_HOSTILE)
 		{
+			int tu = 0;
+
+			if (!_grenade)
+			{
+				tu += 4; // 4TUs for picking up the grenade ( kL_note: unless it's already in-hand..... )
+			}
 			tu += _unit->getActionTUs(BA_PRIME, grenade);
 			tu += _unit->getActionTUs(BA_THROW, grenade);
-			// do we have enough TUs to prime and throw the grenade?
-			if (tu <= _unit->getStats()->tu)
+
+			if (tu <= _unit->getStats()->tu) // do we have enough TUs to prime and throw the grenade?
 			{
 				BattleAction action;
 				action.weapon = grenade;
 				action.target = _aggroTarget->getPosition();
 				action.type = BA_THROW;
 				action.actor = _unit;
-				// are we within range?
-				if (_save->getTileEngine()->validateThrow(&action))
+
+				if (_save->getTileEngine()->validateThrow(&action)) // are we within range?
 				{
 					_attackAction->weapon = grenade;
 					_attackAction->target = action.target;
 					_attackAction->type = BA_THROW;
+
 					_rifle = false;
 					_melee = false;
 				}

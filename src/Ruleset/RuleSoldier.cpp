@@ -34,11 +34,14 @@ RuleSoldier::RuleSoldier(const std::string& type)
 		_armor(""),
 		_standHeight(0),
 		_kneelHeight(0),
-		_floatHeight(0)
+		_floatHeight(0),
+		_minStats(),
+		_maxStats(),
+		_statCaps()
 {
-	_minStats = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-	_maxStats = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-	_statCaps = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+//kL	_minStats = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+//kL	_maxStats = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+//kL	_statCaps = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 }
 
 /**
