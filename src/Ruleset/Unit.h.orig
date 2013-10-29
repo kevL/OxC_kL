@@ -41,6 +41,7 @@ enum SpecialAbility
  */
 struct UnitStats
 {
+<<<<<<< HEAD
 	int tu,
 	stamina,
 	health,
@@ -83,6 +84,14 @@ struct UnitStats
 
 			return *this;
 		}
+=======
+	int tu, stamina, health, bravery, reactions, firing, throwing, strength, psiStrength, psiSkill, melee;
+public:
+	UnitStats() : tu(0), stamina(0), health(0), bravery(0), reactions(0), firing(0), throwing(0), strength(0), psiStrength(0), psiSkill(0), melee(0) {};
+	UnitStats(int tu_, int stamina_, int health_, int bravery_, int reactions_, int firing_, int throwing_, int strength_, int psiStrength_, int psiSkill_, int melee_) : tu(tu_), stamina(stamina_), health(health_), bravery(bravery_), reactions(reactions_), firing(firing_), throwing(throwing_), strength(strength_), psiStrength(psiStrength_), psiSkill(psiSkill_), melee(melee_) {};
+	UnitStats& operator+=(const UnitStats& stats) { tu+=stats.tu; stamina+=stats.stamina; health+=stats.health; bravery+=stats.bravery; reactions+=stats.reactions; firing+=stats.firing; throwing+=stats.throwing; strength+=stats.strength; psiStrength+=stats.psiStrength; psiSkill+=stats.psiSkill; melee+=stats.melee; return *this; }
+	UnitStats operator+(const UnitStats& stats) const { return UnitStats (tu + stats.tu, stamina + stats.stamina, health + stats.health, bravery + stats.bravery, reactions + stats.reactions, firing + stats.firing, throwing + stats.throwing, strength + stats.strength, psiStrength + stats.psiStrength, psiSkill + stats.psiSkill, melee + stats.melee); }
+>>>>>>> master
 };
 
 
@@ -104,11 +113,10 @@ private:
 	SpecialAbility _specab;
 	std::string _zombieUnit, _spawnUnit;
 	bool _livingWeapon;
-<<<<<<< HEAD
 
 	public:
 		/// Creates a blank unit ruleset.
-		Unit(const std::string& type, std::string race, std::string rank);
+		Unit(const std::string& type);
 		/// Cleans up the unit ruleset.
 		~Unit();
 
@@ -150,51 +158,6 @@ private:
 		int getAggroSound() const;
 		/// Checks if this unit has a built in weapon.
 		bool isLivingWeapon() const;
-=======
-public:
-	/// Creates a blank unit ruleset.
-	Unit(const std::string &type);
-	/// Cleans up the unit ruleset.
-	~Unit();
-	/// Loads the unit data from YAML.
-	void load(const YAML::Node& node);
-	/// Gets the unit's type.
-	std::string getType() const;
-	/// Gets the unit's stats.
-	UnitStats *getStats();
-	/// Gets the unit's height when standing.
-	int getStandHeight() const;
-	/// Gets the unit's height when kneeling.
-	int getKneelHeight() const;
-	/// Gets the unit's float elevation.
-	int getFloatHeight() const;
-	/// Gets the armor type.
-	std::string getArmor() const;
-	/// Gets the alien race type.
-	std::string getRace() const;
-	/// Gets the alien rank.
-	std::string getRank() const;
-	/// Gets the value - for score calculation.
-	int getValue() const;
-	/// Gets the death sound id.
-	int getDeathSound() const;
-	/// Gets the move sound id.
-	int getMoveSound() const;
-	/// Gets the intelligence. This is the number of turns AI remembers your troop positions.
-	int getIntelligence() const;
-	/// Gets the aggression. Determines the chance of revenge and taking cover.
-	int getAggression() const;
-	/// Gets the alien's special ability.
-	int getSpecialAbility() const;
-	/// Gets the unit's zombie unit.
-	std::string getZombieUnit() const;
-	/// Gets the unit's spawn unit.
-	std::string getSpawnUnit() const;
-	/// Gets the unit's war cry.
-	int getAggroSound() const;
-	/// Checks if this unit has a built in weapon.
-	bool isLivingWeapon() const;
->>>>>>> master
 };
 
 }
