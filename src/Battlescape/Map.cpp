@@ -322,9 +322,6 @@ void Map::drawTerrain(Surface *surface)
 	bool invalid;
 	int tileShade, wallShade, tileColor;
 
-	static int flip = 1;
-	int _animFrameNew;
-	
 	NumberText* _numWaypid = 0;
 
 	// if we got bullet, get the highest x and y tiles to draw it on
@@ -962,21 +959,11 @@ void Map::drawTerrain(Surface *surface)
 			offset.y += 4;
 		}
 
-		if (flip == 1) 
-		{
-			_animFrameNew = _animFrame;
-		}
-		else 
-		{
-			_animFrameNew = 7 - _animFrame;
-		}
-
-		if (_animFrameNew == 7) flip = -1;
-		if (_animFrameNew == 0) flip =  1;
-
 		if (this->getCursorType() != CT_NONE)
 		{
-			_arrow->blitNShade(surface, screenPosition.x + offset.x + (_spriteWidth / 2) - (_arrow->getWidth() / 2), screenPosition.y + offset.y - _arrow->getHeight() + _animFrameNew, 0);
+			_arrow->blitNShade(surface,
+					screenPosition.x + offset.x + (_spriteWidth / 2) - (_arrow->getWidth() / 2),
+					screenPosition.y + offset.y - _arrow->getHeight() + 4 * sin((_animFrame * 6.28) / 8), 0);
 		}
 	}
 

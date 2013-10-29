@@ -43,9 +43,9 @@ enum AIMode
  */
 class BattleAIState
 {
-	protected:
-		SavedBattleGame* _save;
-		BattleUnit* _unit;
+protected:
+	SavedBattleGame* _save;
+	BattleUnit* _unit;
 
 	public:
 		/// Creates a new BattleAIState linked to the game and a certain unit.
@@ -57,6 +57,7 @@ class BattleAIState
 		virtual void load(const YAML::Node& node);
 		/// Saves the AI state to YAML.
 		virtual YAML::Node save() const;
+
 		/// Enters the state.
 		virtual void enter();
 		/// Exits the state.

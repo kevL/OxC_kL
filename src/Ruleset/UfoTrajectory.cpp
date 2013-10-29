@@ -16,58 +16,77 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "UfoTrajectory.h"
 
-namespace {
-const char *altitudeString[] = {
+
+namespace
+{
+
+const char* altitudeString[] =
+{
 	"STR_GROUND",
 	"STR_VERY_LOW",
 	"STR_LOW_UC",
 	"STR_HIGH_UC",
 	"STR_VERY_HIGH"
 };
+
 }
+
 
 namespace YAML
 {
+
 	template<>
 	struct convert<OpenXcom::TrajectoryWaypoint>
 	{
 		static Node encode(const OpenXcom::TrajectoryWaypoint& rhs)
 		{
 			Node node;
+
 			node.push_back(rhs.zone);
 			node.push_back(rhs.altitude);
 			node.push_back(rhs.speed);
+
 			return node;
 		}
 
 		static bool decode(const Node& node, OpenXcom::TrajectoryWaypoint& rhs)
 		{
-			if(!node.IsSequence() || node.size() != 3)
+			if (!node.IsSequence() || node.size() != 3)
 				return false;
 
-			rhs.zone = node[0].as<int>();
-			rhs.altitude = node[1].as<int>();
-			rhs.speed = node[2].as<int>();
+			rhs.zone		= node[0].as<int>();
+			rhs.altitude	= node[1].as<int>();
+			rhs.speed		= node[2].as<int>();
+
 			return true;
 		}
 	};
+
 }
+
 
 namespace OpenXcom
 {
+
+UfoTrajectory::UfoTrajectory(const std::string& id)
+	:
+		_id(id)
+{
+}
 
 /**
  * Overwrites trajectory data with the data stored in @a node.
  * Only the fields contained in the node will be overwritten.
  * @param node The node containing the new values.
  */
-void UfoTrajectory::load(const YAML::Node &node)
+void UfoTrajectory::load(const YAML::Node& node)
 {
-	_id = node["id"].as<std::string>(_id);
-	_groundTimer = node["groundTimer"].as<unsigned>(_groundTimer);
-	_waypoints = node["waypoints"].as< std::vector<TrajectoryWaypoint> >(_waypoints);
+	_id				= node["id"].as<std::string>(_id);
+	_groundTimer	= node["groundTimer"].as<unsigned>(_groundTimer);
+	_waypoints		= node["waypoints"].as< std::vector<TrajectoryWaypoint> >(_waypoints);
 }
 
 /**

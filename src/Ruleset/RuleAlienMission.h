@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_RULEALIENMISSION_H
 #define OPENXCOM_RULEALIENMISSION_H
 
@@ -23,10 +24,12 @@
 #include <string>
 #include <yaml-cpp/yaml.h>
 
+
 namespace OpenXcom
 {
 
 class WeightedOptions;
+
 
 /**
  * @brief Information about a mission wave.
@@ -53,6 +56,7 @@ struct MissionWave
 	unsigned spawnTimer;
 };
 
+
 /**
  * Stores fixed information about a mission type.
  * It stores the mission waves and the distribution of the races that can
@@ -60,31 +64,44 @@ struct MissionWave
  */
 class RuleAlienMission
 {
-public:
-	/// Releases all resources held by the mission.
-	~RuleAlienMission();
-	/// Get sthe mission's type.
-	const std::string &getType() const { return _type; }
-	/// Gets a race based on the game time and the racial distribution.
-	const std::string &generateRace(const unsigned monthsPassed) const;
-	/// Loads alien mission data from YAML.
-	void load(const YAML::Node &node);
-	/// Gets the number of waves.
-	unsigned getWaveCount() const { return _waves.size(); }
-	/// Gets the full wave information.
-	const MissionWave &getWave(unsigned index) const { return _waves[index]; }
-	/// Gets the score for this mission.
-	int getPoints() const;
 private:
 	/// The mission's type ID.
 	std::string _type;
 	/// The race distribution over game time.
-	std::vector<std::pair<unsigned, WeightedOptions*> > _raceDistribution;
+	std::vector<std::pair<unsigned, WeightedOptions* > > _raceDistribution;
 	/// The mission's waves.
 	std::vector<MissionWave> _waves;
 	/// The mission's points
 	int _points;
 
+	public:
+		/// Creates an Alien Mission rule.
+		RuleAlienMission(const std::string& type);
+		/// Releases all resources held by the mission.
+		~RuleAlienMission();
+
+		/// Loads alien mission data from YAML.
+		void load(const YAML::Node& node);
+
+		/// Gets a race based on the game time and the racial distribution.
+		const std::string& generateRace(const unsigned monthsPassed) const;
+		/// Gets the mission's type.
+		const std::string& getType() const
+		{
+			return _type;
+		}
+		/// Gets the number of waves.
+		unsigned getWaveCount() const
+		{
+			return _waves.size();
+		}
+		/// Gets the full wave information.
+		const MissionWave& getWave(unsigned index) const
+		{
+			return _waves[index];
+		}
+		/// Gets the score for this mission.
+		int getPoints() const;
 };
 
 }

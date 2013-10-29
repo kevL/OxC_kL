@@ -30,8 +30,8 @@ namespace OpenXcom
  */
 BattleAIState::BattleAIState(SavedBattleGame* save, BattleUnit* unit)
 	:
-	_save(save),
-	_unit(unit)
+		_save(save),
+		_unit(unit)
 {
 }
 
