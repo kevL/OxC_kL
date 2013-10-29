@@ -58,12 +58,18 @@ namespace YAML
 namespace OpenXcom
 {
 
+<<<<<<< HEAD
 RuleAlienMission::RuleAlienMission(const std::string& type)
 	:
 		_type(type)
 {
 }
+=======
+RuleAlienMission::RuleAlienMission(const std::string &type) : _type(type)
+{
+}
 
+>>>>>>> master
 /**
  * Loads the mission data from a YAML node.
  * @param node YAML node.

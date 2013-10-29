@@ -107,7 +107,7 @@ private:
 
 	public:
 		/// Creates a blank unit ruleset.
-		Unit(const std::string& type, std::string race, std::string rank);
+		Unit(const std::string& type);
 		/// Cleans up the unit ruleset.
 		~Unit();
 

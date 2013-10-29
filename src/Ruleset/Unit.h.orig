@@ -41,24 +41,50 @@ enum SpecialAbility
  */
 struct UnitStats
 {
-<<<<<<< HEAD
 	int tu,
-		stamina,
-		health,
-		bravery,
-		reactions,
-		firing,
-		throwing,
-		strength,
-		psiStrength,
-		psiSkill,
-		melee;
-=======
-	int tu, stamina, health, bravery, reactions, firing, throwing, strength, psiStrength, psiSkill, melee;
-public:
-	UnitStats& operator+=(const UnitStats& stats) { tu+=stats.tu; stamina+=stats.stamina; health+=stats.health; bravery+=stats.bravery; reactions+=stats.reactions; firing+=stats.firing; throwing+=stats.throwing; strength+=stats.strength; psiStrength+=stats.psiStrength; psiSkill+=stats.psiSkill; melee+=stats.melee; return *this; }
->>>>>>> master
+	stamina,
+	health,
+	bravery,
+	reactions,
+	firing,
+	throwing,
+	strength,
+	psiStrength,
+	psiSkill,
+	melee;
+
+//	http://courses.cms.caltech.edu/cs11/material/cpp/donnie/cpp-ops.html
+/*  MyClass& MyClass::operator=(const MyClass &rhs) {
+
+    // Only do assignment if RHS is a different object from this.
+    if (this != &rhs) {
+      ... // Deallocate, allocate new space, copy values...
+    }
+
+    return *this;
+  } */
+	public:
+		UnitStats& operator+=(const UnitStats& stats)
+		{
+//			if (this != &stats)	// kL
+//			{	// kL
+			tu			+= stats.tu;
+			stamina		+= stats.stamina;
+			health		+= stats.health;
+			bravery		+= stats.bravery;
+			reactions	+= stats.reactions;
+			firing		+= stats.firing;
+			throwing	+= stats.throwing;
+			strength	+= stats.strength;
+			psiStrength	+= stats.psiStrength;
+			psiSkill	+= stats.psiSkill;
+			melee		+= stats.melee;
+//			}	// kL
+
+			return *this;
+		}
 };
+
 
 /**
  * Represents the static data for a unit that is generated on the battlescape, this includes: HWPs, aliens and civilians.
@@ -66,18 +92,19 @@ public:
  */
 class Unit
 {
-	private:
-		std::string _type;
-		std::string _race;
-		std::string _rank;
-		UnitStats _stats;
-		std::string _armor;
-		int _standHeight, _kneelHeight, _floatHeight;
-		int _value, _deathSound, _aggroSound, _moveSound;
-		int _intelligence, _aggression;
-		SpecialAbility _specab;
-		std::string _zombieUnit, _spawnUnit;
-		bool _livingWeapon;
+private:
+	std::string _type;
+	std::string _race;
+	std::string _rank;
+	UnitStats _stats;
+	std::string _armor;
+	int _standHeight, _kneelHeight, _floatHeight;
+	int _value, _deathSound, _aggroSound, _moveSound;
+	int _intelligence, _aggression;
+	SpecialAbility _specab;
+	std::string _zombieUnit, _spawnUnit;
+	bool _livingWeapon;
+<<<<<<< HEAD
 
 	public:
 		/// Creates a blank unit ruleset.
@@ -123,6 +150,51 @@ class Unit
 		int getAggroSound() const;
 		/// Checks if this unit has a built in weapon.
 		bool isLivingWeapon() const;
+=======
+public:
+	/// Creates a blank unit ruleset.
+	Unit(const std::string &type);
+	/// Cleans up the unit ruleset.
+	~Unit();
+	/// Loads the unit data from YAML.
+	void load(const YAML::Node& node);
+	/// Gets the unit's type.
+	std::string getType() const;
+	/// Gets the unit's stats.
+	UnitStats *getStats();
+	/// Gets the unit's height when standing.
+	int getStandHeight() const;
+	/// Gets the unit's height when kneeling.
+	int getKneelHeight() const;
+	/// Gets the unit's float elevation.
+	int getFloatHeight() const;
+	/// Gets the armor type.
+	std::string getArmor() const;
+	/// Gets the alien race type.
+	std::string getRace() const;
+	/// Gets the alien rank.
+	std::string getRank() const;
+	/// Gets the value - for score calculation.
+	int getValue() const;
+	/// Gets the death sound id.
+	int getDeathSound() const;
+	/// Gets the move sound id.
+	int getMoveSound() const;
+	/// Gets the intelligence. This is the number of turns AI remembers your troop positions.
+	int getIntelligence() const;
+	/// Gets the aggression. Determines the chance of revenge and taking cover.
+	int getAggression() const;
+	/// Gets the alien's special ability.
+	int getSpecialAbility() const;
+	/// Gets the unit's zombie unit.
+	std::string getZombieUnit() const;
+	/// Gets the unit's spawn unit.
+	std::string getSpawnUnit() const;
+	/// Gets the unit's war cry.
+	int getAggroSound() const;
+	/// Checks if this unit has a built in weapon.
+	bool isLivingWeapon() const;
+>>>>>>> master
 };
 
 }

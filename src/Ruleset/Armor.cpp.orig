@@ -47,11 +47,7 @@ Armor::Armor(const std::string& type, std::string spriteSheet, int drawingRoutin
 		_drawingRoutine(drawingRoutine),
 		_movementType(movementType),
 		_size(size),
-//kL		_weight(6)
-		_weight(0)		// kL
-=======
-Armor::Armor(const std::string &type, std::string spriteSheet, int drawingRoutine, MovementType movementType, int size) : _type(type), _spriteSheet(spriteSheet), _spriteInv(""), _corpseItem(""), _storeItem(""), _frontArmor(0), _sideArmor(0), _rearArmor(0), _underArmor(0), _drawingRoutine(drawingRoutine), _movementType(movementType), _size(size), _weight(0)
->>>>>>> master
+		_weight(0)
 {
 	for (int i = 0; i < DAMAGE_TYPES; i++)
 	{
@@ -69,6 +65,13 @@ Armor::Armor(const std::string &type, std::string spriteSheet, int drawingRoutin
 	_stats.strength		= 0;
 	_stats.tu			= 0;
 	_stats.throwing		= 0;
+=======
+Armor::Armor(const std::string &type) : _type(type), _spriteSheet(""), _spriteInv(""), _corpseItem(""), _storeItem(""), _frontArmor(0), _sideArmor(0), _rearArmor(0), _underArmor(0), _drawingRoutine(0), _movementType(MT_WALK), _size(1), _weight(0)
+{
+	_stats = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+	for (int i=0; i < DAMAGE_TYPES; i++)
+		_damageModifier[i] = 1.0f;
+>>>>>>> master
 }
 
 /**
