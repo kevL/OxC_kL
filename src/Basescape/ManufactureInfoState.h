@@ -16,13 +16,16 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_MANUFACTUREINFOSTATE_H
 #define OPENXCOM_MANUFACTUREINFOSTATE_H
 
 #include "../Engine/State.h"
 
+
 namespace OpenXcom
 {
+
 class Base;
 class Window;
 class Text;
@@ -36,67 +39,71 @@ class InteractiveSurface;
 /**
  * Screen that allows changing of Production settings (assigned engineer, units to build).
 */
-class ManufactureInfoState : public State
+class ManufactureInfoState
+	:
+		public State
 {
 private:
-	Base * _base;
-	RuleManufacture * _item;
-	Production * _production;
-	Window * _window;
-	ArrowButton * _btnUnitUp, * _btnUnitDown, * _btnEngineerUp, * _btnEngineerDown;
-	TextButton * _btnStop, * _btnOk;
-	Text * _txtTitle, * _txtAvailableEngineer, * _txtAvailableSpace, * _txtAllocatedEngineer, * _txtUnitToProduce, * _txtUnitUp, * _txtUnitDown, * _txtEngineerUp, * _txtEngineerDown, * _txtAllocated, * _txtTodo;
-	Timer * _timerMoreEngineer, * _timerMoreUnit, * _timerLessEngineer, * _timerLessUnit;
-	InteractiveSurface *_surface1, *_surface2;
+	Base* _base;
+	RuleManufacture* _item;
+	Production* _production;
+	Window* _window;
+	ArrowButton* _btnUnitUp, * _btnUnitDown, * _btnEngineerUp, * _btnEngineerDown;
+	TextButton* _btnStop, * _btnOk;
+	Text* _txtTitle, * _txtAvailableEngineer, * _txtAvailableSpace, * _txtAllocatedEngineer, * _txtUnitToProduce,
+					* _txtUnitUp, * _txtUnitDown, * _txtEngineerUp, * _txtEngineerDown, * _txtAllocated, * _txtTodo;
+	Timer* _timerMoreEngineer, * _timerMoreUnit, * _timerLessEngineer, * _timerLessUnit;
+	InteractiveSurface* _surface1, * _surface2;
+
 	int _changeValueByMouseWheel;
 	/// Handler for the Stop button.
-	void btnStopClick (Action * action);
+	void btnStopClick(Action* action);
 	/// Handler for the OK button.
-	void btnOkClick (Action * action);
+	void btnOkClick(Action* action);
 	/// Adds given number of engineers to the project if possible.
 	void moreEngineer(int change);
 	/// Handler for pressing the more engineer button.
-	void moreEngineerPress(Action * action);
+	void moreEngineerPress(Action* action);
 	/// Handler for releasing the more engineer button.
-	void moreEngineerRelease(Action * action);
+	void moreEngineerRelease(Action* action);
 	/// Handler for clicking the more engineer button.
-	void moreEngineerClick(Action * action);
+	void moreEngineerClick(Action* action);
 	/// Adds given number of units to produce to the project if possible.
 	void moreUnit(int change);
 	/// Handler for pressing the more unit button.
-	void moreUnitPress(Action * action);
+	void moreUnitPress(Action* action);
 	/// Handler for releasing the more unit button.
-	void moreUnitRelease(Action * action);
+	void moreUnitRelease(Action* action);
 	/// Handler for clicking the more unit button.
-	void moreUnitClick(Action * action);
+	void moreUnitClick(Action* action);
 	/// Removes the given number of engineers from the project if possible.
 	void lessEngineer(int change);
 	/// Handler for pressing the less engineer button.
-	void lessEngineerPress(Action * action);
+	void lessEngineerPress(Action* action);
 	/// Handler for releasing the less engineer button.
-	void lessEngineerRelease(Action * action);
+	void lessEngineerRelease(Action* action);
 	/// Handler for clicking the less engineer button.
-	void lessEngineerClick(Action * action);
+	void lessEngineerClick(Action* action);
 	/// Removes the given number of units to produce from the project if possible.
 	void lessUnit(int change);
 	/// Handler for pressing the less unit button.
-	void lessUnitPress(Action * action);
+	void lessUnitPress(Action* action);
 	/// Handler for releasing the less unit button.
-	void lessUnitRelease(Action * action);
+	void lessUnitRelease(Action* action);
 	/// Handler for clicking the less unit button.
-	void lessUnitClick(Action * action);
+	void lessUnitClick(Action* action);
 	/// Adds one engineer to the production (if possible).
 	void onMoreEngineer();
 	/// Removes one engineer from the production (if possible).
 	void onLessEngineer();
 	/// Handler for using the mouse wheel on the Engineer-part of the screen.
-	void handleWheelEngineer(Action *action);
+	void handleWheelEngineer(Action* action);
 	/// Increases count of number of units to make.
 	void onMoreUnit();
 	/// Decreases count of number of units to make (if possible).
 	void onLessUnit();
 	/// Handler for using the mouse wheel on the Unit-part of the screen.
-	void handleWheelUnit(Action *action);
+	void handleWheelUnit(Action* action);
 	/// Updates display of assigned/available engineers and workshop space.
 	void setAssignedEngineer();
 	/// Runs state functionality every cycle.
@@ -105,11 +112,16 @@ private:
 	void buildUi();
 	/// Helper to exit the State.
 	void exitState();
-public:
-	/// Creates the State (new production).
-	ManufactureInfoState (Game * game, Base * base, RuleManufacture * _item);
-	/// Creates the State (modify production).
-	ManufactureInfoState (Game * game, Base * base, Production * production);
+
+	public:
+		/// Creates the State (new production).
+		ManufactureInfoState(Game* game, Base* base, RuleManufacture* _item);
+		/// Creates the State (modify production).
+		ManufactureInfoState(Game* game, Base* base, Production* production);
+		/// kL. Cleans up the ManufactureInfo state.
+		~ManufactureInfoState();
 };
+
 }
+
 #endif

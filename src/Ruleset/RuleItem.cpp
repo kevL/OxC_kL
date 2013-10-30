@@ -443,7 +443,7 @@ int RuleItem::getTUMelee() const
  * Gets a list of compatible ammo.
  * @return Pointer to a list of compatible ammo.
  */
-std::vector<std::string> *RuleItem::getCompatibleAmmo()
+std::vector<std::string>* RuleItem::getCompatibleAmmo()
 {
 	return &_compatibleAmmo;
 }
@@ -486,6 +486,7 @@ int RuleItem::getInventoryHeight() const
 
 /**
  * Gets the item's ammo clip size.
+ * Melee items have clipsize(0), lasers have clipsize(-1)
  * @return The ammo clip size.
  */
 int RuleItem::getClipSize() const

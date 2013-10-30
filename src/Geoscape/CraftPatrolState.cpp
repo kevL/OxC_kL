@@ -53,8 +53,9 @@ CraftPatrolState::CraftPatrolState(Game* game, Craft* craft, Globe* globe)
 	_window			= new Window(this, 224, 168, 16, 16, POPUP_BOTH);
 
 //kL	_txtDestination	= new Text(224, 64, 16, 48);
-	_txtDestination	= new Text(224, 64, 16, 43);			// kL
-	_txtPatrolling	= new Text(224, 17, 16, 120);
+	_txtDestination	= new Text(224, 84, 16, 32);			// kL
+//kl	_txtPatrolling	= new Text(224, 17, 16, 120);
+	_txtPatrolling	= new Text(224, 17, 16, 119);			// kL
 
 //kL	_btnOk			= new TextButton(140, 12, 58, 144);
 //kL	_btnRedirect	= new TextButton(140, 12, 58, 160);

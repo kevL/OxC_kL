@@ -1344,29 +1344,35 @@ bool TileEngine::tryReactionSnap(BattleUnit* unit, BattleUnit* target)
 {
 	BattleAction action;
 
-	action.cameraPosition = _save->getBattleState()->getMap()->getCamera()->getMapOffset();
-	action.actor = unit;
+	if (unit->getFaction() == FACTION_PLAYER) // kL_begin:
+	{
+//		BattleItem* biActive = unit->getItem(unit->getActiveHand());
+		action.weapon = unit->getItem(unit->getActiveHand());
+	}
+	else // kL_end.
+		action.weapon = unit->getMainHandWeapon(); // kL_note: no longer returns grenades. good
 
-	action.weapon = unit->getMainHandWeapon();
 	if (!action.weapon)
 	{
 		return false;
 	}
 
 	action.type = BA_SNAPSHOT;									// reaction fire is ALWAYS snap shot. kL_note: not true in Orig. aliens did auto at times
-	if (action.weapon->getRules()->getBattleType() == BT_MELEE)	// unless we're a melee unit.
+	if (action.weapon->getRules()->getBattleType() == BT_MELEE)	// unless we're a melee unit. kL_note: in which case you won't react at all.
 	{
 		action.type = BA_HIT;
 	}
 
-	action.target = target->getPosition();
 	action.TU = unit->getActionTUs(action.type, action.weapon);
 
-	if (action.weapon->getAmmoItem()
-		&& action.weapon->getAmmoItem()->getAmmoQuantity()
+	// kL_note: Does this handle melee hits, as reaction shots? really ?
+	// what about all that 'ammo' stuff...? Conclusion: does not handle BA_HIT
+	if (action.weapon->getAmmoItem() // lasers & melee are their own ammo-items.
+		&& action.weapon->getAmmoItem()->getAmmoQuantity() // returns 255 for laser; 0 for melee
 		&& unit->getTimeUnits() >= action.TU)
 	{
 		action.targeting = true;
+		action.target = target->getPosition();
 
 		// kL begin (taken from immediately below):
 		// kL_note: lets remove this for now.....
@@ -1399,6 +1405,9 @@ bool TileEngine::tryReactionSnap(BattleUnit* unit, BattleUnit* target)
 		if (action.targeting && unit->spendTimeUnits(action.TU))
 		{
 			action.TU = 0;
+
+			action.cameraPosition = _save->getBattleState()->getMap()->getCamera()->getMapOffset();
+			action.actor = unit;
 
 			_save->getBattleState()->getBattleGame()->statePushBack(new UnitTurnBState(_save->getBattleState()->getBattleGame(), action));
 			_save->getBattleState()->getBattleGame()->statePushBack(new ProjectileFlyBState(_save->getBattleState()->getBattleGame(), action));

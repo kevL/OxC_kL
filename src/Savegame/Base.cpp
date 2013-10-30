@@ -1542,7 +1542,7 @@ void Base::setInBattlescape(bool inbattle)
  * Mark the base as a valid alien retaliation target.
  * @param mark Mark (if @c true) or unmark (if @c false) the base.
  */
-void Base::setRetaliationTarget(bool mark)
+void Base::setRetaliationStatus(bool mark)
 {
 	_retaliationTarget = mark;
 }
@@ -1551,7 +1551,7 @@ void Base::setRetaliationTarget(bool mark)
  * Get the base's retaliation status.
  * @return If the base is a valid target for alien retaliation.
  */
-bool Base::getRetaliationTarget() const
+bool Base::getRetaliationStatus() const
 {
 	return _retaliationTarget;
 }
@@ -1637,7 +1637,7 @@ unsigned int Base::getDetectionChance() const
 int Base::getGravShields() const
 {
 	int total = 0;
-	for (std::vector<BaseFacility*>::const_iterator i = _facilities.begin(); i != _facilities.end(); ++i)
+	for (std::vector<BaseFacility* >::const_iterator i = _facilities.begin(); i != _facilities.end(); ++i)
 	{
 		if ((*i)->getBuildTime() == 0
 			&& (*i)->getRules()->isGravShield())

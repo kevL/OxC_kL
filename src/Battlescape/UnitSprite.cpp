@@ -49,15 +49,15 @@ namespace OpenXcom
  */
 UnitSprite::UnitSprite(int width, int height, int x, int y)
 	:
-	Surface(width, height, x, y),
-	_unit(0),
-	_itemA(0),
-	_itemB(0),
-	_unitSurface(0),
-	_itemSurfaceA(0),
-	_itemSurfaceB(0),
-	_part(0),
-	_animationFrame(0)
+		Surface(width, height, x, y),
+		_unit(0),
+		_itemA(0),
+		_itemB(0),
+		_unitSurface(0),
+		_itemSurfaceA(0),
+		_itemSurfaceB(0),
+		_part(0),
+		_animationFrame(0)
 {
 	_hairBleach = Options::getBool("battleHairBleach");
 }
@@ -106,10 +106,10 @@ void UnitSprite::setBattleItem(BattleItem* item)
 {
 	if (item)
 	{
-		if(item->getSlot()->getId() == "STR_RIGHT_HAND")
+		if (item->getSlot()->getId() == "STR_RIGHT_HAND")
 			_itemA = item;
 
-		if(item->getSlot()->getId() == "STR_LEFT_HAND")
+		if (item->getSlot()->getId() == "STR_LEFT_HAND")
 			_itemB = item;
 	}
 
@@ -512,10 +512,10 @@ void UnitSprite::drawRoutine0()
 		itemB->setY(itemB->getY() + (22 - _unit->getStandHeight()));
 	}
 
-	Surface* newTorso		= new Surface(* torso);
-	Surface* newLegs		= new Surface(* legs);
-	Surface* newLeftArm		= new Surface(* leftArm);
-	Surface* newRightArm	= new Surface(* rightArm);
+	Surface* newTorso		= new Surface(*torso);
+	Surface* newLegs		= new Surface(*legs);
+	Surface* newLeftArm		= new Surface(*leftArm);
+	Surface* newRightArm	= new Surface(*rightArm);
 
 	if (_unit->getGeoscapeSoldier() && _hairBleach)
 	{
@@ -525,7 +525,7 @@ void UnitSprite::drawRoutine0()
 			Uint8 face_color = ColorFace::Face;
 			Uint8 hair_color = ColorFace::Hair;
 
-			switch(look)
+			switch (look)
 			{
 				case LOOK_BLONDE:
 				break;
@@ -1480,8 +1480,8 @@ void UnitSprite::drawRoutine8()
 	Surface *legs = 0;
 
 	// magic numbers
-	const int Body = 0, aim = 5, die = 6;
-	const int Pulsate[8] = { 0, 1, 2, 3, 4, 3, 2, 1 };
+	const int body = 0, aim = 5, die = 6;
+	const int pulsate[8] = { 0, 1, 2, 3, 4, 3, 2, 1 };
 
 /*kL	if (_unit->isOut())
 	{
@@ -1489,7 +1489,7 @@ void UnitSprite::drawRoutine8()
 		return;
 	} */
 
-	legs = _unitSurface->getFrame(Body + Pulsate[_animationFrame]);
+	legs = _unitSurface->getFrame(body + pulsate[_animationFrame]);
 	_redraw = true;
 
 	if (_unit->getStatus() == STATUS_COLLAPSING)
@@ -1514,10 +1514,10 @@ void UnitSprite::drawRoutine9()
 	}
 	// kL_end.
 
-	Surface *torso = 0;
+	Surface* torso = 0;
 
 	// magic numbers
-	const int Body = 0, die = 25;
+	const int body = 0, die = 25;
 
 /*kL	if (_unit->isOut())
 	{
@@ -1525,7 +1525,7 @@ void UnitSprite::drawRoutine9()
 		return;
 	} */
 
-	torso = _unitSurface->getFrame(Body + _animationFrame);
+	torso = _unitSurface->getFrame(body + _animationFrame);
 	_redraw = true;
 
 	if (_unit->getStatus() == STATUS_COLLAPSING)
@@ -1539,9 +1539,11 @@ void UnitSprite::drawRoutine9()
  */
 void UnitSprite::sortRifles()
 {
-	if (_itemA && _itemA->getRules()->isTwoHanded())
+//kL	if (_itemA && _itemA->getRules()->isTwoHanded())
+	if (_itemA)		// kL
 	{
-		if (_itemB && _itemB->getRules()->isTwoHanded())
+//kL		if (_itemB && _itemB->getRules()->isTwoHanded())
+		if (_itemB)		// kL
 		{
 			if (_unit->getActiveHand() == "STR_LEFT_HAND")
 			{
@@ -1555,7 +1557,8 @@ void UnitSprite::sortRifles()
 			_itemB = 0;
 		}
 	}
-	else if (_itemB && _itemB->getRules()->isTwoHanded())
+//kL	else if (_itemB && _itemB->getRules()->isTwoHanded())
+	else if (_itemB)	// kL
 	{
 		if (_unit->getStatus() != STATUS_AIMING)
 		{

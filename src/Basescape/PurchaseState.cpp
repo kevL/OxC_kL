@@ -326,10 +326,10 @@ PurchaseState::PurchaseState(Game* game, Base* base)
 		}
 	}
 
-	_timerInc = new Timer(250);
+	_timerInc = new Timer(275);
 	_timerInc->onTimer((StateHandler)& PurchaseState::increase);
 
-	_timerDec = new Timer(250);
+	_timerDec = new Timer(275);
 	_timerDec->onTimer((StateHandler)& PurchaseState::decrease);
 }
 

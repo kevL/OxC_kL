@@ -79,6 +79,7 @@ private:
 		YAML::Node save() const;
 		/// Saves the base's ID to YAML.
 		YAML::Node saveId() const;
+
 		/// Gets the base's name.
 		std::wstring getName(Language* lang = 0) const;
 		/// Sets the base's name.
@@ -190,9 +191,9 @@ private:
 		/// Gets if the craft is in battlescape.
 		bool isInBattlescape() const;
 		/// Mark this base for alien retaliation.
-		void setRetaliationTarget(bool mark = true);
+		void setRetaliationStatus(bool mark = true);
 		/// Gets the retaliation status of this base.
-		bool getRetaliationTarget() const;
+		bool getRetaliationStatus() const;
 		/// Get the detection chance for this base.
 //kL		unsigned getDetectionChance() const;
 		unsigned int getDetectionChance() const;

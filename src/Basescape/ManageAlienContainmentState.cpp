@@ -167,9 +167,9 @@ ManageAlienContainmentState::ManageAlienContainmentState(Game *game, Base *base)
 		}
 	}
 
-	_timerInc = new Timer(250);
+	_timerInc = new Timer(275);
 	_timerInc->onTimer((StateHandler)&ManageAlienContainmentState::increase);
-	_timerDec = new Timer(250);
+	_timerDec = new Timer(275);
 	_timerDec->onTimer((StateHandler)&ManageAlienContainmentState::decrease);
 }
 
@@ -261,8 +261,8 @@ void ManageAlienContainmentState::lstItemsLeftArrowClick(Action *action)
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
 		increaseByValue(1);
-		_timerInc->setInterval(250);
-		_timerDec->setInterval(250);
+		_timerInc->setInterval(275);
+		_timerDec->setInterval(275);
 	}
 }
 
@@ -299,8 +299,8 @@ void ManageAlienContainmentState::lstItemsRightArrowClick(Action *action)
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
 		decreaseByValue(1);
-		_timerInc->setInterval(250);
-		_timerDec->setInterval(250);
+		_timerInc->setInterval(275);
+		_timerDec->setInterval(275);
 	}
 }
 
@@ -350,8 +350,8 @@ int ManageAlienContainmentState::getQuantity()
  */
 void ManageAlienContainmentState::increase()
 {
-	_timerDec->setInterval(50);
-	_timerInc->setInterval(50);
+	_timerDec->setInterval(75);
+	_timerInc->setInterval(75);
 	increaseByValue(1);
 }
 
@@ -374,8 +374,8 @@ void ManageAlienContainmentState::increaseByValue(int change)
  */
 void ManageAlienContainmentState::decrease()
 {
-	_timerInc->setInterval(50);
-	_timerDec->setInterval(50);
+	_timerInc->setInterval(75);
+	_timerDec->setInterval(75);
 	decreaseByValue(1);
 }
 

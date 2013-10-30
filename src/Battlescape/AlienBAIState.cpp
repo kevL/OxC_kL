@@ -165,7 +165,8 @@ void AlienBAIState::think(BattleAction* action)
 
  	action->type = BA_RETHINK;
 	action->actor = _unit;
-	action->weapon = _unit->getMainHandWeapon(); // kL_note: does not return grenades.
+	action->weapon = _unit->getMainHandWeapon();	// kL_note: does not return grenades.
+													// *cough* Does return grenades. -> DID return grenades but i fixed it so it won't.
 
 	_attackAction->diff = (int)(_save->getBattleState()->getGame()->getSavedGame()->getDifficulty());
 	_attackAction->actor = _unit;
@@ -215,8 +216,9 @@ void AlienBAIState::think(BattleAction* action)
 
 		if (action->weapon->getRules()->getBattleType() == BT_MELEE)
 			_melee = true;
-		else if (action->weapon->getRules()->getBattleType() == BT_GRENADE)
-			_grenade = true;
+		else if (action->weapon->getRules()->getBattleType() == BT_GRENADE)		// kL
+			_grenade = true;													// kL, this is no longer useful since I fixed
+																				// getMainHandWeapon() not to return grenades.
 		else if (!action->weapon->getRules()->isWaypoint())
 			_rifle = true;
 		else
@@ -241,7 +243,7 @@ void AlienBAIState::think(BattleAction* action)
 	}
 
 	//Log(LOG_INFO) << ". . . . setupAttack()";
-	setupAttack(); // <- crash here.
+	setupAttack(); // <- crash *was* here.
 	//Log(LOG_INFO) << ". . . . setupAttack() DONE, setupPatrol()";
 	setupPatrol();
 	//Log(LOG_INFO) << ". . . . setupPatrol() DONE";
@@ -446,22 +448,27 @@ void AlienBAIState::setupPatrol()
 {
 	Node* node;
 	_patrolAction->TU = 0;
-	if (_toNode != 0 && _unit->getPosition() == _toNode->getPosition())
+
+	if (_toNode != 0
+		&& _unit->getPosition() == _toNode->getPosition())
 	{
 		if (_traceAI)
 		{
 			Log(LOG_INFO) << "Patrol destination reached!";
 		}
-		// destination reached
-		// head off to next patrol node
+
+		// destination reached; head off to next patrol node
 		_fromNode = _toNode;
 		_toNode->freeNode();
 		_toNode = 0;
+
 		// take a peek through window before walking to the next node
 		int dir = _save->getTileEngine()->faceWindow(_unit->getPosition());
-		if (dir != -1 && dir != _unit->getDirection())
+		if (dir != -1
+			&& dir != _unit->getDirection())
 		{
 			_unit->lookAt(dir);
+
 			while (_unit->getStatus() == STATUS_TURNING)
 			{
 				_unit->turn();
@@ -487,19 +494,28 @@ void AlienBAIState::setupPatrol()
 			}
 		}
 	}
-	int triesLeft = 5;
 
+	int triesLeft = 5;
 	while (_toNode == 0 && triesLeft)
 	{
 		triesLeft--;
+
 		// look for a new node to walk towards
 		bool scout = true;
+
 		if (_save->getMissionType() != "STR_BASE_DEFENSE")
 		{
 			// after turn 20 or if the morale is low, everyone moves out the UFO and scout
+
+			// kL_note: That, above is wrong. Orig behavior depends on "aggression" setting;
+			// determines whether aliens come out of UFO to scout/search.
+
 			// also anyone standing in fire should also probably move
-			if (_save->isCheating() || !_fromNode || _fromNode->getRank() == 0 || 
-				(_save->getTile(_unit->getPosition()) && _save->getTile(_unit->getPosition())->getFire()))
+			if (_save->isCheating()
+				|| !_fromNode
+				|| _fromNode->getRank() == 0
+				||  (_save->getTile(_unit->getPosition())
+					&& _save->getTile(_unit->getPosition())->getFire()))
 			{
 				scout = true;
 			}
@@ -513,24 +529,30 @@ void AlienBAIState::setupPatrol()
 		else if (_unit->getArmor()->getSize() == 1)
 		{
 			// can i shoot an object?
-			if (_fromNode->isTarget() && _unit->getMainHandWeapon() && _unit->getMainHandWeapon()->getAmmoItem()->getRules()->getDamageType() != DT_HE)
+			if (_fromNode->isTarget()
+				&& _unit->getMainHandWeapon()
+				&& _unit->getMainHandWeapon()->getAmmoItem()->getRules()->getDamageType() != DT_HE)
 			{
 				// scan this room for objects to destroy
-				int x = (_unit->getPosition().x/10)*10;
-				int y = (_unit->getPosition().y/10)*10;
-				for (int i = x; i < x+9; i++)
-				for (int j = y; j < y+9; j++)
+				int x = (_unit->getPosition().x / 10) * 10;
+				int y = (_unit->getPosition().y / 10) * 10;
+				for (int i = x; i < x + 9; i++)
 				{
-					MapData *md = _save->getTile(Position(i, j, 1))->getMapData(MapData::O_OBJECT);
-					if (md && md->getDieMCD() && md->getArmor() < 60 )
+					for (int j = y; j < y + 9; j++)
 					{
-						_patrolAction->actor = _unit;
-						_patrolAction->target = Position(i, j, 1);
-						_patrolAction->weapon = _patrolAction->actor->getMainHandWeapon();
-						_patrolAction->type = BA_SNAPSHOT;
-						_patrolAction->TU = _patrolAction->actor->getActionTUs(_patrolAction->type, _patrolAction->weapon);
+						MapData* md = _save->getTile(Position(i, j, 1))->getMapData(MapData::O_OBJECT);
+						if (md
+							&& md->getDieMCD()
+							&& md->getArmor() < 60)
+						{
+							_patrolAction->actor = _unit;
+							_patrolAction->target = Position(i, j, 1);
+							_patrolAction->weapon = _patrolAction->actor->getMainHandWeapon();
+							_patrolAction->type = BA_SNAPSHOT;
+							_patrolAction->TU = _patrolAction->actor->getActionTUs(_patrolAction->type, _patrolAction->weapon);
 
-						return;
+							return;
+						}
 					}
 				}
 			}
@@ -538,13 +560,15 @@ void AlienBAIState::setupPatrol()
 			{
 				// find closest high value target which is not already allocated
 				int closest = 1000000;
-				for (std::vector<Node*>::iterator i = _save->getNodes()->begin(); i != _save->getNodes()->end(); ++i)
+				for (std::vector<Node* >::iterator i = _save->getNodes()->begin(); i != _save->getNodes()->end(); ++i)
 				{
 					if ((*i)->isTarget() && !(*i)->isAllocated())
 					{
 						node = *i;
 						int d = _save->getTileEngine()->distanceSq(_unit->getPosition(), node->getPosition());
-						if (!_toNode ||  (d < closest && node != _fromNode))
+						if (!_toNode
+							|| (d < closest
+								&& node != _fromNode))
 						{
 							_toNode = node;
 							closest = d;
@@ -566,10 +590,12 @@ void AlienBAIState::setupPatrol()
 		if (_toNode != 0)
 		{
 			_save->getPathfinding()->calculate(_unit, _toNode->getPosition());
+
 			if (_save->getPathfinding()->getStartDirection() == -1)
 			{
 				_toNode = 0;
 			}
+
 			_save->getPathfinding()->abortPath();
 		}
 	}
@@ -577,6 +603,7 @@ void AlienBAIState::setupPatrol()
 	if (_toNode != 0)
 	{
 		_toNode->allocateNode();
+
 		_patrolAction->actor = _unit;
 		_patrolAction->type = BA_WALK;
 		_patrolAction->target = _toNode->getPosition();
@@ -1058,11 +1085,13 @@ int AlienBAIState::getSpottingUnits(Position pos) const
 int AlienBAIState::selectNearestTarget()
 {
 	int tally = 0;
-	_closestDist= 100;
+
+	_closestDist = 100;
 	_aggroTarget = 0;
 	Position origin = _save->getTileEngine()->getSightOriginVoxel(_unit);
 	origin.z -= 2;
 	Position target;
+
 	for (std::vector<BattleUnit*>::const_iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 	{
 		if (!(*i)->isOut() && (*i)->getFaction() != FACTION_HOSTILE && _intelligence >= (*i)->getTurnsExposed())
@@ -1070,6 +1099,7 @@ int AlienBAIState::selectNearestTarget()
 			if (_save->getTileEngine()->visible(_unit, (*i)->getTile()))
 			{
 				tally++;
+
 				int dist = _save->getTileEngine()->distance(_unit->getPosition(), (*i)->getPosition());
 				if (dist < _closestDist)
 				{
@@ -1086,6 +1116,7 @@ int AlienBAIState::selectNearestTarget()
 							validTarget = _save->getTileEngine()->validMeleeRange(_attackAction->target, dir, _unit, *i);
 						}
 					}
+
 					if (validTarget)
 					{
 						_closestDist = dist;
@@ -1095,6 +1126,7 @@ int AlienBAIState::selectNearestTarget()
 			}
 		}
 	}
+
 	if (_aggroTarget)
 	{
 		return tally;
@@ -1145,9 +1177,11 @@ bool AlienBAIState::selectRandomTarget()
 
 	for (std::vector<BattleUnit*>::const_iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 	{
-		if (!(*i)->isOut() && (*i)->getFaction() != FACTION_HOSTILE && _intelligence >= (*i)->getTurnsExposed())
+		if (!(*i)->isOut()
+			&& (*i)->getFaction() != FACTION_HOSTILE
+			&& _intelligence >= (*i)->getTurnsExposed())
 		{
-			int dist = RNG::generate(0,20) - _save->getTileEngine()->distance(_unit->getPosition(), (*i)->getPosition());
+			int dist = RNG::generate(0, 20) - _save->getTileEngine()->distance(_unit->getPosition(), (*i)->getPosition());
 			if (dist > farthest)
 			{
 				farthest = dist;
@@ -1165,12 +1199,13 @@ bool AlienBAIState::selectRandomTarget()
  * @param maxTUs Maximum time units the path to the target can cost.
  * @return True if a point was found.
  */
-bool AlienBAIState::selectPointNearTarget(BattleUnit *target, int maxTUs) const
+bool AlienBAIState::selectPointNearTarget(BattleUnit* target, int maxTUs) const
 {
 	int size = _unit->getArmor()->getSize();
 	int targetsize = target->getArmor()->getSize();
 	bool returnValue = false;
 	int distance = 1000;
+
 	for (int x = -size; x <= targetsize; ++x)
 	{
 		for (int y = -size; y <= targetsize; ++y)
@@ -1853,6 +1888,8 @@ void AlienBAIState::selectFireMethod()
 void AlienBAIState::grenadeAction()
 {
 	// do we have a grenade on our belt?
+	// kL_note: this is already checked in setupAttack()
+	// Could use it to determine if grenade is already inHand though! ( see _grenade var.)
 	BattleItem* grenade = _unit->getGrenadeFromBelt();
 
 	// distance must be more than X tiles, otherwise it's too dangerous to play with explosives

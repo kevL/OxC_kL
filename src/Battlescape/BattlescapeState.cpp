@@ -1077,10 +1077,10 @@ void BattlescapeState::btnStatsClick(Action* action)
 		{
 			int posX = action->getXMouse();
 			int posY = action->getYMouse();
-			if ((posX < (Camera::SCROLL_BORDER * action->getXScale()) && posX > 0)
-				|| (posX > (_map->getWidth() - Camera::SCROLL_BORDER) * action->getXScale())
+			if ((posX < Camera::SCROLL_BORDER * action->getXScale() && posX > 0)
+				|| posX > (_map->getWidth() - Camera::SCROLL_BORDER) * action->getXScale()
 				|| (posY < (Camera::SCROLL_BORDER * action->getYScale()) && posY > 0)
-				|| (posY > (_map->getHeight() - Camera::SCROLL_BORDER) * action->getYScale()))
+				|| posY > (_map->getHeight() - Camera::SCROLL_BORDER) * action->getYScale())
 			{
 				// To avoid handling this event as a click
 				// on the stats button when the mouse is on the scroll-border
@@ -1116,7 +1116,7 @@ void BattlescapeState::btnLeftHandItemClick(Action* )
 		_map->cacheUnits();
 		_map->draw();
 
-		BattleItem *leftHandItem = _save->getSelectedUnit()->getItem("STR_LEFT_HAND");
+		BattleItem* leftHandItem = _save->getSelectedUnit()->getItem("STR_LEFT_HAND");
 		handleItemClick(leftHandItem);
 	}
 }
@@ -1128,13 +1128,14 @@ void BattlescapeState::btnLeftHandItemClick(Action* )
 void BattlescapeState::btnRightHandItemClick(Action* )
 {
 	if (_battleGame->getCurrentAction()->type != BA_NONE) return;
+
 	if (playableUnitSelected())
 	{
 		_save->getSelectedUnit()->setActiveHand("STR_RIGHT_HAND");
 		_map->cacheUnits();
 		_map->draw();
 
-		BattleItem *rightHandItem = _save->getSelectedUnit()->getItem("STR_RIGHT_HAND");
+		BattleItem* rightHandItem = _save->getSelectedUnit()->getItem("STR_RIGHT_HAND");
 		handleItemClick(rightHandItem);
 	}
 }

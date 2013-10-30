@@ -74,6 +74,7 @@ BattleItem::BattleItem(RuleItem* rules, int* id)
 		&& _rules->getCompatibleAmmo()->empty())
 	{
 		setAmmoQuantity(_rules->getClipSize());
+
 		_ammoItem = this;
 	}
 }
@@ -175,7 +176,7 @@ void BattleItem::setExplodeTurn(int turn)
  */
 int BattleItem::getAmmoQuantity() const
 {
-	if (_rules->getClipSize() == -1)
+	if (_rules->getClipSize() == -1) // is Laser
 	{
 		return 255;
 	}
@@ -367,8 +368,8 @@ bool BattleItem::needsAmmo() const
 
 /**
  * Sets the item's ammo item.
- * @param item The ammo item.
- * @return -2 when ammo doesn't fit, or -1 when weapon already contains ammo.
+ * @param item, The ammo item.
+ * @return, -2 when ammo doesn't fit, or -1 when weapon already contains ammo.
  */
 int BattleItem::setAmmoItem(BattleItem* item)
 {

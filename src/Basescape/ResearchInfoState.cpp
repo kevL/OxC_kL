@@ -80,6 +80,8 @@ ResearchInfoState::ResearchInfoState(Game* game, Base* base, ResearchProject* pr
  */
 ResearchInfoState::~ResearchInfoState() // not implemented yet.
 {
+	delete _timerMore;
+	delete _timerLess;
 } // kL_end.
 
 /**
@@ -185,9 +187,9 @@ void ResearchInfoState::buildUi()
 	_btnLess->onMouseRelease((ActionHandler)& ResearchInfoState::lessRelease);
 	_btnLess->onMouseClick((ActionHandler)& ResearchInfoState::lessClick, 0);
 
-	_timerMore = new Timer(250); // kL_note: SHOULD THESE TIMERS BE delete'd
+	_timerMore = new Timer(275); // kL_note: SHOULD THESE TIMERS BE delete'd
 	_timerMore->onTimer((StateHandler)& ResearchInfoState::more);
-	_timerLess = new Timer(250); // kL_note: SHOULD THESE TIMERS BE delete'd
+	_timerLess = new Timer(275); // kL_note: SHOULD THESE TIMERS BE delete'd
 	_timerLess->onTimer((StateHandler)& ResearchInfoState::less);
 
 	_btnOk->setColor(Palette::blockOffset(13)+10);
@@ -280,7 +282,7 @@ void ResearchInfoState::moreRelease(Action* action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		_timerMore->setInterval(250);
+		_timerMore->setInterval(275);
 		_timerMore->stop();
 	}
 }
@@ -316,7 +318,7 @@ void ResearchInfoState::lessRelease(Action* action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		_timerLess->setInterval(250);
+		_timerLess->setInterval(275);
 		_timerLess->stop();
 	}
 }
@@ -339,7 +341,7 @@ void ResearchInfoState::lessClick(Action* action)
  */
 void ResearchInfoState::more()
 {
-	_timerMore->setInterval(50);
+	_timerMore->setInterval(75);
 	moreByValue(1);
 }
 
@@ -367,7 +369,7 @@ void ResearchInfoState::moreByValue(int change)
  */
 void ResearchInfoState::less()
 {
-	_timerLess->setInterval(50);
+	_timerLess->setInterval(75);
 	lessByValue(1);
 }
 

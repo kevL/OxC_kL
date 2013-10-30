@@ -44,7 +44,12 @@ namespace OpenXcom
  * @param base Pointer to the base to get info from.
  * @param item The RuleManufacture to produce.
  */
-ManufactureInfoState::ManufactureInfoState (Game * game, Base * base, RuleManufacture * item) : State (game), _base(base), _item(item), _production(0)
+ManufactureInfoState::ManufactureInfoState(Game* game, Base* base, RuleManufacture* item)
+	:
+		State(game),
+		_base(base),
+		_item(item),
+		_production(0)
 {
 	buildUi();
 }
@@ -55,10 +60,26 @@ ManufactureInfoState::ManufactureInfoState (Game * game, Base * base, RuleManufa
  * @param base Pointer to the base to get info from.
  * @param production The Production to modify.
  */
-ManufactureInfoState::ManufactureInfoState (Game * game, Base * base, Production * production) : State (game), _base(base), _item(0), _production(production)
+ManufactureInfoState::ManufactureInfoState(Game* game, Base* base, Production* production)
+	:
+		State(game),
+		_base(base),
+		_item(0),
+		_production(production)
 {
 	buildUi();
 }
+
+/**
+ * kL. Cleans up the ManufactureInfo state.
+ */
+ManufactureInfoState::~ManufactureInfoState() // not implemented yet.
+{
+	delete _timerMoreEngineer;
+	delete _timerLessEngineer;
+	delete _timerMoreUnit;
+	delete _timerLessUnit;
+} // kL_end.
 
 /**
  * Builds screen User Interface.
@@ -195,17 +216,17 @@ void ManufactureInfoState::buildUi()
 	_btnStop->setColor(Palette::blockOffset(15)+6);
 	_btnStop->setText(tr("STR_STOP_PRODUCTION"));
 	_btnStop->onMouseClick((ActionHandler)&ManufactureInfoState::btnStopClick);
-	if(!_production)
+	if (!_production)
 	{
 		_production = new Production (_item, 0);
 		_base->addProduction(_production);
 	}
 	setAssignedEngineer();
 
-	_timerMoreEngineer = new Timer(250);
-	_timerLessEngineer = new Timer(250);
-	_timerMoreUnit = new Timer(250);
-	_timerLessUnit = new Timer(250);
+	_timerMoreEngineer = new Timer(275);
+	_timerLessEngineer = new Timer(275);
+	_timerMoreUnit = new Timer(275);
+	_timerLessUnit = new Timer(275);
 	_timerMoreEngineer->onTimer((StateHandler)&ManufactureInfoState::onMoreEngineer);
 	_timerLessEngineer->onTimer((StateHandler)&ManufactureInfoState::onLessEngineer);
 	_timerMoreUnit->onTimer((StateHandler)&ManufactureInfoState::onMoreUnit);
@@ -216,7 +237,7 @@ void ManufactureInfoState::buildUi()
  * Stops this Production. Returns to the previous screen.
  * @param action A pointer to an Action.
  */
-void ManufactureInfoState::btnStopClick (Action *)
+void ManufactureInfoState::btnStopClick(Action *)
 {
 	_base->removeProduction(_production);
 	exitState();
@@ -226,7 +247,7 @@ void ManufactureInfoState::btnStopClick (Action *)
  * Starts this Production (if new). Returns to the previous screen.
  * @param action A pointer to an Action.
  */
-void ManufactureInfoState::btnOkClick (Action *)
+void ManufactureInfoState::btnOkClick(Action *)
 {
 	if(_item)
 	{
@@ -300,7 +321,7 @@ void ManufactureInfoState::moreEngineerRelease(Action * action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		_timerMoreEngineer->setInterval(250);
+		_timerMoreEngineer->setInterval(275);
 		_timerMoreEngineer->stop();
 	}
 }
@@ -349,7 +370,7 @@ void ManufactureInfoState::lessEngineerRelease(Action * action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		_timerLessEngineer->setInterval(250);
+		_timerLessEngineer->setInterval(275);
 		_timerLessEngineer->stop();
 	}
 }
@@ -405,7 +426,7 @@ void ManufactureInfoState::moreUnitRelease(Action * action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		_timerMoreUnit->setInterval(250);
+		_timerMoreUnit->setInterval(275);
 		_timerMoreUnit->stop();
 	}
 }
@@ -453,7 +474,7 @@ void ManufactureInfoState::lessUnitRelease(Action * action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		_timerLessUnit->setInterval(250);
+		_timerLessUnit->setInterval(275);
 		_timerLessUnit->stop();
 	}
 }
@@ -473,7 +494,7 @@ void ManufactureInfoState::lessUnitClick(Action * action)
  */
 void ManufactureInfoState::onMoreEngineer()
 {
-	_timerMoreEngineer->setInterval(50);
+	_timerMoreEngineer->setInterval(75);
 	moreEngineer(1);
 }
 
@@ -482,7 +503,7 @@ void ManufactureInfoState::onMoreEngineer()
  */
 void ManufactureInfoState::onLessEngineer()
 {
-	_timerLessEngineer->setInterval(50);
+	_timerLessEngineer->setInterval(75);
 	lessEngineer(1);
 }
 
@@ -501,7 +522,7 @@ void ManufactureInfoState::handleWheelEngineer(Action *action)
  */
 void ManufactureInfoState::onMoreUnit()
 {
-	_timerMoreUnit->setInterval(50);
+	_timerMoreUnit->setInterval(75);
 	moreUnit(1);
 }
 
@@ -510,7 +531,7 @@ void ManufactureInfoState::onMoreUnit()
  */
 void ManufactureInfoState::onLessUnit()
 {
-	_timerLessUnit->setInterval(50);
+	_timerLessUnit->setInterval(75);
 	lessUnit(1);
 }
 
@@ -530,9 +551,11 @@ void ManufactureInfoState::handleWheelUnit(Action *action)
 void ManufactureInfoState::think()
 {
 	State::think();
+
 	_timerMoreEngineer->think(this, 0);
 	_timerLessEngineer->think(this, 0);
 	_timerMoreUnit->think(this, 0);
 	_timerLessUnit->think(this, 0);
 }
+
 }

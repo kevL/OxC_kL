@@ -62,8 +62,6 @@ private:
 		/// Creates the ResearchProject state.
 		ResearchInfoState(Game* game, Base* base, RuleResearch* rule);
 		ResearchInfoState(Game* game, Base* base, ResearchProject* project);
-
-		// kL_note: HOW COME NO DESTRUCTOR
 		/// kL_begin: Cleans up the ResearchInfo state.
 		~ResearchInfoState(); // not implemented yet.
 		// kL_end.

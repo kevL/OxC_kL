@@ -73,7 +73,6 @@ Armor::Armor(const std::string& type)
  */
 Armor::~Armor()
 {
-
 }
 
 /**

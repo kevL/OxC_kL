@@ -223,9 +223,9 @@ SellState::SellState(Game* game, Base* base)
 		}
 	}
 
-	_timerInc = new Timer(250);
+	_timerInc = new Timer(275);
 	_timerInc->onTimer((StateHandler)&SellState::increase);
-	_timerDec = new Timer(250);
+	_timerDec = new Timer(275);
 	_timerDec->onTimer((StateHandler)&SellState::decrease);
 }
 
@@ -408,8 +408,8 @@ void SellState::lstItemsLeftArrowClick(Action* action)
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
 		increaseByValue(1);
-		_timerInc->setInterval(250);
-		_timerDec->setInterval(250);
+		_timerInc->setInterval(275);
+		_timerDec->setInterval(275);
 	}
 }
 
@@ -453,8 +453,8 @@ void SellState::lstItemsRightArrowClick(Action* action)
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
 		decreaseByValue(1);
-		_timerInc->setInterval(250);
-		_timerDec->setInterval(250);
+		_timerInc->setInterval(275);
+		_timerDec->setInterval(275);
 	}
 }
 
@@ -550,8 +550,8 @@ int SellState::getQuantity()
  */
 void SellState::increase()
 {
-	_timerDec->setInterval(50);
-	_timerInc->setInterval(50);
+	_timerDec->setInterval(75);
+	_timerInc->setInterval(75);
 	increaseByValue(1);
 }
 
@@ -576,8 +576,8 @@ void SellState::increaseByValue(int change)
  */
 void SellState::decrease()
 {
-	_timerInc->setInterval(50);
-	_timerDec->setInterval(50);
+	_timerInc->setInterval(75);
+	_timerDec->setInterval(75);
 	decreaseByValue(1);
 }
 

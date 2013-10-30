@@ -316,7 +316,7 @@ private:
 		/// Gets the item in the specified slot.
 		BattleItem* getItem(RuleInventory* slot, int x = 0, int y = 0) const;
 		/// Gets the item in the specified slot.
-		BattleItem* getItem(const std::string &slot, int x = 0, int y = 0) const;
+		BattleItem* getItem(const std::string& slot, int x = 0, int y = 0) const;
 		/// Gets the item in the main hand.
 		BattleItem* getMainHandWeapon(bool quickest = true) const;
 		/// Gets a grenade from the belt, if any.
@@ -445,6 +445,7 @@ private:
 
 		/// scratch value for AI's left hand to tell its right hand what's up...
 		bool _hidingForTurn; // don't zone out and start patrolling again
+		///
 		Position lastCover;
 		/// get the vector of units we've seen this turn.
 		std::vector<BattleUnit* > getUnitsSpottedThisTurn();

@@ -1193,7 +1193,7 @@ int BattleUnit::getStunlevel() const
  * Raises a unit's stun level sufficiently so that the unit is ready to become unconscious.
  * Used when another unit falls on top of this unit.
  * Zombified units first convert to their spawn unit.
- * @param battle Pointer to the battlescape game.
+ * @param battle, Pointer to the battlescape game.
  */
 void BattleUnit::knockOut(BattlescapeGame *battle)
 {
@@ -1204,7 +1204,7 @@ void BattleUnit::knockOut(BattlescapeGame *battle)
 	else if (_spawnUnit != "")
 	{
 		setSpecialAbility(SPECAB_NONE);
-		BattleUnit *newUnit = battle->convertUnit(this, _spawnUnit);
+		BattleUnit* newUnit = battle->convertUnit(this, _spawnUnit);
 		newUnit->knockOut(battle);
 	}
 	else
@@ -1901,45 +1901,81 @@ BattleItem* BattleUnit::getItem(const std::string& slot, int x, int y) const
 
 /**
  * Get the "main hand weapon" from the unit.
- * @param quickest Wether to get the quickest weapon, default true
- * @return Pointer to item.
+ * @param quickest, Whether to get the quickest weapon, default true
+ * @return, Pointer to BattleItem.
  */
 BattleItem* BattleUnit::getMainHandWeapon(bool quickest) const
 {
-	BattleItem* weaponRightHand = getItem("STR_RIGHT_HAND");
-	BattleItem* weaponLeftHand = getItem("STR_LEFT_HAND");
+	BattleItem* weaponRight = getItem("STR_RIGHT_HAND");
+	BattleItem* weaponLeft = getItem("STR_LEFT_HAND");
+
+	// kL_begin: BattleUnit::getMainHandWeapon(), rewrite.
+	// Leave ammo out of this and worry about it later......
+	bool isRight = weaponRight
+			&& (weaponRight->getRules()->getBattleType() == BT_FIREARM
+				|| weaponRight->getRules()->getBattleType() == BT_MELEE);
+	bool isLeft = weaponLeft
+			&& (weaponLeft->getRules()->getBattleType() == BT_FIREARM
+				|| weaponLeft->getRules()->getBattleType() == BT_MELEE);
+
+	if (!isRight && !isLeft)
+	{
+		return 0;
+	}
+	else if (!isLeft && isRight)
+	{
+		return weaponRight;
+	}
+	else if (!isRight && isLeft)
+	{
+		return weaponLeft;
+	}
+	else // if (isRight && isLeft)
+	{
+		int tuRight = weaponRight->getRules()->getTUSnap();
+		int tuLeft = weaponLeft->getRules()->getTUSnap();
+		if (tuLeft >= tuRight)
+		{
+			return quickest ? weaponRight : weaponLeft;
+		}
+		else
+		{
+			return quickest ? weaponLeft : weaponRight;
+		}
+	}
+	// kL_end.
 
 	// if there is only one weapon, or only one weapon loaded (rules out grenades) it's easy:
 	// kL_note: Lol, doesn't rule out grenades; getting a positive return with an alien holding only a grenade.
 	// Also, this is doing two runs before the AI even kicks in....
-	if (!weaponRightHand
-		|| !weaponRightHand->getAmmoItem()
-		|| !weaponRightHand->getAmmoItem()->getAmmoQuantity())
+/*kL	if (!weaponRight
+		|| !weaponRight->getAmmoItem()
+		|| !weaponRight->getAmmoItem()->getAmmoQuantity())
 	{
 		//Log(LOG_INFO) << "BattleUnit::getMainHandWeapon(), has leftHand weapon";
-		return weaponLeftHand;
+		return weaponLeft;
 	}
 
-	if (!weaponLeftHand
-		|| !weaponLeftHand->getAmmoItem()
-		|| !weaponLeftHand->getAmmoItem()->getAmmoQuantity())
+	if (!weaponLeft
+		|| !weaponLeft->getAmmoItem()
+		|| !weaponLeft->getAmmoItem()->getAmmoQuantity())
 	{
 		//Log(LOG_INFO) << "BattleUnit::getMainHandWeapon(), has rightHand weapon";
-		return weaponRightHand;
+		return weaponRight;
 	}
 
-	// kL_note: two weapons:
+	// kL_note: two weapons;
 	// otherwise pick the one with the least snapshot TUs
-	int tuRightHand = weaponRightHand->getRules()->getTUSnap();
-	int tuLeftHand = weaponLeftHand->getRules()->getTUSnap();
+	int tuRightHand = weaponRight->getRules()->getTUSnap();
+	int tuLeftHand = weaponLeft->getRules()->getTUSnap();
 	if (tuLeftHand >= tuRightHand)
 	{
-		return quickest ? weaponRightHand : weaponLeftHand;
+		return quickest ? weaponRight : weaponLeft;
 	}
 	else
 	{
-		return quickest ? weaponLeftHand : weaponRightHand;
-	}
+		return quickest ? weaponLeft : weaponRight;
+	} */
 }
 
 /**
@@ -1958,8 +1994,11 @@ BattleItem* BattleUnit::getGrenadeFromBelt() const
 
 	// kL_begin: BattleUnit::getGrenadeFromBelt(), or hand.
 	BattleItem* handgrenade = getItem("STR_RIGHT_HAND");
-	if (!handgrenade)
+	if (!handgrenade
+		|| handgrenade->getRules()->getBattleType() != BT_GRENADE)
+	{
 		handgrenade = getItem("STR_LEFT_HAND");
+	}
 
 	if (handgrenade
 		&& handgrenade->getRules()->getBattleType() == BT_GRENADE)
@@ -2567,13 +2606,31 @@ void BattleUnit::setActiveHand(const std::string& hand)
 
 /**
  * Get unit's active hand.
+ * Must have an item in that hand. Else, switch to
+ * other hand or use default @ right Hand.
  */
 std::string BattleUnit::getActiveHand() const
 {
-	if (getItem(_activeHand))		return _activeHand;
-	if (getItem("STR_LEFT_HAND"))	return "STR_LEFT_HAND";
+	if (getItem(_activeHand)) // has an item in the already active Hand.
+	{
+		return _activeHand;
+	}
+	// kL_begin: BattleUnit::getActiveHand(), tinker tinker.
+	else if (getItem("STR_RIGHT_HAND"))
+	{
+		return "STR_RIGHT_HAND";
+	}
+	else if (getItem("STR_LEFT_HAND"))
+	{
+		return "STR_LEFT_HAND";
+	}
 
-	return "STR_RIGHT_HAND";
+	return "STR_RIGHT_HAND"; // kL_end.
+
+/*kL	if (getItem("STR_LEFT_HAND"))
+		return "STR_LEFT_HAND";
+
+	return "STR_RIGHT_HAND"; */
 }
 
 /**

@@ -1171,14 +1171,14 @@ bool DetectXCOMBase::operator()(const Ufo* ufo) const
  * Functor that marks an XCOM base for retaliation.
  * This is required because of the iterator type.
  */
-struct SetRetaliationTarget
+struct SetRetaliationStatus
 	:
 		public std::unary_function<std::map<const Region*, Base* >::value_type, void>
 {
 	/// Mark as a valid retaliation target.
 	void operator()(const argument_type& iter) const
 	{
-		iter.second->setRetaliationTarget(true);
+		iter.second->setRetaliationStatus(true);
 	}
 };
 
@@ -1236,7 +1236,7 @@ void GeoscapeState::time10Minutes()
 			std::vector<Ufo* >::const_iterator uu = std::find_if(_game->getSavedGame()->getUfos()->begin(), _game->getSavedGame()->getUfos()->end(), DetectXCOMBase(**iBase));
 			if (uu != _game->getSavedGame()->getUfos()->end())
 			{
-				(*iBase)->setRetaliationTarget(true); // Base found
+				(*iBase)->setRetaliationStatus(true); // Base found
 			}
 		}
 	}
@@ -1255,7 +1255,7 @@ void GeoscapeState::time10Minutes()
 		}
 
 		// Now mark the bases as discovered.
-		std::for_each(discovered.begin(), discovered.end(), SetRetaliationTarget());
+		std::for_each(discovered.begin(), discovered.end(), SetRetaliationStatus());
 	}
 }
 
@@ -1264,8 +1264,12 @@ void GeoscapeState::time10Minutes()
  */
 class callThink
 	:
-	public std::unary_function<AlienMission*, void>
+		public std::unary_function<AlienMission*, void>
 {
+private:
+	Game& _game;
+	const Globe& _globe;
+
 	public:
 		/// Store the parameters.
 		/**
@@ -1285,10 +1289,6 @@ class callThink
 		{
 			am->think(_game, _globe);
 		}
-
-	private:
-		Game& _game;
-		const Globe& _globe;
 };
 
 /** @brief Process a TerrorSite.
@@ -1543,6 +1543,7 @@ void GeoscapeState::time30Minutes()
 					{
 						bool insideRange = (*b)->insideRadarRange(*u);
 						detected = detected || insideRange;
+
 						if ((*b)->getHyperDetection()
 							&& insideRange)
 						{
@@ -1629,7 +1630,6 @@ void GeoscapeState::time1Hour()
 									   .arg((*j)->getName(_game->getLanguage()))
 									   .arg((*i)->getName());
 					popup(new CraftErrorState(_game, this, msg));
-
 				}
 			}
 		}

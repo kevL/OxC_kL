@@ -160,7 +160,7 @@ private:
 			return *_trajectory;
 		}
 		/// Gets the UFO's mission object.
-		AlienMission *getMission() const
+		AlienMission* getMission() const
 		{
 			return _mission;
 		}

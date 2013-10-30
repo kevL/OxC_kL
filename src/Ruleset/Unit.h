@@ -29,8 +29,7 @@ namespace OpenXcom
 
 enum SpecialAbility
 {
-//kL	SPECAB_NONE = 0,
-	SPECAB_NONE,	// kL
+	SPECAB_NONE,
 	SPECAB_EXPLODEONDEATH,
 	SPECAB_BURNFLOOR,
 	SPECAB_RESPAWN

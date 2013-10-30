@@ -176,7 +176,7 @@ BriefingState::BriefingState(Game* game, Craft* craft, Base* base)
 
 	if (mission == "STR_BASE_DEFENSE")
 	{
-		base->setRetaliationTarget(false); // And make sure the base is unmarked.
+		base->setRetaliationStatus(false); // And make sure the base is unmarked.
 	}
 }
 
