@@ -63,7 +63,7 @@ TransfersState::TransfersState(Game* game, Base* base)
 //	_lstTransfers->setColumns(3, 155, 75, 37);				// kL_TEMP.
 
 //kL	_lstTransfers	= new TextList(273, 112, 14, 50);
-	_lstTransfers	= new TextList(288, 120, 0, 45);		// kL
+	_lstTransfers	= new TextList(304, 120, 8, 45);		// kL
 
 //kL	_btnOk			= new TextButton(288, 16, 16, 166);
 	_btnOk			= new TextButton(288, 16, 16, 169);		// kL
@@ -112,7 +112,7 @@ TransfersState::TransfersState(Game* game, Base* base)
 	_lstTransfers->setSelectable(true);
 	_lstTransfers->setBackground(_window);
 //kL	_lstTransfers->setMargin(2);
-	_lstTransfers->setMargin(16);	// kL
+	_lstTransfers->setMargin(8);	// kL
 
 	for (std::vector<Transfer* >::iterator i = _base->getTransfers()->begin(); i != _base->getTransfers()->end(); ++i)
 	{

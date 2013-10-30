@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "NewGameState.h"
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
@@ -29,6 +30,7 @@
 #include "../Geoscape/BuildNewBaseState.h"
 #include "../Engine/Options.h"
 
+
 namespace OpenXcom
 {
 
@@ -36,17 +38,18 @@ namespace OpenXcom
  * Initializes all the elements in the Difficulty window.
  * @param game Pointer to the core game.
  */
-NewGameState::NewGameState(Game *game) : State(game)
+NewGameState::NewGameState(Game* game)
+	:
+		State(game)
 {
-	// Create objects
-	_window = new Window(this, 192, 180, 64, 10, POPUP_VERTICAL);
-	_btnBeginner = new TextButton(160, 18, 80, 42);
-	_btnExperienced = new TextButton(160, 18, 80, 64);
-	_btnVeteran = new TextButton(160, 18, 80, 86);
-	_btnGenius = new TextButton(160, 18, 80, 108);
-	_btnSuperhuman = new TextButton(160, 18, 80, 130);
-	_btnCancel = new TextButton(160, 18, 80, 158);
-	_txtTitle = new Text(192, 10, 64, 25);
+	_window			= new Window(this, 192, 180, 64, 10, POPUP_VERTICAL);
+	_btnBeginner	= new TextButton(160, 18, 80, 42);
+	_btnExperienced	= new TextButton(160, 18, 80, 64);
+	_btnVeteran		= new TextButton(160, 18, 80, 86);
+	_btnGenius		= new TextButton(160, 18, 80, 108);
+	_btnSuperhuman	= new TextButton(160, 18, 80, 130);
+	_btnCancel		= new TextButton(160, 18, 80, 158);
+	_txtTitle		= new Text(192, 10, 64, 25);
 
 	add(_window);
 	add(_btnBeginner);
@@ -59,34 +62,34 @@ NewGameState::NewGameState(Game *game) : State(game)
 
 	centerAllSurfaces();
 
-	// Set up objects
+
 	_window->setColor(Palette::blockOffset(8)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
 	_btnBeginner->setColor(Palette::blockOffset(8)+5);
 	_btnBeginner->setText(tr("STR_1_BEGINNER"));
-	_btnBeginner->onMouseClick((ActionHandler)&NewGameState::btnBeginnerClick);
+	_btnBeginner->onMouseClick((ActionHandler)& NewGameState::btnBeginnerClick);
 
 	_btnExperienced->setColor(Palette::blockOffset(8)+5);
 	_btnExperienced->setText(tr("STR_2_EXPERIENCED"));
-	_btnExperienced->onMouseClick((ActionHandler)&NewGameState::btnExperiencedClick);
+	_btnExperienced->onMouseClick((ActionHandler)& NewGameState::btnExperiencedClick);
 
 	_btnVeteran->setColor(Palette::blockOffset(8)+5);
 	_btnVeteran->setText(tr("STR_3_VETERAN"));
-	_btnVeteran->onMouseClick((ActionHandler)&NewGameState::btnVeteranClick);
+	_btnVeteran->onMouseClick((ActionHandler)& NewGameState::btnVeteranClick);
 
 	_btnGenius->setColor(Palette::blockOffset(8)+5);
 	_btnGenius->setText(tr("STR_4_GENIUS"));
-	_btnGenius->onMouseClick((ActionHandler)&NewGameState::btnGeniusClick);
+	_btnGenius->onMouseClick((ActionHandler)& NewGameState::btnGeniusClick);
 
 	_btnSuperhuman->setColor(Palette::blockOffset(8)+5);
 	_btnSuperhuman->setText(tr("STR_5_SUPERHUMAN"));
-	_btnSuperhuman->onMouseClick((ActionHandler)&NewGameState::btnSuperhumanClick);
+	_btnSuperhuman->onMouseClick((ActionHandler)& NewGameState::btnSuperhumanClick);
 
 	_btnCancel->setColor(Palette::blockOffset(8)+5);
 	_btnCancel->setText(tr("STR_CANCEL"));
-	_btnCancel->onMouseClick((ActionHandler)&NewGameState::btnCancelClick);
-	_btnCancel->onKeyboardPress((ActionHandler)&NewGameState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnCancel->onMouseClick((ActionHandler)& NewGameState::btnCancelClick);
+	_btnCancel->onKeyboardPress((ActionHandler)& NewGameState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(8)+10);
 	_txtTitle->setAlign(ALIGN_CENTER);
@@ -99,7 +102,6 @@ NewGameState::NewGameState(Game *game) : State(game)
  */
 NewGameState::~NewGameState()
 {
-
 }
 
 /**
@@ -110,9 +112,11 @@ void NewGameState::newGame(GameDifficulty diff)
 {
 	_game->setSavedGame(_game->getRuleset()->newSave());
 	_game->getSavedGame()->setDifficulty(diff);
-	GeoscapeState *gs = new GeoscapeState(_game);
+
+	GeoscapeState* gs = new GeoscapeState(_game);
 	_game->setState(gs);
 	gs->init();
+
 	_game->pushState(new BuildNewBaseState(_game, _game->getSavedGame()->getBases()->back(), gs->getGlobe(), true));
 }
 
@@ -121,7 +125,7 @@ void NewGameState::newGame(GameDifficulty diff)
  * jumps to the Geoscape screen.
  * @param action Pointer to an action.
  */
-void NewGameState::btnBeginnerClick(Action *)
+void NewGameState::btnBeginnerClick(Action*)
 {
 	newGame(DIFF_BEGINNER);
 }
@@ -131,7 +135,7 @@ void NewGameState::btnBeginnerClick(Action *)
  * jumps to the Geoscape screen.
  * @param action Pointer to an action.
  */
-void NewGameState::btnExperiencedClick(Action *)
+void NewGameState::btnExperiencedClick(Action*)
 {
 	newGame(DIFF_EXPERIENCED);
 }
@@ -141,7 +145,7 @@ void NewGameState::btnExperiencedClick(Action *)
  * jumps to the Geoscape screen.
  * @param action Pointer to an action.
  */
-void NewGameState::btnVeteranClick(Action *)
+void NewGameState::btnVeteranClick(Action*)
 {
 	newGame(DIFF_VETERAN);
 }
@@ -151,7 +155,7 @@ void NewGameState::btnVeteranClick(Action *)
  * jumps to the Geoscape screen.
  * @param action Pointer to an action.
  */
-void NewGameState::btnGeniusClick(Action *)
+void NewGameState::btnGeniusClick(Action*)
 {
 	newGame(DIFF_GENIUS);
 }
@@ -161,7 +165,7 @@ void NewGameState::btnGeniusClick(Action *)
  * jumps to the Geoscape screen.
  * @param action Pointer to an action.
  */
-void NewGameState::btnSuperhumanClick(Action *)
+void NewGameState::btnSuperhumanClick(Action*)
 {
 	newGame(DIFF_SUPERHUMAN);
 }
@@ -170,7 +174,7 @@ void NewGameState::btnSuperhumanClick(Action *)
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void NewGameState::btnCancelClick(Action *)
+void NewGameState::btnCancelClick(Action*)
 {
 	_game->setSavedGame(0);
 	_game->popState();

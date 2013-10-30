@@ -40,7 +40,7 @@ class TextList;
  */
 class SavedGameState
 	:
-	public State
+		public State
 {
 protected:
 	TextButton* _btnCancel;

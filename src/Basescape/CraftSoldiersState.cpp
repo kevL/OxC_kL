@@ -55,26 +55,25 @@ CraftSoldiersState::CraftSoldiersState(Game* game, Base* base, size_t craft)
 {
 //	Log(LOG_INFO) << "Create CraftSoldiersState";
 
-	// Create objects
 	_window			= new Window(this, 320, 200, 0, 0);
 
-	_txtTitle		= new Text(300, 17, 16, 7);
+	_txtTitle		= new Text(300, 17, 16, 8);
 
 	_txtAvailable	= new Text(110, 9, 16, 24);
 	_txtUsed		= new Text(110, 9, 122, 24);
 
-	_txtName		= new Text(114, 9, 16, 32);
-	_txtRank		= new Text(102, 9, 122, 32);
-	_txtCraft		= new Text(84, 9, 224, 32);
+	_txtName		= new Text(116, 9, 16, 33);
+	_txtRank		= new Text(93, 9, 132, 33);
+	_txtCraft		= new Text(71, 9, 225, 33);
 
-	_lstSoldiers	= new TextList(288, 128, 8, 40);
+//	_lstSoldiers->setColumns(3, 116, 93, 71);				// TEMP.
 
-//kL	_btnOk			= new TextButton(288, 16, 16, 176);
+	_lstSoldiers	= new TextList(288, 128, 8, 42);
+
 	_btnUnload		= new TextButton(144, 16, 16, 177);		// kL
-	_btnOk			= new TextButton(144, 16, 163, 177);	// kL
+	_btnOk			= new TextButton(144, 16, 163, 177);
 
 
-	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)), Palette::backPos, 16);
 
 	add(_window);
@@ -91,7 +90,6 @@ CraftSoldiersState::CraftSoldiersState(Game* game, Base* base, size_t craft)
 	centerAllSurfaces();
 
 
-	// Set up objects
 	_window->setColor(Palette::blockOffset(15)+6);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK02.SCR"));
 
@@ -131,7 +129,6 @@ CraftSoldiersState::CraftSoldiersState(Game* game, Base* base, size_t craft)
 	_lstSoldiers->setArrowColor(Palette::blockOffset(15)+6);
 	_lstSoldiers->setArrowColumn(192, ARROW_VERTICAL);
 //kL	_lstSoldiers->setColumns(3, 106, 102, 72);
-//	_lstSoldiers->setColumns(3, 114, 94, 72);					// kL
 	_lstSoldiers->setColumns(3, 116, 93, 71);					// kL
 	_lstSoldiers->setSelectable(true);
 	_lstSoldiers->setBackground(_window);

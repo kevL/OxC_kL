@@ -16,11 +16,13 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_NEWGAMESTATE_H
 #define OPENXCOM_NEWGAMESTATE_H
 
 #include "../Engine/State.h"
 #include "../Savegame/SavedGame.h"
+
 
 namespace OpenXcom
 {
@@ -34,32 +36,35 @@ class Text;
  * of possible difficulties for creating
  * a saved game.
  */
-class NewGameState : public State
+class NewGameState
+	:
+		public State
 {
 private:
-	TextButton *_btnBeginner, *_btnExperienced, *_btnVeteran;
-	TextButton *_btnGenius, *_btnSuperhuman, *_btnCancel;
-	Window *_window;
-	Text *_txtTitle;
-public:
-	/// Creates the New Game state.
-	NewGameState(Game *game);
-	/// Cleans up the New Game state.
-	~NewGameState();
-	/// Creates a new game.
-	void newGame(GameDifficulty diff);
-	/// Handler for clicking the Beginner button.
-	void btnBeginnerClick(Action *action);
-	/// Handler for clicking the Experienced button.
-	void btnExperiencedClick(Action *action);
-	/// Handler for clicking the Veteran button.
-	void btnVeteranClick(Action *action);
-	/// Handler for clicking the Genius button.
-	void btnGeniusClick(Action *action);
-	/// Handler for clicking the Superhuman button.
-	void btnSuperhumanClick(Action *action);
-	/// Handler for clicking the cancel button.
-	void btnCancelClick(Action *);
+	TextButton* _btnBeginner, * _btnExperienced, * _btnVeteran, * _btnGenius, * _btnSuperhuman, * _btnCancel;
+	Window* _window;
+	Text* _txtTitle;
+
+	public:
+		/// Creates the New Game state.
+		NewGameState(Game* game);
+		/// Cleans up the New Game state.
+		~NewGameState();
+
+		/// Creates a new game.
+		void newGame(GameDifficulty diff);
+		/// Handler for clicking the Beginner button.
+		void btnBeginnerClick(Action* action);
+		/// Handler for clicking the Experienced button.
+		void btnExperiencedClick(Action* action);
+		/// Handler for clicking the Veteran button.
+		void btnVeteranClick(Action* action);
+		/// Handler for clicking the Genius button.
+		void btnGeniusClick(Action* action);
+		/// Handler for clicking the Superhuman button.
+		void btnSuperhumanClick(Action* action);
+		/// Handler for clicking the cancel button.
+		void btnCancelClick(Action*);
 };
 
 }

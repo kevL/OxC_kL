@@ -50,17 +50,22 @@ SavedGameState::SavedGameState(Game* game, OptionsOrigin origin)
 {
 	_screen = false;
 
-
 	_window		= new Window(this, 320, 200, 0, 0, POPUP_BOTH);
-	_btnCancel	= new TextButton(80, 16, 120, 172);
+
 	_txtTitle	= new Text(310, 17, 5, 8);
+
 	_txtDelete	= new Text(310, 9, 5, 24);
+
 	_txtName	= new Text(150, 9, 16, 32);
 	_txtTime	= new Text(30, 9, 184, 32);
 	_txtDate	= new Text(38, 9, 214, 32);
-	_txtStatus	= new Text(320, 17, 0, 92);
-	_lstSaves	= new TextList(288, 120, 8, 40);
+//	_lstSaves->setColumns(5, 168, 30, 30, 30, 30);		// TEMP.
 
+	_lstSaves	= new TextList(304, 120, 8, 40);
+
+	_txtStatus	= new Text(320, 17, 0, 92);
+
+	_btnCancel	= new TextButton(80, 16, 120, 172);
 
 	if (_origin != OPT_BATTLESCAPE)
 	{
@@ -139,6 +144,7 @@ SavedGameState::SavedGameState(Game* game, OptionsOrigin origin, bool showMsg)
 
 		_txtStatus->setBig();
 		_txtStatus->setAlign(ALIGN_CENTER);
+
 		if (origin == OPT_BATTLESCAPE)
 		{
 //kL			_txtStatus->setColor(Palette::blockOffset(5));

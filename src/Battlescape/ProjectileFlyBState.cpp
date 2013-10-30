@@ -364,7 +364,7 @@ void ProjectileFlyBState::think()
 	if (_parent->getMap()->getProjectile() == 0)
 	{
 		Tile* t = _parent->getSave()->getTile(_action.actor->getPosition());
-		Tile* bt = _parent->getSave()->getTile(_action.actor->getPosition() + Position(0,0,-1));
+		Tile* bt = _parent->getSave()->getTile(_action.actor->getPosition() + Position(0, 0, -1));
 		bool hasFloor = t && !t->hasNoFloor(bt);
 		bool unitCanFly = _action.actor->getArmor()->getMovementType() == MT_FLY;
 

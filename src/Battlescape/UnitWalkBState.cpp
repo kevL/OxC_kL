@@ -399,7 +399,7 @@ void UnitWalkBState::think()
 			return;
 		}
 
-		if (onScreen
+/*kL		if (onScreen
 			|| _parent->getSave()->getDebugMode())
 		{
 			setNormalWalkSpeed();
@@ -408,6 +408,8 @@ void UnitWalkBState::think()
 //kL			_parent->setStateInterval(0);
 			_parent->setStateInterval(11);		// kL
 			// kL_note: mute footstep sounds. Trying...
+		*/
+		setNormalWalkSpeed();	// kL
 
 		int dir = _pf->getStartDirection();
 		if (_falling)
@@ -832,8 +834,8 @@ void UnitWalkBState::playMovementSound()
 			Tile* tileBelow = _parent->getSave()->getTile(tile->getPosition() + Position(0, 0, -1));
 
 			// play footstep sound 1
-//kL			if (_unit->getWalkingPhase() == 3)
-			if (_unit->getWalkingPhase() == 2)		// kL
+			if (_unit->getWalkingPhase() == 3)
+//			if (_unit->getWalkingPhase() == 2)		// kL
 			{
 				if (tile->getFootstepSound(tileBelow)
 					&& _unit->getRaceString() != "STR_ETHEREAL")	// kL: and not an ethereal

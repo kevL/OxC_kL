@@ -16,11 +16,13 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_SOLDIERARMORSTATE_H
 #define OPENXCOM_SOLDIERARMORSTATE_H
 
 #include <vector>
 #include "../Engine/State.h"
+
 
 namespace OpenXcom
 {
@@ -36,26 +38,30 @@ class Armor;
  * Select Armor window that allows changing
  * of the armor equipped on a soldier.
  */
-class SoldierArmorState : public State
+class SoldierArmorState
+	:
+		public State
 {
 private:
-	Base *_base;
+	Base* _base;
 	size_t _soldier;
 
-	TextButton *_btnCancel;
-	Window *_window;
-	Text *_txtTitle, *_txtSoldier, *_txtType, *_txtQuantity;
-	TextList *_lstArmor;
+	TextButton* _btnCancel;
+	Window* _window;
+	Text* _txtTitle, * _txtSoldier, * _txtType, * _txtQuantity;
+	TextList* _lstArmor;
 	std::vector<Armor*> _armors;
-public:
-	/// Creates the Soldier Armor state.
-	SoldierArmorState(Game *game, Base *base, size_t soldier);
-	/// Cleans up the Soldier Armor state.
-	~SoldierArmorState();
-	/// Handler for clicking the Cancel button.
-	void btnCancelClick(Action *action);
-	/// Handler for clicking the Weapons list.
-	void lstArmorClick(Action *action);
+
+	public:
+		/// Creates the Soldier Armor state.
+		SoldierArmorState(Game* game, Base* base, size_t soldier);
+		/// Cleans up the Soldier Armor state.
+		~SoldierArmorState();
+
+		/// Handler for clicking the Cancel button.
+		void btnCancelClick(Action* action);
+		/// Handler for clicking the Weapons list.
+		void lstArmorClick(Action* action);
 };
 
 }

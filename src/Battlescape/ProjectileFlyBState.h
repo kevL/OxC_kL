@@ -36,7 +36,7 @@ class BattleItem;
  */
 class ProjectileFlyBState
 	:
-	public BattleState
+		public BattleState
 {
 private:
 	BattleUnit* _unit;

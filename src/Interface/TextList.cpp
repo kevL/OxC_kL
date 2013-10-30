@@ -38,41 +38,43 @@ namespace OpenXcom
  */
 TextList::TextList(int width, int height, int x, int y)
 	:
-	InteractiveSurface(width, height, x, y),
-	_texts(),
-	_columns(),
-	_big(0),
-	_small(0),
-	_font(0),
-	_scroll(0),
-	_visibleRows(0),
-	_color(0),
-	_dot(false),
-	_selectable(false),
-	_condensed(false),
-	_contrast(false),
-	_selRow(0),
-	_bg(0),
-	_selector(0),
-	_margin(0),
-	_scrolling(true),
-	_arrowLeft(),
-	_arrowRight(),
-	_arrowPos(-1),
-	_scrollPos(4),
-	_arrowType(ARROW_VERTICAL),
-	_leftClick(0),
-	_leftPress(0),
-	_leftRelease(0),
-	_rightClick(0),
-	_rightPress(0),
-	_rightRelease(0)
+		InteractiveSurface(width, height, x, y),
+		_texts(),
+		_columns(),
+		_big(0),
+		_small(0),
+		_font(0),
+		_scroll(0),
+		_visibleRows(0),
+		_color(0),
+		_dot(false),
+		_selectable(false),
+		_condensed(false),
+		_contrast(false),
+		_selRow(0),
+		_bg(0),
+		_selector(0),
+		_margin(0),
+		_scrolling(true),
+		_arrowLeft(),
+		_arrowRight(),
+		_arrowPos(-1),
+		_scrollPos(4),
+		_arrowType(ARROW_VERTICAL),
+		_leftClick(0),
+		_leftPress(0),
+		_leftRelease(0),
+		_rightClick(0),
+		_rightPress(0),
+		_rightRelease(0)
 {
 	_allowScrollOnArrowButtons = true;
-	_up = new ArrowButton(ARROW_BIG_UP, 13, 14, getX() + getWidth() + _scrollPos, getY() + 1);
+
+	_up = new ArrowButton(ARROW_BIG_UP, 13, 13, getX() + getWidth() + _scrollPos, getY() - 4);
 	_up->setVisible(false);
 	_up->setTextList(this);
-	_down = new ArrowButton(ARROW_BIG_DOWN, 13, 14, getX() + getWidth() + _scrollPos, getY() + getHeight() - 12);
+
+	_down = new ArrowButton(ARROW_BIG_DOWN, 13, 13, getX() + getWidth() + _scrollPos, getY() + getHeight() - 13);
 	_down->setVisible(false);
 	_down->setTextList(this);
 }
@@ -112,8 +114,10 @@ TextList::~TextList()
 void TextList::setX(int x)
 {
 	Surface::setX(x);
+
 	_up->setX(getX() + getWidth() + _scrollPos);
 	_down->setX(getX() + getWidth() + _scrollPos);
+
 	if (_selector != 0)
 		_selector->setX(getX());
 }
@@ -125,8 +129,10 @@ void TextList::setX(int x)
 void TextList::setY(int y)
 {
 	Surface::setY(y);
+
 	_up->setY(getY() + 1);
 	_down->setY(getY() + getHeight() - 12);
+
 	if (_selector != 0)
 		_selector->setY(getY());
 }
@@ -162,7 +168,7 @@ int TextList::getArrowsRightEdge()
  * Unpresses all the arrow buttons.
  * @param state Pointer to running state.
  */
-void TextList::unpress(State *state)
+void TextList::unpress(State* state)
 {
 	InteractiveSurface::unpress(state);
 
@@ -186,6 +192,7 @@ void TextList::unpress(State *state)
 void TextList::setCellColor(int row, int column, Uint8 color)
 {
 	_texts[row][column]->setColor(color);
+
 	_redraw = true;
 }
 
@@ -221,9 +228,10 @@ std::wstring TextList::getCellText(int row, int column) const
  * @param column Column number.
  * @param text Text string.
  */
-void TextList::setCellText(int row, int column, const std::wstring &text)
+void TextList::setCellText(int row, int column, const std::wstring& text)
 {
 	_texts[row][column]->setText(text);
+
 	_redraw = true;
 }
 
@@ -257,6 +265,7 @@ void TextList::addRow(int cols, ...)
 {
 	va_list args;
 	va_start(args, cols);
+
 	std::vector<Text*> temp;
 	int rowX = 0;
 
@@ -333,7 +342,7 @@ void TextList::addRow(int cols, ...)
 			shape2 = ARROW_SMALL_RIGHT;
 		}
 
-		ArrowButton *a1 = new ArrowButton(shape1, 11, 8, getX() + _arrowPos, getY());
+		ArrowButton* a1 = new ArrowButton(shape1, 11, 8, getX() + _arrowPos, getY());
 		a1->setListButton();
 		a1->setPalette(this->getPalette());
 		a1->setColor(_up->getColor());
@@ -342,7 +351,7 @@ void TextList::addRow(int cols, ...)
 		a1->onMouseRelease(_leftRelease);
 		_arrowLeft.push_back(a1);
 
-		ArrowButton *a2 = new ArrowButton(shape2, 11, 8, getX() + _arrowPos + 12, getY());
+		ArrowButton* a2 = new ArrowButton(shape2, 11, 8, getX() + _arrowPos + 12, getY());
 		a2->setListButton();
 		a2->setPalette(this->getPalette());
 		a2->setColor(_up->getColor());
@@ -353,6 +362,7 @@ void TextList::addRow(int cols, ...)
 	}
 
 	_redraw = true;
+
 	va_end(args);
 	updateArrows();
 }
@@ -384,7 +394,7 @@ void TextList::setColumns(int cols, ...)
  * @param firstcolor Offset of the first color to replace.
  * @param ncolors Amount of colors to replace.
  */
-void TextList::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
+void TextList::setPalette(SDL_Color* colors, int firstcolor, int ncolors)
 {
 	Surface::setPalette(colors, firstcolor, ncolors);
 
@@ -421,13 +431,14 @@ void TextList::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
  * @param big Pointer to large-size font.
  * @param small Pointer to small-size font.
  */
-void TextList::setFonts(Font *big, Font *small)
+void TextList::setFonts(Font* big, Font* small)
 {
 	_big = big;
 	_small = small;
 	_font = small;
 
 	delete _selector;
+
 	_selector = new Surface(getWidth(), _font->getHeight() + _font->getSpacing(), getX(), getY());
 	_selector->setPalette(getPalette());
 	_selector->setVisible(false);
@@ -446,8 +457,10 @@ void TextList::setFonts(Font *big, Font *small)
 void TextList::setColor(Uint8 color)
 {
 	_color = color;
+
 	_up->setColor(color);
 	_down->setColor(color);
+
 	for (std::vector< std::vector<Text*> >::iterator u = _texts.begin(); u < _texts.end(); ++u)
 	{
 		for (std::vector<Text*>::iterator v = u->begin(); v < u->end(); ++v)
@@ -492,6 +505,7 @@ Uint8 TextList::getSecondaryColor() const
 void TextList::setHighContrast(bool contrast)
 {
 	_contrast = contrast;
+
 	for (std::vector< std::vector<Text*> >::iterator u = _texts.begin(); u < _texts.end(); ++u)
 	{
 		for (std::vector<Text*>::iterator v = u->begin(); v < u->end(); ++v)
@@ -550,6 +564,7 @@ void TextList::setBig()
 	_font = _big;
 
 	delete _selector;
+
 	_selector = new Surface(getWidth(), _font->getHeight() + _font->getSpacing(), getX(), getY());
 	_selector->setPalette(getPalette());
 	_selector->setVisible(false);
@@ -568,6 +583,7 @@ void TextList::setSmall()
 	_font = _small;
 
 	delete _selector;
+
 	_selector = new Surface(getWidth(), _font->getHeight() + _font->getSpacing(), getX(), getY());
 	_selector->setPalette(getPalette());
 	_selector->setVisible(false);
@@ -601,7 +617,7 @@ int TextList::getSelectedRow() const
  * Changes the surface used to draw the background of the selector.
  * @param bg New background.
  */
-void TextList::setBackground(Surface *bg)
+void TextList::setBackground(Surface* bg)
 {
 	_bg = bg;
 }
@@ -740,13 +756,14 @@ void TextList::clearList()
 	{
 		for (std::vector<Text*>::iterator v = u->begin(); v < u->end(); ++v)
 		{
-			delete (*v);
+			delete *v;
 		}
 
 		u->clear();
 	}
 
 	_texts.clear();
+
 	_redraw = true;
 }
 
@@ -761,6 +778,7 @@ void TextList::scrollUp(bool toMax)
 	if (_texts.size() > _visibleRows && _scroll > 0)
 	{
 		if (toMax) _scroll=0; else _scroll--;
+
 		_redraw = true;
 	}
 
@@ -778,6 +796,7 @@ void TextList::scrollDown(bool toMax)
 	if (_texts.size() > _visibleRows && _scroll < _texts.size() - _visibleRows)
 	{
 		if (toMax) _scroll=_texts.size()-_visibleRows; else _scroll++;
+
 		_redraw = true;
 	}
 
@@ -790,8 +809,8 @@ void TextList::scrollDown(bool toMax)
  */
 void TextList::updateArrows()
 {
-	_up->setVisible((_texts.size() > _visibleRows && _scroll > 0));
-	_down->setVisible((_texts.size() > _visibleRows && _scroll < _texts.size() - _visibleRows));
+	_up->setVisible(_texts.size() > _visibleRows && _scroll > 0);
+	_down->setVisible(_texts.size() > _visibleRows && _scroll < _texts.size() - _visibleRows);
 }
 
 /**
@@ -802,9 +821,11 @@ void TextList::updateArrows()
 void TextList::setScrolling(bool scrolling, int scrollPos)
 {
 	_scrolling = scrolling;
+
 	if (scrollPos != _scrollPos)
 	{
 		_scrollPos = scrollPos;
+
 		_up->setX(getX() + getWidth() + _scrollPos);
 		_down->setX(getX() + getWidth() + _scrollPos);
 	}
@@ -822,6 +843,7 @@ void TextList::draw()
 		for (std::vector<Text*>::iterator j = _texts[i].begin(); j < _texts[i].end(); ++j)
 		{
 			(*j)->setY((i - _scroll) * (_font->getHeight() + _font->getSpacing()));
+
 			(*j)->blit(this);
 		}
 	}
@@ -831,7 +853,7 @@ void TextList::draw()
  * Blits the text list and selector.
  * @param surface Pointer to surface to blit onto.
  */
-void TextList::blit(Surface *surface)
+void TextList::blit(Surface* surface)
 {
 	if (_visible && !_hidden)
 	{
@@ -851,6 +873,7 @@ void TextList::blit(Surface *surface)
 			{
 				_arrowLeft[i]->setY(getY() + (i - _scroll) * (_font->getHeight() + _font->getSpacing()));
 				_arrowLeft[i]->blit(surface);
+
 				_arrowRight[i]->setY(getY() + (i - _scroll) * (_font->getHeight() + _font->getSpacing()));
 				_arrowRight[i]->blit(surface);
 			}
@@ -863,7 +886,7 @@ void TextList::blit(Surface *surface)
  * @param action Pointer to an action.
  * @param state State that the action handlers belong to.
  */
-void TextList::handle(Action *action, State *state)
+void TextList::handle(Action* action, State* state)
 {
 	InteractiveSurface::handle(action, state);
 
@@ -886,8 +909,10 @@ void TextList::handle(Action *action, State *state)
 void TextList::think()
 {
 	InteractiveSurface::think();
+
 	_up->think();
 	_down->think();
+
 
 	for (std::vector<ArrowButton*>::iterator i = _arrowLeft.begin(); i < _arrowLeft.end(); ++i)
 	{
@@ -905,7 +930,7 @@ void TextList::think()
  * @param action Pointer to an action.
  * @param state State that the action handlers belong to.
  */
-void TextList::mousePress(Action *action, State *state)
+void TextList::mousePress(Action* action, State* state)
 {
 	bool allowScroll = _allowScrollOnArrowButtons;
 	if (!allowScroll)
@@ -915,8 +940,10 @@ void TextList::mousePress(Action *action, State *state)
 
 	if (allowScroll)
 	{
-		if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP) scrollUp(false);
-		else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN) scrollDown(false);
+		if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
+			scrollUp(false);
+		else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN)
+			scrollDown(false);
 	}
 
 	if (_selectable)
@@ -957,7 +984,7 @@ void TextList::mouseRelease(Action *action, State *state)
  * @param action Pointer to an action.
  * @param state State that the action handlers belong to.
  */
-void TextList::mouseClick(Action *action, State *state)
+void TextList::mouseClick(Action* action, State* state)
 {
 	if (_selectable)
 	{
@@ -977,7 +1004,7 @@ void TextList::mouseClick(Action *action, State *state)
  * @param action Pointer to an action.
  * @param state State that the action handlers belong to.
  */
-void TextList::mouseOver(Action *action, State *state)
+void TextList::mouseOver(Action* action, State* state)
 {
 	if (_selectable)
 	{
@@ -988,10 +1015,12 @@ void TextList::mouseOver(Action *action, State *state)
 		{
 			_selector->setY(getY() + (_selRow - _scroll) * h);
 			_selector->copy(_bg);
+
 			if (_contrast)
 				_selector->offset(-10, 1);
 			else
 				_selector->offset(-10, Palette::backPos);
+
 			_selector->setVisible(true);
 		}
 		else
@@ -1008,7 +1037,7 @@ void TextList::mouseOver(Action *action, State *state)
  * @param action Pointer to an action.
  * @param state State that the action handlers belong to.
  */
-void TextList::mouseOut(Action *action, State *state)
+void TextList::mouseOut(Action* action, State* state)
 {
 	if (_selectable)
 	{

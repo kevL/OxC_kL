@@ -32,7 +32,7 @@ namespace OpenXcom
  */
 class LoadState
 	:
-	public SavedGameState
+		public SavedGameState
 {
 	public:
 		/// Creates the Load Game state.

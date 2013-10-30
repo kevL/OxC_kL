@@ -932,6 +932,7 @@ void Map::drawTerrain(Surface *surface)
 						{
 							int tuMarker = std::max(0, tile->getTUMarker());
 
+//							_numWaypid->setColor(26);	// kL. 26=brown
 							_numWaypid->setValue(tuMarker);
 							_numWaypid->draw();
 
