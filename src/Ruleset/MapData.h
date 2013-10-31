@@ -60,16 +60,16 @@ enum MovementType
  */
 class MapData
 {
-	private:
-		MapDataSet* _dataset;
-		SpecialTileType _specialType;
-		bool _isUfoDoor, _stopLOS, _isNoFloor, _isGravLift, _isDoor, _blockFire, _blockSmoke;
-		int _yOffset, _TUWalk, _TUFly, _TUSlide, _terrainLevel, _footstepSound, _dieMCD, _altMCD, _objectType, _lightSource;
-		int _armor, _flammable, _fuel, _explosive, _bigWall;
-		int _sprite[8];
-		int _block[6];
-		int _loftID[12];
-		unsigned short _miniMapIndex;
+private:
+	MapDataSet* _dataset;
+	SpecialTileType _specialType;
+	bool _isUfoDoor, _stopLOS, _isNoFloor, _isGravLift, _isDoor, _blockFire, _blockSmoke;
+	int _yOffset, _TUWalk, _TUFly, _TUSlide, _terrainLevel, _footstepSound, _dieMCD, _altMCD, _objectType, _lightSource;
+	int _armor, _flammable, _fuel, _explosive, _bigWall;
+	int _sprite[8];
+	int _block[6];
+	int _loftID[12];
+	unsigned short _miniMapIndex;
 
 	public:
 		MapData(MapDataSet* dataset);

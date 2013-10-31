@@ -36,6 +36,7 @@
 #include "../Engine/Sound.h"
 #include "../Engine/Options.h"
 #include "../Ruleset/Armor.h"
+//#include "../Ruleset/MapData.h"		// kL
 #include "../Engine/Logger.h"
 #include "UnitFallBState.h"
 
@@ -442,7 +443,15 @@ void UnitWalkBState::think()
 			//Log(LOG_INFO) << ". pos 2";
 
 			if (_falling) tu = 0;
-			int energy = tu;
+//kL			int energy = tu;
+
+			// kL_begin: UnitWalkBState::think(), no stamina required to go up/down GravLifts.
+			int energy = 0;
+			if (!(_parent->getSave()->getTile(_unit->getPosition())->getMapData(MapData::O_FLOOR)->isGravLift()
+				&& _parent->getSave()->getTile(destination)->getMapData(MapData::O_FLOOR)->isGravLift()))
+			{
+				energy = tu;
+			} // kL_end.
 
 			if (_action.run)
 			{
@@ -835,25 +844,37 @@ void UnitWalkBState::playMovementSound()
 
 			// play footstep sound 1
 			if (_unit->getWalkingPhase() == 3)
-//			if (_unit->getWalkingPhase() == 2)		// kL
+//			if (_unit->getWalkingPhase() == 3)		// kL
+			{
+				if (tile->getFootstepSound(tileBelow)
+					&& _unit->getRaceString() != "STR_ETHEREAL")	// kL: and not an ethereal
+				{
+//kL					_parent->getResourcePack()->getSound("BATTLE.CAT", 22 + (tile->getFootstepSound(tileBelow) * 2))->play();
+					_parent->getResourcePack()->getSound("BATTLE.CAT", 23 + (tile->getFootstepSound(tileBelow) * 2))->play();		// kL
+				}
+			}
+
+			// play footstep sound 2
+			if (_unit->getWalkingPhase() == 7)
+//			if (_unit->getWalkingPhase() == 7)		// kL
+			{
+				if (tile->getFootstepSound(tileBelow)
+					&& _unit->getRaceString() != "STR_ETHEREAL")	// kL: and not an ethereal
+				{
+//kL					_parent->getResourcePack()->getSound("BATTLE.CAT", 23 + (tile->getFootstepSound(tileBelow) * 2))->play();
+					_parent->getResourcePack()->getSound("BATTLE.CAT", 22 + (tile->getFootstepSound(tileBelow) * 2))->play();		// kL
+				}
+			}
+
+			// kL_begin: UnitWalkBState::playMovementSound(), try this!!
+/*			if (_unit->getWalkingPhase() == 7)		// kL
 			{
 				if (tile->getFootstepSound(tileBelow)
 					&& _unit->getRaceString() != "STR_ETHEREAL")	// kL: and not an ethereal
 				{
 					_parent->getResourcePack()->getSound("BATTLE.CAT", 22 + (tile->getFootstepSound(tileBelow) * 2))->play();
 				}
-			}
-
-			// play footstep sound 2
-			if (_unit->getWalkingPhase() == 7)
-//			if (_unit->getWalkingPhase() == 6)		// kL
-			{
-				if (tile->getFootstepSound(tileBelow)
-					&& _unit->getRaceString() != "STR_ETHEREAL")	// kL: and not an ethereal
-				{
-					_parent->getResourcePack()->getSound("BATTLE.CAT", 23 + (tile->getFootstepSound(tileBelow) * 2))->play();
-				}
-			}
+			} */ // kL_end.
 		}
 		else
 		{

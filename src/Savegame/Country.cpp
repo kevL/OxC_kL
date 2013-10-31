@@ -64,10 +64,10 @@ void Country::load(const YAML::Node& node)
 	_activityXcom	= node["activityXcom"].as< std::vector<int> >(_activityXcom);
 	_activityAlien	= node["activityAlien"].as< std::vector<int> >(_activityAlien);
 
-	if (_pact)
+//kL	if (_pact)
 		_pact		= node["pact"].as<bool>(_pact);
 
-	if (_newPact)
+//kL	if (_newPact)
 		_newPact	= node["newPact"].as<bool>(_newPact);
 }
 
@@ -83,8 +83,11 @@ YAML::Node Country::save() const
 	node["funding"]			= _funding;
 	node["activityXcom"]	= _activityXcom;
 	node["activityAlien"]	= _activityAlien;
-	node["pact"]			= _pact;
-	node["newPact"]			= _newPact;
+
+	if (_pact)		// kL
+		node["pact"]		= _pact;
+	if (_newPact)	// kL
+		node["newPact"]		= _newPact;
 
 	return node;
 }
@@ -122,7 +125,7 @@ void Country::setFunding(int funding)
  */
 int Country::getSatisfaction()
 {
-	if(_pact)
+	if (_pact)
 		return 0;
 
 	return _satisfaction;
@@ -210,12 +213,14 @@ void Country::newMonth(int xcomTotal, int alienTotal)
 	}
 
 	// about to be in cahoots
-	if (_newPact && !_pact)
+//kL	if (_newPact && !_pact)
+	if (_newPact)	// kL. Let them infiltrate for VictPts. more than once.
 	{
 		_newPact = false;
 		_pact = true;
 
-		addActivityAlien(150);
+//kL		addActivityAlien(150);
+		addActivityAlien(250);		// kL
 	}
 
 	// set the new funding and reset the activity meters

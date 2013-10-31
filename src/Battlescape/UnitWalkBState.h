@@ -32,6 +32,7 @@ namespace OpenXcom
 class BattleUnit;
 class Pathfinding;
 class TileEngine;
+//class MapData;			// kL
 //class SavedBattleGame;	// kL
 //class Soldier;			// kL
 
@@ -43,6 +44,7 @@ class UnitWalkBState
 		public BattleState
 {
 private:
+//	MapData* _data;		// kL
 	Position _target;
 	BattleUnit* _unit;
 	Pathfinding* _pf;

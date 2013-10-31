@@ -346,7 +346,7 @@ void MonthlyReportState::calculateChanges()
 	// and have them make their decisions weighted on the council's perspective.
 	for (std::vector<Country* >::iterator k = _game->getSavedGame()->getCountries()->begin(); k != _game->getSavedGame()->getCountries()->end(); ++k)
 	{
-		// add them to the list of new pact members this is done BEFORE initiating
+		// add them to the list of new pact members; this is done BEFORE initiating
 		// a new month because the _newPact flag will be reset in the process
 		if ((*k)->getNewPact())
 		{

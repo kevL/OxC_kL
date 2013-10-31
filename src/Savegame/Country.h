@@ -51,8 +51,10 @@ private:
 		void load(const YAML::Node& node);
 		/// Saves the country to YAML.
 		YAML::Node save() const;
+
 		/// Gets the country's ruleset.
 		RuleCountry* getRules() const;
+
 		/// Gets the country's funding.
 		const std::vector<int>& getFunding() const;
 		/// Sets the country's funding.
