@@ -61,14 +61,12 @@ Country::~Country()
 void Country::load(const YAML::Node& node)
 {
 	_funding		= node["funding"].as< std::vector<int> >(_funding);
+
 	_activityXcom	= node["activityXcom"].as< std::vector<int> >(_activityXcom);
 	_activityAlien	= node["activityAlien"].as< std::vector<int> >(_activityAlien);
 
-//kL	if (_pact)
-		_pact		= node["pact"].as<bool>(_pact);
-
-//kL	if (_newPact)
-		_newPact	= node["newPact"].as<bool>(_newPact);
+	_pact			= node["pact"].as<bool>(_pact);
+	_newPact		= node["newPact"].as<bool>(_newPact);
 }
 
 /**
@@ -84,9 +82,9 @@ YAML::Node Country::save() const
 	node["activityXcom"]	= _activityXcom;
 	node["activityAlien"]	= _activityAlien;
 
-	if (_pact)		// kL
+	if (_pact)
 		node["pact"]		= _pact;
-	if (_newPact)	// kL
+	else if (_newPact)
 		node["newPact"]		= _newPact;
 
 	return node;
