@@ -187,7 +187,7 @@ BattlescapeState::BattlescapeState(Game* game)
 
 	// kL_begin:
 //	Log(LOG_INFO) << ". new TurnCounter";
-	_turnCounter	= new TurnCounter(65, 5, 0, 0);		// kL
+	_turnCounter	= new TurnCounter(20, 5, 0, 0);		// kL
 //	Log(LOG_INFO) << ". new TurnCounter DONE";
 
 //	add(_turnCounter);
@@ -361,14 +361,18 @@ BattlescapeState::BattlescapeState(Game* game)
 	_btnCenter->onMouseIn((ActionHandler)& BattlescapeState::txtTooltipIn);
 	_btnCenter->onMouseOut((ActionHandler)& BattlescapeState::txtTooltipOut);
 
-	_btnNextSoldier->onMouseClick((ActionHandler)& BattlescapeState::btnNextSoldierClick);
+//kL	_btnNextSoldier->onMouseClick((ActionHandler)& BattlescapeState::btnNextSoldierClick);
+	_btnNextSoldier->onMouseClick((ActionHandler)& BattlescapeState::btnNextSoldierClick, SDL_BUTTON_LEFT);		// kL
+	_btnNextSoldier->onMouseClick((ActionHandler)& BattlescapeState::btnPrevSoldierClick, SDL_BUTTON_RIGHT);	// kL
 	_btnNextSoldier->onKeyboardPress((ActionHandler)& BattlescapeState::btnNextSoldierClick, (SDLKey)Options::getInt("keyBattleNextUnit"));
 	_btnNextSoldier->onKeyboardPress((ActionHandler)& BattlescapeState::btnPrevSoldierClick, (SDLKey)Options::getInt("keyBattlePrevUnit"));
 	_btnNextSoldier->setTooltip("STR_NEXT_UNIT");
 	_btnNextSoldier->onMouseIn((ActionHandler)& BattlescapeState::txtTooltipIn);
 	_btnNextSoldier->onMouseOut((ActionHandler)& BattlescapeState::txtTooltipOut);
 
-	_btnNextStop->onMouseClick((ActionHandler)& BattlescapeState::btnNextStopClick);
+//kL	_btnNextStop->onMouseClick((ActionHandler)& BattlescapeState::btnNextStopClick);
+	_btnNextStop->onMouseClick((ActionHandler)& BattlescapeState::btnNextStopClick, SDL_BUTTON_LEFT);		// kL
+	_btnNextStop->onMouseClick((ActionHandler)& BattlescapeState::btnPrevStopClick, SDL_BUTTON_RIGHT);		// kL
 	_btnNextStop->onKeyboardPress((ActionHandler)& BattlescapeState::btnNextStopClick, (SDLKey)Options::getInt("keyBattleDeselectUnit"));
 	_btnNextStop->setTooltip("STR_DESELECT_UNIT");
 	_btnNextStop->onMouseIn((ActionHandler)& BattlescapeState::txtTooltipIn);
@@ -953,7 +957,19 @@ void BattlescapeState::btnCenterClick(Action *)
 void BattlescapeState::btnNextSoldierClick(Action *)
 {
 	if (allowButtons())
-		selectNextPlayerUnit(true, false);
+		selectNextPlayerUnit(true);
+
+/*	if (allowButtons())
+	{
+		if ()
+		{
+			selectNextPlayerUnit(true);
+		}
+		else if ()
+		{
+			selectPreviousPlayerUnit(true);
+		}
+	} */	// kL
 }
 
 /**
@@ -974,6 +990,16 @@ void BattlescapeState::btnPrevSoldierClick(Action *)
 {
 	if (allowButtons())
 		selectPreviousPlayerUnit(true);
+}
+
+/**
+ * Disables reselection of the current soldier and selects the next soldier.
+ * @param action Pointer to an action.
+ */
+void BattlescapeState::btnPrevStopClick(Action *)
+{
+	if (allowButtons())
+		selectPreviousPlayerUnit(true, true);
 }
 
 /**

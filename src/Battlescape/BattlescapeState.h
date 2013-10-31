@@ -139,6 +139,8 @@ private:
 		void btnNextStopClick(Action* action);
 		/// Handler for clicking the Previous Soldier button.
 		void btnPrevSoldierClick(Action* action);
+		/// Handler for clicking the Previous Stop button.	// kL
+		void btnPrevStopClick(Action* action);				// kL
 		/// Handler for clicking the Show Layers button.
 		void btnShowLayersClick(Action* action);
 		/// Handler for clicking the Help button.
