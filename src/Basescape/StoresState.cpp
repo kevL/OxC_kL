@@ -50,20 +50,15 @@ StoresState::StoresState(Game* game, Base* base)
 {
 	_window			= new Window(this, 320, 200, 0, 0);
 
-//kL	_txtTitle		= new Text(310, 17, 5, 8);
-	_txtTitle		= new Text(300, 17, 10, 9);			// kL
+	_txtTitle		= new Text(300, 17, 10, 9);
 
-//kL	_txtItem		= new Text(142, 9, 10, 32);
-//kL	_txtQuantity	= new Text(88, 9, 152, 32);
-//kL	_txtSpaceUsed	= new Text(74, 9, 240, 32);
-	_txtItem		= new Text(142, 9, 16, 25);			// kL
-	_txtQuantity	= new Text(88, 9, 178, 25);			// kL
-	_txtSpaceUsed	= new Text(74, 9, 270, 25);			// kL
+	_txtItem		= new Text(142, 9, 16, 25);
+	_txtQuantity	= new Text(88, 9, 178, 25);
+	_txtSpaceUsed	= new Text(74, 9, 270, 25);
 
-	_lstStores		= new TextList(288, 136, 8, 36);
+	_lstStores		= new TextList(294, 136, 8, 36);
 
-//kL	_btnOk			= new TextButton(300, 16, 10, 176);
-	_btnOk			= new TextButton(288, 16, 16, 177);		// kL
+	_btnOk			= new TextButton(288, 16, 16, 177);
 
 
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);

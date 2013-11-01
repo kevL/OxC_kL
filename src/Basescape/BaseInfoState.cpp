@@ -56,23 +56,15 @@ BaseInfoState::BaseInfoState(Game* game, Base* base, BasescapeState* state)
 {
 	_containmentLimit = Options::getBool("alienContainmentLimitEnforced");
 
-	// Create objects
+
 	_bg					= new Surface(320, 200, 0, 0);
 	_mini				= new MiniBaseView(128, 16, 182, 8);
-//kL	_btnOk				= new TextButton(30, 14, 10, 180);
-//kL	_btnTransfers		= new TextButton(80, 14, 46, 180);
-//kL	_btnStores			= new TextButton(80, 14, 132, 180);
-//kL	_btnMonthlyCosts	= new TextButton(92, 14, 218, 180);
-	_btnMonthlyCosts	= new TextButton(72, 14, 11, 179);		// kL
-	_btnTransfers		= new TextButton(71, 14, 87, 179);		// kL
-	_btnStores			= new TextButton(71, 14, 162, 179);		// kL
-	_btnOk				= new TextButton(72, 14, 237, 179);		// kL
-// 16|                               288                                |16
-// 16|0|   70      |3|      70       |2|     70       |3|    70       |0|16
+	_btnMonthlyCosts	= new TextButton(72, 14, 11, 179);
+	_btnTransfers		= new TextButton(71, 14, 87, 179);
+	_btnStores			= new TextButton(71, 14, 162, 179);
+	_btnOk				= new TextButton(72, 14, 237, 179);
 
-
-//kL	_edtBase			= new TextEdit(127, 16, 8, 8);
-	_edtBase			= new TextEdit(127, 16, 8, 9);			// kL
+	_edtBase			= new TextEdit(127, 16, 8, 9);
 
 	_txtPersonnel		= new Text(300, 9, 8, 30);
 	_txtSoldiers		= new Text(114, 9, 8, 41);
@@ -176,7 +168,7 @@ BaseInfoState::BaseInfoState(Game* game, Base* base, BasescapeState* state)
 
 	centerAllSurfaces();
 
-	// Set up objects
+
 	std::ostringstream ss;
 	if (_containmentLimit)
 	{
@@ -303,7 +295,6 @@ BaseInfoState::BaseInfoState(Game* game, Base* base, BasescapeState* state)
 
 	_barHangars->setColor(Palette::blockOffset(3));
 	_barHangars->setScale(18.0);
-
 
 	_txtDefense->setColor(Palette::blockOffset(13)+5);
 	_txtDefense->setText(tr("STR_DEFENSE_STRENGTH"));

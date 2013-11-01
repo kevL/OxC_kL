@@ -67,8 +67,6 @@ ManufactureStartState::ManufactureStartState(Game* game, Base* base, RuleManufac
 	_txtUnitRequiredColumn	= new Text(60, 9, 180, 85);
 	_txtUnitAvailableColumn	= new Text(60, 9, 240, 85);
 
-//	_lstRequiredItems->setColumns(3, 140, 60, 40);	// TEMP.
-
 	_lstRequiredItems		= new TextList(240, 48, 40, 105);
 
 	_btnCancel				= new TextButton(130, 16, 20, 160);

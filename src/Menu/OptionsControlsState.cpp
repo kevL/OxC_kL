@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "OptionsControlsState.h"
 #include <SDL.h>
 #include "../Engine/Game.h"
@@ -30,19 +31,23 @@
 #include "../Engine/Action.h"
 #include "../Engine/Logger.h"
 
+
 namespace OpenXcom
 {
 
 // Welp time for some ugly static code becuase C++
 // is too much of a derp to initialize class arrays.
 KeyOption OptionsControlsState::_controlsGeneral[] =
-	{{"keyOk", "STR_OK", SDLK_UNKNOWN},
+{
+	{"keyOk", "STR_OK", SDLK_UNKNOWN},
 	{"keyCancel", "STR_CANCEL", SDLK_UNKNOWN},
 	{"keyScreenshot", "STR_SCREENSHOT", SDLK_UNKNOWN},
-	{"keyFps", "STR_FPS_COUNTER", SDLK_UNKNOWN}};
+	{"keyFps", "STR_FPS_COUNTER", SDLK_UNKNOWN}
+};
 
 KeyOption OptionsControlsState::_controlsGeo[] =
-	{{"keyGeoLeft", "STR_ROTATE_LEFT", SDLK_UNKNOWN},
+{
+	{"keyGeoLeft", "STR_ROTATE_LEFT", SDLK_UNKNOWN},
 	{"keyGeoRight", "STR_ROTATE_RIGHT", SDLK_UNKNOWN},
 	{"keyGeoUp", "STR_ROTATE_UP", SDLK_UNKNOWN},
 	{"keyGeoDown", "STR_ROTATE_DOWN", SDLK_UNKNOWN},
@@ -63,10 +68,12 @@ KeyOption OptionsControlsState::_controlsGeo[] =
 	{"keyGeoToggleDetail", "STR_TOGGLE_COUNTRY_DETAIL", SDLK_UNKNOWN},
 	{"keyGeoToggleRadar", "STR_TOGGLE_RADAR_RANGES", SDLK_UNKNOWN},
 	{"keyQuickSave", "STR_QUICK_SAVE", SDLK_UNKNOWN},
-	{"keyQuickLoad", "STR_QUICK_LOAD", SDLK_UNKNOWN}};
+	{"keyQuickLoad", "STR_QUICK_LOAD", SDLK_UNKNOWN}
+};
 
 KeyOption OptionsControlsState::_controlsBattle[] =
-	{{"keyBattleLeft", "STR_SCROLL_LEFT", SDLK_UNKNOWN},
+{
+	{"keyBattleLeft", "STR_SCROLL_LEFT", SDLK_UNKNOWN},
 	{"keyBattleRight", "STR_SCROLL_RIGHT", SDLK_UNKNOWN},
 	{"keyBattleUp", "STR_SCROLL_UP", SDLK_UNKNOWN},
 	{"keyBattleDown", "STR_SCROLL_DOWN", SDLK_UNKNOWN},
@@ -101,27 +108,32 @@ KeyOption OptionsControlsState::_controlsBattle[] =
 	{"keyBattleCenterEnemy8", "STR_CENTER_ON_ENEMY_8", SDLK_UNKNOWN},
 	{"keyBattleCenterEnemy9", "STR_CENTER_ON_ENEMY_9", SDLK_UNKNOWN},
 	{"keyBattleCenterEnemy10", "STR_CENTER_ON_ENEMY_10", SDLK_UNKNOWN},
-	{"keyBattleVoxelView", "STR_SAVE_VOXEL_VIEW", SDLK_UNKNOWN}};
+	{"keyBattleVoxelView", "STR_SAVE_VOXEL_VIEW", SDLK_UNKNOWN}
+};
 
 /**
  * Initializes all the elements in the Controls screen.
  * @param game Pointer to the core game.
  * @param origin Game section that originated this state.
  */
-OptionsControlsState::OptionsControlsState(Game *game, OptionsOrigin origin) : OptionsBaseState(game, origin), _selected(-1), _selKey(0)
+OptionsControlsState::OptionsControlsState(Game* game, OptionsOrigin origin)
+	:
+		OptionsBaseState(game, origin), _selected(-1), _selKey(0)
 {
 	_countGeneral = 4;
 	_countGeo = 20;
 	_countBattle = 36;
-	if (Options::getInt("autosave") == 1)
-		_countGeo += 2;	// You can tune quick save/load hotkeys only if you choose autosave in the advanced options.
 
-	// Create objects
-	_window = new Window(this, 320, 200, 0, 0, POPUP_BOTH);
-	_btnOk = new TextButton(148, 16, 8, 176);
-	_btnCancel = new TextButton(148, 16, 164, 176);
-	_txtTitle = new Text(310, 17, 5, 8);
-	_lstControls = new TextList(288, 136, 8, 30);
+	// You can tune quick save/load hotkeys only if you choose autosave in the advanced options.
+	if (Options::getInt("autosave") == 1)
+		_countGeo += 2;
+
+
+	_window			= new Window(this, 320, 200, 0, 0, POPUP_BOTH);
+	_btnOk			= new TextButton(148, 16, 8, 176);
+	_btnCancel		= new TextButton(148, 16, 164, 176);
+	_txtTitle		= new Text(310, 17, 5, 8);
+	_lstControls	= new TextList(294, 136, 8, 30);
 
 	add(_window);
 	add(_btnOk);
@@ -131,7 +143,7 @@ OptionsControlsState::OptionsControlsState(Game *game, OptionsOrigin origin) : O
 
 	centerAllSurfaces();
 
-	// Set up objects
+
 	_window->setColor(Palette::blockOffset(8)+5);
 	_window->setBackground(game->getResourcePack()->getSurface("BACK01.SCR"));
 
@@ -178,7 +190,6 @@ OptionsControlsState::OptionsControlsState(Game *game, OptionsOrigin origin) : O
  */
 OptionsControlsState::~OptionsControlsState()
 {
-
 }
 
 /**
@@ -192,6 +203,7 @@ std::string OptionsControlsState::ucWords(std::string str)
 	{
 		str[0] = toupper(str[0]);
 	}
+
 	for (size_t i = str.find_first_of(' '); i != std::string::npos; i = str.find_first_of(' ', i+1))
 	{
 		if (str.length() > i+1)
@@ -199,6 +211,7 @@ std::string OptionsControlsState::ucWords(std::string str)
 		else
 			break;
 	}
+
 	return str;
 }
 
@@ -214,8 +227,10 @@ void OptionsControlsState::addControls(KeyOption keys[], int count)
 		keys[i].key = (SDLKey)Options::getInt(keys[i].option);
 		std::wstring name = tr(keys[i].name);
 		std::wstring key = Language::utf8ToWstr(ucWords(SDL_GetKeyName(keys[i].key)));
+
 		if (keys[i].key == SDLK_UNKNOWN)
 			key = L"";
+
 		_lstControls->addRow(2, name.c_str(), key.c_str());
 	}
 }
@@ -230,15 +245,19 @@ void OptionsControlsState::btnOkClick(Action *)
 	{
 		Options::setInt(_controlsGeneral[i].option, _controlsGeneral[i].key);
 	}
+
 	for (int i = 0; i < _countGeo; ++i)
 	{
 		Options::setInt(_controlsGeo[i].option, _controlsGeo[i].key);
 	}
+
 	for (int i = 0; i < _countBattle; ++i)
 	{
 		Options::setInt(_controlsBattle[i].option, _controlsBattle[i].key);
 	}
+
 	Options::save();
+
 	_game->popState();
 }
 
@@ -260,13 +279,16 @@ void OptionsControlsState::lstControlsClick(Action *action)
 	if (_selected != -1)
 	{
 		int selected = _selected;
+
 		_lstControls->setCellColor(_selected, 0, Palette::blockOffset(8)+10);
 		_lstControls->setCellColor(_selected, 1, Palette::blockOffset(8)+10);
 		_selected = -1;
 		_selKey = 0;
+
 		if (selected == _lstControls->getSelectedRow())
 			return;
 	}
+
 	_selected = _lstControls->getSelectedRow();
 	if (_selected > 0 && _selected <= _countGeneral)
 	{
@@ -284,6 +306,7 @@ void OptionsControlsState::lstControlsClick(Action *action)
 	{
 		_selected = -1;
 		_selKey = 0;
+
 		return;
 	}
 
@@ -316,6 +339,7 @@ void OptionsControlsState::lstControlsKeyPress(Action *action)
 			std::wstring name = Language::utf8ToWstr(ucWords(SDL_GetKeyName(_selKey->key)));
 			_lstControls->setCellText(_selected, 1, name);
 		}
+
 		_lstControls->setCellColor(_selected, 0, Palette::blockOffset(8)+10);
 		_lstControls->setCellColor(_selected, 1, Palette::blockOffset(8)+10);
 		_selected = -1;

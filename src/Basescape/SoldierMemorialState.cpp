@@ -60,8 +60,7 @@ SoldierMemorialState::SoldierMemorialState(Game* game)
 	_txtRank		= new Text(70, 9, 140, 36);
 	_txtDate		= new Text(94, 9, 210, 36);
 
-//	_lstSoldiers->setColumns(5, 124, 70, 26, 24, 44);	// TEMP.
-	_lstSoldiers	= new TextList(288, 128, 8, 44);
+	_lstSoldiers	= new TextList(294, 128, 8, 44);
 
 	_btnOk			= new TextButton(288, 16, 16, 177);
 

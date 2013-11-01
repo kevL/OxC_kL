@@ -53,25 +53,19 @@ CraftArmorState::CraftArmorState(Game* game, Base* base, size_t craft)
 {
 //	Log(LOG_INFO) << "Create CraftArmorState";
 
-	// Create objects
 	_window			= new Window(this, 320, 200, 0, 0);
 
-//kL	_txtTitle		= new Text(300, 17, 16, 7);
-	_txtTitle		= new Text(300, 17, 11, 10);			// kL
+	_txtTitle		= new Text(300, 17, 11, 10);
 
-//kL	_txtName		= new Text(114, 9, 16, 32);
-//kL	_txtCraft		= new Text(70, 9, 130, 32);
-//kL	_txtArmor		= new Text(100, 9, 210, 32);
-	_txtName		= new Text(114, 9, 16, 31);				// kL
-	_txtArmor		= new Text(76, 9, 133, 31);				// kL
-	_txtCraft		= new Text(70, 9, 226, 31);				// kL
+	_txtName		= new Text(114, 9, 16, 31);
+	_txtArmor		= new Text(76, 9, 133, 31);
+	_txtCraft		= new Text(70, 9, 226, 31);
 
-//kL	_lstSoldiers	= new TextList(288, 128, 8, 40);
-	_lstSoldiers	= new TextList(288, 128, 8, 42);		// kL
+	_lstSoldiers	= new TextList(294, 128, 8, 42);
 
-//kL	_btnOk			= new TextButton(288, 16, 16, 176);
-	_btnOk			= new TextButton(288, 16, 16, 177);		// kL
-	// Set palette
+	_btnOk			= new TextButton(288, 16, 16, 177);
+
+
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)), Palette::backPos, 16);
 
 	add(_window);
@@ -84,7 +78,7 @@ CraftArmorState::CraftArmorState(Game* game, Base* base, size_t craft)
 
 	centerAllSurfaces();
 
-	// Set up objects
+
 	_window->setColor(Palette::blockOffset(13)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK14.SCR"));
 
@@ -95,7 +89,6 @@ CraftArmorState::CraftArmorState(Game* game, Base* base, size_t craft)
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
-//	_txtTitle->setAlign(ALIGN_CENTER);		// kL
 	_txtTitle->setText(tr("STR_SELECT_ARMOR"));
 
 	_txtName->setColor(Palette::blockOffset(13)+10);
@@ -108,10 +101,9 @@ CraftArmorState::CraftArmorState(Game* game, Base* base, size_t craft)
 	_txtArmor->setText(tr("STR_ARMOR"));
 
 	_lstSoldiers->setColor(Palette::blockOffset(13)+10);
-//kL	_lstSoldiers->setColumns(3, 114, 80, 86);
-	_lstSoldiers->setArrowColor(Palette::blockOffset(13)+10);	// kL. +6= light brownish
+	_lstSoldiers->setArrowColor(Palette::blockOffset(13)+10);	// +6= light brownish
 	_lstSoldiers->setArrowColumn(193, ARROW_VERTICAL);			// kL
-	_lstSoldiers->setColumns(3, 117, 93, 78);					// kL
+	_lstSoldiers->setColumns(3, 117, 93, 78);
 	_lstSoldiers->setSelectable(true);
 	_lstSoldiers->setBackground(_window);
 	_lstSoldiers->setMargin(8);

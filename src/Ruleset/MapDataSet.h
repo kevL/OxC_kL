@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_MAPDATASET_H
 #define OPENXCOM_MAPDATASET_H
 
@@ -23,6 +24,7 @@
 #include <vector>
 #include <SDL.h>
 #include <yaml-cpp/yaml.h>
+
 
 namespace OpenXcom
 {
@@ -42,33 +44,36 @@ class MapDataSet
 private:
 	std::string _name;
 	std::vector<MapData*> _objects;
-	SurfaceSet *_surfaceSet;
+	SurfaceSet* _surfaceSet;
 	bool _loaded;
-	static MapData *_blankTile;
-	static MapData *_scorchedTile;
-public:
-	MapDataSet(const std::string &name);
-	~MapDataSet();
-	/// Loads the map data set from YAML.
-	void load(const YAML::Node& node);
-	/// Loads voxeldata from a DAT file.
-	static void loadLOFTEMPS(const std::string &filename, std::vector<Uint16> *voxelData);
-	/// Gets the dataset name (used for MAP generation).
-	std::string getName() const;
-	/// Gets the dataset size.
-	int getSize() const;
-	/// Gets the objects in this dataset.
-	std::vector<MapData*> *getObjects();
-	/// Gets the surfaces in this dataset.
-	SurfaceSet *getSurfaceset() const;
-	/// Loads the objects from an MCD file.
-	void loadData();
-	///	Unloads to free memory.
-	void unloadData();
-	/// Gets a blank floor tile.
-	static MapData *getBlankFloorTile();
-	/// Gets a scorched earth tile.
-	static MapData *getScorchedEarthTile();
+	static MapData* _blankTile;
+	static MapData* _scorchedTile;
+
+	public:
+		MapDataSet(const std::string& name);
+		~MapDataSet();
+
+		/// Loads the map data set from YAML.
+		void load(const YAML::Node& node);
+
+		/// Loads voxeldata from a DAT file.
+		static void loadLOFTEMPS(const std::string& filename, std::vector<Uint16>* voxelData);
+		/// Gets the dataset name (used for MAP generation).
+		std::string getName() const;
+		/// Gets the dataset size.
+		int getSize() const;
+		/// Gets the objects in this dataset.
+		std::vector<MapData*>* getObjects();
+		/// Gets the surfaces in this dataset.
+		SurfaceSet* getSurfaceset() const;
+		/// Loads the objects from an MCD file.
+		void loadData();
+		///	Unloads to free memory.
+		void unloadData();
+		/// Gets a blank floor tile.
+		static MapData* getBlankFloorTile();
+		/// Gets a scorched earth tile.
+		static MapData* getScorchedEarthTile();
 };
 
 }

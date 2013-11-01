@@ -391,6 +391,8 @@ void Base::setEngineers(int engineers)
  */
 bool Base::detect(Target* target) const
 {
+	Log(LOG_INFO) << "Base::detect()";
+
 	int chance = 0;
 	double distance = getDistance(target);
 
@@ -401,10 +403,12 @@ bool Base::detect(Target* target) const
 		{
 			if ((*f)->getRules()->isHyperwave())
 			{
+				Log(LOG_INFO) << ". . . . isHyperwave() = TRUE";
 				return true;
 			}
 
 			chance += (*f)->getRules()->getRadarChance();
+			Log(LOG_INFO) << ". . chance 1 = " << chance;
 		}
 	}
 
@@ -415,6 +419,7 @@ bool Base::detect(Target* target) const
 	if (u != 0)
 	{
 		chance = ((chance * 100) + u->getVisibility()) / 100;
+		Log(LOG_INFO) << ". . chance 2 = " << chance;
 	}
 
 	return RNG::percent(chance);

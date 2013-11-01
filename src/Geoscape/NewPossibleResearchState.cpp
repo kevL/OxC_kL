@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include <algorithm>
 #include "NewPossibleResearchState.h"
 #include "../Engine/Game.h"
@@ -32,6 +33,7 @@
 #include "../Savegame/SavedGame.h"
 #include "../Engine/Options.h"
 
+
 namespace OpenXcom
 {
 /**
@@ -40,18 +42,20 @@ namespace OpenXcom
  * @param base Pointer to the base to get info from.
  * @param possibilities List of newly possible ResearchProject
  */
-NewPossibleResearchState::NewPossibleResearchState(Game * game, Base * base, const std::vector<RuleResearch *> & possibilities) : State (game), _base(base)
+NewPossibleResearchState::NewPossibleResearchState(Game* game, Base* base, const std::vector<RuleResearch*>& possibilities)
+	:
+	State (game),
+	_base(base)
 {
 	_screen = false;
 
-	// Create objects
-	_window = new Window(this, 288, 180, 16, 10);
-	_btnOk = new TextButton(160, 14, 80, 149);
-	_btnResearch = new TextButton(160, 14, 80, 165);
-	_txtTitle = new Text(288, 40, 16, 20);
-	_lstPossibilities = new TextList(288, 80, 16, 56);
+	_window				= new Window(this, 288, 180, 16, 10);
+	_btnOk				= new TextButton(160, 14, 80, 149);
+	_btnResearch		= new TextButton(160, 14, 80, 165);
+	_txtTitle			= new Text(288, 40, 16, 20);
+	_lstPossibilities	= new TextList(288, 80, 16, 56);
 
-	// Set palette
+
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(1)), Palette::backPos, 16);
 
 	add(_window);
@@ -62,7 +66,7 @@ NewPossibleResearchState::NewPossibleResearchState(Game * game, Base * base, con
 
 	centerAllSurfaces();
 
-	// Set up objects
+
 	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK05.SCR"));
 
@@ -84,10 +88,12 @@ NewPossibleResearchState::NewPossibleResearchState(Game * game, Base * base, con
 	_lstPossibilities->setAlign(ALIGN_CENTER);
 	
 	size_t tally(0);
-	for(std::vector<RuleResearch *>::const_iterator iter = possibilities.begin (); iter != possibilities.end (); ++iter)
+	for (std::vector<RuleResearch *>::const_iterator iter = possibilities.begin (); iter != possibilities.end (); ++iter)
 	{
 		bool liveAlien = _game->getRuleset()->getUnit((*iter)->getName()) != 0;
-		if(!_game->getSavedGame()->wasResearchPopped(*iter) && (*iter)->getRequirements().empty() && !liveAlien)
+		if (!_game->getSavedGame()->wasResearchPopped(*iter)
+			&& (*iter)->getRequirements().empty()
+			&& !liveAlien)
 		{
 			_game->getSavedGame()->addPoppedResearch((*iter));
 			_lstPossibilities->addRow (1, tr((*iter)->getName ()).c_str());
@@ -116,7 +122,7 @@ void NewPossibleResearchState::init()
  * return to the previous screen
  * @param action Pointer to an action.
  */
-void NewPossibleResearchState::btnOkClick(Action *)
+void NewPossibleResearchState::btnOkClick(Action*)
 {
 	_game->popState ();
 }
@@ -125,9 +131,10 @@ void NewPossibleResearchState::btnOkClick(Action *)
  * Open the ResearchState so the player can dispatch available scientist.
  * @param action Pointer to an action.
  */
-void NewPossibleResearchState::btnResearchClick(Action *)
+void NewPossibleResearchState::btnResearchClick(Action*)
 {
 	_game->popState();
 	_game->pushState (new ResearchState(_game, _base));
 }
+
 }

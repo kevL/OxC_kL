@@ -72,6 +72,7 @@ SavedBattleGame::SavedBattleGame()
 		_side(FACTION_PLAYER),
 		_turn(1),
 		_debugMode(false),
+//		_debugMode(true),		// kL
 		_aborted(false),
 		_itemId(0),
 		_objectiveDestroyed(false),
@@ -81,7 +82,6 @@ SavedBattleGame::SavedBattleGame()
 		_sneaky(false),
 		_traceAI(false),
 		_cheating(false)
-//		_allVisibleUnits(0)		// kL
 {
 	//Log(LOG_INFO) << "Create SavedBattleGame";
 

@@ -68,7 +68,7 @@ CraftSoldiersState::CraftSoldiersState(Game* game, Base* base, size_t craft)
 
 //	_lstSoldiers->setColumns(3, 116, 93, 71);				// TEMP.
 
-	_lstSoldiers	= new TextList(288, 128, 8, 42);
+	_lstSoldiers	= new TextList(294, 128, 8, 42);
 
 	_btnUnload		= new TextButton(144, 16, 16, 177);		// kL
 	_btnOk			= new TextButton(144, 16, 163, 177);

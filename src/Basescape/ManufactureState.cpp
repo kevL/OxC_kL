@@ -80,9 +80,8 @@ ManufactureState::ManufactureState(Game* game, Base* base)
 	_txtProduced	= new Text(40, 9, 174, 52);
 	_txtCost		= new Text(50, 17, 216, 44);
 	_txtTimeLeft	= new Text(55, 9, 271, 52);
-//	_lstManufacture->setColumns(5, 129, 29, 42, 55, 32);
 
-	_lstManufacture	= new TextList(288, 96, 8, 70);
+	_lstManufacture	= new TextList(294, 96, 8, 70);
 	// kL_end.
 
 //kL	_btnNew			= new TextButton(148, 16, 8, 176);

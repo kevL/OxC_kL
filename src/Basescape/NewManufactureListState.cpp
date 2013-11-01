@@ -76,8 +76,7 @@ NewManufactureListState::NewManufactureListState(Game* game, Base* base)
 	_txtItem		= new Text(80, 9, 16, 58);
 	_txtCategory	= new Text(80, 9, 172, 58);
 
-//	_lstManufacture->setColumns(2, 156, 130);		// TEMP.
-	_lstManufacture	= new TextList(304, 72, 8, 70);
+	_lstManufacture	= new TextList(294, 72, 8, 70);
 
 	_btnOk			= new TextButton(288, 16, 16, 147);
 

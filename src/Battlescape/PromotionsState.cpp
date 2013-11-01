@@ -44,20 +44,19 @@ PromotionsState::PromotionsState(Game* game)
 	:
 		State(game)
 {
-	// Create objects
 	_window			= new Window(this, 320, 200, 0, 0);
+
 	_txtTitle		= new Text(300, 17, 10, 8);
+
 	_txtName		= new Text(114, 9, 16, 32);
 	_txtRank		= new Text(90, 9, 130, 32);
 	_txtBase		= new Text(80, 9, 220, 32);
-//kL	_lstSoldiers	= new TextList(288, 128, 8, 40);
-	_lstSoldiers	= new TextList(288, 128, 8, 42);		// kL
 
-//kL	_btnOk			= new TextButton(288, 16, 16, 176);
-	_btnOk			= new TextButton(288, 16, 16, 177);		// kL
+	_lstSoldiers	= new TextList(294, 128, 8, 42);
+
+	_btnOk			= new TextButton(288, 16, 16, 177);
 
 
-	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
 	add(_window);
 	add(_btnOk);
@@ -69,7 +68,7 @@ PromotionsState::PromotionsState(Game* game)
 
 	centerAllSurfaces();
 
-	// Set up objects
+
 	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 

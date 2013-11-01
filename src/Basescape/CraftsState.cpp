@@ -47,34 +47,23 @@ CraftsState::CraftsState(Game* game, Base* base)
 		State(game),
 		_base(base)
 {
-	// Create objects
 	_window		= new Window(this, 320, 200, 0, 0);
 
-//kL	_txtTitle	= new Text(298, 17, 16, 8);
-	_txtTitle	= new Text(300, 17, 10, 8);		// kL
+	_txtTitle	= new Text(300, 17, 10, 8);
 
-//kL	_txtBase	= new Text(298, 17, 16, 24);
-	_txtBase	= new Text(298, 17, 16, 25);	// kL
+	_txtBase	= new Text(298, 17, 16, 25);
 
-//kL	_txtName	= new Text(94, 9, 16, 40);
-//kL	_txtStatus	= new Text(50, 9, 110, 40);
-//kL	_txtWeapon	= new Text(50, 16, 160, 40);
-//kL	_txtCrew	= new Text(58, 9, 210, 40);
-//kL	_txtHwp		= new Text(46, 9, 268, 40);
-	_txtName	= new Text(94, 9, 16, 49);		// kL
-	_txtStatus	= new Text(50, 9, 110, 49);		// kL
-	_txtWeapon	= new Text(50, 17, 175, 41);	// kL
-	_txtCrew	= new Text(58, 9, 222, 49);		// kL
-	_txtHwp		= new Text(46, 9, 268, 49);		// kL
+	_txtName	= new Text(94, 9, 16, 49);
+	_txtStatus	= new Text(50, 9, 110, 49);
+	_txtWeapon	= new Text(50, 17, 175, 41);
+	_txtCrew	= new Text(58, 9, 222, 49);
+	_txtHwp		= new Text(46, 9, 268, 49);
 
-//kL	_lstCrafts	= new TextList(288, 118, 8, 58);
-	_lstCrafts	= new TextList(288, 112, 8, 59);		// kL
+	_lstCrafts	= new TextList(294, 112, 8, 59);
 
-//	_lstCrafts->setColumns(5, 94, 65, 47, 46, 28);		// kL_TEMP
+	_btnOk		= new TextButton(288, 16, 16, 177);
 
-//kL	_btnOk		= new TextButton(288, 16, 16, 176);
-	_btnOk		= new TextButton(288, 16, 16, 177);		// kL
-	// Set palette
+
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(3)), Palette::backPos, 16);
 
 	add(_window);
@@ -90,7 +79,7 @@ CraftsState::CraftsState(Game* game, Base* base)
 
 	centerAllSurfaces();
 
-	// Set up objects
+
 	_window->setColor(Palette::blockOffset(15)+1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK14.SCR"));
 

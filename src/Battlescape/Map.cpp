@@ -228,12 +228,6 @@ void Map::draw()
 	}
 
 	//Log(LOG_INFO) << ". . kL_preReveal = " << kL_preReveal;
-//	if (kL_preReveal && !_reveal)		// kL
-//	{
-//		_reveal = 250;					// kL
-	//Log(LOG_INFO) << ". . . . _reveal " << _reveal;
-//	}
-
 /*kL	if ((_save->getSelectedUnit() && _save->getSelectedUnit()->getVisible())
 		|| _unitDying
 		|| _save->getSelectedUnit() == 0
@@ -243,6 +237,7 @@ void Map::draw()
 	{
 		drawTerrain(this);
 	} */
+
 	if ((_save->getSelectedUnit() && _save->getSelectedUnit()->getVisible())
 		|| _unitDying
 		|| _save->getSelectedUnit() == 0
@@ -265,8 +260,6 @@ void Map::draw()
 		drawTerrain(this);
 	}
 	else // "hidden movement"
-//	else if (kL_preReveal			// kL
-//		|| !_reveal)				// kL
 	{
 		if (kL_preReveal)				// kL
 		{
@@ -279,6 +272,8 @@ void Map::draw()
 		//Log(LOG_INFO) << ". . . . blit( hidden movement )";
 		_message->blit(this);
 	}
+
+//	drawTerrain(this); // TEST!!!!!!!!
 }
 
 /**

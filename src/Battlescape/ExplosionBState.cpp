@@ -94,7 +94,7 @@ void ExplosionBState::init()
 		_power = _tile->getExplosive();
 		_areaOfEffect = true;
 	}
-	else
+	else // cyberdisc... ?
 	{
 		_power = 120;
 		_areaOfEffect = true;
@@ -107,12 +107,13 @@ void ExplosionBState::init()
 		{
 			for (int i = 0; i < _power / 5; i++)
 			{
-				int X = RNG::generate(-_power / 2,_power / 2);
-				int Y = RNG::generate(-_power / 2,_power / 2);
+				int X = RNG::generate(-_power / 2, _power / 2);
+				int Y = RNG::generate(-_power / 2, _power / 2);
 
 				Position p = _center;
 				p.x += X; p.y += Y;
-				Explosion* explosion = new Explosion(p, RNG::generate(-3, 6), true);
+//kL				Explosion* explosion = new Explosion(p, RNG::generate(-3, 6), true);
+				Explosion* explosion = new Explosion(p, -3, true);
 
 				_parent->getMap()->getExplosions()->insert(explosion); // add the explosion on the map
 			}
@@ -160,7 +161,9 @@ void ExplosionBState::init()
  */
 void ExplosionBState::think()
 {
-	for (std::set<Explosion* >::const_iterator i = _parent->getMap()->getExplosions()->begin(), inext = i; i != _parent->getMap()->getExplosions()->end(); i = inext)
+	for (std::set<Explosion*>::const_iterator i = _parent->getMap()->getExplosions()->begin(),
+			inext = i;
+			i != _parent->getMap()->getExplosions()->end(); i = inext)
 	{
 		++inext;
 
@@ -265,7 +268,9 @@ void ExplosionBState::explode()
 		&& (_item->getRules()->getBattleType() == BT_GRENADE
 			|| _item->getRules()->getBattleType() == BT_PROXIMITYGRENADE))
 	{
-		for (std::vector<BattleItem* >::iterator j = _parent->getSave()->getItems()->begin(); j != _parent->getSave()->getItems()->end(); ++j)
+		for (std::vector<BattleItem*>::iterator j = _parent->getSave()->getItems()->begin();
+				j != _parent->getSave()->getItems()->end();
+				++j)
 		{
 			if (_item->getId() == (*j)->getId())
 			{

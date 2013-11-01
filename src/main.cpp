@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include <exception>
 #include <sstream>
 #include "version.h"
@@ -24,6 +25,7 @@
 #include "Engine/Game.h"
 #include "Engine/Options.h"
 #include "Menu/StartState.h"
+
 
 /** @mainpage
  * @author OpenXcom Developers
@@ -40,10 +42,10 @@
 
 using namespace OpenXcom;
 
-Game *game = 0;
+Game* game = 0;
 
 // If you can't tell what the main() is for you
-// should have your programming license revoked...
+// should have your programming license revoked ...
 int main(int argc, char** args)
 {
 #ifndef _DEBUG

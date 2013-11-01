@@ -511,6 +511,7 @@ bool Tile::damage(int part, int power)
 	bool objective = false;
 	if (power >= _objects[part]->getArmor())
 		objective = destroy(part);
+
 	return objective;
 }
 

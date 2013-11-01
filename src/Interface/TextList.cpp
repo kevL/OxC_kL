@@ -59,7 +59,8 @@ TextList::TextList(int width, int height, int x, int y)
 		_arrowLeft(),
 		_arrowRight(),
 		_arrowPos(-1),
-		_scrollPos(4),
+//kL		_scrollPos(4),
+		_scrollPos(0),		// kL
 		_arrowType(ARROW_VERTICAL),
 		_leftClick(0),
 		_leftPress(0),
@@ -70,7 +71,7 @@ TextList::TextList(int width, int height, int x, int y)
 {
 	_allowScrollOnArrowButtons = true;
 
-	_up = new ArrowButton(ARROW_BIG_UP, 13, 13, getX() + getWidth() + _scrollPos, getY() - 4);
+	_up = new ArrowButton(ARROW_BIG_UP, 13, 13, getX() + getWidth() + _scrollPos, getY() - 2);
 	_up->setVisible(false);
 	_up->setTextList(this);
 

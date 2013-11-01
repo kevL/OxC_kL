@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "MapDataSet.h"
 #include "MapData.h"
 #include <fstream>
@@ -25,16 +26,22 @@
 #include "../Engine/SurfaceSet.h"
 #include "../Engine/CrossPlatform.h"
 
+
 namespace OpenXcom
 {
 
-MapData *MapDataSet::_blankTile = 0;
-MapData *MapDataSet::_scorchedTile = 0;
+MapData* MapDataSet::_blankTile = 0;
+MapData* MapDataSet::_scorchedTile = 0;
 
 /**
  * MapDataSet construction.
  */
-MapDataSet::MapDataSet(const std::string &name) : _name(name), _objects(), _surfaceSet(0), _loaded(false)
+MapDataSet::MapDataSet(const std::string& name)
+	:
+		_name(name),
+		_objects(),
+		_surfaceSet(0),
+		_loaded(false)
 {
 }
 
@@ -50,7 +57,7 @@ MapDataSet::~MapDataSet()
  * Loads the map data set from a YAML file.
  * @param node YAML node.
  */
-void MapDataSet::load(const YAML::Node &node)
+void MapDataSet::load(const YAML::Node& node)
 {
 	for (YAML::const_iterator i = node.begin(); i != node.end(); ++i)
 	{
@@ -80,7 +87,7 @@ int MapDataSet::getSize() const
  * Gets the objects in this dataset.
  * @return Pointer to the objects.
  */
-std::vector<MapData*> *MapDataSet::getObjects()
+std::vector<MapData*>* MapDataSet::getObjects()
 {
 	return &_objects;
 }
@@ -89,7 +96,7 @@ std::vector<MapData*> *MapDataSet::getObjects()
  * Gets the surfaces in this dataset.
  * @return Pointer to the surfaceset.
  */
-SurfaceSet *MapDataSet::getSurfaceset() const
+SurfaceSet* MapDataSet::getSurfaceset() const
 {
 	return _surfaceSet;
 }
@@ -107,54 +114,54 @@ void MapDataSet::loadData()
 	int objNumber = 0;
 
 	// the struct below helps to read the xcom file format
-	#pragma pack(push, 1)
+#pragma pack(push, 1)
 	struct MCD
 	{
-	unsigned char Frame[8];
-	unsigned char LOFT[12];
-	unsigned short ScanG;
-	unsigned char u23;
-	unsigned char u24;
-	unsigned char u25;
-	unsigned char u26;
-	unsigned char u27;
-	unsigned char u28;
-	unsigned char u29;
-	unsigned char u30;
-	unsigned char UFO_Door;
-	unsigned char Stop_LOS;
-	unsigned char No_Floor;
-	unsigned char Big_Wall;
-	unsigned char Gravlift;
-	unsigned char Door;
-	unsigned char Block_Fire;
-	unsigned char Block_Smoke;
-	unsigned char u39;
-	unsigned char TU_Walk;
-	unsigned char TU_Fly;
-	unsigned char TU_Slide;
-	unsigned char Armor;
-	unsigned char HE_Block;
-	unsigned char Die_MCD;
-	unsigned char Flammable;
-	unsigned char Alt_MCD;
-	unsigned char u48;
-	signed char T_Level;
-	unsigned char P_Level;
-	unsigned char u51;
-	unsigned char Light_Block;
-	unsigned char Footstep;
-	unsigned char Tile_Type;
-	unsigned char HE_Type;
-	unsigned char HE_Strength;
-	unsigned char Smoke_Blockage;
-	unsigned char Fuel;
-	unsigned char Light_Source;
-	unsigned char Target_Type;
-	unsigned char u61;
-	unsigned char u62;
+		unsigned char Frame[8];
+		unsigned char LOFT[12];
+		unsigned short ScanG;
+		unsigned char u23;
+		unsigned char u24;
+		unsigned char u25;
+		unsigned char u26;
+		unsigned char u27;
+		unsigned char u28;
+		unsigned char u29;
+		unsigned char u30;
+		unsigned char UFO_Door;
+		unsigned char Stop_LOS;
+		unsigned char No_Floor;
+		unsigned char Big_Wall;
+		unsigned char Gravlift;
+		unsigned char Door;
+		unsigned char Block_Fire;
+		unsigned char Block_Smoke;
+		unsigned char u39;
+		unsigned char TU_Walk;
+		unsigned char TU_Fly;
+		unsigned char TU_Slide;
+		unsigned char Armor;
+		unsigned char HE_Block;
+		unsigned char Die_MCD;
+		unsigned char Flammable;
+		unsigned char Alt_MCD;
+		unsigned char u48;
+		signed char T_Level;
+		unsigned char P_Level;
+		unsigned char u51;
+		unsigned char Light_Block;
+		unsigned char Footstep;
+		unsigned char Tile_Type;
+		unsigned char HE_Type;
+		unsigned char HE_Strength;
+		unsigned char Smoke_Blockage;
+		unsigned char Fuel;
+		unsigned char Light_Source;
+		unsigned char Target_Type;
+		unsigned char u61;
+		unsigned char u62;
 	};
-	#pragma pack(pop)
+#pragma pack(pop)
 
 	MCD mcd;
 
@@ -169,30 +176,44 @@ void MapDataSet::loadData()
 		throw Exception(s.str() + " not found");
 	}
 
-	while (mapFile.read((char*)&mcd, sizeof(MCD)))
+	while (mapFile.read((char*)& mcd, sizeof(MCD)))
 	{
-		MapData *to = new MapData(this);
+		MapData* to = new MapData(this);
 		_objects.push_back(to);
 
-		// set all the terrainobject properties:
+		// set all the terrain-object properties:
 		for (int frame = 0; frame < 8; frame++)
 		{
 			to->setSprite(frame,(int)mcd.Frame[frame]);
 		}
+
 		to->setYOffset((int)mcd.P_Level);
 		to->setSpecialType((int)mcd.Target_Type, (int)mcd.Tile_Type);
 		to->setTUCosts((int)mcd.TU_Walk, (int)mcd.TU_Fly, (int)mcd.TU_Slide);
-		to->setFlags(mcd.UFO_Door != 0, mcd.Stop_LOS != 0, mcd.No_Floor != 0, (int)mcd.Big_Wall, mcd.Gravlift != 0, mcd.Door != 0, mcd.Block_Fire != 0, mcd.Block_Smoke != 0);
+		to->setFlags(mcd.UFO_Door != 0,
+				mcd.Stop_LOS != 0,
+				mcd.No_Floor != 0,
+				(int)mcd.Big_Wall,
+				mcd.Gravlift != 0,
+				mcd.Door != 0,
+				mcd.Block_Fire != 0,
+				mcd.Block_Smoke != 0);
 		to->setTerrainLevel((int)mcd.T_Level);
 		to->setFootstepSound((int)mcd.Footstep);
 		to->setAltMCD((int)(mcd.Alt_MCD));
 		to->setDieMCD((int)(mcd.Die_MCD));
-		to->setBlockValue((int)mcd.Light_Block, (int)mcd.Stop_LOS, (int)mcd.HE_Block, (int)mcd.Block_Smoke, (int)mcd.Block_Fire, (int)mcd.Block_Smoke);
+		to->setBlockValue((int)mcd.Light_Block,
+				(int)mcd.Stop_LOS,
+				(int)mcd.HE_Block,
+				(int)mcd.Block_Smoke,
+				(int)mcd.Block_Fire,
+				(int)mcd.Block_Smoke);
 		to->setLightSource((int)mcd.Light_Source);
 		to->setArmor((int)mcd.Armor);
 		to->setFlammable((int)mcd.Flammable);
 		to->setFuel((int)mcd.Fuel);
 		to->setExplosive((int)mcd.HE_Strength);
+
 		mcd.ScanG = SDL_SwapLE16(mcd.ScanG);
 		to->setMiniMapIndex(mcd.ScanG);
 
@@ -225,12 +246,14 @@ void MapDataSet::loadData()
 	// process the mapdataset to put block values on floortiles (as we don't have em in UFO)
 	for (std::vector<MapData*>::iterator i = _objects.begin(); i != _objects.end(); ++i)
 	{
-		if ((*i)->getObjectType() == MapData::O_FLOOR && (*i)->getBlock(DT_HE) == 0)
+		if ((*i)->getObjectType() == MapData::O_FLOOR
+			&& (*i)->getBlock(DT_HE) == 0)
 		{
-			(*i)->setBlockValue(1,1,(*i)->getArmor(),1,1,1);
+			(*i)->setBlockValue(1, 1, (*i)->getArmor(), 1, 1, 1);
+
 			if ((*i)->getDieMCD())
 			{
-				_objects.at((*i)->getDieMCD())->setBlockValue(1,1,(*i)->getArmor(),1,1,1);
+				_objects.at((*i)->getDieMCD())->setBlockValue(1, 1, (*i)->getArmor(), 1, 1, 1);
 			}
 		}
 	}
@@ -255,6 +278,7 @@ void MapDataSet::unloadData()
 		{
 			delete *i;
 		}
+
 		delete _surfaceSet;
 	}
 }
@@ -264,7 +288,7 @@ void MapDataSet::unloadData()
  * @param filename Filename of the DAT file.
  * @param voxelData The ruleset.
  */
-void MapDataSet::loadLOFTEMPS(const std::string &filename, std::vector<Uint16> *voxelData)
+void MapDataSet::loadLOFTEMPS(const std::string& filename, std::vector<Uint16>* voxelData)
 {
 	// Load file
 	std::ifstream mapFile (filename.c_str(), std::ios::in | std::ios::binary);
@@ -275,7 +299,7 @@ void MapDataSet::loadLOFTEMPS(const std::string &filename, std::vector<Uint16> *
 
 	Uint16 value;
 
-	while (mapFile.read((char*)&value, sizeof(value)))
+	while (mapFile.read((char*)& value, sizeof(value)))
 	{
 		value = SDL_SwapLE16(value);
 		voxelData->push_back(value);
@@ -293,7 +317,7 @@ void MapDataSet::loadLOFTEMPS(const std::string &filename, std::vector<Uint16> *
  * Gets a blank floor tile.
  * @return Pointer to a blank tile.
  */
-MapData *MapDataSet::getBlankFloorTile()
+MapData* MapDataSet::getBlankFloorTile()
 {
 	return MapDataSet::_blankTile;
 }
@@ -302,7 +326,7 @@ MapData *MapDataSet::getBlankFloorTile()
  * Gets a scorched earth tile.
  * @return Pointer to a scorched earth tile.
  */
-MapData *MapDataSet::getScorchedEarthTile()
+MapData* MapDataSet::getScorchedEarthTile()
 {
 	return MapDataSet::_scorchedTile;
 }

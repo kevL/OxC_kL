@@ -174,6 +174,8 @@ void UnitTurnBState::think()
 		_unit->abortTurn();
 		_parent->popState();
 	}
+
+	//Log(LOG_INFO) << "UnitTurnBState::think() EXIT";
 }
 
 /**

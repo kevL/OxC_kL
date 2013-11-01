@@ -92,9 +92,7 @@ PurchaseState::PurchaseState(Game* game, Base* base)
 	_txtCost		= new Text(102, 9, 166, 33);
 	_txtQuantity	= new Text(60, 9, 267, 33);
 
-//	_lstItems->setColumns(4, 150, 55, 46, 32);		// kL_TEMP
-
-	_lstItems		= new TextList(288, 128, 8, 44);
+	_lstItems		= new TextList(294, 128, 8, 44);
 
 	_btnCancel		= new TextButton(144, 16, 16, 177);
 	_btnOk			= new TextButton(144, 16, 163, 177);

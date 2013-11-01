@@ -48,22 +48,17 @@ FundingState::FundingState(Game* game)
 	_screen = false;
 
 	_window			= new Window(this, 320, 200, 0, 0, POPUP_BOTH);
-//kL	_txtTitle		= new Text(320, 17, 0, 8);
-	_txtTitle		= new Text(300, 17, 10, 9);		// kL
 
-//kL	_txtCountry		= new Text(100, 9, 32, 30);
-//kL	_txtFunding		= new Text(100, 9, 140, 30);
-//kL	_txtChange		= new Text(72, 9, 240, 30);
-	_txtCountry		= new Text(100, 9, 30, 25);		// kL
-	_txtFunding		= new Text(100, 9, 138, 25);	// kL
-	_txtChange		= new Text(72, 9, 238, 25);		// kL
+	_txtTitle		= new Text(300, 17, 10, 9);
 
-//kL	_lstCountries	= new TextList(260, 136, 32, 40);
-	_lstCountries	= new TextList(260, 128, 30, 34);	// kL
-	_lstTotal		= new TextList(265, 9, 30, 165);	// kL
+	_txtCountry		= new Text(100, 9, 30, 25);
+	_txtFunding		= new Text(100, 9, 138, 25);
+	_txtChange		= new Text(72, 9, 238, 25);
 
-//kL	_btnOk			= new TextButton(50, 12, 135, 180);
-	_btnOk			= new TextButton(288, 16, 16, 177);		// kL
+	_lstCountries	= new TextList(260, 128, 30, 34);
+	_lstTotal		= new TextList(265, 9, 30, 165);
+
+	_btnOk			= new TextButton(288, 16, 16, 177);
 
 
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);

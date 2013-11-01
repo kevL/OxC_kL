@@ -73,30 +73,21 @@ SellState::SellState(Game* game, Base* base)
 
 
 	_window			= new Window(this, 320, 200, 0, 0);
-//kL	_txtTitle		= new Text(310, 17, 5, 8);
-	_txtTitle		= new Text(310, 17, 5, 9);			// kL
+
+	_txtTitle		= new Text(310, 17, 5, 9);
 
 	_txtSales		= new Text(140, 9, 16, 24);
 	_txtFunds		= new Text(140, 9, 160, 24);
 
-//kL	_txtItem		= new Text(130, 9, 10, 32);
-//kL	_txtQuantity	= new Text(54, 9, 126, 32);
-//kL	_txtSell		= new Text(96, 9, 180, 32);
-//kL	_txtValue		= new Text(40, 9, 260, 32);
-	_txtItem		= new Text(130, 9, 16, 33);		// kL
-	_txtQuantity	= new Text(54, 9, 166, 33);		// kL
-	_txtSell		= new Text(96, 9, 226, 33);		// kL
-	_txtValue		= new Text(40, 9, 246, 33);		// kL
+	_txtItem		= new Text(130, 9, 16, 33);
+	_txtQuantity	= new Text(54, 9, 166, 33);
+	_txtSell		= new Text(96, 9, 226, 33);
+	_txtValue		= new Text(40, 9, 246, 33);
 
-//	_lstItems->setColumns(4, 150, 60, 22, 55);		// kL_TEMP.
+	_lstItems		= new TextList(294, 128, 8, 44);
 
-//kL	_lstItems		= new TextList(287, 120, 8, 44);
-	_lstItems		= new TextList(288, 128, 8, 44);	// kL
-
-//kL	_btnOk			= new TextButton(148, 16, 8, 176);
-//kL	_btnCancel		= new TextButton(148, 16, 164, 176);
-	_btnCancel		= new TextButton(144, 16, 16, 177);	// kL
-	_btnOk			= new TextButton(144, 16, 163, 177);		// kL
+	_btnCancel		= new TextButton(144, 16, 16, 177);
+	_btnOk			= new TextButton(144, 16, 163, 177);
 
 
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
@@ -157,7 +148,6 @@ SellState::SellState(Game* game, Base* base)
 	_lstItems->setColumns(4, 150, 60, 22, 55);
 	_lstItems->setSelectable(true);
 	_lstItems->setBackground(_window);
-//kL	_lstItems->setMargin(2);
 	_lstItems->setMargin(8);
 	_lstItems->setAllowScrollOnArrowButtons(!_allowChangeListValuesByMouseWheel);
 	_lstItems->onLeftArrowPress((ActionHandler)& SellState::lstItemsLeftArrowPress);

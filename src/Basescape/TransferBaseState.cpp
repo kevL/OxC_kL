@@ -67,7 +67,6 @@ TransferBaseState::TransferBaseState(Game* game, Base* base)
 	_txtName	= new Text(128, 17, 32, 65);
 	_txtArea	= new Text(128, 17, 162, 65);
 
-//	_lstBases->setColumns(2, 128, 128);		// kL_TEMP.
 	_lstBases	= new TextList(256, 57, 24, 82);
 
 	_btnCancel	= new TextButton(260, 16, 32, 146);

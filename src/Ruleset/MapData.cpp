@@ -115,7 +115,7 @@ bool MapData::isDoor() const
 
 /**
  * Gets whether this is a grav lift.
- * @return True if this is a grav lift.
+ * @return, True if this is a grav lift.
  */
 bool MapData::isGravLift() const
 {
@@ -135,14 +135,14 @@ bool MapData::isGravLift() const
  */
 void MapData::setFlags(bool isUfoDoor, bool stopLOS, bool isNoFloor, int bigWall, bool isGravLift, bool isDoor, bool blockFire, bool blockSmoke)
 {
-	_isUfoDoor = isUfoDoor;
-	_stopLOS = stopLOS;
-	_isNoFloor = isNoFloor;
-	_bigWall = bigWall;
-	_isGravLift = isGravLift;
-	_isDoor = isDoor;
-	_blockFire = blockFire;
-	_blockSmoke = blockSmoke;
+	_isUfoDoor	= isUfoDoor;
+	_stopLOS	= stopLOS;
+	_isNoFloor	= isNoFloor;
+	_bigWall	= bigWall;
+	_isGravLift	= isGravLift;
+	_isDoor		= isDoor;
+	_blockFire	= blockFire;
+	_blockSmoke	= blockSmoke;
 }
 
 /**

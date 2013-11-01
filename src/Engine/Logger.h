@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_LOGGER_H
 #define OPENXCOM_LOGGER_H
 
@@ -34,6 +35,7 @@
 #else
 #include <time.h>
 #endif
+
 
 namespace OpenXcom
 {
@@ -61,20 +63,25 @@ enum SeverityLevel
  */
 class Logger
 {
-public:
-    Logger();
-    virtual ~Logger();
-    std::ostringstream& get(SeverityLevel level = LOG_INFO);
-	
-    static SeverityLevel& reportingLevel();
-	static std::string& logFile();
-    static std::string toString(SeverityLevel level);
-protected:
-    std::ostringstream os;
 private:
     Logger(const Logger&);
     Logger& operator =(const Logger&);
+
+protected:
+    std::ostringstream os;
+
+	public:
+		Logger();
+		virtual ~Logger();
+
+		std::ostringstream& get(SeverityLevel level = LOG_INFO);
+	
+		static SeverityLevel& reportingLevel();
+		static std::string& logFile();
+		static std::string toString(SeverityLevel level);
 };
+
+
 
 inline Logger::Logger()
 {
@@ -83,7 +90,7 @@ inline Logger::Logger()
 inline std::ostringstream& Logger::get(SeverityLevel level)
 {
 	os << "[" << toString(level) << "]" << "\t";
-    return os;
+	return os;
 }
 
 inline Logger::~Logger()
@@ -94,9 +101,10 @@ inline Logger::~Logger()
 		fprintf(stderr, "%s", os.str().c_str());
 		fflush(stderr);
 	}
+
 	std::ostringstream ss;
 	ss << "[" << now() << "]" << "\t" << os.str();
-	FILE *file = fopen(logFile().c_str(), "a");
+	FILE* file = fopen(logFile().c_str(), "a");
 	fprintf(file, "%s", ss.str().c_str());
     fflush(file);
 	fclose(file);

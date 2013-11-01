@@ -53,7 +53,7 @@ class BattlescapeState
 		public State
 {
 private:
-	Surface* _rank;
+	Surface* _rank, * _kneel;
 	InteractiveSurface* _icons;
 	Map* _map;
 	InteractiveSurface* _btnUnitUp, * _btnUnitDown, * _btnMapUp, * _btnMapDown, * _btnShowMap, * _btnKneel;
@@ -89,6 +89,9 @@ private:
 	void handleItemClick(BattleItem* item);
 	/// Shifts the red colors of the visible unit buttons backgrounds.
 	void blinkVisibleUnitButtons();
+	/// Draws the kneel indicator.
+	void BattlescapeState::drawKneelIndicator();
+	///
 	TurnCounter* _turnCounter;	// kL
 
 	public:

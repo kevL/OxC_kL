@@ -59,13 +59,12 @@ SavedGameState::SavedGameState(Game* game, OptionsOrigin origin)
 	_txtName	= new Text(150, 9, 16, 32);
 	_txtTime	= new Text(30, 9, 184, 32);
 	_txtDate	= new Text(38, 9, 214, 32);
-//	_lstSaves->setColumns(5, 168, 30, 30, 30, 30);		// TEMP.
 
-	_lstSaves	= new TextList(304, 120, 8, 40);
+	_lstSaves	= new TextList(294, 120, 8, 40);
 
 	_txtStatus	= new Text(320, 17, 0, 92);
 
-	_btnCancel	= new TextButton(80, 16, 120, 172);
+	_btnCancel	= new TextButton(288, 16, 16, 177);
 
 	if (_origin != OPT_BATTLESCAPE)
 	{

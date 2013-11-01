@@ -433,55 +433,6 @@ bool Ufo::isDestroyed() const
  * Calculates the direction for the UFO based
  * on the current raw speed and destination.
  */
-/*kL void Ufo::calculateSpeed()
-{
-	MovingTarget::calculateSpeed();
-	Log(LOG_INFO) << "Ufo::calculateSpeed(), _speedLon = " << _speedLon;
-	Log(LOG_INFO) << "Ufo::calculateSpeed(), _speedLat = " << _speedLat;
-
-	if (_speedLon > 0)
-	{
-		if (_speedLat > 0)
-		{
-			_direction = "STR_SOUTH_EAST";
-		}
-		else if (_speedLat < 0)
-		{
-			_direction = "STR_NORTH_EAST";
-		}
-		else
-		{
-			_direction = "STR_EAST";
-		}
-	}
-	else if (_speedLon < 0)
-	{
-		if (_speedLat > 0)
-		{
-			_direction = "STR_SOUTH_WEST";
-		}
-		else if (_speedLat < 0)
-		{
-			_direction = "STR_NORTH_WEST";
-		}
-		else
-		{
-			_direction = "STR_WEST";
-		}
-	}
-	else
-	{
-		if (_speedLat > 0)
-		{
-			_direction = "STR_SOUTH";
-		}
-		else if (_speedLat < 0)
-		{
-			_direction = "STR_NORTH";
-		}
-	}
-} */
-// kL_begin: Ufo::calculateSpeed() adv.
 void Ufo::calculateSpeed()
 {
 	MovingTarget::calculateSpeed();
@@ -500,22 +451,22 @@ void Ufo::calculateSpeed()
 		}
 		else if (AreSame(x, 0.0))
 		{
-			if (y > 0.f)
+			if (y > 0.0)
 			{
 				_direction = "STR_NORTH";
 			}
-			else if (y < 0.f)
+			else if (y < 0.0)
 			{
 				_direction = "STR_SOUTH";
 			}
 		}
 		else if (AreSame(y, 0.0))
 		{
-			if (x > 0.f)
+			if (x > 0.0)
 			{
 				_direction = "STR_EAST";
 			}
-			else if (x < 0.f)
+			else if (x < 0.0)
 			{
 				_direction = "STR_WEST";
 			}
@@ -531,34 +482,34 @@ void Ufo::calculateSpeed()
 	// Convert radians to degrees so i don't go bonkers;
 	// ie. KILL IT WITH FIRE!!1@!
 	// note that this is between +/- 180 deg.
-	theta = theta * 180.f / M_PI;
+	theta = theta * 180.0 / M_PI;
 //	Log(LOG_INFO) << ". . theta(deg) = " << theta;
 
-	if (22.5f > theta && theta > -22.5f)
+	if (22.5 > theta && theta > -22.5)
 	{
 		_direction = "STR_EAST";
 	}
-	else if (-22.5f > theta && theta > -67.5f)
+	else if (-22.5 > theta && theta > -67.5)
 	{
 		_direction = "STR_SOUTH_EAST";
 	}
-	else if (-67.5f > theta && theta > -112.5f)
+	else if (-67.5 > theta && theta > -112.5)
 	{
 		_direction = "STR_SOUTH";
 	}
-	else if (-112.5f > theta && theta > -157.5f)
+	else if (-112.5 > theta && theta > -157.5)
 	{
 		_direction = "STR_SOUTH_WEST";
 	}
-	else if (-157.5f > theta || theta > 157.5f)
+	else if (-157.5 > theta || theta > 157.5)
 	{
 		_direction = "STR_WEST";
 	}
-	else if (157.5f > theta && theta > 112.5f)
+	else if (157.5 > theta && theta > 112.5)
 	{
 		_direction = "STR_NORTH_WEST";
 	}
-	else if (112.5f > theta && theta > 67.5f)
+	else if (112.5 > theta && theta > 67.5)
 	{
 		_direction = "STR_NORTH";
 	}
@@ -569,7 +520,6 @@ void Ufo::calculateSpeed()
 
 //	Log(LOG_INFO) << ". . _dir = " << _direction;
 }
-// kL_end.
 
 /**
  * Moves the UFO to its destination.
@@ -633,11 +583,17 @@ const std::string& Ufo::getAlienRace() const
 	return _mission->getRace();
 }
 
+/**
+ *
+ */
 void Ufo::setShotDownByCraftId(const int id)
 {
 	_shotDownByCraftId = id;
 }
 
+/**
+ *
+ */
 int Ufo::getShotDownByCraftId() const
 {
 	return _shotDownByCraftId;
@@ -676,7 +632,7 @@ int Ufo::getShotDownByCraftId() const
 
 	return visibility;
 } */
-// kL_begin: Ufo::getVisibility() rewrite detection chances (increase...)
+// kL_begin: Ufo::getVisibility() rewrite detection chances...
 int Ufo::getVisibility() const
 {
 	int size = 0; // size = 15*(3-ufosize);
@@ -703,6 +659,7 @@ int Ufo::getVisibility() const
 	else if (_altitude == "STR_VERY_HIGH")
 		visibility = size - 100;
 
+	Log(LOG_INFO) << "Ufo::getVisibility() = " << visibility;
 	return visibility;
 }
 

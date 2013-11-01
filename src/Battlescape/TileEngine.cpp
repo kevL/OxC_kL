@@ -1529,14 +1529,17 @@ BattleUnit* TileEngine::hit(const Position& center, int power, ItemDamageType ty
  */
 void TileEngine::explode(const Position& center, int power, ItemDamageType type, int maxRadius, BattleUnit* unit)
 {
-	double centerZ = (int)(center.z / 24) + 0.5;
-	double centerX = (int)(center.x / 16) + 0.5;
-	double centerY = (int)(center.y / 16) + 0.5;
+//kL	double centerZ = (int)(center.z / 24) + 0.5;
+//kL	double centerX = (int)(center.x / 16) + 0.5;
+//kL	double centerY = (int)(center.y / 16) + 0.5;
+	double centerZ = (double)(center.z / 24) + 0.5;		// kL
+	double centerX = (double)(center.x / 16) + 0.5;		// kL
+	double centerY = (double)(center.y / 16) + 0.5;		// kL
 
 	int power_;
 
-	std::set<Tile* > tilesAffected;
-	std::pair<std::set<Tile* >::iterator, bool> ret;
+	std::set<Tile*> tilesAffected;
+	std::pair<std::set<Tile*>::iterator, bool> ret;
 
 	if (type == DT_IN)
 	{
@@ -1568,19 +1571,19 @@ void TileEngine::explode(const Position& center, int power, ItemDamageType type,
 		// raytrace every 3 degrees makes sure we cover all tiles in a circle.
 		for (int te = 0; te <= 360; te += 3)
 		{
-			double cos_te = cos(te * M_PI / 180.0);
-			double sin_te = sin(te * M_PI / 180.0);
-			double sin_fi = sin(fi * M_PI / 180.0);
-			double cos_fi = cos(fi * M_PI / 180.0);
+			double cos_te = cos((double)te * M_PI / 180.0);
+			double sin_te = sin((double)te * M_PI / 180.0);
+			double sin_fi = sin((double)fi * M_PI / 180.0);
+			double cos_fi = cos((double)fi * M_PI / 180.0);
 
 			Tile* origin = _save->getTile(Position(centerX, centerY, centerZ));
-			double l = 0;
+			double l = 0.0;
 			double vx, vy, vz;
 			int tileX, tileY, tileZ;
 			power_ = power + 1;
 
 			while (power_ > 0
-				&& l <= maxRadius)
+				&& l <= (double)maxRadius)
 			{
 				vx = centerX + l * sin_te * cos_fi;
 				vy = centerY + l * cos_te * cos_fi;
@@ -1591,6 +1594,7 @@ void TileEngine::explode(const Position& center, int power, ItemDamageType type,
 				tileY = int(floor(vy));
 
 				Tile* dest = _save->getTile(Position(tileX, tileY, tileZ));
+
 				if (!dest) break; // out of map!
 
 
@@ -1615,43 +1619,42 @@ void TileEngine::explode(const Position& center, int power, ItemDamageType type,
 				{
 					if (type == DT_HE)
 					{
-						// explosives do 1/2 damage to terrain and 1/2 up to 3/2 random damage to units (the halving is handled elsewhere)
+						// explosives do 1/2 damage to terrain and 1/2 up to 3/2
+						// random damage to units (the halving is handled elsewhere)
 						dest->setExplosive(power_);
 					}
 
 					ret = tilesAffected.insert(dest); // check if we had this tile already
 					if (ret.second)
 					{
-						if (type == DT_STUN)
+						if (type == DT_STUN) // power 50 - 150%
 						{
-							// power 50 - 150%
 							if (dest->getUnit())
 							{
-								dest->getUnit()->damage(Position(0, 0, 0), (int)(RNG::generate(power_ / 2.0, power_ * 1.5)), type);
+								dest->getUnit()->damage(Position(0, 0, 0), (int)(RNG::generate((float)power_ * 0.5, (float)power_ * 1.5)), type);
 							}
 
-							for (std::vector<BattleItem* >::iterator it = dest->getInventory()->begin(); it != dest->getInventory()->end(); ++it)
+							for (std::vector<BattleItem*>::iterator it = dest->getInventory()->begin(); it != dest->getInventory()->end(); ++it)
 							{
 								if ((*it)->getUnit())
 								{
-									(*it)->getUnit()->damage(Position(0, 0, 0), (int)(RNG::generate(power_ / 2.0, power_ * 1.5)), type);
+									(*it)->getUnit()->damage(Position(0, 0, 0), (int)(RNG::generate((float)power_ * 0.5, (float)power_ * 1.5)), type);
 								}
 							}
 						}
 
-						if (type == DT_HE)
+						if (type == DT_HE) // power 50 - 150%
 						{
-							// power 50 - 150%
 							if (dest->getUnit())
 							{
-								dest->getUnit()->damage(Position(0, 0, 0), (int)(RNG::generate(power_ / 2.0, power_ * 1.5)), type);
+								dest->getUnit()->damage(Position(0, 0, 0), (int)(RNG::generate((float)power_ * 0.5, (float)power_ * 1.5)), type);
 							}
 
 							bool done = false;
-							while (!done)
+							while (!done) // kL_note: what the fuck kind of a loop is this ??!!1?
 							{
 								done = dest->getInventory()->empty();
-								for (std::vector<BattleItem* >::iterator it = dest->getInventory()->begin(); it != dest->getInventory()->end(); )
+								for (std::vector<BattleItem*>::iterator it = dest->getInventory()->begin(); it != dest->getInventory()->end(); )
 								{
 									if (power_ > (*it)->getRules()->getArmor())
 									{
@@ -1662,6 +1665,7 @@ void TileEngine::explode(const Position& center, int power, ItemDamageType type,
 										}
 
 										_save->removeItem((*it));
+
 										break;
 									}
 									else
@@ -1695,13 +1699,15 @@ void TileEngine::explode(const Position& center, int power, ItemDamageType type,
 							// kL_note: fire damage is also caused by BattlescapeGame::endTurn() -- but previously by BattleUnit::prepareNewTurn()!!
 							{
 								float resistance = dest->getUnit()->getArmor()->getDamageModifier(DT_IN);
-								if (resistance > 0.0)
+								if (resistance > 0.f)
 								{
-									Log(LOG_INFO) << ". do Tile Fire : " << dest->getUnit()->getId();
+									int iFire = RNG::generate(3, 9);
 //kL									dest->getUnit()->damage(Position(0, 0, 12-dest->getTerrainLevel()), RNG::generate(5, 10), DT_IN, true);
-									dest->getUnit()->damage(Position(0, 0, 12-dest->getTerrainLevel()), RNG::generate(3, 9), DT_IN, true);		// kL
+									dest->getUnit()->damage(Position(0, 0, 12-dest->getTerrainLevel()), iFire, DT_IN, true);		// kL
+									Log(LOG_INFO) << ". do Tile Fire : " << dest->getUnit()->getId() << " takes " << iFire << " fire";
 
-									int burnTime = RNG::generate(0, int(5 * resistance));
+//kL									int burnTime = RNG::generate(0, int(5 * resistance));
+									int burnTime = RNG::generate(0, 5 * (int)resistance);		// kL
 									if (dest->getUnit()->getFire() < burnTime)
 									{
 										dest->getUnit()->setFire(burnTime); // catch fire and burn
@@ -1721,6 +1727,7 @@ void TileEngine::explode(const Position& center, int power, ItemDamageType type,
 				}
 
 				origin = dest;
+
 				l++;
 			}
 		}
@@ -1729,7 +1736,7 @@ void TileEngine::explode(const Position& center, int power, ItemDamageType type,
 	// now detonate the tiles affected with HE
 	if (type == DT_HE)
 	{
-		for (std::set<Tile* >::iterator i = tilesAffected.begin(); i != tilesAffected.end(); ++i)
+		for (std::set<Tile*>::iterator i = tilesAffected.begin(); i != tilesAffected.end(); ++i)
 		{
 			if (detonate(*i))
 				_save->setObjectiveDestroyed(true);
@@ -1742,16 +1749,17 @@ void TileEngine::explode(const Position& center, int power, ItemDamageType type,
 		}
 	}
 
-	calculateSunShading(); // roofs could have been destroyed
-	calculateTerrainLighting(); // fires could have been started
+	calculateSunShading();		// roofs could have been destroyed
+	calculateTerrainLighting();	// fires could have been started
+
 	calculateFOV(center / Position(16, 16, 24));
 }
 
 /**
  * Applies the explosive power to the tile parts. This is where the actual destruction takes place.
  * Must affect 7 objects (6 box sides and the object inside).
- * @param tile Tile affected.
- * @return True if the objective was destroyed.
+ * @param tile, Tile affected.
+ * @return, True if the objective was destroyed.
  */
 bool TileEngine::detonate(Tile* tile)
 {
@@ -1761,12 +1769,12 @@ bool TileEngine::detonate(Tile* tile)
 	bool objective = false;
 
 	Tile* tiles[7];
-	static const int parts[7]={ 0, 1, 2, 0, 1, 2, 3 };
+	static const int parts[7] = {0, 1, 2, 0, 1, 2, 3};
 
 	Position pos = tile->getPosition();
-	tiles[0] = _save->getTile(Position(pos.x, pos.y, pos.z + 1)); //ceiling
-	tiles[1] = _save->getTile(Position(pos.x + 1, pos.y, pos.z)); //east wall
-	tiles[2] = _save->getTile(Position(pos.x, pos.y + 1, pos.z)); //south wall
+	tiles[0] = _save->getTile(Position(pos.x, pos.y, pos.z + 1)); // ceiling
+	tiles[1] = _save->getTile(Position(pos.x + 1, pos.y, pos.z)); // east wall
+	tiles[2] = _save->getTile(Position(pos.x, pos.y + 1, pos.z)); // south wall
 	tiles[3] = tiles[4] = tiles[5] = tiles[6] = tile;
 
 	if (explosive)
@@ -1780,10 +1788,12 @@ bool TileEngine::detonate(Tile* tile)
 
 		for (int i = 0; i < 7; ++i)
 		{
-			if (tiles[i] && tiles[i]->getMapData(parts[i]))
+			if (tiles[i]
+				&& tiles[i]->getMapData(parts[i]))
 			{
 				remainingPower = explosive;
-				while (remainingPower >= 0 && tiles[i]->getMapData(parts[i]))
+				while (remainingPower >= 0
+					&& tiles[i]->getMapData(parts[i]))
 				{
 					remainingPower -= 2 * tiles[i]->getMapData(parts[i])->getArmor();
 					if (remainingPower >= 0)

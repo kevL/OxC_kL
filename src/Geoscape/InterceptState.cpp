@@ -58,29 +58,20 @@ InterceptState::InterceptState(Game* game, Globe* globe, Base* base, Target* tar
 {
 	_screen = false;
 
-	// Create objects
-//kL	_window		= new Window(this, 320, 140, 0, 30, POPUP_HORIZONTAL);
-	_window		= new Window(this, 320, 144, 0, 30, POPUP_HORIZONTAL);	// kL
+	_window		= new Window(this, 320, 144, 0, 30, POPUP_HORIZONTAL);
 
-//kL	_txtTitle	= new Text(300, 17, 10, 46);
-	_txtTitle	= new Text(300, 17, 10, 40);		// kL
+	_txtTitle	= new Text(300, 17, 10, 40);
 
-/*kL	_txtWeapons	= new Text(80, 17, 238, 62);
-	_txtCraft	= new Text(86, 9, 14, 70);
-	_txtStatus	= new Text(70, 9, 100, 70);
-	_txtBase	= new Text(80, 9, 170, 70);
-	_lstCrafts	= new TextList(288, 64, 8, 78); */
-	_txtCraft	= new Text(86, 9, 16, 64);			// kL
-	_txtStatus	= new Text(60, 9, 102, 64);			// kL
-	_txtBase	= new Text(81, 9, 162, 64);			// kL
-	_txtWeapons	= new Text(77, 17, 243, 56);		// kL
+	_txtCraft	= new Text(86, 9, 16, 64);
+	_txtStatus	= new Text(60, 9, 102, 64);
+	_txtBase	= new Text(81, 9, 162, 64);
+	_txtWeapons	= new Text(77, 17, 243, 56);
 
-//	_lstCrafts->setColumns(4, 86, 60, 81, 45);		// TEMP!
-	_lstCrafts	= new TextList(288, 72, 8, 74);		// kL
+	_lstCrafts	= new TextList(294, 72, 8, 74);
 
-	_btnCancel	= new TextButton(288, 16, 16, 151);	// kL, ...
+	_btnCancel	= new TextButton(288, 16, 16, 151);
 
-	// Set palette
+
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)), Palette::backPos, 16);
 
 	add(_window);
@@ -94,7 +85,7 @@ InterceptState::InterceptState(Game* game, Globe* globe, Base* base, Target* tar
 
 	centerAllSurfaces();
 
-	// Set up objects
+
 	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK12.SCR"));
 
@@ -123,12 +114,10 @@ InterceptState::InterceptState(Game* game, Globe* globe, Base* base, Target* tar
 
 	_lstCrafts->setColor(Palette::blockOffset(15)-1);
 	_lstCrafts->setSecondaryColor(Palette::blockOffset(8)+10);
-//kL	_lstCrafts->setColumns(4, 86, 70, 80, 46);
-	_lstCrafts->setColumns(4, 86, 60, 81, 45);		// kL
+	_lstCrafts->setColumns(4, 86, 60, 81, 45);
 	_lstCrafts->setSelectable(true);
 	_lstCrafts->setBackground(_window);
-//kL	_lstCrafts->setMargin(6);
-	_lstCrafts->setMargin(8);		// kL
+	_lstCrafts->setMargin(8);
 	_lstCrafts->onMouseClick((ActionHandler)& InterceptState::lstCraftsLeftClick);
 	_lstCrafts->onMouseClick((ActionHandler)& InterceptState::lstCraftsRightClick, SDL_BUTTON_RIGHT);
 

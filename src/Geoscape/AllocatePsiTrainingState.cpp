@@ -54,32 +54,18 @@ AllocatePsiTrainingState::AllocatePsiTrainingState(Game* game, Base* base)
 
 	_txtTitle		= new Text(300, 17, 10, 8);
 
-//kL	_txtRemaining	= new Text(134, 10, 10, 24);
-	_txtRemaining	= new Text(100, 8, 12, 20);			// kL
+	_txtRemaining	= new Text(100, 8, 12, 20);
 
-//kL	_txtName		= new Text(64, 10, 10, 40);
-//	_txtName		= new Text(116, 10, 18, 37);		// kL
-	_txtName		= new Text(114, 8, 16, 31);			// kL
-//kL	_txtPsiStrength	= new Text(80, 20, 124, 32);
-//	_txtPsiStrength	= new Text(60, 20, 134, 29);		// kL
-	_txtPsiStrength	= new Text(60, 16, 134, 23);		// kL
-//kL	_txtPsiSkill	= new Text(80, 20, 188, 32);
-//	_txtPsiSkill	= new Text(66, 20, 194, 29);		// kL
-	_txtPsiSkill	= new Text(66, 16, 194, 23);		// kL
-//kL	_txtTraining	= new Text(48, 20, 270, 32);
-//	_txtTraining	= new Text(34, 20, 260, 29);		// kL
-	_txtTraining	= new Text(34, 16, 260, 23);		// kL
+	_txtName		= new Text(114, 8, 16, 31);
+	_txtPsiStrength	= new Text(60, 16, 134, 23);
+	_txtPsiSkill	= new Text(66, 16, 194, 23);
+	_txtTraining	= new Text(34, 16, 260, 23);
 
-//kL	_lstSoldiers	= new TextList(290, 112, 8, 52);
-//	_lstSoldiers	= new TextList(273, 128, 16, 45);	// kL
-	_lstSoldiers	= new TextList(288, 128, 8, 42);
+	_lstSoldiers	= new TextList(294, 128, 8, 42);
 
-//	_lstSoldiers->setColumns(4, 118, 60, 66, 34);		// kL_TEMP
+	_btnOk			= new TextButton(288, 16, 16, 177);
 
-//kL	_btnOk			= new TextButton(160, 14, 80, 174);
-	_btnOk			= new TextButton(288, 16, 16, 177);	// kL
 
-	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)), Palette::backPos, 16);
 
@@ -95,7 +81,7 @@ AllocatePsiTrainingState::AllocatePsiTrainingState(Game* game, Base* base)
 
 	centerAllSurfaces();
 
-	// Set up objects
+
 	_window->setColor(Palette::blockOffset(13)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
@@ -128,12 +114,10 @@ AllocatePsiTrainingState::AllocatePsiTrainingState(Game* game, Base* base)
 
 	_lstSoldiers->setColor(Palette::blockOffset(13)+10);
 //kL	_lstSoldiers->setArrowColumn(-1, ARROW_VERTICAL);
-//kL	_lstSoldiers->setColumns(4, 116, 80, 72, 30);
-	_lstSoldiers->setColumns(4, 118, 60, 66, 34);		// kL
+	_lstSoldiers->setColumns(4, 118, 60, 66, 34);
 	_lstSoldiers->setSelectable(true);
 	_lstSoldiers->setBackground(_window);
-//kL	_lstSoldiers->setMargin(2);
-	_lstSoldiers->setMargin(8);		// kL
+	_lstSoldiers->setMargin(8);
 	_lstSoldiers->onMousePress((ActionHandler)& AllocatePsiTrainingState::lstSoldiersPress);
 	_lstSoldiers->onMouseClick((ActionHandler)& AllocatePsiTrainingState::lstSoldiersClick);
 	_lstSoldiers->onMouseRelease((ActionHandler)& AllocatePsiTrainingState::lstSoldiersRelease);

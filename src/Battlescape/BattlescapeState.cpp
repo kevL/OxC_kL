@@ -121,6 +121,7 @@ BattlescapeState::BattlescapeState(Game* game)
 
 	_numLayers			= new NumberText(3, 5, _icons->getX() + 232, _icons->getY() + 6);
 	_rank				= new Surface(26, 23, _icons->getX() + 107, _icons->getY() + 33);
+	_kneel				= new Surface(2, 2, _icons->getX() + 112, _icons->getY() + 16);
 
 	// Create buttons
 	_btnUnitUp			= new InteractiveSurface(32, 16, _icons->getX() + 48, _icons->getY());
@@ -202,24 +203,25 @@ BattlescapeState::BattlescapeState(Game* game)
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_4")->getColors());
 
 	// Last 16 colors are a greyish gradient
-	SDL_Color color[] = {
-						{	140,	152,	148,	0	},
-						{	132,	136,	140,	0	},
-						{	116,	124,	132,	0	},
-						{	108,	116,	124,	0	},
-						{	92,		104,	108,	0	},
-						{	84,		92,		100,	0	},
-						{	76,		80,		92,		0	},
-						{	56,		68,		84,		0	},
-						{	48,		56,		68,		0	},
-						{	40,		48,		56,		0	},
-						{	32,		36,		48,		0	},
-						{	24,		28,		32,		0	},
-						{	16,		20,		24,		0	},
-						{	8,		12,		16,		0	},
-						{	3,		4,		8,		0	},
-						{	3,		3,		6,		0	}
-						};
+	SDL_Color color[] =
+	{
+		{	140,	152,	148,	0	},
+		{	132,	136,	140,	0	},
+		{	116,	124,	132,	0	},
+		{	108,	116,	124,	0	},
+		{	92,		104,	108,	0	},
+		{	84,		92,		100,	0	},
+		{	76,		80,		92,		0	},
+		{	56,		68,		84,		0	},
+		{	48,		56,		68,		0	},
+		{	40,		48,		56,		0	},
+		{	32,		36,		48,		0	},
+		{	24,		28,		32,		0	},
+		{	16,		20,		24,		0	},
+		{	8,		12,		16,		0	},
+		{	3,		4,		8,		0	},
+		{	3,		3,		6,		0	}
+	};
 
 	_game->setPalette(color, Palette::backPos + 16, 16);
 
@@ -231,6 +233,7 @@ BattlescapeState::BattlescapeState(Game* game)
 	add(_icons);
 	add(_numLayers);
 	add(_rank);
+	add(_kneel);
 	add(_btnUnitUp);
 	add(_btnUnitDown);
 	add(_btnMapUp);
@@ -522,10 +525,6 @@ BattlescapeState::BattlescapeState(Game* game)
 	isMouseScrolling = false;
 	isMouseScrolled = false;
 	_currentTooltip = "";
-
-//	kL_TurnCount = _save->getTurn();			// kL
-//	_turnCounter->setTurnCount(kL_TurnCount);	// kL
-//	Log(LOG_INFO) << "Create BattlescapeState DONE";
 }
 
 
@@ -539,7 +538,6 @@ BattlescapeState::~BattlescapeState()
 	delete _animTimer;
 	delete _gameTimer;
 	delete _battleGame;
-//	delete _turnCounter;		// kL
 }
 
 /**
@@ -606,8 +604,6 @@ void BattlescapeState::think()
 			_game->pushState(*_popups.begin());
 			_popups.erase(_popups.begin());
 			popped = true;
-
-//kL			return;
 		}
 	}
 }
@@ -1284,10 +1280,22 @@ void BattlescapeState::updateSoldierInfo()
 	{
 		_btnVisibleUnit[i]->setVisible(false);
 		_numVisibleUnit[i]->setVisible(false);
+
 		_visibleUnit[i] = 0;
 	}
 
 	bool playableUnit = playableUnitSelected();
+
+	if (playableUnit
+		&& battleUnit->isKneeled())
+	{
+		drawKneelIndicator();
+		_kneel->setVisible(true);
+	}
+	else
+		_kneel->setVisible(false);
+
+
 	_rank->setVisible(playableUnit);
 	_numTimeUnits->setVisible(playableUnit);
 	_barTimeUnits->setVisible(playableUnit);
@@ -1328,9 +1336,7 @@ void BattlescapeState::updateSoldierInfo()
 	}
 
 	_numTimeUnits->setValue(battleUnit->getTimeUnits());
-//	Log(LOG_INFO) << ". . getTimeUnits() = " << battleUnit->getTimeUnits();
 	_barTimeUnits->setMax(battleUnit->getStats()->tu);
-//	Log(LOG_INFO) << ". . getStats()->tu = " << battleUnit->getStats()->tu;
 	_barTimeUnits->setValue(battleUnit->getTimeUnits());
 	_numEnergy->setValue(battleUnit->getEnergy());
 	_barEnergy->setMax(battleUnit->getStats()->stamina);
@@ -1390,6 +1396,20 @@ void BattlescapeState::updateSoldierInfo()
 	}
 
 	showPsiButton(battleUnit->getOriginalFaction() == FACTION_HOSTILE && battleUnit->getStats()->psiSkill > 0);
+}
+
+/**
+ * Draws the kneel indicator.
+ */
+ void BattlescapeState::drawKneelIndicator()
+ {
+	SDL_Rect square;
+	square.x = 0;
+	square.y = 0;
+	square.w = 2;
+	square.h = 2;
+
+	_kneel->drawRect(&square, 32); // red
 }
 
 /**
@@ -2138,6 +2158,7 @@ void BattlescapeState::btnZeroTUsClick(Action* action)
 		if (_battleGame->getSave()->getSelectedUnit())
 		{
 			_battleGame->getSave()->getSelectedUnit()->setTimeUnits(0);
+
 			updateSoldierInfo();
 		}
 	}

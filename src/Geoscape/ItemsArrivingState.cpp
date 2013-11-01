@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "ItemsArrivingState.h"
 #include <sstream>
 #include "../Engine/Game.h"
@@ -37,6 +38,7 @@
 #include "GeoscapeState.h"
 #include "../Engine/Options.h"
 
+
 namespace OpenXcom
 {
 
@@ -45,21 +47,27 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param state Pointer to the Geoscape state.
  */
-ItemsArrivingState::ItemsArrivingState(Game *game, GeoscapeState *state) : State(game), _state(state)
+ItemsArrivingState::ItemsArrivingState(Game* game, GeoscapeState* state)
+	:
+		State(game),
+		_state(state)
 {
 	_screen = false;
 
-	// Create objects
-	_window = new Window(this, 320, 184, 0, 8, POPUP_BOTH);
-	_btnOk = new TextButton(142, 16, 16, 166);
-	_btnOk5Secs = new TextButton(142, 16, 162, 166);
-	_txtTitle = new Text(310, 17, 5, 18);
-	_txtItem = new Text(114, 9, 16, 34);
-	_txtQuantity = new Text(54, 9, 152, 34);
-	_txtDestination = new Text(112, 9, 212, 34);
-	_lstTransfers = new TextList(271, 112, 14, 50);
+	_window			= new Window(this, 320, 184, 0, 8, POPUP_BOTH);
 
-	// Set palette
+	_txtTitle		= new Text(310, 17, 5, 18);
+
+	_txtItem		= new Text(114, 9, 16, 34);
+	_txtQuantity	= new Text(54, 9, 152, 34);
+	_txtDestination	= new Text(112, 9, 212, 34);
+
+	_lstTransfers	= new TextList(294, 112, 16, 50);
+
+	_btnOk			= new TextButton(134, 16, 16, 166);
+	_btnOk5Secs		= new TextButton(134, 16, 170, 166);
+
+
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
 
 	add(_window);
@@ -73,7 +81,7 @@ ItemsArrivingState::ItemsArrivingState(Game *game, GeoscapeState *state) : State
 
 	centerAllSurfaces();
 
-	// Set up objects
+
 	_window->setColor(Palette::blockOffset(8)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 
@@ -106,7 +114,7 @@ ItemsArrivingState::ItemsArrivingState(Game *game, GeoscapeState *state) : State
 	_lstTransfers->setColumns(3, 155, 41, 98);
 	_lstTransfers->setSelectable(true);
 	_lstTransfers->setBackground(_window);
-	_lstTransfers->setMargin(2);
+	_lstTransfers->setMargin(8);
 
 	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
 	{

@@ -69,7 +69,6 @@ BasescapeState::BasescapeState(Game* game, Base* base, Globe* globe)
 		_base(base),
 		_globe(globe)
 {
-	// Create objects
 	_txtFacility	= new Text(192, 9, 0, 0);
 	_view			= new BaseView(192, 192, 0, 8);
 	_mini			= new MiniBaseView(128, 16, 192, 41);
@@ -88,7 +87,7 @@ BasescapeState::BasescapeState(Game* game, Base* base, Globe* globe)
 	_btnSell		= new TextButton(128, 12, 192, 175);
 	_btnGeoscape	= new TextButton(128, 12, 192, 188);
 
-	// Set palette
+
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());
 
 	add(_view);
@@ -111,7 +110,7 @@ BasescapeState::BasescapeState(Game* game, Base* base, Globe* globe)
 
 	centerAllSurfaces();
 
-	// Set up objects
+
 	_view->setTexture(_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK"));
 	_view->onMouseClick((ActionHandler)& BasescapeState::viewLeftClick, SDL_BUTTON_LEFT);
 	_view->onMouseClick((ActionHandler)& BasescapeState::viewRightClick, SDL_BUTTON_RIGHT);
@@ -186,132 +185,6 @@ BasescapeState::BasescapeState(Game* game, Base* base, Globe* globe)
 	_btnGeoscape->onMouseClick((ActionHandler)& BasescapeState::btnGeoscapeClick);
 	_btnGeoscape->onKeyboardPress((ActionHandler)& BasescapeState::btnGeoscapeClick, (SDLKey)Options::getInt("keyCancel"));
 }
-
-// kL_begin: new BasescapeState ctor
-/* BasescapeState::BasescapeState(Game* game, Base* base, Globe* globe, GeoscapeState* gs)
-	:
-	State(game),
-	_base(base),
-	_globe(globe),
-	_gs(gs)
-{
-	// Create objects
-	_txtFacility	= new Text(192, 9, 0, 0);
-	_view			= new BaseView(192, 192, 0, 8);
-	_mini			= new MiniBaseView(128, 16, 192, 41);
-	_edtBase		= new TextEdit(127, 17, 193, 0);
-	_txtLocation	= new Text(126, 9, 194, 16);
-	_txtFunds		= new Text(126, 9, 194, 24);
-	_btnNewBase		= new TextButton(128, 12, 192, 58);
-	_btnBaseInfo	= new TextButton(128, 12, 192, 71);
-	_btnSoldiers	= new TextButton(128, 12, 192, 84);
-	_btnCrafts		= new TextButton(128, 12, 192, 97);
-	_btnFacilities	= new TextButton(128, 12, 192, 110);
-	_btnResearch	= new TextButton(128, 12, 192, 123);
-	_btnManufacture	= new TextButton(128, 12, 192, 136);
-	_btnTransfer	= new TextButton(128, 12, 192, 149);
-	_btnPurchase	= new TextButton(128, 12, 192, 162);
-	_btnSell		= new TextButton(128, 12, 192, 175);
-	_btnGeoscape	= new TextButton(128, 12, 192, 188);
-
-	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());
-
-	add(_view);
-	add(_mini);
-	add(_txtFacility);
-	add(_edtBase);
-	add(_txtLocation);
-	add(_txtFunds);
-	add(_btnNewBase);
-	add(_btnBaseInfo);
-	add(_btnSoldiers);
-	add(_btnCrafts);
-	add(_btnFacilities);
-	add(_btnResearch);
-	add(_btnManufacture);
-	add(_btnTransfer);
-	add(_btnPurchase);
-	add(_btnSell);
-	add(_btnGeoscape);
-
-	centerAllSurfaces();
-
-	// Set up objects
-	_view->setTexture(_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK"));
-	_view->onMouseClick((ActionHandler)& BasescapeState::viewLeftClick, SDL_BUTTON_LEFT);
-	_view->onMouseClick((ActionHandler)& BasescapeState::viewRightClick, SDL_BUTTON_RIGHT);
-	_view->onMouseOver((ActionHandler)& BasescapeState::viewMouseOver);
-	_view->onMouseOut((ActionHandler)& BasescapeState::viewMouseOut);
-
-	_mini->setTexture(_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK"));
-	_mini->setBases(_game->getSavedGame()->getBases());
-	for (unsigned int i = 0; i < _game->getSavedGame()->getBases()->size(); ++i)
-	{
-		if (_game->getSavedGame()->getBases()->at(i) == _base)
-		{
-			_mini->setSelectedBase(i);
-
-			break;
-		}
-	}
-	_mini->onMouseClick((ActionHandler)&BasescapeState::miniClick);
-
-	_txtFacility->setColor(Palette::blockOffset(13)+10);
-
-	_edtBase->setColor(Palette::blockOffset(15)+1);
-	_edtBase->setBig();
-	_edtBase->onKeyboardPress((ActionHandler)& BasescapeState::edtBaseKeyPress);
-
-	_txtLocation->setColor(Palette::blockOffset(15)+6);
-
-	_txtFunds->setColor(Palette::blockOffset(13)+10);
-
-	_btnNewBase->setColor(Palette::blockOffset(13)+5);
-	_btnNewBase->setText(tr("STR_BUILD_NEW_BASE_UC"));
-	_btnNewBase->onMouseClick((ActionHandler)& BasescapeState::btnNewBaseClick);
-
-	_btnBaseInfo->setColor(Palette::blockOffset(13)+5);
-	_btnBaseInfo->setText(tr("STR_BASE_INFORMATION"));
-	_btnBaseInfo->onMouseClick((ActionHandler)& BasescapeState::btnBaseInfoClick);
-
-	_btnSoldiers->setColor(Palette::blockOffset(13)+5);
-	_btnSoldiers->setText(tr("STR_SOLDIERS_UC"));
-	_btnSoldiers->onMouseClick((ActionHandler)& BasescapeState::btnSoldiersClick);
-
-	_btnCrafts->setColor(Palette::blockOffset(13)+5);
-	_btnCrafts->setText(tr("STR_EQUIP_CRAFT"));
-	_btnCrafts->onMouseClick((ActionHandler)& BasescapeState::btnCraftsClick);
-
-	_btnFacilities->setColor(Palette::blockOffset(13)+5);
-	_btnFacilities->setText(tr("STR_BUILD_FACILITIES"));
-	_btnFacilities->onMouseClick((ActionHandler)& BasescapeState::btnFacilitiesClick);
-
-	_btnResearch->setColor(Palette::blockOffset(13)+5);
-	_btnResearch->setText(tr("STR_RESEARCH"));
-	_btnResearch->onMouseClick((ActionHandler)& BasescapeState::btnResearchClick);
-
-	_btnManufacture->setColor(Palette::blockOffset(13)+5);
-	_btnManufacture->setText(tr("STR_MANUFACTURE"));
-	_btnManufacture->onMouseClick((ActionHandler)& BasescapeState::btnManufactureClick);
-
-	_btnTransfer->setColor(Palette::blockOffset(13)+5);
-	_btnTransfer->setText(tr("STR_TRANSFER_UC"));
-	_btnTransfer->onMouseClick((ActionHandler)& BasescapeState::btnTransferClick);
-
-	_btnPurchase->setColor(Palette::blockOffset(13)+5);
-	_btnPurchase->setText(tr("STR_PURCHASE_RECRUIT"));
-	_btnPurchase->onMouseClick((ActionHandler)& BasescapeState::btnPurchaseClick);
-
-	_btnSell->setColor(Palette::blockOffset(13)+5);
-	_btnSell->setText(tr("STR_SELL_SACK_UC"));
-	_btnSell->onMouseClick((ActionHandler)& BasescapeState::btnSellClick);
-
-	_btnGeoscape->setColor(Palette::blockOffset(13)+5);
-	_btnGeoscape->setText(tr("STR_GEOSCAPE_UC"));
-	_btnGeoscape->onMouseClick((ActionHandler)& BasescapeState::btnGeoscapeClick);
-	_btnGeoscape->onKeyboardPress((ActionHandler)& BasescapeState::btnGeoscapeClick, (SDLKey)Options::getInt("keyCancel"));
-} */ // kL_end.
 
 /**
  *
@@ -390,12 +263,9 @@ void BasescapeState::init()
  * @param base, Pointer to new base to display.
  */
 void BasescapeState::setBase(Base* base)
-// void BasescapeState::setBase(Base* base, bool current)	 // kL, almost could use MiniBaseView::setSelectedBase()
 {
 	_base = base;
 
-//	if (!current)	// kL
-//	{
 	for (unsigned int i = 0; i < _game->getSavedGame()->getBases()->size(); ++i)
 	{
 		if (_game->getSavedGame()->getBases()->at(i) == _base)
@@ -407,7 +277,6 @@ void BasescapeState::setBase(Base* base)
 	}
 
 	init();
-//	}
 }
 
 /**

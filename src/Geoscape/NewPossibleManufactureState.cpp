@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "NewPossibleManufactureState.h"
 #include "../Engine/Game.h"
 #include "../Engine/Palette.h"
@@ -29,6 +30,7 @@
 #include "../Basescape/ManufactureState.h"
 #include "../Engine/Options.h"
 
+
 namespace OpenXcom
 {
 /**
@@ -37,18 +39,20 @@ namespace OpenXcom
  * @param base Pointer to the base to get info from.
  * @param possibilities List of newly possible ManufactureProject
  */
-NewPossibleManufactureState::NewPossibleManufactureState(Game * game, Base * base, const std::vector<RuleManufacture *> & possibilities) : State (game), _base(base)
+NewPossibleManufactureState::NewPossibleManufactureState(Game* game, Base* base, const std::vector<RuleManufacture*>& possibilities)
+	:
+		State (game),
+		_base(base)
 {
 	_screen = false;
 
-	// Create objects
-	_window = new Window(this, 288, 180, 16, 10);
-	_btnOk = new TextButton(160, 14, 80, 149);
-	_btnManufacture = new TextButton(160, 14, 80, 165);
-	_txtTitle = new Text(288, 40, 16, 20);
-	_lstPossibilities = new TextList(288, 80, 16, 56);
+	_window				= new Window(this, 288, 180, 16, 10);
+	_btnOk				= new TextButton(160, 14, 80, 149);
+	_btnManufacture		= new TextButton(160, 14, 80, 165);
+	_txtTitle			= new Text(288, 40, 16, 20);
+	_lstPossibilities	= new TextList(288, 80, 16, 56);
 
-	// Set palette
+
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
 
 	add(_window);
@@ -59,7 +63,7 @@ NewPossibleManufactureState::NewPossibleManufactureState(Game * game, Base * bas
 
 	centerAllSurfaces();
 
-	// Set up objects
+
 	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK17.SCR"));
 
@@ -80,7 +84,7 @@ NewPossibleManufactureState::NewPossibleManufactureState(Game * game, Base * bas
 	_lstPossibilities->setColumns(1, 288);
 	_lstPossibilities->setBig();
 	_lstPossibilities->setAlign(ALIGN_CENTER);
-	for(std::vector<RuleManufacture *>::const_iterator iter = possibilities.begin (); iter != possibilities.end (); ++iter)
+	for (std::vector<RuleManufacture*>::const_iterator iter = possibilities.begin (); iter != possibilities.end (); ++iter)
 	{
 		_lstPossibilities->addRow (1, tr((*iter)->getName ()).c_str());
 	}
@@ -99,7 +103,7 @@ void NewPossibleManufactureState::init()
  * return to the previous screen
  * @param action Pointer to an action.
  */
-void NewPossibleManufactureState::btnOkClick(Action *)
+void NewPossibleManufactureState::btnOkClick(Action*)
 {
 	_game->popState ();
 }
@@ -108,9 +112,10 @@ void NewPossibleManufactureState::btnOkClick(Action *)
  * Open the ManufactureState so the player can dispatch available scientist.
  * @param action Pointer to an action.
  */
-void NewPossibleManufactureState::btnManufactureClick(Action *)
+void NewPossibleManufactureState::btnManufactureClick(Action*)
 {
 	_game->popState();
 	_game->pushState (new ManufactureState(_game, _base));
 }
+
 }

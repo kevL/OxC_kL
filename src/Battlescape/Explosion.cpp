@@ -32,11 +32,11 @@ namespace OpenXcom
  */
 Explosion::Explosion(Position position, int startFrame, bool big, bool hit)
 	:
-	_position(position),
-	_currentFrame(startFrame),
-	_startFrame(startFrame),
-	_big(big),
-	_hit(hit)
+		_position(position),
+		_startFrame(startFrame),
+		_currentFrame(startFrame),
+		_big(big),
+		_hit(hit)
 {
 }
 
@@ -49,14 +49,15 @@ Explosion::~Explosion()
 
 /**
  * Animates the explosion further.
- * @return false If the animation is finished.
+ * @return, false If the animation is finished
  */
 bool Explosion::animate()
 {
 	_currentFrame++;
-	if ((_hit && _currentFrame == 4)
-		|| (_big && _currentFrame == 8)
-		|| (!_big && _currentFrame == _startFrame + 10))
+
+	if ((_hit && _currentFrame == 4)						// melee or psiamp
+		|| (_big && _currentFrame == 8)						// explosion
+		|| (!_big && _currentFrame == _startFrame + 10))	// bullet
 	{
 		return false;
 	}

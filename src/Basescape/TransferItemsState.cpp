@@ -81,7 +81,7 @@ TransferItemsState::TransferItemsState(Game* game, Base* baseFrom, Base* baseTo)
 	_containmentLimit = Options::getBool("alienContainmentLimitEnforced");
 	_canTransferCraftsWhileAirborne = Options::getBool("canTransferCraftsWhileAirborne");
 
-	// Create objects
+
 	_window					= new Window(this, 320, 200, 0, 0);
 
 /*kL	_btnOk					= new TextButton(148, 16, 8, 176);
@@ -101,15 +101,13 @@ TransferItemsState::TransferItemsState(Game* game, Base* baseFrom, Base* baseTo)
 	_txtAmountTransfer		= new Text(60, 9, 187, 24);
 	_txtAmountDestination	= new Text(63, 9, 246, 24);
 
-//	_lstItems->setColumns(4, 144, 56, 40, 20);		// TEMP!
-
-	_lstItems				= new TextList(288, 136, 8, 35);
+	_lstItems				= new TextList(294, 136, 8, 35);
 
 	_btnCancel				= new TextButton(144, 16, 16, 177);
 	_btnOk					= new TextButton(144, 16, 163, 177);
 	// kL_end.
 
-	// Set palette
+
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
 
 	add(_window);
@@ -124,7 +122,7 @@ TransferItemsState::TransferItemsState(Game* game, Base* baseFrom, Base* baseTo)
 
 	centerAllSurfaces();
 
-	// Set up objects
+
 	_window->setColor(Palette::blockOffset(13)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 

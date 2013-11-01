@@ -203,20 +203,27 @@ void Bar::draw()
 
 	drawRect(&square, 0);
 
+	double width = _scale * _value;		// kL
+	if (0 < width && width < 1)			// kL
+		width = 1;						// kL
+	double width2 = _scale * _value2;	// kL
+	if (0 < width2 && width2 < 1)		// kL
+		width2 = 1;						// kL
+
 	if (_invert)
 	{
 		if (_secondOnTop)
 		{
-			square.w = (Uint16)(_scale * _value);
+			square.w = (Uint16)(width);
 			drawRect(&square, _color + 4);
-			square.w = (Uint16)(_scale * _value2);
+			square.w = (Uint16)(width2);
 			drawRect(&square, _color2 + 4);
 		}
 		else
 		{
-			square.w = (Uint16)(_scale * _value2);
+			square.w = (Uint16)(width2);
 			drawRect(&square, _color2 + 4);
-			square.w = (Uint16)(_scale * _value);
+			square.w = (Uint16)(width);
 			drawRect(&square, _color + 4);
 		}
 	}
@@ -224,16 +231,16 @@ void Bar::draw()
 	{
 		if (_secondOnTop)
 		{
-			square.w = (Uint16)(_scale * _value);
+			square.w = (Uint16)(width);
 			drawRect(&square, _color);
-			square.w = (Uint16)(_scale * _value2);
+			square.w = (Uint16)(width2);
 			drawRect(&square, _color2);
 		}
 		else
 		{
-			square.w = (Uint16)(_scale * _value2);
+			square.w = (Uint16)(width2);
 			drawRect(&square, _color2);
-			square.w = (Uint16)(_scale * _value);
+			square.w = (Uint16)(width);
 			drawRect(&square, _color);
 		}
 	}

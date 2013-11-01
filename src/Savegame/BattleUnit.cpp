@@ -1171,7 +1171,7 @@ int BattleUnit::damage(const Position& relative, int power, ItemDamageType type,
 		}
 	}
 
-	return power < 0 ? 0 : power;
+	return power < 0? 0:power;
 }
 
 /**
@@ -1181,7 +1181,9 @@ int BattleUnit::damage(const Position& relative, int power, ItemDamageType type,
 void BattleUnit::healStun(int power)
 {
 	_stunlevel -= power;
-	if (_stunlevel < 0) _stunlevel = 0;
+
+	if (_stunlevel < 0)
+		_stunlevel = 0;
 }
 
 int BattleUnit::getStunlevel() const

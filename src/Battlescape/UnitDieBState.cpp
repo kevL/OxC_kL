@@ -314,6 +314,8 @@ void UnitDieBState::think()
 	}
 
 	_parent->getMap()->cacheUnit(_unit);
+
+	//Log(LOG_INFO) << "UnitDieBState::think() EXIT";
 }
 
 /**

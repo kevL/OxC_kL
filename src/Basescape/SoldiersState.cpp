@@ -73,26 +73,20 @@ SoldiersState::SoldiersState(Game* game, Base* base)
 		_btnMemorial	= new TextButton(148, 16, 8, 176);
 	} */
 
-//kL	_txtTitle		= new Text(310, 17, 5, 8);
-	_txtTitle		= new Text(300, 17, 10, 8);		// kL
+	_txtTitle		= new Text(300, 17, 10, 11);
 
-//kL	_txtName		= new Text(114, 9, 16, 32);
-//kL	_txtRank		= new Text(102, 9, 130, 32);
-//kL	_txtCraft		= new Text(82, 9, 222, 32);
-	_txtName		= new Text(114, 9, 16, 31);		// kL
-	_txtRank		= new Text(102, 9, 133, 31);	// kL
-	_txtCraft		= new Text(82, 9, 226, 31);		// kL
+	_txtName		= new Text(114, 9, 16, 31);
+	_txtRank		= new Text(102, 9, 133, 31);
+	_txtCraft		= new Text(82, 9, 226, 31);
 
-//kL	_lstSoldiers	= new TextList(288, 128, 8, 40);
-	_lstSoldiers	= new TextList(288, 128, 8, 42);
+	_lstSoldiers	= new TextList(294, 128, 8, 42);
 
 // eulogy, psi, armor, yep.
-	_btnMemorial	= new TextButton(72, 16, 11, 177);		// kL
-//kL	_btnPsiTrain	= new TextButton(148, 16, 8, 176);
-	_btnPsiTrain	= new TextButton(71, 16, 87, 177);		// kL
-//kL	_btnOk			= new TextButton(isPsiBtnVisible? 148:288, 16, isPsiBtnVisible? 164:16, 176);
+	_btnMemorial	= new TextButton(72, 16, 11, 177);
+	_btnPsiTrain	= new TextButton(71, 16, 87, 177);
 	_btnArmor		= new TextButton(71, 16, 162, 177);		// kL
-	_btnOk			= new TextButton(72, 16, 237, 177);		// kL
+//kL	_btnOk			= new TextButton(isPsiBtnVisible? 148:288, 16, isPsiBtnVisible? 164:16, 176);
+	_btnOk			= new TextButton(72, 16, 237, 177);
 
 
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)), Palette::backPos, 16);

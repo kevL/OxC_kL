@@ -50,6 +50,8 @@ void UnitPanicBState::init()
  */
 void UnitPanicBState::think()
 {
+	//Log(LOG_INFO) << "UnitPanicBState::think()";
+
 	// reset the unit's time units when all panicking is done
 	if (_unit)
 	{
@@ -61,6 +63,8 @@ void UnitPanicBState::think()
 	}
 
 	_parent->popState();
+
+	//Log(LOG_INFO) << "UnitPanicBState::think() EXIT";
 }
 
 /**

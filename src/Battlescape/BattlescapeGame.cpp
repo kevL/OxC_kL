@@ -386,6 +386,7 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 		if (_save->getSelectedUnit())
 		{
 			getMap()->getCamera()->centerOnPosition(_save->getSelectedUnit()->getPosition());
+
 			if (_save->getSelectedUnit()->getId() <= unit->getId())
 			{
 				_AISecondMove = true;
@@ -1192,6 +1193,7 @@ void BattlescapeGame::popState()
 					}
 
 					_AIActionCounter = 0;
+
 					if (_states.empty()
 						&& _save->selectNextPlayerUnit(true) == 0)
 					{

@@ -44,8 +44,8 @@ namespace OpenXcom
  */
 UnitFallBState::UnitFallBState(BattlescapeGame* parent)
 	:
-	BattleState(parent),
-	_terrain(0)
+		BattleState(parent),
+		_terrain(0)
 {
 }
 
@@ -75,6 +75,8 @@ void UnitFallBState::init()
  */
 void UnitFallBState::think()
 {
+	//Log(LOG_INFO) << "UnitFallBState::think()";
+
 	for (std::list<BattleUnit* >::iterator unit = _parent->getSave()->getFallingUnits()->begin(); unit != _parent->getSave()->getFallingUnits()->end();)
 	{
 		if ((*unit)->getStatus() == STATUS_TURNING)
@@ -319,6 +321,8 @@ void UnitFallBState::think()
 
 		return;
 	}
+
+	//Log(LOG_INFO) << "UnitFallBState::think() EXIT";
 }
 
 }

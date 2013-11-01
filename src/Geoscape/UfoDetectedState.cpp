@@ -68,31 +68,25 @@ UfoDetectedState::UfoDetectedState(Game* game, Ufo* ufo, GeoscapeState* state, b
 
 	_screen = false;
 
-	// Create objects
 	if (hyperwave)
 	{
-//kL		_window		= new Window(this, 224, 180, 16, 10, POPUP_BOTH);
-		_window		= new Window(this, 224, 171, 16, 10, POPUP_BOTH);		// kL
+		_window		= new Window(this, 224, 171, 16, 10, POPUP_BOTH);
 	}
 	else
 	{
 		_window		= new Window(this, 224, 120, 16, 48, POPUP_BOTH);
 	}
 
-//kL	_btnCentre		= new TextButton(200, 12, 28, 128);
-//kL	_btnCancel		= new TextButton(200, 12, 28, 144);
-//kL	_txtHyperwave	= new Text(214, 17, 21, 44);
-	_txtHyperwave	= new Text(214, 17, 21, 45);			// kL
+	_txtHyperwave	= new Text(214, 17, 21, 45);
 	_txtUfo			= new Text(207, 17, 28, 56);
-//kL	_txtDetected	= new Text(100, 9, 28, 72);
-	_txtDetected	= new Text(100, 9, 28, 73);				// kL
-//kL	_lstInfo		= new TextList(207, 32, 28, 82);
-//kL	_lstInfo2		= new TextList(207, 32, 28, 96);
-	_lstInfo		= new TextList(207, 33, 28, 85);		// kL
+
+	_txtDetected	= new Text(100, 9, 28, 73);
+
+	_lstInfo		= new TextList(207, 33, 28, 85);
 	_lstInfo2		= new TextList(207, 32, 28, 98);
 
-	_btnCentre		= new TextButton(200, 14, 28, 124);		// kL
-	_btnCancel		= new TextButton(200, 14, 28, 144);		// kL
+	_btnCentre		= new TextButton(200, 14, 28, 124);
+	_btnCancel		= new TextButton(200, 14, 28, 144);
 
 	if (hyperwave)
 	{
@@ -108,7 +102,7 @@ UfoDetectedState::UfoDetectedState(Game* game, Ufo* ufo, GeoscapeState* state, b
 		_lstInfo2->setVisible(false);
 	}
 
-	// Set palette
+
 	if (hyperwave)
 	{
 		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)), Palette::backPos, 16);
@@ -127,7 +121,7 @@ UfoDetectedState::UfoDetectedState(Game* game, Ufo* ufo, GeoscapeState* state, b
 	add(_lstInfo);
 	add(_lstInfo2);
 
-	// Set up objects
+
 	_window->setColor(Palette::blockOffset(8)+5);
 //	_window->setColor(Palette::blockOffset(8)+6);		// kL, darker green border
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK15.SCR"));
@@ -224,7 +218,7 @@ void UfoDetectedState::init()
  * Centers on the UFO and returns to the previous screen.
  * @param action Pointer to an action.
  */
-void UfoDetectedState::btnCentreClick(Action* )
+void UfoDetectedState::btnCentreClick(Action*)
 {
 	_state->timerReset();
 	_state->getGlobe()->center(_ufo->getLongitude(), _ufo->getLatitude());
@@ -235,7 +229,7 @@ void UfoDetectedState::btnCentreClick(Action* )
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void UfoDetectedState::btnCancelClick(Action *)
+void UfoDetectedState::btnCancelClick(Action*)
 {
 	_game->popState();
 }

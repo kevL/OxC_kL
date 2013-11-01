@@ -51,31 +51,21 @@ ResearchState::ResearchState(Game* game, Base* base)
 {
 	_window			= new Window(this, 320, 200, 0, 0);
 
-//kL	_txtTitle		= new Text(310, 17, 5, 8);
-	_txtTitle		= new Text(300, 17, 16, 9);				// kL
+	_txtTitle		= new Text(300, 17, 16, 9);
 
-//kL	_txtAvailable	= new Text(150, 9, 10, 24);
-//kL	_txtAllocated	= new Text(150, 9, 160, 24);
-	_txtAvailable	= new Text(140, 9, 16, 25);				// kL
-	_txtAllocated	= new Text(140, 9, 160, 25);			// kL
+	_txtAvailable	= new Text(140, 9, 16, 25);
+	_txtAllocated	= new Text(140, 9, 160, 25);
 
-//kL	_txtSpace		= new Text(300, 9, 10, 34);
-	_txtSpace		= new Text(100, 9, 16, 34);				// kL
+	_txtSpace		= new Text(100, 9, 16, 34);
 
-//kL	_txtProject		= new Text(110, 17, 10, 44);
-//kL	_txtScientists	= new Text(110, 17, 120, 44);
-//kL	_txtProgress	= new Text(80, 9, 230, 44);
-	_txtProject		= new Text(110, 9, 16, 47);				// kL
-	_txtScientists	= new Text(110, 9, 176, 47);			// kL
-	_txtProgress	= new Text(80, 9, 236, 47);				// kL
+	_txtProject		= new Text(110, 9, 16, 47);
+	_txtScientists	= new Text(110, 9, 176, 47);
+	_txtProgress	= new Text(80, 9, 236, 47);
 
-//kL	_lstResearch	= new TextList(288, 112, 8, 62);
-	_lstResearch	= new TextList(288, 112, 8, 62);		// kL
+	_lstResearch	= new TextList(294, 112, 8, 62);
 	
-//kL	_btnNew			= new TextButton(148, 16, 8, 176);
-//kL	_btnOk			= new TextButton(148, 16, 164, 176);
-	_btnNew			= new TextButton(144, 16, 16, 177);		// kL
-	_btnOk			= new TextButton(144, 16, 163, 177);	// kL
+	_btnNew			= new TextButton(144, 16, 16, 177);
+	_btnOk			= new TextButton(144, 16, 163, 177);
 
 	// back up palette in case we're being called from Geoscape!
 	memcpy(_oldPalette, _game->getScreen()->getPalette(), 256 * sizeof(SDL_Color));
@@ -138,12 +128,10 @@ ResearchState::ResearchState(Game* game, Base* base)
 
 	_lstResearch->setColor(Palette::blockOffset(15)+6);
 	_lstResearch->setArrowColor(Palette::blockOffset(13)+10);
-//kL	_lstResearch->setColumns(3, 158, 62, 66);
-	_lstResearch->setColumns(3, 160, 60, 68);	// kL
+	_lstResearch->setColumns(3, 160, 60, 68);
 	_lstResearch->setSelectable(true);
 	_lstResearch->setBackground(_window);
-//kL	_lstResearch->setMargin(2);
-	_lstResearch->setMargin(8);					// kL
+	_lstResearch->setMargin(8);
 	_lstResearch->onMouseClick((ActionHandler)& ResearchState::onSelectProject);
 
 	fillProjectList();

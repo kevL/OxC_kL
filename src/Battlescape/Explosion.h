@@ -34,7 +34,7 @@ class Explosion
 {
 private:
 	Position _position;
-	int _currentFrame, _startFrame;
+	int  _startFrame, _currentFrame;
 	bool _big, _hit;
 
 	public:

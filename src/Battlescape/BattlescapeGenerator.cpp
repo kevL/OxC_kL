@@ -2035,7 +2035,7 @@ void BattlescapeGenerator::explodePowerSources()
 			// ((x^3)/32000)+50, x= 0..200									// kL
 			int rand = RNG::generate(1, 200);								// kL
 			int power = (int)(((pow((double)rand, 3)) / 32000.0) + 50.0);	// kL
-			Log(LOG_DEBUG) << "BattlescapeGenerator::explodePowerSources() power = " << power;
+			Log(LOG_INFO) << "BattlescapeGenerator::explodePowerSources() power = " << power;
 			_save->getTileEngine()->explode(pos, power, DT_HE, 21);
 		}
 	}

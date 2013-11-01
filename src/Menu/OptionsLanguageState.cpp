@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "OptionsLanguageState.h"
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
@@ -28,6 +29,7 @@
 #include "../Engine/Options.h"
 #include "MainMenuState.h"
 
+
 namespace OpenXcom
 {
 
@@ -36,13 +38,14 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param origin Game section that originated this state.
  */
-OptionsLanguageState::OptionsLanguageState(Game *game, OptionsOrigin origin) : OptionsBaseState(game, origin)
+OptionsLanguageState::OptionsLanguageState(Game* game, OptionsOrigin origin)
+	:
+		OptionsBaseState(game, origin)
 {
-	// Create objects
-	_window = new Window(this, 320, 200, 0, 0, POPUP_BOTH);
-	_txtTitle = new Text(320, 17, 0, 8);
-	_lstLanguages = new TextList(272, 144, 24, 26);
-	_btnCancel = new TextButton(100, 16, 110, 176);
+	_window			= new Window(this, 320, 200, 0, 0, POPUP_BOTH);
+	_txtTitle		= new Text(320, 17, 0, 8);
+	_lstLanguages	= new TextList(272, 144, 24, 26);
+	_btnCancel		= new TextButton(100, 16, 110, 176);
 
 	add(_window);
 	add(_txtTitle);
@@ -51,7 +54,7 @@ OptionsLanguageState::OptionsLanguageState(Game *game, OptionsOrigin origin) : O
 
 	centerAllSurfaces();
 
-	// Set up objects
+
 	_window->setColor(Palette::blockOffset(8)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
@@ -81,7 +84,6 @@ OptionsLanguageState::OptionsLanguageState(Game *game, OptionsOrigin origin) : O
  */
 OptionsLanguageState::~OptionsLanguageState()
 {
-
 }
 
 /**
@@ -92,6 +94,7 @@ OptionsLanguageState::~OptionsLanguageState()
 void OptionsLanguageState::lstLanguagesClick(Action *)
 {
 	_game->loadLanguage(_langs[_lstLanguages->getSelectedRow()]);
+
 	saveOptions();
 }
 

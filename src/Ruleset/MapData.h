@@ -124,7 +124,7 @@ private:
 		int getFootstepSound() const;
 		/// Sets the index to the footstep sound.
 		void setFootstepSound(int value);
-		/// Gets sthe alternative object ID.
+		/// Gets the alternative object ID.
 		int getAltMCD() const;
 		/// Sets the alternative object ID.
 		void setAltMCD(int value);

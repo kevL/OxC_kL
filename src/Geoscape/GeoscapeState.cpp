@@ -606,7 +606,7 @@ void GeoscapeState::init()
 
 	timeDisplay();
 
-	_globe->onMouseClick((ActionHandler)&GeoscapeState::globeClick);
+	_globe->onMouseClick((ActionHandler)& GeoscapeState::globeClick);
 	_globe->onMouseOver(0);
 	_globe->focus();
 	_globe->draw();
@@ -1139,12 +1139,12 @@ private:
 			:
 				_base(base)
 			{
+				Log(LOG_INFO) << "DetectXCOMBase::DetectXCOMBase()";
 				/* Empty by design.  */
 			}
 
 		/// Attempt detection
 		bool operator()(const Ufo* ufo) const;
-
 };
 
 /**
@@ -1154,10 +1154,10 @@ private:
  */
 bool DetectXCOMBase::operator()(const Ufo* ufo) const
 {
-	if ((ufo->getMissionType() != "STR_ALIEN_RETALIATION"
-			&& !Options::getBool("aggressiveRetaliation"))					// only UFOs on retaliation missions actively scan for bases
-		|| ufo->getTrajectory().getID() == "__RETALIATION_ASSAULT_RUN"		// UFOs attacking a base don't detect!
-		|| ufo->isCrashed()													// Crashed UFOs don't detect!
+	if ((ufo->getMissionType() != "STR_ALIEN_RETALIATION"					// only UFOs on retaliation missions actively scan for bases
+			&& !Options::getBool("aggressiveRetaliation"))					// unless aggressiveRetaliation option is true
+		|| ufo->getTrajectory().getID() == "__RETALIATION_ASSAULT_RUN"		// UFOs attacking a base don't bother with this!
+		|| ufo->isCrashed()													// Crashed UFOs can't detect!
 		|| _base.getDistance(ufo) > 80.0 * (1 / 60.0) * (M_PI / 180.0))		// UFOs have a detection range of 80 XCOM units.
 
 	{
@@ -1209,7 +1209,8 @@ void GeoscapeState::time10Minutes()
 
 				if ((*j)->getDestination() == 0)
 				{
-					for (std::vector<AlienBase*>::iterator b = _game->getSavedGame()->getAlienBases()->begin(); b != _game->getSavedGame()->getAlienBases()->end(); b++)
+					for (std::vector<AlienBase*>::iterator b = _game->getSavedGame()->getAlienBases()->begin();
+							b != _game->getSavedGame()->getAlienBases()->end(); b++)
 					{
 						double range = 1696 * (1 / 60.0) * (M_PI / 180);
 						if ((*j)->getDistance(*b) <= range)
@@ -1233,7 +1234,8 @@ void GeoscapeState::time10Minutes()
 		for (std::vector<Base* >::iterator iBase = _game->getSavedGame()->getBases()->begin(); iBase != _game->getSavedGame()->getBases()->end(); ++iBase)
 		{
 			// Find a UFO that detected this base, if any.
-			std::vector<Ufo* >::const_iterator uu = std::find_if(_game->getSavedGame()->getUfos()->begin(), _game->getSavedGame()->getUfos()->end(), DetectXCOMBase(**iBase));
+			std::vector<Ufo* >::const_iterator uu = std::find_if(_game->getSavedGame()->getUfos()->begin(),
+											_game->getSavedGame()->getUfos()->end(), DetectXCOMBase(**iBase));
 			if (uu != _game->getSavedGame()->getUfos()->end())
 			{
 				(*iBase)->setRetaliationStatus(true); // Base found
@@ -1247,7 +1249,8 @@ void GeoscapeState::time10Minutes()
 		for (std::vector<Base* >::iterator iBase = _game->getSavedGame()->getBases()->begin(); iBase != _game->getSavedGame()->getBases()->end(); ++iBase)
 		{
 			// Find a UFO that detected this base, if any.
-			std::vector<Ufo* >::const_iterator uu = std::find_if(_game->getSavedGame()->getUfos()->begin(), _game->getSavedGame()->getUfos()->end(), DetectXCOMBase(**iBase));
+			std::vector<Ufo* >::const_iterator uu = std::find_if(_game->getSavedGame()->getUfos()->begin(),
+											_game->getSavedGame()->getUfos()->end(), DetectXCOMBase(**iBase));
 			if (uu != _game->getSavedGame()->getUfos()->end())
 			{
 				discovered[_game->getSavedGame()->locateRegion(**iBase)] = *iBase;

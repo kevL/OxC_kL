@@ -16,34 +16,41 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "RuleInventory.h"
 #include <cmath>
 #include "RuleItem.h"
 
+
 namespace YAML
 {
+
 	template<>
 	struct convert<OpenXcom::RuleSlot>
 	{
 		static Node encode(const OpenXcom::RuleSlot& rhs)
 		{
 			Node node;
+
 			node.push_back(rhs.x);
 			node.push_back(rhs.y);
+
 			return node;
 		}
 
 		static bool decode(const Node& node, OpenXcom::RuleSlot& rhs)
 		{
-			if(!node.IsSequence() || node.size() != 2)
+			if (!node.IsSequence() || node.size() != 2)
 				return false;
 
 			rhs.x = node[0].as<int>();
 			rhs.y = node[1].as<int>();
+
 			return true;
 		}
 	};
 }
+
 
 namespace OpenXcom
 {
@@ -53,7 +60,14 @@ namespace OpenXcom
  * type of inventory section.
  * @param id String defining the id.
  */
-RuleInventory::RuleInventory(const std::string &id): _id(id), _x(0), _y(0), _type(INV_SLOT), _slots(), _costs()
+RuleInventory::RuleInventory(const std::string& id)
+	:
+		_id(id),
+		_x(0),
+		_y(0),
+		_type(INV_SLOT),
+		_slots(),
+		_costs()
 {
 }
 
@@ -65,14 +79,16 @@ RuleInventory::~RuleInventory()
  * Loads the inventory from a YAML file.
  * @param node YAML node.
  */
-void RuleInventory::load(const YAML::Node &node)
+void RuleInventory::load(const YAML::Node& node)
 {
-	_id = node["id"].as<std::string>(_id);
-	_x = node["x"].as<int>(_x);
-	_y = node["y"].as<int>(_y);
+	_id	= node["id"].as<std::string>(_id);
+	_x	= node["x"].as<int>(_x);
+	_y	= node["y"].as<int>(_y);
+
 	_type = (InventoryType)node["type"].as<int>(_type);
-	_slots = node["slots"].as< std::vector<RuleSlot> >(_slots);
-	_costs = node["costs"].as< std::map<std::string, int> >(_costs);
+
+	_slots = node["slots"].as< std::vector<RuleSlot>>(_slots);
+	_costs = node["costs"].as< std::map<std::string, int>>(_costs);
 }
 
 /**
@@ -119,7 +135,7 @@ InventoryType RuleInventory::getType() const
  * Gets all the slots in the inventory section.
  * @return The list of slots.
  */
-std::vector<struct RuleSlot> *RuleInventory::getSlots()
+std::vector<struct RuleSlot>* RuleInventory::getSlots()
 {
 	return &_slots;
 }
@@ -130,20 +146,24 @@ std::vector<struct RuleSlot> *RuleInventory::getSlots()
  * @param y Mouse Y position. Returns the slot's Y position.
  * @return True if there's a slot there.
  */
-bool RuleInventory::checkSlotInPosition(int *x, int *y) const
+bool RuleInventory::checkSlotInPosition(int* x, int* y) const
 {
 	int mouseX = *x, mouseY = *y;
+
 	if (_type == INV_HAND)
 	{
 		for (int xx = 0; xx < HAND_W; ++xx)
 		{
 			for (int yy = 0; yy < HAND_H; ++yy)
 			{
-				if (mouseX >= _x + xx * SLOT_W && mouseX < _x + (xx + 1) * SLOT_W &&
-					mouseY >= _y + yy * SLOT_H && mouseY < _y + (yy + 1) * SLOT_H)
+				if (mouseX >= _x + xx * SLOT_W
+					&& mouseX < _x + (xx + 1) * SLOT_W
+					&& mouseY >= _y + yy * SLOT_H
+					&& mouseY < _y + (yy + 1) * SLOT_H)
 				{
 					*x = 0;
 					*y = 0;
+
 					return true;
 				}
 			}
@@ -151,10 +171,14 @@ bool RuleInventory::checkSlotInPosition(int *x, int *y) const
 	}
 	else if (_type == INV_GROUND)
 	{
-		if (mouseX >= _x && mouseX < 320 && mouseY >= _y && mouseY < 200)
+		if (mouseX >= _x
+			&& mouseX < 320
+			&& mouseY >= _y
+			&& mouseY < 200)
 		{
 			*x = (int)floor(double(mouseX - _x) / SLOT_W);
 			*y = (int)floor(double(mouseY - _y) / SLOT_H);
+
 			return true;
 		}
 	}
@@ -162,15 +186,19 @@ bool RuleInventory::checkSlotInPosition(int *x, int *y) const
 	{
 		for (std::vector<RuleSlot>::const_iterator i = _slots.begin(); i != _slots.end(); ++i)
 		{
-			if (mouseX >= _x + i->x * SLOT_W && mouseX < _x + (i->x + 1) * SLOT_W &&
-				mouseY >= _y + i->y * SLOT_H && mouseY < _y + (i->y + 1) * SLOT_H)
+			if (mouseX >= _x + i->x * SLOT_W
+				&& mouseX < _x + (i->x + 1) * SLOT_W
+				&& mouseY >= _y + i->y * SLOT_H
+				&& mouseY < _y + (i->y + 1) * SLOT_H)
 			{
 				*x = i->x;
 				*y = i->y;
+
 				return true;
 			}
 		}
 	}
+
 	return false;
 }
 
@@ -182,7 +210,7 @@ bool RuleInventory::checkSlotInPosition(int *x, int *y) const
  * @param y Slot Y position.
  * @return True if there's a slot there.
  */
-bool RuleInventory::fitItemInSlot(RuleItem *item, int x, int y) const
+bool RuleInventory::fitItemInSlot(RuleItem* item, int x, int y) const
 {
 	if (_type == INV_HAND)
 	{
@@ -193,31 +221,43 @@ bool RuleInventory::fitItemInSlot(RuleItem *item, int x, int y) const
 		int width = (320 - _x) / SLOT_W;
 		int height = (200 - _y) / SLOT_H;
 		int xOffset = 0;
+
 		while (x >= xOffset + width)
 			xOffset += width;
+
 		for (int xx = x; xx < x + item->getInventoryWidth(); ++xx)
 		{
 			for (int yy = y; yy < y + item->getInventoryHeight(); ++yy)
 			{
-				if (!(xx >= xOffset && xx < xOffset + width && yy >= 0 && yy < height))
+				if (!(xx >= xOffset
+					&& xx < xOffset + width
+					&& yy >= 0
+					&& yy < height))
+				{
 					return false;
+				}
 			}
 		}
+
 		return true;
 	}
 	else
 	{
 		int totalSlots = item->getInventoryWidth() * item->getInventoryHeight();
 		int foundSlots = 0;
+
 		for (std::vector<RuleSlot>::const_iterator i = _slots.begin(); i != _slots.end() && foundSlots < totalSlots; ++i)
 		{
-			if (i->x >= x && i->x < x + item->getInventoryWidth() &&
-				i->y >= y && i->y < y + item->getInventoryHeight())
+			if (i->x >= x
+				&& i->x < x + item->getInventoryWidth()
+				&& i->y >= y
+				&& i->y < y + item->getInventoryHeight())
 			{
 				foundSlots++;
 			}
 		}
-		return (foundSlots == totalSlots);
+
+		return foundSlots == totalSlots;
 	}
 }
 
@@ -230,6 +270,7 @@ int RuleInventory::getCost(RuleInventory* slot) const
 {
 	if (slot == this)
 		return 0;
+
 	return _costs.find(slot->getId())->second;
 }
 

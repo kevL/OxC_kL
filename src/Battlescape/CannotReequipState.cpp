@@ -45,31 +45,19 @@ CannotReequipState::CannotReequipState(Game* game, std::vector<ReequipStat> miss
 	:
 		State(game)
 {
-	// Create objects
 	_window			= new Window(this, 320, 200, 0, 0);
-/*kL	_btnOk			= new TextButton(120, 18, 100, 174);
-	_txtTitle		= new Text(220, 32, 50, 8);
-	_txtItem		= new Text(142, 9, 10, 50);
-	_txtQuantity	= new Text(88, 9, 152, 50);
-	_txtCraft		= new Text(74, 9, 218, 50);
-	_lstItems		= new TextList(288, 112, 8, 58); */
 
-	// kL_begin: CannotReequipState, surface adj.
 	_txtTitle		= new Text(300, 64, 100, 9);
 
 	_txtItem		= new Text(136, 9, 16, 69);
 	_txtQuantity	= new Text(65, 9, 152, 69);
 	_txtCraft		= new Text(87, 9, 217, 69);
 
-//	_lstItems->setColumns(3, 152, 65, 87);		// TEMP!
-
-	_lstItems		= new TextList(288, 88, 8, 81);
+	_lstItems		= new TextList(294, 88, 8, 81);
 
 	_btnOk			= new TextButton(288, 16, 16, 177);
-	// kL_end.
 
 
-	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
 	add(_window);
 	add(_btnOk);
@@ -81,7 +69,7 @@ CannotReequipState::CannotReequipState(Game* game, std::vector<ReequipStat> miss
 
 	centerAllSurfaces();
 
-	// Set up objects
+
 	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
@@ -110,8 +98,7 @@ CannotReequipState::CannotReequipState(Game* game, std::vector<ReequipStat> miss
 	_lstItems->setColumns(3, 162, 46, 80);
 	_lstItems->setSelectable(true);
 	_lstItems->setBackground(_window);
-//kL	_lstItems->setMargin(2);
-	_lstItems->setMargin(8);	// kL
+	_lstItems->setMargin(8);
 
 	for (std::vector<ReequipStat>::iterator i = missingItems.begin(); i != missingItems.end(); ++i)
 	{
