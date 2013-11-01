@@ -223,7 +223,7 @@ void SaveState::quickSave(const std::string& filename)
 	{
 		Log(LOG_ERROR) << e.what();
 		std::wstringstream error;
-		error << tr("STR_SAVE_UNSUCCESSFUL") << L'\x02' << Language::utf8ToWstr(e.what());
+		error << tr("STR_SAVE_UNSUCCESSFUL") << L'\x02' << Language::fsToWstr(e.what());
 
 		if (_origin != OPT_BATTLESCAPE)
 			_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(8)+10, "BACK01.SCR", 6));
@@ -234,7 +234,7 @@ void SaveState::quickSave(const std::string& filename)
 	{
 		Log(LOG_ERROR) << e.what();
 		std::wstringstream error;
-		error << tr("STR_SAVE_UNSUCCESSFUL") << L'\x02' << Language::utf8ToWstr(e.what());
+		error << tr("STR_SAVE_UNSUCCESSFUL") << L'\x02' << Language::fsToWstr(e.what());
 
 		if (_origin != OPT_BATTLESCAPE)
 			_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(8)+10, "BACK01.SCR", 6));

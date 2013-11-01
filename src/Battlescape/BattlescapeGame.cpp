@@ -758,10 +758,9 @@ void BattlescapeGame::checkForCasualties(BattleItem* murderweapon, BattleUnit* m
 				}
 			}
 
-			if ((*j)->getHealth() > 0
-				&& (*j)->getSpecialAbility() == SPECAB_RESPAWN)
+			if ((*j)->getSpecialAbility() == SPECAB_RESPAWN)
 			{
-//				Log(LOG_INFO) << ". . still alive, Specab = Respawn... converting unit!";		// kL
+				//Log(LOG_INFO) << ". . still alive, Specab = Respawn... converting unit!";		// kL
 
 				(*j)->setSpecialAbility(SPECAB_NONE);
 				convertUnit(*j, (*j)->getSpawnUnit());
