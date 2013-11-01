@@ -43,13 +43,13 @@ InfoboxOKState::InfoboxOKState(Game* game, const std::wstring& msg)
 	_screen = false;
 
 
-	_frame		= new Frame(261, 89, 30, 48);
-	_btnOk		= new TextButton(120, 18, 100, 112);
-	_txtTitle	= new Text(255, 61, 33, 51);
+	_frame		= new Frame(260, 90, 30, 50);
+	_txtTitle	= new Text(250, 60, 35, 55);
+	_btnOk		= new TextButton(120, 16, 100, 117);
 
 	add(_frame);
-	add(_btnOk);
 	add(_txtTitle);
+	add(_btnOk);
 
 	centerAllSurfaces();
 
@@ -59,20 +59,20 @@ InfoboxOKState::InfoboxOKState(Game* game, const std::wstring& msg)
 	_frame->setThickness(3);
 	_frame->setHighContrast(true);
 
+	_txtTitle->setColor(Palette::blockOffset(1)-1);
+	_txtTitle->setBig();
+	_txtTitle->setAlign(ALIGN_CENTER);
+	_txtTitle->setVerticalAlign(ALIGN_MIDDLE);
+	_txtTitle->setHighContrast(true);
+//kL	_txtTitle->setWordWrap(true);
+	_txtTitle->setText(msg);
+
 	_btnOk->setColor(Palette::blockOffset(1)-1);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& InfoboxOKState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)& InfoboxOKState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
 	_btnOk->onKeyboardPress((ActionHandler)& InfoboxOKState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 	_btnOk->setHighContrast(true);
-
-	_txtTitle->setColor(Palette::blockOffset(1)-1);
-	_txtTitle->setBig();
-	_txtTitle->setAlign(ALIGN_CENTER);
-	_txtTitle->setVerticalAlign(ALIGN_MIDDLE);
-	_txtTitle->setHighContrast(true);
-	_txtTitle->setWordWrap(true);
-	_txtTitle->setText(msg);
 
 	_game->getCursor()->setVisible(true);
 }
@@ -88,7 +88,7 @@ InfoboxOKState::~InfoboxOKState()
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void InfoboxOKState::btnOkClick(Action *)
+void InfoboxOKState::btnOkClick(Action*)
 {
 	_game->popState();
 }

@@ -44,20 +44,19 @@ private:
 	Frame* _frame;
 	Timer* _timer;
 
-public:
-	static const int INFOBOX_DELAY = 2000;
-	/// Creates the Infobox state.
-	InfoboxState(Game* game, const std::wstring& msg);
-	/// Cleans up the Infobox state.
-	~InfoboxState();
+	public:
+		static const int INFOBOX_DELAY = 2000;
+		/// Creates the Infobox state.
+		InfoboxState(Game* game, const std::wstring& msg);
+		/// Cleans up the Infobox state.
+		~InfoboxState();
 
-	/// Handler for clicking anything.
-	void handle(Action* action);
-	/// Handles the timers.
-	void think();
-	/// Closes the window.
-	void close();
-
+		/// Handler for clicking anything.
+		void handle(Action* action);
+		/// Handles the timers.
+		void think();
+		/// Closes the window.
+		void close();
 };
 
 }

@@ -112,8 +112,9 @@ void ExplosionBState::init()
 
 				Position p = _center;
 				p.x += X; p.y += Y;
+
 //kL				Explosion* explosion = new Explosion(p, RNG::generate(-3, 6), true);
-				Explosion* explosion = new Explosion(p, -3, true);
+				Explosion* explosion = new Explosion(p, 0, true);
 
 				_parent->getMap()->getExplosions()->insert(explosion); // add the explosion on the map
 			}
@@ -121,8 +122,7 @@ void ExplosionBState::init()
 //kL			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED);
 			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED * 5 / 7);		// kL
 
-//kL			if (_power <= 80) // explosion sound
-			if (_power < 80)	// kL
+			if (_power < 80)
 				_parent->getResourcePack()->getSound("BATTLE.CAT", 12)->play();
 			else
 				_parent->getResourcePack()->getSound("BATTLE.CAT", 5)->play();

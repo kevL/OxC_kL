@@ -287,7 +287,8 @@ void UnitDieBState::think()
 				}
 				else if (Options::getBool("battleNotifyDeath"))
 				{
-					game->pushState(new InfoboxState(game, game->getLanguage()
+//kL					game->pushState(new InfoboxState(game, game->getLanguage()
+					game->pushState(new InfoboxOKState(game, game->getLanguage()	// kL
 							->getString("STR_HAS_BEEN_KILLED", _unit->getGender()).arg(_unit->getName(game->getLanguage()))));
 				}
 			}

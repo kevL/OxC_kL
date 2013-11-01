@@ -41,15 +41,15 @@ InfoboxState::InfoboxState(Game* game, const std::wstring& msg)
 {
 	_screen = false;
 
-
-	_frame	= new Frame(261, 122, 34, 10);
-	_text	= new Text(251, 112, 39, 15);
+//kL	_frame	= new Frame(261, 122, 34, 10);
+//kL	_text	= new Text(251, 112, 39, 15);
+	_frame	= new Frame(260, 90, 30, 50);
+	_text	= new Text(250, 80, 35, 55);
 
 	add(_frame);
 	add(_text);
 
 	centerAllSurfaces();
-
 
 	_frame->setHighContrast(true);
 	_frame->setColor(Palette::blockOffset(0)+7);
@@ -66,7 +66,7 @@ InfoboxState::InfoboxState(Game* game, const std::wstring& msg)
 	_text->setPalette(_frame->getPalette());
 
 	_timer = new Timer(INFOBOX_DELAY);
-	_timer->onTimer((StateHandler)&InfoboxState::close);
+	_timer->onTimer((StateHandler)& InfoboxState::close);
 	_timer->start();
 }
 
