@@ -64,11 +64,11 @@ GeoscapeCraftState::GeoscapeCraftState(Game* game, Craft* craft, Globe* globe, W
 
 	_txtStatus		= new Text(216, 17, 32, 33);
 
-	_btnBase		= new TextButton(192, 14, 32, 125);
-	_btnTarget		= new TextButton(192, 14, 32, 110);
-	_btnCenter		= new TextButton(192, 14, 32, 140);
-	_btnPatrol		= new TextButton(192, 14, 32, 155);
-	_btnCancel		= new TextButton(192, 14, 32, 170);
+	_btnTarget		= new TextButton(192, 14, 32, 111);
+	_btnBase		= new TextButton(192, 14, 32, 126);
+	_btnCenter		= new TextButton(192, 14, 32, 141);
+	_btnPatrol		= new TextButton(192, 14, 32, 156);
+	_btnCancel		= new TextButton(192, 14, 32, 171);
 
 	_txtBase		= new Text(200, 9, 32, 45);
 

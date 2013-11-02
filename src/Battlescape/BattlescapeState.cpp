@@ -111,7 +111,11 @@ BattlescapeState::BattlescapeState(Game* game)
 	_mouseOverIcons = false;
 
 	// Create buttonbar - this should be on the centerbottom of the screen
-	_icons				= new InteractiveSurface(iconsWidth, iconsHeight, screenWidth/2 - iconsWidth/2, screenHeight - iconsHeight);
+	_icons				= new InteractiveSurface(
+								iconsWidth,
+								iconsHeight,
+								(screenWidth / 2) - (iconsWidth / 2),
+								screenHeight - iconsHeight);
 
 	// Create the battlemap view
 	// the actual map height is the total height minus the height of the buttonbar
@@ -121,7 +125,7 @@ BattlescapeState::BattlescapeState(Game* game)
 
 	_numLayers			= new NumberText(3, 5, _icons->getX() + 232, _icons->getY() + 6);
 	_rank				= new Surface(26, 23, _icons->getX() + 107, _icons->getY() + 33);
-	_kneel				= new Surface(2, 2, _icons->getX() + 112, _icons->getY() + 16);
+	_kneel				= new Surface(2, 2, _icons->getX() + 115, _icons->getY() + 19);
 
 	// Create buttons
 	_btnUnitUp			= new InteractiveSurface(32, 16, _icons->getX() + 48, _icons->getY());
@@ -143,10 +147,12 @@ BattlescapeState::BattlescapeState(Game* game)
 	_btnReserveSnap		= new ImageButton(28, 11, _icons->getX() + 78, _icons->getY() + 33);
 	_btnReserveAimed	= new ImageButton(28, 11, _icons->getX() + 49, _icons->getY() + 45);
 	_btnReserveAuto		= new ImageButton(28, 11, _icons->getX() + 78, _icons->getY() + 45);
+
 	// TODO: the following two are set for TFTD, but are unavailable except via hotkey
 	// until the battleScape UI layout is defined in the ruleset
 	_btnReserveKneel	= new ImageButton(10, 21, _icons->getX() + 43, _icons->getY() + 34);
 	_btnZeroTUs			= new ImageButton(10, 21, _icons->getX() + 97, _icons->getY() + 34);
+
 	_btnLeftHandItem	= new InteractiveSurface(32, 48, _icons->getX() + 8, _icons->getY() + 5);
 	_numAmmoLeft		= new NumberText(30, 5, _icons->getX() + 8, _icons->getY() + 4);
 	_btnRightHandItem	= new InteractiveSurface(32, 48, _icons->getX() + 280, _icons->getY() + 5);
@@ -1409,11 +1415,11 @@ void BattlescapeState::updateSoldierInfo()
 	square.w = 2;
 	square.h = 2;
 
-	_kneel->drawRect(&square, 32); // red
+	_kneel->drawRect(&square, Palette::blockOffset(5)+12); // 32=red, blockOffset(5)=browns
 }
 
 /**
- * Shifts the red colors of the visible unit buttons backgrounds.
+ * Shifts the red colors of the visible unit buttons' backgrounds.
  */
 void BattlescapeState::blinkVisibleUnitButtons()
 {
@@ -1987,7 +1993,8 @@ void BattlescapeState::popup(State* state)
  * Finishes up the current battle, shuts down the battlescape
  * and presents the debriefing screen for the mission.
  * @param abort Was the mission aborted?
- * @param inExitArea Number of soldiers in the exit area OR number of survivors when battle finished due to either all aliens or objective being destroyed.
+ * @param inExitArea Number of soldiers in the exit area OR number of survivors
+ *		when battle finished due to either all aliens or objective being destroyed.
  */
 void BattlescapeState::finishBattle(bool abort, int inExitArea)
 {

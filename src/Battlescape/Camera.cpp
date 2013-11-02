@@ -609,7 +609,7 @@ int Camera::toggleShowAllLayers()
 {
 	_showAllLayers = !_showAllLayers;
 
-	return _showAllLayers ? 2 : 1;
+	return _showAllLayers? 2:1;
 }
 
 /**

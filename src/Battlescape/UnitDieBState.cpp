@@ -82,13 +82,10 @@ UnitDieBState::UnitDieBState(BattlescapeGame* parent, BattleUnit* unit, ItemDama
 		_parent->getMap()->getCamera()->centerOnPosition(_unit->getPosition());
 	}
 
-		// kL_note: this is only necessary when spawning a chryssalid from a zombie. See below
+	// kL_note: this is only necessary when spawning a chryssalid from a zombie. See below
 	_originalDir = _unit->getDirection();
 	_unit->setDirection(_originalDir);		// kL. Stop Turning f!!!
 	_unit->setSpinPhase(-1);
-
-		// kL_note: replaced w/ Savegame/BattleUnit.cpp, BattleUnit::deathPirouette()
-//kL		_unit->lookAt(3); // unit goes into status TURNING to prepare for a nice dead animation
 
 	// kL_begin:
 	if (_unit->getVisible())
@@ -96,36 +93,28 @@ UnitDieBState::UnitDieBState(BattlescapeGame* parent, BattleUnit* unit, ItemDama
 	{
 		if (!_unit->getSpawnUnit().empty())	// nb. getSpawnUnit() is a member of both BattleUnit & Unit...
 //			&& _unit->getSpecialAbility() == 0) // this comes into play because Soldiers & Civilians, (health=0) eg, can have SpawnUnit set and SpecAb set too.
-													// but should they spin or not spin??? Did they spin because they're already dead...?
-	/*
-	_ZOMBIE_ -> nospin
-	specab: 0
-	spawnUnit: STR_CHRYSSALID_TERRORIST
-	_ChryssalidTerrorist_ -> spin!!
-	specab: 0
-	spawnUnit: ""
-	*/
-			// and don't spin a unit that has just been smitten:
-			// specab->RESPAWN, ->zombieUnit!
-//			&& !_unit->getZombieUnit().empty()		// not working.
-//			&& _unit->getSpecialAbility() == 3)		// not working.
+												// but should they spin or not spin??? Did they spin because they're already dead...?
+/*
+_ZOMBIE_ -> nospin
+specab: 0
+spawnUnit: STR_CHRYSSALID_TERRORIST
+_ChryssalidTerrorist_ -> spin!!
+specab: 0
+spawnUnit: ""
+*/
 		{
 			//Log(LOG_INFO) << _unit->getId() << " is a zombie.";
 
 			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED * 8 / 7); // slow the zombie down so I can watch this....
-
-//			_originalDir = _unit->getDirection(); // facing for zombie->Chryssalid spawns. See above
 			// unit goes into status TURNING to prepare for a nice dead animation
-			_unit->lookAt(3); // else -> STATUS_STANDING (...), look at the player for the transformation sequence.
-			//Log(LOG_INFO) << ". . got back from lookAt() in ctor ...";
+			_unit->lookAt(3); // else -> STATUS_STANDING (...), look toward the player for the transformation sequence.
+			//Log(LOG_INFO) << ". . got back from lookAt() in cTor ...";
 		}
-		else //if (_unit->getVisible()
-			//&& _parent->getMap()->getCamera()->isOnScreen(_unit->getPosition()))
+		else
 		{
 			//Log(LOG_INFO) << _unit->getId() << " is NOT a zombie. initiate Spin!";
 
 			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED * 2 / 7);
-
 			_unit->initDeathSpin(); // -> STATUS_TURNING, death animation spin; Savegame/BattleUnit.cpp
 		}
 	}
@@ -153,10 +142,10 @@ UnitDieBState::UnitDieBState(BattlescapeGame* parent, BattleUnit* unit, ItemDama
 
     if (_unit->getFaction() == FACTION_HOSTILE)
     {
-        std::vector<Node* >* nodes = _parent->getSave()->getNodes();
+        std::vector<Node*>* nodes = _parent->getSave()->getNodes();
         if (!nodes) return; // this better not happen.
 
-        for (std::vector<Node* >::iterator n = nodes->begin(); n != nodes->end(); ++n)
+        for (std::vector<Node*>::iterator n = nodes->begin(); n != nodes->end(); ++n)
         {
             if (_parent->getSave()->getTileEngine()->distanceSq((*n)->getPosition(), _unit->getPosition()) < 4)
             {
@@ -215,7 +204,6 @@ void UnitDieBState::think()
 	{
 		//Log(LOG_INFO) << ". . !isOut";
 
-//		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED * 8 / 7);	// kL
 		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED);			// kL
 		_unit->startFalling(); // -> STATUS_COLLAPSING
 
@@ -232,12 +220,12 @@ void UnitDieBState::think()
 		// kL_note: I think this is doubling because I remarked DT_HE in the constructor. nah... Yes!
 		// but leave it in 'cause it gives a coolia .. doubling effect !!! In fact,
 		// try it for *EVERYONE** ( but it could be a cool effect that is reserved for HE deaths ) <- ok.
-		if (!_noSound
+/*kL		if (!_noSound
 			&& _damageType == DT_HE
 			&& _unit->getStatus() != STATUS_UNCONSCIOUS)
 		{
 			playDeathSound();
-		}
+		} */
 
 		if (_unit->getStatus() == STATUS_UNCONSCIOUS
 			&& _unit->getSpecialAbility() == SPECAB_EXPLODEONDEATH)

@@ -45,7 +45,7 @@ Target::~Target()
 {
 	for (size_t i = 0; i < _followers.size(); ++i)
 	{
-		Craft* craft = dynamic_cast<Craft* >(_followers[i]);
+		Craft* craft = dynamic_cast<Craft*>(_followers[i]);
 		if (craft)
 		{
 			craft->returnToBase();
@@ -134,14 +134,15 @@ void Target::setLatitude(double lat)
 	_lat = lat;
 
 	// Keep between -PI/2 and PI/2
-	if (_lat < -M_PI/2)
+	if (_lat < -M_PI / 2)
 	{
 		_lat = M_PI - _lat;
 		setLongitude(_lon + M_PI);
 	}
-	else if (_lat > M_PI/2)
+	else if (_lat > M_PI / 2)
 	{
-		_lat = -M_PI + _lat;
+//kL		_lat = -M_PI + _lat;
+		_lat = _lat - M_PI;		// kL
 		setLongitude(_lon - M_PI);
 	}
 }
@@ -150,7 +151,7 @@ void Target::setLatitude(double lat)
  * Returns the list of crafts currently following this target.
  * @return Pointer to list of crafts.
  */
-std::vector<Target* >* Target::getFollowers()
+std::vector<Target*>* Target::getFollowers()
 {
 	return &_followers;
 }

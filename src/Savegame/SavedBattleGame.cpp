@@ -673,7 +673,7 @@ BattleUnit* SavedBattleGame::selectPlayerUnit(int dir, bool checkReselect, bool 
 		return 0;
 	}
 
-	std::vector<BattleUnit* >::iterator begin, end;
+	std::vector<BattleUnit*>::iterator begin, end;
 	if (dir > 0)
 	{
 		begin = _units.begin();
@@ -685,7 +685,7 @@ BattleUnit* SavedBattleGame::selectPlayerUnit(int dir, bool checkReselect, bool 
 		end = _units.begin();
 	}
 
-	std::vector<BattleUnit* >::iterator i = std::find(_units.begin(), _units.end(), _selectedUnit);
+	std::vector<BattleUnit*>::iterator i = std::find(_units.begin(), _units.end(), _selectedUnit);
 	do
 	{
 		// no unit selected
@@ -720,7 +720,7 @@ BattleUnit* SavedBattleGame::selectPlayerUnit(int dir, bool checkReselect, bool 
 	}
 	while (!(*i)->isSelectable(_side, checkReselect, checkInventory));
 
-	_selectedUnit = (*i);
+	_selectedUnit = *i;
 
 	return _selectedUnit;
 }
@@ -748,7 +748,7 @@ BattleUnit* SavedBattleGame::selectUnit(const Position& pos)
  * Gets the list of nodes.
  * @return Pointer to the list of nodes.
  */
-std::vector<Node* >* SavedBattleGame::getNodes()
+std::vector<Node*>* SavedBattleGame::getNodes()
 {
 	return &_nodes;
 }

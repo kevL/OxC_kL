@@ -412,17 +412,24 @@ bool Base::detect(Target* target) const
 		}
 	}
 
-	if (chance == 0)
-		return false;
+	if (chance == 0) return false;
+
 
 	Ufo* u = dynamic_cast<Ufo* >(target);
 	if (u != 0)
 	{
-		chance = ((chance * 100) + u->getVisibility()) / 100;
+//kL		chance = ((chance * 100) + u->getVisibility()) / 100;
+		chance = chance + u->getVisibility();
 		Log(LOG_INFO) << ". . chance 2 = " << chance;
 	}
 
-	return RNG::percent(chance);
+	if (chance <= 0) return false;	// kL
+
+
+	bool ret = RNG::percent(chance);
+	Log(LOG_INFO) << ". ret = " << ret;
+
+	return ret;
 }
 
 /**
@@ -1618,12 +1625,15 @@ bool isCompleted::operator()(const BaseFacility* facility) const
 // kL_begin: rewrite getDetectionChance() using floats.
 unsigned int Base::getDetectionChance() const
 {
+	Log(LOG_INFO) << "Base::getDetectionChance()";
 	float shields = (float)std::count_if(_facilities.begin(), _facilities.end(), isMindShield());
 	float facilities = (float)std::count_if(_facilities.begin(), _facilities.end(), isCompleted());
 
 //	facilities = facilities / 6.f + 10.f;
 	facilities = (facilities / 6.f) + 12.f;
 	shields = (shields * 2.f) + 1.f;
+	Log(LOG_INFO) << ". facilities = " << facilities;
+	Log(LOG_INFO) << ". shields = " << shields;
 	// a Base with 30 facilities and 1 shield gets 5% per 10 min.
 	// a full Base w/ 36 facilities and no shield gets 16% per 10m.
 	// a puny Base w/ 4 facilities and no shield gets 10%
@@ -1631,7 +1641,7 @@ unsigned int Base::getDetectionChance() const
 	// approximate; and a module != a facility. ( eg, hangar is 4 modules )
 
 	unsigned int uiChance = (unsigned int)(facilities / shields);
-	Log(LOG_INFO) << "Base::getDetectionChance() = " << uiChance;
+	Log(LOG_INFO) << ". uiChance = " << uiChance;
 
 	return uiChance;
 }

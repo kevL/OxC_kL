@@ -43,14 +43,13 @@ namespace OpenXcom
  */
 PrimeGrenadeState::PrimeGrenadeState(Game* game, BattleAction* action, bool inInventoryView, BattleItem* grenadeInInventory)
 	:
-	State(game),
-	_action(action),
-	_inInventoryView(inInventoryView),
-	_grenadeInInventory(grenadeInInventory)
+		State(game),
+		_action(action),
+		_inInventoryView(inInventoryView),
+		_grenadeInInventory(grenadeInInventory)
 {
 	_screen = false;
 
-	// Create objects
 	_title	= new Text(192, 24, 65, 44);
 	_frame	= new Frame(192, 27, 65, 37);
 	_bg		= new Surface(192, 93, 65, 45);
@@ -63,7 +62,7 @@ PrimeGrenadeState::PrimeGrenadeState(Game* game, BattleAction* action, bool inIn
 		_number[i] = new Text(20, 20, x + ((i %8) * 24), y - 1 + ((i / 8) * 25));
 	}
 
-	// Set up objects
+
 	SDL_Rect square;
 	square.x = 0;
 	square.y = 0;
@@ -89,11 +88,13 @@ PrimeGrenadeState::PrimeGrenadeState(Game* game, BattleAction* action, bool inIn
 	{
 		add(_button[i]);
 		_button[i]->onMouseClick((ActionHandler)& PrimeGrenadeState::btnClick);
+
 		square.x = 0;
 		square.y = 0;
 		square.w = _button[i]->getWidth();
 		square.h = _button[i]->getHeight();
 		_button[i]->drawRect(&square, Palette::blockOffset(0)+15);
+
 		square.x = 1;
 		square.y = 1;
 		square.w = _button[i]->getWidth()-2;
@@ -103,6 +104,7 @@ PrimeGrenadeState::PrimeGrenadeState(Game* game, BattleAction* action, bool inIn
 		std::wstringstream ss;
 		ss << i;
 		add(_number[i]);
+
 		_number[i]->setBig();
 		_number[i]->setText(ss.str());
 		_number[i]->setColor(Palette::blockOffset(1)-1);
@@ -126,7 +128,7 @@ PrimeGrenadeState::~PrimeGrenadeState()
  * Closes the window on right-click.
  * @param action Pointer to an action.
  */
-void PrimeGrenadeState::handle(Action *action)
+void PrimeGrenadeState::handle(Action* action)
 {
 	State::handle(action);
 
@@ -143,7 +145,7 @@ void PrimeGrenadeState::handle(Action *action)
  * Executes the action corresponding to this action menu item.
  * @param action Pointer to an action.
  */
-void PrimeGrenadeState::btnClick(Action *action)
+void PrimeGrenadeState::btnClick(Action* action)
 {
 	int btnID = -1;
 
@@ -170,7 +172,6 @@ void PrimeGrenadeState::btnClick(Action *action)
 		if (_inInventoryView)
 		{
 			_grenadeInInventory->setExplodeTurn(0 + btnID);
-//			_warning->showMessage(_game->getLanguage()->getString("STR_GRENADE_IS_ACTIVATED"));		// kL
 		}
 		else
 		{
@@ -179,7 +180,8 @@ void PrimeGrenadeState::btnClick(Action *action)
 
 		_game->popState(); // kL_note: get rid of the Timer menu
 
-		if (!_inInventoryView) _game->popState(); // kL_note: get rid of the Action menu.
+		if (!_inInventoryView)
+			_game->popState(); // kL_note: get rid of the Action menu.
 	}
 }
 

@@ -42,10 +42,9 @@ InfoboxOKState::InfoboxOKState(Game* game, const std::wstring& msg)
 {
 	_screen = false;
 
-
-	_frame		= new Frame(260, 90, 30, 50);
-	_txtTitle	= new Text(250, 60, 35, 55);
-	_btnOk		= new TextButton(120, 16, 100, 117);
+	_frame		= new Frame(260, 90, 30, 27);
+	_txtTitle	= new Text(250, 60, 35, 32);
+	_btnOk		= new TextButton(120, 16, 100, 94);
 
 	add(_frame);
 	add(_txtTitle);

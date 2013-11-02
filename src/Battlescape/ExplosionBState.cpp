@@ -142,13 +142,21 @@ void ExplosionBState::init()
 //kL		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED / 2);
 		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED * 5 / 7);		// kL
 
-		bool hit = _item->getRules()->getBattleType() == BT_MELEE || _item->getRules()->getBattleType() == BT_PSIAMP;
-		Explosion* explosion = new Explosion(_center, _item->getRules()->getHitAnimation(), false, hit);
+		bool hit = _item->getRules()->getBattleType() == BT_MELEE
+				|| _item->getRules()->getBattleType() == BT_PSIAMP;
+
+		Explosion* explosion = new Explosion(
+				_center,
+				_item->getRules()->getHitAnimation(),
+				false,
+				hit);
 
 		_parent->getMap()->getExplosions()->insert(explosion);
 
 		_parent->getResourcePack()->getSound("BATTLE.CAT", _item->getRules()->getHitSound())->play(); // bullet hit sound
-//kL		_parent->getMap()->getCamera()->centerOnPosition(t->getPosition(), false);
+
+		if (_parent->getSave()->getSide() == FACTION_HOSTILE)
+			_parent->getMap()->getCamera()->centerOnPosition(t->getPosition(), false);
 
 /*kL		if (hit
 			&& t->getVisible())

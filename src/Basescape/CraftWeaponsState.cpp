@@ -63,7 +63,7 @@ CraftWeaponsState::CraftWeaponsState(Game* game, Base* base, size_t craft, size_
 
 	_txtArmament	= new Text(90, 9, 66, 53);
 	_txtQuantity	= new Text(30, 9, 156, 53);
-	_txtAmmunition	= new Text(80, 9, 190, 53);
+	_txtAmmunition	= new Text(80, 9, 194, 53);
 
 	_lstWeapons		= new TextList(204, 88, 58, 68);
 

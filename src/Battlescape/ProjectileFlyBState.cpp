@@ -88,6 +88,7 @@ ProjectileFlyBState::~ProjectileFlyBState()
  */
 void ProjectileFlyBState::init()
 {
+	//Log(LOG_INFO) << "ProjectileFlyBState::init()";
 	if (_initialized)
 		return;
 
@@ -114,6 +115,7 @@ void ProjectileFlyBState::init()
 	if (_parent->getPanicHandled()
 		&& _action.actor->getTimeUnits() < _action.TU)
 	{
+		//Log(LOG_INFO) << ". not enough time units";
 		_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
 		_parent->popState();
 
@@ -149,6 +151,8 @@ void ProjectileFlyBState::init()
 	}
 
 	// autoshot will default back to snapshot if it's not possible
+	// kL_note: should this be done *before* tu expenditure?!! Ok it is,
+	// popState() does tu costs
 	if (weapon->getRules()->getAccuracyAuto() == 0
 		&& _action.type == BA_AUTOSHOT)
 	{
@@ -157,6 +161,7 @@ void ProjectileFlyBState::init()
 
 	// snapshot defaults to "hit" if it's a melee weapon
 	// (in case of reaction "shots" with a melee weapon)
+	// kL_note: not sure that melee reactionFire is properly implemented...
 	if (weapon->getRules()->getBattleType() == BT_MELEE
 		&& _action.type == BA_SNAPSHOT)
 	{
@@ -206,7 +211,11 @@ void ProjectileFlyBState::init()
 			_projectileItem = weapon;
 		break;
 		case BA_HIT:
-			if (!_parent->getTileEngine()->validMeleeRange(_action.actor->getPosition(), _action.actor->getDirection(), _action.actor, 0))
+			if (!_parent->getTileEngine()->validMeleeRange(
+					_action.actor->getPosition(),
+					_action.actor->getDirection(),
+					_action.actor,
+					0))
 			{
 				_action.result = "STR_THERE_IS_NO_ONE_THERE";
 				_parent->popState();
@@ -216,11 +225,13 @@ void ProjectileFlyBState::init()
 		break;
 		case BA_PANIC:
 		case BA_MINDCONTROL:
-			_parent->statePushFront(new ExplosionBState(_parent,
+			_parent->statePushFront(new ExplosionBState(
+					_parent,
 					Position((_action.target.x * 16) + 8,
 						(_action.target.y * 16) + 8,
 						(_action.target.z * 24) + 10),
-						weapon, _action.actor));
+					weapon,
+					_action.actor));
 
 			return;
 		break;
@@ -244,7 +255,11 @@ bool ProjectileFlyBState::createNewProjectile()
 {
 	// create a new projectile
 	++_action.autoShotCounter;
-	Projectile* projectile = new Projectile(_parent->getResourcePack(), _parent->getSave(), _action, _origin);
+	Projectile* projectile = new Projectile(
+			_parent->getResourcePack(),
+			_parent->getSave(),
+			_action,
+			_origin);
 
 	// add the projectile on the map
 	_parent->getMap()->setProjectile(projectile);
@@ -270,7 +285,9 @@ bool ProjectileFlyBState::createNewProjectile()
 			_projectileItem->moveToOwner(0);
 			_unit->setCache(0);
 			_parent->getMap()->cacheUnit(_unit);
+
 			_parent->getResourcePack()->getSound("BATTLE.CAT", 39)->play();
+
 			_unit->addThrowingExp();
 		}
 		else
@@ -365,6 +382,7 @@ void ProjectileFlyBState::think()
 	{
 		Tile* t = _parent->getSave()->getTile(_action.actor->getPosition());
 		Tile* bt = _parent->getSave()->getTile(_action.actor->getPosition() + Position(0, 0, -1));
+
 		bool hasFloor = t && !t->hasNoFloor(bt);
 		bool unitCanFly = _action.actor->getArmor()->getMovementType() == MT_FLY;
 
@@ -425,7 +443,11 @@ void ProjectileFlyBState::think()
 					&& item->getExplodeTurn() == 0)
 				{
 					// it's a hot grenade to explode immediately
-					_parent->statePushFront(new ExplosionBState(_parent, _parent->getMap()->getProjectile()->getPosition(-1), item, _action.actor));
+					_parent->statePushFront(new ExplosionBState(
+							_parent,
+							_parent->getMap()->getProjectile()->getPosition(-1),
+							item,
+							_action.actor));
 				}
 				else
 				{
@@ -464,8 +486,14 @@ void ProjectileFlyBState::think()
 						offset = -2;
 					}
 
-					_parent->statePushFront(new ExplosionBState(_parent, _parent->getMap()->getProjectile()->getPosition(offset), _ammo, _action.actor, 0,
-							(_action.type != BA_AUTOSHOT || _action.autoShotCounter == _action.weapon->getRules()->getAutoShots() || !_action.weapon->getAmmoItem())));
+					_parent->statePushFront(new ExplosionBState(
+							_parent, _parent->getMap()->getProjectile()->getPosition(offset),
+							_ammo,
+							_action.actor,
+							0,
+							(_action.type != BA_AUTOSHOT
+								|| _action.autoShotCounter == _action.weapon->getRules()->getAutoShots()
+								|| !_action.weapon->getAmmoItem())));
 
 					if (_unit->getSpecialAbility() == SPECAB_BURNFLOOR)
 					{
@@ -474,12 +502,13 @@ void ProjectileFlyBState::think()
 
 					if (_projectileImpact == 4)
 					{
-						BattleUnit* victim = _parent->getSave()->getTile(_parent->getMap()->getProjectile()->getPosition(offset) / Position(16, 16, 24))->getUnit();
+						BattleUnit* victim = _parent->getSave()
+								->getTile(_parent->getMap()->getProjectile()->getPosition(offset) / Position(16, 16, 24))->getUnit();
 						if (victim
 							&& !victim->isOut()
 							&& victim->getFaction() == FACTION_HOSTILE)
 						{
-							AlienBAIState* aggro = dynamic_cast<AlienBAIState *>(victim->getCurrentAIState());
+							AlienBAIState* aggro = dynamic_cast<AlienBAIState*>(victim->getCurrentAIState());
 							if (aggro != 0)
 							{
 								aggro->setWasHit();
@@ -504,8 +533,7 @@ void ProjectileFlyBState::think()
 }
 
 /**
- * Flying projectiles cannot be cancelled,
- * but they can be "skipped".
+ * Flying projectiles cannot be cancelled, but they can be "skipped".
  */
 void ProjectileFlyBState::cancel()
 {

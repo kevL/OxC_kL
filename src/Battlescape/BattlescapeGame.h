@@ -112,7 +112,7 @@ class BattlescapeGame
 private:
 	SavedBattleGame* _save;
 	BattlescapeState* _parentState;
-	std::list<BattleState* > _states;
+	std::list<BattleState*> _states;
 	BattleActionType _tuReserved, _playerTUReserved;
 	bool _playerPanicHandled;
 	int _AIActionCounter;
@@ -127,7 +127,7 @@ private:
 	/// Determines whether there are any actions pending for the given unit.
 	bool noActionsPending(BattleUnit* bu);
 	///
-	std::vector<InfoboxOKState* > _infoboxQueue;
+	std::vector<InfoboxOKState*> _infoboxQueue;
 	/// Shows the infoboxes in the queue (if any).
 	void showInfoBoxQueue();
 	///
@@ -135,7 +135,8 @@ private:
 
 	public:
 		/// Creates the BattlescapeGame state.
-		BattlescapeGame(SavedBattleGame* save, BattlescapeState* parentState);
+		BattlescapeGame(SavedBattleGame* save,
+				BattlescapeState* parentState);
 		/// Cleans up the BattlescapeGame state.
 		~BattlescapeGame();
 
@@ -160,17 +161,26 @@ private:
 		/// Sets state think interval.
 		void setStateInterval(Uint32 interval);
 		/// Checks for casualties in battle.
-		void checkForCasualties(BattleItem* murderweapon, BattleUnit* murderer, bool hiddenExplosion = false, bool terrainExplosion = false);
+		void checkForCasualties(BattleItem* murderweapon,
+				BattleUnit* murderer,
+				bool hiddenExplosion = false,
+				bool terrainExplosion = false);
 		/// Checks if a unit panics.
 //kL		void checkForPanic(BattleUnit *unit);
 		/// Checks reserved tu.
-		bool checkReservedTU(BattleUnit* bu, int tu, bool justChecking = false);
+		bool checkReservedTU(BattleUnit* bu,
+				int tu,
+				bool justChecking = false);
 		/// Handles unit AI.
 		void handleAI(BattleUnit* unit);
 		/// Drops an item and affects it with gravity.
-		void dropItem(const Position& position, BattleItem* item, bool newItem = false, bool removeItem = false);
+		void dropItem(const Position& position,
+				BattleItem* item,
+				bool newItem = false,
+				bool removeItem = false);
 		/// Converts a unit into a unit of another type.
-		BattleUnit* convertUnit(BattleUnit* unit, std::string newType);
+		BattleUnit* convertUnit(BattleUnit* unit,
+				std::string newType);
 		/// Handles kneeling action.
 		bool kneel(BattleUnit* bu);
 		/// Cancels the current action.
@@ -188,11 +198,13 @@ private:
 		/// Handler for the psi button.
 		void psiButtonAction();
 		/// Moves a unit up or down.
-		void moveUpDown(BattleUnit* unit, int dir);
+		void moveUpDown(BattleUnit* unit,
+				int dir);
 		/// Requests the end of the turn (wait for explosions etc to really end the turn).
 		void requestEndTurn();
 		/// Sets the TU reserved type.
-		void setTUReserved(BattleActionType tur, bool player);
+		void setTUReserved(BattleActionType tur,
+				bool player);
 		/// Sets up the cursor taking into account the action.
 		void setupCursor();
 		/// Gets the map.
@@ -219,15 +231,20 @@ private:
 		/// Checks through all the items on the ground and picks one.
 		BattleItem* surveyItems(BattleAction* action);
 		/// Evaluates if it's worthwhile to take this item.
-		bool worthTaking(BattleItem* item, BattleAction *action);
+		bool worthTaking(BattleItem* item,
+				BattleAction *action);
 		/// Picks the item up from the ground.
-		int takeItemFromGround(BattleItem* item, BattleAction* action);
+		int takeItemFromGround(BattleItem* item,
+				BattleAction* action);
 		/// Assigns the item to a slot (stolen from battlescapeGenerator::addItem()).
-		bool takeItem(BattleItem* item, BattleAction* action);
+		bool takeItem(BattleItem* item,
+				BattleAction* action);
 		/// Returns the type of action that is reserved.
 		BattleActionType getReservedAction();
 		/// Tallies the living units, converting them if necessary.
-		void tallyUnits(int& liveAliens, int& liveSoldiers, bool convert);
+		void tallyUnits(int& liveAliens,
+				int& liveSoldiers,
+				bool convert);
 		/// Sets the kneel reservation setting.
 		void setKneelReserved(bool reserved);
 		/// Checks the kneel reservation setting.

@@ -47,13 +47,13 @@ CannotReequipState::CannotReequipState(Game* game, std::vector<ReequipStat> miss
 {
 	_window			= new Window(this, 320, 200, 0, 0);
 
-	_txtTitle		= new Text(300, 64, 100, 9);
+	_txtTitle		= new Text(300, 69, 10, 9);
 
-	_txtItem		= new Text(136, 9, 16, 69);
-	_txtQuantity	= new Text(65, 9, 152, 69);
-	_txtCraft		= new Text(87, 9, 217, 69);
+	_txtItem		= new Text(162, 9, 16, 74);
+	_txtQuantity	= new Text(46, 9, 178, 74);
+	_txtCraft		= new Text(80, 9, 224, 74);
 
-	_lstItems		= new TextList(294, 88, 8, 81);
+	_lstItems		= new TextList(294, 88, 8, 84);
 
 	_btnOk			= new TextButton(288, 16, 16, 177);
 
@@ -83,7 +83,7 @@ CannotReequipState::CannotReequipState(Game* game, std::vector<ReequipStat> miss
 	_txtTitle->setText(tr("STR_NOT_ENOUGH_EQUIPMENT_TO_FULLY_RE_EQUIP_SQUAD"));
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
-	_txtTitle->setWordWrap(true);
+//	_txtTitle->setWordWrap(true);
 
 	_txtItem->setColor(Palette::blockOffset(15)-1);
 	_txtItem->setText(tr("STR_ITEM"));

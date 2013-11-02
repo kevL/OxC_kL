@@ -128,8 +128,6 @@ GeoscapeState::GeoscapeState(Game* game)
 		_dogfights(),
 		_dogfightsToBeStarted(),
 		_minimizedDogfights(0)
-//		_currentBase(0)		// kL
-//		_b()				// kL
 {
 	int screenWidth = Options::getInt("baseXResolution");
 	int screenHeight = Options::getInt("baseYResolution");
@@ -137,8 +135,8 @@ GeoscapeState::GeoscapeState(Game* game)
 	_showFundsOnGeoscape = Options::getBool("showFundsOnGeoscape");
 
 	// Create objects
-	_bg				= new Surface(320, 200, screenWidth-320, screenHeight/2-100);
-	_globe			= new Globe(_game, (screenWidth-64)/2, screenHeight/2, screenWidth-64, screenHeight, 0, 0);
+	_bg				= new Surface(320, 200, screenWidth - 320, screenHeight / 2 - 100);
+	_globe			= new Globe(_game, (screenWidth - 64) / 2, screenHeight / 2, screenWidth - 64, screenHeight, 0, 0);
 
 /*kL	_btnIntercept	= new TextButton(63, 11, screenWidth-63, screenHeight/2-100);
 	_btnBases		= new TextButton(63, 11, screenWidth-63, screenHeight/2-88);
@@ -170,12 +168,12 @@ GeoscapeState::GeoscapeState(Game* game)
 	_btn1Day		= new ImageButton(31, 13, screenWidth-31, screenHeight/2+40);
 	// kL_end.
 
-	_btnRotateLeft	= new InteractiveSurface(12, 10, screenWidth-61, screenHeight/2+76);
+/*kL	_btnRotateLeft	= new InteractiveSurface(12, 10, screenWidth-61, screenHeight/2+76);
 	_btnRotateRight	= new InteractiveSurface(12, 10, screenWidth-37, screenHeight/2+76);
 	_btnRotateUp	= new InteractiveSurface(13, 12, screenWidth-49, screenHeight/2+62);
 	_btnRotateDown	= new InteractiveSurface(13, 12, screenWidth-49, screenHeight/2+87);
 	_btnZoomIn		= new InteractiveSurface(23, 23, screenWidth-25, screenHeight/2+56);
-	_btnZoomOut		= new InteractiveSurface(13, 17, screenWidth-20, screenHeight/2+82);
+	_btnZoomOut		= new InteractiveSurface(13, 17, screenWidth-20, screenHeight/2+82); */
 
 	_txtHour		= new Text(20, 16, screenWidth-61, screenHeight/2-26);
 	_txtHourSep		= new Text(4, 16, screenWidth-41, screenHeight/2-26);
@@ -215,6 +213,7 @@ GeoscapeState::GeoscapeState(Game* game)
 	_game->getCursor()->setColor(Palette::blockOffset(15)+12);
 	_game->getFpsCounter()->setColor(Palette::blockOffset(15)+12);
 
+
 	add(_bg);
 	add(_globe);
 
@@ -232,12 +231,12 @@ GeoscapeState::GeoscapeState(Game* game)
 	add(_btn1Hour);
 	add(_btn1Day);
 
-	add(_btnRotateLeft);
+/*kL	add(_btnRotateLeft);
 	add(_btnRotateRight);
 	add(_btnRotateUp);
 	add(_btnRotateDown);
 	add(_btnZoomIn);
-	add(_btnZoomOut);
+	add(_btnZoomOut); */
 
 	if (_showFundsOnGeoscape) add(_txtFunds);
 	add(_txtHour);
@@ -407,7 +406,7 @@ GeoscapeState::GeoscapeState(Game* game)
 	_btn1Day->onKeyboardPress((ActionHandler)& GeoscapeState::btnTimerClick, (SDLKey)Options::getInt("keyGeoSpeed6"));
 	// kL_end.
 
-	_btnRotateLeft->onMousePress((ActionHandler)& GeoscapeState::btnRotateLeftPress);
+/*kL	_btnRotateLeft->onMousePress((ActionHandler)& GeoscapeState::btnRotateLeftPress);
 	_btnRotateLeft->onMouseRelease((ActionHandler)& GeoscapeState::btnRotateLeftRelease);
 	_btnRotateLeft->onKeyboardPress((ActionHandler)& GeoscapeState::btnRotateLeftPress, (SDLKey)Options::getInt("keyGeoLeft"));
 	_btnRotateLeft->onKeyboardRelease((ActionHandler)& GeoscapeState::btnRotateLeftRelease, (SDLKey)Options::getInt("keyGeoLeft"));
@@ -439,7 +438,7 @@ GeoscapeState::GeoscapeState(Game* game)
 	_btnRotateLeft->setListButton();
 	_btnRotateRight->setListButton();
 	_btnRotateUp->setListButton();
-	_btnRotateDown->setListButton();
+	_btnRotateDown->setListButton(); */
 
 	if (_showFundsOnGeoscape)
 	{
@@ -511,7 +510,7 @@ GeoscapeState::GeoscapeState(Game* game)
 
 	_txtDebug->setColor(Palette::blockOffset(15)+4);
 
-	_timer->onTimer((StateHandler)&GeoscapeState::timeAdvance);
+	_timer->onTimer((StateHandler)& GeoscapeState::timeAdvance);
 	_timer->start();
 
 	_zoomInEffectTimer->onTimer((StateHandler)& GeoscapeState::zoomInEffect);
@@ -538,11 +537,13 @@ GeoscapeState::~GeoscapeState()
 void GeoscapeState::blit()
 {
 	State::blit();
+
 	for (std::vector<DogfightState*>::iterator it = _dogfights.begin(); it != _dogfights.end(); ++it)
 	{
 		(*it)->blit();
 	}
 }
+
 /**
  * Handle key shortcuts.
  * @param action Pointer to an action.
@@ -716,14 +717,11 @@ void GeoscapeState::timeDisplay()
 }
 
 /**
- * Advances the game timer according to
- * the timer speed set, and calls the respective
- * triggers. The timer always advances in "5 secs"
- * cycles, regardless of the speed, otherwise it might
- * skip important steps. Instead, it just keeps advancing
- * the timer until the next speed step (eg. the next day
- * on 1 Day speed) or until an event occurs, since updating
- * the screen on each step would become cumbersomely slow.
+ * Advances the game timer according to the timer speed set, and calls the respective
+ * triggers. The timer always advances in "5 secs" cycles, regardless of the speed,
+ * otherwise it might skip important steps. Instead, it just keeps advancing the
+ * timer until the next speed step (eg. the next day on 1 Day speed) or until an
+ * event occurs, since updating the screen on each step would become cumbersomely slow.
  */
 void GeoscapeState::timeAdvance()
 {
@@ -1138,10 +1136,10 @@ private:
 		DetectXCOMBase(const Base& base)
 			:
 				_base(base)
-			{
-				Log(LOG_INFO) << "DetectXCOMBase::DetectXCOMBase()";
-				/* Empty by design.  */
-			}
+		{
+			//Log(LOG_INFO) << "DetectXCOMBase";
+			/* Empty by design.  */
+		}
 
 		/// Attempt detection
 		bool operator()(const Ufo* ufo) const;
@@ -1154,17 +1152,38 @@ private:
  */
 bool DetectXCOMBase::operator()(const Ufo* ufo) const
 {
-	if ((ufo->getMissionType() != "STR_ALIEN_RETALIATION"					// only UFOs on retaliation missions actively scan for bases
-			&& !Options::getBool("aggressiveRetaliation"))					// unless aggressiveRetaliation option is true
-		|| ufo->getTrajectory().getID() == "__RETALIATION_ASSAULT_RUN"		// UFOs attacking a base don't bother with this!
-		|| ufo->isCrashed()													// Crashed UFOs can't detect!
-		|| _base.getDistance(ufo) > 80.0 * (1 / 60.0) * (M_PI / 180.0))		// UFOs have a detection range of 80 XCOM units.
+	Log(LOG_INFO) << "DetectXCOMBase::operator(), ufoID " << ufo->getId();
 
+	double distance	= _base.getDistance(ufo);
+	double range	= 0.1; // radians. Thanks
+//	double range_def = 80.0 * (1.0 / 60.0) * (M_PI / 180.0);
+
+	bool outRange	= distance > range;
+	bool onRetMiss	= ufo->getMissionType() == "STR_ALIEN_RETALIATION";
+	bool aggro		= Options::getBool("aggressiveRetaliation");
+	bool onRetRun	= ufo->getTrajectory().getID() == "__RETALIATION_ASSAULT_RUN";
+	bool crashed	= ufo->isCrashed();
+
+	Log(LOG_INFO) << ". distance = "	<< distance << " ; range = " << range;
+	Log(LOG_INFO) << ". crashed = "		<< crashed;
+	Log(LOG_INFO) << ". onRetMiss = "	<< onRetMiss;
+	//Log(LOG_INFO) << ". aggro = "		<< aggro;
+	Log(LOG_INFO) << ". onRetRun = "	<< onRetRun;
+
+	if ((!onRetMiss		// only UFOs on retaliation missions actively scan for bases
+			&& !aggro)		// unless aggressiveRetaliation option is true
+		|| onRetRun	// UFOs attacking a base don't bother with this!
+		|| crashed			// Crashed UFOs can't detect!
+		|| outRange)		// UFOs have a detection range of 80 XCOM units.
 	{
+		Log(LOG_INFO) << ". . detection NOT allowed.";
 		return false;
 	}
 
-	return RNG::percent(_base.getDetectionChance());
+	unsigned int uiDet = _base.getDetectionChance();
+	Log(LOG_INFO) << ". iDetChance = " << uiDet;
+
+	return RNG::percent(uiDet);
 }
 
 /**
@@ -1173,7 +1192,7 @@ bool DetectXCOMBase::operator()(const Ufo* ufo) const
  */
 struct SetRetaliationStatus
 	:
-		public std::unary_function<std::map<const Region*, Base* >::value_type, void>
+		public std::unary_function<std::map<const Region*, Base*>::value_type, void>
 {
 	/// Mark as a valid retaliation target.
 	void operator()(const argument_type& iter) const
@@ -1188,15 +1207,14 @@ struct SetRetaliationStatus
  */
 void GeoscapeState::time10Minutes()
 {
-//	Log(LOG_INFO) << "GeoscapeState::time10Minutes()";
-	for (std::vector<Base* >::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
+	Log(LOG_INFO) << "GeoscapeState::time10Minutes()";
+	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
 	{
-		// Fuel consumption for XCOM craft.
-		for (std::vector<Craft* >::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); ++j)
+		for (std::vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); ++j)
 		{
 			if ((*j)->getStatus() == "STR_OUT")
 			{
-				(*j)->consumeFuel();
+				(*j)->consumeFuel(); // Fuel consumption for XCOM craft.
 				if (!(*j)->getLowFuel()
 					&& (*j)->getFuel() <= (*j)->getFuelLimit())
 				{
@@ -1207,19 +1225,28 @@ void GeoscapeState::time10Minutes()
 					popup(new LowFuelState(_game, (*j), this));
 				}
 
-				if ((*j)->getDestination() == 0)
+				if ((*j)->getDestination() == 0) // patrol for aLien bases.
 				{
-					for (std::vector<AlienBase*>::iterator b = _game->getSavedGame()->getAlienBases()->begin();
-							b != _game->getSavedGame()->getAlienBases()->end(); b++)
+					for (std::vector<AlienBase*>::iterator ab = _game->getSavedGame()->getAlienBases()->begin();
+							ab != _game->getSavedGame()->getAlienBases()->end();
+							ab++)
 					{
-						double range = 1696 * (1 / 60.0) * (M_PI / 180);
-						if ((*j)->getDistance(*b) <= range)
+						double range = 1696.0 * (1.0 / 60.0) * (M_PI / 180.0);
+						double dist = (*j)->getDistance(*ab);
+						Log(LOG_INFO) << ". Patrol for alienBases, range = " << range << " ; dist = " << dist;
+
+						if (dist <= range)
 						{
-							// TODO: move the detection range to the ruleset, or use the pre-defined one (which is 600, but detection range should be 500).
-							if (RNG::percent(50 - ((*j)->getDistance(*b) / range) * 50)
-								&& !(*b)->isDiscovered())
+							// TODO: move the detection range to the ruleset, or use the pre-defined
+							// one (which is 600, but detection range should be 500).
+							int iPerc = 50 - (((int)(*j)->getDistance(*ab) / range) * 50);
+							Log(LOG_INFO) << ". . craft in Range, iPercent = " << iPerc;
+
+							if (RNG::percent(iPerc)
+								&& !(*ab)->isDiscovered())
 							{
-								(*b)->setDiscovered(true);
+								Log(LOG_INFO) << ". . . aLienBase discovered";
+								(*ab)->setDiscovered(true);
 							}
 						}
 					}
@@ -1231,13 +1258,17 @@ void GeoscapeState::time10Minutes()
 	if (Options::getBool("aggressiveRetaliation"))
 	{
 		// Detect as many bases as possible.
-		for (std::vector<Base* >::iterator iBase = _game->getSavedGame()->getBases()->begin(); iBase != _game->getSavedGame()->getBases()->end(); ++iBase)
+		for (std::vector<Base*>::iterator iBase = _game->getSavedGame()->getBases()->begin();
+				iBase != _game->getSavedGame()->getBases()->end();
+				++iBase)
 		{
 			// Find a UFO that detected this base, if any.
-			std::vector<Ufo* >::const_iterator uu = std::find_if(_game->getSavedGame()->getUfos()->begin(),
-											_game->getSavedGame()->getUfos()->end(), DetectXCOMBase(**iBase));
+			std::vector<Ufo*>::const_iterator uu = std::find_if(_game->getSavedGame()->getUfos()->begin(),
+													_game->getSavedGame()->getUfos()->end(),
+													DetectXCOMBase(**iBase));
 			if (uu != _game->getSavedGame()->getUfos()->end())
 			{
+				Log(LOG_INFO) << "GeoscapeState::time10Minutes(), xBase found, set RetaliationStatus";
 				(*iBase)->setRetaliationStatus(true); // Base found
 			}
 		}
@@ -1245,12 +1276,15 @@ void GeoscapeState::time10Minutes()
 	else
 	{
 		// Only remember last base in each region.
-		std::map<const Region*, Base* > discovered;
-		for (std::vector<Base* >::iterator iBase = _game->getSavedGame()->getBases()->begin(); iBase != _game->getSavedGame()->getBases()->end(); ++iBase)
+		std::map<const Region*, Base*> discovered;
+		for (std::vector<Base*>::iterator iBase = _game->getSavedGame()->getBases()->begin();
+				iBase != _game->getSavedGame()->getBases()->end();
+				++iBase)
 		{
 			// Find a UFO that detected this base, if any.
-			std::vector<Ufo* >::const_iterator uu = std::find_if(_game->getSavedGame()->getUfos()->begin(),
-											_game->getSavedGame()->getUfos()->end(), DetectXCOMBase(**iBase));
+			std::vector<Ufo*>::const_iterator uu = std::find_if(_game->getSavedGame()->getUfos()->begin(),
+													_game->getSavedGame()->getUfos()->end(),
+													DetectXCOMBase(**iBase));
 			if (uu != _game->getSavedGame()->getUfos()->end())
 			{
 				discovered[_game->getSavedGame()->locateRegion(**iBase)] = *iBase;
@@ -1281,11 +1315,11 @@ private:
 		 */
 		callThink(Game& game, const Globe& globe)
 			:
-			_game(game),
-			_globe(globe)
-			{
-				/* Empty by design. */
-			}
+				_game(game),
+				_globe(globe)
+		{
+			/* Empty by design. */
+		}
 
 		/// Call AlienMission::think() with stored parameters.
 		void operator()(AlienMission* am) const

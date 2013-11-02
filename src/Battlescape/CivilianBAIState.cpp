@@ -136,7 +136,7 @@ void CivilianBAIState::exit()
  */
 void CivilianBAIState::think(BattleAction* action)
 {
-	//Log(LOG_INFO) << "CivilianBAIState::think()";
+	Log(LOG_INFO) << "CivilianBAIState::think()";
 
  	action->type = BA_RETHINK;
 	action->actor = _unit;
@@ -239,7 +239,7 @@ void CivilianBAIState::think(BattleAction* action)
 		_escapeTUs = 0;
 	}
 
-	//Log(LOG_INFO) << "CivilianBAIState::think() EXIT";
+	Log(LOG_INFO) << "CivilianBAIState::think() EXIT";
 }
 
 /**

@@ -56,16 +56,16 @@ ItemsArrivingState::ItemsArrivingState(Game* game, GeoscapeState* state)
 
 	_window			= new Window(this, 320, 184, 0, 8, POPUP_BOTH);
 
-	_txtTitle		= new Text(310, 17, 5, 18);
+	_txtTitle		= new Text(310, 17, 5, 17);
 
-	_txtItem		= new Text(114, 9, 16, 34);
-	_txtQuantity	= new Text(54, 9, 152, 34);
-	_txtDestination	= new Text(112, 9, 212, 34);
+	_txtItem		= new Text(144, 9, 16, 34);
+	_txtQuantity	= new Text(52, 9, 168, 34);
+	_txtDestination	= new Text(92, 9, 220, 34);
 
-	_lstTransfers	= new TextList(294, 112, 16, 50);
+	_lstTransfers	= new TextList(286, 112, 16, 48);
 
-	_btnOk			= new TextButton(134, 16, 16, 166);
-	_btnOk5Secs		= new TextButton(134, 16, 170, 166);
+	_btnOk			= new TextButton(134, 16, 16, 169);
+	_btnOk5Secs		= new TextButton(134, 16, 170, 169);
 
 
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
@@ -111,7 +111,7 @@ ItemsArrivingState::ItemsArrivingState(Game* game, GeoscapeState* state)
 
 	_lstTransfers->setColor(Palette::blockOffset(8)+10);
 	_lstTransfers->setArrowColor(Palette::blockOffset(8)+5);
-	_lstTransfers->setColumns(3, 155, 41, 98);
+	_lstTransfers->setColumns(3, 144, 53, 92);
 	_lstTransfers->setSelectable(true);
 	_lstTransfers->setBackground(_window);
 	_lstTransfers->setMargin(8);
@@ -122,17 +122,18 @@ ItemsArrivingState::ItemsArrivingState(Game* game, GeoscapeState* state)
 		{
 			if ((*j)->getHours() == 0)
 			{
-				// Check if it's ammo to reload a craft
-				if ((*j)->getType() == TRANSFER_ITEM && _game->getRuleset()->getItem((*j)->getItems())->getBattleType() == BT_NONE)
+				if ((*j)->getType() == TRANSFER_ITEM
+					&& _game->getRuleset()->getItem((*j)->getItems())->getBattleType() == BT_NONE)
 				{
 					for (std::vector<Craft*>::iterator c = (*i)->getCrafts()->begin(); c != (*i)->getCrafts()->end(); ++c)
 					{
 						if ((*c)->getStatus() != "STR_READY")
 							continue;
+
 						for (std::vector<CraftWeapon*>::iterator w = (*c)->getWeapons()->begin(); w != (*c)->getWeapons()->end(); ++w)
 						{
-						
-							if ((*w) != 0 && (*w)->getAmmo() < (*w)->getRules()->getAmmoMax())
+							if (*w != 0
+								&& (*w)->getAmmo() < (*w)->getRules()->getAmmoMax())
 							{
 								(*w)->setRearming(true);
 								(*c)->setStatus("STR_REARMING");
@@ -141,10 +142,10 @@ ItemsArrivingState::ItemsArrivingState(Game* game, GeoscapeState* state)
 					}
 				}
 
-				// Remove transfer
 				std::wstringstream ss;
 				ss << (*j)->getQuantity();
 				_lstTransfers->addRow(3, (*j)->getName(_game->getLanguage()).c_str(), ss.str().c_str(), (*i)->getName().c_str());
+
 				delete *j;
 				j = (*i)->getTransfers()->erase(j);
 			}
@@ -161,7 +162,6 @@ ItemsArrivingState::ItemsArrivingState(Game* game, GeoscapeState* state)
  */
 ItemsArrivingState::~ItemsArrivingState()
 {
-
 }
 
 /**
@@ -176,7 +176,7 @@ void ItemsArrivingState::init()
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void ItemsArrivingState::btnOkClick(Action *)
+void ItemsArrivingState::btnOkClick(Action*)
 {
 	_game->popState();
 }
@@ -185,7 +185,7 @@ void ItemsArrivingState::btnOkClick(Action *)
  * Reduces the speed to 5 Secs and returns to the previous screen.
  * @param action Pointer to an action.
  */
-void ItemsArrivingState::btnOk5SecsClick(Action *)
+void ItemsArrivingState::btnOk5SecsClick(Action*)
 {
 	_state->timerReset();
 	_game->popState();

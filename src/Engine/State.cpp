@@ -46,11 +46,11 @@ namespace OpenXcom
  */
 State::State(Game* game)
 	:
-	_game(game),
-	_surfaces(),
-	_screen(true)
+		_game(game),
+		_surfaces(),
+		_screen(true)
 {
-//	Log(LOG_INFO) << "Create State";
+	//Log(LOG_INFO) << "Create State";
 }
 
 /**
@@ -58,9 +58,9 @@ State::State(Game* game)
  */
 State::~State()
 {
-//	Log(LOG_INFO) << "Delete State";
+	//Log(LOG_INFO) << "Delete State";
 
-	for (std::vector<Surface* >::iterator i = _surfaces.begin(); i < _surfaces.end(); ++i)
+	for (std::vector<Surface*>::iterator i = _surfaces.begin(); i < _surfaces.end(); ++i)
 	{
 		delete *i;
 	}
@@ -76,10 +76,8 @@ State::~State()
  */
 void State::add(Surface* surface)
 {
-	// Set palette
 	surface->setPalette(_game->getScreen()->getPalette());
 
-	// Set default fonts
 	if (_game->getResourcePack())
 		surface->setFonts(_game->getResourcePack()->getFont("FONT_BIG"), _game->getResourcePack()->getFont("FONT_SMALL"));
 
@@ -118,7 +116,6 @@ void State::toggleScreen()
  */
 void State::init()
 {
-
 }
 
 /**
@@ -127,7 +124,7 @@ void State::init()
  */
 void State::think()
 {
-	for (std::vector<Surface* >::iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
+	for (std::vector<Surface*>::iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
 		(*i)->think();
 }
 
@@ -138,9 +135,9 @@ void State::think()
  */
 void State::handle(Action* action)
 {
-	for (std::vector<Surface* >::reverse_iterator i = _surfaces.rbegin(); i != _surfaces.rend(); ++i)
+	for (std::vector<Surface*>::reverse_iterator i = _surfaces.rbegin(); i != _surfaces.rend(); ++i)
 	{
-		InteractiveSurface* j = dynamic_cast<InteractiveSurface* >(*i);
+		InteractiveSurface* j = dynamic_cast<InteractiveSurface*>(*i);
 		if (j != 0)
 			j->handle(action, this);
 	}
@@ -152,7 +149,7 @@ void State::handle(Action* action)
  */
 void State::blit()
 {
-	for (std::vector<Surface* >::iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
+	for (std::vector<Surface*>::iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
 		(*i)->blit(_game->getScreen()->getSurface());
 }
 
@@ -161,7 +158,7 @@ void State::blit()
  */
 void State::hideAll()
 {
-	for (std::vector<Surface* >::iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
+	for (std::vector<Surface*>::iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
 		(*i)->setHidden(true);
 }
 
@@ -170,7 +167,7 @@ void State::hideAll()
  */
 void State::showAll()
 {
-	for (std::vector<Surface* >::iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
+	for (std::vector<Surface*>::iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
 		(*i)->setHidden(false);
 }
 
@@ -180,7 +177,7 @@ void State::showAll()
  */
 void State::resetAll()
 {
-	for (std::vector<Surface* >::iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
+	for (std::vector<Surface*>::iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
 	{
 		InteractiveSurface* s = dynamic_cast<InteractiveSurface*>(*i);
 		if (s != 0)
@@ -213,23 +210,32 @@ LocalizedText State::tr(const std::string& id, unsigned n) const
 	return _game->getLanguage()->getString(id, n);
 }
 
+/**
+ *
+ */
 void State::centerAllSurfaces()
 {
-	for (std::vector<Surface* >::iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
+	for (std::vector<Surface*>::iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
 	{
 		(*i)->setX((*i)->getX() + Screen::getDX());
 		(*i)->setY((*i)->getY() + Screen::getDY());
 	}
 }
 
+/**
+ *
+ */
 void State::lowerAllSurfaces()
 {
-	for (std::vector<Surface* >::iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
+	for (std::vector<Surface*>::iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
 	{
 		(*i)->setY((*i)->getY() + Screen::getDY() / 2);
 	}
 }
 
+/**
+ *
+ */
 void State::applyBattlescapeTheme()
 {
 	for (std::vector<Surface*>::iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
@@ -241,24 +247,28 @@ void State::applyBattlescapeTheme()
 			window->setHighContrast(true);
 			window->setBackground(_game->getResourcePack()->getSurface("TAC00.SCR"));
 		}
+
 		Text* text = dynamic_cast<Text*>(*i);
 		if (text)
 		{
 			text->setColor(Palette::blockOffset(0)-1);
 			text->setHighContrast(true);
 		}
+
 		TextButton* button = dynamic_cast<TextButton*>(*i);
 		if (button)
 		{
 			button->setColor(Palette::blockOffset(0)-1);
 			button->setHighContrast(true);
 		}
+
 		TextEdit* edit = dynamic_cast<TextEdit*>(*i);
 		if (edit)
 		{
 			edit->setColor(Palette::blockOffset(0)-1);
 			edit->setHighContrast(true);
 		}
+
 		TextList* list = dynamic_cast<TextList*>(*i);
 		if (list)
 		{
@@ -266,12 +276,14 @@ void State::applyBattlescapeTheme()
 			list->setArrowColor(Palette::blockOffset(0));
 			list->setHighContrast(true);
 		}
-		ArrowButton *arrow = dynamic_cast<ArrowButton*>(*i);
+
+		ArrowButton* arrow = dynamic_cast<ArrowButton*>(*i);
 		if (arrow)
 		{
 			arrow->setColor(Palette::blockOffset(0)-1);
 		}
-		Slider *slider = dynamic_cast<Slider*>(*i);
+
+		Slider* slider = dynamic_cast<Slider*>(*i);
 		if (slider)
 		{
 			slider->setColor(Palette::blockOffset(0)-1);

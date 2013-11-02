@@ -637,29 +637,31 @@ int Ufo::getVisibility() const
 {
 	int size = 0; // size = 15*(3-ufosize);
 	if (_rules->getSize() == "STR_VERY_SMALL")
-		size = -300;
+		size = -30;
 	else if (_rules->getSize() == "STR_SMALL")
-		size = -150;
+		size = -15;
 	else if (_rules->getSize() == "STR_MEDIUM_UC")
 		size = 0;
 	else if (_rules->getSize() == "STR_LARGE")
-		size = 150;
+		size = 15;
 	else if (_rules->getSize() == "STR_VERY_LARGE")
-		size = 300;
+		size = 30;
 
 	int visibility = 0;
 	if (_altitude == "STR_GROUND")
-		visibility = -300;
+//kL		visibility = -30;
+		visibility = -50;		// kL
 	else if (_altitude == "STR_VERY_LOW")
-		visibility = size - 200;
+		visibility = size - 20;
 	else if (_altitude == "STR_LOW_UC")
-		visibility = size - 100;
+		visibility = size - 10;
 	else if (_altitude == "STR_HIGH_UC")
 		visibility = size;
 	else if (_altitude == "STR_VERY_HIGH")
-		visibility = size - 100;
+		visibility = size - 10;
 
 	Log(LOG_INFO) << "Ufo::getVisibility() = " << visibility;
+
 	return visibility;
 }
 

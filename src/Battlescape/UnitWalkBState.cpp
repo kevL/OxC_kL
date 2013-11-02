@@ -44,7 +44,7 @@
 namespace OpenXcom
 {
 
-bool const kL_bDebug = false;
+bool const kL_bDebug = true;
 
 /**
  * Sets up an UnitWalkBState.
@@ -110,7 +110,7 @@ void UnitWalkBState::init()
  */
 void UnitWalkBState::think()
 {
-	if (kL_bDebug) Log(LOG_INFO) << "UnitWalkBState::think() : " << _unit->getId() << " Phase = " << _unit->getWalkingPhase();
+	Log(LOG_INFO) << "UnitWalkBState::think() : " << _unit->getId() << " Phase = " << _unit->getWalkingPhase();
 
 	if (_unit->isOut())
 	{
@@ -740,7 +740,7 @@ void UnitWalkBState::think()
 		}
 	}
 
-	if (kL_bDebug) Log(LOG_INFO) << "****** think() : " << _unit->getId() << " : end ******";
+	Log(LOG_INFO) << "****** think() : " << _unit->getId() << " : end ******";
 }
 
 /**

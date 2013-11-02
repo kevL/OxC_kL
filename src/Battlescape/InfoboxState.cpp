@@ -43,8 +43,8 @@ InfoboxState::InfoboxState(Game* game, const std::wstring& msg)
 
 //kL	_frame	= new Frame(261, 122, 34, 10);
 //kL	_text	= new Text(251, 112, 39, 15);
-	_frame	= new Frame(260, 90, 30, 50);
-	_text	= new Text(250, 80, 35, 55);
+	_frame	= new Frame(260, 90, 30, 27);
+	_text	= new Text(250, 80, 35, 32);
 
 	add(_frame);
 	add(_text);

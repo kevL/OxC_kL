@@ -16,10 +16,12 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_DISMANTLEFACILITYSTATE_H
 #define OPENXCOM_DISMANTLEFACILITYSTATE_H
 
 #include "../Engine/State.h"
+
 
 namespace OpenXcom
 {
@@ -35,25 +37,29 @@ class Text;
  * Window shown when the player tries to
  * dismantle a facility.
  */
-class DismantleFacilityState : public State
+class DismantleFacilityState
+	:
+		public State
 {
 private:
-	Base *_base;
-	BaseView *_view;
-	BaseFacility *_fac;
+	Base* _base;
+	BaseView* _view;
+	BaseFacility* _fac;
 
-	TextButton *_btnOk, *_btnCancel;
-	Window *_window;
-	Text *_txtTitle, *_txtFacility;
-public:
-	/// Creates the Dismantle Facility state.
-	DismantleFacilityState(Game *game, Base *base, BaseView *view, BaseFacility *fac);
-	/// Cleans up the Dismantle Facility state.
-	~DismantleFacilityState();
-	/// Handler for clicking the OK button.
-	void btnOkClick(Action *action);
-	/// Handler for clicking the Cancel button.
-	void btnCancelClick(Action *action);
+	TextButton* _btnOk, * _btnCancel;
+	Window* _window;
+	Text* _txtTitle, * _txtFacility;
+
+	public:
+		/// Creates the Dismantle Facility state.
+		DismantleFacilityState(Game* game, Base* base, BaseView* view, BaseFacility* fac);
+		/// Cleans up the Dismantle Facility state.
+		~DismantleFacilityState();
+
+		/// Handler for clicking the OK button.
+		void btnOkClick(Action* action);
+		/// Handler for clicking the Cancel button.
+		void btnCancelClick(Action* action);
 };
 
 }

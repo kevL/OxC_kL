@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "DismantleFacilityState.h"
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
@@ -31,6 +32,7 @@
 #include "../Ruleset/RuleBaseFacility.h"
 #include "../Savegame/SavedGame.h"
 
+
 namespace OpenXcom
 {
 
@@ -41,18 +43,22 @@ namespace OpenXcom
  * @param view Pointer to the baseview to update.
  * @param fac Pointer to the facility to dismantle.
  */
-DismantleFacilityState::DismantleFacilityState(Game *game, Base *base, BaseView *view, BaseFacility *fac) : State(game), _base(base), _view(view), _fac(fac)
+DismantleFacilityState::DismantleFacilityState(Game* game, Base* base, BaseView* view, BaseFacility* fac)
+	:
+		State(game),
+		_base(base),
+		_view(view),
+		_fac(fac)
 {
 	_screen = false;
 
-	// Create objects
-	_window = new Window(this, 152, 80, 20, 60);
-	_btnOk = new TextButton(44, 16, 36, 115);
-	_btnCancel = new TextButton(44, 16, 112, 115);
-	_txtTitle = new Text(142, 9, 25, 75);
-	_txtFacility = new Text(142, 9, 25, 85);
+	_window			= new Window(this, 152, 80, 20, 60);
+	_txtTitle		= new Text(142, 9, 25, 75);
+	_txtFacility	= new Text(142, 9, 25, 85);
+	_btnCancel		= new TextButton(44, 16, 36, 115);
+	_btnOk			= new TextButton(44, 16, 112, 115);
 
-	// Set palette
+
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
 
 	add(_window);
@@ -63,19 +69,19 @@ DismantleFacilityState::DismantleFacilityState(Game *game, Base *base, BaseView 
 
 	centerAllSurfaces();
 
-	// Set up objects
+
 	_window->setColor(Palette::blockOffset(15)+1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(15)+6);
 	_btnOk->setText(tr("STR_OK"));
-	_btnOk->onMouseClick((ActionHandler)&DismantleFacilityState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&DismantleFacilityState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
+	_btnOk->onMouseClick((ActionHandler)& DismantleFacilityState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)& DismantleFacilityState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
 
 	_btnCancel->setColor(Palette::blockOffset(15)+6);
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
-	_btnCancel->onMouseClick((ActionHandler)&DismantleFacilityState::btnCancelClick);
-	_btnCancel->onKeyboardPress((ActionHandler)&DismantleFacilityState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnCancel->onMouseClick((ActionHandler)& DismantleFacilityState::btnCancelClick);
+	_btnCancel->onKeyboardPress((ActionHandler)& DismantleFacilityState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setAlign(ALIGN_CENTER);
@@ -91,7 +97,6 @@ DismantleFacilityState::DismantleFacilityState(Game *game, Base *base, BaseView 
  */
 DismantleFacilityState::~DismantleFacilityState()
 {
-
 }
 
 /**
@@ -99,12 +104,11 @@ DismantleFacilityState::~DismantleFacilityState()
  * to the previous screen.
  * @param action Pointer to an action.
  */
-void DismantleFacilityState::btnOkClick(Action *)
+void DismantleFacilityState::btnOkClick(Action*)
 {
 	if (!_fac->getRules()->isLift())
 	{
-		// Give refund if this is an unstarted, queued build.
-		if (_fac->getBuildTime() > _fac->getRules()->getBuildTime())
+		if (_fac->getBuildTime() > _fac->getRules()->getBuildTime()) // Give refund if this is an unstarted, queued build.
 		{
 			_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds() + _fac->getRules()->getBuildCost());
 		}
@@ -116,13 +120,15 @@ void DismantleFacilityState::btnOkClick(Action *)
 				_base->getFacilities()->erase(i);
 				_view->resetSelectedFacility();
 				delete _fac;
-				if (Options::getBool("allowBuildingQueue")) _view->reCalcQueuedBuildings();
+
+				if (Options::getBool("allowBuildingQueue"))
+					_view->reCalcQueuedBuildings();
+
 				break;
 			}
 		}
 	}
-	// Remove whole base if it's the access lift
-	else
+	else // Remove whole base if it's the access lift
 	{
 		for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
 		{
@@ -130,10 +136,12 @@ void DismantleFacilityState::btnOkClick(Action *)
 			{
 				_game->getSavedGame()->getBases()->erase(i);
 				delete _base;
+
 				break;
 			}
 		}
 	}
+
 	_game->popState();
 }
 
@@ -141,7 +149,7 @@ void DismantleFacilityState::btnOkClick(Action *)
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void DismantleFacilityState::btnCancelClick(Action *)
+void DismantleFacilityState::btnCancelClick(Action*)
 {
 	_game->popState();
 }

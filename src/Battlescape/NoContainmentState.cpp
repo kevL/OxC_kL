@@ -40,8 +40,8 @@ NoContainmentState::NoContainmentState(Game* game)
 		State(game)
 {
 	_window		= new Window(this, 320, 200, 0, 0);
-	_txtTitle	= new Text(220, 64, 50, 8);
-	_btnOk		= new TextButton(120, 18, 100, 174);
+	_txtTitle	= new Text(300, 160, 10, 8);
+	_btnOk		= new TextButton(120, 16, 100, 177);
 
 
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
@@ -64,7 +64,7 @@ NoContainmentState::NoContainmentState(Game* game)
 	_txtTitle->setColor(Palette::blockOffset(8)+5);
 	_txtTitle->setText(tr("STR_ALIEN_DIES_NO_ALIEN_CONTAINMENT_FACILITY"));
 	_txtTitle->setAlign(ALIGN_CENTER);
-	_txtTitle->setVerticalAlign(ALIGN_MIDDLE);	// kL
+	_txtTitle->setVerticalAlign(ALIGN_MIDDLE);
 	_txtTitle->setBig();
 	_txtTitle->setWordWrap(true);
 }
@@ -80,7 +80,7 @@ NoContainmentState::~NoContainmentState()
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void NoContainmentState::btnOkClick(Action* )
+void NoContainmentState::btnOkClick(Action*)
 {
 	_game->popState();
 }
