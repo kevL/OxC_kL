@@ -260,12 +260,14 @@ void AlienBAIState::think(BattleAction* action)
 	if (_psiAction->type != BA_NONE
 		&& !_didPsi)
 	{
+		if (kL_bDebug) Log(LOG_INFO) << ". . . inside Psi";
 		_didPsi = true;
 
 		action->type = _psiAction->type;
 		action->target = _psiAction->target;
 		action->number -= 1;
 
+		Log(LOG_INFO) << "AlienBAIState::think() EXIT, Psi";
 		return;
 	}
 	else

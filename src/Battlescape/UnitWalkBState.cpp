@@ -44,7 +44,7 @@
 namespace OpenXcom
 {
 
-bool const kL_bDebug = true;
+bool const kL_bDebug = false;
 
 /**
  * Sets up an UnitWalkBState.

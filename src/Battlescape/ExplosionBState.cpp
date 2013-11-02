@@ -108,10 +108,10 @@ void ExplosionBState::init()
 //kL			for (int i = 0; i < _power / 5; i++)
 			for (int i = 0; i < _power / 10; i++)		// kL
 			{
-//kL				int X = RNG::generate(-_power / 2, _power / 2);
-//kL				int Y = RNG::generate(-_power / 2, _power / 2);
-				int X = RNG::generate(-_power / 3, _power / 3);		// kL
-				int Y = RNG::generate(-_power / 3, _power / 3);		// kL
+				int X = RNG::generate(-_power / 2, _power / 2);
+				int Y = RNG::generate(-_power / 2, _power / 2);
+//				int X = RNG::generate(-_power / 3, _power / 3);		// kL
+//				int Y = RNG::generate(-_power / 3, _power / 3);		// kL
 
 				Position p = _center;
 				p.x += X; p.y += Y;
