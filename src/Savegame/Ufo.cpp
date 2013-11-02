@@ -135,7 +135,7 @@ void Ufo::load(const YAML::Node& node, const Ruleset& ruleset, SavedGame& game)
 {
 	MovingTarget::load(node);
 
-	_id					= _crashId = _landId = node["id"].as<int>(_id);
+	_id					= node["id"].as<int>(_id);
 	_crashId			= node["crashId"].as<int>(_crashId);
 	_landId				= node["landId"].as<int>(_landId);
 	_damage				= node["damage"].as<int>(_damage);
@@ -153,6 +153,7 @@ void Ufo::load(const YAML::Node& node, const Ruleset& ruleset, SavedGame& game)
 		lon = dest["lon"].as<double>();
 		lat = dest["lat"].as<double>();
 	}
+
 	_dest = new Waypoint();
 	_dest->setLongitude(lon);
 	_dest->setLatitude(lat);
@@ -182,20 +183,21 @@ void Ufo::load(const YAML::Node& node, const Ruleset& ruleset, SavedGame& game)
 	}
 
 	int missionID		= node["mission"].as<int>();
-	std::vector<AlienMission* >::const_iterator found = std::find_if(game.getAlienMissions().begin(), game.getAlienMissions().end(), matchMissionID(missionID));
+
+	std::vector<AlienMission*>::const_iterator found = std::find_if(game.getAlienMissions().begin(), game.getAlienMissions().end(), matchMissionID(missionID));
 	if (found == game.getAlienMissions().end())
 	{
 		// Corrupt save file.
 		throw Exception("Unknown mission, save file is corrupt.");
 	}
+
 	_mission = *found;
 
 	std::string tid		= node["trajectory"].as<std::string>();
 	_trajectory			= ruleset.getUfoTrajectory(tid);
 	_trajectoryPoint	= node["trajectoryPoint"].as<unsigned>(_trajectoryPoint);
 
-	if (_inBattlescape)
-		setSpeed(0);
+	if (_inBattlescape) setSpeed(0);
 }
 
 /**

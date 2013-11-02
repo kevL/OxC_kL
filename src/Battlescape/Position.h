@@ -40,24 +40,24 @@ public:
 			x(0),
 			y(0),
 			z(0)
-			{
-			};
+	{
+	};
 	/// X Y Z position constructor.
 	Position(int x_, int y_, int z_)
 		:
 			x(x_),
 			y(y_),
 			z(z_)
-			{
-			};
+	{
+	};
 	/// Copy constructor.
 	Position(const Position& pos)
 		:
 			x(pos.x),
 			y(pos.y),
 			z(pos.z)
-			{
-			};
+	{
+	};
 
 	Position& operator= (const Position& pos)
 	{
@@ -131,11 +131,18 @@ public:
 		
 		return *this;
 	}
-
     Position operator/ (const int v) const
 	{
 		return Position(x / v, y / v, z / v);
 	}
+	Position& operator/= (const int v) // kL_begin:
+	{
+		x /= v;
+		y /= v;
+		z /= v;
+		
+		return *this;
+	} // kL_end.	
 
 	/// == operator
     bool operator== (const Position& pos) const
@@ -149,6 +156,20 @@ public:
 		return x != pos.x || y != pos.y || z != pos.z;
 	}
 };
+
+inline std::ostream& operator<< (std::ostream& out, const Position& pos)
+{
+	out << "(" << pos.x << "," << pos.y << "," << pos.z << ")";
+
+	return out;
+}
+
+inline std::wostream& operator<< (std::wostream& wout, const Position& pos)
+{
+	wout << "(" << pos.x << "," << pos.y << "," << pos.z << ")";
+
+	return wout;
+}
 
 typedef Position Vector3i;
 

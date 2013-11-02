@@ -86,12 +86,10 @@ void UnitWalkBState::init()
 	_terrain = _parent->getTileEngine();
 	_target = _action.target;
 
-	//if (_parent->getSave()->getTraceSetting())
-	//{
-		// Log(LOG_INFO) << "Walking from: "
-		//		<< _unit->getPosition().x << "," << _unit->getPosition().y << "," << _unit->getPosition().z
-		//		<< " to " << _target.x << "," << _target.y << "," << _target.z;
-	//}
+	if (_parent->getSave()->getTraceSetting())
+	{
+		Log(LOG_INFO) << "Walking from: " << _unit->getPosition() << ", to " << _target;
+	}
 
 	int dir = _pf->getStartDirection();
 	if (!_action.strafe

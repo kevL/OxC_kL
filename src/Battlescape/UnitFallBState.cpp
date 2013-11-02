@@ -75,9 +75,9 @@ void UnitFallBState::init()
  */
 void UnitFallBState::think()
 {
-	//Log(LOG_INFO) << "UnitFallBState::think()";
+	Log(LOG_INFO) << "UnitFallBState::think()";
 
-	for (std::list<BattleUnit* >::iterator unit = _parent->getSave()->getFallingUnits()->begin(); unit != _parent->getSave()->getFallingUnits()->end();)
+	for (std::list<BattleUnit*>::iterator unit = _parent->getSave()->getFallingUnits()->begin(); unit != _parent->getSave()->getFallingUnits()->end();)
 	{
 		if ((*unit)->getStatus() == STATUS_TURNING)
 		{
@@ -303,6 +303,9 @@ void UnitFallBState::think()
 
 				_parent->checkForProximityGrenades(*unit);
 
+				if (_parent->getTileEngine()->checkReactionFire(*unit))
+					_parent->getPathfinding()->abortPath();
+
 				unit = _parent->getSave()->getFallingUnits()->erase(unit);
 			}
 		}
@@ -322,7 +325,7 @@ void UnitFallBState::think()
 		return;
 	}
 
-	//Log(LOG_INFO) << "UnitFallBState::think() EXIT";
+	Log(LOG_INFO) << "UnitFallBState::think() EXIT";
 }
 
 }

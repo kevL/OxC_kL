@@ -790,7 +790,7 @@ void BattlescapeState::mapClick(Action* action)
 	if (_save->getDebugMode())
 	{
 		std::wstringstream ss;
-		ss << L"Clicked " << pos.x << " "<< pos.y << " "<< pos.z;
+		ss << L"Clicked " << pos;
 		debug(ss.str());
 	}
 
@@ -1602,7 +1602,7 @@ inline void BattlescapeState::handle(Action* action)
 				{
 					saveVoxelMap();
 				}
-				// f9 - ai 
+				// f9 - ai
 				else if (action->getDetails()->key.keysym.sym == SDLK_F9
 					&& Options::getBool("traceAI"))
 				{
@@ -1701,7 +1701,7 @@ void BattlescapeState::saveAIMap()
 				Position pos(tilePos.x, tilePos.y, z);
 				t = _save->getTile(pos);
 				BattleUnit *wat = t->getUnit();
-				if (wat) 
+				if (wat)
 				{
 					switch (wat->getFaction())
 					{

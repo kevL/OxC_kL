@@ -190,7 +190,7 @@ void AlienBAIState::think(BattleAction* action)
 	_rifle = false;
 	_blaster = false;
 	_grenade = false;	// kL
-	
+
 	if (_traceAI)
 	{
 		Log(LOG_INFO) << "Unit has " << _visibleEnemies
@@ -321,7 +321,7 @@ void AlienBAIState::think(BattleAction* action)
 	{
 		evaluate = true;
 	}
-	
+
 	if (_save->isCheating()
 		&& _AIMode != AI_COMBAT)
 	{
@@ -355,7 +355,7 @@ void AlienBAIState::think(BattleAction* action)
 			Log(LOG_INFO) << "Re-Evaluated, now using " << AIMode << " behaviour";
 		}
 	}
-	
+
 	if (kL_bDebug) Log(LOG_INFO) << ". . pos 8";
 	switch (_AIMode)
 	{
@@ -596,7 +596,7 @@ void AlienBAIState::setupPatrol()
 				_toNode = _save->getPatrolNode(!scout, _unit, _fromNode);
 			}
 		}
-		
+
 		if (_toNode != 0)
 		{
 			_save->getPathfinding()->calculate(_unit, _toNode->getPosition());
@@ -673,7 +673,7 @@ void AlienBAIState::setupAmbush()
 				{
 					int score = BASE_SYSTEMATIC_SUCCESS;
 					score -= ambushTUs;
-				
+
 					_save->getPathfinding()->calculate(_aggroTarget, pos);				// make sure our enemy can reach here too.
 
 					if (_save->getPathfinding()->getStartDirection() != -1)
@@ -736,7 +736,7 @@ void AlienBAIState::setupAmbush()
 
 			if (_traceAI)
 			{
-				Log(LOG_INFO) << "Ambush estimation will move to " << _ambushAction->target.x << ", " << _ambushAction->target.y << ", " << _ambushAction->target.z;
+				Log(LOG_INFO) << "Ambush estimation will move to " << _ambushAction->target;
 			}
 
 			return;
@@ -775,7 +775,7 @@ void AlienBAIState::setupAttack()
 			wayPointAction();
 		}
 	}
-	
+
 	// if we CAN see someone, that makes them a viable target for "regular" attacks.
 	if (kL_bDebug) Log(LOG_INFO) << ". . selectNearestTarget()";
 	if (selectNearestTarget())
@@ -811,11 +811,11 @@ void AlienBAIState::setupAttack()
 		{
 			if (_attackAction->type != BA_WALK)
 			{
-				Log(LOG_INFO) << "Attack estimation desires to shoot at " << _attackAction->target.x << ", " << _attackAction->target.y << ", " << _attackAction->target.z;
+				Log(LOG_INFO) << "Attack estimation desires to shoot at " << _attackAction->target;
 			}
 			else
 			{
-				Log(LOG_INFO) << "Attack estimation desires to move to " << _attackAction->target.x << ", " << _attackAction->target.y << ", " << _attackAction->target.z;
+				Log(LOG_INFO) << "Attack estimation desires to move to " << _attackAction->target;
 			}
 		}
 
@@ -828,7 +828,7 @@ void AlienBAIState::setupAttack()
 		{
 			if (_traceAI)
 			{
-				Log(LOG_INFO) << "Attack estimation desires to move to " << _attackAction->target.x << ", " << _attackAction->target.y << ", " << _attackAction->target.z;
+				Log(LOG_INFO) << "Attack estimation desires to move to " << _attackAction->target;
 			}
 
 			return;
@@ -863,7 +863,7 @@ void AlienBAIState::setupEscape()
 	Position bestTile(0, 0, 0);
 
 	Tile* tile = 0;
-	
+
 	// weights of various factors in choosing a tile to which to withdraw
 	const int EXPOSURE_PENALTY = 10;
 	const int FIRE_PENALTY = 40;
@@ -1344,7 +1344,7 @@ void AlienBAIState::evaluateAIMode()
 		combatOdds = 0.f;
 		escapeOdds = 0.f;
 	}
-	
+
 	// take our current mode into consideration
 	switch (_AIMode)
 	{
@@ -1379,7 +1379,7 @@ void AlienBAIState::evaluateAIMode()
 	{
 		escapeOdds *= 1.1f;
 	}
-	
+
 	// take our aggression into consideration
 	switch (_unit->getAggression())
 	{
@@ -1411,7 +1411,7 @@ void AlienBAIState::evaluateAIMode()
 	{
 		escapeOdds /= 2.f;
 	}
-	
+
 	// factor in visible enemies.
 	if (_visibleEnemies)
 	{
@@ -1441,7 +1441,7 @@ void AlienBAIState::evaluateAIMode()
 
 	// generate a random number to represent our decision.
 	int decision = RNG::generate(1, (int)(patrolOdds + ambushOdds + escapeOdds + combatOdds) + 1);
-	
+
 	// if the aliens are cheating, or the unit is charging, enforce combat as a priority.
 	if (_save->isCheating() || _unit->getCharging() != 0)
 	{
@@ -1579,10 +1579,7 @@ bool AlienBAIState::findFirePoint()
 		_attackAction->type = BA_WALK;
 		if (_traceAI)
 		{
-			Log(LOG_INFO) << "Firepoint found at " << _attackAction->target.x
-				<< ", " << _attackAction->target.y
-				<< ", " << _attackAction->target.z
-				<< ", with a score of: " << bestScore;
+			Log(LOG_INFO) << "Firepoint found at " << _attackAction->target << ", with a score of: " << bestScore;
 		}
 
 		return true;
@@ -1590,10 +1587,7 @@ bool AlienBAIState::findFirePoint()
 
 	if (_traceAI)
 	{
-		Log(LOG_INFO) << "Firepoint failed, best estimation was: " << _attackAction->target.x
-			<< ", " << _attackAction->target.y
-			<< ", " << _attackAction->target.z
-			<< ", with a score of: " << bestScore;
+		Log(LOG_INFO) << "Firepoint failed, best estimation was: " << _attackAction->target << ", with a score of: " << bestScore;
 	}
 
 	return false;
@@ -1745,14 +1739,9 @@ void AlienBAIState::meleeAction()
 
 	if (_traceAI && _aggroTarget)
 	{
-		Log(LOG_INFO) << "AlienBAIState::meleeAction:" << " [target]: " << (_aggroTarget->getId())
-			<< " at: "  << _attackAction->target.x
-			<< "," << _attackAction->target.y
-			<< "," << _attackAction->target.z; }
-	if (_traceAI && _aggroTarget)
-	{
+		Log(LOG_INFO) << "AlienBAIState::meleeAction:" << " [target]: " << (_aggroTarget->getId()) << " at: "  << _attackAction->target;
 		Log(LOG_INFO) << "CHARGE!";
-	}
+	{
 }
 
 /**
@@ -2077,12 +2066,12 @@ bool AlienBAIState::psiAction()
 			Log(LOG_INFO) << "AlienBAIState::psiAction() EXIT 3, false";
 			return false;
 		}
-		
+
 		if (_traceAI)
 		{
 			Log(LOG_INFO) << "making a psionic attack this turn";
 		}
-		
+
 		if (iAttack > 30)
 		{
 			int controlOdds = 40;
