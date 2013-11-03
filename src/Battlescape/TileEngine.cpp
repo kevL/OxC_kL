@@ -1627,18 +1627,18 @@ void TileEngine::explode(const Position& center, int power, ItemDamageType type,
 					ret = tilesAffected.insert(dest); // check if we had this tile already
 					if (ret.second)
 					{
-						if (type == DT_STUN) // power 50 - 150%
+						if (type == DT_STUN) // power 0 - 200%
 						{
 							if (dest->getUnit())
 							{
-								dest->getUnit()->damage(Position(0, 0, 0), (int)(RNG::generate((float)power_ * 0.5, (float)power_ * 1.5)), type);
+								dest->getUnit()->damage(Position(0, 0, 0), RNG::generate(0, power_ * 2), type);
 							}
 
 							for (std::vector<BattleItem*>::iterator it = dest->getInventory()->begin(); it != dest->getInventory()->end(); ++it)
 							{
 								if ((*it)->getUnit())
 								{
-									(*it)->getUnit()->damage(Position(0, 0, 0), (int)(RNG::generate((float)power_ * 0.5, (float)power_ * 1.5)), type);
+									(*it)->getUnit()->damage(Position(0, 0, 0), RNG::generate(0, power_ * 2), type);
 								}
 							}
 						}

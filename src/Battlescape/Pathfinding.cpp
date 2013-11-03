@@ -1125,6 +1125,10 @@ bool Pathfinding::previewPath(bool bRemove)
 		}
 
 		energy -= tu / 2;
+		if (dir >= Pathfinding::DIR_UP)
+		{
+			energy = 0;
+		}
 
 		tu += getOpeningUfoDoorCost(dir, pos, destination);
 		tus -= tu;

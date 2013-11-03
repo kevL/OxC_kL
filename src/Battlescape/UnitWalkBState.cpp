@@ -484,6 +484,11 @@ void UnitWalkBState::think()
 				energy *= 1.5;
 			}
 
+//kL			if (dir >= Pathfinding::DIR_UP)
+//kL			{
+//kL				energy = 0;
+//kL			}
+
 			//Log(LOG_INFO) << ". pos 4";
 
 			if (tu > _unit->getTimeUnits())

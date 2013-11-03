@@ -711,15 +711,17 @@ void AlienBAIState::setupAmbush()
 							- _save->getTile(_ambushAction->target)->getTerrainLevel() - 4);
 
 			Position currentPos = _aggroTarget->getPosition();
-			int dir = path.back();
-			path.pop_back();
-
 			Position nextPos;
-			while (path.size()) // hypothetically walk the target through the path.
+
+			size_t tries = path.size();
+			while (tries > 0)  // hypothetically walk the target through the path.
 			{
-				_save->getPathfinding()->directionToVector(dir, &nextPos);
-				currentPos += nextPos;
-				Tile *tile = _save->getTile(currentPos);
+				_save->getPathfinding()->getTUCost(currentPos, path.back(), &nextPos, _aggroTarget, 0, false);
+				path.pop_back();
+				currentPos = nextPos;
+
+				Tile* tile = _save->getTile(currentPos);
+
 				Position target;
 				// do a virtual fire calculation
 				if (_save->getTileEngine()->canTargetUnit(&origin, tile, &target, _unit, _aggroTarget))
@@ -730,8 +732,7 @@ void AlienBAIState::setupAmbush()
 					break;
 				}
 
-				dir = path.back();
-				path.pop_back();
+				--tries;
 			}
 
 			if (_traceAI)
