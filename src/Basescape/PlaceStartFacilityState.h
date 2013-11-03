@@ -16,11 +16,13 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_PLACESTARTFACILITYSTATE_H
 #define OPENXCOM_PLACESTARTFACILITYSTATE_H
 
 #include "PlaceFacilityState.h"
 #include "SelectStartFacilityState.h"
+
 
 namespace OpenXcom
 {
@@ -29,18 +31,21 @@ namespace OpenXcom
  * Window shown when the player tries to
  * build a facility.
  */
-class PlaceStartFacilityState : public PlaceFacilityState
+class PlaceStartFacilityState
+	:
+		public PlaceFacilityState
 {
 private:
-	SelectStartFacilityState *_select;
+	SelectStartFacilityState* _select;
 
-public:
-	/// Creates the Place Facility state.
-	PlaceStartFacilityState(Game *game, Base *base, SelectStartFacilityState *select, RuleBaseFacility *rule);
-	/// Cleans up the Place Facility state.
-	~PlaceStartFacilityState();
-	/// Handler for clicking the base view.
-	void viewClick(Action *action);
+	public:
+		/// Creates the Place Facility state.
+		PlaceStartFacilityState(Game* game, Base* base, SelectStartFacilityState* select, RuleBaseFacility* rule);
+		/// Cleans up the Place Facility state.
+		~PlaceStartFacilityState();
+
+		/// Handler for clicking the base view.
+		void viewClick(Action* action);
 };
 
 }

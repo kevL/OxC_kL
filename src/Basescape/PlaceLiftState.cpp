@@ -47,9 +47,9 @@ namespace OpenXcom
  */
 PlaceLiftState::PlaceLiftState(Game* game, Base* base, Globe* globe, bool first)
 	:
-	State(game),
-	_base(base),
-	_globe(globe),_first(first)
+		State(game),
+		_base(base),
+		_globe(globe),_first(first)
 {
 	// Create objects
 	_view		= new BaseView(192, 192, 0, 8);
@@ -84,7 +84,7 @@ PlaceLiftState::~PlaceLiftState()
  * Processes clicking on facilities.
  * @param action Pointer to an action.
  */
-void PlaceLiftState::viewClick(Action* )
+void PlaceLiftState::viewClick(Action*)
 {
 	BaseFacility* fac = new BaseFacility(_game->getRuleset()->getBaseFacility("STR_ACCESS_LIFT"), _base);
 	fac->setX(_view->getGridX());

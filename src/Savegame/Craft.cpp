@@ -712,20 +712,26 @@ void Craft::checkup()
 }
 
 /**
- * Returns if a certain target is detected by the craft's
- * radar, taking in account the range and chance. // kL_note: no 'chance' here!
- * @param target, Pointer to target to compare.
- * @return, True if it's detected, False otherwise.
+ * Returns if a target is detected by the craft's radar.
+ * @param target, Pointer to target
+ * @return, True if detected, false otherwise
  */
 bool Craft::detect(Target* target) const
 {
-	if (_rules->getRadarRange() == 0)
+	Log(LOG_INFO) << "Craft::detect(Target* target)";
+
+	double radarRange = (double)_rules->getRadarRange();
+	Log(LOG_INFO) << ". radarRange = " << radarRange;
+	if (radarRange == 0.0)
 		return false;
 
-	double range = (double)_rules->getRadarRange() * (1.0 / 60.0) * (M_PI / 180.0);
+	double targetDistance = getDistance(target) * 3440.0;
+	Log(LOG_INFO) << ". targetDistance = " << targetDistance;
 
-	return getDistance(target) <= range;
-	// kL_note: This is automatic detect if in range (do craft radars have %)
+	if (radarRange > targetDistance)
+		return true;
+
+	return false;
 }
 
 /**

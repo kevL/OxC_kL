@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "BuildNewBaseState.h"
 #include <cmath>
 #include "../aresame.h"
@@ -37,6 +38,7 @@
 #include "ConfirmNewBaseState.h"
 #include "../Engine/Options.h"
 
+
 namespace OpenXcom
 {
 
@@ -47,50 +49,63 @@ namespace OpenXcom
  * @param globe Pointer to the Geoscape globe.
  * @param first Is this the first base in the game?
  */
-BuildNewBaseState::BuildNewBaseState(Game *game, Base *base, Globe *globe, bool first) : State(game), _base(base), _globe(globe), _first(first), _oldlat(0), _oldlon(0), _mousex(0), _mousey(0)
+BuildNewBaseState::BuildNewBaseState(Game* game, Base* base, Globe* globe, bool first)
+	:
+		State(game),
+		_base(base),
+		_globe(globe),
+		_first(first),
+		_oldlat(0),
+		_oldlon(0),
+		_mousex(0),
+		_mousey(0)
 {
 	int dx = Screen::getDX();
 	int dy = Screen::getDY();
+
 	_screen = false;
 
 	_oldshowradar = _globe->getShowRadar();
+
 	if (!_oldshowradar)
 		_globe->toggleRadarLines();
-	// Create objects
-	_btnRotateLeft = new InteractiveSurface(12, 10, 259 + dx * 2, 176 + dy);
-	_btnRotateRight = new InteractiveSurface(12, 10, 283 + dx * 2, 176 + dy);
-	_btnRotateUp = new InteractiveSurface(13, 12, 271 + dx * 2, 162 + dy);
-	_btnRotateDown = new InteractiveSurface(13, 12, 271 + dx * 2, 187 + dy);
-	_btnZoomIn = new InteractiveSurface(23, 23, 295 + dx * 2, 156 + dy);
-	_btnZoomOut = new InteractiveSurface(13, 17, 300 + dx * 2, 182 + dy);
 
-	_window = new Window(this, 256, 28, 0 + dx, 0);
+
+/*	_btnRotateLeft	= new InteractiveSurface(12, 10, 259 + dx * 2, 176 + dy);
+	_btnRotateRight	= new InteractiveSurface(12, 10, 283 + dx * 2, 176 + dy);
+	_btnRotateUp	= new InteractiveSurface(13, 12, 271 + dx * 2, 162 + dy);
+	_btnRotateDown	= new InteractiveSurface(13, 12, 271 + dx * 2, 187 + dy);
+	_btnZoomIn		= new InteractiveSurface(23, 23, 295 + dx * 2, 156 + dy);
+	_btnZoomOut		= new InteractiveSurface(13, 17, 300 + dx * 2, 182 + dy); */
+
+	_window			= new Window(this, 256, 28, 0 + dx, 0);
 	_window->setDY(0);
-	_btnCancel = new TextButton(54, 12, 186 + dx, 8);
-	_txtTitle = new Text(180, 16, 8 + dx, 6);
 
-	_hoverTimer = new Timer(50);
+	_btnCancel		= new TextButton(54, 14, 186 + dx, 8);
+	_txtTitle		= new Text(180, 16, 8 + dx, 6);
+
+	_hoverTimer		= new Timer(50);
 	_hoverTimer->onTimer((StateHandler)&BuildNewBaseState::hoverRedraw);
 	_hoverTimer->start();
 	
-	// Set palette
+
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
 
-	add(_btnRotateLeft);
+/*	add(_btnRotateLeft);
 	add(_btnRotateRight);
 	add(_btnRotateUp);
 	add(_btnRotateDown);
 	add(_btnZoomIn);
-	add(_btnZoomOut);
+	add(_btnZoomOut); */
 
 	add(_window);
 	add(_btnCancel);
 	add(_txtTitle);
 
-	// Set up objects
+
 	_globe->onMouseClick((ActionHandler)&BuildNewBaseState::globeClick);
 
-	_btnRotateLeft->onMousePress((ActionHandler)&BuildNewBaseState::btnRotateLeftPress);
+/*	_btnRotateLeft->onMousePress((ActionHandler)&BuildNewBaseState::btnRotateLeftPress);
 	_btnRotateLeft->onMouseRelease((ActionHandler)&BuildNewBaseState::btnRotateLeftRelease);
 	_btnRotateLeft->onKeyboardPress((ActionHandler)&BuildNewBaseState::btnRotateLeftPress, (SDLKey)Options::getInt("keyGeoLeft"));
 	_btnRotateLeft->onKeyboardRelease((ActionHandler)&BuildNewBaseState::btnRotateLeftRelease, (SDLKey)Options::getInt("keyGeoLeft"));
@@ -122,15 +137,15 @@ BuildNewBaseState::BuildNewBaseState(Game *game, Base *base, Globe *globe, bool 
 	_btnRotateLeft->setListButton();
 	_btnRotateRight->setListButton();
 	_btnRotateUp->setListButton();
-	_btnRotateDown->setListButton();
+	_btnRotateDown->setListButton(); */
 
 	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
 	_btnCancel->setColor(Palette::blockOffset(15)-1);
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
-	_btnCancel->onMouseClick((ActionHandler)&BuildNewBaseState::btnCancelClick);
-	_btnCancel->onKeyboardPress((ActionHandler)&BuildNewBaseState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnCancel->onMouseClick((ActionHandler)& BuildNewBaseState::btnCancelClick);
+	_btnCancel->onKeyboardPress((ActionHandler)& BuildNewBaseState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setText(tr("STR_SELECT_SITE_FOR_NEW_BASE"));
@@ -148,10 +163,12 @@ BuildNewBaseState::BuildNewBaseState(Game *game, Base *base, Globe *globe, bool 
  */
 BuildNewBaseState::~BuildNewBaseState()
 {
-	if (!_game->isQuitting() && _globe->getShowRadar() != _oldshowradar)
+	if (!_game->isQuitting()
+		&& _globe->getShowRadar() != _oldshowradar)
 	{
 		_globe->toggleRadarLines();
 	}
+
 	delete _hoverTimer;
 }
 
@@ -161,7 +178,7 @@ BuildNewBaseState::~BuildNewBaseState()
 void BuildNewBaseState::init()
 {
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
-	_globe->onMouseOver((ActionHandler)&BuildNewBaseState::globeHover);
+	_globe->onMouseOver((ActionHandler)& BuildNewBaseState::globeHover);
 	_globe->setNewBaseHover();
 }
 
@@ -179,7 +196,7 @@ void BuildNewBaseState::think()
  * Handles the globe.
  * @param action Pointer to an action.
  */
-void BuildNewBaseState::handle(Action *action)
+void BuildNewBaseState::handle(Action* action)
 {
 	State::handle(action);
 	_globe->handle(action, this);
@@ -189,22 +206,25 @@ void BuildNewBaseState::handle(Action *action)
  * Processes mouse-hover event for base placement,
  * @param action Pointer to an action.
  */
-void BuildNewBaseState::globeHover(Action *action)
+void BuildNewBaseState::globeHover(Action* action)
 {
 	_mousex = (int)floor(action->getAbsoluteXMouse());
 	_mousey = (int)floor(action->getAbsoluteYMouse());
-	if (!_hoverTimer->isRunning()) _hoverTimer->start();
+
+	if (!_hoverTimer->isRunning())
+		_hoverTimer->start();
 }
 
 void BuildNewBaseState::hoverRedraw(void)
 {
 	double lon, lat;
 	_globe->cartToPolar(_mousex, _mousey, &lon, &lat);
-	_globe->setNewBaseHoverPos(lon,lat);
+	_globe->setNewBaseHoverPos(lon, lat);
 
 	_globe->setNewBaseHover();
 	
-	if (_globe->getShowRadar() && !(AreSame(_oldlat, lat) && AreSame(_oldlon, lon)) )
+	if (_globe->getShowRadar()
+		&& !(AreSame(_oldlat, lat) && AreSame(_oldlon, lon)))
 	{
 		_oldlat=lat;
 		_oldlon=lon;
@@ -217,7 +237,7 @@ void BuildNewBaseState::hoverRedraw(void)
  * or right-clicks to scroll the globe.
  * @param action Pointer to an action.
  */
-void BuildNewBaseState::globeClick(Action *action)
+void BuildNewBaseState::globeClick(Action* action)
 {
 	double lon, lat;
 	int mouseX = (int)floor(action->getAbsoluteXMouse()), mouseY = (int)floor(action->getAbsoluteYMouse());
@@ -236,11 +256,16 @@ void BuildNewBaseState::globeClick(Action *action)
 		{
 			_base->setLongitude(lon);
 			_base->setLatitude(lat);
-			for (std::vector<Craft*>::iterator i = _base->getCrafts()->begin(); i != _base->getCrafts()->end(); ++i)
+
+			for (std::vector<Craft*>::iterator
+					i = _base->getCrafts()->begin();
+					i != _base->getCrafts()->end();
+					++i)
 			{
 				(*i)->setLongitude(lon);
 				(*i)->setLatitude(lat);
 			}
+
 			if (_first)
 			{
 				_game->pushState(new BaseNameState(_game, _base, _globe, _first));
@@ -257,7 +282,7 @@ void BuildNewBaseState::globeClick(Action *action)
  * Starts rotating the globe to the left.
  * @param action Pointer to an action.
  */
-void BuildNewBaseState::btnRotateLeftPress(Action *)
+void BuildNewBaseState::btnRotateLeftPress(Action*)
 {
 	_globe->rotateLeft();
 }
@@ -266,7 +291,7 @@ void BuildNewBaseState::btnRotateLeftPress(Action *)
  * Stops rotating the globe to the left.
  * @param action Pointer to an action.
  */
-void BuildNewBaseState::btnRotateLeftRelease(Action *)
+void BuildNewBaseState::btnRotateLeftRelease(Action*)
 {
 	_globe->rotateStop();
 }
@@ -275,7 +300,7 @@ void BuildNewBaseState::btnRotateLeftRelease(Action *)
  * Starts rotating the globe to the right.
  * @param action Pointer to an action.
  */
-void BuildNewBaseState::btnRotateRightPress(Action *)
+void BuildNewBaseState::btnRotateRightPress(Action*)
 {
 	_globe->rotateRight();
 }
@@ -284,7 +309,7 @@ void BuildNewBaseState::btnRotateRightPress(Action *)
  * Stops rotating the globe to the right.
  * @param action Pointer to an action.
  */
-void BuildNewBaseState::btnRotateRightRelease(Action *)
+void BuildNewBaseState::btnRotateRightRelease(Action*)
 {
 	_globe->rotateStop();
 }
@@ -293,7 +318,7 @@ void BuildNewBaseState::btnRotateRightRelease(Action *)
  * Starts rotating the globe upwards.
  * @param action Pointer to an action.
  */
-void BuildNewBaseState::btnRotateUpPress(Action *)
+void BuildNewBaseState::btnRotateUpPress(Action*)
 {
 	_globe->rotateUp();
 }
@@ -302,7 +327,7 @@ void BuildNewBaseState::btnRotateUpPress(Action *)
  * Stops rotating the globe upwards.
  * @param action Pointer to an action.
  */
-void BuildNewBaseState::btnRotateUpRelease(Action *)
+void BuildNewBaseState::btnRotateUpRelease(Action*)
 {
 	_globe->rotateStop();
 }
@@ -311,7 +336,7 @@ void BuildNewBaseState::btnRotateUpRelease(Action *)
  * Starts rotating the globe downwards.
  * @param action Pointer to an action.
  */
-void BuildNewBaseState::btnRotateDownPress(Action *)
+void BuildNewBaseState::btnRotateDownPress(Action*)
 {
 	_globe->rotateDown();
 }
@@ -320,7 +345,7 @@ void BuildNewBaseState::btnRotateDownPress(Action *)
  * Stops rotating the globe downwards.
  * @param action Pointer to an action.
  */
-void BuildNewBaseState::btnRotateDownRelease(Action *)
+void BuildNewBaseState::btnRotateDownRelease(Action*)
 {
 	_globe->rotateStop();
 }
@@ -329,7 +354,7 @@ void BuildNewBaseState::btnRotateDownRelease(Action *)
  * Zooms into the globe.
  * @param action Pointer to an action.
  */
-void BuildNewBaseState::btnZoomInLeftClick(Action *)
+void BuildNewBaseState::btnZoomInLeftClick(Action*)
 {
 	_globe->zoomIn();
 }
@@ -338,7 +363,7 @@ void BuildNewBaseState::btnZoomInLeftClick(Action *)
  * Zooms the globe maximum.
  * @param action Pointer to an action.
  */
-void BuildNewBaseState::btnZoomInRightClick(Action *)
+void BuildNewBaseState::btnZoomInRightClick(Action*)
 {
 	_globe->zoomMax();
 }
@@ -347,7 +372,7 @@ void BuildNewBaseState::btnZoomInRightClick(Action *)
  * Zooms out of the globe.
  * @param action Pointer to an action.
  */
-void BuildNewBaseState::btnZoomOutLeftClick(Action *)
+void BuildNewBaseState::btnZoomOutLeftClick(Action*)
 {
 	_globe->zoomOut();
 }
@@ -356,7 +381,7 @@ void BuildNewBaseState::btnZoomOutLeftClick(Action *)
  * Zooms the globe minimum.
  * @param action Pointer to an action.
  */
-void BuildNewBaseState::btnZoomOutRightClick(Action *)
+void BuildNewBaseState::btnZoomOutRightClick(Action*)
 {
 	_globe->zoomMin();
 }
@@ -365,7 +390,7 @@ void BuildNewBaseState::btnZoomOutRightClick(Action *)
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void BuildNewBaseState::btnCancelClick(Action *)
+void BuildNewBaseState::btnCancelClick(Action*)
 {
 	delete _base;
 	_game->popState();

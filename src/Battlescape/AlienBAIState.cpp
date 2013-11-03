@@ -1741,7 +1741,7 @@ void AlienBAIState::meleeAction()
 	{
 		Log(LOG_INFO) << "AlienBAIState::meleeAction:" << " [target]: " << (_aggroTarget->getId()) << " at: "  << _attackAction->target;
 		Log(LOG_INFO) << "CHARGE!";
-	{
+	}
 }
 
 /**

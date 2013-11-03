@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "BaseView.h"
 #include <sstream>
 #include <cmath>
@@ -32,6 +33,7 @@
 #include "../Engine/Options.h"
 #include <limits>
 
+
 namespace OpenXcom
 {
 
@@ -42,7 +44,19 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-BaseView::BaseView(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _base(0), _texture(0), _selFacility(0), _big(0), _small(0), _gridX(0), _gridY(0), _selSize(0), _selector(0), _blink(true)
+BaseView::BaseView(int width, int height, int x, int y)
+	:
+		InteractiveSurface(width, height, x, y),
+		_base(0),
+		_texture(0),
+		_selFacility(0),
+		_big(0),
+		_small(0),
+		_gridX(0),
+		_gridY(0),
+		_selSize(0),
+		_selector(0),
+		_blink(true)
 {
 	for (int x = 0; x < BASE_SIZE; ++x)
 		for (int y = 0; y < BASE_SIZE; ++y)

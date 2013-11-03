@@ -387,47 +387,66 @@ void Base::setEngineers(int engineers)
  * Returns if a certain target is covered by the base's
  * radar range, taking in account the range and chance.
  * @param target, Pointer to target to compare.
- * @return, True if it's within range, False otherwise.
+ * @return, 0 undetected; 1 detected; 2 hyperdetected
  */
-bool Base::detect(Target* target) const
+uint8_t Base::detect(Target* target) const
 {
 	Log(LOG_INFO) << "Base::detect()";
+	uint8_t ret = 0;
 
-	int chance = 0;
-	double distance = getDistance(target);
-
-	for (std::vector<BaseFacility* >::const_iterator f = _facilities.begin(); f != _facilities.end(); ++f)
+	double targetDistance = insideRadarRange(target);
+	if (targetDistance == -1.0)
 	{
-		if ((*f)->getBuildTime() == 0
-			&& (double)(*f)->getRules()->getRadarRange() * (1.0 / 60.0) * (M_PI / 180.0) >= distance)
+		Log(LOG_INFO) << ". not in range";
+		return 0;
+	}
+	else if (targetDistance == -2.0)
+	{
+		Log(LOG_INFO) << ". hyperdetected";
+		return 2;
+	}
+	else
+	{
+		int percent = 0;
+
+		for (std::vector<BaseFacility*>::const_iterator
+				f = _facilities.begin();
+				f != _facilities.end();
+				++f)
 		{
-			if ((*f)->getRules()->isHyperwave())
+			if ((*f)->getBuildTime() == 0)
 			{
-				Log(LOG_INFO) << ". . . . isHyperwave() = TRUE";
-				return true;
+				double radarRange = (double)(*f)->getRules()->getRadarRange();
+				Log(LOG_INFO) << ". . radarRange = " << radarRange;
+
+				if (targetDistance < radarRange)
+				{
+					percent += (*f)->getRules()->getRadarChance();
+					Log(LOG_INFO) << ". . . percent(base) = " << percent;
+				}
+			}
+		}
+
+		if (percent == 0)
+			return 0;
+		else
+		{
+			Ufo* u = dynamic_cast<Ufo*>(target);
+			if (u != 0)
+			{
+				percent += u->getVisibility();
+				Log(LOG_INFO) << ". . percent(base + ufo) = " << percent;
 			}
 
-			chance += (*f)->getRules()->getRadarChance();
-			Log(LOG_INFO) << ". . chance 1 = " << chance;
+			if (percent < 1)
+				return 0;
+			else
+			{
+				ret = RNG::percent(percent);
+				Log(LOG_INFO) << ". ret = " << ret;
+			}
 		}
 	}
-
-	if (chance == 0) return false;
-
-
-	Ufo* u = dynamic_cast<Ufo* >(target);
-	if (u != 0)
-	{
-//kL		chance = ((chance * 100) + u->getVisibility()) / 100;
-		chance = chance + u->getVisibility();
-		Log(LOG_INFO) << ". . chance 2 = " << chance;
-	}
-
-	if (chance <= 0) return false;	// kL
-
-
-	bool ret = RNG::percent(chance);
-	Log(LOG_INFO) << ". ret = " << ret;
 
 	return ret;
 }
@@ -435,21 +454,39 @@ bool Base::detect(Target* target) const
 /**
  * Returns if a certain target is inside the base's
  * radar range, taking in account the positions of both.
- * @param target Pointer to target to compare.
- * @return True if it's inside, False otherwise.
+ * @param target, Pointer to target to compare.
+ * @return, Distance to ufo; -1.0 if outside range; -2.0 if within range of hyperwave facility
  */
-bool Base::insideRadarRange(Target* target) const
+double Base::insideRadarRange(Target* target) const
 {
-	double range = 0;
-	for (std::vector<BaseFacility* >::const_iterator f = _facilities.begin(); f != _facilities.end(); ++f)
+	double targetDistance = getDistance(target) * 3440.0;
+	Log(LOG_INFO) << ". targetDistance = " << targetDistance;
+
+	for (std::vector<BaseFacility*>::const_iterator
+			f = _facilities.begin();
+			f != _facilities.end();
+			++f)
 	{
 		if ((*f)->getBuildTime() == 0)
 		{
-			range = std::max(range, (double)(*f)->getRules()->getRadarRange() * (1.0 / 60.0) * (M_PI / 180.0));
+			double radarRange = (double)(*f)->getRules()->getRadarRange();
+			Log(LOG_INFO) << ". . radarRange = " << radarRange;
+
+			if (targetDistance < radarRange)
+			{
+				if ((*f)->getRules()->isHyperwave())
+				{
+					Log(LOG_INFO) << ". . . . ret = hyperWave";
+					return -2.0;
+				}
+
+				Log(LOG_INFO) << ". . . ret = detected";
+				return targetDistance;
+			}
 		}
 	}
 	
-	return getDistance(target) <= range;
+	return -1.0;
 }
 
 /**

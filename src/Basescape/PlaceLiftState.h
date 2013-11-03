@@ -37,7 +37,7 @@ class Globe;
  */
 class PlaceLiftState
 	:
-	public State
+		public State
 {
 private:
 	Base* _base;

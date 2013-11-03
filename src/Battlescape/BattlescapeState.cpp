@@ -1585,7 +1585,9 @@ inline void BattlescapeState::handle(Action* action)
 					_save->resetTiles();
 				}
 				// "ctrl-k" - kill all aliens
-				else if (_save->getDebugMode() && action->getDetails()->key.keysym.sym == SDLK_k && (SDL_GetModState() & KMOD_CTRL) != 0)
+				else if (_save->getDebugMode()
+					&& action->getDetails()->key.keysym.sym == SDLK_k
+					&& (SDL_GetModState() & KMOD_CTRL) != 0)
 				{
 					debug(L"Influenza bacterium dispersed");
 					for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i !=_save->getUnits()->end(); ++i)
@@ -1637,8 +1639,11 @@ inline void BattlescapeState::handle(Action* action)
 void BattlescapeState::saveAIMap()
 {
 	Uint32 start = SDL_GetTicks();
+
 	BattleUnit* unit = _save->getSelectedUnit();
+
 	if (!unit) return;
+
 
 	int w = _save->getMapSizeX();
 	int h = _save->getMapSizeY();
@@ -1651,6 +1656,7 @@ void BattlescapeState::saveAIMap()
 	memset(img->pixels, 0, img->pitch * img->h);
 
 	Position tilePos(pos);
+
 	SDL_Rect r;
 	r.h = 8;
 	r.w = 8;
@@ -1665,7 +1671,6 @@ void BattlescapeState::saveAIMap()
 
 			if (!t) continue;
 			if (!t->isDiscovered(2)) continue;
-
 		}
 	}
 
@@ -1677,7 +1682,7 @@ void BattlescapeState::saveAIMap()
 		for (int x = 0; x < w; ++x)
 		{
 			tilePos.x = x;
-			Tile *t = _save->getTile(tilePos);
+			Tile* t = _save->getTile(tilePos);
 
 			if (!t) continue;
 			if (!t->isDiscovered(2)) continue;
@@ -1700,7 +1705,7 @@ void BattlescapeState::saveAIMap()
 			{
 				Position pos(tilePos.x, tilePos.y, z);
 				t = _save->getTile(pos);
-				BattleUnit *wat = t->getUnit();
+				BattleUnit* wat = t->getUnit();
 				if (wat)
 				{
 					switch (wat->getFaction())
@@ -1716,19 +1721,25 @@ void BattlescapeState::saveAIMap()
 							characterRGBA(img, r.x, r.y, (tilePos.z - z) ? 'c' : 'C', 255, 127, 127, 0xff);
 						break;
 					}
+
 					break;
 				}
 
 				pos.z--;
-				if (z > 0 && !t->hasNoFloor(_save->getTile(pos))) break; // no seeing through floors
+				if (z > 0 && !t->hasNoFloor(_save->getTile(pos)))
+				{
+					break; // no seeing through floors
+				}
 			}
 
-			if (t->getMapData(MapData::O_NORTHWALL) && t->getMapData(MapData::O_NORTHWALL)->getTUCost(MT_FLY) == 255)
+			if (t->getMapData(MapData::O_NORTHWALL)
+				&& t->getMapData(MapData::O_NORTHWALL)->getTUCost(MT_FLY) == 255)
 			{
 				lineRGBA(img, r.x, r.y, r.x + r.w, r.y, 0x50, 0x50, 0x50, 255);
 			}
 
-			if (t->getMapData(MapData::O_WESTWALL) && t->getMapData(MapData::O_WESTWALL)->getTUCost(MT_FLY) == 255)
+			if (t->getMapData(MapData::O_WESTWALL)
+				&& t->getMapData(MapData::O_WESTWALL)->getTUCost(MT_FLY) == 255)
 			{
 				lineRGBA(img, r.x, r.y, r.x, r.y + r.h, 0x50, 0x50, 0x50, 255);
 			}

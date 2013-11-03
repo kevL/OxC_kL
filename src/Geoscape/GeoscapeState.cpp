@@ -1076,14 +1076,14 @@ void GeoscapeState::time5Seconds()
 	}
 
 	// Clean up dead UFOs and end dogfights which were minimized.
-	for (std::vector<Ufo* >::iterator i = _game->getSavedGame()->getUfos()->begin(); i != _game->getSavedGame()->getUfos()->end();)
+	for (std::vector<Ufo*>::iterator i = _game->getSavedGame()->getUfos()->begin(); i != _game->getSavedGame()->getUfos()->end();)
 	{
 		if ((*i)->getStatus() == Ufo::DESTROYED)
 		{
 			if (!(*i)->getFollowers()->empty())
 			{
 				// Remove all dogfights with this UFO.
-				for (std::vector<DogfightState* >::iterator d = _dogfights.begin(); d != _dogfights.end();)
+				for (std::vector<DogfightState*>::iterator d = _dogfights.begin(); d != _dogfights.end();)
 				{
 					if ((*d)->getUfo() == *i)
 					{
@@ -1107,7 +1107,7 @@ void GeoscapeState::time5Seconds()
 	}
 
 	// Clean up unused waypoints
-	for (std::vector<Waypoint* >::iterator i = _game->getSavedGame()->getWaypoints()->begin(); i != _game->getSavedGame()->getWaypoints()->end();)
+	for (std::vector<Waypoint*>::iterator i = _game->getSavedGame()->getWaypoints()->begin(); i != _game->getSavedGame()->getWaypoints()->end();)
 	{
 		if ((*i)->getFollowers()->empty())
 		{
@@ -1152,23 +1152,23 @@ private:
  */
 bool DetectXCOMBase::operator()(const Ufo* ufo) const
 {
-	Log(LOG_INFO) << "DetectXCOMBase::operator(), ufoID " << ufo->getId();
+	Log(LOG_INFO) << "DetectXCOMBase(), ufoID " << ufo->getId();
 
-	double distance	= _base.getDistance(ufo);
-	double range	= 0.1; // radians. Thanks
-//	double range_def = 80.0 * (1.0 / 60.0) * (M_PI / 180.0);
+	double ufoRange	= 600.0;
+	double targetDistance = _base.getDistance(ufo) * 3440.0;
+	Log(LOG_INFO) << ". targetDistance = " << targetDistance;
 
-	bool outRange	= distance > range;
+	bool outRange	= targetDistance > ufoRange;
 	bool onRetMiss	= ufo->getMissionType() == "STR_ALIEN_RETALIATION";
 	bool aggro		= Options::getBool("aggressiveRetaliation");
 	bool onRetRun	= ufo->getTrajectory().getID() == "__RETALIATION_ASSAULT_RUN";
 	bool crashed	= ufo->isCrashed();
 
-	Log(LOG_INFO) << ". distance = "	<< distance << " ; range = " << range;
-	Log(LOG_INFO) << ". crashed = "		<< crashed;
+	Log(LOG_INFO) << ". outRange = "	<< outRange;
 	Log(LOG_INFO) << ". onRetMiss = "	<< onRetMiss;
 	//Log(LOG_INFO) << ". aggro = "		<< aggro;
 	Log(LOG_INFO) << ". onRetRun = "	<< onRetRun;
+	Log(LOG_INFO) << ". crashed = "		<< crashed;
 
 	if ((!onRetMiss		// only UFOs on retaliation missions actively scan for bases
 			&& !aggro)		// unless aggressiveRetaliation option is true
@@ -1180,10 +1180,11 @@ bool DetectXCOMBase::operator()(const Ufo* ufo) const
 		return false;
 	}
 
-	unsigned int uiDet = _base.getDetectionChance();
-	Log(LOG_INFO) << ". iDetChance = " << uiDet;
+	unsigned int percent = _base.getDetectionChance();
+	bool ret = RNG::percent(percent);
+	Log(LOG_INFO) << ". percent = " << percent << " ; ret " << ret;
 
-	return RNG::percent(uiDet);
+	return ret;
 }
 
 /**
@@ -1208,42 +1209,50 @@ struct SetRetaliationStatus
 void GeoscapeState::time10Minutes()
 {
 	Log(LOG_INFO) << "GeoscapeState::time10Minutes()";
-	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
+	for (std::vector<Base*>::iterator
+			b = _game->getSavedGame()->getBases()->begin();
+			b != _game->getSavedGame()->getBases()->end();
+			++b)
 	{
-		for (std::vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); ++j)
+		for (std::vector<Craft*>::iterator
+				c = (*b)->getCrafts()->begin();
+				c != (*b)->getCrafts()->end();
+				++c)
 		{
-			if ((*j)->getStatus() == "STR_OUT")
+			if ((*c)->getStatus() == "STR_OUT")
 			{
-				(*j)->consumeFuel(); // Fuel consumption for XCOM craft.
-				if (!(*j)->getLowFuel()
-					&& (*j)->getFuel() <= (*j)->getFuelLimit())
+				(*c)->consumeFuel();
+				if (!(*c)->getLowFuel()
+					&& (*c)->getFuel() <= (*c)->getFuelLimit())
 				{
-					(*j)->setLowFuel(true);
-					(*j)->returnToBase();
+					(*c)->setLowFuel(true);
+					(*c)->returnToBase();
 
 					timerReset();	// kL
-					popup(new LowFuelState(_game, (*j), this));
+					popup(new LowFuelState(_game, (*c), this));
 				}
 
-				if ((*j)->getDestination() == 0) // patrol for aLien bases.
+				if ((*c)->getDestination() == 0) // patrol for aLien bases.
 				{
-					for (std::vector<AlienBase*>::iterator ab = _game->getSavedGame()->getAlienBases()->begin();
+					for (std::vector<AlienBase*>::iterator
+							ab = _game->getSavedGame()->getAlienBases()->begin();
 							ab != _game->getSavedGame()->getAlienBases()->end();
 							ab++)
 					{
-						double range = 1696.0 * (1.0 / 60.0) * (M_PI / 180.0);
-						double dist = (*j)->getDistance(*ab);
-						Log(LOG_INFO) << ". Patrol for alienBases, range = " << range << " ; dist = " << dist;
+						if ((*ab)->isDiscovered())
+							continue;
 
-						if (dist <= range)
+						// TODO: move the craftRadar range to the ruleset.
+						double craftRadar = 600.0;
+						double targetDistance = (*c)->getDistance(*ab) * 3440.0;
+						Log(LOG_INFO) << ". Patrol for alienBases, targetDistance = " << targetDistance;
+
+						if (targetDistance < craftRadar)
 						{
-							// TODO: move the detection range to the ruleset, or use the pre-defined
-							// one (which is 600, but detection range should be 500).
-							int iPerc = 50 - (((int)(*j)->getDistance(*ab) / range) * 50);
-							Log(LOG_INFO) << ". . craft in Range, iPercent = " << iPerc;
+							int percent = 50 - ((int)(targetDistance / craftRadar) * 50);
+							Log(LOG_INFO) << ". . craft in Range, percent = " << percent;
 
-							if (RNG::percent(iPerc)
-								&& !(*ab)->isDiscovered())
+							if (RNG::percent(percent))
 							{
 								Log(LOG_INFO) << ". . . aLienBase discovered";
 								(*ab)->setDiscovered(true);
@@ -1258,18 +1267,20 @@ void GeoscapeState::time10Minutes()
 	if (Options::getBool("aggressiveRetaliation"))
 	{
 		// Detect as many bases as possible.
-		for (std::vector<Base*>::iterator iBase = _game->getSavedGame()->getBases()->begin();
-				iBase != _game->getSavedGame()->getBases()->end();
-				++iBase)
+		for (std::vector<Base*>::iterator
+				b = _game->getSavedGame()->getBases()->begin();
+				b != _game->getSavedGame()->getBases()->end();
+				++b)
 		{
 			// Find a UFO that detected this base, if any.
-			std::vector<Ufo*>::const_iterator uu = std::find_if(_game->getSavedGame()->getUfos()->begin(),
-													_game->getSavedGame()->getUfos()->end(),
-													DetectXCOMBase(**iBase));
-			if (uu != _game->getSavedGame()->getUfos()->end())
+			std::vector<Ufo*>::const_iterator u = std::find_if(
+					_game->getSavedGame()->getUfos()->begin(),
+					_game->getSavedGame()->getUfos()->end(),
+					DetectXCOMBase(**b));
+			if (u != _game->getSavedGame()->getUfos()->end())
 			{
-				Log(LOG_INFO) << "GeoscapeState::time10Minutes(), xBase found, set RetaliationStatus";
-				(*iBase)->setRetaliationStatus(true); // Base found
+				Log(LOG_INFO) << ". xBase found, set RetaliationStatus";
+				(*b)->setRetaliationStatus(true);
 			}
 		}
 	}
@@ -1277,17 +1288,19 @@ void GeoscapeState::time10Minutes()
 	{
 		// Only remember last base in each region.
 		std::map<const Region*, Base*> discovered;
-		for (std::vector<Base*>::iterator iBase = _game->getSavedGame()->getBases()->begin();
-				iBase != _game->getSavedGame()->getBases()->end();
-				++iBase)
+		for (std::vector<Base*>::iterator
+				b = _game->getSavedGame()->getBases()->begin();
+				b != _game->getSavedGame()->getBases()->end();
+				++b)
 		{
 			// Find a UFO that detected this base, if any.
-			std::vector<Ufo*>::const_iterator uu = std::find_if(_game->getSavedGame()->getUfos()->begin(),
-													_game->getSavedGame()->getUfos()->end(),
-													DetectXCOMBase(**iBase));
-			if (uu != _game->getSavedGame()->getUfos()->end())
+			std::vector<Ufo*>::const_iterator u = std::find_if(
+					_game->getSavedGame()->getUfos()->begin(),
+					_game->getSavedGame()->getUfos()->end(),
+					DetectXCOMBase(**b));
+			if (u != _game->getSavedGame()->getUfos()->end())
 			{
-				discovered[_game->getSavedGame()->locateRegion(**iBase)] = *iBase;
+				discovered[_game->getSavedGame()->locateRegion(**b)] = *b;
 			}
 		}
 
@@ -1536,30 +1549,36 @@ void GeoscapeState::time30Minutes()
 
 				if (!(*u)->getDetected())
 				{
-					bool detected = false;
-					for (std::vector<Base* >::iterator b = _game->getSavedGame()->getBases()->begin(); b != _game->getSavedGame()->getBases()->end() && !detected; ++b)
+					bool detected = false, hyperdet = false;
+
+					for (std::vector<Base*>::iterator
+							b = _game->getSavedGame()->getBases()->begin();
+							b != _game->getSavedGame()->getBases()->end()
+								&& !detected;
+							++b)
 					{
-						if ((*b)->detect(*u))
+						switch ((*b)->detect(*u))
 						{
-							detected = true;
-							if ((*b)->getHyperDetection())
-							{
+							case 2:
 								(*u)->setHyperDetected(true);
-							}
+								hyperdet = true;
+							case 1:
+								detected = true;
+							break;
 						}
 
-						for (std::vector<Craft* >::iterator c = (*b)->getCrafts()->begin(); c != (*b)->getCrafts()->end() && !detected; ++c)
+						for (std::vector<Craft*>::iterator
+								c = (*b)->getCrafts()->begin();
+								c != (*b)->getCrafts()->end()
+									&& !detected;
+								++c)
 						{
-							if ((*c)->getLongitude() == (*b)->getLongitude()
-								&& (*c)->getLatitude() == (*b)->getLatitude()
-								&& (*c)->getDestination() == 0)
-							{
-								continue;
-							}
-
-							if ((*c)->detect(*u))
+							if ((*c)->getStatus() == "STR_OUT"
+								&& (*c)->detect(*u))
 							{
 								detected = true;
+
+								break;
 							}
 						}
 					}
@@ -1568,36 +1587,44 @@ void GeoscapeState::time30Minutes()
 					{
 						(*u)->setDetected(true);
 
-//						timerReset();	// kL. Done in UfoDetectedState
-						popup(new UfoDetectedState(_game, *u, this, true, (*u)->getHyperDetected()));
+						popup(new UfoDetectedState(_game, *u, this, true, hyperdet));
 					}
 //					Log(LOG_INFO) << ". . . . . . . not Detected done";
 				}
-				else // kL_note: ufo is already detected
+				else // ufo is already detected
 				{
 					bool detected = false;
-					for (std::vector<Base* >::iterator b = _game->getSavedGame()->getBases()->begin(); b != _game->getSavedGame()->getBases()->end() && !detected; ++b)
-					{
-						bool insideRange = (*b)->insideRadarRange(*u);
-						detected = detected || insideRange;
 
-						if ((*b)->getHyperDetection()
-							&& insideRange)
+					for (std::vector<Base*>::iterator
+							b = _game->getSavedGame()->getBases()->begin();
+							b != _game->getSavedGame()->getBases()->end()
+								&& !detected;
+							++b)
+					{
+						double insideRange = (*b)->insideRadarRange(*u);
+						if (insideRange < 0.0)
 						{
-							(*u)->setHyperDetected(true);
+							detected = true;
+
+							if (insideRange < -1.0)
+							{
+								(*u)->setHyperDetected(true);
+							}
 						}
 
-						for (std::vector<Craft* >::iterator c = (*b)->getCrafts()->begin(); c != (*b)->getCrafts()->end() && !detected; ++c)
+						for (std::vector<Craft*>::iterator
+								c = (*b)->getCrafts()->begin();
+								c != (*b)->getCrafts()->end()
+									&& !detected;
+								++c)
 						{
-							// kL_begin: Geo time30min; add negate craft detection if based. From above
-							if ((*c)->getLongitude() == (*b)->getLongitude()
-								&& (*c)->getLatitude() == (*b)->getLatitude()
-								&& (*c)->getDestination() == 0)
+							if ((*c)->getStatus() == "STR_OUT"
+								&& (*c)->detect(*u))
 							{
-								continue;
-							} // kL_end.
+								detected = true;
 
-							detected = detected || (*c)->detect(*u);
+								break;
+							}
 						}
 //						Log(LOG_INFO) << ". . . . . . . Detected done";
 					}
@@ -1610,6 +1637,7 @@ void GeoscapeState::time30Minutes()
 						if (!(*u)->getFollowers()->empty())
 						{
 							timerReset();	// kL
+
 							popup(new UfoLostState(_game, (*u)->getName(_game->getLanguage())));
 						}
 //						Log(LOG_INFO) << ". . . . . . . not Detected done 2x";

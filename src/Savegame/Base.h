@@ -53,19 +53,18 @@ class Base
 private:
 	const Ruleset* _rule;
 	std::wstring _name;
-	std::vector<BaseFacility* > _facilities;
-	std::vector<Soldier* > _soldiers;
-	std::vector<Craft* > _crafts;
-	std::vector<Transfer* > _transfers;
+	std::vector<BaseFacility*> _facilities;
+	std::vector<Soldier*> _soldiers;
+	std::vector<Craft*> _crafts;
+	std::vector<Transfer*> _transfers;
 	ItemContainer* _items;
 	int _scientists, _engineers;
-	std::vector<ResearchProject* > _research;
-	std::vector<Production* > _productions;
+	std::vector<ResearchProject*> _research;
+	std::vector<Production*> _productions;
 	bool _inBattlescape;
 	bool _retaliationTarget;
-	std::vector<Vehicle* > _vehicles;
-	std::vector<BaseFacility* > _defenses;
-//	Uint8 _currentBase;		// kL
+	std::vector<Vehicle*> _vehicles;
+	std::vector<BaseFacility*> _defenses;
 
 	public:
 		/// Creates a new base.
@@ -85,13 +84,13 @@ private:
 		/// Sets the base's name.
 		void setName(const std::wstring& name);
 		/// Gets the base's facilities.
-		std::vector<BaseFacility* >* getFacilities();
+		std::vector<BaseFacility*>* getFacilities();
 		/// Gets the base's soldiers.
-		std::vector<Soldier* >* getSoldiers();
+		std::vector<Soldier*>* getSoldiers();
 		/// Gets the base's crafts.
-		std::vector<Craft* >* getCrafts();
+		std::vector<Craft*>* getCrafts();
 		/// Gets the base's transfers.
-		std::vector<Transfer* >* getTransfers();
+		std::vector<Transfer*>* getTransfers();
 		/// Gets the base's items.
 		ItemContainer* getItems();
 		/// Gets the base's scientists.
@@ -103,9 +102,9 @@ private:
 		/// Sets the base's engineers.
 		void setEngineers(int engineers);
 		/// Checks if a target is detected by the base's radar.
-		bool detect(Target* target) const;
+		uint8_t detect(Target* target) const;
 		/// Checks if a target is inside the base's radar range.
-		bool insideRadarRange(Target* target) const;
+		double insideRadarRange(Target* target) const;
 		/// Gets the base's available soldiers.
 		int getAvailableSoldiers(bool checkCombatReadiness = false) const;
 		/// Gets the base's total soldiers.
@@ -163,9 +162,9 @@ private:
 		/// Gets the base's total monthly maintenance.
 		int getMonthlyMaintenace() const;
 		/// Get the list of base's ResearchProject.
-		const std::vector<ResearchProject* >& getResearch() const;
+		const std::vector<ResearchProject*>& getResearch() const;
 		/// Add a new ResearchProject to the Base.
-		void addResearch(ResearchProject* );
+		void addResearch(ResearchProject*);
 		/// Remove a ResearchProject from the Base.
 		void removeResearch(ResearchProject* );
 		/// kL: Research Help ala XcomUtil.
@@ -175,7 +174,7 @@ private:
 		/// Remove a Base's Production.
 		void removeProduction(Production* p);
 		/// Get the list of Base's Production.
-		const std::vector<Production* >& getProductions() const;
+		const std::vector<Production*>& getProductions() const;
 		/// Checks if this base is hyper-wave equipped.
 		bool getHyperDetection() const;
 		/// Gets the base's used psi lab space.
@@ -202,14 +201,9 @@ private:
 		///
 		void setupDefenses();
 		/// Get a list of Defensive Facilities
-		std::vector<BaseFacility* >* getDefenses();
+		std::vector<BaseFacility*>* getDefenses();
 		/// Gets the base's vehicles.
-		std::vector<Vehicle* >* getVehicles();
-
-		// kL_begin: set & get Current Base.
-//		void setCurrentBase(Uint8 currentBase = 0);
-//		Uint8 getCurrentBase();
-		// kL_end.
+		std::vector<Vehicle*>* getVehicles();
 };
 
 }

@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "PlaceStartFacilityState.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
@@ -29,6 +30,7 @@
 #include "../Menu/ErrorMessageState.h"
 #include "SelectStartFacilityState.h"
 
+
 namespace OpenXcom
 {
 
@@ -39,9 +41,12 @@ namespace OpenXcom
  * @param select Pointer to the selection state.
  * @param rule Pointer to the facility ruleset to build.
  */
-PlaceStartFacilityState::PlaceStartFacilityState(Game *game, Base *base, SelectStartFacilityState *select, RuleBaseFacility *rule) : PlaceFacilityState(game, base, rule), _select(select)
+PlaceStartFacilityState::PlaceStartFacilityState(Game* game, Base* base, SelectStartFacilityState* select, RuleBaseFacility* rule)
+	:
+		PlaceFacilityState(game, base, rule), _select(select)
 {
 	_view->onMouseClick((ActionHandler)&PlaceStartFacilityState::viewClick);
+
 	_numCost->setText(tr("STR_NONE"));
 	_numTime->setText(tr("STR_NONE"));
 }
@@ -51,14 +56,13 @@ PlaceStartFacilityState::PlaceStartFacilityState(Game *game, Base *base, SelectS
  */
 PlaceStartFacilityState::~PlaceStartFacilityState()
 {
-
 }
 
 /**
  * Processes clicking on facilities.
  * @param action Pointer to an action.
  */
-void PlaceStartFacilityState::viewClick(Action *)
+void PlaceStartFacilityState::viewClick(Action*)
 {
 	if (!_view->isPlaceable(_rule))
 	{
@@ -67,9 +71,11 @@ void PlaceStartFacilityState::viewClick(Action *)
 	}
 	else
 	{
-		BaseFacility *fac = new BaseFacility(_rule, _base);
+		BaseFacility* fac = new BaseFacility(_rule, _base);
+
 		fac->setX(_view->getGridX());
 		fac->setY(_view->getGridY());
+
 		_base->getFacilities()->push_back(fac);
 		_game->popState();
 		_select->facilityBuilt();
