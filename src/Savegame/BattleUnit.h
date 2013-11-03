@@ -106,8 +106,7 @@ private:
 	int _verticalDirection;
 	Position _destination;
 	UnitStatus _status;
-//kL		int _walkPhase, _fallPhase;
-	int _walkPhase, _fallPhase, _spinPhase;		// kL
+	int _walkPhase, _fallPhase, _spinPhase;
 	std::vector<BattleUnit* > _visibleUnits, _unitsSpottedThisTurn;
 	std::vector<Tile* > _visibleTiles;
 	int _tu, _energy, _health, _morale, _stunlevel;
@@ -264,13 +263,13 @@ private:
 		/// Add unit to visible units.
 		bool addToVisibleUnits(BattleUnit* unit);
 		/// Get the list of visible units.
-		std::vector<BattleUnit* >* getVisibleUnits();
+		std::vector<BattleUnit*>* getVisibleUnits();
 		/// Clear visible units.
 		void clearVisibleUnits();
 		/// Add unit to visible tiles.
 		bool addToVisibleTiles(Tile* tile);
 		/// Get the list of visible tiles.
-		std::vector<Tile* >* getVisibleTiles();
+		std::vector<Tile*>* getVisibleTiles();
 		/// Clear visible tiles.
 		void clearVisibleTiles();
 		/// Calculate firing accuracy.
@@ -302,7 +301,7 @@ private:
 		/// Get fire.
 		int getFire() const;
 		/// Get the list of items in the inventory.
-		std::vector<BattleItem* >* getInventory();
+		std::vector<BattleItem*>* getInventory();
 		/// Let AI do their thing.
 		void think(BattleAction* action);
 		/// Get current AI state.
@@ -400,7 +399,7 @@ private:
 		/// Get unit type.
 		std::string getType() const;
 		/// Set the hand this unit is using;
-		void setActiveHand(const std::string &slot);
+		void setActiveHand(const std::string& slot);
 		/// Get unit's active hand.
 		std::string getActiveHand() const;
 		/// Convert's unit to a faction
@@ -448,7 +447,7 @@ private:
 		///
 		Position lastCover;
 		/// get the vector of units we've seen this turn.
-		std::vector<BattleUnit* > getUnitsSpottedThisTurn();
+		std::vector<BattleUnit*> getUnitsSpottedThisTurn();
 		/// set the rank integer
 		void setRankInt(int rank);
 		/// get the rank integer

@@ -403,7 +403,7 @@ void UnitDieBState::playDeathSound()
 		|| _unit->getType() == "MALE_CIVILIAN")
 	{
 		int iSound = RNG::generate(41, 43);
-		Log(LOG_INFO) << "UnitDieBState::playDeathSound(), male iSound = " << iSound;
+		//Log(LOG_INFO) << "UnitDieBState::playDeathSound(), male iSound = " << iSound;
 //kL		_parent->getResourcePack()->getSound("BATTLE.CAT", RNG::generate(41, 43))->play();
 		_parent->getResourcePack()->getSound("BATTLE.CAT", iSound)->play();		// kL
 	}
@@ -411,7 +411,7 @@ void UnitDieBState::playDeathSound()
 		|| _unit->getType() == "FEMALE_CIVILIAN")
 	{
 		int iSound = RNG::generate(44, 46);
-		Log(LOG_INFO) << "UnitDieBState::playDeathSound(), female iSound = " << iSound;
+		//Log(LOG_INFO) << "UnitDieBState::playDeathSound(), female iSound = " << iSound;
 //kL		_parent->getResourcePack()->getSound("BATTLE.CAT", RNG::generate(44, 46))->play();
 		_parent->getResourcePack()->getSound("BATTLE.CAT", iSound)->play();		// kL
 	}

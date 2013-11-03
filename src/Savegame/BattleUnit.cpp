@@ -2152,7 +2152,7 @@ bool BattleUnit::postMissionProcedures(SavedGame* geoscape)
 	const UnitStats caps = s->getRules()->getStatCaps();
 
 	int healthLoss = stats->health - _health;
-	s->setWoundRecovery(RNG::generate(healthLoss * 0.5, healthLoss * 1.5));
+	s->setWoundRecovery(RNG::generate((int)((double)healthLoss * 0.5), (int)((double)healthLoss * 1.5)));
 
 	if (_expBravery && stats->bravery < caps.bravery)
 	{

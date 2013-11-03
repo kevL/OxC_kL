@@ -196,7 +196,7 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 			if (!_save->getDebugMode())
 			{
 				_endTurnRequested = true;
-			Log(LOG_INFO) << "BattlescapeGame::handleAI() statePushBack(end AI turn)";
+				//Log(LOG_INFO) << "BattlescapeGame::handleAI() statePushBack(end AI turn)";
 				statePushBack(0); // end AI turn
 			}
 			else
@@ -217,7 +217,7 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 
 		_AIActionCounter = 0;
 
-		Log(LOG_INFO) << "BattlescapeGame::handleAI() EXIT 1";
+		//Log(LOG_INFO) << "BattlescapeGame::handleAI() EXIT 1";
 		return;
 	}
 
@@ -239,19 +239,21 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 			break;
 		}
 	}
+	//Log(LOG_INFO) << ". aggressionReserved DONE";
+
 
 	unit->setVisible(false);
 
 	// might need this populate _visibleUnit for a newly-created alien
 	_save->getTileEngine()->calculateFOV(unit->getPosition());
-		// it might also help chryssalids realize they've zombified someone and need to move on
-		// it should also hide units when they've killed the guy spotting them
+		// it might also help chryssalids realize they've zombified someone and need to move on;
+		// it should also hide units when they've killed the guy spotting them;
 		// it's also for good luck
 
     BattleAIState* ai = unit->getCurrentAIState();
 	if (!ai)
 	{
-		Log(LOG_INFO) << "BattlescapeGame::handleAI() !ai, assign AI";
+		//Log(LOG_INFO) << "BattlescapeGame::handleAI() !ai, assign AI";
 
 		// for some reason the unit had no AI routine assigned..
 		if (unit->getFaction() == FACTION_HOSTILE)
@@ -270,6 +272,8 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 
 		if (_save->getTraceSetting()) { Log(LOG_INFO) << "#" << unit->getId() << "--" << unit->getType(); }
 	}
+	//Log(LOG_INFO) << ". _AIActionCounter DONE";
+
 
 	// this cast only works when ai was already AlienBAIState at heart
 //	AlienBAIState* aggro = dynamic_cast<AlienBAIState*>(ai);
@@ -283,8 +287,9 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 	{
 		_parentState->debug(L"Rethink");
 		unit->think(&action);
-
 	}
+	//Log(LOG_INFO) << ". BA_RETHINK DONE";
+
 
 	_AIActionCounter = action.number;
 
@@ -297,6 +302,8 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 			findItem(&action);
 		}
 	}
+	//Log(LOG_INFO) << ". findItem DONE";
+
 
 	if (unit->getCharging() != 0)
 	{
@@ -307,6 +314,8 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 			_playedAggroSound = true;
 		}
 	}
+	//Log(LOG_INFO) << ". getCharging DONE";
+
 
 	if (action.type == BA_WALK)
 	{
@@ -323,6 +332,8 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 			statePushBack(new UnitWalkBState(this, action));
 		}
 	}
+	//Log(LOG_INFO) << ". BA_WALK DONE";
+
 
 	if (action.type == BA_SNAPSHOT
 		|| action.type == BA_AUTOSHOT
@@ -333,6 +344,8 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 		|| action.type == BA_PANIC
 		|| action.type == BA_LAUNCH)
 	{
+		//Log(LOG_INFO) << ". . in action.type";
+
 		if (action.type == BA_MINDCONTROL
 			|| action.type == BA_PANIC)
 		{
@@ -345,19 +358,28 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 		{
 			statePushBack(new UnitTurnBState(this, action));
 		}
+		//Log(LOG_INFO) << ". . create Psi weapon DONE";
+
 
 		ss.clear();
 		ss << L"Attack type=" << action.type << " target="<< action.target << " weapon=" << action.weapon->getRules()->getName().c_str();
 		_parentState->debug(ss.str());
 
+		//Log(LOG_INFO) << ". . ProjectileFlyBState";
 		statePushBack(new ProjectileFlyBState(this, action));
+		//Log(LOG_INFO) << ". . ProjectileFlyBState DONE";
+
 		if (action.type == BA_MINDCONTROL
 			|| action.type == BA_PANIC)
 		{
-			bool success = _save->getTileEngine()->psiAttack(&action);
+			//Log(LOG_INFO) << ". . . in action.type Psi";
+
+			bool success = _save->getTileEngine()->psiAttack(&action); // crash ???? ... sometimes!!
+			//Log(LOG_INFO) << ". . . success = " << success;
 			if (success
 				&& action.type == BA_MINDCONTROL)
 			{
+				//Log(LOG_INFO) << ". . . inside success MC";
 				// show a little infobox with the name of the unit and "... is under alien control"
 				Game* game = _parentState->getGame();
 				BattleUnit* unit = _save->getTile(action.target)->getUnit();
@@ -366,13 +388,18 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 						game->getLanguage()->getString("STR_IS_UNDER_ALIEN_CONTROL", unit->getGender())
 						.arg(unit->getName(game->getLanguage()))));
 			}
+			//Log(LOG_INFO) << ". . . success MC Done";
 
 			_save->removeItem(action.weapon);
+			//Log(LOG_INFO) << ". . . Psi weapon removed.";
 		}
 	}
+	//Log(LOG_INFO) << ". . action.type DONE";
 
 	if (action.type == BA_NONE)
 	{
+		//Log(LOG_INFO) << ". . in action.type None";
+
 		_parentState->debug(L"Idle");
 		_AIActionCounter = 0;
 
@@ -381,7 +408,7 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 			if (!_save->getDebugMode())
 			{
 				_endTurnRequested = true;
-				Log(LOG_INFO) << "BattlescapeGame::handleAI() statePushBack(end AI turn) 2";
+				//Log(LOG_INFO) << "BattlescapeGame::handleAI() statePushBack(end AI turn) 2";
 				statePushBack(0); // end AI turn
 			}
 			else
@@ -402,7 +429,7 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 		}
 	}
 
-	Log(LOG_INFO) << "BattlescapeGame::handleAI() EXIT";
+	//Log(LOG_INFO) << "BattlescapeGame::handleAI() EXIT";
 }
 
 /**
@@ -479,12 +506,14 @@ void BattlescapeGame::endTurn()
 
 				statePushBack(0);
 
+				//Log(LOG_INFO) << "BattlescapeGame::endTurn(), hot grenades EXIT";
 				return;
 			}
 
 			++it;
 		}
 	}
+	//Log(LOG_INFO) << ". done grenades";
 
 	// check for terrain explosions
 	Tile* t = _save->getTileEngine()->checkForTerrainExplosions();
@@ -497,8 +526,10 @@ void BattlescapeGame::endTurn()
 
 		statePushBack(0);
 
+		//Log(LOG_INFO) << "BattlescapeGame::endTurn(), terrain explosions EXIT";
 		return;
 	}
+	//Log(LOG_INFO) << ". done explosions";
 
 	if (_save->getSide() != FACTION_NEUTRAL)
 	{
@@ -512,6 +543,7 @@ void BattlescapeGame::endTurn()
 			}
 		}
 	}
+	//Log(LOG_INFO) << ". done !neutral";
 
 	// kL_begin:
 	/* kL. from Savegame/BattleUnit.cpp, void BattleUnit::prepareNewTurn()
@@ -531,7 +563,7 @@ void BattlescapeGame::endTurn()
 				//Log(LOG_INFO) << ". do Turn Fire : " << (*j)->getId();
 
 				(*j)->setFire(-1);
-				(*j)->setHealth((*j)->getHealth() - (*j)->getArmor()->getDamageModifier(DT_IN) * RNG::generate(4, 11));
+				(*j)->setHealth((*j)->getHealth() - (int)(*j)->getArmor()->getDamageModifier(DT_IN) * RNG::generate(4, 11));
 
 				if ((*j)->getHealth() < 0)
 				{
@@ -542,14 +574,17 @@ void BattlescapeGame::endTurn()
 	}
 	// that just might work...
 	// kL_end.
+	//Log(LOG_INFO) << ". done fire damage";
 
 	// if all units from either faction are killed - the mission is over.
 	int liveAliens = 0;
 	int liveSoldiers = 0;
 	// we'll tally them NOW, so that any infected units will... change
 	tallyUnits(liveAliens, liveSoldiers, true);
+	//Log(LOG_INFO) << ". done tallyUnits";
 
 	_save->endTurn();
+	//Log(LOG_INFO) << ". done save->endTurn";
 
 	if (_save->getSide() == FACTION_PLAYER)
 	{
@@ -561,14 +596,16 @@ void BattlescapeGame::endTurn()
 	}
 
 	checkForCasualties(0, 0, false, false);
+	//Log(LOG_INFO) << ". done checkForCasualties";
 
 	// turn off MCed alien lighting.
 	_save->getTileEngine()->calculateUnitLighting();
 
 	if (_save->isObjectiveDestroyed())
 	{
-		_parentState->finishBattle(false,liveSoldiers);
+		_parentState->finishBattle(false, liveSoldiers);
 
+		//Log(LOG_INFO) << "BattlescapeGame::endTurn(), objectiveDestroyed EXIT";
 		return;
 	}
 
@@ -584,9 +621,12 @@ void BattlescapeGame::endTurn()
 			setupCursor();
 		}
 	}
+	//Log(LOG_INFO) << ". done updates";
 
-	if (_save->getSide() != FACTION_NEUTRAL && _endTurnRequested)
+	if (_save->getSide() != FACTION_NEUTRAL
+		&& _endTurnRequested)
 	{
+		//Log(LOG_INFO) << ". . pushState(nextTurnState)";
 		_parentState->getGame()->pushState(new NextTurnState(_parentState->getGame(), _save, _parentState));
 	}
 
@@ -603,12 +643,9 @@ void BattlescapeGame::endTurn()
  */
 void BattlescapeGame::checkForCasualties(BattleItem* murderweapon, BattleUnit* murderer, bool hiddenExplosion, bool terrainExplosion)
 {
-	if (murderer)
-		Log(LOG_INFO) << "BattlescapeGame::checkForCasualties() murderer = " << murderer->getId();
-	else
-		Log(LOG_INFO) << "BattlescapeGame::checkForCasualties() murderer = NULL";
+	Log(LOG_INFO) << "BattlescapeGame::checkForCasualties()";
 
-	for (std::vector<BattleUnit* >::iterator j = _save->getUnits()->begin(); j != _save->getUnits()->end(); ++j)
+	for (std::vector<BattleUnit*>::iterator j = _save->getUnits()->begin(); j != _save->getUnits()->end(); ++j)
 	{
 		if ((*j)->getHealth() == 0
 			&& (*j)->getStatus() != STATUS_DEAD
@@ -710,7 +747,7 @@ void BattlescapeGame::checkForCasualties(BattleItem* murderweapon, BattleUnit* m
 				int winMod = victim->getFaction() == FACTION_HOSTILE ? _save->getMoraleModifier() : _save->getMoraleModifier(0, false);
 				// kL_end.
 
-				for (std::vector<BattleUnit* >::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
+				for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 				{
 					if (!(*i)->isOut()							// conscious
 						&& (*i)->getArmor()->getSize() == 1)	// not a tank or terror unit
@@ -784,7 +821,7 @@ void BattlescapeGame::checkForCasualties(BattleItem* murderweapon, BattleUnit* m
 		_parentState->showPsiButton(bu && bu->getOriginalFaction() == FACTION_HOSTILE && bu->getStats()->psiSkill > 0 && !bu->isOut());
 	}
 
-	Log(LOG_INFO) << "BattlescapeGame::checkForCasualties() EXIT";
+	//Log(LOG_INFO) << "BattlescapeGame::checkForCasualties() EXIT";
 }
 
 /**
@@ -1055,8 +1092,8 @@ void BattlescapeGame::popState()
 		{
 			switch (action.type)
 			{
-	//			case BA_LAUNCH:
-	//				_currentAction.waypoints.clear();
+//				case BA_LAUNCH:
+//					_currentAction.waypoints.clear();
 				case BA_THROW:
 				case BA_SNAPSHOT:
 				case BA_AIMEDSHOT:
@@ -1111,7 +1148,7 @@ void BattlescapeGame::popState()
 				// kL_begin:
 				if (!actionFailed)
 				{
-					unsigned int curTU = action.actor->getTimeUnits();
+					int curTU = action.actor->getTimeUnits();
 
 					switch (action.type)
 					{
@@ -1258,7 +1295,7 @@ void BattlescapeGame::popState()
 	}
 
 	_parentState->updateSoldierInfo();
-	Log(LOG_INFO) << "BattlescapeGame::popState() EXIT";
+	//Log(LOG_INFO) << "BattlescapeGame::popState() EXIT";
 }
 
 /**
@@ -1411,7 +1448,7 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* unit)
 	if (status != STATUS_PANICKING && status != STATUS_BERSERK)
 		return false;
 
-//	Log(LOG_INFO) << "unit Panic/Berserk : " << unit->getId() << " / " << unit->getMorale();		// kL
+	//Log(LOG_INFO) << "unit Panic/Berserk : " << unit->getId() << " / " << unit->getMorale();		// kL
 
 	unit->setVisible(true);
 	getMap()->getCamera()->centerOnPosition(unit->getPosition());
@@ -1524,7 +1561,7 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* unit)
 
 	unit->moraleChange(+15);
 
-//	Log(LOG_INFO) << "unit Panic/Berserk : " << unit->getId() << " / " << unit->getMorale();		// kL
+	//Log(LOG_INFO) << "unit Panic/Berserk : " << unit->getId() << " / " << unit->getMorale();		// kL
 	return true;
 }
 
@@ -1535,7 +1572,7 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* unit)
   */
 bool BattlescapeGame::cancelCurrentAction(bool bForce)
 {
-	Log(LOG_INFO) << "BattlescapeGame::cancelCurrentAction()";
+	//Log(LOG_INFO) << "BattlescapeGame::cancelCurrentAction()";
 
 	bool bPreviewed = Options::getInt("battleNewPreviewPath") > 0;
 
@@ -1816,7 +1853,7 @@ void BattlescapeGame::primaryAction(const Position& pos)
 		}
 	}
 
-	Log(LOG_INFO) << ". . primaryAction() EXIT";
+	//Log(LOG_INFO) << ". . primaryAction() EXIT";
 }
 
 /**
@@ -1825,7 +1862,7 @@ void BattlescapeGame::primaryAction(const Position& pos)
  */
 void BattlescapeGame::secondaryAction(const Position &pos)
 {
-	Log(LOG_INFO) << "BattlescapeGame::secondaryAction()";
+	//Log(LOG_INFO) << "BattlescapeGame::secondaryAction()";
 
 	//  -= turn to or open door =-
 	_currentAction.target = pos;
@@ -2468,9 +2505,9 @@ BattleActionType BattlescapeGame::getReservedAction()
 
 /**
  * Tallies the living units in the game and, if required, converts units into their spawn unit.
- * @param &liveAliens The integer in which to store the live alien tally.
- * @param &liveSoldiers The integer in which to store the live XCom tally.
- * @param convert Should we convert infected units?
+ * @param &liveAliens, The integer in which to store the live alien tally.
+ * @param &liveSoldiers, The integer in which to store the live XCom tally.
+ * @param convert, Should we convert infected units?
  */
 void BattlescapeGame::tallyUnits(int& liveAliens, int& liveSoldiers, bool convert)
 {
@@ -2482,22 +2519,28 @@ void BattlescapeGame::tallyUnits(int& liveAliens, int& liveSoldiers, bool conver
 
 	if (convert)
 	{
-		for (std::vector<BattleUnit*>::iterator j = _save->getUnits()->begin(); j != _save->getUnits()->end(); ++j)
+		for (std::vector<BattleUnit*>::iterator
+				j = _save->getUnits()->begin();
+				j != _save->getUnits()->end();
+				++j)
 		{
-			if ((*j)->getHealth() > 0
-				&& (*j)->getSpecialAbility() == SPECAB_RESPAWN)
+//kL			if ((*j)->getHealth() > 0
+			if ((*j)->getSpecialAbility() == SPECAB_RESPAWN)
 			{
-//				Log(LOG_INFO) << "BattlescapeGame::tallyUnits() " << (*j)->getId() << " : health > 0, SPECAB_RESPAWN -> converting unit!";
+				//Log(LOG_INFO) << "BattlescapeGame::tallyUnits() " << (*j)->getId() << " : health > 0, SPECAB_RESPAWN -> converting unit!";
 
 				(*j)->setSpecialAbility(SPECAB_NONE);
-				convertUnit((*j), (*j)->getSpawnUnit());
+				convertUnit(*j, (*j)->getSpawnUnit());
 
 				j = _save->getUnits()->begin();
 			}
 		}
 	}
 
-	for (std::vector<BattleUnit*>::iterator j = _save->getUnits()->begin(); j != _save->getUnits()->end(); ++j)
+	for (std::vector<BattleUnit*>::iterator
+			j = _save->getUnits()->begin();
+			j != _save->getUnits()->end();
+			++j)
 	{
 		if (!(*j)->isOut())
 		{

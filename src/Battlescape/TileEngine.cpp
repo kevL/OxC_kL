@@ -747,8 +747,8 @@ int TileEngine::checkVoxelExposure(Position *originVoxel, Tile *tile, BattleUnit
 	// vector manipulation to make scan work in view-space
 	Position relPos = targetVoxel - *originVoxel;
 	float normal = unitRadius / sqrt((float)(relPos.x * relPos.x + relPos.y * relPos.y));
-	int relX = floor(((float)relPos.y) * normal + 0.5);
-	int relY = floor(((float)-relPos.x) * normal + 0.5);
+	int relX = (int)floor(((float)relPos.y) * normal + 0.5f);
+	int relY = (int)floor(((float)-relPos.x) * normal + 0.5f);
 
 	int sliceTargets[10] = { 0,0, relX,relY, -relX,-relY };
 
@@ -841,8 +841,8 @@ bool TileEngine::canTargetUnit(Position* originVoxel, Tile* tile, Position* scan
 	// vector manipulation to make scan work in view-space
 	Position relPos = targetVoxel - *originVoxel;
 	float normal = unitRadius / sqrt((float)(relPos.x * relPos.x + relPos.y * relPos.y));
-	int relX = floor(((float)relPos.y) * normal + 0.5);
-	int relY = floor(((float)-relPos.x) * normal + 0.5);
+	int relX = (int)floor(((float)relPos.y) * normal + 0.5f);
+	int relY = (int)floor(((float)-relPos.x) * normal + 0.5f);
 
 	int sliceTargets[10] =
 	{
@@ -1066,7 +1066,7 @@ bool TileEngine::canTargetTile(Position* originVoxel, Tile* tile, int part, Posi
  */
 std::vector<BattleUnit* > TileEngine::getSpottingUnits(BattleUnit* unit)
 {
-//	Log(LOG_INFO) << "getSpottingUnits() " << (unit)->getId() << " : " << (unit)->getReactionScore();		// kL
+	//Log(LOG_INFO) << "getSpottingUnits() " << (unit)->getId() << " : " << (unit)->getReactionScore();		// kL
 
 	std::vector<BattleUnit* > spotters;
 
@@ -1100,14 +1100,14 @@ std::vector<BattleUnit* > TileEngine::getSpottingUnits(BattleUnit* unit)
 				if (_save->getSide() != FACTION_NEUTRAL		// no reaction on civilian turn.
 					&& canMakeSnap(*i, unit))
 				{
-//					Log(LOG_INFO) << "getSpottingUnits() " << (*i)->getId() << " : " << (*i)->getReactionScore() << " add";		// kL
+					//Log(LOG_INFO) << "getSpottingUnits() " << (*i)->getId() << " : " << (*i)->getReactionScore() << " add";		// kL
 
 					spotters.push_back(*i);
 				}
 			}
 		}
 
-//		Log(LOG_INFO) << "getSpottingUnits() " << (*i)->getId() << " : "  << (*i)->getReactionScore() << " not";		// kL
+		//Log(LOG_INFO) << "getSpottingUnits() " << (*i)->getId() << " : "  << (*i)->getReactionScore() << " not";		// kL
 	}
 
 	return spotters;
@@ -1156,7 +1156,7 @@ bool TileEngine::canMakeSnap(BattleUnit* unit, BattleUnit* target)
 		return true;
 	}
 
-//	Log(LOG_INFO) << "canMakeSnap() " << unit->getId() << " false";		// kL
+	//Log(LOG_INFO) << "canMakeSnap() " << unit->getId() << " false";		// kL
 
 	return false;
 }
@@ -1170,12 +1170,12 @@ bool TileEngine::canMakeSnap(BattleUnit* unit, BattleUnit* target)
  */
 bool TileEngine::checkReactionFire(BattleUnit* unit)
 {
-	//	Log(LOG_INFO) << "Battlescape/TileEngine.cpp checkReactionFire() vs." << unit->getId();
+	//Log(LOG_INFO) << "Battlescape/TileEngine.cpp checkReactionFire() vs." << unit->getId();
 
 	// reaction fire only triggered when the actioning unit is of the currently playing side, and is still on the map (alive)
 	if (unit->getFaction() != _save->getSide() || unit->getTile() == 0)
 	{
-//		Log(LOG_INFO) << ". vs getSide() = invalid";
+		//Log(LOG_INFO) << ". vs getSide() = invalid";
 
 		return false;
 	}
@@ -1190,10 +1190,10 @@ bool TileEngine::checkReactionFire(BattleUnit* unit)
 	if (unit->getFaction() == unit->getOriginalFaction()
 		|| unit->getFaction() != FACTION_HOSTILE)
 	{
-//		Log(LOG_INFO) << ". Target = VALID";
+		//Log(LOG_INFO) << ". Target = VALID";
 		std::vector<BattleUnit* > spotters = getSpottingUnits(unit);
 
-//		Log(LOG_INFO) << ". # spotters = " << spotters.size();
+		//Log(LOG_INFO) << ". # spotters = " << spotters.size();
 
 		// get the first man up to bat.
 		BattleUnit* reactor = getReactor(spotters, unit);
@@ -1202,7 +1202,7 @@ bool TileEngine::checkReactionFire(BattleUnit* unit)
 		{
 			if (!tryReactionSnap(reactor, unit))
 			{
-//				Log(LOG_INFO) << ". . no Snap by : " << reactor->getId();
+				//Log(LOG_INFO) << ". . no Snap by : " << reactor->getId();
 
 				// can't make a reaction snapshot for whatever reason, boot this guy from the vector.
 				for (std::vector<BattleUnit* >::iterator i = spotters.begin(); i != spotters.end(); ++i)
@@ -1222,11 +1222,11 @@ bool TileEngine::checkReactionFire(BattleUnit* unit)
 			}
 			else	// kL
 			{
-//				Log(LOG_INFO) << ". . Snap by : " << reactor->getId();
+				//Log(LOG_INFO) << ". . Snap by : " << reactor->getId();
 				result = true;		// kL
 			}
 
-//			Log(LOG_INFO) << ". . Snap by : " << reactor->getId();
+			//Log(LOG_INFO) << ". . Snap by : " << reactor->getId();
 
 			// nice shot, kid. don't get cocky.
 			reactor = getReactor(spotters, unit);
@@ -1234,18 +1234,18 @@ bool TileEngine::checkReactionFire(BattleUnit* unit)
 		}
 	}
 
-//	Log(LOG_INFO) << ". . Reactor == unit, EXIT = " << result;
+	//Log(LOG_INFO) << ". . Reactor == unit, EXIT = " << result;
 	return result;
 }
 // kL_begin: this is my prior, working TileEngine::checkReactionFire()
 /* bool TileEngine::checkReactionFire(BattleUnit* unit)
 {
-	//	Log(LOG_INFO) << "Battlescape/TileEngine.cpp checkReactionFire() vs." << unit->getId();
+	//Log(LOG_INFO) << "Battlescape/TileEngine.cpp checkReactionFire() vs." << unit->getId();
 
 	// reaction fire only triggered when the actioning unit is of the currently playing side, and is still on the map (alive)
 	if (unit->getFaction() != _save->getSide() || unit->getTile() == 0)
 	{
-//		Log(LOG_INFO) << ". vs getSide() = invalid";
+		//Log(LOG_INFO) << ". vs getSide() = invalid";
 
 		return false;
 	}
@@ -1260,11 +1260,11 @@ bool TileEngine::checkReactionFire(BattleUnit* unit)
 	if (unit->getFaction() == unit->getOriginalFaction()
 		|| unit->getFaction() != FACTION_HOSTILE)
 	{
-//		Log(LOG_INFO) << ". Target = VALID";
+		//Log(LOG_INFO) << ". Target = VALID";
 
 		std::vector<BattleUnit* > spotters = getSpottingUnits(unit);
 
-//		Log(LOG_INFO) << ". # spotters = " << spotters.size();
+		//Log(LOG_INFO) << ". # spotters = " << spotters.size();
 
 		BattleUnit* reactor = getReactor(spotters, unit);
 		if (reactor != unit)
@@ -1273,12 +1273,12 @@ bool TileEngine::checkReactionFire(BattleUnit* unit)
 			{
 				if (!tryReactionSnap(reactor, unit))
 				{
-//					Log(LOG_INFO) << ". . no Snap by : " << reactor->getId();
+					//Log(LOG_INFO) << ". . no Snap by : " << reactor->getId();
 					break;
 				}
 				else
 				{
-//					Log(LOG_INFO) << ". . Snap by : " << reactor->getId();
+					//Log(LOG_INFO) << ". . Snap by : " << reactor->getId();
 					result = true;
 				}
 
@@ -1287,7 +1287,7 @@ bool TileEngine::checkReactionFire(BattleUnit* unit)
 					break;
 			}
 		}
-//		else Log(LOG_INFO) << ". . Reactor == unit, EXIT false";
+		//else Log(LOG_INFO) << ". . Reactor == unit, EXIT false";
 	}
 
 	return result;
@@ -1307,14 +1307,14 @@ BattleUnit* TileEngine::getReactor(std::vector<BattleUnit* > spotters, BattleUni
 
 	for (std::vector<BattleUnit* >::iterator i = spotters.begin(); i != spotters.end(); ++i)
 	{
-//		Log(LOG_INFO) << "getReactor() " << (*i)->getId() << " iterate";		// kL
+		//Log(LOG_INFO) << "getReactor() " << (*i)->getId() << " iterate";		// kL
 
 		if (!(*i)->isOut()
 			&& canMakeSnap((*i), unit)
 			&& (*i)->getReactionScore() > bestScore)
 //			&& (*i) != bu)	// kL, stop unit from reacting twice (unless target uses more TU, hopefully)
 		{
-			bestScore = (*i)->getReactionScore();
+			bestScore = (int)(*i)->getReactionScore();
 			bu = *i;
 		}
 	}
@@ -1576,7 +1576,7 @@ void TileEngine::explode(const Position& center, int power, ItemDamageType type,
 			double sin_fi = sin((double)fi * M_PI / 180.0);
 			double cos_fi = cos((double)fi * M_PI / 180.0);
 
-			Tile* origin = _save->getTile(Position(centerX, centerY, centerZ));
+			Tile* origin = _save->getTile(Position((int)centerX, (int)centerY, (int)centerZ));
 			double l = 0.0;
 			double vx, vy, vz;
 			int tileX, tileY, tileZ;
@@ -2870,61 +2870,126 @@ int TileEngine::distanceSq(const Position& pos1, const Position& pos2, bool cons
  */
 bool TileEngine::psiAttack(BattleAction* action)
 {
-	BattleUnit* victim = _save->getTile(action->target)->getUnit();
+	Log(LOG_INFO) << "TileEngine::psiAttack()";
 
-	double attackStrength = action->actor->getStats()->psiStrength * action->actor->getStats()->psiSkill / 50.0;
-	double defenseStrength = victim->getStats()->psiStrength
-			+ ((victim->getStats()->psiSkill > 0) ? 10.0 + victim->getStats()->psiSkill / 5.0 : 10.0);
-	double d = distance(action->actor->getPosition(), action->target);
-	attackStrength -= d;
-	attackStrength += RNG::generate(0, 55);
+	Log(LOG_INFO) << ". action->target = " << action->target;
 
-	if (action->type == BA_MINDCONTROL)
+	BattleUnit* victim; // kL_begin: check if Victim is valid.
+
+	Tile* t = _save->getTile(action->target);
+	if (t
+		&& t->getUnit())
 	{
-		defenseStrength += 20;
-	}
+		Log(LOG_INFO) << ". . tile EXISTS, so does Unit";
+		victim = t->getUnit();
+		Log(LOG_INFO) << ". . victimID " << victim->getId(); // kL_end.
 
-	action->actor->addPsiExp();
-	if (attackStrength > defenseStrength)
-	{
-		action->actor->addPsiExp();
-		action->actor->addPsiExp();
-		if (action->type == BA_PANIC)
+
+		double attackStrength =
+				(double)action->actor->getStats()->psiStrength
+				* (double)action->actor->getStats()->psiSkill
+				/ 50.0;
+		Log(LOG_INFO) << ". attackStrength " << attackStrength;
+
+		double defenseStrength =
+				(double)victim->getStats()->psiStrength
+				+ ((victim->getStats()->psiSkill > 0)? (10.0 + ((double)victim->getStats()->psiSkill / 5.0)):10.0);
+		Log(LOG_INFO) << ". defenseStrength " << defenseStrength;
+
+		double d = (double)distance(action->actor->getPosition(), action->target);
+		Log(LOG_INFO) << ". d " << d;
+
+		attackStrength -= d;
+		attackStrength += (double)RNG::generate(0, 55);
+		Log(LOG_INFO) << ". attackStrength - d + RNG " << attackStrength;
+
+		if (action->type == BA_MINDCONTROL)
 		{
-			int moraleLoss = (110 - _save->getTile(action->target)->getUnit()->getStats()->bravery);
-			if (moraleLoss > 0)
-				_save->getTile(action->target)->getUnit()->moraleChange(-moraleLoss);
+			defenseStrength += 20.0;
 		}
-		else //if (action->type == BA_MINDCONTROL)
-		{
-			victim->convertToFaction(action->actor->getFaction());
-			calculateFOV(victim->getPosition());
-			calculateUnitLighting();
-			victim->setTimeUnits(victim->getStats()->tu);
-			victim->allowReselect();
-			victim->abortTurn(); // resets unit status to STANDING
 
-			// if all units from either faction are mind controlled - auto-end the mission.
-			if (_save->getSide() == FACTION_PLAYER
-				&& Options::getBool("battleAutoEnd")
-				&& Options::getBool("allowPsionicCapture"))
+		action->actor->addPsiExp();
+		if (attackStrength > defenseStrength)
+		{
+			Log(LOG_INFO) << ". . attack > defense";
+
+			action->actor->addPsiExp();
+			action->actor->addPsiExp();
+			if (action->type == BA_PANIC)
 			{
-				int liveAliens = 0;
-				int liveSoldiers = 0;
+				Log(LOG_INFO) << ". . . inside action->type == BA_PANIC";
 
-				_save->getBattleState()->getBattleGame()->tallyUnits(liveAliens, liveSoldiers, false);
-
-				if (liveAliens == 0 || liveSoldiers == 0)
-				{
-					_save->setSelectedUnit(0);
-					_save->getBattleState()->getBattleGame()->requestEndTurn();
-				}
+				int moraleLoss = (110 - _save->getTile(action->target)->getUnit()->getStats()->bravery);
+				if (moraleLoss > 0)
+					_save->getTile(action->target)->getUnit()->moraleChange(-moraleLoss);
 			}
-		}
+			else //if (action->type == BA_MINDCONTROL)
+			{
+				Log(LOG_INFO) << ". . . inside action->type == BA_MINDCONTROL";
 
-		return true;
+				victim->convertToFaction(action->actor->getFaction());
+				calculateFOV(victim->getPosition());
+				calculateUnitLighting();
+				victim->setTimeUnits(victim->getStats()->tu);
+				victim->allowReselect();
+				victim->abortTurn(); // resets unit status to STANDING
+
+				// if all units from either faction are mind controlled - auto-end the mission.
+				if (_save->getSide() == FACTION_PLAYER
+					&& Options::getBool("battleAutoEnd")
+					&& Options::getBool("allowPsionicCapture"))
+				{
+					Log(LOG_INFO) << ". . . . inside tallyUnits codeblock";
+
+					int liveAliens = 0;
+					int liveSoldiers = 0;
+
+					_save->getBattleState()->getBattleGame()->tallyUnits(liveAliens, liveSoldiers, false);
+
+					if (liveAliens == 0 || liveSoldiers == 0)
+					{
+						_save->setSelectedUnit(0);
+						_save->getBattleState()->getBattleGame()->requestEndTurn();
+					}
+				}
+				Log(LOG_INFO) << ". . . tallyUnits codeblock DONE";
+			}
+
+			Log(LOG_INFO) << "TileEngine::psiAttack() ret TRUE";
+			return true;
+		}
+	}
+	else // kL_begin:
+	{
+		Log(LOG_INFO) << ". victim not found";
+//		return false;
 	}
 
+
+	// kL_note: double check this... because of my extra check, if victim=Valid up at the top.
+	// Can prob. take it out from just above ..... barring the return=TRUE clause there
+
+	// if all units from either faction are mind controlled - auto-end the mission.
+	if (_save->getSide() == FACTION_PLAYER
+		&& Options::getBool("battleAutoEnd")
+		&& Options::getBool("allowPsionicCapture"))
+	{
+		Log(LOG_INFO) << ". . inside tallyUnits codeblock 2";
+
+		int liveAliens = 0;
+		int liveSoldiers = 0;
+
+		_save->getBattleState()->getBattleGame()->tallyUnits(liveAliens, liveSoldiers, false);
+
+		if (liveAliens == 0 || liveSoldiers == 0)
+		{
+			_save->setSelectedUnit(0);
+			_save->getBattleState()->getBattleGame()->requestEndTurn();
+		}
+		Log(LOG_INFO) << ". . tallyUnits codeblock 2 DONE";
+	} // kL_end.
+
+	Log(LOG_INFO) << "TileEngine::psiAttack() ret FALSE";
 	return false;
 }
 

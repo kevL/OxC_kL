@@ -110,7 +110,7 @@ void UnitTurnBState::init()
  */
 void UnitTurnBState::think()
 {
-	Log(LOG_INFO) << "UnitTurnBState::think() unitID = " << _unit->getId();
+	//Log(LOG_INFO) << "UnitTurnBState::think() unitID = " << _unit->getId();
 	bool thisFaction = _unit->getFaction() == _parent->getSave()->getSide();	// kL
 
 //kL	const int tu = _unit->getFaction() == _parent->getSave()->getSide() ? 1 : 0; // one turn is 1 tu unless during reaction fire.
@@ -122,7 +122,7 @@ void UnitTurnBState::think()
 		&& !_action.targeting
 		&& !_parent->checkReservedTU(_unit, tu))
 	{
-		Log(LOG_INFO) << "UnitTurnBState::think(), abortTurn() popState()";
+		//Log(LOG_INFO) << "UnitTurnBState::think(), abortTurn() popState()";
 		_unit->abortTurn();		// -> STATUS_STANDING.
 		_parent->popState();
 
@@ -160,13 +160,13 @@ void UnitTurnBState::think()
 				//Log(LOG_INFO) << ". . newUnitSpotted = TRUE, Abort turn";
 			}
 
-			Log(LOG_INFO) << "UnitTurnBState::think(), abortTurn()";
+			//Log(LOG_INFO) << "UnitTurnBState::think(), abortTurn()";
 			_unit->abortTurn();
 		}
 
 		if (_unit->getStatus() == STATUS_STANDING)
 		{
-			Log(LOG_INFO) << "UnitTurnBState::think(), popState()";
+			//Log(LOG_INFO) << "UnitTurnBState::think(), popState()";
 			_parent->popState();
 		}
 	}
@@ -174,12 +174,12 @@ void UnitTurnBState::think()
 	{
 		_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
 
-		Log(LOG_INFO) << "UnitTurnBState::think(), abortTurn() popState() 2";
+		//Log(LOG_INFO) << "UnitTurnBState::think(), abortTurn() popState() 2";
 		_unit->abortTurn();
 		_parent->popState();
 	}
 
-	Log(LOG_INFO) << "UnitTurnBState::think() EXIT";
+	//Log(LOG_INFO) << "UnitTurnBState::think() EXIT";
 }
 
 /**

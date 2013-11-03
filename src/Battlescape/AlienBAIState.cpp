@@ -43,7 +43,7 @@
 namespace OpenXcom
 {
 
-bool const kL_bDebug = true;
+//bool const kL_bDebug = true;
 
 /**
  * Sets up a BattleAIState.
@@ -72,7 +72,7 @@ AlienBAIState::AlienBAIState(SavedBattleGame* save, BattleUnit* unit, Node* node
 		_fromNode(node),
 		_toNode(0)
 {
-	if (kL_bDebug) Log(LOG_INFO) << "Create AlienBAIState";
+	//Log(LOG_INFO) << "Create AlienBAIState";
 
 	_traceAI		= _save->getTraceSetting();
 
@@ -89,7 +89,7 @@ AlienBAIState::AlienBAIState(SavedBattleGame* save, BattleUnit* unit, Node* node
  */
 AlienBAIState::~AlienBAIState()
 {
-	if (kL_bDebug) Log(LOG_INFO) << "Delete AlienBAIState";
+	//Log(LOG_INFO) << "Delete AlienBAIState";
 
 	delete _escapeAction;
 	delete _ambushAction;
@@ -149,7 +149,7 @@ YAML::Node AlienBAIState::save() const
  */
 void AlienBAIState::enter()
 {
-	if (kL_bDebug) Log(LOG_INFO) << "AlienBAIState::enter()";
+	//Log(LOG_INFO) << "AlienBAIState::enter()";
 	// ROOOAARR !
 }
 
@@ -159,7 +159,7 @@ void AlienBAIState::enter()
  */
 void AlienBAIState::exit()
 {
-	if (kL_bDebug) Log(LOG_INFO) << "AlienBAIState::exit()";
+	//Log(LOG_INFO) << "AlienBAIState::exit()";
 }
 
 /**
@@ -217,10 +217,10 @@ void AlienBAIState::think(BattleAction* action)
 		Log(LOG_INFO) << "Currently using " << AIMode << " behaviour";
 	}
 
-	if (kL_bDebug) Log(LOG_INFO) << ". . pos 1";
+	//Log(LOG_INFO) << ". . pos 1";
 	if (action->weapon)
 	{
-		if (kL_bDebug) Log(LOG_INFO) << ". . has MainHandWeapon.";
+		//Log(LOG_INFO) << ". . has MainHandWeapon.";
 
 		if (action->weapon->getRules()->getBattleType() == BT_MELEE)
 			_melee = true;
@@ -233,41 +233,41 @@ void AlienBAIState::think(BattleAction* action)
 			_blaster = true;
 	}
 
-	if (kL_bDebug) Log(LOG_INFO) << ". . pos 2";
+	//Log(LOG_INFO) << ". . pos 2";
 	if (_spottingEnemies
 		&& !_escapeTUs)
 	{
 		setupEscape();
 	}
 
-	if (kL_bDebug) Log(LOG_INFO) << ". . pos 3";
+	//Log(LOG_INFO) << ". . pos 3";
 	if (_knownEnemies
 		&& !_melee
 		&& !_ambushTUs)
 	{
-		if (kL_bDebug) Log(LOG_INFO) << ". . . . setupAmbush()";
+		//Log(LOG_INFO) << ". . . . setupAmbush()";
 		setupAmbush();
-		if (kL_bDebug) Log(LOG_INFO) << ". . . . setupAmbush() DONE";
+		//Log(LOG_INFO) << ". . . . setupAmbush() DONE";
 	}
 
-	if (kL_bDebug) Log(LOG_INFO) << ". . . . setupAttack()";
+	//Log(LOG_INFO) << ". . . . setupAttack()";
 	setupAttack(); // <- crash *was* here.
-	if (kL_bDebug) Log(LOG_INFO) << ". . . . setupAttack() DONE, setupPatrol()";
+	//Log(LOG_INFO) << ". . . . setupAttack() DONE, setupPatrol()";
 	setupPatrol();
-	if (kL_bDebug) Log(LOG_INFO) << ". . . . setupPatrol() DONE";
+	//Log(LOG_INFO) << ". . . . setupPatrol() DONE";
 
-	if (kL_bDebug) Log(LOG_INFO) << ". . pos 4";
+	//Log(LOG_INFO) << ". . pos 4";
 	if (_psiAction->type != BA_NONE
-		&& !_didPsi)
+		&& !_didPsi) // <- new crash in here.
 	{
-		if (kL_bDebug) Log(LOG_INFO) << ". . . inside Psi";
+		//Log(LOG_INFO) << ". . . inside Psi";
 		_didPsi = true;
 
 		action->type = _psiAction->type;
 		action->target = _psiAction->target;
 		action->number -= 1;
 
-		Log(LOG_INFO) << "AlienBAIState::think() EXIT, Psi";
+		//Log(LOG_INFO) << "AlienBAIState::think() EXIT, Psi";
 		return;
 	}
 	else
@@ -277,7 +277,7 @@ void AlienBAIState::think(BattleAction* action)
 
 	bool evaluate = false;
 
-	if (kL_bDebug) Log(LOG_INFO) << ". . pos 5";
+	//Log(LOG_INFO) << ". . pos 5";
 	if (_AIMode == AI_ESCAPE)
 	{
 		if (!_spottingEnemies
@@ -306,7 +306,7 @@ void AlienBAIState::think(BattleAction* action)
 		}
 	}
 
-	if (kL_bDebug) Log(LOG_INFO) << ". . pos 6";
+	//Log(LOG_INFO) << ". . pos 6";
 	if (_AIMode == AI_COMBAT)
 	{
 		if (_attackAction->type == BA_RETHINK)
@@ -328,7 +328,7 @@ void AlienBAIState::think(BattleAction* action)
 		evaluate = true;
 	}
 
-	if (kL_bDebug) Log(LOG_INFO) << ". . pos 7";
+	//Log(LOG_INFO) << ". . pos 7";
 	if (evaluate)
 	{
 		evaluateAIMode();
@@ -356,11 +356,11 @@ void AlienBAIState::think(BattleAction* action)
 		}
 	}
 
-	if (kL_bDebug) Log(LOG_INFO) << ". . pos 8";
+	//Log(LOG_INFO) << ". . pos 8";
 	switch (_AIMode)
 	{
 		case AI_ESCAPE:
-			if (kL_bDebug) Log(LOG_INFO) << ". . . . AI_ESCAPE";
+			Log(LOG_INFO) << ". . . . AI_ESCAPE";
 			action->type = _escapeAction->type;
 			action->target = _escapeAction->target;
 			action->finalAction = true;			// end this unit's turn.
@@ -370,12 +370,12 @@ void AlienBAIState::think(BattleAction* action)
 			_save->getBattleState()->getBattleGame()->setTUReserved(BA_NONE, false);
 		break;
 		case AI_PATROL:
-			if (kL_bDebug) Log(LOG_INFO) << ". . . . AI_PATROL";
+			Log(LOG_INFO) << ". . . . AI_PATROL";
 			action->type = _patrolAction->type;
 			action->target = _patrolAction->target;
 		break;
 		case AI_COMBAT:
-			if (kL_bDebug) Log(LOG_INFO) << ". . . . AI_COMBAT";
+			Log(LOG_INFO) << ". . . . AI_COMBAT";
 			action->type = _attackAction->type;
 			action->target = _attackAction->target;
 			action->weapon = _attackAction->weapon; // this may have changed to a grenade.
@@ -403,7 +403,7 @@ void AlienBAIState::think(BattleAction* action)
 			}
 		break;
 		case AI_AMBUSH:
-			if (kL_bDebug) Log(LOG_INFO) << ". . . . AI_AMBUSH";
+			Log(LOG_INFO) << ". . . . AI_AMBUSH";
 			action->type = _ambushAction->type;
 			action->target = _ambushAction->target;
 			action->finalFacing = _ambushAction->finalFacing;							// face where we think our target will appear.
@@ -415,7 +415,7 @@ void AlienBAIState::think(BattleAction* action)
 		break;
 	}
 
-	if (kL_bDebug) Log(LOG_INFO) << ". . pos 9";
+	//Log(LOG_INFO) << ". . pos 9";
 	if (action->type == BA_WALK)
 	{
 		if (action->target != _unit->getPosition()) // if we're moving, we'll have to re-evaluate our escape/ambush position.
@@ -429,7 +429,7 @@ void AlienBAIState::think(BattleAction* action)
 		}
 	}
 
-	Log(LOG_INFO) << "AlienBAIState::think() EXIT";
+	//Log(LOG_INFO) << "AlienBAIState::think() EXIT";
 }
 
 /**
@@ -757,53 +757,57 @@ void AlienBAIState::setupAmbush()
  */
 void AlienBAIState::setupAttack()
 {
-	if (kL_bDebug) Log(LOG_INFO) << "AlienBAIState::setupAttack()";
+	Log(LOG_INFO) << "AlienBAIState::setupAttack()";
 
 	_attackAction->type = BA_RETHINK;
 
 	// if enemies are known to us but not necessarily visible, we can attack them with a blaster launcher or psi.
 	if (_knownEnemies)
 	{
-		if (_unit->getStats()->psiSkill && psiAction())
+		if (_unit->getStats()->psiSkill
+			&& psiAction()
+			&& !_didPsi)	// kL, also checked in AlienBAIState::psiAction().
 		{
+			//Log(LOG_INFO) << "do Psi attack";
 			// at this point we can save some time with other calculations - the unit WILL make a psionic attack this turn.
 			return;
 		}
 
 		if (_blaster)
 		{
+			//Log(LOG_INFO) << "do Blaster launch";
 			wayPointAction();
 		}
 	}
 
 	// if we CAN see someone, that makes them a viable target for "regular" attacks.
-	if (kL_bDebug) Log(LOG_INFO) << ". . selectNearestTarget()";
+	//Log(LOG_INFO) << ". . selectNearestTarget()";
 	if (selectNearestTarget())
 	{
-		if (kL_bDebug) Log(LOG_INFO) << ". . . . selectNearestTarget()";
+		//Log(LOG_INFO) << ". . . . selectNearestTarget()";
 
 		if (_unit->getGrenadeFromBelt())
 		{
-			if (kL_bDebug) Log(LOG_INFO) << ". . . . . . grenadeAction()";
+			//Log(LOG_INFO) << ". . . . . . grenadeAction()";
 			grenadeAction();
-			if (kL_bDebug) Log(LOG_INFO) << ". . . . . . grenadeAction() DONE";
+			//Log(LOG_INFO) << ". . . . . . grenadeAction() DONE";
 		}
 
 		if (_melee)
 		{
-			if (kL_bDebug) Log(LOG_INFO) << ". . . . . . meleeAction()";
+			//Log(LOG_INFO) << ". . . . . . meleeAction()";
 			meleeAction();
-			if (kL_bDebug) Log(LOG_INFO) << ". . . . . . meleeAction() DONE";
+			//Log(LOG_INFO) << ". . . . . . meleeAction() DONE";
 		}
 
 		if (_rifle)
 		{
-			if (kL_bDebug) Log(LOG_INFO) << ". . . . . . projectileAction()";
+			//Log(LOG_INFO) << ". . . . . . projectileAction()";
 			projectileAction();
-			if (kL_bDebug) Log(LOG_INFO) << ". . . . . . projectileAction() DONE";
+			//Log(LOG_INFO) << ". . . . . . projectileAction() DONE";
 		}
 	}
-	if (kL_bDebug) Log(LOG_INFO) << ". . selectNearestTarget() DONE";
+	//Log(LOG_INFO) << ". . selectNearestTarget() DONE";
 
 	if (_attackAction->type != BA_RETHINK)
 	{
@@ -839,7 +843,7 @@ void AlienBAIState::setupAttack()
 	{
 		Log(LOG_INFO) << "Attack estimation failed";
 	}
-	if (kL_bDebug) Log(LOG_INFO) << "AlienBAIState::setupAttack() EXIT";
+	//Log(LOG_INFO) << "AlienBAIState::setupAttack() EXIT";
 }
 
 /**
@@ -2014,6 +2018,8 @@ bool AlienBAIState::psiAction()
 	if (_unit->getOriginalFaction() != FACTION_PLAYER	// don't let mind controlled soldiers mind control other soldiers.
 		&& _unit->getTimeUnits() > _escapeTUs + 25		// and we have the required 25 TUs and can still make it to cover
 		&& !_didPsi)									// and we didn't already do a psi action this round
+		// kL_note: put prior check into AlienBAIState::setupAttack().
+		// kL_note: might want to pseudo-randomize things like >_escapeTUs+25 ...
 	{
 		float psiAttackStrength = (float)_unit->getStats()->psiSkill * (float)_unit->getStats()->psiStrength / 50.f;
 		float chanceToAttack = 0.f;
@@ -2047,7 +2053,7 @@ bool AlienBAIState::psiAction()
 
 		if (!_aggroTarget || iAttack <= 0)
 		{
-			Log(LOG_INFO) << "AlienBAIState::psiAction() EXIT 1, false";
+			//Log(LOG_INFO) << "AlienBAIState::psiAction() EXIT 1, false";
 			return false;
 		}
 
@@ -2057,13 +2063,13 @@ bool AlienBAIState::psiAction()
 		{
 			if (_attackAction->weapon->getAmmoItem()->getRules()->getPower() > iAttack)
 			{
-				Log(LOG_INFO) << "AlienBAIState::psiAction() EXIT 2, false";
+				//Log(LOG_INFO) << "AlienBAIState::psiAction() EXIT 2, false";
 				return false;
 			}
 		}
 		else if (RNG::generate(35, 155) > iAttack)
 		{
-			Log(LOG_INFO) << "AlienBAIState::psiAction() EXIT 3, false";
+			//Log(LOG_INFO) << "AlienBAIState::psiAction() EXIT 3, false";
 			return false;
 		}
 
@@ -2101,7 +2107,7 @@ bool AlienBAIState::psiAction()
 				_psiAction->type = BA_MINDCONTROL;
 				_psiAction->target = _aggroTarget->getPosition();
 
-				Log(LOG_INFO) << "AlienBAIState::psiAction() EXIT 1, true";
+				//Log(LOG_INFO) << "AlienBAIState::psiAction() EXIT 1, true";
 				return true;
 			}
 		}
@@ -2109,11 +2115,11 @@ bool AlienBAIState::psiAction()
 		_psiAction->type = BA_PANIC;
 		_psiAction->target = _aggroTarget->getPosition();
 
-		Log(LOG_INFO) << "AlienBAIState::psiAction() EXIT 2, true";
+		//Log(LOG_INFO) << "AlienBAIState::psiAction() EXIT 2, true";
 		return true;
 	}
 
-	Log(LOG_INFO) << "AlienBAIState::psiAction() EXIT 4, false";
+	//Log(LOG_INFO) << "AlienBAIState::psiAction() EXIT 4, false";
 	return false;
 }
 

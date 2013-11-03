@@ -86,6 +86,8 @@ struct BattleAction
 			type(BA_NONE),
 			actor(0),
 			weapon(0),
+//			target(0, 0, 0),	// kL
+//waypoints
 			TU(0),
 			targeting(false),
 			value(0),
@@ -135,7 +137,8 @@ private:
 
 	public:
 		/// Creates the BattlescapeGame state.
-		BattlescapeGame(SavedBattleGame* save,
+		BattlescapeGame(
+				SavedBattleGame* save,
 				BattlescapeState* parentState);
 		/// Cleans up the BattlescapeGame state.
 		~BattlescapeGame();
@@ -161,7 +164,8 @@ private:
 		/// Sets state think interval.
 		void setStateInterval(Uint32 interval);
 		/// Checks for casualties in battle.
-		void checkForCasualties(BattleItem* murderweapon,
+		void checkForCasualties(
+				BattleItem* murderweapon,
 				BattleUnit* murderer,
 				bool hiddenExplosion = false,
 				bool terrainExplosion = false);

@@ -37,13 +37,13 @@ namespace OpenXcom
 /// How many bytes various fields use in a serialized tile. See header.
 Tile::SerializationKey Tile::serializationKey =
 {
-	4, // index
-	2, // _mapDataSetID, four of these
-	2, // _mapDataID, four of these
-	1, // _fire
-	1, // _smoke
+	4,	// index
+	2,	// _mapDataSetID, four of these
+	2,	// _mapDataID, four of these
+	1,	// _fire
+	1,	// _smoke
 	1,	// one 8-bit bool field
-	4 + 2*4 + 2*4 + 1 + 1 + 1 // total bytes to save one tile
+	4 + (2 * 4) + (2 * 4) + 1 + 1 + 1	// total bytes to save one tile
 };
 
 /**
@@ -104,16 +104,20 @@ void Tile::load(const YAML::Node& node)
 		_mapDataID[i] = node["mapDataID"][i].as<int>(_mapDataID[i]);
 		_mapDataSetID[i] = node["mapDataSetID"][i].as<int>(_mapDataSetID[i]);
 	}
+
 	_fire = node["fire"].as<int>(_fire);
 	_smoke = node["smoke"].as<int>(_smoke);
+
 	for (int i = 0; i < 3; i++)
 	{
 		_discovered[i] = node["discovered"][i].as<bool>();
 	}
+
 	if (node["openDoorWest"])
 	{
 		_currentFrame[1] = 7;
 	}
+
 	if (node["openDoorNorth"])
 	{
 		_currentFrame[2] = 7;
@@ -124,7 +128,7 @@ void Tile::load(const YAML::Node& node)
  * Load the tile from binary.
  * @param buffer pointer to buffer.
  */
-void Tile::loadBinary(Uint8 *buffer, Tile::SerializationKey& serKey)
+void Tile::loadBinary(Uint8* buffer, Tile::SerializationKey& serKey)
 {
 	_mapDataID[0] = unserializeInt(&buffer, serKey._mapDataID);
 	_mapDataID[1] = unserializeInt(&buffer, serKey._mapDataID);
@@ -817,7 +821,7 @@ void Tile::prepareNewTurn()
 					_unit->toggleFireDamage();
 					_unit->damage(Position(0, 0, 0), _smoke, DT_IN, true); // _smoke becomes our damage value
 
-					if (RNG::percent(40 * _unit->getArmor()->getDamageModifier(DT_IN))) // try to set the unit on fire.
+					if (RNG::percent((int)(40.f * _unit->getArmor()->getDamageModifier(DT_IN)))) // try to set the unit on fire.
 					{
 						int burnTime = RNG::generate(0, int(5 * _unit->getArmor()->getDamageModifier(DT_IN)));
 						if (_unit->getFire() < burnTime)

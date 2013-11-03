@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_TILE_H
 #define OPENXCOM_TILE_H
 
@@ -26,6 +27,7 @@
 #include "BattleUnit.h"
 
 #include <SDL_types.h> // for Uint8
+
 
 namespace OpenXcom
 {
@@ -44,7 +46,7 @@ class Tile
 {
 protected:
 	static const int LIGHTLAYERS = 3;
-	MapData *_objects[4];
+	MapData* _objects[4];
 	int _mapDataID[4];
 	int _mapDataSetID[4];
 	int _currentFrame[4];
@@ -54,8 +56,8 @@ protected:
 	int _fire;
 	int _explosive;
 	Position _pos;
-	BattleUnit *_unit;
-	std::vector<BattleItem *> _inventory;
+	BattleUnit* _unit;
+	std::vector<BattleItem*> _inventory;
 	int _animationOffset;
 	int _markerColor;
 	int _visible;
@@ -84,12 +86,12 @@ protected:
 		~Tile();
 
 		/// Load the tile from yaml
-		void load(const YAML::Node &node);
+		void load(const YAML::Node& node);
 		/// Saves the tile to yaml
 		YAML::Node save() const;
 
 		/// Load the tile from binary buffer in memory
-		void loadBinary(Uint8 *buffer, Tile::SerializationKey& serializationKey);
+		void loadBinary(Uint8* buffer, Tile::SerializationKey& serializationKey);
 		/// Saves the tile to binary
 		void saveBinary(Uint8** buffer) const;
 
@@ -98,21 +100,21 @@ protected:
 		 * @param part the part 0-3.
 		 * @return pointer to mapdata
 		 */
-		MapData *getMapData(int part) const
+		MapData* getMapData(int part) const
 		{
 			return _objects[part];
 		}
 
 		/// Sets the pointer to the mapdata for a specific part of the tile
-		void setMapData(MapData *dat, int mapDataID, int mapDataSetID, int part);
+		void setMapData(MapData* dat, int mapDataID, int mapDataSetID, int part);
 		/// Gets the IDs to the mapdata for a specific part of the tile
-		void getMapData(int *mapDataID, int *mapDataSetID, int part) const;
+		void getMapData(int* mapDataID, int* mapDataSetID, int part) const;
 		/// Gets whether this tile has no objects
 		bool isVoid() const;
 		/// Get the TU cost to walk over a certain part of the tile.
 		int getTUCost(int part, MovementType movementType) const;
 		/// Checks if this tile has a floor.
-		bool hasNoFloor(Tile *tileBelow) const;
+		bool hasNoFloor(Tile* tileBelow) const;
 		/// Checks if this tile is a big wall.
 		bool isBigWall() const;
 		/// Get terrain level.
@@ -128,9 +130,9 @@ protected:
 		}
 
 		/// Gets the floor object footstep sound.
-		int getFootstepSound(Tile *tileBelow) const;
+		int getFootstepSound(Tile* tileBelow) const;
 		/// Open a door, returns the ID, 0(normal), 1(ufo) or -1 if no door opened.
-		int openDoor(int part, BattleUnit *Unit = 0, bool debug = false);
+		int openDoor(int part, BattleUnit* Unit = 0, bool debug = false);
 
 		/**
 		 * Check if the ufo door is open or opening. Used for visibility/light blocking checks.
@@ -166,17 +168,19 @@ protected:
 		/// Animated the tile parts.
 		void animate();
 		/// Get object sprites.
-		Surface *getSprite(int part) const;
+		Surface* getSprite(int part) const;
 		/// Set a unit on this tile.
-		void setUnit(BattleUnit *unit, Tile *tileBelow = 0);
+		void setUnit(BattleUnit* unit, Tile* tileBelow = 0);
+
 		/**
 		 * Get the (alive) unit on this tile.
 		 * @return BattleUnit.
 		 */
-		BattleUnit *getUnit() const
+		BattleUnit* getUnit() const
 		{
 			return _unit;
 		}
+
 		/// Set fire, does not increment overlaps.
 		void setFire(int fire);
 		/// Get fire.
@@ -196,15 +200,15 @@ protected:
 		/// Get fire and smoke animation offset.
 		int getAnimationOffset() const;
 		/// Add item
-		void addItem(BattleItem *item, RuleInventory *ground);
+		void addItem(BattleItem* item, RuleInventory* ground);
 		/// Remove item
-		void removeItem(BattleItem *item);
+		void removeItem(BattleItem* item);
 		/// Get top-most item
 		int getTopItemSprite();
 		/// New turn preparations.
 		void prepareNewTurn();
 		/// Get inventory on this tile.
-		std::vector<BattleItem *> *getInventory();
+		std::vector<BattleItem*>* getInventory();
 		/// Set the tile marker color.
 		void setMarkerColor(int color);
 		/// Get the tile marker color.
