@@ -711,6 +711,7 @@ void AlienBAIState::setupAmbush()
 							- _save->getTile(_ambushAction->target)->getTerrainLevel() - 4);
 
 			Position currentPos = _aggroTarget->getPosition();
+			_save->getPathfinding()->setUnit(_aggroTarget);
 			Position nextPos;
 
 			size_t tries = path.size();
