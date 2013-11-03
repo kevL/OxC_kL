@@ -1452,7 +1452,7 @@ void GeoscapeState::time30Minutes()
 //	Log(LOG_INFO) << ". . decreased mission countdowns";
 
 	// Remove finished missions
-	for (std::vector<AlienMission* >::iterator am = _game->getSavedGame()->getAlienMissions().begin(); am != _game->getSavedGame()->getAlienMissions().end(); )
+	for (std::vector<AlienMission*>::iterator am = _game->getSavedGame()->getAlienMissions().begin(); am != _game->getSavedGame()->getAlienMissions().end(); )
 	{
 		if ((*am)->isOver())
 		{
@@ -1471,9 +1471,9 @@ void GeoscapeState::time30Minutes()
 //	Log(LOG_INFO) << ". . handled crashed UFO expirations";
 
 	// Handle craft maintenance and alien base detection
-	for (std::vector<Base* >::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
+	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
 	{
-		for (std::vector<Craft* >::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); ++j)
+		for (std::vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); ++j)
 		{
 			if ((*j)->getStatus() == "STR_REFUELLING")
 			{
@@ -1510,7 +1510,7 @@ void GeoscapeState::time30Minutes()
 //	Log(LOG_INFO) << ". . handled craft maintenance & alien base detection";
 
 	// Handle UFO detection and give aliens points
-	for (std::vector<Ufo* >::iterator u = _game->getSavedGame()->getUfos()->begin(); u != _game->getSavedGame()->getUfos()->end(); ++u)
+	for (std::vector<Ufo*>::iterator u = _game->getSavedGame()->getUfos()->begin(); u != _game->getSavedGame()->getUfos()->end(); ++u)
 	{
 //		Log(LOG_INFO) << ". . . . for " << *u;
 		int points = 0;
@@ -1524,7 +1524,7 @@ void GeoscapeState::time30Minutes()
 //				Log(LOG_INFO) << ". . . . . . ufo is Flying";
 
 				// Get area
-				for (std::vector<Region* >::iterator k = _game->getSavedGame()->getRegions()->begin(); k != _game->getSavedGame()->getRegions()->end(); ++k)
+				for (std::vector<Region*>::iterator k = _game->getSavedGame()->getRegions()->begin(); k != _game->getSavedGame()->getRegions()->end(); ++k)
 				{
 					if ((*k)->getRules()->insideRegion((*u)->getLongitude(), (*u)->getLatitude()))
 					{
@@ -1536,7 +1536,7 @@ void GeoscapeState::time30Minutes()
 //				Log(LOG_INFO) << ". . . . . . get Area done";
 
 				// Get country
-				for (std::vector<Country* >::iterator k = _game->getSavedGame()->getCountries()->begin(); k != _game->getSavedGame()->getCountries()->end(); ++k)
+				for (std::vector<Country*>::iterator k = _game->getSavedGame()->getCountries()->begin(); k != _game->getSavedGame()->getCountries()->end(); ++k)
 				{
 					if ((*k)->getRules()->insideCountry((*u)->getLongitude(), (*u)->getLatitude()))
 					{
@@ -1554,7 +1554,7 @@ void GeoscapeState::time30Minutes()
 					for (std::vector<Base*>::iterator
 							b = _game->getSavedGame()->getBases()->begin();
 							b != _game->getSavedGame()->getBases()->end()
-								&& !detected;
+								&& !hyperdet;
 							++b)
 					{
 						switch ((*b)->detect(*u))
@@ -1593,12 +1593,13 @@ void GeoscapeState::time30Minutes()
 				}
 				else // ufo is already detected
 				{
+					bool hyperdet = false; // (*u)->getHyperDetected();
 					bool detected = false;
 
 					for (std::vector<Base*>::iterator
 							b = _game->getSavedGame()->getBases()->begin();
 							b != _game->getSavedGame()->getBases()->end()
-								&& !detected;
+								&& !hyperdet;
 							++b)
 					{
 						double insideRange = (*b)->insideRadarRange(*u);
@@ -1609,6 +1610,7 @@ void GeoscapeState::time30Minutes()
 							if (insideRange < -1.0)
 							{
 								(*u)->setHyperDetected(true);
+								hyperdet = true;
 							}
 						}
 

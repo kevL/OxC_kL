@@ -121,8 +121,6 @@ private:
 		}
 		/// Gets the path preview setting.
 		bool isPathPreviewed() const;
-
-//		bool isGravLift() const;	// kL
 };
 
 }

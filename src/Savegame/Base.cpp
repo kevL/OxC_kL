@@ -442,8 +442,8 @@ uint8_t Base::detect(Target* target) const
 				return 0;
 			else
 			{
-				ret = RNG::percent(percent);
-				Log(LOG_INFO) << ". ret = " << ret;
+				ret = (uint8_t)RNG::percent(percent);
+				Log(LOG_INFO) << ". ret = " << (int)ret;
 			}
 		}
 	}
@@ -459,6 +459,8 @@ uint8_t Base::detect(Target* target) const
  */
 double Base::insideRadarRange(Target* target) const
 {
+	double ret = -1.0;
+
 	double targetDistance = getDistance(target) * 3440.0;
 	Log(LOG_INFO) << ". targetDistance = " << targetDistance;
 
@@ -479,14 +481,16 @@ double Base::insideRadarRange(Target* target) const
 					Log(LOG_INFO) << ". . . . ret = hyperWave";
 					return -2.0;
 				}
-
-				Log(LOG_INFO) << ". . . ret = detected";
-				return targetDistance;
+				else
+				{
+					Log(LOG_INFO) << ". . . ret = radar";
+					ret = targetDistance;
+				}
 			}
 		}
 	}
 	
-	return -1.0;
+	return ret;
 }
 
 /**
