@@ -424,6 +424,10 @@ uint8_t Base::detect(Target* target) const
 					percent += (*f)->getRules()->getRadarChance();
 					Log(LOG_INFO) << ". . . percent(base) = " << percent;
 				}
+				else
+				{
+					Log(LOG_INFO) << ". . target out of Range";
+				}
 			}
 		}
 
@@ -443,7 +447,7 @@ uint8_t Base::detect(Target* target) const
 			else
 			{
 				ret = (uint8_t)RNG::percent(percent);
-				Log(LOG_INFO) << ". ret = " << (int)ret;
+				Log(LOG_INFO) << ". detected = " << (int)ret;
 			}
 		}
 	}
@@ -1681,10 +1685,10 @@ unsigned int Base::getDetectionChance() const
 	// a puny Base w/ 4 facilities and 1 shield gets 3%
 	// approximate; and a module != a facility. ( eg, hangar is 4 modules )
 
-	unsigned int uiChance = (unsigned int)(facilities / shields);
-	Log(LOG_INFO) << ". uiChance = " << uiChance;
+	int detchance = (int)(facilities / shields);
+	Log(LOG_INFO) << ". detchance = " << detchance;
 
-	return uiChance;
+	return detchance;
 }
 
 /**
