@@ -795,14 +795,6 @@ void BattlescapeGame::checkForCasualties(BattleItem* murderweapon, BattleUnit* m
 					}
 				}
 			}
-
-			if ((*j)->getSpecialAbility() == SPECAB_RESPAWN)
-			{
-				//Log(LOG_INFO) << ". . still alive, Specab = Respawn... converting unit!";
-
-				(*j)->setSpecialAbility(SPECAB_NONE);
-				convertUnit(*j, (*j)->getSpawnUnit());
-			}
 		}
 		else if ((*j)->getStunlevel() >= (*j)->getHealth()
 			&& (*j)->getStatus() != STATUS_DEAD
@@ -2049,10 +2041,6 @@ BattleUnit* BattlescapeGame::convertUnit(BattleUnit* unit, std::string newType)
 		&& unit->getFaction() == FACTION_PLAYER
 		&& unit->getOriginalFaction() == FACTION_PLAYER)
 	{
-/*kL		std::wstringstream ss;
-		ss << unit->getName(_parentState->getGame()->getLanguage()) << L'\n'
-				<< _parentState->getGame()->getLanguage()->getString("STR_HAS_BEEN_KILLED", unit->getGender());
-		_parentState->getGame()->pushState(new InfoboxState(_parentState->getGame(), ss.str())); */
 		_parentState->getGame()->pushState(new InfoboxState(_parentState->getGame(),
 				_parentState->getGame()->getLanguage()->getString("STR_HAS_BEEN_KILLED", unit->getGender())
 				.arg(unit->getName(_parentState->getGame()->getLanguage()))));

@@ -337,8 +337,7 @@ int Tile::openDoor(int part, BattleUnit *unit, bool debug)
 	if (_objects[part]->isDoor())
 	{
 		if (unit
-			&& unit->getTimeUnits() < _objects[part]->getTUCost(unit->getArmor()->getMovementType())
-			&& !debug)
+			&& unit->getTimeUnits() < _objects[part]->getTUCost(unit->getArmor()->getMovementType()))
 		{
 			return 4;
 		}
@@ -354,8 +353,7 @@ int Tile::openDoor(int part, BattleUnit *unit, bool debug)
 		&& _currentFrame[part] == 0) // ufo door part 0 - door is closed
 	{
 		if (unit
-			&& unit->getTimeUnits() < _objects[part]->getTUCost(unit->getArmor()->getMovementType())
-			&& !debug)
+			&& unit->getTimeUnits() < _objects[part]->getTUCost(unit->getArmor()->getMovementType()))
 		{
 			return 4;
 		}
