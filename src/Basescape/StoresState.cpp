@@ -50,13 +50,13 @@ StoresState::StoresState(Game* game, Base* base)
 {
 	_window			= new Window(this, 320, 200, 0, 0);
 
-	_txtTitle		= new Text(300, 17, 10, 9);
+	_txtTitle		= new Text(300, 17, 10, 8);
 
 	_txtItem		= new Text(142, 9, 16, 25);
 	_txtQuantity	= new Text(88, 9, 178, 25);
 	_txtSpaceUsed	= new Text(74, 9, 270, 25);
 
-	_lstStores		= new TextList(294, 136, 8, 36);
+	_lstStores		= new TextList(286, 136, 16, 36);
 
 	_btnOk			= new TextButton(288, 16, 16, 177);
 
@@ -99,7 +99,7 @@ StoresState::StoresState(Game* game, Base* base)
 	_txtSpaceUsed->setText(tr("STR_VOLUME"));		// kL
 
 	_lstStores->setColor(Palette::blockOffset(13)+10);
-	_lstStores->setColumns(3, 162, 92, 32);
+	_lstStores->setColumns(3, 162, 92, 24);
 	_lstStores->setSelectable(true);
 	_lstStores->setBackground(_window);
 //kL	_lstStores->setMargin(2);
@@ -132,7 +132,7 @@ StoresState::~StoresState()
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void StoresState::btnOkClick(Action* )
+void StoresState::btnOkClick(Action*)
 {
 	_game->popState();
 }

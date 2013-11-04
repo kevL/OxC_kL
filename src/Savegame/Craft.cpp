@@ -84,14 +84,14 @@ Craft::Craft(RuleCraft* rules, Base* base, int id)
  */
 Craft::~Craft()
 {
-	for (std::vector<CraftWeapon* >::iterator i = _weapons.begin(); i != _weapons.end(); ++i)
+	for (std::vector<CraftWeapon*>::iterator i = _weapons.begin(); i != _weapons.end(); ++i)
 	{
 		delete *i;
 	}
 
 	delete _items;
 
-	for (std::vector<Vehicle* >::iterator i = _vehicles.begin(); i != _vehicles.end(); ++i)
+	for (std::vector<Vehicle*>::iterator i = _vehicles.begin(); i != _vehicles.end(); ++i)
 	{
 		delete *i;
 	}
@@ -122,7 +122,7 @@ void Craft::load(const YAML::Node& node, const Ruleset* rule, SavedGame* save)
 		}
 		else if (type == "STR_UFO")
 		{
-			for (std::vector<Ufo* >::iterator i = save->getUfos()->begin(); i != save->getUfos()->end(); ++i)
+			for (std::vector<Ufo*>::iterator i = save->getUfos()->begin(); i != save->getUfos()->end(); ++i)
 			{
 				if ((*i)->getId() == id)
 				{
@@ -133,7 +133,7 @@ void Craft::load(const YAML::Node& node, const Ruleset* rule, SavedGame* save)
 		}
 		else if (type == "STR_WAYPOINT")
 		{
-			for (std::vector<Waypoint* >::iterator i = save->getWaypoints()->begin(); i != save->getWaypoints()->end(); ++i)
+			for (std::vector<Waypoint*>::iterator i = save->getWaypoints()->begin(); i != save->getWaypoints()->end(); ++i)
 			{
 				if ((*i)->getId() == id)
 				{
@@ -144,7 +144,7 @@ void Craft::load(const YAML::Node& node, const Ruleset* rule, SavedGame* save)
 		}
 		else if (type == "STR_TERROR_SITE")
 		{
-			for (std::vector<TerrorSite* >::iterator i = save->getTerrorSites()->begin(); i != save->getTerrorSites()->end(); ++i)
+			for (std::vector<TerrorSite*>::iterator i = save->getTerrorSites()->begin(); i != save->getTerrorSites()->end(); ++i)
 			{
 				if ((*i)->getId() == id)
 				{
@@ -155,7 +155,7 @@ void Craft::load(const YAML::Node& node, const Ruleset* rule, SavedGame* save)
 		}
 		else if (type == "STR_ALIEN_BASE")
 		{
-			for (std::vector<AlienBase* >::iterator i = save->getAlienBases()->begin(); i != save->getAlienBases()->end(); ++i)
+			for (std::vector<AlienBase*>::iterator i = save->getAlienBases()->begin(); i != save->getAlienBases()->end(); ++i)
 			{
 				if ((*i)->getId() == id)
 				{
@@ -214,7 +214,7 @@ YAML::Node Craft::save() const
 	node["fuel"]	= _fuel;
 	node["damage"]	= _damage;
 
-	for (std::vector<CraftWeapon* >::const_iterator i = _weapons.begin(); i != _weapons.end(); ++i)
+	for (std::vector<CraftWeapon*>::const_iterator i = _weapons.begin(); i != _weapons.end(); ++i)
 	{
 		YAML::Node subnode;
 
@@ -232,7 +232,7 @@ YAML::Node Craft::save() const
 
 	node["items"] = _items->save();
 
-	for (std::vector<Vehicle* >::const_iterator i = _vehicles.begin(); i != _vehicles.end(); ++i)
+	for (std::vector<Vehicle*>::const_iterator i = _vehicles.begin(); i != _vehicles.end(); ++i)
 	{
 		node["vehicles"].push_back((*i)->save());
 	}
@@ -382,7 +382,7 @@ void Craft::setStatus(const std::string& status)
  */
 std::string Craft::getAltitude() const
 {
-	Ufo* u = dynamic_cast<Ufo* >(_dest);
+	Ufo* u = dynamic_cast<Ufo*>(_dest);
 
 	if (u
 		&& u->getAltitude() != "STR_GROUND")
@@ -444,7 +444,7 @@ int Craft::getNumWeapons() const
 
 	int total = 0;
 
-	for (std::vector<CraftWeapon* >::const_iterator i = _weapons.begin(); i != _weapons.end(); ++i)
+	for (std::vector<CraftWeapon*>::const_iterator i = _weapons.begin(); i != _weapons.end(); ++i)
 	{
 		if (*i != 0)
 		{
@@ -467,7 +467,7 @@ int Craft::getNumSoldiers() const
 
 	int total = 0;
 
-	for (std::vector<Soldier* >::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); ++i)
+	for (std::vector<Soldier*>::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); ++i)
 	{
 		if ((*i)->getCraft() == this)
 			total++;
@@ -498,7 +498,7 @@ int Craft::getNumVehicles() const
  * Returns the list of weapons currently equipped in the craft.
  * @return Pointer to weapon list.
  */
-std::vector<CraftWeapon* >* Craft::getWeapons()
+std::vector<CraftWeapon*>* Craft::getWeapons()
 {
 	return &_weapons;
 }
@@ -516,7 +516,7 @@ ItemContainer* Craft::getItems()
  * Returns the list of vehicles currently equipped in the craft.
  * @return Pointer to vehicle list.
  */
-std::vector<Vehicle* >* Craft::getVehicles()
+std::vector<Vehicle*>* Craft::getVehicles()
 {
 	return &_vehicles;
 }
@@ -663,7 +663,7 @@ void Craft::think()
 {
 	move();
 
-	if (reachedDestination() && _dest == (Target* )_base)
+	if (reachedDestination() && _dest == (Target*)_base)
 	{
 		setInterceptionOrder(0);
 		checkup();
@@ -681,7 +681,7 @@ void Craft::checkup()
 {
 	int available = 0, full = 0;
 
-	for (std::vector<CraftWeapon* >::iterator i = _weapons.begin(); i != _weapons.end(); ++i)
+	for (std::vector<CraftWeapon*>::iterator i = _weapons.begin(); i != _weapons.end(); ++i)
 	{
 		if (*i == 0) continue;
 
@@ -767,7 +767,7 @@ void Craft::refuel()
 		_status = "STR_READY";
 //		setLowFuel(false);		// kL &redv
 
-		for (std::vector<CraftWeapon* >::iterator i = _weapons.begin(); i != _weapons.end(); ++i)
+		for (std::vector<CraftWeapon*>::iterator i = _weapons.begin(); i != _weapons.end(); ++i)
 		{
 			if (*i && (*i)->isRearming())
 			{
@@ -787,7 +787,7 @@ std::string Craft::rearm()
 {
 	std::string ammo = "";
 
-	for (std::vector<CraftWeapon* >::iterator i = _weapons.begin(); ; ++i)
+	for (std::vector<CraftWeapon*>::iterator i = _weapons.begin(); ; ++i)
 	{
 		if (i == _weapons.end())
 		{
@@ -874,7 +874,7 @@ int Craft::getVehicleCount(const std::string& vehicle) const
 {
 	int total = 0;
 
-	for (std::vector<Vehicle* >::const_iterator i = _vehicles.begin(); i != _vehicles.end(); ++i)
+	for (std::vector<Vehicle*>::const_iterator i = _vehicles.begin(); i != _vehicles.end(); ++i)
 	{
 		if ((*i)->getRules()->getType() == vehicle)
 		{

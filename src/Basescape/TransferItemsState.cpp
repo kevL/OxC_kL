@@ -174,7 +174,7 @@ TransferItemsState::TransferItemsState(Game* game, Base* baseFrom, Base* baseTo)
 	_lstItems->onRightArrowClick((ActionHandler)& TransferItemsState::lstItemsRightArrowClick);
 	_lstItems->onMousePress((ActionHandler)& TransferItemsState::lstItemsMousePress);
 
-	for (std::vector<Soldier* >::iterator i = _baseFrom->getSoldiers()->begin(); i != _baseFrom->getSoldiers()->end(); ++i)
+	for (std::vector<Soldier*>::iterator i = _baseFrom->getSoldiers()->begin(); i != _baseFrom->getSoldiers()->end(); ++i)
 	{
 		if ((*i)->getCraft() == 0)
 		{
@@ -184,7 +184,7 @@ TransferItemsState::TransferItemsState(Game* game, Base* baseFrom, Base* baseTo)
 		}
 	}
 
-	for (std::vector<Craft* >::iterator i = _baseFrom->getCrafts()->begin(); i != _baseFrom->getCrafts()->end(); ++i)
+	for (std::vector<Craft*>::iterator i = _baseFrom->getCrafts()->begin(); i != _baseFrom->getCrafts()->end(); ++i)
 	{
 		if ((*i)->getStatus() != "STR_OUT"
 			|| (_canTransferCraftsWhileAirborne && (*i)->getFuel() >= (*i)->getFuelLimit(_baseTo)))
@@ -231,7 +231,7 @@ TransferItemsState::TransferItemsState(Game* game, Base* baseFrom, Base* baseTo)
 			std::wstring item = tr(*i);
 
 			int tQty = _baseTo->getItems()->getItem(*i); // Returns the quantity of an item in the container.
-			for (std::vector<Transfer* >::const_iterator j = _baseTo->getTransfers()->begin(); j != _baseTo->getTransfers()->end(); ++j)
+			for (std::vector<Transfer*>::const_iterator j = _baseTo->getTransfers()->begin(); j != _baseTo->getTransfers()->end(); ++j)
 			{
 				std::wstring trItem = (*j)->getName(_game->getLanguage());
 				if (item == trItem)
@@ -287,7 +287,7 @@ void TransferItemsState::think()
  * Transfers the selected items.
  * @param action Pointer to an action.
  */
-void TransferItemsState::btnOkClick(Action* )
+void TransferItemsState::btnOkClick(Action*)
 {
 	_game->pushState(new TransferConfirmState(_game, _baseTo, this));
 }
@@ -306,7 +306,7 @@ void TransferItemsState::completeTransfer()
 		{
 			if (i < _soldiers.size()) // Transfer soldiers
 			{
-				for (std::vector<Soldier* >::iterator s = _baseFrom->getSoldiers()->begin(); s != _baseFrom->getSoldiers()->end(); ++s)
+				for (std::vector<Soldier*>::iterator s = _baseFrom->getSoldiers()->begin(); s != _baseFrom->getSoldiers()->end(); ++s)
 				{
 					if (*s == _soldiers[i])
 					{
@@ -330,7 +330,7 @@ void TransferItemsState::completeTransfer()
 				Craft* craft =  _crafts[i - _soldiers.size()];
 
 				// Transfer soldiers inside craft
-				for (std::vector<Soldier* >::iterator s = _baseFrom->getSoldiers()->begin(); s != _baseFrom->getSoldiers()->end();)
+				for (std::vector<Soldier*>::iterator s = _baseFrom->getSoldiers()->begin(); s != _baseFrom->getSoldiers()->end();)
 				{
 					if ((*s)->getCraft() == craft)
 					{
@@ -354,7 +354,7 @@ void TransferItemsState::completeTransfer()
 				}
 
 				// Transfer craft
-				for (std::vector<Craft* >::iterator c = _baseFrom->getCrafts()->begin(); c != _baseFrom->getCrafts()->end(); ++c)
+				for (std::vector<Craft*>::iterator c = _baseFrom->getCrafts()->begin(); c != _baseFrom->getCrafts()->end(); ++c)
 				{
 					if (*c == craft)
 					{
@@ -383,7 +383,7 @@ void TransferItemsState::completeTransfer()
 						}
 
 						// Clear Hangar
-						for (std::vector<BaseFacility* >::iterator f = _baseFrom->getFacilities()->begin(); f != _baseFrom->getFacilities()->end(); ++f)
+						for (std::vector<BaseFacility*>::iterator f = _baseFrom->getFacilities()->begin(); f != _baseFrom->getFacilities()->end(); ++f)
 						{
 							if ((*f)->getCraft() == *c)
 							{
@@ -433,7 +433,7 @@ void TransferItemsState::completeTransfer()
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void TransferItemsState::btnCancelClick(Action* )
+void TransferItemsState::btnCancelClick(Action*)
 {
 	_game->popState();
 	_game->popState();

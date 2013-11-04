@@ -335,7 +335,7 @@ void UnitDieBState::convertUnitToCorpse()
 	// move inventory from unit to the ground for non-large units
 	if (size == 0 && dropItems)
 	{
-		for (std::vector<BattleItem* >::iterator i = _unit->getInventory()->begin(); i != _unit->getInventory()->end(); ++i)
+		for (std::vector<BattleItem*>::iterator i = _unit->getInventory()->begin(); i != _unit->getInventory()->end(); ++i)
 		{
 			_parent->dropItem(_unit->getPosition(), (*i));
 

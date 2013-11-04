@@ -70,9 +70,9 @@ Ufo::Ufo(RuleUfo* rules)
  */
 Ufo::~Ufo()
 {
-	for (std::vector<Target* >::iterator i = _followers.begin(); i != _followers.end();)
+	for (std::vector<Target*>::iterator i = _followers.begin(); i != _followers.end();)
 	{
-		Craft* c = dynamic_cast<Craft* >(*i);
+		Craft* c = dynamic_cast<Craft*>(*i);
 		if (c)
 		{
 			c->returnToBase();
@@ -91,7 +91,7 @@ Ufo::~Ufo()
 
 	if (_dest)
 	{
-		Waypoint* wp = dynamic_cast<Waypoint* >(_dest);
+		Waypoint* wp = dynamic_cast<Waypoint*>(_dest);
 		if (wp != 0)
 		{
 			delete _dest;
@@ -718,7 +718,7 @@ void Ufo::setHyperDetected(bool hyperdetected)
  */
 void Ufo::setDestination(Target* dest)
 {
-	Waypoint* old = dynamic_cast<Waypoint* >(_dest);
+	Waypoint* old = dynamic_cast<Waypoint*>(_dest);
 	MovingTarget::setDestination(dest);
 
 	delete old;

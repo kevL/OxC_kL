@@ -78,7 +78,7 @@ AbortMissionState::AbortMissionState(Game* game, SavedBattleGame* battleGame, Ba
 	}
 
 	// Calculate values
-	for (std::vector<BattleUnit* >::iterator i = _battleGame->getUnits()->begin(); i != _battleGame->getUnits()->end(); ++i)
+	for (std::vector<BattleUnit*>::iterator i = _battleGame->getUnits()->begin(); i != _battleGame->getUnits()->end(); ++i)
 	{
 		if ((*i)->getOriginalFaction() == FACTION_PLAYER
 			&& !(*i)->isOut())
@@ -147,7 +147,7 @@ AbortMissionState::~AbortMissionState()
  * Confirms mission abort.
  * @param action Pointer to an action.
  */
-void AbortMissionState::btnOkClick(Action* )
+void AbortMissionState::btnOkClick(Action*)
 {
 	_game->popState();
 	_battleGame->setAborted(true);
@@ -158,7 +158,7 @@ void AbortMissionState::btnOkClick(Action* )
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void AbortMissionState::btnCancelClick(Action* )
+void AbortMissionState::btnCancelClick(Action*)
 {
 	_game->popState();
 }

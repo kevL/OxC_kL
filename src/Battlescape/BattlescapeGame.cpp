@@ -492,7 +492,7 @@ void BattlescapeGame::endTurn()
 
 	for (int i = 0; i < _save->getMapSizeXYZ(); ++i) // check for hot grenades on the ground
 	{
-		for (std::vector<BattleItem* >::iterator it = _save->getTiles()[i]->getInventory()->begin(); it != _save->getTiles()[i]->getInventory()->end(); )
+		for (std::vector<BattleItem*>::iterator it = _save->getTiles()[i]->getInventory()->begin(); it != _save->getTiles()[i]->getInventory()->end(); )
 		{
 			if ((*it)->getRules()->getBattleType() == BT_GRENADE
 				&& (*it)->getExplodeTurn() == 0) // it's a grenade to explode now
@@ -533,7 +533,7 @@ void BattlescapeGame::endTurn()
 
 	if (_save->getSide() != FACTION_NEUTRAL)
 	{
-		for (std::vector<BattleItem* >::iterator it = _save->getItems()->begin(); it != _save->getItems()->end(); ++it)
+		for (std::vector<BattleItem*>::iterator it = _save->getItems()->begin(); it != _save->getItems()->end(); ++it)
 		{
 			if (((*it)->getRules()->getBattleType() == BT_GRENADE
 					|| (*it)->getRules()->getBattleType() == BT_PROXIMITYGRENADE)
@@ -553,7 +553,7 @@ void BattlescapeGame::endTurn()
 		_health -= _armor->getDamageModifier(DT_IN) * RNG::generate(5, 10);
 		_fire--;
 	} */
-	for (std::vector<BattleUnit* >::iterator j = _save->getUnits()->begin(); j != _save->getUnits()->end(); ++j)
+	for (std::vector<BattleUnit*>::iterator j = _save->getUnits()->begin(); j != _save->getUnits()->end(); ++j)
 	{
 		if (_save->getSide() == (*j)->getFaction())
 		{
@@ -829,7 +829,7 @@ void BattlescapeGame::checkForCasualties(BattleItem* murderweapon, BattleUnit* m
  */
 void BattlescapeGame::showInfoBoxQueue()
 {
-	for (std::vector<InfoboxOKState* >::iterator i = _infoboxQueue.begin(); i != _infoboxQueue.end(); ++i)
+	for (std::vector<InfoboxOKState*>::iterator i = _infoboxQueue.begin(); i != _infoboxQueue.end(); ++i)
 	{
 		_parentState->getGame()->pushState(*i);
 	}
@@ -1424,7 +1424,7 @@ bool BattlescapeGame::checkReservedTU(BattleUnit* bu, int tu, bool justChecking)
  */
 bool BattlescapeGame::handlePanickingPlayer()
 {
-	for (std::vector<BattleUnit* >::iterator j = _save->getUnits()->begin(); j != _save->getUnits()->end(); ++j)
+	for (std::vector<BattleUnit*>::iterator j = _save->getUnits()->begin(); j != _save->getUnits()->end(); ++j)
 	{
 		if ((*j)->getFaction() == FACTION_PLAYER
 			&& (*j)->getOriginalFaction() == FACTION_PLAYER
@@ -1511,7 +1511,7 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* unit)
 				statePushBack(new UnitTurnBState(this, ba));
 			}
 
-			for (std::vector<BattleUnit* >::iterator j = unit->getVisibleUnits()->begin(); j != unit->getVisibleUnits()->end(); ++j)
+			for (std::vector<BattleUnit*>::iterator j = unit->getVisibleUnits()->begin(); j != unit->getVisibleUnits()->end(); ++j)
 			{
 				ba.target = (*j)->getPosition();
 				statePushBack(new UnitTurnBState(this, ba));

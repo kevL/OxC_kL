@@ -132,7 +132,7 @@ private:
 		/// Gets projectile.
 		Projectile* getProjectile() const;
 		/// Gets explosion set.
-		std::set<Explosion* >* getExplosions();
+		std::set<Explosion*>* getExplosions();
 		/// Gets the pointer to the camera.
 		Camera* getCamera();
 		/// Mouse-scrolls the camera.

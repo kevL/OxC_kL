@@ -747,7 +747,7 @@ void DogfightState::animate()
 	}
 
 	// Draw projectiles.
-	for (std::vector<CraftWeaponProjectile* >::iterator it = _projectiles.begin(); it != _projectiles.end(); ++it)
+	for (std::vector<CraftWeaponProjectile*>::iterator it = _projectiles.begin(); it != _projectiles.end(); ++it)
 	{
 		drawProjectile(*it);
 	}
@@ -854,7 +854,7 @@ void DogfightState::move()
 			}
 
 			// don't let the interceptor mystically push or pull its fired projectiles
-			for (std::vector<CraftWeaponProjectile* >::iterator it = _projectiles.begin(); it != _projectiles.end(); ++it)
+			for (std::vector<CraftWeaponProjectile*>::iterator it = _projectiles.begin(); it != _projectiles.end(); ++it)
 			{
 				if ((*it)->getGlobalType() != CWPGT_BEAM
 					&& (*it)->getDirection() == D_UP)
@@ -878,7 +878,7 @@ void DogfightState::move()
 		_txtDistance->setText(ss.str());
 
 		// Move projectiles and check for hits.
-		for (std::vector<CraftWeaponProjectile* >::iterator it = _projectiles.begin(); it != _projectiles.end(); ++it)
+		for (std::vector<CraftWeaponProjectile*>::iterator it = _projectiles.begin(); it != _projectiles.end(); ++it)
 		{
 			CraftWeaponProjectile* p = *it;
 			p->move();
@@ -970,7 +970,7 @@ void DogfightState::move()
 		}
 		
 		// Remove projectiles that hit or missed their target.
-		for (std::vector<CraftWeaponProjectile* >::iterator it = _projectiles.begin(); it != _projectiles.end();)
+		for (std::vector<CraftWeaponProjectile*>::iterator it = _projectiles.begin(); it != _projectiles.end();)
 		{
 			if ((*it)->toBeRemoved() == true
 				|| ((*it)->getMissed() == true && (*it)->getPosition() <= 0))
@@ -1157,7 +1157,7 @@ void DogfightState::move()
 		{
 			if (_ufo->getShotDownByCraftId() == _craft->getId())
 			{
-				for (std::vector<Country* >::iterator country = _game->getSavedGame()->getCountries()->begin(); country != _game->getSavedGame()->getCountries()->end(); ++country)
+				for (std::vector<Country*>::iterator country = _game->getSavedGame()->getCountries()->begin(); country != _game->getSavedGame()->getCountries()->end(); ++country)
 				{
 					if ((*country)->getRules()->insideCountry(_ufo->getLongitude(), _ufo->getLatitude()))
 					{
@@ -1167,7 +1167,7 @@ void DogfightState::move()
 					}
 				}
 
-				for (std::vector<Region* >::iterator region = _game->getSavedGame()->getRegions()->begin(); region != _game->getSavedGame()->getRegions()->end(); ++region)
+				for (std::vector<Region*>::iterator region = _game->getSavedGame()->getRegions()->begin(); region != _game->getSavedGame()->getRegions()->end(); ++region)
 				{
 					if ((*region)->getRules()->insideRegion(_ufo->getLongitude(), _ufo->getLatitude()))
 					{
@@ -1190,7 +1190,7 @@ void DogfightState::move()
 				setStatus("STR_UFO_CRASH_LANDS");
 				_game->getResourcePack()->getSound("GEO.CAT", 10)->play();
 
-				for(std::vector<Country* >::iterator country = _game->getSavedGame()->getCountries()->begin(); country != _game->getSavedGame()->getCountries()->end(); ++country)
+				for(std::vector<Country*>::iterator country = _game->getSavedGame()->getCountries()->begin(); country != _game->getSavedGame()->getCountries()->end(); ++country)
 				{
 					if ((*country)->getRules()->insideCountry(_ufo->getLongitude(), _ufo->getLatitude()))
 					{
@@ -1200,7 +1200,7 @@ void DogfightState::move()
 					}
 				}
 
-				for (std::vector<Region* >::iterator region = _game->getSavedGame()->getRegions()->begin(); region != _game->getSavedGame()->getRegions()->end(); ++region)
+				for (std::vector<Region*>::iterator region = _game->getSavedGame()->getRegions()->begin(); region != _game->getSavedGame()->getRegions()->end(); ++region)
 				{
 					if ((*region)->getRules()->insideRegion(_ufo->getLongitude(), _ufo->getLatitude()))
 					{
@@ -1342,7 +1342,7 @@ void DogfightState::ufoFireWeapon()
 void DogfightState::minimumDistance()
 {
 	int max = 0;
-	for (std::vector<CraftWeapon* >::iterator i = _craft->getWeapons()->begin(); i < _craft->getWeapons()->end(); ++i)
+	for (std::vector<CraftWeapon*>::iterator i = _craft->getWeapons()->begin(); i < _craft->getWeapons()->end(); ++i)
 	{
 		if (*i == 0)
 			continue;
@@ -1370,7 +1370,7 @@ void DogfightState::minimumDistance()
 void DogfightState::maximumDistance()
 {
 	int min = 1000;
-	for (std::vector<CraftWeapon* >::iterator i = _craft->getWeapons()->begin(); i < _craft->getWeapons()->end(); ++i)
+	for (std::vector<CraftWeapon*>::iterator i = _craft->getWeapons()->begin(); i < _craft->getWeapons()->end(); ++i)
 	{
 		if (*i == 0)
 			continue;
@@ -1406,7 +1406,7 @@ void DogfightState::setStatus(const std::string& status)
  * Minimizes the dogfight window.
  * @param action, Pointer to an action.
  */
-void DogfightState::btnMinimizeClick(Action* )
+void DogfightState::btnMinimizeClick(Action*)
 {
 	if (!_ufo->isCrashed()
 		&& !_craft->isDestroyed()
@@ -1452,7 +1452,7 @@ void DogfightState::btnMinimizeClick(Action* )
  * Switches to Standoff mode (maximum range).
  * @param action, Pointer to an action.
  */
-void DogfightState::btnStandoffClick(Action* )
+void DogfightState::btnStandoffClick(Action*)
 {
 	if (!_ufo->isCrashed()
 		&& !_craft->isDestroyed()
@@ -1468,7 +1468,7 @@ void DogfightState::btnStandoffClick(Action* )
  * Switches to Cautious mode (maximum weapon range).
  * @param action, Pointer to an action.
  */
-void DogfightState::btnCautiousClick(Action* )
+void DogfightState::btnCautiousClick(Action*)
 {
 	if (!_ufo->isCrashed()
 		&& !_craft->isDestroyed()
@@ -1498,7 +1498,7 @@ void DogfightState::btnCautiousClick(Action* )
  * Switches to Standard mode (minimum weapon range).
  * @param action, Pointer to an action.
  */
-void DogfightState::btnStandardClick(Action* )
+void DogfightState::btnStandardClick(Action*)
 {
 	if (!_ufo->isCrashed()
 		&& !_craft->isDestroyed()
@@ -1528,7 +1528,7 @@ void DogfightState::btnStandardClick(Action* )
  * Switches to Aggressive mode (minimum range).
  * @param action, Pointer to an action.
  */
-void DogfightState::btnAggressiveClick(Action* )
+void DogfightState::btnAggressiveClick(Action*)
 {
 	if (!_ufo->isCrashed()
 		&& !_craft->isDestroyed()
@@ -1558,7 +1558,7 @@ void DogfightState::btnAggressiveClick(Action* )
  * Disengages from the UFO.
  * @param action, Pointer to an action.
  */
-void DogfightState::btnDisengageClick(Action* )
+void DogfightState::btnDisengageClick(Action*)
 {
 	if (!_ufo->isCrashed()
 		&& !_craft->isDestroyed()
@@ -1576,7 +1576,7 @@ void DogfightState::btnDisengageClick(Action* )
  * Shows a front view of the UFO.
  * @param action, Pointer to an action.
  */
-void DogfightState::btnUfoClick(Action* )
+void DogfightState::btnUfoClick(Action*)
 {
 	_preview->setVisible(true);
 	// Disable all other buttons to prevent misclicks
@@ -1595,7 +1595,7 @@ void DogfightState::btnUfoClick(Action* )
  * Hides the front view of the UFO.
  * @param action, Pointer to an action.
  */
-void DogfightState::previewClick(Action* )
+void DogfightState::previewClick(Action*)
 {
 	_preview->setVisible(false);
 	// Reenable all other buttons to prevent misclicks Lol
@@ -1734,7 +1734,7 @@ void DogfightState::drawProjectile(const CraftWeaponProjectile* p)
 /**
  * Toggles usage of weapon number 1.
  */
-void DogfightState::weapon1Click(Action* )
+void DogfightState::weapon1Click(Action*)
 {
 	_weapon1Enabled = !_weapon1Enabled;
 	recolor(0, _weapon1Enabled);
@@ -1743,7 +1743,7 @@ void DogfightState::weapon1Click(Action* )
 /**
  * Toggles usage of weapon number 2.
  */
-void DogfightState::weapon2Click(Action* )
+void DogfightState::weapon2Click(Action*)
 {
 	_weapon2Enabled = !_weapon2Enabled;
 	recolor(1, _weapon2Enabled);
@@ -1811,7 +1811,7 @@ void DogfightState::setMinimized(const bool minimized)
 /**
  * Maximizes the interception window.
  */
-void DogfightState::btnMinimizedIconClick(Action* )
+void DogfightState::btnMinimizedIconClick(Action*)
 {
 	setMinimized(false);
 	_window->setVisible(true);

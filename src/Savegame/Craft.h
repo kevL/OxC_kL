@@ -51,9 +51,9 @@ class Craft
 		RuleCraft* _rules;
 		Base* _base;
 		int _id, _fuel, _damage, _interceptionOrder;
-		std::vector<CraftWeapon* > _weapons;
+		std::vector<CraftWeapon*> _weapons;
 		ItemContainer* _items;
-		std::vector<Vehicle* > _vehicles;
+		std::vector<Vehicle*> _vehicles;
 		std::string _status;
 		bool _lowFuel;
 		bool _inBattlescape;
@@ -105,11 +105,11 @@ class Craft
 		/// Gets the craft's amount of vehicles.
 		int getNumVehicles() const;
 		/// Gets the craft's weapons.
-		std::vector<CraftWeapon* >* getWeapons();
+		std::vector<CraftWeapon*>* getWeapons();
 		/// Gets the craft's items.
 		ItemContainer* getItems();
 		/// Gets the craft's vehicles.
-		std::vector<Vehicle* >* getVehicles();
+		std::vector<Vehicle*>* getVehicles();
 		/// Gets the craft's amount of fuel.
 		int getFuel() const;
 		/// Sets the craft's amount of fuel.

@@ -68,7 +68,7 @@ private:
 	/// The mission's type ID.
 	std::string _type;
 	/// The race distribution over game time.
-	std::vector<std::pair<unsigned, WeightedOptions* > > _raceDistribution;
+	std::vector<std::pair<unsigned, WeightedOptions*> > _raceDistribution;
 	/// The mission's waves.
 	std::vector<MissionWave> _waves;
 	/// The mission's points

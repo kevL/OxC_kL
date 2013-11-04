@@ -73,7 +73,7 @@ private:
 	Timer* _animTimer, * _gameTimer;
 	SavedBattleGame* _save;
 	Text* _txtDebug, * _txtTooltip;
-	std::vector<State* > _popups;
+	std::vector<State*> _popups;
 	BattlescapeGame* _battleGame;
 	bool firstInit;
 	bool isMouseScrolling;

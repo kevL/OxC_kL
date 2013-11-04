@@ -49,7 +49,7 @@ MovingTarget::~MovingTarget()
 	if (_dest != 0
 		&& !_dest->getFollowers()->empty())
 	{
-		for (std::vector<Target* >::iterator i = _dest->getFollowers()->begin(); i != _dest->getFollowers()->end(); ++i)
+		for (std::vector<Target*>::iterator i = _dest->getFollowers()->begin(); i != _dest->getFollowers()->end(); ++i)
 		{
 			if (*i == this)
 			{
@@ -112,7 +112,7 @@ void MovingTarget::setDestination(Target* dest)
 {
 	if (_dest != 0) // Remove moving target from old destination's followers
 	{
-		for (std::vector<Target* >::iterator i = _dest->getFollowers()->begin(); i != _dest->getFollowers()->end(); ++i)
+		for (std::vector<Target*>::iterator i = _dest->getFollowers()->begin(); i != _dest->getFollowers()->end(); ++i)
 		{
 			if (*i == this)
 			{

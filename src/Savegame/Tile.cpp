@@ -852,7 +852,7 @@ void Tile::prepareNewTurn()
  * Get the inventory on this tile.
  * @return pointer to a vector of battleitems.
  */
-std::vector<BattleItem* >* Tile::getInventory()
+std::vector<BattleItem*>* Tile::getInventory()
 {
 	return &_inventory;
 }

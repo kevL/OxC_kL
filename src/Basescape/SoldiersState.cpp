@@ -184,7 +184,7 @@ void SoldiersState::init()
 	_lstSoldiers->clearList();
 
 	int row = 0;
-	for (std::vector<Soldier* >::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); ++i)
+	for (std::vector<Soldier*>::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); ++i)
 	{
 		_lstSoldiers->addRow(3, (*i)->getName().c_str(), tr((*i)->getRankString()).c_str(), (*i)->getCraftString(_game->getLanguage()).c_str());
 
@@ -201,7 +201,7 @@ void SoldiersState::init()
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void SoldiersState::btnOkClick(Action* )
+void SoldiersState::btnOkClick(Action*)
 {
 	_game->popState();
 }
@@ -210,7 +210,7 @@ void SoldiersState::btnOkClick(Action* )
  * Opens the Psionic Training screen.
  * @param action Pointer to an action.
  */
-void SoldiersState::btnPsiTrainingClick(Action* )
+void SoldiersState::btnPsiTrainingClick(Action*)
 {
 	_game->pushState(new AllocatePsiTrainingState(_game, _base));
 }
@@ -220,7 +220,7 @@ void SoldiersState::btnPsiTrainingClick(Action* )
  * kL. Taken from CraftInfoState.
  * @param action Pointer to an action.
  */
-void SoldiersState::btnArmorClick_Soldier(Action* )
+void SoldiersState::btnArmorClick_Soldier(Action*)
 {
 	_game->pushState(new CraftArmorState(_game, _base, (size_t)0));
 }
@@ -229,7 +229,7 @@ void SoldiersState::btnArmorClick_Soldier(Action* )
  * Opens the Memorial screen.
  * @param action Pointer to an action.
  */
-void SoldiersState::btnMemorialClick(Action* )
+void SoldiersState::btnMemorialClick(Action*)
 {
 	_game->pushState(new SoldierMemorialState(_game));
 }
@@ -239,7 +239,7 @@ void SoldiersState::btnMemorialClick(Action* )
  * Shows the selected soldier's info.
  * @param action Pointer to an action.
  */
-//kL void SoldiersState::lstSoldiersClick(Action* )
+//kL void SoldiersState::lstSoldiersClick(Action*)
 void SoldiersState::lstSoldiersClick(Action* action)		// kL
 {
 	// kL: Taken from CraftSoldiersState::lstSoldiersClick()

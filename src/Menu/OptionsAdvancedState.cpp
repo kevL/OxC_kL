@@ -168,7 +168,7 @@ OptionsAdvancedState::~OptionsAdvancedState()
  * Saves the options.
  * @param action Pointer to an action.
  */
-void OptionsAdvancedState::btnOkClick(Action* )
+void OptionsAdvancedState::btnOkClick(Action*)
 {
 	for (std::vector<std::pair<std::string, bool> >::iterator i = _settingBoolSet.begin(); i != _settingBoolSet.end(); ++i)
 	{
@@ -187,7 +187,7 @@ void OptionsAdvancedState::btnOkClick(Action* )
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void OptionsAdvancedState::btnCancelClick(Action* )
+void OptionsAdvancedState::btnCancelClick(Action*)
 {
 	_game->popState();
 }
@@ -284,7 +284,7 @@ void OptionsAdvancedState::lstOptionsPress(Action* action)
 /**
  *
  */
-void OptionsAdvancedState::lstOptionsMouseOver(Action* )
+void OptionsAdvancedState::lstOptionsMouseOver(Action*)
 {
 	size_t sel = _lstOptions->getSelectedRow();
 	std::ostringstream ss;
@@ -307,7 +307,7 @@ void OptionsAdvancedState::lstOptionsMouseOver(Action* )
 /**
  *
  */
-void OptionsAdvancedState::lstOptionsMouseOut(Action* )
+void OptionsAdvancedState::lstOptionsMouseOut(Action*)
 {
 	_txtDescription->setText(L"");
 }

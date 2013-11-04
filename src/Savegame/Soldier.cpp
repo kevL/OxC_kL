@@ -435,7 +435,7 @@ void Soldier::heal()
  * Returns the list of EquipmentLayoutItems of a soldier.
  * @return Pointer to the EquipmentLayoutItem list.
  */
-std::vector<EquipmentLayoutItem* >* Soldier::getEquipmentLayout()
+std::vector<EquipmentLayoutItem*>* Soldier::getEquipmentLayout()
 {
 	return &_equipmentLayout;
 }
@@ -588,7 +588,7 @@ void Soldier::die(SoldierDeath* death)
 	_recentlyPromoted = false;
 	_recovery = 0;
 
-	for (std::vector<EquipmentLayoutItem* >::iterator i = _equipmentLayout.begin(); i != _equipmentLayout.end(); ++i)
+	for (std::vector<EquipmentLayoutItem*>::iterator i = _equipmentLayout.begin(); i != _equipmentLayout.end(); ++i)
 	{
 		delete *i;
 	}

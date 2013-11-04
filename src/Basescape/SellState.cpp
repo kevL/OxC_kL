@@ -158,7 +158,7 @@ SellState::SellState(Game* game, Base* base)
 	_lstItems->onRightArrowClick((ActionHandler)& SellState::lstItemsRightArrowClick);
 	_lstItems->onMousePress((ActionHandler)& SellState::lstItemsMousePress);
 
-	for (std::vector<Soldier* >::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); ++i)
+	for (std::vector<Soldier*>::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); ++i)
 	{
 		if ((*i)->getCraft() == 0)
 		{
@@ -168,7 +168,7 @@ SellState::SellState(Game* game, Base* base)
 		}
 	}
 
-	for (std::vector<Craft* >::iterator i = _base->getCrafts()->begin(); i != _base->getCrafts()->end(); ++i)
+	for (std::vector<Craft*>::iterator i = _base->getCrafts()->begin(); i != _base->getCrafts()->end(); ++i)
 	{
 		if ((*i)->getStatus() != "STR_OUT")
 		{
@@ -253,7 +253,7 @@ int SellState::getCraftIndex(unsigned selected) const
  * Sells the selected items.
  * @param action Pointer to an action.
  */
-void SellState::btnOkClick(Action* )
+void SellState::btnOkClick(Action*)
 {
 	_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds() + _total);
 
@@ -264,7 +264,7 @@ void SellState::btnOkClick(Action* )
 			switch (getType(i))
 			{
 				case SELL_SOLDIER:
-					for (std::vector<Soldier* >::iterator s = _base->getSoldiers()->begin(); s != _base->getSoldiers()->end(); ++s)
+					for (std::vector<Soldier*>::iterator s = _base->getSoldiers()->begin(); s != _base->getSoldiers()->end(); ++s)
 					{
 						if (*s == _soldiers[i])
 						{
@@ -285,7 +285,7 @@ void SellState::btnOkClick(Action* )
 					Craft* craft = _crafts[getCraftIndex(i)];
 
 					// Remove weapons from craft
-					for (std::vector<CraftWeapon* >::iterator w = craft->getWeapons()->begin(); w != craft->getWeapons()->end(); ++w)
+					for (std::vector<CraftWeapon*>::iterator w = craft->getWeapons()->begin(); w != craft->getWeapons()->end(); ++w)
 					{
 						if (*w != 0)
 						{
@@ -301,7 +301,7 @@ void SellState::btnOkClick(Action* )
 					}
 
 					// Remove soldiers from craft
-					for (std::vector<Soldier* >::iterator s = _base->getSoldiers()->begin(); s != _base->getSoldiers()->end(); ++s)
+					for (std::vector<Soldier*>::iterator s = _base->getSoldiers()->begin(); s != _base->getSoldiers()->end(); ++s)
 					{
 						if ((*s)->getCraft() == craft)
 						{
@@ -310,7 +310,7 @@ void SellState::btnOkClick(Action* )
 					}
 
 					// Clear Hangar
-					for (std::vector<BaseFacility* >::iterator f = _base->getFacilities()->begin(); f != _base->getFacilities()->end(); ++f)
+					for (std::vector<BaseFacility*>::iterator f = _base->getFacilities()->begin(); f != _base->getFacilities()->end(); ++f)
 					{
 						if ((*f)->getCraft() == craft)
 						{
@@ -321,7 +321,7 @@ void SellState::btnOkClick(Action* )
 					}
 
 					// Remove craft
-					for (std::vector<Craft* >::iterator c = _base->getCrafts()->begin(); c != _base->getCrafts()->end(); ++c)
+					for (std::vector<Craft*>::iterator c = _base->getCrafts()->begin(); c != _base->getCrafts()->end(); ++c)
 					{
 						if (*c == craft)
 						{
@@ -353,7 +353,7 @@ void SellState::btnOkClick(Action* )
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void SellState::btnCancelClick(Action* )
+void SellState::btnCancelClick(Action*)
 {
 	_game->popState();
 }

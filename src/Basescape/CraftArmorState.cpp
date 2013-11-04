@@ -119,7 +119,7 @@ CraftArmorState::CraftArmorState(Game* game, Base* base, size_t craft)
 		c = _base->getCrafts()->at(_craft);				// kL
 
 	int row = 0;
-	for (std::vector<Soldier* >::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); ++i)
+	for (std::vector<Soldier*>::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); ++i)
 	{
 //		Log(LOG_INFO) << "CraftArmorState::CraftArmorState() iterate soldiers to createList";
 
@@ -184,7 +184,7 @@ void CraftArmorState::init()
 	// kL_end.
 
 	int row = 0;
-	for (std::vector<Soldier* >::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); ++i)
+	for (std::vector<Soldier*>::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); ++i)
 	{
 		_lstSoldiers->addRow(3, (*i)->getName().c_str(), tr((*i)->getArmor()->getType()).c_str(), (*i)->getCraftString(_game->getLanguage()).c_str());	// kL
 
@@ -217,7 +217,7 @@ void CraftArmorState::init()
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-//kL void CraftArmorState::btnOkClick(Action* )
+//kL void CraftArmorState::btnOkClick(Action*)
 void CraftArmorState::btnOkClick(Action* action)		// kL
 {
 	_game->popState();
@@ -227,7 +227,7 @@ void CraftArmorState::btnOkClick(Action* action)		// kL
  * Shows the Select Armor window.
  * @param action Pointer to an action.
  */
-//kL void CraftArmorState::lstSoldiersClick(Action* )
+//kL void CraftArmorState::lstSoldiersClick(Action*)
 void CraftArmorState::lstSoldiersClick(Action* action)		// kL
 {
 	// kL: Taken from CraftSoldiersState::lstSoldiersClick()

@@ -85,7 +85,7 @@ TargetInfoState::TargetInfoState(Game* game, Target* target)
 	_txtFollowers->setColor(Palette::blockOffset(15)-1);
 	_txtFollowers->setAlign(ALIGN_CENTER);
 	std::wstring s = L"";
-	for (std::vector<Target* >::iterator i = _target->getFollowers()->begin(); i != _target->getFollowers()->end(); ++i)
+	for (std::vector<Target*>::iterator i = _target->getFollowers()->begin(); i != _target->getFollowers()->end(); ++i)
 	{
 		s += (*i)->getName(_game->getLanguage());
 		s += L'\n';
@@ -104,7 +104,7 @@ TargetInfoState::~TargetInfoState()
  * Closes the window.
  * @param action Pointer to an action.
  */
-void TargetInfoState::btnOkClick(Action* )
+void TargetInfoState::btnOkClick(Action*)
 {
 	_game->popState();
 }

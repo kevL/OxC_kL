@@ -79,7 +79,7 @@ PsiTrainingState::PsiTrainingState(Game* game)
 	_txtTitle->setText(tr("STR_PSIONIC_TRAINING"));
 
 	int buttons = 0;
-	for (std::vector<Base* >::const_iterator b = _game->getSavedGame()->getBases()->begin(); b != _game->getSavedGame()->getBases()->end(); ++b)
+	for (std::vector<Base*>::const_iterator b = _game->getSavedGame()->getBases()->begin(); b != _game->getSavedGame()->getBases()->end(); ++b)
 	{
 		if ((*b)->getAvailablePsiLabs())
 		{
@@ -179,7 +179,7 @@ void PsiTrainingState::init()
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void PsiTrainingState::btnOkClick(Action* )
+void PsiTrainingState::btnOkClick(Action*)
 {
 	_game->popState();
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
@@ -188,7 +188,7 @@ void PsiTrainingState::btnOkClick(Action* )
 /**
  *
  */
-void PsiTrainingState::btnBase1Click(Action* )
+void PsiTrainingState::btnBase1Click(Action*)
 {
 	_game->pushState(new AllocatePsiTrainingState(_game, _base1));
 }
@@ -196,7 +196,7 @@ void PsiTrainingState::btnBase1Click(Action* )
 /**
  *
  */
-void PsiTrainingState::btnBase2Click(Action* )
+void PsiTrainingState::btnBase2Click(Action*)
 {
 	_game->pushState(new AllocatePsiTrainingState(_game, _base2));
 }
@@ -204,7 +204,7 @@ void PsiTrainingState::btnBase2Click(Action* )
 /**
  *
  */
-void PsiTrainingState::btnBase3Click(Action* )
+void PsiTrainingState::btnBase3Click(Action*)
 {
 	_game->pushState(new AllocatePsiTrainingState(_game, _base3));
 }
@@ -212,7 +212,7 @@ void PsiTrainingState::btnBase3Click(Action* )
 /**
  *
  */
-void PsiTrainingState::btnBase4Click(Action* )
+void PsiTrainingState::btnBase4Click(Action*)
 {
 	_game->pushState(new AllocatePsiTrainingState(_game, _base4));
 }
@@ -220,7 +220,7 @@ void PsiTrainingState::btnBase4Click(Action* )
 /**
  *
  */
-void PsiTrainingState::btnBase5Click(Action* )
+void PsiTrainingState::btnBase5Click(Action*)
 {
 	_game->pushState(new AllocatePsiTrainingState(_game, _base5));
 }
@@ -228,7 +228,7 @@ void PsiTrainingState::btnBase5Click(Action* )
 /**
  *
  */
-void PsiTrainingState::btnBase6Click(Action* )
+void PsiTrainingState::btnBase6Click(Action*)
 {
 	_game->pushState(new AllocatePsiTrainingState(_game, _base6));
 }
@@ -236,7 +236,7 @@ void PsiTrainingState::btnBase6Click(Action* )
 /**
  *
  */
-void PsiTrainingState::btnBase7Click(Action* )
+void PsiTrainingState::btnBase7Click(Action*)
 {
 	_game->pushState(new AllocatePsiTrainingState(_game, _base7));
 }
@@ -244,7 +244,7 @@ void PsiTrainingState::btnBase7Click(Action* )
 /**
  *
  */
-void PsiTrainingState::btnBase8Click(Action* )
+void PsiTrainingState::btnBase8Click(Action*)
 {
 	_game->pushState(new AllocatePsiTrainingState(_game, _base8));
 }

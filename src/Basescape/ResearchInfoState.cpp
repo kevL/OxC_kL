@@ -218,7 +218,7 @@ void ResearchInfoState::buildUi()
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void ResearchInfoState::btnOkClick(Action* )
+void ResearchInfoState::btnOkClick(Action*)
 {
 	_game->popState();
 }
@@ -228,7 +228,7 @@ void ResearchInfoState::btnOkClick(Action* )
  * research list.
  * @param action Pointer to an action.
  */
-void ResearchInfoState::btnCancelClick(Action* )
+void ResearchInfoState::btnCancelClick(Action*)
 {
 	const RuleResearch* ruleResearch = _rule ? _rule : _project->getRules();
 	if (ruleResearch->needItem()

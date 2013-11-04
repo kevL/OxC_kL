@@ -152,7 +152,7 @@ CraftSoldiersState::~CraftSoldiersState()
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void CraftSoldiersState::btnOkClick(Action* )
+void CraftSoldiersState::btnOkClick(Action*)
 {
 	_game->popState();
 }
@@ -188,7 +188,7 @@ Edit: As Emilio Garavaglia pointed it out, it works only if the characters are A
  *
  * @param action, Pointer to an action.
  */
-void CraftSoldiersState::btnUnloadClick(Action* )
+void CraftSoldiersState::btnUnloadClick(Action*)
 {
 	Craft* c = _base->getCrafts()->at(_craft);
 	std::wstring craft1 = c->getName(_game->getLanguage());
@@ -238,7 +238,7 @@ void CraftSoldiersState::populateList()
 	_lstSoldiers->clearList();
 
 	int row = 0;
-	for (std::vector<Soldier* >::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); ++i)
+	for (std::vector<Soldier*>::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); ++i)
 	{
 		_lstSoldiers->addRow(3, (*i)->getName().c_str(), tr((*i)->getRankString()).c_str(), (*i)->getCraftString(_game->getLanguage()).c_str());
 

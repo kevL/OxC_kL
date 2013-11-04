@@ -86,7 +86,7 @@ ConfirmNewBaseState::ConfirmNewBaseState(Game* game, Base* base, Globe* globe)
 	_btnCancel->onKeyboardPress((ActionHandler)& ConfirmNewBaseState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
 
 	std::wstring area;
-	for (std::vector<Region* >::iterator i = _game->getSavedGame()->getRegions()->begin(); i != _game->getSavedGame()->getRegions()->end(); ++i)
+	for (std::vector<Region*>::iterator i = _game->getSavedGame()->getRegions()->begin(); i != _game->getSavedGame()->getRegions()->end(); ++i)
 	{
 		if ((*i)->getRules()->insideRegion(_base->getLongitude(), _base->getLatitude()))
 		{
@@ -117,7 +117,7 @@ ConfirmNewBaseState::~ConfirmNewBaseState()
  * Go to the Place Access Lift screen.
  * @param action Pointer to an action.
  */
-void ConfirmNewBaseState::btnOkClick(Action* )
+void ConfirmNewBaseState::btnOkClick(Action*)
 {
 	if (_game->getSavedGame()->getFunds() >= _cost)
 	{
@@ -135,7 +135,7 @@ void ConfirmNewBaseState::btnOkClick(Action* )
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void ConfirmNewBaseState::btnCancelClick(Action* )
+void ConfirmNewBaseState::btnCancelClick(Action*)
 {
 	_globe->onMouseOver(0);
 	_game->popState();

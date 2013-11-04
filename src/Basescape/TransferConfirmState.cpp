@@ -50,16 +50,11 @@ TransferConfirmState::TransferConfirmState(Game* game, Base* base, TransferItems
 
 	_window		= new Window(this, 320, 80, 0, 60);
 
-//kL	_txtTitle	= new Text(310, 17, 5, 75);
-	_txtTitle	= new Text(310, 17, 5, 72);				// kL
+	_txtTitle	= new Text(310, 17, 5, 72);
 
-//kL	_txtCost	= new Text(60, 17, 110, 95);
-//kL	_txtTotal	= new Text(100, 17, 170, 95);
-	_txtCost	= new Text(60, 17, 110, 93);			// kL
-	_txtTotal	= new Text(100, 17, 170, 93);			// kL
+	_txtCost	= new Text(60, 17, 110, 93);
+	_txtTotal	= new Text(100, 17, 170, 93);
 
-//kL	_btnOk		= new TextButton(128, 16, 16, 115);
-//kL	_btnCancel	= new TextButton(128, 16, 176, 115);
 	_btnCancel	= new TextButton(144, 16, 16, 115);		// kL
 	_btnOk		= new TextButton(144, 16, 163, 115);	// kL
 
@@ -114,7 +109,7 @@ TransferConfirmState::~TransferConfirmState()
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void TransferConfirmState::btnCancelClick(Action* )
+void TransferConfirmState::btnCancelClick(Action*)
 {
 	_game->popState();
 }
@@ -123,7 +118,7 @@ void TransferConfirmState::btnCancelClick(Action* )
  * Completes the transfer.
  * @param action Pointer to an action.
  */
-void TransferConfirmState::btnOkClick(Action* )
+void TransferConfirmState::btnOkClick(Action*)
 {
 	_state->completeTransfer();
 	_game->popState();

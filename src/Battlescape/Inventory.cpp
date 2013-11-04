@@ -147,7 +147,7 @@ void Inventory::drawGrid()
 	text.setHighContrast(true);
 
 	Uint8 color = Palette::blockOffset(0)+8;
-	for (std::map<std::string, RuleInventory* >::iterator i = _game->getRuleset()->getInventories()->begin(); i != _game->getRuleset()->getInventories()->end(); ++i)
+	for (std::map<std::string, RuleInventory*>::iterator i = _game->getRuleset()->getInventories()->begin(); i != _game->getRuleset()->getInventories()->end(); ++i)
 	{
 		if (i->second->getType() == INV_SLOT) // Draw grid
 		{
@@ -226,7 +226,7 @@ void Inventory::drawItems()
 		SurfaceSet* texture = _game->getResourcePack()->getSurfaceSet("BIGOBS.PCK");
 
 		// Soldier items
-		for (std::vector<BattleItem* >::iterator i = _selUnit->getInventory()->begin(); i != _selUnit->getInventory()->end(); ++i)
+		for (std::vector<BattleItem*>::iterator i = _selUnit->getInventory()->begin(); i != _selUnit->getInventory()->end(); ++i)
 		{
 			if (*i == _selItem) continue;
 
@@ -249,7 +249,7 @@ void Inventory::drawItems()
 		stackLayer->setPalette(getPalette());
 
 		// Ground items
-		for (std::vector<BattleItem* >::iterator i = _selUnit->getTile()->getInventory()->begin(); i != _selUnit->getTile()->getInventory()->end(); ++i)
+		for (std::vector<BattleItem*>::iterator i = _selUnit->getTile()->getInventory()->begin(); i != _selUnit->getTile()->getInventory()->end(); ++i)
 		{
 			// note that you can make items invisible by setting their width or height to 0 (for example used with tank corpse items)
 			if (*i == _selItem
@@ -375,7 +375,7 @@ bool Inventory::overlapItems(BattleItem* item, RuleInventory* slot, int x, int y
 {
 	if (slot->getType() != INV_GROUND)
 	{
-		for (std::vector<BattleItem* >::const_iterator i = _selUnit->getInventory()->begin(); i != _selUnit->getInventory()->end(); ++i)
+		for (std::vector<BattleItem*>::const_iterator i = _selUnit->getInventory()->begin(); i != _selUnit->getInventory()->end(); ++i)
 		{
 			if ((*i)->getSlot() == slot
 				&& (*i)->occupiesSlot(x, y, item))
@@ -386,7 +386,7 @@ bool Inventory::overlapItems(BattleItem* item, RuleInventory* slot, int x, int y
 	}
 	else if (_selUnit->getTile() != 0)
 	{
-		for (std::vector<BattleItem* >::const_iterator i = _selUnit->getTile()->getInventory()->begin(); i != _selUnit->getTile()->getInventory()->end(); ++i)
+		for (std::vector<BattleItem*>::const_iterator i = _selUnit->getTile()->getInventory()->begin(); i != _selUnit->getTile()->getInventory()->end(); ++i)
 		{
 			if ((*i)->occupiesSlot(x, y, item))
 			{
@@ -406,7 +406,7 @@ bool Inventory::overlapItems(BattleItem* item, RuleInventory* slot, int x, int y
  */
 RuleInventory* Inventory::getSlotInPosition(int* x, int* y) const
 {
-	for (std::map<std::string, RuleInventory* >::iterator i = _game->getRuleset()->getInventories()->begin(); i != _game->getRuleset()->getInventories()->end(); ++i)
+	for (std::map<std::string, RuleInventory*>::iterator i = _game->getRuleset()->getInventories()->begin(); i != _game->getRuleset()->getInventories()->end(); ++i)
 	{
 		if (i->second->checkSlotInPosition(x, y))
 		{
@@ -555,7 +555,7 @@ void Inventory::mouseClick(Action* action, State* state)
 
 							if (!placed)
 							{
-								for (std::map<std::string, RuleInventory* >::const_iterator wildCard = _game->getRuleset()->getInventories()->begin();
+								for (std::map<std::string, RuleInventory*>::const_iterator wildCard = _game->getRuleset()->getInventories()->begin();
 																		wildCard != _game->getRuleset()->getInventories()->end() && !placed; ++wildCard)
 								{
 									newSlot = wildCard->second;
@@ -805,7 +805,7 @@ void Inventory::mouseClick(Action* action, State* state)
  */
 bool Inventory::unload()
 {
-	for (std::vector<BattleItem* >::iterator i = _selUnit->getInventory()->begin(); i != _selUnit->getInventory()->end(); ++i)
+	for (std::vector<BattleItem*>::iterator i = _selUnit->getInventory()->begin(); i != _selUnit->getInventory()->end(); ++i)
 	{
 		if ((*i)->getSlot()->getType() == INV_HAND
 			&& *i != _selItem)
@@ -855,7 +855,7 @@ void Inventory::arrangeGround(bool alterOffset)
 	if (_selUnit != 0)
 	{
 		// first move all items out of the way - a big number in X direction
-		for (std::vector<BattleItem* >::iterator i = _selUnit->getTile()->getInventory()->begin(); i != _selUnit->getTile()->getInventory()->end(); ++i)
+		for (std::vector<BattleItem*>::iterator i = _selUnit->getTile()->getInventory()->begin(); i != _selUnit->getTile()->getInventory()->end(); ++i)
 		{
 			(*i)->setSlot(ground);
 			(*i)->setSlotX(1000000);
@@ -863,7 +863,7 @@ void Inventory::arrangeGround(bool alterOffset)
 		}
 
 		// now for each item, find the most topleft position that is not occupied and will fit
-		for (std::vector<BattleItem* >::iterator i = _selUnit->getTile()->getInventory()->begin(); i != _selUnit->getTile()->getInventory()->end(); ++i)
+		for (std::vector<BattleItem*>::iterator i = _selUnit->getTile()->getInventory()->begin(); i != _selUnit->getTile()->getInventory()->end(); ++i)
 		{
 			x = 0;
 			y = 0;

@@ -246,7 +246,7 @@ void BattleItem::moveToOwner(BattleUnit* owner)
 
 	if (_previousOwner != 0)
 	{
-		for (std::vector<BattleItem* >::iterator i = _previousOwner->getInventory()->begin(); i != _previousOwner->getInventory()->end(); ++i)
+		for (std::vector<BattleItem*>::iterator i = _previousOwner->getInventory()->begin(); i != _previousOwner->getInventory()->end(); ++i)
 		{
 			if (*i == this)
 			{

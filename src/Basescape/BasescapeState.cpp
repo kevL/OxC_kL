@@ -193,7 +193,7 @@ BasescapeState::~BasescapeState()
 {
 	// Clean up any temporary bases
 	bool exists = false;
-	for (std::vector<Base* >::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end() && !exists; ++i)
+	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end() && !exists; ++i)
 	{
 		if (*i == _base)
 		{
@@ -217,7 +217,7 @@ void BasescapeState::init()
 	if (!_game->getSavedGame()->getBases()->empty())
 	{
 		bool exists = false;
-		for (std::vector<Base* >::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end() && !exists; ++i)
+		for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end() && !exists; ++i)
 		{
 			if (*i == _base)
 			{
@@ -243,7 +243,7 @@ void BasescapeState::init()
 	_edtBase->setText(_base->getName());
 
 	// Get area
-	for (std::vector<Region* >::iterator i = _game->getSavedGame()->getRegions()->begin(); i != _game->getSavedGame()->getRegions()->end(); ++i)
+	for (std::vector<Region*>::iterator i = _game->getSavedGame()->getRegions()->begin(); i != _game->getSavedGame()->getRegions()->end(); ++i)
 	{
 		if ((*i)->getRules()->insideRegion(_base->getLongitude(), _base->getLatitude()))
 		{
@@ -283,7 +283,7 @@ void BasescapeState::setBase(Base* base)
  * Goes to the Build New Base screen.
  * @param action Pointer to an action.
  */
-void BasescapeState::btnNewBaseClick(Action* )
+void BasescapeState::btnNewBaseClick(Action*)
 {
 	Base* base = new Base(_game->getRuleset());
 	_game->popState();
@@ -294,7 +294,7 @@ void BasescapeState::btnNewBaseClick(Action* )
  * Goes to the Base Info screen.
  * @param action Pointer to an action.
  */
-void BasescapeState::btnBaseInfoClick(Action* )
+void BasescapeState::btnBaseInfoClick(Action*)
 {
 	_game->pushState(new BaseInfoState(_game, _base, this));
 }
@@ -303,7 +303,7 @@ void BasescapeState::btnBaseInfoClick(Action* )
  * Goes to the Soldiers screen.
  * @param action Pointer to an action.
  */
-void BasescapeState::btnSoldiersClick(Action* )
+void BasescapeState::btnSoldiersClick(Action*)
 {
 	_game->pushState(new SoldiersState(_game, _base));
 }
@@ -312,7 +312,7 @@ void BasescapeState::btnSoldiersClick(Action* )
  * Goes to the Crafts screen.
  * @param action Pointer to an action.
  */
-void BasescapeState::btnCraftsClick(Action* )
+void BasescapeState::btnCraftsClick(Action*)
 {
 	_game->pushState(new CraftsState(_game, _base));
 }
@@ -321,7 +321,7 @@ void BasescapeState::btnCraftsClick(Action* )
  * Opens the Build Facilities window.
  * @param action Pointer to an action.
  */
-void BasescapeState::btnFacilitiesClick(Action* )
+void BasescapeState::btnFacilitiesClick(Action*)
 {
 	_game->pushState(new BuildFacilitiesState(_game, _base, this));
 }
@@ -330,7 +330,7 @@ void BasescapeState::btnFacilitiesClick(Action* )
  * Goes to the Research screen.
  * @param action Pointer to an action.
  */
-void BasescapeState::btnResearchClick(Action* )
+void BasescapeState::btnResearchClick(Action*)
 {
 	_game->pushState(new ResearchState(_game, _base));
 }
@@ -339,7 +339,7 @@ void BasescapeState::btnResearchClick(Action* )
  * Goes to the Manufacture screen.
  * @param action Pointer to an action.
  */
-void BasescapeState::btnManufactureClick(Action* )
+void BasescapeState::btnManufactureClick(Action*)
 {
 	_game->pushState(new ManufactureState(_game, _base));
 }
@@ -348,7 +348,7 @@ void BasescapeState::btnManufactureClick(Action* )
  * Goes to the Purchase screen.
  * @param action Pointer to an action.
  */
-void BasescapeState::btnPurchaseClick(Action* )
+void BasescapeState::btnPurchaseClick(Action*)
 {
 	_game->pushState(new PurchaseState(_game, _base));
 }
@@ -357,7 +357,7 @@ void BasescapeState::btnPurchaseClick(Action* )
  * Goes to the Sell screen.
  * @param action Pointer to an action.
  */
-void BasescapeState::btnSellClick(Action* )
+void BasescapeState::btnSellClick(Action*)
 {
 	_game->pushState(new SellState(_game, _base));
 }
@@ -366,7 +366,7 @@ void BasescapeState::btnSellClick(Action* )
  * Goes to the Select Destination Base window.
  * @param action Pointer to an action.
  */
-void BasescapeState::btnTransferClick(Action* )
+void BasescapeState::btnTransferClick(Action*)
 {
 	_game->pushState(new TransferBaseState(_game, _base));
 }
@@ -375,7 +375,7 @@ void BasescapeState::btnTransferClick(Action* )
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void BasescapeState::btnGeoscapeClick(Action* )
+void BasescapeState::btnGeoscapeClick(Action*)
 {
 	_game->popState();
 }
@@ -384,14 +384,14 @@ void BasescapeState::btnGeoscapeClick(Action* )
  * Processes clicking on facilities.
  * @param action Pointer to an action.
  */
-void BasescapeState::viewLeftClick(Action* )
+void BasescapeState::viewLeftClick(Action*)
 {
 	BaseFacility* fac = _view->getSelectedFacility();
 	if (fac != 0)
 	{
 		// Pre-calculate values to ensure base stays connected
 		int x = -1, y = -1, squares = 0;
-		for (std::vector<BaseFacility* >::iterator i = _base->getFacilities()->begin(); i != _base->getFacilities()->end(); ++i)
+		for (std::vector<BaseFacility*>::iterator i = _base->getFacilities()->begin(); i != _base->getFacilities()->end(); ++i)
 		{
 			if ((*i)->getRules()->isLift())
 			{
@@ -425,7 +425,7 @@ void BasescapeState::viewLeftClick(Action* )
  * Processes right clicking on facilities.
  * @param action Pointer to an action.
  */
-void BasescapeState::viewRightClick(Action* )
+void BasescapeState::viewRightClick(Action*)
 {
 	BaseFacility* f = _view->getSelectedFacility();
 	if (f == 0)
@@ -465,7 +465,7 @@ void BasescapeState::viewRightClick(Action* )
  * Displays the name of the facility the mouse is over.
  * @param action Pointer to an action.
  */
-void BasescapeState::viewMouseOver(Action* )
+void BasescapeState::viewMouseOver(Action*)
 {
 	std::wstringstream ss;
 
@@ -495,7 +495,7 @@ void BasescapeState::viewMouseOver(Action* )
  * Clears the facility name.
  * @param action Pointer to an action.
  */
-void BasescapeState::viewMouseOut(Action* )
+void BasescapeState::viewMouseOut(Action*)
 {
 	_txtFacility->setText(L"");
 }
@@ -504,7 +504,7 @@ void BasescapeState::viewMouseOut(Action* )
  * Selects a new base to display.
  * @param action Pointer to an action.
  */
-void BasescapeState::miniClick(Action* )
+void BasescapeState::miniClick(Action*)
 {
 	unsigned int base = _mini->getHoveredBase();
 	if (base < _game->getSavedGame()->getBases()->size())

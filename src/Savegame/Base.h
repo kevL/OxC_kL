@@ -166,7 +166,7 @@ private:
 		/// Add a new ResearchProject to the Base.
 		void addResearch(ResearchProject*);
 		/// Remove a ResearchProject from the Base.
-		void removeResearch(ResearchProject* );
+		void removeResearch(ResearchProject*);
 		/// kL: Research Help ala XcomUtil.
 		void researchHelp(std::string sProject);
 		/// Add a new Production to Base.
@@ -195,7 +195,7 @@ private:
 		bool getRetaliationStatus() const;
 		/// Get the detection chance for this base.
 //kL		unsigned getDetectionChance() const;
-		unsigned int getDetectionChance() const;
+		int getDetectionChance() const;
 		/// Gets how many Grav Shields the base has
 		int getGravShields() const;
 		///

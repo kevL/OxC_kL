@@ -115,17 +115,17 @@ SavedBattleGame::~SavedBattleGame()
 	}
 	delete[] _tiles;
 
-	for (std::vector<Node* >::iterator i = _nodes.begin(); i != _nodes.end(); ++i)
+	for (std::vector<Node*>::iterator i = _nodes.begin(); i != _nodes.end(); ++i)
 	{
 		delete *i;
 	}
 
-	for (std::vector<BattleUnit* >::iterator i = _units.begin(); i != _units.end(); ++i)
+	for (std::vector<BattleUnit*>::iterator i = _units.begin(); i != _units.end(); ++i)
 	{
 		delete *i;
 	}
 
-	for (std::vector<BattleItem* >::iterator i = _items.begin(); i != _items.end(); ++i)
+	for (std::vector<BattleItem*>::iterator i = _items.begin(); i != _items.end(); ++i)
 	{
 		delete *i;
 	}
@@ -289,7 +289,7 @@ void SavedBattleGame::load(const YAML::Node& node, Ruleset* rule, SavedGame* sav
 			int unit = (*i)["unit"].as<int>();
 
 			// match up items and units
-			for (std::vector<BattleUnit* >::iterator bu = _units.begin(); bu != _units.end(); ++bu)
+			for (std::vector<BattleUnit*>::iterator bu = _units.begin(); bu != _units.end(); ++bu)
 			{
 				if ((*bu)->getId() == owner)
 				{
@@ -317,13 +317,13 @@ void SavedBattleGame::load(const YAML::Node& node, Ruleset* rule, SavedGame* sav
 	}
 
 	// tie ammo items to their weapons, running through the items again
-	std::vector<BattleItem* >::iterator weaponi = _items.begin();
+	std::vector<BattleItem*>::iterator weaponi = _items.begin();
 	for (YAML::const_iterator i = node["items"].begin(); i != node["items"].end(); ++i, ++weaponi)
 	{
 		int ammo = (*i)["ammoItem"].as<int>();
 		if (ammo != -1)
 		{
-			for (std::vector<BattleItem* >::iterator ammoi = _items.begin(); ammoi != _items.end(); ++ammoi)
+			for (std::vector<BattleItem*>::iterator ammoi = _items.begin(); ammoi != _items.end(); ++ammoi)
 			{
 				if ((*ammoi)->getId() == ammo)
 				{
@@ -345,7 +345,7 @@ void SavedBattleGame::load(const YAML::Node& node, Ruleset* rule, SavedGame* sav
 void SavedBattleGame::loadMapResources(Game* game)
 {
 	ResourcePack* res = game->getResourcePack();
-	for (std::vector<MapDataSet* >::const_iterator i = _mapDataSets.begin(); i != _mapDataSets.end(); ++i)
+	for (std::vector<MapDataSet*>::const_iterator i = _mapDataSets.begin(); i != _mapDataSets.end(); ++i)
 	{
 		(*i)->loadData();
 
@@ -399,7 +399,7 @@ YAML::Node SavedBattleGame::save() const
 	node["turn"]			= _turn;
 	node["selectedUnit"]	= (_selectedUnit?_selectedUnit->getId():-1);
 
-	for (std::vector<MapDataSet* >::const_iterator i = _mapDataSets.begin(); i != _mapDataSets.end(); ++i)
+	for (std::vector<MapDataSet*>::const_iterator i = _mapDataSets.begin(); i != _mapDataSets.end(); ++i)
 	{
 		node["mapdatasets"].push_back((*i)->getName());
 	}
@@ -445,17 +445,17 @@ YAML::Node SavedBattleGame::save() const
 	free(tileData);
 #endif
 
-	for (std::vector<Node* >::const_iterator i = _nodes.begin(); i != _nodes.end(); ++i)
+	for (std::vector<Node*>::const_iterator i = _nodes.begin(); i != _nodes.end(); ++i)
 	{
 		node["nodes"].push_back((*i)->save());
 	}
 
-	for (std::vector<BattleUnit* >::const_iterator i = _units.begin(); i != _units.end(); ++i)
+	for (std::vector<BattleUnit*>::const_iterator i = _units.begin(); i != _units.end(); ++i)
 	{
 		node["units"].push_back((*i)->save());
 	}
 
-	for (std::vector<BattleItem* >::const_iterator i = _items.begin(); i != _items.end(); ++i)
+	for (std::vector<BattleItem*>::const_iterator i = _items.begin(); i != _items.end(); ++i)
 	{
 		node["items"].push_back((*i)->save());
 	}
@@ -489,7 +489,7 @@ void SavedBattleGame::initMap(int mapsize_x, int mapsize_y, int mapsize_z)
 
 		delete[] _tiles;
 
-		for (std::vector<Node* >::iterator i = _nodes.begin(); i != _nodes.end(); ++i)
+		for (std::vector<Node*>::iterator i = _nodes.begin(); i != _nodes.end(); ++i)
 		{
 			delete *i;
 		}
@@ -820,7 +820,7 @@ TileEngine* SavedBattleGame::getTileEngine() const
 * Gets the array of mapblocks.
 * @return Pointer to the array of mapblocks.
 */
-std::vector<MapDataSet* >* SavedBattleGame::getMapDataSets()
+std::vector<MapDataSet*>* SavedBattleGame::getMapDataSets()
 {
 	return &_mapDataSets;
 }
@@ -1034,7 +1034,7 @@ void SavedBattleGame::setBattleState(BattlescapeState* bs)
  */
 void SavedBattleGame::resetUnitTiles()
 {
-	for (std::vector<BattleUnit* >::iterator i = _units.begin(); i != _units.end(); ++i)
+	for (std::vector<BattleUnit*>::iterator i = _units.begin(); i != _units.end(); ++i)
 	{
 		if (!(*i)->isOut())
 		{
@@ -1074,7 +1074,7 @@ void SavedBattleGame::removeItem(BattleItem* item)
 	BattleUnit* b = item->getOwner();
 	if (t)
 	{
-		for (std::vector<BattleItem* >::iterator it = t->getInventory()->begin(); it != t->getInventory()->end(); ++it)
+		for (std::vector<BattleItem*>::iterator it = t->getInventory()->begin(); it != t->getInventory()->end(); ++it)
 		{
 			if (*it == item)
 			{
@@ -1086,7 +1086,7 @@ void SavedBattleGame::removeItem(BattleItem* item)
 	}
 	else if (b)
 	{
-		for (std::vector<BattleItem* >::iterator it = b->getInventory()->begin(); it != b->getInventory()->end(); ++it)
+		for (std::vector<BattleItem*>::iterator it = b->getInventory()->begin(); it != b->getInventory()->end(); ++it)
 		{
 			if (*it == item)
 			{
@@ -1097,7 +1097,7 @@ void SavedBattleGame::removeItem(BattleItem* item)
 		}
 	}
 
-	for (std::vector<BattleItem* >::iterator i = _items.begin(); i != _items.end(); ++i)
+	for (std::vector<BattleItem*>::iterator i = _items.begin(); i != _items.end(); ++i)
 	{
 		if (*i == item)
 		{
@@ -1180,9 +1180,9 @@ int* SavedBattleGame::getCurrentItemId()
 Node* SavedBattleGame::getSpawnNode(int nodeRank, BattleUnit* unit)
 {
 	int highestPriority = -1;
-	std::vector<Node* > compliantNodes;
+	std::vector<Node*> compliantNodes;
 
-	for (std::vector<Node* >::iterator i = getNodes()->begin(); i != getNodes()->end(); ++i)
+	for (std::vector<Node*>::iterator i = getNodes()->begin(); i != getNodes()->end(); ++i)
 	{
 		if ((*i)->getRank() == nodeRank								// ranks must match
 			&& (!((*i)->getType() & Node::TYPE_SMALL)
@@ -1454,7 +1454,7 @@ void SavedBattleGame::prepareNewTurn()
  */
 void SavedBattleGame::reviveUnconsciousUnits()
 {
-	for (std::vector<BattleUnit* >::iterator i = getUnits()->begin(); i != getUnits()->end(); ++i)
+	for (std::vector<BattleUnit*>::iterator i = getUnits()->begin(); i != getUnits()->end(); ++i)
 	{
 		if ((*i)->getArmor()->getSize() == 1)
 		{
@@ -1501,7 +1501,7 @@ void SavedBattleGame::reviveUnconsciousUnits()
 void SavedBattleGame::removeUnconsciousBodyItem(BattleUnit* bu)
 {
 	// remove the unconscious body item corresponding to this unit
-	for (std::vector<BattleItem* >::iterator it = getItems()->begin(); it != getItems()->end(); )
+	for (std::vector<BattleItem*>::iterator it = getItems()->begin(); it != getItems()->end(); )
 	{
 		if ((*it)->getUnit() == bu)
 		{
@@ -1616,11 +1616,11 @@ int SavedBattleGame::getDragPixelTolerance() const
  */
 /*kL bool SavedBattleGame::eyesOnTarget(UnitFaction faction, BattleUnit* unit)
 {
-	for (std::vector<BattleUnit* >::iterator i = getUnits()->begin(); i != getUnits()->end(); ++i)
+	for (std::vector<BattleUnit*>::iterator i = getUnits()->begin(); i != getUnits()->end(); ++i)
 	{
 		if ((*i)->getFaction() != faction) continue;
 
-		std::vector<BattleUnit* >* vis = (*i)->getVisibleUnits();
+		std::vector<BattleUnit*>* vis = (*i)->getVisibleUnits();
 
 		if (std::find(vis->begin(), vis->end(), unit) != vis->end())
 		{
@@ -1640,7 +1640,7 @@ int SavedBattleGame::getDragPixelTolerance() const
 bool SavedBattleGame::addFallingUnit(BattleUnit* unit)
 {
 	bool add = true;
-	for (std::list<BattleUnit* >::iterator i = _fallingUnits.begin(); i != _fallingUnits.end(); ++i)
+	for (std::list<BattleUnit*>::iterator i = _fallingUnits.begin(); i != _fallingUnits.end(); ++i)
 	{
 		if (unit == *i)
 		{
@@ -1661,7 +1661,7 @@ bool SavedBattleGame::addFallingUnit(BattleUnit* unit)
  * Gets all units in the battlescape that are falling.
  * @return The falling units in the battlescape.
  */
-std::list<BattleUnit* >* SavedBattleGame::getFallingUnits()
+std::list<BattleUnit*>* SavedBattleGame::getFallingUnits()
 {
 	return &_fallingUnits;
 }
@@ -1719,7 +1719,7 @@ bool SavedBattleGame::getTraceSetting() const
 {
 	BattleUnit* leader = 0;
 
-	for (std::vector<BattleUnit* >::iterator j = _units.begin(); j != _units.end(); ++j)
+	for (std::vector<BattleUnit*>::iterator j = _units.begin(); j != _units.end(); ++j)
 	{
 		if ((*j)->getOriginalFaction() == FACTION_PLAYER
 			&& !(*j)->isOut())
@@ -1745,7 +1745,7 @@ BattleUnit* SavedBattleGame::getHighestRanked(bool xcom)
 {
 	BattleUnit* leader = 0;
 
-	for (std::vector<BattleUnit* >::iterator j = _units.begin(); j != _units.end(); ++j)
+	for (std::vector<BattleUnit*>::iterator j = _units.begin(); j != _units.end(); ++j)
 	{
 		if (!(*j)->isOut())
 		{

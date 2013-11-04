@@ -174,13 +174,13 @@ GeoscapeCraftState::GeoscapeCraftState(Game* game, Craft* craft, Globe* globe, W
 	{
 		status = tr("STR_PATROLLING");
 	}
-	else if (_craft->getDestination() == (Target* )_craft->getBase())
+	else if (_craft->getDestination() == (Target*)_craft->getBase())
 	{
 		status = tr("STR_RETURNING_TO_BASE");
 	}
 	else
 	{
-		Ufo* u = dynamic_cast<Ufo* >(_craft->getDestination());
+		Ufo* u = dynamic_cast<Ufo*>(_craft->getDestination());
 		if (u != 0)
 		{
 			if (_craft->isInDogfight())
@@ -346,7 +346,7 @@ GeoscapeCraftState::GeoscapeCraftState(Game* game, Craft* craft, Globe* globe, W
 		_btnTarget->setVisible(false);
 		_btnPatrol->setVisible(false);
 	}
-	else if (_craft->getDestination() == (Target* )_craft->getBase())
+	else if (_craft->getDestination() == (Target*)_craft->getBase())
 	{
 		_btnBase->setVisible(false);
 	}
@@ -378,7 +378,7 @@ void GeoscapeCraftState::init()
  * Centers the craft on the globe.
  * @param action, Pointer to an action.
  */
-void GeoscapeCraftState::btnCenterClick(Action* )
+void GeoscapeCraftState::btnCenterClick(Action*)
 {
 	_game->popState();
 
@@ -390,7 +390,7 @@ void GeoscapeCraftState::btnCenterClick(Action* )
  * Returns the craft back to its base.
  * @param action, Pointer to an action.
  */
-void GeoscapeCraftState::btnBaseClick(Action* )
+void GeoscapeCraftState::btnBaseClick(Action*)
 {
 	_game->popState();
 	_craft->returnToBase();
@@ -402,7 +402,7 @@ void GeoscapeCraftState::btnBaseClick(Action* )
  * Changes the craft's target.
  * @param action, Pointer to an action.
  */
-void GeoscapeCraftState::btnTargetClick(Action* )
+void GeoscapeCraftState::btnTargetClick(Action*)
 {
 	_game->popState();
 	_game->pushState(new SelectDestinationState(_game, _craft, _globe));
@@ -414,7 +414,7 @@ void GeoscapeCraftState::btnTargetClick(Action* )
  * Sets the craft to patrol the current location.
  * @param action, Pointer to an action.
  */
-void GeoscapeCraftState::btnPatrolClick(Action* )
+void GeoscapeCraftState::btnPatrolClick(Action*)
 {
 	_game->popState();
 	_craft->setDestination(0);
@@ -426,7 +426,7 @@ void GeoscapeCraftState::btnPatrolClick(Action* )
  * Closes the window.
  * @param action, Pointer to an action.
  */
-void GeoscapeCraftState::btnCancelClick(Action* ) // kL_note: "scout"/go to last known UFO position
+void GeoscapeCraftState::btnCancelClick(Action*) // kL_note: "scout"/go to last known UFO position
 {
 	if (_waypoint != 0) // Go to the last known UFO position
 	{

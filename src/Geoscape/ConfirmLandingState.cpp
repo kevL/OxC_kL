@@ -125,14 +125,14 @@ ConfirmLandingState::~ConfirmLandingState()
  * Enters the mission.
  * @param action Pointer to an action.
  */
-void ConfirmLandingState::btnYesClick(Action* )
+void ConfirmLandingState::btnYesClick(Action*)
 {
 	_game->popState();
 	_state->musicStop();
 
-	Ufo* u = dynamic_cast<Ufo* >(_craft->getDestination());
-	TerrorSite* t = dynamic_cast<TerrorSite* >(_craft->getDestination());
-	AlienBase* b = dynamic_cast<AlienBase* >(_craft->getDestination());
+	Ufo* u = dynamic_cast<Ufo*>(_craft->getDestination());
+	TerrorSite* t = dynamic_cast<TerrorSite*>(_craft->getDestination());
+	AlienBase* b = dynamic_cast<AlienBase*>(_craft->getDestination());
 
 	SavedBattleGame* bgame = new SavedBattleGame();
 	_game->getSavedGame()->setBattleGame(bgame);
@@ -179,7 +179,7 @@ void ConfirmLandingState::btnYesClick(Action* )
  * Returns the craft to base and closes the window.
  * @param action Pointer to an action.
  */
-void ConfirmLandingState::btnNoClick(Action* )
+void ConfirmLandingState::btnNoClick(Action*)
 {
 	_craft->returnToBase();
 	_game->popState();

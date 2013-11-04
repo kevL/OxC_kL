@@ -60,7 +60,7 @@ MiniBaseView::~MiniBaseView()
  * Changes the current list of bases to display.
  * @param bases Pointer to base list to display.
  */
-void MiniBaseView::setBases(std::vector<Base* >* bases)
+void MiniBaseView::setBases(std::vector<Base*>* bases)
 {
 	_bases = bases;
 	_redraw = true;
@@ -128,7 +128,7 @@ void MiniBaseView::draw()
 			lock();
 
 			SDL_Rect r;
-			for (std::vector<BaseFacility* >::iterator f = _bases->at(i)->getFacilities()->begin(); f != _bases->at(i)->getFacilities()->end(); ++f)
+			for (std::vector<BaseFacility*>::iterator f = _bases->at(i)->getFacilities()->begin(); f != _bases->at(i)->getFacilities()->end(); ++f)
 			{
 				int pal;
 				if ((*f)->getBuildTime() == 0)

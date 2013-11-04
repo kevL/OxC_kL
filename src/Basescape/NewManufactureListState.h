@@ -47,7 +47,7 @@ private:
 	Window* _window;
 	Text* _txtTitle, * _txtItem, * _txtCategory;
 	TextList* _lstManufacture;
-	std::vector<RuleManufacture* > _possibleProductions;
+	std::vector<RuleManufacture*> _possibleProductions;
 
 	public:
 		/// Creates the state.

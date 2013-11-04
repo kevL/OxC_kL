@@ -82,13 +82,13 @@ private:
 		/// Checks visibility of a unit on this tile.
 		bool visible(BattleUnit* currentUnit, Tile* tile);
 		/// Creates a vector of units that can spot this unit.
-		std::vector<BattleUnit* > getSpottingUnits(BattleUnit* unit);
+		std::vector<BattleUnit*> getSpottingUnits(BattleUnit* unit);
 		/// Checks validity of a snap shot to this position.
 		bool canMakeSnap(BattleUnit* unit, BattleUnit* target);
 		/// Checks reaction fire.
 		bool checkReactionFire(BattleUnit* unit);
 		/// Given a vector of spotters, and a unit, picks the spotter with the highest reaction score.
-		BattleUnit* getReactor(std::vector<BattleUnit* > spotters, BattleUnit* unit);
+		BattleUnit* getReactor(std::vector<BattleUnit*> spotters, BattleUnit* unit);
 		/// Tries to perform a reaction snap shot to this location.
 		bool tryReactionSnap(BattleUnit* unit, BattleUnit* target);
 		/// Handles bullet/weapon hits.

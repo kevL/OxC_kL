@@ -45,7 +45,7 @@ class State
 {
 	protected:
 		Game* _game;
-		std::vector<Surface* > _surfaces;
+		std::vector<Surface*> _surfaces;
 		bool _screen;
 
 		public:

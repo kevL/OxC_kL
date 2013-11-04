@@ -1417,7 +1417,7 @@ bool BattleUnit::addToVisibleUnits(BattleUnit* unit)
 {
 	bool add = true;
 
-	for (std::vector<BattleUnit* >::iterator i = _unitsSpottedThisTurn.begin(); i != _unitsSpottedThisTurn.end(); ++i)
+	for (std::vector<BattleUnit*>::iterator i = _unitsSpottedThisTurn.begin(); i != _unitsSpottedThisTurn.end(); ++i)
 	{
 		if ((BattleUnit*)(*i) == unit)
 		{
@@ -1432,7 +1432,7 @@ bool BattleUnit::addToVisibleUnits(BattleUnit* unit)
 		_unitsSpottedThisTurn.push_back(unit);
 	}
 
-	for (std::vector<BattleUnit* >::iterator i = _visibleUnits.begin(); i != _visibleUnits.end(); ++i)
+	for (std::vector<BattleUnit*>::iterator i = _visibleUnits.begin(); i != _visibleUnits.end(); ++i)
 	{
 		if ((BattleUnit*)(*i) == unit)
 		{
@@ -1449,7 +1449,7 @@ bool BattleUnit::addToVisibleUnits(BattleUnit* unit)
  * Get the pointer to the vector of visible units.
  * @return pointer to vector.
  */
-std::vector<BattleUnit* >* BattleUnit::getVisibleUnits()
+std::vector<BattleUnit*>* BattleUnit::getVisibleUnits()
 {
 	return &_visibleUnits;
 }
@@ -1478,7 +1478,7 @@ bool BattleUnit::addToVisibleTiles(Tile* tile)
  * Get the pointer to the vector of visible tiles.
  * @return pointer to vector.
  */
-std::vector<Tile* >* BattleUnit::getVisibleTiles()
+std::vector<Tile*>* BattleUnit::getVisibleTiles()
 {
 	return &_visibleTiles;
 }
@@ -1488,7 +1488,7 @@ std::vector<Tile* >* BattleUnit::getVisibleTiles()
  */
 void BattleUnit::clearVisibleTiles()
 {
-	for (std::vector<Tile* >::iterator j = _visibleTiles.begin(); j != _visibleTiles.end(); ++j)
+	for (std::vector<Tile*>::iterator j = _visibleTiles.begin(); j != _visibleTiles.end(); ++j)
 	{
 		(*j)->setVisible(-1);
 	}
@@ -1754,7 +1754,7 @@ int BattleUnit::getFire() const
  * Get the pointer to the vector of inventory items.
  * @return pointer to vector.
  */
-std::vector<BattleItem* >* BattleUnit::getInventory()
+std::vector<BattleItem*>* BattleUnit::getInventory()
 {
 	return &_inventory;
 }
@@ -1852,7 +1852,7 @@ BattleItem* BattleUnit::getItem(RuleInventory* slot, int x, int y) const
 	}
 	else if (_tile != 0) // Ground items
 	{
-		for (std::vector<BattleItem* >::const_iterator i = _tile->getInventory()->begin(); i != _tile->getInventory()->end(); ++i)
+		for (std::vector<BattleItem*>::const_iterator i = _tile->getInventory()->begin(); i != _tile->getInventory()->end(); ++i)
 		{
 			if ((*i)->occupiesSlot(x, y))
 			{
@@ -1876,7 +1876,7 @@ BattleItem* BattleUnit::getItem(const std::string& slot, int x, int y) const
 {
 	if (slot != "STR_GROUND") // Soldier items
 	{
-		for (std::vector<BattleItem* >::const_iterator i = _inventory.begin(); i != _inventory.end(); ++i)
+		for (std::vector<BattleItem*>::const_iterator i = _inventory.begin(); i != _inventory.end(); ++i)
 		{
 			if ((*i)->getSlot() != 0
 				&& (*i)->getSlot()->getId() == slot
@@ -1888,7 +1888,7 @@ BattleItem* BattleUnit::getItem(const std::string& slot, int x, int y) const
 	}
 	else if (_tile != 0) // Ground items
 	{
-		for (std::vector<BattleItem* >::const_iterator i = _tile->getInventory()->begin(); i != _tile->getInventory()->end(); ++i)
+		for (std::vector<BattleItem*>::const_iterator i = _tile->getInventory()->begin(); i != _tile->getInventory()->end(); ++i)
 		{
 			if ((*i)->getSlot() != 0
 				&& (*i)->occupiesSlot(x, y))
@@ -2037,7 +2037,7 @@ bool BattleUnit::checkAmmo()
 	BattleItem* ammo = 0;
 	bool wrong = true;
 
-	for (std::vector<BattleItem* >::iterator i = getInventory()->begin(); i != getInventory()->end(); ++i)
+	for (std::vector<BattleItem*>::iterator i = getInventory()->begin(); i != getInventory()->end(); ++i)
 	{
 		ammo = *i;
 		for (std::vector<std::string>::iterator c = weapon->getRules()->getCompatibleAmmo()->begin(); c != weapon->getRules()->getCompatibleAmmo()->end(); ++c)
@@ -2778,7 +2778,7 @@ void BattleUnit::invalidateCache()
  * kL_note: This pertains only to individual soldiers;
  * ie, what has *this* soldier spotted this turn.
  */
-std::vector<BattleUnit* > BattleUnit::getUnitsSpottedThisTurn()
+std::vector<BattleUnit*> BattleUnit::getUnitsSpottedThisTurn()
 {
 	return _unitsSpottedThisTurn;
 }

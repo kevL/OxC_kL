@@ -121,13 +121,13 @@ TransferBaseState::TransferBaseState(Game* game, Base* base)
 	_lstBases->onMouseClick((ActionHandler)& TransferBaseState::lstBasesClick);
 
 	int row = 0;
-	for (std::vector<Base* >::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
+	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
 	{
 		if (*i != _base)
 		{
 			std::wstring area = L""; // Get area
 
-			for (std::vector<Region* >::iterator j = _game->getSavedGame()->getRegions()->begin(); j != _game->getSavedGame()->getRegions()->end(); ++j)
+			for (std::vector<Region*>::iterator j = _game->getSavedGame()->getRegions()->begin(); j != _game->getSavedGame()->getRegions()->end(); ++j)
 			{
 				if ((*j)->getRules()->insideRegion((*i)->getLongitude(), (*i)->getLatitude()))
 				{
@@ -156,7 +156,7 @@ TransferBaseState::~TransferBaseState()
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void TransferBaseState::btnCancelClick(Action* )
+void TransferBaseState::btnCancelClick(Action*)
 {
 	_game->popState();
 }
@@ -165,7 +165,7 @@ void TransferBaseState::btnCancelClick(Action* )
  * Shows the Transfer screen for the selected base.
  * @param action Pointer to an action.
  */
-void TransferBaseState::lstBasesClick(Action* )
+void TransferBaseState::lstBasesClick(Action*)
 {
 	_game->pushState(new TransferItemsState(_game, _base, _bases[_lstBases->getSelectedRow()]));
 }

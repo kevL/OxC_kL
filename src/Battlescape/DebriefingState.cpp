@@ -165,7 +165,7 @@ DebriefingState::DebriefingState(Game *game)
 
 	int total = 0, statsY = 0, recoveryY = 0;
 
-	for (std::vector<DebriefingStat* >::iterator i = _stats.begin(); i != _stats.end(); ++i)
+	for (std::vector<DebriefingStat*>::iterator i = _stats.begin(); i != _stats.end(); ++i)
 	{
 		if ((*i)->qty == 0)
 			continue;
@@ -269,7 +269,7 @@ DebriefingState::~DebriefingState()
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void DebriefingState::btnOkClick(Action* )
+void DebriefingState::btnOkClick(Action*)
 {
 	_game->getSavedGame()->setBattleGame(0);
 	_game->popState();
@@ -395,7 +395,7 @@ void DebriefingState::prepareDebriefing()
 	bool success = !aborted;
 
 	Craft* craft = 0;
-	std::vector<Craft* >::iterator craftIterator;
+	std::vector<Craft*>::iterator craftIterator;
 
 	Base* base = 0;
 
@@ -403,14 +403,14 @@ void DebriefingState::prepareDebriefing()
 	int playersSurvived = 0; // if this stays 0 the craft is lost...
 	int playersUnconscious = 0;
 
-	for (std::vector<Base* >::iterator i = save->getBases()->begin(); i != save->getBases()->end(); ++i)
+	for (std::vector<Base*>::iterator i = save->getBases()->begin(); i != save->getBases()->end(); ++i)
 	{
 		// in case we have a craft - check which craft it is about
-		for (std::vector<Craft* >::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); ++j)
+		for (std::vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); ++j)
 		{
 			if ((*j)->isInBattlescape())
 			{
-				for (std::vector<Region* >::iterator k = _game->getSavedGame()->getRegions()->begin(); k != _game->getSavedGame()->getRegions()->end(); ++k)
+				for (std::vector<Region*>::iterator k = _game->getSavedGame()->getRegions()->begin(); k != _game->getSavedGame()->getRegions()->end(); ++k)
 				{
 					if ((*k)->getRules()->insideRegion((*j)->getLongitude(), (*j)->getLatitude()))
 					{
@@ -420,7 +420,7 @@ void DebriefingState::prepareDebriefing()
 					}
 				}
 
-				for (std::vector<Country* >::iterator k = _game->getSavedGame()->getCountries()->begin(); k != _game->getSavedGame()->getCountries()->end(); ++k)
+				for (std::vector<Country*>::iterator k = _game->getSavedGame()->getCountries()->begin(); k != _game->getSavedGame()->getCountries()->end(); ++k)
 				{
 					if ((*k)->getRules()->insideCountry((*j)->getLongitude(), (*j)->getLatitude()))
 					{
@@ -439,7 +439,7 @@ void DebriefingState::prepareDebriefing()
 			}
 			else if ((*j)->getDestination() != 0)
 			{
-				Ufo* u = dynamic_cast<Ufo* >((*j)->getDestination());
+				Ufo* u = dynamic_cast<Ufo*>((*j)->getDestination());
 				if (u != 0
 					&& u->isInBattlescape())
 				{
@@ -453,7 +453,7 @@ void DebriefingState::prepareDebriefing()
 			base = *i;
 			base->setInBattlescape(false);
 
-			for (std::vector<Region* >::iterator k = _game->getSavedGame()->getRegions()->begin(); k != _game->getSavedGame()->getRegions()->end(); ++k)
+			for (std::vector<Region*>::iterator k = _game->getSavedGame()->getRegions()->begin(); k != _game->getSavedGame()->getRegions()->end(); ++k)
 			{
 				if ((*k)->getRules()->insideRegion((*i)->getLongitude(), (*i)->getLatitude()))
 				{
@@ -463,7 +463,7 @@ void DebriefingState::prepareDebriefing()
 				}
 			}
 
-			for (std::vector<Country* >::iterator k = _game->getSavedGame()->getCountries()->begin(); k != _game->getSavedGame()->getCountries()->end(); ++k)
+			for (std::vector<Country*>::iterator k = _game->getSavedGame()->getCountries()->begin(); k != _game->getSavedGame()->getCountries()->end(); ++k)
 			{
 				if ((*k)->getRules()->insideCountry((*i)->getLongitude(), (*i)->getLatitude()))
 				{
@@ -483,7 +483,7 @@ void DebriefingState::prepareDebriefing()
 	_base = base;
 
 	// UFO crash/landing site disappears
-	for (std::vector<Ufo* >::iterator i = save->getUfos()->begin(); i != save->getUfos()->end(); ++i)
+	for (std::vector<Ufo*>::iterator i = save->getUfos()->begin(); i != save->getUfos()->end(); ++i)
 	{
 		if ((*i)->isInBattlescape())
 		{
@@ -502,7 +502,7 @@ void DebriefingState::prepareDebriefing()
 	}
 
 	// terror site disappears (even when you abort)
-	for (std::vector<TerrorSite* >::iterator i = save->getTerrorSites()->begin(); i != save->getTerrorSites()->end(); ++i)
+	for (std::vector<TerrorSite*>::iterator i = save->getTerrorSites()->begin(); i != save->getTerrorSites()->end(); ++i)
 	{
 		if ((*i)->isInBattlescape())
 		{
@@ -534,7 +534,7 @@ void DebriefingState::prepareDebriefing()
 			}
 		}
 
-		for (std::vector<AlienBase* >::iterator i = save->getAlienBases()->begin(); i != save->getAlienBases()->end(); ++i)
+		for (std::vector<AlienBase*>::iterator i = save->getAlienBases()->begin(); i != save->getAlienBases()->end(); ++i)
 		{
 			if ((*i)->isInBattlescape())
 			{
@@ -565,7 +565,7 @@ void DebriefingState::prepareDebriefing()
 	// lets see what happens with units
 
 	// first, we evaluate how many surviving XCom units there are, and how many are conscious
-	for (std::vector<BattleUnit* >::iterator j = battle->getUnits()->begin(); j != battle->getUnits()->end(); ++j)
+	for (std::vector<BattleUnit*>::iterator j = battle->getUnits()->begin(); j != battle->getUnits()->end(); ++j)
 	{
 		if ((*j)->getOriginalFaction() == FACTION_PLAYER
 			&& (*j)->getStatus() != STATUS_DEAD)
@@ -584,7 +584,7 @@ void DebriefingState::prepareDebriefing()
 	if (playersUnconscious == playersSurvived)
 	{
 		playersSurvived = 0;
-		for (std::vector<BattleUnit* >::iterator j = battle->getUnits()->begin(); j != battle->getUnits()->end(); ++j)
+		for (std::vector<BattleUnit*>::iterator j = battle->getUnits()->begin(); j != battle->getUnits()->end(); ++j)
 		{
 			if ((*j)->getOriginalFaction() == FACTION_PLAYER
 				&& (*j)->getStatus() != STATUS_DEAD)
@@ -594,7 +594,7 @@ void DebriefingState::prepareDebriefing()
 		}
 	}
 
-	for (std::vector<BattleUnit* >::iterator j = battle->getUnits()->begin(); j != battle->getUnits()->end(); ++j)
+	for (std::vector<BattleUnit*>::iterator j = battle->getUnits()->begin(); j != battle->getUnits()->end(); ++j)
 	{
 		UnitStatus status = (*j)->getStatus();
 		UnitFaction faction = (*j)->getFaction();
@@ -627,7 +627,7 @@ void DebriefingState::prepareDebriefing()
 				{
 					addStat("STR_XCOM_OPERATIVES_KILLED", 1, -value);
 
-					for (std::vector<Soldier* >::iterator i = base->getSoldiers()->begin(); i != base->getSoldiers()->end(); ++i)
+					for (std::vector<Soldier*>::iterator i = base->getSoldiers()->begin(); i != base->getSoldiers()->end(); ++i)
 					{
 						if ((*i) == soldier)
 						{
@@ -695,7 +695,7 @@ void DebriefingState::prepareDebriefing()
 
 					if (soldier != 0)
 					{
-						for (std::vector<Soldier* >::iterator i = base->getSoldiers()->begin(); i != base->getSoldiers()->end(); ++i)
+						for (std::vector<Soldier*>::iterator i = base->getSoldiers()->begin(); i != base->getSoldiers()->end(); ++i)
 						{
 							if ((*i) == soldier)
 							{
@@ -716,7 +716,7 @@ void DebriefingState::prepareDebriefing()
 				&& (!aborted || (*j)->isInExitArea())
 				&& faction == FACTION_PLAYER) // mind controlled units may as well count as unconscious
 			{
-				for (std::vector<BattleItem* >::iterator k = (*j)->getInventory()->begin(); k != (*j)->getInventory()->end(); ++k)
+				for (std::vector<BattleItem*>::iterator k = (*j)->getInventory()->begin(); k != (*j)->getInventory()->end(); ++k)
 				{
 					if (!(*k)->getRules()->isFixed())
 					{
@@ -956,7 +956,7 @@ void DebriefingState::prepareDebriefing()
 	if (playersSurvived > 0)
 	{
 		int aadivider = battle->getMissionType() == "STR_ALIEN_BASE_ASSAULT" ? 150 : 10;
-		for (std::vector<DebriefingStat* >::iterator i = _stats.begin(); i != _stats.end(); ++i)
+		for (std::vector<DebriefingStat*>::iterator i = _stats.begin(); i != _stats.end(); ++i)
 		{
 			// alien alloys recovery values are divided by 10 or divided by 150 in case of an alien base
 			if ((*i)->item == "STR_ALIEN_ALLOYS")
@@ -985,14 +985,14 @@ void DebriefingState::prepareDebriefing()
 	if (battle->getMissionType() == "STR_BASE_DEFENSE"
 		&& !_destroyBase)
 	{
-		for (std::vector<Craft* >::iterator c = base->getCrafts()->begin(); c != base->getCrafts()->end(); ++c)
+		for (std::vector<Craft*>::iterator c = base->getCrafts()->begin(); c != base->getCrafts()->end(); ++c)
 		{
 			if ((*c)->getStatus() != "STR_OUT")
 				reequipCraft(base, *c, false);
 		}
 
 		// Clearing base->getVehicles() objects, they don't needed anymore.
-		for (std::vector<Vehicle* >::iterator i = base->getVehicles()->begin(); i != base->getVehicles()->end(); ++i)
+		for (std::vector<Vehicle*>::iterator i = base->getVehicles()->begin(); i != base->getVehicles()->end(); ++i)
 			delete (*i);
 
 		base->getVehicles()->clear();
@@ -1001,7 +1001,7 @@ void DebriefingState::prepareDebriefing()
 	if (_destroyBase
 		&& _game->getSavedGame()->getMonthsPassed() != -1)
 	{
-		for (std::vector<Base* >::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
+		for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
 		{
 			if ((*i) == base)
 			{
@@ -1014,7 +1014,7 @@ void DebriefingState::prepareDebriefing()
 		}
 
 		AlienMission* am = _game->getSavedGame()->getAlienMission(_region->getRules()->getType(), "STR_ALIEN_RETALIATION");
-		for (std::vector<Ufo* >::iterator i = _game->getSavedGame()->getUfos()->begin(); i != _game->getSavedGame()->getUfos()->end();)
+		for (std::vector<Ufo*>::iterator i = _game->getSavedGame()->getUfos()->begin(); i != _game->getSavedGame()->getUfos()->end();)
 		{
 			if ((*i)->getMission() == am)
 			{
@@ -1031,7 +1031,7 @@ void DebriefingState::prepareDebriefing()
 		for (std::vector<AlienMission*>::iterator i = _game->getSavedGame()->getAlienMissions().begin();
 			i != _game->getSavedGame()->getAlienMissions().end(); ++i)
 		{
-			if ((AlienMission* )(*i) == am)
+			if ((AlienMission*)(*i) == am)
 			{
 				delete (*i);
 
@@ -1071,13 +1071,13 @@ void DebriefingState::reequipCraft(Base* base, Craft* craft, bool vehicleItemsCa
 
 	// Now let's see the vehicles
 	ItemContainer craftVehicles;
-	for (std::vector<Vehicle* >::iterator i = craft->getVehicles()->begin(); i != craft->getVehicles()->end(); ++i)
+	for (std::vector<Vehicle*>::iterator i = craft->getVehicles()->begin(); i != craft->getVehicles()->end(); ++i)
 		craftVehicles.addItem((*i)->getRules()->getType());
 
 	// Now we know how many vehicles (separated by types) we have to read
 	// Erase the current vehicles, because we have to reAdd them (cause we want to redistribute their ammo)
 	if (vehicleItemsCanBeDestroyed)
-		for (std::vector<Vehicle* >::iterator i = craft->getVehicles()->begin(); i != craft->getVehicles()->end(); ++i)
+		for (std::vector<Vehicle*>::iterator i = craft->getVehicles()->begin(); i != craft->getVehicles()->end(); ++i)
 			delete (*i);
 
 	craft->getVehicles()->clear();
@@ -1149,9 +1149,9 @@ void DebriefingState::reequipCraft(Base* base, Craft* craft, bool vehicleItemsCa
  * @param from Items recovered from the battlescape.
  * @param base Base to add items to.
  */
-void DebriefingState::recoverItems(std::vector<BattleItem* >* from, Base* base)
+void DebriefingState::recoverItems(std::vector<BattleItem*>* from, Base* base)
 {
-	for (std::vector<BattleItem* >::iterator it = from->begin(); it != from->end(); ++it)
+	for (std::vector<BattleItem*>::iterator it = from->begin(); it != from->end(); ++it)
 	{
 		if ((*it)->getRules()->getName() == "STR_ELERIUM_115")
 		{

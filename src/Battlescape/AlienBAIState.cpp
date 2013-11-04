@@ -570,7 +570,7 @@ void AlienBAIState::setupPatrol()
 			{
 				// find closest high value target which is not already allocated
 				int closest = 1000000;
-				for (std::vector<Node* >::iterator i = _save->getNodes()->begin(); i != _save->getNodes()->end(); ++i)
+				for (std::vector<Node*>::iterator i = _save->getNodes()->begin(); i != _save->getNodes()->end(); ++i)
 				{
 					if ((*i)->isTarget() && !(*i)->isAllocated())
 					{
@@ -1644,7 +1644,7 @@ bool AlienBAIState::explosiveEfficacy(Position targetPos, BattleUnit* attackingU
 
 	BattleUnit* target = _save->getTile(targetPos)->getUnit();
 
-	for (std::vector<BattleUnit* >::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
+	for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 	{
 		if (!(*i)->isOut()
 			&& *i != attackingUnit

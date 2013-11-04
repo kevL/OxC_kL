@@ -46,7 +46,7 @@ private:
 	static const int BORDER = 5;
 	static const int BUTTON_HEIGHT = 16;
 
-	std::vector<Target* > _targets;
+	std::vector<Target*> _targets;
 	Craft* _craft;
 	GeoscapeState* _state;
 
@@ -56,7 +56,7 @@ private:
 
 	public:
 		/// Creates the Multiple Targets state.
-		MultipleTargetsState(Game* game, std::vector<Target* > targets, Craft* craft, GeoscapeState* state);
+		MultipleTargetsState(Game* game, std::vector<Target*> targets, Craft* craft, GeoscapeState* state);
 		/// Cleans up the Multiple Targets state.
 		~MultipleTargetsState();
 

@@ -192,7 +192,7 @@ BriefingState::~BriefingState()
  * Closes the window.
  * @param action Pointer to an action.
  */
-void BriefingState::btnOkClick(Action* )
+void BriefingState::btnOkClick(Action*)
 {
 	_game->popState();
 

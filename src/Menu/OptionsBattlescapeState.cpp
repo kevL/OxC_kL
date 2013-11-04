@@ -361,7 +361,7 @@ OptionsBattlescapeState::~OptionsBattlescapeState()
  * Saves options and returns to the previous screen.
  * @param action Pointer to an action.
  */
-void OptionsBattlescapeState::btnOkClick(Action* )
+void OptionsBattlescapeState::btnOkClick(Action*)
 {
 	if		(_scrollSpeed == _btnScrollSpeed1)	Options::setInt("battleScrollSpeed", 4);
 	else if (_scrollSpeed == _btnScrollSpeed2)	Options::setInt("battleScrollSpeed", 8);
@@ -401,7 +401,7 @@ void OptionsBattlescapeState::btnOkClick(Action* )
 * Returns to the previous screen.
 * @param action Pointer to an action.
 */
-void OptionsBattlescapeState::btnCancelClick(Action* )
+void OptionsBattlescapeState::btnCancelClick(Action*)
 {
 	_game->popState();
 }

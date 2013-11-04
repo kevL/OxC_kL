@@ -886,7 +886,7 @@ void BattlescapeState::btnShowMapClick(Action *)
  * Toggles the current unit's kneel/standup status.
  * @param action Pointer to an action.
  */
-void BattlescapeState::btnKneelClick(Action* )
+void BattlescapeState::btnKneelClick(Action*)
 {
 	if (allowButtons())
 	{
@@ -1053,7 +1053,7 @@ void BattlescapeState::selectPreviousPlayerUnit(bool checkReselect, bool setRese
  * Shows/hides all map layers.
  * @param action Pointer to an action.
  */
-void BattlescapeState::btnShowLayersClick(Action* )
+void BattlescapeState::btnShowLayersClick(Action*)
 {
 	_numLayers->setValue(_map->getCamera()->toggleShowAllLayers());
 }
@@ -1062,7 +1062,7 @@ void BattlescapeState::btnShowLayersClick(Action* )
  * Shows options.
  * @param action Pointer to an action.
  */
-void BattlescapeState::btnHelpClick(Action* )
+void BattlescapeState::btnHelpClick(Action*)
 {
 	if (allowButtons(true))
 		_game->pushState(new PauseState(_game, OPT_BATTLESCAPE));
@@ -1073,7 +1073,7 @@ void BattlescapeState::btnHelpClick(Action* )
  * so all ongoing actions, like explosions are finished first before really switching turn.
  * @param action Pointer to an action.
  */
-void BattlescapeState::btnEndTurnClick(Action* )
+void BattlescapeState::btnEndTurnClick(Action*)
 {
 	if (allowButtons())
 	{
@@ -1088,7 +1088,7 @@ void BattlescapeState::btnEndTurnClick(Action* )
  * Aborts the game.
  * @param action Pointer to an action.
  */
-void BattlescapeState::btnAbortClick(Action* )
+void BattlescapeState::btnAbortClick(Action*)
 {
 	if (allowButtons())
 		_game->pushState(new AbortMissionState(_game, _save, this));
@@ -1138,7 +1138,7 @@ void BattlescapeState::btnStatsClick(Action* action)
  * Shows an action popup menu. When clicked, creates the action.
  * @param action Pointer to an action.
  */
-void BattlescapeState::btnLeftHandItemClick(Action* )
+void BattlescapeState::btnLeftHandItemClick(Action*)
 {
 	if (_battleGame->getCurrentAction()->type != BA_NONE) return;
 
@@ -1157,7 +1157,7 @@ void BattlescapeState::btnLeftHandItemClick(Action* )
  * Shows an action popup menu. When clicked, create the action.
  * @param action Pointer to an action.
  */
-void BattlescapeState::btnRightHandItemClick(Action* )
+void BattlescapeState::btnRightHandItemClick(Action*)
 {
 	if (_battleGame->getCurrentAction()->type != BA_NONE) return;
 
@@ -1242,7 +1242,7 @@ void BattlescapeState::btnReserveClick(Action* action)
  * Reloads the weapon in hand.
  * @param action Pointer to an action.
  */
-void BattlescapeState::btnReloadClick(Action* )
+void BattlescapeState::btnReloadClick(Action*)
 {
 	if (playableUnitSelected()
 		&& _save->getSelectedUnit()->checkAmmo())
@@ -1257,7 +1257,7 @@ void BattlescapeState::btnReloadClick(Action* )
  * Toggles soldier's personal lighting (purely cosmetic).
  * @param action Pointer to an action.
  */
-void BattlescapeState::btnPersonalLightingClick(Action* )
+void BattlescapeState::btnPersonalLightingClick(Action*)
 {
 	if (allowButtons())
 		_save->getTileEngine()->togglePersonalLighting();
@@ -1392,7 +1392,7 @@ void BattlescapeState::updateSoldierInfo()
 	_save->getTileEngine()->calculateFOV(_save->getSelectedUnit());
 
 	int j = 0;
-	for (std::vector<BattleUnit* >::iterator i = battleUnit->getVisibleUnits()->begin(); i != battleUnit->getVisibleUnits()->end() && j < VISIBLE_MAX; ++i)
+	for (std::vector<BattleUnit*>::iterator i = battleUnit->getVisibleUnits()->begin(); i != battleUnit->getVisibleUnits()->end() && j < VISIBLE_MAX; ++i)
 	{
 		_btnVisibleUnit[j]->setVisible(true);
 		_numVisibleUnit[j]->setVisible(true);

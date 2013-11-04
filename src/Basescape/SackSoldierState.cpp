@@ -103,14 +103,14 @@ SackSoldierState::~SackSoldierState()
  * to the previous screen.
  * @param action Pointer to an action.
  */
-void SackSoldierState::btnOkClick(Action* )
+void SackSoldierState::btnOkClick(Action*)
 {
 	if (_soldier->getArmor()->getStoreItem() != "STR_NONE")
 	{
 		_base->getItems()->addItem(_soldier->getArmor()->getStoreItem());
 	}
 
-	for (std::vector<Soldier* >::iterator s = _base->getSoldiers()->begin(); s != _base->getSoldiers()->end(); ++s)
+	for (std::vector<Soldier*>::iterator s = _base->getSoldiers()->begin(); s != _base->getSoldiers()->end(); ++s)
 	{
 		if ((*s) == _soldier)
 		{
@@ -127,7 +127,7 @@ void SackSoldierState::btnOkClick(Action* )
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void SackSoldierState::btnCancelClick(Action* )
+void SackSoldierState::btnCancelClick(Action*)
 {
 	_game->popState();
 }

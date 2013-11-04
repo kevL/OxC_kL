@@ -106,7 +106,7 @@ SoldierMemorialState::SoldierMemorialState(Game* game)
 
 	int lost = _game->getSavedGame()->getDeadSoldiers()->size();
 	int recruited = lost;
-	for (std::vector<Base* >::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
+	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
 	{
 		recruited += (*i)->getTotalSoldiers();
 	}
@@ -128,7 +128,7 @@ SoldierMemorialState::SoldierMemorialState(Game* game)
 	_lstSoldiers->setMargin(8);
 	_lstSoldiers->onMouseClick((ActionHandler)& SoldierMemorialState::lstSoldiersClick);
 
-	for (std::vector<Soldier* >::reverse_iterator i = _game->getSavedGame()->getDeadSoldiers()->rbegin(); i != _game->getSavedGame()->getDeadSoldiers()->rend(); ++i)
+	for (std::vector<Soldier*>::reverse_iterator i = _game->getSavedGame()->getDeadSoldiers()->rbegin(); i != _game->getSavedGame()->getDeadSoldiers()->rend(); ++i)
 	{
 		SoldierDeath* death = (*i)->getDeath();
 
@@ -151,7 +151,7 @@ SoldierMemorialState::~SoldierMemorialState()
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void SoldierMemorialState::btnOkClick(Action* )
+void SoldierMemorialState::btnOkClick(Action*)
 {
 	_game->popState();
 	_game->getResourcePack()->getRandomMusic("GMGEO")->play();
@@ -161,7 +161,7 @@ void SoldierMemorialState::btnOkClick(Action* )
  * Shows the selected soldier's info.
  * @param action Pointer to an action.
  */
-void SoldierMemorialState::lstSoldiersClick(Action* )
+void SoldierMemorialState::lstSoldiersClick(Action*)
 {
 	//_game->pushState(new SoldierInfoState(_game, _base, _lstSoldiers->getSelectedRow()));
 }

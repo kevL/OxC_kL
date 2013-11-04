@@ -151,7 +151,7 @@ CraftWeaponsState::~CraftWeaponsState()
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void CraftWeaponsState::btnCancelClick(Action* )
+void CraftWeaponsState::btnCancelClick(Action*)
 {
 	_game->popState();
 }
@@ -160,7 +160,7 @@ void CraftWeaponsState::btnCancelClick(Action* )
  * Equips the weapon on the craft and returns to the previous screen.
  * @param action Pointer to an action.
  */
-void CraftWeaponsState::lstWeaponsClick(Action* )
+void CraftWeaponsState::lstWeaponsClick(Action*)
 {
 	CraftWeapon* current = _base->getCrafts()->at(_craft)->getWeapons()->at(_weapon);
 	if (current != 0) // Remove current weapon

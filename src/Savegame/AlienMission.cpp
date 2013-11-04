@@ -127,7 +127,7 @@ void AlienMission::load(const YAML::Node& node, SavedGame& game)
 	if (const YAML::Node& base = node["alienBase"])
 	{
 		int id = base.as<int>();
-		std::vector<AlienBase* >::const_iterator found = std::find_if(game.getAlienBases()->begin(), game.getAlienBases()->end(), matchById(id));
+		std::vector<AlienBase*>::const_iterator found = std::find_if(game.getAlienBases()->begin(), game.getAlienBases()->end(), matchById(id));
 		if (found == game.getAlienBases()->end())
 		{
 			throw Exception("Corrupted save: Invalid base for mission.");
@@ -244,7 +244,7 @@ void AlienMission::think(Game& engine, const Globe& globe)
 	if (_rule.getType() == "STR_ALIEN_INFILTRATION"
 		&& _nextWave == _rule.getWaveCount())
 	{
-		for (std::vector<Country* >::iterator c = game.getCountries()->begin(); c != game.getCountries()->end(); ++c)
+		for (std::vector<Country*>::iterator c = game.getCountries()->begin(); c != game.getCountries()->end(); ++c)
 		{
 			if (!(*c)->getPact()
 				&& !(*c)->getNewPact()
@@ -296,7 +296,7 @@ Ufo* AlienMission::spawnUfo(const SavedGame& game, const Ruleset& ruleset, const
 			// Spawn a battleship straight for the XCOM base.
 			const RuleUfo& battleshipRule = *ruleset.getUfo("STR_BATTLESHIP");
 			const UfoTrajectory& assaultTrajectory = *ruleset.getUfoTrajectory("__RETALIATION_ASSAULT_RUN");
-			Ufo* ufo = new Ufo(const_cast<RuleUfo* >(&battleshipRule));
+			Ufo* ufo = new Ufo(const_cast<RuleUfo*>(&battleshipRule));
 			ufo->setMissionInfo(this, &assaultTrajectory);
 
 			std::pair<double, double> pos;
@@ -332,7 +332,7 @@ Ufo* AlienMission::spawnUfo(const SavedGame& game, const Ruleset& ruleset, const
 		}
 
 		// Our destination is always an alien base.
-		Ufo* ufo = new Ufo(const_cast<RuleUfo* >(&ufoRule));
+		Ufo* ufo = new Ufo(const_cast<RuleUfo*>(&ufoRule));
 		ufo->setMissionInfo(this, &trajectory);
 		const RuleRegion& regionRules = *ruleset.getRegion(_region);
 
@@ -379,7 +379,7 @@ Ufo* AlienMission::spawnUfo(const SavedGame& game, const Ruleset& ruleset, const
 	}
 
 	// Spawn according to sequence.
-	Ufo* ufo = new Ufo(const_cast<RuleUfo* >(&ufoRule));
+	Ufo* ufo = new Ufo(const_cast<RuleUfo*>(&ufoRule));
 	ufo->setMissionInfo(this, &trajectory);
 	const RuleRegion& regionRules = *ruleset.getRegion(_region);
 
@@ -533,9 +533,9 @@ void AlienMission::ufoReachedWaypoint(Ufo& ufo, Game &engine, const Globe& globe
 
 			game.getTerrorSites()->push_back(terrorSite);
 
-			for (std::vector<Target* >::iterator t = ufo.getFollowers()->begin(); t != ufo.getFollowers()->end();)
+			for (std::vector<Target*>::iterator t = ufo.getFollowers()->begin(); t != ufo.getFollowers()->end();)
 			{
-				Craft* c = dynamic_cast<Craft* >(*t);
+				Craft* c = dynamic_cast<Craft*>(*t);
 				if (c
 					&& c->getNumSoldiers() != 0)
 				{
@@ -728,7 +728,7 @@ const AlienBase* AlienMission::getAlienBase() const
  */
 void AlienMission::addScore(const double lon, const double lat, Game& engine)
 {
-	for (std::vector<Region* >::iterator region = engine.getSavedGame()->getRegions()->begin(); region != engine.getSavedGame()->getRegions()->end(); ++region)
+	for (std::vector<Region*>::iterator region = engine.getSavedGame()->getRegions()->begin(); region != engine.getSavedGame()->getRegions()->end(); ++region)
 	{
 		if ((*region)->getRules()->insideRegion(lon, lat))
 		{
@@ -738,7 +738,7 @@ void AlienMission::addScore(const double lon, const double lat, Game& engine)
 		}
 	}
 
-	for (std::vector<Country* >::iterator country = engine.getSavedGame()->getCountries()->begin(); country != engine.getSavedGame()->getCountries()->end(); ++country)
+	for (std::vector<Country*>::iterator country = engine.getSavedGame()->getCountries()->begin(); country != engine.getSavedGame()->getCountries()->end(); ++country)
 	{
 		if ((*country)->getRules()->insideCountry(lon, lat))
 		{

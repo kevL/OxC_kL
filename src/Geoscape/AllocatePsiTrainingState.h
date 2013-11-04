@@ -45,7 +45,7 @@ private:
 	Window* _window;
 	Text* _txtTitle, * _txtTraining, * _txtName, * _txtCraft, * _txtRemaining, * _txtPsiStrength, * _txtPsiSkill;
 	TextList* _lstSoldiers;
-	std::vector<Soldier* > _soldiers;
+	std::vector<Soldier*> _soldiers;
 	unsigned int _sel;
 	int _labSpace;
 	Base* _base;

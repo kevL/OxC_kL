@@ -608,7 +608,7 @@ void SoldierInfoState::edtSoldierKeyPress(Action* action)
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void SoldierInfoState::btnOkClick(Action* )
+void SoldierInfoState::btnOkClick(Action*)
 {
 	_base->getSoldiers()->at(_soldier)->setName(_edtSoldier->getText());
 	_game->popState();
@@ -618,7 +618,7 @@ void SoldierInfoState::btnOkClick(Action* )
  * Goes to the previous soldier.
  * @param action Pointer to an action.
  */
-void SoldierInfoState::btnPrevClick(Action* )
+void SoldierInfoState::btnPrevClick(Action*)
 {
 	_edtSoldier->deFocus();
 	_base->getSoldiers()->at(_soldier)->setName(_edtSoldier->getText());
@@ -635,7 +635,7 @@ void SoldierInfoState::btnPrevClick(Action* )
  * Goes to the next soldier.
  * @param action Pointer to an action.
  */
-void SoldierInfoState::btnNextClick(Action* )
+void SoldierInfoState::btnNextClick(Action*)
 {
 	_edtSoldier->deFocus();
 	_base->getSoldiers()->at(_soldier)->setName(_edtSoldier->getText());
@@ -651,7 +651,7 @@ void SoldierInfoState::btnNextClick(Action* )
  * Shows the Select Armor window.
  * @param action Pointer to an action.
  */
-void SoldierInfoState::btnArmorClick(Action* )
+void SoldierInfoState::btnArmorClick(Action*)
 {
 	_edtSoldier->deFocus();
 	_base->getSoldiers()->at(_soldier)->setName(_edtSoldier->getText());
@@ -668,7 +668,7 @@ void SoldierInfoState::btnArmorClick(Action* )
  * Shows the Sack Soldier window.
  * @param action Pointer to an action.
  */
-void SoldierInfoState::btnSackClick(Action* )
+void SoldierInfoState::btnSackClick(Action*)
 {
 	Soldier *soldier = _base->getSoldiers()->at(_soldier);
 	_game->pushState(new SackSoldierState(_game, _base, soldier));

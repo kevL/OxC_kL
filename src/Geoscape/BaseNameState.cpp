@@ -144,7 +144,7 @@ void BaseNameState::edtNameKeyPress(Action* action)
  * Returns to the previous screen
  * @param action Pointer to an action.
  */
-void BaseNameState::btnOkClick(Action* )
+void BaseNameState::btnOkClick(Action*)
 {
 	nameBase();
 }

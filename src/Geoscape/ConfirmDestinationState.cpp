@@ -50,7 +50,7 @@ ConfirmDestinationState::ConfirmDestinationState(Game* game, Craft* craft, Targe
 		_craft(craft),
 		_target(target)
 {
-	Waypoint* w = dynamic_cast<Waypoint* >(_target);
+	Waypoint* w = dynamic_cast<Waypoint*>(_target);
 
 	_screen = false;
 
@@ -122,9 +122,9 @@ ConfirmDestinationState::~ConfirmDestinationState()
  * Confirms the selected target for the craft.
  * @param action Pointer to an action.
  */
-void ConfirmDestinationState::btnOkClick(Action* )
+void ConfirmDestinationState::btnOkClick(Action*)
 {
-	Waypoint* w = dynamic_cast<Waypoint* >(_target);
+	Waypoint* w = dynamic_cast<Waypoint*>(_target);
 	if (w != 0 && w->getId() == 0)
 	{
 		w->setId(_game->getSavedGame()->getId("STR_WAYPOINT"));
@@ -137,9 +137,9 @@ void ConfirmDestinationState::btnOkClick(Action* )
 	if (_craft->getInterceptionOrder() == 0)
 	{
 		int maxInterceptionOrder = 0;
-		for (std::vector<Base* >::iterator baseIt = _game->getSavedGame()->getBases()->begin(); baseIt != _game->getSavedGame()->getBases()->end(); ++baseIt)
+		for (std::vector<Base*>::iterator baseIt = _game->getSavedGame()->getBases()->begin(); baseIt != _game->getSavedGame()->getBases()->end(); ++baseIt)
 		{
-			for (std::vector<Craft* >::iterator craftIt = (*baseIt)->getCrafts()->begin(); craftIt != (*baseIt)->getCrafts()->end(); ++craftIt)
+			for (std::vector<Craft*>::iterator craftIt = (*baseIt)->getCrafts()->begin(); craftIt != (*baseIt)->getCrafts()->end(); ++craftIt)
 			{
 				if ((*craftIt)->getInterceptionOrder() > maxInterceptionOrder)
 				{
@@ -159,9 +159,9 @@ void ConfirmDestinationState::btnOkClick(Action* )
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void ConfirmDestinationState::btnCancelClick(Action* )
+void ConfirmDestinationState::btnCancelClick(Action*)
 {
-	Waypoint* w = dynamic_cast<Waypoint* >(_target);
+	Waypoint* w = dynamic_cast<Waypoint*>(_target);
 	if (w != 0 && w->getId() == 0)
 	{
 		delete w;

@@ -102,7 +102,7 @@ FundingState::FundingState(Game* game)
 	_lstCountries->setSecondaryColor(Palette::blockOffset(8)+10);
 	_lstCountries->setColumns(3, 108, 100, 52);
 	_lstCountries->setDot(true);
-	for (std::vector<Country* >::iterator i = _game->getSavedGame()->getCountries()->begin(); i != _game->getSavedGame()->getCountries()->end(); ++i)
+	for (std::vector<Country*>::iterator i = _game->getSavedGame()->getCountries()->begin(); i != _game->getSavedGame()->getCountries()->end(); ++i)
 	{
 		std::wstringstream ss, ss2;
 		ss << L'\x01' << Text::formatFunding((*i)->getFunding().at((*i)->getFunding().size()-1)) << L'\x01';
@@ -146,7 +146,7 @@ FundingState::~FundingState()
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void FundingState::btnOkClick(Action* )
+void FundingState::btnOkClick(Action*)
 {
 	_game->popState();
 }

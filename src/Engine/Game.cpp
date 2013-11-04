@@ -168,7 +168,7 @@ Game::~Game()
 
 	Mix_HaltChannel(-1);
 
-	for (std::list<State* >::iterator i = _states.begin(); i != _states.end(); ++i)
+	for (std::list<State*>::iterator i = _states.begin(); i != _states.end(); ++i)
 	{
 		delete *i;
 	}

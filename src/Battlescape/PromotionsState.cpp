@@ -98,9 +98,9 @@ PromotionsState::PromotionsState(Game* game)
 	_lstSoldiers->setBackground(_window);
 	_lstSoldiers->setMargin(8);
 
-	for (std::vector<Base* >::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
+	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
 	{
-		for (std::vector<Soldier* >::iterator j = (*i)->getSoldiers()->begin(); j != (*i)->getSoldiers()->end(); ++j)
+		for (std::vector<Soldier*>::iterator j = (*i)->getSoldiers()->begin(); j != (*i)->getSoldiers()->end(); ++j)
 		{
 			if ((*j)->isPromoted())
 			{
@@ -121,7 +121,7 @@ PromotionsState::~PromotionsState()
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void PromotionsState::btnOkClick(Action* )
+void PromotionsState::btnOkClick(Action*)
 {
 	_game->popState();
 }

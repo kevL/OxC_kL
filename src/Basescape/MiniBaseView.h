@@ -57,7 +57,7 @@ private:
 		~MiniBaseView();
 
 		/// Sets the base list to display.
-		void setBases(std::vector<Base* >* bases);
+		void setBases(std::vector<Base*>* bases);
 		/// Sets the texture for the mini base view.
 		void setTexture(SurfaceSet* texture);
 		/// Gets the base the mouse is over.

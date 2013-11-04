@@ -50,7 +50,7 @@ private:
 	Window* _window;
 	Text* _txtTitle, * _txtArmament, * _txtQuantity, * _txtAmmunition;
 	TextList* _lstWeapons;
-	std::vector<RuleCraftWeapon* > _weapons;
+	std::vector<RuleCraftWeapon*> _weapons;
 
 	public:
 		/// Creates the Craft Weapons state.

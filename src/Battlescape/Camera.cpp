@@ -106,7 +106,7 @@ void Camera::minMaxInt(int* value, const int minValue, const int maxValue) const
  * @param action Pointer to an action.
  * @param state State that the action handlers belong to.
  */
-void Camera::mousePress(Action* action, State* )
+void Camera::mousePress(Action* action, State*)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
 	{
@@ -131,7 +131,7 @@ void Camera::mousePress(Action* action, State* )
  * @param action Pointer to an action.
  * @param state State that the action handlers belong to.
  */
-void Camera::mouseRelease(Action* action, State* )
+void Camera::mouseRelease(Action* action, State*)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT
 		&& Options::getInt("battleScrollType") == SCROLL_TRIGGER)
@@ -160,7 +160,7 @@ void Camera::mouseRelease(Action* action, State* )
  * @param action Pointer to an action.
  * @param state State that the action handlers belong to.
  */
-void Camera::mouseOver(Action* action, State* )
+void Camera::mouseOver(Action* action, State*)
 {
 	if (_map->getCursorType() == CT_NONE)
 	{
@@ -272,7 +272,7 @@ void Camera::mouseOver(Action* action, State* )
  * @param action Pointer to an action.
  * @param state State that the action handlers belong to.
  */
-void Camera::keyboardPress(Action* action, State* )
+void Camera::keyboardPress(Action* action, State*)
 {
 	if (_map->getCursorType() == CT_NONE)
 	{
@@ -318,7 +318,7 @@ void Camera::keyboardPress(Action* action, State* )
  * @param action Pointer to an action.
  * @param state State that the action handlers belong to.
  */
-void Camera::keyboardRelease(Action* action, State* )
+void Camera::keyboardRelease(Action* action, State*)
 {
 	if (_map->getCursorType() == CT_NONE)
 	{

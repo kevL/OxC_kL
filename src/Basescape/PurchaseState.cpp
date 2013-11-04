@@ -192,7 +192,7 @@ PurchaseState::PurchaseState(Game* game, Base* base)
 			_qtys.push_back(0);
 
 			int crafts = 0;
-			for (std::vector<Craft* >::iterator c = _base->getCrafts()->begin(); c != _base->getCrafts()->end(); ++c)
+			for (std::vector<Craft*>::iterator c = _base->getCrafts()->begin(); c != _base->getCrafts()->end(); ++c)
 			{
 				if ((*c)->getRules()->getType() == *i)
 					crafts++;
@@ -225,7 +225,7 @@ PurchaseState::PurchaseState(Game* game, Base* base)
 			std::wstring item = tr(launcher->getType());
 			// kL_begin:
 			int tQty = _base->getItems()->getItem(launcher->getType()); // Gets the item type. Each item has a unique type.
-			for (std::vector<Transfer* >::const_iterator j = _base->getTransfers()->begin(); j != _base->getTransfers()->end(); ++j)
+			for (std::vector<Transfer*>::const_iterator j = _base->getTransfers()->begin(); j != _base->getTransfers()->end(); ++j)
 			{
 				std::wstring trItem = (*j)->getName(_game->getLanguage());
 				if (item == trItem)
@@ -261,7 +261,7 @@ PurchaseState::PurchaseState(Game* game, Base* base)
 			std::wstring item = tr(clip->getType());
 			// kL_begin:
 			int tQty = _base->getItems()->getItem(clip->getType()); // Gets the item type. Each item has a unique type.
-			for (std::vector<Transfer* >::const_iterator j = _base->getTransfers()->begin(); j != _base->getTransfers()->end(); ++j)
+			for (std::vector<Transfer*>::const_iterator j = _base->getTransfers()->begin(); j != _base->getTransfers()->end(); ++j)
 			{
 				std::wstring trItem = (*j)->getName(_game->getLanguage());
 				if (item == trItem)
@@ -303,7 +303,7 @@ PurchaseState::PurchaseState(Game* game, Base* base)
 
 			// kL_begin:
 			int tQty = _base->getItems()->getItem(*i); // Returns the quantity of an item in the container.
-			for (std::vector<Transfer* >::const_iterator j = _base->getTransfers()->begin(); j != _base->getTransfers()->end(); ++j)
+			for (std::vector<Transfer*>::const_iterator j = _base->getTransfers()->begin(); j != _base->getTransfers()->end(); ++j)
 			{
 				std::wstring trItem = (*j)->getName(_game->getLanguage());
 				if (item == trItem)
@@ -378,7 +378,7 @@ bool PurchaseState::isExcluded(std::string item)
  * Purchases the selected items.
  * @param action Pointer to an action.
  */
-void PurchaseState::btnOkClick(Action* )
+void PurchaseState::btnOkClick(Action*)
 {
 	_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds() - _total);
 
@@ -441,7 +441,7 @@ void PurchaseState::btnOkClick(Action* )
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void PurchaseState::btnCancelClick(Action* )
+void PurchaseState::btnCancelClick(Action*)
 {
 	_game->popState();
 }

@@ -184,8 +184,8 @@ void UnitFallBState::think()
 			// Find somewhere to move the unit(s) endanger of being squashed.
 			if (!unitsToMove.empty())
 			{
-				std::vector<Tile* > escapeTiles;
-				for (std::vector<BattleUnit* >::iterator ub = unitsToMove.begin(); ub < unitsToMove.end(); )
+				std::vector<Tile*> escapeTiles;
+				for (std::vector<BattleUnit*>::iterator ub = unitsToMove.begin(); ub < unitsToMove.end(); )
 				{
 					BattleUnit* unitBelow = *ub;
 					bool escapeFound = false;

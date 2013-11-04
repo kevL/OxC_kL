@@ -77,7 +77,7 @@ void BattleAIState::exit()
  * Runs any code the state needs to keep updating every
  * AI cycle.
  */
-void BattleAIState::think(BattleAction* )
+void BattleAIState::think(BattleAction*)
 {
 }
 

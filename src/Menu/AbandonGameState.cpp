@@ -111,7 +111,7 @@ AbandonGameState::~AbandonGameState()
  * Goes back to the Main Menu.
  * @param action Pointer to an action.
  */
-void AbandonGameState::btnYesClick(Action* )
+void AbandonGameState::btnYesClick(Action*)
 {
 	if (Options::getInt("autosave") == 3)
 	{
@@ -127,7 +127,7 @@ void AbandonGameState::btnYesClick(Action* )
  * Closes the window.
  * @param action Pointer to an action.
  */
-void AbandonGameState::btnNoClick(Action* )
+void AbandonGameState::btnNoClick(Action*)
 {
 	_game->popState();
 }

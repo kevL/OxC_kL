@@ -80,12 +80,12 @@ private:
 	int _missions, _kills, _recovery;
 	bool _recentlyPromoted, _psiTraining;
 	Armor* _armor;
-	std::vector<EquipmentLayoutItem* > _equipmentLayout;
+	std::vector<EquipmentLayoutItem*> _equipmentLayout;
 	SoldierDeath* _death;
 
 	public:
 		/// Creates a new soldier.
-		Soldier(RuleSoldier* rules, Armor* armor, const std::vector<SoldierNamePool* >* names = 0, int id = 0);
+		Soldier(RuleSoldier* rules, Armor* armor, const std::vector<SoldierNamePool*>* names = 0, int id = 0);
 		/// Cleans up the soldier.
 		~Soldier();
 
@@ -145,7 +145,7 @@ private:
 		/// Heals wound recoveries.
 		void heal();
 		/// Gets the soldier's equipment-layout.
-		std::vector<EquipmentLayoutItem* >* getEquipmentLayout();
+		std::vector<EquipmentLayoutItem*>* getEquipmentLayout();
 		/// Trains a soldier's psychic stats
 		void trainPsi();
 		/// Trains a soldier's psionic abilities (anytimePsiTraining option).

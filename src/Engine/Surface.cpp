@@ -763,10 +763,10 @@ void Surface::paletteShift(int off, int mul, int mid)
 	int ncolors = _surface->format->palette->ncolors;
 
 	// store the original palette
-	_originalColors = (SDL_Color* )malloc(sizeof(SDL_Color)* ncolors);
+	_originalColors = (SDL_Color*)malloc(sizeof(SDL_Color)* ncolors);
 
 	// create a temporary new palette
-	SDL_Color* newColors = (SDL_Color* )malloc(sizeof(SDL_Color)* ncolors);
+	SDL_Color* newColors = (SDL_Color*)malloc(sizeof(SDL_Color)* ncolors);
 
 	// do the color shift - while storing the original colors too
 	for (int i = 0; i < ncolors; i++)

@@ -123,12 +123,12 @@ InterceptState::InterceptState(Game* game, Globe* globe, Base* base, Target* tar
 
 	int row = 0;
 
-	for (std::vector<Base* >::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
+	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
 	{
 		if (_base != 0 && *i != _base)
 			continue;
 
-		for (std::vector<Craft* >::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); ++j)
+		for (std::vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); ++j)
 		{
 			std::wstringstream ss;
 			if ((*j)->getNumWeapons() > 0)
@@ -184,7 +184,7 @@ InterceptState::~InterceptState()
  * Closes the window.
  * @param action Pointer to an action.
  */
-void InterceptState::btnCancelClick(Action* )
+void InterceptState::btnCancelClick(Action*)
 {
 	_game->popState();
 }
@@ -193,7 +193,7 @@ void InterceptState::btnCancelClick(Action* )
  * Pick a target for the selected craft.
  * @param action Pointer to an action.
  */
-/*kL void InterceptState::lstCraftsLeftClick(Action* )
+/*kL void InterceptState::lstCraftsLeftClick(Action*)
 {
 	Craft* c = _crafts[_lstCrafts->getSelectedRow()];
 	if (c->getStatus() == "STR_READY"
@@ -212,7 +212,7 @@ void InterceptState::btnCancelClick(Action* )
 	}
 } */
 // kL_begin: list of Intercept craft actions.
-void InterceptState::lstCraftsLeftClick(Action* )
+void InterceptState::lstCraftsLeftClick(Action*)
 {
 	Craft* c = _crafts[_lstCrafts->getSelectedRow()];
 /*	if (c->getStatus() == "STR_OUT")
@@ -232,7 +232,7 @@ void InterceptState::lstCraftsLeftClick(Action* )
  * Centers on the selected craft.
  * @param action Pointer to an action.
  */
-void InterceptState::lstCraftsRightClick(Action* )
+void InterceptState::lstCraftsRightClick(Action*)
 {
 	Craft* c = _crafts[_lstCrafts->getSelectedRow()];
 //kL	if (c->getStatus() == "STR_OUT")

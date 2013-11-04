@@ -220,7 +220,7 @@ void SavedGameState::updateStatus(const std::string& msg)
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void SavedGameState::btnCancelClick(Action* )
+void SavedGameState::btnCancelClick(Action*)
 {
 	_game->popState();
 }

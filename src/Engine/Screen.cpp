@@ -111,7 +111,7 @@ Screen::Screen(int width, int height, int bpp, bool fullscreen, int windowedMode
 		std::ostringstream ss;
 		ss << "SDL_VIDEO_WINDOW_POS=" << prev;
 
-		SDL_putenv(const_cast<char* >(ss.str().c_str()));
+		SDL_putenv(const_cast<char*>(ss.str().c_str()));
 	}
 
 	memset(deferredPalette, 0, 256 * sizeof(SDL_Color));
@@ -297,7 +297,7 @@ void Screen::setPalette(SDL_Color* colors, int firstcolor, int ncolors, bool imm
  */
 SDL_Color* Screen::getPalette() const
 {
-	return (SDL_Color* )deferredPalette;
+	return (SDL_Color*)deferredPalette;
 }
 
 /**
@@ -536,7 +536,7 @@ void Screen::screenshot(const std::string& filename) const
 		SDL_BlitSurface(_screen, 0, screenshot, 0);
 	}
 
-	unsigned error = lodepng::encode(filename, (const unsigned char* )(screenshot->pixels), getWidth(), getHeight(), LCT_RGB);
+	unsigned error = lodepng::encode(filename, (const unsigned char*)(screenshot->pixels), getWidth(), getHeight(), LCT_RGB);
 	if (error)
 	{
 		Log(LOG_ERROR) << "Saving to PNG failed: " << lodepng_error_text(error);

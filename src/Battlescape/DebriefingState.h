@@ -76,7 +76,7 @@ private:
 	Region* _region;
 	Country* _country;
 	Base* _base;
-	std::vector<DebriefingStat* > _stats;
+	std::vector<DebriefingStat*> _stats;
 	TextButton* _btnOk;
 	Window* _window;
 	Text* _txtTitle, * _txtItem, * _txtQuantity, * _txtScore, * _txtRecovery, * _txtRating;
@@ -88,7 +88,7 @@ private:
 	/// Prepares debriefing.
 	void prepareDebriefing();
 	/// Recovers items from the battlescape.
-	void recoverItems(std::vector<BattleItem* >* from, Base* base);
+	void recoverItems(std::vector<BattleItem*>* from, Base* base);
 	/// Reequips a craft after a mission.
 	void reequipCraft(Base* base, Craft* craft, bool vehicleItemsCanBeDestroyed);
 	bool _noContainment, _manageContainment, _destroyBase;

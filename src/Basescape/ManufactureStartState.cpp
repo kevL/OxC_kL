@@ -246,7 +246,7 @@ void ManufactureStartState::btnCancelClick(Action*)
  * Go to the Production settings screen.
  * @param action A pointer to an Action.
  */
-void ManufactureStartState::btnStartClick(Action* )
+void ManufactureStartState::btnStartClick(Action*)
 {
 	_game->pushState(new ManufactureInfoState(_game, _base, _item));
 }

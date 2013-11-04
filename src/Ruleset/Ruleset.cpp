@@ -550,7 +550,7 @@ void Ruleset::loadFiles(const std::string &dirname)
  *
  */
 template <typename T>
-T* Ruleset::loadRule(const YAML::Node& node, std::map<std::string, T* >* map, std::vector<std::string>* index, const std::string& key)
+T* Ruleset::loadRule(const YAML::Node& node, std::map<std::string, T*>* map, std::vector<std::string>* index, const std::string& key)
 {
 	T* rule = 0;
 	if (node[key])

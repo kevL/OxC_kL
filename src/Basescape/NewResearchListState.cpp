@@ -121,7 +121,7 @@ void NewResearchListState::init()
  * Selects the RuleResearch to work on.
  * @param action Pointer to an action.
  */
-void NewResearchListState::onSelectProject(Action* )
+void NewResearchListState::onSelectProject(Action*)
 {
 	_game->pushState(new ResearchInfoState(_game, _base, _projects[_lstResearch->getSelectedRow()]));
 }
@@ -130,7 +130,7 @@ void NewResearchListState::onSelectProject(Action* )
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void NewResearchListState::btnOKClick(Action* )
+void NewResearchListState::btnOKClick(Action*)
 {
 	_game->popState();
 }
@@ -144,7 +144,7 @@ void NewResearchListState::fillProjectList()
 	_lstResearch->clearList();
 	_game->getSavedGame()->getAvailableResearchProjects(_projects, _game->getRuleset(), _base);
 
-	std::vector<RuleResearch* >::iterator it = _projects.begin();
+	std::vector<RuleResearch*>::iterator it = _projects.begin();
 	while (it != _projects.end())
 	{
 		if ((*it)->getRequirements().empty())

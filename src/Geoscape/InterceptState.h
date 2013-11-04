@@ -52,7 +52,7 @@ class InterceptState
 		Globe* _globe;
 		Base* _base;
 	Target *_target;
-		std::vector<Craft* > _crafts;
+		std::vector<Craft*> _crafts;
 
 	public:
 		/// Creates the Intercept state.

@@ -148,7 +148,7 @@ ResearchState::~ResearchState()
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void ResearchState::btnOkClick(Action* )
+void ResearchState::btnOkClick(Action*)
 {
 	// restore palette
 	_game->setPalette(_oldPalette);
@@ -160,7 +160,7 @@ void ResearchState::btnOkClick(Action* )
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void ResearchState::btnNewClick(Action* )
+void ResearchState::btnNewClick(Action*)
 {
 	_game->pushState(new NewResearchListState(_game, _base));
 }
@@ -169,9 +169,9 @@ void ResearchState::btnNewClick(Action* )
  * Displays the list of possible ResearchProjects.
  * @param action Pointer to an action.
  */
-void ResearchState::onSelectProject(Action* )
+void ResearchState::onSelectProject(Action*)
 {
-	const std::vector<ResearchProject* >& baseProjects(_base->getResearch());
+	const std::vector<ResearchProject*>& baseProjects(_base->getResearch());
 
 	_game->pushState(new ResearchInfoState(_game, _base, baseProjects[_lstResearch->getSelectedRow()]));
 }
@@ -190,11 +190,11 @@ void ResearchState::init()
  */
 void ResearchState::fillProjectList()
 {
-	const std::vector<ResearchProject* >& baseProjects(_base->getResearch());
+	const std::vector<ResearchProject*>& baseProjects(_base->getResearch());
 
 	_lstResearch->clearList();
 
-	for (std::vector<ResearchProject* >::const_iterator iter = baseProjects.begin (); iter != baseProjects.end (); ++iter)
+	for (std::vector<ResearchProject*>::const_iterator iter = baseProjects.begin (); iter != baseProjects.end (); ++iter)
 	{
 		std::wstringstream sstr;
 		sstr << (*iter)->getAssigned ();

@@ -98,7 +98,7 @@ void ConfirmCydoniaState::init()
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void ConfirmCydoniaState::btnYesClick(Action* )
+void ConfirmCydoniaState::btnYesClick(Action*)
 {
 	_game->popState();
 	_game->popState();
@@ -120,7 +120,7 @@ void ConfirmCydoniaState::btnYesClick(Action* )
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void ConfirmCydoniaState::btnNoClick(Action* )
+void ConfirmCydoniaState::btnNoClick(Action*)
 {
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
 	_game->popState();

@@ -104,7 +104,7 @@ TransfersState::TransfersState(Game* game, Base* base)
 	_lstTransfers->setBackground(_window);
 	_lstTransfers->setMargin(8);
 
-	for (std::vector<Transfer* >::iterator i = _base->getTransfers()->begin(); i != _base->getTransfers()->end(); ++i)
+	for (std::vector<Transfer*>::iterator i = _base->getTransfers()->begin(); i != _base->getTransfers()->end(); ++i)
 	{
 		std::wstringstream ss, ss2;
 		ss << (*i)->getQuantity();
@@ -124,7 +124,7 @@ TransfersState::~TransfersState()
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void TransfersState::btnOkClick(Action* )
+void TransfersState::btnOkClick(Action*)
 {
 	_game->popState();
 }

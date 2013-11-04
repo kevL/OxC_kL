@@ -94,7 +94,7 @@ void ResearchCompleteState::init()
  * return to the previous screen
  * @param action Pointer to an action.
  */
-void ResearchCompleteState::btnOkClick(Action* )
+void ResearchCompleteState::btnOkClick(Action*)
 {
 	_game->popState ();
 }
@@ -103,7 +103,7 @@ void ResearchCompleteState::btnOkClick(Action* )
  * open the Ufopaedia to the entry about the Research.
  * @param action Pointer to an action.
  */
-void ResearchCompleteState::btnReportClick(Action* )
+void ResearchCompleteState::btnReportClick(Action*)
 {
 	_game->popState();
 

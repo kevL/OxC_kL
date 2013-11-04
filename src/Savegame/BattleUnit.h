@@ -107,14 +107,14 @@ private:
 	Position _destination;
 	UnitStatus _status;
 	int _walkPhase, _fallPhase, _spinPhase;
-	std::vector<BattleUnit* > _visibleUnits, _unitsSpottedThisTurn;
-	std::vector<Tile* > _visibleTiles;
+	std::vector<BattleUnit*> _visibleUnits, _unitsSpottedThisTurn;
+	std::vector<Tile*> _visibleTiles;
 	int _tu, _energy, _health, _morale, _stunlevel;
 	bool _kneeled, _floating, _dontReselect;
 	int _currentArmor[5];
 	int _fatalWounds[6];
 	int _fire;
-	std::vector<BattleItem* > _inventory;
+	std::vector<BattleItem*> _inventory;
 	BattleAIState* _currentAIState;
 	bool _visible;
 	Surface* _cache[5];

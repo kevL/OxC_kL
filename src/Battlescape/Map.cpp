@@ -170,9 +170,6 @@ void Map::init()
 	_arrow->unlock();
 
 	_projectile = 0;
-
-	//Log(LOG_INFO) << "Map::init(), Set _reveal FALSE";
-//	_reveal = false;	// kL
 }
 
 /**
@@ -243,10 +240,10 @@ void Map::draw()
 		|| _save->getSelectedUnit() == 0
 		|| _save->getDebugMode()
 		|| projectileInFOV
-		|| explosionInFOV
-		|| (_reveal && !kL_preReveal))
+		|| explosionInFOV)
+//		|| (_reveal && !kL_preReveal))
 	{
-		if (_reveal && !kL_preReveal)
+/*		if (_reveal && !kL_preReveal)
 		{
 			_reveal--;
 			//Log(LOG_INFO) << ". . . . . . drawTerrain() _reveal = " << _reveal;
@@ -255,19 +252,19 @@ void Map::draw()
 		{
 			_reveal = 8;
 			//Log(LOG_INFO) << ". . . . . . drawTerrain() Set _reveal = " << _reveal;
-		}
+		} */
 
 		drawTerrain(this);
 	}
 	else // "hidden movement"
 	{
-		if (kL_preReveal)				// kL
+/*		if (kL_preReveal)				// kL
 		{
 			kL_preReveal = false;		// kL
 			_reveal = 0;				// kL
 			//Log(LOG_INFO) << ". . . . . . kL_preReveal, set " << kL_preReveal;
 			//Log(LOG_INFO) << ". . . . . . _reveal, set " << _reveal;
-		}
+		} */
 
 		//Log(LOG_INFO) << ". . . . blit( hidden movement )";
 		_message->blit(this);
@@ -285,7 +282,7 @@ void Map::draw()
 void Map::setPalette(SDL_Color* colors, int firstcolor, int ncolors)
 {
 	Surface::setPalette(colors, firstcolor, ncolors);
-	for (std::vector<MapDataSet* >::const_iterator i = _save->getMapDataSets()->begin(); i != _save->getMapDataSets()->end(); ++i)
+	for (std::vector<MapDataSet*>::const_iterator i = _save->getMapDataSets()->begin(); i != _save->getMapDataSets()->end(); ++i)
 	{
 		(*i)->getSurfaceset()->setPalette(colors, firstcolor, ncolors);
 	}
@@ -944,7 +941,7 @@ void Map::drawTerrain(Surface *surface)
 		}
 	}
 
-	unit = (BattleUnit* )_save->getSelectedUnit();
+	unit = (BattleUnit*)_save->getSelectedUnit();
 	if (unit
 		&& (_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
 		&& unit->getPosition().z <= _camera->getViewLevel())
@@ -972,7 +969,7 @@ void Map::drawTerrain(Surface *surface)
 	// check if we got big explosions
 	if (explosionInFOV)
 	{
-		for (std::set<Explosion* >::const_iterator i = _explosions.begin(); i != _explosions.end(); ++i)
+		for (std::set<Explosion*>::const_iterator i = _explosions.begin(); i != _explosions.end(); ++i)
 		{
 			_camera->convertVoxelToScreen((*i)->getPosition(), &bulletPositionScreen);
 			if ((*i)->isBig())
@@ -1264,7 +1261,7 @@ CursorType Map::getCursorType() const
  */
 void Map::cacheUnits()
 {
-	for (std::vector<BattleUnit* >::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
+	for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 	{
 		cacheUnit(*i);
 	}
@@ -1374,7 +1371,7 @@ Projectile* Map::getProjectile() const
  * Gets a list of explosion sprites on the map.
  * @return A list of explosion sprites.
  */
-std::set<Explosion* >* Map::getExplosions()
+std::set<Explosion*>* Map::getExplosions()
 {
 	return &_explosions;
 }

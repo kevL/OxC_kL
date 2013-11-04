@@ -61,8 +61,8 @@ private:
 	Text* _txtTitle, * _txtSales, * _txtFunds, * _txtItem, * _txtQuantity, * _txtSell, * _txtValue;
 	TextList* _lstItems;
 	std::vector<int> _qtys;
-	std::vector<Soldier* > _soldiers;
-	std::vector<Craft* > _crafts;
+	std::vector<Soldier*> _soldiers;
+	std::vector<Craft*> _crafts;
 	std::vector<std::string> _items;
 	unsigned int _sel;
 	int _total, _hasSci, _hasEng;

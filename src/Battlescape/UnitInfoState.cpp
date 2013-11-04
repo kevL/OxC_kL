@@ -576,7 +576,7 @@ void UnitInfoState::handle(Action* action)
 * Selects the previous soldier.
 * @param action Pointer to an action.
 */
-void UnitInfoState::btnPrevClick(Action* )
+void UnitInfoState::btnPrevClick(Action*)
 {
 	if (_parent)
 	{
@@ -602,7 +602,7 @@ void UnitInfoState::btnPrevClick(Action* )
 * Selects the next soldier.
 * @param action Pointer to an action.
 */
-void UnitInfoState::btnNextClick(Action* )
+void UnitInfoState::btnNextClick(Action*)
 {
 	if (_parent)
 	{

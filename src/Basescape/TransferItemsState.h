@@ -54,7 +54,7 @@ class TransferItemsState
 		TextList* _lstItems;
 		std::vector<int> _qtys;
 		std::vector<Soldier*> _soldiers;
-		std::vector<Craft* > _crafts;
+		std::vector<Craft*> _crafts;
 		std::vector<std::string> _items;
 		unsigned int _sel;
 		int _total, _pQty, _cQty, _aQty;

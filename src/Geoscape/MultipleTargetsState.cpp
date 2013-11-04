@@ -49,7 +49,7 @@ namespace OpenXcom
  * @param craft Pointer to craft to retarget (NULL if none).
  * @param state Pointer to the Geoscape state.
  */
-MultipleTargetsState::MultipleTargetsState(Game* game, std::vector<Target* > targets, Craft* craft, GeoscapeState* state)
+MultipleTargetsState::MultipleTargetsState(Game* game, std::vector<Target*> targets, Craft* craft, GeoscapeState* state)
 	:
 		State(game),
 		_targets(targets),
@@ -109,7 +109,7 @@ MultipleTargetsState::MultipleTargetsState(Game* game, std::vector<Target* > tar
 		_lstTargets->setBackground(_window);
 		_lstTargets->onMouseClick((ActionHandler)& MultipleTargetsState::lstTargetsClick);
 
-		for (std::vector<Target* >::iterator i = _targets.begin(); i != _targets.end(); ++i)
+		for (std::vector<Target*>::iterator i = _targets.begin(); i != _targets.end(); ++i)
 		{
 			_lstTargets->addRow(1, (*i)->getName(_game->getLanguage()).c_str());
 		}
@@ -147,10 +147,10 @@ void MultipleTargetsState::popupTarget(Target* target)
 
 	if (_craft == 0)
 	{
-		Craft* c = dynamic_cast<Craft* >(target);
-		Ufo* u = dynamic_cast<Ufo* >(target);
+		Craft* c = dynamic_cast<Craft*>(target);
+		Ufo* u = dynamic_cast<Ufo*>(target);
 
-		Base* b = dynamic_cast<Base* >(target);
+		Base* b = dynamic_cast<Base*>(target);
 		if (b != 0)
 		{
 			_game->pushState(new InterceptState(_game, _state->getGlobe(), b));
@@ -178,7 +178,7 @@ void MultipleTargetsState::popupTarget(Target* target)
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void MultipleTargetsState::btnCancelClick(Action* )
+void MultipleTargetsState::btnCancelClick(Action*)
 {
 	_game->popState();
 }
@@ -187,7 +187,7 @@ void MultipleTargetsState::btnCancelClick(Action* )
  * Pick a target to display.
  * @param action Pointer to an action.
  */
-void MultipleTargetsState::lstTargetsClick(Action* )
+void MultipleTargetsState::lstTargetsClick(Action*)
 {
 	Target* t = _targets[_lstTargets->getSelectedRow()];
 	popupTarget(t);

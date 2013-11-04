@@ -119,7 +119,7 @@ void ProductionCompleteState::init()
  * Closes the window.
  * @param action Pointer to an action.
  */
-void ProductionCompleteState::btnOkClick(Action* )
+void ProductionCompleteState::btnOkClick(Action*)
 {
 	_game->popState();
 }

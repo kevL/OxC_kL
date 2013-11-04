@@ -202,7 +202,7 @@ void ManufactureState::init ()
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void ManufactureState::btnOkClick(Action* )
+void ManufactureState::btnOkClick(Action*)
 {
 	// restore palette
 	_game->setPalette(_oldPalette);
@@ -214,7 +214,7 @@ void ManufactureState::btnOkClick(Action* )
  * Opens the screen with the list of possible productions.
  * @param action Pointer to an action.
  */
-void ManufactureState::btnNewProductionClick(Action* )
+void ManufactureState::btnNewProductionClick(Action*)
 {
 	_game->pushState(new NewManufactureListState(_game, _base));
 }
@@ -224,9 +224,9 @@ void ManufactureState::btnNewProductionClick(Action* )
  */
 void ManufactureState::fillProductionList()
 {
-	const std::vector<Production* > productions(_base->getProductions ());
+	const std::vector<Production*> productions(_base->getProductions ());
 	_lstManufacture->clearList();
-	for(std::vector<Production* >::const_iterator iter = productions.begin (); iter != productions.end (); ++iter)
+	for(std::vector<Production*>::const_iterator iter = productions.begin (); iter != productions.end (); ++iter)
 	{
 		std::wstringstream s1;
 		s1 << (*iter)->getAssignedEngineers();
@@ -275,9 +275,9 @@ void ManufactureState::fillProductionList()
  * Opens the screen displaying production settings.
  * @param action Pointer to an action.
  */
-void ManufactureState::lstManufactureClick(Action* )
+void ManufactureState::lstManufactureClick(Action*)
 {
-	const std::vector<Production* > productions(_base->getProductions ());
+	const std::vector<Production*> productions(_base->getProductions ());
 	_game->pushState(new ManufactureInfoState(_game, _base, productions[_lstManufacture->getSelectedRow()]));
 }
 

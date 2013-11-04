@@ -136,7 +136,7 @@ CraftsState::~CraftsState()
 void CraftsState::init()
 {
 	_lstCrafts->clearList();
-	for (std::vector<Craft* >::iterator i = _base->getCrafts()->begin(); i != _base->getCrafts()->end(); ++i)
+	for (std::vector<Craft*>::iterator i = _base->getCrafts()->begin(); i != _base->getCrafts()->end(); ++i)
 	{
 		std::wstringstream ss, ss2, ss3;
 		ss << (*i)->getNumWeapons() << "/" << (*i)->getRules()->getWeapons();
@@ -150,7 +150,7 @@ void CraftsState::init()
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void CraftsState::btnOkClick(Action* )
+void CraftsState::btnOkClick(Action*)
 {
 	_game->popState();
 }
@@ -159,7 +159,7 @@ void CraftsState::btnOkClick(Action* )
  * Shows the selected craft's info.
  * @param action Pointer to an action.
  */
-void CraftsState::lstCraftsClick(Action* )
+void CraftsState::lstCraftsClick(Action*)
 {
 	if (_base->getCrafts()->at(_lstCrafts->getSelectedRow())->getStatus() != "STR_OUT")
 	{

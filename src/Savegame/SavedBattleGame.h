@@ -54,12 +54,12 @@ class SavedBattleGame
 private:
 	BattlescapeState* _battleState;
 	int _mapsize_x, _mapsize_y, _mapsize_z;
-	std::vector<MapDataSet* > _mapDataSets;
+	std::vector<MapDataSet*> _mapDataSets;
 	Tile** _tiles;
 	BattleUnit* _selectedUnit, * _lastSelectedUnit;
-	std::vector<Node* > _nodes;
-	std::vector<BattleUnit* > _units;
-	std::vector<BattleItem* > _items;
+	std::vector<Node*> _nodes;
+	std::vector<BattleUnit*> _units;
+	std::vector<BattleItem*> _items;
 	Pathfinding* _pathfinding;
 	TileEngine* _tileEngine;
 	std::string _missionType;
@@ -74,8 +74,8 @@ private:
 	int _dragTimeTolerance;		// this is a cache for Options::getInt("battleScrollDragTimeTolerance")
 	int _dragPixelTolerance;	// this is a cache for Options::getInt("battleScrollDragPixelTolerance")
 	bool _objectiveDestroyed;
-//kL	std::vector<BattleUnit* > _exposedUnits;
-	std::list<BattleUnit* > _fallingUnits;
+//kL	std::vector<BattleUnit*> _exposedUnits;
+	std::list<BattleUnit*> _fallingUnits;
 	bool _unitsFalling, _strafeEnabled, _sneaky, _traceAI, _cheating;
 	std::vector<Position> _tileSearch;
 	/// Selects a soldier.
@@ -97,7 +97,7 @@ private:
 		/// Initialises the pathfinding and tileengine.
 		void initUtilities(ResourcePack* res);
 		/// Gets the game's mapdatafiles.
-		std::vector<MapDataSet* >* getMapDataSets();
+		std::vector<MapDataSet*>* getMapDataSets();
 		/// Sets the mission type.
 		void setMissionType(const std::string& missionType);
 		/// Gets the mission type.
@@ -109,11 +109,11 @@ private:
 		/// Gets a pointer to the tiles, a tile is the smallest component of battlescape.
 		Tile** getTiles() const;
 		/// Gets a pointer to the list of nodes.
-		std::vector<Node* >* getNodes();
+		std::vector<Node*>* getNodes();
 		/// Gets a pointer to the list of items.
-		std::vector<BattleItem* >* getItems();
+		std::vector<BattleItem*>* getItems();
 		/// Gets a pointer to the list of units.
-		std::vector<BattleUnit* >* getUnits();
+		std::vector<BattleUnit*>* getUnits();
 		/// Gets terrain size x.
 		int getMapSizeX() const;
 		/// Gets terrain size y.
@@ -217,7 +217,7 @@ private:
 		/// Adds this unit to the vector of falling units.
 		bool addFallingUnit(BattleUnit* unit);
 		/// Gets the vector of falling units.
-		std::list<BattleUnit* >* getFallingUnits();
+		std::list<BattleUnit*>* getFallingUnits();
 		/// Toggles the switch that says "there are units falling, start the fall state".
 		void setUnitsFalling(bool fall);
 		/// Checks the status of the switch that says "there are units falling".

@@ -123,7 +123,7 @@ AllocatePsiTrainingState::AllocatePsiTrainingState(Game* game, Base* base)
 	_lstSoldiers->onMouseRelease((ActionHandler)& AllocatePsiTrainingState::lstSoldiersRelease);
 
 	int row = 0;
-	for (std::vector<Soldier* >::const_iterator s = base->getSoldiers()->begin(); s != base->getSoldiers()->end(); ++s)
+	for (std::vector<Soldier*>::const_iterator s = base->getSoldiers()->begin(); s != base->getSoldiers()->end(); ++s)
 	{
 		std::wstringstream ssStr;
 		std::wstringstream ssSkl;
@@ -176,7 +176,7 @@ void AllocatePsiTrainingState::init()
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void AllocatePsiTrainingState::btnOkClick(Action* )
+void AllocatePsiTrainingState::btnOkClick(Action*)
 {
 	_game->popState();
 }
@@ -184,14 +184,14 @@ void AllocatePsiTrainingState::btnOkClick(Action* )
 /**
  *
  */
-void AllocatePsiTrainingState::lstSoldiersPress(Action* )
+void AllocatePsiTrainingState::lstSoldiersPress(Action*)
 {
 }
 
 /**
  *
  */
-void AllocatePsiTrainingState::lstSoldiersRelease(Action* )
+void AllocatePsiTrainingState::lstSoldiersRelease(Action*)
 {
 }
 

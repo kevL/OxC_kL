@@ -454,7 +454,7 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
  */
 /*kL void TileEngine::calculateFOV(const Position& position)
 {
-	for (std::vector<BattleUnit* >::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
+	for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 	{
 		if (distance(position, (*i)->getPosition()) < MAX_VIEW_DISTANCE)
 		{
@@ -465,7 +465,7 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 // kL_begin: TileEngine::calculateFOV, stop stopping my soldiers !!
 bool TileEngine::calculateFOV(const Position& position)
 {
-	for (std::vector<BattleUnit* >::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
+	for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 	{
 		if (distance(position, (*i)->getPosition()) < MAX_VIEW_DISTANCE)
 		{
@@ -486,7 +486,7 @@ bool TileEngine::calculateFOV(const Position& position)
  */
 void TileEngine::recalculateFOV()
 {
-	for (std::vector<BattleUnit* >::iterator bu = _save->getUnits()->begin(); bu != _save->getUnits()->end(); ++bu)
+	for (std::vector<BattleUnit*>::iterator bu = _save->getUnits()->begin(); bu != _save->getUnits()->end(); ++bu)
 	{
 		if ((*bu)->getTile() != 0)
 		{
@@ -1064,14 +1064,14 @@ bool TileEngine::canTargetTile(Position* originVoxel, Tile* tile, int part, Posi
  * @param unit, The unit to check for spotters of.
  * @return, A vector of units that can see this unit.
  */
-std::vector<BattleUnit* > TileEngine::getSpottingUnits(BattleUnit* unit)
+std::vector<BattleUnit*> TileEngine::getSpottingUnits(BattleUnit* unit)
 {
 	//Log(LOG_INFO) << "getSpottingUnits() " << (unit)->getId() << " : " << (unit)->getReactionScore();		// kL
 
-	std::vector<BattleUnit* > spotters;
+	std::vector<BattleUnit*> spotters;
 
 	Tile* tile = unit->getTile();
-	for (std::vector<BattleUnit* >::const_iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
+	for (std::vector<BattleUnit*>::const_iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
 	{
 		if (!(*i)->isOut()																// not dead/unconscious
 			&& (*i)->getHealth() != 0													// not dying
@@ -1083,7 +1083,7 @@ std::vector<BattleUnit* > TileEngine::getSpottingUnits(BattleUnit* unit)
 			originVoxel.z -= 2;
 			Position targetVoxel;
 
-			AlienBAIState* aggro = dynamic_cast<AlienBAIState* >((*i)->getCurrentAIState());
+			AlienBAIState* aggro = dynamic_cast<AlienBAIState*>((*i)->getCurrentAIState());
 			bool gotHit = aggro != 0 && aggro->getWasHit();
 
 			if (((*i)->checkViewSector(unit->getPosition()) || gotHit)	// spotter can actually see the target Tile, or unit got hit
@@ -1191,7 +1191,7 @@ bool TileEngine::checkReactionFire(BattleUnit* unit)
 		|| unit->getFaction() != FACTION_HOSTILE)
 	{
 		//Log(LOG_INFO) << ". Target = VALID";
-		std::vector<BattleUnit* > spotters = getSpottingUnits(unit);
+		std::vector<BattleUnit*> spotters = getSpottingUnits(unit);
 
 		//Log(LOG_INFO) << ". # spotters = " << spotters.size();
 
@@ -1205,7 +1205,7 @@ bool TileEngine::checkReactionFire(BattleUnit* unit)
 				//Log(LOG_INFO) << ". . no Snap by : " << reactor->getId();
 
 				// can't make a reaction snapshot for whatever reason, boot this guy from the vector.
-				for (std::vector<BattleUnit* >::iterator i = spotters.begin(); i != spotters.end(); ++i)
+				for (std::vector<BattleUnit*>::iterator i = spotters.begin(); i != spotters.end(); ++i)
 				{
 					if (*i == reactor)
 					{
@@ -1262,7 +1262,7 @@ bool TileEngine::checkReactionFire(BattleUnit* unit)
 	{
 		//Log(LOG_INFO) << ". Target = VALID";
 
-		std::vector<BattleUnit* > spotters = getSpottingUnits(unit);
+		std::vector<BattleUnit*> spotters = getSpottingUnits(unit);
 
 		//Log(LOG_INFO) << ". # spotters = " << spotters.size();
 
@@ -1300,12 +1300,12 @@ bool TileEngine::checkReactionFire(BattleUnit* unit)
  * @param unit The unit to check scores against.
  * @return The unit with the highest reactions.
  */
-BattleUnit* TileEngine::getReactor(std::vector<BattleUnit* > spotters, BattleUnit* unit)
+BattleUnit* TileEngine::getReactor(std::vector<BattleUnit*> spotters, BattleUnit* unit)
 {
 	int bestScore = -1;
 	BattleUnit* bu = 0;
 
-	for (std::vector<BattleUnit* >::iterator i = spotters.begin(); i != spotters.end(); ++i)
+	for (std::vector<BattleUnit*>::iterator i = spotters.begin(); i != spotters.end(); ++i)
 	{
 		//Log(LOG_INFO) << "getReactor() " << (*i)->getId() << " iterate";		// kL
 
@@ -1388,7 +1388,7 @@ bool TileEngine::tryReactionSnap(BattleUnit* unit, BattleUnit* target)
 
 		if (unit->getFaction() == FACTION_HOSTILE) // hostile units will go into an "aggro" state when they react.
 		{
-			AlienBAIState* aggro = dynamic_cast<AlienBAIState* >(unit->getCurrentAIState());
+			AlienBAIState* aggro = dynamic_cast<AlienBAIState*>(unit->getCurrentAIState());
 			if (aggro == 0) // should not happen, but just in case...
 			{
 				aggro = new AlienBAIState(_save, unit, 0);
@@ -2328,7 +2328,7 @@ int TileEngine::unitOpensDoor(BattleUnit* unit, bool rClick, int dir)
 		calculateFOV(unit->getPosition());
 
 		// look from the other side (may be need check reaction fire?)
-		std::vector<BattleUnit* >* vunits = unit->getVisibleUnits();
+		std::vector<BattleUnit*>* vunits = unit->getVisibleUnits();
 		for (size_t i = 0; i < vunits->size(); ++i)
 		{
 			calculateFOV(vunits->at(i));
@@ -2872,7 +2872,7 @@ bool TileEngine::psiAttack(BattleAction* action)
 {
 	Log(LOG_INFO) << "TileEngine::psiAttack()";
 
-	Log(LOG_INFO) << ". action->target = " << action->target;
+	Log(LOG_INFO) << ". target(pos) = " << action->target;
 
 	BattleUnit* victim; // kL_begin: check if Victim is valid.
 
@@ -2880,7 +2880,7 @@ bool TileEngine::psiAttack(BattleAction* action)
 	if (t
 		&& t->getUnit())
 	{
-		Log(LOG_INFO) << ". . tile EXISTS, so does Unit";
+		//Log(LOG_INFO) << ". . tile EXISTS, so does Unit";
 		victim = t->getUnit();
 		Log(LOG_INFO) << ". . victimID " << victim->getId(); // kL_end.
 
@@ -2889,19 +2889,19 @@ bool TileEngine::psiAttack(BattleAction* action)
 				(double)action->actor->getStats()->psiStrength
 				* (double)action->actor->getStats()->psiSkill
 				/ 50.0;
-		Log(LOG_INFO) << ". attackStrength " << attackStrength;
+		Log(LOG_INFO) << ". . . attackStrength " << attackStrength;
 
 		double defenseStrength =
 				(double)victim->getStats()->psiStrength
 				+ ((victim->getStats()->psiSkill > 0)? (10.0 + ((double)victim->getStats()->psiSkill / 5.0)):10.0);
-		Log(LOG_INFO) << ". defenseStrength " << defenseStrength;
+		Log(LOG_INFO) << ". . . defenseStrength " << defenseStrength;
 
 		double d = (double)distance(action->actor->getPosition(), action->target);
-		Log(LOG_INFO) << ". d " << d;
+		Log(LOG_INFO) << ". . . d " << d;
 
 		attackStrength -= d;
 		attackStrength += (double)RNG::generate(0, 55);
-		Log(LOG_INFO) << ". attackStrength - d + RNG " << attackStrength;
+		Log(LOG_INFO) << ". . . attackStrength - d + RNG = " << attackStrength;
 
 		if (action->type == BA_MINDCONTROL)
 		{
@@ -2911,13 +2911,13 @@ bool TileEngine::psiAttack(BattleAction* action)
 		action->actor->addPsiExp();
 		if (attackStrength > defenseStrength)
 		{
-			Log(LOG_INFO) << ". . attack > defense";
+			Log(LOG_INFO) << ". . Success";
 
 			action->actor->addPsiExp();
 			action->actor->addPsiExp();
 			if (action->type == BA_PANIC)
 			{
-				Log(LOG_INFO) << ". . . inside action->type == BA_PANIC";
+				Log(LOG_INFO) << ". . . action->type == BA_PANIC";
 
 				int moraleLoss = (110 - _save->getTile(action->target)->getUnit()->getStats()->bravery);
 				if (moraleLoss > 0)
@@ -2925,7 +2925,7 @@ bool TileEngine::psiAttack(BattleAction* action)
 			}
 			else //if (action->type == BA_MINDCONTROL)
 			{
-				Log(LOG_INFO) << ". . . inside action->type == BA_MINDCONTROL";
+				Log(LOG_INFO) << ". . . action->type == BA_MINDCONTROL";
 
 				victim->convertToFaction(action->actor->getFaction());
 				calculateFOV(victim->getPosition());
@@ -2939,7 +2939,7 @@ bool TileEngine::psiAttack(BattleAction* action)
 					&& Options::getBool("battleAutoEnd")
 					&& Options::getBool("allowPsionicCapture"))
 				{
-					Log(LOG_INFO) << ". . . . inside tallyUnits codeblock";
+					//Log(LOG_INFO) << ". . . . inside tallyUnits codeblock";
 
 					int liveAliens = 0;
 					int liveSoldiers = 0;
@@ -2952,16 +2952,16 @@ bool TileEngine::psiAttack(BattleAction* action)
 						_save->getBattleState()->getBattleGame()->requestEndTurn();
 					}
 				}
-				Log(LOG_INFO) << ". . . tallyUnits codeblock DONE";
+				//Log(LOG_INFO) << ". . . tallyUnits codeblock DONE";
 			}
 
-			Log(LOG_INFO) << "TileEngine::psiAttack() ret TRUE";
+			//Log(LOG_INFO) << "TileEngine::psiAttack() ret TRUE";
 			return true;
 		}
 	}
 	else // kL_begin:
 	{
-		Log(LOG_INFO) << ". victim not found";
+		//Log(LOG_INFO) << ". victim not found";
 //		return false;
 	}
 
@@ -2974,7 +2974,7 @@ bool TileEngine::psiAttack(BattleAction* action)
 		&& Options::getBool("battleAutoEnd")
 		&& Options::getBool("allowPsionicCapture"))
 	{
-		Log(LOG_INFO) << ". . inside tallyUnits codeblock 2";
+		//Log(LOG_INFO) << ". . inside tallyUnits codeblock 2";
 
 		int liveAliens = 0;
 		int liveSoldiers = 0;
@@ -2986,10 +2986,10 @@ bool TileEngine::psiAttack(BattleAction* action)
 			_save->setSelectedUnit(0);
 			_save->getBattleState()->getBattleGame()->requestEndTurn();
 		}
-		Log(LOG_INFO) << ". . tallyUnits codeblock 2 DONE";
+		//Log(LOG_INFO) << ". . tallyUnits codeblock 2 DONE";
 	} // kL_end.
 
-	Log(LOG_INFO) << "TileEngine::psiAttack() ret FALSE";
+	//Log(LOG_INFO) << "TileEngine::psiAttack() ret FALSE";
 	return false;
 }
 
@@ -3079,7 +3079,7 @@ Tile* TileEngine::applyGravity(Tile* t)
 		p.z--;
 	}
 
-	for (std::vector<BattleItem* >::iterator it = t->getInventory()->begin(); it != t->getInventory()->end(); ++it)
+	for (std::vector<BattleItem*>::iterator it = t->getInventory()->begin(); it != t->getInventory()->end(); ++it)
 	{
 		if ((*it)->getUnit() && t->getPosition() == (*it)->getUnit()->getPosition())
 		{

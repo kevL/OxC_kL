@@ -63,8 +63,8 @@ private:
 	Timer* _timer, * _zoomInEffectTimer, * _zoomOutEffectTimer, * _dogfightStartTimer;
 	bool _pause, _music, _zoomInEffectDone, _zoomOutEffectDone, _battleMusic;
 	Text* _txtDebug;
-	std::vector<State* > _popups;
-	std::vector<DogfightState* > _dogfights, _dogfightsToBeStarted;
+	std::vector<State*> _popups;
+	std::vector<DogfightState*> _dogfights, _dogfightsToBeStarted;
 	size_t _minimizedDogfights;
 	bool _showFundsOnGeoscape; // this is a cache for Options::getBool("showFundsOnGeoscape")
 

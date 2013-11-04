@@ -1449,7 +1449,7 @@ std::vector<int> Pathfinding::findReachable(BattleUnit* unit, int tuMax)
 	std::vector<int> tiles;
 	tiles.reserve(reachable.size());
 
-	for (std::vector<PathfindingNode* >::const_iterator it = reachable.begin(); it != reachable.end(); ++it)
+	for (std::vector<PathfindingNode*>::const_iterator it = reachable.begin(); it != reachable.end(); ++it)
 	{
 		tiles.push_back(_save->getTileIndex((*it)->getPosition()));
 	}

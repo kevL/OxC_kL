@@ -343,15 +343,15 @@ void InventoryState::updateStats()
  */
 void InventoryState::saveEquipmentLayout()
 {
-	for (std::vector<BattleUnit* >::iterator i = _battleGame->getUnits()->begin(); i != _battleGame->getUnits()->end(); ++i)
+	for (std::vector<BattleUnit*>::iterator i = _battleGame->getUnits()->begin(); i != _battleGame->getUnits()->end(); ++i)
 	{
 		if (0 == (*i)->getGeoscapeSoldier()) continue; // we need X-Com soldiers only
 
-		std::vector<EquipmentLayoutItem* >* layoutItems = (*i)->getGeoscapeSoldier()->getEquipmentLayout();
+		std::vector<EquipmentLayoutItem*>* layoutItems = (*i)->getGeoscapeSoldier()->getEquipmentLayout();
 
 		if (!layoutItems->empty()) // clear the previous save
 		{
-			for (std::vector<EquipmentLayoutItem* >::iterator j = layoutItems->begin(); j != layoutItems->end(); ++j)
+			for (std::vector<EquipmentLayoutItem*>::iterator j = layoutItems->begin(); j != layoutItems->end(); ++j)
 				delete *j;
 
 			layoutItems->clear();
@@ -359,7 +359,7 @@ void InventoryState::saveEquipmentLayout()
 
 		// save the soldier's items
 		// note: with using getInventory() we are skipping the ammos loaded, (they're not owned) because we handle the loaded-ammos separately (inside)
-		for (std::vector<BattleItem* >::iterator j = (*i)->getInventory()->begin(); j != (*i)->getInventory()->end(); ++j)
+		for (std::vector<BattleItem*>::iterator j = (*i)->getInventory()->begin(); j != (*i)->getInventory()->end(); ++j)
 		{
 			std::string ammo;
 			if ((*j)->needsAmmo() && 0 != (*j)->getAmmoItem())
@@ -382,7 +382,7 @@ void InventoryState::saveEquipmentLayout()
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void InventoryState::btnOkClick(Action* )
+void InventoryState::btnOkClick(Action*)
 {
 	if (_inv->getSelectedItem() != 0)
 		return;
@@ -394,7 +394,7 @@ void InventoryState::btnOkClick(Action* )
 		saveEquipmentLayout();
 		_battleGame->resetUnitTiles();
 
-		for (std::vector<BattleUnit* >::iterator i = _battleGame->getUnits()->begin(); i != _battleGame->getUnits()->end(); ++i)
+		for (std::vector<BattleUnit*>::iterator i = _battleGame->getUnits()->begin(); i != _battleGame->getUnits()->end(); ++i)
 		{
 			if ((*i)->getFaction() == _battleGame->getSide())
 				(*i)->prepareNewTurn();
@@ -413,7 +413,7 @@ void InventoryState::btnOkClick(Action* )
  * Selects the previous soldier.
  * @param action Pointer to an action.
  */
-void InventoryState::btnPrevClick(Action* )
+void InventoryState::btnPrevClick(Action*)
 {
 	if (_inv->getSelectedItem() != 0)
 	{
@@ -436,7 +436,7 @@ void InventoryState::btnPrevClick(Action* )
  * Selects the next soldier.
  * @param action Pointer to an action.
  */
-void InventoryState::btnNextClick(Action* )
+void InventoryState::btnNextClick(Action*)
 {
 	if (_inv->getSelectedItem() != 0)
 	{
@@ -459,7 +459,7 @@ void InventoryState::btnNextClick(Action* )
  * Unloads the selected weapon.
  * @param action Pointer to an action.
  */
-void InventoryState::btnUnloadClick(Action* )
+void InventoryState::btnUnloadClick(Action*)
 {
 	if (_inv->getSelectedItem() != 0
 		&& _inv->getSelectedItem()->getAmmoItem() != 0
@@ -478,7 +478,7 @@ void InventoryState::btnUnloadClick(Action* )
  * Shows more ground items / rearranges them.
  * @param action Pointer to an action.
  */
-void InventoryState::btnGroundClick(Action* )
+void InventoryState::btnGroundClick(Action*)
 {
 	_inv->arrangeGround();
 }
@@ -487,7 +487,7 @@ void InventoryState::btnGroundClick(Action* )
  * Shows the unit info screen.
  * @param action Pointer to an action.
  */
-void InventoryState::btnRankClick(Action* )
+void InventoryState::btnRankClick(Action*)
 {
 	_game->pushState(new UnitInfoState(_game, _battleGame->getSelectedUnit(), _parent));
 }
@@ -496,7 +496,7 @@ void InventoryState::btnRankClick(Action* )
  * Updates item info.
  * @param action Pointer to an action.
  */
-void InventoryState::invClick(Action* )
+void InventoryState::invClick(Action*)
 {
 	BattleItem* item = _inv->getSelectedItem();
 

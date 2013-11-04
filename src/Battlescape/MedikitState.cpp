@@ -226,7 +226,7 @@ void MedikitState::handle(Action* action)
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void MedikitState::onEndClick(Action* )
+void MedikitState::onEndClick(Action*)
 {
 	_game->popState();
 }
@@ -235,7 +235,7 @@ void MedikitState::onEndClick(Action* )
  * Handler for clicking on the heal button.
  * @param action Pointer to an action.
  */
-void MedikitState::onHealClick(Action* )
+void MedikitState::onHealClick(Action*)
 {
 	RuleItem* rule = _item->getRules();
 
@@ -277,7 +277,7 @@ void MedikitState::onHealClick(Action* )
  * Handler for clicking on the stimulant button.
  * @param action Pointer to an action.
  */
-void MedikitState::onStimulantClick(Action* )
+void MedikitState::onStimulantClick(Action*)
 {
 	int stimulant = _item->getStimulantQuantity();
 	if (stimulant == 0)
@@ -315,7 +315,7 @@ void MedikitState::onStimulantClick(Action* )
  * Handler for clicking on the pain killer button.
  * @param action Pointer to an action.
  */
-void MedikitState::onPainKillerClick(Action* )
+void MedikitState::onPainKillerClick(Action*)
 {
 	int pk = _item->getPainKillerQuantity();
 	if (pk == 0)

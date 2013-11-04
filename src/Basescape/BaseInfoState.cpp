@@ -445,7 +445,7 @@ void BaseInfoState::edtBaseKeyPress(Action* action)
  * Selects a new base to display.
  * @param action Pointer to an action.
  */
-void BaseInfoState::miniClick(Action* )
+void BaseInfoState::miniClick(Action*)
 {
 	unsigned int base = _mini->getHoveredBase();
 	if (base < _game->getSavedGame()->getBases()->size())
@@ -462,7 +462,7 @@ void BaseInfoState::miniClick(Action* )
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void BaseInfoState::btnOkClick(Action* )
+void BaseInfoState::btnOkClick(Action*)
 {
 	_base->setName(_edtBase->getText());
 	_game->popState();
@@ -472,7 +472,7 @@ void BaseInfoState::btnOkClick(Action* )
  * Goes to the Transfers window.
  * @param action Pointer to an action.
  */
-void BaseInfoState::btnTransfersClick(Action* )
+void BaseInfoState::btnTransfersClick(Action*)
 {
 	_game->pushState(new TransfersState(_game, _base));
 }
@@ -481,7 +481,7 @@ void BaseInfoState::btnTransfersClick(Action* )
  * Goes to the Stores screen.
  * @param action Pointer to an action.
  */
-void BaseInfoState::btnStoresClick(Action* )
+void BaseInfoState::btnStoresClick(Action*)
 {
 	_game->pushState(new StoresState(_game, _base));
 }
@@ -490,7 +490,7 @@ void BaseInfoState::btnStoresClick(Action* )
  * Goes to the Monthly Costs screen.
  * @param action Pointer to an action.
  */
-void BaseInfoState::btnMonthlyCostsClick(Action* )
+void BaseInfoState::btnMonthlyCostsClick(Action*)
 {
 	_game->pushState(new MonthlyCostsState(_game, _base));
 }

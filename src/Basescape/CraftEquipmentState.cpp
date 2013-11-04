@@ -287,7 +287,7 @@ void CraftEquipmentState::think()
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void CraftEquipmentState::btnOkClick(Action* )
+void CraftEquipmentState::btnOkClick(Action*)
 {
 	_game->popState();
 }
@@ -519,7 +519,7 @@ void CraftEquipmentState::moveLeftByValue(int change)
 			// First we remove all vehicles because we want to redistribute the ammo
 			RuleItem *ammo = _game->getRuleset()->getItem(item->getCompatibleAmmo()->front());
 
-			for (std::vector<Vehicle* >::iterator i = c->getVehicles()->begin(); i != c->getVehicles()->end(); )
+			for (std::vector<Vehicle*>::iterator i = c->getVehicles()->begin(); i != c->getVehicles()->end(); )
 			{
 				if ((*i)->getRules() == item)
 				{
@@ -703,7 +703,7 @@ void CraftEquipmentState::moveRightByValue(int change)
 /**
  * Empties the contents of the craft, moving all of the items back to the base.
  */
-void CraftEquipmentState::btnClearClick(Action* )
+void CraftEquipmentState::btnClearClick(Action*)
 {
 	for (_sel = 0; _sel != _items.size(); ++_sel)
 	{
@@ -716,7 +716,7 @@ void CraftEquipmentState::btnClearClick(Action* )
 * inside the craft.
 * @param action Pointer to an action.
 */
-void CraftEquipmentState::btnInventoryClick(Action* )
+void CraftEquipmentState::btnInventoryClick(Action*)
 {
 	Craft* craft = _base->getCrafts()->at(_craft);
 	if (craft->getNumSoldiers() != 0)
