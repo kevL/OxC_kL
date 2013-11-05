@@ -2271,7 +2271,7 @@ int TileEngine::blockage(Tile* tile, const int part, ItemDamageType type, int di
  * @param unit Unit.
  * @param rClick Whether the player right clicked.
  * @param dir Direction.
- * @return -1 there is no door, you can walk through;
+ * @return -1 there is no door, you can walk through; or you're a tank and can't do sweet shit with a door except blast the fuck out of it.
  *			0 normal door opened, make a squeaky sound and you can walk through;
  *			1 ufo door is starting to open, make a whoosh sound, don't walk through;
  *			3 ufo door is still opening, don't walk through it yet. (have patience, futuristic technology...)
@@ -2293,13 +2293,24 @@ int TileEngine::unitOpensDoor(BattleUnit* unit, bool rClick, int dir)
 	}
 
 	int z = unit->getTile()->getTerrainLevel() < -12? 1:0; // if we're standing on stairs, check the tile above instead.
-	for (int x = 0; x < size && door == -1; x++)
+	for (int
+			x = 0;
+			x < size
+				&& door == -1;
+			x++)
 	{
-		for (int y = 0; y < size && door == -1; y++)
+		for (int
+				y = 0;
+				y < size
+					&& door == -1;
+				y++)
 		{
-			std::vector<std::pair<Position, int> > checkPositions;
+			std::vector<std::pair<Position, int>> checkPositions;
 			Tile* tile = _save->getTile(unit->getPosition() + Position(x, y, z));
-			if (!tile) continue;
+
+			if (!tile)
+				continue;
+
 
 			switch (dir)
 			{
@@ -2339,12 +2350,17 @@ int TileEngine::unitOpensDoor(BattleUnit* unit, bool rClick, int dir)
 					checkPositions.push_back(std::make_pair(Position(0, -1, 0), MapData::O_WESTWALL));	// one tile north
 					checkPositions.push_back(std::make_pair(Position(-1, 0, 0), MapData::O_NORTHWALL));	// one tile west
 				break;
+
 				default:
 				break;
 			}
 
 			int part = 0;
-			for (std::vector<std::pair<Position, int> >::const_iterator i = checkPositions.begin(); i != checkPositions.end() && door == -1; ++i)
+			for (std::vector<std::pair<Position, int>>::const_iterator
+					i = checkPositions.begin();
+					i != checkPositions.end()
+						&& door == -1;
+					++i)
 			{
 				tile = _save->getTile(unit->getPosition() + Position(x, y, z) + i->first);
 				if (tile)
@@ -2356,7 +2372,7 @@ int TileEngine::unitOpensDoor(BattleUnit* unit, bool rClick, int dir)
 
 						if (door == 1)
 						{
-							checkAdjacentDoors(unit->getPosition() + Position(x,y,z) + i->first, i->second);
+							checkAdjacentDoors(unit->getPosition() + Position(x, y, z) + i->first, i->second);
 						}
 					}
 				}
@@ -2391,17 +2407,28 @@ int TileEngine::unitOpensDoor(BattleUnit* unit, bool rClick, int dir)
 				calculateFOV(unit->getPosition());
 
 				// look from the other side (may be need check reaction fire?)
+				// kL_note: and what about mutual surprise rule?
 				std::vector<BattleUnit*>* vunits = unit->getVisibleUnits();
-				for (size_t i = 0; i < vunits->size(); ++i)
+				for (size_t
+						i = 0;
+						i < vunits->size();
+						++i)
 				{
 					calculateFOV(vunits->at(i));
 				}
 			}
 			else return 4;
 		}
-
-		return 5;
+		else	// kL
+			return 5;
 	}
+
+// -1 there is no door, you can walk through; or you're a tank and can't do sweet shit with a door except blast the fuck out of it.
+//	0 normal door opened, make a squeaky sound and you can walk through;
+//	1 ufo door is starting to open, make a whoosh sound, don't walk through;
+//	3 ufo door is still opening, don't walk through it yet. (have patience, futuristic technology...)
+//	4 not enough TUs
+//	5 would contravene fire reserve
 
 	return door;
 }

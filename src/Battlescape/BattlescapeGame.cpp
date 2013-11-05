@@ -1355,9 +1355,9 @@ void BattlescapeGame::setStateInterval(Uint32 interval)
 
 /**
  * Checks against reserved time units.
- * @param bu Pointer to the unit.
- * @param tu Number of time units to check.
- * @return bool Whether or not we got enough time units.
+ * @param bu, Pointer to the unit.
+ * @param tu, Number of time units to check.
+ * @return bool, Whether or not *bu has enough time units.
  */
 bool BattlescapeGame::checkReservedTU(BattleUnit* bu, int tu, bool justChecking)
 {
@@ -1390,6 +1390,11 @@ bool BattlescapeGame::checkReservedTU(BattleUnit* bu, int tu, bool justChecking)
 
 	// check TUs against slowest weapon if we have two weapons
 	BattleItem* slowestWeapon = bu->getMainHandWeapon(false);
+	// kL_note: Use getActiveHand() instead, if xCom wants to reserve TU.
+	// kL_note: make sure this doesn't work on aLiens, because getMainHandWeapon()
+	// returns grenades and that can easily cause problems. Probably could cause
+	// problems for xCom too, if xCom wants to reserve TU's in this manner.
+
 	// if the weapon has no autoshot, reserve TUs for snapshot
 	if (bu->getActionTUs(_tuReserved, slowestWeapon) == 0
 		&& _tuReserved == BA_AUTOSHOT)
@@ -1397,7 +1402,7 @@ bool BattlescapeGame::checkReservedTU(BattleUnit* bu, int tu, bool justChecking)
 		effectiveTuReserved = BA_SNAPSHOT;
 	}
 
-	const int tuKneel = _kneelReserved ? 4 : 0;
+	const int tuKneel = _kneelReserved? 4:0;
 	if ((effectiveTuReserved != BA_NONE || _kneelReserved)
 		&& tu + tuKneel + bu->getActionTUs(effectiveTuReserved, slowestWeapon) > bu->getTimeUnits()
 		&& tuKneel + bu->getActionTUs(effectiveTuReserved, slowestWeapon) <= bu->getTimeUnits())

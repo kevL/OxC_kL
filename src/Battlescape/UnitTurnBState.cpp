@@ -60,6 +60,8 @@ UnitTurnBState::~UnitTurnBState()
  */
 void UnitTurnBState::init()
 {
+	Log(LOG_INFO) << "UnitTurnBState::init()";
+
 	_unit = _action.actor;
 	_action.TU = 0;
 
@@ -89,15 +91,21 @@ void UnitTurnBState::init()
 			int door = _parent->getTileEngine()->unitOpensDoor(_unit, true);
 			if (door == 0)
 			{
+				//Log(LOG_INFO) << ". open door PlaySound";
 				_parent->getResourcePack()->getSound("BATTLE.CAT", 3)->play(); // normal door
 			}
 			else if (door == 1)
 			{
+				//Log(LOG_INFO) << ". open uFo door PlaySound";
 				_parent->getResourcePack()->getSound("BATTLE.CAT", RNG::generate(20, 21))->play(); // ufo door
 			}
 			else if (door == 4)
 			{
 				_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
+			}
+			else if (door == 5)
+			{
+				_action.result = "STR_TUS_RESERVED";
 			}
 		}
 
