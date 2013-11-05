@@ -109,8 +109,7 @@ NewManufactureListState::NewManufactureListState(Game* game, Base* base)
 	_lstManufacture->setColumns(2, 156, 130);
 	_lstManufacture->setSelectable(true);
 	_lstManufacture->setBackground(_window);
-//kL	_lstManufacture->setMargin(2);
-	_lstManufacture->setMargin(8);		// kL
+	_lstManufacture->setMargin(8);
 	_lstManufacture->setColor(Palette::blockOffset(13));
 	_lstManufacture->setArrowColor(Palette::blockOffset(15)+1);
 	_lstManufacture->onMouseClick((ActionHandler)& NewManufactureListState::lstProdClick);
@@ -133,7 +132,7 @@ void NewManufactureListState::init ()
  * Returns to the previous screen.
  * @param action A pointer to an Action.
  */
-void NewManufactureListState::btnOkClick(Action *)
+void NewManufactureListState::btnOkClick(Action*)
 {
 	_game->popState();
 }
@@ -142,7 +141,7 @@ void NewManufactureListState::btnOkClick(Action *)
  * Opens the Production settings screen.
  * @param action A pointer to an Action.
 */
-void NewManufactureListState::lstProdClick(Action *)
+void NewManufactureListState::lstProdClick(Action*)
 {
 	RuleManufacture *rule = _possibleProductions[_lstManufacture->getSelectedRow()];
 	if (rule->getCategory() == "STR_CRAFT"

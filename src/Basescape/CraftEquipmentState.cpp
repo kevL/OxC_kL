@@ -241,8 +241,8 @@ CraftEquipmentState::CraftEquipmentState(Game* game, Base* base, size_t craft)
 		}
 	}
 
-	_timerLeft = new Timer(275);
-	_timerRight = new Timer(275);
+	_timerLeft = new Timer(280);
+	_timerRight = new Timer(280);
 	_timerLeft->onTimer((StateHandler) &CraftEquipmentState::moveLeft);
 	_timerRight->onTimer((StateHandler) &CraftEquipmentState::moveRight);
 }
@@ -334,8 +334,8 @@ void CraftEquipmentState::lstEquipmentLeftArrowClick(Action* action)
 	{
 		moveLeftByValue(1);
 
-		_timerRight->setInterval(275);
-		_timerLeft->setInterval(275);
+		_timerRight->setInterval(280);
+		_timerLeft->setInterval(280);
 	}
 }
 
@@ -381,8 +381,8 @@ void CraftEquipmentState::lstEquipmentRightArrowClick(Action* action)
 	{
 		moveRightByValue(1);
 
-		_timerRight->setInterval(275);
-		_timerLeft->setInterval(275);
+		_timerRight->setInterval(280);
+		_timerLeft->setInterval(280);
 	}
 }
 
@@ -482,8 +482,8 @@ void CraftEquipmentState::updateQuantity()
  */
 void CraftEquipmentState::moveLeft()
 {
-	_timerLeft->setInterval(75);
-	_timerRight->setInterval(75);
+	_timerLeft->setInterval(80);
+	_timerRight->setInterval(80);
 
 	moveLeftByValue(1);
 }
@@ -581,8 +581,8 @@ void CraftEquipmentState::moveLeftByValue(int change)
  */
 void CraftEquipmentState::moveRight()
 {
-	_timerLeft->setInterval(75);
-	_timerRight->setInterval(75);
+	_timerLeft->setInterval(80);
+	_timerRight->setInterval(80);
 
 	moveRightByValue(1);
 }

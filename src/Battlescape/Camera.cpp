@@ -429,8 +429,7 @@ void Camera::up()
 	if (_mapOffset.z < _mapsize_z - 1)
 	{
 		_mapOffset.z++;
-//kL		_mapOffset.y += _spriteHeight / 2;
-		_mapOffset.y += (_spriteHeight / 2) + 4;	// kL
+		_mapOffset.y += (_spriteHeight / 2) + 4;
 
 		_map->draw();
 	}
@@ -444,8 +443,7 @@ void Camera::down()
 	if (_mapOffset.z > 0)
 	{
 		_mapOffset.z--;
-//kL		_mapOffset.y -= _spriteHeight / 2;
-		_mapOffset.y -= (_spriteHeight / 2) + 4;	// kL
+		_mapOffset.y -= (_spriteHeight / 2) + 4;
 
 		_map->draw();
 	}
@@ -478,11 +476,8 @@ void Camera::centerOnPosition(const Position& mapPos, bool redraw)
 	minMaxInt(&_center.y, -1, _mapsize_x);
 	convertMapToScreen(_center, &screenPos);
 
-//kL	_mapOffset.x = -(screenPos.x - (_screenWidth / 2));
-//kL	_mapOffset.y = -(screenPos.y - (_visibleMapHeight / 2));
-	_mapOffset.x = -(screenPos.x - (_screenWidth / 2) +16);			// kL
-	_mapOffset.y = -(screenPos.y - (_visibleMapHeight / 2) +16);	// kL
-//	_mapOffset.y = -(screenPos.y - (_visibleMapHeight / 2) +24);	// kL
+	_mapOffset.x = -(screenPos.x - (_screenWidth / 2) + 16);
+	_mapOffset.y = -(screenPos.y - (_visibleMapHeight / 2) + 16);
 	_mapOffset.z = _center.z;
 
 	if (redraw) _map->draw();

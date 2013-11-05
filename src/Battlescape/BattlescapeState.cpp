@@ -590,10 +590,10 @@ void BattlescapeState::init()
 	if (firstInit
 		&& playableUnitSelected())
 	{
+		firstInit = false;
+
 		_battleGame->setupCursor();
 		_map->getCamera()->centerOnPosition(_save->getSelectedUnit()->getPosition());
-
-		firstInit = false;
 
 		_btnReserveNone->setGroup(&_reserve);
 		_btnReserveSnap->setGroup(&_reserve);
@@ -1082,7 +1082,8 @@ void BattlescapeState::selectNextPlayerUnit(bool checkReselect, bool setReselect
 		BattleUnit* unit = _save->selectNextPlayerUnit(checkReselect, setReselect, checkInventory);
 		updateSoldierInfo();
 
-		if (unit) _map->getCamera()->centerOnPosition(unit->getPosition());
+		if (unit)
+			_map->getCamera()->centerOnPosition(unit->getPosition());
 
 		_battleGame->cancelCurrentAction();
 		_battleGame->getCurrentAction()->actor = unit;
@@ -1106,7 +1107,8 @@ void BattlescapeState::selectPreviousPlayerUnit(bool checkReselect, bool setRese
 		BattleUnit* unit = _save->selectPreviousPlayerUnit(checkReselect, setReselect, checkInventory);
 		updateSoldierInfo();
 
-		if (unit) _map->getCamera()->centerOnPosition(unit->getPosition());
+		if (unit)
+			_map->getCamera()->centerOnPosition(unit->getPosition());
 
 		_battleGame->cancelCurrentAction();
 		_battleGame->getCurrentAction()->actor = unit;

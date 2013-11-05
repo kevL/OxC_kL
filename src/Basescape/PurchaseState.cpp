@@ -324,10 +324,10 @@ PurchaseState::PurchaseState(Game* game, Base* base)
 		}
 	}
 
-	_timerInc = new Timer(275);
+	_timerInc = new Timer(280);
 	_timerInc->onTimer((StateHandler)& PurchaseState::increase);
 
-	_timerDec = new Timer(275);
+	_timerDec = new Timer(280);
 	_timerDec->onTimer((StateHandler)& PurchaseState::decrease);
 }
 
@@ -489,8 +489,8 @@ void PurchaseState::lstItemsLeftArrowClick(Action* action)
 
 //kL		_timerInc->setInterval(250);
 //kL		_timerDec->setInterval(250);
-		_timerInc->setInterval(275);		// kL
-		_timerDec->setInterval(275);		// kL
+		_timerInc->setInterval(280);		// kL
+		_timerDec->setInterval(280);		// kL
 	}
 }
 
@@ -537,8 +537,8 @@ void PurchaseState::lstItemsRightArrowClick(Action* action)
 
 //kL		_timerInc->setInterval(250);
 //kL		_timerDec->setInterval(250);
-		_timerInc->setInterval(275);		// kL
-		_timerDec->setInterval(275);		// kL
+		_timerInc->setInterval(280);		// kL
+		_timerDec->setInterval(280);		// kL
 	}
 }
 
@@ -611,8 +611,8 @@ void PurchaseState::increase()
 {
 //kL	_timerDec->setInterval(50);
 //kL	_timerInc->setInterval(50);
-	_timerDec->setInterval(75);		// kL
-	_timerInc->setInterval(75);		// kL
+	_timerDec->setInterval(80);		// kL
+	_timerInc->setInterval(80);		// kL
 
 	increaseByValue(1);
 }
@@ -672,7 +672,7 @@ void PurchaseState::increaseByValue(int change)
 		{
 			// Item count
 			float storesNeededPerItem = _game->getRuleset()->getItem(_items[_sel - 3 - _crafts.size()])->getSize();
-			float freeStores = (float)(_base->getAvailableStores() - _base->getUsedStores()) - _iQty;
+			float freeStores = static_cast<float>(_base->getAvailableStores() - _base->getUsedStores()) - _iQty;
 			int maxByStores;
 			if (AreSame(storesNeededPerItem, 0.f))
 			{
@@ -680,7 +680,7 @@ void PurchaseState::increaseByValue(int change)
 			}
 			else
 			{
-				maxByStores = floor(freeStores / storesNeededPerItem);
+				maxByStores = static_cast<int>(floor(freeStores / storesNeededPerItem));
 			}
 
 			change = std::min(maxByStores, change);
@@ -701,8 +701,8 @@ void PurchaseState::decrease()
 {
 //kL	_timerInc->setInterval(50);
 //kL	_timerDec->setInterval(50);
-	_timerDec->setInterval(75);		// kL
-	_timerInc->setInterval(75);		// kL
+	_timerDec->setInterval(80);		// kL
+	_timerInc->setInterval(80);		// kL
 
 	decreaseByValue(1);
 }

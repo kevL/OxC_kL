@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "BaseDestroyedState.h"
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
@@ -33,16 +34,20 @@
 #include "../Ruleset/RuleRegion.h"
 #include "../Engine/Options.h"
 
+
 namespace OpenXcom
 {
 
-BaseDestroyedState::BaseDestroyedState(Game *game, Base *base) : State(game), _base(base)
+BaseDestroyedState::BaseDestroyedState(Game* game, Base* base)
+	:
+		State(game),
+		_base(base)
 {
 	_screen = false;
-	// Create objects
-	_window = new Window(this, 256, 160, 32, 20);
-	_btnOk = new TextButton(100, 20, 110, 142);
-	_txtMessage = new Text(224, 48, 48, 76);
+
+	_window		= new Window(this, 256, 160, 32, 20);
+	_txtMessage	= new Text(224, 120, 48, 30);
+	_btnOk		= new TextButton(100, 16, 110, 156);
 
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)), Palette::backPos, 16);
 	
@@ -51,54 +56,61 @@ BaseDestroyedState::BaseDestroyedState(Game *game, Base *base) : State(game), _b
 	add(_txtMessage);
 
 	centerAllSurfaces();
-	
-	// Set up objects
+
+
 	_window->setColor(Palette::blockOffset(8)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK15.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(tr("STR_OK"));
-	_btnOk->onMouseClick((ActionHandler)&BaseDestroyedState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&BaseDestroyedState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
-	_btnOk->onKeyboardPress((ActionHandler)&BaseDestroyedState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
-		
+	_btnOk->onMouseClick((ActionHandler)& BaseDestroyedState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)& BaseDestroyedState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
+	_btnOk->onKeyboardPress((ActionHandler)& BaseDestroyedState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+
 	_txtMessage->setAlign(ALIGN_CENTER);
+	_txtMessage->setVerticalAlign(ALIGN_MIDDLE);
 	_txtMessage->setBig();
 	_txtMessage->setWordWrap(true);
 	_txtMessage->setColor(Palette::blockOffset(8)+5);
 
 	_txtMessage->setText(tr("STR_THE_ALIENS_HAVE_DESTROYED_THE_UNDEFENDED_BASE").arg(_base->getName()));
 
-	std::vector<Region*>::iterator k = _game->getSavedGame()->getRegions()->begin();
-	for (; k != _game->getSavedGame()->getRegions()->end(); ++k)
+
+	std::vector<Region*>::iterator r = _game->getSavedGame()->getRegions()->begin();
+	for (; r != _game->getSavedGame()->getRegions()->end(); ++r)
 	{
-		if ((*k)->getRules()->insideRegion((base)->getLongitude(), (base)->getLatitude()))
+		if ((*r)->getRules()->insideRegion((base)->getLongitude(), (base)->getLatitude()))
 		{
 			break;
 		}
 	}
 
-	AlienMission* am = _game->getSavedGame()->getAlienMission((*k)->getRules()->getType(), "STR_ALIEN_RETALIATION");
-	for (std::vector<Ufo*>::iterator i = _game->getSavedGame()->getUfos()->begin(); i != _game->getSavedGame()->getUfos()->end();)
+	AlienMission* a = _game->getSavedGame()->getAlienMission((*r)->getRules()->getType(), "STR_ALIEN_RETALIATION");
+	for (std::vector<Ufo*>::iterator
+			u = _game->getSavedGame()->getUfos()->begin();
+			u != _game->getSavedGame()->getUfos()->end();)
 	{
-		if ((*i)->getMission() == am)
+		if ((*u)->getMission() == a)
 		{
-			delete *i;
-			i = _game->getSavedGame()->getUfos()->erase(i);
+			delete *u;
+			u = _game->getSavedGame()->getUfos()->erase(u);
 		}
 		else
 		{
-			++i;
+			++u;
 		}
 	}
 
-	for (std::vector<AlienMission*>::iterator i = _game->getSavedGame()->getAlienMissions().begin();
-		i != _game->getSavedGame()->getAlienMissions().end(); ++i)
+	for (std::vector<AlienMission*>::iterator
+			m = _game->getSavedGame()->getAlienMissions().begin();
+			m != _game->getSavedGame()->getAlienMissions().end();
+			++m)
 	{
-		if ((AlienMission*)(*i) == am)
+		if ((AlienMission*)(*m) == a)
 		{
-			delete (*i);
-			_game->getSavedGame()->getAlienMissions().erase(i);
+			delete (*m);
+			_game->getSavedGame()->getAlienMissions().erase(m);
+
 			break;
 		}
 	}
@@ -123,15 +135,20 @@ void BaseDestroyedState::init()
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void BaseDestroyedState::btnOkClick(Action *)
+void BaseDestroyedState::btnOkClick(Action*)
 {
 	_game->popState();
-	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
+
+	for (std::vector<Base*>::iterator
+			b = _game->getSavedGame()->getBases()->begin();
+			b != _game->getSavedGame()->getBases()->end();
+			++b)
 	{
-		if ((*i) == _base)
+		if ((*b) == _base)
 		{
-			delete (*i);
-			_game->getSavedGame()->getBases()->erase(i);
+			delete (*b);
+			_game->getSavedGame()->getBases()->erase(b);
+
 			break;
 		}
 	}

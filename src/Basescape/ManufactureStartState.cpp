@@ -200,7 +200,7 @@ ManufactureStartState::ManufactureStartState(Game* game, Base* base, RuleManufac
 	_txtUnitAvailableColumn->setWordWrap(true);
 
 //kL	_lstRequiredItems->setColumns(3, 12 * button_x_border, 8 * button_x_border, 8 * button_x_border);
-	_lstRequiredItems->setColumns(3, 140, 60, 40);		// kL
+	_lstRequiredItems->setColumns(3, 140, 60, 40);
 	_lstRequiredItems->setBackground(_window);
 	_lstRequiredItems->setColor(Palette::blockOffset(13));
 

@@ -676,7 +676,8 @@ bool Pathfinding::isBlocked(Tile* tile, const int part, BattleUnit* missileTarge
 		{
 			return true; // blocking part
 		}
-		else return false;
+		else
+			return false;
 	}
 
 	if (part == MapData::O_WESTWALL)
@@ -721,9 +722,10 @@ bool Pathfinding::isBlocked(Tile* tile, const int part, BattleUnit* missileTarge
 
 	if (part == MapData::O_FLOOR)
 	{
-		BattleUnit* unit = tile->getUnit();
-		if (unit != 0)
+		if (tile->getUnit())
 		{
+			BattleUnit* unit = tile->getUnit();
+
 			if (unit == _unit
 				|| unit == missileTarget
 				|| unit->isOut())
@@ -752,18 +754,23 @@ bool Pathfinding::isBlocked(Tile* tile, const int part, BattleUnit* missileTarge
 			while (pos.z >= 0)
 			{
 				Tile* t = _save->getTile(pos);
-				BattleUnit* unit = t->getUnit();
-
-				if (unit != 0 && unit != _unit)
+				if (t->getUnit()
+					&& t->getUnit() != _unit)
 				{
+					BattleUnit* unit = t->getUnit();
+
 					// don't let large units fall on other units
-					if (_unit && _unit->getArmor()->getSize() > 1)
+					if (_unit
+						&& _unit->getArmor()->getSize() > 1)
 					{
 						return true;
 					}
 
 					// don't let any units fall on large units
-					if (unit != _unit && unit != missileTarget && !unit->isOut() && unit->getArmor()->getSize() > 1)
+					if (//kL unit != _unit &&
+						unit != missileTarget
+						&& !unit->isOut()
+						&& unit->getArmor()->getSize() > 1)
 					{
 						return true;
 					}

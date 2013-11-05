@@ -248,14 +248,19 @@ void ManufactureState::fillProductionList()
 		if ((*iter)->getAssignedEngineers() > 0)
 		{
 			int timeLeft;
-			if (Options::getBool("allowAutoSellProduction") && (*iter)->getAmountTotal() == std::numeric_limits<int>::max())
-				timeLeft = ((*iter)->getAmountProduced()+1) * (*iter)->getRules()->getManufactureTime() - (*iter)->getTimeSpent ();
+			if (Options::getBool("allowAutoSellProduction")
+				&& (*iter)->getAmountTotal() == std::numeric_limits<int>::max())
+			{
+				timeLeft = ((*iter)->getAmountProduced()+1) * (*iter)->getRules()->getManufactureTime() - (*iter)->getTimeSpent();
+			}
 			else
-				timeLeft = (*iter)->getAmountTotal () * (*iter)->getRules()->getManufactureTime() - (*iter)->getTimeSpent ();
+			{
+				timeLeft = (*iter)->getAmountTotal () * (*iter)->getRules()->getManufactureTime() - (*iter)->getTimeSpent();
+			}
 
 			timeLeft /= (*iter)->getAssignedEngineers();
-			float dayLeft = timeLeft / 24.0f;
-			int hours = (dayLeft - static_cast<int>(dayLeft)) * 24;
+			float dayLeft = static_cast<float>(timeLeft) / 24.0f;
+			int hours = static_cast<int>(dayLeft - dayLeft) * 24;
 			s4 << static_cast<int>(dayLeft) << "/" << hours;
 		}
 		else

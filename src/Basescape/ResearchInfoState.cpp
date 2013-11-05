@@ -98,7 +98,7 @@ void ResearchInfoState::buildUi()
 	int start_x = (max_width - width) / 2;
 	int start_y = (max_height - height) / 2;
 
-	_surface				= new InteractiveSurface(width, height, start_x, start_y);
+	_surface = new InteractiveSurface(width, height, start_x, start_y);
 	_surface->onMouseClick((ActionHandler)& ResearchInfoState::handleWheel, 0);
 
 	int button_x_border = 16;
@@ -107,20 +107,53 @@ void ResearchInfoState::buildUi()
 	int footer_button_width = width / 2 - (4 + button_x_border);
 
 	_screen = false;
+
 	_window					= new Window(this, width, height, start_x, start_y);
 
-	_txtTitle				= new Text(width - 2 * button_x_border, button_height, start_x + button_x_border, start_y + button_y_border);
+	_txtTitle				= new Text(width - 2 * button_x_border,
+										button_height,
+										start_x + button_x_border,
+										start_y + button_y_border);
 
-	_txtAvailableScientist	= new Text(width - 2 * button_x_border, button_height, start_x + button_x_border, start_y + 3*button_y_border);
-	_txtAvailableSpace		= new Text(width - 2 * button_x_border, button_height, start_x + button_x_border, start_y + 4*button_y_border);
-	_txtAllocatedScientist	= new Text(width - 2 * button_x_border, button_height, start_x + button_x_border, start_y + 5*button_y_border);
-	_txtMore				= new Text(width - 6 * button_x_border, button_height, start_x + 2.5*button_x_border + 8, start_y + 7*button_y_border);
-	_txtLess				= new Text(width - 6 * button_x_border, button_height, start_x + 2.5*button_x_border + 8, start_y + 9*button_y_border);
-	_btnCancel				= new TextButton(footer_button_width, button_height, start_x + button_x_border, start_y + height - button_height - button_y_border);
-	_btnOk					= new TextButton(footer_button_width, button_height, start_x + button_x_border + footer_button_width + 8, start_y + height - button_height - button_y_border);
+	_txtAvailableScientist	= new Text(width - 2 * button_x_border,
+										button_height,
+										start_x + button_x_border,
+										start_y + (3 * button_y_border));
+	_txtAvailableSpace		= new Text(width - 2 * button_x_border,
+										button_height,
+										start_x + button_x_border,
+										start_y + (4 * button_y_border));
+	_txtAllocatedScientist	= new Text(width - 2 * button_x_border,
+										button_height,
+										start_x + button_x_border,
+										start_y + (5 * button_y_border));
+	_txtMore				= new Text(width - 6 * button_x_border,
+										button_height,
+										start_x + static_cast<int>(2.5 * button_x_border) + 8,
+										start_y + (7 * button_y_border));
+	_txtLess				= new Text(width - 6 * button_x_border,
+										button_height,
+										start_x + static_cast<int>(2.5 * button_x_border) + 8,
+										start_y + (9 * button_y_border));
+	_btnCancel				= new TextButton(footer_button_width,
+										button_height,
+										start_x + button_x_border,
+										start_y + height - button_height - button_y_border);
+	_btnOk					= new TextButton(footer_button_width,
+										button_height,
+										start_x + button_x_border + footer_button_width + 8,
+										start_y + height - button_height - button_y_border);
 
-	_btnMore				= new ArrowButton(ARROW_BIG_UP, button_x_border - 3, button_height - 2, start_x + 10*button_x_border, start_y + 7*button_y_border);
-	_btnLess				= new ArrowButton(ARROW_BIG_DOWN, button_x_border - 3, button_height - 2, start_x + 10*button_x_border, start_y + 9*button_y_border);
+	_btnMore				= new ArrowButton(ARROW_BIG_UP,
+										button_x_border - 3,
+										button_height - 2,
+										start_x + (10 * button_x_border),
+										start_y + (7 * button_y_border));
+	_btnLess				= new ArrowButton(ARROW_BIG_DOWN,
+										button_x_border - 3,
+										button_height - 2,
+										start_x + (10 * button_x_border),
+										start_y + (9 * button_y_border));
 
 	add(_surface);
 	add(_window);
@@ -187,9 +220,9 @@ void ResearchInfoState::buildUi()
 	_btnLess->onMouseRelease((ActionHandler)& ResearchInfoState::lessRelease);
 	_btnLess->onMouseClick((ActionHandler)& ResearchInfoState::lessClick, 0);
 
-	_timerMore = new Timer(275); // kL_note: SHOULD THESE TIMERS BE delete'd
+	_timerMore = new Timer(280); // kL_note: SHOULD THESE TIMERS BE delete'd
 	_timerMore->onTimer((StateHandler)& ResearchInfoState::more);
-	_timerLess = new Timer(275); // kL_note: SHOULD THESE TIMERS BE delete'd
+	_timerLess = new Timer(280); // kL_note: SHOULD THESE TIMERS BE delete'd
 	_timerLess->onTimer((StateHandler)& ResearchInfoState::less);
 
 	_btnOk->setColor(Palette::blockOffset(13)+10);
@@ -282,7 +315,7 @@ void ResearchInfoState::moreRelease(Action* action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		_timerMore->setInterval(275);
+		_timerMore->setInterval(280);
 		_timerMore->stop();
 	}
 }
@@ -318,7 +351,7 @@ void ResearchInfoState::lessRelease(Action* action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		_timerLess->setInterval(275);
+		_timerLess->setInterval(280);
 		_timerLess->stop();
 	}
 }
@@ -341,7 +374,7 @@ void ResearchInfoState::lessClick(Action* action)
  */
 void ResearchInfoState::more()
 {
-	_timerMore->setInterval(75);
+	_timerMore->setInterval(80);
 	moreByValue(1);
 }
 
@@ -369,7 +402,7 @@ void ResearchInfoState::moreByValue(int change)
  */
 void ResearchInfoState::less()
 {
-	_timerLess->setInterval(75);
+	_timerLess->setInterval(80);
 	lessByValue(1);
 }
 

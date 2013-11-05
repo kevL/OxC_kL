@@ -1274,11 +1274,16 @@ int BattleUnit::getFallingPhase() const
  * A soldier that is out, cannot perform any actions, cannot be selected, but it's still a unit.
  * @return flag if out or not.
  */
-bool BattleUnit::isOut() const
+bool BattleUnit::isOut(bool checkHealth) const
 {
+	if (checkHealth)
+	{
+		if (this->getHealth() == 0)
+			return true;
+	}
+
 	return _status == STATUS_DEAD
-			|| _status == STATUS_UNCONSCIOUS
-			|| this->getHealth() == 0;		// kL
+			|| _status == STATUS_UNCONSCIOUS;
 }
 
 /**
@@ -1669,16 +1674,18 @@ void BattleUnit::prepareNewTurn()
 
 	if (!isOut())
 	{
-		int chance = 100 - (2 * getMorale());
-		if (RNG::generate(0, 99) <= chance)
+		int percent = 100 - (2 * getMorale());
+		if (percent < 0) percent = 0;
+//kL		if (RNG::generate(0, 99) <= chance)
+		if (RNG::percent(percent))
 		{
 			int type = RNG::generate(0, 99);
 			// 33% chance of berserk, panic can mean freeze or flee, but that is determined later
-			_status = (type < 33 ? STATUS_BERSERK : STATUS_PANICKING);
+			_status = (type < 33)? STATUS_BERSERK:STATUS_PANICKING;
 		}
 		else // successfully avoided panic
 		{
-			if (chance > 1) _expBravery++; // increase bravery experience counter
+			if (percent > 0) _expBravery++; // increase bravery experience counter
 		}
 	}
 

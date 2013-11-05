@@ -555,8 +555,11 @@ void Inventory::mouseClick(Action* action, State* state)
 
 							if (!placed)
 							{
-								for (std::map<std::string, RuleInventory*>::const_iterator wildCard = _game->getRuleset()->getInventories()->begin();
-																		wildCard != _game->getRuleset()->getInventories()->end() && !placed; ++wildCard)
+								for (std::map<std::string, RuleInventory*>::const_iterator
+										wildCard = _game->getRuleset()->getInventories()->begin();
+										wildCard != _game->getRuleset()->getInventories()->end()
+											&& !placed;
+										++wildCard)
 								{
 									newSlot = wildCard->second;
 									if (newSlot->getType() == INV_GROUND)
@@ -608,8 +611,12 @@ void Inventory::mouseClick(Action* action, State* state)
 		}
 		else // Drop item
 		{
-			int x = _selection->getX() + (RuleInventory::HAND_W - _selItem->getRules()->getInventoryWidth()) * RuleInventory::SLOT_W/2 + RuleInventory::SLOT_W/2,
-				y = _selection->getY() + (RuleInventory::HAND_H - _selItem->getRules()->getInventoryHeight()) * RuleInventory::SLOT_H/2 + RuleInventory::SLOT_H/2;
+			int x = _selection->getX()
+						+ (RuleInventory::HAND_W - _selItem->getRules()->getInventoryWidth()) * RuleInventory::SLOT_W / 2
+						+ RuleInventory::SLOT_W / 2,
+				y = _selection->getY()
+						+ (RuleInventory::HAND_H - _selItem->getRules()->getInventoryHeight()) * RuleInventory::SLOT_H / 2
+						+ RuleInventory::SLOT_H / 2;
 
 			RuleInventory *slot = getSlotInPosition(&x, &y);
 			if (slot != 0)
@@ -665,11 +672,15 @@ void Inventory::mouseClick(Action* action, State* state)
 				else if (!item->getRules()->getCompatibleAmmo()->empty()) // Put item in weapon
 				{
 					bool wrong = true;
-					for (std::vector<std::string>::iterator i = item->getRules()->getCompatibleAmmo()->begin(); i != item->getRules()->getCompatibleAmmo()->end(); ++i)
+					for (std::vector<std::string>::iterator
+							i = item->getRules()->getCompatibleAmmo()->begin();
+							i != item->getRules()->getCompatibleAmmo()->end();
+							++i)
 					{
 						if ((*i) == _selItem->getRules()->getType())
 						{
 							wrong = false;
+
 							break;
 						}
 					}
@@ -684,7 +695,8 @@ void Inventory::mouseClick(Action* action, State* state)
 						{
 							_warning->showMessage(_game->getLanguage()->getString("STR_WEAPON_IS_ALREADY_LOADED"));
 						}
-						else if (!_tu || _selUnit->spendTimeUnits(15))
+						else if (!_tu
+							|| _selUnit->spendTimeUnits(15))
 						{
 							moveItem(_selItem, 0, 0, 0);
 							item->setAmmoItem(_selItem);
@@ -777,12 +789,10 @@ void Inventory::mouseClick(Action* action, State* state)
 					}
 				}
 			}
-			// kL_begin:
 			else
 			{
 				_game->popState(); // Closes the inventory window on right-click (if not in preBattle equip screen!)
 			}
-			// kL_end. - from Battlescape/MiniMapView.cpp, void MiniMapView::mouseClick (Action *action, State *state)
 		}
 		else
 		{
@@ -805,7 +815,10 @@ void Inventory::mouseClick(Action* action, State* state)
  */
 bool Inventory::unload()
 {
-	for (std::vector<BattleItem*>::iterator i = _selUnit->getInventory()->begin(); i != _selUnit->getInventory()->end(); ++i)
+	for (std::vector<BattleItem*>::iterator
+			i = _selUnit->getInventory()->begin();
+			i != _selUnit->getInventory()->end();
+			++i)
 	{
 		if ((*i)->getSlot()->getType() == INV_HAND
 			&& *i != _selItem)
@@ -850,12 +863,16 @@ void Inventory::arrangeGround(bool alterOffset)
 	int y = 0;
 	bool ok = false;
 	int xMax = 0;
+
 	_stackLevel.clear();
 
 	if (_selUnit != 0)
 	{
 		// first move all items out of the way - a big number in X direction
-		for (std::vector<BattleItem*>::iterator i = _selUnit->getTile()->getInventory()->begin(); i != _selUnit->getTile()->getInventory()->end(); ++i)
+		for (std::vector<BattleItem*>::iterator
+				i = _selUnit->getTile()->getInventory()->begin();
+				i != _selUnit->getTile()->getInventory()->end();
+				++i)
 		{
 			(*i)->setSlot(ground);
 			(*i)->setSlotX(1000000);
@@ -863,15 +880,23 @@ void Inventory::arrangeGround(bool alterOffset)
 		}
 
 		// now for each item, find the most topleft position that is not occupied and will fit
-		for (std::vector<BattleItem*>::iterator i = _selUnit->getTile()->getInventory()->begin(); i != _selUnit->getTile()->getInventory()->end(); ++i)
+		for (std::vector<BattleItem*>::iterator
+				i = _selUnit->getTile()->getInventory()->begin();
+				i != _selUnit->getTile()->getInventory()->end();
+				++i)
 		{
 			x = 0;
 			y = 0;
+
 			ok = false;
 			while (!ok)
 			{
 				ok = true; // assume we can put the item here, if one of the following checks fails, we can't.
-				for (int xd = 0; xd < (*i)->getRules()->getInventoryWidth() && ok; xd++)
+				for (int
+						xd = 0;
+						xd < (*i)->getRules()->getInventoryWidth()
+							&& ok;
+						xd++)
 				{
 					if ((x + xd) %slotsX < x %slotsX)
 					{
@@ -879,10 +904,14 @@ void Inventory::arrangeGround(bool alterOffset)
 					}
 					else
 					{
-						for (int yd = 0; yd < (*i)->getRules()->getInventoryHeight() && ok; yd++)
+						for (int
+								yd = 0;
+								yd < (*i)->getRules()->getInventoryHeight()
+									&& ok;
+								yd++)
 						{
 							BattleItem* item = _selUnit->getItem(ground, x + xd, y + yd);
-							ok = item == 0;
+							ok = (item == 0);
 
 							if (canBeStacked(item, *i))
 							{

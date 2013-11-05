@@ -246,7 +246,7 @@ void MiniMapView::mouseClick (Action *action, State *state)
 	if (isMouseScrolling)
 	{
 		if (action->getDetails()->button.button != _battleGame->getDragButton()
-			&& 0 == SDL_GetMouseState(0, 0)& SDL_BUTTON(_battleGame->getDragButton())) // so we missed again the mouse-release :(
+			&& 0 == (SDL_GetMouseState(0, 0) & SDL_BUTTON(_battleGame->getDragButton()))) // so we missed again the mouse-release :(
 		{
 			// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
 			if (!mouseMovedOverThreshold
@@ -265,8 +265,12 @@ void MiniMapView::mouseClick (Action *action, State *state)
 	if (isMouseScrolling)
 	{
 		// While scrolling, other buttons are ineffective
-		if (action->getDetails()->button.button == _battleGame->getDragButton()) isMouseScrolling = false;
-		else return;
+		if (action->getDetails()->button.button == _battleGame->getDragButton())
+		{
+			isMouseScrolling = false;
+		}
+		else
+			return;
 
 		// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
 		if (!mouseMovedOverThreshold
@@ -278,13 +282,14 @@ void MiniMapView::mouseClick (Action *action, State *state)
 			_redraw = true;
 		}
 
-		if (isMouseScrolled) return;
+		if (isMouseScrolled)
+			return;
 	}
 
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		int origX = action->getRelativeXMouse() / action->getXScale();
-		int origY = action->getRelativeYMouse() / action->getYScale();
+		int origX = (int)(action->getRelativeXMouse() / action->getXScale());
+		int origY = (int)(action->getRelativeYMouse() / action->getYScale());
 
 		// get offset (in cells) of the click relative to center of screen
 		int xOff = (origX / CELL_WIDTH) - ((getWidth() / 2) / CELL_WIDTH);
@@ -321,7 +326,7 @@ void MiniMapView::mouseOver(Action *action, State *state)
 		// the mouse-release event is missed for any reason.
 		// However if the SDL is also missed the release event, then it is to no avail :(
 		// (checking: is the dragScroll-mouse-button still pressed?)
-		if (0 == SDL_GetMouseState(0, 0)& SDL_BUTTON(_battleGame->getDragButton())) // so we missed again the mouse-release :(
+		if (0 == (SDL_GetMouseState(0, 0)& SDL_BUTTON(_battleGame->getDragButton()))) // so we missed again the mouse-release :(
 		{
 			// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
 			if (!mouseMovedOverThreshold

@@ -247,7 +247,8 @@ private:
 		/// Get falling sequence.
 		int getFallingPhase() const;
 		/// The unit is out - either dead or unconscious.
-		bool isOut() const;
+//kL		bool isOut() const;
+		bool isOut(bool checkHealth = false) const;		// kL
 		/// Get the number of time units a certain action takes.
 		int getActionTUs(BattleActionType actionType, BattleItem* item);
 		/// Spend time units if it can.

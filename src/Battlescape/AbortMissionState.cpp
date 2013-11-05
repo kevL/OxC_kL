@@ -46,11 +46,11 @@ namespace OpenXcom
  */
 AbortMissionState::AbortMissionState(Game* game, SavedBattleGame* battleGame, BattlescapeState* state)
 	:
-	State(game),
-	_battleGame(battleGame),
-	_state(state),
-	_inExitArea(0),
-	_outExitArea(0)
+		State(game),
+		_battleGame(battleGame),
+		_state(state),
+		_inExitArea(0),
+		_outExitArea(0)
 {
 	// Create objects
 	_screen			= false;

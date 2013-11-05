@@ -78,13 +78,13 @@ BuildNewBaseState::BuildNewBaseState(Game* game, Base* base, Globe* globe, bool 
 	_btnZoomIn		= new InteractiveSurface(23, 23, 295 + dx * 2, 156 + dy);
 	_btnZoomOut		= new InteractiveSurface(13, 17, 300 + dx * 2, 182 + dy); */
 
-	_window			= new Window(this, 256, 28, 0 + dx, 0);
+	_window			= new Window(this, 256, 29, 0 + dx, 0);
 	_window->setDY(0);
 
-	_btnCancel		= new TextButton(54, 14, 186 + dx, 8);
-	_txtTitle		= new Text(180, 16, 8 + dx, 6);
+	_txtTitle		= new Text(180, 9, 8 + dx, 11);
+	_btnCancel		= new TextButton(54, 14, 194 + dx, 8);
 
-	_hoverTimer		= new Timer(50);
+	_hoverTimer		= new Timer(80);
 	_hoverTimer->onTimer((StateHandler)&BuildNewBaseState::hoverRedraw);
 	_hoverTimer->start();
 	
@@ -103,7 +103,7 @@ BuildNewBaseState::BuildNewBaseState(Game* game, Base* base, Globe* globe, bool 
 	add(_txtTitle);
 
 
-	_globe->onMouseClick((ActionHandler)&BuildNewBaseState::globeClick);
+	_globe->onMouseClick((ActionHandler)& BuildNewBaseState::globeClick);
 
 /*	_btnRotateLeft->onMousePress((ActionHandler)&BuildNewBaseState::btnRotateLeftPress);
 	_btnRotateLeft->onMouseRelease((ActionHandler)&BuildNewBaseState::btnRotateLeftRelease);
@@ -149,8 +149,9 @@ BuildNewBaseState::BuildNewBaseState(Game* game, Base* base, Globe* globe, bool 
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setText(tr("STR_SELECT_SITE_FOR_NEW_BASE"));
-	_txtTitle->setVerticalAlign(ALIGN_MIDDLE);
-	_txtTitle->setWordWrap(true);
+	_txtTitle->setAlign(ALIGN_CENTER);
+//	_txtTitle->setVerticalAlign(ALIGN_MIDDLE);
+//	_txtTitle->setWordWrap(true);
 
 	if (_first)
 	{

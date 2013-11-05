@@ -249,9 +249,9 @@ TransferItemsState::TransferItemsState(Game* game, Base* baseFrom, Base* baseTo)
 
 	_distance = getDistance();
 
-	_timerInc = new Timer(275);
+	_timerInc = new Timer(280);
 	_timerInc->onTimer((StateHandler)& TransferItemsState::increase);
-	_timerDec = new Timer(275);
+	_timerDec = new Timer(280);
 	_timerDec->onTimer((StateHandler)& TransferItemsState::decrease);
 }
 
@@ -478,8 +478,8 @@ void TransferItemsState::lstItemsLeftArrowClick(Action* action)
 	{
 		increaseByValue(1);
 
-		_timerInc->setInterval(275);
-		_timerDec->setInterval(275);
+		_timerInc->setInterval(280);
+		_timerDec->setInterval(280);
 	}
 }
 
@@ -524,8 +524,8 @@ void TransferItemsState::lstItemsRightArrowClick(Action* action)
 	{
 		decreaseByValue(1);
 
-		_timerInc->setInterval(275);
-		_timerDec->setInterval(275);
+		_timerInc->setInterval(280);
+		_timerDec->setInterval(280);
 	}
 }
 
@@ -608,8 +608,8 @@ int TransferItemsState::getQuantity() const
  */
 void TransferItemsState::increase()
 {
-	_timerDec->setInterval(75);
-	_timerInc->setInterval(75);
+	_timerDec->setInterval(80);
+	_timerInc->setInterval(80);
 
 	increaseByValue(1);
 }
@@ -740,8 +740,8 @@ void TransferItemsState::increaseByValue(int change)
  */
 void TransferItemsState::decrease()
 {
-	_timerInc->setInterval(75);
-	_timerDec->setInterval(75);
+	_timerInc->setInterval(80);
+	_timerDec->setInterval(80);
 
 	decreaseByValue(1);
 }

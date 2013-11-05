@@ -16,39 +16,45 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http:///www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_BASEDESTROYEDSTATE_H
 #define OPENXCOM_BASEDESTROYEDSTATE_H
 
 #include "../Engine/State.h"
 
+
 namespace OpenXcom
 {
+
 class Base;
 class Window;
 class Text;
 class TextButton;
 
 /**
- * Screen that allows the player
- * to pick a target for a craft on the globe.
+ * Base Destroyed screen.
  */
-class BaseDestroyedState : public State
+class BaseDestroyedState
+	:
+		public State
 {
 private:
-	Window *_window;
-	Text *_txtMessage;
-	TextButton *_btnOk;
-	Base *_base;
-public:
-	/// Creates the Select Destination state.
-	BaseDestroyedState(Game *game, Base *base);
-	/// Cleans up the Select Destination state.
-	~BaseDestroyedState();
-	/// Updates the palette.
-	void init();
-	/// Handler for clicking the Cydonia mission button.
-	void btnOkClick(Action *action);
+	Window* _window;
+	Text* _txtMessage;
+	TextButton* _btnOk;
+	Base* _base;
 
+	public:
+		/// Creates the Select Destination state.
+		BaseDestroyedState(Game* game, Base* base);
+		/// Cleans up the Select Destination state.
+		~BaseDestroyedState();
+
+		/// Updates the palette.
+		void init();
+
+		/// Handler for clicking the Cydonia mission button.
+		void btnOkClick(Action* action);
 };
 
 }

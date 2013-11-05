@@ -53,6 +53,8 @@ class BattlescapeState
 		public State
 {
 private:
+	static const int VISIBLE_MAX = 10;
+
 	Surface* _rank, * _kneel;
 	InteractiveSurface* _icons;
 	Map* _map;
@@ -62,13 +64,12 @@ private:
 	ImageButton* _reserve;
 	ImageButton* _btnReserveNone, * _btnReserveSnap, * _btnReserveAimed, * _btnReserveAuto, * _btnReserveKneel, * _btnZeroTUs;
 	InteractiveSurface* _btnLeftHandItem, * _btnRightHandItem;
-	static const int VISIBLE_MAX = 10;
 	InteractiveSurface* _btnVisibleUnit[VISIBLE_MAX];
 	NumberText* _numVisibleUnit[VISIBLE_MAX];
 	BattleUnit* _visibleUnit[VISIBLE_MAX];
 	WarningMessage* _warning;
 	Text* _txtName;
-	NumberText* _numTUSnap;	// kL
+	NumberText* _numTUSnap;
 	NumberText* _numTimeUnits, * _numEnergy, * _numHealth, * _numMorale, * _numLayers, * _numAmmoLeft, * _numAmmoRight;
 	Bar* _barTimeUnits, * _barEnergy, * _barHealth, * _barMorale;
 	Timer* _animTimer, * _gameTimer;
@@ -93,7 +94,7 @@ private:
 	/// Draws the kneel indicator.
 	void BattlescapeState::drawKneelIndicator();
 	///
-	TurnCounter* _turnCounter;	// kL
+	TurnCounter* _turnCounter;
 
 	public:
 		/// Creates the Battlescape state.
@@ -101,8 +102,7 @@ private:
 		/// Cleans up the Battlescape state.
 		~BattlescapeState();
 
-//kL		static const int DEFAULT_ANIM_SPEED = 100;
-		static const int DEFAULT_ANIM_SPEED = 87;		// kL
+		static const int DEFAULT_ANIM_SPEED = 85;
 
 		/// Selects the next soldier.
 		void selectNextPlayerUnit(bool checkReselect = false, bool setReselect = false, bool checkInventory = false);

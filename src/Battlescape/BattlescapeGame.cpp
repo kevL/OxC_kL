@@ -738,7 +738,7 @@ void BattlescapeGame::checkForCasualties(BattleItem* murderweapon, BattleUnit* k
 						i != _save->getUnits()->end();
 						++i)
 				{
-					if (!(*i)->isOut()
+					if (!(*i)->isOut(true)
 						&& (*i)->getArmor()->getSize() == 1) // not a large unit
 					{
 						if ((*i)->getOriginalFaction() == victim->getOriginalFaction())

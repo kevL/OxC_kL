@@ -53,14 +53,13 @@ ConfirmNewBaseState::ConfirmNewBaseState(Game* game, Base* base, Globe* globe)
 {
 	_screen = false;
 
-	// Create objects
 	_window		= new Window(this, 224, 72, 16, 64);
-	_btnOk		= new TextButton(54, 12, 68, 104);
-	_btnCancel	= new TextButton(54, 12, 138, 104);
+	_btnOk		= new TextButton(54, 14, 68, 106);
+	_btnCancel	= new TextButton(54, 14, 138, 106);
 	_txtCost	= new Text(120, 9, 68, 80);
 	_txtArea	= new Text(120, 9, 68, 90);
 
-	// Set palette
+
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
 
 	add(_window);
@@ -71,7 +70,7 @@ ConfirmNewBaseState::ConfirmNewBaseState(Game* game, Base* base, Globe* globe)
 
 	centerAllSurfaces();
 
-	// Set up objects
+
 	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 

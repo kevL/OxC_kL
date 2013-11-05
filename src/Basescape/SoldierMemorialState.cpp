@@ -56,11 +56,11 @@ SoldierMemorialState::SoldierMemorialState(Game* game)
 	_txtRecruited	= new Text(110, 9, 16, 25);
 	_txtLost		= new Text(110, 9, 210, 25);
 
-	_txtName		= new Text(124, 9, 16, 36);
-	_txtRank		= new Text(70, 9, 140, 36);
-	_txtDate		= new Text(94, 9, 210, 36);
+	_txtName		= new Text(132, 9, 16, 36);
+	_txtRank		= new Text(70, 9, 148, 36);
+	_txtDate		= new Text(86, 9, 218, 36);
 
-	_lstSoldiers	= new TextList(294, 128, 8, 44);
+	_lstSoldiers	= new TextList(286, 128, 16, 44);
 
 	_btnOk			= new TextButton(288, 16, 16, 177);
 
@@ -121,8 +121,7 @@ SoldierMemorialState::SoldierMemorialState(Game* game)
 
 	_lstSoldiers->setColor(Palette::blockOffset(15)+6);
 	_lstSoldiers->setArrowColor(Palette::blockOffset(13)+10);
-//kL	_lstSoldiers->setColumns(5, 114, 88, 30, 25, 35);
-	_lstSoldiers->setColumns(5, 124, 70, 26, 24, 44);		// kL
+	_lstSoldiers->setColumns(5, 124, 70, 26, 24, 32);
 	_lstSoldiers->setSelectable(true);
 	_lstSoldiers->setBackground(_window);
 	_lstSoldiers->setMargin(8);
