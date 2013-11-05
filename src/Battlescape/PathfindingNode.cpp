@@ -113,7 +113,7 @@ void PathfindingNode::connect(int tuCost, PathfindingNode* prevNode, int prevDir
 	{
 		Position d = target - _pos;
 		d *= d;
-		_tuGuess = 4 * sqrt((double)d.x + d.y + d.z);
+		_tuGuess = 4 * (int)sqrt((double)d.x + (double)d.y + (double)d.z);
 	}
 }
 

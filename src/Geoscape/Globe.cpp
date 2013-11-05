@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #define _USE_MATH_DEFINES
 #include "Globe.h"
 #include <cmath>
@@ -56,6 +57,7 @@
 #include "../Ruleset/RuleBaseFacility.h"
 #include "../Ruleset/RuleCraft.h"
 #include "../Ruleset/Ruleset.h"
+
 
 namespace OpenXcom
 {
@@ -110,10 +112,12 @@ struct GlobeStaticData
 	}
 	
 	//initialization	
-	GlobeStaticData() : random_surf_size(60)
+	GlobeStaticData()
+		:
+			random_surf_size(60)
 	{
 		//filling terminator gradient LUT
-		for (int i=0; i<240; ++i)
+		for (int i = 0; i < 240; ++i)
 		{
 			int j = i - 120;
 
@@ -155,11 +159,12 @@ struct GlobeStaticData
 
 			shade_gradient[i]= j+16;
 		}
-
 	}
 };
 
+
 GlobeStaticData static_data;
+
 
 struct Ocean
 {
@@ -168,6 +173,7 @@ struct Ocean
 		dest = Palette::blockOffset(12) + 0;
 	}
 };
+
 
 struct CreateShadow
 {
@@ -207,7 +213,7 @@ struct CreateShadow
 			else
 			{
 				//this pixel is land
-				if (dest==0) return val;
+				if (dest==0) return (Uint8)val;
 				const int s = val / 3;
 				const int e = dest+s;
 				if(e > d + helper::ColorShade)
@@ -241,7 +247,6 @@ struct CreateShadow
 };
 
 }//namespace
-
 
 /**
  * Sets up a globe with the specified size and position.
@@ -980,20 +985,16 @@ void Globe::draw()
 	drawDetail();
 }
 
-
 /**
  * Renders the ocean, shading it according to the time of day.
  */
 void Globe::drawOcean()
 {
 	lock();
-	drawCircle(_cenX+1, _cenY, _radius[_zoom]+20, Palette::blockOffset(12)+0);
+	drawCircle(_cenX+1, _cenY, (Sint16)_radius[_zoom] + 20, Palette::blockOffset(12)+0);
 //	ShaderDraw<Ocean>(ShaderSurface(this));
 	unlock();
 }
-
-
-
 
 /**
  * Renders the land, taking all the visible world polygons
@@ -1147,7 +1148,7 @@ void Globe::XuLine(Surface* surface, Surface* src, double x1, double y1, double 
 					tcol = d + helper::ColorShade;
 				else tcol = e;
 			}
-			surface->setPixel((int)x0,(int)y0,tcol);
+			surface->setPixel((int)x0, (int)y0, (Uint8)tcol);
 		}
 		x0+=SX;
 		y0+=SY;
@@ -1271,19 +1272,27 @@ void Globe::setNewBaseHover(void)
 {
 	_hover=true;
 }
+
+
 void Globe::unsetNewBaseHover(void)
 {
 	_hover=false;
 }
+
+
 bool Globe::getNewBaseHover(void)
 {
 	return _hover;
 }
+
+
 void Globe::setNewBaseHoverPos(double lon, double lat)
 {
 	_hoverLon=lon;
 	_hoverLat=lat;
 }
+
+
 bool Globe::getShowRadar(void)
 {
 	return _game->getSavedGame()->getRadarLines();
@@ -1302,12 +1311,12 @@ void Globe::drawVHLine(double lon1, double lat1, double lon2, double lat2, int c
 
 	if (fabs(sx)<0.01)
 	{
-		seg = abs( sy/(2*M_PI)*48 );
+		seg = (int)abs(sy / (2.0 * M_PI) * 48.0);
 		if (seg == 0) ++seg;
 	}
 	else
 	{
-		seg = abs( sx/(2*M_PI)*96 );
+		seg = (int)abs(sx / (2.0 * M_PI) * 96.0);
 		if (seg == 0) ++seg;
 	}
 
@@ -1329,7 +1338,6 @@ void Globe::drawVHLine(double lon1, double lat1, double lon2, double lat2, int c
 		}
 	}
 }
-
 
 /**
  * Draws the details of the countries on the globe,
@@ -1788,10 +1796,11 @@ bool Globe::isZoomedOutToMax() const
 	}
 }
 
+
 void Globe::toggleRadarLines()
 {
 	_game->getSavedGame()->toggleRadarLines();
 	drawRadars();
 }
 
-}//namespace OpenXcom
+}

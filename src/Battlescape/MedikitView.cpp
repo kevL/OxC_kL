@@ -103,8 +103,8 @@ void MedikitView::mouseClick (Action *action, State *)
 {
 	SurfaceSet *set = _game->getResourcePack()->getSurfaceSet("MEDIBITS.DAT");
 
-	int x = action->getRelativeXMouse() / action->getXScale();
-	int y = action->getRelativeYMouse() / action->getYScale();
+	int x = (int)(action->getRelativeXMouse() / action->getXScale());
+	int y = (int)(action->getRelativeYMouse() / action->getYScale());
 
 	for (int i = 0; i < set->getTotalFrames(); i++)
 	{
@@ -113,6 +113,7 @@ void MedikitView::mouseClick (Action *action, State *)
 		{
 			_selectedPart = i;
 			_redraw = true;
+
 			break;
 		}
 	}

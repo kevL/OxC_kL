@@ -23,8 +23,8 @@
 #include "BattleState.h"
 #include "../Ruleset/RuleItem.h"
 
-namespace OpenXcom
 
+namespace OpenXcom
 {
 
 class BattlescapeGame;
@@ -36,13 +36,13 @@ class BattleUnit;
  */
 class UnitDieBState
 	:
-	public BattleState
+		public BattleState
 {
-	private:
-		BattleUnit* _unit;
-		ItemDamageType _damageType;
-		bool _noSound;
-		int _originalDir;
+private:
+	BattleUnit* _unit;
+	ItemDamageType _damageType;
+	bool _noSound;
+	int _originalDir;
 
 	public:
 		/// Creates a new UnitDieBState class

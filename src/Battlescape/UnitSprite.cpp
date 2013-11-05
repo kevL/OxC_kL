@@ -725,7 +725,8 @@ void UnitSprite::drawRoutine1()
 	// when walking, torso(fixed sprite) has to be animated up/down
 	if (_unit->getStatus() == STATUS_WALKING)
 	{
-		torso = _unitSurface->getFrame(walk + (5 * _unit->getDirection()) + (_unit->getWalkingPhase() / 1.6)); // floater only has 5 walk animations instead of 8
+		// floater only has 5 walk animations instead of 8
+		torso = _unitSurface->getFrame(walk + (5 * _unit->getDirection()) + (int)((float)_unit->getWalkingPhase() / 1.6f));
 		torso->setY(yoffWalk[_unit->getWalkingPhase()]);
 	}
 	else

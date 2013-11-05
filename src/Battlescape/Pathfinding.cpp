@@ -1155,7 +1155,10 @@ bool Pathfinding::previewPath(bool bRemove)
 		&& _unit->getArmor()->getSize() == 1
 		&& _path.size() > 1;
 
-	for (std::vector<int>::reverse_iterator i = _path.rbegin(); i != _path.rend(); ++i)
+	for (std::vector<int>::reverse_iterator
+			i = _path.rbegin();
+			i != _path.rend();
+			++i)
 	{
 		int dir = *i;
 		// gets tu cost, but also gets the destination position.
@@ -1163,7 +1166,8 @@ bool Pathfinding::previewPath(bool bRemove)
 
 		if (running)
 		{
-			tu *= 0.75;
+//			tu *= 0.75;
+			tu = tu * 3 / 4;
 		}
 
 		energy -= tu / 2;

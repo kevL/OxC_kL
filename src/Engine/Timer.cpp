@@ -42,7 +42,7 @@ Uint32 slowTick()
 	return false_time >> accurate;
 }
 
-} // namespace
+}
 
 
 Uint32 Timer::gameSlowSpeed = 1;
@@ -124,14 +124,19 @@ void Timer::think(State* state, Surface* surface)
 	// must be signed to permit negative numbers
 	Sint64 now = slowTick();
 	// this is used to make sure we stop calling *_state on *state in the loop once *state has been popped and deallocated
-	Game* game = state ? state->_game : 0;
+	Game* game = state? state->_game:0;
 //	assert(!game || game->isState(state));
 
 	if (_running)
 	{
 		if (now - _frameSkipStart >= _interval)
 		{
-			for (int i = 0; i <= maxFrameSkip && isRunning() && (now - _frameSkipStart) >= _interval; ++i)
+			for (int
+					i = 0;
+					i <= maxFrameSkip
+						&& isRunning()
+						&& now - _frameSkipStart >= _interval;
+					++i)
 			{
 				if (state != 0 && _state != 0)
 				{
@@ -141,11 +146,17 @@ void Timer::think(State* state, Surface* surface)
 				_frameSkipStart += _interval;
 
 				// breaking here after one iteration effectively returns this function to its old functionality:
-				if (!game || !_frameSkipping || !game->isState(state)) // if game isn't set, we can't verify *state
+				if (!game
+					|| !_frameSkipping
+					|| !game->isState(state)) // if game isn't set, we can't verify *state
+				{
 					break;
+				}
 			}
 			
-			if (_running && surface != 0 && _surface != 0)
+			if (_running
+				&& surface != 0
+				&& _surface != 0)
 			{
 				(surface->*_surface)();
 			}

@@ -281,6 +281,7 @@ void UnitDieBState::think()
 						game->pushState(new InfoboxOKState(game,
 								game->getLanguage()->getString("STR_HAS_BEEN_KILLED", _unit->getGender())
 								.arg(_unit->getName(game->getLanguage()))));
+					}
 				}
 			}
 			else
@@ -292,7 +293,8 @@ void UnitDieBState::think()
 		}
 
 		// if all units from either faction are killed - auto-end the mission.
-		if (_parent->getSave()->getSide() == FACTION_PLAYER && Options::getBool("battleAutoEnd"))
+		if (_parent->getSave()->getSide() == FACTION_PLAYER
+			&& Options::getBool("battleAutoEnd"))
 		{
 			int liveAliens = 0;
 			int liveSoldiers = 0;
