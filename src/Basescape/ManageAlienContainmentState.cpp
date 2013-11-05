@@ -50,8 +50,9 @@ namespace OpenXcom
  * Initializes all the elements in the Manage Alien Containment screen.
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
+ * @param origin Game section that originated this state.
  */
-ManageAlienContainmentState::ManageAlienContainmentState(Game* game, Base* base)
+ManageAlienContainmentState::ManageAlienContainmentState(Game* game, Base* base, OptionsOrigin origin)
 	:
 		State(game),
 		_base(base),
@@ -63,7 +64,7 @@ ManageAlienContainmentState::ManageAlienContainmentState(Game* game, Base* base)
 {
 	_changeValueByMouseWheel = Options::getInt("changeValueByMouseWheel");
 	_allowChangeListValuesByMouseWheel = (Options::getBool("allowChangeListValuesByMouseWheel") && _changeValueByMouseWheel);
-	_containmentLimit = Options::getBool("alienContainmentLimitEnforced") ? 1 : 0;
+	_containmentLimit = Options::getBool("alienContainmentLimitEnforced");
 	_overCrowded = _containmentLimit && _base->getAvailableContainment() < _base->getUsedContainment();
 
 	for (std::vector<ResearchProject*>::const_iterator iter = _base->getResearch().begin (); iter != _base->getResearch().end (); ++iter)
@@ -76,20 +77,33 @@ ManageAlienContainmentState::ManageAlienContainmentState(Game* game, Base* base)
 	}
 
 	_window			= new Window(this, 320, 200, 0, 0);
-	_btnOk			= new TextButton(_overCrowded? 288:148, 16, _overCrowded? 16:8, 176);
-	_btnCancel		= new TextButton(148, 16, 164, 176);
-	_txtTitle		= new Text(310, 16, 5, 8);
+
+	_txtTitle		= new Text(310, 17, 5, 8);
+
 	_txtAvailable	= new Text(190, 9, 10, 24);
-	_txtUsed		= new Text(114, 9, 200, 24);
+	_txtUsed		= new Text(110, 9, 136, 24);
+
 	_txtItem		= new Text(130, 9, 10, 32);
-	_txtQuantity	= new Text(54, 9, 126, 32);
-	_txtFate		= new Text(96, 9, 180, 32);
-	_lstAliens		= new TextList(294, 120, 8, 44);
+	_txtLiveAliens	= new Text(54, 9, 136, 32);
+	_txtDeadAliens	= new Text(96, 9, 220, 32);
+
+	_lstAliens		= new TextList(280, 120, 8, 44);
+
+	_btnCancel		= new TextButton(148, 16, 164, 177);
+	_btnOk			= new TextButton(_overCrowded? 288:148, 16, _overCrowded? 16:8, 177);
 
 
-	if (_overCrowded)
+	if (origin == OPT_BATTLESCAPE)
 	{
 		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
+		_color  = Palette::blockOffset(15)-1;
+		_color2 = Palette::blockOffset(8)+10;
+	}
+	else
+	{
+		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(1)), Palette::backPos, 16);
+		_color  = Palette::blockOffset(13)+10;
+		_color2 = Palette::blockOffset(13);
 	}
 
 	add(_window);
@@ -99,22 +113,22 @@ ManageAlienContainmentState::ManageAlienContainmentState(Game* game, Base* base)
 	add(_txtAvailable);
 	add(_txtUsed);
 	add(_txtItem);
-	add(_txtQuantity);
-	add(_txtFate);
+	add(_txtLiveAliens);
+	add(_txtDeadAliens);
 	add(_lstAliens);
 
 	centerAllSurfaces();
 
 
-	_window->setColor(Palette::blockOffset(15)-1);
-	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
+	_window->setColor(_color);
+	_window->setBackground(_game->getResourcePack()->getSurface((origin == OPT_BATTLESCAPE)? "BACK01.SCR" : "BACK05.SCR"));
 
-	_btnOk->setColor(_overCrowded ? Palette::blockOffset(8)+5 : Palette::blockOffset(13)+10);
+	_btnOk->setColor(_color);
 	_btnOk->setText(tr("STR_REMOVE_SELECTED"));
 	_btnOk->onMouseClick((ActionHandler)& ManageAlienContainmentState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)& ManageAlienContainmentState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
 
-	_btnCancel->setColor(_overCrowded ? Palette::blockOffset(8)+5 : Palette::blockOffset(13)+10);
+	_btnCancel->setColor(_color);
 	_btnCancel->setText(tr("STR_CANCEL"));
 	_btnCancel->onMouseClick((ActionHandler)& ManageAlienContainmentState::btnCancelClick);
 	_btnCancel->onKeyboardPress((ActionHandler)& ManageAlienContainmentState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
@@ -125,42 +139,43 @@ ManageAlienContainmentState::ManageAlienContainmentState(Game* game, Base* base)
 		_btnOk->setVisible(false);
 	}
 
-	_txtTitle->setColor(_overCrowded ? Palette::blockOffset(8)+5 : Palette::blockOffset(13)+10);
+	_txtTitle->setColor((origin == OPT_BATTLESCAPE)? Palette::blockOffset(8)+5:_color);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_MANAGE_CONTAINMENT"));
 
-	_txtItem->setColor(_overCrowded ? Palette::blockOffset(8)+5 : Palette::blockOffset(13)+10);
+	_txtItem->setColor(_color);
 	_txtItem->setText(tr("STR_ALIEN"));
 
-	_txtQuantity->setColor(_overCrowded ? Palette::blockOffset(8)+5 : Palette::blockOffset(13)+10);
-	_txtQuantity->setText(tr("STR_QUANTITY_UC"));
+	_txtLiveAliens->setColor(_color);
+	_txtLiveAliens->setText(tr("STR_LIVE_ALIENS"));
 
-	_txtFate->setColor(_overCrowded ? Palette::blockOffset(8)+5 : Palette::blockOffset(13)+10);
-	_txtFate->setText(tr("STR_REMOVE_SELECTED"));
+	_txtDeadAliens->setColor(_color);
+	_txtDeadAliens->setText(tr("STR_DEAD_ALIENS"));
 
-	_txtAvailable->setColor(_overCrowded ? Palette::blockOffset(8)+5 : Palette::blockOffset(13)+10);
-	_txtAvailable->setSecondaryColor(_overCrowded ? Palette::blockOffset(8)+10 : Palette::blockOffset(13));
+	_txtAvailable->setColor(_color);
+	_txtAvailable->setSecondaryColor(_color2);
 	_txtAvailable->setText(tr("STR_SPACE_AVAILABLE").arg(_base->getAvailableContainment() - _base->getUsedContainment()));
 
-	_txtUsed->setColor(_overCrowded ? Palette::blockOffset(8)+5 : Palette::blockOffset(13)+10);
-	_txtUsed->setSecondaryColor(_overCrowded ? Palette::blockOffset(8)+10 : Palette::blockOffset(13));
+	_txtUsed->setColor(_color);
+	_txtUsed->setSecondaryColor(_color2);
 	_txtUsed->setText(tr("STR_SPACE_USED").arg( _base->getUsedContainment() - _researchedAliens));
 
-	_lstAliens->setColor(_overCrowded ? Palette::blockOffset(8)+5 : Palette::blockOffset(13)+10);
-	_lstAliens->setArrowColumn(182, ARROW_VERTICAL);
-	_lstAliens->setColumns(4, 150, 60, 22, 55);
+	_lstAliens->setColor(_color2);
+	_lstAliens->setArrowColor(_color);
+	_lstAliens->setArrowColumn(184, ARROW_HORIZONTAL);
+	_lstAliens->setColumns(3, 150, 84, 46);
 	_lstAliens->setSelectable(true);
 	_lstAliens->setBackground(_window);
 	_lstAliens->setMargin(8);
 	_lstAliens->setAllowScrollOnArrowButtons(!_allowChangeListValuesByMouseWheel);
-	_lstAliens->onLeftArrowPress((ActionHandler)&ManageAlienContainmentState::lstItemsLeftArrowPress);
-	_lstAliens->onLeftArrowRelease((ActionHandler)&ManageAlienContainmentState::lstItemsLeftArrowRelease);
-	_lstAliens->onLeftArrowClick((ActionHandler)&ManageAlienContainmentState::lstItemsLeftArrowClick);
-	_lstAliens->onRightArrowPress((ActionHandler)&ManageAlienContainmentState::lstItemsRightArrowPress);
-	_lstAliens->onRightArrowRelease((ActionHandler)&ManageAlienContainmentState::lstItemsRightArrowRelease);
-	_lstAliens->onRightArrowClick((ActionHandler)&ManageAlienContainmentState::lstItemsRightArrowClick);
-	_lstAliens->onMousePress((ActionHandler)&ManageAlienContainmentState::lstItemsMousePress);
+	_lstAliens->onLeftArrowPress((ActionHandler)& ManageAlienContainmentState::lstItemsLeftArrowPress);
+	_lstAliens->onLeftArrowRelease((ActionHandler)& ManageAlienContainmentState::lstItemsLeftArrowRelease);
+	_lstAliens->onLeftArrowClick((ActionHandler)& ManageAlienContainmentState::lstItemsLeftArrowClick);
+	_lstAliens->onRightArrowPress((ActionHandler)& ManageAlienContainmentState::lstItemsRightArrowPress);
+	_lstAliens->onRightArrowRelease((ActionHandler)& ManageAlienContainmentState::lstItemsRightArrowRelease);
+	_lstAliens->onRightArrowClick((ActionHandler)& ManageAlienContainmentState::lstItemsRightArrowClick);
+	_lstAliens->onMousePress((ActionHandler)& ManageAlienContainmentState::lstItemsMousePress);
 
 	const std::vector<std::string> &items = _game->getRuleset()->getItemsList();
 	for (std::vector<std::string>::const_iterator i = items.begin(); i != items.end(); ++i)
@@ -176,9 +191,9 @@ ManageAlienContainmentState::ManageAlienContainmentState(Game* game, Base* base)
 		}
 	}
 
-	_timerInc = new Timer(275);
+	_timerInc = new Timer(280);
 	_timerInc->onTimer((StateHandler)&ManageAlienContainmentState::increase);
-	_timerDec = new Timer(275);
+	_timerDec = new Timer(280);
 	_timerDec->onTimer((StateHandler)&ManageAlienContainmentState::decrease);
 }
 
@@ -242,17 +257,22 @@ void ManageAlienContainmentState::btnCancelClick(Action*)
  * Starts increasing the alien count.
  * @param action Pointer to an action.
  */
-void ManageAlienContainmentState::lstItemsLeftArrowPress(Action* action)
+void ManageAlienContainmentState::lstItemsRightArrowPress(Action* action)
 {
 	_sel = _lstAliens->getSelectedRow();
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT && !_timerInc->isRunning()) _timerInc->start();
+
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT
+		&& !_timerInc->isRunning())
+	{
+		_timerInc->start();
+	}
 }
 
 /**
  * Stops increasing the alien count.
  * @param action Pointer to an action.
  */
-void ManageAlienContainmentState::lstItemsLeftArrowRelease(Action* action)
+void ManageAlienContainmentState::lstItemsRightArrowRelease(Action* action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
@@ -265,7 +285,7 @@ void ManageAlienContainmentState::lstItemsLeftArrowRelease(Action* action)
  * by one on left-click, to max on right-click.
  * @param action Pointer to an action.
  */
-void ManageAlienContainmentState::lstItemsLeftArrowClick(Action* action)
+void ManageAlienContainmentState::lstItemsRightArrowClick(Action* action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 		increaseByValue(INT_MAX);
@@ -274,8 +294,8 @@ void ManageAlienContainmentState::lstItemsLeftArrowClick(Action* action)
 	{
 		increaseByValue(1);
 
-		_timerInc->setInterval(275);
-		_timerDec->setInterval(275);
+		_timerInc->setInterval(280);
+		_timerDec->setInterval(280);
 	}
 }
 
@@ -283,7 +303,7 @@ void ManageAlienContainmentState::lstItemsLeftArrowClick(Action* action)
  * Starts decreasing the alien count.
  * @param action Pointer to an action.
  */
-void ManageAlienContainmentState::lstItemsRightArrowPress(Action* action)
+void ManageAlienContainmentState::lstItemsLeftArrowPress(Action* action)
 {
 	_sel = _lstAliens->getSelectedRow();
 
@@ -298,7 +318,7 @@ void ManageAlienContainmentState::lstItemsRightArrowPress(Action* action)
  * Stops decreasing the alien count.
  * @param action Pointer to an action.
  */
-void ManageAlienContainmentState::lstItemsRightArrowRelease(Action* action)
+void ManageAlienContainmentState::lstItemsLeftArrowRelease(Action* action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
@@ -311,7 +331,7 @@ void ManageAlienContainmentState::lstItemsRightArrowRelease(Action* action)
  * by one on left-click, to 0 on right-click.
  * @param action Pointer to an action.
  */
-void ManageAlienContainmentState::lstItemsRightArrowClick(Action* action)
+void ManageAlienContainmentState::lstItemsLeftArrowClick(Action* action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 		decreaseByValue(INT_MAX);
@@ -320,8 +340,8 @@ void ManageAlienContainmentState::lstItemsRightArrowClick(Action* action)
 	{
 		decreaseByValue(1);
 
-		_timerInc->setInterval(275);
-		_timerDec->setInterval(275);
+		_timerInc->setInterval(280);
+		_timerDec->setInterval(280);
 	}
 }
 
@@ -359,8 +379,7 @@ void ManageAlienContainmentState::lstItemsMousePress(Action* action)
 }
 
 /**
- * Gets the quantity of the currently selected alien
- * on the base.
+ * Gets the quantity of the currently selected alien on the base.
  * @return Quantity of selected alien on the base.
  */
 int ManageAlienContainmentState::getQuantity()
@@ -373,8 +392,8 @@ int ManageAlienContainmentState::getQuantity()
  */
 void ManageAlienContainmentState::increase()
 {
-	_timerDec->setInterval(75);
-	_timerInc->setInterval(75);
+	_timerDec->setInterval(80);
+	_timerInc->setInterval(80);
 
 	increaseByValue(1);
 }
@@ -385,10 +404,11 @@ void ManageAlienContainmentState::increase()
  */
 void ManageAlienContainmentState::increaseByValue(int change)
 {
-	if (0 >= change || getQuantity() <=_qtys[_sel])
+	int qty = getQuantity() - _qtys[_sel];
+	if (0 >= change || qty <= 0)
 		return;
 
-	change = std::min(getQuantity() - _qtys[_sel], change);
+	change = std::min(qty, change);
 	_qtys[_sel] += change;
 	_aliensSold += change;
 
@@ -400,8 +420,8 @@ void ManageAlienContainmentState::increaseByValue(int change)
  */
 void ManageAlienContainmentState::decrease()
 {
-	_timerInc->setInterval(75);
-	_timerDec->setInterval(75);
+	_timerInc->setInterval(80);
+	_timerDec->setInterval(80);
 
 	decreaseByValue(1);
 }
@@ -428,18 +448,22 @@ void ManageAlienContainmentState::decreaseByValue(int change)
 void ManageAlienContainmentState::updateStrings()
 {
 	std::wstringstream ss, ss2;
+	int qty = getQuantity() - _qtys[_sel];
+	ss << qty;
+	ss2 << _qtys[_sel];
 
-	ss << _qtys[_sel];
-	_lstAliens->setCellText(_sel, 2, ss.str());
-	ss2 << getQuantity() - _qtys[_sel];
-	_lstAliens->setCellText(_sel, 1, ss2.str());
+	_lstAliens->setRowColor(_sel, (qty != 0)? _color2 : _color);
+	_lstAliens->setCellText(_sel, 1, ss.str());
+	_lstAliens->setCellText(_sel, 2, ss2.str());
 
 	int aliens = _base->getUsedContainment() - _aliensSold - _researchedAliens;
 	int spaces = _base->getAvailableContainment() - _base->getUsedContainment() + _aliensSold;
-	bool enoughSpace = spaces * _containmentLimit >= 0;
+
+	bool enoughSpace = _containmentLimit? spaces >= 0:true;
 
 	_txtAvailable->setText(tr("STR_SPACE_AVAILABLE").arg(spaces));
 	_txtUsed->setText(tr("STR_SPACE_USED").arg(aliens));
+
 	_btnCancel->setVisible(enoughSpace && !_overCrowded);
 	_btnOk->setVisible(enoughSpace);
 }

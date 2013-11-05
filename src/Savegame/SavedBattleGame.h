@@ -78,6 +78,8 @@ private:
 	std::list<BattleUnit*> _fallingUnits;
 	bool _unitsFalling, _strafeEnabled, _sneaky, _traceAI, _cheating;
 	std::vector<Position> _tileSearch;
+	BattleActionType _tuReserved;
+	bool _kneelReserved;
 	/// Selects a soldier.
 	BattleUnit* selectPlayerUnit(int dir, bool checkReselect = false, bool setReselect = false, bool checkInventory = false);
 
@@ -252,6 +254,14 @@ private:
 		const std::vector<Position> getTileSearch();
 		/// check if the AI has engaged cheat mode.
 		bool isCheating();
+		///
+		BattleActionType getTUReserved() const;
+		///
+		void setTUReserved(BattleActionType reserved);
+		///
+		bool getKneelReserved() const;
+		///
+		void setKneelReserved(bool reserved);
 };
 
 }

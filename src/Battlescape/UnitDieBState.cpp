@@ -268,22 +268,26 @@ void UnitDieBState::think()
 
 			if (_unit->getStatus() == STATUS_DEAD)
 			{
-				if (_damageType == DT_NONE && _unit->getArmor()->getSize() == 1)
+				if (_unit->getArmor()->getSize() == 1)
 				{
-					game->pushState(new InfoboxOKState(game, game->getLanguage()
-							->getString("STR_HAS_DIED_FROM_A_FATAL_WOUND", _unit->getGender()).arg(_unit->getName(game->getLanguage()))));
-				}
-				else if (Options::getBool("battleNotifyDeath"))
-				{
-//kL					game->pushState(new InfoboxState(game, game->getLanguage()
-					game->pushState(new InfoboxOKState(game, game->getLanguage()	// kL
-							->getString("STR_HAS_BEEN_KILLED", _unit->getGender()).arg(_unit->getName(game->getLanguage()))));
+					if (_damageType == DT_NONE)
+					{
+						game->pushState(new InfoboxOKState(game,
+								game->getLanguage()->getString("STR_HAS_DIED_FROM_A_FATAL_WOUND", _unit->getGender())
+								.arg(_unit->getName(game->getLanguage()))));
+					}
+					else if (Options::getBool("battleNotifyDeath"))
+					{
+						game->pushState(new InfoboxOKState(game,
+								game->getLanguage()->getString("STR_HAS_BEEN_KILLED", _unit->getGender())
+								.arg(_unit->getName(game->getLanguage()))));
 				}
 			}
 			else
 			{
-				game->pushState(new InfoboxOKState(game, game->getLanguage()
-						->getString("STR_HAS_BECOME_UNCONSCIOUS", _unit->getGender()).arg(_unit->getName(game->getLanguage()))));
+				game->pushState(new InfoboxOKState(game,
+						game->getLanguage()->getString("STR_HAS_BECOME_UNCONSCIOUS", _unit->getGender())
+						.arg(_unit->getName(game->getLanguage()))));
 			}
 		}
 

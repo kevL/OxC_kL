@@ -1845,10 +1845,16 @@ void GeoscapeState::time1Day()
 {
 	//Log(LOG_INFO) << "GeoscapeState::time1Day()";
 
-	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
+	for (std::vector<Base*>::iterator
+			i = _game->getSavedGame()->getBases()->begin();
+			i != _game->getSavedGame()->getBases()->end();
+			++i)
 	{
 		// Handle facility construction
-		for (std::vector<BaseFacility*>::iterator j = (*i)->getFacilities()->begin(); j != (*i)->getFacilities()->end(); ++j)
+		for (std::vector<BaseFacility*>::iterator
+				j = (*i)->getFacilities()->begin();
+				j != (*i)->getFacilities()->end();
+				++j)
 		{
 			if ((*j)->getBuildTime() > 0)
 			{
@@ -1863,20 +1869,23 @@ void GeoscapeState::time1Day()
 
 		// Handle science project
 		std::vector<ResearchProject*> finished;
-		for (std::vector<ResearchProject*>::const_iterator iter = (*i)->getResearch().begin(); iter != (*i)->getResearch().end(); ++iter)
+		for (std::vector<ResearchProject*>::const_iterator
+				iter = (*i)->getResearch().begin();
+				iter != (*i)->getResearch().end();
+				++iter)
 		{
 			if ((*iter)->step())
 			{
-				// kL_note: creating a ResearchProject-object, vector called "finished"...
 				finished.push_back(*iter);
 			}
 		}
 
-		for (std::vector<ResearchProject*>::const_iterator iter = finished.begin(); iter != finished.end(); ++iter)
+		for (std::vector<ResearchProject*>::const_iterator
+				iter = finished.begin();
+				iter != finished.end();
+				++iter)
 		{
 			(*i)->removeResearch(*iter);
-			// kL_note: Add Research Help here.
-			// (*i) is the currently iterating Base
 
 			RuleResearch* bonus = 0;
 			const RuleResearch* research = (*iter)->getRules();
@@ -1886,7 +1895,12 @@ void GeoscapeState::time1Day()
 				&& research->needItem()
 				&& _game->getRuleset()->getUnit(research->getName()))
 			{
-				(*i)->getItems()->addItem(_game->getRuleset()->getArmor(_game->getRuleset()->getUnit(research->getName())->getArmor())->getCorpseItem());
+				(*i)->getItems()->addItem(
+						_game->getRuleset()->getArmor(
+								_game->getRuleset()->getUnit(
+										research->getName())
+								->getArmor())
+						->getCorpseItem());
 				// ;) -> kL_note: heh i noticed that.
 			}
 
@@ -1894,11 +1908,16 @@ void GeoscapeState::time1Day()
 			{
 				std::vector<std::string> possibilities;
 
-				for (std::vector<std::string>::const_iterator f = (*iter)->getRules()->getGetOneFree().begin(); f != (*iter)->getRules()->getGetOneFree().end(); ++f)
+				for (std::vector<std::string>::const_iterator
+						f = (*iter)->getRules()->getGetOneFree().begin();
+						f != (*iter)->getRules()->getGetOneFree().end();
+						++f)
 				{
 					bool newFound = true;
-					for (std::vector<const RuleResearch*>::const_iterator discovered = _game->getSavedGame()->getDiscoveredResearch().begin();
-							discovered != _game->getSavedGame()->getDiscoveredResearch().end(); ++discovered)
+					for (std::vector<const RuleResearch*>::const_iterator
+							discovered = _game->getSavedGame()->getDiscoveredResearch().begin();
+							discovered != _game->getSavedGame()->getDiscoveredResearch().end();
+							++discovered)
 					{
 						if (*f == (*discovered)->getName())
 						{
@@ -1951,19 +1970,23 @@ void GeoscapeState::time1Day()
 //kL			timerReset();
 
 			// check for possible researching weapon before clip
-			std::vector<std::string> manufactures = _game->getRuleset()->getManufactureList();
-			for (std::vector<std::string>::iterator man = manufactures.begin(); man != manufactures.end(); ++man)
+			if (newResearch)
 			{
-				RuleManufacture* rule = _game->getRuleset()->getManufacture(*man);
-				std::vector<std::string> req = rule->getRequirements();
-				if (newResearch
-					&& rule->getCategory() == "STR_WEAPON"
-					&& std::find(req.begin(), req.end(), newResearch->getName()) != req.end()
-					&& !_game->getSavedGame()->isResearched(req))
+				RuleItem* item = _game->getRuleset()->getItem(newResearch->getName());
+				if (item
+					&& item->getBattleType() == BT_FIREARM
+					&& !item->getCompatibleAmmo()->empty())
 				{
-					popup(new ResearchRequiredState(_game, _game->getRuleset()->getItem(rule->getName())));
-
-					break;
+					RuleManufacture *man = _game->getRuleset()->getManufacture(item->getType());
+					std::vector<std::string> req = man->getRequirements();
+					RuleItem* ammo = _game->getRuleset()->getItem(item->getCompatibleAmmo()->front());
+					if (man
+						&& ammo
+						&& std::find(req.begin(), req.end(), ammo->getType()) != req.end()
+						&& !_game->getSavedGame()->isResearched(man->getRequirements()))
+					{
+						popup(new ResearchRequiredState(_game, item));
+					}
 				}
 			}
 
@@ -1974,12 +1997,17 @@ void GeoscapeState::time1Day()
 			}
 
 			// now iterate through all the bases and remove this project from their labs
-			for (std::vector<Base*>::iterator j = _game->getSavedGame()->getBases()->begin(); j != _game->getSavedGame()->getBases()->end(); ++j)
+			for (std::vector<Base*>::iterator
+					j = _game->getSavedGame()->getBases()->begin();
+					j != _game->getSavedGame()->getBases()->end();
+					++j)
 			{
-				for (std::vector<ResearchProject*>::const_iterator iter2 = (*j)->getResearch().begin(); iter2 != (*j)->getResearch().end(); ++iter2)
+				for (std::vector<ResearchProject*>::const_iterator
+						iter2 = (*j)->getResearch().begin();
+						iter2 != (*j)->getResearch().end();
+						++iter2)
 				{
 					if ((*iter)->getRules()->getName() == (*iter2)->getRules()->getName()
-						// kL_note: what's this, making sure a soldier doesn't have the same name as a research project?!??
 						&&  _game->getRuleset()->getUnit((*iter2)->getRules()->getName()) == 0)
 					{
 						(*j)->removeResearch(*iter2);
@@ -1993,7 +2021,10 @@ void GeoscapeState::time1Day()
 		}
 
 		// Handle soldier wounds
-		for (std::vector<Soldier*>::iterator j = (*i)->getSoldiers()->begin(); j != (*i)->getSoldiers()->end(); ++j)
+		for (std::vector<Soldier*>::iterator
+				j = (*i)->getSoldiers()->begin();
+				j != (*i)->getSoldiers()->end();
+				++j)
 		{
 			if ((*j)->getWoundRecovery() > 0)
 			{
@@ -2005,15 +2036,26 @@ void GeoscapeState::time1Day()
 		if ((*i)->getAvailablePsiLabs() > 0
 			&& Options::getBool("anytimePsiTraining"))
 		{
-			for (std::vector<Soldier*>::const_iterator s = (*i)->getSoldiers()->begin(); s != (*i)->getSoldiers()->end(); ++s)
+			for (std::vector<Soldier*>::const_iterator
+					s = (*i)->getSoldiers()->begin();
+					s != (*i)->getSoldiers()->end();
+					++s)
+			{
 				(*s)->trainPsi1Day();
+			}
 		}
 	}
 
 	// handle regional and country points for alien bases
-	for (std::vector<AlienBase*>::const_iterator b = _game->getSavedGame()->getAlienBases()->begin(); b != _game->getSavedGame()->getAlienBases()->end(); ++b)
+	for (std::vector<AlienBase*>::const_iterator
+			b = _game->getSavedGame()->getAlienBases()->begin();
+			b != _game->getSavedGame()->getAlienBases()->end();
+			++b)
 	{
-		for (std::vector<Region*>::iterator k = _game->getSavedGame()->getRegions()->begin(); k != _game->getSavedGame()->getRegions()->end(); ++k)
+		for (std::vector<Region*>::iterator
+				k = _game->getSavedGame()->getRegions()->begin();
+				k != _game->getSavedGame()->getRegions()->end();
+				++k)
 		{
 			if ((*k)->getRules()->insideRegion((*b)->getLongitude(), (*b)->getLatitude()))
 			{
@@ -2024,7 +2066,10 @@ void GeoscapeState::time1Day()
 			}
 		}
 
-		for (std::vector<Country*>::iterator k = _game->getSavedGame()->getCountries()->begin(); k != _game->getSavedGame()->getCountries()->end(); ++k)
+		for (std::vector<Country*>::iterator
+				k = _game->getSavedGame()->getCountries()->begin();
+				k != _game->getSavedGame()->getCountries()->end();
+				++k)
 		{
 			if ((*k)->getRules()->insideCountry((*b)->getLongitude(), (*b)->getLatitude()))
 			{

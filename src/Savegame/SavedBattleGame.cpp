@@ -81,7 +81,9 @@ SavedBattleGame::SavedBattleGame()
 		_strafeEnabled(false),
 		_sneaky(false),
 		_traceAI(false),
-		_cheating(false)
+		_cheating(false),
+		_tuReserved(BA_NONE),
+		_kneelReserved(false)
 {
 	//Log(LOG_INFO) << "Create SavedBattleGame";
 
@@ -336,6 +338,8 @@ void SavedBattleGame::load(const YAML::Node& node, Ruleset* rule, SavedGame* sav
 	}
 
 	_objectiveDestroyed = node["objectiveDestroyed"].as<bool>(_objectiveDestroyed);
+	_tuReserved = (BattleActionType)node["tuReserved"].as<int>(_tuReserved);
+	_kneelReserved = node["kneelReserved"].as<bool>(_kneelReserved);
 }
 
 /**
@@ -459,6 +463,9 @@ YAML::Node SavedBattleGame::save() const
 	{
 		node["items"].push_back((*i)->save());
 	}
+
+	node["tuReserved"] = (int)_tuReserved;
+    node["kneelReserved"] = _kneelReserved;
 
 	return node;
 }
@@ -2035,6 +2042,42 @@ const std::vector<Position> SavedBattleGame::getTileSearch()
 bool SavedBattleGame::isCheating()
 {
 	return _cheating;
+}
+
+/**
+ * Gets the TU reserved type.
+ * @return A battleactiontype.
+ */
+BattleActionType SavedBattleGame::getTUReserved() const
+{
+	return _tuReserved;
+}
+
+/**
+ * Sets the TU reserved type.
+ * @param reserved A battleactiontype.
+ */
+void SavedBattleGame::setTUReserved(BattleActionType reserved)
+{
+	_tuReserved = reserved;
+}
+
+/**
+ * Gets the kneel reservation setting.
+ * @return Should we reserve an extra 4 TUs to kneel?
+ */
+bool SavedBattleGame::getKneelReserved() const
+{
+	return _kneelReserved;
+}
+
+/**
+ * Sets the kneel reservation setting.
+ * @param reserved Should we reserve an extra 4 TUs to kneel?
+ */
+void SavedBattleGame::setKneelReserved(bool reserved)
+{
+	_kneelReserved = reserved;
 }
 
 }

@@ -172,17 +172,18 @@ OptionsControlsState::OptionsControlsState(Game* game, OptionsOrigin origin)
 	_lstControls->onKeyboardPress((ActionHandler)&OptionsControlsState::lstControlsKeyPress);
 	_lstControls->focus();
 
-	_lstControls->addRow(2, tr("STR_GENERAL").c_str(), L"");
-	_lstControls->setCellColor(0, 0, Palette::blockOffset(15)-1);
-	addControls(_controlsGeneral, _countGeneral);
-	_lstControls->addRow(2, L"", L"");
-	_lstControls->addRow(2, tr("STR_GEOSCAPE").c_str(), L"");
-	_lstControls->setCellColor(_countGeneral + 2, 0, Palette::blockOffset(15)-1);
-	addControls(_controlsGeo, _countGeo);
-	_lstControls->addRow(2, L"", L"");
-	_lstControls->addRow(2, tr("STR_BATTLESCAPE").c_str(), L"");
-	_lstControls->setCellColor(_countGeneral + 2 + _countGeo + 2, 0, Palette::blockOffset(15)-1);
-	addControls(_controlsBattle, _countBattle);
+	if (origin != OPT_BATTLESCAPE)
+	{
+		_colorGroup = Palette::blockOffset(15) - 1;
+		_colorSel = Palette::blockOffset(8) + 5;
+		_colorNormal = Palette::blockOffset(8) + 10;
+	}
+	else
+	{
+		_colorGroup = Palette::blockOffset(1) - 1;
+		_colorSel = Palette::blockOffset(5) - 1;
+		_colorNormal = Palette::blockOffset(0) - 1;
+	}
 }
 
 /**
@@ -190,6 +191,22 @@ OptionsControlsState::OptionsControlsState(Game* game, OptionsOrigin origin)
  */
 OptionsControlsState::~OptionsControlsState()
 {
+}
+
+void OptionsControlsState::init()
+{
+	OptionsBaseState::init();
+	_lstControls->addRow(2, tr("STR_GENERAL").c_str(), L"");
+	_lstControls->setCellColor(0, 0, _colorGroup);
+	addControls(_controlsGeneral, _countGeneral);
+	_lstControls->addRow(2, L"", L"");
+	_lstControls->addRow(2, tr("STR_GEOSCAPE").c_str(), L"");
+	_lstControls->setCellColor(_countGeneral + 2, 0, _colorGroup);
+	addControls(_controlsGeo, _countGeo);
+	_lstControls->addRow(2, L"", L"");
+	_lstControls->addRow(2, tr("STR_BATTLESCAPE").c_str(), L"");
+	_lstControls->setCellColor(_countGeneral + 2 + _countGeo + 2, 0, _colorGroup);
+	addControls(_controlsBattle, _countBattle);
 }
 
 /**
@@ -280,8 +297,9 @@ void OptionsControlsState::lstControlsClick(Action *action)
 	{
 		int selected = _selected;
 
-		_lstControls->setCellColor(_selected, 0, Palette::blockOffset(8)+10);
-		_lstControls->setCellColor(_selected, 1, Palette::blockOffset(8)+10);
+		_lstControls->setCellColor(_selected, 0, _colorNormal);
+		_lstControls->setCellColor(_selected, 1, _colorNormal);
+
 		_selected = -1;
 		_selKey = 0;
 
@@ -312,8 +330,8 @@ void OptionsControlsState::lstControlsClick(Action *action)
 
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		_lstControls->setCellColor(_selected, 0, Palette::blockOffset(8)+5);
-		_lstControls->setCellColor(_selected, 1, Palette::blockOffset(8)+5);
+		_lstControls->setCellColor(_selected, 0, _colorSel);
+		_lstControls->setCellColor(_selected, 1, _colorSel);
 	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
@@ -340,8 +358,9 @@ void OptionsControlsState::lstControlsKeyPress(Action *action)
 			_lstControls->setCellText(_selected, 1, name);
 		}
 
-		_lstControls->setCellColor(_selected, 0, Palette::blockOffset(8)+10);
-		_lstControls->setCellColor(_selected, 1, Palette::blockOffset(8)+10);
+		_lstControls->setCellColor(_selected, 0, _colorNormal);
+		_lstControls->setCellColor(_selected, 1, _colorNormal);
+
 		_selected = -1;
 		_selKey = 0;
 	}
