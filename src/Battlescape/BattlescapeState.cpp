@@ -568,6 +568,25 @@ void BattlescapeState::init()
 
 	updateSoldierInfo();
 
+	// Update reserve settings
+	_battleGame->setTUReserved(_save->getTUReserved(), true);
+	switch (_save->getTUReserved())
+	{
+		case BA_SNAPSHOT:
+			_reserve = _btnReserveSnap;
+		break;
+		case BA_AIMEDSHOT:
+			_reserve = _btnReserveAimed;
+		break;
+		case BA_AUTOSHOT:
+			_reserve = _btnReserveAuto;
+		break;
+
+		default:
+			_reserve = _btnReserveNone;
+		break;
+	}
+
 	if (firstInit
 		&& playableUnitSelected())
 	{
@@ -575,34 +594,20 @@ void BattlescapeState::init()
 		_map->getCamera()->centerOnPosition(_save->getSelectedUnit()->getPosition());
 
 		firstInit = false;
+
+		_btnReserveNone->setGroup(&_reserve);
+		_btnReserveSnap->setGroup(&_reserve);
+		_btnReserveAimed->setGroup(&_reserve);
+		_btnReserveAuto->setGroup(&_reserve);
 	}
 
 	_txtTooltip->setText(L"");
-	// Update reserve settings
-	_battleGame->setTUReserved(_save->getTUReserved(), true);
-	switch (_save->getTUReserved())
-	{
-	case BA_SNAPSHOT:
-		_reserve = _btnReserveSnap;
-		break;
-	case BA_AIMEDSHOT:
-		_reserve = _btnReserveAimed;
-		break;
-	case BA_AUTOSHOT:
-		_reserve = _btnReserveAuto;
-		break;
-	default:
-		_reserve = _btnReserveNone;
-		break;
-	}
-	_btnReserveNone->setGroup(&_reserve);
-	_btnReserveSnap->setGroup(&_reserve);
-	_btnReserveAimed->setGroup(&_reserve);
-	_btnReserveAuto->setGroup(&_reserve);
+
 	if (_save->getKneelReserved())
 	{
 		_btnReserveKneel->invert(0);
 	}
+
 	_battleGame->setKneelReserved(_save->getKneelReserved());
 }
 
