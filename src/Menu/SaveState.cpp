@@ -55,7 +55,7 @@ SaveState::SaveState(Game* game, OptionsOrigin origin)
 
 	_txtTitle->setText(tr("STR_SELECT_SAVE_POSITION"));
 
-	_lstSaves->onMousePress((ActionHandler)&SaveState::lstSavesPress);
+	_lstSaves->onMousePress((ActionHandler)& SaveState::lstSavesPress);
 
 	_edtSave->setColor(Palette::blockOffset(8)+10);
 	_edtSave->setVisible(false);
@@ -186,6 +186,7 @@ void SaveState::edtSaveKeyPress(Action* action)
 			std::string newPath = Options::getUserFolder() + newFilename + ".sav";
 			rename(oldPath.c_str(), newPath.c_str());
 		}
+
 		_game->popState();
 		_game->popState();
 	}
@@ -197,7 +198,8 @@ void SaveState::edtSaveKeyPress(Action* action)
  */
 void SaveState::quickSave(const std::string& filename)
 {
-	if (_showMsg) updateStatus("STR_SAVING_GAME");
+	if (_showMsg)
+		updateStatus("STR_SAVING_GAME");
 
 	std::string fullPath = Options::getUserFolder() + filename + ".sav";
 	std::string bakPath = fullPath + ".bak";

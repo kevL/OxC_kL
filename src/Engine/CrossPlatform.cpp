@@ -712,4 +712,5 @@ bool isQuitShortcut(const SDL_Event &ev)
 }
 
 }
+
 }

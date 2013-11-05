@@ -291,7 +291,6 @@ OptionsState::OptionsState(Game *game, OptionsOrigin origin) : OptionsBaseState(
  */
 OptionsState::~OptionsState()
 {
-
 }
 
 /**
@@ -300,8 +299,8 @@ OptionsState::~OptionsState()
 void OptionsState::init()
 {
 	OptionsBaseState::init();
-	_musicVolume = _slrMusicVolume->getValue() * SDL_MIX_MAXVOLUME;
-	_soundVolume = _slrSoundVolume->getValue() * SDL_MIX_MAXVOLUME;
+	_musicVolume = (int)(_slrMusicVolume->getValue() * (double)SDL_MIX_MAXVOLUME);
+	_soundVolume = (int)(_slrSoundVolume->getValue() * (double)SDL_MIX_MAXVOLUME);
 }
 
 /**
@@ -310,7 +309,7 @@ void OptionsState::init()
  */
 void OptionsState::slrMusicVolumeRelease(Action *)
 {
-	_game->setVolume(_slrSoundVolume->getValue() * SDL_MIX_MAXVOLUME, _slrMusicVolume->getValue() * SDL_MIX_MAXVOLUME);
+	_game->setVolume((int)(_slrSoundVolume->getValue() * (double)SDL_MIX_MAXVOLUME), (int)(_slrMusicVolume->getValue() * (double)SDL_MIX_MAXVOLUME));
 }
 
 /**
@@ -319,7 +318,7 @@ void OptionsState::slrMusicVolumeRelease(Action *)
  */
 void OptionsState::slrSoundVolumeRelease(Action *)
 {
-	_game->setVolume(_slrSoundVolume->getValue() * SDL_MIX_MAXVOLUME, _slrMusicVolume->getValue() * SDL_MIX_MAXVOLUME);
+	_game->setVolume((int)(_slrSoundVolume->getValue() * (double)SDL_MIX_MAXVOLUME), (int)(_slrMusicVolume->getValue() * (double)SDL_MIX_MAXVOLUME));
 	_game->getResourcePack()->getSound("GEO.CAT", 0)->play();
 }
 
@@ -337,31 +336,32 @@ void OptionsState::btnOkClick(Action *)
 	else if (_displayMode == _btnDisplayFullscreen)
 		Options::setBool("fullscreen", true);
 
-	Options::setInt("musicVolume", _slrMusicVolume->getValue() * SDL_MIX_MAXVOLUME);
-	Options::setInt("soundVolume", _slrSoundVolume->getValue() * SDL_MIX_MAXVOLUME);
+	Options::setInt("musicVolume", (int)(_slrMusicVolume->getValue() * (double)SDL_MIX_MAXVOLUME));
+	Options::setInt("soundVolume", (int)(_slrSoundVolume->getValue() * (double)SDL_MIX_MAXVOLUME));
 
 	switch (_selFilter)
 	{
-	case 0:
-		Options::setBool("useOpenGL", false);
-		Options::setBool("useScaleFilter", false);
-		Options::setBool("useHQXFilter", false);
+		case 0:
+			Options::setBool("useOpenGL", false);
+			Options::setBool("useScaleFilter", false);
+			Options::setBool("useHQXFilter", false);
 		break;
-	case 1:
-		Options::setBool("useOpenGL", false);
-		Options::setBool("useScaleFilter", true);
-		Options::setBool("useHQXFilter", false);
+		case 1:
+			Options::setBool("useOpenGL", false);
+			Options::setBool("useScaleFilter", true);
+			Options::setBool("useHQXFilter", false);
 		break;
-	case 2:
-		Options::setBool("useOpenGL", false);
-		Options::setBool("useScaleFilter", false);
-		Options::setBool("useHQXFilter", true);
+		case 2:
+			Options::setBool("useOpenGL", false);
+			Options::setBool("useScaleFilter", false);
+			Options::setBool("useHQXFilter", true);
 		break;
-	default:
-		Options::setBool("useOpenGL", true);
-		Options::setBool("useScaleFilter", false);
-		Options::setBool("useHQXFilter", false);
-		Options::setString("useOpenGLShader", _filterPaths[_selFilter]);
+
+		default:
+			Options::setBool("useOpenGL", true);
+			Options::setBool("useScaleFilter", false);
+			Options::setBool("useHQXFilter", false);
+			Options::setString("useOpenGLShader", _filterPaths[_selFilter]);
 		break;
 	}
 

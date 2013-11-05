@@ -637,137 +637,135 @@ void BattlescapeGame::endTurn()
 /**
  * Checks for casualties and adjusts morale accordingly.
  * @param murderweapon, Need to know this, for a HE explosion there is an instant death.
- * @param murderer, This is needed for credits for the kill.
+ * @param killer, This is needed for credits for the kill.
  * @param hiddenExplosion, Set to true for the explosions of UFO Power sources at start of battlescape.
  * @param terrainExplosion, Set to true for the explosions of terrain.
  */
-void BattlescapeGame::checkForCasualties(BattleItem* murderweapon, BattleUnit* murderer, bool hiddenExplosion, bool terrainExplosion)
+void BattlescapeGame::checkForCasualties(BattleItem* murderweapon, BattleUnit* killer, bool hiddenExplosion, bool terrainExplosion)
 {
 	Log(LOG_INFO) << "BattlescapeGame::checkForCasualties()";
 
-	for (std::vector<BattleUnit*>::iterator j = _save->getUnits()->begin(); j != _save->getUnits()->end(); ++j)
+	for (std::vector<BattleUnit*>::iterator
+			x = _save->getUnits()->begin();
+			x != _save->getUnits()->end();
+			++x)
 	{
-		if ((*j)->getHealth() == 0
-			&& (*j)->getStatus() != STATUS_DEAD
-			&& (*j)->getStatus() != STATUS_COLLAPSING)
+		if ((*x)->getHealth() == 0
+			&& (*x)->getStatus() != STATUS_DEAD
+			&& (*x)->getStatus() != STATUS_COLLAPSING)
 		{
-			BattleUnit* victim = *j;
+			BattleUnit* victim = *x;
+			Log(LOG_INFO) << ". victim = " << (*x)->getId();
 
-			if (murderer)
+			if (killer)
 			{
-				//Log(LOG_INFO) << "BattlescapeGame::checkForCasualties() murderer = " << murderer->getId();
-			}
-			//Log(LOG_INFO) << "BattlescapeGame::checkForCasualties() victim = " << victim->getId();
+				Log(LOG_INFO) << ". killer = " << killer->getId();
 
-			if (murderer)
-			{
-				murderer->addKillCount();
-				victim->killedBy(murderer->getFaction());
+				killer->addKillCount();
+				victim->killedBy(killer->getFaction());
 
-/*kL				int modif = murderer->getFaction() == FACTION_PLAYER ? _save->getMoraleModifier() : 100;
-				// if there is a known murderer, he will get a morale bonus if he is of a different faction
+				int bonus = 100;
+				if (killer->getFaction() == FACTION_PLAYER)
+				{
+					bonus = _save->getMoraleModifier();
+				}
+				else if (killer->getFaction() == FACTION_HOSTILE)
+				{
+					bonus = _save->getMoraleModifier(0, false);
+				}
+
+				// killer's boost
 				if ((victim->getOriginalFaction() == FACTION_PLAYER
-						&& murderer->getFaction() == FACTION_HOSTILE)
+						&& killer->getOriginalFaction() == FACTION_HOSTILE)
 					|| (victim->getOriginalFaction() == FACTION_HOSTILE
-						&& murderer->getFaction() == FACTION_PLAYER))
+						&& killer->getOriginalFaction() == FACTION_PLAYER))
 				{
-					murderer->moraleChange(20 * modif / 100);
-				}
-				// murderer will get a penalty with friendly fire
-				if (victim->getOriginalFaction() == murderer->getOriginalFaction())
-				{
-					murderer->moraleChange(-(2000 / modif));
-				}
-				if (victim->getOriginalFaction() == FACTION_NEUTRAL)
-				{
-					if (murderer->getOriginalFaction() == FACTION_PLAYER)
-					{
-						murderer->moraleChange(-(1000 / modif));
-					}
-					else
-					{
-						murderer->moraleChange(10);
-					}
-				} */
+					int boost = 10 * bonus / 100;
+					killer->moraleChange(boost); // double what rest of squad gets below
 
-				// kL_begin: morale modification includes aliens in checkForCasualties()
-				int modif = 100;
-				if (murderer->getFaction() == FACTION_PLAYER)
-				{
-					modif = _save->getMoraleModifier();
-				}
-				else if (murderer->getFaction() == FACTION_HOSTILE)
-				{
-					modif = _save->getMoraleModifier(0, false);
+					Log(LOG_INFO) << ". . killer boost + " << boost;
 				}
 
-				// kL_begin: morale modification boost in checkForCasualties()
-				if ((victim->getOriginalFaction() == FACTION_PLAYER
-						&& murderer->getOriginalFaction() == FACTION_HOSTILE)
-					|| (victim->getOriginalFaction() == FACTION_HOSTILE
-						&& murderer->getOriginalFaction() == FACTION_PLAYER))
-				{
-					murderer->moraleChange(10 * modif / 100); // double what rest of squad gets, v.below
-				}
-
-				// kL_begin: murderer (mc'd or not) will get a penalty with friendly fire (mc'd or not)
-				// except aLiens, who don't care.....
+				// killer (mc'd or not) will get a penalty with friendly fire (mc'd or not)
+				// ... except aLiens, who don't care.
 				if (victim->getOriginalFaction() == FACTION_PLAYER
-					&& murderer->getOriginalFaction() == FACTION_PLAYER)
+					&& killer->getOriginalFaction() == FACTION_PLAYER)
 				{
-					murderer->moraleChange(-(5000 / modif));
+					int hit = 5000 / bonus;
+					killer->moraleChange(-hit); // huge hit!
+
+					Log(LOG_INFO) << ". . FF hit, killer - " << hit;
 				}
 
-				if (victim->getOriginalFaction() == FACTION_NEUTRAL)
+				if (victim->getOriginalFaction() == FACTION_NEUTRAL) // civilian kills
 				{
-					if (murderer->getOriginalFaction() == FACTION_PLAYER)
+					if (killer->getOriginalFaction() == FACTION_PLAYER)
 					{
-						murderer->moraleChange(-(2000 / modif));
+						int civdeath = 2000 / bonus;
+						killer->moraleChange(-civdeath);
+
+						Log(LOG_INFO) << ". . civdeath by xCom, soldier - " << civdeath;
 					}
-					else if (murderer->getOriginalFaction() == FACTION_HOSTILE)
+					else if (killer->getOriginalFaction() == FACTION_HOSTILE)
 					{
-						murderer->moraleChange(20);
+						killer->moraleChange(20); // no leadership bonus for aLiens executing civies: it's their job.
+
+						Log(LOG_INFO) << ". . civdeath by aLien, killer + " << 20;
 					}
 				}
-				// kL_end.
 			}
 
-			// kL_note: now cycle through all units...
+			// cycle through units and do all faction
 			if (victim->getFaction() != FACTION_NEUTRAL)
 			{
-//kL				int modif = _save->getMoraleModifier(victim);
-//kL				int loseMod = victim->getFaction() == FACTION_HOSTILE ? 100 : _save->getMoraleModifier();
-//kL				int winMod = victim->getFaction() == FACTION_HOSTILE ? _save->getMoraleModifier() : 100;
+				int solo = _save->getMoraleModifier(victim); // penalty for losing a unit on your side
 
-				// kL_begin: group morale modifications in checkForCasualties()
-				int modif = _save->getMoraleModifier(victim); // penalty for losing a unit on your side
-
-				// these two are for group bonuses (loseMod mitigates the loss of modif, winMod enhances modif)
-				int loseMod = victim->getFaction() == FACTION_HOSTILE ? _save->getMoraleModifier(0, false) : _save->getMoraleModifier();
-				int winMod = victim->getFaction() == FACTION_HOSTILE ? _save->getMoraleModifier() : _save->getMoraleModifier(0, false);
-				// kL_end.
-
-				for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
+				// these two are faction bonuses ('losers' mitigates the loss of solo, 'winners' boosts solo)
+				int losers = 100, winners = 100;
+				if (victim->getFaction() == FACTION_HOSTILE)
 				{
-					if (!(*i)->isOut()							// conscious
-						&& (*i)->getArmor()->getSize() == 1)	// not a tank or terror unit
-					{
-						if ((*i)->getOriginalFaction() == victim->getOriginalFaction()) // you killed yourself, Mc'd or not!!
-						{
-							// the losing squad all get a morale loss
-							int bravery = (110 - (*i)->getStats()->bravery) / 10;
-							(*i)->moraleChange(-(modif * 200 * bravery / loseMod / 100));
+					losers = _save->getMoraleModifier(0, false);
+					winners = _save->getMoraleModifier();
+				}
+				else
+				{
+					losers = _save->getMoraleModifier();
+					winners = _save->getMoraleModifier(0, false);
+				}
 
-							if (victim->getFaction() == FACTION_HOSTILE
-								&& murderer)
+				for (std::vector<BattleUnit*>::iterator
+						i = _save->getUnits()->begin();
+						i != _save->getUnits()->end();
+						++i)
+				{
+					if (!(*i)->isOut()
+						&& (*i)->getArmor()->getSize() == 1) // not a large unit
+					{
+						if ((*i)->getOriginalFaction() == victim->getOriginalFaction())
+						{
+							// losing faction get a morale loss
+							int bravery = (110 - (*i)->getStats()->bravery) / 10;
+							bravery = solo * 200 * bravery / losers / 100;
+							(*i)->moraleChange(-bravery);
+
+							Log(LOG_INFO) << ". . . loser - " << bravery;
+
+							if (killer
+								&& killer->getFaction() == FACTION_PLAYER
+								&& victim->getFaction() == FACTION_HOSTILE)
 							{
-								murderer->setTurnsExposed(0);
+								killer->setTurnsExposed(0); // interesting
+
+								Log(LOG_INFO) << ". . . . killer Exposed";
 							}
 						}
 						else
 						{
 							// the winning squad all get a morale increase
-							(*i)->moraleChange(10 * winMod / 100);
+							int boost = 10 * winners / 100;
+							(*i)->moraleChange(boost);
+
+							Log(LOG_INFO) << ". . . winner + " << boost;
 						}
 					}
 				}
@@ -775,34 +773,34 @@ void BattlescapeGame::checkForCasualties(BattleItem* murderweapon, BattleUnit* m
 
 			if (murderweapon) // kL_note: This is where units get sent to DEATH!
 			{
-				statePushNext(new UnitDieBState(this, *j, murderweapon->getRules()->getDamageType(), false));
+				statePushNext(new UnitDieBState(this, *x, murderweapon->getRules()->getDamageType(), false));
 			}
 			else
 			{
 				if (hiddenExplosion) // this is instant death from UFO powersources, without screaming sounds
 				{
-					statePushNext(new UnitDieBState(this, *j, DT_HE, true));
+					statePushNext(new UnitDieBState(this, *x, DT_HE, true));
 				}
 				else
 				{
 					if (terrainExplosion)
 					{
-						statePushNext(new UnitDieBState(this, *j, DT_HE, false));
+						statePushNext(new UnitDieBState(this, *x, DT_HE, false));
 					}
-					else // no murderer, and no terrain explosion, must be fatal wounds
+					else // no killer, and no terrain explosion, must be fatal wounds
 					{
-						statePushNext(new UnitDieBState(this, *j, DT_NONE, false));  // DT_NONE = STR_HAS_DIED_FROM_A_FATAL_WOUND
+						statePushNext(new UnitDieBState(this, *x, DT_NONE, false));  // DT_NONE = STR_HAS_DIED_FROM_A_FATAL_WOUND
 					}
 				}
 			}
 		}
-		else if ((*j)->getStunlevel() >= (*j)->getHealth()
-			&& (*j)->getStatus() != STATUS_DEAD
-			&& (*j)->getStatus() != STATUS_UNCONSCIOUS
-			&& (*j)->getStatus() != STATUS_COLLAPSING
-			&& (*j)->getStatus() != STATUS_TURNING)
+		else if ((*x)->getStunlevel() >= (*x)->getHealth()
+			&& (*x)->getStatus() != STATUS_DEAD
+			&& (*x)->getStatus() != STATUS_UNCONSCIOUS
+			&& (*x)->getStatus() != STATUS_COLLAPSING
+			&& (*x)->getStatus() != STATUS_TURNING)
 		{
-			statePushNext(new UnitDieBState(this, *j, DT_STUN, true)); // kL_note: This is where units get set to STUNNED
+			statePushNext(new UnitDieBState(this, *x, DT_STUN, true)); // kL_note: This is where units get set to STUNNED
 		}
 	}
 
@@ -813,7 +811,7 @@ void BattlescapeGame::checkForCasualties(BattleItem* murderweapon, BattleUnit* m
 		_parentState->showPsiButton(bu && bu->getOriginalFaction() == FACTION_HOSTILE && bu->getStats()->psiSkill > 0 && !bu->isOut());
 	}
 
-	//Log(LOG_INFO) << "BattlescapeGame::checkForCasualties() EXIT";
+	Log(LOG_INFO) << "BattlescapeGame::checkForCasualties() EXIT";
 }
 
 /**
@@ -1062,7 +1060,11 @@ void BattlescapeGame::popState()
 			<< (_save->getSelectedUnit() ? _save->getSelectedUnit()->getTimeUnits() : -9999) << " TU";
 	}
 
-	if (_states.empty()) return;
+	if (_states.empty())
+	{
+		//Log(LOG_INFO) << ". states.Empty -> return";
+		return;
+	}
 
 	bool actionFailed = false;
 
@@ -1073,6 +1075,8 @@ void BattlescapeGame::popState()
 		&& _playerPanicHandled
 		&& (_save->getSide() == FACTION_PLAYER || _debugPlay))
 	{
+		//Log(LOG_INFO) << ". actionFailed";
+
 		_parentState->warning(action.result);
 
 		actionFailed = true;
@@ -1104,14 +1108,20 @@ void BattlescapeGame::popState()
 		} // kL_end.
 	}
 
+	//Log(LOG_INFO) << ". states.Popfront";
 	_states.pop_front();
+	//Log(LOG_INFO) << ". states.Popfront DONE";
 
 	// handle the end of this unit's actions
 	if (action.actor
 		&& noActionsPending(action.actor))
 	{
+		//Log(LOG_INFO) << ". noActionsPending";
+
 		if (action.actor->getFaction() == FACTION_PLAYER)
 		{
+			//Log(LOG_INFO) << ". actor -> Faction_Player";
+
 			// spend TUs of "target triggered actions" (shooting, throwing) only
 			// the other actions' TUs (healing,scanning,..) are already take care of
 			if (action.targeting
@@ -1123,6 +1133,8 @@ void BattlescapeGame::popState()
 
 			if (_save->getSide() == FACTION_PLAYER)
 			{
+				//Log(LOG_INFO) << ". side -> Faction_Player";
+
 				// after throwing, the cursor returns to default cursor, after shooting it stays in
 				// targeting mode and the player can shoot again in the same mode (autoshot/snap/aimed)
 				// kL_note: unless he/she is out of tu's
@@ -1197,10 +1209,14 @@ void BattlescapeGame::popState()
 
 				_parentState->getGame()->getCursor()->setVisible(true);
 				setupCursor();
+
+				//Log(LOG_INFO) << ". end NOT actionFailed";
 			}
 		}
 		else
 		{
+			//Log(LOG_INFO) << ". action -> NOT Faction_Player";
+
 			action.actor->spendTimeUnits(action.TU); // spend TUs
 
 			if (_save->getSide() != FACTION_PLAYER && !_debugPlay)
@@ -1247,12 +1263,21 @@ void BattlescapeGame::popState()
 		}
 	}
 
+	//Log(LOG_INFO) << ". uhm yeah";
+
+
 	if (!_states.empty())
 	{
+		//Log(LOG_INFO) << ". NOT states.Empty";
+
 		if (_states.front() == 0) // end turn request?
 		{
+			//Log(LOG_INFO) << ". states.front() == 0";
+
 			while (!_states.empty())
 			{
+				//Log(LOG_INFO) << ". while (!_states.empty()";
+
 				if (_states.front() == 0)
 					_states.pop_front();
 				else
@@ -1261,16 +1286,20 @@ void BattlescapeGame::popState()
 
 			if (_states.empty())
 			{
+				Log(LOG_INFO) << ". endTurn()";
 				endTurn();
+				//Log(LOG_INFO) << ". endTurn() DONE return";
 
 				return;
 			}
 			else
 			{
+				//Log(LOG_INFO) << ". states.front() != 0";
 				_states.push_back(0);
 			}
 		}
 
+		//Log(LOG_INFO) << ". states.front()->init()";
 		_states.front()->init(); // init the next state in queue
 	}
 
@@ -1278,6 +1307,8 @@ void BattlescapeGame::popState()
 	if (_save->getSelectedUnit() == 0
 		|| _save->getSelectedUnit()->isOut())
 	{
+		//Log(LOG_INFO) << ". huh hey wot)";
+
 		cancelCurrentAction();
 
 		_save->setSelectedUnit(0);
@@ -1286,7 +1317,9 @@ void BattlescapeGame::popState()
 		_parentState->getGame()->getCursor()->setVisible(true);
 	}
 
+	Log(LOG_INFO) << ". updateSoldierInfo()";
 	_parentState->updateSoldierInfo();
+
 	//Log(LOG_INFO) << "BattlescapeGame::popState() EXIT";
 }
 
@@ -1642,7 +1675,8 @@ void BattlescapeGame::primaryAction(const Position& pos)
 	{
 		sUnit = _save->getSelectedUnit()->getId();	// kL
 	} */
-	Log(LOG_INFO) << "BattlescapeGame::primaryAction()";// unitID = " << sUnit;
+
+	Log(LOG_INFO) << "BattlescapeGame::primaryAction()"; // unitID = " << _currentAction.actor->getId();
 
 	bool bPreviewed = Options::getInt("battleNewPreviewPath") > 0;
 
@@ -1845,7 +1879,7 @@ void BattlescapeGame::primaryAction(const Position& pos)
 		}
 	}
 
-	//Log(LOG_INFO) << ". . primaryAction() EXIT";
+	Log(LOG_INFO) << ". . primaryAction() EXIT";
 }
 
 /**

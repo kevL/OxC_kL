@@ -122,38 +122,59 @@ void TileEngine::calculateTerrainLighting()
 	const int fireLightPower = 15; // amount of light a fire generates
 
 	// reset all light to 0 first
-	for (int i = 0; i < _save->getMapSizeXYZ(); ++i)
+	for (int
+			i = 0;
+			i < _save->getMapSizeXYZ();
+			++i)
 	{
 		_save->getTiles()[i]->resetLight(layer);
 	}
 
 	// add lighting of terrain
-	for (int i = 0; i < _save->getMapSizeXYZ(); ++i)
+	for (int
+			i = 0;
+			i < _save->getMapSizeXYZ();
+			++i)
 	{
 		// only floors and objects can light up
 		if (_save->getTiles()[i]->getMapData(MapData::O_FLOOR)
 			&& _save->getTiles()[i]->getMapData(MapData::O_FLOOR)->getLightSource())
 		{
-			addLight(_save->getTiles()[i]->getPosition(), _save->getTiles()[i]->getMapData(MapData::O_FLOOR)->getLightSource(), layer);
+			addLight(
+					_save->getTiles()[i]->getPosition(),
+					_save->getTiles()[i]->getMapData(MapData::O_FLOOR)->getLightSource(),
+					layer);
 		}
 
 		if (_save->getTiles()[i]->getMapData(MapData::O_OBJECT)
 			&& _save->getTiles()[i]->getMapData(MapData::O_OBJECT)->getLightSource())
 		{
-			addLight(_save->getTiles()[i]->getPosition(), _save->getTiles()[i]->getMapData(MapData::O_OBJECT)->getLightSource(), layer);
+			addLight(
+					_save->getTiles()[i]->getPosition(),
+					_save->getTiles()[i]->getMapData(MapData::O_OBJECT)->getLightSource(),
+					layer);
 		}
 
 		// fires
 		if (_save->getTiles()[i]->getFire())
 		{
-			addLight(_save->getTiles()[i]->getPosition(), fireLightPower, layer);
+			addLight(
+					_save->getTiles()[i]->getPosition(),
+					fireLightPower,
+					layer);
 		}
 
-		for (std::vector<BattleItem*>::iterator it = _save->getTiles()[i]->getInventory()->begin(); it != _save->getTiles()[i]->getInventory()->end(); ++it)
+		for (std::vector<BattleItem*>::iterator
+				it = _save->getTiles()[i]->getInventory()->begin();
+				it != _save->getTiles()[i]->getInventory()->end();
+				++it)
 		{
 			if ((*it)->getRules()->getBattleType() == BT_FLARE)
 			{
-				addLight(_save->getTiles()[i]->getPosition(), (*it)->getRules()->getPower(), layer);
+				addLight(
+						_save->getTiles()[i]->getPosition(),
+						(*it)->getRules()->getPower(),
+						layer);
 			}
 		}
 	}
@@ -169,34 +190,46 @@ void TileEngine::calculateUnitLighting()
 	const int fireLightPower = 15;		// amount of light a fire generates
 
 	// reset all light to 0 first
-	for (int i = 0; i < _save->getMapSizeXYZ(); ++i)
+	for (int
+			i = 0;
+			i < _save->getMapSizeXYZ();
+			++i)
 	{
 		_save->getTiles()[i]->resetLight(layer);
 	}
 
-	for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
+	for (std::vector<BattleUnit*>::iterator
+			i = _save->getUnits()->begin();
+			i != _save->getUnits()->end();
+			++i)
 	{
 		// add lighting of soldiers
 		if (_personalLighting
 			&& (*i)->getFaction() == FACTION_PLAYER
 			&& !(*i)->isOut())
 		{
-			addLight((*i)->getPosition(), personalLightPower, layer);
+			addLight(
+					(*i)->getPosition(),
+					personalLightPower,
+					layer);
 		}
 
 		// add lighting of units on fire
 		if ((*i)->getFire())
 		{
-			addLight((*i)->getPosition(), fireLightPower, layer);
+			addLight(
+					(*i)->getPosition(),
+					fireLightPower,
+					layer);
 		}
 	}
 }
 
 /**
  * Adds circular light pattern starting from center and losing power with distance travelled.
- * @param center Center.
- * @param power Power.
- * @param layer Light is separated in 3 layers: Ambient, Static and Dynamic.
+ * @param center, Center.
+ * @param power, Power.
+ * @param layer, Light is separated in 3 layers: Ambient, Static and Dynamic.
  */
 void TileEngine::addLight(const Position& center, int power, int layer)
 {
@@ -207,19 +240,20 @@ void TileEngine::addLight(const Position& center, int power, int layer)
 		{
 			for (int z = 0; z < _save->getMapSizeZ(); z++)
 			{
-				int distance = int(floor(sqrt(float(x * x + y * y)) + 0.5));
+//kL				int distance = int(floor(sqrt(float(x * x + y * y)) + 0.5));
+				int distance = (int)floor(sqrt((float)(x * x + y * y)));		// kL
 
-				if (_save->getTile(Position(center.x + x,center.y + y, z)))
-					_save->getTile(Position(center.x + x,center.y + y, z))->addLight(power - distance, layer);
+				if (_save->getTile(Position(center.x + x, center.y + y, z)))
+					_save->getTile(Position(center.x + x, center.y + y, z))->addLight(power - distance, layer);
 
-				if (_save->getTile(Position(center.x - x,center.y - y, z)))
-					_save->getTile(Position(center.x - x,center.y - y, z))->addLight(power - distance, layer);
+				if (_save->getTile(Position(center.x - x, center.y - y, z)))
+					_save->getTile(Position(center.x - x, center.y - y, z))->addLight(power - distance, layer);
 
-				if (_save->getTile(Position(center.x - x,center.y + y, z)))
-					_save->getTile(Position(center.x - x,center.y + y, z))->addLight(power - distance, layer);
+				if (_save->getTile(Position(center.x + x, center.y - y, z)))
+					_save->getTile(Position(center.x + x, center.y - y, z))->addLight(power - distance, layer);
 
-				if (_save->getTile(Position(center.x + x,center.y - y, z)))
-					_save->getTile(Position(center.x + x,center.y - y, z))->addLight(power - distance, layer);
+				if (_save->getTile(Position(center.x - x, center.y + y, z)))
+					_save->getTile(Position(center.x - x, center.y + y, z))->addLight(power - distance, layer);
 			}
 		}
 	}
@@ -1170,7 +1204,7 @@ bool TileEngine::canMakeSnap(BattleUnit* unit, BattleUnit* target)
  */
 bool TileEngine::checkReactionFire(BattleUnit* unit)
 {
-	//Log(LOG_INFO) << "Battlescape/TileEngine.cpp checkReactionFire() vs." << unit->getId();
+	Log(LOG_INFO) << "TileEngine::checkReactionFire vs " << unit->getId();
 
 	// reaction fire only triggered when the actioning unit is of the currently playing side, and is still on the map (alive)
 	if (unit->getFaction() != _save->getSide() || unit->getTile() == 0)
@@ -1423,14 +1457,16 @@ bool TileEngine::tryReactionSnap(BattleUnit* unit, BattleUnit* target)
  * Handles bullet/weapon hits.
  *
  * A bullet/weapon hits a voxel.
- * @param center Center of the explosion in voxelspace.
- * @param power Power of the explosion.
- * @param type The damage type of the explosion.
- * @param unit The unit that caused the explosion.
- * @return The Unit that got hit.
+ * @param center, Center of the explosion in voxelspace.
+ * @param power, Power of the explosion.
+ * @param type, The damage type of the explosion.
+ * @param unit, The unit that caused the explosion.
+ * @return, The Unit that got hit.
  */
 BattleUnit* TileEngine::hit(const Position& center, int power, ItemDamageType type, BattleUnit* unit)
 {
+	Log(LOG_INFO) << "TileEngine::hit";
+
 	Tile* tile = _save->getTile(Position(center.x / 16, center.y / 16, center.z / 24));
 	if (!tile)
 	{
@@ -1441,14 +1477,15 @@ BattleUnit* TileEngine::hit(const Position& center, int power, ItemDamageType ty
 	int adjustedDamage = 0;
 
 	const int part = voxelCheck(center, unit);
-	if (part >= 0 && part <= 3)
+	if (part >= 0 && part <= 3) // terrain
 	{
 		// power 25% to 75%
-		const int rndPower = RNG::generate(power / 4, (power * 3) / 4); // RNG::boxMuller(power, power/6)
+		const int rndPower = RNG::generate(power/4, power * 3/4); // RNG::boxMuller(power, power/6)
 		if (tile->damage(part, rndPower))
 			_save->setObjectiveDestroyed(true);
+		// kL_note: This would be where to adjust damage based on effectiveness of weapon vs Terrain!
 	}
-	else if (part == 4)
+	else if (part == 4)	// battleunit
 	{
 		// power 0 - 200%
 		const int rndPower = RNG::generate(0, power * 2); // RNG::boxMuller(power, power/3)
@@ -1457,31 +1494,48 @@ BattleUnit* TileEngine::hit(const Position& center, int power, ItemDamageType ty
 		if (!bu)
 		{
 			// it's possible we have a unit below the actual tile, when he stands on a stairs and sticks his head out to the next tile
+			// kL_note: yeah, just like in LoS calculations!!!! cf. visible() .. idiots.
 			Tile* below = _save->getTile(Position(center.x / 16, center.y / 16, (center.z / 24) - 1));
-			if (below)
+			if (below
+				&& below->getUnit())	// kL
 			{
-				BattleUnit* buBelow = below->getUnit();
-				if (buBelow)
-				{
-					bu = buBelow;
-					verticaloffset = 24;
-				}
+//kL				BattleUnit* buBelow = below->getUnit();
+//kL				if (buBelow)
+//kL				{
+//kL				bu = buBelow;
+				bu = below->getUnit();	// kL
+				verticaloffset = 24;
+//kL				}
 			}
 		}
 
 		if (bu)
 		{
 			const int sz = bu->getArmor()->getSize() * 8;
-			const Position target = bu->getPosition() * Position(16, 16, 24) + Position(sz, sz, bu->getFloatHeight() - tile->getTerrainLevel());
+			const Position target = (bu->getPosition() * Position(16, 16, 24)) + Position(sz, sz, bu->getFloatHeight() - tile->getTerrainLevel());
 			const Position relative = (center - target) - Position(0, 0, verticaloffset);
 
 			adjustedDamage = bu->damage(relative, rndPower, type);
 
-			const int bravery = (110 - bu->getStats()->bravery) / 10;
-			const int modifier = bu->getFaction() == FACTION_PLAYER ? _save->getMoraleModifier() : 100;
-			const int morale_loss = 100 * (adjustedDamage * bravery / 10) / modifier;
+			// kL_note: this shouldn't be done if Psi_attack.
+			{
+				const int bravery = (110 - bu->getStats()->bravery) / 10;
 
-			bu->moraleChange(-morale_loss);
+	//kL			const int modifier = bu->getFaction() == FACTION_PLAYER? _save->getMoraleModifier():100;
+				int modifier = 100;
+				if (bu->getFaction() == FACTION_PLAYER)
+				{
+					modifier = _save->getMoraleModifier();
+				}
+				else if (bu->getFaction() == FACTION_HOSTILE)
+				{
+					modifier = _save->getMoraleModifier(0, false);
+				}
+
+				const int morale_loss = 100 * (adjustedDamage * bravery / 10) / modifier;
+
+				bu->moraleChange(-morale_loss);
+			}
 
 			if (bu->getSpecialAbility() == SPECAB_EXPLODEONDEATH
 				&& !bu->isOut()
@@ -1529,6 +1583,8 @@ BattleUnit* TileEngine::hit(const Position& center, int power, ItemDamageType ty
  */
 void TileEngine::explode(const Position& center, int power, ItemDamageType type, int maxRadius, BattleUnit* unit)
 {
+	Log(LOG_INFO) << "TileEngine::explode";
+
 //kL	double centerZ = (int)(center.z / 24) + 0.5;
 //kL	double centerX = (int)(center.x / 16) + 0.5;
 //kL	double centerY = (int)(center.y / 16) + 0.5;
@@ -1763,6 +1819,8 @@ void TileEngine::explode(const Position& center, int power, ItemDamageType type,
  */
 bool TileEngine::detonate(Tile* tile)
 {
+	Log(LOG_INFO) << "TileEngine::detonate";
+
 	int explosive = tile->getExplosive();
 	tile->setExplosive(0, true);
 
@@ -2436,8 +2494,15 @@ int TileEngine::closeUfoDoors()
  * @param excludeAllBut, [Optional] The only unit to be considered for ray hits.
  * @return, The objectnumber(0-3) or unit(4) or out-of-map(5) or -1(hit nothing).
  */
-int TileEngine::calculateLine(const Position& origin, const Position& target, bool storeTrajectory, std::vector<Position>* trajectory,
-												BattleUnit* excludeUnit, bool doVoxelCheck, bool onlyVisible, BattleUnit* excludeAllBut)
+int TileEngine::calculateLine(
+				const Position& origin,
+				const Position& target,
+				bool storeTrajectory,
+				std::vector<Position>* trajectory,
+				BattleUnit* excludeUnit,
+				bool doVoxelCheck,
+				bool onlyVisible,
+				BattleUnit* excludeAllBut)
 {
 	int x, x0, x1, delta_x, step_x;
 	int y, y0, y1, delta_y, step_y;
@@ -2606,17 +2671,23 @@ int TileEngine::calculateLine(const Position& origin, const Position& target, bo
 
 /**
  * Calculates a parabola trajectory, used for throwing items.
- * @param origin Orign in voxelspace.
- * @param target Target in voxelspace.
- * @param storeTrajectory True will store the whole trajectory - otherwise it just stores the last position.
- * @param trajectory A vector of positions in which the trajectory is stored.
- * @param excludeUnit Makes sure the trajectory does not hit the shooter itself.
- * @param curvature How high the parabola goes: 1.0 is almost straight throw, 3.0 is a very high throw, to throw over a fence for example.
- * @param accuracy Is the deviation of the angles it should take into account. 1.0 is perfection.
- * @return The objectnumber(0-3) or unit(4) or out of map (5) or -1(hit nothing).
+ * @param origin, Orign in voxelspace.
+ * @param target, Target in voxelspace.
+ * @param storeTrajectory, True will store the whole trajectory - otherwise it just stores the last position.
+ * @param trajectory, A vector of positions in which the trajectory is stored.
+ * @param excludeUnit, Makes sure the trajectory does not hit the shooter itself.
+ * @param arc, How high the parabola goes: 1.0 is almost straight throw, 3.0 is a very high throw, to throw over a fence for example.
+ * @param acu, Is the deviation of the angles it should take into account. 1.0 is perfection.
+ * @return, The objectnumber(0-3) or unit(4) or out of map (5) or -1(hit nothing).
  */
-int TileEngine::calculateParabola(const Position& origin, const Position& target, bool storeTrajectory, std::vector<Position>* trajectory,
-		BattleUnit* excludeUnit, double curvature, double accuracy)
+int TileEngine::calculateParabola(
+				const Position& origin,
+				const Position& target,
+				bool storeTrajectory,
+				std::vector<Position>* trajectory,
+				BattleUnit* excludeUnit,
+				double arc,
+				double acu)
 {
 	double ro = sqrt((double)((target.x - origin.x) * (target.x - origin.x)
 			+ (target.y - origin.y) * (target.y - origin.y)
@@ -2625,10 +2696,10 @@ int TileEngine::calculateParabola(const Position& origin, const Position& target
 	double fi = acos((double)(target.z - origin.z) / ro);
 	double te = atan2((double)(target.y - origin.y), (double)(target.x - origin.x));
 
-	fi *= accuracy;
-	te *= accuracy;
+	fi *= acu;
+	te *= acu;
 
-	double zA = sqrt(ro) * curvature;
+	double zA = sqrt(ro) * arc;
 	double zK = 4.0 * zA / ro / ro;
 
 	int x = origin.x;
@@ -2667,6 +2738,109 @@ int TileEngine::calculateParabola(const Position& origin, const Position& target
 	}
 
 	return -1;
+}
+
+/**
+ * Validates a throw action.
+ * @param action The action to validate.
+ * @return Validity of action.
+ */
+bool TileEngine::validateThrow(BattleAction* action)
+{
+	Position originVoxel, targetVoxel;
+	bool found = false;
+
+	if (action->type == BA_THROW
+		&& _save->getTile(action->target)
+		&& _save->getTile(action->target)->getMapData(MapData::O_OBJECT)
+		&& _save->getTile(action->target)->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) == 255)
+	{
+		return false; // object blocking - can't throw here
+	}
+
+	Position origin = action->actor->getPosition();
+	std::vector<Position> trajectory;
+	Tile* tileAbove = _save->getTile(origin + Position(0, 0, 1));
+
+	originVoxel = Position((origin.x * 16)+8, (origin.y * 16)+8, (origin.z * 24));
+	originVoxel.z += -_save->getTile(origin)->getTerrainLevel();
+	originVoxel.z += action->actor->getHeight() + action->actor->getFloatHeight();
+	originVoxel.z -= 3;
+	if (originVoxel.z >= (origin.z + 1)*24)
+	{
+		if (!tileAbove
+			|| !tileAbove->hasNoFloor(0))
+		{
+			while (originVoxel.z > (origin.z + 1)*24)
+			{
+				originVoxel.z--;
+			}
+
+			originVoxel.z -=4;
+		}
+		else
+		{
+			origin.z++;
+		}
+	}
+
+	// determine the target voxel; aim at the center of the floor
+	targetVoxel = Position((action->target.x * 16)+8, (action->target.y * 16)+8, (action->target.z * 24)+2);
+	targetVoxel.z -= _save->getTile(action->target)->getTerrainLevel();
+
+	if (action->type != BA_THROW)
+	{
+		BattleUnit* buThrower = _save->getTile(action->target)->getUnit();
+		if (!buThrower
+			&& action->target.z > 0
+			&& _save->getTile(action->target)->hasNoFloor(0))
+		{
+			buThrower = _save->getTile(Position(action->target.x, action->target.y, action->target.z - 1))->getUnit();
+		}
+
+		if (buThrower)
+		{
+			targetVoxel.z += buThrower->getHeight()/2 + buThrower->getFloatHeight();
+		}
+	}
+
+	// we try 4 different arcs to try and reach our goal.
+	double arc = 1.0;
+	while (!found && arc < 5.0)
+	{
+		int checkParab = calculateParabola(
+						originVoxel,
+						targetVoxel,
+						false,
+						&trajectory,
+						action->actor,
+						arc,
+						1.0);
+		if (checkParab != 5
+//kL			&& (int)trajectory.at(0).x / 16 == (int)targetVoxel.x / 16
+//kL			&& (int)trajectory.at(0).y / 16 == (int)targetVoxel.y / 16
+//kL			&& (int)trajectory.at(0).z / 24 == (int)targetVoxel.z / 24)
+			&& trajectory.at(0).x / 16 == targetVoxel.x / 16
+			&& trajectory.at(0).y / 16 == targetVoxel.y / 16
+			&& trajectory.at(0).z / 24 == targetVoxel.z / 24)
+		{
+			found = true;
+		}
+		else
+		{
+//kL			arc += 1.0;
+			arc += 0.5;		// kL
+		}
+
+		trajectory.clear();
+	}
+
+	if (AreSame(arc, 5.0))
+	{
+		return false;
+	}
+
+	return ProjectileFlyBState::validThrowRange(action);
 }
 
 /**
@@ -2809,8 +2983,9 @@ int TileEngine::voxelCheck(const Position& voxel, BattleUnit* excludeUnit, bool 
 		{
 			Position tilepos;
 			Position unitpos = unit->getPosition();
-			int tz = unitpos.z * 24 + unit->getFloatHeight() + (-tile->getTerrainLevel()); // bottom
-			if ((voxel.z > tz) && (voxel.z <= tz + unit->getHeight()))
+			int tz = (unitpos.z * 24) + unit->getFloatHeight() - tile->getTerrainLevel(); // bottom
+			if (voxel.z > tz
+				&& voxel.z <= tz + unit->getHeight())
 			{
 				int x = voxel.x %16;
 				int y = voxel.y %16;
@@ -2845,30 +3020,34 @@ void TileEngine::togglePersonalLighting()
 
 /**
  * Calculates the distance between 2 points. Rounded up to first INT.
- * @param pos1 Position of first square.
- * @param pos2 Position of second square.
- * @return Distance.
+ * @param pos1, Position of first square.
+ * @param pos2, Position of second square.
+ * @return, Distance.
  */
 int TileEngine::distance(const Position& pos1, const Position& pos2) const
 {
 	int x = pos1.x - pos2.x;
 	int y = pos1.y - pos2.y;
+	int z = pos1.z - pos2.z;	// kL
 
-	return int(floor(sqrt(float(x * x + y * y)) + 0.5));
+//kL	return (int)floor(sqrt(float(x * x + y * y)) + 0.5f);
+//	return (int)floor(sqrt(float(x * x + y * y)));				// kL, why the +0.5 ???
+	return (int)floor(sqrt((float)(x * x + y * y + z * z)));	// kL, 3-dimensional
 }
 
 /**
- * Calculates the distance squared between 2 points. No sqrt(), not floating point math, and sometimes it's all you need.
- * @param pos1 Position of first square.
- * @param pos2 Position of second square.
- * @param considerZ Whether to consider the z coordinate.
- * @return Distance.
+ * Calculates the distance squared between 2 points.
+ * No sqrt(), not floating point math, and sometimes it's all you need.
+ * @param pos1, Position of first square.
+ * @param pos2, Position of second square.
+ * @param considerZ, Whether to consider the z coordinate.
+ * @return, Distance.
  */
 int TileEngine::distanceSq(const Position& pos1, const Position& pos2, bool considerZ) const
 {
 	int x = pos1.x - pos2.x;
 	int y = pos1.y - pos2.y;
-	int z = considerZ ? (pos1.z - pos2.z) : 0;
+	int z = considerZ? (pos1.z - pos2.z):0;
 
 	return x * x + y * y + z * z;
 }
@@ -2881,47 +3060,53 @@ int TileEngine::distanceSq(const Position& pos1, const Position& pos2, bool cons
 bool TileEngine::psiAttack(BattleAction* action)
 {
 	Log(LOG_INFO) << "TileEngine::psiAttack()";
+	Log(LOG_INFO) << ". attackerID " << action->actor->getId();
 
-	Log(LOG_INFO) << ". target(pos) = " << action->target;
-
-	BattleUnit* victim; // kL_begin: check if Victim is valid.
+//	bool ret = false;
 
 	Tile* t = _save->getTile(action->target);
 	if (t
 		&& t->getUnit())
 	{
 		//Log(LOG_INFO) << ". . tile EXISTS, so does Unit";
-		victim = t->getUnit();
-		Log(LOG_INFO) << ". . victimID " << victim->getId(); // kL_end.
+		BattleUnit* victim = t->getUnit();
+		Log(LOG_INFO) << ". victimID " << victim->getId();
+		Log(LOG_INFO) << ". . target(pos) " << action->target;
 
 
-		double attackStrength =
+		double attackStr =
 				(double)action->actor->getStats()->psiStrength
 				* (double)action->actor->getStats()->psiSkill
 				/ 50.0;
-		Log(LOG_INFO) << ". . . attackStrength " << attackStrength;
+		Log(LOG_INFO) << ". . . attackStr = " << attackStr;
 
-		double defenseStrength =
+		double defenseStr =
 				(double)victim->getStats()->psiStrength
-				+ ((victim->getStats()->psiSkill > 0)? (10.0 + ((double)victim->getStats()->psiSkill / 5.0)):10.0);
-		Log(LOG_INFO) << ". . . defenseStrength " << defenseStrength;
+				+ ((double)victim->getStats()->psiSkill / 5.0);
+		Log(LOG_INFO) << ". . . defenseStr = " << defenseStr;
 
 		double d = (double)distance(action->actor->getPosition(), action->target);
-		Log(LOG_INFO) << ". . . d " << d;
+		Log(LOG_INFO) << ". . . d = " << d;
 
-		attackStrength -= d;
-		attackStrength += (double)RNG::generate(0, 55);
-		Log(LOG_INFO) << ". . . attackStrength - d + RNG = " << attackStrength;
+		attackStr -= d;
 
+		attackStr -= defenseStr;
 		if (action->type == BA_MINDCONTROL)
-		{
-			defenseStrength += 20.0;
-		}
+			attackStr += 25.0;
+		else
+			attackStr += 45.0;
+
+		attackStr *= 100.0;
+		attackStr /= 56.0;
+
+		Log(LOG_INFO) << ". . . attackStr Success @ " << (int)attackStr;
 
 		action->actor->addPsiExp();
-		if (attackStrength > defenseStrength)
+		if (attackStr > 0.0
+			&& RNG::percent((int)attackStr))		// kL
 		{
-			Log(LOG_INFO) << ". . Success";
+			//Log(LOG_INFO) << ". . Success";
+//			ret = true;
 
 			action->actor->addPsiExp();
 			action->actor->addPsiExp();
@@ -2969,18 +3154,18 @@ bool TileEngine::psiAttack(BattleAction* action)
 			return true;
 		}
 	}
-	else // kL_begin:
-	{
+//	else // kL_begin:
+//	{
 		//Log(LOG_INFO) << ". victim not found";
 //		return false;
-	}
+//	}
 
 
 	// kL_note: double check this... because of my extra check, if victim=Valid up at the top.
 	// Can prob. take it out from just above ..... barring the return=TRUE clause there
 
 	// if all units from either faction are mind controlled - auto-end the mission.
-	if (_save->getSide() == FACTION_PLAYER
+/*	if (_save->getSide() == FACTION_PLAYER
 		&& Options::getBool("battleAutoEnd")
 		&& Options::getBool("allowPsionicCapture"))
 	{
@@ -2998,7 +3183,7 @@ bool TileEngine::psiAttack(BattleAction* action)
 		}
 		//Log(LOG_INFO) << ". . tallyUnits codeblock 2 DONE";
 	} // kL_end.
-
+*/
 	//Log(LOG_INFO) << "TileEngine::psiAttack() ret FALSE";
 	return false;
 }
@@ -3220,99 +3405,6 @@ int TileEngine::faceWindow(const Position &position)
 	}
 
 	return -1;
-}
-
-/**
- * Validates a throw action.
- * @param action The action to validate.
- * @return Validity of action.
- */
-bool TileEngine::validateThrow(BattleAction* action)
-{
-	Position originVoxel, targetVoxel;
-	bool foundCurve = false;
-
-	if (action->type == BA_THROW // object blocking - can't throw here
-		&& _save->getTile(action->target)
-		&& _save->getTile(action->target)->getMapData(MapData::O_OBJECT)
-		&& _save->getTile(action->target)->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) == 255)
-	{
-		return false;
-	}
-
-	Position origin = action->actor->getPosition();
-	std::vector<Position> trajectory;
-	Tile* tileAbove = _save->getTile(origin + Position(0, 0, 1));
-
-	originVoxel = Position(origin.x * 16 + 8, origin.y * 16 + 8, origin.z * 24);
-	originVoxel.z += -_save->getTile(origin)->getTerrainLevel();
-	originVoxel.z += action->actor->getHeight() + action->actor->getFloatHeight();
-	originVoxel.z -= 3;
-	if (originVoxel.z >= (origin.z + 1) * 24)
-	{
-		if (!tileAbove
-			|| !tileAbove->hasNoFloor(0))
-		{
-			while (originVoxel.z > (origin.z + 1) * 24)
-			{
-				originVoxel.z--;
-			}
-
-			originVoxel.z -=4;
-		}
-		else
-		{
-			origin.z++;
-		}
-	}
-
-	// determine the target voxel.
-	// aim at the center of the floor
-	targetVoxel = Position(action->target.x * 16 + 8, action->target.y * 16 + 8, action->target.z * 24 + 2);
-	targetVoxel.z -= _save->getTile(action->target)->getTerrainLevel();
-
-	if (action->type != BA_THROW)
-	{
-		BattleUnit* tu = _save->getTile(action->target)->getUnit();
-		if (!tu
-			&& action->target.z > 0
-			&& _save->getTile(action->target)->hasNoFloor(0))
-		{
-			tu = _save->getTile(Position(action->target.x, action->target.y, action->target.z - 1))->getUnit();
-		}
-
-		if (tu)
-		{
-			targetVoxel.z += (tu->getHeight() / 2) + tu->getFloatHeight();
-		}
-	}
-
-	// we try 4 different curvatures to try and reach our goal.
-	double curvature = 1.f;
-	while (!foundCurve && curvature < 5.f)
-	{
-		int check = calculateParabola(originVoxel, targetVoxel, false, &trajectory, action->actor, curvature, 1.f);
-		if (check != 5
-			&& (int)trajectory.at(0).x / 16 == (int)targetVoxel.x / 16
-			&& (int)trajectory.at(0).y / 16 == (int)targetVoxel.y / 16
-			&& (int)trajectory.at(0).z / 24 == (int)targetVoxel.z / 24)
-		{
-			foundCurve = true;
-		}
-		else
-		{
-			curvature += 1.f;
-		}
-
-		trajectory.clear();
-	}
-
-	if (AreSame(curvature, 5.0))
-	{
-		return false;
-	}
-
-	return ProjectileFlyBState::validThrowRange(action);
 }
 
 /**

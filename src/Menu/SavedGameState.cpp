@@ -138,7 +138,8 @@ SavedGameState::SavedGameState(Game* game, OptionsOrigin origin, bool showMsg)
 {
 	if (_showMsg)
 	{
-		_txtStatus = new Text(320, 16, Screen::getDX(), 92 + Screen::getDY());
+//kL		_txtStatus = new Text(320, 17, Screen::getDX(), Screen::getDY() + 92);
+		_txtStatus = new Text(320, 17, Screen::getDX(), Screen::getDY() + 64);		// kL
 		add(_txtStatus);
 
 		_txtStatus->setBig();
@@ -146,12 +147,15 @@ SavedGameState::SavedGameState(Game* game, OptionsOrigin origin, bool showMsg)
 
 		if (origin == OPT_BATTLESCAPE)
 		{
-//kL			_txtStatus->setColor(Palette::blockOffset(5));
-			_txtStatus->setColor(Palette::blockOffset(5)+1);		// kL
-			_txtStatus->setHighContrast(true);
+//kL			_txtStatus->setColor(Palette::blockOffset(5));		// brown
+			_txtStatus->setColor(Palette::blockOffset(14)+5);		// kL
+//kL			_txtStatus->setHighContrast(true);
 		}
 		else
-			_txtStatus->setColor(Palette::blockOffset(8)+5);
+		{
+//kL			_txtStatus->setColor(Palette::blockOffset(8)+5);	// cyan
+			_txtStatus->setColor(Palette::blockOffset(11+6));		// kL, purple
+		}
 	}
 }
 

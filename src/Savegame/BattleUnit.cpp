@@ -2627,7 +2627,10 @@ std::string BattleUnit::getActiveHand() const
 		return "STR_LEFT_HAND";
 	}
 
-	return "STR_RIGHT_HAND"; // kL_end.
+//	return "STR_RIGHT_HAND";
+	return "";
+	// kL_end.
+
 
 /*kL	if (getItem("STR_LEFT_HAND"))
 		return "STR_LEFT_HAND";

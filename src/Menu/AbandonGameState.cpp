@@ -59,13 +59,10 @@ AbandonGameState::AbandonGameState(Game* game, OptionsOrigin origin)
 
 
 	_window		= new Window(this, 216, 160, x, 20, POPUP_BOTH);
-//kL	_txtTitle	= new Text(206, 15, x + 5, 70);
-	_txtTitle	= new Text(206, 15, x + 5, 72);				// kL
+	_txtTitle	= new Text(206, 15, x + 5, 72);
 
-//kL	_btnYes		= new TextButton(50, 20, x + 18, 140);
-//kL	_btnNo		= new TextButton(50, 20, x + 148, 140);
-	_btnNo		= new TextButton(55, 20, x + 30, 133);		// kL
-	_btnYes		= new TextButton(55, 20, x + 131, 133);		// kL
+	_btnNo		= new TextButton(55, 20, x + 30, 133);
+	_btnYes		= new TextButton(55, 20, x + 131, 133);
 
 	add(_window);
 	add(_btnYes);
@@ -104,7 +101,6 @@ AbandonGameState::AbandonGameState(Game* game, OptionsOrigin origin)
  */
 AbandonGameState::~AbandonGameState()
 {
-
 }
 
 /**

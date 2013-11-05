@@ -222,8 +222,7 @@ void Text::setInvert(bool invert)
 }
 
 /**
- * Enables/disables high contrast color. Mostly used for
- * Battlescape UI.
+ * Enables/disables high contrast color. Mostly used for Battlescape UI.
  * @param contrast High contrast setting.
  */
 void Text::setHighContrast(bool contrast)

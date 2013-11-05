@@ -480,8 +480,10 @@ void UnitWalkBState::think()
 
 			if (_action.run)
 			{
-				tu *= 0.75;
-				energy *= 1.5;
+//kL				tu *= 0.75;
+//kL				energy *= 1.5;
+				tu = tu * 3 / 4;			// kL
+				energy = energy * 3 / 2;	// kL
 			}
 
 //kL			if (dir >= Pathfinding::DIR_UP)
@@ -606,7 +608,7 @@ void UnitWalkBState::think()
 							|| (belowDest
 								&& unitBelowMyWay
 								&& unitBelowMyWay != _unit
-								&& -belowDest->getTerrainLevel() + unitBelowMyWay->getFloatHeight() + unitBelowMyWay->getHeight()) >= 28))
+								&& unitBelowMyWay->getFloatHeight() + unitBelowMyWay->getHeight() - belowDest->getTerrainLevel() >= 28)))
 								// 4+ voxels poking into the tile above, we don't kick people in the head here at XCom.
 					{
 						_action.TU = 0;

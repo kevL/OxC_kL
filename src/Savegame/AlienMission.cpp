@@ -290,7 +290,7 @@ Ufo* AlienMission::spawnUfo(const SavedGame& game, const Ruleset& ruleset, const
 	{
 		const RuleRegion& regionRules = *ruleset.getRegion(_region);
 
-		std::vector<Base *>::const_iterator found = std::find_if(game.getBases()->begin(), game.getBases()->end(), FindMarkedXCOMBase(regionRules));
+		std::vector<Base*>::const_iterator found = std::find_if(game.getBases()->begin(), game.getBases()->end(), FindMarkedXCOMBase(regionRules));
 		if (found != game.getBases()->end())
 		{
 			// Spawn a battleship straight for the XCOM base.
@@ -310,7 +310,7 @@ Ufo* AlienMission::spawnUfo(const SavedGame& game, const Ruleset& ruleset, const
 			}
 
 			ufo->setAltitude(assaultTrajectory.getAltitude(0));
-			ufo->setSpeed(assaultTrajectory.getSpeedPercentage(0) * ufoRule.getMaxSpeed());
+			ufo->setSpeed((int)(assaultTrajectory.getSpeedPercentage(0) * (float)ufoRule.getMaxSpeed()));
 			ufo->setLongitude(pos.first);
 			ufo->setLatitude(pos.second);
 
@@ -347,7 +347,7 @@ Ufo* AlienMission::spawnUfo(const SavedGame& game, const Ruleset& ruleset, const
 		}
 
 		ufo->setAltitude(trajectory.getAltitude(0));
-		ufo->setSpeed(trajectory.getSpeedPercentage(0) * ufoRule.getMaxSpeed());
+		ufo->setSpeed((int)(trajectory.getSpeedPercentage(0) * (float)ufoRule.getMaxSpeed()));
 		ufo->setLongitude(pos.first);
 		ufo->setLatitude(pos.second);
 
@@ -394,7 +394,7 @@ Ufo* AlienMission::spawnUfo(const SavedGame& game, const Ruleset& ruleset, const
 	}
 
 	ufo->setAltitude(trajectory.getAltitude(0));
-	ufo->setSpeed(trajectory.getSpeedPercentage(0) * ufoRule.getMaxSpeed());
+	ufo->setSpeed((int)(trajectory.getSpeedPercentage(0) * (float)ufoRule.getMaxSpeed()));
 	ufo->setLongitude(pos.first);
 	ufo->setLatitude(pos.second);
 

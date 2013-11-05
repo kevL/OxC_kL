@@ -166,7 +166,7 @@ private:
 		/// Checks for casualties in battle.
 		void checkForCasualties(
 				BattleItem* murderweapon,
-				BattleUnit* murderer,
+				BattleUnit* killer,
 				bool hiddenExplosion = false,
 				bool terrainExplosion = false);
 		/// Checks if a unit panics.

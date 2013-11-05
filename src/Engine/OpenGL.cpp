@@ -121,7 +121,16 @@ Uint32 (APIENTRYP wglSwapIntervalEXT)(int interval);
     glFlush();
   }
 
-  void OpenGL::refresh(bool smooth, unsigned inwidth, unsigned inheight, unsigned outwidth, unsigned outheight, int topBlackBand, int bottomBlackBand, int leftBlackBand, int rightBlackBand) {
+  void OpenGL::refresh(
+			bool smooth,
+			unsigned inwidth,
+			unsigned inheight,
+			unsigned outwidth,
+			unsigned outheight,
+			int topBlackBand,
+			int bottomBlackBand,
+			int leftBlackBand,
+			int rightBlackBand) {
     while (glGetError() != GL_NO_ERROR); // clear possible error from who knows where
 #ifndef __NO_SHADERS
     if(shader_support && (fragmentshader || vertexshader)) {    

@@ -68,6 +68,7 @@ private:
 	BattleUnit* _visibleUnit[VISIBLE_MAX];
 	WarningMessage* _warning;
 	Text* _txtName;
+	NumberText* _numTUSnap;	// kL
 	NumberText* _numTimeUnits, * _numEnergy, * _numHealth, * _numMorale, * _numLayers, * _numAmmoLeft, * _numAmmoRight;
 	Bar* _barTimeUnits, * _barEnergy, * _barHealth, * _barMorale;
 	Timer* _animTimer, * _gameTimer;

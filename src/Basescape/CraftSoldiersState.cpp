@@ -204,7 +204,7 @@ void CraftSoldiersState::btnUnloadClick(Action*)
 
 	// iterate over all listRows and change their stringText and lineColor
 	Uint8 color;
-	for (int r = 0; r < _base->getSoldiers()->size(); ++r)
+	for (int r = 0; (unsigned)r < _base->getSoldiers()->size(); ++r)
 	{
 		std::wstring craft2 = _lstSoldiers->getCellText(r, 2);
 		if (craft2 == craft1) // if row pertains to this craft

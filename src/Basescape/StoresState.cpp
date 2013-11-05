@@ -52,9 +52,9 @@ StoresState::StoresState(Game* game, Base* base)
 
 	_txtTitle		= new Text(300, 17, 10, 8);
 
-	_txtItem		= new Text(142, 9, 16, 25);
-	_txtQuantity	= new Text(88, 9, 178, 25);
-	_txtSpaceUsed	= new Text(74, 9, 270, 25);
+	_txtItem		= new Text(162, 9, 16, 25);
+	_txtQuantity	= new Text(84, 9, 178, 25);
+	_txtSpaceUsed	= new Text(26, 9, 262, 25);
 
 	_lstStores		= new TextList(286, 136, 16, 36);
 
@@ -99,11 +99,10 @@ StoresState::StoresState(Game* game, Base* base)
 	_txtSpaceUsed->setText(tr("STR_VOLUME"));		// kL
 
 	_lstStores->setColor(Palette::blockOffset(13)+10);
-	_lstStores->setColumns(3, 162, 92, 24);
+	_lstStores->setColumns(3, 154, 84, 16);
 	_lstStores->setSelectable(true);
 	_lstStores->setBackground(_window);
-//kL	_lstStores->setMargin(2);
-	_lstStores->setMargin(8);		// kL
+	_lstStores->setMargin(8);
 
 	const std::vector<std::string>& items = _game->getRuleset()->getItemsList();
 	for (std::vector<std::string>::const_iterator i = items.begin(); i != items.end(); ++i)

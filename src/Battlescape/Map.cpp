@@ -240,10 +240,10 @@ void Map::draw()
 		|| _save->getSelectedUnit() == 0
 		|| _save->getDebugMode()
 		|| projectileInFOV
-		|| explosionInFOV)
-//		|| (_reveal && !kL_preReveal))
+		|| explosionInFOV
+		|| (_reveal && !kL_preReveal))
 	{
-/*		if (_reveal && !kL_preReveal)
+		if (_reveal && !kL_preReveal)
 		{
 			_reveal--;
 			//Log(LOG_INFO) << ". . . . . . drawTerrain() _reveal = " << _reveal;
@@ -252,25 +252,23 @@ void Map::draw()
 		{
 			_reveal = 8;
 			//Log(LOG_INFO) << ". . . . . . drawTerrain() Set _reveal = " << _reveal;
-		} */
+		}
 
 		drawTerrain(this);
 	}
 	else // "hidden movement"
 	{
-/*		if (kL_preReveal)				// kL
+		if (kL_preReveal)				// kL
 		{
 			kL_preReveal = false;		// kL
 			_reveal = 0;				// kL
 			//Log(LOG_INFO) << ". . . . . . kL_preReveal, set " << kL_preReveal;
 			//Log(LOG_INFO) << ". . . . . . _reveal, set " << _reveal;
-		} */
+		}
 
 		//Log(LOG_INFO) << ". . . . blit( hidden movement )";
 		_message->blit(this);
 	}
-
-//	drawTerrain(this); // TEST!!!!!!!!
 }
 
 /**
@@ -932,8 +930,8 @@ void Map::drawTerrain(Surface *surface)
 							_numWaypid->setValue(tuMarker);
 							_numWaypid->draw();
 
-							int off = tile->getTUMarker() > 9 ? 4 : 2;
-							_numWaypid->blitNShade(surface, screenPosition.x + 16 - off, screenPosition.y + (50-adjustment), 0);
+							int off = tile->getTUMarker() > 9? 4:2;
+							_numWaypid->blitNShade(surface, screenPosition.x + 16 - off, screenPosition.y + (50 - adjustment), 0);
 						}
 					}
 				}
@@ -958,9 +956,11 @@ void Map::drawTerrain(Surface *surface)
 
 		if (this->getCursorType() != CT_NONE)
 		{
-			_arrow->blitNShade(surface,
+			_arrow->blitNShade(
+					surface,
 					screenPosition.x + offset.x + (_spriteWidth / 2) - (_arrow->getWidth() / 2),
-					screenPosition.y + offset.y - _arrow->getHeight() + 4 * sin((_animFrame * 6.28) / 8), 0);
+					screenPosition.y + offset.y - _arrow->getHeight() + (int)(4.0 * sin(((double)_animFrame * 6.28) / 8.0)),
+					0);
 		}
 	}
 

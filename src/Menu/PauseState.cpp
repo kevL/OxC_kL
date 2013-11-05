@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "PauseState.h"
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
@@ -30,6 +31,7 @@
 #include "../Engine/Options.h"
 #include "OptionsState.h"
 
+
 namespace OpenXcom
 {
 
@@ -38,7 +40,10 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param origin Game section that originated this state.
  */
-PauseState::PauseState(Game *game, OptionsOrigin origin) : State(game), _origin(origin)
+PauseState::PauseState(Game* game, OptionsOrigin origin)
+	:
+		State(game),
+		_origin(origin)
 {
 	_screen = false;
 
@@ -52,16 +57,16 @@ PauseState::PauseState(Game *game, OptionsOrigin origin) : State(game), _origin(
 		x = 52;
 	}
 
-	// Create objects
-	_window = new Window(this, 216, 160, x, 20, POPUP_BOTH);
-	_btnLoad = new TextButton(180, 18, x+18, 52);
-	_btnSave = new TextButton(180, 18, x+18, 74);
-	_btnAbandon = new TextButton(180, 18, x+18, 96);
-	_btnOptions = new TextButton(180, 18, x+18, 122);
-	_btnCancel = new TextButton(180, 18, x+18, 150);
-	_txtTitle = new Text(206, 15, x+5, 32);
 
-	// Set palette
+	_window		= new Window(this, 216, 160, x, 20, POPUP_BOTH);
+	_btnLoad	= new TextButton(180, 18, x+18, 52);
+	_btnSave	= new TextButton(180, 18, x+18, 74);
+	_btnAbandon	= new TextButton(180, 18, x+18, 96);
+	_btnOptions	= new TextButton(180, 18, x+18, 122);
+	_btnCancel	= new TextButton(180, 18, x+18, 150);
+	_txtTitle	= new Text(206, 15, x+5, 32);
+
+
 	if (_origin != OPT_BATTLESCAPE)
 	{
 		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
@@ -77,37 +82,37 @@ PauseState::PauseState(Game *game, OptionsOrigin origin) : State(game), _origin(
 
 	centerAllSurfaces();
 
-	// Set up objects
+
 	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
 	_btnLoad->setColor(Palette::blockOffset(15)-1);
 	_btnLoad->setText(tr("STR_LOAD_GAME"));
-	_btnLoad->onMouseClick((ActionHandler)&PauseState::btnLoadClick);
+	_btnLoad->onMouseClick((ActionHandler)& PauseState::btnLoadClick);
 
 	_btnSave->setColor(Palette::blockOffset(15)-1);
 	_btnSave->setText(tr("STR_SAVE_GAME"));
-	_btnSave->onMouseClick((ActionHandler)&PauseState::btnSaveClick);
+	_btnSave->onMouseClick((ActionHandler)& PauseState::btnSaveClick);
 
 	_btnAbandon->setColor(Palette::blockOffset(15)-1);
 	_btnAbandon->setText(tr("STR_ABANDON_GAME"));
-	_btnAbandon->onMouseClick((ActionHandler)&PauseState::btnAbandonClick);
+	_btnAbandon->onMouseClick((ActionHandler)& PauseState::btnAbandonClick);
 
 	_btnOptions->setColor(Palette::blockOffset(15)-1);
 	_btnOptions->setText(tr("STR_GAME_OPTIONS"));
-	_btnOptions->onMouseClick((ActionHandler)&PauseState::btnOptionsClick);
+	_btnOptions->onMouseClick((ActionHandler)& PauseState::btnOptionsClick);
 
 	_btnCancel->setColor(Palette::blockOffset(15)-1);
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
-	_btnCancel->onMouseClick((ActionHandler)&PauseState::btnCancelClick);
-	_btnCancel->onKeyboardPress((ActionHandler)&PauseState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnCancel->onMouseClick((ActionHandler)& PauseState::btnCancelClick);
+	_btnCancel->onKeyboardPress((ActionHandler)& PauseState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
 	_txtTitle->setText(tr("STR_OPTIONS_UC"));
 
-	if (Options::getInt("autosave") >= 2)
+	if (Options::getInt("autosave") > 1)
 	{
 		_btnSave->setVisible(false);
 		_btnLoad->setVisible(false);
@@ -124,7 +129,6 @@ PauseState::PauseState(Game *game, OptionsOrigin origin) : State(game), _origin(
  */
 PauseState::~PauseState()
 {
-
 }
 
 /**
@@ -144,7 +148,7 @@ void PauseState::init()
  * Opens the Load Game screen.
  * @param action Pointer to an action.
  */
-void PauseState::btnLoadClick(Action *)
+void PauseState::btnLoadClick(Action*)
 {
 	_game->pushState(new LoadState(_game, _origin));
 }
@@ -153,7 +157,7 @@ void PauseState::btnLoadClick(Action *)
  * Opens the Save Game screen.
  * @param action Pointer to an action.
  */
-void PauseState::btnSaveClick(Action *)
+void PauseState::btnSaveClick(Action*)
 {
 	_game->pushState(new SaveState(_game, _origin));
 }
@@ -162,7 +166,7 @@ void PauseState::btnSaveClick(Action *)
 * Opens the Game Options screen.
 * @param action Pointer to an action.
 */
-void PauseState::btnOptionsClick(Action *)
+void PauseState::btnOptionsClick(Action*)
 {
 	_game->pushState(new OptionsState(_game, _origin));
 }
@@ -171,7 +175,7 @@ void PauseState::btnOptionsClick(Action *)
  * Opens the Abandon Game window.
  * @param action Pointer to an action.
  */
-void PauseState::btnAbandonClick(Action *)
+void PauseState::btnAbandonClick(Action*)
 {
 	_game->pushState(new AbandonGameState(_game, _origin));
 }
@@ -180,7 +184,7 @@ void PauseState::btnAbandonClick(Action *)
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void PauseState::btnCancelClick(Action *)
+void PauseState::btnCancelClick(Action*)
 {
 	_game->popState();
 }

@@ -2042,7 +2042,7 @@ void GeoscapeState::time1Day()
 					GenerateSupplyMission(*_game->getRuleset(), *_game->getSavedGame()));
 
 	// Autosave
-	if (Options::getInt("autosave") >= 2)
+	if (Options::getInt("autosave") > 1)
 		_game->pushState(new SaveState(_game, OPT_GEOSCAPE, false));
 }
 

@@ -1745,7 +1745,10 @@ BattleUnit* SavedBattleGame::getHighestRanked(bool xcom)
 {
 	BattleUnit* leader = 0;
 
-	for (std::vector<BattleUnit*>::iterator j = _units.begin(); j != _units.end(); ++j)
+	for (std::vector<BattleUnit*>::iterator
+			j = _units.begin();
+			j != _units.end();
+			++j)
 	{
 		if (!(*j)->isOut())
 		{
@@ -1831,13 +1834,15 @@ BattleUnit* SavedBattleGame::getHighestRanked(bool xcom)
 // kL_begin: SavedBattleGame::getMoraleModifier() rewrite to include alien_Faction.
 /**
  * Gets the morale modifier, either
- * - based on the highest ranked, living unit of the xcom/alien faction
- * - or for a unit passed into this function.
- * @param unit Unit.
- * @return The morale modifier.
+ * - a bonus based on the highest ranked, living unit of the xcom/alien factions
+ * - or penalty for a unit (deceased..) passed into this function.
+ * @param unit, Unit deceased; higher rank gets higher penalty to faction
+ * @param xcom, If no unit is passed in this determines whether bonus applies to xcom/aliens
+ * @return, The morale modifier
  */
 int SavedBattleGame::getMoraleModifier(BattleUnit* unit, bool xcom)
 {
+	Log(LOG_INFO) << "SavedBattleGame::getMoraleModifier()";
 	int result = 100;
 
 	if (unit == 0) // leadership Bonus
@@ -1868,7 +1873,7 @@ int SavedBattleGame::getMoraleModifier(BattleUnit* unit, bool xcom)
 				}
 			}
 
-			Log(LOG_INFO) << ". . Xcom bonus = " << result;
+			Log(LOG_INFO) << ". . xCom bonus = " << result;
 		}
 		else // alien
 		{
@@ -1922,7 +1927,7 @@ int SavedBattleGame::getMoraleModifier(BattleUnit* unit, bool xcom)
 				break;
 			}
 
-			Log(LOG_INFO) << ". . Xcom penalty = " << result;
+			Log(LOG_INFO) << ". . xCom penalty = " << result;
 		}
 		else if (unit->getFaction() == FACTION_HOSTILE) // aliens or Mind Controlled XCOM dies.
 		{
@@ -1950,7 +1955,8 @@ int SavedBattleGame::getMoraleModifier(BattleUnit* unit, bool xcom)
 		}
 	}
 
-	Log(LOG_INFO) << "SavedBattleGame::getMoraleModifier() = " << result;
+	//Log(LOG_INFO) << ". totalModifier = " << result;
+
 	return result;
 }
 // kL_end.

@@ -109,12 +109,30 @@ private:
 		void checkAdjacentDoors(Position pos, int part);
 		/// Closes ufo doors.
 		int closeUfoDoors();
+
 		/// Calculates a line trajectory.
-		int calculateLine(const Position& origin, const Position& target, bool storeTrajectory, std::vector<Position>* trajectory,
-						BattleUnit* excludeUnit, bool doVoxelCheck = true, bool onlyVisible = false, BattleUnit* excludeAllBut = 0);
+		int calculateLine(
+						const Position& origin,
+						const Position& target,
+						bool storeTrajectory,
+						std::vector<Position>*
+						trajectory,
+						BattleUnit* excludeUnit,
+						bool doVoxelCheck = true,
+						bool onlyVisible = false,
+						BattleUnit* excludeAllBut = 0);
 		/// Calculates a parabola trajectory.
-		int calculateParabola(const Position& origin, const Position& target, bool storeTrajectory,
-						std::vector<Position>* trajectory, BattleUnit* excludeUnit, double curvature, double accuracy);
+		int calculateParabola(
+						const Position& origin,
+						const Position& target,
+						bool storeTrajectory,
+						std::vector<Position>* trajectory,
+						BattleUnit* excludeUnit,
+						double arc,
+						double acu);
+		/// Validates a throwing action.
+		bool validateThrow(BattleAction* action);
+
 		/// Turn XCom soldier's personal lighting on or off.
 		void togglePersonalLighting();
 		/// Checks the distance between two positions.
@@ -143,8 +161,6 @@ private:
 		bool isVoxelVisible(const Position& voxel);
 		/// Checks what type of voxel occupies this space.
 		int voxelCheck(const Position& voxel, BattleUnit* excludeUnit, bool excludeAllUnits = false, bool onlyVisible = false, BattleUnit* excludeAllBut = 0);
-		/// Validates a throwing action.
-		bool validateThrow(BattleAction* action);
 		/// Get direction to a certain point
 		int getDirectionTo(const Position& origin, const Position& target) const;
 };

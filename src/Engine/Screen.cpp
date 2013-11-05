@@ -378,7 +378,7 @@ void Screen::setResolution(int width, int height)
 	if (_scaleX > _scaleY
 		&& Options::getBool("keepAspectRatio"))
 	{
-		int targetWidth = floor(_scaleY * (double)BASE_WIDTH);
+		int targetWidth = (int)floor(_scaleY * (double)BASE_WIDTH);
 
 		_topBlackBand = _bottomBlackBand = 0;
 		_leftBlackBand = (getWidth() - targetWidth) / 2;
@@ -403,7 +403,7 @@ void Screen::setResolution(int width, int height)
 	else if (_scaleY > _scaleX
 		&& Options::getBool("keepAspectRatio"))
 	{
-		int targetHeight = floor(_scaleX * (double)BASE_HEIGHT);
+		int targetHeight = (int)floor(_scaleX * (double)BASE_HEIGHT);
 
 		_topBlackBand = (getHeight() - targetHeight) / 2;
 		if (_topBlackBand < 0)

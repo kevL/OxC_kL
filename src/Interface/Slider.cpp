@@ -165,7 +165,7 @@ void Slider::setValue(double value)
 	_button->setX((int) floor(getX() + (_maxX - _minX) * _value));
 
 	std::wstringstream ss;
-	int val = _min + _value * (_max - _min);
+	int val = _min + (int)(_value * (double)(_max - _min));
 	ss << val;
 	_button->setText(ss.str());
 }
