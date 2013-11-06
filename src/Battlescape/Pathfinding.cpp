@@ -1043,8 +1043,8 @@ bool Pathfinding::validateUpDown(BattleUnit* bu, Position startPosition, int con
  * @param start The starting position of the travel.
  * @param destination Where the travel ends.
  * @return The TU cost of opening the door. 0 if no UFO door opened.
-  */
-int Pathfinding::getOpeningUfoDoorCost(int direction, Position start, Position destination)
+ */
+/* int Pathfinding::getOpeningUfoDoorCost(int direction, Position start, Position destination)
 {
 	Tile* s = _save->getTile(start);
 	Tile* d = _save->getTile(destination);
@@ -1121,7 +1121,7 @@ int Pathfinding::getOpeningUfoDoorCost(int direction, Position start, Position d
 	}
 
 	return 0;
-}
+} */
 
 /**
  * Marks tiles for the path preview.

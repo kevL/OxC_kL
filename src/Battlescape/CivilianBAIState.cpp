@@ -624,12 +624,12 @@ void CivilianBAIState::setupPatrol()
  */
 void CivilianBAIState::evaluateAIMode()
 {
-	int escapeOdds = _visibleEnemies ? 15 : 0;
-	int patrolOdds = _visibleEnemies ? 15 : 30;
+	double escapeOdds = _visibleEnemies? 15.0: 0.0;
+	double patrolOdds = _visibleEnemies? 15.0: 30.0;
 
 	if (_spottingEnemies)
 	{
-		patrolOdds = 0;
+		patrolOdds = 0.0;
 
 		if (_escapeTUs == 0)
 		{
@@ -672,14 +672,14 @@ void CivilianBAIState::evaluateAIMode()
 	
 	if (_spottingEnemies)
 	{
-		escapeOdds = 10 * escapeOdds * (_spottingEnemies + 10) / 100;
+		escapeOdds = 10.0 * escapeOdds * static_cast<double>((_spottingEnemies + 10)) / 100.0;
 	}
 	else
 	{
-		escapeOdds /= 2;
+		escapeOdds /= 2.0;
 	}
 	
-	int decision = 1 + RNG::generate(0, patrolOdds + escapeOdds);
+	double decision = 1.0 + RNG::generate(0.0, patrolOdds + escapeOdds);
 	if (decision > escapeOdds)
 	{
 		_AIMode = AI_PATROL;

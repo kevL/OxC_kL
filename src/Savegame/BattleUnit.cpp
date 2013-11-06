@@ -500,7 +500,7 @@ UnitStatus BattleUnit::getStatus() const
  */
 void BattleUnit::startWalking(int direction, const Position& destination, Tile* tileBelow, bool cache)
 {
-//	Log(LOG_INFO) << "BattleUnit::startWalking()";		// kL
+	//Log(LOG_INFO) << "BattleUnit::startWalking()";
 
 	_walkPhase = 0;
 	_destination = destination;
@@ -509,14 +509,14 @@ void BattleUnit::startWalking(int direction, const Position& destination, Tile* 
 
 	if (direction >= Pathfinding::DIR_UP)
 	{
-//		Log(LOG_INFO) << "BattleUnit::startWalking(), STATUS_FLYING";		// kL
+		//Log(LOG_INFO) << "BattleUnit::startWalking(), STATUS_FLYING";
 
 		_verticalDirection = direction;
 		_status = STATUS_FLYING;
 	}
 	else
 	{
-//		Log(LOG_INFO) << "BattleUnit::startWalking(), STATUS_WALKING";		// kL
+		//Log(LOG_INFO) << "BattleUnit::startWalking(), STATUS_WALKING";
 
 		_direction = direction;
 		_status = STATUS_WALKING;
@@ -526,7 +526,8 @@ void BattleUnit::startWalking(int direction, const Position& destination, Tile* 
 
 //kL	_kneeled = false;
 
-	if (_tile->hasNoFloor(tileBelow) || direction >= Pathfinding::DIR_UP)
+	if (_tile->hasNoFloor(tileBelow)
+		|| direction >= Pathfinding::DIR_UP)
 	{
 		_status = STATUS_FLYING;
 		_floating = true;
@@ -543,8 +544,7 @@ void BattleUnit::startWalking(int direction, const Position& destination, Tile* 
 void BattleUnit::keepWalking(Tile* tileBelow, bool cache)
 {
 	_walkPhase++;
-//	Log(LOG_INFO) << "BattleUnit::keepWalking() _walkPhase = " << _walkPhase;		// kL
-
+//	Log(LOG_INFO) << "BattleUnit::keepWalking() _walkPhase = " << _walkPhase;
 
 	int middle, end;
 	if (_verticalDirection)
@@ -582,12 +582,11 @@ void BattleUnit::keepWalking(Tile* tileBelow, bool cache)
 
 	if (_walkPhase >= end)
 	{
-//		Log(LOG_INFO) << ". STATUS_STANDING end";		// kL
+		//Log(LOG_INFO) << ". STATUS_STANDING end";
 
 		// we officially reached our destination tile
 		_status = STATUS_STANDING;
 		_walkPhase = 0;
-//		_walkPhase = -1;		// kL
 		_verticalDirection = 0;
 
 		if (_floating && !_tile->hasNoFloor(tileBelow))
