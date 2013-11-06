@@ -69,6 +69,7 @@ SellState::SellState(Game* game, Base* base)
 {
 	_changeValueByMouseWheel = Options::getInt("changeValueByMouseWheel");
 	_allowChangeListValuesByMouseWheel = Options::getBool("allowChangeListValuesByMouseWheel") && _changeValueByMouseWheel;
+
 	bool canSellLiveAliens=Options::getBool("canSellLiveAliens");
 
 
@@ -86,8 +87,8 @@ SellState::SellState(Game* game, Base* base)
 
 	_lstItems		= new TextList(294, 128, 8, 44);
 
-	_btnCancel		= new TextButton(144, 16, 16, 177);
-	_btnOk			= new TextButton(144, 16, 163, 177);
+	_btnCancel		= new TextButton(134, 16, 16, 177);
+	_btnOk			= new TextButton(134, 16, 170, 177);
 
 
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);

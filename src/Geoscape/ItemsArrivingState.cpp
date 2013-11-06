@@ -62,7 +62,7 @@ ItemsArrivingState::ItemsArrivingState(Game* game, GeoscapeState* state)
 	_txtQuantity	= new Text(52, 9, 168, 34);
 	_txtDestination	= new Text(92, 9, 220, 34);
 
-	_lstTransfers	= new TextList(286, 120, 16, 46);
+	_lstTransfers	= new TextList(286, 120, 16, 45);
 
 	_btnOk			= new TextButton(134, 16, 16, 169);
 	_btnOk5Secs		= new TextButton(134, 16, 170, 169);

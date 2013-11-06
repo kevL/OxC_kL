@@ -249,7 +249,7 @@ void ProjectileFlyBState::init()
 /**
  * Tries to create a projectile sprite and add it to the map,
  * calculating its trajectory.
- * @return True, if the projectile was successfully created.
+ * @return, True if the projectile was successfully created.
  */
 bool ProjectileFlyBState::createNewProjectile()
 {
@@ -266,8 +266,8 @@ bool ProjectileFlyBState::createNewProjectile()
 
 	// set the speed of the state think cycle to 16 ms (roughly one think cycle per frame)
 //kL	_parent->setStateInterval(1000/60);
-	Uint32 interval = (Uint32)(50.f / 3.f);		// kL
-	_parent->setStateInterval(interval);		// kL
+	Uint32 interval = static_cast<Uint32>(50.f / 3.f);	// kL
+	_parent->setStateInterval(interval);				// kL
 
 	// let it calculate a trajectory
 	_projectileImpact = -1;
@@ -555,16 +555,16 @@ bool ProjectileFlyBState::validThrowRange(BattleAction* action)
 	// Throwing Distance roughly = 2.5 \D7 Strength / Weight
 
 	// note that all coordinates and thus also distances below are in number of tiles (not in voxels).
-	double range = 2.5 * (double)(action->actor->getStats()->strength / action->weapon->getRules()->getWeight());
+	double range = 2.5 * static_cast<double>(action->actor->getStats()->strength / action->weapon->getRules()->getWeight());
 
 	int xdiff = action->target.x - action->actor->getPosition().x;
 	int ydiff = action->target.y - action->actor->getPosition().y;
 	int zdiff = action->target.z - action->actor->getPosition().z;
-	double distance = sqrt((double)(xdiff * xdiff + ydiff * ydiff));
+	double distance = sqrt(static_cast<double>(xdiff * xdiff + ydiff * ydiff));
 
 	// throwing off a building of 1 level lets you throw 2 tiles further than normal range,
 	// throwing up the roof of this building lets your throw 2 tiles less further
-	distance += zdiff * 2;
+	distance += static_cast<double>(zdiff * 2);
 
 	return distance < range;
 }

@@ -81,7 +81,9 @@ DebriefingState::DebriefingState(Game *game)
 {
 	// Restore the cursor in case something weird happened
 	_game->getCursor()->setVisible(true);
-	_containmentLimit = Options::getBool("alienContainmentLimitEnforced")? 1:0;
+
+
+	_containmentLimit = Options::getBool("alienContainmentLimitEnforced")? 1: 0;
 
 
 	_window			= new Window(this, 320, 200, 0, 0);
@@ -99,8 +101,8 @@ DebriefingState::DebriefingState(Game *game)
 
 	_txtRecovery	= new Text(180, 9, 16, 60);
 
-	_btnOk			= new TextButton(42, 14, 16, 178);
-	_txtRating		= new Text(120, 9, 64, 180);
+	_btnOk			= new TextButton(176, 16, 16, 177);
+	_txtRating		= new Text(100, 9, 200, 180);
 
 
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
@@ -149,13 +151,17 @@ DebriefingState::DebriefingState(Game *game)
 
 	_lstStats->setColor(Palette::blockOffset(15)-1);
 	_lstStats->setSecondaryColor(Palette::blockOffset(8)+10);
-	_lstStats->setColumns(3, 184, 60, 64);
+	_lstStats->setColumns(3, 176, 60, 64);
 	_lstStats->setDot(true);
+	_lstTotal->setSelectable(true);
+	_lstTotal->setMargin(8);
 
 	_lstRecovery->setColor(Palette::blockOffset(15)-1);
 	_lstRecovery->setSecondaryColor(Palette::blockOffset(8)+10);
-	_lstRecovery->setColumns(3, 184, 60, 64);
+	_lstRecovery->setColumns(3, 176, 60, 64);
 	_lstRecovery->setDot(true);
+	_lstTotal->setSelectable(true);
+	_lstTotal->setMargin(8);
 
 	_lstTotal->setColor(Palette::blockOffset(8)+5);
 	_lstTotal->setColumns(2, 244, 64);
@@ -163,9 +169,14 @@ DebriefingState::DebriefingState(Game *game)
 
 	prepareDebriefing();
 
-	int total = 0, statsY = 0, recoveryY = 0;
+	int total = 0,
+		statsY = 0,
+		recoveryY = 0;
 
-	for (std::vector<DebriefingStat*>::iterator i = _stats.begin(); i != _stats.end(); ++i)
+	for (std::vector<DebriefingStat*>::iterator
+			i = _stats.begin();
+			i != _stats.end();
+			++i)
 	{
 		if ((*i)->qty == 0)
 			continue;
@@ -174,6 +185,7 @@ DebriefingState::DebriefingState(Game *game)
 		ss << L'\x01' << (*i)->qty << L'\x01';
 		ss2 << L'\x01' << (*i)->score;
 		total += (*i)->score;
+
 		if ((*i)->recovery)
 		{
 			_lstRecovery->addRow(3, tr((*i)->item).c_str(), ss.str().c_str(), ss2.str().c_str());
@@ -297,7 +309,9 @@ void DebriefingState::btnOkClick(Action*)
 		else if (_manageContainment)
 		{
 			_game->pushState(new ManageAlienContainmentState(_game, _base, OPT_BATTLESCAPE));
-			_game->pushState(new ErrorMessageState(_game, tr("STR_CONTAINMENT_EXCEEDED").arg(_base->getName()).c_str(), Palette::blockOffset(8)+5, "BACK01.SCR", 0));
+			_game->pushState(new ErrorMessageState(
+					_game, tr("STR_CONTAINMENT_EXCEEDED")
+					.arg(_base->getName()).c_str(), Palette::blockOffset(8)+5, "BACK01.SCR", 0));
 		}
 	}
 }
@@ -310,7 +324,10 @@ void DebriefingState::btnOkClick(Action*)
  */
 void DebriefingState::addStat(const std::string& name, int quantity, int score)
 {
-	for (std::vector<DebriefingStat *>::iterator i = _stats.begin(); i != _stats.end(); ++i)
+	for (std::vector<DebriefingStat*>::iterator
+			i = _stats.begin();
+			i != _stats.end();
+			++i)
 	{
 		if ((*i)->item == name)
 		{
@@ -325,7 +342,9 @@ void DebriefingState::addStat(const std::string& name, int quantity, int score)
 /**
  * Clears the alien base from supply missions that use it.
  */
-class ClearAlienBase: public std::unary_function<AlienMission*, void>
+class ClearAlienBase
+	:
+		public std::unary_function<AlienMission*, void>
 {
 private:
 	const AlienBase* _base;
@@ -1045,14 +1064,17 @@ void DebriefingState::prepareDebriefing()
 
 /**
  * Reequips a craft after a mission.
- * @param base Base to reequip from.
- * @param craft Craft to reequip.
- * @param vehicleItemsCanBeDestroyed Whether we can destroy the vehicles on the craft.
+ * @param base, Base to reequip from.
+ * @param craft, Craft to reequip.
+ * @param vehicleItemsCanBeDestroyed, Whether we can destroy the vehicles on the craft.
  */
 void DebriefingState::reequipCraft(Base* base, Craft* craft, bool vehicleItemsCanBeDestroyed)
 {
 	std::map<std::string, int> craftItems = *craft->getItems()->getContents();
-	for (std::map<std::string, int>::iterator i = craftItems.begin(); i != craftItems.end(); ++i)
+	for (std::map<std::string, int>::iterator
+			i = craftItems.begin();
+			i != craftItems.end();
+			++i)
 	{
 		int qty = base->getItems()->getItem(i->first);
 		if (qty >= i->second)
@@ -1062,9 +1084,15 @@ void DebriefingState::reequipCraft(Base* base, Craft* craft, bool vehicleItemsCa
 		else
 		{
 			int missing = i->second - qty;
+
 			base->getItems()->removeItem(i->first, qty);
 			craft->getItems()->removeItem(i->first, missing);
-			ReequipStat stat = {i->first, missing, craft->getName(_game->getLanguage())};
+
+			ReequipStat stat =
+			{
+				i->first, missing, craft->getName(_game->getLanguage())
+			};
+
 			_missingItems.push_back(stat);
 		}
 	}
@@ -1209,7 +1237,8 @@ void DebriefingState::recoverItems(std::vector<BattleItem*>* from, Base* base)
 				}
 			}
 
-			if ((*it)->getRules()->isRecoverable() && !(*it)->getRules()->isFixed()) // put items back in the base
+			if ((*it)->getRules()->isRecoverable()
+				&& !(*it)->getRules()->isFixed()) // put items back in the base
 			{
 				switch ((*it)->getRules()->getBattleType())
 				{
@@ -1222,7 +1251,8 @@ void DebriefingState::recoverItems(std::vector<BattleItem*>* from, Base* base)
 					case BT_MELEE: // It's a weapon, count any rounds left in the clip.
 					{
 						BattleItem* clip = (*it)->getAmmoItem();
-						if (clip && clip->getRules()->getClipSize() > 0)
+						if (clip
+							&& clip->getRules()->getClipSize() > 0)
 						{
 							_rounds[clip->getRules()] += clip->getAmmoQuantity();
 						}
@@ -1230,6 +1260,7 @@ void DebriefingState::recoverItems(std::vector<BattleItem*>* from, Base* base)
 
 					default: // Fall-through, to recover the weapon itself.
 						base->getItems()->addItem((*it)->getRules()->getType(), 1);
+					break;
 				}
 			}
 		}

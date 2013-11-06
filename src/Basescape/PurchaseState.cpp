@@ -72,17 +72,6 @@ PurchaseState::PurchaseState(Game* game, Base* base)
 
 
 	_window			= new Window(this, 320, 200, 0, 0);
-/*kL	_btnOk			= new TextButton(148, 16, 8, 176);
-	_btnCancel		= new TextButton(148, 16, 164, 176);
-	_txtTitle		= new Text(310, 17, 5, 8);
-	_txtFunds		= new Text(150, 9, 10, 24);
-	_txtPurchases	= new Text(150, 9, 160, 24);
-	_txtItem		= new Text(140, 9, 10, 32);
-	_txtCost		= new Text(102, 9, 152, 32);
-	_txtQuantity	= new Text(60, 9, 256, 32);
-	_lstItems		= new TextList(287, 128, 8, 40); */
-
-	// kL_begin: PurchaseState surface adjustments.
 	_txtTitle		= new Text(310, 17, 5, 9);
 
 	_txtFunds		= new Text(140, 9, 16, 24);
@@ -94,9 +83,8 @@ PurchaseState::PurchaseState(Game* game, Base* base)
 
 	_lstItems		= new TextList(294, 128, 8, 44);
 
-	_btnCancel		= new TextButton(144, 16, 16, 177);
-	_btnOk			= new TextButton(144, 16, 163, 177);
-	// kL_end.
+	_btnCancel		= new TextButton(134, 16, 16, 177);
+	_btnOk			= new TextButton(134, 16, 170, 177);
 
 
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);

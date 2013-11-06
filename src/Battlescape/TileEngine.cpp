@@ -1076,7 +1076,7 @@ bool TileEngine::canTargetTile(
  */
 std::vector<BattleUnit*> TileEngine::getSpottingUnits(BattleUnit* unit)
 {
-	Log(LOG_INFO) << "TileEngine::getSpottingUnits() spottedID " << (unit)->getId() << " ; RA = " << (unit)->getReactionScore();
+	Log(LOG_INFO) << "TileEngine::getSpottingUnits() spottedID " << (unit)->getId() << " : initia = " << (unit)->getReactionScore();
 
 	Tile* tile = unit->getTile();
 
@@ -1113,23 +1113,23 @@ std::vector<BattleUnit*> TileEngine::getSpottingUnits(BattleUnit* unit)
 //				if (_save->getSide() != FACTION_NEUTRAL // no reaction on civilian turn. done in "checkReactionFire()"
 				if (canMakeSnap(*bu, unit))
 				{
-					Log(LOG_INFO) << ". . . spotterID " << (*bu)->getId() << " ; RA = " << (*bu)->getReactionScore() << " : add";
+					Log(LOG_INFO) << ". . . spotterID " << (*bu)->getId() << " : initia = " << (*bu)->getReactionScore() << " : add";
 
 					spotters.push_back(*bu);
 				}
 				else
 				{
-					Log(LOG_INFO) << ". . spotterID " << (*bu)->getId() << " ; RA = "  << (*bu)->getReactionScore() << " : can't makeSnap.";
+					Log(LOG_INFO) << ". . spotterID " << (*bu)->getId() << " : initia = "  << (*bu)->getReactionScore() << " : can't makeSnap.";
 				}
 			}
 			else
 			{
-				Log(LOG_INFO) << ". . spotterID " << (*bu)->getId() << " ; RA = "  << (*bu)->getReactionScore() << " : not facing AND not aggro, OR target obscured/OoR";
+				Log(LOG_INFO) << ". . spotterID " << (*bu)->getId() << " : initia = "  << (*bu)->getReactionScore() << " : not facing AND not aggro, OR target obscured/OoR";
 			}
 		}
 		else
 		{
-			Log(LOG_INFO) << ". . spotterID " << (*bu)->getId() << " ; RA = "  << (*bu)->getReactionScore() << " : isOut(true) OR side's faction";
+			Log(LOG_INFO) << ". . spotterID " << (*bu)->getId() << " : initia = "  << (*bu)->getReactionScore() << " : isOut(true) OR side's faction";
 		}
 	}
 
@@ -1144,7 +1144,7 @@ std::vector<BattleUnit*> TileEngine::getSpottingUnits(BattleUnit* unit)
  */
 bool TileEngine::canMakeSnap(BattleUnit* unit, BattleUnit* target)
 {
-	Log(LOG_INFO) << "TileEngine::canMakeSnap() spottedID " << (unit)->getId() << " ; RA = " << (unit)->getReactionScore();
+	Log(LOG_INFO) << "TileEngine::canMakeSnap() spottedID " << (unit)->getId() << " : initia = " << (unit)->getReactionScore();
 
 	BattleItem* weapon; // = unit->getMainHandWeapon(true);
 	if (unit->getFaction() == FACTION_PLAYER
@@ -1310,7 +1310,7 @@ BattleUnit* TileEngine::getReactor(std::vector<BattleUnit*> spotters, BattleUnit
  */
 bool TileEngine::tryReactionSnap(BattleUnit* unit, BattleUnit* target)
 {
-	Log(LOG_INFO) << "TileEngine::tryReactionSnap() snapperID " << unit->getId();
+	Log(LOG_INFO) << "TileEngine::tryReactionSnap() unitID " << unit->getId() << " vs targetID " << target->getId();
 	BattleAction action;
 
 	// note that other checks for/of weapon were done in "canMakeSnap()"
@@ -1393,7 +1393,7 @@ bool TileEngine::tryReactionSnap(BattleUnit* unit, BattleUnit* target)
  */
 BattleUnit* TileEngine::hit(const Position& center, int power, ItemDamageType type, BattleUnit* unit)
 {
-	Log(LOG_INFO) << "TileEngine::hit";
+	Log(LOG_INFO) << "TileEngine::hit()";
 
 	Tile* tile = _save->getTile(Position(center.x / 16, center.y / 16, center.z / 24));
 	if (!tile)
@@ -1511,7 +1511,7 @@ BattleUnit* TileEngine::hit(const Position& center, int power, ItemDamageType ty
  */
 void TileEngine::explode(const Position& center, int power, ItemDamageType type, int maxRadius, BattleUnit* unit)
 {
-	Log(LOG_INFO) << "TileEngine::explode";
+	Log(LOG_INFO) << "TileEngine::explode()";
 
 //kL	double centerZ = (int)(center.z / 24) + 0.5;
 //kL	double centerX = (int)(center.x / 16) + 0.5;
@@ -2395,7 +2395,8 @@ void TileEngine::checkAdjacentDoors(Position pos, int part)
 		{
 			tile->openDoor(part);
 		}
-		else break;
+		else
+			break;
 	}
 }
 
@@ -2459,6 +2460,8 @@ int TileEngine::calculateLine(
 				bool onlyVisible,
 				BattleUnit* excludeAllBut)
 {
+	//Log(LOG_INFO) << "TileEngine::calculateLine()";
+
 	int x, x0, x1, delta_x, step_x;
 	int y, y0, y1, delta_y, step_y;
 	int z, z0, z1, delta_z, step_z;
@@ -2644,6 +2647,8 @@ int TileEngine::calculateParabola(
 				double arc,
 				double acu)
 {
+	Log(LOG_INFO) << "TileEngine::calculateParabola()";
+
 	double ro = sqrt((double)((target.x - origin.x) * (target.x - origin.x)
 			+ (target.y - origin.y) * (target.y - origin.y)
 			+ (target.z - origin.z) * (target.z - origin.z)));
@@ -2702,6 +2707,8 @@ int TileEngine::calculateParabola(
  */
 bool TileEngine::validateThrow(BattleAction* action)
 {
+	Log(LOG_INFO) << "TileEngine::validateThrow()";
+
 	Position originVoxel, targetVoxel;
 	bool found = false;
 
@@ -2717,16 +2724,16 @@ bool TileEngine::validateThrow(BattleAction* action)
 	std::vector<Position> trajectory;
 	Tile* tileAbove = _save->getTile(origin + Position(0, 0, 1));
 
-	originVoxel = Position((origin.x * 16)+8, (origin.y * 16)+8, (origin.z * 24));
+	originVoxel = Position((origin.x * 16) + 8, (origin.y * 16) + 8, (origin.z * 24));
 	originVoxel.z += -_save->getTile(origin)->getTerrainLevel();
 	originVoxel.z += action->actor->getHeight() + action->actor->getFloatHeight();
 	originVoxel.z -= 3;
-	if (originVoxel.z >= (origin.z + 1)*24)
+	if (originVoxel.z >= (origin.z + 1) * 24)
 	{
 		if (!tileAbove
 			|| !tileAbove->hasNoFloor(0))
 		{
-			while (originVoxel.z > (origin.z + 1)*24)
+			while (originVoxel.z > (origin.z + 1) * 24)
 			{
 				originVoxel.z--;
 			}
@@ -2740,27 +2747,35 @@ bool TileEngine::validateThrow(BattleAction* action)
 	}
 
 	// determine the target voxel; aim at the center of the floor
-	targetVoxel = Position((action->target.x * 16)+8, (action->target.y * 16)+8, (action->target.z * 24)+2);
+	targetVoxel = Position((action->target.x * 16) + 8, (action->target.y * 16) + 8, (action->target.z * 24) + 2);
 	targetVoxel.z -= _save->getTile(action->target)->getTerrainLevel();
 
 	if (action->type != BA_THROW)
 	{
-		BattleUnit* buThrower = _save->getTile(action->target)->getUnit();
-		if (!buThrower
+		BattleUnit* targetUnit;
+		if (_save->getTile(action->target)->getUnit())
+		{
+			targetUnit = _save->getTile(action->target)->getUnit();
+		}
+
+		if (!targetUnit
 			&& action->target.z > 0
 			&& _save->getTile(action->target)->hasNoFloor(0))
 		{
-			buThrower = _save->getTile(Position(action->target.x, action->target.y, action->target.z - 1))->getUnit();
+			if (_save->getTile(Position(action->target.x, action->target.y, action->target.z - 1))->getUnit())
+			{
+				targetUnit = _save->getTile(Position(action->target.x, action->target.y, action->target.z - 1))->getUnit();
+			}
 		}
 
-		if (buThrower)
+		if (targetUnit)
 		{
-			targetVoxel.z += buThrower->getHeight()/2 + buThrower->getFloatHeight();
+			targetVoxel.z += (targetUnit->getHeight() / 2) + targetUnit->getFloatHeight();
 		}
 	}
 
 	// we try 4 different arcs to try and reach our goal.
-	double arc = 1.0;
+	double arc = 0.5;
 	while (!found && arc < 5.0)
 	{
 		int checkParab = calculateParabola(
@@ -2772,9 +2787,6 @@ bool TileEngine::validateThrow(BattleAction* action)
 						arc,
 						1.0);
 		if (checkParab != 5
-//kL			&& (int)trajectory.at(0).x / 16 == (int)targetVoxel.x / 16
-//kL			&& (int)trajectory.at(0).y / 16 == (int)targetVoxel.y / 16
-//kL			&& (int)trajectory.at(0).z / 24 == (int)targetVoxel.z / 24)
 			&& trajectory.at(0).x / 16 == targetVoxel.x / 16
 			&& trajectory.at(0).y / 16 == targetVoxel.y / 16
 			&& trajectory.at(0).z / 24 == targetVoxel.z / 24)
@@ -2783,8 +2795,7 @@ bool TileEngine::validateThrow(BattleAction* action)
 		}
 		else
 		{
-//kL			arc += 1.0;
-			arc += 0.5;		// kL
+			arc += 0.5;
 		}
 
 		trajectory.clear();

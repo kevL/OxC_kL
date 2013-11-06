@@ -68,9 +68,10 @@ Projectile::Projectile(ResourcePack* res, SavedBattleGame* save, BattleAction ac
 	{
 		if (_action.type == BA_THROW)
 		{
+			_speed /= 2;	// kL
 			_sprite = _res->getSurfaceSet("FLOOROB.PCK")->getFrame(getItem()->getRules()->getFloorSprite());
 		}
-		else
+		else // ba_SHOOT!!
 		{
 			_speed = std::max(1, _speed + _action.weapon->getRules()->getBulletSpeed());
 		}
@@ -91,6 +92,8 @@ Projectile::~Projectile()
  */
 int Projectile::calculateTrajectory(double accuracy)
 {
+	Log(LOG_INFO) << "Projectile::calculateTrajectory()";
+
 	Position originVoxel, targetVoxel;
 	Tile* targetTile = 0;
 	//int dirYshift[24] = {1, 3, 9, 15, 15, 13, 7, 1,  1, 1, 7, 13, 15, 15, 9, 3,  1, 2, 8, 14, 15, 14, 8, 2};
@@ -269,13 +272,15 @@ int Projectile::calculateTrajectory(double accuracy)
 
 /**
  * Calculates the trajectory for a curved path.
- * @param accuracy The unit's accuracy.
- * @return True when a trajectory is possible.
+ * @param accuracy, The unit's accuracy.
+ * @return, True when a trajectory is possible.
  */
 int Projectile::calculateThrow(double accuracy)
 {
+	Log(LOG_INFO) << "Projectile::calculateThrow()";
+
 	Position originVoxel, targetVoxel;
-	bool foundCurve = false;
+	bool found = false;
 
 	// object blocking - can't throw here
 	if (_action.type == BA_THROW
@@ -288,11 +293,22 @@ int Projectile::calculateThrow(double accuracy)
 
 	originVoxel = Position(_origin.x * 16 + 8, _origin.y * 16 + 8, _origin.z * 24);
 	originVoxel.z += -_save->getTile(_origin)->getTerrainLevel();
-	BattleUnit* bu = _save->getTile(_origin)->getUnit();
-	Tile *tileAbove = _save->getTile(_origin + Position(0,0,1));
+	Tile* tileAbove = _save->getTile(_origin + Position(0, 0, 1));
+
+	BattleUnit* bu;
+	if (_save->getTile(_origin)->getUnit())
+	{
+		bu = _save->getTile(_origin)->getUnit();
+	}
+	else if (_save->getTile(Position(_origin.x, _origin.y, _origin.z - 1))->getUnit())
+	{
+		bu = _save->getTile(Position(_origin.x, _origin.y, _origin.z - 1))->getUnit();
+	}
 
 	if (!bu)
-		bu = _save->getTile(Position(_origin.x, _origin.y, _origin.z - 1))->getUnit();
+	{
+		Log(LOG_INFO) << "ERROR Projectile::calculateThrow() - no thrower.";
+	}
 
 	originVoxel.z += bu->getHeight() + bu->getFloatHeight();
 	originVoxel.z -= 3;
@@ -322,41 +338,49 @@ int Projectile::calculateThrow(double accuracy)
 
 	if (_action.type != BA_THROW)
 	{
-		BattleUnit *tu = _save->getTile(_action.target)->getUnit();
-		if (!tu
+		BattleUnit* targetUnit;
+		if (_save->getTile(_action.target)->getUnit())
+		{
+			targetUnit = _save->getTile(_action.target)->getUnit();
+		}
+
+		if (!targetUnit
 			&& _action.target.z > 0
 			&& _save->getTile(_action.target)->hasNoFloor(0))
 		{
-			tu = _save->getTile(Position(_action.target.x, _action.target.y, _action.target.z - 1))->getUnit();
+			if (_save->getTile(Position(_action.target.x, _action.target.y, _action.target.z - 1))->getUnit())
+			{
+				targetUnit = _save->getTile(Position(_action.target.x, _action.target.y, _action.target.z - 1))->getUnit();
+			}
 		}
 
-		if (tu)
+		if (targetUnit)
 		{
-			targetVoxel.z += (tu->getHeight() / 2) + tu->getFloatHeight();
+			targetVoxel.z += (targetUnit->getHeight() / 2) + targetUnit->getFloatHeight();
 		}
 	}
 
-	// we try 4 different curvatures to try and reach our goal.
-	double curvature = 1.0;
-	while (!foundCurve && curvature < 5.0)
+	// we try 4 different arcs to try and reach our goal.
+	double arc = 0.5;
+	while (!found && arc < 5.0)
 	{
-		int check = _save->getTileEngine()->calculateParabola(originVoxel, targetVoxel, false, &_trajectory, bu, curvature, 1.0);
+		int check = _save->getTileEngine()->calculateParabola(originVoxel, targetVoxel, false, &_trajectory, bu, arc, 1.0);
 		if (check != 5
-			&& (int)_trajectory.at(0).x / 16 == (int)targetVoxel.x / 16
-			&& (int)_trajectory.at(0).y / 16 == (int)targetVoxel.y / 16
-			&& (int)_trajectory.at(0).z / 24 == (int)targetVoxel.z / 24)
+			&& _trajectory.at(0).x / 16 == targetVoxel.x / 16
+			&& _trajectory.at(0).y / 16 == targetVoxel.y / 16
+			&& _trajectory.at(0).z / 24 == targetVoxel.z / 24)
 		{
-			foundCurve = true;
+			found = true;
 		}
 		else
 		{
-			curvature += 1.0;
+			arc += 0.5;
 		}
 
 		_trajectory.clear();
 	}
 
-	if (AreSame(curvature, 5.0))
+	if (AreSame(arc, 5.0))
 	{
 		return -1;
 	}
@@ -373,14 +397,15 @@ int Projectile::calculateThrow(double accuracy)
 	int retValue = -1;
 
 	// finally do a line calculation and store this trajectory.
-	retValue = _save->getTileEngine()->calculateParabola(originVoxel, targetVoxel, true, &_trajectory, bu, curvature, 1.0 + deviation);
+	retValue = _save->getTileEngine()->calculateParabola(originVoxel, targetVoxel, true, &_trajectory, bu, arc, 1.0 + deviation);
 
 	Position endPoint = _trajectory.at(_trajectory.size() - 1);
 	endPoint.x /= 16;
 	endPoint.y /= 16;
 	endPoint.z /= 24;
 
-	// check if the item would land on a tile with a blocking object, if so then we let it fly without deviation, it must land on a valid tile in that case
+	// check if the item would land on a tile with a blocking object, if so then we
+	// let it fly without deviation, it must land on a valid tile in that case
 	if (_save->getTile(endPoint)
 		&& _save->getTile(endPoint)->getMapData(MapData::O_OBJECT)
 		&& _save->getTile(endPoint)->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) == 255)
@@ -388,7 +413,7 @@ int Projectile::calculateThrow(double accuracy)
 		_trajectory.clear();
 
 		// finally do a line calculation and store this trajectory.
-		retValue = _save->getTileEngine()->calculateParabola(originVoxel, targetVoxel, true, &_trajectory, bu, curvature, 1.0);
+		retValue = _save->getTileEngine()->calculateParabola(originVoxel, targetVoxel, true, &_trajectory, bu, arc, 1.0);
 	}
 
 	return retValue;
@@ -409,6 +434,8 @@ void Projectile::applyAccuracy(
 		bool keepRange,
 		Tile* targetTile)
 {
+	Log(LOG_INFO) << "Projectile::applyAccuracy()";
+
 	int xdiff = origin.x - target->x;
 	int ydiff = origin.y - target->y;
 	double realDistance = sqrt(static_cast<double>(xdiff * xdiff) + static_cast<double>(ydiff * ydiff));
@@ -498,18 +525,21 @@ void Projectile::applyAccuracy(
 	if (RNG::generate(0.0, 1.0) < accuracy)
 	{
 		// we hit, so no deviation
-		dRot = 0;
-		dTilt = 0;
+		dRot = 0.0;
+		dTilt = 0.0;
 	}
 	else
 	{
-		dRot = RNG::boxMuller(0, baseDeviation);
-		dTilt = RNG::boxMuller(0, baseDeviation / 2.0); // tilt deviation is halved
+		dRot = RNG::boxMuller(0.0, baseDeviation);
+		dTilt = RNG::boxMuller(0.0, baseDeviation / 2.0); // tilt deviation is halved
 	}
 
-	rotation = atan2(double(target->y - origin.y), double(target->x - origin.x)) * 180 / M_PI;
-	tilt = atan2(double(target->z - origin.z),
-		sqrt(double(target->x - origin.x) * double(target->x - origin.x) + double(target->y - origin.y) * double(target->y - origin.y))) * 180 / M_PI;
+	rotation = atan2(static_cast<double>(target->y - origin.y), static_cast<double>(target->x - origin.x)) * 180.0 / M_PI;
+	tilt = atan2(static_cast<double>(target->z - origin.z),
+			sqrt(
+					static_cast<double>(target->x - origin.x) * static_cast<double>(target->x - origin.x)
+						+ static_cast<double>(target->y - origin.y) * static_cast<double>(target->y - origin.y)))
+						* 180.0 / M_PI;
 
 	// add deviations
 	rotation += dRot;
@@ -522,20 +552,24 @@ void Projectile::applyAccuracy(
 	double cos_te = cos(rotation * M_PI / 180.0);
 	double sin_te = sin(rotation * M_PI / 180.0);
 
-	target->x = (int)(origin.x + maxRange * cos_te * cos_fi);
-	target->y = (int)(origin.y + maxRange * sin_te * cos_fi);
-	target->z = (int)(origin.z + maxRange * sin_fi);
+	target->x = static_cast<int>(static_cast<double>(origin.x) + maxRange * cos_te * cos_fi);
+	target->y = static_cast<int>(static_cast<double>(origin.y) + maxRange * sin_te * cos_fi);
+	target->z = static_cast<int>(static_cast<double>(origin.z) + maxRange * sin_fi);
 }
 
 /**
  * Moves further in the trajectory.
- * @return false if the trajectory is finished - no new position exists in the trajectory.
+ * @return, False if the trajectory is finished - no new position exists in the trajectory.
  */
 bool Projectile::move()
 {
-	for (int i = 0; i < _speed; ++i)
+	for (int
+			i = 0;
+			i < _speed;
+			++i)
 	{
 		_position++;
+
 		if (_position == _trajectory.size())
 		{
 			_position--;
@@ -554,8 +588,8 @@ bool Projectile::move()
  */
 Position Projectile::getPosition(int offset) const
 {
-	int posOffset = (int)_position + offset;
-	if (posOffset >= 0 && posOffset < (int)_trajectory.size())
+	int posOffset = static_cast<int>(_position) + offset;
+	if (posOffset >= 0 && posOffset < static_cast<int>(_trajectory.size()))
 		return _trajectory.at(posOffset);
 	else
 		return _trajectory.at(_position);
