@@ -254,7 +254,7 @@ int Tile::getTUCost(int part, MovementType movementType) const
 {
 	if (_objects[part])
 	{
-		if (_objects[part]->isUFODoor() && _currentFrame[part] != 1)
+		if (_objects[part]->isUFODoor() && _currentFrame[part] == 7)
 			return 0;
 		if (_objects[part]->getBigWall() >= 4)
 			return 0;
@@ -330,14 +330,15 @@ int Tile::getFootstepSound(Tile *tileBelow) const
  * @param part
  * @return a value: 0(normal door), 1(ufo door) or -1 if no door opened or 3 if ufo door(=animated) is still opening 4 if not enough TUs
  */
-int Tile::openDoor(int part, BattleUnit *unit, bool debug)
+int Tile::openDoor(int part, BattleUnit *unit, BattleActionType reserve)
 {
 	if (!_objects[part]) return -1;
 
 	if (_objects[part]->isDoor())
 	{
 		if (unit
-			&& unit->getTimeUnits() < _objects[part]->getTUCost(unit->getArmor()->getMovementType()))
+			&& unit->getTimeUnits() < _objects[part]->getTUCost(unit->getArmor()->getMovementType())
+					+ unit->getActionTUs(reserve, unit->getMainHandWeapon(false)))
 		{
 			return 4;
 		}
@@ -353,7 +354,8 @@ int Tile::openDoor(int part, BattleUnit *unit, bool debug)
 		&& _currentFrame[part] == 0) // ufo door part 0 - door is closed
 	{
 		if (unit
-			&& unit->getTimeUnits() < _objects[part]->getTUCost(unit->getArmor()->getMovementType()))
+			&& unit->getTimeUnits() < _objects[part]->getTUCost(unit->getArmor()->getMovementType())
+					+ unit->getActionTUs(reserve, unit->getMainHandWeapon(false)))
 		{
 			return 4;
 		}

@@ -1183,8 +1183,6 @@ bool Pathfinding::previewPath(bool bRemove)
 //kL			energy = 0;
 //kL		}
 		// kL_note: should put my gravLift energy-reduction in here.
-
-		tu += getOpeningUfoDoorCost(dir, pos, destination);
 		tus -= tu;
 		total += tu;
 

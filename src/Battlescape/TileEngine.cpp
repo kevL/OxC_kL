@@ -2294,7 +2294,7 @@ int TileEngine::unitOpensDoor(BattleUnit* unit, bool rClick, int dir)
 				tile = _save->getTile(unit->getPosition() + Position(x, y, z) + i->first);
 				if (tile)
 				{
-					door = tile->openDoor(i->second, unit, false);
+					door = tile->openDoor(i->second, unit, _save->getBattleState()->getBattleGame()->getReservedAction());
 					if (door != -1)
 					{
 						part = i->second;
@@ -2320,14 +2320,14 @@ int TileEngine::unitOpensDoor(BattleUnit* unit, bool rClick, int dir)
 
 				TUCost = tile->getTUCost(part, unit->getArmor()->getMovementType());
 			}
-			else if (door == 1)
+			else if (door == 1 || door == 4)
 			{
 				TUCost = tile->getTUCost(part, unit->getArmor()->getMovementType());
 			}
 		}
 	}
 
-	if (door == 0 || door == 1)
+	if (TUCost != 0)
 	{
 		if (_save->getBattleState()->getBattleGame()->checkReservedTU(unit, TUCost))
 		{
@@ -2348,8 +2348,7 @@ int TileEngine::unitOpensDoor(BattleUnit* unit, bool rClick, int dir)
 			}
 			else return 4;
 		}
-		else	// kL
-			return 5;
+		else return 5;
 	}
 
 // -1 there is no door, you can walk through; or you're a tank and can't do sweet shit with a door except blast the fuck out of it.

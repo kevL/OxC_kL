@@ -570,7 +570,7 @@ void BattleUnit::keepWalking(Tile* tileBelow, bool cache)
 	if (!cache)
 	{
 		_pos = _destination;
-		end = 1;
+		end = 2;
 	}
 
 	if (_walkPhase == middle)
