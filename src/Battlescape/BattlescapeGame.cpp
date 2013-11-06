@@ -759,7 +759,8 @@ void BattlescapeGame::checkForCasualties(BattleItem* murderweapon, BattleUnit* k
 								Log(LOG_INFO) << ". . . . killer Exposed";
 							}
 						}
-						else
+						// prevent mind-controlled units from receiving benefits.
+						else if ((*i)->getOriginalFaction() != victim->getOriginalFaction())
 						{
 							// the winning squad all get a morale increase
 							int boost = 10 * winners / 100;
@@ -1394,6 +1395,7 @@ bool BattlescapeGame::checkReservedTU(BattleUnit* bu, int tu, bool justChecking)
 	// kL_note: make sure this doesn't work on aLiens, because getMainHandWeapon()
 	// returns grenades and that can easily cause problems. Probably could cause
 	// problems for xCom too, if xCom wants to reserve TU's in this manner.
+	// note: won't return grenades anymore.
 
 	// if the weapon has no autoshot, reserve TUs for snapshot
 	if (bu->getActionTUs(_tuReserved, slowestWeapon) == 0
@@ -1550,7 +1552,7 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* unit)
 			if (_save->getTile(ba.target) != 0)
 			{
 				ba.weapon = unit->getMainHandWeapon();
-				if(ba.weapon)
+				if (ba.weapon)
 				{
 					if (ba.weapon->getRules()->getBattleType() == BT_FIREARM)
 					{

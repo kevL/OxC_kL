@@ -290,9 +290,8 @@ bool ProjectileFlyBState::createNewProjectile()
 
 			_unit->addThrowingExp();
 		}
-		else
+		else // unable to throw here
 		{
-			// unable to throw here
 			delete projectile;
 
 			_parent->getMap()->setProjectile(0);
@@ -354,9 +353,8 @@ bool ProjectileFlyBState::createNewProjectile()
 				_action.weapon->setAmmoItem(0);
 			}
 		}
-		else
+		else // no line of fire
 		{
-			// no line of fire
 			delete projectile;
 
 			_parent->getMap()->setProjectile(0);
@@ -381,9 +379,9 @@ void ProjectileFlyBState::think()
 	if (_parent->getMap()->getProjectile() == 0)
 	{
 		Tile* t = _parent->getSave()->getTile(_action.actor->getPosition());
-		Tile* bt = _parent->getSave()->getTile(_action.actor->getPosition() + Position(0, 0, -1));
+		Tile* tBelow = _parent->getSave()->getTile(_action.actor->getPosition() + Position(0, 0, -1));
 
-		bool hasFloor = t && !t->hasNoFloor(bt);
+		bool hasFloor = t && !t->hasNoFloor(tBelow);
 		bool unitCanFly = _action.actor->getArmor()->getMovementType() == MT_FLY;
 
 		if (_action.type == BA_AUTOSHOT

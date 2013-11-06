@@ -1920,14 +1920,16 @@ BattleItem* BattleUnit::getMainHandWeapon(bool quickest) const
 	BattleItem* weaponRight = getItem("STR_RIGHT_HAND");
 	BattleItem* weaponLeft = getItem("STR_LEFT_HAND");
 
-	// kL_begin: BattleUnit::getMainHandWeapon(), rewrite.
-	// Leave ammo out of this and worry about it later......
+	// kL_note: What if a laserweapon, eg. is #id=0
+	// then any checks for isLoaded, via the usual method here, return FALSE.
 	bool isRight = weaponRight
-			&& (weaponRight->getRules()->getBattleType() == BT_FIREARM
-				|| weaponRight->getRules()->getBattleType() == BT_MELEE);
+			&& weaponRight->getAmmoItem();
+//			&& (weaponRight->getRules()->getBattleType() == BT_FIREARM
+//				|| weaponRight->getRules()->getBattleType() == BT_MELEE)
 	bool isLeft = weaponLeft
-			&& (weaponLeft->getRules()->getBattleType() == BT_FIREARM
-				|| weaponLeft->getRules()->getBattleType() == BT_MELEE);
+			&& weaponLeft->getAmmoItem();
+//			&& (weaponLeft->getRules()->getBattleType() == BT_FIREARM
+//				|| weaponLeft->getRules()->getBattleType() == BT_MELEE);
 
 	if (!isRight && !isLeft)
 	{
@@ -1941,21 +1943,31 @@ BattleItem* BattleUnit::getMainHandWeapon(bool quickest) const
 	{
 		return weaponLeft;
 	}
-	else // if (isRight && isLeft)
+	else // if (isRight && isLeft).
 	{
-		int tuRight = weaponRight->getRules()->getTUSnap();
-		int tuLeft = weaponLeft->getRules()->getTUSnap();
-		if (tuLeft >= tuRight)
+		int tuRight = weaponRight->getRules()->getBattleType() == BT_MELEE?
+				weaponRight->getRules()->getTUMelee()
+				: weaponRight->getRules()->getTUSnap();
+		int tuLeft = weaponLeft->getRules()->getBattleType() == BT_MELEE?
+				weaponLeft->getRules()->getTUMelee()
+				: weaponLeft->getRules()->getTUSnap();
+
+		if (tuRight <= tuLeft)
 		{
-			return quickest ? weaponRight : weaponLeft;
+			return quickest?
+					weaponRight
+					: weaponLeft;
 		}
 		else
 		{
-			return quickest ? weaponLeft : weaponRight;
+			return quickest?
+					weaponLeft
+					: weaponRight;
 		}
 	}
-	// kL_end.
 
+	return 0;
+}
 	// if there is only one weapon, or only one weapon loaded (rules out grenades) it's easy:
 	// kL_note: Lol, doesn't rule out grenades; getting a positive return with an alien holding only a grenade.
 	// Also, this is doing two runs before the AI even kicks in....
@@ -1987,7 +1999,6 @@ BattleItem* BattleUnit::getMainHandWeapon(bool quickest) const
 	{
 		return quickest ? weaponLeft : weaponRight;
 	} */
-}
 
 /**
  * Get a grenade from the belt (used for AI)
@@ -2828,47 +2839,47 @@ void BattleUnit::deriveRank()
 }
 
 /**
- * This function checks if a tile is visible, using maths.
+ * This function checks if a tile is in a unit's facing-quadrant, using maths.
  * @param pos, the position to check against
  * @return, what the maths decide
  */
 bool BattleUnit::checkViewSector(Position pos) const
 {
-	int deltaX = pos.x - _pos.x;
-	int deltaY = _pos.y - pos.y;
+	int dx = pos.x - _pos.x;
+	int dy = _pos.y - pos.y;
 
 	switch (_direction)
 	{
 		case 0:
-			if (deltaX + deltaY >= 0 && deltaY - deltaX >= 0)
+			if (dx + dy >= 0 && dy - dx >= 0)
 				return true;
 		break;
 		case 1:
-			if (deltaX >= 0 && deltaY >= 0)
+			if (dx >= 0 && dy >= 0)
 				return true;
 		break;
 		case 2:
-			if (deltaX + deltaY >= 0 && deltaY - deltaX <= 0)
+			if (dx + dy >= 0 && dy - dx <= 0)
 				return true;
 		break;
 		case 3:
-			if (deltaY <= 0 && deltaX >= 0)
+			if (dy <= 0 && dx >= 0)
 				return true;
 		break;
 		case 4:
-			if (deltaX + deltaY <= 0 && deltaY - deltaX <= 0)
+			if (dx + dy <= 0 && dy - dx <= 0)
 				return true;
 		break;
 		case 5:
-			if (deltaX <= 0 && deltaY <= 0)
+			if (dx <= 0 && dy <= 0)
 				return true;
 		break;
 		case 6:
-			if (deltaX + deltaY <= 0 && deltaY - deltaX >= 0)
+			if (dx + dy <= 0 && dy - dx >= 0)
 				return true;
 		break;
 		case 7:
-			if (deltaY >= 0 && deltaX <= 0)
+			if (dy >= 0 && dx <= 0)
 				return true;
 		break;
 

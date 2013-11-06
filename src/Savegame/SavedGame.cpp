@@ -55,12 +55,14 @@
 
 namespace OpenXcom
 {
+
 struct findRuleResearch
 	:
 		public std::unary_function<ResearchProject*, bool>
 {
 	RuleResearch* _toFind;
 	findRuleResearch(RuleResearch* toFind);
+
 	bool operator()(const ResearchProject* r) const;
 };
 
@@ -81,6 +83,7 @@ struct equalProduction
 {
 	RuleManufacture* _item;
 	equalProduction(RuleManufacture* item);
+
 	bool operator()(const Production* p) const;
 };
 
@@ -963,7 +966,7 @@ void SavedGame::getAvailableResearchProjects(std::vector<RuleResearch*>& project
 				}
 			}
 
-			if(tally != research->getRequirements().size())
+			if (tally != research->getRequirements().size())
 
 			continue;
 		}
@@ -1011,6 +1014,7 @@ bool SavedGame::isResearchAvailable(RuleResearch* r, const std::vector<const Rul
 	std::vector<std::string> deps = r->getDependencies();
 	const std::vector<const RuleResearch*>& discovered(getDiscoveredResearch());
 	bool liveAlien = ruleset->getUnit(r->getName()) != 0;
+
 	if (std::find(unlocked.begin(), unlocked.end(), r) != unlocked.end())
 	{
 		return true;

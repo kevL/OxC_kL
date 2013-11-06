@@ -110,8 +110,7 @@ SavedGameState::SavedGameState(Game* game, OptionsOrigin origin)
 	_txtDate->setColor(Palette::blockOffset(15)-1);
 	_txtDate->setText(tr("STR_DATE"));
 
-	// kL_note: This is color of loadGame... from main menu.
-	_txtStatus->setColor(Palette::blockOffset(8)+5);	// kL_note: +5=white; +3=hot pink ; +4=red/greenishedge
+	_txtStatus->setColor(Palette::blockOffset(11)+1);
 	_txtStatus->setBig();
 	_txtStatus->setAlign(ALIGN_CENTER);
 
@@ -124,7 +123,7 @@ SavedGameState::SavedGameState(Game* game, OptionsOrigin origin)
 }
 
 /**
- * Initializes all the elements in the Saved Game screen.
+ * Initializes the Quicksave notice.
  * @param game, Pointer to the core game.
  * @param origin, Game section that originated this state.
  * @param showMsg, True if need to show messages like "Loading game" or "Saving game".
@@ -147,14 +146,12 @@ SavedGameState::SavedGameState(Game* game, OptionsOrigin origin, bool showMsg)
 
 		if (origin == OPT_BATTLESCAPE)
 		{
-//kL			_txtStatus->setColor(Palette::blockOffset(5));		// brown
-			_txtStatus->setColor(Palette::blockOffset(14)+5);		// kL
-//kL			_txtStatus->setHighContrast(true);
+			_txtStatus->setColor(Palette::blockOffset(13)+5);		// kL, blue
+			_txtStatus->setHighContrast(true);
 		}
 		else
 		{
-//kL			_txtStatus->setColor(Palette::blockOffset(8)+5);	// cyan
-			_txtStatus->setColor(Palette::blockOffset(11+6));		// kL, purple
+			_txtStatus->setColor(Palette::blockOffset(11+5));		// kL, purple
 		}
 	}
 }

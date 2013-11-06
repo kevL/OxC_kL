@@ -1773,7 +1773,7 @@ void AlienBAIState::wayPointAction()
 		if (_save->getPathfinding()->getStartDirection() != -1
 			&& explosiveEfficacy((*i)->getPosition(),
 					_unit,
-					(_unit->getMainHandWeapon()->getAmmoItem()->getRules()->getPower() /20) + 1,
+					(_unit->getMainHandWeapon()->getAmmoItem()->getRules()->getPower() / 20) + 1,
 					_attackAction->diff))
 		{
 			_aggroTarget = *i;

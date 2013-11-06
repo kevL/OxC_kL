@@ -288,18 +288,19 @@ int Projectile::calculateThrow(double accuracy)
 
 	originVoxel = Position(_origin.x * 16 + 8, _origin.y * 16 + 8, _origin.z * 24);
 	originVoxel.z += -_save->getTile(_origin)->getTerrainLevel();
-	BattleUnit *bu = _save->getTile(_origin)->getUnit();
+	BattleUnit* bu = _save->getTile(_origin)->getUnit();
 	Tile *tileAbove = _save->getTile(_origin + Position(0,0,1));
 
 	if (!bu)
-		bu = _save->getTile(Position(_origin.x, _origin.y, _origin.z-1))->getUnit();
+		bu = _save->getTile(Position(_origin.x, _origin.y, _origin.z - 1))->getUnit();
 
 	originVoxel.z += bu->getHeight() + bu->getFloatHeight();
 	originVoxel.z -= 3;
 
 	if (originVoxel.z >= (_origin.z + 1) * 24)
 	{
-		if (!tileAbove || !tileAbove->hasNoFloor(0))
+		if (!tileAbove
+			|| !tileAbove->hasNoFloor(0))
 		{
 			while (originVoxel.z > (_origin.z + 1) * 24)
 			{
@@ -316,7 +317,7 @@ int Projectile::calculateThrow(double accuracy)
 
 	// determine the target voxel.
 	// aim at the center of the floor
-	targetVoxel = Position(_action.target.x * 16 + 8, _action.target.y * 16 + 8, _action.target.z * 24 + 2);
+	targetVoxel = Position((_action.target.x * 16) + 8, (_action.target.y) * 16 + 8, (_action.target.z * 24) + 2);
 	targetVoxel.z -= _save->getTile(_action.target)->getTerrainLevel();
 
 	if (_action.type != BA_THROW)
@@ -361,13 +362,12 @@ int Projectile::calculateThrow(double accuracy)
 	}
 
 	// apply some accuracy modifiers
-	if (accuracy > 1) accuracy = 1;
+	if (accuracy > 1.0) accuracy = 1.0;
 
-//kL	static const double maxDeviation = 0.08;
-	static const double maxDeviation = 0.075;	// kL
-	static const double minDeviation = 0;
+	static const double maxDeviation = 0.075;
+	static const double minDeviation = 0.0;
 	double baseDeviation = (maxDeviation - (maxDeviation * accuracy)) + minDeviation;
-	double deviation = RNG::boxMuller(0, baseDeviation);
+	double deviation = RNG::boxMuller(0.0, baseDeviation);
 
 	_trajectory.clear();
 	int retValue = -1;
@@ -402,46 +402,56 @@ int Projectile::calculateThrow(double accuracy)
  * @param keepRange Whether range affects accuracy.
  * @param targetTile Tile of target. Default = 0.
  */
-void Projectile::applyAccuracy(const Position& origin, Position* target, double accuracy, bool keepRange, Tile* targetTile)
+void Projectile::applyAccuracy(
+		const Position& origin,
+		Position* target,
+		double accuracy,
+		bool keepRange,
+		Tile* targetTile)
 {
 	int xdiff = origin.x - target->x;
 	int ydiff = origin.y - target->y;
-	double realDistance = sqrt((double)(xdiff * xdiff) + (double)(ydiff * ydiff));
+	double realDistance = sqrt(static_cast<double>(xdiff * xdiff) + static_cast<double>(ydiff * ydiff));
 
 	// maxRange is the maximum range a projectile shall ever travel in voxel space
-	double maxRange = keepRange ? realDistance : 16 * 1000; // 1000 tiles
-	maxRange = _action.type == BA_HIT ? 46 : maxRange; // up to 2 tiles diagonally (as in the case of reaper v reaper)
+	double maxRange = keepRange?
+			realDistance
+			: 16.0 * 1000.0; // 1000 tiles
+	maxRange = _action.type == BA_HIT?
+			45.0
+			: maxRange; // up to 2 tiles diagonally (as in the case of reaper v reaper)
 
 	if (Options::getBool("battleRangeBasedAccuracy"))
 	{
 		double baseDeviation, accuracyPenalty;
 
-		if (targetTile)
+		if (targetTile
+			&& targetTile->getUnit())
 		{
 			BattleUnit* targetUnit = targetTile->getUnit();
 
-			if (targetUnit && (targetUnit->getFaction() == FACTION_HOSTILE))
-				accuracyPenalty = 0.01 * targetTile->getShade(); // Shade can be from 0 to 15
+			if (targetUnit
+				&& targetUnit->getFaction() == FACTION_HOSTILE)
+			{
+				accuracyPenalty = 0.01 * static_cast<double>(targetTile->getShade()); // Shade can be from 0 to 15
+			}
 			else
 				accuracyPenalty = 0.0; // Enemy units can see in the dark.
 
-			// If unit is kneeled, then chance to hit them reduced by 5%.
+			// If unit is kneeled, then chance to hit them reduced by 6%.
 			// This is a compromise, because vertical deviation is 2 times less.
 			if (targetUnit && targetUnit->isKneeled())
-//kL				accuracyPenalty += 0.05;
 				accuracyPenalty += 0.06;	// kL
 		}
 		else
 			accuracyPenalty = 0.01 * _save->getGlobalShade(); // Shade can be from 0 (day) to 15 (night).
-
-//kL		baseDeviation = -0.15 + (_action.type == BA_AUTOSHOT ? 0.28 : 0.26) / (accuracy - accuracyPenalty + 0.25);
 
 		// kL_begin: modify rangedBasedAccuracy (shot-modes).
 		baseDeviation = -0.15;
 		switch (_action.type)
 		{
 			case BA_AUTOSHOT:
-				baseDeviation += 0.33 / (accuracy - accuracyPenalty + 0.24);
+				baseDeviation += 0.32 / (accuracy - accuracyPenalty + 0.24);
 			break;
 			case BA_SNAPSHOT:
 				baseDeviation += 0.28 / (accuracy - accuracyPenalty + 0.24);
@@ -463,14 +473,14 @@ void Projectile::applyAccuracy(const Position& origin, Position* target, double 
 		double dH = RNG::boxMuller(0.0, baseDeviation / 6.0); // horizontal miss in radian
 //kL		double dV = RNG::boxMuller(0.0, baseDeviation /(6.0 * 2));
 		double dV = RNG::boxMuller(0.0, baseDeviation /(6.0 * 1.8));	// kL
-		double te = atan2(double(target->y - origin.y), double(target->x - origin.x)) + dH;
-		double fi = atan2(double(target->z - origin.z), realDistance) + dV;
+		double te = atan2(static_cast<double>(target->y - origin.y), static_cast<double>(target->x - origin.x)) + dH;
+		double fi = atan2(static_cast<double>(target->z - origin.z), realDistance) + dV;
 		double cos_fi = cos(fi);
 
 		// It is a simple task - to hit a target width of 5-7 voxels. Good luck!
-		target->x = (int)(origin.x + maxRange * cos(te) * cos_fi);
-		target->y = (int)(origin.y + maxRange * sin(te) * cos_fi);
-		target->z = (int)(origin.z + maxRange * sin(fi));
+		target->x = (int)(static_cast<double>(origin.x) + maxRange * cos(te) * cos_fi);
+		target->y = (int)(static_cast<double>(origin.y) + maxRange * sin(te) * cos_fi);
+		target->z = (int)(static_cast<double>(origin.z) + maxRange * sin(fi));
 
 		return;
 	}

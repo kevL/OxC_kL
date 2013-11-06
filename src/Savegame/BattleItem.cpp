@@ -68,6 +68,8 @@ BattleItem::BattleItem(RuleItem* rules, int* id)
 	(*id)++;
 
 	// weapon does not need ammo, ammo item points to weapon
+	// kL_note: What if a laserweapon, eg. is #id=0
+	// then any checks for isLoaded, via the usual method, return FALSE.
 	if (_rules
 		&& (_rules->getBattleType() == BT_FIREARM
 			|| _rules->getBattleType() == BT_MELEE)
@@ -176,7 +178,7 @@ void BattleItem::setExplodeTurn(int turn)
  */
 int BattleItem::getAmmoQuantity() const
 {
-	if (_rules->getClipSize() == -1) // is Laser
+	if (_rules->getClipSize() == -1) // is Laser, etc.
 	{
 		return 255;
 	}

@@ -573,27 +573,22 @@ Position TileEngine::getSightOriginVoxel(BattleUnit* currentUnit)
  */
 bool TileEngine::visible(BattleUnit* currentUnit, Tile* tile)
 {
-	//Log(LOG_INFO) << "TileEngine::visible() spotter = " << currentUnit->getId();
-//	bool kL_Debug = false;
-//	if (currentUnit->getId() == 1000001) kL_Debug = true;
-
-
-
+	Log(LOG_INFO) << "TileEngine::visible() spotter = " << currentUnit->getId();
 
 	// if there is no tile or no unit, we can't see it
-	if (!tile || !tile->getUnit())
+	if (!tile
+		|| !tile->getUnit())
 	{
 		return false;
 	}
 
-	BattleUnit* targetUnit = tile->getUnit();		// kL
+	BattleUnit* targetUnit = tile->getUnit();
 
-	//if (kL_Debug) Log(LOG_INFO) << ". . . attempt to Spot = " << targetUnit->getId();
+	Log(LOG_INFO) << ". attempt to Spot = " << targetUnit->getId();
 
-//kL	if (currentUnit->getFaction() == tile->getUnit()->getFaction()) // friendlies are always seen
-	if (currentUnit->getFaction() == targetUnit->getFaction())		// kL
+	if (currentUnit->getFaction() == targetUnit->getFaction())
 	{
-		//if (kL_Debug) Log(LOG_INFO) << ". . . spotted is Friend, ret TRUE";
+		Log(LOG_INFO) << ". . spotted is Friend, ret TRUE";
 		return true;
 	}
 
@@ -602,35 +597,38 @@ bool TileEngine::visible(BattleUnit* currentUnit, Tile* tile)
 		&& distance(currentUnit->getPosition(), tile->getPosition()) > 9
 		&& tile->getShade() > MAX_DARKNESS_TO_SEE_UNITS)
 	{
-		//Log(LOG_INFO) << ". . too dark to see Tile, ret FALSE";
+		Log(LOG_INFO) << ". . too dark to see Tile, ret FALSE";
 		return false;
 	}
 
 
-	Position originVoxel = getSightOriginVoxel(currentUnit);
 	// for large units origin voxel is in the middle
+	// kL_note: this leads to problems with large units trying to shoot around corners, b.t.w.
+	// further, i think Lines of Sight and Fire determinations are getting mixed up somewhere!!!
+	Position originVoxel = getSightOriginVoxel(currentUnit);
 	Position scanVoxel;
 	std::vector<Position> _trajectory;
 
 	bool unitIsSeen = false;
 
-	// kL_note: Is an intermediary object *not* obstructing viewing/targetting, when it should be??
+	// kL_note: Is an intermediary object *not* obstructing viewing/targetting,
+	// when it should be?? Like, around corners?
 	unitIsSeen = canTargetUnit(&originVoxel, tile, &scanVoxel, currentUnit);
 	if (unitIsSeen)
 	{
-//		Log(LOG_INFO) << ". . canTargetUnit() -> unit Seen !";
+		Log(LOG_INFO) << ". . . canTargetUnit()";
 
 		// now check if we really see it taking into account smoke tiles
 		// initial smoke "density" of a smoke grenade is around 15 per tile
 		// we do density/3 to get the decay of visibility
 		// so in fresh smoke we should only have 4 tiles of visibility
 		// this is traced in voxel space, with smoke affecting visibility every step of the way
+		// kL_note: well not really, not until I floatified it.....
 		_trajectory.clear();
 
-		// kL_note: Is this stopping at an obstructing object between currentUnit and targetUnit????
 		calculateLine(originVoxel, scanVoxel, true, &_trajectory, currentUnit);
 
-		// kL_begin: visible() - Check if targetUnit is really targetUnit.
+		// visible() - Check if targetUnit is really targetUnit.
 /*		Log(LOG_INFO) << ". . . . identifying targetUnit @ end of trajectory...";
 		Tile* endTile = _save->getTile(Position(_trajectory.back().x / 16, _trajectory.back().y / 16, _trajectory.back().z / 24));
 		Log(LOG_INFO) << ". . . . got endTile, now Id unit...";
@@ -647,60 +645,43 @@ bool TileEngine::visible(BattleUnit* currentUnit, Tile* tile)
 //			unitIsSeen = false;
 			return false;
 		} */
-		// kL_end.
 
-/*kL		Tile* t = _save->getTile(currentUnit->getPosition());
 
-		int needDistance = _trajectory.size();
-		for (unsigned int i = 0; i < _trajectory.size(); i++)
-		{
-			if (t != _save->getTile(Position(_trajectory.at(i).x / 16, _trajectory.at(i).y / 16, _trajectory.at(i).z / 24)))
-			{
-				t = _save->getTile(Position(_trajectory.at(i).x / 16, _trajectory.at(i).y / 16, _trajectory.at(i).z / 24));
-			}
-
-			if (t->getFire() == 0)
-				needDistance += t->getSmoke() / 3;
-
-			if (needDistance > MAX_VOXEL_VIEW_DISTANCE)
-			{
-				unitIsSeen = false;
-				break;
-			}
-		} */
-
-		// kL_begin: floatify this Smoke thing.
-		float needDistance = (float)_trajectory.size();
-//		Log(LOG_INFO) << ". . . . needDistance = " << needDistance;
+		// floatify this Smoke ( & Fire ) thing.
+		float needDist = static_cast<float>(_trajectory.size());
+		//Log(LOG_INFO) << ". . . . needDist = " << needDist;
 
 		Tile* t = _save->getTile(currentUnit->getPosition());
 
-		for (unsigned int i = 0; i < _trajectory.size(); i++)
+		for (uint16_t
+				i = 0;
+				i < _trajectory.size();
+				i++)
 		{
-//			Log(LOG_INFO) << ". . . . . . tracing Trajectory...";
+			//Log(LOG_INFO) << ". . . . . . tracing Trajectory...";
 			if (t != _save->getTile(Position(_trajectory.at(i).x / 16, _trajectory.at(i).y / 16, _trajectory.at(i).z / 24)))
 			{
 				t = _save->getTile(Position(_trajectory.at(i).x / 16, _trajectory.at(i).y / 16, _trajectory.at(i).z / 24));
 			}
 
-			needDistance += (float)t->getSmoke() / 3.f;
-//			Log(LOG_INFO) << ". . . . . . . . -smoke : " << needDistance;
-			needDistance += (float)t->getFire() / 2.f;
-//			Log(LOG_INFO) << ". . . . . . . . -fire : " << needDistance;
+			needDist += static_cast<float>(t->getSmoke()) / 3.f;
+			//Log(LOG_INFO) << ". . . . . . . . -smoke : " << needDist;
+			needDist += static_cast<float>(t->getFire()) / 2.f;
+			//Log(LOG_INFO) << ". . . . . . . . -fire : " << needDist;
 
-			if (needDistance > (float)MAX_VOXEL_VIEW_DISTANCE)
+			if (needDist > static_cast<float>(MAX_VOXEL_VIEW_DISTANCE))
 			{
-//				Log(LOG_INFO) << ". . . . Distance is too far. ret FALSE - needDistance = " << (int)needDistance;
+				//Log(LOG_INFO) << ". . . . Distance is too far. ret FALSE - needDist = " << (int)needDist;
 				unitIsSeen = false;
 
 				break;
-//				return false;
 			}
 		}
 
-		//if (kL_Debug) Log(LOG_INFO) << ". . . . 1 unitIsSeen = " << unitIsSeen;
+		//Log(LOG_INFO) << ". . . . 1 unitIsSeen = " << unitIsSeen;
 		if (unitIsSeen)
 		{
+			// have to check if targetUnit is poking its head up from tileBelow
 			Tile* tbelow = _save->getTile(t->getPosition() + Position(0, 0, -1));
 			if (!(t->getUnit() == targetUnit
 				|| (tbelow
@@ -711,36 +692,9 @@ bool TileEngine::visible(BattleUnit* currentUnit, Tile* tile)
 				//if (kL_Debug) Log(LOG_INFO) << ". . . . 2 unitIsSeen = " << unitIsSeen;
 			}
 		}
-
-/*		Log(LOG_INFO) << ". . . . 1 unitIsSeen = " << unitIsSeen;
-		if (unitIsSeen)
-		{
-			Tile* tbelow = _save->getTile(t->getPosition() + Position(0, 0, -1));
-			if (t->getUnit() == targetUnit
-				|| (tbelow
-					&& tbelow->getUnit()
-					&& tbelow->getUnit() == targetUnit))
-			{
-				unitIsSeen = true;
-				Log(LOG_INFO) << ". . . . 2 unitIsSeen = " << unitIsSeen;
-			}
-			else
-			{
-				unitIsSeen = false;
-				Log(LOG_INFO) << ". . . . 3 unitIsSeen = " << unitIsSeen;
-			}
-		} */
-
-/*		if (t->getUnit() != targetUnit)
-		{
-			Log(LOG_INFO) << ". . . . tileUnit != targetUnit -> ret FALSE";
-			unitIsSeen = false;
-//			return true;
-		} */
-		// kL_end.
 	}
 
-	//if (kL_Debug) Log(LOG_INFO) << ". . unitIsSeen = " << unitIsSeen;
+	Log(LOG_INFO) << ". unitIsSeen = " << unitIsSeen;
 	return unitIsSeen;
 }
 
@@ -752,7 +706,11 @@ bool TileEngine::visible(BattleUnit* currentUnit, Tile* tile)
  * @param excludeAllBut, [Optional] is unit which is the only one to be considered for ray hits.
  * @return, Degree of exposure (as percent).
  */
-int TileEngine::checkVoxelExposure(Position *originVoxel, Tile *tile, BattleUnit *excludeUnit, BattleUnit *excludeAllBut)
+int TileEngine::checkVoxelExposure(
+		Position* originVoxel,
+		Tile* tile,
+		BattleUnit* excludeUnit,
+		BattleUnit* excludeAllBut)
 {
 	Position targetVoxel = Position((tile->getPosition().x * 16) + 7, (tile->getPosition().y * 16) + 8, tile->getPosition().z * 24);
 	Position scanVoxel;
@@ -839,7 +797,12 @@ int TileEngine::checkVoxelExposure(Position *originVoxel, Tile *tile, BattleUnit
  * @param potentialUnit, is a hypothetical unit to draw a virtual line of fire for AI. if left blank, this function behaves normally.
  * @return, True if the unit can be targetted.
  */
-bool TileEngine::canTargetUnit(Position* originVoxel, Tile* tile, Position* scanVoxel, BattleUnit* excludeUnit, BattleUnit* potentialUnit)
+bool TileEngine::canTargetUnit(
+		Position* originVoxel,
+		Tile* tile,
+		Position* scanVoxel,
+		BattleUnit* excludeUnit,
+		BattleUnit* potentialUnit)
 {
 //kL	Position targetVoxel = Position((tile->getPosition().x * 16) + 7, (tile->getPosition().y * 16) + 8, tile->getPosition().z * 24);
 	Position targetVoxel = Position((tile->getPosition().x * 16) + 8, (tile->getPosition().y * 16) + 8, tile->getPosition().z * 24);	// kL: there's that +7 again.
@@ -880,11 +843,11 @@ bool TileEngine::canTargetUnit(Position* originVoxel, Tile* tile, Position* scan
 
 	int sliceTargets[10] =
 	{
-		0, 0,
-		relX, relY,
-		-relX, -relY,
-		relY, -relX,
-		-relY, relX
+		0,		0,
+		relX,	relY,
+		-relX,	-relY,
+		relY,	-relX,
+		-relY,	relX
 	};
 
 	if (!potentialUnit->isOut())
@@ -908,7 +871,7 @@ bool TileEngine::canTargetUnit(Position* originVoxel, Tile* tile, Position* scan
 		scanVoxel->z = targetCenterHeight+heightFromCenter[i];
 		for (int j = 0; j < 5; ++j)
 		{
-			if (i < (heightRange-1) && j > 2)
+			if (i < (heightRange - 1) && j > 2)
 				break; // skip unnecessary checks
 
 			scanVoxel->x=targetVoxel.x + sliceTargets[j * 2];
@@ -919,9 +882,15 @@ bool TileEngine::canTargetUnit(Position* originVoxel, Tile* tile, Position* scan
 			int test = calculateLine(*originVoxel, *scanVoxel, false, &_trajectory, excludeUnit, true, false);
 			if (test == 4)
 			{
-				for (int x = 0; x <= targetSize; ++x)
+				for (int
+						x = 0;
+						x <= targetSize;
+						++x)
 				{
-					for (int y = 0; y <= targetSize; ++y)
+					for (int
+							y = 0;
+							y <= targetSize;
+							++y)
 					{
 						// voxel of hit must be inside of scanned box
 						if (_trajectory.at(0).x / 16 == (scanVoxel->x / 16) + x
@@ -934,7 +903,9 @@ bool TileEngine::canTargetUnit(Position* originVoxel, Tile* tile, Position* scan
 					}
 				}
 			}
-			else if (test == -1 && hypothetical && !_trajectory.empty())
+			else if (test == -1
+				&& hypothetical
+				&& !_trajectory.empty())
 			{
 				return true;
 			}
@@ -953,7 +924,12 @@ bool TileEngine::canTargetUnit(Position* originVoxel, Tile* tile, Position* scan
  * @param excludeUnit Is self (not to hit self).
  * @return True if the tile can be targetted.
  */
-bool TileEngine::canTargetTile(Position* originVoxel, Tile* tile, int part, Position* scanVoxel, BattleUnit* excludeUnit)
+bool TileEngine::canTargetTile(
+		Position* originVoxel,
+		Tile* tile,
+		int part,
+		Position* scanVoxel,
+		BattleUnit* excludeUnit)
 {
 	static int sliceObjectSpiral[82] =
 	{
@@ -1080,9 +1056,9 @@ bool TileEngine::canTargetTile(Position* originVoxel, Tile* tile, int part, Posi
 			int test = calculateLine(*originVoxel, *scanVoxel, false, &_trajectory, excludeUnit, true);
 			if (test == part) // bingo
 			{
-				if (_trajectory.at(0).x/16 == scanVoxel->x/16 &&
-					_trajectory.at(0).y/16 == scanVoxel->y/16 &&
-					_trajectory.at(0).z/24 == scanVoxel->z/24)
+				if (_trajectory.at(0).x/16 == scanVoxel->x/16
+					&& _trajectory.at(0).y/16 == scanVoxel->y/16
+					&& _trajectory.at(0).z/24 == scanVoxel->z/24)
 				{
 					return true;
 				}
@@ -1100,48 +1076,61 @@ bool TileEngine::canTargetTile(Position* originVoxel, Tile* tile, int part, Posi
  */
 std::vector<BattleUnit*> TileEngine::getSpottingUnits(BattleUnit* unit)
 {
-	//Log(LOG_INFO) << "getSpottingUnits() " << (unit)->getId() << " : " << (unit)->getReactionScore();		// kL
-
-	std::vector<BattleUnit*> spotters;
+	Log(LOG_INFO) << "TileEngine::getSpottingUnits() spottedID " << (unit)->getId() << " ; RA = " << (unit)->getReactionScore();
 
 	Tile* tile = unit->getTile();
-	for (std::vector<BattleUnit*>::const_iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
+
+	std::vector<BattleUnit*> spotters;
+	for (std::vector<BattleUnit*>::const_iterator
+			bu = _save->getUnits()->begin();
+			bu != _save->getUnits()->end();
+			++bu)
 	{
-		if (!(*i)->isOut()																// not dead/unconscious
-			&& (*i)->getHealth() != 0													// not dying
-			&& (*i)->getStunlevel() < (*i)->getHealth()									// not about to pass out
-			&& (*i)->getFaction() != _save->getSide()									// not a friend
-			&& distance(unit->getPosition(), (*i)->getPosition()) <= MAX_VIEW_DISTANCE)	// closer than 20 tiles
+		if (!(*bu)->isOut(true)																// not dead/unconscious
+//			&& (*bu)->getHealth() != 0														// not dying, checked by "isOut(true)"
+			&& (*bu)->getStunlevel() < (*bu)->getHealth()									// not about to pass out
+			&& (*bu)->getFaction() != _save->getSide())										// not a friend
+//			&& distance(unit->getPosition(), (*bu)->getPosition()) <= MAX_VIEW_DISTANCE)	// closer than 20 tiles, checked by "visible()"
 		{
-			Position originVoxel = _save->getTileEngine()->getSightOriginVoxel(*i);
-			originVoxel.z -= 2;
-			Position targetVoxel;
+//			Position originVoxel = _save->getTileEngine()->getSightOriginVoxel(*bu);
+//			originVoxel.z -= 2;
+//			Position targetVoxel;
 
-			AlienBAIState* aggro = dynamic_cast<AlienBAIState*>((*i)->getCurrentAIState());
-			bool gotHit = aggro != 0 && aggro->getWasHit();
-
-			if (((*i)->checkViewSector(unit->getPosition()) || gotHit)	// spotter can actually see the target Tile, or unit got hit
-				&& canTargetUnit(&originVoxel, tile, &targetVoxel, *i)	// can actually target the unit
-				&& visible(*i, tile))									// can actually see the unit
+			AlienBAIState* aggro = dynamic_cast<AlienBAIState*>((*bu)->getCurrentAIState());
+			if (((*bu)->checkViewSector(unit->getPosition())			// spotter is looking in the right direction
+					|| (aggro != 0 && aggro->getWasHit()))				// spotter has been aggro'd
+//				&& canTargetUnit(&originVoxel, tile, &targetVoxel, *bu)	// can actually target the unit, checked by "visible()",
+																		// although origin is placed 2 voxels lower here.
+				&& visible(*bu, tile))									// can actually see the unit through smoke/fire & within viewRange
 			{
-				if ((*i)->getFaction() == FACTION_PLAYER)
+				if ((*bu)->getFaction() == FACTION_PLAYER)
 				{
 					unit->setVisible(true);
 				}
 
-				(*i)->addToVisibleUnits(unit);
+				(*bu)->addToVisibleUnits(unit);
 
-				if (_save->getSide() != FACTION_NEUTRAL		// no reaction on civilian turn.
-					&& canMakeSnap(*i, unit))
+//				if (_save->getSide() != FACTION_NEUTRAL // no reaction on civilian turn. done in "checkReactionFire()"
+				if (canMakeSnap(*bu, unit))
 				{
-					//Log(LOG_INFO) << "getSpottingUnits() " << (*i)->getId() << " : " << (*i)->getReactionScore() << " add";		// kL
+					Log(LOG_INFO) << ". . . spotterID " << (*bu)->getId() << " ; RA = " << (*bu)->getReactionScore() << " : add";
 
-					spotters.push_back(*i);
+					spotters.push_back(*bu);
+				}
+				else
+				{
+					Log(LOG_INFO) << ". . spotterID " << (*bu)->getId() << " ; RA = "  << (*bu)->getReactionScore() << " : can't makeSnap.";
 				}
 			}
+			else
+			{
+				Log(LOG_INFO) << ". . spotterID " << (*bu)->getId() << " ; RA = "  << (*bu)->getReactionScore() << " : not facing AND not aggro, OR target obscured/OoR";
+			}
 		}
-
-		//Log(LOG_INFO) << "getSpottingUnits() " << (*i)->getId() << " : "  << (*i)->getReactionScore() << " not";		// kL
+		else
+		{
+			Log(LOG_INFO) << ". . spotterID " << (*bu)->getId() << " ; RA = "  << (*bu)->getReactionScore() << " : isOut(true) OR side's faction";
+		}
 	}
 
 	return spotters;
@@ -1149,49 +1138,37 @@ std::vector<BattleUnit*> TileEngine::getSpottingUnits(BattleUnit* unit)
 
 /**
  * Checks the validity of a snap shot performed here.
- * @param unit The unit to check sight from.
- * @param target The unit to check sight TO.
- * @return True if the target is valid.
+ * @param unit, The unit to check sight from.
+ * @param target, The unit to check sight TO.
+ * @return, True if the target is valid.
  */
 bool TileEngine::canMakeSnap(BattleUnit* unit, BattleUnit* target)
 {
-	BattleItem* weapon = unit->getMainHandWeapon();
+	Log(LOG_INFO) << "TileEngine::canMakeSnap() spottedID " << (unit)->getId() << " ; RA = " << (unit)->getReactionScore();
 
-	if (weapon																	// has a weapon
-		&& (weapon->getRules()->getBattleType() == BT_MELEE						// has a melee weapon and is in melee range
-			&& validMeleeRange(unit, target, unit->getDirection()
-			&& unit->getTimeUnits() > unit->getActionTUs(BA_HIT, weapon))
-		|| (weapon->getRules()->getBattleType() != BT_MELEE						// has a gun capable of snap shot with ammo
-			&& weapon->getRules()->getTUSnap()
-			&& weapon->getAmmoItem()
-			&& unit->getTimeUnits() > unit->getActionTUs(BA_SNAPSHOT, weapon))))
+	BattleItem* weapon; // = unit->getMainHandWeapon(true);
+	if (unit->getFaction() == FACTION_PLAYER
+		&& unit->getOriginalFaction() == FACTION_PLAYER)
 	{
+		weapon = unit->getItem(unit->getActiveHand());
+	}
+	else
+		weapon = unit->getMainHandWeapon(); // kL_note: no longer returns grenades. good
 
-/* They've come to their senses and taken all this out.
-//kL		Position origin = getSightOriginVoxel(unit);
-//kL		Position scanVoxel;
-//kL		if (canTargetUnit(&origin, target->getTile(), &scanVoxel, unit))
-
-// kL_note: This is Warboy's code below, replaces condition above.
-// note that canTargetUnit() has actually already been done when
-// constructing the spotters.Vector in getSpottingUnits()
-		Position originVoxel = getSightOriginVoxel(unit);
-		originVoxel.z -= 2;
-		Position targetVoxel = getSightOriginVoxel(target);
-		targetVoxel.z -= 2;
-		std::vector<Position> trajectory;
-		if (calculateLine(originVoxel, targetVoxel, true, &trajectory, unit) == 4
-			&& trajectory.back().x / 16 == targetVoxel.x / 16
-			&& trajectory.back().y / 16 == targetVoxel.y / 16
-			&& trajectory.back().z / 24 == targetVoxel.z / 24)
-// kL_note. */
-		//Log(LOG_INFO) << "canMakeSnap() " << unit->getId() << " true";
-
+	if (weapon																		// has a weapon
+		&& (weapon->getRules()->getBattleType() == BT_MELEE							// has a melee weapon
+			&& validMeleeRange(unit, target, unit->getDirection()					// is in melee range
+			&& unit->getTimeUnits() >= unit->getActionTUs(BA_HIT, weapon))			// has enough TU
+		|| (weapon->getRules()->getBattleType() == BT_FIREARM						// has a gun
+			&& weapon->getRules()->getTUSnap()										// can make snapshot
+//			&& weapon->getAmmoItem()												// gun is loaded, checked in "getMainHandWeapon()"
+			&& unit->getTimeUnits() >= unit->getActionTUs(BA_SNAPSHOT, weapon))))	// has enough TU
+	{
+		Log(LOG_INFO) << ". ret TRUE";
 		return true;
 	}
 
-	//Log(LOG_INFO) << "canMakeSnap() " << unit->getId() << " false";		// kL
-
+	Log(LOG_INFO) << ". ret FALSE";
 	return false;
 }
 
@@ -1199,17 +1176,24 @@ bool TileEngine::canMakeSnap(BattleUnit* unit, BattleUnit* target)
  * Checks if a sniper from the opposing faction sees this unit. The unit with the
  * highest reaction score will be compared with the current unit's reaction score.
  * If it's higher, a shot is fired when enough time units, a weapon and ammo are available.
- * @param unit The unit to check reaction fire upon.
- * @return True if reaction fire took place.
+ * @param unit, The unit to check reaction fire upon.
+ * @return, True if reaction fire took place.
  */
 bool TileEngine::checkReactionFire(BattleUnit* unit)
 {
-	Log(LOG_INFO) << "TileEngine::checkReactionFire vs " << unit->getId();
+	Log(LOG_INFO) << "TileEngine::checkReactionFire() vs " << unit->getId();
 
-	// reaction fire only triggered when the actioning unit is of the currently playing side, and is still on the map (alive)
-	if (unit->getFaction() != _save->getSide() || unit->getTile() == 0)
+	if (_save->getSide() == FACTION_NEUTRAL) // no reaction on civilian turn.
+		return false;
+
+
+	// trigger reaction fire only when the spotted unit is of the
+	// currently playing side, and is still on the map, alive
+	if (_save->getSide() != unit->getFaction()
+		|| unit->getTile() == 0
+		|| unit->isOut(true))	// kL (note getTile() may return false for corpses anyway)
 	{
-		//Log(LOG_INFO) << ". vs getSide() = invalid";
+		Log(LOG_INFO) << ". ret FALSE pre";
 
 		return false;
 	}
@@ -1220,7 +1204,6 @@ bool TileEngine::checkReactionFire(BattleUnit* unit)
 	// kL. If spotted unit is not mind controlled,
 	// or is mind controlled but not an alien;
 	// ie, never reaction fire on a mind-controlled xCom soldier;
-	// SHOOT!!!!
 	if (unit->getFaction() == unit->getOriginalFaction()
 		|| unit->getFaction() != FACTION_HOSTILE)
 	{
@@ -1234,6 +1217,7 @@ bool TileEngine::checkReactionFire(BattleUnit* unit)
 		// start iterating through the possible reactors until the current unit is the one with the highest score.
 		while (reactor != unit)
 		{
+			// !!!!!SHOOT!!!!!
 			if (!tryReactionSnap(reactor, unit))
 			{
 				//Log(LOG_INFO) << ". . no Snap by : " << reactor->getId();
@@ -1271,156 +1255,100 @@ bool TileEngine::checkReactionFire(BattleUnit* unit)
 	//Log(LOG_INFO) << ". . Reactor == unit, EXIT = " << result;
 	return result;
 }
-// kL_begin: this is my prior, working TileEngine::checkReactionFire()
-/* bool TileEngine::checkReactionFire(BattleUnit* unit)
-{
-	//Log(LOG_INFO) << "Battlescape/TileEngine.cpp checkReactionFire() vs." << unit->getId();
-
-	// reaction fire only triggered when the actioning unit is of the currently playing side, and is still on the map (alive)
-	if (unit->getFaction() != _save->getSide() || unit->getTile() == 0)
-	{
-		//Log(LOG_INFO) << ". vs getSide() = invalid";
-
-		return false;
-	}
-
-	bool result = false;
-
-	// not mind controlled, or controlled by the player
-	// kL. If spotted unit is not mind controlled,
-	// or is mind controlled but not an alien;
-	// ie, never reaction fire on a mind-controlled xCom soldier;
-	// SHOOT!!!!
-	if (unit->getFaction() == unit->getOriginalFaction()
-		|| unit->getFaction() != FACTION_HOSTILE)
-	{
-		//Log(LOG_INFO) << ". Target = VALID";
-
-		std::vector<BattleUnit*> spotters = getSpottingUnits(unit);
-
-		//Log(LOG_INFO) << ". # spotters = " << spotters.size();
-
-		BattleUnit* reactor = getReactor(spotters, unit);
-		if (reactor != unit)
-		{
-			while (true)
-			{
-				if (!tryReactionSnap(reactor, unit))
-				{
-					//Log(LOG_INFO) << ". . no Snap by : " << reactor->getId();
-					break;
-				}
-				else
-				{
-					//Log(LOG_INFO) << ". . Snap by : " << reactor->getId();
-					result = true;
-				}
-
-				reactor = getReactor(spotters, unit);
-				if (reactor == unit)
-					break;
-			}
-		}
-		//else Log(LOG_INFO) << ". . Reactor == unit, EXIT false";
-	}
-
-	return result;
-} */
-// kL_end.
 
 /**
  * Gets the unit with the highest reaction score from the spotter vector.
- * @param spotters The vector of spotting units.
- * @param unit The unit to check scores against.
- * @return The unit with the highest reactions.
+ * @param spotters, The vector of spotting units.
+ * @param unit, The unit to check scores against.
+ * @return, The unit with initiative.
  */
 BattleUnit* TileEngine::getReactor(std::vector<BattleUnit*> spotters, BattleUnit* unit)
 {
+	Log(LOG_INFO) << "TileEngine::getReactor() vs " << unit->getId();
+
 	int bestScore = -1;
-	BattleUnit* bu = 0;
+	BattleUnit* reactor = 0;
 
-	for (std::vector<BattleUnit*>::iterator i = spotters.begin(); i != spotters.end(); ++i)
+	for (std::vector<BattleUnit*>::iterator
+			spot = spotters.begin();
+			spot != spotters.end();
+			++spot)
 	{
-		//Log(LOG_INFO) << "getReactor() " << (*i)->getId() << " iterate";		// kL
+		Log(LOG_INFO) << ". spotterID " << (*spot)->getId();
 
-		if (!(*i)->isOut()
-			&& canMakeSnap((*i), unit)
-			&& (*i)->getReactionScore() > bestScore)
-//			&& (*i) != bu)	// kL, stop unit from reacting twice (unless target uses more TU, hopefully)
+		if (!(*spot)->isOut(true)
+//			&& canMakeSnap((*spot), unit)				// done in "getSpottingUnits()"
+			&& (*spot)->getReactionScore() > bestScore)
+//			&& (*spot) != bu)	// kL, stop unit from reacting twice (unless target uses more TU, hopefully)
 		{
-			bestScore = (int)(*i)->getReactionScore();
-			bu = *i;
+			bestScore = static_cast<int>((*spot)->getReactionScore());
+			reactor = *spot;
 		}
 	}
 
-	if (unit->getReactionScore() <= bestScore)
+	if (static_cast<int>(unit->getReactionScore()) <= bestScore)
 	{
-		if (bu->getOriginalFaction() == FACTION_PLAYER)
+		if (reactor->getOriginalFaction() == FACTION_PLAYER)
 		{
-			bu->addReactionExp();
+			reactor->addReactionExp();
 		}
 	}
 	else
 	{
-		bu = unit;
+		// unit has to *best* the bestScore to regain initiative.
+		reactor = unit;
 	}
 
-	return bu;
+	return reactor;
 }
 
 /**
  * Attempts to perform a reaction snap shot.
- * @param unit The unit to check sight from.
- * @param target The unit to check sight TO.
- * @return True if the action should (theoretically) succeed.
+ * @param unit, The unit to check sight from.
+ * @param target, The unit to check sight TO.
+ * @return, True if the action should (theoretically) succeed.
  */
 bool TileEngine::tryReactionSnap(BattleUnit* unit, BattleUnit* target)
 {
+	Log(LOG_INFO) << "TileEngine::tryReactionSnap() snapperID " << unit->getId();
 	BattleAction action;
 
-	if (unit->getFaction() == FACTION_PLAYER) // kL_begin:
+	// note that other checks for/of weapon were done in "canMakeSnap()"
+	// redone here to fill the BattleAction object...
+	if (unit->getFaction() == FACTION_PLAYER)
 	{
-//		BattleItem* biActive = unit->getItem(unit->getActiveHand());
 		action.weapon = unit->getItem(unit->getActiveHand());
 	}
-	else // kL_end.
+	else
 		action.weapon = unit->getMainHandWeapon(); // kL_note: no longer returns grenades. good
 
 	if (!action.weapon)
 	{
+		Log(LOG_INFO) << ". no Weapon, ret FALSE";
 		return false;
 	}
 
-	action.type = BA_SNAPSHOT;									// reaction fire is ALWAYS snap shot. kL_note: not true in Orig. aliens did auto at times
-	if (action.weapon->getRules()->getBattleType() == BT_MELEE)	// unless we're a melee unit. kL_note: in which case you won't react at all.
+	action.type = BA_SNAPSHOT;									// reaction fire is ALWAYS snap shot.
+																// kL_note: not true in Orig. aliens did auto at times
+	if (action.weapon->getRules()->getBattleType() == BT_MELEE)	// unless we're a melee unit.
+																// kL_note: in which case you won't react at all. ( yet )
 	{
 		action.type = BA_HIT;
 	}
 
 	action.TU = unit->getActionTUs(action.type, action.weapon);
 
-	// kL_note: Does this handle melee hits, as reaction shots? really ?
-	// what about all that 'ammo' stuff...? Conclusion: does not handle BA_HIT
-	if (action.weapon->getAmmoItem() // lasers & melee are their own ammo-items.
-		&& action.weapon->getAmmoItem()->getAmmoQuantity() // returns 255 for laser; 0 for melee
-		&& unit->getTimeUnits() >= action.TU)
+	// kL_note: Does this handle melee hits, as reaction shots? really.
+//	if (action.weapon->getAmmoItem()						// lasers & melee are their own ammo-items.
+															// Unless their battleGame #ID happens to be 0
+//		&& action.weapon->getAmmoItem()->getAmmoQuantity()	// returns 255 for laser; 0 for melee
+//		&& unit->getTimeUnits() >= action.TU)
+	// That's all been done!!!
 	{
 		action.targeting = true;
 		action.target = target->getPosition();
 
-		// kL begin (taken from immediately below):
-		// kL_note: lets remove this for now.....
-/*		if (target->getFaction() == FACTION_HOSTILE) // kL. hostile units will go into an "aggro" state when they get shot at.
-		{											 // (may be redundant with I'm-hit-Jim code) doesn't seem to be working as intended...
-			AggroBAIState *aggro = dynamic_cast<AggroBAIState*>(target->getCurrentAIState());
-			if (aggro == 0)
-			{
-				aggro = new AggroBAIState(_save, target); // CAREFUL, this needs to be deleted somewhere/how!!!!!
-				target->setAIState(aggro);
-			}
-		} */ // kL_end.
-
-		if (unit->getFaction() == FACTION_HOSTILE) // hostile units will go into an "aggro" state when they react.
+		if (unit->getFaction() == FACTION_HOSTILE) // aLien units will go into an "aggro" state when they react.
 		{
 			AlienBAIState* aggro = dynamic_cast<AlienBAIState*>(unit->getCurrentAIState());
 			if (aggro == 0) // should not happen, but just in case...
@@ -1819,7 +1747,7 @@ void TileEngine::explode(const Position& center, int power, ItemDamageType type,
  */
 bool TileEngine::detonate(Tile* tile)
 {
-	Log(LOG_INFO) << "TileEngine::detonate";
+	//Log(LOG_INFO) << "TileEngine::detonate()";
 
 	int explosive = tile->getExplosive();
 	tile->setExplosive(0, true);
@@ -1841,8 +1769,9 @@ bool TileEngine::detonate(Tile* tile)
 		int flam = tile->getFlammability();
 		int fuel = tile->getFuel() + 1;
 
-		// explosions create smoke which only stays 1 or 2 turns
-		tile->setSmoke(std::max(1, std::min(tile->getSmoke() + RNG::generate(0, 2), 15)));
+		// explosions create smoke which only stays 1 or 2 turns; kL_note: or 3
+		// smoke added to an already smoking tile will increase smoke to max.15
+		tile->setSmoke(std::max(1, std::min(tile->getSmoke() + RNG::generate(0, 3), 15)));
 
 		for (int i = 0; i < 7; ++i)
 		{
@@ -3129,11 +3058,12 @@ bool TileEngine::psiAttack(BattleAction* action)
 		Log(LOG_INFO) << ". . . attackStr Success @ " << (int)attackStr;
 
 		action->actor->addPsiExp();
-		if (attackStr > 0.0
-			&& RNG::percent((int)attackStr))		// kL
+
+		int percent = static_cast<int>(attackStr);
+		if (percent > 0
+			&& RNG::percent(percent))
 		{
 			//Log(LOG_INFO) << ". . Success";
-//			ret = true;
 
 			action->actor->addPsiExp();
 			action->actor->addPsiExp();
