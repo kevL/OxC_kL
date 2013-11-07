@@ -66,7 +66,7 @@ BattleUnit::BattleUnit(Soldier* soldier, UnitFaction faction)
 		_status(STATUS_STANDING),
 		_walkPhase(0),
 		_fallPhase(0),
-		_spinPhase(-1),		// kL
+		_spinPhase(-1),
 		_kneeled(false),
 		_floating(false),
 		_dontReselect(false),
@@ -87,7 +87,6 @@ BattleUnit::BattleUnit(Soldier* soldier, UnitFaction faction)
 		_coverReserve(0),
 		_charging(0),
 		_turnsExposed(255),
-//		_armor(0),	// kL
 		_geoscapeSoldier(soldier),
 		_unitRules(0),
 		_rankInt(-1),
@@ -102,11 +101,6 @@ BattleUnit::BattleUnit(Soldier* soldier, UnitFaction faction)
 	_rank			= soldier->getRankString();
 	_stats			= *soldier->getCurrentStats();
 
-/*	if (faction == FACTION_HOSTILE)
-	{
-		adjustStats(diff);
-	} */ // kL stuff. from 2nd cTor below; trying to resolve no stat increase per difficulty on reloading a BattleSave...
-
 	_standHeight	= soldier->getRules()->getStandHeight();
 	_kneelHeight	= soldier->getRules()->getKneelHeight();
 	_floatHeight	= soldier->getRules()->getFloatHeight();
@@ -117,12 +111,10 @@ BattleUnit::BattleUnit(Soldier* soldier, UnitFaction faction)
 	_aggression		= 1;
 	_specab			= SPECAB_NONE;
 	_armor			= soldier->getArmor();
-//kL	_stats			+= *_armor->getStats();	// armors may modify effective stats
-	_stats			+= *_armor->getStats();		// kL
+	_stats			+= *_armor->getStats();	// armors may modify effective stats
 	_loftempsSet	= _armor->getLoftempsSet();
 	_gender			= soldier->getGender();
 	_faceDirection	= -1;
-//	_spinPhase = -1;	// kL
 
 	int rankbonus = 0;
 	switch (soldier->getRank())
@@ -181,7 +173,7 @@ BattleUnit::BattleUnit(Unit* unit, UnitFaction faction, int id, Armor* armor, in
 		_status(STATUS_STANDING),
 		_walkPhase(0),
 		_fallPhase(0),
-		_spinPhase(-1),		// kL
+		_spinPhase(-1),
 		_kneeled(false),
 		_floating(false),
 		_dontReselect(false),
@@ -254,10 +246,8 @@ BattleUnit::BattleUnit(Unit* unit, UnitFaction faction, int id, Armor* armor, in
 	for (int i = 0; i < 5; ++i) _cache[i] = 0;
 
 	_activeHand = "STR_RIGHT_HAND";
-//	_activeHand = this->getMainHandWeapon();
 
 	lastCover = Position(-1, -1, -1);
-
 	Log(LOG_INFO) << "Create BattleUnit 2, DONE";
 }
 
