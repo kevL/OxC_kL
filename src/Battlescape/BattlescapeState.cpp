@@ -1143,8 +1143,6 @@ void BattlescapeState::btnEndTurnClick(Action*)
 {
 	if (allowButtons())
 	{
-//		_turnCounter->update();						// kL
-
 		_txtTooltip->setText(L"");
 		_battleGame->requestEndTurn();
 	}
@@ -1157,7 +1155,12 @@ void BattlescapeState::btnEndTurnClick(Action*)
 void BattlescapeState::btnAbortClick(Action*)
 {
 	if (allowButtons())
+	{
+		Log(LOG_INFO) << "BattlescapeState::btnAbortClick()";
 		_game->pushState(new AbortMissionState(_game, _save, this));
+	}
+
+	Log(LOG_INFO) << "BattlescapeState::btnAbortClick() EXIT";
 }
 
 /**
@@ -1333,7 +1336,7 @@ void BattlescapeState::btnPersonalLightingClick(Action*)
  * Determines whether a playable unit is selected. Normally only player side
  * units can be selected, but in debug mode one can play with aliens too :)
  * Is used to see if stats can be displayed and action buttons will work.
- * @return Whether a playable unit is selected.
+ * @return, Whether a playable unit is selected.
  */
 bool BattlescapeState::playableUnitSelected()
 {
@@ -1507,6 +1510,8 @@ bool BattlescapeState::playableUnitSelected()
 // kL_begin:
 void BattlescapeState::updateSoldierInfo()
 {
+	Log(LOG_INFO) << "BattlescapeState::updateSoldierInfo()";
+
 	for (int i = 0; i < VISIBLE_MAX; ++i) // remove red target indicators
 	{
 		_btnVisibleUnit[i]->setVisible(false);
@@ -1515,150 +1520,190 @@ void BattlescapeState::updateSoldierInfo()
 		_visibleUnit[i] = 0;
 	}
 
-	bool isPlayable = playableUnitSelected();
-
-	_rank->setVisible(isPlayable);
-	_numTimeUnits->setVisible(isPlayable);
-	_barTimeUnits->setVisible(isPlayable);
-	_barTimeUnits->setVisible(isPlayable);
-	_numEnergy->setVisible(isPlayable);
-	_barEnergy->setVisible(isPlayable);
-	_barEnergy->setVisible(isPlayable);
-	_numHealth->setVisible(isPlayable);
-	_barHealth->setVisible(isPlayable);
-	_barHealth->setVisible(isPlayable);
-	_numMorale->setVisible(isPlayable);
-	_barMorale->setVisible(isPlayable);
-	_barMorale->setVisible(isPlayable);
-	_btnLeftHandItem->setVisible(isPlayable);
-	_btnRightHandItem->setVisible(isPlayable);
-	_numAmmoLeft->setVisible(isPlayable);
-	_numAmmoRight->setVisible(isPlayable);
-
-	if (!isPlayable)
-	{
-		_txtName->setText(L"");
-		showPsiButton(false);
-	}
-
-	_kneel->setVisible(false);
-	_numTUSnap->setVisible(false);
-
-	_numAmmoRight->setVisible(false);
-	_numAmmoLeft->setVisible(false);
-
-	_rank->clear();
 	_btnRightHandItem->clear();
 	_btnLeftHandItem->clear();
 
+	_btnRightHandItem	->setVisible(false);
+	_btnLeftHandItem	->setVisible(false);
+	_numAmmoRight		->setVisible(false);
+	_numAmmoLeft		->setVisible(false);
 
-	if (!_save->getSelectedUnit())
+	_kneel		->setVisible(false);
+	_numTUSnap	->setVisible(false);
+
+
+	// -= return =-  //
+	bool isPlayable = playableUnitSelected();	// not aLien or civilian; ie. xCom Soldier
+	Log(LOG_INFO) << ". isPlayable = " << isPlayable;
+
+	if (!isPlayable)							// not xCom Soldier; ie. aLien or civilian
+	{
+		_txtName->setText(L"");
+		_rank->clear();
+
+		showPsiButton(false);
+
+		_rank			->setVisible(false);
+
+		_numTimeUnits	->setVisible(false);
+		_barTimeUnits	->setVisible(false);
+		_barTimeUnits	->setVisible(false);
+
+		_numEnergy		->setVisible(false);
+		_barEnergy		->setVisible(false);
+		_barEnergy		->setVisible(false);
+
+		_numHealth		->setVisible(false);
+		_barHealth		->setVisible(false);
+		_barHealth		->setVisible(false);
+
+		_numMorale		->setVisible(false);
+		_barMorale		->setVisible(false);
+		_barMorale		->setVisible(false);
+
+		Log(LOG_INFO) << ". . return";
 		return;
-
-	BattleUnit* bu = _save->getSelectedUnit();
-	Log(LOG_INFO) << "BattlescapeState::updateSoldierInfo()" << bu->getId();
-
-	if (isPlayable
-		&& bu->isKneeled())
-	{
-		drawKneelIndicator();
-		_kneel->setVisible(true);
 	}
-
-	BattleItem* rightHandItem = bu->getItem("STR_RIGHT_HAND");
-	BattleItem* leftHandItem = bu->getItem("STR_LEFT_HAND");
-
-	if (isPlayable
-		&& bu->getActiveHand() != "")
+	else // not aLien or civilian; ie. xCom Soldier
 	{
-		int tuSnap = 0;
-		if (bu->getActiveHand() == "STR_RIGHT_HAND"
-			&& rightHandItem->getRules()->getBattleType() == BT_FIREARM)
-		{
-			tuSnap = bu->getActionTUs(BA_SNAPSHOT, rightHandItem);
-		}
-		else if (bu->getActiveHand() == "STR_LEFT_HAND"
-			&& leftHandItem->getRules()->getBattleType() == BT_FIREARM)
-		{
-			tuSnap = bu->getActionTUs(BA_SNAPSHOT, leftHandItem);
-		}
+		_rank			->setVisible(true);
 
-		_numTUSnap->setValue(tuSnap);
-		_numTUSnap->setVisible(true);
+		_numTimeUnits	->setVisible(true);
+		_barTimeUnits	->setVisible(true);
+		_barTimeUnits	->setVisible(true);
+
+		_numEnergy		->setVisible(true);
+		_barEnergy		->setVisible(true);
+		_barEnergy		->setVisible(true);
+
+		_numHealth		->setVisible(true);
+		_barHealth		->setVisible(true);
+		_barHealth		->setVisible(true);
+
+		_numMorale		->setVisible(true);
+		_barMorale		->setVisible(true);
+		_barMorale		->setVisible(true);
 	}
 
 
-	_txtName->setText(bu->getName(_game->getLanguage(), false));
+	BattleUnit* selectUnit;
+	if (_save->getSelectedUnit())
+	{
+		selectUnit = _save->getSelectedUnit();
+		Log(LOG_INFO) << ". . selectUnit ID " << selectUnit->getId();
+	}
+	else // safety.
+	{
+		Log(LOG_INFO) << ". . selectUnit = 0 return";
+		return;
+	}
 
-	Soldier* s = _game->getSavedGame()->getSoldier(bu->getId());
+
+	_save->getTileEngine()->calculateFOV(selectUnit);
+
+	int j = 0;
+	for (std::vector<BattleUnit*>::iterator
+			i = selectUnit->getVisibleUnits()->begin();
+			i != selectUnit->getVisibleUnits()->end()
+				&& j < VISIBLE_MAX;
+			++i)
+	{
+		_btnVisibleUnit[j]->setVisible(true);
+		_numVisibleUnit[j]->setVisible(true);
+		_visibleUnit[j] = *i;
+
+		++j;
+	}
+
+
+	_txtName->setText(selectUnit->getName(_game->getLanguage(), false));
+
+	Soldier* s = _game->getSavedGame()->getSoldier(selectUnit->getId());
 	if (s != 0)
 	{
 		SurfaceSet* texture = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
 		texture->getFrame(s->getRankSprite())->blit(_rank);
 	}
 
-	_numTimeUnits->setValue(bu->getTimeUnits());
-	_barTimeUnits->setMax(bu->getStats()->tu);
-	_barTimeUnits->setValue(bu->getTimeUnits());
-	_numEnergy->setValue(bu->getEnergy());
-	_barEnergy->setMax(bu->getStats()->stamina);
-	_barEnergy->setValue(bu->getEnergy());
-	_numHealth->setValue(bu->getHealth());
-	_barHealth->setMax(bu->getStats()->health);
-	_barHealth->setValue(bu->getHealth());
-	_barHealth->setValue2(bu->getStunlevel());
-	_numMorale->setValue(bu->getMorale());
-	_barMorale->setMax(100);
-	_barMorale->setValue(bu->getMorale());
+	_numTimeUnits	->setValue(selectUnit->getTimeUnits());
+	_barTimeUnits	->setMax(selectUnit->getStats()->tu);
+	_barTimeUnits	->setValue(selectUnit->getTimeUnits());
 
+	_numEnergy		->setValue(selectUnit->getEnergy());
+	_barEnergy		->setMax(selectUnit->getStats()->stamina);
+	_barEnergy		->setValue(selectUnit->getEnergy());
 
-	if (rightHandItem)
+	_numHealth		->setValue(selectUnit->getHealth());
+	_barHealth		->setMax(selectUnit->getStats()->health);
+	_barHealth		->setValue(selectUnit->getHealth());
+	_barHealth		->setValue2(selectUnit->getStunlevel());
+
+	_numMorale		->setValue(selectUnit->getMorale());
+	_barMorale		->setMax(100);
+	_barMorale		->setValue(selectUnit->getMorale());
+
+	if (selectUnit->isKneeled())
 	{
-		rightHandItem->getRules()->drawHandSprite(_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"), _btnRightHandItem);
-		if (rightHandItem->getRules()->getBattleType() == BT_FIREARM
-			&& (rightHandItem->needsAmmo() || rightHandItem->getRules()->getClipSize() > 0))
+		drawKneelIndicator();
+		_kneel->setVisible(true);
+	}
+
+
+	BattleItem* rtItem = selectUnit->getItem("STR_RIGHT_HAND");
+	BattleItem* ltItem = selectUnit->getItem("STR_LEFT_HAND");
+
+	if (selectUnit->getActiveHand() != "")
+	{
+		int tuSnap = 0;
+		if (selectUnit->getActiveHand() == "STR_RIGHT_HAND"
+			&& rtItem->getRules()->getBattleType() == BT_FIREARM)
+		{
+			tuSnap = selectUnit->getActionTUs(BA_SNAPSHOT, rtItem);
+			_numTUSnap->setVisible(true);
+		}
+		else if (selectUnit->getActiveHand() == "STR_LEFT_HAND"
+			&& ltItem->getRules()->getBattleType() == BT_FIREARM)
+		{
+			tuSnap = selectUnit->getActionTUs(BA_SNAPSHOT, ltItem);
+			_numTUSnap->setVisible(true);
+		}
+
+		_numTUSnap->setValue(tuSnap);
+	}
+
+	if (rtItem)
+	{
+		rtItem->getRules()->drawHandSprite(_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"), _btnRightHandItem);
+		_btnRightHandItem->setVisible(true);
+		if (rtItem->getRules()->getBattleType() == BT_FIREARM
+			&& (rtItem->needsAmmo() || rtItem->getRules()->getClipSize() > 0))
 		{
 			_numAmmoRight->setVisible(true);
-			if (rightHandItem->getAmmoItem())
-				_numAmmoRight->setValue(rightHandItem->getAmmoItem()->getAmmoQuantity());
+			if (rtItem->getAmmoItem())
+				_numAmmoRight->setValue(rtItem->getAmmoItem()->getAmmoQuantity());
 			else
 				_numAmmoRight->setValue(0);
 		}
 	}
 
-	if (leftHandItem)
+	if (ltItem)
 	{
-		leftHandItem->getRules()->drawHandSprite(_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"), _btnLeftHandItem);
-		if (leftHandItem->getRules()->getBattleType() == BT_FIREARM
-			&& (leftHandItem->needsAmmo() || leftHandItem->getRules()->getClipSize() > 0))
+		ltItem->getRules()->drawHandSprite(_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"), _btnLeftHandItem);
+		_btnLeftHandItem->setVisible(true);
+		if (ltItem->getRules()->getBattleType() == BT_FIREARM
+			&& (ltItem->needsAmmo() || ltItem->getRules()->getClipSize() > 0))
 		{
 			_numAmmoLeft->setVisible(true);
-			if (leftHandItem->getAmmoItem())
-				_numAmmoLeft->setValue(leftHandItem->getAmmoItem()->getAmmoQuantity());
+			if (ltItem->getAmmoItem())
+				_numAmmoLeft->setValue(ltItem->getAmmoItem()->getAmmoQuantity());
 			else
 				_numAmmoLeft->setValue(0);
 		}
 	}
 
-	_save->getTileEngine()->calculateFOV(_save->getSelectedUnit());
-
-	int j = 0;
-	for (std::vector<BattleUnit*>::iterator
-			i = bu->getVisibleUnits()->begin();
-			i != bu->getVisibleUnits()->end()
-				&& j < VISIBLE_MAX;
-			++i)
-	{
-		_btnVisibleUnit[j]->setVisible(true);
-		_numVisibleUnit[j]->setVisible(true);
-		_visibleUnit[j] = (*i);
-
-		++j;
-	}
-
 	showPsiButton(
-			bu->getOriginalFaction() == FACTION_HOSTILE
-				&& bu->getStats()->psiSkill > 0);
+			selectUnit->getOriginalFaction() == FACTION_HOSTILE
+				&& selectUnit->getStats()->psiSkill > 0);
 
 	Log(LOG_INFO) << "BattlescapeState::updateSoldierInfo() EXIT";
 }
@@ -2263,12 +2308,14 @@ void BattlescapeState::popup(State* state)
 /**
  * Finishes up the current battle, shuts down the battlescape
  * and presents the debriefing screen for the mission.
- * @param abort Was the mission aborted?
- * @param inExitArea Number of soldiers in the exit area OR number of survivors
+ * @param abort, Was the mission aborted?
+ * @param inExitArea, Number of soldiers in the exit area OR number of survivors
  *		when battle finished due to either all aliens or objective being destroyed.
  */
 void BattlescapeState::finishBattle(bool abort, int inExitArea)
 {
+	Log(LOG_INFO) << "BattlescapeState::finishBattle()";
+
 	_game->getCursor()->setVisible(true);
 	std::string nextStage = "";
 
@@ -2295,6 +2342,8 @@ void BattlescapeState::finishBattle(bool abort, int inExitArea)
 	}
 	else
 	{
+		Log(LOG_INFO) << ". stopTimers, popState";
+
 		_popups.clear();
 		_animTimer->stop();
 		_gameTimer->stop();
@@ -2303,17 +2352,20 @@ void BattlescapeState::finishBattle(bool abort, int inExitArea)
 		if (abort
 			|| (!abort  && inExitArea == 0))
 		{
+			Log(LOG_INFO) << ". . missionAborted";
 			// abort was done or no player is still alive
 			// this concludes to defeat when in mars or mars landing mission
 			if ((_save->getMissionType() == "STR_MARS_THE_FINAL_ASSAULT"
 					|| _save->getMissionType() == "STR_MARS_CYDONIA_LANDING")
 				&& _game->getSavedGame()->getMonthsPassed() > -1)
 			{
-				_game->pushState (new DefeatState(_game));
+				_game->pushState(new DefeatState(_game));
 			}
 			else
 			{
+				Log(LOG_INFO) << ". . . new DebriefingState";
 				_game->pushState(new DebriefingState(_game));
+				Log(LOG_INFO) << ". . . new DebriefingState DONE";
 			}
 		}
 		else
@@ -2323,7 +2375,7 @@ void BattlescapeState::finishBattle(bool abort, int inExitArea)
 			if (_save->getMissionType() == "STR_MARS_THE_FINAL_ASSAULT"
 				&& _game->getSavedGame()->getMonthsPassed() > -1)
 			{
-				_game->pushState (new VictoryState(_game));
+				_game->pushState(new VictoryState(_game));
 			}
 			else
 			{
@@ -2331,9 +2383,13 @@ void BattlescapeState::finishBattle(bool abort, int inExitArea)
 			}
 		}
 
+		Log(LOG_INFO) << ". . set Cursor & FPS colors";
+
 		_game->getCursor()->setColor(Palette::blockOffset(15)+12);
 		_game->getFpsCounter()->setColor(Palette::blockOffset(15)+12);
 	}
+
+	Log(LOG_INFO) << "BattlescapeState::finishBattle() EXIT";
 }
 
 /**

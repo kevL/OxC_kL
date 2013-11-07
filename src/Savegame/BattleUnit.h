@@ -286,7 +286,7 @@ private:
 		/// Get total number of fatal wounds.
 		int getFatalWounds() const;
 		/// Get the current reaction score.
-		double getReactionScore();
+		double getInitiative();
 		/// Prepare for a new turn.
 		void prepareNewTurn();
 		/// Morale change

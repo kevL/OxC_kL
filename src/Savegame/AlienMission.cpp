@@ -75,6 +75,7 @@ std::pair<double, double> getLandPoint(const OpenXcom::Globe& globe, const OpenX
 
 }
 
+
 namespace OpenXcom
 {
 
@@ -90,6 +91,7 @@ AlienMission::~AlienMission()
 {
 }
 
+
 class matchById: public std::unary_function<const AlienBase*, bool>
 {
 private:
@@ -103,6 +105,7 @@ private:
 		{
 			/* Empty by design. */
 		}
+
 		/// Match with stored ID.
 		bool operator()(const AlienBase* ab) const
 		{
@@ -185,6 +188,7 @@ bool AlienMission::isOver() const
 	return false;
 }
 
+
 /**
  * Find an XCOM base in this region that is marked for retaliation.
  */
@@ -202,11 +206,13 @@ private:
 		{
 			/* Empty by design. */
 		}
+
 		bool operator()(const Base* base) const
 		{
 			return _region.insideRegion(base->getLongitude(), base->getLatitude()) && base->getRetaliationStatus();
 		}
 };
+
 
 void AlienMission::think(Game& engine, const Globe& globe)
 {
@@ -269,7 +275,7 @@ void AlienMission::think(Game& engine, const Globe& globe)
 	if (_nextWave != _rule.getWaveCount())
 	{
 		int spawnTimer = _rule.getWave(_nextWave).spawnTimer / 30;
-		_spawnCountdown = (spawnTimer/2 + RNG::generate(0, spawnTimer)) * 30;
+		_spawnCountdown = ((spawnTimer / 2) + RNG::generate(0, spawnTimer)) * 30;
 	}
 }
 
@@ -277,14 +283,19 @@ void AlienMission::think(Game& engine, const Globe& globe)
  * This function will spawn a UFO according the the mission rules.
  * Some code is duplicated between cases, that's ok for now. It's on different
  * code paths and the function is MUCH easier to read written this way.
- * @param game The saved game information.
- * @param ruleset The ruleset.
- * @param globe The globe, for land checks.
- * @param ufoRule The rule for the desired UFO.
- * @param trajectory The rule for the desired trajectory.
- * @return Pointer to the spawned UFO. If the mission does not desire to spawn a UFO, 0 is returned.
+ * @param game, The saved game information.
+ * @param ruleset, The ruleset.
+ * @param globe, The globe, for land checks.
+ * @param ufoRule, The rule for the desired UFO.
+ * @param trajectory, The rule for the desired trajectory.
+ * @return, Pointer to the spawned UFO. If the mission does not desire to spawn a UFO, 0 is returned.
  */
-Ufo* AlienMission::spawnUfo(const SavedGame& game, const Ruleset& ruleset, const Globe& globe, const RuleUfo& ufoRule, const UfoTrajectory& trajectory)
+Ufo* AlienMission::spawnUfo(
+		const SavedGame& game,
+		const Ruleset& ruleset,
+		const Globe& globe,
+		const RuleUfo& ufoRule,
+		const UfoTrajectory& trajectory)
 {
 	if (_rule.getType() == "STR_ALIEN_RETALIATION")
 	{
@@ -424,7 +435,7 @@ void AlienMission::start(unsigned initialCount)
 	if (initialCount == 0)
 	{
 		int spawnTimer = _rule.getWave(0).spawnTimer / 30;
-		_spawnCountdown = (spawnTimer / 2 + RNG::generate(0, spawnTimer)) * 30;
+		_spawnCountdown = ((spawnTimer / 2) + RNG::generate(0, spawnTimer)) * 30;
 	}
 	else
 	{
@@ -451,6 +462,7 @@ private:
 		{
 			/* Empty by design. */
 		}
+
 		/// Match with base's coordinates.
 		bool operator()(const Base* base) const
 		{
@@ -459,13 +471,13 @@ private:
 };
 
 /**
- * This function is called when one of the mission's UFOs arrives at it's current destination.
+ * This function is called when one of the mission's UFOs arrives at its current destination.
  * It takes care of sending the UFO to the next waypoint, landing UFOs and
  * marking them for removal as required. It must set the game data in a way that the rest of the code
  * understands what to do.
- * @param ufo The UFO that reached it's waypoint.
- * @param engine The game engine, required to get access to game data and game rules.
- * @param globe The earth globe, required to get access to land checks.
+ * @param ufo, The UFO that reached its waypoint.
+ * @param engine, The game engine, required to get access to game data and game rules.
+ * @param globe, The earth globe, required to get access to land checks.
  */
 void AlienMission::ufoReachedWaypoint(Ufo& ufo, Game &engine, const Globe& globe)
 {
@@ -555,7 +567,7 @@ void AlienMission::ufoReachedWaypoint(Ufo& ufo, Game &engine, const Globe& globe
 			// Remove UFO, replace with Base defense.
 			ufo.setDetected(false);
 
-			std::vector<Base *>::const_iterator found = std::find_if(game.getBases()->begin(),
+			std::vector<Base*>::const_iterator found = std::find_if(game.getBases()->begin(),
 					game.getBases()->end(),
 					MatchBaseCoordinates(ufo.getLongitude(), ufo.getLatitude()));
 			if (found == game.getBases()->end())
@@ -606,10 +618,10 @@ void AlienMission::ufoShotDown(Ufo& ufo, Game&, const Globe&)
 }
 
 /**
- * This function is called when one of the mission's UFOs has finished it's time on the ground.
+ * This function is called when one of the mission's UFOs has finished its time on the ground.
  * It takes care of sending the UFO to the next waypoint and marking them for removal as required.
  * It must set the game data in a way that the rest of the code understands what to do.
- * @param ufo The UFO that reached it's waypoint.
+ * @param ufo The UFO that reached its waypoint.
  * @param engine The game engine, required to get access to game data and game rules.
  * @param globe The earth globe, required to get access to land checks.
  */

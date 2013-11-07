@@ -79,7 +79,18 @@ struct UnitStats
 		{
 		};
 
-		UnitStats(int tu_, int stamina_, int health_, int bravery_, int reactions_, int firing_, int throwing_, int strength_, int psiStrength_, int psiSkill_, int melee_)
+		UnitStats(
+				int tu_,
+				int stamina_,
+				int health_,
+				int bravery_,
+				int reactions_,
+				int firing_,
+				int throwing_,
+				int strength_,
+				int psiStrength_,
+				int psiSkill_,
+				int melee_)
 			:
 				tu(tu_),
 				stamina(stamina_),
@@ -97,27 +108,28 @@ struct UnitStats
 
 		UnitStats& operator+=(const UnitStats& stats)
 		{
-//			if (this != &stats)	// kL
-//			{	// kL
-			tu			+= stats.tu;
-			stamina		+= stats.stamina;
-			health		+= stats.health;
-			bravery		+= stats.bravery;
-			reactions	+= stats.reactions;
-			firing		+= stats.firing;
-			throwing	+= stats.throwing;
-			strength	+= stats.strength;
-			psiStrength	+= stats.psiStrength;
-			psiSkill	+= stats.psiSkill;
-			melee		+= stats.melee;
-//			}	// kL
+			if (this != &stats)	// kL
+			{					// kL
+				tu			+= stats.tu;
+				stamina		+= stats.stamina;
+				health		+= stats.health;
+				bravery		+= stats.bravery;
+				reactions	+= stats.reactions;
+				firing		+= stats.firing;
+				throwing	+= stats.throwing;
+				strength	+= stats.strength;
+				psiStrength	+= stats.psiStrength;
+				psiSkill	+= stats.psiSkill;
+				melee		+= stats.melee;
+			}					// kL
 
 			return *this;
 		}
 
 		UnitStats operator+(const UnitStats& stats) const
 		{
-			return UnitStats(tu + stats.tu,
+			return UnitStats(
+					tu			+ stats.tu,
 					stamina		+ stats.stamina,
 					health		+ stats.health,
 					bravery		+ stats.bravery,

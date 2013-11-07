@@ -1123,11 +1123,12 @@ void DogfightState::move()
 		mission->ufoShotDown(*_ufo, *_game, *_globe);
 
 		// Check for retaliation trigger.
-		if (!RNG::percent(4 * (24 - (int)(_game->getSavedGame()->getDifficulty()))))
+//kL		if (!RNG::percent(4 * (24 - static_cast<int>(_game->getSavedGame()->getDifficulty())))) // <- too clever by half.
+		if (RNG::percent(4 + (4 * static_cast<int>(_game->getSavedGame()->getDifficulty()))))
 		{
 			// Spawn retaliation mission.
 			std::string targetRegion;
-			if (RNG::percent(50 - 6 * (int)(_game->getSavedGame()->getDifficulty())))
+			if (RNG::percent(50 - (6 * static_cast<int>(_game->getSavedGame()->getDifficulty()))))
 			{
 				targetRegion = _ufo->getMission()->getRegion(); // Attack on UFO's mission region
 			}
@@ -1157,7 +1158,10 @@ void DogfightState::move()
 		{
 			if (_ufo->getShotDownByCraftId() == _craft->getId())
 			{
-				for (std::vector<Country*>::iterator country = _game->getSavedGame()->getCountries()->begin(); country != _game->getSavedGame()->getCountries()->end(); ++country)
+				for (std::vector<Country*>::iterator
+						country = _game->getSavedGame()->getCountries()->begin();
+						country != _game->getSavedGame()->getCountries()->end();
+						++country)
 				{
 					if ((*country)->getRules()->insideCountry(_ufo->getLongitude(), _ufo->getLatitude()))
 					{
@@ -1167,7 +1171,10 @@ void DogfightState::move()
 					}
 				}
 
-				for (std::vector<Region*>::iterator region = _game->getSavedGame()->getRegions()->begin(); region != _game->getSavedGame()->getRegions()->end(); ++region)
+				for (std::vector<Region*>::iterator
+						region = _game->getSavedGame()->getRegions()->begin();
+						region != _game->getSavedGame()->getRegions()->end();
+						++region)
 				{
 					if ((*region)->getRules()->insideRegion(_ufo->getLongitude(), _ufo->getLatitude()))
 					{
@@ -1190,7 +1197,10 @@ void DogfightState::move()
 				setStatus("STR_UFO_CRASH_LANDS");
 				_game->getResourcePack()->getSound("GEO.CAT", 10)->play();
 
-				for(std::vector<Country*>::iterator country = _game->getSavedGame()->getCountries()->begin(); country != _game->getSavedGame()->getCountries()->end(); ++country)
+				for(std::vector<Country*>::iterator
+						country = _game->getSavedGame()->getCountries()->begin();
+						country != _game->getSavedGame()->getCountries()->end();
+						++country)
 				{
 					if ((*country)->getRules()->insideCountry(_ufo->getLongitude(), _ufo->getLatitude()))
 					{
@@ -1200,7 +1210,10 @@ void DogfightState::move()
 					}
 				}
 
-				for (std::vector<Region*>::iterator region = _game->getSavedGame()->getRegions()->begin(); region != _game->getSavedGame()->getRegions()->end(); ++region)
+				for (std::vector<Region*>::iterator
+						region = _game->getSavedGame()->getRegions()->begin();
+						region != _game->getSavedGame()->getRegions()->end();
+						++region)
 				{
 					if ((*region)->getRules()->insideRegion(_ufo->getLongitude(), _ufo->getLatitude()))
 					{

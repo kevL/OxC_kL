@@ -79,6 +79,8 @@ DebriefingState::DebriefingState(Game *game)
 		_manageContainment(false),
 		_destroyBase(false)
 {
+	Log(LOG_INFO) << "Create DebriefingState";
+
 	// Restore the cursor in case something weird happened
 	_game->getCursor()->setVisible(true);
 
@@ -90,16 +92,16 @@ DebriefingState::DebriefingState(Game *game)
 
 	_txtTitle		= new Text(280, 17, 16, 8);
 
-	_lstTotal		= new TextList(288, 9, 16, 12);
-
 	_txtItem		= new Text(180, 9, 16, 24);
 	_txtQuantity	= new Text(60, 9, 200, 24);
 	_txtScore		= new Text(55, 9, 260, 24);
 
 	_lstStats		= new TextList(288, 80, 16, 32);
-	_lstRecovery	= new TextList(288, 80, 16, 32);
 
+	_lstRecovery	= new TextList(288, 80, 16, 32);
 	_txtRecovery	= new Text(180, 9, 16, 60);
+
+	_lstTotal		= new TextList(288, 9, 16, 12);
 
 	_btnOk			= new TextButton(176, 16, 16, 177);
 	_txtRating		= new Text(100, 9, 200, 180);
@@ -109,16 +111,16 @@ DebriefingState::DebriefingState(Game *game)
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
 
 	add(_window);
-	add(_btnOk);
 	add(_txtTitle);
 	add(_txtItem);
 	add(_txtQuantity);
 	add(_txtScore);
 	add(_txtRecovery);
-	add(_txtRating);
 	add(_lstStats);
 	add(_lstRecovery);
 	add(_lstTotal);
+	add(_btnOk);
+	add(_txtRating);
 
 	centerAllSurfaces();
 
@@ -153,15 +155,15 @@ DebriefingState::DebriefingState(Game *game)
 	_lstStats->setSecondaryColor(Palette::blockOffset(8)+10);
 	_lstStats->setColumns(3, 176, 60, 64);
 	_lstStats->setDot(true);
-	_lstTotal->setSelectable(true);
-	_lstTotal->setMargin(8);
+//	_lstStats->setSelectable(true);
+	_lstStats->setMargin(8);
 
 	_lstRecovery->setColor(Palette::blockOffset(15)-1);
 	_lstRecovery->setSecondaryColor(Palette::blockOffset(8)+10);
 	_lstRecovery->setColumns(3, 176, 60, 64);
 	_lstRecovery->setDot(true);
-	_lstTotal->setSelectable(true);
-	_lstTotal->setMargin(8);
+//	_lstRecovery->setSelectable(true);
+	_lstRecovery->setMargin(8);
 
 	_lstTotal->setColor(Palette::blockOffset(8)+5);
 	_lstTotal->setColumns(2, 244, 64);
@@ -170,37 +172,49 @@ DebriefingState::DebriefingState(Game *game)
 	prepareDebriefing();
 
 	int total = 0,
-		statsY = 0,
-		recoveryY = 0;
+		statsDy = 0,
+		recoveryDy = 0;
 
 	for (std::vector<DebriefingStat*>::iterator
 			i = _stats.begin();
 			i != _stats.end();
 			++i)
 	{
-		if ((*i)->qty == 0)
-			continue;
+		if ((*i)->qty == 0) continue;
+
 
 		std::wstringstream ss, ss2;
-		ss << L'\x01' << (*i)->qty << L'\x01';
-		ss2 << L'\x01' << (*i)->score;
-		total += (*i)->score;
+		ss << L'\x01' << (*i)->qty << L'\x01';	// quantity of recovered item-type
+		ss2 << L'\x01' << (*i)->score;			// score
+		total += (*i)->score;					// total score
 
 		if ((*i)->recovery)
 		{
 			_lstRecovery->addRow(3, tr((*i)->item).c_str(), ss.str().c_str(), ss2.str().c_str());
-			recoveryY += 8;
+			recoveryDy += 8;
 		}
 		else
 		{
 			_lstStats->addRow(3, tr((*i)->item).c_str(), ss.str().c_str(), ss2.str().c_str());
-			statsY += 8;
+			statsDy += 8;
 		}
 	}
 
 	std::wstringstream ss3;
 	ss3 << total;
 	_lstTotal->addRow(2, tr("STR_TOTAL_UC").c_str(), ss3.str().c_str());
+
+	if (recoveryDy > 0)
+	{
+		_txtRecovery->setY(_lstStats->getY() + statsDy + 5);
+		_lstRecovery->setY(_txtRecovery->getY() + 8);
+		_lstTotal->setY(_lstRecovery->getY() + recoveryDy + 5);
+	}
+	else
+	{
+		_txtRecovery->setText(L"");
+		_lstTotal->setY(_lstStats->getY() + statsDy + 5);
+	}
 
 	// add the points to our activity score
 	if (_region)
@@ -211,18 +225,6 @@ DebriefingState::DebriefingState(Game *game)
 	if (_country)
 	{
 		_country->addActivityXcom(total);
-	}
-
-	if (recoveryY > 0)
-	{
-		_txtRecovery->setY(_lstStats->getY() + statsY + 5);
-		_lstRecovery->setY(_txtRecovery->getY() + 8);
-		_lstTotal->setY(_lstRecovery->getY() + recoveryY + 5);
-	}
-	else
-	{
-		_txtRecovery->setText(L"");
-		_lstTotal->setY(_lstStats->getY() + statsY + 5);
 	}
 
 	// Calculate rating
@@ -257,6 +259,8 @@ DebriefingState::DebriefingState(Game *game)
 
 	_game->getCursor()->setColor(Palette::blockOffset(15) + 12);
 	_game->getFpsCounter()->setColor(Palette::blockOffset(15) + 12);
+
+	Log(LOG_INFO) << "Create DebriefingState DONE";
 }
 
 /**
@@ -264,6 +268,8 @@ DebriefingState::DebriefingState(Game *game)
  */
 DebriefingState::~DebriefingState()
 {
+	Log(LOG_INFO) << "Delete DebriefingState";
+
 	if (_game->isQuitting())
 	{
 		_game->getSavedGame()->setBattleGame(0);
@@ -283,6 +289,8 @@ DebriefingState::~DebriefingState()
  */
 void DebriefingState::btnOkClick(Action*)
 {
+	Log(LOG_INFO) << "DebriefingState::btnOkClick()";
+
 	_game->getSavedGame()->setBattleGame(0);
 	_game->popState();
 
@@ -314,6 +322,8 @@ void DebriefingState::btnOkClick(Action*)
 					.arg(_base->getName()).c_str(), Palette::blockOffset(8)+5, "BACK01.SCR", 0));
 		}
 	}
+
+	Log(LOG_INFO) << "DebriefingState::btnOkClick() EXIT";
 }
 
 /**
@@ -324,6 +334,8 @@ void DebriefingState::btnOkClick(Action*)
  */
 void DebriefingState::addStat(const std::string& name, int quantity, int score)
 {
+	Log(LOG_INFO) << "DebriefingState::addStat()";
+
 	for (std::vector<DebriefingStat*>::iterator
 			i = _stats.begin();
 			i != _stats.end();
@@ -337,6 +349,8 @@ void DebriefingState::addStat(const std::string& name, int quantity, int score)
 			break;
 		}
 	}
+
+	Log(LOG_INFO) << "DebriefingState::addStat() EXIT";
 }
 
 /**
@@ -355,6 +369,8 @@ private:
 			:
 				_base(base)
 		{
+			Log(LOG_INFO) << "DebriefingState, ClearAlienBase() cTor";
+
 			/* Empty by design. */
 		}
 
@@ -369,6 +385,8 @@ private:
  */
 void ClearAlienBase::operator()(AlienMission* am) const
 {
+	Log(LOG_INFO) << "DebriefingState, ClearAlienBase()";
+
 	if (am->getAlienBase() == _base)
 	{
 		am->setAlienBase(0);
@@ -383,6 +401,8 @@ void ClearAlienBase::operator()(AlienMission* am) const
  */
 void DebriefingState::prepareDebriefing()
 {
+	Log(LOG_INFO) << "DebriefingState::prepareDebriefing()";
+
 	_stats.push_back(new DebriefingStat("STR_ALIENS_KILLED", false));
 	_stats.push_back(new DebriefingStat("STR_ALIEN_CORPSES_RECOVERED", false));
 	_stats.push_back(new DebriefingStat("STR_LIVE_ALIENS_RECOVERED", false));
@@ -418,8 +438,8 @@ void DebriefingState::prepareDebriefing()
 
 	Base* base = 0;
 
-	int playerInExitArea = 0; // if this stays 0 the craft is lost...
-	int playersSurvived = 0; // if this stays 0 the craft is lost...
+	int playerInExitArea = 0;	// if this stays 0 the craft is lost...
+	int playersSurvived = 0;	// if this stays 0 the craft is lost...
 	int playersUnconscious = 0;
 
 	for (std::vector<Base*>::iterator i = save->getBases()->begin(); i != save->getBases()->end(); ++i)
@@ -765,17 +785,20 @@ void DebriefingState::prepareDebriefing()
 					if (base->getAvailableContainment() == 0)
 					{
 						_noContainment = true;
-						base->getItems()->addItem(corpseItem, 1);
+//kL						base->getItems()->addItem(corpseItem, 1);
+						base->getItems()->addItem(corpseItem);
 					}
 					else
 					{
-						base->getItems()->addItem(type, 1);
+//kL						base->getItems()->addItem(type, 1);
+						base->getItems()->addItem(type);
 						_manageContainment = base->getAvailableContainment() - (base->getUsedContainment() * _containmentLimit) < 0;
 					}
 				}
 				else
 				{
-					base->getItems()->addItem(corpseItem, 1);
+//kL					base->getItems()->addItem(corpseItem, 1);
+					base->getItems()->addItem(corpseItem);
 				}
 			}
 			else if (origFaction == FACTION_NEUTRAL)
@@ -949,9 +972,10 @@ void DebriefingState::prepareDebriefing()
 			_txtTitle->setText(tr("STR_UFO_IS_NOT_RECOVERED"));
 		}
 
-		if (playersSurvived > 0 && !_destroyBase)
+		if (playersSurvived > 0
+			&& !_destroyBase)
 		{
-			// recover items from the craft floor
+			// recover items from the ground
 			for (int i = 0; i < battle->getMapSizeXYZ(); ++i)
 			{
 				if (battle->getTiles()[i]->getMapData(MapData::O_FLOOR)
@@ -1060,6 +1084,8 @@ void DebriefingState::prepareDebriefing()
 			}
 		}
 	}
+
+	Log(LOG_INFO) << "DebriefingState::prepareDebriefing() EXIT";
 }
 
 /**
@@ -1070,6 +1096,8 @@ void DebriefingState::prepareDebriefing()
  */
 void DebriefingState::reequipCraft(Base* base, Craft* craft, bool vehicleItemsCanBeDestroyed)
 {
+	Log(LOG_INFO) << "DebriefingState::reequipCraft()";
+
 	std::map<std::string, int> craftItems = *craft->getItems()->getContents();
 	for (std::map<std::string, int>::iterator
 			i = craftItems.begin();
@@ -1168,6 +1196,8 @@ void DebriefingState::reequipCraft(Base* base, Craft* craft, bool vehicleItemsCa
 			}
 		}
 	}
+
+	Log(LOG_INFO) << "DebriefingState::reequipCraft() EXIT";
 }
 
 /**
@@ -1179,6 +1209,8 @@ void DebriefingState::reequipCraft(Base* base, Craft* craft, bool vehicleItemsCa
  */
 void DebriefingState::recoverItems(std::vector<BattleItem*>* from, Base* base)
 {
+	Log(LOG_INFO) << "DebriefingState::recoverItems()";
+
 	for (std::vector<BattleItem*>::iterator it = from->begin(); it != from->end(); ++it)
 	{
 		if ((*it)->getRules()->getName() == "STR_ELERIUM_115")
@@ -1196,7 +1228,8 @@ void DebriefingState::recoverItems(std::vector<BattleItem*>* from, Base* base)
 				{
 //kL					addStat("STR_ALIEN_CORPSES_RECOVERED", 1, (*it)->getUnit()->getValue());
 					addStat("STR_ALIEN_CORPSES_RECOVERED", 1, (*it)->getUnit()->getValue() / 5);	// kL
-					base->getItems()->addItem((*it)->getRules()->getName(), 1);
+//kL					base->getItems()->addItem((*it)->getRules()->getName(), 1);
+					base->getItems()->addItem((*it)->getRules()->getName());
 				}
 				else if ((*it)->getRules()->getBattleType() == BT_CORPSE
 					&& (*it)->getUnit()->getStatus() == STATUS_UNCONSCIOUS)
@@ -1206,24 +1239,30 @@ void DebriefingState::recoverItems(std::vector<BattleItem*>* from, Base* base)
 //kL						addStat("STR_LIVE_ALIENS_RECOVERED", 1, 10); // 10 points for recovery
 						addStat("STR_LIVE_ALIENS_RECOVERED", 1, (*it)->getUnit()->getValue());	// kL, duplicated above.
 
-						if (_game->getSavedGame()->isResearchAvailable(_game->getRuleset()->getResearch((*it)->getUnit()->getType()), _game->getSavedGame()->getDiscoveredResearch(), _game->getRuleset()))
+						if (_game->getSavedGame()->isResearchAvailable(
+								_game->getRuleset()->getResearch((*it)->getUnit()->getType()),
+								_game->getSavedGame()->getDiscoveredResearch(),
+								_game->getRuleset()))
 						{
 //kL							addStat("STR_LIVE_ALIENS_RECOVERED", 0, ((*it)->getUnit()->getValue() * 2) - 10); // more points if it's not researched
 							addStat("STR_LIVE_ALIENS_RECOVERED", 0, (*it)->getUnit()->getValue() * 3 / 2);	// kL, duplicated above.
 							if (base->getAvailableContainment() == 0)
 							{
 								_noContainment = true;
-								base->getItems()->addItem((*it)->getRules()->getName(), 1);
+//kL								base->getItems()->addItem((*it)->getRules()->getName(), 1);
+								base->getItems()->addItem((*it)->getRules()->getName());
 							}
 							else
 							{
-								base->getItems()->addItem((*it)->getUnit()->getType(), 1);
+//kL								base->getItems()->addItem((*it)->getUnit()->getType(), 1);
+								base->getItems()->addItem((*it)->getUnit()->getType());
 								_manageContainment = (base->getAvailableContainment() - (base->getUsedContainment() * _containmentLimit) < 0);
 							}
 						}
 						else
 						{
-							base->getItems()->addItem((*it)->getRules()->getName(), 1);
+//kL							base->getItems()->addItem((*it)->getRules()->getName(), 1);
+							base->getItems()->addItem((*it)->getRules()->getName());
 						}
 					}
 					else if ((*it)->getUnit()->getOriginalFaction() == FACTION_NEUTRAL)
@@ -1259,12 +1298,15 @@ void DebriefingState::recoverItems(std::vector<BattleItem*>* from, Base* base)
 					}
 
 					default: // Fall-through, to recover the weapon itself.
-						base->getItems()->addItem((*it)->getRules()->getType(), 1);
+//kL						base->getItems()->addItem((*it)->getRules()->getType(), 1);
+						base->getItems()->addItem((*it)->getRules()->getType());
 					break;
 				}
 			}
 		}
 	}
+
+	Log(LOG_INFO) << "DebriefingState::recoverItems() EXIT";
 }
 
 }

@@ -43,7 +43,7 @@ BattlescapeMessage::BattlescapeMessage(int width, int height, int x, int y)
 
 	// 'hidden movement' text
 //kL	_text = new Text(width, height, x, y);
-	_text = new Text(width - 4, height - 8, x, y + 8);		// kL
+	_text = new Text(width - 7, height - 9, x, y + 9);		// kL
 	_text->setColor(Palette::blockOffset(0)-1);
 	_text->setAlign(ALIGN_CENTER);
 	_text->setVerticalAlign(ALIGN_MIDDLE);

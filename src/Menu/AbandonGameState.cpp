@@ -59,15 +59,16 @@ AbandonGameState::AbandonGameState(Game* game, OptionsOrigin origin)
 
 
 	_window		= new Window(this, 216, 160, x, 20, POPUP_BOTH);
-	_txtTitle	= new Text(206, 15, x + 5, 72);
 
-	_btnNo		= new TextButton(55, 20, x + 30, 133);
-	_btnYes		= new TextButton(55, 20, x + 131, 133);
+	_txtTitle	= new Text(206, 17, x + 5, 80);
+
+	_btnNo		= new TextButton(55, 20, x + 30, 131);
+	_btnYes		= new TextButton(55, 20, x + 131, 131);
 
 	add(_window);
-	add(_btnYes);
-	add(_btnNo);
 	add(_txtTitle);
+	add(_btnNo);
+	add(_btnYes);
 
 	centerAllSurfaces();
 

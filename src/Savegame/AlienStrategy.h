@@ -16,14 +16,17 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_ALIENSTRATEGY_H
 #define OPENXCOM_ALIENSTRATEGY_H
 
 #include <yaml-cpp/yaml.h>
 #include "WeightedOptions.h"
 
+
 namespace OpenXcom
 {
+
 class Ruleset;
 
 /**
@@ -31,23 +34,6 @@ class Ruleset;
  */
 class AlienStrategy
 {
-public:
-	/// Create an AlienStrategy with no data.
-	AlienStrategy();
-	/// Free resources used by the AlienStrategy.
-	~AlienStrategy();
-	/// Initialize values according to the rules.
-	void init(const Ruleset *rules);
-	/// Loads the data from YAML.
-	void load(const Ruleset *rules, const YAML::Node& node);
-	/// Saves the data to YAML.
-	YAML::Node save() const;
-	/// Choose a random region for a regular mission.
-	const std::string &chooseRandomRegion() const;
-	/// Choose a random mission for a region.
-	const std::string &chooseRandomMission(const std::string &region) const;
-	/// Remove a region and mission from the list of posibilities.
-	bool removeMission(const std::string &region, const std::string &mission);
 private:
 	/// The chances of each region to be targeted for a mission.
 	WeightedOptions _regionChances;
@@ -55,8 +41,29 @@ private:
 	std::map<std::string, WeightedOptions*> _regionMissions;
 
 	// Disable copy and assignments.
-	AlienStrategy(const AlienStrategy &);
-	AlienStrategy &operator=(const AlienStrategy &);
+	AlienStrategy(const AlienStrategy&);
+	AlienStrategy &operator=(const AlienStrategy&);
+
+	public:
+		/// Create an AlienStrategy with no data.
+		AlienStrategy();
+		/// Free resources used by the AlienStrategy.
+		~AlienStrategy();
+
+		/// Saves the data to YAML.
+		YAML::Node save() const;
+
+		/// Initialize values according to the rules.
+		void init(const Ruleset* rules);
+		/// Loads the data from YAML.
+		void load(const Ruleset* rules, const YAML::Node& node);
+
+		/// Choose a random region for a regular mission.
+		const std::string& chooseRandomRegion() const;
+		/// Choose a random mission for a region.
+		const std::string& chooseRandomMission(const std::string& region) const;
+		/// Remove a region and mission from the list of posibilities.
+		bool removeMission(const std::string& region, const std::string& mission);
 };
 
 }

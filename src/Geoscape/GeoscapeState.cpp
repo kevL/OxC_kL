@@ -1821,7 +1821,7 @@ class GenerateSupplyMission
  */
 void GenerateSupplyMission::operator()(const AlienBase* base) const
 {
-	if (RNG::percent(6))
+	if (RNG::percent(5))
 	{
 		// Spawn supply mission for this base.
 		const RuleAlienMission& rule = *_ruleset.getAlienMission("STR_ALIEN_SUPPLY");
@@ -2092,8 +2092,7 @@ void GeoscapeState::time1Day()
 }
 
 /**
- * Takes care of any game logic that has to
- * run every game month, like funding.
+ * Takes care of any game logic that has to run every game month.
  */
 void GeoscapeState::time1Month()
 {
@@ -2105,13 +2104,14 @@ void GeoscapeState::time1Month()
 	bool newRetaliation = false;
 
 	// Determine alien mission for this month.
-	// kL_note: why done twice here?
 	determineAlienMissions();
 
-	if (monthsPassed > 5)
+//kL	if (monthsPassed > 5)
+	if (RNG::percent(monthsPassed * 2))		// kL
 		determineAlienMissions();
 
-	if (monthsPassed >= 14 - (int)(_game->getSavedGame()->getDifficulty())
+//kL	if (monthsPassed > 13 - static_cast<int>(_game->getSavedGame()->getDifficulty())
+	if (RNG::percent(monthsPassed * static_cast<int>(_game->getSavedGame()->getDifficulty()))	// kL
 		|| _game->getSavedGame()->isResearched("STR_THE_MARTIAN_SOLUTION"))
 	{
 		newRetaliation = true;
@@ -2120,11 +2120,17 @@ void GeoscapeState::time1Month()
 	// Handle Psi-Training and initiate a new retaliation mission, if applicable
 	bool psi = false;
 
-	for(std::vector<Base*>::const_iterator b = _game->getSavedGame()->getBases()->begin(); b != _game->getSavedGame()->getBases()->end(); ++b)
+	for(std::vector<Base*>::const_iterator
+			b = _game->getSavedGame()->getBases()->begin();
+			b != _game->getSavedGame()->getBases()->end();
+			++b)
 	{
 		if (newRetaliation)
 		{
-			for (std::vector<Region*>::iterator i = _game->getSavedGame()->getRegions()->begin(); i != _game->getSavedGame()->getRegions()->end(); ++i)
+			for (std::vector<Region*>::iterator
+					i = _game->getSavedGame()->getRegions()->begin();
+					i != _game->getSavedGame()->getRegions()->end();
+					++i)
 			{
 				if ((*i)->getRules()->insideRegion((*b)->getLongitude(), (*b)->getLatitude()))
 				{
@@ -2153,7 +2159,10 @@ void GeoscapeState::time1Month()
 		{
 			psi = true;
 
-			for (std::vector<Soldier*>::const_iterator s = (*b)->getSoldiers()->begin(); s != (*b)->getSoldiers()->end(); ++s)
+			for (std::vector<Soldier*>::const_iterator
+					s = (*b)->getSoldiers()->begin();
+					s != (*b)->getSoldiers()->end();
+					++s)
 			{
 				if ((*s)->isInPsiTraining())
 				{
@@ -2171,7 +2180,10 @@ void GeoscapeState::time1Month()
 	// Handle Xcom Operatives discovering bases
 	if (!_game->getSavedGame()->getAlienBases()->empty())
 	{
-		for (std::vector<AlienBase*>::const_iterator b = _game->getSavedGame()->getAlienBases()->begin(); b != _game->getSavedGame()->getAlienBases()->end(); ++b)
+		for (std::vector<AlienBase*>::const_iterator
+				b = _game->getSavedGame()->getAlienBases()->begin();
+				b != _game->getSavedGame()->getAlienBases()->end();
+				++b)
 		{
 			if (!(*b)->isDiscovered()
 				&& RNG::percent(5))
@@ -2649,8 +2661,8 @@ void GeoscapeState::handleBaseDefense(Base* base, Ufo* ufo)
 
 /**
  * Determine the alien missions to start this month.
- * In the vanilla game each month a terror mission and one other are started in
- * random regions.
+ * In the vanilla game each month a terror mission
+ * and one other are started in random regions.
  */
 void GeoscapeState::determineAlienMissions(bool atGameStart)
 {
@@ -2658,12 +2670,12 @@ void GeoscapeState::determineAlienMissions(bool atGameStart)
 	// One terror mission per month
 	//
 
-	//Determine a random region with at least one city.
+	// Determine a random region with at least one city.
 	RuleRegion* region = 0;
 	std::vector<std::string> regions = _game->getRuleset()->getRegionsList();
 	do
 	{
-		region = _game->getRuleset()->getRegion(regions[RNG::generate(0, regions.size()-1)]);
+		region = _game->getRuleset()->getRegion(regions[RNG::generate(0, regions.size() - 1)]);
 	}
 	while (region->getCities()->empty());
 

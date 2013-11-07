@@ -48,19 +48,19 @@ Armor::Armor(const std::string& type)
 		_size(1),
 		_weight(0)
 {
-/*	_stats.bravery		= 0;
-	_stats.firing		= 0;
+	_stats.tu			= 0;
+	_stats.stamina		= 0;
 	_stats.health		= 0;
-	_stats.melee		= 0;
+	_stats.bravery		= 0;
+	_stats.reactions	= 0;
+	_stats.firing		= 0;
+	_stats.throwing		= 0;
+	_stats.strength		= 0;
 	_stats.psiSkill		= 0;
 	_stats.psiStrength	= 0;
-	_stats.reactions	= 0;
-	_stats.stamina		= 0;
-	_stats.strength		= 0;
-	_stats.tu			= 0;
-	_stats.throwing		= 0; */
+	_stats.melee		= 0;
 
-//kL	_stats = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+//	_stats = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 	for (int i = 0; i < DAMAGE_TYPES; i++)
 	{
@@ -98,7 +98,11 @@ void Armor::load(const YAML::Node& node)
 
 	if (const YAML::Node& dmg = node["damageModifier"])
 	{
-		for (size_t i = 0; i < dmg.size() && i < DAMAGE_TYPES; ++i)
+		for (size_t
+				i = 0;
+				i < dmg.size()
+					&& i < DAMAGE_TYPES;
+				++i)
 		{
 			_damageModifier[i] = dmg[i].as<float>();
 		}
@@ -242,7 +246,7 @@ std::vector<int> Armor::getLoftempsSet() const
 
 /**
   * Gets pointer to the armor's stats.
-  * @return stats Pointer to the armor's stats.
+  * @return stats, Pointer to the armor's stats.
   */
 UnitStats* Armor::getStats()
 {

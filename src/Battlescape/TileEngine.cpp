@@ -1076,7 +1076,7 @@ bool TileEngine::canTargetTile(
  */
 std::vector<BattleUnit*> TileEngine::getSpottingUnits(BattleUnit* unit)
 {
-	Log(LOG_INFO) << "TileEngine::getSpottingUnits() spottedID " << (unit)->getId() << " : initia = " << (unit)->getReactionScore();
+	Log(LOG_INFO) << "TileEngine::getSpottingUnits() targetID " << (unit)->getId() << " : initi = " << static_cast<int>((unit)->getInitiative());
 
 	Tile* tile = unit->getTile();
 
@@ -1086,6 +1086,8 @@ std::vector<BattleUnit*> TileEngine::getSpottingUnits(BattleUnit* unit)
 			bu != _save->getUnits()->end();
 			++bu)
 	{
+		int buIniti = static_cast<int>((*bu)->getInitiative()); // purely Debug info, here.
+
 		if (!(*bu)->isOut(true)																// not dead/unconscious
 //			&& (*bu)->getHealth() != 0														// not dying, checked by "isOut(true)"
 			&& (*bu)->getStunlevel() < (*bu)->getHealth()									// not about to pass out
@@ -1113,23 +1115,31 @@ std::vector<BattleUnit*> TileEngine::getSpottingUnits(BattleUnit* unit)
 //				if (_save->getSide() != FACTION_NEUTRAL // no reaction on civilian turn. done in "checkReactionFire()"
 				if (canMakeSnap(*bu, unit))
 				{
-					Log(LOG_INFO) << ". . . spotterID " << (*bu)->getId() << " : initia = " << (*bu)->getReactionScore() << " : add";
+					Log(LOG_INFO) << ". . . reactID " << (*bu)->getId()
+							<< " : initi = " << buIniti
+							<< " : ADD";
 
 					spotters.push_back(*bu);
 				}
 				else
 				{
-					Log(LOG_INFO) << ". . spotterID " << (*bu)->getId() << " : initia = "  << (*bu)->getReactionScore() << " : can't makeSnap.";
+					Log(LOG_INFO) << ". . reactID " << (*bu)->getId()
+							<< " : initi = "  << buIniti
+							<< " : can't makeSnap.";
 				}
 			}
 			else
 			{
-				Log(LOG_INFO) << ". . spotterID " << (*bu)->getId() << " : initia = "  << (*bu)->getReactionScore() << " : not facing AND not aggro, OR target obscured/OoR";
+				Log(LOG_INFO) << ". . reactID " << (*bu)->getId()
+						<< " : initi = "  << buIniti
+						<< " : not facing AND not aggro, OR target obscured/OoR";
 			}
 		}
 		else
 		{
-			Log(LOG_INFO) << ". . spotterID " << (*bu)->getId() << " : initia = "  << (*bu)->getReactionScore() << " : isOut(true) OR side's faction";
+			Log(LOG_INFO) << ". . reactID " << (*bu)->getId()
+					<< " : initi = "  << buIniti
+					<< " : isOut(true) OR side's faction";
 		}
 	}
 
@@ -1144,7 +1154,7 @@ std::vector<BattleUnit*> TileEngine::getSpottingUnits(BattleUnit* unit)
  */
 bool TileEngine::canMakeSnap(BattleUnit* unit, BattleUnit* target)
 {
-	Log(LOG_INFO) << "TileEngine::canMakeSnap() spottedID " << (unit)->getId() << " : initia = " << (unit)->getReactionScore();
+	Log(LOG_INFO) << "TileEngine::canMakeSnap() reactID " << unit->getId() << " vs targetID " << target->getId();
 
 	BattleItem* weapon; // = unit->getMainHandWeapon(true);
 	if (unit->getFaction() == FACTION_PLAYER
@@ -1181,7 +1191,7 @@ bool TileEngine::canMakeSnap(BattleUnit* unit, BattleUnit* target)
  */
 bool TileEngine::checkReactionFire(BattleUnit* unit)
 {
-	Log(LOG_INFO) << "TileEngine::checkReactionFire() vs " << unit->getId();
+	Log(LOG_INFO) << "TileEngine::checkReactionFire() vs targetID" << unit->getId();
 
 	if (_save->getSide() == FACTION_NEUTRAL) // no reaction on civilian turn.
 		return false;
@@ -1223,7 +1233,9 @@ bool TileEngine::checkReactionFire(BattleUnit* unit)
 				//Log(LOG_INFO) << ". . no Snap by : " << reactor->getId();
 
 				// can't make a reaction snapshot for whatever reason, boot this guy from the vector.
-				for (std::vector<BattleUnit*>::iterator i = spotters.begin(); i != spotters.end(); ++i)
+				for (std::vector<BattleUnit*>::iterator
+						i = spotters.begin();
+						i != spotters.end(); ++i)
 				{
 					if (*i == reactor)
 					{
@@ -1238,17 +1250,17 @@ bool TileEngine::checkReactionFire(BattleUnit* unit)
 
 				continue;
 			}
-			else	// kL
+			else
 			{
 				//Log(LOG_INFO) << ". . Snap by : " << reactor->getId();
-				result = true;		// kL
+				result = true;
 			}
 
 			//Log(LOG_INFO) << ". . Snap by : " << reactor->getId();
 
-			// nice shot, kid. don't get cocky.
+			// nice shot, kid. don't get too cocky.
 			reactor = getReactor(spotters, unit);
-//kL			result = true;
+			Log(LOG_INFO) << ". . next at bat : " << reactor->getId();
 		}
 	}
 
@@ -1264,7 +1276,7 @@ bool TileEngine::checkReactionFire(BattleUnit* unit)
  */
 BattleUnit* TileEngine::getReactor(std::vector<BattleUnit*> spotters, BattleUnit* unit)
 {
-	Log(LOG_INFO) << "TileEngine::getReactor() vs " << unit->getId();
+	Log(LOG_INFO) << "TileEngine::getReactor() vs targetID" << unit->getId();
 
 	int bestScore = -1;
 	BattleUnit* reactor = 0;
@@ -1274,19 +1286,20 @@ BattleUnit* TileEngine::getReactor(std::vector<BattleUnit*> spotters, BattleUnit
 			spot != spotters.end();
 			++spot)
 	{
-		Log(LOG_INFO) << ". spotterID " << (*spot)->getId();
+		Log(LOG_INFO) << ". reactID " << (*spot)->getId();
 
 		if (!(*spot)->isOut(true)
 //			&& canMakeSnap((*spot), unit)				// done in "getSpottingUnits()"
-			&& (*spot)->getReactionScore() > bestScore)
+			&& (*spot)->getInitiative() > bestScore)
 //			&& (*spot) != bu)	// kL, stop unit from reacting twice (unless target uses more TU, hopefully)
 		{
-			bestScore = static_cast<int>((*spot)->getReactionScore());
+			bestScore = static_cast<int>((*spot)->getInitiative());
 			reactor = *spot;
 		}
 	}
 
-	if (static_cast<int>(unit->getReactionScore()) <= bestScore)
+	// reactor has to *best* unit.Initi to get initiative
+	if (bestScore > static_cast<int>(unit->getInitiative()))
 	{
 		if (reactor->getOriginalFaction() == FACTION_PLAYER)
 		{
@@ -1295,7 +1308,8 @@ BattleUnit* TileEngine::getReactor(std::vector<BattleUnit*> spotters, BattleUnit
 	}
 	else
 	{
-		// unit has to *best* the bestScore to regain initiative.
+		Log(LOG_INFO) << ". initi returns to targetID " << unit->getId();
+
 		reactor = unit;
 	}
 
@@ -1310,7 +1324,7 @@ BattleUnit* TileEngine::getReactor(std::vector<BattleUnit*> spotters, BattleUnit
  */
 bool TileEngine::tryReactionSnap(BattleUnit* unit, BattleUnit* target)
 {
-	Log(LOG_INFO) << "TileEngine::tryReactionSnap() unitID " << unit->getId() << " vs targetID " << target->getId();
+	Log(LOG_INFO) << "TileEngine::tryReactionSnap() reactID " << unit->getId() << " vs targetID " << target->getId();
 	BattleAction action;
 
 	// note that other checks for/of weapon were done in "canMakeSnap()"
@@ -1366,6 +1380,8 @@ bool TileEngine::tryReactionSnap(BattleUnit* unit, BattleUnit* target)
 
 		if (action.targeting && unit->spendTimeUnits(action.TU))
 		{
+			Log(LOG_INFO) << ". Reaction Fire by reactID " << unit->getId();
+
 			action.TU = 0;
 
 			action.cameraPosition = _save->getBattleState()->getMap()->getCamera()->getMapOffset();

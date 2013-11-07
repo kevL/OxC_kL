@@ -187,42 +187,42 @@ Ruleset::~Ruleset()
 		delete i->second;
 	}
 
-	for (std::map<std::string, RuleResearch *>::const_iterator i = _research.begin (); i != _research.end (); ++i)
+	for (std::map<std::string, RuleResearch*>::const_iterator i = _research.begin (); i != _research.end (); ++i)
 	{
 		delete i->second;
 	}
 
-	for (std::map<std::string, RuleManufacture *>::const_iterator i = _manufacture.begin (); i != _manufacture.end (); ++i)
+	for (std::map<std::string, RuleManufacture*>::const_iterator i = _manufacture.begin (); i != _manufacture.end (); ++i)
 	{
 		delete i->second;
 	}
 
-	for (std::map<std::string, UfoTrajectory *>::const_iterator i = _ufoTrajectories.begin (); i != _ufoTrajectories.end (); ++i)
+	for (std::map<std::string, UfoTrajectory*>::const_iterator i = _ufoTrajectories.begin (); i != _ufoTrajectories.end (); ++i)
 	{
 		delete i->second;
 	}
 
-	for (std::map<std::string, RuleAlienMission *>::const_iterator i = _alienMissions.begin (); i != _alienMissions.end (); ++i)
+	for (std::map<std::string, RuleAlienMission*>::const_iterator i = _alienMissions.begin (); i != _alienMissions.end (); ++i)
 	{
 		delete i->second;
 	}
 
-	for (std::map<std::string, MCDPatch *>::const_iterator i = _MCDPatches.begin (); i != _MCDPatches.end (); ++i)
+	for (std::map<std::string, MCDPatch*>::const_iterator i = _MCDPatches.begin (); i != _MCDPatches.end (); ++i)
 	{
 		delete i->second;
 	}
 
-	for (std::vector< std::pair<std::string, ExtraSprites *> >::const_iterator i = _extraSprites.begin (); i != _extraSprites.end (); ++i)
+	for (std::vector< std::pair<std::string, ExtraSprites*>>::const_iterator i = _extraSprites.begin (); i != _extraSprites.end (); ++i)
 	{
 		delete i->second;
 	}
 
-	for (std::vector< std::pair<std::string, ExtraSounds *> >::const_iterator i = _extraSounds.begin (); i != _extraSounds.end (); ++i)
+	for (std::vector< std::pair<std::string, ExtraSounds*>>::const_iterator i = _extraSounds.begin (); i != _extraSounds.end (); ++i)
 	{
 		delete i->second;
 	}
 
-	for (std::map<std::string, ExtraStrings *>::const_iterator i = _extraStrings.begin (); i != _extraStrings.end (); ++i)
+	for (std::map<std::string, ExtraStrings*>::const_iterator i = _extraStrings.begin (); i != _extraStrings.end (); ++i)
 	{
 		delete i->second;
 	}
@@ -232,7 +232,7 @@ Ruleset::~Ruleset()
  * Loads a ruleset's contents from the given source.
  * @param source The source to use.
  */
-void Ruleset::load(const std::string &source)
+void Ruleset::load(const std::string& source)
 {
 	std::string dirname = CrossPlatform::getDataFolder("Ruleset/" + source + '/');
 	if (!CrossPlatform::folderExists(dirname))
@@ -246,7 +246,7 @@ void Ruleset::load(const std::string &source)
  * Rules that match pre-existing rules overwrite them.
  * @param filename YAML filename.
  */
-void Ruleset::loadFile(const std::string &filename)
+void Ruleset::loadFile(const std::string& filename)
 {
 	YAML::Node doc = YAML::LoadFile(filename);
 	for (YAML::const_iterator i = doc["countries"].begin(); i != doc["countries"].end(); ++i)
@@ -318,7 +318,7 @@ void Ruleset::loadFile(const std::string &filename)
 
 	for (YAML::const_iterator i = doc["invs"].begin(); i != doc["invs"].end(); ++i)
 	{
-		RuleInventory *rule = loadRule(*i, &_invs, 0, "id");
+		RuleInventory* rule = loadRule(*i, &_invs, 0, "id");
 		if (rule != 0)
 		{
 			rule->load(*i);
@@ -334,7 +334,9 @@ void Ruleset::loadFile(const std::string &filename)
 		}
 	}
 
-	for (YAML::const_iterator i = doc["armors"].begin(); i != doc["armors"].end(); ++i)
+	for (YAML::const_iterator
+			i = doc["armors"].begin();
+			i != doc["armors"].end();++i)
 	{
 		Armor* rule = loadRule(*i, &_armors, &_armorsIndex);
 		if (rule != 0)
@@ -465,7 +467,7 @@ void Ruleset::loadFile(const std::string &filename)
 		}
 	}
 
-	_alienItemLevels = doc["alienItemLevels"].as< std::vector< std::vector<int> > >(_alienItemLevels);
+	_alienItemLevels = doc["alienItemLevels"].as< std::vector< std::vector<int>> >(_alienItemLevels);
 
 	for (YAML::const_iterator i = doc["MCDPatches"].begin(); i != doc["MCDPatches"].end(); ++i)
 	{
@@ -537,7 +539,7 @@ void Ruleset::loadFile(const std::string &filename)
  * Loads the contents of all the rule files in the given directory.
  * @param dirname The name of an existing directory containing rule files.
  */
-void Ruleset::loadFiles(const std::string &dirname)
+void Ruleset::loadFiles(const std::string& dirname)
 {
 	std::vector<std::string> names = CrossPlatform::getFolderContents(dirname, "rul");
 	for (std::vector<std::string>::iterator i = names.begin(); i != names.end(); ++i)
@@ -615,7 +617,7 @@ SavedGame* Ruleset::newSave() const
 	}
 
 	// Set up starting base
-	Base *base = new Base(this);
+	Base* base = new Base(this);
 	base->load(_startingBase, save, true);
 
 	// Correct IDs
@@ -628,7 +630,7 @@ SavedGame* Ruleset::newSave() const
 	int soldiers = _startingBase["randomSoldiers"].as<int>(0);
 	for (int i = 0; i < soldiers; ++i)
 	{
-		Soldier *soldier = new Soldier(getSoldier("XCOM"), getArmor("STR_NONE_UC"), &_names, save->getId("STR_SOLDIER"));
+		Soldier* soldier = new Soldier(getSoldier("XCOM"), getArmor("STR_NONE_UC"), &_names, save->getId("STR_SOLDIER"));
 		soldier->setCraft(base->getCrafts()->front());
 		base->getSoldiers()->push_back(soldier);
 	}
@@ -644,7 +646,7 @@ SavedGame* Ruleset::newSave() const
  * Returns the list of soldier name pools.
  * @return Pointer to soldier name pool list.
  */
-const std::vector<SoldierNamePool*> &Ruleset::getPools() const
+const std::vector<SoldierNamePool*>& Ruleset::getPools() const
 {
 	return _names;
 }
@@ -654,7 +656,7 @@ const std::vector<SoldierNamePool*> &Ruleset::getPools() const
  * @param id Country type.
  * @return Rules for the country.
  */
-RuleCountry *Ruleset::getCountry(const std::string &id) const
+RuleCountry* Ruleset::getCountry(const std::string& id) const
 {
 	std::map<std::string, RuleCountry*>::const_iterator i = _countries.find(id);
 	if (_countries.end() != i) return i->second; else return 0;
@@ -664,7 +666,7 @@ RuleCountry *Ruleset::getCountry(const std::string &id) const
  * Returns the list of all countries provided by the ruleset.
  * @return List of countries.
  */
-const std::vector<std::string> &Ruleset::getCountriesList() const
+const std::vector<std::string>& Ruleset::getCountriesList() const
 {
 	return _countriesIndex;
 }
@@ -674,7 +676,7 @@ const std::vector<std::string> &Ruleset::getCountriesList() const
  * @param id Region type.
  * @return Rules for the region.
  */
-RuleRegion *Ruleset::getRegion(const std::string &id) const
+RuleRegion* Ruleset::getRegion(const std::string& id) const
 {
 	std::map<std::string, RuleRegion*>::const_iterator i = _regions.find(id);
 	if (_regions.end() != i) return i->second; else return 0;
@@ -685,7 +687,7 @@ RuleRegion *Ruleset::getRegion(const std::string &id) const
  * provided by the ruleset.
  * @return List of regions.
  */
-const std::vector<std::string> &Ruleset::getRegionsList() const
+const std::vector<std::string>& Ruleset::getRegionsList() const
 {
 	return _regionsIndex;
 }
@@ -695,7 +697,7 @@ const std::vector<std::string> &Ruleset::getRegionsList() const
  * @param id Facility type.
  * @return Rules for the facility.
  */
-RuleBaseFacility *Ruleset::getBaseFacility(const std::string &id) const
+RuleBaseFacility* Ruleset::getBaseFacility(const std::string& id) const
 {
 	std::map<std::string, RuleBaseFacility*>::const_iterator i = _facilities.find(id);
 	if (_facilities.end() != i) return i->second; else return 0;
@@ -706,7 +708,7 @@ RuleBaseFacility *Ruleset::getBaseFacility(const std::string &id) const
  * provided by the ruleset.
  * @return List of base faciliies.
  */
-const std::vector<std::string> &Ruleset::getBaseFacilitiesList() const
+const std::vector<std::string>& Ruleset::getBaseFacilitiesList() const
 {
 	return _facilitiesIndex;
 }
@@ -716,7 +718,7 @@ const std::vector<std::string> &Ruleset::getBaseFacilitiesList() const
  * @param id Craft type.
  * @return Rules for the craft.
  */
-RuleCraft *Ruleset::getCraft(const std::string &id) const
+RuleCraft* Ruleset::getCraft(const std::string& id) const
 {
 	std::map<std::string, RuleCraft*>::const_iterator i = _crafts.find(id);
 	if (_crafts.end() != i) return i->second; else return 0;
@@ -727,7 +729,7 @@ RuleCraft *Ruleset::getCraft(const std::string &id) const
  * provided by the ruleset.
  * @return List of crafts.
  */
-const std::vector<std::string> &Ruleset::getCraftsList() const
+const std::vector<std::string>& Ruleset::getCraftsList() const
 {
 	return _craftsIndex;
 }
@@ -737,7 +739,7 @@ const std::vector<std::string> &Ruleset::getCraftsList() const
  * @param id Craft weapon type.
  * @return Rules for the craft weapon.
  */
-RuleCraftWeapon *Ruleset::getCraftWeapon(const std::string &id) const
+RuleCraftWeapon* Ruleset::getCraftWeapon(const std::string& id) const
 {
 	std::map<std::string, RuleCraftWeapon*>::const_iterator i = _craftWeapons.find(id);
 	if (_craftWeapons.end() != i) return i->second; else return 0;
@@ -748,7 +750,7 @@ RuleCraftWeapon *Ruleset::getCraftWeapon(const std::string &id) const
  * provided by the ruleset.
  * @return List of craft weapons.
  */
-const std::vector<std::string> &Ruleset::getCraftWeaponsList() const
+const std::vector<std::string>& Ruleset::getCraftWeaponsList() const
 {
 	return _craftWeaponsIndex;
 }
@@ -758,7 +760,7 @@ const std::vector<std::string> &Ruleset::getCraftWeaponsList() const
  * @param id Item type.
  * @return Rules for the item, or 0 when the item is not found.
  */
-RuleItem *Ruleset::getItem(const std::string &id) const
+RuleItem* Ruleset::getItem(const std::string& id) const
 {
 	if (_items.find(id) != _items.end())
 		return _items.find(id)->second;
@@ -771,7 +773,7 @@ RuleItem *Ruleset::getItem(const std::string &id) const
  * provided by the ruleset.
  * @return List of items.
  */
-const std::vector<std::string> &Ruleset::getItemsList() const
+const std::vector<std::string>& Ruleset::getItemsList() const
 {
 	return _itemsIndex;
 }
@@ -781,7 +783,7 @@ const std::vector<std::string> &Ruleset::getItemsList() const
  * @param id UFO type.
  * @return Rules for the UFO.
  */
-RuleUfo *Ruleset::getUfo(const std::string &id) const
+RuleUfo* Ruleset::getUfo(const std::string& id) const
 {
 	std::map<std::string, RuleUfo*>::const_iterator i = _ufos.find(id);
 	if (_ufos.end() != i) return i->second; else return 0;
@@ -792,7 +794,7 @@ RuleUfo *Ruleset::getUfo(const std::string &id) const
  * provided by the ruleset.
  * @return List of ufos.
  */
-const std::vector<std::string> &Ruleset::getUfosList() const
+const std::vector<std::string>& Ruleset::getUfosList() const
 {
 	return _ufosIndex;
 }
@@ -802,7 +804,7 @@ const std::vector<std::string> &Ruleset::getUfosList() const
  * provided by the ruleset.
  * @return List of terrains.
  */
-const std::vector<std::string> &Ruleset::getTerrainList() const
+const std::vector<std::string>& Ruleset::getTerrainList() const
 {
 	return _terrainIndex;
 }
@@ -812,7 +814,7 @@ const std::vector<std::string> &Ruleset::getTerrainList() const
  * @param name Terrain name.
  * @return Rules for the terrain.
  */
-RuleTerrain *Ruleset::getTerrain(const std::string &name) const
+RuleTerrain* Ruleset::getTerrain(const std::string& name) const
 {
 	std::map<std::string, RuleTerrain*>::const_iterator i = _terrains.find(name);
 	if (_terrains.end() != i) return i->second; else return 0;
@@ -823,12 +825,12 @@ RuleTerrain *Ruleset::getTerrain(const std::string &name) const
  * @param name Datafile name.
  * @return Rules for the datafile.
  */
-MapDataSet *Ruleset::getMapDataSet(const std::string &name)
+MapDataSet* Ruleset::getMapDataSet(const std::string& name)
 {
 	std::map<std::string, MapDataSet*>::iterator map = _mapDataSets.find(name);
 	if (map == _mapDataSets.end())
 	{
-		MapDataSet *set = new MapDataSet(name);
+		MapDataSet* set = new MapDataSet(name);
 		_mapDataSets[name] = set;
 		return set;
 	}
@@ -843,7 +845,7 @@ MapDataSet *Ruleset::getMapDataSet(const std::string &name)
  * @param name Unit name.
  * @return Rules for the units.
  */
-RuleSoldier *Ruleset::getSoldier(const std::string &name) const
+RuleSoldier* Ruleset::getSoldier(const std::string& name) const
 {
 	std::map<std::string, RuleSoldier*>::const_iterator i = _soldiers.find(name);
 	if (_soldiers.end() != i) return i->second; else return 0;
@@ -854,7 +856,7 @@ RuleSoldier *Ruleset::getSoldier(const std::string &name) const
  * @param name Unit name.
  * @return Rules for the units.
  */
-Unit *Ruleset::getUnit(const std::string &name) const
+Unit* Ruleset::getUnit(const std::string& name) const
 {
 	std::map<std::string, Unit*>::const_iterator i = _units.find(name);
 	if (_units.end() != i) return i->second; else return 0;
@@ -865,7 +867,7 @@ Unit *Ruleset::getUnit(const std::string &name) const
  * @param name Race name.
  * @return Rules for the race.
  */
-AlienRace *Ruleset::getAlienRace(const std::string &name) const
+AlienRace* Ruleset::getAlienRace(const std::string& name) const
 {
 	std::map<std::string, AlienRace*>::const_iterator i = _alienRaces.find(name);
 	if (_alienRaces.end() != i) return i->second; else return 0;
@@ -876,7 +878,7 @@ AlienRace *Ruleset::getAlienRace(const std::string &name) const
  * provided by the ruleset.
  * @return List of alien races.
  */
-const std::vector<std::string> &Ruleset::getAlienRacesList() const
+const std::vector<std::string>& Ruleset::getAlienRacesList() const
 {
 	return _aliensIndex;
 }
@@ -886,7 +888,7 @@ const std::vector<std::string> &Ruleset::getAlienRacesList() const
  * @param name Deployment name.
  * @return Rules for the deployment.
  */
-AlienDeployment *Ruleset::getDeployment(const std::string &name) const
+AlienDeployment* Ruleset::getDeployment(const std::string& name) const
 {
 	std::map<std::string, AlienDeployment*>::const_iterator i = _alienDeployments.find(name);
 	if (_alienDeployments.end() != i) return i->second; else return 0;
@@ -897,7 +899,7 @@ AlienDeployment *Ruleset::getDeployment(const std::string &name) const
  * provided by the ruleset.
  * @return List of alien deployments.
  */
-const std::vector<std::string> &Ruleset::getDeploymentsList() const
+const std::vector<std::string>& Ruleset::getDeploymentsList() const
 {
 	return _deploymentsIndex;
 }
@@ -907,18 +909,20 @@ const std::vector<std::string> &Ruleset::getDeploymentsList() const
  * @param name Armor name.
  * @return Rules for the armor.
  */
-Armor *Ruleset::getArmor(const std::string &name) const
+Armor* Ruleset::getArmor(const std::string& name) const
 {
 	std::map<std::string, Armor*>::const_iterator i = _armors.find(name);
-	if (_armors.end() != i) return i->second; else return 0;
+	if (_armors.end() != i)
+		return i->second;
+	else
+		return 0;
 }
 
 /**
- * Returns the list of all armors
- * provided by the ruleset.
+ * Returns the list of all armors provided by the ruleset.
  * @return List of armors.
  */
-const std::vector<std::string> &Ruleset::getArmorsList() const
+const std::vector<std::string>& Ruleset::getArmorsList() const
 {
 	return _armorsIndex;
 }
@@ -968,7 +972,7 @@ int Ruleset::getPersonnelTime() const
  * @param name Article name.
  * @return Article definition.
  */
-ArticleDefinition *Ruleset::getUfopaediaArticle(const std::string &name) const
+ArticleDefinition* Ruleset::getUfopaediaArticle(const std::string& name) const
 {
 	std::map<std::string, ArticleDefinition*>::const_iterator i = _ufopaediaArticles.find(name);
 	if (_ufopaediaArticles.end() != i) return i->second; else return 0;
@@ -979,7 +983,7 @@ ArticleDefinition *Ruleset::getUfopaediaArticle(const std::string &name) const
  * provided by the ruleset.
  * @return List of articles.
  */
-const std::vector<std::string> &Ruleset::getUfopaediaList() const
+const std::vector<std::string>& Ruleset::getUfopaediaList() const
 {
 	return _ufopaediaIndex;
 }
@@ -988,7 +992,7 @@ const std::vector<std::string> &Ruleset::getUfopaediaList() const
  * Returns the list of inventories.
  * @return Pointer to inventory list.
  */
-std::map<std::string, RuleInventory*> *Ruleset::getInventories()
+std::map<std::string, RuleInventory*>* Ruleset::getInventories()
 {
 	return &_invs;
 }
@@ -998,7 +1002,7 @@ std::map<std::string, RuleInventory*> *Ruleset::getInventories()
  * @param id Inventory type.
  * @return Inventory ruleset.
  */
-RuleInventory *Ruleset::getInventory(const std::string &id) const
+RuleInventory* Ruleset::getInventory(const std::string& id) const
 {
 	std::map<std::string, RuleInventory*>::const_iterator i = _invs.find(id);
 	if (_invs.end() != i) return i->second; else return 0;
@@ -1009,9 +1013,9 @@ RuleInventory *Ruleset::getInventory(const std::string &id) const
  * @param id Research project type.
  * @return Rules for the research project.
  */
-RuleResearch *Ruleset::getResearch (const std::string &id) const
+RuleResearch* Ruleset::getResearch (const std::string& id) const
 {
-	std::map<std::string, RuleResearch *>::const_iterator i = _research.find(id);
+	std::map<std::string, RuleResearch*>::const_iterator i = _research.find(id);
 	if (_research.end() != i) return i->second; else return 0;
 }
 
@@ -1019,7 +1023,7 @@ RuleResearch *Ruleset::getResearch (const std::string &id) const
  * Returns the list of research projects.
  * @return The list of research projects.
  */
-const std::vector<std::string> &Ruleset::getResearchList () const
+const std::vector<std::string>& Ruleset::getResearchList () const
 {
 	return _researchIndex;
 }
@@ -1029,9 +1033,9 @@ const std::vector<std::string> &Ruleset::getResearchList () const
  * @param id Manufacture project type.
  * @return Rules for the manufacture project.
  */
-RuleManufacture *Ruleset::getManufacture (const std::string &id) const
+RuleManufacture* Ruleset::getManufacture (const std::string& id) const
 {
-	std::map<std::string, RuleManufacture *>::const_iterator i = _manufacture.find(id);
+	std::map<std::string, RuleManufacture*>::const_iterator i = _manufacture.find(id);
 	if (_manufacture.end() != i) return i->second; else return 0;
 }
 
@@ -1039,7 +1043,7 @@ RuleManufacture *Ruleset::getManufacture (const std::string &id) const
  * Returns the list of manufacture projects.
  * @return The list of manufacture projects.
  */
-const std::vector<std::string> &Ruleset::getManufactureList () const
+const std::vector<std::string>& Ruleset::getManufactureList () const
 {
 	return _manufactureIndex;
 }
@@ -1070,9 +1074,9 @@ std::vector<OpenXcom::RuleBaseFacility*> Ruleset::getCustomBaseFacilities() cons
  * @param id Ufo trajectory id.
  * @return A pointer to the data for the specified ufo trajectory.
  */
-const UfoTrajectory *Ruleset::getUfoTrajectory(const std::string &id) const
+const UfoTrajectory* Ruleset::getUfoTrajectory(const std::string& id) const
 {
-	std::map<std::string, UfoTrajectory *>::const_iterator i = _ufoTrajectories.find(id);
+	std::map<std::string, UfoTrajectory*>::const_iterator i = _ufoTrajectories.find(id);
 	if (_ufoTrajectories.end() != i) return i->second; else return 0;
 }
 
@@ -1081,9 +1085,9 @@ const UfoTrajectory *Ruleset::getUfoTrajectory(const std::string &id) const
  * @param id Alien mission type.
  * @return Rules for the alien mission.
  */
-const RuleAlienMission *Ruleset::getAlienMission(const std::string &id) const
+const RuleAlienMission* Ruleset::getAlienMission(const std::string& id) const
 {
-	std::map<std::string, RuleAlienMission *>::const_iterator i = _alienMissions.find(id);
+	std::map<std::string, RuleAlienMission*>::const_iterator i = _alienMissions.find(id);
 	if (_alienMissions.end() != i) return i->second; else return 0;
 }
 
@@ -1091,28 +1095,43 @@ const RuleAlienMission *Ruleset::getAlienMission(const std::string &id) const
  * Returns the list of alien mission types.
  * @return The list of alien mission types.
  */
-const std::vector<std::string> &Ruleset::getAlienMissionList() const
+const std::vector<std::string>& Ruleset::getAlienMissionList() const
 {
 	return _alienMissionsIndex;
 }
 
+
 #define CITY_EPSILON 0.00000000000001 // compensate for slight coordinate change
+
 
 /**
  * @brief Match a city based on coordinates.
  * This function object compares a city's coordinates with the stored coordinates.
  */
-class EqualCoordinates: std::unary_function<const City *, bool>
+class EqualCoordinates
+	:
+		std::unary_function<const City* , bool>
 {
-public:
-	/// Remembers the coordinates.
-	EqualCoordinates(double lon, double lat) : _lon(lon), _lat(lat) { /* Empty by design */ }
-	/// Compares with stored coordinates.
-	//bool operator()(const City *city) const { return AreSame(city->getLongitude(), _lon) && AreSame(city->getLatitude(), _lat); }
-	bool operator()(const City *city) const { return (fabs(city->getLongitude() - _lon) < CITY_EPSILON) &&
-	                                                 (fabs(city->getLatitude() - _lat) < CITY_EPSILON); }
 private:
 	double _lon, _lat;
+
+	public:
+		/// Remembers the coordinates.
+		EqualCoordinates(double lon, double lat)
+			:
+				_lon(lon),
+				_lat(lat)
+		{
+			/* Empty by design */
+		}
+
+		/// Compares with stored coordinates.
+		//bool operator()(const City* city) const { return AreSame(city->getLongitude(), _lon) && AreSame(city->getLatitude(), _lat); }
+		bool operator()(const City* city) const
+		{
+			return (fabs(city->getLongitude() - _lon) < CITY_EPSILON)
+					&& (fabs(city->getLatitude() - _lat) < CITY_EPSILON);
+		}
 };
 
 /**
@@ -1122,17 +1141,18 @@ private:
  * @param lat The latitude.
  * @return A pointer to the city information, or 0 if no city was found.
  */
-const City *Ruleset::locateCity(double lon, double lat) const
+const City* Ruleset::locateCity(double lon, double lat) const
 {
 	for (std::map<std::string, RuleRegion*>::const_iterator rr = _regions.begin(); rr != _regions.end(); ++rr)
 	{
-		const std::vector<City*> &cities = *rr->second->getCities();
-		std::vector<City *>::const_iterator citer = std::find_if(cities.begin(), cities.end(), EqualCoordinates(lon, lat));
+		const std::vector<City*>& cities = *rr->second->getCities();
+		std::vector<City*>::const_iterator citer = std::find_if(cities.begin(), cities.end(), EqualCoordinates(lon, lat));
 		if (citer != cities.end())
 		{
 			return *citer;
 		}
 	}
+
 	return 0;
 }
 
@@ -1140,7 +1160,7 @@ const City *Ruleset::locateCity(double lon, double lat) const
  * Gets the alien item level table.
  * @return A deep array containing the alien item levels.
  */
-const std::vector<std::vector<int> > &Ruleset::getAlienItemLevels() const
+const std::vector<std::vector<int>>& Ruleset::getAlienItemLevels() const
 {
 	return _alienItemLevels;
 }
@@ -1149,7 +1169,7 @@ const std::vector<std::vector<int> > &Ruleset::getAlienItemLevels() const
  * Gets the Defined starting base.
  * @return The starting base definition.
  */
-const YAML::Node &Ruleset::getStartingBase()
+const YAML::Node& Ruleset::getStartingBase()
 {
 	return _startingBase;
 }
@@ -1159,7 +1179,7 @@ const YAML::Node &Ruleset::getStartingBase()
  * @param id The ID of the MCDPatch we want.
  * @return The MCDPatch based on ID, or 0 if none defined.
  */
-MCDPatch *Ruleset::getMCDPatch(const std::string id) const
+MCDPatch* Ruleset::getMCDPatch(const std::string id) const
 {
 	std::map<std::string, MCDPatch*>::const_iterator i = _MCDPatches.find(id);
 	if (_MCDPatches.end() != i) return i->second; else return 0;
@@ -1169,7 +1189,7 @@ MCDPatch *Ruleset::getMCDPatch(const std::string id) const
  * Gets the list of external sprites.
  * @return The list of external sprites.
  */
-std::vector<std::pair<std::string, ExtraSprites *> > Ruleset::getExtraSprites() const
+std::vector<std::pair<std::string, ExtraSprites*>> Ruleset::getExtraSprites() const
 {
 	return _extraSprites;
 }
@@ -1178,7 +1198,7 @@ std::vector<std::pair<std::string, ExtraSprites *> > Ruleset::getExtraSprites() 
  * Gets the list of external sounds.
  * @return The list of external sounds.
  */
-std::vector<std::pair<std::string, ExtraSounds *> > Ruleset::getExtraSounds() const
+std::vector<std::pair<std::string, ExtraSounds*>> Ruleset::getExtraSounds() const
 {
 	return _extraSounds;
 }
@@ -1186,7 +1206,7 @@ std::vector<std::pair<std::string, ExtraSounds *> > Ruleset::getExtraSounds() co
  * Gets the list of external strings.
  * @return The list of external strings.
  */
-std::map<std::string, ExtraStrings *> Ruleset::getExtraStrings() const
+std::map<std::string, ExtraStrings*> Ruleset::getExtraStrings() const
 {
 	return _extraStrings;
 }

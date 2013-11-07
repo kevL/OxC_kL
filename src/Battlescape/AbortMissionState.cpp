@@ -52,14 +52,20 @@ AbortMissionState::AbortMissionState(Game* game, SavedBattleGame* battleGame, Ba
 		_inExitArea(0),
 		_outExitArea(0)
 {
-	// Create objects
+	Log(LOG_INFO) << "Create AbortMissionState";
+
 	_screen			= false;
+
 	_window			= new Window(this, 320, 144, 0, 0);
+
 	_txtInExit		= new Text(304, 17, 16, 25);
+
 	_txtOutsideExit	= new Text(304, 17, 16, 50);
-	_txtAbort		= new Text(320, 17, 0, 75);
-	_btnOk			= new TextButton(120, 16, 16, 110);
-	_btnCancel		= new TextButton(120, 16, 184, 110);
+
+	_txtAbort		= new Text(320, 17, 0, 83);
+
+	_btnOk			= new TextButton(134, 16, 16, 118);
+	_btnCancel		= new TextButton(134, 16, 170, 118);
 
 	add(_window);
 	add(_txtInExit);
@@ -77,8 +83,10 @@ AbortMissionState::AbortMissionState(Game* game, SavedBattleGame* battleGame, Ba
 		nextStage = game->getRuleset()->getDeployment(_battleGame->getMissionType())->getNextStage();
 	}
 
-	// Calculate values
-	for (std::vector<BattleUnit*>::iterator i = _battleGame->getUnits()->begin(); i != _battleGame->getUnits()->end(); ++i)
+	for (std::vector<BattleUnit*>::iterator
+			i = _battleGame->getUnits()->begin();
+			i != _battleGame->getUnits()->end();
+			++i)
 	{
 		if ((*i)->getOriginalFaction() == FACTION_PLAYER
 			&& !(*i)->isOut())
@@ -95,7 +103,7 @@ AbortMissionState::AbortMissionState(Game* game, SavedBattleGame* battleGame, Ba
 		}
 	}
 
-	// Set up objects
+
 	_window->setColor(Palette::blockOffset(0)-1);
 	_window->setHighContrast(true);
 	_window->setBackground(_game->getResourcePack()->getSurface("TAC00.SCR"));
@@ -140,7 +148,7 @@ AbortMissionState::AbortMissionState(Game* game, SavedBattleGame* battleGame, Ba
  */
 AbortMissionState::~AbortMissionState()
 {
-
+	Log(LOG_INFO) << "Delete AbortMissionState";
 }
 
 /**

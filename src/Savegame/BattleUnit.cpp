@@ -87,13 +87,14 @@ BattleUnit::BattleUnit(Soldier* soldier, UnitFaction faction)
 		_coverReserve(0),
 		_charging(0),
 		_turnsExposed(255),
+//		_armor(0),	// kL
 		_geoscapeSoldier(soldier),
 		_unitRules(0),
 		_rankInt(-1),
 		_turretType(-1),
 		_hidingForTurn(false)
 {
-	//Log(LOG_INFO) << "Create BattleUnit 1 : soldier";
+	Log(LOG_INFO) << "Create BattleUnit 1 : soldier ID = " << getId();
 
 	_name			= soldier->getName();
 	_id				= soldier->getId();
@@ -116,7 +117,8 @@ BattleUnit::BattleUnit(Soldier* soldier, UnitFaction faction)
 	_aggression		= 1;
 	_specab			= SPECAB_NONE;
 	_armor			= soldier->getArmor();
-	_stats			+= *_armor->getStats();	// armors may modify effective stats
+//kL	_stats			+= *_armor->getStats();	// armors may modify effective stats
+	_stats			+= *_armor->getStats();		// kL
 	_loftempsSet	= _armor->getLoftempsSet();
 	_gender			= soldier->getGender();
 	_faceDirection	= -1;
@@ -153,7 +155,7 @@ BattleUnit::BattleUnit(Soldier* soldier, UnitFaction faction)
 	_activeHand = "STR_RIGHT_HAND";
 
 	lastCover = Position(-1, -1, -1);
-	//Log(LOG_INFO) << "Create BattleUnit, DONE";
+	Log(LOG_INFO) << "Create BattleUnit 1, DONE";
 }
 
 /**
@@ -207,11 +209,12 @@ BattleUnit::BattleUnit(Unit* unit, UnitFaction faction, int id, Armor* armor, in
 		_turretType(-1),
 		_hidingForTurn(false)
 {
-	//Log(LOG_INFO) << "Create BattleUnit 2 : alien";
+	Log(LOG_INFO) << "Create BattleUnit 2 : alien ID = " << getId();
 
 	_type	= unit->getType();
 	_rank	= unit->getRank();
 	_race	= unit->getRace();
+
 	_stats	= *unit->getStats();
 	_stats	+= *_armor->getStats();	// armors may modify effective stats
 	if (faction == FACTION_HOSTILE)
@@ -251,10 +254,11 @@ BattleUnit::BattleUnit(Unit* unit, UnitFaction faction, int id, Armor* armor, in
 	for (int i = 0; i < 5; ++i) _cache[i] = 0;
 
 	_activeHand = "STR_RIGHT_HAND";
+//	_activeHand = this->getMainHandWeapon();
 
 	lastCover = Position(-1, -1, -1);
 
-	//Log(LOG_INFO) << "Create BattleUnit, DONE";
+	Log(LOG_INFO) << "Create BattleUnit 2, DONE";
 }
 
 /**
@@ -1509,10 +1513,11 @@ void BattleUnit::clearVisibleTiles()
  * @param item
  * @return firing Accuracy
  */
-double BattleUnit::getFiringAccuracy(BattleActionType actionType, BattleItem *item)
+double BattleUnit::getFiringAccuracy(BattleActionType actionType, BattleItem* item)
 {
 	//Log(LOG_INFO) << "BattleUnit::getFiringAccuracy(), unitID " << getId() << " /  getStats()->firing" << getStats()->firing;
-	double result = (double)(getStats()->firing / 100.0);
+
+	double result = static_cast<double>(getStats()->firing) / 100.0;
 
 	double weaponAcc = item->getRules()->getAccuracySnap();
 	if (actionType == BA_AIMEDSHOT || actionType == BA_LAUNCH)
@@ -1520,9 +1525,9 @@ double BattleUnit::getFiringAccuracy(BattleActionType actionType, BattleItem *it
 	else if (actionType == BA_AUTOSHOT)
 		weaponAcc = item->getRules()->getAccuracyAuto();
 	else if (actionType == BA_HIT)
-		return (double)(item->getRules()->getAccuracyMelee() / 100.0);
+		return static_cast<double>(item->getRules()->getAccuracyMelee()) / 100.0;
 
-	result *= (double)(weaponAcc / 100.0);
+	result *= static_cast<double>(weaponAcc) / 100.0;
 
 	if (_kneeled)
 		result *= 1.16;
@@ -1546,13 +1551,13 @@ double BattleUnit::getFiringAccuracy(BattleActionType actionType, BattleItem *it
  */
 double BattleUnit::getAccuracyModifier()
 {
-	double result = (double)_health / (double)getStats()->health;
+	double result = static_cast<double>(_health) / static_cast<double>(getStats()->health);
 
 	int wounds = _fatalWounds[BODYPART_HEAD] + _fatalWounds[BODYPART_RIGHTARM];
 	if (wounds > 9)
 		wounds = 9;
 
-	result *= 1 + (-0.1 * wounds);
+	result *= 1.0 - (0.1 * wounds);
 
 	return result;
 }
@@ -1563,7 +1568,7 @@ double BattleUnit::getAccuracyModifier()
  */
 double BattleUnit::getThrowingAccuracy()
 {
-	return (double)(getStats()->throwing / 100.0) * getAccuracyModifier();
+	return (static_cast<double>(getStats()->throwing) / 100.0) * getAccuracyModifier();
 }
 
 /**
@@ -1608,12 +1613,11 @@ int BattleUnit::getFatalWounds() const
  * Little formula to calculate reaction score.
  * @return Reaction score.
  */
-double BattleUnit::getReactionScore()
+double BattleUnit::getInitiative()
 {
 	// (Reactions Stat) x (Current Time Units / Max TUs)
-	double score = ((double)getStats()->reactions * (double)getTimeUnits()) / (double)getStats()->tu;
-
-	return score;
+	return static_cast<double>(getStats()->reactions)
+			* (static_cast<double>(getTimeUnits() / static_cast<double>(getStats()->tu)));
 }
 
 /**
@@ -1621,16 +1625,18 @@ double BattleUnit::getReactionScore()
  */
 void BattleUnit::prepareNewTurn()
 {
+	Log(LOG_INFO) << "BattleUnit::prepareNewTurn()";
+
 	_faction = _originalFaction; // revert to original faction
 
 	_unitsSpottedThisTurn.clear();
 
 	int TURecovery = getStats()->tu; // recover TUs
 
-	float encumbrance = (float)getStats()->strength / (float)getCarriedWeight();
+	float encumbrance = static_cast<double>(getStats()->strength) / static_cast<double>(getCarriedWeight());
 	if (encumbrance < 1.f)
 	{
-		TURecovery = int(encumbrance * TURecovery);
+		TURecovery = static_cast<int>(encumbrance * static_cast<float>(TURecovery));
 	}
 
 	// Each fatal wound to the left or right leg reduces the soldier's TUs by 10%.
@@ -1691,11 +1697,13 @@ void BattleUnit::prepareNewTurn()
 	_hitByFire = false;
 	_dontReselect = false;
 	_motionPoints = 0;
+
+	Log(LOG_INFO) << "BattleUnit::prepareNewTurn() EXIT";
 }
 
 /**
  * Morale change with bounds check.
- * @param change can be positive or negative
+ * @param change, Can be positive or negative
  */
 void BattleUnit::moraleChange(int change)
 {
@@ -1705,12 +1713,12 @@ void BattleUnit::moraleChange(int change)
 		return;
 	}
 
-//	Log(LOG_INFO) << "BattleUnit::moraleChange() unitID = " << getId() << " delta = " << change ;		// kL
+	//Log(LOG_INFO) << "BattleUnit::moraleChange() unitID = " << getId() << " delta = " << change ;
 
 	_morale += change;
 
-	if (_morale > 100) _morale = 100;
-	if (_morale < 0) _morale = 0;
+	if (_morale > 100)	_morale = 100;
+	if (_morale < 0)	_morale = 0;
 }
 
 /**

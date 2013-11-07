@@ -37,7 +37,7 @@ class BattlescapeState;
  */
 class AbortMissionState
 	:
-	public State
+		public State
 {
 	private:
 		Window* _window;

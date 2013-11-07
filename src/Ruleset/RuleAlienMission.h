@@ -51,7 +51,7 @@ struct MissionWave
 	std::string trajectory;
 	/// Number of minutes between UFOs in the wave.
 	/**
-	 * The actual value used is spawnTimer/4 or 3*spawnTimer/4.
+	 * The actual value used is spawnTimer*1/4 or spawnTimer*3/4.
 	 */
 	unsigned spawnTimer;
 };
@@ -68,7 +68,7 @@ private:
 	/// The mission's type ID.
 	std::string _type;
 	/// The race distribution over game time.
-	std::vector<std::pair<unsigned, WeightedOptions*> > _raceDistribution;
+	std::vector<std::pair<unsigned, WeightedOptions*>> _raceDistribution;
 	/// The mission's waves.
 	std::vector<MissionWave> _waves;
 	/// The mission's points

@@ -33,6 +33,7 @@
 #include "Logger.h"
 #include "CrossPlatform.h"
 
+
 namespace OpenXcom
 {
 
@@ -269,6 +270,11 @@ void createDefault()
 
 	_rulesets.clear();
 	_rulesets.push_back("Xcom1Ruleset");
+
+	// kL: Rulesets.
+//	_rulesets.push_back("AlienInventory");
+//	_rulesets.push_back("ResearchHelp");
+//	_rulesets.push_back("XCOM1_Improved_Nations");
 }
 
 /**
@@ -667,13 +673,16 @@ void setBool(const std::string& id, bool value)
 
 /**
  * Returns the list of rulesets to be used by the game.
- * @return Ruleset list.
+ * @return, Ruleset list.
  */
 std::vector<std::string> getRulesets()
 {
 	return _rulesets;
 }
 
+/**
+ *
+ */
 std::vector<std::string> getPurchaseExclusions()
 {
 	return _purchaseexclusions;

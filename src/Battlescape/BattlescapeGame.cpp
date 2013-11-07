@@ -1886,7 +1886,7 @@ void BattlescapeGame::primaryAction(const Position& pos)
 		}
 	}
 
-	Log(LOG_INFO) << ". . primaryAction() EXIT";
+	Log(LOG_INFO) << "BattlescapeGame::primaryAction() EXIT";
 }
 
 /**

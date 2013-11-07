@@ -56,17 +56,17 @@ namespace OpenXcom
  */
 Game::Game(const std::string& title)
 	:
-	_screen(0),
-	_cursor(0),
-	_lang(0),
-	_states(),
-	_deleted(),
-	_res(0),
-	_save(0),
-	_rules(0),
-	_quit(false),
-	_init(false),
-	_mouseActive(true)
+		_screen(0),
+		_cursor(0),
+		_lang(0),
+		_states(),
+		_deleted(),
+		_res(0),
+		_save(0),
+		_rules(0),
+		_quit(false),
+		_init(false),
+		_mouseActive(true)
 {
 //	Log(LOG_INFO) << "Create Game";
 
@@ -608,7 +608,6 @@ Ruleset* Game::getRuleset() const
 
 /**
  * Changes the ruleset currently in use by the game.
- * @param filename Filename of the language file.
  */
 void Game::loadRuleset()
 {
@@ -637,7 +636,7 @@ void Game::setMouseActive(bool active)
 
 /**
  * @brief Returns whether current state is *state
- * @param state The state to test against the stack state
+ * @param state, The state to test against the stack state
  */
 bool Game::isState(State* state) const
 {
