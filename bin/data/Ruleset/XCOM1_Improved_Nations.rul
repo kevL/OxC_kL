@@ -1,0 +1,1167 @@
+# X-COM 1 (UFO: Enemy Unknown) Improved Nations Ruleset
+# New Locations Noted with #; e.g. #Hawaii
+#
+# Work by MKSheppard and Gix of OpenXCOM Forum
+# http://openxcom.org/forum/index.php/topic,1513.0.html
+#
+countries:
+  - type: STR_CANADA
+    fundingBase: 225
+    fundingCap: 2250
+    labelLon: 260
+    labelLat: -55
+    areas:
+      - [224, 230, -60.36, -58.5] #North of US Box Near Juneau
+      - [219, 230, -80, -60.36] #Juneau Landsplit2
+      - [230, 271, -80, -49] #moved up from -40 to -49 and cut off
+      - [271, 285, -80, -44.5] #Eastern Canada Pt 1
+      - [285, 305, -80, -45] #Eastern Canada Pt 2
+      - [227, 230, -55, -52.1] #Extend Canada 5 DONE
+      - [276, 279, -44.5, -41.59] #Toronto Region 1
+      - [279, 281, -44.5, -42.74] #Toronto Region 2
+      - [281, 284.3, -44.5, -43.38] #Toronto Region 3
+      - [293.5, 298, -45, -43.2] #Newfie1
+      - [305, 307.89, -49.37, -46.77] #Newfie2
+  - type: STR_USA
+    fundingBase: 675
+    fundingCap: 6750
+    labelLon: 260
+    labelLat: -40
+    areas:
+      - [235, 255, -49, -32]
+      - [255, 277.5, -49, -29]
+      - [260, 265, -29, -26]
+      - [277, 280, -32, -25]
+      - [277.5, 286, -44, -32]
+      - [286, 292.5, -45.5, -40]
+      - [202.288, 212.857, -25.2248, -16.2686] #Hawaii
+      - [190, 219, -80, -53.6] #Alaska Main Body
+      - [219, 224, -60.4, -57] #Alaska Juneau Box1
+      - [224, 230, -58.5, -54] #Alaska Juneau Box2  
+  - type: STR_MEXICO #New Nation
+    fundingBase: 150
+    fundingCap: 1500
+    labelLon: 255
+    labelLat: -22.5
+    areas:   # lonMin lonMax latMin latMax
+      - [241, 255, -33, -28] #TopMexicoLeft1
+      - [244, 255, -28, -22] #TopMexicoLeft1	
+      - [255, 260, -29, -22] #TopMexicoMiddle
+      - [260, 265, -26, -22] #TopMexicoRight	
+      - [253, 265, -22, -17] #MexicoCityArea
+      - [260, 265, -17, -15.7] #MexicoCityBottom
+      - [265, 270, -19, -15.5] #Wee
+      - [268, 272, -21.6, -19] #Wee2
+      - [270, 272, -19, -15.5] #Wee3
+  - type: STR_RUSSIA
+    fundingBase: 535
+    fundingCap: 5350
+    labelLon: 69
+    labelLat: -64
+    areas:
+      - [30, 50, -80, -52.1] #European Russia Top
+      - [34.1, 50, -52.1, -50.35] #European Russia Middle1
+      - [38.3, 75, -50.35, -42] #European Russia Middle and 'Central Stans
+      - [50, 190.5, -80, -50.5] #Central Siberian Area Past Urals.
+      - [134, 146.1, -50.5, -45.63] #Sakhalin Island Area.
+      - [130, 137.6, -45.63, -42.36] #Vladviostock Area
+      - [46, 75, -42, -38.3] #BAKU/'Stan Area
+      - [46, 75, -42, -38.3] #Central 'Stan Area
+  - type: STR_UK
+    fundingBase: 235
+    fundingCap: 2350
+    labelLon: 358
+    labelLat: -53.625
+    areas:
+      - [352, 2, -60, -53.93] #Scotland and Northern Ireland
+      - [353.9, 2, -53.93, -50] #Lower Part of England.
+  - type: STR_FRANCE
+    fundingBase: 255
+    fundingCap: 2550
+    labelLon: 2.5
+    labelLat: -46.5
+    areas:
+      - [355, 7, -50, -43] #European France.
+      - [8.2, 9.88, -43, -41.3] #Corsica - HOME OF NAPOLEON! YARR!
+      - [163.6, 167, 19.9, 22.71] #New Caledonia - E of Australia
+      - [304, 308, -6.8, -2.6] #French Guiana - N of Brazil  
+  - type: STR_GERMANY
+    fundingBase: 205
+    fundingCap: 2050
+    labelLon: 8.64
+    labelLat: -51.31
+    areas:
+      - [6, 15, -55, -47.5]
+  - type: STR_ITALY
+    fundingBase: 145
+    fundingCap: 1450
+    labelLon: 12.5
+    labelLat: -43.875
+    areas:
+      - [7, 15, -46.5, -43]
+      - [11, 18, -43, -37]
+      - [18, 18.9, -40.88, -39.5] #Eastern Tip of Mainland.
+      - [13.34, 15.5, -37, -36.4] #Bottom of Sicily
+      - [7.7, 10.33, -41.3, -38.4] #Sardinia
+  - type: STR_SPAIN
+    fundingBase: 95
+    fundingCap: 950
+    labelLon: 357.5
+    labelLat: -42.625
+    areas:
+      - [350, 355, -44.38, -41.66] #Area North of Portugal.
+      - [353.76, 355, -41.66, -41] #Little Tip 1
+      - [355, 359, -44, -43] #Little Tip 2
+      - [355, 4.13, -43, -41] #Northern Part of Spain
+      - [353.59, 1, -41, -37.6] #Central Part of Spain
+      - [352.411, 353.59, -39, -37.6] #C near Portugal 1
+      - [352.917, 353.59, -40, -39] #C near Portugal 2
+      - [352.32, 359.1, -37.6, -36.11] #Southern Part of Spain
+      - [1.92, 3.7, -40.17, -39] #Majorca
+  - type: STR_PORTUGAL
+    fundingBase: 85
+    fundingCap: 850
+    labelLon: 348.5
+    labelLat: -39.62
+    areas:
+      - [350, 353.76, -41.66, -39.6]
+      - [350, 352.8, -39.6, -36.7]
+  - type: STR_CHINA
+    fundingBase: 335
+    fundingCap: 3350
+    labelLon: 100
+    labelLat: -35
+    areas:
+      - [75, 98, -50, -30]
+      - [98, 122, -50, -22]
+      - [122, 133, -54, -40]
+      - [108, 113, -22, -17.9] #Southern China near Hainan and Hainan Island.
+  - type: STR_JAPAN
+    fundingBase: 385
+    fundingCap: 3850
+    labelLon: 138
+    labelLat: -38.25
+    areas:
+      - [130, 143, -40, -30]
+      - [138, 147, -46, -40]
+      - [129, 130, -34.2, -31.95]
+      - [141, 146, -54, -45.6] #Sakhalin - Claimed by RUSSIA/JAPAN
+  - type: STR_INDIA
+    fundingBase: 115
+    fundingCap: 1150
+    labelLon: 80
+    labelLat: -24
+    areas:
+      - [70, 85, -30, -8]
+      - [74, 79, -35, -30]
+      - [85, 89, -27, -18]
+      - [68, 70, -23.81, -21.27]
+  - type: STR_AUSTRALIA
+    fundingBase: 205
+    fundingCap: 2050
+    labelLon: 135
+    labelLat: 25
+    areas:
+      - [110, 156, 10, 40]
+      - [144, 149, 40, 44.3] #Tasmania
+      - [164, 177.2, 40, 47] #New Zealand 1
+      - [172, 179, 33.5, 40] #New Zealand 2
+  - type: STR_AFRICANUNION #NEW COUNTRY
+    fundingBase: 280
+    fundingCap: 2800
+    labelLon: 19
+    labelLat: -7
+    areas:
+      - [43, 51.5, -12.5, 0] #Horn of Africa
+      - [37, 40.5, -16.77, -14] #Little Bit on Red Sea
+      - [43, 51.2, 11, 26] #Magdascar
+      - [8, 43, -14, 22] #Center Africa
+      - [341.4, 8, -20, -3] #LeftAfrica
+      - [342, 10, -29, -20] #LeftAfrica2 
+      - [8, 37, -19.45, -14] #LeftAfrica2 
+      - [13, 25, 22, 26] #Near South Africa 1
+      - [33, 36, 22, 26.3] #Near South Africa 2
+  # - type: STR_NIGERIA #DEPRECIATED IN FAVOR OF AU
+    # fundingBase: 165
+    # fundingCap: 1650
+    # labelLon: 7.5
+    # labelLat: -10
+    # areas:
+      # - [3, 14, -14, -4]
+  - type: STR_SOUTH_AFRICA
+    fundingBase: 305
+    fundingCap: 3050
+    labelLon: 25
+    labelLat: 30
+    areas:
+      - [15, 25, 26, 35]
+      - [25, 33, 22, 35]
+  - type: STR_EGYPT
+    fundingBase: 125
+    fundingCap: 1250
+    labelLon: 29
+    labelLat: -26
+    areas:
+      - [25, 35, -32, -22]
+  - type: STR_PHILIPPINES #New Nation
+    fundingBase: 105 #placeholder
+    fundingCap: 1050 #placeholder
+    labelLon: 120
+    labelLat: -18
+    areas:   # lonMin lonMax latMin latMax
+      - [117, 126, -19.5, -11.6] #Part 1
+      - [121, 128, -11.6, -5] #Part 2
+  - type: STR_TAIWAN #New Nation
+    fundingBase: 120 #placeholder
+    fundingCap: 1200 #placeholder
+    labelLon: 120
+    labelLat: -22.8
+    areas:   # lonMin lonMax latMin latMax
+      - [118, 124, -26, -21] #Formosa
+      - [108.5, 111.75, -20.5, -17.9] #Hainan Island
+  - type: STR_KOREA #New Nation
+    fundingBase: 150
+    fundingCap: 1500
+    labelLon: 125
+    labelLat: -39
+    areas:   # lonMin lonMax latMin latMax
+      - [125, 129, -41, -40] #upper body of Korea 1
+      - [127.7, 130.5, -42, -41] #upper body of Korea 2
+      - [124, 130, -40, -33.6] #main body of Korea
+  - type: STR_PAKISTAN #New Nation
+    fundingBase: 135
+    fundingCap: 1350
+    labelLon: 65
+    labelLat: -30
+    areas:   # lonMin lonMax latMin latMax
+      - [61, 70, -32.5, -23] #Main Body of Pakistan
+      - [70, 74, -35, -30] #TopLeft
+      - [64, 70, -35, -32.5] #RightBottom  
+  - type: STR_IRAN #New Nation
+    fundingBase: 160
+    fundingCap: 1600
+    labelLon: 50
+    labelLat: -33.5
+    areas:   # lonMin lonMax latMin latMax
+      - [47, 61, -38.3, -29] #Main Body of Iran
+      - [50.2, 61, -29, -26.3] #Bottom Body of Iran
+      - [56.8, 61, -26.3, -24.7] #BottomRight Body of Iran
+  - type: STR_SAUDI #New Nation
+    fundingBase: 255
+    fundingCap: 2550
+    labelLon: 44.6
+    labelLat: -22.1
+    areas:   # lonMin lonMax latMin latMax
+      - [37, 50, -29, -21] #Main Body of Saudi Arabia
+      - [38.6, 50, -21, -17] #Main Body of Saudi Arabia
+      - [50, 55, -23, -18.6] #Main Body of Saudi Arabia
+  - type: STR_QUATAR #New Nation
+    fundingBase: 160
+    fundingCap: 1600
+    labelLon: 50.9
+    labelLat: -23.9
+    areas:   # lonMin lonMax latMin latMax
+      - [50, 53.2, -26, -23] #Main Body of QUATAR
+  - type: STR_UAE #New Nation
+    fundingBase: 140
+    fundingCap: 1400
+    labelLon: 55
+    labelLat: -23.8
+    areas:   # lonMin lonMax latMin latMax
+      - [53.2, 57.5, -26, -23] #Main Body of UAE
+  - type: STR_LIBYA #New Nation
+    fundingBase: 110
+    fundingCap: 1100
+    labelLon: 15
+    labelLat: -27
+    areas:   # lonMin lonMax latMin latMax
+      - [10.5, 25, -34, -25] #Main Body of Libya 1
+      - [17, 25, -25, -20] #Main Body of Libya 1
+  - type: STR_POLAND #new country
+    fundingBase: 150
+    fundingCap: 1500
+    labelLon: 18.09
+    labelLat: -51.7
+    areas:
+      - [15, 24, -55, -50.95] #Main Body of Poland
+      - [18.5, 24, -50.95, -49.5] #Bottom Body of Poland
+  - type: STR_UKRAINE #new country
+    fundingBase: 195
+    fundingCap: 1950
+    labelLon: 30.25
+    labelLat: -48.69
+    areas:
+      - [24.3, 33.6, -51.5, -47.5] #UkraineBox1
+      - [33.6, 37.9, -51.16, -44.19] #UkraineBox2
+      - [28.35, 33.6, -47.5, -44.19] #UkraineBox3
+  - type: STR_DENMARK #new country
+    fundingBase: 185
+    fundingCap: 1850
+    labelLon: 9
+    labelLat: -56.15
+    areas:
+      - [7.37, 11.13, -57.74, -55] #Main Body of DENMARK
+  - type: STR_INDONESIA #new country
+    fundingBase: 125
+    fundingCap: 1250
+    labelLon: 112
+    labelLat: 3.5
+    areas:
+      - [107, 141, -1.85, 9.45] #Main Body of Indonesia 1
+      - [98.57, 107, -0.57, 9.45] #Main Body of Indonesia 2
+      - [95, 100, -5.9, -0.57] #Main Body of Indonesia 3
+      - [100, 101, -3.54, -0.57] #Main Body of Indonesia 4
+      - [101, 102, -2.17, -0.57] #Main Body of Indonesia 5
+      - [102, 103, -1.54, -0.57] #Main Body of Indonesia 6
+  - type: STR_VIETNAM #new country
+    fundingBase: 125
+    fundingCap: 1250
+    labelLon: 108
+    labelLat: -15
+    areas:
+      - [104, 108, -21.5, -17.5] #Main Body of VIETNAM 1
+      - [105, 107.4, -17.5, -16.5] #Main Body of VIETNAM 2
+      - [107.4, 110, -17.5, -9.85] #Main Body of VIETNAM 3
+      - [104.8, 107.4, -10.5, -8] #Main Body of VIETNAM 4
+  - type: STR_THAILAND #new country
+    fundingBase: 195
+    fundingCap: 1950
+    labelLon: 102
+    labelLat: -14.65
+    areas:
+      - [97.68, 102, -19.1, -6.6] #Main Body of Thailand
+      - [102, 104.2, -16.8, -13.79] #Right Side of Thailand
+  - type: STR_GREECE #new country
+    fundingBase: 205
+    fundingCap: 2050
+    labelLon: 20.77
+    labelLat: -40.44
+    areas:
+      - [19.19, 25.7, -41.8, -36.3] #Main Body of Greece
+      - [23.07, 26.6, -35.84, -34.75] #Crete  
+  - type: STR_TURKEY #new country
+    fundingBase: 155
+    fundingCap: 1550
+    labelLon: 35.25
+    labelLat: -38.7
+    areas:
+      - [25.7, 46, -42, -36] #Main Body of Turkey
+  - type: STR_NORWAY #new country
+    fundingBase: 225
+    fundingCap: 2250
+    labelLon: 7.7
+    labelLat: -61.41
+    areas:
+      - [3.3, 10.6, -63, -58.25] #Main Body of Norway
+      - [5.2, 12, -66, -63] #Up One  
+      - [12, 15.5, -70, -64] #Up Two
+      - [15.5, 29.5, -71.62, -69.22] #Up Three
+      - [15.5, 19, -69.22, -67.3] #Up FOUR
+  - type: STR_SWEDEN #new country
+    fundingBase: 205
+    fundingCap: 2050
+    labelLon: 15.2
+    labelLat: -60
+    areas:
+      - [11.47, 19.6, -62.7, -55.2] #Main Body of SWEDEN
+      - [12.4, 20.7, -64, -62.7]
+      - [15.5, 22.5, -67.3, -64]
+      - [19, 22.7, -69.22, -67.3]
+  - type: STR_FINLAND #new country
+    fundingBase: 190
+    fundingCap: 1900
+    labelLon: 25.3
+    labelLat: -63.45
+    areas:
+      - [22.7, 29.77, -69.22, -59.4] #Main Body of FINLAND
+      - [20.61, 22.7, -63.96, -59.4] 
+      - [29.77, 31.46, -69.45, -62.39] 
+  - type: STR_BELGIUM #new country
+    fundingBase: 180
+    fundingCap: 1800
+    labelLon: 3.282
+    labelLat: -50.974
+    areas:
+      - [2, 6, -51.9, -50] #BELGIUM
+  - type: STR_NETHERLANDS #new country
+    fundingBase: 185
+    fundingCap: 1850
+    labelLon: 3
+    labelLat: -52.949
+    areas:
+      - [2, 6, -53.8, -51.9] #Main Body
+  - type: STR_IRELAND #new country
+    fundingBase: 180
+    fundingCap: 1800
+    labelLon: 351.4
+    labelLat: -53.5
+    areas:
+      - [348.348, 353.9, -53.93, -51.13] #Lower Half
+      - [348.8, 352, -55.45, -53.93] #Upper Half
+  - type: STR_IRAQ #new country
+    fundingBase: 275
+    fundingCap: 2750
+    labelLon: 43.17
+    labelLat: -34.7
+    areas:
+      - [40.65, 47, -36, -29]
+  - type: STR_SYRIA #new country
+    fundingBase: 125
+    fundingCap: 1250
+    labelLon: 37.3
+    labelLat: -34.7
+    areas:
+      - [35.9, 40.65, -36, -31.8]
+  - type: STR_ISRAEL #new country
+    fundingBase: 175
+    fundingCap: 1750
+    labelLon: 33.5
+    labelLat: -33.91
+    areas:
+      - [33.5, 35.9, -34.3, -31.14]
+  - type: STR_BALTENTENTE #new country
+    fundingBase: 165
+    fundingCap: 1650
+    labelLon: 23.43
+    labelLat: -56.97
+    areas:
+      - [19.89, 28.21, -59.4, -55] 
+  - type: STR_BELARUS #new country
+    fundingBase: 130
+    fundingCap: 1300
+    labelLon: 25
+    labelLat: -52.9
+    areas:
+      - [24, 33.15, -55, -51.5]
+  - type: STR_CZECH #new country
+    fundingBase: 125
+    fundingCap: 1250
+    labelLon: 13.307
+    labelLat: -50.1063
+    areas:
+      - [12, 18.5, -50.95, -48.9]
+  - type: STR_AUSTRIA #new country
+    fundingBase: 130
+    fundingCap: 1300
+    labelLon: 13.2584
+    labelLat: -47.2403
+    areas:
+      - [10.7, 17.25, -47.5, -46.5] #Area near Switzerland
+      - [12.9, 17.25, -48.9, -47.5] #MAIN AREA
+  - type: STR_HUNGARY #new country
+    fundingBase: 105
+    fundingCap: 1050
+    labelLon: 18.821
+    labelLat: -48.0142
+    areas:
+      - [17.25, 24.3, -47.9, -45.9] #Main Body of HUNGARY.
+  - type: STR_ROMANIA #new country
+    fundingBase: 175
+    fundingCap: 1750
+    labelLon: 25.24
+    labelLat: -45.83
+    areas:
+      - [24.3, 28.35, -47.5, -43.6] #Main Body of ROMANIA.
+  - type: STR_BULGARIA #new country
+    fundingBase: 85
+    fundingCap: 850
+    labelLon: 26.6
+    labelLat: -42.95
+    areas:
+      - [24.3, 28.5, -43.6, -42] #Main Body of BULGARIA.
+  - type: STR_BALKANPACT #new country
+    fundingBase: 95
+    fundingCap: 950
+    labelLon: 17.34
+    labelLat: -44.94
+    areas:
+      - [15, 17.25, -46.5, -43] #Box 1
+      - [17.25, 24.3, -45.9, -43] #Box 2
+      - [17.1, 24.3, -43, -41.8] #Box 3
+  - type: STR_CUBA #new country
+    fundingBase: 75
+    fundingCap: 750
+    labelLon: 280
+    labelLat: -22
+    areas:
+      - [274.4, 283.4, -23.5, -21] #Box 1
+      - [280.6, 285.2, -21, -19.4] #Box 1
+  - type: STR_VENEZULA #new country
+    fundingBase: 190
+    fundingCap: 1900
+    labelLon: 292.9
+    labelLat: -7.7
+    areas:
+      - [288.7, 300, -12.7, -6.8] #Box 1
+      - [291.4, 296.6, -6.8, -1.7] #Box 2
+      - [296.6, 299.581, -6.8, -4.25] #Box 3
+  - type: STR_BRAZIL
+    fundingBase: 165
+    fundingCap: 1650
+    labelLon: 305
+    labelLat: 5
+    areas:
+      - [286, 302, 3.8, 11.6] #Western Brazil Part 1
+      - [296.2, 302, 11.6, 14.1] #Western Brazil Part 2
+      - [298.7, 302, 14.1, 16.2] #Western Brazil Part 3
+      - [289.878, 302, -1.7, 3.8] #Western Brazil Part 4
+      - [295.6, 301, -5.5, -1.7] #Western Brazil Part 5
+      - [302, 316, -2.5, 24] #Central Brazil
+      - [316, 325, 1.4, 24] #Eastern Brazil
+      - [304, 316, 24, 26.3] #Southern Brazil 1
+      - [303.78, 312, 26.3, 33] #Southern Brazil 2
+  - type: STR_COLOMBIA #new country
+    fundingBase: 155
+    fundingCap: 1550
+    labelLon: 284.9
+    labelLat: -6.27
+    areas:
+      - [281.4, 288.7, -13, -2.8] #Box 1
+      - [288.7, 291.4, -6.8, -2.8] #Box 2
+      - [285, 289.878, -2.8, 1.5] #Box 3
+      - [287, 289.878, 1.5, 3.8] #Box 4
+      - [289.878, 291.4, -2.8, -1.7] #Box 4
+  - type: STR_PERU #new country
+    fundingBase: 70
+    fundingCap: 700
+    labelLon: 281.3
+    labelLat: 6.14
+    areas:
+      - [278, 286, 3.9, 8.4] #Box 1
+      - [281, 287, 1.5, 3.8] #Box 2
+      - [280, 286, 8.4, 11.6] #Box 3
+      - [281, 289.5, 11.6, 17.7] #Box 4
+  - type: STR_CHILE #new country
+    fundingBase: 75
+    fundingCap: 750
+    labelLon: 285.6
+    labelLat: 28.25
+    areas:
+      - [287, 292, 17.7, 30] #Box 1
+      - [285, 290, 30, 37] #Box 2
+      - [283, 288, 37, 55] #Box 3
+      - [288, 293, 50, 56.2] #Box 4
+  - type: STR_ARGENTINA #new country
+    fundingBase: 100
+    fundingCap: 1000
+    labelLon: 294
+    labelLat: 38
+    areas:
+      - [288, 299, 37, 50] #Box 1
+      - [299, 303.6, 34, 39.1] #Buenos Ares Region
+      - [290, 299, 30, 37] #Box 2
+      - [292, 302, 17.7, 30] #Box 3
+      - [298, 302, 30, 34] #Box 4
+regions:
+  - type: STR_ARCTIC
+    cities:
+      - name: STR_HAMMERFEST
+        lon: 23.75
+        lat: -70.625
+      - name: STR_TIKSI
+        lon: 128.75
+        lat: -71.75
+      - name: STR_BARROW
+        lon: 203.25
+        lat: -69.75
+  - type: STR_SOUTH_AMERICA
+    cities:
+      - name: STR_SAOPAULO
+        lon: 313.325
+        lat: 23.5
+      - name: STR_BELOHORIZONTE
+        lon: 316.0
+        lat: 19.875
+      - name: STR_RECIFE
+        lon: 324.875
+        lat: 8.0
+      - name: STR_SALVADOR
+        lon: 321.25
+        lat: 13.0
+      - name: STR_FORTALEZA
+        lon: 321.5
+        lat: 3.75
+      - name: STR_GUAYAQUIL
+        lon: 280.0
+        lat: 2.125
+      - name: STR_MARACAIBO
+        lon: 289.875
+        lat: 10.625
+  - type: STR_NORTH_AMERICA
+    cities:
+      - name: STR_ANCHORAGE
+        lon: 209.259
+        lat: -60.7251
+      - name: STR_ATLANTA
+        lon: 275.625
+        lat: -33.75
+      - name: STR_HOUSTON
+        lon: 264.625
+        lat: -29.75
+      - name: STR_PHOENIX
+        lon: 248.0
+        lat: -33.5
+      - name: STR_PHILADELPHIA
+        lon: 284.75
+        lat: -40.0
+      - name: STR_SANDIEGO
+        lon: 242.625
+        lat: -32.75
+      - name: STR_JUNEAU
+        lon: 223.247
+        lat: -58.2465
+      - name: STR_TORONTO
+        lon: 279.454
+        lat: -43.1442
+      - name: STR_DETROIT
+        lon: 276.478
+        lat: -41.8107
+      - name: STR_SANFRANCISCO
+        lon: 236.705
+        lat: -38.7191
+      - name: STR_MIAMI
+        lon: 279.733
+        lat: -26.0843
+      - name: STR_NEWORLEANS
+        lon: 269.92
+        lat: -29.6422
+      - name: STR_ORLANDO
+        lon: 278.381
+        lat: -28.9759
+      - name: STR_SEATTLE
+        lon: 236.948
+        lat: -47.3382
+      - name: STR_NORFOLK
+        lon: 283.818
+        lat: -35.9958
+      - name: STR_CHARLESTON #South Carolina
+        lon: 280.632
+        lat: -33.2811
+      - name: STR_BOSTON
+        lon: 289.069
+        lat: -42.4427
+      - name: STR_INDIANAPOLIS
+        lon: 273.272
+        lat: -38.83
+      - name: STR_CORPUSCHRISTI
+        lon: 263.552
+        lat: -28.1696
+      - name: STR_GUADALAJARA
+        lon: 256.625
+        lat: -20.75
+      - name: STR_GUATEMALA
+        lon: 269.5
+        lat: -14.625
+      - name: STR_SANTODOMINGO
+        lon: 290.0
+        lat: -18.5
+  - type: STR_PACIFIC
+    cities:
+      - name: STR_HONOLULU
+        lon: 207.074
+        lat: -21.3902
+  - type: STR_EUROPE
+    cities:
+      - name: STR_CORK
+        lon: 351.426
+        lat: -51.8672
+      - name: STR_DUBLIN
+        lon: 353.589
+        lat: -53.2906
+      - name: STR_BAKU
+        lon: 49.875
+        lat: -40.387
+      - name: STR_MINSK
+        lon: 27.5
+        lat: -53.875
+      - name: STR_BUCHAREST
+        lon: 26.125
+        lat: -44.375
+      - name: STR_HAMBURG
+        lon: 10.0
+        lat: -53.5
+      - name: STR_VIENNA
+        lon: 16.375
+        lat: -48.25
+      - name: STR_BELGRADE
+        lon: 20.5
+        lat: -44.5
+      - name: STR_MILAN
+        lon: 9.125
+        lat: -45.5
+      - name: STR_NAPLES
+        lon: 15.0214
+        lat: -40.236
+      - name: STR_LISBON
+        lon: 350.776
+        lat: -38.6697
+      - name: STR_BARCELONA
+        lon: 1.59451
+        lat: -41.3466
+      - name: STR_STOCKHOLM
+        lon: 17.3259
+        lat: -58.9438
+      - name: STR_OSLO
+        lon: 10.1726
+        lat: -59.5036
+      - name: STR_BREST
+        lon: 355.728
+        lat: -47.5496
+      - name: STR_TRONDHEIM
+        lon: 11.8662
+        lat: -65.3174
+      - name: STR_TURKU
+        lon: 22.1694
+        lat: -60.3752
+      - name: STR_WARSAW
+        lon: 21.08
+        lat: -53.103
+      - name: STR_MUNICH
+        lon: 11.414
+        lat: -48.661
+      - name: STR_GLASGOW
+        lon: 355.827
+        lat: -55.8861
+      - name: STR_LYON
+        lon: 4.09847
+        lat: -45.1811
+      - name: STR_ODESSA
+        lon: 29.5606
+        lat: -45.8821
+      - name: STR_SEVASTOPOL
+        lon: 33.5006
+        lat: -44.7669
+      - name: STR_KHARKOV
+        lon: 34.4776
+        lat: -50.6673
+      - name: STR_KIEV
+        lon: 30.0658
+        lat: -49.834
+      - name: STR_LENINGRAD
+        lon: 29.8012
+        lat: -60.2338
+      - name: STR_ARCHANGEL
+        lon: 40.8787
+        lat: -64.4464
+      - name: STR_STALINGRAD
+        lon: 44.8376
+        lat: -47.8135
+      - name: STR_ASTRAKHAN
+        lon: 48.4994
+        lat: -45.774
+      - name: STR_ATHENS
+        lon: 23.5792
+        lat: -38.0952
+      - name: STR_SOFIA
+        lon: 24.7072
+        lat: -42.9134
+  - type: STR_SIBERIA
+    cities:
+      - name: STR_CHEYLABINSK
+        lon: 61.845
+        lat: -57.48
+      - name: STR_YEKATERINBURG
+        lon: 63.653
+        lat: -60.54
+      - name: STR_OMSK
+        lon: 73.325
+        lat: -55
+      - name: STR_KRASNOYARSK
+        lon: 93
+        lat: -56
+      - name: STR_PETROPAVLOVSK
+        lon: 158.625
+        lat: -53
+  - type: STR_NORTH_AFRICA
+    cities:
+      - name: STR_DAMASCUS
+        lon: 36.6815
+        lat: -33.5637
+      - name: STR_JERUSALEM
+        lon: 34.59
+        lat: -32.25
+      - name: STR_TRIPOLI
+        lon: 11.91
+        lat: -32.98
+      - name: STR_BENGHAZI
+        lon: 19.9549
+        lat: -31.9422
+      - name: STR_ALGIERS
+        lon: 3.10578
+        lat: -36.7188
+      - name: STR_KHARTOUM
+        lon: 32.5
+        lat: -15.625
+      - name: STR_ALEXANDRIA
+        lon: 29.875
+        lat: -31.0
+      - name: STR_ABIDJAN
+        lon: 356.0
+        lat: -5.375
+      - name: STR_MOGADISHU
+        lon: 45.0
+        lat: -2.0
+      - name: STR_ACCRA
+        lon: 359.75
+        lat: -5.75
+      - name: STR_KANO
+        lon: 8.5
+        lat: -12.0
+      - name: STR_KAMPALA
+        lon: 32.625
+        lat: -0.375
+      - name: STR_BAMAKO
+        lon: -8
+        lat: -12.625
+  - type: STR_SOUTHERN_AFRICA
+    cities:
+      - name: STR_DURBAN
+        lon: 31.0
+        lat: 29.875
+      - name: STR_DARESSALAAM
+        lon: 39.25
+        lat: 6.75
+      - name: STR_ADDISABABA
+        lon: 38.75
+        lat: -9.0
+      - name: STR_LUANDA
+        lon: 13.25
+        lat: 8.875
+      - name: STR_HARARE
+        lon: 31.0
+        lat: 17.875
+      - name: STR_MAPUTO
+        lon: 32.625
+        lat: 26.0
+      - name: STR_ANTANANARIVO
+        lon: 47.5
+        lat: 18.875
+      - name: STR_LUSAKA
+        lon: 28.25
+        lat: 15.375
+  - type: STR_CENTRAL_ASIA
+    cities:
+      - name: STR_DOHA
+        lon: 51.4081
+        lat: -25.0363
+      - name: STR_DUBAI
+        lon: 55.3655
+        lat: -25.1684
+      - name: STR_RIYADH
+        lon: 47
+        lat: -23.95
+      - name: STR_ISTANBUL
+        lon: 29.0389
+        lat: -41.07
+      - name: STR_MASHHAD
+        lon: 58.55
+        lat: -36.71
+      - name: STR_ISLAMABAD
+        lon: 72.35
+        lat: -32.58
+      - name: STR_DHAKA
+        lon: 90.375
+        lat: -23.75
+      - name: STR_CHENNAI
+        lon: 80.4045
+        lat: -13.5846
+      - name: STR_BANGALORE
+        lon: 77.5
+        lat: -13.0
+      - name: STR_LAHORE
+        lon: 74.25
+        lat: -31.5
+  - type: STR_AUSTRALASIA
+    cities:
+      - name: STR_DARWIN
+        lon: 131.008
+        lat: 12.2741
+      - name: STR_BRISBANE
+        lon: 152.99
+        lat: 26.8513
+      - name: STR_PORTMORESBY
+        lon: 147.25
+        lat: 9.5
+      - name: STR_SURABAYA
+        lon: 112.75
+        lat: 7.375
+      - name: STR_NOUMEA
+        lon: 166.5
+        lat: 22.25
+      - name: STR_SUVA
+        lon: 178.5
+        lat: 18.125
+  - type: STR_SOUTH_EAST_ASIA
+    cities:
+      - name: STR_VLADIVOSTOK # Russian Far East Base
+        lon: 133.016
+        lat: -42.8694
+      - name: STR_TAPEI # ROC Capital
+        lon: 121.712
+        lat: -24.99
+      - name: STR_HIROSHIMA
+        lon: 132.023
+        lat: -33.0262
+      - name: STR_HAIKOU # Hainan Capital, ROC
+        lon: 110.775
+        lat: -19.92
+      - name: STR_HANOI
+        lon: 105.74
+        lat: -20.87
+      - name: STR_SAIGON
+        lon: 108.1
+        lat: -11.17
+      - name: STR_DAVAO
+        lon: 125.712
+        lat: -6.71346
+      - name: STR_WUHAN
+        lon: 112.95
+        lat: -30.9466
+      - name: STR_CHENGDU
+        lon: 102.678
+        lat: -32.7376
+      - name: STR_OSAKA
+        lon: 135.5
+        lat: -34.5
+      - name: STR_KUALA
+        lon: 101.75
+        lat: -3.125
+  - type: STR_ANTARCTICA # ALL DEPRECIATED UNTIL UNIQUE TERRAINS AND CODE IS IMPLEMENTED IN OPEN XCOM.
+    cities:
+      - name: STR_VOSTOKSTATION # Russian
+        lon: 116.782
+        lat: 75.2393
+      - name: STR_MCMURDOSTATION # American
+        lon: 171.575
+        lat: 79.0707
+      - name: STR_AMUNDSENSCOTTSTATION # American South Pole
+        lon: 0
+        lat: 90
+extraStrings:
+  - type: en-US
+    strings:
+      # ANTARTIC BASES/OUTPOSTS
+      STR_VOSTOKSTATION: Vostok
+      STR_MCMURDOSTATION: McMurdo
+      STR_AMUNDSENSCOTTSTATION: Amundsen-Scott
+      # BRAZILIAN CITIES
+      STR_SAOPAULO: Sao Paulo
+      STR_MARACAIBO: Maracaibo
+      STR_BELOHORIZONTE: Belo Horizonte
+      STR_RECIFE: Recife
+      STR_SALVADOR: Salvador
+      STR_FORTALEZA: Fortaleza
+      # SYRIAN CITIES
+      STR_SYRIA: syria
+      STR_DAMASCUS: Damascus
+      # CHINESE CITIES
+      STR_WUHAN: Wuhan
+      STR_CHENGDU: Chengdu
+      # ALGERIAN CITIES
+      STR_ALGERIA: algeria
+      STR_ALGIERS: Algiers
+      # PORTUGESE CITIES
+      STR_PORTUGAL: portugul
+      STR_LISBON: Lisbon
+      # SPANISH CITIES
+      STR_BARCELONA: Barcelona
+      # GREEK CITIES
+      STR_GREECE: greece
+      STR_ATHENS: Athens
+      # IRAQI CITIES
+      STR_IRAQ: iraq
+      # BRITISH CITIES
+      STR_GLASGOW: Glasgow
+      # IRISH CITIES
+      STR_IRELAND: eire
+      STR_CORK: Cork
+      STR_DUBLIN: Dublin
+      # FRENCH CITIES
+      STR_LYON: Lyon
+      STR_BREST: Brest
+      STR_NOUMEA: Noumea #New Caledonia
+      # CANADIAN CITIES
+      STR_TORONTO: Toronto
+      # KOREAN CITIES
+      STR_KOREA: korea
+      # TAIWANESE/ROC CITIES
+      STR_TAIWAN: taiwan
+      STR_TAPEI: Tapei
+      STR_HAIKOU: Haikou
+      # PHILIPPINE CITIES
+      STR_PHILIPPINES: philippines
+      STR_DAVAO: Davao
+      # MEXICAN CITIES
+      STR_MEXICO: mexico
+      # PAKISTANI CITIES
+      STR_PAKISTAN: pakistan
+      STR_ISLAMABAD: Islamabad
+      STR_LAHORE: Lahore
+      # INDIAN CITIES
+      STR_CHENNAI: Chennai
+      STR_BANGALORE: Bangalore
+      # ISRAELI CITIES
+      STR_ISRAEL: israel
+      STR_JERUSALEM: Jerusalem
+      # IRANIAN CITIES
+      STR_IRAN: iran
+      STR_MASHHAD: Mashhad
+      # QUATARI CITIES
+      STR_QUATAR: quatar
+      STR_DOHA: Doha
+      # UAE CITIES
+      STR_UAE: uae
+      STR_DUBAI: Dubai
+      # SAUDI ARABIAN CITIES
+      STR_SAUDI: saudi arabia
+      STR_RIYADH: Riyadh
+      # BALTIC ENTENTE CITIES
+      STR_BALTENTENTE: baltic entente
+      # BELARUS CITIES
+      STR_BELARUS: belarus
+      # LIBYAN CITIES
+      STR_LIBYA: libya
+      STR_TRIPOLI: Tripoli
+      STR_BENGHAZI: Benghazi
+      # POLISH CITIES
+      STR_POLAND: poland
+      STR_WARSAW: Warsaw
+      # DANISH CITIES
+      STR_DENMARK: denmark
+      # TURKISH CITIES
+      STR_TURKEY: turkey
+      STR_ISTANBUL: Istanbul
+      # INDONESIAN CITIES
+      STR_INDONESIA: indonesia
+      STR_KUALA: Kuala Lumpur
+      STR_SURABAYA: Surabaya
+      # VIETNAMESE CITIES
+      STR_VIETNAM: vietnam
+      STR_HANOI: Hanoi
+      STR_SAIGON: Saigon
+      STR_THAILAND: thailand
+      # UKRAINIAN CITIES
+      STR_UKRAINE: ukraine
+      STR_ODESSA: Odessa
+      STR_KHARKOV: Kharkov
+      STR_KIEV: Kiev
+      # RUSSIAN CITIES
+      STR_SEVASTOPOL: Sevastopol
+      STR_LENINGRAD: St. Petersburg
+      STR_ARCHANGEL: Archangel
+      STR_STALINGRAD: Volgograd
+      STR_ASTRAKHAN: Astrakhan
+      STR_CHEYLABINSK: Cheylabinsk
+      STR_YEKATERINBURG: Yekaterinburg
+      STR_VLADIVOSTOK: Vladivostok
+      STR_OMSK: Omsk
+      STR_KRASNOYARSK: Krasnoyarsk
+      STR_PETROPAVLOVSK: Petropavlovsk
+      STR_TIKSI: Tiksi
+      # AZERBAIJANIAN CITIES
+      STR_BAKU: Baku
+      # BELARUSIAN CITIES
+      STR_MINSK: Minsk
+      # GERMAN CITIES
+      STR_MUNICH: Munich
+      STR_HAMBURG: Hamburg
+      # ROMANIAN CITIES
+      STR_BUCHAREST: Bucharest
+      # JAPANESE CITIES
+      STR_HIROSHIMA: Hiroshima
+      STR_OSAKA: Osaka
+      # AMERICAN CITIES
+      STR_ANCHORAGE: Anchorage
+      STR_JUNEAU: Juneau
+      STR_NEWORLEANS: New Orleans
+      STR_SEATTLE: Seattle
+      STR_HONOLULU: Honolulu
+      STR_DETROIT: Detroit
+      STR_SANFRANCISCO: San Francisco
+      STR_MIAMI: Miami
+      STR_ORLANDO: Orlando
+      STR_HOUSTON: Houston
+      STR_PHILADELPHIA: Philadelphia
+      STR_ATLANTA: Atlanta
+      STR_PHOENIX: Phoenix
+      STR_SANDIEGO: San Diego
+      STR_NORFOLK: Norfolk
+      STR_CHARLESTON: Charleston
+      STR_BOSTON: Boston
+      STR_INDIANAPOLIS: Indianapolis
+      STR_CORPUSCHRISTI: Corpus Christi
+      STR_BARROW: Barrow #Alaska
+      # EGYPTIAN CITIES
+      STR_ALEXANDRIA: Alexandria
+      # ITALIAN CITIES
+      STR_MILAN: Milan
+      STR_NAPLES: Naples
+      # MEXICAN CITIES
+      STR_GUADALAJARA: Guadalajara
+      STR_GUATEMALA: Guatemala
+      STR_SANTODOMINGO: Santo Domingo
+      # AUSTRALIAN CITIES
+      STR_DARWIN: Darwin
+      STR_BRISBANE: Brisbane
+      # PAPA NEW GUINEAN CITIES
+      STR_PORTMORESBY: Port Moresby
+      # AFRICAN UNION (AFRICA) CITIES
+      STR_AFRICANUNION: african union
+      STR_LUANDA: Luanda
+      STR_KHARTOUM: Khartoum
+      STR_ADDISABABA: Addis Ababa
+      STR_KAMPALA: Kampala
+      STR_HARARE: Harare
+      STR_KANO: Kano
+      STR_DARESSALAAM: Dar es Salaam
+      STR_MOGADISHU: Mogadishu
+      STR_MAPUTO: Maputo
+      STR_LUSAKA: Lusaka
+      STR_ABIDJAN: Abidjan
+      STR_ACCRA: Accra
+      STR_BAMAKO: Bamako
+      STR_ANTANANARIVO: Antananarivo #MADAGASCAR
+      # SOUTH AFRICAN CITIES
+      STR_DURBAN: Durban
+      # NORWEGIAN CITIES
+      STR_NORWAY: norway
+      STR_OSLO: Oslo
+      STR_TRONDHEIM: Trondheim
+      STR_HAMMERFEST: Hammerfest
+      # BELGIAN CITIES
+      STR_BELGIUM: belgium
+      # DUTCH CITIES
+      STR_NETHERLANDS: netherlands
+      # SWEDISH CITIES
+      STR_SWEDEN: sweden
+      STR_STOCKHOLM: Stockholm
+      # CZECH CITIES
+      STR_CZECH: czech republic
+      # FINNISH CITIES
+      STR_FINLAND: finland
+      STR_TURKU: Turku
+      # BANGLADESHI CITIES
+      STR_DHAKA: Dhaka
+      # AUSTRIAN CITIES
+      STR_AUSTRIA: austria
+      STR_VIENNA: Vienna
+      # HUNGARIAN CITIES
+      STR_HUNGARY: hungary
+      # SERBIAN CITIES
+      STR_BELGRADE: Belgrade
+      # ECUADORIAN CITIES
+      STR_GUAYAQUIL: Guayaquil
+      # FIJI CITIES
+      STR_SUVA: Suva
+      # ROMANIAN CITIES
+      STR_ROMANIA: romania
+      # BULGARIAN CITIES
+      STR_BULGARIA: bulgaria
+      STR_SOFIA: Sofia
+      STR_BALKANPACT: balkan pact
+      STR_CUBA: cuba
+      STR_VENEZULA: venezuela
+      STR_COLOMBIA: columbia
+      STR_PERU: peru
+      STR_CHILE: chile
+      STR_ARGENTINA: argentina
