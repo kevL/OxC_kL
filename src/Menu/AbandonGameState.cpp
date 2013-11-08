@@ -60,10 +60,10 @@ AbandonGameState::AbandonGameState(Game* game, OptionsOrigin origin)
 
 	_window		= new Window(this, 216, 160, x, 20, POPUP_BOTH);
 
-	_txtTitle	= new Text(206, 17, x + 5, 80);
+	_txtTitle	= new Text(206, 17, x + 5, 79);
 
-	_btnNo		= new TextButton(55, 20, x + 30, 131);
-	_btnYes		= new TextButton(55, 20, x + 131, 131);
+	_btnNo		= new TextButton(55, 20, x + 30, 132);
+	_btnYes		= new TextButton(55, 20, x + 131, 132);
 
 	add(_window);
 	add(_txtTitle);

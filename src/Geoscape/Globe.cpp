@@ -62,10 +62,10 @@
 namespace OpenXcom
 {
 
-const double Globe::QUAD_LONGITUDE = 0.05;
-const double Globe::QUAD_LATITUDE = 0.2;
-const double Globe::ROTATE_LONGITUDE = 0.25;
-const double Globe::ROTATE_LATITUDE = 0.15;
+const double Globe::QUAD_LONGITUDE		= 0.05;
+const double Globe::QUAD_LATITUDE		= 0.2;
+const double Globe::ROTATE_LONGITUDE	= 0.25;
+const double Globe::ROTATE_LATITUDE		= 0.15;
 
 namespace
 {
@@ -77,16 +77,16 @@ struct GlobeStaticData
 	Sint16 shade_gradient[240];
 	///size of x & y of noise surface
 	const int random_surf_size;
-	
+
 	/**
 	 * Function returning normal vector of sphere surface
-     * @param ox x cord of sphere center
-     * @param oy y cord of sphere center
-     * @param r radius of sphere
-     * @param x cord of point where we getting this vector
-     * @param y cord of point where we getting this vector
-     * @return normal vector of sphere surface 
-     */
+	 * @param ox x cord of sphere center
+	 * @param oy y cord of sphere center
+	 * @param r radius of sphere
+	 * @param x cord of point where we getting this vector
+	 * @param y cord of point where we getting this vector
+	 * @return normal vector of sphere surface 
+	 */
 	inline Cord circle_norm(double ox, double oy, double r, double x, double y)
 	{
 		const double limit = r*r;
@@ -192,9 +192,9 @@ struct CreateShadow
 		temp.x -= 2;
 		temp.x *= 125.;
 
-		if (temp.x < -110)
+		if(temp.x < -110)
 			temp.x = -31;
-		else if (temp.x > 120)
+		else if(temp.x > 120)
 			temp.x = 50;
 		else
 			temp.x = static_data.shade_gradient[(Sint16)temp.x + 120];
@@ -213,7 +213,7 @@ struct CreateShadow
 			else
 			{
 				//this pixel is land
-				if (dest==0) return (Uint8)val;
+				if(dest==0) return (Uint8)val;
 				const int s = val / 3;
 				const int e = dest+s;
 				if(e > d + helper::ColorShade)
@@ -236,7 +236,7 @@ struct CreateShadow
 			}
 		}
 	}
-	
+
 	static inline void func(Uint8& dest, const Cord& earth, const Cord& sun, const Sint16& noise, const int&)
 	{
 		if(dest && earth.z)
@@ -246,7 +246,7 @@ struct CreateShadow
 	}
 };
 
-}//namespace
+}
 
 /**
  * Sets up a globe with the specified size and position.
@@ -258,25 +258,32 @@ struct CreateShadow
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-Globe::Globe(Game *game, int cenX, int cenY, int width, int height, int x, int y):
-	InteractiveSurface(width, height, x, y),
-	_rotLon(0.0), _rotLat(0.0),
-	_cenX(cenX), _cenY(cenY), _game(game),
-	_blink(true), _hover(false), _cacheLand()
+Globe::Globe(Game* game, int cenX, int cenY, int width, int height, int x, int y)
+	:
+		InteractiveSurface(width, height, x, y),
+		_rotLon(0.0),
+		_rotLat(0.0),
+		_cenX(cenX),
+		_cenY(cenY),
+		_game(game),
+		_blink(true),
+		_hover(false),
+		_cacheLand()
 {
 	_texture = new SurfaceSet(*_game->getResourcePack()->getSurfaceSet("TEXTURE.DAT"));
 
-	_countries = new Surface(width, height, x, y);
-	_markers = new Surface(width, height, x, y);
-	_radars = new Surface(width, height, x, y);
-	_clipper = new FastLineClip(x, x+width, y, y+height);
+	_countries	= new Surface(width, height, x, y);
+	_markers	= new Surface(width, height, x, y);
+	_radars		= new Surface(width, height, x, y);
+	_clipper	= new FastLineClip(x, x+width, y, y+height);
 
 	// Animation timers
 	_blinkTimer = new Timer(100);
-	_blinkTimer->onTimer((SurfaceHandler)&Globe::blink);
+	_blinkTimer->onTimer((SurfaceHandler)& Globe::blink);
 	_blinkTimer->start();
+
 	_rotTimer = new Timer(50);
-	_rotTimer->onTimer((SurfaceHandler)&Globe::rotate);
+	_rotTimer->onTimer((SurfaceHandler)& Globe::rotate);
 
 	// Globe markers
 	_mkXcomBase = new Surface(3, 3);
@@ -373,29 +380,31 @@ Globe::Globe(Game *game, int cenX, int cenY, int width, int height, int x, int y
 	_cenLat = _game->getSavedGame()->getGlobeLatitude();
 	_zoom = _game->getSavedGame()->getGlobeZoom();
 
-	_radius.push_back(0.45*height);
-	_radius.push_back(0.60*height);
-	_radius.push_back(0.90*height);
-	_radius.push_back(1.40*height);
-	_radius.push_back(2.25*height);
-	_radius.push_back(3.60*height);
+	_radius.push_back(0.45 * height);
+	_radius.push_back(0.60 * height);
+	_radius.push_back(0.90 * height);
+	_radius.push_back(1.40 * height);
+	_radius.push_back(2.25 * height);
+	_radius.push_back(3.60 * height);
 	_earthData.resize(_radius.size());
 
 	//filling normal field for each radius
-	for(unsigned int r = 0; r<_radius.size(); ++r)
+	for (unsigned int r = 0; r < _radius.size(); ++r)
 	{
 		_earthData[r].resize(width * height);
-		for(int j=0; j<height; ++j)
-			for(int i=0; i<width; ++i)
+		for (int j = 0; j < height; ++j)
+		{
+			for (int i = 0; i < width; ++i)
 			{
-				_earthData[r][width*j + i] = static_data.circle_norm(width/2, height/2, _radius[r], i+.5, j+.5);
+				_earthData[r][width * j + i] = static_data.circle_norm(width / 2, height / 2, _radius[r], i + .5, j + .5);
 			}
+		}
 	}
 
 	//filling random noise "texture"
 	_randomNoiseData.resize(static_data.random_surf_size * static_data.random_surf_size);
-	for(unsigned int i=0; i<_randomNoiseData.size(); ++i)
-		_randomNoiseData[i] = rand()%4;
+	for (unsigned int i = 0; i < _randomNoiseData.size(); ++i)
+		_randomNoiseData[i] = rand() %4;
 
 	cachePolygons();
 }
@@ -509,7 +518,7 @@ bool Globe::pointBack(double lon, double lat) const
 double Globe::lastVisibleLat(double lon) const
 {
 //	double c = cos(_cenLat) * cos(lat) * cos(lon - _cenLon) + sin(_cenLat) * sin(lat);
-//		tan(lat) = -cos(_cenLat) * cos(lon - _cenLon)/sin(_cenLat) ;
+//	tan(lat) = -cos(_cenLat) * cos(lon - _cenLon)/sin(_cenLat);
 	return atan(-cos(_cenLat) * cos(lon - _cenLon)/sin(_cenLat));
 }
 
@@ -535,9 +544,9 @@ bool Globe::insidePolygon(double lon, double lat, Polygon *poly) const
 	{
 		int j = (i + 1) % poly->getPoints();
 
-		/*double x = lon, y = lat,
-			   x_i = poly->getLongitude(i), y_i = poly->getLatitude(i),
-			   x_j = poly->getLongitude(j), y_j = poly->getLatitude(j);*/
+		/* double x = lon, y = lat,
+				x_i = poly->getLongitude(i), y_i = poly->getLatitude(i),
+				x_j = poly->getLongitude(j), y_j = poly->getLatitude(j); */
 
 		double x, y, x_i, x_j, y_i, y_j;
 		polarToCart(poly->getLongitude(i), poly->getLatitude(i), &x_i, &y_i);
@@ -549,6 +558,7 @@ bool Globe::insidePolygon(double lon, double lat, Polygon *poly) const
 			odd ^= (x_i + (y - y_i) / (y_j - y_i) * (x_j - x_i) < x);
 		}
 	}
+
 	return odd;
 }
 
@@ -667,6 +677,7 @@ void Globe::zoomIn()
 	{
 		_zoom++;
 		_game->getSavedGame()->setGlobeZoom(_zoom);
+
 		cachePolygons();
 	}
 }
@@ -680,6 +691,7 @@ void Globe::zoomOut()
 	{
 		_zoom--;
 		_game->getSavedGame()->setGlobeZoom(_zoom);
+
 		cachePolygons();
 	}
 }
@@ -691,6 +703,7 @@ void Globe::zoomMin()
 {
 	_zoom = 0;
 	_game->getSavedGame()->setGlobeZoom(_zoom);
+
 	cachePolygons();
 }
 
@@ -701,6 +714,7 @@ void Globe::zoomMax()
 {
 	_zoom = _radius.size() - 1;
 	_game->getSavedGame()->setGlobeZoom(_zoom);
+
 	cachePolygons();
 }
 
@@ -716,6 +730,7 @@ void Globe::center(double lon, double lat)
 	_cenLat = lat;
 	_game->getSavedGame()->setGlobeLongitude(_cenLon);
 	_game->getSavedGame()->setGlobeLatitude(_cenLat);
+
 	cachePolygons();
 }
 
@@ -733,12 +748,18 @@ bool Globe::insideLand(double lon, double lat) const
 	double oldLon = _cenLon, oldLat = _cenLat;
 	globe->_cenLon = lon;
 	globe->_cenLat = lat;
-	for (std::list<Polygon*>::iterator i = _game->getResourcePack()->getPolygons()->begin(); i != _game->getResourcePack()->getPolygons()->end() && !inside; ++i)
+	for (std::list<Polygon*>::iterator
+			i = _game->getResourcePack()->getPolygons()->begin();
+			i != _game->getResourcePack()->getPolygons()->end()
+				&& !inside;
+			++i)
 	{
 		inside = insidePolygon(lon, lat, *i);
 	}
+
 	globe->_cenLon = oldLon;
 	globe->_cenLat = oldLat;
+
 	return inside;
 }
 
@@ -749,6 +770,7 @@ bool Globe::insideLand(double lon, double lat) const
 void Globe::toggleDetail()
 {
 	_game->getSavedGame()->toggleDetail();
+
 	drawDetail();
 }
 
@@ -763,12 +785,15 @@ void Globe::toggleDetail()
 bool Globe::targetNear(Target* target, int x, int y) const
 {
 	Sint16 tx, ty;
+
 	if (pointBack(target->getLongitude(), target->getLatitude()))
 		return false;
+
 	polarToCart(target->getLongitude(), target->getLatitude(), &tx, &ty);
 
 	int dx = x - tx;
 	int dy = y - ty;
+
 	return (dx * dx + dy * dy <= NEAR_RADIUS);
 }
 
@@ -783,6 +808,7 @@ bool Globe::targetNear(Target* target, int x, int y) const
 std::vector<Target*> Globe::getTargets(int x, int y, bool craft) const
 {
 	std::vector<Target*> v;
+
 	if (!craft)
 	{
 		for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
@@ -807,6 +833,7 @@ std::vector<Target*> Globe::getTargets(int x, int y, bool craft) const
 			}
 		}
 	}
+
 	for (std::vector<Ufo*>::iterator i = _game->getSavedGame()->getUfos()->begin(); i != _game->getSavedGame()->getUfos()->end(); ++i)
 	{
 		if (!(*i)->getDetected())
@@ -817,6 +844,7 @@ std::vector<Target*> Globe::getTargets(int x, int y, bool craft) const
 			v.push_back(*i);
 		}
 	}
+
 	for (std::vector<Waypoint*>::iterator i = _game->getSavedGame()->getWaypoints()->begin(); i != _game->getSavedGame()->getWaypoints()->end(); ++i)
 	{
 		if (targetNear((*i), x, y))
@@ -824,6 +852,7 @@ std::vector<Target*> Globe::getTargets(int x, int y, bool craft) const
 			v.push_back(*i);
 		}
 	}
+
 	for (std::vector<TerrorSite*>::iterator i = _game->getSavedGame()->getTerrorSites()->begin(); i != _game->getSavedGame()->getTerrorSites()->end(); ++i)
 	{
 		if (targetNear((*i), x, y))
@@ -831,17 +860,20 @@ std::vector<Target*> Globe::getTargets(int x, int y, bool craft) const
 			v.push_back(*i);
 		}
 	}
+
 	for (std::vector<AlienBase*>::iterator i = _game->getSavedGame()->getAlienBases()->begin(); i != _game->getSavedGame()->getAlienBases()->end(); ++i)
- 	{
+	{
 		if (!(*i)->isDiscovered())
 		{
 			continue;
 		}
+
 		if (targetNear((*i), x, y))
 		{
 			v.push_back(*i);
 		}
 	}
+
 	return v;
 }
 
@@ -853,6 +885,7 @@ std::vector<Target*> Globe::getTargets(int x, int y, bool craft) const
 void Globe::cachePolygons()
 {
 	cache(_game->getResourcePack()->getPolygons(), &_cacheLand);
+
 	_redraw = true;
 }
 
@@ -861,13 +894,14 @@ void Globe::cachePolygons()
  * @param polygons Pointer to list of polygons.
  * @param cache Pointer to cache.
  */
-void Globe::cache(std::list<Polygon*> *polygons, std::list<Polygon*> *cache)
+void Globe::cache(std::list<Polygon*>* polygons, std::list<Polygon*>* cache)
 {
 	// Clear existing cache
 	for (std::list<Polygon*>::iterator i = cache->begin(); i != cache->end(); ++i)
 	{
 		delete *i;
 	}
+
 	cache->clear();
 
 	// Pre-calculate values to cache
@@ -968,6 +1002,7 @@ void Globe::rotate()
 	_cenLat += _rotLat;
 	_game->getSavedGame()->setGlobeLongitude(_cenLon);
 	_game->getSavedGame()->setGlobeLatitude(_cenLat);
+
 	cachePolygons();
 }
 
@@ -977,6 +1012,7 @@ void Globe::rotate()
 void Globe::draw()
 {
 	Surface::draw();
+
 	drawOcean();
 	drawLand();
 	drawRadars();
@@ -1071,6 +1107,7 @@ Cord Globe::getSunDirection(double lon, double lat) const
 	//norm should be always greater than 0
 	norm = 1./norm;
 	sun_direction *= norm;
+
 	return sun_direction;
 }
 
@@ -1079,13 +1116,12 @@ void Globe::drawShadow()
 {
 	ShaderMove<Cord> earth = ShaderMove<Cord>(_earthData[_zoom], getWidth(), getHeight());
 	ShaderRepeat<Sint16> noise = ShaderRepeat<Sint16>(_randomNoiseData, static_data.random_surf_size, static_data.random_surf_size);
-	
+
 	earth.setMove(_cenX-getWidth()/2, _cenY-getHeight()/2);
-	
+
 	lock();
 	ShaderDraw<CreateShadow>(ShaderSurface(this), earth, ShaderScalar(getSunDirection(_cenLon, _cenLat)), noise);
 	unlock();
-		
 }
 
 
@@ -1108,23 +1144,22 @@ void Globe::XuLine(Surface* surface, Surface* src, double x1, double y1, double 
 		inv=true;
 	}
 
-	if (y2<y1) { 
-    SY=-1;
-  } else if ( AreSame(deltay, 0.0) ) {
-    SY=0;
-  } else {
-    SY=1;
-  }
+	if (y2<y1)
+		SY=-1;
+	else if (AreSame(deltay, 0.0))
+		SY=0;
+	else
+		SY=1;
 
-	if (x2<x1) {
-    SX=-1;
-  } else if ( AreSame(deltax, 0.0) ) {
-    SX=0;
-  } else {
-    SX=1;
-  }
+	if (x2<x1)
+		SX=-1;
+	else if (AreSame(deltax, 0.0))
+		SX=0;
+	else
+		SX=1;
 
-	x0=x1;  y0=y1;
+
+	x0=x1; y0=y1;
 	if (inv)
 		SY=(deltay/len);
 	else
@@ -1162,12 +1197,13 @@ void Globe::drawRadars()
 	_radars->clear();
 	if (!_game->getSavedGame()->getRadarLines())
 		return;
+
 /*	Text *label = new Text(80, 9, 0, 0);
 	label->setPalette(getPalette());
 	label->setFonts(_game->getResourcePack()->getFont("FONT_BIG"), _game->getResourcePack()->getFont("FONT_SMALL"));
 	label->setAlign(ALIGN_LEFT);
-	label->setColor(Palette::blockOffset(15)-1);
-*/
+	label->setColor(Palette::blockOffset(15)-1); */
+
 	double x, y;
 	double tr, range;
 	double lat, lon;
@@ -1408,11 +1444,13 @@ void Globe::drawDetail()
 	// Draw the city markers
 	if (_zoom >= 3)
 	{
-		Text *label = new Text(80, 9, 0, 0);
+		Text* label = new Text(80, 9, 0, 0);
 		label->setPalette(getPalette());
 		label->setFonts(_game->getResourcePack()->getFont("FONT_BIG"), _game->getResourcePack()->getFont("FONT_SMALL"));
 		label->setAlign(ALIGN_CENTER);
-		label->setColor(Palette::blockOffset(8)+10);
+		label->setColor(Palette::blockOffset(10)+8);	// grey-blue=blockOffset(10)+6)
+														// lavender=blockOffset(6)+4; 
+														// (default)yellow=blockOffset(8)+10;
 
 		Sint16 x, y;
 		for (std::vector<Region*>::iterator i = _game->getSavedGame()->getRegions()->begin(); i != _game->getSavedGame()->getRegions()->end(); ++i)
@@ -1440,7 +1478,7 @@ void Globe::drawDetail()
 
 		delete label;
 	}
-	
+
 	static int debugType = 0;
 	static bool canSwitchDebugType = false;
 	if (_game->getSavedGame()->getDebugMode())
@@ -1497,13 +1535,13 @@ void Globe::drawDetail()
 					color += 2;
 					for(std::vector<MissionArea>::const_iterator k = (*j).areas.begin(); k != (*j).areas.end(); ++k)
 					{
-						double lon2 = (*k).lonMax * M_PI / 180;
+						double lon2 = (*k).lonMax * M_PI / 180.0;
 							//(*i)->getRules()->getLonMax().at(k);
-						double lon1 = (*k).lonMin * M_PI / 180;
+						double lon1 = (*k).lonMin * M_PI / 180.0;
 							//(*i)->getRules()->getLonMin().at(k);
-						double lat2 = (*k).latMax * M_PI / 180;
+						double lat2 = (*k).latMax * M_PI / 180.0;
 							//(*i)->getRules()->getLatMax().at(k);
-						double lat1 = (*k).latMin * M_PI / 180;
+						double lat1 = (*k).latMin * M_PI / 180.0;
 							//(*i)->getRules()->getLatMin().at(k);
 
 						drawVHLine(lon1, lat1, lon2, lat1, color);
@@ -1600,18 +1638,18 @@ void Globe::drawMarkers()
 		Surface *marker = 0;
 		switch ((*i)->getStatus())
 		{
-		case Ufo::DESTROYED:
+			case Ufo::DESTROYED:
 			continue;
-		case Ufo::FLYING:
-			if (!(*i)->getDetected()) continue;
-			marker = _mkFlyingUfo;
+			case Ufo::FLYING:
+				if (!(*i)->getDetected()) continue;
+				marker = _mkFlyingUfo;
 			break;
-		case Ufo::LANDED:
-			if (!(*i)->getDetected()) continue;
-			marker = _mkLandedUfo;
+			case Ufo::LANDED:
+				if (!(*i)->getDetected()) continue;
+				marker = _mkLandedUfo;
 			break;
-		case Ufo::CRASHED:
-			marker = _mkCrashedUfo;
+			case Ufo::CRASHED:
+				marker = _mkCrashedUfo;
 			break;
 		}
 		polarToCart((*i)->getLongitude(), (*i)->getLatitude(), &x, &y);
@@ -1645,6 +1683,7 @@ void Globe::drawMarkers()
 void Globe::blit(Surface *surface)
 {
 	Surface::blit(surface);
+
 	_radars->blit(surface);
 	_countries->blit(surface);
 	_markers->blit(surface);
@@ -1713,16 +1752,18 @@ void Globe::mouseClick(Action *action, State *state)
 
 /**
  * Handles globe keyboard shortcuts.
- * @param action Pointer to an action.
- * @param state State that the action handlers belong to.
+ * @param action, Pointer to an action.
+ * @param state, State that the action handlers belong to.
  */
 void Globe::keyboardPress(Action *action, State *state)
 {
 	InteractiveSurface::keyboardPress(action, state);
+
 	if (action->getDetails()->key.keysym.sym == Options::getInt("keyGeoToggleDetail"))
 	{
 		toggleDetail();
 	}
+
 	if (action->getDetails()->key.keysym.sym == Options::getInt("keyGeoToggleRadar"))
 	{
 		toggleRadarLines();
@@ -1770,7 +1811,7 @@ void Globe::getPolygonTextureAndShade(double lon, double lat, int *texture, int 
  */
 bool Globe::isZoomedInToMax() const
 {
-	if(_zoom == _radius.size() - 1)
+	if (_zoom == _radius.size() - 1)
 	{
 		return true;
 	}
@@ -1786,7 +1827,7 @@ bool Globe::isZoomedInToMax() const
  */
 bool Globe::isZoomedOutToMax() const
 {
-	if(_zoom == 0)
+	if (_zoom == 0)
 	{
 		return true;
 	}

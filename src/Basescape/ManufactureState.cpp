@@ -54,19 +54,6 @@ ManufactureState::ManufactureState(Game* game, Base* base)
 {
 	_window			= new Window(this, 320, 200, 0, 0);
 
-/*kL	_txtTitle		= new Text(310, 17, 5, 8);
-	_txtAvailable	= new Text(150, 9, 8, 24);
-	_txtAllocated	= new Text(150, 9, 160, 24);
-	_txtSpace		= new Text(150, 9, 8, 34);
-	_txtFunds		= new Text(150, 9, 160, 34);
-	_txtItem		= new Text(80, 9, 10, 52);
-	_txtEngineers	= new Text(56, 18, 112, 44);
-	_txtProduced	= new Text(56, 18, 168, 44);
-	_txtCost		= new Text(44, 27, 222, 44);
-	_txtTimeLeft	= new Text(55, 18, 260, 44);
-	_lstManufacture	= new TextList(307, 90, 8, 80); */
-
-	// kL_begin: Manufacture graphic adjustments.
 	_txtTitle		= new Text(300, 17, 16, 9);
 
 	_txtAvailable	= new Text(140, 9, 16, 25);
@@ -79,15 +66,12 @@ ManufactureState::ManufactureState(Game* game, Base* base)
 	_txtEngineers	= new Text(45, 9, 145, 44);
 	_txtProduced	= new Text(40, 9, 174, 52);
 	_txtCost		= new Text(50, 17, 216, 44);
-	_txtTimeLeft	= new Text(55, 9, 271, 52);
+	_txtTimeLeft	= new Text(55, 17, 271, 44);
 
 	_lstManufacture	= new TextList(294, 96, 8, 70);
-	// kL_end.
 
-//kL	_btnNew			= new TextButton(148, 16, 8, 176);
-//kL	_btnOk			= new TextButton(148, 16, 164, 176);
-	_btnNew			= new TextButton(144, 16, 16, 177);		// kL
-	_btnOk			= new TextButton(144, 16, 163, 177);	// kL
+	_btnNew			= new TextButton(134, 16, 16, 177);
+	_btnOk			= new TextButton(134, 16, 170, 177);
 
 
 	// back up palette in case we're being called from Geoscape!
@@ -169,13 +153,11 @@ ManufactureState::ManufactureState(Game* game, Base* base)
 
 	_lstManufacture->setColor(Palette::blockOffset(13)+10);
 	_lstManufacture->setArrowColor(Palette::blockOffset(15)+9);
-//kL	_lstManufacture->setColumns(5, 122, 17, 52, 56, 32);
-	_lstManufacture->setColumns(5, 129, 29, 42, 55, 32);		// kL
+	_lstManufacture->setColumns(5, 129, 29, 42, 55, 32);
 //kL	_lstManufacture->setAlign(ALIGN_RIGHT);
 //kL	_lstManufacture->setAlign(ALIGN_LEFT, 0);
 	_lstManufacture->setSelectable(true);
 	_lstManufacture->setBackground(_window);
-//kL	_lstManufacture->setMargin(1);
 	_lstManufacture->setMargin(8);
 	_lstManufacture->onMouseClick((ActionHandler)& ManufactureState::lstManufactureClick);
 
@@ -224,9 +206,13 @@ void ManufactureState::btnNewProductionClick(Action*)
  */
 void ManufactureState::fillProductionList()
 {
-	const std::vector<Production*> productions(_base->getProductions ());
 	_lstManufacture->clearList();
-	for(std::vector<Production*>::const_iterator iter = productions.begin (); iter != productions.end (); ++iter)
+
+	const std::vector<Production*> productions(_base->getProductions());
+	for(std::vector<Production*>::const_iterator
+			iter = productions.begin();
+			iter != productions.end();
+			++iter)
 	{
 		std::wstringstream s1;
 		s1 << (*iter)->getAssignedEngineers();
@@ -236,7 +222,7 @@ void ManufactureState::fillProductionList()
 		if (Options::getBool("allowAutoSellProduction")
 			&& (*iter)->getAmountTotal() == std::numeric_limits<int>::max())
 		{
-			s2 << "$$$";
+			s2 << "$profit$";
 		}
 		else
 			s2 << (*iter)->getAmountTotal();
@@ -251,17 +237,20 @@ void ManufactureState::fillProductionList()
 			if (Options::getBool("allowAutoSellProduction")
 				&& (*iter)->getAmountTotal() == std::numeric_limits<int>::max())
 			{
-				timeLeft = ((*iter)->getAmountProduced()+1) * (*iter)->getRules()->getManufactureTime() - (*iter)->getTimeSpent();
+				timeLeft = ((*iter)->getAmountProduced() + 1) * (*iter)->getRules()->getManufactureTime() - (*iter)->getTimeSpent();
 			}
 			else
 			{
-				timeLeft = (*iter)->getAmountTotal () * (*iter)->getRules()->getManufactureTime() - (*iter)->getTimeSpent();
+				timeLeft = (*iter)->getAmountTotal() * (*iter)->getRules()->getManufactureTime() - (*iter)->getTimeSpent();
 			}
 
 			timeLeft /= (*iter)->getAssignedEngineers();
-			float dayLeft = static_cast<float>(timeLeft) / 24.0f;
-			int hours = static_cast<int>(dayLeft - dayLeft) * 24;
-			s4 << static_cast<int>(dayLeft) << "/" << hours;
+//kL			float dayLeft = static_cast<float>(timeLeft) / 24.f;	// <- too clever by half.
+			int daysLeft = timeLeft / 24;
+//kL			int hours = (dayLeft - static_cast<int>(dayLeft)) * 24;	// <- too clever by half.
+			int hoursLeft = timeLeft %24;
+//kL			s4 << static_cast<int>(daysLeft) << "/" << hoursLeft;	// <- too clever by half.
+			s4 << daysLeft << "/" << hoursLeft;
 		}
 		else
 		{

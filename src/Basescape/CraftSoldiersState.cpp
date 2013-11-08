@@ -66,19 +66,17 @@ CraftSoldiersState::CraftSoldiersState(Game* game, Base* base, size_t craft)
 	_txtRank		= new Text(93, 9, 132, 33);
 	_txtCraft		= new Text(71, 9, 225, 33);
 
-//	_lstSoldiers->setColumns(3, 116, 93, 71);				// TEMP.
-
 	_lstSoldiers	= new TextList(294, 128, 8, 42);
 
-	_btnUnload		= new TextButton(144, 16, 16, 177);		// kL
-	_btnOk			= new TextButton(144, 16, 163, 177);
+	_btnUnload		= new TextButton(134, 16, 16, 177);
+	_btnOk			= new TextButton(134, 16, 170, 177);
 
 
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)), Palette::backPos, 16);
 
 	add(_window);
 	add(_btnOk);
-	add(_btnUnload);	// kL
+	add(_btnUnload);
 	add(_txtTitle);
 	add(_txtName);
 	add(_txtRank);
@@ -98,9 +96,9 @@ CraftSoldiersState::CraftSoldiersState(Game* game, Base* base, size_t craft)
 	_btnOk->onMouseClick((ActionHandler)& CraftSoldiersState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)& CraftSoldiersState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 
-	_btnUnload->setColor(Palette::blockOffset(13)+10);									// kL
-	_btnUnload->setText(_game->getLanguage()->getString("STR_UNLOAD"));					// kL
-	_btnUnload->onMouseClick((ActionHandler)& CraftSoldiersState::btnUnloadClick);		// kL
+	_btnUnload->setColor(Palette::blockOffset(13)+10);
+	_btnUnload->setText(_game->getLanguage()->getString("STR_UNLOAD"));
+	_btnUnload->onMouseClick((ActionHandler)& CraftSoldiersState::btnUnloadClick);
 
 	_txtTitle->setColor(Palette::blockOffset(15)+6);
 	_txtTitle->setBig();
@@ -128,8 +126,7 @@ CraftSoldiersState::CraftSoldiersState(Game* game, Base* base, size_t craft)
 	_lstSoldiers->setColor(Palette::blockOffset(13)+10);
 	_lstSoldiers->setArrowColor(Palette::blockOffset(15)+6);
 	_lstSoldiers->setArrowColumn(192, ARROW_VERTICAL);
-//kL	_lstSoldiers->setColumns(3, 106, 102, 72);
-	_lstSoldiers->setColumns(3, 116, 93, 71);					// kL
+	_lstSoldiers->setColumns(3, 116, 93, 71);
 	_lstSoldiers->setSelectable(true);
 	_lstSoldiers->setBackground(_window);
 	_lstSoldiers->setMargin(8);

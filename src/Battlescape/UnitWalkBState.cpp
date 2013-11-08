@@ -58,7 +58,7 @@ UnitWalkBState::UnitWalkBState(BattlescapeGame* parent, BattleAction action)
 		_unitsSpotted(0),
 		_preMovementCost(0)
 {
-	//Log(LOG_INFO) << "Create UnitWalkBState";
+	Log(LOG_INFO) << "Create UnitWalkBState";
 }
 
 /**
@@ -66,7 +66,7 @@ UnitWalkBState::UnitWalkBState(BattlescapeGame* parent, BattleAction action)
  */
 UnitWalkBState::~UnitWalkBState()
 {
-	//Log(LOG_INFO) << "Delete UnitWalkBState";
+	Log(LOG_INFO) << "Delete UnitWalkBState";
 }
 
 /**
@@ -171,7 +171,7 @@ void UnitWalkBState::think()
 	if (_unit->getStatus() == STATUS_WALKING
 		|| _unit->getStatus() == STATUS_FLYING)
 	{
-		Log(LOG_INFO) << "STATUS_WALKING or FLYING : " << _unit->getId();	// kL
+		Log(LOG_INFO) << "STATUS_WALKING or FLYING : " << _unit->getId();
 
 		Tile* tileBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(0, 0, -1));	// kL_above
 
@@ -180,12 +180,14 @@ void UnitWalkBState::think()
 			// Had that happen with a sectoid left standing in the air because a cyberdisc was 2 levels below it.
 			|| _parent->getSave()->getTile(_unit->getDestination())->getUnit() == _unit)
 		{
+			Log(LOG_INFO) << ". WalkBState, keepWalking()";
+
 			playMovementSound();
 			_unit->keepWalking(tileBelow, onScreen); // advances the phase
 		}
 		else if (!_falling)
 		{
-			//Log(LOG_INFO) << "UnitWalkBState::think(), !falling Abort path";
+			Log(LOG_INFO) << ". WalkBState, !falling Abort path";
 
 			_unit->lookAt(_unit->getDestination(), _unit->getTurretType() != -1);	// turn to undiscovered unit
 			_pf->abortPath();
@@ -197,28 +199,44 @@ void UnitWalkBState::think()
 			int size = _unit->getArmor()->getSize() - 1;
 			bool largeCheck = true;
 
-			for (int x = size; x >= 0; x--)
+			for (int
+					x = size;
+					x > -1;
+					x--)
 			{
-				for (int y = size; y >= 0; y--)
+				for (int
+						y = size;
+						y > -1;
+						y--)
 				{
-					Tile* otherTileBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(x, y, -1));
+					Tile* tileBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(x, y, -1));
 
-					if (!_parent->getSave()->getTile(_unit->getPosition() + Position(x, y, 0))->hasNoFloor(otherTileBelow)
+					if (!_parent->getSave()->getTile(_unit->getPosition() + Position(x, y, 0))->hasNoFloor(tileBelow)
 						|| _unit->getArmor()->getMovementType() == MT_FLY)
 					{
+						Log(LOG_INFO) << ". . WalkBState, hasFloor or is Flying";
 						largeCheck = false;
 					}
 
+					Log(LOG_INFO) << ". . WalkBState, remove unit from current (upper) tile";
 					_parent->getSave()->getTile(_unit->getLastPosition() + Position(x, y, 0))->setUnit(0);
 				}
 			}
 
-			for (int x = size; x >= 0; x--)
+			for (int
+					x = size;
+					x > -1;
+					x--)
 			{
-				for (int y = size; y >= 0; y--)
+				for (int
+						y = size;
+						y > -1;
+						y--)
 				{
-					_parent->getSave()->getTile(_unit->getPosition()
-						+ Position(x, y, 0))->setUnit(_unit, _parent->getSave()->getTile(_unit->getPosition() + Position(x, y, -1)));
+					Log(LOG_INFO) << ". . WalkBState, set unit on lower tile";
+
+					_parent->getSave()->getTile(_unit->getPosition() + Position(x, y, 0))
+							->setUnit(_unit, _parent->getSave()->getTile(_unit->getPosition() + Position(x, y, -1)));
 				}
 			}
 
@@ -229,19 +247,33 @@ void UnitWalkBState::think()
 					&& _unit->getWalkingPhase() == 0;
 			if (_falling)
 			{
-				for (int x = _unit->getArmor()->getSize() - 1; x >= 0; --x)
+				Log(LOG_INFO) << ". WalkBState, falling";
+
+				for (int
+						x = size;
+						x > -1;
+						--x)
 				{
-					for (int y = _unit->getArmor()->getSize() - 1; y >= 0; --y)
+					for (int
+							y = size;
+							y > -1;
+							--y)
 					{
 						Tile* otherTileBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(x, y, -1));
+						if (otherTileBelow) Log(LOG_INFO) << ". . WalkBState, tileBelow exists";
+						else Log(LOG_INFO) << ". . WalkBState, tileBelow Does NOT exist";
 
 						if (otherTileBelow
 							&& otherTileBelow->getUnit())
 						{
+							Log(LOG_INFO) << ". . WalkBState, another unit already occupies lower tile";
+
 							_falling = false;
 
 							_pf->dequeuePath();
 							_parent->getSave()->addFallingUnit(_unit);
+
+							Log(LOG_INFO) << "UnitWalkBState::think(), addFallingUnit() ID " << _unit->getId();
 							_parent->statePushFront(new UnitFallBState(_parent));
 
 							return;
@@ -445,24 +477,6 @@ void UnitWalkBState::think()
 //kL			int energy = tu;
 
 			// kL_begin: UnitWalkBState::think(), no stamina required to go up/down GravLifts.
-/*			bool destTileLift = false;
-			bool curTileLift = _parent->getSave()->getTile(_unit->getPosition())->getMapData(MapData::O_FLOOR)->isGravLift();
-			Log(LOG_INFO) << ". curTileLift = " << curTileLift;
-			if (_parent->getSave()->getTile(destination))
-			{
-				Log(LOG_INFO) << ". . getTile(destination) is Valid";
-				if (_parent->getSave()->getTile(destination)->getMapData(MapData::O_FLOOR)->isNoFloor());
-				{
-					Log(LOG_INFO) << ". . . isNoFloor()";
-				}
-
-				Log(LOG_INFO) << ". . . destination.x = " << destination.x;
-				Log(LOG_INFO) << ". . . destination.y = " << destination.y;
-				Log(LOG_INFO) << ". . . destination.z = " << destination.z;
-				destTileLift = _parent->getSave()->getTile(destination)->getMapData(MapData::O_FLOOR)->isGravLift(); // <- CRASH TD !!!
-			}
-			Log(LOG_INFO) << ". destTileLift = " << destTileLift; */
-
 			int energy = 0;
 //			if (!(_parent->getSave()->getTile(_unit->getPosition())->getMapData(MapData::O_FLOOR)->isGravLift()
 //				&& _parent->getSave()->getTile(destination)->getMapData(MapData::O_FLOOR)->isGravLift()))
@@ -543,7 +557,6 @@ void UnitWalkBState::think()
 			}
 			// we are looking in the wrong way, turn first (unless strafing)
 			// we are not using the turn state, because turning during walking costs no tu
-			// kL_note: have this turn to face the nearest (last spotted?) xCom soldier
 			else if (dir != _unit->getDirection()
 				&& dir < _pf->DIR_UP
 				&& !_pf->getStrafeMove())
@@ -636,8 +649,8 @@ void UnitWalkBState::think()
 					//Log(LOG_INFO) << ". WalkBState: spend TU & Energy";
 
 					Tile* tileBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(0, 0, -1));
-					//Log(LOG_INFO) << ". WalkBState: startWalking()";
 
+					Log(LOG_INFO) << ". WalkBState: startWalking()";
 					_unit->startWalking(dir, destination, tileBelow, onScreen);
 					_beforeFirstStep = false;
 				}
@@ -875,24 +888,24 @@ void UnitWalkBState::playMovementSound()
 	{
 		if (_unit->getStatus() == STATUS_WALKING)
 		{
-			Tile* tile = _unit->getTile();
-			Tile* tileBelow = _parent->getSave()->getTile(tile->getPosition() + Position(0, 0, -1));
+			Tile* t = _unit->getTile();
+			Tile* tBelow = _parent->getSave()->getTile(t->getPosition() + Position(0, 0, -1));
 
 			if (_unit->getWalkingPhase() == 3) // play footstep sound 1
 			{
-				if (tile->getFootstepSound(tileBelow)
+				if (t->getFootstepSound(tBelow)
 					&& _unit->getRaceString() != "STR_ETHEREAL")
 				{
-					_parent->getResourcePack()->getSound("BATTLE.CAT", 23 + (tile->getFootstepSound(tileBelow) * 2))->play();
+					_parent->getResourcePack()->getSound("BATTLE.CAT", 23 + (t->getFootstepSound(tBelow) * 2))->play();
 				}
 			}
 
 			if (_unit->getWalkingPhase() == 7) // play footstep sound 2
 			{
-				if (tile->getFootstepSound(tileBelow)
+				if (t->getFootstepSound(tBelow)
 					&& _unit->getRaceString() != "STR_ETHEREAL")
 				{
-					_parent->getResourcePack()->getSound("BATTLE.CAT", 22 + (tile->getFootstepSound(tileBelow) * 2))->play();
+					_parent->getResourcePack()->getSound("BATTLE.CAT", 22 + (t->getFootstepSound(tBelow) * 2))->play();
 				}
 			}
 		}

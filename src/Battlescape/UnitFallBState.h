@@ -16,10 +16,12 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_UNITFALLBSTATE_H
 #define OPENXCOM_UNITFALLBSTATE_H
 
 #include "BattleState.h"
+
 
 namespace OpenXcom
 {
@@ -32,21 +34,25 @@ class BattleUnit;
 /**
  * State for falling units.
  */
-class UnitFallBState : public BattleState
+class UnitFallBState
+	:
+		public BattleState
 {
 private:
-	TileEngine *_terrain;
+	TileEngine* _terrain;
 	std::vector<Tile*> tilesToFallInto;
 	std::vector<BattleUnit*> unitsToMove;
-public:
-	/// Creates a new UnitWalkBState class
-	UnitFallBState(BattlescapeGame *parent);
-	/// Cleans up the UnitWalkBState.
-	~UnitFallBState();
-	/// Initializes the state.
-	void init();
-	/// Runs state functionality every cycle. Returns when finished.
-	void think();
+
+	public:
+		/// Creates a new UnitWalkBState class
+		UnitFallBState(BattlescapeGame* parent);
+		/// Cleans up the UnitWalkBState.
+		~UnitFallBState();
+
+		/// Initializes the state.
+		void init();
+		/// Runs state functionality every cycle. Returns when finished.
+		void think();
 };
 
 }

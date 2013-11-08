@@ -52,12 +52,9 @@ class GeoscapeState
 private:
 	Surface* _bg;
 	Globe* _globe;
-//kL	TextButton* _btnIntercept, * _btnBases, * _btnGraphs, * _btnUfopaedia, * _btnOptions, * _btnFunding;
-//kL	TextButton* _timeSpeed;
-//kL	TextButton* _btn5Secs, * _btn1Min, * _btn5Mins, * _btn30Mins, * _btn1Hour, * _btn1Day;
-	ImageButton* _btnIntercept, * _btnBases, * _btnGraphs, * _btnUfopaedia, * _btnOptions, * _btnFunding;	// kL
-	ImageButton* _timeSpeed;																				// kL
-	ImageButton* _btn5Secs, * _btn1Min, * _btn5Mins, * _btn30Mins, * _btn1Hour, * _btn1Day;					// kL
+	ImageButton* _btnIntercept, * _btnBases, * _btnGraphs, * _btnUfopaedia, * _btnOptions, * _btnFunding;
+	ImageButton* _timeSpeed, * _btnDetail;
+	ImageButton* _btn5Secs, * _btn1Min, * _btn5Mins, * _btn30Mins, * _btn1Hour, * _btn1Day;
 	InteractiveSurface* _btnRotateLeft, * _btnRotateRight, * _btnRotateUp, * _btnRotateDown, * _btnZoomIn, * _btnZoomOut;
 	Text* _txtFunds, * _txtHour, * _txtHourSep, * _txtMin, * _txtMinSep, * _txtSec, * _txtWeekday, * _txtDay, * _txtMonth, * _txtYear;
 	Timer* _timer, * _zoomInEffectTimer, * _zoomOutEffectTimer, * _dogfightStartTimer;
@@ -67,9 +64,6 @@ private:
 	std::vector<DogfightState*> _dogfights, _dogfightsToBeStarted;
 	size_t _minimizedDogfights;
 	bool _showFundsOnGeoscape; // this is a cache for Options::getBool("showFundsOnGeoscape")
-
-//	Uint8 _currentBase;		// kL
-//	Base* _b;
 
 	/// Handle alien mission generation.
 	void determineAlienMissions(bool atGameStart = false);
@@ -108,8 +102,10 @@ private:
 		void musicStop(bool pause = false);
 		/// Displays a popup window.
 		void popup(State* state);
+
 		/// Gets the Geoscape globe.
 		Globe* getGlobe() const;
+
 		/// Handler for clicking the globe.
 		void globeClick(Action* action);
 		/// Handler for clicking the Intercept button.
@@ -124,6 +120,10 @@ private:
 		void btnOptionsClick(Action* action);
 		/// Handler for clicking the Funding button.
 		void btnFundingClick(Action* action);
+
+		/// Handler for clicking the Detail area.
+		void btnDetailClick(Action* action);
+
 		/// Handler for pressing the Rotate Left arrow.
 		void btnRotateLeftPress(Action* action);
 		/// Handler for releasing the Rotate Left arrow.
@@ -148,6 +148,7 @@ private:
 		void btnZoomOutLeftClick(Action* action);
 		/// Handler for right-clicking the Zoom Out icon.
 		void btnZoomOutRightClick(Action* action);
+
 		/// Blit method - renders the state and dogfights.
 		void blit();
 		/// Globe zoom in effect for dogfights.
@@ -162,23 +163,20 @@ private:
 		void startDogfight();
 		/// Get first free dogfight slot.
 		int getFirstFreeDogfightSlot();
+
 		/// Create the starting missions.
 		void createStartingMissions()
 		{
 			determineAlienMissions(true);
 		}
+
 		/// Handler for clicking the timer button.
 		void btnTimerClick(Action* action);
+
 		/// Process a terror site
 		bool processTerrorSite(TerrorSite* ts) const;
 		/// Handles base defense
 		void handleBaseDefense(Base* base, Ufo* ufo);
-
-//		void setCurrentBase(Uint8 curBase);	// kL
-		// kL_begin: set & get Current Base.
-//		void setCurrentBase(Uint8 currentBase = 0);
-//		Uint8 getCurrentBase();
-		// kL_end.
 };
 
 }

@@ -212,7 +212,7 @@ void Tile::saveBinary(Uint8** buffer) const
  * @param newObjectID The ID in the total list of the objects of this battlegame.
  * @param part the part number
  */
-void Tile::setMapData(MapData *dat, int mapDataID, int mapDataSetID, int part)
+void Tile::setMapData(MapData* dat, int mapDataID, int mapDataSetID, int part)
 {
 	_objects[part] = dat;
 	_mapDataID[part] = mapDataID;
@@ -224,7 +224,7 @@ void Tile::setMapData(MapData *dat, int mapDataID, int mapDataSetID, int part)
  * @param part the part number
  * @return the object ID
  */
-void Tile::getMapData(int *mapDataID, int *mapDataSetID, int part) const
+void Tile::getMapData(int* mapDataID, int* mapDataSetID, int part) const
 {
 	*mapDataID = _mapDataID[part];
 	*mapDataSetID = _mapDataSetID[part];
@@ -232,7 +232,7 @@ void Tile::getMapData(int *mapDataID, int *mapDataSetID, int part) const
 
 /**
  * Gets whether this tile has no objects. Note that we can have a unit or smoke on this tile.
- * @return bool True if there is nothing but air on this tile.
+ * @return bool, True if there is nothing but air on this tile.
  */
 bool Tile::isVoid() const
 {
@@ -254,10 +254,15 @@ int Tile::getTUCost(int part, MovementType movementType) const
 {
 	if (_objects[part])
 	{
-		if (_objects[part]->isUFODoor() && _currentFrame[part] == 7)
+		if (_objects[part]->isUFODoor()
+			&& _currentFrame[part] == 7)
+		{
 			return 0;
+		}
+
 		if (_objects[part]->getBigWall() >= 4)
 			return 0;
+
 		return _objects[part]->getTUCost(movementType);
 	}
 	else
@@ -268,10 +273,11 @@ int Tile::getTUCost(int part, MovementType movementType) const
  * Whether this tile has a floor or not. If no object defined as floor, it has no floor.
  * @return bool
  */
-bool Tile::hasNoFloor(Tile *tileBelow) const
+bool Tile::hasNoFloor(Tile* tileBelow) const
 {
 	if (tileBelow != 0 && tileBelow->getTerrainLevel() == -24)
 		return false;
+
 	if (_objects[MapData::O_FLOOR])
 		return _objects[MapData::O_FLOOR]->isNoFloor();
 	else
@@ -311,16 +317,26 @@ int Tile::getTerrainLevel() const
  * Gets the tile's footstep sound.
  * @return sound ID
  */
-int Tile::getFootstepSound(Tile *tileBelow) const
+int Tile::getFootstepSound(Tile* tileBelow) const
 {
 	int sound = 0;
 
 	if (_objects[MapData::O_FLOOR])
 		sound = _objects[MapData::O_FLOOR]->getFootstepSound();
-	if (_objects[MapData::O_OBJECT] && _objects[MapData::O_OBJECT]->getBigWall() == 0)
+
+	if (_objects[MapData::O_OBJECT]
+		&& _objects[MapData::O_OBJECT]->getBigWall() == 0)
+	{
 		sound = _objects[MapData::O_OBJECT]->getFootstepSound();
-	if (!_objects[MapData::O_FLOOR] && !_objects[MapData::O_OBJECT] && tileBelow != 0 && tileBelow->getTerrainLevel() == -24)
+	}
+
+	if (!_objects[MapData::O_FLOOR]
+		&& !_objects[MapData::O_OBJECT]
+		&& tileBelow != 0
+		&& tileBelow->getTerrainLevel() == -24)
+	{
 		sound = tileBelow->getMapData(MapData::O_OBJECT)->getFootstepSound();
+	}
 
 	return sound;
 }
@@ -330,7 +346,7 @@ int Tile::getFootstepSound(Tile *tileBelow) const
  * @param part
  * @return a value: 0(normal door), 1(ufo door) or -1 if no door opened or 3 if ufo door(=animated) is still opening 4 if not enough TUs
  */
-int Tile::openDoor(int part, BattleUnit *unit, BattleActionType reserve)
+int Tile::openDoor(int part, BattleUnit* unit, BattleActionType reserve)
 {
 	if (!_objects[part]) return -1;
 
@@ -343,8 +359,10 @@ int Tile::openDoor(int part, BattleUnit *unit, BattleActionType reserve)
 			return 4;
 		}
 
-		setMapData(_objects[part]->getDataset()->getObjects()->at(_objects[part]->getAltMCD()), _objects[part]->getAltMCD(), _mapDataSetID[part],
-					_objects[part]->getDataset()->getObjects()->at(_objects[part]->getAltMCD())->getObjectType());
+		setMapData(_objects[part]->getDataset()->getObjects()->at(_objects[part]->getAltMCD()),
+				_objects[part]->getAltMCD(),
+				_mapDataSetID[part],
+				_objects[part]->getDataset()->getObjects()->at(_objects[part]->getAltMCD())->getObjectType());
 		setMapData(0, -1, -1, part);
 
 		return 0;

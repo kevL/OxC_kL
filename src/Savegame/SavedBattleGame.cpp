@@ -1646,8 +1646,13 @@ int SavedBattleGame::getDragPixelTolerance() const
  */
 bool SavedBattleGame::addFallingUnit(BattleUnit* unit)
 {
+	Log(LOG_INFO) << "SavedBattleGame::addFallingUnit() ID = " << unit->getId();
+
 	bool add = true;
-	for (std::list<BattleUnit*>::iterator i = _fallingUnits.begin(); i != _fallingUnits.end(); ++i)
+	for (std::list<BattleUnit*>::iterator
+			i = _fallingUnits.begin();
+			i != _fallingUnits.end();
+			++i)
 	{
 		if (unit == *i)
 		{
@@ -1675,7 +1680,7 @@ std::list<BattleUnit*>* SavedBattleGame::getFallingUnits()
 
 /**
  * Toggles the switch that says "there are units falling, start the fall state".
- * @param fall True if there are any units falling in the battlescape.
+ * @param fall, True if there are any units falling in the battlescape.
  */
 void SavedBattleGame::setUnitsFalling(bool fall)
 {
@@ -1684,7 +1689,7 @@ void SavedBattleGame::setUnitsFalling(bool fall)
 
 /**
  * Returns whether there are any units falling in the battlescape.
- * @return True if there are any units falling in the battlescape.
+ * @return, True if there are any units falling in the battlescape.
  */
 bool SavedBattleGame::getUnitsFalling() const
 {

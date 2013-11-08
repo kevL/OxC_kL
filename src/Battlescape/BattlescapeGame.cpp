@@ -152,6 +152,8 @@ void BattlescapeGame::think()
 
 		if (_save->getUnitsFalling())
 		{
+			Log(LOG_INFO) << "BattlescapeGame::think(), get/setUnitsFalling() ID " << _save->getSelectedUnit()->getId();
+
 			statePushFront(new UnitFallBState(this));
 			_save->setUnitsFalling(false);
 		}

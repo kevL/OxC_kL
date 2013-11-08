@@ -214,7 +214,7 @@ void ManufactureInfoState::buildUi()
 	_window->setColor(Palette::blockOffset(15)+1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK17.SCR"));
 	_txtTitle->setColor(Palette::blockOffset(15)+1);
-	_txtTitle->setText(tr(_item? _item->getName():_production->getRules()->getName()));
+	_txtTitle->setText(tr(_item? _item->getName(): _production->getRules()->getName()));
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 
@@ -278,11 +278,13 @@ void ManufactureInfoState::buildUi()
 	_btnStop->setColor(Palette::blockOffset(15)+6);
 	_btnStop->setText(tr("STR_STOP_PRODUCTION"));
 	_btnStop->onMouseClick((ActionHandler)& ManufactureInfoState::btnStopClick);
+
 	if (!_production)
 	{
 		_production = new Production(_item, 0);
 		_base->addProduction(_production);
 	}
+
 	setAssignedEngineer();
 
 	_timerMoreEngineer = new Timer(280);
@@ -311,10 +313,11 @@ void ManufactureInfoState::btnStopClick(Action*)
  */
 void ManufactureInfoState::btnOkClick(Action*)
 {
-	if(_item)
+	if (_item)
 	{
 		_production->startItem(_base, _game->getSavedGame());
 	}
+
 	exitState();
 }
 
@@ -324,7 +327,8 @@ void ManufactureInfoState::btnOkClick(Action*)
 void ManufactureInfoState::exitState()
 {
 	_game->popState();
-	if(_item)
+
+	if (_item)
 	{
 		_game->popState();
 	}
@@ -337,14 +341,21 @@ void ManufactureInfoState::setAssignedEngineer()
 {
 	_txtAvailableEngineer->setText(tr("STR_ENGINEERS_AVAILABLE_UC").arg(_base->getAvailableEngineers()));
 	_txtAvailableSpace->setText(tr("STR_WORKSHOP_SPACE_AVAILABLE_UC").arg(_base->getFreeWorkshops()));
+
 	std::wstringstream s3;
 	s3 << L">\x01" << _production->getAssignedEngineers();
 	_txtAllocated->setText(s3.str());
+
 	std::wstringstream s4;
 	s4 << L">\x01";
-	if (Options::getBool("allowAutoSellProduction") && _production->getAmountTotal() == std::numeric_limits<int>::max())
-		s4 << "$$$";
-	else s4 << _production->getAmountTotal();
+	if (Options::getBool("allowAutoSellProduction")
+		&& _production->getAmountTotal() == std::numeric_limits<int>::max())
+	{
+		s4 << "$profit$";
+	}
+	else
+		s4 << _production->getAmountTotal();
+
 	_txtTodo->setText(s4.str());
 }
 
@@ -354,14 +365,18 @@ void ManufactureInfoState::setAssignedEngineer()
  */
 void ManufactureInfoState::moreEngineer(int change)
 {
-	if (0 >= change) return;
+	if (change < 1) return;
+
 	int availableEngineer = _base->getAvailableEngineers();
 	int availableWorkSpace = _base->getFreeWorkshops();
-	if (availableEngineer > 0 && availableWorkSpace > 0)
+
+	if (availableEngineer > 0
+		&& availableWorkSpace > 0)
 	{
 		change = std::min(std::min(availableEngineer, availableWorkSpace), change);
 		_production->setAssignedEngineers(_production->getAssignedEngineers()+change);
 		_base->setEngineers(_base->getEngineers()-change);
+
 		setAssignedEngineer();
 	}
 }
@@ -370,16 +385,17 @@ void ManufactureInfoState::moreEngineer(int change)
  * Starts the timerMoreEngineer.
  * @param action A pointer to an Action.
  */
-void ManufactureInfoState::moreEngineerPress(Action * action)
+void ManufactureInfoState::moreEngineerPress(Action* action)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) _timerMoreEngineer->start();
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+		_timerMoreEngineer->start();
 }
 
 /**
  * Stops the timerMoreEngineer.
  * @param action A pointer to an Action.
  */
-void ManufactureInfoState::moreEngineerRelease(Action * action)
+void ManufactureInfoState::moreEngineerRelease(Action* action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
@@ -392,10 +408,12 @@ void ManufactureInfoState::moreEngineerRelease(Action * action)
  * Allocates all engineers.
  * @param action A pointer to an Action.
  */
-void ManufactureInfoState::moreEngineerClick(Action * action)
+void ManufactureInfoState::moreEngineerClick(Action* action)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT) moreEngineer(std::numeric_limits<int>::max());
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) moreEngineer(1);
+	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+		moreEngineer(std::numeric_limits<int>::max());
+	else if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+		moreEngineer(1);
 }
 
 /**
@@ -404,13 +422,15 @@ void ManufactureInfoState::moreEngineerClick(Action * action)
  */
 void ManufactureInfoState::lessEngineer(int change)
 {
-	if (0 >= change) return;
+	if (change < 1) return;
+
 	int assigned = _production->getAssignedEngineers();
-	if(assigned > 0)
+	if (assigned > 0)
 	{
 		change = std::min(assigned, change);
 		_production->setAssignedEngineers(assigned-change);
 		_base->setEngineers(_base->getEngineers()+change);
+
 		setAssignedEngineer();
 	}
 }
@@ -421,7 +441,8 @@ void ManufactureInfoState::lessEngineer(int change)
  */
 void ManufactureInfoState::lessEngineerPress(Action* action)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) _timerLessEngineer->start();
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+		_timerLessEngineer->start();
 }
 
 /**
@@ -443,8 +464,10 @@ void ManufactureInfoState::lessEngineerRelease(Action* action)
  */
 void ManufactureInfoState::lessEngineerClick(Action* action)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT) lessEngineer(std::numeric_limits<int>::max());
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) lessEngineer(1);
+	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+		lessEngineer(std::numeric_limits<int>::max());
+	else if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+		lessEngineer(1);
 }
 
 /**
@@ -453,8 +476,10 @@ void ManufactureInfoState::lessEngineerClick(Action* action)
  */
 void ManufactureInfoState::moreUnit(int change)
 {
-	if (0 >= change) return;
-	if (_production->getRules()->getCategory() == "STR_CRAFT" && _base->getAvailableHangars() - _base->getUsedHangars() == 0)
+	if (change < 1) return;
+
+	if (_production->getRules()->getCategory() == "STR_CRAFT"
+		&& _base->getAvailableHangars() - _base->getUsedHangars() == 0)
 	{
 		_timerMoreUnit->stop();
 		_game->pushState(new ErrorMessageState(_game, "STR_NO_FREE_HANGARS_FOR_CRAFT_PRODUCTION", Palette::blockOffset(15)+1, "BACK17.SCR", 6));
@@ -462,10 +487,13 @@ void ManufactureInfoState::moreUnit(int change)
 	else
 	{
 		int units = _production->getAmountTotal();
-		change = std::min(std::numeric_limits<int>::max()-units, change);
+
+		change = std::min(std::numeric_limits<int>::max() - units, change);
 		if (_production->getRules()->getCategory() == "STR_CRAFT")
 			change = std::min(_base->getAvailableHangars() - _base->getUsedHangars(), change);
-		_production->setAmountTotal(units+change);
+
+		_production->setAmountTotal(units + change);
+
 		setAssignedEngineer();
 	}
 }
@@ -476,8 +504,11 @@ void ManufactureInfoState::moreUnit(int change)
  */
 void ManufactureInfoState::moreUnitPress(Action* action)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT && _production->getAmountTotal() < std::numeric_limits<int>::max())
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT
+		&& _production->getAmountTotal() < std::numeric_limits<int>::max())
+	{
 		_timerMoreUnit->start();
+	}
 }
 
 /**
@@ -500,8 +531,9 @@ void ManufactureInfoState::moreUnitRelease(Action* action)
 void ManufactureInfoState::moreUnitClick(Action* action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
-		moreUnit(Options::getBool("allowAutoSellProduction") ? std::numeric_limits<int>::max() : (999 - _production->getAmountTotal()));
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) moreUnit(1);
+		moreUnit(Options::getBool("allowAutoSellProduction")? std::numeric_limits<int>::max(): 999 - _production->getAmountTotal());
+	else if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+		moreUnit(1);
 }
 
 /**
@@ -510,12 +542,18 @@ void ManufactureInfoState::moreUnitClick(Action* action)
  */
 void ManufactureInfoState::lessUnit(int change)
 {
-	if (0 >= change) return;
-	if (Options::getBool("allowAutoSellProduction") && _production->getAmountTotal() == std::numeric_limits<int>::max())
-		_production->setAmountTotal(std::max(_production->getAmountProduced()+1,999));
+	if (change < 1) return;
+
+	if (Options::getBool("allowAutoSellProduction")
+		&& _production->getAmountTotal() == std::numeric_limits<int>::max())
+	{
+		_production->setAmountTotal(std::max(_production->getAmountProduced() + 1, 999));
+	}
+
 	int units = _production->getAmountTotal();
-	change = std::min(units-(_production->getAmountProduced()+1), change);
+	change = std::min(units-(_production->getAmountProduced() + 1), change);
 	_production->setAmountTotal(units-change);
+
 	setAssignedEngineer();
 }
 
@@ -525,7 +563,8 @@ void ManufactureInfoState::lessUnit(int change)
  */
 void ManufactureInfoState::lessUnitPress(Action* action)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) _timerLessUnit->start();
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+		_timerLessUnit->start();
 }
 
 /**
@@ -547,8 +586,10 @@ void ManufactureInfoState::lessUnitRelease(Action* action)
  */
 void ManufactureInfoState::lessUnitClick(Action* action)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT) lessUnit(std::numeric_limits<int>::max());
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) lessUnit(1);
+	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+		lessUnit(std::numeric_limits<int>::max());
+	else if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+		lessUnit(1);
 }
 
 /**
@@ -575,8 +616,10 @@ void ManufactureInfoState::onLessEngineer()
  */
 void ManufactureInfoState::handleWheelEngineer(Action* action)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP) moreEngineer(_changeValueByMouseWheel);
-	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN) lessEngineer(_changeValueByMouseWheel);
+	if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
+		moreEngineer(_changeValueByMouseWheel);
+	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN)
+		lessEngineer(_changeValueByMouseWheel);
 }
 
 /**
@@ -603,8 +646,10 @@ void ManufactureInfoState::onLessUnit()
  */
 void ManufactureInfoState::handleWheelUnit(Action* action)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP) moreUnit(_changeValueByMouseWheel);
-	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN) lessUnit(_changeValueByMouseWheel);
+	if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
+		moreUnit(_changeValueByMouseWheel);
+	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN)
+		lessUnit(_changeValueByMouseWheel);
 }
 
 /**

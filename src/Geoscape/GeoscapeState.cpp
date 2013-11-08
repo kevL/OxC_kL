@@ -138,6 +138,9 @@ GeoscapeState::GeoscapeState(Game* game)
 	_bg				= new Surface(320, 200, screenWidth - 320, screenHeight / 2 - 100);
 	_globe			= new Globe(_game, (screenWidth - 64) / 2, screenHeight / 2, screenWidth - 64, screenHeight, 0, 0);
 
+	// the old globe-view buttons are now become the Detail toggle.
+	_btnDetail		= new ImageButton(63, 46, screenWidth-63, screenHeight/2+54);
+
 /*kL	_btnIntercept	= new TextButton(63, 11, screenWidth-63, screenHeight/2-100);
 	_btnBases		= new TextButton(63, 11, screenWidth-63, screenHeight/2-88);
 	_btnGraphs		= new TextButton(63, 11, screenWidth-63, screenHeight/2-76);
@@ -197,14 +200,14 @@ GeoscapeState::GeoscapeState(Game* game)
 	}
 
 	_timeSpeed = _btn5Secs;
-	_timer = new Timer(100);
-//	_timer = new Timer(80);	// kL
 
-	_zoomInEffectTimer	= new Timer(50);
-	_zoomOutEffectTimer	= new Timer(50);
-	_dogfightStartTimer	= new Timer(250);
+	_timer				= new Timer(120);
 
-	_txtDebug = new Text(200, 18, 0, 0);
+	_zoomInEffectTimer	= new Timer(80);
+	_zoomOutEffectTimer	= new Timer(80);
+	_dogfightStartTimer	= new Timer(280);
+
+	_txtDebug			= new Text(200, 18, 0, 0);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
@@ -216,6 +219,8 @@ GeoscapeState::GeoscapeState(Game* game)
 
 	add(_bg);
 	add(_globe);
+
+	add(_btnDetail);
 
 	add(_btnIntercept);
 	add(_btnBases);
@@ -343,6 +348,11 @@ GeoscapeState::GeoscapeState(Game* game)
 	_btn1Day->setText(tr("STR_1_DAY"));
 	_btn1Day->setGroup(&_timeSpeed);
 	_btn1Day->onKeyboardPress((ActionHandler)& GeoscapeState::btnTimerClick, (SDLKey)Options::getInt("keyGeoSpeed6")); */
+
+	_btnDetail->copy(_bg);
+//	_btnDetail->setColor(Palette::blockOffset(15)+5);
+	_btnDetail->onMouseClick((ActionHandler)& GeoscapeState::btnDetailClick);
+//	_btnDetail->onKeyboardPress((ActionHandler)& GeoscapeState::btnDetailClick, (SDLKey)Options::getInt("keyGeoToggleDetail"));
 
 	// kL_begin: revert to ImageButtons.
 	_btnIntercept->copy(_bg);
@@ -1154,29 +1164,32 @@ bool DetectXCOMBase::operator()(const Ufo* ufo) const
 {
 	Log(LOG_INFO) << "DetectXCOMBase(), ufoID " << ufo->getId();
 
+	if (ufo->isCrashed())
+	{
+		Log(LOG_INFO) << ". . Crashed UFOs can't detect!";
+		return false;
+	}
+
+	if (ufo->getMissionType() != "STR_ALIEN_RETALIATION"
+		&& !Options::getBool("aggressiveRetaliation"))
+	{
+		Log(LOG_INFO) << ". . Only uFo's on retaliation missions scan for bases unless 'aggressiveRetaliation' option is true";
+		return false;
+	}
+
+	if (ufo->getTrajectory().getID() == "__RETALIATION_ASSAULT_RUN")
+	{
+		Log(LOG_INFO) << ". uFo's attacking a base don't bother with this!";
+		return false;
+	}
+
 	double ufoRange	= 600.0;
 	double targetDistance = _base.getDistance(ufo) * 3440.0;
 	Log(LOG_INFO) << ". targetDistance = " << targetDistance;
 
-	bool outRange	= targetDistance > ufoRange;
-	bool onRetMiss	= ufo->getMissionType() == "STR_ALIEN_RETALIATION";
-	bool aggro		= Options::getBool("aggressiveRetaliation");
-	bool onRetRun	= ufo->getTrajectory().getID() == "__RETALIATION_ASSAULT_RUN";
-	bool crashed	= ufo->isCrashed();
-
-	Log(LOG_INFO) << ". outRange = "	<< outRange;
-	Log(LOG_INFO) << ". onRetMiss = "	<< onRetMiss;
-	//Log(LOG_INFO) << ". aggro = "		<< aggro;
-	Log(LOG_INFO) << ". onRetRun = "	<< onRetRun;
-	Log(LOG_INFO) << ". crashed = "		<< crashed;
-
-	if ((!onRetMiss		// only UFOs on retaliation missions actively scan for bases
-			&& !aggro)		// unless aggressiveRetaliation option is true
-		|| onRetRun	// UFOs attacking a base don't bother with this!
-		|| crashed			// Crashed UFOs can't detect!
-		|| outRange)		// UFOs have a detection range of 80 XCOM units.
+	if (targetDistance > ufoRange)
 	{
-		Log(LOG_INFO) << ". . detection NOT allowed.";
+		Log(LOG_INFO) << ". . uFo's have a detection range of 600 nautical miles.";
 		return false;
 	}
 
@@ -2368,6 +2381,18 @@ void GeoscapeState::btnFundingClick(Action*)
 	timerReset();	// kL
 
 	_game->pushState(new FundingState(_game));
+}
+
+/**
+ * Handler for clicking the Detail area.
+ * @param action, Pointer to an action.
+ */
+void GeoscapeState::btnDetailClick(Action* action)
+{
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+		_globe->toggleDetail();
+	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+		_globe->toggleRadarLines();
 }
 
 /**

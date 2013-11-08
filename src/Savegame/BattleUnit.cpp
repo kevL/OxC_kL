@@ -229,7 +229,7 @@ BattleUnit::BattleUnit(Unit* unit, UnitFaction faction, int id, Armor* armor, in
 	_moveSound		= unit->getMoveSound();
 	_intelligence	= unit->getIntelligence();
 	_aggression		= unit->getAggression();
-	_specab			= (SpecialAbility) unit->getSpecialAbility();
+	_specab			= (SpecialAbility)unit->getSpecialAbility();
 	_zombieUnit		= unit->getZombieUnit();
 	_spawnUnit		= unit->getSpawnUnit();
 	_value			= unit->getValue();
@@ -489,39 +489,85 @@ UnitStatus BattleUnit::getStatus() const
 
 /**
  * Initialises variables to start walking.
- * @param direction Which way to walk.
- * @param destination The position we should end up on.
+ * @param direction, Which way to walk.
+ * @param destination, The position we should end up on.
  */
 void BattleUnit::startWalking(int direction, const Position& destination, Tile* tileBelow, bool cache)
 {
-	//Log(LOG_INFO) << "BattleUnit::startWalking()";
+	Log(LOG_INFO) << "BattleUnit::startWalking() unitID = " << getId();
 
 	_walkPhase = 0;
 	_destination = destination;
 	_lastPos = _pos;
 	_cacheInvalid = cache;
+	_direction = direction;						// kL
 
+	_status = STATUS_WALKING;					// kL
+
+
+	if (direction > 7)
+//		&& _tile->hasNoFloor(tileBelow)			// kL
+//		&& _armor->getMovementType() == MT_FLY)	// kL
+	{
+		Log(LOG_INFO) << ". STATUS_FLYING";
+
+		_status = STATUS_FLYING;
+
+		_verticalDirection = direction;
+		_floating = true;						// kL
+	}
+	else //if (direction > 7						// kL
+		//&& _tile->hasNoFloor(tileBelow))		// kL
+	{
+		Log(LOG_INFO) << ". STATUS_WALKING";
+
+//kL		_status = STATUS_FLYING;
+//		_verticalDirection = Pathfinding::DIR_DOWN;
+//kL		_direction = direction;
+//		_floating = true;						// kL
+
+		_kneeled = false;
+	}
+//	else // just walking along ...
+//	{
+//		_floating = false;
+//		_kneeled = false;
+//	}
+
+	if (_tile->hasNoFloor(tileBelow))
+	{
+		Log(LOG_INFO) << ". hasNoFloor(), STATUS_FLYING";
+
+		_status = STATUS_FLYING;
+		_floating = true;
+	}
+	else
+	{
+		Log(LOG_INFO) << ". has Floor(), STATUS_WALKING";
+
+		_floating = false;
+	}
+
+	Log(LOG_INFO) << "BattleUnit::startWalking() EXIT";
+}
+/*kL void BattleUnit::startWalking(int direction, const Position &destination, Tile *tileBelowMe, bool cache)
+{
 	if (direction >= Pathfinding::DIR_UP)
 	{
-		//Log(LOG_INFO) << "BattleUnit::startWalking(), STATUS_FLYING";
-
 		_verticalDirection = direction;
 		_status = STATUS_FLYING;
 	}
 	else
 	{
-		//Log(LOG_INFO) << "BattleUnit::startWalking(), STATUS_WALKING";
-
 		_direction = direction;
 		_status = STATUS_WALKING;
-
-		_kneeled = false;			// kL
 	}
-
-//kL	_kneeled = false;
-
-	if (_tile->hasNoFloor(tileBelow)
-		|| direction >= Pathfinding::DIR_UP)
+	bool floorFound = false;
+	if (!_tile->hasNoFloor(tileBelowMe))
+	{
+		floorFound = true;
+	}
+	if (!floorFound || direction >= Pathfinding::DIR_UP)
 	{
 		_status = STATUS_FLYING;
 		_floating = true;
@@ -530,15 +576,23 @@ void BattleUnit::startWalking(int direction, const Position& destination, Tile* 
 	{
 		_floating = false;
 	}
-}
+
+	_walkPhase = 0;
+	_destination = destination;
+	_lastPos = _pos;
+	_cacheInvalid = cache;
+	_kneeled = false;
+} */
 
 /**
  * This will increment the walking phase.
  */
 void BattleUnit::keepWalking(Tile* tileBelow, bool cache)
 {
+	Log(LOG_INFO) << "BattleUnit::keepWalking() unitID = " << getId();
+
 	_walkPhase++;
-//	Log(LOG_INFO) << "BattleUnit::keepWalking() _walkPhase = " << _walkPhase;
+	Log(LOG_INFO) << ". _walkPhase = " << _walkPhase;
 
 	int middle, end;
 	if (_verticalDirection)
@@ -576,10 +630,11 @@ void BattleUnit::keepWalking(Tile* tileBelow, bool cache)
 
 	if (_walkPhase >= end)
 	{
-		//Log(LOG_INFO) << ". STATUS_STANDING end";
+		Log(LOG_INFO) << ". end, STATUS_STANDING";
 
 		// we officially reached our destination tile
 		_status = STATUS_STANDING;
+
 		_walkPhase = 0;
 		_verticalDirection = 0;
 
@@ -612,7 +667,81 @@ void BattleUnit::keepWalking(Tile* tileBelow, bool cache)
 	}
 
 	_cacheInvalid = cache;
+
+	Log(LOG_INFO) << "BattleUnit::keepWalking() EXIT";
 }
+/*kL void BattleUnit::keepWalking(Tile *tileBelowMe, bool cache)
+{
+	int middle, end;
+	if (_verticalDirection)
+	{
+		middle = 4;
+		end = 8;
+	}
+	else
+	{
+		// diagonal walking takes double the steps
+		middle = 4 + 4 * (_direction % 2);
+		end = 8 + 8 * (_direction % 2);
+		if (_armor->getSize() > 1)
+		{
+			if (_direction < 1 || _direction > 4)
+				middle = end;
+			else
+				middle = 1;
+		}
+	}
+	if (!cache)
+	{
+		_pos = _destination;
+		end = 2;
+	}
+
+	_walkPhase++;
+	
+
+	if (_walkPhase == middle)
+	{
+		// we assume we reached our destination tile
+		// this is actually a drawing hack, so soldiers are not overlapped by floortiles
+		_pos = _destination;
+	}
+
+	if (_walkPhase >= end)
+	{
+		if (_floating && !_tile->hasNoFloor(tileBelowMe))
+		{
+			_floating = false;
+		}
+		// we officially reached our destination tile
+		_status = STATUS_STANDING;
+		_walkPhase = 0;
+		_verticalDirection = 0;
+		if (_faceDirection >= 0) {
+			// Finish strafing move facing the correct way.
+			_direction = _faceDirection;
+			_faceDirection = -1;
+		} 
+
+		// motion points calculation for the motion scanner blips
+		if (_armor->getSize() > 1)
+		{
+			_motionPoints += 30;
+		}
+		else
+		{
+			// sectoids actually have less motion points
+			// but instead of create yet another variable, 
+			// I used the height of the unit instead (logical)
+			if (getStandHeight() > 16)
+				_motionPoints += 4;
+			else
+				_motionPoints += 3;
+		}
+	}
+
+	_cacheInvalid = cache;
+} */
 
 /**
  * Gets the walking phase for animation and sound.
@@ -1164,7 +1293,7 @@ int BattleUnit::damage(const Position& relative, int power, ItemDamageType type,
 		}
 	}
 
-	return power < 0? 0:power;
+	return power < 0? 0: power;
 }
 
 /**
@@ -1623,7 +1752,7 @@ void BattleUnit::prepareNewTurn()
 
 	int TURecovery = getStats()->tu; // recover TUs
 
-	float encumbrance = static_cast<double>(getStats()->strength) / static_cast<double>(getCarriedWeight());
+	float encumbrance = static_cast<float>(getStats()->strength) / static_cast<float>(getCarriedWeight());
 	if (encumbrance < 1.f)
 	{
 		TURecovery = static_cast<int>(encumbrance * static_cast<float>(TURecovery));
@@ -1802,7 +1931,7 @@ BattleAIState* BattleUnit::getCurrentAIState() const
 }
 
 /**
- * Sets the tile that unit's standing on
+ * Sets the tile that unit is standing on.
  * @param tile
  */
 void BattleUnit::setTile(Tile* tile, Tile* tileBelow)

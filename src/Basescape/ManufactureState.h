@@ -16,11 +16,13 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_MANUFACTURESTATE_H
 #define OPENXCOM_MANUFACTURESTATE_H
 
 #include "../Engine/State.h"
 #include <SDL.h>
+
 
 namespace OpenXcom
 {
@@ -35,29 +37,33 @@ class Base;
  * Manufacture screen that lets the player manage
  * all the manufacturing operations of a base.
  */
-class ManufactureState : public State
+class ManufactureState
+	:
+		public State
 {
 private:
-	Base *_base;
-	TextButton *_btnNew, *_btnOk;
-	Window *_window;
-	Text *_txtTitle, *_txtAvailable, *_txtAllocated, *_txtSpace, *_txtFunds, *_txtItem, *_txtEngineers, *_txtProduced, *_txtCost, *_txtTimeLeft;
-	TextList *_lstManufacture;	
+	Base* _base;
+	TextButton* _btnNew, * _btnOk;
+	Window* _window;
+	Text* _txtTitle, * _txtAvailable, * _txtAllocated, * _txtSpace, * _txtFunds, * _txtItem, * _txtEngineers, * _txtProduced, * _txtCost, * _txtTimeLeft;
+	TextList* _lstManufacture;	
 	SDL_Color _oldPalette[256];
-	void lstManufactureClick(Action * action);
-public:
-	/// Creates the Manufacture state.
-	ManufactureState(Game *game, Base *base);
-	/// Cleans up the Manufacture state.
-	~ManufactureState();
-	/// Handler for clicking the OK button.
-	void btnOkClick(Action *action);
-	/// Updates the production list.
-	void init ();
-	/// Handler for the New Production button.
-	void btnNewProductionClick(Action * action);
-	/// Fills the list of base productions.
-	void fillProductionList();
+	void lstManufactureClick(Action* action);
+
+	public:
+		/// Creates the Manufacture state.
+		ManufactureState(Game* game, Base* base);
+		/// Cleans up the Manufacture state.
+		~ManufactureState();
+
+		/// Updates the production list.
+		void init();
+		/// Handler for clicking the OK button.
+		void btnOkClick(Action* action);
+		/// Handler for the New Production button.
+		void btnNewProductionClick(Action* action);
+		/// Fills the list of base productions.
+		void fillProductionList();
 };
 
 }

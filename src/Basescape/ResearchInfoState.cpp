@@ -52,8 +52,7 @@ ResearchInfoState::ResearchInfoState(Game* game, Base* base, RuleResearch* rule)
 	:
 		State(game),
 		_base(base),
-//kL		_project(new ResearchProject(rule, int(rule->getCost() * OpenXcom::RNG::generate(50, 150) / 100))),
-		_project(new ResearchProject(rule, int(rule->getCost() * RNG::generate(50, 150) / 100))),	// kL
+		_project(new ResearchProject(rule, int(rule->getCost() * RNG::generate(50, 150) / 100))),
 		_rule(rule)
 {
 	buildUi();
@@ -244,7 +243,7 @@ void ResearchInfoState::buildUi()
 		_btnOk->onKeyboardPress((ActionHandler)& ResearchInfoState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 	}
 
-	_btnCancel->onMouseClick((ActionHandler)&ResearchInfoState::btnCancelClick);
+	_btnCancel->onMouseClick((ActionHandler)& ResearchInfoState::btnCancelClick);
 }
 
 /**

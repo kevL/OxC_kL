@@ -573,7 +573,8 @@ Position TileEngine::getSightOriginVoxel(BattleUnit* currentUnit)
  */
 bool TileEngine::visible(BattleUnit* currentUnit, Tile* tile)
 {
-	Log(LOG_INFO) << "TileEngine::visible() spotter = " << currentUnit->getId();
+	//Log(LOG_INFO) << "TileEngine::visible()";
+	//Log(LOG_INFO) << ". spotter / reactor ID = " << currentUnit->getId();
 
 	// if there is no tile or no unit, we can't see it
 	if (!tile
@@ -584,12 +585,24 @@ bool TileEngine::visible(BattleUnit* currentUnit, Tile* tile)
 
 	BattleUnit* targetUnit = tile->getUnit();
 
-	Log(LOG_INFO) << ". attempt to Spot = " << targetUnit->getId();
+	//Log(LOG_INFO) << ". target ID = " << targetUnit->getId();
+
+	if (targetUnit->isOut(true))
+	{
+		//Log(LOG_INFO) << ". . target is Dead, ret FALSE";
+		return false;
+	}
 
 	if (currentUnit->getFaction() == targetUnit->getFaction())
 	{
-		Log(LOG_INFO) << ". . spotted is Friend, ret TRUE";
+		//Log(LOG_INFO) << ". . target is Friend, ret TRUE";
 		return true;
+	}
+
+	if (distance(currentUnit->getPosition(), targetUnit->getPosition()) > MAX_VIEW_DISTANCE)
+	{
+		//Log(LOG_INFO) << ". . too far to see Tile, ret FALSE";
+		return false;
 	}
 
 	// aliens can see in the dark, xcom can see at a distance of 9 or less, further if there's enough light.
@@ -597,7 +610,7 @@ bool TileEngine::visible(BattleUnit* currentUnit, Tile* tile)
 		&& distance(currentUnit->getPosition(), tile->getPosition()) > 9
 		&& tile->getShade() > MAX_DARKNESS_TO_SEE_UNITS)
 	{
-		Log(LOG_INFO) << ". . too dark to see Tile, ret FALSE";
+		//Log(LOG_INFO) << ". . too dark to see Tile, ret FALSE";
 		return false;
 	}
 
@@ -616,7 +629,7 @@ bool TileEngine::visible(BattleUnit* currentUnit, Tile* tile)
 	unitIsSeen = canTargetUnit(&originVoxel, tile, &scanVoxel, currentUnit);
 	if (unitIsSeen)
 	{
-		Log(LOG_INFO) << ". . . canTargetUnit()";
+		//Log(LOG_INFO) << ". . . canTargetUnit()";
 
 		// now check if we really see it taking into account smoke tiles
 		// initial smoke "density" of a smoke grenade is around 15 per tile
@@ -694,7 +707,7 @@ bool TileEngine::visible(BattleUnit* currentUnit, Tile* tile)
 		}
 	}
 
-	Log(LOG_INFO) << ". unitIsSeen = " << unitIsSeen;
+	//Log(LOG_INFO) << ". unitIsSeen = " << unitIsSeen;
 	return unitIsSeen;
 }
 
@@ -850,7 +863,7 @@ bool TileEngine::canTargetUnit(
 		-relY,	relX
 	};
 
-	if (!potentialUnit->isOut())
+	if (!potentialUnit->isOut(true))
 	{
 		heightRange = potentialUnit->getHeight();
 	}
@@ -1191,7 +1204,7 @@ bool TileEngine::canMakeSnap(BattleUnit* unit, BattleUnit* target)
  */
 bool TileEngine::checkReactionFire(BattleUnit* unit)
 {
-	Log(LOG_INFO) << "TileEngine::checkReactionFire() vs targetID" << unit->getId();
+	Log(LOG_INFO) << "TileEngine::checkReactionFire() vs targetID " << unit->getId();
 
 	if (_save->getSide() == FACTION_NEUTRAL) // no reaction on civilian turn.
 		return false;
@@ -1260,7 +1273,7 @@ bool TileEngine::checkReactionFire(BattleUnit* unit)
 
 			// nice shot, kid. don't get too cocky.
 			reactor = getReactor(spotters, unit);
-			Log(LOG_INFO) << ". . next at bat : " << reactor->getId();
+			Log(LOG_INFO) << ". . NEXT AT BAT : " << reactor->getId();
 		}
 	}
 
@@ -1276,7 +1289,7 @@ bool TileEngine::checkReactionFire(BattleUnit* unit)
  */
 BattleUnit* TileEngine::getReactor(std::vector<BattleUnit*> spotters, BattleUnit* unit)
 {
-	Log(LOG_INFO) << "TileEngine::getReactor() vs targetID" << unit->getId();
+	Log(LOG_INFO) << "TileEngine::getReactor() vs targetID " << unit->getId();
 
 	int bestScore = -1;
 	BattleUnit* reactor = 0;
@@ -1286,7 +1299,7 @@ BattleUnit* TileEngine::getReactor(std::vector<BattleUnit*> spotters, BattleUnit
 			spot != spotters.end();
 			++spot)
 	{
-		Log(LOG_INFO) << ". reactID " << (*spot)->getId();
+		Log(LOG_INFO) << ". . reactID " << (*spot)->getId();
 
 		if (!(*spot)->isOut(true)
 //			&& canMakeSnap((*spot), unit)				// done in "getSpottingUnits()"
@@ -1308,11 +1321,12 @@ BattleUnit* TileEngine::getReactor(std::vector<BattleUnit*> spotters, BattleUnit
 	}
 	else
 	{
-		Log(LOG_INFO) << ". initi returns to targetID " << unit->getId();
+		Log(LOG_INFO) << ". . initi returns to targetID " << unit->getId();
 
 		reactor = unit;
 	}
 
+	Log(LOG_INFO) << ". . bestScore = " << bestScore;
 	return reactor;
 }
 
@@ -3225,15 +3239,16 @@ Tile* TileEngine::applyGravity(Tile* t)
 				&& occupant->getStunlevel() < occupant->getHealth())
 			{
 				occupant->startWalking(Pathfinding::DIR_DOWN, occupant->getPosition() + Position(0, 0, -1), _save->getTile(occupant->getPosition() + Position(0, 0, -1)), true);
+				Log(LOG_INFO) << "TileEngine::applyGravity(), addFallingUnit() ID " << occupant->getId();
 				_save->addFallingUnit(occupant);
 			}
 			else
 			{
 				Position origin = occupant->getPosition();
 
-				for (int y = occupant->getArmor()->getSize()-1; y >= 0; --y)
+				for (int y = occupant->getArmor()->getSize() - 1; y >= 0; --y)
 				{
-					for (int x = occupant->getArmor()->getSize()-1; x >= 0; --x)
+					for (int x = occupant->getArmor()->getSize() - 1; x >= 0; --x)
 					{
 						_save->getTile(origin + Position(x, y, 0))->setUnit(0);
 					}
@@ -3259,7 +3274,8 @@ Tile* TileEngine::applyGravity(Tile* t)
 
 	for (std::vector<BattleItem*>::iterator it = t->getInventory()->begin(); it != t->getInventory()->end(); ++it)
 	{
-		if ((*it)->getUnit() && t->getPosition() == (*it)->getUnit()->getPosition())
+		if ((*it)->getUnit()
+			&& t->getPosition() == (*it)->getUnit()->getPosition())
 		{
 			(*it)->getUnit()->setPosition(rt->getPosition());
 		}
