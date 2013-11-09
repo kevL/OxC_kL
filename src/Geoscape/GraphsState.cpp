@@ -91,14 +91,17 @@ GraphsState::GraphsState(Game* game)
 
 
 	int offset = 0;
-	for (std::vector<Region *>::iterator iter = _game->getSavedGame()->getRegions()->begin(); iter != _game->getSavedGame()->getRegions()->end(); ++iter)
+	for (std::vector<Region*>::iterator
+			iter = _game->getSavedGame()->getRegions()->begin();
+			iter != _game->getSavedGame()->getRegions()->end();
+			++iter)
 	{
 		_btnRegions.push_back(new ToggleTextButton(90, 11, 0, offset*11));
 		_regionToggles.push_back(false);
 		_btnRegions.at(offset)->setColor(Palette::blockOffset(9)+7);
 		_btnRegions.at(offset)->setInvertColor(-42 + (4*offset));
 		_btnRegions.at(offset)->setText(tr((*iter)->getRules()->getType()));
-		_btnRegions.at(offset)->onMousePress((ActionHandler)&GraphsState::btnRegionListPress);
+		_btnRegions.at(offset)->onMousePress((ActionHandler)& GraphsState::btnRegionListPress);
 		add(_btnRegions.at(offset));
 		_alienRegionLines.push_back(new Surface(320,200,0,0));
 		add(_alienRegionLines.at(offset));
@@ -110,47 +113,50 @@ GraphsState::GraphsState(Game* game)
 
 	_btnRegionTotal = new ToggleTextButton(90, 11, 0, offset*11);
 	_regionToggles.push_back(false);
-	_btnRegionTotal->onMousePress((ActionHandler)&GraphsState::btnRegionListPress);
+	_btnRegionTotal->onMousePress((ActionHandler)& GraphsState::btnRegionListPress);
 	_btnRegionTotal->setColor(Palette::blockOffset(9)+7);
     _btnRegionTotal->setInvertColor(22);
 	_btnRegionTotal->setText(tr("STR_TOTAL_UC"));
-	_alienRegionLines.push_back(new Surface(320,200,0,0));
+	_alienRegionLines.push_back(new Surface(320, 200, 0, 0));
 	add(_alienRegionLines.at(offset));
-	_xcomRegionLines.push_back(new Surface(320,200,0,0));
+	_xcomRegionLines.push_back(new Surface(320, 200, 0, 0));
 	add(_xcomRegionLines.at(offset));
 	add(_btnRegionTotal);
 	
 	offset = 0;
-	for (std::vector<Country *>::iterator iter = _game->getSavedGame()->getCountries()->begin(); iter != _game->getSavedGame()->getCountries()->end(); ++iter)
+	for (std::vector<Country*>::iterator
+			iter = _game->getSavedGame()->getCountries()->begin();
+			iter != _game->getSavedGame()->getCountries()->end();
+			++iter)
 	{
-		_btnCountries.push_back(new ToggleTextButton(90, 11, 0, offset*11));
+		_btnCountries.push_back(new ToggleTextButton(90, 11, 0, offset * 11));
 		_countryToggles.push_back(false);
 		_btnCountries.at(offset)->setColor(Palette::blockOffset(9)+7);
-		_btnCountries.at(offset)->setInvertColor(-42 + (4*offset));
+		_btnCountries.at(offset)->setInvertColor(-42 + (4 * offset));
 		_btnCountries.at(offset)->setText(tr((*iter)->getRules()->getType()));
-		_btnCountries.at(offset)->onMousePress((ActionHandler)&GraphsState::btnCountryListPress);
+		_btnCountries.at(offset)->onMousePress((ActionHandler)& GraphsState::btnCountryListPress);
 		add(_btnCountries.at(offset));
-		_alienCountryLines.push_back(new Surface(320,200,0,0));
+		_alienCountryLines.push_back(new Surface(320, 200, 0, 0));
 		add(_alienCountryLines.at(offset));
-		_xcomCountryLines.push_back(new Surface(320,200,0,0));
+		_xcomCountryLines.push_back(new Surface(320, 200, 0, 0));
 		add(_xcomCountryLines.at(offset));
-		_incomeLines.push_back(new Surface(320,200,0,0));
+		_incomeLines.push_back(new Surface(320, 200, 0, 0));
 		add(_incomeLines.at(offset));
 
 		++offset;
 	}
 
-	_btnCountryTotal = new ToggleTextButton(90, 11, 0, offset*11);
+	_btnCountryTotal = new ToggleTextButton(90, 11, 0, offset * 11);
 	_countryToggles.push_back(false);
-	_btnCountryTotal->onMousePress((ActionHandler)&GraphsState::btnCountryListPress);
+	_btnCountryTotal->onMousePress((ActionHandler)& GraphsState::btnCountryListPress);
 	_btnCountryTotal->setColor(Palette::blockOffset(9)+7);
     _btnCountryTotal->setInvertColor(22);
 	_btnCountryTotal->setText(tr("STR_TOTAL_UC"));
-	_alienCountryLines.push_back(new Surface(320,200,0,0));
+	_alienCountryLines.push_back(new Surface(320, 200, 0, 0));
 	add(_alienCountryLines.at(offset));
-	_xcomCountryLines.push_back(new Surface(320,200,0,0));
+	_xcomCountryLines.push_back(new Surface(320, 200, 0, 0));
 	add(_xcomCountryLines.at(offset));
-	_incomeLines.push_back(new Surface(320,200,0,0));
+	_incomeLines.push_back(new Surface(320, 200, 0, 0));
 	add(_incomeLines.at(offset));
 	add(_btnCountryTotal);
 	
@@ -158,13 +164,13 @@ GraphsState::GraphsState(Game* game)
 	for (int iter = 0; iter != 5; ++iter)
 	{
 		offset = iter;
-		_btnFinances.push_back(new ToggleTextButton(90, 11, 0, offset*11));
+		_btnFinances.push_back(new ToggleTextButton(90, 11, 0, offset * 11));
 		_financeToggles.push_back(false);
 		_btnFinances.at(offset)->setColor(Palette::blockOffset(9)+7);
-        _btnFinances.at(offset)->setInvertColor(-42 + (4*offset));
-		_btnFinances.at(offset)->onMousePress((ActionHandler)&GraphsState::btnFinanceListPress);
+        _btnFinances.at(offset)->setInvertColor(-42 + (4 * offset));
+		_btnFinances.at(offset)->onMousePress((ActionHandler)& GraphsState::btnFinanceListPress);
 		add(_btnFinances.at(offset));
-		_financeLines.push_back(new Surface(320,200,0,0));
+		_financeLines.push_back(new Surface(320, 200, 0, 0));
 		add(_financeLines.at(offset));
 	}
 
@@ -178,30 +184,37 @@ GraphsState::GraphsState(Game* game)
 	std::string graphRegionToggles = _game->getSavedGame()->getGraphRegionToggles();
 	std::string graphCountryToggles = _game->getSavedGame()->getGraphCountryToggles();
 	std::string graphFinanceToggles = _game->getSavedGame()->getGraphFinanceToggles();
-	while (graphRegionToggles.size() < _regionToggles.size()) graphRegionToggles.push_back('0');
-	while (graphCountryToggles.size() < _countryToggles.size()) graphCountryToggles.push_back('0');
-	while (graphFinanceToggles.size() < _financeToggles.size()) graphFinanceToggles.push_back('0');
+
+	while (graphRegionToggles.size() < _regionToggles.size())
+		graphRegionToggles.push_back('0');
+	while (graphCountryToggles.size() < _countryToggles.size())
+		graphCountryToggles.push_back('0');
+	while (graphFinanceToggles.size() < _financeToggles.size())
+		graphFinanceToggles.push_back('0');
+
 	for (size_t i = 0; i < _regionToggles.size(); ++i)
 	{
-		_regionToggles[i] = ('0'==graphRegionToggles[i]) ? false : true;
+		_regionToggles[i] = ('0' == graphRegionToggles[i])? false: true;
 		if (_btnRegions.size() == i)
 		{
 			_btnRegionTotal->setPressed(_regionToggles[i]);
 		}
-		else _btnRegions.at(i)->setPressed(_regionToggles[i]);
+		else
+			_btnRegions.at(i)->setPressed(_regionToggles[i]);
 	}
 	for (size_t i = 0; i < _countryToggles.size(); ++i)
 	{
-		_countryToggles[i] = ('0'==graphCountryToggles[i]) ? false : true;
+		_countryToggles[i] = ('0' == graphCountryToggles[i])? false: true;
 		if (_btnCountries.size() == i)
 		{
 			_btnCountryTotal->setPressed(_countryToggles[i]);
 		}
-		else _btnCountries.at(i)->setPressed(_countryToggles[i]);
+		else
+			_btnCountries.at(i)->setPressed(_countryToggles[i]);
 	}
 	for (size_t i = 0; i < _financeToggles.size(); ++i)
 	{
-		_financeToggles[i] = ('0'==graphFinanceToggles[i]) ? false : true;
+		_financeToggles[i] = ('0' == graphFinanceToggles[i])? false: true;
 		_btnFinances.at(i)->setPressed(_financeToggles[i]);
 	}
 
@@ -213,10 +226,10 @@ GraphsState::GraphsState(Game* game)
 	current.y = 49;
 	_bg->drawRect(&current, Palette::blockOffset(10));
 
-	for (int grid = 0; grid !=5; ++grid)
+	for (int grid = 0; grid != 5; ++grid)
 	{
-	current.w = 16 - (grid*2);
-	current.h = 13 - (grid*2);
+		current.w = 16 - (grid*2);
+		current.h = 13 - (grid*2);
 		for (int y = 50 + grid; y <= 163 + grid; y += 14)
 		{
 			current.y = y;
@@ -228,6 +241,7 @@ GraphsState::GraphsState(Game* game)
 				{
 					color = 0;
 				} 
+
 				_bg->drawRect(&current, color);
 			}
 		}
@@ -278,6 +292,7 @@ GraphsState::GraphsState(Game* game)
 		}
 
 		_txtMonths->setCellText(0, iter, tr(months[month]));
+
 		++month;
 	}
 
@@ -299,14 +314,14 @@ GraphsState::GraphsState(Game* game)
 	_txtFactor->setColor(Palette::blockOffset(8)+7);
 
 
-	_btnUfoRegion->onMouseClick((ActionHandler)&GraphsState::btnUfoRegionClick);
-	_btnUfoCountry->onMouseClick((ActionHandler)&GraphsState::btnUfoCountryClick);
-	_btnXcomRegion->onMouseClick((ActionHandler)&GraphsState::btnXcomRegionClick);
-	_btnXcomCountry->onMouseClick((ActionHandler)&GraphsState::btnXcomCountryClick);
-	_btnIncome->onMouseClick((ActionHandler)&GraphsState::btnIncomeClick);
-	_btnFinance->onMouseClick((ActionHandler)&GraphsState::btnFinanceClick);
-	_btnGeoscape->onMouseClick((ActionHandler)&GraphsState::btnGeoscapeClick);
-	_btnGeoscape->onKeyboardPress((ActionHandler)&GraphsState::btnGeoscapeClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnUfoRegion->onMouseClick((ActionHandler)& GraphsState::btnUfoRegionClick);
+	_btnUfoCountry->onMouseClick((ActionHandler)& GraphsState::btnUfoCountryClick);
+	_btnXcomRegion->onMouseClick((ActionHandler)& GraphsState::btnXcomRegionClick);
+	_btnXcomCountry->onMouseClick((ActionHandler)& GraphsState::btnXcomCountryClick);
+	_btnIncome->onMouseClick((ActionHandler)& GraphsState::btnIncomeClick);
+	_btnFinance->onMouseClick((ActionHandler)& GraphsState::btnFinanceClick);
+	_btnGeoscape->onMouseClick((ActionHandler)& GraphsState::btnGeoscapeClick);
+	_btnGeoscape->onKeyboardPress((ActionHandler)& GraphsState::btnGeoscapeClick, (SDLKey)Options::getInt("keyCancel"));
 
 	centerAllSurfaces();
 }
@@ -319,9 +334,14 @@ GraphsState::~GraphsState()
 	std::string graphRegionToggles = "";
 	std::string graphCountryToggles = "";
 	std::string graphFinanceToggles = "";
-	for (size_t i = 0; i < _regionToggles.size(); ++i) graphRegionToggles.push_back(_regionToggles[i] ? '1' : '0');
-	for (size_t i = 0; i < _countryToggles.size(); ++i) graphCountryToggles.push_back(_countryToggles[i] ? '1' : '0');
-	for (size_t i = 0; i < _financeToggles.size(); ++i) graphFinanceToggles.push_back(_financeToggles[i] ? '1' : '0');
+
+	for (size_t i = 0; i < _regionToggles.size(); ++i)
+		graphRegionToggles.push_back(_regionToggles[i]? '1': '0');
+	for (size_t i = 0; i < _countryToggles.size(); ++i)
+		graphCountryToggles.push_back(_countryToggles[i]? '1': '0');
+	for (size_t i = 0; i < _financeToggles.size(); ++i)
+		graphFinanceToggles.push_back(_financeToggles[i]? '1': '0');
+
 	_game->getSavedGame()->setGraphRegionToggles(graphRegionToggles);
 	_game->getSavedGame()->setGraphCountryToggles(graphCountryToggles);
 	_game->getSavedGame()->setGraphFinanceToggles(graphFinanceToggles);
@@ -331,7 +351,7 @@ GraphsState::~GraphsState()
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void GraphsState::btnGeoscapeClick(Action *)
+void GraphsState::btnGeoscapeClick(Action*)
 {
 	_game->popState();
 }
@@ -339,7 +359,7 @@ void GraphsState::btnGeoscapeClick(Action *)
 /**
  * Swtiches to the ufo country activity screen
  */
-void GraphsState::btnUfoRegionClick(Action *)
+void GraphsState::btnUfoRegionClick(Action*)
 {
 	_alien = true;
 	_income = false;
@@ -349,7 +369,7 @@ void GraphsState::btnUfoRegionClick(Action *)
 	resetScreen();
 	drawLines();
 
-	for (std::vector<ToggleTextButton *>::iterator iter = _btnRegions.begin(); iter != _btnRegions.end(); ++iter)
+	for (std::vector<ToggleTextButton*>::iterator iter = _btnRegions.begin(); iter != _btnRegions.end(); ++iter)
 	{
 		(*iter)->setVisible(true);
 	}
@@ -362,7 +382,7 @@ void GraphsState::btnUfoRegionClick(Action *)
 /**
  * Swtiches to the ufo country activity screen
  */
-void GraphsState::btnUfoCountryClick(Action *)
+void GraphsState::btnUfoCountryClick(Action*)
 {
 	_alien = true;
 	_income = false;
@@ -372,7 +392,7 @@ void GraphsState::btnUfoCountryClick(Action *)
 	resetScreen();
 	drawLines();
 
-	for (std::vector<ToggleTextButton *>::iterator iter = _btnCountries.begin(); iter != _btnCountries.end(); ++iter)
+	for (std::vector<ToggleTextButton*>::iterator iter = _btnCountries.begin(); iter != _btnCountries.end(); ++iter)
 	{
 		(*iter)->setVisible(true);
 	}
@@ -385,7 +405,7 @@ void GraphsState::btnUfoCountryClick(Action *)
 /**
  * Swtiches to the xcom region activity screen
  */
-void GraphsState::btnXcomRegionClick(Action *)
+void GraphsState::btnXcomRegionClick(Action*)
 {
 	_alien = false;
 	_income = false;
@@ -395,7 +415,7 @@ void GraphsState::btnXcomRegionClick(Action *)
 	resetScreen();
 	drawLines();
 
-	for (std::vector<ToggleTextButton *>::iterator iter = _btnRegions.begin(); iter != _btnRegions.end(); ++iter)
+	for (std::vector<ToggleTextButton*>::iterator iter = _btnRegions.begin(); iter != _btnRegions.end(); ++iter)
 	{
 		(*iter)->setVisible(true);
 	}
@@ -408,7 +428,7 @@ void GraphsState::btnXcomRegionClick(Action *)
 /**
  * Swtiches to the xcom country activity screen
  */
-void GraphsState::btnXcomCountryClick(Action *)
+void GraphsState::btnXcomCountryClick(Action*)
 {
 	_alien = false;
 	_income = false;
@@ -418,7 +438,7 @@ void GraphsState::btnXcomCountryClick(Action *)
 	resetScreen();
 	drawLines();
 
-	for (std::vector<ToggleTextButton *>::iterator iter = _btnCountries.begin(); iter != _btnCountries.end(); ++iter)
+	for (std::vector<ToggleTextButton*>::iterator iter = _btnCountries.begin(); iter != _btnCountries.end(); ++iter)
 	{
 		(*iter)->setVisible(true);
 	}
@@ -431,7 +451,7 @@ void GraphsState::btnXcomCountryClick(Action *)
 /**
  * Swtiches to the income screen
  */
-void GraphsState::btnIncomeClick(Action *)
+void GraphsState::btnIncomeClick(Action*)
 {
 	_alien = false;
 	_income = true;
@@ -442,7 +462,7 @@ void GraphsState::btnIncomeClick(Action *)
 	drawLines();
 
 	_txtFactor->setVisible(true);
-	for (std::vector<ToggleTextButton *>::iterator iter = _btnCountries.begin(); iter != _btnCountries.end(); ++iter)
+	for (std::vector<ToggleTextButton*>::iterator iter = _btnCountries.begin(); iter != _btnCountries.end(); ++iter)
 	{
 		(*iter)->setVisible(true);
 	}
@@ -455,7 +475,7 @@ void GraphsState::btnIncomeClick(Action *)
 /**
  * Swtiches to the finances screen
  */
-void GraphsState::btnFinanceClick(Action *)
+void GraphsState::btnFinanceClick(Action*)
 {
 	_alien = false;
 	_income = false;
@@ -465,7 +485,7 @@ void GraphsState::btnFinanceClick(Action *)
 	resetScreen();
 	drawLines();
 
-	for (std::vector<ToggleTextButton *>::iterator iter = _btnFinances.begin(); iter != _btnFinances.end(); ++iter)
+	for (std::vector<ToggleTextButton*>::iterator iter = _btnFinances.begin(); iter != _btnFinances.end(); ++iter)
 	{
 		(*iter)->setVisible(true);
 	}
@@ -478,10 +498,10 @@ void GraphsState::btnFinanceClick(Action *)
 /**
  * handles a Press on a region button
  */
-void GraphsState::btnRegionListPress(Action * action)
+void GraphsState::btnRegionListPress(Action* action)
 {
-	size_t number = (action->getSender()->getY()-Screen::getDY())/11;
-	ToggleTextButton *button = 0;
+	size_t number = (action->getSender()->getY() - Screen::getDY()) / 11;
+	ToggleTextButton* button = 0;
 
 	if (number == _btnRegions.size())
 	{
@@ -500,10 +520,10 @@ void GraphsState::btnRegionListPress(Action * action)
 /**
  * handles a Press on a country button
  */
-void GraphsState::btnCountryListPress(Action * action)
+void GraphsState::btnCountryListPress(Action* action)
 {
-	size_t number = (action->getSender()->getY()-Screen::getDY())/11;
-	ToggleTextButton *button = 0;
+	size_t number = (action->getSender()->getY() - Screen::getDY()) / 11;
+	ToggleTextButton* button = 0;
 
 	if (number == _btnCountries.size())
 	{
@@ -522,10 +542,10 @@ void GraphsState::btnCountryListPress(Action * action)
 /**
  * handles a Press on a finances button
  */
-void GraphsState::btnFinanceListPress(Action *action)
+void GraphsState::btnFinanceListPress(Action* action)
 {
-	size_t number = (action->getSender()->getY()-Screen::getDY())/11;
-	ToggleTextButton *button = _btnFinances.at(number);
+	size_t number = (action->getSender()->getY() - Screen::getDY()) / 11;
+	ToggleTextButton* button = _btnFinances.at(number);
 	
 	_financeLines.at(number)->setVisible(!_financeToggles.at(number));
 	_financeToggles.at(number) = button->getPressed();
@@ -538,48 +558,48 @@ void GraphsState::btnFinanceListPress(Action *action)
  */
 void GraphsState::resetScreen()
 {
-	for (std::vector<Surface *>::iterator iter = _alienRegionLines.begin(); iter != _alienRegionLines.end(); ++iter)
+	for (std::vector<Surface*>::iterator iter = _alienRegionLines.begin(); iter != _alienRegionLines.end(); ++iter)
 	{
 		(*iter)->setVisible(false);
 	}
 
-	for (std::vector<Surface *>::iterator iter = _alienCountryLines.begin(); iter != _alienCountryLines.end(); ++iter)
+	for (std::vector<Surface*>::iterator iter = _alienCountryLines.begin(); iter != _alienCountryLines.end(); ++iter)
 	{
 		(*iter)->setVisible(false);
 	}
 
-	for (std::vector<Surface *>::iterator iter = _xcomRegionLines.begin(); iter != _xcomRegionLines.end(); ++iter)
+	for (std::vector<Surface*>::iterator iter = _xcomRegionLines.begin(); iter != _xcomRegionLines.end(); ++iter)
 	{
 		(*iter)->setVisible(false);
 	}
 
-	for (std::vector<Surface *>::iterator iter = _xcomCountryLines.begin(); iter != _xcomCountryLines.end(); ++iter)
+	for (std::vector<Surface*>::iterator iter = _xcomCountryLines.begin(); iter != _xcomCountryLines.end(); ++iter)
 	{
 		(*iter)->setVisible(false);
 	}
 
-	for (std::vector<Surface *>::iterator iter = _incomeLines.begin(); iter != _incomeLines.end(); ++iter)
+	for (std::vector<Surface*>::iterator iter = _incomeLines.begin(); iter != _incomeLines.end(); ++iter)
 	{
 		(*iter)->setVisible(false);
 	}
 
-	for (std::vector<Surface *>::iterator iter = _financeLines.begin(); iter != _financeLines.end(); ++iter)
+	for (std::vector<Surface*>::iterator iter = _financeLines.begin(); iter != _financeLines.end(); ++iter)
 	{
 		(*iter)->setVisible(false);
 	}
 
 
-	for (std::vector<ToggleTextButton *>::iterator iter = _btnRegions.begin(); iter != _btnRegions.end(); ++iter)
+	for (std::vector<ToggleTextButton*>::iterator iter = _btnRegions.begin(); iter != _btnRegions.end(); ++iter)
 	{
 		(*iter)->setVisible(false);
 	}
 
-	for (std::vector<ToggleTextButton *>::iterator iter = _btnCountries.begin(); iter != _btnCountries.end(); ++iter)
+	for (std::vector<ToggleTextButton*>::iterator iter = _btnCountries.begin(); iter != _btnCountries.end(); ++iter)
 	{
 		(*iter)->setVisible(false);
 	}
 
-	for (std::vector<ToggleTextButton *>::iterator iter = _btnFinances.begin(); iter != _btnFinances.end(); ++iter)
+	for (std::vector<ToggleTextButton*>::iterator iter = _btnFinances.begin(); iter != _btnFinances.end(); ++iter)
 	{
 		(*iter)->setVisible(false);
 	}
@@ -682,7 +702,6 @@ void GraphsState::drawCountryLines()
 				{
 					lowerLimit = _game->getSavedGame()->getCountries()->at(iter)->getActivityXcom().at(entry);
 				}
-
 			}
 		}
 
@@ -698,7 +717,7 @@ void GraphsState::drawCountryLines()
 	double low = lowerLimit;
 
 	int grids = 9; // cells in grid
-	int check = _income ? 50 : 10;
+	int check = _income? 50: 10;
 
 	while (range > check * grids)
 	{
@@ -721,9 +740,12 @@ void GraphsState::drawCountryLines()
 	double units = range / 126;
 
 	// draw country lines
-	for (size_t entry = 0; entry != _game->getSavedGame()->getCountries()->size(); ++entry)
+	for (size_t
+			entry = 0;
+			entry != _game->getSavedGame()->getCountries()->size();
+			++entry)
 	{
-		Country *country = _game->getSavedGame()->getCountries()->at(entry);
+		Country* country = _game->getSavedGame()->getCountries()->at(entry);
 
 		_alienCountryLines.at(entry)->clear();
 		_xcomCountryLines.at(entry)->clear();
@@ -738,8 +760,7 @@ void GraphsState::drawCountryLines()
 				++iter)
 		{
 			int x = 312 - (iter * 17);
-//kL			int y = 175 - (-lowerLimit / units);
-			int y = 175 + static_cast<int>((static_cast<double>(lowerLimit) / units));		// kL
+			int y = 175 + static_cast<int>((static_cast<double>(lowerLimit) / units));
 
 			if (_alien)
 			{
@@ -893,8 +914,11 @@ void GraphsState::drawRegionLines()
 			}
 		}
 
-		if (_regionToggles.back() && total > upperLimit)
-				upperLimit = total;
+		if (_regionToggles.back()
+			&& total > upperLimit)
+		{
+			upperLimit = total;
+		}
 	}
 
 	// adjust the scale to fit the upward maximum
@@ -1197,7 +1221,7 @@ void GraphsState::drawFinanceLines()
 			y -= reduction;
 			newLineVector.push_back(y);
 
-			int offset = button %2? 8:0;
+			int offset = button %2? 8: 0;
 
 			if (newLineVector.size() > 1)
 				_financeLines.at(button)->drawLine(x, y, x + 17, newLineVector.at(newLineVector.size() - 2), Palette::blockOffset((button / 2) + 1) + offset);

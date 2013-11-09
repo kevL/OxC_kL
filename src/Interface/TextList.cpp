@@ -607,7 +607,7 @@ void TextList::setCondensed(bool condensed)
 
 /**
  * Returns the currently selected row if the text list is selectable.
- * @return Selected row.
+ * @return, Selected row.
  */
 int TextList::getSelectedRow() const
 {

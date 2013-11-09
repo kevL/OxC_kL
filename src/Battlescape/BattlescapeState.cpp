@@ -1362,7 +1362,7 @@ void BattlescapeState::updateSoldierInfo()
 	// but it's here so I can see the pretty lights....
 	//
 	// Hidden Movement reveal_start:
-	BattleUnit* selectUnit;
+/*	BattleUnit* selectUnit;
 	if (_save->getSelectedUnit())
 	{
 		selectUnit = _save->getSelectedUnit();
@@ -1372,9 +1372,9 @@ void BattlescapeState::updateSoldierInfo()
 	{
 		//Log(LOG_INFO) << ". . selectUnit = 0 return";
 		return;
-	}
+	} */
 
-	_save->getTileEngine()->calculateFOV(selectUnit);
+/*	_save->getTileEngine()->calculateFOV(selectUnit);
 
 	int j = 0;
 	for (std::vector<BattleUnit*>::iterator
@@ -1388,16 +1388,18 @@ void BattlescapeState::updateSoldierInfo()
 		_visibleUnit[j] = *i;
 
 		++j;
-	}
+	} */
 
-	_txtName->setText(selectUnit->getName(_game->getLanguage(), false));
+//	_txtName->setText(selectUnit->getName(_game->getLanguage(), false));
 
-	showPsiButton(
+/*	showPsiButton(
 			selectUnit->getOriginalFaction() == FACTION_HOSTILE
 //				&& selectUnit->getFaction() == FACTION_HOSTILE
-				&& selectUnit->getStats()->psiSkill > 0);
+				&& selectUnit->getStats()->psiSkill > 0); */
 	// Hidden Movement reveal_end.
 
+
+	_rank->clear();
 
 	_btnRightHandItem->clear();
 	_btnLeftHandItem->clear();
@@ -1411,7 +1413,7 @@ void BattlescapeState::updateSoldierInfo()
 	_numTUSnap	->setVisible(false);
 
 
-	Soldier* s = _game->getSavedGame()->getSoldier(selectUnit->getId());
+/*	Soldier* s = _game->getSavedGame()->getSoldier(selectUnit->getId());
 	if (s != 0)
 	{
 		SurfaceSet* texture = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
@@ -1420,7 +1422,7 @@ void BattlescapeState::updateSoldierInfo()
 	else
 	{
 		_rank->clear();
-	}
+	} */
 
 	// -= return =-  //
 	bool isPlayable = playableUnitSelected();	// not aLien or civilian; ie. xCom Soldier
@@ -1428,9 +1430,9 @@ void BattlescapeState::updateSoldierInfo()
 
 	if (!isPlayable)							// not xCom Soldier; ie. aLien or civilian
 	{
-//		_txtName->setText(L"");
+		_txtName->setText(L"");
 
-//		showPsiButton(false);
+		showPsiButton(false);
 
 		_rank			->setVisible(false);
 
@@ -1475,7 +1477,7 @@ void BattlescapeState::updateSoldierInfo()
 	}
 
 
-/*	BattleUnit* selectUnit;
+	BattleUnit* selectUnit;
 	if (_save->getSelectedUnit())
 	{
 		selectUnit = _save->getSelectedUnit();
@@ -1485,10 +1487,10 @@ void BattlescapeState::updateSoldierInfo()
 	{
 		Log(LOG_INFO) << ". . selectUnit = 0 return";
 		return;
-	} */
+	}
 
 
-/*	_save->getTileEngine()->calculateFOV(selectUnit);
+	_save->getTileEngine()->calculateFOV(selectUnit);
 
 	int j = 0;
 	for (std::vector<BattleUnit*>::iterator
@@ -1499,20 +1501,21 @@ void BattlescapeState::updateSoldierInfo()
 	{
 		_btnVisibleUnit[j]->setVisible(true);
 		_numVisibleUnit[j]->setVisible(true);
+
 		_visibleUnit[j] = *i;
 
 		++j;
-	} */
+	}
 
 
-/*	_txtName->setText(selectUnit->getName(_game->getLanguage(), false)); */
+	_txtName->setText(selectUnit->getName(_game->getLanguage(), false));
 
-/*	Soldier* s = _game->getSavedGame()->getSoldier(selectUnit->getId());
+	Soldier* s = _game->getSavedGame()->getSoldier(selectUnit->getId());
 	if (s != 0)
 	{
 		SurfaceSet* texture = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
 		texture->getFrame(s->getRankSprite())->blit(_rank);
-	} */
+	}
 
 	_numTimeUnits	->setValue(selectUnit->getTimeUnits());
 	_barTimeUnits	->setMax(selectUnit->getStats()->tu);
@@ -1590,10 +1593,10 @@ void BattlescapeState::updateSoldierInfo()
 		}
 	}
 
-/*	showPsiButton(
+	showPsiButton(
 			selectUnit->getOriginalFaction() == FACTION_HOSTILE
 //				&& selectUnit->getFaction() == FACTION_HOSTILE
-				&& selectUnit->getStats()->psiSkill > 0); */
+				&& selectUnit->getStats()->psiSkill > 0);
 
 	//Log(LOG_INFO) << "BattlescapeState::updateSoldierInfo() EXIT";
 }

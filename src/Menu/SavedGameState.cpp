@@ -123,8 +123,8 @@ SavedGameState::SavedGameState(Game* game, OptionsOrigin origin, int firstValidR
 	_lstSaves->setSelectable(true);
 	_lstSaves->setBackground(_window);
 	_lstSaves->setMargin(8);
-	_lstSaves->onMouseOver((ActionHandler)& SavedGameState::lstSavesMouseOver);
-	_lstSaves->onMouseOut((ActionHandler)& SavedGameState::lstSavesMouseOut);
+//	_lstSaves->onMouseOver((ActionHandler)& SavedGameState::lstSavesMouseOver);
+//	_lstSaves->onMouseOut((ActionHandler)& SavedGameState::lstSavesMouseOut);
 
 	_txtDetails->setColor(Palette::blockOffset(15)-1);
 	_txtDetails->setSecondaryColor(Palette::blockOffset(8)+10);
@@ -239,15 +239,20 @@ void SavedGameState::btnCancelClick(Action*)
  */
 void SavedGameState::lstSavesMouseOver(Action*)
 {
+	Log(LOG_INFO) << "SavedGameState::lstSavesMouseOver()";
+	Log(LOG_INFO) << ". selRow = " << _lstSaves->getSelectedRow();
+	Log(LOG_INFO) << ". firstValidRow = " << _firstValidRow;
+
 	int sel = _lstSaves->getSelectedRow() - _firstValidRow;
 	if (0 > sel)
 	{
 		_txtDetails->setText(L"");
+
 		return;
 	}
 
 	std::string fullname = Options::getUserFolder() + _saves[sel];
-	std::wstring wstr=L"";
+	std::wstring wstr = L"";
 	try
 	{
 		YAML::Node doc = YAML::LoadFile(fullname);

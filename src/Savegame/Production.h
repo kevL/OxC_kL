@@ -16,41 +16,60 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_PRODUCTION_H
 #define OPENXCOM_PRODUCTION_H
 
 #include <yaml-cpp/yaml.h>
 
+
 namespace OpenXcom
 {
+
 class RuleManufacture;
 class Base;
 class SavedGame;
 class Ruleset;
-enum productionProgress_e { PROGRESS_NOT_COMPLETE, PROGRESS_COMPLETE, PROGRESS_NOT_ENOUGH_MONEY, PROGRESS_NOT_ENOUGH_MATERIALS, PROGRESS_MAX, PROGRESS_CONSTRUCTION };
+
+enum productionProgress_e
+{
+	PROGRESS_NOT_COMPLETE,
+	PROGRESS_COMPLETE,
+	PROGRESS_NOT_ENOUGH_MONEY,
+	PROGRESS_NOT_ENOUGH_MATERIALS,
+	PROGRESS_MAX,
+	PROGRESS_CONSTRUCTION
+};
+
 class Production
 {
-public:
-	Production (const RuleManufacture * rules, int amount);
-	int getAmountTotal () const;
-	void setAmountTotal (int);
-	int getTimeSpent () const;
-	void setTimeSpent (int);
-	int getAmountProduced () const;
-	int getAssignedEngineers() const;
-	void setAssignedEngineers (int);
-	productionProgress_e step(Base * b, SavedGame * g, const Ruleset *r);
-	const RuleManufacture * getRules() const;
-	void startItem(Base * b, SavedGame * g);
-	YAML::Node save() const;
-	void load(const YAML::Node &node);
 private:
-	const RuleManufacture * _rules;
+	const RuleManufacture* _rules;
 	int _amount;
 	int _timeSpent;
 	int _engineers;
-	bool haveEnoughMoneyForOneMoreUnit(SavedGame * g);
-	bool haveEnoughMaterialsForOneMoreUnit(Base * b);
+	bool haveEnoughMoneyForOneMoreUnit(SavedGame* g);
+	bool haveEnoughMaterialsForOneMoreUnit(Base* b);
+
+	public:
+		Production(const RuleManufacture* rules, int amount);
+		// kL_note: no dTor !
+
+		void load(const YAML::Node& node);
+		YAML::Node save() const;
+
+		int getAmountTotal() const;
+		void setAmountTotal(int);
+		int getTimeSpent() const;
+		void setTimeSpent(int);
+		int getAmountProduced() const;
+		int getAssignedEngineers() const;
+		void setAssignedEngineers(int);
+		productionProgress_e step(Base* b, SavedGame* g, const Ruleset* r);
+		const RuleManufacture* getRules() const;
+		void startItem(Base* b, SavedGame* g);
 };
+
 }
+
 #endif

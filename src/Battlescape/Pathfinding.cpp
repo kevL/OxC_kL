@@ -307,7 +307,6 @@ bool Pathfinding::aStarPath(const Position& startPosition, const Position& endPo
 int Pathfinding::getTUCost(const Position& startPosition, int direction, Position* endPosition, BattleUnit* unit, BattleUnit* target, bool missile)
 {
 	_unit = unit;
-	int size = _unit->getArmor()->getSize() - 1;
 
 	directionToVector(direction, endPosition);
 	*endPosition += startPosition;
@@ -323,9 +322,16 @@ int Pathfinding::getTUCost(const Position& startPosition, int direction, Positio
 	int cost = 0;
 	int totalCost = 0;
 
-	for (int x = 0; x <= size; ++x)
+	int size = _unit->getArmor()->getSize() - 1;
+	for (int
+			x = 0;
+			x <= size;
+			++x)
 	{
-		for (int y = 0; y <= size; ++y)
+		for (int
+				y = 0;
+				y <= size;
+				++y)
 		{
 			Position offset = Position(x, y, 0);
 
@@ -431,7 +437,7 @@ int Pathfinding::getTUCost(const Position& startPosition, int direction, Positio
 				&& canFallDown(startTile))
 			{
 				numberOfPartsFalling++;
-				if (numberOfPartsFalling == (size+1) * (size+1))
+				if (numberOfPartsFalling == (size + 1) * (size + 1))
 				{
 					*endPosition = startPosition + Position(0, 0, -1);
 					destinationTile = _save->getTile(*endPosition + offset);
@@ -454,19 +460,6 @@ int Pathfinding::getTUCost(const Position& startPosition, int direction, Positio
 					return 255;
 			}
 
-			int wallcost = 0; // walking through rubble walls
-			if (direction == 7 || direction == 0 || direction == 1)
-				wallcost += startTile->getTUCost(MapData::O_NORTHWALL, _movementType);
-
-			if (direction == 1 || direction == 2 || direction == 3)
-				wallcost += destinationTile->getTUCost(MapData::O_WESTWALL, _movementType);
-
-			if (direction == 3 || direction == 4 || direction == 5)
-				wallcost += destinationTile->getTUCost(MapData::O_NORTHWALL, _movementType);
-
-			if (direction == 5 || direction == 6 || direction == 7)
-				wallcost += startTile->getTUCost(MapData::O_WESTWALL, _movementType);
-
 			// check if the destination tile can be walked over
 			if (isBlocked(destinationTile, MapData::O_FLOOR, target)
 				|| isBlocked(destinationTile, MapData::O_OBJECT, target))
@@ -474,16 +467,13 @@ int Pathfinding::getTUCost(const Position& startPosition, int direction, Positio
 				return 255;
 			}
 
-			// if we don't want to fall down and there is no floor, we can't know the TUs so it's default to 4
-			if (direction < DIR_UP
-				&& !fellDown
-				&& destinationTile->hasNoFloor(0))
-			{
-				cost = 4;
-			}
+
+if (direction < DIR_UP) // TEST
+{
+
 
 			// calculate the cost by adding floor walk cost and object walk cost
-			if (direction < DIR_UP)
+//			if (direction < DIR_UP)
 			{
 				cost += destinationTile->getTUCost(MapData::O_FLOOR, _movementType);
 
@@ -501,16 +491,104 @@ int Pathfinding::getTUCost(const Position& startPosition, int direction, Positio
 				}
 			}
 
-			// diagonal walking (uneven directions) costs 50% more tu's
-			if (direction < DIR_UP
-				&& direction & 1)
+			// if we don't want to fall down and there is no floor, we can't know the TUs so it defaults to 4
+//			if (direction < DIR_UP &&
+			if (!fellDown
+				&& destinationTile->hasNoFloor(0))
 			{
-				// kL_note: Try taking this out.. check diagonal TU values.
-//kL				wallcost /= 2;
-				cost = (int)((double)cost * 1.5);
+				cost = 4;
+			}
+
+
+			int wallcost = 0;	// walking through rubble walls
+			int sides = 0;		// how many walls we cross when moving diagonally
+			int wallTU = 0;		// used to check if there's a wall that costs +TU.
+
+			if (direction == 7
+				|| direction == 0
+				|| direction == 1)
+			{
+				wallTU = startTile->getTUCost(MapData::O_NORTHWALL, _movementType);
+				if (wallTU > 0)
+				{
+//					if (direction &1) // would use this to increase diagonal wall-crossing by +50%
+//					{
+//						wallTU += wallTU / 2;
+//					}
+					wallcost += wallTU;
+					sides ++;
+				}
+			}
+
+			if (direction == 1
+				|| direction == 2
+				|| direction == 3)
+			{
+				wallTU = destinationTile->getTUCost(MapData::O_WESTWALL, _movementType);
+				if (wallTU > 0)
+				{
+					wallcost += wallTU;
+					sides ++;
+				}
+			}
+
+			if (direction == 3
+				|| direction == 4
+				|| direction == 5)
+			{
+				wallTU = destinationTile->getTUCost(MapData::O_NORTHWALL, _movementType);
+				if (wallTU > 0)
+				{
+					wallcost += wallTU;
+					sides ++;
+				}
+			}
+
+			if (direction == 5
+				|| direction == 6
+				|| direction == 7)
+			{
+				wallTU = startTile->getTUCost(MapData::O_WESTWALL, _movementType);
+				if (wallTU > 0)
+				{
+					wallcost += wallTU;
+					sides ++;
+				}
+			}
+
+			// diagonal walking (uneven directions) costs 50% more tu's
+			// kL_note: this is moved up so that objects don't cost +150% tu;
+			// instead, let them keep a flat +100% to step onto
+			// -- note that Walls also do not take +150 tu to step over diagonally....
+//			if (direction < DIR_UP &&
+			if (direction &1)
+			{
+				cost = static_cast<int>(static_cast<float>(cost) * 1.5f);
+
+				if (sides == 2)
+					wallcost /= 2; // average of the wall-sides crossed
 			}
 
 			cost += wallcost;
+
+			// diagonal walking (uneven directions) costs 50% more tu's
+/*			if (direction < DIR_UP
+				&& direction &1)
+			{
+				if (sides > 1)
+				{
+					wallcost /= 2;
+				}
+
+				cost = static_cast<int>(static_cast<double>(cost) * 1.5);
+			}
+
+			cost += wallcost; */
+
+
+} // end_TEST
+
+
 			if (_unit->getFaction() == FACTION_HOSTILE
 				&& destinationTile->getFire() > 0)
 			{
@@ -555,7 +633,7 @@ int Pathfinding::getTUCost(const Position& startPosition, int direction, Positio
 	// for bigger sized units, check the path between part 1,1 and part 0,0 at end position
 	if (size)
 	{
-		totalCost /= (size+1) * (size+1);
+		totalCost /= (size + 1) * (size + 1); // ie. /=4
 
 		Tile* startTile = _save->getTile(*endPosition + Position(1, 1, 0));
 		Tile* destinationTile = _save->getTile(*endPosition);

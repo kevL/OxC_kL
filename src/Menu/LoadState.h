@@ -27,8 +27,7 @@ namespace OpenXcom
 {
 
 /**
- * Load Game screen for listing info on available
- * saved games and loading them.
+ * Load Game screen for listing info on available saved games and loading them.
  */
 class LoadState
 	:
