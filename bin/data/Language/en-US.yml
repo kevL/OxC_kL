@@ -1004,6 +1004,7 @@ en-US:
   STR_PRESS_BUTTON_TO_CONTINUE: "All your TU are belong to us."
   STR_MIND_CONTROL: "control"
   STR_PANIC_UNIT: "panic"
+  STR_MORALE_ATTACK_SUCCESSFUL: "Morale Attack Successful"
   STR_MIND_CONTROL_SUCCESSFUL: "... yaz Mazta ..."
   STR_HAS_GONE_BERSERK_MALE: "{0}{NEWLINE}has gone Berserk!"
   STR_HAS_GONE_BERSERK_FEMALE: "{0}{NEWLINE}has gone Berserk!"
@@ -1213,6 +1214,7 @@ en-US:
   STR_DEAD_ALIENS: "Fertilizer"
   STR_CONTAINMENT_EXCEEDED: "ALIEN CONTAINMENT LIMITS EXCEEDED{SMALLLINE}Insufficient containment space at {0}. You must torture excess aliens until they are fishfood."
   STR_MANAGE_CONTAINMENT: "Alien Containment"
+  STR_DETAILS: "Details: {ALT}{0}"
   STR_HOUR:
     one: "{N} hr"
     few: "{N} hrs"

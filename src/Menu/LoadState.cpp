@@ -45,7 +45,7 @@ namespace OpenXcom
  */
 LoadState::LoadState(Game* game, OptionsOrigin origin)
 	:
-		SavedGameState(game, origin)
+		SavedGameState(game, origin, 0)
 {
 	_txtTitle->setText(tr("STR_SELECT_GAME_TO_LOAD"));
 	_lstSaves->onMousePress((ActionHandler)& LoadState::lstSavesPress);
@@ -59,7 +59,7 @@ LoadState::LoadState(Game* game, OptionsOrigin origin)
  */
 LoadState::LoadState(Game* game, OptionsOrigin origin, bool showMsg)
 	:
-		SavedGameState(game, origin, showMsg)
+		SavedGameState(game, origin, 0, showMsg)
 {
 	quickLoad("autosave");
 }

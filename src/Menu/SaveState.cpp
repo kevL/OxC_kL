@@ -44,7 +44,7 @@ namespace OpenXcom
  */
 SaveState::SaveState(Game* game, OptionsOrigin origin)
 	:
-		SavedGameState(game, origin),
+		SavedGameState(game, origin, 1),
 		_selected(L""),
 		_previousSelectedRow(-1),
 		_selectedRow(-1)
@@ -70,7 +70,7 @@ SaveState::SaveState(Game* game, OptionsOrigin origin)
  */
 SaveState::SaveState(Game* game, OptionsOrigin origin, bool showMsg)
 	:
-		SavedGameState(game, origin, showMsg)
+		SavedGameState(game, origin, 1, showMsg)
 {
 	game->getSavedGame()->setName(L"autosave");
 	quickSave("autosave");
