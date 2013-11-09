@@ -104,7 +104,7 @@ private:
 		~SavedGame();
 
 		/// Gets list of saves in the user directory.
-		static std::vector<std::string> getList(TextList* list, Language* lang);
+		static std::vector<std::string> getList(TextList* list, Language* lang, std::vector<std::wstring>* details);
 		/// Loads a saved game from YAML.
 		void load(const std::string& filename, Ruleset* rule);
 		/// Saves a saved game to YAML.
