@@ -53,7 +53,7 @@ CannotReequipState::CannotReequipState(Game* game, std::vector<ReequipStat> miss
 	_txtQuantity	= new Text(46, 9, 178, 74);
 	_txtCraft		= new Text(80, 9, 224, 74);
 
-	_lstItems		= new TextList(294, 88, 8, 84);
+	_lstItems		= new TextList(286, 88, 16, 84);
 
 	_btnOk			= new TextButton(288, 16, 16, 177);
 
@@ -95,7 +95,7 @@ CannotReequipState::CannotReequipState(Game* game, std::vector<ReequipStat> miss
 	_txtCraft->setText(tr("STR_CRAFT"));
 
 	_lstItems->setColor(Palette::blockOffset(8)+10);
-	_lstItems->setColumns(3, 162, 46, 80);
+	_lstItems->setColumns(3, 154, 46, 80);
 	_lstItems->setSelectable(true);
 	_lstItems->setBackground(_window);
 	_lstItems->setMargin(8);

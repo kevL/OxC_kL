@@ -67,7 +67,10 @@ ManageAlienContainmentState::ManageAlienContainmentState(Game* game, Base* base,
 	_containmentLimit = Options::getBool("alienContainmentLimitEnforced");
 	_overCrowded = _containmentLimit && _base->getAvailableContainment() < _base->getUsedContainment();
 
-	for (std::vector<ResearchProject*>::const_iterator iter = _base->getResearch().begin (); iter != _base->getResearch().end (); ++iter)
+	for (std::vector<ResearchProject*>::const_iterator
+			iter = _base->getResearch().begin();
+			iter != _base->getResearch().end();
+			++iter)
 	{
 		const RuleResearch* research = (*iter)->getRules();
 		if (_game->getRuleset()->getUnit(research->getName()))
@@ -78,19 +81,20 @@ ManageAlienContainmentState::ManageAlienContainmentState(Game* game, Base* base,
 
 	_window			= new Window(this, 320, 200, 0, 0);
 
-	_txtTitle		= new Text(310, 17, 5, 8);
+	_txtTitle		= new Text(310, 17, 5, 10);
 
-	_txtAvailable	= new Text(190, 9, 10, 24);
-	_txtUsed		= new Text(110, 9, 136, 24);
+	_txtAvailable	= new Text(144, 9, 16, 30);
+	_txtUsed		= new Text(144, 9, 160, 30);
 
-	_txtItem		= new Text(130, 9, 10, 32);
-	_txtLiveAliens	= new Text(54, 9, 136, 32);
-	_txtDeadAliens	= new Text(96, 9, 220, 32);
+	_txtItem		= new Text(144, 9, 16, 40);
+	_txtLiveAliens	= new Text(62, 9, 164, 40);
+	_txtDeadAliens	= new Text(66, 9, 230, 40);
 
-	_lstAliens		= new TextList(280, 120, 8, 44);
+	_lstAliens		= new TextList(286, 120, 16, 50);
 
-	_btnCancel		= new TextButton(148, 16, 164, 177);
-	_btnOk			= new TextButton(_overCrowded? 288:148, 16, _overCrowded? 16:8, 177);
+	_btnCancel		= new TextButton(134, 16, 170, 177);
+//	_btnOk			= new TextButton(_overCrowded? 288: 148, 16, _overCrowded? 16: 8, 177);
+	_btnOk			= new TextButton(134, 16, 16, 177);
 
 
 	if (origin == OPT_BATTLESCAPE)
@@ -121,7 +125,7 @@ ManageAlienContainmentState::ManageAlienContainmentState(Game* game, Base* base,
 
 
 	_window->setColor(_color);
-	_window->setBackground(_game->getResourcePack()->getSurface((origin == OPT_BATTLESCAPE)? "BACK01.SCR" : "BACK05.SCR"));
+	_window->setBackground(_game->getResourcePack()->getSurface((origin == OPT_BATTLESCAPE)? "BACK04.SCR": "BACK05.SCR"));
 
 	_btnOk->setColor(_color);
 	_btnOk->setText(tr("STR_REMOVE_SELECTED"));
@@ -139,7 +143,7 @@ ManageAlienContainmentState::ManageAlienContainmentState(Game* game, Base* base,
 		_btnOk->setVisible(false);
 	}
 
-	_txtTitle->setColor((origin == OPT_BATTLESCAPE)? Palette::blockOffset(8)+5:_color);
+	_txtTitle->setColor((origin == OPT_BATTLESCAPE)? Palette::blockOffset(8)+5: _color);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_MANAGE_CONTAINMENT"));
@@ -163,8 +167,8 @@ ManageAlienContainmentState::ManageAlienContainmentState(Game* game, Base* base,
 
 	_lstAliens->setColor(_color2);
 	_lstAliens->setArrowColor(_color);
-	_lstAliens->setArrowColumn(184, ARROW_HORIZONTAL);
-	_lstAliens->setColumns(3, 150, 84, 46);
+	_lstAliens->setArrowColumn(178, ARROW_HORIZONTAL);
+	_lstAliens->setColumns(3, 140, 66, 56);
 	_lstAliens->setSelectable(true);
 	_lstAliens->setBackground(_window);
 	_lstAliens->setMargin(8);
@@ -459,7 +463,7 @@ void ManageAlienContainmentState::updateStrings()
 	int aliens = _base->getUsedContainment() - _aliensSold - _researchedAliens;
 	int spaces = _base->getAvailableContainment() - _base->getUsedContainment() + _aliensSold;
 
-	bool enoughSpace = _containmentLimit? spaces >= 0:true;
+	bool enoughSpace = _containmentLimit? spaces > -1: true;
 
 	_txtAvailable->setText(tr("STR_SPACE_AVAILABLE").arg(spaces));
 	_txtUsed->setText(tr("STR_SPACE_USED").arg(aliens));

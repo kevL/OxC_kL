@@ -55,16 +55,16 @@ SavedGameState::SavedGameState(Game* game, OptionsOrigin origin, int firstValidR
 
 	_txtTitle	= new Text(310, 17, 5, 8);
 
-	_txtDelete	= new Text(310, 9, 5, 24);
+	_txtDelete	= new Text(310, 9, 5, 23);
 
-	_txtName	= new Text(150, 9, 16, 32);
-	_txtTime	= new Text(30, 9, 184, 32);
-	_txtDate	= new Text(38, 9, 214, 32);
+	_txtName	= new Text(176, 9, 16, 32);
+	_txtTime	= new Text(30, 9, 190, 32);
+	_txtDate	= new Text(84, 9, 220, 32);
 
-	_lstSaves	= new TextList(294, 112, 8, 40);
+	_lstSaves	= new TextList(286, 112, 16, 41);
 
 	_txtStatus	= new Text(320, 17, 0, 92);
-	_txtDetails = new Text(288, 9, 16, 160);
+	_txtDetails = new Text(288, 9, 16, 165);
 
 	_btnCancel	= new TextButton(288, 16, 16, 177);
 
@@ -119,12 +119,12 @@ SavedGameState::SavedGameState(Game* game, OptionsOrigin origin, int firstValidR
 
 	_lstSaves->setColor(Palette::blockOffset(8)+10);
 	_lstSaves->setArrowColor(Palette::blockOffset(8)+5);
-	_lstSaves->setColumns(5, 168, 30, 30, 30, 30);
+	_lstSaves->setColumns(5, 168, 30, 26, 24, 32);
 	_lstSaves->setSelectable(true);
 	_lstSaves->setBackground(_window);
 	_lstSaves->setMargin(8);
-//	_lstSaves->onMouseOver((ActionHandler)& SavedGameState::lstSavesMouseOver);
-//	_lstSaves->onMouseOut((ActionHandler)& SavedGameState::lstSavesMouseOut);
+	_lstSaves->onMouseOver((ActionHandler)& SavedGameState::lstSavesMouseOver);
+	_lstSaves->onMouseOut((ActionHandler)& SavedGameState::lstSavesMouseOut);
 
 	_txtDetails->setColor(Palette::blockOffset(15)-1);
 	_txtDetails->setSecondaryColor(Palette::blockOffset(8)+10);
@@ -239,8 +239,9 @@ void SavedGameState::btnCancelClick(Action*)
  */
 void SavedGameState::lstSavesMouseOver(Action*)
 {
-	int sel = _lstSaves->getSelectedRow() - _firstValidRow;
 	std::wstring wstr;
+
+	int sel = _lstSaves->getSelectedRow() - _firstValidRow;
 	if (sel >= 0 && sel < _saves.size())
 	{
 		wstr = _details[sel];

@@ -212,7 +212,7 @@ std::vector<std::string> SavedGame::getList(TextList* list, Language* lang, std:
 			std::wstringstream info;
 			if (doc["turn"])
 			{
-				info << lang->getString("STR_BATTLESCAPE") << L": " << lang->getString(doc["mission"].as<std::string>()) << L", ";
+				info << lang->getString("STR_BATTLESCAPE") << L" : " << lang->getString(doc["mission"].as<std::string>()) << L" ";
 				info << lang->getString("STR_TURN").arg(doc["turn"].as<int>());
 			}
 			else
@@ -1253,7 +1253,7 @@ bool SavedGame::handlePromotions()
 
 	inspectSoldiers(&highestRanked, &filledPositions, RANK_COLONEL);
 	inspectSoldiers(&highestRanked, &filledPositions2, RANK_CAPTAIN);
-	if (filledPositions < (soldiersTotal / 23)
+	if (filledPositions < soldiersTotal / 23
 		&& filledPositions2 > 0)
 	{
 		highestRanked->promoteRank();
@@ -1262,7 +1262,7 @@ bool SavedGame::handlePromotions()
 
 	inspectSoldiers(&highestRanked, &filledPositions, RANK_CAPTAIN);
 	inspectSoldiers(&highestRanked, &filledPositions2, RANK_SERGEANT);
-	if (filledPositions < (soldiersTotal / 11)
+	if (filledPositions < soldiersTotal / 11
 		&& filledPositions2 > 0)
 	{
 		highestRanked->promoteRank();
@@ -1271,14 +1271,15 @@ bool SavedGame::handlePromotions()
 
 	inspectSoldiers(&highestRanked, &filledPositions, RANK_SERGEANT);
 	inspectSoldiers(&highestRanked, &filledPositions2, RANK_SQUADDIE);
-	if (filledPositions < (soldiersTotal / 5)
+
+	if (filledPositions < soldiersTotal / 5
 		&& filledPositions2 > 0)
 	{
 		highestRanked->promoteRank();
 		soldiersPromoted++;
 	}
 
-	return (soldiersPromoted > 0);
+	return soldiersPromoted > 0;
 }
 
 /**
@@ -1299,6 +1300,7 @@ void SavedGame::inspectSoldiers(Soldier** highestRanked, size_t* total, int rank
 			if ((*j)->getRank() == (SoldierRank)rank)
 			{
 				(*total)++;
+
 				UnitStats* s = (*j)->getCurrentStats();
 				int v1 = 2 * s->health + 2 * s->stamina + 4 * s->reactions + 4 * s->bravery;
 				int v2 = v1 + 3 * (s->tu + 2 * (s->firing));

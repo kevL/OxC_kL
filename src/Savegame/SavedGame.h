@@ -261,8 +261,8 @@ private:
 		bool wasResearchPopped(const RuleResearch* research);
 		/// remove a research from the "popped up" array
 		void removePoppedResearch(const RuleResearch* research);
-	/// Gets the list of dead soldiers.
-	std::vector<Soldier*> *getDeadSoldiers();
+		/// Gets the list of dead soldiers.
+		std::vector<Soldier*>* getDeadSoldiers();
 };
 
 }

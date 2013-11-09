@@ -49,10 +49,10 @@ PromotionsState::PromotionsState(Game* game)
 	_txtTitle		= new Text(300, 17, 10, 13);
 
 	_txtName		= new Text(114, 9, 16, 32);
-	_txtRank		= new Text(90, 9, 130, 32);
+	_txtRank		= new Text(70, 9, 150, 32);
 	_txtBase		= new Text(80, 9, 220, 32);
 
-	_lstSoldiers	= new TextList(294, 128, 8, 42);
+	_lstSoldiers	= new TextList(286, 128, 16, 42);
 
 	_btnOk			= new TextButton(288, 16, 16, 177);
 
@@ -93,7 +93,7 @@ PromotionsState::PromotionsState(Game* game)
 	_txtBase->setText(tr("STR_BASE"));
 
 	_lstSoldiers->setColor(Palette::blockOffset(8)+10);
-	_lstSoldiers->setColumns(3, 114, 90, 84);
+	_lstSoldiers->setColumns(3, 126, 70, 84);
 	_lstSoldiers->setSelectable(true);
 	_lstSoldiers->setBackground(_window);
 	_lstSoldiers->setMargin(8);

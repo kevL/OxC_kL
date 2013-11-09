@@ -44,7 +44,7 @@ WarningMessage::WarningMessage(int width, int height, int x, int y)
 	_text->setHighContrast(true);
 	_text->setAlign(ALIGN_CENTER);
 
-	_timer = new Timer(50);
+	_timer = new Timer(80);
 	_timer->onTimer((SurfaceHandler)&WarningMessage::fade);
 
 	setVisible(false);
