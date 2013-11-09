@@ -236,7 +236,7 @@ private:
 		BattleItem* surveyItems(BattleAction* action);
 		/// Evaluates if it's worthwhile to take this item.
 		bool worthTaking(BattleItem* item,
-				BattleAction *action);
+				BattleAction* action);
 		/// Picks the item up from the ground.
 		int takeItemFromGround(BattleItem* item,
 				BattleAction* action);

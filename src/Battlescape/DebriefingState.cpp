@@ -79,7 +79,7 @@ DebriefingState::DebriefingState(Game *game)
 		_manageContainment(false),
 		_destroyBase(false)
 {
-	Log(LOG_INFO) << "Create DebriefingState";
+	//Log(LOG_INFO) << "Create DebriefingState";
 
 	// Restore the cursor in case something weird happened
 	_game->getCursor()->setVisible(true);
@@ -260,7 +260,7 @@ DebriefingState::DebriefingState(Game *game)
 	_game->getCursor()->setColor(Palette::blockOffset(15) + 12);
 	_game->getFpsCounter()->setColor(Palette::blockOffset(15) + 12);
 
-	Log(LOG_INFO) << "Create DebriefingState DONE";
+	//Log(LOG_INFO) << "Create DebriefingState DONE";
 }
 
 /**
@@ -268,7 +268,7 @@ DebriefingState::DebriefingState(Game *game)
  */
 DebriefingState::~DebriefingState()
 {
-	Log(LOG_INFO) << "Delete DebriefingState";
+	//Log(LOG_INFO) << "Delete DebriefingState";
 
 	if (_game->isQuitting())
 	{
@@ -289,7 +289,7 @@ DebriefingState::~DebriefingState()
  */
 void DebriefingState::btnOkClick(Action*)
 {
-	Log(LOG_INFO) << "DebriefingState::btnOkClick()";
+	//Log(LOG_INFO) << "DebriefingState::btnOkClick()";
 
 	_game->getSavedGame()->setBattleGame(0);
 	_game->popState();
@@ -323,7 +323,7 @@ void DebriefingState::btnOkClick(Action*)
 		}
 	}
 
-	Log(LOG_INFO) << "DebriefingState::btnOkClick() EXIT";
+	//Log(LOG_INFO) << "DebriefingState::btnOkClick() EXIT";
 }
 
 /**
@@ -334,7 +334,7 @@ void DebriefingState::btnOkClick(Action*)
  */
 void DebriefingState::addStat(const std::string& name, int quantity, int score)
 {
-	Log(LOG_INFO) << "DebriefingState::addStat()";
+	//Log(LOG_INFO) << "DebriefingState::addStat()";
 
 	for (std::vector<DebriefingStat*>::iterator
 			i = _stats.begin();
@@ -350,7 +350,7 @@ void DebriefingState::addStat(const std::string& name, int quantity, int score)
 		}
 	}
 
-	Log(LOG_INFO) << "DebriefingState::addStat() EXIT";
+	//Log(LOG_INFO) << "DebriefingState::addStat() EXIT";
 }
 
 /**
@@ -369,7 +369,7 @@ private:
 			:
 				_base(base)
 		{
-			Log(LOG_INFO) << "DebriefingState, ClearAlienBase() cTor";
+			//Log(LOG_INFO) << "DebriefingState, ClearAlienBase() cTor";
 
 			/* Empty by design. */
 		}
@@ -385,7 +385,7 @@ private:
  */
 void ClearAlienBase::operator()(AlienMission* am) const
 {
-	Log(LOG_INFO) << "DebriefingState, ClearAlienBase()";
+	//Log(LOG_INFO) << "DebriefingState, ClearAlienBase()";
 
 	if (am->getAlienBase() == _base)
 	{
@@ -401,7 +401,7 @@ void ClearAlienBase::operator()(AlienMission* am) const
  */
 void DebriefingState::prepareDebriefing()
 {
-	Log(LOG_INFO) << "DebriefingState::prepareDebriefing()";
+	//Log(LOG_INFO) << "DebriefingState::prepareDebriefing()";
 
 	_stats.push_back(new DebriefingStat("STR_ALIENS_KILLED", false));
 	_stats.push_back(new DebriefingStat("STR_ALIEN_CORPSES_RECOVERED", false));
@@ -1085,7 +1085,7 @@ void DebriefingState::prepareDebriefing()
 		}
 	}
 
-	Log(LOG_INFO) << "DebriefingState::prepareDebriefing() EXIT";
+	//Log(LOG_INFO) << "DebriefingState::prepareDebriefing() EXIT";
 }
 
 /**
@@ -1096,7 +1096,7 @@ void DebriefingState::prepareDebriefing()
  */
 void DebriefingState::reequipCraft(Base* base, Craft* craft, bool vehicleItemsCanBeDestroyed)
 {
-	Log(LOG_INFO) << "DebriefingState::reequipCraft()";
+	//Log(LOG_INFO) << "DebriefingState::reequipCraft()";
 
 	std::map<std::string, int> craftItems = *craft->getItems()->getContents();
 	for (std::map<std::string, int>::iterator
@@ -1197,7 +1197,7 @@ void DebriefingState::reequipCraft(Base* base, Craft* craft, bool vehicleItemsCa
 		}
 	}
 
-	Log(LOG_INFO) << "DebriefingState::reequipCraft() EXIT";
+	//Log(LOG_INFO) << "DebriefingState::reequipCraft() EXIT";
 }
 
 /**
@@ -1209,7 +1209,7 @@ void DebriefingState::reequipCraft(Base* base, Craft* craft, bool vehicleItemsCa
  */
 void DebriefingState::recoverItems(std::vector<BattleItem*>* from, Base* base)
 {
-	Log(LOG_INFO) << "DebriefingState::recoverItems()";
+	//Log(LOG_INFO) << "DebriefingState::recoverItems()";
 
 	for (std::vector<BattleItem*>::iterator it = from->begin(); it != from->end(); ++it)
 	{
@@ -1306,7 +1306,7 @@ void DebriefingState::recoverItems(std::vector<BattleItem*>* from, Base* base)
 		}
 	}
 
-	Log(LOG_INFO) << "DebriefingState::recoverItems() EXIT";
+	//Log(LOG_INFO) << "DebriefingState::recoverItems() EXIT";
 }
 
 }

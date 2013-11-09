@@ -59,12 +59,16 @@ PauseState::PauseState(Game* game, OptionsOrigin origin)
 
 
 	_window		= new Window(this, 216, 160, x, 20, POPUP_BOTH);
-	_btnLoad	= new TextButton(180, 18, x+18, 52);
-	_btnSave	= new TextButton(180, 18, x+18, 74);
-	_btnAbandon	= new TextButton(180, 18, x+18, 96);
-	_btnOptions	= new TextButton(180, 18, x+18, 122);
-	_btnCancel	= new TextButton(180, 18, x+18, 150);
-	_txtTitle	= new Text(206, 15, x+5, 32);
+
+	_txtTitle	= new Text(206, 15, x + 5, 32);
+
+	_btnLoad	= new TextButton(180, 18, x + 18, 53);
+	_btnSave	= new TextButton(180, 18, x + 18, 74);
+	_btnAbandon	= new TextButton(180, 18, x + 18, 95);
+
+	_btnOptions	= new TextButton(180, 18, x + 18, 124);
+
+	_btnCancel	= new TextButton(180, 18, x + 18, 152);
 
 
 	if (_origin != OPT_BATTLESCAPE)

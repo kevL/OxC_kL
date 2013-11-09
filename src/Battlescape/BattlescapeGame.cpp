@@ -152,7 +152,7 @@ void BattlescapeGame::think()
 
 		if (_save->getUnitsFalling())
 		{
-			Log(LOG_INFO) << "BattlescapeGame::think(), get/setUnitsFalling() ID " << _save->getSelectedUnit()->getId();
+			//Log(LOG_INFO) << "BattlescapeGame::think(), get/setUnitsFalling() ID " << _save->getSelectedUnit()->getId();
 
 			statePushFront(new UnitFallBState(this));
 			_save->setUnitsFalling(false);
@@ -179,7 +179,7 @@ void BattlescapeGame::init()
  */
 void BattlescapeGame::handleAI(BattleUnit* unit)
 {
-	Log(LOG_INFO) << "BattlescapeGame::handleAI()";
+	//Log(LOG_INFO) << "BattlescapeGame::handleAI()";
 
 	std::wstringstream ss;
 
@@ -474,7 +474,7 @@ bool BattlescapeGame::kneel(BattleUnit* bu)
  */
 void BattlescapeGame::endTurn()
 {
-	Log(LOG_INFO) << "BattlescapeGame::endTurn()";
+	//Log(LOG_INFO) << "BattlescapeGame::endTurn()";
 
 	Position p;
 
@@ -633,7 +633,7 @@ void BattlescapeGame::endTurn()
 	}
 
 	_endTurnRequested = false;
-	Log(LOG_INFO) << "BattlescapeGame::endTurn() EXIT";
+	//Log(LOG_INFO) << "BattlescapeGame::endTurn() EXIT";
 }
 
 /**
@@ -645,7 +645,7 @@ void BattlescapeGame::endTurn()
  */
 void BattlescapeGame::checkForCasualties(BattleItem* murderweapon, BattleUnit* killer, bool hiddenExplosion, bool terrainExplosion)
 {
-	Log(LOG_INFO) << "BattlescapeGame::checkForCasualties()";
+	//Log(LOG_INFO) << "BattlescapeGame::checkForCasualties()";
 
 	for (std::vector<BattleUnit*>::iterator
 			x = _save->getUnits()->begin();
@@ -657,11 +657,11 @@ void BattlescapeGame::checkForCasualties(BattleItem* murderweapon, BattleUnit* k
 			&& (*x)->getStatus() != STATUS_COLLAPSING)
 		{
 			BattleUnit* victim = *x;
-			Log(LOG_INFO) << ". victim = " << (*x)->getId();
+			//Log(LOG_INFO) << ". victim = " << (*x)->getId();
 
 			if (killer)
 			{
-				Log(LOG_INFO) << ". killer = " << killer->getId();
+				//Log(LOG_INFO) << ". killer = " << killer->getId();
 
 				killer->addKillCount();
 				victim->killedBy(killer->getFaction());
@@ -685,7 +685,7 @@ void BattlescapeGame::checkForCasualties(BattleItem* murderweapon, BattleUnit* k
 					int boost = 10 * bonus / 100;
 					killer->moraleChange(boost); // double what rest of squad gets below
 
-					Log(LOG_INFO) << ". . killer boost + " << boost;
+					//Log(LOG_INFO) << ". . killer boost + " << boost;
 				}
 
 				// killer (mc'd or not) will get a penalty with friendly fire (mc'd or not)
@@ -696,7 +696,7 @@ void BattlescapeGame::checkForCasualties(BattleItem* murderweapon, BattleUnit* k
 					int hit = 5000 / bonus;
 					killer->moraleChange(-hit); // huge hit!
 
-					Log(LOG_INFO) << ". . FF hit, killer - " << hit;
+					//Log(LOG_INFO) << ". . FF hit, killer - " << hit;
 				}
 
 				if (victim->getOriginalFaction() == FACTION_NEUTRAL) // civilian kills
@@ -706,13 +706,13 @@ void BattlescapeGame::checkForCasualties(BattleItem* murderweapon, BattleUnit* k
 						int civdeath = 2000 / bonus;
 						killer->moraleChange(-civdeath);
 
-						Log(LOG_INFO) << ". . civdeath by xCom, soldier - " << civdeath;
+						//Log(LOG_INFO) << ". . civdeath by xCom, soldier - " << civdeath;
 					}
 					else if (killer->getOriginalFaction() == FACTION_HOSTILE)
 					{
 						killer->moraleChange(20); // no leadership bonus for aLiens executing civies: it's their job.
 
-						Log(LOG_INFO) << ". . civdeath by aLien, killer + " << 20;
+						//Log(LOG_INFO) << ". . civdeath by aLien, killer + " << 20;
 					}
 				}
 			}
@@ -750,7 +750,7 @@ void BattlescapeGame::checkForCasualties(BattleItem* murderweapon, BattleUnit* k
 							bravery = solo * 200 * bravery / losers / 100;
 							(*i)->moraleChange(-bravery);
 
-							Log(LOG_INFO) << ". . . loser - " << bravery;
+							//Log(LOG_INFO) << ". . . loser - " << bravery;
 
 							if (killer
 								&& killer->getFaction() == FACTION_PLAYER
@@ -758,7 +758,7 @@ void BattlescapeGame::checkForCasualties(BattleItem* murderweapon, BattleUnit* k
 							{
 								killer->setTurnsExposed(0); // interesting
 
-								Log(LOG_INFO) << ". . . . killer Exposed";
+								//Log(LOG_INFO) << ". . . . killer Exposed";
 							}
 						}
 						// prevent mind-controlled units from receiving benefits.
@@ -768,7 +768,7 @@ void BattlescapeGame::checkForCasualties(BattleItem* murderweapon, BattleUnit* k
 							int boost = 10 * winners / 100;
 							(*i)->moraleChange(boost);
 
-							Log(LOG_INFO) << ". . . winner + " << boost;
+							//Log(LOG_INFO) << ". . . winner + " << boost;
 						}
 					}
 				}
@@ -811,10 +811,14 @@ void BattlescapeGame::checkForCasualties(BattleItem* murderweapon, BattleUnit* k
 
 	if (_save->getSide() == FACTION_PLAYER)
 	{
-		_parentState->showPsiButton(bu && bu->getOriginalFaction() == FACTION_HOSTILE && bu->getStats()->psiSkill > 0 && !bu->isOut());
+		_parentState->showPsiButton(
+				bu
+				&& bu->getOriginalFaction() == FACTION_HOSTILE
+				&& bu->getStats()->psiSkill > 0
+				&& !bu->isOut());
 	}
 
-	Log(LOG_INFO) << "BattlescapeGame::checkForCasualties() EXIT";
+	//Log(LOG_INFO) << "BattlescapeGame::checkForCasualties() EXIT";
 }
 
 /**
@@ -1055,7 +1059,7 @@ void BattlescapeGame::statePushBack(BattleState* bs)
  */
 void BattlescapeGame::popState()
 {
-	Log(LOG_INFO) << "BattlescapeGame::popState()";
+	//Log(LOG_INFO) << "BattlescapeGame::popState()";
 
 	if (_save->getTraceSetting())
 	{
@@ -1289,7 +1293,7 @@ void BattlescapeGame::popState()
 
 			if (_states.empty())
 			{
-				Log(LOG_INFO) << ". endTurn()";
+				//Log(LOG_INFO) << ". endTurn()";
 				endTurn();
 				//Log(LOG_INFO) << ". endTurn() DONE return";
 
@@ -1320,7 +1324,7 @@ void BattlescapeGame::popState()
 		_parentState->getGame()->getCursor()->setVisible(true);
 	}
 
-	Log(LOG_INFO) << ". updateSoldierInfo()";
+	//Log(LOG_INFO) << ". updateSoldierInfo()";
 	_parentState->updateSoldierInfo();
 
 	//Log(LOG_INFO) << "BattlescapeGame::popState() EXIT";
@@ -1685,7 +1689,7 @@ void BattlescapeGame::primaryAction(const Position& pos)
 		sUnit = _save->getSelectedUnit()->getId();	// kL
 	} */
 
-	Log(LOG_INFO) << "BattlescapeGame::primaryAction()"; // unitID = " << _currentAction.actor->getId();
+	//Log(LOG_INFO) << "BattlescapeGame::primaryAction()"; // unitID = " << _currentAction.actor->getId();
 
 	bool bPreviewed = Options::getInt("battleNewPreviewPath") > 0;
 
@@ -1748,6 +1752,8 @@ void BattlescapeGame::primaryAction(const Position& pos)
 
 				// get the sound/animation started
 				_currentAction.cameraPosition = getMap()->getCamera()->getMapOffset();
+
+				//Log(LOG_INFO) << ". . . . . . new ProjectileFlyBState";
 				statePushBack(new ProjectileFlyBState(this, _currentAction));
 
 				if (_currentAction.TU <= _currentAction.actor->getTimeUnits())
@@ -1767,7 +1773,7 @@ void BattlescapeGame::primaryAction(const Position& pos)
 									game->getLanguage()->getString("STR_HAS_PANICKED", unit->getGender())
 									.arg(unit->getName(game->getLanguage()))));
 						}
-						else if (_currentAction.type == BA_MINDCONTROL)
+						else //if (_currentAction.type == BA_MINDCONTROL)
 						{
 							//Log(LOG_INFO) << ". . . . . . . . BA_MindControl";
 
@@ -1781,13 +1787,14 @@ void BattlescapeGame::primaryAction(const Position& pos)
 
 						// kL_begin: BattlescapeGame::primaryAction(), not sure where this bit came from.....
 						// it doesn't seem to be in the official oXc but it might
-						// stop some (psi-related) crashes i'm getting;
+						// stop some (psi-related) crashes i'm getting; (no, it was something else..)
 						// but then it probably never runs because I doubt that selectedUnit can be other than xCom.
-						if (_save->getSelectedUnit()->getFaction() != FACTION_PLAYER)
-						{
-							_currentAction.targeting = false;
-							_currentAction.type = BA_NONE;
-						}
+						// (yes, selectedUnit is currently operating unit of *any* faction)
+//						if (_save->getSelectedUnit()->getFaction() != FACTION_PLAYER)
+//						{
+//						_currentAction.targeting = false;
+//						_currentAction.type = BA_NONE;
+//						}
 //						setupCursor();
 
 
@@ -1888,7 +1895,7 @@ void BattlescapeGame::primaryAction(const Position& pos)
 		}
 	}
 
-	Log(LOG_INFO) << "BattlescapeGame::primaryAction() EXIT";
+	//Log(LOG_INFO) << "BattlescapeGame::primaryAction() EXIT";
 }
 
 /**
@@ -1914,7 +1921,7 @@ void BattlescapeGame::secondaryAction(const Position &pos)
  */
 void BattlescapeGame::launchAction()
 {
-	Log(LOG_INFO) << "BattlescapeGame::launchAction()";
+	//Log(LOG_INFO) << "BattlescapeGame::launchAction()";
 
 	_parentState->showLaunchButton(false);
 
@@ -1936,7 +1943,7 @@ void BattlescapeGame::launchAction()
  */
 void BattlescapeGame::psiButtonAction()
 {
-	Log(LOG_INFO) << "BattlescapeGame::psiButtonAction()";
+	//Log(LOG_INFO) << "BattlescapeGame::psiButtonAction()";
 
 	_currentAction.weapon = 0;
 	_currentAction.targeting = true;
@@ -1954,7 +1961,7 @@ void BattlescapeGame::psiButtonAction()
  */
 void BattlescapeGame::moveUpDown(BattleUnit* unit, int dir)
 {
-	Log(LOG_INFO) << "BattlescapeGame::moveUpDown()";
+	//Log(LOG_INFO) << "BattlescapeGame::moveUpDown()";
 
 	_currentAction.target = unit->getPosition();
 	if (dir == Pathfinding::DIR_UP)
@@ -1985,7 +1992,7 @@ void BattlescapeGame::moveUpDown(BattleUnit* unit, int dir)
  */
 void BattlescapeGame::requestEndTurn()
 {
-	Log(LOG_INFO) << "BattlescapeGame::requestEndTurn()";
+	//Log(LOG_INFO) << "BattlescapeGame::requestEndTurn()";
 
 	cancelCurrentAction();
 
@@ -2204,7 +2211,7 @@ const Ruleset* BattlescapeGame::getRuleset() const
  */
 void BattlescapeGame::findItem(BattleAction* action)
 {
-	Log(LOG_INFO) << "BattlescapeGame::findItem()";
+	//Log(LOG_INFO) << "BattlescapeGame::findItem()";
 
 	if (action->actor->getRankString() != "STR_TERRORIST")								// terrorists don't have hands.
 	{
@@ -2239,7 +2246,7 @@ void BattlescapeGame::findItem(BattleAction* action)
  */
 BattleItem* BattlescapeGame::surveyItems(BattleAction* action)
 {
-	Log(LOG_INFO) << "BattlescapeGame::surveyItems()";
+	//Log(LOG_INFO) << "BattlescapeGame::surveyItems()";
 
 	std::vector<BattleItem*> droppedItems;
 
@@ -2286,7 +2293,7 @@ BattleItem* BattlescapeGame::surveyItems(BattleAction* action)
  */
 bool BattlescapeGame::worthTaking(BattleItem* item, BattleAction *action)
 {
-	Log(LOG_INFO) << "BattlescapeGame::worthTaking()";
+	//Log(LOG_INFO) << "BattlescapeGame::worthTaking()";
 
 	int worthToTake = 0;
 
@@ -2386,7 +2393,7 @@ bool BattlescapeGame::worthTaking(BattleItem* item, BattleAction *action)
  */
 int BattlescapeGame::takeItemFromGround(BattleItem* item, BattleAction *action)
 {
-	Log(LOG_INFO) << "BattlescapeGame::takeItemFromGround()";
+	//Log(LOG_INFO) << "BattlescapeGame::takeItemFromGround()";
 
 	const int unhandledError = -1;
 	const int success = 0;
@@ -2441,7 +2448,7 @@ int BattlescapeGame::takeItemFromGround(BattleItem* item, BattleAction *action)
  */
 bool BattlescapeGame::takeItem(BattleItem* item, BattleAction* action)
 {
-	Log(LOG_INFO) << "BattlescapeGame::takeItem()";
+	//Log(LOG_INFO) << "BattlescapeGame::takeItem()";
 
 	bool placed = false;
 	Ruleset* rules = _parentState->getGame()->getRuleset();
@@ -2543,7 +2550,7 @@ BattleActionType BattlescapeGame::getReservedAction()
  */
 void BattlescapeGame::tallyUnits(int& liveAliens, int& liveSoldiers, bool convert)
 {
-	Log(LOG_INFO) << "BattlescapeGame::tallyUnits()";
+	//Log(LOG_INFO) << "BattlescapeGame::tallyUnits()";
 
 	liveSoldiers = 0;
 	liveAliens = 0;
@@ -2598,7 +2605,7 @@ void BattlescapeGame::tallyUnits(int& liveAliens, int& liveSoldiers, bool conver
 		}
 	}
 
-	Log(LOG_INFO) << "BattlescapeGame::tallyUnits() EXIT";
+	//Log(LOG_INFO) << "BattlescapeGame::tallyUnits() EXIT";
 }
 
 /**

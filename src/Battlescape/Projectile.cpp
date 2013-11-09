@@ -68,7 +68,7 @@ Projectile::Projectile(ResourcePack* res, SavedBattleGame* save, BattleAction ac
 	{
 		if (_action.type == BA_THROW)
 		{
-			_speed = _speed * 2 / 3;	// kL
+			_speed = _speed * 3 / 5;	// kL
 			_sprite = _res->getSurfaceSet("FLOOROB.PCK")->getFrame(getItem()->getRules()->getFloorSprite());
 		}
 		else // ba_SHOOT!!
@@ -92,7 +92,7 @@ Projectile::~Projectile()
  */
 int Projectile::calculateTrajectory(double accuracy)
 {
-	Log(LOG_INFO) << "Projectile::calculateTrajectory()";
+	//Log(LOG_INFO) << "Projectile::calculateTrajectory()";
 
 	Position originVoxel, targetVoxel;
 	Tile* targetTile = 0;
@@ -277,7 +277,7 @@ int Projectile::calculateTrajectory(double accuracy)
  */
 int Projectile::calculateThrow(double accuracy)
 {
-	Log(LOG_INFO) << "Projectile::calculateThrow()";
+	//Log(LOG_INFO) << "Projectile::calculateThrow()";
 
 	Position originVoxel, targetVoxel;
 	bool found = false;
@@ -307,7 +307,7 @@ int Projectile::calculateThrow(double accuracy)
 
 	if (!bu)
 	{
-		Log(LOG_INFO) << "ERROR Projectile::calculateThrow() - no thrower.";
+		//Log(LOG_INFO) << "ERROR Projectile::calculateThrow() - no thrower.";
 	}
 
 	originVoxel.z += bu->getHeight() + bu->getFloatHeight();
@@ -434,7 +434,7 @@ void Projectile::applyAccuracy(
 		bool keepRange,
 		Tile* targetTile)
 {
-	Log(LOG_INFO) << "Projectile::applyAccuracy()";
+	//Log(LOG_INFO) << "Projectile::applyAccuracy()";
 
 	int xdiff = origin.x - target->x;
 	int ydiff = origin.y - target->y;

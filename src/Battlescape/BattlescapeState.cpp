@@ -1156,11 +1156,11 @@ void BattlescapeState::btnAbortClick(Action*)
 {
 	if (allowButtons())
 	{
-		Log(LOG_INFO) << "BattlescapeState::btnAbortClick()";
+		//Log(LOG_INFO) << "BattlescapeState::btnAbortClick()";
 		_game->pushState(new AbortMissionState(_game, _save, this));
 	}
 
-	Log(LOG_INFO) << "BattlescapeState::btnAbortClick() EXIT";
+	//Log(LOG_INFO) << "BattlescapeState::btnAbortClick() EXIT";
 }
 
 /**
@@ -1348,7 +1348,7 @@ bool BattlescapeState::playableUnitSelected()
  */
 void BattlescapeState::updateSoldierInfo()
 {
-	Log(LOG_INFO) << "BattlescapeState::updateSoldierInfo()";
+	//Log(LOG_INFO) << "BattlescapeState::updateSoldierInfo()";
 
 	for (int i = 0; i < VISIBLE_MAX; ++i) // remove red target indicators
 	{
@@ -1366,11 +1366,11 @@ void BattlescapeState::updateSoldierInfo()
 	if (_save->getSelectedUnit())
 	{
 		selectUnit = _save->getSelectedUnit();
-		Log(LOG_INFO) << ". . selectUnit ID " << selectUnit->getId();
+		//Log(LOG_INFO) << ". . selectUnit ID " << selectUnit->getId();
 	}
 	else // safety.
 	{
-		Log(LOG_INFO) << ". . selectUnit = 0 return";
+		//Log(LOG_INFO) << ". . selectUnit = 0 return";
 		return;
 	}
 
@@ -1424,7 +1424,7 @@ void BattlescapeState::updateSoldierInfo()
 
 	// -= return =-  //
 	bool isPlayable = playableUnitSelected();	// not aLien or civilian; ie. xCom Soldier
-	Log(LOG_INFO) << ". isPlayable = " << isPlayable;
+	//Log(LOG_INFO) << ". isPlayable = " << isPlayable;
 
 	if (!isPlayable)							// not xCom Soldier; ie. aLien or civilian
 	{
@@ -1450,7 +1450,7 @@ void BattlescapeState::updateSoldierInfo()
 		_barMorale		->setVisible(false);
 		_barMorale		->setVisible(false);
 
-		Log(LOG_INFO) << ". . return";
+		//Log(LOG_INFO) << ". . return";
 		return;
 	}
 	else // not aLien or civilian; ie. xCom Soldier
@@ -1595,7 +1595,7 @@ void BattlescapeState::updateSoldierInfo()
 //				&& selectUnit->getFaction() == FACTION_HOSTILE
 				&& selectUnit->getStats()->psiSkill > 0); */
 
-	Log(LOG_INFO) << "BattlescapeState::updateSoldierInfo() EXIT";
+	//Log(LOG_INFO) << "BattlescapeState::updateSoldierInfo() EXIT";
 }
 // kL_end.
 
@@ -2204,7 +2204,7 @@ void BattlescapeState::popup(State* state)
  */
 void BattlescapeState::finishBattle(bool abort, int inExitArea)
 {
-	Log(LOG_INFO) << "BattlescapeState::finishBattle()";
+	//Log(LOG_INFO) << "BattlescapeState::finishBattle()";
 
 	_game->getCursor()->setVisible(true);
 	std::string nextStage = "";
@@ -2232,7 +2232,7 @@ void BattlescapeState::finishBattle(bool abort, int inExitArea)
 	}
 	else
 	{
-		Log(LOG_INFO) << ". stopTimers, popState";
+		//Log(LOG_INFO) << ". stopTimers, popState";
 
 		_popups.clear();
 		_animTimer->stop();
@@ -2242,7 +2242,7 @@ void BattlescapeState::finishBattle(bool abort, int inExitArea)
 		if (abort
 			|| (!abort  && inExitArea == 0))
 		{
-			Log(LOG_INFO) << ". . missionAborted";
+			//Log(LOG_INFO) << ". . missionAborted";
 			// abort was done or no player is still alive
 			// this concludes to defeat when in mars or mars landing mission
 			if ((_save->getMissionType() == "STR_MARS_THE_FINAL_ASSAULT"
@@ -2253,9 +2253,9 @@ void BattlescapeState::finishBattle(bool abort, int inExitArea)
 			}
 			else
 			{
-				Log(LOG_INFO) << ". . . new DebriefingState";
+				//Log(LOG_INFO) << ". . . new DebriefingState";
 				_game->pushState(new DebriefingState(_game));
-				Log(LOG_INFO) << ". . . new DebriefingState DONE";
+				//Log(LOG_INFO) << ". . . new DebriefingState DONE";
 			}
 		}
 		else
@@ -2273,13 +2273,13 @@ void BattlescapeState::finishBattle(bool abort, int inExitArea)
 			}
 		}
 
-		Log(LOG_INFO) << ". . set Cursor & FPS colors";
+		//Log(LOG_INFO) << ". . set Cursor & FPS colors";
 
 		_game->getCursor()->setColor(Palette::blockOffset(15)+12);
 		_game->getFpsCounter()->setColor(Palette::blockOffset(15)+12);
 	}
 
-	Log(LOG_INFO) << "BattlescapeState::finishBattle() EXIT";
+	//Log(LOG_INFO) << "BattlescapeState::finishBattle() EXIT";
 }
 
 /**

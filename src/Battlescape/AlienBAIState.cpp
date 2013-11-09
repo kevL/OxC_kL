@@ -169,7 +169,7 @@ void AlienBAIState::exit()
  */
 void AlienBAIState::think(BattleAction* action)
 {
-	Log(LOG_INFO) << "AlienBAIState::think(), unitID = " << _unit->getId();
+	//Log(LOG_INFO) << "AlienBAIState::think(), unitID = " << _unit->getId();
 
  	action->type = BA_RETHINK;
 	action->actor = _unit;
@@ -360,7 +360,7 @@ void AlienBAIState::think(BattleAction* action)
 	switch (_AIMode)
 	{
 		case AI_ESCAPE:
-			Log(LOG_INFO) << ". . . . AI_ESCAPE";
+			//Log(LOG_INFO) << ". . . . AI_ESCAPE";
 			action->type = _escapeAction->type;
 			action->target = _escapeAction->target;
 			action->finalAction = true;			// end this unit's turn.
@@ -370,12 +370,12 @@ void AlienBAIState::think(BattleAction* action)
 			_save->getBattleState()->getBattleGame()->setTUReserved(BA_NONE, false);
 		break;
 		case AI_PATROL:
-			Log(LOG_INFO) << ". . . . AI_PATROL";
+			//Log(LOG_INFO) << ". . . . AI_PATROL";
 			action->type = _patrolAction->type;
 			action->target = _patrolAction->target;
 		break;
 		case AI_COMBAT:
-			Log(LOG_INFO) << ". . . . AI_COMBAT";
+			//Log(LOG_INFO) << ". . . . AI_COMBAT";
 			action->type = _attackAction->type;
 			action->target = _attackAction->target;
 			action->weapon = _attackAction->weapon; // this may have changed to a grenade.
@@ -403,7 +403,7 @@ void AlienBAIState::think(BattleAction* action)
 			}
 		break;
 		case AI_AMBUSH:
-			Log(LOG_INFO) << ". . . . AI_AMBUSH";
+			//Log(LOG_INFO) << ". . . . AI_AMBUSH";
 			action->type = _ambushAction->type;
 			action->target = _ambushAction->target;
 			action->finalFacing = _ambushAction->finalFacing;							// face where we think our target will appear.
@@ -759,7 +759,7 @@ void AlienBAIState::setupAmbush()
  */
 void AlienBAIState::setupAttack()
 {
-	Log(LOG_INFO) << "AlienBAIState::setupAttack()";
+	//Log(LOG_INFO) << "AlienBAIState::setupAttack()";
 
 	_attackAction->type = BA_RETHINK;
 
@@ -2012,7 +2012,7 @@ void AlienBAIState::grenadeAction()
  */
 bool AlienBAIState::psiAction()
 {
-	Log(LOG_INFO) << "AlienBAIState::psiAction()";
+	//Log(LOG_INFO) << "AlienBAIState::psiAction()";
 
 	_psiAction->type = BA_NONE;
 	_aggroTarget = 0;

@@ -732,17 +732,20 @@ void GraphsState::drawCountryLines()
 		std::vector<Sint16> newLineVector;
 
 		int reduction = 0;
-		for (size_t iter = 0; iter != 12; ++iter)
+		for (size_t
+				iter = 0;
+				iter != 12;
+				++iter)
 		{
 			int x = 312 - (iter * 17);
 //kL			int y = 175 - (-lowerLimit / units);
-			int y = 175 + (lowerLimit / units);		// kL
+			int y = 175 + static_cast<int>((static_cast<double>(lowerLimit) / units));		// kL
 
 			if (_alien)
 			{
 				if (iter < country->getActivityAlien().size())
 				{
-					reduction = country->getActivityAlien().at(country->getActivityAlien().size() - (1 + iter)) / units;
+					reduction = static_cast<int>(static_cast<double>(country->getActivityAlien().at(country->getActivityAlien().size() - (1 + iter))) / units);
 					y -= reduction;
 
 					totals[iter] += country->getActivityAlien().at(country->getActivityAlien().size() - (1 + iter));
@@ -752,17 +755,17 @@ void GraphsState::drawCountryLines()
 			{
 				if (iter < country->getFunding().size())
 				{
-					reduction = (country->getFunding().at(country->getFunding().size() - (1 + iter)) / 1000) / units;
+					reduction = static_cast<int>(static_cast<double>(country->getFunding().at(country->getFunding().size() - (1 + iter))) / 1000.0 / units);
 					y -= reduction;
 
-					totals[iter] += country->getFunding().at(country->getFunding().size() - (1 + iter)) / 1000;
+					totals[iter] += static_cast<int>(static_cast<double>(country->getFunding().at(country->getFunding().size() - (1 + iter))) / 1000.0);
 				}
 			}
 			else
 			{
 				if (iter < country->getActivityXcom().size())
 				{
-					reduction = country->getActivityXcom().at(country->getActivityXcom().size() - (1 + iter)) / units;
+					reduction = static_cast<int>(static_cast<double>(country->getActivityXcom().at(country->getActivityXcom().size() - (1 + iter))) / units);
 					y -= reduction;
 
 					totals[iter] += country->getActivityXcom().at(country->getActivityXcom().size() - (1 + iter));
@@ -804,11 +807,11 @@ void GraphsState::drawCountryLines()
 	for (int iter = 0; iter != 12; ++iter)
 	{
 		int x = 312 - (iter*17);
-		int y = 175 - (-lowerLimit / units);
+		int y = 175 + static_cast<int>(static_cast<double>(lowerLimit) / units);
 
 		if (totals[iter] > 0)
 		{
-			int reduction = totals[iter] / units;
+			int reduction = static_cast<int>(static_cast<double>(totals[iter]) / units);
 			y -= reduction;
 		}
 
@@ -934,14 +937,13 @@ void GraphsState::drawRegionLines()
 		for (size_t iter = 0; iter != 12; ++iter)
 		{
 			int x = 312 - (iter * 17);
-//kL			int y = 175 - (-lowerLimit / units);
-			int y = 175 + (lowerLimit / units);		// kL
+			int y = 175 + static_cast<int>(static_cast<double>(lowerLimit) / units);
 
 			if (_alien)
 			{
 				if (iter < region->getActivityAlien().size())
 				{
-					reduction = region->getActivityAlien().at(region->getActivityAlien().size() - (1 + iter)) / units;
+					reduction = static_cast<int>(static_cast<double>(region->getActivityAlien().at(region->getActivityAlien().size() - (1 + iter))) / units);
 					y -= reduction;
 
 					totals[iter] += region->getActivityAlien().at(region->getActivityAlien().size() - (1 + iter));
@@ -951,7 +953,7 @@ void GraphsState::drawRegionLines()
 			{
 				if (iter < region->getActivityXcom().size())
 				{
-					reduction = region->getActivityXcom().at(region->getActivityXcom().size() - (1 + iter)) / units;
+					reduction = static_cast<int>(static_cast<double>(region->getActivityXcom().at(region->getActivityXcom().size() - (1 + iter))) / units);
 					y -= reduction;
 
 					totals[iter] += region->getActivityXcom().at(region->getActivityXcom().size() - (1 + iter));
@@ -990,7 +992,7 @@ void GraphsState::drawRegionLines()
 
 		if (totals[iter] > 0)
 		{
-			int reduction = totals[iter] / units;
+			int reduction = static_cast<int>(static_cast<double>(totals[iter]) / units);
 			y -= reduction;
 		}
 
@@ -1164,28 +1166,31 @@ void GraphsState::drawFinanceLines()
 	for (int button = 0; button != 5; ++button)
 	{
 		std::vector<Sint16> newLineVector;
-		for (int iter = 0; iter != 12; ++iter)
+		for (int
+				iter = 0;
+				iter != 12;
+				++iter)
 		{
 			int x = 312 - (iter*17);
-			int y = 175 - (-lowerLimit / units);
+			int y = 175 + static_cast<int>(static_cast<double>(lowerLimit) / units);
 			int reduction = 0;
 
 			switch(button)
 			{
 				case 0:
-					reduction = incomeTotals[iter] / units;
+					reduction = static_cast<int>(static_cast<double>(incomeTotals[iter]) / units);
 				break;
 				case 1:
-					reduction = expendTotals[iter] / units;
+					reduction = static_cast<int>(static_cast<double>(expendTotals[iter]) / units);
 				break;
 				case 2:
-					reduction = maintTotals[iter] / units;
+					reduction = static_cast<int>(static_cast<double>(maintTotals[iter]) / units);
 				break;
 				case 3:
-					reduction = balanceTotals[iter] / units;
+					reduction = static_cast<int>(static_cast<double>(balanceTotals[iter]) / units);
 				break;
 				case 4:
-					reduction = scoreTotals[iter] / units;
+					reduction = static_cast<int>(static_cast<double>(scoreTotals[iter]) / units);
 				break;
 			}
 

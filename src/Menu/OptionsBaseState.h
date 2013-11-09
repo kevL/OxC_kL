@@ -16,10 +16,12 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_OPTIONSBASESTATE_H
 #define OPENXCOM_OPTIONSBASESTATE_H
 
 #include "../Engine/State.h"
+
 
 namespace OpenXcom
 {
@@ -31,23 +33,29 @@ enum OptionsOrigin
 	OPT_BATTLESCAPE
 };
 
+
 /**
  * Options base state for common stuff
  * across Options windows.
  */
-class OptionsBaseState : public State
+class OptionsBaseState
+	:
+		public State
 {
 protected:
 	OptionsOrigin _origin;
-public:
-	/// Creates the Options state.
-	OptionsBaseState(Game *game, OptionsOrigin origin);
-	/// Cleans up the Options state.
-	~OptionsBaseState();
-	/// Initializes palettes.
-	void init();
-	/// Saves the game options.
-	void saveOptions();
+
+	public:
+		/// Creates the Options state.
+		OptionsBaseState(Game* game, OptionsOrigin origin);
+		/// Cleans up the Options state.
+		~OptionsBaseState();
+
+		/// Initializes palettes.
+		void init();
+
+		/// Saves the game options.
+		void saveOptions();
 };
 
 }

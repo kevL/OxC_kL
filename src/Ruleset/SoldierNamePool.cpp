@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "SoldierNamePool.h"
 #include <iostream>
 #include <sstream>
@@ -26,13 +27,20 @@
 #include "../Engine/Exception.h"
 #include "../Engine/CrossPlatform.h"
 
+
 namespace OpenXcom
 {
 
 /**
  * Initializes a new pool with blank lists of names.
  */
-SoldierNamePool::SoldierNamePool() : _maleFirst(), _femaleFirst(), _maleLast(), _femaleLast(), _totalWeight(0)
+SoldierNamePool::SoldierNamePool()
+	:
+		_maleFirst(),
+		_femaleFirst(),
+		_maleLast(),
+		_femaleLast(),
+		_totalWeight(0)
 {
 }
 
@@ -47,7 +55,7 @@ SoldierNamePool::~SoldierNamePool()
  * Loads the pool from a YAML file.
  * @param filename YAML file.
  */
-void SoldierNamePool::load(const std::string &filename)
+void SoldierNamePool::load(const std::string& filename)
 {
 	std::string s = CrossPlatform::getDataFile("SoldierName/" + filename + ".nam");
 	YAML::Node doc = YAML::LoadFile(s);
@@ -57,44 +65,51 @@ void SoldierNamePool::load(const std::string &filename)
 		std::wstring name = Language::utf8ToWstr(i->as<std::string>());
 		_maleFirst.push_back(name);
 	}
+
 	for (YAML::const_iterator i = doc["femaleFirst"].begin(); i != doc["femaleFirst"].end(); ++i)
 	{
 		std::wstring name = Language::utf8ToWstr(i->as<std::string>());
 		_femaleFirst.push_back(name);
 	}
+
 	for (YAML::const_iterator i = doc["maleLast"].begin(); i != doc["maleLast"].end(); ++i)
 	{
 		std::wstring name = Language::utf8ToWstr(i->as<std::string>());
 		_maleLast.push_back(name);
 	}
+
 	for (YAML::const_iterator i = doc["femaleLast"].begin(); i != doc["femaleLast"].end(); ++i)
 	{
 		std::wstring name = Language::utf8ToWstr(i->as<std::string>());
 		_femaleLast.push_back(name);
 	}
+
 	if (_femaleLast.empty())
 	{
 		_femaleLast = _maleLast;
 	}
-	_lookWeights = doc["lookWeights"].as< std::vector<int> >(_lookWeights);
+
+	_lookWeights = doc["lookWeights"].as<std::vector<int>>(_lookWeights);
 	_totalWeight = 0;
+
 	for (std::vector<int>::iterator i = _lookWeights.begin(); i != _lookWeights.end(); ++i)
 	{
-		_totalWeight += (*i);
+		_totalWeight += *i;
 	}
 }
 
 /**
- * Returns a new random name (first + last) from the
- * lists of names contained within.
- * @param gender Returned gender of the name.
- * @return The soldier's name.
+ * Returns a new random name (first + last) from the lists of names contained within.
+ * @param gender. Returned gender of the name.
+ * @return. The soldier's name.
  */
-std::wstring SoldierNamePool::genName(SoldierGender *gender) const
+std::wstring SoldierNamePool::genName(SoldierGender* gender) const
 {
 	std::wstringstream name;
-	int gen = RNG::generate(1, 10);
-	if (gen <= 5)
+
+//kL	int gen = RNG::generate(1, 10);
+//kL	if (gen <= 5)
+	if (RNG::percent(50))
 	{
 		*gender = GENDER_MALE;
 		size_t first = RNG::generate(0, _maleFirst.size() - 1);
@@ -116,24 +131,28 @@ std::wstring SoldierNamePool::genName(SoldierGender *gender) const
 			name << " " << _femaleLast[last];
 		}
 	}
+
 	return name.str();
 }
 
 /**
  * Generates an int representing the index of the soldier's look, when passed the maximum index value.
- * @param numLooks The maximum index.
- * @return The index of the soldier's look.
+ * @param numLooks, The maximum index.
+ * @return, The index of the soldier's look.
  */
 int SoldierNamePool::genLook(size_t numLooks)
 {
 	int look = 0;
-	const int minimumChance = 2;	// minimum chance of a look being selected if it isn't enumerated. This ensures that looks MUST be zeroed to not appear.
+	// minimum chance of a look being selected if it isn't enumerated.
+	// This ensures that looks MUST be zeroed to not appear.
+	const int minimumChance = 2;
 
 	while (_lookWeights.size() < numLooks)
 	{
 		_lookWeights.push_back(minimumChance);
 		_totalWeight += minimumChance;
 	}
+
 	while (_lookWeights.size() > numLooks)
 	{
 		_totalWeight -= _lookWeights.back();
@@ -147,6 +166,7 @@ int SoldierNamePool::genLook(size_t numLooks)
 		{
 			return look;
 		}
+
 		random -= *i;
 		++look;
 	}

@@ -391,18 +391,18 @@ void Base::setEngineers(int engineers)
  */
 uint8_t Base::detect(Target* target) const
 {
-	Log(LOG_INFO) << "Base::detect()";
+	//Log(LOG_INFO) << "Base::detect()";
 	uint8_t ret = 0;
 
 	double targetDistance = insideRadarRange(target);
 	if (targetDistance == -2.0)
 	{
-		Log(LOG_INFO) << ". not in range";
+		//Log(LOG_INFO) << ". not in range";
 		return 0;
 	}
 	else if (targetDistance == -1.0)
 	{
-		Log(LOG_INFO) << ". hyperdetected";
+		//Log(LOG_INFO) << ". hyperdetected";
 		return 2;
 	}
 	else
@@ -417,16 +417,16 @@ uint8_t Base::detect(Target* target) const
 			if ((*f)->getBuildTime() == 0)
 			{
 				double radarRange = (double)(*f)->getRules()->getRadarRange();
-				Log(LOG_INFO) << ". . radarRange = " << radarRange;
+				//Log(LOG_INFO) << ". . radarRange = " << radarRange;
 
 				if (targetDistance < radarRange)
 				{
 					percent += (*f)->getRules()->getRadarChance();
-					Log(LOG_INFO) << ". . . percent(base) = " << percent;
+					//Log(LOG_INFO) << ". . . percent(base) = " << percent;
 				}
 				else
 				{
-					Log(LOG_INFO) << ". . target out of Range";
+					//Log(LOG_INFO) << ". . target out of Range";
 				}
 			}
 		}
@@ -439,7 +439,7 @@ uint8_t Base::detect(Target* target) const
 			if (u != 0)
 			{
 				percent += u->getVisibility();
-				Log(LOG_INFO) << ". . percent(base + ufo) = " << percent;
+				//Log(LOG_INFO) << ". . percent(base + ufo) = " << percent;
 			}
 
 			if (percent < 1)
@@ -447,7 +447,7 @@ uint8_t Base::detect(Target* target) const
 			else
 			{
 				ret = (uint8_t)RNG::percent(percent);
-				Log(LOG_INFO) << ". detected = " << (int)ret;
+				//Log(LOG_INFO) << ". detected = " << (int)ret;
 			}
 		}
 	}
@@ -466,7 +466,7 @@ double Base::insideRadarRange(Target* target) const
 	double ret = -2.0;
 
 	double targetDistance = getDistance(target) * 3440.0;
-	Log(LOG_INFO) << ". targetDistance = " << targetDistance;
+	//Log(LOG_INFO) << ". targetDistance = " << targetDistance;
 
 	for (std::vector<BaseFacility*>::const_iterator
 			f = _facilities.begin();
@@ -476,18 +476,18 @@ double Base::insideRadarRange(Target* target) const
 		if ((*f)->getBuildTime() == 0)
 		{
 			double radarRange = (double)(*f)->getRules()->getRadarRange();
-			Log(LOG_INFO) << ". . radarRange = " << radarRange;
+			//Log(LOG_INFO) << ". . radarRange = " << radarRange;
 
 			if (targetDistance < radarRange)
 			{
 				if ((*f)->getRules()->isHyperwave())
 				{
-					Log(LOG_INFO) << ". . . . ret = hyperWave";
+					//Log(LOG_INFO) << ". . . . ret = hyperWave";
 					return -1.0;
 				}
 				else
 				{
-					Log(LOG_INFO) << ". . . ret = radar";
+					//Log(LOG_INFO) << ". . . ret = radar";
 					ret = targetDistance;
 				}
 			}
@@ -1670,17 +1670,17 @@ bool isCompleted::operator()(const BaseFacility* facility) const
 // kL_begin: rewrite getDetectionChance() using floats.
 int Base::getDetectionChance() const
 {
-	Log(LOG_INFO) << "Base::getDetectionChance()";
+	//Log(LOG_INFO) << "Base::getDetectionChance()";
 	int shields = (int)std::count_if(_facilities.begin(), _facilities.end(), isMindShield());
 	int facilities = (int)std::count_if(_facilities.begin(), _facilities.end(), isCompleted());
 
 	facilities = (facilities / 6) + 9;
 	shields = (shields * 2) + 1;
-	Log(LOG_INFO) << ". facilities = " << facilities;
-	Log(LOG_INFO) << ". shields = " << shields;
+	//Log(LOG_INFO) << ". facilities = " << facilities;
+	//Log(LOG_INFO) << ". shields = " << shields;
 
 	int detchance = facilities / shields;
-	Log(LOG_INFO) << ". detchance = " << detchance;
+	//Log(LOG_INFO) << ". detchance = " << detchance;
 
 	return detchance;
 }

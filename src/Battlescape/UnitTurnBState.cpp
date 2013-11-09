@@ -60,7 +60,7 @@ UnitTurnBState::~UnitTurnBState()
  */
 void UnitTurnBState::init()
 {
-	Log(LOG_INFO) << "UnitTurnBState::init()";
+	//Log(LOG_INFO) << "UnitTurnBState::init()";
 
 	_unit = _action.actor;
 	_action.TU = 0;

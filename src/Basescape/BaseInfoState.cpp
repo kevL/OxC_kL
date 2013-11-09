@@ -59,10 +59,16 @@ BaseInfoState::BaseInfoState(Game* game, Base* base, BasescapeState* state)
 
 	_bg					= new Surface(320, 200, 0, 0);
 	_mini				= new MiniBaseView(128, 16, 182, 8);
-	_btnMonthlyCosts	= new TextButton(72, 14, 11, 179);
+
+/*	_btnMonthlyCosts	= new TextButton(72, 14, 11, 179);
 	_btnTransfers		= new TextButton(71, 14, 87, 179);
 	_btnStores			= new TextButton(71, 14, 162, 179);
-	_btnOk				= new TextButton(72, 14, 237, 179);
+	_btnOk				= new TextButton(72, 14, 237, 179); */
+
+	_btnMonthlyCosts	= new TextButton(72, 14, 10, 179);
+	_btnTransfers		= new TextButton(72, 14, 86, 179);
+	_btnStores			= new TextButton(72, 14, 162, 179);
+	_btnOk				= new TextButton(72, 14, 238, 179);
 
 	_edtBase			= new TextEdit(127, 16, 8, 9);
 

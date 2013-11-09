@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "Soldier.h"
 #include "../Engine/RNG.h"
 #include "../Engine/Language.h"
@@ -27,48 +28,72 @@
 #include "../Ruleset/Armor.h"
 #include "../Ruleset/Ruleset.h"
 
+
 namespace OpenXcom
 {
 
 /**
  * Initializes a new soldier, either blank or randomly generated.
- * @param rules Soldier ruleset.
- * @param armor Soldier armor.
- * @param names List of name pools for soldier generation.
- * @param id Pointer to unique soldier id for soldier generation.
+ * @param rules, Soldier ruleset.
+ * @param armor, Soldier armor.
+ * @param names, List of name pools for soldier generation.
+ * @param id, Pointer to unique soldier id for soldier generation.
  */
-Soldier::Soldier(RuleSoldier *rules, Armor *armor, const std::vector<SoldierNamePool*> *names, int id) : _name(L""), _id(0), _improvement(0), _rules(rules), _initialStats(), _currentStats(), _rank(RANK_ROOKIE), _craft(0), _gender(GENDER_MALE), _look(LOOK_BLONDE), _missions(0), _kills(0), _recovery(0), _recentlyPromoted(false), _psiTraining(false), _armor(armor), _equipmentLayout(), _death(0)
+Soldier::Soldier(RuleSoldier* rules, Armor* armor, const std::vector<SoldierNamePool*>* names, int id)
+	:
+		_name(L""),
+		_id(0),
+		_improvement(0),
+		_rules(rules),
+		_initialStats(),
+		_currentStats(),
+		_rank(RANK_ROOKIE),
+		_craft(0),
+		_gender(GENDER_MALE),
+		_look(LOOK_BLONDE),
+		_missions(0),
+		_kills(0),
+		_recovery(0),
+		_recentlyPromoted(false),
+		_psiTraining(false),
+		_armor(armor),
+		_equipmentLayout(),
+		_death(0)
 {
 	if (names != 0)
 	{
 		UnitStats minStats = rules->getMinStats();
 		UnitStats maxStats = rules->getMaxStats();
 
-		_initialStats.tu = RNG::generate(minStats.tu, maxStats.tu);
-		_initialStats.stamina = RNG::generate(minStats.stamina, maxStats.stamina);
-		_initialStats.health = RNG::generate(minStats.health, maxStats.health);
-		_initialStats.bravery = RNG::generate(minStats.bravery/10, maxStats.bravery/10)*10;
-		_initialStats.reactions = RNG::generate(minStats.reactions, maxStats.reactions);
-		_initialStats.firing = RNG::generate(minStats.firing, maxStats.firing);
-		_initialStats.throwing = RNG::generate(minStats.throwing, maxStats.throwing);
-		_initialStats.strength = RNG::generate(minStats.strength, maxStats.strength);
-		_initialStats.psiStrength = RNG::generate(minStats.psiStrength, maxStats.psiStrength);
-		_initialStats.melee = RNG::generate(minStats.melee, maxStats.melee);
+		_initialStats.tu			= RNG::generate(minStats.tu, maxStats.tu);
+		_initialStats.stamina		= RNG::generate(minStats.stamina, maxStats.stamina);
+		_initialStats.health		= RNG::generate(minStats.health, maxStats.health);
+		_initialStats.bravery		= RNG::generate(minStats.bravery/10, maxStats.bravery/10)*10;
+		_initialStats.reactions		= RNG::generate(minStats.reactions, maxStats.reactions);
+		_initialStats.firing		= RNG::generate(minStats.firing, maxStats.firing);
+		_initialStats.throwing		= RNG::generate(minStats.throwing, maxStats.throwing);
+		_initialStats.strength		= RNG::generate(minStats.strength, maxStats.strength);
+		_initialStats.psiStrength	= RNG::generate(minStats.psiStrength, maxStats.psiStrength);
+		_initialStats.melee			= RNG::generate(minStats.melee, maxStats.melee);
+
 		_initialStats.psiSkill = minStats.psiSkill;
 
 		_currentStats = _initialStats;	
 
 		if (!names->empty())
 		{
-			int nationality = RNG::generate(0, names->size()-1);
+			int nationality = RNG::generate(0, names->size() - 1);
 			_name = names->at(nationality)->genName(&_gender);
-			_look = (SoldierLook)names->at(nationality)->genLook(4); // Once we add the ability to mod in extra looks, this will need to reference the ruleset for the maximum amount of looks.
+
+			// Once we add the ability to mod in extra looks, this will
+			// need to reference the ruleset for the maximum amount of looks.
+			_look = (SoldierLook)names->at(nationality)->genLook(4);
 		}
 		else
 		{
 			_name = L"";
 			_gender = (SoldierGender)RNG::generate(0, 1);
-			_look = (SoldierLook)RNG::generate(0,3);
+			_look = (SoldierLook)RNG::generate(0, 3);
 		}
 	}
 
@@ -87,6 +112,7 @@ Soldier::~Soldier()
 	{
 		delete *i;
 	}
+
 	delete _death;
 }
 
@@ -95,27 +121,28 @@ Soldier::~Soldier()
  * @param node YAML node.
  * @param rule Game ruleset.
  */
-void Soldier::load(const YAML::Node &node, const Ruleset *rule)
+void Soldier::load(const YAML::Node& node, const Ruleset* rule)
 {
-	_id = node["id"].as<int>(_id);
-	_name = Language::utf8ToWstr(node["name"].as<std::string>());
-	_initialStats = node["initialStats"].as<UnitStats>(_initialStats);
-	_currentStats = node["currentStats"].as<UnitStats>(_currentStats);
-	_rank = (SoldierRank)node["rank"].as<int>();
-	_gender = (SoldierGender)node["gender"].as<int>();
-	_look = (SoldierLook)node["look"].as<int>();
-	_missions = node["missions"].as<int>(_missions);
-	_kills = node["kills"].as<int>(_kills);
-	_recovery = node["recovery"].as<int>(_recovery);
-	_armor = rule->getArmor(node["armor"].as<std::string>());
-	_psiTraining = node["psiTraining"].as<bool>(_psiTraining);
-	_improvement = node["improvement"].as<int>(_improvement);
+	_id				= node["id"].as<int>(_id);
+	_name			= Language::utf8ToWstr(node["name"].as<std::string>());
+	_initialStats	= node["initialStats"].as<UnitStats>(_initialStats);
+	_currentStats	= node["currentStats"].as<UnitStats>(_currentStats);
+	_rank			= (SoldierRank)node["rank"].as<int>();
+	_gender			= (SoldierGender)node["gender"].as<int>();
+	_look			= (SoldierLook)node["look"].as<int>();
+	_missions		= node["missions"].as<int>(_missions);
+	_kills			= node["kills"].as<int>(_kills);
+	_recovery		= node["recovery"].as<int>(_recovery);
+	_armor			= rule->getArmor(node["armor"].as<std::string>());
+	_psiTraining	= node["psiTraining"].as<bool>(_psiTraining);
+	_improvement	= node["improvement"].as<int>(_improvement);
 
-	if (const YAML::Node &layout = node["equipmentLayout"])
+	if (const YAML::Node& layout = node["equipmentLayout"])
 	{
 		for (YAML::const_iterator i = layout.begin(); i != layout.end(); ++i)
 			_equipmentLayout.push_back(new EquipmentLayoutItem(*i));
 	}
+
 	if (node["death"])
 	{
 		_death = new SoldierDeath();
@@ -130,27 +157,28 @@ void Soldier::load(const YAML::Node &node, const Ruleset *rule)
 YAML::Node Soldier::save() const
 {
 	YAML::Node node;
-	node["id"] = _id;
-	node["name"] = Language::wstrToUtf8(_name);
-	node["initialStats"] = _initialStats;
-	node["currentStats"] = _currentStats;
-	node["rank"] = (int)_rank;
+
+	node["id"]				= _id;
+	node["name"]			= Language::wstrToUtf8(_name);
+	node["initialStats"]	= _initialStats;
+	node["currentStats"]	= _currentStats;
+	node["rank"]			= (int)_rank;
 
 	if (_craft != 0)
 	{
-		node["craft"] = _craft->saveId();
+		node["craft"]		= _craft->saveId();
 	}
 
-	node["gender"] = (int)_gender;
-	node["look"] = (int)_look;
-	node["missions"] = _missions;
-	node["kills"] = _kills;
+	node["gender"]			= (int)_gender;
+	node["look"]			= (int)_look;
+	node["missions"]		= _missions;
+	node["kills"]			= _kills;
 	if (_recovery > 0)
-		node["recovery"] = _recovery;
-	node["armor"] = _armor->getType();
+		node["recovery"]	= _recovery;
+	node["armor"]			= _armor->getType();
 	if (_psiTraining)
-		node["psiTraining"] = _psiTraining;
-	node["improvement"] = _improvement;
+		node["psiTraining"]	= _psiTraining;
+	node["improvement"]		= _improvement;
 
 	if (!_equipmentLayout.empty())
 	{
@@ -177,7 +205,7 @@ std::wstring Soldier::getName() const
  * Changes the soldier's full name.
  * @param name Soldier name.
  */
-void Soldier::setName(const std::wstring &name)
+void Soldier::setName(const std::wstring& name)
 {
 	_name = name;
 }
@@ -186,7 +214,7 @@ void Soldier::setName(const std::wstring &name)
  * Returns the craft the soldier is assigned to.
  * @return Pointer to craft.
  */
-Craft *Soldier::getCraft() const
+Craft* Soldier::getCraft() const
 {
 	return _craft;
 }
@@ -195,7 +223,7 @@ Craft *Soldier::getCraft() const
  * Assigns the soldier to a new craft.
  * @param craft Pointer to craft.
  */
-void Soldier::setCraft(Craft *craft)
+void Soldier::setCraft(Craft* craft)
 {
 	_craft = craft;
 }
@@ -206,9 +234,10 @@ void Soldier::setCraft(Craft *craft)
  * @param lang Language to get strings from.
  * @return Full name.
  */
-std::wstring Soldier::getCraftString(Language *lang) const
+std::wstring Soldier::getCraftString(Language* lang) const
 {
 	std::wstring s;
+
 	if (_recovery > 0)
 	{
 		s = lang->getString("STR_WOUNDED");
@@ -252,7 +281,7 @@ std::string Soldier::getRankString() const
  * Returns a graphic representation of
  * the soldier's military rank.
  * @note THE MEANING OF LIFE
- * @return Sprite ID for rank.
+ * @return, Sprite ID for rank.
  */
 int Soldier::getRankSprite() const
 {
@@ -322,7 +351,7 @@ SoldierLook Soldier::getLook() const
  * Returns the soldier's rules.
  * @return rulesoldier
  */
-RuleSoldier *Soldier::getRules() const
+RuleSoldier* Soldier::getRules() const
 {
 	return _rules;
 }
@@ -356,7 +385,7 @@ void Soldier::addKillCount(int count)
 /**
  * Get pointer to initial stats.
  */
-UnitStats *Soldier::getInitStats()
+UnitStats* Soldier::getInitStats()
 {
 	return &_initialStats;
 }
@@ -364,7 +393,7 @@ UnitStats *Soldier::getInitStats()
 /**
  * Get pointer to current stats.
  */
-UnitStats *Soldier::getCurrentStats()
+UnitStats* Soldier::getCurrentStats()
 {
 	return &_currentStats;
 }
@@ -385,7 +414,7 @@ bool Soldier::isPromoted()
  * Returns the unit's current armor.
  * @return Pointer to armor data.
  */
-Armor *Soldier::getArmor() const
+Armor* Soldier::getArmor() const
 {
 	return _armor;
 }
@@ -394,7 +423,7 @@ Armor *Soldier::getArmor() const
  * Changes the unit's current armor.
  * @param armor Pointer to armor data.
  */
-void Soldier::setArmor(Armor *armor)
+void Soldier::setArmor(Armor* armor)
 {
 	_armor = armor;
 }

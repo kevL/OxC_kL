@@ -93,7 +93,7 @@ BattleUnit::BattleUnit(Soldier* soldier, UnitFaction faction)
 		_turretType(-1),
 		_hidingForTurn(false)
 {
-	Log(LOG_INFO) << "Create BattleUnit 1 : soldier ID = " << getId();
+	//Log(LOG_INFO) << "Create BattleUnit 1 : soldier ID = " << getId();
 
 	_name			= soldier->getName();
 	_id				= soldier->getId();
@@ -147,7 +147,7 @@ BattleUnit::BattleUnit(Soldier* soldier, UnitFaction faction)
 	_activeHand = "STR_RIGHT_HAND";
 
 	lastCover = Position(-1, -1, -1);
-	Log(LOG_INFO) << "Create BattleUnit 1, DONE";
+	//Log(LOG_INFO) << "Create BattleUnit 1, DONE";
 }
 
 /**
@@ -201,7 +201,7 @@ BattleUnit::BattleUnit(Unit* unit, UnitFaction faction, int id, Armor* armor, in
 		_turretType(-1),
 		_hidingForTurn(false)
 {
-	Log(LOG_INFO) << "Create BattleUnit 2 : alien ID = " << getId();
+	//Log(LOG_INFO) << "Create BattleUnit 2 : alien ID = " << getId();
 
 	_type	= unit->getType();
 	_rank	= unit->getRank();
@@ -248,7 +248,7 @@ BattleUnit::BattleUnit(Unit* unit, UnitFaction faction, int id, Armor* armor, in
 	_activeHand = "STR_RIGHT_HAND";
 
 	lastCover = Position(-1, -1, -1);
-	Log(LOG_INFO) << "Create BattleUnit 2, DONE";
+	//Log(LOG_INFO) << "Create BattleUnit 2, DONE";
 }
 
 /**
@@ -494,13 +494,13 @@ UnitStatus BattleUnit::getStatus() const
  */
 void BattleUnit::startWalking(int direction, const Position& destination, Tile* tileBelow, bool cache)
 {
-	Log(LOG_INFO) << "BattleUnit::startWalking() unitID = " << getId();
+	//Log(LOG_INFO) << "BattleUnit::startWalking() unitID = " << getId();
 
 	_walkPhase = 0;
 	_destination = destination;
 	_lastPos = _pos;
 	_cacheInvalid = cache;
-	_direction = direction;						// kL
+//	_direction = direction;						// kL
 
 	_status = STATUS_WALKING;					// kL
 
@@ -509,7 +509,7 @@ void BattleUnit::startWalking(int direction, const Position& destination, Tile* 
 //		&& _tile->hasNoFloor(tileBelow)			// kL
 //		&& _armor->getMovementType() == MT_FLY)	// kL
 	{
-		Log(LOG_INFO) << ". STATUS_FLYING";
+		//Log(LOG_INFO) << ". STATUS_FLYING";
 
 		_status = STATUS_FLYING;
 
@@ -519,11 +519,11 @@ void BattleUnit::startWalking(int direction, const Position& destination, Tile* 
 	else //if (direction > 7						// kL
 		//&& _tile->hasNoFloor(tileBelow))		// kL
 	{
-		Log(LOG_INFO) << ". STATUS_WALKING";
+		//Log(LOG_INFO) << ". STATUS_WALKING";
 
 //kL		_status = STATUS_FLYING;
 //		_verticalDirection = Pathfinding::DIR_DOWN;
-//kL		_direction = direction;
+		_direction = direction;
 //		_floating = true;						// kL
 
 		_kneeled = false;
@@ -536,19 +536,19 @@ void BattleUnit::startWalking(int direction, const Position& destination, Tile* 
 
 	if (_tile->hasNoFloor(tileBelow))
 	{
-		Log(LOG_INFO) << ". hasNoFloor(), STATUS_FLYING";
+		//Log(LOG_INFO) << ". hasNoFloor(), STATUS_FLYING";
 
 		_status = STATUS_FLYING;
 		_floating = true;
 	}
 	else
 	{
-		Log(LOG_INFO) << ". has Floor(), STATUS_WALKING";
+		//Log(LOG_INFO) << ". has Floor(), STATUS_WALKING";
 
 		_floating = false;
 	}
 
-	Log(LOG_INFO) << "BattleUnit::startWalking() EXIT";
+	//Log(LOG_INFO) << "BattleUnit::startWalking() EXIT";
 }
 /*kL void BattleUnit::startWalking(int direction, const Position &destination, Tile *tileBelowMe, bool cache)
 {
@@ -589,10 +589,10 @@ void BattleUnit::startWalking(int direction, const Position& destination, Tile* 
  */
 void BattleUnit::keepWalking(Tile* tileBelow, bool cache)
 {
-	Log(LOG_INFO) << "BattleUnit::keepWalking() unitID = " << getId();
+	//Log(LOG_INFO) << "BattleUnit::keepWalking() unitID = " << getId();
 
 	_walkPhase++;
-	Log(LOG_INFO) << ". _walkPhase = " << _walkPhase;
+	//Log(LOG_INFO) << ". _walkPhase = " << _walkPhase;
 
 	int middle, end;
 	if (_verticalDirection)
@@ -630,7 +630,7 @@ void BattleUnit::keepWalking(Tile* tileBelow, bool cache)
 
 	if (_walkPhase >= end)
 	{
-		Log(LOG_INFO) << ". end, STATUS_STANDING";
+		//Log(LOG_INFO) << ". end, STATUS_STANDING";
 
 		// we officially reached our destination tile
 		_status = STATUS_STANDING;
@@ -668,7 +668,7 @@ void BattleUnit::keepWalking(Tile* tileBelow, bool cache)
 
 	_cacheInvalid = cache;
 
-	Log(LOG_INFO) << "BattleUnit::keepWalking() EXIT";
+	//Log(LOG_INFO) << "BattleUnit::keepWalking() EXIT";
 }
 /*kL void BattleUnit::keepWalking(Tile *tileBelowMe, bool cache)
 {
@@ -1028,7 +1028,7 @@ Surface* BattleUnit::getCache(bool* invalid, int part) const
  */
 void BattleUnit::kneel(bool kneeled)
 {
-//	Log(LOG_INFO) << "BattleUnit::kneel()" ;	// kL
+	//Log(LOG_INFO) << "BattleUnit::kneel()";
 //	_status = STATUS_KNEELING;		// kL
 
 	_kneeled = kneeled;
@@ -1396,11 +1396,19 @@ int BattleUnit::getFallingPhase() const
  * A soldier that is out, cannot perform any actions, cannot be selected, but it's still a unit.
  * @return flag if out or not.
  */
-bool BattleUnit::isOut(bool checkHealth) const
+bool BattleUnit::isOut(bool checkHealth, bool checkStun) const
 {
+	//Log(LOG_INFO) << "BattleUnit::isOut() ID = " << getId();
+
 	if (checkHealth)
 	{
-		if (this->getHealth() == 0)
+		if (getHealth() == 0)
+			return true;
+	}
+
+	if (checkStun)
+	{
+		if (getStunlevel() >= getHealth())
 			return true;
 	}
 
@@ -1636,17 +1644,30 @@ double BattleUnit::getFiringAccuracy(BattleActionType actionType, BattleItem* it
 {
 	//Log(LOG_INFO) << "BattleUnit::getFiringAccuracy(), unitID " << getId() << " /  getStats()->firing" << getStats()->firing;
 
-	double result = static_cast<double>(getStats()->firing) / 100.0;
-
-	double weaponAcc = item->getRules()->getAccuracySnap();
-	if (actionType == BA_AIMEDSHOT || actionType == BA_LAUNCH)
-		weaponAcc = item->getRules()->getAccuracyAimed();
-	else if (actionType == BA_AUTOSHOT)
-		weaponAcc = item->getRules()->getAccuracyAuto();
-	else if (actionType == BA_HIT)
+	if (actionType == BA_HIT) // quick out.
+	{
 		return static_cast<double>(item->getRules()->getAccuracyMelee()) / 100.0;
+//		return static_cast<double>(item->getRules()->getAccuracyMelee()) / 100.0 * getAccuracyModifier();	// kL
+	}
 
-	result *= static_cast<double>(weaponAcc) / 100.0;
+
+	double weaponAcc = 0.0;
+	if (actionType == BA_AIMEDSHOT
+		|| actionType == BA_LAUNCH)
+	{
+		weaponAcc = item->getRules()->getAccuracyAimed();
+	}
+	else if (actionType == BA_AUTOSHOT)
+	{
+		weaponAcc = item->getRules()->getAccuracyAuto();
+	}
+	else
+	{
+		weaponAcc = item->getRules()->getAccuracySnap();
+	}
+
+	double result = static_cast<double>(getStats()->firing) / 100.0;
+	result *= weaponAcc / 100.0;
 
 	if (_kneeled)
 		result *= 1.16;
@@ -1654,7 +1675,8 @@ double BattleUnit::getFiringAccuracy(BattleActionType actionType, BattleItem* it
 	if (item->getRules()->isTwoHanded())
 	{
 		// two handed weapon, means one hand should be empty
-		if (getItem("STR_RIGHT_HAND") != 0 && getItem("STR_LEFT_HAND") != 0)
+		if (getItem("STR_RIGHT_HAND") != 0
+			&& getItem("STR_LEFT_HAND") != 0)
 		{
 			result *= 0.79;
 		}
@@ -1744,7 +1766,7 @@ double BattleUnit::getInitiative()
  */
 void BattleUnit::prepareNewTurn()
 {
-	Log(LOG_INFO) << "BattleUnit::prepareNewTurn()";
+	//Log(LOG_INFO) << "BattleUnit::prepareNewTurn()";
 
 	_faction = _originalFaction; // revert to original faction
 
@@ -1817,7 +1839,7 @@ void BattleUnit::prepareNewTurn()
 	_dontReselect = false;
 	_motionPoints = 0;
 
-	Log(LOG_INFO) << "BattleUnit::prepareNewTurn() EXIT";
+	//Log(LOG_INFO) << "BattleUnit::prepareNewTurn() EXIT";
 }
 
 /**
@@ -2186,7 +2208,10 @@ bool BattleUnit::checkAmmo()
 	for (std::vector<BattleItem*>::iterator i = getInventory()->begin(); i != getInventory()->end(); ++i)
 	{
 		ammo = *i;
-		for (std::vector<std::string>::iterator c = weapon->getRules()->getCompatibleAmmo()->begin(); c != weapon->getRules()->getCompatibleAmmo()->end(); ++c)
+		for (std::vector<std::string>::iterator
+				c = weapon->getRules()->getCompatibleAmmo()->begin();
+				c != weapon->getRules()->getCompatibleAmmo()->end();
+				++c)
 		{
 			if (*c == ammo->getRules()->getType())
 			{
@@ -2196,8 +2221,7 @@ bool BattleUnit::checkAmmo()
 			}
 		}
 
-		if (!wrong)
-			break;
+		if (!wrong) break;
 	}
 
 	if (wrong)

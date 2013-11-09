@@ -46,7 +46,7 @@ PromotionsState::PromotionsState(Game* game)
 {
 	_window			= new Window(this, 320, 200, 0, 0);
 
-	_txtTitle		= new Text(300, 17, 10, 8);
+	_txtTitle		= new Text(300, 17, 10, 13);
 
 	_txtName		= new Text(114, 9, 16, 32);
 	_txtRank		= new Text(90, 9, 130, 32);
@@ -98,9 +98,15 @@ PromotionsState::PromotionsState(Game* game)
 	_lstSoldiers->setBackground(_window);
 	_lstSoldiers->setMargin(8);
 
-	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
+	for (std::vector<Base*>::iterator
+			i = _game->getSavedGame()->getBases()->begin();
+			i != _game->getSavedGame()->getBases()->end();
+			++i)
 	{
-		for (std::vector<Soldier*>::iterator j = (*i)->getSoldiers()->begin(); j != (*i)->getSoldiers()->end(); ++j)
+		for (std::vector<Soldier*>::iterator
+				j = (*i)->getSoldiers()->begin();
+				j != (*i)->getSoldiers()->end();
+				++j)
 		{
 			if ((*j)->isPromoted())
 			{

@@ -1162,40 +1162,40 @@ private:
  */
 bool DetectXCOMBase::operator()(const Ufo* ufo) const
 {
-	Log(LOG_INFO) << "DetectXCOMBase(), ufoID " << ufo->getId();
+	//Log(LOG_INFO) << "DetectXCOMBase(), ufoID " << ufo->getId();
 
 	if (ufo->isCrashed())
 	{
-		Log(LOG_INFO) << ". . Crashed UFOs can't detect!";
+		//Log(LOG_INFO) << ". . Crashed UFOs can't detect!";
 		return false;
 	}
 
 	if (ufo->getMissionType() != "STR_ALIEN_RETALIATION"
 		&& !Options::getBool("aggressiveRetaliation"))
 	{
-		Log(LOG_INFO) << ". . Only uFo's on retaliation missions scan for bases unless 'aggressiveRetaliation' option is true";
+		//Log(LOG_INFO) << ". . Only uFo's on retaliation missions scan for bases unless 'aggressiveRetaliation' option is true";
 		return false;
 	}
 
 	if (ufo->getTrajectory().getID() == "__RETALIATION_ASSAULT_RUN")
 	{
-		Log(LOG_INFO) << ". uFo's attacking a base don't bother with this!";
+		//Log(LOG_INFO) << ". uFo's attacking a base don't bother with this!";
 		return false;
 	}
 
 	double ufoRange	= 600.0;
 	double targetDistance = _base.getDistance(ufo) * 3440.0;
-	Log(LOG_INFO) << ". targetDistance = " << targetDistance;
+	//Log(LOG_INFO) << ". targetDistance = " << targetDistance;
 
 	if (targetDistance > ufoRange)
 	{
-		Log(LOG_INFO) << ". . uFo's have a detection range of 600 nautical miles.";
+		//Log(LOG_INFO) << ". . uFo's have a detection range of 600 nautical miles.";
 		return false;
 	}
 
 	int percent = _base.getDetectionChance();
 	bool ret = RNG::percent(percent);
-	Log(LOG_INFO) << ". percent = " << percent << " ; ret " << ret;
+	//Log(LOG_INFO) << ". percent = " << percent << " ; ret " << ret;
 
 	return ret;
 }
@@ -1221,7 +1221,7 @@ struct SetRetaliationStatus
  */
 void GeoscapeState::time10Minutes()
 {
-	Log(LOG_INFO) << "GeoscapeState::time10Minutes()";
+	//Log(LOG_INFO) << "GeoscapeState::time10Minutes()";
 
 	for (std::vector<Base*>::iterator
 			b = _game->getSavedGame()->getBases()->begin();
@@ -1259,16 +1259,16 @@ void GeoscapeState::time10Minutes()
 						// TODO: move the craftRadar range to the ruleset.
 						double craftRadar = 600.0;
 						double targetDistance = (*c)->getDistance(*ab) * 3440.0;
-						Log(LOG_INFO) << ". Patrol for alienBases, targetDistance = " << targetDistance;
+						//Log(LOG_INFO) << ". Patrol for alienBases, targetDistance = " << targetDistance;
 
 						if (targetDistance < craftRadar)
 						{
 							int percent = 50 - ((int)(targetDistance / craftRadar) * 50);
-							Log(LOG_INFO) << ". . craft in Range, percent = " << percent;
+							//Log(LOG_INFO) << ". . craft in Range, percent = " << percent;
 
 							if (RNG::percent(percent))
 							{
-								Log(LOG_INFO) << ". . . aLienBase discovered";
+								//Log(LOG_INFO) << ". . . aLienBase discovered";
 								(*ab)->setDiscovered(true);
 							}
 						}
@@ -1293,7 +1293,7 @@ void GeoscapeState::time10Minutes()
 					DetectXCOMBase(**b));
 			if (u != _game->getSavedGame()->getUfos()->end())
 			{
-				Log(LOG_INFO) << ". xBase found, set RetaliationStatus";
+				//Log(LOG_INFO) << ". xBase found, set RetaliationStatus";
 				(*b)->setRetaliationStatus(true);
 			}
 		}
@@ -1462,7 +1462,7 @@ struct expireCrashedUfo: public std::unary_function<Ufo*, void>
  */
 void GeoscapeState::time30Minutes()
 {
-	Log(LOG_INFO) << "GeoscapeState::time30Minutes()";
+	//Log(LOG_INFO) << "GeoscapeState::time30Minutes()";
 
 	// Decrease mission countdowns
 	std::for_each(
@@ -1592,7 +1592,7 @@ void GeoscapeState::time30Minutes()
 
 				if (!(*u)->getDetected())
 				{
-					Log(LOG_INFO) << ". handle undetected uFo";
+					//Log(LOG_INFO) << ". handle undetected uFo";
 
 					bool detected = false, hyperdet = false;
 
@@ -1605,12 +1605,12 @@ void GeoscapeState::time30Minutes()
 						switch ((*b)->detect(*u))
 						{
 							case 2:
-								Log(LOG_INFO) << ". detect() = 2, hyperDet";
+								//Log(LOG_INFO) << ". detect() = 2, hyperDet";
 
 								(*u)->setHyperDetected(true);
 								hyperdet = true;
 							case 1:
-								Log(LOG_INFO) << ". detect() = 1, radar";
+								//Log(LOG_INFO) << ". detect() = 1, radar";
 								detected = true;
 							break;
 						}
@@ -1624,7 +1624,7 @@ void GeoscapeState::time30Minutes()
 							if ((*c)->getStatus() == "STR_OUT"
 								&& (*c)->detect(*u))
 							{
-								Log(LOG_INFO) << ". detected by Craft";
+								//Log(LOG_INFO) << ". detected by Craft";
 								detected = true;
 
 								break;
@@ -1642,7 +1642,7 @@ void GeoscapeState::time30Minutes()
 				}
 				else // ufo is already detected
 				{
-					Log(LOG_INFO) << ". handle previously detected uFo";
+					//Log(LOG_INFO) << ". handle previously detected uFo";
 
 					bool hyperdet = false; // (*u)->getHyperDetected();
 					bool detected = false;
@@ -1656,13 +1656,13 @@ void GeoscapeState::time30Minutes()
 						double targetRange = (*b)->insideRadarRange(*u); // -2.0 =outside range ; -1.0 =hyperdetected ; 0.0+ =targetDistance
 						if (targetRange > -2.0)
 						{
-							Log(LOG_INFO) << ". . still detected";
+							//Log(LOG_INFO) << ". . still detected";
 
 							detected = true;
 
 							if (targetRange == -1.0)
 							{
-								Log(LOG_INFO) << ". . and hyper-detected";
+								//Log(LOG_INFO) << ". . and hyper-detected";
 
 								(*u)->setHyperDetected(true);
 								hyperdet = true;
@@ -1678,7 +1678,7 @@ void GeoscapeState::time30Minutes()
 							if ((*c)->getStatus() == "STR_OUT"
 								&& (*c)->detect(*u))
 							{
-								Log(LOG_INFO) << ". detected by Craft";
+								//Log(LOG_INFO) << ". detected by Craft";
 								detected = true;
 
 								break;

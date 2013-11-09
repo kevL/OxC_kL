@@ -135,12 +135,13 @@ void ProjectileFlyBState::init()
 		return;
 	}
 
-	if (_unit->getFaction() != _parent->getSave()->getSide()) // reaction fire
+	// kL_note: This ought been taken care of....
+/*kL	if (_unit->getFaction() != _parent->getSave()->getSide()) // reaction fire
 	{
 		// no ammo or target is dead: give the time units back and cancel the shot.
 		if (_ammo == 0
 			|| !_parent->getSave()->getTile(_action.target)->getUnit()
-			|| _parent->getSave()->getTile(_action.target)->getUnit()->isOut()
+			|| _parent->getSave()->getTile(_action.target)->getUnit()->isOut(true, true)
 			|| _parent->getSave()->getTile(_action.target)->getUnit() != _parent->getSave()->getSelectedUnit())
 		{
 			_unit->setTimeUnits(_unit->getTimeUnits() + _unit->getActionTUs(_action.type, _action.weapon));
@@ -148,7 +149,7 @@ void ProjectileFlyBState::init()
 
 			return;
 		}
-	}
+	} */
 
 	// autoshot will default back to snapshot if it's not possible
 	// kL_note: should this be done *before* tu expenditure?!! Ok it is,
@@ -225,6 +226,8 @@ void ProjectileFlyBState::init()
 		break;
 		case BA_PANIC:
 		case BA_MINDCONTROL:
+			//Log(LOG_INFO) << ". . PsiAttack, new ExplosionBState";
+
 			_parent->statePushFront(new ExplosionBState(
 					_parent,
 					Position((_action.target.x * 16) + 8,
@@ -266,7 +269,7 @@ bool ProjectileFlyBState::createNewProjectile()
 
 	// set the speed of the state think cycle to 16 ms (roughly one think cycle per frame)
 //kL	_parent->setStateInterval(1000/60);
-	Uint32 interval = static_cast<Uint32>(50.f / 3.f);	// kL
+	Uint32 interval = static_cast<Uint32>(50.0 / 3.0);	// kL
 	_parent->setStateInterval(interval);				// kL
 
 	// let it calculate a trajectory

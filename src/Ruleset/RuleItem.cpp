@@ -458,7 +458,7 @@ ItemDamageType RuleItem::getDamageType() const
 }
 
 /**
- * Gets the item's battlye type.
+ * Gets the item's battle type.
  * @return The battle type.
  */
 BattleType RuleItem::getBattleType() const

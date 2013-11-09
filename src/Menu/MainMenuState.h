@@ -16,10 +16,12 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_MAINMENUSTATE_H
 #define OPENXCOM_MAINMENUSTATE_H
 
 #include "../Engine/State.h"
+
 
 namespace OpenXcom
 {
@@ -32,29 +34,34 @@ class Text;
  * Main Menu window displayed when first
  * starting the game.
  */
-class MainMenuState : public State
+class MainMenuState
+	:
+		public State
 {
 private:
-	TextButton *_btnNewGame, *_btnNewBattle, *_btnLoad, *_btnOptions, *_btnQuit;
-	Window *_window;
-	Text *_txtTitle;
-public:
-	/// Creates the Main Menu state.
-	MainMenuState(Game *game);
-	/// Cleans up the Main Menu state.
-	~MainMenuState();
-	/// Updates the palette.
-	void init();
-	/// Handler for clicking the New Game button.
-	void btnNewGameClick(Action *action);
-	/// Handler for clicking the New Battle button.
-	void btnNewBattleClick(Action *action);
-	/// Handler for clicking the Load Saved Game button.
-	void btnLoadClick(Action *action);
-	/// Handler for clicking the Options button.
-	void btnOptionsClick(Action *action);
-	/// Handler for clicking the Quit button.
-	void btnQuitClick(Action *action);
+	TextButton* _btnNewGame, * _btnNewBattle, * _btnLoad, * _btnOptions, * _btnQuit;
+	Window* _window;
+	Text* _txtTitle;
+
+	public:
+		/// Creates the Main Menu state.
+		MainMenuState(Game* game);
+		/// Cleans up the Main Menu state.
+		~MainMenuState();
+
+		/// Updates the palette.
+		void init();
+
+		/// Handler for clicking the New Game button.
+		void btnNewGameClick(Action* action);
+		/// Handler for clicking the New Battle button.
+		void btnNewBattleClick(Action* action);
+		/// Handler for clicking the Load Saved Game button.
+		void btnLoadClick(Action* action);
+		/// Handler for clicking the Options button.
+		void btnOptionsClick(Action* action);
+		/// Handler for clicking the Quit button.
+		void btnQuitClick(Action* action);
 };
 
 }

@@ -76,6 +76,8 @@ ExplosionBState::~ExplosionBState()
  */
 void ExplosionBState::init()
 {
+	//Log(LOG_INFO) << "ExplosionBState::init()";
+
 	if (_item)
 	{
 		_power = _item->getRules()->getPower();
@@ -96,34 +98,40 @@ void ExplosionBState::init()
 	}
 	else // cyberdisc... ?
 	{
-		_power = 120;
+//kL		_power = 120;
+		_power = RNG::generate(61, 120);	// kL
 		_areaOfEffect = true;
 	}
 
 	Tile* t = _parent->getSave()->getTile(Position(_center.x / 16, _center.y / 16, _center.z / 24));
 	if (_areaOfEffect)
 	{
+		//Log(LOG_INFO) << ". . new Explosion(AoE)";
+
 		if (_power)
 		{
 //kL			for (int i = 0; i < _power / 5; i++)
-			for (int i = 0; i < _power / 10; i++)		// kL
+			for (int
+					i = 0;
+					i < _power / 10;
+					i++)		// kL
 			{
 				int X = RNG::generate(-_power / 2, _power / 2);
 				int Y = RNG::generate(-_power / 2, _power / 2);
 //				int X = RNG::generate(-_power / 3, _power / 3);		// kL
 //				int Y = RNG::generate(-_power / 3, _power / 3);		// kL
 
-				Position p = _center;
-				p.x += X; p.y += Y;
+				Position pos = _center;
+				pos.x += X; pos.y += Y;
 
 //kL				Explosion* explosion = new Explosion(p, RNG::generate(-3, 6), true);
-				Explosion* explosion = new Explosion(p, 0, true);
+				Explosion* explosion = new Explosion(pos, 0, true);
 
 				_parent->getMap()->getExplosions()->insert(explosion); // add the explosion on the map
 			}
 
 //kL			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED);
-			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED * 5 / 7);		// kL
+			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED * 6 / 7);		// kL
 
 			if (_power < 80)
 				_parent->getResourcePack()->getSound("BATTLE.CAT", 12)->play();
@@ -139,8 +147,10 @@ void ExplosionBState::init()
 	}
 	else // create a bullet hit
 	{
+		//Log(LOG_INFO) << ". . new Explosion(bullet)";
+
 //kL		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED / 2);
-		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED * 5 / 7);		// kL
+		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED * 6 / 7);		// kL
 
 		bool hit = _item->getRules()->getBattleType() == BT_MELEE
 				|| _item->getRules()->getBattleType() == BT_PSIAMP;
@@ -172,9 +182,11 @@ void ExplosionBState::init()
  */
 void ExplosionBState::think()
 {
-	for (std::set<Explosion*>::const_iterator i = _parent->getMap()->getExplosions()->begin(),
-			inext = i;
-			i != _parent->getMap()->getExplosions()->end(); i = inext)
+	for (std::set<Explosion*>::const_iterator
+			i = _parent->getMap()->getExplosions()->begin(),
+				inext = i;
+			i != _parent->getMap()->getExplosions()->end();
+			i = inext)
 	{
 		++inext;
 
@@ -185,8 +197,6 @@ void ExplosionBState::think()
 			if (_parent->getMap()->getExplosions()->empty())
 			{
 				explode();
-
-				return;
 			}
 		}
 	}
@@ -204,8 +214,15 @@ void ExplosionBState::cancel()
  */
 void ExplosionBState::explode()
 {
+	//Log(LOG_INFO) << "ExplosionBState::explode()";
+
 	bool terrainExplosion = false;
 	SavedBattleGame* save = _parent->getSave();
+
+
+//if (_item->getRules()->getDamageType() != DT_NONE)	// TEST
+//{
+
 
 	// after the animation is done, the real explosion/hit takes place
 	if (_item)
@@ -218,11 +235,13 @@ void ExplosionBState::explode()
 
 		if (_areaOfEffect)
 		{
+			//Log(LOG_INFO) << ". AoE, explode()";
+
 			save->getTileEngine()->explode(_center, _power, _item->getRules()->getDamageType(), _item->getRules()->getExplosionRadius(), _unit);
 		}
 		else
 		{
-			//Log(LOG_INFO) << "ExplosionBState::explode()";
+			//Log(LOG_INFO) << ". hit()";
 
 			BattleUnit* victim = save->getTileEngine()->hit(_center, _power, _item->getRules()->getDamageType(), _unit);
 
@@ -256,6 +275,11 @@ void ExplosionBState::explode()
 	// now check for new casualties
 	_parent->checkForCasualties(_item, _unit, false, terrainExplosion);
 
+
+//} // end_TEST
+
+
+
 	// if this explosion was caused by a unit shooting, now it's the time to put the gun down
 	if (_unit
 		&& !_unit->isOut()
@@ -279,7 +303,8 @@ void ExplosionBState::explode()
 		&& (_item->getRules()->getBattleType() == BT_GRENADE
 			|| _item->getRules()->getBattleType() == BT_PROXIMITYGRENADE))
 	{
-		for (std::vector<BattleItem*>::iterator j = _parent->getSave()->getItems()->begin();
+		for (std::vector<BattleItem*>::iterator
+				j = _parent->getSave()->getItems()->begin();
 				j != _parent->getSave()->getItems()->end();
 				++j)
 		{
@@ -292,6 +317,9 @@ void ExplosionBState::explode()
 			}
 		}
 	}
+
+
+
 }
 
 }
