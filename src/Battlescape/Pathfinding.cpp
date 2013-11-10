@@ -515,6 +515,7 @@ if (direction < DIR_UP) // TEST
 //					{
 //						wallTU += wallTU / 2;
 //					}
+
 					wallcost += wallTU;
 					sides ++;
 				}

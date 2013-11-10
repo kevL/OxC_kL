@@ -58,17 +58,17 @@ GeoscapeCraftState::GeoscapeCraftState(Game* game, Craft* craft, Globe* globe, W
 {
 	_screen = false;
 
-	_window			= new Window(this, 240, 184, 8, 8, POPUP_BOTH);
+	_window			= new Window(this, 240, 185, 8, 8, POPUP_BOTH);
 
-	_txtTitle		= new Text(216, 17, 32, 18);
+	_txtTitle		= new Text(216, 17, 32, 17);
 
 	_txtStatus		= new Text(216, 17, 32, 33);
 
-	_btnTarget		= new TextButton(192, 14, 32, 111);
-	_btnBase		= new TextButton(192, 14, 32, 126);
-	_btnCenter		= new TextButton(192, 14, 32, 141);
-	_btnPatrol		= new TextButton(192, 14, 32, 156);
-	_btnCancel		= new TextButton(192, 14, 32, 171);
+	_btnTarget		= new TextButton(176, 14, 48, 111);
+	_btnBase		= new TextButton(176, 14, 48, 126);
+	_btnCenter		= new TextButton(176, 14, 48, 141);
+	_btnPatrol		= new TextButton(176, 14, 48, 156);
+	_btnCancel		= new TextButton(176, 14, 48, 171);
 
 	_txtBase		= new Text(200, 9, 32, 45);
 

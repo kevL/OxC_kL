@@ -160,7 +160,7 @@ SavedGameState::SavedGameState(Game* game, OptionsOrigin origin, int firstValidR
 		}
 		else
 		{
-			_txtStatus->setColor(Palette::blockOffset(11+5));	// kL, purple
+			_txtStatus->setColor(Palette::blockOffset(11)+4);	// kL, purple
 		}
 	}
 }

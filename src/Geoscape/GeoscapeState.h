@@ -64,6 +64,7 @@ private:
 	std::vector<DogfightState*> _dogfights, _dogfightsToBeStarted;
 	size_t _minimizedDogfights;
 	bool _showFundsOnGeoscape; // this is a cache for Options::getBool("showFundsOnGeoscape")
+	size_t _zoomPreDF;	// kL
 
 	/// Handle alien mission generation.
 	void determineAlienMissions(bool atGameStart = false);

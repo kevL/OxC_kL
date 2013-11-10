@@ -67,7 +67,8 @@ SoldierMemorialState::SoldierMemorialState(Game* game)
 
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)), Palette::backPos, 16);
 
-	_game->getResourcePack()->getMusic("GMLOSE")->play();
+//kL	_game->getResourcePack()->getMusic("GMLOSE")->play();
+	_game->getResourcePack()->getMusic("GMWIN")->play();	// kL
 
 	add(_window);
 	add(_btnOk);

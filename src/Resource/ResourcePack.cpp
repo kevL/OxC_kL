@@ -35,8 +35,16 @@ namespace OpenXcom
 /**
  * Initializes a blank resource set pointing to a folder.
  */
-ResourcePack::ResourcePack() :
-	_palettes(), _fonts(), _surfaces(), _sets(), _sounds(), _polygons(), _polylines(), _musics()
+ResourcePack::ResourcePack()
+	:
+		_palettes(),
+		_fonts(),
+		_surfaces(),
+		_sets(),
+		_sounds(),
+		_polygons(),
+		_polylines(),
+		_musics()
 {
 	_muteMusic = new Music();
 	_muteSound = new Sound();
@@ -153,10 +161,10 @@ std::list<Polyline*> *ResourcePack::getPolylines()
 
 /**
  * Returns a specific music from the resource set.
- * @param name Name of the music.
- * @return Pointer to the music.
+ * @param name, Name of the music.
+ * @return, Pointer to the music.
  */
-Music *ResourcePack::getMusic(const std::string &name) const
+Music* ResourcePack::getMusic(const std::string& name) const
 {
 	if (Options::getBool("mute"))
 	{
@@ -174,10 +182,10 @@ Music *ResourcePack::getMusic(const std::string &name) const
 
 /**
  * Returns a random music from the resource set.
- * @param name Name of the music to pick from.
- * @return Pointer to the music.
+ * @param name, Name of the music to pick from.
+ * @return, Pointer to the music.
  */
-Music *ResourcePack::getRandomMusic(const std::string &name) const
+Music* ResourcePack::getRandomMusic(const std::string& name) const
 {
 	if (Options::getBool("mute"))
 	{
@@ -186,7 +194,10 @@ Music *ResourcePack::getRandomMusic(const std::string &name) const
 	else
 	{
 		std::vector<Music*> music;
-		for (std::map<std::string, Music*>::const_iterator i = _musics.begin(); i != _musics.end(); ++i)
+		for (std::map<std::string, Music*>::const_iterator
+				i = _musics.begin();
+				i != _musics.end();
+				++i)
 		{
 			if (i->first.find(name) != std::string::npos)
 			{

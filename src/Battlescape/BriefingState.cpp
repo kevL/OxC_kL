@@ -55,23 +55,16 @@ BriefingState::BriefingState(Game* game, Craft* craft, Base* base)
 //	Log(LOG_INFO) << "Create BriefingState";
 
 	_screen = false;
+
 	_window			= new Window(this, 320, 200, 0, 0);
 
-/*	_txtTitle		= new Text(300, 17, 16, 24);
-	_txtTarget		= new Text(300, 17, 16, 40);
-	_txtCraft		= new Text(300, 17, 16, 56); */
+	_txtTitle		= new Text(288, 17, 16, 22);
+	_txtTarget		= new Text(288, 17, 16, 39);
+	_txtCraft		= new Text(288, 17, 16, 56);
 
-	_txtTitle		= new Text(288, 17, 16, 22);	// kL
+	_txtBriefing	= new Text(288, 97, 16, 75);
 
-	_txtTarget		= new Text(288, 17, 16, 39);	// kL
-
-	_txtCraft		= new Text(288, 17, 16, 56);	// kL
-
-//kL	_txtBriefing	= new Text(274, 64, 16, 72);
-	_txtBriefing	= new Text(288, 97, 16, 75);	// kL
-
-//kL	_btnOk			= new TextButton(120, 18, 100, 164);
-	_btnOk			= new TextButton(288, 16, 16, 177);		// kL
+	_btnOk			= new TextButton(288, 16, 16, 177);
 
 
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());

@@ -632,7 +632,7 @@ void SavedGame::setGlobeLatitude(double lat)
 
 /**
  * Returns the current zoom level of the Geoscape globe.
- * @return Zoom level.
+ * @return, Zoom level.
  */
 int SavedGame::getGlobeZoom() const
 {
@@ -641,7 +641,7 @@ int SavedGame::getGlobeZoom() const
 
 /**
  * Changes the current zoom level of the Geoscape globe.
- * @param zoom Zoom level.
+ * @param zoom, Zoom level.
  */
 void SavedGame::setGlobeZoom(int zoom)
 {

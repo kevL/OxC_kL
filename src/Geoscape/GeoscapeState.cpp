@@ -127,7 +127,8 @@ GeoscapeState::GeoscapeState(Game* game)
 		_popups(),
 		_dogfights(),
 		_dogfightsToBeStarted(),
-		_minimizedDogfights(0)
+		_minimizedDogfights(0),
+		_zoomPreDF(0)	// kL
 {
 	int screenWidth = Options::getInt("baseXResolution");
 	int screenHeight = Options::getInt("baseYResolution");
@@ -612,7 +613,6 @@ void GeoscapeState::handle(Action* action)
  */
 void GeoscapeState::init()
 {
-	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
 
 	timeDisplay();
@@ -2508,6 +2508,8 @@ void GeoscapeState::btnZoomOutRightClick(Action*)
  */
 void GeoscapeState::zoomInEffect()
 {
+	_zoomPreDF = _game->getSavedGame()->getGlobeZoom();	// kL
+
 	_globe->zoomIn();
 
 	if (_globe->isZoomedInToMax())
@@ -2524,7 +2526,8 @@ void GeoscapeState::zoomOutEffect()
 {
 	_globe->zoomOut();
 
-	if (_globe->isZoomedOutToMax())
+//kL	if (_globe->isZoomedOutToMax())
+	if (_globe->isZoomedToLevel(_zoomPreDF))	// kL
 	{
 		_zoomOutEffectDone = true;
 		_zoomOutEffectTimer->stop();

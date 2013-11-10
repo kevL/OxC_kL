@@ -1806,7 +1806,7 @@ void Globe::getPolygonTextureAndShade(double lon, double lat, int *texture, int 
 }
 
 /**
- * Checks if the globe is zoomed in to it's maximum.
+ * Checks if the globe is zoomed in to its maximum.
  * @return Returns true if globe is at max zoom, otherwise returns false.
  */
 bool Globe::isZoomedInToMax() const
@@ -1822,7 +1822,7 @@ bool Globe::isZoomedInToMax() const
 }
 
 /**
- * Checks if the globe is zoomed out to it's maximum.
+ * Checks if the globe is zoomed out to its maximum.
  * @return Returns true if globe is at max zoom, otherwise returns false.
  */
 bool Globe::isZoomedOutToMax() const
@@ -1837,7 +1837,26 @@ bool Globe::isZoomedOutToMax() const
 	}
 }
 
+/**
+ * Checks if the globe is zoomed to a certain level.
+ * @param level, The level to zoom out to.
+ * @return, Returns true if globe has reached the level.
+ */
+bool Globe::isZoomedToLevel(size_t level) const
+{
+	if (_zoom == level)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
 
+/**
+ *
+ */
 void Globe::toggleRadarLines()
 {
 	_game->getSavedGame()->toggleRadarLines();

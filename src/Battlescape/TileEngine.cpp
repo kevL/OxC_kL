@@ -3124,8 +3124,7 @@ bool TileEngine::psiAttack(BattleAction* action)
 
 		double attackStr =
 				(double)action->actor->getStats()->psiStrength
-				* (double)action->actor->getStats()->psiSkill
-				/ 50.0;
+				* (double)action->actor->getStats()->psiSkill / 50.0;
 		//Log(LOG_INFO) << ". . . attackStr = " << attackStr;
 
 		double defenseStr =
@@ -3163,7 +3162,8 @@ bool TileEngine::psiAttack(BattleAction* action)
 			{
 				//Log(LOG_INFO) << ". . . action->type == BA_PANIC";
 
-				int moraleLoss = (110 - _save->getTile(action->target)->getUnit()->getStats()->bravery);
+//kL				int moraleLoss = (110 - _save->getTile(action->target)->getUnit()->getStats()->bravery);
+				int moraleLoss = (110 - victim->getStats()->bravery);		// kL
 				if (moraleLoss > 0)
 					_save->getTile(action->target)->getUnit()->moraleChange(-moraleLoss);
 			}

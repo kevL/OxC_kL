@@ -92,9 +92,9 @@ ManageAlienContainmentState::ManageAlienContainmentState(Game* game, Base* base,
 
 	_lstAliens		= new TextList(286, 120, 16, 50);
 
-	_btnCancel		= new TextButton(134, 16, 170, 177);
 //	_btnOk			= new TextButton(_overCrowded? 288: 148, 16, _overCrowded? 16: 8, 177);
-	_btnOk			= new TextButton(134, 16, 16, 177);
+	_btnOk			= new TextButton(134, 16, 170, 177);
+	_btnCancel		= new TextButton(134, 16, 16, 177);
 
 
 	if (origin == OPT_BATTLESCAPE)
@@ -181,17 +181,21 @@ ManageAlienContainmentState::ManageAlienContainmentState(Game* game, Base* base,
 	_lstAliens->onRightArrowClick((ActionHandler)& ManageAlienContainmentState::lstItemsRightArrowClick);
 	_lstAliens->onMousePress((ActionHandler)& ManageAlienContainmentState::lstItemsMousePress);
 
-	const std::vector<std::string> &items = _game->getRuleset()->getItemsList();
-	for (std::vector<std::string>::const_iterator i = items.begin(); i != items.end(); ++i)
+	const std::vector<std::string>& items = _game->getRuleset()->getItemsList();
+	for (std::vector<std::string>::const_iterator
+			i = items.begin();
+			i != items.end();
+			++i)
 	{
-		int qty = _base->getItems()->getItem(*i);
-		if (qty > 0 && _game->getRuleset()->getItem(*i)->getAlien())
+		int qty = _base->getItems()->getItem(*i);							// get Qty of each item at this base
+		if (qty > 0															// if item exists at this base
+			&& _game->getRuleset()->getItem(*i)->getAlien())				// and it's a live alien...
 		{
-			_qtys.push_back(0);
-			_aliens.push_back(*i);
+			_qtys.push_back(0);												// put it in the _qtys<vector> as (int)
+			_aliens.push_back(*i);											// put its name in the _aliens<vector> as (string)
 			std::wstringstream ss;
 			ss << qty;
-			_lstAliens->addRow(3, tr(*i).c_str(), ss.str().c_str(), L"0");
+			_lstAliens->addRow(3, tr(*i).c_str(), ss.str().c_str(), L"0");	// show its name on the list.
 		}
 	}
 
@@ -227,10 +231,55 @@ void ManageAlienContainmentState::think()
  */
 void ManageAlienContainmentState::btnOkClick(Action*)
 {
-	for (unsigned int i = 0; i < _qtys.size(); ++i)
+	for (unsigned int
+			i = 0;
+			i < _qtys.size();
+			++i)																// iterate as many times as there are aliens queued.
 	{
-		if (_qtys[i] > 0)
+		if (_qtys[i] > 0)														// if _qtys<vector>(int) at position[i]
 		{
+			// kL_begin: ManageAlienContainmentState::btnOkClick, researchHelp() call.
+
+			_base->researchHelp(_aliens[i]);
+
+/*			std::string sProject = project->getRules()->getName();
+
+
+			for (std::vector<ResearchProject*>::const_iterator
+					iter = finished.begin();
+					iter != finished.end();
+					++iter)
+			{
+
+				// now iterate through all the bases and remove this project from their labs
+				for (std::vector<Base*>::iterator
+						j = _game->getSavedGame()->getBases()->begin();
+						j != _game->getSavedGame()->getBases()->end();
+						++j)
+				{
+					for (std::vector<ResearchProject*>::const_iterator
+							iter2 = (*j)->getResearch().begin();
+							iter2 != (*j)->getResearch().end();
+							++iter2)
+					{
+						if ((*iter)->getRules()->getName() == (*iter2)->getRules()->getName()
+							&&  _game->getRuleset()->getUnit((*iter2)->getRules()->getName()) == 0)
+						{
+							(*j)->removeResearch(*iter2);
+
+							break;
+						}
+					}
+				}
+			} */
+
+/*			std::vector<ResearchProject*>::iterator iter = std::find(_research.begin(), _research.end(), project);
+			if (iter != _research.end())
+			{
+
+			} */
+			// kL_end.
+
 			// remove the aliens
 			_base->getItems()->removeItem(_aliens[i], _qtys[i]);
 
@@ -240,8 +289,7 @@ void ManageAlienContainmentState::btnOkClick(Action*)
 					_game->getRuleset()->getUnit(
 						_aliens[i]
 					)->getArmor()
-				)->getCorpseItem(), _qtys[i]
-			); // ;)
+				)->getCorpseItem(), _qtys[i]); // ;)
 		}
 	}
 

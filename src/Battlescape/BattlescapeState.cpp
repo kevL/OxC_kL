@@ -517,7 +517,7 @@ BattlescapeState::BattlescapeState(Game* game)
 	_btnReserveAuto->setColor(Palette::blockOffset(2)+3);
 	_btnReserveAuto->setGroup(&_reserve);
 
-	// Set music
+
 	_game->getResourcePack()->getRandomMusic("GMTACTIC")->play();
 
 	_animTimer = new Timer(DEFAULT_ANIM_SPEED, true);

@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "ErrorMessageState.h"
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
@@ -25,6 +26,7 @@
 #include "../Interface/Window.h"
 #include "../Interface/Text.h"
 #include "../Engine/Options.h"
+
 
 namespace OpenXcom
 {
@@ -37,7 +39,9 @@ namespace OpenXcom
  * @param bg Background image.
  * @param bgColor Background color (-1 for Battlescape).
  */
-ErrorMessageState::ErrorMessageState(Game *game, const std::string &id, Uint8 color, std::string bg, Uint8 bgColor) : State(game)
+ErrorMessageState::ErrorMessageState(Game* game, const std::string& id, Uint8 color, std::string bg, Uint8 bgColor)
+	:
+		State(game)
 {
 	create(id, L"", color, bg, bgColor);
 }
@@ -50,7 +54,9 @@ ErrorMessageState::ErrorMessageState(Game *game, const std::string &id, Uint8 co
  * @param bg Background image.
  * @param bgColor Background color (-1 for Battlescape).
  */
-ErrorMessageState::ErrorMessageState(Game *game, const std::wstring &msg, Uint8 color, std::string bg, Uint8 bgColor) : State(game)
+ErrorMessageState::ErrorMessageState(Game* game, const std::wstring& msg, Uint8 color, std::string bg, Uint8 bgColor)
+	:
+		State(game)
 {
 	create("", msg, color, bg, bgColor);
 }
@@ -60,20 +66,21 @@ ErrorMessageState::ErrorMessageState(Game *game, const std::wstring &msg, Uint8 
  */
 ErrorMessageState::~ErrorMessageState()
 {
-
 }
 
-void ErrorMessageState::create(const std::string &str, const std::wstring &wstr, Uint8 color, std::string bg, Uint8 bgColor)
+/**
+ *
+ */
+void ErrorMessageState::create(const std::string& str, const std::wstring& wstr, Uint8 color, std::string bg, Uint8 bgColor)
 {
 	_screen = false;
 
-	// Create objects
-	_window = new Window(this, 256, 160, 32, 20, POPUP_BOTH);
-	_btnOk = new TextButton(120, 18, 100, 154);
-	_txtMessage = new Text(246, 80, 37, 50);
+	_window		= new Window(this, 256, 160, 32, 20, POPUP_BOTH);
+	_txtMessage	= new Text(246, 120, 37, 30);
+	_btnOk		= new TextButton(120, 18, 100, 154);
 
-	// Set palette
-	if (bgColor != ((Uint8)-1))
+
+	if (bgColor != static_cast<Uint8>(-1))
 		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(bgColor)), Palette::backPos, 16);
 
 	add(_window);
@@ -82,7 +89,7 @@ void ErrorMessageState::create(const std::string &str, const std::wstring &wstr,
 
 	centerAllSurfaces();
 
-	// Set up objects
+
 	_window->setColor(color);
 	_window->setBackground(_game->getResourcePack()->getSurface(bg));
 
@@ -102,7 +109,7 @@ void ErrorMessageState::create(const std::string &str, const std::wstring &wstr,
 	else
 		_txtMessage->setText(tr(str));
 
-	if (bgColor == ((Uint8)-1))
+	if (bgColor == static_cast<Uint8>(-1))
 	{
 		_window->setHighContrast(true);
 		_btnOk->setHighContrast(true);
@@ -114,7 +121,7 @@ void ErrorMessageState::create(const std::string &str, const std::wstring &wstr,
  * Closes the window.
  * @param action Pointer to an action.
  */
-void ErrorMessageState::btnOkClick(Action *)
+void ErrorMessageState::btnOkClick(Action*)
 {
 	_game->popState();
 }

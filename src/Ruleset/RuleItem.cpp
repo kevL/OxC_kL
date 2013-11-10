@@ -654,7 +654,7 @@ int RuleItem::getTurretType() const
 
 /**
  * Returns if this is a live alien.
- * @return True if this is a live alien.
+ * @return, True if this is a live alien.
  */
 bool RuleItem::getAlien() const
 {

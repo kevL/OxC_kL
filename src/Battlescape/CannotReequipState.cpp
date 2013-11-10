@@ -49,11 +49,11 @@ CannotReequipState::CannotReequipState(Game* game, std::vector<ReequipStat> miss
 
 	_txtTitle		= new Text(300, 69, 10, 9);
 
-	_txtItem		= new Text(162, 9, 16, 74);
-	_txtQuantity	= new Text(46, 9, 178, 74);
-	_txtCraft		= new Text(80, 9, 224, 74);
+	_txtItem		= new Text(162, 9, 16, 77);
+	_txtQuantity	= new Text(46, 9, 178, 77);
+	_txtCraft		= new Text(80, 9, 224, 77);
 
-	_lstItems		= new TextList(286, 88, 16, 84);
+	_lstItems		= new TextList(286, 88, 16, 87);
 
 	_btnOk			= new TextButton(288, 16, 16, 177);
 
