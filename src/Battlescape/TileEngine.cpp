@@ -1438,13 +1438,13 @@ BattleUnit* TileEngine::hit(const Position& center, int power, ItemDamageType ty
 
 	if (type != DT_NONE)	// TEST for Psi-attack.
 	{
-		//Log(LOG_INFO) << ". DT_ type = " << static_cast<int>(type);
+		//Log(LOG_INFO) << "DT_ type = " << static_cast<int>(type);
 
 
 		Tile* tile = _save->getTile(Position(center.x / 16, center.y / 16, center.z / 24));
 		if (!tile)
 		{
-			//Log(LOG_INFO) << ". centerTile NOT Valid, return NULL";
+			//Log(LOG_INFO) << ". Position& center : NOT Valid, return NULL";
 			return 0;
 		}
 
@@ -1458,17 +1458,21 @@ BattleUnit* TileEngine::hit(const Position& center, int power, ItemDamageType ty
 
 //kL		int adjustedDamage = 0;
 
+		// This is returning part < 4 when using a stunRod against a unit outside the north (or west) UFO wall. ERROR!!!
 		const int part = voxelCheck(center, unit);
-		if (part > -1
-			&& part < 4) // 4 terrain parts
+		if (-1 < part && part < 4 // 4 terrain parts
+			&& type != DT_STUN) // kL, workaround for Stunrod.
 		{
+			//Log(LOG_INFO) << ". terrain hit";
+
 			// power 25% to 75%
 			const int rndPower = RNG::generate(power / 4, power * 3 / 4); // RNG::boxMuller(power, power/6)
 			if (tile->damage(part, rndPower))
 				_save->setObjectiveDestroyed(true);
 			// kL_note: This would be where to adjust damage based on effectiveness of weapon vs Terrain!
 		}
-		else if (part == 4)	// battleunit part
+		else if (part == 4	// battleunit part
+			|| type == DT_STUN) // kL, workaround for Stunrod.
 		{
 			//Log(LOG_INFO) << ". battleunit hit";
 
@@ -1515,7 +1519,7 @@ BattleUnit* TileEngine::hit(const Position& center, int power, ItemDamageType ty
 //				if (!_save->
 //				getBattleState->_currentAction.type == BA_MINDCONTROL)
 //				if (targetUnit->)
-				if (type != DT_NONE)	// kL
+//				if (type != DT_NONE)	// kL
 				{
 					const int bravery = (110 - targetUnit->getStats()->bravery) / 10;
 
@@ -1542,8 +1546,8 @@ BattleUnit* TileEngine::hit(const Position& center, int power, ItemDamageType ty
 //kL					(targetUnit->getHealth() == 0 || targetUnit->getStunlevel() >= targetUnit->getHealth()))
 				{
 					if (type != DT_STUN
-						&& type != DT_HE
-						&& type != DT_NONE)	// kL
+						&& type != DT_HE)
+//						&& type != DT_NONE)	// kL
 					{
 						//Log(LOG_INFO) << ". . . . new ExplosionBState()";
 						// kL_note: wait a second. hit() creates an ExplosionBState, but ExplosionBState::explode() creates a hit() !
@@ -1557,6 +1561,10 @@ BattleUnit* TileEngine::hit(const Position& center, int power, ItemDamageType ty
 					&& unit->getOriginalFaction() == FACTION_PLAYER
 					&& type != DT_NONE)
 				{
+					//Log(LOG_INFO) << ". . . addFiringExp() - huh, even for Melee?";
+					// kL_note: with my workaround for Stunrods above, this needs to check
+					// whether a StunLauncher fires or a melee attack has been done, and
+					// Exp altered accordingly:
 					unit->addFiringExp();
 				}
 			}
@@ -1568,12 +1576,13 @@ BattleUnit* TileEngine::hit(const Position& center, int power, ItemDamageType ty
 		calculateFOV(center / Position(16, 16, 24));
 
 
-		//Log(LOG_INFO) << "TileEngine::hit() EXIT";
+		//Log(LOG_INFO) << "TileEngine::hit() EXIT, return = " << targetUnit->getId();
 		return targetUnit;
 
 	}
 	//else Log(LOG_INFO) << ". DT_ = " << static_cast<int>(type);
 
+	//Log(LOG_INFO) << "TileEngine::hit() EXIT, return NULL";
 	return 0; // end_TEST
 }
 
@@ -1598,9 +1607,9 @@ void TileEngine::explode(const Position& center, int power, ItemDamageType type,
 //kL	double centerZ = (int)(center.z / 24) + 0.5;
 //kL	double centerX = (int)(center.x / 16) + 0.5;
 //kL	double centerY = (int)(center.y / 16) + 0.5;
-	double centerZ = (double)(center.z / 24) + 0.5;		// kL
-	double centerX = (double)(center.x / 16) + 0.5;		// kL
-	double centerY = (double)(center.y / 16) + 0.5;		// kL
+	double centerZ = static_cast<double>((center.z / 24) + 0.5);		// kL
+	double centerX = static_cast<double>((center.x / 16) + 0.5);		// kL
+	double centerY = static_cast<double>((center.y / 16) + 0.5);		// kL
 
 	int power_;
 
@@ -1637,10 +1646,10 @@ void TileEngine::explode(const Position& center, int power, ItemDamageType type,
 		// raytrace every 3 degrees makes sure we cover all tiles in a circle.
 		for (int te = 0; te <= 360; te += 3)
 		{
-			double cos_te = cos((double)te * M_PI / 180.0);
-			double sin_te = sin((double)te * M_PI / 180.0);
-			double sin_fi = sin((double)fi * M_PI / 180.0);
-			double cos_fi = cos((double)fi * M_PI / 180.0);
+			double cos_te = cos(static_cast<double>(te) * M_PI / 180.0);
+			double sin_te = sin(static_cast<double>(te) * M_PI / 180.0);
+			double sin_fi = sin(static_cast<double>(fi) * M_PI / 180.0);
+			double cos_fi = cos(static_cast<double>(fi) * M_PI / 180.0);
 
 			Tile* origin = _save->getTile(Position((int)centerX, (int)centerY, (int)centerZ));
 			double l = 0.0;
@@ -1649,15 +1658,15 @@ void TileEngine::explode(const Position& center, int power, ItemDamageType type,
 			power_ = power + 1;
 
 			while (power_ > 0
-				&& l <= (double)maxRadius)
+				&& l <= static_cast<double>(maxRadius))
 			{
 				vx = centerX + l * sin_te * cos_fi;
 				vy = centerY + l * cos_te * cos_fi;
 				vz = centerZ + l * sin_fi;
 
-				tileZ = int(floor(vz));
-				tileX = int(floor(vx));
-				tileY = int(floor(vy));
+				tileZ = static_cast<int>(floor(vz));
+				tileX = static_cast<int>(floor(vx));
+				tileY = static_cast<int>(floor(vy));
 
 				Tile* dest = _save->getTile(Position(tileX, tileY, tileZ));
 
@@ -1697,14 +1706,16 @@ void TileEngine::explode(const Position& center, int power, ItemDamageType type,
 						{
 							if (dest->getUnit())
 							{
-								dest->getUnit()->damage(Position(0, 0, 0), RNG::generate(0, power_ * 2), type);
+//kL								dest->getUnit()->damage(Position(0, 0, 0), RNG::generate(0, power_ * 2), type);
+								dest->getUnit()->damage(Position(0, 0, 0), RNG::generate(1, power_ * 2), type);		// kL
 							}
 
 							for (std::vector<BattleItem*>::iterator it = dest->getInventory()->begin(); it != dest->getInventory()->end(); ++it)
 							{
 								if ((*it)->getUnit())
 								{
-									(*it)->getUnit()->damage(Position(0, 0, 0), RNG::generate(0, power_ * 2), type);
+//kL									(*it)->getUnit()->damage(Position(0, 0, 0), RNG::generate(0, power_ * 2), type);
+									(*it)->getUnit()->damage(Position(0, 0, 0), RNG::generate(1, power_ * 2), type);	// kL
 								}
 							}
 						}
@@ -1713,14 +1724,17 @@ void TileEngine::explode(const Position& center, int power, ItemDamageType type,
 						{
 							if (dest->getUnit())
 							{
-								dest->getUnit()->damage(Position(0, 0, 0), (int)(RNG::generate((float)power_ * 0.5, (float)power_ * 1.5)), type);
+								dest->getUnit()->damage(
+										Position(0, 0, 0),
+										static_cast<int>(RNG::generate(static_cast<float>(power_) * 0.5f, static_cast<float>(power_) * 1.5f)),
+										type);
 							}
 
 							bool done = false;
 							while (!done) // kL_note: what the fuck kind of a loop is this ??!!1?
 							{
 								done = dest->getInventory()->empty();
-								for (std::vector<BattleItem*>::iterator it = dest->getInventory()->begin(); it != dest->getInventory()->end(); )
+								for (std::vector<BattleItem*>::iterator it = dest->getInventory()->begin(); it != dest->getInventory()->end();)
 								{
 									if (power_ > (*it)->getRules()->getArmor())
 									{
@@ -2965,16 +2979,20 @@ bool TileEngine::isVoxelVisible(const Position& voxel)
  */
 int TileEngine::voxelCheck(const Position& voxel, BattleUnit* excludeUnit, bool excludeAllUnits, bool onlyVisible, BattleUnit* excludeAllBut)
 {
+	//Log(LOG_INFO) << "TileEngine::voxelCheck()";
+
 //	Tile* tile = _save->getTile(Position(voxel.x / 16, voxel.y / 16, voxel.z / 24));
 	Tile* tile = _save->getTile(voxel / Position(16, 16, 24));
 
 	// check if we are not out of the map
 	if (tile == 0 || voxel.x < 0 || voxel.y < 0 || voxel.z < 0)
 	{
+		//Log(LOG_INFO) << "TileEngine::voxelCheck() EXIT, return 5";
 		return 5;
 	}
 	if (tile->isVoid() && tile->getUnit() == 0)
 	{
+		//Log(LOG_INFO) << "TileEngine::voxelCheck() EXIT, return(1) -1";
 		return -1;
 	}
 
@@ -2987,25 +3005,31 @@ int TileEngine::voxelCheck(const Position& voxel, BattleUnit* excludeUnit, bool 
 			&& tileBelow->getMapData(MapData::O_FLOOR)
 			&& !tileBelow->getMapData(MapData::O_FLOOR)->isGravLift())
 		{
+			//Log(LOG_INFO) << "TileEngine::voxelCheck() EXIT, return 0";
 			return 0;
 		}
 	}
 
 	// first we check terrain voxel data, not to allow 2x2 units stick through walls
-	for (int i = 0; i < 4; ++i)
+	for (int
+			i = 0;
+			i < 4;
+			++i)
 	{
-		MapData* mp = tile->getMapData(i);
+		MapData* data = tile->getMapData(i);
 
 		if (tile->isUfoDoorOpen(i))
 			continue;
 
-		if (mp != 0)
+		if (data != 0)
 		{
 			int x = 15 - voxel.x %16;
 			int y = voxel.y %16;
-			int idx = (mp->getLoftID((voxel.z %24) / 2) * 16) + y;
-			if (_voxelData->at(idx) & (1 << x))
+
+			int LoftIdx = (data->getLoftID((voxel.z %24) / 2) * 16) + y;
+			if (_voxelData->at(LoftIdx) & (1 << x))
 			{
+				//Log(LOG_INFO) << "TileEngine::voxelCheck() EXIT, return i = " << i;
 				return i;
 			}
 		}
@@ -3045,15 +3069,17 @@ int TileEngine::voxelCheck(const Position& voxel, BattleUnit* excludeUnit, bool 
 					part = tilepos.x - unitpos.x + (tilepos.y - unitpos.y) * 2;
 				}
 
-				int idx = (unit->getLoftemps(part) * 16) + y;
-				if (_voxelData->at(idx) & (1 << x))
+				int LoftIdx = (unit->getLoftemps(part) * 16) + y;
+				if (_voxelData->at(LoftIdx) & (1 << x))
 				{
+					//Log(LOG_INFO) << "TileEngine::voxelCheck() EXIT, return 4";
 					return 4;
 				}
 			}
 		}
 	}
 
+	//Log(LOG_INFO) << "TileEngine::voxelCheck() EXIT, return(2) -1";
 	return -1;
 }
 
@@ -3361,14 +3387,15 @@ bool TileEngine::validMeleeRange(BattleUnit* attacker, BattleUnit* target, int d
 
 /**
  * Validates the melee range between a tile and a unit.
- * @param pos Position to check from.
- * @param direction Direction to check.
- * @param size For large units, we have to do extra checks.
- * @param target The unit we want to attack, 0 for any unit.
- * @return True when the range is valid.
+ * @param pos, Position to check from.
+ * @param direction, Direction to check.
+ * @param size, For large units, we have to do extra checks.
+ * @param target, The unit we want to attack, 0 for any unit.
+ * @return, True when the range is valid.
  */
 bool TileEngine::validMeleeRange(Position pos, int direction, BattleUnit* attacker, BattleUnit* target)
 {
+	//Log(LOG_INFO) << "TileEngine::validMeleeRange()";
 	if (direction < 0 || direction > 7)
 		return false;
 
@@ -3376,13 +3403,22 @@ bool TileEngine::validMeleeRange(Position pos, int direction, BattleUnit* attack
 	Pathfinding::directionToVector(direction, &p);
 
 	int size = attacker->getArmor()->getSize() - 1;
-	for (int x = 0; x <= size; ++x)
+	for (int
+			x = 0;
+			x <= size;
+			++x)
 	{
-		for (int y = 0; y <= size; ++y)
+		for (int
+				y = 0;
+				y <= size;
+				++y)
 		{
-			Tile* origin (_save->getTile(Position(pos + Position(x, y, 0))));
-			Tile* targetTile (_save->getTile(Position(pos + Position(x, y, 0) + p)));
-			Tile* aboveTargetTile (_save->getTile(Position(pos + Position(x, y, 1) + p)));
+//kL			Tile* origin (_save->getTile(Position(pos + Position(x, y, 0))));
+//kL			Tile* targetTile (_save->getTile(Position(pos + Position(x, y, 0) + p)));
+//kL			Tile* aboveTargetTile (_save->getTile(Position(pos + Position(x, y, 1) + p)));
+			Tile* origin = _save->getTile(Position(pos + Position(x, y, 0)));				// kL
+			Tile* targetTile = _save->getTile(Position(pos + Position(x, y, 0) + p));		// kL
+			Tile* aboveTargetTile = _save->getTile(Position(pos + Position(x, y, 1) + p));	// kL
 
 			if (targetTile && origin)
 			{
@@ -3395,14 +3431,20 @@ bool TileEngine::validMeleeRange(Position pos, int direction, BattleUnit* attack
 
 				if (targetTile->getUnit())
 				{
-					if (target == 0 || targetTile->getUnit() == target)
+					//Log(LOG_INFO) << ". . . targetted tileUnit is valid ID = " << targetTile->getUnit()->getId();
+
+					if (target == 0
+						|| targetTile->getUnit() == target)
 					{
+						//Log(LOG_INFO) << ". . . targetUnit and tileUnit are same";
+
 						Position originVoxel = Position(origin->getPosition() * Position(16, 16, 24))
 								+ Position(8, 8, attacker->getHeight() + attacker->getFloatHeight() - 4 -origin->getTerrainLevel());
 
 						Position targetVoxel;
 						if (canTargetUnit(&originVoxel, targetTile, &targetVoxel, attacker))
 						{
+							//Log(LOG_INFO) << "TileEngine::validMeleeRange() EXIT true";
 							return true;
 						}
 					}
@@ -3411,6 +3453,7 @@ bool TileEngine::validMeleeRange(Position pos, int direction, BattleUnit* attack
 		}
 	}
 
+	//Log(LOG_INFO) << "TileEngine::validMeleeRange() EXIT false";
 	return false;
 }
 

@@ -40,18 +40,17 @@ namespace OpenXcom
  * @param base Base the item belongs to.
  * @param endType What ended the production.
  */
-ProductionCompleteState::ProductionCompleteState(Game* game, const std::wstring& item, const std::wstring& base, productionProgress_e endType)
+ProductionCompleteState::ProductionCompleteState(Game* game, const std::wstring& item, const std::wstring& base, ProdProgress endType)
 	:
 		State(game)
 {
 	_screen = false;
 
-	// Create objects
 	_window		= new Window(this, 256, 160, 32, 20, POPUP_BOTH);
 	_btnOk		= new TextButton(120, 18, 100, 154);
 	_txtMessage	= new Text(246, 110, 37, 35);
 
-	// Set palette
+
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
 
 	add(_window);
@@ -60,7 +59,7 @@ ProductionCompleteState::ProductionCompleteState(Game* game, const std::wstring&
 
 	centerAllSurfaces();
 
-	// Set up objects
+
 	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK17.SCR"));
 
@@ -94,7 +93,6 @@ ProductionCompleteState::ProductionCompleteState(Game* game, const std::wstring&
 
 		default:
 			assert(false);
-//		break;
 	}
 
 	_txtMessage->setText(s);

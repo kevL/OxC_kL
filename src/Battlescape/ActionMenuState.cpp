@@ -308,8 +308,10 @@ void ActionMenuState::btnActionMenuItemClick(Action* action)
 		else if ((_action->type == BA_STUN || _action->type == BA_HIT)
 			&& weapon->getBattleType() == BT_MELEE)
 		{
-
-			if (!_game->getSavedGame()->getSavedBattle()->getTileEngine()->validMeleeRange(_action->actor->getPosition(), _action->actor->getDirection(), _action->actor, 0))
+			if (!_game->getSavedGame()->getSavedBattle()->getTileEngine()->validMeleeRange(
+					_action->actor->getPosition(),
+					_action->actor->getDirection(),
+					_action->actor, 0))
 			{
 				_action->result = "STR_THERE_IS_NO_ONE_THERE";
 			}

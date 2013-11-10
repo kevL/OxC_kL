@@ -31,7 +31,7 @@ class Base;
 class SavedGame;
 class Ruleset;
 
-enum productionProgress_e
+enum ProdProgress
 {
 	PROGRESS_NOT_COMPLETE,
 	PROGRESS_COMPLETE,
@@ -48,8 +48,8 @@ private:
 	int _amount;
 	int _timeSpent;
 	int _engineers;
-	bool haveEnoughMoneyForOneMoreUnit(SavedGame* g);
-	bool haveEnoughMaterialsForOneMoreUnit(Base* b);
+	bool enoughMoney(SavedGame* g);
+	bool enoughMaterials(Base* b);
 
 	public:
 		Production(const RuleManufacture* rules, int amount);
@@ -65,7 +65,7 @@ private:
 		int getAmountProduced() const;
 		int getAssignedEngineers() const;
 		void setAssignedEngineers(int);
-		productionProgress_e step(Base* b, SavedGame* g, const Ruleset* r);
+		ProdProgress step(Base* b, SavedGame* g, const Ruleset* r);
 		const RuleManufacture* getRules() const;
 		void startItem(Base* b, SavedGame* g);
 };

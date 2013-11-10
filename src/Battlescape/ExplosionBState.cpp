@@ -155,7 +155,7 @@ void ExplosionBState::init()
 		bool hit = _item->getRules()->getBattleType() == BT_MELEE
 				|| _item->getRules()->getBattleType() == BT_PSIAMP;
 
-		Explosion* explosion = new Explosion(
+		Explosion* explosion = new Explosion( // animation.
 				_center,
 				_item->getRules()->getHitAnimation(),
 				false,
@@ -174,6 +174,8 @@ void ExplosionBState::init()
 			_parent->getMap()->getCamera()->centerOnPosition(Position(_center.x / 16, _center.y / 16, _center.z / 24));
 		} */
 	}
+
+	//Log(LOG_INFO) << "ExplosionBState::init() EXIT";
 }
 
 /**
@@ -227,6 +229,8 @@ void ExplosionBState::explode()
 	// after the animation is done, the real explosion/hit takes place
 	if (_item)
 	{
+		//Log(LOG_INFO) << "damageType = " << static_cast<int>(_item->getRules()->getDamageType());
+
 		if (!_unit
 			&& _item->getPreviousOwner())
 		{
@@ -241,7 +245,7 @@ void ExplosionBState::explode()
 		}
 		else
 		{
-			//Log(LOG_INFO) << ". hit()";
+			//Log(LOG_INFO) << ". Do hit()";
 
 			BattleUnit* victim = save->getTileEngine()->hit(_center, _power, _item->getRules()->getDamageType(), _unit);
 
@@ -318,8 +322,7 @@ void ExplosionBState::explode()
 		}
 	}
 
-
-
+	//Log(LOG_INFO) << "ExplosionBState::explode() EXIT";
 }
 
 }

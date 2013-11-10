@@ -235,8 +235,11 @@ void SavedBattleGame::load(const YAML::Node& node, Ruleset* rule, SavedGame* sav
 
 		if (faction == FACTION_PLAYER)
 		{
-			if ((unit->getId() == selectedUnit) || (_selectedUnit == 0 && !unit->isOut()))
+			if (unit->getId() == selectedUnit
+				|| (_selectedUnit == 0 && !unit->isOut()))
+			{
 				_selectedUnit = unit;
+			}
 
 			// silly hack to fix mind controlled aliens
 			// TODO: save stats instead? maybe some kind of weapon will affect them at some point.

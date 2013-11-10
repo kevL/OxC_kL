@@ -1532,7 +1532,10 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* unit)
 
 				unit->setCache(0);
 
-				ba.target = Position(unit->getPosition().x + RNG::generate(-5, 5), unit->getPosition().y + RNG::generate(-5, 5), unit->getPosition().z);
+				ba.target = Position(
+						unit->getPosition().x + RNG::generate(-5, 5),
+						unit->getPosition().y + RNG::generate(-5, 5),
+						unit->getPosition().z);
 				if (_save->getTile(ba.target)) // only walk towards it when the place exists
 				{
 					_save->getPathfinding()->calculate(ba.actor, ba.target);
@@ -1545,7 +1548,10 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* unit)
 			ba.type = BA_TURN;
 			for (int i= 0; i < 4; i++)
 			{
-				ba.target = Position(unit->getPosition().x + RNG::generate(-5,5), unit->getPosition().y + RNG::generate(-5,5), unit->getPosition().z);
+				ba.target = Position(
+						unit->getPosition().x + RNG::generate(-5, 5),
+						unit->getPosition().y + RNG::generate(-5, 5),
+						unit->getPosition().z);
 				statePushBack(new UnitTurnBState(this, ba));
 			}
 
@@ -1857,7 +1863,6 @@ void BattlescapeGame::primaryAction(const Position& pos)
 		}
 		else if (playableUnitSelected())
 		{
-
 			if (_currentAction.target != pos && bPreviewed)
 				_save->getPathfinding()->removePreview();
 

@@ -128,7 +128,7 @@ GeoscapeState::GeoscapeState(Game* game)
 		_dogfights(),
 		_dogfightsToBeStarted(),
 		_minimizedDogfights(0),
-		_zoomPreDF(0)	// kL
+		_zoomIntercept(0)
 {
 	int screenWidth = Options::getInt("baseXResolution");
 	int screenHeight = Options::getInt("baseYResolution");
@@ -1776,26 +1776,35 @@ void GeoscapeState::time1Hour()
 
 	if (window)
 	{
-		// kL_note: resetTimer handled in ItemsArrivingState
 		popup(new ItemsArrivingState(_game, this));
 	}
 
 	// Handle Production
-	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
+	for (std::vector<Base*>::iterator
+			i = _game->getSavedGame()->getBases()->begin();
+			i != _game->getSavedGame()->getBases()->end();
+			++i)
 	{
-		std::map<Production*, productionProgress_e> toRemove;
-		for (std::vector<Production*>::const_iterator j = (*i)->getProductions().begin(); j != (*i)->getProductions().end(); ++j)
+		std::map<Production*, ProdProgress> toRemove;
+		for (std::vector<Production*>::const_iterator
+				j = (*i)->getProductions().begin();
+				j != (*i)->getProductions().end();
+				++j)
 		{
 			toRemove[(*j)] = (*j)->step((*i), _game->getSavedGame(), _game->getRuleset());
 		}
-		for (std::map<Production*, productionProgress_e>::iterator j = toRemove.begin(); j != toRemove.end(); ++j)
+
+		for (std::map<Production*, ProdProgress>::iterator
+				j = toRemove.begin();
+				j != toRemove.end();
+				++j)
 		{
 			if (j->second > PROGRESS_NOT_COMPLETE)
 			{
 				(*i)->removeProduction (j->first);
-				timerReset();	// kL
+
+				timerReset();
 				popup(new ProductionCompleteState(_game, tr(j->first->getRules()->getName()), (*i)->getName(), j->second));
-//kL				timerReset();
 			}
 		}
 	}
@@ -2508,7 +2517,7 @@ void GeoscapeState::btnZoomOutRightClick(Action*)
  */
 void GeoscapeState::zoomInEffect()
 {
-	_zoomPreDF = _game->getSavedGame()->getGlobeZoom();	// kL
+	_zoomIntercept = _globe->getZoomLevel();
 
 	_globe->zoomIn();
 
@@ -2524,15 +2533,16 @@ void GeoscapeState::zoomInEffect()
  */
 void GeoscapeState::zoomOutEffect()
 {
-	_globe->zoomOut();
-
-//kL	if (_globe->isZoomedOutToMax())
-	if (_globe->isZoomedToLevel(_zoomPreDF))	// kL
+	if (_globe->isZoomedToLevel(_zoomIntercept))
 	{
 		_zoomOutEffectDone = true;
 		_zoomOutEffectTimer->stop();
 
 		init();
+	}
+	else
+	{
+		_globe->zoomOut();
 	}
 }
 

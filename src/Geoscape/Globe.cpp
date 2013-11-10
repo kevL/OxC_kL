@@ -70,12 +70,12 @@ const double Globe::ROTATE_LATITUDE		= 0.15;
 namespace
 {
 	
-///helper class for `Globe` for drawing earth globe with shadows
+/// helper class for `Globe` for drawing earth globe with shadows
 struct GlobeStaticData
 {
-	///array of shading gradient
+	/// array of shading gradient
 	Sint16 shade_gradient[240];
-	///size of x & y of noise surface
+	/// size of x & y of noise surface
 	const int random_surf_size;
 
 	/**
@@ -111,12 +111,12 @@ struct GlobeStaticData
 		}
 	}
 	
-	//initialization	
+	// initialization	
 	GlobeStaticData()
 		:
 			random_surf_size(60)
 	{
-		//filling terminator gradient LUT
+		// filling terminator gradient LUT
 		for (int i = 0; i < 240; ++i)
 		{
 			int j = i - 120;
@@ -180,14 +180,14 @@ struct CreateShadow
 	static inline Uint8 getShadowValue(const Uint8& dest, const Cord& earth, const Cord& sun, const Sint16& noise)
 	{
 		Cord temp = earth;
-		//diff
+		// diff
 		temp -= sun;
-		//norm
+		// norm
 		temp.x *= temp.x;
 		temp.y *= temp.y;
 		temp.z *= temp.z;
 		temp.x += temp.z + temp.y;
-		//we have norm of distance between 2 vectors, now stored in `x`
+		// we have norm of distance between 2 vectors, now stored in 'x'
 
 		temp.x -= 2;
 		temp.x *= 125.;
@@ -203,21 +203,23 @@ struct CreateShadow
 
 		if(temp.x > 0.)
 		{
-			const Sint16 val = (temp.x> 31)? 31 : (Sint16)temp.x;
+			const Sint16 val = (temp.x> 31)? 31: (Sint16)temp.x;
 			const int d = dest & helper::ColorGroup;
 			if(d ==  Palette::blockOffset(12) || d ==  Palette::blockOffset(13))
 			{
-				//this pixel is ocean
-				return Palette::blockOffset(12) + val;
+				// this pixel is ocean
+				return Palette::blockOffset(12)+val;
 			}
 			else
 			{
-				//this pixel is land
+				// this pixel is land
 				if(dest==0) return (Uint8)val;
+
 				const int s = val / 3;
 				const int e = dest+s;
 				if(e > d + helper::ColorShade)
 					return d + helper::ColorShade;
+
 				return e;
 			}
 		}
@@ -226,12 +228,12 @@ struct CreateShadow
 			const int d = dest & helper::ColorGroup;
 			if(d ==  Palette::blockOffset(12) || d ==  Palette::blockOffset(13))
 			{
-				//this pixel is ocean
+				// this pixel is ocean
 				return Palette::blockOffset(12);
 			}
 			else
 			{
-				//this pixel is land
+				// this pixel is land
 				return dest;
 			}
 		}
@@ -247,6 +249,7 @@ struct CreateShadow
 };
 
 }
+
 
 /**
  * Sets up a globe with the specified size and position.
@@ -275,14 +278,14 @@ Globe::Globe(Game* game, int cenX, int cenY, int width, int height, int x, int y
 	_countries	= new Surface(width, height, x, y);
 	_markers	= new Surface(width, height, x, y);
 	_radars		= new Surface(width, height, x, y);
-	_clipper	= new FastLineClip(x, x+width, y, y+height);
+	_clipper	= new FastLineClip(x, x + width, y, y + height);
 
 	// Animation timers
-	_blinkTimer = new Timer(100);
+	_blinkTimer = new Timer(120);
 	_blinkTimer->onTimer((SurfaceHandler)& Globe::blink);
 	_blinkTimer->start();
 
-	_rotTimer = new Timer(50);
+	_rotTimer = new Timer(80);
 	_rotTimer->onTimer((SurfaceHandler)& Globe::rotate);
 
 	// Globe markers
@@ -378,17 +381,21 @@ Globe::Globe(Game* game, int cenX, int cenY, int width, int height, int x, int y
 
 	_cenLon = _game->getSavedGame()->getGlobeLongitude();
 	_cenLat = _game->getSavedGame()->getGlobeLatitude();
+
 	_zoom = _game->getSavedGame()->getGlobeZoom();
 
-	_radius.push_back(0.45 * height);
-	_radius.push_back(0.60 * height);
-	_radius.push_back(0.90 * height);
-	_radius.push_back(1.40 * height);
-	_radius.push_back(2.25 * height);
-	_radius.push_back(3.60 * height);
+	// kL_note: These are the globe-zoom magnifications, stored as a <vector> of 6 (doubles).
+	_radius.push_back(0.45 * height); // 0 - Zoomed all out
+	_radius.push_back(0.60 * height); // 1
+//kL	_radius.push_back(0.90 * height);
+	_radius.push_back(0.85 * height); // 2		// kL
+	_radius.push_back(1.40 * height); // 3
+	_radius.push_back(2.25 * height); // 4
+	_radius.push_back(3.60 * height); // 5 - Zoomed all in
+
 	_earthData.resize(_radius.size());
 
-	//filling normal field for each radius
+	// filling normal field for each radius
 	for (unsigned int r = 0; r < _radius.size(); ++r)
 	{
 		_earthData[r].resize(width * height);
@@ -396,15 +403,17 @@ Globe::Globe(Game* game, int cenX, int cenY, int width, int height, int x, int y
 		{
 			for (int i = 0; i < width; ++i)
 			{
-				_earthData[r][width * j + i] = static_data.circle_norm(width / 2, height / 2, _radius[r], i + .5, j + .5);
+				_earthData[r][width * j + i] = static_data.circle_norm(width / 2, height / 2, _radius[r], i + 0.5, j + 0.5);
 			}
 		}
 	}
 
-	//filling random noise "texture"
+	// filling random noise "texture"
 	_randomNoiseData.resize(static_data.random_surf_size * static_data.random_surf_size);
 	for (unsigned int i = 0; i < _randomNoiseData.size(); ++i)
+	{
 		_randomNoiseData[i] = rand() %4;
+	}
 
 	cachePolygons();
 }
@@ -719,6 +728,14 @@ void Globe::zoomMax()
 }
 
 /**
+ * Gets the globe's current zoom level.
+ */
+size_t Globe::getZoomLevel()
+{
+	return _zoom;
+}
+
+/**
  * Rotates the globe to center on a certain
  * polar point on the world map.
  * @param lon Longitude of the point.
@@ -937,7 +954,7 @@ void Globe::cache(std::list<Polygon*>* polygons, std::list<Polygon*>* cache)
  * @param firstcolor Offset of the first color to replace.
  * @param ncolors Amount of colors to replace.
  */
-void Globe::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
+void Globe::setPalette(SDL_Color* colors, int firstcolor, int ncolors)
 {
 	Surface::setPalette(colors, firstcolor, ncolors);
 	
@@ -1158,8 +1175,8 @@ void Globe::XuLine(Surface* surface, Surface* src, double x1, double y1, double 
 	else
 		SX=1;
 
-
 	x0=x1; y0=y1;
+
 	if (inv)
 		SY=(deltay/len);
 	else
@@ -1185,6 +1202,7 @@ void Globe::XuLine(Surface* surface, Surface* src, double x1, double y1, double 
 			}
 			surface->setPixel((int)x0, (int)y0, (Uint8)tcol);
 		}
+
 		x0+=SX;
 		y0+=SY;
 		len-=1.0;
@@ -1299,6 +1317,7 @@ void Globe::drawGlobeCircle(double lat, double lon, double radius, int segments)
 		}
 		if (!pointBack(lon1,lat1))
 			XuLine(_radars, this, x, y, x2, y2, 249);
+
 		x2=x; y2=y;
 	}
 }

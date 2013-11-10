@@ -154,7 +154,7 @@ void WarningMessage::draw()
 	square1.y = 0;
 	square1.w = getWidth();
 	square1.h = getHeight();
-	drawRect(&square1, _color + (_fade > 12 ? 12 : _fade));
+	drawRect(&square1, _color + (_fade > 12? 12: _fade));
 
 	_text->blit(this);
 }

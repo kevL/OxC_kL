@@ -71,11 +71,11 @@ TextList::TextList(int width, int height, int x, int y)
 {
 	_allowScrollOnArrowButtons = true;
 
-	_up = new ArrowButton(ARROW_BIG_UP, 13, 13, getX() + getWidth() + _scrollPos, getY() - 3);
+	_up = new ArrowButton(ARROW_BIG_UP, 13, 13, getX() + getWidth() + _scrollPos, getY() +1); // - 2
 	_up->setVisible(false);
 	_up->setTextList(this);
 
-	_down = new ArrowButton(ARROW_BIG_DOWN, 13, 13, getX() + getWidth() + _scrollPos, getY() + getHeight() - 13);
+	_down = new ArrowButton(ARROW_BIG_DOWN, 13, 13, getX() + getWidth() + _scrollPos, getY() + getHeight() -12); // - 13
 	_down->setVisible(false);
 	_down->setTextList(this);
 }
@@ -85,7 +85,7 @@ TextList::TextList(int width, int height, int x, int y)
  */
 TextList::~TextList()
 {
-	for (std::vector< std::vector<Text*> >::iterator u = _texts.begin(); u < _texts.end(); ++u)
+	for (std::vector<std::vector<Text*>>::iterator u = _texts.begin(); u < _texts.end(); ++u)
 	{
 		for (std::vector<Text*>::iterator v = (*u).begin(); v < (*u).end(); ++v)
 		{

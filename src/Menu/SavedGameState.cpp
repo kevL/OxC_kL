@@ -113,7 +113,7 @@ SavedGameState::SavedGameState(Game* game, OptionsOrigin origin, int firstValidR
 	_txtDate->setColor(Palette::blockOffset(15)-1);
 	_txtDate->setText(tr("STR_DATE"));
 
-	_txtStatus->setColor(Palette::blockOffset(11)+1);
+	_txtStatus->setColor(Palette::blockOffset(6)+4);	// kL, lavender
 	_txtStatus->setBig();
 	_txtStatus->setAlign(ALIGN_CENTER);
 

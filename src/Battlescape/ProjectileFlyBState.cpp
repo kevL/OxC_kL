@@ -100,6 +100,7 @@ void ProjectileFlyBState::init()
 
 	if (!weapon) // can't shoot without weapon
 	{
+		//Log(LOG_INFO) << ". no weapon, EXIT";
 		_parent->popState();
 
 		return;
@@ -107,6 +108,7 @@ void ProjectileFlyBState::init()
 
 	if (!_parent->getSave()->getTile(_action.target)) // invalid target position
 	{
+		//Log(LOG_INFO) << ". no target, EXIT";
 		_parent->popState();
 
 		return;
@@ -115,7 +117,7 @@ void ProjectileFlyBState::init()
 	if (_parent->getPanicHandled()
 		&& _action.actor->getTimeUnits() < _action.TU)
 	{
-		//Log(LOG_INFO) << ". not enough time units";
+		//Log(LOG_INFO) << ". not enough time units, EXIT";
 		_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
 		_parent->popState();
 
@@ -130,6 +132,7 @@ void ProjectileFlyBState::init()
 		|| _unit->getHealth() < _unit->getStunlevel())
 	{
 		// something went wrong - we can't shoot when dead or unconscious, or if we're about to fall over.
+		//Log(LOG_INFO) << ". actor is Out, EXIT";
 		_parent->popState();
 
 		return;
@@ -166,6 +169,7 @@ void ProjectileFlyBState::init()
 	if (weapon->getRules()->getBattleType() == BT_MELEE
 		&& _action.type == BA_SNAPSHOT)
 	{
+		//Log(LOG_INFO) << ". convert BA_SNAPSHOT to BA_HIT";
 		_action.type = BA_HIT;
 	}
 
@@ -175,8 +179,12 @@ void ProjectileFlyBState::init()
 		case BA_AIMEDSHOT:
 		case BA_AUTOSHOT:
 		case BA_LAUNCH:
+			//Log(LOG_INFO) << ". . BA_SNAPSHOT/AIMEDSHOT/AUTOSHOT/LAUNCH";
+
 			if (_ammo == 0)
 			{
+				//Log(LOG_INFO) << ". . . no ammo, EXIT";
+
 				_action.result = "STR_NO_AMMUNITION_LOADED";
 				_parent->popState();
 
@@ -185,6 +193,8 @@ void ProjectileFlyBState::init()
 
 			if (_ammo->getAmmoQuantity() == 0)
 			{
+				//Log(LOG_INFO) << ". . . no ammo Quantity, EXIT";
+
 				_action.result = "STR_NO_ROUNDS_LEFT";
 				_parent->popState();
 
@@ -194,6 +204,8 @@ void ProjectileFlyBState::init()
 			if (weapon->getRules()->getRange() != 0
 				&& _parent->getTileEngine()->distance(_action.actor->getPosition(), _action.target) > weapon->getRules()->getRange())
 			{
+				//Log(LOG_INFO) << ". . . out of range, EXIT";
+
 				_action.result = "STR_OUT_OF_RANGE";
 				_parent->popState();
 
@@ -201,8 +213,12 @@ void ProjectileFlyBState::init()
 			}
 		break;
 		case BA_THROW:
+			//Log(LOG_INFO) << ". . BA_THROW";
+
 			if (!validThrowRange(&_action))
 			{
+				//Log(LOG_INFO) << ". . . not valid throw range, EXIT";
+
 				_action.result = "STR_OUT_OF_RANGE";
 				_parent->popState();
 
@@ -212,12 +228,16 @@ void ProjectileFlyBState::init()
 			_projectileItem = weapon;
 		break;
 		case BA_HIT:
+			//Log(LOG_INFO) << ". . BA_HIT";
+
 			if (!_parent->getTileEngine()->validMeleeRange(
 					_action.actor->getPosition(),
 					_action.actor->getDirection(),
 					_action.actor,
 					0))
 			{
+				//Log(LOG_INFO) << ". . . out of hit range range, EXIT";
+
 				_action.result = "STR_THERE_IS_NO_ONE_THERE";
 				_parent->popState();
 
@@ -226,7 +246,7 @@ void ProjectileFlyBState::init()
 		break;
 		case BA_PANIC:
 		case BA_MINDCONTROL:
-			//Log(LOG_INFO) << ". . PsiAttack, new ExplosionBState";
+			//Log(LOG_INFO) << ". . BA_PANIC/MINDCONTROL, new ExplosionBState, EXIT";
 
 			_parent->statePushFront(new ExplosionBState(
 					_parent,
@@ -240,6 +260,8 @@ void ProjectileFlyBState::init()
 		break;
 
 		default:
+			//Log(LOG_INFO) << ". . default, EXIT";
+
 			_parent->popState();
 
 			return;
@@ -247,6 +269,7 @@ void ProjectileFlyBState::init()
 	}
 
 	createNewProjectile();
+	//Log(LOG_INFO) << "ProjectileFlyBState::init() EXIT";
 }
 
 /**
@@ -378,6 +401,8 @@ bool ProjectileFlyBState::createNewProjectile()
  */
 void ProjectileFlyBState::think()
 {
+	//Log(LOG_INFO) << "ProjectileFlyBState::think()";
+
 	/* TODO refactoring : store the projectile in this state, instead of getting it from the map each time? */
 	if (_parent->getMap()->getProjectile() == 0)
 	{
@@ -488,6 +513,7 @@ void ProjectileFlyBState::think()
 						offset = -2;
 					}
 
+					//Log(LOG_INFO) << ". . . . new ExplosionBState()";
 					_parent->statePushFront(new ExplosionBState(
 							_parent, _parent->getMap()->getProjectile()->getPosition(offset),
 							_ammo,

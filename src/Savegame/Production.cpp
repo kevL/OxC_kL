@@ -35,6 +35,9 @@
 namespace OpenXcom
 {
 
+/**
+ *
+ */
 Production::Production(const RuleManufacture* rules, int amount)
 	:
 		_rules(rules),
@@ -44,42 +47,66 @@ Production::Production(const RuleManufacture* rules, int amount)
 {
 }
 
+/**
+ *
+ */
 int Production::getAmountTotal() const
 {
 	return _amount;
 }
 
+/**
+ *
+ */
 void Production::setAmountTotal(int amount)
 {
 	_amount = amount;
 }
 
+/**
+ *
+ */
 int Production::getTimeSpent() const
 {
 	return _timeSpent;
 }
 
+/**
+ *
+ */
 void Production::setTimeSpent(int done)
 {
 	_timeSpent = done;
 }
 
+/**
+ *
+ */
 int Production::getAssignedEngineers() const
 {
 	return _engineers;
 }
 
+/**
+ *
+ */
 void Production::setAssignedEngineers(int engineers)
 {
 	_engineers = engineers;
 }
 
-bool Production::haveEnoughMoneyForOneMoreUnit(SavedGame* g)
+/**
+ *
+ */
+bool Production::enoughMoney(SavedGame* g)
 {
 	return (g->getFunds() >= _rules->getManufactureCost());
 }
 
-bool Production::haveEnoughMaterialsForOneMoreUnit(Base* b)
+/**
+ *
+ */
+bool Production::enoughMaterials(Base* b)
 {
 	for (std::map<std::string,int>::const_iterator
 			iter = _rules->getRequiredItems().begin();
@@ -93,22 +120,29 @@ bool Production::haveEnoughMaterialsForOneMoreUnit(Base* b)
 	return true;
 }
 
-productionProgress_e Production::step(Base* b, SavedGame* g, const Ruleset* r)
+/**
+ *
+ */
+ProdProgress Production::step(Base* b, SavedGame* g, const Ruleset* r)
 {
+	int done = getAmountProduced();
 	_timeSpent += _engineers;
 
-	int done = getAmountProduced();
 	if (done < getAmountProduced())
 	{
-		bool allowAutoSellProduction = Options::getBool("allowAutoSellProduction");
-		bool canManufactureMoreItemsPerHour = Options::getBool("canManufactureMoreItemsPerHour");
+		bool autoSell = Options::getBool("allowAutoSellProduction");
+		bool moreItems = Options::getBool("canManufactureMoreItemsPerHour");
 
-		int produced = std::min(getAmountProduced(), _amount) - done; // std::min is required because we don't want to overproduce
+		// std::min is required because we don't want to overproduce
+		int produced = std::min(getAmountProduced(), _amount) - done;
 		int count = 0;
 
 		do
 		{
-			for (std::map<std::string,int>::const_iterator i = _rules->getProducedItems().begin(); i != _rules->getProducedItems().end(); ++i)
+			for (std::map<std::string,int>::const_iterator
+					i = _rules->getProducedItems().begin();
+					i != _rules->getProducedItems().end();
+					++i)
 			{
 				if (_rules->getCategory() == "STR_CRAFT")
 				{
@@ -123,14 +157,20 @@ productionProgress_e Production::step(Base* b, SavedGame* g, const Ruleset* r)
 					// Check if it's ammo to reload a craft
 					if (r->getItem(i->first)->getBattleType() == BT_NONE)
 					{
-						for (std::vector<Craft*>::iterator c = b->getCrafts()->begin(); c != b->getCrafts()->end(); ++c)
+						for (std::vector<Craft*>::iterator
+								c = b->getCrafts()->begin();
+								c != b->getCrafts()->end();
+								++c)
 						{
 							if ((*c)->getStatus() != "STR_READY")
 								continue;
 
-							for (std::vector<CraftWeapon*>::iterator w = (*c)->getWeapons()->begin(); w != (*c)->getWeapons()->end(); ++w)
+							for (std::vector<CraftWeapon*>::iterator
+									w = (*c)->getWeapons()->begin();
+									w != (*c)->getWeapons()->end();
+									++w)
 							{
-								if ((*w) != 0
+								if (*w != 0
 									&& (*w)->getRules()->getClipItem() == i->first
 									&& (*w)->getAmmo() < (*w)->getRules()->getAmmoMax())
 								{
@@ -155,7 +195,7 @@ productionProgress_e Production::step(Base* b, SavedGame* g, const Ruleset* r)
 						}
 					}
 
-					if (allowAutoSellProduction
+					if (autoSell
 						&& getAmountTotal() == std::numeric_limits<int>::max())
 					{
 						g->setFunds(g->getFunds() + (r->getItem(i->first)->getSellCost() * i->second));
@@ -165,17 +205,17 @@ productionProgress_e Production::step(Base* b, SavedGame* g, const Ruleset* r)
 				}
 			}
 
-			if (!canManufactureMoreItemsPerHour)
+			if (!moreItems)
 				break;
 
 			count++;
 			if (count < produced)
 			{
 				// We need to ensure that player has enough cash/item to produce a new unit
-				if (!haveEnoughMoneyForOneMoreUnit(g))
+				if (!enoughMoney(g))
 					return PROGRESS_NOT_ENOUGH_MONEY;
 
-				if (!haveEnoughMaterialsForOneMoreUnit(b))
+				if (!enoughMaterials(b))
 					return PROGRESS_NOT_ENOUGH_MATERIALS;
 
 				startItem(b, g);
@@ -190,10 +230,10 @@ productionProgress_e Production::step(Base* b, SavedGame* g, const Ruleset* r)
 	if (done < getAmountProduced())
 	{
 		// We need to ensure that player has enough cash/item to produce a new unit
-		if (!haveEnoughMoneyForOneMoreUnit(g))
+		if (!enoughMoney(g))
 			return PROGRESS_NOT_ENOUGH_MONEY;
 
-		if (!haveEnoughMaterialsForOneMoreUnit(b))
+		if (!enoughMaterials(b))
 			return PROGRESS_NOT_ENOUGH_MATERIALS;
 
 		startItem(b, g);
@@ -202,16 +242,25 @@ productionProgress_e Production::step(Base* b, SavedGame* g, const Ruleset* r)
 	return PROGRESS_NOT_COMPLETE;
 }
 
+/**
+ *
+ */
 int Production::getAmountProduced() const
 {
 	return _timeSpent / _rules->getManufactureTime();
 }
 
+/**
+ *
+ */
 const RuleManufacture* Production::getRules() const
 {
 	return _rules;
 }
 
+/**
+ *
+ */
 void Production::startItem(Base* b, SavedGame* g)
 {
 	g->setFunds(g->getFunds() - _rules->getManufactureCost());
@@ -225,6 +274,9 @@ void Production::startItem(Base* b, SavedGame* g)
 	}
 }
 
+/**
+ *
+ */
 void Production::load(const YAML::Node& node)
 {
 	setAssignedEngineers(node["assigned"].as<int>());
@@ -232,6 +284,9 @@ void Production::load(const YAML::Node& node)
 	setAmountTotal(node["amount"].as<int>());
 }
 
+/**
+ *
+ */
 YAML::Node Production::save() const
 {
 	YAML::Node node;

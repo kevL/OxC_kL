@@ -70,11 +70,11 @@ private:
 	Surface* _mkXcomBase, * _mkAlienBase, * _mkCraft, * _mkWaypoint, * _mkCity;
 	Surface* _mkFlyingUfo, * _mkLandedUfo, * _mkCrashedUfo, * _mkAlienSite;
 	FastLineClip* _clipper;
-	///normal of each pixel in earth globe per zoom level
+	/// normal of each pixel in earth globe per zoom level
 	std::vector<std::vector<Cord>> _earthData;
-	///data sample used for noise in shading
+	/// data sample used for noise in shading
 	std::vector<Sint16> _randomNoiseData;
-	///list of dimension of earth on screen per zoom level
+	/// list of dimension of earth on screen per zoom level
 	std::vector<double> _radius;
 
 	/// Checks if a point is behind the globe.
@@ -125,6 +125,8 @@ private:
 		void zoomMin();
 		/// Zooms the globe maximum.
 		void zoomMax();
+		/// Gets the globe's current zoom level.
+		size_t getZoomLevel();
 
 		/// Centers the globe on a point.
 		void center(double lon, double lat);

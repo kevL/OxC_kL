@@ -1481,11 +1481,11 @@ void BattlescapeState::updateSoldierInfo()
 	if (_save->getSelectedUnit())
 	{
 		selectUnit = _save->getSelectedUnit();
-		Log(LOG_INFO) << ". . selectUnit ID " << selectUnit->getId();
+		//Log(LOG_INFO) << ". . selectUnit ID " << selectUnit->getId();
 	}
 	else // safety.
 	{
-		Log(LOG_INFO) << ". . selectUnit = 0 return";
+		//Log(LOG_INFO) << ". . selectUnit = 0 return";
 		return;
 	}
 
