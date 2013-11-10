@@ -84,7 +84,7 @@ private:
 		void load(const YAML::Node& node);
 
 		/// Gets a race based on the game time and the racial distribution.
-		const std::string& generateRace(const unsigned monthsPassed) const;
+		const std::string generateRace(const unsigned monthsPassed) const;
 		/// Gets the mission's type.
 		const std::string& getType() const
 		{

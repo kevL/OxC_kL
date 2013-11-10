@@ -1793,7 +1793,10 @@ inline void BattlescapeState::handle(Action* action)
 						if ((*i)->getOriginalFaction() == FACTION_HOSTILE)
 						{
 							(*i)->instaKill();
-							(*i)->getTile()->setUnit(0);
+							if ((*i)->getTile())
+							{
+								(*i)->getTile()->setUnit(0);
+							}
 						}
 					}
 				}

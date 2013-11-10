@@ -234,8 +234,7 @@ void UnitDieBState::think()
 		}
 
 		_parent->getMap()->setUnitDying(false);
-
-		if (_unit->getTurnsExposed())
+		if (_unit->getTurnsExposed() < 255)
 		{
 			_unit->setTurnsExposed(255);
 		}
