@@ -762,6 +762,7 @@ void AlienBAIState::setupAttack()
 	//Log(LOG_INFO) << "AlienBAIState::setupAttack()";
 
 	_attackAction->type = BA_RETHINK;
+	_psiAction->type = BA_NONE;
 
 	// if enemies are known to us but not necessarily visible, we can attack them with a blaster launcher or psi.
 	if (_knownEnemies)
@@ -2014,7 +2015,6 @@ bool AlienBAIState::psiAction()
 {
 	//Log(LOG_INFO) << "AlienBAIState::psiAction()";
 
-	_psiAction->type = BA_NONE;
 	_aggroTarget = 0;
 
 	if (_unit->getOriginalFaction() != FACTION_PLAYER	// don't let mind controlled soldiers mind control other soldiers.

@@ -125,11 +125,11 @@ void ManufactureInfoState::buildUi()
 									button_height,
 									start_x + button_x_border,
 									start_y + (int)(2.7f * (float)button_height));
-	_txtAllocatedEngineer	= new Text(button_width,
+	_txtAllocatedEngineer	= new Text(button_width - button_x_border,
 									2 * button_height,
 									start_x + button_x_border,
 									start_y + (int)(3.5f * (float)button_height));
-	_txtUnitToProduce		= new Text(button_width,
+	_txtUnitToProduce		= new Text(button_width - 4 * button_x_border,
 									2 * button_height,
 									width - button_width - button_x_border,
 									start_y + (int)(3.5f * (float)button_height));
