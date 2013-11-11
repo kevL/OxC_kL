@@ -506,13 +506,16 @@ void BattlescapeGenerator::deployXCOM()
 	}
 
 	// auto-equip soldiers (only soldiers without layout)
-	for (std::vector<BattleItem*>::iterator i = _craftInventoryTile->getInventory()->begin(); i != _craftInventoryTile->getInventory()->end(); ++i)
+	for (std::vector<BattleItem*>::reverse_iterator i = _craftInventoryTile->getInventory()->rbegin(); i != _craftInventoryTile->getInventory()->rend(); ++i)
 	{
 		//Log(LOG_INFO) << "BattlescapeGenerator::deployXCOM(), addItem(*item, !SecondPass)";
 		addItem(*i, false);
 	}
 
-	for (std::vector<BattleItem*>::iterator i = _craftInventoryTile->getInventory()->begin(); i != _craftInventoryTile->getInventory()->end(); ++i)
+	for (std::vector<BattleItem*>::reverse_iterator
+			i = _craftInventoryTile->getInventory()->rbegin();
+			i != _craftInventoryTile->getInventory()->rend();
+			++i)
 	{
 		//Log(LOG_INFO) << "BattlescapeGenerator::deployXCOM(), addItem(*item, SecondPass)";
 		addItem(*i, true);
