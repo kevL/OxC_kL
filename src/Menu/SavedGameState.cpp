@@ -242,7 +242,8 @@ void SavedGameState::lstSavesMouseOver(Action*)
 	std::wstring wstr;
 
 	int sel = _lstSaves->getSelectedRow() - _firstValidRow;
-	if (sel >= 0 && sel < _saves.size())
+	if (sel > -1
+		&& sel < static_cast<int>(_saves.size()))
 	{
 		wstr = _details[sel];
 	}

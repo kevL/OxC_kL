@@ -58,36 +58,36 @@ GeoscapeCraftState::GeoscapeCraftState(Game* game, Craft* craft, Globe* globe, W
 {
 	_screen = false;
 
-	_window			= new Window(this, 240, 185, 8, 8, POPUP_BOTH);
+	_window			= new Window(this, 224, 185, 16, 8, POPUP_BOTH);
 
-	_txtTitle		= new Text(216, 17, 32, 17);
+	_txtTitle		= new Text(192, 17, 32, 17);
 
-	_txtStatus		= new Text(216, 17, 32, 33);
+	_txtStatus		= new Text(192, 17, 32, 33);
 
-	_btnTarget		= new TextButton(176, 14, 48, 111);
-	_btnBase		= new TextButton(176, 14, 48, 126);
-	_btnCenter		= new TextButton(176, 14, 48, 141);
-	_btnPatrol		= new TextButton(176, 14, 48, 156);
-	_btnCancel		= new TextButton(176, 14, 48, 171);
+	_btnTarget		= new TextButton(176, 14, 40, 112);
+	_btnBase		= new TextButton(176, 14, 40, 127);
+	_btnCenter		= new TextButton(176, 14, 40, 142);
+	_btnPatrol		= new TextButton(176, 14, 40, 157);
+	_btnCancel		= new TextButton(176, 14, 40, 172);
 
-	_txtBase		= new Text(200, 9, 32, 45);
+	_txtBase		= new Text(192, 9, 32, 45);
 
-	_txtSpeed		= new Text(200, 9, 32, 54);
+	_txtSpeed		= new Text(192, 9, 32, 54);
 
-	_txtMaxSpeed	= new Text(200, 9, 32, 63);
-	_txtSoldier		= new Text(200, 9, 161, 63);
+	_txtMaxSpeed	= new Text(120, 9, 32, 63);
+	_txtSoldier		= new Text(80, 9, 160, 63);
 
-	_txtAltitude	= new Text(200, 9, 32, 72);
-	_txtHWP			= new Text(200, 9, 161, 72);
+	_txtAltitude	= new Text(120, 9, 32, 72);
+	_txtHWP			= new Text(80, 9, 160, 72);
 
 	_txtFuel		= new Text(120, 9, 32, 81);
-	_txtDamage		= new Text(75, 9, 161, 81);
+	_txtDamage		= new Text(80, 9, 160, 81);
 
 	_txtW1Name		= new Text(120, 9, 32, 90);
-	_txtW1Ammo		= new Text(60, 9, 161, 90);
+	_txtW1Ammo		= new Text(80, 9, 160, 90);
 
 	_txtW2Name		= new Text(120, 9, 32, 99);
-	_txtW2Ammo		= new Text(60, 9, 161, 99);
+	_txtW2Ammo		= new Text(80, 9, 160, 99);
 
 	_txtRedirect	= new Text(120, 17, 120, 50);
 

@@ -1435,11 +1435,12 @@ void Globe::drawDetail()
 	// Draw the country names
 	if (_zoom >= 2)
 	{
-		Text *label = new Text(100, 9, 0, 0);
+		Text* label = new Text(100, 9, 0, 0);
 		label->setPalette(getPalette());
 		label->setFonts(_game->getResourcePack()->getFont("FONT_BIG"), _game->getResourcePack()->getFont("FONT_SMALL"));
 		label->setAlign(ALIGN_CENTER);
-		label->setColor(Palette::blockOffset(15)-1);
+//kL		label->setColor(Palette::blockOffset(15)-1);
+		label->setColor(Palette::blockOffset(14)+4);		// kL, olive
 
 		Sint16 x, y;
 		for (std::vector<Country*>::iterator i = _game->getSavedGame()->getCountries()->begin(); i != _game->getSavedGame()->getCountries()->end(); ++i)
