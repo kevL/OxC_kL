@@ -240,56 +240,16 @@ void ManageAlienContainmentState::btnOkClick(Action*)
 		{
 			// kL_begin: ManageAlienContainmentState::btnOkClick, researchHelp() call.
 
-			_base->researchHelp(_aliens[i]);
-
-/*			std::string sProject = project->getRules()->getName();
-
-
-			for (std::vector<ResearchProject*>::const_iterator
-					iter = finished.begin();
-					iter != finished.end();
-					++iter)
-			{
-
-				// now iterate through all the bases and remove this project from their labs
-				for (std::vector<Base*>::iterator
-						j = _game->getSavedGame()->getBases()->begin();
-						j != _game->getSavedGame()->getBases()->end();
-						++j)
-				{
-					for (std::vector<ResearchProject*>::const_iterator
-							iter2 = (*j)->getResearch().begin();
-							iter2 != (*j)->getResearch().end();
-							++iter2)
-					{
-						if ((*iter)->getRules()->getName() == (*iter2)->getRules()->getName()
-							&&  _game->getRuleset()->getUnit((*iter2)->getRules()->getName()) == 0)
-						{
-							(*j)->removeResearch(*iter2);
-
-							break;
-						}
-					}
-				}
-			} */
-
-/*			std::vector<ResearchProject*>::iterator iter = std::find(_research.begin(), _research.end(), project);
-			if (iter != _research.end())
-			{
-
-			} */
-			// kL_end.
+			// check for tortured intelligence reports
+			_base->researchHelp(_aliens[i]);	// kL
 
 			// remove the aliens
 			_base->getItems()->removeItem(_aliens[i], _qtys[i]);
 
 			// add the corpses
 			_base->getItems()->addItem(
-				_game->getRuleset()->getArmor(
-					_game->getRuleset()->getUnit(
-						_aliens[i]
-					)->getArmor()
-				)->getCorpseGeoscape(), _qtys[i]
+					_game->getRuleset()->getArmor(_game->getRuleset()->getUnit(_aliens[i])->getArmor())->getCorpseGeoscape(),
+					_qtys[i]);
 		}
 	}
 

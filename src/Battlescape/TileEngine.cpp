@@ -1452,7 +1452,8 @@ bool TileEngine::checkReactionFire(BattleUnit* unit)
 					}
 				}
 
-				// avoid setting result to true, but carry on, just cause one unit can't react doesn't mean the rest of the units in the vector (if any) can't
+				// avoid setting result to true, but carry on, just cause one unit can't
+				// react doesn't mean the rest of the units in the vector (if any) can't
 				reactor = getReactor(spotters, unit);
 
 				continue;

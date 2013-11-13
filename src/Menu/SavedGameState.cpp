@@ -46,8 +46,8 @@ SavedGameState::SavedGameState(Game* game, OptionsOrigin origin, int firstValidR
 		State(game),
 		_origin(origin),
 		_showMsg(true),
-		_noUI(false)
-		_firstValidRow(firstValidRow),
+		_noUI(false),
+		_firstValidRow(firstValidRow)
 {
 	_screen = false;
 
@@ -142,8 +142,8 @@ SavedGameState::SavedGameState(Game* game, OptionsOrigin origin, int firstValidR
 		State(game),
 		_origin(origin),
 		_showMsg(showMsg),
-		_noUI(true)
-		_firstValidRow(firstValidRow),
+		_noUI(true),
+		_firstValidRow(firstValidRow)
 {
 	if (_showMsg)
 	{

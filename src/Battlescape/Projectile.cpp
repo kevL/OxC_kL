@@ -72,13 +72,8 @@ Projectile::Projectile(
 	{
 		if (_action.type == BA_THROW)
 		{
-			_speed = _speed * 3 / 5;	// kL
-			_sprite =
-					_res
-						->getSurfaceSet("FLOOROB.PCK")
-							->getFrame(getItem()
-								->getRules()
-									->getFloorSprite());
+			_speed = _speed * 5 / 7;	// kL
+			_sprite =_res->getSurfaceSet("FLOOROB.PCK")->getFrame(getItem()->getRules()->getFloorSprite());
 		}
 		else // ba_SHOOT!!
 		{
@@ -215,7 +210,6 @@ int Projectile::calculateTrajectory(double accuracy)
 				targetVoxel = Position(
 						_action.target.x * 16 + 8,
 						_action.target.y * 16 + 8,
-//kL						_action.target.z * 24 + 10);
 						_action.target.z * 24 + 8);
 			}
 		}
@@ -278,49 +272,32 @@ int Projectile::calculateTrajectory(double accuracy)
 		}
 
 
-		test = _save->
-				getTileEngine()->
-						calculateLine(
-								originVoxel,
-								targetVoxel,
-								false,
-								&_trajectory,
-								bu);
+		test = _save->getTileEngine()->calculateLine(
+				originVoxel,
+				targetVoxel,
+				false,
+				&_trajectory,
+				bu);
 
 		//Log(LOG_INFO) << ". test = " << test;
 
-		if (test != -1 && !_trajectory.empty() && _action.actor->getFaction() == FACTION_PLAYER && _action.autoShotCounter == 1)
-//		if (test == 4 // aiming at Unit.
-//			&& !_trajectory.empty())
+		if (test != -1
+				&& !_trajectory.empty()
+				&& _action.actor->getFaction() == FACTION_PLAYER
+				&& _action.autoShotCounter == 1)
 		{
 			hitPos = Position(
 					_trajectory.at(0).x / 16,
 					_trajectory.at(0).y / 16,
 					_trajectory.at(0).z / 24);
 
-			if (test == 4 && _save->getTile(hitPos) && _save->getTile(hitPos)->getUnit() == 0) //no unit? must be lower
-//			if (_save->getTile(hitPos)
-//				&& _save->getTile(hitPos)->getUnit() == 0) // must be poking head up from the belowTile
+			if (test == 4
+					&& _save->getTile(hitPos)
+					&& _save->getTile(hitPos)->getUnit() == 0)
 			{
+				// must be poking head up from the belowTile
 				hitPos = Position(hitPos.x, hitPos.y, hitPos.z - 1);
 			}
-/*		}
-
-		if (test != -1
-			&& !_trajectory.empty()
-			&& _action.actor->getFaction() == FACTION_PLAYER
-			&& _action.autoShotCounter == 1)
-		{
-			//Log(LOG_INFO) << ". test != -1 etc.";
-
-			// skip already estimated hitPos
-			if (test != 4) // hit something in tile, not Unit.
-			{
-				hitPos = Position(
-						_trajectory.at(0).x / 16,
-						_trajectory.at(0).y / 16,
-						_trajectory.at(0).z / 24);
-			} */
 
 			if (hitPos != _action.target
 				&& _action.result == "")
@@ -334,9 +311,10 @@ int Projectile::calculateTrajectory(double accuracy)
 					if (hitPos.y - 1 != _action.target.y)
 //					if (hitPos.y - 1 == _action.target.y)
 					{
-						//Log(LOG_INFO) << ". . . . no Acu modifi";
+						//Log(LOG_INFO) << ". . . . no Acu modifi perhaps";
 
 						_trajectory.clear();
+
 						return -1;
 /*						return _save->getTileEngine()->calculateLine(
 								originVoxel,
@@ -346,63 +324,38 @@ int Projectile::calculateTrajectory(double accuracy)
 								bu); */
 					}
 				}
-
-				else if (test == 1)
-				{
-					if (hitPos.x - 1 != _action.target.x)
-					{
-						_trajectory.clear();
-						return -1;
-					}
-				}
-				else if (test == 4)
-				{
-					BattleUnit *hitUnit = _save->getTile(hitPos)->getUnit();
-					BattleUnit *targetUnit = targetTile->getUnit();
-					if (hitUnit != targetUnit)
-					{
-						_trajectory.clear();
-						return -1;
-					}
-				}
-				else
-				{
-					_trajectory.clear();
-					return -1;
-				}
-			}
-		}
-	}
-/*				if (test == 1) // re-calculate for Westwall east of targetTile
+				else if (test == 1) // re-calculate for Westwall east of targetTile
 				{
 					//Log(LOG_INFO) << ". . . test == 1";
 
-						return -1;
-					}
-						//Log(LOG_INFO) << ". . . . no Acu modifi";
-
+					if (hitPos.x - 1 != _action.target.x)
+//					if (hitPos.x - 1 == _action.target.x)
+					{
+						//Log(LOG_INFO) << ". . . . no Acu modifi perhaps";
 						_trajectory.clear();
 
-						return _save->getTileEngine()->calculateLine(
+						return -1;
+/*						return _save->getTileEngine()->calculateLine(
 								originVoxel,
 								targetVoxel,
 								true,
 								&_trajectory,
-								bu);
+								bu); */
 					}
 				}
-
-				// kL_begin: Projectile::calculateTrajectory() NOW TARGETS FLOORS.
-				if (test == 0)
+/*				// kL_begin: Projectile::calculateTrajectory() NOW TARGETS FLOORS.
+				else if (test == 0)
 				{
 					//Log(LOG_INFO) << ". . . test == 0";
 
+//					if (hitPos.x - 1 != _action.target.x)
 //					if (hitPos.z - 1 == _action.target.z)
 //					{
-						//Log(LOG_INFO) << ". . . . no Acu modifi";
+						//Log(LOG_INFO) << ". . . . no Acu modifi perhaps";
 
 					_trajectory.clear();
 
+//					return -1;
 					return _save->getTileEngine()->calculateLine(
 							originVoxel,
 							targetVoxel,
@@ -410,17 +363,30 @@ int Projectile::calculateTrajectory(double accuracy)
 							&_trajectory,
 							bu);
 //					}
-				} // kL_end.
+				} */// kL_end.
+				else if (test == 4)
+				{
+					BattleUnit* hitUnit = _save->getTile(hitPos)->getUnit();
+					BattleUnit* targetUnit = targetTile->getUnit();
 
-				_trajectory.clear();
+					if (hitUnit != targetUnit)
+					{
+						_trajectory.clear();
 
-				//Log(LOG_INFO) << ". return -1";
-				return -1;
+						return -1;
+					}
+				}
+				else // test == 3, or something much higher.
+				{
+					_trajectory.clear();
+
+					return -1;
+				}
 			}
 		}
+	}
 
-		_trajectory.clear();
-	} */
+	_trajectory.clear();
 
 	// apply some accuracy modifiers (todo: calculate this)
 	// This will results in a new target voxel
@@ -746,7 +712,7 @@ void Projectile::applyAccuracy(
 	else
 		zShift = xyShift + zDist / 2;
 
-	int deviation = RNG::generate(0, 100) - (accuracy * 100);
+	int deviation = RNG::generate(0, 100) - (static_cast<int>(accuracy * 100.0));
 
 	if (deviation >= 0)
 		deviation += 50;				// add extra spread to "miss" cloud

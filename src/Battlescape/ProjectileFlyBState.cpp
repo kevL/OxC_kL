@@ -591,16 +591,16 @@ bool ProjectileFlyBState::validThrowRange(BattleAction* action)
 	// Throwing Distance roughly = 2.5 \D7 Strength / Weight
 
 	// note that all coordinates and thus also distances below are in number of tiles (not in voxels).
-	double range = 2.6 * static_cast<double>(action->actor->getStats()->strength / action->weapon->getRules()->getWeight());
+	double range = 2.63 * static_cast<double>(action->actor->getStats()->strength / action->weapon->getRules()->getWeight());
 
-	int xdiff = action->target.x - action->actor->getPosition().x;
-	int ydiff = action->target.y - action->actor->getPosition().y;
-	double distance = sqrt(static_cast<double>((xdiff * xdiff) + (ydiff * ydiff)));
+	int delta_x = action->actor->getPosition().x - action->target.x;
+	int delta_y = action->actor->getPosition().y - action->target.y;
+	double distance = sqrt(static_cast<double>((delta_x * delta_x) + (delta_y * delta_y)));
 
 	// throwing off a building of 1 level lets you throw 2 tiles further than normal range,
 	// throwing up the roof of this building lets your throw 2 tiles less further
-	int zdiff = action->target.z - action->actor->getPosition().z;
-	distance -= static_cast<double>(zdiff * 2);		// kL. was +=
+	int delta_z = action->actor->getPosition().z - action->target.z;
+	distance -= static_cast<double>(delta_z * 2);
 
 	return distance < range;
 }
