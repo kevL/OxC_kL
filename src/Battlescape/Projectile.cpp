@@ -252,6 +252,7 @@ int Projectile::calculateTrajectory(double accuracy)
 		else if (targetTile->getMapData(MapData::O_FLOOR) != 0) // aiming at Floor
 		{
 			// kL_note: This is not allowing floortiles to be targetted properly.
+			// Wb did an update, so check it out.... +2 voxels on the z-axis
 			if (!_save->getTileEngine()->canTargetTile(
 					&originVoxel,
 					targetTile,
@@ -264,7 +265,7 @@ int Projectile::calculateTrajectory(double accuracy)
 				targetVoxel = Position(
 						_action.target.x * 16 + 8,
 						_action.target.y * 16 + 8,
-						_action.target.z * 24);
+						_action.target.z * 24 + 2);
 			}
 		}
 		else // aiming at empty space.
@@ -273,8 +274,7 @@ int Projectile::calculateTrajectory(double accuracy)
 			targetVoxel = Position(
 					_action.target.x * 16 + 8,
 					_action.target.y * 16 + 8,
-//kL					_action.target.z * 24 + 10);
-					_action.target.z * 24 + 12);	// kL
+					_action.target.z * 24 + 12);
 		}
 
 
@@ -289,20 +289,22 @@ int Projectile::calculateTrajectory(double accuracy)
 
 		//Log(LOG_INFO) << ". test = " << test;
 
-		if (test == 4 // aiming at Unit.
-			&& !_trajectory.empty())
+		if (test != -1 && !_trajectory.empty() && _action.actor->getFaction() == FACTION_PLAYER && _action.autoShotCounter == 1)
+//		if (test == 4 // aiming at Unit.
+//			&& !_trajectory.empty())
 		{
 			hitPos = Position(
 					_trajectory.at(0).x / 16,
 					_trajectory.at(0).y / 16,
 					_trajectory.at(0).z / 24);
 
-			if (_save->getTile(hitPos)
-				&& _save->getTile(hitPos)->getUnit() == 0) // must be poking head up from the belowTile
+			if (test == 4 && _save->getTile(hitPos) && _save->getTile(hitPos)->getUnit() == 0) //no unit? must be lower
+//			if (_save->getTile(hitPos)
+//				&& _save->getTile(hitPos)->getUnit() == 0) // must be poking head up from the belowTile
 			{
 				hitPos = Position(hitPos.x, hitPos.y, hitPos.z - 1);
 			}
-		}
+/*		}
 
 		if (test != -1
 			&& !_trajectory.empty()
@@ -318,7 +320,7 @@ int Projectile::calculateTrajectory(double accuracy)
 						_trajectory.at(0).x / 16,
 						_trajectory.at(0).y / 16,
 						_trajectory.at(0).z / 24);
-			}
+			} */
 
 			if (hitPos != _action.target
 				&& _action.result == "")
@@ -329,27 +331,54 @@ int Projectile::calculateTrajectory(double accuracy)
 				{
 					//Log(LOG_INFO) << ". . . test == 2";
 
-					if (hitPos.y - 1 == _action.target.y)
+					if (hitPos.y - 1 != _action.target.y)
+//					if (hitPos.y - 1 == _action.target.y)
 					{
 						//Log(LOG_INFO) << ". . . . no Acu modifi";
 
 						_trajectory.clear();
-
-						return _save->getTileEngine()->calculateLine(
+						return -1;
+/*						return _save->getTileEngine()->calculateLine(
 								originVoxel,
 								targetVoxel,
 								true,
 								&_trajectory,
-								bu);
+								bu); */
 					}
 				}
 
-				if (test == 1) // re-calculate for Westwall east of targetTile
+				else if (test == 1)
+				{
+					if (hitPos.x - 1 != _action.target.x)
+					{
+						_trajectory.clear();
+						return -1;
+					}
+				}
+				else if (test == 4)
+				{
+					BattleUnit *hitUnit = _save->getTile(hitPos)->getUnit();
+					BattleUnit *targetUnit = targetTile->getUnit();
+					if (hitUnit != targetUnit)
+					{
+						_trajectory.clear();
+						return -1;
+					}
+				}
+				else
+				{
+					_trajectory.clear();
+					return -1;
+				}
+			}
+		}
+	}
+/*				if (test == 1) // re-calculate for Westwall east of targetTile
 				{
 					//Log(LOG_INFO) << ". . . test == 1";
 
-					if (hitPos.x - 1 == _action.target.x)
-					{
+						return -1;
+					}
 						//Log(LOG_INFO) << ". . . . no Acu modifi";
 
 						_trajectory.clear();
@@ -391,7 +420,7 @@ int Projectile::calculateTrajectory(double accuracy)
 		}
 
 		_trajectory.clear();
-	}
+	} */
 
 	// apply some accuracy modifiers (todo: calculate this)
 	// This will results in a new target voxel
@@ -701,7 +730,41 @@ void Projectile::applyAccuracy(
 		return;
 	}
 
-	// maxDeviation is the max angle deviation for accuracy 0% in degrees
+	// Wb's new nonRangeBased target formula. 2013 nov 12
+	int xDist = abs(origin.x - target->x);
+	int yDist = abs(origin.y - target->y);
+	int zDist = abs(origin.z - target->z);
+	int xyShift, zShift;
+
+	if (xDist / 2 <= yDist)				//yes, we need to add some x/y non-uniformity
+		xyShift = xDist / 4 + yDist;	//and don't ask why, please. it's The Commandment
+	else
+		xyShift = (xDist + yDist) / 2;	//that's uniform part of spreading
+
+	if (xyShift <= zDist)				//slight z deviation
+		zShift = xyShift / 2 + zDist;
+	else
+		zShift = xyShift + zDist / 2;
+
+	int deviation = RNG::generate(0, 100) - (accuracy * 100);
+
+	if (deviation >= 0)
+		deviation += 50;				// add extra spread to "miss" cloud
+	else
+		deviation += 10;				//accuracy of 109 or greater will become 1 (tightest spread)
+	
+	deviation = std::max(1, zShift * deviation / 200);	//range ratio
+		
+	target->x += RNG::generate(0, deviation) - deviation / 2;
+	target->y += RNG::generate(0, deviation) - deviation / 2;
+	target->z += RNG::generate(0, deviation / 2) / 2 - deviation / 8;
+	
+	double rotation, tilt;
+	rotation = atan2(double(target->y - origin.y), double(target->x - origin.x)) * 180 / M_PI;
+	tilt = atan2(double(target->z - origin.z),
+		sqrt(double(target->x - origin.x)*double(target->x - origin.x)+double(target->y - origin.y)*double(target->y - origin.y))) * 180 / M_PI;
+
+/*	// maxDeviation is the max angle deviation for accuracy 0% in degrees
 	double maxDeviation = 2.5;
 	// minDeviation is the min angle deviation for accuracy 100% in degrees
 	double minDeviation = 0.4;
@@ -734,7 +797,7 @@ void Projectile::applyAccuracy(
 
 	// add deviations
 	rotation += dRot;
-	tilt += dTilt;
+	tilt += dTilt; */
 
 	// calculate new target
 	// this new target can be very far out of the map, but we don't care about that right now

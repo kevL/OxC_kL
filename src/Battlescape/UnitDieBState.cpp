@@ -329,7 +329,7 @@ void UnitDieBState::convertUnitToCorpse()
 
 	Position lastPosition = _unit->getPosition();
 
-	int size = _unit->getArmor()->getSize() - 1;
+	int size = _unit->getArmor()->getSize();
 
 	BattleItem* itemToKeep = 0;
 
@@ -338,7 +338,7 @@ void UnitDieBState::convertUnitToCorpse()
 			|| _unit->getStatus() == STATUS_UNCONSCIOUS;
 
 	// move inventory from unit to the ground for non-large units
-	if (size == 0 && dropItems)
+	if (size == 1 && dropItems)
 	{
 		for (std::vector<BattleItem*>::iterator i = _unit->getInventory()->begin(); i != _unit->getInventory()->end(); ++i)
 		{
@@ -364,37 +364,22 @@ void UnitDieBState::convertUnitToCorpse()
 
 	_unit->setTile(0); // remove unit-tile link
 
-	if (size == 0)
+	int i = 0;
+	for (int y = 0; y < size; y++)
 	{
-		BattleItem* corpse = new BattleItem(_parent->getRuleset()->getItem(_unit->getArmor()->getCorpseItem()),_parent->getSave()->getCurrentItemId());
-		corpse->setUnit(_unit);
-		_parent->dropItem(_unit->getPosition(), corpse, true);
+		for (int x = 0; x < size; x++)
+		{
+			BattleItem *corpse = new BattleItem(_parent->getRuleset()->getItem(_unit->getArmor()->getCorpseBattlescape()[i]), _parent->getSave()->getCurrentItemId());
+			corpse->setUnit(_unit);
 
-		if (_parent->getSave()->getTile(lastPosition)->getUnit() == _unit) // check in case unit was displaced by another unit
-		{
-			_parent->getSave()->getTile(lastPosition)->setUnit(0);
-		}
-	}
-	else
-	{
-		int i = 1;
-		for (int y = 0; y <= size; y++)
-		{
-			for (int x = 0; x <= size; x++)
+			if (_parent->getSave()->getTile(lastPosition + Position(x, y, 0))->getUnit() == _unit) // check in case unit was displaced by another unit
 			{
-				std::ostringstream ss;
-				ss << _unit->getArmor()->getCorpseItem() << i;
-				BattleItem* corpse = new BattleItem(_parent->getRuleset()->getItem(ss.str()),_parent->getSave()->getCurrentItemId());
-				corpse->setUnit(_unit);
-
-				if (_parent->getSave()->getTile(lastPosition + Position(x, y, 0))->getUnit() == _unit) // check in case unit was displaced by another unit
-				{
-					_parent->getSave()->getTile(lastPosition + Position(x, y, 0))->setUnit(0);
-				}
-				_parent->dropItem(lastPosition + Position(x, y, 0), corpse, true);
-
-				i++;
+				_parent->getSave()->getTile(lastPosition + Position(x, y, 0))->setUnit(0);
 			}
+
+			_parent->dropItem(lastPosition + Position(x, y, 0), corpse, true);
+
+			i++;
 		}
 	}
 }

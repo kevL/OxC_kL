@@ -1922,7 +1922,7 @@ void GeoscapeState::time1Day()
 								_game->getRuleset()->getUnit(
 										research->getName())
 								->getArmor())
-						->getCorpseItem());
+						->getCorpseGeoscape());
 				// ;) -> kL_note: heh i noticed that.
 			}
 

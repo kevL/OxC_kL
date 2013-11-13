@@ -763,16 +763,10 @@ void DebriefingState::prepareDebriefing()
 					}
 				}
 
-				std::string corpseItem = (*j)->getArmor()->getCorpseItem();
+				std::string corpseItem = (*j)->getArmor()->getCorpseGeoscape();
 				if ((*j)->getSpawnUnit() != "")
 				{
-					corpseItem = _game->getRuleset()->getArmor(_game->getRuleset()->getUnit((*j)->getSpawnUnit())->getArmor())->getCorpseItem();
-				}
-
-				// we need to remove that pesky underscore and add an STR_ for large unit corpses.
-				if ((*j)->getArmor()->getSize() > 1)
-				{
-					corpseItem = "STR_" + corpseItem.substr(0, corpseItem.size() - 1);
+					corpseItem = _game->getRuleset()->getArmor(_game->getRuleset()->getUnit((*j)->getSpawnUnit())->getArmor())->getCorpseGeoscape();
 				}
 
 //kL				addStat("STR_LIVE_ALIENS_RECOVERED", 1, 10); // 10 points for recovery
@@ -1249,8 +1243,8 @@ void DebriefingState::recoverItems(std::vector<BattleItem*>* from, Base* base)
 							if (base->getAvailableContainment() == 0)
 							{
 								_noContainment = true;
-//kL								base->getItems()->addItem((*it)->getRules()->getName(), 1);
-								base->getItems()->addItem((*it)->getRules()->getName());
+//kL								base->getItems()->addItem((*it)->getUnit()->getArmor()->getCorpseGeoscape(), 1);
+								base->getItems()->addItem((*it)->getUnit()->getArmor()->getCorpseGeoscape());
 							}
 							else
 							{
@@ -1261,8 +1255,8 @@ void DebriefingState::recoverItems(std::vector<BattleItem*>* from, Base* base)
 						}
 						else
 						{
-//kL							base->getItems()->addItem((*it)->getRules()->getName(), 1);
-							base->getItems()->addItem((*it)->getRules()->getName());
+//kL							base->getItems()->addItem((*it)->getUnit()->getArmor()->getCorpseGeoscape(), 1);
+							base->getItems()->addItem((*it)->getUnit()->getArmor()->getCorpseGeoscape());
 						}
 					}
 					else if ((*it)->getUnit()->getOriginalFaction() == FACTION_NEUTRAL)
