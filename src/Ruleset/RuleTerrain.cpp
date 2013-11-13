@@ -29,7 +29,11 @@ namespace OpenXcom
 /**
  * RuleTerrain construction.
  */
-RuleTerrain::RuleTerrain(const std::string &name) : _name(name), _largeBlockLimit(0), _hemisphere(0)
+RuleTerrain::RuleTerrain(const std::string& name)
+	:
+		_name(name),
+		_largeBlockLimit(0),
+		_hemisphere(0)
 {
 }
 
@@ -49,9 +53,9 @@ RuleTerrain::~RuleTerrain()
  * @param node YAML node.
  * @param ruleset Ruleset for the terrain.
  */
-void RuleTerrain::load(const YAML::Node &node, Ruleset *ruleset)
+void RuleTerrain::load(const YAML::Node& node, Ruleset* ruleset)
 {
-	if (const YAML::Node &map = node["mapDataSets"])
+	if (const YAML::Node& map = node["mapDataSets"])
 	{
 		_mapDataSets.clear();
 		for (YAML::const_iterator i = map.begin(); i != map.end(); ++i)
@@ -59,27 +63,30 @@ void RuleTerrain::load(const YAML::Node &node, Ruleset *ruleset)
 			_mapDataSets.push_back(ruleset->getMapDataSet(i->as<std::string>()));
 		}
 	}
-	if (const YAML::Node &map = node["mapBlocks"])
+
+	if (const YAML::Node& map = node["mapBlocks"])
 	{
 		_mapBlocks.clear();
+
 		for (YAML::const_iterator i = map.begin(); i != map.end(); ++i)
 		{
-			MapBlock *map = new MapBlock(this, (*i)["name"].as<std::string>(), 0, 0, MT_DEFAULT);
+			MapBlock* map = new MapBlock(this, (*i)["name"].as<std::string>(), 0, 0, MT_DEFAULT);
 			map->load(*i);
 			_mapBlocks.push_back(map);
 		}
 	}
-	_name = node["name"].as<std::string>(_name);
-	_largeBlockLimit = node["largeBlockLimit"].as<int>(_largeBlockLimit);
-	_textures = node["textures"].as< std::vector<int> >(_textures);
-	_hemisphere = node["hemisphere"].as<int>(_hemisphere);
+
+	_name				= node["name"].as<std::string>(_name);
+	_largeBlockLimit	= node["largeBlockLimit"].as<int>(_largeBlockLimit);
+	_textures			= node["textures"].as< std::vector<int> >(_textures);
+	_hemisphere			= node["hemisphere"].as<int>(_hemisphere);
 }
 
 /**
  * Gets the array of mapblocks.
  * @return Pointer to the array of mapblocks.
  */
-std::vector<MapBlock*> *RuleTerrain::getMapBlocks()
+std::vector<MapBlock*>* RuleTerrain::getMapBlocks()
 {
 	return &_mapBlocks;
 }
@@ -88,7 +95,7 @@ std::vector<MapBlock*> *RuleTerrain::getMapBlocks()
  * Gets the array of mapdatafiles.
  * @return Pointer to the array of mapdatafiles.
  */
-std::vector<MapDataSet*> *RuleTerrain::getMapDataSets()
+std::vector<MapDataSet*>* RuleTerrain::getMapDataSets()
 {
 	return &_mapDataSets;
 }
@@ -115,9 +122,9 @@ MapBlock* RuleTerrain::getRandomMapBlock(int maxsize, MapBlockType type, bool fo
 
 	for (std::vector<MapBlock*>::const_iterator i = _mapBlocks.begin(); i != _mapBlocks.end(); ++i)
 	{
-		if (((force && (*i)->getSizeX() == maxsize) ||
-			(!force && (*i)->getSizeX() <= maxsize)) &&
-			((*i)->getType() == type || (*i)->getSubType() == type))
+		if (((force && (*i)->getSizeX() == maxsize)
+				|| (!force && (*i)->getSizeX() <= maxsize))
+			&& ((*i)->getType() == type || (*i)->getSubType() == type))
 		{
 			for (int j = 0; j != (*i)->getRemainingUses(); ++j)
 			{
@@ -145,9 +152,10 @@ MapBlock* RuleTerrain::getMapBlock(const std::string &name)
 {
 	for (std::vector<MapBlock*>::const_iterator i = _mapBlocks.begin(); i != _mapBlocks.end(); ++i)
 	{
-		if((*i)->getName() == name)
+		if ((*i)->getName() == name)
 			return (*i);
 	}
+
 	return 0;
 }
 
@@ -157,17 +165,19 @@ MapBlock* RuleTerrain::getMapBlock(const std::string &name)
  * @param mapDataSetID The id of the map data set.
  * @return Pointer to MapData object.
  */
-MapData *RuleTerrain::getMapData(int *id, int *mapDataSetID) const
+MapData* RuleTerrain::getMapData(int* id, int* mapDataSetID) const
 {
 	MapDataSet* mdf = 0;
 
 	for (std::vector<MapDataSet*>::const_iterator i = _mapDataSets.begin(); i != _mapDataSets.end(); ++i)
 	{
 		mdf = *i;
+
 		if (*id - mdf->getSize() < 0)
 		{
 			break;
 		}
+
 		*id -= mdf->getSize();
 		(*mapDataSetID)++;
 	}
@@ -199,7 +209,7 @@ void RuleTerrain::resetMapBlocks()
  * Gets the array of globe texture IDs this terrain is loaded on.
  * @return Pointer to the array of texture IDs.
  */
-std::vector<int> *RuleTerrain::getTextures()
+std::vector<int>* RuleTerrain::getTextures()
 {
 	return &_textures;
 }

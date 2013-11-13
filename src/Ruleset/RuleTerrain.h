@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_RULETERRAIN_H
 #define OPENXCOM_RULETERRAIN_H
 
@@ -23,6 +24,7 @@
 #include <string>
 #include <yaml-cpp/yaml.h>
 #include "MapBlock.h"
+
 
 namespace OpenXcom
 {
@@ -47,29 +49,34 @@ private:
 	int _largeBlockLimit;
 	std::vector<int> _textures;
 	int _hemisphere;
-public:
-	RuleTerrain(const std::string &name);
-	~RuleTerrain();
-	/// Loads the terrain from YAML.
-	void load(const YAML::Node& node, Ruleset *ruleset);
-	/// Gets the terrain's name (used for MAP generation).
-	std::string getName() const;
-	/// Gets the terrain's mapblocks.
-	std::vector<MapBlock*> *getMapBlocks();
-	/// Gets the terrain's mapdatafiles.
-	std::vector<MapDataSet*> *getMapDataSets();
-	/// Gets a random mapblock.
-	MapBlock *getRandomMapBlock(int maxsize, MapBlockType type, bool force = false);
-	/// Gets a mapblock given its name.
-	MapBlock *getMapBlock(const std::string &name);
-	/// Gets the mapdata object.
-	MapData *getMapData(int *id, int *mapDataSetID) const;
-	/// Gets the maximum amount of large blocks in this terrain.
-	int getLargeBlockLimit() const;
-	void resetMapBlocks();
-	std::vector<int> *getTextures();
-	int getHemisphere() const;
 
+	public:
+		RuleTerrain(const std::string &name);
+		~RuleTerrain();
+
+		/// Loads the terrain from YAML.
+		void load(const YAML::Node& node, Ruleset* ruleset);
+
+		/// Gets the terrain's name (used for MAP generation).
+		std::string getName() const;
+		/// Gets the terrain's mapblocks.
+		std::vector<MapBlock*>* getMapBlocks();
+		/// Gets the terrain's mapdatafiles.
+		std::vector<MapDataSet*>* getMapDataSets();
+		/// Gets a random mapblock.
+		MapBlock* getRandomMapBlock(int maxsize, MapBlockType type, bool force = false);
+		/// Gets a mapblock given its name.
+		MapBlock* getMapBlock(const std::string &name);
+		/// Gets the mapdata object.
+		MapData* getMapData(int* id, int* mapDataSetID) const;
+		/// Gets the maximum amount of large blocks in this terrain.
+		int getLargeBlockLimit() const;
+		///
+		void resetMapBlocks();
+		///
+		std::vector<int> *getTextures();
+		///
+		int getHemisphere() const;
 };
 
 }

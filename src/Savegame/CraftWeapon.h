@@ -52,8 +52,10 @@ private:
 		void load(const YAML::Node& node);
 		/// Saves the craft weapon to YAML.
 		YAML::Node save() const;
+
 		/// Gets the craft weapon's ruleset.
 		RuleCraftWeapon* getRules() const;
+
 		/// Gets the craft weapon's ammo.
 		int getAmmo() const;
 		/// Sets the craft weapon's ammo.
@@ -64,6 +66,7 @@ private:
 		void setRearming(bool rearming);
 		/// Rearms the craft weapon.
 		void rearm();
+
 		/// Fires the craft weapon. Used during dogfights.
 		CraftWeaponProjectile* fire() const;
 };

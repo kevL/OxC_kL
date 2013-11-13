@@ -32,9 +32,9 @@ namespace OpenXcom
  */
 CraftWeapon::CraftWeapon(RuleCraftWeapon* rules, int ammo)
 	:
-	_rules(rules),
-	_ammo(ammo),
-	_rearming(false)
+		_rules(rules),
+		_ammo(ammo),
+		_rearming(false)
 {
 }
 
@@ -148,6 +148,7 @@ void CraftWeapon::rearm()
 CraftWeaponProjectile* CraftWeapon::fire() const
 {
 	CraftWeaponProjectile* p = new CraftWeaponProjectile();
+
 	p->setType(this->getRules()->getProjectileType());
 	p->setSpeed(this->getRules()->getProjectileSpeed());
 	p->setAccuracy(this->getRules()->getAccuracy());

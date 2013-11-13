@@ -16,7 +16,9 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "MapBlock.h"
+
 
 namespace OpenXcom
 {
@@ -24,7 +26,18 @@ namespace OpenXcom
 /**
  * MapBlock construction.
  */
-MapBlock::MapBlock(RuleTerrain *terrain, std::string name, int size_x, int size_y, MapBlockType type):_terrain(terrain), _name(name), _size_x(size_x), _size_y(size_y), _size_z(0), _type(type), _subType(MT_UNDEFINED), _frequency(1), _timesUsed(0), _maxCount(-1)
+MapBlock::MapBlock(RuleTerrain* terrain, std::string name, int size_x, int size_y, MapBlockType type)
+	:
+		_terrain(terrain),
+		_name(name),
+		_size_x(size_x),
+		_size_y(size_y),
+		_size_z(0),
+		_type(type),
+		_subType(MT_UNDEFINED),
+		_frequency(1),
+		_timesUsed(0),
+		_maxCount(-1)
 {
 }
 
@@ -140,6 +153,7 @@ void MapBlock::markUsed()
 	{
 		return;
 	}
+
 	_timesUsed++;
 	if (_timesUsed >= _maxCount)
 	{

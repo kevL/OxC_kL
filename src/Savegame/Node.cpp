@@ -16,13 +16,23 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "Node.h"
+
 
 namespace OpenXcom
 {
 
-
-Node::Node() : _id(0), _segment(0), _type(0), _rank(0), _flags(0), _reserved(0), _priority(0), _allocated(false)
+Node::Node()
+	:
+		_id(0),
+		_segment(0),
+		_type(0),
+		_rank(0),
+		_flags(0),
+		_reserved(0),
+		_priority(0),
+		_allocated(false)
 {
 }
 
@@ -37,7 +47,17 @@ Node::Node() : _id(0), _segment(0), _type(0), _rank(0), _flags(0), _reserved(0),
  * @param reserved
  * @param priority
  */
-Node::Node(int id, Position pos, int segment, int type, int rank, int flags, int reserved, int priority) : _id(id), _pos(pos), _segment(segment), _type(type), _rank(rank), _flags(flags), _reserved(reserved), _priority(priority), _allocated(false)
+Node::Node(int id, Position pos, int segment, int type, int rank, int flags, int reserved, int priority)
+	:
+		_id(id),
+		_pos(pos),
+		_segment(segment),
+		_type(type),
+		_rank(rank),
+		_flags(flags),
+		_reserved(reserved),
+		_priority(priority),
+		_allocated(false)
 {
 }
 
@@ -48,15 +68,17 @@ Node::~Node()
 {
 }
 
-const int Node::nodeRank[8][7] = {
-	{ 4, 3, 5, 8, 7, 2, 0 },	// commander
-	{ 4, 3, 5, 8, 7, 2, 0 },	// leader
-	{ 5, 4, 3, 2, 7, 8, 0 },	// engineer
-	{ 7, 6, 2, 8, 3, 4, 0 },	// medic
-	{ 3, 4, 5, 2, 7, 8, 0 },	// navigator
-	{ 2, 5, 3, 4, 6, 8, 0 },	// soldier
-	{ 2, 5, 3, 4, 6, 8, 0 },	// terrorist
-	{ 2, 5, 3, 4, 6, 8, 0 }		// also terrorist
+
+const int Node::nodeRank[8][7] =
+{
+	{4, 3, 5, 8, 7, 2, 0},	// commander
+	{4, 3, 5, 8, 7, 2, 0},	// leader
+	{5, 4, 3, 2, 7, 8, 0},	// engineer
+	{7, 6, 2, 8, 3, 4, 0},	// medic
+	{3, 4, 5, 2, 7, 8, 0},	// navigator
+	{2, 5, 3, 4, 6, 8, 0},	// soldier
+	{2, 5, 3, 4, 6, 8, 0},	// terrorist
+	{2, 5, 3, 4, 6, 8, 0}	// also terrorist
 };
 
 /**
@@ -65,16 +87,16 @@ const int Node::nodeRank[8][7] = {
  */
 void Node::load(const YAML::Node &node)
 {
-	_id = node["id"].as<int>(_id);
-	_pos = node["position"].as<Position>(_pos);
-	//_segment = node["segment"].as<int>(_segment);
-	_type = node["type"].as<int>(_type);
-	_rank = node["rank"].as<int>(_rank);
-	_flags = node["flags"].as<int>(_flags);
-	_reserved = node["reserved"].as<int>(_reserved);
-	_priority = node["priority"].as<int>(_priority);
-	_allocated = node["allocated"].as<bool>(_allocated);
-	_nodeLinks = node["links"].as< std::vector<int> >(_nodeLinks);
+	_id			= node["id"].as<int>(_id);
+	_pos		= node["position"].as<Position>(_pos);
+//	_segment	= node["segment"].as<int>(_segment);
+	_type		= node["type"].as<int>(_type);
+	_rank		= node["rank"].as<int>(_rank);
+	_flags		= node["flags"].as<int>(_flags);
+	_reserved	= node["reserved"].as<int>(_reserved);
+	_priority	= node["priority"].as<int>(_priority);
+	_allocated	= node["allocated"].as<bool>(_allocated);
+	_nodeLinks	= node["links"].as< std::vector<int> >(_nodeLinks);
 }
 
 /**
@@ -85,16 +107,16 @@ YAML::Node Node::save() const
 {
 	YAML::Node node;
 
-	node["id"] = _id;
-	node["position"] = _pos;
-//	node["segment"] = _segment;
-	node["type"] = _type;
-	node["rank"] = _rank;
-	node["flags"] = _flags;
-	node["reserved"] = _reserved;
-	node["priority"] = _priority;
-	node["allocated"] = _allocated;
-	node["links"] = _nodeLinks;
+	node["id"]			= _id;
+	node["position"]	= _pos;
+//	node["segment"]		= _segment;
+	node["type"]		= _type;
+	node["rank"]		= _rank;
+	node["flags"]		= _flags;
+	node["reserved"]	= _reserved;
+	node["priority"]	= _priority;
+	node["allocated"]	= _allocated;
+	node["links"]		= _nodeLinks;
 
 	return node;
 }
@@ -145,7 +167,7 @@ int Node::getSegment() const
 }
 
 /// get the node's paths
-std::vector<int> *Node::getNodeLinks()
+std::vector<int>* Node::getNodeLinks()
 {
 	return &_nodeLinks;
 }

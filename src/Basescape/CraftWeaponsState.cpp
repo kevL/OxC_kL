@@ -61,9 +61,9 @@ CraftWeaponsState::CraftWeaponsState(Game* game, Base* base, size_t craft, size_
 
 	_txtTitle		= new Text(200, 17, 60, 28);
 
-	_txtArmament	= new Text(90, 9, 66, 53);
-	_txtQuantity	= new Text(30, 9, 156, 53);
-	_txtAmmunition	= new Text(80, 9, 194, 53);
+	_txtArmament	= new Text(98, 9, 66, 53);
+	_txtQuantity	= new Text(30, 9, 164, 53);
+	_txtAmmunition	= new Text(76, 9, 194, 53);
 
 	_lstWeapons		= new TextList(204, 88, 58, 68);
 
@@ -108,7 +108,7 @@ CraftWeaponsState::CraftWeaponsState(Game* game, Base* base, size_t craft, size_
 
 	_lstWeapons->setColor(Palette::blockOffset(13)+10);
 	_lstWeapons->setArrowColor(Palette::blockOffset(15)+6);
-	_lstWeapons->setColumns(3, 90, 30, 80);
+	_lstWeapons->setColumns(3, 98, 30, 76);
 	_lstWeapons->setSelectable(true);
 	_lstWeapons->setBackground(_window);
 	_lstWeapons->setMargin(8);
@@ -166,7 +166,10 @@ void CraftWeaponsState::lstWeaponsClick(Action*)
 	if (current != 0) // Remove current weapon
 	{
 		_base->getItems()->addItem(current->getRules()->getLauncherItem());
-		_base->getItems()->addItem(current->getRules()->getClipItem(), (int)floor((double)current->getAmmo() / current->getRules()->getRearmRate()));
+		_base->getItems()->addItem(
+				current->getRules()->getClipItem(),
+				static_cast<int>(floor(static_cast<double>(current->getAmmo() / current->getRules()->getRearmRate()))));
+
 		delete current;
 		_base->getCrafts()->at(_craft)->getWeapons()->at(_weapon) = 0;
 	}

@@ -210,22 +210,22 @@ BattlescapeState::BattlescapeState(Game* game)
 	// Last 16 colors are a greyish gradient
 	SDL_Color color[] =
 	{
-		{	140,	152,	148,	0	},
-		{	132,	136,	140,	0	},
-		{	116,	124,	132,	0	},
-		{	108,	116,	124,	0	},
-		{	92,		104,	108,	0	},
-		{	84,		92,		100,	0	},
-		{	76,		80,		92,		0	},
-		{	56,		68,		84,		0	},
-		{	48,		56,		68,		0	},
-		{	40,		48,		56,		0	},
-		{	32,		36,		48,		0	},
-		{	24,		28,		32,		0	},
-		{	16,		20,		24,		0	},
-		{	8,		12,		16,		0	},
-		{	3,		4,		8,		0	},
-		{	3,		3,		6,		0	}
+		{140,	152,	148,	0},
+		{132,	136,	140,	0},
+		{116,	124,	132,	0},
+		{108,	116,	124,	0},
+		{92,	104,	108,	0},
+		{84,	92,		100,	0},
+		{76,	80,		92,		0},
+		{56,	68,		84,		0},
+		{48,	56,		68,		0},
+		{40,	48,		56,		0},
+		{32,	36,		48,		0},
+		{24,	28,		32,		0},
+		{16,	20,		24,		0},
+		{8,		12,		16,		0},
+		{3,		4,		8,		0},
+		{3,		3,		6,		0}
 	};
 
 	_game->setPalette(color, Palette::backPos + 16, 16);
@@ -292,7 +292,6 @@ BattlescapeState::BattlescapeState(Game* game)
 
 
 	add(_turnCounter);									// kL
-//	_turnCounter->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_4")->getColors());	// kL
 	_turnCounter->setColor(Palette::blockOffset(9));	// kL
 
 
@@ -312,7 +311,7 @@ BattlescapeState::BattlescapeState(Game* game)
 	r->h = iconsHeight;
 	s->blit(_icons);
 
-	_numLayers->setColor(Palette::blockOffset(1)-2);
+	_numLayers->setColor(Palette::blockOffset(5)-2);
 	_numLayers->setValue(1);
 
 	_numAmmoLeft->setColor(2);
@@ -443,9 +442,9 @@ BattlescapeState::BattlescapeState(Game* game)
 	_btnReserveAuto->onMouseIn((ActionHandler)& BattlescapeState::txtTooltipIn);
 	_btnReserveAuto->onMouseOut((ActionHandler)& BattlescapeState::txtTooltipOut);
 
+	// todo: make these visible based on ruleset and assign them to their own button
 	_btnReserveKneel->onMouseClick((ActionHandler)& BattlescapeState::btnReserveKneelClick);
 	_btnZeroTUs->onMouseClick((ActionHandler)& BattlescapeState::btnZeroTUsClick);
-	// todo: make these visible based on ruleset and assign them to their own button
 	_btnReserveKneel->setVisible(false);
 	_btnZeroTUs->setVisible(false);
 
@@ -456,7 +455,10 @@ BattlescapeState::BattlescapeState(Game* game)
 	_btnStats->onKeyboardPress((ActionHandler)& BattlescapeState::btnReloadClick, (SDLKey)Options::getInt("keyBattleReload"));
 	_btnStats->onKeyboardPress((ActionHandler)& BattlescapeState::btnPersonalLightingClick, (SDLKey)Options::getInt("keyBattlePersonalLighting"));
 
-	for (int i = 0; i < VISIBLE_MAX; ++i)
+	for (int
+			i = 0;
+			i < VISIBLE_MAX;
+			++i)
 	{
 		std::ostringstream key, tooltip;
 
@@ -523,7 +525,8 @@ BattlescapeState::BattlescapeState(Game* game)
 	_animTimer = new Timer(DEFAULT_ANIM_SPEED, true);
 	_animTimer->onTimer((StateHandler) &BattlescapeState::animate);
 
-	_gameTimer = new Timer(DEFAULT_ANIM_SPEED, true);
+//kL	_gameTimer = new Timer(DEFAULT_ANIM_SPEED, true);
+	_gameTimer = new Timer(DEFAULT_ANIM_SPEED + 35, true);
 	_gameTimer->onTimer((StateHandler) &BattlescapeState::handleState);
 
 	_battleGame = new BattlescapeGame(_save, this);

@@ -486,7 +486,40 @@ void Ufo::calculateSpeed()
 	theta = theta * 180.0 / M_PI;
 //	Log(LOG_INFO) << ". . theta(deg) = " << theta;
 
-	if (22.5 > theta && theta > -22.5)
+	if (157.5 < theta || theta < -157.5)
+	{
+		_direction = "STR_WEST";
+	}
+	else if (theta > 112.5)
+	{
+		_direction = "STR_NORTH_WEST";
+	}
+	else if (theta > 67.5)
+	{
+		_direction = "STR_NORTH";
+	}
+	else if (theta > 22.5)
+	{
+		_direction = "STR_NORTH_EAST";
+	}
+	else if (theta < -112.5)
+	{
+		_direction = "STR_SOUTH_WEST";
+	}
+	else if (theta < -67.5)
+	{
+		_direction = "STR_SOUTH";
+	}
+	else if (theta < -22.5)
+	{
+		_direction = "STR_SOUTH_EAST";
+	}
+	else
+	{
+		_direction = "STR_EAST";
+	}
+
+/*	if (22.5 > theta && theta > -22.5)
 	{
 		_direction = "STR_EAST";
 	}
@@ -517,7 +550,7 @@ void Ufo::calculateSpeed()
 	else
 	{
 		_direction = "STR_NORTH_EAST";
-	}
+	} */
 
 //	Log(LOG_INFO) << ". . _dir = " << _direction;
 }

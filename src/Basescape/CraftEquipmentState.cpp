@@ -72,7 +72,7 @@ CraftEquipmentState::CraftEquipmentState(Game* game, Base* base, size_t craft)
 	bool craftHasACrew = c->getNumSoldiers() > 0;
 	bool isNewBattle = game->getSavedGame()->getMonthsPassed() == -1;
 
-	// Create objects
+
 	_window			= new Window(this, 320, 200, 0, 0);
 
 	_txtTitle		= new Text(300, 17, 16, 8);
@@ -109,7 +109,7 @@ CraftEquipmentState::CraftEquipmentState(Game* game, Base* base, size_t craft)
 
 	centerAllSurfaces();
 
-	// Set up objects
+
 	_window->setColor(Palette::blockOffset(15)+1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK04.SCR"));
 
@@ -179,6 +179,7 @@ CraftEquipmentState::CraftEquipmentState(Game* game, Base* base, size_t craft)
 			continue;
 
 		RuleItem* rule = _game->getRuleset()->getItem(*i);
+
 		int cQty = 0;
 		if (rule->isFixed())
 		{

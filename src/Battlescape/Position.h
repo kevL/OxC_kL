@@ -194,7 +194,7 @@ struct convert<OpenXcom::Position>
 
 	static bool decode(const Node& node, OpenXcom::Position& rhs)
 	{
-		if(!node.IsSequence() || node.size() != 3)
+		if (!node.IsSequence() || node.size() != 3)
 			return false;
 
 		rhs.x = node[0].as<int>();

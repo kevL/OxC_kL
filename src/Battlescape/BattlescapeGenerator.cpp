@@ -1773,12 +1773,12 @@ void BattlescapeGenerator::generateMap()
 	/* attach nodelinks to each other */
 	for (std::vector<Node*>::iterator i = _save->getNodes()->begin(); i != _save->getNodes()->end(); ++i)
 	{
-		Node* node = (*i);
+		Node* node = *i;
 		int segmentX = node->getPosition().x / 10;
 		int segmentY = node->getPosition().y / 10;
 		int neighbourSegments[4];
-		int neighbourDirections[4] = { -2, -3, -4, -5 };
-		int neighbourDirectionsInverted[4] = { -4, -5, -2, -3 };
+		int neighbourDirections[4] = {-2, -3, -4, -5};
+		int neighbourDirectionsInverted[4] = {-4, -5, -2, -3};
 
 		if (segmentX == _mapsize_x / 10 - 1)
 			neighbourSegments[0] = -1;
@@ -1873,13 +1873,17 @@ int BattlescapeGenerator::loadMAP(MapBlock* mapblock, int xoff, int yoff, RuleTe
 	z += sizez - 1;
 	mapblock->setSizeZ(sizez);
 
-	for (int i = _mapsize_z - 1; i > 0; i--)
+	for (int
+			i = _mapsize_z - 1;
+			i > 0;
+			i--)
 	{
 		// check if there is already a layer - if so, we have to move Z up
-		MapData *floor = _save->getTile(Position(x, y, i))->getMapData(MapData::O_FLOOR);
+		MapData* floor = _save->getTile(Position(x, y, i))->getMapData(MapData::O_FLOOR);
 		if (floor != 0)
 		{
 			z += i;
+
 			break;
 		}
 	}
@@ -1889,7 +1893,7 @@ int BattlescapeGenerator::loadMAP(MapBlock* mapblock, int xoff, int yoff, RuleTe
 		throw Exception("Something is wrong in your map definitions");
 	}
 
-	while (mapFile.read((char*) &value, sizeof(value)))
+	while (mapFile.read((char*)&value, sizeof(value)))
 	{
 		for (int part = 0; part < 4; part++)
 		{
@@ -2123,16 +2127,25 @@ bool BattlescapeGenerator::placeUnitNearFriend(BattleUnit* unit)
  * @param lat Latitude.
  * @return Pointer to ruleterrain.
  */
-RuleTerrain *BattlescapeGenerator::getTerrain(int tex, double lat)
+RuleTerrain* BattlescapeGenerator::getTerrain(int tex, double lat)
 {
-	RuleTerrain *t =  0;
-	const std::vector<std::string> &terrains = _game->getRuleset()->getTerrainList();
-	for (std::vector<std::string>::const_iterator i = terrains.begin(); i != terrains.end(); ++i)
+	RuleTerrain* t = 0;
+	const std::vector<std::string>& terrains = _game->getRuleset()->getTerrainList();
+	for (std::vector<std::string>::const_iterator
+			i = terrains.begin();
+			i != terrains.end();
+			++i)
 	{
-		t =  _game->getRuleset()->getTerrain(*i);
-		for (std::vector<int>::iterator j = t->getTextures()->begin(); j != t->getTextures()->end(); ++j )
+		t = _game->getRuleset()->getTerrain(*i);
+		for (std::vector<int>::iterator
+				j = t->getTextures()->begin();
+				j != t->getTextures()->end();
+				++j)
 		{
-			if (*j == tex && (t->getHemisphere() == 0 || (t->getHemisphere() < 0 && lat < 0) || (t->getHemisphere() > 0 && lat >= 0)))
+			if (*j == tex
+				&& (t->getHemisphere() == 0
+					|| (t->getHemisphere() < 0 && lat < 0.0)
+					|| (t->getHemisphere() > 0 && lat >= 0.0)))
 			{
 				return t;
 			}
@@ -2158,12 +2171,12 @@ void BattlescapeGenerator::runInventory(Craft *craft)
 	_mapsize_z = 1;
 	_save->initMap(_mapsize_x, _mapsize_y, _mapsize_z);
 
-	MapDataSet *set = new MapDataSet("dummy");
-	MapData *data = new MapData(set);
+	MapDataSet* set = new MapDataSet("dummy");
+	MapData* data = new MapData(set);
 
 	for (int i = 0; i < soldiers; ++i)
 	{
-		Tile *tile = _save->getTiles()[i];
+		Tile* tile = _save->getTiles()[i];
 		tile->setMapData(data, 0, 0, MapData::O_FLOOR);
 		tile->getMapData(MapData::O_FLOOR)->setSpecialType(START_POINT, 0);
 		tile->getMapData(MapData::O_FLOOR)->setTUWalk(0);

@@ -146,14 +146,11 @@ TransferItemsState::TransferItemsState(Game* game, Base* baseFrom, Base* baseTo)
 
 	_lstItems->setColor(Palette::blockOffset(15)+1);
 	_lstItems->setArrowColor(Palette::blockOffset(13)+10);
-//kL	_lstItems->setArrowColumn(193, ARROW_VERTICAL);
-	_lstItems->setArrowColumn(181, ARROW_VERTICAL);		// kL
-//kL	_lstItems->setColumns(4, 162, 58, 40, 20);
-	_lstItems->setColumns(4, 144, 56, 31, 20);		// kL
+	_lstItems->setArrowColumn(181, ARROW_VERTICAL);
+	_lstItems->setColumns(4, 144, 56, 31, 20);
 	_lstItems->setSelectable(true);
 	_lstItems->setBackground(_window);
-//kL	_lstItems->setMargin(2);
-	_lstItems->setMargin(8);		// kL
+	_lstItems->setMargin(8);
 	_lstItems->setAllowScrollOnArrowButtons(!_allowChangeListValuesByMouseWheel);
 	_lstItems->onLeftArrowPress((ActionHandler)& TransferItemsState::lstItemsLeftArrowPress);
 	_lstItems->onLeftArrowRelease((ActionHandler)& TransferItemsState::lstItemsLeftArrowRelease);

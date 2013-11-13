@@ -16,9 +16,11 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "PathfindingNode.h"
 #include "Position.h"
 #include <math.h>
+
 
 namespace OpenXcom
 {
@@ -27,7 +29,10 @@ namespace OpenXcom
  * Sets up a PathfindingNode.
  * @param pos Position.
  */
-PathfindingNode::PathfindingNode(Position pos) : _pos(pos), _openentry(0)
+PathfindingNode::PathfindingNode(Position pos)
+	:
+		_pos(pos),
+		_openentry(0)
 {
 }
 
@@ -42,7 +47,7 @@ PathfindingNode::~PathfindingNode()
  * Gets the node position.
  * @return Node position.
  */
-const Position &PathfindingNode::getPosition() const
+const Position& PathfindingNode::getPosition() const
 {
 	return _pos;
 }
@@ -104,16 +109,17 @@ int PathfindingNode::getPrevDir() const
  * @param prevDir The direction FROM the previous node.
  * @param target The target position (used to update our guess cost).
 */
-void PathfindingNode::connect(int tuCost, PathfindingNode* prevNode, int prevDir, const Position &target)
+void PathfindingNode::connect(int tuCost, PathfindingNode* prevNode, int prevDir, const Position& target)
 {
 	_tuCost = tuCost;
 	_prevNode = prevNode;
 	_prevDir = prevDir;
+
 	if (!inOpenSet()) // Otherwise we have this already.
 	{
 		Position d = target - _pos;
 		d *= d;
-		_tuGuess = 4 * (int)sqrt((double)d.x + (double)d.y + (double)d.z);
+		_tuGuess = 4 * static_cast<int>(sqrt(static_cast<double>(d.x) + static_cast<double>(d.y) + static_cast<double>(d.z)));
 	}
 }
 

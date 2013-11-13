@@ -247,6 +247,7 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 	unit->setVisible(false);
 
 	// might need this populate _visibleUnit for a newly-created alien
+	//Log(LOG_INFO) << "BattlescapeGame::handleAI(), calculateFOV() call";
 	_save->getTileEngine()->calculateFOV(unit->getPosition());
 		// it might also help chryssalids realize they've zombified someone and need to move on;
 		// it should also hide units when they've killed the guy spotting them;
@@ -443,7 +444,7 @@ bool BattlescapeGame::kneel(BattleUnit* bu)
 {
 	//Log(LOG_INFO) << "BattlescapeGame::kneel()";
 
-	int tu = bu->isKneeled() ? 8 : 4;
+	int tu = bu->isKneeled()? 8: 4;
 
 	if (bu->getType() == "SOLDIER"
 		&& !bu->isFloating()		// kL_note: This prevents flying soldiers from 'kneeling' .....
@@ -492,9 +493,15 @@ void BattlescapeGame::endTurn()
 		getResourcePack()->getSound("BATTLE.CAT", 21)->play(); // ufo door closed
 	}
 
-	for (int i = 0; i < _save->getMapSizeXYZ(); ++i) // check for hot grenades on the ground
+	for (int
+			i = 0;
+			i < _save->getMapSizeXYZ();
+			++i) // check for hot grenades on the ground
 	{
-		for (std::vector<BattleItem*>::iterator it = _save->getTiles()[i]->getInventory()->begin(); it != _save->getTiles()[i]->getInventory()->end(); )
+		for (std::vector<BattleItem*>::iterator
+				it = _save->getTiles()[i]->getInventory()->begin();
+				it != _save->getTiles()[i]->getInventory()->end();
+				)
 		{
 			if ((*it)->getRules()->getBattleType() == BT_GRENADE
 				&& (*it)->getExplodeTurn() == 0) // it's a grenade to explode now
@@ -1811,7 +1818,8 @@ void BattlescapeGame::primaryAction(const Position& pos)
 //						_parentState->getMap()->refreshSelectorPosition();			// kL
 
 //						getMap()->setCursorType(CT_NONE);							// kL
-						_parentState->getGame()->getCursor()->setVisible(false);	// kL
+//						_parentState->getGame()->getCursor()->setVisible(false);	// kL
+//						_parentState->getMap()->refreshSelectorPosition();			// kL
 						// kL_end.
 
 						//Log(LOG_INFO) << ". . . . . . inVisible cursor, DONE";
@@ -1908,13 +1916,24 @@ void BattlescapeGame::primaryAction(const Position& pos)
  * Activates secondary action (right click).
  * @param pos Position on the map.
  */
-void BattlescapeGame::secondaryAction(const Position &pos)
+void BattlescapeGame::secondaryAction(const Position& pos)
 {
 	//Log(LOG_INFO) << "BattlescapeGame::secondaryAction()";
 
-	//  -= turn to or open door =-
-	_currentAction.target = pos;
 	_currentAction.actor = _save->getSelectedUnit();
+
+	Position unitPos = _currentAction.actor->getPosition();	// kL
+	if (pos == unitPos)										// kL
+	{
+		// could put just about anything in here Orelly.
+		_currentAction.actor = 0;							// kL
+
+		return;												// kL
+	}
+
+	// -= turn to or open door =-
+	_currentAction.target = pos;
+//kL	_currentAction.actor = _save->getSelectedUnit();
 	_currentAction.strafe = _save->getStrafeSetting()
 			&& (SDL_GetModState() & KMOD_CTRL) != 0
 			&& _save->getSelectedUnit()->getTurretType() > -1;
@@ -2649,18 +2668,33 @@ bool BattlescapeGame::getKneelReserved()
 bool BattlescapeGame::checkForProximityGrenades(BattleUnit* unit)
 {
 	int size = unit->getArmor()->getSize() - 1;
-	for (int x = size; x >= 0; x--)
+	for (int
+			x = size;
+			x > -1;
+			x--)
 	{
-		for (int y = size; y >= 0; y--)
+		for (int
+				y = size;
+				y > -1;
+				y--)
 		{
-			for (int tx = -1; tx < 2; tx++)
+			for (int
+					tx = -1;
+					tx < 2;
+					tx++)
 			{
-				for (int ty = -1; ty < 2; ty++)
+				for (int
+						ty = -1;
+						ty < 2;
+						ty++)
 				{
 					Tile* t = _save->getTile(unit->getPosition() + Position(x, y, 0) + Position(tx, ty, 0));
 					if (t)
 					{
-						for (std::vector<BattleItem*>::iterator i = t->getInventory()->begin(); i != t->getInventory()->end(); ++i)
+						for (std::vector<BattleItem*>::iterator
+								i = t->getInventory()->begin();
+								i != t->getInventory()->end();
+								++i)
 						{
 							if ((*i)->getRules()->getBattleType() == BT_PROXIMITYGRENADE
 								&& (*i)->getExplodeTurn() == 0)

@@ -385,13 +385,16 @@ Globe::Globe(Game* game, int cenX, int cenY, int width, int height, int x, int y
 	_zoom = _game->getSavedGame()->getGlobeZoom();
 
 	// kL_note: These are the globe-zoom magnifications, stored as a <vector> of 6 (doubles).
-	_radius.push_back(0.45 * height); // 0 - Zoomed all out
-	_radius.push_back(0.60 * height); // 1
-//kL	_radius.push_back(0.90 * height);
-	_radius.push_back(0.85 * height); // 2		// kL
-	_radius.push_back(1.40 * height); // 3
-	_radius.push_back(2.25 * height); // 4
-	_radius.push_back(3.60 * height); // 5 - Zoomed all in
+	_radius.push_back(0.45 * height); // 0 - Zoomed all out		// no detail
+	_radius.push_back(0.60 * height); // 1						// country borders
+//kL	_radius.push_back(0.90 * height);						// country labels
+	_radius.push_back(0.85 * height); // 2
+//kL	_radius.push_back(1.40 * height); // 3					// cities / all detail
+	_radius.push_back(1.38 * height); // 3
+//kL	_radius.push_back(2.25 * height); // 4
+	_radius.push_back(2.13 * height); // 4
+//kL	_radius.push_back(3.60 * height); // 5 - Zoomed all in
+	_radius.push_back(3.45 * height); // 5 - Zoomed all in
 
 	_earthData.resize(_radius.size());
 
@@ -1440,7 +1443,7 @@ void Globe::drawDetail()
 		label->setFonts(_game->getResourcePack()->getFont("FONT_BIG"), _game->getResourcePack()->getFont("FONT_SMALL"));
 		label->setAlign(ALIGN_CENTER);
 //kL		label->setColor(Palette::blockOffset(15)-1);
-		label->setColor(Palette::blockOffset(14)+4);		// kL, olive
+		label->setColor(Palette::blockOffset(14)+3);		// kL, olive
 
 		Sint16 x, y;
 		for (std::vector<Country*>::iterator i = _game->getSavedGame()->getCountries()->begin(); i != _game->getSavedGame()->getCountries()->end(); ++i)

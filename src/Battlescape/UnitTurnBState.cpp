@@ -122,7 +122,7 @@ void UnitTurnBState::think()
 	bool thisFaction = _unit->getFaction() == _parent->getSave()->getSide();	// kL
 
 //kL	const int tu = _unit->getFaction() == _parent->getSave()->getSide() ? 1 : 0; // one turn is 1 tu unless during reaction fire.
-	const int tu = thisFaction? 1:0;	// kL
+	const int tu = thisFaction? 1: 0;	// kL
 
 //kL	if (_unit->getFaction() == _parent->getSave()->getSide()
 	if (thisFaction		// kL
@@ -159,14 +159,14 @@ void UnitTurnBState::think()
 				&& _unit->getUnitsSpottedThisTurn().size() > unitsSpotted	// kL
 				&& _unit->getFaction() != FACTION_PLAYER))					// kL
 		{
-			if (_unit->getFaction() == FACTION_PLAYER)
-			{
+			//if (_unit->getFaction() == FACTION_PLAYER)
+			//{
 				//Log(LOG_INFO) << ". . newVis = TRUE, Abort turn";
-			}
-			else if (_unit->getFaction() != FACTION_PLAYER)
-			{
+			//}
+			//else if (_unit->getFaction() != FACTION_PLAYER)
+			//{
 				//Log(LOG_INFO) << ". . newUnitSpotted = TRUE, Abort turn";
-			}
+			//}
 
 			//Log(LOG_INFO) << "UnitTurnBState::think(), abortTurn()";
 			_unit->abortTurn();
@@ -193,8 +193,8 @@ void UnitTurnBState::think()
 /**
  * Unit turning cannot be cancelled.
  */
-void UnitTurnBState::cancel()
-{
-}
+//void UnitTurnBState::cancel()
+//{
+//}
 
 }

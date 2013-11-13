@@ -43,7 +43,7 @@ class NewManufactureListState
 {
 private:
 	Base* _base;
-	TextButton* _btnOk;
+	TextButton* _btnCancel;
 	Window* _window;
 	Text* _txtTitle, * _txtItem, * _txtCategory;
 	TextList* _lstManufacture;
@@ -56,9 +56,9 @@ private:
 		/// Initializes state.
 		void init ();
 		/// Handler for clicking the OK button.
-		void btnOkClick(Action* action);
+		void btnCancelClick(Action* action);
 		/// Handler for clicking on the list.
-		void lstProdClick (Action* action);
+		void lstProdClick(Action* action);
 		/// Fills the list of possible productions.
 		void fillProductionList();
 };

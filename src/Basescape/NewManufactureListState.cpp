@@ -78,12 +78,12 @@ NewManufactureListState::NewManufactureListState(Game* game, Base* base)
 
 	_lstManufacture	= new TextList(294, 72, 8, 70);
 
-	_btnOk			= new TextButton(288, 16, 16, 147);
+	_btnCancel		= new TextButton(288, 16, 16, 147);
 
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
 
 	add(_window);
-	add(_btnOk);
+	add(_btnCancel);
 	add(_txtTitle);
 	add(_txtItem);
 	add(_txtCategory);
@@ -114,16 +114,16 @@ NewManufactureListState::NewManufactureListState(Game* game, Base* base)
 	_lstManufacture->setArrowColor(Palette::blockOffset(15)+1);
 	_lstManufacture->onMouseClick((ActionHandler)& NewManufactureListState::lstProdClick);
 
-	_btnOk->setColor(Palette::blockOffset(13)+10);
-	_btnOk->setText(tr("STR_OK"));
-	_btnOk->onMouseClick((ActionHandler)& NewManufactureListState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)& NewManufactureListState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnCancel->setColor(Palette::blockOffset(13)+10);
+	_btnCancel->setText(tr("STR_CANCEL"));
+	_btnCancel->onMouseClick((ActionHandler)& NewManufactureListState::btnCancelClick);
+	_btnCancel->onKeyboardPress((ActionHandler)& NewManufactureListState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
 }
 
 /**
  * Initializes state (fills list of possible productions).
  */
-void NewManufactureListState::init ()
+void NewManufactureListState::init()
 {
 	fillProductionList();
 }
@@ -132,7 +132,7 @@ void NewManufactureListState::init ()
  * Returns to the previous screen.
  * @param action A pointer to an Action.
  */
-void NewManufactureListState::btnOkClick(Action*)
+void NewManufactureListState::btnCancelClick(Action*)
 {
 	_game->popState();
 }

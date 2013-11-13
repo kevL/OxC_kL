@@ -44,15 +44,23 @@ class Tile;
 class TileEngine
 {
 private:
-	static const int MAX_VIEW_DISTANCE = 20;
-	static const int MAX_VOXEL_VIEW_DISTANCE = MAX_VIEW_DISTANCE * 16;
-	static const int MAX_DARKNESS_TO_SEE_UNITS = 9;
+	static const int MAX_VIEW_DISTANCE			= 20;
+	static const int MAX_VOXEL_VIEW_DISTANCE	= MAX_VIEW_DISTANCE * 16;
+	static const int MAX_DARKNESS_TO_SEE_UNITS	= 9;
+
 	static const int heightFromCenter[11];
 
 	SavedBattleGame* _save;
 	std::vector<Uint16>* _voxelData;
-	void addLight(const Position& center, int power, int layer);
-	int blockage(Tile* tile, const int part, ItemDamageType type, int direction = -1);
+	void addLight(
+			const Position& center,
+			int power,
+			int layer);
+	int blockage(
+			Tile* tile,
+			const int part,
+			ItemDamageType type,
+			int direction = -1);
 	bool _personalLighting;
 
 	public:
@@ -71,10 +79,8 @@ private:
 		void calculateUnitLighting();
 		/// Calculates the field of view from a units view point.
 		bool calculateFOV(BattleUnit* unit);
-//		bool calculateFOV(BattleUnit* unit, bool bPos = false);		// kL
 		/// Calculates Field of View, including line of sight of all units within range of the Position
-//kL		void calculateFOV(const Position& position);
-		bool calculateFOV(const Position& position);	// kL
+		void calculateFOV(const Position& position);
 		/// Recalculates FOV of all units in-game.
 		void recalculateFOV();
 		/// Gets the origin voxel of a unit's eyesight.
@@ -92,19 +98,37 @@ private:
 		/// Tries to perform a reaction snap shot to this location.
 		bool tryReactionSnap(BattleUnit* unit, BattleUnit* target);
 		/// Handles bullet/weapon hits.
-		BattleUnit* hit(const Position& center, int power, ItemDamageType type, BattleUnit* unit);
+		BattleUnit* hit(
+				const Position& center,
+				int power,
+				ItemDamageType type,
+				BattleUnit* unit);
 		/// Handles explosions.
-		void explode(const Position& center, int power, ItemDamageType type, int maxRadius, BattleUnit* unit = 0);
+		void explode(
+				const Position& center,
+				int power,
+				ItemDamageType type,
+				int maxRadius,
+				BattleUnit* unit = 0);
 		/// Blows this tile up.
 		bool detonate(Tile* tile);
 		/// Checks if a destroyed tile starts an explosion.
 		Tile* checkForTerrainExplosions();
 		/// Checks the vertical blockage of a tile.
-		int verticalBlockage(Tile* startTile, Tile* endTile, ItemDamageType type);
+		int verticalBlockage(
+				Tile* startTile,
+				Tile* endTile,
+				ItemDamageType type);
 		/// Checks the horizontal blockage of a tile.
-		int horizontalBlockage(Tile* startTile, Tile* endTile, ItemDamageType type);
+		int horizontalBlockage(
+				Tile* startTile,
+				Tile* endTile,
+				ItemDamageType type);
 		/// Unit opens door?
-		int unitOpensDoor(BattleUnit* unit, bool rClick = false, int dir = -1);
+		int unitOpensDoor(
+				BattleUnit* unit,
+				bool rClick = false,
+				int dir = -1);
 		/// Opens any doors this door is connected to.
 		void checkAdjacentDoors(Position pos, int part);
 		/// Closes ufo doors.
@@ -112,24 +136,24 @@ private:
 
 		/// Calculates a line trajectory.
 		int calculateLine(
-						const Position& origin,
-						const Position& target,
-						bool storeTrajectory,
-						std::vector<Position>*
-						trajectory,
-						BattleUnit* excludeUnit,
-						bool doVoxelCheck = true,
-						bool onlyVisible = false,
-						BattleUnit* excludeAllBut = 0);
+				const Position& origin,
+				const Position& target,
+				bool storeTrajectory,
+				std::vector<Position>*
+				trajectory,
+				BattleUnit* excludeUnit,
+				bool doVoxelCheck = true,
+				bool onlyVisible = false,
+				BattleUnit* excludeAllBut = 0);
 		/// Calculates a parabola trajectory.
 		int calculateParabola(
-						const Position& origin,
-						const Position& target,
-						bool storeTrajectory,
-						std::vector<Position>* trajectory,
-						BattleUnit* excludeUnit,
-						double arc,
-						double acu);
+				const Position& origin,
+				const Position& target,
+				bool storeTrajectory,
+				std::vector<Position>* trajectory,
+				BattleUnit* excludeUnit,
+				double arc,
+				double acu);
 		/// Validates a throwing action.
 		bool validateThrow(BattleAction* action);
 
@@ -144,25 +168,48 @@ private:
 		/// Applies gravity to anything that occupy this tile.
 		Tile* applyGravity(Tile* t);
 		/// Returns melee validity between two units.
-		bool validMeleeRange(BattleUnit* attacker, BattleUnit* target, int dir);
+		bool validMeleeRange(
+				BattleUnit* attacker,
+				BattleUnit* target,
+				int dir);
 		/// Returns validity of a melee attack from a given position.
-		bool validMeleeRange(Position pos, int direction, BattleUnit* attacker, BattleUnit* target);
+		bool validMeleeRange(
+				Position pos,
+				int direction,
+				BattleUnit* attacker,
+				BattleUnit* target);
 		/// Gets the AI to look through a window.
 		int faceWindow(const Position& position);
 		/// Checks a unit's % exposure on a tile.
-		int checkVoxelExposure(Position* originVoxel, Tile* tile, BattleUnit* excludeUnit, BattleUnit* excludeAllBut);
+//kL		int checkVoxelExposure(Position* originVoxel, Tile* tile, BattleUnit* excludeUnit, BattleUnit* excludeAllBut);
 		/// Checks validity for targetting a unit.
-		bool canTargetUnit(Position* originVoxel, Tile* tile, Position* scanVoxel, BattleUnit* excludeUnit, BattleUnit* potentialUnit = 0);
+		bool canTargetUnit(
+				Position* originVoxel,
+				Tile* tile,
+				Position* scanVoxel,
+				BattleUnit* excludeUnit,
+				BattleUnit* potentialUnit = 0);
 		/// Check validity for targetting a tile.
-		bool canTargetTile(Position* originVoxel, Tile* tile, int part, Position* scanVoxel, BattleUnit* excludeUnit);
+		bool canTargetTile(Position* originVoxel,
+				Tile* tile,
+				int part,
+				Position* scanVoxel,
+				BattleUnit* excludeUnit);
 		/// Calculates the z voxel for shadows.
 		int castedShade(const Position& voxel);
 		/// Checks the visibility of a given voxel.
 		bool isVoxelVisible(const Position& voxel);
 		/// Checks what type of voxel occupies this space.
-		int voxelCheck(const Position& voxel, BattleUnit* excludeUnit, bool excludeAllUnits = false, bool onlyVisible = false, BattleUnit* excludeAllBut = 0);
+		int voxelCheck(
+				const Position& voxel,
+				BattleUnit* excludeUnit,
+				bool excludeAllUnits = false,
+				bool onlyVisible = false,
+				BattleUnit* excludeAllBut = 0);
 		/// Get direction to a certain point
-		int getDirectionTo(const Position& origin, const Position& target) const;
+		int getDirectionTo(
+				const Position& origin,
+				const Position& target) const;
 };
 
 }

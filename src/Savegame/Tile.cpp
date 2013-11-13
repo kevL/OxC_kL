@@ -392,6 +392,9 @@ int Tile::openDoor(int part, BattleUnit* unit, BattleActionType reserve)
 	return -1;
 }
 
+/**
+ *
+ */
 int Tile::closeUfoDoor()
 {
 	int retval = 0;
@@ -423,6 +426,7 @@ void Tile::setDiscovered(bool flag, int part)
 			_discovered[0] = true;
 			_discovered[1] = true;
 		}
+
 		// if light on tile changes, units and objects on it change light too
 		if (_unit != 0)
 		{
@@ -531,12 +535,12 @@ bool Tile::destroy(int part)
 bool Tile::damage(int part, int power)
 {
 	bool objective = false;
+
 	if (power >= _objects[part]->getArmor())
 		objective = destroy(part);
 
 	return objective;
 }
-
 
 /**
  * Set a "virtual" explosive on this tile. We mark a tile this way to detonate it later.
@@ -668,7 +672,7 @@ void Tile::animate()
  * @param part
  * @return Pointer to the sprite.
  */
-Surface *Tile::getSprite(int part) const
+Surface* Tile::getSprite(int part) const
 {
 	if (_objects[part] == 0)
 		return 0;
@@ -680,7 +684,7 @@ Surface *Tile::getSprite(int part) const
  * Set a unit on this tile.
  * @param unit
  */
-void Tile::setUnit(BattleUnit *unit, Tile *tileBelow)
+void Tile::setUnit(BattleUnit* unit, Tile* tileBelow)
 {
 	if (unit != 0)
 	{

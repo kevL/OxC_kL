@@ -1070,11 +1070,62 @@ void BattleUnit::aim(bool aiming)
 
 /**
  * Returns the direction from this unit to a given point.
+ * kL_note: This function is almost identical to TileEngine::getDirectionTo().
  * @return direction.
  */
 int BattleUnit::directionTo(const Position& point) const
 {
-	double ox = point.x - _pos.x;
+	if (_pos == point) return 0;	// kL. safety
+
+	double offset_x = point.x - _pos.x;
+	double offset_y = point.y - _pos.y;
+
+	double theta = atan2(-offset_y, offset_x); // radians: + = y > 0; - = y < 0;
+
+	// divide the pie in 4 thetas, each at 1/8th before each quarter
+	double m_pi_8 = M_PI / 8.0;			// a circle divided into 16 sections (rads) -> 22.5 deg
+	double pie[4] =
+	{
+		M_PI - m_pi_8,					// 2.7488935718910690836548129603696	-> 157.5 deg
+		(M_PI * 3.0 / 4.0) - m_pi_8,	// 1.9634954084936207740391521145497	-> 112.5 deg
+		M_PI_2 - m_pi_8,				// 1.1780972450961724644234912687298	-> 67.5 deg
+		m_pi_8							// 0.39269908169872415480783042290994	-> 22.5 deg
+	};
+
+	int dir = 2;
+	if (theta > pie[0] || theta < -pie[0])
+	{
+		dir = 6;
+	}
+	else if (theta > pie[1])
+	{
+		dir = 7;
+	}
+	else if (theta > pie[2])
+	{
+		dir = 0;
+	}
+	else if (theta > pie[3])
+	{
+		dir = 1;
+	}
+	else if (theta < -pie[1])
+	{
+		dir = 5;
+	}
+	else if (theta < -pie[2])
+	{
+		dir = 4;
+	}
+	else if (theta < -pie[3])
+	{
+		dir = 3;
+	}
+
+	//Log(LOG_INFO) << "BattleUnit::directionTo() dir = " << dir;
+	return dir;
+}
+/*	double ox = point.x - _pos.x;
 	double oy = point.y - _pos.y;
 	double angle = atan2(ox, -oy);
 
@@ -1088,8 +1139,7 @@ int BattleUnit::directionTo(const Position& point) const
 	};
 
 	int dir = 0;
-	if (angle > pie[0]
-		|| angle < -pie[0])
+	if (angle > pie[0] || angle < -pie[0])
 	{
 		dir = 4;
 	}
@@ -1122,9 +1172,7 @@ int BattleUnit::directionTo(const Position& point) const
 		dir = 0;
 	}
 
-	//Log(LOG_INFO) << "BattleUnit::directionTo() dir = " << dir;
-	return dir;
-}
+	return dir; */
 
 /**
  * Returns the soldier's amount of time units.
@@ -1164,10 +1212,10 @@ int BattleUnit::getMorale() const
 
 /**
  * Do an amount of damage.
- * @param position The position defines which part of armor and/or bodypart is hit.
+ * @param position, The position defines which part of armor and/or bodypart is hit.
  * @param power
  * @param type
- * @return damage done after adjustment
+ * @return, Damage done after adjustment
  */
 int BattleUnit::damage(const Position& relative, int power, ItemDamageType type, bool ignoreArmor)
 {
@@ -1179,7 +1227,7 @@ int BattleUnit::damage(const Position& relative, int power, ItemDamageType type,
 		return 0;
 	}
 
-	power = (int)floor(power * _armor->getDamageModifier(type));
+	power = static_cast<int>(floor(static_cast<float>(power) * _armor->getDamageModifier(type)));
 
 	if (type == DT_SMOKE) type = DT_STUN; // smoke doesn't do real damage, but stun damage
 
@@ -1218,14 +1266,14 @@ int BattleUnit::damage(const Position& relative, int power, ItemDamageType type,
 
 			switch ((relativeDirection - _direction) %8)
 			{
-				case 0:	side = SIDE_FRONT; 										break;
-				case 1:	side = RNG::generate(0, 2) < 2 ? SIDE_FRONT:SIDE_RIGHT;	break;
-				case 2:	side = SIDE_RIGHT; 										break;
-				case 3:	side = RNG::generate(0, 2) < 2 ? SIDE_REAR:SIDE_RIGHT; 	break;
-				case 4:	side = SIDE_REAR; 										break;
-				case 5:	side = RNG::generate(0, 2) < 2 ? SIDE_REAR:SIDE_LEFT; 	break;
-				case 6:	side = SIDE_LEFT; 										break;
-				case 7:	side = RNG::generate(0, 2) < 2 ? SIDE_FRONT:SIDE_LEFT; 	break;
+				case 0:	side = SIDE_FRONT; 									break;
+				case 1:	side = RNG::percent(50)? SIDE_FRONT: SIDE_RIGHT;	break;
+				case 2:	side = SIDE_RIGHT; 									break;
+				case 3:	side = RNG::percent(50)? SIDE_REAR: SIDE_RIGHT;		break;
+				case 4:	side = SIDE_REAR; 									break;
+				case 5:	side = RNG::percent(50)? SIDE_REAR: SIDE_LEFT; 		break;
+				case 6:	side = SIDE_LEFT; 									break;
+				case 7:	side = RNG::percent(50)? SIDE_FRONT: SIDE_LEFT;		break;
 			}
 
 			if (relative.z > getHeight())
@@ -1293,6 +1341,7 @@ int BattleUnit::damage(const Position& relative, int power, ItemDamageType type,
 		}
 	}
 
+	//Log(LOG_INFO) << "BattleUnit::damage() power = " << power;
 	return power < 0? 0: power;
 }
 

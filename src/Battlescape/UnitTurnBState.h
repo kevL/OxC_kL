@@ -49,7 +49,7 @@ private:
 		/// Initializes the state.
 		void init();
 		/// Handles a cancels request.
-		void cancel();
+//		void cancel();
 		/// Runs state functionality every cycle.
 		void think();
 		/// Gets the result of the state.

@@ -73,26 +73,26 @@ NewResearchListState::NewResearchListState(Game* game, Base* base)
 						start_x + button_x_border,
 						start_y + button_y_border + button_height - 4);
 
-	_btnOK			= new TextButton(width - 2 * button_x_border,
+	_btnCancel		= new TextButton(width - 2 * button_x_border,
 						button_height,
 						start_x + button_x_border,
 						start_y + height - button_height - button_y_border);
 
 	add(_window);
-	add(_btnOK);
+	add(_btnCancel);
 	add(_txtTitle);
 	add(_lstResearch);
 
 	centerAllSurfaces();
 
-	// Set up objects
+
 	_window->setColor(Palette::blockOffset(13)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK05.SCR"));
 
-	_btnOK->setColor(Palette::blockOffset(15)+6);
-	_btnOK->setText(tr("STR_OK"));
-	_btnOK->onMouseClick((ActionHandler)& NewResearchListState::btnOKClick);
-	_btnOK->onKeyboardPress((ActionHandler)& NewResearchListState::btnOKClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnCancel->setColor(Palette::blockOffset(15)+6);
+	_btnCancel->setText(tr("STR_CANCEL"));
+	_btnCancel->onMouseClick((ActionHandler)& NewResearchListState::btnCancelClick);
+	_btnCancel->onKeyboardPress((ActionHandler)& NewResearchListState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setAlign(ALIGN_CENTER);
@@ -102,8 +102,7 @@ NewResearchListState::NewResearchListState(Game* game, Base* base)
 	_lstResearch->setColumns(1, width - 4 * button_x_border);
 	_lstResearch->setSelectable(true);
 	_lstResearch->setBackground(_window);
-//kL	_lstResearch->setMargin(2);
-	_lstResearch->setMargin(8);		// kL
+	_lstResearch->setMargin(8);
 	_lstResearch->setAlign(ALIGN_CENTER);
 	_lstResearch->setArrowColor(Palette::blockOffset(13)+10);
 	_lstResearch->onMouseClick((ActionHandler)& NewResearchListState::onSelectProject);
@@ -114,7 +113,7 @@ NewResearchListState::NewResearchListState(Game* game, Base* base)
  */
 void NewResearchListState::init()
 {
-	fillProjectList ();
+	fillProjectList();
 }
 
 /**
@@ -130,7 +129,7 @@ void NewResearchListState::onSelectProject(Action*)
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void NewResearchListState::btnOKClick(Action*)
+void NewResearchListState::btnCancelClick(Action*)
 {
 	_game->popState();
 }

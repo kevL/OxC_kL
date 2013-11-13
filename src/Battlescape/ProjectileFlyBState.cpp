@@ -127,9 +127,9 @@ void ProjectileFlyBState::init()
 	_unit = _action.actor;
 	_ammo = weapon->getAmmoItem();
 
-	if (_unit->isOut()
-		|| _unit->getHealth() == 0
-		|| _unit->getHealth() < _unit->getStunlevel())
+	if (_unit->isOut(true, true))
+//		|| _unit->getHealth() == 0
+//		|| _unit->getHealth() < _unit->getStunlevel())
 	{
 		// something went wrong - we can't shoot when dead or unconscious, or if we're about to fall over.
 		//Log(LOG_INFO) << ". actor is Out, EXIT";
@@ -292,7 +292,8 @@ bool ProjectileFlyBState::createNewProjectile()
 
 	// set the speed of the state think cycle to 16 ms (roughly one think cycle per frame)
 //kL	_parent->setStateInterval(1000/60);
-	Uint32 interval = static_cast<Uint32>(50.0 / 3.0);	// kL
+//	Uint32 interval = static_cast<Uint32>(50.0 / 3.0);	// kL
+	Uint32 interval = static_cast<Uint32>(16);			// kL
 	_parent->setStateInterval(interval);				// kL
 
 	// let it calculate a trajectory
@@ -358,12 +359,16 @@ bool ProjectileFlyBState::createNewProjectile()
 			return false;
 		}
 	}
-	else
+	else // shoot weapon
 	{
+		//Log(LOG_INFO) << "ProjectileFlyBState::createNewProjectile() shoot weapon";
+
 		_projectileImpact = projectile->calculateTrajectory(_unit->getFiringAccuracy(_action.type, _action.weapon));
 		if (_projectileImpact != -1
 			|| _action.type == BA_LAUNCH)
 		{
+			//Log(LOG_INFO) << ". _projectileImpact !";
+
 			_unit->aim(true); // set the soldier in an aiming position
 			_parent->getMap()->cacheUnit(_unit);
 
@@ -381,6 +386,8 @@ bool ProjectileFlyBState::createNewProjectile()
 		}
 		else // no line of fire
 		{
+			//Log(LOG_INFO) << ". no LoF.";
+
 			delete projectile;
 
 			_parent->getMap()->setProjectile(0);
@@ -584,16 +591,16 @@ bool ProjectileFlyBState::validThrowRange(BattleAction* action)
 	// Throwing Distance roughly = 2.5 \D7 Strength / Weight
 
 	// note that all coordinates and thus also distances below are in number of tiles (not in voxels).
-	double range = 2.5 * static_cast<double>(action->actor->getStats()->strength / action->weapon->getRules()->getWeight());
+	double range = 2.6 * static_cast<double>(action->actor->getStats()->strength / action->weapon->getRules()->getWeight());
 
 	int xdiff = action->target.x - action->actor->getPosition().x;
 	int ydiff = action->target.y - action->actor->getPosition().y;
-	int zdiff = action->target.z - action->actor->getPosition().z;
-	double distance = sqrt(static_cast<double>(xdiff * xdiff + ydiff * ydiff));
+	double distance = sqrt(static_cast<double>((xdiff * xdiff) + (ydiff * ydiff)));
 
 	// throwing off a building of 1 level lets you throw 2 tiles further than normal range,
 	// throwing up the roof of this building lets your throw 2 tiles less further
-	distance += static_cast<double>(zdiff * 2);
+	int zdiff = action->target.z - action->actor->getPosition().z;
+	distance -= static_cast<double>(zdiff * 2);		// kL. was +=
 
 	return distance < range;
 }

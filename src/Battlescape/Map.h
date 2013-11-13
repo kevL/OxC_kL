@@ -40,6 +40,7 @@ class Explosion;
 class BattlescapeMessage;
 class Camera;
 class Timer;
+//class RuleTerrain;	// kL
 
 enum CursorType
 {
@@ -85,7 +86,8 @@ private:
 	std::vector<Position> _waypoints;
 	bool _unitDying;
 	int _previewSetting;
-	int _reveal;	// kL
+	int _reveal;				// kL
+//	RuleTerrain* _ruleTerrain;	// kL
 
 	public:
 		/// Creates a new map at the specified position and size.
@@ -99,6 +101,7 @@ private:
 		void think();
 		/// Draws the surface.
 		void draw();
+
 		/// Sets the palette.
 		void setPalette(SDL_Color* colors, int firstcolor = 0, int ncolors = 256);
 		/// Special handling for mouse press.

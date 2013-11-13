@@ -16,16 +16,31 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_MAPBLOCK_H
 #define OPENXCOM_MAPBLOCK_H
 
 #include <string>
 #include <yaml-cpp/yaml.h>
 
+
 namespace OpenXcom
 {
 
-enum MapBlockType {MT_UNDEFINED = -1, MT_DEFAULT, MT_LANDINGZONE, MT_EWROAD, MT_NSROAD, MT_CROSSING, MT_DIRT, MT_XCOMSPAWN, MT_UBASECOMM, MT_FINALCOMM };
+enum MapBlockType
+{
+	MT_UNDEFINED = -1,
+	MT_DEFAULT,
+	MT_LANDINGZONE,
+	MT_EWROAD,
+	MT_NSROAD,
+	MT_CROSSING,
+	MT_DIRT,
+	MT_XCOMSPAWN,
+	MT_UBASECOMM,
+	MT_FINALCOMM
+};
+
 class RuleTerrain;
 
 /**
@@ -37,37 +52,41 @@ class RuleTerrain;
 class MapBlock
 {
 private:
-	RuleTerrain *_terrain;
+	RuleTerrain* _terrain;
 	std::string _name;
 	int _size_x, _size_y, _size_z;
 	MapBlockType _type, _subType;
 	int _frequency, _timesUsed, _maxCount;
-public:
-	MapBlock(RuleTerrain *terrain, std::string name, int size_x, int size_y, MapBlockType type);
-	~MapBlock();
-	/// Loads the map block from YAML.
-	void load(const YAML::Node& node);
-	/// Gets the mapblock's name (used for MAP generation).
-	std::string getName() const;
-	/// Gets the mapblock's x size.
-	int getSizeX() const;
-	/// Gets the mapblock's y size.
-	int getSizeY() const;
-	/// Gets the mapblock's z size.
-	int getSizeZ() const;
-	/// Sets the mapblock's z size.
-	void setSizeZ(int size_z);
-	/// Returns whether this mapblock is a landingzone.
-	MapBlockType getType() const;
-	/// Returns whether this mapblock is a landingzone.
-	MapBlockType getSubType() const;
-	/// Gets either remaining uses or frequency.
-	int getRemainingUses();
-	/// Decreases remaining uses.
-	void markUsed();
-	/// Resets remaining uses.
-	void reset();
 
+	public:
+		MapBlock(RuleTerrain* terrain, std::string name, int size_x, int size_y, MapBlockType type);
+		~MapBlock();
+
+		/// Loads the map block from YAML.
+		void load(const YAML::Node& node);
+
+		/// Gets the mapblock's name (used for MAP generation).
+		std::string getName() const;
+
+		/// Gets the mapblock's x size.
+		int getSizeX() const;
+		/// Gets the mapblock's y size.
+		int getSizeY() const;
+		/// Gets the mapblock's z size.
+		int getSizeZ() const;
+		/// Sets the mapblock's z size.
+		void setSizeZ(int size_z);
+
+		/// Returns whether this mapblock is a landingzone.
+		MapBlockType getType() const;
+		/// Returns whether this mapblock is a landingzone.
+		MapBlockType getSubType() const;
+		/// Gets either remaining uses or frequency.
+		int getRemainingUses();
+		/// Decreases remaining uses.
+		void markUsed();
+		/// Resets remaining uses.
+		void reset();
 };
 
 }

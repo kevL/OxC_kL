@@ -99,7 +99,7 @@ StoresState::StoresState(Game* game, Base* base)
 	_txtSpaceUsed->setText(tr("STR_VOLUME"));		// kL
 
 	_lstStores->setColor(Palette::blockOffset(13)+10);
-	_lstStores->setColumns(3, 154, 84, 16);
+	_lstStores->setColumns(3, 154, 84, 26);
 	_lstStores->setSelectable(true);
 	_lstStores->setBackground(_window);
 	_lstStores->setMargin(8);

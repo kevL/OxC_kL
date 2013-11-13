@@ -28,7 +28,9 @@ namespace OpenXcom
 /**
  * Initializes an item container with no contents.
  */
-ItemContainer::ItemContainer() : _qty()
+ItemContainer::ItemContainer()
+	:
+		_qty()
 {
 }
 
@@ -43,9 +45,9 @@ ItemContainer::~ItemContainer()
  * Loads the item container from a YAML file.
  * @param node YAML node.
  */
-void ItemContainer::load(const YAML::Node &node)
+void ItemContainer::load(const YAML::Node& node)
 {
-	_qty = node.as< std::map<std::string, int> >(_qty);
+	_qty = node.as<std::map<std::string, int>>(_qty);
 }
 
 /**
@@ -136,6 +138,7 @@ int ItemContainer::getTotalQuantity() const
 	{
 		total += i->second;
 	}
+
 	return total;
 }
 
@@ -157,7 +160,7 @@ double ItemContainer::getTotalSize(const Ruleset* rule) const
 
 /**
  * Returns all the items currently contained within.
- * @return List of contents.
+ * @return, List of contents.
  */
 std::map<std::string, int>* ItemContainer::getContents()
 {

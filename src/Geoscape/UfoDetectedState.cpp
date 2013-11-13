@@ -77,7 +77,7 @@ UfoDetectedState::UfoDetectedState(Game* game, Ufo* ufo, GeoscapeState* state, b
 		_window		= new Window(this, 224, 120, 16, 48, POPUP_BOTH);
 	}
 
-	_txtHyperwave	= new Text(214, 17, 21, 45);
+	_txtHyperwave	= new Text(214, 17, 21, 46);
 	_txtUfo			= new Text(207, 17, 28, 56);
 
 	_txtDetected	= new Text(100, 9, 28, 73);
@@ -90,11 +90,11 @@ UfoDetectedState::UfoDetectedState(Game* game, Ufo* ufo, GeoscapeState* state, b
 
 	if (hyperwave)
 	{
-		_btnCentre->setY(144);
-		_btnCancel->setY(160);
-		_txtUfo->setY(20);
+		_txtUfo->setY(19);
 		_txtDetected->setY(36);
 		_lstInfo->setY(60);
+		_btnCentre->setY(144);
+		_btnCancel->setY(160);
 	}
 	else
 	{

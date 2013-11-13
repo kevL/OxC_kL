@@ -49,6 +49,7 @@
 #include "../Interface/Cursor.h"
 #include "../Engine/Options.h"
 #include "../Interface/NumberText.h"
+//#include "../Ruleset/RuleTerrain.h"		// kL
 
 
 /*
@@ -250,7 +251,7 @@ void Map::draw()
 		}
 		else
 		{
-			_reveal = 8;
+			_reveal = 4;
 			//Log(LOG_INFO) << ". . . . . . drawTerrain() Set _reveal = " << _reveal;
 		}
 
@@ -435,7 +436,7 @@ void Map::drawTerrain(Surface *surface)
 	{
 		_numWaypid = new NumberText(15, 15, 20, 30);
 		_numWaypid->setPalette(getPalette());
-		_numWaypid->setColor(Palette::blockOffset(pathfinderTurnedOn ? 0 : 1));
+		_numWaypid->setColor(Palette::blockOffset(pathfinderTurnedOn? 0: 1));
 	}
 
 	surface->lock();
@@ -926,11 +927,23 @@ void Map::drawTerrain(Surface *surface)
 						{
 							int tuMarker = std::max(0, tile->getTUMarker());
 
-//							_numWaypid->setColor(26);	// kL. 26=brown
+							// kL_note: Set pathfinder/ pathpreview number color.
+//							Log(LOG_INFO) << "Map::drawTerrain() mapname = " << _ruleTerrain->getName();
+//							Uint8 wpColor = 2;									// #1:white;#26:brown;#15:yellow
+//							if (_ruleTerrain->getName() == "STR_POLAR")
+//							{
+//								wpColor = 15;
+//							}
+//							_numWaypid->setColor(Palette::blockOffset(0)+3);	// kL
+							_numWaypid->setColor(Palette::blockOffset(5)+1);	// kL
+
+//							Log(LOG_INFO) << "Map::drawTerrain() terrain = " << _game->getRuleset()->getTerrain("POLAR")->getName();
+//							_save->
+
 							_numWaypid->setValue(tuMarker);
 							_numWaypid->draw();
 
-							int off = tile->getTUMarker() > 9? 4:2;
+							int off = tile->getTUMarker() > 9? 4: 2;
 							_numWaypid->blitNShade(surface, screenPosition.x + 16 - off, screenPosition.y + (50 - adjustment), 0);
 						}
 					}

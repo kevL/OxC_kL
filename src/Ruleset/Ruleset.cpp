@@ -817,7 +817,11 @@ const std::vector<std::string>& Ruleset::getTerrainList() const
 RuleTerrain* Ruleset::getTerrain(const std::string& name) const
 {
 	std::map<std::string, RuleTerrain*>::const_iterator i = _terrains.find(name);
-	if (_terrains.end() != i) return i->second; else return 0;
+
+	if (_terrains.end() != i)
+		return i->second;
+	else
+		return 0;
 }
 
 /**
