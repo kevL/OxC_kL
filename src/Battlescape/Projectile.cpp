@@ -96,7 +96,7 @@ Projectile::~Projectile()
  */
 int Projectile::calculateTrajectory(double accuracy)
 {
-	//Log(LOG_INFO) << "Projectile::calculateTrajectory()";
+	Log(LOG_INFO) << "Projectile::calculateTrajectory()";
 
 	Position originVoxel, targetVoxel;
 
@@ -400,12 +400,15 @@ int Projectile::calculateTrajectory(double accuracy)
 
 	//Log(LOG_INFO) << ". LoF calculated, Acu applied (if not BL)";
 	// finally do a line calculation and store this trajectory.
-	return _save->getTileEngine()->calculateLine(
+	int retValue = _save->getTileEngine()->calculateLine(
 			originVoxel,
 			targetVoxel,
 			true,
 			&_trajectory,
 			bu);
+
+	Log(LOG_INFO) << ". ret = " << retValue;
+	return retValue;
 }
 
 /**
@@ -415,7 +418,7 @@ int Projectile::calculateTrajectory(double accuracy)
  */
 int Projectile::calculateThrow(double accuracy)
 {
-	Log(LOG_INFO) << "Projectile::calculateThrow(), similar to TileEngine::validateThrow()";
+	Log(LOG_INFO) << "Projectile::calculateThrow(), cf TileEngine::validateThrow()";
 
 	Position originVoxel, targetVoxel;
 	bool found = false;
@@ -520,8 +523,9 @@ int Projectile::calculateThrow(double accuracy)
 		}
 	}
 
-	// we try 4 different arcs to try and reach our goal.
-	double arc = 0.5;
+	// we try several different arcs to try and reach our goal.
+//	double arc = 0.5; // start with a very low traj.5 seems too low.
+	double arc = 1.0;
 	while (!found && arc < 5.0)
 	{
 		int check = _save->getTileEngine()->calculateParabola(
@@ -546,6 +550,7 @@ int Projectile::calculateThrow(double accuracy)
 
 		_trajectory.clear();
 	}
+	Log(LOG_INFO) << ". arc = " << arc;
 
 	if (AreSame(arc, 5.0))
 	{
@@ -555,7 +560,7 @@ int Projectile::calculateThrow(double accuracy)
 	// apply some accuracy modifiers
 	if (accuracy > 1.0) accuracy = 1.0;
 
-	static const double maxDeviation = 0.066;
+	static const double maxDeviation = 0.0675;
 	static const double minDeviation = 0.0;
 	double baseDeviation = (maxDeviation - (maxDeviation * accuracy)) + minDeviation;
 	double deviation = RNG::boxMuller(0.0, baseDeviation);
@@ -597,6 +602,7 @@ int Projectile::calculateThrow(double accuracy)
 				1.0);
 	}
 
+	Log(LOG_INFO) << ". ret = " << retValue;
 	return retValue;
 }
 

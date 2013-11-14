@@ -78,15 +78,22 @@ UfoDetectedState::UfoDetectedState(Game* game, Ufo* ufo, GeoscapeState* state, b
 	}
 
 	_txtHyperwave	= new Text(214, 17, 21, 46);
+
 	_txtUfo			= new Text(207, 17, 28, 56);
 
 	_txtDetected	= new Text(100, 9, 28, 73);
 
-	_lstInfo		= new TextList(207, 33, 28, 85);
+/*	_lstInfo		= new TextList(207, 33, 28, 85);
 	_lstInfo2		= new TextList(207, 32, 28, 98);
 
 	_btnCentre		= new TextButton(200, 14, 28, 124);
-	_btnCancel		= new TextButton(200, 14, 28, 144);
+	_btnCancel		= new TextButton(200, 14, 28, 144); */
+
+	_lstInfo		= new TextList(196, 33, 32, 85);
+	_lstInfo2		= new TextList(196, 32, 32, 98);
+
+	_btnCentre		= new TextButton(196, 14, 32, 124);
+	_btnCancel		= new TextButton(196, 14, 32, 144);
 
 	if (hyperwave)
 	{
@@ -158,7 +165,7 @@ UfoDetectedState::UfoDetectedState(Game* game, Ufo* ufo, GeoscapeState* state, b
 	_txtUfo->setText(_ufo->getName(_game->getLanguage()));
 
 	_lstInfo->setColor(Palette::blockOffset(8)+5);
-	_lstInfo->setColumns(2, 87, 120);
+	_lstInfo->setColumns(2, 86, 110);
 	_lstInfo->setDot(true);
 	_lstInfo->addRow(2, tr("STR_SIZE_UC").c_str(), tr(_ufo->getRules()->getSize()).c_str());
 	_lstInfo->setCellColor(0, 1, Palette::blockOffset(8)+10);
@@ -179,7 +186,7 @@ UfoDetectedState::UfoDetectedState(Game* game, Ufo* ufo, GeoscapeState* state, b
 	_lstInfo->setCellColor(3, 1, Palette::blockOffset(8)+10);
 
 	_lstInfo2->setColor(Palette::blockOffset(8)+5);
-	_lstInfo2->setColumns(2, 87, 120);
+	_lstInfo2->setColumns(2, 86, 110);
 	_lstInfo2->setDot(true);
 	_lstInfo2->addRow(2, tr("STR_CRAFT_TYPE").c_str(), tr(_ufo->getRules()->getType()).c_str());
 	_lstInfo2->setCellColor(0, 1, Palette::blockOffset(8)+10);

@@ -76,11 +76,13 @@ ExplosionBState::~ExplosionBState()
  */
 void ExplosionBState::init()
 {
-	//Log(LOG_INFO) << "ExplosionBState::init()";
+	Log(LOG_INFO) << "ExplosionBState::init()"
+			<< " type = " << (int)_item->getRules()->getDamageType();
 
 	if (_item)
 	{
 		_power = _item->getRules()->getPower();
+		Log(LOG_INFO) << ". _power(_item) = " << _power;
 
 		// heavy explosions, incendiary, smoke or stun bombs create AOE explosions
 		// all the rest hits one point:
@@ -94,32 +96,33 @@ void ExplosionBState::init()
 	else if (_tile)
 	{
 		_power = _tile->getExplosive();
+		Log(LOG_INFO) << ". _power(_tile) = " << _power;
+
 		_areaOfEffect = true;
 	}
 	else // cyberdisc... ?
 	{
 //kL		_power = 120;
 		_power = RNG::generate(61, 120);	// kL
+		Log(LOG_INFO) << ". _power(Cyberdisc) = " << _power;
+
 		_areaOfEffect = true;
 	}
 
 	Tile* t = _parent->getSave()->getTile(Position(_center.x / 16, _center.y / 16, _center.z / 24));
 	if (_areaOfEffect)
 	{
-		//Log(LOG_INFO) << ". . new Explosion(AoE)";
+		Log(LOG_INFO) << ". . new Explosion(AoE)'s";
 
 		if (_power)
 		{
-//kL			for (int i = 0; i < _power / 5; i++)
 			for (int
 					i = 0;
 					i < _power / 10;
-					i++)		// kL
+					i++)
 			{
 				int X = RNG::generate(-_power / 2, _power / 2);
 				int Y = RNG::generate(-_power / 2, _power / 2);
-//				int X = RNG::generate(-_power / 3, _power / 3);		// kL
-//				int Y = RNG::generate(-_power / 3, _power / 3);		// kL
 
 				Position pos = _center;
 				pos.x += X; pos.y += Y;
@@ -147,7 +150,7 @@ void ExplosionBState::init()
 	}
 	else // create a bullet hit
 	{
-		//Log(LOG_INFO) << ". . new Explosion(bullet)";
+		Log(LOG_INFO) << ". . new Explosion(bullet)";
 
 //kL		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED / 2);
 		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED * 6 / 7);		// kL
@@ -221,11 +224,6 @@ void ExplosionBState::explode()
 	bool terrainExplosion = false;
 	SavedBattleGame* save = _parent->getSave();
 
-
-//if (_item->getRules()->getDamageType() != DT_NONE)	// TEST
-//{
-
-
 	// after the animation is done, the real explosion/hit takes place
 	if (_item)
 	{
@@ -278,11 +276,6 @@ void ExplosionBState::explode()
 
 	// now check for new casualties
 	_parent->checkForCasualties(_item, _unit, false, terrainExplosion);
-
-
-//} // end_TEST
-
-
 
 	// if this explosion was caused by a unit shooting, now it's the time to put the gun down
 	if (_unit

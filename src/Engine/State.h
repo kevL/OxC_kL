@@ -53,6 +53,7 @@ class State
 			State(Game* game);
 			/// Cleans up the state.
 			virtual ~State();
+
 			/// Adds a child element to the state.
 			void add(Surface* surface);
 			/// Gets whether the state is a full-screen.

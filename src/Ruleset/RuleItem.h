@@ -27,16 +27,16 @@
 
 enum ItemDamageType
 {
-	DT_NONE,
-	DT_AP,
-	DT_IN,
-	DT_HE,
-	DT_LASER,
-	DT_PLASMA,
-	DT_STUN,
-	DT_MELEE,
-	DT_ACID,
-	DT_SMOKE
+	DT_NONE,	// 0
+	DT_AP,		// 1
+	DT_IN,		// 2
+	DT_HE,		// 3
+	DT_LASER,	// 4
+	DT_PLASMA,	// 5
+	DT_STUN,	// 6
+	DT_MELEE,	// 7
+	DT_ACID,	// 8
+	DT_SMOKE	// 9
 };
 
 enum BattleType

@@ -47,7 +47,7 @@ WarningMessage::WarningMessage(int width, int height, int x, int y)
 	_text->setWordWrap(true);
 
 	_timer = new Timer(80);
-	_timer->onTimer((SurfaceHandler)&WarningMessage::fade);
+	_timer->onTimer((SurfaceHandler)& WarningMessage::fade);
 
 	setVisible(false);
 }

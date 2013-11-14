@@ -83,6 +83,7 @@ private:
 		void animate();
 		/// Moves the craft.
 		void move();
+
 		// Fires the first weapon.
 		void fireWeapon1();
 		// Fires the second weapon.
@@ -95,6 +96,7 @@ private:
 		void maximumDistance();
 		/// Changes the status text.
 		void setStatus(const std::string& status);
+
 		/// Handler for clicking the Minimize button.
 		void btnMinimizeClick(Action* action);
 		/// Handler for clicking the Standoff button.
@@ -111,8 +113,10 @@ private:
 		void btnUfoClick(Action* action);
 		/// Handler for clicking the Preview graphic.
 		void previewClick(Action* action);
+
 		/// Makes the UFO break off the interception... or at least tries to.
 		void ufoBreakOff();
+
 		/// Draws UFO.
 		void drawUfo();
 		/// Draws projectiles.
@@ -121,30 +125,37 @@ private:
 		void animateCraftDamage();
 		/// Updates craft damage.
 		void drawCraftDamage();
+
 		/// Toggles usage of weapon 1.
 		void weapon1Click(Action* action);
 		/// Toggles usage of weapon 2.
 		void weapon2Click(Action* action);
+
 		/// Changes colors of weapon icons, range indicators and ammo texts base on current weapon state.
 		void recolor(const int weaponNo, const bool currentState);
+
 		/// Returns true if state is minimized.
 		bool isMinimized() const;
 		/// Sets state minimized or maximized.
 		void setMinimized(const bool minimized);
 		/// Handler for clicking the minimized interception window icon.
 		void btnMinimizedIconClick(Action *action);
+
 		/// Gets interception number.
 		int getInterceptionNumber() const;
 		/// Sets interception number.
 		void setInterceptionNumber(const int number);
 		/// Sets interceptions count.
 		void setInterceptionsCount(const int count);
+
 		/// Calculates window position according to opened interception windows.
 		void calculateWindowPosition();
 		/// Moves window to new position.
 		void moveWindow();
+
 		/// Checks if the dogfight should be ended.
 		bool dogfightEnded() const;
+
 		/// Gets pointer to the UFO in this dogfight.
 		Ufo* getUfo() const;
 };

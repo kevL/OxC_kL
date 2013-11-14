@@ -152,6 +152,7 @@ private:
 
 		/// Blit method - renders the state and dogfights.
 		void blit();
+
 		/// Globe zoom in effect for dogfights.
 		void zoomInEffect();
 		/// Globe zoom out effect for dogfights.
@@ -164,6 +165,10 @@ private:
 		void startDogfight();
 		/// Get first free dogfight slot.
 		int getFirstFreeDogfightSlot();
+		/// kL. Get the zoom-out effect timer for Dogfights.
+//		Timer* getZoomOutTimer();
+		/// kL. Get the zoom-in effect timer for Dogfights.
+//		Timer* getZoomInTimer();
 
 		/// Create the starting missions.
 		void createStartingMissions()

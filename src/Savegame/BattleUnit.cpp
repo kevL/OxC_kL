@@ -494,12 +494,8 @@ UnitStatus BattleUnit::getStatus() const
  */
 void BattleUnit::startWalking(int direction, const Position& destination, Tile* tileBelow, bool cache)
 {
-	//Log(LOG_INFO) << "BattleUnit::startWalking() unitID = " << getId();
+	Log(LOG_INFO) << "BattleUnit::startWalking() unitID = " << getId();
 
-	_walkPhase = 0;
-	_destination = destination;
-	_lastPos = _pos;
-	_cacheInvalid = cache;
 //	_direction = direction;						// kL
 
 	_status = STATUS_WALKING;					// kL
@@ -509,7 +505,7 @@ void BattleUnit::startWalking(int direction, const Position& destination, Tile* 
 //		&& _tile->hasNoFloor(tileBelow)			// kL
 //		&& _armor->getMovementType() == MT_FLY)	// kL
 	{
-		//Log(LOG_INFO) << ". STATUS_FLYING";
+		Log(LOG_INFO) << ". STATUS_FLYING";
 
 		_status = STATUS_FLYING;
 
@@ -519,7 +515,7 @@ void BattleUnit::startWalking(int direction, const Position& destination, Tile* 
 	else //if (direction > 7						// kL
 		//&& _tile->hasNoFloor(tileBelow))		// kL
 	{
-		//Log(LOG_INFO) << ". STATUS_WALKING";
+		Log(LOG_INFO) << ". STATUS_WALKING";
 
 //kL		_status = STATUS_FLYING;
 //		_verticalDirection = Pathfinding::DIR_DOWN;
@@ -536,19 +532,24 @@ void BattleUnit::startWalking(int direction, const Position& destination, Tile* 
 
 	if (_tile->hasNoFloor(tileBelow))
 	{
-		//Log(LOG_INFO) << ". hasNoFloor(), STATUS_FLYING";
+		Log(LOG_INFO) << ". hasNoFloor(), STATUS_FLYING";
 
 		_status = STATUS_FLYING;
 		_floating = true;
 	}
 	else
 	{
-		//Log(LOG_INFO) << ". has Floor(), STATUS_WALKING";
+		Log(LOG_INFO) << ". has Floor(), STATUS_WALKING";
 
 		_floating = false;
 	}
 
-	//Log(LOG_INFO) << "BattleUnit::startWalking() EXIT";
+	_walkPhase = 0;
+	_destination = destination;
+	_lastPos = _pos;
+	_cacheInvalid = cache;
+
+	Log(LOG_INFO) << "BattleUnit::startWalking() EXIT";
 }
 /*kL void BattleUnit::startWalking(int direction, const Position &destination, Tile *tileBelowMe, bool cache)
 {
@@ -589,10 +590,10 @@ void BattleUnit::startWalking(int direction, const Position& destination, Tile* 
  */
 void BattleUnit::keepWalking(Tile* tileBelow, bool cache)
 {
-	//Log(LOG_INFO) << "BattleUnit::keepWalking() unitID = " << getId();
+	Log(LOG_INFO) << "BattleUnit::keepWalking() unitID = " << getId();
 
 	_walkPhase++;
-	//Log(LOG_INFO) << ". _walkPhase = " << _walkPhase;
+	Log(LOG_INFO) << ". _walkPhase = " << _walkPhase;
 
 	int middle, end;
 	if (_verticalDirection)
@@ -630,7 +631,7 @@ void BattleUnit::keepWalking(Tile* tileBelow, bool cache)
 
 	if (_walkPhase >= end)
 	{
-		//Log(LOG_INFO) << ". end, STATUS_STANDING";
+		Log(LOG_INFO) << ". end, STATUS_STANDING";
 
 		// we officially reached our destination tile
 		_status = STATUS_STANDING;
@@ -668,7 +669,7 @@ void BattleUnit::keepWalking(Tile* tileBelow, bool cache)
 
 	_cacheInvalid = cache;
 
-	//Log(LOG_INFO) << "BattleUnit::keepWalking() EXIT";
+	Log(LOG_INFO) << "BattleUnit::keepWalking() EXIT";
 }
 /*kL void BattleUnit::keepWalking(Tile *tileBelowMe, bool cache)
 {
@@ -767,7 +768,7 @@ int BattleUnit::getDiagonalWalkingPhase() const
  */
 void BattleUnit::lookAt(const Position& point, bool turret)
 {
-	//Log(LOG_INFO) << "BattleUnit::lookAt() #1 unitID = " << getId();
+	Log(LOG_INFO) << "BattleUnit::lookAt() #1";// unitID = " << getId();
 	//Log(LOG_INFO) << ". . _direction = " << _direction;
 	//Log(LOG_INFO) << ". . _toDirection = " << _toDirection;
 	//Log(LOG_INFO) << ". . _directionTurret = " << _directionTurret;
@@ -813,7 +814,7 @@ void BattleUnit::lookAt(const Position& point, bool turret)
  */
 void BattleUnit::lookAt(int direction, bool force)
 {
-	//Log(LOG_INFO) << "BattleUnit::lookAt() #2 unitID = " << getId();
+	Log(LOG_INFO) << "BattleUnit::lookAt() #2";// unitID = " << getId();
 	//Log(LOG_INFO) << ". . _direction = " << _direction;
 	//Log(LOG_INFO) << ". . _toDirection = " << _toDirection;
 	//Log(LOG_INFO) << ". . lookAt() direction = " << direction;
@@ -846,7 +847,7 @@ void BattleUnit::lookAt(int direction, bool force)
  */
 void BattleUnit::turn(bool turret)
 {
-	//Log(LOG_INFO) << "BattleUnit::turn() unitID = " << getId();
+	Log(LOG_INFO) << "BattleUnit::turn()";// unitID = " << getId();
 	//Log(LOG_INFO) << ". . _direction = " << _direction;
 	//Log(LOG_INFO) << ". . _toDirection = " << _toDirection;
 	//Log(LOG_INFO) << ". . _directionTurret = " << _directionTurret;
@@ -1461,8 +1462,10 @@ bool BattleUnit::isOut(bool checkHealth, bool checkStun) const
 			return true;
 	}
 
-	return _status == STATUS_DEAD
-			|| _status == STATUS_UNCONSCIOUS;
+	if (_status == STATUS_DEAD || _status == STATUS_UNCONSCIOUS)
+		return true;
+
+	return false;
 }
 
 /**
@@ -1517,7 +1520,7 @@ int BattleUnit::getActionTUs(BattleActionType actionType, BattleItem* item)
 		|| actionType == BA_THROW
 		|| actionType == BA_PRIME)
 	{
-		cost = (int)floor(getStats()->tu * cost / 100.f);
+		cost = static_cast<int>(floor(static_cast<float>(getStats()->tu * (cost)) / 100.f));
 	}
 
 	return cost;
@@ -3052,39 +3055,39 @@ bool BattleUnit::checkViewSector(Position pos) const
 		case 0:
 			if (dx + dy >= 0 && dy - dx >= 0)
 				return true;
-		break;
+//		break;
 		case 1:
 			if (dx >= 0 && dy >= 0)
 				return true;
-		break;
+//		break;
 		case 2:
 			if (dx + dy >= 0 && dy - dx <= 0)
 				return true;
-		break;
+//		break;
 		case 3:
 			if (dy <= 0 && dx >= 0)
 				return true;
-		break;
+//		break;
 		case 4:
 			if (dx + dy <= 0 && dy - dx <= 0)
 				return true;
-		break;
+//		break;
 		case 5:
 			if (dx <= 0 && dy <= 0)
 				return true;
-		break;
+//		break;
 		case 6:
 			if (dx + dy <= 0 && dy - dx >= 0)
 				return true;
-		break;
+//		break;
 		case 7:
 			if (dy >= 0 && dx <= 0)
 				return true;
-		break;
+//		break;
 
 		default:
 			return false;
-		break;
+//		break;
 	}
 
 	return false;

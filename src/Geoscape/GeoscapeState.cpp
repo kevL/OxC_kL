@@ -2554,6 +2554,8 @@ void GeoscapeState::handleDogfights()
 	// If all dogfights are minimized rotate the globe, etc.
 	if (_dogfights.size() == _minimizedDogfights)
 	{
+		_zoomOutEffectTimer->start();	// kL
+
 		_pause = false;
 		_timer->think(this, 0);
 	}
@@ -2663,6 +2665,22 @@ int GeoscapeState::getFirstFreeDogfightSlot()
 
 	return slotNo;
 }
+
+/**
+ * kL. Get the zoom-out effect timer for Dogfights.
+ */
+/* Timer* GeoscapeState::getZoomOutTimer()
+{
+	return _zoomOutEffectTimer;
+} */
+
+/**
+ * kL. Get the zoom-in effect timer for Dogfights.
+ */
+/* Timer* GeoscapeState::getZoomInTimer()
+{
+	return _zoomInEffectTimer;
+} */
 
 /**
  * Handle base defense

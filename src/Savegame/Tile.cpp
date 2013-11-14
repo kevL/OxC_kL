@@ -489,56 +489,78 @@ int Tile::getShade() const
  * This is because the object type of the old and new one are not necessarily the same.
  * If the destroyed part is an explosive, set the tile's explosive value, which will trigger a chained explosion.
  * @param part
- * @return bool Return true objective was destroyed
+ * @return bool, Return true objective was destroyed
  */
 bool Tile::destroy(int part)
 {
+	//Log(LOG_INFO) << "Tile::destroy()";
+
 	bool _objective = false;
+
 	if (_objects[part])
 	{
+		//Log(LOG_INFO) << ". objects[part] is Valid";
+
 		if (_objects[part]->isGravLift())
 			return false;
 
 		_objective = _objects[part]->getSpecialType() == MUST_DESTROY;
-		MapData *originalPart = _objects[part];
+		MapData* originalPart = _objects[part];
 
 		int originalMapDataSetID = _mapDataSetID[part];
 		setMapData(0, -1, -1, part);
 
+		//Log(LOG_INFO) << ". preDie";
 		if (originalPart->getDieMCD())
 		{
-			MapData *dead = originalPart->getDataset()->getObjects()->at(originalPart->getDieMCD());
+			//Log(LOG_INFO) << ". . getDieMCD()";
+
+			MapData* dead = originalPart->getDataset()->getObjects()->at(originalPart->getDieMCD());
 			setMapData(dead, originalPart->getDieMCD(), originalMapDataSetID, dead->getObjectType());
 		}
 
+		//Log(LOG_INFO) << ". preExplode";
 		if (originalPart->getExplosive())
 		{
+			//Log(LOG_INFO) << ". . getExplosive()";
+
 			setExplosive(originalPart->getExplosive());
 		}
 	}
 
+	//Log(LOG_INFO) << ". preScorchEarth";
 	// check if the floor on the lowest level is gone
 	if (part == MapData::O_FLOOR
 		&& getPosition().z == 0
 		&& _objects[MapData::O_FLOOR] == 0)
 	{
+		//Log(LOG_INFO) << ". . getScorchedEarthTile()";
+
 		// replace with scorched earth
 		setMapData(MapDataSet::getScorchedEarthTile(), 1, 0, MapData::O_FLOOR);
 	}
 
+	//Log(LOG_INFO) << ". ret = " << _objective;
 	return _objective;
 }
 
 /* damage terrain  - check against armor
- * @return bool Return true objective was destroyed
+ * @return bool, Return true objective was destroyed
  */
 bool Tile::damage(int part, int power)
 {
+	//Log(LOG_INFO) << "Tile::destroy()";
+
 	bool objective = false;
 
 	if (power >= _objects[part]->getArmor())
-		objective = destroy(part);
+	{
+		Log(LOG_INFO) << ". . destroy(part)";
 
+		objective = destroy(part);
+	}
+
+	//Log(LOG_INFO) << ". ret = " << objective;
 	return objective;
 }
 
@@ -633,13 +655,17 @@ void Tile::ignite(int power)
 
 /**
  * Animate the tile. This means to advance the current frame for every object.
- * Ufo doors are a bit special, they animated only when triggered.
+ * Ufo doors are a bit special, they animate only when triggered.
  * When ufo doors are on frame 0(closed) or frame 7(open) they are not animated further.
  */
 void Tile::animate()
 {
 	int newframe;
-	for (int i = 0; i < 4; ++i)
+
+	for (int
+			i = 0;
+			i < 4;
+			++i)
 	{
 		if (_objects[i])
 		{
@@ -650,6 +676,7 @@ void Tile::animate()
 			}
 
 			newframe = _currentFrame[i] + 1;
+
 			if (_objects[i]->isUFODoor()
 				&& _objects[i]->getSpecialType() == START_POINT
 				&& newframe == 3)

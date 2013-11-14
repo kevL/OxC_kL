@@ -1068,6 +1068,42 @@ void Map::mouseOver(Action* action, State* state)
 	setSelectorPosition(_mouseX, _mouseY);
 }
 
+/**
+ * Handles animating tiles. 8 Frames per animation.
+ * @param redraw Redraw the battlescape?
+ */
+void Map::animate(bool redraw)
+{
+	_animFrame++;
+	if (_animFrame == 8) _animFrame = 0;
+
+	// animate tiles
+	for (int
+			i = 0;
+			i < _save->getMapSizeXYZ();
+			++i)
+	{
+		_save->getTiles()[i]->animate();
+	}
+
+	// animate certain units (large flying units have a propulsion animation)
+	for (std::vector<BattleUnit*>::iterator
+			i = _save->getUnits()->begin();
+			i != _save->getUnits()->end();
+			++i)
+	{
+		if (((*i)->getArmor()->getSize() > 1
+				&& (*i)->getArmor()->getMovementType() == MT_FLY) 
+			|| (*i)->getArmor()->getDrawingRoutine() == 8
+			|| (*i)->getArmor()->getDrawingRoutine() == 9)
+		{
+			(*i)->setCache(0);
+			cacheUnit(*i);
+		}
+	}
+
+	if (redraw) _redraw = true;
+}
 
 /**
  * Sets the selector to a certain tile on the map.
@@ -1086,37 +1122,6 @@ void Map::setSelectorPosition(int mx, int my)
 	{
 		_redraw = true;
 	}
-}
-
-/**
- * Handles animating tiles. 8 Frames per animation.
- * @param redraw Redraw the battlescape?
- */
-void Map::animate(bool redraw)
-{
-	_animFrame++;
-	if (_animFrame == 8) _animFrame = 0;
-
-	// animate tiles
-	for (int i = 0; i < _save->getMapSizeXYZ(); ++i)
-	{
-		_save->getTiles()[i]->animate();
-	}
-
-	// animate certain units (large flying units have a propulsion animation)
-	for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
-	{
-		if (((*i)->getArmor()->getSize() > 1
-				&& (*i)->getArmor()->getMovementType() == MT_FLY) 
-			|| (*i)->getArmor()->getDrawingRoutine() == 8
-			|| (*i)->getArmor()->getDrawingRoutine() == 9)
-		{
-			(*i)->setCache(0);
-			cacheUnit(*i);
-		}
-	}
-
-	if (redraw) _redraw = true;
 }
 
 /**

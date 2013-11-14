@@ -292,7 +292,7 @@ BattlescapeState::BattlescapeState(Game* game)
 
 
 	add(_turnCounter);									// kL
-	_turnCounter->setColor(Palette::blockOffset(9));	// kL
+	_turnCounter->setColor(Palette::blockOffset(15)+5);	// kL
 
 
 	_save = _game->getSavedGame()->getSavedBattle();
@@ -311,7 +311,7 @@ BattlescapeState::BattlescapeState(Game* game)
 	r->h = iconsHeight;
 	s->blit(_icons);
 
-	_numLayers->setColor(Palette::blockOffset(5)-2);
+	_numLayers->setColor(Palette::blockOffset(5)+12);
 	_numLayers->setValue(1);
 
 	_numAmmoLeft->setColor(2);
@@ -1624,33 +1624,47 @@ void BattlescapeState::updateSoldierInfo()
  */
 void BattlescapeState::blinkVisibleUnitButtons()
 {
-	static int delta = 1, color = 32;
+	static int delta = 1, color = 34;	// lightest red +1
 
-	SDL_Rect square1;
+	SDL_Rect square1;	// black border
 	square1.x = 0;
 	square1.y = 0;
 	square1.w = 15;
 	square1.h = 12;
 
-	SDL_Rect square2;
+	SDL_Rect square2;	// inner red square
 	square2.x = 1;
 	square2.y = 1;
 	square2.w = 13;
 	square2.h = 10;
 
-	for (int i = 0; i < VISIBLE_MAX;  ++i)
+	for (int
+			i = 0;
+			i < VISIBLE_MAX;
+			++i)
 	{
 		if (_btnVisibleUnit[i]->getVisible() == true)
 		{
-			_btnVisibleUnit[i]->drawRect(&square1, 15);
-			_btnVisibleUnit[i]->drawRect(&square2, color);
+			_btnVisibleUnit[i]->drawRect(&square1, 15);		// black border
+			_btnVisibleUnit[i]->drawRect(&square2, color);	// inner red square
 		}
 	}
 
-	if (color == 44) delta = -2;
-	if (color == 32) delta = 1;
+//kL	if (color == 44) delta = -2;
+	if (color == 45) delta = -1;	// reached darkish red
+	if (color == 34) delta = 1;		// reached lightest red
 
 	color += delta;
+}
+
+/**
+ * Animates map objects on the map, also smoke,fire, ...
+ */
+void BattlescapeState::animate()
+{
+	_map->animate(!_battleGame->isBusy());
+
+	blinkVisibleUnitButtons();
 }
 
 /**
@@ -1675,16 +1689,6 @@ void BattlescapeState::handleItemClick(BattleItem* item)
 			warning("STR_UNABLE_TO_USE_ALIEN_ARTIFACT_UNTIL_RESEARCHED");
 		}
 	}
-}
-
-/**
- * Animates map objects on the map, also smoke,fire, ...
- */
-void BattlescapeState::animate()
-{
-	_map->animate(!_battleGame->isBusy());
-
-	blinkVisibleUnitButtons();
 }
 
 /**

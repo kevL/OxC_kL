@@ -1156,6 +1156,7 @@ bool SavedBattleGame::isAborted() const
 void SavedBattleGame::setObjectiveDestroyed(bool flag)
 {
 	_objectiveDestroyed = flag;
+
 	if (flag && Options::getBool("battleAutoEnd"))
 	{
 		setSelectedUnit(0);
@@ -1727,126 +1728,56 @@ bool SavedBattleGame::getTraceSetting() const
 }
 
 /**
- * Gets the highest ranked, living XCom unit.
- * @return, The highest ranked, living XCom unit.
- */
-/*kL BattleUnit* SavedBattleGame::getHighestRankedXCom()
-{
-	BattleUnit* leader = 0;
-
-	for (std::vector<BattleUnit*>::iterator j = _units.begin(); j != _units.end(); ++j)
-	{
-		if ((*j)->getOriginalFaction() == FACTION_PLAYER
-			&& !(*j)->isOut())
-		{
-			if (leader == 0
-				|| (*j)->getRankInt() > leader->getRankInt())
-			{
-				leader = *j;
-			}
-		}
-	}
-
-	return leader;
-} */
-
-// kL_begin: SavedBattleGame::getHighestRanked() rewrite to include alien_Faction.
-/**
- * Gets the highest ranked, living unit of faction.
- * @bool xCom, True if faction_Player else false if faction_Hostile.
- * @return, The highest ranked, living unit of the given faction.
+ * Gets the highest ranked, living, non Mc'd unit of faction.
+ * @param bool, xCom=true if faction_Player else false if faction_Hostile.
+ * @return BattleUnit*, The highest ranked, living unit of the given faction.
  */
 BattleUnit* SavedBattleGame::getHighestRanked(bool xcom)
 {
+	Log(LOG_INFO) << "SavedBattleGame::getHighestRanked() forXcom = " << xcom;
+
 	BattleUnit* leader = 0;
 
 	for (std::vector<BattleUnit*>::iterator
-			j = _units.begin();
-			j != _units.end();
-			++j)
+			bu = _units.begin();
+			bu != _units.end();
+			++bu)
 	{
-		if (!(*j)->isOut())
+		if (*bu
+			&& !(*bu)->isOut(true, true))
 		{
 			if (xcom)
 			{
 				//Log(LOG_INFO) << "SavedBattleGame::getHighestRanked(), side is Xcom";
-				if ((*j)->getOriginalFaction() == FACTION_PLAYER)
+				if ((*bu)->getOriginalFaction() == FACTION_PLAYER
+					&& (*bu)->getFaction() == FACTION_PLAYER)
 				{
 					if (leader == 0
-						|| (*j)->getRankInt() > leader->getRankInt())
+						|| (*bu)->getRankInt() > leader->getRankInt())
 					{
-						leader = *j;
+						leader = *bu;
 					}
 				}
 			}
-			else if ((*j)->getOriginalFaction() == FACTION_HOSTILE)
+			else if ((*bu)->getOriginalFaction() == FACTION_HOSTILE
+				&& (*bu)->getFaction() == FACTION_HOSTILE)
 			{
 				//Log(LOG_INFO) << "SavedBattleGame::getHighestRanked(), side is aLien";
 				if (leader == 0
-					|| (*j)->getRankInt() < leader->getRankInt())
+					|| (*bu)->getRankInt() < leader->getRankInt())
 				{
-					leader = *j;
+					leader = *bu;
 				}
 			}
 		}
 	}
 
-	//Log(LOG_INFO) << ". . leader = " << leader->getId();
+	if (leader) Log(LOG_INFO) << ". leaderID = " << leader->getId();
+	else Log(LOG_INFO) << ". leaderID = 0";
+
 	return leader;
 }
-// kL_end.
 
-/**
- * Gets the morale modifier for
- * - either XCom based on the highest ranked, living XCom unit,
- * - or the unit passed to this function.
- * @param unit Unit.
- * @return The morale modifier.
- */
-/*kL int SavedBattleGame::getMoraleModifier(BattleUnit* unit)
-{
-	int result = 100;
-
-	if (unit == 0)
-	{
-		BattleUnit *leader = getHighestRankedXCom();
-		if (leader)
-		{
-			switch (leader->getRankInt())
-			{
-			case 5:
-				result += 25;
-			case 4:
-				result += 10;
-			case 3:
-				result += 5;
-			case 2:
-				result += 10;
-			default:
-				break;
-			}
-		}
-	}
-	else if (unit->getFaction() == FACTION_PLAYER)
-	{
-		switch (unit->getRankInt())
-		{
-		case 5:
-			result += 25;
-		case 4:
-			result += 20;
-		case 3:
-			result += 10;
-		case 2:
-			result += 20;
-		default:
-			break;
-		}
-	}
-	return result;
-} */
-
-// kL_begin: SavedBattleGame::getMoraleModifier() rewrite to include alien_Faction.
 /**
  * Gets the morale modifier, either
  * - a bonus based on the highest ranked, living unit of the xcom/alien factions
@@ -1857,7 +1788,7 @@ BattleUnit* SavedBattleGame::getHighestRanked(bool xcom)
  */
 int SavedBattleGame::getMoraleModifier(BattleUnit* unit, bool xcom)
 {
-	//Log(LOG_INFO) << "SavedBattleGame::getMoraleModifier()";
+	Log(LOG_INFO) << "SavedBattleGame::getMoraleModifier()";
 	int result = 100;
 
 	if (unit == 0) // leadership Bonus
@@ -1888,7 +1819,7 @@ int SavedBattleGame::getMoraleModifier(BattleUnit* unit, bool xcom)
 				}
 			}
 
-			//Log(LOG_INFO) << ". . xCom bonus = " << result;
+			Log(LOG_INFO) << ". . xCom leaderModifi = " << result;
 		}
 		else // alien
 		{
@@ -1917,7 +1848,7 @@ int SavedBattleGame::getMoraleModifier(BattleUnit* unit, bool xcom)
 				}
 			}
 
-			//Log(LOG_INFO) << ". . aLien bonus = " << result;
+			Log(LOG_INFO) << ". . aLien leaderModifi = " << result;
 		}
 	}
 	else // morale Loss when 'unit' slain
@@ -1942,7 +1873,7 @@ int SavedBattleGame::getMoraleModifier(BattleUnit* unit, bool xcom)
 				break;
 			}
 
-			//Log(LOG_INFO) << ". . xCom penalty = " << result;
+			Log(LOG_INFO) << ". . xCom lossModifi = " << result;
 		}
 		else if (unit->getFaction() == FACTION_HOSTILE) // aliens or Mind Controlled XCOM dies.
 		{
@@ -1966,7 +1897,7 @@ int SavedBattleGame::getMoraleModifier(BattleUnit* unit, bool xcom)
 			}
 			// else if a mind-controlled alien dies nobody cares.
 
-			//Log(LOG_INFO) << ". . aLien penalty = " << result;
+			Log(LOG_INFO) << ". . aLien lossModifi = " << result;
 		}
 	}
 
@@ -1974,7 +1905,6 @@ int SavedBattleGame::getMoraleModifier(BattleUnit* unit, bool xcom)
 
 	return result;
 }
-// kL_end.
 
 /**
  * Places a unit on or near a position.

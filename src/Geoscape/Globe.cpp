@@ -731,7 +731,7 @@ void Globe::zoomMax()
 }
 
 /**
- * Gets the globe's current zoom level.
+ * kL. Gets the globe's current zoom level.
  */
 size_t Globe::getZoomLevel()
 {
@@ -1861,7 +1861,7 @@ bool Globe::isZoomedOutToMax() const
 }
 
 /**
- * Checks if the globe is zoomed to a certain level.
+ * kL. Checks if the globe is zoomed to a certain level.
  * @param level, The level to zoom out to.
  * @return, Returns true if globe has reached the level.
  */

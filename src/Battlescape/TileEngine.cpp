@@ -1276,7 +1276,7 @@ bool TileEngine::canTargetTile(
  */
 std::vector<BattleUnit*> TileEngine::getSpottingUnits(BattleUnit* unit)
 {
-	//Log(LOG_INFO) << "TileEngine::getSpottingUnits() targetID " << (unit)->getId() << " : initi = " << static_cast<int>((unit)->getInitiative());
+	Log(LOG_INFO) << "TileEngine::getSpottingUnits() targetID " << (unit)->getId() << " : initi = " << static_cast<int>((unit)->getInitiative());
 
 	Tile* tile = unit->getTile();
 
@@ -1288,7 +1288,8 @@ std::vector<BattleUnit*> TileEngine::getSpottingUnits(BattleUnit* unit)
 	{
 		int buIniti = static_cast<int>((*bu)->getInitiative()); // purely Debug info, here.
 
-		if (!(*bu)->isOut(true, true)														// not dead/unconscious
+		if (*bu != unit																		// don't put spottee unit itself in with the spotters.
+			&& !(*bu)->isOut(true, true)													// not dead/unconscious
 //			&& (*bu)->getHealth() != 0														// not dying, checked by "isOut(true)"
 //			&& (*bu)->getStunlevel() < (*bu)->getHealth()									// not about to pass out
 			&& ((*bu)->getFaction() != _save->getSide()										// not a friend, unless...
@@ -1318,8 +1319,8 @@ std::vector<BattleUnit*> TileEngine::getSpottingUnits(BattleUnit* unit)
 //				if (_save->getSide() != FACTION_NEUTRAL // no reaction on civilian turn. done in "checkReactionFire()"
 				if (canMakeSnap(*bu, unit))
 				{
-					//Log(LOG_INFO) << ". . . reactID " << (*bu)->getId()
-					//		<< " : initi = " << buIniti
+					Log(LOG_INFO) << ". . . reactID " << (*bu)->getId()
+							<< " : initi = " << buIniti;
 					//		<< " : ADD";
 
 					spotters.push_back(*bu);
@@ -1394,7 +1395,7 @@ bool TileEngine::canMakeSnap(BattleUnit* unit, BattleUnit* target)
  */
 bool TileEngine::checkReactionFire(BattleUnit* unit)
 {
-	//Log(LOG_INFO) << "TileEngine::checkReactionFire() vs targetID " << unit->getId();
+	Log(LOG_INFO) << "TileEngine::checkReactionFire() vs targetID " << unit->getId();
 
 	if (_save->getSide() == FACTION_NEUTRAL) // no reaction on civilian turn.
 		return false;
@@ -1430,11 +1431,13 @@ bool TileEngine::checkReactionFire(BattleUnit* unit)
 		// get the first man up to bat.
 		BattleUnit* reactor = getReactor(spotters, unit);
 		// start iterating through the possible reactors until the current unit is the one with the highest score.
-		while (reactor != unit
-			&& !unit->isOut(true, true))
+		while (reactor != unit)
+//			&& !unit->isOut(true, true))	// <- this doesn't want to take effect until after cycling & shots is over
+											// iow, this probably just cycles and sets up the ProjectileFlyBState()'s,
+											// leaving the kill, if any, for later.......
 		{
 			// !!!!!SHOOT!!!!!
-			if (!tryReactionSnap(reactor, unit))
+			if (!tryReactionSnap(reactor, unit))	// <- statePushBack(new ProjectileFlyBState()
 			{
 				//Log(LOG_INFO) << ". . no Snap by : " << reactor->getId();
 
@@ -1466,6 +1469,10 @@ bool TileEngine::checkReactionFire(BattleUnit* unit)
 
 			//Log(LOG_INFO) << ". . Snap by : " << reactor->getId();
 
+			// ... not working!
+//			if (unit->isOut(true, true))	// <- try this down there also.
+//				break;
+			
 			// nice shot, kid. don't get too cocky.
 			reactor = getReactor(spotters, unit);
 			//Log(LOG_INFO) << ". . NEXT AT BAT : " << reactor->getId();
@@ -1487,25 +1494,25 @@ bool TileEngine::checkReactionFire(BattleUnit* unit)
  */
 BattleUnit* TileEngine::getReactor(std::vector<BattleUnit*> spotters, BattleUnit* unit)
 {
-	//Log(LOG_INFO) << "TileEngine::getReactor() vs targetID " << unit->getId();
+	Log(LOG_INFO) << "TileEngine::getReactor() vs targetID " << unit->getId();
 
 	int bestScore = -1;
 	BattleUnit* reactor = 0;
 
 	for (std::vector<BattleUnit*>::iterator
-			spot = spotters.begin();
-			spot != spotters.end();
-			++spot)
+			spotter = spotters.begin();
+			spotter != spotters.end();
+			++spotter)
 	{
-		//Log(LOG_INFO) << ". . reactID " << (*spot)->getId();
+		Log(LOG_INFO) << ". . reactID " << (*spotter)->getId();
 
-		if (!(*spot)->isOut(true, true)
-//			&& canMakeSnap((*spot), unit)				// done in "getSpottingUnits()"
-			&& (*spot)->getInitiative() > bestScore)
-//			&& (*spot) != bu)	// kL, stop unit from reacting twice (unless target uses more TU, hopefully)
+		if (!(*spotter)->isOut(true, true)
+//			&& canMakeSnap((*spotter), unit)				// done in "getSpottingUnits()"
+			&& (*spotter)->getInitiative() > bestScore)
+//			&& (*spotter) != bu)	// kL, stop unit from reacting twice (unless target uses more TU, hopefully)
 		{
-			bestScore = static_cast<int>((*spot)->getInitiative());
-			reactor = *spot;
+			bestScore = static_cast<int>((*spotter)->getInitiative());
+			reactor = *spotter;
 		}
 	}
 
@@ -1519,12 +1526,12 @@ BattleUnit* TileEngine::getReactor(std::vector<BattleUnit*> spotters, BattleUnit
 	}
 	else
 	{
-		//Log(LOG_INFO) << ". . initi returns to targetID " << unit->getId();
+		Log(LOG_INFO) << ". . initi returns to ID " << unit->getId();
 
 		reactor = unit;
 	}
 
-	//Log(LOG_INFO) << ". . bestScore = " << bestScore;
+	Log(LOG_INFO) << ". bestScore = " << bestScore;
 	return reactor;
 }
 
@@ -1593,7 +1600,7 @@ bool TileEngine::tryReactionSnap(BattleUnit* unit, BattleUnit* target)
 		if (action.targeting
 			&& unit->spendTimeUnits(action.TU))
 		{
-			//Log(LOG_INFO) << ". Reaction Fire by reactID " << unit->getId();
+			Log(LOG_INFO) << ". Reaction Fire by reactID " << unit->getId();
 
 			action.TU = 0;
 
@@ -1620,9 +1627,14 @@ bool TileEngine::tryReactionSnap(BattleUnit* unit, BattleUnit* target)
  * @param unit, The unit that caused the hit.
  * @return, The Unit that got hit.
  */
-BattleUnit* TileEngine::hit(const Position& center, int power, ItemDamageType type, BattleUnit* unit)
+BattleUnit* TileEngine::hit(
+		const Position& center,
+		int power,
+		ItemDamageType type,
+		BattleUnit* unit)
 {
-	//Log(LOG_INFO) << "TileEngine::hit() by ID " << unit->getId();
+	Log(LOG_INFO) << "TileEngine::hit() by ID " << unit->getId()
+			<< " : power = " << power << " : type = " << static_cast<int>(type);
 
 	if (type != DT_NONE)	// TEST for Psi-attack.
 	{
@@ -1637,42 +1649,48 @@ BattleUnit* TileEngine::hit(const Position& center, int power, ItemDamageType ty
 		}
 
 //kL		BattleUnit* targetUnit = tile->getUnit();
-		BattleUnit* targetUnit;			// kL_begin:
+		BattleUnit* targetUnit = 0;			// kL_begin:
 		if (tile->getUnit())
 		{
-			//Log(LOG_INFO) << ". targetUnit Valid, continue";
 			targetUnit = tile->getUnit();
-		}								// kL_end.
+			Log(LOG_INFO) << ". targetUnit Valid ID = " << targetUnit->getId();
+		}
+//		else
+//			targetUnit = 0; // kL_end.
 
 //kL		int adjustedDamage = 0;
 
 		// This is returning part < 4 when using a stunRod against a unit outside the north (or west) UFO wall. ERROR!!!
-		const int part = voxelCheck(center, unit);
-		//Log(LOG_INFO) << "TileEngine::hit() part = " << part;
+		int const part = voxelCheck(center, unit);
+		Log(LOG_INFO) << "TileEngine::hit() part = " << part;
 
 		if (-1 < part && part < 4 // 4 terrain parts
 			&& type != DT_STUN) // kL, workaround for Stunrod.
 		{
-			//Log(LOG_INFO) << ". terrain hit";
+			Log(LOG_INFO) << ". terrain hit";//, part = " << part;
 
 			// power 25% to 75%
-			const int rndPower = RNG::generate(power / 4, power * 3 / 4); // RNG::boxMuller(power, power/6)
-			if (tile->damage(part, rndPower))
+//kL			const int randPower = RNG::generate(power / 4, power * 3 / 4); // RNG::boxMuller(power, power/6)
+			power = RNG::generate(power / 4, power * 3 / 4);
+			Log(LOG_INFO) << ". . RNG::generate(power) = " << power;
+			if (tile->damage(part, power))
+			{
 				_save->setObjectiveDestroyed(true);
+			}
 			// kL_note: This would be where to adjust damage based on effectiveness of weapon vs Terrain!
 		}
 		else if (part == 4)	// battleunit part
 //			|| type == DT_STUN) // kL, workaround for Stunrod.
 		{
-			//Log(LOG_INFO) << ". battleunit hit";
+			Log(LOG_INFO) << ". battleunit hit";
 
 			// power 0 - 200% -> 1 - 200%
-//kL			const int rndPower = RNG::generate(1, power * 2); // RNG::boxMuller(power, power/3)
+//kL			const int randPower = RNG::generate(1, power * 2); // RNG::boxMuller(power, power/3)
 			int verticaloffset = 0;
 
 			if (!targetUnit)
 			{
-				//Log(LOG_INFO) << ". targetUnit NOT Valid, check tBelow";
+				Log(LOG_INFO) << ". targetUnit NOT Valid, check tileBelow";
 
 				// it's possible we have a unit below the actual tile, when he stands on a stairs and sticks his head up into the above tile.
 				// kL_note: yeah, just like in LoS calculations!!!! cf. visible() etc etc .. idiots.
@@ -1687,34 +1705,51 @@ BattleUnit* TileEngine::hit(const Position& center, int power, ItemDamageType ty
 
 			if (targetUnit)
 			{
-				//Log(LOG_INFO) << ". . targetUnit Valid";
+				Log(LOG_INFO) << ". . targetUnit Valid ID = " << targetUnit->getId();
 
-				const int size = targetUnit->getArmor()->getSize() * 8;
-				const Position targetPos =
-						(targetUnit->getPosition() * Position(16, 16, 24)) // convert tilespace to voxelspace
-							+ Position(size, size, targetUnit->getFloatHeight() - tile->getTerrainLevel());
-				const Position relativePos = center - targetPos - Position(0, 0, verticaloffset);
+/*kL				const int size = targetUnit->getArmor()->getSize() * 8;
+				const Position targetPos = (targetUnit->getPosition() * Position(16, 16, 24)) // convert tilespace to voxelspace
+						+ Position(
+								size,
+								size,
+								targetUnit->getFloatHeight() - tile->getTerrainLevel());
+				const Position relPos = center - targetPos - Position(0, 0, verticaloffset); */
+				int const size = targetUnit->getArmor()->getSize() * 8;
+				Position const targetPos = (targetUnit->getPosition() * Position(16, 16, 24)) // convert tilespace to voxelspace
+						+ Position(
+								size,
+								size,
+								targetUnit->getFloatHeight() - tile->getTerrainLevel());
+				Position const relPos = center - targetPos - Position(0, 0, verticaloffset);
 
-				const int rndPower = RNG::generate(1, power * 2);	// kL_above
-				bool ignoreArmor = (type == DT_STUN); // kL. stun ignores armor... does now!
-				int adjustedDamage = targetUnit->damage(relativePos, rndPower, type, ignoreArmor);
-				//Log(LOG_INFO) << "TileEngine::hit() adjDamage = " << adjustedDamage;
+//kL				const int randPower	= RNG::generate(1, power * 2);	// kL_above
+				power = RNG::generate(1, power * 2);
+				Log(LOG_INFO) << ". . RNG::generate(power) = " << power;
+				bool ignoreArmor = (type == DT_STUN);			// kL. stun ignores armor... does now!
+				int adjustedDamage = targetUnit->damage(relPos, power, type, ignoreArmor);
+				Log(LOG_INFO) << ". . adjustedDamage = " << adjustedDamage;
 
-				const int bravery = (110 - targetUnit->getStats()->bravery) / 10;
-
-				int modifier = 100;
-				if (targetUnit->getFaction() == FACTION_PLAYER)
+				if (adjustedDamage > 0)
 				{
-					modifier = _save->getMoraleModifier();
-				}
-				else if (targetUnit->getFaction() == FACTION_HOSTILE)
-				{
-					modifier = _save->getMoraleModifier(0, false);
-				}
+					const int bravery = (110 - targetUnit->getStats()->bravery) / 10;
+					if (bravery > 0)
+					{
+						int modifier = 100;
+						if (targetUnit->getFaction() == FACTION_PLAYER)
+						{
+							modifier = _save->getMoraleModifier();
+						}
+						else if (targetUnit->getFaction() == FACTION_HOSTILE)
+						{
+							modifier = _save->getMoraleModifier(0, false);
+						}
 
-				const int morale_loss = 100 * (adjustedDamage * bravery / 10) / modifier;
+						const int morale_loss = 10 * adjustedDamage * bravery / modifier;
+						Log(LOG_INFO) << ". . . morale_loss = " << morale_loss;
 
-				targetUnit->moraleChange(-morale_loss);
+						targetUnit->moraleChange(-morale_loss);
+					}
+				}
 
 				if (targetUnit->getSpecialAbility() == SPECAB_EXPLODEONDEATH
 					&& !targetUnit->isOut() // <- don't explode if stunned. Maybe... kL
@@ -1724,10 +1759,14 @@ BattleUnit* TileEngine::hit(const Position& center, int power, ItemDamageType ty
 					if (type != DT_STUN
 						&& type != DT_HE)
 					{
-						//Log(LOG_INFO) << ". . . . new ExplosionBState()";
+						Log(LOG_INFO) << ". . . . new ExplosionBState(), !DT_STUN & !DT_HE";
 						// kL_note: wait a second. hit() creates an ExplosionBState, but ExplosionBState::explode() creates a hit() !
 
-						Position unitPos = Position(targetUnit->getPosition().x * 16, targetUnit->getPosition().y * 16, targetUnit->getPosition().z * 24);
+						Position unitPos = Position(
+								targetUnit->getPosition().x * 16,
+								targetUnit->getPosition().y * 16,
+								targetUnit->getPosition().z * 24);
+
 						_save->getBattleState()->getBattleGame()->statePushNext(
 								new ExplosionBState(
 										_save->getBattleState()->getBattleGame(),
@@ -1742,7 +1781,7 @@ BattleUnit* TileEngine::hit(const Position& center, int power, ItemDamageType ty
 					&& unit->getOriginalFaction() == FACTION_PLAYER
 					&& type != DT_NONE)
 				{
-					//Log(LOG_INFO) << ". . . addFiringExp() - huh, even for Melee?";
+					Log(LOG_INFO) << ". . . addFiringExp() - huh, even for Melee?";
 					// kL_note: with my workaround for Stunrods above, this needs to check
 					// whether a StunLauncher fires or a melee attack has been done, and
 					// Exp altered accordingly:
@@ -1751,18 +1790,24 @@ BattleUnit* TileEngine::hit(const Position& center, int power, ItemDamageType ty
 			}
 		}
 
+		//Log(LOG_INFO) << ". applyGravity()";
 		applyGravity(tile);
-		calculateSunShading();		// roofs could have been destroyed
-		calculateTerrainLighting();	// fires could have been started
-		calculateFOV(center / Position(16, 16, 24));
+		//Log(LOG_INFO) << ". calculateSunShading()";
+		calculateSunShading();							// roofs could have been destroyed
+		//Log(LOG_INFO) << ". calculateTerrainLighting()";
+		calculateTerrainLighting();						// fires could have been started
+		//Log(LOG_INFO) << ". calculateFOV()";
+		calculateFOV(center / Position(16, 16, 24));	// walls & objects could have been ruined
 
 
-		//Log(LOG_INFO) << "TileEngine::hit() EXIT, return = " << targetUnit->getId();
+		if (targetUnit) Log(LOG_INFO) << "TileEngine::hit() EXIT, return targetUnit";
+		else Log(LOG_INFO) << "TileEngine::hit() EXIT, return 0";
+
 		return targetUnit;
 	}
 	//else Log(LOG_INFO) << ". DT_ = " << static_cast<int>(type);
 
-	//Log(LOG_INFO) << "TileEngine::hit() EXIT, return NULL";
+	Log(LOG_INFO) << "TileEngine::hit() EXIT, return NULL";
 	return 0; // end_TEST
 }
 
@@ -2959,7 +3004,7 @@ int TileEngine::calculateParabola(
 				double arc,
 				double acu)
 {
-	//Log(LOG_INFO) << "TileEngine::calculateParabola()";
+	Log(LOG_INFO) << "TileEngine::calculateParabola()";
 
 	double ro = sqrt(static_cast<double>((target.x - origin.x) * (target.x - origin.x)
 			+ (target.y - origin.y) * (target.y - origin.y)
@@ -3020,7 +3065,7 @@ int TileEngine::calculateParabola(
  */
 bool TileEngine::validateThrow(BattleAction* action)
 {
-	Log(LOG_INFO) << "TileEngine::validateThrow(), similar to Projectile::calculateThrow()";
+	Log(LOG_INFO) << "TileEngine::validateThrow(), cf Projectile::calculateThrow()";
 
 	Position originVoxel, targetVoxel;
 	bool found = false;
@@ -3087,8 +3132,9 @@ bool TileEngine::validateThrow(BattleAction* action)
 		}
 	}
 
-	// we try 4 different arcs to try and reach our goal.
-	double arc = 0.5;
+	// we try several different arcs to try and reach our goal.
+//	double arc = 0.5; // start with a low traj.5 is a bit too low
+	double arc = 1.0;
 	while (!found && arc < 5.0)
 	{
 		int checkParab = calculateParabola(
@@ -3113,6 +3159,7 @@ bool TileEngine::validateThrow(BattleAction* action)
 
 		trajectory.clear();
 	}
+	Log(LOG_INFO) << ". arc = " << arc;
 
 	if (AreSame(arc, 5.0))
 	{
@@ -3355,8 +3402,8 @@ int TileEngine::distanceSq(const Position& pos1, const Position& pos2, bool cons
  */
 bool TileEngine::psiAttack(BattleAction* action)
 {
-	//Log(LOG_INFO) << "TileEngine::psiAttack()";
-	//Log(LOG_INFO) << ". attackerID " << action->actor->getId();
+	Log(LOG_INFO) << "TileEngine::psiAttack()";
+	Log(LOG_INFO) << ". attackerID " << action->actor->getId();
 
 //	bool ret = false;
 
@@ -3373,15 +3420,15 @@ bool TileEngine::psiAttack(BattleAction* action)
 		double attackStr =
 				(double)action->actor->getStats()->psiStrength
 				* (double)action->actor->getStats()->psiSkill / 50.0;
-		//Log(LOG_INFO) << ". . . attackStr = " << attackStr;
+		Log(LOG_INFO) << ". . . attackStr = " << attackStr;
 
 		double defenseStr =
 				(double)victim->getStats()->psiStrength
 				+ ((double)victim->getStats()->psiSkill / 5.0);
-		//Log(LOG_INFO) << ". . . defenseStr = " << defenseStr;
+		Log(LOG_INFO) << ". . . defenseStr = " << defenseStr;
 
 		double d = (double)distance(action->actor->getPosition(), action->target);
-		//Log(LOG_INFO) << ". . . d = " << d;
+		Log(LOG_INFO) << ". . . d = " << d;
 
 		attackStr -= d;
 
@@ -3394,7 +3441,7 @@ bool TileEngine::psiAttack(BattleAction* action)
 		attackStr *= 100.0;
 		attackStr /= 56.0;
 
-		//Log(LOG_INFO) << ". . . attackStr Success @ " << (int)attackStr;
+		Log(LOG_INFO) << ". . . attackStr Success @ " << (int)attackStr;
 
 		action->actor->addPsiExp();
 
@@ -3402,13 +3449,13 @@ bool TileEngine::psiAttack(BattleAction* action)
 		if (percent > 0
 			&& RNG::percent(percent))
 		{
-			//Log(LOG_INFO) << ". . Success";
+			Log(LOG_INFO) << ". . Success";
 
 			action->actor->addPsiExp();
 			action->actor->addPsiExp();
 			if (action->type == BA_PANIC)
 			{
-				//Log(LOG_INFO) << ". . . action->type == BA_PANIC";
+				Log(LOG_INFO) << ". . . action->type == BA_PANIC";
 
 //kL				int moraleLoss = (110 - _save->getTile(action->target)->getUnit()->getStats()->bravery);
 				int moraleLoss = (110 - victim->getStats()->bravery);		// kL
@@ -3417,7 +3464,7 @@ bool TileEngine::psiAttack(BattleAction* action)
 			}
 			else //if (action->type == BA_MINDCONTROL)
 			{
-				//Log(LOG_INFO) << ". . . action->type == BA_MINDCONTROL";
+				Log(LOG_INFO) << ". . . action->type == BA_MINDCONTROL";
 
 				victim->convertToFaction(action->actor->getFaction());
 				calculateFOV(victim->getPosition());
@@ -3622,7 +3669,7 @@ bool TileEngine::validMeleeRange(BattleUnit* attacker, BattleUnit* target, int d
  */
 bool TileEngine::validMeleeRange(Position pos, int direction, BattleUnit* attacker, BattleUnit* target)
 {
-	//Log(LOG_INFO) << "TileEngine::validMeleeRange()";
+	Log(LOG_INFO) << "TileEngine::validMeleeRange()";
 	if (direction < 0 || direction > 7)
 		return false;
 
@@ -3671,7 +3718,7 @@ bool TileEngine::validMeleeRange(Position pos, int direction, BattleUnit* attack
 						Position targetVoxel;
 						if (canTargetUnit(&originVoxel, targetTile, &targetVoxel, attacker))
 						{
-							//Log(LOG_INFO) << "TileEngine::validMeleeRange() EXIT true";
+							Log(LOG_INFO) << "TileEngine::validMeleeRange() EXIT true";
 							return true;
 						}
 					}
@@ -3680,7 +3727,7 @@ bool TileEngine::validMeleeRange(Position pos, int direction, BattleUnit* attack
 		}
 	}
 
-	//Log(LOG_INFO) << "TileEngine::validMeleeRange() EXIT false";
+	Log(LOG_INFO) << "TileEngine::validMeleeRange() EXIT false";
 	return false;
 }
 

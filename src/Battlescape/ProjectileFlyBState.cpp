@@ -138,11 +138,33 @@ void ProjectileFlyBState::init()
 		return;
 	}
 
-	// kL_note: This ought been taken care of....
-/*kL	if (_unit->getFaction() != _parent->getSave()->getSide()) // reaction fire
+	// kL_begin: ProjectileFlyBState::init() Give back time units; pre-end Reaction Fire.
+	if (_unit->getFaction() != _parent->getSave()->getSide()) // reaction fire
 	{
+		if (_parent->getSave()->getTile(_action.target)->getUnit())
+		{
+			BattleUnit* targetUnit = _parent->getSave()->getTile(_action.target)->getUnit();
+		
+			if (_ammo == 0
+				|| targetUnit->isOut(true, true)
+				|| targetUnit != _parent->getSave()->getSelectedUnit())
+			{
+				_unit->setTimeUnits(_unit->getTimeUnits() + _unit->getActionTUs(_action.type, _action.weapon));
+				_parent->popState();
+
+				return;
+			}
+		}
+		else
+		{
+			_unit->setTimeUnits(_unit->getTimeUnits() + _unit->getActionTUs(_action.type, _action.weapon));
+			_parent->popState();
+
+			return;
+		} // kL_end.
+
 		// no ammo or target is dead: give the time units back and cancel the shot.
-		if (_ammo == 0
+/*		if (_ammo == 0
 			|| !_parent->getSave()->getTile(_action.target)->getUnit()
 			|| _parent->getSave()->getTile(_action.target)->getUnit()->isOut(true, true)
 			|| _parent->getSave()->getTile(_action.target)->getUnit() != _parent->getSave()->getSelectedUnit())
@@ -151,8 +173,8 @@ void ProjectileFlyBState::init()
 			_parent->popState();
 
 			return;
-		}
-	} */
+		} */
+	}
 
 	// autoshot will default back to snapshot if it's not possible
 	// kL_note: should this be done *before* tu expenditure?!! Ok it is,
@@ -250,7 +272,8 @@ void ProjectileFlyBState::init()
 
 			_parent->statePushFront(new ExplosionBState(
 					_parent,
-					Position((_action.target.x * 16) + 8,
+					Position(
+						(_action.target.x * 16) + 8,
 						(_action.target.y * 16) + 8,
 						(_action.target.z * 24) + 10),
 					weapon,
@@ -281,6 +304,7 @@ bool ProjectileFlyBState::createNewProjectile()
 {
 	// create a new projectile
 	++_action.autoShotCounter;
+
 	Projectile* projectile = new Projectile(
 			_parent->getResourcePack(),
 			_parent->getSave(),
@@ -298,6 +322,7 @@ bool ProjectileFlyBState::createNewProjectile()
 
 	// let it calculate a trajectory
 	_projectileImpact = -1;
+
 	if (_action.type == BA_THROW)
 	{
 		_projectileImpact = projectile->calculateThrow(_unit->getThrowingAccuracy());
@@ -331,6 +356,7 @@ bool ProjectileFlyBState::createNewProjectile()
 	else if (_action.weapon->getRules()->getArcingShot()) // special code for the "spit" trajectory
 	{
 		_projectileImpact = projectile->calculateThrow(_unit->getFiringAccuracy(_action.type, _action.weapon));
+
 		if (_projectileImpact != -1)
 		{
 			_unit->aim(true); // set the soldier in an aiming position
@@ -364,6 +390,7 @@ bool ProjectileFlyBState::createNewProjectile()
 		//Log(LOG_INFO) << "ProjectileFlyBState::createNewProjectile() shoot weapon";
 
 		_projectileImpact = projectile->calculateTrajectory(_unit->getFiringAccuracy(_action.type, _action.weapon));
+
 		if (_projectileImpact != -1
 			|| _action.type == BA_LAUNCH)
 		{

@@ -179,7 +179,7 @@ void BattlescapeGame::init()
  */
 void BattlescapeGame::handleAI(BattleUnit* unit)
 {
-	//Log(LOG_INFO) << "BattlescapeGame::handleAI()";
+	Log(LOG_INFO) << "BattlescapeGame::handleAI()";
 
 	std::wstringstream ss;
 
@@ -432,7 +432,7 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 		}
 	}
 
-	//Log(LOG_INFO) << "BattlescapeGame::handleAI() EXIT";
+	Log(LOG_INFO) << "BattlescapeGame::handleAI() EXIT";
 }
 
 /**
@@ -442,7 +442,7 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
  */
 bool BattlescapeGame::kneel(BattleUnit* bu)
 {
-	//Log(LOG_INFO) << "BattlescapeGame::kneel()";
+	Log(LOG_INFO) << "BattlescapeGame::kneel()";
 
 	int tu = bu->isKneeled()? 8: 4;
 
@@ -475,7 +475,7 @@ bool BattlescapeGame::kneel(BattleUnit* bu)
  */
 void BattlescapeGame::endTurn()
 {
-	//Log(LOG_INFO) << "BattlescapeGame::endTurn()";
+	Log(LOG_INFO) << "BattlescapeGame::endTurn()";
 
 	Position p;
 
@@ -652,7 +652,7 @@ void BattlescapeGame::endTurn()
  */
 void BattlescapeGame::checkForCasualties(BattleItem* murderweapon, BattleUnit* killer, bool hiddenExplosion, bool terrainExplosion)
 {
-	//Log(LOG_INFO) << "BattlescapeGame::checkForCasualties()";
+	Log(LOG_INFO) << "BattlescapeGame::checkForCasualties()";
 
 	for (std::vector<BattleUnit*>::iterator
 			x = _save->getUnits()->begin();
@@ -664,11 +664,11 @@ void BattlescapeGame::checkForCasualties(BattleItem* murderweapon, BattleUnit* k
 			&& (*x)->getStatus() != STATUS_COLLAPSING)
 		{
 			BattleUnit* victim = *x;
-			//Log(LOG_INFO) << ". victim = " << (*x)->getId();
+			Log(LOG_INFO) << ". victim = " << (*x)->getId();
 
 			if (killer)
 			{
-				//Log(LOG_INFO) << ". killer = " << killer->getId();
+				Log(LOG_INFO) << ". killer = " << killer->getId();
 
 				killer->addKillCount();
 				victim->killedBy(killer->getFaction());
@@ -692,7 +692,7 @@ void BattlescapeGame::checkForCasualties(BattleItem* murderweapon, BattleUnit* k
 					int boost = 10 * bonus / 100;
 					killer->moraleChange(boost); // double what rest of squad gets below
 
-					//Log(LOG_INFO) << ". . killer boost + " << boost;
+					Log(LOG_INFO) << ". . killer boost + " << boost;
 				}
 
 				// killer (mc'd or not) will get a penalty with friendly fire (mc'd or not)
@@ -703,7 +703,7 @@ void BattlescapeGame::checkForCasualties(BattleItem* murderweapon, BattleUnit* k
 					int hit = 5000 / bonus;
 					killer->moraleChange(-hit); // huge hit!
 
-					//Log(LOG_INFO) << ". . FF hit, killer - " << hit;
+					Log(LOG_INFO) << ". . FF hit, killer - " << hit;
 				}
 
 				if (victim->getOriginalFaction() == FACTION_NEUTRAL) // civilian kills
@@ -713,13 +713,13 @@ void BattlescapeGame::checkForCasualties(BattleItem* murderweapon, BattleUnit* k
 						int civdeath = 2000 / bonus;
 						killer->moraleChange(-civdeath);
 
-						//Log(LOG_INFO) << ". . civdeath by xCom, soldier - " << civdeath;
+						Log(LOG_INFO) << ". . civdeath by xCom, soldier - " << civdeath;
 					}
 					else if (killer->getOriginalFaction() == FACTION_HOSTILE)
 					{
 						killer->moraleChange(20); // no leadership bonus for aLiens executing civies: it's their job.
 
-						//Log(LOG_INFO) << ". . civdeath by aLien, killer + " << 20;
+						Log(LOG_INFO) << ". . civdeath by aLien, killer + " << 20;
 					}
 				}
 			}
@@ -747,17 +747,21 @@ void BattlescapeGame::checkForCasualties(BattleItem* murderweapon, BattleUnit* k
 						i != _save->getUnits()->end();
 						++i)
 				{
-					if (!(*i)->isOut(true)
+					if (!(*i)->isOut(true, true)
 						&& (*i)->getArmor()->getSize() == 1) // not a large unit
 					{
 						if ((*i)->getOriginalFaction() == victim->getOriginalFaction())
 						{
 							// losing faction get a morale loss
 							int bravery = (110 - (*i)->getStats()->bravery) / 10;
-							bravery = solo * 200 * bravery / losers / 100;
-							(*i)->moraleChange(-bravery);
+							if (bravery > 0)
+							{
+//kL								bravery = solo * 200 * bravery / losers / 100;
+								bravery = solo * 2 * bravery / losers;
+								(*i)->moraleChange(-bravery);
+							}
 
-							//Log(LOG_INFO) << ". . . loser - " << bravery;
+							Log(LOG_INFO) << ". . . loser - " << bravery;
 
 							if (killer
 								&& killer->getFaction() == FACTION_PLAYER
@@ -772,10 +776,11 @@ void BattlescapeGame::checkForCasualties(BattleItem* murderweapon, BattleUnit* k
 						else if ((*i)->getOriginalFaction() != victim->getOriginalFaction())
 						{
 							// the winning squad all get a morale increase
-							int boost = 10 * winners / 100;
+//kL							int boost = 10 * winners / 100;
+							int boost = winners / 10;
 							(*i)->moraleChange(boost);
 
-							//Log(LOG_INFO) << ". . . winner + " << boost;
+							Log(LOG_INFO) << ". . . winner + " << boost;
 						}
 					}
 				}
@@ -825,7 +830,7 @@ void BattlescapeGame::checkForCasualties(BattleItem* murderweapon, BattleUnit* k
 				&& !bu->isOut());
 	}
 
-	//Log(LOG_INFO) << "BattlescapeGame::checkForCasualties() EXIT";
+	Log(LOG_INFO) << "BattlescapeGame::checkForCasualties() EXIT";
 }
 
 /**
@@ -1702,7 +1707,7 @@ void BattlescapeGame::primaryAction(const Position& pos)
 		sUnit = _save->getSelectedUnit()->getId();	// kL
 	} */
 
-	//Log(LOG_INFO) << "BattlescapeGame::primaryAction()"; // unitID = " << _currentAction.actor->getId();
+	Log(LOG_INFO) << "BattlescapeGame::primaryAction()"; // unitID = " << _currentAction.actor->getId();
 
 	bool bPreviewed = Options::getInt("battleNewPreviewPath") > 0;
 
@@ -1905,7 +1910,7 @@ void BattlescapeGame::primaryAction(const Position& pos)
 		}
 	}
 
-	//Log(LOG_INFO) << "BattlescapeGame::primaryAction() EXIT";
+	Log(LOG_INFO) << "BattlescapeGame::primaryAction() EXIT";
 }
 
 /**
@@ -1914,7 +1919,7 @@ void BattlescapeGame::primaryAction(const Position& pos)
  */
 void BattlescapeGame::secondaryAction(const Position& pos)
 {
-	//Log(LOG_INFO) << "BattlescapeGame::secondaryAction()";
+	Log(LOG_INFO) << "BattlescapeGame::secondaryAction()";
 
 	_currentAction.actor = _save->getSelectedUnit();
 
@@ -2414,7 +2419,7 @@ bool BattlescapeGame::worthTaking(BattleItem* item, BattleAction *action)
  */
 int BattlescapeGame::takeItemFromGround(BattleItem* item, BattleAction *action)
 {
-	//Log(LOG_INFO) << "BattlescapeGame::takeItemFromGround()";
+	Log(LOG_INFO) << "BattlescapeGame::takeItemFromGround()";
 
 	const int unhandledError = -1;
 	const int success = 0;

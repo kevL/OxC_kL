@@ -233,10 +233,10 @@ const int DogfightState::_projectileBlobs[4][6][3] =
 
 /**
  * Initializes all the elements in the Dogfight window.
- * @param game Pointer to the core game.
- * @param globe Pointer to the Geoscape globe.
- * @param craft Pointer to the craft intercepting.
- * @param ufo Pointer to the UFO being intercepted.
+ * @param game, Pointer to the core game.
+ * @param globe, Pointer to the Geoscape globe.
+ * @param craft, Pointer to the craft intercepting.
+ * @param ufo, Pointer to the UFO being intercepted.
  */
 DogfightState::DogfightState(Game* game, Globe* globe, Craft* craft, Ufo* ufo)
 	:
@@ -1231,6 +1231,7 @@ void DogfightState::move()
 			}
 			else
 			{
+				// kL_note: This is how long, in seconds, the crashed uFo remains....
 				_ufo->setSecondsRemaining(RNG::generate(24, 96) * 3600);
 				_ufo->setAltitude("STR_GROUND");
 
@@ -1427,6 +1428,8 @@ void DogfightState::btnMinimizeClick(Action*)
 	{
 		if (_currentDist >= STANDOFF_DIST)
 		{
+//			GeoscapeState::getZoomOutTimer()->start();	// kL
+
 			setMinimized(true);
 
 			_window->setVisible(false);
@@ -1734,7 +1737,7 @@ void DogfightState::drawProjectile(const CraftWeaponProjectile* p)
 		{
 			Uint8 radarPixelColor = _window->getPixel(xPos + 3, y + 3);
 			Uint8 color = radarPixelColor - pixelOffset;
-			if(color < 108)
+			if (color < 108)
 			{
 				color = 108;
 			}
