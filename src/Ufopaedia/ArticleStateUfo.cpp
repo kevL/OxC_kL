@@ -37,9 +37,9 @@
 namespace OpenXcom
 {
 
-ArticleStateUfo::ArticleStateUfo(Game* game, ArticleDefinitionUfo* defs, int palSwitch)
+ArticleStateUfo::ArticleStateUfo(Game* game, ArticleDefinitionUfo* defs)
 	:
-		ArticleState(game, defs->id, palSwitch)
+		ArticleState(game, defs->id)
 {
 	RuleUfo* ufo = _game->getRuleset()->getUfo(defs->id);
 
