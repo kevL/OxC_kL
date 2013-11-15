@@ -488,8 +488,8 @@ void Inventory::mouseOver(Action* action, State* state)
 
 /**
  * Picks up / drops an item.
- * @param action Pointer to an action.
- * @param state State that the action handlers belong to.
+ * @param action, Pointer to an action.
+ * @param state, State that the action handlers belong to.
  */
 void Inventory::mouseClick(Action* action, State* state)
 {
@@ -499,8 +499,8 @@ void Inventory::mouseClick(Action* action, State* state)
 
 		if (_selItem == 0) // Pickup item
 		{
-			int x = (int)floor(action->getAbsoluteXMouse()) - _dx,
-				y = (int)floor(action->getAbsoluteYMouse()) - _dy;
+			int x = static_cast<int>(floor(action->getAbsoluteXMouse())) - _dx,
+				y = static_cast<int>(floor(action->getAbsoluteYMouse())) - _dy;
 
 			RuleInventory* slot = getSlotInPosition(&x, &y);
 			if (slot != 0)
@@ -720,8 +720,8 @@ void Inventory::mouseClick(Action* action, State* state)
 			else
 			{
 				// try again, using the position of the mouse cursor, not the item (slightly more intuitive for stacking)
-				x = (int)floor(action->getAbsoluteXMouse())-_dx;
-				y = (int)floor(action->getAbsoluteYMouse())-_dy;
+				x = static_cast<int>(floor(action->getAbsoluteXMouse())) - _dx;
+				y = static_cast<int>(floor(action->getAbsoluteYMouse())) - _dy;
 
 				slot = getSlotInPosition(&x, &y);
 				if (slot != 0
@@ -738,6 +738,7 @@ void Inventory::mouseClick(Action* action, State* state)
 							moveItem(_selItem, slot, item->getSlotX(), item->getSlotY());
 							_stackLevel[item->getSlotX()][item->getSlotY()] += 1;
 							setSelectedItem(0);
+
 							_game->getResourcePack()->getSound("BATTLE.CAT", 38)->play();
 						}
 						else
@@ -755,8 +756,8 @@ void Inventory::mouseClick(Action* action, State* state)
 		{
 			if (!_tu) // kL_note: ie. TurnUnits have not been instantiated yet: ergo preBattlescape inventory screen is active.
 			{
-				int x = (int)floor(action->getAbsoluteXMouse()) - _dx,
-					y = (int)floor(action->getAbsoluteYMouse()) - _dy;
+				int x = static_cast<int>(floor(action->getAbsoluteXMouse())) - _dx,
+					y = static_cast<int>(floor(action->getAbsoluteYMouse())) - _dy;
 
 				RuleInventory *slot = getSlotInPosition(&x, &y);
 				if (slot != 0)
@@ -792,6 +793,19 @@ void Inventory::mouseClick(Action* action, State* state)
 			else
 			{
 				_game->popState(); // Closes the inventory window on right-click (if not in preBattle equip screen!)
+
+				// but Does NOT applyGravity(), so from InventoryState::btnOkClick()
+				_game->getSavedGame()->getSavedBattle()->getTileEngine()->applyGravity(_game->getSavedGame()->getSavedBattle()->getSelectedUnit()->getTile());
+				_game->getSavedGame()->getSavedBattle()->getTileEngine()->calculateTerrainLighting(); // dropping/picking up flares
+				_game->getSavedGame()->getSavedBattle()->getTileEngine()->recalculateFOV();
+
+				// from BattlescapeGame::dropItem() but can't really use this because I don't know exactly what dropped...
+				// could figure it out via what's on Ground but meh.
+/*				if (item->getRules()->getBattleType() == BT_FLARE)
+				{
+					getTileEngine()->calculateTerrainLighting();
+					getTileEngine()->calculateFOV(position);
+				} */
 			}
 		}
 		else

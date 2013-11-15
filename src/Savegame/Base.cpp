@@ -391,18 +391,18 @@ void Base::setEngineers(int engineers)
  */
 uint8_t Base::detect(Target* target) const
 {
-	//Log(LOG_INFO) << "Base::detect()";
+	Log(LOG_INFO) << "Base::detect()";
 	uint8_t ret = 0;
 
 	double targetDistance = insideRadarRange(target);
 	if (targetDistance == -2.0)
 	{
-		//Log(LOG_INFO) << ". not in range";
+		Log(LOG_INFO) << ". not in range";
 		return 0;
 	}
 	else if (targetDistance == -1.0)
 	{
-		//Log(LOG_INFO) << ". hyperdetected";
+		Log(LOG_INFO) << ". hyperdetected";
 		return 2;
 	}
 	else
@@ -416,17 +416,17 @@ uint8_t Base::detect(Target* target) const
 		{
 			if ((*f)->getBuildTime() == 0)
 			{
-				double radarRange = (double)(*f)->getRules()->getRadarRange();
-				//Log(LOG_INFO) << ". . radarRange = " << radarRange;
+				double radarRange = static_cast<double>((*f)->getRules()->getRadarRange());
+				Log(LOG_INFO) << ". . radarRange = " << radarRange;
 
 				if (targetDistance < radarRange)
 				{
 					percent += (*f)->getRules()->getRadarChance();
-					//Log(LOG_INFO) << ". . . percent(base) = " << percent;
+					Log(LOG_INFO) << ". . . percent(base) = " << percent;
 				}
 				else
 				{
-					//Log(LOG_INFO) << ". . target out of Range";
+					Log(LOG_INFO) << ". . target out of Range";
 				}
 			}
 		}
@@ -439,15 +439,15 @@ uint8_t Base::detect(Target* target) const
 			if (u != 0)
 			{
 				percent += u->getVisibility();
-				//Log(LOG_INFO) << ". . percent(base + ufo) = " << percent;
+				Log(LOG_INFO) << ". . percent(base + ufo) = " << percent;
 			}
 
 			if (percent < 1)
 				return 0;
 			else
 			{
-				ret = (uint8_t)RNG::percent(percent);
-				//Log(LOG_INFO) << ". detected = " << (int)ret;
+				ret = static_cast<uint8_t>(RNG::percent(percent));
+				Log(LOG_INFO) << ". detected = " << static_cast<int>(ret);
 			}
 		}
 	}
@@ -466,7 +466,10 @@ double Base::insideRadarRange(Target* target) const
 	double ret = -2.0;
 
 	double targetDistance = getDistance(target) * 3440.0;
-	//Log(LOG_INFO) << ". targetDistance = " << targetDistance;
+	Log(LOG_INFO) << ". targetDistance = " << (int)targetDistance;
+
+	if (targetDistance > 2400.0) // early out.
+		return ret;
 
 	for (std::vector<BaseFacility*>::const_iterator
 			f = _facilities.begin();
@@ -475,19 +478,19 @@ double Base::insideRadarRange(Target* target) const
 	{
 		if ((*f)->getBuildTime() == 0)
 		{
-			double radarRange = (double)(*f)->getRules()->getRadarRange();
-			//Log(LOG_INFO) << ". . radarRange = " << radarRange;
+			double radarRange = static_cast<double>((*f)->getRules()->getRadarRange());
+			Log(LOG_INFO) << ". . radarRange = " << (int)radarRange;
 
 			if (targetDistance < radarRange)
 			{
 				if ((*f)->getRules()->isHyperwave())
 				{
-					//Log(LOG_INFO) << ". . . . ret = hyperWave";
+					Log(LOG_INFO) << ". . . . ret = hyperWave";
 					return -1.0;
 				}
 				else
 				{
-					//Log(LOG_INFO) << ". . . ret = radar";
+					Log(LOG_INFO) << ". . . ret = radar";
 					ret = targetDistance;
 				}
 			}
@@ -1050,19 +1053,19 @@ void Base::researchHelp(std::string sProject)
 			{
 				(*iter2)->setSpent(spent + (int)(cost * 0.1f));
 
-				//Log(LOG_INFO) << ". . Soldier.1 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.1f);
+				Log(LOG_INFO) << ". . Soldier.1 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.1f);
 			}
 			else if (help == "STR_ALIEN_ORIGINS")
 			{
 				(*iter2)->setSpent(spent + (int)(cost * 0.2f));
 
-				//Log(LOG_INFO) << ". . Soldier.2 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.2f);
+				Log(LOG_INFO) << ". . Soldier.2 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.2f);
 			}
 			else if (help == "STR_POWER_SUIT")
 			{
 				(*iter2)->setSpent(spent + (int)(cost * 0.25f));
 
-				//Log(LOG_INFO) << ". . Soldier.25 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.25f);
+				Log(LOG_INFO) << ". . Soldier.25 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.25f);
 			}
 			else if (help == "STR_HEAVY_PLASMA_CLIP"
 				|| help == "STR_PLASMA_RIFLE_CLIP"
@@ -1070,7 +1073,7 @@ void Base::researchHelp(std::string sProject)
 			{
 				(*iter2)->setSpent(spent + (int)(cost * 0.4f));
 
-				//Log(LOG_INFO) << ". . Soldier.4 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.4f);
+				Log(LOG_INFO) << ". . Soldier.4 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.4f);
 			}
 			else if (help == "STR_ALIEN_GRENADE"
 				|| help == "STR_ALIEN_ENTERTAINMENT"
@@ -1078,7 +1081,7 @@ void Base::researchHelp(std::string sProject)
 			{
 				(*iter2)->setSpent(spent + (int)(cost * 0.5f));
 
-				//Log(LOG_INFO) << ". . Soldier.5 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.5f);
+				Log(LOG_INFO) << ". . Soldier.5 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.5f);
 			}
 
 			// always takes an extra day to complete (and guards vs. potential code-flow bork!)
@@ -1102,7 +1105,7 @@ void Base::researchHelp(std::string sProject)
 			{
 				(*iter2)->setSpent(spent + (int)(cost * 0.15f));
 
-				//Log(LOG_INFO) << ". . Navigator.15 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.15f);
+				Log(LOG_INFO) << ". . Navigator.15 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.15f);
 			}
 			else if (help == "STR_HEAVY_PLASMA"
 				|| help == "STR_HEAVY_PLASMA_CLIP"
@@ -1120,7 +1123,7 @@ void Base::researchHelp(std::string sProject)
 			{
 				(*iter2)->setSpent(spent + (int)(cost * 0.2f));
 
-				//Log(LOG_INFO) << ". . Navigator.2 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.2f);
+				Log(LOG_INFO) << ". . Navigator.2 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.2f);
 			}
 			else if (help == "STR_UFO_POWER_SOURCE"
 				|| help == "STR_UFO_CONSTRUCTION"
@@ -1128,40 +1131,40 @@ void Base::researchHelp(std::string sProject)
 			{
 				(*iter2)->setSpent(spent + (int)(cost * 0.25f));
 
-				//Log(LOG_INFO) << ". . Navigator.25: help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.25f);
+				Log(LOG_INFO) << ". . Navigator.25: help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.25f);
 			}
 			else if (help == "STR_FLYING_SUIT")
 			{
 				(*iter2)->setSpent(spent + (int)(cost * 0.3f));
 
-				//Log(LOG_INFO) << ". . Navigator.3 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.3f);
+				Log(LOG_INFO) << ". . Navigator.3 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.3f);
 			}
 			else if (help == "STR_ALIEN_ORIGINS")
 			{
 				(*iter2)->setSpent(spent + (int)(cost * 0.35f));
 
-				//Log(LOG_INFO) << ". . Navigator.35 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.35f);
+				Log(LOG_INFO) << ". . Navigator.35 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.35f);
 			}
 			else if (help == "STR_GRAV_SHIELD"
 				|| help == "STR_ALIEN_ALLOYS")
 			{
 				(*iter2)->setSpent(spent + (int)(cost * 0.4f));
 
-				//Log(LOG_INFO) << ". . Navigator.4 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.4f);
+				Log(LOG_INFO) << ". . Navigator.4 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.4f);
 			}
 			else if (help == "STR_MOTION_SCANNER"
 				|| help == "STR_ALIEN_ENTERTAINMENT")
 			{
 				(*iter2)->setSpent(spent + (int)(cost * 0.5f));
 
-				//Log(LOG_INFO) << ". . Navigator.5 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.5f);
+				Log(LOG_INFO) << ". . Navigator.5 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.5f);
 			}
 			else if (help == "STR_HYPER_WAVE_DECODER"
 				|| help == "STR_UFO_NAVIGATION")
 			{
 				(*iter2)->setSpent(spent + (int)(cost * 0.8f));
 
-				//Log(LOG_INFO) << ". . Navigator.8 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.8f);
+				Log(LOG_INFO) << ". . Navigator.8 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.8f);
 			}
 
 			// always takes an extra day to complete (and guards vs. potential code-flow bork!)
@@ -1183,19 +1186,19 @@ void Base::researchHelp(std::string sProject)
 			{
 				(*iter2)->setSpent(spent + (int)(cost * 0.1f));
 
-				//Log(LOG_INFO) << ". . Medic.1 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.1f);
+				Log(LOG_INFO) << ". . Medic.1 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.1f);
 			}
 			else if (help == "STR_ALIEN_ORIGINS")
 			{
 				(*iter2)->setSpent(spent + (int)(cost * 0.2f));
 
-				//Log(LOG_INFO) << ". . Medic.2 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.2f);
+				Log(LOG_INFO) << ". . Medic.2 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.2f);
 			}
 			else if (help == "STR_ALIEN_REPRODUCTION")
 			{
 				(*iter2)->setSpent(spent + (int)(cost * 0.5f));
 
-				//Log(LOG_INFO) << ". . Medic.5 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.5f);
+				Log(LOG_INFO) << ". . Medic.5 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.5f);
 			}
 			else if (help == "STR_MEDI_KIT"
 				|| help == "STR_PSI_AMP"
@@ -1210,7 +1213,7 @@ void Base::researchHelp(std::string sProject)
 			{
 				(*iter2)->setSpent(spent + (int)(cost * 0.8f));
 
-				//Log(LOG_INFO) << ". . Medic.8 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.8f);
+				Log(LOG_INFO) << ". . Medic.8 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.8f);
 			}
 
 			// always takes an extra day to complete (and guards vs. potential code-flow bork!)
@@ -1233,7 +1236,7 @@ void Base::researchHelp(std::string sProject)
 			{
 				(*iter2)->setSpent(spent + (int)(cost * 0.1f));
 
-				//Log(LOG_INFO) << ". . Engineer.1 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.1f);
+				Log(LOG_INFO) << ". . Engineer.1 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.1f);
 			}
 			else if (help == "STR_ALIEN_ORIGINS"
 				|| help == "STR_SMALL_LAUNCHER"
@@ -1241,7 +1244,7 @@ void Base::researchHelp(std::string sProject)
 			{
 				(*iter2)->setSpent(spent + (int)(cost * 0.2f));
 
-				//Log(LOG_INFO) << ". . Engineer.2 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.2f);
+				Log(LOG_INFO) << ". . Engineer.2 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.2f);
 			}
 			else if (help == "STR_NEW_FIGHTER_CRAFT"
 				|| help == "STR_NEW_FIGHTER_TRANSPORTER"
@@ -1249,7 +1252,7 @@ void Base::researchHelp(std::string sProject)
 			{
 				(*iter2)->setSpent(spent + (int)(cost * 0.3f));
 
-				//Log(LOG_INFO) << ". . Engineer.3 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.3f);
+				Log(LOG_INFO) << ". . Engineer.3 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.3f);
 			}
 			else if (help == "STR_MOTION_SCANNER"
 				|| help == "STR_HEAVY_PLASMA"
@@ -1274,14 +1277,14 @@ void Base::researchHelp(std::string sProject)
 			{
 				(*iter2)->setSpent(spent + (int)(cost * 0.5f));
 
-				//Log(LOG_INFO) << ". . Engineer.5 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.5f);
+				Log(LOG_INFO) << ". . Engineer.5 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.5f);
 			}
 			else if (help == "STR_BLASTER_LAUNCHER"
 				|| help == "STR_BLASTER_BOMB")
 			{
 				(*iter2)->setSpent(spent + (int)(cost * 0.7f));
 
-				//Log(LOG_INFO) << ". . Engineer.7 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.7f);
+				Log(LOG_INFO) << ". . Engineer.7 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.7f);
 			}
 
 			// always takes an extra day to complete (and guards vs. potential code-flow bork!)
@@ -1306,7 +1309,7 @@ void Base::researchHelp(std::string sProject)
 			{
 				(*iter2)->setSpent(spent + (int)(cost * 0.1f));
 
-				//Log(LOG_INFO) << ". . Leader.1 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.1f);
+				Log(LOG_INFO) << ". . Leader.1 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.1f);
 			}
 			else if (help == "STR_HEAVY_PLASMA"
 				|| help == "STR_HEAVY_PLASMA_CLIP"
@@ -1328,37 +1331,37 @@ void Base::researchHelp(std::string sProject)
 			{
 				(*iter2)->setSpent(spent + (int)(cost * 0.2f));
 
-				//Log(LOG_INFO) << ". . Leader.2 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.2f);
+				Log(LOG_INFO) << ". . Leader.2 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.2f);
 			}
 			else if (help == "STR_PSI_AMP")
 			{
 				(*iter2)->setSpent(spent + (int)(cost * 0.25f));
 
-				//Log(LOG_INFO) << ". . Leader.25 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.25f);
+				Log(LOG_INFO) << ". . Leader.25 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.25f);
 			}
 			else if (help == "STR_THE_MARTIAN_SOLUTION")
 			{
 				(*iter2)->setSpent(spent + (int)(cost * 0.3f));
 
-				//Log(LOG_INFO) << ". . Leader.3 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.3f);
+				Log(LOG_INFO) << ". . Leader.3 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.3f);
 			}
 			else if (help == "STR_ALIEN_ORIGINS")
 			{
 				(*iter2)->setSpent(spent + (int)(cost * 0.5f));
 
-				//Log(LOG_INFO) << ". . Leader.5 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.5f);
+				Log(LOG_INFO) << ". . Leader.5 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.5f);
 			}
 			else if (help == "STR_BLASTER_LAUNCHER")
 			{
 				(*iter2)->setSpent(spent + (int)(cost * 0.6f));
 
-				//Log(LOG_INFO) << ". . Leader.6 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.6f);
+				Log(LOG_INFO) << ". . Leader.6 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.6f);
 			}
 			else if (help == "STR_EXAMINATION_ROOM")
 			{
 				(*iter2)->setSpent(spent + (int)(cost * 0.8f));
 
-				//Log(LOG_INFO) << ". . Leader.8 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.8f);
+				Log(LOG_INFO) << ". . Leader.8 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.8f);
 			}
 
 			// always takes an extra day to complete (and guards vs. potential code-flow bork!)
@@ -1393,7 +1396,7 @@ void Base::researchHelp(std::string sProject)
 			{
 				(*iter2)->setSpent(spent + (int)(cost * 0.2f));
 
-				//Log(LOG_INFO) << ". . Commander.2 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.2f);
+				Log(LOG_INFO) << ". . Commander.2 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.2f);
 			}
 			else if (help == "STR_BLASTER_BOMB"
 					|| help == "STR_ELERIUM_115"
@@ -1404,33 +1407,33 @@ void Base::researchHelp(std::string sProject)
 			{
 				(*iter2)->setSpent(spent + (int)(cost * 0.25f));
 
-				//Log(LOG_INFO) << ". . Commander.25 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.25f);
+				Log(LOG_INFO) << ". . Commander.25 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.25f);
 			}
 			else if (help == "STR_PSI_AMP"
 				|| help == "STR_CYDONIA_OR_BUST")
 			{
 				(*iter2)->setSpent(spent + (int)(cost * 0.5f));
 
-				//Log(LOG_INFO) << ". . Commander.5 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.5f);
+				Log(LOG_INFO) << ". . Commander.5 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.5f);
 			}
 			else if (help == "STR_THE_MARTIAN_SOLUTION")
 			{
 				(*iter2)->setSpent(spent + (int)(cost * 0.6f));
 
-				//Log(LOG_INFO) << ". . Commander.6 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.6f);
+				Log(LOG_INFO) << ". . Commander.6 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.6f);
 			}
 			else if (help == "STR_ALIEN_ORIGINS")
 			{
 				(*iter2)->setSpent(spent + (int)(cost * 0.7f));
 
-				//Log(LOG_INFO) << ". . Commander.7 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.7f);
+				Log(LOG_INFO) << ". . Commander.7 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.7f);
 			}
 			else if (help == "STR_BLASTER_LAUNCHER"
 				|| help == "STR_EXAMINATION_ROOM")
 			{
 				(*iter2)->setSpent(spent + (int)(cost * 0.8f));
 
-				//Log(LOG_INFO) << ". . Commander.8 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.8f);
+				Log(LOG_INFO) << ". . Commander.8 : help = " << help << " ; spent = " << spent << " ; cost = " << cost << " ; newSpent = " << spent + (int)(cost * 0.8f);
 			}
 
 			// always takes an extra day to complete (and guards vs. potential code-flow bork!)
@@ -1670,17 +1673,17 @@ bool isCompleted::operator()(const BaseFacility* facility) const
 // kL_begin: rewrite getDetectionChance() using floats.
 int Base::getDetectionChance() const
 {
-	//Log(LOG_INFO) << "Base::getDetectionChance()";
+	Log(LOG_INFO) << "Base::getDetectionChance()";
 	int shields = (int)std::count_if(_facilities.begin(), _facilities.end(), isMindShield());
 	int facilities = (int)std::count_if(_facilities.begin(), _facilities.end(), isCompleted());
 
 	facilities = (facilities / 6) + 9;
 	shields = (shields * 2) + 1;
-	//Log(LOG_INFO) << ". facilities = " << facilities;
-	//Log(LOG_INFO) << ". shields = " << shields;
+	Log(LOG_INFO) << ". facilities = " << facilities;
+	Log(LOG_INFO) << ". shields = " << shields;
 
 	int detchance = facilities / shields;
-	//Log(LOG_INFO) << ". detchance = " << detchance;
+	Log(LOG_INFO) << ". detchance = " << detchance;
 
 	return detchance;
 }

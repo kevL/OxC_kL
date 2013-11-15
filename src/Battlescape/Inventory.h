@@ -43,23 +43,23 @@ class Inventory
 	:
 	public InteractiveSurface
 {
-	private:
-		Game* _game;
-		Surface* _grid, * _items, * _selection;
-		WarningMessage* _warning;
-		BattleUnit* _selUnit;
-		BattleItem* _selItem;
-		bool _tu;
-		int _groundOffset;
-		std::map<int, std::map<int, int> > _stackLevel;
-		NumberText* _stackNumber;
+private:
+	Game* _game;
+	Surface* _grid, * _items, * _selection;
+	WarningMessage* _warning;
+	BattleUnit* _selUnit;
+	BattleItem* _selItem;
+	bool _tu;
+	int _groundOffset;
+	std::map<int, std::map<int, int> > _stackLevel;
+	NumberText* _stackNumber;
 
-		/// Moves an item to a specified slot.
-		void moveItem(BattleItem* item, RuleInventory* slot, int x, int y);
-		/// Checks for item overlap.
-		bool overlapItems(BattleItem* item, RuleInventory* slot, int x, int y) const;
-		/// Gets the slot in the specified position.
-		RuleInventory* getSlotInPosition(int* x, int* y) const;
+	/// Moves an item to a specified slot.
+	void moveItem(BattleItem* item, RuleInventory* slot, int x, int y);
+	/// Checks for item overlap.
+	bool overlapItems(BattleItem* item, RuleInventory* slot, int x, int y) const;
+	/// Gets the slot in the specified position.
+	RuleInventory* getSlotInPosition(int* x, int* y) const;
 
 	public:
 		/// Creates a new inventory view at the specified position and size.

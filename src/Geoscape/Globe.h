@@ -126,7 +126,7 @@ private:
 		/// Zooms the globe maximum.
 		void zoomMax();
 		/// kL. Gets the globe's current zoom level.
-		size_t getZoomLevel();
+//		size_t getZoomLevel();
 
 		/// Centers the globe on a point.
 		void center(double lon, double lat);
@@ -182,7 +182,7 @@ private:
 		/// Checks if current globe zoom level is at minimum.
 		bool isZoomedOutToMax() const;
 		/// kL. Checks if the globe is zoomed to a certain level.
-		bool isZoomedToLevel(size_t level) const;
+//		bool isZoomedToLevel(size_t level) const;
 
 		/// Get the localized text.
 		const LocalizedText& tr(const std::string& id) const;

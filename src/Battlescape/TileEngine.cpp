@@ -1827,11 +1827,8 @@ BattleUnit* TileEngine::hit(
  */
 void TileEngine::explode(const Position& center, int power, ItemDamageType type, int maxRadius, BattleUnit* unit)
 {
-	//Log(LOG_INFO) << "TileEngine::explode()";
+	Log(LOG_INFO) << "TileEngine::explode() power = " << power << " ; type = " << (int)type << " ; maxRadius = " << maxRadius;
 
-//kL	double centerZ = (int)(center.z / 24) + 0.5;
-//kL	double centerX = (int)(center.x / 16) + 0.5;
-//kL	double centerY = (int)(center.y / 16) + 0.5;
 	double centerZ = static_cast<double>((center.z / 24) + 0.5);		// kL
 	double centerX = static_cast<double>((center.x / 16) + 0.5);		// kL
 	double centerY = static_cast<double>((center.y / 16) + 0.5);		// kL
@@ -1844,6 +1841,7 @@ void TileEngine::explode(const Position& center, int power, ItemDamageType type,
 	if (type == DT_IN)
 	{
 		power /= 2;
+		Log(LOG_INFO) << ". DT_IN power = " << power;
 	}
 
 	int vertdec = 1000; // default flat explosion
@@ -1932,15 +1930,22 @@ void TileEngine::explode(const Position& center, int power, ItemDamageType type,
 							if (dest->getUnit())
 							{
 //kL								dest->getUnit()->damage(Position(0, 0, 0), RNG::generate(0, power_ * 2), type);
-								dest->getUnit()->damage(Position(0, 0, 0), RNG::generate(1, power_ * 2), type);		// kL
+								int powerUnit = RNG::generate(1, power_ * 2);
+								Log(LOG_INFO) << ". . powerUnit = " << powerUnit << " DT_STUN";
+								dest->getUnit()->damage(Position(0, 0, 0), powerUnit, type);	// kL
 							}
 
-							for (std::vector<BattleItem*>::iterator it = dest->getInventory()->begin(); it != dest->getInventory()->end(); ++it)
+							for (std::vector<BattleItem*>::iterator
+									it = dest->getInventory()->begin();
+									it != dest->getInventory()->end();
+									++it)
 							{
 								if ((*it)->getUnit())
 								{
 //kL									(*it)->getUnit()->damage(Position(0, 0, 0), RNG::generate(0, power_ * 2), type);
-									(*it)->getUnit()->damage(Position(0, 0, 0), RNG::generate(1, power_ * 2), type);	// kL
+									int powerCorpse = RNG::generate(1, power_ * 2);
+									Log(LOG_INFO) << ". . powerCorpse = " << powerCorpse << " DT_STUN";
+									(*it)->getUnit()->damage(Position(0, 0, 0), powerCorpse, type);		// kL
 								}
 							}
 						}
@@ -1949,9 +1954,12 @@ void TileEngine::explode(const Position& center, int power, ItemDamageType type,
 						{
 							if (dest->getUnit())
 							{
+								int powerUnit = static_cast<int>(
+										RNG::generate(static_cast<float>(power_) * 0.5f, static_cast<float>(power_) * 1.5f));
+								Log(LOG_INFO) << ". . powerUnit = " << powerUnit << " DT_HE";
 								dest->getUnit()->damage(
 										Position(0, 0, 0),
-										static_cast<int>(RNG::generate(static_cast<float>(power_) * 0.5f, static_cast<float>(power_) * 1.5f)),
+										powerUnit,
 										type);
 							}
 
@@ -1959,16 +1967,21 @@ void TileEngine::explode(const Position& center, int power, ItemDamageType type,
 							while (!done) // kL_note: what the fuck kind of a loop is this ??!!1?
 							{
 								done = dest->getInventory()->empty();
-								for (std::vector<BattleItem*>::iterator it = dest->getInventory()->begin(); it != dest->getInventory()->end();)
+								for (std::vector<BattleItem*>::iterator
+										it = dest->getInventory()->begin();
+										it != dest->getInventory()->end();
+										)
 								{
 									if (power_ > (*it)->getRules()->getArmor())
 									{
 										if ((*it)->getUnit()
 											&& (*it)->getUnit()->getStatus() == STATUS_UNCONSCIOUS)
 										{
+											Log(LOG_INFO) << ". . . Frank blow'd up.";
 											(*it)->getUnit()->instaKill();
 										}
 
+										Log(LOG_INFO) << ". . item destroyed";
 										_save->removeItem((*it));
 
 										break;
@@ -1976,12 +1989,13 @@ void TileEngine::explode(const Position& center, int power, ItemDamageType type,
 									else
 									{
 										++it;
-										done = it == dest->getInventory()->end();
+										done = (it == dest->getInventory()->end());
 									}
 								}
 							}
 						}
 
+						// kL_note: Could do instant smoke inhalation damage here (sorta like Fire or Stun).
 						if (type == DT_SMOKE) // smoke from explosions always stay 6 to 14 turns - power of a smoke grenade is 60
 						{
 							if (dest->getSmoke() < 10)
@@ -2001,18 +2015,18 @@ void TileEngine::explode(const Position& center, int power, ItemDamageType type,
 							}
 
 							if (dest->getUnit())
-							// kL_note: fire damage is also caused by BattlescapeGame::endTurn() -- but previously by BattleUnit::prepareNewTurn()!!
+							// kL_note: fire damage is also caused by BattlescapeGame::endTurn() -- but previously by BattleUnit::prepareNewTurn()!!!!
 							{
 								float resistance = dest->getUnit()->getArmor()->getDamageModifier(DT_IN);
 								if (resistance > 0.f)
 								{
-									int iFire = RNG::generate(3, 9);
+									int iFire = RNG::generate(4, 11);
 //kL									dest->getUnit()->damage(Position(0, 0, 12-dest->getTerrainLevel()), RNG::generate(5, 10), DT_IN, true);
-									dest->getUnit()->damage(Position(0, 0, 12-dest->getTerrainLevel()), iFire, DT_IN, true);		// kL
-									//Log(LOG_INFO) << ". do Tile Fire : " << dest->getUnit()->getId() << " takes " << iFire << " fire";
+									dest->getUnit()->damage(Position(0, 0, 12 - dest->getTerrainLevel()), iFire, DT_IN, true);		// kL
+									Log(LOG_INFO) << ". . DT_IN : " << dest->getUnit()->getId() << " takes " << iFire << " fire";
 
 //kL									int burnTime = RNG::generate(0, int(5 * resistance));
-									int burnTime = RNG::generate(0, 5 * (int)resistance);		// kL
+									int burnTime = RNG::generate(0, static_cast<int>(5.f * resistance));	// kL
 									if (dest->getUnit()->getFire() < burnTime)
 									{
 										dest->getUnit()->setFire(burnTime); // catch fire and burn
@@ -2023,7 +2037,10 @@ void TileEngine::explode(const Position& center, int power, ItemDamageType type,
 
 						if (unit
 							&& dest->getUnit()
-							&& dest->getUnit()->getFaction() != unit->getFaction())
+							&& unit->getOriginalFaction() == FACTION_PLAYER			// kL
+							&& unit->getFaction() == FACTION_PLAYER					// kL
+							&& dest->getUnit()->getFaction() != FACTION_PLAYER)		// kL
+//							&& dest->getUnit()->getFaction() != unit->getFaction())
 						{
 							unit->addFiringExp();
 						}
@@ -3539,13 +3556,14 @@ bool TileEngine::psiAttack(BattleAction* action)
  */
 Tile* TileEngine::applyGravity(Tile* t)
 {
-	if (t->getInventory()->empty() && !t->getUnit())
-		return t; // skip this if there are no items
+	if (!t) return 0;				// skip this if there is no tile.
 
-	if (!t)
+	if (t->getInventory()->empty()	// skip this if there are no items;
+		&& !t->getUnit())			// skip this if there is no unit in the tile. huh
 	{
-		return 0;
+		return t;
 	}
+
 
 	Position p = t->getPosition();
 	Tile* rt = t;
@@ -3561,9 +3579,17 @@ Tile* TileEngine::applyGravity(Tile* t)
 		{
 			bool canFall = true;
 
-			for (int y = 0; y < occupant->getArmor()->getSize() && canFall; ++y)
+			for (int
+					y = 0;
+					y < occupant->getArmor()->getSize()
+						&& canFall;
+					++y)
 			{
-				for (int x = 0; x < occupant->getArmor()->getSize() && canFall; ++x)
+				for (int
+						x = 0;
+						x < occupant->getArmor()->getSize()
+							&& canFall;
+						++x)
 				{
 					rt = _save->getTile(Position(unitpos.x + x, unitpos.y + y, unitpos.z));
 					rtb = _save->getTile(Position(unitpos.x + x, unitpos.y + y, unitpos.z - 1)); // below
@@ -3574,8 +3600,8 @@ Tile* TileEngine::applyGravity(Tile* t)
 				}
 			}
 
-			if (!canFall)
-				break;
+			if (!canFall) break;
+
 
 			unitpos.z--;
 		}
@@ -3598,9 +3624,15 @@ Tile* TileEngine::applyGravity(Tile* t)
 			{
 				Position origin = occupant->getPosition();
 
-				for (int y = occupant->getArmor()->getSize() - 1; y >= 0; --y)
+				for (int
+						y = occupant->getArmor()->getSize() - 1;
+						y >= 0;
+						--y)
 				{
-					for (int x = occupant->getArmor()->getSize() - 1; x >= 0; --x)
+					for (int
+							x = occupant->getArmor()->getSize() - 1;
+							x >= 0;
+							--x)
 					{
 						_save->getTile(origin + Position(x, y, 0))->setUnit(0);
 					}
@@ -3624,7 +3656,10 @@ Tile* TileEngine::applyGravity(Tile* t)
 		p.z--;
 	}
 
-	for (std::vector<BattleItem*>::iterator it = t->getInventory()->begin(); it != t->getInventory()->end(); ++it)
+	for (std::vector<BattleItem*>::iterator
+			it = t->getInventory()->begin();
+			it != t->getInventory()->end();
+			++it)
 	{
 		if ((*it)->getUnit()
 			&& t->getPosition() == (*it)->getUnit()->getPosition())

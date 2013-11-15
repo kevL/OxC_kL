@@ -733,10 +733,10 @@ void Globe::zoomMax()
 /**
  * kL. Gets the globe's current zoom level.
  */
-size_t Globe::getZoomLevel()
+/* size_t Globe::getZoomLevel()
 {
 	return _zoom;
-}
+} */
 
 /**
  * Rotates the globe to center on a certain
@@ -1216,6 +1216,7 @@ void Globe::XuLine(Surface* surface, Surface* src, double x1, double y1, double 
 void Globe::drawRadars()
 {
 	_radars->clear();
+
 	if (!_game->getSavedGame()->getRadarLines())
 		return;
 
@@ -1236,21 +1237,28 @@ void Globe::drawRadars()
 
 	if (_hover)
 	{
-		const std::vector<std::string> &facilities = _game->getRuleset()->getBaseFacilitiesList();
+		const std::vector<std::string>& facilities = _game->getRuleset()->getBaseFacilitiesList();
 		for (std::vector<std::string>::const_iterator i = facilities.begin(); i != facilities.end(); ++i)
 		{
 			range=_game->getRuleset()->getBaseFacility(*i)->getRadarRange();
-			range = range * (1 / 60.0) * (M_PI / 180);
+			range = range * (1 / 60.0) * (M_PI / 180.0);
+
 			drawGlobeCircle(_hoverLat,_hoverLon,range,48);
-			if (Options::getBool("globeAllRadarsOnBaseBuild")) ranges.push_back(range);
+
+			if (Options::getBool("globeAllRadarsOnBaseBuild"))
+				ranges.push_back(range);
 		}
 	}
 
 	// Draw radars around bases
-	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
+	for (std::vector<Base*>::iterator
+			i = _game->getSavedGame()->getBases()->begin();
+			i != _game->getSavedGame()->getBases()->end();
+			++i)
 	{
 		lat = (*i)->getLatitude();
 		lon = (*i)->getLongitude();
+
 		// Cheap hack to hide bases when they haven't been placed yet
 		if (( !(AreSame(lon, 0.0) && AreSame(lat, 0.0)) )/* &&
 			!pointBack((*i)->getLongitude(), (*i)->getLatitude())*/)
@@ -1259,11 +1267,12 @@ void Globe::drawRadars()
 
 			if (_hover && Options::getBool("globeAllRadarsOnBaseBuild"))
 			{
-				for (size_t j=0; j<ranges.size(); j++) drawGlobeCircle(lat,lon,ranges[j],48);
+				for (size_t j = 0; j < ranges.size(); j++) drawGlobeCircle(lat, lon, ranges[j], 48);
 			}
 			else
 			{
 				range = 0;
+
 				for (std::vector<BaseFacility*>::iterator j = (*i)->getFacilities()->begin(); j != (*i)->getFacilities()->end(); ++j)
 				{
 					if ((*j)->getBuildTime() == 0)
@@ -1272,24 +1281,28 @@ void Globe::drawRadars()
 						if (tr > range) range = tr;
 					}
 				}
-				range = range * (1 / 60.0) * (M_PI / 180);
 
-				if (range>0) drawGlobeCircle(lat,lon,range,48);
+				range = range * (1 / 60.0) * (M_PI / 180.0);
+
+				if (range>0) drawGlobeCircle(lat, lon, range, 48);
 			}
-	
 		}
 
 		for (std::vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); ++j)
 		{
-			lat=(*j)->getLatitude();
-			lon=(*j)->getLongitude();
 			if ((*j)->getStatus()!= "STR_OUT")
 				continue;
-			polarToCart(lon, lat, &x, &y);
-			range = (*j)->getRules()->getRadarRange();
-			range = range * (1 / 60.0) * (M_PI / 180);
 
-			if (range>0) drawGlobeCircle(lat,lon,range,24);
+			lat = (*j)->getLatitude();
+			lon = (*j)->getLongitude();
+
+			polarToCart(lon, lat, &x, &y);
+
+			range = (*j)->getRules()->getRadarRange();
+			range = range * (1 / 60.0) * (M_PI / 180.0);
+
+			if (range > 0)
+				drawGlobeCircle(lat, lon, range, 24);
 		}
 	}
 
@@ -1305,23 +1318,28 @@ void Globe::drawGlobeCircle(double lat, double lon, double radius, int segments)
 {
 	double x, y, x2 = 0, y2 = 0;
 	double lat1, lon1;
-	double seg = M_PI / (static_cast<double>(segments) / 2);
-	for (double az = 0; az <= M_PI*2+0.01; az+=seg) //48 circle segments
+	double seg = M_PI / (static_cast<double>(segments) / 2.0);
+
+	for (double az = 0; az <= M_PI * 2.0 + 0.01; az += seg) //48 circle segments
 	{
 		//calculating sphere-projected circle
 		lat1 = asin(sin(lat) * cos(radius) + cos(lat) * sin(radius) * cos(az));
 		lon1 = lon + atan2(sin(az) * sin(radius) * cos(lat), cos(radius) - sin(lat) * sin(lat1));
+
 		polarToCart(lon1, lat1, &x, &y);
-		if ( AreSame(az, 0.0) ) //first vertex is for initialization only
+
+		if (AreSame(az, 0.0)) //first vertex is for initialization only
 		{
-			x2=x;
-			y2=y;
+			x2 = x;
+			y2 = y;
+
 			continue;
 		}
+
 		if (!pointBack(lon1,lat1))
 			XuLine(_radars, this, x, y, x2, y2, 249);
 
-		x2=x; y2=y;
+		x2 = x; y2 = y;
 	}
 }
 
@@ -1471,14 +1489,20 @@ void Globe::drawDetail()
 		label->setPalette(getPalette());
 		label->setFonts(_game->getResourcePack()->getFont("FONT_BIG"), _game->getResourcePack()->getFont("FONT_SMALL"));
 		label->setAlign(ALIGN_CENTER);
-		label->setColor(Palette::blockOffset(10)+8);	// grey-blue=blockOffset(10)+6)
+		label->setColor(Palette::blockOffset(10)+7);	// grey-blue=blockOffset(10)+6)
 														// lavender=blockOffset(6)+4; 
 														// (default)yellow=blockOffset(8)+10;
 
 		Sint16 x, y;
-		for (std::vector<Region*>::iterator i = _game->getSavedGame()->getRegions()->begin(); i != _game->getSavedGame()->getRegions()->end(); ++i)
+		for (std::vector<Region*>::iterator
+				i = _game->getSavedGame()->getRegions()->begin();
+				i != _game->getSavedGame()->getRegions()->end();
+				++i)
 		{
-			for (std::vector<City*>::iterator j = (*i)->getRules()->getCities()->begin(); j != (*i)->getRules()->getCities()->end(); ++j)
+			for (std::vector<City*>::iterator
+					j = (*i)->getRules()->getCities()->begin();
+					j != (*i)->getRules()->getCities()->end();
+					++j)
 			{
 				// Don't draw if city is facing back
 				if (pointBack((*j)->getLongitude(), (*j)->getLatitude()))
@@ -1802,28 +1826,38 @@ void Globe::keyboardPress(Action *action, State *state)
  */
 void Globe::getPolygonTextureAndShade(double lon, double lat, int *texture, int *shade) const
 {
-	///this is shade conversion from 0..31 levels of geoscape to battlescape levels 0..15
-	int worldshades[32] = {  0, 0, 0, 0, 1, 1, 2, 2,
-							 3, 3, 4, 4, 5, 5, 6, 6,
-							 7, 7, 8, 8, 9, 9,10,11,
-							11,12,12,13,13,14,15,15};
+	// this is shade conversion from 0..31 levels of geoscape to battlescape levels 0..15
+	int worldshades[32] =
+	{
+		 0,  0,  0,  0,  1,  1,  2,  2,
+		 3,  3,  4,  4,  5,  5,  6,  6,
+		 7,  7,  8,  8,  9,  9, 10, 11,
+		11, 12, 12, 13, 13, 14, 15, 15
+	};
 
 	*texture = -1;
-	*shade = worldshades[ CreateShadow::getShadowValue(0, Cord(0.,0.,1.), getSunDirection(lon, lat), 0) ];
+	*shade = worldshades[CreateShadow::getShadowValue(0, Cord(0., 0., 1.), getSunDirection(lon, lat), 0)];
 
 	// We're only temporarily changing cenLon/cenLat so the "const" is actually preserved
 	Globe* const globe = const_cast<Globe* const>(this); // WARNING: BAD CODING PRACTICE
+
 	double oldLon = _cenLon, oldLat = _cenLat;
 	globe->_cenLon = lon;
 	globe->_cenLat = lat;
-	for (std::list<Polygon*>::iterator i = _game->getResourcePack()->getPolygons()->begin(); i != _game->getResourcePack()->getPolygons()->end(); ++i)
+
+	for (std::list<Polygon*>::iterator
+			i = _game->getResourcePack()->getPolygons()->begin();
+			i != _game->getResourcePack()->getPolygons()->end();
+			++i)
 	{
 		if (insidePolygon(lon, lat, *i))
 		{
 			*texture = (*i)->getTexture();
+
 			break;
 		}
 	}
+
 	globe->_cenLon = oldLon;
 	globe->_cenLat = oldLat;
 }
@@ -1865,7 +1899,7 @@ bool Globe::isZoomedOutToMax() const
  * @param level, The level to zoom out to.
  * @return, Returns true if globe has reached the level.
  */
-bool Globe::isZoomedToLevel(size_t level) const
+/* bool Globe::isZoomedToLevel(size_t level) const
 {
 	if (_zoom == level)
 	{
@@ -1875,7 +1909,7 @@ bool Globe::isZoomedToLevel(size_t level) const
 	{
 		return false;
 	}
-}
+} */
 
 /**
  *
@@ -1883,6 +1917,7 @@ bool Globe::isZoomedToLevel(size_t level) const
 void Globe::toggleRadarLines()
 {
 	_game->getSavedGame()->toggleRadarLines();
+
 	drawRadars();
 }
 

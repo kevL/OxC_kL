@@ -55,7 +55,7 @@ private:
 	ImageButton* _btnIntercept, * _btnBases, * _btnGraphs, * _btnUfopaedia, * _btnOptions, * _btnFunding;
 	ImageButton* _timeSpeed, * _btnDetail;
 	ImageButton* _btn5Secs, * _btn1Min, * _btn5Mins, * _btn30Mins, * _btn1Hour, * _btn1Day;
-	InteractiveSurface* _btnRotateLeft, * _btnRotateRight, * _btnRotateUp, * _btnRotateDown, * _btnZoomIn, * _btnZoomOut;
+//	InteractiveSurface* _btnRotateLeft, * _btnRotateRight, * _btnRotateUp, * _btnRotateDown, * _btnZoomIn, * _btnZoomOut;
 	Text* _txtFunds, * _txtHour, * _txtHourSep, * _txtMin, * _txtMinSep, * _txtSec, * _txtWeekday, * _txtDay, * _txtMonth, * _txtYear;
 	Timer* _timer, * _zoomInEffectTimer, * _zoomOutEffectTimer, * _dogfightStartTimer;
 	bool _pause, _music, _zoomInEffectDone, _zoomOutEffectDone, _battleMusic;
@@ -64,7 +64,8 @@ private:
 	std::vector<DogfightState*> _dogfights, _dogfightsToBeStarted;
 	size_t _minimizedDogfights;
 	bool _showFundsOnGeoscape; // this is a cache for Options::getBool("showFundsOnGeoscape")
-	size_t _zoomIntercept;
+//	size_t _zoomInter;
+	int _zoomInter;
 
 	/// Handle alien mission generation.
 	void determineAlienMissions(bool atGameStart = false);
@@ -126,7 +127,7 @@ private:
 		void btnDetailClick(Action* action);
 
 		/// Handler for pressing the Rotate Left arrow.
-		void btnRotateLeftPress(Action* action);
+/*		void btnRotateLeftPress(Action* action);
 		/// Handler for releasing the Rotate Left arrow.
 		void btnRotateLeftRelease(Action* action);
 		/// Handler for pressing the Rotate Right arrow.
@@ -148,7 +149,7 @@ private:
 		/// Handler for left-clicking the Zoom Out icon.
 		void btnZoomOutLeftClick(Action* action);
 		/// Handler for right-clicking the Zoom Out icon.
-		void btnZoomOutRightClick(Action* action);
+		void btnZoomOutRightClick(Action* action); */
 
 		/// Blit method - renders the state and dogfights.
 		void blit();

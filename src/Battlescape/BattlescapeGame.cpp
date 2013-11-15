@@ -562,17 +562,21 @@ void BattlescapeGame::endTurn()
 		_health -= _armor->getDamageModifier(DT_IN) * RNG::generate(5, 10);
 		_fire--;
 	} */
-	for (std::vector<BattleUnit*>::iterator j = _save->getUnits()->begin(); j != _save->getUnits()->end(); ++j)
+	for (std::vector<BattleUnit*>::iterator
+			j = _save->getUnits()->begin();
+			j != _save->getUnits()->end();
+			++j)
 	{
 		if (_save->getSide() == (*j)->getFaction())
 		{
 			if (!(*j)->tookFireDamage()
 				&& (*j)->getFire() > 0)
 			{
-				//Log(LOG_INFO) << ". do Turn Fire : " << (*j)->getId();
-
 				(*j)->setFire(-1);
-				(*j)->setHealth((*j)->getHealth() - (int)(*j)->getArmor()->getDamageModifier(DT_IN) * RNG::generate(4, 11));
+
+				int iFire = static_cast<int>((*j)->getArmor()->getDamageModifier(DT_IN) * static_cast<float>(RNG::generate(3., 9.)));
+				Log(LOG_INFO) << ". . endTurn() ID " << (*j)->getId() << " iFire = " << iFire;
+				(*j)->setHealth((*j)->getHealth() - iFire);
 
 				if ((*j)->getHealth() < 0)
 				{
@@ -640,7 +644,7 @@ void BattlescapeGame::endTurn()
 	}
 
 	_endTurnRequested = false;
-	//Log(LOG_INFO) << "BattlescapeGame::endTurn() EXIT";
+	Log(LOG_INFO) << "BattlescapeGame::endTurn() EXIT";
 }
 
 /**
@@ -1071,7 +1075,7 @@ void BattlescapeGame::statePushBack(BattleState* bs)
  */
 void BattlescapeGame::popState()
 {
-	//Log(LOG_INFO) << "BattlescapeGame::popState()";
+	Log(LOG_INFO) << "BattlescapeGame::popState()";
 
 	if (_save->getTraceSetting())
 	{
@@ -1081,7 +1085,7 @@ void BattlescapeGame::popState()
 
 	if (_states.empty())
 	{
-		//Log(LOG_INFO) << ". states.Empty -> return";
+		Log(LOG_INFO) << ". states.Empty -> return";
 		return;
 	}
 
@@ -1339,7 +1343,7 @@ void BattlescapeGame::popState()
 	//Log(LOG_INFO) << ". updateSoldierInfo()";
 	_parentState->updateSoldierInfo();
 
-	//Log(LOG_INFO) << "BattlescapeGame::popState() EXIT";
+	Log(LOG_INFO) << "BattlescapeGame::popState() EXIT";
 }
 
 /**
@@ -2018,7 +2022,7 @@ void BattlescapeGame::moveUpDown(BattleUnit* unit, int dir)
  */
 void BattlescapeGame::requestEndTurn()
 {
-	//Log(LOG_INFO) << "BattlescapeGame::requestEndTurn()";
+	Log(LOG_INFO) << "BattlescapeGame::requestEndTurn()";
 
 	cancelCurrentAction();
 
@@ -2028,6 +2032,7 @@ void BattlescapeGame::requestEndTurn()
 
 		statePushBack(0);
 	}
+	Log(LOG_INFO) << "BattlescapeGame::requestEndTurn() EXIT";
 }
 
 /**
@@ -2576,7 +2581,7 @@ BattleActionType BattlescapeGame::getReservedAction()
  */
 void BattlescapeGame::tallyUnits(int& liveAliens, int& liveSoldiers, bool convert)
 {
-	//Log(LOG_INFO) << "BattlescapeGame::tallyUnits()";
+	Log(LOG_INFO) << "BattlescapeGame::tallyUnits()";
 
 	liveSoldiers = 0;
 	liveAliens = 0;
@@ -2631,7 +2636,7 @@ void BattlescapeGame::tallyUnits(int& liveAliens, int& liveSoldiers, bool conver
 		}
 	}
 
-	//Log(LOG_INFO) << "BattlescapeGame::tallyUnits() EXIT";
+	Log(LOG_INFO) << "BattlescapeGame::tallyUnits() EXIT";
 }
 
 /**

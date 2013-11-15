@@ -909,6 +909,7 @@ void DogfightState::move()
 						setStatus("STR_UFO_HIT");
 						_currentRadius += 4;
 						_game->getResourcePack()->getSound("GEO.CAT", 12)->play();
+
 						p->remove();
 					}
 					else // Missed.
@@ -1830,6 +1831,7 @@ void DogfightState::setMinimized(const bool minimized)
 void DogfightState::btnMinimizedIconClick(Action*)
 {
 	setMinimized(false);
+
 	_window->setVisible(true);
 	_btnStandoff->setVisible(true);
 	_btnCautious->setVisible(true);

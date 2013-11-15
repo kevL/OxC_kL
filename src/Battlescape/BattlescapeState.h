@@ -62,7 +62,7 @@ private:
 	InteractiveSurface* _btnInventory, * _btnCenter, * _btnNextSoldier, * _btnNextStop, * _btnShowLayers, * _btnHelp;
 	InteractiveSurface* _btnEndTurn, * _btnAbort, * _btnStats, * _btnLaunch, * _btnPsi;
 	ImageButton* _reserve;
-	ImageButton* _btnReserveNone, * _btnReserveSnap, * _btnReserveAimed, * _btnReserveAuto, * _btnReserveKneel, * _btnZeroTUs;
+//	ImageButton* _btnReserveNone, * _btnReserveSnap, * _btnReserveAimed, * _btnReserveAuto, * _btnReserveKneel, * _btnZeroTUs;
 	InteractiveSurface* _btnLeftHandItem, * _btnRightHandItem;
 	InteractiveSurface* _btnVisibleUnit[VISIBLE_MAX];
 	NumberText* _numVisibleUnit[VISIBLE_MAX];
@@ -74,7 +74,7 @@ private:
 	Bar* _barTimeUnits, * _barEnergy, * _barHealth, * _barMorale;
 	Timer* _animTimer, * _gameTimer;
 	SavedBattleGame* _save;
-	Text* _txtDebug, * _txtTooltip;
+	Text* _txtDebug; //* _txtTooltip;
 	std::vector<State*> _popups;
 	BattlescapeGame* _battleGame;
 	bool firstInit;
@@ -166,9 +166,9 @@ private:
 		/// Handler for clicking the use psi button.
 		void btnPsiClick(Action* action);
 		/// Handler for clicking a reserved button.
-		void btnReserveClick(Action* action);
+//		void btnReserveClick(Action* action);
 		/// Handler for clicking the reload button.
-		void btnReloadClick(Action* action);
+//		void btnReloadClick(Action* action);
 		/// Handler for clicking the lighting button.
 		void btnPersonalLightingClick(Action* action);
 		/// Determines whether a playable unit is selected.
@@ -218,13 +218,13 @@ private:
 		/// Is the player allowed to press buttons?
 		bool allowButtons(bool allowSaving = false) const;
 		/// Handler for clicking the reserve TUs to kneel button.
-		void btnReserveKneelClick(Action* action);
+//		void btnReserveKneelClick(Action* action);
 		/// Handler for clicking the expend all TUs button.
-		void btnZeroTUsClick(Action* action);
+//		void btnZeroTUsClick(Action* action);
 		/// Handler for showing tooltip.
-		void txtTooltipIn(Action* action);
+//		void txtTooltipIn(Action* action);
 		/// Handler for hiding tooltip.
-		void txtTooltipOut(Action* action);
+//		void txtTooltipOut(Action* action);
 		/// kL. Gets the TurnCounter.
 		TurnCounter* getTurnCounter() const;	// kL
 };

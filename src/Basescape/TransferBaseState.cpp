@@ -49,28 +49,18 @@ TransferBaseState::TransferBaseState(Game* game, Base* base)
 		_base(base),
 		_bases()
 {
-/*kL	_window		= new Window(this, 280, 140, 20, 30);
-	_txtTitle	= new Text(270, 17, 25, 38);
-	_txtFunds	= new Text(250, 9, 30, 54);
-	_txtName	= new Text(130, 17, 28, 64);
-	_txtArea	= new Text(130, 17, 160, 64);
-	_lstBases	= new TextList(248, 64, 28, 80);
-	_btnCancel	= new TextButton(264, 16, 28, 146); */
-
-	// kL_begin:
 	_window		= new Window(this, 280, 140, 20, 30);
 
 	_txtTitle	= new Text(270, 17, 25, 38);
 
-	_txtFunds	= new Text(248, 9, 32, 54);
+	_txtFunds	= new Text(248, 9, 36, 54);
 
-	_txtName	= new Text(128, 17, 32, 65);
-	_txtArea	= new Text(128, 17, 162, 65);
+	_txtName	= new Text(136, 17, 36, 65);
+	_txtArea	= new Text(56, 17, 172, 65);
 
-	_lstBases	= new TextList(256, 57, 24, 82);
+	_lstBases	= new TextList(228, 57, 36, 82);
 
-	_btnCancel	= new TextButton(260, 16, 32, 146);
-	// kL_end.
+	_btnCancel	= new TextButton(228, 16, 36, 146);
 
 
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)), Palette::backPos, 16);
@@ -113,11 +103,10 @@ TransferBaseState::TransferBaseState(Game* game, Base* base)
 
 	_lstBases->setColor(Palette::blockOffset(15) + 1);
 	_lstBases->setArrowColor(Palette::blockOffset(13) + 5);
-	_lstBases->setColumns(2, 130, 116);
+	_lstBases->setColumns(2, 128, 100);
 	_lstBases->setSelectable(true);
 	_lstBases->setBackground(_window);
-//kL	_lstBases->setMargin(2);
-	_lstBases->setMargin(8);	// kL
+	_lstBases->setMargin(8);
 	_lstBases->onMouseClick((ActionHandler)& TransferBaseState::lstBasesClick);
 
 	int row = 0;

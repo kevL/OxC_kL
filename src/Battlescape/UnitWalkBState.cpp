@@ -129,6 +129,7 @@ void UnitWalkBState::think()
 	bool newUnitSpotted = false;
 	bool onScreen = _unit->getVisible()
 			&& _parent->getMap()->getCamera()->isOnScreen(_unit->getPosition());
+	Log(LOG_INFO) << ". onScreen = " << onScreen;
 
 	int dir = _pf->getStartDirection();		// kL: also below, in STATUS_STANDING!
 	//Log(LOG_INFO) << ". StartDirection = " << dir;
@@ -706,7 +707,7 @@ void UnitWalkBState::think()
 			// make sure the unit sprites are up to date
 			if (onScreen)
 			{
-				Log(LOG_INFO) << ". . . onScreen -> cacheUnit()";
+				Log(LOG_INFO) << ". . . onScreen";
 
 				if (_pf->getStrafeMove())
 				{
@@ -724,11 +725,11 @@ void UnitWalkBState::think()
 				}
 				else	// kL
 				{
-					Log(LOG_INFO) << ". . mid (onScreen)";
+					Log(LOG_INFO) << ". . (onScreen) -> cacheUnit()";
 					_parent->getMap()->cacheUnit(_unit);
 				}
 
-				Log(LOG_INFO) << ". . end (onScreen)";
+				//Log(LOG_INFO) << ". . end (onScreen)";
 			}
 
 			Log(LOG_INFO) << "EXIT (dir!=-1) : " << _unit->getId();

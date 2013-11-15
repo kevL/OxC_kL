@@ -406,7 +406,7 @@ void Ufo::setAltitude(const std::string& altitude)
 	}
 	else
 	{
-		_status = isCrashed() ? CRASHED : LANDED;
+		_status = isCrashed()? CRASHED: LANDED;
 	}
 }
 

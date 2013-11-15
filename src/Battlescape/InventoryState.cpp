@@ -78,7 +78,7 @@ InventoryState::InventoryState(Game* game, bool tu, BattlescapeState* parent)
 	_bg			= new Surface(320, 200, 0, 0);
 	_soldier	= new Surface(320, 200, 0, 0);
 	_txtName	= new Text(200, 17, 36, 6);
-	_txtTus		= new Text(40, 9, 245, _showMoreStatsInInventoryView ? 32 : 24);
+	_txtTus		= new Text(40, 9, 245, _showMoreStatsInInventoryView? 32: 24);
 
 	if (_showMoreStatsInInventoryView)
 	{
@@ -406,6 +406,14 @@ void InventoryState::btnOkClick(Action*)
 		_battleGame->getTileEngine()->applyGravity(_battleGame->getSelectedUnit()->getTile());
 		_battleGame->getTileEngine()->calculateTerrainLighting(); // dropping/picking up flares
 		_battleGame->getTileEngine()->recalculateFOV();
+
+		// from BattlescapeGame::dropItem() but can't really use this because I don't know exactly what dropped...
+		// could figure it out via what's on Ground but meh.
+/*		if (item->getRules()->getBattleType() == BT_FLARE)
+		{
+			getTileEngine()->calculateTerrainLighting();
+			getTileEngine()->calculateFOV(position);
+		} */
 	}
 }
 

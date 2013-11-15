@@ -128,7 +128,7 @@ GeoscapeState::GeoscapeState(Game* game)
 		_dogfights(),
 		_dogfightsToBeStarted(),
 		_minimizedDogfights(0),
-		_zoomIntercept(0)
+		_zoomInter(0)
 {
 	int screenWidth = Options::getInt("baseXResolution");
 	int screenHeight = Options::getInt("baseYResolution");
@@ -179,15 +179,21 @@ GeoscapeState::GeoscapeState(Game* game)
 	_btnZoomIn		= new InteractiveSurface(23, 23, screenWidth-25, screenHeight/2+56);
 	_btnZoomOut		= new InteractiveSurface(13, 17, screenWidth-20, screenHeight/2+82); */
 
-	_txtHour		= new Text(20, 16, screenWidth-61, screenHeight/2-26);
-	_txtHourSep		= new Text(4, 16, screenWidth-41, screenHeight/2-26);
-	_txtMin			= new Text(20, 16, screenWidth-37, screenHeight/2-26);
-	_txtMinSep		= new Text(4, 16, screenWidth-17, screenHeight/2-26);
-	_txtSec			= new Text(11, 8, screenWidth-13, screenHeight/2-20);
-	_txtWeekday		= new Text(59, 8, screenWidth-61, screenHeight/2-13);
-	_txtDay			= new Text(29, 8, screenWidth-61, screenHeight/2-6);
-	_txtMonth		= new Text(29, 8, screenWidth-32, screenHeight/2-6);
-	_txtYear		= new Text(59, 8, screenWidth-61, screenHeight/2+1);
+/*kL	_txtHour		= new Text(20, 17, screenWidth - 61, screenHeight / 2 - 26);
+	_txtHourSep		= new Text(4, 17, screenWidth - 41, screenHeight / 2 - 26);
+	_txtMin			= new Text(20, 17, screenWidth - 37, screenHeight / 2 - 26);
+	_txtMinSep		= new Text(4, 17, screenWidth - 17, screenHeight / 2 - 26);
+	_txtSec			= new Text(11, 8, screenWidth - 13, screenHeight / 2 - 20); */
+	_txtHour		= new Text(19, 17, screenWidth - 62, screenHeight / 2 - 27);
+	_txtHourSep		= new Text(5, 17, screenWidth - 43, screenHeight / 2 - 27);
+	_txtMin			= new Text(19, 17, screenWidth - 38, screenHeight / 2 - 27);
+	_txtMinSep		= new Text(5, 17, screenWidth - 19, screenHeight / 2 - 27);
+	_txtSec			= new Text(10, 17, screenWidth - 14, screenHeight / 2 - 27);
+
+	_txtWeekday		= new Text(59, 8, screenWidth - 61, screenHeight / 2 - 13);
+	_txtDay			= new Text(29, 8, screenWidth - 61, screenHeight / 2 - 6);
+	_txtMonth		= new Text(29, 8, screenWidth - 32, screenHeight / 2 - 6);
+	_txtYear		= new Text(59, 8, screenWidth - 61, screenHeight / 2 + 1);
 
 	if (_showFundsOnGeoscape)
 	{
@@ -352,7 +358,8 @@ GeoscapeState::GeoscapeState(Game* game)
 
 	_btnDetail->copy(_bg);
 //	_btnDetail->setColor(Palette::blockOffset(15)+5);
-	_btnDetail->onMouseClick((ActionHandler)& GeoscapeState::btnDetailClick);
+	_btnDetail->onMouseClick((ActionHandler)& GeoscapeState::btnDetailClick, SDL_BUTTON_LEFT);
+	_btnDetail->onMouseClick((ActionHandler)& GeoscapeState::btnDetailClick, SDL_BUTTON_RIGHT);
 //	_btnDetail->onKeyboardPress((ActionHandler)& GeoscapeState::btnDetailClick, (SDLKey)Options::getInt("keyGeoToggleDetail"));
 
 	// kL_begin: revert to ImageButtons.
@@ -493,11 +500,14 @@ GeoscapeState::GeoscapeState(Game* game)
 
 	if (_showFundsOnGeoscape) _txtMinSep->setSmall(); else _txtMinSep->setBig();
 	_txtMinSep->setColor(Palette::blockOffset(15)+2);
-	_txtMinSep->setText(L":");
+//	_txtMinSep->setText(L":");
+	_txtMinSep->setText(L".");
 
-	_txtSec->setSmall();
+//	_txtSec->setSmall();
+	_txtSec->setBig();
 	_txtSec->setColor(Palette::blockOffset(15)+2);
 	_txtSec->setText(L"");
+
 
 	_txtWeekday->setSmall();
 	_txtWeekday->setColor(Palette::blockOffset(15)+2);
@@ -701,8 +711,13 @@ void GeoscapeState::timeDisplay()
 		_txtFunds->setText(Text::formatFunding(_game->getSavedGame()->getFunds()));
 	}
 
+	int sec = _game->getSavedGame()->getTime()->getSecond();
+	sec = sec / 30 * 5;
+	if (sec == 2) sec = 0;
+
 	std::wstringstream ss;
-	ss << std::setfill(L'0') << std::setw(2) << _game->getSavedGame()->getTime()->getSecond();
+//	ss << std::setfill(L'0') << std::setw(2) << _game->getSavedGame()->getTime()->getSecond();
+	ss << sec;
 	_txtSec->setText(ss.str());
 
 	std::wstringstream ss2;
@@ -904,14 +919,22 @@ void GeoscapeState::time5Seconds()
 	}
 
 	// Handle craft logic
-	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
+	for (std::vector<Base*>::iterator
+			i = _game->getSavedGame()->getBases()->begin();
+			i != _game->getSavedGame()->getBases()->end();
+			++i)
 	{
-		for (std::vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end();)
+		for (std::vector<Craft*>::iterator
+				j = (*i)->getCrafts()->begin();
+				j != (*i)->getCrafts()->end();
+				)
 		{
 			if ((*j)->isDestroyed())
 			{
-				for (std::vector<Country*>::iterator country = _game->getSavedGame()->getCountries()->begin();
-											country != _game->getSavedGame()->getCountries()->end(); ++country)
+				for (std::vector<Country*>::iterator
+						country = _game->getSavedGame()->getCountries()->begin();
+						country != _game->getSavedGame()->getCountries()->end();
+						++country)
 				{
 					if ((*country)->getRules()->insideCountry((*j)->getLongitude(), (*j)->getLatitude()))
 					{
@@ -920,17 +943,22 @@ void GeoscapeState::time5Seconds()
 					}
 				}
 
-				for(std::vector<Region*>::iterator region = _game->getSavedGame()->getRegions()->begin(); region != _game->getSavedGame()->getRegions()->end(); ++region)
+				for (std::vector<Region*>::iterator
+						region = _game->getSavedGame()->getRegions()->begin();
+						region != _game->getSavedGame()->getRegions()->end();
+						++region)
 				{
 					if ((*region)->getRules()->insideRegion((*j)->getLongitude(), (*j)->getLatitude()))
 					{
 						(*region)->addActivityXcom(-(*j)->getRules()->getScore());
+
 						break;
 					}
 				}
 
 				delete *j;
 				j = (*i)->getCrafts()->erase(j);
+
 				continue;
 			}
 
@@ -1162,7 +1190,7 @@ private:
  */
 bool DetectXCOMBase::operator()(const Ufo* ufo) const
 {
-	//Log(LOG_INFO) << "DetectXCOMBase(), ufoID " << ufo->getId();
+	Log(LOG_INFO) << "DetectXCOMBase(), ufoID " << ufo->getId();
 
 	if (ufo->isCrashed())
 	{
@@ -1185,7 +1213,7 @@ bool DetectXCOMBase::operator()(const Ufo* ufo) const
 
 	double ufoRange	= 600.0;
 	double targetDistance = _base.getDistance(ufo) * 3440.0;
-	//Log(LOG_INFO) << ". targetDistance = " << targetDistance;
+	Log(LOG_INFO) << ". targetDistance = " << (int)targetDistance;
 
 	if (targetDistance > ufoRange)
 	{
@@ -1195,7 +1223,7 @@ bool DetectXCOMBase::operator()(const Ufo* ufo) const
 
 	int percent = _base.getDetectionChance();
 	bool ret = RNG::percent(percent);
-	//Log(LOG_INFO) << ". percent = " << percent << " ; ret " << ret;
+	Log(LOG_INFO) << ". percent = " << percent << " ; ret " << ret;
 
 	return ret;
 }
@@ -1259,16 +1287,16 @@ void GeoscapeState::time10Minutes()
 						// TODO: move the craftRadar range to the ruleset.
 						double craftRadar = 600.0;
 						double targetDistance = (*c)->getDistance(*ab) * 3440.0;
-						//Log(LOG_INFO) << ". Patrol for alienBases, targetDistance = " << targetDistance;
+						Log(LOG_INFO) << ". Patrol for alienBases, targetDistance = " << targetDistance;
 
 						if (targetDistance < craftRadar)
 						{
-							int percent = 50 - ((int)(targetDistance / craftRadar) * 50);
-							//Log(LOG_INFO) << ". . craft in Range, percent = " << percent;
+							int percent = 50 - (static_cast<int>(targetDistance / craftRadar) * 50);
+							Log(LOG_INFO) << ". . craft in Range, percent = " << percent;
 
 							if (RNG::percent(percent))
 							{
-								//Log(LOG_INFO) << ". . . aLienBase discovered";
+								Log(LOG_INFO) << ". . . aLienBase discovered";
 								(*ab)->setDiscovered(true);
 							}
 						}
@@ -1293,7 +1321,7 @@ void GeoscapeState::time10Minutes()
 					DetectXCOMBase(**b));
 			if (u != _game->getSavedGame()->getUfos()->end())
 			{
-				//Log(LOG_INFO) << ". xBase found, set RetaliationStatus";
+				Log(LOG_INFO) << ". xBase found, set RetaliationStatus";
 				(*b)->setRetaliationStatus(true);
 			}
 		}
@@ -1358,42 +1386,6 @@ private:
 /** @brief Process a TerrorSite.
  * This function object will count down towards expiring a TerrorSite, and handle expired TerrorSites.
  */
-/*kL bool GeoscapeState::processTerrorSite(TerrorSite* ts) const
-{
-	if (ts->getSecondsRemaining() >= 30 * 60)
-	{
-		ts->setSecondsRemaining(ts->getSecondsRemaining() - 30 * 60);
-
-		return false;
-	}
-
-	if (!ts->getFollowers()->empty()) // CHEEKY EXPLOIT
-	{
-		return false;
-	}
-
-	// Score and delete it.
-	Region* region = _game->getSavedGame()->locateRegion(*ts);
-	if (region)
-	{
-		//TODO: This should come from mission rules!
-		region->addActivityAlien(1000);
-		//kids, tell your folks... don't ignore terror sites.
-	}
-
-	for (std::vector<Country*>::iterator k = _game->getSavedGame()->getCountries()->begin(); k != _game->getSavedGame()->getCountries()->end(); ++k)
-	{
-		if ((*k)->getRules()->insideCountry(ts->getLongitude(), ts->getLatitude()))
-		{
-			(*k)->addActivityAlien(1000);
-			break;
-		}
-	}
-
-	delete ts;
-	return true;
-} */
-// kL_begin: new TerrorSite process (add half-hourly activity score)
 bool GeoscapeState::processTerrorSite(TerrorSite* ts) const
 {
 	int tsProgress = 1000;
@@ -1432,7 +1424,6 @@ bool GeoscapeState::processTerrorSite(TerrorSite* ts) const
 
 	return false;
 }
-// kL_end.
 
 /** @brief Advance time for crashed UFOs.
  * This function object will decrease the expiration timer for crashed UFOs.
@@ -1583,7 +1574,7 @@ void GeoscapeState::time30Minutes()
 					if ((*k)->getRules()->insideCountry((*u)->getLongitude(), (*u)->getLatitude()))
 					{
 //kL						(*k)->addActivityAlien(points); // one point per UFO in-flight per half hour
-						(*k)->addActivityAlien(points * 2); // two points per UFO in-Country per half hour
+						(*k)->addActivityAlien(points * 3); // three points per UFO in-Country per half hour
 
 						break;
 					}
@@ -1605,12 +1596,12 @@ void GeoscapeState::time30Minutes()
 						switch ((*b)->detect(*u))
 						{
 							case 2:
-								//Log(LOG_INFO) << ". detect() = 2, hyperDet";
+								Log(LOG_INFO) << ". detect() = 2, hyperDet";
 
 								(*u)->setHyperDetected(true);
 								hyperdet = true;
 							case 1:
-								//Log(LOG_INFO) << ". detect() = 1, radar";
+								Log(LOG_INFO) << ". detect() = 1, radar";
 								detected = true;
 							break;
 						}
@@ -1624,7 +1615,7 @@ void GeoscapeState::time30Minutes()
 							if ((*c)->getStatus() == "STR_OUT"
 								&& (*c)->detect(*u))
 							{
-								//Log(LOG_INFO) << ". detected by Craft";
+								Log(LOG_INFO) << ". detected by Craft";
 								detected = true;
 
 								break;
@@ -1656,13 +1647,13 @@ void GeoscapeState::time30Minutes()
 						double targetRange = (*b)->insideRadarRange(*u); // -2.0 =outside range ; -1.0 =hyperdetected ; 0.0+ =targetDistance
 						if (targetRange > -2.0)
 						{
-							//Log(LOG_INFO) << ". . still detected";
+							Log(LOG_INFO) << ". . still detected";
 
 							detected = true;
 
 							if (targetRange == -1.0)
 							{
-								//Log(LOG_INFO) << ". . and hyper-detected";
+								Log(LOG_INFO) << ". . and hyper-detected";
 
 								(*u)->setHyperDetected(true);
 								hyperdet = true;
@@ -1678,7 +1669,7 @@ void GeoscapeState::time30Minutes()
 							if ((*c)->getStatus() == "STR_OUT"
 								&& (*c)->detect(*u))
 							{
-								//Log(LOG_INFO) << ". detected by Craft";
+								Log(LOG_INFO) << ". detected by Craft";
 								detected = true;
 
 								break;
@@ -1816,7 +1807,7 @@ void GeoscapeState::time1Hour()
  */
 class GenerateSupplyMission
 	:
-	public std::unary_function<const AlienBase*, void>
+		public std::unary_function<const AlienBase*, void>
 {
 	public:
 		/// Store rules and game data references for later use.
@@ -2082,7 +2073,7 @@ void GeoscapeState::time1Day()
 			if ((*k)->getRules()->insideRegion((*b)->getLongitude(), (*b)->getLatitude()))
 			{
 //kL				(*k)->addActivityAlien(5);
-				(*k)->addActivityAlien(20);		// kL
+				(*k)->addActivityAlien(15);		// kL
 
 				break;
 			}
@@ -2096,7 +2087,7 @@ void GeoscapeState::time1Day()
 			if ((*k)->getRules()->insideCountry((*b)->getLongitude(), (*b)->getLatitude()))
 			{
 //kL				(*k)->addActivityAlien(5);
-				(*k)->addActivityAlien(20);		// kL
+				(*k)->addActivityAlien(15);		// kL
 
 				break;
 			}
@@ -2277,7 +2268,8 @@ Globe* GeoscapeState::getGlobe() const
  */
 void GeoscapeState::globeClick(Action* action)
 {
-	int mouseX = (int)floor(action->getAbsoluteXMouse()), mouseY = (int)floor(action->getAbsoluteYMouse());
+	int mouseX = static_cast<int>(floor(action->getAbsoluteXMouse()));
+	int mouseY = static_cast<int>(floor(action->getAbsoluteYMouse()));
 
 	// Clicking markers on the globe
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
@@ -2408,116 +2400,117 @@ void GeoscapeState::btnDetailClick(Action* action)
  * Starts rotating the globe to the left.
  * @param action Pointer to an action.
  */
-void GeoscapeState::btnRotateLeftPress(Action*)
+/* void GeoscapeState::btnRotateLeftPress(Action*)
 {
 	_globe->rotateLeft();
-}
+} */
 
 /**
  * Stops rotating the globe to the left.
  * @param action Pointer to an action.
  */
-void GeoscapeState::btnRotateLeftRelease(Action*)
+/* void GeoscapeState::btnRotateLeftRelease(Action*)
 {
 	_globe->rotateStop();
-}
+} */
 
 /**
  * Starts rotating the globe to the right.
  * @param action Pointer to an action.
  */
-void GeoscapeState::btnRotateRightPress(Action*)
+/* void GeoscapeState::btnRotateRightPress(Action*)
 {
 	_globe->rotateRight();
-}
+} */
 
 /**
  * Stops rotating the globe to the right.
  * @param action Pointer to an action.
  */
-void GeoscapeState::btnRotateRightRelease(Action*)
+/* void GeoscapeState::btnRotateRightRelease(Action*)
 {
 	_globe->rotateStop();
-}
+} */
 
 /**
  * Starts rotating the globe upwards.
  * @param action Pointer to an action.
  */
-void GeoscapeState::btnRotateUpPress(Action*)
+/* void GeoscapeState::btnRotateUpPress(Action*)
 {
 	_globe->rotateUp();
-}
+} */
 
 /**
  * Stops rotating the globe upwards.
  * @param action Pointer to an action.
  */
-void GeoscapeState::btnRotateUpRelease(Action*)
+/* void GeoscapeState::btnRotateUpRelease(Action*)
 {
 	_globe->rotateStop();
-}
+} */
 
 /**
  * Starts rotating the globe downwards.
  * @param action Pointer to an action.
  */
-void GeoscapeState::btnRotateDownPress(Action*)
+/* void GeoscapeState::btnRotateDownPress(Action*)
 {
 	_globe->rotateDown();
-}
+} */
 
 /**
  * Stops rotating the globe downwards.
  * @param action Pointer to an action.
  */
-void GeoscapeState::btnRotateDownRelease(Action*)
+/* void GeoscapeState::btnRotateDownRelease(Action*)
 {
 	_globe->rotateStop();
-}
+} */
 
 /**
  * Zooms into the globe.
  * @param action Pointer to an action.
  */
-void GeoscapeState::btnZoomInLeftClick(Action*)
+/* void GeoscapeState::btnZoomInLeftClick(Action*)
 {
 	_globe->zoomIn();
-}
+} */
 
 /**
  * Zooms the globe maximum.
  * @param action Pointer to an action.
  */
-void GeoscapeState::btnZoomInRightClick(Action*)
+/* void GeoscapeState::btnZoomInRightClick(Action*)
 {
 	_globe->zoomMax();
-}
+} */
 
 /**
  * Zooms out of the globe.
  * @param action Pointer to an action.
  */
-void GeoscapeState::btnZoomOutLeftClick(Action*)
+/* void GeoscapeState::btnZoomOutLeftClick(Action*)
 {
 	_globe->zoomOut();
-}
+} */
 
 /**
  * Zooms the globe minimum.
  * @param action Pointer to an action.
  */
-void GeoscapeState::btnZoomOutRightClick(Action*)
+/* void GeoscapeState::btnZoomOutRightClick(Action*)
 {
 	_globe->zoomMin();
-}
+} */
 
 /**
  * Zoom in effect for dogfights.
  */
 void GeoscapeState::zoomInEffect()
 {
-	_zoomIntercept = _globe->getZoomLevel();
+//	_zoomInter = _globe->getZoomLevel();
+	_zoomInter = _game->getSavedGame()->getGlobeZoom();
 
 	_globe->zoomIn();
 
@@ -2533,7 +2526,8 @@ void GeoscapeState::zoomInEffect()
  */
 void GeoscapeState::zoomOutEffect()
 {
-	if (_globe->isZoomedToLevel(_zoomIntercept))
+//	if (_globe->isZoomedToLevel(_zoomInter))
+	if (_game->getSavedGame()->getGlobeZoom() <= _zoomInter)
 	{
 		_zoomOutEffectDone = true;
 		_zoomOutEffectTimer->stop();
@@ -2554,7 +2548,8 @@ void GeoscapeState::handleDogfights()
 	// If all dogfights are minimized rotate the globe, etc.
 	if (_dogfights.size() == _minimizedDogfights)
 	{
-		_zoomOutEffectTimer->start();	// kL
+//		_zoomOutEffectTimer->start();	// kL
+//		zoomOutEffect();				// kL
 
 		_pause = false;
 		_timer->think(this, 0);

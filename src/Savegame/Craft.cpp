@@ -718,15 +718,15 @@ void Craft::checkup()
  */
 bool Craft::detect(Target* target) const
 {
-	//Log(LOG_INFO) << "Craft::detect(Target* target)";
+	Log(LOG_INFO) << "Craft::detect(Target* target)";
 
-	double radarRange = (double)_rules->getRadarRange();
-	//Log(LOG_INFO) << ". radarRange = " << radarRange;
+	double radarRange = static_cast<double>(_rules->getRadarRange());
+	Log(LOG_INFO) << ". radarRange = " << radarRange;
 	if (radarRange == 0.0)
 		return false;
 
 	double targetDistance = getDistance(target) * 3440.0;
-	//Log(LOG_INFO) << ". targetDistance = " << targetDistance;
+	Log(LOG_INFO) << ". targetDistance = " << (int)targetDistance;
 
 	if (radarRange > targetDistance)
 		return true;

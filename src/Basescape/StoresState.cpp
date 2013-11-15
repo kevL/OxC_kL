@@ -85,7 +85,6 @@ StoresState::StoresState(Game* game, Base* base)
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
-//kL	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_STORES"));
 
 	_txtItem->setColor(Palette::blockOffset(13)+10);

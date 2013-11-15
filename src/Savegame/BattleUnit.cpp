@@ -626,6 +626,7 @@ void BattleUnit::keepWalking(Tile* tileBelow, bool cache)
 	{
 		// we assume we reached our destination tile
 		// this is actually a drawing hack, so soldiers are not overlapped by floortiles
+		_lastPos = _pos;	// kL
 		_pos = _destination;
 	}
 
@@ -805,7 +806,7 @@ void BattleUnit::lookAt(const Position& point, bool turret)
 		}
 	}
 
-	//Log(LOG_INFO) << "BattleUnit::lookAt() #1, DONE";
+	Log(LOG_INFO) << "BattleUnit::lookAt() #1 EXIT";
 }
 
 /**
@@ -840,6 +841,7 @@ void BattleUnit::lookAt(int direction, bool force)
 //		Log(LOG_INFO) << "BattleUnit::lookAt() - " << this->getId() << " - force Status_Standing";
 //		_status = STATUS_STANDING;	// kL. idk... seems to screw up UnitDieBDeath sequence
 	}
+	Log(LOG_INFO) << "BattleUnit::lookAt() #2 EXIT";// unitID = " << getId();
 }
 
 /**
@@ -964,6 +966,7 @@ void BattleUnit::turn(bool turret)
 		//Log(LOG_INFO) << "BattleUnit::turn() " << getId() << " - STATUS_STANDING (turn has ended)";
 		_status = STATUS_STANDING; // we officially reached our destination
 	}
+	Log(LOG_INFO) << "BattleUnit::turn() EXIT";// unitID = " << getId();
 }
 
 /**
