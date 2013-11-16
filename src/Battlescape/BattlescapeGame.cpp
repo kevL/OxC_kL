@@ -634,6 +634,12 @@ void BattlescapeGame::endTurn()
 			setupCursor();
 		}
 	}
+	else if (Options::getBool("battleAutoEnd"))
+	{
+		_parentState->finishBattle(false,liveSoldiers);
+
+		return;
+	}
 	//Log(LOG_INFO) << ". done updates";
 
 	if (_save->getSide() != FACTION_NEUTRAL

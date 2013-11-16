@@ -880,7 +880,7 @@ void SavedBattleGame::endTurn()
 		_side = FACTION_NEUTRAL;
 
 		// If there is no neutral team, we skip this and instantly prepare the new turn for the player.
-		// kL_note: wtf does that mean, 5th graders**
+		// kL_note: wtf does that mean, 5th graders***
 		if (selectNextPlayerUnit() == 0)
 		{
 			//Log(LOG_INFO) << ". . nextPlayerUnit == 0";
@@ -892,7 +892,8 @@ void SavedBattleGame::endTurn()
 			_side = FACTION_PLAYER;
 
 			if (_lastSelectedUnit
-				&& !_lastSelectedUnit->isOut())
+				&& _lastSelectedUnit->isSelectable(FACTION_PLAYER, false, false))	// intended to fixed what I fixed below(?)
+//				&& !_lastSelectedUnit->isOut())										// old code. similar to above(?)
 			{
 				//Log(LOG_INFO) << ". . . lastSelectedUnit is aLive";
 				_selectedUnit = _lastSelectedUnit;
@@ -920,19 +921,26 @@ void SavedBattleGame::endTurn()
 		prepareNewTurn();
 		_turn++;
 		_side = FACTION_PLAYER;
-
 		if (_lastSelectedUnit
-			&& !_lastSelectedUnit->isOut())
+			&& _lastSelectedUnit->isSelectable(FACTION_PLAYER, false, false))	// intended to fixed what I fixed below(?)
+//			&& !_lastSelectedUnit->isOut())										// old code. similar to above(?)
 		{
+			//Log(LOG_INFO) << ". . . lastSelectedUnit is aLive";
 			_selectedUnit = _lastSelectedUnit;
 		}
 		else
+		{
+			//Log(LOG_INFO) << ". . . select nextPlayerUnit";
 			selectNextPlayerUnit();
+		}
 
 		while (_selectedUnit
 			&& _selectedUnit->getFaction() != FACTION_PLAYER)
 		{
-			selectNextPlayerUnit();
+			//Log(LOG_INFO) << ". . . finding a Unit to select";
+//kL			selectNextPlayerUnit();
+			selectNextPlayerUnit(true);			// kL, try this one first; they should have been marked noReselect by now.
+//			selectNextPlayerUnit(true, true);	// kL
 		}
 	}
 	//Log(LOG_INFO) << "done Factions";

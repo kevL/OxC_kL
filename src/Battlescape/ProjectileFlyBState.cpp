@@ -195,6 +195,8 @@ void ProjectileFlyBState::init()
 		_action.type = BA_HIT;
 	}
 
+	Position originVoxel = _parent->getTileEngine()->getSightOriginVoxel(_unit) - Position(0, 0, 2);
+
 	switch (_action.type)
 	{
 		case BA_SNAPSHOT:
@@ -237,7 +239,7 @@ void ProjectileFlyBState::init()
 		case BA_THROW:
 			//Log(LOG_INFO) << ". . BA_THROW";
 
-			if (!validThrowRange(&_action))
+			if (!validThrowRange(&_action, originVoxel, _parent->getSave()->getTile(_action.target)))
 			{
 				//Log(LOG_INFO) << ". . . not valid throw range, EXIT";
 
@@ -613,12 +615,28 @@ void ProjectileFlyBState::cancel()
  * Validates the throwing range.
  * @return, True when the range is valid.
  */
-bool ProjectileFlyBState::validThrowRange(BattleAction* action)
+bool ProjectileFlyBState::validThrowRange(BattleAction* action, Position origin, Tile* target)
 {
-	// Throwing Distance roughly = 2.5 \D7 Strength / Weight
-
 	// note that all coordinates and thus also distances below are in number of tiles (not in voxels).
-	double range = 2.63 * static_cast<double>(action->actor->getStats()->strength / action->weapon->getRules()->getWeight());
+	int offset = 1;
+
+	if (action->type != BA_THROW
+		&& target->getUnit())
+	{
+		offset = target->getUnit()->getHeight() / 2 + target->getUnit()->getFloatHeight();
+	}
+
+	int zd = (origin.z) - ((action->target.z * 24 + offset) - target->getTerrainLevel());
+	int weight = action->weapon->getRules()->getWeight();
+	if (action->weapon->getAmmoItem()
+		&& action->weapon->getAmmoItem() != action->weapon)
+	{
+		weight += action->weapon->getAmmoItem()->getRules()->getWeight();
+	}
+
+	double range = (getMaxThrowDistance(weight, action->actor->getStats()->strength, zd) + 8) / 16;
+	// Throwing Distance was roughly = 2.5 \D7 Strength / Weight
+//	double range = 2.63 * static_cast<double>(action->actor->getStats()->strength / action->weapon->getRules()->getWeight()); // old code.
 
 	int delta_x = action->actor->getPosition().x - action->target.x;
 	int delta_y = action->actor->getPosition().y - action->target.y;
@@ -630,6 +648,40 @@ bool ProjectileFlyBState::validThrowRange(BattleAction* action)
 	distance -= static_cast<double>(delta_z * 2);
 
 	return distance < range;
+}
+
+/**
+ *
+ */
+int ProjectileFlyBState::getMaxThrowDistance(int weight, int strength, int level)
+{
+	double curZ = level + 0.5;
+	double dz = 1.;
+
+	int dist = 0;
+	while (dist < 4000) // just in case
+	{
+		dist += 8;
+		if (dz < -1)
+			curZ -= 8;
+		else
+			curZ += dz * 8;
+
+		if (curZ < 0 && dz < 0) // roll back
+		{
+			dz = std::max(dz, -1.);
+			if (abs(dz) > 1e-10) // rollback horizontal
+				dist -= curZ / dz;
+
+			break;
+        }
+
+		dz -= static_cast<double>(50 * weight / strength) / 100.;
+		if (dz <= -2.) // become falling
+			break;
+	}
+
+	return dist;
 }
 
 }

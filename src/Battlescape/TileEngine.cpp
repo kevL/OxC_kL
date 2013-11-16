@@ -2301,6 +2301,7 @@ int TileEngine::horizontalBlockage(Tile* startTile, Tile* endTile, ItemDamageTyp
 				block = (blockage(startTile,MapData::O_NORTHWALL, type) + blockage(endTile,MapData::O_WESTWALL, type)) / 2
 						+ (blockage(_save->getTile(startTile->getPosition() + oneTileEast), MapData::O_WESTWALL, type)
 							+ blockage(_save->getTile(startTile->getPosition() + oneTileEast), MapData::O_NORTHWALL, type)) / 2
+				+ blockage(_save->getTile(startTile->getPosition() + oneTileEast),MapData::O_OBJECT, type, direction)
 						+ (blockage(_save->getTile(startTile->getPosition() + oneTileNorth), MapData::O_OBJECT, type, 4)
 							+ blockage(_save->getTile(startTile->getPosition() + oneTileNorth), MapData::O_OBJECT, type, 2)) / 2;
 
@@ -2368,6 +2369,7 @@ int TileEngine::horizontalBlockage(Tile* startTile, Tile* endTile, ItemDamageTyp
 				block = (blockage(endTile,MapData::O_NORTHWALL, type) + blockage(startTile, MapData::O_WESTWALL, type)) / 2
 						+ (blockage(_save->getTile(startTile->getPosition() + oneTileSouth), MapData::O_WESTWALL, type)
 							+ blockage(_save->getTile(startTile->getPosition() + oneTileSouth), MapData::O_NORTHWALL, type)) / 2
+				+ blockage(_save->getTile(startTile->getPosition() + oneTileSouth),MapData::O_OBJECT, type, direction)
 						+ (blockage(_save->getTile(startTile->getPosition() + oneTileWest), MapData::O_OBJECT, type, 2)
 							+ blockage(_save->getTile(startTile->getPosition() + oneTileWest), MapData::O_OBJECT, type, 4)) / 2;
 
@@ -3087,10 +3089,12 @@ bool TileEngine::validateThrow(BattleAction* action)
 	Position originVoxel, targetVoxel;
 	bool found = false;
 
-	if (action->type == BA_THROW
-		&& _save->getTile(action->target)
-		&& _save->getTile(action->target)->getMapData(MapData::O_OBJECT)
-		&& _save->getTile(action->target)->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) == 255)
+	Tile* tile = _save->getTile(action->target);
+	if (!tile
+		|| (action->type == BA_THROW
+			&& tile
+			&& tile->getMapData(MapData::O_OBJECT)
+			&& tile->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) == 255))
 	{
 		return false; // object blocking - can't throw here
 	}
@@ -3128,14 +3132,14 @@ bool TileEngine::validateThrow(BattleAction* action)
 	if (action->type != BA_THROW)
 	{
 		BattleUnit* targetUnit;
-		if (_save->getTile(action->target)->getUnit())
+		if (tile->getUnit())
 		{
-			targetUnit = _save->getTile(action->target)->getUnit();
+			targetUnit = tile->getUnit();
 		}
 
 		if (!targetUnit
 			&& action->target.z > 0
-			&& _save->getTile(action->target)->hasNoFloor(0))
+			&& tile->hasNoFloor(0))
 		{
 			if (_save->getTile(Position(action->target.x, action->target.y, action->target.z - 1))->getUnit())
 			{
@@ -3183,7 +3187,7 @@ bool TileEngine::validateThrow(BattleAction* action)
 		return false;
 	}
 
-	return ProjectileFlyBState::validThrowRange(action);
+	return ProjectileFlyBState::validThrowRange(action, originVoxel, tile);
 }
 
 /**
