@@ -33,10 +33,10 @@ namespace OpenXcom
  */
 ImageButton::ImageButton(int width, int height, int x, int y)
 	:
-	InteractiveSurface(width, height, x, y),
-	_color(0),
-	_group(0),
-	_inverted(false)
+		InteractiveSurface(width, height, x, y),
+		_color(0),
+		_group(0),
+		_inverted(false)
 {
 }
 
@@ -92,10 +92,13 @@ void ImageButton::mousePress(Action* action, State* state)
 			(*_group)->invert((*_group)->getColor() + 3);
 			*_group = this;
 			invert(_color + 3);
-			_inverted = true;
+
+			_inverted = true; // 2013 nov 15
 		}
 	}
-	else if (!_inverted && isButtonPressed() && isButtonHandled(action->getDetails()->button.button))
+	else if (!_inverted
+		&& isButtonPressed()
+		&& isButtonHandled(action->getDetails()->button.button))
 	{
 		_inverted = true;
 		invert(_color + 3);
@@ -111,7 +114,12 @@ void ImageButton::mousePress(Action* action, State* state)
  */
 void ImageButton::mouseRelease(Action* action, State* state)
 {
-	if (_group != 0 || (_inverted && isButtonHandled(action->getDetails()->button.button)))
+//	if (_group != 0 // 2013 nov 15, This causes my Geoscape timer buttons to act glitchy.
+//		|| (_inverted
+//			&& isButtonHandled(action->getDetails()->button.button)))
+
+	if (_inverted
+			&& isButtonHandled(action->getDetails()->button.button))
 	{
 		_inverted = false;
 		invert(_color + 3);

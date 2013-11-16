@@ -59,6 +59,7 @@ private:
 	void playMovementSound();
 	std::size_t _unitsSpotted;
 	int _preMovementCost;
+	bool _tileSwitchDone;	// kL
 
 //	SavedBattleGame _sbgame;	// kL
 //	Soldier* _geoscapeSoldier;	// kL: to cycle through all seen HOSTILE units.

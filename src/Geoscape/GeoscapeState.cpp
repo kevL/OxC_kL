@@ -393,6 +393,7 @@ GeoscapeState::GeoscapeState(Game* game)
 	_btnFunding->onMouseClick((ActionHandler)& GeoscapeState::btnFundingClick);
 	_btnFunding->onKeyboardPress((ActionHandler)& GeoscapeState::btnFundingClick, (SDLKey)Options::getInt("keyGeoFunding"));
 
+
 	_btn5Secs->copy(_bg);
 	_btn5Secs->setColor(Palette::blockOffset(15)+5);
 	_btn5Secs->setGroup(&_timeSpeed);
@@ -2762,6 +2763,7 @@ void GeoscapeState::determineAlienMissions(bool atGameStart)
 		otherMission->start();
 
 		_game->getSavedGame()->getAlienMissions().push_back(otherMission);
+
 		// Make sure this combination never comes up again.
 		strategy.removeMission(targetRegion, targetMission);
 	}
@@ -2783,6 +2785,7 @@ void GeoscapeState::determineAlienMissions(bool atGameStart)
 		otherMission->start(150);
 
 		_game->getSavedGame()->getAlienMissions().push_back(otherMission);
+
 		// Make sure this combination never comes up again.
 		strategy.removeMission(targetRegion, "STR_ALIEN_RESEARCH");
 	}

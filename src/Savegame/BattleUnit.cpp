@@ -626,7 +626,7 @@ void BattleUnit::keepWalking(Tile* tileBelow, bool cache)
 	{
 		// we assume we reached our destination tile
 		// this is actually a drawing hack, so soldiers are not overlapped by floortiles
-		_lastPos = _pos;	// kL
+//		_lastPos = _pos;	// kL
 		_pos = _destination;
 	}
 

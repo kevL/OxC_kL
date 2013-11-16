@@ -16,10 +16,12 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_TEXTBUTTON_H
 #define OPENXCOM_TEXTBUTTON_H
 
 #include "../Engine/InteractiveSurface.h"
+
 
 namespace OpenXcom
 {
@@ -35,49 +37,54 @@ class Sound;
  * buttons to turn it into a radio button (only one button
  * pushed at a time).
  */
-class TextButton : public InteractiveSurface
+class TextButton
+	:
+		public InteractiveSurface
 {
 private:
 	Uint8 _color;
-	Text *_text;
-	TextButton **_group;
+	Text* _text;
+	TextButton** _group;
 	bool _contrast;
-public:
-	static Sound *soundPress;
-	/// Creates a new text button with the specified size and position.
-	TextButton(int width, int height, int x = 0, int y = 0);
-	/// Cleans up the text button.
-	~TextButton();
-	/// Sets the text button's color.
-	void setColor(Uint8 color);
-	/// Gets the text button's color.
-	Uint8 getColor() const;
-	/// Sets the text button's text color.
-	void setTextColor(Uint8 color);
-	/// Sets the text size to big.
-	void setBig();
-	/// Sets the text size to small.
-	void setSmall();
-	/// Gets the text button's current font.
-	Font *getFont() const;
-	/// Sets the text button's various fonts.
-	void setFonts(Font *big, Font *small);
-	/// Sets the text button's high contrast color setting.
-	void setHighContrast(bool contrast);
-	/// Sets the text button's text.
-	void setText(const std::wstring &text);
-	/// Gets the text button's text.
-	std::wstring getText() const;
-	/// Sets the text button's group.
-	void setGroup(TextButton **group);
-	/// Sets the text button's palette.
-	void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
-	/// Draws the text button.
-	void draw();
-	/// Special handling for mouse presses.
-	void mousePress(Action *action, State *state);
-	/// Special handling for mouse releases.
-	void mouseRelease(Action *action, State *state);
+
+	public:
+		static Sound* soundPress;
+
+		/// Creates a new text button with the specified size and position.
+		TextButton(int width, int height, int x = 0, int y = 0);
+		/// Cleans up the text button.
+		~TextButton();
+
+		/// Sets the text button's color.
+		void setColor(Uint8 color);
+		/// Gets the text button's color.
+		Uint8 getColor() const;
+		/// Sets the text button's text color.
+		void setTextColor(Uint8 color);
+		/// Sets the text size to big.
+		void setBig();
+		/// Sets the text size to small.
+		void setSmall();
+		/// Gets the text button's current font.
+		Font* getFont() const;
+		/// Sets the text button's various fonts.
+		void setFonts(Font* big, Font* small);
+		/// Sets the text button's high contrast color setting.
+		void setHighContrast(bool contrast);
+		/// Sets the text button's text.
+		void setText(const std::wstring& text);
+		/// Gets the text button's text.
+		std::wstring getText() const;
+		/// Sets the text button's group.
+		void setGroup(TextButton** group);
+		/// Sets the text button's palette.
+		void setPalette(SDL_Color* colors, int firstcolor = 0, int ncolors = 256);
+		/// Draws the text button.
+		void draw();
+		/// Special handling for mouse presses.
+		void mousePress(Action* action, State* state);
+		/// Special handling for mouse releases.
+		void mouseRelease(Action* action, State* state);
 };
 
 }

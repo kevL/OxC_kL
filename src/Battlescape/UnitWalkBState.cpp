@@ -56,7 +56,8 @@ UnitWalkBState::UnitWalkBState(BattlescapeGame* parent, BattleAction action)
 		_falling(false),
 		_beforeFirstStep(false),
 		_unitsSpotted(0),
-		_preMovementCost(0)
+		_preMovementCost(0),
+		_tileSwitchDone(false)		// kL
 {
 	//Log(LOG_INFO) << "Create UnitWalkBState";
 }
@@ -77,6 +78,8 @@ void UnitWalkBState::init()
 	_unit = _action.actor;
 	Log(LOG_INFO) << "UnitWalkBState::init() unitID = " << _unit->getId();
 
+
+	_tileSwitchDone = false;	// kL
 
 	setNormalWalkSpeed();
 
@@ -128,7 +131,8 @@ void UnitWalkBState::think()
 	bool newVis = false;											// kL
 	bool newUnitSpotted = false;
 	bool onScreen = _unit->getVisible()
-			&& _parent->getMap()->getCamera()->isOnScreen(_unit->getPosition());
+			&& (_parent->getMap()->getCamera()->isOnScreen(_unit->getPosition())
+					|| _parent->getMap()->getCamera()->isOnScreen(_unit->getDestination()));
 	Log(LOG_INFO) << ". onScreen = " << onScreen;
 
 	int dir = _pf->getStartDirection();		// kL: also below, in STATUS_STANDING!
@@ -202,9 +206,12 @@ void UnitWalkBState::think()
 		}
 
 		// unit moved from one tile to the other, update the tiles
-		if (_unit->getPosition() != _unit->getLastPosition())
+		if (!_tileSwitchDone	// kL
+			&& _unit->getPosition() != _unit->getLastPosition())
 		{
 			Log(LOG_INFO) << ". tile switch from _lastpos to _pos.";
+
+			_tileSwitchDone = true;		// kL
 
 			int size = _unit->getArmor()->getSize() - 1;
 			bool largeCheck = true;
@@ -312,6 +319,8 @@ void UnitWalkBState::think()
 		if (_unit->getStatus() == STATUS_STANDING)
 		{
 			Log(LOG_INFO) << "Hey we got to STATUS_STANDING in UnitWalkBState _WALKING or _FLYING !!!" ;
+
+			_tileSwitchDone = false;	// kL
 
 			// if the unit burns floortiles, burn floortiles
 			if (_unit->getSpecialAbility() == SPECAB_BURNFLOOR)
@@ -432,6 +441,8 @@ void UnitWalkBState::think()
 		|| _unit->getStatus() == STATUS_PANICKING)
 	{
 		Log(LOG_INFO) << "STATUS_STANDING or PANICKING : " << _unit->getId();
+
+		_tileSwitchDone = false;	// kL
 
 		newVis = _terrain->calculateFOV(_unit)								// kL
 			&& _unit->getFaction() == FACTION_PLAYER;						// kL
@@ -608,7 +619,7 @@ void UnitWalkBState::think()
 			}
 			else if (dir < _pf->DIR_UP) // now open doors (if any)
 			{
-				Log(LOG_INFO) << ". . open doors";
+				Log(LOG_INFO) << ". . check for doors";
 
 				int door = _terrain->unitOpensDoor(_unit, false, dir);
 				if (door == 3)
@@ -648,7 +659,7 @@ void UnitWalkBState::think()
 						y > -1;
 						--y)
 				{
-					Log(LOG_INFO) << ". . . obstacle(unit)";
+					Log(LOG_INFO) << ". . . check obstacle(unit)";
 
 					BattleUnit* unitInMyWay = _parent->getSave()->getTile(destination + Position(x, y, 0))->getUnit();
 					BattleUnit* unitBelowMyWay = 0;
@@ -666,7 +677,8 @@ void UnitWalkBState::think()
 							|| (belowDest
 								&& unitBelowMyWay
 								&& unitBelowMyWay != _unit
-								&& unitBelowMyWay->getFloatHeight() + unitBelowMyWay->getHeight() - belowDest->getTerrainLevel() >= 28)))
+								&& unitBelowMyWay->getFloatHeight()
+										+ unitBelowMyWay->getHeight() - belowDest->getTerrainLevel() >= 28)))
 								// 4+ voxels poking into the tile above, we don't kick people in the head here at XCom.
 					{
 						Log(LOG_INFO) << ". . . obstacle(unit) -> abortPath()";
@@ -831,6 +843,8 @@ void UnitWalkBState::cancel()
 void UnitWalkBState::postPathProcedures()
 {
 	Log(LOG_INFO) << "UnitWalkBState::postPathProcedures(), unit = " << _unit->getId();
+
+	_tileSwitchDone = false;	// kL
 
 	_action.TU = 0;
 

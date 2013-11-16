@@ -89,38 +89,53 @@ GraphsState::GraphsState(Game* game)
 		add(_txtScale.at(scaleText));
 	}
 
-
+	std::wstring rPts;	// kL
 	int offset = 0;
 	for (std::vector<Region*>::iterator
 			iter = _game->getSavedGame()->getRegions()->begin();
 			iter != _game->getSavedGame()->getRegions()->end();
 			++iter)
 	{
-		_btnRegions.push_back(new ToggleTextButton(90, 11, 0, offset*11));
+		_btnRegions.push_back(new ToggleTextButton(90, 11, 0, offset * 11));
 		_regionToggles.push_back(false);
+
 		_btnRegions.at(offset)->setColor(Palette::blockOffset(9)+7);
-		_btnRegions.at(offset)->setInvertColor(-42 + (4*offset));
-		_btnRegions.at(offset)->setText(tr((*iter)->getRules()->getType()));
+		_btnRegions.at(offset)->setInvertColor((4 * offset) - 42);
+		_btnRegions.at(offset)->setText(tr((*iter)->getRules()->getType())); // unique name of Region
+/*
+		rPts = tr((*iter)->getRules()->getType());			// kL
+//		rPts += (*iter)->getActivityAlien().at(offset);		// kL
+		rPts += (*iter)->getActivityAlien().at((*iter)->getActivityAlien()->getActivityAlien().size() - (1 + offset));		// kL
+		_btnRegions.at(offset)->setText(rPts);				// kL
+*/
+//		_btnRegions.at(offset)->setAlign(ALIGN_LEFT);		// kL
 		_btnRegions.at(offset)->onMousePress((ActionHandler)& GraphsState::btnRegionListPress);
 		add(_btnRegions.at(offset));
-		_alienRegionLines.push_back(new Surface(320,200,0,0));
+
+		_alienRegionLines.push_back(new Surface(320, 200, 0, 0));
 		add(_alienRegionLines.at(offset));
-		_xcomRegionLines.push_back(new Surface(320,200,0,0));
+
+		_xcomRegionLines.push_back(new Surface(320, 200, 0, 0));
 		add(_xcomRegionLines.at(offset));
 
 		++offset;
 	}
 
-	_btnRegionTotal = new ToggleTextButton(90, 11, 0, offset*11);
+	_btnRegionTotal = new ToggleTextButton(90, 11, 0, offset * 11);
+
 	_regionToggles.push_back(false);
+
 	_btnRegionTotal->onMousePress((ActionHandler)& GraphsState::btnRegionListPress);
 	_btnRegionTotal->setColor(Palette::blockOffset(9)+7);
     _btnRegionTotal->setInvertColor(22);
 	_btnRegionTotal->setText(tr("STR_TOTAL_UC"));
+
 	_alienRegionLines.push_back(new Surface(320, 200, 0, 0));
 	add(_alienRegionLines.at(offset));
+
 	_xcomRegionLines.push_back(new Surface(320, 200, 0, 0));
 	add(_xcomRegionLines.at(offset));
+
 	add(_btnRegionTotal);
 	
 	offset = 0;
@@ -131,15 +146,19 @@ GraphsState::GraphsState(Game* game)
 	{
 		_btnCountries.push_back(new ToggleTextButton(90, 11, 0, offset * 11));
 		_countryToggles.push_back(false);
+
 		_btnCountries.at(offset)->setColor(Palette::blockOffset(9)+7);
-		_btnCountries.at(offset)->setInvertColor(-42 + (4 * offset));
+		_btnCountries.at(offset)->setInvertColor((4 * offset) - 42);
 		_btnCountries.at(offset)->setText(tr((*iter)->getRules()->getType()));
 		_btnCountries.at(offset)->onMousePress((ActionHandler)& GraphsState::btnCountryListPress);
 		add(_btnCountries.at(offset));
+
 		_alienCountryLines.push_back(new Surface(320, 200, 0, 0));
 		add(_alienCountryLines.at(offset));
+
 		_xcomCountryLines.push_back(new Surface(320, 200, 0, 0));
 		add(_xcomCountryLines.at(offset));
+
 		_incomeLines.push_back(new Surface(320, 200, 0, 0));
 		add(_incomeLines.at(offset));
 
@@ -148,28 +167,36 @@ GraphsState::GraphsState(Game* game)
 
 	_btnCountryTotal = new ToggleTextButton(90, 11, 0, offset * 11);
 	_countryToggles.push_back(false);
+
 	_btnCountryTotal->onMousePress((ActionHandler)& GraphsState::btnCountryListPress);
 	_btnCountryTotal->setColor(Palette::blockOffset(9)+7);
     _btnCountryTotal->setInvertColor(22);
 	_btnCountryTotal->setText(tr("STR_TOTAL_UC"));
+
 	_alienCountryLines.push_back(new Surface(320, 200, 0, 0));
 	add(_alienCountryLines.at(offset));
+
 	_xcomCountryLines.push_back(new Surface(320, 200, 0, 0));
 	add(_xcomCountryLines.at(offset));
+
 	_incomeLines.push_back(new Surface(320, 200, 0, 0));
 	add(_incomeLines.at(offset));
+
 	add(_btnCountryTotal);
 	
 
 	for (int iter = 0; iter != 5; ++iter)
 	{
 		offset = iter;
+
 		_btnFinances.push_back(new ToggleTextButton(90, 11, 0, offset * 11));
 		_financeToggles.push_back(false);
+
 		_btnFinances.at(offset)->setColor(Palette::blockOffset(9)+7);
         _btnFinances.at(offset)->setInvertColor(-42 + (4 * offset));
 		_btnFinances.at(offset)->onMousePress((ActionHandler)& GraphsState::btnFinanceListPress);
 		add(_btnFinances.at(offset));
+
 		_financeLines.push_back(new Surface(320, 200, 0, 0));
 		add(_financeLines.at(offset));
 	}
@@ -202,6 +229,7 @@ GraphsState::GraphsState(Game* game)
 		else
 			_btnRegions.at(i)->setPressed(_regionToggles[i]);
 	}
+
 	for (size_t i = 0; i < _countryToggles.size(); ++i)
 	{
 		_countryToggles[i] = ('0' == graphCountryToggles[i])? false: true;
@@ -212,6 +240,7 @@ GraphsState::GraphsState(Game* game)
 		else
 			_btnCountries.at(i)->setPressed(_countryToggles[i]);
 	}
+
 	for (size_t i = 0; i < _financeToggles.size(); ++i)
 	{
 		_financeToggles[i] = ('0' == graphFinanceToggles[i])? false: true;
@@ -357,7 +386,7 @@ void GraphsState::btnGeoscapeClick(Action*)
 }
 
 /**
- * Swtiches to the ufo country activity screen
+ * Swtiches to the ufo region activity screen
  */
 void GraphsState::btnUfoRegionClick(Action*)
 {

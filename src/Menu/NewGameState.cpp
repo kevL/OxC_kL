@@ -43,13 +43,15 @@ NewGameState::NewGameState(Game* game)
 		State(game)
 {
 	_window			= new Window(this, 192, 180, 64, 10, POPUP_VERTICAL);
+
+	_txtTitle		= new Text(192, 17, 64, 21);
+
 	_btnBeginner	= new TextButton(160, 18, 80, 42);
 	_btnExperienced	= new TextButton(160, 18, 80, 64);
 	_btnVeteran		= new TextButton(160, 18, 80, 86);
 	_btnGenius		= new TextButton(160, 18, 80, 108);
 	_btnSuperhuman	= new TextButton(160, 18, 80, 130);
 	_btnCancel		= new TextButton(160, 18, 80, 158);
-	_txtTitle		= new Text(192, 10, 64, 25);
 
 	add(_window);
 	add(_btnBeginner);
@@ -93,7 +95,7 @@ NewGameState::NewGameState(Game* game)
 
 	_txtTitle->setColor(Palette::blockOffset(8)+10);
 	_txtTitle->setAlign(ALIGN_CENTER);
-	_txtTitle->setSmall();
+	_txtTitle->setBig();
 	_txtTitle->setText(tr("STR_SELECT_DIFFICULTY_LEVEL"));
 }
 

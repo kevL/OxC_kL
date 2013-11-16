@@ -35,12 +35,12 @@ namespace OpenXcom
  */
 class ImageButton
 	:
-	public InteractiveSurface
+		public InteractiveSurface
 {
-	protected:
-		Uint8 _color;
-		ImageButton** _group;
-		bool _inverted;
+protected:
+	Uint8 _color;
+	ImageButton** _group;
+	bool _inverted;
 
 	public:
 		/// Creates a new image button with the specified size and position.

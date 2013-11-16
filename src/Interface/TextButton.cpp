@@ -16,16 +16,19 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "TextButton.h"
 #include <SDL.h>
 #include "Text.h"
 #include "../Engine/Sound.h"
 #include "../Engine/Action.h"
 
+
 namespace OpenXcom
 {
 
-Sound *TextButton::soundPress = 0;
+Sound* TextButton::soundPress = 0;
+
 
 /**
  * Sets up a text button with the specified size and position.
@@ -35,7 +38,12 @@ Sound *TextButton::soundPress = 0;
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-TextButton::TextButton(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _color(0), _group(0), _contrast(false)
+TextButton::TextButton(int width, int height, int x, int y)
+	:
+		InteractiveSurface(width, height, x, y),
+		_color(0),
+		_group(0),
+		_contrast(false)
 {
 	_text = new Text(width, height, 0, 0);
 	_text->setSmall();
@@ -60,6 +68,7 @@ void TextButton::setColor(Uint8 color)
 {
 	_color = color;
 	_text->setColor(color);
+
 	_redraw = true;
 }
 
@@ -79,6 +88,7 @@ Uint8 TextButton::getColor() const
 void TextButton::setTextColor(Uint8 color)
 {
 	_text->setColor(color);
+
 	_redraw = true;
 }
 
@@ -88,6 +98,7 @@ void TextButton::setTextColor(Uint8 color)
 void TextButton::setBig()
 {
 	_text->setBig();
+
 	_redraw = true;
 }
 
@@ -97,6 +108,7 @@ void TextButton::setBig()
 void TextButton::setSmall()
 {
 	_text->setSmall();
+
 	_redraw = true;
 }
 
@@ -104,7 +116,7 @@ void TextButton::setSmall()
 * Returns the font currently used by the text.
 * @return Pointer to font.
 */
-Font *TextButton::getFont() const
+Font* TextButton::getFont() const
 {
 	return _text->getFont();
 }
@@ -116,9 +128,10 @@ Font *TextButton::getFont() const
  * @param big Pointer to large-size font.
  * @param small Pointer to small-size font.
  */
-void TextButton::setFonts(Font *big, Font *small)
+void TextButton::setFonts(Font* big, Font* small)
 {
 	_text->setFonts(big, small);
+
 	_redraw = true;
 }
 
@@ -131,6 +144,7 @@ void TextButton::setHighContrast(bool contrast)
 {
 	_contrast = contrast;
 	_text->setHighContrast(contrast);
+
 	_redraw = true;
 }
 
@@ -138,9 +152,10 @@ void TextButton::setHighContrast(bool contrast)
  * Changes the text of the button label.
  * @param text Text string.
  */
-void TextButton::setText(const std::wstring &text)
+void TextButton::setText(const std::wstring& text)
 {
 	_text->setText(text);
+
 	_redraw = true;
 }
 
@@ -158,9 +173,10 @@ std::wstring TextButton::getText() const
  * @param group Pointer to the pressed button pointer in the group.
  * Null makes it a regular button.
  */
-void TextButton::setGroup(TextButton **group)
+void TextButton::setGroup(TextButton** group)
 {
 	_group = group;
+
 	_redraw = true;
 }
 
@@ -170,7 +186,7 @@ void TextButton::setGroup(TextButton **group)
  * @param firstcolor Offset of the first color to replace.
  * @param ncolors Amount of colors to replace.
  */
-void TextButton::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
+void TextButton::setPalette(SDL_Color* colors, int firstcolor, int ncolors)
 {
 	Surface::setPalette(colors, firstcolor, ncolors);
 	_text->setPalette(colors, firstcolor, ncolors);
@@ -202,7 +218,7 @@ void TextButton::draw()
 	{
 		drawRect(&square, color);
 
-		if (i % 2 == 0)
+		if (i %2 == 0)
 		{
 			square.x++;
 			square.y++;
@@ -212,19 +228,19 @@ void TextButton::draw()
 
 		switch (i)
 		{
-		case 0:
-			color = _color + 5 * mul;
-			setPixel(square.w, 0, color);
+			case 0:
+				color = _color + 5 * mul;
+				setPixel(square.w, 0, color);
 			break;
-		case 1:
-			color = _color + 2 * mul;
+			case 1:
+				color = _color + 2 * mul;
 			break;
-		case 2:
-			color = _color + 4 * mul;
-			setPixel(square.w+1, 1, color);
+			case 2:
+				color = _color + 4 * mul;
+				setPixel(square.w+1, 1, color);
 			break;
-		case 3:
-			color = _color + 3 * mul;
+			case 3:
+				color = _color + 3 * mul;
 			break;
 		}
 	}
@@ -249,21 +265,26 @@ void TextButton::draw()
  * @param action Pointer to an action.
  * @param state State that the action handlers belong to.
  */
-void TextButton::mousePress(Action *action, State *state)
+void TextButton::mousePress(Action* action, State* state)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT && _group != 0)
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT
+		&& _group != 0)
 	{
-		TextButton *old = *_group;
+		TextButton* old = *_group;
 		*_group = this;
+
 		if (old != 0)
 			old->draw();
-		draw();
+
+		draw(); // 2013 nov 15
 	}
 
 	if (isButtonHandled(action->getDetails()->button.button))
 	{		
-		if (soundPress != 0 && _group == 0 &&
-			action->getDetails()->button.button != SDL_BUTTON_WHEELUP && action->getDetails()->button.button != SDL_BUTTON_WHEELDOWN)
+		if (soundPress != 0
+			&& _group == 0
+			&& action->getDetails()->button.button != SDL_BUTTON_WHEELUP
+			&& action->getDetails()->button.button != SDL_BUTTON_WHEELDOWN)
 		{
 			soundPress->play();
 		}
@@ -271,6 +292,7 @@ void TextButton::mousePress(Action *action, State *state)
 		draw();
 		//_redraw = true;
 	}
+
 	InteractiveSurface::mousePress(action, state);
 }
 
@@ -279,13 +301,14 @@ void TextButton::mousePress(Action *action, State *state)
  * @param action Pointer to an action.
  * @param state State that the action handlers belong to.
  */
-void TextButton::mouseRelease(Action *action, State *state)
+void TextButton::mouseRelease(Action* action, State* state)
 {
 	if (isButtonHandled(action->getDetails()->button.button))
 	{	
 		draw();
 		//_redraw = true;
 	}
+
 	InteractiveSurface::mouseRelease(action, state);
 }
 

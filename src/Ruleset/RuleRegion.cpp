@@ -81,9 +81,8 @@ void RuleRegion::load(const YAML::Node &node)
 }
 
 /**
- * Gets the language string that names
- * this region. Each region type
- * has a unique name.
+ * Gets the language string that names this region.
+ * Each region type has a unique name.
  * @return The region type.
  */
 std::string RuleRegion::getType() const
