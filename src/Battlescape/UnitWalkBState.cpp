@@ -146,7 +146,7 @@ void UnitWalkBState::think()
 //kL			_terrain->calculateFOV(_unit);
 			newVis = _terrain->calculateFOV(_unit);		// kL
 
-//			_unit->setCache(0);							// kL
+			_unit->setCache(0);
 			_parent->getMap()->cacheUnit(_unit);
 
 			if (newVis)									// kL
@@ -155,8 +155,8 @@ void UnitWalkBState::think()
 
 				_pf->abortPath();						// kL
 
-				_unit->setCache(0);						// kL
-				_parent->getMap()->cacheUnit(_unit);	// kL
+//				_unit->setCache(0);						// kL
+//				_parent->getMap()->cacheUnit(_unit);	// kL
 
 				_parent->popState();					// kL
 
@@ -382,11 +382,10 @@ void UnitWalkBState::think()
 				{
 					//Log(LOG_INFO) << ". . . cacheUnit";
 
-					_pf->abortPath();
 
 					_unit->setCache(0);
 					_parent->getMap()->cacheUnit(_unit);
-
+					_pf->abortPath();
 					_parent->popState();
 
 					return;
@@ -717,13 +716,13 @@ void UnitWalkBState::think()
 					int dirTemp = _unit->getDirection();
 					_unit->setDirection(_unit->getFaceDirection());
 
-					_parent->getMap()->cacheUnit(_unit);	// kL
+//					_parent->getMap()->cacheUnit(_unit);	// kL
 
 					_unit->setDirection(dirTemp);
 
 					//Log(LOG_INFO) << ". . . end (_pf->getStrafeMove()";
 				}
-				else	// kL
+//				else	// kL
 				{
 					Log(LOG_INFO) << ". . (onScreen) -> cacheUnit()";
 					_parent->getMap()->cacheUnit(_unit);
