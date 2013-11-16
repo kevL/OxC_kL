@@ -647,7 +647,7 @@ bool ProjectileFlyBState::validThrowRange(BattleAction* action, Position origin,
 	int delta_z = action->actor->getPosition().z - action->target.z;
 	distance -= static_cast<double>(delta_z * 2);
 
-	return distance < range;
+	return distance <= range;
 }
 
 /**
@@ -671,7 +671,7 @@ int ProjectileFlyBState::getMaxThrowDistance(int weight, int strength, int level
 		{
 			dz = std::max(dz, -1.);
 			if (abs(dz) > 1e-10) // rollback horizontal
-				dist -= curZ / dz;
+				dist -= static_cast<int>(curZ / dz);
 
 			break;
         }
