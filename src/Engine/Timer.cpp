@@ -124,7 +124,7 @@ void Timer::think(State* state, Surface* surface)
 	// must be signed to permit negative numbers
 	Sint64 now = slowTick();
 	// this is used to make sure we stop calling *_state on *state in the loop once *state has been popped and deallocated
-	Game* game = state? state->_game:0;
+	Game* game = state? state->_game: 0;
 //	assert(!game || game->isState(state));
 
 	if (_running)

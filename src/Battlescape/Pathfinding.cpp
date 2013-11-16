@@ -82,10 +82,10 @@ PathfindingNode* Pathfinding::getNode(const Position& pos)
 
 /**
  * Calculates the shortest path.
- * @param unit Unit taking the path.
- * @param endPosition The position we want to reach.
- * @param target Target of the path.
- * @param maxTUCost Maximum time units the path can cost.
+ * @param unit, Unit taking the path.
+ * @param endPosition, The position we want to reach.
+ * @param target, Target of the path.
+ * @param maxTUCost, Maximum time units the path can cost.
  */
 void Pathfinding::calculate(BattleUnit* unit, Position endPosition, BattleUnit* target, int maxTUCost)
 {
@@ -125,32 +125,36 @@ void Pathfinding::calculate(BattleUnit* unit, Position endPosition, BattleUnit* 
 
 	// the following check avoids that the unit walks behind the stairs if we click behind the stairs to make it go up the stairs.
 	// it only works if the unit is on one of the 2 tiles on the stairs, or on the tile right in front of the stairs.
-	if (isOnStairs(startPosition, endPosition))
+	// kL_note: I don't want this: ( the function, below, can be removed ).
+/*kL	if (isOnStairs(startPosition, endPosition))
+	{
+		endPosition.z++;
+		destinationTile = _save->getTile(endPosition);
+	} */
+
+	while (destinationTile->getTerrainLevel() == -24
+		&& endPosition.z != _save->getMapSizeZ())
 	{
 		endPosition.z++;
 		destinationTile = _save->getTile(endPosition);
 	}
 
-	while (endPosition.z != _save->getMapSizeZ()
-		&& destinationTile->getTerrainLevel() == -24)
+	// check if we have floor, else lower destination (for non flying
+	// units only, because otherwise they never reached this place)
+	if (_movementType != MT_FLY)
 	{
-		endPosition.z++;
-		destinationTile = _save->getTile(endPosition);
+		while (canFallDown(destinationTile, _unit->getArmor()->getSize()))
+		{
+			endPosition.z--;
+			destinationTile = _save->getTile(endPosition);
+		}
 	}
 
-	// check if we have floor, else lower destination (for non flying units only, because otherwise they never reached this place)
-	while (canFallDown(destinationTile, _unit->getArmor()->getSize())
-		&& _movementType != MT_FLY)
-	{
-		endPosition.z--;
-		destinationTile = _save->getTile(endPosition);
-	}
-
-	int size = unit->getArmor()->getSize()-1;
+	int size = unit->getArmor()->getSize() - 1;
 	if (size >= 1)
 	{
 		int its = 0;
-		const int dir[3] = {4,2,3};
+		const int dir[3] = {4, 2, 3};
 		for (int x = 0; x <= size; x += size)
 		{
 			for (int y = 0; y <= size; y += size)
@@ -196,7 +200,8 @@ void Pathfinding::calculate(BattleUnit* unit, Position endPosition, BattleUnit* 
 		Log(LOG_INFO) << "Pathfinding::calculate() _strafeMove INVALID"; */	// kL
 
 	// look for a possible fast and accurate bresenham path and skip A*
-	if (startPosition.z == endPosition.z && bresenhamPath(startPosition,endPosition, target, sneak))
+	if (startPosition.z == endPosition.z
+		&& bresenhamPath(startPosition, endPosition, target, sneak))
 	{
 		std::reverse(_path.begin(), _path.end()); // paths are stored in reverse order
 
@@ -218,14 +223,19 @@ void Pathfinding::calculate(BattleUnit* unit, Position endPosition, BattleUnit* 
  * Calculates the shortest path using a simple A-Star algorithm.
  * The unit information and movement type must have already been set.
  * The path information is set only if a valid path is found.
- * @param startPosition The position to start from.
- * @param endPosition The position we want to reach.
- * @param target Target of the path.
- * @param sneak Is the unit sneaking?
- * @param maxTUCost Maximum time units the path can cost.
- * @return True if a path exists, false otherwise.
+ * @param startPosition, The position to start from.
+ * @param endPosition, The position we want to reach.
+ * @param target, Target of the path.
+ * @param sneak, Is the unit sneaking?
+ * @param maxTUCost, Maximum time units the path can cost.
+ * @return, True if a path exists, false otherwise.
  */
-bool Pathfinding::aStarPath(const Position& startPosition, const Position& endPosition, BattleUnit* target, bool sneak, int maxTUCost)
+bool Pathfinding::aStarPath(
+		const Position& startPosition,
+		const Position& endPosition,
+		BattleUnit* target,
+		bool sneak,
+		int maxTUCost)
 {
 	// reset every node, so we have to check them all
 	for (std::vector<PathfindingNode>::iterator it = _nodes.begin(); it != _nodes.end(); ++it)
@@ -239,7 +249,7 @@ bool Pathfinding::aStarPath(const Position& startPosition, const Position& endPo
 
 	bool missile = target && maxTUCost == -1;
 
-	// if the open list is empty, we've reached the end
+	// if the openList is empty, we've reached the end
 	while (!openList.empty())
 	{
 		PathfindingNode* currentNode = openList.pop();
@@ -261,9 +271,13 @@ bool Pathfinding::aStarPath(const Position& startPosition, const Position& endPo
 		}
 
 		// Try all reachable neighbours.
-		for (int direction = 0; direction < 10; direction++)
+		for (int
+				direction = 0;
+				direction < 10;
+				direction++)
 		{
 			Position nextPos;
+
 			int tuCost = getTUCost(currentPos, direction, &nextPos, _unit, target, missile);
 			if (tuCost >= 255) // Skip unreachable / blocked
 				continue;
@@ -279,6 +293,7 @@ bool Pathfinding::aStarPath(const Position& startPosition, const Position& endPo
 				continue;
 
 			_totalTUCost = currentNode->getTUCost(missile) + tuCost;
+
 			// If this node is unvisited or has only been visited from inferior paths...
 			if ((!nextNode->inOpenSet() || nextNode->getTUCost(missile) > _totalTUCost)
 				&& _totalTUCost <= maxTUCost)
@@ -304,7 +319,13 @@ bool Pathfinding::aStarPath(const Position& startPosition, const Position& endPo
  * @param missile Is this a guided missile?
  * @return TU cost or 255 if movement is impossible.
  */
-int Pathfinding::getTUCost(const Position& startPosition, int direction, Position* endPosition, BattleUnit* unit, BattleUnit* target, bool missile)
+int Pathfinding::getTUCost(
+		const Position& startPosition,
+		int direction,
+		Position* endPosition,
+		BattleUnit* unit,
+		BattleUnit* target,
+		bool missile)
 {
 	_unit = unit;
 
@@ -378,7 +399,7 @@ int Pathfinding::getTUCost(const Position& startPosition, int direction, Positio
 				&& _movementType != MT_FLY
 				&& belowDestination
 				&& canFallDown(destinationTile)
-				&& belowDestination->getTerrainLevel() <= -12)
+				&& belowDestination->getTerrainLevel() <= -12) // kL_note: why not fall more than half tile.Z ?
 			{
 				numberOfPartsGoingDown++;
 				if (numberOfPartsGoingDown == (size + 1) * (size + 1))
@@ -470,7 +491,6 @@ int Pathfinding::getTUCost(const Position& startPosition, int direction, Positio
 
 if (direction < DIR_UP) // TEST
 {
-
 
 			// calculate the cost by adding floor walk cost and object walk cost
 //			if (direction < DIR_UP)
@@ -585,7 +605,6 @@ if (direction < DIR_UP) // TEST
 			}
 
 			cost += wallcost; */
-
 
 } // end_TEST
 
@@ -737,12 +756,16 @@ void Pathfinding::abortPath()
 
 /**
  * Determines whether a certain part of a tile blocks movement.
- * @param tile Specified tile, can be a null pointer.
- * @param part Part of the tile.
- * @param missileTarget Target for a missile.
- * @return True if the movement is blocked.
+ * @param tile, Specified tile, can be a null pointer.
+ * @param part, Part of the tile.
+ * @param missileTarget, Target for a missile.
+ * @return, True if the movement is blocked.
  */
-bool Pathfinding::isBlocked(Tile* tile, const int part, BattleUnit* missileTarget, int bigWallExclusion)
+bool Pathfinding::isBlocked(
+		Tile* tile,
+		const int part,
+		BattleUnit* missileTarget,
+		int bigWallExclusion)
 {
 	if (tile == 0) return true; // probably outside the map here
 
@@ -883,13 +906,16 @@ bool Pathfinding::isBlocked(Tile* tile, const int part, BattleUnit* missileTarge
 
 /**
  * Determines whether going from one tile to another blocks movement.
- * @param startTile The tile to start from.
- * @param endTile The tile we want to reach.
- * @param direction The direction we are facing.
- * @param missileTarget Target for a missile.
- * @return True if the movement is blocked.
+ * @param startTile, The tile to start from.
+ * @param endTile, The tile we want to reach.
+ * @param direction, The direction we are facing.
+ * @param missileTarget, Target for a missile.
+ * @return, True if the movement is blocked.
  */
-bool Pathfinding::isBlocked(Tile* startTile, Tile* /* endTile */, const int direction, BattleUnit* missileTarget)
+bool Pathfinding::isBlocked(Tile* startTile,
+		Tile* /* endTile */,
+		const int direction,
+		BattleUnit* missileTarget)
 {
 	// check if the difference in height between start and destination is not too high
 	// so we can not jump to the highest part of the stairs from the floor
@@ -902,7 +928,7 @@ bool Pathfinding::isBlocked(Tile* startTile, Tile* /* endTile */, const int dire
 	static const Position oneTileSouth = Position(0, 1, 0);
 	static const Position oneTileWest = Position(-1, 0, 0);
 
-	switch(direction)
+	switch (direction)
 	{
 		case 0:	// north
 			if (isBlocked(startTile, MapData::O_NORTHWALL, missileTarget))
@@ -983,13 +1009,13 @@ bool Pathfinding::isBlocked(Tile* startTile, Tile* /* endTile */, const int dire
 
 /**
  * Determines whether a unit can fall down from this tile.
- * We can fall down here, if the tile does not exist, the tile has no floor
+ * We can fall down here, if the tile does not exist, the tile has no floor,
  * the current position is higher than 0, if there is no unit standing below us.
  * @param here The current tile.
  * @return True if a unit can fall down.
  */
 // aha! (kL) This is why that sectoid stood in the air: it walked off the top of a building but there was a cyberdisc below!!!
-bool Pathfinding::canFallDown(Tile *here)
+bool Pathfinding::canFallDown(Tile* here)
 {
 	if (here->getPosition().z == 0)
 		return false;
@@ -1001,7 +1027,7 @@ bool Pathfinding::canFallDown(Tile *here)
 
 /**
  * Determines whether a unit can fall down from this tile.
- * We can fall down here, if the tile does not exist, the tile has no floor
+ * We can fall down here, if the tile does not exist, the tile has no floor,
  * the current position is higher than 0, if there is no unit standing below us.
  * @param here The current tile.
  * @param size The size of the unit.
@@ -1013,7 +1039,7 @@ bool Pathfinding::canFallDown(Tile* here, int size)
 	{
 		for (int y = 0; y != size; ++y)
 		{
-			Position checkPos = here->getPosition() + Position(x,y,0);
+			Position checkPos = here->getPosition() + Position(x, y, 0);
 			Tile* checkTile = _save->getTile(checkPos);
 			if (!canFallDown(checkTile))
 				return false;
@@ -1031,7 +1057,7 @@ bool Pathfinding::canFallDown(Tile* here, int size)
  */
 bool Pathfinding::isOnStairs(const Position& startPosition, const Position& endPosition)
 {
-	//condition 1 : endposition has to the south a terrainlevel -16 object (upper part of the stairs)
+	// condition 1 : endposition has to the south a terrainlevel -16 object (upper part of the stairs)
 	if (_save->getTile(endPosition + Position(0, 1, 0))
 		&& _save->getTile(endPosition + Position(0, 1, 0))->getTerrainLevel() == -16)
 	{

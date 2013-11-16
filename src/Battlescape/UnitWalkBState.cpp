@@ -678,8 +678,9 @@ void UnitWalkBState::think()
 								&& unitBelowMyWay
 								&& unitBelowMyWay != _unit
 								&& unitBelowMyWay->getFloatHeight()
-										+ unitBelowMyWay->getHeight() - belowDest->getTerrainLevel() >= 28)))
+										+ unitBelowMyWay->getHeight() - belowDest->getTerrainLevel() >= 24 + 4)))
 								// 4+ voxels poking into the tile above, we don't kick people in the head here at XCom.
+								// kL_note: this appears to be only +2 in Pathfinding....
 					{
 						Log(LOG_INFO) << ". . . obstacle(unit) -> abortPath()";
 

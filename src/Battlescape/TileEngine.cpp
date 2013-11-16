@@ -1915,6 +1915,8 @@ void TileEngine::explode(const Position& center, int power, ItemDamageType type,
 
 				if (power_ > 0)
 				{
+					//Log(LOG_INFO) << ". power_ > 0";
+
 					if (type == DT_HE)
 					{
 						// explosives do 1/2 damage to terrain and 1/2 up to 3/2
@@ -1931,7 +1933,7 @@ void TileEngine::explode(const Position& center, int power, ItemDamageType type,
 							{
 //kL								dest->getUnit()->damage(Position(0, 0, 0), RNG::generate(0, power_ * 2), type);
 								int powerUnit = RNG::generate(1, power_ * 2);
-								Log(LOG_INFO) << ". . powerUnit = " << powerUnit << " DT_STUN";
+								Log(LOG_INFO) << ". . . powerUnit = " << powerUnit << " DT_STUN";
 								dest->getUnit()->damage(Position(0, 0, 0), powerUnit, type);	// kL
 							}
 
@@ -1944,7 +1946,7 @@ void TileEngine::explode(const Position& center, int power, ItemDamageType type,
 								{
 //kL									(*it)->getUnit()->damage(Position(0, 0, 0), RNG::generate(0, power_ * 2), type);
 									int powerCorpse = RNG::generate(1, power_ * 2);
-									Log(LOG_INFO) << ". . powerCorpse = " << powerCorpse << " DT_STUN";
+									Log(LOG_INFO) << ". . . . powerCorpse = " << powerCorpse << " DT_STUN";
 									(*it)->getUnit()->damage(Position(0, 0, 0), powerCorpse, type);		// kL
 								}
 							}
@@ -1952,11 +1954,13 @@ void TileEngine::explode(const Position& center, int power, ItemDamageType type,
 
 						if (type == DT_HE) // power 50 - 150%
 						{
+							//Log(LOG_INFO) << ". . type == DT_HE";
+
 							if (dest->getUnit())
 							{
 								int powerUnit = static_cast<int>(
 										RNG::generate(static_cast<float>(power_) * 0.5f, static_cast<float>(power_) * 1.5f));
-								Log(LOG_INFO) << ". . powerUnit = " << powerUnit << " DT_HE";
+								Log(LOG_INFO) << ". . . powerUnit = " << powerUnit << " DT_HE";
 								dest->getUnit()->damage(
 										Position(0, 0, 0),
 										powerUnit,
@@ -1977,11 +1981,11 @@ void TileEngine::explode(const Position& center, int power, ItemDamageType type,
 										if ((*it)->getUnit()
 											&& (*it)->getUnit()->getStatus() == STATUS_UNCONSCIOUS)
 										{
-											Log(LOG_INFO) << ". . . Frank blow'd up.";
+											Log(LOG_INFO) << ". . . . Frank blow'd up.";
 											(*it)->getUnit()->instaKill();
 										}
 
-										Log(LOG_INFO) << ". . item destroyed";
+										Log(LOG_INFO) << ". . . item destroyed";
 										_save->removeItem((*it));
 
 										break;
@@ -1994,6 +1998,7 @@ void TileEngine::explode(const Position& center, int power, ItemDamageType type,
 								}
 							}
 						}
+						//Log(LOG_INFO) << ". type == DT_HE DONE";
 
 						// kL_note: Could do instant smoke inhalation damage here (sorta like Fire or Stun).
 						if (type == DT_SMOKE) // smoke from explosions always stay 6 to 14 turns - power of a smoke grenade is 60
@@ -2044,7 +2049,6 @@ void TileEngine::explode(const Position& center, int power, ItemDamageType type,
 						{
 							unit->addFiringExp();
 						}
-
 					}
 				}
 
@@ -2058,6 +2062,8 @@ void TileEngine::explode(const Position& center, int power, ItemDamageType type,
 	// now detonate the tiles affected with HE
 	if (type == DT_HE)
 	{
+		Log(LOG_INFO) << ". explode Tiles";
+
 		for (std::set<Tile*>::iterator i = tilesAffected.begin(); i != tilesAffected.end(); ++i)
 		{
 			if (detonate(*i))
@@ -2069,12 +2075,14 @@ void TileEngine::explode(const Position& center, int power, ItemDamageType type,
 			if (j)
 				applyGravity(j);
 		}
+		Log(LOG_INFO) << ". explode Tiles DONE";
 	}
 
 	calculateSunShading();		// roofs could have been destroyed
 	calculateTerrainLighting();	// fires could have been started
 
 	calculateFOV(center / Position(16, 16, 24));
+	Log(LOG_INFO) << "TileEngine::explode() EXIT";
 }
 
 /**

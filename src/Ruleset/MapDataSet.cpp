@@ -109,6 +109,7 @@ void MapDataSet::loadData()
 {
 	// prevents loading twice
 	if (_loaded) return;
+
 	_loaded = true;
 
 	int objNumber = 0;

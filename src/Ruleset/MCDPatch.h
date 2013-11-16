@@ -16,32 +16,39 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_MCDPATCH_H
 #define OPENXCOM_MCDPATCH_H
 
 #include <string>
 #include <yaml-cpp/yaml.h>
 
+
 namespace OpenXcom
 {
+
 class Ruleset;
 class MapDataSet;
+
 /**
  * An MCD data Patch.
  */
 class MCDPatch
 {
 private:
-	std::vector<std::pair<size_t, int> > _bigWalls, _TUWalks, _TUFlys, _TUSlides, _deathTiles, _terrainHeight;
-public:
-	/// Creates an MCD Patch.
-	MCDPatch();
-	/// Cleans up the MCD Patch.
-	~MCDPatch();
-	/// Loads the MCD Patch from YAML.
-	void load(const YAML::Node& node);
-	/// Applies an MCD patch to a mapDataSet
-	void modifyData(MapDataSet *dataSet) const;
+	std::vector<std::pair<size_t, int>> _bigWalls, _TUWalks, _TUFlys, _TUSlides, _deathTiles, _terrainHeight;
+
+	public:
+		/// Creates an MCD Patch.
+		MCDPatch();
+		/// Cleans up the MCD Patch.
+		~MCDPatch();
+
+		/// Loads the MCD Patch from YAML.
+		void load(const YAML::Node& node);
+
+		/// Applies an MCD patch to a mapDataSet
+		void modifyData(MapDataSet* dataSet) const;
 };
 
 }

@@ -621,7 +621,7 @@ void Projectile::applyAccuracy(
 		bool keepRange,
 		Tile* targetTile)
 {
-	//Log(LOG_INFO) << "Projectile::applyAccuracy()";
+	Log(LOG_INFO) << "Projectile::applyAccuracy()";
 
 	int xdiff = origin.x - target->x;
 	int ydiff = origin.y - target->y;
@@ -733,8 +733,11 @@ void Projectile::applyAccuracy(
 	
 	double rotation, tilt;
 	rotation = atan2(double(target->y - origin.y), double(target->x - origin.x)) * 180 / M_PI;
-	tilt = atan2(double(target->z - origin.z),
-		sqrt(double(target->x - origin.x)*double(target->x - origin.x)+double(target->y - origin.y)*double(target->y - origin.y))) * 180 / M_PI;
+	tilt = atan2(
+			double(target->z - origin.z),
+			sqrt(double(target->x - origin.x) * double(target->x - origin.x)
+					+ double(target->y - origin.y) * double(target->y - origin.y)))
+				* 180 / M_PI;
 
 /*	// maxDeviation is the max angle deviation for accuracy 0% in degrees
 	double maxDeviation = 2.5;
@@ -781,6 +784,8 @@ void Projectile::applyAccuracy(
 	target->x = static_cast<int>(static_cast<double>(origin.x) + maxRange * cos_te * cos_fi);
 	target->y = static_cast<int>(static_cast<double>(origin.y) + maxRange * sin_te * cos_fi);
 	target->z = static_cast<int>(static_cast<double>(origin.z) + maxRange * sin_fi);
+
+	Log(LOG_INFO) << "Projectile::applyAccuracy() EXIT";
 }
 
 /**

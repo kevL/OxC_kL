@@ -16,10 +16,12 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_PATHFINDINGOPENSET_H
 #define OPENXCOM_PATHFINDINGOPENSET_H
 
 #include <queue>
+
 
 namespace OpenXcom
 {
@@ -29,7 +31,7 @@ class PathfindingNode;
 struct OpenSetEntry
 {
 	int _cost;
-	PathfindingNode *_node;
+	PathfindingNode* _node;
 };
 
 /**
@@ -37,17 +39,17 @@ struct OpenSetEntry
  */
 class EntryCompare
 {
-public:
-	/**
-	 * Compares entries @a *a and @a *b.
-	 * @param a Pointer to first entry.
-	 * @param b Pointer to second entry.
-	 * @return True if entry @a *b must come before @a *a.
-	 */
-	bool operator()(OpenSetEntry *a, OpenSetEntry *b) const
-	{
-		return b->_cost < a->_cost;
-	}
+	public:
+		/**
+		 * Compares entries @a *a and @a *b.
+		 * @param a Pointer to first entry.
+		 * @param b Pointer to second entry.
+		 * @return True if entry @a *b must come before @a *a.
+		 */
+		bool operator()(OpenSetEntry* a, OpenSetEntry* b) const
+		{
+			return b->_cost < a->_cost;
+		}
 };
 
 /**
@@ -55,21 +57,25 @@ public:
  */
 class PathfindingOpenSet
 {
-public:
-	/// Cleans up the set and frees allocated memory.
-	~PathfindingOpenSet();
-	/// Gets the next node to check.
-	PathfindingNode *pop();
-	/// Adds a node to the set.
-	void push(PathfindingNode *node);
-	/// Is the set empty?
-	bool empty() const { return _queue.empty(); }
-
 private:
 	std::priority_queue<OpenSetEntry*, std::vector<OpenSetEntry*>, EntryCompare> _queue;
 
 	/// Removes reachable discarded entries.
 	void removeDiscarded();
+
+	public:
+		/// Cleans up the set and frees allocated memory.
+		~PathfindingOpenSet();
+		/// Gets the next node to check.
+		PathfindingNode *pop();
+
+		/// Adds a node to the set.
+		void push(PathfindingNode* node);
+		/// Is the set empty?
+		bool empty() const
+		{
+			return _queue.empty();
+		}
 };
 
 }

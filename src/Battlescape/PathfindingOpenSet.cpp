@@ -16,9 +16,11 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include <assert.h>
 #include "PathfindingOpenSet.h"
 #include "PathfindingNode.h"
+
 
 namespace OpenXcom
 {
@@ -30,8 +32,9 @@ PathfindingOpenSet::~PathfindingOpenSet()
 {
 	while (!_queue.empty())
 	{
-		OpenSetEntry *entry = _queue.top();
+		OpenSetEntry* entry = _queue.top();
 		_queue.pop();
+
 		delete entry;
 	}
 }
@@ -45,6 +48,7 @@ void PathfindingOpenSet::removeDiscarded()
 	{
 		OpenSetEntry *entry = _queue.top();
 		_queue.pop();
+
 		delete entry;
 	}
 }
@@ -54,17 +58,19 @@ void PathfindingOpenSet::removeDiscarded()
  * After this call, the node is no longer in the set. It is an error to call this when the set is empty.
  * @return A pointer to the node which had the least cost.
  */
-PathfindingNode *PathfindingOpenSet::pop()
+PathfindingNode* PathfindingOpenSet::pop()
 {
 	assert(!empty());
-	OpenSetEntry *entry = _queue.top();
-	PathfindingNode *nd = entry->_node;
+	OpenSetEntry* entry = _queue.top();
+	PathfindingNode* nd = entry->_node;
 	_queue.pop();
+
 	delete entry;
 	nd->_openentry = 0;
 
 	// Discarded entries might be visible now.
 	removeDiscarded();
+
 	return nd;
 }
 
@@ -74,16 +80,17 @@ PathfindingNode *PathfindingOpenSet::pop()
  * It is the caller's responsibility to never re-add a node with a worse cost.
  * @param node A pointer to the node to add.
  */
-void PathfindingOpenSet::push(PathfindingNode *node)
+void PathfindingOpenSet::push(PathfindingNode* node)
 {
-	OpenSetEntry *entry = new OpenSetEntry;
+	OpenSetEntry* entry = new OpenSetEntry;
 	entry->_node = node;
 	entry->_cost = node->getTUCost(false) + node->getTUGuess();
+
 	if (node->_openentry)
 		node->_openentry->_node = 0;
+
 	node->_openentry = entry;
 	_queue.push(entry);
 }
-
 
 }

@@ -777,10 +777,13 @@ void GeoscapeState::timeAdvance()
 		timeSpan = 12 * 5 * 6 * 2 * 24;
 	}
 
-	for (int i = 0; i < timeSpan && !_pause; ++i)
+	for (int
+			i = 0;
+			i < timeSpan
+				&& !_pause;
+			++i)
 	{
-		TimeTrigger trigger;
-		trigger = _game->getSavedGame()->getTime()->advance();
+		TimeTrigger trigger = _game->getSavedGame()->getTime()->advance();
 		switch (trigger)
 		{
 			case TIME_1MONTH:
@@ -1250,7 +1253,7 @@ struct SetRetaliationStatus
  */
 void GeoscapeState::time10Minutes()
 {
-	//Log(LOG_INFO) << "GeoscapeState::time10Minutes()";
+	Log(LOG_INFO) << "GeoscapeState::time10Minutes()";
 
 	for (std::vector<Base*>::iterator
 			b = _game->getSavedGame()->getBases()->begin();
@@ -1454,7 +1457,7 @@ struct expireCrashedUfo: public std::unary_function<Ufo*, void>
  */
 void GeoscapeState::time30Minutes()
 {
-	//Log(LOG_INFO) << "GeoscapeState::time30Minutes()";
+	Log(LOG_INFO) << "GeoscapeState::time30Minutes()";
 
 	// Decrease mission countdowns
 	std::for_each(
@@ -1725,7 +1728,7 @@ void GeoscapeState::time30Minutes()
  */
 void GeoscapeState::time1Hour()
 {
-	//Log(LOG_INFO) << "GeoscapeState::time1Hour()";
+	Log(LOG_INFO) << "GeoscapeState::time1Hour()";
 
 	// Handle craft maintenance
 	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
@@ -1857,7 +1860,7 @@ void GenerateSupplyMission::operator()(const AlienBase* base) const
  */
 void GeoscapeState::time1Day()
 {
-	//Log(LOG_INFO) << "GeoscapeState::time1Day()";
+	Log(LOG_INFO) << "GeoscapeState::time1Day()";
 
 	for (std::vector<Base*>::iterator
 			i = _game->getSavedGame()->getBases()->begin();
@@ -2110,7 +2113,7 @@ void GeoscapeState::time1Day()
  */
 void GeoscapeState::time1Month()
 {
-	//Log(LOG_INFO) << "GeoscapeState::time1Month()";
+	Log(LOG_INFO) << "GeoscapeState::time1Month()";
 
 	_game->getSavedGame()->addMonth();
 

@@ -498,7 +498,7 @@ BattlescapeState::BattlescapeState(Game* game)
 
 	_txtName->setColor(Palette::blockOffset(8));
 	_txtName->setHighContrast(true);
-	_numTUSnap->setColor(Palette::blockOffset(0)+5);
+	_numTUSnap->setColor(Palette::blockOffset(0)+6);
 	_numTimeUnits->setColor(Palette::blockOffset(4));
 	_numEnergy->setColor(Palette::blockOffset(1));
 	_numHealth->setColor(Palette::blockOffset(2));
@@ -2022,16 +2022,16 @@ void BattlescapeState::saveVoxelView()
 {
 	static const unsigned char pal[30] =
 	{
-		0,0,0,
-		224,224,224,	// ground
-		192,224,255,	// west wall
-		255,224,192,	// north wall
-		128,255,128,	// object
-		192,0,255,		// enemy unit
-		0,0,0,
-		255,255,255,
-		224,192,0,		// xcom unit
-		255,64,128		// neutral unit
+		  0,   0,   0,
+		224, 224, 224,	// ground
+		192, 224, 255,	// west wall
+		255, 224, 192,	// north wall
+		128, 255, 128,	// object
+		192,   0, 255,	// enemy unit
+		  0,   0,   0,
+		255, 255, 255,
+		224, 192,   0,	// xcom unit
+		255,  64, 128	// neutral unit
 	};	
 
 	BattleUnit* bu = _save->getSelectedUnit();
@@ -2039,9 +2039,9 @@ void BattlescapeState::saveVoxelView()
 
 	std::vector<Position> _trajectory;
 
-	double ang_x,ang_y;
+	double ang_x, ang_y;
 	bool black;
-	Tile *tile;
+	Tile* tile;
 	std::ostringstream ss;
 	std::vector<unsigned char> image;
 	int test;
@@ -2052,20 +2052,22 @@ void BattlescapeState::saveVoxelView()
 
 	double dist;
 	bool _debug = _save->getDebugMode();
-	double dir = ((float) bu->getDirection() + 4) / 4 * M_PI;
+	double dir = static_cast<double>(bu->getDirection() + 4) / 4. * M_PI;
 
 	image.clear();
 
-	for (int y = -256+32; y < 256+32; ++y)
+	for (int y = -256 + 32; y < 256 + 32; ++y)
 	{
 		ang_y = (((double)y)/640*M_PI+M_PI/2);
+//		ang_y = (static_cast<double>(y)) / 640. * M_PI + M_PI / 2.;	// kL
 		for (int x = -256; x < 256; ++x)
 		{
 			ang_x = ((double)x/1024)*M_PI+dir;
+//			ang_x = (static_cast<double>(x / 1024)) * M_PI + dir;	//kL, getting way too confusing here.
 
-			targetVoxel.x=originVoxel.x + (int)(-sin(ang_x)*1024*sin(ang_y));
-			targetVoxel.y=originVoxel.y + (int)(cos(ang_x)*1024*sin(ang_y));
-			targetVoxel.z=originVoxel.z + (int)(cos(ang_y)*1024);
+			targetVoxel.x=originVoxel.x + (int)(-sin(ang_x) * 1024 * sin(ang_y));
+			targetVoxel.y=originVoxel.y + (int)(cos(ang_x) * 1024 * sin(ang_y));
+			targetVoxel.z=originVoxel.z + (int)(cos(ang_y) * 1024);
 
 			_trajectory.clear();
 			test = _save->getTileEngine()->calculateLine(originVoxel, targetVoxel, false, &_trajectory, bu, true, !_debug) +1;
@@ -2162,68 +2164,89 @@ void BattlescapeState::saveVoxelView()
 }
 
 /**
- * Saves each layer of voxels on the bettlescape as a png.
+ * Saves each layer of voxels on the battlescape as a png.
  */
 void BattlescapeState::saveVoxelMap()
 {
 	std::ostringstream ss;
 	std::vector<unsigned char> image;
-	static const unsigned char pal[30]=
-	{255,255,255, 224,224,224,  128,160,255,  255,160,128, 128,255,128, 192,0,255,  255,255,255, 255,255,255,  224,192,0,  255,64,128 };
+	static const unsigned char pal[30] =
+	{
+		255,255,255,
+		224,224,224,
+		128,160,255,
+		255,160,128,
+		128,255,128,
+		192,  0,255,
+		255,255,255,
+		255,255,255,
+		224,192,  0,
+		255, 64,128
+	};
 
 	Tile* tile;
 
-	for (int z = 0; z < _save->getMapSizeZ()*12; ++z)
+	for (int z = 0; z < _save->getMapSizeZ() * 12; ++z)
 	{
 		image.clear();
 
-		for (int y = 0; y < _save->getMapSizeY()*16; ++y)
+		for (int y = 0; y < _save->getMapSizeY() * 16; ++y)
 		{
-			for (int x = 0; x < _save->getMapSizeX()*16; ++x)
+			for (int x = 0; x < _save->getMapSizeX() * 16; ++x)
 			{
-				int test = _save->getTileEngine()->voxelCheck(Position(x,y,z*2),0,0) +1;
-				float dist=1;
+				int test = _save->getTileEngine()->voxelCheck(Position(x, y, z * 2), 0, 0) + 1;
+				float dist = 1;
 
-				if (x %16==15)
+				if (x %16 == 15)
 				{
-					dist*=0.9f;
+					dist *= 0.9f;
 				}
 
-				if (y %16==15)
+				if (y %16 == 15)
 				{
-					dist*=0.9f;
+					dist *= 0.9f;
 				}
 
 				if (test == 5)
 				{
-					tile = _save->getTile(Position(x/16, y/16, z/12));
+					tile = _save->getTile(Position(x / 16, y / 16, z / 12));
 					if (tile->getUnit())
 					{
-						if (tile->getUnit()->getFaction()==FACTION_NEUTRAL) test=9;
-						else if (tile->getUnit()->getFaction()==FACTION_PLAYER) test=8;
+						if (tile->getUnit()->getFaction() == FACTION_NEUTRAL)
+							test = 9;
+						else if (tile->getUnit()->getFaction() == FACTION_PLAYER)
+							test = 8;
 					}
 					else
 					{
-						tile = _save->getTile(Position(x/16, y/16, z/12-1));
-						if (tile && tile->getUnit())
+						tile = _save->getTile(Position(x / 16, y / 16, z / 12 - 1));
+						if (tile
+							&& tile->getUnit())
 						{
-							if (tile->getUnit()->getFaction()==FACTION_NEUTRAL) test=9;
-							else if (tile->getUnit()->getFaction()==FACTION_PLAYER) test=8;
+							if (tile->getUnit()->getFaction() == FACTION_NEUTRAL)
+								test = 9;
+							else if (tile->getUnit()->getFaction() == FACTION_PLAYER)
+								test = 8;
 						}
 					}
 				}
 
-				image.push_back((int)((float)pal[test*3+0]*dist));
-				image.push_back((int)((float)pal[test*3+1]*dist));
-				image.push_back((int)((float)pal[test*3+2]*dist));
+				image.push_back(static_cast<int>(static_cast<float>(pal[test * 3 + 0]) * dist));
+				image.push_back(static_cast<int>(static_cast<float>(pal[test * 3 + 1]) * dist));
+				image.push_back(static_cast<int>(static_cast<float>(pal[test * 3 + 2]) * dist));
 			}
 		}
 
 		ss.str("");
 		ss << Options::getUserFolder() << "voxel" << std::setfill('0') << std::setw(2) << z << ".png";
 
+		unsigned error = lodepng::encode(
+				ss.str(),
+				image,
+				_save->getMapSizeX() * 16,
+				_save->getMapSizeY() * 16,
+				LCT_RGB);
 
-		unsigned error = lodepng::encode(ss.str(), image, _save->getMapSizeX()*16, _save->getMapSizeY()*16, LCT_RGB);
 		if (error)
 		{
 			Log(LOG_ERROR) << "Saving to PNG failed: " << lodepng_error_text(error);

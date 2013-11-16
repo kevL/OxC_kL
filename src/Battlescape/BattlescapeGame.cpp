@@ -1957,7 +1957,7 @@ void BattlescapeGame::secondaryAction(const Position& pos)
  */
 void BattlescapeGame::launchAction()
 {
-	//Log(LOG_INFO) << "BattlescapeGame::launchAction()";
+	Log(LOG_INFO) << "BattlescapeGame::launchAction()";
 
 	_parentState->showLaunchButton(false);
 
@@ -1972,6 +1972,7 @@ void BattlescapeGame::launchAction()
 	_states.push_back(new ProjectileFlyBState(this, _currentAction));
 
 	statePushFront(new UnitTurnBState(this, _currentAction)); // first of all turn towards the target
+	Log(LOG_INFO) << "BattlescapeGame::launchAction() EXIT";
 }
 
 /**

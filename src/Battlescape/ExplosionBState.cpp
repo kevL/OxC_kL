@@ -76,8 +76,8 @@ ExplosionBState::~ExplosionBState()
  */
 void ExplosionBState::init()
 {
-	Log(LOG_INFO) << "ExplosionBState::init()"
-			<< " type = " << (int)_item->getRules()->getDamageType();
+	Log(LOG_INFO) << "ExplosionBState::init()";
+//			<< " type = " << (int)_item->getRules()->getDamageType();
 
 	if (_item)
 	{
@@ -178,7 +178,7 @@ void ExplosionBState::init()
 		} */
 	}
 
-	//Log(LOG_INFO) << "ExplosionBState::init() EXIT";
+	Log(LOG_INFO) << "ExplosionBState::init() EXIT";
 }
 
 /**
@@ -219,7 +219,7 @@ void ExplosionBState::cancel()
  */
 void ExplosionBState::explode()
 {
-	//Log(LOG_INFO) << "ExplosionBState::explode()";
+	Log(LOG_INFO) << "ExplosionBState::explode()";
 
 	bool terrainExplosion = false;
 	SavedBattleGame* save = _parent->getSave();
@@ -315,7 +315,7 @@ void ExplosionBState::explode()
 		}
 	}
 
-	//Log(LOG_INFO) << "ExplosionBState::explode() EXIT";
+	Log(LOG_INFO) << "ExplosionBState::explode() EXIT";
 }
 
 }
