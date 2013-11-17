@@ -624,20 +624,18 @@ void ProjectileFlyBState::cancel()
 
 /**
  * Validates the throwing range.
- * @return, True when the range is valid.
+ * @param action, The BattleAction struct
+ * @param origin, Position of origin in voxelspace
+ * @param target, The target tile
+ * @return, True when the range is valid
  */
-bool ProjectileFlyBState::validThrowRange(BattleAction* action, Position origin, Tile* target)
+bool ProjectileFlyBState::validThrowRange(
+		BattleAction* action,
+		Position origin,
+		Tile* target)
 {
-	// note that all coordinates and thus also distances below are in number of tiles (not in voxels).
-	int offset = 1;
+	Log(LOG_INFO) << "ProjectileFlyBState::validThrowRange()";
 
-	if (action->type != BA_THROW
-		&& target->getUnit())
-	{
-		offset = target->getUnit()->getHeight() / 2 + target->getUnit()->getFloatHeight();
-	}
-
-	int zd = (origin.z) - ((action->target.z * 24 + offset) - target->getTerrainLevel());
 	int weight = action->weapon->getRules()->getWeight();
 	if (action->weapon->getAmmoItem()
 		&& action->weapon->getAmmoItem() != action->weapon)
@@ -645,21 +643,33 @@ bool ProjectileFlyBState::validThrowRange(BattleAction* action, Position origin,
 		weight += action->weapon->getAmmoItem()->getRules()->getWeight();
 	}
 
-	double range = (getMaxThrowDistance(weight, action->actor->getStats()->strength, zd) + 8.) / 16.;
+	int offset_z = 1;				// kL_note: this is prob +1 to get things up off of the lowest voxel of a targetTile.
+	if (action->type != BA_THROW	// kL_note: huh? if *NOT* throw???
+		&& target->getUnit())		// but if there is a unit in targetTile??
+									// ah okay, this is a celatid spit.
+	{
+		offset_z = target->getUnit()->getHeight() / 2 + target->getUnit()->getFloatHeight();
+	}
+
+	int delta_z = origin.z - (((action->target.z * 24) + offset_z) - target->getTerrainLevel());
+	double maxDistance = static_cast<double>(getMaxThrowDistance(weight, action->actor->getStats()->strength, delta_z) + 8) / 16.;
 	// Throwing Distance was roughly = 2.5 \D7 Strength / Weight
 //	double range = 2.63 * static_cast<double>(action->actor->getStats()->strength / action->weapon->getRules()->getWeight()); // old code.
 
 	int delta_x = action->actor->getPosition().x - action->target.x;
 	int delta_y = action->actor->getPosition().y - action->target.y;
-	double distance = sqrt(static_cast<double>((delta_x * delta_x) + (delta_y * delta_y)));
+	double realDistance = sqrt(static_cast<double>((delta_x * delta_x) + (delta_y * delta_y)));
 
 	// throwing off a building of 1 level lets you throw 2 tiles further than normal range,
 	// throwing up the roof of this building lets your throw 2 tiles less further
-	int delta_z = action->actor->getPosition().z - action->target.z;
+/*	int delta_z = action->actor->getPosition().z - action->target.z;
 	distance -= static_cast<double>(delta_z);
-	distance -= static_cast<double>(delta_z);
+	distance -= static_cast<double>(delta_z); */
 
-	return static_cast<int>(distance) <= static_cast<int>(range);
+	bool ret = static_cast<int>(realDistance) <= static_cast<int>(maxDistance);
+	Log(LOG_INFO) << ". realDistance " << (int)realDistance << " <= maxDistance " << (int)maxDistance << " : return " << ret;
+
+	return ret;
 }
 
 /**
@@ -667,32 +677,35 @@ bool ProjectileFlyBState::validThrowRange(BattleAction* action, Position origin,
  */
 int ProjectileFlyBState::getMaxThrowDistance(int weight, int strength, int level)
 {
+	Log(LOG_INFO) << "ProjectileFlyBState::getMaxThrowDistance()";
+
 	double curZ = level + 0.5;
-	double dz = 1.;
+	double delta_z = 1.;
 
 	int dist = 0;
 	while (dist < 4000) // just in case
 	{
 		dist += 8;
-		if (dz < -1)
+		if (delta_z < -1)
 			curZ -= 8;
 		else
-			curZ += dz * 8;
+			curZ += delta_z * 8;
 
-		if (curZ < 0 && dz < 0) // roll back
+		if (curZ < 0 && delta_z < 0) // roll back
 		{
-			dz = std::max(dz, -1.);
-			if (abs(dz) > 1e-10) // rollback horizontal
-				dist -= static_cast<int>(curZ / dz);
+			delta_z = std::max(delta_z, -1.);
+			if (abs(delta_z) > 1e-10) // rollback horizontal
+				dist -= static_cast<int>(curZ / delta_z);
 
 			break;
         }
 
-		dz -= static_cast<double>(50 * weight / strength) / 100.;
-		if (dz <= -2.) // become falling
+		delta_z -= static_cast<double>(50 * weight / strength) / 100.;
+		if (delta_z <= -2.) // become falling
 			break;
 	}
 
+	Log(LOG_INFO) << ". dist = " << dist;
 	return dist;
 }
 

@@ -3067,7 +3067,7 @@ int TileEngine::calculateParabola(
 
 		Position nextPosition = Position(x, y, z);
 		int result = calculateLine(lastPosition, nextPosition, false, 0, excludeUnit);
-//		int result = voxelCheck(Position(x, y, z), excludeUnit); // passes through this point? Old code, not sure it should be changed to calculateLine()...
+//		int result = voxelCheck(Position(x, y, z), excludeUnit); // Old code, not sure it should be changed to calculateLine()...
 		if (result != -1)
 		{
 			if (lastPosition.z < nextPosition.z)
@@ -3097,14 +3097,13 @@ int TileEngine::calculateParabola(
 
 /**
  * Validates a throw action.
- * @param action The action to validate.
- * @return Validity of action.
+ * @param action, The action to validate
+ * @return, Validity of action
  */
 bool TileEngine::validateThrow(BattleAction* action)
 {
 	Log(LOG_INFO) << "TileEngine::validateThrow(), cf Projectile::calculateThrow()";
 
-	Position originVoxel, targetVoxel;
 	bool found = false;
 
 	Tile* tile = _save->getTile(action->target);
@@ -3117,14 +3116,18 @@ bool TileEngine::validateThrow(BattleAction* action)
 		return false; // object blocking - can't throw here
 	}
 
+	Position originVoxel, targetVoxel;
+
 	Position origin = action->actor->getPosition();
-	std::vector<Position> trajectory;
 	Tile* tileAbove = _save->getTile(origin + Position(0, 0, 1));
 
-	originVoxel = Position((origin.x * 16) + 8, (origin.y * 16) + 8, (origin.z * 24));
-	originVoxel.z += -_save->getTile(origin)->getTerrainLevel();
-	originVoxel.z += action->actor->getHeight() + action->actor->getFloatHeight();
-	originVoxel.z -= 3;
+	originVoxel = Position(
+			(origin.x * 16) + 8,
+			(origin.y * 16) + 8,
+			(origin.z * 24));
+	originVoxel.z += action->actor->getHeight() + action->actor->getFloatHeight()
+			- _save->getTile(origin)->getTerrainLevel() - 3;
+
 	if (originVoxel.z >= (origin.z + 1) * 24)
 	{
 		if (!tileAbove
@@ -3135,7 +3138,7 @@ bool TileEngine::validateThrow(BattleAction* action)
 				originVoxel.z--;
 			}
 
-			originVoxel.z -=4;
+			originVoxel.z -= 4;
 		}
 		else
 		{
@@ -3144,7 +3147,10 @@ bool TileEngine::validateThrow(BattleAction* action)
 	}
 
 	// determine the target voxel; aim at the center of the floor
-	targetVoxel = Position((action->target.x * 16) + 8, (action->target.y * 16) + 8, (action->target.z * 24) + 2);
+	targetVoxel = Position(
+			(action->target.x * 16) + 8,
+			(action->target.y * 16) + 8,
+			(action->target.z * 24) + 2);
 	targetVoxel.z -= _save->getTile(action->target)->getTerrainLevel();
 
 	if (action->type != BA_THROW)
@@ -3159,9 +3165,17 @@ bool TileEngine::validateThrow(BattleAction* action)
 			&& action->target.z > 0
 			&& tile->hasNoFloor(0))
 		{
-			if (_save->getTile(Position(action->target.x, action->target.y, action->target.z - 1))->getUnit())
+			if (_save->getTile(Position(
+						action->target.x,
+						action->target.y,
+						action->target.z - 1))
+					->getUnit())
 			{
-				targetUnit = _save->getTile(Position(action->target.x, action->target.y, action->target.z - 1))->getUnit();
+				targetUnit = _save->getTile(Position(
+							action->target.x,
+							action->target.y,
+							action->target.z - 1))
+						->getUnit();
 			}
 		}
 
@@ -3171,10 +3185,13 @@ bool TileEngine::validateThrow(BattleAction* action)
 		}
 	}
 
+
+	std::vector<Position> trajectory;
+
 	// we try several different arcs to try and reach our goal.
 //	double arc = 0.5; // start with a low traj.5 is a bit too low
-	double arc = 1.0;
-	while (!found && arc < 5.0)
+	double arc = 1.;
+	while (!found && arc < 5.)
 	{
 		int checkParab = calculateParabola(
 						originVoxel,
@@ -3200,7 +3217,7 @@ bool TileEngine::validateThrow(BattleAction* action)
 	}
 	Log(LOG_INFO) << ". arc = " << arc;
 
-	if (AreSame(arc, 5.0))
+	if (AreSame(arc, 5.))
 	{
 		return false;
 	}
