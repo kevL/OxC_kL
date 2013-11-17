@@ -1195,6 +1195,7 @@ private:
 bool DetectXCOMBase::operator()(const Ufo* ufo) const
 {
 	Log(LOG_INFO) << "DetectXCOMBase(), ufoID " << ufo->getId();
+	//Log(LOG_INFO) << "" << _base.getName(); // not workie!
 
 	if (ufo->isCrashed())
 	{

@@ -3714,9 +3714,13 @@ bool TileEngine::validMeleeRange(BattleUnit* attacker, BattleUnit* target, int d
  * @param target, The unit we want to attack, 0 for any unit.
  * @return, True when the range is valid.
  */
-bool TileEngine::validMeleeRange(Position pos, int direction, BattleUnit* attacker, BattleUnit* target)
+bool TileEngine::validMeleeRange(
+		Position pos,
+		int direction,
+		BattleUnit* attacker,
+		BattleUnit* target)
 {
-	Log(LOG_INFO) << "TileEngine::validMeleeRange()";
+	//Log(LOG_INFO) << "TileEngine::validMeleeRange()";
 	if (direction < 0 || direction > 7)
 		return false;
 
@@ -3760,12 +3764,15 @@ bool TileEngine::validMeleeRange(Position pos, int direction, BattleUnit* attack
 						//Log(LOG_INFO) << ". . . targetUnit and tileUnit are same";
 
 						Position originVoxel = Position(origin->getPosition() * Position(16, 16, 24))
-								+ Position(8, 8, attacker->getHeight() + attacker->getFloatHeight() - 4 -origin->getTerrainLevel());
+								+ Position(
+										8,
+										8,
+										attacker->getHeight() + attacker->getFloatHeight() - 4 - origin->getTerrainLevel());
 
 						Position targetVoxel;
 						if (canTargetUnit(&originVoxel, targetTile, &targetVoxel, attacker))
 						{
-							Log(LOG_INFO) << "TileEngine::validMeleeRange() EXIT true";
+							//Log(LOG_INFO) << "TileEngine::validMeleeRange() EXIT true";
 							return true;
 						}
 					}
@@ -3774,7 +3781,7 @@ bool TileEngine::validMeleeRange(Position pos, int direction, BattleUnit* attack
 		}
 	}
 
-	Log(LOG_INFO) << "TileEngine::validMeleeRange() EXIT false";
+	//Log(LOG_INFO) << "TileEngine::validMeleeRange() EXIT false";
 	return false;
 }
 
@@ -3842,16 +3849,17 @@ int TileEngine::getDirectionTo(const Position& origin, const Position& target) c
 	// divide the pie in 4 thetas, each at 1/8th before each quarter
 //	double m_pi_8 = M_PI_4 / 2.0;
 	double m_pi_8 = M_PI / 8.0;			// a circle divided into 16 sections (rads) -> 22.5 deg
+	double d = 0.1;						// kL, a bias toward cardinal directions.
 	double pie[4] =
 	{
 //kL		(M_PI_4 * 4.0) - m_pi_8,	// 2.7488935718910690836548129603696
-		M_PI - m_pi_8,					// 2.7488935718910690836548129603696	-> 157.5 deg
+		M_PI - m_pi_8 - d,					// 2.7488935718910690836548129603696	-> 157.5 deg
 //kL		(M_PI_4 * 3.0) - m_pi_8,	// 1.9634954084936207740391521145497
-		(M_PI * 3.0 / 4.0) - m_pi_8,	// 1.9634954084936207740391521145497	-> 112.5 deg
+		(M_PI * 3.0 / 4.0) - m_pi_8 + d,	// 1.9634954084936207740391521145497	-> 112.5 deg
 //kL		(M_PI_4 * 2.0) - m_pi_8,	// 1.1780972450961724644234912687298
-		M_PI_2 - m_pi_8,				// 1.1780972450961724644234912687298	-> 67.5 deg
+		M_PI_2 - m_pi_8 - d,				// 1.1780972450961724644234912687298	-> 67.5 deg
 //kL		(M_PI_4 * 1.0) - m_pi_8		// 0.39269908169872415480783042290994
-		m_pi_8							// 0.39269908169872415480783042290994	-> 22.5 deg
+		m_pi_8 + d							// 0.39269908169872415480783042290994	-> 22.5 deg
 	};
 
 //kL	int dir = 0;

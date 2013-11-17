@@ -1674,8 +1674,8 @@ bool isCompleted::operator()(const BaseFacility* facility) const
 int Base::getDetectionChance() const
 {
 	Log(LOG_INFO) << "Base::getDetectionChance()";
-	int shields = (int)std::count_if(_facilities.begin(), _facilities.end(), isMindShield());
-	int facilities = (int)std::count_if(_facilities.begin(), _facilities.end(), isCompleted());
+	int shields = static_cast<int>(std::count_if(_facilities.begin(), _facilities.end(), isMindShield()));
+	int facilities = static_cast<int>(std::count_if(_facilities.begin(), _facilities.end(), isCompleted()));
 
 	facilities = (facilities / 6) + 9;
 	shields = (shields * 2) + 1;

@@ -60,7 +60,7 @@ NextTurnState::NextTurnState(Game* game, SavedBattleGame* battleGame, Battlescap
 
 	_txtSide	= new Text(320, 17, 0, 108);
 
-	_txtMessage	= new Text(320, 17, 0, 150);
+	_txtMessage	= new Text(320, 17, 0, 149);
 
 	add(_window);
 	add(_txtTitle);

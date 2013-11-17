@@ -1088,12 +1088,13 @@ int BattleUnit::directionTo(const Position& point) const
 
 	// divide the pie in 4 thetas, each at 1/8th before each quarter
 	double m_pi_8 = M_PI / 8.0;			// a circle divided into 16 sections (rads) -> 22.5 deg
+	double d = 0.1;						// kL, a bias toward cardinal directions.
 	double pie[4] =
 	{
-		M_PI - m_pi_8,					// 2.7488935718910690836548129603696	-> 157.5 deg
-		(M_PI * 3.0 / 4.0) - m_pi_8,	// 1.9634954084936207740391521145497	-> 112.5 deg
-		M_PI_2 - m_pi_8,				// 1.1780972450961724644234912687298	-> 67.5 deg
-		m_pi_8							// 0.39269908169872415480783042290994	-> 22.5 deg
+		M_PI - m_pi_8 - d,					// 2.7488935718910690836548129603696	-> 157.5 deg
+		(M_PI * 3.0 / 4.0) - m_pi_8 + d,	// 1.9634954084936207740391521145497	-> 112.5 deg
+		M_PI_2 - m_pi_8 - d,				// 1.1780972450961724644234912687298	-> 67.5 deg
+		m_pi_8 + d							// 0.39269908169872415480783042290994	-> 22.5 deg
 	};
 
 	int dir = 2;
