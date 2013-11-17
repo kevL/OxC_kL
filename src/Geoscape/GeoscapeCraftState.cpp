@@ -58,38 +58,46 @@ GeoscapeCraftState::GeoscapeCraftState(Game* game, Craft* craft, Globe* globe, W
 {
 	_screen = false;
 
-	_window			= new Window(this, 224, 185, 16, 8, POPUP_BOTH);
+	_window			= new Window(this, 224, 174, 16, 8, POPUP_BOTH); // center: 128, end: 240
 
 	_txtTitle		= new Text(192, 17, 32, 17);
 
-	_txtStatus		= new Text(192, 17, 32, 33);
-
-	_btnTarget		= new TextButton(176, 14, 40, 112);
-	_btnBase		= new TextButton(176, 14, 40, 127);
-	_btnCenter		= new TextButton(176, 14, 40, 142);
-	_btnPatrol		= new TextButton(176, 14, 40, 157);
-	_btnCancel		= new TextButton(176, 14, 40, 172);
+	_txtStatus		= new Text(192, 17, 32, 32);
 
 	_txtBase		= new Text(192, 9, 32, 45);
 
-	_txtSpeed		= new Text(192, 9, 32, 54);
-
-	_txtMaxSpeed	= new Text(120, 9, 32, 63);
-	_txtSoldier		= new Text(80, 9, 160, 63);
-
-	_txtAltitude	= new Text(120, 9, 32, 72);
-	_txtHWP			= new Text(80, 9, 160, 72);
-
-	_txtFuel		= new Text(120, 9, 32, 81);
-	_txtDamage		= new Text(80, 9, 160, 81);
-
-	_txtW1Name		= new Text(120, 9, 32, 90);
-	_txtW1Ammo		= new Text(80, 9, 160, 90);
-
-	_txtW2Name		= new Text(120, 9, 32, 99);
-	_txtW2Ammo		= new Text(80, 9, 160, 99);
-
 	_txtRedirect	= new Text(120, 17, 120, 50);
+
+	_txtSpeed		= new Text(192, 9, 32, 55);
+
+	_txtMaxSpeed	= new Text(120, 9, 32, 64);
+	_txtSoldier		= new Text(80, 9, 160, 64);
+
+	_txtAltitude	= new Text(120, 9, 32, 73);
+	_txtHWP			= new Text(80, 9, 160, 73);
+
+	_txtFuel		= new Text(120, 9, 32, 82);
+	_txtDamage		= new Text(80, 9, 160, 82);
+
+	_txtW1Name		= new Text(120, 9, 32, 91);
+	_txtW1Ammo		= new Text(80, 9, 160, 91);
+
+	_txtW2Name		= new Text(120, 9, 32, 100);
+	_txtW2Ammo		= new Text(80, 9, 160, 100);
+
+/*	_btnTarget		= new TextButton(176, 14, 40, 112);
+	_btnBase		= new TextButton(176, 14, 40, 127);
+	_btnCenter		= new TextButton(176, 14, 40, 142);
+	_btnPatrol		= new TextButton(176, 14, 40, 157);
+	_btnCancel		= new TextButton(176, 14, 40, 172); */
+
+	_btnTarget		= new TextButton(90, 16, 32, 113);
+	_btnBase		= new TextButton(90, 16, 134, 113);
+
+	_btnCenter		= new TextButton(90, 16, 83, 135);
+
+	_btnPatrol		= new TextButton(90, 16, 32, 157);
+	_btnCancel		= new TextButton(90, 16, 134, 157);
 
 
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)), Palette::backPos, 16);
@@ -381,7 +389,6 @@ void GeoscapeCraftState::init()
 void GeoscapeCraftState::btnCenterClick(Action*)
 {
 	_game->popState();
-
 	_globe->center(_craft->getLongitude(), _craft->getLatitude());
 }
 // kL_end.

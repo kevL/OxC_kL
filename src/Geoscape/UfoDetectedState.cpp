@@ -71,57 +71,36 @@ UfoDetectedState::UfoDetectedState(Game* game, Ufo* ufo, GeoscapeState* state, b
 
 	if (hyperwave)
 	{
-		_window		= new Window(this, 224, 171, 16, 10, POPUP_BOTH);
+		_window		= new Window(this, 224, 170, 16, 10, POPUP_BOTH); // center: 128, end: 240
+
+		_txtHyperwave	= new Text(216, 17, 20, 46);
+		_lstInfo2		= new TextList(192, 33, 32, 98);
 	}
 	else
 	{
-//		_window		= new Window(this, 224, 120, 16, 48, POPUP_BOTH);
-		_window		= new Window(this, 224, 128, 16, 44, POPUP_BOTH); // new
+		_window		= new Window(this, 224, 120, 16, 48, POPUP_BOTH);
 	}
 
-//	_txtHyperwave	= new Text(214, 17, 21, 46);
-	_txtHyperwave	= new Text(214, 17, 21, 44); // new
+	_txtUfo			= new Text(208, 17, 32, 56);
 
-//	_txtUfo			= new Text(207, 17, 28, 56);
-	_txtUfo			= new Text(207, 17, 28, 53); // new
+	_txtDetected	= new Text(80, 9, 32, 73);
 
-//	_txtDetected	= new Text(100, 9, 28, 73);
-	_txtDetected	= new Text(100, 9, 28, 69); // new
+	_lstInfo		= new TextList(192, 33, 32, 85);
 
-//	_btnIntercept	= new TextButton(200, 12, 28, 118); // new
+	_btnIntercept	= new TextButton(192, 16, 32, 124);
 
-//	_lstInfo		= new TextList(196, 33, 32, 85);
-	_lstInfo		= new TextList(207, 32, 28, 80); // new
-//	_lstInfo2		= new TextList(196, 32, 32, 98);
-	_lstInfo2		= new TextList(207, 32, 28, 96); // new
-
-//	_btnCentre		= new TextButton(196, 14, 32, 124);
-	_btnCentre		= new TextButton(200, 12, 28, 134); // new
-
-//	_btnCancel		= new TextButton(196, 14, 32, 144);
-	_btnCancel		= new TextButton(200, 12, 28, 150); // new
+	_btnCentre		= new TextButton(88, 16, 32, 144);
+	_btnCancel		= new TextButton(88, 16, 136, 144);
 
 	if (hyperwave)
 	{
-//		_txtUfo->setY(19);
-		_txtUfo->setY(20); // new
+		_txtUfo->setY(19);
 		_txtDetected->setY(36);
 		_lstInfo->setY(60);
-//		_btnCentre->setY(144);
-		_btnCentre->setY(152); // new
-		_btnIntercept->setY(136); // new
-//		_btnCancel->setY(160);
-		_btnCancel->setY(168); // new
-	}
-	else
-	{
-		_txtHyperwave->setVisible(false);
-		_lstInfo2->setVisible(false);
-	}
+		_btnIntercept->setY(135);
+		_btnCentre->setY(155);
+		_btnCancel->setY(155);
 
-
-	if (hyperwave)
-	{
 		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)), Palette::backPos, 16);
 	}
 	else
@@ -129,36 +108,30 @@ UfoDetectedState::UfoDetectedState(Game* game, Ufo* ufo, GeoscapeState* state, b
 		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)), Palette::backPos, 16);
 	}
 
+
 	add(_window);
+	add(_txtUfo);
+	add(_txtDetected);
+	add(_lstInfo);
 	add(_btnIntercept);
 	add(_btnCentre);
 	add(_btnCancel);
-	add(_txtUfo);
-	add(_txtDetected);
-	add(_txtHyperwave);
-	add(_lstInfo);
-	add(_lstInfo2);
 
-
-	_window->setColor(Palette::blockOffset(8)+5);
-//	_window->setColor(Palette::blockOffset(8)+6);		// kL, darker green border
-	_window->setBackground(_game->getResourcePack()->getSurface("BACK15.SCR"));
+	if (hyperwave)
+	{
+		add(_txtHyperwave);
+		add(_lstInfo2);
+	}
 
 	centerAllSurfaces();
 
-	_btnIntercept->setColor(Palette::blockOffset(8)+5);
-	_btnIntercept->setText(tr("STR_INTERCEPT"));
-	_btnIntercept->onMouseClick((ActionHandler)& UfoDetectedState::btnInterceptClick);
 
-	_btnCentre->setColor(Palette::blockOffset(8)+5);
-	_btnCentre->setText(tr("STR_CENTER_ON_UFO_TIME_5_SECS"));
-	_btnCentre->onMouseClick((ActionHandler)& UfoDetectedState::btnCentreClick);
-//	_btnCentre->onKeyboardPress((ActionHandler)& UfoDetectedState::btnCentreClick, (SDLKey)Options::getInt("keyOk")); // removed by Sup.
+	_window->setColor(Palette::blockOffset(8)+5);
+	_window->setBackground(_game->getResourcePack()->getSurface("BACK15.SCR"));
 
-	_btnCancel->setColor(Palette::blockOffset(8)+5);
-	_btnCancel->setText(tr("STR_CANCEL_UC"));
-	_btnCancel->onMouseClick((ActionHandler)& UfoDetectedState::btnCancelClick);
-	_btnCancel->onKeyboardPress((ActionHandler)& UfoDetectedState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
+	_txtUfo->setColor(Palette::blockOffset(8)+5);
+	_txtUfo->setBig();
+	_txtUfo->setText(_ufo->getName(_game->getLanguage()));
 
 	_txtDetected->setColor(Palette::blockOffset(8)+5);
 	if (detected)
@@ -170,47 +143,57 @@ UfoDetectedState::UfoDetectedState(Game* game, Ufo* ufo, GeoscapeState* state, b
 		_txtDetected->setText(L"");
 	}
 
-	_txtHyperwave->setColor(Palette::blockOffset(8)+5);
-	_txtHyperwave->setAlign(ALIGN_CENTER);
-	_txtHyperwave->setWordWrap(true);
-	_txtHyperwave->setText(tr("STR_HYPER_WAVE_TRANSMISSIONS_ARE_DECODED"));
-
-	_txtUfo->setColor(Palette::blockOffset(8)+5);
-	_txtUfo->setBig();
-	_txtUfo->setText(_ufo->getName(_game->getLanguage()));
-
 	_lstInfo->setColor(Palette::blockOffset(8)+5);
-	_lstInfo->setColumns(2, 86, 110);
+	_lstInfo->setColumns(2, 80, 112);
 	_lstInfo->setDot(true);
 	_lstInfo->addRow(2, tr("STR_SIZE_UC").c_str(), tr(_ufo->getRules()->getSize()).c_str());
 	_lstInfo->setCellColor(0, 1, Palette::blockOffset(8)+10);
-
-	std::string altitude = _ufo->getAltitude() == "STR_GROUND" ? "STR_GROUNDED" : _ufo->getAltitude();
+	std::string altitude = _ufo->getAltitude() == "STR_GROUND"? "STR_GROUNDED": _ufo->getAltitude();
 	_lstInfo->addRow(2, tr("STR_ALTITUDE").c_str(), tr(altitude).c_str());
 	_lstInfo->setCellColor(1, 1, Palette::blockOffset(8)+10);
 	std::string heading = _ufo->getDirection();
-
 	if (_ufo->getStatus() != Ufo::FLYING)
 	{
 		heading = "STR_NONE_UC";
 	}
 	_lstInfo->addRow(2, tr("STR_HEADING").c_str(), tr(heading).c_str());
 	_lstInfo->setCellColor(2, 1, Palette::blockOffset(8)+10);
-
 	_lstInfo->addRow(2, tr("STR_SPEED").c_str(), Text::formatNumber(_ufo->getSpeed()).c_str());
 	_lstInfo->setCellColor(3, 1, Palette::blockOffset(8)+10);
 
-	_lstInfo2->setColor(Palette::blockOffset(8)+5);
-	_lstInfo2->setColumns(2, 86, 110);
-	_lstInfo2->setDot(true);
-	_lstInfo2->addRow(2, tr("STR_CRAFT_TYPE").c_str(), tr(_ufo->getRules()->getType()).c_str());
-	_lstInfo2->setCellColor(0, 1, Palette::blockOffset(8)+10);
-	_lstInfo2->addRow(2, tr("STR_RACE").c_str(), tr(_ufo->getAlienRace()).c_str());
-	_lstInfo2->setCellColor(1, 1, Palette::blockOffset(8)+10);
-	_lstInfo2->addRow(2, tr("STR_MISSION").c_str(), tr(_ufo->getMissionType()).c_str());
-	_lstInfo2->setCellColor(2, 1, Palette::blockOffset(8)+10);
-	_lstInfo2->addRow(2, tr("STR_ZONE").c_str(), tr(_ufo->getMission()->getRegion()).c_str());
-	_lstInfo2->setCellColor(3, 1, Palette::blockOffset(8)+10);
+	_btnIntercept->setColor(Palette::blockOffset(8)+5);
+	_btnIntercept->setText(tr("STR_INTERCEPT"));
+	_btnIntercept->onMouseClick((ActionHandler)& UfoDetectedState::btnInterceptClick);
+
+	_btnCentre->setColor(Palette::blockOffset(8)+5);
+	_btnCentre->setText(tr("STR_CENTER_ON_UFO_TIME_5_SECS"));
+	_btnCentre->onMouseClick((ActionHandler)& UfoDetectedState::btnCentreClick);
+	_btnCentre->onKeyboardPress((ActionHandler)& UfoDetectedState::btnCentreClick, (SDLKey)Options::getInt("keyOk"));
+
+	_btnCancel->setColor(Palette::blockOffset(8)+5);
+	_btnCancel->setText(tr("STR_CANCEL_UC"));
+	_btnCancel->onMouseClick((ActionHandler)& UfoDetectedState::btnCancelClick);
+	_btnCancel->onKeyboardPress((ActionHandler)& UfoDetectedState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
+
+	if (hyperwave)
+	{
+		_txtHyperwave->setColor(Palette::blockOffset(8)+5);
+		_txtHyperwave->setAlign(ALIGN_CENTER);
+		_txtHyperwave->setWordWrap(true);
+		_txtHyperwave->setText(tr("STR_HYPER_WAVE_TRANSMISSIONS_ARE_DECODED"));
+
+		_lstInfo2->setColor(Palette::blockOffset(8)+5);
+		_lstInfo2->setColumns(2, 80, 112);
+		_lstInfo2->setDot(true);
+		_lstInfo2->addRow(2, tr("STR_CRAFT_TYPE").c_str(), tr(_ufo->getRules()->getType()).c_str());
+		_lstInfo2->setCellColor(0, 1, Palette::blockOffset(8)+10);
+		_lstInfo2->addRow(2, tr("STR_RACE").c_str(), tr(_ufo->getAlienRace()).c_str());
+		_lstInfo2->setCellColor(1, 1, Palette::blockOffset(8)+10);
+		_lstInfo2->addRow(2, tr("STR_MISSION").c_str(), tr(_ufo->getMissionType()).c_str());
+		_lstInfo2->setCellColor(2, 1, Palette::blockOffset(8)+10);
+		_lstInfo2->addRow(2, tr("STR_ZONE").c_str(), tr(_ufo->getMission()->getRegion()).c_str());
+		_lstInfo2->setCellColor(3, 1, Palette::blockOffset(8)+10);
+	}
 }
 
 /**
@@ -244,17 +227,20 @@ void UfoDetectedState::btnInterceptClick(Action*)
 {
 	_state->timerReset();
 	_state->getGlobe()->center(_ufo->getLongitude(), _ufo->getLatitude());
+
+	_game->popState();
 	_game->pushState(new InterceptState(_game, _state->getGlobe(), 0, _ufo));
 }
 
 /**
- * Centers on the UFO and returns to the previous screen.
+ * Centers the globe on the UFO and returns to the previous screen.
  * @param action Pointer to an action.
  */
 void UfoDetectedState::btnCentreClick(Action*)
 {
 	_state->timerReset();
 	_state->getGlobe()->center(_ufo->getLongitude(), _ufo->getLatitude());
+
 	_game->popState();
 }
 

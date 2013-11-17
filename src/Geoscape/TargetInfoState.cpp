@@ -45,27 +45,28 @@ TargetInfoState::TargetInfoState(Game* game, Target* target, Globe* globe)
 		_target(target),
 		_globe(globe)
 {
+	Log(LOG_INFO) << "Create TargetInfoState";
+
 	_screen = false;
 
 	_window			= new Window(this, 192, 120, 32, 40, POPUP_BOTH);
 
+	_txtTitle		= new Text(182, 17, 37, 53);
 
-	_txtTargetted	= new Text(182, 9, 37, 78);
-	_txtFollowers	= new Text(182, 40, 37, 88);
+	_txtTargetted	= new Text(182, 9, 37, 71);
+	_txtFollowers	= new Text(182, 40, 37, 80);
 
-	_btnIntercept	= new TextButton(160, 14, 48, 124); // new
-
-//	_btnOk			= new TextButton(160, 16, 48, 135);
-	_btnOk			= new TextButton(160, 14, 48, 140); // new
+	_btnIntercept	= new TextButton(160, 16, 48, 120);
+	_btnOk			= new TextButton(160, 16, 48, 137);
 
 
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
 
 	add(_window);
-	add(_btnIntercept);
 	add(_txtTitle);
 	add(_txtTargetted);
 	add(_txtFollowers);
+	add(_btnIntercept);
 	add(_btnOk);
 
 	centerAllSurfaces();
@@ -79,7 +80,7 @@ TargetInfoState::TargetInfoState(Game* game, Target* target, Globe* globe)
 	_btnIntercept->onMouseClick((ActionHandler)& TargetInfoState::btnInterceptClick);
 
 	_btnOk->setColor(Palette::blockOffset(8)+5);
-	_btnOk->setText(tr("STR_OK"));
+	_btnOk->setText(tr("STR_CANCEL_UC"));
 	_btnOk->onMouseClick((ActionHandler)& TargetInfoState::btnOkClick);
 //	_btnOk->onKeyboardPress((ActionHandler)& TargetInfoState::btnOkClick, (SDLKey)Options::getInt("keyOk")); // removed by Sup.
 	_btnOk->onKeyboardPress((ActionHandler)& TargetInfoState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
@@ -103,6 +104,8 @@ TargetInfoState::TargetInfoState(Game* game, Target* target, Globe* globe)
 		ss << (*i)->getName(_game->getLanguage()) << L'\n';
 	}
 	_txtFollowers->setText(ss.str());
+
+	Log(LOG_INFO) << "Create TargetInfoState EXIT";
 }
 
 /**
@@ -118,6 +121,7 @@ TargetInfoState::~TargetInfoState()
  */
 void TargetInfoState::btnInterceptClick(Action*)
 {
+	_game->popState();
 	_game->pushState(new InterceptState(_game, _globe, 0, _target));
 }
 

@@ -2198,7 +2198,7 @@ Tile* TileEngine::checkForTerrainExplosions()
 
 /**
  * Calculates the amount of power that is blocked going from one tile to another on a different level.
- * Can cross more than one level. Only floor tiles are taken into account.
+ * Can cross more than one level. Only floor & object tiles are taken into account.
  * @param startTile, The tile where the power starts
  * @param endTile, The adjacent tile where the power ends
  * @param type, The type of power/damage
@@ -2223,8 +2223,8 @@ int TileEngine::verticalBlockage(
 
 	if (direction < 0) // down
 	{
-		for (int
-				z = startTile->getPosition().z;
+		for (
+				;
 				z > endTile->getPosition().z;
 				z--)
 		{
@@ -2236,7 +2236,8 @@ int TileEngine::verticalBlockage(
 		{
 			x = endTile->getPosition().x;
 			y = endTile->getPosition().y;
-			int z = startTile->getPosition().z;
+			z = startTile->getPosition().z;
+
 			block += horizontalBlockage(startTile, _save->getTile(Position(x, y, z)), type);
 
 			for (
@@ -2251,7 +2252,10 @@ int TileEngine::verticalBlockage(
 	}
 	else if (direction > 0) // up
 	{
-		for (int z = startTile->getPosition().z + 1; z <= endTile->getPosition().z; z++)
+		for (
+				z += 1;
+				z <= endTile->getPosition().z;
+				z++)
 		{
 			block += blockage(_save->getTile(Position(x, y, z)), MapData::O_FLOOR, type);
 			block += blockage(_save->getTile(Position(x, y, z)), MapData::O_OBJECT, type, Pathfinding::DIR_UP);
@@ -2261,9 +2265,14 @@ int TileEngine::verticalBlockage(
 		{
 			x = endTile->getPosition().x;
 			y = endTile->getPosition().y;
-			int z = startTile->getPosition().z;
+			z = startTile->getPosition().z;
+
 			block += horizontalBlockage(startTile, _save->getTile(Position(x, y, z)), type);
-			for (z = startTile->getPosition().z + 1; z <= endTile->getPosition().z; z++)
+
+			for (
+					z += 1;
+					z <= endTile->getPosition().z;
+					z++)
 			{
 				block += blockage(_save->getTile(Position(x, y, z)), MapData::O_FLOOR, type);
 				block += blockage(_save->getTile(Position(x, y, z)), MapData::O_OBJECT, type);
