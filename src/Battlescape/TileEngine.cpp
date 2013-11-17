@@ -2199,12 +2199,15 @@ Tile* TileEngine::checkForTerrainExplosions()
 /**
  * Calculates the amount of power that is blocked going from one tile to another on a different level.
  * Can cross more than one level. Only floor tiles are taken into account.
- * @param startTile The tile where the power starts.
- * @param endTile The adjacent tile where the power ends.
- * @param type The type of power/damage.
- * @return Amount of blockage of this power.
+ * @param startTile, The tile where the power starts
+ * @param endTile, The adjacent tile where the power ends
+ * @param type, The type of power/damage
+ * @return, Amount of blockage of this power
  */
-int TileEngine::verticalBlockage(Tile* startTile, Tile* endTile, ItemDamageType type)
+int TileEngine::verticalBlockage(
+		Tile* startTile,
+		Tile* endTile,
+		ItemDamageType type)
 {
 	int block = 0;
 
@@ -2216,20 +2219,30 @@ int TileEngine::verticalBlockage(Tile* startTile, Tile* endTile, ItemDamageType 
 
 	int x = startTile->getPosition().x;
 	int y = startTile->getPosition().y;
+	int z = startTile->getPosition().z;		// kL
 
 	if (direction < 0) // down
 	{
-		for (int z = startTile->getPosition().z; z > endTile->getPosition().z; z--)
+		for (int
+				z = startTile->getPosition().z;
+				z > endTile->getPosition().z;
+				z--)
 		{
 			block += blockage(_save->getTile(Position(x, y, z)), MapData::O_FLOOR, type);
-			block += blockage(_save->getTile(Position(x, y, z)), MapData::O_OBJECT, type);
+			block += blockage(_save->getTile(Position(x, y, z)), MapData::O_OBJECT, type, Pathfinding::DIR_DOWN);
 		}
 
 		if (x != endTile->getPosition().x || y != endTile->getPosition().y)
 		{
 			x = endTile->getPosition().x;
 			y = endTile->getPosition().y;
-			for (int z = startTile->getPosition().z; z > endTile->getPosition().z; z--)
+			int z = startTile->getPosition().z;
+			block += horizontalBlockage(startTile, _save->getTile(Position(x, y, z)), type);
+
+			for (
+					;
+					z > endTile->getPosition().z;
+					z--)
 			{
 				block += blockage(_save->getTile(Position(x, y, z)), MapData::O_FLOOR, type);
 				block += blockage(_save->getTile(Position(x, y, z)), MapData::O_OBJECT, type);
@@ -2241,14 +2254,16 @@ int TileEngine::verticalBlockage(Tile* startTile, Tile* endTile, ItemDamageType 
 		for (int z = startTile->getPosition().z + 1; z <= endTile->getPosition().z; z++)
 		{
 			block += blockage(_save->getTile(Position(x, y, z)), MapData::O_FLOOR, type);
-			block += blockage(_save->getTile(Position(x, y, z)), MapData::O_OBJECT, type);
+			block += blockage(_save->getTile(Position(x, y, z)), MapData::O_OBJECT, type, Pathfinding::DIR_UP);
 		}
 
 		if (x != endTile->getPosition().x || y != endTile->getPosition().y)
 		{
 			x = endTile->getPosition().x;
 			y = endTile->getPosition().y;
-			for (int z = startTile->getPosition().z + 1; z <= endTile->getPosition().z; z++)
+			int z = startTile->getPosition().z;
+			block += horizontalBlockage(startTile, _save->getTile(Position(x, y, z)), type);
+			for (z = startTile->getPosition().z + 1; z <= endTile->getPosition().z; z++)
 			{
 				block += blockage(_save->getTile(Position(x, y, z)), MapData::O_FLOOR, type);
 				block += blockage(_save->getTile(Position(x, y, z)), MapData::O_OBJECT, type);
@@ -2536,6 +2551,13 @@ int TileEngine::blockage(Tile* tile, const int part, ItemDamageType type, int di
 					if (wall == Pathfinding::BIGWALLSOUTH
 						|| wall == Pathfinding::BIGWALLEAST
 						|| wall == Pathfinding::BIGWALLEASTANDSOUTH)
+				{
+					check = false;
+				}
+				break;
+				case 8: // up
+				case 9: // down
+					if (wall != 0 && wall != Pathfinding::BLOCK)
 					{
 						check = false;
 					}
