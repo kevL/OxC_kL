@@ -165,7 +165,7 @@ void MultipleTargetsState::popupTarget(Target* target)
 		}
 		else
 		{
-			_game->pushState(new TargetInfoState(_game, target));
+			_game->pushState(new TargetInfoState(_game, target, _state->getGlobe()));
 		}
 	}
 	else

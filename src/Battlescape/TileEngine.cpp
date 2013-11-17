@@ -3051,6 +3051,8 @@ int TileEngine::calculateParabola(
 	int z = origin.z;
 	int i = 8;
 
+	Position lastPosition = Position(x, y, z);
+
 	while (z > 0)
 	{
 		x = static_cast<int>(static_cast<double>(origin.x) + static_cast<double>(i) * cos(te) * sin(fi));
@@ -3063,17 +3065,25 @@ int TileEngine::calculateParabola(
 			trajectory->push_back(Position(x, y, z));
 		}
 
-		int result = voxelCheck(Position(x, y, z), excludeUnit); // passes through this point?
+		Position nextPosition = Position(x, y, z);
+		int result = calculateLine(lastPosition, nextPosition, false, 0, excludeUnit);
+//		int result = voxelCheck(Position(x, y, z), excludeUnit); // passes through this point? Old code, not sure it should be changed to calculateLine()...
 		if (result != -1)
 		{
+			if (lastPosition.z < nextPosition.z)
+			{
+				result = 5;
+			}
+
 			if (!storeTrajectory && trajectory != 0)
 			{
-				trajectory->push_back(Position(x, y, z)); // store the position of impact
+				trajectory->push_back(nextPosition); // store the position of impact
 			}
 
 			return result;
 		}
 
+		lastPosition = Position(x, y, z);
 		++i;
 	}
 

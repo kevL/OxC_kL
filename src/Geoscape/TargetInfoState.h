@@ -30,6 +30,7 @@ class TextButton;
 class Window;
 class Text;
 class Target;
+class Globe;
 
 /**
  * Generic window used to display all the
@@ -41,16 +42,19 @@ class TargetInfoState
 {
 private:
 	Target* _target;
-	TextButton* _btnOk;
+	Globe *_globe;
+	TextButton* _btnIntercept, * _btnOk;
 	Window* _window;
 	Text* _txtTitle, * _txtTargetted, * _txtFollowers;
 
 	public:
 		/// Creates the Target Info state.
-		TargetInfoState(Game* game, Target* target);
+		TargetInfoState(Game* game, Target* target, Globe* globe);
 		/// Cleans up the Target Info state.
 		~TargetInfoState();
 
+		/// Handler for clicking the Intercept button.
+		void btnInterceptClick(Action* action);
 		/// Handler for clicking the OK button.
 		void btnOkClick(Action* action);
 };

@@ -40,15 +40,15 @@ class UfoDetectedState
 	:
 		public State
 {
-	private:
-		Ufo* _ufo;
-		GeoscapeState* _state;
-		bool _hyperwave;
+private:
+	Ufo* _ufo;
+	GeoscapeState* _state;
+	bool _hyperwave;
 
-		TextButton* _btnCentre, * _btnCancel;
-		Window* _window;
-		Text* _txtUfo, * _txtDetected, * _txtHyperwave;
-		TextList* _lstInfo, * _lstInfo2;
+	TextButton* _btnIntercept, * _btnCentre, * _btnCancel;
+	Window* _window;
+	Text* _txtUfo, * _txtDetected, * _txtHyperwave;
+	TextList* _lstInfo, * _lstInfo2;
 
 	public:
 		/// Creates the Ufo Detected state.
@@ -58,6 +58,9 @@ class UfoDetectedState
 
 		/// Updates the palette.
 		void init();
+
+		/// Handler for clicking the Intercept button.
+		void btnInterceptClick(Action* action);
 		/// Handler for clicking the Centre on UFO button.
 		void btnCentreClick(Action* action);
 		/// Handler for clicking the Cancel button.

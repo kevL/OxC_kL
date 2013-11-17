@@ -359,6 +359,7 @@ bool ProjectileFlyBState::createNewProjectile()
 
 			_parent->getMap()->setProjectile(0);
 			_action.result = "STR_UNABLE_TO_THROW_HERE";
+			_action.TU = 0;
 			_parent->popState();
 
 			return false;
@@ -644,7 +645,7 @@ bool ProjectileFlyBState::validThrowRange(BattleAction* action, Position origin,
 		weight += action->weapon->getAmmoItem()->getRules()->getWeight();
 	}
 
-	double range = (getMaxThrowDistance(weight, action->actor->getStats()->strength, zd) + 8) / 16;
+	double range = (getMaxThrowDistance(weight, action->actor->getStats()->strength, zd) + 8.) / 16.;
 	// Throwing Distance was roughly = 2.5 \D7 Strength / Weight
 //	double range = 2.63 * static_cast<double>(action->actor->getStats()->strength / action->weapon->getRules()->getWeight()); // old code.
 
@@ -655,9 +656,10 @@ bool ProjectileFlyBState::validThrowRange(BattleAction* action, Position origin,
 	// throwing off a building of 1 level lets you throw 2 tiles further than normal range,
 	// throwing up the roof of this building lets your throw 2 tiles less further
 	int delta_z = action->actor->getPosition().z - action->target.z;
-	distance -= static_cast<double>(delta_z * 2);
+	distance -= static_cast<double>(delta_z);
+	distance -= static_cast<double>(delta_z);
 
-	return distance <= range;
+	return static_cast<int>(distance) <= static_cast<int>(range);
 }
 
 /**

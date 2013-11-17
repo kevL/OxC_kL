@@ -48,10 +48,15 @@ ResearchCompleteState::ResearchCompleteState(Game* game, const RuleResearch* res
 	_screen = false;
 
 
-	_window		= new Window(this, 224, 140, 48, 30, POPUP_BOTH);
-	_txtTitle	= new Text(224, 17, 48, 88);
-	_btnReport	= new TextButton(80, 16, 64, 146);
-	_btnOk		= new TextButton(80, 16, 176, 146);
+//	_window			= new Window(this, 224, 140, 48, 30, POPUP_BOTH);
+	_window			= new Window(this, 230, 140, 45, 30, POPUP_BOTH); // new
+
+	_txtTitle		= new Text(230, 17, 45, 70); // new
+//	_txtTitle		= new Text(224, 17, 48, 88);
+	_txtResearch	= new Text(230, 17, 45, 96); // new
+
+	_btnReport		= new TextButton(80, 16, 64, 146);
+	_btnOk			= new TextButton(80, 16, 176, 146);
 
 
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
@@ -60,6 +65,7 @@ ResearchCompleteState::ResearchCompleteState(Game* game, const RuleResearch* res
 	add(_btnOk);
 	add(_btnReport);
 	add(_txtTitle);
+	add(_txtResearch);
 
 	centerAllSurfaces();
 
@@ -71,6 +77,7 @@ ResearchCompleteState::ResearchCompleteState(Game* game, const RuleResearch* res
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&ResearchCompleteState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)&ResearchCompleteState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+
 	_btnReport->setColor(Palette::blockOffset(8)+5);
 	_btnReport->setText(tr("STR_VIEW_REPORTS"));
 	_btnReport->onMouseClick((ActionHandler)&ResearchCompleteState::btnReportClick);
@@ -80,6 +87,14 @@ ResearchCompleteState::ResearchCompleteState(Game* game, const RuleResearch* res
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_RESEARCH_COMPLETED"));
+
+	_txtResearch->setColor(Palette::blockOffset(8)+10);
+	_txtResearch->setAlign(ALIGN_CENTER);
+	_txtResearch->setBig();
+	if (research)
+	{
+		_txtResearch->setText(tr(research->getName()));
+	}
 }
 
 /**
