@@ -1742,7 +1742,7 @@ bool SavedBattleGame::getTraceSetting() const
  */
 BattleUnit* SavedBattleGame::getHighestRanked(bool xcom)
 {
-	Log(LOG_INFO) << "SavedBattleGame::getHighestRanked() forXcom = " << xcom;
+	Log(LOG_INFO) << "SavedBattleGame::getHighestRanked() xcom = " << xcom;
 
 	BattleUnit* leader = 0;
 
@@ -1884,6 +1884,11 @@ int SavedBattleGame::getMoraleModifier(BattleUnit* unit, bool xcom)
 			Log(LOG_INFO) << ". . xCom lossModifi = " << result;
 		}
 		else if (unit->getFaction() == FACTION_HOSTILE) // aliens or Mind Controlled XCOM dies.
+														// note this does funny things. A low-ranked, mind-controlled xCom unit's
+														// death will make the aLiens take a hard hit (due to loss of malleable
+														// 'fresh meat' for the Hive/Borg collective). But a high-ranking 'cannot
+														// teach an old dog new tricks' Mc'd xCom soldier is not as much of a loss
+														// to aLiens.....
 		{
 			switch (unit->getRankInt())
 			{

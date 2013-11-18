@@ -1804,24 +1804,4 @@ std::vector<Vehicle*>* Base::getVehicles()
 	return &_vehicles;
 }
 
-// kL_begin: set & get Current Base.
-/**
- * Sets the last-chosen (current) base.
- * @return Pointer to vehicle list.
- */
-/* void Base::setCurrentBase(Uint8 currentBase)
-{
-	_currentBase = currentBase;
-} */
-
-/**
- * Returns the list of vehicles currently equipped
- * in the base.
- * @return Pointer to vehicle list.
- */
-/* Uint8 Base::getCurrentBase()
-{
-	return _currentBase;
-} */ // kL_end.
-
 }

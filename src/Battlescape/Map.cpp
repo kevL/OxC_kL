@@ -251,7 +251,7 @@ void Map::draw()
 		}
 		else
 		{
-			_reveal = 4;
+			_reveal = 3;
 			//Log(LOG_INFO) << ". . . . . . drawTerrain() Set _reveal = " << _reveal;
 		}
 
@@ -911,7 +911,13 @@ void Map::drawTerrain(Surface *surface)
 								tmpSurface = _res->getSurfaceSet("Pathfinding")->getFrame(23);
 								if (tmpSurface)
 								{
-									tmpSurface->blitNShade(surface, screenPosition.x - 16, screenPosition.y - 20, 0, false, tile->getMarkerColor());
+									tmpSurface->blitNShade(
+											surface,
+											screenPosition.x - 16,
+											screenPosition.y - 20,
+											0,
+											false,
+											tile->getMarkerColor());
 								}
 							}
 
@@ -919,7 +925,13 @@ void Map::drawTerrain(Surface *surface)
 							tmpSurface = _res->getSurfaceSet("Pathfinding")->getFrame(overlay);
 							if (tmpSurface)
 							{
-								tmpSurface->blitNShade(surface, screenPosition.x - 16, screenPosition.y - adjustment, 0, false, tile->getMarkerColor());
+								tmpSurface->blitNShade(
+										surface,
+										screenPosition.x - 16,
+										screenPosition.y - adjustment,
+										0,
+										false,
+										tile->getMarkerColor());
 							}
 						}
 
@@ -934,8 +946,7 @@ void Map::drawTerrain(Surface *surface)
 //							{
 //								wpColor = 15;
 //							}
-//							_numWaypid->setColor(Palette::blockOffset(0)+3);	// kL
-							_numWaypid->setColor(Palette::blockOffset(5)+3);	// kL
+							_numWaypid->setColor(Palette::blockOffset(14)+6);		// kL
 
 //							Log(LOG_INFO) << "Map::drawTerrain() terrain = " << _game->getRuleset()->getTerrain("POLAR")->getName();
 //							_save->

@@ -327,10 +327,10 @@ BattlescapeState::BattlescapeState(Game* game)
 	_numLayers->setColor(Palette::blockOffset(5)+12);
 	_numLayers->setValue(1);
 
-	_numAmmoLeft->setColor(2);
+	_numAmmoLeft->setColor(3);
 	_numAmmoLeft->setValue(999);
 
-	_numAmmoRight->setColor(2);
+	_numAmmoRight->setColor(3);
 	_numAmmoRight->setValue(999);
 
 	_icons->onMouseIn((ActionHandler)& BattlescapeState::mouseInIcons);
@@ -498,7 +498,7 @@ BattlescapeState::BattlescapeState(Game* game)
 
 	_txtName->setColor(Palette::blockOffset(8));
 	_txtName->setHighContrast(true);
-	_numTUSnap->setColor(Palette::blockOffset(0)+7);
+	_numTUSnap->setColor(Palette::blockOffset(0)+8);
 	_numTimeUnits->setColor(Palette::blockOffset(4));
 	_numEnergy->setColor(Palette::blockOffset(1));
 	_numHealth->setColor(Palette::blockOffset(2));

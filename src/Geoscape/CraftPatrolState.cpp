@@ -49,20 +49,15 @@ CraftPatrolState::CraftPatrolState(Game* game, Craft* craft, Globe* globe)
 {
 	_screen = false;
 
-	// Create objects
 	_window			= new Window(this, 224, 168, 16, 16, POPUP_BOTH);
 
-//kL	_txtDestination	= new Text(224, 64, 16, 48);
-	_txtDestination	= new Text(224, 84, 16, 32);			// kL
-//kl	_txtPatrolling	= new Text(224, 17, 16, 120);
-	_txtPatrolling	= new Text(224, 17, 16, 119);			// kL
+	_txtDestination	= new Text(224, 84, 16, 32);
+	_txtPatrolling	= new Text(224, 17, 16, 119);
 
-//kL	_btnOk			= new TextButton(140, 12, 58, 144);
-//kL	_btnRedirect	= new TextButton(140, 12, 58, 160);
-	_btnOk			= new TextButton(144, 16, 58, 140);		// kL
-	_btnRedirect	= new TextButton(144, 16, 58, 159);		// kL
+	_btnOk			= new TextButton(144, 16, 58, 140);
+	_btnRedirect	= new TextButton(144, 16, 58, 159);
 
-	// Set palette
+
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)), Palette::backPos, 16);
 
 	add(_window);
@@ -73,7 +68,7 @@ CraftPatrolState::CraftPatrolState(Game* game, Craft* craft, Globe* globe)
 
 	centerAllSurfaces();
 
-	// Set up objects
+
 	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK12.SCR"));
 

@@ -129,7 +129,7 @@ void ExplosionBState::init()
 
 //kL				Explosion* explosion = new Explosion(p, RNG::generate(-3, 6), true);
 //				Explosion* explosion = new Explosion(pos, 0, true);
-				Explosion* explosion = new Explosion(pos, -3, true);
+				Explosion* explosion = new Explosion(pos, -4, true);
 
 				_parent->getMap()->getExplosions()->insert(explosion); // add the explosion on the map
 			}

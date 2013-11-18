@@ -18,25 +18,32 @@
  */
 
 #include "SelectDestinationState.h"
+
 #include <cmath>
-#include "../Engine/Game.h"
-#include "../Engine/Screen.h"
+
+#include "ConfirmCydoniaState.h"
+#include "Globe.h"
+#include "MultipleTargetsState.h"
+
 #include "../Engine/Action.h"
-#include "../Resource/ResourcePack.h"
+#include "../Engine/Game.h"
+#include "../Engine/Options.h"
+#include "../Engine/Screen.h"
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Surface.h"
-#include "../Interface/Window.h"
-#include "Globe.h"
+
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
+#include "../Interface/Window.h"
+
+#include "../Resource/ResourcePack.h"
+
+#include "../Ruleset/RuleCraft.h"
+
 #include "../Savegame/Waypoint.h"
-#include "MultipleTargetsState.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Craft.h"
-#include "../Ruleset/RuleCraft.h"
-#include "ConfirmCydoniaState.h"
-#include "../Engine/Options.h"
 
 
 namespace OpenXcom
@@ -54,37 +61,34 @@ SelectDestinationState::SelectDestinationState(Game* game, Craft* craft, Globe* 
 		_craft(craft),
 		_globe(globe)
 {
-	int dx = Screen::getDX();
-	int dy = Screen::getDY();
 	_screen = false;
 
-	// Create objects
-	_btnRotateLeft	= new InteractiveSurface(12, 10, 259 + dx * 2, 176 + dy);
+	int dx = Screen::getDX();
+	int dy = Screen::getDY();
+
+/*	_btnRotateLeft	= new InteractiveSurface(12, 10, 259 + dx * 2, 176 + dy);
 	_btnRotateRight	= new InteractiveSurface(12, 10, 283 + dx * 2, 176 + dy);
 	_btnRotateUp	= new InteractiveSurface(13, 12, 271 + dx * 2, 162 + dy);
 	_btnRotateDown	= new InteractiveSurface(13, 12, 271 + dx * 2, 187 + dy);
 	_btnZoomIn		= new InteractiveSurface(23, 23, 295 + dx * 2, 156 + dy);
-	_btnZoomOut		= new InteractiveSurface(13, 17, 300 + dx * 2, 182 + dy);
+	_btnZoomOut		= new InteractiveSurface(13, 17, 300 + dx * 2, 182 + dy); */
 
-//kL	_window		= new Window(this, 256, 28, 0 + dx, 0);
-	_window		= new Window(this, 256, 30, 0 + dx, 0);		// kL
+	_window		= new Window(this, 256, 30, 0 + dx, 0);
 	_window->setDY(0);
-/*kL	_btnCancel	= new TextButton(60, 12, 110 + dx, 8);
-	_btnCydonia	= new TextButton(60, 12, 180 + dx, 8);
-	_txtTitle	= new Text(100, 16, 10 + dx, 6); */
-	_txtTitle	= new Text(100, 9, 16 + dx, 10);			// kL
-	_btnCancel	= new TextButton(60, 14, 98 + dx, 8);		// kL
-	_btnCydonia	= new TextButton(60, 14, 180 + dx, 8);		// kL
 
-	// Set palette
+	_txtTitle	= new Text(100, 9, 16 + dx, 10);
+	_btnCancel	= new TextButton(60, 14, 98 + dx, 8);
+	_btnCydonia	= new TextButton(60, 14, 180 + dx, 8);
+
+
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
 
-	add(_btnRotateLeft);
+/*	add(_btnRotateLeft);
 	add(_btnRotateRight);
 	add(_btnRotateUp);
 	add(_btnRotateDown);
 	add(_btnZoomIn);
-	add(_btnZoomOut);
+	add(_btnZoomOut); */
 
 	add(_window);
 	add(_btnCancel);
@@ -92,10 +96,9 @@ SelectDestinationState::SelectDestinationState(Game* game, Craft* craft, Globe* 
 	add(_txtTitle);
 
 
-	// Set up objects
 	_globe->onMouseClick((ActionHandler)& SelectDestinationState::globeClick);
 
-	_btnRotateLeft->onMousePress((ActionHandler)& SelectDestinationState::btnRotateLeftPress);
+/*	_btnRotateLeft->onMousePress((ActionHandler)& SelectDestinationState::btnRotateLeftPress);
 	_btnRotateLeft->onMouseRelease((ActionHandler)& SelectDestinationState::btnRotateLeftRelease);
 	_btnRotateLeft->onKeyboardPress((ActionHandler)& SelectDestinationState::btnRotateLeftPress, (SDLKey)Options::getInt("keyGeoLeft"));
 	_btnRotateLeft->onKeyboardRelease((ActionHandler)& SelectDestinationState::btnRotateLeftRelease, (SDLKey)Options::getInt("keyGeoLeft"));
@@ -121,13 +124,13 @@ SelectDestinationState::SelectDestinationState(Game* game, Craft* craft, Globe* 
 
 	_btnZoomOut->onMouseClick((ActionHandler)& SelectDestinationState::btnZoomOutLeftClick, SDL_BUTTON_LEFT);
 	_btnZoomOut->onMouseClick((ActionHandler)& SelectDestinationState::btnZoomOutRightClick, SDL_BUTTON_RIGHT);
-	_btnZoomOut->onKeyboardPress((ActionHandler)& SelectDestinationState::btnZoomOutLeftClick, (SDLKey)Options::getInt("keyGeoZoomOut"));
+	_btnZoomOut->onKeyboardPress((ActionHandler)& SelectDestinationState::btnZoomOutLeftClick, (SDLKey)Options::getInt("keyGeoZoomOut")); */
 
 	// dirty hacks to get the rotate buttons to work in "classic" style
-	_btnRotateLeft->setListButton();
+/*	_btnRotateLeft->setListButton();
 	_btnRotateRight->setListButton();
 	_btnRotateUp->setListButton();
-	_btnRotateDown->setListButton();
+	_btnRotateDown->setListButton(); */
 
 	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
@@ -183,7 +186,7 @@ void SelectDestinationState::think()
  * Handles the globe.
  * @param action Pointer to an action.
  */
-void SelectDestinationState::handle(Action *action)
+void SelectDestinationState::handle(Action* action)
 {
 	State::handle(action);
 	_globe->handle(action, this);
@@ -194,20 +197,18 @@ void SelectDestinationState::handle(Action *action)
  * or right-clicks to scroll the globe.
  * @param action Pointer to an action.
  */
-void SelectDestinationState::globeClick(Action *action)
+void SelectDestinationState::globeClick(Action* action)
 {
 	double lon, lat;
 	int mouseX = (int)floor(action->getAbsoluteXMouse()), mouseY = (int)floor(action->getAbsoluteYMouse());
 	_globe->cartToPolar(mouseX, mouseY, &lon, &lat);
 
-	// Ignore window clicks
-	if (mouseY < 28)
+	if (mouseY < 28) // Ignore window clicks
 	{
 		return;
 	}
 
-	// Clicking on a valid target
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) // Clicking on a valid target
 	{
 		std::vector<Target*> v = _globe->getTargets(mouseX, mouseY, true);
 		if (v.empty())
@@ -226,120 +227,120 @@ void SelectDestinationState::globeClick(Action *action)
  * Starts rotating the globe to the left.
  * @param action Pointer to an action.
  */
-void SelectDestinationState::btnRotateLeftPress(Action *)
+/* void SelectDestinationState::btnRotateLeftPress(Action*)
 {
 	_globe->rotateLeft();
-}
+} */
 
 /**
  * Stops rotating the globe to the left.
  * @param action Pointer to an action.
  */
-void SelectDestinationState::btnRotateLeftRelease(Action *)
+/* void SelectDestinationState::btnRotateLeftRelease(Action*)
 {
 	_globe->rotateStop();
-}
+} */
 
 /**
  * Starts rotating the globe to the right.
  * @param action Pointer to an action.
  */
-void SelectDestinationState::btnRotateRightPress(Action *)
+/* void SelectDestinationState::btnRotateRightPress(Action*)
 {
 	_globe->rotateRight();
-}
+} */
 
 /**
  * Stops rotating the globe to the right.
  * @param action Pointer to an action.
  */
-void SelectDestinationState::btnRotateRightRelease(Action *)
+/* void SelectDestinationState::btnRotateRightRelease(Action*)
 {
 	_globe->rotateStop();
-}
+} */
 
 /**
  * Starts rotating the globe upwards.
  * @param action Pointer to an action.
  */
-void SelectDestinationState::btnRotateUpPress(Action *)
+/* void SelectDestinationState::btnRotateUpPress(Action*)
 {
 	_globe->rotateUp();
-}
+} */
 
 /**
  * Stops rotating the globe upwards.
  * @param action Pointer to an action.
  */
-void SelectDestinationState::btnRotateUpRelease(Action *)
+/* void SelectDestinationState::btnRotateUpRelease(Action*)
 {
 	_globe->rotateStop();
-}
+} */
 
 /**
  * Starts rotating the globe downwards.
  * @param action Pointer to an action.
  */
-void SelectDestinationState::btnRotateDownPress(Action *)
+/* void SelectDestinationState::btnRotateDownPress(Action*)
 {
 	_globe->rotateDown();
-}
+} */
 
 /**
  * Stops rotating the globe downwards.
  * @param action Pointer to an action.
  */
-void SelectDestinationState::btnRotateDownRelease(Action *)
+/* void SelectDestinationState::btnRotateDownRelease(Action*)
 {
 	_globe->rotateStop();
-}
+} */
 
 /**
  * Zooms into the globe.
  * @param action Pointer to an action.
  */
-void SelectDestinationState::btnZoomInLeftClick(Action *)
+/* void SelectDestinationState::btnZoomInLeftClick(Action*)
 {
 	_globe->zoomIn();
-}
+} */
 
 /**
  * Zooms the globe maximum.
  * @param action Pointer to an action.
  */
-void SelectDestinationState::btnZoomInRightClick(Action *)
+/* void SelectDestinationState::btnZoomInRightClick(Action*)
 {
 	_globe->zoomMax();
-}
+} */
 
 /**
  * Zooms out of the globe.
  * @param action Pointer to an action.
  */
-void SelectDestinationState::btnZoomOutLeftClick(Action *)
+/* void SelectDestinationState::btnZoomOutLeftClick(Action*)
 {
 	_globe->zoomOut();
-}
+} */
 
 /**
  * Zooms the globe minimum.
  * @param action Pointer to an action.
  */
-void SelectDestinationState::btnZoomOutRightClick(Action *)
+/* void SelectDestinationState::btnZoomOutRightClick(Action*)
 {
 	_globe->zoomMin();
-}
+} */
 
 /**
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void SelectDestinationState::btnCancelClick(Action *)
+void SelectDestinationState::btnCancelClick(Action*)
 {
 	_game->popState();
 }
 
-void SelectDestinationState::btnCydoniaClick(Action *)
+void SelectDestinationState::btnCydoniaClick(Action*)
 {
 	if (_craft->getNumSoldiers() > 0
 		|| _craft->getNumVehicles() > 0)

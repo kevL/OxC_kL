@@ -16,17 +16,19 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http:///www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_SELECTDESTINATIONSTATE_H
 #define OPENXCOM_SELECTDESTINATIONSTATE_H
 
 #include "../Engine/State.h"
+
 
 namespace OpenXcom
 {
 
 class Craft;
 class Globe;
-class InteractiveSurface;
+//class InteractiveSurface;
 class Timer;
 class Window;
 class Text;
@@ -36,57 +38,61 @@ class TextButton;
  * Screen that allows the player
  * to pick a target for a craft on the globe.
  */
-class SelectDestinationState : public State
+class SelectDestinationState
+	:
+		public State
 {
 private:
-	Craft *_craft;
-	Globe *_globe;
-	InteractiveSurface *_btnRotateLeft, *_btnRotateRight, *_btnRotateUp, *_btnRotateDown, *_btnZoomIn, *_btnZoomOut;
-	Window *_window;
-	Text *_txtTitle;
-	TextButton *_btnCancel, *_btnCydonia;
-public:
-	/// Creates the Select Destination state.
-	SelectDestinationState(Game *game, Craft *craft, Globe *globe);
-	/// Cleans up the Select Destination state.
-	~SelectDestinationState();
-	/// Updates the palette.
-	void init();
-	/// Runs the timer.
-	void think();
-	/// Handles actions.
-	void handle(Action *action);
-	/// Handler for clicking the globe.
-	void globeClick(Action *action);
-	/// Handler for pressing the Rotate Left arrow.
-	void btnRotateLeftPress(Action *action);
-	/// Handler for releasing the Rotate Left arrow.
-	void btnRotateLeftRelease(Action *action);
-	/// Handler for pressing the Rotate Right arrow.
-	void btnRotateRightPress(Action *action);
-	/// Handler for releasing the Rotate Right arrow.
-	void btnRotateRightRelease(Action *action);
-	/// Handler for pressing the Rotate Up arrow.
-	void btnRotateUpPress(Action *action);
-	/// Handler for releasing the Rotate Up arrow.
-	void btnRotateUpRelease(Action *action);
-	/// Handler for pressing the Rotate Down arrow.
-	void btnRotateDownPress(Action *action);
-	/// Handler for releasing the Rotate Down arrow.
-	void btnRotateDownRelease(Action *action);
-	/// Handler for left-clicking the Zoom In icon.
-	void btnZoomInLeftClick(Action *action);
-	/// Handler for right-clicking the Zoom In icon.
-	void btnZoomInRightClick(Action *action);
-	/// Handler for left-clicking the Zoom Out icon.
-	void btnZoomOutLeftClick(Action *action);
-	/// Handler for right-clicking the Zoom Out icon.
-	void btnZoomOutRightClick(Action *action);
-	/// Handler for clicking the Cancel button.
-	void btnCancelClick(Action *action);
-	/// Handler for clicking the Cydonia mission button.
-	void btnCydoniaClick(Action *action);
+	Craft* _craft;
+	Globe* _globe;
+//	InteractiveSurface* _btnRotateLeft, * _btnRotateRight, * _btnRotateUp, * _btnRotateDown, * _btnZoomIn, * _btnZoomOut;
+	Window* _window;
+	Text* _txtTitle;
+	TextButton* _btnCancel, * _btnCydonia;
 
+	public:
+		/// Creates the Select Destination state.
+		SelectDestinationState(Game* game, Craft* craft, Globe* globe);
+		/// Cleans up the Select Destination state.
+		~SelectDestinationState();
+
+		/// Updates the palette.
+		void init();
+		/// Runs the timer.
+		void think();
+
+		/// Handles actions.
+		void handle(Action* action);
+		/// Handler for clicking the globe.
+		void globeClick(Action* action);
+		/// Handler for pressing the Rotate Left arrow.
+/*		void btnRotateLeftPress(Action* action);
+		/// Handler for releasing the Rotate Left arrow.
+		void btnRotateLeftRelease(Action* action);
+		/// Handler for pressing the Rotate Right arrow.
+		void btnRotateRightPress(Action* action);
+		/// Handler for releasing the Rotate Right arrow.
+		void btnRotateRightRelease(Action* action);
+		/// Handler for pressing the Rotate Up arrow.
+		void btnRotateUpPress(Action* action);
+		/// Handler for releasing the Rotate Up arrow.
+		void btnRotateUpRelease(Action* action);
+		/// Handler for pressing the Rotate Down arrow.
+		void btnRotateDownPress(Action* action);
+		/// Handler for releasing the Rotate Down arrow.
+		void btnRotateDownRelease(Action* action);
+		/// Handler for left-clicking the Zoom In icon.
+		void btnZoomInLeftClick(Action* action);
+		/// Handler for right-clicking the Zoom In icon.
+		void btnZoomInRightClick(Action* action);
+		/// Handler for left-clicking the Zoom Out icon.
+		void btnZoomOutLeftClick(Action* action);
+		/// Handler for right-clicking the Zoom Out icon.
+		void btnZoomOutRightClick(Action* action); */
+		/// Handler for clicking the Cancel button.
+		void btnCancelClick(Action* action);
+		/// Handler for clicking the Cydonia mission button.
+		void btnCydoniaClick(Action* action);
 };
 
 }

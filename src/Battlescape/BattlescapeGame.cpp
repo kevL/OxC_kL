@@ -431,7 +431,6 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 			}
 		}
 	}
-
 	Log(LOG_INFO) << "BattlescapeGame::handleAI() EXIT";
 }
 
@@ -554,14 +553,10 @@ void BattlescapeGame::endTurn()
 	}
 	//Log(LOG_INFO) << ". done !neutral";
 
-	// kL_begin:
-	/* kL. from Savegame/BattleUnit.cpp, void BattleUnit::prepareNewTurn()
-	// kL_note: fire damage is also caused by TileEngine::explode()
-	if (!_hitByFire && _fire > 0) // suffer from fire
-	{
-		_health -= _armor->getDamageModifier(DT_IN) * RNG::generate(5, 10);
-		_fire--;
-	} */
+	// kL_begin: battleUnit is burning...
+	// Fire damage is also in Savegame/BattleUnit::prepareNewTurn(), on fire
+	// see also, Savegame/Tile::prepareNewTurn(), catch fire on fire tile
+	// fire damage by hit is caused by TileEngine::explode()
 	for (std::vector<BattleUnit*>::iterator
 			j = _save->getUnits()->begin();
 			j != _save->getUnits()->end();
@@ -574,7 +569,7 @@ void BattlescapeGame::endTurn()
 			{
 				(*j)->setFire(-1);
 
-				int iFire = static_cast<int>((*j)->getArmor()->getDamageModifier(DT_IN) * static_cast<float>(RNG::generate(3., 9.)));
+				int iFire = static_cast<int>((*j)->getArmor()->getDamageModifier(DT_IN) * static_cast<float>(RNG::generate(3, 9)));
 				Log(LOG_INFO) << ". . endTurn() ID " << (*j)->getId() << " iFire = " << iFire;
 				(*j)->setHealth((*j)->getHealth() - iFire);
 
@@ -660,7 +655,11 @@ void BattlescapeGame::endTurn()
  * @param hiddenExplosion, Set to true for the explosions of UFO Power sources at start of battlescape.
  * @param terrainExplosion, Set to true for the explosions of terrain.
  */
-void BattlescapeGame::checkForCasualties(BattleItem* murderweapon, BattleUnit* killer, bool hiddenExplosion, bool terrainExplosion)
+void BattlescapeGame::checkForCasualties(
+		BattleItem* murderweapon,
+		BattleUnit* killer,
+		bool hiddenExplosion,
+		bool terrainExplosion)
 {
 	Log(LOG_INFO) << "BattlescapeGame::checkForCasualties()";
 
@@ -680,15 +679,16 @@ void BattlescapeGame::checkForCasualties(BattleItem* murderweapon, BattleUnit* k
 			{
 				Log(LOG_INFO) << ". killer = " << killer->getId();
 
-				killer->addKillCount();
-				victim->killedBy(killer->getFaction());
+				victim->killedBy(killer->getFaction()); // used in DebriefingState.
 
 				int bonus = 100;
-				if (killer->getFaction() == FACTION_PLAYER)
+				if (killer->getOriginalFaction() == FACTION_PLAYER)
 				{
 					bonus = _save->getMoraleModifier();
+
+					killer->addKillCount();
 				}
-				else if (killer->getFaction() == FACTION_HOSTILE)
+				else if (killer->getOriginalFaction() == FACTION_HOSTILE)
 				{
 					bonus = _save->getMoraleModifier(0, false);
 				}
@@ -735,13 +735,13 @@ void BattlescapeGame::checkForCasualties(BattleItem* murderweapon, BattleUnit* k
 			}
 
 			// cycle through units and do all faction
-			if (victim->getFaction() != FACTION_NEUTRAL)
+//kL			if (victim->getFaction() != FACTION_NEUTRAL) // civie deaths now affect other Factions.
 			{
-				int solo = _save->getMoraleModifier(victim); // penalty for losing a unit on your side
+				int solo = _save->getMoraleModifier(victim); // penalty for the death of a unit; civilians return standard 100.
 
 				// these two are faction bonuses ('losers' mitigates the loss of solo, 'winners' boosts solo)
 				int losers = 100, winners = 100;
-				if (victim->getFaction() == FACTION_HOSTILE)
+				if (victim->getOriginalFaction() == FACTION_HOSTILE)
 				{
 					losers = _save->getMoraleModifier(0, false);
 					winners = _save->getMoraleModifier();
@@ -751,7 +751,9 @@ void BattlescapeGame::checkForCasualties(BattleItem* murderweapon, BattleUnit* k
 					losers = _save->getMoraleModifier();
 					winners = _save->getMoraleModifier(0, false);
 				}
+				// civilians are unaffected by leadership above. They use standard 100.
 
+				// do bystander FACTION changes:
 				for (std::vector<BattleUnit*>::iterator
 						i = _save->getUnits()->begin();
 						i != _save->getUnits()->end();
@@ -760,13 +762,18 @@ void BattlescapeGame::checkForCasualties(BattleItem* murderweapon, BattleUnit* k
 					if (!(*i)->isOut(true, true)
 						&& (*i)->getArmor()->getSize() == 1) // not a large unit
 					{
-						if ((*i)->getOriginalFaction() == victim->getOriginalFaction())
+						if (victim->getOriginalFaction() == (*i)->getOriginalFaction()
+							|| (victim->getOriginalFaction() == FACTION_NEUTRAL				// for civie-death,
+									&& (*i)->getFaction() == FACTION_PLAYER					// non-Mc'd xCom takes hit
+									&& (*i)->getOriginalFaction() != FACTION_HOSTILE)		// but not Mc'd aLiens
+							|| (victim->getOriginalFaction() == FACTION_PLAYER				// for death of xCom unit,
+									&& (*i)->getOriginalFaction() == FACTION_NEUTRAL))		// civies take hit.
 						{
-							// losing faction get a morale loss
+							// losing team(s) all get a morale loss,
+							// based on their individual Bravery & rank of unit that was killed
 							int bravery = (110 - (*i)->getStats()->bravery) / 10;
 							if (bravery > 0)
 							{
-//kL								bravery = solo * 200 * bravery / losers / 100;
 								bravery = solo * 2 * bravery / losers;
 								(*i)->moraleChange(-bravery);
 							}
@@ -778,15 +785,18 @@ void BattlescapeGame::checkForCasualties(BattleItem* murderweapon, BattleUnit* k
 								&& victim->getFaction() == FACTION_HOSTILE)
 							{
 								killer->setTurnsExposed(0); // interesting
-
 								//Log(LOG_INFO) << ". . . . killer Exposed";
 							}
 						}
-						// prevent mind-controlled units from receiving benefits.
-						else if ((*i)->getOriginalFaction() != victim->getOriginalFaction())
+						// note this is unaffected by the rank of the dead unit...
+						else if ((victim->getOriginalFaction() == FACTION_HOSTILE
+									&& ((*i)->getOriginalFaction() == FACTION_PLAYER
+										|| (*i)->getOriginalFaction() == FACTION_NEUTRAL))
+							|| ((*i)->getOriginalFaction() == FACTION_HOSTILE
+									&& (victim->getOriginalFaction() == FACTION_PLAYER
+										|| victim->getOriginalFaction() == FACTION_NEUTRAL)))
 						{
-							// the winning squad all get a morale increase
-//kL							int boost = 10 * winners / 100;
+							// winning team(s) all get a morale boost
 							int boost = winners / 10;
 							(*i)->moraleChange(boost);
 

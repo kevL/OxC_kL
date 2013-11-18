@@ -143,46 +143,46 @@ void MultipleTargetsState::init()
  */
 void MultipleTargetsState::popupTarget(Target* target)
 {
-	Log(LOG_INFO) << "MultipleTargetsState::popupTarget()";
+	//Log(LOG_INFO) << "MultipleTargetsState::popupTarget()";
 	_game->popState();
 
 	if (_craft == 0)
 	{
-		Log(LOG_INFO) << ". _craft == 0";
+		//Log(LOG_INFO) << ". _craft == 0";
 
 		Craft* c = dynamic_cast<Craft*>(target);
 		Ufo* u = dynamic_cast<Ufo*>(target);
 		Base* b = dynamic_cast<Base*>(target);
-		Log(LOG_INFO) << ". dynamic_cast's examined";
+		//Log(LOG_INFO) << ". dynamic_cast's examined";
 
 		if (b != 0)
 		{
-			Log(LOG_INFO) << ". . base";
+			//Log(LOG_INFO) << ". . base";
 			_game->pushState(new InterceptState(_game, _state->getGlobe(), b));
 		}
 		else if (c != 0)
 		{
-			Log(LOG_INFO) << ". . craft";
+			//Log(LOG_INFO) << ". . craft";
 			_game->pushState(new GeoscapeCraftState(_game, c, _state->getGlobe(), 0));
 		}
 		else if (u != 0)
 		{
-			Log(LOG_INFO) << ". . ufo";
+			//Log(LOG_INFO) << ". . ufo";
 			_game->pushState(new UfoDetectedState(_game, u, _state, false, u->getHyperDetected()));
 		}
 		else
 		{
-			Log(LOG_INFO) << ". . else...";
+			//Log(LOG_INFO) << ". . else...";
 			_game->pushState(new TargetInfoState(_game, target, _state->getGlobe()));
 		}
 	}
 	else
 	{
-		Log(LOG_INFO) << ". _craft != 0";
+		//Log(LOG_INFO) << ". _craft != 0";
 		_game->pushState(new ConfirmDestinationState(_game, _craft, target));
 	}
 
-	Log(LOG_INFO) << "MultipleTargetsState::popupTarget() EXIT";
+	//Log(LOG_INFO) << "MultipleTargetsState::popupTarget() EXIT";
 }
 
 /**
@@ -200,7 +200,7 @@ void MultipleTargetsState::btnCancelClick(Action*)
  */
 void MultipleTargetsState::lstTargetsClick(Action*)
 {
-	Log(LOG_INFO) << "MultipleTargetsState::lstTargetsClick()";
+	//Log(LOG_INFO) << "MultipleTargetsState::lstTargetsClick()";
 
 	Target* t = _targets[_lstTargets->getSelectedRow()];
 	popupTarget(t);

@@ -55,15 +55,11 @@ ConfirmDestinationState::ConfirmDestinationState(Game* game, Craft* craft, Targe
 	_screen = false;
 
 	_window		= new Window(this, 224, 72, 16, 64);
-//kL	_txtTarget	= new Text(212, 32, 22, 72);
 
-//kL	_txtTarget	= new Text(192, 32, 32, 72);
-	_txtTarget	= new Text(192, 32, 32, 78);
+	_txtTarget	= new Text(192, 32, 32, 75);
 
-//kL	_btnOk		= new TextButton(50, 12, 68, 104);
-//kL	_btnCancel	= new TextButton(50, 12, 138, 104);
-	_btnCancel	= new TextButton(75, 14, 51, 115);		// kL
-	_btnOk		= new TextButton(75, 14, 130, 115);		// kL
+	_btnCancel	= new TextButton(75, 16, 51, 111);
+	_btnOk		= new TextButton(75, 16, 130, 111);
 
 	if (w != 0
 		&& w->getId() == 0)
@@ -77,13 +73,28 @@ ConfirmDestinationState::ConfirmDestinationState(Game* game, Craft* craft, Targe
 
 	add(_window);
 	add(_txtTarget);
-	add(_btnOk);
 	add(_btnCancel);
+	add(_btnOk);
+
 
 	centerAllSurfaces();
 
 	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK12.SCR"));
+
+	_txtTarget->setColor(Palette::blockOffset(15)-1);
+	_txtTarget->setBig();
+	_txtTarget->setAlign(ALIGN_CENTER);
+	_txtTarget->setVerticalAlign(ALIGN_MIDDLE);
+//	_txtTarget->setWordWrap(true);
+	if (w != 0 && w->getId() == 0)
+	{
+		_txtTarget->setText(tr("STR_TARGET_WAY_POINT"));
+	}
+	else
+	{
+		_txtTarget->setText(tr("STR_TARGET").arg(_target->getName(_game->getLanguage())));
+	}
 
 	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(tr("STR_OK"));
@@ -94,21 +105,6 @@ ConfirmDestinationState::ConfirmDestinationState(Game* game, Craft* craft, Targe
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler) &ConfirmDestinationState::btnCancelClick);
 	_btnCancel->onKeyboardPress((ActionHandler) &ConfirmDestinationState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
-
-	_txtTarget->setColor(Palette::blockOffset(15)-1);
-	_txtTarget->setBig();
-	_txtTarget->setAlign(ALIGN_CENTER);
-	_txtTarget->setVerticalAlign(ALIGN_MIDDLE);
-	_txtTarget->setWordWrap(true);
-
-	if (w != 0 && w->getId() == 0)
-	{
-		_txtTarget->setText(tr("STR_TARGET_WAY_POINT"));
-	}
-	else
-	{
-		_txtTarget->setText(tr("STR_TARGET").arg(_target->getName(_game->getLanguage())));
-	}
 }
 
 /**

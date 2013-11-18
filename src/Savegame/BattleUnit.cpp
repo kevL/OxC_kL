@@ -805,7 +805,6 @@ void BattleUnit::lookAt(const Position& point, bool turret)
 			// kL_note: what about Forcing the faced direction instantly?
 		}
 	}
-
 	Log(LOG_INFO) << "BattleUnit::lookAt() #1 EXIT";
 }
 
@@ -820,9 +819,17 @@ void BattleUnit::lookAt(int direction, bool force)
 	//Log(LOG_INFO) << ". . _toDirection = " << _toDirection;
 	//Log(LOG_INFO) << ". . lookAt() direction = " << direction;
 
-	if (!force)
+	if (force)
 	{
-		if (direction < 0 || direction > 7)
+		_toDirection = direction;
+		_direction = direction;
+
+//		Log(LOG_INFO) << "BattleUnit::lookAt() - " << this->getId() << " - force Status_Standing";
+//		_status = STATUS_STANDING;	// kL. idk... seems to screw up UnitDieBDeath sequence
+	}
+	else // !force
+	{
+		if (direction < 0 || 7 < direction)
 			return;
 
 		_toDirection = direction;
@@ -832,14 +839,6 @@ void BattleUnit::lookAt(int direction, bool force)
 		}
 //		else
 //			_status = STATUS_STANDING;	// kL
-	}
-	else // force
-	{
-		_toDirection = direction;
-		_direction = direction;
-
-//		Log(LOG_INFO) << "BattleUnit::lookAt() - " << this->getId() << " - force Status_Standing";
-//		_status = STATUS_STANDING;	// kL. idk... seems to screw up UnitDieBDeath sequence
 	}
 	Log(LOG_INFO) << "BattleUnit::lookAt() #2 EXIT";// unitID = " << getId();
 }
@@ -1224,10 +1223,12 @@ int BattleUnit::getMorale() const
  */
 int BattleUnit::damage(const Position& relative, int power, ItemDamageType type, bool ignoreArmor)
 {
+	Log(LOG_INFO) << "BattleUnit::damage() ID " << getId();
+
 	UnitSide side = SIDE_FRONT;
 	UnitBodyPart bodypart = BODYPART_TORSO;
 
-	if (power <= 0)
+	if (power < 1)
 	{
 		return 0;
 	}
@@ -1346,8 +1347,10 @@ int BattleUnit::damage(const Position& relative, int power, ItemDamageType type,
 		}
 	}
 
-	//Log(LOG_INFO) << "BattleUnit::damage() power = " << power;
-	return power < 0? 0: power;
+	int ret = power < 0? 0: power;
+	Log(LOG_INFO) << "BattleUnit::damage() ret " << ret;
+
+	return ret;
 }
 
 /**
@@ -1807,14 +1810,13 @@ int BattleUnit::getFatalWounds() const
 }
 
 /**
- * Little formula to calculate reaction score.
- * @return Reaction score.
+ * Little formula to calculate initiative/reaction score.
+ * @return, Reaction score; aka INITIATIVE
  */
 double BattleUnit::getInitiative()
 {
 	// (Reactions Stat) x (Current Time Units / Max TUs)
-	return static_cast<double>(getStats()->reactions)
-			* (static_cast<double>(getTimeUnits() / static_cast<double>(getStats()->tu)));
+	return static_cast<double>(getStats()->reactions * getTimeUnits()) / static_cast<double>(getStats()->tu);
 }
 
 /**
@@ -1822,7 +1824,7 @@ double BattleUnit::getInitiative()
  */
 void BattleUnit::prepareNewTurn()
 {
-	//Log(LOG_INFO) << "BattleUnit::prepareNewTurn()";
+	Log(LOG_INFO) << "BattleUnit::prepareNewTurn() ID " << getId();
 
 	_faction = _originalFaction; // revert to original faction
 
@@ -1853,13 +1855,17 @@ void BattleUnit::prepareNewTurn()
 
 	_health -= getFatalWounds(); // suffer from fatal wounds
 
-/*kL, this should happen at the end of Turn (see BattlescapeGame.cpp, void BattlescapeGame::endTurn()
-	// kL_note: fire damage is also caused by TileEngine::explode()
+	// Fire damage is also in Battlescape/BattlescapeGame::endTurn(), stand on fire tile
+	// see also, Savegame/Tile::prepareNewTurn(), catch fire on fire tile
+	// fire damage by hit is caused by TileEngine::explode()
 	if (!_hitByFire && _fire > 0) // suffer from fire
 	{
-		_health -= _armor->getDamageModifier(DT_IN) * RNG::generate(5, 10);
+		int fireDam = static_cast<int>(_armor->getDamageModifier(DT_IN) * RNG::generate(2, 6));
+		Log(LOG_INFO) << ". fireDam = " << fireDam;
+		_health -= fireDam;
+
 		_fire--;
-	} */
+	}
 
 	if (_health < 0) _health = 0;
 
@@ -1874,7 +1880,7 @@ void BattleUnit::prepareNewTurn()
 
 	if (_stunlevel > 0) healStun(1); // recover stun 1pt/turn
 
-	if (!isOut())
+	if (!isOut(true, true))
 	{
 		int percent = 100 - (2 * getMorale());
 		if (percent < 0) percent = 0;
@@ -1895,7 +1901,7 @@ void BattleUnit::prepareNewTurn()
 	_dontReselect = false;
 	_motionPoints = 0;
 
-	//Log(LOG_INFO) << "BattleUnit::prepareNewTurn() EXIT";
+	Log(LOG_INFO) << "BattleUnit::prepareNewTurn() EXIT";
 }
 
 /**

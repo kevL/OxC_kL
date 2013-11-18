@@ -1256,9 +1256,9 @@ bool TileEngine::canTargetTile(
 
 			if (test == part) // bingo
 			{
-				if (   _trajectory.at(0).x/16 == scanVoxel->x/16
-					&& _trajectory.at(0).y/16 == scanVoxel->y/16
-					&& _trajectory.at(0).z/24 == scanVoxel->z/24)
+				if (   _trajectory.at(0).x / 16 == scanVoxel->x / 16
+					&& _trajectory.at(0).y / 16 == scanVoxel->y / 16
+					&& _trajectory.at(0).z / 24 == scanVoxel->z / 24)
 				{
 					return true;
 				}
@@ -1276,7 +1276,7 @@ bool TileEngine::canTargetTile(
  */
 std::vector<BattleUnit*> TileEngine::getSpottingUnits(BattleUnit* unit)
 {
-	Log(LOG_INFO) << "TileEngine::getSpottingUnits() targetID " << (unit)->getId() << " : initi = " << static_cast<int>((unit)->getInitiative());
+	Log(LOG_INFO) << "TileEngine::getSpottingUnits() targetID " << (unit)->getId() << " : initi = " << (int)(unit)->getInitiative();
 
 	Tile* tile = unit->getTile();
 
@@ -1286,7 +1286,7 @@ std::vector<BattleUnit*> TileEngine::getSpottingUnits(BattleUnit* unit)
 			bu != _save->getUnits()->end();
 			++bu)
 	{
-		int buIniti = static_cast<int>((*bu)->getInitiative()); // purely Debug info, here.
+//		int buIniti = static_cast<int>((*bu)->getInitiative()); // purely Debug info, here.
 
 		if (*bu != unit																		// don't put spottee unit itself in with the spotters.
 			&& !(*bu)->isOut(true, true)													// not dead/unconscious
@@ -1319,30 +1319,26 @@ std::vector<BattleUnit*> TileEngine::getSpottingUnits(BattleUnit* unit)
 //				if (_save->getSide() != FACTION_NEUTRAL // no reaction on civilian turn. done in "checkReactionFire()"
 				if (canMakeSnap(*bu, unit))
 				{
-					Log(LOG_INFO) << ". . . reactID " << (*bu)->getId()
-							<< " : initi = " << buIniti;
+					Log(LOG_INFO) << ". . . reactID " << (*bu)->getId() << " : initi = " << (int)(*bu)->getInitiative();
 					//		<< " : ADD";
 
 					spotters.push_back(*bu);
 				}
 //				else
 				{
-					//Log(LOG_INFO) << ". . reactID " << (*bu)->getId()
-					//		<< " : initi = "  << buIniti
+					//Log(LOG_INFO) << ". . reactID " << (*bu)->getId() << " : initi = "  << buIniti
 					//		<< " : can't makeSnap.";
 				}
 			}
 //			else
 			{
-				//Log(LOG_INFO) << ". . reactID " << (*bu)->getId()
-				//		<< " : initi = "  << buIniti
+				//Log(LOG_INFO) << ". . reactID " << (*bu)->getId() << " : initi = "  << buIniti
 				//		<< " : not facing AND not aggro, OR target obscured/OoR";
 			}
 		}
 //		else
 		{
-			//Log(LOG_INFO) << ". . reactID " << (*bu)->getId()
-			//		<< " : initi = "  << buIniti
+			//Log(LOG_INFO) << ". . reactID " << (*bu)->getId() << " : initi = "  << buIniti
 			//		<< " : isOut(true, true) OR side's faction";
 		}
 	}
@@ -1729,17 +1725,18 @@ BattleUnit* TileEngine::hit(
 				int adjustedDamage = targetUnit->damage(relPos, power, type, ignoreArmor);
 				Log(LOG_INFO) << ". . adjustedDamage = " << adjustedDamage;
 
-				if (adjustedDamage > 0)
+				if (adjustedDamage > 0
+					&& !targetUnit->isOut(true)) // -> do morale hit only if health still > 0.
 				{
 					const int bravery = (110 - targetUnit->getStats()->bravery) / 10;
 					if (bravery > 0)
 					{
 						int modifier = 100;
-						if (targetUnit->getFaction() == FACTION_PLAYER)
+						if (targetUnit->getOriginalFaction() == FACTION_PLAYER)
 						{
 							modifier = _save->getMoraleModifier();
 						}
-						else if (targetUnit->getFaction() == FACTION_HOSTILE)
+						else if (targetUnit->getOriginalFaction() == FACTION_HOSTILE)
 						{
 							modifier = _save->getMoraleModifier(0, false);
 						}
@@ -1909,7 +1906,10 @@ void TileEngine::explode(const Position& center, int power, ItemDamageType type,
 						int dir;
 						Pathfinding::vectorToDirection(origin->getPosition() - dest->getPosition(), dir);
 
-						if (dir != -1 && dir %2) power_ -= 5; // diagonal movement costs an extra 50% for fire.
+						if (dir != -1 && dir %2)
+						{
+							power_ -= 5; // diagonal movement costs an extra 50% for fire.
+						}
 					}
 				}
 
@@ -2025,10 +2025,19 @@ void TileEngine::explode(const Position& center, int power, ItemDamageType type,
 								float resistance = dest->getUnit()->getArmor()->getDamageModifier(DT_IN);
 								if (resistance > 0.f)
 								{
-									int iFire = RNG::generate(4, 11);
+//kL									int fire = RNG::generate(4, 11);					// <- why is this not based on power_
+									int fire = RNG::generate(power_ / 4, power_ * 3 / 4);	// kL: 25 - 50%
+
 //kL									dest->getUnit()->damage(Position(0, 0, 12-dest->getTerrainLevel()), RNG::generate(5, 10), DT_IN, true);
-									dest->getUnit()->damage(Position(0, 0, 12 - dest->getTerrainLevel()), iFire, DT_IN, true);		// kL
-									Log(LOG_INFO) << ". . DT_IN : " << dest->getUnit()->getId() << " takes " << iFire << " fire";
+									dest->getUnit()->damage(
+														Position(
+																0,
+																0,
+																12 - dest->getTerrainLevel()),
+															fire,
+															DT_IN,
+															true);		// kL
+									Log(LOG_INFO) << ". . DT_IN : " << dest->getUnit()->getId() << " takes " << fire << " fire";
 
 //kL									int burnTime = RNG::generate(0, int(5 * resistance));
 									int burnTime = RNG::generate(0, static_cast<int>(5.f * resistance));	// kL
@@ -3500,7 +3509,7 @@ bool TileEngine::psiAttack(BattleAction* action)
 	{
 		//Log(LOG_INFO) << ". . tile EXISTS, so does Unit";
 		BattleUnit* victim = t->getUnit();
-		//Log(LOG_INFO) << ". victimID " << victim->getId();
+		Log(LOG_INFO) << ". . defenderID " << victim->getId();
 		//Log(LOG_INFO) << ". . target(pos) " << action->target;
 
 

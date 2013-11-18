@@ -823,7 +823,7 @@ void UnitWalkBState::think()
 		}
 	}
 
-	Log(LOG_INFO) << "****** think() : " << _unit->getId() << " : EXIT ******";
+	Log(LOG_INFO) << "***** EXIT think() : " << _unit->getId() << " *****";
 }
 
 /**

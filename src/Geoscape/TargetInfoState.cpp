@@ -45,7 +45,7 @@ TargetInfoState::TargetInfoState(Game* game, Target* target, Globe* globe)
 		_target(target),
 		_globe(globe)
 {
-	Log(LOG_INFO) << "Create TargetInfoState";
+	//Log(LOG_INFO) << "Create TargetInfoState";
 
 	_screen = false;
 
@@ -105,7 +105,7 @@ TargetInfoState::TargetInfoState(Game* game, Target* target, Globe* globe)
 	}
 	_txtFollowers->setText(ss.str());
 
-	Log(LOG_INFO) << "Create TargetInfoState EXIT";
+	//Log(LOG_INFO) << "Create TargetInfoState EXIT";
 }
 
 /**
