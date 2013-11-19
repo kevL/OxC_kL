@@ -184,11 +184,11 @@ SoldierInfoState::SoldierInfoState(Game* game, Base* base, size_t soldier)
 	_btnOk->onKeyboardPress((ActionHandler)& SoldierInfoState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_btnPrev->setColor(Palette::blockOffset(15)+6);
-	_btnPrev->setText(L"<<");
+	_btnPrev->setText(L"<");
 	_btnPrev->onMouseClick((ActionHandler)& SoldierInfoState::btnPrevClick);
 
 	_btnNext->setColor(Palette::blockOffset(15)+6);
-	_btnNext->setText(L">>");
+	_btnNext->setText(L">");
 	_btnNext->onMouseClick((ActionHandler)& SoldierInfoState::btnNextClick);
 
 	_btnArmor->setColor(Palette::blockOffset(15)+6);
@@ -489,7 +489,9 @@ void SoldierInfoState::init()
 
 	_txtPsionic->setVisible(s->isInPsiTraining());
 
-	if (current->psiSkill > 0 || (Options::getBool("psiStrengthEval") && _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements())))
+	if (current->psiSkill > 0
+		|| (Options::getBool("psiStrengthEval")
+			&& _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements())))
 	{
 		std::wstringstream ss14;
 		ss14 << current->psiStrength;
@@ -609,7 +611,8 @@ void SoldierInfoState::btnArmorClick(Action*)
  */
 void SoldierInfoState::btnSackClick(Action*)
 {
-	Soldier *soldier = _base->getSoldiers()->at(_soldier);
+	Soldier* soldier = _base->getSoldiers()->at(_soldier);
+
 	_game->pushState(new SackSoldierState(_game, _base, soldier));
 }
 

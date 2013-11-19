@@ -39,20 +39,20 @@ class Bar;
  */
 class SoldierInfoState
 	:
-	public State
+		public State
 {
-	private:
-		Base* _base;
-		size_t _soldier;
+private:
+	Base* _base;
+	size_t _soldier;
 
-		Surface* _bg, * _rank;
-		TextButton* _btnOk, * _btnPrev, * _btnNext, * _btnArmor, * _btnSack;
-		Text* _txtArmor, * _txtRank, * _txtMissions, * _txtKills, * _txtCraft, * _txtRecovery, * _txtPsionic;
-		TextEdit* _edtSoldier;
+	Surface* _bg, * _rank;
+	TextButton* _btnOk, * _btnPrev, * _btnNext, * _btnArmor, * _btnSack;
+	Text* _txtArmor, * _txtRank, * _txtMissions, * _txtKills, * _txtCraft, * _txtRecovery, * _txtPsionic;
+	TextEdit* _edtSoldier;
 
-		Text* _txtTimeUnits, * _txtStamina, * _txtHealth, * _txtBravery, * _txtReactions, * _txtFiring, * _txtThrowing, * _txtStrength, * _txtPsiStrength, * _txtPsiSkill;
-		Text* _numTimeUnits, * _numStamina, * _numHealth, * _numBravery, * _numReactions, * _numFiring, * _numThrowing, * _numStrength, * _numPsiStrength, * _numPsiSkill;
-		Bar* _barTimeUnits, * _barStamina, * _barHealth, * _barBravery, * _barReactions, * _barFiring, * _barThrowing, * _barStrength, * _barPsiStrength, * _barPsiSkill;
+	Text* _txtTimeUnits, * _txtStamina, * _txtHealth, * _txtBravery, * _txtReactions, * _txtFiring, * _txtThrowing, * _txtStrength, * _txtPsiStrength, * _txtPsiSkill;
+	Text* _numTimeUnits, * _numStamina, * _numHealth, * _numBravery, * _numReactions, * _numFiring, * _numThrowing, * _numStrength, * _numPsiStrength, * _numPsiSkill;
+	Bar* _barTimeUnits, * _barStamina, * _barHealth, * _barBravery, * _barReactions, * _barFiring, * _barThrowing, * _barStrength, * _barPsiStrength, * _barPsiSkill;
 
 	public:
 		/// Creates the Soldier Info state.
