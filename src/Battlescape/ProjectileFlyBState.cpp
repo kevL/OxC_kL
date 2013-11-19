@@ -332,12 +332,12 @@ bool ProjectileFlyBState::createNewProjectile()
 	_parent->setStateInterval(interval);				// kL
 
 	// let it calculate a trajectory
-	_projectileImpact = -1;
+	_projectileImpact = V_EMPTY;
 
 	if (_action.type == BA_THROW)
 	{
 		_projectileImpact = projectile->calculateThrow(_unit->getThrowingAccuracy());
-		if (_projectileImpact != -1)
+		if (_projectileImpact == V_FLOOR)
 		{
 			if (_unit->getFaction() != FACTION_PLAYER
 				&& _projectileItem->getRules()->getBattleType() == BT_GRENADE)
@@ -369,7 +369,7 @@ bool ProjectileFlyBState::createNewProjectile()
 	{
 		_projectileImpact = projectile->calculateThrow(_unit->getFiringAccuracy(_action.type, _action.weapon));
 
-		if (_projectileImpact != -1)
+		if (_projectileImpact != V_EMPTY)
 		{
 			_unit->aim(true); // set the soldier in an aiming position
 			_parent->getMap()->cacheUnit(_unit);
@@ -403,7 +403,7 @@ bool ProjectileFlyBState::createNewProjectile()
 
 		_projectileImpact = projectile->calculateTrajectory(_unit->getFiringAccuracy(_action.type, _action.weapon));
 
-		if (_projectileImpact != -1
+		if (_projectileImpact != V_EMPTY
 			|| _action.type == BA_LAUNCH)
 		{
 			Log(LOG_INFO) << ". . . _projectileImpact !";

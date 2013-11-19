@@ -93,7 +93,7 @@ void ImageButton::mousePress(Action* action, State* state)
 			*_group = this;
 			invert(_color + 3);
 
-			_inverted = true; // 2013 nov 15
+			_inverted = true;
 		}
 	}
 	else if (!_inverted
@@ -114,10 +114,6 @@ void ImageButton::mousePress(Action* action, State* state)
  */
 void ImageButton::mouseRelease(Action* action, State* state)
 {
-//	if (_group != 0 // 2013 nov 15, This causes my Geoscape timer buttons to act glitchy.
-//		|| (_inverted
-//			&& isButtonHandled(action->getDetails()->button.button)))
-
 	if (_inverted
 			&& isButtonHandled(action->getDetails()->button.button))
 	{

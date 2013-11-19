@@ -914,7 +914,7 @@ bool TileEngine::visible(BattleUnit* currentUnit, Tile* tile)
 			_trajectory.clear();
 
 			int test = calculateLine(*originVoxel, scanVoxel, false, &_trajectory, excludeUnit, true, false, excludeAllBut);
-			if (test == 4)
+			if (test == V_UNIT)
 			{
 				// voxel of hit must be inside of scanned box
 				if (_trajectory.at(0).x / 16 == scanVoxel.x / 16
@@ -1034,7 +1034,7 @@ bool TileEngine::canTargetUnit(
 			_trajectory.clear();
 
 			int test = calculateLine(*originVoxel, *scanVoxel, false, &_trajectory, excludeUnit, true, false);
-			if (test == 4)
+			if (test == V_UNIT)
 			{
 				for (int
 						x = 0;
@@ -1057,7 +1057,7 @@ bool TileEngine::canTargetUnit(
 					}
 				}
 			}
-			else if (test == -1
+			else if (test == V_EMPTY
 				&& hypothetical
 				&& !_trajectory.empty())
 			{
@@ -1660,7 +1660,7 @@ BattleUnit* TileEngine::hit(
 		int const part = voxelCheck(center, unit);
 		Log(LOG_INFO) << "TileEngine::hit() part = " << part;
 
-		if (-1 < part && part < 4 // 4 terrain parts
+		if (V_EMPTY < part && part < V_UNIT // 4 terrain parts
 			&& type != DT_STUN) // kL, workaround for Stunrod.
 		{
 			Log(LOG_INFO) << ". terrain hit";//, part = " << part;
@@ -1675,7 +1675,7 @@ BattleUnit* TileEngine::hit(
 			}
 			// kL_note: This would be where to adjust damage based on effectiveness of weapon vs Terrain!
 		}
-		else if (part == 4)	// battleunit part
+		else if (part == V_UNIT)	// battleunit part
 //			|| type == DT_STUN) // kL, workaround for Stunrod.
 		{
 			Log(LOG_INFO) << ". battleunit hit";
@@ -2948,7 +2948,7 @@ int TileEngine::calculateLine(
 		if (doVoxelCheck)
 		{
 			result = voxelCheck(Position(cx, cy, cz), excludeUnit, false, onlyVisible, excludeAllBut);
-			if (result != -1)
+			if (result != V_EMPTY)
 			{
 				if (trajectory)
 				{
@@ -3006,7 +3006,7 @@ int TileEngine::calculateLine(
 				if (swap_xy) std::swap(cx, cy);
 
 				result = voxelCheck(Position(cx, cy, cz), excludeUnit, false, onlyVisible, excludeAllBut);
-				if (result != -1)
+				if (result != V_EMPTY)
 				{
 					if (trajectory != 0)
 					{
@@ -3033,7 +3033,7 @@ int TileEngine::calculateLine(
 				if (swap_xy) std::swap(cx, cy);
 
 				result = voxelCheck(Position(cx, cy, cz), excludeUnit, false, onlyVisible,  excludeAllBut);
-				if (result != -1)
+				if (result != V_EMPTY)
 				{
 					if (trajectory != 0)
 					{
@@ -3048,7 +3048,7 @@ int TileEngine::calculateLine(
 	}
 
 	//Log(LOG_INFO) << ". return -1";
-	return -1;
+	return V_EMPTY;
 }
 
 /**
@@ -3108,11 +3108,11 @@ int TileEngine::calculateParabola(
 		Position nextPosition = Position(x, y, z);
 		int result = calculateLine(lastPosition, nextPosition, false, 0, excludeUnit);
 //		int result = voxelCheck(Position(x, y, z), excludeUnit); // Old code, not sure it should be changed to calculateLine()...
-		if (result != -1)
+		if (result != V_EMPTY)
 		{
 			if (lastPosition.z < nextPosition.z)
 			{
-				result = 5;
+				result = V_OUTOFBOUNDS;
 			}
 
 			if (!storeTrajectory && trajectory != 0)
@@ -3132,7 +3132,7 @@ int TileEngine::calculateParabola(
 		trajectory->push_back(Position(x, y, z)); // store the position of impact
 	}
 
-	return -1;
+	return V_EMPTY;
 }
 
 /**
@@ -3290,7 +3290,7 @@ int TileEngine::castedShade(const Position& voxel)
 	for (z = zstart; z > 0; z--)
 	{
 		tmpVoxel.z = z;
-		if (voxelCheck(tmpVoxel, 0) != -1)
+		if (voxelCheck(tmpVoxel, 0) != V_EMPTY)
 			break;
 	}
 
@@ -3316,13 +3316,13 @@ bool TileEngine::isVoxelVisible(const Position& voxel)
 		tmpVoxel.z = z;
 
 		// only OBJECT can cause additional occlusion (because of any shape)
-		if (voxelCheck(tmpVoxel, 0) == MapData::O_OBJECT) return false;
+		if (voxelCheck(tmpVoxel, 0) == V_OBJECT) return false;
 
 		++tmpVoxel.x;
-		if (voxelCheck(tmpVoxel, 0) == MapData::O_OBJECT) return false;
+		if (voxelCheck(tmpVoxel, 0) == V_OBJECT) return false;
 
 		++tmpVoxel.y;
-		if (voxelCheck(tmpVoxel, 0) == MapData::O_OBJECT) return false;
+		if (voxelCheck(tmpVoxel, 0) == V_OBJECT) return false;
 	}
 
 	return true;
@@ -3353,12 +3353,12 @@ int TileEngine::voxelCheck(
 	if (tile == 0 || voxel.x < 0 || voxel.y < 0 || voxel.z < 0)
 	{
 		//Log(LOG_INFO) << "TileEngine::voxelCheck() EXIT, return 5";
-		return 5;
+		return V_OUTOFBOUNDS;
 	}
 	if (tile->isVoid() && tile->getUnit() == 0)
 	{
 		//Log(LOG_INFO) << "TileEngine::voxelCheck() EXIT, return(1) -1";
-		return -1;
+		return V_EMPTY;
 	}
 
 	if (voxel.z %24 == 0
@@ -3371,7 +3371,7 @@ int TileEngine::voxelCheck(
 			&& !tileBelow->getMapData(MapData::O_FLOOR)->isGravLift())
 		{
 			//Log(LOG_INFO) << "TileEngine::voxelCheck() EXIT, return 0";
-			return 0;
+			return V_FLOOR;
 		}
 	}
 
@@ -3438,14 +3438,14 @@ int TileEngine::voxelCheck(
 				if (_voxelData->at(LoftIdx) & (1 << x))
 				{
 					//Log(LOG_INFO) << "TileEngine::voxelCheck() EXIT, return 4";
-					return 4;
+					return V_UNIT;
 				}
 			}
 		}
 	}
 
 	//Log(LOG_INFO) << "TileEngine::voxelCheck() EXIT, return(2) -1";
-	return -1;
+	return V_EMPTY;
 }
 
 /**

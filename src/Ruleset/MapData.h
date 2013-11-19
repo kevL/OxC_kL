@@ -54,6 +54,18 @@ enum MovementType
 	MT_SLIDE
 };
 
+enum VoxelType
+{
+	V_EMPTY = -1,
+	V_FLOOR,
+	V_WESTWALL,
+	V_NORTHWALL,
+	V_OBJECT,
+	V_UNIT,
+	V_OUTOFBOUNDS
+};
+
+
 /**
  * MapData is the smallest piece of a Battlescape terrain, holding info about a certain object, wall, floor, ...
  * @sa MapDataSet.
