@@ -238,7 +238,7 @@ void SelectDestinationState::globeClick(Action* action)
  */
 /* void SelectDestinationState::btnRotateLeftRelease(Action*)
 {
-	_globe->rotateStop();
+	_globe->rotateStopLon();
 } */
 
 /**
@@ -256,7 +256,7 @@ void SelectDestinationState::globeClick(Action* action)
  */
 /* void SelectDestinationState::btnRotateRightRelease(Action*)
 {
-	_globe->rotateStop();
+	_globe->rotateStopLon();
 } */
 
 /**
@@ -274,7 +274,7 @@ void SelectDestinationState::globeClick(Action* action)
  */
 /* void SelectDestinationState::btnRotateUpRelease(Action*)
 {
-	_globe->rotateStop();
+	_globe->rotateStopLat();
 } */
 
 /**
@@ -292,7 +292,7 @@ void SelectDestinationState::globeClick(Action* action)
  */
 /* void SelectDestinationState::btnRotateDownRelease(Action*)
 {
-	_globe->rotateStop();
+	_globe->rotateStopLat();
 } */
 
 /**

@@ -1039,6 +1039,15 @@ BattlescapeState* SavedBattleGame::getBattleState()
 }
 
 /**
+ * Gets the BattlescapeState.
+ * @return Pointer to the BattlescapeState.
+ */
+BattlescapeGame *SavedBattleGame::getBattleGame()
+{
+	return _battleState->getBattleGame();
+}
+
+/**
  * Sets the BattlescapeState.
  * @param bs A Pointer to a BattlescapeState.
  */

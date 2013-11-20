@@ -294,7 +294,7 @@ void BuildNewBaseState::btnRotateLeftPress(Action*)
  */
 void BuildNewBaseState::btnRotateLeftRelease(Action*)
 {
-	_globe->rotateStop();
+	_globe->rotateStopLon();
 }
 
 /**
@@ -312,7 +312,7 @@ void BuildNewBaseState::btnRotateRightPress(Action*)
  */
 void BuildNewBaseState::btnRotateRightRelease(Action*)
 {
-	_globe->rotateStop();
+	_globe->rotateStopLon();
 }
 
 /**
@@ -330,7 +330,7 @@ void BuildNewBaseState::btnRotateUpPress(Action*)
  */
 void BuildNewBaseState::btnRotateUpRelease(Action*)
 {
-	_globe->rotateStop();
+	_globe->rotateStopLat();
 }
 
 /**
@@ -348,7 +348,7 @@ void BuildNewBaseState::btnRotateDownPress(Action*)
  */
 void BuildNewBaseState::btnRotateDownRelease(Action*)
 {
-	_globe->rotateStop();
+	_globe->rotateStopLat();
 }
 
 /**

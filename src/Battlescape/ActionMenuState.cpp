@@ -21,6 +21,7 @@
 #include <sstream>
 #include <cmath>
 #include "../Engine/Game.h"
+#include "../Engine/Options.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
@@ -188,6 +189,13 @@ void ActionMenuState::handle(Action* action)
 //kL	if (action->getDetails()->type == SDL_MOUSEBUTTONDOWN
 //kL		&& action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)		// kL
+	{
+		_game->popState();
+	}
+	else if (action->getDetails()->type == SDL_KEYDOWN &&
+		(action->getDetails()->key.keysym.sym == (SDLKey)Options::getInt("keyCancel") ||
+		action->getDetails()->key.keysym.sym == (SDLKey)Options::getInt("keyBattleUseLeftHand") ||
+		action->getDetails()->key.keysym.sym == (SDLKey)Options::getInt("keyBattleUseRightHand")))
 	{
 		_game->popState();
 	}

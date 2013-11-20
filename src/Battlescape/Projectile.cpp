@@ -22,11 +22,13 @@
 #include <cmath>
 #include "Projectile.h"
 #include "TileEngine.h"
+#include "Position.h"
+#include "BattlescapeGame.h"
 #include "../aresame.h"
 #include "../Engine/SurfaceSet.h"
 #include "../Engine/Surface.h"
-#include "../Battlescape/Position.h"
-#include "../Battlescape/TileEngine.h"
+//Old #include "../Battlescape/Position.h"
+//Old #include "../Battlescape/TileEngine.h"
 #include "../Resource/ResourcePack.h"
 #include "../Ruleset/Unit.h"
 #include "../Ruleset/RuleSoldier.h"
@@ -156,7 +158,8 @@ int Projectile::calculateTrajectory(double accuracy)
 	}
 
 	if (_action.type == BA_LAUNCH
-		|| (SDL_GetModState() & KMOD_CTRL) != 0)
+		|| (SDL_GetModState() & KMOD_CTRL) != 0
+		|| !_save->getBattleGame()->getPanicHandled()))
 		// kL_note: Ctrl+LMB could check for tile-parts... cf below.
 	{
 		// target nothing, targets the middle of the tile
@@ -420,7 +423,7 @@ int Projectile::calculateThrow(double accuracy)
 
 	// object blocking - can't throw here
 	if (_action.type == BA_THROW
-		&&_save->getTile(_action.target)
+		&& _save->getTile(_action.target)
 		&& _save->getTile(_action.target)->getMapData(MapData::O_OBJECT)
 		&& _save->getTile(_action.target)->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) == 255)
 	{
@@ -534,9 +537,7 @@ int Projectile::calculateThrow(double accuracy)
 				arc,
 				1.0);
 		if (check != V_OUTOFBOUNDS // out of map
-			&& _trajectory.at(0).x / 16 == targetVoxel.x / 16
-			&& _trajectory.at(0).y / 16 == targetVoxel.y / 16
-			&& _trajectory.at(0).z / 24 == targetVoxel.z / 24)
+			&& (_trajectory.at(0) / Position(16, 16, 24)) == (targetVoxel / Position(16, 16, 24)))
 		{
 			found = true;
 		}
@@ -560,7 +561,7 @@ int Projectile::calculateThrow(double accuracy)
 	static const double maxDeviation = 0.0675;
 	static const double minDeviation = 0.0;
 	double baseDeviation = (maxDeviation - (maxDeviation * accuracy)) + minDeviation;
-	double deviation = RNG::boxMuller(0.0, baseDeviation);
+//Old	double deviation = RNG::boxMuller(0.0, baseDeviation);
 
 	_trajectory.clear();
 	int retValue = V_OUTOFBOUNDS;
@@ -578,6 +579,8 @@ int Projectile::calculateThrow(double accuracy)
 	// finally do a line calculation and store this trajectory, make sure it's valid.
 	while (result == V_OUTOFBOUNDS)
 	{
+		double deviation = RNG::boxMuller(0, baseDeviation);
+
 		_trajectory.clear();
 		result = _save->getTileEngine()->calculateParabola(
 				originVoxel,
@@ -594,7 +597,8 @@ int Projectile::calculateThrow(double accuracy)
 		endPoint.z /= 24;
 		// check if the item would land on a tile with a blocking object
 		// OLD. let it fly without deviation, it must land on a valid tile in that case
-		if (_save->getTile(endPoint)
+		if (_action.type == BA_THROW
+			&& _save->getTile(endPoint)
 			&& _save->getTile(endPoint)->getMapData(MapData::O_OBJECT)
 			&& _save->getTile(endPoint)->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) == 255)
 		{

@@ -1600,11 +1600,11 @@ bool TileEngine::tryReactionSnap(BattleUnit* unit, BattleUnit* target)
 
 			action.TU = 0;
 
-			action.cameraPosition = _save->getBattleState()->getMap()->getCamera()->getMapOffset();
-			action.actor = unit;
+			action.cameraPosition = _save->getBattleState()->getMap()->getCamera()->getMapOffset();	// kL, was above under "BattleAction action;"
+			action.actor = unit;																	// kL, was above under "BattleAction action;"
 
-			_save->getBattleState()->getBattleGame()->statePushBack(new UnitTurnBState(_save->getBattleState()->getBattleGame(), action));
-			_save->getBattleState()->getBattleGame()->statePushBack(new ProjectileFlyBState(_save->getBattleState()->getBattleGame(), action));
+			_save->getBattleGame()->statePushBack(new UnitTurnBState(_save->getBattleGame(), action));
+			_save->getBattleGame()->statePushBack(new ProjectileFlyBState(_save->getBattleGame(), action));
 
 			return true;
 		}
@@ -1764,9 +1764,9 @@ BattleUnit* TileEngine::hit(
 								targetUnit->getPosition().y * 16,
 								targetUnit->getPosition().z * 24);
 
-						_save->getBattleState()->getBattleGame()->statePushNext(
+						_save->getBattleGame()->statePushNext(
 								new ExplosionBState(
-										_save->getBattleState()->getBattleGame(),
+										_save->getBattleGame(),
 										unitPos,
 										0,
 										targetUnit,
@@ -2707,7 +2707,7 @@ int TileEngine::unitOpensDoor(BattleUnit* unit, bool rClick, int dir)
 				tile = _save->getTile(unit->getPosition() + Position(x, y, z) + i->first);
 				if (tile)
 				{
-					door = tile->openDoor(i->second, unit, _save->getBattleState()->getBattleGame()->getReservedAction());
+					door = tile->openDoor(i->second, unit, _save->getBattleGame()->getReservedAction());
 					if (door != -1)
 					{
 						part = i->second;
@@ -2742,7 +2742,7 @@ int TileEngine::unitOpensDoor(BattleUnit* unit, bool rClick, int dir)
 
 	if (TUCost != 0)
 	{
-		if (_save->getBattleState()->getBattleGame()->checkReservedTU(unit, TUCost))
+		if (_save->getBattleGame()->checkReservedTU(unit, TUCost))
 		{
 			if (unit->spendTimeUnits(TUCost))
 			{
@@ -3579,12 +3579,12 @@ bool TileEngine::psiAttack(BattleAction* action)
 					int liveAliens = 0;
 					int liveSoldiers = 0;
 
-					_save->getBattleState()->getBattleGame()->tallyUnits(liveAliens, liveSoldiers, false);
+					_save->getBattleGame()->tallyUnits(liveAliens, liveSoldiers, false);
 
 					if (liveAliens == 0 || liveSoldiers == 0)
 					{
 						_save->setSelectedUnit(0);
-						_save->getBattleState()->getBattleGame()->requestEndTurn();
+						_save->getBattleGame()->requestEndTurn();
 					}
 				}
 				//Log(LOG_INFO) << ". . . tallyUnits codeblock DONE";

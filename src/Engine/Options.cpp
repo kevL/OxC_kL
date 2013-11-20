@@ -147,6 +147,7 @@ void createDefault()
     setBool("cursorInBlackBandsInWindow", true);
     setBool("cursorInBlackBandsInBorderlessWindow", false);
 	setBool("newSeedOnLoad", false);
+	setBool("skipNextTurnScreen", false);
 
 	// new battle mode data
 	setInt("NewBattleMission", 0);
@@ -236,6 +237,8 @@ void createDefault()
 	setInt("keyBattlePrevUnit", SDLK_LSHIFT);
 	setInt("keyBattleNextUnit", SDLK_TAB);
 	setInt("keyBattleDeselectUnit", SDLK_BACKSLASH);
+	setInt("keyBattleUseLeftHand", SDLK_q);
+	setInt("keyBattleUseRightHand", SDLK_e);
 	setInt("keyBattleInventory", SDLK_i);
 	setInt("keyBattleMap", SDLK_m);
 	setInt("keyBattleOptions", SDLK_ESCAPE);

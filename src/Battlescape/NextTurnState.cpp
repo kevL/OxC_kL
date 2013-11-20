@@ -20,6 +20,8 @@
 #include "NextTurnState.h"
 #include <sstream>
 #include "../Engine/Game.h"
+#include "../Engine/Options.h"
+#include "../Engine/Timer.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
@@ -47,7 +49,8 @@ NextTurnState::NextTurnState(Game* game, SavedBattleGame* battleGame, Battlescap
 	:
 		State(game),
 		_battleGame(battleGame),
-		_state(state)
+		_state(state),
+		_timer(0)
 {
 	//Log(LOG_INFO) << "Create NextTurnState";
 
@@ -85,7 +88,7 @@ NextTurnState::NextTurnState(Game* game, SavedBattleGame* battleGame, Battlescap
 	_txtTurn->setAlign(ALIGN_CENTER);
 	_txtTurn->setHighContrast(true);
 	_txtTurn->setText(tr("STR_TURN").arg(_battleGame->getTurn()));
-	//Log(LOG_INFO) << ". NextTurnState -> SavedBattleGame::getTurn() : " << _battleGame->getTurn();	// kL
+	//Log(LOG_INFO) << ". NextTurnState -> SavedBattleGame::getTurn() : " << _battleGame->getTurn();
 
 	_txtSide->setColor(Palette::blockOffset(0)-1);
 	_txtSide->setBig();
@@ -103,6 +106,13 @@ NextTurnState::NextTurnState(Game* game, SavedBattleGame* battleGame, Battlescap
 
 	kL_preReveal = true;	// kL
 	//Log(LOG_INFO) << ". . set kL_preReveal TRUE";
+
+	if (Options::getBool("skipNextTurnScreen"))
+	{
+		_timer = new Timer(NEXT_TURN_DELAY);
+		_timer->onTimer((StateHandler)&NextTurnState::close);
+		_timer->start();
+	}
 }
 
 /**
@@ -111,6 +121,7 @@ NextTurnState::NextTurnState(Game* game, SavedBattleGame* battleGame, Battlescap
 NextTurnState::~NextTurnState()
 {
 	//Log(LOG_INFO) << "Delete NextTurnState";
+	delete _timer;
 }
 
 /**
@@ -119,38 +130,51 @@ NextTurnState::~NextTurnState()
  */
 void NextTurnState::handle(Action* action)
 {
-	//Log(LOG_INFO) << "NextTurnState::handle()";	// kL
 	State::handle(action);
 
 //kL	if (action->getDetails()->type == SDL_KEYDOWN
 //kL		|| action->getDetails()->type == SDL_MOUSEBUTTONDOWN)
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)	// kL
 	{
-		//Log(LOG_INFO) << ". . . . RMB, update TurnCounter, popState & tallyUnits";	// kL
-
-//		_turnCounter->setTurnCount(kL_TurnCount);	// kL
-		kL_TurnCount = _battleGame->getTurn();		// kL
+		kL_TurnCount = _battleGame->getTurn();
 
 		_turnCounter = _state->getTurnCounter();
 		_turnCounter->update();
 
-		_game->popState();
-
-		int liveAliens = 0;
-		int liveSoldiers = 0;
-
-		_state->getBattleGame()->tallyUnits(liveAliens, liveSoldiers, false);
-		if (liveAliens == 0 || liveSoldiers == 0)
-		{
-			_state->finishBattle(false, liveSoldiers);
-		}
-		else
-		{
-			_state->btnCenterClick(0);
-		}
+		close();
 	}
+}
 
-	//Log(LOG_INFO) << ". . handle() EXIT";	// kL
+/**
+ * Keeps the timer running.
+ */
+void NextTurnState::think()
+{
+	if (_timer)
+	{
+		_timer->think(this, 0);
+	}
+}
+
+/**
+ * Closes the window.
+ */
+void NextTurnState::close()
+{
+	_game->popState();
+
+	int liveAliens = 0;
+	int liveSoldiers = 0;
+
+	_state->getBattleGame()->tallyUnits(liveAliens, liveSoldiers, false);
+	if (liveAliens == 0 || liveSoldiers == 0)
+	{
+		_state->finishBattle(false, liveSoldiers);
+	}
+	else
+	{
+		_state->btnCenterClick(0);
+	}
 }
 
 }

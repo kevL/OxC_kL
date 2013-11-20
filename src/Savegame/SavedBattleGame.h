@@ -232,6 +232,8 @@ private:
 		bool getTraceSetting() const;
 		/// Gets a pointer to the BattlescapeState.
 		BattlescapeState* getBattleState();
+		/// Gets a pointer to the BattlescapeGame.
+		BattlescapeGame* getBattleGame();
 		/// Sets the pointer to the BattlescapeState.
 		void setBattleState(BattlescapeState* bs);
 		/// Gets the highest ranked, living XCom unit.

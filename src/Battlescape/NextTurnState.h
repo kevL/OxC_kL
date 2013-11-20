@@ -31,6 +31,7 @@ class Text;
 class SavedBattleGame;
 class BattlescapeState;
 class TurnCounter;		// kL
+class Timer;
 
 /**
  * Screen which announces the next turn.
@@ -40,11 +41,13 @@ class NextTurnState
 		public State
 {
 private:
+	static const int NEXT_TURN_DELAY = 500;
 	Window* _window;
 	Text* _txtTitle, * _txtTurn, * _txtSide, * _txtMessage;
 	SavedBattleGame* _battleGame;
 	BattlescapeState* _state;
 	TurnCounter* _turnCounter;		// kL
+	Timer* _timer;
 
 	public:
 		/// Creates the Next Turn state.
@@ -53,6 +56,10 @@ private:
 		~NextTurnState();
 		/// Handler for clicking anything.
 		void handle(Action* action);
+		/// Handles the timer.
+		void think();
+		/// Closes the window.
+		void close();
 };
 
 }

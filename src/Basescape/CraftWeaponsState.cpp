@@ -168,7 +168,8 @@ void CraftWeaponsState::lstWeaponsClick(Action*)
 		_base->getItems()->addItem(current->getRules()->getLauncherItem());
 		_base->getItems()->addItem(
 				current->getRules()->getClipItem(),
-				static_cast<int>(floor(static_cast<double>(current->getAmmo() / current->getRules()->getRearmRate()))));
+// OLD.				static_cast<int>(floor(static_cast<double>(current->getAmmo() / current->getRules()->getRearmRate()))));
+				current->getClipsLoaded(_game->getRuleset()));
 
 		delete current;
 		_base->getCrafts()->at(_craft)->getWeapons()->at(_weapon) = 0;
