@@ -34,6 +34,7 @@ class TextButton;
 class ToggleTextButton;
 class TextList;
 class Region;
+struct GraphButInfo;
 
 /**
  * Graphs screen for displaying graphs of various
@@ -44,7 +45,7 @@ class GraphsState
 		public State
 {
 private:
-	Surface* _bg;
+	InteractiveSurface* _bg;
 	InteractiveSurface* _btnGeoscape;
 	InteractiveSurface* _btnXcomCountry, * _btnUfoCountry;
 	InteractiveSurface* _btnXcomRegion, * _btnUfoRegion;
@@ -52,15 +53,23 @@ private:
 	Text* _txtTitle, * _txtFactor;
 	TextList* _txtMonths, * _txtYears;
 	std::vector<Text*> _txtScale;
-	std::vector<ToggleTextButton*> _btnRegions, _btnCountries;
-	std::vector<ToggleTextButton*> _btnFinances;
-	std::vector<bool> _regionToggles, _countryToggles;
+	std::vector<ToggleTextButton*> _btnRegions, _btnCountries, _btnFinances;
+	std::vector<GraphButInfo*>  _regionToggles, _countryToggles;
 	std::vector<bool> _financeToggles;
 	ToggleTextButton* _btnRegionTotal, * _btnCountryTotal;
 	std::vector<Surface*> _alienRegionLines, _alienCountryLines;
 	std::vector<Surface*> _xcomRegionLines, _xcomCountryLines;
 	std::vector<Surface*> _financeLines, _incomeLines;
 	bool _alien, _income, _country, _finance;
+
+	static const unsigned int GRAPH_MAX_BUTTONS = 16;
+
+	/// will be only between 0 and size()
+	unsigned int _butRegionsOffset, _butCountriesOffset;
+	/// scroll and repaint buttons functions
+	void scrollButtons(std::vector<GraphButInfo*>& toggles, std::vector<ToggleTextButton*>& buttons, unsigned int& offset, int step);
+	///
+	void updateButton(GraphButInfo* from, ToggleTextButton* to);
 
 	public:
 		/// Creates the Graphs state.
@@ -82,12 +91,14 @@ private:
 		void btnIncomeClick(Action* action);
 		/// Handler for clicking the finance icon.
 		void btnFinanceClick(Action* action);
-		/// Handler for pressing on a region button.
-		void btnRegionListPress(Action* action);
-		/// Handler for pressing on a country button.
-		void btnCountryListPress(Action* action);
-		/// Handler for pressing on a finances button.
-		void btnFinanceListPress(Action* action);
+		/// Handler for clicking on a region button.
+		void btnRegionListClick(Action* action);
+		/// Handler for clicking on a country button.
+		void btnCountryListClick(Action* action);
+		/// Handler for clicking  on a finances button.
+		void btnFinanceListClick(Action* action);
+		/// Mouse wheel handler for shifting up/down the buttons
+		void shiftButtons(Action* action);
 
 		/// Reset all the elements on screen.
 		void resetScreen();
@@ -101,6 +112,8 @@ private:
 		void drawCountryLines();
 		/// Draw Finances Lines.
 		void drawFinanceLines();
+
+		/// Scroll button lists
 };
 
 }

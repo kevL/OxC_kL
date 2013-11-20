@@ -180,6 +180,7 @@ void BuildNewBaseState::init()
 {
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
 	_globe->onMouseOver((ActionHandler)& BuildNewBaseState::globeHover);
+	_globe->rotateStop();
 	_globe->setNewBaseHover();
 }
 

@@ -630,6 +630,7 @@ void GeoscapeState::init()
 
 	_globe->onMouseClick((ActionHandler)& GeoscapeState::globeClick);
 	_globe->onMouseOver(0);
+	_globe->rotateStop();
 	_globe->focus();
 	_globe->draw();
 
