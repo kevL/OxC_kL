@@ -20,8 +20,9 @@
 #ifndef OPENXCOM_GRAPHSSTATE_H
 #define OPENXCOM_GRAPHSSTATE_H
 
-#include "../Engine/State.h"
 #include <string>
+
+#include "../Engine/State.h"
 
 
 namespace OpenXcom
@@ -34,7 +35,7 @@ class TextButton;
 class ToggleTextButton;
 class TextList;
 class Region;
-struct GraphButInfo;
+struct GraphBtnInfo;
 
 /**
  * Graphs screen for displaying graphs of various
@@ -52,24 +53,31 @@ private:
 	InteractiveSurface* _btnIncome, * _btnFinance;
 	Text* _txtTitle, * _txtFactor;
 	TextList* _txtMonths, * _txtYears;
-	std::vector<Text*> _txtScale;
-	std::vector<ToggleTextButton*> _btnRegions, _btnCountries, _btnFinances;
-	std::vector<GraphButInfo*>  _regionToggles, _countryToggles;
-	std::vector<bool> _financeToggles;
 	ToggleTextButton* _btnRegionTotal, * _btnCountryTotal;
+
+	std::vector<GraphBtnInfo*> _regionToggles, _countryToggles;
 	std::vector<Surface*> _alienRegionLines, _alienCountryLines;
 	std::vector<Surface*> _xcomRegionLines, _xcomCountryLines;
 	std::vector<Surface*> _financeLines, _incomeLines;
+	std::vector<Text*> _txtScale;
+	std::vector<ToggleTextButton*> _btnRegions, _btnCountries, _btnFinances;
+
+	std::vector<bool> _financeToggles;
+
 	bool _alien, _income, _country, _finance;
 
 	static const unsigned int GRAPH_MAX_BUTTONS = 16;
 
 	/// will be only between 0 and size()
-	unsigned int _butRegionsOffset, _butCountriesOffset;
+	unsigned int _btnRegionsOffset, _btnCountriesOffset;
 	/// scroll and repaint buttons functions
-	void scrollButtons(std::vector<GraphButInfo*>& toggles, std::vector<ToggleTextButton*>& buttons, unsigned int& offset, int step);
+	void scrollButtons(
+			std::vector<GraphBtnInfo*>& toggles,
+			std::vector<ToggleTextButton*>& buttons,
+			unsigned int& offset,
+			int step);
 	///
-	void updateButton(GraphButInfo* from, ToggleTextButton* to);
+	void updateButton(GraphBtnInfo* from, ToggleTextButton* to);
 
 	public:
 		/// Creates the Graphs state.

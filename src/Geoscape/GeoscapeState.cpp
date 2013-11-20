@@ -2537,6 +2537,8 @@ void GeoscapeState::zoomOutEffect()
 	if (_game->getSavedGame()->getGlobeZoom() == 0
 		|| _game->getSavedGame()->getGlobeZoom() < _zoomInter - 1)
 	{
+		_zoomInter = 0;
+
 		_zoomOutEffectDone = true;
 		_zoomOutEffectTimer->stop();
 
