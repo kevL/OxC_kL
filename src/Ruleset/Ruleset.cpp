@@ -581,6 +581,15 @@ T* Ruleset::loadRule(const YAML::Node& node, std::map<std::string, T*>* map, std
 		{
 			map->erase(i);
 		}
+
+		if (index != 0)
+		{
+			std::vector<std::string>::iterator idx = std::find(index->begin(), index->end(), type);
+			if (idx != index->end())
+			{
+				index->erase(idx);
+			}
+		}
 	}
 
 	return rule;
@@ -604,8 +613,13 @@ SavedGame* Ruleset::newSave() const
 //kL	int missing = ((_initialFunding - save->getCountryFunding()/1000) / (int)save->getCountries()->size()) * 1000;
 	for (std::vector<Country*>::iterator i = save->getCountries()->begin(); i != save->getCountries()->end(); ++i)
 	{
-//kL		(*i)->setFunding((*i)->getFunding().back() + missing);
-		(*i)->setFunding((*i)->getFunding().back());	// kL
+		int funding = (*i)->getFunding().back(); //kL + missing;
+		if (funding < 0)
+		{
+			funding = (*i)->getFunding().back();
+		}
+
+		(*i)->setFunding(funding);
 	}
 
 	save->setFunds(save->getCountryFunding());
