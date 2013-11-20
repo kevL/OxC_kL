@@ -20,9 +20,10 @@
 #ifndef OPENXCOM_DOGFIGHTSTATE_H
 #define OPENXCOM_DOGFIGHTSTATE_H
 
-#include "../Engine/State.h"
 #include <vector>
 #include <string>
+
+#include "../Engine/State.h"
 
 
 namespace OpenXcom
@@ -41,14 +42,24 @@ class Ufo;
 class CraftWeaponProjectile;
 
 /**
- * Shows a dogfight (interception) between a
- * player craft and an UFO.
+ * Shows a dogfight (interception) between a player craft and an UFO.
  */
 class DogfightState
 	:
 		public State
 {
 private:
+	static const int _ufoBlobs[8][13][13];
+	static const int _projectileBlobs[4][6][3];
+	static const int _timeScale;
+
+	bool _end, _destroyUfo, _destroyCraft, _ufoBreakingOff, _weapon1Enabled, _weapon2Enabled, _minimized, _endDogfight;
+	int _timeout, _currentDist, _targetDist, _currentRadius, _ufoFireInterval, _ufoHitFrame;
+	int _ufoSize, _craftHeight, _currentCraftDamageColor, _interceptionsCount, _interceptionNumber;
+	int _x, _y, _minimizedIconX, _minimizedIconY;
+
+	std::vector<CraftWeaponProjectile*> _projectiles;
+
 	Timer* _animTimer, * _moveTimer, * _w1Timer, * _w2Timer, * _ufoWtimer, * _ufoEscapeTimer, * _craftDamageAnimTimer;
 	Surface* _window, * _battle, * _range1, * _range2, * _damage;
 	InteractiveSurface* _btnMinimize, * _preview, * _weapon1, * _weapon2;
@@ -59,14 +70,6 @@ private:
 	Globe* _globe;
 	Craft* _craft;
 	Ufo* _ufo;
-	int _timeout, _currentDist, _targetDist, _currentRadius, _ufoFireInterval, _ufoHitFrame;
-	bool _end, _destroyUfo, _destroyCraft, _ufoBreakingOff, _weapon1Enabled, _weapon2Enabled, _minimized, _endDogfight;
-	std::vector<CraftWeaponProjectile*> _projectiles;
-	static const int _ufoBlobs[8][13][13];
-	static const int _projectileBlobs[4][6][3];
-	static const int _timeScale;
-	int _ufoSize, _craftHeight, _currentCraftDamageColor, _interceptionsCount, _interceptionNumber;
-	int _x, _y, _minimizedIconX, _minimizedIconY;
 
 	// Ends the dogfight.
 	void endDogfight();

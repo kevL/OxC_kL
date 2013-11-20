@@ -718,10 +718,10 @@ void Craft::checkup()
  */
 bool Craft::detect(Target* target) const
 {
-	Log(LOG_INFO) << "Craft::detect(Target* target)";
+	Log(LOG_INFO) << "Craft::detect()";
 
 	double radarRange = static_cast<double>(_rules->getRadarRange());
-	Log(LOG_INFO) << ". radarRange = " << radarRange;
+	//Log(LOG_INFO) << ". radarRange = " << radarRange;
 	if (radarRange == 0.0)
 		return false;
 

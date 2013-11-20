@@ -87,9 +87,9 @@ UfoDetectedState::UfoDetectedState(Game* game, Ufo* ufo, GeoscapeState* state, b
 
 	_lstInfo		= new TextList(192, 33, 32, 85);
 
-	_btnIntercept	= new TextButton(192, 16, 32, 124);
+	_btnCentre		= new TextButton(192, 16, 32, 124);
 
-	_btnCentre		= new TextButton(88, 16, 32, 144);
+	_btnIntercept	= new TextButton(88, 16, 32, 144);
 	_btnCancel		= new TextButton(88, 16, 136, 144);
 
 	if (hyperwave)
@@ -97,8 +97,8 @@ UfoDetectedState::UfoDetectedState(Game* game, Ufo* ufo, GeoscapeState* state, b
 		_txtUfo->setY(19);
 		_txtDetected->setY(36);
 		_lstInfo->setY(60);
-		_btnIntercept->setY(135);
-		_btnCentre->setY(155);
+		_btnCentre->setY(135);
+		_btnIntercept->setY(155);
 		_btnCancel->setY(155);
 
 		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)), Palette::backPos, 16);

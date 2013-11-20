@@ -66,7 +66,7 @@ GeoscapeCraftState::GeoscapeCraftState(Game* game, Craft* craft, Globe* globe, W
 
 	_txtBase		= new Text(192, 9, 32, 45);
 
-	_txtRedirect	= new Text(120, 17, 120, 50);
+	_txtRedirect	= new Text(120, 17, 120, 46);
 
 	_txtSpeed		= new Text(192, 9, 32, 55);
 

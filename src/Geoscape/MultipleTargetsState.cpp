@@ -205,7 +205,7 @@ void MultipleTargetsState::lstTargetsClick(Action*)
 	Target* t = _targets[_lstTargets->getSelectedRow()];
 	popupTarget(t);
 
-	Log(LOG_INFO) << "MultipleTargetsState::lstTargetsClick() EXIT";
+	//Log(LOG_INFO) << "MultipleTargetsState::lstTargetsClick() EXIT";
 }
 
 }

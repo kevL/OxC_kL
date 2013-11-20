@@ -20,8 +20,9 @@
 #ifndef OPENXCOM_GEOSCAPESTATE_H
 #define OPENXCOM_GEOSCAPESTATE_H
 
-#include "../Engine/State.h"
 #include <vector>
+
+#include "../Engine/State.h"
 
 
 namespace OpenXcom
@@ -33,7 +34,7 @@ class Surface;
 class Globe;
 //kL class TextButton;
 class ImageButton;		// kL
-class InteractiveSurface;
+//kL class InteractiveSurface;
 class Text;
 class Timer;
 class DogfightState;

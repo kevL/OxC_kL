@@ -417,11 +417,12 @@ uint8_t Base::detect(Target* target) const
 			if ((*f)->getBuildTime() == 0)
 			{
 				double radarRange = static_cast<double>((*f)->getRules()->getRadarRange());
-				Log(LOG_INFO) << ". . radarRange = " << radarRange;
+				//Log(LOG_INFO) << ". . radarRange = " << (int)radarRange;
 
 				if (targetDistance < radarRange)
 				{
 					percent += (*f)->getRules()->getRadarChance();
+					Log(LOG_INFO) << ". . radarRange = " << (int)radarRange;
 					Log(LOG_INFO) << ". . . percent(base) = " << percent;
 				}
 				else

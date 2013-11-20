@@ -73,15 +73,19 @@ Uint8 ImageButton::getColor() const
 void ImageButton::setGroup(ImageButton** group)
 {
 	_group = group;
-	if (_group != 0 && *_group == this)
+
+	if (_group != 0
+		&& *_group == this)
+	{
 		invert(_color + 3);
+	}
 }
 
 /**
  * Sets the button as the pressed button if it's part of a group,
  * and inverts the colors when pressed.
- * @param action Pointer to an action.
- * @param state State that the action handlers belong to.
+ * @param action, Pointer to an action.
+ * @param state, State that the action handlers belong to.
  */
 void ImageButton::mousePress(Action* action, State* state)
 {
@@ -92,8 +96,6 @@ void ImageButton::mousePress(Action* action, State* state)
 			(*_group)->invert((*_group)->getColor() + 3);
 			*_group = this;
 			invert(_color + 3);
-
-			_inverted = true;
 		}
 	}
 	else if (!_inverted
@@ -109,8 +111,8 @@ void ImageButton::mousePress(Action* action, State* state)
 
 /*
  * Sets the button as the released button if it's part of a group.
- * @param action Pointer to an action.
- * @param state State that the action handlers belong to.
+ * @param action, Pointer to an action.
+ * @param state, State that the action handlers belong to.
  */
 void ImageButton::mouseRelease(Action* action, State* state)
 {

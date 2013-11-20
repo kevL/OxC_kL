@@ -223,6 +223,7 @@ void TextButton::draw()
 			square.x++;
 			square.y++;
 		}
+
 		square.w--;
 		square.h--;
 
@@ -276,7 +277,7 @@ void TextButton::mousePress(Action* action, State* state)
 		if (old != 0)
 			old->draw();
 
-		draw(); // 2013 nov 15
+		draw();
 	}
 
 	if (isButtonHandled(action->getDetails()->button.button))
@@ -290,7 +291,7 @@ void TextButton::mousePress(Action* action, State* state)
 		}
 
 		draw();
-		//_redraw = true;
+//		_redraw = true;
 	}
 
 	InteractiveSurface::mousePress(action, state);
@@ -306,7 +307,7 @@ void TextButton::mouseRelease(Action* action, State* state)
 	if (isButtonHandled(action->getDetails()->button.button))
 	{	
 		draw();
-		//_redraw = true;
+//		_redraw = true;
 	}
 
 	InteractiveSurface::mouseRelease(action, state);
