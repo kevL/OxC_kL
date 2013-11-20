@@ -159,7 +159,7 @@ int Projectile::calculateTrajectory(double accuracy)
 
 	if (_action.type == BA_LAUNCH
 		|| (SDL_GetModState() & KMOD_CTRL) != 0
-		|| !_save->getBattleGame()->getPanicHandled()))
+		|| !_save->getBattleGame()->getPanicHandled())
 		// kL_note: Ctrl+LMB could check for tile-parts... cf below.
 	{
 		// target nothing, targets the middle of the tile
@@ -176,7 +176,7 @@ int Projectile::calculateTrajectory(double accuracy)
 		// Store this target voxel.
 		targetTile = _save->getTile(_action.target);
 		Position hitPos;
-		int test = V_EMPTY;
+		int test = VOXEL_EMPTY;
 
 		if (targetTile->getUnit() != 0) // aiming at Unit.
 		{
@@ -283,7 +283,7 @@ int Projectile::calculateTrajectory(double accuracy)
 
 		//Log(LOG_INFO) << ". test = " << test;
 
-		if (test != V_EMPTY
+		if (test != VOXEL_EMPTY
 				&& !_trajectory.empty()
 				&& _action.actor->getFaction() == FACTION_PLAYER
 				&& _action.autoShotCounter == 1)
@@ -293,7 +293,7 @@ int Projectile::calculateTrajectory(double accuracy)
 					_trajectory.at(0).y / 16,
 					_trajectory.at(0).z / 24);
 
-			if (test == V_UNIT
+			if (test == VOXEL_UNIT
 					&& _save->getTile(hitPos)
 					&& _save->getTile(hitPos)->getUnit() == 0)
 			{
@@ -306,7 +306,7 @@ int Projectile::calculateTrajectory(double accuracy)
 			{
 				//Log(LOG_INFO) << ". . hitPos != target";
 
-				if (test == V_NORTHWALL) // re-calculate for Northwall south of targetTile
+				if (test == VOXEL_NORTHWALL) // re-calculate for Northwall south of targetTile
 				{
 					//Log(LOG_INFO) << ". . . test == 2";
 
@@ -316,7 +316,7 @@ int Projectile::calculateTrajectory(double accuracy)
 						//Log(LOG_INFO) << ". . . . no Acu modifi perhaps";
 
 						_trajectory.clear();
-						return V_EMPTY;
+						return VOXEL_EMPTY;
 /*						return _save->getTileEngine()->calculateLine(
 								originVoxel,
 								targetVoxel,
@@ -325,7 +325,7 @@ int Projectile::calculateTrajectory(double accuracy)
 								bu); */
 					}
 				}
-				else if (test == V_WESTWALL) // re-calculate for Westwall east of targetTile
+				else if (test == VOXEL_WESTWALL) // re-calculate for Westwall east of targetTile
 				{
 					//Log(LOG_INFO) << ". . . test == 1";
 
@@ -334,7 +334,7 @@ int Projectile::calculateTrajectory(double accuracy)
 					{
 						//Log(LOG_INFO) << ". . . . no Acu modifi perhaps";
 						_trajectory.clear();
-						return V_EMPTY;
+						return VOXEL_EMPTY;
 /*						return _save->getTileEngine()->calculateLine(
 								originVoxel,
 								targetVoxel,
@@ -364,7 +364,7 @@ int Projectile::calculateTrajectory(double accuracy)
 							bu);
 //					}
 				} */// kL_end.
-				else if (test == V_UNIT)
+				else if (test == VOXEL_UNIT)
 				{
 					BattleUnit* hitUnit = _save->getTile(hitPos)->getUnit();
 					BattleUnit* targetUnit = targetTile->getUnit();
@@ -372,13 +372,15 @@ int Projectile::calculateTrajectory(double accuracy)
 					if (hitUnit != targetUnit)
 					{
 						_trajectory.clear();
-						return V_EMPTY;
+
+						return VOXEL_EMPTY;
 					}
 				}
 				else // test == 3, or something much higher.
 				{
 					_trajectory.clear();
-					return V_EMPTY;
+
+					return VOXEL_EMPTY;
 				}
 			}
 		}
@@ -427,7 +429,7 @@ int Projectile::calculateThrow(double accuracy)
 		&& _save->getTile(_action.target)->getMapData(MapData::O_OBJECT)
 		&& _save->getTile(_action.target)->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) == 255)
 	{
-		return V_EMPTY;
+		return VOXEL_EMPTY;
 	}
 
 	originVoxel = Position(
@@ -524,7 +526,7 @@ int Projectile::calculateThrow(double accuracy)
 	// we try several different arcs to try and reach our goal.
 //	double arc = 0.5; // start with a very low traj.5 seems too low.
 	double arc = 1.0;
-	int retValue = V_EMPTY;
+	int retValue = VOXEL_EMPTY;
 
 	while (!found && arc < 5.0)
 	{
@@ -536,10 +538,11 @@ int Projectile::calculateThrow(double accuracy)
 				bu,
 				arc,
 				1.0);
-		if (check != V_OUTOFBOUNDS // out of map
+		if (check != VOXEL_OUTOFBOUNDS // out of map
 			&& (_trajectory.at(0) / Position(16, 16, 24)) == (targetVoxel / Position(16, 16, 24)))
 		{
 			found = true;
+			retValue = check;
 		}
 		else
 		{
@@ -552,7 +555,7 @@ int Projectile::calculateThrow(double accuracy)
 
 	if (AreSame(arc, 5.0))
 	{
-		return V_EMPTY;
+		return VOXEL_EMPTY;
 	}
 
 	// apply some accuracy modifiers
@@ -564,7 +567,7 @@ int Projectile::calculateThrow(double accuracy)
 //Old	double deviation = RNG::boxMuller(0.0, baseDeviation);
 
 	_trajectory.clear();
-	int retValue = V_OUTOFBOUNDS;
+	int result = VOXEL_OUTOFBOUNDS;
 
 	// finally do a line calculation and store this trajectory.
 /*	retValue = _save->getTileEngine()->calculateParabola(
@@ -577,7 +580,7 @@ int Projectile::calculateThrow(double accuracy)
 			1.0 + deviation); */
 
 	// finally do a line calculation and store this trajectory, make sure it's valid.
-	while (result == V_OUTOFBOUNDS)
+	while (result == VOXEL_OUTOFBOUNDS)
 	{
 		double deviation = RNG::boxMuller(0, baseDeviation);
 
@@ -603,7 +606,7 @@ int Projectile::calculateThrow(double accuracy)
 			&& _save->getTile(endPoint)->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) == 255)
 		{
 //			_trajectory.clear();
-			result = V_OUTOFBOUNDS;
+			result = VOXEL_OUTOFBOUNDS;
 		}
 
 		// OLD. finally do a line calculation and store this trajectory.

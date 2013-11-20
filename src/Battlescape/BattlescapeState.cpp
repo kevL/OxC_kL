@@ -2220,7 +2220,7 @@ void BattlescapeState::saveVoxelMap()
 					dist *= 0.9f;
 				}
 
-				if (test == V_OUTOFBOUNDS)
+				if (test == VOXEL_OUTOFBOUNDS)
 				{
 					tile = _save->getTile(Position(x / 16, y / 16, z / 12));
 					if (tile->getUnit())

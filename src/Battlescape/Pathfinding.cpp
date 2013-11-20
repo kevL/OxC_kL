@@ -1339,7 +1339,7 @@ bool Pathfinding::previewPath(bool bRemove)
 
 	if (switchBack)
 	{
-		_save->setTUReserved(BA_NONE, false);
+		_save->getBattleGame()->setTUReserved(BA_NONE, false);
 	}
 
 	return true;
