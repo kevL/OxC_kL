@@ -220,17 +220,21 @@ void AlienBAIState::think(BattleAction* action)
 	//Log(LOG_INFO) << ". . pos 1";
 	if (action->weapon)
 	{
-		//Log(LOG_INFO) << ". . has MainHandWeapon.";
-
-		if (action->weapon->getRules()->getBattleType() == BT_MELEE)
+		RuleItem *rule = action->weapon->getRules();
+		if (rule->getBattleType() == BT_FIREARM)
+		{
+			if (!rule->isWaypoint())
+				_rifle = true;
+			else
+				_blaster = true;
+		}
+		else if (rule->getBattleType() == BT_MELEE)
+		{
 			_melee = true;
-		else if (action->weapon->getRules()->getBattleType() == BT_GRENADE)		// kL
-			_grenade = true;													// kL, this is no longer useful since I fixed
-																				// getMainHandWeapon() not to return grenades.
-		else if (!action->weapon->getRules()->isWaypoint())
-			_rifle = true;
-		else
-			_blaster = true;
+		}
+		else if (rule->getBattleType() == BT_GRENADE)		// kL
+			_grenade = true;								// kL, this is no longer useful since I fixed
+															// getMainHandWeapon() to not return grenades.
 	}
 
 	//Log(LOG_INFO) << ". . pos 2";

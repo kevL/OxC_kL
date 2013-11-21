@@ -371,11 +371,11 @@ void Inventory::moveItem(BattleItem* item, RuleInventory* slot, int x, int y)
  * @param y Y position in slot.
  * @return If there's overlap.
  */
-bool Inventory::overlapItems(BattleItem* item, RuleInventory* slot, int x, int y) const
+bool Inventory::overlapItems(BattleUnit* unit, BattleItem* item, RuleInventory* slot, int x, int y)
 {
 	if (slot->getType() != INV_GROUND)
 	{
-		for (std::vector<BattleItem*>::const_iterator i = _selUnit->getInventory()->begin(); i != _selUnit->getInventory()->end(); ++i)
+		for (std::vector<BattleItem*>::const_iterator i = unit->getInventory()->begin(); i != unit->getInventory()->end(); ++i)
 		{
 			if ((*i)->getSlot() == slot
 				&& (*i)->occupiesSlot(x, y, item))
@@ -384,9 +384,9 @@ bool Inventory::overlapItems(BattleItem* item, RuleInventory* slot, int x, int y
 			}
 		}
 	}
-	else if (_selUnit->getTile() != 0)
+	else if (unit->getTile() != 0)
 	{
-		for (std::vector<BattleItem*>::const_iterator i = _selUnit->getTile()->getInventory()->begin(); i != _selUnit->getTile()->getInventory()->end(); ++i)
+		for (std::vector<BattleItem*>::const_iterator i = unit->getTile()->getInventory()->begin(); i != unit->getTile()->getInventory()->end(); ++i)
 		{
 			if ((*i)->occupiesSlot(x, y, item))
 			{
@@ -633,7 +633,7 @@ void Inventory::mouseClick(Action* action, State* state)
 				if (item == 0
 					|| item == _selItem || canStack) // Put item in empty slot, or stack it, if possible.
 				{
-					if (!overlapItems(_selItem, slot, x, y)
+					if (!overlapItems(_selUnit, _selItem, slot, x, y)
 						&& slot->fitItemInSlot(_selItem->getRules(), x, y))
 					{
 						if (!_tu || _selUnit->spendTimeUnits(_selItem->getSlot()->getCost(slot)))
@@ -989,7 +989,7 @@ bool Inventory::fitItem(RuleInventory* newSlot, BattleItem* item, std::string &w
 	{
 		for (int x2 = 0; x2 <= newSlot->getX() / RuleInventory::SLOT_W && !placed; ++x2)
 		{
-			if (!overlapItems(item, newSlot, x2, y2) && newSlot->fitItemInSlot(item->getRules(), x2, y2))
+			if (!overlapItems(_selUnit, item, newSlot, x2, y2) && newSlot->fitItemInSlot(item->getRules(), x2, y2))
 			{
 				if (!_tu
 					|| _selUnit->spendTimeUnits(item->getSlot()->getCost(newSlot)))
