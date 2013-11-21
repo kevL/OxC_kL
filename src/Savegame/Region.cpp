@@ -16,8 +16,11 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "Region.h"
+
 #include "../Ruleset/RuleRegion.h"
+
 
 namespace OpenXcom
 {
@@ -26,7 +29,9 @@ namespace OpenXcom
  * Initializes a region of the specified type.
  * @param rules Pointer to ruleset.
  */
-Region::Region(RuleRegion *rules): _rules(rules)
+Region::Region(RuleRegion* rules)
+	:
+		_rules(rules)
 {
 	_activityAlien.push_back(0);
 	_activityXcom.push_back(0);
@@ -43,10 +48,10 @@ Region::~Region()
  * Loads the region from a YAML file.
  * @param node YAML node.
  */
-void Region::load(const YAML::Node &node)
+void Region::load(const YAML::Node& node)
 {
-	_activityXcom = node["activityXcom"].as< std::vector<int> >(_activityXcom);
-	_activityAlien = node["activityAlien"].as< std::vector<int> >(_activityAlien);
+	_activityXcom	= node["activityXcom"].as< std::vector<int> >(_activityXcom);
+	_activityAlien	= node["activityAlien"].as< std::vector<int> >(_activityAlien);
 }
 
 /**
@@ -56,9 +61,11 @@ void Region::load(const YAML::Node &node)
 YAML::Node Region::save() const
 {
 	YAML::Node node;
-	node["type"] = _rules->getType();
-	node["activityXcom"] = _activityXcom;
-	node["activityAlien"] = _activityAlien;
+
+	node["type"]			= _rules->getType();
+	node["activityXcom"]	= _activityXcom;
+	node["activityAlien"]	= _activityAlien;
+
 	return node;
 }
 
@@ -66,7 +73,7 @@ YAML::Node Region::save() const
  * Returns the ruleset for the region's type.
  * @return Pointer to ruleset.
  */
-RuleRegion *Region::getRules() const
+RuleRegion* Region::getRules() const
 {
 	return _rules;
 }
@@ -91,7 +98,7 @@ void Region::addActivityAlien(int activity)
  * Gets the region's xcom activity level.
  * @return activity level.
  */
-const std::vector<int> &Region::getActivityXcom() const
+const std::vector<int>& Region::getActivityXcom() const
 {
 	return _activityXcom;
 }
@@ -100,18 +107,24 @@ const std::vector<int> &Region::getActivityXcom() const
  * Gets the region's alien activity level.
  * @return activity level.
  */
-const std::vector<int> &Region::getActivityAlien() const
+const std::vector<int>& Region::getActivityAlien() const
 {
 	return _activityAlien;
 }
 
+/**
+ * Stores last month's counters, starts new counters.
+ */
 void Region::newMonth()
 {
 	_activityAlien.push_back(0);
 	_activityXcom.push_back(0);
-	if(_activityAlien.size() > 12)
+
+	if (_activityAlien.size() > 12)
 		_activityAlien.erase(_activityAlien.begin());
-	if(_activityXcom.size() > 12)
+
+	if (_activityXcom.size() > 12)
 		_activityXcom.erase(_activityXcom.begin());
 }
+
 }

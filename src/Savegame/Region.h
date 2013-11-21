@@ -16,11 +16,13 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_REGION_H
 #define OPENXCOM_REGION_H
 
 #include <vector>
 #include <yaml-cpp/yaml.h>
+
 
 namespace OpenXcom
 {
@@ -35,29 +37,33 @@ class RuleRegion;
 class Region
 {
 private:
-	RuleRegion *_rules;
+	RuleRegion* _rules;
 	std::vector<int> _activityXcom, _activityAlien;
-public:
-	/// Creates a new region of the specified type.
-	Region(RuleRegion *rules);
-	/// Cleans up the region.
-	~Region();
-	/// Loads the region from YAML.
-	void load(const YAML::Node& node);
-	/// Saves the region to YAML.
-	YAML::Node save() const;
-	/// Gets the region's ruleset.
-	RuleRegion *getRules() const;
-	/// add xcom activity in this region
-	void addActivityXcom(int activity);
-	/// add alien activity in this region
-	void addActivityAlien(int activity);
-	/// get xcom activity to this region
-	const std::vector<int> &getActivityXcom() const;
-	/// get xcom activity to this region
-	const std::vector<int> &getActivityAlien() const;
-	/// store last month's counters, start new counters.
-	void newMonth();
+
+	public:
+		/// Creates a new region of the specified type.
+		Region(RuleRegion* rules);
+		/// Cleans up the region.
+		~Region();
+
+		/// Loads the region from YAML.
+		void load(const YAML::Node& node);
+		/// Saves the region to YAML.
+		YAML::Node save() const;
+
+		/// Gets the region's ruleset.
+		RuleRegion* getRules() const;
+
+		/// add xcom activity in this region
+		void addActivityXcom(int activity);
+		/// add alien activity in this region
+		void addActivityAlien(int activity);
+		/// get xcom activity to this region
+		const std::vector<int>& getActivityXcom() const;
+		/// get xcom activity to this region
+		const std::vector<int>& getActivityAlien() const;
+		/// store last month's counters, start new counters.
+		void newMonth();
 };
 
 }

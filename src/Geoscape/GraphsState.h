@@ -111,7 +111,7 @@ private:
 		/// Reset all the elements on screen.
 		void resetScreen();
 		/// Update the scale 
-		void updateScale(double lowerLimit, double upperLimit);
+		void updateScale(double lowerLimit, double upperLimit, int grid = 9);
 		/// Decide which lines to draw
 		void drawLines();
 		/// Draw Region Lines.
