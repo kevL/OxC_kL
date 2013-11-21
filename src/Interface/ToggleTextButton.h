@@ -20,31 +20,36 @@
 #ifndef __OXC_TOGGLETEXTBUTTON_H
 #define __OXC_TOGGLETEXTBUTTON_H
 
-
 #include "TextButton.h"
 #include "../Engine/Action.h"
 #include "../Engine/State.h"
 
+
 namespace OpenXcom
 {
 
-class ToggleTextButton :
-    public TextButton
+class ToggleTextButton
+	:
+		public TextButton
 {
 private:
-    bool _isPressed, _filterSound;
-    int _invertMid;
-    TextButton *_fakeGroup;
+	bool _isPressed, _filterSound;
+	int _invertMid;
+	TextButton* _fakeGroup;
 
-public:
+	public:
+		ToggleTextButton(int width, int height, int x, int y, bool filterSound = false);
+		~ToggleTextButton(void);
 
-    void draw();
-    void mousePress(Action *action, State *state);
-    void setPressed(bool pressed);
-    bool getPressed() const { return _isPressed; }
-    void setInvertColor(Uint8 mid);
-    ToggleTextButton(int width, int height, int x, int y, bool filterSound=false);
-    ~ToggleTextButton(void);
+		void draw();
+		void setInvertColor(Uint8 mid);
+
+		void mousePress(Action* action, State* state);
+		void setPressed(bool pressed);
+		bool getPressed() const
+		{
+			return _isPressed;
+		}
 };
 
 }

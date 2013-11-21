@@ -25,10 +25,15 @@
 namespace OpenXcom
 {
 
-ToggleTextButton::ToggleTextButton(int width, int height, int x, int y, bool filterSound) : TextButton(width, height, x, y), _filterSound(filterSound),_invertMid(-1), _fakeGroup(0)
+ToggleTextButton::ToggleTextButton(int width, int height, int x, int y, bool filterSound)
+	:
+		TextButton(width, height, x, y),
+		_filterSound(filterSound),
+		_invertMid(-1),
+		_fakeGroup(0)
 {
-    _isPressed = false;
-    TextButton::setGroup(&_fakeGroup);
+	_isPressed = false;
+	TextButton::setGroup(&_fakeGroup);
 }
 
 
@@ -36,52 +41,67 @@ ToggleTextButton::~ToggleTextButton(void)
 {
 }
 
-/// handle mouse clicks by toggling the button state; use _fakeGroup to trick TextButton into drawing the right thing
-void ToggleTextButton::mousePress(Action *action, State *state)
+/**
+ * handle mouse clicks by toggling the button state; use _fakeGroup to trick TextButton into drawing the right thing
+ */
+void ToggleTextButton::mousePress(Action* action, State* state)
 {
-    if (soundPress != 0 && (! _filterSound || action->getDetails()->button.button == SDL_BUTTON_LEFT || action->getDetails()->button.button == SDL_BUTTON_RIGHT))
-        soundPress->play();
+	if (soundPress != 0
+		&& (! _filterSound
+			|| action->getDetails()->button.button == SDL_BUTTON_LEFT
+			|| action->getDetails()->button.button == SDL_BUTTON_RIGHT))
+	{
+		soundPress->play();
+	}
 
-    if (action->getDetails()->button.button == SDL_BUTTON_LEFT || action->getDetails()->button.button == SDL_BUTTON_RIGHT)
-    {
-        _isPressed = !_isPressed;
-        _fakeGroup = _isPressed ? this : 0; // this is the trick that makes TextButton stick
-    }
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT
+		|| action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+	{
+		_isPressed = !_isPressed;
+		_fakeGroup = _isPressed? this: 0; // this is the trick that makes TextButton stick
+	}
 
 	InteractiveSurface::mousePress(action, state); // skip TextButton's code as it will try to set *_group
-    draw();
+	draw();
 }
 
-/// set the _isPressed state of the button and force it to redraw
+/**
+ * set the _isPressed state of the button and force it to redraw
+ */
 void ToggleTextButton::setPressed(bool pressed)
 {
-    if (_isPressed == pressed) return;
-    _isPressed = pressed;
-    _fakeGroup = _isPressed ? this : 0;
-    _redraw = true;
+	if (_isPressed == pressed) return;
+
+	_isPressed = pressed;
+	_fakeGroup = _isPressed? this: 0;
+
+	_redraw = true;
 }
 
-/// When this is set, Surface::invert() is called with the value from mid when it's time to invert the button
+/**
+ * When this is set, Surface::invert() is called with the value from mid when it's time to invert the button
+ */
 void ToggleTextButton::setInvertColor(Uint8 mid)
 {
-    _invertMid = mid;
-    _fakeGroup = 0;
-    _redraw = true;
+	_invertMid = mid;
+	_fakeGroup = 0;
+
+	_redraw = true;
 }
 
-/// handle draw() in case we need to paint the button a garish color
+/**
+ * handle draw() in case we need to paint the button a garish color
+ */
 void ToggleTextButton::draw()
 {
-    if (_invertMid > -1) _fakeGroup = 0; // nevermind, TextButton. We'll invert the surface ourselves.
-    TextButton::draw();
+	if (_invertMid > -1) _fakeGroup = 0; // nevermind, TextButton. We'll invert the surface ourselves.
 
-    if (_invertMid > -1 && _isPressed)
-    {
-        this->invert(_invertMid);
-    }
+	TextButton::draw();
+
+	if (_invertMid > -1 && _isPressed)
+	{
+		this->invert(_invertMid);
+	}
 }
-
-
-
 
 }
