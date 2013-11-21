@@ -35,6 +35,7 @@ class TextButton;
 class ToggleTextButton;
 class TextList;
 class Region;
+class NumberText; // kL
 struct GraphBtnInfo;
 
 /**
@@ -54,6 +55,7 @@ private:
 	Text* _txtTitle, * _txtFactor;
 	TextList* _txtMonths, * _txtYears;
 	ToggleTextButton* _btnRegionTotal, * _btnCountryTotal;
+//	NumberText* _numRegionAlien, * _numRegionXcom, * _numCountryAlien, * _numCountryXcom;
 
 	std::vector<GraphBtnInfo*> _regionToggles, _countryToggles;
 	std::vector<Surface*> _alienRegionLines, _alienCountryLines;
@@ -61,6 +63,7 @@ private:
 	std::vector<Surface*> _financeLines, _incomeLines;
 	std::vector<Text*> _txtScale;
 	std::vector<ToggleTextButton*> _btnRegions, _btnCountries, _btnFinances;
+	std::vector<NumberText*> _numRegionActivityAlien, _numRegionActivityXCom, _numCountryActivityAlien, _numCountryActivityXCom;
 
 	std::vector<bool> _financeToggles;
 
@@ -70,7 +73,7 @@ private:
 
 	/// will be only between 0 and size()
 	unsigned int _btnRegionsOffset, _btnCountriesOffset;
-	/// scroll and repaint buttons functions
+	/// Scroll button lists: scroll and repaint buttons functions
 	void scrollButtons(
 			std::vector<GraphBtnInfo*>& toggles,
 			std::vector<ToggleTextButton*>& buttons,
@@ -78,6 +81,8 @@ private:
 			int step);
 	///
 	void updateButton(GraphBtnInfo* from, ToggleTextButton* to);
+	/// Show the latest month's value as NumberText beside the buttons.
+	void latestTally();
 
 	public:
 		/// Creates the Graphs state.
@@ -120,8 +125,6 @@ private:
 		void drawCountryLines();
 		/// Draw Finances Lines.
 		void drawFinanceLines();
-
-		/// Scroll button lists
 };
 
 }

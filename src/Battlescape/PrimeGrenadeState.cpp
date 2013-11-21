@@ -50,7 +50,7 @@ PrimeGrenadeState::PrimeGrenadeState(Game* game, BattleAction* action, bool inIn
 {
 	_screen = false;
 
-	_title	= new Text(192, 24, 65, 44);
+	_title	= new Text(192, 24, 65, 43);
 	_frame	= new Frame(192, 27, 65, 37);
 	_bg		= new Surface(192, 93, 65, 45);
 
@@ -58,8 +58,17 @@ PrimeGrenadeState::PrimeGrenadeState(Game* game, BattleAction* action, bool inIn
 	int y = 68;
 	for (int i = 0; i < 24; ++i)
 	{
-		_button[i] = new InteractiveSurface(22, 22, x - 1 + ((i %8) * 24), y - 4 + ((i / 8) * 25));
-		_number[i] = new Text(20, 20, x + ((i %8) * 24), y - 1 + ((i / 8) * 25));
+		_button[i] = new InteractiveSurface(
+				22,
+				22,
+				x - 1 + ((i %8) * 24),
+				y - 4 + ((i / 8) * 25));
+		_number[i] = new Text(
+				20,
+				20,
+				x + ((i %8) * 24),
+//kL				y - 1 + ((i / 8) * 25));
+				y - 4 + ((i / 8) * 25));
 	}
 
 

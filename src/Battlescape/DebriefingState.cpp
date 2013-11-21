@@ -257,8 +257,8 @@ DebriefingState::DebriefingState(Game *game)
 	// Set music
 	_game->getResourcePack()->getMusic("GMMARS")->play();
 
-	_game->getCursor()->setColor(Palette::blockOffset(15) + 12);
-	_game->getFpsCounter()->setColor(Palette::blockOffset(15) + 12);
+	_game->getCursor()->setColor(Palette::blockOffset(15)+12);
+	_game->getFpsCounter()->setColor(Palette::blockOffset(15)+12);
 
 	//Log(LOG_INFO) << "Create DebriefingState DONE";
 }
@@ -563,6 +563,7 @@ void DebriefingState::prepareDebriefing()
 			{
 				playersUnconscious++;
 			}
+
 			playersSurvived++;
 		}
 	}
@@ -720,12 +721,14 @@ void DebriefingState::prepareDebriefing()
 			{
 				if ((*j)->killedBy() == FACTION_PLAYER)
 				{
-					addStat("STR_CIVILIANS_KILLED_BY_XCOM_OPERATIVES", 1, -(*j)->getValue() - (*j)->getValue() * 2 / 3);
+//kL					addStat("STR_CIVILIANS_KILLED_BY_XCOM_OPERATIVES", 1, -(*j)->getValue() - (*j)->getValue() * 2 / 3);
+					addStat("STR_CIVILIANS_KILLED_BY_XCOM_OPERATIVES", 1, -(value * 2));	// kL
 				}
 				else
 				{
 					// if civilians happen to kill themselves XCOM shouldn't get penalty for it
-					addStat("STR_CIVILIANS_KILLED_BY_ALIENS", 1, -(*j)->getValue());
+//kL					addStat("STR_CIVILIANS_KILLED_BY_ALIENS", 1, -(*j)->getValue());
+					addStat("STR_CIVILIANS_KILLED_BY_ALIENS", 1, -value);	// kL
 				}
 			}
 		}
@@ -800,12 +803,17 @@ void DebriefingState::prepareDebriefing()
 				}
 
 //kL				addStat("STR_LIVE_ALIENS_RECOVERED", 1, 10); // 10 points for recovery
-				addStat("STR_LIVE_ALIENS_RECOVERED", 1, (*j)->getValue());	// kL, duplicated in function below.
+//				addStat("STR_LIVE_ALIENS_RECOVERED", 1, (*j)->getValue());	// kL, duplicated in function below.
+				addStat("STR_LIVE_ALIENS_RECOVERED", 1, value * 2);
 
-				if (_game->getSavedGame()->isResearchAvailable(_game->getRuleset()->getResearch(type), _game->getSavedGame()->getDiscoveredResearch(), _game->getRuleset()))
+				if (_game->getSavedGame()->isResearchAvailable(
+						_game->getRuleset()->getResearch(type),
+						_game->getSavedGame()->getDiscoveredResearch(),
+						_game->getRuleset()))
 				{
 //kL					addStat("STR_LIVE_ALIENS_RECOVERED", 0, ((*j)->getValue() * 2) - 10); // more points if it's not researched
-					addStat("STR_LIVE_ALIENS_RECOVERED", 0, (*j)->getValue() * 3 / 2);	// kL, duplicated in function below.
+//					addStat("STR_LIVE_ALIENS_RECOVERED", 0, (*j)->getValue() * 3 / 2);	// kL, duplicated in function below.
+					addStat("STR_LIVE_ALIENS_RECOVERED", 0, value * 3);
 					if (base->getAvailableContainment() == 0)
 					{
 						_noContainment = true;
@@ -829,11 +837,13 @@ void DebriefingState::prepareDebriefing()
 			{
 				if (aborted || playersSurvived == 0) // if mission fails, all civilians die
 				{
-					addStat("STR_CIVILIANS_KILLED_BY_ALIENS", 1, -(*j)->getValue());
+//kL					addStat("STR_CIVILIANS_KILLED_BY_ALIENS", 1, -(*j)->getValue());
+					addStat("STR_CIVILIANS_KILLED_BY_ALIENS", 1, -value);		// kL
 				}
 				else
 				{
-					addStat("STR_CIVILIANS_SAVED", 1, (*j)->getValue());	// kL_note: duplicated below.
+//kL					addStat("STR_CIVILIANS_SAVED", 1, (*j)->getValue());	// kL_note: duplicated below.
+					addStat("STR_CIVILIANS_SAVED", 1, value);
 				}
 			}
 		}
@@ -1022,7 +1032,7 @@ void DebriefingState::prepareDebriefing()
 	// recover all our goodies
 	if (playersSurvived > 0)
 	{
-		int aadivider = battle->getMissionType() == "STR_ALIEN_BASE_ASSAULT" ? 150 : 10;
+		int aadivider = battle->getMissionType() == "STR_ALIEN_BASE_ASSAULT"? 150: 10;
 		for (std::vector<DebriefingStat*>::iterator i = _stats.begin(); i != _stats.end(); ++i)
 		{
 			// alien alloys recovery values are divided by 10 or divided by 150 in case of an alien base
@@ -1261,7 +1271,7 @@ void DebriefingState::recoverItems(std::vector<BattleItem*>* from, Base* base)
 					if ((*it)->getUnit()->getOriginalFaction() == FACTION_HOSTILE)
 					{
 //kL						addStat("STR_LIVE_ALIENS_RECOVERED", 1, 10); // 10 points for recovery
-						addStat("STR_LIVE_ALIENS_RECOVERED", 1, (*it)->getUnit()->getValue());	// kL, duplicated above.
+						addStat("STR_LIVE_ALIENS_RECOVERED", 1, (*it)->getUnit()->getValue() * 2);	// kL, duplicated above.
 
 						if (_game->getSavedGame()->isResearchAvailable(
 								_game->getRuleset()->getResearch((*it)->getUnit()->getType()),
@@ -1269,7 +1279,7 @@ void DebriefingState::recoverItems(std::vector<BattleItem*>* from, Base* base)
 								_game->getRuleset()))
 						{
 //kL							addStat("STR_LIVE_ALIENS_RECOVERED", 0, ((*it)->getUnit()->getValue() * 2) - 10); // more points if it's not researched
-							addStat("STR_LIVE_ALIENS_RECOVERED", 0, (*it)->getUnit()->getValue() * 3 / 2);	// kL, duplicated above.
+							addStat("STR_LIVE_ALIENS_RECOVERED", 0, (*it)->getUnit()->getValue() * 3);	// kL, duplicated above.
 							if (base->getAvailableContainment() == 0)
 							{
 								_noContainment = true;

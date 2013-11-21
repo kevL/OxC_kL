@@ -188,11 +188,11 @@ GeoscapeState::GeoscapeState(Game* game)
 	_txtMin			= new Text(20, 17, screenWidth - 37, screenHeight / 2 - 26);
 	_txtMinSep		= new Text(4, 17, screenWidth - 17, screenHeight / 2 - 26);
 	_txtSec			= new Text(11, 8, screenWidth - 13, screenHeight / 2 - 20); */
-	_txtHour		= new Text(19, 17, screenWidth - 62, screenHeight / 2 - 27);
-	_txtHourSep		= new Text(5, 17, screenWidth - 43, screenHeight / 2 - 27);
-	_txtMin			= new Text(19, 17, screenWidth - 38, screenHeight / 2 - 27);
-	_txtMinSep		= new Text(5, 17, screenWidth - 19, screenHeight / 2 - 27);
-	_txtSec			= new Text(10, 17, screenWidth - 14, screenHeight / 2 - 27);
+	_txtHour		= new Text(19, 17, screenWidth - 61, screenHeight / 2 - 27);
+	_txtHourSep		= new Text(5, 17, screenWidth - 42, screenHeight / 2 - 27);
+	_txtMin			= new Text(19, 17, screenWidth - 37, screenHeight / 2 - 27);
+	_txtMinSep		= new Text(5, 17, screenWidth - 18, screenHeight / 2 - 27);
+	_txtSec			= new Text(10, 17, screenWidth - 13, screenHeight / 2 - 27);
 
 	_txtWeekday		= new Text(59, 8, screenWidth - 61, screenHeight / 2 - 13);
 	_txtDay			= new Text(29, 8, screenWidth - 61, screenHeight / 2 - 6);

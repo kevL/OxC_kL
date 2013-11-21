@@ -16,9 +16,12 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "NumberText.h"
+
 #include <sstream>
 #include <string>
+
 
 namespace OpenXcom
 {
@@ -30,7 +33,11 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-NumberText::NumberText(int width, int height, int x, int y) : Surface(width, height, x, y), _value(0), _color(0)
+NumberText::NumberText(int width, int height, int x, int y)
+	:
+		Surface(width, height, x, y),
+		_value(0),
+		_color(0)
 {
 	_chars[0] = new Surface(3, 5);
 	_chars[0]->lock();
@@ -197,6 +204,7 @@ NumberText::~NumberText()
 void NumberText::setValue(unsigned int value)
 {
 	_value = value;
+
 	_redraw = true;
 }
 
@@ -216,6 +224,7 @@ unsigned int NumberText::getValue() const
 void NumberText::setColor(Uint8 color)
 {
 	_color = color;
+
 	_redraw = true;
 }
 
@@ -234,7 +243,7 @@ Uint8 NumberText::getColor() const
  * @param firstcolor Offset of the first color to replace.
  * @param ncolors Amount of colors to replace.
  */
-void NumberText::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
+void NumberText::setPalette(SDL_Color* colors, int firstcolor, int ncolors)
 {
 	Surface::setPalette(colors, firstcolor, ncolors);
 
@@ -253,9 +262,13 @@ void NumberText::draw()
 	std::ostringstream ss;
 	ss << _value;
 	std::string s = ss.str();
+
 	int x = 0;
 
-	for (std::string::iterator i = s.begin(); i != s.end(); ++i)
+	for (std::string::iterator
+			i = s.begin();
+			i != s.end();
+			++i)
 	{
 		_chars[*i - '0']->setX(x);
 		_chars[*i - '0']->setY(0);

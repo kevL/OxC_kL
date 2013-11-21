@@ -22,6 +22,7 @@
 
 #include "../Engine/Surface.h"
 
+
 namespace OpenXcom
 {
 
@@ -29,29 +30,34 @@ namespace OpenXcom
  * Number digits displayed on the screen.
  * Takes a number and displays it using a simple hard-coded font.
  */
-class NumberText : public Surface
+class NumberText
+	:
+		public Surface
 {
 private:
 	unsigned int _value;
-	Surface *_chars[10];
+	Surface* _chars[10];
 	Uint8 _color;
-public:
-	/// Creates a new number text with the specified size and position.
-	NumberText(int width, int height, int x = 0, int y = 0);
-	/// Cleans up the number text.
-	~NumberText();
-	/// Sets the number text's value.
-	void setValue(unsigned int value);
-	/// Gets the number text's value.
-	unsigned int getValue() const;
-	/// Sets the number text's color.
-	void setColor(Uint8 color);
-	/// Gets the number text's color.
-	Uint8 getColor() const;
-	/// Sets the number text's palette.
-	void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
-	/// Draws the number text.
-	void draw();
+
+	public:
+		/// Creates a new number text with the specified size and position.
+		NumberText(int width, int height, int x = 0, int y = 0);
+		/// Cleans up the number text.
+		~NumberText();
+
+		/// Sets the number text's value.
+		void setValue(unsigned int value);
+		/// Gets the number text's value.
+		unsigned int getValue() const;
+		/// Sets the number text's color.
+		void setColor(Uint8 color);
+		/// Gets the number text's color.
+		Uint8 getColor() const;
+		/// Sets the number text's palette.
+		void setPalette(SDL_Color* colors, int firstcolor = 0, int ncolors = 256);
+
+		/// Draws the number text.
+		void draw();
 };
 
 }

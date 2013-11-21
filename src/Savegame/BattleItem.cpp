@@ -68,8 +68,6 @@ BattleItem::BattleItem(RuleItem* rules, int* id)
 	(*id)++;
 
 	// weapon does not need ammo, ammo item points to weapon
-	// kL_note: What if a laserweapon, eg. is #id=0
-	// then any checks for isLoaded, via the usual method, return FALSE.
 	if (_rules
 		&& (_rules->getBattleType() == BT_FIREARM
 			|| _rules->getBattleType() == BT_MELEE)
@@ -112,35 +110,46 @@ YAML::Node BattleItem::save() const
 {
 	YAML::Node node;
 
-	node["id"]											= _id;
-	node["type"]										= _rules->getType();
+	node["id"]						= _id;
+	node["type"]					= _rules->getType();
 
-	if (_owner) node["owner"]							= _owner->getId();
-	else node["owner"]									= -1;
+	if (_owner)
+		node["owner"]				= _owner->getId();
+	else
+		node["owner"]				= -1;
 
-	if (_unit) node["unit"]								= _unit->getId();
-	else node["unit"]									= -1;
+	if (_unit)
+		node["unit"]				= _unit->getId();
+	else
+		node["unit"]				= -1;
 
-	if (_inventorySlot) node["inventoryslot"]			= _inventorySlot->getId();
-	else node["inventoryslot"]							= "NULL";
+	if (_inventorySlot)
+		node["inventoryslot"]		= _inventorySlot->getId();
+	else
+		node["inventoryslot"]		= "NULL";
 
-	node["inventoryX"]									= _inventoryX;
-	node["inventoryY"]									= _inventoryY;
+	node["inventoryX"]				= _inventoryX;
+	node["inventoryY"]				= _inventoryY;
 
-	if (_tile) node["position"]							= _tile->getPosition();
-	else node["position"]								= Position(-1, -1, -1);
+	if (_tile)
+		node["position"]			= _tile->getPosition();
+	else
+		node["position"]			= Position(-1, -1, -1);
 
-	node["ammoqty"]										= _ammoQuantity;
+	node["ammoqty"]					= _ammoQuantity;
 
-	if (_ammoItem) node["ammoItem"]						= _ammoItem->getId();
-	else node["ammoItem"]								= -1;
+	if (_ammoItem)
+		node["ammoItem"]			= _ammoItem->getId();
+	else
+		node["ammoItem"]			= -1;
 
-	node["painKiller"]									= _painKiller;
-	node["heal"]										= _heal;
-	node["stimulant"]									= _stimulant;
-	node["explodeTurn"]									= _explodeTurn;
+	node["painKiller"]				= _painKiller;
+	node["heal"]					= _heal;
+	node["stimulant"]				= _stimulant;
+	node["explodeTurn"]				= _explodeTurn;
 
-	if (_droppedOnAlienTurn) node["droppedOnAlienTurn"]	= _droppedOnAlienTurn;
+	if (_droppedOnAlienTurn)
+		node["droppedOnAlienTurn"]	= _droppedOnAlienTurn;
 
 	return node;
 }
@@ -165,7 +174,7 @@ int BattleItem::getExplodeTurn() const
 
 /**
  * Sets the turn to explode on.
- * @param turn Turn to explode on.
+ * @param turn, Turn to explode on.
  */
 void BattleItem::setExplodeTurn(int turn)
 {
@@ -174,7 +183,7 @@ void BattleItem::setExplodeTurn(int turn)
 
 /**
  * Gets the quantity of ammo in this item.
- * @return Ammo quantity.
+ * @return, Ammo quantity.
  */
 int BattleItem::getAmmoQuantity() const
 {
@@ -188,7 +197,7 @@ int BattleItem::getAmmoQuantity() const
 
 /**
  * Changes the quantity of ammo in this item.
- * @param qty Ammo quantity.
+ * @param qty, Ammo quantity.
  */
 void BattleItem::setAmmoQuantity(int qty)
 {
@@ -197,7 +206,7 @@ void BattleItem::setAmmoQuantity(int qty)
 
 /**
  * Spends a bullet from the ammo in this item.
- * @return True if there are bullets left.
+ * @return, True if there are bullets left.
  */
 bool BattleItem::spendBullet()
 {
@@ -351,8 +360,8 @@ bool BattleItem::occupiesSlot(int x, int y, BattleItem* item) const
 }
 
 /**
- * Gets the item's ammo item.
- * @return, The ammo item.
+ * Gets the item's currently loaded ammo item.
+ * @return, The ammo item; 0 if it doesn't need ammo
  */
 BattleItem* BattleItem::getAmmoItem()
 {

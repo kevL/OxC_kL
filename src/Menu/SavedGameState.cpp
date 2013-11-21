@@ -61,7 +61,8 @@ SavedGameState::SavedGameState(Game* game, OptionsOrigin origin, int firstValidR
 	_txtTime	= new Text(30, 9, 190, 32);
 	_txtDate	= new Text(84, 9, 220, 32);
 
-	_lstSaves	= new TextList(286, 120, 16, 41);
+	_lstSaves	= new TextList(284, 120, 16, 41); // when editing, the up/down arrow jogs a few px right.
+//_lstSaves->setColumns(5, 168, 30, 26, 24, 32);
 
 	_txtStatus	= new Text(320, 17, 0, 92);
 	_txtDetails = new Text(288, 9, 16, 165);

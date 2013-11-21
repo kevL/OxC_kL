@@ -29,6 +29,7 @@
 #include "../Engine/Palette.h"
 #include "../Engine/Screen.h"
 #include "../Engine/Surface.h"
+#include "../Interface/NumberText.h" // kL
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/TextList.h"
@@ -82,7 +83,7 @@ GraphsState::GraphsState(Game* game)
 	_btnGeoscape	= new InteractiveSurface(32, 24, 288, 0);
 
 	_txtTitle		= new Text(220, 17, 100, 28);
-	_txtFactor		= new Text(38, 11, 96, 28);
+	_txtFactor		= new Text(35, 9, 96, 28);
 
 	_txtMonths		= new TextList(205, 8, 115, 183);
 	_txtYears		= new TextList(200, 8, 121, 191);
@@ -109,7 +110,7 @@ GraphsState::GraphsState(Game* game)
 			scaleText < 10;
 			++scaleText)
 	{
-		_txtScale.push_back(new Text(42, 16, 80, 171 - (scaleText * 14)));
+		_txtScale.push_back(new Text(36, 16, 86, 171 - (scaleText * 14)));
 
 		add(_txtScale.at(scaleText));
 	}
@@ -126,24 +127,30 @@ GraphsState::GraphsState(Game* game)
 		// initially add the GRAPH_MAX_BUTTONS having the first region's information
 		if (offset < GRAPH_MAX_BUTTONS)
 		{
-//kL			_btnRegions.push_back(new ToggleTextButton(80, 11, 0, offset * 11, true));
-			_btnRegions.push_back(new ToggleTextButton(96, 11, 0, offset * 11, true));		// kL
+			_btnRegions.push_back(new ToggleTextButton(65, 10, 0, offset * 10, true));
 			_btnRegions.at(offset)->setColor(Palette::blockOffset(9)+7);
 			_btnRegions.at(offset)->setInvertColor((offset * 4) - 42);
-//			_btnRegions.at(offset)->setText(tr((*iter)->getRules()->getType())); // unique name of Region
+			_btnRegions.at(offset)->setText(tr((*iter)->getRules()->getType())); // unique name of Region
 			_btnRegions.at(offset)->onMousePress((ActionHandler)& GraphsState::btnRegionListClick);
 			_btnRegions.at(offset)->onMousePress((ActionHandler)& GraphsState::shiftButtons, SDL_BUTTON_WHEELUP);
 			_btnRegions.at(offset)->onMousePress((ActionHandler)& GraphsState::shiftButtons, SDL_BUTTON_WHEELDOWN);
 
-			std::wstring rPts;								// kL
-			rPts = tr((*iter)->getRules()->getType());		// kL
-//			rPts += (*iter)->getActivityAlien().at(11);		// kL
-			rPts += L" ";									// kL
-			rPts += (*iter)->getActivityAlien().back();		// kL
-			_btnRegions.at(offset)->setText(rPts);			// kL
-//			_btnRegions.at(offset)->setAlign(ALIGN_LEFT);	// kL
-
 			add(_btnRegions.at(offset));
+
+/*			std::wstring rPts;								// kL
+			rPts = tr((*iter)->getRules()->getType());		// kL
+			rPts += L" ";									// kL
+			rPts += std::to_wstring(static_cast<long long>((*iter)->getActivityAlien().back()));	// kL, ho9ly fuck.
+			_btnRegions.at(offset)->setText(rPts);			// kL
+*/
+			_numRegionActivityAlien.push_back(new NumberText(18, 10, 67, offset * 10));
+			_numRegionActivityAlien.at(offset)->setColor(Palette::blockOffset(9)+7);
+			_numRegionActivityXCom.push_back(new NumberText(18, 10, 67, offset * 10));
+			_numRegionActivityXCom.at(offset)->setColor(Palette::blockOffset(9)+7);
+//			_numRegionActivityAlien.at(offset)->setColor((offset * 4) - 42);
+
+			add(_numRegionActivityAlien.at(offset));
+			add(_numRegionActivityXCom.at(offset));
 		}
 
 		_alienRegionLines.push_back(new Surface(320, 200, 0, 0));
@@ -156,16 +163,17 @@ GraphsState::GraphsState(Game* game)
 	}
 
 	if (_regionToggles.size() < GRAPH_MAX_BUTTONS)
-		_btnRegionTotal = new ToggleTextButton(80, 11, 0, _regionToggles.size() * 11, true);
+		_btnRegionTotal = new ToggleTextButton(65, 10, 0, _regionToggles.size() * 10, true);
 	else
-		_btnRegionTotal = new ToggleTextButton(80, 11, 0, GRAPH_MAX_BUTTONS * 11, true);
+		_btnRegionTotal = new ToggleTextButton(65, 10, 0, GRAPH_MAX_BUTTONS * 10, true);
 
 	_regionToggles.push_back(new GraphBtnInfo(tr("STR_TOTAL_UC"), 22));
 
-	_btnRegionTotal->onMousePress((ActionHandler)& GraphsState::btnRegionListClick);
 	_btnRegionTotal->setColor(Palette::blockOffset(9)+7);
 	_btnRegionTotal->setInvertColor(22);
 	_btnRegionTotal->setText(tr("STR_TOTAL_UC"));
+	_btnRegionTotal->onMousePress((ActionHandler)& GraphsState::btnRegionListClick);
+
 
 	_alienRegionLines.push_back(new Surface(320, 200, 0, 0));
 	add(_alienRegionLines.at(offset));
@@ -174,6 +182,7 @@ GraphsState::GraphsState(Game* game)
 	add(_xcomRegionLines.at(offset));
 
 	add(_btnRegionTotal);
+
 	
 	offset = 0;
 	for (std::vector<Country*>::iterator
@@ -187,7 +196,7 @@ GraphsState::GraphsState(Game* game)
 		// initially add the GRAPH_MAX_BUTTONS having the first country's information
 		if (offset < GRAPH_MAX_BUTTONS)
 		{
-			_btnCountries.push_back(new ToggleTextButton(80, 11, 0, offset * 11, true));
+			_btnCountries.push_back(new ToggleTextButton(65, 10, 0, offset * 10, true));
 			_btnCountries.at(offset)->setColor(Palette::blockOffset(9)+7);
 			_btnCountries.at(offset)->setInvertColor((offset * 4) - 42);
 			_btnCountries.at(offset)->setText(tr((*iter)->getRules()->getType()));
@@ -196,6 +205,14 @@ GraphsState::GraphsState(Game* game)
 			_btnCountries.at(offset)->onMousePress((ActionHandler)& GraphsState::shiftButtons, SDL_BUTTON_WHEELDOWN);
 
 			add(_btnCountries.at(offset));
+
+			_numCountryActivityAlien.push_back(new NumberText(18, 10, 67, offset * 10));
+			_numCountryActivityAlien.at(offset)->setColor(Palette::blockOffset(9)+7);
+			_numCountryActivityXCom.push_back(new NumberText(18, 10, 67, offset * 10));
+			_numCountryActivityXCom.at(offset)->setColor(Palette::blockOffset(9)+7);
+
+			add(_numCountryActivityAlien.at(offset));
+			add(_numCountryActivityXCom.at(offset));
 		}
 
 		_alienCountryLines.push_back(new Surface(320, 200, 0, 0));
@@ -211,16 +228,17 @@ GraphsState::GraphsState(Game* game)
 	}
 	
 	if (_countryToggles.size() < GRAPH_MAX_BUTTONS)
-		_btnCountryTotal = new ToggleTextButton(80, 11, 0, _countryToggles.size() * 11, true);
+		_btnCountryTotal = new ToggleTextButton(65, 10, 0, _countryToggles.size() * 10, true);
 	else
-		_btnCountryTotal = new ToggleTextButton(80, 11, 0, GRAPH_MAX_BUTTONS * 11, true);
+		_btnCountryTotal = new ToggleTextButton(65, 10, 0, GRAPH_MAX_BUTTONS * 10, true);
 
 	_countryToggles.push_back(new GraphBtnInfo(tr("STR_TOTAL_UC"), 22));
 
-	_btnCountryTotal->onMousePress((ActionHandler)& GraphsState::btnCountryListClick);
 	_btnCountryTotal->setColor(Palette::blockOffset(9)+7);
     _btnCountryTotal->setInvertColor(22);
 	_btnCountryTotal->setText(tr("STR_TOTAL_UC"));
+	_btnCountryTotal->onMousePress((ActionHandler)& GraphsState::btnCountryListClick);
+
 
 	_alienCountryLines.push_back(new Surface(320, 200, 0, 0));
 	add(_alienCountryLines.at(offset));
@@ -241,12 +259,13 @@ GraphsState::GraphsState(Game* game)
 	{
 		offset = iter;
 
-		_btnFinances.push_back(new ToggleTextButton(80, 11, 0, offset * 11));
+		_btnFinances.push_back(new ToggleTextButton(85, 10, 0, offset * 10));
 		_financeToggles.push_back(false);
 
 		_btnFinances.at(offset)->setColor(Palette::blockOffset(9)+7);
         _btnFinances.at(offset)->setInvertColor((offset * 4) - 42);
 		_btnFinances.at(offset)->onMousePress((ActionHandler)& GraphsState::btnFinanceListClick);
+
 		add(_btnFinances.at(offset));
 
 		_financeLines.push_back(new Surface(320, 200, 0, 0));
@@ -454,6 +473,87 @@ GraphsState::~GraphsState()
 }
 
 /**
+ * Show the latest month's value as NumberText beside the buttons.
+ */
+void GraphsState::latestTally()
+{
+	unsigned int offset = 0;
+
+	if (_alien == true
+		&& _income == false
+		&& _country == false
+		&& _finance == false)
+	{
+		for (std::vector<Region*>::iterator
+				iter = _game->getSavedGame()->getRegions()->begin();
+				iter != _game->getSavedGame()->getRegions()->end();
+				++iter)
+		{
+			if (offset < GRAPH_MAX_BUTTONS)
+			{
+				_numRegionActivityAlien.at(offset)->setValue((*iter)->getActivityAlien().back());
+
+				offset++;
+			}
+		}
+	}
+	else if (_alien == true
+		&& _income == false
+		&& _country == true
+		&& _finance == false)
+	{
+		for (std::vector<Country*>::iterator
+				iter = _game->getSavedGame()->getCountries()->begin();
+				iter != _game->getSavedGame()->getCountries()->end();
+				++iter)
+		{
+			if (offset < GRAPH_MAX_BUTTONS)
+			{
+				_numCountryActivityAlien.at(offset)->setValue((*iter)->getActivityAlien().back());
+
+				offset++;
+			}
+		}
+	}
+	else if (_alien == false
+		&& _income == false
+		&& _country == false
+		&& _finance == false)
+	{
+		for (std::vector<Region*>::iterator
+				iter = _game->getSavedGame()->getRegions()->begin();
+				iter != _game->getSavedGame()->getRegions()->end();
+				++iter)
+		{
+			if (offset < GRAPH_MAX_BUTTONS)
+			{
+				_numRegionActivityXCom.at(offset)->setValue((*iter)->getActivityXcom().back());
+
+				offset++;
+			}
+		}
+	}
+	else if (_alien == false
+		&& _income == false
+		&& _country == true
+		&& _finance == false)
+	{
+		for (std::vector<Country*>::iterator
+				iter = _game->getSavedGame()->getCountries()->begin();
+				iter != _game->getSavedGame()->getCountries()->end();
+				++iter)
+		{
+			if (offset < GRAPH_MAX_BUTTONS)
+			{
+				_numCountryActivityXCom.at(offset)->setValue((*iter)->getActivityXcom().back());
+
+				offset++;
+			}
+		}
+	}
+}
+
+/**
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
@@ -475,7 +575,10 @@ void GraphsState::btnUfoRegionClick(Action*)
 	resetScreen();
 	drawLines();
 
-	for (std::vector<ToggleTextButton*>::iterator iter = _btnRegions.begin(); iter != _btnRegions.end(); ++iter)
+	for (std::vector<ToggleTextButton*>::iterator
+			iter = _btnRegions.begin();
+			iter != _btnRegions.end();
+			++iter)
 	{
 		(*iter)->setVisible(true);
 	}
@@ -483,6 +586,16 @@ void GraphsState::btnUfoRegionClick(Action*)
 	_btnRegionTotal->setVisible(true);
 	_txtTitle->setBig();
 	_txtTitle->setText(tr("STR_UFO_ACTIVITY_IN_AREAS"));
+
+	for (std::vector<NumberText*>::iterator
+			iter = _numRegionActivityAlien.begin();
+			iter != _numRegionActivityAlien.end();
+			++iter)
+	{
+		(*iter)->setVisible(true);
+	}
+
+	latestTally();
 }
 
 /**
@@ -498,7 +611,10 @@ void GraphsState::btnUfoCountryClick(Action*)
 	resetScreen();
 	drawLines();
 
-	for (std::vector<ToggleTextButton*>::iterator iter = _btnCountries.begin(); iter != _btnCountries.end(); ++iter)
+	for (std::vector<ToggleTextButton*>::iterator
+			iter = _btnCountries.begin();
+			iter != _btnCountries.end();
+			++iter)
 	{
 		(*iter)->setVisible(true);
 	}
@@ -506,6 +622,16 @@ void GraphsState::btnUfoCountryClick(Action*)
 	_btnCountryTotal->setVisible(true);
 	_txtTitle->setBig();
 	_txtTitle->setText(tr("STR_UFO_ACTIVITY_IN_COUNTRIES"));
+
+	for (std::vector<NumberText*>::iterator
+			iter = _numCountryActivityAlien.begin();
+			iter != _numCountryActivityAlien.end();
+			++iter)
+	{
+		(*iter)->setVisible(true);
+	}
+
+	latestTally();
 }
 
 /**
@@ -521,7 +647,10 @@ void GraphsState::btnXcomRegionClick(Action*)
 	resetScreen();
 	drawLines();
 
-	for (std::vector<ToggleTextButton*>::iterator iter = _btnRegions.begin(); iter != _btnRegions.end(); ++iter)
+	for (std::vector<ToggleTextButton*>::iterator
+			iter = _btnRegions.begin();
+			iter != _btnRegions.end();
+			++iter)
 	{
 		(*iter)->setVisible(true);
 	}
@@ -529,6 +658,16 @@ void GraphsState::btnXcomRegionClick(Action*)
 	_btnRegionTotal->setVisible(true);
 	_txtTitle->setBig();
 	_txtTitle->setText(tr("STR_XCOM_ACTIVITY_IN_AREAS"));
+
+	for (std::vector<NumberText*>::iterator
+			iter = _numRegionActivityXCom.begin();
+			iter != _numRegionActivityXCom.end();
+			++iter)
+	{
+		(*iter)->setVisible(true);
+	}
+
+	latestTally();
 }
 
 /**
@@ -552,6 +691,16 @@ void GraphsState::btnXcomCountryClick(Action*)
 	_btnCountryTotal->setVisible(true);
 	_txtTitle->setBig();
 	_txtTitle->setText(tr("STR_XCOM_ACTIVITY_IN_COUNTRIES"));
+
+	for (std::vector<NumberText*>::iterator
+			iter = _numCountryActivityXCom.begin();
+			iter != _numCountryActivityXCom.end();
+			++iter)
+	{
+		(*iter)->setVisible(true);
+	}
+
+	latestTally();
 }
 
 /**
@@ -606,7 +755,7 @@ void GraphsState::btnFinanceClick(Action*)
  */
 void GraphsState::btnRegionListClick(Action* action)
 {
-	size_t number = (action->getSender()->getY() - Screen::getDY()) / 11;
+	size_t number = (action->getSender()->getY() - Screen::getDY()) / 10;
 	ToggleTextButton* button = 0;
 
 	if ((_regionToggles.size() <= GRAPH_MAX_BUTTONS + 1
@@ -631,7 +780,7 @@ void GraphsState::btnRegionListClick(Action* action)
  */
 void GraphsState::btnCountryListClick(Action* action)
 {
-	size_t number = (action->getSender()->getY() - Screen::getDY()) / 11;
+	size_t number = (action->getSender()->getY() - Screen::getDY()) / 10;
 	ToggleTextButton* button = 0;
 
 	if ((_countryToggles.size() <= GRAPH_MAX_BUTTONS + 1
@@ -656,7 +805,7 @@ void GraphsState::btnCountryListClick(Action* action)
  */
 void GraphsState::btnFinanceListClick(Action* action)
 {
-	size_t number = (action->getSender()->getY() - Screen::getDY()) / 11;
+	size_t number = (action->getSender()->getY() - Screen::getDY()) / 10;
 	ToggleTextButton* button = _btnFinances.at(number);
 	
 	_financeLines.at(number)->setVisible(!_financeToggles.at(number));
@@ -715,6 +864,40 @@ void GraphsState::resetScreen()
 	{
 		(*iter)->setVisible(false);
 	}
+
+
+	for (std::vector<NumberText*>::iterator
+			iter = _numRegionActivityAlien.begin();
+			iter != _numRegionActivityAlien.end();
+			++iter)
+	{
+		(*iter)->setVisible(false);
+	}
+
+	for (std::vector<NumberText*>::iterator
+			iter = _numCountryActivityAlien.begin();
+			iter != _numCountryActivityAlien.end();
+			++iter)
+	{
+		(*iter)->setVisible(false);
+	}
+
+	for (std::vector<NumberText*>::iterator
+			iter = _numRegionActivityXCom.begin();
+			iter != _numRegionActivityXCom.end();
+			++iter)
+	{
+		(*iter)->setVisible(false);
+	}
+
+	for (std::vector<NumberText*>::iterator
+			iter = _numCountryActivityXCom.begin();
+			iter != _numCountryActivityXCom.end();
+			++iter)
+	{
+		(*iter)->setVisible(false);
+	}
+
 
 	_btnRegionTotal->setVisible(false);
 	_btnCountryTotal->setVisible(false);

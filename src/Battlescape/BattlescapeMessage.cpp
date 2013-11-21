@@ -44,7 +44,7 @@ BattlescapeMessage::BattlescapeMessage(int width, int height, int x, int y)
 	// 'hidden movement' text
 //kL	_text = new Text(width, height, x, y);
 //	_text = new Text(width - 7, height - 10, x, y + 10);	// kL, good for default font
-	_text = new Text(width - 8, height - 15, x, y + 15);	// kL, PS-adapted font
+	_text = new Text(width - 9, height - 15, x, y + 15);	// kL, PS-adapted font
 	_text->setColor(Palette::blockOffset(0)-1);
 	_text->setAlign(ALIGN_CENTER);
 	_text->setVerticalAlign(ALIGN_MIDDLE);

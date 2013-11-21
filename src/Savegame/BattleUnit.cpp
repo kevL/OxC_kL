@@ -2126,48 +2126,18 @@ BattleItem* BattleUnit::getItem(const std::string& slot, int x, int y) const
  * @return, Pointer to BattleItem.
  */
 BattleItem* BattleUnit::getMainHandWeapon(bool quickest) const
-/*{ // NEW!
-	BattleItem *weaponRightHand = getItem("STR_RIGHT_HAND");
-	BattleItem *weaponLeftHand = getItem("STR_LEFT_HAND");
-
-	// ignore weapons without ammo (rules out grenades)
-	if (!weaponRightHand || !weaponRightHand->getAmmoItem() || !weaponRightHand->getAmmoItem()->getAmmoQuantity())
-		weaponRightHand = 0;
-	if (!weaponLeftHand || !weaponLeftHand->getAmmoItem() || !weaponLeftHand->getAmmoItem()->getAmmoQuantity())
-		weaponLeftHand = 0;
-
-	// if there is only one weapon, it's easy:
-	if (weaponRightHand && !weaponLeftHand)
-		return weaponRightHand;
-	else if (!weaponRightHand && weaponLeftHand)
-		return weaponLeftHand;
-	else if (!weaponRightHand && !weaponLeftHand)
-		return 0;
-
-	// otherwise pick the one with the least snapshot TUs
-	int tuRightHand = weaponRightHand->getRules()->getTUSnap();
-	int tuLeftHand = weaponLeftHand->getRules()->getTUSnap();
-	if (tuLeftHand >= tuRightHand)
-	{
-		return quickest?weaponRightHand:weaponLeftHand;
-	}
-	else
-	{
-		return quickest?weaponLeftHand:weaponRightHand;
-	}
-} */
 {
 	BattleItem* weaponRight = getItem("STR_RIGHT_HAND");
 	BattleItem* weaponLeft = getItem("STR_LEFT_HAND");
 
-	// kL_note: What if a laserweapon, eg. is #id=0
-	// then any checks for isLoaded, via the usual method here, return FALSE.
 	bool isRight = weaponRight
-			&& weaponRight->getAmmoItem();
+			&& weaponRight->getAmmoItem();						// itself, if no ammo required (?)
+//			&& weaponRight->getAmmoItem()->getAmmoQuantity();	// -1 if no ammo required (?)
 //			&& (weaponRight->getRules()->getBattleType() == BT_FIREARM
 //				|| weaponRight->getRules()->getBattleType() == BT_MELEE)
 	bool isLeft = weaponLeft
 			&& weaponLeft->getAmmoItem();
+//			&& weaponLeft->getAmmoItem()->getAmmoQuantity();
 //			&& (weaponLeft->getRules()->getBattleType() == BT_FIREARM
 //				|| weaponLeft->getRules()->getBattleType() == BT_MELEE);
 
@@ -2194,50 +2164,43 @@ BattleItem* BattleUnit::getMainHandWeapon(bool quickest) const
 
 		if (tuRight <= tuLeft)
 		{
-			return quickest?
-					weaponRight
-					: weaponLeft;
+			return quickest? weaponRight: weaponLeft;
 		}
 		else
 		{
-			return quickest?
-					weaponLeft
-					: weaponRight;
+			return quickest? weaponLeft: weaponRight;
 		}
 	}
 
 	return 0;
 }
-	// if there is only one weapon, or only one weapon loaded (rules out grenades) it's easy:
-	// kL_note: Lol, doesn't rule out grenades; getting a positive return with an alien holding only a grenade.
-	// Also, this is doing two runs before the AI even kicks in....
-/*kL	if (!weaponRight
-		|| !weaponRight->getAmmoItem()
-		|| !weaponRight->getAmmoItem()->getAmmoQuantity())
-	{
-		//Log(LOG_INFO) << "BattleUnit::getMainHandWeapon(), has leftHand weapon";
-		return weaponLeft;
-	}
+/*	BattleItem *weaponRightHand = getItem("STR_RIGHT_HAND");
+	BattleItem *weaponLeftHand = getItem("STR_LEFT_HAND");
 
-	if (!weaponLeft
-		|| !weaponLeft->getAmmoItem()
-		|| !weaponLeft->getAmmoItem()->getAmmoQuantity())
-	{
-		//Log(LOG_INFO) << "BattleUnit::getMainHandWeapon(), has rightHand weapon";
-		return weaponRight;
-	}
+	// ignore weapons without ammo (rules out grenades)
+	if (!weaponRightHand || !weaponRightHand->getAmmoItem() || !weaponRightHand->getAmmoItem()->getAmmoQuantity())
+		weaponRightHand = 0;
+	if (!weaponLeftHand || !weaponLeftHand->getAmmoItem() || !weaponLeftHand->getAmmoItem()->getAmmoQuantity())
+		weaponLeftHand = 0;
 
-	// kL_note: two weapons;
+	// if there is only one weapon, it's easy:
+	if (weaponRightHand && !weaponLeftHand)
+		return weaponRightHand;
+	else if (!weaponRightHand && weaponLeftHand)
+		return weaponLeftHand;
+	else if (!weaponRightHand && !weaponLeftHand)
+		return 0;
+
 	// otherwise pick the one with the least snapshot TUs
-	int tuRightHand = weaponRight->getRules()->getTUSnap();
-	int tuLeftHand = weaponLeft->getRules()->getTUSnap();
+	int tuRightHand = weaponRightHand->getRules()->getTUSnap();
+	int tuLeftHand = weaponLeftHand->getRules()->getTUSnap();
 	if (tuLeftHand >= tuRightHand)
 	{
-		return quickest ? weaponRight : weaponLeft;
+		return quickest?weaponRightHand:weaponLeftHand;
 	}
 	else
 	{
-		return quickest ? weaponLeft : weaponRight;
+		return quickest?weaponLeftHand:weaponRightHand;
 	} */
 
 /**
