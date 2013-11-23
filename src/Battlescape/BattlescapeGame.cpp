@@ -629,15 +629,10 @@ void BattlescapeGame::endTurn()
 			setupCursor();
 		}
 	}
-	else if (Options::getBool("battleAutoEnd"))
-	{
-		// make sure we hit the statement below
-		_endTurnRequested = true;
-//Old		return;
-	}
 	//Log(LOG_INFO) << ". done updates";
 
-	if (_save->getSide() != FACTION_NEUTRAL
+	bool battleComplete = liveAliens == 0 || liveSoldiers == 0;
+	if ((_save->getSide() != FACTION_NEUTRAL || battleComplete)
 		&& _endTurnRequested)
 	{
 		//Log(LOG_INFO) << ". . pushState(nextTurnState)";
