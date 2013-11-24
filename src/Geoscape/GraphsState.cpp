@@ -143,10 +143,12 @@ GraphsState::GraphsState(Game* game)
 			rPts += std::to_wstring(static_cast<long long>((*iter)->getActivityAlien().back()));	// kL, ho9ly fuck.
 			_btnRegions.at(offset)->setText(rPts);			// kL
 */
-			_numRegionActivityAlien.push_back(new NumberText(18, 10, 67, offset * 10));
-			_numRegionActivityAlien.at(offset)->setColor(Palette::blockOffset(9)+7);
-			_numRegionActivityXCom.push_back(new NumberText(18, 10, 67, offset * 10));
-			_numRegionActivityXCom.at(offset)->setColor(Palette::blockOffset(9)+7);
+			_numRegionActivityAlien.push_back(new NumberText(18, 10, 67, offset * 10 + 3));
+//			_numRegionActivityAlien.at(offset)->setColor(Palette::blockOffset(9)+7); // grey
+			_numRegionActivityAlien.at(offset)->setColor((offset * 8)+16);
+			_numRegionActivityXCom.push_back(new NumberText(18, 10, 67, offset * 10 + 3));
+//			_numRegionActivityXCom.at(offset)->setColor(Palette::blockOffset(9)+7);
+			_numRegionActivityXCom.at(offset)->setColor((offset * 8)+16);
 //			_numRegionActivityAlien.at(offset)->setColor((offset * 4) - 42);
 
 			add(_numRegionActivityAlien.at(offset));
@@ -206,10 +208,12 @@ GraphsState::GraphsState(Game* game)
 
 			add(_btnCountries.at(offset));
 
-			_numCountryActivityAlien.push_back(new NumberText(18, 10, 67, offset * 10));
-			_numCountryActivityAlien.at(offset)->setColor(Palette::blockOffset(9)+7);
-			_numCountryActivityXCom.push_back(new NumberText(18, 10, 67, offset * 10));
-			_numCountryActivityXCom.at(offset)->setColor(Palette::blockOffset(9)+7);
+			_numCountryActivityAlien.push_back(new NumberText(18, 10, 67, offset * 10 + 3));
+//			_numCountryActivityAlien.at(offset)->setColor(Palette::blockOffset(9)+7);
+			_numCountryActivityAlien.at(offset)->setColor((offset * 8)+16);
+			_numCountryActivityXCom.push_back(new NumberText(18, 10, 67, offset * 10 + 3));
+//			_numCountryActivityXCom.at(offset)->setColor(Palette::blockOffset(9)+7);
+			_numCountryActivityXCom.at(offset)->setColor((offset * 8)+16);
 
 			add(_numCountryActivityAlien.at(offset));
 			add(_numCountryActivityXCom.at(offset));

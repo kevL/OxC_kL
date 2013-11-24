@@ -53,12 +53,13 @@ std::wstring toString(type t)
 	return ss.str();
 }
 
+
 /**
  * Helper class for the medikit title.
  */
 class MedikitTitle
 	:
-	public Text
+		public Text
 {
 	public:
 		/// Creates a medikit title.
@@ -72,7 +73,7 @@ class MedikitTitle
  */
 MedikitTitle::MedikitTitle(int y, const std::wstring& title)
 	:
-	Text (60, 16, 192, y)
+		Text (60, 16, 192, y)
 {
 	this->setText(title);
 	this->setHighContrast(true);
@@ -84,7 +85,7 @@ MedikitTitle::MedikitTitle(int y, const std::wstring& title)
  */
 class MedikitTxt
 	:
-	public Text
+		public Text
 {
 	public:
 		/// Creates a medikit text.
@@ -97,7 +98,7 @@ class MedikitTxt
  */
 MedikitTxt::MedikitTxt(int y)
 	:
-	Text(30, 22, 220, y)
+		Text(30, 22, 220, y)
 {
 	// Note: we can't set setBig here. The needed font is only set when added to State
 	this->setColor(Palette::blockOffset(1));
@@ -111,7 +112,7 @@ MedikitTxt::MedikitTxt(int y)
  */
 class MedikitButton
 	:
-	public InteractiveSurface
+		public InteractiveSurface
 {
 	public:
 		/// Creates a medikit button.
@@ -124,7 +125,7 @@ class MedikitButton
  */
 MedikitButton::MedikitButton(int y)
 	:
-	InteractiveSurface(30, 20, 190, y)
+		InteractiveSurface(30, 20, 190, y)
 {
 }
 
@@ -136,9 +137,9 @@ MedikitButton::MedikitButton(int y)
  */
 MedikitState::MedikitState(Game* game, BattleUnit* targetUnit, BattleAction* action)
 	:
-	State(game),
-	_targetUnit(targetUnit),
-	_action(action)
+		State(game),
+		_targetUnit(targetUnit),
+		_action(action)
 {
 	_unit = action->actor;
 	_item = action->weapon;

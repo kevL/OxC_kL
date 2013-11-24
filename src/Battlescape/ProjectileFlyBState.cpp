@@ -668,7 +668,7 @@ bool ProjectileFlyBState::validThrowRange(
 
 	// since getMaxThrowDistance seems to return 1 less than maxDistance, use "< realDistance" for this determination:
 	bool ret = static_cast<int>(realDistance) < static_cast<int>(maxDistance);
-	Log(LOG_INFO) << ". realDistance " << (int)realDistance << " <= maxDistance " << (int)maxDistance << " : return " << ret;
+	Log(LOG_INFO) << ". realDistance " << (int)realDistance << " < maxDistance " << (int)maxDistance << " : return " << ret;
 
 	return ret;
 }

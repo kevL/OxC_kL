@@ -1889,7 +1889,7 @@ void BattleUnit::prepareNewTurn()
 		{
 			int type = RNG::generate(0, 99);
 			// 33% chance of berserk, panic can mean freeze or flee, but that is determined later
-			_status = (type < 33)? STATUS_BERSERK:STATUS_PANICKING;
+			_status = (type < 33)? STATUS_BERSERK: STATUS_PANICKING;
 		}
 		else // successfully avoided panic
 		{

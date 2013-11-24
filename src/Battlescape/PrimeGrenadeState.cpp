@@ -68,7 +68,7 @@ PrimeGrenadeState::PrimeGrenadeState(Game* game, BattleAction* action, bool inIn
 				20,
 				x + ((i %8) * 24),
 //kL				y - 1 + ((i / 8) * 25));
-				y - 4 + ((i / 8) * 25));
+				y - 3 + ((i / 8) * 25));
 	}
 
 

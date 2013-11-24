@@ -859,11 +859,11 @@ int SavedBattleGame::getTurn() const
  */
 void SavedBattleGame::endTurn()
 {
-	//Log(LOG_INFO) << "SavedBattleGame::endTurn()";
+	Log(LOG_INFO) << "SavedBattleGame::endTurn()";
 
-	if (_side == FACTION_PLAYER)
+	if (_side == FACTION_PLAYER) // end of Xcom turn.
 	{
-		//Log(LOG_INFO) << ". Faction_Player";
+		Log(LOG_INFO) << ". Faction_Player";
 
 		if (_selectedUnit
 			&& _selectedUnit->getOriginalFaction() == FACTION_PLAYER)
@@ -872,23 +872,39 @@ void SavedBattleGame::endTurn()
 		}
 
 		_side = FACTION_HOSTILE;
-	}
-	else if (_side == FACTION_HOSTILE)
+
+	// kL_begin: sbg::endTurn() no Reselect Mc'd alien units!!!
+	for (std::vector<BattleUnit*>::iterator
+			i = getUnits()->begin();
+			i != getUnits()->end();
+			++i)
 	{
-		//Log(LOG_INFO) << ". Faction_Hostile";
+		if ((*i)->getFaction() == FACTION_PLAYER
+			&& (*i)->getOriginalFaction() == FACTION_HOSTILE)
+		{
+			// either zero tu's or set no reselect:
+			(*i)->dontReselect();
+		}
+	} // kL_end.
+
+
+	}
+	else if (_side == FACTION_HOSTILE) // end of Alien turn.
+	{
+		Log(LOG_INFO) << ". Faction_Hostile";
 
 		_side = FACTION_NEUTRAL;
 
-		// If there is no neutral team, we skip this and instantly prepare the new turn for the player.
-		// kL_note: wtf does that mean, 5th graders***
-		if (selectNextPlayerUnit() == 0)
+		// if there is no neutral team, we skip this section
+		// and instantly prepare the new turn for the player.
+		if (selectNextPlayerUnit() == 0) // <-- no civilians are on the battlescape. (all units have been 'selected' during the past full-turn)
 		{
 			//Log(LOG_INFO) << ". . nextPlayerUnit == 0";
 
 			prepareNewTurn();
 			//Log(LOG_INFO) << ". . prepareNewTurn DONE";
-
 			_turn++;
+
 			_side = FACTION_PLAYER;
 
 			if (_lastSelectedUnit
@@ -914,15 +930,17 @@ void SavedBattleGame::endTurn()
 			}
 		}
 	}
-	else if (_side == FACTION_NEUTRAL)
+	else if (_side == FACTION_NEUTRAL) // end of Civilian turn.
 	{
-		//Log(LOG_INFO) << ". Faction_Neutral";
+		Log(LOG_INFO) << ". Faction_Neutral";
 
 		prepareNewTurn();
 		_turn++;
+
 		_side = FACTION_PLAYER;
+
 		if (_lastSelectedUnit
-			&& _lastSelectedUnit->isSelectable(FACTION_PLAYER, false, false))	// intended to fixed what I fixed below(?)
+			&& _lastSelectedUnit->isSelectable(FACTION_PLAYER, false, false))	// intended to fix what I fixed below(?)
 //			&& !_lastSelectedUnit->isOut())										// old code. similar to above(?)
 		{
 			//Log(LOG_INFO) << ". . . lastSelectedUnit is aLive";
@@ -951,8 +969,8 @@ void SavedBattleGame::endTurn()
 	//Log(LOG_INFO) << "done tallyUnits";
 
 	// kL_begin: semi-randomize the Turn20 reveal (and the less than 3 aliens left rule).
-	uint8_t rand = (uint8_t)RNG::generate(0, 5);
-	if (_turn > 17 + (int)rand || liveAliens < (int)rand)
+	int rand = RNG::generate(0, 5);
+	if (_turn > 17 + rand || liveAliens < rand)
 	// kL_end.
 //kL	if (_turn >= 20 || liveAliens < 2)
 	{
@@ -969,14 +987,14 @@ void SavedBattleGame::endTurn()
 		for (std::vector<BattleUnit*>::iterator i = _units.begin(); i != _units.end(); ++i)
 		{
 			if ((*i)->getTurnsExposed() < 255)
-//kL				&& _side == FACTION_PLAYER)
+//kL				&& _side == FACTION_PLAYER) // kL_note: maybe should be getFaction() or getOriginalFaction()
 			{
 				(*i)->setTurnsExposed((*i)->getTurnsExposed() +	1);
 			}
 
 			if (_cheating
 				&& (*i)->getFaction() == FACTION_PLAYER
-				&& !(*i)->isOut())
+				&& !(*i)->isOut(true))
 			{
 				(*i)->setTurnsExposed(0);
 			}
@@ -1004,7 +1022,8 @@ void SavedBattleGame::endTurn()
 	//Log(LOG_INFO) << "done recalculateFoV";
 
 	if (_side != FACTION_PLAYER) selectNextPlayerUnit();
-	//Log(LOG_INFO) << "SavedBattleGame::endTurn() EXIT";
+
+	Log(LOG_INFO) << "SavedBattleGame::endTurn() EXIT";
 }
 
 /**
@@ -1482,14 +1501,20 @@ void SavedBattleGame::prepareNewTurn()
  */
 void SavedBattleGame::reviveUnconsciousUnits()
 {
-	for (std::vector<BattleUnit*>::iterator i = getUnits()->begin(); i != getUnits()->end(); ++i)
+	for (std::vector<BattleUnit*>::iterator
+			i = getUnits()->begin();
+			i != getUnits()->end();
+			++i)
 	{
 		if ((*i)->getArmor()->getSize() == 1)
 		{
 			Position originalPosition = (*i)->getPosition();
 			if (originalPosition == Position(-1, -1, -1))
 			{
-				for (std::vector<BattleItem*>::iterator j = _items.begin(); j != _items.end(); ++j)
+				for (std::vector<BattleItem*>::iterator
+						j = _items.begin();
+						j != _items.end();
+						++j)
 				{
 					if ((*j)->getUnit()
 						&& (*j)->getUnit() == *i
@@ -1510,6 +1535,7 @@ void SavedBattleGame::reviveUnconsciousUnits()
 					(*i)->turn(false); // makes the unit stand up again
 //kL					(*i)->kneel(false);
 					(*i)->setCache(0);
+					(*i)->setDirection(RNG::generate(0, 7));		// kL
 
 					getTileEngine()->calculateFOV((*i));
 					getTileEngine()->calculateUnitLighting();

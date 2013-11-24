@@ -121,7 +121,11 @@ void BattlescapeGame::think()
 				if (_save->getSelectedUnit())
 				{
 					if (!handlePanickingUnit(_save->getSelectedUnit()))
+//						&& _save->getSelectedUnit()->getFaction() != FACTION_PLAYER)	// kL, safety.
+					{
+						Log(LOG_INFO) << "BattlescapeGame::think() call handleAI() ID " << _save->getSelectedUnit()->getId();
 						handleAI(_save->getSelectedUnit());
+					}
 				}
 				else
 				{
@@ -181,6 +185,13 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 {
 	Log(LOG_INFO) << "BattlescapeGame::handleAI()";
 
+/*	if (unit->getFaction() == FACTION_PLAYER)				// kL
+	{
+		Log(LOG_INFO) << ". got a Faction_Player trying to AI ! Aborting...";
+		return;												// kL
+	} */ // well, that loops...
+
+
 	std::wstringstream ss;
 
 	_tuReserved = BA_NONE;
@@ -211,6 +222,7 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 		if (_save->getSelectedUnit())
 		{
 			getMap()->getCamera()->centerOnPosition(_save->getSelectedUnit()->getPosition());
+
 			if (_save->getSelectedUnit()->getId() <= unit->getId())
 			{
 				_AISecondMove = true;
@@ -219,7 +231,7 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 
 		_AIActionCounter = 0;
 
-		//Log(LOG_INFO) << "BattlescapeGame::handleAI() EXIT 1";
+		Log(LOG_INFO) << "BattlescapeGame::handleAI() Pre-EXIT";
 		return;
 	}
 
