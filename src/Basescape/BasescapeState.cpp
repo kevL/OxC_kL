@@ -222,8 +222,7 @@ void BasescapeState::init()
 			if (*i == _base)
 			{
 				exists = true;
-
-				break;
+//				break; // kL_note: taken out.
 			}
 		}
 
@@ -249,7 +248,7 @@ void BasescapeState::init()
 		{
 			_txtLocation->setText(tr((*i)->getRules()->getType()));
 
-			break;
+//kL			break; // kL_note: try this
 		}
 	}
 

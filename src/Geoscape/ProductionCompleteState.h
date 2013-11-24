@@ -31,6 +31,8 @@ namespace OpenXcom
 class TextButton;
 class Window;
 class Text;
+class Base;
+class GeoscapeState;
 
 /**
  * Window used to notify the player when
@@ -40,15 +42,18 @@ class ProductionCompleteState
 	:
 		public State
 {
-	private:
-		TextButton* _btnOk;
-		Window* _window;
-		Text* _txtMessage;
-		ProdProgress _endType;
+private:
+	Base* _base;
+	GeoscapeState* _state;
+
+	TextButton* _btnOk, * _btnGotoBase;
+	Window* _window;
+	Text* _txtMessage;
+	ProdProgress _endType;
 
 	public:
 		/// Creates the Production Complete state.
-		ProductionCompleteState(Game* game, const std::wstring& item, const std::wstring& base, ProdProgress endType = PROGRESS_COMPLETE);
+		ProductionCompleteState(Game* game, Base* base, const std::wstring& item, GeoscapeState* state, ProdProgress endType = PROGRESS_COMPLETE);
 		/// Cleans up the Production Complete state.
 		~ProductionCompleteState();
 
@@ -56,6 +61,8 @@ class ProductionCompleteState
 		void init();
 		/// Handler for clicking the OK button.
 		void btnOkClick(Action* action);
+		/// Handler for clicking the Go To Base button.
+		void btnGotoBaseClick(Action* action);
 };
 
 }

@@ -1219,6 +1219,7 @@ en-US:
   STR_CONTAINMENT_EXCEEDED: "ALIEN CONTAINMENT LIMITS EXCEEDED{SMALLLINE}Insufficient containment space at {0}. You must torture excess aliens until they are fishfood."
   STR_MANAGE_CONTAINMENT: "Alien Containment"
   STR_DETAILS: "Details: {ALT}{0}"
+  STR_GO_TO_BASE: "Go to Base"
   STR_HOUR:
     one: "{N} hr"
     few: "{N} hrs"

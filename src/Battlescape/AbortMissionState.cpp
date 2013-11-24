@@ -141,6 +141,7 @@ AbortMissionState::AbortMissionState(Game* game, SavedBattleGame* battleGame, Ba
 	_btnCancel->setHighContrast(true);
 	_btnCancel->onMouseClick((ActionHandler)& AbortMissionState::btnCancelClick);
 	_btnCancel->onKeyboardPress((ActionHandler)& AbortMissionState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnCancel->onKeyboardPress((ActionHandler)& AbortMissionState::btnCancelClick, (SDLKey)Options::getInt("keyBattleAbort"));
 }
 
 /**
