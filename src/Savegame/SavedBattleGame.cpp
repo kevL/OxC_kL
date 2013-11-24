@@ -873,14 +873,16 @@ void SavedBattleGame::endTurn()
 
 		_side = FACTION_HOSTILE;
 
-	// kL_begin: sbg::endTurn() no Reselect Mc'd alien units!!!
+	// kL_begin: sbg::endTurn() no Reselect /*Mc'd alien*/ units!!!
 	for (std::vector<BattleUnit*>::iterator
 			i = getUnits()->begin();
 			i != getUnits()->end();
 			++i)
 	{
-		if ((*i)->getFaction() == FACTION_PLAYER
-			&& (*i)->getOriginalFaction() == FACTION_HOSTILE)
+		if ((*i)->getFaction() == FACTION_PLAYER)
+//			&& (*i)->getOriginalFaction() == FACTION_HOSTILE)	// (a) or
+//			&& (*i)->getOriginalFaction() != FACTION_PLAYER)	// (b) ergo, Mc'd unit
+			// wait.. let's do this for all Side_xCom.
 		{
 			// either zero tu's or set no reselect:
 			(*i)->dontReselect();
