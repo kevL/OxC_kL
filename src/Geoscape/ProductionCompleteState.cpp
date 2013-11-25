@@ -53,17 +53,19 @@ ProductionCompleteState::ProductionCompleteState(Game* game, Base* base, const s
 	_screen = false;
 
 	_window			= new Window(this, 256, 160, 32, 20, POPUP_BOTH);
-	_btnOk			= new TextButton(118, 18, 40, 154);
-	_btnGotoBase	= new TextButton(118, 18, 162, 154);
 	_txtMessage		= new Text(246, 110, 37, 35);
 
+	_btnOk			= new TextButton(90, 16, 16, 154);
+	_btnOk5Secs		= new TextButton(90, 16, 118, 154);
+	_btnGotoBase	= new TextButton(90, 16, 220, 154);
 
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
 
 	add(_window);
-	add(_btnOk);
-	add(_btnGotoBase);
 	add(_txtMessage);
+	add(_btnOk);
+	add(_btnOk5Secs);
+	add(_btnGotoBase);
 
 	centerAllSurfaces();
 
@@ -76,6 +78,11 @@ ProductionCompleteState::ProductionCompleteState(Game* game, Base* base, const s
 	_btnOk->onMouseClick((ActionHandler)& ProductionCompleteState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)& ProductionCompleteState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 
+	_btnOk5Secs->setColor(Palette::blockOffset(8)+5);
+	_btnOk5Secs->setText(tr("STR_OK_5_SECS"));
+	_btnOk5Secs->onMouseClick((ActionHandler)& ProductionCompleteState::btnOk5SecsClick);
+	_btnOk5Secs->onKeyboardPress((ActionHandler)& ProductionCompleteState::btnOk5SecsClick, (SDLKey)Options::getInt("keyGeoSpeed1"));
+
 	_btnGotoBase->setColor(Palette::blockOffset(8)+5);
 	if (_endType != PROGRESS_CONSTRUCTION)
 	{
@@ -86,6 +93,7 @@ ProductionCompleteState::ProductionCompleteState(Game* game, Base* base, const s
 		_btnGotoBase->setText(tr("STR_GO_TO_BASE"));
 	}
 	_btnGotoBase->onMouseClick((ActionHandler)& ProductionCompleteState::btnGotoBaseClick);
+	_btnGotoBase->onKeyboardPress((ActionHandler)& ProductionCompleteState::btnGotoBaseClick, (SDLKey)Options::getInt("keyOk"));
 
 	_txtMessage->setColor(Palette::blockOffset(15)-1);
 	_txtMessage->setAlign(ALIGN_CENTER);
@@ -137,6 +145,17 @@ void ProductionCompleteState::init()
  */
 void ProductionCompleteState::btnOkClick(Action*)
 {
+	_game->popState();
+}
+
+/**
+ * Reduces the speed to 5 Secs and returns to the previous screen.
+ * @param action Pointer to an action.
+ */
+void ProductionCompleteState::btnOk5SecsClick(Action*)
+{
+	_state->timerReset();
+
 	_game->popState();
 }
 

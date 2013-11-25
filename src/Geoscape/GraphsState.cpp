@@ -263,7 +263,8 @@ GraphsState::GraphsState(Game* game)
 	{
 		offset = iter;
 
-		_btnFinances.push_back(new ToggleTextButton(85, 10, 0, offset * 10));
+//kL		_btnFinances.push_back(new ToggleTextButton(85, 10, 0, offset * 10));
+		_btnFinances.push_back(new ToggleTextButton(82, 16, 0, offset * 16));		// kL
 		_financeToggles.push_back(false);
 
 		_btnFinances.at(offset)->setColor(Palette::blockOffset(9)+7);
@@ -688,7 +689,10 @@ void GraphsState::btnXcomCountryClick(Action*)
 	resetScreen();
 	drawLines();
 
-	for (std::vector<ToggleTextButton*>::iterator iter = _btnCountries.begin(); iter != _btnCountries.end(); ++iter)
+	for (std::vector<ToggleTextButton*>::iterator
+			iter = _btnCountries.begin();
+			iter != _btnCountries.end();
+			++iter)
 	{
 		(*iter)->setVisible(true);
 	}
@@ -722,7 +726,11 @@ void GraphsState::btnIncomeClick(Action*)
 	drawLines();
 
 	_txtFactor->setVisible(true);
-	for (std::vector<ToggleTextButton*>::iterator iter = _btnCountries.begin(); iter != _btnCountries.end(); ++iter)
+
+	for (std::vector<ToggleTextButton*>::iterator
+			iter = _btnCountries.begin();
+			iter != _btnCountries.end();
+			++iter)
 	{
 		(*iter)->setVisible(true);
 	}
@@ -745,7 +753,10 @@ void GraphsState::btnFinanceClick(Action*)
 	resetScreen();
 	drawLines();
 
-	for (std::vector<ToggleTextButton*>::iterator iter = _btnFinances.begin(); iter != _btnFinances.end(); ++iter)
+	for (std::vector<ToggleTextButton*>::iterator
+			iter = _btnFinances.begin();
+			iter != _btnFinances.end();
+			++iter)
 	{
 		(*iter)->setVisible(true);
 	}
@@ -810,7 +821,7 @@ void GraphsState::btnCountryListClick(Action* action)
  */
 void GraphsState::btnFinanceListClick(Action* action)
 {
-	size_t number = (action->getSender()->getY() - Screen::getDY()) / 10;
+	size_t number = (action->getSender()->getY() - Screen::getDY()) / 16;
 	ToggleTextButton* button = _btnFinances.at(number);
 	
 	_financeLines.at(number)->setVisible(!_financeToggles.at(number));

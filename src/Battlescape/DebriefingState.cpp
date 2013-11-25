@@ -104,7 +104,7 @@ DebriefingState::DebriefingState(Game *game)
 	_lstTotal		= new TextList(288, 9, 16, 12);
 
 	_btnOk			= new TextButton(176, 16, 16, 177);
-	_txtRating		= new Text(100, 9, 200, 180);
+	_txtRating		= new Text(100, 9, 212, 180);
 
 
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());

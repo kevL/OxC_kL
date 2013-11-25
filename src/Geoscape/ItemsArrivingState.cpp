@@ -66,21 +66,22 @@ ItemsArrivingState::ItemsArrivingState(Game* game, GeoscapeState* state)
 
 	_lstTransfers	= new TextList(286, 120, 16, 45);
 
-	_btnOk			= new TextButton(134, 16, 16, 169);
-	_btnGotoBase	= new TextButton(134, 16, 170, 169);
-//	_btnOk5Secs		= new TextButton(134, 16, 170, 169);
+	_btnOk			= new TextButton(90, 16, 16, 169);
+	_btnOk5Secs		= new TextButton(90, 16, 118, 169);
+	_btnGotoBase	= new TextButton(90, 16, 220, 169);
 
 
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
 
 	add(_window);
-	add(_btnOk);
-	add(_btnGotoBase);
 	add(_txtTitle);
 	add(_txtItem);
 	add(_txtQuantity);
 	add(_txtDestination);
 	add(_lstTransfers);
+	add(_btnOk);
+	add(_btnOk5Secs);
+	add(_btnGotoBase);
 
 	centerAllSurfaces();
 
@@ -90,8 +91,13 @@ ItemsArrivingState::ItemsArrivingState(Game* game, GeoscapeState* state)
 
 	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(tr("STR_OK"));
-	_btnOk->onMouseClick((ActionHandler)&ItemsArrivingState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&ItemsArrivingState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onMouseClick((ActionHandler)& ItemsArrivingState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)& ItemsArrivingState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+
+	_btnOk5Secs->setColor(Palette::blockOffset(8)+5);
+	_btnOk5Secs->setText(tr("STR_OK_5_SECS"));
+	_btnOk5Secs->onMouseClick((ActionHandler)& ItemsArrivingState::btnOk5SecsClick);
+	_btnOk5Secs->onKeyboardPress((ActionHandler)& ItemsArrivingState::btnOk5SecsClick, (SDLKey)Options::getInt("keyGeoSpeed1"));
 
 	_btnGotoBase->setColor(Palette::blockOffset(8)+5);
 	_btnGotoBase->setText(tr("STR_GO_TO_BASE"));
@@ -184,6 +190,17 @@ void ItemsArrivingState::init()
  */
 void ItemsArrivingState::btnOkClick(Action*)
 {
+	_game->popState();
+}
+
+/**
+ * Reduces the speed to 5 Secs and returns to the previous screen.
+ * @param action Pointer to an action.
+ */
+void ItemsArrivingState::btnOk5SecsClick(Action*)
+{
+	_state->timerReset();
+
 	_game->popState();
 }
 

@@ -217,12 +217,15 @@ void BasescapeState::init()
 	if (!_game->getSavedGame()->getBases()->empty())
 	{
 		bool exists = false;
-		for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end() && !exists; ++i)
+		for (std::vector<Base*>::iterator
+				i = _game->getSavedGame()->getBases()->begin();
+				i != _game->getSavedGame()->getBases()->end()
+					&& !exists;
+				++i)
 		{
 			if (*i == _base)
 			{
 				exists = true;
-//				break; // kL_note: taken out.
 			}
 		}
 
@@ -248,7 +251,7 @@ void BasescapeState::init()
 		{
 			_txtLocation->setText(tr((*i)->getRules()->getType()));
 
-//kL			break; // kL_note: try this
+			break;
 		}
 	}
 

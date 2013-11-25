@@ -16,10 +16,12 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_MINIMAP_H
 #define OPENXCOM_MINIMAP_H
 
 #include "../Engine/State.h"
+
 
 namespace OpenXcom
 {
@@ -32,31 +34,39 @@ class Timer;
 class SavedBattleGame;
 
 /**
- * The MiniMap is a representation of a Battlescape map that allows you to see more of the map.
+ * The MiniMap is an overhead representation of the Battlescape map;
+ * a strategic view that allows you to see more of the map.
  */
-class MiniMapState : public State
+class MiniMapState
+	:
+		public State
 {
-	InteractiveSurface * _surface;
-	MiniMapView * _miniMapView;
-	Text * _txtLevel;
-	Timer * _timerAnimate;
+private:
+	InteractiveSurface* _surface;
+	MiniMapView* _miniMapView;
+	Text* _txtLevel;
+	Timer* _timerAnimate;
+
 	/// Handles Minimap animation.
 	void animate();
-public:
-	/// Creates the MiniMapState.
-	MiniMapState (Game * game, Camera * camera, SavedBattleGame * battleGame);
-	/// Cleans up the MiniMapState.
-	~MiniMapState();
-	/// Handler for the OK button.
-	void btnOkClick (Action * action);
-	/// Handler for the one level up button.
-	void btnLevelUpClick (Action * action);
-	/// Handler for the one level down button.
-	void btnLevelDownClick (Action * action);
-	/// Handler for right-clicking anything.
-	void handle(Action *action);
-	/// Handles timers.
-	void think ();
+
+	public:
+		/// Creates the MiniMapState.
+		MiniMapState(Game* game, Camera* camera, SavedBattleGame* battleGame);
+		/// Cleans up the MiniMapState.
+		~MiniMapState();
+
+		/// Handler for the OK button.
+		void btnOkClick(Action* action);
+		/// Handler for the one level up button.
+		void btnLevelUpClick(Action* action);
+		/// Handler for the one level down button.
+		void btnLevelDownClick(Action* action);
+		/// Handler for right-clicking anything.
+		void handle(Action* action);
+
+		/// Handles timers.
+		void think ();
 };
 
 }

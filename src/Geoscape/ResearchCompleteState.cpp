@@ -48,12 +48,10 @@ ResearchCompleteState::ResearchCompleteState(Game* game, const RuleResearch* res
 	_screen = false;
 
 
-//	_window			= new Window(this, 224, 140, 48, 30, POPUP_BOTH);
-	_window			= new Window(this, 230, 140, 45, 30, POPUP_BOTH); // new
+	_window			= new Window(this, 230, 140, 45, 30, POPUP_BOTH);
 
-	_txtTitle		= new Text(230, 17, 45, 70); // new
-//	_txtTitle		= new Text(224, 17, 48, 88);
-	_txtResearch	= new Text(230, 17, 45, 96); // new
+	_txtTitle		= new Text(230, 17, 45, 70);
+	_txtResearch	= new Text(230, 17, 45, 96);
 
 	_btnReport		= new TextButton(80, 16, 64, 146);
 	_btnOk			= new TextButton(80, 16, 176, 146);

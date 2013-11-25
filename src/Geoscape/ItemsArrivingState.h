@@ -44,7 +44,7 @@ class ItemsArrivingState
 private:
 	GeoscapeState* _state;
 	Base* _base;
-	TextButton* _btnOk, * _btnGotoBase;
+	TextButton* _btnOk, * _btnOk5Secs, * _btnGotoBase;
 	Window* _window;
 	Text* _txtTitle, * _txtItem, * _txtQuantity, * _txtDestination;
 	TextList* _lstTransfers;
@@ -59,9 +59,11 @@ private:
 		void init();
 
 		/// Handler for clicking the OK button.
-		void btnOkClick(Action* action);
+		void btnOkClick(Action*);
+		/// Handler for clicking the Ok 5sec button.
+		void btnOk5SecsClick(Action*);
 		/// Handler for clicking the Go To Base button.
-		void btnGotoBaseClick(Action* action);
+		void btnGotoBaseClick(Action*);
 };
 
 }

@@ -55,13 +55,9 @@ NextTurnState::NextTurnState(Game* game, SavedBattleGame* battleGame, Battlescap
 	//Log(LOG_INFO) << "Create NextTurnState";
 
 	_window		= new Window(this, 320, 200, 0, 0);
-
-	_txtTitle	= new Text(320, 17, 0, 67);
-
-	_txtTurn	= new Text(320, 17, 0, 92);
-
-	_txtSide	= new Text(320, 17, 0, 108);
-
+	_txtTitle	= new Text(320, 17, 0, 68);
+	_txtTurn	= new Text(320, 17, 0, 93);
+	_txtSide	= new Text(320, 17, 0, 109);
 	_txtMessage	= new Text(320, 17, 0, 149);
 
 	add(_window);

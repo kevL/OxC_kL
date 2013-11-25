@@ -16,20 +16,24 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "MiniMapState.h"
+
 #include <iostream>
 #include <sstream>
-#include "../Engine/Game.h"
-#include "../Engine/Screen.h"
-#include "../Engine/InteractiveSurface.h"
-#include "../Resource/ResourcePack.h"
-#include "../Engine/Palette.h"
-#include "../Interface/Text.h"
-#include "MiniMapView.h"
+
 #include "Camera.h"
-#include "../Engine/Timer.h"
+#include "MiniMapView.h"
 #include "../Engine/Action.h"
+#include "../Engine/Game.h"
+#include "../Engine/InteractiveSurface.h"
 #include "../Engine/Options.h"
+#include "../Engine/Palette.h"
+#include "../Engine/Screen.h"
+#include "../Engine/Timer.h"
+#include "../Interface/Text.h"
+#include "../Resource/ResourcePack.h"
+
 
 namespace OpenXcom
 {
@@ -39,14 +43,19 @@ namespace OpenXcom
  * @param camera The Battlescape camera.
  * @param battleGame The Battlescape save.
  */
-MiniMapState::MiniMapState (Game * game, Camera * camera, SavedBattleGame * battleGame) : State(game)
+MiniMapState::MiniMapState(Game* game, Camera* camera, SavedBattleGame* battleGame)
+	:
+		State(game)
 {
-	_surface = new InteractiveSurface(320, 200);
-	_miniMapView = new MiniMapView(222, 150, 49, 15, game, camera, battleGame);
-	InteractiveSurface * btnLvlUp = new InteractiveSurface(18, 20, 24, 62);
-	InteractiveSurface * btnLvlDwn = new InteractiveSurface(18, 20, 24, 88);
-	InteractiveSurface * btnOk = new InteractiveSurface(32, 32, 275, 145);
+	_surface		= new InteractiveSurface(320, 200);
+	_miniMapView	= new MiniMapView(222, 150, 49, 15, game, camera, battleGame);
+
+	InteractiveSurface* btnLvlUp	= new InteractiveSurface(18, 20, 24, 62);
+	InteractiveSurface* btnLvlDwn	= new InteractiveSurface(18, 20, 24, 88);
+	InteractiveSurface* btnOk		= new InteractiveSurface(32, 32, 275, 145);
+
 	_txtLevel = new Text (20, 25, 281, 75);
+
 	add(_surface);
 	add(_miniMapView);
 	add(btnLvlUp);
@@ -56,32 +65,40 @@ MiniMapState::MiniMapState (Game * game, Camera * camera, SavedBattleGame * batt
 
 	centerAllSurfaces();
 
-	if (Screen::getDY() > 50)
+
+/*kL	if (Screen::getDY() > 50)
 	{
 		_screen = false;
+
 		SDL_Rect current;
 		current.w = 223;
 		current.h = 151;
 		current.x = 46;
 		current.y = 14;
 		_surface->drawRect(&current, Palette::blockOffset(15)+15);
-	}
+	} */
 
 	_game->getResourcePack()->getSurface("SCANBORD.PCK")->blit(_surface);
-	btnLvlUp->onMouseClick((ActionHandler)&MiniMapState::btnLevelUpClick);
-	btnLvlDwn->onMouseClick((ActionHandler)&MiniMapState::btnLevelDownClick);
-	btnOk->onMouseClick((ActionHandler)&MiniMapState::btnOkClick);
-	btnOk->onKeyboardPress((ActionHandler)&MiniMapState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
-	btnOk->onKeyboardPress((ActionHandler)&MiniMapState::btnOkClick, (SDLKey)Options::getInt("keyBattleMap"));
+
+
+	btnLvlUp->onMouseClick((ActionHandler)& MiniMapState::btnLevelUpClick);
+	btnLvlDwn->onMouseClick((ActionHandler)& MiniMapState::btnLevelDownClick);
+
+	btnOk->onMouseClick((ActionHandler)& MiniMapState::btnOkClick);
+	btnOk->onKeyboardPress((ActionHandler)& MiniMapState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	btnOk->onKeyboardPress((ActionHandler)& MiniMapState::btnOkClick, (SDLKey)Options::getInt("keyBattleMap"));
+
 	_txtLevel->setBig();
 	_txtLevel->setColor(Palette::blockOffset(4));
 	_txtLevel->setHighContrast(true);
 	std::wstringstream s;
 	s << camera->getViewLevel();
 	_txtLevel->setText(s.str());
+
 	_timerAnimate = new Timer(125);
-	_timerAnimate->onTimer((StateHandler)&MiniMapState::animate);
+	_timerAnimate->onTimer((StateHandler)& MiniMapState::animate);
 	_timerAnimate->start();
+
 	_miniMapView->draw();
 }
 
@@ -97,20 +114,19 @@ MiniMapState::~MiniMapState()
  * Handles mouse-wheeling.
  * @param action Pointer to an action.
  */
-void MiniMapState::handle(Action *action)
+void MiniMapState::handle(Action* action)
 {
 	State::handle(action);
+
 	if (action->getDetails()->type == SDL_MOUSEBUTTONDOWN)
 	{
 		if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
 		{
-//kL			btnLevelUpClick(action);
-			btnLevelDownClick(action);		// kL
+			btnLevelDownClick(action);
 		}
 		else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN)
 		{
-//kL			btnLevelDownClick(action);
-			btnLevelUpClick(action);		// kL
+			btnLevelUpClick(action);
 		}
 	}
 }
@@ -119,7 +135,7 @@ void MiniMapState::handle(Action *action)
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void MiniMapState::btnOkClick(Action *)
+void MiniMapState::btnOkClick(Action*)
 {
 	_game->popState();
 }
@@ -128,7 +144,7 @@ void MiniMapState::btnOkClick(Action *)
  * Changes the currently displayed minimap level.
  * @param action Pointer to an action.
  */
-void MiniMapState::btnLevelUpClick(Action *)
+void MiniMapState::btnLevelUpClick(Action*)
 {
 	std::wstringstream s;
 	s << _miniMapView->up();
@@ -139,7 +155,7 @@ void MiniMapState::btnLevelUpClick(Action *)
  * Changes the currently displayed minimap level.
  * @param action Pointer to an action.
  */
-void MiniMapState::btnLevelDownClick(Action *)
+void MiniMapState::btnLevelDownClick(Action*)
 {
 	std::wstringstream s;
 	s << _miniMapView->down ();

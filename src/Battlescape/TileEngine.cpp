@@ -3515,13 +3515,13 @@ bool TileEngine::psiAttack(BattleAction* action)
 
 		double attackStr =
 				(double)action->actor->getStats()->psiStrength
-				* (double)action->actor->getStats()->psiSkill / 50.0;
-		Log(LOG_INFO) << ". . . attackStr = " << attackStr;
+				* (double)action->actor->getStats()->psiSkill / 50.;
+		Log(LOG_INFO) << ". . . attackStr = " << (int)attackStr;
 
 		double defenseStr =
 				(double)victim->getStats()->psiStrength
-				+ ((double)victim->getStats()->psiSkill / 5.0);
-		Log(LOG_INFO) << ". . . defenseStr = " << defenseStr;
+				+ ((double)victim->getStats()->psiSkill / 5.);
+		Log(LOG_INFO) << ". . . defenseStr = " << (int)defenseStr;
 
 		double d = (double)distance(action->actor->getPosition(), action->target);
 		Log(LOG_INFO) << ". . . d = " << d;
