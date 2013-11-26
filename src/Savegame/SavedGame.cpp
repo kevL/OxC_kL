@@ -433,8 +433,8 @@ void SavedGame::save(const std::string& filename) const
 
 	if (_battleGame != 0)
 	{
-		brief["mission"] = _battleGame->getMissionType();
-		brief["turn"] = _battleGame->getTurn();
+		brief["mission"]	= _battleGame->getMissionType();
+		brief["turn"]		= _battleGame->getTurn();
 	}
 
 	out << brief;
@@ -444,7 +444,7 @@ void SavedGame::save(const std::string& filename) const
 
 	YAML::Node node;
 
-	node["difficulty"]			= (int)_difficulty;
+	node["difficulty"]			= static_cast<int>(_difficulty);
 	node["monthsPassed"]		= _monthsPassed;
 	node["radarLines"]			= _radarLines;
 	node["detail"]				= _detail;
@@ -819,13 +819,14 @@ SavedBattleGame* SavedGame::getSavedBattle()
 void SavedGame::setBattleGame(SavedBattleGame* battleGame)
 {
 	delete _battleGame;
+
 	_battleGame = battleGame;
 }
 
 /**
  * Add a ResearchProject to the list of already discovered ResearchProject
  * @param r The newly found ResearchProject
-*/
+ */
 void SavedGame::addFinishedResearch(const RuleResearch* r, const Ruleset* ruleset)
 {
 	std::vector<const RuleResearch*>::const_iterator itDiscovered = std::find(_discovered.begin (), _discovered.end (), r);
@@ -869,20 +870,20 @@ void SavedGame::addFinishedResearch(const RuleResearch* r, const Ruleset* rulese
 }
 
 /**
-   Returns the list of already discovered ResearchProject
+ * Returns the list of already discovered ResearchProject
  * @return the list of already discovered ResearchProject
-*/
+ */
 const std::vector<const RuleResearch*>& SavedGame::getDiscoveredResearch() const
 {
 	return _discovered;
 }
 
 /**
-   Get the list of RuleResearch which can be researched in a Base.
-   * @param projects the list of ResearchProject which are available.
-   * @param ruleset the Game Ruleset
-   * @param base a pointer to a Base
-*/
+ * Get the list of RuleResearch which can be researched in a Base.
+ * @param projects the list of ResearchProject which are available.
+ * @param ruleset the Game Ruleset
+ * @param base a pointer to a Base
+ */
 void SavedGame::getAvailableResearchProjects(std::vector<RuleResearch*>& projects, const Ruleset* ruleset, Base* base) const
 {
 	const std::vector<const RuleResearch*>& discovered(getDiscoveredResearch());
@@ -907,7 +908,7 @@ void SavedGame::getAvailableResearchProjects(std::vector<RuleResearch*>& project
 		}
 		std::vector<const RuleResearch*>::const_iterator itDiscovered = std::find(discovered.begin (), discovered.end (), research);
 		
-		bool liveAlien = ruleset->getUnit(research->getName()) != 0;
+		bool liveAlien = (ruleset->getUnit(research->getName()) != 0);
 
 		if (itDiscovered != discovered.end ())
 		{
@@ -935,8 +936,8 @@ void SavedGame::getAvailableResearchProjects(std::vector<RuleResearch*>& project
 				std::vector<std::string>::const_iterator leaderCheck = std::find(research->getUnlocked().begin(), research->getUnlocked().end(), "STR_LEADER_PLUS");
 				std::vector<std::string>::const_iterator cmnderCheck = std::find(research->getUnlocked().begin(), research->getUnlocked().end(), "STR_CYDONIA_DEP");
 				
-				bool leader(leaderCheck != research->getUnlocked().end());
-				bool cmnder(cmnderCheck != research->getUnlocked().end());
+				bool leader = (leaderCheck != research->getUnlocked().end());
+				bool cmnder = (cmnderCheck != research->getUnlocked().end());
 
 				if (leader)
 				{
@@ -990,11 +991,11 @@ void SavedGame::getAvailableResearchProjects(std::vector<RuleResearch*>& project
 }
 
 /**
-   Get the list of RuleManufacture which can be manufacture in a Base.
-   * @param productions the list of Productions which are available.
-   * @param ruleset the Game Ruleset
-   * @param base a pointer to a Base
-*/
+ * Get the list of RuleManufacture which can be manufacture in a Base.
+ * @param productions the list of Productions which are available.
+ * @param ruleset the Game Ruleset
+ * @param base a pointer to a Base
+ */
 void SavedGame::getAvailableProductions(std::vector<RuleManufacture*>& productions, const Ruleset* ruleset, Base* base) const
 {
 	const std::vector<std::string>& items = ruleset->getManufactureList();
@@ -1018,16 +1019,17 @@ void SavedGame::getAvailableProductions(std::vector<RuleManufacture*>& productio
 }
 
 /**
-   Check whether a ResearchProject can be researched.
-   * @param r the RuleResearch to test.
-   * @param unlocked the list of currently unlocked RuleResearch
-   * @return true if the RuleResearch can be researched
-*/
+ * Check whether a ResearchProject can be researched.
+ * @param r the RuleResearch to test.
+ * @param unlocked the list of currently unlocked RuleResearch
+ * @return true if the RuleResearch can be researched
+ */
 bool SavedGame::isResearchAvailable(RuleResearch* r, const std::vector<const RuleResearch*>& unlocked, const Ruleset* ruleset) const
 {
 	std::vector<std::string> deps = r->getDependencies();
 	const std::vector<const RuleResearch*>& discovered(getDiscoveredResearch());
-	bool liveAlien = ruleset->getUnit(r->getName()) != 0;
+
+	bool liveAlien = (ruleset->getUnit(r->getName()) != 0);
 
 	if (std::find(unlocked.begin(), unlocked.end(), r) != unlocked.end())
 	{
@@ -1048,8 +1050,8 @@ bool SavedGame::isResearchAvailable(RuleResearch* r, const std::vector<const Rul
 			std::vector<std::string>::const_iterator leaderCheck = std::find(r->getUnlocked().begin(), r->getUnlocked().end(), "STR_LEADER_PLUS");
 			std::vector<std::string>::const_iterator cmnderCheck = std::find(r->getUnlocked().begin(), r->getUnlocked().end(), "STR_CYDONIA_DEP");
 				
-			bool leader ( leaderCheck != r->getUnlocked().end());
-			bool cmnder ( cmnderCheck != r->getUnlocked().end());
+			bool leader = (leaderCheck != r->getUnlocked().end());
+			bool cmnder = (cmnderCheck != r->getUnlocked().end());
 
 			if (leader)
 			{
@@ -1081,12 +1083,12 @@ bool SavedGame::isResearchAvailable(RuleResearch* r, const std::vector<const Rul
 }
 
 /**
-   Get the list of newly available research projects once a ResearchProject has been completed. This function check for fake ResearchProject.
-   * @param dependables the list of RuleResearch which are now available.
-   * @param research The RuleResearch which has just been discovered
-   * @param ruleset the Game Ruleset
-   * @param base a pointer to a Base
-*/
+ * Get the list of newly available research projects once a ResearchProject has been completed. This function check for fake ResearchProject.
+ * @param dependables the list of RuleResearch which are now available.
+ * @param research The RuleResearch which has just been discovered
+ * @param ruleset the Game Ruleset
+ * @param base a pointer to a Base
+ */
 void SavedGame::getDependableResearch(std::vector<RuleResearch*>& dependables, const RuleResearch* research, const Ruleset* ruleset, Base* base) const
 {
 	getDependableResearchBasic(dependables, research, ruleset, base);
@@ -1103,12 +1105,12 @@ void SavedGame::getDependableResearch(std::vector<RuleResearch*>& dependables, c
 }
 
 /**
-   Get the list of newly available research projects once a ResearchProject has been completed. This function doesn't check for fake ResearchProject.
-   * @param dependables the list of RuleResearch which are now available.
-   * @param research The RuleResearch which has just been discovered
-   * @param ruleset the Game Ruleset
-   * @param base a pointer to a Base
-*/
+ * Get the list of newly available research projects once a ResearchProject has been completed. This function doesn't check for fake ResearchProject.
+ * @param dependables the list of RuleResearch which are now available.
+ * @param research The RuleResearch which has just been discovered
+ * @param ruleset the Game Ruleset
+ * @param base a pointer to a Base
+ */
 void SavedGame::getDependableResearchBasic(std::vector<RuleResearch*>& dependables, const RuleResearch* research, const Ruleset* ruleset, Base* base) const
 {
 	std::vector<RuleResearch*> possibleProjects;
@@ -1129,12 +1131,12 @@ void SavedGame::getDependableResearchBasic(std::vector<RuleResearch*>& dependabl
 }
 
 /**
-   Get the list of newly available manufacture projects once a ResearchProject has been completed. This function check for fake ResearchProject.
-   * @param dependables the list of RuleManufacture which are now available.
-   * @param research The RuleResearch which has just been discovered
-   * @param ruleset the Game Ruleset
-   * @param base a pointer to a Base
-*/
+ * Get the list of newly available manufacture projects once a ResearchProject has been completed. This function check for fake ResearchProject.
+ * @param dependables the list of RuleManufacture which are now available.
+ * @param research The RuleResearch which has just been discovered
+ * @param ruleset the Game Ruleset
+ * @param base a pointer to a Base
+ */
 void SavedGame::getDependableManufacture(std::vector<RuleManufacture*>& dependables, const RuleResearch* research, const Ruleset* ruleset, Base*) const
 {
 	const std::vector<std::string> &mans = ruleset->getManufactureList();
@@ -1201,7 +1203,7 @@ bool SavedGame::isResearched(const std::vector<std::string>& research) const
 }
 
 /**
- * Returns pointer to the Soldier given it's unique ID.
+ * Returns pointer to the Soldier given its unique ID.
  * @param id A soldier's unique id.
  * @return Pointer to Soldier.
  */

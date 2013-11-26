@@ -337,7 +337,10 @@ bool ProjectileFlyBState::createNewProjectile()
 	if (_action.type == BA_THROW)
 	{
 		_projectileImpact = projectile->calculateThrow(_unit->getThrowingAccuracy());
-		if (_projectileImpact == VOXEL_FLOOR || _projectileImpact == VOXEL_UNIT || _projectileImpact == VOXEL_OBJECT)
+
+		if (_projectileImpact == VOXEL_FLOOR
+			|| _projectileImpact == VOXEL_UNIT
+			|| _projectileImpact == VOXEL_OBJECT)
 		{
 			if (_unit->getFaction() != FACTION_PLAYER
 				&& _projectileItem->getRules()->getBattleType() == BT_GRENADE)

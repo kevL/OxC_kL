@@ -18,19 +18,21 @@
  */
 
 #include "ResearchCompleteState.h"
+
+#include <algorithm>
+
 #include "../Engine/Game.h"
-#include "../Engine/Palette.h"
 #include "../Engine/Language.h"
-#include "../Resource/ResourcePack.h"
+#include "../Engine/Options.h"
+#include "../Engine/Palette.h"
+#include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
-#include "../Interface/Text.h"
+#include "../Resource/ResourcePack.h"
+#include "../Ruleset/ArticleDefinition.h"
 #include "../Ruleset/RuleResearch.h"
 #include "../Ruleset/Ruleset.h"
-#include "../Ruleset/ArticleDefinition.h"
 #include "../Ufopaedia/Ufopaedia.h"
-#include <algorithm>
-#include "../Engine/Options.h"
 
 
 namespace OpenXcom
@@ -43,7 +45,9 @@ namespace OpenXcom
  */
 ResearchCompleteState::ResearchCompleteState(Game* game, const RuleResearch* research, const RuleResearch* bonus)
 	:
-		State(game), _research(research), _bonus(bonus)
+		State(game),
+		_research(research),
+		_bonus(bonus)
 {
 	_screen = false;
 
@@ -53,8 +57,8 @@ ResearchCompleteState::ResearchCompleteState(Game* game, const RuleResearch* res
 	_txtTitle		= new Text(230, 17, 45, 70);
 	_txtResearch	= new Text(230, 17, 45, 96);
 
-	_btnReport		= new TextButton(80, 16, 64, 146);
-	_btnOk			= new TextButton(80, 16, 176, 146);
+	_btnOk			= new TextButton(80, 16, 64, 146);
+	_btnReport		= new TextButton(80, 16, 176, 146);
 
 
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
@@ -73,13 +77,13 @@ ResearchCompleteState::ResearchCompleteState(Game* game, const RuleResearch* res
 
 	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(tr("STR_OK"));
-	_btnOk->onMouseClick((ActionHandler)&ResearchCompleteState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&ResearchCompleteState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onMouseClick((ActionHandler)& ResearchCompleteState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)& ResearchCompleteState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_btnReport->setColor(Palette::blockOffset(8)+5);
 	_btnReport->setText(tr("STR_VIEW_REPORTS"));
-	_btnReport->onMouseClick((ActionHandler)&ResearchCompleteState::btnReportClick);
-	_btnReport->onKeyboardPress((ActionHandler)&ResearchCompleteState::btnReportClick, (SDLKey)Options::getInt("keyOk"));
+	_btnReport->onMouseClick((ActionHandler)& ResearchCompleteState::btnReportClick);
+	_btnReport->onKeyboardPress((ActionHandler)& ResearchCompleteState::btnReportClick, (SDLKey)Options::getInt("keyOk"));
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setBig();
@@ -109,7 +113,7 @@ void ResearchCompleteState::init()
  */
 void ResearchCompleteState::btnOkClick(Action*)
 {
-	_game->popState ();
+	_game->popState();
 }
 
 /**
@@ -120,11 +124,9 @@ void ResearchCompleteState::btnReportClick(Action*)
 {
 	_game->popState();
 
-	std::string name;
-	std::string bonusName;
-
 	if (_bonus)
 	{
+		std::string bonusName;
 		if (_bonus->getLookup() == "")
 			bonusName = _bonus->getName();
 		else
@@ -135,10 +137,12 @@ void ResearchCompleteState::btnReportClick(Action*)
 
 	if (_research)
 	{
+		std::string name;
 		if (_research->getLookup() == "")
 			name = _research->getName();
 		else
 			name = _research->getLookup();
+
 		Ufopaedia::openArticle(_game, name);
 	}
 }

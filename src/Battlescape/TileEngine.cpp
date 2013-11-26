@@ -3230,8 +3230,8 @@ bool TileEngine::validateThrow(BattleAction* action)
 
 	// we try several different arcs to try and reach our goal.
 //	double arc = 0.5; // start with a low traj.5 is a bit too low
-	double arc = 1.;
-	while (!found && arc < 5.)
+	double arc = 1.0;
+	while (!found && arc < 5.0)
 	{
 		int checkParab = calculateParabola(
 						originVoxel,
@@ -3257,7 +3257,7 @@ bool TileEngine::validateThrow(BattleAction* action)
 	}
 	Log(LOG_INFO) << ". arc = " << arc;
 
-	if (AreSame(arc, 5.))
+	if (AreSame(arc, 5.0))
 	{
 		return false;
 	}

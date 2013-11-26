@@ -49,18 +49,25 @@ TransferBaseState::TransferBaseState(Game* game, Base* base)
 		_base(base),
 		_bases()
 {
-	_window		= new Window(this, 280, 140, 20, 30);
-
+/*	_window		= new Window(this, 280, 140, 20, 30);
 	_txtTitle	= new Text(270, 17, 25, 38);
-
 	_txtFunds	= new Text(248, 9, 36, 54);
-
 	_txtName	= new Text(136, 17, 36, 65);
 	_txtArea	= new Text(56, 17, 172, 65);
-
 	_lstBases	= new TextList(228, 57, 36, 82);
+	_btnCancel	= new TextButton(228, 16, 36, 146); */
 
-	_btnCancel	= new TextButton(228, 16, 36, 146);
+	_window		= new Window(this, 260, 140, 30, 30);
+	_txtTitle	= new Text(250, 17, 45, 38);
+
+	_txtFunds	= new Text(100, 9, 46, 54);
+
+	_txtName	= new Text(80, 17, 46, 65);
+	_txtArea	= new Text(60, 17, 182, 65);
+
+	_lstBases	= new TextList(228, 57, 46, 82);
+
+	_btnCancel	= new TextButton(228, 16, 46, 146);
 
 
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)), Palette::backPos, 16);
@@ -94,7 +101,8 @@ TransferBaseState::TransferBaseState(Game* game, Base* base)
 	_txtFunds->setText(tr("STR_CURRENT_FUNDS").arg(Text::formatFunding(_game->getSavedGame()->getFunds())));
 
 	_txtName->setColor(Palette::blockOffset(13) + 5);
-	_txtName->setText(tr("STR_NAME"));
+//kL	_txtName->setText(tr("STR_NAME"));
+	_txtName->setText(tr("STR_BASE_KL"));	// kL
 	_txtName->setBig();
 
 	_txtArea->setColor(Palette::blockOffset(13) + 5);

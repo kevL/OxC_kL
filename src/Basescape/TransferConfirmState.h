@@ -16,10 +16,12 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_TRANSFERCONFIRMSTATE_H
 #define OPENXCOM_TRANSFERCONFIRMSTATE_H
 
 #include "../Engine/State.h"
+
 
 namespace OpenXcom
 {
@@ -33,23 +35,27 @@ class Base;
 /**
  * Window to confirm a transfer between bases.
  */
-class TransferConfirmState : public State
+class TransferConfirmState
+	:
+		public State
 {
 private:
-	TextButton *_btnCancel, *_btnOk;
-	Window *_window;
-	Text *_txtTitle, *_txtCost, *_txtTotal;
-	Base *_base;
-	TransferItemsState *_state;
-public:
-	/// Creates the Transfer Confirm state.
-	TransferConfirmState(Game *game, Base *base, TransferItemsState *state);
-	/// Cleans up the Transfer Confirm state.
-	~TransferConfirmState();
-	/// Handler for clicking the Cancel button.
-	void btnCancelClick(Action *action);
-	/// Handler for clicking the OK button.
-	void btnOkClick(Action *action);
+	TextButton* _btnCancel, * _btnOk;
+	Window* _window;
+	Text* _txtTitle, * _txtCost, * _txtTotal;
+	Base* _base;
+	TransferItemsState* _state;
+
+	public:
+		/// Creates the Transfer Confirm state.
+		TransferConfirmState(Game* game, Base* base, TransferItemsState* state);
+		/// Cleans up the Transfer Confirm state.
+		~TransferConfirmState();
+
+		/// Handler for clicking the Cancel button.
+		void btnCancelClick(Action* action);
+		/// Handler for clicking the OK button.
+		void btnOkClick(Action* action);
 };
 
 }

@@ -697,18 +697,20 @@ BattleUnit* BattlescapeGenerator::addXCOMUnit(BattleUnit* unit)
  */
 void BattlescapeGenerator::deployAliens(AlienRace* race, AlienDeployment* deployment)
 {
-	int month;
-	if (_game->getSavedGame()->getMonthsPassed() != -1)
+	int month = _game->getSavedGame()->getMonthsPassed();
+	if (month != -1)
 	{
-		month = (size_t)_game->getSavedGame()->getMonthsPassed() > _game->getRuleset()->getAlienItemLevels().size() - 1
-						? _game->getRuleset()->getAlienItemLevels().size() - 1 : _game->getSavedGame()->getMonthsPassed();
+		int aiLevel_maximum = static_cast<int>(_game->getRuleset()->getAlienItemLevels().size()) - 1;
+		if (month > aiLevel_maximum)
+			month = aiLevel_maximum;
 	}
 	else
-	{
 		month = _alienItemLevel;
-	}
 
-	for (std::vector<DeploymentData>::iterator d = deployment->getDeploymentData()->begin(); d != deployment->getDeploymentData()->end(); ++d)
+	for (std::vector<DeploymentData>::iterator
+			d = deployment->getDeploymentData()->begin();
+			d != deployment->getDeploymentData()->end();
+			++d)
 	{
 		std::string alienName = race->getMember((*d).alienRank);
 
@@ -721,17 +723,22 @@ void BattlescapeGenerator::deployAliens(AlienRace* race, AlienDeployment* deploy
 		else
 			quantity = (*d).highQty + RNG::generate(0, (*d).dQty);										// super (and beyond?)
 
-		for (int i = 0; i < quantity; i++)
+		for (int
+				i = 0;
+				i < quantity;
+				i++)
 		{
-			bool outside = RNG::generate(0, 99) < (*d).percentageOutsideUfo;
-			if (_ufo == 0) outside = false;
+			bool outside = false;
+			if (_ufo)
+			{
+				outside = RNG::generate(0, 99) < (*d).percentageOutsideUfo;
+			}
 
 			Unit* rule = _game->getRuleset()->getUnit(alienName);
 			BattleUnit* unit = addAlien(rule, (*d).alienRank, outside);
 
 //			Log(LOG_INFO) << "BattlescapeGenerator::deplyAliens() do getAlienItemLevels()";
-			int itemLevel = _game->getRuleset()->getAlienItemLevels().at(month).at(RNG::generate(0, 9));	// kL_note: this is default alienItemLevels in the ruleset.
-//			int itemLevel = _game->getRuleset()->getAlienItemLevels().at(month).at(RNG::generate(0, 16));	// kL. This is for my expanded alienItemLevels in the ruleset.
+			int itemLevel = _game->getRuleset()->getAlienItemLevels().at(month).at(RNG::generate(0, 9));
 //			Log(LOG_INFO) << "BattlescapeGenerator::deplyAliens() DONE getAlienItemLevels()";
 			if (unit)
 			{
@@ -748,7 +755,10 @@ void BattlescapeGenerator::deployAliens(AlienRace* race, AlienDeployment* deploy
 				}
 				else
 				{
-					for (std::vector<std::string>::iterator it = (*d).itemSets.at(itemLevel).items.begin(); it != (*d).itemSets.at(itemLevel).items.end(); ++it)
+					for (std::vector<std::string>::iterator
+							it = (*d).itemSets.at(itemLevel).items.begin();
+							it != (*d).itemSets.at(itemLevel).items.end();
+							++it)
 					{
 						RuleItem* ruleItem = _game->getRuleset()->getItem((*it));
 						if (ruleItem)
@@ -771,7 +781,7 @@ void BattlescapeGenerator::deployAliens(AlienRace* race, AlienDeployment* deploy
  */
 BattleUnit* BattlescapeGenerator::addAlien(Unit* rules, int alienRank, bool outside)
 {
-	int difficulty = (int)(_game->getSavedGame()->getDifficulty());
+	int difficulty = static_cast<int>(_game->getSavedGame()->getDifficulty());
 	BattleUnit* unit = new BattleUnit(rules, FACTION_HOSTILE, _unitSequence++, _game->getRuleset()->getArmor(rules->getArmor()), difficulty);
 	Node* node = 0;
 
@@ -796,7 +806,7 @@ BattleUnit* BattlescapeGenerator::addAlien(Unit* rules, int alienRank, bool outs
 
 //kL		if (_save->getTileEngine()->distance(node->getPosition(), craft) <= 20 && RNG::percent(20 * difficulty))
 		if (_save->getTileEngine()->distance(node->getPosition(), craft) < 25	// kL
-			&& RNG::percent(20 * difficulty))									// kL
+			&& RNG::percent(difficulty * 20))									// kL
 		{
 			dir = unit->directionTo(craft);
 		}

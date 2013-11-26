@@ -193,6 +193,7 @@ ManageAlienContainmentState::ManageAlienContainmentState(Game* game, Base* base,
 		{
 			_qtys.push_back(0);												// put it in the _qtys<vector> as (int)
 			_aliens.push_back(*i);											// put its name in the _aliens<vector> as (string)
+
 			std::wstringstream ss;
 			ss << qty;
 			_lstAliens->addRow(3, tr(*i).c_str(), ss.str().c_str(), L"0");	// show its name on the list.
@@ -234,13 +235,12 @@ void ManageAlienContainmentState::btnOkClick(Action*)
 	for (unsigned int
 			i = 0;
 			i < _qtys.size();
-			++i)																// iterate as many times as there are aliens queued.
+			++i)				// iterate as many times as there are aliens queued.
 	{
-		if (_qtys[i] > 0)														// if _qtys<vector>(int) at position[i]
+		if (_qtys[i] > 0)		// if _qtys<vector>(int) at position[i]
 		{
-			// kL_begin: ManageAlienContainmentState::btnOkClick, researchHelp() call.
-
 			// check for tortured intelligence reports
+			// Should put in a for(*i) loop.....
 			_base->researchHelp(_aliens[i]);	// kL
 
 			// remove the aliens
@@ -417,7 +417,7 @@ void ManageAlienContainmentState::increase()
 void ManageAlienContainmentState::increaseByValue(int change)
 {
 	int qty = getQuantity() - _qtys[_sel];
-	if (0 >= change || qty <= 0)
+	if (change <= 0 || qty <= 0)
 		return;
 
 	change = std::min(qty, change);
@@ -444,7 +444,7 @@ void ManageAlienContainmentState::decrease()
  */
 void ManageAlienContainmentState::decreaseByValue(int change)
 {
-	if (0 >= change || 0 >= _qtys[_sel])
+	if (change <= 0 || _qtys[_sel] <= 0)
 		return;
 
 	change = std::min(_qtys[_sel], change);

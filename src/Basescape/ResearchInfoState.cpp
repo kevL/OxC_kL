@@ -18,25 +18,27 @@
  */
 
 #include "ResearchInfoState.h"
+
+#include <limits>
+#include <sstream>
+
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
-#include "../Engine/Palette.h"
 #include "../Engine/Options.h"
+#include "../Engine/Palette.h"
+#include "../Engine/RNG.h"
+#include "../Engine/Timer.h"
+#include "../Interface/ArrowButton.h"
+#include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
-#include "../Interface/Text.h"
-#include "../Savegame/Base.h"
+#include "../Resource/ResourcePack.h"
 #include "../Ruleset/RuleResearch.h"
 #include "../Ruleset/Ruleset.h"
+#include "../Savegame/Base.h"
 #include "../Savegame/ItemContainer.h"
 #include "../Savegame/ResearchProject.h"
-#include "../Interface/ArrowButton.h"
-#include "../Engine/Timer.h"
-#include "../Engine/RNG.h"
-#include <sstream>
-#include <limits>
 
 
 namespace OpenXcom
@@ -52,7 +54,7 @@ ResearchInfoState::ResearchInfoState(Game* game, Base* base, RuleResearch* rule)
 	:
 		State(game),
 		_base(base),
-		_project(new ResearchProject(rule, int(rule->getCost() * RNG::generate(50, 150) / 100))),
+		_project(new ResearchProject(rule, (rule->getCost() * RNG::generate(50, 150)) / 100)), // time = 50 to 150%
 		_rule(rule)
 {
 	buildUi();
@@ -128,11 +130,11 @@ void ResearchInfoState::buildUi()
 										start_y + (5 * button_y_border));
 	_txtMore				= new Text(width - 6 * button_x_border,
 										button_height,
-										start_x + static_cast<int>(2.5 * button_x_border) + 8,
+										start_x + static_cast<int>(2.5f * static_cast<float>(button_x_border)) + 8,
 										start_y + (7 * button_y_border));
 	_txtLess				= new Text(width - 6 * button_x_border,
 										button_height,
-										start_x + static_cast<int>(2.5 * button_x_border) + 8,
+										start_x + static_cast<int>(2.5f * static_cast<float>(button_x_border)) + 8,
 										start_y + (9 * button_y_border));
 	_btnCancel				= new TextButton(footer_button_width,
 										button_height,
@@ -175,7 +177,7 @@ void ResearchInfoState::buildUi()
 	_txtTitle->setColor(Palette::blockOffset(13)+5);
 	_txtTitle->setBig();
 
-	_txtTitle->setText(_rule ? tr(_rule->getName()) : tr(_project->getRules ()->getName()));
+	_txtTitle->setText(_rule? tr(_rule->getName()): tr(_project->getRules()->getName()));
 
 	_txtAvailableScientist->setColor(Palette::blockOffset(13)+5);
 	_txtAvailableScientist->setSecondaryColor(Palette::blockOffset(13));
@@ -211,16 +213,18 @@ void ResearchInfoState::buildUi()
 	setAssignedScientist();
 
 	_btnMore->setColor(Palette::blockOffset(13)+5);
-	_btnLess->setColor(Palette::blockOffset(13)+5);
 	_btnMore->onMousePress((ActionHandler)& ResearchInfoState::morePress);
 	_btnMore->onMouseRelease((ActionHandler)& ResearchInfoState::moreRelease);
 	_btnMore->onMouseClick((ActionHandler)& ResearchInfoState::moreClick, 0);
+
+	_btnLess->setColor(Palette::blockOffset(13)+5);
 	_btnLess->onMousePress((ActionHandler)& ResearchInfoState::lessPress);
 	_btnLess->onMouseRelease((ActionHandler)& ResearchInfoState::lessRelease);
 	_btnLess->onMouseClick((ActionHandler)& ResearchInfoState::lessClick, 0);
 
 	_timerMore = new Timer(280); // kL_note: SHOULD THESE TIMERS BE delete'd
 	_timerMore->onTimer((StateHandler)& ResearchInfoState::more);
+
 	_timerLess = new Timer(280); // kL_note: SHOULD THESE TIMERS BE delete'd
 	_timerLess->onTimer((StateHandler)& ResearchInfoState::less);
 
@@ -263,6 +267,7 @@ void ResearchInfoState::btnOkClick(Action*)
 void ResearchInfoState::btnCancelClick(Action*)
 {
 	const RuleResearch* ruleResearch = _rule? _rule: _project->getRules();
+
 	if (ruleResearch->needItem()
 		&& (_game->getRuleset()->getUnit(ruleResearch->getName())
 			|| Options::getBool("researchedItemsWillSpent")))
@@ -383,7 +388,7 @@ void ResearchInfoState::more()
  */
 void ResearchInfoState::moreByValue(int change)
 {
-	if (0 >= change) return;
+	if (change <= 0) return;
 
 	int freeScientist = _base->getAvailableScientists();
 	int freeSpaceLab = _base->getFreeLaboratories();
@@ -392,6 +397,7 @@ void ResearchInfoState::moreByValue(int change)
 		change = std::min(std::min(freeScientist, freeSpaceLab), change);
 		_project->setAssigned(_project->getAssigned() + change);
 		_base->setScientists(_base->getScientists() - change);
+
 		setAssignedScientist();
 	}
 }
@@ -411,7 +417,7 @@ void ResearchInfoState::less()
  */
 void ResearchInfoState::lessByValue(int change)
 {
-	if (0 >= change) return;
+	if (change <= 0) return;
 
 	int assigned = _project->getAssigned();
 	if (assigned > 0)

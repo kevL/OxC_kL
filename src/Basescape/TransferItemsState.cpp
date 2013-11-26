@@ -76,10 +76,10 @@ TransferItemsState::TransferItemsState(Game* game, Base* baseFrom, Base* baseTo)
 		_hasEng(0),
 		_distance(0.0)
 {
-	_changeValueByMouseWheel = Options::getInt("changeValueByMouseWheel");
-	_allowChangeListValuesByMouseWheel = (Options::getBool("allowChangeListValuesByMouseWheel") && _changeValueByMouseWheel);
-	_containmentLimit = Options::getBool("alienContainmentLimitEnforced");
-	_canTransferCraftsWhileAirborne = Options::getBool("canTransferCraftsWhileAirborne");
+	_changeValueByMouseWheel			= Options::getInt("changeValueByMouseWheel");
+	_allowChangeListValuesByMouseWheel	= Options::getBool("allowChangeListValuesByMouseWheel") && _changeValueByMouseWheel;
+	_containmentLimit					= Options::getBool("alienContainmentLimitEnforced");
+	_canTransferCraftsWhileAirborne		= Options::getBool("canTransferCraftsWhileAirborne");
 
 
 	_window					= new Window(this, 320, 200, 0, 0);

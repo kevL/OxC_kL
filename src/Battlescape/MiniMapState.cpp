@@ -66,7 +66,7 @@ MiniMapState::MiniMapState(Game* game, Camera* camera, SavedBattleGame* battleGa
 	centerAllSurfaces();
 
 
-/*kL	if (Screen::getDY() > 50)
+	if (Screen::getDY() > 50)
 	{
 		_screen = false;
 
@@ -76,7 +76,7 @@ MiniMapState::MiniMapState(Game* game, Camera* camera, SavedBattleGame* battleGa
 		current.x = 46;
 		current.y = 14;
 		_surface->drawRect(&current, Palette::blockOffset(15)+15);
-	} */
+	}
 
 	_game->getResourcePack()->getSurface("SCANBORD.PCK")->blit(_surface);
 

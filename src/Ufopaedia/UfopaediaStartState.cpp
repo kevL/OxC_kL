@@ -18,6 +18,7 @@
  */
 
 #include "UfopaediaStartState.h"
+
 #include "UfopaediaSelectState.h"
 #include "Ufopaedia.h"
 #include "../Ruleset/ArticleDefinition.h"
@@ -32,99 +33,120 @@
 #include "../Interface/TextButton.h"
 #include "../Resource/ResourcePack.h"
 
+
 namespace OpenXcom
 {
-	const std::string UfopaediaStartState::SECTIONS[] = {UFOPAEDIA_XCOM_CRAFT_ARMAMENT,
-	                                                     UFOPAEDIA_HEAVY_WEAPONS_PLATFORMS,
-	                                                     UFOPAEDIA_WEAPONS_AND_EQUIPMENT,
-	                                                     UFOPAEDIA_ALIEN_ARTIFACTS,
-	                                                     UFOPAEDIA_BASE_FACILITIES,
-	                                                     UFOPAEDIA_ALIEN_LIFE_FORMS,
-	                                                     UFOPAEDIA_ALIEN_RESEARCH,
-	                                                     UFOPAEDIA_UFO_COMPONENTS,
-	                                                     UFOPAEDIA_UFOS};
-	
-	UfopaediaStartState::UfopaediaStartState(Game *game) : State(game)
+
+const std::string UfopaediaStartState::SECTIONS[] =
+{
+	UFOPAEDIA_XCOM_CRAFT_ARMAMENT,
+	UFOPAEDIA_HEAVY_WEAPONS_PLATFORMS,
+	UFOPAEDIA_WEAPONS_AND_EQUIPMENT,
+	UFOPAEDIA_ALIEN_ARTIFACTS,
+	UFOPAEDIA_BASE_FACILITIES,
+	UFOPAEDIA_ALIEN_LIFE_FORMS,
+	UFOPAEDIA_ALIEN_RESEARCH,
+	UFOPAEDIA_UFO_COMPONENTS,
+	UFOPAEDIA_UFOS
+};
+
+
+UfopaediaStartState::UfopaediaStartState(Game* game)
+	:
+		State(game)
+{
+	_screen = false;
+
+	_window		= new Window(this, 256, 180, 32, 10, POPUP_BOTH);
+	_txtTitle	= new Text(224, 17, 48, 24);
+
+	int y = 50;
+	for (int
+			i = 0;
+			i < NUM_SECTIONS;
+			++i)
 	{
-		_screen = false;
+		_btnSection[i] = new TextButton(224, 12, 48, y);
+		y += 13;
+	}
+	_btnOk = new TextButton(112, 16, 104, y);
 
-		// set background window
-		_window = new Window(this, 256, 180, 32, 10, POPUP_BOTH);
 
-		// set title
-		_txtTitle = new Text(224, 17, 48, 33);
+	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
 
-		// set buttons
-		int y = 50;
-		for (int i = 0; i < NUM_SECTIONS; ++i)
-		{
-			_btnSection[i] = new TextButton(224, 12, 48, y);
-			y += 13;
-		}
-		_btnOk = new TextButton(224, 12, 48, y);
+	add(_window);
+	add(_txtTitle);
+	add(_btnOk);
 
-		// Set palette
-		_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
+	for (int
+			i = 0;
+			i < NUM_SECTIONS;
+			++i)
+	{
+		add(_btnSection[i]);
+	}
 
-		add(_window);
-		add(_txtTitle);
-		for (int i = 0; i < NUM_SECTIONS; ++i)
-		{
-			add(_btnSection[i]);
-		}
-		add(_btnOk);
+	centerAllSurfaces();
 
-		centerAllSurfaces();
+	_window->setColor(Palette::blockOffset(15)-1);
+	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
-		_window->setColor(Palette::blockOffset(15)-1);
-		_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
-
-		_txtTitle->setColor(Palette::blockOffset(8)+10);
-		_txtTitle->setBig();
-		_txtTitle->setAlign(ALIGN_CENTER);
-		_txtTitle->setText(tr("STR_UFOPAEDIA"));
+	_txtTitle->setColor(Palette::blockOffset(8)+10);
+	_txtTitle->setBig();
+	_txtTitle->setAlign(ALIGN_CENTER);
+	_txtTitle->setText(tr("STR_UFOPAEDIA"));
 		
-		for (int i = 0; i < NUM_SECTIONS; ++i)
-		{
-			_btnSection[i]->setColor(Palette::blockOffset(8)+5);
-			_btnSection[i]->setText(tr(SECTIONS[i]));
-			_btnSection[i]->onMouseClick((ActionHandler)&UfopaediaStartState::btnSectionClick);
-		}		
-
-		_btnOk->setColor(Palette::blockOffset(8)+5);
-		_btnOk->setText(tr("STR_OK"));
-		_btnOk->onMouseClick((ActionHandler)&UfopaediaStartState::btnOkClick);
-		_btnOk->onKeyboardPress((ActionHandler)&UfopaediaStartState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
-		_btnOk->onKeyboardPress((ActionHandler)&UfopaediaStartState::btnOkClick, (SDLKey)Options::getInt("keyGeoUfopedia"));
-	}
-
-	UfopaediaStartState::~UfopaediaStartState()
-	{}
-
-	/**
-	 * Returns to the previous screen.
-	 * @param action Pointer to an action.
-	 */
-	void UfopaediaStartState::btnOkClick(Action *)
+	for (int
+			i = 0;
+			i < NUM_SECTIONS;
+			++i)
 	{
-		_game->popState();
-//		_game->quit();
-	}
+		_btnSection[i]->setColor(Palette::blockOffset(8)+5);
+		_btnSection[i]->setText(tr(SECTIONS[i]));
+		_btnSection[i]->onMouseClick((ActionHandler)& UfopaediaStartState::btnSectionClick);
+	}		
 
-	/**
-	 * Displays the list of articles for this section.
-	 * @param action Pointer to an action.
-	 */
-	void UfopaediaStartState::btnSectionClick(Action *action)
+	_btnOk->setColor(Palette::blockOffset(8)+5);
+	_btnOk->setText(tr("STR_OK"));
+	_btnOk->onMouseClick((ActionHandler)& UfopaediaStartState::btnOkClick);
+	_btnOk->onKeyboardPress((ActionHandler)& UfopaediaStartState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onKeyboardPress((ActionHandler)& UfopaediaStartState::btnOkClick, (SDLKey)Options::getInt("keyGeoUfopedia"));
+}
+
+/**
+ *
+ */
+UfopaediaStartState::~UfopaediaStartState()
+{}
+
+/**
+ * Returns to the previous screen.
+ * @param action Pointer to an action.
+ */
+void UfopaediaStartState::btnOkClick(Action*)
+{
+	_game->popState();
+//	_game->quit();
+}
+
+/**
+ * Displays the list of articles for this section.
+ * @param action Pointer to an action.
+ */
+void UfopaediaStartState::btnSectionClick(Action* action)
+{
+	for (int
+			i = 0;
+			i < NUM_SECTIONS;
+			++i)
 	{
-		for (int i = 0; i < NUM_SECTIONS; ++i)
+		if (action->getSender() == _btnSection[i])
 		{
-			if (action->getSender() == _btnSection[i])
-			{
-				_game->pushState(new UfopaediaSelectState(_game, SECTIONS[i]));
-				break;
-			}
+			_game->pushState(new UfopaediaSelectState(_game, SECTIONS[i]));
+
+			break;
 		}
 	}
+}
 
 }

@@ -18,9 +18,11 @@
  */
 
 #include "ResearchProject.h"
+
+#include <algorithm>
+
 #include "../Ruleset/RuleResearch.h"
 #include "../Ruleset/Ruleset.h"
-#include <algorithm>
 
 
 namespace OpenXcom
@@ -36,18 +38,18 @@ const float PROGRESS_LIMIT_POOR		= 0.1f;		// kL
 const float PROGRESS_LIMIT_AVERAGE	= 0.25f;	// kL
 const float PROGRESS_LIMIT_GOOD		= 0.5f;		// kL
 */
-const float PROGRESS_LIMIT_UNKNOWN	= 0.1f;		// kL
-const float PROGRESS_LIMIT_POOR		= 0.2f;		// kL
-const float PROGRESS_LIMIT_AVERAGE	= 0.5f;		// kL
-const float PROGRESS_LIMIT_GOOD		= 0.8f;		// kL
+const float PROGRESS_LIMIT_UNKNOWN	= 0.09f;		// kL
+const float PROGRESS_LIMIT_POOR		= 0.23f;		// kL
+const float PROGRESS_LIMIT_AVERAGE	= 0.55f;		// kL
+const float PROGRESS_LIMIT_GOOD		= 0.86f;		// kL
 
 
-ResearchProject::ResearchProject(RuleResearch* p, int c)
+ResearchProject::ResearchProject(RuleResearch* project, int cost)
 	:
-		_project(p),
+		_project(project),
 		_assigned(0),
 		_spent(0),
-		_cost(c)
+		_cost(cost)
 {
 }
 
@@ -115,11 +117,11 @@ int ResearchProject::getSpent() const
 
 /**
  * Changes the cost of the ResearchProject
- * @param f, New project cost(in man/day)
+ * @param cost, New project cost(in man/day)
  */
-void ResearchProject::setCost(int f)
+void ResearchProject::setCost(int cost)
 {
-	_cost = f;
+	_cost = cost;
 }
 
 /**
@@ -149,6 +151,7 @@ void ResearchProject::load(const YAML::Node& node)
 YAML::Node ResearchProject::save() const
 {
 	YAML::Node node;
+
 	node["project"]		= getRules()->getName();
 	node["assigned"]	= getAssigned();
 	node["spent"]		= getSpent();
@@ -204,10 +207,13 @@ YAML::Node ResearchProject::save() const
 		return "STR_EXCELLENT";
 	}
 } */
+
 // kL_begin: ResearchProject::getResearchProgress(), rewrite so it makes sense.
 std::string ResearchProject::getResearchProgress() const
 {
-	float progress = (float)getSpent() / (float)getRules()->getCost();
+//	float progress = static_cast<float>(getSpent()) / static_cast<float>(getRules()->getCost());
+	float progress = static_cast<float>(getSpent()) / static_cast<float>(getCost());
+
 //	Log(LOG_INFO) << "ResearchProject::getResearchProgress(), progress = " << progress;
 //	Log(LOG_INFO) << "ResearchProject::getResearchProgress(), getSpent() = " << getSpent();
 //	Log(LOG_INFO) << "ResearchProject::getResearchProgress(), getRules()->getCost() = " << getRules()->getCost();
@@ -217,29 +223,31 @@ std::string ResearchProject::getResearchProgress() const
 //		Log(LOG_INFO) << ". . none assigned.";
 		return "STR_NONE";
 	}
-	else if (progress < PROGRESS_LIMIT_UNKNOWN) // 0.1f
+	else if (progress < PROGRESS_LIMIT_UNKNOWN)		// 0.1f
 	{
 //		Log(LOG_INFO) << ". . progress < unknown.";
 		return "STR_UNKNOWN";
 	}
-	else if (progress < PROGRESS_LIMIT_POOR)
+	else if (progress < PROGRESS_LIMIT_POOR)		// 0.2f
 	{
 //		Log(LOG_INFO) << ". . . . . . progress < POOR";
 		return "STR_POOR";
 	}
-	else if (progress < PROGRESS_LIMIT_AVERAGE) // 0.2f
+	else if (progress < PROGRESS_LIMIT_AVERAGE)		// 0.5f
 	{
 //		Log(LOG_INFO) << ". . . . . . progress < AVERAGE";
 		return "STR_AVERAGE";
 	}
-	else if (progress < PROGRESS_LIMIT_GOOD) // 0.5f
+	else if (progress < PROGRESS_LIMIT_GOOD)		// 0.8f
 	{
 //		Log(LOG_INFO) << ". . . . . . progress < GOOD";
 		return "STR_GOOD";
 	}
-
-//	Log(LOG_INFO) << ". . . . . . progress = EXCELLENT"; // > 0.8f
-	return "STR_EXCELLENT";
+	else											// > 0.8f
+	{
+//		Log(LOG_INFO) << ". . . . . . progress = EXCELLENT";
+		return "STR_EXCELLENT";
+	}
 } // kL_end.
 
 }

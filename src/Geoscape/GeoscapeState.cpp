@@ -1899,6 +1899,8 @@ void GeoscapeState::time1Day()
 		{
 			if ((*iter)->step())
 			{
+				timerReset();	// kL
+
 				finished.push_back(*iter);
 			}
 		}
@@ -1983,7 +1985,6 @@ void GeoscapeState::time1Day()
 				_game->getSavedGame()->addFinishedResearch(_game->getRuleset()->getResearch(research->getLookup()), _game->getRuleset());
 			}
 
-			timerReset(); // kL. Should this be inside both the Research/Manufacture complete scopes, like it is under Facility complete scope?
 			popup(new ResearchCompleteState(_game, newResearch, bonus));
 			std::vector<RuleResearch*> newPossibleResearch;
 			_game->getSavedGame()->getDependableResearch(newPossibleResearch, (*iter)->getRules(), _game->getRuleset(), *i);

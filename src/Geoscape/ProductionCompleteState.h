@@ -60,11 +60,11 @@ private:
 		/// Updates the palette.
 		void init();
 		/// Handler for clicking the OK button.
-		void btnOkClick(Action*);
+		void btnOkClick(Action* action);
 		/// Handler for clicking the Ok 5sec button.
-		void btnOk5SecsClick(Action*);
+		void btnOk5SecsClick(Action* action);
 		/// Handler for clicking the Go To Base button.
-		void btnGotoBaseClick(Action*);
+		void btnGotoBaseClick(Action* action);
 };
 
 }

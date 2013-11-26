@@ -21,8 +21,8 @@
 #define OPENXCOM_SAVEDGAME_H
 
 #include <map>
-#include <vector>
 #include <string>
+#include <vector>
 
 
 namespace OpenXcom
@@ -54,7 +54,7 @@ class Soldier;
  */
 enum GameDifficulty
 {
-	DIFF_BEGINNER = 0,
+	DIFF_BEGINNER,
 	DIFF_EXPERIENCED,
 	DIFF_VETERAN,
 	DIFF_GENIUS,
@@ -109,6 +109,7 @@ private:
 		void load(const std::string& filename, Ruleset* rule);
 		/// Saves a saved game to YAML.
 		void save(const std::string& filename) const;
+
 		/// Gets the game name.
 		std::wstring getName() const;
 		/// Sets the game name.

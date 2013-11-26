@@ -20,41 +20,46 @@
 #ifndef OPENXCOM_UFOPAEDIASTARTSTATE_H
 #define OPENXCOM_UFOPAEDIASTARTSTATE_H
 
-#include "../Engine/State.h"
 #include <string>
+
+#include "../Engine/State.h"
+
 
 namespace OpenXcom
 {
-	class Game;
-	class Action;
-	class Window;
-	class Text;
-	class TextButton;
 
-	/**
-	 * UfopaediaStartState is the screen that opens when clicking Ufopaedia button in Geoscape.
-	 * Presents buttons to all sections of Ufopaedia, opening a UfopaediaSelectState on click.
-	 */
+class Game;
+class Action;
+class Window;
+class Text;
+class TextButton;
 
-	class UfopaediaStartState : public State
-	{
-	public:
-		UfopaediaStartState(Game *game);
-		virtual ~UfopaediaStartState();
-
-	protected:
-		static const int NUM_SECTIONS = 9;
-		static const std::string SECTIONS[NUM_SECTIONS];
+/**
+ * UfopaediaStartState is the screen that opens when clicking Ufopaedia button in Geoscape.
+ * Presents buttons to all sections of Ufopaedia, opening a UfopaediaSelectState on click.
+ */
+class UfopaediaStartState
+	:
+		public State
+{
+protected:
+	static const int NUM_SECTIONS = 9;
+	static const std::string SECTIONS[NUM_SECTIONS];
 		
-		Window *_window;
-		Text *_txtTitle;
-		TextButton *_btnOk;
-		TextButton *_btnSection[NUM_SECTIONS];
+	Window* _window;
+	Text* _txtTitle;
+	TextButton* _btnOk;
+	TextButton* _btnSection[NUM_SECTIONS];
 
-		// navigation callbacks
-		void btnSectionClick(Action *action);
-		void btnOkClick(Action *action);
-	};
+	// navigation callbacks
+	void btnSectionClick(Action* action);
+	void btnOkClick(Action* action);
+
+	public:
+		UfopaediaStartState(Game* game);
+		virtual ~UfopaediaStartState();
+};
+
 }
 
 #endif

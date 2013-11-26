@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "MiniMapView.h"
 #include "../Savegame/Tile.h"
 #include "Map.h"
@@ -29,8 +30,10 @@
 #include "../Ruleset/Armor.h"
 #include <sstream>
 
+
 namespace OpenXcom
 {
+
 const int CELL_WIDTH	= 4;
 const int CELL_HEIGHT	= 4;
 const int MAX_LEVEL		= 3;
@@ -46,7 +49,15 @@ const int MAX_FRAME		= 2;
  * @param camera The Battlescape camera.
  * @param battleGame Pointer to the SavedBattleGame.
  */
-MiniMapView::MiniMapView(int w, int h, int x, int y, Game * game, Camera * camera, SavedBattleGame * battleGame) : InteractiveSurface(w, h, x, y), _game(game), _camera(camera), _battleGame(battleGame), _frame(0), isMouseScrolling(false), isMouseScrolled(false)
+MiniMapView::MiniMapView(int w, int h, int x, int y, Game* game, Camera* camera, SavedBattleGame* battleGame)
+	:
+		InteractiveSurface(w, h, x, y),
+		_game(game),
+		_camera(camera),
+		_battleGame(battleGame),
+		_frame(0),
+		isMouseScrolling(false),
+		isMouseScrolled(false)
 {
 	_set = _game->getResourcePack()->getSurfaceSet("SCANG.DAT");
 }
@@ -74,22 +85,35 @@ void MiniMapView::draw()
 
 	this->lock();
 
-	for (int lvl = 0; lvl <= _camera->getCenterPosition().z; lvl++)
+	for (int
+			lvl = 0;
+			lvl <= _camera->getCenterPosition().z;
+			lvl++)
 	{
 		int py = _startY;
-		for (int y = Surface::getY(); y < getHeight() + Surface::getY(); y += CELL_HEIGHT)
+
+		for (int
+				y = Surface::getY();
+				y < getHeight() + Surface::getY();
+				y += CELL_HEIGHT)
 		{
 			int px = _startX;
-			for (int x = Surface::getX(); x < getWidth() + Surface::getX(); x += CELL_WIDTH)
-			{
-				MapData * data = 0;
 
-				Tile * t = 0;
+			for (int
+					x = Surface::getX();
+					x < getWidth() + Surface::getX();
+					x += CELL_WIDTH)
+			{
+				MapData* data = 0;
+
+				Tile* t = 0;
 				Position p (px, py, lvl);
 				t = _battleGame->getTile(p);
+
 				if (!t)
 				{
 					px++;
+
 					continue;
 				}
 
@@ -99,11 +123,14 @@ void MiniMapView::draw()
 					tileShade = t->getShade();
 				}
 
-				for (int i = 0; i < 4; i++)
+				for (int
+						i = 0;
+						i < 4;
+						i++)
 				{
 					data = t->getMapData(i);
+					Surface* s = 0;
 
-					Surface * s = 0;
 					if (data && data->getMiniMapIndex())
 					{
 						s = _set->getFrame (data->getMiniMapIndex()+35);
@@ -115,21 +142,25 @@ void MiniMapView::draw()
 					}
 				}
 
-				if (t->getUnit() && t->getUnit()->getVisible()) // alive units
+				if (t->getUnit()
+					&& t->getUnit()->getVisible()) // visible, alive units
 				{
 					int frame = t->getUnit()->getMiniMapSpriteIndex();
 					int size = t->getUnit()->getArmor()->getSize();
 					frame += (t->getPosition().y - t->getUnit()->getPosition().y) * size;
 					frame += t->getPosition().x - t->getUnit()->getPosition().x;
 					frame += _frame * size * size;
-					Surface * s = _set->getFrame(frame);
+
+					Surface* s = _set->getFrame(frame);
 					s->blitNShade(this, x, y, 0);
 				}
 
-				if (t->isDiscovered(2) && !t->getInventory()->empty()) // perhaps (at least one) item on this tile?
+				if (t->isDiscovered(2)
+					&& !t->getInventory()->empty()) // perhaps (at least one) item on this tile?
 				{
 					int frame = 9 + _frame;
-					Surface * s = _set->getFrame(frame);
+
+					Surface* s = _set->getFrame(frame);
 					s->blitNShade(this, x, y, 0);
 				}
 
@@ -205,11 +236,12 @@ int MiniMapView::down()
  * @param action Pointer to an action.
  * @param state State that the action handlers belong to.
  */
-void MiniMapView::mousePress(Action *action, State *state)
+void MiniMapView::mousePress(Action* action, State* state)
 {
 	InteractiveSurface::mousePress(action, state);
 
-	if (((Uint8) - 1) != _battleGame->getDragButton())
+//kL	if (((Uint8) - 1) != _battleGame->getDragButton())
+	if (_battleGame->getDragButton() != -1)		// kL
 	{
 		if (action->getDetails()->button.button == _battleGame->getDragButton())
 		{
@@ -235,7 +267,7 @@ void MiniMapView::mousePress(Action *action, State *state)
  * @param action Pointer to an action.
  * @param state State that the action handlers belong to.
  */
-void MiniMapView::mouseClick (Action *action, State *state)
+void MiniMapView::mouseClick(Action* action, State* state)
 {
 	InteractiveSurface::mouseClick(action, state);
 
@@ -250,7 +282,7 @@ void MiniMapView::mouseClick (Action *action, State *state)
 		{
 			// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
 			if (!mouseMovedOverThreshold
-				&& SDL_GetTicks() - mouseScrollingStartTime <= (Uint32)_battleGame->getDragTimeTolerance())
+				&& SDL_GetTicks() - mouseScrollingStartTime <= static_cast<Uint32>(_battleGame->getDragTimeTolerance()))
 			{
 				_camera->centerOnPosition(posBeforeMouseScrolling);
 
@@ -274,7 +306,7 @@ void MiniMapView::mouseClick (Action *action, State *state)
 
 		// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
 		if (!mouseMovedOverThreshold
-			&& SDL_GetTicks() - mouseScrollingStartTime <= (Uint32)_battleGame->getDragTimeTolerance())
+			&& SDL_GetTicks() - mouseScrollingStartTime <= static_cast<Uint32>(_battleGame->getDragTimeTolerance()))
 		{
 			isMouseScrolled = false;
 			_camera->centerOnPosition(posBeforeMouseScrolling);
@@ -288,8 +320,8 @@ void MiniMapView::mouseClick (Action *action, State *state)
 
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		int origX = (int)(action->getRelativeXMouse() / action->getXScale());
-		int origY = (int)(action->getRelativeYMouse() / action->getYScale());
+		int origX = static_cast<int>(action->getRelativeXMouse() / action->getXScale());
+		int origY = static_cast<int>(action->getRelativeYMouse() / action->getYScale());
 
 		// get offset (in cells) of the click relative to center of screen
 		int xOff = (origX / CELL_WIDTH) - ((getWidth() / 2) / CELL_WIDTH);
@@ -312,10 +344,10 @@ void MiniMapView::mouseClick (Action *action, State *state)
 /**
  * Handles moving over the minimap.
  * Will change the camera center when the mouse is moved in mouse-moving mode.
- * @param action Pointer to an action.
- * @param state State that the action handlers belong to.
+ * @param action, Pointer to an action.
+ * @param state, State that the action handlers belong to.
  */
-void MiniMapView::mouseOver(Action *action, State *state)
+void MiniMapView::mouseOver(Action* action, State* state)
 {
 	InteractiveSurface::mouseOver(action, state);
 
@@ -326,11 +358,11 @@ void MiniMapView::mouseOver(Action *action, State *state)
 		// the mouse-release event is missed for any reason.
 		// However if the SDL is also missed the release event, then it is to no avail :(
 		// (checking: is the dragScroll-mouse-button still pressed?)
-		if (0 == (SDL_GetMouseState(0, 0)& SDL_BUTTON(_battleGame->getDragButton()))) // so we missed again the mouse-release :(
+		if (0 == (SDL_GetMouseState(0, 0) & SDL_BUTTON(_battleGame->getDragButton()))) // so we missed again the mouse-release :(
 		{
 			// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
 			if (!mouseMovedOverThreshold
-				&& SDL_GetTicks() - mouseScrollingStartTime <= (Uint32)_battleGame->getDragTimeTolerance())
+				&& SDL_GetTicks() - mouseScrollingStartTime <= static_cast<Uint32>(_battleGame->getDragTimeTolerance()))
 			{
 					_camera->centerOnPosition(posBeforeMouseScrolling);
 
@@ -356,8 +388,8 @@ void MiniMapView::mouseOver(Action *action, State *state)
 		totalMouseMoveX += action->getDetails()->motion.xrel;
 		totalMouseMoveY += action->getDetails()->motion.yrel;
 		if (!mouseMovedOverThreshold)
-			mouseMovedOverThreshold = ((std::abs(totalMouseMoveX) > _battleGame->getDragPixelTolerance())
-					|| (std::abs(totalMouseMoveY) > _battleGame->getDragPixelTolerance()));
+			mouseMovedOverThreshold = std::abs(totalMouseMoveX) > _battleGame->getDragPixelTolerance()
+					|| std::abs(totalMouseMoveY) > _battleGame->getDragPixelTolerance();
 
 		// Calculate the move
 		int newX;
@@ -384,8 +416,8 @@ void MiniMapView::mouseOver(Action *action, State *state)
 		}
 		else
 		{
-			newX = posBeforeMouseScrolling.x - (int)((double)totalMouseMoveX / action->getXScale()) / 4;
-			newY = posBeforeMouseScrolling.y - (int)((double)totalMouseMoveY / action->getYScale()) / 4;
+			newX = posBeforeMouseScrolling.x - static_cast<int>(static_cast<double>(totalMouseMoveX) / action->getXScale() / 4.);
+			newY = posBeforeMouseScrolling.y - static_cast<int>(static_cast<double>(totalMouseMoveY) / action->getYScale() / 4.);
 
 			// Keep the limits...
 			if (newX < -1) newX = -1;

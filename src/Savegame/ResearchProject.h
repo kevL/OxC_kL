@@ -41,7 +41,7 @@ class ResearchProject
 	int _cost;
 
 	public:
-		ResearchProject(RuleResearch* p, int c = 0);
+		ResearchProject(RuleResearch* project, int cost = 0);
 		// kL_note: DESTRUCTOR?
 
 		/// Game logic. Called every new day to compute time spent.
@@ -59,7 +59,7 @@ class ResearchProject
 		/// get time already spent on this ResearchProject
 		int getSpent() const;
 		/// set time cost of this ResearchProject
-		void setCost(int f);
+		void setCost(int cost);
 		/// get time cost of this ResearchProject
 		int getCost() const;
 
