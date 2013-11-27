@@ -18,40 +18,48 @@
  */
 
 #include "BasescapeState.h"
-#include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
-#include "../Engine/Language.h"
-#include "../Engine/Palette.h"
-#include "../Engine/Options.h"
-#include "../Interface/TextButton.h"
-#include "../Interface/Text.h"
-#include "../Interface/TextEdit.h"
-#include "BaseView.h"
-#include "MiniBaseView.h"
-#include "../Savegame/SavedGame.h"
-#include "../Savegame/Base.h"
-#include "../Savegame/BaseFacility.h"
-#include "../Ruleset/RuleBaseFacility.h"
-#include "../Savegame/Region.h"
-#include "../Ruleset/RuleRegion.h"
-#include "../Geoscape/GeoscapeState.h"
-#include "../Menu/ErrorMessageState.h"
-#include "DismantleFacilityState.h"
-#include "../Geoscape/BuildNewBaseState.h"
-#include "../Engine/Action.h"
-#include "../Savegame/Craft.h"
+
 #include "BaseInfoState.h"
-#include "SoldiersState.h"
-#include "CraftsState.h"
+#include "BaseView.h"
 #include "BuildFacilitiesState.h"
-#include "ResearchState.h"
+#include "CraftInfoState.h"
+#include "CraftsState.h"
+#include "DismantleFacilityState.h"
 #include "ManageAlienContainmentState.h"
 #include "ManufactureState.h"
+#include "MiniBaseView.h"
 #include "PurchaseState.h"
+#include "ResearchState.h"
 #include "SellState.h"
+#include "SoldiersState.h"
 #include "TransferBaseState.h"
-#include "CraftInfoState.h"
+
+#include "../Engine/Action.h"
+#include "../Engine/Game.h"
+#include "../Engine/Language.h"
+#include "../Engine/Options.h"
+#include "../Engine/Palette.h"
+
 #include "../Geoscape/AllocatePsiTrainingState.h"
+#include "../Geoscape/BuildNewBaseState.h"
+#include "../Geoscape/GeoscapeState.h"
+
+#include "../Interface/Text.h"
+#include "../Interface/TextButton.h"
+#include "../Interface/TextEdit.h"
+
+#include "../Menu/ErrorMessageState.h"
+
+#include "../Resource/ResourcePack.h"
+
+#include "../Ruleset/RuleBaseFacility.h"
+#include "../Ruleset/RuleRegion.h"
+
+#include "../Savegame/Base.h"
+#include "../Savegame/BaseFacility.h"
+#include "../Savegame/Craft.h"
+#include "../Savegame/Region.h"
+#include "../Savegame/SavedGame.h"
 
 
 namespace OpenXcom
@@ -380,6 +388,10 @@ void BasescapeState::btnTransferClick(Action*)
 void BasescapeState::btnGeoscapeClick(Action*)
 {
 	_game->popState();
+
+	// kL_note: try to get the geoscape colors to correct themselves after "GoToBase" option.
+	// Could do it universally, via above _game->popState() i guess
+	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());		// kL
 }
 
 /**

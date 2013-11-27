@@ -409,8 +409,8 @@ void Camera::scrollXY(int x, int y, bool redraw)
 
 /**
  * Handles jumping with given deviation.
- * @param x X deviation.
- * @param y Y deviation.
+ * @param x, X deviation.
+ * @param y, Y deviation.
  */
 void Camera::jumpXY(int x, int y)
 {
@@ -545,8 +545,8 @@ void Camera::convertVoxelToScreen(const Position& voxelPos, Position* screenPos)
 	double dy = voxelPos.y - (mapPosition.y * 16);
 	double dz = voxelPos.z - (mapPosition.z * 24);
 
-	screenPos->x += (int)(dx - dy) + (_spriteWidth/2);
-	screenPos->y += (int)(((_spriteHeight / 2.0)) + (dx / 2.0) + (dy / 2.0) - dz);
+	screenPos->x += static_cast<int>(dx - dy) + (_spriteWidth / 2);
+	screenPos->y += static_cast<int>(((static_cast<double>(_spriteHeight) / 2.0)) + (dx / 2.0) + (dy / 2.0) - dz);
 	screenPos->x += _mapOffset.x;
 	screenPos->y += _mapOffset.y;
 }

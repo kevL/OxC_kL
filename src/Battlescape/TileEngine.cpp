@@ -3514,16 +3514,16 @@ bool TileEngine::psiAttack(BattleAction* action)
 
 
 		double attackStr =
-				(double)action->actor->getStats()->psiStrength
-				* (double)action->actor->getStats()->psiSkill / 50.;
+				static_cast<double>(action->actor->getStats()->psiStrength)
+				* static_cast<double>(action->actor->getStats()->psiSkill) / 50.0;
 		Log(LOG_INFO) << ". . . attackStr = " << (int)attackStr;
 
 		double defenseStr =
-				(double)victim->getStats()->psiStrength
-				+ ((double)victim->getStats()->psiSkill / 5.);
+				static_cast<double>(victim->getStats()->psiStrength)
+				+ (static_cast<double>(victim->getStats()->psiSkill) / 5.0);
 		Log(LOG_INFO) << ". . . defenseStr = " << (int)defenseStr;
 
-		double d = (double)distance(action->actor->getPosition(), action->target);
+		double d = static_cast<double>(distance(action->actor->getPosition(), action->target));
 		Log(LOG_INFO) << ". . . d = " << d;
 
 		attackStr -= d;
@@ -3537,11 +3537,9 @@ bool TileEngine::psiAttack(BattleAction* action)
 		attackStr *= 100.0;
 		attackStr /= 56.0;
 
-		Log(LOG_INFO) << ". . . attackStr Success @ " << (int)attackStr;
-
 		action->actor->addPsiExp();
-
 		int percent = static_cast<int>(attackStr);
+		Log(LOG_INFO) << ". . . attackStr Success @ " << percent;
 		if (percent > 0
 			&& RNG::percent(percent))
 		{

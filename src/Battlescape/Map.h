@@ -20,9 +20,10 @@
 #ifndef OPENXCOM_MAP_H
 #define OPENXCOM_MAP_H
 
-#include "../Engine/InteractiveSurface.h"
 #include <set>
 #include <vector>
+
+#include "../Engine/InteractiveSurface.h"
 
 
 namespace OpenXcom
@@ -60,8 +61,9 @@ class Map
 		public InteractiveSurface
 {
 private:
-	static const int SCROLL_INTERVAL = 20;
-	static const int BULLET_SPRITES = 35;
+	static const int SCROLL_INTERVAL	= 20;
+	static const int BULLET_SPRITES		= 35;
+
 	Timer* _scrollMouseTimer, * _scrollKeyTimer;
 	Game* _game;
 	SavedBattleGame* _save;
@@ -75,7 +77,7 @@ private:
 	int _animFrame;
 	Projectile* _projectile;
 	bool projectileInFOV;
-	std::set<Explosion *> _explosions;
+	std::set<Explosion*> _explosions;
 	bool explosionInFOV;
 	bool _launch;
 	BattlescapeMessage* _message;

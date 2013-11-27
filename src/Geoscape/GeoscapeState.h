@@ -167,10 +167,6 @@ private:
 		void startDogfight();
 		/// Get first free dogfight slot.
 		int getFirstFreeDogfightSlot();
-		/// kL. Get the zoom-out effect timer for Dogfights.
-//		Timer* getZoomOutTimer();
-		/// kL. Get the zoom-in effect timer for Dogfights.
-//		Timer* getZoomInTimer();
 
 		/// Create the starting missions.
 		void createStartingMissions()

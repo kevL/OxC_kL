@@ -53,8 +53,8 @@ private:
 	bool _mouseScroll, _keyboardScroll;
 
 	public:
-		static const int SCROLL_BORDER = 5;
-		static const int SCROLL_DIAGONAL_EDGE = 60;
+		static const int SCROLL_BORDER			= 5;
+		static const int SCROLL_DIAGONAL_EDGE	= 60;
 
 		/// Creates a new camera.
 		Camera(int spriteWidth, int spriteHeight, int mapsize_x, int mapsize_y, int mapsize_z, Map* map, int visibleMapHeight);

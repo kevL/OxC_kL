@@ -232,8 +232,8 @@ void InventoryState::init()
 		}
 	}
 
-	if (_parent)
-		_parent->getMap()->getCamera()->centerOnPosition(unit->getPosition(), false);
+//kL	if (_parent)
+//kL		_parent->getMap()->getCamera()->centerOnPosition(unit->getPosition(), false);
 
 	unit->setCache(0);
 	_soldier->clear();

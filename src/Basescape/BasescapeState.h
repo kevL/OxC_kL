@@ -20,8 +20,8 @@
 #ifndef OPENXCOM_BASESCAPESTATE_H
 #define OPENXCOM_BASESCAPESTATE_H
 
-
 #include "../Engine/State.h"
+
 
 namespace OpenXcom
 {
@@ -33,7 +33,6 @@ class TextButton;
 class TextEdit;
 class Base;
 class Globe;
-//class GeoscapeState;	// kL
 
 /**
  * Basescape screen that shows a base's layout
@@ -48,15 +47,24 @@ private:
 	MiniBaseView* _mini;
 	Text* _txtFacility, * _txtLocation, * _txtFunds;
 	TextEdit* _edtBase;
-	TextButton* _btnNewBase, * _btnBaseInfo, * _btnSoldiers, * _btnCrafts, * _btnFacilities, * _btnResearch, * _btnManufacture, * _btnTransfer, * _btnPurchase, * _btnSell, * _btnGeoscape;
+	TextButton
+			* _btnNewBase,
+			* _btnBaseInfo,
+			* _btnSoldiers,
+			* _btnCrafts,
+			* _btnFacilities,
+			* _btnResearch,
+			* _btnManufacture,
+			* _btnTransfer,
+			* _btnPurchase,
+			* _btnSell,
+			* _btnGeoscape;
 	Base* _base;
 	Globe* _globe;
-//	GeoscapeState* _gs;		// kL
 
 	public:
 		/// Creates the Basescape state.
 		BasescapeState(Game* game, Base* base, Globe* globe);
-//		BasescapeState(Game* game, Base* base, Globe* globe, GeoscapeState* gs);		// kL
 		/// Cleans up the Basescape state.
 		~BasescapeState();
 
@@ -64,7 +72,6 @@ private:
 		void init();
 		/// Sets a new base to display.
 		void setBase(Base* base);
-//		void setBase(Base* base, bool current = false);		// kL
 		/// Handler for clicking the Build New Base button.
 		void btnNewBaseClick(Action* action);
 		/// Handler for clicking the Base Information button.

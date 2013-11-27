@@ -1889,7 +1889,7 @@ void Globe::getPolygonTextureAndShade(double lon, double lat, int *texture, int 
 
 /**
  * Checks if the globe is zoomed in to its maximum.
- * @return Returns true if globe is at max zoom, otherwise returns false.
+ * @return, Returns true if globe is at max zoom, otherwise returns false.
  */
 bool Globe::isZoomedInToMax() const
 {
@@ -1905,7 +1905,7 @@ bool Globe::isZoomedInToMax() const
 
 /**
  * Checks if the globe is zoomed out to its maximum.
- * @return Returns true if globe is at max zoom, otherwise returns false.
+ * @return, Returns true if globe is at max zoom, otherwise returns false.
  */
 bool Globe::isZoomedOutToMax() const
 {

@@ -389,7 +389,7 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 		{
 			//Log(LOG_INFO) << ". . . in action.type Psi";
 
-			bool success = _save->getTileEngine()->psiAttack(&action); // crash ???? ... sometimes!!
+			bool success = _save->getTileEngine()->psiAttack(&action);
 			//Log(LOG_INFO) << ". . . success = " << success;
 			if (success
 				&& action.type == BA_MINDCONTROL)

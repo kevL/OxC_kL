@@ -57,8 +57,10 @@
 #include "UfoLostState.h"
 
 #include "../Basescape/BasescapeState.h"
+
 #include "../Battlescape/BattlescapeGenerator.h"
 #include "../Battlescape/BriefingState.h"
+
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
@@ -69,14 +71,18 @@
 #include "../Engine/Screen.h"
 #include "../Engine/Surface.h"
 #include "../Engine/Timer.h"
+
 #include "../Interface/Cursor.h"
 #include "../Interface/FpsCounter.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
+
 #include "../Menu/LoadState.h"
 #include "../Menu/PauseState.h"
 #include "../Menu/SaveState.h"
+
 #include "../Resource/ResourcePack.h"
+
 #include "../Ruleset/Armor.h"
 #include "../Ruleset/RuleBaseFacility.h"
 #include "../Ruleset/City.h"
@@ -89,6 +95,7 @@
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleUfo.h"
 #include "../Ruleset/UfoTrajectory.h"
+
 #include "../Savegame/AlienBase.h"
 #include "../Savegame/AlienMission.h"
 #include "../Savegame/AlienStrategy.h"
@@ -108,6 +115,7 @@
 #include "../Savegame/Transfer.h"
 #include "../Savegame/Ufo.h"
 #include "../Savegame/Waypoint.h"
+
 #include "../Ufopaedia/Ufopaedia.h"
 
 
@@ -876,11 +884,11 @@ void GeoscapeState::time5Seconds()
 							mission->setWaveCountdown(30 * (RNG::generate(0, 48) + 400));
 							(*i)->setDestination(0);
 							base->setupDefenses();
+
 							timerReset();
 
 							if (!base->getDefenses()->empty())
 							{
-								timerReset();	// kL
 								popup(new BaseDefenseState(_game, base, *i, this));
 							}
 							else
@@ -2537,8 +2545,8 @@ void GeoscapeState::zoomInEffect()
  */
 void GeoscapeState::zoomOutEffect()
 {
-//	if (_globe->isZoomedToLevel(_zoomInter))
-	if (_game->getSavedGame()->getGlobeZoom() == 0
+	if (_globe->isZoomedOutToMax()
+//	if (_game->getSavedGame()->getGlobeZoom() == 0
 		|| _game->getSavedGame()->getGlobeZoom() < _zoomInter - 1)
 	{
 		_zoomInter = 0;
@@ -2674,22 +2682,6 @@ int GeoscapeState::getFirstFreeDogfightSlot()
 
 	return slotNo;
 }
-
-/**
- * kL. Get the zoom-out effect timer for Dogfights.
- */
-/* Timer* GeoscapeState::getZoomOutTimer()
-{
-	return _zoomOutEffectTimer;
-} */
-
-/**
- * kL. Get the zoom-in effect timer for Dogfights.
- */
-/* Timer* GeoscapeState::getZoomInTimer()
-{
-	return _zoomInEffectTimer;
-} */
 
 /**
  * Handle base defense

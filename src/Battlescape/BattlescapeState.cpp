@@ -995,7 +995,7 @@ void BattlescapeState::btnShowMapClick(Action*)
 {
 	// MiniMapState
 	if (allowButtons())
-		_game->pushState (new MiniMapState (_game, _map->getCamera(), _save));
+		_game->pushState(new MiniMapState (_game, _map->getCamera(), _save));
 }
 
 /**

@@ -19,30 +19,33 @@
 
 #define _USE_MATH_DEFINES
 
-#include <cmath>
 #include "Projectile.h"
-#include "TileEngine.h"
-#include "Position.h"
+
+#include <cmath>
+
 #include "BattlescapeGame.h"
+#include "Position.h"
+#include "TileEngine.h"
 #include "../aresame.h"
-#include "../Engine/SurfaceSet.h"
+#include "../Engine/Game.h"
+#include "../Engine/Options.h"
+#include "../Engine/RNG.h"
 #include "../Engine/Surface.h"
+#include "../Engine/SurfaceSet.h"
+#include "../Resource/ResourcePack.h"
+#include "../Ruleset/Armor.h"
+#include "../Ruleset/MapData.h"
+#include "../Ruleset/RuleItem.h"
+#include "../Ruleset/RuleSoldier.h"
+#include "../Ruleset/Unit.h"
+#include "../Savegame/BattleItem.h"
+#include "../Savegame/BattleUnit.h"
+#include "../Savegame/SavedBattleGame.h"
+#include "../Savegame/Soldier.h"
+#include "../Savegame/Tile.h"
+
 //Old #include "../Battlescape/Position.h"
 //Old #include "../Battlescape/TileEngine.h"
-#include "../Resource/ResourcePack.h"
-#include "../Ruleset/Unit.h"
-#include "../Ruleset/RuleSoldier.h"
-#include "../Ruleset/RuleItem.h"
-#include "../Ruleset/MapData.h"
-#include "../Savegame/BattleUnit.h"
-#include "../Savegame/BattleItem.h"
-#include "../Savegame/Soldier.h"
-#include "../Savegame/SavedBattleGame.h"
-#include "../Savegame/Tile.h"
-#include "../Engine/RNG.h"
-#include "../Engine/Options.h"
-#include "../Ruleset/Armor.h"
-#include "../Engine/Game.h"
 
 
 namespace OpenXcom

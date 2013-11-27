@@ -75,8 +75,8 @@ GraphsState::GraphsState(Game* game)
 	_bg->onMousePress((ActionHandler)& GraphsState::shiftButtons, SDL_BUTTON_WHEELDOWN);
 
 	_btnUfoRegion	= new InteractiveSurface(32, 24, 96, 0);
-	_btnUfoCountry	= new InteractiveSurface(32, 24, 128, 0);
-	_btnXcomRegion	= new InteractiveSurface(32, 24, 160, 0);
+	_btnXcomRegion	= new InteractiveSurface(32, 24, 128, 0);
+	_btnUfoCountry	= new InteractiveSurface(32, 24, 160, 0);
 	_btnXcomCountry	= new InteractiveSurface(32, 24, 192, 0);
 	_btnIncome		= new InteractiveSurface(32, 24, 224, 0);
 	_btnFinance		= new InteractiveSurface(32, 24, 256, 0);

@@ -247,8 +247,10 @@ void BaseDefenseState::nextStep()
 void BaseDefenseState::btnOkClick(Action*)
 {
 	_timer->stop();
+
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
 	_game->popState();
+
 	if (_ufo->getStatus() != Ufo::DESTROYED)
 	{
 		// Whatever happens in the base defense, the UFO has finished its duty
