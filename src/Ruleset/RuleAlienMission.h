@@ -20,8 +20,9 @@
 #ifndef OPENXCOM_RULEALIENMISSION_H
 #define OPENXCOM_RULEALIENMISSION_H
 
-#include <vector>
 #include <string>
+#include <vector>
+
 #include <yaml-cpp/yaml.h>
 
 
@@ -59,8 +60,8 @@ struct MissionWave
 
 /**
  * Stores fixed information about a mission type.
- * It stores the mission waves and the distribution of the races that can
- * undertake the mission based on game date.
+ * It stores the mission waves and the distribution of the races
+ * that can undertake the mission based on game date.
  */
 class RuleAlienMission
 {

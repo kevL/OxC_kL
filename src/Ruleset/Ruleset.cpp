@@ -850,6 +850,7 @@ MapDataSet* Ruleset::getMapDataSet(const std::string& name)
 	{
 		MapDataSet* set = new MapDataSet(name);
 		_mapDataSets[name] = set;
+
 		return set;
 	}
 	else
@@ -866,7 +867,10 @@ MapDataSet* Ruleset::getMapDataSet(const std::string& name)
 RuleSoldier* Ruleset::getSoldier(const std::string& name) const
 {
 	std::map<std::string, RuleSoldier*>::const_iterator i = _soldiers.find(name);
-	if (_soldiers.end() != i) return i->second; else return 0;
+	if (_soldiers.end() != i)
+		return i->second;
+	else
+		return 0;
 }
 
 /**
@@ -877,7 +881,10 @@ RuleSoldier* Ruleset::getSoldier(const std::string& name) const
 Unit* Ruleset::getUnit(const std::string& name) const
 {
 	std::map<std::string, Unit*>::const_iterator i = _units.find(name);
-	if (_units.end() != i) return i->second; else return 0;
+	if (_units.end() != i)
+		return i->second;
+	else
+		return 0;
 }
 
 /**
@@ -888,7 +895,10 @@ Unit* Ruleset::getUnit(const std::string& name) const
 AlienRace* Ruleset::getAlienRace(const std::string& name) const
 {
 	std::map<std::string, AlienRace*>::const_iterator i = _alienRaces.find(name);
-	if (_alienRaces.end() != i) return i->second; else return 0;
+	if (_alienRaces.end() != i)
+		return i->second;
+	else
+		return 0;
 }
 
 /**
@@ -909,7 +919,10 @@ const std::vector<std::string>& Ruleset::getAlienRacesList() const
 AlienDeployment* Ruleset::getDeployment(const std::string& name) const
 {
 	std::map<std::string, AlienDeployment*>::const_iterator i = _alienDeployments.find(name);
-	if (_alienDeployments.end() != i) return i->second; else return 0;
+	if (_alienDeployments.end() != i)
+		return i->second;
+	else
+		return 0;
 }
 
 /**

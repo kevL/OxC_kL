@@ -16,14 +16,29 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_ALIENRACE_H
 #define OPENXCOM_ALIENRACE_H
 
 #include <string>
 #include <vector>
+
 #include <yaml-cpp/yaml.h>
 
-enum AlienRank{AR_HUMAN = -1, AR_COMMANDER, AR_LEADER, AR_ENGINEER, AR_MEDIC, AR_NAVIGATOR, AR_SOLDIER, AR_TERRORIST, AR_TERRORIST2};
+
+enum AlienRank
+{
+	AR_HUMAN = -1,
+	AR_COMMANDER,
+	AR_LEADER,
+	AR_ENGINEER,
+	AR_MEDIC,
+	AR_NAVIGATOR,
+	AR_SOLDIER,
+	AR_TERRORIST,
+	AR_TERRORIST2
+};
+
 
 namespace OpenXcom
 {
@@ -37,17 +52,20 @@ class AlienRace
 private:
 	std::string _id;
 	std::vector<std::string> _members;
-public:
-	/// Creates a blank alien race ruleset.
-	AlienRace(const std::string &id);
-	/// Cleans up the alien race ruleset.
-	~AlienRace();
-	/// Loads alien race data from YAML.
-	void load(const YAML::Node& node);
-	/// Gets the alien race's id.
-	std::string getId() const;
-	/// Gets a certain member of this alien race family.
-	std::string getMember(int id) const;
+
+	public:
+		/// Creates a blank alien race ruleset.
+		AlienRace(const std::string& id);
+		/// Cleans up the alien race ruleset.
+		~AlienRace();
+
+		/// Loads alien race data from YAML.
+		void load(const YAML::Node& node);
+
+		/// Gets the alien race's id.
+		std::string getId() const;
+		/// Gets a certain member of this alien race family.
+		std::string getMember(int id) const;
 };
 
 }

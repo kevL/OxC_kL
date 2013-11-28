@@ -18,29 +18,36 @@
  */
 
 #include "SoldierInfoState.h"
+
 #include <sstream>
-#include "../Engine/Game.h"
+
+#include "SackSoldierState.h"
+#include "SoldierArmorState.h"
+
 #include "../Engine/Action.h"
-#include "../Resource/ResourcePack.h"
+#include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Palette.h"
 #include "../Engine/Options.h"
-#include "../Interface/Bar.h"
-#include "../Interface/TextButton.h"
-#include "../Interface/Text.h"
-#include "../Interface/TextEdit.h"
+#include "../Engine/Palette.h"
 #include "../Engine/Surface.h"
-#include "../Savegame/SavedGame.h"
+#include "../Engine/SurfaceSet.h"
+
+#include "../Interface/Bar.h"
+#include "../Interface/Text.h"
+#include "../Interface/TextButton.h"
+#include "../Interface/TextEdit.h"
+
+#include "../Resource/ResourcePack.h"
+
+#include "../Ruleset/Armor.h"
+#include "../Ruleset/RuleCraft.h"
 #include "../Ruleset/Ruleset.h"
+
 #include "../Savegame/Base.h"
 #include "../Savegame/Craft.h"
-#include "../Ruleset/RuleCraft.h"
-#include "../Savegame/Soldier.h"
 #include "../Savegame/ItemContainer.h"
-#include "../Engine/SurfaceSet.h"
-#include "../Ruleset/Armor.h"
-#include "SoldierArmorState.h"
-#include "SackSoldierState.h"
+#include "../Savegame/SavedGame.h"
+#include "../Savegame/Soldier.h"
 
 
 namespace OpenXcom
@@ -59,16 +66,18 @@ SoldierInfoState::SoldierInfoState(Game* game, Base* base, size_t soldier)
 		_soldier(soldier)
 {
 	_bg				= new Surface(320, 200, 0, 0);
+
 	_rank			= new Surface(26, 23, 4, 4);
-	_btnPrev		= new TextButton(28, 14, 0, 33);
-	_btnOk			= new TextButton(48, 14, 30, 33);
-	_btnNext		= new TextButton(28, 14, 80, 33);
+
+	_btnPrev		= new TextButton(28, 15, 0, 32);
+	_btnOk			= new TextButton(48, 15, 30, 32);
+	_btnNext		= new TextButton(28, 15, 80, 32);
 
 	_txtArmor		= new Text(30, 9, 130, 35);
-	_btnArmor		= new TextButton(70, 14, 164, 33);
+	_btnArmor		= new TextButton(70, 15, 164, 32);
 
 	_edtSoldier		= new TextEdit(200, 16, 40, 9);
-	_btnSack		= new TextButton(44, 16, 269, 8);
+	_btnSack		= new TextButton(45, 17, 268, 7);
 
 	_txtRank		= new Text(130, 9, 0, 49);
 	_txtMissions	= new Text(100, 9, 130, 49);

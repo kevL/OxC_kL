@@ -41,7 +41,7 @@ class SoldiersState
 		public State
 {
 private:
-	TextButton* _btnOk, * _btnPsiTrain, * _btnArmor, *_btnMemorial;	// kL: add _btnArmor
+	TextButton* _btnOk, * _btnPsiTrain, * _btnArmor, *_btnMemorial;
 	Window* _window;
 	Text* _txtTitle, * _txtName, * _txtRank, * _txtCraft, * _txtRecruited, * _txtLost;
 	TextList* _lstSoldiers;
@@ -50,7 +50,6 @@ private:
 	public:
 		/// Creates the Soldiers state.
 		SoldiersState(Game* game, Base* base);
-//		SoldiersState(Game* game, Base* base, Craft* craft);		// kL
 		/// Cleans up the Soldiers state.
 		~SoldiersState();
 		/// Updates the soldier names.
@@ -60,19 +59,17 @@ private:
 		void btnOkClick(Action* action);
 		/// Handler for clicking the PsiTraining button.
 		void btnPsiTrainingClick(Action* action);
-		/// Handler for clicking the Armor button.		// kL
-		void btnArmorClick_Soldier(Action* action);		// kL
+		/// Handler for clicking the Armor button.
+		void btnArmorClick_Soldier(Action* action);
 		/// Handler for clicking the Memorial button.
 		void btnMemorialClick(Action* action);
 		/// Handler for clicking the Soldiers list.
 		void lstSoldiersClick(Action *action);
 
-		// kL_begin: re-order soldiers, taken from CraftSoldiersState.
 		/// Handler for clicking the Soldiers reordering button.
 		void lstItemsLeftArrowClick_Soldier(Action* action);
 		/// Handler for clicking the Soldiers reordering button.
 		void lstItemsRightArrowClick_Soldier(Action* action);
-		// kL_end.
 };
 
 }

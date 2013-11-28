@@ -1089,7 +1089,7 @@ void Map::drawTerrain(Surface *surface)
 //							{
 //								wpColor = 15;
 //							}
-							_numWaypid->setColor(Palette::blockOffset(12)+4);		// kL
+							_numWaypid->setColor(Palette::blockOffset(12)+7);		// kL
 
 //							Log(LOG_INFO) << "Map::drawTerrain() terrain = " << _game->getRuleset()->getTerrain("POLAR")->getName();
 //							_save->

@@ -16,12 +16,15 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_ALIENDEPLOYMENT_H
 #define OPENXCOM_ALIENDEPLOYMENT_H
 
-#include <vector>
 #include <string>
+#include <vector>
+
 #include <yaml-cpp/yaml.h>
+
 
 namespace OpenXcom
 {
@@ -29,10 +32,12 @@ namespace OpenXcom
 class RuleTerrain;
 class Ruleset;
 
+
 struct ItemSet
 {
 	std::vector<std::string> items;
 };
+
 
 struct DeploymentData
 {
@@ -44,8 +49,8 @@ struct DeploymentData
 
 /**
  * Represents a specific type of Alien Deployment.
- * Contains constant info about a Alien Deployment like
- * the number of aliens for each alien type and what items they carry
+ * Contains constant info about an Alien Deployment, like the
+ * number of aliens for each alien type and what items they carry
  * (itemset depends on alien technology advancement level 0, 1 or 2).
  * - deployment type can be a craft's name, but also alien base or cydonia.
  * - alienRank is used to check which nodeRanks can be used to deploy this unit
@@ -62,33 +67,36 @@ private:
 	std::string _terrain;
 	int _shade;
 	std::string _nextStage;
-public:
-	/// Creates a blank Alien Deployment ruleset.
-	AlienDeployment(const std::string &type);
-	/// Cleans up the Alien Deployment ruleset.
-	~AlienDeployment();
-	/// Loads Alien Deployment data from YAML.
-	void load(const YAML::Node& node);
-	/// Gets the Alien Deployment's type.
-	std::string getType() const;
-	/// Gets a pointer to the data.
-	std::vector<DeploymentData>* getDeploymentData();
-	/// Gets dimensions.
-	void getDimensions(int *width, int *length, int *height);
-	/// Gets civilians.
-	int getCivilians() const;
-	/// Gets road type odds.
-	std::vector<int> getRoadTypeOdds() const;
-	/// Gets the terrain for battlescape generation.
-	std::string getTerrain() const;
-	/// Gets the shade level for battlescape generation.
-	int getShade() const;
-	/// Gets the next stage of the mission.
-	std::string getNextStage() const;
 
+	public:
+		/// Creates a blank Alien Deployment ruleset.
+		AlienDeployment(const std::string& type);
+		/// Cleans up the Alien Deployment ruleset.
+		~AlienDeployment();
+
+		/// Loads Alien Deployment data from YAML.
+		void load(const YAML::Node& node);
+
+		/// Gets the Alien Deployment's type.
+		std::string getType() const;
+		/// Gets a pointer to the data.
+		std::vector<DeploymentData>* getDeploymentData();
+		/// Gets dimensions.
+		void getDimensions(int* width, int* length, int* height);
+		/// Gets civilians.
+		int getCivilians() const;
+		/// Gets road type odds.
+		std::vector<int> getRoadTypeOdds() const;
+		/// Gets the terrain for battlescape generation.
+		std::string getTerrain() const;
+		/// Gets the shade level for battlescape generation.
+		int getShade() const;
+		/// Gets the next stage of the mission.
+		std::string getNextStage() const;
 };
 
 }
+
 
 namespace YAML
 {
@@ -108,7 +116,7 @@ namespace YAML
 			if (!node.IsSequence())
 				return false;
 
-			rhs.items = node.as< std::vector<std::string> >(rhs.items);
+			rhs.items = node.as< std::vector<std::string>>(rhs.items);
 
 			return true;
 		}

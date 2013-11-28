@@ -18,23 +18,31 @@
  */
 
 #include "NewManufactureListState.h"
+
 #include <algorithm>
-#include "../Interface/Window.h"
-#include "../Interface/TextButton.h"
-#include "../Interface/Text.h"
-#include "../Interface/TextList.h"
+
+#include "ManufactureStartState.h"
+
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Palette.h"
 #include "../Engine/Options.h"
+#include "../Engine/Palette.h"
+
+#include "../Interface/Text.h"
+#include "../Interface/TextButton.h"
+#include "../Interface/TextList.h"
+#include "../Interface/Window.h"
+
+#include "../Menu/ErrorMessageState.h"
+
 #include "../Resource/ResourcePack.h"
+
 #include "../Ruleset/RuleManufacture.h"
 #include "../Ruleset/Ruleset.h"
-#include "../Savegame/SavedGame.h"
-#include "../Savegame/Production.h"
+
 #include "../Savegame/Base.h"
-#include "ManufactureStartState.h"
-#include "../Menu/ErrorMessageState.h"
+#include "../Savegame/Production.h"
+#include "../Savegame/SavedGame.h"
 
 
 namespace OpenXcom
@@ -106,10 +114,10 @@ NewManufactureListState::NewManufactureListState(Game* game, Base* base)
 	_txtCategory->setText(tr("STR_CATEGORY"));
 
 //kL	_lstManufacture->setColumns(2, int(19.5f * button_x_border), int(16.25f * button_x_border));
-	_lstManufacture->setColumns(2, 156, 130);
+	_lstManufacture->setColumns(2, 148, 130);
 	_lstManufacture->setSelectable(true);
 	_lstManufacture->setBackground(_window);
-	_lstManufacture->setMargin(8);
+	_lstManufacture->setMargin(16);
 	_lstManufacture->setColor(Palette::blockOffset(13));
 	_lstManufacture->setArrowColor(Palette::blockOffset(15)+1);
 	_lstManufacture->onMouseClick((ActionHandler)& NewManufactureListState::lstProdClick);

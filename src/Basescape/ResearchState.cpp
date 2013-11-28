@@ -23,17 +23,22 @@
 
 #include "NewResearchListState.h"
 #include "ResearchInfoState.h"
+
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
 #include "../Engine/Options.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Screen.h"
+
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/TextList.h"
 #include "../Interface/Window.h"
+
 #include "../Resource/ResourcePack.h"
+
 #include "../Ruleset/RuleResearch.h"
+
 #include "../Savegame/Base.h"
 #include "../Savegame/ResearchProject.h"
 
@@ -66,8 +71,8 @@ ResearchState::ResearchState(Game* game, Base* base)
 
 	_lstResearch	= new TextList(294, 112, 8, 62);
 	
-	_btnNew			= new TextButton(134, 16, 16, 177);
-	_btnOk			= new TextButton(134, 16, 170, 177);
+	_btnOk			= new TextButton(134, 16, 16, 177);
+	_btnNew			= new TextButton(134, 16, 170, 177);
 
 	// back up palette in case we're being called from Geoscape!
 	memcpy(_oldPalette, _game->getScreen()->getPalette(), 256 * sizeof(SDL_Color));

@@ -16,9 +16,13 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include <assert.h>
+
 #include "WeightedOptions.h"
+
+#include <assert.h>
+
 #include "../Engine/RNG.h"
+
 
 namespace OpenXcom
 {
@@ -27,7 +31,7 @@ namespace OpenXcom
  * Select a random choice from among the contents.
  * This MUST be called on non-empty objects.
  * Each time this is called, the returned value can be different.
- * @return The key of the selected choice.
+ * @return, The key of the selected choice.
  */
 const std::string WeightedOptions::choose() const
 {
@@ -35,14 +39,22 @@ const std::string WeightedOptions::choose() const
 	{
 		return "";
 	}
+
 	unsigned var = RNG::generate(0, _totalWeight);
-	std::map<std::string, unsigned>::const_iterator ii = _choices.begin();
-	for (; ii != _choices.end(); ++ii)
+	std::map<std::string, unsigned>::const_iterator
+			ii = _choices.begin();
+
+	for (
+			;
+			ii != _choices.end();
+			++ii)
 	{
 		if (var <= ii->second)
 			break;
+
 		var -= ii->second;
 	}
+
 	// We always have a valid iterator here.
 	return ii->first;
 }
@@ -52,18 +64,22 @@ const std::string WeightedOptions::choose() const
  * If @a weight is set to 0, the option is removed from the list of choices.
  * If @a id already exists, the new weight replaces the old one, otherwise
  * @a id is added to the list of choices, with @a weight as the weight.
- * @param id The option name.
- * @param weight The option's new weight.
+ * @param id, The option name.
+ * @param weight, The option's new weight.
  */
-void WeightedOptions::set(const std::string &id, unsigned weight)
+void WeightedOptions::set(const std::string& id, unsigned weight)
 {
-	std::map<std::string, unsigned>::iterator option = _choices.find(id);
+	std::map<std::string, unsigned>::iterator
+			option = _choices.find(id);
+
 	if (option != _choices.end())
 	{
 		_totalWeight -= option->second;
-		if (0 != weight)
+
+		if (weight != 0)
 		{
 			option->second = weight;
+
 			_totalWeight += weight;
 		}
 		else
@@ -71,40 +87,49 @@ void WeightedOptions::set(const std::string &id, unsigned weight)
 			_choices.erase(option);
 		}
 	}
-	else if (0 != weight)
+	else if (weight != 0)
 	{
 		_choices.insert(std::make_pair(id, weight));
+
 		_totalWeight += weight;
 	}
 }
 
 /**
  * Add the weighted options from a YAML::Node to a WeightedOptions.
- * The weight option list is not replaced, only values in @a nd will be added /
- * changed.
- * @param nd The YAML node (containing a map) with the new values.
+ * The weight option list is not replaced, only values in @a nd will be added / changed.
+ * @param nd, The YAML node (containing a map) with the new values.
  */
-void WeightedOptions::load(const YAML::Node &nd)
+void WeightedOptions::load(const YAML::Node& nd)
 {
-	for (YAML::const_iterator val = nd.begin(); val != nd.end(); ++val)
+	for (YAML::const_iterator
+			val = nd.begin();
+			val != nd.end();
+			++val)
 	{
 		std::string id = val->first.as<std::string>();
 		unsigned w = val->second.as<unsigned>();
+
 		set(id, w);
 	}
 }
 
 /**
  * Send the WeightedOption contents to a YAML::Emitter.
- * @param out The YAML emitter.
+ * @param out, The YAML emitter.
  */
 YAML::Node WeightedOptions::save() const
 {
 	YAML::Node node;
-	for (std::map<std::string, unsigned>::const_iterator ii = _choices.begin(); ii != _choices.end(); ++ii)
+
+	for (std::map<std::string, unsigned>::const_iterator
+			ii = _choices.begin();
+			ii != _choices.end();
+			++ii)
 	{
 		node[ii->first] = ii->second;
 	}
+
 	return node;
 }
 

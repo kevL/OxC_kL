@@ -391,10 +391,36 @@ void Camera::scrollXY(int x, int y, bool redraw)
 		// Handling map bounds...
 		// Ok, this is a prototype, it should be optimized.
 		// Actually this should be calculated instead of slow-approximation.
-		if (_center.x < 0)				{ _mapOffset.x -= 2; _mapOffset.y -= 1; continue; }
-		if (_center.x > _mapsize_x -1)	{ _mapOffset.x += 2; _mapOffset.y += 1; continue; }
-		if (_center.y < 0)				{ _mapOffset.x += 2; _mapOffset.y -= 1; continue; }
-		if (_center.y > _mapsize_y -1)	{ _mapOffset.x -= 2; _mapOffset.y += 1; continue; }
+		if (_center.x < 0)
+		{
+			_mapOffset.x -= 2;
+			_mapOffset.y -= 1;
+
+			continue;
+		}
+
+		if (_center.x > _mapsize_x -1)
+		{
+			_mapOffset.x += 2;
+			_mapOffset.y += 1;
+
+			continue;
+		}
+
+		if (_center.y < 0)
+		{
+			_mapOffset.x += 2;
+			_mapOffset.y -= 1;
+
+			continue;
+		}
+
+		if (_center.y > _mapsize_y -1)
+		{
+			_mapOffset.x -= 2;
+			_mapOffset.y += 1;
+			continue;
+		}
 
 		break;
 	}

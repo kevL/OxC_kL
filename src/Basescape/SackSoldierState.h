@@ -37,7 +37,7 @@ class Text;
  */
 class SackSoldierState
 	:
-	public State
+		public State
 {
 	private:
 		Base* _base;

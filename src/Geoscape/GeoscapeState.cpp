@@ -196,11 +196,11 @@ GeoscapeState::GeoscapeState(Game* game)
 	_txtMin			= new Text(20, 17, screenWidth - 37, screenHeight / 2 - 26);
 	_txtMinSep		= new Text(4, 17, screenWidth - 17, screenHeight / 2 - 26);
 	_txtSec			= new Text(11, 8, screenWidth - 13, screenHeight / 2 - 20); */
-	_txtHour		= new Text(19, 17, screenWidth - 61, screenHeight / 2 - 27);
-	_txtHourSep		= new Text(5, 17, screenWidth - 42, screenHeight / 2 - 27);
-	_txtMin			= new Text(19, 17, screenWidth - 37, screenHeight / 2 - 27);
-	_txtMinSep		= new Text(5, 17, screenWidth - 18, screenHeight / 2 - 27);
-	_txtSec			= new Text(10, 17, screenWidth - 13, screenHeight / 2 - 27);
+	_txtHour		= new Text(19, 17, screenWidth - 61, screenHeight / 2 - 26);
+	_txtHourSep		= new Text(5, 17, screenWidth - 42, screenHeight / 2 - 26);
+	_txtMin			= new Text(19, 17, screenWidth - 37, screenHeight / 2 - 26);
+	_txtMinSep		= new Text(5, 17, screenWidth - 18, screenHeight / 2 - 26);
+	_txtSec			= new Text(10, 17, screenWidth - 13, screenHeight / 2 - 26);
 
 	_txtWeekday		= new Text(59, 8, screenWidth - 61, screenHeight / 2 - 13);
 	_txtDay			= new Text(29, 8, screenWidth - 61, screenHeight / 2 - 6);
@@ -2132,16 +2132,15 @@ void GeoscapeState::time1Month()
 
 	_game->getSavedGame()->addMonth();
 
-	int monthsPassed = _game->getSavedGame()->getMonthsPassed();
-	bool newRetaliation = false;
-
 	// Determine alien mission for this month.
 	determineAlienMissions();
 
+	int monthsPassed = _game->getSavedGame()->getMonthsPassed();
 //kL	if (monthsPassed > 5)
 	if (RNG::percent(monthsPassed * 2))		// kL
 		determineAlienMissions();
 
+	bool newRetaliation = false;
 //kL	if (monthsPassed > 13 - static_cast<int>(_game->getSavedGame()->getDifficulty())
 	if (RNG::percent(monthsPassed * static_cast<int>(_game->getSavedGame()->getDifficulty()))	// kL
 		|| _game->getSavedGame()->isResearched("STR_THE_MARTIAN_SOLUTION"))
@@ -2305,7 +2304,7 @@ void GeoscapeState::globeClick(Action* action)
 		double lon, lat;
 		_globe->cartToPolar(mouseX, mouseY, &lon, &lat);
 
-		double lonDeg = lon / M_PI * 180, latDeg = lat / M_PI * 180;
+		double lonDeg = lon / M_PI * 180.0, latDeg = lat / M_PI * 180.0;
 
 		std::wstringstream ss;
 		ss << "rad: " << lon << " , " << lat << std::endl;
@@ -2690,8 +2689,6 @@ int GeoscapeState::getFirstFreeDogfightSlot()
  */
 void GeoscapeState::handleBaseDefense(Base* base, Ufo* ufo)
 {
-	timerReset();	// kL
-
     // Whatever happens in the base defense, the UFO has finished its duty
 	ufo->setStatus(Ufo::DESTROYED);
 
@@ -2775,7 +2772,7 @@ void GeoscapeState::determineAlienMissions(bool atGameStart)
 	else
 	{
 		//
-		// Sectoid Research at base's region.
+		// Sectoid Research at base's region. haha
 		//
 		AlienStrategy& strategy = _game->getSavedGame()->getAlienStrategy();
 		std::string targetRegion = _game->getSavedGame()->locateRegion(*_game->getSavedGame()->getBases()->front())->getRules()->getType();

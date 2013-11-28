@@ -16,7 +16,9 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "AlienDeployment.h"
+
 
 namespace YAML
 {
@@ -26,12 +28,14 @@ namespace YAML
 		static Node encode(const OpenXcom::DeploymentData& rhs)
 		{
 			Node node;
-			node["alienRank"] = rhs.alienRank;
-			node["lowQty"] = rhs.lowQty;
-			node["highQty"] = rhs.highQty;
-			node["dQty"] = rhs.dQty;
-			node["percentageOutsideUfo"] = rhs.percentageOutsideUfo;
-			node["itemSets"] = rhs.itemSets;
+
+			node["alienRank"]				= rhs.alienRank;
+			node["lowQty"]					= rhs.lowQty;
+			node["highQty"]					= rhs.highQty;
+			node["dQty"]					= rhs.dQty;
+			node["percentageOutsideUfo"]	= rhs.percentageOutsideUfo;
+			node["itemSets"]				= rhs.itemSets;
+
 			return node;
 		}
 
@@ -40,16 +44,18 @@ namespace YAML
 			if (!node.IsMap())
 				return false;
 
-			rhs.alienRank = node["alienRank"].as<int>(rhs.alienRank);
-			rhs.lowQty = node["lowQty"].as<int>(rhs.lowQty);
-			rhs.highQty = node["highQty"].as<int>(rhs.highQty);
-			rhs.dQty = node["dQty"].as<int>(rhs.dQty);
-			rhs.percentageOutsideUfo = node["percentageOutsideUfo"].as<int>(rhs.percentageOutsideUfo);
-			rhs.itemSets = node["itemSets"].as< std::vector<OpenXcom::ItemSet> >(rhs.itemSets);
+			rhs.alienRank				= node["alienRank"].as<int>(rhs.alienRank);
+			rhs.lowQty					= node["lowQty"].as<int>(rhs.lowQty);
+			rhs.highQty					= node["highQty"].as<int>(rhs.highQty);
+			rhs.dQty					= node["dQty"].as<int>(rhs.dQty);
+			rhs.percentageOutsideUfo	= node["percentageOutsideUfo"].as<int>(rhs.percentageOutsideUfo);
+			rhs.itemSets				= node["itemSets"].as< std::vector<OpenXcom::ItemSet> >(rhs.itemSets);
+
 			return true;
 		}
 	};
 }
+
 
 namespace OpenXcom
 {
@@ -57,9 +63,19 @@ namespace OpenXcom
 /**
  * Creates a blank ruleset for a certain
  * type of deployment data.
- * @param type String defining the type.
+ * @param type, String defining the type.
  */
-AlienDeployment::AlienDeployment(const std::string &type) : _type(type), _data(), _width(0), _length(0), _height(0), _civilians(0), _terrain(""), _shade(-1), _nextStage("")
+AlienDeployment::AlienDeployment(const std::string& type)
+	:
+		_type(type),
+		_data(),
+		_width(0),
+		_length(0),
+		_height(0),
+		_civilians(0),
+		_terrain(""),
+		_shade(-1),
+		_nextStage("")
 {
 }
 
@@ -74,18 +90,18 @@ AlienDeployment::~AlienDeployment()
  * Loads the Deployment from a YAML file.
  * @param node YAML node.
  */
-void AlienDeployment::load(const YAML::Node &node)
+void AlienDeployment::load(const YAML::Node& node)
 {
-	_type = node["type"].as<std::string>(_type);
-	_data = node["data"].as< std::vector<DeploymentData> >(_data);
-	_width = node["width"].as<int>(_width);
-	_length = node["length"].as<int>(_length);
-	_height = node["height"].as<int>(_height);
-	_civilians = node["civilians"].as<int>(_civilians);
-	_roadTypeOdds = node["roadTypeOdds"].as< std::vector<int> >(_roadTypeOdds);
-	_terrain = node["terrain"].as<std::string>(_terrain);
-	_shade = node["shade"].as<int>(_shade);
-	_nextStage = node["nextStage"].as<std::string>(_nextStage);
+	_type			= node["type"].as<std::string>(_type);
+	_data			= node["data"].as< std::vector<DeploymentData> >(_data);
+	_width			= node["width"].as<int>(_width);
+	_length			= node["length"].as<int>(_length);
+	_height			= node["height"].as<int>(_height);
+	_civilians		= node["civilians"].as<int>(_civilians);
+	_roadTypeOdds	= node["roadTypeOdds"].as< std::vector<int> >(_roadTypeOdds);
+	_terrain		= node["terrain"].as<std::string>(_terrain);
+	_shade			= node["shade"].as<int>(_shade);
+	_nextStage		= node["nextStage"].as<std::string>(_nextStage);
 }
 
 /**
@@ -113,11 +129,11 @@ std::vector<DeploymentData>* AlienDeployment::getDeploymentData()
  * @param length Length.
  * @param height Height.
  */
-void AlienDeployment::getDimensions(int *width, int *length, int *height)
+void AlienDeployment::getDimensions(int* width, int* length, int* height)
 {
-	*width = _width;
-	*length = _length;
-	*height = _height;
+	*width	= _width;
+	*length	= _length;
+	*height	= _height;
 }
 
 /**

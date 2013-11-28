@@ -17,21 +17,27 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <list>
 #include "Pathfinding.h"
+
+#include <list>
+
 #include "PathfindingNode.h"
 #include "PathfindingOpenSet.h"
-#include "../Savegame/SavedBattleGame.h"
-#include "../Savegame/Tile.h"
-#include "../Ruleset/MapData.h"
-#include "../Ruleset/Armor.h"
-#include "../Ruleset/Ruleset.h"
-#include "../Savegame/BattleUnit.h"
-#include "../Savegame/BattleItem.h"
-#include "../Engine/Game.h"
-#include "../Battlescape/TileEngine.h"
+
 #include "../Battlescape/BattlescapeGame.h"
 #include "../Battlescape/BattlescapeState.h"
+#include "../Battlescape/TileEngine.h"
+
+#include "../Engine/Game.h"
+
+#include "../Ruleset/Armor.h"
+#include "../Ruleset/MapData.h"
+#include "../Ruleset/Ruleset.h"
+
+#include "../Savegame/BattleItem.h"
+#include "../Savegame/BattleUnit.h"
+#include "../Savegame/SavedBattleGame.h"
+#include "../Savegame/Tile.h"
 
 
 namespace OpenXcom
@@ -81,7 +87,7 @@ PathfindingNode* Pathfinding::getNode(const Position& pos)
 }
 
 /**
- * Calculates the shortest path.
+ * Calculates the shortest path; tries bresenham then A* paths.
  * @param unit, Unit taking the path.
  * @param endPosition, The position we want to reach.
  * @param target, Target of the path.
@@ -89,42 +95,53 @@ PathfindingNode* Pathfinding::getNode(const Position& pos)
  */
 void Pathfinding::calculate(BattleUnit* unit, Position endPosition, BattleUnit* target, int maxTUCost)
 {
+	//Log(LOG_INFO) << "Pathfinding::calculate()";
+
 	_totalTUCost = 0;
 	_path.clear();
 
+	_unit = unit;
+
 	// i'm DONE with these out of bounds errors.
-	if (endPosition.x > _save->getMapSizeX() - unit->getArmor()->getSize()
-		|| endPosition.y > _save->getMapSizeY() - unit->getArmor()->getSize()
+	if (endPosition.x > _save->getMapSizeX() - _unit->getArmor()->getSize()
+		|| endPosition.y > _save->getMapSizeY() - _unit->getArmor()->getSize()
 		|| endPosition.x < 0
 		|| endPosition.y < 0)
 	{
 		return;
 	}
 
-	bool sneak = _save->getSneakySetting() && unit->getFaction() == FACTION_HOSTILE;
-
-	Position startPosition = unit->getPosition();
-
-	_movementType = unit->getArmor()->getMovementType();
-	if (target != 0 && maxTUCost == -1) // pathfinding for missile
-	{
-		_movementType = MT_FLY;
-		maxTUCost = 10000;
-	}
-
-	_unit = unit;
-
-	Tile* destinationTile = _save->getTile(endPosition);
-
 	// check if destination is not blocked
+	Tile* destinationTile = _save->getTile(endPosition);
 	if (isBlocked(destinationTile, MapData::O_FLOOR, target)
 		|| isBlocked(destinationTile, MapData::O_OBJECT, target))
 	{
 		return;
 	}
 
-	// the following check avoids that the unit walks behind the stairs if we click behind the stairs to make it go up the stairs.
-	// it only works if the unit is on one of the 2 tiles on the stairs, or on the tile right in front of the stairs.
+
+	if (target != 0 && maxTUCost == -1) // pathfinding for missile
+	{
+		maxTUCost = 10000;
+
+		_movementType = MT_FLY;
+	}
+	else
+		_movementType = _unit->getArmor()->getMovementType();
+
+
+	// check if destination is not blocked
+/*kL	Tile* destinationTile = _save->getTile(endPosition);
+	if (isBlocked(destinationTile, MapData::O_FLOOR, target)
+		|| isBlocked(destinationTile, MapData::O_OBJECT, target))
+	{
+		return;
+	} */ // kL: moved up.
+
+	// The following check avoids that the unit walks behind the stairs
+	// if we click behind the stairs to make it go up the stairs.
+	// It only works if the unit is on one of the 2 tiles on the
+	// stairs, or on the tile right in front of the stairs.
 	// kL_note: I don't want this: ( the function, below, can be removed ).
 /*kL	if (isOnStairs(startPosition, endPosition))
 	{
@@ -139,30 +156,56 @@ void Pathfinding::calculate(BattleUnit* unit, Position endPosition, BattleUnit* 
 		destinationTile = _save->getTile(endPosition);
 	}
 
-	// check if we have floor, else lower destination (for non flying
-	// units only, because otherwise they never reached this place)
+	// check if we have a floor, else lower destination
 	if (_movementType != MT_FLY)
 	{
-		while (canFallDown(destinationTile, _unit->getArmor()->getSize()))
+		while (canFallDown(destinationTile, _unit->getArmor()->getSize())) // for large & small units.
 		{
 			endPosition.z--;
 			destinationTile = _save->getTile(endPosition);
+
+			//Log(LOG_INFO) << ". canFallDown() -1 level, endPosition = " << endPosition;
 		}
 	}
 
-	int size = unit->getArmor()->getSize() - 1;
-	if (size >= 1)
+	int size = _unit->getArmor()->getSize() - 1;
+	if (size > 0) // for large units only.
 	{
+			//Log(LOG_INFO) << ". checking large unit blockage";
+
 		int its = 0;
 		const int dir[3] = {4, 2, 3};
-		for (int x = 0; x <= size; x += size)
+
+		for (int
+				x = 0;
+				x <= size;
+				x += size)
 		{
-			for (int y = 0; y <= size; y += size)
+			for (int
+					y = 0;
+					y <= size;
+					y += size)
 			{
 				if (x || y)
 				{
 					Tile* checkTile = _save->getTile(endPosition + Position(x, y, 0));
-					if ((isBlocked(destinationTile, checkTile, dir[its], unit)
+					if (isBlocked(destinationTile, checkTile, dir[its], _unit)
+						&& isBlocked(destinationTile, checkTile, dir[its], target))
+					{
+						return;
+					}
+
+					if (checkTile->getUnit())
+					{
+						BattleUnit* checkUnit = checkTile->getUnit();
+						if (checkUnit != _unit
+							&& checkUnit != target
+							&& checkUnit->getVisible())
+						{
+							return;
+						}
+					}
+/*kL, ^					if ((isBlocked(destinationTile, checkTile, dir[its], unit)
 							&& isBlocked(destinationTile, checkTile, dir[its], target))
 						|| (checkTile->getUnit()
 							&& checkTile->getUnit() != unit
@@ -170,7 +213,7 @@ void Pathfinding::calculate(BattleUnit* unit, Position endPosition, BattleUnit* 
 							&& checkTile->getUnit() != target))
 					{
 						return;
-					}
+					} */
 
 					++its;
 				}
@@ -187,8 +230,9 @@ void Pathfinding::calculate(BattleUnit* unit, Position endPosition, BattleUnit* 
 	*/// kL_end_TEST.
 
 	// Strafing move allowed only to adjacent squares on same z. "Same z" rule mainly to simplify walking render.
+	Position startPosition = _unit->getPosition();
 	_strafeMove = _save->getStrafeSetting()
-		&& (SDL_GetModState()& KMOD_CTRL) != 0
+		&& (SDL_GetModState() & KMOD_CTRL) != 0
 		&& startPosition.z == endPosition.z
 		&& abs(startPosition.x - endPosition.x) <= 1
 		&& abs(startPosition.y - endPosition.y) <= 1;
@@ -200,6 +244,8 @@ void Pathfinding::calculate(BattleUnit* unit, Position endPosition, BattleUnit* 
 		Log(LOG_INFO) << "Pathfinding::calculate() _strafeMove INVALID"; */	// kL
 
 	// look for a possible fast and accurate bresenham path and skip A*
+	bool sneak = _unit->getFaction() == FACTION_HOSTILE && _save->getSneakySetting();
+
 	if (startPosition.z == endPosition.z
 		&& bresenhamPath(startPosition, endPosition, target, sneak))
 	{
@@ -237,6 +283,8 @@ bool Pathfinding::aStarPath(
 		bool sneak,
 		int maxTUCost)
 {
+	//Log(LOG_INFO) << "Pathfinding::aStarPath()";
+
 	// reset every node, so we have to check them all
 	for (std::vector<PathfindingNode>::iterator it = _nodes.begin(); it != _nodes.end(); ++it)
 		it->reset();
@@ -276,9 +324,12 @@ bool Pathfinding::aStarPath(
 				direction < 10;
 				direction++)
 		{
+			//Log(LOG_INFO) << ". try direction ... " << direction;
+
 			Position nextPos;
 
 			int tuCost = getTUCost(currentPos, direction, &nextPos, _unit, target, missile);
+			//Log(LOG_INFO) << ". TU Cost = " << tuCost;
 			if (tuCost >= 255) // Skip unreachable / blocked
 				continue;
 
@@ -299,6 +350,7 @@ bool Pathfinding::aStarPath(
 				&& _totalTUCost <= maxTUCost)
 			{
 				nextNode->connect(_totalTUCost, currentNode, direction, endPosition);
+
 				openList.push(nextNode);
 			}
 		}
@@ -327,6 +379,8 @@ int Pathfinding::getTUCost(
 		BattleUnit* target,
 		bool missile)
 {
+	//Log(LOG_INFO) << "Pathfinding::getTUCost()";
+
 	_unit = unit;
 
 	directionToVector(direction, endPosition);
@@ -395,8 +449,8 @@ int Pathfinding::getTUCost(
 					triedStairs = true;
 				}
 			}
-			else if (!fellDown
-				&& _movementType != MT_FLY
+			else if ( //kL!fellDown &&
+				_movementType != MT_FLY
 				&& belowDestination
 				&& canFallDown(destinationTile)
 				&& belowDestination->getTerrainLevel() <= -12) // kL_note: why not fall more than half tile.Z ?
@@ -545,11 +599,14 @@ if (direction < DIR_UP) // TEST
 				|| direction == 2
 				|| direction == 3)
 			{
-				wallTU = destinationTile->getTUCost(MapData::O_WESTWALL, _movementType);
-				if (wallTU > 0)
+				if (startTile->getPosition().z == destinationTile->getPosition().z) // don't count wallcost if it's on the floor below.
 				{
-					wallcost += wallTU;
-					sides ++;
+					wallTU = destinationTile->getTUCost(MapData::O_WESTWALL, _movementType);
+					if (wallTU > 0)
+					{
+						wallcost += wallTU;
+						sides ++;
+					}
 				}
 			}
 
@@ -557,11 +614,14 @@ if (direction < DIR_UP) // TEST
 				|| direction == 4
 				|| direction == 5)
 			{
-				wallTU = destinationTile->getTUCost(MapData::O_NORTHWALL, _movementType);
-				if (wallTU > 0)
+				if (startTile->getPosition().z == destinationTile->getPosition().z) // don't count wallcost if it's on the floor below.
 				{
-					wallcost += wallTU;
-					sides ++;
+					wallTU = destinationTile->getTUCost(MapData::O_NORTHWALL, _movementType);
+					if (wallTU > 0)
+					{
+						wallcost += wallTU;
+						sides ++;
+					}
 				}
 			}
 
@@ -679,7 +739,10 @@ if (direction < DIR_UP) // TEST
 	if (missile)
 		return 0;
 	else
+	{
+		//Log(LOG_INFO) << "Pathfinding::getTUCost() ret = " << totalCost;
 		return totalCost;
+	}
 }
 
 /**
@@ -767,10 +830,13 @@ bool Pathfinding::isBlocked(
 		BattleUnit* missileTarget,
 		int bigWallExclusion)
 {
+	//Log(LOG_INFO) << "Pathfinding::isBlocked() #2";
+
 	if (tile == 0) return true; // probably outside the map here
 
 	if (part == O_BIGWALL)
 	{
+		//Log(LOG_INFO) << ". part is Bigwall";
 		if (tile->getMapData(MapData::O_OBJECT)
 			&& tile->getMapData(MapData::O_OBJECT)->getBigWall() != 0
 			&& tile->getMapData(MapData::O_OBJECT)->getBigWall() <= BIGWALLNWSE
@@ -784,6 +850,7 @@ bool Pathfinding::isBlocked(
 
 	if (part == MapData::O_WESTWALL)
 	{
+		//Log(LOG_INFO) << ". part is Westwall";
 		if (tile->getMapData(MapData::O_OBJECT)
 			&& tile->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALLWEST)
 		{
@@ -804,6 +871,7 @@ bool Pathfinding::isBlocked(
 
 	if (part == MapData::O_NORTHWALL)
 	{
+		//Log(LOG_INFO) << ". part is Northwall";
 		if (tile->getMapData(MapData::O_OBJECT)
 			&& tile->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALLNORTH)
 		{
@@ -824,6 +892,7 @@ bool Pathfinding::isBlocked(
 
 	if (part == MapData::O_FLOOR)
 	{
+		//Log(LOG_INFO) << ". part is Floor";
 		if (tile->getUnit())
 		{
 			BattleUnit* unit = tile->getUnit();
@@ -912,29 +981,35 @@ bool Pathfinding::isBlocked(
  * @param missileTarget, Target for a missile.
  * @return, True if the movement is blocked.
  */
-bool Pathfinding::isBlocked(Tile* startTile,
+bool Pathfinding::isBlocked(
+		Tile* startTile,
 		Tile* /* endTile */,
 		const int direction,
 		BattleUnit* missileTarget)
 {
+	//Log(LOG_INFO) << "Pathfinding::isBlocked() #1";
+
 	// check if the difference in height between start and destination is not too high
 	// so we can not jump to the highest part of the stairs from the floor
 	// stairs terrainlevel goes typically -8 -16 (2 steps) or -4 -12 -20 (3 steps)
 	// this "maximum jump height" is therefore set to 8
 
 	const Position currentPosition = startTile->getPosition();
-	static const Position oneTileNorth = Position(0, -1, 0);
-	static const Position oneTileEast = Position(1, 0, 0);
-	static const Position oneTileSouth = Position(0, 1, 0);
-	static const Position oneTileWest = Position(-1, 0, 0);
+
+	static const Position oneTileNorth	= Position( 0, -1,  0);
+	static const Position oneTileEast	= Position( 1,  0,  0);
+	static const Position oneTileSouth	= Position( 0,  1,  0);
+	static const Position oneTileWest	= Position(-1,  0,  0);
 
 	switch (direction)
 	{
 		case 0:	// north
+			//Log(LOG_INFO) << ". try North";
 			if (isBlocked(startTile, MapData::O_NORTHWALL, missileTarget))
 				return true;
 		break;
 		case 1: // north-east
+			//Log(LOG_INFO) << ". try NorthEast";
 			if (isBlocked(startTile, MapData::O_NORTHWALL, missileTarget))
 				return true;
 			if (isBlocked(_save->getTile(currentPosition + oneTileNorth + oneTileEast), MapData::O_WESTWALL, missileTarget))
@@ -949,10 +1024,15 @@ bool Pathfinding::isBlocked(Tile* startTile,
 				return true;
 		break;
 		case 2: // east
+			//Log(LOG_INFO) << ". try East";
 			if (isBlocked(_save->getTile(currentPosition + oneTileEast), MapData::O_WESTWALL, missileTarget))
+			{
+				//Log(LOG_INFO) << "Pathfinding::isBlocked -> east is Blocked";
 				return true;
+			}
 		break;
 		case 3: // south-east
+			//Log(LOG_INFO) << ". try SouthEast";
 			if (isBlocked(_save->getTile(currentPosition + oneTileEast), MapData::O_WESTWALL, missileTarget))
 				return true;
 			if (isBlocked(_save->getTile(currentPosition + oneTileSouth), MapData::O_NORTHWALL, missileTarget))
@@ -967,10 +1047,12 @@ bool Pathfinding::isBlocked(Tile* startTile,
 				return true;
 		break;
 		case 4: // south
+			//Log(LOG_INFO) << ". try South";
 			if (isBlocked(_save->getTile(currentPosition + oneTileSouth), MapData::O_NORTHWALL, missileTarget))
 				return true;
 		break;
 		case 5: // south-west
+			//Log(LOG_INFO) << ". try SouthWest";
 			if (isBlocked(startTile, MapData::O_WESTWALL, missileTarget))
 				return true;
 			if (isBlocked(_save->getTile(currentPosition + oneTileSouth), MapData::O_WESTWALL, missileTarget))
@@ -985,10 +1067,12 @@ bool Pathfinding::isBlocked(Tile* startTile,
 				return true;
 		break;
 		case 6: // west
+			//Log(LOG_INFO) << ". try West";
 			if (isBlocked(startTile, MapData::O_WESTWALL, missileTarget))
 				return true;
 		break;
 		case 7: // north-west
+			//Log(LOG_INFO) << ". try NorthWest";
 			if (isBlocked(startTile, MapData::O_WESTWALL, missileTarget))
 				return true;
 			if (isBlocked(startTile, MapData::O_NORTHWALL, missileTarget))
@@ -1009,15 +1093,16 @@ bool Pathfinding::isBlocked(Tile* startTile,
 
 /**
  * Determines whether a unit can fall down from this tile.
- * We can fall down here, if the tile does not exist, the tile has no floor,
- * the current position is higher than 0, if there is no unit standing below us.
- * @param here The current tile.
- * @return True if a unit can fall down.
+ * We can fall down here,
+ * if the current position is higher than 0 (the tileBelow does not exist)
+ * or if the tile has no floor, [or if there is no unit standing below us].
+ * @param here, The current tile.
+ * @return, True if a unit can fall down.
  */
-// aha! (kL) This is why that sectoid stood in the air: it walked off the top of a building but there was a cyberdisc below!!!
+// aha! (kL) This is why that sectoid stood in the air: it walked off the top of a building but there was a cyberdisc below!!! NOT.
 bool Pathfinding::canFallDown(Tile* here)
 {
-	if (here->getPosition().z == 0)
+	if (here->getPosition().z == 0) // already on lowest maplevel
 		return false;
 
 	Tile* tileBelow = _save->getTile(here->getPosition() - Position(0, 0, 1));
@@ -1026,12 +1111,10 @@ bool Pathfinding::canFallDown(Tile* here)
 }
 
 /**
- * Determines whether a unit can fall down from this tile.
- * We can fall down here, if the tile does not exist, the tile has no floor,
- * the current position is higher than 0, if there is no unit standing below us.
- * @param here The current tile.
- * @param size The size of the unit.
- * @return True if a unit can fall down.
+ * Wrapper for canFallDown() above.
+ * @param here, The current tile.
+ * @param size, The size of the unit.
+ * @return, True if a unit can fall down.
  */
 bool Pathfinding::canFallDown(Tile* here, int size)
 {
@@ -1055,7 +1138,7 @@ bool Pathfinding::canFallDown(Tile* here, int size)
  * @param endPosition The position we wanna reach.
  * @return True if the unit is going up a stairs.
  */
-bool Pathfinding::isOnStairs(const Position& startPosition, const Position& endPosition)
+/*kL bool Pathfinding::isOnStairs(const Position& startPosition, const Position& endPosition)
 {
 	// condition 1 : endposition has to the south a terrainlevel -16 object (upper part of the stairs)
 	if (_save->getTile(endPosition + Position(0, 1, 0))
@@ -1096,7 +1179,7 @@ bool Pathfinding::isOnStairs(const Position& startPosition, const Position& endP
 	}
 
 	return false;
-}
+} */
 
 /**
  * Checks, for the up/down button, if the movement is valid. Either there
@@ -1371,6 +1454,8 @@ bool Pathfinding::removePreview()
  */
 bool Pathfinding::bresenhamPath(const Position& origin, const Position& target, BattleUnit* targetUnit, bool sneak, int maxTUCost)
 {
+	//Log(LOG_INFO) << "Pathfinding::bresenhamPath()";
+
 	int xd[8] = {0, 1, 1, 1, 0, -1, -1, -1};
 	int yd[8] = {-1, -1, 0, 1, 1, 1, 0, -1};
 
@@ -1427,7 +1512,7 @@ bool Pathfinding::bresenhamPath(const Position& origin, const Position& target, 
 	z = z0;
 
 	// step through longest delta (which we have swapped to x)
-	for (x = x0; x != (x1+step_x); x += step_x)
+	for (x = x0; x != (x1 + step_x); x += step_x)
 	{
 		// copy position
 		cx = x;	cy = y;	cz = z;
@@ -1512,9 +1597,14 @@ bool Pathfinding::bresenhamPath(const Position& origin, const Position& target, 
  */
 std::vector<int> Pathfinding::findReachable(BattleUnit* unit, int tuMax)
 {
+	//Log(LOG_INFO) << "Pathfinding::findReachable()";
+
 	const Position& start = unit->getPosition();
 
-	for (std::vector<PathfindingNode>::iterator it = _nodes.begin(); it != _nodes.end(); ++it)
+	for (std::vector<PathfindingNode>::iterator
+			it = _nodes.begin();
+			it != _nodes.end();
+			++it)
 	{
 		it->reset();
 	}
@@ -1530,7 +1620,10 @@ std::vector<int> Pathfinding::findReachable(BattleUnit* unit, int tuMax)
 		PathfindingNode* currentNode = unvisited.pop();
 		Position const &currentPos = currentNode->getPosition();
 
-		for (int direction = 0; direction < 10; direction++)	// Try all reachable neighbours.
+		for (int
+				direction = 0;
+				direction < 10;
+				direction++)									// Try all reachable neighbours.
 		{
 			Position nextPos;
 
@@ -1560,10 +1653,14 @@ std::vector<int> Pathfinding::findReachable(BattleUnit* unit, int tuMax)
 	}
 
 	std::sort(reachable.begin(), reachable.end(), MinNodeCosts());
+
 	std::vector<int> tiles;
 	tiles.reserve(reachable.size());
 
-	for (std::vector<PathfindingNode*>::const_iterator it = reachable.begin(); it != reachable.end(); ++it)
+	for (std::vector<PathfindingNode*>::const_iterator
+			it = reachable.begin();
+			it != reachable.end();
+			++it)
 	{
 		tiles.push_back(_save->getTileIndex((*it)->getPosition()));
 	}

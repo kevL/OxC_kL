@@ -18,19 +18,24 @@
  */
 
 #include "SackSoldierState.h"
+
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
-#include "../Engine/Palette.h"
 #include "../Engine/Options.h"
+#include "../Engine/Palette.h"
+
+#include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
-#include "../Interface/Text.h"
+
+#include "../Resource/ResourcePack.h"
+
+#include "../Ruleset/Armor.h"
+
 #include "../Savegame/Base.h"
 #include "../Savegame/ItemContainer.h"
-#include "../Savegame/Soldier.h"
 #include "../Savegame/SavedGame.h"
-#include "../Ruleset/Armor.h"
+#include "../Savegame/Soldier.h"
 
 
 namespace OpenXcom
@@ -44,18 +49,18 @@ namespace OpenXcom
  */
 SackSoldierState::SackSoldierState(Game* game, Base* base, Soldier* soldier)
 	:
-	State(game),
-	_base(base),
-	_soldier(soldier)
+		State(game),
+		_base(base),
+		_soldier(soldier)
 {
 	_screen = false;
 
 	// Create objects
 	_window		= new Window(this, 152, 80, 84, 60);
-	_btnOk		= new TextButton(44, 16, 100, 115);
-	_btnCancel	= new TextButton(44, 16, 176, 115);
 	_txtTitle	= new Text(142, 9, 89, 75);
 	_txtSoldier	= new Text(142, 9, 89, 85);
+	_btnCancel	= new TextButton(44, 16, 100, 115);
+	_btnOk		= new TextButton(44, 16, 176, 115);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
@@ -110,11 +115,15 @@ void SackSoldierState::btnOkClick(Action*)
 		_base->getItems()->addItem(_soldier->getArmor()->getStoreItem());
 	}
 
-	for (std::vector<Soldier*>::iterator s = _base->getSoldiers()->begin(); s != _base->getSoldiers()->end(); ++s)
+	for (std::vector<Soldier*>::iterator
+			s = _base->getSoldiers()->begin();
+			s != _base->getSoldiers()->end();
+			++s)
 	{
-		if ((*s) == _soldier)
+		if (*s == _soldier)
 		{
 			_base->getSoldiers()->erase(s);
+
 			break;
 		}
 	}

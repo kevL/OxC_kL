@@ -18,28 +18,35 @@
  */
 
 #include "SoldiersState.h"
+
+#include <sstream>
 #include <string>
-#include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
-#include "../Engine/Language.h"
-#include "../Engine/Palette.h"
-#include "../Engine/Options.h"
-#include "../Geoscape/AllocatePsiTrainingState.h"
-#include "../Interface/TextButton.h"
-#include "../Interface/Window.h"
-#include "../Interface/Text.h"
-#include "../Interface/TextList.h"
-#include "../Savegame/Base.h"
-#include "../Savegame/Soldier.h"
-#include "../Savegame/Craft.h"
-#include "../Ruleset/RuleCraft.h"
+#include <climits>
+
 #include "SoldierInfoState.h"
 #include "SoldierMemorialState.h"
-// kL_begin: taken from CraftSoldiersState...
-#include <sstream>
-#include <climits>
+
 #include "../Engine/Action.h"
+#include "../Engine/Game.h"
+#include "../Engine/Language.h"
 #include "../Engine/LocalizedText.h"
+#include "../Engine/Options.h"
+#include "../Engine/Palette.h"
+
+#include "../Geoscape/AllocatePsiTrainingState.h"
+
+#include "../Interface/Text.h"
+#include "../Interface/TextButton.h"
+#include "../Interface/TextList.h"
+#include "../Interface/Window.h"
+
+#include "../Resource/ResourcePack.h"
+
+#include "../Savegame/Base.h"
+#include "../Savegame/Craft.h"
+#include "../Savegame/Soldier.h"
+
+#include "../Ruleset/RuleCraft.h"
 
 
 namespace OpenXcom
@@ -51,28 +58,11 @@ namespace OpenXcom
  * @param base Pointer to the base to get info from.
  */
 SoldiersState::SoldiersState(Game* game, Base* base)
-//SoldiersState::SoldiersState(Game* game, Base* base, size_t craft)		// kL
 	:
 		State(game),
 		_base(base)
-//		_craft(craft)	// kL
 {
 	_window			= new Window(this, 320, 200, 0, 0);
-
-	bool isPsiBtnVisible = Options::getBool("anytimePsiTraining") && _base->getAvailablePsiLabs() > 0;
-/*kL	if (isPsiBtnVisible)
-	{
-		_btnOk			= new TextButton(96, 16, 216, 176);
-		_btnPsiTrain	= new TextButton(96, 16, 112, 176);
-		_btnMemorial	= new TextButton(96, 16, 8, 176);
-	}
-	else
-	{
-		_btnOk			= new TextButton(148, 16, 164, 176);
-		_btnPsiTrain	= new TextButton(148, 16, 164, 176);
-		_btnMemorial	= new TextButton(148, 16, 8, 176);
-	} */
-
 	_txtTitle		= new Text(300, 17, 10, 11);
 
 	_txtName		= new Text(114, 9, 16, 31);
@@ -81,11 +71,9 @@ SoldiersState::SoldiersState(Game* game, Base* base)
 
 	_lstSoldiers	= new TextList(294, 128, 8, 42);
 
-// eulogy, psi, armor, yep.
 	_btnMemorial	= new TextButton(72, 16, 11, 177);
 	_btnPsiTrain	= new TextButton(71, 16, 87, 177);
-	_btnArmor		= new TextButton(71, 16, 162, 177);		// kL
-//kL	_btnOk			= new TextButton(isPsiBtnVisible? 148:288, 16, isPsiBtnVisible? 164:16, 176);
+	_btnArmor		= new TextButton(71, 16, 162, 177);
 	_btnOk			= new TextButton(72, 16, 237, 177);
 
 
@@ -93,7 +81,7 @@ SoldiersState::SoldiersState(Game* game, Base* base)
 
 	add(_window);
 	add(_btnPsiTrain);
-	add(_btnArmor);		// kL
+	add(_btnArmor);
 	add(_btnOk);
 	add(_btnMemorial);
 	add(_txtTitle);
@@ -111,13 +99,11 @@ SoldiersState::SoldiersState(Game* game, Base* base)
 	_btnPsiTrain->setColor(Palette::blockOffset(13)+10);
 	_btnPsiTrain->setText(tr("STR_PSIONIC_TRAINING"));
 	_btnPsiTrain->onMouseClick((ActionHandler)& SoldiersState::btnPsiTrainingClick);
-	_btnPsiTrain->setVisible(isPsiBtnVisible);
+	_btnPsiTrain->setVisible(Options::getBool("anytimePsiTraining") && _base->getAvailablePsiLabs() > 0);
 
-	// kL_begin: setup Armor from Soldiers screen.
 	_btnArmor->setColor(Palette::blockOffset(13)+10);
 	_btnArmor->setText(tr("STR_ARMOR"));
 	_btnArmor->onMouseClick((ActionHandler)& SoldiersState::btnArmorClick_Soldier);
-	// kL_end.
 
 	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(tr("STR_OK"));
@@ -126,7 +112,7 @@ SoldiersState::SoldiersState(Game* game, Base* base)
 
 	_btnMemorial->setColor(Palette::blockOffset(13)+10);
 	_btnMemorial->setText(tr("STR_MEMORIAL"));
-	_btnMemorial->onMouseClick((ActionHandler)&SoldiersState::btnMemorialClick);
+	_btnMemorial->onMouseClick((ActionHandler)& SoldiersState::btnMemorialClick);
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
@@ -143,29 +129,15 @@ SoldiersState::SoldiersState(Game* game, Base* base)
 	_txtCraft->setText(tr("STR_CRAFT"));
 
 	_lstSoldiers->setColor(Palette::blockOffset(13)+10);
-//kL	_lstSoldiers->setArrowColor(Palette::blockOffset(15)+1);
-	_lstSoldiers->setArrowColor(Palette::blockOffset(15)+6);	// kL
-	_lstSoldiers->setArrowColumn(193, ARROW_VERTICAL);			// kL
-//kL	_lstSoldiers->setColumns(3, 114, 92, 74);				// =280
-	_lstSoldiers->setColumns(3, 117, 93, 71);					// kL
-	_lstSoldiers->setSelectable(true);
-	_lstSoldiers->setBackground(_window);
-	_lstSoldiers->setMargin(8);
-	_lstSoldiers->onLeftArrowClick((ActionHandler)& SoldiersState::lstItemsLeftArrowClick_Soldier);		// kL
-	_lstSoldiers->onRightArrowClick((ActionHandler)& SoldiersState::lstItemsRightArrowClick_Soldier);	// kL
-	_lstSoldiers->onMouseClick((ActionHandler)& SoldiersState::lstSoldiersClick);
-
-	// kL_note: this is the CraftSoldiersState list:
-/*	_lstSoldiers->setColor(Palette::blockOffset(13)+10);
 	_lstSoldiers->setArrowColor(Palette::blockOffset(15)+6);
-	_lstSoldiers->setArrowColumn(192, ARROW_VERTICAL);
-	_lstSoldiers->setColumns(3, 106, 102, 72);
+	_lstSoldiers->setArrowColumn(193, ARROW_VERTICAL);
+	_lstSoldiers->setColumns(3, 117, 93, 71);
 	_lstSoldiers->setSelectable(true);
 	_lstSoldiers->setBackground(_window);
 	_lstSoldiers->setMargin(8);
-	_lstSoldiers->onLeftArrowClick((ActionHandler) &CraftSoldiersState::lstItemsLeftArrowClick);
-	_lstSoldiers->onRightArrowClick((ActionHandler) &CraftSoldiersState::lstItemsRightArrowClick);
-	_lstSoldiers->onMouseClick((ActionHandler) &CraftSoldiersState::lstSoldiersClick); */
+	_lstSoldiers->onLeftArrowClick((ActionHandler)& SoldiersState::lstItemsLeftArrowClick_Soldier);
+	_lstSoldiers->onRightArrowClick((ActionHandler)& SoldiersState::lstItemsRightArrowClick_Soldier);
+	_lstSoldiers->onMouseClick((ActionHandler)& SoldiersState::lstSoldiersClick);
 }
 
 /**
@@ -184,9 +156,16 @@ void SoldiersState::init()
 	_lstSoldiers->clearList();
 
 	int row = 0;
-	for (std::vector<Soldier*>::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); ++i)
+	for (std::vector<Soldier*>::iterator
+			i = _base->getSoldiers()->begin();
+			i != _base->getSoldiers()->end();
+			++i)
 	{
-		_lstSoldiers->addRow(3, (*i)->getName().c_str(), tr((*i)->getRankString()).c_str(), (*i)->getCraftString(_game->getLanguage()).c_str());
+		_lstSoldiers->addRow(
+				3,
+				(*i)->getName().c_str(),
+				tr((*i)->getRankString()).c_str(),
+				(*i)->getCraftString(_game->getLanguage()).c_str());
 
 		if ((*i)->getCraft() == 0)
 		{
@@ -239,16 +218,14 @@ void SoldiersState::btnMemorialClick(Action*)
  * Shows the selected soldier's info.
  * @param action Pointer to an action.
  */
-//kL void SoldiersState::lstSoldiersClick(Action*)
-void SoldiersState::lstSoldiersClick(Action* action)		// kL
+void SoldiersState::lstSoldiersClick(Action* action)
 {
-	// kL: Taken from CraftSoldiersState::lstSoldiersClick()
 	double mx = action->getAbsoluteXMouse();
 	if (mx >= _lstSoldiers->getArrowsLeftEdge()
 		&& mx < _lstSoldiers->getArrowsRightEdge())
 	{
 		return;
-	} // end_kL.
+	}
 
 	_game->pushState(new SoldierInfoState(_game, _base, _lstSoldiers->getSelectedRow()));
 }
@@ -274,7 +251,9 @@ void SoldiersState::lstItemsLeftArrowClick_Soldier(Action* action)
 
 				if (row != _lstSoldiers->getScroll())
 				{
-					SDL_WarpMouse(action->getXMouse(), action->getYMouse() - static_cast<Uint16>(8 * action->getYScale()));
+					SDL_WarpMouse(
+							static_cast<Uint16>(action->getXMouse()),
+							static_cast<Uint16>(action->getYMouse() - static_cast<int>(8.0 * action->getYScale())));
 				}
 				else
 				{
@@ -306,7 +285,7 @@ void SoldiersState::lstItemsRightArrowClick_Soldier(Action* action)
 	
 		if (0 < numSoldiers
 			&& INT_MAX >= numSoldiers
-			&& row < (int)numSoldiers - 1)
+			&& row < static_cast<int>(numSoldiers) - 1)
 		{
 			Soldier* s = _base->getSoldiers()->at(row);
 
@@ -317,7 +296,9 @@ void SoldiersState::lstItemsRightArrowClick_Soldier(Action* action)
 
 				if (row != 15 + _lstSoldiers->getScroll())
 				{
-					SDL_WarpMouse(action->getXMouse(), action->getYMouse() + static_cast<Uint16>(8 * action->getYScale()));
+					SDL_WarpMouse(
+							static_cast<Uint16>(action->getXMouse()),
+							static_cast<Uint16>(action->getYMouse() + static_cast<int>(8.0 * action->getYScale())));
 				}
 				else
 				{

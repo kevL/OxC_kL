@@ -16,7 +16,9 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "AlienRace.h"
+
 
 namespace OpenXcom
 {
@@ -25,10 +27,16 @@ namespace OpenXcom
  * Creates a blank alien race.
  * @param id String defining the id.
  */
-AlienRace::AlienRace(const std::string &id): _id(id), _members()
+AlienRace::AlienRace(const std::string& id)
+	:
+		_id(id),
+		_members()
 {
 }
 
+/**
+ *
+ */
 AlienRace::~AlienRace()
 {
 }
@@ -37,10 +45,10 @@ AlienRace::~AlienRace()
  * Loads the alien race from a YAML file.
  * @param node YAML node.
  */
-void AlienRace::load(const YAML::Node &node)
+void AlienRace::load(const YAML::Node& node)
 {
-	_id = node["id"].as<std::string>(_id);
-	_members = node["members"].as< std::vector<std::string> >(_members);
+	_id			= node["id"].as<std::string>(_id);
+	_members	= node["members"].as< std::vector<std::string>>(_members);
 }
 
 /**

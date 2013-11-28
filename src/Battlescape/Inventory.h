@@ -20,20 +20,21 @@
 #ifndef OPENXCOM_INVENTORY_H
 #define OPENXCOM_INVENTORY_H
 
-#include "../Engine/InteractiveSurface.h"
 #include <map>
 #include <string>
+
+#include "../Engine/InteractiveSurface.h"
 
 
 namespace OpenXcom
 {
 
-class RuleInventory;
-class Game;
-class WarningMessage;
 class BattleItem;
 class BattleUnit;
+class Game;
 class NumberText;
+class RuleInventory;
+class WarningMessage;
 
 /**
  * Interactive view of an inventory.
@@ -51,7 +52,7 @@ private:
 	BattleItem* _selItem;
 	bool _tu;
 	int _groundOffset;
-	std::map<int, std::map<int, int> > _stackLevel;
+	std::map<int, std::map<int, int>> _stackLevel;
 	NumberText* _stackNumber;
 
 	/// Moves an item to a specified slot.

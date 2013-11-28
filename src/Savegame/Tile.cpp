@@ -275,8 +275,11 @@ int Tile::getTUCost(int part, MovementType movementType) const
  */
 bool Tile::hasNoFloor(Tile* tileBelow) const
 {
-	if (tileBelow != 0 && tileBelow->getTerrainLevel() == -24)
+	if (tileBelow != 0
+		&& tileBelow->getTerrainLevel() == -24)
+	{
 		return false;
+	}
 
 	if (_objects[MapData::O_FLOOR])
 		return _objects[MapData::O_FLOOR]->isNoFloor();

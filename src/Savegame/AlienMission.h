@@ -21,6 +21,7 @@
 #define OPENXCOM_ALIEN_MISSION_H
 
 #include <string>
+
 #include <yaml-cpp/yaml.h>
 
 
@@ -39,8 +40,8 @@ class AlienBase;
 
 /**
  * Represents an ongoing alien mission.
- * Contains variable info about the mission, like spawn counter, target region
- * and current wave.
+ * Contains variable info about the mission, like spawn counter,
+ * target region and current wave.
  * @sa RuleAlienMission
  */
 class AlienMission

@@ -18,8 +18,10 @@
  */
 
 #include "PathfindingNode.h"
-#include "Position.h"
+
 #include <math.h>
+
+#include "Position.h"
 
 
 namespace OpenXcom
@@ -102,8 +104,8 @@ int PathfindingNode::getPrevDir() const
 }
 
 /**
- * Connects the node. This will connect the node to the previous node along the path to @a target
- * and update the pathfinding information.
+ * Connects the node. This will connect the node to the previous node
+ * along the path to @a target and update the pathfinding information.
  * @param tuCost The total cost of the path so far.
  * @param prevNode The previous node along the path.
  * @param prevDir The direction FROM the previous node.

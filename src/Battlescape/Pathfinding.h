@@ -21,7 +21,9 @@
 #define OPENXCOM_PATHFINDING_H
 
 #include <vector>
+
 #include "Position.h"
+
 #include "../Ruleset/MapData.h"
 
 
@@ -46,11 +48,25 @@ private:
 	/// Gets the node at certain position.
 	PathfindingNode* getNode(const Position& pos);
 	/// Determines whether a tile blocks a certain movementType.
-	bool isBlocked(Tile* tile, const int part, BattleUnit* missileTarget, int bigWallExclusion = -1);
+	bool isBlocked(
+			Tile* tile,
+			const int part,
+			BattleUnit* missileTarget,
+			int bigWallExclusion = -1);
 	/// Tries to find a straight line path between two positions.
-	bool bresenhamPath(const Position& origin, const Position& target, BattleUnit* missileTarget, bool sneak = false, int maxTUCost = 1000);
+	bool bresenhamPath(
+			const Position& origin,
+			const Position& target,
+			BattleUnit* missileTarget,
+			bool sneak = false,
+			int maxTUCost = 1000);
 	/// Tries to find a path between two positions.
-	bool aStarPath(const Position& origin, const Position& target, BattleUnit* missileTarget, bool sneak = false, int maxTUCost = 1000);
+	bool aStarPath(
+			const Position& origin,
+			const Position& target,
+			BattleUnit* missileTarget,
+			bool sneak = false,
+			int maxTUCost = 1000);
 	/// Determines whether a unit can fall down from this tile.
 	bool canFallDown(Tile* destinationTile);
 	/// Determines whether a unit can fall down from this tile.
@@ -85,11 +101,19 @@ private:
 		static const int O_BIGWALL = -1;
 
 		/// Determines whether the unit is going up a stairs.
-		bool isOnStairs(const Position& startPosition, const Position& endPosition);
+//kL		bool isOnStairs(const Position& startPosition, const Position& endPosition);
 		/// Determines whether or not movement between starttile and endtile is possible in the direction.
-		bool isBlocked(Tile* startTile, Tile* endTile, const int direction, BattleUnit* missileTarget);
+		bool isBlocked(
+				Tile* startTile,
+				Tile* endTile,
+				const int direction,
+				BattleUnit* missileTarget);
 		/// Calculates the shortest path.
-		void calculate(BattleUnit* unit, Position endPosition, BattleUnit* missileTarget = 0, int maxTUCost = 1000);
+		void calculate(
+				BattleUnit* unit,
+				Position endPosition,
+				BattleUnit* missileTarget = 0,
+				int maxTUCost = 1000);
 		/// Converts direction to a vector.
 		static void directionToVector(int const direction, Position* vector);
 		/// Converts a vector to a direction.
@@ -99,13 +123,22 @@ private:
 		/// Dequeues a direction.
 		int dequeuePath();
 		/// Gets the TU cost to move from 1 tile to the other.
-		int getTUCost(const Position& startPosition, const int direction, Position* endPosition, BattleUnit* unit, BattleUnit* target, bool missile);
+		int getTUCost(
+				const Position& startPosition,
+				const int direction,
+				Position* endPosition,
+				BattleUnit* unit,
+				BattleUnit* target,
+				bool missile);
 		/// Aborts the current path.
 		void abortPath();
 		/// Gets the strafe move setting.
 		bool getStrafeMove() const;
 		/// Checks, for the up/down button, if the movement is valid.
-		bool validateUpDown(BattleUnit* bu, Position startPosition, int const direction);
+		bool validateUpDown(
+				BattleUnit* bu,
+				Position startPosition,
+				int const direction);
 		/// Previews the path.
 		bool previewPath(bool bRemove = false);
 		/// Removes the path preview.

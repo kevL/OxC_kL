@@ -64,6 +64,7 @@ private:
 		/// Saves the soldiers' equipment-layout.
 		void saveEquipmentLayout();
 		/// Handler for clicking the OK button.
+
 		void btnOkClick(Action* action);
 		/// Handler for clicking the Previous button.
 		void btnPrevClick(Action* action);

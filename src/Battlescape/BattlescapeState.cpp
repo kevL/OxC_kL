@@ -19,73 +19,84 @@
 
 #define _USE_MATH_DEFINES
 
+#include "BattlescapeState.h"
+
 #include <cmath>
 #include <sstream>
 #include <iomanip>
+
 #include <SDL_gfxPrimitives.h>
-#include "Map.h"
-#include "Camera.h"
-#include "BattlescapeState.h"
-#include "NextTurnState.h"
+
 #include "AbortMissionState.h"
+#include "ActionMenuState.h"
+#include "AlienBAIState.h"
+#include "BattlescapeGame.h"
+#include "BattlescapeGenerator.h"
 #include "BattleState.h"
+#include "BriefingState.h"
+#include "Camera.h"
+#include "CivilianBAIState.h"
+#include "DebriefingState.h"
+#include "ExplosionBState.h"
+#include "InfoboxState.h"
+#include "InventoryState.h"
+#include "Map.h"
+#include "MiniMapState.h"
+#include "NextTurnState.h"
+#include "Pathfinding.h"
+#include "ProjectileFlyBState.h"
+#include "TileEngine.h"
+#include "UnitDieBState.h"
+#include "UnitInfoState.h"
 #include "UnitTurnBState.h"
 #include "UnitWalkBState.h"
-#include "ProjectileFlyBState.h"
-#include "ExplosionBState.h"
-#include "TileEngine.h"
-#include "ActionMenuState.h"
-#include "UnitInfoState.h"
-#include "UnitDieBState.h"
-#include "InventoryState.h"
-#include "AlienBAIState.h"
-#include "CivilianBAIState.h"
-#include "Pathfinding.h"
-#include "BattlescapeGame.h"
+#include "WarningMessage.h"
+
+#include "../lodepng.h"
+
+#include "../Engine/Action.h"
+#include "../Engine/CrossPlatform.h"
 #include "../Engine/Game.h"
-#include "../Engine/Options.h"
-#include "../Engine/Music.h"
 #include "../Engine/Language.h"
+#include "../Engine/Logger.h"
+#include "../Engine/Music.h"
+#include "../Engine/Options.h"
 #include "../Engine/Palette.h"
-#include "../Engine/Surface.h"
-#include "../Engine/SurfaceSet.h"
+#include "../Engine/RNG.h"
 #include "../Engine/Screen.h"
 #include "../Engine/Sound.h"
-#include "../Engine/Action.h"
-#include "../Resource/ResourcePack.h"
+#include "../Engine/Surface.h"
+#include "../Engine/SurfaceSet.h"
+#include "../Engine/Timer.h"
+
+#include "../Geoscape/DefeatState.h"
+#include "../Geoscape/VictoryState.h"
+
+#include "../Interface/Bar.h"
 #include "../Interface/Cursor.h"
 #include "../Interface/FpsCounter.h"
-#include "../Interface/Text.h"
-#include "../Interface/Bar.h"
 #include "../Interface/ImageButton.h"
 #include "../Interface/NumberText.h"
+#include "../Interface/Text.h"
+#include "../Interface/TurnCounter.h"	// kL
+
+#include "../Menu/LoadState.h"
+#include "../Menu/PauseState.h"
+#include "../Menu/SaveState.h"
+
+#include "../Resource/ResourcePack.h"
+
+#include "../Ruleset/AlienDeployment.h"
+#include "../Ruleset/Armor.h"
+#include "../Ruleset/RuleItem.h"
+#include "../Ruleset/Ruleset.h"
+
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/Tile.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/Soldier.h"
 #include "../Savegame/BattleItem.h"
-#include "../Ruleset/Ruleset.h"
-#include "../Ruleset/RuleItem.h"
-#include "../Ruleset/AlienDeployment.h"
-#include "../Ruleset/Armor.h"
-#include "../Engine/Timer.h"
-#include "WarningMessage.h"
-#include "../Menu/PauseState.h"
-#include "DebriefingState.h"
-#include "../Engine/RNG.h"
-#include "InfoboxState.h"
-#include "MiniMapState.h"
-#include "BattlescapeGenerator.h"
-#include "BriefingState.h"
-#include "../Geoscape/DefeatState.h"
-#include "../Geoscape/VictoryState.h"
-#include "../lodepng.h"
-#include "../Engine/Logger.h"
-#include "../Engine/CrossPlatform.h"
-#include "../Menu/SaveState.h"
-#include "../Menu/LoadState.h"
-#include "../Interface/TurnCounter.h"	// kL
 
 
 namespace OpenXcom
@@ -510,7 +521,7 @@ BattlescapeState::BattlescapeState(Game* game)
 	_numTUSnap->setColor(Palette::blockOffset(0)+8);
 	_numTimeUnits->setColor(Palette::blockOffset(4));
 	_numEnergy->setColor(Palette::blockOffset(1));
-	_numHealth->setColor(Palette::blockOffset(2));
+	_numHealth->setColor(Palette::blockOffset(2)+11);	// kL, dark red
 	_numMorale->setColor(Palette::blockOffset(12));
 	_barTimeUnits->setColor(Palette::blockOffset(4));
 	_barTimeUnits->setScale(1.0);

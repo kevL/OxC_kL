@@ -18,35 +18,42 @@
  */
 
 #include "InventoryState.h"
+
 #include <sstream>
-#include "../Engine/Game.h"
+
+#include "BattlescapeState.h"
+#include "Camera.h"
+#include "Inventory.h"
+#include "Map.h"
+#include "Pathfinding.h"
+#include "TileEngine.h"
+#include "UnitInfoState.h"
+
+#include "../Engine/Action.h"
 #include "../Engine/CrossPlatform.h"
-#include "../Resource/ResourcePack.h"
+#include "../Engine/Game.h"
+#include "../Engine/InteractiveSurface.h"
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Surface.h"
-#include "../Interface/Text.h"
-#include "../Engine/Action.h"
-#include "../Engine/InteractiveSurface.h"
 #include "../Engine/SurfaceSet.h"
-#include "../Savegame/SavedGame.h"
-#include "../Savegame/SavedBattleGame.h"
+
+#include "../Interface/Text.h"
+
+#include "../Resource/ResourcePack.h"
+
 #include "../Savegame/BattleItem.h"
 #include "../Savegame/BattleUnit.h"
-#include "../Savegame/Soldier.h"
 #include "../Savegame/EquipmentLayoutItem.h"
-#include "Inventory.h"
-#include "../Ruleset/Ruleset.h"
-#include "../Ruleset/RuleItem.h"
-#include "../Ruleset/RuleInventory.h"
+#include "../Savegame/SavedBattleGame.h"
+#include "../Savegame/SavedGame.h"
+#include "../Savegame/Soldier.h"
+
 #include "../Ruleset/Armor.h"
 #include "../Engine/Options.h"
-#include "UnitInfoState.h"
-#include "BattlescapeState.h"
-#include "TileEngine.h"
-#include "Map.h"
-#include "Camera.h"
-#include "Pathfinding.h"
+#include "../Ruleset/RuleItem.h"
+#include "../Ruleset/RuleInventory.h"
+#include "../Ruleset/Ruleset.h"
 
 
 namespace OpenXcom
@@ -97,7 +104,11 @@ InventoryState::InventoryState(Game* game, bool tu, BattlescapeState* parent)
 	_btnUnload	= new InteractiveSurface(32, 25, 288, 32);
 	_btnGround	= new InteractiveSurface(32, 15, 289, 137);
 	_btnRank	= new InteractiveSurface(26, 23, 0, 0);
-	_selAmmo	= new Surface(RuleInventory::HAND_W * RuleInventory::SLOT_W, RuleInventory::HAND_H * RuleInventory::SLOT_H, 272, 88);
+	_selAmmo	= new Surface(
+						RuleInventory::HAND_W * RuleInventory::SLOT_W,
+						RuleInventory::HAND_H * RuleInventory::SLOT_H,
+						272,
+						88);
 	_inv		= new Inventory(_game, 320, 200, 0, 0);
 
 	add(_bg);
@@ -301,7 +312,9 @@ void InventoryState::init()
 			_txtPSkill->setText(L"");
 		}
 
-		if (unit->getStats()->psiSkill > 0 || (Options::getBool("psiStrengthEval") && _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements())))
+		if (unit->getStats()->psiSkill > 0
+			|| (Options::getBool("psiStrengthEval")
+				&& _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements())))
 		{
 			_txtPStr->setText(tr("STR_PSTRENGTH").arg(unit->getStats()->psiStrength));
 		}
@@ -397,7 +410,10 @@ void InventoryState::btnOkClick(Action*)
 		saveEquipmentLayout();
 		_battleGame->resetUnitTiles();
 
-		for (std::vector<BattleUnit*>::iterator i = _battleGame->getUnits()->begin(); i != _battleGame->getUnits()->end(); ++i)
+		for (std::vector<BattleUnit*>::iterator
+				i = _battleGame->getUnits()->begin();
+				i != _battleGame->getUnits()->end();
+				++i)
 		{
 			if ((*i)->getFaction() == _battleGame->getSide())
 				(*i)->prepareNewTurn();

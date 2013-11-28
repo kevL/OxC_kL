@@ -16,11 +16,13 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_WEIGHTEDOPTIONS_H
 #define OPENXCOM_WEIGHTEDOPTIONS_H
 
 #include <string>
 #include <map>
+
 #include <yaml-cpp/yaml.h>
 
 
@@ -33,25 +35,42 @@ namespace OpenXcom
  */
 class WeightedOptions
 {
-public:
-	/// Create an empty set.
-	WeightedOptions() : _totalWeight(0) { /* Empty by design. */ }
-	/// Select from among the items.
-	const std::string choose() const;
-	/// Set an option's weight.
-	void set(const std::string &id, unsigned weight);
-	/// Is this empty?
-	bool empty() const { return 0 == _totalWeight; }
-	/// Remove all entries.
-	void clear() { _totalWeight = 0; _choices.clear(); }
-	/// Update our list with data from YAML.
-	void load(const YAML::Node &node);
-	/// Store our list in YAML.
-	YAML::Node save() const;
 private:
 	std::map<std::string, unsigned> _choices; //!< Options and weights
 	unsigned _totalWeight; //!< The total weight of all options.
+
+	public:
+		/// Create an empty set.
+		WeightedOptions()
+			:
+				_totalWeight(0)
+		{
+			/* Empty by design. */
+		}
+
+		/// Select from among the items.
+		const std::string choose() const;
+		/// Set an option's weight.
+		void set(const std::string& id, unsigned weight);
+		/// Is this empty, or not
+		bool empty() const
+		{
+			return (0 == _totalWeight);
+		}
+
+		/// Remove all entries.
+		void clear()
+		{
+			_totalWeight = 0;
+			_choices.clear();
+		}
+
+		/// Update our list with data from YAML.
+		void load(const YAML::Node& node);
+		/// Store our list in YAML.
+		YAML::Node save() const;
 };
 
 }
+
 #endif

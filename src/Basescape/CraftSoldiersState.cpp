@@ -18,24 +18,30 @@
  */
 
 #include "CraftSoldiersState.h"
-#include <string>
-#include <sstream>
+
 #include <climits>
+#include <sstream>
+#include <string>
+
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
-#include "../Engine/Palette.h"
-#include "../Engine/Options.h"
-#include "../Interface/TextButton.h"
-#include "../Interface/Window.h"
-#include "../Interface/Text.h"
-#include "../Interface/TextList.h"
-#include "../Savegame/Base.h"
-#include "../Savegame/Soldier.h"
-#include "../Savegame/Craft.h"
-#include "../Ruleset/RuleCraft.h"
 #include "../Engine/LocalizedText.h"
+#include "../Engine/Options.h"
+#include "../Engine/Palette.h"
+
+#include "../Resource/ResourcePack.h"
+
+#include "../Interface/Text.h"
+#include "../Interface/TextButton.h"
+#include "../Interface/TextList.h"
+#include "../Interface/Window.h"
+
+#include "../Ruleset/RuleCraft.h"
+
+#include "../Savegame/Base.h"
+#include "../Savegame/Craft.h"
+#include "../Savegame/Soldier.h"
 
 
 namespace OpenXcom
@@ -191,7 +197,10 @@ void CraftSoldiersState::btnUnloadClick(Action*)
 	std::wstring craft1 = c->getName(_game->getLanguage());
 
 	// iterate over all soldiers at Base
-	for (std::vector<Soldier*>::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); ++i)
+	for (std::vector<Soldier*>::iterator
+			i = _base->getSoldiers()->begin();
+			i != _base->getSoldiers()->end();
+			++i)
 	{
 		if ((*i)->getCraft() == c) // if soldier is on this Craft, unload them
 		{
@@ -201,7 +210,10 @@ void CraftSoldiersState::btnUnloadClick(Action*)
 
 	// iterate over all listRows and change their stringText and lineColor
 	Uint8 color;
-	for (int r = 0; (unsigned)r < _base->getSoldiers()->size(); ++r)
+	for (unsigned
+			r = 0;
+			r < _base->getSoldiers()->size();
+			++r)
 	{
 		std::wstring craft2 = _lstSoldiers->getCellText(r, 2);
 		if (craft2 == craft1) // if row pertains to this craft
@@ -235,9 +247,16 @@ void CraftSoldiersState::populateList()
 	_lstSoldiers->clearList();
 
 	int row = 0;
-	for (std::vector<Soldier*>::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); ++i)
+	for (std::vector<Soldier*>::iterator
+			i = _base->getSoldiers()->begin();
+			i != _base->getSoldiers()->end();
+			++i)
 	{
-		_lstSoldiers->addRow(3, (*i)->getName().c_str(), tr((*i)->getRankString()).c_str(), (*i)->getCraftString(_game->getLanguage()).c_str());
+		_lstSoldiers->addRow(
+				3,
+				(*i)->getName().c_str(),
+				tr((*i)->getRankString()).c_str(),
+				(*i)->getCraftString(_game->getLanguage()).c_str());
 
 		Uint8 color;
 
@@ -281,7 +300,9 @@ void CraftSoldiersState::lstItemsLeftArrowClick(Action* action)
 
 				if (row != _lstSoldiers->getScroll())
 				{
-					SDL_WarpMouse(action->getXMouse(), action->getYMouse() - static_cast<Uint16>(8 * action->getYScale()));
+					SDL_WarpMouse(
+							static_cast<Uint16>(action->getXMouse()),
+							static_cast<Uint16>(action->getYMouse() - static_cast<int>(8.0 * action->getYScale())));
 				}
 				else
 				{
@@ -324,7 +345,9 @@ void CraftSoldiersState::lstItemsRightArrowClick(Action* action)
 
 				if (row != 15 + _lstSoldiers->getScroll())
 				{
-					SDL_WarpMouse(action->getXMouse(), action->getYMouse() + static_cast<Uint16>(8 * action->getYScale()));
+					SDL_WarpMouse(
+							static_cast<Uint16>(action->getXMouse()),
+							static_cast<Uint16>(action->getYMouse() + static_cast<int>(8.0 * action->getYScale())));
 				}
 				else
 				{

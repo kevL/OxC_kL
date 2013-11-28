@@ -60,11 +60,6 @@ BaseInfoState::BaseInfoState(Game* game, Base* base, BasescapeState* state)
 	_bg					= new Surface(320, 200, 0, 0);
 	_mini				= new MiniBaseView(128, 16, 182, 8);
 
-/*	_btnMonthlyCosts	= new TextButton(72, 14, 11, 179);
-	_btnTransfers		= new TextButton(71, 14, 87, 179);
-	_btnStores			= new TextButton(71, 14, 162, 179);
-	_btnOk				= new TextButton(72, 14, 237, 179); */
-
 	_btnMonthlyCosts	= new TextButton(72, 14, 10, 179);
 	_btnTransfers		= new TextButton(72, 14, 86, 179);
 	_btnStores			= new TextButton(72, 14, 162, 179);
@@ -104,19 +99,19 @@ BaseInfoState::BaseInfoState(Game* game, Base* base, BasescapeState* state)
 		_barContainment = new Bar(150, 5, 166, 125);
 	}
 
-	_txtHangars			= new Text(114, 9, 8, _containmentLimit ? 133 : 123);
-	_numHangars			= new Text(40, 9, 126, _containmentLimit ? 133 : 123);
-	_barHangars			= new Bar(150, 5, 166, _containmentLimit ? 135 : 125);
+	_txtHangars			= new Text(114, 9, 8, _containmentLimit? 133: 123);
+	_numHangars			= new Text(40, 9, 126, _containmentLimit? 133: 123);
+	_barHangars			= new Bar(150, 5, 166, _containmentLimit? 135: 125);
 
-	_txtDefense			= new Text(114, 9, 8, _containmentLimit ? 147 : 138);
-	_numDefense			= new Text(40, 9, 126, _containmentLimit ? 147 : 138);
-	_barDefense			= new Bar(150, 5, 166, _containmentLimit ? 149 : 140);
-	_txtShortRange		= new Text(114, 9, 8, _containmentLimit ? 157 : 153);
-	_numShortRange		= new Text(40, 9, 126, _containmentLimit ? 157 : 153);
-	_barShortRange		= new Bar(150, 5, 166, _containmentLimit ? 159 : 155);
-	_txtLongRange		= new Text(114, 9, 8, _containmentLimit ? 167 : 163);
-	_numLongRange		= new Text(40, 9, 126, _containmentLimit ? 167 : 163);
-	_barLongRange		= new Bar(150, 5, 166, _containmentLimit ? 169 : 165);
+	_txtDefense			= new Text(114, 9, 8, _containmentLimit? 147: 138);
+	_numDefense			= new Text(40, 9, 126, _containmentLimit? 147: 138);
+	_barDefense			= new Bar(150, 5, 166, _containmentLimit? 149: 140);
+	_txtShortRange		= new Text(114, 9, 8, _containmentLimit? 157: 153);
+	_numShortRange		= new Text(40, 9, 126, _containmentLimit? 157: 153);
+	_barShortRange		= new Bar(150, 5, 166, _containmentLimit? 159: 155);
+	_txtLongRange		= new Text(114, 9, 8, _containmentLimit? 167: 163);
+	_numLongRange		= new Text(40, 9, 126, _containmentLimit? 167: 163);
+	_barLongRange		= new Bar(150, 5, 166, _containmentLimit? 169: 165);
 
 	add(_bg);
 	add(_mini);
@@ -471,6 +466,7 @@ void BaseInfoState::miniClick(Action*)
 void BaseInfoState::btnOkClick(Action*)
 {
 	_base->setName(_edtBase->getText());
+
 	_game->popState();
 }
 

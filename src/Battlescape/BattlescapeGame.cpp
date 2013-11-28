@@ -887,10 +887,12 @@ void BattlescapeGame::handleNonTargetAction()
 			{
 				_currentAction.weapon->setExplodeTurn(_currentAction.value);
 				_parentState->warning("STR_GRENADE_IS_ACTIVATED");
+//				_parentState->warning(_game->getLanguage()->getString("STR_GRENADE_IS_ACTIVATED"));		// kL
 			}
 			else
 			{
 				_parentState->warning("STR_NOT_ENOUGH_TIME_UNITS");
+//				_parentState->warning(_game->getLanguage()->getString("STR_NOT_ENOUGH_TIME_UNITS"));	// kL
 			}
 		}
 
