@@ -54,7 +54,8 @@ private:
 			Position* target,
 			double accuracy,
 			bool keepRange = false,
-			Tile* targetTile = 0);
+			Tile* targetTile = 0,
+			bool throwing = false);
 
 	public:
 		/// Creates a new Projectile.

@@ -3074,7 +3074,7 @@ int TileEngine::calculateLine(
  * @param trajectory, A vector of positions in which the trajectory is stored.
  * @param excludeUnit, Makes sure the trajectory does not hit the shooter itself.
  * @param arc, How high the parabola goes: 1.0 is almost straight throw, 3.0 is a very high throw, to throw over a fence for example.
- * @param acu, Is the deviation of the angles it should take into account. 1.0 is perfection.
+ * @param delta, Is the deviation of the angles it should take into account, 0,0,0 is perfection.
  * @return, The objectnumber(0-3) or unit(4) or out of map (5) or -1(hit nothing).
  */
 int TileEngine::calculateParabola(
@@ -3084,7 +3084,7 @@ int TileEngine::calculateParabola(
 				std::vector<Position>* trajectory,
 				BattleUnit* excludeUnit,
 				double arc,
-				double acu)
+				const Position delta)
 {
 	Log(LOG_INFO) << "TileEngine::calculateParabola()";
 
@@ -3092,14 +3092,16 @@ int TileEngine::calculateParabola(
 			+ (target.y - origin.y) * (target.y - origin.y)
 			+ (target.z - origin.z) * (target.z - origin.z)));
 
+	if (AreSame(ro, 0.0)) return VOXEL_EMPTY; // just in case
+
 	double fi = acos(static_cast<double>(target.z - origin.z) / ro);
 	double te = atan2(static_cast<double>(target.y - origin.y), static_cast<double>(target.x - origin.x));
 
-	fi *= acu;
-	te *= acu;
+	te += (static_cast<double>(delta.x) / ro) / 2.0 * M_PI;							// horizontal magic value
+	fi += (static_cast<double>(delta.z + delta.y) / ro) / 14.0 * M_PI * curvature;	// another magic value (vertical), to make it in-line with fire spread
 
 	double zA = sqrt(ro) * arc;
-	double zK = 4.0 * zA / ro / ro;
+	double zK = 4.0 * zA / (ro * ro);
 
 	int x = origin.x;
 	int y = origin.y;
@@ -3155,7 +3157,74 @@ int TileEngine::calculateParabola(
  * @param action, The action to validate
  * @return, Validity of action
  */
-bool TileEngine::validateThrow(BattleAction* action)
+bool TileEngine::validateThrow(
+		BattleAction& action,
+		Position originVoxel,
+		Position targetVoxel,
+		double* curve,
+		int* voxelType)
+{
+	bool found = false;
+	double arc = 1.0;
+
+	Tile* targetTile = _save->getTile(action.target);
+
+	// object blocking - can't throw here
+	if ((action.type == BA_THROW
+			&& targetTile
+			&& targetTile->getMapData(MapData::O_OBJECT)
+			&& targetTile->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) == 255)
+		|| ProjectileFlyBState::validThrowRange(&action, originVoxel, targetTile) == false)
+	{
+		return false;
+	}
+
+	// we try 8 different curvatures to try and reach our goal.
+	int test = VOXEL_OUTOFBOUNDS;
+
+	while (!found
+		&& curvature < 5.0)
+	{
+		std::vector<Position> trajectory;
+
+		test = calculateParabola(
+				originVoxel,
+				targetVoxel,
+				false,
+				&trajectory,
+				action.actor,
+				arc,
+				Position(0, 0, 0));
+
+		if (test != VOXEL_OUTOFBOUNDS
+			&& trajectory.at(0) / Position(16, 16, 24) == targetVoxel / Position(16, 16, 24))
+		{
+			if (voxelType)
+			{
+				*voxelType = test;
+			}
+
+			found = true;
+		}
+		else
+		{
+			arc += 0.5;
+		}
+	}
+
+	if (AreSame(arc, 5.0))
+	{
+		return false;
+	}
+
+	if (curve)
+	{
+		*curve = arc;
+	}
+
+	return true;
+}
+/*Old: bool TileEngine::validateThrow(BattleAction* action)
 {
 	Log(LOG_INFO) << "TileEngine::validateThrow(), cf Projectile::calculateThrow()";
 
@@ -3278,7 +3347,7 @@ bool TileEngine::validateThrow(BattleAction* action)
 	}
 
 	return ProjectileFlyBState::validThrowRange(action, originVoxel, tile);
-}
+} */
 
 /**
  * Calculates z "grounded" value for a particular voxel (used for projectile shadow).
@@ -4006,6 +4075,85 @@ int TileEngine::getDirectionTo(const Position& origin, const Position& target) c
 //	}
 
 	return dir;
+}
+
+/**
+ *
+ */
+Position TileEngine::getOriginVoxel(BattleAction& action, Tile* tile)
+{
+	const int dirYshift[24] = {1, 3, 9, 15, 15, 13, 7, 1,  1, 1, 7, 13, 15, 15, 9, 3,  1, 2, 8, 14, 15, 14, 8, 2};
+	const int dirXshift[24] = {9, 15, 15, 13, 8, 1, 1, 3,  7, 13, 15, 15, 9, 3, 1, 1,  8, 14, 15, 14, 8, 2, 1, 2};
+
+	if (!tile)
+	{
+		tile = action.actor->getTile();
+	}
+
+	Position origin = tile->getPosition();
+	Tile* tileAbove = _save->getTile(origin + Position(0, 0, 1));
+	Position originVoxel = Position(origin.x * 16, origin.y * 16, origin.z * 24);
+
+	// take into account soldier height and terrain level if the projectile is launched from a soldier
+	if (action.actor->getPosition() == origin
+		|| action.type != BA_LAUNCH)
+	{
+		// calculate offset of the starting point of the projectile
+		originVoxel.z -= tile->getTerrainLevel();
+		originVoxel.z += action.actor->getHeight() + action.actor->getFloatHeight();
+		
+		if (action.type == BA_THROW)
+		{
+			originVoxel.z -= 3;
+		}
+		else
+		{
+			originVoxel.z -= 4;
+		}
+
+		if (originVoxel.z >= (origin.z + 1) * 24)
+		{
+			if (tileAbove
+				&& tileAbove->hasNoFloor(0))
+			{
+				origin.z++;
+			}
+			else
+			{
+				while (originVoxel.z >= (origin.z + 1) * 24)
+				{
+					originVoxel.z--;
+				}
+
+				originVoxel.z -= 4;
+			}
+		}
+
+		int offset = 0;
+		if (action.actor->getArmor()->getSize() > 1)
+		{
+			offset = 16;
+		}
+
+		else if (action.weapon == action.weapon->getOwner()->getItem("STR_LEFT_HAND")
+			&& !action.weapon->getRules()->isTwoHanded())
+		{
+			offset = 8;
+		}
+
+		int direction = getDirectionTo(origin, action.target);
+		originVoxel.x += dirXshift[direction + offset] * action.actor->getArmor()->getSize();
+		originVoxel.y += dirYshift[direction + offset] * action.actor->getArmor()->getSize();
+	}
+	else
+	{
+		// don't take into account soldier height and terrain level if the projectile is not launched from a soldier(from a waypoint)
+		originVoxel.x += 8;
+		originVoxel.y += 8;
+		originVoxel.z += 12;
+	}
+
+	return originVoxel;
 }
 
 }
