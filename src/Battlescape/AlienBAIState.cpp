@@ -1973,34 +1973,34 @@ void AlienBAIState::grenadeAction()
 	// distance must be more than X tiles, otherwise it's too dangerous to play with explosives
 	if (explosiveEfficacy(_aggroTarget->getPosition(), _unit, grenade->getRules()->getExplosionRadius(), _attackAction->diff))
 	{
-		int tu = 0;
-
-		if (!_grenade)
+		if (_unit->getFaction() == FACTION_HOSTILE)
 		{
-			tu = 4; // 4TUs for picking up the grenade ( kL_note: unless it's already in-hand..... )
-		}
-		tu += _unit->getActionTUs(BA_PRIME, grenade);
-		tu += _unit->getActionTUs(BA_THROW, grenade);
+			int tu = 0;
 
-		if (tu <= _unit->getStats()->tu) // do we have enough TUs to prime and throw the grenade?
-		{
-			BattleAction action;
-			action.weapon = grenade;
-			action.target = _aggroTarget->getPosition();
-			action.type = BA_THROW;
-			action.actor = _unit;
-
-			Position originVoxel = _save->getTileEngine()->getOriginVoxel(action, 0);
-			Position targetVoxel = action.target * Position (16, 16, 24) + Position (8, 8, (2 -_save->getTile(action.target)->getTerrainLevel()));
-
-			if (_save->getTileEngine()->validateThrow(action, originVoxel, targetVoxel)) // are we within range?
+			if (!_grenade)
 			{
-				_attackAction->weapon	= grenade;
-				_attackAction->target	= action.target;
-				_attackAction->type		= BA_THROW;
+				tu += 4; // 4TUs for picking up the grenade ( kL_note: unless it's already in-hand..... )
+			}
+			tu += _unit->getActionTUs(BA_PRIME, grenade);
+			tu += _unit->getActionTUs(BA_THROW, grenade);
 
-				_rifle = false;
-				_melee = false;
+			if (tu <= _unit->getStats()->tu) // do we have enough TUs to prime and throw the grenade?
+			{
+				BattleAction action;
+				action.weapon = grenade;
+				action.target = _aggroTarget->getPosition();
+				action.type = BA_THROW;
+				action.actor = _unit;
+
+				if (_save->getTileEngine()->validateThrow(&action)) // are we within range?
+				{
+					_attackAction->weapon = grenade;
+					_attackAction->target = action.target;
+					_attackAction->type = BA_THROW;
+
+					_rifle = false;
+					_melee = false;
+				}
 			}
 		}
 	}

@@ -200,7 +200,7 @@ void ProjectileFlyBState::init()
 		_action.type = BA_HIT;
 	}
 
-//kL_below:	Position originVoxel = _parent->getTileEngine()->getSightOriginVoxel(_unit) - Position(0, 0, 2); // this was taken out. new function getOriginVoxel()
+//kL_below:	Position originVoxel = _parent->getTileEngine()->getSightOriginVoxel(_unit) - Position(0, 0, 2);
 
 	switch (_action.type)
 	{
@@ -242,11 +242,12 @@ void ProjectileFlyBState::init()
 			}
 		break;
 		case BA_THROW:
+		{
 			Log(LOG_INFO) << ". . BA_THROW";
 
-//			Position originVoxel = _parent->getTileEngine()->getSightOriginVoxel(_unit) - Position(0, 0, 2);	// kL_above.
-			if (!validThrowRange(&_action, _parent->getTileEngine()->getOriginVoxel(_action, 0), _parent->getSave()->getTile(_action.target)))
+			Position originVoxel = _parent->getTileEngine()->getSightOriginVoxel(_unit) - Position(0, 0, 2);	// kL_above.
 
+			if (!validThrowRange(&_action, originVoxel, _parent->getSave()->getTile(_action.target)))
 			{
 				Log(LOG_INFO) << ". . . not valid throw range, EXIT";
 
@@ -257,6 +258,7 @@ void ProjectileFlyBState::init()
 			}
 
 			_projectileItem = weapon;
+		}
 		break;
 		case BA_HIT:
 			Log(LOG_INFO) << ". . BA_HIT";
@@ -677,7 +679,7 @@ bool ProjectileFlyBState::validThrowRange(
 		weight += action->weapon->getAmmoItem()->getRules()->getWeight();
 	}
 
-	int offset_z = 2;				// kL_note: this is prob +1 (now +2) to get things up off of the lowest voxel of a targetTile.
+	int offset_z = 1;				// kL_note: this is prob +1 to get things up off of the lowest voxel of a targetTile.
 	if (action->type != BA_THROW	// kL_note: huh? if *NOT* throw???
 		&& target->getUnit())		// but if there is a unit in targetTile??
 									// ah okay, this is a celatid spit.

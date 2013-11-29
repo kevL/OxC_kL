@@ -153,14 +153,10 @@ private:
 				std::vector<Position>* trajectory,
 				BattleUnit* excludeUnit,
 				double arc,
-				const Position delta);
+				double acu);
 		/// Validates a throwing action.
-		bool validateThrow(
-				BattleAction& action,
-				Position originVoxel,
-				Position targetVoxel,
-				double* arc = 0,
-				int* voxelType = 0);
+		bool validateThrow(BattleAction* action);
+
 		/// Turn XCom soldier's personal lighting on or off.
 		void togglePersonalLighting();
 		/// Checks the distance between two positions.
@@ -214,8 +210,6 @@ private:
 		int getDirectionTo(
 				const Position& origin,
 				const Position& target) const;
-		/// determine the origin voxel of a given action.
-		Position getOriginVoxel(BattleAction& action, Tile* tile);
 };
 
 }
