@@ -142,7 +142,10 @@ protected:
 		 */
 		bool isUfoDoorOpen(int part) const
 		{
-			return (_objects[part] && _objects[part]->isUFODoor() && _currentFrame[part] != 0);
+			return (
+					_objects[part]
+						&& _objects[part]->isUFODoor()
+						&& _currentFrame[part] != 0);
 		}
 
 		/// Close ufo door.

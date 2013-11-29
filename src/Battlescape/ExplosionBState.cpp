@@ -18,23 +18,28 @@
  */
 
 #include "ExplosionBState.h"
+
+#include "Camera.h"
 #include "BattlescapeState.h"
 #include "Explosion.h"
+#include "Map.h"
 #include "TileEngine.h"
 #include "UnitDieBState.h"
-#include "Map.h"
-#include "Camera.h"
+
 #include "../Engine/Game.h"
-#include "../Savegame/BattleUnit.h"
-#include "../Savegame/BattleItem.h"
-#include "../Savegame/SavedGame.h"
-#include "../Savegame/SavedBattleGame.h"
-#include "../Savegame/Tile.h"
-#include "../Resource/ResourcePack.h"
-#include "../Engine/Sound.h"
-#include "../Ruleset/RuleItem.h"
-#include "../Ruleset/Armor.h"
 #include "../Engine/RNG.h"
+#include "../Engine/Sound.h"
+
+#include "../Resource/ResourcePack.h"
+
+#include "../Ruleset/Armor.h"
+#include "../Ruleset/RuleItem.h"
+
+#include "../Savegame/BattleItem.h"
+#include "../Savegame/BattleUnit.h"
+#include "../Savegame/SavedBattleGame.h"
+#include "../Savegame/SavedGame.h"
+#include "../Savegame/Tile.h"
 
 
 namespace OpenXcom
@@ -42,12 +47,12 @@ namespace OpenXcom
 
 /**
  * Sets up an ExplosionBState.
- * @param parent Pointer to the BattleScape.
- * @param center Center position in voxelspace.
- * @param item Item involved in the explosion (eg grenade).
- * @param unit Unit involved in the explosion (eg unit throwing the grenade).
- * @param tile Tile the explosion is on.
- * @param lowerWeapon Whether the unit causing this explosion should now lower their weapon.
+ * @param parent, Pointer to the BattleScape.
+ * @param center, Center position in voxelspace.
+ * @param item, Item involved in the explosion (eg grenade).
+ * @param unit, Unit involved in the explosion (eg unit throwing the grenade).
+ * @param tile, Tile the explosion is on.
+ * @param lowerWeapon, Whether the unit causing this explosion should now lower their weapon.
  */
 ExplosionBState::ExplosionBState(BattlescapeGame* parent, Position center, BattleItem* item, BattleUnit* unit, Tile* tile, bool lowerWeapon)
 	:
@@ -149,9 +154,9 @@ void ExplosionBState::init()
 			_parent->popState();
 		}
 	}
-	else // create a bullet hit
+	else // create a bullet hit, or melee hit, or psi-hit, or acid spit
 	{
-		Log(LOG_INFO) << ". . new Explosion(bullet)";
+		Log(LOG_INFO) << ". . new Explosion(point)";
 
 //kL		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED / 2);
 		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED * 6 / 7);		// kL
@@ -160,14 +165,14 @@ void ExplosionBState::init()
 				|| _item->getRules()->getBattleType() == BT_PSIAMP;
 
 		Explosion* explosion = new Explosion( // animation.
-				_center,
-				_item->getRules()->getHitAnimation(),
-				false,
-				hit);
+									_center,
+									_item->getRules()->getHitAnimation(),
+									false,
+									hit);
 
 		_parent->getMap()->getExplosions()->insert(explosion);
 
-		_parent->getResourcePack()->getSound("BATTLE.CAT", _item->getRules()->getHitSound())->play(); // bullet hit sound
+		_parent->getResourcePack()->getSound("BATTLE.CAT", _item->getRules()->getHitSound())->play(); // hit sound
 
 		if (_parent->getSave()->getSide() == FACTION_HOSTILE)
 			_parent->getMap()->getCamera()->centerOnPosition(t->getPosition(), false);
@@ -222,13 +227,12 @@ void ExplosionBState::explode()
 {
 	Log(LOG_INFO) << "ExplosionBState::explode()";
 
-	bool terrainExplosion = false;
 	SavedBattleGame* save = _parent->getSave();
 
 	// after the animation is done, the real explosion/hit takes place
 	if (_item)
 	{
-		//Log(LOG_INFO) << "damageType = " << static_cast<int>(_item->getRules()->getDamageType());
+		Log(LOG_INFO) << ". _item is VALID";
 
 		if (!_unit
 			&& _item->getPreviousOwner())
@@ -238,15 +242,24 @@ void ExplosionBState::explode()
 
 		if (_areaOfEffect)
 		{
-			//Log(LOG_INFO) << ". AoE, explode()";
+			Log(LOG_INFO) << ". . AoE, TileEngine::explode()";
 
-			save->getTileEngine()->explode(_center, _power, _item->getRules()->getDamageType(), _item->getRules()->getExplosionRadius(), _unit);
+			save->getTileEngine()->explode(
+									_center,
+									_power,
+									_item->getRules()->getDamageType(),
+									_item->getRules()->getExplosionRadius(),
+									_unit);
 		}
 		else
 		{
-			//Log(LOG_INFO) << ". Do hit()";
+			Log(LOG_INFO) << ". . not AoE, TileEngine::hit()";
 
-			BattleUnit* victim = save->getTileEngine()->hit(_center, _power, _item->getRules()->getDamageType(), _unit);
+			BattleUnit* victim = save->getTileEngine()->hit(
+														_center,
+														_power,
+														_item->getRules()->getDamageType(),
+														_unit);
 
 			if (!_unit->getZombieUnit().empty() // check if this unit turns others into zombies
 				&& victim
@@ -262,15 +275,17 @@ void ExplosionBState::explode()
 		}
 	}
 
+
+	bool terrainExplosion = false;
+
 	if (_tile)
 	{
 		save->getTileEngine()->explode(_center, _power, DT_HE, _power / 10);
 		terrainExplosion = true;
 	}
 
-	if (!_tile && !_item)
+	if (!_tile && !_item) // explosion not caused by terrain or an item, must be by a unit (cyberdisc)
 	{
-		// explosion not caused by terrain or an item, must be by a unit (cyberdisc)
 		save->getTileEngine()->explode(_center, _power, DT_HE, 6);
 		terrainExplosion = true;
 	}
@@ -280,7 +295,7 @@ void ExplosionBState::explode()
 
 	// if this explosion was caused by a unit shooting, now it's the time to put the gun down
 	if (_unit
-		&& !_unit->isOut()
+		&& !_unit->isOut(true, true) // <-- params might cause a graphic anomaly...
 		&& _lowerWeapon)
 	{
 		_unit->aim(false);

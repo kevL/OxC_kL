@@ -2306,7 +2306,10 @@ bool BattleUnit::isInExitArea(SpecialTileType stt) const
  */
 int BattleUnit::getHeight() const
 {
-	return isKneeled()?getKneelHeight():getStandHeight();
+	if (isKneeled())
+		return getKneelHeight();
+
+	return getStandHeight();
 }
 
 /**
@@ -2663,8 +2666,9 @@ int BattleUnit::getFloatHeight() const
 }
 
 /**
- * Get the unit's loft ID. This is only one, as it is repeated over the entire height of the unit.
- * @return The unit's line of fire template ID.
+ * Get the unit's loft ID.
+ * This is one slice only, as it is repeated over the entire height of the unit.
+ * @return, The unit's line of fire template ID.
  */
 int BattleUnit::getLoftemps(int entry) const
 {

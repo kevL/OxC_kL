@@ -22,6 +22,7 @@
 
 #include <string>
 #include <vector>
+
 #include <yaml-cpp/yaml.h>
 
 
@@ -58,8 +59,8 @@ enum BattleType
 namespace OpenXcom
 {
 
-class SurfaceSet;
 class Surface;
+class SurfaceSet;
 
 /**
  * Represents a specific type of item.

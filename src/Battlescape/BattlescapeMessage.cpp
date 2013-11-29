@@ -18,9 +18,11 @@
  */
 
 #include "BattlescapeMessage.h"
-#include "../Interface/Window.h"
-#include "../Interface/Text.h"
+
 #include "../Engine/Palette.h"
+
+#include "../Interface/Text.h"
+#include "../Interface/Window.h"
 
 
 namespace OpenXcom
@@ -44,7 +46,7 @@ BattlescapeMessage::BattlescapeMessage(int width, int height, int x, int y)
 	// 'hidden movement' text
 //kL	_text = new Text(width, height, x, y);
 //	_text = new Text(width - 7, height - 10, x, y + 10);	// kL, good for default font
-	_text = new Text(width - 10, height - 16, x, y + 16);	// kL, PS-adapted font
+	_text = new Text(width - 10, height - 17, x, y + 17);	// kL, PS-adapted font
 	_text->setColor(Palette::blockOffset(0)-1);
 	_text->setAlign(ALIGN_CENTER);
 	_text->setVerticalAlign(ALIGN_MIDDLE);

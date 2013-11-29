@@ -19,38 +19,47 @@
 
 #define _USE_MATH_DEFINES
 
-#include <assert.h>
-#include <cmath>
-#include <climits>
-#include <set>
-#include <functional>
 #include "TileEngine.h"
+
+#include <climits>
+#include <cmath>
+#include <functional>
+#include <set>
+
+#include <assert.h>
 #include <SDL.h>
-#include "BattleAIState.h"
+
 #include "AlienBAIState.h"
-#include "UnitTurnBState.h"
-#include "Map.h"
+#include "BattleAIState.h"
+#include "BattlescapeState.h"
 #include "Camera.h"
-#include "../Savegame/SavedBattleGame.h"
 #include "ExplosionBState.h"
-#include "../Savegame/Tile.h"
+#include "Map.h"
+#include "Pathfinding.h"
+#include "ProjectileFlyBState.h"
+#include "UnitTurnBState.h"
+
+#include "../aresame.h"
+
+#include "../Engine/Logger.h"
+#include "../Engine/Options.h"
+#include "../Engine/RNG.h"
+
+#include "../Resource/ResourcePack.h"
+
+#include "../Ruleset/Armor.h"
+#include "../Ruleset/MapData.h"
+#include "../Ruleset/MapDataSet.h"
+#include "../Ruleset/Ruleset.h"
+#include "../Ruleset/RuleSoldier.h"
+#include "../Ruleset/Unit.h"
+
 #include "../Savegame/BattleItem.h"
 #include "../Savegame/BattleUnit.h"
+#include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/Soldier.h"
-#include "../Engine/RNG.h"
-#include "BattlescapeState.h"
-#include "../Ruleset/MapDataSet.h"
-#include "../Ruleset/MapData.h"
-#include "../Ruleset/Unit.h"
-#include "../Ruleset/RuleSoldier.h"
-#include "../Ruleset/Armor.h"
-#include "../Ruleset/Ruleset.h"
-#include "../Resource/ResourcePack.h"
-#include "Pathfinding.h"
-#include "../Engine/Options.h"
-#include "ProjectileFlyBState.h"
-#include "../Engine/Logger.h"
-#include "../aresame.h"
+#include "../Savegame/Tile.h"
+
 
 namespace OpenXcom
 {
@@ -226,12 +235,12 @@ void TileEngine::calculateUnitLighting()
 }
 
 /**
- * Adds circular light pattern starting from center and losing power with distance travelled.
- * @param center, Center.
+ * Adds circular light pattern starting from voxelTarget and losing power with distance travelled.
+ * @param voxelTarget, Center.
  * @param power, Power.
  * @param layer, Light is separated in 3 layers: Ambient, Static and Dynamic.
  */
-void TileEngine::addLight(const Position& center, int power, int layer)
+void TileEngine::addLight(const Position& voxelTarget, int power, int layer)
 {
 	// only loop through the positive quadrant.
 	for (int x = 0; x <= power; ++x)
@@ -243,17 +252,17 @@ void TileEngine::addLight(const Position& center, int power, int layer)
 //kL				int distance = int(floor(sqrt(float(x * x + y * y)) + 0.5));
 				int distance = (int)floor(sqrt((float)(x * x + y * y)));		// kL
 
-				if (_save->getTile(Position(center.x + x, center.y + y, z)))
-					_save->getTile(Position(center.x + x, center.y + y, z))->addLight(power - distance, layer);
+				if (_save->getTile(Position(voxelTarget.x + x, voxelTarget.y + y, z)))
+					_save->getTile(Position(voxelTarget.x + x, voxelTarget.y + y, z))->addLight(power - distance, layer);
 
-				if (_save->getTile(Position(center.x - x, center.y - y, z)))
-					_save->getTile(Position(center.x - x, center.y - y, z))->addLight(power - distance, layer);
+				if (_save->getTile(Position(voxelTarget.x - x, voxelTarget.y - y, z)))
+					_save->getTile(Position(voxelTarget.x - x, voxelTarget.y - y, z))->addLight(power - distance, layer);
 
-				if (_save->getTile(Position(center.x + x, center.y - y, z)))
-					_save->getTile(Position(center.x + x, center.y - y, z))->addLight(power - distance, layer);
+				if (_save->getTile(Position(voxelTarget.x + x, voxelTarget.y - y, z)))
+					_save->getTile(Position(voxelTarget.x + x, voxelTarget.y - y, z))->addLight(power - distance, layer);
 
-				if (_save->getTile(Position(center.x - x, center.y + y, z)))
-					_save->getTile(Position(center.x - x, center.y + y, z))->addLight(power - distance, layer);
+				if (_save->getTile(Position(voxelTarget.x - x, voxelTarget.y + y, z)))
+					_save->getTile(Position(voxelTarget.x - x, voxelTarget.y + y, z))->addLight(power - distance, layer);
 			}
 		}
 	}
@@ -1617,54 +1626,60 @@ bool TileEngine::tryReactionSnap(BattleUnit* unit, BattleUnit* target)
  * Handles bullet/weapon hits.
  *
  * A bullet/weapon hits a voxel.
- * @param center, Center of the hit in voxelspace.
+ * @param pTarget_voxel, Center of the hit in voxelspace.
  * @param power, Power of the hit/explosion.
  * @param type, The damage type of the hit.
- * @param unit, The unit that caused the hit.
+ * @param attacker, The unit that caused the hit.
  * @return, The Unit that got hit.
  */
 BattleUnit* TileEngine::hit(
-		const Position& center,
+		const Position& pTarget_voxel,
 		int power,
 		ItemDamageType type,
-		BattleUnit* unit)
+		BattleUnit* attacker)
 {
-	Log(LOG_INFO) << "TileEngine::hit() by ID " << unit->getId()
-			<< " : power = " << power << " : type = " << static_cast<int>(type);
+	Log(LOG_INFO) << "TileEngine::hit() by ID " << attacker->getId() << " @ " << attacker->getPosition()
+			<< " : power = " << power
+			<< " : type = " << static_cast<int>(type);
 
 	if (type != DT_NONE)	// TEST for Psi-attack.
 	{
 		//Log(LOG_INFO) << "DT_ type = " << static_cast<int>(type);
 
 
-		Tile* tile = _save->getTile(Position(center.x / 16, center.y / 16, center.z / 24));
+		Tile* tile = _save->getTile(Position(
+										pTarget_voxel.x / 16,
+										pTarget_voxel.y / 16,
+										pTarget_voxel.z / 24));
+		Log(LOG_INFO) << ". targetTile " << tile->getPosition() << " targetVoxel " << pTarget_voxel;
+
 		if (!tile)
 		{
-			//Log(LOG_INFO) << ". Position& center : NOT Valid, return NULL";
+			//Log(LOG_INFO) << ". Position& pTarget_voxel : NOT Valid, return NULL";
 			return 0;
 		}
 
-//kL		BattleUnit* targetUnit = tile->getUnit();
-		BattleUnit* targetUnit = 0;			// kL_begin:
+//kL		BattleUnit* buTarget = tile->getUnit();
+		BattleUnit* buTarget = 0;			// kL_begin:
 		if (tile->getUnit())
 		{
-			targetUnit = tile->getUnit();
-			Log(LOG_INFO) << ". targetUnit Valid ID = " << targetUnit->getId();
+			buTarget = tile->getUnit();
+			Log(LOG_INFO) << ". . buTarget Valid ID = " << buTarget->getId();
 		}
 //		else
-//			targetUnit = 0; // kL_end.
+//			buTarget = 0; // kL_end.
 
 //kL		int adjustedDamage = 0;
 
-		// This is returning part < 4 when using a stunRod against a unit outside the north (or west) UFO wall. ERROR!!!
-		int const part = voxelCheck(center, unit);
-		Log(LOG_INFO) << "TileEngine::hit() part = " << part;
+		// This is returning part < 4 when using a stunRod against a unit outside the north (or east) UFO wall. ERROR!!!
+		// later: Now it's returning VOXEL_EMPTY (-1) when a silicoid attacks a poor civvie!!!!! And on acid-spits!!!
+		int const part = voxelCheck(pTarget_voxel, attacker);
+		Log(LOG_INFO) << ". voxelCheck() ret part = " << part;
 
-		if (VOXEL_EMPTY < part && part < VOXEL_UNIT // 4 terrain parts
-			&& type != DT_STUN) // kL, workaround for Stunrod.
+		if (VOXEL_EMPTY < part && part < VOXEL_UNIT	// 4 terrain parts ( #0 - #3 )
+			&& type != DT_STUN)						// kL, workaround for Stunrod.
 		{
-			Log(LOG_INFO) << ". terrain hit";//, part = " << part;
-
+			Log(LOG_INFO) << ". . terrain hit";
 			// power 25% to 75%
 //kL			const int randPower = RNG::generate(power / 4, power * 3 / 4); // RNG::boxMuller(power, power/6)
 			power = RNG::generate(power / 4, power * 3 / 4);
@@ -1676,113 +1691,113 @@ BattleUnit* TileEngine::hit(
 			// kL_note: This would be where to adjust damage based on effectiveness of weapon vs Terrain!
 		}
 		else if (part == VOXEL_UNIT)	// battleunit part
-//			|| type == DT_STUN) // kL, workaround for Stunrod.
+//			|| type == DT_STUN)			// kL, workaround for Stunrod. (not needed, huh?)
 		{
-			Log(LOG_INFO) << ". battleunit hit";
+			Log(LOG_INFO) << ". . battleunit hit";
 
 			// power 0 - 200% -> 1 - 200%
 //kL			const int randPower = RNG::generate(1, power * 2); // RNG::boxMuller(power, power/3)
 			int verticaloffset = 0;
 
-			if (!targetUnit)
+			if (!buTarget)
 			{
-				Log(LOG_INFO) << ". targetUnit NOT Valid, check tileBelow";
+				Log(LOG_INFO) << ". . . buTarget NOT Valid, check tileBelow";
 
 				// it's possible we have a unit below the actual tile, when he stands on a stairs and sticks his head up into the above tile.
 				// kL_note: yeah, just like in LoS calculations!!!! cf. visible() etc etc .. idiots.
-				Tile* below = _save->getTile(Position(center.x / 16, center.y / 16, (center.z / 24) - 1));
-				if (below
-					&& below->getUnit())
+				Tile* tileBelow = _save->getTile(Position(pTarget_voxel.x / 16, pTarget_voxel.y / 16, (pTarget_voxel.z / 24) - 1));
+				if (tileBelow
+					&& tileBelow->getUnit())
 				{
-					targetUnit = below->getUnit();
+					buTarget = tileBelow->getUnit();
 					verticaloffset = 24;
 				}
 			}
 
-			if (targetUnit)
+			if (buTarget)
 			{
-				Log(LOG_INFO) << ". . targetUnit Valid ID = " << targetUnit->getId();
+				Log(LOG_INFO) << ". . . buTarget Valid ID = " << buTarget->getId();
 
-/*kL				const int size = targetUnit->getArmor()->getSize() * 8;
-				const Position targetPos = (targetUnit->getPosition() * Position(16, 16, 24)) // convert tilespace to voxelspace
+/*kL				const int size = buTarget->getArmor()->getSize() * 8;
+				const Position targetPos = (buTarget->getPosition() * Position(16, 16, 24)) // convert tilespace to voxelspace
 						+ Position(
 								size,
 								size,
-								targetUnit->getFloatHeight() - tile->getTerrainLevel());
-				const Position relPos = center - targetPos - Position(0, 0, verticaloffset); */
-				int const size = targetUnit->getArmor()->getSize() * 8;
-				Position const targetPos = (targetUnit->getPosition() * Position(16, 16, 24)) // convert tilespace to voxelspace
+								buTarget->getFloatHeight() - tile->getTerrainLevel());
+				const Position relPos = pTarget_voxel - targetPos - Position(0, 0, verticaloffset); */
+				int const size = buTarget->getArmor()->getSize() * 8;
+				Position const targetPos = (buTarget->getPosition() * Position(16, 16, 24)) // convert tilespace to voxelspace
 						+ Position(
 								size,
 								size,
-								targetUnit->getFloatHeight() - tile->getTerrainLevel());
-				Position const relPos = center - targetPos - Position(0, 0, verticaloffset);
+								buTarget->getFloatHeight() - tile->getTerrainLevel());
+				Position const relPos = pTarget_voxel - targetPos - Position(0, 0, verticaloffset);
 
 //kL				const int randPower	= RNG::generate(1, power * 2);	// kL_above
 				power = RNG::generate(1, power * 2);
-				Log(LOG_INFO) << ". . RNG::generate(power) = " << power;
-				bool ignoreArmor = (type == DT_STUN);			// kL. stun ignores armor... does now!
-				int adjustedDamage = targetUnit->damage(relPos, power, type, ignoreArmor);
-				Log(LOG_INFO) << ". . adjustedDamage = " << adjustedDamage;
+				Log(LOG_INFO) << ". . . RNG::generate(power) = " << power;
+				bool ignoreArmor = (type == DT_STUN);			// kL. stun ignores armor... does now! UHM....
+				int adjustedDamage = buTarget->damage(relPos, power, type, ignoreArmor);
+				Log(LOG_INFO) << ". . . adjustedDamage = " << adjustedDamage;
 
 				if (adjustedDamage > 0
-					&& !targetUnit->isOut(true)) // -> do morale hit only if health still > 0.
+					&& !buTarget->isOut(true)) // -> do morale hit only if health still > 0.
 				{
-					const int bravery = (110 - targetUnit->getStats()->bravery) / 10;
+					const int bravery = (110 - buTarget->getStats()->bravery) / 10;
 					if (bravery > 0)
 					{
 						int modifier = 100;
-						if (targetUnit->getOriginalFaction() == FACTION_PLAYER)
+						if (buTarget->getOriginalFaction() == FACTION_PLAYER)
 						{
 							modifier = _save->getMoraleModifier();
 						}
-						else if (targetUnit->getOriginalFaction() == FACTION_HOSTILE)
+						else if (buTarget->getOriginalFaction() == FACTION_HOSTILE)
 						{
 							modifier = _save->getMoraleModifier(0, false);
 						}
 
 						const int morale_loss = 10 * adjustedDamage * bravery / modifier;
-						Log(LOG_INFO) << ". . . morale_loss = " << morale_loss;
+						Log(LOG_INFO) << ". . . . morale_loss = " << morale_loss;
 
-						targetUnit->moraleChange(-morale_loss);
+						buTarget->moraleChange(-morale_loss);
 					}
 				}
 
-				if (targetUnit->getSpecialAbility() == SPECAB_EXPLODEONDEATH
-					&& !targetUnit->isOut() // <- don't explode if stunned. Maybe... kL
-					&& targetUnit->getHealth() == 0)	// kL
-//kL					(targetUnit->getHealth() == 0 || targetUnit->getStunlevel() >= targetUnit->getHealth()))
+				if (buTarget->getSpecialAbility() == SPECAB_EXPLODEONDEATH
+					&& !buTarget->isOut() // <- don't explode if stunned. Maybe... kL
+					&& buTarget->getHealth() == 0)	// kL
+//kL					(buTarget->getHealth() == 0 || buTarget->getStunlevel() >= buTarget->getHealth()))
 				{
 					if (type != DT_STUN
 						&& type != DT_HE)
 					{
 						Log(LOG_INFO) << ". . . . new ExplosionBState(), !DT_STUN & !DT_HE";
-						// kL_note: wait a second. hit() creates an ExplosionBState, but ExplosionBState::explode() creates a hit() !
+						// kL_note: wait a second. hit() creates an ExplosionBState, but ExplosionBState::explode() creates a hit() ! -> terrain..
 
 						Position unitPos = Position(
-								targetUnit->getPosition().x * 16,
-								targetUnit->getPosition().y * 16,
-								targetUnit->getPosition().z * 24);
+								buTarget->getPosition().x * 16,
+								buTarget->getPosition().y * 16,
+								buTarget->getPosition().z * 24);
 
 						_save->getBattleGame()->statePushNext(
 								new ExplosionBState(
 										_save->getBattleGame(),
 										unitPos,
 										0,
-										targetUnit,
+										buTarget,
 										0));
 					}
 				}
 
-				if (targetUnit->getOriginalFaction() == FACTION_HOSTILE
-					&& unit->getOriginalFaction() == FACTION_PLAYER
+				if (buTarget->getOriginalFaction() == FACTION_HOSTILE
+					&& attacker->getOriginalFaction() == FACTION_PLAYER
 					&& type != DT_NONE)
 				{
-					Log(LOG_INFO) << ". . . addFiringExp() - huh, even for Melee?";
+					Log(LOG_INFO) << ". . addFiringExp() - huh, even for Melee?";
 					// kL_note: with my workaround for Stunrods above, this needs to check
 					// whether a StunLauncher fires or a melee attack has been done, and
 					// Exp altered accordingly:
-					unit->addFiringExp();
+					attacker->addFiringExp();
 				}
 			}
 		}
@@ -1794,13 +1809,13 @@ BattleUnit* TileEngine::hit(
 		//Log(LOG_INFO) << ". calculateTerrainLighting()";
 		calculateTerrainLighting();						// fires could have been started
 		//Log(LOG_INFO) << ". calculateFOV()";
-		calculateFOV(center / Position(16, 16, 24));	// walls & objects could have been ruined
+		calculateFOV(pTarget_voxel / Position(16, 16, 24));	// walls & objects could have been ruined
 
 
-		if (targetUnit) Log(LOG_INFO) << "TileEngine::hit() EXIT, return targetUnit";
+		if (buTarget) Log(LOG_INFO) << "TileEngine::hit() EXIT, return buTarget";
 		else Log(LOG_INFO) << "TileEngine::hit() EXIT, return 0";
 
-		return targetUnit;
+		return buTarget;
 	}
 	//else Log(LOG_INFO) << ". DT_ = " << static_cast<int>(type);
 
@@ -1816,19 +1831,19 @@ BattleUnit* TileEngine::hit(
  * HE destroys an object if its armor is lower than the explosive power,
  * then its HE blockage is applied for further propagation.
  * See http://www.ufopaedia.org/index.php?title=Explosions for more info.
- * @param center, Center of the explosion in voxelspace.
+ * @param voxelTarget, Center of the explosion in voxelspace.
  * @param power, Power of the explosion.
  * @param type, The damage type of the explosion.
  * @param maxRadius, The maximum radius othe explosion.
  * @param unit, The unit that caused the explosion.
  */
-void TileEngine::explode(const Position& center, int power, ItemDamageType type, int maxRadius, BattleUnit* unit)
+void TileEngine::explode(const Position& voxelTarget, int power, ItemDamageType type, int maxRadius, BattleUnit* unit)
 {
 	Log(LOG_INFO) << "TileEngine::explode() power = " << power << " ; type = " << (int)type << " ; maxRadius = " << maxRadius;
 
-	double centerZ = static_cast<double>((center.z / 24) + 0.5);		// kL
-	double centerX = static_cast<double>((center.x / 16) + 0.5);		// kL
-	double centerY = static_cast<double>((center.y / 16) + 0.5);		// kL
+	double centerZ = static_cast<double>((voxelTarget.z / 24) + 0.5);		// kL
+	double centerX = static_cast<double>((voxelTarget.x / 16) + 0.5);		// kL
+	double centerY = static_cast<double>((voxelTarget.y / 16) + 0.5);		// kL
 
 	int power_;
 
@@ -2090,7 +2105,7 @@ void TileEngine::explode(const Position& center, int power, ItemDamageType type,
 	calculateSunShading();		// roofs could have been destroyed
 	calculateTerrainLighting();	// fires could have been started
 
-	calculateFOV(center / Position(16, 16, 24));
+	calculateFOV(voxelTarget / Position(16, 16, 24));
 	Log(LOG_INFO) << "TileEngine::explode() EXIT";
 }
 
@@ -3329,8 +3344,8 @@ bool TileEngine::isVoxelVisible(const Position& voxel)
 }
 
 /**
- * Checks if we hit a voxel.
- * @param voxel, The voxel to check.
+ * Checks if we hit a pTarget_voxel.
+ * @param pTarget_voxel, The voxel to check.
  * @param excludeUnit, Don't do checks on this unit.
  * @param excludeAllUnits, Don't do checks on any unit.
  * @param onlyVisible, Whether to consider only visible units.
@@ -3338,63 +3353,71 @@ bool TileEngine::isVoxelVisible(const Position& voxel)
  * @return, The objectnumber(0-3) or unit(4) or out of map (5) or -1 (hit nothing).
  */
 int TileEngine::voxelCheck(
-		const Position& voxel,
+		const Position& pTarget_voxel,
 		BattleUnit* excludeUnit,
 		bool excludeAllUnits,
 		bool onlyVisible,
 		BattleUnit* excludeAllBut)
 {
-	//Log(LOG_INFO) << "TileEngine::voxelCheck()";
+	//Log(LOG_INFO) << "TileEngine::voxelCheck()"; // massive lag-to-file, Do not use.
 
-//	Tile* tile = _save->getTile(Position(voxel.x / 16, voxel.y / 16, voxel.z / 24));
-	Tile* tile = _save->getTile(voxel / Position(16, 16, 24));
+//	Tile* tileTest_old = _save->getTile(Position(pTarget_voxel.x / 16, pTarget_voxel.y / 16, pTarget_voxel.z / 24));
+	//Log(LOG_INFO) << ". tileTest_old = " << tileTest_old->getPosition();
 
-	// check if we are not out of the map
-	if (tile == 0 || voxel.x < 0 || voxel.y < 0 || voxel.z < 0)
+	Tile* tTarget = _save->getTile(pTarget_voxel / Position(16, 16, 24)); // converts to tilespace -> Tile
+	//Log(LOG_INFO) << ". tTarget kL = " << tTarget->getPosition();
+
+	// check if we are out of the map
+	if (tTarget == 0
+		|| pTarget_voxel.x < 0
+		|| pTarget_voxel.y < 0
+		|| pTarget_voxel.z < 0)
 	{
-		//Log(LOG_INFO) << "TileEngine::voxelCheck() EXIT, return 5";
+		//Log(LOG_INFO) << "TileEngine::voxelCheck() EXIT, ret 5";
 		return VOXEL_OUTOFBOUNDS;
 	}
-	if (tile->isVoid() && tile->getUnit() == 0)
+
+	if (tTarget->isVoid()
+		&& tTarget->getUnit() == 0) // <- check tileBelow ? It's done below, but this seems premature!!!
 	{
-		//Log(LOG_INFO) << "TileEngine::voxelCheck() EXIT, return(1) -1";
+		//Log(LOG_INFO) << "TileEngine::voxelCheck() EXIT, ret(1) -1";
 		return VOXEL_EMPTY;
 	}
 
-	if (voxel.z %24 == 0
-		&& tile->getMapData(MapData::O_FLOOR)
-		&& tile->getMapData(MapData::O_FLOOR)->isGravLift())
+	if (pTarget_voxel.z %24 == 0
+		&& tTarget->getMapData(MapData::O_FLOOR)
+		&& tTarget->getMapData(MapData::O_FLOOR)->isGravLift())
 	{
-		Tile* tileBelow = _save->getTile(tile->getPosition() + Position(0, 0, -1));
-		if (tileBelow
-			&& tileBelow->getMapData(MapData::O_FLOOR)
-			&& !tileBelow->getMapData(MapData::O_FLOOR)->isGravLift())
+		Tile* tTarget_below = _save->getTile(tTarget->getPosition() + Position(0, 0, -1)); // tileBelow target
+		if (tTarget_below
+			&& tTarget_below->getMapData(MapData::O_FLOOR)
+			&& !tTarget_below->getMapData(MapData::O_FLOOR)->isGravLift())
 		{
-			//Log(LOG_INFO) << "TileEngine::voxelCheck() EXIT, return 0";
+			//Log(LOG_INFO) << "TileEngine::voxelCheck() EXIT, ret 0";
 			return VOXEL_FLOOR;
 		}
 	}
 
-	// first we check terrain voxel data, not to allow 2x2 units stick through walls
-	for (int
+	// first we check TERRAIN tile/voxel data,
+	// not to allow 2x2 units stick through walls <- English pls??
+	for (int // terrain parts (floor, 2x walls, & content-object)
 			i = 0;
 			i < 4;
 			++i)
 	{
-		MapData* data = tile->getMapData(i);
-
-		if (tile->isUfoDoorOpen(i))
+		if (tTarget->isUfoDoorOpen(i))
 			continue;
 
-		if (data != 0)
+		MapData* dataTarget = tTarget->getMapData(i);
+		if (dataTarget != 0)
 		{
-			int x = 15 - voxel.x %16;
-			int y = voxel.y %16;
+			int x = 15 - pTarget_voxel.x %16;	// x-direction is reversed
+			int y = pTarget_voxel.y %16;		// y-direction is standard
 
-			int LoftIdx = (data->getLoftID((voxel.z %24) / 2) * 16) + y;
+			int LoftIdx = ((dataTarget->getLoftID((pTarget_voxel.z %24) / 2) * 16) + y); // wtf
 			if (_voxelData->at(LoftIdx) & (1 << x))
 			{
-				//Log(LOG_INFO) << "TileEngine::voxelCheck() EXIT, return i = " << i;
+				//Log(LOG_INFO) << "TileEngine::voxelCheck() EXIT, ret i = " << i;
 				return i;
 			}
 		}
@@ -3402,49 +3425,55 @@ int TileEngine::voxelCheck(
 
 	if (!excludeAllUnits)
 	{
-		BattleUnit* unit = tile->getUnit();
-		// sometimes there is unit on the tile below, but sticks up to this tile with his head,
-		// in this case we couldn't have unit standing at current tile.
-		if (unit == 0
-			&& tile->hasNoFloor(0))
+		BattleUnit* buTarget = tTarget->getUnit();
+		// sometimes there is unit on the tile below, but sticks up into this tile with its head.
+		if (buTarget == 0
+			&& tTarget->hasNoFloor(0))
 		{
-			tile = _save->getTile(Position(voxel.x / 16, voxel.y / 16, (voxel.z / 24) - 1)); // below
-			if (tile)
-				unit = tile->getUnit();
+			tTarget = _save->getTile(Position( // tileBelow
+										pTarget_voxel.x / 16,
+										pTarget_voxel.y / 16,
+										pTarget_voxel.z / 24 - 1));
+			if (tTarget)
+				buTarget = tTarget->getUnit();
 		}
 
-		if (unit != 0
-			&& unit != excludeUnit
-			&& (!excludeAllBut || unit == excludeAllBut)
-			&& (!onlyVisible || unit->getVisible()))
+		if (buTarget != 0
+			&& buTarget != excludeUnit
+			&& (!excludeAllBut || buTarget == excludeAllBut)
+			&& (!onlyVisible || buTarget->getVisible()))
 		{
-			Position tilepos;
-			Position unitpos = unit->getPosition();
-			int tz = (unitpos.z * 24) + unit->getFloatHeight() - tile->getTerrainLevel(); // bottom
-			if (voxel.z > tz
-				&& voxel.z <= tz + unit->getHeight())
-			{
-				int x = voxel.x %16;
-				int y = voxel.y %16;
-				int part = 0;
+			Position pTarget_bu = buTarget->getPosition();
+			int tz = (pTarget_bu.z * 24) + buTarget->getFloatHeight() - tTarget->getTerrainLevel(); // floor-level voxel
 
-				if (unit->getArmor()->getSize() > 1)
+			if (pTarget_voxel.z > tz
+				&& pTarget_voxel.z <= tz + buTarget->getHeight()) // if hit is between foot- and hair-level voxel layers (z-axis)
+			{
+				int entry = 0;
+
+				int x = pTarget_voxel.x %16; // where on the x-axis
+				int y = pTarget_voxel.y %16; // where on the y-axis
+					// That should be (8,8,10) as per BattlescapeGame::handleNonTargetAction(), if (_currentAction.type == BA_HIT)
+
+				if (buTarget->getArmor()->getSize() > 1) // for large units...
 				{
-					tilepos = tile->getPosition();
-					part = tilepos.x - unitpos.x + (tilepos.y - unitpos.y) * 2;
+					Position pTarget_tile = tTarget->getPosition();
+					entry = ((pTarget_tile.x - pTarget_bu.x) + ((pTarget_tile.y - pTarget_bu.y) * 2));
 				}
 
-				int LoftIdx = (unit->getLoftemps(part) * 16) + y;
+				int LoftIdx = ((buTarget->getLoftemps(entry) * 16) + y);
+				//Log(LOG_INFO) << "LoftIdx = " << LoftIdx;
 				if (_voxelData->at(LoftIdx) & (1 << x))
+					// if the voxelData at LoftIdx is "1" solid:
 				{
-					//Log(LOG_INFO) << "TileEngine::voxelCheck() EXIT, return 4";
+					//Log(LOG_INFO) << "TileEngine::voxelCheck() EXIT, ret 4";
 					return VOXEL_UNIT;
 				}
 			}
 		}
 	}
 
-	//Log(LOG_INFO) << "TileEngine::voxelCheck() EXIT, return(2) -1";
+	//Log(LOG_INFO) << "TileEngine::voxelCheck() EXIT, ret(2) -1"; // massive lag-to-file, Do not use.
 	return VOXEL_EMPTY;
 }
 
@@ -3651,8 +3680,8 @@ Tile* TileEngine::applyGravity(Tile* t)
 		&& (occupant->getArmor()->getMovementType() != MT_FLY
 			|| occupant->isOut()))
 	{
-		Position unitpos = occupant->getPosition();
-		while (unitpos.z >= 0)
+		Position unitPos = occupant->getPosition();
+		while (unitPos.z >= 0)
 		{
 			bool canFall = true;
 
@@ -3668,8 +3697,8 @@ Tile* TileEngine::applyGravity(Tile* t)
 							&& canFall;
 						++x)
 				{
-					rt = _save->getTile(Position(unitpos.x + x, unitpos.y + y, unitpos.z));
-					rtb = _save->getTile(Position(unitpos.x + x, unitpos.y + y, unitpos.z - 1)); // below
+					rt = _save->getTile(Position(unitPos.x + x, unitPos.y + y, unitPos.z));
+					rtb = _save->getTile(Position(unitPos.x + x, unitPos.y + y, unitPos.z - 1)); // below
 					if (!rt->hasNoFloor(rtb))
 					{
 						canFall = false;
@@ -3680,10 +3709,10 @@ Tile* TileEngine::applyGravity(Tile* t)
 			if (!canFall) break;
 
 
-			unitpos.z--;
+			unitPos.z--;
 		}
 
-		if (unitpos != occupant->getPosition())
+		if (unitPos != occupant->getPosition())
 		{
 			if (occupant->getHealth() != 0
 				&& occupant->getStunlevel() < occupant->getHealth())
@@ -3715,7 +3744,7 @@ Tile* TileEngine::applyGravity(Tile* t)
 					}
 				}
 
-				occupant->setPosition(unitpos);
+				occupant->setPosition(unitPos);
 			}
 		}
 	}
@@ -3766,9 +3795,16 @@ Tile* TileEngine::applyGravity(Tile* t)
  * @param dir Direction to check.
  * @return True when the range is valid.
  */
-bool TileEngine::validMeleeRange(BattleUnit* attacker, BattleUnit* target, int dir)
+bool TileEngine::validMeleeRange(
+		BattleUnit* attacker,
+		BattleUnit* target,
+		int dir)
 {
-	return validMeleeRange(attacker->getPosition(), dir, attacker, target);
+	return validMeleeRange(
+			attacker->getPosition(),
+			dir,
+			attacker,
+			target);
 }
 
 /**
@@ -3803,39 +3839,39 @@ bool TileEngine::validMeleeRange(
 				y <= size;
 				++y)
 		{
-//kL			Tile* origin (_save->getTile(Position(pos + Position(x, y, 0))));
-//kL			Tile* targetTile (_save->getTile(Position(pos + Position(x, y, 0) + p)));
-//kL			Tile* aboveTargetTile (_save->getTile(Position(pos + Position(x, y, 1) + p)));
-			Tile* origin = _save->getTile(Position(pos + Position(x, y, 0)));				// kL
-			Tile* targetTile = _save->getTile(Position(pos + Position(x, y, 0) + p));		// kL
-			Tile* aboveTargetTile = _save->getTile(Position(pos + Position(x, y, 1) + p));	// kL
+//kL			Tile* tileOrigin (_save->getTile(Position(pos + Position(x, y, 0))));
+//kL			Tile* tileTarget (_save->getTile(Position(pos + Position(x, y, 0) + p)));
+//kL			Tile* tileTargetAbove (_save->getTile(Position(pos + Position(x, y, 1) + p)));
+			Tile* tileOrigin		= _save->getTile(Position(pos + Position(x, y, 0)));		// kL
+			Tile* tileTarget		= _save->getTile(Position(pos + Position(x, y, 0) + p));	// kL
+			Tile* tileTargetAbove	= _save->getTile(Position(pos + Position(x, y, 1) + p));	// kL
 
-			if (targetTile && origin)
+			if (tileOrigin && tileTarget)
 			{
-				if (origin->getTerrainLevel() <= -16
-					&& aboveTargetTile
-					&& !aboveTargetTile->hasNoFloor(targetTile))
+				if (tileOrigin->getTerrainLevel() <= -16
+					&& tileTargetAbove
+					&& !tileTargetAbove->hasNoFloor(tileTarget))
 				{
-					targetTile = aboveTargetTile;
+					tileTarget = tileTargetAbove;
 				}
 
-				if (targetTile->getUnit())
+				if (tileTarget->getUnit())
 				{
-					//Log(LOG_INFO) << ". . . targetted tileUnit is valid ID = " << targetTile->getUnit()->getId();
+					//Log(LOG_INFO) << ". . targetted tileUnit is valid ID = " << tileTarget->getUnit()->getId();
 
 					if (target == 0
-						|| targetTile->getUnit() == target)
+						|| target == tileTarget->getUnit())
 					{
-						//Log(LOG_INFO) << ". . . targetUnit and tileUnit are same";
+						//Log(LOG_INFO) << ". . . target and tileUnit are same";
 
-						Position originVoxel = Position(origin->getPosition() * Position(16, 16, 24))
+						Position voxelOrigin = Position(tileOrigin->getPosition() * Position(16, 16, 24))
 								+ Position(
 										8,
 										8,
-										attacker->getHeight() + attacker->getFloatHeight() - 4 - origin->getTerrainLevel());
+										attacker->getHeight() + attacker->getFloatHeight() - 4 - tileOrigin->getTerrainLevel());
 
-						Position targetVoxel;
-						if (canTargetUnit(&originVoxel, targetTile, &targetVoxel, attacker))
+						Position voxelTarget;
+						if (canTargetUnit(&voxelOrigin, tileTarget, &voxelTarget, attacker))
 						{
 							//Log(LOG_INFO) << "TileEngine::validMeleeRange() EXIT true";
 							return true;

@@ -25,16 +25,21 @@
 #include "GeoscapeCraftState.h"		// kL
 #include "Globe.h"
 #include "SelectDestinationState.h"
+
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
 #include "../Engine/Options.h"
 #include "../Engine/Palette.h"
+
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/TextList.h"
 #include "../Interface/Window.h"
+
 #include "../Resource/ResourcePack.h"
+
 #include "../Ruleset/RuleCraft.h"
+
 #include "../Savegame/Base.h"
 #include "../Savegame/Craft.h"
 #include "../Savegame/SavedGame.h"
@@ -74,7 +79,10 @@ InterceptState::InterceptState(Game* game, Globe* globe, Base* base, Target* tar
 	_btnCancel	= new TextButton(288, 16, 16, 151);
 
 
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)), Palette::backPos, 16);
+	_game->setPalette(
+			_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)),
+			Palette::backPos,
+			16);
 
 	add(_window);
 	add(_btnCancel);

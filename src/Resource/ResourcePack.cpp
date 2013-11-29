@@ -16,18 +16,23 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "ResourcePack.h"
-#include "../Engine/Palette.h"
+
 #include "../Engine/Font.h"
+#include "../Engine/Music.h"
+#include "../Engine/Palette.h"
 #include "../Engine/Surface.h"
 #include "../Engine/SurfaceSet.h"
-#include "../Engine/Music.h"
+
 #include "../Geoscape/Polygon.h"
 #include "../Geoscape/Polyline.h"
-#include "../Engine/SoundSet.h"
-#include "../Engine/Sound.h"
-#include "../Engine/RNG.h"
+
 #include "../Engine/Options.h"
+#include "../Engine/RNG.h"
+#include "../Engine/Sound.h"
+#include "../Engine/SoundSet.h"
+
 
 namespace OpenXcom
 {
@@ -104,7 +109,7 @@ ResourcePack::~ResourcePack()
  * @param name Name of the font.
  * @return Pointer to the font.
  */
-Font *ResourcePack::getFont(const std::string &name) const
+Font* ResourcePack::getFont(const std::string& name) const
 {
 	std::map<std::string, Font*>::const_iterator i = _fonts.find(name);
 	if (_fonts.end() != i)
@@ -118,7 +123,7 @@ Font *ResourcePack::getFont(const std::string &name) const
  * @param name Name of the surface.
  * @return Pointer to the surface.
  */
-Surface *ResourcePack::getSurface(const std::string &name) const
+Surface* ResourcePack::getSurface(const std::string& name) const
 {
 	std::map<std::string, Surface*>::const_iterator i = _surfaces.find(name);
 	if (_surfaces.end() != i)
@@ -132,7 +137,7 @@ Surface *ResourcePack::getSurface(const std::string &name) const
  * @param name Name of the surface set.
  * @return Pointer to the surface set.
  */
-SurfaceSet *ResourcePack::getSurfaceSet(const std::string &name) const
+SurfaceSet* ResourcePack::getSurfaceSet(const std::string& name) const
 {
 	std::map<std::string, SurfaceSet*>::const_iterator i = _sets.find(name);
 	if (_sets.end() != i)
@@ -145,7 +150,7 @@ SurfaceSet *ResourcePack::getSurfaceSet(const std::string &name) const
  * Returns the list of polygons in the resource set.
  * @return Pointer to the list of polygons.
  */
-std::list<Polygon*> *ResourcePack::getPolygons()
+std::list<Polygon*>* ResourcePack::getPolygons()
 {
 	return &_polygons;
 }
@@ -154,7 +159,7 @@ std::list<Polygon*> *ResourcePack::getPolygons()
  * Returns the list of polylines in the resource set.
  * @return Pointer to the list of polylines.
  */
-std::list<Polyline*> *ResourcePack::getPolylines()
+std::list<Polyline*>* ResourcePack::getPolylines()
 {
 	return &_polylines;
 }
@@ -218,7 +223,7 @@ Music* ResourcePack::getRandomMusic(const std::string& name) const
  * @param sound ID of the sound.
  * @return Pointer to the sound.
  */
-Sound *ResourcePack::getSound(const std::string &set, unsigned int sound) const
+Sound* ResourcePack::getSound(const std::string& set, unsigned int sound) const
 {
 	if (Options::getBool("mute"))
 	{
@@ -239,7 +244,7 @@ Sound *ResourcePack::getSound(const std::string &set, unsigned int sound) const
  * @param name Name of the palette.
  * @return Pointer to the palette.
  */
-Palette *ResourcePack::getPalette(const std::string &name) const
+Palette* ResourcePack::getPalette(const std::string &name) const
 {
 	std::map<std::string, Palette*>::const_iterator i = _palettes.find(name);
 	if (_palettes.end() != i)
@@ -254,7 +259,7 @@ Palette *ResourcePack::getPalette(const std::string &name) const
  * @param firstcolor Offset of the first color to replace.
  * @param ncolors Amount of colors to replace.
  */
-void ResourcePack::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
+void ResourcePack::setPalette(SDL_Color* colors, int firstcolor, int ncolors)
 {
 	for (std::map<std::string, Font*>::iterator i = _fonts.begin(); i != _fonts.end(); ++i)
 	{
@@ -263,7 +268,7 @@ void ResourcePack::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 
 	for (std::map<std::string, Surface*>::iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
 	{
-		if(i->first.substr(i->first.length()-3, i->first.length()) != "LBM")
+		if (i->first.substr(i->first.length() - 3, i->first.length()) != "LBM")
 			i->second->setPalette(colors, firstcolor, ncolors);
 	}
 
@@ -275,9 +280,9 @@ void ResourcePack::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 
 /**
  * Returns the list of voxeldata in the resource set.
- * @return Pointer to the list of voxeldata.
+ * @return, Pointer to the list of voxeldata.
  */
-std::vector<Uint16> *ResourcePack::getVoxelData()
+std::vector<Uint16>* ResourcePack::getVoxelData()
 {
 	return &_voxelData;
 }

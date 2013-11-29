@@ -169,7 +169,7 @@ void ProjectileFlyBState::init()
 		} // kL_end.
 
 		// no ammo or target is dead: give the time units back and cancel the shot.
-/*		if (_ammo == 0
+/*kL: above.		if (_ammo == 0
 			|| !_parent->getSave()->getTile(_action.target)->getUnit()
 			|| _parent->getSave()->getTile(_action.target)->getUnit()->isOut(true, true)
 			|| _parent->getSave()->getTile(_action.target)->getUnit() != _parent->getSave()->getSelectedUnit())
@@ -269,7 +269,7 @@ void ProjectileFlyBState::init()
 					_action.actor,
 					0))
 			{
-				Log(LOG_INFO) << ". . . out of hit range range, EXIT";
+				Log(LOG_INFO) << ". . . out of hit range, EXIT";
 
 				_action.result = "STR_THERE_IS_NO_ONE_THERE";
 				_parent->popState();
@@ -313,14 +313,15 @@ void ProjectileFlyBState::init()
  */
 bool ProjectileFlyBState::createNewProjectile()
 {
-	Log(LOG_INFO) << "ProjectileFlyBState::createNewProjectile()";
+	Log(LOG_INFO) << "ProjectileFlyBState::createNewProjectile() -> create Projectile";
+
 	++_action.autoShotCounter;
 
 	Projectile* projectile = new Projectile(
-			_parent->getResourcePack(),
-			_parent->getSave(),
-			_action,
-			_origin);
+									_parent->getResourcePack(),
+									_parent->getSave(),
+									_action,
+									_origin);
 
 	// add the projectile on the map
 	_parent->getMap()->setProjectile(projectile);
@@ -337,6 +338,7 @@ bool ProjectileFlyBState::createNewProjectile()
 	if (_action.type == BA_THROW)
 	{
 		_projectileImpact = projectile->calculateThrow(_unit->getThrowingAccuracy());
+		Log(LOG_INFO) << ". BA_THROW, part = " << _projectileImpact;
 
 		if (_projectileImpact == VOXEL_FLOOR
 			|| _projectileImpact == VOXEL_UNIT
@@ -358,6 +360,8 @@ bool ProjectileFlyBState::createNewProjectile()
 		}
 		else // unable to throw here
 		{
+			Log(LOG_INFO) << ". . no throw, Voxel_Empty or _Wall or _OutofBounds";
+
 			delete projectile;
 
 			_parent->getMap()->setProjectile(0);
@@ -371,6 +375,7 @@ bool ProjectileFlyBState::createNewProjectile()
 	else if (_action.weapon->getRules()->getArcingShot()) // special code for the "spit" trajectory
 	{
 		_projectileImpact = projectile->calculateThrow(_unit->getFiringAccuracy(_action.type, _action.weapon));
+		Log(LOG_INFO) << ". acid spit, part = " << _projectileImpact;
 
 		if (_projectileImpact != VOXEL_EMPTY)
 		{
@@ -391,6 +396,8 @@ bool ProjectileFlyBState::createNewProjectile()
 		}
 		else // no line of fire
 		{
+			Log(LOG_INFO) << ". . no spit, no LoF, Voxel_Empty";
+
 			delete projectile;
 
 			_parent->getMap()->setProjectile(0);
@@ -400,16 +407,40 @@ bool ProjectileFlyBState::createNewProjectile()
 			return false;
 		}
 	}
-	else // shoot weapon
+	else if (_action.type == BA_HIT) // kL. Let's not calculate anything we don't have to for meleeHits!
 	{
-		Log(LOG_INFO) << ". . shoot weapon, call calculateTrajectory()";
-
+		// validMeleeRange/target has been validated.
+//		_projectileImpact = 4;
 		_projectileImpact = projectile->calculateTrajectory(_unit->getFiringAccuracy(_action.type, _action.weapon));
+		Log(LOG_INFO) << ". melee attack! part = " << _projectileImpact;
+
+		_unit->aim(true); // set the soldier in an aiming position
+		_parent->getMap()->cacheUnit(_unit);
+
+		// and we have a hit!
+		if (_action.weapon->getRules()->getFireSound() != -1)
+			_parent->getResourcePack()->getSound("BATTLE.CAT", _action.weapon->getRules()->getFireSound())->play();
+
+/*		if (!_parent->getSave()->getDebugMode()
+			&& _action.type != BA_LAUNCH
+			&& _ammo->spendBullet() == false)
+		{
+			_parent->getSave()->removeItem(_ammo);
+			_action.weapon->setAmmoItem(0);
+		} */
+	}
+	else // shoot weapon / was do melee attack too
+	{
+		// kL_note: what, you recalculate the trajectory after it was already done above,
+		// and, don't even use it other than to find out if it already hit or not?!??
+		// Not to mention that melee attacks ***don't even need to use a trajectory***
+		_projectileImpact = projectile->calculateTrajectory(_unit->getFiringAccuracy(_action.type, _action.weapon));
+		Log(LOG_INFO) << ". shoot weapon, part = " << _projectileImpact;
 
 		if (_projectileImpact != VOXEL_EMPTY
 			|| _action.type == BA_LAUNCH)
 		{
-			Log(LOG_INFO) << ". . . _projectileImpact !";
+			Log(LOG_INFO) << ". . _projectileImpact !";
 
 			_unit->aim(true); // set the soldier in an aiming position
 			_parent->getMap()->cacheUnit(_unit);
@@ -426,9 +457,9 @@ bool ProjectileFlyBState::createNewProjectile()
 				_action.weapon->setAmmoItem(0);
 			}
 		}
-		else // no line of fire
+		else // VOXEL_EMPTY, no line of fire
 		{
-			//Log(LOG_INFO) << ". no LoF.";
+			Log(LOG_INFO) << ". no shot, no LoF, Voxel_Empty";
 
 			delete projectile;
 
@@ -451,7 +482,7 @@ bool ProjectileFlyBState::createNewProjectile()
  */
 void ProjectileFlyBState::think()
 {
-	//Log(LOG_INFO) << "ProjectileFlyBState::think()";
+	Log(LOG_INFO) << "ProjectileFlyBState::think()";
 
 	/* TODO refactoring : store the projectile in this state, instead of getting it from the map each time? */
 	if (_parent->getMap()->getProjectile() == 0)
@@ -608,6 +639,8 @@ void ProjectileFlyBState::think()
 			_parent->getMap()->setProjectile(0);
 		}
 	}
+
+	Log(LOG_INFO) << "ProjectileFlyBState::think() EXIT";
 }
 
 /**

@@ -377,10 +377,15 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 
 
 		ss.clear();
-		ss << L"Attack type=" << action.type << " target="<< action.target << " weapon=" << action.weapon->getRules()->getName().c_str();
+		ss << L"Attack type=" << action.type << " target=" << action.target << " weapon=" << action.weapon->getRules()->getName().c_str();
 		_parentState->debug(ss.str());
 
-		//Log(LOG_INFO) << ". . ProjectileFlyBState";
+		Log(LOG_INFO) << ". attack action.Type = " << action.type
+				<< ", action.Target = " << action.target
+				<< " action.Weapon = " << action.weapon->getRules()->getName().c_str();
+
+
+		Log(LOG_INFO) << ". . call ProjectileFlyBState()";
 		statePushBack(new ProjectileFlyBState(this, action));
 		//Log(LOG_INFO) << ". . ProjectileFlyBState DONE";
 
@@ -443,6 +448,7 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 			}
 		}
 	}
+
 	Log(LOG_INFO) << "BattlescapeGame::handleAI() EXIT";
 }
 
@@ -874,15 +880,20 @@ void BattlescapeGame::showInfoBoxQueue()
 }
 
 /**
- * Handles the result of non target actions, like priming a grenade.
+ * Handles the result of non target actions,
+ * like priming a grenade or performing a melee attack.
  */
 void BattlescapeGame::handleNonTargetAction()
 {
+	//Log(LOG_INFO) << "BattlescapeGame::handleNonTargetAction()";
+
 	if (!_currentAction.targeting)
 	{
 		if (_currentAction.type == BA_PRIME
 			&& _currentAction.value > -1)
 		{
+			Log(LOG_INFO) << "BattlescapeGame::handleNonTargetAction() BA_PRIME";
+
 			if (_currentAction.actor->spendTimeUnits(_currentAction.TU))
 			{
 				_currentAction.weapon->setExplodeTurn(_currentAction.value);
@@ -895,10 +906,12 @@ void BattlescapeGame::handleNonTargetAction()
 //				_parentState->warning(_game->getLanguage()->getString("STR_NOT_ENOUGH_TIME_UNITS"));	// kL
 			}
 		}
-
+		else // kL
 		if (_currentAction.type == BA_USE
 			|| _currentAction.type == BA_LAUNCH)
 		{
+			Log(LOG_INFO) << "BattlescapeGame::handleNonTargetAction() BA_USE or BA_LAUNCH";
+
 			if (_currentAction.result.length() > 0)
 			{
 				_parentState->warning(_currentAction.result);
@@ -907,9 +920,11 @@ void BattlescapeGame::handleNonTargetAction()
 
 			_save->reviveUnconsciousUnits();
 		}
-
+		else // kL
 		if (_currentAction.type == BA_HIT)
 		{
+			Log(LOG_INFO) << "BattlescapeGame::handleNonTargetAction() BA_HIT";
+
 			if (_currentAction.result.length() > 0)
 			{
 				_parentState->warning(_currentAction.result);
@@ -919,33 +934,49 @@ void BattlescapeGame::handleNonTargetAction()
 			{
 				if (_currentAction.actor->spendTimeUnits(_currentAction.TU))
 				{
-					Position p;
-					Pathfinding::directionToVector(_currentAction.actor->getDirection(), &p);
-					Tile* tile (_save->getTile(_currentAction.actor->getPosition() + p));
+					Position pAttack_vector;
+					Pathfinding::directionToVector(_currentAction.actor->getDirection(), &pAttack_vector);
+					Tile* tTarget; //kL = _save->getTile(_currentAction.actor->getPosition() + pAttack_vector);
 
-					for (int x = 0; x != _currentAction.actor->getArmor()->getSize(); ++x)
+					for (int
+							x = 0;
+							x != _currentAction.actor->getArmor()->getSize();
+							++x)
 					{
-						for (int y = 0; y != _currentAction.actor->getArmor()->getSize(); ++y)
+						for (int
+								y = 0;
+								y != _currentAction.actor->getArmor()->getSize();
+								++y)
 						{
-							tile = _save->getTile(Position(_currentAction.actor->getPosition().x + x,
-									_currentAction.actor->getPosition().y + y,
-									_currentAction.actor->getPosition().z) + p);
-							if (tile->getUnit()
-								&& tile->getUnit() != _currentAction.actor)
+							tTarget = _save->getTile(Position(
+															_currentAction.actor->getPosition().x + x,
+															_currentAction.actor->getPosition().y + y,
+															_currentAction.actor->getPosition().z)
+														+ pAttack_vector);
+							if (tTarget->getUnit()
+								&& tTarget->getUnit() != _currentAction.actor)
 							{
-								Position voxel = Position(tile->getPosition().x * 16,tile->getPosition().y * 16,tile->getPosition().z * 24);
-								voxel.x += 8;voxel.y += 8;voxel.z += 8;
+								Position pTarget_voxel = Position( // converts position to voxelspace
+										tTarget->getPosition().x * 16,
+										tTarget->getPosition().y * 16,
+										tTarget->getPosition().z * 24);
+								pTarget_voxel.x += 8;
+								pTarget_voxel.y += 8;
+//kL								pTarget_voxel.z += 8;
+								pTarget_voxel.z += 10;		// kL
 
-								statePushNext(new ExplosionBState(this, voxel, _currentAction.weapon, _currentAction.actor));
+								Log(LOG_INFO) << ". . new ExplosionBState() tTarget " << tTarget->getPosition()
+												<< " pTarget_voxel " << pTarget_voxel;
+								statePushNext(new ExplosionBState(this, pTarget_voxel, _currentAction.weapon, _currentAction.actor));
 
 								break;
 							}
 						}
 
-						if (tile->getUnit()
-							&& tile->getUnit() != _currentAction.actor)
+						if (tTarget->getUnit()
+							&& tTarget->getUnit() != _currentAction.actor) // <- enemy within!
 						{
-							break;
+							break; // already found one, Thanks.
 						}
 					}
 				}

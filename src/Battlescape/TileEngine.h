@@ -53,7 +53,7 @@ private:
 	SavedBattleGame* _save;
 	std::vector<Uint16>* _voxelData;
 	void addLight(
-			const Position& center,
+			const Position& voxelTarget,
 			int power,
 			int layer);
 	int blockage(
@@ -99,13 +99,13 @@ private:
 		bool tryReactionSnap(BattleUnit* unit, BattleUnit* target);
 		/// Handles bullet/weapon hits.
 		BattleUnit* hit(
-				const Position& center,
+				const Position& pTarget_voxel,
 				int power,
 				ItemDamageType type,
-				BattleUnit* unit);
+				BattleUnit* attacker);
 		/// Handles explosions.
 		void explode(
-				const Position& center,
+				const Position& voxelTarget,
 				int power,
 				ItemDamageType type,
 				int maxRadius,
@@ -201,7 +201,7 @@ private:
 		bool isVoxelVisible(const Position& voxel);
 		/// Checks what type of voxel occupies this space.
 		int voxelCheck(
-				const Position& voxel,
+				const Position& pTarget_voxel,
 				BattleUnit* excludeUnit,
 				bool excludeAllUnits = false,
 				bool onlyVisible = false,

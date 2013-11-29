@@ -293,13 +293,13 @@ void MapDataSet::unloadData()
 
 /**
  * Loads the LOFTEMPS.DAT into the ruleset voxeldata.
- * @param filename Filename of the DAT file.
- * @param voxelData The ruleset.
+ * @param filename, Filename of the DAT file.
+ * @param voxelData, The ruleset.
  */
 void MapDataSet::loadLOFTEMPS(const std::string& filename, std::vector<Uint16>* voxelData)
 {
 	// Load file
-	std::ifstream mapFile (filename.c_str(), std::ios::in | std::ios::binary);
+	std::ifstream mapFile(filename.c_str(), std::ios::in | std::ios::binary);
 	if (!mapFile)
 	{
 		throw Exception(filename + " not found");

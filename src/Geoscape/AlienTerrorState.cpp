@@ -16,21 +16,29 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "AlienTerrorState.h"
+
 #include <sstream>
-#include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
-#include "../Engine/Language.h"
-#include "../Engine/Palette.h"
-#include "../Interface/TextButton.h"
-#include "../Interface/Window.h"
-#include "../Interface/Text.h"
+
 #include "GeoscapeState.h"
 #include "Globe.h"
+#include "InterceptState.h"
+
+#include "../Engine/Game.h"
+#include "../Engine/Language.h"
+#include "../Engine/Options.h"
+#include "../Engine/Palette.h"
+
+#include "../Interface/Text.h"
+#include "../Interface/TextButton.h"
+#include "../Interface/Window.h"
+
+#include "../Resource/ResourcePack.h"
+
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/TerrorSite.h"
-#include "../Engine/Options.h"
-#include "InterceptState.h"
+
 
 namespace OpenXcom
 {
@@ -42,20 +50,28 @@ namespace OpenXcom
  * @param city Terrorized city name.
  * @param state Pointer to the Geoscape.
  */
-AlienTerrorState::AlienTerrorState(Game *game, TerrorSite *terror, const std::string &city, GeoscapeState *state) : State(game), _terror(terror), _state(state)
+AlienTerrorState::AlienTerrorState(Game* game, TerrorSite* terror, const std::string& city, GeoscapeState* state)
+	:
+		State(game),
+		_terror(terror),
+		_state(state)
 {
 	_screen = false;
 
-	// Create objects
-	_window = new Window(this, 256, 200, 0, 0, POPUP_BOTH);
-	_btnIntercept = new TextButton(200, 16, 28, 130);
-	_btnCentre = new TextButton(200, 16, 28, 150);
-	_btnCancel = new TextButton(200, 16, 28, 170);
-	_txtTitle = new Text(246, 32, 5, 48);
-	_txtCity = new Text(246, 17, 5, 80);
+	_window			= new Window(this, 256, 200, 0, 0, POPUP_BOTH);
+	_txtTitle		= new Text(246, 32, 5, 48);
 
-	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(3)), Palette::backPos, 16);
+	_txtCity		= new Text(246, 17, 5, 80);
+
+	_btnIntercept	= new TextButton(200, 16, 28, 130);
+	_btnCentre		= new TextButton(200, 16, 28, 150);
+	_btnCancel		= new TextButton(200, 16, 28, 170);
+
+
+	_game->setPalette(
+			_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(3)),
+			Palette::backPos,
+			16);
 
 	add(_window);
 	add(_btnIntercept);
@@ -66,22 +82,22 @@ AlienTerrorState::AlienTerrorState(Game *game, TerrorSite *terror, const std::st
 
 	centerAllSurfaces();
 
-	// Set up objects
+
 	_window->setColor(Palette::blockOffset(8)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK03.SCR"));
 
 	_btnIntercept->setColor(Palette::blockOffset(8)+5);
 	_btnIntercept->setText(tr("STR_INTERCEPT"));
-	_btnIntercept->onMouseClick((ActionHandler)&AlienTerrorState::btnInterceptClick);
+	_btnIntercept->onMouseClick((ActionHandler)& AlienTerrorState::btnInterceptClick);
 
 	_btnCentre->setColor(Palette::blockOffset(8)+5);
 	_btnCentre->setText(tr("STR_CENTER_ON_SITE_TIME_5_SECS"));
-	_btnCentre->onMouseClick((ActionHandler)&AlienTerrorState::btnCentreClick);
+	_btnCentre->onMouseClick((ActionHandler)& AlienTerrorState::btnCentreClick);
 
 	_btnCancel->setColor(Palette::blockOffset(8)+5);
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
-	_btnCancel->onMouseClick((ActionHandler)&AlienTerrorState::btnCancelClick);
-	_btnCancel->onKeyboardPress((ActionHandler)&AlienTerrorState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnCancel->onMouseClick((ActionHandler)& AlienTerrorState::btnCancelClick);
+	_btnCancel->onKeyboardPress((ActionHandler)& AlienTerrorState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(8)+5);
 	_txtTitle->setBig();
@@ -100,7 +116,6 @@ AlienTerrorState::AlienTerrorState(Game *game, TerrorSite *terror, const std::st
  */
 AlienTerrorState::~AlienTerrorState()
 {
-
 }
 
 /**
@@ -115,9 +130,10 @@ void AlienTerrorState::init()
  * Picks a craft to intercept the UFO.
  * @param action Pointer to an action.
  */
-void AlienTerrorState::btnInterceptClick(Action *)
+void AlienTerrorState::btnInterceptClick(Action*)
 {
 	_state->timerReset();
+
 	_state->getGlobe()->center(_terror->getLongitude(), _terror->getLatitude());
 	_game->pushState(new InterceptState(_game, _state->getGlobe(), 0, _terror));
 }
@@ -126,9 +142,10 @@ void AlienTerrorState::btnInterceptClick(Action *)
  * Centers on the UFO and returns to the previous screen.
  * @param action Pointer to an action.
  */
-void AlienTerrorState::btnCentreClick(Action *)
+void AlienTerrorState::btnCentreClick(Action*)
 {
 	_state->timerReset();
+
 	_state->getGlobe()->center(_terror->getLongitude(), _terror->getLatitude());
 	_game->popState();
 }
@@ -137,7 +154,7 @@ void AlienTerrorState::btnCentreClick(Action *)
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void AlienTerrorState::btnCancelClick(Action *)
+void AlienTerrorState::btnCancelClick(Action*)
 {
 	_game->popState();
 }

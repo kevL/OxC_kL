@@ -26,18 +26,23 @@
 #include "BattlescapeGame.h"
 #include "Position.h"
 #include "TileEngine.h"
+
 #include "../aresame.h"
+
 #include "../Engine/Game.h"
 #include "../Engine/Options.h"
 #include "../Engine/RNG.h"
 #include "../Engine/Surface.h"
 #include "../Engine/SurfaceSet.h"
+
 #include "../Resource/ResourcePack.h"
+
 #include "../Ruleset/Armor.h"
 #include "../Ruleset/MapData.h"
 #include "../Ruleset/RuleItem.h"
 #include "../Ruleset/RuleSoldier.h"
 #include "../Ruleset/Unit.h"
+
 #include "../Savegame/BattleItem.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/SavedBattleGame.h"
@@ -77,11 +82,15 @@ Projectile::Projectile(
 	{
 		if (_action.type == BA_THROW)
 		{
+			Log(LOG_INFO) << "Create Projectile -> BA_THROW";
+
 			_speed = _speed * 5 / 7;	// kL
 			_sprite =_res->getSurfaceSet("FLOOROB.PCK")->getFrame(getItem()->getRules()->getFloorSprite());
 		}
-		else // ba_SHOOT!!
+		else // ba_SHOOT!! or hit, or spit.... probly Psi-attack also.
 		{
+			Log(LOG_INFO) << "Create Projectile -> not BA_THROW";
+
 			_speed = std::max(1, _speed + _action.weapon->getRules()->getBulletSpeed());
 		}
 	}
@@ -125,13 +134,14 @@ int Projectile::calculateTrajectory(double accuracy)
 	{
 		// calculate offset of the starting point of the projectile
 		originVoxel.z +=
-				bu->getHeight() + bu->getFloatHeight()
-				-_save->getTile(_origin)->getTerrainLevel() - 4; // 2 voxels lower than LoS origin.
-
-		Tile* tileAbove = _save->getTile(_origin + Position(0, 0, 1));
+				bu->getHeight()
+					+ bu->getFloatHeight()
+					-_save->getTile(_origin)->getTerrainLevel()
+					- 4; // 2 voxels lower than LoS origin.
 
 		if (originVoxel.z >= (_origin.z + 1) * 24)
 		{
+			Tile* tileAbove = _save->getTile(_origin + Position(0, 0, 1));
 			if (tileAbove
 				&& tileAbove->hasNoFloor(0))
 			{
@@ -144,23 +154,27 @@ int Projectile::calculateTrajectory(double accuracy)
 					originVoxel.z--;
 				}
 
-				originVoxel.z -= 4;
+				originVoxel.z -= 4; // keep originVoxel 4 voxels below any ceiling.
 			}
 		}
 
 		// originally used the dirXShift and dirYShift as detailed above, this however results in MUCH more predictable results.
+		// center Origin in the originTile (or the center of all four tiles for large units):
 		int offset = bu->getArmor()->getSize() * 8;
 		originVoxel.x += offset;
 		originVoxel.y += offset;
 	}
-	else
+	else // _action.actor is NOT in originTile.
 	{
-		// don't take into account soldier height and terrain level if the projectile is not launched from a soldier(from a waypoint)
+		// don't take into account soldier height and terrain level if the
+		// projectile is not launched from a soldier (ie. from a waypoint)
 		originVoxel.x += 8;
 		originVoxel.y += 8;
 		originVoxel.z += 12;
 	}
 
+
+	// TARGETTING //
 	if (_action.type == BA_LAUNCH
 		|| (SDL_GetModState() & KMOD_CTRL) != 0
 		|| !_save->getBattleGame()->getPanicHandled())
@@ -172,16 +186,18 @@ int Projectile::calculateTrajectory(double accuracy)
 				_action.target.y * 16 + 8,
 				_action.target.z * 24 + 12);
 	}
-	else
+	else // non-waypointed attack follows
 	{
 		// determine the target voxel.
 		// aim at the center of the unit, the object, the walls or the floor (in that priority)
-		// if there is no LOF to the center, try elsewhere (more outward).
-		// Store this target voxel.
+		// if there is no LOF to the center, try elsewhere outward.
+		// Then store this target voxel.
 		targetTile = _save->getTile(_action.target);
 
 		if (targetTile->getUnit() != 0) // aiming at Unit.
 		{
+			Log(LOG_INFO) << ". targetTile has unit";
+
 			if (_origin == _action.target
 				|| targetTile->getUnit() == _action.actor)
 			{
@@ -190,7 +206,8 @@ int Projectile::calculateTrajectory(double accuracy)
 				targetVoxel = Position(
 						_action.target.x * 16 + 8,
 						_action.target.y * 16 + 8,
-						_action.target.z * 24);
+//kL						_action.target.z * 24);
+						_action.target.z * 24 + 1);		// kL
 			}
 			else	// kL_note: huh? Is this for storing _trajectory??? ... no. might be
 					// setting &targetVoxel tho. Or "_action.target" ( targetTile ) even......
@@ -204,6 +221,8 @@ int Projectile::calculateTrajectory(double accuracy)
 		}
 		else if (targetTile->getMapData(MapData::O_OBJECT) != 0) // aiming at content-Object.
 		{
+			Log(LOG_INFO) << ". targetTile has content-object";
+
 			if (!_save->getTileEngine()->canTargetTile(
 					&originVoxel,
 					targetTile,
@@ -220,6 +239,8 @@ int Projectile::calculateTrajectory(double accuracy)
 		}
 		else if (targetTile->getMapData(MapData::O_NORTHWALL) != 0) // aiming at Northwall
 		{
+			Log(LOG_INFO) << ". targetTile has northwall";
+
 			if (!_save->getTileEngine()->canTargetTile(
 					&originVoxel,
 					targetTile,
@@ -237,6 +258,8 @@ int Projectile::calculateTrajectory(double accuracy)
 		}
 		else if (targetTile->getMapData(MapData::O_WESTWALL) != 0) // aiming at Westwall
 		{
+			Log(LOG_INFO) << ". targetTile has westwall";
+
 			if (!_save->getTileEngine()->canTargetTile(
 					&originVoxel,
 					targetTile,
@@ -254,6 +277,8 @@ int Projectile::calculateTrajectory(double accuracy)
 		}
 		else if (targetTile->getMapData(MapData::O_FLOOR) != 0) // aiming at Floor
 		{
+			Log(LOG_INFO) << ". targetTile has floor";
+
 			// kL_note: This is not allowing floortiles to be targetted properly.
 			// Wb did an update, so check it out.... +2 voxels on the z-axis
 			if (!_save->getTileEngine()->canTargetTile(
@@ -274,6 +299,8 @@ int Projectile::calculateTrajectory(double accuracy)
 		}
 		else // aiming at empty space.
 		{
+			Log(LOG_INFO) << ". targetTile is void";
+
 			// target nothing, targets the middle of the tile
 			targetVoxel = Position(
 					_action.target.x * 16 + 8,
@@ -401,11 +428,11 @@ int Projectile::calculateTrajectory(double accuracy)
 	// This will results in a new target voxel
 	if (_action.type != BA_LAUNCH) // <- what, no drift??!?
 		applyAccuracy(
-				originVoxel,
-				&targetVoxel,
-				accuracy,
-				false,
-				targetTile);
+					originVoxel,
+					&targetVoxel,
+					accuracy,
+					false,
+					targetTile);
 
 	//Log(LOG_INFO) << ". LoF calculated, Acu applied (if not BL)";
 	// finally do a line calculation and store this trajectory.

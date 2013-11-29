@@ -21,6 +21,7 @@
 #define OPENXCOM_INTERCEPTSTATE_H
 
 #include <vector>
+
 #include "../Engine/State.h"
 
 
@@ -51,7 +52,7 @@ class InterceptState
 		TextList* _lstCrafts;
 		Globe* _globe;
 		Base* _base;
-	Target *_target;
+		Target *_target;
 		std::vector<Craft*> _crafts;
 
 	public:

@@ -44,21 +44,21 @@ class InfoboxOKState;
 
 enum BattleActionType
 {
-	BA_NONE,
-	BA_TURN,
-	BA_WALK,
-	BA_PRIME,
-	BA_THROW,
-	BA_AUTOSHOT,
-	BA_SNAPSHOT,
-	BA_AIMEDSHOT,
-	BA_STUN,
-	BA_HIT,
-	BA_USE,
-	BA_LAUNCH,
-	BA_MINDCONTROL,
-	BA_PANIC,
-	BA_RETHINK
+	BA_NONE,		// 0
+	BA_TURN,		// 1
+	BA_WALK,		// 2
+	BA_PRIME,		// 3
+	BA_THROW,		// 4
+	BA_AUTOSHOT,	// 5
+	BA_SNAPSHOT,	// 6
+	BA_AIMEDSHOT,	// 7
+	BA_STUN,		// 8
+	BA_HIT,			// 9
+	BA_USE,			// 10
+	BA_LAUNCH,		// 11
+	BA_MINDCONTROL,	// 12
+	BA_PANIC,		// 13
+	BA_RETHINK		// 14
 };
 
 struct BattleAction
