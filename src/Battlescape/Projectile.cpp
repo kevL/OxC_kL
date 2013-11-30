@@ -727,11 +727,12 @@ int Projectile::calculateThrow(double accuracy)
 
 /**
  * Calculates the new target in voxel space, based on the given accuracy modifier.
- * @param origin Startposition of the trajectory.
- * @param target Endpoint of the trajectory.
- * @param accuracy Accuracy modifier.
- * @param keepRange Whether range affects accuracy.
- * @param targetTile Tile of target. Default = 0.
+ * @param origin, Startposition of the trajectory.
+ * @param target, Endpoint of the trajectory.
+ * @param accuracy, Accuracy modifier.
+ * @param keepRange, Whether range affects accuracy. Default = false.
+ * @param targetTile, Tile of target. Default = 0.
+ * @param throwing, Whether or not projectile is being thrown. Default = false.
  */
 void Projectile::applyAccuracy(
 		const Position& origin,
@@ -767,7 +768,7 @@ void Projectile::applyAccuracy(
 			if (targetUnit
 				&& targetUnit->getFaction() == FACTION_HOSTILE)
 			{
-				accuracyPenalty = 0.01 * static_cast<double>(targetTile->getShade()); // Shade can be from 0 to 15
+				accuracyPenalty = 0.015 * static_cast<double>(targetTile->getShade()); // Shade can be from 0 to 15
 			}
 //			else
 //				accuracyPenalty = 0.0; // Enemy units can see in the dark.
@@ -775,10 +776,10 @@ void Projectile::applyAccuracy(
 			// If unit is kneeled, then accuracy reduced by 5%.
 			// This is a compromise, because vertical deviation is 2 times less.
 			if (targetUnit && targetUnit->isKneeled())
-				accuracyPenalty += 0.05;
+				accuracyPenalty += 0.063;
 		}
 		else
-			accuracyPenalty = 0.01 * _save->getGlobalShade(); // Shade can be from 0 (day) to 15 (night).
+			accuracyPenalty = 0.015 * static_cast<double>(_save->getGlobalShade()); // Shade can be from 0 (day) to 15 (night).
 
 		// kL_begin: modify rangedBasedAccuracy (shot-modes).
 //		baseDeviation = -0.15;
@@ -823,16 +824,16 @@ void Projectile::applyAccuracy(
 		// 0.02 is the min angle deviation for best accuracy (+-3s = 0.02 radian).
 		// kL_note: changed to min 0.006 deviation.
 //kL		if (baseDeviation < 0.02) baseDeviation = 0.02;
-		if (baseDeviation < 0.006)
+		if (baseDeviation < 0.001)
 		{
-			Log(LOG_INFO) << ". baseDeviation low-capped @ 0.006";
-			baseDeviation = 0.006;		// kL
+			Log(LOG_INFO) << ". baseDeviation low-capped @ 0.001";
+			baseDeviation = 0.001;		// kL
 		}
 		else Log(LOG_INFO) << ". baseDeviation = " << baseDeviation;
 
 		// the angle deviations are spread using a normal distribution for baseDeviation (+-3s with precision 99,7%)
 		double dH = RNG::boxMuller(0.0, baseDeviation / 6.0); // horizontal miss in radian
-		double dV = RNG::boxMuller(0.0, baseDeviation /(6.0 * 1.75));	// kL
+		double dV = RNG::boxMuller(0.0, baseDeviation /(6.0 * 1.72));	// kL
 //kL		double dV = RNG::boxMuller(0.0, baseDeviation /(6.0 * 2));
 
 		double te = atan2(static_cast<double>(target->y - origin.y), static_cast<double>(target->x - origin.x)) + dH;
@@ -847,7 +848,7 @@ void Projectile::applyAccuracy(
 			target->z = static_cast<int>(static_cast<double>(origin.z) + maxRange * sin(fi));
 		}
 
-		Log(LOG_INFO) << "Projectile::applyAccuracy() EXIT, rangeBased";
+		Log(LOG_INFO) << "Projectile::applyAccuracy() rangeBased EXIT";
 		return;
 	}
 

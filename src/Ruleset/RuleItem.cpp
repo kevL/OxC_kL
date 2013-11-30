@@ -18,9 +18,11 @@
  */
 
 #include "RuleItem.h"
+
 #include "RuleInventory.h"
-#include "../Engine/SurfaceSet.h"
+
 #include "../Engine/Surface.h"
+#include "../Engine/SurfaceSet.h"
 
 
 namespace OpenXcom
@@ -101,86 +103,86 @@ RuleItem::~RuleItem()
  * @param modIndex Offsets the sounds and sprite values to avoid conflicts.
  * @param listOrder The list weight for this item.
  */
-void RuleItem::load(const YAML::Node &node, int modIndex, int listOrder)
+void RuleItem::load(const YAML::Node& node, int modIndex, int listOrder)
 {
-	_type = node["type"].as<std::string>(_type);
-	_name = node["name"].as<std::string>(_name);
-	_requires = node["requires"].as< std::vector<std::string> >(_requires);
-	_size = node["size"].as<float>(_size);
-	_costBuy = node["costBuy"].as<int>(_costBuy);
-	_costSell = node["costSell"].as<int>(_costSell);
-	_transferTime = node["transferTime"].as<int>(_transferTime);
-	_weight = node["weight"].as<int>(_weight);
-	_bigSprite = node["bigSprite"].as<int>(_bigSprite);
-	// BIGOBS.PCK: 57 entries
-	if (_bigSprite > 56)
-		_bigSprite += modIndex;
-	_floorSprite = node["floorSprite"].as<int>(_floorSprite);
-	// FLOOROB.PCK: 73 entries
-	if (_floorSprite > 72)
-		_floorSprite += modIndex;
-	_handSprite = node["handSprite"].as<int>(_handSprite);
-	// HANDOBS.PCK: 128 entries
-	if (_handSprite > 127)
-		_handSprite += modIndex;
+	_type					= node["type"].as<std::string>(_type);
+	_name					= node["name"].as<std::string>(_name);
+	_requires				= node["requires"].as< std::vector<std::string> >(_requires);
+	_size					= node["size"].as<float>(_size);
+	_costBuy				= node["costBuy"].as<int>(_costBuy);
+	_costSell				= node["costSell"].as<int>(_costSell);
+	_transferTime			= node["transferTime"].as<int>(_transferTime);
+	_weight					= node["weight"].as<int>(_weight);
+
+	_bigSprite				= node["bigSprite"].as<int>(_bigSprite);
+	if (_bigSprite > 56)	// BIGOBS.PCK: 57 entries
+		_bigSprite			+= modIndex;
+	_floorSprite			= node["floorSprite"].as<int>(_floorSprite);
+	if (_floorSprite > 72)	// FLOOROB.PCK: 73 entries
+		_floorSprite		+= modIndex;
+	_handSprite				= node["handSprite"].as<int>(_handSprite);
+	if (_handSprite > 127)	// HANDOBS.PCK: 128 entries
+		_handSprite			+= modIndex;
+
 	if (node["bulletSprite"])
 	{
 		// Projectiles: 385 entries ((105*33) / (3*3)) (35 sprites per projectile(0-34), 11 projectiles (0-10))
-		_bulletSprite = node["bulletSprite"].as<int>(_bulletSprite) * 35;
+		_bulletSprite		= node["bulletSprite"].as<int>(_bulletSprite) * 35;
 		if (_bulletSprite >= 385)
-			_bulletSprite += modIndex;
+			_bulletSprite	+= modIndex;
 	}
-	_fireSound = node["fireSound"].as<int>(_fireSound);
-	// BATTLE.CAT: 55 entries
-	if (_fireSound > 54)
-		_fireSound += modIndex;
-	_hitSound = node["hitSound"].as<int>(_hitSound);
-	// BATTLE.CAT: 55 entries
-	if (_hitSound > 54)
-		_hitSound += modIndex;
-	_hitAnimation = node["hitAnimation"].as<int>(_hitAnimation);
-	// SMOKE.PCK: 56 entries
-	if (_hitAnimation > 55)
-		_hitAnimation += modIndex;
-	_power = node["power"].as<int>(_power);
-	_compatibleAmmo = node["compatibleAmmo"].as< std::vector<std::string> >(_compatibleAmmo);
-	_damageType = (ItemDamageType)node["damageType"].as<int>(_damageType);
-	_accuracyAuto = node["accuracyAuto"].as<int>(_accuracyAuto);
-	_accuracySnap = node["accuracySnap"].as<int>(_accuracySnap);
-	_accuracyAimed = node["accuracyAimed"].as<int>(_accuracyAimed);
-	_tuAuto = node["tuAuto"].as<int>(_tuAuto);
-	_tuSnap = node["tuSnap"].as<int>(_tuSnap);
-	_tuAimed = node["tuAimed"].as<int>(_tuAimed);
-	_clipSize = node["clipSize"].as<int>(_clipSize);
-	_accuracyMelee = node["accuracyMelee"].as<int>(_accuracyMelee);
-	_tuMelee = node["tuMelee"].as<int>(_tuMelee);
-	_battleType = (BattleType)node["battleType"].as<int>(_battleType);
-	_twoHanded = node["twoHanded"].as<bool>(_twoHanded);
-	_waypoint = node["waypoint"].as<bool>(_waypoint);
-	_fixedWeapon = node["fixedWeapon"].as<bool>(_fixedWeapon);
-	_invWidth = node["invWidth"].as<int>(_invWidth);
-	_invHeight = node["invHeight"].as<int>(_invHeight);
-	_painKiller = node["painKiller"].as<int>(_painKiller);
-	_heal = node["heal"].as<int>(_heal);
-	_stimulant = node["stimulant"].as<int>(_stimulant);
-	_woundRecovery = node["woundRecovery"].as<int>(_woundRecovery);
-	_healthRecovery = node["healthRecovery"].as<int>(_healthRecovery);
-	_stunRecovery = node["stunRecovery"].as<int>(_stunRecovery);
-	_energyRecovery = node["energyRecovery"].as<int>(_energyRecovery);
-	_tuUse = node["tuUse"].as<int>(_tuUse);
-	_recoveryPoints = node["recoveryPoints"].as<int>(_recoveryPoints);
-	_armor = node["armor"].as<int>(_armor);
-	_turretType = node["turretType"].as<int>(_turretType);
-	_recover = node["recover"].as<bool>(_recover);
-	_liveAlien = node["liveAlien"].as<bool>(_liveAlien);
-	_blastRadius = node["blastRadius"].as<int>(_blastRadius);
-	_attraction = node["attraction"].as<int>(_attraction);
-	_flatRate = node["flatRate"].as<bool>(_flatRate);
-	_arcingShot = node["arcingShot"].as<bool>(_arcingShot);
-	_listOrder = node["listOrder"].as<int>(_listOrder);
-	_range = node["maxRange"].as<int>(_range);
-	_bulletSpeed = node["bulletSpeed"].as<int>(_bulletSpeed);
-	_autoShots = node["autoShots"].as<int>(_autoShots);
+
+	_fireSound				= node["fireSound"].as<int>(_fireSound);
+	if (_fireSound > 54)	// BATTLE.CAT: 55 entries
+		_fireSound			+= modIndex;
+	_hitSound				= node["hitSound"].as<int>(_hitSound);
+	if (_hitSound > 54)		// BATTLE.CAT: 55 entries
+		_hitSound			+= modIndex;
+	_hitAnimation			= node["hitAnimation"].as<int>(_hitAnimation);
+	if (_hitAnimation > 55)	// SMOKE.PCK: 56 entries
+		_hitAnimation		+= modIndex;
+
+	_power					= node["power"].as<int>(_power);
+	_compatibleAmmo			= node["compatibleAmmo"].as< std::vector<std::string> >(_compatibleAmmo);
+//kL	_damageType				= (ItemDamageType)node["damageType"].as<int>(_damageType);
+	_damageType				= static_cast<ItemDamageType>(node["damageType"].as<int>(_damageType));
+	_accuracyAuto			= node["accuracyAuto"].as<int>(_accuracyAuto);
+	_accuracySnap			= node["accuracySnap"].as<int>(_accuracySnap);
+	_accuracyAimed			= node["accuracyAimed"].as<int>(_accuracyAimed);
+	_tuAuto					= node["tuAuto"].as<int>(_tuAuto);
+	_tuSnap					= node["tuSnap"].as<int>(_tuSnap);
+	_tuAimed				= node["tuAimed"].as<int>(_tuAimed);
+	_clipSize				= node["clipSize"].as<int>(_clipSize);
+	_accuracyMelee			= node["accuracyMelee"].as<int>(_accuracyMelee);
+	_tuMelee				= node["tuMelee"].as<int>(_tuMelee);
+//kL	_battleType				= (BattleType)node["battleType"].as<int>(_battleType);
+	_battleType				= static_cast<BattleType>(node["battleType"].as<int>(_battleType));
+	_twoHanded				= node["twoHanded"].as<bool>(_twoHanded);
+	_waypoint				= node["waypoint"].as<bool>(_waypoint);
+	_fixedWeapon			= node["fixedWeapon"].as<bool>(_fixedWeapon);
+	_invWidth				= node["invWidth"].as<int>(_invWidth);
+	_invHeight				= node["invHeight"].as<int>(_invHeight);
+	_painKiller				= node["painKiller"].as<int>(_painKiller);
+	_heal					= node["heal"].as<int>(_heal);
+	_stimulant				= node["stimulant"].as<int>(_stimulant);
+	_woundRecovery			= node["woundRecovery"].as<int>(_woundRecovery);
+	_healthRecovery			= node["healthRecovery"].as<int>(_healthRecovery);
+	_stunRecovery			= node["stunRecovery"].as<int>(_stunRecovery);
+	_energyRecovery			= node["energyRecovery"].as<int>(_energyRecovery);
+	_tuUse					= node["tuUse"].as<int>(_tuUse);
+	_recoveryPoints			= node["recoveryPoints"].as<int>(_recoveryPoints);
+	_armor					= node["armor"].as<int>(_armor);
+	_turretType				= node["turretType"].as<int>(_turretType);
+	_recover				= node["recover"].as<bool>(_recover);
+	_liveAlien				= node["liveAlien"].as<bool>(_liveAlien);
+	_blastRadius			= node["blastRadius"].as<int>(_blastRadius);
+	_attraction				= node["attraction"].as<int>(_attraction);
+	_flatRate				= node["flatRate"].as<bool>(_flatRate);
+	_arcingShot				= node["arcingShot"].as<bool>(_arcingShot);
+	_listOrder				= node["listOrder"].as<int>(_listOrder);
+	_range					= node["maxRange"].as<int>(_range);
+	_bulletSpeed			= node["bulletSpeed"].as<int>(_bulletSpeed);
+	_autoShots				= node["autoShots"].as<int>(_autoShots);
 
 	if (!_listOrder)
 	{
@@ -199,8 +201,7 @@ std::string RuleItem::getType() const
 }
 
 /**
- * Gets the language string that names
- * this item. This is not necessarily unique.
+ * Gets the language string that names this item. This is not necessarily unique.
  * @return  The item's name.
  */
 std::string RuleItem::getName() const
@@ -209,18 +210,16 @@ std::string RuleItem::getName() const
 }
 
 /**
- * Gets the list of research required to
- * use this item.
+ * Gets the list of research required to use this item.
  * @return The list of research IDs.
  */
-const std::vector<std::string> &RuleItem::getRequirements() const
+const std::vector<std::string>& RuleItem::getRequirements() const
 {
 	return _requires;
 }
 
 /**
- * Gets the amount of space this item
- * takes up in a storage facility.
+ * Gets the amount of space this item takes up in a storage facility.
  * @return The storage size.
  */
 float RuleItem::getSize() const
@@ -229,8 +228,7 @@ float RuleItem::getSize() const
 }
 
 /**
- * Gets the amount of money this item
- * costs to purchase (0 if not purchasable).
+ * Gets the amount of money this item costs to purchase (0 if not purchasable).
  * @return The buy cost.
  */
 int RuleItem::getBuyCost() const
@@ -239,8 +237,7 @@ int RuleItem::getBuyCost() const
 }
 
 /**
- * Gets the amount of money this item
- * is worth to sell.
+ * Gets the amount of money this item is worth to sell.
  * @return The sell cost.
  */
 int RuleItem::getSellCost() const
@@ -249,8 +246,7 @@ int RuleItem::getSellCost() const
 }
 
 /**
- * Gets the amount of time this item
- * takes to arrive at a base.
+ * Gets the amount of time this item takes to arrive at a base.
  * @return The time in hours.
  */
 int RuleItem::getTransferTime() const
@@ -359,7 +355,7 @@ int RuleItem::getHitAnimation() const
 }
 
 /**
- * Gets the item's power.
+ * Gets the item's damage power.
  * @return The power.
  */
 int RuleItem::getPower() const
@@ -495,16 +491,19 @@ int RuleItem::getClipSize() const
 }
 
 /**
- * Draws and centers the hand sprite on a surface
- * according to its dimensions.
+ * Draws and centers the hand sprite on a surface according to its dimensions.
  * @param texture Pointer to the surface set to get the sprite from.
  * @param surface Pointer to the surface to draw to.
  */
-void RuleItem::drawHandSprite(SurfaceSet *texture, Surface *surface) const
+void RuleItem::drawHandSprite(SurfaceSet* texture, Surface* surface) const
 {
-	Surface *frame = texture->getFrame(this->getBigSprite());
-	frame->setX((RuleInventory::HAND_W - this->getInventoryWidth()) * RuleInventory::SLOT_W/2);
-	frame->setY((RuleInventory::HAND_H - this->getInventoryHeight()) * RuleInventory::SLOT_H/2);
+	Surface* frame = texture->getFrame(this->getBigSprite());
+
+	frame->setX(
+			(RuleInventory::HAND_W - this->getInventoryWidth()) * RuleInventory::SLOT_W / 2);
+	frame->setY(
+			(RuleInventory::HAND_H - this->getInventoryHeight()) * RuleInventory::SLOT_H / 2);
+
 	texture->getFrame(this->getBigSprite())->blit(surface);
 }
 
@@ -581,8 +580,9 @@ int RuleItem::getTUUse() const
 }
 
 /**
- * Returns the item's max explosion radius. Small explosions don't have a restriction.
- * Larger explosions are restricted using a formula, with a maximum of radius 10 no matter how large the explosion is.
+ * Returns the item's max explosion radius.
+ * Small explosions don't have a restriction. Larger explosions are restricted
+ * using a formula, with a maximum of radius 10 no matter how large the explosion.
  * @return The radius.
  */
 int RuleItem::getExplosionRadius() const
@@ -595,7 +595,8 @@ int RuleItem::getExplosionRadius() const
 		{
 			radius = (_power / 30) + 1;
 		}
-		else if (_damageType == DT_HE || _damageType == DT_STUN)
+		else if (_damageType == DT_HE
+			|| _damageType == DT_STUN)
 		{
 			radius = _power / 20;
 		}
@@ -634,8 +635,7 @@ int RuleItem::getArmor() const
 }
 
 /**
- * Returns if the item should be recoverable
- * from the battlescape.
+ * Returns if the item should be recoverable from the battlescape.
  * @return True if it is recoverable.
  */
 bool RuleItem::isRecoverable() const

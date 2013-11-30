@@ -1120,6 +1120,7 @@ int AlienBAIState::getSpottingUnits(Position pos) const
 		{
 			int dist = _save->getTileEngine()->distance(pos, (*i)->getPosition());
 			if (dist > 20) continue;
+
 			Position originVoxel = _save->getTileEngine()->getSightOriginVoxel(*i);
 			originVoxel.z -= 2;
 			Position targetVoxel;
@@ -1270,31 +1271,43 @@ bool AlienBAIState::selectRandomTarget()
  */
 bool AlienBAIState::selectPointNearTarget(BattleUnit* target, int maxTUs) const
 {
+	bool returnValue = false;
+
 	int size = _unit->getArmor()->getSize();
 	int targetsize = target->getArmor()->getSize();
-	bool returnValue = false;
 	int distance = 1000;
 
-	for (int x = -size; x <= targetsize; ++x)
+	for (int
+			x = -size;
+			x <= targetsize;
+			++x)
 	{
-		for (int y = -size; y <= targetsize; ++y)
+		for (int
+				y = -size;
+				y <= targetsize;
+				++y)
 		{
 			if (x || y) // skip the unit itself
 			{
 				Position checkPath = target->getPosition() + Position (x, y, 0);
+
 				int dir = _save->getTileEngine()->getDirectionTo(checkPath, target->getPosition());
+
 				bool valid = _save->getTileEngine()->validMeleeRange(checkPath, dir, _unit, target);
 				bool fitHere = _save->setUnitPosition(_unit, checkPath, true);
-
 				if (valid && fitHere)
 				{
 					_save->getPathfinding()->calculate(_unit, checkPath, 0, maxTUs);
-					if (_save->getPathfinding()->getStartDirection() != -1 && _save->getTileEngine()->distance(checkPath, _unit->getPosition()) < distance)
+
+					if (_save->getPathfinding()->getStartDirection() != -1
+						&& _save->getTileEngine()->distance(checkPath, _unit->getPosition()) < distance)
 					{
-						_attackAction->target = checkPath;
 						returnValue = true;
+
+						_attackAction->target = checkPath;
 						distance = _save->getTileEngine()->distance(checkPath, _unit->getPosition());
 					}
+
 					_save->getPathfinding()->abortPath();
 				}
 			}
@@ -1310,12 +1323,12 @@ bool AlienBAIState::selectPointNearTarget(BattleUnit* target, int maxTUs) const
 void AlienBAIState::evaluateAIMode()
 {
 	// we don't run and hide on our first action.
-	float escapeOdds = _escapeAction->number == 1? 0.f:15.f;
+	float escapeOdds = _escapeAction->number == 1? 0.f: 15.f;
 	float ambushOdds = 12.f;
 	float combatOdds = 20.f;
 
 	// we're less likely to patrol if we see enemies.
-	float patrolOdds = _visibleEnemies? 15.f:30.f;
+	float patrolOdds = _visibleEnemies? 15.f: 30.f;
 
 	// the enemy sees us, we should take retreat into consideration, and forget about patrolling for now.
 	if (_spottingEnemies)
@@ -1328,7 +1341,8 @@ void AlienBAIState::evaluateAIMode()
 	}
 
 	// melee/blaster units shouldn't consider ambush
-	if (!_rifle || _ambushTUs == 0)
+	if (!_rifle
+		|| _ambushTUs == 0)
 	{
 		ambushOdds = 0.f;
 		if (_melee)
@@ -1544,31 +1558,43 @@ bool AlienBAIState::findFirePoint()
 
 	std::vector<Position> randomTileSearch = _save->getTileSearch();
 	std::random_shuffle(randomTileSearch.begin(), randomTileSearch.end());
+
+	const int BASE_SYSTEMATIC_SUCCESS	= 100;
+	const int FAST_PASS_THRESHOLD		= 125;
+
 	Position target;
-	const int BASE_SYSTEMATIC_SUCCESS = 100;
-	const int FAST_PASS_THRESHOLD = 125;
-	int bestScore = 0;
 	_attackAction->type = BA_RETHINK;
-	for (std::vector<Position>::const_iterator i = randomTileSearch.begin(); i != randomTileSearch.end(); ++i)
+
+	int bestScore = 0;
+
+	for (std::vector<Position>::const_iterator
+			i = randomTileSearch.begin();
+			i != randomTileSearch.end();
+			++i)
 	{
 		Position pos = _unit->getPosition() + *i;
-		Tile *tile = _save->getTile(pos);
-		if (tile == 0)
-			continue;
+
+		Tile* tile = _save->getTile(pos);
+		if (tile == 0) continue;
 
 		int score = 0;
 		// i should really make a function for this
-		Position origin = (pos * Position(16, 16, 24)) + 
+		Position origin = (pos * Position(16, 16, 24))
+							+ Position(
+									8,
+									8,
+									_unit->getHeight()
+												+ _unit->getFloatHeight()
+												- tile->getTerrainLevel()
+												- 4);
 			// 4 because -2 is eyes and 2 below that is the rifle (or at least that's my understanding)
-			Position(8, 8, _unit->getHeight() + _unit->getFloatHeight() - tile->getTerrainLevel() - 4);
 
 		if (_save->getTileEngine()->canTargetUnit(&origin, _aggroTarget->getTile(), &target, _unit))
 		{
 			_save->getPathfinding()->calculate(_unit, pos);
-			// can move here
-			if (_save->getPathfinding()->getStartDirection() != -1 &&
-			// can still shoot
-			_save->getPathfinding()->getTotalTUCost() <= _unit->getTimeUnits())
+
+			if (_save->getPathfinding()->getStartDirection() != -1						// can move here
+				&& _save->getPathfinding()->getTotalTUCost() <= _unit->getTimeUnits())	// can still shoot
 			{
 				score = BASE_SYSTEMATIC_SUCCESS - getSpottingUnits(pos) * 10;
 				score += _unit->getTimeUnits() - _save->getPathfinding()->getTotalTUCost();
@@ -1581,6 +1607,7 @@ bool AlienBAIState::findFirePoint()
 				if (score > bestScore)
 				{
 					bestScore = score;
+
 					_attackAction->target = pos;
 					_attackAction->finalFacing = _save->getTileEngine()->getDirectionTo(pos, _aggroTarget->getPosition());
 
@@ -1717,17 +1744,20 @@ void AlienBAIState::meleeAction()
 		}
 	}
 
-	int attackCost = _unit->getActionTUs(BA_HIT, _unit->getMainHandWeapon());
-	int chargeReserve = _unit->getTimeUnits() - attackCost;
-	int distance = (chargeReserve / 4) + 1;
+	int attackCost		= _unit->getActionTUs(BA_HIT, _unit->getMainHandWeapon());
+	int chargeReserve	= _unit->getTimeUnits() - attackCost;
+	int distance		= (chargeReserve / 4) + 1;
 
 	_aggroTarget = 0;
 
-	for (std::vector<BattleUnit*>::const_iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
+	for (std::vector<BattleUnit*>::const_iterator
+			i = _save->getUnits()->begin();
+			i != _save->getUnits()->end();
+			++i)
 	{
 		int newDistance = _save->getTileEngine()->distance(_unit->getPosition(), (*i)->getPosition());
-		if ((*i)->isOut()
-			||  (*i)->getFaction() == _unit->getFaction()
+		if ((*i)->isOut(true, true)
+			|| (*i)->getFaction() == _unit->getFaction()
 			|| newDistance > 20
 			|| (*i)->getTurnsExposed() > _intelligence)
 		{
@@ -1735,14 +1765,16 @@ void AlienBAIState::meleeAction()
 		}
 
 		// pick closest living unit that we can move to
-		if ((newDistance < distance || newDistance == 1)
-			&& !(*i)->isOut())
+		if ((newDistance < distance
+				|| newDistance == 1)
+			&& !(*i)->isOut(true, true))
 		{
 			if (newDistance == 1 || selectPointNearTarget(*i, chargeReserve))
 			{
 				_aggroTarget = (*i);
 				_attackAction->type = BA_WALK;
 				_unit->setCharging(_aggroTarget);
+
 				distance = newDistance;
 			}
 		}
@@ -1750,7 +1782,11 @@ void AlienBAIState::meleeAction()
 
 	if (_aggroTarget != 0)
 	{
-		if (_save->getTileEngine()->validMeleeRange(_unit, _aggroTarget, _save->getTileEngine()->getDirectionTo(_unit->getPosition(), _aggroTarget->getPosition())))
+		if (_save->getTileEngine()->validMeleeRange(
+											_unit,
+											_aggroTarget,
+											_save->getTileEngine()->getDirectionTo(_unit->getPosition(),
+											_aggroTarget->getPosition())))
 		{
 			meleeAttack();
 		}
@@ -1765,17 +1801,19 @@ void AlienBAIState::meleeAction()
 
 /**
  * Attempts to fire a waypoint projectile at an enemy we, or one of our teammates sees.
- *
  * Waypoint targetting: pick from any units currently spotted by our allies.
- * @param action Pointer to an action.
  */
 void AlienBAIState::wayPointAction()
 {
 	_aggroTarget = 0;
 
-	for (std::vector<BattleUnit*>::const_iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end() && _aggroTarget == 0; ++i)
+	for (std::vector<BattleUnit*>::const_iterator
+			i = _save->getUnits()->begin();
+			i != _save->getUnits()->end()
+				&& _aggroTarget == 0;
+			++i)
 	{
-		if ((*i)->isOut()
+		if ((*i)->isOut(true, true)
 			|| (*i)->getFaction() == _unit->getFaction()
 			|| (*i)->getTurnsExposed() > _intelligence)
 		{
@@ -1828,11 +1866,25 @@ void AlienBAIState::wayPointAction()
 
 			CurrentPosition = CurrentPosition + DirectionVector;
 
-			Position voxelPosA((CurrentPosition.x * 16) + 8, (CurrentPosition.y * 16) + 8, (CurrentPosition.z * 24) + 12);
-			Position voxelPosb((LastWayPoint.x * 16) + 8, (LastWayPoint.y * 16) + 8, (LastWayPoint.z * 24) + 12);
+			Position voxelPosA(
+					(CurrentPosition.x * 16) + 8,
+					(CurrentPosition.y * 16) + 8,
+					(CurrentPosition.z * 24) + 12);
+			Position voxelPosb(
+					(LastWayPoint.x * 16) + 8,
+					(LastWayPoint.y * 16) + 8,
+					(LastWayPoint.z * 24) + 12);
 
-			CollidesWith = _save->getTileEngine()->calculateLine(voxelPosA, voxelPosb, false, 0, _unit, true);
-			if (CollidesWith > VOXEL_EMPTY && CollidesWith < VOXEL_UNIT)
+			CollidesWith = _save->getTileEngine()->calculateLine(
+															voxelPosA,
+															voxelPosb,
+															false,
+															0,
+															_unit,
+															true);
+
+			if (CollidesWith > VOXEL_EMPTY
+				&& CollidesWith < VOXEL_UNIT)
 			{
 				_attackAction->waypoints.push_back(LastPosition);
 				LastWayPoint = LastPosition;
@@ -1852,7 +1904,7 @@ void AlienBAIState::wayPointAction()
 
 		_attackAction->target = _attackAction->waypoints.front();
 
-		if ((int)_attackAction->waypoints.size() > 6 + (_attackAction->diff * 2)
+		if (static_cast<int>(_attackAction->waypoints.size()) > 6 + (_attackAction->diff * 2)
 			|| LastWayPoint != _aggroTarget->getPosition())
 		{
 			_attackAction->type = BA_RETHINK;
@@ -1862,9 +1914,7 @@ void AlienBAIState::wayPointAction()
 
 /**
  * Attempts to fire at an enemy we can see.
- *
  * Regular targetting: we can see an enemy, we have a gun, let's try to shoot.
- * @param action Pointer to an action.
  */
 void AlienBAIState::projectileAction()
 {
@@ -1883,89 +1933,91 @@ void AlienBAIState::projectileAction()
 
 /**
  * Selects a fire method based on range, time units, and time units reserved for cover.
- * @param action Pointer to an action.
+ * kL_note: Question: what should this set for BA_* if no FireMethod condition checks TRUE...?
+ *			I'll leave it at BA_RETHINK for now......
  */
 void AlienBAIState::selectFireMethod()
 {
-	int distance = _save->getTileEngine()->distance(_unit->getPosition(), _attackAction->target);
 	_attackAction->type = BA_RETHINK;
 
-	int tuAuto = _attackAction->weapon->getRules()->getTUAuto();
-	int tuSnap = _attackAction->weapon->getRules()->getTUSnap();
-	int tuAimed = _attackAction->weapon->getRules()->getTUAimed();
+	int tuSnap	= _attackAction->weapon->getRules()->getTUSnap();	// least TU
+	int tuAuto	= _attackAction->weapon->getRules()->getTUAuto();	// middle TU
+	int tuAimed	= _attackAction->weapon->getRules()->getTUAimed();	// most TU
 
-	int currentTU = _unit->getTimeUnits() - _escapeTUs;
+	int usableTU = _unit->getTimeUnits() - _escapeTUs;
 
-//kL	if (distance < 4)
-	if (distance < 5)		// kL
+	int distance = _save->getTileEngine()->distance(_unit->getPosition(), _attackAction->target);
+	if (distance < 5)
 	{
 		if (tuAuto
-			&& currentTU >= _unit->getActionTUs(BA_AUTOSHOT, _attackAction->weapon))
+			&& usableTU >= _unit->getActionTUs(BA_AUTOSHOT, _attackAction->weapon))
 		{
 			_attackAction->type = BA_AUTOSHOT;
-
-			return;
 		}
-
-		if (!tuSnap
-			|| currentTU < _unit->getActionTUs(BA_SNAPSHOT, _attackAction->weapon))
+		else if (tuSnap
+			&& usableTU >= _unit->getActionTUs(BA_SNAPSHOT, _attackAction->weapon))
 		{
-			if (tuAimed
-				&& currentTU >= _unit->getActionTUs(BA_AIMEDSHOT, _attackAction->weapon))
-			{
-				_attackAction->type = BA_AIMEDSHOT;
-			}
-
-			return;
+			_attackAction->type = BA_SNAPSHOT;
 		}
-
-		_attackAction->type = BA_SNAPSHOT;
-
-		return;
+		else if (tuAimed
+			&& usableTU >= _unit->getActionTUs(BA_AIMEDSHOT, _attackAction->weapon))
+		{
+			_attackAction->type = BA_AIMEDSHOT;
+		}
 	}
-
-	if (distance > 12)
+	else if (distance < 13)
+	{
+		if (tuSnap
+			&& usableTU >= _unit->getActionTUs(BA_SNAPSHOT, _attackAction->weapon))
+		{
+			_attackAction->type = BA_SNAPSHOT;
+		}
+		else if (tuAimed
+			&& usableTU >= _unit->getActionTUs(BA_AIMEDSHOT, _attackAction->weapon))
+		{
+			_attackAction->type = BA_AIMEDSHOT;
+		}
+		else if (tuAuto
+			&& usableTU >= _unit->getActionTUs(BA_AUTOSHOT, _attackAction->weapon))
+		{
+			_attackAction->type = BA_AUTOSHOT;
+		}
+	}
+	else // distance > 12
 	{
 		if (tuAimed
-			&& currentTU >= _unit->getActionTUs(BA_AIMEDSHOT, _attackAction->weapon))
+			&& usableTU >= _unit->getActionTUs(BA_AIMEDSHOT, _attackAction->weapon))
 		{
 			_attackAction->type = BA_AIMEDSHOT;
-
-			return;
 		}
-
-		if (distance < 20
-			&& tuSnap
-			&& currentTU >= _unit->getActionTUs(BA_SNAPSHOT, _attackAction->weapon))
+		else if (tuSnap
+			&& usableTU >= _unit->getActionTUs(BA_SNAPSHOT, _attackAction->weapon))
 		{
 			_attackAction->type = BA_SNAPSHOT;
-
-			return;
 		}
-	}
-
-	if (tuSnap
-		&& currentTU >= _unit->getActionTUs(BA_SNAPSHOT, _attackAction->weapon))
-	{
-			_attackAction->type = BA_SNAPSHOT;
-
-			return;
-	}
-
-	if (tuAimed
-		&& currentTU >= _unit->getActionTUs(BA_AIMEDSHOT, _attackAction->weapon))
-	{
-			_attackAction->type = BA_AIMEDSHOT;
-
-			return;
-	}
-
-	if (tuAuto
-		&& currentTU >= _unit->getActionTUs(BA_AUTOSHOT, _attackAction->weapon))
-	{
+		else if (tuAuto
+			&& usableTU >= _unit->getActionTUs(BA_AUTOSHOT, _attackAction->weapon))
+		{
 			_attackAction->type = BA_AUTOSHOT;
+		}
 	}
 }
+	// else, just take yer best (most TU) shot!
+/*	if (tuAimed
+		&& usableTU >= _unit->getActionTUs(BA_AIMEDSHOT, _attackAction->weapon))
+	{
+		_attackAction->type = BA_AIMEDSHOT;
+	}
+	else if (tuAuto
+		&& usableTU >= _unit->getActionTUs(BA_AUTOSHOT, _attackAction->weapon))
+	{
+		_attackAction->type = BA_AUTOSHOT;
+	}
+	else if (tuSnap
+		&& usableTU >= _unit->getActionTUs(BA_SNAPSHOT, _attackAction->weapon))
+	{
+		_attackAction->type = BA_SNAPSHOT;
+	} */
 
 /**
  * Evaluates whether to throw a grenade at an enemy (or group of enemies) we can see.
@@ -2003,9 +2055,9 @@ void AlienBAIState::grenadeAction()
 /* Wb.131129
 			Position originVoxel = _save->getTileEngine()->getOriginVoxel(action, 0);
 			Position targetVoxel = action.target * Position (16,16,24) + Position (8,8, (2 + -_save->getTile(action.target)->getTerrainLevel()));
-			if (_save->getTileEngine()->validateThrow(action, originVoxel, targetVoxel)) // are we within range?
+			if (_save->getTileEngine()->validateThrow(action, originVoxel, targetVoxel)) // are we within range
 */
-				if (_save->getTileEngine()->validateThrow(&action)) // are we within range?
+				if (_save->getTileEngine()->validateThrow(&action)) // are we within range
 				{
 					_attackAction->weapon = grenade;
 					_attackAction->target = action.target;
@@ -2148,7 +2200,12 @@ bool AlienBAIState::psiAction()
  */
 void AlienBAIState::meleeAttack()
 {
-	_unit->lookAt(_aggroTarget->getPosition() + Position(_unit->getArmor()->getSize() - 1, _unit->getArmor()->getSize() - 1, 0), false);
+	_unit->lookAt(
+			_aggroTarget->getPosition() + Position(
+											_unit->getArmor()->getSize() - 1,
+											_unit->getArmor()->getSize() - 1,
+											0),
+			false);
 
 	while (_unit->getStatus() == STATUS_TURNING)
 	{

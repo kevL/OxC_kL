@@ -52,7 +52,10 @@ protected:
 
 	public:
 		/// Creates a new AlienBAIState linked to the game and a certain unit.
-		AlienBAIState(SavedBattleGame* save, BattleUnit* unit, Node* node);
+		AlienBAIState(
+				SavedBattleGame* save,
+				BattleUnit* unit,
+				Node* node);
 		/// Cleans up the AlienBAIState.
 		~AlienBAIState();
 
@@ -96,7 +99,11 @@ protected:
 		/// Selects a suitable position from which to attack.
 		bool findFirePoint();
 		/// Decides if we should throw a grenade/launch a missile to this position.
-		bool explosiveEfficacy(Position targetPos, BattleUnit* attackingUnit, int radius, int diff) const;
+		bool explosiveEfficacy(
+				Position targetPos,
+				BattleUnit* attackingUnit,
+				int radius,
+				int diff) const;
 		/// Attempts to take a melee attack/charge an enemy we can see.
 		void meleeAction();
 		/// Attempts to fire a waypoint projectile at an enemy we, or one of our teammates sees.

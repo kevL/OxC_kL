@@ -24,24 +24,24 @@
 namespace OpenXcom
 {
 
-class SavedBattleGame;
-class Craft;
-class Ufo;
-class RuleTerrain;
-class ResourcePack;
-class BattleItem;
-class MapBlock;
-class Vehicle;
-class Tile;
-class RuleItem;
-class Unit;
-class AlienRace;
-class AlienDeployment;
-class Game;
-class Base;
-class TerrorSite;
 class AlienBase;
+class AlienDeployment;
+class AlienRace;
+class Base;
+class BattleItem;
 class BattleUnit;
+class Craft;
+class Game;
+class MapBlock;
+class ResourcePack;
+class RuleItem;
+class RuleTerrain;
+class SavedBattleGame;
+class TerrorSite;
+class Tile;
+class Ufo;
+class Unit;
+class Vehicle;
 
 /**
  * A utility class that generates the initial battlescape data. Taking into account mission type, craft and ufo involved, terrain type,...
@@ -83,9 +83,19 @@ private:
 	/// Adds an item to a unit.
 	BattleItem* addItem(RuleItem* item, BattleUnit* unit);
 	/// Loads an XCom MAP file.
-	int loadMAP(MapBlock* mapblock, int xoff, int yoff, RuleTerrain* terrain, int objectIDOffset, bool discovered = false);
+	int loadMAP(
+			MapBlock* mapblock,
+			int xoff,
+			int yoff,
+			RuleTerrain* terrain,
+			int objectIDOffset,
+			bool discovered = false);
 	/// Loads an XCom RMP file.
-	void loadRMP(MapBlock* mapblock, int xoff, int yoff, int segment);
+	void loadRMP(
+			MapBlock* mapblock,
+			int xoff,
+			int yoff,
+			int segment);
 	/// Fills power sources with an elerium-115 object.
 	void fuelPowerSources();
 	/// Possibly explodes ufo powersources.
