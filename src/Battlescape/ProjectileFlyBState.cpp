@@ -384,7 +384,8 @@ bool ProjectileFlyBState::createNewProjectile()
 		_projectileImpact = projectile->calculateThrow(_unit->getFiringAccuracy(_action.type, _action.weapon));
 		Log(LOG_INFO) << ". acid spit, part = " << _projectileImpact;
 
-		if (_projectileImpact != VOXEL_EMPTY)
+		if (_projectileImpact != VOXEL_EMPTY
+			 && _projectileImpact != VOXEL_OUTOFBOUNDS)
 		{
 			_unit->aim(true); // set the soldier in an aiming position
 			_parent->getMap()->cacheUnit(_unit);
@@ -679,6 +680,14 @@ bool ProjectileFlyBState::validThrowRange(
 {
 	Log(LOG_INFO) << "ProjectileFlyBState::validThrowRange()";
 
+	if (action->type != BA_THROW)	// kL_note: huh? if *NOT* throw???
+//		&& target->getUnit())		// but if there is a unit in targetTile??
+									// ah okay, this is a celatid spit.
+	{
+//		offset_z = target->getUnit()->getHeight() / 2 + target->getUnit()->getFloatHeight();
+		return true;
+	}
+
 	int weight = action->weapon->getRules()->getWeight();
 	if (action->weapon->getAmmoItem()
 		&& action->weapon->getAmmoItem() != action->weapon)
@@ -687,13 +696,6 @@ bool ProjectileFlyBState::validThrowRange(
 	}
 
 	int offset_z = 2;				// kL_note: this is prob +1 (.. +2) to get things up off of the lowest voxel of a targetTile.
-	if (action->type != BA_THROW	// kL_note: huh? if *NOT* throw???
-		&& target->getUnit())		// but if there is a unit in targetTile??
-									// ah okay, this is a celatid spit.
-	{
-		offset_z = target->getUnit()->getHeight() / 2 + target->getUnit()->getFloatHeight();
-	}
-
 	int delta_z = origin.z - (((action->target.z * 24) + offset_z) - target->getTerrainLevel());
 	double maxDistance = static_cast<double>(getMaxThrowDistance(weight, action->actor->getStats()->strength, delta_z) + 8) / 16.;
 	// Throwing Distance was roughly = 2.5 \D7 Strength / Weight
