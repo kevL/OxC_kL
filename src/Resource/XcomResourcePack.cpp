@@ -409,9 +409,6 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 		{
 			SoundSet *s = _sounds["INTRO.CAT"] = new SoundSet();
 			s->loadCat(CrossPlatform::getDataFile("SOUND/INTRO.CAT"), false);
-		} else
-		{
-			Log(LOG_WARNING) << "INTRO.CAT is missing! :(";
 		}
 
 		if (CrossPlatform::fileExists(CrossPlatform::getDataFile("SOUND/SAMPLE3.CAT")))
@@ -419,9 +416,6 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 			SoundSet *s = _sounds["SAMPLE3.CAT"] = new SoundSet();
 			wav = true;
 			s->loadCat(CrossPlatform::getDataFile("SOUND/SAMPLE3.CAT"), true);
-		} else
-		{
-			Log(LOG_WARNING) << "SAMPLE3.CAT is missing! :(";
 		}
 		
 	}
@@ -839,7 +833,7 @@ void XcomResourcePack::loadBattlescapeResources()
 	}
 
 	// Add in custom reserve buttons
-	Surface* icons = new Surface(50, 24);
+	Surface* icons = new Surface(59, 24);
 	icons->loadImage(CrossPlatform::getDataFile("Resources/UI/reserve.png"));
 	icons->setX(48);
 	icons->setY(176);
@@ -865,7 +859,7 @@ void XcomResourcePack::loadBattlescapeResources()
 
 		for (int i = 0; i < 16; ++i)
 		{
-			//chest frame
+			// chest frame
 			Surface* surf = xcom_1->getFrame(4 * 8 + i);
 			ShaderMove<Uint8> head = ShaderMove<Uint8>(surf);
 			GraphSubset dim = head.getBaseDomain();
@@ -883,7 +877,7 @@ void XcomResourcePack::loadBattlescapeResources()
 
 		for (int i = 0; i < 3; ++i)
 		{
-			//fall frame
+			// fall frame
 			Surface* surf = xcom_1->getFrame(264 + i);
 			ShaderMove<Uint8> head = ShaderMove<Uint8>(surf);
 			GraphSubset dim = head.getBaseDomain();
