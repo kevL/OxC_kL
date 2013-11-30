@@ -260,7 +260,7 @@ void Map::draw()
 		}
 		else
 		{
-			_reveal = 3;
+			_reveal = 4;
 			//Log(LOG_INFO) << ". . . . . . drawTerrain() Set _reveal = " << _reveal;
 		}
 
@@ -476,11 +476,20 @@ void Map::drawTerrain(Surface *surface)
 	}
 
 	surface->lock();
-	for (int itZ = beginZ; itZ <= endZ; itZ++)
+	for (int
+			itZ = beginZ;
+			itZ <= endZ;
+			itZ++)
 	{
-		for (int itX = beginX; itX <= endX; itX++)
+		for (int
+				itX = beginX;
+				itX <= endX;
+				itX++)
 		{
-			for (int itY = beginY; itY <= endY; itY++)
+			for (int
+					itY = beginY;
+					itY <= endY;
+					itY++)
 			{
 				mapPosition = Position(itX, itY, itZ);
 				_camera->convertMapToScreen(mapPosition, &screenPosition);

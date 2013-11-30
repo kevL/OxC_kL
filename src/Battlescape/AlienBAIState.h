@@ -20,17 +20,18 @@
 #ifndef OPENXCOM_ALIENBAISTATE_H
 #define OPENXCOM_ALIENBAISTATE_H
 
-#include "BattleAIState.h"
 #include <vector>
+
+#include "BattleAIState.h"
 
 
 namespace OpenXcom
 {
 
-class SavedBattleGame;
-class BattleUnit;
 class BattlescapeState;
+class BattleUnit;
 class Node;
+class SavedBattleGame;
 
 /**
  * This class is used by the BattleUnit AI.

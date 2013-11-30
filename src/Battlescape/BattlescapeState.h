@@ -20,30 +20,31 @@
 #ifndef OPENXCOM_BATTLESCAPESTATE_H
 #define OPENXCOM_BATTLESCAPESTATE_H
 
-#include "../Engine/State.h"
+#include <string>
+#include <vector>
+
 #include "Position.h"
 
-#include <vector>
-#include <string>
+#include "../Engine/State.h"
 
 
 namespace OpenXcom
 {
 
-class Surface;
-class Map;
+class Bar;
+class BattlescapeGame;
+class BattleItem;
+class BattleUnit;
 class ImageButton;
 class InteractiveSurface;
-class Text;
-class Bar;
+class Map;
 class NumberText;
-class BattleUnit;
 class SavedBattleGame;
-class BattleItem;
+class Surface;
+class Text;
 class Timer;
-class WarningMessage;
-class BattlescapeGame;
 class TurnCounter;		// kL
+class WarningMessage;
 
 /**
  * Battlescape screen which shows the tactical battle.

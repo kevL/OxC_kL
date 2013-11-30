@@ -21,10 +21,14 @@
 #define OPENXCOM_TILEENGINE_H
 
 #include <vector>
-#include "Position.h"
-#include "../Ruleset/MapData.h"
+
 #include <SDL.h>
+
 #include "BattlescapeGame.h"
+#include "Position.h"
+
+#include "../Ruleset/MapData.h"
+
 #include "../Savegame/BattleUnit.h"
 
 
@@ -102,7 +106,8 @@ private:
 				const Position& pTarget_voxel,
 				int power,
 				ItemDamageType type,
-				BattleUnit* attacker);
+				BattleUnit* attacker,
+				bool hit = false);	// kL add.
 		/// Handles explosions.
 		void explode(
 				const Position& voxelTarget,
@@ -154,8 +159,15 @@ private:
 				BattleUnit* excludeUnit,
 				double arc,
 				double acu);
+//				const Position delta);	// Wb.131129, supercedes 'acu'
 		/// Validates a throwing action.
 		bool validateThrow(BattleAction* action);
+/*		bool validateThrow( // Wb.131129
+				BattleAction& action,
+				Position originVoxel,
+				Position targetVoxel,
+				double* curve = 0,
+				int* voxelType = 0); */
 
 		/// Turn XCom soldier's personal lighting on or off.
 		void togglePersonalLighting();
@@ -199,17 +211,20 @@ private:
 		int castedShade(const Position& voxel);
 		/// Checks the visibility of a given voxel.
 		bool isVoxelVisible(const Position& voxel);
-		/// Checks what type of voxel occupies this space.
+		/// Checks what type of voxel occupies pTarget_voxel space.
 		int voxelCheck(
 				const Position& pTarget_voxel,
 				BattleUnit* excludeUnit,
 				bool excludeAllUnits = false,
 				bool onlyVisible = false,
-				BattleUnit* excludeAllBut = 0);
-		/// Get direction to a certain point
+				BattleUnit* excludeAllBut = 0,
+				bool hit = false); // kL add.
+		/// Get direction to a target-point
 		int getDirectionTo(
 				const Position& origin,
 				const Position& target) const;
+		/// determine the origin voxel of a given action.
+		Position getOriginVoxel(BattleAction& action, Tile* tile);
 };
 
 }

@@ -19,26 +19,32 @@
 
 #define _USE_MATH_DEFINES
 
-#include <cmath>
 #include "ProjectileFlyBState.h"
-#include "ExplosionBState.h"
-#include "Projectile.h"
-#include "TileEngine.h"
-#include "Map.h"
-#include "Pathfinding.h"
-#include "../Engine/Game.h"
-#include "../Savegame/BattleUnit.h"
-#include "../Savegame/BattleItem.h"
-#include "../Savegame/SavedGame.h"
-#include "../Savegame/SavedBattleGame.h"
-#include "../Savegame/Tile.h"
-#include "../Resource/ResourcePack.h"
-#include "../Engine/Sound.h"
-#include "../Ruleset/Armor.h"
-#include "../Ruleset/RuleItem.h"
-#include "../Engine/Options.h"
+
+#include <cmath>
+
 #include "AlienBAIState.h"
 #include "Camera.h"
+#include "ExplosionBState.h"
+#include "Map.h"
+#include "Pathfinding.h"
+#include "Projectile.h"
+#include "TileEngine.h"
+
+#include "../Engine/Game.h"
+#include "../Engine/Options.h"
+#include "../Engine/Sound.h"
+
+#include "../Resource/ResourcePack.h"
+
+#include "../Ruleset/Armor.h"
+#include "../Ruleset/RuleItem.h"
+
+#include "../Savegame/BattleItem.h"
+#include "../Savegame/BattleUnit.h"
+#include "../Savegame/SavedBattleGame.h"
+#include "../Savegame/SavedGame.h"
+#include "../Savegame/Tile.h"
 
 
 namespace OpenXcom
@@ -191,7 +197,8 @@ void ProjectileFlyBState::init()
 	}
 
 	// snapshot defaults to "hit" if it's a melee weapon
-	// (in case of reaction "shots" with a melee weapon)
+	// (in case of reaction "shots" with a melee weapon),
+	// for Silacoid attack, etc.
 	// kL_note: not sure that melee reactionFire is properly implemented...
 	if (weapon->getRules()->getBattleType() == BT_MELEE
 		&& _action.type == BA_SNAPSHOT)
@@ -200,7 +207,6 @@ void ProjectileFlyBState::init()
 		_action.type = BA_HIT;
 	}
 
-//kL_below:	Position originVoxel = _parent->getTileEngine()->getSightOriginVoxel(_unit) - Position(0, 0, 2);
 
 	switch (_action.type)
 	{
@@ -245,7 +251,8 @@ void ProjectileFlyBState::init()
 		{
 			Log(LOG_INFO) << ". . BA_THROW";
 
-			Position originVoxel = _parent->getTileEngine()->getSightOriginVoxel(_unit) - Position(0, 0, 2);	// kL_above.
+//Wb.			Position originVoxel = _parent->getTileEngine()->getSightOriginVoxel(_unit) - Position(0, 0, 2);
+			Position originVoxel = _parent->getTileEngine()->getOriginVoxel(_action, 0);	// Wb.
 
 			if (!validThrowRange(&_action, originVoxel, _parent->getSave()->getTile(_action.target)))
 			{
@@ -482,7 +489,7 @@ bool ProjectileFlyBState::createNewProjectile()
  */
 void ProjectileFlyBState::think()
 {
-	Log(LOG_INFO) << "ProjectileFlyBState::think()";
+	//Log(LOG_INFO) << "ProjectileFlyBState::think()";
 
 	/* TODO refactoring : store the projectile in this state, instead of getting it from the map each time? */
 	if (_parent->getMap()->getProjectile() == 0)
@@ -583,7 +590,7 @@ void ProjectileFlyBState::think()
 					_action.weapon->setAmmoItem(0);
 				}
 
-				if (_projectileImpact != 5) // out of map
+				if (_projectileImpact != 5) // NOT out of map
 				{
 					// explosions impact not inside the voxel but two steps back (projectiles generally move 2 voxels at a time)
 					int offset = 0;
@@ -596,13 +603,13 @@ void ProjectileFlyBState::think()
 
 					//Log(LOG_INFO) << ". . . . new ExplosionBState()";
 					_parent->statePushFront(new ExplosionBState(
-							_parent, _parent->getMap()->getProjectile()->getPosition(offset),
-							_ammo,
-							_action.actor,
-							0,
-							(_action.type != BA_AUTOSHOT
-								|| _action.autoShotCounter == _action.weapon->getRules()->getAutoShots()
-								|| !_action.weapon->getAmmoItem())));
+															_parent, _parent->getMap()->getProjectile()->getPosition(offset),
+															_ammo,
+															_action.actor,
+															0,
+															_action.type != BA_AUTOSHOT
+																|| _action.autoShotCounter == _action.weapon->getRules()->getAutoShots()
+																|| !_action.weapon->getAmmoItem()));
 
 					if (_unit->getSpecialAbility() == SPECAB_BURNFLOOR)
 					{
@@ -640,7 +647,7 @@ void ProjectileFlyBState::think()
 		}
 	}
 
-	Log(LOG_INFO) << "ProjectileFlyBState::think() EXIT";
+	//Log(LOG_INFO) << "ProjectileFlyBState::think() EXIT";
 }
 
 /**
@@ -679,7 +686,7 @@ bool ProjectileFlyBState::validThrowRange(
 		weight += action->weapon->getAmmoItem()->getRules()->getWeight();
 	}
 
-	int offset_z = 1;				// kL_note: this is prob +1 to get things up off of the lowest voxel of a targetTile.
+	int offset_z = 2;				// kL_note: this is prob +1 (.. +2) to get things up off of the lowest voxel of a targetTile.
 	if (action->type != BA_THROW	// kL_note: huh? if *NOT* throw???
 		&& target->getUnit())		// but if there is a unit in targetTile??
 									// ah okay, this is a celatid spit.
@@ -717,28 +724,28 @@ int ProjectileFlyBState::getMaxThrowDistance(int weight, int strength, int level
 	Log(LOG_INFO) << "ProjectileFlyBState::getMaxThrowDistance()";
 
 	double curZ = level + 0.5;
-	double delta_z = 1.;
+	double delta_z = 1.0;
 
 	int dist = 0;
 	while (dist < 4000) // just in case
 	{
 		dist += 8;
-		if (delta_z < -1)
-			curZ -= 8;
+		if (delta_z < -1.0)
+			curZ -= 8.0;
 		else
-			curZ += delta_z * 8;
+			curZ += delta_z * 8.0;
 
-		if (curZ < 0 && delta_z < 0) // roll back
+		if (curZ < 0.0 && delta_z < 0.0) // roll back
 		{
-			delta_z = std::max(delta_z, -1.);
+			delta_z = std::max(delta_z, -1.0);
 			if (abs(delta_z) > 1e-10) // rollback horizontal
 				dist -= static_cast<int>(curZ / delta_z);
 
 			break;
         }
 
-		delta_z -= static_cast<double>(50 * weight / strength) / 100.;
-		if (delta_z <= -2.) // become falling
+		delta_z -= static_cast<double>(50 * weight / strength) / 100.0;
+		if (delta_z <= -2.0) // become falling
 			break;
 	}
 

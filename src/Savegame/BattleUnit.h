@@ -20,72 +20,74 @@
 #ifndef OPENXCOM_BATTLEUNIT_H
 #define OPENXCOM_BATTLEUNIT_H
 
-#include <vector>
 #include <string>
-#include "../Battlescape/Position.h"
+#include <vector>
+
+#include "Soldier.h"
+
 #include "../Battlescape/BattlescapeGame.h"
+#include "../Battlescape/Position.h"
+
+#include "../Ruleset/MapData.h"
 #include "../Ruleset/RuleItem.h"
 #include "../Ruleset/Unit.h"
-#include "../Ruleset/MapData.h"
-#include "Soldier.h"
 
 
 namespace OpenXcom
 {
 
-class Tile;
-class BattleItem;
-class Unit;
-class BattleAIState;
-class Node;
-class Surface;
-class RuleInventory;
-class Soldier;
-class Armor;
-class SavedGame;
-class Language;
 class AlienBAIState;
+class Armor;
+class BattleAIState;
+class BattleItem;
 class CivilianBAIState;
+class Language;
+class Node;
+class RuleInventory;
+class SavedGame;
+class Soldier;
+class Surface;
+class Tile;
+class Unit;
 
 enum UnitStatus
 {
-//	STATUS_KNEELING,	// kL
-	STATUS_STANDING,
-	STATUS_WALKING,
-	STATUS_FLYING,
-	STATUS_TURNING,
-	STATUS_AIMING,
-	STATUS_COLLAPSING,
-	STATUS_DEAD,
-	STATUS_UNCONSCIOUS,
-	STATUS_PANICKING,
-	STATUS_BERSERK
+	STATUS_STANDING,	// 0
+	STATUS_WALKING,		// 1
+	STATUS_FLYING,		// 2
+	STATUS_TURNING,		// 3
+	STATUS_AIMING,		// 4
+	STATUS_COLLAPSING,	// 5
+	STATUS_DEAD,		// 6
+	STATUS_UNCONSCIOUS,	// 7
+	STATUS_PANICKING,	// 8
+	STATUS_BERSERK		// 9
 };
 
 enum UnitFaction
 {
-	FACTION_PLAYER,
-	FACTION_HOSTILE,
-	FACTION_NEUTRAL
+	FACTION_PLAYER,		// 0
+	FACTION_HOSTILE,	// 1
+	FACTION_NEUTRAL		// 2
 };
 
 enum UnitSide
 {
-	SIDE_FRONT,
-	SIDE_LEFT,
-	SIDE_RIGHT,
-	SIDE_REAR,
-	SIDE_UNDER
+	SIDE_FRONT,			// 0
+	SIDE_LEFT,			// 1
+	SIDE_RIGHT,			// 2
+	SIDE_REAR,			// 3
+	SIDE_UNDER			// 4
 };
 
 enum UnitBodyPart
 {
-	BODYPART_HEAD,
-	BODYPART_TORSO,
-	BODYPART_RIGHTARM,
-	BODYPART_LEFTARM,
-	BODYPART_RIGHTLEG,
-	BODYPART_LEFTLEG
+	BODYPART_HEAD,		// 0
+	BODYPART_TORSO,		// 1
+	BODYPART_RIGHTARM,	// 2
+	BODYPART_LEFTARM,	// 3
+	BODYPART_RIGHTLEG,	// 4
+	BODYPART_LEFTLEG	// 5
 };
 
 /**

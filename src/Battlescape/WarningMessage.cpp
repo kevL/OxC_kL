@@ -17,10 +17,14 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "WarningMessage.h"
-#include <SDL.h>
 #include <string>
+
+#include <SDL.h>
+
+#include "WarningMessage.h"
+
 #include "../Engine/Timer.h"
+
 #include "../Interface/Text.h"
 
 
@@ -134,7 +138,7 @@ void WarningMessage::fade()
 	_redraw = true;
 
 	_fade++;
-	if (_fade == 24)
+	if (_fade == 16)
 	{
 		setVisible(false);
 

@@ -18,26 +18,34 @@
  */
 
 #define _USE_MATH_DEFINES
+
+#include "AlienBAIState.h"
+
 #include <cmath>
 #include <climits>
 #include <algorithm>
-#include "AlienBAIState.h"
+
 #include "ProjectileFlyBState.h"
-#include "../Savegame/BattleUnit.h"
+
+#include "../Battlescape/BattlescapeState.h"
+#include "../Battlescape/Map.h"
+#include "../Battlescape/Pathfinding.h"
+#include "../Battlescape/TileEngine.h"
+
+#include "../Engine/Game.h"
+#include "../Engine/Logger.h"
+#include "../Engine/RNG.h"
+
+#include "../Resource/ResourcePack.h"
+
+#include "../Ruleset/Armor.h"
+
 #include "../Savegame/BattleItem.h"
+#include "../Savegame/BattleUnit.h"
 #include "../Savegame/Node.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/SavedGame.h"
-#include "../Battlescape/TileEngine.h"
-#include "../Battlescape/Map.h"
-#include "../Battlescape/BattlescapeState.h"
 #include "../Savegame/Tile.h"
-#include "../Battlescape/Pathfinding.h"
-#include "../Engine/RNG.h"
-#include "../Engine/Logger.h"
-#include "../Engine/Game.h"
-#include "../Ruleset/Armor.h"
-#include "../Resource/ResourcePack.h"
 
 
 namespace OpenXcom
@@ -1973,7 +1981,7 @@ void AlienBAIState::grenadeAction()
 	// distance must be more than X tiles, otherwise it's too dangerous to play with explosives
 	if (explosiveEfficacy(_aggroTarget->getPosition(), _unit, grenade->getRules()->getExplosionRadius(), _attackAction->diff))
 	{
-		if (_unit->getFaction() == FACTION_HOSTILE)
+//		if (_unit->getFaction() == FACTION_HOSTILE)
 		{
 			int tu = 0;
 
@@ -1992,6 +2000,11 @@ void AlienBAIState::grenadeAction()
 				action.type = BA_THROW;
 				action.actor = _unit;
 
+/* Wb.131129
+			Position originVoxel = _save->getTileEngine()->getOriginVoxel(action, 0);
+			Position targetVoxel = action.target * Position (16,16,24) + Position (8,8, (2 + -_save->getTile(action.target)->getTerrainLevel()));
+			if (_save->getTileEngine()->validateThrow(action, originVoxel, targetVoxel)) // are we within range?
+*/
 				if (_save->getTileEngine()->validateThrow(&action)) // are we within range?
 				{
 					_attackAction->weapon = grenade;

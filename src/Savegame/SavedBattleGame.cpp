@@ -1581,9 +1581,15 @@ bool SavedBattleGame::setUnitPosition(BattleUnit* bu, const Position& position, 
 {
 	int size = bu->getArmor()->getSize() - 1;
 
-	for (int x = size; x >= 0; x--) // first check if the tiles are occupied
+	for (int // first check if the tiles are occupied
+			x = size;
+			x >= 0;
+			x--)
 	{
-		for (int y = size; y >= 0; y--)
+		for (int
+				y = size;
+				y >= 0;
+				y--)
 		{
 			Tile* t = getTile(position + Position(x, y, 0));
 			if (t == 0
@@ -1598,7 +1604,10 @@ bool SavedBattleGame::setUnitPosition(BattleUnit* bu, const Position& position, 
 	if (size > 0)
 	{
 		getPathfinding()->setUnit(bu);
-		for (int dir = 2; dir <= 4; ++dir)
+		for (int
+				dir = 2;
+				dir <= 4;
+				++dir)
 		{
 			if (getPathfinding()->isBlocked(getTile(position), 0, dir, 0))
 				return false;
@@ -1607,13 +1616,21 @@ bool SavedBattleGame::setUnitPosition(BattleUnit* bu, const Position& position, 
 
 	if (testOnly) return true;
 
-	for (int x = size; x >= 0; x--) // set the unit in position
+
+	for (int // set the unit in position
+			x = size;
+			x >= 0;
+			x--)
 	{
-		for (int y = size; y >= 0; y--)
+		for (int
+				y = size;
+				y >= 0;
+				y--)
 		{
 			if (x == 0 && y == 0)
 			{
-				bu->setPosition(position + Position(x, y, 0));
+				bu->setPosition(position);
+//				bu->setTile(getTile(position), getTile(position - Position(0, 0, 1)));
 			}
 
 			getTile(position + Position(x, y, 0))->setUnit(bu, getTile(position + Position(x, y, -1)));

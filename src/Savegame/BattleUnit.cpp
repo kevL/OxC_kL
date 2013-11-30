@@ -20,25 +20,30 @@
 #define _USE_MATH_DEFINES
 
 #include "BattleUnit.h"
-#include "BattleItem.h"
+
 #include <cmath>
 #include <sstream>
 #include <typeinfo>
-#include "../Engine/Palette.h"
-#include "../Engine/Surface.h"
+
+#include "BattleItem.h"
+#include "SavedGame.h"
+#include "Soldier.h"
+#include "Tile.h"
+
+#include "../Battlescape/BattleAIState.h"
+#include "../Battlescape/BattlescapeGame.h"
+#include "../Battlescape/Pathfinding.h"
+
 #include "../Engine/Language.h"
 #include "../Engine/Logger.h"
-#include "../Battlescape/Pathfinding.h"
-#include "../Battlescape/BattlescapeGame.h"
-#include "../Battlescape/BattleAIState.h"
-#include "Soldier.h"
-#include "../Ruleset/Armor.h"
-#include "../Ruleset/Unit.h"
+#include "../Engine/Palette.h"
 #include "../Engine/RNG.h"
+#include "../Engine/Surface.h"
+
+#include "../Ruleset/Armor.h"
 #include "../Ruleset/RuleInventory.h"
 #include "../Ruleset/RuleSoldier.h"
-#include "Tile.h"
-#include "SavedGame.h"
+#include "../Ruleset/Unit.h"
 
 
 namespace OpenXcom
@@ -769,7 +774,7 @@ int BattleUnit::getDiagonalWalkingPhase() const
  */
 void BattleUnit::lookAt(const Position& point, bool turret)
 {
-	Log(LOG_INFO) << "BattleUnit::lookAt() #1";// unitID = " << getId();
+	//Log(LOG_INFO) << "BattleUnit::lookAt() #1";// unitID = " << getId();
 	//Log(LOG_INFO) << ". . _direction = " << _direction;
 	//Log(LOG_INFO) << ". . _toDirection = " << _toDirection;
 	//Log(LOG_INFO) << ". . _directionTurret = " << _directionTurret;
@@ -805,7 +810,7 @@ void BattleUnit::lookAt(const Position& point, bool turret)
 			// kL_note: what about Forcing the faced direction instantly?
 		}
 	}
-	Log(LOG_INFO) << "BattleUnit::lookAt() #1 EXIT";
+	//Log(LOG_INFO) << "BattleUnit::lookAt() #1 EXIT";
 }
 
 /**
@@ -814,7 +819,7 @@ void BattleUnit::lookAt(const Position& point, bool turret)
  */
 void BattleUnit::lookAt(int direction, bool force)
 {
-	Log(LOG_INFO) << "BattleUnit::lookAt() #2";// unitID = " << getId();
+	//Log(LOG_INFO) << "BattleUnit::lookAt() #2";// unitID = " << getId();
 	//Log(LOG_INFO) << ". . _direction = " << _direction;
 	//Log(LOG_INFO) << ". . _toDirection = " << _toDirection;
 	//Log(LOG_INFO) << ". . lookAt() direction = " << direction;
@@ -840,7 +845,7 @@ void BattleUnit::lookAt(int direction, bool force)
 //		else
 //			_status = STATUS_STANDING;	// kL
 	}
-	Log(LOG_INFO) << "BattleUnit::lookAt() #2 EXIT";// unitID = " << getId();
+	//Log(LOG_INFO) << "BattleUnit::lookAt() #2 EXIT";// unitID = " << getId();
 }
 
 /**
@@ -848,7 +853,7 @@ void BattleUnit::lookAt(int direction, bool force)
  */
 void BattleUnit::turn(bool turret)
 {
-	Log(LOG_INFO) << "BattleUnit::turn()";// unitID = " << getId();
+	//Log(LOG_INFO) << "BattleUnit::turn()";// unitID = " << getId();
 	//Log(LOG_INFO) << ". . _direction = " << _direction;
 	//Log(LOG_INFO) << ". . _toDirection = " << _toDirection;
 	//Log(LOG_INFO) << ". . _directionTurret = " << _directionTurret;
@@ -965,7 +970,7 @@ void BattleUnit::turn(bool turret)
 		//Log(LOG_INFO) << "BattleUnit::turn() " << getId() << " - STATUS_STANDING (turn has ended)";
 		_status = STATUS_STANDING; // we officially reached our destination
 	}
-	Log(LOG_INFO) << "BattleUnit::turn() EXIT";// unitID = " << getId();
+	//Log(LOG_INFO) << "BattleUnit::turn() EXIT";// unitID = " << getId();
 }
 
 /**
@@ -1615,7 +1620,7 @@ bool BattleUnit::addToVisibleUnits(BattleUnit* unit)
 
 	for (std::vector<BattleUnit*>::iterator i = _unitsSpottedThisTurn.begin(); i != _unitsSpottedThisTurn.end(); ++i)
 	{
-		if ((BattleUnit*)(*i) == unit)
+		if (dynamic_cast<BattleUnit*>(*i) == unit)
 		{
 			add = false;
 
@@ -1630,7 +1635,7 @@ bool BattleUnit::addToVisibleUnits(BattleUnit* unit)
 
 	for (std::vector<BattleUnit*>::iterator i = _visibleUnits.begin(); i != _visibleUnits.end(); ++i)
 	{
-		if ((BattleUnit*)(*i) == unit)
+		if (dynamic_cast<BattleUnit*>(*i) == unit)
 		{
 			return false;
 		}
@@ -2037,6 +2042,11 @@ void BattleUnit::setTile(Tile* tile, Tile* tileBelow)
 	{
 		_status = STATUS_WALKING;
 		_floating = false;
+	}
+	else if (_status == STATUS_STANDING
+		&& _armor->getMovementType() == MT_FLY)
+	{
+		_floating = _tile->hasNoFloor(tileBelow);
 	}
 }
 

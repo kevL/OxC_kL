@@ -42,18 +42,18 @@ enum ItemDamageType
 
 enum BattleType
 {
-	BT_NONE,
-	BT_FIREARM,
-	BT_AMMO,
-	BT_MELEE,
-	BT_GRENADE,
-	BT_PROXIMITYGRENADE,
-	BT_MEDIKIT,
-	BT_SCANNER,
-	BT_MINDPROBE,
-	BT_PSIAMP,
-	BT_FLARE,
-	BT_CORPSE
+	BT_NONE,				// 0
+	BT_FIREARM,				// 1
+	BT_AMMO,				// 2
+	BT_MELEE,				// 3
+	BT_GRENADE,				// 4
+	BT_PROXIMITYGRENADE,	// 5
+	BT_MEDIKIT,				// 6
+	BT_SCANNER,				// 7
+	BT_MINDPROBE,			// 8
+	BT_PSIAMP,				// 9
+	BT_FLARE,				// 10
+	BT_CORPSE				// 11
 };
 
 namespace OpenXcom

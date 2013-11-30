@@ -21,6 +21,7 @@
 #define OPENXCOM_BATTLEAISTATE_H
 
 #include <yaml-cpp/yaml.h>
+
 #include "BattlescapeGame.h"
 
 
@@ -32,10 +33,10 @@ class BattleUnit;
 
 enum AIMode
 {
-	AI_PATROL,
-	AI_AMBUSH,
-	AI_COMBAT,
-	AI_ESCAPE
+	AI_PATROL,	// 0
+	AI_AMBUSH,	// 1
+	AI_COMBAT,	// 2
+	AI_ESCAPE	// 3
 };
 
 /**

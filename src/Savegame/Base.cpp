@@ -20,27 +20,31 @@
 #define _USE_MATH_DEFINES
 
 #include "Base.h"
-#include <cmath>
+
 #include <algorithm>
+#include <cmath>
+
 #include "BaseFacility.h"
-#include "../Ruleset/RuleBaseFacility.h"
 #include "Craft.h"
-#include "../Ruleset/RuleCraft.h"
-#include "../Ruleset/Ruleset.h"
 #include "ItemContainer.h"
+#include "Production.h"
+#include "ResearchProject.h"
 #include "Soldier.h"
+#include "Target.h"
+#include "Transfer.h"
+#include "Ufo.h"
+#include "Vehicle.h"
+
 #include "../Engine/Language.h"
+#include "../Engine/Options.h"
+#include "../Engine/RNG.h"
+
+#include "../Ruleset/RuleBaseFacility.h"
+#include "../Ruleset/RuleCraft.h"
 #include "../Ruleset/RuleItem.h"
 #include "../Ruleset/RuleManufacture.h"
 #include "../Ruleset/RuleResearch.h"
-#include "Transfer.h"
-#include "ResearchProject.h"
-#include "Production.h"
-#include "Vehicle.h"
-#include "Target.h"
-#include "Ufo.h"
-#include "../Engine/RNG.h"
-#include "../Engine/Options.h"
+#include "../Ruleset/Ruleset.h"
 
 
 namespace OpenXcom

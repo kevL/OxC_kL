@@ -521,7 +521,7 @@ BattlescapeState::BattlescapeState(Game* game)
 	_numTUSnap->setColor(Palette::blockOffset(0)+8);
 	_numTimeUnits->setColor(Palette::blockOffset(4));
 	_numEnergy->setColor(Palette::blockOffset(1));
-	_numHealth->setColor(Palette::blockOffset(2)+11);	// kL, dark red
+	_numHealth->setColor(Palette::blockOffset(2)+12);	// kL, dark red
 	_numMorale->setColor(Palette::blockOffset(12));
 	_barTimeUnits->setColor(Palette::blockOffset(4));
 	_barTimeUnits->setScale(1.0);

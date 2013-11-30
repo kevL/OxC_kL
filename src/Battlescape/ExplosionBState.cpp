@@ -255,11 +255,13 @@ void ExplosionBState::explode()
 		{
 			Log(LOG_INFO) << ". . not AoE, TileEngine::hit()";
 
+			bool hit = _item->getRules()->getBattleType() == BT_MELEE;
 			BattleUnit* victim = save->getTileEngine()->hit(
 														_center,
 														_power,
 														_item->getRules()->getDamageType(),
-														_unit);
+														_unit,
+														hit);	// kL add.
 
 			if (!_unit->getZombieUnit().empty() // check if this unit turns others into zombies
 				&& victim

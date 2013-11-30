@@ -21,15 +21,16 @@
 #define OPENXCOM_PROJECTILE_H
 
 #include <vector>
-#include "Position.h"
+
 #include "BattlescapeGame.h"
+#include "Position.h"
 
 
 namespace OpenXcom
 {
 
-class ResourcePack;
 class BattleItem;
+class ResourcePack;
 class SavedBattleGame;
 class Surface;
 class Tile;
@@ -54,7 +55,8 @@ private:
 			Position* target,
 			double accuracy,
 			bool keepRange = false,
-			Tile* targetTile = 0);
+			Tile* targetTile = 0,
+			bool throwing = false);
 
 	public:
 		/// Creates a new Projectile.
