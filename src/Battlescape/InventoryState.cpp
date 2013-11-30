@@ -295,34 +295,6 @@ void InventoryState::init()
 		}
 	}
 
-/*	if (_showMoreStatsInInventoryView
-		&& !_tu)
-	{
-		_txtFAcc->setText(tr("STR_FACCURACY").arg((int)(unit->getStats()->firing * unit->getAccuracyModifier())));
-
-		_txtReact->setText(tr("STR_REACT").arg(unit->getStats()->reactions));
-
-		if (unit->getStats()->psiSkill > 0)
-		{
-			_txtPSkill->setText(tr("STR_PSKILL").arg(unit->getStats()->psiSkill));
-		}
-		else
-		{
-			_txtPSkill->setText(L"");
-		}
-
-		if (unit->getStats()->psiSkill > 0
-			|| (Options::getBool("psiStrengthEval")
-				&& _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements())))
-		{
-			_txtPStr->setText(tr("STR_PSTRENGTH").arg(unit->getStats()->psiStrength));
-		}
-		else
-		{
-			_txtPStr->setText(L"");
-		}
-	} */
-
 	updateStats();
 }
 
@@ -339,11 +311,11 @@ void InventoryState::updateStats()
 	_txtWeight->setText(tr("STR_WEIGHT").arg(weight).arg(unit->getStats()->strength));
 	if (weight > unit->getStats()->strength)
 	{
-		_txtWeight->setSecondaryColor(Palette::blockOffset(2));
+		_txtWeight->setSecondaryColor(Palette::blockOffset(2)+5);
 	}
 	else
 	{
-		_txtWeight->setSecondaryColor(Palette::blockOffset(1));
+		_txtWeight->setSecondaryColor(Palette::blockOffset(3));
 	}
 	
 	_txtFAcc->setText(tr("STR_FACCURACY").arg((int)(unit->getStats()->firing * unit->getAccuracyModifier())));
@@ -359,7 +331,9 @@ void InventoryState::updateStats()
 		_txtPSkill->setText(L"");
 	}
 
-	if (unit->getStats()->psiSkill > 0 || (Options::getBool("psiStrengthEval") && _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements())))
+	if (unit->getStats()->psiSkill > 0
+		|| (Options::getBool("psiStrengthEval")
+			&& _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements())))
 	{
 		_txtPStr->setText(tr("STR_PSTRENGTH").arg(unit->getStats()->psiStrength));
 	}
