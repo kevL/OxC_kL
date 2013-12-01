@@ -18,16 +18,20 @@
  */
 
 #include "UnitTurnBState.h"
-#include "TileEngine.h"
+
 #include "BattlescapeState.h"
 #include "Map.h"
+#include "TileEngine.h"
+
 #include "../Engine/Game.h"
+#include "../Engine/Options.h"
+#include "../Engine/RNG.h"
+#include "../Engine/Sound.h"
+
+#include "../Resource/ResourcePack.h"
+
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/SavedBattleGame.h"
-#include "../Resource/ResourcePack.h"
-#include "../Engine/Sound.h"
-#include "../Engine/RNG.h"
-#include "../Engine/Options.h"
 
 
 namespace OpenXcom
@@ -65,6 +69,8 @@ void UnitTurnBState::init()
 	_unit = _action.actor;
 	_action.TU = 0;
 
+	_unit->setStopShot(false); // kL
+
 	//Log(LOG_INFO) << "UnitTurnBState::init() unitID = " << _unit->getId() << "_action.strafe = " << _action.strafe;
 
 	if (_unit->getFaction() == FACTION_PLAYER)
@@ -73,12 +79,11 @@ void UnitTurnBState::init()
 		_parent->setStateInterval(Options::getInt("battleAlienSpeed"));
 
 	// if the unit has a turret and we are turning during targeting, then only the turret turns
-//kL	_turret = (_unit->getTurretType() != -1 && _action.targeting) || _action.strafe;
-	_turret = _action.strafe					// kL
-			|| (_unit->getTurretType() != -1	// kL
-				&& _action.targeting);			// kL
+	_turret = _action.strafe
+			|| (_unit->getTurretType() != -1
+				&& _action.targeting);
 
-	_unit->lookAt(_action.target, _turret);	// kL_note: -> STATUS_TURNING
+	_unit->lookAt(_action.target, _turret);	// -> STATUS_TURNING
 
 //	_unit->setCache(0);						// kL, done in UnitTurnBState::think()
 //	_parent->getMap()->cacheUnit(_unit);	// kL, done in UnitTurnBState::think()
@@ -169,7 +174,12 @@ void UnitTurnBState::think()
 			//}
 
 			//Log(LOG_INFO) << "UnitTurnBState::think(), abortTurn()";
-			_unit->abortTurn();
+			_unit->abortTurn();			// -> STATUS_STANDING.
+			_unit->setStopShot(true);	// kL
+
+			// kL_note: Can i pop the state (ProjectileFlyBState) here if we came from
+			// BattlescapeGame::primaryAction() and as such STOP a unit from shooting
+			// elsewhere, if it was turning to do a/the shot when a newVis unit gets Spotted
 		}
 
 		if (_unit->getStatus() == STATUS_STANDING)
@@ -183,7 +193,7 @@ void UnitTurnBState::think()
 		_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
 
 		//Log(LOG_INFO) << "UnitTurnBState::think(), abortTurn() popState() 2";
-		_unit->abortTurn();
+		_unit->abortTurn();		// -> STATUS_STANDING.
 		_parent->popState();
 	}
 

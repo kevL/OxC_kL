@@ -95,9 +95,9 @@ InventoryState::InventoryState(Game* game, bool tu, BattlescapeState* parent)
 
 	_txtItem	= new Text(160, 9, 128, 140);
 	_txtAmmo	= new Text(66, 24, 254, 64);
-	_btnOk		= new InteractiveSurface(35, 22, 237, 1);
-	_btnPrev	= new InteractiveSurface(23, 22, 273, 1);
-	_btnNext	= new InteractiveSurface(23, 22, 297, 1);
+	_btnOk		= new InteractiveSurface(35, 22, 237, 0);
+	_btnPrev	= new InteractiveSurface(23, 22, 273, 0);
+	_btnNext	= new InteractiveSurface(23, 22, 297, 0);
 	_btnUnload	= new InteractiveSurface(32, 25, 288, 32);
 	_btnGround	= new InteractiveSurface(32, 15, 289, 137);
 	_btnRank	= new InteractiveSurface(26, 23, 0, 0);

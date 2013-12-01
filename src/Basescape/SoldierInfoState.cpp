@@ -69,12 +69,12 @@ SoldierInfoState::SoldierInfoState(Game* game, Base* base, size_t soldier)
 
 	_rank			= new Surface(26, 23, 4, 4);
 
-	_btnPrev		= new TextButton(28, 15, 0, 32);
-	_btnOk			= new TextButton(48, 15, 30, 32);
-	_btnNext		= new TextButton(28, 15, 80, 32);
+	_btnPrev		= new TextButton(28, 16, 0, 32);
+	_btnOk			= new TextButton(48, 16, 30, 32);
+	_btnNext		= new TextButton(28, 16, 80, 32);
 
 	_txtArmor		= new Text(30, 9, 130, 35);
-	_btnArmor		= new TextButton(70, 15, 164, 32);
+	_btnArmor		= new TextButton(70, 16, 164, 32);
 
 	_edtSoldier		= new TextEdit(200, 16, 40, 9);
 	_btnSack		= new TextButton(45, 17, 268, 7);

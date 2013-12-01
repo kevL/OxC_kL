@@ -133,6 +133,7 @@ private:
 	int _turnsExposed;
 	std::string _zombieUnit, _spawnUnit;
 	std::string _activeHand;
+	bool _stopShot; // kL, to stop a unit from firing/throwing if it spots a new opponent during turning
 
 	// static data
 	std::string _type;
@@ -487,6 +488,11 @@ private:
 
 		/// Sets a unit's health level.
 		void setHealth(int health);
+
+		/// to stop a unit from firing/throwing if it spots a new opponent during turning
+		void setStopShot(bool stop);
+		/// to stop a unit from firing/throwing if it spots a new opponent during turning
+		bool getStopShot();
 		// kL_end.
 
 		/// Is this unit selectable?

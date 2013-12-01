@@ -435,7 +435,7 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 							//if (kL_Debug) Log(LOG_INFO) << ". . calculateFOV(), FACTION_PLAYER, Done";
 
 							if ((visUnit->getFaction() == FACTION_HOSTILE && unit->getFaction() != FACTION_HOSTILE)		// kL_note: or not Neutral?
-								|| (visUnit->getFaction() != FACTION_HOSTILE && unit->getFaction() == FACTION_HOSTILE))
+								|| (visUnit->getFaction() != FACTION_HOSTILE && unit->getFaction() == FACTION_HOSTILE))	// kL_note: what about Mc'd spooters?
 							{
 								//Log(LOG_INFO) << ". . . opposite Factions, add Tile & visUnit to visList";
 

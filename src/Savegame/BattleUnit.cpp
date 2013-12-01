@@ -96,7 +96,8 @@ BattleUnit::BattleUnit(Soldier* soldier, UnitFaction faction)
 		_unitRules(0),
 		_rankInt(-1),
 		_turretType(-1),
-		_hidingForTurn(false)
+		_hidingForTurn(false),
+		_stopShot(false) // kL
 {
 	//Log(LOG_INFO) << "Create BattleUnit 1 : soldier ID = " << getId();
 
@@ -3284,6 +3285,21 @@ void BattleUnit::knockOut()
 void BattleUnit::setHealth(int health)
 {
 	_health = health;
+}
+
+/**
+ * to stop a unit from firing/throwing if it spots a new opponent during turning
+ */
+void BattleUnit::setStopShot(bool stop)
+{
+	_stopShot = stop;
+}
+/**
+ * to stop a unit from firing/throwing if it spots a new opponent during turning
+ */
+bool BattleUnit::getStopShot()
+{
+	return _stopShot;
 }
 // kL_end.
 

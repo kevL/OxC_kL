@@ -101,7 +101,6 @@ void ProjectileFlyBState::init()
 		Log(LOG_INFO) << ". already initialized, EXIT";
 		return;
 	}
-
 	_initialized = true;
 
 	BattleItem* weapon = _action.weapon;
@@ -147,7 +146,20 @@ void ProjectileFlyBState::init()
 		return;
 	}
 
-	// kL_begin: ProjectileFlyBState::init() Give back time units; pre-end Reaction Fire.
+	// kL_begin: ProjectileFlyBState::init() Give back time units; pre-end Reaction Fire. +stopShot!!
+	if (_unit->getStopShot())
+	{
+		// do I have to refund TU's for this???
+		// when are TU subtracted for a primaryAction firing/throwing action?
+		_unit->setStopShot(false);
+
+		_parent->popState();
+
+		Log(LOG_INFO) << ". stopShot.";
+		return;
+	}
+
+
 	if (_unit->getFaction() != _parent->getSave()->getSide()) // reaction fire
 	{
 		if (_parent->getSave()->getTile(_action.target)->getUnit())
@@ -161,7 +173,7 @@ void ProjectileFlyBState::init()
 				_unit->setTimeUnits(_unit->getTimeUnits() + _unit->getActionTUs(_action.type, _action.weapon));
 				_parent->popState();
 
-				Log(LOG_INFO) << ". . reactionFire refund (targetUnit exists) EXIT";
+				Log(LOG_INFO) << ". . . reactionFire refund (targetUnit exists) EXIT";
 				return;
 			}
 		}
