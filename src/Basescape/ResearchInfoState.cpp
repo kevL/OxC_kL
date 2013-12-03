@@ -29,13 +29,17 @@
 #include "../Engine/Palette.h"
 #include "../Engine/RNG.h"
 #include "../Engine/Timer.h"
+
 #include "../Interface/ArrowButton.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
+
 #include "../Resource/ResourcePack.h"
+
 #include "../Ruleset/RuleResearch.h"
 #include "../Ruleset/Ruleset.h"
+
 #include "../Savegame/Base.h"
 #include "../Savegame/ItemContainer.h"
 #include "../Savegame/ResearchProject.h"

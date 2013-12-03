@@ -220,11 +220,11 @@ GeoscapeState::GeoscapeState(Game* game)
 
 	_timeSpeed = _btn5Secs;
 
-	_timer				= new Timer(120);
+	_timer				= new Timer(200);
 
-	_zoomInEffectTimer	= new Timer(80);
-	_zoomOutEffectTimer	= new Timer(80);
-	_dogfightStartTimer	= new Timer(280);
+	_zoomInEffectTimer	= new Timer(100);
+	_zoomOutEffectTimer	= new Timer(100);
+	_dogfightStartTimer	= new Timer(250);
 
 	_txtDebug			= new Text(200, 18, 0, 0);
 
@@ -642,7 +642,7 @@ void GeoscapeState::init()
 
 	_globe->onMouseClick((ActionHandler)& GeoscapeState::globeClick);
 	_globe->onMouseOver(0);
-	_globe->rotateStop();
+//	_globe->rotateStop();
 	_globe->focus();
 	_globe->draw();
 
@@ -699,7 +699,7 @@ void GeoscapeState::think()
 
 		if (!_popups.empty()) // Handle popups
 		{
-			_globe->rotateStop();
+//			_globe->rotateStop();
 			_game->pushState(*_popups.begin());
 			_popups.erase(_popups.begin());
 		}
@@ -1036,7 +1036,7 @@ void GeoscapeState::time5Seconds()
 							}
 
 							if (!(*j)->isInDogfight()
-								&& !(*j)->getDistance(u))
+								&& !(*j)->getDistance(u)) // we ran into a UFO
 							{
 								_dogfightsToBeStarted.push_back(new DogfightState(_game, _globe, (*j), u));
 
@@ -2151,7 +2151,7 @@ void GeoscapeState::time1Month()
 	// Handle Psi-Training and initiate a new retaliation mission, if applicable
 	bool psi = false;
 
-	for(std::vector<Base*>::const_iterator
+	for (std::vector<Base*>::const_iterator
 			b = _game->getSavedGame()->getBases()->begin();
 			b != _game->getSavedGame()->getBases()->end();
 			++b)
@@ -2546,7 +2546,7 @@ void GeoscapeState::zoomOutEffect()
 {
 	if (_globe->isZoomedOutToMax()
 //	if (_game->getSavedGame()->getGlobeZoom() == 0
-		|| _game->getSavedGame()->getGlobeZoom() < _zoomInter - 1)
+		|| _game->getSavedGame()->getGlobeZoom() < _zoomInter)
 	{
 		_zoomInter = 0;
 

@@ -18,21 +18,28 @@
  */
 
 #include "ManufactureStartState.h"
-#include "../Interface/Window.h"
-#include "../Interface/TextButton.h"
-#include "../Interface/Text.h"
-#include "../Interface/TextList.h"
+
+#include <sstream>
+
+#include "ManufactureInfoState.h"
+
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Palette.h"
 #include "../Engine/Options.h"
+#include "../Engine/Palette.h"
+
+#include "../Interface/Text.h"
+#include "../Interface/TextButton.h"
+#include "../Interface/TextList.h"
+#include "../Interface/Window.h"
+
 #include "../Resource/ResourcePack.h"
+
 #include "../Ruleset/RuleManufacture.h"
+
 #include "../Savegame/Base.h"
 #include "../Savegame/ItemContainer.h"
-#include "ManufactureInfoState.h"
 #include "../Savegame/SavedGame.h"
-#include <sstream>
 
 
 namespace OpenXcom
@@ -67,7 +74,7 @@ ManufactureStartState::ManufactureStartState(Game* game, Base* base, RuleManufac
 	_txtUnitRequiredColumn	= new Text(60, 9, 180, 85);
 	_txtUnitAvailableColumn	= new Text(60, 9, 240, 85);
 
-	_lstRequiredItems		= new TextList(240, 48, 40, 105);
+	_lstRequiredItems		= new TextList(240, 64, 40, 90);
 
 	_btnCancel				= new TextButton(130, 16, 20, 160);
 	_btnStart				= new TextButton(130, 16, 170, 160);
@@ -141,7 +148,6 @@ ManufactureStartState::ManufactureStartState(Game* game, Base* base, RuleManufac
 	add(_txtManHour);
 	add(_txtCost);
 	add(_txtWorkSpace);
-	add(_btnCancel);
 
 	add(_txtRequiredItemsTitle);
 	add(_txtItemNameColumn);
@@ -149,6 +155,7 @@ ManufactureStartState::ManufactureStartState(Game* game, Base* base, RuleManufac
 	add(_txtUnitAvailableColumn);
 	add(_lstRequiredItems);
 
+	add(_btnCancel);
 	add(_btnStart);
 
 	centerAllSurfaces();
@@ -185,7 +192,7 @@ ManufactureStartState::ManufactureStartState(Game* game, Base* base, RuleManufac
 
 	_txtRequiredItemsTitle->setColor(Palette::blockOffset(13)+10);
 	_txtRequiredItemsTitle->setText(tr("STR_SPECIAL_MATERIALS_REQUIRED"));
-	_txtRequiredItemsTitle->setAlign(ALIGN_CENTER);
+//kL	_txtRequiredItemsTitle->setAlign(ALIGN_CENTER);
 
 	_txtItemNameColumn->setColor(Palette::blockOffset(13)+10);
 	_txtItemNameColumn->setText(tr("STR_ITEM_REQUIRED"));

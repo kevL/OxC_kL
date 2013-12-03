@@ -18,15 +18,20 @@
  */
 
 #include "MiniBaseView.h"
+
 #include <cmath>
-#include "../Engine/SurfaceSet.h"
+
 #include "../Engine/Action.h"
+#include "../Engine/Palette.h"
+#include "../Engine/SurfaceSet.h"
+
+//#include "../Geoscape/GeoscapeState.h"	// kL
+
+#include "../Ruleset/RuleBaseFacility.h"
+
 #include "../Savegame/Base.h"
 #include "../Savegame/BaseFacility.h"
-#include "../Ruleset/RuleBaseFacility.h"
 #include "../Savegame/Craft.h"
-#include "../Engine/Palette.h"
-//#include "../Geoscape/GeoscapeState.h"	// kL
 
 
 namespace OpenXcom
@@ -41,11 +46,11 @@ namespace OpenXcom
  */
 MiniBaseView::MiniBaseView(int width, int height, int x, int y)
 	:
-	InteractiveSurface(width, height, x, y),
-	_bases(),
-	_texture(0),
-	_base(0),
-	_hoverBase(0)
+		InteractiveSurface(width, height, x, y),
+		_bases(),
+		_texture(0),
+		_base(0),
+		_hoverBase(0)
 {
 }
 
@@ -67,8 +72,7 @@ void MiniBaseView::setBases(std::vector<Base*>* bases)
 }
 
 /**
- * Changes the texture to use for drawing
- * the various base elements.
+ * Changes the texture to use for drawing the various base elements.
  * @param texture Pointer to SurfaceSet to use.
  */
 void MiniBaseView::setTexture(SurfaceSet* texture)
@@ -86,8 +90,7 @@ unsigned int MiniBaseView::getHoveredBase() const
 }
 
 /**
- * Changes the base that is currently selected on
- * the mini base view.
+ * Changes the base that is currently selected on the mini base view.
  * @param base ID of base.
  */
 void MiniBaseView::setSelectedBase(unsigned int base)
@@ -106,19 +109,24 @@ void MiniBaseView::setSelectedBase(unsigned int base)
 void MiniBaseView::draw()
 {
 	Surface::draw();
-	for (unsigned int i = 0; i < MAX_BASES; ++i)
+
+	for (unsigned int
+			i = 0;
+			i < MAX_BASES;
+			++i)
 	{
 		// Draw base squares
 		if (i == _base)
 		{
 			SDL_Rect r;
-			r.x = i * (MINI_SIZE + 2);
+			r.x = static_cast<Sint16>(static_cast<int>(i) * (MINI_SIZE + 2));
 			r.y = 0;
-			r.w = MINI_SIZE + 2;
-			r.h = MINI_SIZE + 2;
+			r.w = static_cast<Uint16>(MINI_SIZE + 2);
+			r.h = static_cast<Uint16>(MINI_SIZE + 2);
 			drawRect(&r, 1);
 		}
-		_texture->getFrame(41)->setX(i * (MINI_SIZE + 2));
+
+		_texture->getFrame(41)->setX(static_cast<int>(i) * (MINI_SIZE + 2));
 		_texture->getFrame(41)->setY(0);
 		_texture->getFrame(41)->blit(this);
 
@@ -128,7 +136,10 @@ void MiniBaseView::draw()
 			lock();
 
 			SDL_Rect r;
-			for (std::vector<BaseFacility*>::iterator f = _bases->at(i)->getFacilities()->begin(); f != _bases->at(i)->getFacilities()->end(); ++f)
+			for (std::vector<BaseFacility*>::iterator
+					f = _bases->at(i)->getFacilities()->begin();
+					f != _bases->at(i)->getFacilities()->end();
+					++f)
 			{
 				int pal;
 				if ((*f)->getBuildTime() == 0)
@@ -136,10 +147,10 @@ void MiniBaseView::draw()
 				else
 					pal = 2;
 
-				r.x = i * (MINI_SIZE + 2) + 2 + (*f)->getX() * 2;
-				r.y = 2 + (*f)->getY() * 2;
-				r.w = (*f)->getRules()->getSize() * 2;
-				r.h = (*f)->getRules()->getSize() * 2;
+				r.x = static_cast<Sint16>(static_cast<int>(i) * (MINI_SIZE + 2) + 2 + (*f)->getX() * 2);
+				r.y = static_cast<Sint16>(2 + (*f)->getY() * 2);
+				r.w = static_cast<Uint16>((*f)->getRules()->getSize() * 2);
+				r.h = static_cast<Uint16>((*f)->getRules()->getSize() * 2);
 				drawRect(&r, Palette::blockOffset(pal)+3);
 
 				r.x++;
@@ -170,12 +181,14 @@ void MiniBaseView::draw()
 
 /**
  * Selects the base the mouse is over.
- * @param action Pointer to an action.
- * @param state State that the action handlers belong to.
+ * @param action, Pointer to an action.
+ * @param state, State that the action handlers belong to.
  */
 void MiniBaseView::mouseOver(Action* action, State* state)
 {
-	_hoverBase = (int)floor(action->getRelativeXMouse() / ((MINI_SIZE + 2) * action->getXScale()));
+	_hoverBase = static_cast<unsigned int>(
+					floor(action->getRelativeXMouse()) / (static_cast<double>(MINI_SIZE + 2) * action->getXScale()));
+
 	InteractiveSurface::mouseOver(action, state);
 }
 

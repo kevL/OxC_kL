@@ -20,26 +20,33 @@
 #define _USE_MATH_DEFINES
 
 #include "MonthlyReportState.h"
-#include <sstream>
+
 #include <cmath>
-#include "../Engine/RNG.h"
-#include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
-#include "../Engine/Language.h"
-#include "../Engine/Palette.h"
-#include "../Interface/TextButton.h"
-#include "../Interface/Window.h"
-#include "../Interface/Text.h"
-#include "../Savegame/SavedGame.h"
-#include "../Savegame/GameTime.h"
-#include "PsiTrainingState.h"
-#include "../Savegame/Region.h"
-#include "../Savegame/Country.h"
-#include "../Ruleset/RuleCountry.h"
+#include <sstream>
+
 #include "DefeatState.h"
 #include "Globe.h"
-#include "../Savegame/AlienBase.h"
+#include "PsiTrainingState.h"
+
+#include "../Engine/Game.h"
+#include "../Engine/Language.h"
 #include "../Engine/Options.h"
+#include "../Engine/Palette.h"
+#include "../Engine/RNG.h"
+
+#include "../Interface/Text.h"
+#include "../Interface/TextButton.h"
+#include "../Interface/Window.h"
+
+#include "../Resource/ResourcePack.h"
+
+#include "../Ruleset/RuleCountry.h"
+
+#include "../Savegame/AlienBase.h"
+#include "../Savegame/Country.h"
+#include "../Savegame/GameTime.h"
+#include "../Savegame/Region.h"
+#include "../Savegame/SavedGame.h"
 
 
 namespace OpenXcom
@@ -63,30 +70,20 @@ MonthlyReportState::MonthlyReportState(Game* game, bool psi, Globe* globe)
 {
 	_globe = globe;
 
-	// Create objects
 	_window		= new Window(this, 320, 200, 0, 0);
 
-//kL	_btnOk		= new TextButton(50, 12, 135, 180);
-
-//kL	_txtTitle	= new Text(300, 17, 16, 8);
 	_txtTitle	= new Text(300, 17, 10, 8);
 
 	_txtMonth	= new Text(110, 9, 16, 24);
-//kL	_txtRating	= new Text(180, 9, 125, 24);
 	_txtRating	= new Text(178, 9, 126, 24);
 
-//kL	_txtChange	= new Text(300, 9, 16, 32);
 	_txtChange	= new Text(288, 9, 16, 32);
-
-//kL	_txtFailure = new Text(290, 128, 15, 34);
 	_txtFailure	= new Text(288, 128, 16, 35);
-
-//kL	_txtDesc	= new Text(280, 140, 16, 40);
 	_txtDesc	= new Text(288, 140, 16, 40);
 
-	_btnOk		= new TextButton(288, 16, 16, 177);		// kL
+	_btnOk		= new TextButton(288, 16, 16, 177);
 
-	// Set palette
+
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(3)), Palette::backPos, 16);
 
 	add(_window);
@@ -100,7 +97,7 @@ MonthlyReportState::MonthlyReportState(Game* game, bool psi, Globe* globe)
 
 	centerAllSurfaces();
 
-	// Set up objects
+
 	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 
@@ -112,6 +109,7 @@ MonthlyReportState::MonthlyReportState(Game* game, bool psi, Globe* globe)
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setBig();
+	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_XCOM_PROJECT_MONTHLY_REPORT"));
 
 	_txtFailure->setColor(Palette::blockOffset(8)+10);
@@ -121,9 +119,13 @@ MonthlyReportState::MonthlyReportState(Game* game, bool psi, Globe* globe)
 	_txtFailure->setText(tr("STR_YOU_HAVE_FAILED"));
 	_txtFailure->setVisible(false);
 
+
 	calculateChanges();
 
-	int month = _game->getSavedGame()->getTime()->getMonth() - 1, year = _game->getSavedGame()->getTime()->getYear();
+	int
+		month = _game->getSavedGame()->getTime()->getMonth() - 1,
+		year = _game->getSavedGame()->getTime()->getYear();
+
 	if (month == 0)
 	{
 		month = 12;
@@ -149,7 +151,7 @@ MonthlyReportState::MonthlyReportState(Game* game, bool psi, Globe* globe)
 		default: m = "";
 	}
 
-	int difficulty_threshold = 100 * ((int)(_game->getSavedGame()->getDifficulty()) - 9);
+	int difficulty_threshold = 100 * (static_cast<int>(_game->getSavedGame()->getDifficulty()) - 9);
 
 	_txtMonth->setColor(Palette::blockOffset(15)-1);
 	_txtMonth->setSecondaryColor(Palette::blockOffset(8)+10);
@@ -225,17 +227,18 @@ MonthlyReportState::MonthlyReportState(Game* game, bool psi, Globe* globe)
 			if (_game->getSavedGame()->getWarned())
 			{
 				ss4 << "\n\n" << tr("STR_YOU_HAVE_NOT_SUCCEEDED");
+
 				_pactList.erase(_pactList.begin(), _pactList.end());
 				_happyList.erase(_happyList.begin(), _happyList.end());
 				_sadList.erase(_sadList.begin(), _sadList.end());
 
-				_gameOver = true;
+				_gameOver = true; // you lose.
 			}
 			else
 			{
 				ss4 << "\n\n" << tr("STR_COUNCIL_REDUCE_DEBTS");
-				_game->getSavedGame()->setWarned(true);
 
+				_game->getSavedGame()->setWarned(true);
 				resetWarning = false;
 			}
 		}
@@ -273,7 +276,7 @@ void MonthlyReportState::init()
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void MonthlyReportState::btnOkClick(Action *)
+void MonthlyReportState::btnOkClick(Action*)
 {
 	if (!_gameOver)
 	{
@@ -292,6 +295,7 @@ void MonthlyReportState::btnOkClick(Action *)
 		else
 		{
 			_window->setColor(Palette::blockOffset(8)+10);
+
 			_txtTitle->setVisible(false);
 			_txtMonth->setVisible(false);
 			_txtRating->setVisible(false);
@@ -304,7 +308,7 @@ void MonthlyReportState::btnOkClick(Action *)
 
 /**
  * Update all our activity counters, gather all our scores, 
- * get our countries to make sign pacts, adjust their fundings,
+ * get our countries to sign pacts, adjust their fundings,
  * assess their satisfaction, and finally calculate our overall
  * total score, with thanks to Volutar for the formulae.
  */
@@ -322,7 +326,10 @@ void MonthlyReportState::calculateChanges()
 
 	// update activity meters, calculate a total score based
 	// on regional activity and gather last month's score
-	for (std::vector<Region*>::iterator k = _game->getSavedGame()->getRegions()->begin(); k != _game->getSavedGame()->getRegions()->end(); ++k)
+	for (std::vector<Region*>::iterator
+			k = _game->getSavedGame()->getRegions()->begin();
+			k != _game->getSavedGame()->getRegions()->end();
+			++k)
 	{
 		(*k)->newMonth();
 
@@ -344,10 +351,13 @@ void MonthlyReportState::calculateChanges()
 
 	// now that we have our totals we can send the relevant info to the countries
 	// and have them make their decisions weighted on the council's perspective.
-	for (std::vector<Country*>::iterator k = _game->getSavedGame()->getCountries()->begin(); k != _game->getSavedGame()->getCountries()->end(); ++k)
+	for (std::vector<Country*>::iterator
+			k = _game->getSavedGame()->getCountries()->begin();
+			k != _game->getSavedGame()->getCountries()->end();
+			++k)
 	{
 		// add them to the list of new pact members; this is done BEFORE initiating
-		// a new month because the _newPact flag will be reset in the process
+		// a new month because the _newPact flag will be reset in the process <-
 		if ((*k)->getNewPact())
 		{
 			_pactList.push_back((*k)->getRules()->getType());
@@ -385,9 +395,13 @@ void MonthlyReportState::calculateChanges()
  * @param singular String ID to append at the end if the list is singular.
  * @param plural String ID to append at the end if the list is plural.
  */
-std::wstring MonthlyReportState::countryList(const std::vector<std::string>& countries, const std::string& singular, const std::string& plural)
+std::wstring MonthlyReportState::countryList(
+										const std::vector<std::string>& countries,
+										const std::string& singular,
+										const std::string& plural)
 {
 	std::wstringstream ss;
+
 	if (!countries.empty())
 	{
 		ss << "\n\n";
@@ -400,7 +414,10 @@ std::wstring MonthlyReportState::countryList(const std::vector<std::string>& cou
 			LocalizedText list = tr(countries.front());
 
 			std::vector<std::string>::const_iterator i;
-			for (i = countries.begin() + 1; i < countries.end() - 1; ++i)
+			for (
+					i = countries.begin() + 1;
+					i < countries.end() - 1;
+					++i)
 			{
 				list = tr("STR_COUNTRIES_COMMA").arg(list).arg(tr(*i));
 			}

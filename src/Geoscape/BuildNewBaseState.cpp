@@ -18,25 +18,32 @@
  */
 
 #include "BuildNewBaseState.h"
+
 #include <cmath>
-#include "../aresame.h"
-#include "../Engine/Game.h"
-#include "../Engine/Action.h"
-#include "../Resource/ResourcePack.h"
-#include "../Engine/Language.h"
-#include "../Engine/Palette.h"
-#include "../Engine/Surface.h"
-#include "../Engine/Timer.h"
-#include "../Engine/Screen.h"
-#include "../Interface/Window.h"
-#include "Globe.h"
-#include "../Interface/Text.h"
-#include "../Interface/TextButton.h"
-#include "../Savegame/Base.h"
-#include "../Savegame/Craft.h"
+
 #include "BaseNameState.h"
 #include "ConfirmNewBaseState.h"
+#include "Globe.h"
+
+#include "../aresame.h"
+
+#include "../Engine/Action.h"
+#include "../Engine/Game.h"
+#include "../Engine/Language.h"
 #include "../Engine/Options.h"
+#include "../Engine/Palette.h"
+#include "../Engine/Screen.h"
+#include "../Engine/Surface.h"
+#include "../Engine/Timer.h"
+
+#include "../Interface/Text.h"
+#include "../Interface/TextButton.h"
+#include "../Interface/Window.h"
+
+#include "../Resource/ResourcePack.h"
+
+#include "../Savegame/Base.h"
+#include "../Savegame/Craft.h"
 
 
 namespace OpenXcom
@@ -180,7 +187,7 @@ void BuildNewBaseState::init()
 {
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
 	_globe->onMouseOver((ActionHandler)& BuildNewBaseState::globeHover);
-	_globe->rotateStop();
+//	_globe->rotateStop();
 	_globe->setNewBaseHover();
 }
 
@@ -228,8 +235,9 @@ void BuildNewBaseState::hoverRedraw(void)
 	if (_globe->getShowRadar()
 		&& !(AreSame(_oldlat, lat) && AreSame(_oldlon, lon)))
 	{
-		_oldlat=lat;
-		_oldlon=lon;
+		_oldlat = lat;
+		_oldlon = lon;
+
 		_globe->draw();
 	}
 }
@@ -242,7 +250,10 @@ void BuildNewBaseState::hoverRedraw(void)
 void BuildNewBaseState::globeClick(Action* action)
 {
 	double lon, lat;
-	int mouseX = (int)floor(action->getAbsoluteXMouse()), mouseY = (int)floor(action->getAbsoluteYMouse());
+	int
+		mouseX = static_cast<int>(floor(action->getAbsoluteXMouse())),
+		mouseY = static_cast<int>(floor(action->getAbsoluteYMouse()));
+
 	_globe->cartToPolar(mouseX, mouseY, &lon, &lat);
 
 	// Ignore window clicks
@@ -284,109 +295,109 @@ void BuildNewBaseState::globeClick(Action* action)
  * Starts rotating the globe to the left.
  * @param action Pointer to an action.
  */
-void BuildNewBaseState::btnRotateLeftPress(Action*)
+/* void BuildNewBaseState::btnRotateLeftPress(Action*)
 {
 	_globe->rotateLeft();
-}
+} */
 
 /**
  * Stops rotating the globe to the left.
  * @param action Pointer to an action.
  */
-void BuildNewBaseState::btnRotateLeftRelease(Action*)
+/* void BuildNewBaseState::btnRotateLeftRelease(Action*)
 {
 	_globe->rotateStopLon();
-}
+} */
 
 /**
  * Starts rotating the globe to the right.
  * @param action Pointer to an action.
  */
-void BuildNewBaseState::btnRotateRightPress(Action*)
+/* void BuildNewBaseState::btnRotateRightPress(Action*)
 {
 	_globe->rotateRight();
-}
+} */
 
 /**
  * Stops rotating the globe to the right.
  * @param action Pointer to an action.
  */
-void BuildNewBaseState::btnRotateRightRelease(Action*)
+/* void BuildNewBaseState::btnRotateRightRelease(Action*)
 {
 	_globe->rotateStopLon();
-}
+} */
 
 /**
  * Starts rotating the globe upwards.
  * @param action Pointer to an action.
  */
-void BuildNewBaseState::btnRotateUpPress(Action*)
+/* void BuildNewBaseState::btnRotateUpPress(Action*)
 {
 	_globe->rotateUp();
-}
+} */
 
 /**
  * Stops rotating the globe upwards.
  * @param action Pointer to an action.
  */
-void BuildNewBaseState::btnRotateUpRelease(Action*)
+/* void BuildNewBaseState::btnRotateUpRelease(Action*)
 {
 	_globe->rotateStopLat();
-}
+} */
 
 /**
  * Starts rotating the globe downwards.
  * @param action Pointer to an action.
  */
-void BuildNewBaseState::btnRotateDownPress(Action*)
+/* void BuildNewBaseState::btnRotateDownPress(Action*)
 {
 	_globe->rotateDown();
-}
+} */
 
 /**
  * Stops rotating the globe downwards.
  * @param action Pointer to an action.
  */
-void BuildNewBaseState::btnRotateDownRelease(Action*)
+/* void BuildNewBaseState::btnRotateDownRelease(Action*)
 {
 	_globe->rotateStopLat();
-}
+} */
 
 /**
  * Zooms into the globe.
  * @param action Pointer to an action.
  */
-void BuildNewBaseState::btnZoomInLeftClick(Action*)
+/* void BuildNewBaseState::btnZoomInLeftClick(Action*)
 {
 	_globe->zoomIn();
-}
+} */
 
 /**
  * Zooms the globe maximum.
  * @param action Pointer to an action.
  */
-void BuildNewBaseState::btnZoomInRightClick(Action*)
+/* void BuildNewBaseState::btnZoomInRightClick(Action*)
 {
 	_globe->zoomMax();
-}
+} */
 
 /**
  * Zooms out of the globe.
  * @param action Pointer to an action.
  */
-void BuildNewBaseState::btnZoomOutLeftClick(Action*)
+/* void BuildNewBaseState::btnZoomOutLeftClick(Action*)
 {
 	_globe->zoomOut();
-}
+} */
 
 /**
  * Zooms the globe minimum.
  * @param action Pointer to an action.
  */
-void BuildNewBaseState::btnZoomOutRightClick(Action*)
+/* void BuildNewBaseState::btnZoomOutRightClick(Action*)
 {
 	_globe->zoomMin();
-}
+} */
 
 /**
  * Returns to the previous screen.

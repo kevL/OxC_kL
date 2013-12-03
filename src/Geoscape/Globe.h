@@ -20,11 +20,13 @@
 #ifndef OPENXCOM_GLOBE_H
 #define OPENXCOM_GLOBE_H
 
-#include <vector>
 #include <list>
-#include "../Engine/InteractiveSurface.h"
-#include "../Engine/FastLineClip.h"
+#include <vector>
+
 #include "Cord.h"
+
+#include "../Engine/FastLineClip.h"
+#include "../Engine/InteractiveSurface.h"
 
 
 namespace OpenXcom
@@ -55,17 +57,18 @@ private:
 
 //Old	static const double QUAD_LONGITUDE;
 //Old	static const double QUAD_LATITUDE;
-	static const double ROTATE_LONGITUDE;
-	static const double ROTATE_LATITUDE;
+//	static const double ROTATE_LONGITUDE;
+//	static const double ROTATE_LATITUDE;
 
-	double _cenLon, _cenLat, _rotLon, _rotLat, _hoverLon, _hoverLat;
+	double _cenLon, _cenLat, _hoverLon, _hoverLat; //, _rotLon, _rotLat;
 	Sint16 _cenX, _cenY;
 	size_t _zoom;
 	SurfaceSet* _texture;
 	Game* _game;
 	Surface* _markers, * _countries, * _radars;
-	bool _blink, _hover;
-	Timer* _blinkTimer, * _rotTimer;
+	bool _hover, _blink;
+	int _blinkVal;
+	Timer* _blinkTimer; //, * _rotTimer;
 	std::list<Polygon*> _cacheLand;
 	Surface* _mkXcomBase, * _mkAlienBase, * _mkCraft, * _mkWaypoint, * _mkCity;
 	Surface* _mkFlyingUfo, * _mkLandedUfo, * _mkCrashedUfo, * _mkAlienSite;
@@ -108,30 +111,29 @@ private:
 		void setTexture(SurfaceSet* texture);
 
 		/// Starts rotating the globe left.
-		void rotateLeft();
+//		void rotateLeft();
 		/// Starts rotating the globe right.
-		void rotateRight();
+//		void rotateRight();
 		/// Starts rotating the globe up.
-		void rotateUp();
+//		void rotateUp();
 		/// Starts rotating the globe down.
-		void rotateDown();
+//		void rotateDown();
 		/// Stops rotating the globe.
-		void rotateStop();
+//		void rotateStop();
 		/// Stops longitude rotation of the globe.
-		void rotateStopLon();
+//		void rotateStopLon();
 		/// Stops latitude rotation of the globe.
-		void rotateStopLat();
+//		void rotateStopLat();
 		/// Zooms the globe in.
 		void zoomIn();
 		/// Zooms the globe out.
 		void zoomOut();
 		/// Zooms the globe minimum.
-		void zoomMin();
+//		void zoomMin();
 		/// Zooms the globe maximum.
-		void zoomMax();
+//		void zoomMax();
 		/// kL. Gets the globe's current zoom level.
 //		size_t getZoomLevel();
-
 		/// Centers the globe on a point.
 		void center(double lon, double lat);
 
@@ -151,7 +153,7 @@ private:
 		/// Blinks the markers.
 		void blink();
 		/// Rotates the globe.
-		void rotate();
+//		void rotate();
 		/// Draws the whole globe.
 		void draw();
 		/// Draws the ocean of the globe.

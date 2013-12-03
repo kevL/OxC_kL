@@ -45,7 +45,7 @@ class BuildNewBaseState
 private:
 	Base* _base;
 	Globe* _globe;
-	InteractiveSurface* _btnRotateLeft, * _btnRotateRight, * _btnRotateUp, * _btnRotateDown, * _btnZoomIn, * _btnZoomOut;
+//	InteractiveSurface* _btnRotateLeft, * _btnRotateRight, * _btnRotateUp, * _btnRotateDown, * _btnZoomIn, * _btnZoomOut;
 	Window* _window;
 	Text* _txtTitle;
 	TextButton* _btnCancel;
@@ -73,30 +73,32 @@ private:
 		void globeHover(Action* action);
 		/// Handler for redrawing hover (delayed)
 		void hoverRedraw(void);
+
 		/// Handler for pressing the Rotate Left arrow.
-		void btnRotateLeftPress(Action* action);
+//		void btnRotateLeftPress(Action* action);
 		/// Handler for releasing the Rotate Left arrow.
-		void btnRotateLeftRelease(Action* action);
+//		void btnRotateLeftRelease(Action* action);
 		/// Handler for pressing the Rotate Right arrow.
-		void btnRotateRightPress(Action* action);
+//		void btnRotateRightPress(Action* action);
 		/// Handler for releasing the Rotate Right arrow.
-		void btnRotateRightRelease(Action* action);
+//		void btnRotateRightRelease(Action* action);
 		/// Handler for pressing the Rotate Up arrow.
-		void btnRotateUpPress(Action* action);
+//		void btnRotateUpPress(Action* action);
 		/// Handler for releasing the Rotate Up arrow.
-		void btnRotateUpRelease(Action* action);
+//		void btnRotateUpRelease(Action* action);
 		/// Handler for pressing the Rotate Down arrow.
-		void btnRotateDownPress(Action* action);
+//		void btnRotateDownPress(Action* action);
 		/// Handler for releasing the Rotate Down arrow.
-		void btnRotateDownRelease(Action* action);
+//		void btnRotateDownRelease(Action* action);
 		/// Handler for left-clicking the Zoom In icon.
-		void btnZoomInLeftClick(Action* action);
+//		void btnZoomInLeftClick(Action* action);
 		/// Handler for right-clicking the Zoom In icon.
-		void btnZoomInRightClick(Action* action);
+//		void btnZoomInRightClick(Action* action);
 		/// Handler for left-clicking the Zoom Out icon.
-		void btnZoomOutLeftClick(Action* action);
+//		void btnZoomOutLeftClick(Action* action);
 		/// Handler for right-clicking the Zoom Out icon.
-		void btnZoomOutRightClick(Action* action);
+//		void btnZoomOutRightClick(Action* action);
+
 		/// Handler for clicking the Cancel button.
 		void btnCancelClick(Action* action);
 };

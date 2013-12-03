@@ -18,23 +18,30 @@
  */
 
 #include "ManufactureInfoState.h"
-#include "../Interface/Window.h"
-#include "../Interface/TextButton.h"
-#include "../Interface/Text.h"
-#include "../Interface/TextList.h"
+
+#include <limits>
+
 #include "../Interface/ArrowButton.h"
+#include "../Interface/Text.h"
+#include "../Interface/TextButton.h"
+#include "../Interface/TextList.h"
+#include "../Interface/Window.h"
+
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Palette.h"
 #include "../Engine/Options.h"
+#include "../Engine/Palette.h"
+#include "../Engine/Timer.h"
+
+#include "../Menu/ErrorMessageState.h"
+
 #include "../Resource/ResourcePack.h"
+
 #include "../Ruleset/RuleManufacture.h"
+
 #include "../Savegame/Base.h"
 #include "../Savegame/Production.h"
-#include "../Engine/Timer.h"
-#include "../Menu/ErrorMessageState.h"
-#include <limits>
 
 
 namespace OpenXcom

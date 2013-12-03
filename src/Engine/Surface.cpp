@@ -17,18 +17,20 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "Surface.h"
-#include "Screen.h"
-#include "ShaderDraw.h"
-#include <vector>
 #include <fstream>
+#include <vector>
+
+#include <SDL_endian.h>
 #include <SDL_gfxPrimitives.h>
 #include <SDL_image.h>
-#include <SDL_endian.h>
-#include "Palette.h"
-#include "Exception.h"
-#include "ShaderMove.h"
 #include <stdlib.h>
+
+#include "Exception.h"
+#include "Palette.h"
+#include "Screen.h"
+#include "ShaderDraw.h"
+#include "ShaderMove.h"
+#include "Surface.h"
 
 #ifdef _WIN32
 #include <malloc.h>
@@ -135,7 +137,15 @@ inline void DeleteAligned(void* buffer)
  * @param y Y position in pixels.
  * @param bpp Bits-per-pixel depth.
  */
-Surface::Surface(int width, int height, int x, int y, int bpp) : _x(x), _y(y), _visible(true), _hidden(false), _redraw(false), _originalColors(0), _alignedBuffer(0)
+Surface::Surface(int width, int height, int x, int y, int bpp)
+	:
+		_x(x),
+		_y(y),
+		_visible(true),
+		_hidden(false),
+		_redraw(false),
+		_originalColors(0),
+		_alignedBuffer(0)
 {
 	_alignedBuffer = NewAligned(bpp, width, height);
 	_surface = SDL_CreateRGBSurfaceFrom(_alignedBuffer, width, height, bpp, GetPitch(bpp, width), 0, 0, 0, 0);
@@ -164,7 +174,7 @@ Surface::Surface(const Surface& other)
 //	Log(LOG_INFO) << "Create Surface 2";
 
 	// if is native OpenXcom aligned surface
-	if(other._alignedBuffer)
+	if (other._alignedBuffer)
 	{
 		Uint8 bpp = other._surface->format->BitsPerPixel;
 		int width = other.getWidth();
@@ -222,7 +232,7 @@ Surface::~Surface()
  * @param filename Filename of the SCR image.
  * @sa http://www.ufopaedia.org/index.php?title=Image_Formats#SCR_.26_DAT
  */
-void Surface::loadScr(const std::string &filename)
+void Surface::loadScr(const std::string& filename)
 {
 	// Load file and put pixels in surface
 	std::ifstream imgFile(filename.c_str(), std::ios::binary);
@@ -252,7 +262,7 @@ void Surface::loadScr(const std::string &filename)
  * known format into the surface.
  * @param filename Filename of the image.
  */
-void Surface::loadImage(const std::string &filename)
+void Surface::loadImage(const std::string& filename)
 {
 	// Destroy current surface (will be replaced)
 	DeleteAligned(_alignedBuffer);
@@ -407,12 +417,11 @@ void Surface::clear()
 
 /**
  * Shifts all the colors in the surface by a set amount.
- * This is a common method in 8bpp games to simulate color
- * effects for cheap.
- * @param off Amount to shift.
- * @param min Minimum color to shift to.
- * @param max Maximum color to shift to.
- * @param mul Shift multiplier.
+ * This is a common method in 8bpp games to simulate color effects for cheap.
+ * @param off, Amount to shift.
+ * @param min, Minimum color to shift to.
+ * @param max, Maximum color to shift to.
+ * @param mul, Shift multiplier.
  */
 void Surface::offset(int off, int min, int max, int mul)
 {
@@ -422,23 +431,31 @@ void Surface::offset(int off, int min, int max, int mul)
 	// Lock the surface
 	lock();
 
-	for (int x = 0, y = 0; x < getWidth() && y < getHeight();)
+	for (int
+			x = 0, y = 0;
+			x < getWidth()
+				&& y < getHeight();
+			)
 	{
-		Uint8 pixel = getPixel(x, y);
-		int p;
+		Uint8 pixel = getPixel(x, y);	// getPixelColor
+		int p;							// the new color
+
 		if (off > 0)
 		{
-			p = pixel * mul + off;
+			p = (pixel * mul) + off;
 		}
 		else
 		{
 			p = (pixel + off) / mul;
 		}
-		if (min != -1 && p < min)
+
+		if (min != -1
+			&& p < min)
 		{
 			p = min;
 		}
-		else if (max != -1 && p > max)
+		else if (max != -1
+			&& p > max)
 		{
 			p = max;
 		}
@@ -467,7 +484,7 @@ void Surface::invert(Uint8 mid)
 	// Lock the surface
 	lock();
 
-	for (int x = 0, y = 0; x < getWidth() && y < getHeight(); )
+	for (int x = 0, y = 0; x < getWidth() && y < getHeight();)
 	{
 		Uint8 pixel = getPixel(x, y);
 		if (pixel > 0)
@@ -771,7 +788,7 @@ void Surface::paletteShift(int off, int mul, int mid)
 	// do the color shift - while storing the original colors too
 	for (int i = 0; i < ncolors; i++)
 	{
-		int inverseOffset = mid ? 2 * (mid - i) : 0;
+		int inverseOffset = mid? 2 * (mid - i): 0;
 		int j = (i * mul + off + inverseOffset + ncolors) %ncolors;
 
 		_originalColors[i].r = getPalette()[i].r;
@@ -923,7 +940,7 @@ std::string Surface::getTooltip() const
 * for example for showing in tooltips.
 * @param str String ID.
 */
-void Surface::setTooltip(const std::string &tooltip)
+void Surface::setTooltip(const std::string& tooltip)
 {
 	_tooltip = tooltip;
 }

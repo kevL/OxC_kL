@@ -20,23 +20,26 @@
 #ifndef OPENXCOM_MONTHLYREPORTSTATE_H
 #define OPENXCOM_MONTHLYREPORTSTATE_H
 
-#include "../Engine/State.h"
 #include <string>
+
+#include "../Engine/State.h"
 
 
 namespace OpenXcom
 {
 
+class Globe;
+class Text;
 class TextButton;
 class Window;
-class Text;
-class Globe;
 
 /**
  * Report screen shown monthly to display
  * changes in the player's performance and funding.
  */
-class MonthlyReportState : public State
+class MonthlyReportState
+	:
+		public State
 {
 private:
 	TextButton* _btnOk;
@@ -59,6 +62,7 @@ private:
 		void init();
 		/// Handler for clicking the OK button.
 		void btnOkClick(Action* action);
+		///
 		void calculateChanges();
 };
 

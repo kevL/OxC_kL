@@ -77,8 +77,8 @@ ManufactureState::ManufactureState(Game* game, Base* base)
 
 	_lstManufacture	= new TextList(294, 96, 8, 70);
 
-	_btnOk			= new TextButton(134, 16, 16, 177);
-	_btnNew			= new TextButton(134, 16, 170, 177);
+	_btnNew			= new TextButton(134, 16, 16, 177);
+	_btnOk			= new TextButton(134, 16, 170, 177);
 
 
 	// back up palette in case we're being called from Geoscape!

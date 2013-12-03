@@ -19,18 +19,22 @@
 
 #include "UfopaediaStartState.h"
 
-#include "UfopaediaSelectState.h"
 #include "Ufopaedia.h"
+#include "UfopaediaSelectState.h"
+
 #include "../Ruleset/ArticleDefinition.h"
-#include "../Engine/Game.h"
+
 #include "../Engine/Action.h"
+#include "../Engine/Game.h"
 #include "../Engine/Options.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Surface.h"
 #include "../Engine/Language.h"
-#include "../Interface/Window.h"
+
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
+#include "../Interface/Window.h"
+
 #include "../Resource/ResourcePack.h"
 
 
@@ -60,7 +64,7 @@ UfopaediaStartState::UfopaediaStartState(Game* game)
 	_window		= new Window(this, 256, 180, 32, 10, POPUP_BOTH);
 	_txtTitle	= new Text(224, 17, 48, 24);
 
-	int y = 50;
+	int y = 48;
 	for (int
 			i = 0;
 			i < NUM_SECTIONS;
@@ -69,7 +73,7 @@ UfopaediaStartState::UfopaediaStartState(Game* game)
 		_btnSection[i] = new TextButton(224, 12, 48, y);
 		y += 13;
 	}
-	_btnOk = new TextButton(112, 16, 104, y);
+	_btnOk = new TextButton(112, 16, 104, y + 1);
 
 
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());

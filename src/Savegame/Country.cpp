@@ -18,8 +18,10 @@
  */
 
 #include "Country.h"
-#include "../Ruleset/RuleCountry.h"
+
 #include "../Engine/RNG.h"
+
+#include "../Ruleset/RuleCountry.h"
 
 
 namespace OpenXcom
@@ -166,8 +168,7 @@ const std::vector<int>& Country::getActivityAlien() const
 }
 
 /**
- * reset all the counters,
- * calculate this month's funding,
+ * reset all the counters, calculate this month's funding,
  * set the change value for the month.
  * @param xcomTotal, the council's xcom score
  * @param alienTotal, the council's alien score
@@ -211,8 +212,7 @@ void Country::newMonth(int xcomTotal, int alienTotal)
 	}
 
 	// about to be in cahoots
-//kL	if (_newPact && !_pact)
-	if (_newPact)	// kL. Let them infiltrate for VictPts. more than once.
+	if (_newPact && !_pact)
 	{
 		_newPact = false;
 		_pact = true;
