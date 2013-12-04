@@ -20,9 +20,10 @@
 #ifndef OPENXCOM_EXPLOSIONBSTATE_H
 #define OPENXCOM_EXPLOSIONBSTATE_H
 
+#include <string>
+
 #include "BattleState.h"
 #include "Position.h"
-#include <string>
 
 
 namespace OpenXcom
@@ -53,7 +54,13 @@ private:
 
 	public:
 		/// Creates a new ExplosionBState class.
-		ExplosionBState(BattlescapeGame* parent, Position center, BattleItem* item, BattleUnit* unit, Tile* tile = 0, bool lowerWeapon = false);
+		ExplosionBState(
+				BattlescapeGame* parent,
+				Position center,
+				BattleItem* item,
+				BattleUnit* unit,
+				Tile* tile = 0,
+				bool lowerWeapon = false);
 		/// Cleans up the ExplosionBState.
 		~ExplosionBState();
 

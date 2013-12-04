@@ -116,6 +116,7 @@ void ManufactureInfoState::buildUi()
 									button_height * 2,
 									start_x + button_x_border,
 									start_y + button_y_border);
+
 	_btnOk					= new TextButton(button_width,
 									button_height,
 									width - button_width - button_x_border,
@@ -124,6 +125,7 @@ void ManufactureInfoState::buildUi()
 									button_height,
 									start_x + button_x_border,
 									start_y + height - button_height - button_y_border);
+
 	_txtAvailableEngineer	= new Text(width - 4 * button_x_border,
 									button_height,
 									start_x + button_x_border,
@@ -132,6 +134,7 @@ void ManufactureInfoState::buildUi()
 									button_height,
 									start_x + button_x_border,
 									start_y + (int)(2.7f * (float)button_height));
+
 	_txtAllocatedEngineer	= new Text(button_width - button_x_border,
 									2 * button_height,
 									start_x + button_x_border,
@@ -140,6 +143,7 @@ void ManufactureInfoState::buildUi()
 									2 * button_height,
 									width - button_width - button_x_border,
 									start_y + (int)(3.5f * (float)button_height));
+
 	_txtEngineerUp			= new Text(button_width,
 									2 * button_height,
 									start_x + 3 * button_x_border,
@@ -148,6 +152,7 @@ void ManufactureInfoState::buildUi()
 									2 * button_height,
 									start_x + 3 * button_x_border,
 									start_y + (int)(7.5f * (float)button_height));
+
 	_txtUnitUp				= new Text(button_width,
 									2 * button_height,
 									width - button_width - button_x_border + 3 * button_x_border,
@@ -156,6 +161,7 @@ void ManufactureInfoState::buildUi()
 									2 * button_height,
 									width - button_width - button_x_border + 3 * button_x_border,
 									start_y + (int)(7.5f * (float)button_height));
+
 	_btnEngineerUp			= new ArrowButton(ARROW_BIG_UP,
 									(int)(1.4f * (float)button_x_border),
 									button_height - 2,
@@ -166,6 +172,7 @@ void ManufactureInfoState::buildUi()
 									button_height - 2,
 									width - button_width - 4 * button_x_border,
 									start_y + (int)(7.5f * (float)button_height));
+
 	_btnUnitUp				= new ArrowButton(ARROW_BIG_UP,
 									(int)(1.4f * (float)button_x_border),
 									button_height - 2,
@@ -176,6 +183,7 @@ void ManufactureInfoState::buildUi()
 									button_height - 2,
 									width - 4 * button_x_border,
 									start_y + (int)(7.5f * (float)button_height));
+
 	_txtAllocated			= new Text(button_width,
 									2 * button_height,
 									width - button_width - 5 * button_x_border,
@@ -238,6 +246,7 @@ void ManufactureInfoState::buildUi()
 	_txtAllocated->setColor(Palette::blockOffset(15)+1);
 	_txtAllocated->setSecondaryColor(Palette::blockOffset(13));
 	_txtAllocated->setBig();
+
 	_txtTodo->setColor(Palette::blockOffset(15)+1);
 	_txtTodo->setSecondaryColor(Palette::blockOffset(13));
 	_txtTodo->setBig();
@@ -298,6 +307,7 @@ void ManufactureInfoState::buildUi()
 	_timerLessEngineer = new Timer(280);
 	_timerMoreUnit = new Timer(280);
 	_timerLessUnit = new Timer(280);
+
 	_timerMoreEngineer->onTimer((StateHandler)& ManufactureInfoState::onMoreEngineer);
 	_timerLessEngineer->onTimer((StateHandler)& ManufactureInfoState::onLessEngineer);
 	_timerMoreUnit->onTimer((StateHandler)& ManufactureInfoState::onMoreUnit);
@@ -352,15 +362,15 @@ void ManufactureInfoState::setAssignedEngineer()
 	_txtAvailableSpace->setText(tr("STR_WORKSHOP_SPACE_AVAILABLE_UC").arg(_base->getFreeWorkshops()));
 
 	std::wstringstream s3;
-	s3 << L">\x01" << _production->getAssignedEngineers();
+	s3 << L"> \x01" << _production->getAssignedEngineers();
 	_txtAllocated->setText(s3.str());
 
 	std::wstringstream s4;
-	s4 << L">\x01";
+	s4 << L"> \x01";
 	if (Options::getBool("allowAutoSellProduction")
 		&& _production->getAmountTotal() == std::numeric_limits<int>::max())
 	{
-		s4 << "$profit$";
+		s4 << "$$";
 	}
 	else
 		s4 << _production->getAmountTotal();

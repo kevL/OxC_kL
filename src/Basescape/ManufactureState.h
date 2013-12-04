@@ -20,18 +20,19 @@
 #ifndef OPENXCOM_MANUFACTURESTATE_H
 #define OPENXCOM_MANUFACTURESTATE_H
 
-#include "../Engine/State.h"
 #include <SDL.h>
+
+#include "../Engine/State.h"
 
 
 namespace OpenXcom
 {
 
-class TextButton;
-class Window;
-class Text;
-class TextList;
 class Base;
+class Text;
+class TextButton;
+class TextList;
+class Window;
 
 /**
  * Manufacture screen that lets the player manage
@@ -45,7 +46,16 @@ private:
 	Base* _base;
 	TextButton* _btnNew, * _btnOk;
 	Window* _window;
-	Text* _txtTitle, * _txtAvailable, * _txtAllocated, * _txtSpace, * _txtFunds, * _txtItem, * _txtEngineers, * _txtProduced, * _txtCost, * _txtTimeLeft;
+	Text* _txtTitle,
+		* _txtAvailable,
+		* _txtAllocated,
+		* _txtSpace,
+		* _txtFunds,
+		* _txtItem,
+		* _txtEngineers,
+		* _txtProduced,
+		* _txtCost,
+		* _txtTimeLeft;
 	TextList* _lstManufacture;	
 	SDL_Color _oldPalette[256];
 	void lstManufactureClick(Action* action);

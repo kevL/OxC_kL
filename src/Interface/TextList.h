@@ -20,10 +20,12 @@
 #ifndef OPENXCOM_TEXTLIST_H
 #define OPENXCOM_TEXTLIST_H
 
-#include <vector>
 #include <map>
-#include "../Engine/InteractiveSurface.h"
+#include <vector>
+
 #include "Text.h"
+
+#include "../Engine/InteractiveSurface.h"
 
 
 namespace OpenXcom

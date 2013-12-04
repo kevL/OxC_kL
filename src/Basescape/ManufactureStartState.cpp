@@ -74,7 +74,7 @@ ManufactureStartState::ManufactureStartState(Game* game, Base* base, RuleManufac
 	_txtUnitRequiredColumn	= new Text(60, 9, 180, 85);
 	_txtUnitAvailableColumn	= new Text(60, 9, 240, 85);
 
-	_lstRequiredItems		= new TextList(240, 64, 40, 90);
+	_lstRequiredItems		= new TextList(240, 56, 40, 100);
 
 	_btnCancel				= new TextButton(130, 16, 20, 160);
 	_btnStart				= new TextButton(130, 16, 170, 160);
@@ -213,7 +213,7 @@ ManufactureStartState::ManufactureStartState(Game* game, Base* base, RuleManufac
 
 	ItemContainer* itemContainer (base->getItems());
 	int row = 0;
-	for(std::map<std::string, int>::const_iterator iter = requiredItems.begin (); iter != requiredItems.end (); ++iter)
+	for (std::map<std::string, int>::const_iterator iter = requiredItems.begin (); iter != requiredItems.end (); ++iter)
 	{
 		std::wstringstream s1, s2;
 		s1 << iter->second;
@@ -221,9 +221,10 @@ ManufactureStartState::ManufactureStartState(Game* game, Base* base, RuleManufac
 		productionPossible &= (itemContainer->getItem(iter->first) >= iter->second);
 		_lstRequiredItems->addRow(3, tr(iter->first).c_str(), s1.str().c_str(), s2.str().c_str());
 		_lstRequiredItems->setCellColor(row, 0, Palette::blockOffset(13)+10);
-		_lstRequiredItems->addRow(1, L"");
+//kL		_lstRequiredItems->addRow(1, L"");
 
-		row += 2;
+//kL		row += 2;
+		row++;
 	}
 
 	_txtRequiredItemsTitle->setVisible(!requiredItems.empty());

@@ -21,34 +21,49 @@
 
 #include "../Engine/State.h"
 
+
 namespace OpenXcom
 {
+
 class Base;
 class RuleManufacture;
-class Window;
-class TextButton;
 class Text;
+class TextButton;
 class TextList;
+class Window;
 
 /**
  * Screen which displays needed elements to start productions (items/required workshop state/cost to build a unit, ...).
  */
-class ManufactureStartState : public State
+class ManufactureStartState
+	:
+		public State
 {
 private:
-	Base * _base;
-	RuleManufacture * _item;
-	Window * _window;
-	TextButton * _btnCancel, * _btnStart;
-	Text * _txtTitle, * _txtManHour, * _txtCost, * _txtWorkSpace, * _txtRequiredItemsTitle, * _txtItemNameColumn, * _txtUnitRequiredColumn, * _txtUnitAvailableColumn;
-	TextList * _lstRequiredItems;
-public:
-	/// Creates the State.
-	ManufactureStartState(Game * game, Base * base, RuleManufacture * item);
-	/// Handler for the Cancel button.
-	void btnCancelClick(Action * action);
-	/// Handler for the start button.
-	void btnStartClick(Action * action);
+	Base* _base;
+	RuleManufacture* _item;
+	Window* _window;
+	TextButton* _btnCancel, * _btnStart;
+	Text* _txtTitle,
+		* _txtManHour,
+		* _txtCost,
+		* _txtWorkSpace,
+		* _txtRequiredItemsTitle,
+		* _txtItemNameColumn,
+		* _txtUnitRequiredColumn,
+		* _txtUnitAvailableColumn;
+	TextList* _lstRequiredItems;
+
+	public:
+		/// Creates the State.
+		ManufactureStartState(Game* game, Base* base, RuleManufacture* item);
+		/// Handler for the Cancel button.
+		void btnCancelClick(Action* action);
+
+		/// Handler for the start button.
+		void btnStartClick(Action* action);
 };
+
 }
+
 #endif

@@ -88,6 +88,7 @@ NewManufactureListState::NewManufactureListState(Game* game, Base* base)
 
 	_btnCancel		= new TextButton(288, 16, 16, 147);
 
+
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
 
 	add(_window);
@@ -98,6 +99,7 @@ NewManufactureListState::NewManufactureListState(Game* game, Base* base)
 	add(_lstManufacture);
 
 	centerAllSurfaces();
+
 
 	_window->setColor(Palette::blockOffset(15)+1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK17.SCR"));

@@ -132,9 +132,15 @@ void ExplosionBState::init()
 				Position pos = _center;
 				pos.x += X; pos.y += Y;
 
+				int startFrame = -3;
+				if (i > 1)
+				{
+					startFrame = RNG::generate(0, 9) - 3;
+				}
+
 //kL				Explosion* explosion = new Explosion(p, RNG::generate(-3, 6), true);
-//				Explosion* explosion = new Explosion(pos, 0, true);
-				Explosion* explosion = new Explosion(pos, -3, true);
+//				Explosion* explosion = new Explosion(pos, -3, true);			// kL
+				Explosion* explosion = new Explosion(pos, startFrame, true);	// kL
 
 				_parent->getMap()->getExplosions()->insert(explosion); // add the explosion on the map
 			}

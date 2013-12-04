@@ -29,14 +29,18 @@
 #include "../Engine/Palette.h"
 #include "../Engine/Screen.h"
 #include "../Engine/Surface.h"
+
 #include "../Interface/NumberText.h" // kL
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/TextList.h"
 #include "../Interface/ToggleTextButton.h"
+
 #include "../Resource/ResourcePack.h"
+
 #include "../Ruleset/RuleCountry.h"
 #include "../Ruleset/RuleRegion.h"
+
 #include "../Savegame/Country.h"
 #include "../Savegame/GameTime.h"
 #include "../Savegame/Region.h"
@@ -386,8 +390,6 @@ GraphsState::GraphsState(Game* game)
 		"STR_DEC"
 	};
 
-	int month = _game->getSavedGame()->getTime()->getMonth();
-
 	// i know using textlist for this is ugly and brutal, but YOU try getting this damn text to line up.
 	// also, there's nothing wrong with being ugly or brutal, you should learn tolerance. kL_note: and C++
 	_txtMonths->setColumns(12, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17);
@@ -397,6 +399,9 @@ GraphsState::GraphsState(Game* game)
 	_txtYears->setColumns(6, 34, 34, 34, 34, 34, 34);
 	_txtYears->addRow(6, L" ", L" ", L" ", L" ", L" ", L" ");
 	_txtYears->setRowColor(0, Palette::blockOffset(6)+7);
+
+
+	int month = _game->getSavedGame()->getTime()->getMonth();
 
 	for (int
 			iter = 0;
@@ -925,10 +930,10 @@ void GraphsState::resetScreen()
  */
 void GraphsState::updateScale(double lowerLimit, double upperLimit, int grid)
 {
-	double increment = ((upperLimit - lowerLimit) / grid);
-	if (increment < 10.)
+	double increment = ((upperLimit - lowerLimit) / static_cast<double>(grid));
+	if (increment < 10.0)
 	{
-		increment = 10.;
+		increment = 10.0;
 	}
 
 	double text = lowerLimit;
@@ -996,11 +1001,11 @@ void GraphsState::drawCountryLines()
 					upperLimit = amount;
 				}
 
-				if (amount < lowerLimit
+/*				if (amount < lowerLimit
 					&& _countryToggles.at(iter)->_pushed)
 				{
 					lowerLimit = amount;
-				}
+				} */
 			}
 		}
 		else if (_income)
@@ -1019,11 +1024,11 @@ void GraphsState::drawCountryLines()
 					upperLimit = amount;
 				}
 
-				if (amount < lowerLimit
+/*				if (amount < lowerLimit
 					&& _countryToggles.at(iter)->_pushed)
 				{
 					lowerLimit = amount;
-				}
+				} */
 			}
 		}
 		else
@@ -1073,7 +1078,7 @@ void GraphsState::drawCountryLines()
 	lowerLimit = 0;
 	upperLimit = test * grid;
 
-	if (low < 0.)
+	if (low < 0.0)
 	{
 		while (low < static_cast<double>(lowerLimit))
 		{
@@ -1083,7 +1088,7 @@ void GraphsState::drawCountryLines()
 	}
 
 	range = static_cast<double>(upperLimit - lowerLimit);
-	double units = range / 126.;
+	double units = range / 126.0;
 
 	// draw country lines
 	for (size_t
@@ -1278,11 +1283,11 @@ void GraphsState::drawRegionLines()
 					upperLimit = amount;
 				}
 
-				if (amount < lowerLimit
+/*				if (amount < lowerLimit
 					&& _regionToggles.at(iter)->_pushed)
 				{
 					lowerLimit = amount;
-				}
+				} */
 			}
 		}
 		else
@@ -1331,7 +1336,7 @@ void GraphsState::drawRegionLines()
 	lowerLimit = 0;
 	upperLimit = test * grid;
 
-	if (low < 0.)
+	if (low < 0.0)
 	{
 		while (low < static_cast<double>(lowerLimit))
 		{
@@ -1341,8 +1346,7 @@ void GraphsState::drawRegionLines()
 	}
 
 	range = static_cast<double>(upperLimit - lowerLimit);
-
-	double units = range / 126.;
+	double units = range / 126.0;
 
 	// draw region lines
 	for (size_t
@@ -1393,7 +1397,7 @@ void GraphsState::drawRegionLines()
 			newLineVector.push_back(y);
 
 			int offset = 0;
-			if (entry % 2) offset = 8;
+			if (entry %2) offset = 8;
 
 			if (newLineVector.size() > 1 && _alien)
 				_alienRegionLines.at(entry)->drawLine(
@@ -1408,7 +1412,7 @@ void GraphsState::drawRegionLines()
 						y,
 						x + 17,
 						newLineVector.at(newLineVector.size() - 2),
-						Palette::blockOffset((entry /2) + 1) + offset);
+						Palette::blockOffset((entry / 2) + 1) + offset);
 		}
 
 		if (_alien)
@@ -1417,20 +1421,22 @@ void GraphsState::drawRegionLines()
 			_xcomRegionLines.at(entry)->setVisible(_regionToggles.at(entry)->_pushed);
 	}
 
-	// set up the "total" line
 	if (_alien)
 		_alienRegionLines.back()->clear();
 	else
 		_xcomRegionLines.back()->clear();
 
+	// set up the "total" line
 	std::vector<Sint16> newLineVector;
+
 	for (int
 			iter = 0;
 			iter < 12;
 			++iter)
 	{
 		int x = 312 - (iter * 17);
-		int y = 175;
+		int y = 175 + static_cast<int>(static_cast<double>(lowerLimit) / units);
+//		int y = 175;
 
 		if (totals[iter] > 0)
 		{
@@ -1439,13 +1445,22 @@ void GraphsState::drawRegionLines()
 		}
 
 		newLineVector.push_back(y);
-
 		if (newLineVector.size() > 1)
 		{
 			if (_alien)
-				_alienRegionLines.back()->drawLine(x, y, x + 17, newLineVector.at(newLineVector.size() - 2), Palette::blockOffset(9));
+				_alienRegionLines.back()->drawLine(
+						x,
+						y,
+						x + 17,
+						newLineVector.at(newLineVector.size() - 2),
+						Palette::blockOffset(9));
 			else
-				_xcomRegionLines.back()->drawLine(x, y, x + 17, newLineVector.at(newLineVector.size() - 2), Palette::blockOffset(9));
+				_xcomRegionLines.back()->drawLine(
+						x,
+						y,
+						x + 17,
+						newLineVector.at(newLineVector.size() - 2),
+						Palette::blockOffset(9));
 		}
 	}
 
@@ -1576,7 +1591,7 @@ void GraphsState::drawFinanceLines()
 	lowerLimit = 0;
 	upperLimit = test * grid;
 
-	if (low < 0)
+	if (low < 0.0)
 	{
 		while (low < static_cast<double>(lowerLimit))
 		{
@@ -1597,7 +1612,7 @@ void GraphsState::drawFinanceLines()
 
 	range = static_cast<double>(upperLimit - lowerLimit);
 	// figure out how many units to the pixel, then plot the points for the graph and connect the dots.
-	double units = range / 126.;
+	double units = range / 126.0;
 
 	for (int
 			button = 0;

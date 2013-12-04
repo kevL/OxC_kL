@@ -17,20 +17,28 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <assert.h>
 #include "ProductionCompleteState.h"
+
+#include <assert.h>
+
+#include "GeoscapeState.h"
+
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
+#include "../Engine/Options.h"
 #include "../Engine/Palette.h"
+
+#include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
-#include "../Interface/Text.h"
-#include "GeoscapeState.h"
-#include "../Engine/Options.h"
+
 #include "../Basescape/BasescapeState.h"
 #include "../Basescape/ManufactureState.h"
+
+#include "../Resource/ResourcePack.h"
+
 #include "../Savegame/Base.h"
+
 
 namespace OpenXcom
 {
@@ -55,9 +63,10 @@ ProductionCompleteState::ProductionCompleteState(Game* game, Base* base, const s
 	_window			= new Window(this, 256, 160, 32, 20, POPUP_BOTH);
 	_txtMessage		= new Text(246, 110, 37, 35);
 
-	_btnOk			= new TextButton(90, 16, 16, 154);
-	_btnOk5Secs		= new TextButton(90, 16, 118, 154);
-	_btnGotoBase	= new TextButton(90, 16, 220, 154);
+	_btnOk			= new TextButton(72, 16, 48, 154);
+	_btnOk5Secs		= new TextButton(72, 16, 124, 154);
+	_btnGotoBase	= new TextButton(72, 16, 200, 154);
+
 
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
 

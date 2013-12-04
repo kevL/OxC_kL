@@ -18,12 +18,15 @@
  */
 
 #include "TextList.h"
-#include <cstdarg>
+
 #include <cmath>
+#include <cstdarg>
+
+#include "ArrowButton.h"
+
 #include "../Engine/Action.h"
 #include "../Engine/Font.h"
 #include "../Engine/Palette.h"
-#include "ArrowButton.h"
 
 
 namespace OpenXcom
@@ -462,7 +465,7 @@ void TextList::setColor(Uint8 color)
 	_up->setColor(color);
 	_down->setColor(color);
 
-	for (std::vector< std::vector<Text*> >::iterator u = _texts.begin(); u < _texts.end(); ++u)
+	for (std::vector<std::vector<Text*>>::iterator u = _texts.begin(); u < _texts.end(); ++u)
 	{
 		for (std::vector<Text*>::iterator v = u->begin(); v < u->end(); ++v)
 		{
@@ -507,7 +510,7 @@ void TextList::setHighContrast(bool contrast)
 {
 	_contrast = contrast;
 
-	for (std::vector< std::vector<Text*> >::iterator u = _texts.begin(); u < _texts.end(); ++u)
+	for (std::vector<std::vector<Text*>>::iterator u = _texts.begin(); u < _texts.end(); ++u)
 	{
 		for (std::vector<Text*>::iterator v = u->begin(); v < u->end(); ++v)
 		{
@@ -1010,7 +1013,11 @@ void TextList::mouseOver(Action* action, State* state)
 	if (_selectable)
 	{
 		int h = _font->getHeight() + _font->getSpacing();
-		_selRow = std::max(0, (int)(_scroll + (int)floor(action->getRelativeYMouse() / (h * action->getYScale()))));
+		_selRow = std::max(
+						0,
+						static_cast<int>(
+							static_cast<int>(_scroll)
+								+ static_cast<int>(floor(action->getRelativeYMouse() / (static_cast<double>(h) * action->getYScale())))));
 
 		if (_selRow < _texts.size())
 		{
