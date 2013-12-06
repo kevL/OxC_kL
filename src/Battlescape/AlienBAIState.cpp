@@ -1640,56 +1640,73 @@ bool AlienBAIState::findFirePoint()
 }
 
 /**
- * Decides if it worth our while to create an explosion here.
- * @param targetPos The target's position.
- * @param attackingUnit The attacking unit.
- * @param radius How big the explosion will be.
- * @param diff Game difficulty.
- * @return True if it is worthwile creating an explosion in the target position.
+ * Decides if it's worth our while to create an explosion here.
+ * @param targetPos, The target's position.
+ * @param attackingUnit, The attacking unit.
+ * @param radius, How big the explosion will be.
+ * @param diff, Game difficulty.
+ * @return, True if it is worthwile creating an explosion in the target position.
  */
-bool AlienBAIState::explosiveEfficacy(Position targetPos, BattleUnit* attackingUnit, int radius, int diff) const
+bool AlienBAIState::explosiveEfficacy(
+		Position targetPos,
+		BattleUnit* attackingUnit,
+		int radius,
+		int diff) const
 {
-	// i hate the player and i want him dead, but i don't want to piss him off.
-//kL	if (_save->getTurn() < 3) return false;
+	Log(LOG_INFO) << "AlienBAIState::explosiveEfficacy()";
 
 	if (diff == -1)
 	{
-		diff = (int)(_save->getBattleState()->getGame()->getSavedGame()->getDifficulty());
+		diff = static_cast<int>(_save->getBattleState()->getGame()->getSavedGame()->getDifficulty());
 	}
+	// i hate the player and i want him dead, but i don't want to piss him off:
+//kL	if (_save->getTurn() < 3) return false;
+	if (_save->getTurn() < 5 - diff) return false;	// kL
 
-	int distance = _save->getTileEngine()->distance(attackingUnit->getPosition(), targetPos);
-	int injurylevel = attackingUnit->getStats()->health - attackingUnit->getHealth();
-	int desperation = (100 - attackingUnit->getMorale()) / 10;
-	int enemiesAffected = 0;
 
 	// if we're below 1/3 health, let's assume things are dire, and increase desperation.
-	if (injurylevel > attackingUnit->getStats()->health / 3 * 2)
-		desperation += 3;
+	int desperation = (100 - attackingUnit->getMorale()) / 10;
+//kL	int hurt = attackingUnit->getStats()->health - attackingUnit->getHealth();
+	int hurt = 10 -
+			static_cast<int>(
+					static_cast<float>(attackingUnit->getHealth()) / static_cast<float>(attackingUnit->getStats()->health) * 10.f);
+//kL	if (hurt > attackingUnit->getStats()->health * 2 / 3)
+//kL		desperation += 3;
 
-	int efficacy = desperation + enemiesAffected; // kL_note: no enemiesAffected yet...
+//kL	int eff = desperation + affected; // kL_note: no affected yet...
+	int eff = (desperation + hurt) * 2; // kL_note: no affected yet...
 
-	if (distance <= radius)
-		efficacy -= 3;
+	int distance = _save->getTileEngine()->distance(attackingUnit->getPosition(), targetPos);
+	if (distance < radius + 1)
+//kL		eff -= 3;
+		eff -= 50;		// kL
 
 	// we don't want to ruin our own base, but we do want to ruin XCom's day.
 	if (_save->getMissionType() == "STR_ALIEN_BASE_ASSAULT")
 	{
-		efficacy -= 3;
+//kL		eff -= 3;
+		eff -= 25;
 	}
 	else if (_save->getMissionType() == "STR_BASE_DEFENSE"
 		|| _save->getMissionType() == "STR_TERROR_MISSION")
 	{
-		efficacy += 3;
+//kL		eff += 3;
+		eff += 50;
 	}
 
-	BattleUnit* target = _save->getTile(targetPos)->getUnit();
 
-	for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
+//kL	int affected = 0;
+
+	BattleUnit* target = _save->getTile(targetPos)->getUnit();
+	for (std::vector<BattleUnit*>::iterator
+			i = _save->getUnits()->begin();
+			i != _save->getUnits()->end();
+			++i)
 	{
-		if (!(*i)->isOut()
+		if (!(*i)->isOut(true)
 			&& *i != attackingUnit
 			&& (*i)->getPosition().z == targetPos.z
-			&& _save->getTileEngine()->distance((*i)->getPosition(), targetPos) <= radius)
+			&& _save->getTileEngine()->distance((*i)->getPosition(), targetPos) < radius + 1)
 		{
 			if ((*i)->getFaction() == FACTION_PLAYER
 				&& (*i)->getTurnsExposed() > _intelligence)
@@ -1697,34 +1714,56 @@ bool AlienBAIState::explosiveEfficacy(Position targetPos, BattleUnit* attackingU
 				continue;
 			}
 
-			Position voxelPosA = Position((targetPos.x * 16) + 8, (targetPos.y * 16) + 8, (targetPos.z * 24) + 12);
-			Position voxelPosB = Position(((*i)->getPosition().x * 16) + 8, ((*i)->getPosition().y * 16) + 8, ((*i)->getPosition().z * 24) + 12);
+			Position voxelPosA = Position(
+									(targetPos.x * 16) + 8,
+									(targetPos.y * 16) + 8,
+									(targetPos.z * 24) + 12);
+			Position voxelPosB = Position(
+									((*i)->getPosition().x * 16) + 8,
+									((*i)->getPosition().y * 16) + 8,
+									((*i)->getPosition().z * 24) + 12);
 
-			int collidesWith = _save->getTileEngine()->calculateLine(voxelPosA, voxelPosB, false, 0, target, true, false, *i);
-			if (collidesWith == VOXEL_UNIT)
+			int collision = _save->getTileEngine()->calculateLine(
+														voxelPosA,
+														voxelPosB,
+														false,
+														0,
+														target,
+														true,
+														false,
+														*i);
+			if (collision == VOXEL_UNIT)
 			{
 				if ((*i)->getFaction() == FACTION_PLAYER)
 				{
-					++enemiesAffected;
-					++efficacy;
+					eff += 10;
+//kL					++eff;
+//kL					++affected;
 				}
-				else if ((*i)->getFaction() == _unit->getFaction())
+//kL				else if ((*i)->getFaction() == _unit->getFaction())
+				else if ((*i)->getOriginalFaction() == _unit->getFaction())		// kL
 				{
-					efficacy -= 2; // friendlies count double
+//kL					eff -= 2;	// friendlies count double
+					eff -= 5;		// true friendlies count half
 				}
 			}
 		}
 	}
 
 	// spice things up a bit by adding a random number based on difficulty level
-	efficacy += RNG::generate(0, diff + 1) - RNG::generate(0, 5);
-//kL	if (efficacy > 0 || enemiesAffected >= 10)
-	if (efficacy > 0
-		|| enemiesAffected >= 3)	// kL
+//kL	eff += RNG::generate(0, diff + 1) - RNG::generate(0, 5);
+//kL	if (eff > 0 || affected >= 10)
+//kL	if (eff > 0)
+//kL		|| affected >= 3)	// kL
+
+	if (eff > 0					// kL
+		&& RNG::percent(eff))	// kL
 	{
+		Log(LOG_INFO) << "AlienBAIState::explosiveEfficacy() EXIT true, eff = " << eff;
 		return true;
 	}
 
+	Log(LOG_INFO) << "AlienBAIState::explosiveEfficacy() EXIT false, eff = " << eff;
 	return false;
 }
 

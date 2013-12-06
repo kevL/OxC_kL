@@ -54,7 +54,13 @@ namespace OpenXcom
  * @param tile, Tile the explosion is on.
  * @param lowerWeapon, Whether the unit causing this explosion should now lower their weapon.
  */
-ExplosionBState::ExplosionBState(BattlescapeGame* parent, Position center, BattleItem* item, BattleUnit* unit, Tile* tile, bool lowerWeapon)
+ExplosionBState::ExplosionBState(
+		BattlescapeGame* parent,
+		Position center,
+		BattleItem* item,
+		BattleUnit* unit,
+		Tile* tile,
+		bool lowerWeapon)
 	:
 		BattleState(parent),
 		_unit(unit),

@@ -1460,19 +1460,19 @@ void Globe::drawVHLine(double lon1, double lat1, double lon2, double lat2, int c
 	double sx = lon2 - lon1;
 	double sy = lat2 - lat1;
 	double ln1, lt1, ln2, lt2;
-	int seg;
 	Sint16 x1, y1, x2, y2;
+	int seg;
 
-	if (sx<0) sx += 2*M_PI;
+	if (sx < 0) sx += 2*M_PI;
 
-	if (fabs(sx)<0.01)
+	if (fabs(sx) < 0.01)
 	{
-		seg = (int)abs(sy / (2.0 * M_PI) * 48.0);
+		seg = static_cast<int>(abs(sy / (2.0 * M_PI) * 48.0));
 		if (seg == 0) ++seg;
 	}
 	else
 	{
-		seg = (int)abs(sx / (2.0 * M_PI) * 96.0);
+		seg = static_cast<int>(abs(sx / (2.0 * M_PI) * 96.0));
 		if (seg == 0) ++seg;
 	}
 
@@ -1481,15 +1481,16 @@ void Globe::drawVHLine(double lon1, double lat1, double lon2, double lat2, int c
 
 	for (int i = 0; i < seg; ++i)
 	{
-		ln1 = lon1 + sx*i;
-		lt1 = lat1 + sy*i;
-		ln2 = lon1 + sx*(i+1);
-		lt2 = lat1 + sy*(i+1);
+		ln1 = lon1 + sx * i;
+		lt1 = lat1 + sy * i;
+		ln2 = lon1 + sx * (i + 1);
+		lt2 = lat1 + sy * (i + 1);
 
-		if (!pointBack(ln2, lt2)&&!pointBack(ln1, lt1))
+		if (!pointBack(ln2, lt2) && !pointBack(ln1, lt1))
 		{
-			polarToCart(ln1,lt1,&x1,&y1);
-			polarToCart(ln2,lt2,&x2,&y2);
+			polarToCart(ln1, lt1, &x1, &y1);
+			polarToCart(ln2, lt2, &x2, &y2);
+
 			_countries->drawLine(x1, y1, x2, y2, colour);
 		}
 	}
@@ -1507,23 +1508,41 @@ void Globe::drawDetail()
 		return;
 
 	// Draw the country borders
-	if (_zoom >= 1)
+	if (_zoom > 0)
 	{
 		// Lock the surface
 		_countries->lock();
 
-		for (std::list<Polyline*>::iterator i = _game->getResourcePack()->getPolylines()->begin(); i != _game->getResourcePack()->getPolylines()->end(); ++i)
+		for (std::list<Polyline*>::iterator
+				i = _game->getResourcePack()->getPolylines()->begin();
+				i != _game->getResourcePack()->getPolylines()->end();
+				++i)
 		{
 			Sint16 x[2], y[2];
-			for (int j = 0; j < (*i)->getPoints() - 1; ++j)
+
+			for (int
+					j = 0;
+					j < (*i)->getPoints() - 1;
+					++j)
 			{
 				// Don't draw if polyline is facing back
-				if (pointBack((*i)->getLongitude(j), (*i)->getLatitude(j)) || pointBack((*i)->getLongitude(j + 1), (*i)->getLatitude(j + 1)))
+				if (pointBack((*i)->getLongitude(j), (*i)->getLatitude(j))
+					|| pointBack((*i)->getLongitude(j + 1), (*i)->getLatitude(j + 1)))
+				{
 					continue;
+				}
 
 				// Convert coordinates
-				polarToCart((*i)->getLongitude(j), (*i)->getLatitude(j), &x[0], &y[0]);
-				polarToCart((*i)->getLongitude(j + 1), (*i)->getLatitude(j + 1), &x[1], &y[1]);
+				polarToCart(
+						(*i)->getLongitude(j),
+						(*i)->getLatitude(j),
+						&x[0],
+						&y[0]);
+				polarToCart(
+						(*i)->getLongitude(j + 1),
+						(*i)->getLatitude(j + 1),
+						&x[1],
+						&y[1]);
 
 				_countries->drawLine(x[0], y[0], x[1], y[1], Palette::blockOffset(10)+2);
 			}
@@ -1534,28 +1553,36 @@ void Globe::drawDetail()
 	}
 
 	// Draw the country names
-	if (_zoom >= 2)
+	if (_zoom > 1)
 	{
 		Text* label = new Text(100, 9, 0, 0);
 		label->setPalette(getPalette());
 		label->setFonts(_game->getResourcePack()->getFont("FONT_BIG"), _game->getResourcePack()->getFont("FONT_SMALL"));
-		label->setAlign(ALIGN_CENTER);
-//kL		label->setColor(Palette::blockOffset(15)-1);
-		label->setColor(Palette::blockOffset(14)+3);		// kL, olive
+//kL		label->setAlign(ALIGN_CENTER);
+		label->setColor(Palette::blockOffset(14)+3);
 
 		Sint16 x, y;
-		for (std::vector<Country*>::iterator i = _game->getSavedGame()->getCountries()->begin(); i != _game->getSavedGame()->getCountries()->end(); ++i)
+
+		for (std::vector<Country*>::iterator
+				i = _game->getSavedGame()->getCountries()->begin();
+				i != _game->getSavedGame()->getCountries()->end();
+				++i)
 		{
 			// Don't draw if label is facing back
 			if (pointBack((*i)->getRules()->getLabelLongitude(), (*i)->getRules()->getLabelLatitude()))
 				continue;
 
 			// Convert coordinates
-			polarToCart((*i)->getRules()->getLabelLongitude(), (*i)->getRules()->getLabelLatitude(), &x, &y);
+			polarToCart(
+					(*i)->getRules()->getLabelLongitude(),
+					(*i)->getRules()->getLabelLatitude(),
+					&x,
+					&y);
 
 			label->setX(x - 40);
 			label->setY(y);
 			label->setText(_game->getLanguage()->getString((*i)->getRules()->getType()));
+
 			label->blit(_countries);
 		}
 
@@ -1563,17 +1590,16 @@ void Globe::drawDetail()
 	}
 
 	// Draw the city markers
-	if (_zoom >= 3)
+/*kL	if (_zoom > 2)
 	{
 		Text* label = new Text(80, 9, 0, 0);
 		label->setPalette(getPalette());
 		label->setFonts(_game->getResourcePack()->getFont("FONT_BIG"), _game->getResourcePack()->getFont("FONT_SMALL"));
-		label->setAlign(ALIGN_CENTER);
-		label->setColor(Palette::blockOffset(10)+7);	// grey-blue=blockOffset(10)+6)
-														// lavender=blockOffset(6)+4; 
-														// (default)yellow=blockOffset(8)+10;
+//kL		label->setAlign(ALIGN_CENTER);
+		label->setColor(Palette::blockOffset(10)+7);
 
 		Sint16 x, y;
+
 		for (std::vector<Region*>::iterator
 				i = _game->getSavedGame()->getRegions()->begin();
 				i != _game->getSavedGame()->getRegions()->end();
@@ -1594,31 +1620,116 @@ void Globe::drawDetail()
 				_mkCity->setX(x - 1);
 				_mkCity->setY(y - 1);
 				_mkCity->setPalette(getPalette());
+
 				_mkCity->blit(_countries);
 
 				label->setX(x - 40);
 				label->setY(y + 2);
 				label->setText(_game->getLanguage()->getString((*j)->getName()));
+
 				label->blit(_countries);
 			}
 		}
 
 		delete label;
+	} */
+
+	// kL_begin: Globe::drawDetail(), separate city markers from labels for zoomLevels
+	// Draw the city markers
+	if (_zoom > 2)
+	{
+		Sint16 x, y;
+
+		for (std::vector<Region*>::iterator
+				i = _game->getSavedGame()->getRegions()->begin();
+				i != _game->getSavedGame()->getRegions()->end();
+				++i)
+		{
+			for (std::vector<City*>::iterator
+					j = (*i)->getRules()->getCities()->begin();
+					j != (*i)->getRules()->getCities()->end();
+					++j)
+			{
+				// Don't draw if city is facing back
+				if (pointBack((*j)->getLongitude(), (*j)->getLatitude()))
+					continue;
+
+				// Convert coordinates
+				polarToCart((*j)->getLongitude(), (*j)->getLatitude(), &x, &y);
+
+				_mkCity->setX(x - 1);
+				_mkCity->setY(y - 1);
+				_mkCity->setPalette(getPalette());
+
+				_mkCity->blit(_countries);
+			}
+		}
 	}
 
+	// Draw the city labels
+	if (_zoom > 3)
+	{
+		Text* label = new Text(80, 9, 0, 0);
+		label->setPalette(getPalette());
+		label->setFonts(_game->getResourcePack()->getFont("FONT_BIG"), _game->getResourcePack()->getFont("FONT_SMALL"));
+		label->setAlign(ALIGN_CENTER);
+		label->setColor(Palette::blockOffset(10)+7);
+
+		Sint16 x, y;
+
+		for (std::vector<Region*>::iterator
+				i = _game->getSavedGame()->getRegions()->begin();
+				i != _game->getSavedGame()->getRegions()->end();
+				++i)
+		{
+			for (std::vector<City*>::iterator
+					j = (*i)->getRules()->getCities()->begin();
+					j != (*i)->getRules()->getCities()->end();
+					++j)
+			{
+				// Don't draw if city is facing back
+				if (pointBack((*j)->getLongitude(), (*j)->getLatitude()))
+					continue;
+
+				// Convert coordinates
+				polarToCart((*j)->getLongitude(), (*j)->getLatitude(), &x, &y);
+
+				label->setX(x - 40);
+				label->setY(y + 2);
+				label->setText(_game->getLanguage()->getString((*j)->getName()));
+
+				label->blit(_countries);
+			}
+		}
+
+		delete label;
+	} // kL_end.
+
+
+	// debug stuff follows...
 	static int debugType = 0;
 	static bool canSwitchDebugType = false;
+
 	if (_game->getSavedGame()->getDebugMode())
 	{
-		int color;
 		canSwitchDebugType = true;
+		int color;
+
 		if (debugType == 0)
 		{
 			color = 0;
-			for (std::vector<Country*>::iterator i = _game->getSavedGame()->getCountries()->begin(); i != _game->getSavedGame()->getCountries()->end(); ++i)
+
+			for (std::vector<Country*>::iterator
+					i = _game->getSavedGame()->getCountries()->begin();
+					i != _game->getSavedGame()->getCountries()->end();
+					++i)
 			{
 				color += 10;
-				for (size_t k = 0; k != (*i)->getRules()->getLatMax().size(); ++k)
+
+				for (size_t
+						k = 0;
+						k != (*i)->getRules()->getLatMax().size();
+						++k)
 				{
 					double lon2 = (*i)->getRules()->getLonMax().at(k);
 					double lon1 = (*i)->getRules()->getLonMin().at(k);
@@ -1635,10 +1746,18 @@ void Globe::drawDetail()
 		else if (debugType == 1)
 		{
 			color = 0;
-			for (std::vector<Region*>::iterator i = _game->getSavedGame()->getRegions()->begin(); i != _game->getSavedGame()->getRegions()->end(); ++i)
+
+			for (std::vector<Region*>::iterator
+					i = _game->getSavedGame()->getRegions()->begin();
+					i != _game->getSavedGame()->getRegions()->end();
+					++i)
 			{
 				color += 10;
-				for(size_t k = 0; k != (*i)->getRules()->getLatMax().size(); ++k)
+
+				for (size_t
+						k = 0;
+						k != (*i)->getRules()->getLatMax().size();
+						++k)
 				{
 					double lon2 = (*i)->getRules()->getLonMax().at(k);
 					double lon1 = (*i)->getRules()->getLonMin().at(k);
@@ -1654,13 +1773,24 @@ void Globe::drawDetail()
 		}
 		else if (debugType == 2)
 		{
-			for (std::vector<Region*>::iterator i = _game->getSavedGame()->getRegions()->begin(); i != _game->getSavedGame()->getRegions()->end(); ++i)
+			for (std::vector<Region*>::iterator
+					i = _game->getSavedGame()->getRegions()->begin();
+					i != _game->getSavedGame()->getRegions()->end();
+					++i)
 			{
 				color = -1;
-				for (std::vector<MissionZone>::const_iterator j = (*i)->getRules()->getMissionZones().begin(); j != (*i)->getRules()->getMissionZones().end(); ++j)
+
+				for (std::vector<MissionZone>::const_iterator
+						j = (*i)->getRules()->getMissionZones().begin();
+						j != (*i)->getRules()->getMissionZones().end();
+						++j)
 				{
 					color += 2;
-					for (std::vector<MissionArea>::const_iterator k = (*j).areas.begin(); k != (*j).areas.end(); ++k)
+
+					for (std::vector<MissionArea>::const_iterator
+							k = (*j).areas.begin();
+							k != (*j).areas.end();
+							++k)
 					{
 						double lon2 = (*k).lonMax * M_PI / 180.0;
 							//(*i)->getRules()->getLonMax().at(k);
@@ -1686,6 +1816,7 @@ void Globe::drawDetail()
 		{
 			++debugType;
 			if (debugType > 2) debugType = 0;
+
 			canSwitchDebugType = false;
 		}
 	}
@@ -1697,11 +1828,15 @@ void Globe::drawDetail()
  */
 void Globe::drawMarkers()
 {
-	Sint16 x, y;
 	_markers->clear();
 
+	Sint16 x, y;
+
 	// Draw the base markers
-	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
+	for (std::vector<Base*>::iterator
+			i = _game->getSavedGame()->getBases()->begin();
+			i != _game->getSavedGame()->getBases()->end();
+			++i)
 	{
 		// Cheap hack to hide bases when they haven't been placed yet
 		if (((*i)->getLongitude() != 0.0 || (*i)->getLatitude() != 0.0)
@@ -1711,12 +1846,16 @@ void Globe::drawMarkers()
 
 			_mkXcomBase->setX(x - 1);
 			_mkXcomBase->setY(y - 1);
+
 			_mkXcomBase->blit(_markers);
 		}
 	}
 
 	// Draw the waypoint markers
-	for (std::vector<Waypoint*>::iterator i = _game->getSavedGame()->getWaypoints()->begin(); i != _game->getSavedGame()->getWaypoints()->end(); ++i)
+	for (std::vector<Waypoint*>::iterator
+			i = _game->getSavedGame()->getWaypoints()->begin();
+			i != _game->getSavedGame()->getWaypoints()->end();
+			++i)
 	{
 		if (pointBack((*i)->getLongitude(), (*i)->getLatitude()))
 			continue;
@@ -1725,11 +1864,15 @@ void Globe::drawMarkers()
 
 		_mkWaypoint->setX(x - 1);
 		_mkWaypoint->setY(y - 1);
+
 		_mkWaypoint->blit(_markers);
 	}
 
 	// Draw the terror site markers
-	for (std::vector<TerrorSite*>::iterator i = _game->getSavedGame()->getTerrorSites()->begin(); i != _game->getSavedGame()->getTerrorSites()->end(); ++i)
+	for (std::vector<TerrorSite*>::iterator
+			i = _game->getSavedGame()->getTerrorSites()->begin();
+			i != _game->getSavedGame()->getTerrorSites()->end();
+			++i)
 	{
 		if (pointBack((*i)->getLongitude(), (*i)->getLatitude()))
 			continue;
@@ -1738,11 +1881,15 @@ void Globe::drawMarkers()
 
 		_mkAlienSite->setX(x - 1);
 		_mkAlienSite->setY(y - 1);
+
 		_mkAlienSite->blit(_markers);
 	}
 
 	// Draw the Alien Base markers
-	for (std::vector<AlienBase*>::iterator i = _game->getSavedGame()->getAlienBases()->begin(); i != _game->getSavedGame()->getAlienBases()->end(); ++i)
+	for (std::vector<AlienBase*>::iterator
+			i = _game->getSavedGame()->getAlienBases()->begin();
+			i != _game->getSavedGame()->getAlienBases()->end();
+			++i)
 	{
 		if (pointBack((*i)->getLongitude(), (*i)->getLatitude()))
 			continue;
@@ -1753,26 +1900,36 @@ void Globe::drawMarkers()
 		{
 			_mkAlienBase->setX(x - 1);
 			_mkAlienBase->setY(y - 1);
+
 			_mkAlienBase->blit(_markers);
 		}
 	}
 
 	// Draw the UFO markers
-	for (std::vector<Ufo*>::iterator i = _game->getSavedGame()->getUfos()->begin(); i != _game->getSavedGame()->getUfos()->end(); ++i)
+	for (std::vector<Ufo*>::iterator
+			i = _game->getSavedGame()->getUfos()->begin();
+			i != _game->getSavedGame()->getUfos()->end();
+			++i)
 	{
 		if (pointBack((*i)->getLongitude(), (*i)->getLatitude()))
 			continue;
-		Surface *marker = 0;
+
+		Surface* marker = 0;
+
 		switch ((*i)->getStatus())
 		{
 			case Ufo::DESTROYED:
 			continue;
 			case Ufo::FLYING:
-				if (!(*i)->getDetected()) continue;
+				if (!(*i)->getDetected())
+					continue;
+
 				marker = _mkFlyingUfo;
 			break;
 			case Ufo::LANDED:
-				if (!(*i)->getDetected()) continue;
+				if (!(*i)->getDetected())
+					continue;
+
 				marker = _mkLandedUfo;
 			break;
 			case Ufo::CRASHED:
@@ -1783,13 +1940,20 @@ void Globe::drawMarkers()
 		polarToCart((*i)->getLongitude(), (*i)->getLatitude(), &x, &y);
 		marker->setX(x - 1);
 		marker->setY(y - 1);
+
 		marker->blit(_markers);
 	}
 
 	// Draw the craft markers
-	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
+	for (std::vector<Base*>::iterator
+			i = _game->getSavedGame()->getBases()->begin();
+			i != _game->getSavedGame()->getBases()->end();
+			++i)
 	{
-		for (std::vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); ++j)
+		for (std::vector<Craft*>::iterator
+				j = (*i)->getCrafts()->begin();
+				j != (*i)->getCrafts()->end();
+				++j)
 		{
 			// Hide crafts docked at base
 			if ((*j)->getStatus() != "STR_OUT"
@@ -1802,6 +1966,7 @@ void Globe::drawMarkers()
 
 			_mkCraft->setX(x - 1);
 			_mkCraft->setY(y - 1);
+
 			_mkCraft->blit(_markers);
 		}
 	}
@@ -1828,7 +1993,11 @@ void Globe::blit(Surface* surface)
 void Globe::mousePress(Action* action, State* state)
 {
 	double lon, lat;
-	cartToPolar(static_cast<Sint16>(floor(action->getAbsoluteXMouse())), static_cast<Sint16>(floor(action->getAbsoluteYMouse())), &lon, &lat);
+	cartToPolar(
+			static_cast<Sint16>(floor(action->getAbsoluteXMouse())),
+			static_cast<Sint16>(floor(action->getAbsoluteYMouse())),
+			&lon,
+			&lat);
 
 	// Check for errors
 	if (lat == lat && lon == lon)
@@ -1843,7 +2012,11 @@ void Globe::mousePress(Action* action, State* state)
 void Globe::mouseRelease(Action* action, State* state)
 {
 	double lon, lat;
-	cartToPolar(static_cast<Sint16>(floor(action->getAbsoluteXMouse())), static_cast<Sint16>(floor(action->getAbsoluteYMouse())), &lon, &lat);
+	cartToPolar(
+			static_cast<Sint16>(floor(action->getAbsoluteXMouse())),
+			static_cast<Sint16>(floor(action->getAbsoluteYMouse())),
+			&lon,
+			&lat);
 
 	// Check for errors
 	if (lat == lat && lon == lon)
@@ -1868,12 +2041,17 @@ void Globe::mouseClick(Action* action, State* state)
 	}
 
 	double lon, lat;
-	cartToPolar(static_cast<Sint16>(floor(action->getAbsoluteXMouse())), static_cast<Sint16>(floor(action->getAbsoluteYMouse())), &lon, &lat);
+	cartToPolar(
+			static_cast<Sint16>(floor(action->getAbsoluteXMouse())),
+			static_cast<Sint16>(floor(action->getAbsoluteYMouse())),
+			&lon,
+			&lat);
 	
 	// Check for errors
 	if (lat == lat && lon == lon)
 	{
 		InteractiveSurface::mouseClick(action, state);
+
 		if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 		{
 			center(lon, lat);

@@ -2527,8 +2527,7 @@ void GeoscapeState::btnDetailClick(Action* action)
  */
 void GeoscapeState::zoomInEffect()
 {
-//	_zoomInter = _globe->getZoomLevel();
-	_zoomInter = _game->getSavedGame()->getGlobeZoom();
+//	_zoomInter = _game->getSavedGame()->getGlobeZoom();		// kL
 
 	_globe->zoomIn();
 
@@ -2545,10 +2544,9 @@ void GeoscapeState::zoomInEffect()
 void GeoscapeState::zoomOutEffect()
 {
 	if (_globe->isZoomedOutToMax()
-//	if (_game->getSavedGame()->getGlobeZoom() == 0
-		|| _game->getSavedGame()->getGlobeZoom() < _zoomInter)
+		|| _game->getSavedGame()->getGlobeZoom() <= _zoomInter)		// kL
 	{
-		_zoomInter = 0;
+		_zoomInter = 0;												// kL
 
 		_zoomOutEffectDone = true;
 		_zoomOutEffectTimer->stop();
@@ -2634,6 +2632,8 @@ int GeoscapeState::minimizedDogfightsCount()
  */
 void GeoscapeState::startDogfight()
 {
+	_zoomInter = _game->getSavedGame()->getGlobeZoom();		// kL
+
 	if (!_globe->isZoomedInToMax())
 	{
 		if (!_zoomInEffectTimer->isRunning())

@@ -149,13 +149,14 @@ void ProjectileFlyBState::init()
 	// kL_begin: ProjectileFlyBState::init() Give back time units; pre-end Reaction Fire. +stopShot!!
 	if (_unit->getStopShot())
 	{
-		// do I have to refund TU's for this???
+		// do I have to refund TU's for this??? YES. done
 		// when are TU subtracted for a primaryAction firing/throwing action?
 		_unit->setStopShot(false);
 
+		_unit->setTimeUnits(_unit->getTimeUnits() + _unit->getActionTUs(_action.type, _action.weapon));
 		_parent->popState();
 
-		Log(LOG_INFO) << ". stopShot.";
+		Log(LOG_INFO) << ". stopShot, refund TUs.";
 		return;
 	}
 

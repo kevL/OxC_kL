@@ -1534,10 +1534,12 @@ void SavedBattleGame::reviveUnconsciousUnits()
 				if (placeUnitNearPosition((*i), originalPosition))
 				{
 					// recover from unconscious
-					(*i)->turn(false); // makes the unit stand up again
+					(*i)->turn(false); // -> STATUS_STANDING
 //kL					(*i)->kneel(false);
+					(*i)->kneel(true);								// kL
 					(*i)->setCache(0);
 					(*i)->setDirection(RNG::generate(0, 7));		// kL
+					(*i)->setTimeUnits(0);							// kL
 
 					getTileEngine()->calculateFOV((*i));
 					getTileEngine()->calculateUnitLighting();

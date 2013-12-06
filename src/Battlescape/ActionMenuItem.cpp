@@ -18,9 +18,11 @@
  */
 
 #include "ActionMenuItem.h"
-#include "../Interface/Text.h"
-#include "../Interface/Frame.h"
+
 #include "../Engine/Palette.h"
+
+#include "../Interface/Frame.h"
+#include "../Interface/Text.h"
 
 
 namespace OpenXcom
@@ -89,13 +91,19 @@ ActionMenuItem::~ActionMenuItem()
  * @param timeunits The timeunits string, including the TUs> prefix.
  * @param tu The timeunits value.
  */
-void ActionMenuItem::setAction(BattleActionType action, std::wstring description, std::wstring accuracy, std::wstring timeunits, int tu)
+void ActionMenuItem::setAction(
+		BattleActionType action,
+		std::wstring description,
+		std::wstring accuracy,
+		std::wstring timeunits,
+		int tu)
 {
 	_action = action;
 	_txtDescription->setText(description);
 	_txtAcc->setText(accuracy);
 	_txtTU->setText(timeunits);
 	_tu = tu;
+
 	_redraw = true;
 }
 
@@ -167,7 +175,7 @@ void ActionMenuItem::mouseIn(Action* action, State* state)
 void ActionMenuItem::mouseOut(Action* action, State* state)
 {
 	_highlighted = false;
-	_frame->setBackground(Palette::blockOffset(0) + 14);
+	_frame->setBackground(Palette::blockOffset(0)+14);
 
 	draw();
 	InteractiveSurface::mouseOut(action, state);

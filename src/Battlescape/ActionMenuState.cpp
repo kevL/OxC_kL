@@ -18,27 +18,34 @@
  */
 
 #include "ActionMenuState.h"
-#include <sstream>
+
 #include <cmath>
-#include "../Engine/Game.h"
-#include "../Engine/Options.h"
-#include "../Resource/ResourcePack.h"
-#include "../Engine/Language.h"
-#include "../Engine/Palette.h"
-#include "../Engine/Action.h"
-#include "../Savegame/BattleUnit.h"
-#include "../Savegame/BattleItem.h"
-#include "../Ruleset/RuleItem.h"
+#include <sstream>
+
 #include "ActionMenuItem.h"
-#include "PrimeGrenadeState.h"
 #include "MedikitState.h"
-#include "ScannerState.h"
-#include "../Savegame/SavedGame.h"
-#include "../Savegame/SavedBattleGame.h"
-#include "../Savegame/Tile.h"
 #include "Pathfinding.h"
+#include "PrimeGrenadeState.h"
+#include "ScannerState.h"
 #include "TileEngine.h"
+
+#include "../Engine/Action.h"
+#include "../Engine/Game.h"
+#include "../Engine/Language.h"
+#include "../Engine/Options.h"
+#include "../Engine/Palette.h"
+
 #include "../Interface/Text.h"
+
+#include "../Resource/ResourcePack.h"
+
+#include "../Ruleset/RuleItem.h"
+
+#include "../Savegame/BattleItem.h"
+#include "../Savegame/BattleUnit.h"
+#include "../Savegame/SavedBattleGame.h"
+#include "../Savegame/SavedGame.h"
+#include "../Savegame/Tile.h"
 
 
 namespace OpenXcom
@@ -60,15 +67,21 @@ ActionMenuState::ActionMenuState(Game* game, BattleAction* action, int x, int y)
 
 	for (int i = 0; i < 6; ++i)
 	{
-		_actionMenu[i] = new ActionMenuItem(i, _game->getResourcePack()->getFont("FONT_BIG"), _game->getResourcePack()->getFont("FONT_SMALL"), x, y);
+		_actionMenu[i] = new ActionMenuItem(
+									i,
+									_game->getResourcePack()->getFont("FONT_BIG"),
+									_game->getResourcePack()->getFont("FONT_SMALL"),
+									x,
+									y);
 		add(_actionMenu[i]);
+
 		_actionMenu[i]->setVisible(false);
-		_actionMenu[i]->onMouseClick((ActionHandler)&ActionMenuState::btnActionMenuItemClick);
+		_actionMenu[i]->onMouseClick((ActionHandler)& ActionMenuState::btnActionMenuItemClick);
 	}
 
-	// Build up the popup menu
-	int id = 0;
+	// Build the popup menu
 	RuleItem* weapon = _action->weapon->getRules();
+	int id = 0;
 
 	if (!weapon->isFixed()) // throwing (if not a fixed weapon)
 	{
@@ -85,8 +98,10 @@ ActionMenuState::ActionMenuState(Game* game, BattleAction* action, int x, int y)
 	if (weapon->getBattleType() == BT_FIREARM)
 	{
 		if (weapon->isWaypoint()	// kL_note: removing this might muck w/ hovertank-fusion actionMenu.
-			|| (_action->weapon->getAmmoItem() && _action->weapon->getAmmoItem()->getRules()->isWaypoint()))
-//		if (_action->weapon->getAmmoItem() && _action->weapon->getAmmoItem()->getRules()->isWaypoint())		// kL: This really screws BL; turns launch to scope.
+			|| (_action->weapon->getAmmoItem()
+				&& _action->weapon->getAmmoItem()->getRules()->isWaypoint()))
+//		if (_action->weapon->getAmmoItem()
+//			&& _action->weapon->getAmmoItem()->getRules()->isWaypoint())	// kL: That really screws BL; turns launch to scope.
 		{
 			addItem(BA_LAUNCH, "STR_LAUNCH_MISSILE", &id);
 		}
@@ -127,7 +142,8 @@ ActionMenuState::ActionMenuState(Game* game, BattleAction* action, int x, int y)
 	{
 		addItem(BA_USE, "STR_USE_SCANNER", &id);
 	}
-	else if (weapon->getBattleType() == BT_PSIAMP && _action->actor->getStats()->psiSkill > 0)
+	else if (weapon->getBattleType() == BT_PSIAMP
+		&& _action->actor->getStats()->psiSkill > 0)
 	{
 		addItem(BA_MINDCONTROL, "STR_MIND_CONTROL", &id);
 		addItem(BA_PANIC, "STR_PANIC_UNIT", &id);
@@ -154,10 +170,10 @@ ActionMenuState::~ActionMenuState()
 void ActionMenuState::addItem(BattleActionType ba, const std::string& name, int* id)
 {
 	std::wstring s1, s2;
-	int acc = (int)floor(_action->actor->getFiringAccuracy(ba, _action->weapon) * 100);
+	int acc = static_cast<int>(floor(_action->actor->getFiringAccuracy(ba, _action->weapon) * 100));
 
 	if (ba == BA_THROW)
-		acc = (int)floor(_action->actor->getThrowingAccuracy() * 100);
+		acc = static_cast<int>(floor(_action->actor->getThrowingAccuracy() * 100));
 
 	int tu = _action->actor->getActionTUs(ba, _action->weapon);
 
@@ -192,10 +208,10 @@ void ActionMenuState::handle(Action* action)
 	{
 		_game->popState();
 	}
-	else if (action->getDetails()->type == SDL_KEYDOWN &&
-		(action->getDetails()->key.keysym.sym == (SDLKey)Options::getInt("keyCancel") ||
-		action->getDetails()->key.keysym.sym == (SDLKey)Options::getInt("keyBattleUseLeftHand") ||
-		action->getDetails()->key.keysym.sym == (SDLKey)Options::getInt("keyBattleUseRightHand")))
+	else if (action->getDetails()->type == SDL_KEYDOWN
+		&& (action->getDetails()->key.keysym.sym == (SDLKey)Options::getInt("keyCancel")
+			|| action->getDetails()->key.keysym.sym == (SDLKey)Options::getInt("keyBattleUseLeftHand")
+			|| action->getDetails()->key.keysym.sym == (SDLKey)Options::getInt("keyBattleUseRightHand")))
 	{
 		_game->popState();
 	}
@@ -209,11 +225,15 @@ void ActionMenuState::btnActionMenuItemClick(Action* action)
 {
 	_game->getSavedGame()->getSavedBattle()->getPathfinding()->removePreview();
 
-	int btnID = -1;
 	RuleItem* weapon = _action->weapon->getRules();
+	int btnID = -1;
 
 	// got to find out which button was pressed
-	for (size_t i = 0; i < sizeof(_actionMenu) / sizeof(_actionMenu[0]) && btnID == -1; ++i)
+	for (size_t
+			i = 0;
+			i < sizeof(_actionMenu) / sizeof(_actionMenu[0])
+				&& btnID == -1;
+			++i)
 	{
 		if (action->getSender() == _actionMenu[i])
 		{
@@ -231,6 +251,7 @@ void ActionMenuState::btnActionMenuItemClick(Action* action)
 			if (weapon->getBattleType() == BT_PROXIMITYGRENADE)
 			{
 				_action->value = 0;
+
 				_game->popState();
 			}
 			else
@@ -243,13 +264,17 @@ void ActionMenuState::btnActionMenuItemClick(Action* action)
 		{
 			BattleUnit* targetUnit = NULL;
 
-			std::vector<BattleUnit*>* const units (_game->getSavedGame()->getSavedBattle()->getUnits());
-			for (std::vector<BattleUnit*>::const_iterator i = units->begin (); i != units->end () && !targetUnit; ++i)
+			std::vector<BattleUnit*>* const units = _game->getSavedGame()->getSavedBattle()->getUnits();
+			for (std::vector<BattleUnit*>::const_iterator
+					i = units->begin();
+					i != units->end()
+						&& !targetUnit;
+					++i)
 			{
 				// we can heal a unit that is at the same position, unconscious and healable(=woundable)
 				if ((*i)->getPosition() == _action->actor->getPosition()
 					&& *i != _action->actor
-					&& (*i)->getStatus () == STATUS_UNCONSCIOUS
+					&& (*i)->getStatus() == STATUS_UNCONSCIOUS
 					&& (*i)->isWoundable())
 				{
 					targetUnit = *i;
@@ -273,11 +298,13 @@ void ActionMenuState::btnActionMenuItemClick(Action* action)
 			if (targetUnit)
 			{
 				_game->popState();
+
 				_game->pushState(new MedikitState(_game, targetUnit, _action));
 			}
 			else
 			{
 				_action->result = "STR_THERE_IS_NO_ONE_THERE";
+
 				_game->popState();
 			}
 		}
@@ -287,11 +314,13 @@ void ActionMenuState::btnActionMenuItemClick(Action* action)
 			if (_action->actor->spendTimeUnits(_action->TU)) // spend TUs first, then show the scanner
 			{
 				_game->popState();
+
 				_game->pushState(new ScannerState(_game, _action));
 			}
 			else
 			{
 				_action->result = "STR_NOT_ENOUGH_TIME_UNITS";
+
 				_game->popState();
 			}
 		}
@@ -302,7 +331,8 @@ void ActionMenuState::btnActionMenuItemClick(Action* action)
 				_action->result = "STR_NOT_ENOUGH_TIME_UNITS";
 			}
 			else if (_action->weapon->getAmmoItem() == 0
-				|| (_action->weapon->getAmmoItem() && _action->weapon->getAmmoItem()->getAmmoQuantity() == 0))
+				|| (_action->weapon->getAmmoItem()
+					&& _action->weapon->getAmmoItem()->getAmmoQuantity() == 0))
 			{
 				_action->result = "STR_NO_AMMUNITION_LOADED";
 			}
@@ -317,9 +347,9 @@ void ActionMenuState::btnActionMenuItemClick(Action* action)
 			&& weapon->getBattleType() == BT_MELEE)
 		{
 			if (!_game->getSavedGame()->getSavedBattle()->getTileEngine()->validMeleeRange(
-					_action->actor->getPosition(),
-					_action->actor->getDirection(),
-					_action->actor, 0))
+																				_action->actor->getPosition(),
+																				_action->actor->getDirection(),
+																				_action->actor, 0))
 			{
 				_action->result = "STR_THERE_IS_NO_ONE_THERE";
 			}

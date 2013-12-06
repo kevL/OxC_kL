@@ -18,22 +18,29 @@
  */
 
 #include "MedikitState.h"
-#include "MedikitView.h"
-#include "../Engine/InteractiveSurface.h"
-#include "../Engine/Game.h"
-#include "../Engine/Language.h"
-#include "../Engine/CrossPlatform.h"
-#include "../Engine/Action.h"
-#include "../Engine/Palette.h"
-#include "../Interface/Text.h"
-#include "../Engine/Screen.h"
-#include "../Savegame/BattleItem.h"
-#include "../Savegame/BattleUnit.h"
-#include "../Ruleset/RuleItem.h"
-#include "../Resource/ResourcePack.h"
+
 #include <iostream>
 #include <sstream>
+
+#include "MedikitView.h"
+
+#include "../Engine/Action.h"
+#include "../Engine/CrossPlatform.h"
+#include "../Engine/Game.h"
+#include "../Engine/InteractiveSurface.h"
+#include "../Engine/Language.h"
 #include "../Engine/Options.h"
+#include "../Engine/Palette.h"
+#include "../Engine/Screen.h"
+
+#include "../Interface/Text.h"
+
+#include "../Resource/ResourcePack.h"
+
+#include "../Ruleset/RuleItem.h"
+
+#include "../Savegame/BattleItem.h"
+#include "../Savegame/BattleUnit.h"
 
 
 namespace OpenXcom
@@ -199,11 +206,11 @@ MedikitState::MedikitState(Game* game, BattleUnit* targetUnit, BattleAction* act
 	_woundTxt->setColor(Palette::blockOffset(2));
 	_woundTxt->setHighContrast(true);
 
-	endButton->onMouseClick((ActionHandler) &MedikitState::onEndClick);
-	endButton->onKeyboardPress((ActionHandler) &MedikitState::onEndClick, (SDLKey)Options::getInt("keyCancel"));
-	healButton->onMouseClick((ActionHandler) &MedikitState::onHealClick);
-	stimulantButton->onMouseClick((ActionHandler) &MedikitState::onStimulantClick);
-	pkButton->onMouseClick((ActionHandler) &MedikitState::onPainKillerClick);
+	endButton->onMouseClick((ActionHandler)& MedikitState::onEndClick);
+	endButton->onKeyboardPress((ActionHandler)& MedikitState::onEndClick, (SDLKey)Options::getInt("keyCancel"));
+	healButton->onMouseClick((ActionHandler)& MedikitState::onHealClick);
+	stimulantButton->onMouseClick((ActionHandler)& MedikitState::onStimulantClick);
+	pkButton->onMouseClick((ActionHandler)& MedikitState::onPainKillerClick);
 
 	update();
 }
@@ -246,9 +253,13 @@ void MedikitState::onHealClick(Action*)
 		return;
 	}
 
-	if (_unit->spendTimeUnits (rule->getTUUse()))
+	if (_unit->spendTimeUnits(rule->getTUUse()))
 	{
-		_targetUnit->heal(_medikitView->getSelectedPart(), rule->getWoundRecovery(), rule->getHealthRecovery());
+		_targetUnit->heal(
+					_medikitView->getSelectedPart(),
+					rule->getWoundRecovery(),
+					rule->getHealthRecovery());
+
 		_item->setHealQuantity(--heal);
 		_medikitView->invalidate();
 
@@ -256,16 +267,16 @@ void MedikitState::onHealClick(Action*)
 
 		// kL_begin: onHealClick() revive & randomize facing.
 		// - similar to Stimulant code below
-		if (_targetUnit->getStatus() == STATUS_UNCONSCIOUS
+/*		if (_targetUnit->getStatus() == STATUS_UNCONSCIOUS
 			&& _targetUnit->getStunlevel() < _targetUnit->getHealth())
 //kL			&& _targetUnit->getHealth() > 0)
 		{
-			_targetUnit->setTimeUnits(0);
-			_targetUnit->setDirection(RNG::generate(0, 7));
+//			_targetUnit->setTimeUnits(0);
+//			_targetUnit->setDirection(RNG::generate(0, 7));
+				// done in SavedBattleGame::reviveUnconsciousUnits()
 
 //kL			_game->popState();
-		}
-		// kL_end.
+		} // kL_end. */
 	}
 	else
 	{
@@ -287,7 +298,7 @@ void MedikitState::onStimulantClick(Action*)
 	}
 
 	RuleItem* rule = _item->getRules();
-	if (_unit->spendTimeUnits (rule->getTUUse()))
+	if (_unit->spendTimeUnits(rule->getTUUse()))
 	{
 		_targetUnit->stimulant(rule->getEnergyRecovery(), rule->getStunRecovery());
 		_item->setStimulantQuantity(--stimulant);
@@ -299,8 +310,9 @@ void MedikitState::onStimulantClick(Action*)
 			&& _targetUnit->getStunlevel() < _targetUnit->getHealth())
 //kL			&& _targetUnit->getHealth() > 0)
 		{
-			_targetUnit->setTimeUnits(0);
-			_targetUnit->setDirection(RNG::generate(0, 7));		// kL
+//			_targetUnit->setTimeUnits(0);
+//			_targetUnit->setDirection(RNG::generate(0, 7));
+				// done in SavedBattleGame::reviveUnconsciousUnits()
 
 			_game->popState();
 		}

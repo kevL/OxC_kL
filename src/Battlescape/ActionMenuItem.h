@@ -20,17 +20,18 @@
 #ifndef OPENXCOM_ACTIONMENUITEM_H
 #define OPENXCOM_ACTIONMENUITEM_H
 
-#include "../Engine/InteractiveSurface.h"
 #include "BattlescapeGame.h"
+
+#include "../Engine/InteractiveSurface.h"
 
 
 namespace OpenXcom
 {
 
-class State;
 class Font;
-class Text;
 class Frame;
+class State;
+class Text;
 
 /**
  * A class that represents a single box in the action popup menu on the battlescape.
@@ -39,7 +40,7 @@ class Frame;
  */
 class ActionMenuItem
 	:
-	public InteractiveSurface
+		public InteractiveSurface
 {
 private:
 	int _id;
@@ -56,15 +57,23 @@ private:
 		~ActionMenuItem();
 
 		/// Assigns an action to it.
-		void setAction(BattleActionType action, std::wstring description, std::wstring accuracy, std::wstring timeunits, int tu);
+		void setAction(
+				BattleActionType action,
+				std::wstring description,
+				std::wstring accuracy,
+				std::wstring timeunits,
+				int tu);
 		/// Gets the assigned action.
 		BattleActionType getAction() const;
+
 		/// Gets the assigned action TUs.
 		int getTUs() const;
+
 		/// Sets the palettes.
 		void setPalette(SDL_Color* colors, int firstcolor, int ncolors);
 		/// Redraws it.
 		void draw();
+
 		/// Processes a mouse hover in event.
 		void mouseIn(Action* action, State* state);
 		/// Processes a mouse hover out event.

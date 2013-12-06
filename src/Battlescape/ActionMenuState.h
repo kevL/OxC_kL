@@ -20,22 +20,23 @@
 #ifndef OPENXCOM_ACTIONMENUSTATE_H
 #define OPENXCOM_ACTIONMENUSTATE_H
 
-#include "../Engine/State.h"
 #include "BattlescapeGame.h"
+
+#include "../Engine/State.h"
 
 
 namespace OpenXcom
 {
 
-class Game;
 class ActionMenuItem;
+class Game;
 
 /**
  * Window that allows the player to select a battlescape action.
  */
 class ActionMenuState
 	:
-	public State
+		public State
 {
 private:
 	BattleAction* _action;

@@ -127,7 +127,13 @@ void UnitTurnBState::think()
 	bool thisFaction = _unit->getFaction() == _parent->getSave()->getSide();	// kL
 
 //kL	const int tu = _unit->getFaction() == _parent->getSave()->getSide() ? 1 : 0; // one turn is 1 tu unless during reaction fire.
-	const int tu = thisFaction? 1: 0;	// kL
+//	const int tu = thisFaction? 1: 0;	// kL
+	int tu = 1;											// one tu per facing change
+	if (!thisFaction) tu = 0;							// reaction fire
+//	else if (_unit->getArmor()->getSize() > 1) tu = 2;	// large units cost 2 per facing change
+	else if (_unit->getTurretType() != -1
+		&& !_action.strafe) tu = 2;						// large units cost 2 per facing change
+
 
 //kL	if (_unit->getFaction() == _parent->getSave()->getSide()
 	if (thisFaction		// kL

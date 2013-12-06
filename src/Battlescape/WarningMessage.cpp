@@ -104,6 +104,7 @@ void WarningMessage::setFonts(Font* big, Font* small)
 void WarningMessage::setPalette(SDL_Color* colors, int firstcolor, int ncolors)
 {
 	Surface::setPalette(colors, firstcolor, ncolors);
+
 	_text->setPalette(colors, firstcolor, ncolors);
 }
 
@@ -138,7 +139,7 @@ void WarningMessage::fade()
 	_redraw = true;
 
 	_fade++;
-	if (_fade == 16)
+	if (_fade == 14)
 	{
 		setVisible(false);
 

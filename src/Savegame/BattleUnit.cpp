@@ -498,7 +498,11 @@ UnitStatus BattleUnit::getStatus() const
  * @param direction, Which way to walk.
  * @param destination, The position we should end up on.
  */
-void BattleUnit::startWalking(int direction, const Position& destination, Tile* tileBelow, bool cache)
+void BattleUnit::startWalking(
+		int direction,
+		const Position& destination,
+		Tile* tileBelow,
+		bool cache)
 {
 	Log(LOG_INFO) << "BattleUnit::startWalking() unitID = " << getId();
 
@@ -601,37 +605,44 @@ void BattleUnit::keepWalking(Tile* tileBelow, bool cache)
 	_walkPhase++;
 	Log(LOG_INFO) << ". _walkPhase = " << _walkPhase;
 
-	int middle, end;
+	int
+		middle,
+		end;
+
 	if (_verticalDirection)
 	{
 		middle = 4;
 		end = 8;
+//		middle	= 8;		// kL
+//		end		= 16;		// kL
 	}
 	else
 	{
 		// diagonal walking takes double the steps
-		middle = 4 + 4 * (_direction %2);
-		end = 8 + 8 * (_direction %2);
+		middle	= 4 + 4 * (_direction %2);
+		end		= 8 + 8 * (_direction %2);
 
 		if (_armor->getSize() > 1)
 		{
-			if (_direction < 1 || _direction > 4)
+			if (1 > _direction || _direction > 4) // dir = 0,7,6,5 (upscreen)
 				middle = end;
 			else
 				middle = 1;
 		}
 	}
 
-	if (!cache)
+	if (!cache) // ie. if not onScreen
 	{
-		_pos = _destination;
-		end = 2;
+//		_pos = _destination; // kL_note: I think this is causing the 'double-step'
+		middle	= 1;	// kL
+		end		= 2;
 	}
 
 	if (_walkPhase == middle)
 	{
 		// we assume we reached our destination tile
 		// this is actually a drawing hack, so soldiers are not overlapped by floortiles
+		// kL_note: which they (large units) are half the time anyway...
 //		_lastPos = _pos;	// kL
 		_pos = _destination;
 	}
@@ -965,8 +976,11 @@ void BattleUnit::turn(bool turret)
 			_status = STATUS_STANDING; // we officially reached our destination
 		 }
 	}
-	else if (_toDirection == _direction || _status == STATUS_UNCONSCIOUS)	// kL_note: I didn't know Unconscious could turn...
-																			// learn something new every day.
+	else if (_toDirection == _direction
+			|| _status == STATUS_UNCONSCIOUS)	// kL_note: I didn't know Unconscious could turn...
+												// learn something new every day.
+												// It's used when reviving unconscious soldiers;
+												// they need to go to STATUS_STANDING.
 	{
 		//Log(LOG_INFO) << "BattleUnit::turn() " << getId() << " - STATUS_STANDING (turn has ended)";
 		_status = STATUS_STANDING; // we officially reached our destination
@@ -1032,13 +1046,12 @@ Surface* BattleUnit::getCache(bool* invalid, int part) const
 }
 
 /**
- * Kneel down.
- * @param kneeled to kneel or to stand up
+ * Kneel down/stand up.
+ * @param kneeled, Whether to kneel or stand up
  */
 void BattleUnit::kneel(bool kneeled)
 {
 	//Log(LOG_INFO) << "BattleUnit::kneel()";
-//	_status = STATUS_KNEELING;		// kL
 
 	_kneeled = kneeled;
 	_cacheInvalid = true;

@@ -136,8 +136,8 @@ void UnitWalkBState::think()
 	bool newVis = false;											// kL
 	bool newUnitSpotted = false;
 	bool onScreen = _unit->getVisible()
-			&& (_parent->getMap()->getCamera()->isOnScreen(_unit->getPosition())
-					|| _parent->getMap()->getCamera()->isOnScreen(_unit->getDestination()));
+								&& (_parent->getMap()->getCamera()->isOnScreen(_unit->getPosition())
+										|| _parent->getMap()->getCamera()->isOnScreen(_unit->getDestination()));
 	Log(LOG_INFO) << ". onScreen = " << onScreen;
 
 	int dir = _pf->getStartDirection();		// kL: also below, in STATUS_STANDING!
@@ -516,7 +516,13 @@ void UnitWalkBState::think()
 
 			// gets tu cost, but also gets the destination position.
 			Position destination;
-			int tu = _pf->getTUCost(_unit->getPosition(), dir, &destination, _unit, 0, false);
+			int tu = _pf->getTUCost(
+							_unit->getPosition(),
+							dir,
+							&destination,
+							_unit,
+							0,
+							false);
 
 			// kL_note: should this include neutrals? (ie != FACTION_PLAYER; see also 32tu inflation...)
 			if (_unit->getFaction() == FACTION_HOSTILE
@@ -719,7 +725,12 @@ void UnitWalkBState::think()
 					Tile* tileBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(0, 0, -1));
 
 					Log(LOG_INFO) << ". WalkBState: startWalking()";
-					_unit->startWalking(dir, destination, tileBelow, onScreen);
+					_unit->startWalking(
+									dir,
+									destination,
+									tileBelow,
+									onScreen);
+
 					_beforeFirstStep = false;
 				}
 			}
@@ -744,12 +755,12 @@ void UnitWalkBState::think()
 					//Log(LOG_INFO) << ". . . end (_pf->getStrafeMove()";
 				}
 //				else	// kL
-				{
+//				{
 					//Log(LOG_INFO) << ". . (onScreen) -> cacheUnit()";
 
-//					_unit->setCache(0);						// kL
-					_parent->getMap()->cacheUnit(_unit);
-				}
+				_unit->setCache(0);						// kL
+				_parent->getMap()->cacheUnit(_unit);
+//				}
 
 				//Log(LOG_INFO) << ". . end (onScreen)";
 			}

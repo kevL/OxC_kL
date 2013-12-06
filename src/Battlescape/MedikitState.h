@@ -20,8 +20,9 @@
 #ifndef OPENXCOM_MEDIKITSTATE_H
 #define OPENXCOM_MEDIKITSTATE_H
 
-#include "../Engine/State.h"
 #include "BattlescapeGame.h"
+
+#include "../Engine/State.h"
 
 
 namespace OpenXcom
@@ -38,7 +39,7 @@ class BattleUnit;
  */
 class MedikitState
 	:
-	public State
+		public State
 {
 	InteractiveSurface* _surface;
 	MedikitView* _medikitView;
