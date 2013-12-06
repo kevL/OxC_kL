@@ -37,8 +37,8 @@ enum ArrowOrientation
 	ARROW_HORIZONTAL
 };
 
-class Font;
 class ArrowButton;
+class Font;
 
 /**
  * List of Text's split into columns.
@@ -185,6 +185,8 @@ private:
 		void mouseOut(Action* action, State* state);
 		/// get the scroll depth
 		int getScroll();
+		/// set the scroll depth
+		void setScroll(int scroll);
 };
 
 }

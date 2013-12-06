@@ -174,6 +174,10 @@ void SoldiersState::init()
 
 		row++;
 	}
+	if (row > 0 && _lstSoldiers->getScroll() >= row)
+	{
+		_lstSoldiers->setScroll(0);
+	}
 }
 
 /**

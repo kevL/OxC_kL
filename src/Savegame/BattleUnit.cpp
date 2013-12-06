@@ -2040,7 +2040,12 @@ BattleAIState* BattleUnit::getCurrentAIState() const
 void BattleUnit::setTile(Tile* tile, Tile* tileBelow)
 {
 	_tile = tile;
-	if (!_tile) return;
+	if (!_tile)
+	{
+		_floating = false;
+
+		return;
+	}
 
 	// unit could have changed from flying to walking or vice versa
 	if (_status == STATUS_WALKING
@@ -2057,10 +2062,16 @@ void BattleUnit::setTile(Tile* tile, Tile* tileBelow)
 		_status = STATUS_WALKING;
 		_floating = false;
 	}
-	else if (_status == STATUS_STANDING
-		&& _armor->getMovementType() == MT_FLY)
+	else if (_status == STATUS_STANDING				// kL. keeping this section in tho it was taken out
+		&& _armor->getMovementType() == MT_FLY)		// when STATUS_UNCONSCIOUS below was inserted.
 	{
 		_floating = _tile->hasNoFloor(tileBelow);
+	}
+	else if (_status == STATUS_UNCONSCIOUS) // <- kL_note: not so sure having flying unconscious soldiers is a good deal.
+	{
+		_floating =
+					_armor->getMovementType() == MT_FLY
+				&& _tile->hasNoFloor(tileBelow);
 	}
 }
 

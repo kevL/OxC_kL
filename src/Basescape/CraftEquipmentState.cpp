@@ -33,6 +33,7 @@
 #include "../Interface/Text.h"
 #include "../Interface/TextList.h"
 #include "../Ruleset/Ruleset.h"
+#include "../Ruleset/Armor.h"
 #include "../Savegame/Base.h"
 #include "../Savegame/Soldier.h"
 #include "../Savegame/Craft.h"
@@ -594,8 +595,8 @@ void CraftEquipmentState::moveRight()
  */
 void CraftEquipmentState::moveRightByValue(int change)
 {
-	Craft *c = _base->getCrafts()->at(_craft);
-	RuleItem *item = _game->getRuleset()->getItem(_items[_sel]);
+	Craft* c = _base->getCrafts()->at(_craft);
+	RuleItem* item = _game->getRuleset()->getItem(_items[_sel]);
 
 	int bqty = _base->getItems()->getItem(_items[_sel]);
 
@@ -615,13 +616,19 @@ void CraftEquipmentState::moveRightByValue(int change)
 
 	if (item->isFixed()) // Do we need to convert item to vehicle?
 	{
+		int size = 4;
+		if (_game->getRuleset()->getUnit(item->getType()))
+		{
+			size = _game->getRuleset()->getArmor(_game->getRuleset()->getUnit(item->getType())->getArmor())->getSize();
+		}
+
 		// Check if there's enough room
-		int room = std::min(c->getRules()->getVehicles() - c->getNumVehicles(), c->getSpaceAvailable() / 4);
+		int room = std::min(c->getRules()->getVehicles() - c->getNumVehicles(), c->getSpaceAvailable() / size);
 		if (room > 0)
 		{
 			change = std::min(room, change);
 
-			if(!item->getCompatibleAmmo()->empty())
+			if (!item->getCompatibleAmmo()->empty())
 			{
 				// We want to redistribute all the available ammo among the vehicles,
 				// so first we note the total number of vehicles we want in the craft
@@ -632,7 +639,7 @@ void CraftEquipmentState::moveRightByValue(int change)
 					moveLeftByValue(INT_MAX);
 
 				// And now let's see if we can add the total number of vehicles.
-				RuleItem *ammo = _game->getRuleset()->getItem(item->getCompatibleAmmo()->front());
+				RuleItem* ammo = _game->getRuleset()->getItem(item->getCompatibleAmmo()->front());
 
 				int baqty = _base->getItems()->getItem(ammo->getType()); // Ammo Quantity for this vehicle-type on the base
 
@@ -650,15 +657,19 @@ void CraftEquipmentState::moveRightByValue(int change)
 					{
 						newAmmo = newAmmoPerVehicle;
 
-						if (i<remainder) ++newAmmo;
-
-						c->getVehicles()->push_back(new Vehicle(item, newAmmo));
+						if (i < remainder) ++newAmmo;
 
 						if (_game->getSavedGame()->getMonthsPassed() != -1)
 						{
 							_base->getItems()->removeItem(ammo->getType(), newAmmo);
 							_base->getItems()->removeItem(_items[_sel]);
 						}
+						else
+						{
+							newAmmo = ammo->getClipSize();
+						}
+
+						c->getVehicles()->push_back(new Vehicle(item, newAmmo, size));
 					}
 				}
 
@@ -666,6 +677,7 @@ void CraftEquipmentState::moveRightByValue(int change)
 				{
 					// So we haven't managed to increase the count of vehicles because of the ammo
 					_timerRight->stop();
+
 					LocalizedText msg(tr("STR_NOT_ENOUGH_AMMO_TO_ARM_HWP").arg(tr(ammo->getType())));
 					_game->pushState(new ErrorMessageState(_game, msg, Palette::blockOffset(15)+1, "BACK04.SCR", 2));
 				}
@@ -674,7 +686,7 @@ void CraftEquipmentState::moveRightByValue(int change)
 			{
 				for (int i = 0; i < change; ++i)
 				{
-					c->getVehicles()->push_back(new Vehicle(item, item->getClipSize()));
+					c->getVehicles()->push_back(new Vehicle(item, item->getClipSize(), size));
 
 					if (_game->getSavedGame()->getMonthsPassed() != -1)
 					{

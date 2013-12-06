@@ -42,6 +42,7 @@
 #include "../Ruleset/RuleBaseFacility.h"
 #include "../Ruleset/RuleCraft.h"
 #include "../Ruleset/RuleItem.h"
+#include "../Ruleset/Armor.h"
 #include "../Ruleset/RuleManufacture.h"
 #include "../Ruleset/RuleResearch.h"
 #include "../Ruleset/Ruleset.h"
@@ -1908,20 +1909,29 @@ void Base::setupDefenses()
 	}
 
 	// add vehicles left on the base
-	for (std::map<std::string, int>::iterator i = _items->getContents()->begin(); i != _items->getContents()->end(); )
+	for (std::map<std::string, int>::iterator
+			i = _items->getContents()->begin();
+			i != _items->getContents()->end();
+			)
 	{
 		std::string itemId = (i)->first;
 		int iqty = (i)->second;
 
-		RuleItem *rule = _rule->getItem(itemId);
+		RuleItem* rule = _rule->getItem(itemId);
 		if (rule->isFixed())
 		{
+			int size = 4;
+			if (_rule->getUnit(itemId))
+			{
+				size = _rule->getArmor(_rule->getUnit(itemId)->getArmor())->getSize();
+			}
+
 			if (rule->getCompatibleAmmo()->empty()) // so this vehicle does not need ammo
 			{
-				for (int j = 0; j < iqty; ++j)
-				{
-					_vehicles.push_back(new Vehicle(rule, rule->getClipSize()));
-				}
+				for (int
+						j = 0;
+						j < iqty;
+						++j) _vehicles.push_back(new Vehicle(rule, rule->getClipSize(), size));
 
 				_items->removeItem(itemId, iqty);
 			}
@@ -1943,12 +1953,16 @@ void Base::setupDefenses()
 
 				if (ammo->getClipSize() > newAmmoPerVehicle) remainder = baqty - (canBeAdded * newAmmoPerVehicle);
 				int newAmmo;
-				for (int j = 0; j < canBeAdded; ++j)
+				for (int
+						j = 0;
+						j < canBeAdded;
+						++j)
 				{
 					newAmmo = newAmmoPerVehicle;
-					if (j<remainder) ++newAmmo;
 
-					_vehicles.push_back(new Vehicle(rule, newAmmo));
+					if (j < remainder) ++newAmmo;
+
+					_vehicles.push_back(new Vehicle(rule, newAmmo, size));
 					_items->removeItem(ammo->getType(), newAmmo);
 				}
 

@@ -1173,10 +1173,20 @@ void DebriefingState::reequipCraft(Base* base, Craft* craft, bool vehicleItemsCa
 	craft->getVehicles()->clear();
 
 	// Ok, now read those vehicles
-	for (std::map<std::string, int>::iterator i = craftVehicles.getContents()->begin(); i != craftVehicles.getContents()->end(); ++i)
+	for (std::map<std::string, int>::iterator
+			i = craftVehicles.getContents()->begin();
+			i != craftVehicles.getContents()->end();
+			++i)
 	{
 		int qty = base->getItems()->getItem(i->first);
 		RuleItem* tankRule = _game->getRuleset()->getItem(i->first);
+
+		int size = 4;
+		if (_game->getRuleset()->getUnit(tankRule->getType()))
+		{
+			size = _game->getRuleset()->getArmor(_game->getRuleset()->getUnit(tankRule->getType())->getArmor())->getSize();
+		}
+
 		int canBeAdded = std::min(qty, i->second);
 
 		if (qty < i->second)
@@ -1190,8 +1200,13 @@ void DebriefingState::reequipCraft(Base* base, Craft* craft, bool vehicleItemsCa
 		if (tankRule->getCompatibleAmmo()->empty())
 		{
 			// so this tank does NOT require ammo
-			for (int j = 0; j < canBeAdded; ++j)
-				craft->getVehicles()->push_back(new Vehicle(tankRule, tankRule->getClipSize()));
+			for (int
+					j = 0;
+					j < canBeAdded;
+					++j)
+			{
+				craft->getVehicles()->push_back(new Vehicle(tankRule, tankRule->getClipSize(), size));
+			}
 
 			base->getItems()->removeItem(i->first, canBeAdded);
 		}
@@ -1222,7 +1237,7 @@ void DebriefingState::reequipCraft(Base* base, Craft* craft, bool vehicleItemsCa
 					newAmmo = newAmmoPerVehicle;
 					if (j < remainder) ++newAmmo;
 
-					craft->getVehicles()->push_back(new Vehicle(tankRule, newAmmo));
+					craft->getVehicles()->push_back(new Vehicle(tankRule, newAmmo, size));
 					base->getItems()->removeItem(ammo->getType(), newAmmo);
 				}
 
