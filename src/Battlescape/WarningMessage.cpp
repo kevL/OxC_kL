@@ -139,7 +139,7 @@ void WarningMessage::fade()
 	_redraw = true;
 
 	_fade++;
-	if (_fade == 14)
+	if (_fade == 15)
 	{
 		setVisible(false);
 
@@ -159,7 +159,11 @@ void WarningMessage::draw()
 	square1.y = 0;
 	square1.w = getWidth();
 	square1.h = getHeight();
-	drawRect(&square1, _color + (_fade > 12? 12: _fade));
+//kL	drawRect(&square1, _color + (_fade > 12? 12: _fade));
+
+	Uint8 color = _color + 1 + _fade;	// kL
+	if (_fade == 15) color -= 1;		// kL
+	drawRect(&square1, color);			// kL
 
 	_text->blit(this);
 }

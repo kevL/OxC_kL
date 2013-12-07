@@ -18,23 +18,30 @@
  */
 
 #define _USE_MATH_DEFINES
-#include <cmath>
+
 #include "UnitSprite.h"
-#include "../Engine/SurfaceSet.h"
+
+#include <cmath>
+
 #include "../Battlescape/Position.h"
-#include "../Resource/ResourcePack.h"
-#include "../Ruleset/RuleSoldier.h"
-#include "../Ruleset/Unit.h"
-#include "../Ruleset/RuleItem.h"
-#include "../Ruleset/Armor.h"
-#include "../Savegame/BattleUnit.h"
-#include "../Savegame/BattleItem.h"
-#include "../Savegame/Soldier.h"
-#include "../Ruleset/RuleInventory.h"
-#include "../Ruleset/Ruleset.h"
+
+#include "../Engine/Options.h"
 #include "../Engine/ShaderDraw.h"
 #include "../Engine/ShaderMove.h"
-#include "../Engine/Options.h"
+#include "../Engine/SurfaceSet.h"
+
+#include "../Resource/ResourcePack.h"
+
+#include "../Ruleset/Armor.h"
+#include "../Ruleset/RuleInventory.h"
+#include "../Ruleset/RuleItem.h"
+#include "../Ruleset/Ruleset.h"
+#include "../Ruleset/RuleSoldier.h"
+#include "../Ruleset/Unit.h"
+
+#include "../Savegame/BattleItem.h"
+#include "../Savegame/BattleUnit.h"
+#include "../Savegame/Soldier.h"
 
 
 namespace OpenXcom
@@ -76,7 +83,10 @@ UnitSprite::~UnitSprite()
  * @param itemSurfaceA Pointer to the item surface set.
  * @param itemSurfaceB Pointer to the item surface set.
  */
-void UnitSprite::setSurfaces(SurfaceSet* unitSurface, SurfaceSet* itemSurfaceA, SurfaceSet* itemSurfaceB)
+void UnitSprite::setSurfaces(
+		SurfaceSet* unitSurface,
+		SurfaceSet* itemSurfaceA,
+		SurfaceSet* itemSurfaceB)
 {
 	_unitSurface = unitSurface;
 	_itemSurfaceA = itemSurfaceA;
@@ -211,7 +221,13 @@ void UnitSprite::drawRoutine0()
 	}
 	// kL_end.
 
-	Surface* torso = 0, * legs = 0, * leftArm = 0, * rightArm = 0, * itemA = 0, * itemB = 0;
+	Surface
+			* torso = 0,
+			* legs = 0,
+			* leftArm = 0,
+			* rightArm = 0,
+			* itemA = 0,
+			* itemB = 0;
 
 	// magic numbers
 	const int maleTorso = 32, femaleTorso = 267, legsStand = 16, legsKneel = 24, die = 264, legsFloat = 275;
@@ -247,6 +263,7 @@ void UnitSprite::drawRoutine0()
 	{
 		torso = _unitSurface->getFrame(die + _unit->getFallingPhase());
 		torso->blit(this);
+
 		if (_unit->getGeoscapeSoldier() && _hairBleach)
 		{
 			SoldierLook look = _unit->getGeoscapeSoldier()->getLook();
@@ -491,8 +508,8 @@ void UnitSprite::drawRoutine0()
 		leftArm->setY(offYKneel);
 		rightArm->setY(offYKneel);
 		torso->setY(offYKneel);
-		itemA ? itemA->setY(itemA->getY() + offYKneel) : void();
-		itemB ? itemB->setY(itemB->getY() + offYKneel) : void();
+		itemA? itemA->setY(itemA->getY() + offYKneel): void();
+		itemB? itemB->setY(itemB->getY() + offYKneel): void();
 	}
 	else if (!isWalking)
 	{
@@ -568,13 +585,6 @@ void UnitSprite::drawRoutine0()
 			rightArm->blit(this);
 		break;
 		case 1:
-			leftArm->blit(this);
-			legs->blit(this);
-			itemB ? itemB->blit(this) : void();
-			torso->blit(this);
-			itemA ? itemA->blit(this) : void();
-			rightArm->blit(this);
-		break;
 		case 2:
 			leftArm->blit(this);
 			legs->blit(this);
@@ -692,7 +702,12 @@ void UnitSprite::drawRoutine1()
 	}
 	// kL_end.
 
-	Surface *torso = 0, *leftArm = 0, *rightArm = 0, *itemA = 0, *itemB = 0;
+	Surface
+			* torso = 0,
+			* leftArm = 0,
+			* rightArm = 0,
+			* itemA = 0,
+			* itemB = 0;
 
 	// magic numbers
 	const int stand = 16, walk = 24, die = 64;
@@ -726,7 +741,11 @@ void UnitSprite::drawRoutine1()
 	if (_unit->getStatus() == STATUS_WALKING)
 	{
 		// floater only has 5 walk animations instead of 8
-		torso = _unitSurface->getFrame(walk + (5 * _unit->getDirection()) + (int)((float)_unit->getWalkingPhase() / 1.6f));
+		torso = _unitSurface->getFrame(
+									walk
+									+ (5 * _unit->getDirection())
+									+ static_cast<int>(
+											static_cast<float>(_unit->getWalkingPhase()) / 1.6f));
 		torso->setY(yoffWalk[_unit->getWalkingPhase()]);
 	}
 	else
@@ -829,12 +848,6 @@ void UnitSprite::drawRoutine1()
 			rightArm->blit(this);
 		break;
 		case 1:
-			leftArm->blit(this);
-			torso->blit(this);
-			rightArm->blit(this);
-			itemA ? itemA->blit(this) : void();
-			itemB ? itemB->blit(this) : void();
-		break;
 		case 2:
 			leftArm->blit(this);
 			torso->blit(this);
@@ -843,12 +856,6 @@ void UnitSprite::drawRoutine1()
 			itemB ? itemB->blit(this) : void();
 		break;
 		case 3:
-			torso->blit(this);
-			leftArm->blit(this);
-			rightArm->blit(this);
-			itemA ? itemA->blit(this) : void();
-			itemB ? itemB->blit(this) : void();
-		break;
 		case 4:
 			torso->blit(this);
 			leftArm->blit(this);
@@ -870,7 +877,8 @@ void UnitSprite::drawRoutine1()
 			torso->blit(this);
 			leftArm->blit(this);
 		break;
-		case 7:	rightArm->blit(this);
+		case 7:
+			rightArm->blit(this);
 			itemA ? itemA->blit(this) : void();
 			itemB ? itemB->blit(this) : void();
 			leftArm->blit(this);
@@ -899,7 +907,7 @@ void UnitSprite::drawRoutine2()
 	const int offX[8] = { -2, -7, -5, 0, 5, 7, 2, 0 };		// hovertank offsets
 	const int offy[8] = { -1, -3, -4, -5, -4, -3, -1, -1 };	// hovertank offsets
 
-	Surface *s = 0;
+	Surface* s = 0;
 	int turret = _unit->getTurretType();
 
 	// draw the animated propulsion below the hwp
@@ -942,7 +950,7 @@ void UnitSprite::drawRoutine3()
 		return;
 	}
 
-	Surface *s = 0;
+	Surface* s = 0;
 
 	// draw the animated propulsion below the hwp
 	if (_part > 0)
@@ -968,7 +976,10 @@ void UnitSprite::drawRoutine4()
 		return;
 	}
 
-	Surface *s = 0, *itemA = 0, *itemB = 0;
+	Surface
+			* s = 0,
+			* itemA = 0,
+			* itemB = 0;
 
 	const int stand = 0, walk = 8, die = 72;
 	const int offX[8] = { 8, 10, 7, 4, -9, -11, -7, -3 };	// for the weapons
@@ -1071,20 +1082,12 @@ void UnitSprite::drawRoutine4()
 			itemA ? itemA->blit(this) : void();
 		break;
 		case 3:
-			s->blit(this);
-			itemA ? itemA->blit(this) : void();
-			itemB ? itemB->blit(this) : void();
-		break;
 		case 4:
 			s->blit(this);
 			itemA ? itemA->blit(this) : void();
 			itemB ? itemB->blit(this) : void();
 		break;
 		case 5:
-			itemA ? itemA->blit(this) : void();
-			s->blit(this);
-			itemB ? itemB->blit(this) : void();
-		break;
 		case 6:
 			itemA ? itemA->blit(this) : void();
 			s->blit(this);
@@ -1109,7 +1112,7 @@ void UnitSprite::drawRoutine5()
 		return;
 	}
 
-	Surface *s = 0;
+	Surface* s = 0;
 
 	if (_unit->getStatus() == STATUS_WALKING)
 	{
@@ -1136,7 +1139,13 @@ void UnitSprite::drawRoutine6()
 	}
 	// kL_end.
 
-	Surface *torso = 0, *legs = 0, *leftArm = 0, *rightArm = 0, *itemA = 0, *itemB = 0;
+	Surface
+			* torso = 0,
+			* legs = 0,
+			* leftArm = 0,
+			* rightArm = 0,
+			* itemA = 0,
+			* itemB = 0;
 
 	// magic numbers
 	const int Torso = 24, legsStand = 16, die = 96;
@@ -1318,13 +1327,6 @@ void UnitSprite::drawRoutine6()
 			itemB ? itemB->blit(this) : void();
 		break;
 		case 4:
-			rightArm->blit(this);
-			legs->blit(this);
-			torso->blit(this);
-			leftArm->blit(this);
-			itemA ? itemA->blit(this) : void();
-			itemB ? itemB->blit(this) : void();
-		break;
 		case 5:
 			rightArm->blit(this);
 			legs->blit(this);
@@ -1365,7 +1367,11 @@ void UnitSprite::drawRoutine7()
 	}
 	// kL_end.
 
-	Surface *torso = 0, *legs = 0, *leftArm = 0, *rightArm = 0;
+	Surface
+			* torso = 0,
+			* legs = 0,
+			* leftArm = 0,
+			* rightArm = 0;
 
 	// magic numbers
 	const int Torso = 24, legsStand = 16, die = 224;
@@ -1415,17 +1421,7 @@ void UnitSprite::drawRoutine7()
 	switch (_unit->getDirection())
 	{
 		case 0:
-			leftArm->blit(this);
-			legs->blit(this);
-			torso->blit(this);
-			rightArm->blit(this);
-		break;
 		case 1:
-			leftArm->blit(this);
-			legs->blit(this);
-			torso->blit(this);
-			rightArm->blit(this);
-		break;
 		case 2:
 			leftArm->blit(this);
 			legs->blit(this);
@@ -1439,17 +1435,7 @@ void UnitSprite::drawRoutine7()
 			rightArm->blit(this);
 		break;
 		case 4:
-			rightArm->blit(this);
-			legs->blit(this);
-			torso->blit(this);
-			leftArm->blit(this);
-		break;
 		case 5:
-			rightArm->blit(this);
-			legs->blit(this);
-			torso->blit(this);
-			leftArm->blit(this);
-		break;
 		case 6:
 			rightArm->blit(this);
 			legs->blit(this);
@@ -1478,7 +1464,7 @@ void UnitSprite::drawRoutine8()
 	}
 	// kL_end.
 
-	Surface *legs = 0;
+	Surface* legs = 0;
 
 	// magic numbers
 	const int body = 0, aim = 5, die = 6;

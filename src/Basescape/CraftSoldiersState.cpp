@@ -53,7 +53,10 @@ namespace OpenXcom
  * @param base Pointer to the base to get info from.
  * @param craft ID of the selected craft.
  */
-CraftSoldiersState::CraftSoldiersState(Game* game, Base* base, size_t craft)
+CraftSoldiersState::CraftSoldiersState(
+		Game* game,
+		Base* base,
+		size_t craft)
 	:
 		State(game),
 		_base(base),
@@ -78,7 +81,10 @@ CraftSoldiersState::CraftSoldiersState(Game* game, Base* base, size_t craft)
 	_btnOk			= new TextButton(134, 16, 170, 177);
 
 
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)), Palette::backPos, 16);
+	_game->setPalette(
+				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)),
+				Palette::backPos,
+				16);
 
 	add(_window);
 	add(_btnOk);
@@ -334,7 +340,7 @@ void CraftSoldiersState::lstItemsRightArrowClick(Action* action)
 	
 		if (0 < numSoldiers
 			&& INT_MAX >= numSoldiers
-			&& row < (int)numSoldiers - 1)
+			&& row < static_cast<int>(numSoldiers) - 1)
 		{
 			Soldier* s = _base->getSoldiers()->at(row);
 
@@ -372,8 +378,8 @@ void CraftSoldiersState::lstItemsRightArrowClick(Action* action)
 void CraftSoldiersState::lstSoldiersClick(Action* action)
 {
 	double mx = action->getAbsoluteXMouse();
-	if (mx >= _lstSoldiers->getArrowsLeftEdge()
-		&& mx < _lstSoldiers->getArrowsRightEdge())
+	if (mx >= static_cast<double>(_lstSoldiers->getArrowsLeftEdge())
+		&& mx < static_cast<double>(_lstSoldiers->getArrowsRightEdge()))
 	{
 		return;
 	}

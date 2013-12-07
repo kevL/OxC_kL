@@ -21,15 +21,17 @@
 #define OPENXCOM_ERRORMESSAGESTATE_H
 
 #include <string>
+
 #include "../Engine/State.h"
 
 
 namespace OpenXcom
 {
 
+class Text;
 class TextButton;
 class Window;
-class Text;
+
 
 /**
  * Generic window used to display error messages.

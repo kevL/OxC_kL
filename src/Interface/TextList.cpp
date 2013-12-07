@@ -1072,4 +1072,5 @@ void TextList::setScroll(int scroll)
 {
 	_scroll = scroll;
 }
+
 }

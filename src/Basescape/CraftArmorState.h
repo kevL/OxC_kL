@@ -49,6 +49,7 @@ private:
 	Base* _base;
 	size_t _craft;
 
+
 	public:
 		/// Creates the Craft Armor state.
 		CraftArmorState(Game* game, Base* base, size_t craft);

@@ -184,7 +184,7 @@ void AlienBAIState::think(BattleAction* action)
 	action->weapon = _unit->getMainHandWeapon();	// kL_note: does not return grenades.
 													// *cough* Does return grenades. -> DID return grenades but i fixed it so it won't.
 
-	_attackAction->diff = (int)(_save->getBattleState()->getGame()->getSavedGame()->getDifficulty());
+	_attackAction->diff = static_cast<int>(_save->getBattleState()->getGame()->getSavedGame()->getDifficulty());
 	_attackAction->actor = _unit;
 	_attackAction->weapon = action->weapon;
 	_attackAction->number = action->number;
@@ -1114,9 +1114,14 @@ int AlienBAIState::getSpottingUnits(Position pos) const
 	bool checking = pos != _unit->getPosition();
 	int tally = 0;
 
-	for (std::vector<BattleUnit*>::const_iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
+	for (std::vector<BattleUnit*>::const_iterator
+			i = _save->getUnits()->begin();
+			i != _save->getUnits()->end();
+			++i)
 	{
-		if (!(*i)->isOut() && (*i)->getFaction() == FACTION_PLAYER && _intelligence >= (*i)->getTurnsExposed())
+		if (!(*i)->isOut()
+			&& (*i)->getFaction() == FACTION_PLAYER
+			&& _intelligence >= (*i)->getTurnsExposed())
 		{
 			int dist = _save->getTileEngine()->distance(pos, (*i)->getPosition());
 			if (dist > 20) continue;
@@ -1437,8 +1442,8 @@ void AlienBAIState::evaluateAIMode()
 	// factor in the spotters.
 	if (_spottingEnemies)
 	{
-		escapeOdds = 10.f * escapeOdds * (float)(_spottingEnemies + 10) / 100.f;
-		combatOdds = 5.f * combatOdds * (float)(_spottingEnemies + 20) / 100.f;
+		escapeOdds *= (10.f * static_cast<float>(_spottingEnemies + 10) / 100.f);
+		combatOdds *= (5.f * static_cast<float>(_spottingEnemies + 20) / 100.f);
 	}
 	else
 	{
@@ -1448,7 +1453,7 @@ void AlienBAIState::evaluateAIMode()
 	// factor in visible enemies.
 	if (_visibleEnemies)
 	{
-		combatOdds = 10.f * combatOdds * (float)(_visibleEnemies + 10) / 100.f;
+		combatOdds *= (10.f * static_cast<float>(_visibleEnemies + 10) / 100.f);
 		if (_closestDist < 5)
 		{
 			ambushOdds = 0.f;
@@ -1473,18 +1478,18 @@ void AlienBAIState::evaluateAIMode()
 	}
 
 	// generate a random number to represent our decision.
-	int decision = RNG::generate(1, (int)(patrolOdds + ambushOdds + escapeOdds + combatOdds) + 1);
+	int decision = RNG::generate(1, static_cast<int>(patrolOdds + ambushOdds + escapeOdds + combatOdds) + 1);
 
 	// if the aliens are cheating, or the unit is charging, enforce combat as a priority.
 	if (_save->isCheating() || _unit->getCharging() != 0)
 	{
 		_AIMode = AI_COMBAT;
 	}
-	else if ((float)decision > escapeOdds)
+	else if (static_cast<float>(decision) > escapeOdds)
 	{
-		if ((float)decision > escapeOdds + ambushOdds)
+		if (static_cast<float>(decision) > escapeOdds + ambushOdds)
 		{
-			if ((float)decision > escapeOdds + ambushOdds + combatOdds)
+			if (static_cast<float>(decision) > escapeOdds + ambushOdds + combatOdds)
 			{
 				_AIMode = AI_PATROL;
 			}
@@ -1518,7 +1523,8 @@ void AlienBAIState::evaluateAIMode()
 				return;
 			}
 		}
-		else if (selectRandomTarget() && findFirePoint())
+		else if (selectRandomTarget()
+			&& findFirePoint())
 		{
 			return;
 		}
@@ -1773,7 +1779,8 @@ bool AlienBAIState::explosiveEfficacy(
  */
 void AlienBAIState::meleeAction()
 {
-	if (_aggroTarget != 0 && !_aggroTarget->isOut())
+	if (_aggroTarget != 0
+		&& !_aggroTarget->isOut(true, true))
 	{
 		if (_save->getTileEngine()->validMeleeRange(_unit, _aggroTarget, _unit->getDirection()))
 		{
@@ -1860,6 +1867,7 @@ void AlienBAIState::wayPointAction()
 		}
 
 		_save->getPathfinding()->calculate(_unit, (*i)->getPosition(), *i, -1);
+
 		if (_save->getPathfinding()->getStartDirection() != -1
 			&& explosiveEfficacy((*i)->getPosition(),
 					_unit,
@@ -2131,7 +2139,10 @@ bool AlienBAIState::psiAction()
 		// kL_note: put prior check into AlienBAIState::setupAttack().
 		// kL_note: might want to pseudo-randomize things like >_escapeTUs+25 ...
 	{
-		float psiAttackStrength = (float)_unit->getStats()->psiSkill * (float)_unit->getStats()->psiStrength / 50.f;
+		float psiAttackStrength =
+						static_cast<float>(_unit->getStats()->psiSkill)
+							* static_cast<float>(_unit->getStats()->psiStrength)
+							/ 50.f;
 		float chanceToAttack = 0.f;
 		float chanceToAttack2 = 0.f;
 
@@ -2146,10 +2157,10 @@ bool AlienBAIState::psiAction()
 				&& (*i)->getFaction() == FACTION_PLAYER)		// and they mustn't be under mind control already
 			{
 				chanceToAttack2 = psiAttackStrength
-						+ (((*i)->getStats()->psiSkill > 0)? (float)(*i)->getStats()->psiSkill * -0.4f:0.f)
-						- (float)_save->getTileEngine()->distance((*i)->getPosition(), _unit->getPosition())
-						- (float)((*i)->getStats()->psiStrength)
-						+ (float)RNG::generate(55, 105);
+						+ (((*i)->getStats()->psiSkill > 0)? static_cast<float>((*i)->getStats()->psiSkill) * -0.4f: 0.f)
+						- static_cast<float>(_save->getTileEngine()->distance((*i)->getPosition(), _unit->getPosition()))
+						- static_cast<float>((*i)->getStats()->psiStrength)
+						+ static_cast<float>(RNG::generate(55, 105));
 
 				if (chanceToAttack2 > chanceToAttack)
 				{
@@ -2159,7 +2170,7 @@ bool AlienBAIState::psiAction()
 			}
 		}
 
-		int iAttack = (int)chanceToAttack;
+		int iAttack = static_cast<int>(chanceToAttack);
 
 		if (!_aggroTarget || iAttack <= 0)
 		{

@@ -48,6 +48,7 @@ protected:
 	SavedBattleGame* _save;
 	BattleUnit* _unit;
 
+
 	public:
 		/// Creates a new BattleAIState linked to the game and a certain unit.
 		BattleAIState(SavedBattleGame* save, BattleUnit* unit);

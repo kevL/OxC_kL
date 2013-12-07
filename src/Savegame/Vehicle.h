@@ -20,7 +20,9 @@
 #define OPENXCOM_VEHICLE_H
 
 #include <string>
+
 #include <yaml-cpp/yaml.h>
+
 
 namespace OpenXcom
 {
@@ -35,25 +37,28 @@ class RuleItem;
 class Vehicle
 {
 private:
-	RuleItem *_rules;
+	RuleItem* _rules;
 	int _ammo, _size;
-public:
-	/// Creates a vehicle of the specified type.
-	Vehicle(RuleItem *rules, int ammo, int space);
-	/// Cleans up the vehicle.
-	~Vehicle();
-	/// Loads the vehicle from YAML.
-	void load(const YAML::Node& node);
-	/// Saves the vehicle to YAML.
-	YAML::Node save() const;
-	/// Gets the vehicle's ruleset.
-	RuleItem *getRules() const;
-	/// Gets the vehicle's ammo.
-	int getAmmo() const;
-	/// Sets the vehicle's ammo.
-	void setAmmo(int ammo);
-	/// Gets the vehicle's size.
-	int getSize() const;
+
+	public:
+		/// Creates a vehicle of the specified type.
+		Vehicle(RuleItem* rules, int ammo, int space);
+		/// Cleans up the vehicle.
+		~Vehicle();
+
+		/// Loads the vehicle from YAML.
+		void load(const YAML::Node& node);
+		/// Saves the vehicle to YAML.
+		YAML::Node save() const;
+
+		/// Gets the vehicle's ruleset.
+		RuleItem* getRules() const;
+		/// Gets the vehicle's ammo.
+		int getAmmo() const;
+		/// Sets the vehicle's ammo.
+		void setAmmo(int ammo);
+		/// Gets the vehicle's size.
+		int getSize() const;
 };
 
 }

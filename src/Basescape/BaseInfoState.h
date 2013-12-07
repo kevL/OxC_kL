@@ -26,14 +26,14 @@
 namespace OpenXcom
 {
 
-class BasescapeState;
+class Bar;
 class Base;
-class Surface;
+class BasescapeState;
 class MiniBaseView;
+class Surface;
+class Text;
 class TextButton;
 class TextEdit;
-class Text;
-class Bar;
 
 /**
  * Base Info screen that shows all the

@@ -16,19 +16,25 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "Window.h"
+
 #include <SDL.h>
+
 #include "../aresame.h"
-#include "../Engine/Timer.h"
-#include "../Engine/Sound.h"
+
 #include "../Engine/RNG.h"
+#include "../Engine/Sound.h"
+#include "../Engine/Timer.h"
+
 
 namespace OpenXcom
 {
 
-const double Window::POPUP_SPEED = 0.08;
+const double Window::POPUP_SPEED = 0.1;
 
-Sound *Window::soundPopup[3] = {0, 0, 0};
+Sound* Window::soundPopup[3] = {0, 0, 0};
+
 
 /**
  * Sets up a blank window with the specified size and position.
@@ -39,11 +45,25 @@ Sound *Window::soundPopup[3] = {0, 0, 0};
  * @param y Y position in pixels.
  * @param popup Popup animation.
  */
-Window::Window(State *state, int width, int height, int x, int y, WindowPopup popup)
-	: Surface(width, height, x, y), _bg(0), _color(0), _popup(popup), _popupStep(0.0), _state(state), _contrast(false), _screen(false)
+Window::Window(
+		State* state,
+		int width,
+		int height,
+		int x,
+		int y,
+		WindowPopup popup)
+	:
+		Surface(width, height, x, y),
+		_bg(0),
+		_color(0),
+		_popup(popup),
+		_popupStep(0.0),
+		_state(state),
+		_contrast(false),
+		_screen(false)
 {
 	_timer = new Timer(10);
-	_timer->onTimer((SurfaceHandler)&Window::popup);
+	_timer->onTimer((SurfaceHandler)& Window::popup);
 
 	if (_popup == POPUP_NONE)
 	{
@@ -73,7 +93,7 @@ Window::~Window()
  * Changes the surface used to draw the background of the window.
  * @param bg New background.
  */
-void Window::setBackground(Surface *bg)
+void Window::setBackground(Surface* bg)
 {
 	if (_popupStep < 1.0)
 	{
@@ -153,8 +173,10 @@ void Window::popup()
 		{
 			_state->toggleScreen();
 		}
+
 		_state->showAll();
 		_popupStep = 1.0;
+
 		_timer->stop();
 	}
 

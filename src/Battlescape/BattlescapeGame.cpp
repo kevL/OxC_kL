@@ -19,47 +19,54 @@
 
 #define _USE_MATH_DEFINES
 
+#include "BattlescapeGame.h"
+
 #include <cmath>
 #include <sstream>
 #include <typeinfo>
-#include "BattlescapeGame.h"
-#include "BattlescapeState.h"
-#include "Map.h"
-#include "Camera.h"
-#include "NextTurnState.h"
+
 #include "AbortMissionState.h"
+#include "AlienBAIState.h"
+#include "BattlescapeState.h"
 #include "BattleState.h"
+#include "Camera.h"
+#include "CivilianBAIState.h"
+#include "ExplosionBState.h"
+#include "InfoboxOKState.h"
+#include "InfoboxState.h"
+#include "Map.h"
+#include "NextTurnState.h"
+#include "Pathfinding.h"
+#include "ProjectileFlyBState.h"
+#include "TileEngine.h"
+#include "UnitDieBState.h"
+#include "UnitFallBState.h"
+#include "UnitInfoState.h"
+#include "UnitPanicBState.h"
 #include "UnitTurnBState.h"
 #include "UnitWalkBState.h"
-#include "ProjectileFlyBState.h"
-#include "ExplosionBState.h"
-#include "TileEngine.h"
-#include "UnitInfoState.h"
-#include "UnitDieBState.h"
-#include "UnitPanicBState.h"
-#include "AlienBAIState.h"
-#include "CivilianBAIState.h"
-#include "Pathfinding.h"
+
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Sound.h"
-#include "../Resource/ResourcePack.h"
-#include "../Interface/Cursor.h"
-#include "../Savegame/SavedGame.h"
-#include "../Savegame/SavedBattleGame.h"
-#include "../Savegame/Tile.h"
-#include "../Savegame/BattleUnit.h"
-#include "../Savegame/BattleItem.h"
-#include "../Ruleset/Ruleset.h"
-#include "../Ruleset/RuleItem.h"
-#include "../Ruleset/RuleInventory.h"
-#include "../Ruleset/Armor.h"
+#include "../Engine/Logger.h"
 #include "../Engine/Options.h"
 #include "../Engine/RNG.h"
-#include "InfoboxState.h"
-#include "InfoboxOKState.h"
-#include "UnitFallBState.h"
-#include "../Engine/Logger.h"
+#include "../Engine/Sound.h"
+
+#include "../Interface/Cursor.h"
+
+#include "../Resource/ResourcePack.h"
+
+#include "../Ruleset/Armor.h"
+#include "../Ruleset/RuleInventory.h"
+#include "../Ruleset/RuleItem.h"
+#include "../Ruleset/Ruleset.h"
+
+#include "../Savegame/BattleItem.h"
+#include "../Savegame/BattleUnit.h"
+#include "../Savegame/SavedBattleGame.h"
+#include "../Savegame/SavedGame.h"
+#include "../Savegame/Tile.h"
 
 
 namespace OpenXcom
@@ -2203,12 +2210,13 @@ BattleUnit* BattlescapeGame::convertUnit(BattleUnit* unit, std::string newType)
 	terroristWeapon += "_WEAPON";
 	RuleItem* newItem = getRuleset()->getItem(terroristWeapon);
 
-	int difficulty = (int)(_parentState->getGame()->getSavedGame()->getDifficulty());
-	BattleUnit* newUnit = new BattleUnit(getRuleset()->getUnit(newType),
-			FACTION_HOSTILE,
-			_save->getUnits()->back()->getId() + 1,
-			getRuleset()->getArmor(newArmor.str()),
-			difficulty);
+	int difficulty = static_cast<int>(_parentState->getGame()->getSavedGame()->getDifficulty());
+	BattleUnit* newUnit = new BattleUnit(
+									getRuleset()->getUnit(newType),
+									FACTION_HOSTILE,
+									_save->getUnits()->back()->getId() + 1,
+									getRuleset()->getArmor(newArmor.str()),
+									difficulty);
 	// kL_note: what about setting _zombieUnit=true ? It's not generic but it's the only case, afaict
 
 	if (!difficulty)

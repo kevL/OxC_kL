@@ -20,25 +20,27 @@
 #ifndef OPENXCOM_DEBRIEFINGSTATE_H
 #define OPENXCOM_DEBRIEFINGSTATE_H
 
-#include "../Engine/State.h"
+#include <map>
 #include <string>
 #include <vector>
-#include <map>
+
+#include "../Engine/State.h"
 
 
 namespace OpenXcom
 {
 
-class TextButton;
-class Window;
-class Text;
-class TextList;
-class BattleItem;
-class Craft;
 class Base;
-class Region;
+class BattleItem;
 class Country;
+class Craft;
+class Region;
 class RuleItem;
+class Text;
+class TextButton;
+class TextList;
+class Window;
+
 
 struct DebriefingStat
 {
@@ -56,6 +58,7 @@ struct DebriefingStat
 	int score;
 	bool recovery;
 };
+
 
 struct ReequipStat
 {
@@ -83,6 +86,7 @@ private:
 	TextList* _lstStats, * _lstRecovery, * _lstTotal;
 	std::vector<ReequipStat> _missingItems;
 	std::map<RuleItem*, int> _rounds;
+
 	/// Adds to the debriefing stats.
 	void addStat(const std::string& name, int quantity, int score);
 	/// Prepares debriefing.

@@ -20,46 +20,52 @@
 #define OPENXCOM_BUILDFACILITIESSTATE_H
 
 #include <vector>
+
 #include "../Engine/State.h"
+
 
 namespace OpenXcom
 {
 
 class Base;
-class TextButton;
-class Window;
-class Text;
-class TextList;
 class RuleBaseFacility;
+class Text;
+class TextButton;
+class TextList;
+class Window;
 
 /**
  * Window shown with all the facilities
  * available to build.
  */
-class BuildFacilitiesState : public State
+class BuildFacilitiesState
+	:
+		public State
 {
 protected:
-	Base *_base;
-	State *_state;
+	Base* _base;
+	State* _state;
 	std::vector<RuleBaseFacility*> _facilities;
 
-	TextButton *_btnOk;
-	Window *_window;
-	Text *_txtTitle;
-	TextList *_lstFacilities;
-public:
-	/// Creates the Build Facilities state.
-	BuildFacilitiesState(Game *game, Base *base, State *state);
-	/// Cleans up the Build Facilities state.
-	~BuildFacilitiesState();
-	/// Populates the build option list.
-	virtual void PopulateBuildList();
-	/// Updates the base stats.
-	void init();
-	/// Handler for clicking the OK button.
-	void btnOkClick(Action *action);
-	/// Handler for clicking the Facilities list.
-	virtual void lstFacilitiesClick(Action *action);
+	TextButton* _btnOk;
+	Window* _window;
+	Text* _txtTitle;
+	TextList* _lstFacilities;
+
+	public:
+		/// Creates the Build Facilities state.
+		BuildFacilitiesState(Game* game, Base* base, State* state);
+		/// Cleans up the Build Facilities state.
+		~BuildFacilitiesState();
+
+		/// Populates the build option list.
+		virtual void PopulateBuildList();
+		/// Updates the base stats.
+		void init();
+		/// Handler for clicking the OK button.
+		void btnOkClick(Action* action);
+		/// Handler for clicking the Facilities list.
+		virtual void lstFacilitiesClick(Action* action);
 };
 
 }

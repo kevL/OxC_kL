@@ -46,7 +46,7 @@ BattleAIState::~BattleAIState()
  * Loads the AI state from a YAML file.
  * @param node YAML node.
  */
-void BattleAIState::load(const YAML::Node& )
+void BattleAIState::load(const YAML::Node&)
 {
 }
 

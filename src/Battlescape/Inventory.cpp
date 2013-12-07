@@ -488,7 +488,7 @@ BattleItem* Inventory::getSelectedItem() const
  */
 void Inventory::setSelectedItem(BattleItem* item)
 {
-	_selItem = (item && !item->getRules()->isFixed()) ? item : 0;
+	_selItem = (item && !item->getRules()->isFixed())? item: 0;
 	if (_selItem == 0)
 	{
 		_selection->clear();
@@ -521,6 +521,7 @@ void Inventory::think()
 void Inventory::blit(Surface* surface)
 {
 	clear();
+
 	_grid->blit(this);
 	_items->blit(this);
 	_selection->blit(this);

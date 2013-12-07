@@ -18,16 +18,21 @@
  */
 
 #include "TargetInfoState.h"
+
+#include "InterceptState.h"
+
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
+#include "../Engine/Options.h"
 #include "../Engine/Palette.h"
+
+#include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
-#include "../Interface/Text.h"
+
+#include "../Resource/ResourcePack.h"
+
 #include "../Savegame/Target.h"
-#include "../Engine/Options.h"
-#include "InterceptState.h"
 
 
 namespace OpenXcom
@@ -39,7 +44,10 @@ namespace OpenXcom
  * @param target Pointer to the target to show info from.
  * @param globe Pointer to the Geoscape globe.
  */
-TargetInfoState::TargetInfoState(Game* game, Target* target, Globe* globe)
+TargetInfoState::TargetInfoState(
+			Game* game,
+			Target* target,
+			Globe* globe)
 	:
 		State(game),
 		_target(target),
@@ -60,7 +68,10 @@ TargetInfoState::TargetInfoState(Game* game, Target* target, Globe* globe)
 	_btnOk			= new TextButton(160, 16, 48, 137);
 
 
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
+	_game->setPalette(
+				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)),
+				Palette::backPos,
+				16);
 
 	add(_window);
 	add(_txtTitle);

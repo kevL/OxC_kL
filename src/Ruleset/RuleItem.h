@@ -47,7 +47,7 @@ enum BattleType
 	BT_AMMO,				// 2
 	BT_MELEE,				// 3
 	BT_GRENADE,				// 4
-	BT_PROXIMITYGRENADE,	// 5
+	BT_PROXIMITYGRENADE,	// 5 // kL_note: where is SMOKEGRENADE ?!?!? (and Alien_Grenade)
 	BT_MEDIKIT,				// 6
 	BT_SCANNER,				// 7
 	BT_MINDPROBE,			// 8
@@ -96,13 +96,16 @@ private:
 	bool _flatRate, _arcingShot;
 	int _listOrder, _range, _bulletSpeed, _autoShots;
 
+
 	public:
 		/// Creates a blank item ruleset.
 		RuleItem(const std::string& type);
 		/// Cleans up the item ruleset.
 		~RuleItem();
+
 		/// Loads item data from YAML.
 		void load(const YAML::Node& node, int modIndex, int listIndex);
+
 		/// Gets the item's type.
 		std::string getType() const;
 		/// Gets the item's name.

@@ -84,7 +84,7 @@ void UnitWalkBState::init()
 	Log(LOG_INFO) << "UnitWalkBState::init() unitID = " << _unit->getId();
 
 
-	_tileSwitchDone = false;	// kL
+//	_tileSwitchDone = false;	// kL
 
 	setNormalWalkSpeed();
 
@@ -324,7 +324,7 @@ void UnitWalkBState::think()
 		{
 			Log(LOG_INFO) << "Hey we got to STATUS_STANDING in UnitWalkBState _WALKING or _FLYING !!!" ;
 
-			_tileSwitchDone = false;	// kL
+//			_tileSwitchDone = false;	// kL
 
 			// if the unit burns floortiles, burn floortiles
 			if (_unit->getSpecialAbility() == SPECAB_BURNFLOOR)

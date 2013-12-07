@@ -27,11 +27,12 @@ namespace OpenXcom
 {
 
 class Base;
-class SurfaceSet;
 class BaseFacility;
-class RuleBaseFacility;
 class Font;
+class RuleBaseFacility;
+class SurfaceSet;
 class Timer;
+
 
 /**
  * Interactive view of a base.

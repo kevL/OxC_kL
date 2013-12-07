@@ -26,12 +26,13 @@
 namespace OpenXcom
 {
 
-class TextButton;
-class Window;
-class Text;
 class Base;
+class Text;
+class TextButton;
 class TextList;
 class Soldier;
+class Window;
+
 
 /**
  * Screen that allocates soldiers to psionic training.
@@ -43,12 +44,20 @@ class AllocatePsiTrainingState
 private:
 	TextButton* _btnOk;
 	Window* _window;
-	Text* _txtTitle, * _txtTraining, * _txtName, * _txtCraft, * _txtRemaining, * _txtPsiStrength, * _txtPsiSkill;
+	Text
+		* _txtTitle,
+		* _txtTraining,
+		* _txtName,
+		* _txtCraft,
+		* _txtRemaining,
+		* _txtPsiStrength,
+		* _txtPsiSkill;
 	TextList* _lstSoldiers;
 	std::vector<Soldier*> _soldiers;
 	unsigned int _sel;
 	int _labSpace;
 	Base* _base;
+
 
 	public:
 		/// Creates the Psi Training state.
@@ -61,10 +70,17 @@ private:
 
 		/// Handler for clicking the OK button.
 		void btnOkClick(Action* action);
-		void btnBase1Click();
-		void lstSoldiersPress(Action* action);
-		void lstSoldiersRelease(Action* action);
+//kL		void btnBase1Click();
+//kL		void lstSoldiersPress(Action* action);
+//kL		void lstSoldiersRelease(Action* action);
 		void lstSoldiersClick(Action* action);
+
+		// kL_begin: re-order soldiers, taken from CraftSoldiersState.
+		/// Handler for clicking the Soldiers reordering button.
+		void lstItemsLeftArrowClick_Psi(Action* action);
+		/// Handler for clicking the Soldiers reordering button.
+		void lstItemsRightArrowClick_Psi(Action* action);
+		// kL_end.
 };
 
 }

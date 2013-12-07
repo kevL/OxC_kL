@@ -26,8 +26,8 @@
 namespace OpenXcom
 {
 
-class BattleUnit;
 class BattleItem;
+class BattleUnit;
 class SurfaceSet;
 
 /**
@@ -36,7 +36,7 @@ class SurfaceSet;
  */
 class UnitSprite
 	:
-	public Surface
+		public Surface
 
 {
 	private:
@@ -45,6 +45,7 @@ class UnitSprite
 		SurfaceSet* _unitSurface, * _itemSurfaceA, * _itemSurfaceB;
 		int _part, _animationFrame;
 		bool _hairBleach;
+
 		/// Drawing routine for XCom soldiers in overalls and Sectoids and Mutons (routine 10).
 		void drawRoutine0();
 		/// Drawing routine for floaters.
@@ -65,6 +66,7 @@ class UnitSprite
 		void drawRoutine8();
 		/// Drawing routine for celatids.
 		void drawRoutine9();
+
 		int _drawingRoutine;
 		/// sort two handed sprites out.
 		void sortRifles();
@@ -76,7 +78,10 @@ class UnitSprite
 		~UnitSprite();
 
 		/// Sets surfacesets for rendering.
-		void setSurfaces(SurfaceSet* unitSurface, SurfaceSet* itemSurfaceA, SurfaceSet* itemSurfaceB);
+		void setSurfaces(
+				SurfaceSet* unitSurface,
+				SurfaceSet* itemSurfaceA,
+				SurfaceSet* itemSurfaceB);
 		/// Sets the battleunit to be rendered.
 		void setBattleUnit(BattleUnit* unit, int part = 0);
 		/// Sets the battleitem to be rendered.

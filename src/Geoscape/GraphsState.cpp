@@ -84,7 +84,7 @@ GraphsState::GraphsState(Game* game)
 	_btnXcomCountry	= new InteractiveSurface(32, 24, 192, 0);
 	_btnIncome		= new InteractiveSurface(32, 24, 224, 0);
 	_btnFinance		= new InteractiveSurface(32, 24, 256, 0);
-	_btnGeoscape	= new InteractiveSurface(32, 24, 288, 0);
+	_btnGeoscape	= new InteractiveSurface(32, 28, 288, 0); // on-off trick using y to drop to Geo-btn.
 
 	_txtTitle		= new Text(220, 17, 100, 28);
 	_txtFactor		= new Text(35, 9, 96, 28);

@@ -109,6 +109,7 @@ private:
 	/// Gets battlescape terrain.
 	RuleTerrain* getTerrain(int tex, double lat);
 
+
 	public:
 		/// Creates a new BattlescapeGenerator class
 		BattlescapeGenerator(Game* game);

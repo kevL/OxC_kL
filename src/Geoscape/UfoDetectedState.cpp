@@ -18,23 +18,30 @@
  */
 
 #include "UfoDetectedState.h"
+
 #include <sstream>
-#include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
-#include "../Engine/Language.h"
-#include "../Engine/Palette.h"
-#include "../Interface/TextButton.h"
-#include "../Interface/Window.h"
-#include "../Interface/Text.h"
-#include "../Interface/TextList.h"
-#include "../Savegame/Ufo.h"
-#include "../Ruleset/RuleUfo.h"
+
 #include "GeoscapeState.h"
 #include "Globe.h"
-#include "../Savegame/SavedGame.h"
-#include "../Engine/Options.h"
-#include "../Savegame/AlienMission.h"
 #include "InterceptState.h"
+
+#include "../Engine/Game.h"
+#include "../Engine/Language.h"
+#include "../Engine/Options.h"
+#include "../Engine/Palette.h"
+
+#include "../Interface/Text.h"
+#include "../Interface/TextButton.h"
+#include "../Interface/TextList.h"
+#include "../Interface/Window.h"
+
+#include "../Resource/ResourcePack.h"
+
+#include "../Ruleset/RuleUfo.h"
+
+#include "../Savegame/AlienMission.h"
+#include "../Savegame/SavedGame.h"
+#include "../Savegame/Ufo.h"
 
 
 namespace OpenXcom
@@ -48,7 +55,12 @@ namespace OpenXcom
  * @param detected Was the UFO detected?
  * @param hyperwave Was it a hyperwave radar?
  */
-UfoDetectedState::UfoDetectedState(Game* game, Ufo* ufo, GeoscapeState* state, bool detected, bool hyperwave)
+UfoDetectedState::UfoDetectedState(
+			Game* game,
+			Ufo* ufo,
+			GeoscapeState* state,
+			bool detected,
+			bool hyperwave)
 	:
 		State(game),
 		_ufo(ufo),
@@ -71,7 +83,7 @@ UfoDetectedState::UfoDetectedState(Game* game, Ufo* ufo, GeoscapeState* state, b
 
 	if (hyperwave)
 	{
-		_window		= new Window(this, 224, 170, 16, 10, POPUP_BOTH); // center: 128, end: 240
+		_window			= new Window(this, 224, 170, 16, 10, POPUP_BOTH); // center: 128, end: 240
 
 		_txtHyperwave	= new Text(216, 17, 20, 46);
 		_lstInfo2		= new TextList(192, 33, 32, 98);
@@ -101,11 +113,17 @@ UfoDetectedState::UfoDetectedState(Game* game, Ufo* ufo, GeoscapeState* state, b
 		_btnIntercept->setY(155);
 		_btnCancel->setY(155);
 
-		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)), Palette::backPos, 16);
+		_game->setPalette(
+					_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)),
+					Palette::backPos,
+					16);
 	}
 	else
 	{
-		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)), Palette::backPos, 16);
+		_game->setPalette(
+					_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)),
+					Palette::backPos,
+					16);
 	}
 
 
@@ -210,12 +228,17 @@ void UfoDetectedState::init()
 {
 	if (_hyperwave)
 	{
-//kL		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)), Palette::backPos, 16);
-		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);		// kL
+		_game->setPalette(
+					_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)),
+					Palette::backPos,
+					16);
 	}
 	else
 	{
-		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)), Palette::backPos, 16);
+		_game->setPalette(
+					_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)),
+					Palette::backPos,
+					16);
 	}
 }
 
@@ -226,10 +249,14 @@ void UfoDetectedState::init()
 void UfoDetectedState::btnInterceptClick(Action*)
 {
 	_state->timerReset();
-	_state->getGlobe()->center(_ufo->getLongitude(), _ufo->getLatitude());
+//kL	_state->getGlobe()->center(_ufo->getLongitude(), _ufo->getLatitude());
 
 	_game->popState();
-	_game->pushState(new InterceptState(_game, _state->getGlobe(), 0, _ufo));
+	_game->pushState(new InterceptState(
+									_game,
+									_state->getGlobe(),
+									0,
+									_ufo));
 }
 
 /**

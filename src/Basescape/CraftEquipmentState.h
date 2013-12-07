@@ -20,20 +20,21 @@
 #ifndef OPENXCOM_CRAFTEQUIPMENTSTATE_H
 #define OPENXCOM_CRAFTEQUIPMENTSTATE_H
 
-#include "../Engine/State.h"
-#include <vector>
 #include <string>
+#include <vector>
+
+#include "../Engine/State.h"
 
 
 namespace OpenXcom
 {
 
-class TextButton;
-class Window;
+class Base;
 class Text;
+class TextButton;
 class TextList;
 class Timer;
-class Base;
+class Window;
 
 /**
  * Equipment screen that lets the player
@@ -41,22 +42,23 @@ class Base;
  */
 class CraftEquipmentState
 	:
-	public State
+		public State
 {
-	private:
-		TextButton *_btnOk, *_btnClear, *_btnInventory;
-		Window *_window;
-		Text *_txtTitle, *_txtItem, *_txtStores, *_txtAvailable, *_txtUsed, *_txtCrew;
-		TextList *_lstEquipment;
-		Timer *_timerLeft, *_timerRight;
-		unsigned int _sel;
-		Base *_base;
-		size_t _craft;
-		std::vector<std::string> _items;
-		int _changeValueByMouseWheel;
-		bool _allowChangeListValuesByMouseWheel;
-		/// Updates quantities of item.
-		void updateQuantity();
+private:
+	TextButton* _btnOk, * _btnClear, * _btnInventory;
+	Window* _window;
+	Text* _txtTitle, * _txtItem, * _txtStores, * _txtAvailable, * _txtUsed, * _txtCrew;
+	TextList* _lstEquipment;
+	Timer* _timerLeft, * _timerRight;
+	unsigned int _sel;
+	Base* _base;
+	size_t _craft;
+	std::vector<std::string> _items;
+	int _changeValueByMouseWheel;
+	bool _allowChangeListValuesByMouseWheel;
+
+	/// Updates quantities of item.
+	void updateQuantity();
 
 	public:
 		/// Creates the Craft Equipment state.
@@ -68,6 +70,7 @@ class CraftEquipmentState
 		void init();
 		/// Runs the timers.
 		void think();
+
 		/// Handler for clicking the OK button.
 		void btnOkClick(Action* action);
 		/// Handler for pressing a Move Left arrow in the list.
@@ -84,6 +87,7 @@ class CraftEquipmentState
 		void lstEquipmentRightArrowClick(Action* action);
 		/// Handler for pressing-down a mouse-button in the list.
 		void lstEquipmentMousePress(Action* action);
+
 		/// Moves an item to the base.
 		void moveLeft();
 		/// Moves the given number of items to the base.
@@ -92,6 +96,7 @@ class CraftEquipmentState
 		void moveRight();
 		/// Moves the given number of items to the craft.
 		void moveRightByValue(int change);
+
 		/// Empties the contents of the craft, moving all of the items back to the base.
 		void btnClearClick(Action* action);
 		/// Handler for clicking the Inventory button.

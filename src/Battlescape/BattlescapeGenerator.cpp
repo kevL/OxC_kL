@@ -1247,8 +1247,8 @@ BattleItem* BattlescapeGenerator::addItem(RuleItem* item, BattleUnit* unit)
 				}
 			}
 		break;
-		case BT_GRENADE:
-		case BT_PROXIMITYGRENADE:
+		case BT_GRENADE:			// includes AlienGrenades
+		case BT_PROXIMITYGRENADE:	// includes SmokeGrenades
 			for (int i = 0; i != 4; ++i)
 			{
 				if (!unit->getItem("STR_BELT", i))
@@ -1284,10 +1284,12 @@ BattleItem* BattlescapeGenerator::addItem(RuleItem* item, BattleUnit* unit)
 			}
 		break;
 		case BT_MINDPROBE:
-			if (!unit->getItem("STR_LEFT_HAND"))
+//kL			if (!unit->getItem("STR_LEFT_HAND"))
+			if (!unit->getItem("STR_BACK_PACK"))	// kL
 			{
 				bi->moveToOwner(unit);
-				bi->setSlot(_game->getRuleset()->getInventory("STR_LEFT_HAND"));
+//kL				bi->setSlot(_game->getRuleset()->getInventory("STR_LEFT_HAND"));
+				bi->setSlot(_game->getRuleset()->getInventory("STR_BACK_PACK"));	// kL
 
 				placed = true;
 			}

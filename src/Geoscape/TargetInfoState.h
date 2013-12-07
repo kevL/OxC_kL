@@ -26,11 +26,12 @@
 namespace OpenXcom
 {
 
+class Globe;
+class Target;
+class Text;
 class TextButton;
 class Window;
-class Text;
-class Target;
-class Globe;
+
 
 /**
  * Generic window used to display all the
@@ -41,15 +42,26 @@ class TargetInfoState
 		public State
 {
 private:
-	Target* _target;
-	Globe *_globe;
-	TextButton* _btnIntercept, * _btnOk;
-	Window* _window;
-	Text* _txtTitle, * _txtTargetted, * _txtFollowers;
+	Target
+		* _target;
+	Globe
+		* _globe;
+	TextButton
+		* _btnIntercept,
+		* _btnOk;
+	Window
+		* _window;
+	Text
+		* _txtTitle,
+		* _txtTargetted,
+		* _txtFollowers;
 
 	public:
 		/// Creates the Target Info state.
-		TargetInfoState(Game* game, Target* target, Globe* globe);
+		TargetInfoState(
+				Game* game,
+				Target* target,
+				Globe* globe);
 		/// Cleans up the Target Info state.
 		~TargetInfoState();
 

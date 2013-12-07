@@ -26,10 +26,10 @@
 namespace OpenXcom
 {
 
-class TextButton;
-class Window;
 class Text;
+class TextButton;
 class TextList;
+class Window;
 
 /**
  * Funding screen accessible from the Geoscape

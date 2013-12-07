@@ -26,10 +26,11 @@
 namespace OpenXcom
 {
 
+class Base;
+class Text;
 class TextButton;
 class Window;
-class Text;
-class Base;
+
 
 /**
  * Report screen shown monthly to display
@@ -40,10 +41,28 @@ class PsiTrainingState
 		public State
 {
 private:
-	TextButton* _btnOk, * _btnBase1, * _btnBase2, * _btnBase3, * _btnBase4, * _btnBase5, * _btnBase6, * _btnBase7, * _btnBase8;
+	TextButton
+		* _btnOk,
+		* _btnBase1,
+		* _btnBase2,
+		* _btnBase3,
+		* _btnBase4,
+		* _btnBase5,
+		* _btnBase6,
+		* _btnBase7,
+		* _btnBase8;
 	Window* _window;
 	Text* _txtTitle;
-	Base* _base1, * _base2, * _base3, * _base4, * _base5, * _base6, * _base7, * _base8;
+	Base
+		* _base1,
+		* _base2,
+		* _base3,
+		* _base4,
+		* _base5,
+		* _base6,
+		* _base7,
+		* _base8;
+
 
 	public:
 		/// Creates the Psi Training state.

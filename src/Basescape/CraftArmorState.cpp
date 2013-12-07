@@ -18,22 +18,30 @@
  */
 
 #include "CraftArmorState.h"
+
 #include <string>
-#include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
-#include "../Engine/Language.h"
-#include "../Engine/Palette.h"
-#include "../Engine/Options.h"
-#include "../Interface/TextButton.h"
-#include "../Interface/Window.h"
-#include "../Interface/Text.h"
-#include "../Interface/TextList.h"
-#include "../Savegame/Base.h"
-#include "../Savegame/Soldier.h"
-#include "../Savegame/Craft.h"
-#include "../Ruleset/RuleCraft.h"
-#include "../Ruleset/Armor.h"
+
 #include "SoldierArmorState.h"
+
+#include "../Engine/Game.h"
+#include "../Engine/Language.h"
+#include "../Engine/Options.h"
+#include "../Engine/Palette.h"
+
+#include "../Interface/Text.h"
+#include "../Interface/TextButton.h"
+#include "../Interface/TextList.h"
+#include "../Interface/Window.h"
+
+#include "../Resource/ResourcePack.h"
+
+#include "../Ruleset/Armor.h"
+#include "../Ruleset/RuleCraft.h"
+
+#include "../Savegame/Base.h"
+#include "../Savegame/Craft.h"
+#include "../Savegame/Soldier.h"
+
 
 
 namespace OpenXcom
@@ -66,7 +74,10 @@ CraftArmorState::CraftArmorState(Game* game, Base* base, size_t craft)
 	_btnOk			= new TextButton(288, 16, 16, 177);
 
 
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)), Palette::backPos, 16);
+	_game->setPalette(
+				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)),
+				Palette::backPos,
+				16);
 
 	add(_window);
 	add(_btnOk);
@@ -101,7 +112,7 @@ CraftArmorState::CraftArmorState(Game* game, Base* base, size_t craft)
 	_txtArmor->setText(tr("STR_ARMOR"));
 
 	_lstSoldiers->setColor(Palette::blockOffset(13)+10);
-	_lstSoldiers->setArrowColor(Palette::blockOffset(13)+10);	// +6= light brownish
+	_lstSoldiers->setArrowColor(Palette::blockOffset(13)+10);
 	_lstSoldiers->setArrowColumn(193, ARROW_VERTICAL);			// kL
 	_lstSoldiers->setColumns(3, 117, 93, 78);
 	_lstSoldiers->setSelectable(true);
@@ -119,13 +130,20 @@ CraftArmorState::CraftArmorState(Game* game, Base* base, size_t craft)
 		c = _base->getCrafts()->at(_craft);				// kL
 
 	int row = 0;
-	for (std::vector<Soldier*>::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); ++i)
+	for (std::vector<Soldier*>::iterator
+			i = _base->getSoldiers()->begin();
+			i != _base->getSoldiers()->end();
+			++i)
 	{
 //		Log(LOG_INFO) << "CraftArmorState::CraftArmorState() iterate soldiers to createList";
 
 //		if (hasCraft)	// kL
 //kL			_lstSoldiers->addRow(3, (*i)->getName().c_str(), (*i)->getCraftString(_game->getLanguage()).c_str(), tr((*i)->getArmor()->getType()).c_str());
-		_lstSoldiers->addRow(3, (*i)->getName().c_str(), tr((*i)->getArmor()->getType()).c_str(), (*i)->getCraftString(_game->getLanguage()).c_str());
+		_lstSoldiers->addRow(
+							3,
+							(*i)->getName().c_str(),
+							tr((*i)->getArmor()->getType()).c_str(),
+							(*i)->getCraftString(_game->getLanguage()).c_str());
 //		else			// kL
 //			_lstSoldiers->addRow(3, (*i)->getName().c_str(), tr("STR_NONE_UC"), tr((*i)->getArmor()->getType()).c_str());	// kL
 
@@ -184,9 +202,16 @@ void CraftArmorState::init()
 	// kL_end.
 
 	int row = 0;
-	for (std::vector<Soldier*>::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); ++i)
+	for (std::vector<Soldier*>::iterator
+			i = _base->getSoldiers()->begin();
+			i != _base->getSoldiers()->end();
+			++i)
 	{
-		_lstSoldiers->addRow(3, (*i)->getName().c_str(), tr((*i)->getArmor()->getType()).c_str(), (*i)->getCraftString(_game->getLanguage()).c_str());	// kL
+		_lstSoldiers->addRow(
+							3,
+							(*i)->getName().c_str(),
+							tr((*i)->getArmor()->getType()).c_str(),
+							(*i)->getCraftString(_game->getLanguage()).c_str());	// kL
 
 //kL		_lstSoldiers->setCellText(row, 2, tr((*i)->getArmor()->getType()));
 //		_lstSoldiers->setCellText(row, 1, tr((*i)->getArmor()->getType()));		// kL
@@ -217,8 +242,8 @@ void CraftArmorState::init()
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-//kL void CraftArmorState::btnOkClick(Action*)
-void CraftArmorState::btnOkClick(Action* action)		// kL
+void CraftArmorState::btnOkClick(Action*)
+//void CraftArmorState::btnOkClick(Action* action)		// kL
 {
 	_game->popState();
 }
@@ -227,19 +252,21 @@ void CraftArmorState::btnOkClick(Action* action)		// kL
  * Shows the Select Armor window.
  * @param action Pointer to an action.
  */
-//kL void CraftArmorState::lstSoldiersClick(Action*)
+// void CraftArmorState::lstSoldiersClick(Action*)
 void CraftArmorState::lstSoldiersClick(Action* action)		// kL
 {
 	// kL: Taken from CraftSoldiersState::lstSoldiersClick()
 	double mx = action->getAbsoluteXMouse();
-	if (mx >= _lstSoldiers->getArrowsLeftEdge()
-		&& mx < _lstSoldiers->getArrowsRightEdge())
+	if (mx >= static_cast<double>(_lstSoldiers->getArrowsLeftEdge())
+		&& mx < static_cast<double>(_lstSoldiers->getArrowsRightEdge()))
 	{
 		return;
 	} // end_kL.
 
 	Soldier* s = _base->getSoldiers()->at(_lstSoldiers->getSelectedRow());
-	if (!(s->getCraft() && s->getCraft()->getStatus() == "STR_OUT"))
+	if (!
+		(s->getCraft()
+			&& s->getCraft()->getStatus() == "STR_OUT"))
 	{
 		_game->pushState(new SoldierArmorState(_game, _base, _lstSoldiers->getSelectedRow()));
 	}
@@ -266,7 +293,9 @@ void CraftArmorState::lstItemsLeftArrowClick_Armor(Action* action)
 
 				if (row != _lstSoldiers->getScroll())
 				{
-					SDL_WarpMouse(action->getXMouse(), action->getYMouse() - static_cast<Uint16>(8 * action->getYScale()));
+					SDL_WarpMouse(
+							static_cast<Uint16>(action->getXMouse()),
+							static_cast<Uint16>(action->getYMouse() - static_cast<int>(8.0 * action->getYScale())));
 				}
 				else
 				{
@@ -298,7 +327,7 @@ void CraftArmorState::lstItemsRightArrowClick_Armor(Action* action)
 	
 		if (0 < numSoldiers
 			&& INT_MAX >= numSoldiers
-			&& row < (int)numSoldiers - 1)
+			&& row < static_cast<int>(numSoldiers) - 1)
 		{
 			Soldier* s = _base->getSoldiers()->at(row);
 
@@ -309,7 +338,9 @@ void CraftArmorState::lstItemsRightArrowClick_Armor(Action* action)
 
 				if (row != 15 + _lstSoldiers->getScroll())
 				{
-					SDL_WarpMouse(action->getXMouse(), action->getYMouse() + static_cast<Uint16>(8 * action->getYScale()));
+					SDL_WarpMouse(
+							static_cast<Uint16>(action->getXMouse()),
+							static_cast<Uint16>(action->getYMouse() + static_cast<int>(8.0 * action->getYScale())));
 				}
 				else
 				{

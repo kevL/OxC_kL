@@ -16,22 +16,32 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_WINDOW_H
 #define OPENXCOM_WINDOW_H
 
 #include "../Engine/Surface.h"
 
+
 namespace OpenXcom
 {
 
-class Timer;
-class State;
 class Sound;
+class State;
+class Timer;
+
 
 /**
  * Enumeration for the type of animation when a window pops up.
  */
-enum WindowPopup { POPUP_NONE, POPUP_HORIZONTAL, POPUP_VERTICAL, POPUP_BOTH };
+enum WindowPopup
+{
+	POPUP_NONE,
+	POPUP_HORIZONTAL,
+	POPUP_VERTICAL,
+	POPUP_BOTH
+};
+
 
 /**
  * Box with a coloured border and custom background.
@@ -39,37 +49,46 @@ enum WindowPopup { POPUP_NONE, POPUP_HORIZONTAL, POPUP_VERTICAL, POPUP_BOTH };
  * it's also used in screens, so it's not really much of a window, just a... box.
  * But box sounds lame.
  */
-class Window : public Surface
+class Window
+	:
+		public Surface
 {
 private:
 	static const double POPUP_SPEED;
-	Surface *_bg;
+	Surface* _bg;
 	Uint8 _color;
 	WindowPopup _popup;
 	double _popupStep;
-	Timer *_timer;
-	State *_state;
+	Timer* _timer;
+	State* _state;
 	bool _contrast, _screen;
-public:
-	static Sound *soundPopup[3];
-	/// Creates a new window with the specified size and position.
-	Window(State *state, int width, int height, int x = 0, int y = 0, WindowPopup popup = POPUP_NONE);
-	/// Cleans up the window.
-	~Window();
-	/// Sets the background surface.
-	void setBackground(Surface *bg);
-	/// Sets the border color.
-	void setColor(Uint8 color);
-	/// Gets the border color.
-	Uint8 getColor() const;
-	/// Sets the high contrast color setting.
-	void setHighContrast(bool contrast);
-	/// Handles the timers.
-	void think();
-	/// Popups the window.
-	void popup();
-	/// Draws the window.
-	void draw();
+
+	public:
+		static Sound* soundPopup[3];
+		/// Creates a new window with the specified size and position.
+		Window(State* state,
+				int width,
+				int height,
+				int x = 0,
+				int y = 0,
+				WindowPopup popup = POPUP_NONE);
+		/// Cleans up the window.
+		~Window();
+
+		/// Sets the background surface.
+		void setBackground(Surface* bg);
+		/// Sets the border color.
+		void setColor(Uint8 color);
+		/// Gets the border color.
+		Uint8 getColor() const;
+		/// Sets the high contrast color setting.
+		void setHighContrast(bool contrast);
+		/// Handles the timers.
+		void think();
+		/// Popups the window.
+		void popup();
+		/// Draws the window.
+		void draw();
 };
 
 }

@@ -16,8 +16,11 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "Vehicle.h"
+
 #include "../Ruleset/RuleItem.h"
+
 
 namespace OpenXcom
 {
@@ -27,7 +30,11 @@ namespace OpenXcom
  * @param rules Pointer to ruleset.
  * @param ammo Initial ammo.
  */
-Vehicle::Vehicle(RuleItem *rules, int ammo, int size) : _rules(rules), _ammo(ammo), _size(size)
+Vehicle::Vehicle(RuleItem* rules, int ammo, int size)
+	:
+		_rules(rules),
+		_ammo(ammo),
+		_size(size)
 {
 }
 
@@ -42,7 +49,7 @@ Vehicle::~Vehicle()
  * Loads the vehicle from a YAML file.
  * @param node YAML node.
  */
-void Vehicle::load(const YAML::Node &node)
+void Vehicle::load(const YAML::Node& node)
 {
 	_ammo = node["ammo"].as<int>(_ammo);
 	_size = node["size"].as<int>(_size);
@@ -55,9 +62,11 @@ void Vehicle::load(const YAML::Node &node)
 YAML::Node Vehicle::save() const
 {
 	YAML::Node node;
+
 	node["type"] = _rules->getType();
 	node["ammo"] = _ammo;
 	node["size"] = _size;
+
 	return node;
 }
 
@@ -65,7 +74,7 @@ YAML::Node Vehicle::save() const
  * Returns the ruleset for the vehicle's type.
  * @return Pointer to ruleset.
  */
-RuleItem *Vehicle::getRules() const
+RuleItem* Vehicle::getRules() const
 {
 	return _rules;
 }
@@ -80,6 +89,7 @@ int Vehicle::getAmmo() const
 	{
 		return 255;
 	}
+
 	return _ammo;
 }
 
@@ -103,4 +113,5 @@ int Vehicle::getSize() const
 {
 	return _size;
 }
+
 }

@@ -18,19 +18,25 @@
  */
 
 #include "FundingState.h"
+
 #include <sstream>
+
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
-#include "../Engine/Palette.h"
-#include "../Interface/TextButton.h"
-#include "../Interface/Window.h"
-#include "../Interface/Text.h"
-#include "../Interface/TextList.h"
-#include "../Savegame/Country.h"
-#include "../Ruleset/RuleCountry.h"
-#include "../Savegame/SavedGame.h"
 #include "../Engine/Options.h"
+#include "../Engine/Palette.h"
+
+#include "../Interface/Text.h"
+#include "../Interface/TextButton.h"
+#include "../Interface/TextList.h"
+#include "../Interface/Window.h"
+
+#include "../Resource/ResourcePack.h"
+
+#include "../Ruleset/RuleCountry.h"
+
+#include "../Savegame/Country.h"
+#include "../Savegame/SavedGame.h"
 
 
 namespace OpenXcom
@@ -51,12 +57,12 @@ FundingState::FundingState(Game* game)
 
 	_txtTitle		= new Text(300, 17, 10, 9);
 
-	_txtCountry		= new Text(100, 9, 30, 25);
+	_txtCountry		= new Text(100, 9, 16, 25);
 	_txtFunding		= new Text(100, 9, 138, 25);
 	_txtChange		= new Text(72, 9, 238, 25);
 
 	_lstCountries	= new TextList(260, 128, 30, 34);
-	_lstTotal		= new TextList(265, 9, 30, 165);
+	_lstTotal		= new TextList(279, 9, 16, 165);
 
 	_btnOk			= new TextButton(288, 16, 16, 177);
 
@@ -103,7 +109,10 @@ FundingState::FundingState(Game* game)
 	_lstCountries->setSecondaryColor(Palette::blockOffset(8)+10);
 	_lstCountries->setColumns(3, 108, 100, 52);
 	_lstCountries->setDot(true);
-	for (std::vector<Country*>::iterator i = _game->getSavedGame()->getCountries()->begin(); i != _game->getSavedGame()->getCountries()->end(); ++i)
+	for (std::vector<Country*>::iterator
+			i = _game->getSavedGame()->getCountries()->begin();
+			i != _game->getSavedGame()->getCountries()->end();
+			++i)
 	{
 		std::wstringstream ss, ss2;
 		ss << L'\x01' << Text::formatFunding((*i)->getFunding().at((*i)->getFunding().size()-1)) << L'\x01';
@@ -121,16 +130,24 @@ FundingState::FundingState(Game* game)
 			ss2 << Text::formatFunding(0);
 		}
 
-		_lstCountries->addRow(3, tr((*i)->getRules()->getType()).c_str(), ss.str().c_str(), ss2.str().c_str());
+		_lstCountries->addRow(
+							3,
+							tr((*i)->getRules()->getType()).c_str(),
+							ss.str().c_str(),
+							ss2.str().c_str());
 	}
 //kL	_lstCountries->addRow(2, tr("STR_TOTAL_UC").c_str(), Text::formatFunding(_game->getSavedGame()->getCountryFunding()).c_str());
 //kL	_lstCountries->setRowColor(_game->getSavedGame()->getCountries()->size(), Palette::blockOffset(8)+5);
 
 	// kL_begin: FundingState, list Total.
 	_lstTotal->setColor(Palette::blockOffset(8)+5);
-	_lstTotal->setColumns(3, 108, 100, 57);
+	_lstTotal->setColumns(3, 122, 100, 57);
 	_lstTotal->setDot(true);
-	_lstTotal->addRow(3, "", tr("STR_TOTAL_UC").c_str(), Text::formatFunding(_game->getSavedGame()->getCountryFunding()).c_str());
+	_lstTotal->addRow(
+					3,
+					"",
+					tr("STR_TOTAL_UC").c_str(),
+					Text::formatFunding(_game->getSavedGame()->getCountryFunding()).c_str());
 	// kL_end.
 
 //	Log(LOG_INFO) << "Create FundingState DONE";

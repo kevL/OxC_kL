@@ -2244,14 +2244,6 @@ BattleItem* BattleUnit::getMainHandWeapon(bool quickest) const
  */
 BattleItem* BattleUnit::getGrenadeFromBelt() const
 {
-	for (std::vector<BattleItem*>::const_iterator i = _inventory.begin(); i != _inventory.end(); ++i)
-	{
-		if ((*i)->getRules()->getBattleType() == BT_GRENADE)
-		{
-			return *i;
-		}
-	}
-
 	// kL_begin: BattleUnit::getGrenadeFromBelt(), or hand.
 	BattleItem* handgrenade = getItem("STR_RIGHT_HAND");
 	if (!handgrenade
@@ -2266,6 +2258,17 @@ BattleItem* BattleUnit::getGrenadeFromBelt() const
 		return handgrenade;
 	}
 	// kL_end.
+
+	for (std::vector<BattleItem*>::const_iterator
+			i = _inventory.begin();
+			i != _inventory.end();
+			++i)
+	{
+		if ((*i)->getRules()->getBattleType() == BT_GRENADE)
+		{
+			return *i;
+		}
+	}
 
 	return 0;
 }
@@ -2415,7 +2418,9 @@ bool BattleUnit::postMissionProcedures(SavedGame* geoscape)
 	const UnitStats caps = s->getRules()->getStatCaps();
 
 	int healthLoss = stats->health - _health;
-	s->setWoundRecovery(RNG::generate((int)((double)healthLoss * 0.5), (int)((double)healthLoss * 1.5)));
+	s->setWoundRecovery(RNG::generate(
+							static_cast<int>((static_cast<double>(healthLoss) * 0.5)),
+							static_cast<int>((static_cast<double>(healthLoss) * 1.5))));
 
 	if (_expBravery && stats->bravery < caps.bravery)
 	{
@@ -2485,16 +2490,18 @@ bool BattleUnit::postMissionProcedures(SavedGame* geoscape)
 int BattleUnit::improveStat(int exp)
 {
 	double tier = 4.0;
+
 	if (exp <= 10)
 	{
 		tier = 3.0;
+
 		if (exp <= 5)
 		{
-			tier = exp > 2 ? 2.0 : 1.0;
+			tier = exp > 2? 2.0: 1.0;
 		}
 	}
 
-	return (int)((tier / 2.0) + RNG::generate(0.0, tier));
+	return static_cast<int>((tier / 2.0) + RNG::generate(0.0, tier));
 }
 
 /**
@@ -2510,7 +2517,7 @@ int BattleUnit::getMiniMapSpriteIndex() const
 	// * 9-11  : Item
 	// * 12-23 : Xcom HWP
 	// * 24-35 : Alien big terror unit(cyberdisk, ...)
-	if (isOut())
+	if (isOut(true, true))
 	{
 		return 9;
 	}

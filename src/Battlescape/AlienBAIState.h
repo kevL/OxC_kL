@@ -50,6 +50,7 @@ protected:
 	int _AIMode, _intelligence, _closestDist;
 	Node* _fromNode, * _toNode;
 
+
 	public:
 		/// Creates a new AlienBAIState linked to the game and a certain unit.
 		AlienBAIState(

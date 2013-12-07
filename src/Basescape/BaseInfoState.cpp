@@ -18,25 +18,31 @@
  */
 
 #include "BaseInfoState.h"
+
 #include <sstream>
-#include "../Engine/Game.h"
-#include "../Engine/Action.h"
-#include "../Resource/ResourcePack.h"
-#include "../Engine/Language.h"
-#include "../Engine/Palette.h"
-#include "../Engine/Options.h"
-#include "../Interface/Bar.h"
-#include "../Interface/TextButton.h"
-#include "../Interface/Text.h"
-#include "../Interface/TextEdit.h"
-#include "../Engine/Surface.h"
+
+#include "BasescapeState.h"
 #include "MiniBaseView.h"
+#include "MonthlyCostsState.h"
+#include "StoresState.h"
+#include "TransfersState.h"
+
+#include "../Engine/Action.h"
+#include "../Engine/Game.h"
+#include "../Engine/Language.h"
+#include "../Engine/Options.h"
+#include "../Engine/Palette.h"
+#include "../Engine/Surface.h"
+
+#include "../Interface/Bar.h"
+#include "../Interface/Text.h"
+#include "../Interface/TextButton.h"
+#include "../Interface/TextEdit.h"
+
+#include "../Resource/ResourcePack.h"
+
 #include "../Savegame/Base.h"
 #include "../Savegame/SavedGame.h"
-#include "MonthlyCostsState.h"
-#include "TransfersState.h"
-#include "StoresState.h"
-#include "BasescapeState.h"
 
 
 namespace OpenXcom

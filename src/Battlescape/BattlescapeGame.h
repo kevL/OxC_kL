@@ -20,27 +20,30 @@
 #ifndef OPENXCOM_BATTLESCAPEGAME_H
 #define OPENXCOM_BATTLESCAPEGAME_H
 
-#include "Position.h"
-#include <SDL.h>
-#include <string>
 #include <list>
+#include <string>
 #include <vector>
+
+#include <SDL.h>
+
+#include "Position.h"
 
 
 namespace OpenXcom
 {
 
-class BattleUnit;
-class SavedBattleGame;
 class BattleItem;
-class BattleState;
 class BattlescapeState;
-class ResourcePack;
-class Map;
-class TileEngine;
-class Pathfinding;
-class Ruleset;
+class BattleState;
+class BattleUnit;
 class InfoboxOKState;
+class Map;
+class Pathfinding;
+class ResourcePack;
+class Ruleset;
+class SavedBattleGame;
+class TileEngine;
+
 
 enum BattleActionType
 {
@@ -60,6 +63,7 @@ enum BattleActionType
 	BA_PANIC,		// 13
 	BA_RETHINK		// 14
 };
+
 
 struct BattleAction
 {
@@ -134,6 +138,7 @@ private:
 	void showInfoBoxQueue();
 	///
 	bool _playedAggroSound, _endTurnRequested, _kneelReserved;
+
 
 	public:
 		/// Creates the BattlescapeGame state.

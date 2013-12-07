@@ -64,7 +64,7 @@ UfopaediaStartState::UfopaediaStartState(Game* game)
 	_window		= new Window(this, 256, 180, 32, 10, POPUP_BOTH);
 	_txtTitle	= new Text(224, 17, 48, 24);
 
-	int y = 48;
+	int y = 47;
 	for (int
 			i = 0;
 			i < NUM_SECTIONS;
@@ -73,7 +73,7 @@ UfopaediaStartState::UfopaediaStartState(Game* game)
 		_btnSection[i] = new TextButton(224, 12, 48, y);
 		y += 13;
 	}
-	_btnOk = new TextButton(112, 16, 104, y + 1);
+	_btnOk = new TextButton(112, 16, 104, y + 2);
 
 
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());

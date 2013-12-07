@@ -17,20 +17,26 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <sstream>
 #include "PsiTrainingState.h"
+
+#include <sstream>
+
+#include "AllocatePsiTrainingState.h"
+#include "GeoscapeState.h"
+
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
+#include "../Engine/Options.h"
 #include "../Engine/Palette.h"
+
+#include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
-#include "../Interface/Text.h"
-#include "../Savegame/SavedGame.h"
+
+#include "../Resource/ResourcePack.h"
+
 #include "../Savegame/Base.h"
-#include "GeoscapeState.h"
-#include "AllocatePsiTrainingState.h"
-#include "../Engine/Options.h"
+#include "../Savegame/SavedGame.h"
 
 
 namespace OpenXcom
@@ -58,7 +64,10 @@ PsiTrainingState::PsiTrainingState(Game* game)
 
 
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)), Palette::backPos, 16);
+	_game->setPalette(
+				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)),
+				Palette::backPos,
+				16);
 
 	add(_window);
 	add(_btnOk);
@@ -79,7 +88,10 @@ PsiTrainingState::PsiTrainingState(Game* game)
 	_txtTitle->setText(tr("STR_PSIONIC_TRAINING"));
 
 	int buttons = 0;
-	for (std::vector<Base*>::const_iterator b = _game->getSavedGame()->getBases()->begin(); b != _game->getSavedGame()->getBases()->end(); ++b)
+	for (std::vector<Base*>::const_iterator
+			b = _game->getSavedGame()->getBases()->begin();
+			b != _game->getSavedGame()->getBases()->end();
+			++b)
 	{
 		if ((*b)->getAvailablePsiLabs())
 		{
@@ -92,6 +104,7 @@ PsiTrainingState::PsiTrainingState(Game* game)
 					_btnBase1->onMouseClick((ActionHandler)&PsiTrainingState::btnBase1Click);
 					_btnBase1->setText((*b)->getName());
 					_base1 = (*b);
+
 					add(_btnBase1);
 				break;
 				case 2:
@@ -100,6 +113,7 @@ PsiTrainingState::PsiTrainingState(Game* game)
 					_btnBase2->setText((*b)->getName());
 					_btnBase2->onMouseClick((ActionHandler)&PsiTrainingState::btnBase2Click);
 					_base2 = (*b);
+
 					add(_btnBase2);
 				break;
 				case 3:
@@ -108,6 +122,7 @@ PsiTrainingState::PsiTrainingState(Game* game)
 					_btnBase3->setText((*b)->getName());
 					_btnBase3->onMouseClick((ActionHandler)&PsiTrainingState::btnBase3Click);
 					_base3 = (*b);
+
 					add(_btnBase3);
 				break;
 				case 4:
@@ -116,6 +131,7 @@ PsiTrainingState::PsiTrainingState(Game* game)
 					_btnBase4->setText((*b)->getName());
 					_btnBase4->onMouseClick((ActionHandler)&PsiTrainingState::btnBase4Click);
 					_base4 = (*b);
+
 					add(_btnBase4);
 				break;
 				case 5:
@@ -124,6 +140,7 @@ PsiTrainingState::PsiTrainingState(Game* game)
 					_btnBase5->setText((*b)->getName());
 					_btnBase5->onMouseClick((ActionHandler)&PsiTrainingState::btnBase5Click);
 					_base5 = (*b);
+
 					add(_btnBase5);
 				break;
 				case 6:
@@ -132,6 +149,7 @@ PsiTrainingState::PsiTrainingState(Game* game)
 					_btnBase6->setText((*b)->getName());
 					_btnBase6->onMouseClick((ActionHandler)&PsiTrainingState::btnBase6Click);
 					_base6 = (*b);
+
 					add(_btnBase6);
 				break;
 				case 7:
@@ -140,6 +158,7 @@ PsiTrainingState::PsiTrainingState(Game* game)
 					_btnBase7->setText((*b)->getName());
 					_btnBase7->onMouseClick((ActionHandler)&PsiTrainingState::btnBase7Click);
 					_base7 = (*b);
+
 					add(_btnBase7);
 				break;
 				case 8:
@@ -148,6 +167,7 @@ PsiTrainingState::PsiTrainingState(Game* game)
 					_btnBase8->setText((*b)->getName());
 					_btnBase8->onMouseClick((ActionHandler)&PsiTrainingState::btnBase8Click);
 					_base8 = (*b);
+
 					add(_btnBase8);
 				break;
 
@@ -172,7 +192,10 @@ PsiTrainingState::~PsiTrainingState()
  */
 void PsiTrainingState::init()
 {
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)), Palette::backPos, 16);
+	_game->setPalette(
+				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)),
+				Palette::backPos,
+				16);
 }
 
 /**

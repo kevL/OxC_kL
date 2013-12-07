@@ -18,20 +18,25 @@
  */
 
 #include "BaseView.h"
-#include <sstream>
+
 #include <cmath>
-#include "../Engine/SurfaceSet.h"
+#include <limits>
+#include <sstream>
+
 #include "../Engine/Action.h"
-#include "../Savegame/Base.h"
-#include "../Savegame/BaseFacility.h"
-#include "../Ruleset/RuleBaseFacility.h"
-#include "../Savegame/Craft.h"
-#include "../Ruleset/RuleCraft.h"
-#include "../Interface/Text.h"
+#include "../Engine/Options.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Timer.h"
-#include "../Engine/Options.h"
-#include <limits>
+#include "../Engine/SurfaceSet.h"
+
+#include "../Interface/Text.h"
+
+#include "../Ruleset/RuleBaseFacility.h"
+#include "../Ruleset/RuleCraft.h"
+
+#include "../Savegame/Base.h"
+#include "../Savegame/BaseFacility.h"
+#include "../Savegame/Craft.h"
 
 
 namespace OpenXcom

@@ -26,11 +26,11 @@
 namespace OpenXcom
 {
 
-class TextButton;
-class Window;
-class Text;
-class TextList;
 class Base;
+class Text;
+class TextButton;
+class TextList;
+class Window;
 
 /**
  * Soldiers screen that lets the player
@@ -52,9 +52,10 @@ private:
 		SoldiersState(Game* game, Base* base);
 		/// Cleans up the Soldiers state.
 		~SoldiersState();
-		/// Updates the soldier names.
 
+		/// Updates the soldier names.
 		void init();
+
 		/// Handler for clicking the OK button.
 		void btnOkClick(Action* action);
 		/// Handler for clicking the PsiTraining button.
@@ -64,7 +65,7 @@ private:
 		/// Handler for clicking the Memorial button.
 		void btnMemorialClick(Action* action);
 		/// Handler for clicking the Soldiers list.
-		void lstSoldiersClick(Action *action);
+		void lstSoldiersClick(Action* action);
 
 		/// Handler for clicking the Soldiers reordering button.
 		void lstItemsLeftArrowClick_Soldier(Action* action);

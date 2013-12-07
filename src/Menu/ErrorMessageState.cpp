@@ -18,14 +18,17 @@
  */
 
 #include "ErrorMessageState.h"
+
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
+#include "../Engine/Options.h"
 #include "../Engine/Palette.h"
+
+#include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
-#include "../Interface/Text.h"
-#include "../Engine/Options.h"
+
+#include "../Resource/ResourcePack.h"
 
 
 namespace OpenXcom
@@ -76,7 +79,8 @@ void ErrorMessageState::create(const std::string& str, const std::wstring& wstr,
 	_screen = false;
 
 	_window		= new Window(this, 256, 160, 32, 20, POPUP_BOTH);
-	_txtMessage	= new Text(246, 120, 37, 30);
+//kL	_txtMessage	= new Text(246, 120, 37, 30);
+	_txtMessage	= new Text(200, 120, 60, 30);
 	_btnOk		= new TextButton(120, 18, 100, 154);
 
 

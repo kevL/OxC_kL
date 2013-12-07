@@ -404,8 +404,15 @@ void BasescapeState::viewLeftClick(Action*)
 	if (fac != 0)
 	{
 		// Pre-calculate values to ensure base stays connected
-		int x = -1, y = -1, squares = 0;
-		for (std::vector<BaseFacility*>::iterator i = _base->getFacilities()->begin(); i != _base->getFacilities()->end(); ++i)
+		int
+			x = -1,
+			y = -1,
+			squares = 0;
+
+		for (std::vector<BaseFacility*>::iterator
+				i = _base->getFacilities()->begin();
+				i != _base->getFacilities()->end();
+				++i)
 		{
 			if ((*i)->getRules()->isLift())
 			{
@@ -418,15 +425,24 @@ void BasescapeState::viewLeftClick(Action*)
 
 		squares -= fac->getRules()->getSize() * fac->getRules()->getSize();
 
-		// Is facility in use?
-		if (fac->inUse())
+		if (fac->inUse()) // facility in Use.
 		{
-			_game->pushState(new ErrorMessageState(_game, "STR_FACILITY_IN_USE", Palette::blockOffset(15)+1, "BACK13.SCR", 6));
+			_game->pushState(new ErrorMessageState(
+												_game,
+												"STR_FACILITY_IN_USE",
+												Palette::blockOffset(15)+1,
+												"BACK13.SCR",
+												6));
 		}
-		// Would base become disconnected? (occupied squares connected to Access Lift < total squares occupied by base)
+		// disconnected facilities. ( occupied squares connected to Access Lift < total squares occupied by base )
 		else if (_view->countConnected(x, y, 0, fac) < squares)
 		{
-			_game->pushState(new ErrorMessageState(_game, "STR_CANNOT_DISMANTLE_FACILITY", Palette::blockOffset(15)+1, "BACK13.SCR", 6));
+			_game->pushState(new ErrorMessageState(
+												_game,
+												"STR_CANNOT_DISMANTLE_FACILITY",
+												Palette::blockOffset(15)+1,
+												"BACK13.SCR",
+												6));
 		}
 		else
 		{

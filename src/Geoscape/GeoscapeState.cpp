@@ -220,7 +220,7 @@ GeoscapeState::GeoscapeState(Game* game)
 
 	_timeSpeed = _btn5Secs;
 
-	_timer				= new Timer(200);
+	_timer				= new Timer(180);
 
 	_zoomInEffectTimer	= new Timer(100);
 	_zoomOutEffectTimer	= new Timer(100);
