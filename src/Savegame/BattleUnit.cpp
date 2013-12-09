@@ -2070,8 +2070,8 @@ void BattleUnit::setTile(Tile* tile, Tile* tileBelow)
 	else if (_status == STATUS_UNCONSCIOUS) // <- kL_note: not so sure having flying unconscious soldiers is a good deal.
 	{
 		_floating =
-					_armor->getMovementType() == MT_FLY
-				&& _tile->hasNoFloor(tileBelow);
+				_armor->getMovementType() == MT_FLY
+					&& _tile->hasNoFloor(tileBelow);
 	}
 }
 

@@ -18,21 +18,26 @@
  */
 
 #include "MainMenuState.h"
-#include "../version.h"
-#include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
-#include "../Engine/Language.h"
-#include "../Engine/Palette.h"
-#include "../Interface/TextButton.h"
-#include "../Interface/Window.h"
-#include "../Interface/Text.h"
-#include "../Engine/Music.h"
-#include "NewGameState.h"
-#include "NewBattleState.h"
+
 #include "LoadState.h"
+#include "NewBattleState.h"
+#include "NewGameState.h"
 #include "OptionsState.h"
+
+#include "../version.h"
+
+#include "../Engine/Game.h"
+#include "../Engine/Language.h"
+#include "../Engine/Music.h"
+#include "../Engine/Palette.h"
+
 #include "../Interface/Cursor.h"
 #include "../Interface/FpsCounter.h"
+#include "../Interface/Text.h"
+#include "../Interface/TextButton.h"
+#include "../Interface/Window.h"
+
+#include "../Resource/ResourcePack.h"
 
 
 namespace OpenXcom
@@ -60,7 +65,10 @@ MainMenuState::MainMenuState(Game *game)
 
 
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
+	_game->setPalette(
+					_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)),
+					Palette::backPos,
+					16);
 
 	add(_window);
 	add(_btnNewGame);
@@ -125,7 +133,10 @@ MainMenuState::~MainMenuState()
  */
 void MainMenuState::init()
 {
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
+	_game->setPalette(
+				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)),
+				Palette::backPos,
+				16);
 }
 
 /**

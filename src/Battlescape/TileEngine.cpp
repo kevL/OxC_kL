@@ -1839,7 +1839,12 @@ BattleUnit* TileEngine::hit(
  * @param maxRadius, The maximum radius othe explosion.
  * @param unit, The unit that caused the explosion.
  */
-void TileEngine::explode(const Position& voxelTarget, int power, ItemDamageType type, int maxRadius, BattleUnit* unit)
+void TileEngine::explode(
+			const Position& voxelTarget,
+			int power,
+			ItemDamageType type,
+			int maxRadius,
+			BattleUnit* unit)
 {
 	Log(LOG_INFO) << "TileEngine::explode() power = " << power << " ; type = " << (int)type << " ; maxRadius = " << maxRadius;
 
@@ -1969,18 +1974,27 @@ void TileEngine::explode(const Position& voxelTarget, int power, ItemDamageType 
 							}
 						}
 
-						if (type == DT_HE) // power 50 - 150%
+						if (type == DT_HE) // power 50 - 150%, 60% of that if kneeled.
 						{
 							//Log(LOG_INFO) << ". . type == DT_HE";
 
-							if (dest->getUnit())
+							BattleUnit* targetUnit = dest->getUnit();
+
+							if (targetUnit)
 							{
-								int powerUnit = static_cast<int>(
+								int powerVsUnit = static_cast<int>(
 										RNG::generate(static_cast<float>(power_) * 0.5f, static_cast<float>(power_) * 1.5f));
-								Log(LOG_INFO) << ". . . powerUnit = " << powerUnit << " DT_HE";
-								dest->getUnit()->damage(
+								Log(LOG_INFO) << ". . . powerVsUnit = " << powerVsUnit << " DT_HE";
+	
+								if (targetUnit->isKneeled())
+								{
+									powerVsUnit = powerVsUnit * 3 / 5;
+									Log(LOG_INFO) << ". . . powerVsUnit(kneeled) = " << powerVsUnit << " DT_HE";
+								}
+
+								targetUnit->damage(
 										Position(0, 0, 0),
-										powerUnit,
+										powerVsUnit,
 										type);
 							}
 

@@ -229,7 +229,7 @@ void ManufactureState::fillProductionList()
 		if (Options::getBool("allowAutoSellProduction")
 			&& (*iter)->getAmountTotal() == std::numeric_limits<int>::max())
 		{
-			s2 << "$profit$";
+			s2 << "$$";
 		}
 		else
 			s2 << (*iter)->getAmountTotal();

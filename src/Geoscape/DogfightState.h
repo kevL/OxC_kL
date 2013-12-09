@@ -31,15 +31,16 @@ namespace OpenXcom
 
 const int STANDOFF_DIST = 560;
 
-class ImageButton;
-class Text;
-class Surface;
-class InteractiveSurface;
-class Timer;
-class Globe;
 class Craft;
-class Ufo;
 class CraftWeaponProjectile;
+class Globe;
+class ImageButton;
+class InteractiveSurface;
+class Surface;
+class Text;
+class Timer;
+class Ufo;
+
 
 /**
  * Shows a dogfight (interception) between a player craft and an UFO.
@@ -53,30 +54,89 @@ private:
 	static const int _projectileBlobs[4][6][3];
 	static const int _timeScale;
 
-	bool _end, _destroyUfo, _destroyCraft, _ufoBreakingOff, _weapon1Enabled, _weapon2Enabled, _minimized, _endDogfight;
-	int _timeout, _currentDist, _targetDist, _currentRadius, _ufoFireInterval, _ufoHitFrame;
-	int _ufoSize, _craftHeight, _currentCraftDamageColor, _interceptionsCount, _interceptionNumber;
-	int _x, _y, _minimizedIconX, _minimizedIconY;
+	bool
+		_end,
+		_destroyUfo,
+		_destroyCraft,
+		_ufoBreakingOff,
+		_weapon1Enabled,
+		_weapon2Enabled,
+		_minimized,
+		_endDogfight;
+	int
+		_timeout,
+		_currentDist,
+		_targetDist,
+		_currentRadius,
+		_ufoFireInterval,
+		_ufoHitFrame;
+	int
+		_ufoSize,
+		_craftHeight,
+		_currentCraftDamageColor,
+		_interceptionsCount,
+		_interceptionNumber;
+	int
+		_x,
+		_y,
+		_minimizedIconX,
+		_minimizedIconY;
 
 	std::vector<CraftWeaponProjectile*> _projectiles;
 
-	Timer* _animTimer, * _moveTimer, * _w1Timer, * _w2Timer, * _ufoWtimer, * _ufoEscapeTimer, * _craftDamageAnimTimer;
-	Surface* _window, * _battle, * _range1, * _range2, * _damage;
-	InteractiveSurface* _btnMinimize, * _preview, * _weapon1, * _weapon2;
-	ImageButton* _btnStandoff, * _btnCautious, * _btnStandard, * _btnAggressive, * _btnDisengage, * _btnUfo;
-	ImageButton* _mode;
-	InteractiveSurface* _btnMinimizedIcon;
-	Text* _txtAmmo1, * _txtAmmo2, * _txtDistance, * _txtStatus, * _txtInterceptionNumber;
-	Globe* _globe;
-	Craft* _craft;
-	Ufo* _ufo;
+	Craft
+		* _craft;
+	Globe
+		* _globe;
+	ImageButton
+		* _btnStandoff,
+		* _btnCautious,
+		* _btnStandard,
+		* _btnAggressive,
+		* _btnDisengage,
+		* _btnUfo;
+	ImageButton
+		* _mode;
+	InteractiveSurface
+		* _btnMinimize,
+		* _preview,
+		* _weapon1,
+		* _weapon2;
+	InteractiveSurface
+		* _btnMinimizedIcon;
+	Surface
+		* _window,
+		* _battle,
+		* _range1,
+		* _range2,
+		* _damage;
+	Text
+		* _txtAmmo1,
+		* _txtAmmo2,
+		* _txtDistance,
+		* _txtStatus,
+		* _txtInterceptionNumber;
+	Timer
+		* _animTimer,
+		* _moveTimer,
+		* _w1Timer,
+		* _w2Timer,
+		* _ufoWtimer,
+		* _ufoEscapeTimer,
+		* _craftDamageAnimTimer;
+	Ufo
+		* _ufo;
 
 	// Ends the dogfight.
 	void endDogfight();
 
 	public:
 		/// Creates the Dogfight state.
-		DogfightState(Game* game, Globe* globe, Craft* craft, Ufo* ufo);
+		DogfightState(
+					Game* game,
+					Globe* globe,
+					Craft* craft,
+					Ufo* ufo);
 		/// Cleans up the Dogfight state.
 		~DogfightState();
 

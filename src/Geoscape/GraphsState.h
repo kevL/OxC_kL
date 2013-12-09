@@ -28,15 +28,17 @@
 namespace OpenXcom
 {
 
-class Surface;
 class InteractiveSurface;
+class NumberText; // kL
+class Region;
+class Surface;
 class Text;
 class TextButton;
-class ToggleTextButton;
 class TextList;
-class Region;
-class NumberText; // kL
+class ToggleTextButton;
+
 struct GraphBtnInfo;
+
 
 /**
  * Graphs screen for displaying graphs of various
@@ -46,33 +48,67 @@ class GraphsState
 	:
 		public State
 {
+
 private:
-	InteractiveSurface* _bg;
-	InteractiveSurface* _btnGeoscape;
-	InteractiveSurface* _btnXcomCountry, * _btnUfoCountry;
-	InteractiveSurface* _btnXcomRegion, * _btnUfoRegion;
-	InteractiveSurface* _btnIncome, * _btnFinance;
-	Text* _txtTitle, * _txtFactor;
-	TextList* _txtMonths, * _txtYears;
-	ToggleTextButton* _btnRegionTotal, * _btnCountryTotal;
-//	NumberText* _numRegionAlien, * _numRegionXcom, * _numCountryAlien, * _numCountryXcom;
+	static const unsigned int
+		GRAPH_MAX_BUTTONS = 16;
 
-	std::vector<GraphBtnInfo*> _regionToggles, _countryToggles;
-	std::vector<Surface*> _alienRegionLines, _alienCountryLines;
-	std::vector<Surface*> _xcomRegionLines, _xcomCountryLines;
-	std::vector<Surface*> _financeLines, _incomeLines;
-	std::vector<Text*> _txtScale;
-	std::vector<ToggleTextButton*> _btnRegions, _btnCountries, _btnFinances;
-	std::vector<NumberText*> _numRegionActivityAlien, _numRegionActivityXCom, _numCountryActivityAlien, _numCountryActivityXCom;
-
-	std::vector<bool> _financeToggles;
-
-	bool _alien, _income, _country, _finance;
-
-	static const unsigned int GRAPH_MAX_BUTTONS = 16;
+	bool
+		_alien,
+		_country,
+		_finance,
+		_income;
 
 	/// will be only between 0 and size()
-	unsigned int _btnRegionsOffset, _btnCountriesOffset;
+	unsigned int
+		_btnRegionsOffset,
+		_btnCountriesOffset;
+
+	InteractiveSurface
+		* _bg,
+		* _btnFinance,
+		* _btnGeoscape,
+		* _btnIncome,
+		* _btnUfoCountry,
+		* _btnUfoRegion,
+		* _btnXcomCountry,
+		* _btnXcomRegion;
+	NumberText
+		* _numScore;
+	Text
+		* _txtTitle,
+		* _txtFactor;
+	TextList
+		* _txtMonths,
+		* _txtYears;
+	ToggleTextButton
+		* _btnRegionTotal,
+		* _btnCountryTotal;
+
+	std::vector<bool>
+		_financeToggles;
+	std::vector<GraphBtnInfo*>
+		_regionToggles,
+		_countryToggles;
+	std::vector<NumberText*>
+		_numCountryActivityAlien,
+		_numCountryActivityXCom,
+		_numRegionActivityAlien,
+		_numRegionActivityXCom;
+	std::vector<Surface*>
+		_alienCountryLines,
+		_alienRegionLines,
+		_financeLines,
+		_incomeLines,
+		_xcomCountryLines,
+		_xcomRegionLines;
+	std::vector<Text*>
+		_txtScale;
+	std::vector<ToggleTextButton*>
+		_btnRegions,
+		_btnCountries,
+		_btnFinances;
+
 	/// Scroll button lists: scroll and repaint buttons functions
 	void scrollButtons(
 			std::vector<GraphBtnInfo*>& toggles,
@@ -80,9 +116,12 @@ private:
 			unsigned int& offset,
 			int step);
 	///
-	void updateButton(GraphBtnInfo* from, ToggleTextButton* to);
+	void updateButton(
+			GraphBtnInfo* from,
+			ToggleTextButton* to);
 	/// Show the latest month's value as NumberText beside the buttons.
 	void latestTally();
+
 
 	public:
 		/// Creates the Graphs state.
@@ -116,7 +155,11 @@ private:
 		/// Reset all the elements on screen.
 		void resetScreen();
 		/// Update the scale 
-		void updateScale(double lowerLimit, double upperLimit, int grid = 9);
+		void updateScale(
+				double lowerLimit,
+				double upperLimit,
+				int grid = 9);
+
 		/// Decide which lines to draw
 		void drawLines();
 		/// Draw Region Lines.

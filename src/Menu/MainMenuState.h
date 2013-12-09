@@ -26,9 +26,10 @@
 namespace OpenXcom
 {
 
+class Text;
 class TextButton;
 class Window;
-class Text;
+
 
 /**
  * Main Menu window displayed when first
@@ -39,9 +40,17 @@ class MainMenuState
 		public State
 {
 private:
-	TextButton* _btnNewGame, * _btnNewBattle, * _btnLoad, * _btnOptions, * _btnQuit;
-	Window* _window;
-	Text* _txtTitle;
+	TextButton
+		* _btnNewGame,
+		* _btnNewBattle,
+		* _btnLoad,
+		* _btnOptions,
+		* _btnQuit;
+	Window
+		* _window;
+	Text
+		* _txtTitle;
+
 
 	public:
 		/// Creates the Main Menu state.

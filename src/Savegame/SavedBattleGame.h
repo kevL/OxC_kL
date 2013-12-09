@@ -20,29 +20,33 @@
 #ifndef OPENXCOM_SAVEDBATTLEGAME_H
 #define OPENXCOM_SAVEDBATTLEGAME_H
 
-#include <iostream>
 #include <algorithm>
-#include <vector>
+#include <iostream>
 #include <string>
+#include <vector>
+
 #include <SDL.h>
+
 #include <yaml-cpp/yaml.h>
+
 #include "BattleUnit.h"
 
 
 namespace OpenXcom
 {
 
-class Tile;
-class SavedGame;
+class BattleItem;
+class BattlescapeState;
+class Game;
 class MapDataSet;
 class Node;
-class Game;
-class BattlescapeState;
-class Position;
 class Pathfinding;
-class TileEngine;
-class BattleItem;
+class Position;
 class Ruleset;
+class SavedGame;
+class Tile;
+class TileEngine;
+
 
 /**
  * The battlescape data that gets written to disk when the game is saved.
@@ -51,37 +55,76 @@ class Ruleset;
  */
 class SavedBattleGame
 {
+
 private:
-	BattlescapeState* _battleState;
-	int _mapsize_x, _mapsize_y, _mapsize_z;
-	std::vector<MapDataSet*> _mapDataSets;
-	Tile** _tiles;
-	BattleUnit* _selectedUnit, * _lastSelectedUnit;
-	std::vector<Node*> _nodes;
-	std::vector<BattleUnit*> _units;
-	std::vector<BattleItem*> _items;
-	Pathfinding* _pathfinding;
-	TileEngine* _tileEngine;
-	std::string _missionType;
-	int _globalShade;
-	UnitFaction _side;
-	int _turn;
-	bool _debugMode;
-	bool _aborted;
-	int _itemId;
-	Uint8 _dragButton;			// this is a cache for Options::getString("battleScrollDragButton")
-	bool _dragInvert;			// this is a cache for Options::getString("battleScrollDragInvert")
-	int _dragTimeTolerance;		// this is a cache for Options::getInt("battleScrollDragTimeTolerance")
-	int _dragPixelTolerance;	// this is a cache for Options::getInt("battleScrollDragPixelTolerance")
-	bool _objectiveDestroyed;
+	int
+		_globalShade,
+		_itemId,
+		_mapsize_x,
+		_mapsize_y,
+		_mapsize_z,
+		_turn;
+	bool
+		_aborted,
+		_debugMode,
+		_cheating,
+		_kneelReserved,
+		_objectiveDestroyed,
+		_sneaky,
+		_strafeEnabled,
+		_traceAI,
+		_unitsFalling;
+
+	BattleActionType
+		_tuReserved;
+	UnitFaction
+		_side;
+
+	BattlescapeState
+		* _battleState;
+	BattleUnit
+		* _selectedUnit,
+		* _lastSelectedUnit;
+	Pathfinding
+		* _pathfinding;
+	Tile
+		** _tiles;
+	TileEngine
+		* _tileEngine;
+
 //kL	std::vector<BattleUnit*> _exposedUnits;
-	std::list<BattleUnit*> _fallingUnits;
-	bool _unitsFalling, _strafeEnabled, _sneaky, _traceAI, _cheating;
-	std::vector<Position> _tileSearch;
-	BattleActionType _tuReserved;
-	bool _kneelReserved;
+	std::string
+		_missionType;
+
+	std::list<BattleUnit*>
+		_fallingUnits;
+
+	std::vector<BattleItem*>
+		_items;
+	std::vector<BattleUnit*>
+		_units;
+	std::vector<MapDataSet*>
+		_mapDataSets;
+	std::vector<Node*>
+		_nodes;
+	std::vector<Position>
+		_tileSearch;
+
+	Uint8
+		_dragButton;			// this is a cache for Options::getString("battleScrollDragButton")
+	bool
+		_dragInvert;			// this is a cache for Options::getString("battleScrollDragInvert")
+	int
+		_dragTimeTolerance,		// this is a cache for Options::getInt("battleScrollDragTimeTolerance")
+		_dragPixelTolerance;	// this is a cache for Options::getInt("battleScrollDragPixelTolerance")
+
 	/// Selects a soldier.
-	BattleUnit* selectPlayerUnit(int dir, bool checkReselect = false, bool setReselect = false, bool checkInventory = false);
+	BattleUnit* selectPlayerUnit(
+			int dir,
+			bool checkReselect = false,
+			bool setReselect = false,
+			bool checkInventory = false);
+
 
 	public:
 		/// Creates a new battle save, based on the current generic save.
@@ -90,12 +133,18 @@ private:
 		~SavedBattleGame();
 
 		/// Loads a saved battle game from YAML.
-		void load(const YAML::Node& node, Ruleset* rule, SavedGame* savedGame);
+		void load(
+				const YAML::Node& node,
+				Ruleset* rule,
+				SavedGame* savedGame);
 		/// Saves a saved battle game to YAML.
 		YAML::Node save() const;
 
 		/// Sets the dimensions of the map and initializes it.
-		void initMap(int mapsize_x, int mapsize_y, int mapsize_z);
+		void initMap(
+				int mapsize_x,
+				int mapsize_y,
+				int mapsize_z);
 		/// Initialises the pathfinding and tileengine.
 		void initUtilities(ResourcePack* res);
 		/// Gets the game's mapdatafiles.
@@ -133,7 +182,7 @@ private:
 		 */
 		inline int getTileIndex(const Position& pos) const
 		{
-			return pos.z * _mapsize_y * _mapsize_x + pos.y * _mapsize_x + pos.x;
+			return (pos.z * _mapsize_y * _mapsize_x) + (pos.y * _mapsize_x + pos.x);
 		}
 
 		/// Converts a tile index to its coordinates.
@@ -147,8 +196,12 @@ private:
 		 */
 		inline Tile* getTile(const Position& pos) const
 		{
-			if (pos.x < 0 || pos.y < 0 || pos.z < 0
-				|| pos.x >= _mapsize_x || pos.y >= _mapsize_y || pos.z >= _mapsize_z)
+			if (pos.x < 0
+				|| pos.y < 0
+				|| pos.z < 0
+				|| pos.x >= _mapsize_x
+				|| pos.y >= _mapsize_y
+				|| pos.z >= _mapsize_z)
 			{
 				return 0;
 			}
@@ -161,9 +214,15 @@ private:
 		/// Sets the currently selected unit.
 		void setSelectedUnit(BattleUnit* unit);
 		/// Selects the previous soldier.
-		BattleUnit* selectPreviousPlayerUnit(bool checkReselect = false, bool setReselect = false, bool checkInventory = false);
+		BattleUnit* selectPreviousPlayerUnit(
+				bool checkReselect = false,
+				bool setReselect = false,
+				bool checkInventory = false);
 		/// Selects the next soldier.
-		BattleUnit* selectNextPlayerUnit(bool checkReselect = false, bool setReselect = false, bool checkInventory = false);
+		BattleUnit* selectNextPlayerUnit(
+				bool checkReselect = false,
+				bool setReselect = false,
+				bool checkInventory = false);
 		/// Selects the unit with position on map.
 		BattleUnit* selectUnit(const Position& pos);
 		/// Gets the pathfinding object.

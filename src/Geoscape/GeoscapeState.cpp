@@ -2544,7 +2544,7 @@ void GeoscapeState::zoomInEffect()
 void GeoscapeState::zoomOutEffect()
 {
 	if (_globe->isZoomedOutToMax()
-		|| _game->getSavedGame()->getGlobeZoom() <= _zoomInter)		// kL
+		|| _game->getSavedGame()->getGlobeZoom() >= _zoomInter)		// kL
 	{
 		_zoomInter = 0;												// kL
 

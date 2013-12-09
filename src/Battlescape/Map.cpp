@@ -762,7 +762,8 @@ void Map::drawTerrain(Surface *surface)
 					if (unit
 						&& (unit->getVisible() || _save->getDebugMode()))
 					{
-						// the part is 0 for small units, large units have parts 1,2 & 3 depending on the relative x/y position of this tile vs the actual unit position.
+						// the part is 0 for small units, large units have parts 1,2 & 3 depending
+						// on the relative x/y position of this tile vs the actual unit position.
 						int part = 0;
 						part += tile->getPosition().x - unit->getPosition().x;
 						part += (tile->getPosition().y - unit->getPosition().y) * 2;
@@ -804,7 +805,8 @@ void Map::drawTerrain(Surface *surface)
 							&& ttile->getTerrainLevel() < 0
 							&& ttile->isDiscovered(2))
 						{
-							// the part is 0 for small units, large units have parts 1,2 & 3 depending on the relative x/y position of this tile vs the actual unit position.
+							// the part is 0 for small units, large units have parts 1,2 & 3 depending
+							// on the relative x/y position of this tile vs the actual unit position.
 							int part = 0;
 							part += ttile->getPosition().x - tunit->getPosition().x;
 							part += (ttile->getPosition().y - tunit->getPosition().y) * 2;
@@ -846,7 +848,8 @@ void Map::drawTerrain(Surface *surface)
 						frameNumber = 0;
 						if (!tile->getFire())
 						{
-							frameNumber = 8 + int(floor((tile->getSmoke() / 6.0) - 0.1)); // see http://www.ufopaedia.org/images/c/cb/Smoke.gif
+							// see http://www.ufopaedia.org/images/c/cb/Smoke.gif
+							frameNumber = 8 + static_cast<int>(floor((static_cast<double>(tile->getSmoke()) / 6.0) - 0.1));
 						}
 
 						if ((_animFrame / 2) + tile->getAnimationOffset() > 3)
@@ -1470,7 +1473,7 @@ void Map::cacheUnits()
 
 /**
  * Check if a certain unit needs to be redrawn.
- * @param unit Pointer to battleUnit.
+ * @param unit, Pointer to battleUnit.
  */
 void Map::cacheUnit(BattleUnit* unit)
 {

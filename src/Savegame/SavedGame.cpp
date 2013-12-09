@@ -18,39 +18,46 @@
  */
 
 #include "SavedGame.h"
-#include <fstream>
-#include <sstream>
-#include <iomanip>
+
 #include <algorithm>
+#include <fstream>
+#include <iomanip>
+#include <sstream>
+
 #include <yaml-cpp/yaml.h>
-#include "../version.h"
-#include "../Engine/Logger.h"
-#include "../Ruleset/Ruleset.h"
-#include "../Engine/RNG.h"
-#include "../Engine/Language.h"
-#include "../Interface/TextList.h"
-#include "../Engine/Exception.h"
-#include "../Engine/Options.h"
-#include "../Engine/CrossPlatform.h"
-#include "SavedBattleGame.h"
-#include "GameTime.h"
-#include "Country.h"
+
+#include "AlienBase.h"
+#include "AlienMission.h"
+#include "AlienStrategy.h"
 #include "Base.h"
+#include "Country.h"
 #include "Craft.h"
+#include "GameTime.h"
+#include "ItemContainer.h"
+#include "Production.h"
 #include "Region.h"
+#include "ResearchProject.h"
+#include "SavedBattleGame.h"
+#include "Soldier.h"
+#include "TerrorSite.h"
 #include "Ufo.h"
 #include "Waypoint.h"
-#include "../Ruleset/RuleResearch.h"
-#include "ResearchProject.h"
-#include "ItemContainer.h"
-#include "Soldier.h"
+
+#include "../version.h"
+
+#include "../Engine/CrossPlatform.h"
+#include "../Engine/Exception.h"
+#include "../Engine/Language.h"
+#include "../Engine/Logger.h"
+#include "../Engine/Options.h"
+#include "../Engine/RNG.h"
+
+#include "../Interface/TextList.h"
+
 #include "../Ruleset/RuleManufacture.h"
-#include "Production.h"
-#include "TerrorSite.h"
-#include "AlienBase.h"
-#include "AlienStrategy.h"
-#include "AlienMission.h"
 #include "../Ruleset/RuleRegion.h"
+#include "../Ruleset/RuleResearch.h"
+#include "../Ruleset/Ruleset.h"
 
 
 namespace OpenXcom

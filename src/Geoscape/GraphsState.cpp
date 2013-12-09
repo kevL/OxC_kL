@@ -92,6 +92,8 @@ GraphsState::GraphsState(Game* game)
 	_txtMonths		= new TextList(205, 8, 115, 183);
 	_txtYears		= new TextList(200, 8, 121, 191);
 
+	_numScore		= new NumberText(24, 16, 58, 83);
+
 
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_2")->getColors());
 	
@@ -107,6 +109,7 @@ GraphsState::GraphsState(Game* game)
 	add(_txtYears);
 	add(_txtTitle);
 	add(_txtFactor);
+	add(_numScore);
 
 
 	for (int
@@ -265,20 +268,17 @@ GraphsState::GraphsState(Game* game)
 			iter < 5;
 			++iter)
 	{
-		offset = iter;
-
-//kL		_btnFinances.push_back(new ToggleTextButton(85, 10, 0, offset * 10));
-		_btnFinances.push_back(new ToggleTextButton(82, 16, 0, offset * 16));		// kL
+		_btnFinances.push_back(new ToggleTextButton(82, 16, 0, iter * 16));
 		_financeToggles.push_back(false);
 
-		_btnFinances.at(offset)->setColor(Palette::blockOffset(9)+7);
-        _btnFinances.at(offset)->setInvertColor((offset * 4) - 42);
-		_btnFinances.at(offset)->onMousePress((ActionHandler)& GraphsState::btnFinanceListClick);
+		_btnFinances.at(iter)->setColor(Palette::blockOffset(9)+7);
+        _btnFinances.at(iter)->setInvertColor((iter * 4) - 42);
+		_btnFinances.at(iter)->onMousePress((ActionHandler)& GraphsState::btnFinanceListClick);
 
-		add(_btnFinances.at(offset));
+		add(_btnFinances.at(iter));
 
 		_financeLines.push_back(new Surface(320, 200, 0, 0));
-		add(_financeLines.at(offset));
+		add(_financeLines.at(iter));
 	}
 
 	_btnFinances.at(0)->setText(tr("STR_INCOME"));
@@ -741,6 +741,7 @@ void GraphsState::btnIncomeClick(Action*)
 	}
 
 	_btnCountryTotal->setVisible(true);
+
 	_txtTitle->setBig();
 	_txtTitle->setText(tr("STR_INCOME"));
 }
@@ -765,6 +766,8 @@ void GraphsState::btnFinanceClick(Action*)
 	{
 		(*iter)->setVisible(true);
 	}
+
+	_numScore->setVisible(true);
 
 	_txtTitle->setBig();
 	_txtTitle->setText(tr("STR_FINANCE"));
@@ -923,6 +926,7 @@ void GraphsState::resetScreen()
 	_btnRegionTotal->setVisible(false);
 	_btnCountryTotal->setVisible(false);
 	_txtFactor->setVisible(false);
+	_numScore->setVisible(false);
 }
 
 /**
@@ -1515,6 +1519,13 @@ void GraphsState::drawFinanceLines()
 				iter != _game->getSavedGame()->getRegions()->end();
 				++iter)
 			score[entry] += (*iter)->getActivityXcom().at(invertedEntry) - (*iter)->getActivityAlien().at(invertedEntry);
+
+		if (entry == 0) // values are stored backwards. So take 1st value for last.
+		{
+			_numScore->setColor(49); // should be medium cyan
+			_numScore->setValue(static_cast<unsigned int>(score[entry])); // heh, this could be signed/unsigned quirky!
+		}
+
 
 		if (_financeToggles.at(0))
 		{

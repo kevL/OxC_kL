@@ -17,34 +17,40 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <assert.h>
 #include <vector>
 #include <deque>
 #include <queue>
+
+#include <assert.h>
+
 #include "BattleItem.h"
+#include "Node.h"
 #include "SavedBattleGame.h"
 #include "SavedGame.h"
+#include "SerializationHelper.h"
 #include "Tile.h"
-#include "Node.h"
+
+#include "../Battlescape/AlienBAIState.h"
+#include "../Battlescape/CivilianBAIState.h"
+#include "../Battlescape/BattlescapeGame.h"
+#include "../Battlescape/BattlescapeState.h"
+#include "../Battlescape/Pathfinding.h"
+#include "../Battlescape/Position.h"
+#include "../Battlescape/TileEngine.h"
+
+#include "../Engine/Game.h"
+#include "../Engine/Language.h"
+#include "../Engine/Logger.h"
+#include "../Engine/Options.h"
+#include "../Engine/RNG.h"
+
+#include "../Resource/ResourcePack.h"
+
+#include "../Ruleset/Armor.h"
 #include "../Ruleset/MapDataSet.h"
 #include "../Ruleset/MCDPatch.h"
-#include "../Battlescape/Pathfinding.h"
-#include "../Battlescape/TileEngine.h"
-#include "../Battlescape/BattlescapeState.h"
-#include "../Battlescape/BattlescapeGame.h"
-#include "../Battlescape/Position.h"
-#include "../Resource/ResourcePack.h"
-#include "../Ruleset/Ruleset.h"
-#include "../Ruleset/Armor.h"
-#include "../Engine/Language.h"
-#include "../Engine/Game.h"
 #include "../Ruleset/RuleInventory.h"
-#include "../Battlescape/CivilianBAIState.h"
-#include "../Battlescape/AlienBAIState.h"
-#include "../Engine/RNG.h"
-#include "../Engine/Options.h"
-#include "../Engine/Logger.h"
-#include "SerializationHelper.h"
+#include "../Ruleset/Ruleset.h"
 
 
 namespace OpenXcom
@@ -1287,7 +1293,7 @@ Node* SavedBattleGame::getPatrolNode(bool scout, BattleUnit* unit, Node* fromNod
 	}
 
 	// scouts roam all over while all others shuffle around to adjacent nodes at most:
-	int const end = scout ? getNodes()->size() : fromNode->getNodeLinks()->size();
+	int const end = scout? getNodes()->size(): fromNode->getNodeLinks()->size();
 
 	for (int i = 0; i < end; ++i)
 	{
@@ -1330,7 +1336,7 @@ Node* SavedBattleGame::getPatrolNode(bool scout, BattleUnit* unit, Node* fromNod
 
 	if (compliantNodes.empty())
 	{
-		if (Options::getBool("traceAI")) { Log(LOG_INFO) << (scout ? "Scout " : "Guard ") << "found no patrol node! XXX XXX XXX"; }
+		if (Options::getBool("traceAI")) { Log(LOG_INFO) << (scout? "Scout ": "Guard ") << "found no patrol node! XXX XXX XXX"; }
 
 		if (unit->getArmor()->getSize() > 1 && !scout)
 		{
@@ -1502,7 +1508,8 @@ void SavedBattleGame::prepareNewTurn()
 
 /**
  * Checks for units that are unconcious and revives them if they shouldn't be.
- * kL, does this still need a check to see if the unit revives *on a floor* (if not, drop him/her down to a floor tile)
+ * kL, does this still need a check to see if the unit revives
+ * *on a floor* (if not, drop him/her down to a floor tile) <- yes, it does. (also raise up onto terrainLevel)
  * Revived units need a tile to stand on. If the unit's current position is occupied, then
  * all directions around the tile are searched for a free tile to place the unit in.
  * If no free tile is found the unit stays unconscious.
@@ -1542,7 +1549,13 @@ void SavedBattleGame::reviveUnconsciousUnits()
 					// recover from unconscious
 					(*i)->turn(false); // -> STATUS_STANDING
 //kL					(*i)->kneel(false);
-					(*i)->kneel(true);								// kL
+					if ((*i)->getOriginalFaction() == FACTION_PLAYER
+						&& (*i)->getArmor()->getSize() == 1)		// kL
+					{
+						(*i)->kneel(true);							// kL
+					}
+					//Map::cacheUnit(BattleUnit* unit)
+					//UnitSprite::setBattleUnit(BattleUnit* unit, int part)
 					(*i)->setCache(0);
 					(*i)->setDirection(RNG::generate(0, 7));		// kL
 					(*i)->setTimeUnits(0);							// kL
@@ -1565,7 +1578,10 @@ void SavedBattleGame::reviveUnconsciousUnits()
 void SavedBattleGame::removeUnconsciousBodyItem(BattleUnit* bu)
 {
 	// remove the unconscious body item corresponding to this unit
-	for (std::vector<BattleItem*>::iterator it = getItems()->begin(); it != getItems()->end(); )
+	for (std::vector<BattleItem*>::iterator
+			it = getItems()->begin();
+			it != getItems()->end();
+			)
 	{
 		if ((*it)->getUnit() == bu)
 		{
@@ -1580,10 +1596,10 @@ void SavedBattleGame::removeUnconsciousBodyItem(BattleUnit* bu)
 
 /**
  * Places units on the map. Handles large units that are placed on multiple tiles.
- * @param bu The unit to be placed.
- * @param position The position to place the unit.
- * @param testOnly If true then just checks if the unit can be placed at the position.
- * @return True if the unit could be successfully placed.
+ * @param bu, The unit to be placed.
+ * @param position, The position to place the unit.
+ * @param testOnly, If true then just checks if the unit can be placed at the position.
+ * @return, True if the unit could be successfully placed.
  */
 bool SavedBattleGame::setUnitPosition(BattleUnit* bu, const Position& position, bool testOnly)
 {
@@ -1987,9 +2003,9 @@ int SavedBattleGame::getMoraleModifier(BattleUnit* unit, bool xcom)
 
 /**
  * Places a unit on or near a position.
- * @param unit The unit to place.
- * @param entryPoint The position around which to attempt to place the unit.
- * @return True if the unit was successfully placed.
+ * @param unit, The unit to place.
+ * @param entryPoint, The position around which to attempt to place the unit.
+ * @return, True if the unit was successfully placed.
  */
 bool SavedBattleGame::placeUnitNearPosition(BattleUnit* unit, Position entryPoint)
 {
@@ -1998,7 +2014,10 @@ bool SavedBattleGame::placeUnitNearPosition(BattleUnit* unit, Position entryPoin
 		return true;
 	}
 
-	for (int dir = 0; dir <= 7; ++dir)
+	for (int
+			dir = 0;
+			dir <= 7;
+			++dir)
 	{
 		Position offset;
 		getPathfinding()->directionToVector(dir, &offset);
