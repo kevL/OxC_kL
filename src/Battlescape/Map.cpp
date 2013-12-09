@@ -88,7 +88,13 @@ bool kL_preReveal = true;		// kL
  * @param y Y position in pixels.
  * @param visibleMapHeight Current visible map height.
  */
-Map::Map(Game* game, int width, int height, int x, int y, int visibleMapHeight)
+Map::Map(
+			Game* game,
+			int width,
+			int height,
+			int x,
+			int y,
+			int visibleMapHeight)
 	:
 		InteractiveSurface(width, height, x, y),
 		_game(game),
@@ -111,8 +117,7 @@ Map::Map(Game* game, int width, int height, int x, int y, int visibleMapHeight)
 
 	if (Options::getBool("traceAI"))
 	{
-		// turn everything on because we want to see the markers.
-		_previewSetting = 3;
+		_previewSetting = 3; // turn everything on because we want to see the markers.
 	}
 
 	_res = _game->getResourcePack();
@@ -121,16 +126,26 @@ Map::Map(Game* game, int width, int height, int x, int y, int visibleMapHeight)
 
 	_save = _game->getSavedGame()->getSavedBattle();
 
-	// kL_note: "hidden movement" screen
-	_message = new BattlescapeMessage(320, visibleMapHeight < 200 ? visibleMapHeight : 200, Screen::getDX(), Screen::getDY());
+	_message = new BattlescapeMessage( // Hidden Movement... screen
+									320,
+									visibleMapHeight < 200? visibleMapHeight: 200,
+									Screen::getDX(),
+									Screen::getDY());
 
-	_camera = new Camera(_spriteWidth, _spriteHeight, _save->getMapSizeX(), _save->getMapSizeY(), _save->getMapSizeZ(), this, visibleMapHeight);
+	_camera = new Camera(
+					_spriteWidth,
+					_spriteHeight,
+					_save->getMapSizeX(),
+					_save->getMapSizeY(),
+					_save->getMapSizeZ(),
+					this,
+					visibleMapHeight);
 
 	_scrollMouseTimer = new Timer(SCROLL_INTERVAL);
-	_scrollMouseTimer->onTimer((SurfaceHandler)&Map::scrollMouse);
+	_scrollMouseTimer->onTimer((SurfaceHandler)& Map::scrollMouse);
 
 	_scrollKeyTimer = new Timer(SCROLL_INTERVAL);
-	_scrollKeyTimer->onTimer((SurfaceHandler)&Map::scrollKey);
+	_scrollKeyTimer->onTimer((SurfaceHandler)& Map::scrollKey);
 
 	_camera->setScrollTimer(_scrollMouseTimer, _scrollKeyTimer);
 }
@@ -207,18 +222,18 @@ void Map::draw()
 	Surface::draw();
 	Tile* t;
 
-	projectileInFOV = _save->getDebugMode();
+	_projectileInFOV = _save->getDebugMode();
 	if (_projectile)
 	{
 		t = _save->getTile(Position(_projectile->getPosition(0).x / 16, _projectile->getPosition(0).y / 16, _projectile->getPosition(0).z / 24));
 		if (_save->getSide() == FACTION_PLAYER
 			|| (t && t->getVisible()))
 		{
-			projectileInFOV = true;
+			_projectileInFOV = true;
 		}
 	}
 
-	explosionInFOV = _save->getDebugMode();
+	_explosionInFOV = _save->getDebugMode();
 	if (!_explosions.empty())
 	{
 		for (std::set<Explosion*>::iterator i = _explosions.begin(); i != _explosions.end(); ++i)
@@ -227,7 +242,7 @@ void Map::draw()
 			if (t
 				&& ((*i)->isBig() || t->getVisible()))
 			{
-				explosionInFOV = true;
+				_explosionInFOV = true;
 
 				break;
 			}
@@ -239,8 +254,8 @@ void Map::draw()
 		|| _unitDying
 		|| _save->getSelectedUnit() == 0
 		|| _save->getDebugMode()
-		|| projectileInFOV
-		|| explosionInFOV)
+		|| _projectileInFOV
+		|| _explosionInFOV)
 	{
 		drawTerrain(this);
 	} */
@@ -249,8 +264,8 @@ void Map::draw()
 		|| _unitDying
 		|| _save->getSelectedUnit() == 0
 		|| _save->getDebugMode()
-		|| projectileInFOV
-		|| explosionInFOV
+		|| _projectileInFOV
+		|| _explosionInFOV
 		|| (_reveal && !kL_preReveal))
 	{
 		if (_reveal && !kL_preReveal)
@@ -382,7 +397,7 @@ void Map::drawTerrain(Surface *surface)
 		// if the projectile is outside the viewport - center it back on it
 		_camera->convertVoxelToScreen(_projectile->getPosition(), &bulletPositionScreen);
 
-		if (projectileInFOV)
+		if (_projectileInFOV)
 		{
 			if (_launch)
 			{
@@ -392,7 +407,7 @@ void Map::drawTerrain(Surface *surface)
 						|| bulletPositionScreen.x > surface->getWidth()
 						|| bulletPositionScreen.y < 0
 						|| bulletPositionScreen.y > _visibleMapHeight)
-//kL					&& projectileInFOV)
+//kL					&& _projectileInFOV)
 				{
 					_camera->centerOnPosition(Position(bulletLowX, bulletLowY, bulletHighZ), false);
 				}
@@ -404,7 +419,7 @@ void Map::drawTerrain(Surface *surface)
 				{
 					newCam.z = bulletHighZ;
 
-//kL					if (projectileInFOV)
+//kL					if (_projectileInFOV)
 //					{
 					_camera->setMapOffset(newCam);
 					_camera->convertVoxelToScreen(_projectile->getPosition(), &bulletPositionScreen);
@@ -659,7 +674,7 @@ void Map::drawTerrain(Surface *surface)
 					}
 
 					// check if we got bullet && it is in Field Of View
-					if (_projectile && projectileInFOV)
+					if (_projectile && _projectileInFOV)
 					{
 						tmpSurface = 0;
 
@@ -1151,7 +1166,7 @@ void Map::drawTerrain(Surface *surface)
 	delete _numWaypid;
 
 	// check if we got big explosions
-	if (explosionInFOV)
+	if (_explosionInFOV)
 	{
 		for (std::set<Explosion*>::const_iterator
 				i = _explosions.begin();

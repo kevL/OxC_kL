@@ -37,6 +37,7 @@
 #include "../Battlescape/Pathfinding.h"
 #include "../Battlescape/Position.h"
 #include "../Battlescape/TileEngine.h"
+//#include "../Battlescape/UnitSprite.h" // kL, trying to redraw according to terrainLevel when revived.
 
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
@@ -1554,9 +1555,12 @@ void SavedBattleGame::reviveUnconsciousUnits()
 					{
 						(*i)->kneel(true);							// kL
 					}
-					//Map::cacheUnit(BattleUnit* unit)
-					//UnitSprite::setBattleUnit(BattleUnit* unit, int part)
+
+					// Map::cacheUnit(BattleUnit* unit)
+//					UnitSprite::setBattleUnit(unit, part);
+					// UnitSprite::setBattleUnit(BattleUnit* unit, int part);
 					(*i)->setCache(0);
+
 					(*i)->setDirection(RNG::generate(0, 7));		// kL
 					(*i)->setTimeUnits(0);							// kL
 

@@ -31,17 +31,17 @@ namespace OpenXcom
 
 extern bool kL_preReveal;	// kL
 
+class BattlescapeMessage;
+class BattleUnit;
+class Camera;
+class Explosion;
+class Position;
+class Projectile;
 class ResourcePack;
 class SavedBattleGame;
 class Surface;
-class Position;
-class BattleUnit;
-class Projectile;
-class Explosion;
-class BattlescapeMessage;
-class Camera;
 class Timer;
-//class RuleTerrain;	// kL
+
 
 enum CursorType
 {
@@ -52,6 +52,7 @@ enum CursorType
 	CT_WAYPOINT,
 	CT_THROW
 };
+
 
 /**
  * Interactive map of the battlescape.
@@ -64,36 +65,65 @@ private:
 	static const int SCROLL_INTERVAL	= 20;
 	static const int BULLET_SPRITES		= 35;
 
-	Timer* _scrollMouseTimer, * _scrollKeyTimer;
-	Game* _game;
-	SavedBattleGame* _save;
-	ResourcePack* _res;
-	Surface* _arrow;
-	int _spriteWidth, _spriteHeight;
-	int _selectorX, _selectorY;
-	int _mouseX, _mouseY;
-	CursorType _cursorType;
-	int _cursorSize;
-	int _animFrame;
-	Projectile* _projectile;
-	bool projectileInFOV;
-	std::set<Explosion*> _explosions;
-	bool explosionInFOV;
-	bool _launch;
-	BattlescapeMessage* _message;
-	Camera* _camera;
-	int _visibleMapHeight;
-	void drawTerrain(Surface* surface);
-	int getTerrainLevel(Position pos, int size);
-	std::vector<Position> _waypoints;
-	bool _unitDying;
-	int _previewSetting;
-	int _reveal;				// kL
-//	RuleTerrain* _ruleTerrain;	// kL
+	BattlescapeMessage
+		* _message;
+	Camera
+		* _camera;
+	CursorType
+		_cursorType;
+	Game
+		* _game;
+	Projectile
+		* _projectile;
+	ResourcePack
+		* _res;
+	SavedBattleGame
+		* _save;
+	Surface
+		* _arrow;
+	Timer
+		* _scrollMouseTimer,
+		* _scrollKeyTimer;
+
+	int
+		_animFrame,
+		_cursorSize,
+		_mouseX,
+		_mouseY,
+		_previewSetting,
+		_reveal, // kL
+		_selectorX,
+		_selectorY,
+		_spriteWidth,
+		_spriteHeight,
+		_visibleMapHeight;
+	bool
+		_explosionInFOV,
+		_launch,
+		_projectileInFOV,
+		_unitDying;
+
+	std::set<Explosion*>
+		_explosions;
+	std::vector<Position>
+		_waypoints;
+
+	void drawTerrain(
+			Surface* surface);
+	int getTerrainLevel(
+			Position pos,
+			int size);
+
 
 	public:
 		/// Creates a new map at the specified position and size.
-		Map(Game* game, int width, int height, int x, int y, int visibleMapHeight);
+		Map(
+				Game* game,
+				int width,
+				int height,
+				int x,
+				int y,
+				int visibleMapHeight);
 		/// Cleans up the map.
 		~Map();
 
@@ -105,7 +135,11 @@ private:
 		void draw();
 
 		/// Sets the palette.
-		void setPalette(SDL_Color* colors, int firstcolor = 0, int ncolors = 256);
+		void setPalette(
+				SDL_Color* colors,
+				int firstcolor = 0,
+				int ncolors = 256);
+
 		/// Special handling for mouse press.
 		void mousePress(Action* action, State* state);
 		/// Special handling for mouse release.
@@ -116,42 +150,53 @@ private:
 		void keyboardPress(Action* action, State* state);
 		/// Special handling for key releases.
 		void keyboardRelease(Action* action, State* state);
+
 		/// Rotates the tileframes 0-7
 		void animate(bool redraw);
+
 		/// Sets the battlescape selector position relative to mouseposition.
 		void setSelectorPosition(int mx, int my);
 		/// Gets the currently selected position.
 		void getSelectorPosition(Position* pos) const;
+
 		/// Calculates the offset of a soldier, when it is walking in the middle of 2 tiles.
 		void calculateWalkingOffset(BattleUnit* unit, Position* offset);
+
 		/// Sets the 3D cursor type.
 		void setCursorType(CursorType type, int size = 1);
 		/// Gets the 3D cursor type.
 		CursorType getCursorType() const;
+
 		/// Caches units.
 		void cacheUnits();
 		/// Caches the unit.
 		void cacheUnit(BattleUnit* unit);
+
 		/// Sets projectile.
 		void setProjectile(Projectile* projectile);
 		/// Gets projectile.
 		Projectile* getProjectile() const;
+
 		/// Gets explosion set.
 		std::set<Explosion*>* getExplosions();
+
 		/// Gets the pointer to the camera.
 		Camera* getCamera();
 		/// Mouse-scrolls the camera.
 		void scrollMouse();
 		/// Keyboard-scrolls the camera.
 		void scrollKey();
-		/// Get waypoints vector.
-		std::vector<Position>* getWaypoints();
-		/// Set mouse-buttons' pressed state.
-		void setButtonsPressed(Uint8 button, bool pressed);
-		/// Sets the unitDying flag.
-		void setUnitDying(bool flag);
 		/// Refreshes the battlescape selector after scrolling.
 		void refreshSelectorPosition();
+
+		/// Get waypoints vector.
+		std::vector<Position>* getWaypoints();
+
+		/// Set mouse-buttons' pressed state.
+		void setButtonsPressed(Uint8 button, bool pressed);
+
+		/// Sets the unitDying flag.
+		void setUnitDying(bool flag);
 };
 
 }

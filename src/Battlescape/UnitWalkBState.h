@@ -21,8 +21,9 @@
 #define OPENXCOM_UNITWALKBSTATE_H
 
 #include <climits>
-#include "BattleState.h"
+
 #include "BattlescapeGame.h"
+#include "BattleState.h"
 #include "Position.h"
 
 
@@ -32,9 +33,7 @@ namespace OpenXcom
 class BattleUnit;
 class Pathfinding;
 class TileEngine;
-//class MapData;			// kL
-//class SavedBattleGame;	// kL
-//class Soldier;			// kL
+
 
 /**
  * State for walking units.
@@ -43,35 +42,46 @@ class UnitWalkBState
 	:
 		public BattleState
 {
+
 private:
-//	MapData* _data;		// kL
-	Position _target;
-	BattleUnit* _unit;
-	Pathfinding* _pf;
-	TileEngine* _terrain;
-	bool _falling;
-	bool _beforeFirstStep;
+	bool
+		_falling,
+		_beforeFirstStep,
+		_tileSwitchDone; // kL
+	int
+		_preMovementCost;
+
+	BattleUnit
+		* _unit;
+	Pathfinding
+		* _pf;
+	Position
+		_target;
+	TileEngine
+		* _terrain;
+
+	std::size_t
+		_unitsSpotted;
+
 	/// Handles some calculations when the path is finished.
 	void postPathProcedures();
 	/// Handles some calculations when the walking is finished.
 	void setNormalWalkSpeed();
 	/// Handles the stepping sounds.
 	void playMovementSound();
-	std::size_t _unitsSpotted;
-	int _preMovementCost;
-	bool _tileSwitchDone;	// kL
 
-//	SavedBattleGame _sbgame;	// kL
-//	Soldier* _geoscapeSoldier;	// kL: to cycle through all seen HOSTILE units.
 
 	public:
 		/// Creates a new UnitWalkBState class.
-		UnitWalkBState(BattlescapeGame* parent, BattleAction _action);
+		UnitWalkBState(
+				BattlescapeGame* parent,
+				BattleAction _action);
 		/// Cleans up the UnitWalkBState.
 		~UnitWalkBState();
 
 		/// Sets the target to walk to.
-		void setTarget(Position target);
+		void setTarget(
+				Position target);
 		/// Initializes the state.
 		void init();
 		/// Handles a cancels request.

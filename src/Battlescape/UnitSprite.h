@@ -30,6 +30,7 @@ class BattleItem;
 class BattleUnit;
 class SurfaceSet;
 
+
 /**
  * A class that renders a specific unit, given its render
  * rules combining the right frames from the surfaceset.
@@ -51,8 +52,10 @@ private:
 		* _unitSurface;
 	int
 		_animationFrame,
+		_drawingRoutine,
 		_part;
-	bool _hairBleach;
+	bool
+		_hairBleach;
 
 	/// Drawing routine for XCom soldiers in overalls and Sectoids and Mutons (routine 10).
 	void drawRoutine0();
@@ -75,14 +78,17 @@ private:
 	/// Drawing routine for celatids.
 	void drawRoutine9();
 
-	int _drawingRoutine;
 	/// sort two handed sprites out.
 	void sortRifles();
 
 
 	public:
 		/// Creates a new UnitSprite at the specified position and size.
-		UnitSprite(int width, int height, int x, int y);
+		UnitSprite(
+				int width,
+				int height,
+				int x,
+				int y);
 		/// Cleans up the UnitSprite.
 		~UnitSprite();
 
@@ -92,11 +98,15 @@ private:
 				SurfaceSet* itemSurfaceA,
 				SurfaceSet* itemSurfaceB);
 		/// Sets the battleunit to be rendered.
-		void setBattleUnit(BattleUnit* unit, int part = 0);
+		void setBattleUnit(
+				BattleUnit* unit,
+				int part = 0);
 		/// Sets the battleitem to be rendered.
-		void setBattleItem(BattleItem* item);
+		void setBattleItem(
+				BattleItem* item);
 		/// Sets the animation frame.
-		void setAnimationFrame(int frame);
+		void setAnimationFrame(
+				int frame);
 		/// Draws the unit.
 		void draw();
 };

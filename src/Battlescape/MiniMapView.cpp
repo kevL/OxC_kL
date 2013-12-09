@@ -18,17 +18,24 @@
  */
 
 #include "MiniMapView.h"
-#include "../Savegame/Tile.h"
-#include "Map.h"
+
+#include <sstream>
+
 #include "Camera.h"
+#include "Map.h"
+
 #include "../Engine/Action.h"
-#include "../Interface/Cursor.h"
-#include "../Savegame/SavedBattleGame.h"
 #include "../Engine/Game.h"
 #include "../Engine/SurfaceSet.h"
+
+#include "../Interface/Cursor.h"
+
 #include "../Resource/ResourcePack.h"
+
 #include "../Ruleset/Armor.h"
-#include <sstream>
+
+#include "../Savegame/SavedBattleGame.h"
+#include "../Savegame/Tile.h"
 
 
 namespace OpenXcom
@@ -38,6 +45,7 @@ const int CELL_WIDTH	= 4;
 const int CELL_HEIGHT	= 4;
 const int MAX_LEVEL		= 3;
 const int MAX_FRAME		= 2;
+
 
 /**
  * Initializes all the elements in the MiniMapView.
@@ -49,7 +57,14 @@ const int MAX_FRAME		= 2;
  * @param camera The Battlescape camera.
  * @param battleGame Pointer to the SavedBattleGame.
  */
-MiniMapView::MiniMapView(int w, int h, int x, int y, Game* game, Camera* camera, SavedBattleGame* battleGame)
+MiniMapView::MiniMapView(
+		int w,
+		int h,
+		int x,
+		int y,
+		Game* game,
+		Camera* camera,
+		SavedBattleGame* battleGame)
 	:
 		InteractiveSurface(w, h, x, y),
 		_game(game),
@@ -176,9 +191,11 @@ void MiniMapView::draw()
 	// kL. looks like the crosshairs for the MiniMap
 	int centerX = getWidth() / 2;
 	int centerY = getHeight() / 2;
-	Uint8 color = 1 + _frame * 3;
 	int xOffset = CELL_WIDTH / 2;
 	int yOffset = CELL_HEIGHT / 2;
+
+	Uint8 color = 1 + _frame * 3;
+
 /*kL	drawLine(centerX - CELL_WIDTH, centerY - CELL_HEIGHT,
 		 centerX - xOffset, centerY - yOffset,
 		 color); // top left

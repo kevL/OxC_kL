@@ -27,42 +27,70 @@ namespace OpenXcom
 {
 
 class Action;
+class Map;
 class State;
 class Timer;
-class Map;
+
 
 /**
  * Class handling camera movement, either by mouse or by events on the battlescape.
  */
 class Camera
 {
+
 private:
 	static const int SCROLL_INTERVAL = 50;
 
-	Timer* _scrollMouseTimer, * _scrollKeyTimer;
-	int _spriteWidth, _spriteHeight;
-	int _mapsize_x, _mapsize_y, _mapsize_z;
-	int _screenWidth, _screenHeight;
-	Position _mapOffset, _center;
-	int _scrollMouseX, _scrollMouseY, _scrollKeyX, _scrollKeyY;
-	bool _scrollTrigger;
-	int _visibleMapHeight;
-	bool _showAllLayers;
-	void minMaxInt(int* value, const int minValue, const int maxValue) const;
-	Map* _map;
-	bool _mouseScroll, _keyboardScroll;
+	bool
+		_keyboardScroll,
+		_mouseScroll,
+		_scrollTrigger,
+		_showAllLayers;
+	int
+		_mapsize_x,
+		_mapsize_y,
+		_mapsize_z,
+		_screenHeight,
+		_screenWidth,
+		_scrollMouseX,
+		_scrollMouseY,
+		_scrollKeyX,
+		_scrollKeyY,
+		_spriteHeight,
+		_spriteWidth,
+		_visibleMapHeight;
+
+	Map
+		* _map;
+	Position
+		_mapOffset,
+		_center;
+	Timer
+		* _scrollMouseTimer,
+		* _scrollKeyTimer;
+
+	void minMaxInt(
+			int* value,
+			const int minValue,
+			const int maxValue) const;
+
 
 	public:
 		static const int SCROLL_BORDER			= 5;
 		static const int SCROLL_DIAGONAL_EDGE	= 60;
 
 		/// Creates a new camera.
-		Camera(int spriteWidth, int spriteHeight, int mapsize_x, int mapsize_y, int mapsize_z, Map* map, int visibleMapHeight);
+		Camera(
+				int spriteWidth,
+				int spriteHeight,
+				int mapsize_x,
+				int mapsize_y,
+				int mapsize_z,
+				Map* map,
+				int visibleMapHeight);
 		/// Cleans up the camera.
 		~Camera();
 
-		/// Sets the camera's scroll timers.
-		void setScrollTimer(Timer* mouse, Timer* key);
 		/// Special handling for mouse press.
 		void mousePress(Action* action, State* state);
 		/// Special handling for mouse release.
@@ -73,6 +101,9 @@ private:
 		void keyboardPress(Action* action, State* state);
 		/// Special handling for key releases.
 		void keyboardRelease(Action* action, State* state);
+
+		/// Sets the camera's scroll timers.
+		void setScrollTimer(Timer* mouse, Timer* key);
 		/// Scrolls the view for mouse-scrolling.
 		void scrollMouse();
 		/// Scrolls the view for keyboard-scrolling.
@@ -85,20 +116,33 @@ private:
 		void up();
 		/// Move map layer down.
 		void down();
-		/// Sets the view level.
-		void setViewLevel(int viewlevel);
-		/// Converts map coordinates to screen coordinates.
-		void convertMapToScreen(const Position& mapPos, Position* screenPos) const;
-		/// Converts voxel coordinates to screen coordinates.
-		void convertVoxelToScreen(const Position& voxelPos, Position* screenPos) const;
-		/// Converts screen coordinates to map coordinates.
-		void convertScreenToMap(int screenX, int screenY, int* mapX, int* mapY) const;
-		/// Center map on a position.
-		void centerOnPosition(const Position& pos, bool redraw = true);
-		/// Gets map's center position.
-		Position getCenterPosition();
+
 		/// Gets the map displayed level.
 		int getViewLevel() const;
+		/// Sets the view level.
+		void setViewLevel(int viewLevel);
+
+		/// Converts map coordinates to screen coordinates.
+		void convertMapToScreen(
+				const Position& mapPos,
+				Position* screenPos) const;
+		/// Converts voxel coordinates to screen coordinates.
+		void convertVoxelToScreen(
+				const Position& voxelPos,
+				Position* screenPos) const;
+		/// Converts screen coordinates to map coordinates.
+		void convertScreenToMap(
+				int screenX,
+				int screenY,
+				int* mapX,
+				int* mapY) const;
+		/// Center map on a position.
+		void centerOnPosition(
+				const Position& pos,
+				bool redraw = true);
+
+		/// Gets map's center position.
+		Position getCenterPosition();
 		/// Gets the map size x.
 		int getMapSizeX() const;
 		/// Gets the map size y.
@@ -107,10 +151,12 @@ private:
 		Position getMapOffset();
 		/// Sets the map x/y screen offset.
 		void setMapOffset(Position pos);
+
 		/// Toggles showing all map layers.
 		int toggleShowAllLayers();
 		/// Checks if the camera is showing all map layers.
 		bool getShowAllLayers() const;
+
 		/// Checks if map coordinates X,Y,Z are on screen.
 		bool isOnScreen(const Position& mapPos) const;
 };

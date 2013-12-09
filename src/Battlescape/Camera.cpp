@@ -85,11 +85,14 @@ void Camera::setScrollTimer(Timer* mouse, Timer* key)
 
 /**
  * Sets the value to min if it is below min and to max if it is above max.
- * @param value Pointer to the value.
- * @param minValue The minimum value.
- * @param maxValue The maximum value.
+ * @param value, Pointer to the value.
+ * @param minValue, The minimum value.
+ * @param maxValue, The maximum value.
  */
-void Camera::minMaxInt(int* value, const int minValue, const int maxValue) const
+void Camera::minMaxInt(
+		int* value,
+		const int minValue,
+		const int maxValue) const
 {
 	if (*value < minValue)
 	{
@@ -110,13 +113,11 @@ void Camera::mousePress(Action* action, State*)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
 	{
-//kL		up();
-		down();		// kL
+		down();
 	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN)
 	{
-//kL		down();
-		up();		// kL
+		up();
 	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_LEFT
 		&& Options::getInt("battleScrollType") == SCROLL_TRIGGER)
@@ -280,6 +281,7 @@ void Camera::keyboardPress(Action* action, State*)
 	}
 
 	int scrollSpeed = Options::getInt("battleScrollSpeed");		// kL
+
 	int key = action->getDetails()->key.keysym.sym;
 //kL	int scrollSpeed = Options::getInt("battleScrollSpeed");
 	if (key == Options::getInt("keyBattleLeft"))
@@ -476,12 +478,21 @@ void Camera::down()
 }
 
 /**
- * Sets the view level.
- * @param viewlevel New view level.
+ * Gets the displayed level.
+ * @return The displayed layer.
  */
-void Camera::setViewLevel(int viewlevel)
+int Camera::getViewLevel() const
 {
-	_mapOffset.z = viewlevel;
+	return _mapOffset.z;
+}
+
+/**
+ * Sets the view level.
+ * @param viewLevel, New view level.
+ */
+void Camera::setViewLevel(int viewLevel)
+{
+	_mapOffset.z = viewLevel;
 	minMaxInt(&_mapOffset.z, 0, _mapsize_z - 1);
 
 	_map->draw();
@@ -498,6 +509,7 @@ void Camera::centerOnPosition(const Position& mapPos, bool redraw)
 	Position screenPos;
 
 	_center = mapPos;
+
 	minMaxInt(&_center.x, -1, _mapsize_y);
 	minMaxInt(&_center.y, -1, _mapsize_x);
 	convertMapToScreen(_center, &screenPos);
@@ -575,15 +587,6 @@ void Camera::convertVoxelToScreen(const Position& voxelPos, Position* screenPos)
 	screenPos->y += static_cast<int>(((static_cast<double>(_spriteHeight) / 2.0)) + (dx / 2.0) + (dy / 2.0) - dz);
 	screenPos->x += _mapOffset.x;
 	screenPos->y += _mapOffset.y;
-}
-
-/**
- * Gets the displayed level.
- * @return The displayed layer.
- */
-int Camera::getViewLevel() const
-{
-	return _mapOffset.z;
 }
 
 /**

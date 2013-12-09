@@ -133,11 +133,11 @@ void UnitWalkBState::think()
 //	}
 
 
-	bool newVis = false;											// kL
+	bool newVis = false; // kL
 	bool newUnitSpotted = false;
 	bool onScreen = _unit->getVisible()
-								&& (_parent->getMap()->getCamera()->isOnScreen(_unit->getPosition())
-										|| _parent->getMap()->getCamera()->isOnScreen(_unit->getDestination()));
+							&& (_parent->getMap()->getCamera()->isOnScreen(_unit->getPosition())
+								|| _parent->getMap()->getCamera()->isOnScreen(_unit->getDestination()));
 	Log(LOG_INFO) << ". onScreen = " << onScreen;
 
 	int dir = _pf->getStartDirection();		// kL: also below, in STATUS_STANDING!
@@ -313,9 +313,20 @@ void UnitWalkBState::think()
 				_parent->getMap()->getCamera()->centerOnPosition(_unit->getPosition());
 			}
 
-			// if the unit changed level, camera changes level with it
-			_parent->getMap()->getCamera()->setViewLevel(_unit->getPosition().z);
-				// kL_note: might want to offset map-y to make the level shift obvious.
+			// if the unit changed level, camera changes level with it. kL_begin:
+			if (_parent->getMap()->getCamera()->getViewLevel() != _unit->getPosition().z)
+			{
+				int delta_z = _unit->getPosition().z - _parent->getMap()->getCamera()->getViewLevel();
+				if (delta_z > 0)
+				{
+					_parent->getMap()->getCamera()->up();
+				}
+				else
+				{
+					_parent->getMap()->getCamera()->down();
+				}
+			} // kL_end.
+//kL			_parent->getMap()->getCamera()->setViewLevel(_unit->getPosition().z);
 		}
 
 		// is the step finished?

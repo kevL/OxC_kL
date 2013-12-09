@@ -21,16 +21,18 @@
 #define OPENXCOM_MINIMAPVIEW_H
 
 #include "Position.h"
+
 #include "../Engine/InteractiveSurface.h"
 
 
 namespace OpenXcom
 {
 
-class Game;
 class Camera;
+class Game;
 class SavedBattleGame;
 class SurfaceSet;
+
 
 /**
  * MiniMapView is the class used to display the map in the MiniMapState.
@@ -39,22 +41,36 @@ class MiniMapView
 	:
 		public InteractiveSurface
 {
+
 private:
-	Game* _game;
-	Camera* _camera;
-	SavedBattleGame* _battleGame;
-	int _frame;
-	SurfaceSet* _set;
+	bool
+		isMouseScrolled,
+		isMouseScrolling,
+		mouseMovedOverThreshold;
+
+	int
+		_frame,
+		mouseScrollX,
+		mouseScrollY,
+		totalMouseMoveX,
+		totalMouseMoveY,
+		xBeforeMouseScrolling,
+		yBeforeMouseScrolling;
+
+	Camera
+		* _camera;
+	Game
+		* _game;
+	SavedBattleGame
+		* _battleGame;
+	SurfaceSet
+		* _set;
 
 	// these two are required for right-button scrolling on the minimap
-	bool isMouseScrolling;
-	bool isMouseScrolled;
-	int xBeforeMouseScrolling, yBeforeMouseScrolling;
-	int mouseScrollX, mouseScrollY;
-	Position posBeforeMouseScrolling;
-	Uint32 mouseScrollingStartTime;
-	int totalMouseMoveX, totalMouseMoveY;
-	bool mouseMovedOverThreshold;
+	Position
+		posBeforeMouseScrolling;
+	Uint32
+		mouseScrollingStartTime;
 
 	/// Handles pressing on the MiniMap.
 	void mousePress(Action* action, State* state);
@@ -65,16 +81,26 @@ private:
 	/// Handles moving the mouse into the MiniMap surface.
 	void mouseIn(Action* action, State* state);
 
+
 	public:
 		/// Creates the MiniMapView.
-		MiniMapView(int w, int h, int x, int y, Game* game, Camera* camera, SavedBattleGame* battleGame);
+		MiniMapView(
+				int w,
+				int h,
+				int x,
+				int y,
+				Game* game,
+				Camera* camera,
+				SavedBattleGame* battleGame);
 
 		/// Draws the minimap.
 		void draw();
+
 		/// Changes the displayed minimap level.
-		int up ();
+		int up();
 		/// Changes the displayed minimap level.
-		int down ();
+		int down();
+
 		/// Updates the minimap animation.
 		void animate();
 };
