@@ -44,25 +44,51 @@ class CraftEquipmentState
 	:
 		public State
 {
+
 private:
-	TextButton* _btnOk, * _btnClear, * _btnInventory;
-	Window* _window;
-	Text* _txtTitle, * _txtItem, * _txtStores, * _txtAvailable, * _txtUsed, * _txtCrew;
-	TextList* _lstEquipment;
-	Timer* _timerLeft, * _timerRight;
-	unsigned int _sel;
-	Base* _base;
-	size_t _craft;
-	std::vector<std::string> _items;
-	int _changeValueByMouseWheel;
-	bool _allowChangeListValuesByMouseWheel;
+	bool
+		_allowChangeListValuesByMouseWheel;
+	int
+		_changeValueByMouseWheel;
+	unsigned int
+		_sel;
+	size_t
+		_craft;
+
+	Base
+		* _base;
+	Text
+		* _txtTitle,
+		* _txtItem,
+		* _txtStores,
+		* _txtAvailable,
+		* _txtUsed,
+		* _txtCrew;
+	TextButton
+		* _btnOk,
+		* _btnClear,
+		* _btnInventory;
+	TextList
+		* _lstEquipment;
+	Timer
+		* _timerLeft,
+		* _timerRight;
+	Window
+		* _window;
+
+	std::vector<std::string>
+		_items;
 
 	/// Updates quantities of item.
 	void updateQuantity();
 
+
 	public:
 		/// Creates the Craft Equipment state.
-		CraftEquipmentState(Game* game, Base* base, size_t craft);
+		CraftEquipmentState(
+				Game* game,
+				Base* base,
+				size_t craft);
 		/// Cleans up the Craft Equipment state.
 		~CraftEquipmentState();
 

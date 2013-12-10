@@ -118,7 +118,7 @@ void UnitWalkBState::think()
 {
 	Log(LOG_INFO) << "UnitWalkBState::think() : " << _unit->getId() << " phase = " << _unit->getWalkingPhase();
 
-	if (_unit->isOut())		// kL_note: might want (true, true)
+	if (_unit->isOut(true, true))		// kL_note: might want (true, true)
 	{
 		Log(LOG_INFO) << ". . unit isOut, abort.";
 
@@ -342,7 +342,12 @@ void UnitWalkBState::think()
 			{
 				_unit->getTile()->ignite(1);
 
-				Position here = (_unit->getPosition() * Position(16, 16, 24)) + Position(8, 8, -(_unit->getTile()->getTerrainLevel()));
+				Position here =
+							_unit->getPosition() * Position(16, 16, 24)
+								+ Position(
+										8,
+										8,
+										-(_unit->getTile()->getTerrainLevel()));
 				_parent->getTileEngine()->hit(here, _unit->getStats()->strength, DT_IN, _unit);
 			}
 
@@ -419,7 +424,9 @@ void UnitWalkBState::think()
 					//Log(LOG_INFO) << ". . WalkBState: checkReactionFire() returned FALSE... no caching";
 //				}
 			}
-//			else
+//			else // <<-- Looks like we gotta make it fall here!!! (if unit *ends* its total walk sequence on empty air.
+					// And, fall *before* spotting new units, else Abort will likely make it float...
+
 //			{
 //				Log(LOG_INFO) << ". . WalkBState: falling, myNew cache... didn't work.";
 
@@ -703,7 +710,8 @@ void UnitWalkBState::think()
 								&& unitBelowMyWay
 								&& unitBelowMyWay != _unit
 								&& unitBelowMyWay->getFloatHeight()
-										+ unitBelowMyWay->getHeight() - belowDest->getTerrainLevel() >= 24 + 4)))
+										+ unitBelowMyWay->getHeight()
+										- belowDest->getTerrainLevel() >= 24 + 4)))
 								// 4+ voxels poking into the tile above, we don't kick people in the head here at XCom.
 								// kL_note: this appears to be only +2 in Pathfinding....
 					{
@@ -725,7 +733,8 @@ void UnitWalkBState::think()
 			//Log(LOG_INFO) << ". pos 8";
 
 			dir = _pf->dequeuePath(); // now start moving
-			if (_falling) dir = _pf->DIR_DOWN;		// kL_note: set above, if it hasn't changed...
+			if (_falling)
+				dir = _pf->DIR_DOWN;		// kL_note: set above, if it hasn't changed...
 
 			if (_unit->spendTimeUnits(tu))
 			{
@@ -788,33 +797,29 @@ void UnitWalkBState::think()
 		}
 	}
 
-	// turning during walking costs no tu
-	if (_unit->getStatus() == STATUS_TURNING)
+	if (_unit->getStatus() == STATUS_TURNING)	// turning during walking costs no tu
 	{
 		Log(LOG_INFO) << "STATUS_TURNING : " << _unit->getId();
 
-		// except before the first step.
-		if (_beforeFirstStep)
+		if (_beforeFirstStep)					// except before the first step.
 		{
 			_preMovementCost++;
 		}
 
 		_unit->turn();
 
-		// calculateFOV() is unreliable for setting the newUnitSpotted bool, as it can be called from
-		// various other places in the code, ie: doors opening (& explosions/terrain destruction?), and that messes up the result.
-//kL		_terrain->calculateFOV(_unit);
-//kL		unitSpotted = (!_falling && !_action.desperate && _parent->getPanicHandled() && _numUnitsSpotted != _unit->getUnitsSpottedThisTurn().size());
+		// calculateFOV() is unreliable for setting the newUnitSpotted bool,
+		// as it can be called from various other places in the code, ie:
+		// doors opening (& explosions/terrain destruction?), and that messes up the result.
+		// kL_note: But let's do it anyway!
 		newVis = _terrain->calculateFOV(_unit)								// kL
 			&& _unit->getFaction() == FACTION_PLAYER;						// kL
 		newUnitSpotted = //kL !!_falling && _action.desperate &&
 			_parent->getPanicHandled()
-//kL			&& _unitsSpotted != _unit->getUnitsSpottedThisTurn().size();
 			&& _unitsSpotted < _unit->getUnitsSpottedThisTurn().size()		// kL
 			&& _unit->getFaction() != FACTION_PLAYER;						// kL
 
-		// make sure the unit sprites are up to date
-		if (onScreen)
+		if (onScreen) // make sure the unit sprites are up to date
 		{
 			//Log(LOG_INFO) << ". cacheUnit()";
 
@@ -822,7 +827,7 @@ void UnitWalkBState::think()
 			_parent->getMap()->cacheUnit(_unit);
 		}
 
-		if ((newVis		// kL
+		if ((newVis
 				|| (newUnitSpotted
 					&& !(_action.desperate || _unit->getCharging())))
 			&& !_falling)

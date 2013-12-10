@@ -65,7 +65,10 @@ namespace OpenXcom
  * @param base Pointer to the base to get info from.
  * @param craft ID of the selected craft.
  */
-CraftEquipmentState::CraftEquipmentState(Game* game, Base* base, size_t craft)
+CraftEquipmentState::CraftEquipmentState(
+		Game* game,
+		Base* base,
+		size_t craft)
 	:
 		State(game),
 		_sel(0),
@@ -73,12 +76,14 @@ CraftEquipmentState::CraftEquipmentState(Game* game, Base* base, size_t craft)
 		_craft(craft)
 {
 	_changeValueByMouseWheel = Options::getInt("changeValueByMouseWheel");
-	_allowChangeListValuesByMouseWheel = (Options::getBool("allowChangeListValuesByMouseWheel") && _changeValueByMouseWheel);
+	_allowChangeListValuesByMouseWheel =
+									Options::getBool("allowChangeListValuesByMouseWheel")
+										&& _changeValueByMouseWheel;
 
 	Craft* c = _base->getCrafts()->at(_craft);
 
-	bool craftHasACrew = c->getNumSoldiers() > 0;
-	bool isNewBattle = game->getSavedGame()->getMonthsPassed() == -1;
+	bool craftHasCrew = c->getNumSoldiers() > 0;
+	bool newBattle = game->getSavedGame()->getMonthsPassed() == -1;
 
 
 	_window			= new Window(this, 320, 200, 0, 0);
@@ -96,24 +101,27 @@ CraftEquipmentState::CraftEquipmentState(Game* game, Base* base, size_t craft)
 
 	_btnClear		= new TextButton(94, 16, 16, 177);
 	_btnInventory	= new TextButton(94, 16, 113, 177);
-//kL	_btnOk			= new TextButton((craftHasACrew || isNewBattle) ? 148 : 288, 16, (craftHasACrew || isNewBattle) ? 164 : 16, 176);
+//kL	_btnOk			= new TextButton((craftHasCrew || newBattle) ? 148 : 288, 16, (craftHasCrew || newBattle) ? 164 : 16, 176);
 	_btnOk			= new TextButton(94, 16, 210, 177);
 
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)), Palette::backPos, 16);
+	_game->setPalette(
+				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)),
+				Palette::backPos,
+				16);
 
 	add(_window);
+	add(_txtTitle);
+	add(_txtAvailable);
+	add(_txtUsed);
+	add(_txtItem);
+	add(_txtStores);
+//kL	add(_txtCrew);
+	add(_lstEquipment);
 	add(_btnClear);
 	add(_btnInventory);
 	add(_btnOk);
-	add(_txtTitle);
-	add(_txtItem);
-	add(_txtStores);
-	add(_txtAvailable);
-	add(_txtUsed);
-//kL	add(_txtCrew);
-	add(_lstEquipment);
 
 	centerAllSurfaces();
 
@@ -124,13 +132,13 @@ CraftEquipmentState::CraftEquipmentState(Game* game, Base* base, size_t craft)
 	_btnClear->setColor(Palette::blockOffset(15)+1);
 	_btnClear->setText(tr("STR_UNLOAD"));
 	_btnClear->onMouseClick((ActionHandler)& CraftEquipmentState::btnClearClick);
-//kL	_btnClear->setVisible(isNewBattle);
+//kL	_btnClear->setVisible(newBattle);
 
 	_btnInventory->setColor(Palette::blockOffset(15) + 1);
 	_btnInventory->setText(tr("STR_INVENTORY"));
 	_btnInventory->onMouseClick((ActionHandler)& CraftEquipmentState::btnInventoryClick);
-//kL	_btnInventory->setVisible(craftHasACrew && !isNewBattle);
-	_btnInventory->setVisible(craftHasACrew || isNewBattle);		// kL
+	_btnInventory->setVisible(craftHasCrew && !newBattle);
+//	_btnInventory->setVisible(craftHasCrew || newBattle);		// kL
 
 	_btnOk->setColor(Palette::blockOffset(15)+1);
 	_btnOk->setText(tr("STR_OK"));
@@ -274,7 +282,6 @@ CraftEquipmentState::~CraftEquipmentState()
 */
 void CraftEquipmentState::init()
 {
-	// Set palette
 	_game->setPalette(
 				_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());
 	_game->setPalette(
@@ -405,7 +412,7 @@ void CraftEquipmentState::lstEquipmentRightArrowClick(Action* action)
 
 /**
  * Handles the mouse-wheels on the arrow-buttons.
- * @param action Pointer to an action.
+ * @param action, Pointer to an action.
  */
 void CraftEquipmentState::lstEquipmentMousePress(Action* action)
 {
@@ -427,6 +434,7 @@ void CraftEquipmentState::lstEquipmentMousePress(Action* action)
 	{
 		_timerRight->stop();
 		_timerLeft->stop();
+
 		if (_allowChangeListValuesByMouseWheel
 			&& action->getAbsoluteXMouse() >= _lstEquipment->getArrowsLeftEdge()
 			&& action->getAbsoluteXMouse() <= _lstEquipment->getArrowsRightEdge())
@@ -437,8 +445,7 @@ void CraftEquipmentState::lstEquipmentMousePress(Action* action)
 }
 
 /**
- * Updates the displayed quantities of the
- * selected item on the list.
+ * Updates the displayed quantities of the selected item on the list.
  */
 void CraftEquipmentState::updateQuantity()
 {
@@ -507,7 +514,7 @@ void CraftEquipmentState::moveLeft()
 
 /**
  * Moves the given number of items (selected) to the base.
- * @param change Item difference.
+ * @param change, Item difference.
  */
 void CraftEquipmentState::moveLeftByValue(int change)
 {
@@ -549,7 +556,7 @@ void CraftEquipmentState::moveLeftByValue(int change)
 				{
 					_base->getItems()->addItem(ammo->getType(), (*i)->getAmmo());
 
-					delete (*i);
+					delete *i;
 					i = c->getVehicles()->erase(i);
 				}
 				else ++i;
@@ -577,10 +584,11 @@ void CraftEquipmentState::moveLeftByValue(int change)
 			{
 				if ((*i)->getRules() == item)
 				{
-					delete (*i);
+					delete *i;
 					i = c->getVehicles()->erase(i);
 
-					if (0 >= --change) break;
+					if (--change < 1)
+						break;
 				}
 				else ++i;
 			}
@@ -616,7 +624,7 @@ void CraftEquipmentState::moveRight()
 
 /**
  * Moves the given number of items (selected) to the craft.
- * @param change Item difference.
+ * @param change, Item difference.
  */
 void CraftEquipmentState::moveRightByValue(int change)
 {
@@ -670,16 +678,16 @@ void CraftEquipmentState::moveRightByValue(int change)
 				// And now let's see if we can add the total number of vehicles.
 				RuleItem* ammo = _game->getRuleset()->getItem(item->getCompatibleAmmo()->front());
 
-				int baqty = _base->getItems()->getItem(ammo->getType()); // Ammo Quantity for this vehicle-type on the base
+				int baQty = _base->getItems()->getItem(ammo->getType()); // Ammo Quantity for this vehicle-type on the base
 
-				int canBeAdded = std::min(newVehiclesCount, baqty);
+				int canBeAdded = std::min(newVehiclesCount, baQty);
 				if (canBeAdded > 0)
 				{
-					int newAmmoPerVehicle = std::min(baqty / canBeAdded, ammo->getClipSize());
+					int newAmmoPerVehicle = std::min(baQty / canBeAdded, ammo->getClipSize());
 					int remainder = 0;
 
 					if (ammo->getClipSize() > newAmmoPerVehicle)
-						remainder = baqty - (canBeAdded * newAmmoPerVehicle);
+						remainder = baQty - (canBeAdded * newAmmoPerVehicle);
 
 					int newAmmo;
 					for (int
@@ -753,7 +761,10 @@ void CraftEquipmentState::moveRightByValue(int change)
  */
 void CraftEquipmentState::btnClearClick(Action*)
 {
-	for (_sel = 0; _sel != _items.size(); ++_sel)
+	for (
+			_sel = 0;
+			_sel != _items.size();
+			++_sel)
 	{
 		moveLeftByValue(INT_MAX);
 	}
@@ -766,19 +777,21 @@ void CraftEquipmentState::btnClearClick(Action*)
 */
 void CraftEquipmentState::btnInventoryClick(Action*)
 {
+	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_4")->getColors()); // kL
+
 	Craft* craft = _base->getCrafts()->at(_craft);
-	if (craft->getNumSoldiers() != 0)
-	{
-		_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_4")->getColors());
+//kL	if (craft->getNumSoldiers() != 0)	// kL_note: done in cTor.
+//	{
+//kL	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_4")->getColors());
 
-		SavedBattleGame* bgame = new SavedBattleGame();
-		_game->getSavedGame()->setBattleGame(bgame);
+	SavedBattleGame* bgame = new SavedBattleGame();
+	_game->getSavedGame()->setBattleGame(bgame);
 
-		BattlescapeGenerator bgen = BattlescapeGenerator(_game);
-		bgen.runInventory(craft);
+	BattlescapeGenerator bgen = BattlescapeGenerator(_game);
+	bgen.runInventory(craft);
 
-		_game->pushState(new InventoryState(_game, false, 0));
-	}
+	_game->pushState(new InventoryState(_game, false, 0));
+//	}
 }
 
 }

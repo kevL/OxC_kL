@@ -254,9 +254,13 @@ DebriefingState::DebriefingState(Game* game)
 	{
 		rating = tr("STR_RATING_GOOD");
 	}
-	else
+	else if (total <= 1500)
 	{
 		rating = tr("STR_RATING_EXCELLENT");
+	}
+	else
+	{
+		rating = tr("STR_RATING_STUPENDOUS");
 	}
 
 	_txtRating->setText(tr("STR_RATING").arg(rating));

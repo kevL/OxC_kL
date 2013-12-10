@@ -89,12 +89,12 @@ bool kL_preReveal = true;		// kL
  * @param visibleMapHeight Current visible map height.
  */
 Map::Map(
-			Game* game,
-			int width,
-			int height,
-			int x,
-			int y,
-			int visibleMapHeight)
+		Game* game,
+		int width,
+		int height,
+		int x,
+		int y,
+		int visibleMapHeight)
 	:
 		InteractiveSurface(width, height, x, y),
 		_game(game),
@@ -170,8 +170,8 @@ Map::~Map()
 void Map::init()
 {
 	// load the tiny arrow into a surface
-	int f = Palette::blockOffset(1)+1; // yellow
-	int b = 15; // black
+	int f = Palette::blockOffset(1)+1;	// yellow
+	int b = 15;							// black
 	int pixels[81] = { 0, 0, b, b, b, b, b, 0, 0,
 					   0, 0, b, f, f, f, b, 0, 0,
 				       0, 0, b, f, f, f, b, 0, 0,
@@ -185,9 +185,15 @@ void Map::init()
 	_arrow = new Surface(9, 9);
 	_arrow->setPalette(this->getPalette());
 	_arrow->lock();
- 	for (int y = 0; y < 9; ++y)
+	for (int
+			y = 0;
+			y < 9;
+			++y)
 	{
-		for (int x = 0; x < 9; ++x)
+		for (int
+				x = 0;
+				x < 9;
+				++x)
 		{
 			_arrow->setPixel(x, y, pixels[x + (y * 9)]);
 		}
@@ -220,12 +226,16 @@ void Map::draw()
 	} */
 
 	Surface::draw();
+
 	Tile* t;
 
 	_projectileInFOV = _save->getDebugMode();
 	if (_projectile)
 	{
-		t = _save->getTile(Position(_projectile->getPosition(0).x / 16, _projectile->getPosition(0).y / 16, _projectile->getPosition(0).z / 24));
+		t = _save->getTile(Position(
+								_projectile->getPosition(0).x / 16,
+								_projectile->getPosition(0).y / 16,
+								_projectile->getPosition(0).z / 24));
 		if (_save->getSide() == FACTION_PLAYER
 			|| (t && t->getVisible()))
 		{
@@ -236,9 +246,15 @@ void Map::draw()
 	_explosionInFOV = _save->getDebugMode();
 	if (!_explosions.empty())
 	{
-		for (std::set<Explosion*>::iterator i = _explosions.begin(); i != _explosions.end(); ++i)
+		for (std::set<Explosion*>::iterator
+				i = _explosions.begin();
+				i != _explosions.end();
+				++i)
 		{
-			t = _save->getTile(Position((*i)->getPosition().x / 16, (*i)->getPosition().y / 16, (*i)->getPosition().z / 24));
+			t = _save->getTile(Position(
+									(*i)->getPosition().x / 16,
+									(*i)->getPosition().y / 16,
+									(*i)->getPosition().z / 24));
 			if (t
 				&& ((*i)->isBig() || t->getVisible()))
 			{
@@ -275,7 +291,7 @@ void Map::draw()
 		}
 		else
 		{
-			_reveal = 4;
+			_reveal = 3;
 			//Log(LOG_INFO) << ". . . . . . drawTerrain() Set _reveal = " << _reveal;
 		}
 
@@ -329,10 +345,10 @@ void Map::drawTerrain(Surface *surface)
 	Tile* tile;
 
 	int beginX	= 0,
-		endX	= _save->getMapSizeX() - 1;
-	int beginY	= 0,
-		endY	= _save->getMapSizeY() - 1;
-	int beginZ	= 0,
+		endX	= _save->getMapSizeX() - 1,
+		beginY	= 0,
+		endY	= _save->getMapSizeY() - 1,
+		beginZ	= 0,
 		endZ	= _camera->getViewLevel();
 	if (_camera->getShowAllLayers())
 		endZ	= _save->getMapSizeZ() - 1;
@@ -350,7 +366,10 @@ void Map::drawTerrain(Surface *surface)
 
 	BattleUnit* unit = 0;
 	bool invalid;
-	int tileShade, wallShade, tileColor;
+	int
+		tileShade,
+		wallShade,
+		tileColor;
 
 	NumberText* _numWaypid = 0;
 
@@ -1111,7 +1130,6 @@ void Map::drawTerrain(Surface *surface)
 
 							// kL_note: Set pathfinder/ pathpreview number color.
 //							Log(LOG_INFO) << "Map::drawTerrain() mapname = " << _ruleTerrain->getName();
-//							Uint8 wpColor = 2;									// #1:white;#26:brown;#15:yellow
 //							if (_ruleTerrain->getName() == "STR_POLAR")
 //							{
 //								wpColor = 15;
@@ -1119,7 +1137,6 @@ void Map::drawTerrain(Surface *surface)
 							_numWaypid->setColor(Palette::blockOffset(12)+7);		// kL
 
 //							Log(LOG_INFO) << "Map::drawTerrain() terrain = " << _game->getRuleset()->getTerrain("POLAR")->getName();
-//							_save->
 
 							_numWaypid->setValue(tuMarker);
 							_numWaypid->draw();
@@ -1313,11 +1330,17 @@ void Map::animate(bool redraw)
  */
 void Map::setSelectorPosition(int mx, int my)
 {
-	int oldX = _selectorX, oldY = _selectorY;
+	int
+		oldX = _selectorX,
+		oldY = _selectorY;
 
 	if (!mx && !my) return; // cursor is offscreen
 
-	_camera->convertScreenToMap(mx, my + _spriteHeight / 4, &_selectorX, &_selectorY);
+	_camera->convertScreenToMap(
+								mx,
+								my + _spriteHeight / 4,
+								&_selectorX,
+								&_selectorY);
 
 	if (oldX != _selectorX || oldY != _selectorY)
 	{
@@ -1430,26 +1453,35 @@ void Map::calculateWalkingOffset(BattleUnit* unit, Position* offset)
 }
 
 /**
-  * Terrainlevel goes from 0 to -24. For a larger sized unit, we need to pick the heighest terrain level, which is the lowest number...
-  * @param pos Position.
-  * @param size Size of the unit we want to get the level from.
-  * @return terrainlevel.
+  * Terrainlevel goes from 0 to -24 (bottom to top).
+  * For a large sized unit, we need to pick the highest
+  * terrain level, which is the lowest number...
+  * @param pos, Position.
+  * @param size, Size of the unit we want to get the level from.
+  * @return, terrainlevel.
   */
 int Map::getTerrainLevel(Position pos, int size)
 {
-	int lowestlevel = 0;
+	int lowestLevel = 0;
+	int lowTest = 0;
 
-	for (int x = 0; x < size; x++)
+	for (int
+			x = 0;
+			x < size;
+			x++)
 	{
-		for (int y = 0; y < size; y++)
+		for (int
+				y = 0;
+				y < size;
+				y++)
 		{
-			int l = _save->getTile(pos + Position(x, y, 0))->getTerrainLevel();
-			if (l < lowestlevel)
-				lowestlevel = l;
+			lowTest = _save->getTile(pos + Position(x, y, 0))->getTerrainLevel();
+			if (lowTest < lowestLevel)
+				lowestLevel = lowTest;
 		}
 	}
 
-	return lowestlevel;
+	return lowestLevel;
 }
 
 /**
@@ -1480,7 +1512,10 @@ CursorType Map::getCursorType() const
  */
 void Map::cacheUnits()
 {
-	for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
+	for (std::vector<BattleUnit*>::iterator
+			i = _save->getUnits()->begin();
+			i != _save->getUnits()->end();
+			++i)
 	{
 		cacheUnit(*i);
 	}
@@ -1498,7 +1533,7 @@ void Map::cacheUnit(BattleUnit* unit)
 	unitSprite->setPalette(this->getPalette());
 	bool invalid = false;
 	bool d = false;
-	int numOfParts = unit->getArmor()->getSize() == 1? 1: unit->getArmor()->getSize() * 2;
+	int numOfParts = unit->getArmor()->getSize() == 1? 1: (unit->getArmor()->getSize() * 2);
 
 	unit->getCache(&invalid);
 	if (invalid)
@@ -1506,7 +1541,10 @@ void Map::cacheUnit(BattleUnit* unit)
 		//Log(LOG_INFO) << ". (invalid)";	// kL
 
 		// 1 or 4 iterations, depending on unit size
-		for (int i = 0; i < numOfParts; i++)
+		for (int
+				i = 0;
+				i < numOfParts;
+				i++)
 		{
 			//Log(LOG_INFO) << ". . i = " << i;	// kL
 
@@ -1515,7 +1553,9 @@ void Map::cacheUnit(BattleUnit* unit)
 			{
 				//Log(LOG_INFO) << ". . . (!cache)";	// kL
 
-				cache = new Surface(_spriteWidth, _spriteHeight);
+				cache = new Surface(
+								_spriteWidth,
+								_spriteHeight);
 				cache->setPalette(this->getPalette());
 
 				//Log(LOG_INFO) << ". . . end (!cache)";	// kL
@@ -1598,7 +1638,7 @@ std::set<Explosion*>* Map::getExplosions()
 
 /**
  * Gets the pointer to the camera.
- * @return Pointer to camera.
+ * @return, Pointer to camera.
  */
 Camera* Map::getCamera()
 {

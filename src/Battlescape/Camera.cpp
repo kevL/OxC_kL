@@ -479,7 +479,7 @@ void Camera::down()
 
 /**
  * Gets the displayed level.
- * @return The displayed layer.
+ * @return, The displayed layer.
  */
 int Camera::getViewLevel() const
 {

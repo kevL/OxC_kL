@@ -30,17 +30,19 @@ namespace OpenXcom
 
 extern unsigned int kL_currentBase;
 
-class Surface;
-class Globe;
-//kL class TextButton;
-class ImageButton;		// kL
-//kL class InteractiveSurface;
-class Text;
-class Timer;
-class DogfightState;
-class Ufo;
-class TerrorSite;
+
 class Base;
+class DogfightState;
+class Globe;
+class ImageButton; // kL
+//kL class InteractiveSurface;
+class Surface;
+class TerrorSite;
+class Text;
+//kL class TextButton;
+class Timer;
+class Ufo;
+
 
 /**
  * Geoscape screen which shows an overview of
@@ -50,26 +52,69 @@ class GeoscapeState
 	:
 		public State
 {
+
 private:
-	Surface* _bg;
-	Globe* _globe;
-	ImageButton* _btnIntercept, * _btnBases, * _btnGraphs, * _btnUfopaedia, * _btnOptions, * _btnFunding;
-	ImageButton* _timeSpeed, * _btnDetail;
-	ImageButton* _btn5Secs, * _btn1Min, * _btn5Mins, * _btn30Mins, * _btn1Hour, * _btn1Day;
+	bool
+		_battleMusic,
+		_music,
+		_pause,
+		_showFundsOnGeoscape, // this is a cache for Options::getBool("showFundsOnGeoscape")
+		_zoomInEffectDone,
+		_zoomOutEffectDone;
+	int
+		_zoomInter; // kL
+	size_t
+		_minimizedDogfights;
+
+	Globe
+		* _globe;
+	ImageButton
+		* _btnIntercept,
+		* _btnBases,
+		* _btnGraphs,
+		* _btnUfopaedia,
+		* _btnOptions,
+		* _btnFunding;
+	ImageButton
+		* _btn5Secs,
+		* _btn1Min,
+		* _btn5Mins,
+		* _btn30Mins,
+		* _btn1Hour,
+		* _btn1Day,
+		* _btnDetail,
+		* _timeSpeed;
 //	InteractiveSurface* _btnRotateLeft, * _btnRotateRight, * _btnRotateUp, * _btnRotateDown, * _btnZoomIn, * _btnZoomOut;
-	Text* _txtFunds, * _txtHour, * _txtHourSep, * _txtMin, * _txtMinSep, * _txtSec, * _txtWeekday, * _txtDay, * _txtMonth, * _txtYear;
-	Timer* _timer, * _zoomInEffectTimer, * _zoomOutEffectTimer, * _dogfightStartTimer;
-	bool _pause, _music, _zoomInEffectDone, _zoomOutEffectDone, _battleMusic;
-	Text* _txtDebug;
-	std::vector<State*> _popups;
-	std::vector<DogfightState*> _dogfights, _dogfightsToBeStarted;
-	size_t _minimizedDogfights;
-	bool _showFundsOnGeoscape; // this is a cache for Options::getBool("showFundsOnGeoscape")
-//	size_t _zoomInter;
-	int _zoomInter;
+	Surface
+		* _bg;
+	Text
+		* _txtDebug,
+		* _txtFunds,
+		* _txtHour,
+		* _txtHourSep,
+		* _txtMin,
+		* _txtMinSep,
+		* _txtSec,
+		* _txtWeekday,
+		* _txtDay,
+		* _txtMonth,
+		* _txtYear;
+	Timer
+		* _timer,
+		* _zoomInEffectTimer,
+		* _zoomOutEffectTimer,
+		* _dogfightStartTimer;
+
+	std::vector<State*>
+		_popups;
+	std::vector<DogfightState*>
+		_dogfights,
+		_dogfightsToBeStarted;
 
 	/// Handle alien mission generation.
-	void determineAlienMissions(bool atGameStart = false);
+	void determineAlienMissions(
+			bool atGameStart = false);
+
 
 	public:
 		/// Creates the Geoscape state.
@@ -79,10 +124,12 @@ private:
 
 		/// Handle keypresses.
 		void handle(Action* action);
+
 		/// Updates the palette and timer.
 		void init();
 		/// Runs the timer.
 		void think();
+
 		/// Displays the game time/date. (+Funds)
 		void timeDisplay();
 		/// Advances the game timer.
@@ -99,10 +146,13 @@ private:
 		void time1Day();
 		/// Trigger whenever 1 month passes.
 		void time1Month();
+
 		/// Resets the timer to minimum speed.
 		void timerReset();
+
 		/// Stop the music!
 		void musicStop(bool pause = false);
+
 		/// Displays a popup window.
 		void popup(State* state);
 
@@ -159,6 +209,7 @@ private:
 		void zoomInEffect();
 		/// Globe zoom out effect for dogfights.
 		void zoomOutEffect();
+
 		/// Multi-dogfights logic handling.
 		void handleDogfights();
 		/// Gets the number of minimized dogfights.
@@ -179,6 +230,7 @@ private:
 
 		/// Process a terror site
 		bool processTerrorSite(TerrorSite* ts) const;
+
 		/// Handles base defense
 		void handleBaseDefense(Base* base, Ufo* ufo);
 };

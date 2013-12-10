@@ -140,7 +140,7 @@ GeoscapeState::GeoscapeState(Game* game)
 		_dogfights(),
 		_dogfightsToBeStarted(),
 		_minimizedDogfights(0),
-		_zoomInter(0)
+		_zoomInter(0) // kL
 {
 	int screenWidth = Options::getInt("baseXResolution");
 	int screenHeight = Options::getInt("baseYResolution");
@@ -572,7 +572,10 @@ void GeoscapeState::blit()
 {
 	State::blit();
 
-	for (std::vector<DogfightState*>::iterator it = _dogfights.begin(); it != _dogfights.end(); ++it)
+	for (std::vector<DogfightState*>::iterator
+			it = _dogfights.begin();
+			it != _dogfights.end();
+			++it)
 	{
 		(*it)->blit();
 	}
@@ -621,7 +624,10 @@ void GeoscapeState::handle(Action* action)
 
 	if (!_dogfights.empty())
 	{
-		for(std::vector<DogfightState*>::iterator it = _dogfights.begin(); it != _dogfights.end(); ++it)
+		for (std::vector<DogfightState*>::iterator
+				it = _dogfights.begin();
+				it != _dogfights.end();
+				++it)
 		{
 			(*it)->handle(action);
 		}
@@ -678,9 +684,12 @@ void GeoscapeState::think()
 	if (_game->getSavedGame()->getMonthsPassed() == -1)
 	{
 		_game->getSavedGame()->addMonth();
+
 		determineAlienMissions(true);
+
 		_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds()
-				- (_game->getSavedGame()->getBaseMaintenance() - _game->getSavedGame()->getBases()->front()->getPersonnelMaintenance()));
+				- _game->getSavedGame()->getBaseMaintenance()
+				- _game->getSavedGame()->getBases()->front()->getPersonnelMaintenance());
 	}
 
 	if (_popups.empty()
@@ -2527,8 +2536,6 @@ void GeoscapeState::btnDetailClick(Action* action)
  */
 void GeoscapeState::zoomInEffect()
 {
-//	_zoomInter = _game->getSavedGame()->getGlobeZoom();		// kL
-
 	_globe->zoomIn();
 
 	if (_globe->isZoomedInToMax())
@@ -2544,7 +2551,7 @@ void GeoscapeState::zoomInEffect()
 void GeoscapeState::zoomOutEffect()
 {
 	if (_globe->isZoomedOutToMax()
-		|| _game->getSavedGame()->getGlobeZoom() >= _zoomInter)		// kL
+		|| _game->getSavedGame()->getGlobeZoom() <= _zoomInter)		// kL
 	{
 		_zoomInter = 0;												// kL
 
@@ -2564,18 +2571,13 @@ void GeoscapeState::zoomOutEffect()
  */
 void GeoscapeState::handleDogfights()
 {
-	// If all dogfights are minimized rotate the globe, etc.
-	if (_dogfights.size() == _minimizedDogfights)
+	if (_dogfights.size() == _minimizedDogfights) // if all dogfights are minimized rotate the globe, etc.
 	{
-//		_zoomOutEffectTimer->start();	// kL
-//		zoomOutEffect();				// kL
-
 		_pause = false;
 		_timer->think(this, 0);
 	}
 
-	// Handle dogfights logic.
-	_minimizedDogfights = 0;
+	_minimizedDogfights = 0; // handle dogfights logic.
 
 	std::vector<DogfightState*>::iterator d = _dogfights.begin();
 	while (d != _dogfights.end())
@@ -2616,7 +2618,10 @@ void GeoscapeState::handleDogfights()
 int GeoscapeState::minimizedDogfightsCount()
 {
 	int minimizedDogfights = 0;
-	for (std::vector<DogfightState*>::iterator d = _dogfights.begin(); d != _dogfights.end(); ++d)
+	for (std::vector<DogfightState*>::iterator
+			d = _dogfights.begin();
+			d != _dogfights.end();
+			++d)
 	{
 		if ((*d)->isMinimized())
 		{
@@ -2632,7 +2637,8 @@ int GeoscapeState::minimizedDogfightsCount()
  */
 void GeoscapeState::startDogfight()
 {
-	_zoomInter = _game->getSavedGame()->getGlobeZoom();		// kL
+	if (_zoomInter == 0)
+		_zoomInter = _game->getSavedGame()->getGlobeZoom(); // kL
 
 	if (!_globe->isZoomedInToMax())
 	{
@@ -2658,7 +2664,10 @@ void GeoscapeState::startDogfight()
 		}
 
 		// Set correct number of interceptions for every dogfight.
-		for (std::vector<DogfightState*>::iterator d = _dogfights.begin(); d != _dogfights.end(); ++d)
+		for (std::vector<DogfightState*>::iterator
+				d = _dogfights.begin();
+				d != _dogfights.end();
+				++d)
 		{
 			(*d)->setInterceptionsCount(_dogfights.size());
 		}
@@ -2671,7 +2680,10 @@ void GeoscapeState::startDogfight()
 int GeoscapeState::getFirstFreeDogfightSlot()
 {
 	int slotNo = 1;
-	for (std::vector<DogfightState*>::iterator d = _dogfights.begin(); d != _dogfights.end(); ++d)
+	for (std::vector<DogfightState*>::iterator
+			d = _dogfights.begin();
+			d != _dogfights.end();
+			++d)
 	{
 		if ((*d)->getInterceptionNumber() == slotNo)
 		{
