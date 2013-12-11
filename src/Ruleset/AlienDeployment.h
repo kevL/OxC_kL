@@ -29,8 +29,8 @@
 namespace OpenXcom
 {
 
-class RuleTerrain;
 class Ruleset;
+class RuleTerrain;
 
 
 struct ItemSet
@@ -42,10 +42,14 @@ struct ItemSet
 struct DeploymentData
 {
 	int alienRank;
-	int lowQty, highQty, dQty;
+	int
+		lowQty,
+		highQty,
+		dQty;
 	int percentageOutsideUfo;
 	std::vector<ItemSet> itemSets;
 };
+
 
 /**
  * Represents a specific type of Alien Deployment.
@@ -59,16 +63,27 @@ struct DeploymentData
  */
 class AlienDeployment
 {
+
 private:
-	std::string _type;
-	std::vector<DeploymentData> _data;
-	int _width, _length, _height, _civilians;
+
+	int
+		_civilians,
+		_height,
+		_length,
+		_width,
+		_shade;
+
+	std::string
+		_type,
+		_terrain,
+		_nextStage;
+
 	std::vector<int> _roadTypeOdds;
-	std::string _terrain;
-	int _shade;
-	std::string _nextStage;
+	std::vector<DeploymentData> _data;
+
 
 	public:
+
 		/// Creates a blank Alien Deployment ruleset.
 		AlienDeployment(const std::string& type);
 		/// Cleans up the Alien Deployment ruleset.
@@ -82,7 +97,10 @@ private:
 		/// Gets a pointer to the data.
 		std::vector<DeploymentData>* getDeploymentData();
 		/// Gets dimensions.
-		void getDimensions(int* width, int* length, int* height);
+		void getDimensions(
+				int* width,
+				int* length,
+				int* height);
 		/// Gets civilians.
 		int getCivilians() const;
 		/// Gets road type odds.

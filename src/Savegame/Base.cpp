@@ -181,9 +181,15 @@ void Base::load(const YAML::Node& node, SavedGame* save, bool newGame, bool newB
 
 	_items->load(node["items"]);
 	// Some old saves have bad items, better get rid of them to avoid further bugs
-	for (std::map<std::string, int>::iterator i = _items->getContents()->begin(); i != _items->getContents()->end();)
+	for (std::map<std::string, int>::iterator
+			i = _items->getContents()->begin();
+			i != _items->getContents()->end();
+			)
 	{
-		if (std::find(_rule->getItemsList().begin(), _rule->getItemsList().end(), i->first) == _rule->getItemsList().end())
+		if (std::find(
+					_rule->getItemsList().begin(),
+					_rule->getItemsList().end(),
+					i->first) == _rule->getItemsList().end())
 		{
 			_items->getContents()->erase(i++);
 		}

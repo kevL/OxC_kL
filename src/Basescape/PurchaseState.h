@@ -20,20 +20,22 @@
 #ifndef OPENXCOM_PURCHASESTATE_H
 #define OPENXCOM_PURCHASESTATE_H
 
-#include "../Engine/State.h"
-#include <vector>
 #include <string>
+#include <vector>
+
+#include "../Engine/State.h"
 
 
 namespace OpenXcom
 {
 
-class TextButton;
-class Window;
+class Base;
 class Text;
+class TextButton;
 class TextList;
 class Timer;
-class Base;
+class Window;
+
 
 /**
  * Purchase/Hire screen that lets the player buy
@@ -44,33 +46,56 @@ class PurchaseState
 		public State
 {
 private:
-	Base* _base;
 
-	TextButton* _btnOk, * _btnCancel;
-	Window* _window;
-	Text* _txtTitle, * _txtFunds, * _txtPurchases, * _txtItem, * _txtCost, * _txtQuantity;
-	TextList* _lstItems;
-	std::vector<std::string> _crafts, _items;
-	std::vector<int> _qtys;
-	unsigned int _sel;
-	int _total, _pQty, _cQty;
-	float _iQty;
-	Timer* _timerInc, * _timerDec;
-	int _changeValueByMouseWheel;
 	bool _allowChangeListValuesByMouseWheel;
+	int
+		_changeValueByMouseWheel,
+		_cQty,
+		_pQty,
+		_total;
+	unsigned int _sel;
+	float _iQty;
+
+	Base* _base;
+	Timer
+		* _timerInc,
+		* _timerDec;
+	TextButton
+		* _btnOk,
+		* _btnCancel;
+	Window* _window;
+	Text
+		* _txtCost,
+		* _txtFunds,
+		* _txtItem,
+		* _txtPurchases,
+		* _txtQuantity,
+		* _txtTitle;
+	TextList* _lstItems;
+
+	std::vector<int> _qtys;
+	std::vector<std::string>
+		_crafts,
+		_items;
+
+	/// Is excluded in the options file.
+	bool isExcluded(std::string item);
 	/// Gets selected price.
 	int getPrice();
-	/// Is it excluded in the options file?
-	bool isExcluded(std::string item);
+
 
 	public:
+
 		/// Creates the Purchase state.
-		PurchaseState(Game* game, Base* base);
+		PurchaseState(
+				Game* game,
+				Base* base);
 		/// Cleans up the Purchase state.
 		~PurchaseState();
 
 		/// Runs the timers.
 		void think();
+
 		/// Handler for clicking the OK button.
 		void btnOkClick(Action* action);
 		/// Handler for clicking the Cancel button.
@@ -89,6 +114,7 @@ private:
 		void lstItemsRightArrowClick(Action* action);
 		/// Handler for pressing-down a mouse-button in the list.
 		void lstItemsMousePress(Action* action);
+
 		/// Increases the quantity of an item by one.
 		void increase();
 		/// Increases the quantity of an item by the given value.
@@ -97,6 +123,7 @@ private:
 		void decrease();
 		/// Decreases the quantity of an item by the given value.
 		void decreaseByValue(int change);
+
 		/// Updates the quantity-strings of the selected item.
 		void updateItemStrings();
 };

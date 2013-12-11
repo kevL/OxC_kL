@@ -196,8 +196,7 @@ int RuleCraftWeapon::getRearmRate() const
 }
 
 /**
- * Gets the language string of the item used to
- * equip this craft weapon.
+ * Gets the language string of the item used to equip this craft weapon.
  * @return The item name.
  */
 std::string RuleCraftWeapon::getLauncherItem() const
@@ -206,8 +205,7 @@ std::string RuleCraftWeapon::getLauncherItem() const
 }
 
 /**
- * Gets the language string of the item used to
- * load this craft weapon with ammo.
+ * Gets the language string of the item used to load this craft weapon with ammo.
  * @return The item name.
  */
 std::string RuleCraftWeapon::getClipItem() const

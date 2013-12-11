@@ -806,17 +806,17 @@ void Projectile::applyAccuracy(
 		switch (_action.type)
 		{
 			case BA_AUTOSHOT:
-				baseDeviation += 0.18 / (accuracy - accuracyPenalty + 0.23); // was 0.25 (too accurate)
+				baseDeviation += 0.18 / (accuracy - accuracyPenalty + 0.22); // was 0.25 (too accurate)
 			break;
 			case BA_SNAPSHOT:
-				baseDeviation += 0.15 / (accuracy - accuracyPenalty + 0.23);
+				baseDeviation += 0.15 / (accuracy - accuracyPenalty + 0.22);
 			break;
 			case BA_AIMEDSHOT:
-				baseDeviation += 0.12 / (accuracy - accuracyPenalty + 0.23);
+				baseDeviation += 0.12 / (accuracy - accuracyPenalty + 0.22);
 			break;
 
 			default:
-				baseDeviation += 0.15 / (accuracy - accuracyPenalty + 0.23);
+				baseDeviation += 0.15 / (accuracy - accuracyPenalty + 0.22);
 			break;
 		}
 		// kL_end.

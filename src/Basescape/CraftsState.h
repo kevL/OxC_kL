@@ -26,11 +26,12 @@
 namespace OpenXcom
 {
 
-class TextButton;
-class Window;
-class Text;
-class TextList;
 class Base;
+class Text;
+class TextButton;
+class TextList;
+class Window;
+
 
 /**
  * Equip Craft screen that lets the player manage all the crafts in a base.
@@ -40,24 +41,37 @@ class CraftsState
 		public State
 {
 private:
-	TextButton* _btnOk;
-	Window* _window;
-	Text* _txtTitle, * _txtBase, * _txtName, * _txtStatus, * _txtWeapon, * _txtCrew, * _txtHwp;
-	TextList* _lstCrafts;
+
 	Base* _base;
+	Text
+		* _txtBase,
+		* _txtCrew,
+		* _txtHwp,
+		* _txtName,
+		* _txtStatus,
+		* _txtTitle,
+		* _txtWeapon;
+	TextButton* _btnOk;
+	TextList* _lstCrafts;
+	Window* _window;
+
 
 	public:
+
 		/// Creates the Crafts state.
-		CraftsState(Game* game, Base* base);
+		CraftsState(
+				Game* game,
+				Base* base);
 		/// Cleans up the Crafts state.
 		~CraftsState();
 
 		/// Updates the craft info.
 		void init();
-		/// Handler for clicking the OK button.
-		void btnOkClick(Action* action);
+
 		/// Handler for clicking the Crafts list.
 		void lstCraftsClick(Action* action);
+		/// Handler for clicking the OK button.
+		void btnOkClick(Action* action);
 };
 
 }

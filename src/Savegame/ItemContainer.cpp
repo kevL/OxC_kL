@@ -18,8 +18,9 @@
  */
 
 #include "ItemContainer.h"
-#include "../Ruleset/Ruleset.h"
+
 #include "../Ruleset/RuleItem.h"
+#include "../Ruleset/Ruleset.h"
 
 
 namespace OpenXcom

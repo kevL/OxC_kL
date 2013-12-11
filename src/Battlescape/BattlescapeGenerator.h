@@ -43,45 +43,44 @@ class Ufo;
 class Unit;
 class Vehicle;
 
+
 /**
  * A utility class that generates the initial battlescape data. Taking into account mission type, craft and ufo involved, terrain type,...
  */
 class BattlescapeGenerator
 {
+
 private:
-	Game* _game;
-	SavedBattleGame* _save;
-	ResourcePack* _res;
-	Craft* _craft;
-	Ufo* _ufo;
-	Base* _base;
-	TerrorSite* _terror;
+
+	int
+		_alienItemLevel,
+		_mapsize_x,
+		_mapsize_y,
+		_mapsize_z,
+		_tankPos, // kL
+		_unitSequence,
+		_worldTexture,
+		_worldShade;
+
 	AlienBase* _alienBase;
+	Base* _base;
+	Craft* _craft;
+	Game* _game;
+	ResourcePack* _res;
 	RuleTerrain* _terrain;
-	int _mapsize_x, _mapsize_y, _mapsize_z;
-	int _worldTexture, _worldShade;
-	int _unitSequence;
+	SavedBattleGame* _save;
+	TerrorSite* _terror;
 	Tile* _craftInventoryTile;
+	Ufo* _ufo;
+
 	std::string _alienRace;
-	int _alienItemLevel;
-	int _tankPos;		// kL
+
 
 	/// Generates a new battlescape map.
 	void generateMap();
-	/// Adds a vehicle to the game.
-	BattleUnit* addXCOMVehicle(Vehicle* v);
-	/// Adds a soldier to the game.
-	BattleUnit* addXCOMUnit(BattleUnit* unit);
-	/// Adds an alien to the game.
-	BattleUnit* addAlien(Unit* rules, int alienRank, bool outside);
-	/// Adds a civlian to the game.
-	BattleUnit* addCivilian(Unit* rules);
-	/// Places an item on a soldier based on equipment layout.
-	BattleItem* placeItemByLayout(BattleItem* item);
-	/// Adds an item to the game.
-	BattleItem* addItem(BattleItem* item, bool secondPass);
-	/// Adds an item to a unit.
-	BattleItem* addItem(RuleItem* item, BattleUnit* unit);
+	/// Gets battlescape terrain.
+	RuleTerrain* getTerrain(int tex, double lat);
+
 	/// Loads an XCom MAP file.
 	int loadMAP(
 			MapBlock* mapblock,
@@ -96,18 +95,37 @@ private:
 			int xoff,
 			int yoff,
 			int segment);
-	/// Fills power sources with an elerium-115 object.
-	void fuelPowerSources();
-	/// Possibly explodes ufo powersources.
-	void explodePowerSources();
+
+
 	/// Deploys the XCOM units on the mission.
 	void deployXCOM();
 	/// Deploys the aliens, according to the alien deployment rules.
 	void deployAliens(AlienRace* race, AlienDeployment* deployment);
 	/// Spawns civilians on a terror mission.
 	void deployCivilians(int civilians);
-	/// Gets battlescape terrain.
-	RuleTerrain* getTerrain(int tex, double lat);
+
+	/// Adds a vehicle to the game.
+	BattleUnit* addXCOMVehicle(Vehicle* v);
+	/// Adds a soldier to the game.
+	BattleUnit* addXCOMUnit(BattleUnit* unit);
+	/// Adds an alien to the game.
+	BattleUnit* addAlien(Unit* rules, int alienRank, bool outside);
+	/// Adds a civlian to the game.
+	BattleUnit* addCivilian(Unit* rules);
+	/// Places an item on a soldier based on equipment layout.
+	BattleItem* placeItemByLayout(BattleItem* item);
+	/// Adds an item to the game.
+	BattleItem* addItem(BattleItem* item, bool secondPass);
+	/// Adds an item to a unit.
+	BattleItem* addItem(RuleItem* item, BattleUnit* unit);
+
+	/// Loads a weapon on the inventoryTile.
+	bool loadGroundWeapon(BattleItem* item);
+
+	/// Fills power sources with an elerium-115 object.
+	void fuelPowerSources();
+	/// Possibly explodes ufo powersources.
+	void explodePowerSources();
 
 
 	public:
@@ -115,30 +133,37 @@ private:
 		BattlescapeGenerator(Game* game);
 		/// Cleans up the BattlescapeGenerator.
 		~BattlescapeGenerator();
-		/// Sets the XCom craft.
-		void setCraft(Craft* craft);
-		/// Sets the ufo.
-		void setUfo(Ufo* ufo);
+
 		/// Sets the polygon texture.
 		void setWorldTexture(int texture);
 		/// Sets the polygon shade.
 		void setWorldShade(int shade);
-		/// Sets the alien race.
-		void setAlienRace(const std::string& alienRace);
-		/// Sets the alien item level.
-		void setAlienItemlevel(int alienItemLevel);
+
+		/// Runs the generator.
+		void run();
+		/// Sets up the next stage (for cydonia/tftd terror missions).
+		void nextStage();
+
+		/// Sets the XCom craft.
+		void setCraft(Craft* craft);
+		/// Sets the ufo.
+		void setUfo(Ufo* ufo);
+
 		/// Sets the XCom base.
 		void setBase(Base* base);
 		/// Sets the terror site.
 		void setTerrorSite(TerrorSite* site);
 		/// Sets the alien base
 		void setAlienBase(AlienBase* base);
-		/// Runs the generator.
-		void run();
-		/// Sets up the next stage (for cydonia/tftd terror missions).
-		void nextStage();
+
+		/// Sets the alien race.
+		void setAlienRace(const std::string& alienRace);
+		/// Sets the alien item level.
+		void setAlienItemlevel(int alienItemLevel);
+
 		/// Finds a spot near a friend to spawn at.
 		bool placeUnitNearFriend(BattleUnit* unit);
+
 		/// Generates an inventory battlescape.
 		void runInventory(Craft* craft);
 };

@@ -18,32 +18,40 @@
  */
 
 #include "PurchaseState.h"
-#include <sstream>
+
 #include <climits>
 #include <cmath>
+#include <sstream>
+
 #include "../aresame.h"
+
+#include "../Engine/Action.h"
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
+#include "../Engine/Options.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Timer.h"
-#include "../Engine/Options.h"
-#include "../Interface/TextButton.h"
-#include "../Interface/Window.h"
+
 #include "../Interface/Text.h"
+#include "../Interface/TextButton.h"
 #include "../Interface/TextList.h"
-#include "../Savegame/SavedGame.h"
-#include "../Ruleset/Ruleset.h"
-#include "../Ruleset/RuleCraft.h"
-#include "../Ruleset/RuleItem.h"
-#include "../Savegame/Base.h"
-#include "../Engine/Action.h"
-#include "../Savegame/Transfer.h"
-#include "../Savegame/Craft.h"
-#include "../Savegame/Soldier.h"
-#include "../Savegame/ItemContainer.h"
+#include "../Interface/Window.h"
+
 #include "../Menu/ErrorMessageState.h"
+
+#include "../Resource/ResourcePack.h"
+
+#include "../Ruleset/RuleCraft.h"
 #include "../Ruleset/RuleCraftWeapon.h"
+#include "../Ruleset/RuleItem.h"
+#include "../Ruleset/Ruleset.h"
+
+#include "../Savegame/Base.h"
+#include "../Savegame/Craft.h"
+#include "../Savegame/ItemContainer.h"
+#include "../Savegame/SavedGame.h"
+#include "../Savegame/Soldier.h"
+#include "../Savegame/Transfer.h"
 
 
 namespace OpenXcom
@@ -54,7 +62,9 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
  */
-PurchaseState::PurchaseState(Game* game, Base* base)
+PurchaseState::PurchaseState(
+		Game* game,
+		Base* base)
 	:
 		State(game),
 		_base(base),
@@ -68,7 +78,9 @@ PurchaseState::PurchaseState(Game* game, Base* base)
 		_iQty(0.0f)
 {
 	_changeValueByMouseWheel = Options::getInt("changeValueByMouseWheel");
-	_allowChangeListValuesByMouseWheel = (Options::getBool("allowChangeListValuesByMouseWheel") && _changeValueByMouseWheel);
+	_allowChangeListValuesByMouseWheel =
+							Options::getBool("allowChangeListValuesByMouseWheel")
+								&& _changeValueByMouseWheel;
 
 
 	_window			= new Window(this, 320, 200, 0, 0);
@@ -87,11 +99,13 @@ PurchaseState::PurchaseState(Game* game, Base* base)
 	_btnOk			= new TextButton(134, 16, 170, 177);
 
 
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
+	_game->setPalette(
+				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(
+																			Palette::blockOffset(0)),
+																			Palette::backPos,
+																			16);
 
 	add(_window);
-	add(_btnOk);
-	add(_btnCancel);
 	add(_txtTitle);
 	add(_txtFunds);
 	add(_txtPurchases);
@@ -99,6 +113,8 @@ PurchaseState::PurchaseState(Game* game, Base* base)
 	add(_txtCost);
 	add(_txtQuantity);
 	add(_lstItems);
+	add(_btnCancel);
+	add(_btnOk);
 
 	centerAllSurfaces();
 
@@ -156,24 +172,43 @@ PurchaseState::PurchaseState(Game* game, Base* base)
 	_qtys.push_back(0);
 	std::wstringstream ss;
 	ss << _base->getTotalSoldiers();
-	_lstItems->addRow(4, tr("STR_SOLDIER").c_str(), Text::formatFunding(_game->getRuleset()->getSoldierCost() * 2).c_str(), ss.str().c_str(), L"0");
+	_lstItems->addRow(
+					4,
+					tr("STR_SOLDIER").c_str(),
+					Text::formatFunding(_game->getRuleset()->getSoldierCost() * 2).c_str(),
+					ss.str().c_str(),
+					L"0");
 
 	_qtys.push_back(0);
 	std::wstringstream ss2;
 	ss2 << _base->getTotalScientists();
-	_lstItems->addRow(4, tr("STR_SCIENTIST").c_str(), Text::formatFunding(_game->getRuleset()->getScientistCost() * 2).c_str(), ss2.str().c_str(), L"0");
+	_lstItems->addRow(
+					4,
+					tr("STR_SCIENTIST").c_str(),
+					Text::formatFunding(_game->getRuleset()->getScientistCost() * 2).c_str(),
+					ss2.str().c_str(),
+					L"0");
 
 	_qtys.push_back(0);
 	std::wstringstream ss3;
 	ss3 << _base->getTotalEngineers();
-	_lstItems->addRow(4, tr("STR_ENGINEER").c_str(), Text::formatFunding(_game->getRuleset()->getEngineerCost() * 2).c_str(), ss3.str().c_str(), L"0");
+	_lstItems->addRow(
+					4,
+					tr("STR_ENGINEER").c_str(),
+					Text::formatFunding(_game->getRuleset()->getEngineerCost() * 2).c_str(),
+					ss3.str().c_str(),
+					L"0");
 
 
 	// Add craft-types to purchase list.
 	const std::vector<std::string>& crafts = _game->getRuleset()->getCraftsList();
-	for (std::vector<std::string>::const_iterator i = crafts.begin(); i != crafts.end(); ++i)
+	for (std::vector<std::string>::const_iterator
+			i = crafts.begin();
+			i != crafts.end();
+			++i)
 	{
 		RuleCraft* rule = _game->getRuleset()->getCraft(*i);
+
 		if (rule->getBuyCost() > 0
 			&& _game->getSavedGame()->isResearched(rule->getRequirements()))
 		{
@@ -181,7 +216,10 @@ PurchaseState::PurchaseState(Game* game, Base* base)
 			_qtys.push_back(0);
 
 			int crafts = 0;
-			for (std::vector<Craft*>::iterator c = _base->getCrafts()->begin(); c != _base->getCrafts()->end(); ++c)
+			for (std::vector<Craft*>::iterator
+					c = _base->getCrafts()->begin();
+					c != _base->getCrafts()->end();
+					++c)
 			{
 				if ((*c)->getRules()->getType() == *i)
 					crafts++;
@@ -189,7 +227,12 @@ PurchaseState::PurchaseState(Game* game, Base* base)
 
 			std::wstringstream ss4;
 			ss4 << crafts;
-			_lstItems->addRow(4, tr(*i).c_str(), Text::formatFunding(rule->getBuyCost()).c_str(), ss4.str().c_str(), L"0");
+			_lstItems->addRow(
+							4,
+							tr(*i).c_str(),
+							Text::formatFunding(rule->getBuyCost()).c_str(),
+							ss4.str().c_str(),
+							L"0");
 		}
 	}
 
@@ -198,12 +241,15 @@ PurchaseState::PurchaseState(Game* game, Base* base)
 
 	// Add craft Weapon-types to purchase list.
 	const std::vector<std::string>& cweapons = _game->getRuleset()->getCraftWeaponsList();
-	for (std::vector<std::string>::const_iterator i = cweapons.begin(); i != cweapons.end(); ++i)
+	for (std::vector<std::string>::const_iterator
+			i = cweapons.begin();
+			i != cweapons.end();
+			++i)
 	{
 		// Special handling for treating craft weapons as items
 		RuleCraftWeapon* rule = _game->getRuleset()->getCraftWeapon(*i);
+		RuleItem* launcher = _game->getRuleset()->getItem(rule->getLauncherItem()); // kL
 
-		RuleItem* launcher = _game->getRuleset()->getItem(rule->getLauncherItem());		// kL
 		if (launcher != 0
 			&& launcher->getBuyCost() > 0
 			&& !isExcluded(launcher->getType()))
@@ -211,25 +257,35 @@ PurchaseState::PurchaseState(Game* game, Base* base)
 			_items.push_back(launcher->getType());
 			_qtys.push_back(0);
 
-			std::wstringstream ss5;
-//kL			ss5 << _base->getItems()->getItem(launcher->getType());
 			std::wstring item = tr(launcher->getType());
 			// kL_begin: Add qty of craft weapons in transit to Purchase screen stores.
 			int tQty = _base->getItems()->getItem(launcher->getType()); // Gets the item type. Each item has a unique type.
-			for (std::vector<Transfer*>::const_iterator j = _base->getTransfers()->begin(); j != _base->getTransfers()->end(); ++j)
+			for (std::vector<Transfer*>::const_iterator
+					j = _base->getTransfers()->begin();
+					j != _base->getTransfers()->end();
+					++j)
 			{
 				std::wstring trItem = (*j)->getName(_game->getLanguage());
 				if (item == trItem)
 				{
 					tQty += (*j)->getQuantity();
 				}
-			}
+			} // kL_end.
 
-			ss5 << tQty;
-			// kL_end.
-			_lstItems->addRow(4, item.c_str(), Text::formatFunding(launcher->getBuyCost()).c_str(), ss5.str().c_str(), L"0");
+			std::wstringstream ss5;
+//kL			ss5 << _base->getItems()->getItem(launcher->getType());
+			ss5 << tQty; // kL
+			_lstItems->addRow(
+							4,
+							item.c_str(),
+							Text::formatFunding(launcher->getBuyCost()).c_str(),
+							ss5.str().c_str(),
+							L"0");
 
-			for (std::vector<std::string>::iterator j = items.begin(); j != items.end(); ++j)
+			for (std::vector<std::string>::iterator
+					j = items.begin();
+					j != items.end();
+					++j)
 			{
 				if (*j == launcher->getType())
 				{
@@ -240,33 +296,48 @@ PurchaseState::PurchaseState(Game* game, Base* base)
 			}
 		}
 
-		RuleItem* clip = _game->getRuleset()->getItem(rule->getClipItem());		// kL
+
+		// Handle craft weapon ammo.
+		RuleItem* clip = _game->getRuleset()->getItem(rule->getClipItem()); // kL
+
 		if (clip != 0
 			&& clip->getBuyCost() > 0
 			&& !isExcluded(clip->getType()))
 		{
 			_items.push_back(clip->getType());
 			_qtys.push_back(0);
-			std::wstringstream ss5;
-//kL			ss5 << _base->getItems()->getItem(clip->getType());
+
 			std::wstring item = tr(clip->getType());
 			// kL_begin: Add qty of clips in transit to Purchase screen stores.
 			int tQty = _base->getItems()->getItem(clip->getType()); // Gets the item type. Each item has a unique type.
-			for (std::vector<Transfer*>::const_iterator j = _base->getTransfers()->begin(); j != _base->getTransfers()->end(); ++j)
+			for (std::vector<Transfer*>::const_iterator
+					j = _base->getTransfers()->begin();
+					j != _base->getTransfers()->end();
+					++j)
 			{
 				std::wstring trItem = (*j)->getName(_game->getLanguage());
 				if (item == trItem)
 				{
 					tQty += (*j)->getQuantity();
 				}
-			}
+			} // kL_end.
 
-			ss5 << tQty;
-			// kL_end.
+			std::wstringstream ss5;
+//kL			ss5 << _base->getItems()->getItem(clip->getType());
+			ss5 << tQty; // kL
+
 			item.insert(0, L"  ");
-			_lstItems->addRow(4, item.c_str(), Text::formatFunding(clip->getBuyCost()).c_str(), ss5.str().c_str(), L"0");
+			_lstItems->addRow(
+							4,
+							item.c_str(),
+							Text::formatFunding(clip->getBuyCost()).c_str(),
+							ss5.str().c_str(),
+							L"0");
 
-			for (std::vector<std::string>::iterator j = items.begin(); j != items.end(); ++j)
+			for (std::vector<std::string>::iterator
+					j = items.begin();
+					j != items.end();
+					++j)
 			{
 				if (*j == clip->getType())
 				{
@@ -278,81 +349,92 @@ PurchaseState::PurchaseState(Game* game, Base* base)
 		}
 	}
 
+
 	// Add items to purchase list.
-	for (std::vector<std::string>::const_iterator i = items.begin(); i != items.end(); ++i)
+	for (std::vector<std::string>::const_iterator
+			i = items.begin();
+			i != items.end();
+			++i)
 	{
 		RuleItem* rule = _game->getRuleset()->getItem(*i);
 
-		if (rule->getBuyCost() > 0 && !isExcluded(*i))
+		if (rule->getBuyCost() > 0
+			&& !isExcluded(*i))
 		{
 			_items.push_back(*i);
 			_qtys.push_back(0);
 
-			std::wstringstream ss5;
-//kL			ss5 << _base->getItems()->getItem(*i);
 			std::wstring item = tr(*i);
 
 			// kL_begin:
 			int tQty = _base->getItems()->getItem(*i); // Returns the quantity of an item in the container.
 
-			// Add qty of items in transit to Purchase screen stores.
-			for (std::vector<Transfer*>::const_iterator j = _base->getTransfers()->begin(); j != _base->getTransfers()->end(); ++j)
+			// Add qty of items in transit to Purchase screen stock.
+			for (std::vector<Transfer*>::const_iterator
+					j = _base->getTransfers()->begin();
+					j != _base->getTransfers()->end();
+					++j)
 			{
 				std::wstring trItem = (*j)->getName(_game->getLanguage());
+//				std::wstring trItem = tr(*j);
 				if (item == trItem)
 				{
 					tQty += (*j)->getQuantity();
 				}
 			}
 
-			// Add qty of items on transport crafts to Purchase screen stores.
-/*			for (std::vector<Craft*>::const_iterator c = _base->getCrafts()->begin(); c != _base->getCrafts()->end(); ++c)
+			// Add qty of items & vehicles on transport craft to Purchase screen stock.
+			for (std::vector<Craft*>::const_iterator
+					c = _base->getCrafts()->begin();
+					c != _base->getCrafts()->end();
+					++c)
 			{
-				if ((*c)->getRules()->getSoldiers() != 0) // is transport craft
+				if ((*c)->getRules()->getSoldiers() > 0) // is transport craft
 				{
-					ItemContainer* craftItems = (*c)->getItems();
-	for (std::vector<std::string>::const_iterator i = items.begin(); i != items.end(); ++i)
-	{
-
-int ItemContainer::getItem(const std::string& id) const; //Returns the quantity of an item in the container.
-std::map<std::string, int>* ItemContainer::getContents(); //Returns all the items currently contained within.
-
-					Craft* c = _base->getCrafts()->at(_craft);
-					tQty += c->getItems()->getItem(*i);
-
-
-					std::wstring cItem = (*itemInCraftItemContainer)->getName(_game->getLanguage());
-
-
-
-	for (std::vector<std::string>::const_iterator i = items.begin(); i != items.end(); ++i)
-	{
-
-
-					ItemContainer* items = _game->getRuleset()->getCraft(*i);
-
-
-//	std::vector<std::string> items = _game->getRuleset()->getItemsList();
-					for (std::vector<Craft*>::const_iterator k = (*c)->getItems(); k != _base->getCrafts()->end(); ++k)
+					for (std::map<std::string, int>::iterator
+							t = (*c)->getItems()->getContents()->begin();
+							t != (*c)->getItems()->getContents()->end();
+							++t) // ha, map is my bitch!!
 					{
-						std::wstring trItem = (*k)->getName(_game->getLanguage());
-						if (item == trItem)
+						std::wstring ti = tr(t->first);
+						if (ti == item)
 						{
-							tQty += (*c)->getItems()->getItem(*i);
+							tQty += t->second;
 						}
+					}
 				}
-			} */
 
+				if ((*c)->getRules()->getVehicles() > 0) // is transport craft capable of vehicles
+				{
+					for (std::vector<Vehicle*>::const_iterator
+							v = (*c)->getVehicles()->begin();
+							v != (*c)->getVehicles()->end();
+							++v)
+					{
+						std::wstring tv = tr((*v)->getRules()->getType());
+						if (tv == item)
+						{
+							tQty++;
+							// still have to do vehicle ammo...
+						}
+					}
+				}
+			} // kL_end.
 
-			ss5 << tQty;
-			// kL_end.
+			std::wstringstream ss5;
+			ss5 << tQty; // kL
 
 			if (rule->getBattleType() == BT_AMMO)
 			{
 				item.insert(0, L"  ");
 			}
 
-			_lstItems->addRow(4, item.c_str(), Text::formatFunding(rule->getBuyCost()).c_str(), ss5.str().c_str(), L"0");
+			_lstItems->addRow(
+							4,
+							item.c_str(),
+							Text::formatFunding(rule->getBuyCost()).c_str(),
+							ss5.str().c_str(),
+							L"0");
 		}
 	}
 

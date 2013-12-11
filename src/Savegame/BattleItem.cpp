@@ -252,12 +252,15 @@ void BattleItem::setOwner(BattleUnit* owner)
  */
 void BattleItem::moveToOwner(BattleUnit* owner)
 {
-	_previousOwner = _owner ? _owner : owner;
+	_previousOwner = _owner? _owner: owner;
 	_owner = owner;
 
 	if (_previousOwner != 0)
 	{
-		for (std::vector<BattleItem*>::iterator i = _previousOwner->getInventory()->begin(); i != _previousOwner->getInventory()->end(); ++i)
+		for (std::vector<BattleItem*>::iterator
+				i = _previousOwner->getInventory()->begin();
+				i != _previousOwner->getInventory()->end();
+				++i)
 		{
 			if (*i == this)
 			{
@@ -360,7 +363,7 @@ bool BattleItem::occupiesSlot(int x, int y, BattleItem* item) const
 }
 
 /**
- * Gets the item's currently loaded ammo item.
+ * Gets an item's currently loaded ammo item.
  * @return, The ammo item; 0 if it doesn't need ammo
  */
 BattleItem* BattleItem::getAmmoItem()
@@ -370,17 +373,18 @@ BattleItem* BattleItem::getAmmoItem()
 
 /**
  * Determines if the item uses ammo.
+ * No ammo is needed if the item has itself assigned as its ammoItem.
  * @return, True if ammo is used.
  */
 bool BattleItem::needsAmmo() const
 {
-	return _ammoItem != this; // no ammo for this weapon is needed
+	return _ammoItem != this;
 }
 
 /**
- * Sets the item's ammo item.
+ * Sets an ammo item.
  * @param item, The ammo item.
- * @return, -2 when ammo doesn't fit, or -1 when weapon already contains ammo.
+ * @return, -2 if ammo doesn't fit, or -1 if weapon already contains ammo.
  */
 int BattleItem::setAmmoItem(BattleItem* item)
 {
@@ -396,7 +400,10 @@ int BattleItem::setAmmoItem(BattleItem* item)
 	if (_ammoItem)
 		return -1;
 
-	for (std::vector<std::string>::iterator i = _rules->getCompatibleAmmo()->begin(); i != _rules->getCompatibleAmmo()->end(); ++i)
+	for (std::vector<std::string>::iterator
+			i = _rules->getCompatibleAmmo()->begin();
+			i != _rules->getCompatibleAmmo()->end();
+			++i)
 	{
 		if (*i == item->getRules()->getType())
 		{

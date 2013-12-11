@@ -18,20 +18,27 @@
  */
 
 #include "CraftsState.h"
+
 #include <sstream>
-#include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
-#include "../Engine/Language.h"
-#include "../Engine/Palette.h"
-#include "../Engine/Options.h"
-#include "../Interface/TextButton.h"
-#include "../Interface/Window.h"
-#include "../Interface/Text.h"
-#include "../Interface/TextList.h"
-#include "../Savegame/Craft.h"
-#include "../Ruleset/RuleCraft.h"
-#include "../Savegame/Base.h"
+
 #include "CraftInfoState.h"
+
+#include "../Engine/Game.h"
+#include "../Engine/Language.h"
+#include "../Engine/Options.h"
+#include "../Engine/Palette.h"
+
+#include "../Interface/Text.h"
+#include "../Interface/TextButton.h"
+#include "../Interface/TextList.h"
+#include "../Interface/Window.h"
+
+#include "../Resource/ResourcePack.h"
+
+#include "../Ruleset/RuleCraft.h"
+
+#include "../Savegame/Base.h"
+#include "../Savegame/Craft.h"
 
 
 namespace OpenXcom
@@ -42,13 +49,14 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
  */
-CraftsState::CraftsState(Game* game, Base* base)
+CraftsState::CraftsState(
+		Game* game,
+		Base* base)
 	:
 		State(game),
 		_base(base)
 {
 	_window		= new Window(this, 320, 200, 0, 0);
-
 	_txtTitle	= new Text(300, 17, 10, 8);
 
 	_txtBase	= new Text(298, 17, 16, 25);
@@ -64,10 +72,13 @@ CraftsState::CraftsState(Game* game, Base* base)
 	_btnOk		= new TextButton(288, 16, 16, 177);
 
 
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(3)), Palette::backPos, 16);
+	_game->setPalette(
+				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(
+																			Palette::blockOffset(3)),
+																			Palette::backPos,
+																			16);
 
 	add(_window);
-	add(_btnOk);
 	add(_txtTitle);
 	add(_txtBase);
 	add(_txtName);
@@ -76,6 +87,7 @@ CraftsState::CraftsState(Game* game, Base* base)
 	add(_txtCrew);
 	add(_txtHwp);
 	add(_lstCrafts);
+	add(_btnOk);
 
 	centerAllSurfaces();
 
@@ -136,13 +148,27 @@ CraftsState::~CraftsState()
 void CraftsState::init()
 {
 	_lstCrafts->clearList();
-	for (std::vector<Craft*>::iterator i = _base->getCrafts()->begin(); i != _base->getCrafts()->end(); ++i)
+
+	for (std::vector<Craft*>::iterator
+			i = _base->getCrafts()->begin();
+			i != _base->getCrafts()->end();
+			++i)
 	{
-		std::wstringstream ss, ss2, ss3;
+		std::wstringstream
+			ss,
+			ss2,
+			ss3;
 		ss << (*i)->getNumWeapons() << "/" << (*i)->getRules()->getWeapons();
 		ss2 << (*i)->getNumSoldiers();
 		ss3 << (*i)->getNumVehicles();
-		_lstCrafts->addRow(5, (*i)->getName(_game->getLanguage()).c_str(), tr((*i)->getStatus()).c_str(), ss.str().c_str(), ss2.str().c_str(), ss3.str().c_str());
+
+		_lstCrafts->addRow(
+						5,
+						(*i)->getName(_game->getLanguage()).c_str(),
+						tr((*i)->getStatus()).c_str(),
+							ss.str().c_str(),
+							ss2.str().c_str(),
+							ss3.str().c_str());
 	}
 }
 
@@ -163,7 +189,10 @@ void CraftsState::lstCraftsClick(Action*)
 {
 	if (_base->getCrafts()->at(_lstCrafts->getSelectedRow())->getStatus() != "STR_OUT")
 	{
-		_game->pushState(new CraftInfoState(_game, _base, _lstCrafts->getSelectedRow()));
+		_game->pushState(new CraftInfoState(
+										_game,
+										_base,
+										_lstCrafts->getSelectedRow()));
 	}
 }
 

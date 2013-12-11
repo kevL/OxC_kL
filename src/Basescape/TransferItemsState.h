@@ -20,23 +20,25 @@
 #ifndef OPENXCOM_TRANSFERITEMSSTATE_H
 #define OPENXCOM_TRANSFERITEMSSTATE_H
 
+#include <string>
+#include <vector>
+
 #include "../Engine/State.h"
 #include "../Savegame/Transfer.h"
-#include <vector>
-#include <string>
 
 
 namespace OpenXcom
 {
 
-class TextButton;
-class Window;
+class Base;
+class Craft;
+class Soldier;
 class Text;
+class TextButton;
 class TextList;
 class Timer;
-class Base;
-class Soldier;
-class Craft;
+class Window;
+
 
 /**
  * Transfer screen that lets the player pick
@@ -44,40 +46,68 @@ class Craft;
  */
 class TransferItemsState
 	:
-	public State
+		public State
 {
-	private:
-		Base* _baseFrom, * _baseTo;
-		TextButton* _btnOk, * _btnCancel;
-		Window* _window;
-		Text* _txtTitle, * _txtItem, * _txtQuantity, * _txtAmountTransfer, * _txtAmountDestination;
-		TextList* _lstItems;
-		std::vector<int> _qtys;
-		std::vector<Soldier*> _soldiers;
-		std::vector<Craft*> _crafts;
-		std::vector<std::string> _items;
-		unsigned int _sel;
-		int _total, _pQty, _cQty, _aQty;
-		float _iQty;
-		int _hasSci, _hasEng;
-		double _distance;
-		Timer* _timerInc, * _timerDec;
-		int _changeValueByMouseWheel;
-		bool _canTransferCraftsWhileAirborne, _containmentLimit, _allowChangeListValuesByMouseWheel;
-		/// Gets selected cost.
-		int getCost() const;
-		/// Gets selected quantity.
-		int getQuantity() const;
-		/// Gets distance between bases.
-		double getDistance() const;
-		/// Gets type of selected item.
-		enum TransferType getType(unsigned selected) const;
-		/// Gets item Index.
-		int getItemIndex(unsigned selected) const;
+
+private:
+
+	bool
+		_allowChangeListValuesByMouseWheel,
+		_canTransferCraftsWhileAirborne,
+		_containmentLimit;
+	int
+		_aQty,
+		_cQty,
+		_pQty,
+		_total,
+		_changeValueByMouseWheel,
+		_hasEng,
+		_hasSci;
+	unsigned int _sel;
+	float _iQty;
+	double _distance;
+
+	Base
+		* _baseFrom,
+		* _baseTo;
+	Text
+		* _txtTitle,
+		* _txtItem,
+		* _txtQuantity,
+		* _txtAmountTransfer,
+		* _txtAmountDestination;
+	TextButton
+		* _btnCancel,
+		* _btnOk;
+	TextList* _lstItems;
+	Timer
+		* _timerInc,
+		* _timerDec;
+	Window* _window;
+
+	std::vector<int> _qtys;
+	std::vector<std::string> _items;
+	std::vector<Craft*> _crafts;
+	std::vector<Soldier*> _soldiers;
+
+	/// Gets selected cost.
+	int getCost() const;
+	/// Gets selected quantity.
+	int getQuantity() const;
+	/// Gets distance between bases.
+	double getDistance() const;
+	/// Gets type of selected item.
+	enum TransferType getType(unsigned selected) const;
+	/// Gets item Index.
+	int getItemIndex(unsigned selected) const;
+
 
 	public:
 		/// Creates the Transfer Items state.
-		TransferItemsState(Game* game, Base* baseFrom, Base* baseTo);
+		TransferItemsState(
+				Game* game,
+				Base* baseFrom,
+				Base* baseTo);
 		/// Cleans up the Transfer Items state.
 		~TransferItemsState();
 
@@ -85,10 +115,12 @@ class TransferItemsState
 		void init();
 		/// Runs the timers.
 		void think();
-		/// Handler for clicking the OK button.
-		void btnOkClick(Action* action);
+
 		/// Completes the transfer between bases.
 		void completeTransfer();
+
+		/// Handler for clicking the OK button.
+		void btnOkClick(Action* action);
 		/// Handler for clicking the Cancel button.
 		void btnCancelClick(Action* action);
 		/// Handler for pressing an Increase arrow in the list.
@@ -105,6 +137,7 @@ class TransferItemsState
 		void lstItemsRightArrowClick(Action* action);
 		/// Handler for pressing-down a mouse-button in the list.
 		void lstItemsMousePress(Action* action);
+
 		/// Increases the quantity of an item by one.
 		void increase();
 		/// Increases the quantity of an item by the given value.
@@ -113,8 +146,10 @@ class TransferItemsState
 		void decrease();
 		/// Decreases the quantity of an item by the given value.
 		void decreaseByValue(int change);
+
 		/// Updates the quantity-strings of the selected item.
 		void updateItemStrings();
+
 		/// Gets the total of the transfer.
 		int getTotal() const;
 };
