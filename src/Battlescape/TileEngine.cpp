@@ -3318,7 +3318,11 @@ bool TileEngine::validateThrow(BattleAction* action) // superceded by Wb.131129 
 bool TileEngine::validateThrow(BattleAction &action, Position originVoxel, Position targetVoxel, double *curve, int *voxelType)
 {
 	bool foundCurve = false;
-	double curvature = 1.0;
+	double curvature = 0.5;
+	if (action.type == BA_THROW)
+	{
+		curvature = std::max(0.48, 1.73 / sqrt(sqrt((double)(action.actor->getStats()->strength / action.weapon->getRules()->getWeight()))) + (action.actor->isKneeled()? 0.1 : 0.0));
+	}
 	Tile *targetTile = _save->getTile(action.target);
 	// object blocking - can't throw here
 	if ((action.type == BA_THROW
@@ -3350,7 +3354,7 @@ bool TileEngine::validateThrow(BattleAction &action, Position originVoxel, Posit
 			curvature += 0.5;
 		}
 	}
-	if (AreSame(curvature, 5.0))
+	if (curvature >= 5.0)
 	{
 		return false;
 	}
@@ -3360,8 +3364,7 @@ bool TileEngine::validateThrow(BattleAction &action, Position originVoxel, Posit
 	}
 
 	return true;
-}
-*/
+} */
 
 /**
  * Calculates z "grounded" value for a particular voxel (used for projectile shadow).

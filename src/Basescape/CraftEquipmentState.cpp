@@ -657,6 +657,7 @@ void CraftEquipmentState::moveRightByValue(int change)
 		if (_game->getRuleset()->getUnit(item->getType()))
 		{
 			size = _game->getRuleset()->getArmor(_game->getRuleset()->getUnit(item->getType())->getArmor())->getSize();
+			size *= size;
 		}
 
 		// Check if there's enough room

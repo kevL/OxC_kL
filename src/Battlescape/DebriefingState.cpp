@@ -1296,6 +1296,7 @@ void DebriefingState::reequipCraft(Base* base, Craft* craft, bool vehicleItemsCa
 		if (_game->getRuleset()->getUnit(tankRule->getType()))
 		{
 			size = _game->getRuleset()->getArmor(_game->getRuleset()->getUnit(tankRule->getType())->getArmor())->getSize();
+			size *= size;
 		}
 
 		int canBeAdded = std::min(qty, i->second);
