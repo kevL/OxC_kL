@@ -337,7 +337,7 @@ void Map::setPalette(SDL_Color* colors, int firstcolor, int ncolors)
  * Keep this function as optimised as possible. It's big to minimise overhead of function calls.
  * @param surface The surface to draw on.
  */
-void Map::drawTerrain(Surface *surface)
+void Map::drawTerrain(Surface* surface)
 {
 	int frameNumber = 0;
 
@@ -880,10 +880,13 @@ void Map::drawTerrain(Surface *surface)
 					if (tile->getSmoke() && tile->isDiscovered(2))
 					{
 						frameNumber = 0;
+
 						if (!tile->getFire())
 						{
 							// see http://www.ufopaedia.org/images/c/cb/Smoke.gif
-							frameNumber = 8 + static_cast<int>(floor((static_cast<double>(tile->getSmoke()) / 6.0) - 0.1));
+//kL							frameNumber = 8 + static_cast<int>(floor((static_cast<double>(tile->getSmoke()) / 6.0) - 0.1));
+//							frameNumber = 8 + static_cast<int>(floor(static_cast<double>(tile->getSmoke()) / 2.0));		// kL
+							frameNumber = 8 + (tile->getSmoke() / 2); // kL
 						}
 
 						if ((_animFrame / 2) + tile->getAnimationOffset() > 3)

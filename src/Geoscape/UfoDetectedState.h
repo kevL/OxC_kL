@@ -33,6 +33,7 @@ class Text;
 class TextList;
 class GeoscapeState;
 
+
 /**
  * Displays info on a detected UFO.
  */
@@ -40,19 +41,36 @@ class UfoDetectedState
 	:
 		public State
 {
+
 private:
-	Ufo* _ufo;
-	GeoscapeState* _state;
+
 	bool _hyperwave;
 
-	TextButton* _btnIntercept, * _btnCentre, * _btnCancel;
+	GeoscapeState* _state;
+	Text
+		* _txtDetected,
+		* _txtHyperwave,
+		* _txtUfo;
+	TextButton
+		* _btnCancel,
+		* _btnCentre,
+		* _btnIntercept;
+	TextList
+		* _lstInfo,
+		* _lstInfo2;
 	Window* _window;
-	Text* _txtUfo, * _txtDetected, * _txtHyperwave;
-	TextList* _lstInfo, * _lstInfo2;
+	Ufo* _ufo;
+
 
 	public:
+
 		/// Creates the Ufo Detected state.
-		UfoDetectedState(Game* game, Ufo* ufo, GeoscapeState* state, bool detected, bool hyper);
+		UfoDetectedState(
+				Game* game,
+				Ufo* ufo,
+				GeoscapeState* state,
+				bool detected,
+				bool hyper);
 		/// Cleans up the Ufo Detected state.
 		~UfoDetectedState();
 

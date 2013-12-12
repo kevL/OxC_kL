@@ -767,7 +767,7 @@ void Tile::addSmoke(int smoke)
 
 /**
  * Set the amount of turns this tile is smoking. 0 = no smoke.
- * @param smoke : amount of turns this tile is smoking.
+ * @param smoke : amount of turns this tile will be smoking.
  */
 void Tile::setSmoke(int smoke)
 {
@@ -777,7 +777,7 @@ void Tile::setSmoke(int smoke)
 
 /**
  * Get the amount of turns this tile is smoking. 0 = no smoke.
- * @return smoke : amount of turns this tile is smoking.
+ * @return smoke : amount of turns this tile will be smoking.
  */
 int Tile::getSmoke() const
 {
@@ -799,10 +799,11 @@ int Tile::getAnimationOffset() const
  * @param item
  * @param ground
  */
-void Tile::addItem(BattleItem *item, RuleInventory *ground)
+void Tile::addItem(BattleItem* item, RuleInventory* ground)
 {
 	item->setSlot(ground);
 	_inventory.push_back(item);
+
 	item->setTile(this);
 }
 
@@ -810,7 +811,7 @@ void Tile::addItem(BattleItem *item, RuleInventory *ground)
  * Remove an item from the tile.
  * @param item
  */
-void Tile::removeItem(BattleItem *item)
+void Tile::removeItem(BattleItem* item)
 {
 	for (std::vector<BattleItem*>::iterator i = _inventory.begin(); i != _inventory.end(); ++i)
 	{

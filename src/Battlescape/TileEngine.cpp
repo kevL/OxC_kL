@@ -3205,8 +3205,10 @@ bool TileEngine::validateThrow(BattleAction* action) // superceded by Wb.131129 
 			(origin.x * 16) + 8,
 			(origin.y * 16) + 8,
 			(origin.z * 24));
-	originVoxel.z += action->actor->getHeight() + action->actor->getFloatHeight()
-			- _save->getTile(origin)->getTerrainLevel() - 3;
+	originVoxel.z += action->actor->getHeight()
+						+ action->actor->getFloatHeight()
+						- _save->getTile(origin)->getTerrainLevel()
+						- 3;
 
 	if (originVoxel.z >= (origin.z + 1) * 24)
 	{
@@ -3271,6 +3273,16 @@ bool TileEngine::validateThrow(BattleAction* action) // superceded by Wb.131129 
 	// we try several different arcs to try and reach our goal.
 //	double arc = 0.5; // start with a low traj.5 is a bit too low
 	double arc = 1.0;
+	if (action->type == BA_THROW)
+	{
+		arc = std::max(
+					0.48,
+					(1.73 / sqrt(
+								sqrt(
+									(static_cast<double>(action->actor->getStats()->strength)
+										/ static_cast<double>(action->weapon->getRules()->getWeight())))))
+							+ (action->actor->isKneeled()? 0.1: 0.0));
+	}
 	while (!found && arc < 5.0)
 	{
 		int checkParab = calculateParabola(
@@ -3297,7 +3309,7 @@ bool TileEngine::validateThrow(BattleAction* action) // superceded by Wb.131129 
 	}
 	Log(LOG_INFO) << ". arc = " << arc;
 
-	if (AreSame(arc, 5.0))
+	if (arc >= 5.0)
 	{
 		return false;
 	}
@@ -3321,7 +3333,13 @@ bool TileEngine::validateThrow(BattleAction &action, Position originVoxel, Posit
 	double curvature = 0.5;
 	if (action.type == BA_THROW)
 	{
-		curvature = std::max(0.48, 1.73 / sqrt(sqrt((double)(action.actor->getStats()->strength / action.weapon->getRules()->getWeight()))) + (action.actor->isKneeled()? 0.1 : 0.0));
+		curvature = std::max(
+						0.48,
+						(1.73 / sqrt(
+									sqrt(
+										(static_cast<double>(action->actor->getStats()->strength)
+											/ static_cast<double>(action->weapon->getRules()->getWeight())))))
+								+ (action->actor->isKneeled()? 0.1: 0.0));
 	}
 	Tile *targetTile = _save->getTile(action.target);
 	// object blocking - can't throw here

@@ -482,11 +482,9 @@ void BattlescapeGenerator::deployXCOM()
 					count++)
 			{
 				_craftInventoryTile->addItem(new BattleItem(
-														_game->getRuleset()->getItem(i->first),
-														_save->getCurrentItemId()),
-				_game->getRuleset()->getInventory("STR_GROUND"));
-
-				// kL_note: load weapons here. -> Done below
+													_game->getRuleset()->getItem(i->first),
+													_save->getCurrentItemId()),
+										_game->getRuleset()->getInventory("STR_GROUND"));
 			}
 		}
 	}
@@ -497,7 +495,8 @@ void BattlescapeGenerator::deployXCOM()
 				i != _base->getItems()->getContents()->end();
 				)
 		{
-			// only put items in the battlescape that make sense (when the item got a sprite, it's probably ok)
+			// only put items in the battlescape that make sense
+			// (when the item has a sprite, it's probably ok)
 			RuleItem* rule = _game->getRuleset()->getItem(i->first);
 			if (rule->getBigSprite() > -1
 				&& rule->getBattleType() != BT_NONE
@@ -511,11 +510,9 @@ void BattlescapeGenerator::deployXCOM()
 						count++)
 				{
 					_craftInventoryTile->addItem(new BattleItem(
-															_game->getRuleset()->getItem(i->first),
-															_save->getCurrentItemId()),
-					_game->getRuleset()->getInventory("STR_GROUND"));
-
-					// kL_note: load weapons here. -> Done below
+														_game->getRuleset()->getItem(i->first),
+														_save->getCurrentItemId()),
+											_game->getRuleset()->getInventory("STR_GROUND"));
 				}
 
 				std::map<std::string, int>::iterator tmp = i;
@@ -551,9 +548,7 @@ void BattlescapeGenerator::deployXCOM()
 					_craftInventoryTile->addItem(new BattleItem(
 															_game->getRuleset()->getItem(i->first),
 															_save->getCurrentItemId()),
-					_game->getRuleset()->getInventory("STR_GROUND"));
-
-					// kL_note: load weapons here. -> Done below
+											_game->getRuleset()->getInventory("STR_GROUND"));
 				}
 			}
 		}
@@ -569,24 +564,28 @@ void BattlescapeGenerator::deployXCOM()
 		placeItemByLayout(*i);
 	}
 
-	// auto-equip soldiers (only soldiers without layout)
+	// auto-equip soldiers (only soldiers *without* layout)
 	for (std::vector<BattleItem*>::reverse_iterator
 			i = _craftInventoryTile->getInventory()->rbegin();
 			i != _craftInventoryTile->getInventory()->rend();
 			++i)
 	{
 		//Log(LOG_INFO) << "BattlescapeGenerator::deployXCOM(), addItem(*item, !SecondPass)";
-		addItem(*i, false);
+//kL		addItem(*i, false);
+
+		_save->getItems()->push_back(*i);	// kL_begin: moved up from addItem()
+		(*i)->setXCOMProperty(true);		// kL_begin: moved up from addItem()
 	}
 
-	for (std::vector<BattleItem*>::reverse_iterator
+/*kL	for (std::vector<BattleItem*>::reverse_iterator
 			i = _craftInventoryTile->getInventory()->rbegin();
 			i != _craftInventoryTile->getInventory()->rend();
 			++i)
 	{
 		//Log(LOG_INFO) << "BattlescapeGenerator::deployXCOM(), addItem(*item, SecondPass)";
 		addItem(*i, true);
-	}
+	} */
+	// kL_note: no more auto-equip, Lolz.
 
 
 	// clean up moved items
@@ -603,13 +602,15 @@ void BattlescapeGenerator::deployXCOM()
 		}
 		else
 		{
-			// kL_note: LOAD WEAPONS HERE.
-			if ((*i)->needsAmmo())
+			// kL_begin: LOAD WEAPONS HERE.
+			if ((*i)->needsAmmo()
+				&& loadGroundWeapon(*i))
 			{
-				loadGroundWeapon(*i); // kL
+				// back to the beginning because the vector just got screwed:
+				i = _craftInventoryTile->getInventory()->begin();
 			}
-
-			++i;
+			else
+				++i;
 		}
 	}
 }
@@ -621,9 +622,6 @@ void BattlescapeGenerator::deployXCOM()
  */
 bool BattlescapeGenerator::loadGroundWeapon(BattleItem* item)
 {
-	RuleInventory* ground = _game->getRuleset()->getInventory("STR_GROUND");
-
-	// maybe we find the ammo on the ground to load it with
 	for (std::vector<BattleItem*>::iterator
 			i = _craftInventoryTile->getInventory()->begin();
 			i != _craftInventoryTile->getInventory()->end();
@@ -679,8 +677,8 @@ BattleUnit* BattlescapeGenerator::addXCOMVehicle(Vehicle* v)
  * Adds a soldier to the game and places him on a free spawnpoint.
  * Spawnpoints are either tiles in case of an XCom craft that landed
  * or they are mapnodes in case there's no craft.
- * @param soldier Pointer to the Soldier.
- * @return Pointer to the spawned unit.
+ * @param unit, Pointer to the soldier.
+ * @return Battleunit, Pointer to the spawned unit.
  */
 BattleUnit* BattlescapeGenerator::addXCOMUnit(BattleUnit* unit)
 {
@@ -761,7 +759,7 @@ BattleUnit* BattlescapeGenerator::addXCOMUnit(BattleUnit* unit)
 					}
 				} */
 				// kL_begin: BattlescapeGenerator, set tankPosition
-				if (unit->getArmor()->getSize() == 2
+				if (unit->getArmor()->getSize() > 1
 					&& _save->getTiles()[i]->getPosition().x == _craftInventoryTile->getPosition().x)
 				{
 					_tankPos++;
@@ -1006,6 +1004,7 @@ BattleUnit* BattlescapeGenerator::addCivilian(Unit* rules)
 BattleItem* BattlescapeGenerator::placeItemByLayout(BattleItem* item)
 {
 	RuleInventory* ground = _game->getRuleset()->getInventory("STR_GROUND");
+
 	if (item->getSlot() == ground)
 	{
 		RuleInventory* righthand = _game->getRuleset()->getInventory("STR_RIGHT_HAND");
@@ -1019,13 +1018,12 @@ BattleItem* BattlescapeGenerator::placeItemByLayout(BattleItem* item)
 		{
 			// skip the vehicles, we need only X-Com soldiers WITH equipment-layout
 			if ((*i)->getArmor()->getSize() > 1
-				|| (*i)->getGeoscapeSoldier() == 0)
+				|| (*i)->getGeoscapeSoldier() == 0
+				|| (*i)->getGeoscapeSoldier()->getEquipmentLayout()->empty())
 			{
 				continue;
 			}
 
-			if ((*i)->getGeoscapeSoldier()->getEquipmentLayout()->empty())
-				continue;
 
 			// find the first matching layout-slot which is not already occupied
 			std::vector<EquipmentLayoutItem*>* layoutItems = (*i)->getGeoscapeSoldier()->getEquipmentLayout();
@@ -1035,7 +1033,11 @@ BattleItem* BattlescapeGenerator::placeItemByLayout(BattleItem* item)
 					++j)
 			{
 				if (item->getRules()->getType() != (*j)->getItemType()
-					|| (*i)->getItem((*j)->getSlot(), (*j)->getSlotX(), (*j)->getSlotY()))
+					|| (*i)->getItem(
+									(*j)->getSlot(),
+									(*j)->getSlotX(),
+									(*j)->getSlotY()))	// HOW can something other than the layout item be
+														// in the item-slot?? (depends when Layout is saved)
 				{
 					continue;
 				}
@@ -1046,7 +1048,7 @@ BattleItem* BattlescapeGenerator::placeItemByLayout(BattleItem* item)
 				{
 					loaded = false;
 
-					// maybe we find the layout-ammo on the ground to load it with
+					// maybe we find the layout-ammo on the ground to load it with - yeh, maybe: as in, maybe this works maybe it doesn't
 					for (std::vector<BattleItem*>::iterator
 							k = _craftInventoryTile->getInventory()->begin();
 							k != _craftInventoryTile->getInventory()->end()
@@ -1054,10 +1056,11 @@ BattleItem* BattlescapeGenerator::placeItemByLayout(BattleItem* item)
 							++k)
 					{
 						if ((*k)->getRules()->getType() == (*j)->getAmmoItem()
-							&& (*k)->getSlot() == ground
-							&& item->setAmmoItem(*k) == 0)
+//kL							&& (*k)->getSlot() == ground	// why the redundancy?
+																// WHAT OTHER _craftInventoryTile IS THERE BUT THE GROUND TILE!!??!!!1
+							&& item->setAmmoItem(*k) == 0) // okay, so load the damn item.
 						{
-							(*k)->setSlot(righthand);
+//kL							(*k)->setSlot(righthand); // why are you putting ammo in his right hand.....
 
 							loaded = true;
 							// note: soldier is not owner of the ammo, we are using this fact when saving equipments
@@ -1065,7 +1068,7 @@ BattleItem* BattlescapeGenerator::placeItemByLayout(BattleItem* item)
 					}
 				}
 
-				// only place the weapon onto the soldier when it's loaded with its layout-ammo (if any)
+				// only place the weapon (or any other item..) onto the soldier when it's loaded with its layout-ammo (if any)
 				if (loaded)
 				{
 					item->moveToOwner((*i));
@@ -1091,6 +1094,7 @@ BattleItem* BattlescapeGenerator::placeItemByLayout(BattleItem* item)
  * @param secondPass, Is this the second time through the equipping routine?
  * @return, Pointer to the Item.
  */
+// kL_note: NOT USED ANYMORE
 BattleItem* BattlescapeGenerator::addItem(BattleItem* item, bool secondPass)
 {
 //kL	RuleInventory* ground = _game->getRuleset()->getInventory("STR_GROUND");
@@ -2391,7 +2395,7 @@ RuleTerrain* BattlescapeGenerator::getTerrain(int tex, double lat)
 /**
 * Creates a mini-battle-save for managing inventory from the Geoscape.
 * Kids, don't try this at home!
-* @param craft Pointer to craft to manage.
+* @param craft, Pointer to craft to manage.
 */
 void BattlescapeGenerator::runInventory(Craft *craft)
 {
@@ -2405,7 +2409,10 @@ void BattlescapeGenerator::runInventory(Craft *craft)
 	MapDataSet* set = new MapDataSet("dummy");
 	MapData* data = new MapData(set);
 
-	for (int i = 0; i < soldiers; ++i)
+	for (int
+			i = 0;
+			i < soldiers;
+			++i)
 	{
 		Tile* tile = _save->getTiles()[i];
 		tile->setMapData(data, 0, 0, MapData::O_FLOOR);

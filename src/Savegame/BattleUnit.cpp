@@ -2086,16 +2086,22 @@ Tile* BattleUnit::getTile() const
 
 /**
  * Checks if there's an inventory item in the specified inventory position.
- * @param slot Inventory slot.
- * @param x X position in slot.
- * @param y Y position in slot.
- * @return Item in the slot, or NULL if none.
+ * @param slot, Inventory slot.
+ * @param x, X position in slot.
+ * @param y, Y position in slot.
+ * @return BattleItem, Pointer to item in the slot, or NULL if none.
  */
-BattleItem* BattleUnit::getItem(RuleInventory* slot, int x, int y) const
+BattleItem* BattleUnit::getItem(
+		RuleInventory* slot,
+		int x,
+		int y) const
 {
 	if (slot->getType() != INV_GROUND) // Soldier items
 	{
-		for (std::vector<BattleItem*>::const_iterator i = _inventory.begin(); i != _inventory.end(); ++i)
+		for (std::vector<BattleItem*>::const_iterator
+				i = _inventory.begin();
+				i != _inventory.end();
+				++i)
 		{
 			if ((*i)->getSlot() == slot
 				&& (*i)->occupiesSlot(x, y))
@@ -2106,7 +2112,10 @@ BattleItem* BattleUnit::getItem(RuleInventory* slot, int x, int y) const
 	}
 	else if (_tile != 0) // Ground items
 	{
-		for (std::vector<BattleItem*>::const_iterator i = _tile->getInventory()->begin(); i != _tile->getInventory()->end(); ++i)
+		for (std::vector<BattleItem*>::const_iterator
+				i = _tile->getInventory()->begin();
+				i != _tile->getInventory()->end();
+				++i)
 		{
 			if ((*i)->occupiesSlot(x, y))
 			{
@@ -2119,18 +2128,23 @@ BattleItem* BattleUnit::getItem(RuleInventory* slot, int x, int y) const
 }
 
 /**
- * Checks if there's an inventory item in
- * the specified inventory position.
- * @param slot Inventory slot.
- * @param x X position in slot.
- * @param y Y position in slot.
- * @return Item in the slot, or NULL if none.
+ * Checks if there's an inventory item in the specified inventory position.
+ * @param slot, Inventory slot.
+ * @param x, X position in slot.
+ * @param y, Y position in slot.
+ * @return BattleItem, Pointer to item in the slot, or NULL if none.
  */
-BattleItem* BattleUnit::getItem(const std::string& slot, int x, int y) const
+BattleItem* BattleUnit::getItem(
+		const std::string& slot,
+		int x,
+		int y) const
 {
 	if (slot != "STR_GROUND") // Soldier items
 	{
-		for (std::vector<BattleItem*>::const_iterator i = _inventory.begin(); i != _inventory.end(); ++i)
+		for (std::vector<BattleItem*>::const_iterator
+				i = _inventory.begin();
+				i != _inventory.end();
+				++i)
 		{
 			if ((*i)->getSlot() != 0
 				&& (*i)->getSlot()->getId() == slot
@@ -2142,7 +2156,10 @@ BattleItem* BattleUnit::getItem(const std::string& slot, int x, int y) const
 	}
 	else if (_tile != 0) // Ground items
 	{
-		for (std::vector<BattleItem*>::const_iterator i = _tile->getInventory()->begin(); i != _tile->getInventory()->end(); ++i)
+		for (std::vector<BattleItem*>::const_iterator
+				i = _tile->getInventory()->begin();
+				i != _tile->getInventory()->end();
+				++i)
 		{
 			if ((*i)->getSlot() != 0
 				&& (*i)->occupiesSlot(x, y))

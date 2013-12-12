@@ -1321,7 +1321,10 @@ void DebriefingState::reequipCraft(Base* base, Craft* craft, bool vehicleItemsCa
 					j < canBeAdded;
 					++j)
 			{
-				craft->getVehicles()->push_back(new Vehicle(tankRule, tankRule->getClipSize(), size));
+				craft->getVehicles()->push_back(new Vehicle(
+														tankRule,
+														tankRule->getClipSize(),
+														size));
 			}
 
 			base->getItems()->removeItem(i->first, canBeAdded);

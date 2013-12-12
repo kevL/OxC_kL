@@ -53,19 +53,19 @@ namespace OpenXcom
  * @param ufo Pointer to the UFO to get info from.
  * @param state Pointer to the Geoscape.
  * @param detected Was the UFO detected?
- * @param hyperwave Was it a hyperwave radar?
+ * @param hyper Was it a hyperwave radar?
  */
 UfoDetectedState::UfoDetectedState(
-			Game* game,
-			Ufo* ufo,
-			GeoscapeState* state,
-			bool detected,
-			bool hyperwave)
+		Game* game,
+		Ufo* ufo,
+		GeoscapeState* state,
+		bool detected,
+		bool hyper)
 	:
 		State(game),
 		_ufo(ufo),
 		_state(state),
-		_hyperwave(hyperwave)
+		_hyperwave(hyper)
 {
 	// Generate UFO ID
 	if (_ufo->getId() == 0)
@@ -81,11 +81,11 @@ UfoDetectedState::UfoDetectedState(
 
 	_screen = false;
 
-	if (hyperwave)
+	if (hyper)
 	{
-		_window			= new Window(this, 224, 170, 16, 10, POPUP_BOTH); // center: 128, end: 240
+		_window			= new Window(this, 224, 170, 16, 10, POPUP_BOTH);
 
-		_txtHyperwave	= new Text(216, 17, 20, 46);
+		_txtHyperwave	= new Text(216, 17, 20, 45);
 		_lstInfo2		= new TextList(192, 33, 32, 98);
 	}
 	else
@@ -104,7 +104,7 @@ UfoDetectedState::UfoDetectedState(
 	_btnIntercept	= new TextButton(88, 16, 32, 144);
 	_btnCancel		= new TextButton(88, 16, 136, 144);
 
-	if (hyperwave)
+	if (hyper)
 	{
 		_txtUfo->setY(19);
 		_txtDetected->setY(36);
@@ -135,7 +135,7 @@ UfoDetectedState::UfoDetectedState(
 	add(_btnCentre);
 	add(_btnCancel);
 
-	if (hyperwave)
+	if (hyper)
 	{
 		add(_txtHyperwave);
 		add(_lstInfo2);
@@ -164,19 +164,31 @@ UfoDetectedState::UfoDetectedState(
 	_lstInfo->setColor(Palette::blockOffset(8)+5);
 	_lstInfo->setColumns(2, 80, 112);
 	_lstInfo->setDot(true);
-	_lstInfo->addRow(2, tr("STR_SIZE_UC").c_str(), tr(_ufo->getRules()->getSize()).c_str());
+	_lstInfo->addRow(
+					2,
+					tr("STR_SIZE_UC").c_str(),
+					tr(_ufo->getRules()->getSize()).c_str());
 	_lstInfo->setCellColor(0, 1, Palette::blockOffset(8)+10);
 	std::string altitude = _ufo->getAltitude() == "STR_GROUND"? "STR_GROUNDED": _ufo->getAltitude();
-	_lstInfo->addRow(2, tr("STR_ALTITUDE").c_str(), tr(altitude).c_str());
+	_lstInfo->addRow(
+					2,
+					tr("STR_ALTITUDE").c_str(),
+					tr(altitude).c_str());
 	_lstInfo->setCellColor(1, 1, Palette::blockOffset(8)+10);
 	std::string heading = _ufo->getDirection();
 	if (_ufo->getStatus() != Ufo::FLYING)
 	{
 		heading = "STR_NONE_UC";
 	}
-	_lstInfo->addRow(2, tr("STR_HEADING").c_str(), tr(heading).c_str());
+	_lstInfo->addRow(
+					2,
+					tr("STR_HEADING").c_str(),
+					tr(heading).c_str());
 	_lstInfo->setCellColor(2, 1, Palette::blockOffset(8)+10);
-	_lstInfo->addRow(2, tr("STR_SPEED").c_str(), Text::formatNumber(_ufo->getSpeed()).c_str());
+	_lstInfo->addRow(
+					2,
+					tr("STR_SPEED").c_str(),
+					Text::formatNumber(_ufo->getSpeed()).c_str());
 	_lstInfo->setCellColor(3, 1, Palette::blockOffset(8)+10);
 
 	_btnIntercept->setColor(Palette::blockOffset(8)+5);
@@ -193,7 +205,7 @@ UfoDetectedState::UfoDetectedState(
 	_btnCancel->onMouseClick((ActionHandler)& UfoDetectedState::btnCancelClick);
 	_btnCancel->onKeyboardPress((ActionHandler)& UfoDetectedState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
 
-	if (hyperwave)
+	if (hyper)
 	{
 		_txtHyperwave->setColor(Palette::blockOffset(8)+5);
 		_txtHyperwave->setAlign(ALIGN_CENTER);
@@ -203,13 +215,25 @@ UfoDetectedState::UfoDetectedState(
 		_lstInfo2->setColor(Palette::blockOffset(8)+5);
 		_lstInfo2->setColumns(2, 80, 112);
 		_lstInfo2->setDot(true);
-		_lstInfo2->addRow(2, tr("STR_CRAFT_TYPE").c_str(), tr(_ufo->getRules()->getType()).c_str());
+		_lstInfo2->addRow(
+						2,
+						tr("STR_CRAFT_TYPE").c_str(),
+						tr(_ufo->getRules()->getType()).c_str());
 		_lstInfo2->setCellColor(0, 1, Palette::blockOffset(8)+10);
-		_lstInfo2->addRow(2, tr("STR_RACE").c_str(), tr(_ufo->getAlienRace()).c_str());
+		_lstInfo2->addRow(
+						2,
+						tr("STR_RACE").c_str(),
+						tr(_ufo->getAlienRace()).c_str());
 		_lstInfo2->setCellColor(1, 1, Palette::blockOffset(8)+10);
-		_lstInfo2->addRow(2, tr("STR_MISSION").c_str(), tr(_ufo->getMissionType()).c_str());
+		_lstInfo2->addRow(
+						2,
+						tr("STR_MISSION").c_str(),
+						tr(_ufo->getMissionType()).c_str());
 		_lstInfo2->setCellColor(2, 1, Palette::blockOffset(8)+10);
-		_lstInfo2->addRow(2, tr("STR_ZONE").c_str(), tr(_ufo->getMission()->getRegion()).c_str());
+		_lstInfo2->addRow(
+						2,
+						tr("STR_ZONE").c_str(),
+						tr(_ufo->getMission()->getRegion()).c_str());
 		_lstInfo2->setCellColor(3, 1, Palette::blockOffset(8)+10);
 	}
 }

@@ -56,7 +56,7 @@ void Vehicle::load(const YAML::Node& node)
 }
 
 /**
- * Saves the base to a YAML file.
+ * Saves the vehicle to a YAML file.
  * @return YAML node.
  */
 YAML::Node Vehicle::save() const
@@ -95,7 +95,7 @@ int Vehicle::getAmmo() const
 
 /**
  * Changes the ammo contained in this vehicle.
- * @param ammo Weapon ammo.
+ * @param ammo, Weapon ammo.
  */
 void Vehicle::setAmmo(int ammo)
 {
@@ -106,8 +106,8 @@ void Vehicle::setAmmo(int ammo)
 }
 
 /**
- * Returns the sizer of in this vehicle.
- * @return Weapon ammo.
+ * Returns the size of this vehicle.
+ * @return int, The size of the vehicle
  */
 int Vehicle::getSize() const
 {

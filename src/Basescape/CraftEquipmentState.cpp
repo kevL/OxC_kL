@@ -450,10 +450,10 @@ void CraftEquipmentState::lstEquipmentMousePress(Action* action)
 void CraftEquipmentState::updateQuantity()
 {
 	Craft* c = _base->getCrafts()->at(_craft);
-	RuleItem* item = _game->getRuleset()->getItem(_items[_sel]);
+	RuleItem* itemRule = _game->getRuleset()->getItem(_items[_sel]);
 
 	int cQty = 0;
-	if (item->isFixed())
+	if (itemRule->isFixed())
 	{
 		cQty = c->getVehicleCount(_items[_sel]);
 	}
@@ -462,24 +462,27 @@ void CraftEquipmentState::updateQuantity()
 		cQty = c->getItems()->getItem(_items[_sel]);
 	}
 
-	std::wstringstream ss, ss2;
+
+	std::wstringstream
+		ss,
+		ss2;
+
 	if (_game->getSavedGame()->getMonthsPassed() > -1)
-	{
 		ss << _base->getItems()->getItem(_items[_sel]);
-	}
 	else
-	{
 		ss << "-";
-	}
 
 	ss2 << cQty;
+
 
 	Uint8 color;
 
 	if (cQty == 0)
 	{
-		RuleItem* rule = _game->getRuleset()->getItem(_items[_sel]);
-		if (rule->getBattleType() == BT_AMMO)
+//kL		RuleItem* rule = _game->getRuleset()->getItem(_items[_sel]);
+
+//kL		if (rule->getBattleType() == BT_AMMO)
+		if (itemRule->getBattleType() == BT_AMMO)
 		{
 			color = Palette::blockOffset(15)+6;
 		}
@@ -522,11 +525,11 @@ void CraftEquipmentState::moveLeftByValue(int change)
 
 
 	Craft* c = _base->getCrafts()->at(_craft);
-	RuleItem* item = _game->getRuleset()->getItem(_items[_sel]);
+	RuleItem* itemRule = _game->getRuleset()->getItem(_items[_sel]);
 
 	int cQty = 0;
 
-	if (item->isFixed())
+	if (itemRule->isFixed())
 	{
 		cQty = c->getVehicleCount(_items[_sel]);
 	}
@@ -540,19 +543,19 @@ void CraftEquipmentState::moveLeftByValue(int change)
 
 	change = std::min(cQty, change);
 
-	if (item->isFixed()) // Convert vehicle to item
+	if (itemRule->isFixed()) // Convert vehicle to item
 	{
-		if (!item->getCompatibleAmmo()->empty())
+		if (!itemRule->getCompatibleAmmo()->empty())
 		{
 			// First we remove all vehicles because we want to redistribute the ammo
-			RuleItem *ammo = _game->getRuleset()->getItem(item->getCompatibleAmmo()->front());
+			RuleItem *ammo = _game->getRuleset()->getItem(itemRule->getCompatibleAmmo()->front());
 
 			for (std::vector<Vehicle*>::iterator
 					i = c->getVehicles()->begin();
 					i != c->getVehicles()->end();
 					)
 			{
-				if ((*i)->getRules() == item)
+				if ((*i)->getRules() == itemRule)
 				{
 					_base->getItems()->addItem(ammo->getType(), (*i)->getAmmo());
 
@@ -582,7 +585,7 @@ void CraftEquipmentState::moveLeftByValue(int change)
 					i != c->getVehicles()->end();
 					)
 			{
-				if ((*i)->getRules() == item)
+				if ((*i)->getRules() == itemRule)
 				{
 					delete *i;
 					i = c->getVehicles()->erase(i);
@@ -632,7 +635,7 @@ void CraftEquipmentState::moveRightByValue(int change)
 
 
 	Craft* c = _base->getCrafts()->at(_craft);
-	RuleItem* item = _game->getRuleset()->getItem(_items[_sel]);
+	RuleItem* itemRule = _game->getRuleset()->getItem(_items[_sel]);
 
 	int bQty = _base->getItems()->getItem(_items[_sel]);
 
@@ -651,33 +654,41 @@ void CraftEquipmentState::moveRightByValue(int change)
 
 	change = std::min(bQty, change);
 
-	if (item->isFixed()) // Do we need to convert item to vehicle?
+	if (itemRule->isFixed()) // Do we need to convert item to vehicle?
 	{
 		int size = 4;
-		if (_game->getRuleset()->getUnit(item->getType()))
+		Unit* tankRule = _game->getRuleset()->getUnit(itemRule->getType());
+		if (tankRule)
 		{
-			size = _game->getRuleset()->getArmor(_game->getRuleset()->getUnit(item->getType())->getArmor())->getSize();
+			size = _game->getRuleset()->getArmor(tankRule->getArmor())->getSize();
 			size *= size;
 		}
+/*		if (_game->getRuleset()->getUnit(itemRule->getType()))
+		{
+			size = _game->getRuleset()->getArmor(_game->getRuleset()->getUnit(itemRule->getType())->getArmor())->getSize();
+			size *= size;
+		} */
 
 		// Check if there's enough room
-		int room = std::min(c->getRules()->getVehicles() - c->getNumVehicles(), c->getSpaceAvailable() / size);
+		int room = std::min(
+						c->getRules()->getVehicles() - c->getNumVehicles(),
+						c->getSpaceAvailable() / size);
 		if (room > 0)
 		{
 			change = std::min(room, change);
 
-			if (!item->getCompatibleAmmo()->empty())
+			if (!itemRule->getCompatibleAmmo()->empty()) // if there is compatible ammo
 			{
 				// We want to redistribute all the available ammo among the vehicles,
 				// so first we note the total number of vehicles we want in the craft
 				int oldVehiclesCount = c->getVehicleCount(_items[_sel]);
 				int newVehiclesCount = oldVehiclesCount + change;
 				// ...and we move back all of this vehicle-type to the base.
-				if (0 < oldVehiclesCount)
+				if (oldVehiclesCount > 0)
 					moveLeftByValue(INT_MAX);
 
 				// And now let's see if we can add the total number of vehicles.
-				RuleItem* ammo = _game->getRuleset()->getItem(item->getCompatibleAmmo()->front());
+				RuleItem* ammo = _game->getRuleset()->getItem(itemRule->getCompatibleAmmo()->front()); // here's the ammo
 
 				int baQty = _base->getItems()->getItem(ammo->getType()); // Ammo Quantity for this vehicle-type on the base
 
@@ -710,7 +721,10 @@ void CraftEquipmentState::moveRightByValue(int change)
 							newAmmo = ammo->getClipSize();
 						}
 
-						c->getVehicles()->push_back(new Vehicle(item, newAmmo, size));
+						c->getVehicles()->push_back(new Vehicle(
+															itemRule,
+															newAmmo,
+															static_cast<int>(sqrt(static_cast<double>(size)))));
 					}
 				}
 
@@ -720,17 +734,23 @@ void CraftEquipmentState::moveRightByValue(int change)
 					_timerRight->stop();
 
 					LocalizedText msg(tr("STR_NOT_ENOUGH_AMMO_TO_ARM_HWP").arg(tr(ammo->getType())));
-					_game->pushState(new ErrorMessageState(_game, msg, Palette::blockOffset(15)+1, "BACK04.SCR", 2));
+					_game->pushState(new ErrorMessageState(
+														_game,
+														msg,
+														Palette::blockOffset(15)+1, "BACK04.SCR", 2));
 				}
 			}
-			else
+			else // no ammo required.
 			{
 				for (int
 						i = 0;
 						i < change;
 						++i)
 				{
-					c->getVehicles()->push_back(new Vehicle(item, item->getClipSize(), size));
+					c->getVehicles()->push_back(new Vehicle(
+														itemRule,
+														itemRule->getClipSize(),
+														static_cast<int>(sqrt(static_cast<double>(size)))));
 
 					if (_game->getSavedGame()->getMonthsPassed() != -1)
 					{

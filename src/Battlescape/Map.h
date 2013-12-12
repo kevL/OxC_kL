@@ -61,30 +61,17 @@ class Map
 	:
 		public InteractiveSurface
 {
+
 private:
+
 	static const int SCROLL_INTERVAL	= 20;
 	static const int BULLET_SPRITES		= 35;
 
-	BattlescapeMessage
-		* _message;
-	Camera
-		* _camera;
-	CursorType
-		_cursorType;
-	Game
-		* _game;
-	Projectile
-		* _projectile;
-	ResourcePack
-		* _res;
-	SavedBattleGame
-		* _save;
-	Surface
-		* _arrow;
-	Timer
-		* _scrollMouseTimer,
-		* _scrollKeyTimer;
-
+	bool
+		_explosionInFOV,
+		_launch,
+		_projectileInFOV,
+		_unitDying;
 	int
 		_animFrame,
 		_cursorSize,
@@ -97,25 +84,30 @@ private:
 		_spriteWidth,
 		_spriteHeight,
 		_visibleMapHeight;
-	bool
-		_explosionInFOV,
-		_launch,
-		_projectileInFOV,
-		_unitDying;
 
-	std::set<Explosion*>
-		_explosions;
-	std::vector<Position>
-		_waypoints;
+	BattlescapeMessage* _message;
+	Camera* _camera;
+	CursorType _cursorType;
+	Game* _game;
+	Projectile* _projectile;
+	ResourcePack* _res;
+	SavedBattleGame* _save;
+	Surface* _arrow;
+	Timer
+		* _scrollMouseTimer,
+		* _scrollKeyTimer;
 
-	void drawTerrain(
-			Surface* surface);
-	int getTerrainLevel(
-			Position pos,
-			int size);
+	std::set<Explosion*> _explosions;
+	std::vector<Position> _waypoints;
+
+	///
+	void drawTerrain(Surface* surface);
+	///
+	int getTerrainLevel(Position pos, int size);
 
 
 	public:
+
 		/// Creates a new map at the specified position and size.
 		Map(
 				Game* game,

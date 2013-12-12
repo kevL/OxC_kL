@@ -24,24 +24,21 @@ namespace OpenXcom
 {
 
 /**
- * Initializes a new soldier-equipment layout item from YAML.
- * @param node, YAML node.
- */
-EquipmentLayoutItem::EquipmentLayoutItem(const YAML::Node& node)
-{
-	load(node);
-}
-
-/**
  * Initializes a new soldier-equipment layout item.
- * @param itemType Item's type.
- * @param slot Occupied slot's id.
- * @param slotX Position-X in the occupied slot.
- * @param slotY Position-Y in the occupied slot.
- * @param ammoItem The ammo has to be loaded into the item. (it's type)
- * @param explodeTurn The turn when the item explodes. (if it's an activated grenade-type)
+ * @param itemType, Item's type.
+ * @param slot, Occupied slot's id.
+ * @param slotX, Position-X in the occupied slot.
+ * @param slotY, Position-Y in the occupied slot.
+ * @param ammoItem, The ammo has to be loaded into the item. (its type)
+ * @param explodeTurn, The turn when the item explodes. (if it's an activated grenade-type)
  */
-EquipmentLayoutItem::EquipmentLayoutItem(std::string itemType, std::string slot, int slotX, int slotY, std::string ammoItem, int explodeTurn)
+EquipmentLayoutItem::EquipmentLayoutItem(
+		std::string itemType,
+		std::string slot,
+		int slotX,
+		int slotY,
+		std::string ammoItem,
+		int explodeTurn)
 	:
 		_itemType(itemType),
 		_slot(slot),
@@ -53,10 +50,51 @@ EquipmentLayoutItem::EquipmentLayoutItem(std::string itemType, std::string slot,
 }
 
 /**
+ * Initializes a new soldier-equipment layout item from YAML.
+ * @param node, YAML node.
+ */
+EquipmentLayoutItem::EquipmentLayoutItem(const YAML::Node& node)
+{
+	load(node);
+}
+
+/**
  *
  */
 EquipmentLayoutItem::~EquipmentLayoutItem()
 {
+}
+
+/**
+ * Loads the soldier-equipment layout item from a YAML file.
+ * @param node YAML node.
+ */
+void EquipmentLayoutItem::load(const YAML::Node &node)
+{
+	_itemType		= node["itemType"].as<std::string>(_itemType);
+	_slot			= node["slot"].as<std::string>(_slot);
+	_slotX			= node["slotX"].as<int>(_slotX);
+	_slotY			= node["slotY"].as<int>(_slotY);
+	_ammoItem		= node["ammoItem"].as<std::string>(_ammoItem);
+	_explodeTurn	= node["explodeTurn"].as<int>(_explodeTurn);
+}
+
+/**
+ * Saves the soldier-equipment layout item to a YAML file.
+ * @return YAML node.
+ */
+YAML::Node EquipmentLayoutItem::save() const
+{
+	YAML::Node node;
+
+	node["itemType"]	= _itemType;
+	node["slot"]		= _slot;
+	node["slotX"]		= _slotX;
+	node["slotY"]		= _slotY;
+	node["ammoItem"]	= _ammoItem;
+	node["explodeTurn"]	= _explodeTurn;
+
+	return node;
 }
 
 /**
@@ -96,8 +134,8 @@ int EquipmentLayoutItem::getSlotY() const
 }
 
 /**
- * Returns the ammo has to be loaded into the item.
- * @return ammo type.
+ * Returns the ammo that has to be loaded into the item.
+ * @return string, The ammo type
  */
 std::string EquipmentLayoutItem::getAmmoItem() const
 {
@@ -106,43 +144,11 @@ std::string EquipmentLayoutItem::getAmmoItem() const
 
 /**
  * Returns the turn when the item explodes. (if it's an activated grenade-type)
- * @return turn count.
+ * @return int, The half-turns left before exploding
  */
 int EquipmentLayoutItem::getExplodeTurn() const
 {
 	return _explodeTurn;
-}
-
-/**
- * Loads the soldier-equipment layout item from a YAML file.
- * @param node YAML node.
- */
-void EquipmentLayoutItem::load(const YAML::Node &node)
-{
-	_itemType		= node["itemType"].as<std::string>(_itemType);
-	_slot			= node["slot"].as<std::string>(_slot);
-	_slotX			= node["slotX"].as<int>(_slotX);
-	_slotY			= node["slotY"].as<int>(_slotY);
-	_ammoItem		= node["ammoItem"].as<std::string>(_ammoItem);
-	_explodeTurn	= node["explodeTurn"].as<int>(_explodeTurn);
-}
-
-/**
- * Saves the soldier-equipment layout item to a YAML file.
- * @return YAML node.
- */
-YAML::Node EquipmentLayoutItem::save() const
-{
-	YAML::Node node;
-
-	node["itemType"]	= _itemType;
-	node["slot"]		= _slot;
-	node["slotX"]		= _slotX;
-	node["slotY"]		= _slotY;
-	node["ammoItem"]	= _ammoItem;
-	node["explodeTurn"]	= _explodeTurn;
-
-	return node;
 }
 
 }

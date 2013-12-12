@@ -2124,9 +2124,11 @@ void BattlescapeState::saveVoxelView()
 					}
 
 					hitPos = Position(_trajectory.at(0).x, _trajectory.at(0).y, _trajectory.at(0).z);
-					dist = sqrt((double)((hitPos.x-originVoxel.x)*(hitPos.x-originVoxel.x)
-							+ (hitPos.y-originVoxel.y)*(hitPos.y-originVoxel.y)
-							+ (hitPos.z-originVoxel.z)*(hitPos.z-originVoxel.z)) );
+					dist = sqrt(static_cast<double>(
+							(hitPos.x-originVoxel.x) * (hitPos.x-originVoxel.x)
+								+ (hitPos.y-originVoxel.y) * (hitPos.y-originVoxel.y)
+								+ (hitPos.z-originVoxel.z) * (hitPos.z-originVoxel.z)));
+
 					black = false;
 				}
 			}
@@ -2137,9 +2139,9 @@ void BattlescapeState::saveVoxelView()
 			}
 			else
 			{
-				if (dist > 1000) dist = 1000;
-				if (dist < 1) dist = 1;
-				dist = (1000 - (log(dist)) * 140) / 700;
+				if (dist > 1000.0) dist = 1000.0;
+				if (dist < 1.0) dist = 1.0;
+				dist = (1000.0 - (log(dist)) * 140.0) / 700.0;
 
 				if (hitPos.x % 16 == 15)
 				{
@@ -2156,9 +2158,9 @@ void BattlescapeState::saveVoxelView()
 					dist *= 0.9;
 				}
 
-				if (dist > 1) dist = 1;
+				if (dist > 1.0) dist = 1.0;
 
-				if (tile) dist *= (16 - (float)tile->getShade()) / 16;
+				if (tile) dist *= (16.0 - static_cast<double>(tile->getShade())) / 16.0;
 			}
 
 			image.push_back((int)((float)(pal[test*3+0])*dist));

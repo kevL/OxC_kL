@@ -1271,7 +1271,7 @@ void BattlescapeGame::popState()
 								cancelCurrentAction(true);
 							}
 						break;
-						case BA_PANIC:
+/*						case BA_PANIC:
 							if (curTU < action.actor->getActionTUs(BA_PANIC, action.weapon))
 							{
 								cancelCurrentAction(true);
@@ -1282,7 +1282,7 @@ void BattlescapeGame::popState()
 							{
 								cancelCurrentAction(true);
 							}
-						break;
+						break; */
 /*						case BA_USE:
 							if (action.weapon->getRules()->getBattleType() == BT_MINDPROBE
 								&& curTU < action.actor->getActionTUs(BA_MINDCONTROL, action.weapon))
@@ -1445,7 +1445,10 @@ void BattlescapeGame::setStateInterval(Uint32 interval)
  * @param tu, Number of time units to check.
  * @return bool, Whether or not *bu has enough time units.
  */
-bool BattlescapeGame::checkReservedTU(BattleUnit* bu, int tu, bool justChecking)
+bool BattlescapeGame::checkReservedTU(
+		BattleUnit* bu,
+		int tu,
+		bool justChecking)
 {
     BattleActionType effectiveTuReserved = _tuReserved; // avoid changing _tuReserved in this method
 

@@ -1006,7 +1006,10 @@ int Ruleset::getPersonnelTime() const
 ArticleDefinition* Ruleset::getUfopaediaArticle(const std::string& name) const
 {
 	std::map<std::string, ArticleDefinition*>::const_iterator i = _ufopaediaArticles.find(name);
-	if (_ufopaediaArticles.end() != i) return i->second; else return 0;
+	if (_ufopaediaArticles.end() != i)
+		return i->second;
+	else
+		return 0;
 }
 
 /**
@@ -1030,13 +1033,16 @@ std::map<std::string, RuleInventory*>* Ruleset::getInventories()
 
 /**
  * Returns the rules for a specific inventory.
- * @param id Inventory type.
- * @return Inventory ruleset.
+ * @param id, Inventory type.
+ * @return, Inventory ruleset.
  */
 RuleInventory* Ruleset::getInventory(const std::string& id) const
 {
 	std::map<std::string, RuleInventory*>::const_iterator i = _invs.find(id);
-	if (_invs.end() != i) return i->second; else return 0;
+	if (_invs.end() != i)
+		return i->second;
+	else
+		return 0;
 }
 
 /**
@@ -1044,17 +1050,20 @@ RuleInventory* Ruleset::getInventory(const std::string& id) const
  * @param id Research project type.
  * @return Rules for the research project.
  */
-RuleResearch* Ruleset::getResearch (const std::string& id) const
+RuleResearch* Ruleset::getResearch(const std::string& id) const
 {
 	std::map<std::string, RuleResearch*>::const_iterator i = _research.find(id);
-	if (_research.end() != i) return i->second; else return 0;
+	if (_research.end() != i)
+		return i->second;
+	else
+		return 0;
 }
 
 /**
  * Returns the list of research projects.
  * @return The list of research projects.
  */
-const std::vector<std::string>& Ruleset::getResearchList () const
+const std::vector<std::string>& Ruleset::getResearchList() const
 {
 	return _researchIndex;
 }
@@ -1064,17 +1073,20 @@ const std::vector<std::string>& Ruleset::getResearchList () const
  * @param id Manufacture project type.
  * @return Rules for the manufacture project.
  */
-RuleManufacture* Ruleset::getManufacture (const std::string& id) const
+RuleManufacture* Ruleset::getManufacture(const std::string& id) const
 {
 	std::map<std::string, RuleManufacture*>::const_iterator i = _manufacture.find(id);
-	if (_manufacture.end() != i) return i->second; else return 0;
+	if (_manufacture.end() != i)
+		return i->second;
+	else
+		return 0;
 }
 
 /**
  * Returns the list of manufacture projects.
  * @return The list of manufacture projects.
  */
-const std::vector<std::string>& Ruleset::getManufactureList () const
+const std::vector<std::string>& Ruleset::getManufactureList() const
 {
 	return _manufactureIndex;
 }
@@ -1089,7 +1101,10 @@ std::vector<OpenXcom::RuleBaseFacility*> Ruleset::getCustomBaseFacilities() cons
 {
 	std::vector<OpenXcom::RuleBaseFacility*> PlaceList;
 
-	for (YAML::const_iterator i = _startingBase["facilities"].begin(); i != _startingBase["facilities"].end(); ++i)
+	for (YAML::const_iterator
+			i = _startingBase["facilities"].begin();
+			i != _startingBase["facilities"].end();
+			++i)
 	{
 		std::string type = (*i)["type"].as<std::string>();
 		if (type != "STR_ACCESS_LIFT")
@@ -1097,6 +1112,7 @@ std::vector<OpenXcom::RuleBaseFacility*> Ruleset::getCustomBaseFacilities() cons
 			PlaceList.push_back(getBaseFacility(type));
 		}
 	}
+
 	return PlaceList;
 }
 
@@ -1108,7 +1124,10 @@ std::vector<OpenXcom::RuleBaseFacility*> Ruleset::getCustomBaseFacilities() cons
 const UfoTrajectory* Ruleset::getUfoTrajectory(const std::string& id) const
 {
 	std::map<std::string, UfoTrajectory*>::const_iterator i = _ufoTrajectories.find(id);
-	if (_ufoTrajectories.end() != i) return i->second; else return 0;
+	if (_ufoTrajectories.end() != i)
+		return i->second;
+	else
+		return 0;
 }
 
 /**
@@ -1119,7 +1138,10 @@ const UfoTrajectory* Ruleset::getUfoTrajectory(const std::string& id) const
 const RuleAlienMission* Ruleset::getAlienMission(const std::string& id) const
 {
 	std::map<std::string, RuleAlienMission*>::const_iterator i = _alienMissions.find(id);
-	if (_alienMissions.end() != i) return i->second; else return 0;
+	if (_alienMissions.end() != i)
+		return i->second;
+	else
+		return 0;
 }
 
 /**
@@ -1134,7 +1156,6 @@ const std::vector<std::string>& Ruleset::getAlienMissionList() const
 
 #define CITY_EPSILON 0.00000000000001 // compensate for slight coordinate change
 
-
 /**
  * @brief Match a city based on coordinates.
  * This function object compares a city's coordinates with the stored coordinates.
@@ -1143,10 +1164,14 @@ class EqualCoordinates
 	:
 		std::unary_function<const City* , bool>
 {
+
 private:
+
 	double _lon, _lat;
 
+
 	public:
+
 		/// Remembers the coordinates.
 		EqualCoordinates(double lon, double lat)
 			:
@@ -1174,10 +1199,16 @@ private:
  */
 const City* Ruleset::locateCity(double lon, double lat) const
 {
-	for (std::map<std::string, RuleRegion*>::const_iterator rr = _regions.begin(); rr != _regions.end(); ++rr)
+	for (std::map<std::string, RuleRegion*>::const_iterator
+			rr = _regions.begin();
+			rr != _regions.end();
+			++rr)
 	{
 		const std::vector<City*>& cities = *rr->second->getCities();
-		std::vector<City*>::const_iterator citer = std::find_if(cities.begin(), cities.end(), EqualCoordinates(lon, lat));
+		std::vector<City*>::const_iterator citer = std::find_if(
+															cities.begin(),
+															cities.end(),
+															EqualCoordinates(lon, lat));
 		if (citer != cities.end())
 		{
 			return *citer;
@@ -1213,7 +1244,10 @@ const YAML::Node& Ruleset::getStartingBase()
 MCDPatch* Ruleset::getMCDPatch(const std::string id) const
 {
 	std::map<std::string, MCDPatch*>::const_iterator i = _MCDPatches.find(id);
-	if (_MCDPatches.end() != i) return i->second; else return 0;
+	if (_MCDPatches.end() != i)
+		return i->second;
+	else
+		return 0;
 }
 
 /**
