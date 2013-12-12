@@ -36,13 +36,23 @@ class RuleItem;
  */
 class Vehicle
 {
+
 private:
+
+	int
+		_ammo,
+		_size;
+
 	RuleItem* _rules;
-	int _ammo, _size;
+
 
 	public:
+
 		/// Creates a vehicle of the specified type.
-		Vehicle(RuleItem* rules, int ammo, int space);
+		Vehicle(
+				RuleItem* rules,
+				int ammo,
+				int size);
 		/// Cleans up the vehicle.
 		~Vehicle();
 

@@ -955,7 +955,7 @@ int Craft::getSpaceUsed() const
 			i != _vehicles.end();
 			++i)
 	{
-		vehicleSpaceUsed += (*i)->getSize() * (*i)->getSize();
+		vehicleSpaceUsed += (*i)->getSize();
 	}
 
 	return getNumSoldiers() + vehicleSpaceUsed;
