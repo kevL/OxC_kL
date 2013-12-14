@@ -955,6 +955,7 @@ int Craft::getSpaceUsed() const
 			i != _vehicles.end();
 			++i)
 	{
+//		vehicleSpaceUsed += (*i)->getSize() * (*i)->getSize(); // kL
 		vehicleSpaceUsed += (*i)->getSize();
 	}
 

@@ -1395,7 +1395,7 @@ int BattleUnit::getStunlevel() const
  * Zombified units first convert to their spawn unit.
  * @param battle, Pointer to the battlescape game.
  */
-void BattleUnit::knockOut(BattlescapeGame *battle)
+void BattleUnit::knockOut(BattlescapeGame* battle)
 {
 	if (getArmor()->getSize() > 1) // large units die
 	{
@@ -2037,7 +2037,9 @@ BattleAIState* BattleUnit::getCurrentAIState() const
  * Sets the tile that unit is standing on.
  * @param tile
  */
-void BattleUnit::setTile(Tile* tile, Tile* tileBelow)
+void BattleUnit::setTile(
+		Tile* tile,
+		Tile* tileBelow)
 {
 	_tile = tile;
 	if (!_tile)

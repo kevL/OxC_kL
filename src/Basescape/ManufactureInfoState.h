@@ -26,15 +26,16 @@
 namespace OpenXcom
 {
 
-class Base;
-class Window;
-class Text;
 class ArrowButton;
-class TextButton;
-class RuleManufacture;
-class Production;
-class Timer;
+class Base;
 class InteractiveSurface;
+class Production;
+class RuleManufacture;
+class Text;
+class TextButton;
+class Timer;
+class Window;
+
 
 /**
  * Screen that allows changing of Production settings (assigned engineer, units to build).
@@ -43,23 +44,48 @@ class ManufactureInfoState
 	:
 		public State
 {
-private:
-	Base* _base;
-	RuleManufacture* _item;
-	Production* _production;
-	Window* _window;
-	ArrowButton* _btnUnitUp, * _btnUnitDown, * _btnEngineerUp, * _btnEngineerDown;
-	TextButton* _btnStop, * _btnOk;
-	Text* _txtTitle, * _txtAvailableEngineer, * _txtAvailableSpace, * _txtAllocatedEngineer, * _txtUnitToProduce,
-					* _txtUnitUp, * _txtUnitDown, * _txtEngineerUp, * _txtEngineerDown, * _txtAllocated, * _txtTodo;
-	Timer* _timerMoreEngineer, * _timerMoreUnit, * _timerLessEngineer, * _timerLessUnit;
-	InteractiveSurface* _surface1, * _surface2;
 
+private:
 	int _changeValueByMouseWheel;
+
+	ArrowButton
+		* _btnEngineerDown,
+		* _btnEngineerUp,
+		* _btnUnitDown,
+		* _btnUnitUp;
+	Base* _base;
+	InteractiveSurface
+		* _surface1,
+		* _surface2;
+	Production* _production;
+	RuleManufacture* _item;
+	Text
+		* _txtAllocated,
+		* _txtAllocatedEngineer,
+		* _txtAvailableEngineer,
+		* _txtAvailableSpace,
+		* _txtEngineerDown,
+		* _txtEngineerUp,
+		* _txtTitle,
+		* _txtTodo,
+		* _txtUnitDown,
+		* _txtUnitToProduce,
+		* _txtUnitUp;
+	TextButton
+		* _btnOk,
+		* _btnStop;
+	Timer
+		* _timerLessEngineer,
+		* _timerLessUnit,
+		* _timerMoreEngineer,
+		* _timerMoreUnit;
+	Window* _window;
+
 	/// Handler for the Stop button.
 	void btnStopClick(Action* action);
 	/// Handler for the OK button.
 	void btnOkClick(Action* action);
+
 	/// Adds given number of engineers to the project if possible.
 	void moreEngineer(int change);
 	/// Handler for pressing the more engineer button.
@@ -68,6 +94,7 @@ private:
 	void moreEngineerRelease(Action* action);
 	/// Handler for clicking the more engineer button.
 	void moreEngineerClick(Action* action);
+
 	/// Adds given number of units to produce to the project if possible.
 	void moreUnit(int change);
 	/// Handler for pressing the more unit button.
@@ -76,6 +103,7 @@ private:
 	void moreUnitRelease(Action* action);
 	/// Handler for clicking the more unit button.
 	void moreUnitClick(Action* action);
+
 	/// Removes the given number of engineers from the project if possible.
 	void lessEngineer(int change);
 	/// Handler for pressing the less engineer button.
@@ -84,6 +112,7 @@ private:
 	void lessEngineerRelease(Action* action);
 	/// Handler for clicking the less engineer button.
 	void lessEngineerClick(Action* action);
+
 	/// Removes the given number of units to produce from the project if possible.
 	void lessUnit(int change);
 	/// Handler for pressing the less unit button.
@@ -92,20 +121,26 @@ private:
 	void lessUnitRelease(Action* action);
 	/// Handler for clicking the less unit button.
 	void lessUnitClick(Action* action);
+
 	/// Adds one engineer to the production (if possible).
 	void onMoreEngineer();
 	/// Removes one engineer from the production (if possible).
 	void onLessEngineer();
+
 	/// Handler for using the mouse wheel on the Engineer-part of the screen.
 	void handleWheelEngineer(Action* action);
+
 	/// Increases count of number of units to make.
 	void onMoreUnit();
 	/// Decreases count of number of units to make (if possible).
 	void onLessUnit();
+
 	/// Handler for using the mouse wheel on the Unit-part of the screen.
 	void handleWheelUnit(Action* action);
+
 	/// Updates display of assigned/available engineers and workshop space.
 	void setAssignedEngineer();
+
 	/// Runs state functionality every cycle.
 	void think();
 	/// Builds the User Interface.
@@ -113,11 +148,18 @@ private:
 	/// Helper to exit the State.
 	void exitState();
 
+
 	public:
 		/// Creates the State (new production).
-		ManufactureInfoState(Game* game, Base* base, RuleManufacture* _item);
+		ManufactureInfoState(
+				Game* game,
+				Base* base,
+				RuleManufacture* _item);
 		/// Creates the State (modify production).
-		ManufactureInfoState(Game* game, Base* base, Production* production);
+		ManufactureInfoState(
+				Game* game,
+				Base* base,
+				Production* production);
 		/// kL. Cleans up the ManufactureInfo state.
 		~ManufactureInfoState();
 };

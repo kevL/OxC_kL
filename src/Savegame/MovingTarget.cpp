@@ -207,6 +207,7 @@ bool MovingTarget::reachedDestination() const
 void MovingTarget::move()
 {
 	calculateSpeed();
+
 	if (_dest != 0)
 	{
 		if (getDistance(_dest) > _speedRadian)

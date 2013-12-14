@@ -3283,6 +3283,7 @@ bool TileEngine::validateThrow(BattleAction* action) // superceded by Wb.131129 
 										/ static_cast<double>(action->weapon->getRules()->getWeight())))))
 							+ (action->actor->isKneeled()? 0.1: 0.0));
 	}
+
 	while (!found && arc < 5.0)
 	{
 		int checkParab = calculateParabola(

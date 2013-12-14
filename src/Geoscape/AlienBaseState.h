@@ -26,30 +26,38 @@
 namespace OpenXcom
 {
 
+class AlienBase;
+class GeoscapeState;
 class Region;
+class Text;
 class TextButton;
 class Window;
-class Text;
-class GeoscapeState;
-class AlienBase;
+
 
 /**
  * Displays info on an alien base.
  */
 class AlienBaseState
 	:
-	public State
+		public State
 {
+
 private:
-	GeoscapeState* _state;
+
 	AlienBase* _base;
+	GeoscapeState* _state;
+	Text* _txtTitle;
 	TextButton* _btnOk;
 	Window* _window;
-	Text* _txtTitle;
+
 
 	public:
+
 		/// Creates the Alien Base Detected state.
-		AlienBaseState(Game* game, AlienBase* base, GeoscapeState* state);
+		AlienBaseState(
+				Game* game,
+				AlienBase* base,
+				GeoscapeState* state);
 		/// Cleans up the Alien Base Detected state.
 		~AlienBaseState();
 

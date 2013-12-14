@@ -51,7 +51,10 @@ namespace OpenXcom
  * @param base Pointer to the base to get info from.
  * @param item The RuleManufacture to produce.
  */
-ManufactureStartState::ManufactureStartState(Game* game, Base* base, RuleManufacture* item)
+ManufactureStartState::ManufactureStartState(
+		Game* game,
+		Base* base,
+		RuleManufacture* item)
 	:
 		State(game),
 		_base(base),
@@ -61,7 +64,6 @@ ManufactureStartState::ManufactureStartState(Game* game, Base* base, RuleManufac
 
 	// kL_begin: ManufactureStartState, use Fucking #'s. thanks
 	_window					= new Window(this, 320, 170, 0, 15);
-
 	_txtTitle				= new Text(300, 16, 10, 26);
 
 	_txtManHour				= new Text(280, 9, 20, 45);
@@ -141,7 +143,10 @@ ManufactureStartState::ManufactureStartState(Game* game, Base* base, RuleManufac
 										start_y + height - button_height - button_y_border); */
 
 
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
+	_game->setPalette(
+				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)),
+				Palette::backPos,
+				16);
 
 	add(_window);
 	add(_txtTitle);
@@ -213,13 +218,20 @@ ManufactureStartState::ManufactureStartState(Game* game, Base* base, RuleManufac
 
 	ItemContainer* itemContainer (base->getItems());
 	int row = 0;
-	for (std::map<std::string, int>::const_iterator iter = requiredItems.begin (); iter != requiredItems.end (); ++iter)
+	for (std::map<std::string, int>::const_iterator
+			iter = requiredItems.begin();
+			iter != requiredItems.end();
+			++iter)
 	{
 		std::wstringstream s1, s2;
 		s1 << iter->second;
 		s2 << itemContainer->getItem(iter->first);
 		productionPossible &= (itemContainer->getItem(iter->first) >= iter->second);
-		_lstRequiredItems->addRow(3, tr(iter->first).c_str(), s1.str().c_str(), s2.str().c_str());
+		_lstRequiredItems->addRow(
+								3,
+								tr(iter->first).c_str(),
+								s1.str().c_str(),
+								s2.str().c_str());
 		_lstRequiredItems->setCellColor(row, 0, Palette::blockOffset(13)+10);
 //kL		_lstRequiredItems->addRow(1, L"");
 

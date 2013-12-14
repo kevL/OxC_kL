@@ -724,7 +724,8 @@ void CraftEquipmentState::moveRightByValue(int change)
 						c->getVehicles()->push_back(new Vehicle(
 															itemRule,
 															newAmmo,
-															static_cast<int>(sqrt(static_cast<double>(size)))));
+//															static_cast<int>(sqrt(static_cast<double>(size))))); // kL
+															size));
 					}
 				}
 
@@ -750,7 +751,8 @@ void CraftEquipmentState::moveRightByValue(int change)
 					c->getVehicles()->push_back(new Vehicle(
 														itemRule,
 														itemRule->getClipSize(),
-														static_cast<int>(sqrt(static_cast<double>(size)))));
+//														static_cast<int>(sqrt(static_cast<double>(size))))); // kL
+														size));
 
 					if (_game->getSavedGame()->getMonthsPassed() != -1)
 					{
@@ -792,27 +794,28 @@ void CraftEquipmentState::btnClearClick(Action*)
 }
 
 /**
-* Displays the inventory screen for the soldiers
-* inside the craft.
+* Displays the inventory screen for the soldiers inside the craft.
 * @param action Pointer to an action.
 */
 void CraftEquipmentState::btnInventoryClick(Action*)
 {
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_4")->getColors()); // kL
+	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_4")->getColors());
 
-	Craft* craft = _base->getCrafts()->at(_craft);
-//kL	if (craft->getNumSoldiers() != 0)	// kL_note: done in cTor.
-//	{
-//kL	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_4")->getColors());
+
+//	delete _game->getSavedGame()->getSavedBattle(); // kL
+	_game->getSavedGame()->setBattleGame(0);		// kL
+		// kL_note: EquipCraft->Inventory for soldiers refuses to create after a mission.
+		// Try fix
+
 
 	SavedBattleGame* bgame = new SavedBattleGame();
 	_game->getSavedGame()->setBattleGame(bgame);
 
 	BattlescapeGenerator bgen = BattlescapeGenerator(_game);
+	Craft* craft = _base->getCrafts()->at(_craft);
 	bgen.runInventory(craft);
 
 	_game->pushState(new InventoryState(_game, false, 0));
-//	}
 }
 
 }

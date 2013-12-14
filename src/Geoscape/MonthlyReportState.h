@@ -33,6 +33,7 @@ class Text;
 class TextButton;
 class Window;
 
+
 /**
  * Report screen shown monthly to display
  * changes in the player's performance and funding.
@@ -41,29 +42,55 @@ class MonthlyReportState
 	:
 		public State
 {
+
 private:
+	bool
+		_gameOver,
+		_psi;
+	int
+		_fundingDiff,
+		_lastMonthsRating,
+		_ratingTotal;
+
+	Globe* _globe;
+	Text
+		* _txtChange,
+		* _txtDesc,
+		* _txtFailure,
+		* _txtMonth,
+		* _txtRating,
+		* _txtTitle;
 	TextButton* _btnOk;
 	Window* _window;
-	Text* _txtTitle, * _txtMonth, * _txtRating, * _txtChange, * _txtDesc, * _txtFailure;
-	bool _psi, _gameOver;
-	int _ratingTotal, _fundingDiff, _lastMonthsRating;
-	std::vector<std::string> _happyList, _sadList, _pactList;
-	Globe* _globe;
+
+	std::vector<std::string>
+		_happyList,
+		_pactList,
+		_sadList;
+
 	/// Builds a country list string.
-	std::wstring countryList(const std::vector<std::string>& countries, const std::string& singular, const std::string& plural);
+	std::wstring countryList(
+			const std::vector<std::string>& countries,
+			const std::string& singular,
+			const std::string& plural);
+
 
 	public:
 		/// Creates the Monthly Report state.
-		MonthlyReportState(Game* game, bool psi, Globe* globe);
+		MonthlyReportState(
+				Game* game,
+				bool psi,
+				Globe* globe);
 		/// Cleans up the Monthly Report state.
 		~MonthlyReportState();
 
 		/// Updates the palette.
 		void init();
-		/// Handler for clicking the OK button.
-		void btnOkClick(Action* action);
 		///
 		void calculateChanges();
+
+		/// Handler for clicking the OK button.
+		void btnOkClick(Action* action);
 };
 
 }

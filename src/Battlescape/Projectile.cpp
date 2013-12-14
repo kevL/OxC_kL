@@ -441,15 +441,15 @@ Wb.131129
 
 	//Log(LOG_INFO) << ". LoF calculated, Acu applied (if not BL)";
 	// finally do a line calculation and store this trajectory.
-	int retValue = _save->getTileEngine()->calculateLine(
+	int ret = _save->getTileEngine()->calculateLine(
 													originVoxel,
 													targetVoxel,
 													true,
 													&_trajectory,
 													bu);
 
-	Log(LOG_INFO) << ". ret = " << retValue;
-	return retValue;
+	Log(LOG_INFO) << ". ret = " << ret;
+	return ret;
 }
 
 /**
@@ -565,7 +565,7 @@ Wb.131129
 
 	// we try several different arcs to try and reach our goal.
 //	double arc = 0.5; // start with a very low traj.5 seems too low.
-	int retValue = VOXEL_EMPTY;
+	int ret = VOXEL_EMPTY;
 	bool found = false;
 	double arc = 1.0;
 
@@ -583,7 +583,7 @@ Wb.131129
 		if (check != VOXEL_OUTOFBOUNDS // out of map
 			&& (_trajectory.at(0) / Position(16, 16, 24)) == (targetVoxel / Position(16, 16, 24)))
 		{
-			retValue = check;
+			ret = check;
 
 			found = true;
 		}
@@ -596,7 +596,7 @@ Wb.131129
 	}
 	Log(LOG_INFO) << ". arc = " << arc;
 
-	if (AreSame(arc, 5.0))
+	if (arc >= 5.0)
 	{
 		return VOXEL_EMPTY;
 	}
@@ -604,7 +604,7 @@ Wb.131129
 	// apply some accuracy modifiers
 	if (accuracy > 1.0) accuracy = 1.0;
 
-	static const double maxDeviation = 0.085;
+	static const double maxDeviation = 0.08;
 	static const double minDeviation = 0.0;
 	double baseDeviation = (maxDeviation - (maxDeviation * accuracy)) + minDeviation;
 //Old	double deviation = RNG::boxMuller(0.0, baseDeviation);
@@ -614,7 +614,7 @@ Wb.131129
 	int result = VOXEL_OUTOFBOUNDS;
 
 	// finally do a line calculation and store this trajectory.
-/*	retValue = _save->getTileEngine()->calculateParabola(
+/*	ret = _save->getTileEngine()->calculateParabola(
 			originVoxel,
 			targetVoxel,
 			true,
@@ -656,7 +656,7 @@ Wb.131129
 		}
 
 		// OLD. finally do a line calculation and store this trajectory.
-/*		retValue = _save->getTileEngine()->calculateParabola(
+/*		ret = _save->getTileEngine()->calculateParabola(
 				originVoxel,
 				targetVoxel,
 				true,
@@ -666,8 +666,8 @@ Wb.131129
 				1.); */
 	}
 
-	Log(LOG_INFO) << ". ret = " << retValue;
-	return retValue;
+	Log(LOG_INFO) << ". ret = " << ret;
+	return ret;
 }
 /*
 Wb.131129

@@ -56,7 +56,10 @@ namespace OpenXcom
  * Initializes all the elements in the Monthly Report screen.
  * @param game Pointer to the core game.
  */
-MonthlyReportState::MonthlyReportState(Game* game, bool psi, Globe* globe)
+MonthlyReportState::MonthlyReportState(
+		Game* game,
+		bool psi,
+		Globe* globe)
 	:
 		State(game),
 		_psi(psi),
@@ -71,7 +74,6 @@ MonthlyReportState::MonthlyReportState(Game* game, bool psi, Globe* globe)
 	_globe = globe;
 
 	_window		= new Window(this, 320, 200, 0, 0);
-
 	_txtTitle	= new Text(300, 17, 10, 8);
 
 	_txtMonth	= new Text(110, 9, 16, 24);
@@ -84,16 +86,19 @@ MonthlyReportState::MonthlyReportState(Game* game, bool psi, Globe* globe)
 	_btnOk		= new TextButton(288, 16, 16, 177);
 
 
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(3)), Palette::backPos, 16);
+	_game->setPalette(
+				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(3)),
+				Palette::backPos,
+				16);
 
 	add(_window);
-	add(_btnOk);
 	add(_txtTitle);
 	add(_txtMonth);
 	add(_txtRating);
 	add(_txtChange);
-	add(_txtDesc);
 	add(_txtFailure);
+	add(_txtDesc);
+	add(_btnOk);
 
 	centerAllSurfaces();
 
@@ -151,7 +156,12 @@ MonthlyReportState::MonthlyReportState(Game* game, bool psi, Globe* globe)
 		default: m = "";
 	}
 
-	int difficulty_threshold = 100 * (static_cast<int>(_game->getSavedGame()->getDifficulty()) - 9);
+	int difficulty_threshold = 250 * (static_cast<int>(_game->getSavedGame()->getDifficulty()) - 4);
+		// 0 -> -1000
+		// 1 -> -750
+		// 2 -> -500
+		// 3 -> -250
+		// 4 -> 0
 
 	_txtMonth->setColor(Palette::blockOffset(15)-1);
 	_txtMonth->setSecondaryColor(Palette::blockOffset(8)+10);
@@ -159,24 +169,26 @@ MonthlyReportState::MonthlyReportState(Game* game, bool psi, Globe* globe)
 
 	// Calculate rating
 	std::wstring rating = tr("STR_RATING_TERRIBLE");
-//kL	if (_ratingTotal > 500)
-	if (_ratingTotal > 1000)	// kL
+	if (_ratingTotal > 10000)
+	{
+		rating = tr("STR_RATING_STUPENDOUS");
+	}
+	else if (_ratingTotal > 5000)
 	{
 		rating = tr("STR_RATING_EXCELLENT");
 	}
-	else if (_ratingTotal > 0)
+	else if (_ratingTotal > 2500)
 	{
 		rating = tr("STR_RATING_GOOD");
 	}
-	else if (_ratingTotal > difficulty_threshold)
+	else if (_ratingTotal > 1000)
 	{
 		rating = tr("STR_RATING_OK");
 	}
-	else if (_ratingTotal > difficulty_threshold - 300)
+	else if (_ratingTotal > difficulty_threshold)
 	{
 		rating = tr("STR_RATING_POOR");
 	}
-
 	_txtRating->setColor(Palette::blockOffset(15)-1);
 	_txtRating->setSecondaryColor(Palette::blockOffset(8)+10);
 	_txtRating->setText(tr("STR_MONTHLY_RATING").arg(_ratingTotal).arg(rating));
@@ -195,8 +207,7 @@ MonthlyReportState::MonthlyReportState(Game* game, bool psi, Globe* globe)
 	// calculate satisfaction
 	std::wstringstream ss4;
 	std::wstring satisFactionString = tr("STR_COUNCIL_IS_DISSATISFIED");
-//kL	if (_ratingTotal > 500)
-	if (_ratingTotal > 1000)	// kL
+	if (_ratingTotal > 1500)
 	{
 		satisFactionString = tr("STR_COUNCIL_IS_VERY_PLEASED");
 	}
@@ -250,9 +261,18 @@ MonthlyReportState::MonthlyReportState(Game* game, bool psi, Globe* globe)
 		_game->getSavedGame()->setWarned(false);
 	}
 
-	ss4 << countryList(_happyList, "STR_COUNTRY_IS_PARTICULARLY_PLEASED", "STR_COUNTRIES_ARE_PARTICULARLY_HAPPY");
-	ss4 << countryList(_sadList, "STR_COUNTRY_IS_UNHAPPY_WITH_YOUR_ABILITY", "STR_COUNTRIES_ARE_UNHAPPY_WITH_YOUR_ABILITY");
-	ss4 << countryList(_pactList, "STR_COUNTRY_HAS_SIGNED_A_SECRET_PACT", "STR_COUNTRIES_HAVE_SIGNED_A_SECRET_PACT");
+	ss4 << countryList(
+					_happyList,
+					"STR_COUNTRY_IS_PARTICULARLY_PLEASED",
+					"STR_COUNTRIES_ARE_PARTICULARLY_HAPPY");
+	ss4 << countryList(
+					_sadList,
+					"STR_COUNTRY_IS_UNHAPPY_WITH_YOUR_ABILITY",
+					"STR_COUNTRIES_ARE_UNHAPPY_WITH_YOUR_ABILITY");
+	ss4 << countryList(
+					_pactList,
+					"STR_COUNTRY_HAS_SIGNED_A_SECRET_PACT",
+					"STR_COUNTRIES_HAVE_SIGNED_A_SECRET_PACT");
 
 	_txtDesc->setText(ss4.str());
 }
@@ -269,41 +289,10 @@ MonthlyReportState::~MonthlyReportState()
  */
 void MonthlyReportState::init()
 {
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(3)), Palette::backPos, 16);
-}
-
-/**
- * Returns to the previous screen.
- * @param action Pointer to an action.
- */
-void MonthlyReportState::btnOkClick(Action*)
-{
-	if (!_gameOver)
-	{
-		_game->popState();
-
-		if (_psi)
-			_game->pushState(new PsiTrainingState(_game));
-	}
-	else
-	{
-		if (_txtFailure->getVisible())
-		{
-			_game->popState();
-			_game->pushState(new DefeatState(_game));
-		}
-		else
-		{
-			_window->setColor(Palette::blockOffset(8)+10);
-
-			_txtTitle->setVisible(false);
-			_txtMonth->setVisible(false);
-			_txtRating->setVisible(false);
-			_txtChange->setVisible(false);
-			_txtDesc->setVisible(false);
-			_txtFailure->setVisible(true);
-		}
-	}
+	_game->setPalette(
+					_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(3)),
+					Palette::backPos,
+					16);
 }
 
 /**
@@ -334,7 +323,9 @@ void MonthlyReportState::calculateChanges()
 		(*k)->newMonth();
 
 		if ((*k)->getActivityXcom().size() > 2)
-			_lastMonthsRating += (*k)->getActivityXcom().at(lastMonthOffset) - (*k)->getActivityAlien().at(lastMonthOffset);
+			_lastMonthsRating +=
+							(*k)->getActivityXcom().at(lastMonthOffset)
+								- (*k)->getActivityAlien().at(lastMonthOffset);
 
 		xcomSubTotal += (*k)->getActivityXcom().at(monthOffset);
 		alienTotal += (*k)->getActivityAlien().at(monthOffset);
@@ -368,7 +359,10 @@ void MonthlyReportState::calculateChanges()
 
 		// and after they've made their decisions, calculate the difference,
 		// and add them to the appropriate lists.
-		_fundingDiff += (*k)->getFunding().back() - (*k)->getFunding().at((*k)->getFunding().size() - 2);
+		_fundingDiff +=
+					(*k)->getFunding().back()
+						- (*k)->getFunding().at((*k)->getFunding().size()
+						- 2);
 
 		switch ((*k)->getSatisfaction())
 		{
@@ -389,6 +383,41 @@ void MonthlyReportState::calculateChanges()
 }
 
 /**
+ * Returns to the previous screen.
+ * @param action Pointer to an action.
+ */
+void MonthlyReportState::btnOkClick(Action*)
+{
+	if (!_gameOver)
+	{
+		_game->popState();
+
+		if (_psi)
+			_game->pushState(new PsiTrainingState(_game));
+	}
+	else
+	{
+		if (_txtFailure->getVisible())
+		{
+			_game->popState();
+			_game->pushState(new DefeatState(_game));
+		}
+		else
+		{
+			_window->setColor(Palette::blockOffset(8)+10);
+
+			_txtTitle->setVisible(false);
+			_txtMonth->setVisible(false);
+			_txtRating->setVisible(false);
+			_txtChange->setVisible(false);
+			_txtDesc->setVisible(false);
+
+			_txtFailure->setVisible(true);
+		}
+	}
+}
+
+/**
  * Builds a sentence from a list of countries, adding the appropriate
  * separators and pluralization.
  * @param countries List of country string IDs.
@@ -396,9 +425,9 @@ void MonthlyReportState::calculateChanges()
  * @param plural String ID to append at the end if the list is plural.
  */
 std::wstring MonthlyReportState::countryList(
-										const std::vector<std::string>& countries,
-										const std::string& singular,
-										const std::string& plural)
+		const std::vector<std::string>& countries,
+		const std::string& singular,
+		const std::string& plural)
 {
 	std::wstringstream ss;
 

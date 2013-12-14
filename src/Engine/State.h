@@ -20,18 +20,20 @@
 #ifndef OPENXCOM_STATE_H
 #define OPENXCOM_STATE_H
 
-#include <vector>
 #include <string>
+#include <vector>
+
 #include <SDL.h>
 
 
 namespace OpenXcom
 {
 
-class Game;
-class Surface;
 class Action;
+class Game;
 class LocalizedText;
+class Surface;
+
 
 /**
  * A game state that receives user input and reacts accordingly.
@@ -43,12 +45,16 @@ class LocalizedText;
  */
 class State
 {
+
 	protected:
+
+		bool _screen;
 		Game* _game;
 		std::vector<Surface*> _surfaces;
-		bool _screen;
+
 
 		public:
+
 			/// Creates a new state linked to a game.
 			State(Game* game);
 			/// Cleans up the state.
@@ -60,30 +66,36 @@ class State
 			bool isScreen() const;
 			/// Toggles whether the state is a full-screen.
 			void toggleScreen();
+
 			/// Initializes the state.
 			virtual void init();
-			/// Handles any events.
-			virtual void handle(Action* action);
 			/// Runs state functionality every cycle.
 			virtual void think();
 			/// Blits the state to the screen.
 			virtual void blit();
+
+			/// Handles any events.
+			virtual void handle(Action* action);
+
 			/// Hides all the state surfaces.
 			void hideAll();
 			/// Shws all the state surfaces.
 			void showAll();
 			/// Resets all the state surfaces.
 			void resetAll();
+
 			/// Get the localized text.
 			const LocalizedText& tr(const std::string& id) const;
 			/// Get the localized text.
 			LocalizedText tr(const std::string& id, unsigned n) const;
+
 			///
 			void centerAllSurfaces();
 			///
 			void lowerAllSurfaces();
 			///
 			void applyBattlescapeTheme();
+
 			///
 			friend class Timer;
 };

@@ -18,25 +18,31 @@
  */
 
 #include "MultipleTargetsState.h"
+
 #include <sstream>
+
+#include "ConfirmDestinationState.h"
+#include "GeoscapeCraftState.h"
+#include "GeoscapeState.h"
+#include "InterceptState.h"
+#include "TargetInfoState.h"
+#include "UfoDetectedState.h"
+
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
+#include "../Engine/Options.h"
 #include "../Engine/Palette.h"
+
 #include "../Interface/TextButton.h"
-#include "../Interface/Window.h"
 #include "../Interface/TextList.h"
-#include "../Savegame/Target.h"
+#include "../Interface/Window.h"
+
+#include "../Resource/ResourcePack.h"
+
 #include "../Savegame/Base.h"
 #include "../Savegame/Craft.h"
+#include "../Savegame/Target.h"
 #include "../Savegame/Ufo.h"
-#include "GeoscapeState.h"
-#include "ConfirmDestinationState.h"
-#include "InterceptState.h"
-#include "UfoDetectedState.h"
-#include "GeoscapeCraftState.h"
-#include "TargetInfoState.h"
-#include "../Engine/Options.h"
 
 
 namespace OpenXcom
@@ -49,7 +55,11 @@ namespace OpenXcom
  * @param craft Pointer to craft to retarget (NULL if none).
  * @param state Pointer to the Geoscape state.
  */
-MultipleTargetsState::MultipleTargetsState(Game* game, std::vector<Target*> targets, Craft* craft, GeoscapeState* state)
+MultipleTargetsState::MultipleTargetsState(
+		Game* game,
+		std::vector<Target*> targets,
+		Craft* craft,
+		GeoscapeState* state)
 	:
 		State(game),
 		_targets(targets),
@@ -81,15 +91,18 @@ MultipleTargetsState::MultipleTargetsState(Game* game, std::vector<Target*> targ
 		int btnY = ((236 - listHeight) / 2) + listHeight + 12; */
 
 		_window		= new Window(this, 136, listHeight + 36, 60, 118 - listHeight / 2);
-		_btnCancel	= new TextButton(116, 16, 70, 130 + listHeight / 2);
 		_lstTargets	= new TextList(116, listHeight, 70, 126 - listHeight / 2);
+		_btnCancel	= new TextButton(116, 16, 70, 130 + listHeight / 2);
 
 
-		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)), Palette::backPos, 16);
+		_game->setPalette(
+					_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)),
+					Palette::backPos,
+					16);
 
 		add(_window);
-		add(_btnCancel);
 		add(_lstTargets);
+		add(_btnCancel);
 
 		centerAllSurfaces();
 
@@ -108,10 +121,14 @@ MultipleTargetsState::MultipleTargetsState(Game* game, std::vector<Target*> targ
 		_lstTargets->setSelectable(true);
 		_lstTargets->setBackground(_window);
 		_lstTargets->onMouseClick((ActionHandler)& MultipleTargetsState::lstTargetsClick);
-
-		for (std::vector<Target*>::iterator i = _targets.begin(); i != _targets.end(); ++i)
+		for (std::vector<Target*>::iterator
+				i = _targets.begin();
+				i != _targets.end();
+				++i)
 		{
-			_lstTargets->addRow(1, (*i)->getName(_game->getLanguage()).c_str());
+			_lstTargets->addRow(
+								1,
+								(*i)->getName(_game->getLanguage()).c_str());
 		}
 	}
 }
@@ -124,12 +141,14 @@ MultipleTargetsState::~MultipleTargetsState()
 }
 
 /**
- * Resets the palette and ignores the window
- * if there's only one target.
+ * Resets the palette and ignores the window if there's only one target.
  */
 void MultipleTargetsState::init()
 {
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)), Palette::backPos, 16);
+	_game->setPalette(
+				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)),
+				Palette::backPos,
+				16);
 
 	if (_targets.size() == 1)
 	{
@@ -158,28 +177,48 @@ void MultipleTargetsState::popupTarget(Target* target)
 		if (b != 0)
 		{
 			//Log(LOG_INFO) << ". . base";
-			_game->pushState(new InterceptState(_game, _state->getGlobe(), b));
+			_game->pushState(new InterceptState(
+											_game,
+											_state->getGlobe(),
+											b));
 		}
 		else if (c != 0)
 		{
 			//Log(LOG_INFO) << ". . craft";
-			_game->pushState(new GeoscapeCraftState(_game, c, _state->getGlobe(), 0));
+			_game->pushState(new GeoscapeCraftState(
+												_game,
+												c,
+												_state->getGlobe(),
+												0));
 		}
 		else if (u != 0)
 		{
 			//Log(LOG_INFO) << ". . ufo";
-			_game->pushState(new UfoDetectedState(_game, u, _state, false, u->getHyperDetected()));
+			_game->pushState(new UfoDetectedState(
+												_game,
+												u,
+												_state,
+												false,
+												u->getHyperDetected()));
 		}
 		else
 		{
 			//Log(LOG_INFO) << ". . else...";
-			_game->pushState(new TargetInfoState(_game, target, _state->getGlobe()));
+//kL			_game->pushState(new TargetInfoState(_game, target, _state->getGlobe()));
+			_game->pushState(new TargetInfoState(
+												_game,
+												target,
+												_state->getGlobe(),
+												_state)); // kL
 		}
 	}
 	else
 	{
 		//Log(LOG_INFO) << ". _craft != 0";
-		_game->pushState(new ConfirmDestinationState(_game, _craft, target));
+		_game->pushState(new ConfirmDestinationState(
+													_game,
+													_craft,
+													target));
 	}
 
 	//Log(LOG_INFO) << "MultipleTargetsState::popupTarget() EXIT";

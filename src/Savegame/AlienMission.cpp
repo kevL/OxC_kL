@@ -426,6 +426,9 @@ Ufo* AlienMission::spawnUfo(
 	return ufo;
 }
 
+/**
+ *
+ */
 void AlienMission::start(unsigned initialCount)
 {
 	_nextWave = 0;
@@ -450,6 +453,7 @@ class MatchBaseCoordinates
 	:
 		public std::unary_function<const Base*, bool>
 {
+
 private:
 	double _lon, _lat;
 
@@ -466,20 +470,25 @@ private:
 		/// Match with base's coordinates.
 		bool operator()(const Base* base) const
 		{
-			return AreSame(base->getLongitude(), _lon) && AreSame(base->getLatitude(), _lat);
+			return
+				AreSame(base->getLongitude(), _lon)
+					&& AreSame(base->getLatitude(), _lat);
 		}
 };
 
 /**
  * This function is called when one of the mission's UFOs arrives at its current destination.
  * It takes care of sending the UFO to the next waypoint, landing UFOs and
- * marking them for removal as required. It must set the game data in a way that the rest of the code
- * understands what to do.
+ * marking them for removal as required. It must set the game data
+ * in a way that the rest of the code understands what to do.
  * @param ufo, The UFO that reached its waypoint.
  * @param engine, The game engine, required to get access to game data and game rules.
  * @param globe, The earth globe, required to get access to land checks.
  */
-void AlienMission::ufoReachedWaypoint(Ufo& ufo, Game &engine, const Globe& globe)
+void AlienMission::ufoReachedWaypoint(
+		Ufo& ufo,
+		Game &engine,
+		const Globe& globe)
 {
 	const Ruleset& rules = *engine.getRuleset();
 	SavedGame& game = *engine.getSavedGame();
@@ -505,7 +514,10 @@ void AlienMission::ufoReachedWaypoint(Ufo& ufo, Game &engine, const Globe& globe
 		Waypoint* wp = new Waypoint(); // Set next waypoint.
 		RuleRegion* region = rules.getRegion(_region);
 
-		ufo.setSpeed((int)(ufo.getRules()->getMaxSpeed() * ufo.getTrajectory().getSpeedPercentage(ufo.getTrajectoryPoint())));
+		ufo.setSpeed(static_cast<int>(
+							(static_cast<float>(
+									ufo.getRules()->getMaxSpeed())
+										* ufo.getTrajectory().getSpeedPercentage(ufo.getTrajectoryPoint()))));
 
 		std::pair<double, double> pos;
 		if (ufo.getTrajectory().getAltitude(ufo.getTrajectoryPoint()) == "STR_GROUND")
@@ -537,7 +549,7 @@ void AlienMission::ufoReachedWaypoint(Ufo& ufo, Game &engine, const Globe& globe
 			terrorSite->setLongitude(ufo.getLongitude());
 			terrorSite->setLatitude(ufo.getLatitude());
 			terrorSite->setId(game.getId("STR_TERROR_SITE"));
-			terrorSite->setSecondsRemaining(4 * 3600 + RNG::generate(0, 6) * 3600);	// 4 + 0to6 hrs.
+			terrorSite->setSecondsRemaining(4 * 3600 + RNG::generate(0, 6) * 3600);	// 4hr. + (0 to 6) hrs.
 			terrorSite->setAlienRace(_race);
 
 			const City* city = rules.locateCity(ufo.getLongitude(), ufo.getLatitude());
@@ -545,7 +557,10 @@ void AlienMission::ufoReachedWaypoint(Ufo& ufo, Game &engine, const Globe& globe
 
 			game.getTerrorSites()->push_back(terrorSite);
 
-			for (std::vector<Target*>::iterator t = ufo.getFollowers()->begin(); t != ufo.getFollowers()->end();)
+			for (std::vector<Target*>::iterator
+					t = ufo.getFollowers()->begin();
+					t != ufo.getFollowers()->end();
+					)
 			{
 				Craft* c = dynamic_cast<Craft*>(*t);
 				if (c
@@ -595,11 +610,14 @@ void AlienMission::ufoReachedWaypoint(Ufo& ufo, Game &engine, const Globe& globe
 /**
  * This function is called when one of the mission's UFOs is shot down (crashed or destroyed).
  * Currently the only thing that happens is delaying the next UFO in the mission sequence.
- * @param ufo The UFO that was shot down.
- * @param engine The game engine, unused for now.
- * @param globe The earth globe, unused for now.
+ * @param ufo, The UFO that was shot down.
+ * @param engine, The game engine, unused for now.
+ * @param globe, The earth globe, unused for now.
  */
-void AlienMission::ufoShotDown(Ufo& ufo, Game&, const Globe&)
+void AlienMission::ufoShotDown(
+		Ufo& ufo,
+		Game&,
+		const Globe&)
 {
 	switch (ufo.getStatus())
 	{
@@ -621,13 +639,17 @@ void AlienMission::ufoShotDown(Ufo& ufo, Game&, const Globe&)
  * This function is called when one of the mission's UFOs has finished its time on the ground.
  * It takes care of sending the UFO to the next waypoint and marking them for removal as required.
  * It must set the game data in a way that the rest of the code understands what to do.
- * @param ufo The UFO that reached its waypoint.
- * @param engine The game engine, required to get access to game data and game rules.
- * @param globe The earth globe, required to get access to land checks.
+ * @param ufo, The UFO that reached its waypoint.
+ * @param engine, The game engine, required to get access to game data and game rules.
+ * @param globe, The earth globe, required to get access to land checks.
  */
-void AlienMission::ufoLifting(Ufo& ufo, Game& engine, const Globe& globe)
+void AlienMission::ufoLifting(
+		Ufo& ufo,
+		Game& engine,
+		const Globe& globe)
 {
 	const Ruleset& rules = *engine.getRuleset();
+
 	switch (ufo.getStatus())
 	{
 		case Ufo::FLYING:
@@ -684,6 +706,7 @@ void AlienMission::ufoLifting(Ufo& ufo, Game& engine, const Globe& globe)
 void AlienMission::setWaveCountdown(unsigned minutes)
 {
 	assert(minutes != 0 && minutes %30 == 0);
+
 	if (isOver())
 	{
 		return;
@@ -738,9 +761,15 @@ const AlienBase* AlienMission::getAlienBase() const
  * @param lon Longitudinal coordinates to check
  * @param lat Lattitudinal coordinates to check
  */
-void AlienMission::addScore(const double lon, const double lat, Game& engine)
+void AlienMission::addScore(
+		const double lon,
+		const double lat,
+		Game& engine)
 {
-	for (std::vector<Region*>::iterator region = engine.getSavedGame()->getRegions()->begin(); region != engine.getSavedGame()->getRegions()->end(); ++region)
+	for (std::vector<Region*>::iterator
+			region = engine.getSavedGame()->getRegions()->begin();
+			region != engine.getSavedGame()->getRegions()->end();
+			++region)
 	{
 		if ((*region)->getRules()->insideRegion(lon, lat))
 		{
@@ -750,7 +779,10 @@ void AlienMission::addScore(const double lon, const double lat, Game& engine)
 		}
 	}
 
-	for (std::vector<Country*>::iterator country = engine.getSavedGame()->getCountries()->begin(); country != engine.getSavedGame()->getCountries()->end(); ++country)
+	for (std::vector<Country*>::iterator
+			country = engine.getSavedGame()->getCountries()->begin();
+			country != engine.getSavedGame()->getCountries()->end();
+			++country)
 	{
 		if ((*country)->getRules()->insideCountry(lon, lat))
 		{
@@ -761,7 +793,9 @@ void AlienMission::addScore(const double lon, const double lat, Game& engine)
 	}
 }
 
-void AlienMission::spawnAlienBase(const Globe& globe, Game& engine)
+void AlienMission::spawnAlienBase(
+		const Globe& globe,
+		Game& engine)
 {
 	SavedGame& game = *engine.getSavedGame();
 
@@ -796,7 +830,9 @@ void AlienMission::spawnAlienBase(const Globe& globe, Game& engine)
  * @param region the region we want to try to set the mission to.
  * @param rules the ruleset, in case we need to swap out the region.
  */
-void AlienMission::setRegion(const std::string& region, const Ruleset& rules)
+void AlienMission::setRegion(
+		const std::string& region,
+		const Ruleset& rules)
 {
 	if (rules.getRegion(region)->getMissionRegion() != "")
 	{

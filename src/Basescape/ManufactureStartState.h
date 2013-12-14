@@ -32,6 +32,7 @@ class TextButton;
 class TextList;
 class Window;
 
+
 /**
  * Screen which displays needed elements to start productions (items/required workshop state/cost to build a unit, ...).
  */
@@ -39,6 +40,7 @@ class ManufactureStartState
 	:
 		public State
 {
+
 private:
 	Base* _base;
 	RuleManufacture* _item;
@@ -54,9 +56,13 @@ private:
 		* _txtUnitAvailableColumn;
 	TextList* _lstRequiredItems;
 
+
 	public:
 		/// Creates the State.
-		ManufactureStartState(Game* game, Base* base, RuleManufacture* item);
+		ManufactureStartState(
+				Game* game,
+				Base* base,
+				RuleManufacture* item);
 		/// Handler for the Cancel button.
 		void btnCancelClick(Action* action);
 

@@ -18,22 +18,25 @@
  */
 
 #include "State.h"
-#include "InteractiveSurface.h"
-#include "Game.h"
-#include "Screen.h"
-#include "Surface.h"
+
 #include "Font.h"
+#include "Game.h"
+#include "InteractiveSurface.h"
 #include "Language.h"
 #include "LocalizedText.h"
 #include "Palette.h"
-#include "../Resource/ResourcePack.h"
-#include "../Interface/Window.h"
+#include "Screen.h"
+#include "Surface.h"
+
+#include "../Interface/ArrowButton.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/TextEdit.h"
 #include "../Interface/TextList.h"
-#include "../Interface/ArrowButton.h"
 #include "../Interface/Slider.h"
+#include "../Interface/Window.h"
+
+#include "../Resource/ResourcePack.h"
 
 
 namespace OpenXcom

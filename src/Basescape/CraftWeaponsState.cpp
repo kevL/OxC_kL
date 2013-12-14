@@ -18,23 +18,29 @@
  */
 
 #include "CraftWeaponsState.h"
-#include <sstream>
+
 #include <cmath>
+#include <sstream>
+
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
-#include "../Engine/Palette.h"
 #include "../Engine/Options.h"
-#include "../Interface/TextButton.h"
-#include "../Interface/Window.h"
+#include "../Engine/Palette.h"
+
 #include "../Interface/Text.h"
+#include "../Interface/TextButton.h"
 #include "../Interface/TextList.h"
+#include "../Interface/Window.h"
+
+#include "../Resource/ResourcePack.h"
+
+#include "../Ruleset/RuleCraftWeapon.h"
 #include "../Ruleset/Ruleset.h"
+
+#include "../Savegame/Base.h"
 #include "../Savegame/Craft.h"
 #include "../Savegame/CraftWeapon.h"
-#include "../Ruleset/RuleCraftWeapon.h"
 #include "../Savegame/ItemContainer.h"
-#include "../Savegame/Base.h"
 
 
 namespace OpenXcom
@@ -42,12 +48,16 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Craft Weapons window.
- * @param game Pointer to the core game.
- * @param base Pointer to the base to get info from.
- * @param craft ID of the selected craft.
- * @param weapon ID of the selected weapon.
+ * @param game : Pointer to the core game.
+ * @param base : Pointer to the base to get info from.
+ * @param craft : ID of the selected craft.
+ * @param weapon : ID of the selected weapon.
  */
-CraftWeaponsState::CraftWeaponsState(Game* game, Base* base, size_t craft, size_t weapon)
+CraftWeaponsState::CraftWeaponsState(
+		Game* game,
+		Base* base,
+		size_t craft,
+		size_t weapon)
 	:
 		State(game),
 		_base(base),
@@ -58,8 +68,7 @@ CraftWeaponsState::CraftWeaponsState(Game* game, Base* base, size_t craft, size_
 	_screen = false;
 
 	_window			= new Window(this, 220, 160, 50, 20, POPUP_BOTH);
-
-	_txtTitle		= new Text(200, 17, 60, 28);
+	_txtTitle		= new Text(200, 17, 60, 32);
 
 	_txtArmament	= new Text(98, 9, 66, 53);
 	_txtQuantity	= new Text(30, 9, 164, 53);
@@ -70,15 +79,18 @@ CraftWeaponsState::CraftWeaponsState(Game* game, Base* base, size_t craft, size_
 	_btnCancel		= new TextButton(140, 16, 90, 156);
 
 
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)), Palette::backPos, 16);
+	_game->setPalette(
+					_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)),
+					Palette::backPos,
+					16);
 
 	add(_window);
-	add(_btnCancel);
 	add(_txtTitle);
 	add(_txtArmament);
 	add(_txtQuantity);
 	add(_txtAmmunition);
 	add(_lstWeapons);
+	add(_btnCancel);
 
 	centerAllSurfaces();
 
@@ -113,11 +125,17 @@ CraftWeaponsState::CraftWeaponsState(Game* game, Base* base, size_t craft, size_
 	_lstWeapons->setBackground(_window);
 	_lstWeapons->setMargin(8);
 
-	_lstWeapons->addRow(1, tr("STR_NONE_UC").c_str());
+	_lstWeapons->addRow(
+						1,
+						tr("STR_NONE_UC").c_str());
+
 	_weapons.push_back(0);
 
 	const std::vector<std::string>& weapons = _game->getRuleset()->getCraftWeaponsList();
-	for (std::vector<std::string>::const_iterator i = weapons.begin(); i != weapons.end(); ++i)
+	for (std::vector<std::string>::const_iterator
+			i = weapons.begin();
+			i != weapons.end();
+			++i)
 	{
 		RuleCraftWeapon* w = _game->getRuleset()->getCraftWeapon(*i);
 		if (_base->getItems()->getItem(w->getLauncherItem()) > 0)
@@ -133,7 +151,11 @@ CraftWeaponsState::CraftWeaponsState(Game* game, Base* base, size_t craft, size_
 			{
 				ss2 << tr("STR_NOT_AVAILABLE");
 			}
-			_lstWeapons->addRow(3, tr(w->getType()).c_str(), ss.str().c_str(), ss2.str().c_str());
+			_lstWeapons->addRow(
+								3,
+								tr(w->getType()).c_str(),
+								ss.str().c_str(),
+								ss2.str().c_str());
 		}
 	}
 

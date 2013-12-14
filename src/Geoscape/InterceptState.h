@@ -28,14 +28,15 @@
 namespace OpenXcom
 {
 
-class TextButton;
-class Window;
-class Text;
-class TextList;
 class Base;
-class Globe;
 class Craft;
+class Globe;
 class Target;
+class Text;
+class TextButton;
+class TextList;
+class Window;
+
 
 /**
  * Intercept window that lets the player launch
@@ -45,19 +46,33 @@ class InterceptState
 	:
 		public State
 {
+
 	private:
-		TextButton* _btnCancel;
-		Window* _window;
-		Text* _txtTitle, * _txtCraft, * _txtStatus, * _txtBase, * _txtWeapons;
-		TextList* _lstCrafts;
-		Globe* _globe;
+
 		Base* _base;
+		Globe* _globe;
 		Target *_target;
+		Text
+			* _txtBase,
+			* _txtCraft,
+			* _txtStatus,
+			* _txtTitle,
+			* _txtWeapons;
+		TextButton* _btnCancel;
+		TextList* _lstCrafts;
+		Window* _window;
+
 		std::vector<Craft*> _crafts;
 
+
 	public:
+
 		/// Creates the Intercept state.
-		InterceptState(Game* game, Globe* globe, Base* base = 0, Target* target = 0);
+		InterceptState(
+				Game* game,
+				Globe* globe,
+				Base* base = 0,
+				Target* target = 0);
 		/// Cleans up the Intercept state.
 		~InterceptState();
 

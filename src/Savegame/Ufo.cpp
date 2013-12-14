@@ -16,22 +16,30 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "Ufo.h"
-#include <assert.h>
+
 #define _USE_MATH_DEFINES
-#include <math.h>
+
+#include "Ufo.h"
+
 #include <sstream>
 #include <algorithm>
+
+#include <assert.h>
+#include <math.h>
+
 #include "../aresame.h"
-#include "Craft.h"
+
 #include "AlienMission.h"
+#include "Craft.h"
+#include "SavedGame.h"
+#include "Waypoint.h"
+
 #include "../Engine/Exception.h"
 #include "../Engine/Language.h"
+
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleUfo.h"
 #include "../Ruleset/UfoTrajectory.h"
-#include "SavedGame.h"
-#include "Waypoint.h"
 
 
 namespace OpenXcom
@@ -65,11 +73,13 @@ Ufo::Ufo(RuleUfo* rules)
 
 /**
  * Make sure our mission forgets us, and we only delete targets we own (waypoints).
- *
  */
 Ufo::~Ufo()
 {
-	for (std::vector<Target*>::iterator i = _followers.begin(); i != _followers.end();)
+	for (std::vector<Target*>::iterator
+			i = _followers.begin();
+			i != _followers.end();
+			)
 	{
 		Craft* c = dynamic_cast<Craft*>(*i);
 		if (c)
@@ -106,6 +116,7 @@ class matchMissionID
 	:
 		public std::unary_function<const AlienMission*, bool>
 {
+
 private:
 	int _id;
 
@@ -117,6 +128,7 @@ private:
 		{
 			/* Empty by design. */
 		}
+
 		/// Match with stored ID.
 		bool operator()(const AlienMission* am) const
 		{
@@ -130,7 +142,10 @@ private:
  * @param ruleset The game rules. Use to access the trajectory rules.
  * @param game The game data. Used to find the UFO's mission.
  */
-void Ufo::load(const YAML::Node& node, const Ruleset& ruleset, SavedGame& game)
+void Ufo::load(
+		const YAML::Node& node,
+		const Ruleset& ruleset,
+		SavedGame& game)
 {
 	MovingTarget::load(node);
 
@@ -183,7 +198,10 @@ void Ufo::load(const YAML::Node& node, const Ruleset& ruleset, SavedGame& game)
 
 	int missionID		= node["mission"].as<int>();
 
-	std::vector<AlienMission*>::const_iterator found = std::find_if(game.getAlienMissions().begin(), game.getAlienMissions().end(), matchMissionID(missionID));
+	std::vector<AlienMission*>::const_iterator found =
+													std::find_if(game.getAlienMissions().begin(),
+													game.getAlienMissions().end(),
+													matchMissionID(missionID));
 	if (found == game.getAlienMissions().end())
 	{
 		// Corrupt save file.

@@ -26,12 +26,13 @@
 namespace OpenXcom
 {
 
-class TextButton;
-class Window;
-class TextList;
 class Craft;
-class Target;
 class GeoscapeState;
+class Target;
+class TextButton;
+class TextList;
+class Window;
+
 
 /**
  * Displays a list of possible targets.
@@ -40,7 +41,9 @@ class MultipleTargetsState
 	:
 		public State
 {
+
 private:
+
 	static const int OUTER_MARGIN = 3;
 	static const int INNER_MARGIN = 4;
 	static const int BORDER = 5;
@@ -54,16 +57,24 @@ private:
 	TextButton* _btnCancel;
 	TextList* _lstTargets;
 
+
 	public:
+
 		/// Creates the Multiple Targets state.
-		MultipleTargetsState(Game* game, std::vector<Target*> targets, Craft* craft, GeoscapeState* state);
+		MultipleTargetsState(
+				Game* game,
+				std::vector<Target*> targets,
+				Craft* craft,
+				GeoscapeState* state);
 		/// Cleans up the Multiple Targets state.
 		~MultipleTargetsState();
 
 		/// Updates the window.
 		void init();
+
 		/// Popup for a target.
 		void popupTarget(Target* target);
+
 		/// Handler for clicking the Cancel button.
 		void btnCancelClick(Action* action);
 		/// Handler for clicking the Targets list.

@@ -35,21 +35,27 @@ class SavedBattleGame;
 class Surface;
 class Tile;
 
+
 /**
  * A class that represents a projectile. Map is the owner of an instance of this class during its short life.
  * It calculates its own trajectory and then moves along this precalculated trajectory in voxel space.
  */
 class Projectile
 {
+
 private:
-	ResourcePack* _res;
-	SavedBattleGame* _save;
+	int _speed;
+	unsigned int _position;
+
 	BattleAction _action;
 	Position _origin;
-	std::vector<Position> _trajectory;
-	unsigned int _position;
+	ResourcePack* _res;
+	SavedBattleGame* _save;
 	Surface* _sprite;
-	int _speed;
+
+	std::vector<Position> _trajectory;
+
+	///
 	void applyAccuracy(
 			const Position& origin,
 			Position* target,
@@ -58,9 +64,14 @@ private:
 			Tile* targetTile = 0,
 			bool throwing = false);
 
+
 	public:
 		/// Creates a new Projectile.
-		Projectile(ResourcePack* res, SavedBattleGame* save, BattleAction action, Position origin);
+		Projectile(
+				ResourcePack* res,
+				SavedBattleGame* save,
+				BattleAction action,
+				Position origin);
 		/// Cleans up the Projectile.
 		~Projectile();
 

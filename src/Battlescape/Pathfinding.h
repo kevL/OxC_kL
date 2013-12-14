@@ -35,19 +35,30 @@ class PathfindingNode;
 class Tile;
 class BattleUnit;
 
+
 /**
  * A utility class that calculates the shortest path between two points on the battlescape map.
  */
 class Pathfinding
 {
+
 private:
-	SavedBattleGame* _save;
-	std::vector<PathfindingNode> _nodes;
-	int _size;
+	bool
+		_pathPreviewed,
+		_strafeMove;
+	int
+		_size,
+		_totalTUCost;
+
+	BattleUnit* _unit;
 	MovementType _movementType;
-	/// Gets the node at certain position.
+	SavedBattleGame* _save;
+
+	std::vector<PathfindingNode> _nodes;
+
+	/// Gets the node at a position.
 	PathfindingNode* getNode(const Position& pos);
-	/// Determines whether a tile blocks a certain movementType.
+	/// Determines whether a tile blocks a movementType.
 	bool isBlocked(
 			Tile* tile,
 			const int part,
@@ -71,18 +82,15 @@ private:
 	bool canFallDown(Tile* destinationTile);
 	/// Determines whether a unit can fall down from this tile.
 	bool canFallDown(Tile* destinationTile, int size);
-	/// Determines the additional TU cost of going one step from start to destination if going through a closed UFO door.
+	/// Determines the additional TU cost of going one step from
+	/// start to destination if going through a closed UFO door.
 //	int getOpeningUfoDoorCost(int direction, Position start, Position destination);
-	BattleUnit* _unit;
-	bool _pathPreviewed;
-	bool _strafeMove;
-	int _totalTUCost;
+
 
 	public:
-		std::vector<int> _path;
-		Pathfinding(SavedBattleGame* save);
-		/// Cleans up the Pathfinding.
-		~Pathfinding();
+		static const int DIR_UP = 8;
+		static const int DIR_DOWN = 9;
+		static const int O_BIGWALL = -1;
 
 		enum bigWallTypes
 		{
@@ -96,32 +104,44 @@ private:
 			BIGWALLEASTANDSOUTH
 		};
 
-		static const int DIR_UP = 8;
-		static const int DIR_DOWN = 9;
-		static const int O_BIGWALL = -1;
+		std::vector<int> _path;
 
-		/// Determines whether the unit is going up a stairs.
-//kL		bool isOnStairs(const Position& startPosition, const Position& endPosition);
-		/// Determines whether or not movement between starttile and endtile is possible in the direction.
-		bool isBlocked(
-				Tile* startTile,
-				Tile* endTile,
-				const int direction,
-				BattleUnit* missileTarget);
+
+		Pathfinding(SavedBattleGame* save);
+		/// Cleans up the Pathfinding.
+		~Pathfinding();
+
 		/// Calculates the shortest path.
 		void calculate(
 				BattleUnit* unit,
 				Position endPosition,
 				BattleUnit* missileTarget = 0,
 				int maxTUCost = 1000);
+
+		/// Determines whether or not movement between starttile and endtile is possible in the direction.
+		bool isBlocked(
+				Tile* startTile,
+				Tile* endTile,
+				const int direction,
+				BattleUnit* missileTarget);
+
+		/// Aborts the current path.
+		void abortPath();
+
 		/// Converts direction to a vector.
-		static void directionToVector(int const direction, Position* vector);
+		static void directionToVector(
+				int const direction,
+				Position* vector);
 		/// Converts a vector to a direction.
-		static void vectorToDirection(const Position& vector, int& dir);
-		/// Checks whether a path is ready and gives the first direction.
+		static void vectorToDirection(
+				const Position& vector,
+				int& dir);
+
+		/// Checks whether a path is ready and returns the direction.
 		int getStartDirection();
-		/// Dequeues a direction.
+		/// Dequeues a path and returns the direction.
 		int dequeuePath();
+
 		/// Gets the TU cost to move from 1 tile to the other.
 		int getTUCost(
 				const Position& startPosition,
@@ -130,30 +150,38 @@ private:
 				BattleUnit* unit,
 				BattleUnit* target,
 				bool missile);
-		/// Aborts the current path.
-		void abortPath();
-		/// Gets the strafe move setting.
-		bool getStrafeMove() const;
-		/// Checks, for the up/down button, if the movement is valid.
-		bool validateUpDown(
-				BattleUnit* bu,
-				Position startPosition,
-				int const direction);
-		/// Previews the path.
-		bool previewPath(bool bRemove = false);
-		/// Removes the path preview.
-		bool removePreview();
-		/// Sets _unit in order to abuse low-level pathfinding functions from outside the class.
-		void setUnit(BattleUnit* unit);
-		/// Gets all reachable tiles, based on cost.
-		std::vector<int> findReachable(BattleUnit* unit, int tuMax);
 		/// Gets _totalTUCost; finds out whether we can hike somewhere in this turn or not.
 		int getTotalTUCost() const
 		{
 			return _totalTUCost;
 		}
+
+		/// Checks if the movement is valid, for the up/down button.
+		bool validateUpDown(
+				BattleUnit* bu,
+				Position startPosition,
+				int const direction);
+
+		/// Gets all reachable tiles, based on cost.
+		std::vector<int> findReachable(
+				BattleUnit* unit,
+				int tuMax);
+
+		/// Previews the path.
+		bool previewPath(bool bRemove = false);
+		/// Removes the path preview.
+		bool removePreview();
 		/// Gets the path preview setting.
 		bool isPathPreviewed() const;
+
+		/// Gets the strafe move setting.
+		bool getStrafeMove() const;
+
+		/// Sets _unit in order to abuse low-level pathfinding functions from outside the class.
+		void setUnit(BattleUnit* unit);
+
+		/// Determines whether the unit is going up a stairs.
+//kL		bool isOnStairs(const Position& startPosition, const Position& endPosition);
 };
 
 }

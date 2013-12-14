@@ -54,6 +54,7 @@ class GeoscapeState
 {
 
 private:
+
 	bool
 		_battleMusic,
 		_music,
@@ -117,6 +118,7 @@ private:
 
 
 	public:
+
 		/// Creates the Geoscape state.
 		GeoscapeState(Game* game);
 		/// Cleans up the Geoscape state.

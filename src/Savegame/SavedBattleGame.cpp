@@ -104,7 +104,10 @@ SavedBattleGame::SavedBattleGame()
 
 	_tileSearch.resize(11 * 11);
 
-	for (int i = 0; i < 121; ++i)
+	for (int
+			i = 0;
+			i < 121;
+			++i)
 	{
 		_tileSearch[i].x = (i %11) - 5;
 		_tileSearch[i].y = (i / 11) - 5;
@@ -149,7 +152,10 @@ SavedBattleGame::~SavedBattleGame()
  * @param rule for the saved game.
  * @param savedGame Pointer to saved game.
  */
-void SavedBattleGame::load(const YAML::Node& node, Ruleset* rule, SavedGame* savedGame)
+void SavedBattleGame::load(
+		const YAML::Node& node,
+		Ruleset* rule,
+		SavedGame* savedGame)
 {
 	//Log(LOG_INFO) << "SavedBattleGame::load()";
 
@@ -233,7 +239,12 @@ void SavedBattleGame::load(const YAML::Node& node, Ruleset* rule, SavedGame* sav
 			std::string armor = (*i)["genUnitArmor"].as<std::string>();
 
 			// create a new Unit.
-			unit = new BattleUnit(rule->getUnit(type), faction, id, rule->getArmor(armor), savedGame->getDifficulty());
+			unit = new BattleUnit(
+								rule->getUnit(type),
+								faction,
+								id,
+								rule->getArmor(armor),
+								savedGame->getDifficulty());
 		}
 		//Log(LOG_INFO) << "SavedGame::load(), difficulty = " << savedGame->getDifficulty();
 

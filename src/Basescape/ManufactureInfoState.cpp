@@ -53,7 +53,10 @@ namespace OpenXcom
  * @param base Pointer to the base to get info from.
  * @param item The RuleManufacture to produce.
  */
-ManufactureInfoState::ManufactureInfoState(Game* game, Base* base, RuleManufacture* item)
+ManufactureInfoState::ManufactureInfoState(
+		Game* game,
+		Base* base,
+		RuleManufacture* item)
 	:
 		State(game),
 		_base(base),
@@ -69,7 +72,10 @@ ManufactureInfoState::ManufactureInfoState(Game* game, Base* base, RuleManufactu
  * @param base Pointer to the base to get info from.
  * @param production The Production to modify.
  */
-ManufactureInfoState::ManufactureInfoState(Game* game, Base* base, Production* production)
+ManufactureInfoState::ManufactureInfoState(
+		Game* game,
+		Base* base,
+		Production* production)
 	:
 		State(game),
 		_base(base),
@@ -111,7 +117,6 @@ void ManufactureInfoState::buildUi()
 	int button_width	= (width - 5 * button_x_border) / 2;
 
 	_window					= new Window(this, width, height, start_x, start_y);
-
 	_txtTitle				= new Text(width - 4 * button_x_border,
 									button_height * 2,
 									start_x + button_x_border,
@@ -194,12 +199,23 @@ void ManufactureInfoState::buildUi()
 									start_y + 4 * button_height);
 
 
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
+	_game->setPalette(
+				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)),
+				Palette::backPos,
+				16);
 
-	_surface1 = new InteractiveSurface((_btnEngineerUp->getX()+_btnEngineerUp->getWidth()+_txtUnitToProduce->getX()) / 2, height, start_x, start_y);
+	_surface1 = new InteractiveSurface(
+								(_btnEngineerUp->getX() + _btnEngineerUp->getWidth() + _txtUnitToProduce->getX()) / 2,
+								height,
+								start_x,
+								start_y);
 	_surface1->onMouseClick((ActionHandler)& ManufactureInfoState::handleWheelEngineer, 0);
 
-	_surface2 = new InteractiveSurface(_surface1->getWidth(), height, start_x + _surface1->getWidth(), start_y);
+	_surface2 = new InteractiveSurface(
+								_surface1->getWidth(),
+								height,
+								start_x + _surface1->getWidth(),
+								start_y);
 	_surface2->onMouseClick((ActionHandler)& ManufactureInfoState::handleWheelUnit, 0);
 
 	add(_surface1);
@@ -297,6 +313,8 @@ void ManufactureInfoState::buildUi()
 
 	if (!_production)
 	{
+		_btnOk->setVisible(false);
+
 		_production = new Production(_item, 0);
 		_base->addProduction(_production);
 	}
@@ -321,6 +339,7 @@ void ManufactureInfoState::buildUi()
 void ManufactureInfoState::btnStopClick(Action*)
 {
 	_base->removeProduction(_production);
+
 	exitState();
 }
 
@@ -330,8 +349,6 @@ void ManufactureInfoState::btnStopClick(Action*)
  */
 void ManufactureInfoState::btnOkClick(Action*)
 {
-	if (0 == _production->getAmountTotal()) return; // Do not allow to start a project with zero units to produce!
-
 	if (_item)
 	{
 		_production->startItem(_base, _game->getSavedGame());
@@ -376,6 +393,11 @@ void ManufactureInfoState::setAssignedEngineer()
 		s4 << _production->getAmountTotal();
 
 	_txtTodo->setText(s4.str());
+
+	if (_production->getAmountTotal() == 0)
+		_btnOk->setVisible(false);
+	else
+		_btnOk->setVisible(true);
 }
 
 /**
@@ -501,7 +523,12 @@ void ManufactureInfoState::moreUnit(int change)
 		&& _base->getAvailableHangars() - _base->getUsedHangars() == 0)
 	{
 		_timerMoreUnit->stop();
-		_game->pushState(new ErrorMessageState(_game, "STR_NO_FREE_HANGARS_FOR_CRAFT_PRODUCTION", Palette::blockOffset(15)+1, "BACK17.SCR", 6));
+		_game->pushState(new ErrorMessageState(
+											_game,
+											"STR_NO_FREE_HANGARS_FOR_CRAFT_PRODUCTION",
+											Palette::blockOffset(15)+1,
+											"BACK17.SCR",
+											6));
 	}
 	else
 	{

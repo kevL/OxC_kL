@@ -65,7 +65,9 @@ struct MissionWave
  */
 class RuleAlienMission
 {
+
 private:
+
 	/// The mission's type ID.
 	std::string _type;
 	/// The race distribution over game time.
@@ -75,7 +77,9 @@ private:
 	/// The mission's points
 	int _points;
 
+
 	public:
+
 		/// Creates an Alien Mission rule.
 		RuleAlienMission(const std::string& type);
 		/// Releases all resources held by the mission.

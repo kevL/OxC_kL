@@ -55,7 +55,10 @@ namespace OpenXcom
  * @param craft Pointer to the craft to target.
  * @param globe Pointer to the Geoscape globe.
  */
-SelectDestinationState::SelectDestinationState(Game* game, Craft* craft, Globe* globe)
+SelectDestinationState::SelectDestinationState(
+		Game* game,
+		Craft* craft,
+		Globe* globe)
 	:
 		State(game),
 		_craft(craft),
@@ -77,11 +80,15 @@ SelectDestinationState::SelectDestinationState(Game* game, Craft* craft, Globe* 
 	_window->setDY(0);
 
 	_txtTitle	= new Text(100, 9, 16 + dx, 10);
+
 	_btnCancel	= new TextButton(60, 14, 98 + dx, 8);
 	_btnCydonia	= new TextButton(60, 14, 180 + dx, 8);
 
 
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
+	_game->setPalette(
+					_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)),
+					Palette::backPos,
+					16);
 
 /*	add(_btnRotateLeft);
 	add(_btnRotateRight);
@@ -200,27 +207,43 @@ void SelectDestinationState::handle(Action* action)
  */
 void SelectDestinationState::globeClick(Action* action)
 {
-	double lon, lat;
-	int mouseX = (int)floor(action->getAbsoluteXMouse()), mouseY = (int)floor(action->getAbsoluteYMouse());
-	_globe->cartToPolar(mouseX, mouseY, &lon, &lat);
+	double
+		lon,
+		lat;
+	int
+		mouseX = static_cast<int>(floor(action->getAbsoluteXMouse())),
+		mouseY = static_cast<int>(floor(action->getAbsoluteYMouse()));
 
-	if (mouseY < 28) // Ignore window clicks
+	_globe->cartToPolar(
+					mouseX,
+					mouseY,
+					&lon,
+					&lat);
+
+	if (mouseY < 30) // Ignore window clicks
 	{
 		return;
 	}
 
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) // Clicking on a valid target
 	{
-		std::vector<Target*> v = _globe->getTargets(mouseX, mouseY, true);
-		if (v.empty())
+		std::vector<Target*> targets = _globe->getTargets(
+														mouseX,
+														mouseY,
+														true);
+		if (targets.empty())
 		{
 			Waypoint *w = new Waypoint();
 			w->setLongitude(lon);
 			w->setLatitude(lat);
-			v.push_back(w);
+			targets.push_back(w);
 		}
 
-		_game->pushState(new MultipleTargetsState(_game, v, _craft, 0));
+		_game->pushState(new MultipleTargetsState(
+												_game,
+												targets,
+												_craft,
+												0));
 	}
 }
 

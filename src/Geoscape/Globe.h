@@ -33,11 +33,12 @@ namespace OpenXcom
 {
 
 class Game;
+class LocalizedText;
 class Polygon;
 class SurfaceSet;
-class Timer;
 class Target;
-class LocalizedText;
+class Timer;
+
 
 /**
  * Interactive globe view of the world.
@@ -49,7 +50,9 @@ class Globe
 	:
 		public InteractiveSurface
 {
+
 private:
+
 	static const int NUM_TEXTURES	= 13;
 	static const int NUM_LANDSHADES	= 48;
 	static const int NUM_SEASHADES	= 72;
@@ -60,25 +63,46 @@ private:
 //	static const double ROTATE_LONGITUDE;
 //	static const double ROTATE_LATITUDE;
 
-	double _cenLon, _cenLat, _hoverLon, _hoverLat; //, _rotLon, _rotLat;
-	Sint16 _cenX, _cenY;
-	size_t _zoom;
-	SurfaceSet* _texture;
-	Game* _game;
-	Surface* _markers, * _countries, * _radars;
-	bool _hover, _blink;
+	bool
+		_hover,
+		_blink;
 	int _blinkVal;
-	Timer* _blinkTimer; //, * _rotTimer;
-	std::list<Polygon*> _cacheLand;
-	Surface* _mkXcomBase, * _mkAlienBase, * _mkCraft, * _mkWaypoint, * _mkCity;
-	Surface* _mkFlyingUfo, * _mkLandedUfo, * _mkCrashedUfo, * _mkAlienSite;
+	double
+		_cenLon,
+		_cenLat,
+		_hoverLon,
+		_hoverLat; //, _rotLon, _rotLat;
+	Sint16
+		_cenX,
+		_cenY;
+	size_t _zoom;
+
 	FastLineClip* _clipper;
+	Game* _game;
+	Surface
+		* _countries,
+		* _markers,
+		* _radars,
+		* _mkAlienBase,
+		* _mkAlienSite,
+		* _mkCity,
+		* _mkCraft,
+		* _mkCrashedUfo,
+		* _mkFlyingUfo,
+		* _mkLandedUfo,
+		* _mkWaypoint,
+		* _mkXcomBase;
+	SurfaceSet* _texture;
+	Timer* _blinkTimer; //, * _rotTimer;
+
+	std::list<Polygon*> _cacheLand;
 	/// normal of each pixel in earth globe per zoom level
 	std::vector<std::vector<Cord>> _earthData;
 	/// data sample used for noise in shading
 	std::vector<Sint16> _randomNoiseData;
 	/// list of dimension of earth on screen per zoom level
 	std::vector<double> _radius;
+
 
 	/// Checks if a point is behind the globe.
 	bool pointBack(double lon, double lat) const;
@@ -93,19 +117,42 @@ private:
 	/// Get position of sun relative to given position in polar cords and date.
 	Cord getSunDirection(double lon, double lat) const;
 
+
 	public:
+
 		/// Creates a new globe at the specified position and size.
-		Globe(Game* game, int cenX, int cenY, int width, int height, int x = 0, int y = 0);
+		Globe(Game* game,
+				int cenX,
+				int cenY,
+				int width,
+				int height,
+				int x = 0,
+				int y = 0);
 		/// Cleans up the globe.
 		~Globe();
 
 		/// Loads a set of polygons from a DAT file.
-		static void loadDat(const std::string& filename, std::list<Polygon*>* polygons);
+		static void loadDat(
+				const std::string& filename,
+				std::list<Polygon*>* polygons);
+
 		/// Converts polar coordinates to cartesian coordinates.
-		void polarToCart(double lon, double lat, Sint16* x, Sint16* y) const;
-		void polarToCart(double lon, double lat, double* x, double* y) const;
+		void polarToCart(
+				double lon,
+				double lat,
+				Sint16* x,
+				Sint16* y) const;
+		void polarToCart(
+				double lon,
+				double lat,
+				double* x,
+				double* y) const;
 		/// Converts cartesian coordinates to polar coordinates.
-		void cartToPolar(Sint16 x, Sint16 y, double* lon, double* lat) const;
+		void cartToPolar(
+				Sint16 x,
+				Sint16 y,
+				double* lon,
+				double* lat) const;
 
 		/// Sets the texture set for the globe's polygons.
 		void setTexture(SurfaceSet* texture);
@@ -139,14 +186,23 @@ private:
 
 		/// Checks if a point is inside land.
 		bool insideLand(double lon, double lat) const;
+
 		/// Turns on/off the globe detail.
 		void toggleDetail();
+
 		/// Gets all the targets near a point on the globe.
-		std::vector<Target*> getTargets(int x, int y, bool craft) const;
+		std::vector<Target*> getTargets(
+				int x,
+				int y,
+				bool craftOnly) const;
+
 		/// Caches visible globe polygons.
 		void cachePolygons();
 		/// Sets the palette of the globe.
-		void setPalette(SDL_Color* colors, int firstcolor = 0, int ncolors = 256);
+		void setPalette(
+				SDL_Color* colors,
+				int firstcolor = 0,
+				int ncolors = 256);
 
 		/// Handles the timers.
 		void think();
@@ -154,6 +210,7 @@ private:
 		void blink();
 		/// Rotates the globe.
 //		void rotate();
+
 		/// Draws the whole globe.
 		void draw();
 		/// Draws the ocean of the globe.
@@ -181,7 +238,11 @@ private:
 		void keyboardPress(Action* action, State* state);
 
 		/// Get the polygons texture and shade at the given point.
-		void getPolygonTextureAndShade(double lon, double lat, int* texture, int* shade) const;
+		void getPolygonTextureAndShade(
+				double lon,
+				double lat,
+				int* texture,
+				int* shade) const;
 
 		/// Checks if current globe zoom level is at maximum.
 		bool isZoomedInToMax() const;
@@ -195,9 +256,20 @@ private:
 		/// Get the localized text.
 		LocalizedText tr(const std::string& id, unsigned n) const;
 		/// Draw globe range circle.
-		void drawGlobeCircle(double lat, double lon, double radius, int segments);
+		void drawGlobeCircle(
+				double lat,
+				double lon,
+				double radius,
+				int segments);
 		/// Special "transparent" line.
-		void XuLine(Surface* surface, Surface* src, double x1, double y1, double x2, double y2, Sint16 Color);
+		void XuLine(
+				Surface* surface,
+				Surface* src,
+				double x1,
+				double y1,
+				double x2,
+				double y2,
+				Sint16 Color);
 
 		/// Sets hover base position.
 		void setNewBaseHoverPos(double lon, double lat);
@@ -213,7 +285,12 @@ private:
 		/// set the _radarLines variable
 		void toggleRadarLines();
 
-		void drawVHLine(double lon1, double lat1, double lon2, double lat2, int colour);
+		void drawVHLine(
+				double lon1,
+				double lat1,
+				double lon2,
+				double lat2,
+				int colour);
 };
 
 }

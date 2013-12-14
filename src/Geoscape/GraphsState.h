@@ -29,7 +29,7 @@ namespace OpenXcom
 {
 
 class InteractiveSurface;
-class NumberText; // kL
+//class NumberText; // kL
 class Region;
 class Surface;
 class Text;
@@ -59,8 +59,7 @@ private:
 		_finance,
 		_income;
 
-	/// will be only between 0 and size()
-	unsigned int
+	unsigned int // will be only between 0 and size()
 		_btnRegionsOffset,
 		_btnCountriesOffset;
 
@@ -73,11 +72,11 @@ private:
 		* _btnUfoRegion,
 		* _btnXcomCountry,
 		* _btnXcomRegion;
-	NumberText
-		* _numScore;
+//	NumberText* _numScore;
 	Text
-		* _txtTitle,
-		* _txtFactor;
+		* _numScore,
+		* _txtFactor,
+		* _txtTitle;
 	TextList
 		* _txtMonths,
 		* _txtYears;
@@ -85,12 +84,12 @@ private:
 		* _btnRegionTotal,
 		* _btnCountryTotal;
 
-	std::vector<bool>
-		_financeToggles;
+	std::vector<bool> _financeToggles;
 	std::vector<GraphBtnInfo*>
 		_regionToggles,
 		_countryToggles;
-	std::vector<NumberText*>
+//	std::vector<NumberText*>
+	std::vector<Text*>
 		_numCountryActivityAlien,
 		_numCountryActivityXCom,
 		_numRegionActivityAlien,
@@ -102,8 +101,7 @@ private:
 		_incomeLines,
 		_xcomCountryLines,
 		_xcomRegionLines;
-	std::vector<Text*>
-		_txtScale;
+	std::vector<Text*> _txtScale;
 	std::vector<ToggleTextButton*>
 		_btnRegions,
 		_btnCountries,

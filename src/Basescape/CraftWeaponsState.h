@@ -21,6 +21,7 @@
 #define OPENXCOM_CRAFTWEAPONSSTATE_H
 
 #include <vector>
+
 #include "../Engine/State.h"
 
 
@@ -28,11 +29,12 @@ namespace OpenXcom
 {
 
 class Base;
-class TextButton;
-class Window;
-class Text;
-class TextList;
 class RuleCraftWeapon;
+class Text;
+class TextButton;
+class TextList;
+class Window;
+
 
 /**
  * Select Armament window for
@@ -40,21 +42,34 @@ class RuleCraftWeapon;
  */
 class CraftWeaponsState
 	:
-	public State
+		public State
 {
+
 private:
 	Base* _base;
-	size_t _craft, _weapon;
-
+	Text
+		* _txtAmmunition,
+		* _txtArmament,
+		* _txtQuantity,
+		* _txtTitle;
 	TextButton* _btnCancel;
-	Window* _window;
-	Text* _txtTitle, * _txtArmament, * _txtQuantity, * _txtAmmunition;
 	TextList* _lstWeapons;
+	Window* _window;
+
+	size_t
+		_craft,
+		_weapon;
+
 	std::vector<RuleCraftWeapon*> _weapons;
+
 
 	public:
 		/// Creates the Craft Weapons state.
-		CraftWeaponsState(Game* game, Base* base, size_t craft, size_t weapon);
+		CraftWeaponsState(
+				Game* game,
+				Base* base,
+				size_t craft,
+				size_t weapon);
 		/// Cleans up the Craft Weapons state.
 		~CraftWeaponsState();
 

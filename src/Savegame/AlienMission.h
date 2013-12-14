@@ -28,15 +28,16 @@
 namespace OpenXcom
 {
 
-class RuleAlienMission;
-class Ufo;
-class Globe;
+class AlienBase;
 class Game;
-class SavedGame;
+class Globe;
+class RuleAlienMission;
 class Ruleset;
 class RuleUfo;
+class SavedGame;
+class Ufo;
 class UfoTrajectory;
-class AlienBase;
+
 
 /**
  * Represents an ongoing alien mission.
@@ -46,22 +47,36 @@ class AlienBase;
  */
 class AlienMission
 {
+
 private:
-	const RuleAlienMission& _rule;
-	std::string _region, _race;
-	unsigned _nextWave;
-	unsigned _nextUfoCounter;
-	unsigned _spawnCountdown;
-	unsigned _liveUfos;
+
 	int _uniqueID;
+	unsigned int
+		_liveUfos,
+		_nextUfoCounter,
+		_nextWave,
+		_spawnCountdown;
+
 	const AlienBase* _base;
+	const RuleAlienMission& _rule;
+
+	std::string _region, _race;
 
 	/// Spawns a UFO, based on mission rules.
-	Ufo* spawnUfo(const SavedGame& game, const Ruleset& ruleset, const Globe& globe, const RuleUfo& ufoRule, const UfoTrajectory& trajectory);
+	Ufo* spawnUfo(
+			const SavedGame& game,
+			const Ruleset& ruleset,
+			const Globe& globe,
+			const RuleUfo& ufoRule,
+			const UfoTrajectory& trajectory);
 	/// Spawn an alien base
-	void spawnAlienBase(const Globe& globe, Game& engine);
+	void spawnAlienBase(
+			const Globe& globe,
+			Game& engine);
+
 
 	public:
+
 		// Data
 		/// Creates a mission of the specified type.
 		AlienMission(const RuleAlienMission& rule);
@@ -81,7 +96,9 @@ private:
 			return _region;
 		}
 		/// Sets the mission's region.
-		void setRegion(const std::string& region, const Ruleset& rules);
+		void setRegion(
+				const std::string& region,
+				const Ruleset& rules);
 		/// Gets the mission's race.
 		const std::string& getRace() const
 		{
@@ -92,6 +109,7 @@ private:
 		{
 			_race = race;
 		}
+
 		/// Gets the minutes until next wave spawns.
 		unsigned getWaveCountdown() const
 		{
@@ -99,10 +117,12 @@ private:
 		}
 		/// Sets the minutes until next wave spawns.
 		void setWaveCountdown(unsigned minutes);
+
 		/// Sets the unique ID for this mission.
 		void setId(int id);
 		/// Gets the unique ID for this mission.
 		int getId() const;
+
 		/// Gets the alien base for this mission.
 		const AlienBase* getAlienBase() const;
 		/// Sets the alien base for this mission.
@@ -111,10 +131,12 @@ private:
 		// Behaviour
 		/// Is this mission over?
 		bool isOver() const;
+
 		/// Handle UFO spawning for the mission.
 		void think(Game& engine, const Globe& globe);
 		/// Initialize with values from rules.
 		void start(unsigned initialCount = 0);
+
 		/// Increase number of live UFOs.
 		void increaseLiveUfos()
 		{
@@ -125,14 +147,28 @@ private:
 		{
 			--_liveUfos;
 		}
+
 		/// Handle UFO reaching a waypoint.
-		void ufoReachedWaypoint(Ufo& ufo, Game& engine, const Globe& globe);
+		void ufoReachedWaypoint(
+				Ufo& ufo,
+				Game& engine,
+				const Globe& globe);
 		/// Handle UFO lifting from the ground.
-		void ufoLifting(Ufo& ufo, Game& engine, const Globe& globe);
+		void ufoLifting(
+				Ufo& ufo,
+				Game& engine,
+				const Globe& globe);
 		/// Handle UFO shot down.
-		void ufoShotDown(Ufo& ufo, Game& engine, const Globe& globe);
+		void ufoShotDown(
+				Ufo& ufo,
+				Game& engine,
+				const Globe& globe);
+
 		/// Handle Points for mission successes.
-		void addScore(const double lon, const double lat, Game& engine);
+		void addScore(
+				const double lon,
+				const double lat,
+				Game& engine);
 };
 
 }

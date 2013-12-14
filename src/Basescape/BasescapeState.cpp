@@ -296,6 +296,7 @@ void BasescapeState::setBase(Base* base)
 void BasescapeState::btnNewBaseClick(Action*)
 {
 	Base* base = new Base(_game->getRuleset());
+
 	_game->popState();
 	_game->pushState(new BuildNewBaseState(_game, base, _globe, false));
 }

@@ -20,44 +20,56 @@
 #ifndef OPENXCOM_PRIMEGRENADESTATE_H
 #define OPENXCOM_PRIMEGRENADESTATE_H
 
-#include "../Engine/State.h"
 #include "BattlescapeGame.h"
+
+#include "../Engine/State.h"
 
 
 namespace OpenXcom
 {
 
-class Game;
-class Text;
-class InteractiveSurface;
 class Frame;
+class Game;
+class InteractiveSurface;
 class Surface;
+class Text;
+
 
 /**
  * Window that allows the player to set the timer of an explosive.
  */
-class PrimeGrenadeState : public State
+class PrimeGrenadeState
+	:
+		public State
 {
-	private:
-		BattleAction *_action;
-		bool _inInventoryView;
-		BattleItem *_grenadeInInventory;
-		Text *_number[24];
-		Text *_title;
-		Frame *_frame;
-		InteractiveSurface *_button[24];
-		Surface *_bg;
+
+private:
+	bool _inInventoryView;
+
+	BattleAction* _action;
+	BattleItem* _grenadeInInventory;
+	Frame* _frame;
+	InteractiveSurface* _button[24];
+	Surface* _bg;
+	Text
+		* _number[24],
+		* _title;
+
 
 	public:
 		/// Creates the Prime Grenade state.
-		PrimeGrenadeState(Game *game, BattleAction *action, bool inInventoryView, BattleItem *grenadeInInventory);
+		PrimeGrenadeState(
+				Game* game,
+				BattleAction* action,
+				bool inInventoryView,
+				BattleItem* grenadeInInventory);
 		/// Cleans up the Prime Grenade state.
 		~PrimeGrenadeState();
 
 		/// Handler for right-clicking anything.
-		void handle(Action *action);
+		void handle(Action* action);
 		/// Handler for clicking a button.
-		void btnClick(Action *action);
+		void btnClick(Action* action);
 };
 
 }

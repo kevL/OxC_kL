@@ -55,7 +55,11 @@ namespace OpenXcom
  * @param base Pointer to base to show contained crafts (NULL to show all crafts).
  * @param target Pointer to target to intercept (NULL to ask user for target).
  */
-InterceptState::InterceptState(Game* game, Globe* globe, Base* base, Target* target)
+InterceptState::InterceptState(
+		Game* game,
+		Globe* globe,
+		Base* base,
+		Target* target)
 	:
 		State(game),
 		_globe(globe),
@@ -66,7 +70,6 @@ InterceptState::InterceptState(Game* game, Globe* globe, Base* base, Target* tar
 	_screen = false;
 
 	_window		= new Window(this, 320, 144, 0, 30, POPUP_HORIZONTAL);
-
 	_txtTitle	= new Text(300, 17, 10, 40);
 
 	_txtCraft	= new Text(86, 9, 16, 64);
@@ -80,18 +83,18 @@ InterceptState::InterceptState(Game* game, Globe* globe, Base* base, Target* tar
 
 
 	_game->setPalette(
-			_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)),
-			Palette::backPos,
-			16);
+					_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)),
+					Palette::backPos,
+					16);
 
 	add(_window);
-	add(_btnCancel);
 	add(_txtTitle);
 	add(_txtCraft);
 	add(_txtStatus);
 	add(_txtBase);
 	add(_txtWeapons);
 	add(_lstCrafts);
+	add(_btnCancel);
 
 	centerAllSurfaces();
 
@@ -134,14 +137,21 @@ InterceptState::InterceptState(Game* game, Globe* globe, Base* base, Target* tar
 
 	int row = 0;
 
-	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
+	for (std::vector<Base*>::iterator
+			i = _game->getSavedGame()->getBases()->begin();
+			i != _game->getSavedGame()->getBases()->end();
+			++i)
 	{
 		if (_base != 0 && *i != _base)
 			continue;
 
-		for (std::vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); ++j)
+		for (std::vector<Craft*>::iterator
+				j = (*i)->getCrafts()->begin();
+				j != (*i)->getCrafts()->end();
+				++j)
 		{
 			std::wstringstream ss;
+
 			if ((*j)->getNumWeapons() > 0)
 			{
 				ss << L'\x01' << (*j)->getNumWeapons() << L'\x01';
@@ -172,11 +182,12 @@ InterceptState::InterceptState(Game* game, Globe* globe, Base* base, Target* tar
 			}
 
 			_crafts.push_back(*j);
-			_lstCrafts->addRow(4,
-					(*j)->getName(_game->getLanguage()).c_str(),
-					tr((*j)->getStatus()).c_str(),
-					(*i)->getName().c_str(),
-					ss.str().c_str());
+			_lstCrafts->addRow(
+							4,
+							(*j)->getName(_game->getLanguage()).c_str(),
+							tr((*j)->getStatus()).c_str(),
+							(*i)->getName().c_str(),
+							ss.str().c_str());
 
 			if ((*j)->getStatus() == "STR_READY")
 			{

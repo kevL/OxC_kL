@@ -26,6 +26,7 @@
 namespace OpenXcom
 {
 
+class GeoscapeState;
 class Globe;
 class Target;
 class Text;
@@ -41,27 +42,30 @@ class TargetInfoState
 	:
 		public State
 {
+
 private:
-	Target
-		* _target;
-	Globe
-		* _globe;
-	TextButton
-		* _btnIntercept,
-		* _btnOk;
-	Window
-		* _window;
+
+	GeoscapeState* _state;
+	Globe* _globe;
+	Target* _target;
 	Text
 		* _txtTitle,
 		* _txtTargetted,
 		* _txtFollowers;
+	TextButton
+		* _btnIntercept,
+		* _btnOk;
+	Window* _window;
+
 
 	public:
+
 		/// Creates the Target Info state.
 		TargetInfoState(
 				Game* game,
 				Target* target,
-				Globe* globe);
+				Globe* globe,
+				GeoscapeState* state);
 		/// Cleans up the Target Info state.
 		~TargetInfoState();
 

@@ -63,6 +63,7 @@
 namespace OpenXcom
 {
 
+
 struct findRuleResearch
 	:
 		public std::unary_function<ResearchProject*, bool>
@@ -84,6 +85,7 @@ bool findRuleResearch::operator()(const ResearchProject* r) const
 	return _toFind == r->getRules();
 }
 
+
 struct equalProduction
 	:
 		public std::unary_function<Production*, bool>
@@ -94,7 +96,9 @@ struct equalProduction
 	bool operator()(const Production* p) const;
 };
 
-equalProduction::equalProduction(RuleManufacture* item) : _item(item)
+equalProduction::equalProduction(RuleManufacture* item)
+	:
+		_item(item)
 {
 }
 
@@ -102,6 +106,7 @@ bool equalProduction::operator()(const Production* p) const
 {
 	return p->getRules() == _item;
 }
+
 
 /**
  * Initializes a brand new saved game according to the specified difficulty.
@@ -812,7 +817,7 @@ std::vector<TerrorSite*>* SavedGame::getTerrorSites()
 
 /**
  * Get pointer to the battleGame object.
- * @return Pointer to the battleGame object.
+ * @return, Pointer to the battleGame object.
  */
 SavedBattleGame* SavedGame::getSavedBattle()
 {
@@ -821,7 +826,7 @@ SavedBattleGame* SavedGame::getSavedBattle()
 
 /**
  * Set battleGame object.
- * @param battleGame Pointer to the battleGame object.
+ * @param battleGame, Pointer to the battleGame object.
  */
 void SavedGame::setBattleGame(SavedBattleGame* battleGame)
 {

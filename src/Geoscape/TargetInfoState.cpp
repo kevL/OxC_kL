@@ -19,6 +19,7 @@
 
 #include "TargetInfoState.h"
 
+#include "GeoscapeState.h"
 #include "InterceptState.h"
 
 #include "../Engine/Game.h"
@@ -45,26 +46,27 @@ namespace OpenXcom
  * @param globe Pointer to the Geoscape globe.
  */
 TargetInfoState::TargetInfoState(
-			Game* game,
-			Target* target,
-			Globe* globe)
+		Game* game,
+		Target* target,
+		Globe* globe,
+		GeoscapeState* state)
 	:
 		State(game),
 		_target(target),
-		_globe(globe)
+		_globe(globe),
+		_state(state)
 {
 	//Log(LOG_INFO) << "Create TargetInfoState";
 
 	_screen = false;
 
 	_window			= new Window(this, 192, 120, 32, 40, POPUP_BOTH);
-
 	_txtTitle		= new Text(182, 17, 37, 53);
 
 	_txtTargetted	= new Text(182, 9, 37, 71);
 	_txtFollowers	= new Text(182, 40, 37, 80);
 
-	_btnIntercept	= new TextButton(160, 16, 48, 120);
+	_btnIntercept	= new TextButton(160, 16, 48, 119);
 	_btnOk			= new TextButton(160, 16, 48, 137);
 
 
@@ -110,7 +112,10 @@ TargetInfoState::TargetInfoState(
 	_txtFollowers->setColor(Palette::blockOffset(15)-1);
 	_txtFollowers->setAlign(ALIGN_CENTER);
 	std::wostringstream ss;
-	for (std::vector<Target*>::iterator i = _target->getFollowers()->begin(); i != _target->getFollowers()->end(); ++i)
+	for (std::vector<Target*>::iterator
+			i = _target->getFollowers()->begin();
+			i != _target->getFollowers()->end();
+			++i)
 	{
 		ss << (*i)->getName(_game->getLanguage()) << L'\n';
 	}
@@ -132,8 +137,14 @@ TargetInfoState::~TargetInfoState()
  */
 void TargetInfoState::btnInterceptClick(Action*)
 {
+	_state->timerReset();
+
 	_game->popState();
-	_game->pushState(new InterceptState(_game, _globe, 0, _target));
+	_game->pushState(new InterceptState(
+									_game,
+									_globe,
+									0,
+									_target));
 }
 
 /**

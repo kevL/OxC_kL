@@ -60,9 +60,13 @@ Pathfinding::Pathfinding(SavedBattleGame* save)
 	_nodes.reserve(_size);
 
 	Position p;
-	for (int i = 0; i < _size; ++i)
+	for (int
+			i = 0;
+			i < _size;
+			++i)
 	{
 		_save->getTileCoords(i, &p.x, &p.y, &p.z);
+
 		_nodes.push_back(PathfindingNode(p));
 	}
 }
@@ -93,9 +97,13 @@ PathfindingNode* Pathfinding::getNode(const Position& pos)
  * @param target, Target of the path.
  * @param maxTUCost, Maximum time units the path can cost.
  */
-void Pathfinding::calculate(BattleUnit* unit, Position endPosition, BattleUnit* target, int maxTUCost)
+void Pathfinding::calculate(
+		BattleUnit* unit,
+		Position endPosition,
+		BattleUnit* target,
+		int maxTUCost)
 {
-	//Log(LOG_INFO) << "Pathfinding::calculate()";
+	Log(LOG_INFO) << "Pathfinding::calculate()";
 
 	_totalTUCost = 0;
 	_path.clear();
@@ -266,6 +274,157 @@ void Pathfinding::calculate(BattleUnit* unit, Position endPosition, BattleUnit* 
 }
 
 /**
+ * Calculates the shortest path using Brensenham path algorithm.
+ * @note This only works in the X/Y plane.
+ * @param origin The position to start from.
+ * @param target The position we want to reach.
+ * @param targetUnit Target of the path.
+ * @param sneak Is the unit sneaking?
+ * @param maxTUCost Maximum time units the path can cost.
+ * @return True if a path exists, false otherwise.
+ */
+bool Pathfinding::bresenhamPath(
+		const Position& origin,
+		const Position& target,
+		BattleUnit* targetUnit,
+		bool sneak,
+		int maxTUCost)
+{
+	Log(LOG_INFO) << "Pathfinding::bresenhamPath()";
+
+	int xd[8] = {0, 1, 1, 1, 0, -1, -1, -1};
+	int yd[8] = {-1, -1, 0, 1, 1, 1, 0, -1};
+
+	int x, x0, x1, delta_x, step_x;
+	int y, y0, y1, delta_y, step_y;
+	int z, z0, z1, delta_z, step_z;
+	int swap_xy, swap_xz;
+	int drift_xy, drift_xz;
+	int cx, cy, cz;
+	Position lastPoint(origin);
+	int dir;
+	int lastTUCost = -1;
+	Position nextPoint;
+	_totalTUCost = 0;
+
+	// start and end points
+	x0 = origin.x;	 x1 = target.x;
+	y0 = origin.y;	 y1 = target.y;
+	z0 = origin.z;	 z1 = target.z;
+
+	// 'steep' xy Line, make longest delta x plane
+	swap_xy = abs(y1 - y0) > abs(x1 - x0);
+	if (swap_xy)
+	{
+		std::swap(x0, y0);
+		std::swap(x1, y1);
+	}
+
+	// do same for xz
+	swap_xz = abs(z1 - z0) > abs(x1 - x0);
+	if (swap_xz)
+	{
+		std::swap(x0, z0);
+		std::swap(x1, z1);
+	}
+
+	// delta is Length in each plane
+	delta_x = abs(x1 - x0);
+	delta_y = abs(y1 - y0);
+	delta_z = abs(z1 - z0);
+
+	// drift controls when to step in 'shallow' planes
+	// starting value keeps Line centred
+	drift_xy = (delta_x / 2);
+	drift_xz = (delta_x / 2);
+
+	// direction of line
+	step_x = 1; if (x0 > x1) { step_x = -1; }
+	step_y = 1; if (y0 > y1) { step_y = -1; }
+	step_z = 1; if (z0 > z1) { step_z = -1; }
+
+	// starting point
+	y = y0;
+	z = z0;
+
+	// step through longest delta (which we have swapped to x)
+	for (x = x0; x != (x1 + step_x); x += step_x)
+	{
+		// copy position
+		cx = x;	cy = y;	cz = z;
+
+		// unswap (in reverse)
+		if (swap_xz) std::swap(cx, cz);
+		if (swap_xy) std::swap(cx, cy);
+
+		if (x != x0 || y != y0 || z != z0)
+		{
+			Position realNextPoint = Position(cx, cy, cz);
+			nextPoint = realNextPoint;
+			// get direction
+			for (dir = 0; dir < 8; ++dir)
+			{
+				if (xd[dir] == cx-lastPoint.x && yd[dir] == cy-lastPoint.y) break;
+			}
+
+			int tuCost = getTUCost(lastPoint, dir, &nextPoint, _unit, targetUnit, (targetUnit && maxTUCost == 10000));
+
+			if (sneak && _save->getTile(nextPoint)->getVisible())
+			{
+				return false;
+			}
+
+			// delete the following
+			bool isDiagonal = (dir&1);
+			int lastTUCostDiagonal = lastTUCost + lastTUCost / 2;
+			int tuCostDiagonal = tuCost + tuCost / 2;
+			if (nextPoint == realNextPoint
+				&& tuCost < 255
+				&& (tuCost == lastTUCost
+					|| (isDiagonal && tuCost == lastTUCostDiagonal)
+					|| (!isDiagonal && tuCostDiagonal == lastTUCost)
+					|| lastTUCost == -1)
+				&& !isBlocked(_save->getTile(lastPoint), _save->getTile(nextPoint), dir, targetUnit))
+			{
+				_path.push_back(dir);
+			}
+			else
+			{
+				return false;
+			}
+			if (targetUnit == 0
+				&& tuCost != 255)
+			{
+				lastTUCost = tuCost;
+				_totalTUCost += tuCost;
+			}
+
+			lastPoint = Position(cx, cy, cz);
+		}
+
+		// update progress in other planes
+		drift_xy = drift_xy - delta_y;
+		drift_xz = drift_xz - delta_z;
+
+		// step in y plane
+		if (drift_xy < 0)
+		{
+			y = y + step_y;
+			drift_xy = drift_xy + delta_x;
+		}
+
+		// same in z
+		if (drift_xz < 0)
+		{
+			z = z + step_z;
+			drift_xz = drift_xz + delta_x;
+		}
+	}
+
+	return true;
+}
+
+/**
  * Calculates the shortest path using a simple A-Star algorithm.
  * The unit information and movement type must have already been set.
  * The path information is set only if a valid path is found.
@@ -283,7 +442,7 @@ bool Pathfinding::aStarPath(
 		bool sneak,
 		int maxTUCost)
 {
-	//Log(LOG_INFO) << "Pathfinding::aStarPath()";
+	Log(LOG_INFO) << "Pathfinding::aStarPath()";
 
 	// reset every node, so we have to check them all
 	for (std::vector<PathfindingNode>::iterator it = _nodes.begin(); it != _nodes.end(); ++it)
@@ -379,7 +538,7 @@ int Pathfinding::getTUCost(
 		BattleUnit* target,
 		bool missile)
 {
-	//Log(LOG_INFO) << "Pathfinding::getTUCost()";
+	Log(LOG_INFO) << "Pathfinding::getTUCost()";
 
 	_unit = unit;
 
@@ -795,8 +954,8 @@ int Pathfinding::getStartDirection()
 }
 
 /**
- * Dequeues the next path direction. Ie returns the direction and removes it from queue.
- * @return Direction where the unit needs to go next, -1 if it's the end of the path.
+ * Dequeues the next path direction. Ie, returns the direction and removes it from queue.
+ * @return, Direction where the unit needs to go next, -1 if it's the end of the path.
  */
 int Pathfinding::dequeuePath()
 {
@@ -824,6 +983,7 @@ void Pathfinding::abortPath()
  * @param missileTarget, Target for a missile.
  * @return, True if the movement is blocked.
  */
+// private
 bool Pathfinding::isBlocked(
 		Tile* tile,
 		const int part,
@@ -981,6 +1141,7 @@ bool Pathfinding::isBlocked(
  * @param missileTarget, Target for a missile.
  * @return, True if the movement is blocked.
  */
+// public:
 bool Pathfinding::isBlocked(
 		Tile* startTile,
 		Tile* /* endTile */,
@@ -1125,10 +1286,14 @@ bool Pathfinding::canFallDown(Tile* here, int size)
 			Position checkPos = here->getPosition() + Position(x, y, 0);
 			Tile* checkTile = _save->getTile(checkPos);
 			if (!canFallDown(checkTile))
+			{
+				Log(LOG_INFO) << "Pathfinding::canFallDown() ret FALSE";
 				return false;
+			}
 		}
 	}
 
+	Log(LOG_INFO) << "Pathfinding::canFallDown() ret TRUE";
 	return true;
 }
 
@@ -1443,149 +1608,12 @@ bool Pathfinding::removePreview()
 }
 
 /**
- * Calculates the shortest path using Brensenham path algorithm.
- * @note This only works in the X/Y plane.
- * @param origin The position to start from.
- * @param target The position we want to reach.
- * @param targetUnit Target of the path.
- * @param sneak Is the unit sneaking?
- * @param maxTUCost Maximum time units the path can cost.
- * @return True if a path exists, false otherwise.
+ * Gets the path preview setting.
+ * @return True, if paths are previewed.
  */
-bool Pathfinding::bresenhamPath(const Position& origin, const Position& target, BattleUnit* targetUnit, bool sneak, int maxTUCost)
+bool Pathfinding::isPathPreviewed() const
 {
-	//Log(LOG_INFO) << "Pathfinding::bresenhamPath()";
-
-	int xd[8] = {0, 1, 1, 1, 0, -1, -1, -1};
-	int yd[8] = {-1, -1, 0, 1, 1, 1, 0, -1};
-
-	int x, x0, x1, delta_x, step_x;
-	int y, y0, y1, delta_y, step_y;
-	int z, z0, z1, delta_z, step_z;
-	int swap_xy, swap_xz;
-	int drift_xy, drift_xz;
-	int cx, cy, cz;
-	Position lastPoint(origin);
-	int dir;
-	int lastTUCost = -1;
-	Position nextPoint;
-	_totalTUCost = 0;
-
-	// start and end points
-	x0 = origin.x;	 x1 = target.x;
-	y0 = origin.y;	 y1 = target.y;
-	z0 = origin.z;	 z1 = target.z;
-
-	// 'steep' xy Line, make longest delta x plane
-	swap_xy = abs(y1 - y0) > abs(x1 - x0);
-	if (swap_xy)
-	{
-		std::swap(x0, y0);
-		std::swap(x1, y1);
-	}
-
-	// do same for xz
-	swap_xz = abs(z1 - z0) > abs(x1 - x0);
-	if (swap_xz)
-	{
-		std::swap(x0, z0);
-		std::swap(x1, z1);
-	}
-
-	// delta is Length in each plane
-	delta_x = abs(x1 - x0);
-	delta_y = abs(y1 - y0);
-	delta_z = abs(z1 - z0);
-
-	// drift controls when to step in 'shallow' planes
-	// starting value keeps Line centred
-	drift_xy = (delta_x / 2);
-	drift_xz = (delta_x / 2);
-
-	// direction of line
-	step_x = 1; if (x0 > x1) { step_x = -1; }
-	step_y = 1; if (y0 > y1) { step_y = -1; }
-	step_z = 1; if (z0 > z1) { step_z = -1; }
-
-	// starting point
-	y = y0;
-	z = z0;
-
-	// step through longest delta (which we have swapped to x)
-	for (x = x0; x != (x1 + step_x); x += step_x)
-	{
-		// copy position
-		cx = x;	cy = y;	cz = z;
-
-		// unswap (in reverse)
-		if (swap_xz) std::swap(cx, cz);
-		if (swap_xy) std::swap(cx, cy);
-
-		if (x != x0 || y != y0 || z != z0)
-		{
-			Position realNextPoint = Position(cx, cy, cz);
-			nextPoint = realNextPoint;
-			// get direction
-			for (dir = 0; dir < 8; ++dir)
-			{
-				if (xd[dir] == cx-lastPoint.x && yd[dir] == cy-lastPoint.y) break;
-			}
-
-			int tuCost = getTUCost(lastPoint, dir, &nextPoint, _unit, targetUnit, (targetUnit && maxTUCost == 10000));
-
-			if (sneak && _save->getTile(nextPoint)->getVisible())
-			{
-				return false;
-			}
-
-			// delete the following
-			bool isDiagonal = (dir&1);
-			int lastTUCostDiagonal = lastTUCost + lastTUCost / 2;
-			int tuCostDiagonal = tuCost + tuCost / 2;
-			if (nextPoint == realNextPoint
-				&& tuCost < 255
-				&& (tuCost == lastTUCost
-					|| (isDiagonal && tuCost == lastTUCostDiagonal)
-					|| (!isDiagonal && tuCostDiagonal == lastTUCost)
-					|| lastTUCost == -1)
-				&& !isBlocked(_save->getTile(lastPoint), _save->getTile(nextPoint), dir, targetUnit))
-			{
-				_path.push_back(dir);
-			}
-			else
-			{
-				return false;
-			}
-			if (targetUnit == 0
-				&& tuCost != 255)
-			{
-				lastTUCost = tuCost;
-				_totalTUCost += tuCost;
-			}
-
-			lastPoint = Position(cx, cy, cz);
-		}
-
-		// update progress in other planes
-		drift_xy = drift_xy - delta_y;
-		drift_xz = drift_xz - delta_z;
-
-		// step in y plane
-		if (drift_xy < 0)
-		{
-			y = y + step_y;
-			drift_xy = drift_xy + delta_x;
-		}
-
-		// same in z
-		if (drift_xz < 0)
-		{
-			z = z + step_z;
-			drift_xz = drift_xz + delta_x;
-		}
-	}
-
-	return true;
+	return _pathPreviewed;
 }
 
 /**
@@ -1675,15 +1703,6 @@ std::vector<int> Pathfinding::findReachable(BattleUnit* unit, int tuMax)
 bool Pathfinding::getStrafeMove() const
 {
 	return _strafeMove;
-}
-
-/**
- * Gets the path preview setting.
- * @return True, if paths are previewed.
- */
-bool Pathfinding::isPathPreviewed() const
-{
-	return _pathPreviewed;
 }
 
 /**

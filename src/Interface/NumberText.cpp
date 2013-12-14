@@ -28,14 +28,22 @@ namespace OpenXcom
 
 /**
  * Sets up a blank number text.
- * @param width Width in pixels.
- * @param height Height in pixels.
- * @param x X position in pixels.
- * @param y Y position in pixels.
+ * @param width, Width in pixels.
+ * @param height, Height in pixels.
+ * @param x, X position in pixels.
+ * @param y, Y position in pixels.
  */
-NumberText::NumberText(int width, int height, int x, int y)
+NumberText::NumberText(
+		int width,
+		int height,
+		int x,
+		int y)
 	:
-		Surface(width, height, x, y),
+		Surface(
+				width,
+				height,
+				x,
+				y),
 		_value(0),
 		_color(0)
 {
@@ -191,7 +199,10 @@ NumberText::NumberText(int width, int height, int x, int y)
  */
 NumberText::~NumberText()
 {
-	for (int i = 0; i < 10; ++i)
+	for (int
+			i = 0;
+			i < 10;
+			++i)
 	{
 		delete _chars[i];
 	}
@@ -199,7 +210,7 @@ NumberText::~NumberText()
 
 /**
  * Changes the value used to render the number.
- * @param value Number value.
+ * @param value, Number value.
  */
 void NumberText::setValue(unsigned int value)
 {
@@ -210,7 +221,7 @@ void NumberText::setValue(unsigned int value)
 
 /**
  * Returns the value used to render the number.
- * @return Number value.
+ * @return, Number value.
  */
 unsigned int NumberText::getValue() const
 {
@@ -243,13 +254,25 @@ Uint8 NumberText::getColor() const
  * @param firstcolor Offset of the first color to replace.
  * @param ncolors Amount of colors to replace.
  */
-void NumberText::setPalette(SDL_Color* colors, int firstcolor, int ncolors)
+void NumberText::setPalette(
+		SDL_Color* colors,
+		int firstcolor,
+		int ncolors)
 {
-	Surface::setPalette(colors, firstcolor, ncolors);
+	Surface::setPalette(
+			colors,
+			firstcolor,
+			ncolors);
 
-	for (int i = 0; i < 10; ++i)
+	for (int
+			i = 0;
+			i < 10;
+			++i)
 	{
-		_chars[i]->setPalette(colors, firstcolor, ncolors);
+		_chars[i]->setPalette(
+							colors,
+							firstcolor,
+							ncolors);
 	}
 }
 
@@ -259,6 +282,7 @@ void NumberText::setPalette(SDL_Color* colors, int firstcolor, int ncolors)
 void NumberText::draw()
 {
 	Surface::draw();
+
 	std::ostringstream ss;
 	ss << _value;
 	std::string s = ss.str();

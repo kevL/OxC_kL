@@ -41,7 +41,11 @@ private:
 
 	public:
 		/// Creates a new number text with the specified size and position.
-		NumberText(int width, int height, int x = 0, int y = 0);
+		NumberText(
+				int width,
+				int height,
+				int x = 0,
+				int y = 0);
 		/// Cleans up the number text.
 		~NumberText();
 
@@ -54,7 +58,10 @@ private:
 		/// Gets the number text's color.
 		Uint8 getColor() const;
 		/// Sets the number text's palette.
-		void setPalette(SDL_Color* colors, int firstcolor = 0, int ncolors = 256);
+		void setPalette(
+				SDL_Color* colors,
+				int firstcolor = 0,
+				int ncolors = 256);
 
 		/// Draws the number text.
 		void draw();

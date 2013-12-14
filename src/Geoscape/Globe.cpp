@@ -918,41 +918,55 @@ void Globe::toggleDetail()
 /**
  * Checks if a certain target is near a certain cartesian point
  * (within a circled area around it) over the globe.
- * @param target Pointer to target.
- * @param x X coordinate of point.
- * @param y Y coordinate of point.
- * @return True if it's near, false otherwise.
+ * @param target, Pointer to target.
+ * @param x, X coordinate of point.
+ * @param y, Y coordinate of point.
+ * @return, True if it's near, false otherwise.
  */
-bool Globe::targetNear(Target* target, int x, int y) const
+bool Globe::targetNear(
+		Target* target,
+		int x,
+		int y) const
 {
-	Sint16 tx, ty;
+	Sint16
+		tx,
+		ty;
 
-	if (pointBack(target->getLongitude(), target->getLatitude()))
+	if (pointBack(
+				target->getLongitude(),
+				target->getLatitude()))
+	{
 		return false;
+	}
 
-	polarToCart(target->getLongitude(), target->getLatitude(), &tx, &ty);
+	polarToCart(
+			target->getLongitude(),
+			target->getLatitude(),
+			&tx,
+			&ty);
 
-	int dx = x - tx;
-	int dy = y - ty;
+	int
+		dx = x - tx,
+		dy = y - ty;
 
 	return (dx * dx + dy * dy <= NEAR_RADIUS);
 }
 
 /**
  * Returns a list of all the targets currently near a certain cartesian point over the globe.
- * @param x X coordinate of point.
- * @param y Y coordinate of point.
- * @param craft Only get craft targets.
- * @return List of pointers to targets.
+ * @param x, X coordinate of point
+ * @param y, Y coordinate of point
+ * @param craft, Only get craft targets -> kL_note: should mean 'get ufo targets as well as possible xCom-craft targets'
+ * @return, Vector of pointers to targets
  */
 std::vector<Target*> Globe::getTargets(
 		int x,
 		int y,
-		bool craft) const
+		bool craftOnly) const
 {
-	std::vector<Target*> v;
+	std::vector<Target*> targets;
 
-	if (!craft)
+	if (!craftOnly)
 	{
 		for (std::vector<Base*>::iterator
 				i = _game->getSavedGame()->getBases()->begin();
@@ -967,9 +981,9 @@ std::vector<Target*> Globe::getTargets(
 				continue;
 			}
 
-			if (targetNear((*i), x, y))
+			if (targetNear(*i, x, y))
 			{
-				v.push_back(*i);
+				targets.push_back(*i);
 			}
 
 			for (std::vector<Craft*>::iterator
@@ -987,51 +1001,57 @@ std::vector<Target*> Globe::getTargets(
 					continue;
 				}
 
-				if (targetNear((*j), x, y))
+				if (targetNear(*j, x, y))
 				{
-					v.push_back(*j);
+					targets.push_back(*j);
 				}
 			}
 		}
 	}
 
-	for (std::vector<Ufo*>::iterator
+	for (std::vector<Ufo*>::iterator // get UFOs
 			i = _game->getSavedGame()->getUfos()->begin();
 			i != _game->getSavedGame()->getUfos()->end();
 			++i)
 	{
-		if (!(*i)->getDetected())
+		if (!(*i)->getDetected()
+			// kL: this is a kludge; the UFO should have been deleted before
+			// creating SelectDestinationState, or MultipleTargetsState.
+			// see: GeoscapeState::time5Seconds(), case Ufo::FLYING
+			|| ((*i)->reachedDestination() && (*i)->getMissionType() == "STR_ALIEN_TERROR")) // kL
+		{
 			continue;
+		}
 
 		if (targetNear((*i), x, y))
 		{
-			v.push_back(*i);
+			targets.push_back(*i);
 		}
 	}
 
-	for (std::vector<Waypoint*>::iterator
+	for (std::vector<Waypoint*>::iterator // get Waypoints
 			i = _game->getSavedGame()->getWaypoints()->begin();
 			i != _game->getSavedGame()->getWaypoints()->end();
 			++i)
 	{
 		if (targetNear((*i), x, y))
 		{
-			v.push_back(*i);
+			targets.push_back(*i);
 		}
 	}
 
-	for (std::vector<TerrorSite*>::iterator
+	for (std::vector<TerrorSite*>::iterator // get terrorSites
 			i = _game->getSavedGame()->getTerrorSites()->begin();
 			i != _game->getSavedGame()->getTerrorSites()->end();
 			++i)
 	{
 		if (targetNear((*i), x, y))
 		{
-			v.push_back(*i);
+			targets.push_back(*i);
 		}
 	}
 
-	for (std::vector<AlienBase*>::iterator
+	for (std::vector<AlienBase*>::iterator // get aLienBases
 			i = _game->getSavedGame()->getAlienBases()->begin();
 			i != _game->getSavedGame()->getAlienBases()->end();
 			++i)
@@ -1043,11 +1063,11 @@ std::vector<Target*> Globe::getTargets(
 
 		if (targetNear((*i), x, y))
 		{
-			v.push_back(*i);
+			targets.push_back(*i);
 		}
 	}
 
-	return v;
+	return targets;
 }
 
 /**

@@ -18,20 +18,27 @@
  */
 
 #include "PrimeGrenadeState.h"
-#include <sstream>
+
 #include <cmath>
+#include <sstream>
+
+#include "WarningMessage.h" // kL
+
+#include "../Engine/Action.h"
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
+#include "../Engine/InteractiveSurface.h"
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
-#include "../Engine/Action.h"
-#include "../Interface/Text.h"
+
 #include "../Interface/Frame.h"
-#include "../Engine/InteractiveSurface.h"
+#include "../Interface/Text.h"
+
+#include "../Resource/ResourcePack.h"
+
 #include "../Savegame/BattleItem.h"
-#include "../Savegame/SavedGame.h"
 #include "../Savegame/SavedBattleGame.h"
-#include "WarningMessage.h"		// kL
+#include "../Savegame/SavedGame.h"
+
 
 namespace OpenXcom
 {
@@ -41,7 +48,11 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param action Pointer to  the action.
  */
-PrimeGrenadeState::PrimeGrenadeState(Game* game, BattleAction* action, bool inInventoryView, BattleItem* grenadeInInventory)
+PrimeGrenadeState::PrimeGrenadeState(
+		Game* game,
+		BattleAction* action,
+		bool inInventoryView,
+		BattleItem* grenadeInInventory)
 	:
 		State(game),
 		_action(action),
@@ -56,19 +67,21 @@ PrimeGrenadeState::PrimeGrenadeState(Game* game, BattleAction* action, bool inIn
 
 	int x = 67;
 	int y = 68;
-	for (int i = 0; i < 24; ++i)
+	for (int
+			i = 0;
+			i < 24;
+			++i)
 	{
 		_button[i] = new InteractiveSurface(
-				22,
-				22,
-				x - 1 + ((i %8) * 24),
-				y - 4 + ((i / 8) * 25));
+											22,
+											22,
+											x - 1 + ((i %8) * 24),
+											y - 4 + ((i / 8) * 25));
 		_number[i] = new Text(
-				20,
-				20,
-				x + ((i %8) * 24),
-//kL				y - 1 + ((i / 8) * 25));
-				y - 3 + ((i / 8) * 25));
+							20,
+							20,
+							x + (((i %8) * 24) - 1),
+							y + ((i / 8) * 25) - 3);
 	}
 
 
@@ -93,7 +106,10 @@ PrimeGrenadeState::PrimeGrenadeState(Game* game, BattleAction* action, bool inIn
 	_title->setColor(Palette::blockOffset(1)-1);
 	_title->setHighContrast(true);
 
-	for (int i = 0; i < 24; ++i)
+	for (int
+			i = 0;
+			i < 24;
+			++i)
 	{
 		add(_button[i]);
 		_button[i]->onMouseClick((ActionHandler)& PrimeGrenadeState::btnClick);

@@ -30,7 +30,7 @@
 #include "../Engine/Screen.h"
 #include "../Engine/Surface.h"
 
-#include "../Interface/NumberText.h" // kL
+//#include "../Interface/NumberText.h" // kL
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/TextList.h"
@@ -52,11 +52,13 @@ namespace OpenXcom
 
 struct GraphBtnInfo
 {
-	LocalizedText _name;
-	int _color;
 	bool _pushed;
+	int _color;
+	LocalizedText _name;
 
-	GraphBtnInfo(const LocalizedText& name, int color)
+	GraphBtnInfo(
+			const LocalizedText& name,
+			int color)
 		:
 			_name(name),
 			_color(color),
@@ -64,6 +66,8 @@ struct GraphBtnInfo
 	{
 	}
 };
+
+
 /**
  * Initializes all the elements in the Graphs screen.
  * @param game Pointer to the core game.
@@ -92,7 +96,8 @@ GraphsState::GraphsState(Game* game)
 	_txtMonths		= new TextList(205, 8, 115, 183);
 	_txtYears		= new TextList(200, 8, 121, 191);
 
-	_numScore		= new NumberText(24, 16, 58, 83);
+//	_numScore		= new NumberText(24, 16, 58, 83);
+	_numScore		= new Text(24, 16, 58, 82);
 
 
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_2")->getColors());
@@ -150,10 +155,10 @@ GraphsState::GraphsState(Game* game)
 			rPts += std::to_wstring(static_cast<long long>((*iter)->getActivityAlien().back()));	// kL, ho9ly fuck.
 			_btnRegions.at(offset)->setText(rPts);			// kL
 */
-			_numRegionActivityAlien.push_back(new NumberText(18, 10, 67, offset * 10 + 3));
+			_numRegionActivityAlien.push_back(new Text(24, 10, 66, offset * 10 + 1));
 //			_numRegionActivityAlien.at(offset)->setColor(Palette::blockOffset(9)+7); // grey
 			_numRegionActivityAlien.at(offset)->setColor((offset * 8)+16);
-			_numRegionActivityXCom.push_back(new NumberText(18, 10, 67, offset * 10 + 3));
+			_numRegionActivityXCom.push_back(new Text(24, 10, 66, offset * 10 + 1));
 //			_numRegionActivityXCom.at(offset)->setColor(Palette::blockOffset(9)+7);
 			_numRegionActivityXCom.at(offset)->setColor((offset * 8)+16);
 //			_numRegionActivityAlien.at(offset)->setColor((offset * 4) - 42);
@@ -215,10 +220,10 @@ GraphsState::GraphsState(Game* game)
 
 			add(_btnCountries.at(offset));
 
-			_numCountryActivityAlien.push_back(new NumberText(18, 10, 67, offset * 10 + 3));
+			_numCountryActivityAlien.push_back(new Text(24, 10, 66, offset * 10 + 1));
 //			_numCountryActivityAlien.at(offset)->setColor(Palette::blockOffset(9)+7);
 			_numCountryActivityAlien.at(offset)->setColor((offset * 8)+16);
-			_numCountryActivityXCom.push_back(new NumberText(18, 10, 67, offset * 10 + 3));
+			_numCountryActivityXCom.push_back(new Text(24, 10, 66, offset * 10 + 1));
 //			_numCountryActivityXCom.at(offset)->setColor(Palette::blockOffset(9)+7);
 			_numCountryActivityXCom.at(offset)->setColor((offset * 8)+16);
 
@@ -502,7 +507,8 @@ void GraphsState::latestTally()
 		{
 			if (offset < GRAPH_MAX_BUTTONS)
 			{
-				_numRegionActivityAlien.at(offset)->setValue((*iter)->getActivityAlien().back());
+//				_numRegionActivityAlien.at(offset)->setValue((*iter)->getActivityAlien().back());
+				_numRegionActivityAlien.at(offset)->setText(std::to_wstring(static_cast<long long>((*iter)->getActivityAlien().back())));
 
 				offset++;
 			}
@@ -520,7 +526,8 @@ void GraphsState::latestTally()
 		{
 			if (offset < GRAPH_MAX_BUTTONS)
 			{
-				_numCountryActivityAlien.at(offset)->setValue((*iter)->getActivityAlien().back());
+//				_numCountryActivityAlien.at(offset)->setValue((*iter)->getActivityAlien().back());
+				_numCountryActivityAlien.at(offset)->setText(std::to_wstring(static_cast<long long>((*iter)->getActivityAlien().back())));
 
 				offset++;
 			}
@@ -538,7 +545,8 @@ void GraphsState::latestTally()
 		{
 			if (offset < GRAPH_MAX_BUTTONS)
 			{
-				_numRegionActivityXCom.at(offset)->setValue((*iter)->getActivityXcom().back());
+//				_numRegionActivityXCom.at(offset)->setValue((*iter)->getActivityXcom().back());
+				_numRegionActivityXCom.at(offset)->setText(std::to_wstring(static_cast<long long>((*iter)->getActivityXcom().back())));
 
 				offset++;
 			}
@@ -556,7 +564,8 @@ void GraphsState::latestTally()
 		{
 			if (offset < GRAPH_MAX_BUTTONS)
 			{
-				_numCountryActivityXCom.at(offset)->setValue((*iter)->getActivityXcom().back());
+//				_numCountryActivityXCom.at(offset)->setValue((*iter)->getActivityXcom().back());
+				_numCountryActivityXCom.at(offset)->setText(std::to_wstring(static_cast<long long>((*iter)->getActivityXcom().back())));
 
 				offset++;
 			}
@@ -598,7 +607,8 @@ void GraphsState::btnUfoRegionClick(Action*)
 	_txtTitle->setBig();
 	_txtTitle->setText(tr("STR_UFO_ACTIVITY_IN_AREAS"));
 
-	for (std::vector<NumberText*>::iterator
+//	for (std::vector<NumberText*>::iterator
+	for (std::vector<Text*>::iterator
 			iter = _numRegionActivityAlien.begin();
 			iter != _numRegionActivityAlien.end();
 			++iter)
@@ -634,7 +644,8 @@ void GraphsState::btnUfoCountryClick(Action*)
 	_txtTitle->setBig();
 	_txtTitle->setText(tr("STR_UFO_ACTIVITY_IN_COUNTRIES"));
 
-	for (std::vector<NumberText*>::iterator
+//	for (std::vector<NumberText*>::iterator
+	for (std::vector<Text*>::iterator
 			iter = _numCountryActivityAlien.begin();
 			iter != _numCountryActivityAlien.end();
 			++iter)
@@ -670,7 +681,8 @@ void GraphsState::btnXcomRegionClick(Action*)
 	_txtTitle->setBig();
 	_txtTitle->setText(tr("STR_XCOM_ACTIVITY_IN_AREAS"));
 
-	for (std::vector<NumberText*>::iterator
+//	for (std::vector<NumberText*>::iterator
+	for (std::vector<Text*>::iterator
 			iter = _numRegionActivityXCom.begin();
 			iter != _numRegionActivityXCom.end();
 			++iter)
@@ -706,7 +718,8 @@ void GraphsState::btnXcomCountryClick(Action*)
 	_txtTitle->setBig();
 	_txtTitle->setText(tr("STR_XCOM_ACTIVITY_IN_COUNTRIES"));
 
-	for (std::vector<NumberText*>::iterator
+//	for (std::vector<NumberText*>::iterator
+	for (std::vector<Text*>::iterator
 			iter = _numCountryActivityXCom.begin();
 			iter != _numCountryActivityXCom.end();
 			++iter)
@@ -890,7 +903,7 @@ void GraphsState::resetScreen()
 	}
 
 
-	for (std::vector<NumberText*>::iterator
+	for (std::vector<Text*>::iterator
 			iter = _numRegionActivityAlien.begin();
 			iter != _numRegionActivityAlien.end();
 			++iter)
@@ -898,7 +911,7 @@ void GraphsState::resetScreen()
 		(*iter)->setVisible(false);
 	}
 
-	for (std::vector<NumberText*>::iterator
+	for (std::vector<Text*>::iterator
 			iter = _numCountryActivityAlien.begin();
 			iter != _numCountryActivityAlien.end();
 			++iter)
@@ -906,7 +919,7 @@ void GraphsState::resetScreen()
 		(*iter)->setVisible(false);
 	}
 
-	for (std::vector<NumberText*>::iterator
+	for (std::vector<Text*>::iterator
 			iter = _numRegionActivityXCom.begin();
 			iter != _numRegionActivityXCom.end();
 			++iter)
@@ -914,7 +927,7 @@ void GraphsState::resetScreen()
 		(*iter)->setVisible(false);
 	}
 
-	for (std::vector<NumberText*>::iterator
+	for (std::vector<Text*>::iterator
 			iter = _numCountryActivityXCom.begin();
 			iter != _numCountryActivityXCom.end();
 			++iter)
@@ -1523,7 +1536,10 @@ void GraphsState::drawFinanceLines()
 		if (entry == 0) // values are stored backwards. So take 1st value for last.
 		{
 			_numScore->setColor(49); // should be medium cyan
-			_numScore->setValue(static_cast<unsigned int>(score[entry])); // heh, this could be signed/unsigned quirky!
+			_numScore->setAlign(ALIGN_RIGHT);
+//			_numScore->setValue(static_cast<unsigned int>(score[entry])); // heh, this could be signed/unsigned quirky!
+			std::wstring txtScore = std::to_wstring(static_cast<long long>(score[entry]));
+			_numScore->setText(txtScore);
 		}
 
 

@@ -50,7 +50,11 @@ namespace OpenXcom
  * @param city Terrorized city name.
  * @param state Pointer to the Geoscape.
  */
-AlienTerrorState::AlienTerrorState(Game* game, TerrorSite* terror, const std::string& city, GeoscapeState* state)
+AlienTerrorState::AlienTerrorState(
+		Game* game,
+		TerrorSite* terror,
+		const std::string& city,
+		GeoscapeState* state)
 	:
 		State(game),
 		_terror(terror),
@@ -123,7 +127,10 @@ AlienTerrorState::~AlienTerrorState()
  */
 void AlienTerrorState::init()
 {
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(3)), Palette::backPos, 16);
+	_game->setPalette(
+					_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(3)),
+					Palette::backPos,
+					16);
 }
 
 /**
@@ -135,7 +142,13 @@ void AlienTerrorState::btnInterceptClick(Action*)
 	_state->timerReset();
 
 	_state->getGlobe()->center(_terror->getLongitude(), _terror->getLatitude());
-	_game->pushState(new InterceptState(_game, _state->getGlobe(), 0, _terror));
+	_game->popState();
+
+	_game->pushState(new InterceptState(
+									_game,
+									_state->getGlobe(),
+									0,
+									_terror));
 }
 
 /**
