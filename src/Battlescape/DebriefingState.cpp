@@ -1375,7 +1375,7 @@ void DebriefingState::reequipCraft(Base* base, Craft* craft, bool vehicleItemsCa
 			canBeAdded = std::min(canBeAdded, baQty);
 			if (canBeAdded > 0)
 			{
-				int newAmmoPerVehicle = std::min(baQty / canBeAdded, ammoRule->getClipSize());;
+				int newAmmoPerVehicle = std::min(baQty / canBeAdded, ammoRule->getClipSize());
 				int remainder = 0;
 				if (ammoRule->getClipSize() > newAmmoPerVehicle)
 					remainder = baQty - (canBeAdded * newAmmoPerVehicle);

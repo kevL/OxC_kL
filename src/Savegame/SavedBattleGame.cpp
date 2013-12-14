@@ -1319,7 +1319,10 @@ Node* SavedBattleGame::getPatrolNode(bool scout, BattleUnit* unit, Node* fromNod
 	// scouts roam all over while all others shuffle around to adjacent nodes at most:
 	int const end = scout? getNodes()->size(): fromNode->getNodeLinks()->size();
 
-	for (int i = 0; i < end; ++i)
+	for (int
+			i = 0;
+			i < end;
+			++i)
 	{
 		if (!scout
 			&& fromNode->getNodeLinks()->at(i) < 1)
@@ -1327,7 +1330,7 @@ Node* SavedBattleGame::getPatrolNode(bool scout, BattleUnit* unit, Node* fromNod
 			continue;
 		}
 
-		Node* n = getNodes()->at(scout ? i : fromNode->getNodeLinks()->at(i));
+		Node* n = getNodes()->at(scout? i: fromNode->getNodeLinks()->at(i));
 
 		if ((n->getFlags() > 0
 				|| n->getRank() > 0
@@ -1341,6 +1344,8 @@ Node* SavedBattleGame::getPatrolNode(bool scout, BattleUnit* unit, Node* fromNod
 			&& setUnitPosition(unit, n->getPosition(), true)		// check if not already occupied
 			&& getTile(n->getPosition())
 			&& !getTile(n->getPosition())->getFire()				// you are not a firefighter; do not patrol into fire
+			&& (unit->getFaction() != FACTION_HOSTILE
+				|| !getTile(n->getPosition())->getDangerous())		// aliens don't run into a grenade blast
 			&& (!scout
 				|| n != fromNode)									// scouts push forward
 			&& n->getPosition().x > 0

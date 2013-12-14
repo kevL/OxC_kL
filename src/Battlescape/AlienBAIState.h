@@ -33,6 +33,7 @@ class BattleUnit;
 class Node;
 class SavedBattleGame;
 
+
 /**
  * This class is used by the BattleUnit AI.
  */
@@ -40,15 +41,37 @@ class AlienBAIState
 	:
 		public BattleAIState
 {
+
 protected:
+	bool
+		_blaster,
+		_didPsi,
+		_grenade, // kL
+		_melee,
+		_rifle,
+		_traceAI,
+		_wasHit;
+	int
+		_AIMode,
+		_closestDist,
+		_intelligence,
+		_knownEnemies,
+		_spottingEnemies,
+		_visibleEnemies,
+		_ambushTUs,
+		_escapeTUs,
+		_reserveTUs;
+
 	BattleUnit* _aggroTarget;
-	int _knownEnemies, _visibleEnemies, _spottingEnemies;
-	int _escapeTUs, _ambushTUs, _reserveTUs;
-	BattleAction* _escapeAction, * _ambushAction, * _attackAction, * _patrolAction, * _psiAction;
-	bool _rifle, _melee, _blaster, _grenade;	// kL: add _grenade
-	bool _traceAI, _wasHit, _didPsi;
-	int _AIMode, _intelligence, _closestDist;
-	Node* _fromNode, * _toNode;
+	BattleAction
+		* _ambushAction,
+		* _attackAction,
+		* _escapeAction,
+		* _patrolAction,
+		* _psiAction;
+	Node
+		* _fromNode,
+		* _toNode;
 
 
 	public:
@@ -119,6 +142,8 @@ protected:
 		bool psiAction();
 		/// Performs a melee attack action.
 		void meleeAttack();
+		///
+		bool validTarget(BattleUnit* unit, bool assessDanger, bool includeCivs) const;
 };
 
 }

@@ -1954,7 +1954,7 @@ void Base::setupDefenses()
 				}
 
 				int canBeAdded = std::min(iqty, baqty);
-				int newAmmoPerVehicle = std::min(baqty / canBeAdded, ammo->getClipSize());;
+				int newAmmoPerVehicle = std::min(baqty / canBeAdded, ammo->getClipSize());
 				int remainder = 0;
 
 				if (ammo->getClipSize() > newAmmoPerVehicle) remainder = baqty - (canBeAdded * newAmmoPerVehicle);

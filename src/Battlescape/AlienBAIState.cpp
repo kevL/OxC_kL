@@ -660,13 +660,20 @@ void AlienBAIState::setupAmbush()
 
 		// we'll use node positions for this, since it gives map makers a
 		// good degree of control over how the units will use the environment.
-		for (std::vector<Node*>::const_iterator i = _save->getNodes()->begin(); i != _save->getNodes()->end(); ++i)
+		for (std::vector<Node*>::const_iterator
+				i = _save->getNodes()->begin();
+				i != _save->getNodes()->end();
+				++i)
 		{
 			Position pos = (*i)->getPosition();
-			Tile *tile = _save->getTile(pos);
-			if (tile == 0 || _save->getTileEngine()->distance(pos, _unit->getPosition()) > 10 || pos.z != _unit->getPosition().z)
+			Tile* tile = _save->getTile(pos);
+			if (tile == 0
+				|| _save->getTileEngine()->distance(pos, _unit->getPosition()) > 10
+				|| pos.z != _unit->getPosition().z
+				|| tile->getDangerous())
+			{
 				continue;
-
+			}
 			if (_traceAI) // colour all the nodes in range purple.
 			{
 				tile->setPreview(10);
@@ -1013,6 +1020,11 @@ void AlienBAIState::setupEscape()
 				score -= FIRE_PENALTY;
 			}
 
+			if (tile->getDangerous())
+			{
+				score -= BASE_SYSTEMATIC_SUCCESS;
+			}
+
 			if (_traceAI)
 			{
 				tile->setMarkerColor(score < 0? 3:(score < FAST_PASS_THRESHOLD / 2? 8:(score < FAST_PASS_THRESHOLD? 9:5)));
@@ -1089,14 +1101,14 @@ void AlienBAIState::setupEscape()
 int AlienBAIState::countKnownTargets() const
 {
 	int knownEnemies = 0;
-	for (std::vector<BattleUnit*>::const_iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
+	for (std::vector<BattleUnit*>::const_iterator
+			i = _save->getUnits()->begin();
+			i != _save->getUnits()->end();
+			++i)
 	{
-		if (!(*i)->isOut() && (*i)->getFaction() != FACTION_HOSTILE)
+		if (validTarget(*i, true, true))
 		{
-			if (_intelligence >= (*i)->getTurnsExposed())
-			{
-				++knownEnemies;
-			}
+			++knownEnemies;
 		}
 	}
 
@@ -1119,9 +1131,7 @@ int AlienBAIState::getSpottingUnits(Position pos) const
 			i != _save->getUnits()->end();
 			++i)
 	{
-		if (!(*i)->isOut()
-			&& (*i)->getFaction() == FACTION_PLAYER
-			&& _intelligence >= (*i)->getTurnsExposed())
+		if (validTarget(*i, false, false))
 		{
 			int dist = _save->getTileEngine()->distance(pos, (*i)->getPosition());
 			if (dist > 20) continue;
@@ -1165,38 +1175,37 @@ int AlienBAIState::selectNearestTarget()
 	origin.z -= 2;
 	Position target;
 
-	for (std::vector<BattleUnit*>::const_iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
+	for (std::vector<BattleUnit*>::const_iterator
+			i = _save->getUnits()->begin();
+			i != _save->getUnits()->end();
+			++i)
 	{
-		if (!(*i)->isOut()
-			&& (*i)->getFaction() != FACTION_HOSTILE
-			&& _intelligence >= (*i)->getTurnsExposed())
+		if (validTarget(*i, true, true)
+			&& _save->getTileEngine()->visible(_unit, (*i)->getTile()))
 		{
-			if (_save->getTileEngine()->visible(_unit, (*i)->getTile()))
+			tally++;
+
+			int dist = _save->getTileEngine()->distance(_unit->getPosition(), (*i)->getPosition());
+			if (dist < _closestDist)
 			{
-				tally++;
-
-				int dist = _save->getTileEngine()->distance(_unit->getPosition(), (*i)->getPosition());
-				if (dist < _closestDist)
+				bool validTarget = false;
+				if (_rifle || !_melee)
 				{
-					bool validTarget = false;
-					if (_rifle || !_melee)
+					validTarget = _save->getTileEngine()->canTargetUnit(&origin, (*i)->getTile(), &target, _unit);
+				}
+				else
+				{
+					if (selectPointNearTarget(*i, _unit->getTimeUnits()))
 					{
-						validTarget = _save->getTileEngine()->canTargetUnit(&origin, (*i)->getTile(), &target, _unit);
+						int dir = _save->getTileEngine()->getDirectionTo(_attackAction->target, (*i)->getPosition());
+						validTarget = _save->getTileEngine()->validMeleeRange(_attackAction->target, dir, _unit, *i);
 					}
-					else
-					{
-						if (selectPointNearTarget(*i, _unit->getTimeUnits()))
-						{
-							int dir = _save->getTileEngine()->getDirectionTo(_attackAction->target, (*i)->getPosition());
-							validTarget = _save->getTileEngine()->validMeleeRange(_attackAction->target, dir, _unit, *i);
-						}
-					}
+				}
 
-					if (validTarget)
-					{
-						_closestDist = dist;
-						_aggroTarget = *i;
-					}
+				if (validTarget)
+				{
+					_closestDist = dist;
+					_aggroTarget = *i;
 				}
 			}
 		}
@@ -1219,21 +1228,19 @@ bool AlienBAIState::selectClosestKnownEnemy()
 {
 	_aggroTarget = 0;
 	int minDist = 255;
-	for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
+
+	for (std::vector<BattleUnit*>::iterator
+			i = _save->getUnits()->begin();
+			i != _save->getUnits()->end();
+			++i)
 	{
-		if (!(*i)->isOut())
+		if (validTarget(*i, true, false))
 		{
-			if ((*i)->getFaction() == FACTION_PLAYER)
+			int dist = _save->getTileEngine()->distance((*i)->getPosition(), _unit->getPosition());
+			if (dist < minDist)
 			{
-				if (_intelligence >= (*i)->getTurnsExposed())
-				{
-					int dist = _save->getTileEngine()->distance((*i)->getPosition(), _unit->getPosition());
-					if (dist < minDist )
-					{
-						minDist = dist;
-						_aggroTarget = *i;
-					}
-				}
+				minDist = dist;
+				_aggroTarget = *i;
 			}
 		}
 	}
@@ -1250,11 +1257,12 @@ bool AlienBAIState::selectRandomTarget()
 	int farthest = -100;
 	_aggroTarget = 0;
 
-	for (std::vector<BattleUnit*>::const_iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
+	for (std::vector<BattleUnit*>::const_iterator
+			i = _save->getUnits()->begin();
+			i != _save->getUnits()->end();
+			++i)
 	{
-		if (!(*i)->isOut()
-			&& (*i)->getFaction() != FACTION_HOSTILE
-			&& _intelligence >= (*i)->getTurnsExposed())
+		if (validTarget(*i, true, true))
 		{
 			int dist = RNG::generate(0, 20) - _save->getTileEngine()->distance(_unit->getPosition(), (*i)->getPosition());
 			if (dist > farthest)
@@ -1300,7 +1308,7 @@ bool AlienBAIState::selectPointNearTarget(BattleUnit* target, int maxTUs) const
 
 				bool valid = _save->getTileEngine()->validMeleeRange(checkPath, dir, _unit, target);
 				bool fitHere = _save->setUnitPosition(_unit, checkPath, true);
-				if (valid && fitHere)
+				if (valid && fitHere && !_save->getTile(checkPath)->getDangerous())
 				{
 					_save->getPathfinding()->calculate(_unit, checkPath, 0, maxTUs);
 
@@ -1802,10 +1810,8 @@ void AlienBAIState::meleeAction()
 			++i)
 	{
 		int newDistance = _save->getTileEngine()->distance(_unit->getPosition(), (*i)->getPosition());
-		if ((*i)->isOut(true, true)
-			|| (*i)->getFaction() == _unit->getFaction()
-			|| newDistance > 20
-			|| (*i)->getTurnsExposed() > _intelligence)
+		if (newDistance > 20
+			|| !validTarget(*i, true, true))
 		{
 			continue;
 		}
@@ -1859,9 +1865,7 @@ void AlienBAIState::wayPointAction()
 				&& _aggroTarget == 0;
 			++i)
 	{
-		if ((*i)->isOut(true, true)
-			|| (*i)->getFaction() == _unit->getFaction()
-			|| (*i)->getTurnsExposed() > _intelligence)
+		if (!validTarget(*i, true, true))
 		{
 			continue;
 		}
@@ -2146,15 +2150,14 @@ bool AlienBAIState::psiAction()
 		float chanceToAttack = 0.f;
 		float chanceToAttack2 = 0.f;
 
-		for (std::vector<BattleUnit*>::const_iterator i = _save->getUnits()->begin();
+		for (std::vector<BattleUnit*>::const_iterator
+				i = _save->getUnits()->begin();
 				i != _save->getUnits()->end();
 				++i)
 		{
-			if ((*i)->getArmor()->getSize() == 1				// don't target tanks
-				&& !(*i)->isOut()								// or units that are dead/unconscious
-				&& (*i)->getTurnsExposed() <= _intelligence		// they must be units that we "know" about
-				&& (*i)->getOriginalFaction() == FACTION_PLAYER	// they must be player units
-				&& (*i)->getFaction() == FACTION_PLAYER)		// and they mustn't be under mind control already
+			if ((*i)->getArmor()->getSize() == 1					// don't target tanks
+				&& validTarget(*i, true, false)
+				&& (*i)->getOriginalFaction() == FACTION_PLAYER)	// they must be player units
 			{
 				chanceToAttack2 = psiAttackStrength
 						+ (((*i)->getStats()->psiSkill > 0)? static_cast<float>((*i)->getStats()->psiSkill) * -0.4f: 0.f)
@@ -2269,6 +2272,30 @@ void AlienBAIState::meleeAttack()
 
 	_attackAction->target = _aggroTarget->getPosition();
 	_attackAction->type = BA_HIT;
+}
+
+/**
+ *
+ */
+bool AlienBAIState::validTarget(
+		BattleUnit* unit,
+		bool assessDanger,
+		bool includeCivs) const
+{
+	if (unit->isOut(true, true)									// ignore units that are dead/unconscious
+		|| _intelligence < unit->getTurnsExposed()				// they must be units that we "know" about
+		|| (assessDanger && unit->getTile()->getDangerous())	// they haven't been grenaded
+		|| unit->getFaction() == FACTION_HOSTILE)				// and they mustn't be on our side
+	{
+		return false;
+	}
+
+	if (includeCivs)
+	{
+		return true;
+	}
+
+	return unit->getFaction() == FACTION_PLAYER;
 }
 
 }
