@@ -46,7 +46,10 @@ class UnitWalkBState
 private:
 	bool
 		_falling,
-		_beforeFirstStep,
+		_newUnitSpotted,
+		_newVis, // kL
+		_onScreen,
+		_turnBeforeFirstStep,
 		_tileSwitchDone; // kL
 	int
 		_preMovementCost;
@@ -62,6 +65,15 @@ private:
 
 	std::size_t
 		_unitsSpotted;
+
+	/// This function continues unit movement.
+	bool doStatusWalk();
+	/// This function ends unit movement.
+	bool doStatusStand_end();
+	/// This function begins unit movement.
+	bool doStatusStand();
+	/// This function turns unit during movement.
+	void doStatusTurn();
 
 	/// Handles some calculations when the path is finished.
 	void postPathProcedures();

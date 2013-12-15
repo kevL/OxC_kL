@@ -17,8 +17,10 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <assert.h>
 #include "PathfindingOpenSet.h"
+
+#include <assert.h>
+
 #include "PathfindingNode.h"
 
 
@@ -56,22 +58,22 @@ void PathfindingOpenSet::removeDiscarded()
 /**
  * Gets the node with the least cost.
  * After this call, the node is no longer in the set. It is an error to call this when the set is empty.
- * @return A pointer to the node which had the least cost.
+ * @return, A pointer to the node which had the least cost.
  */
 PathfindingNode* PathfindingOpenSet::pop()
 {
 	assert(!empty());
 	OpenSetEntry* entry = _queue.top();
-	PathfindingNode* nd = entry->_node;
+	PathfindingNode* node = entry->_node;
 	_queue.pop();
 
 	delete entry;
-	nd->_openentry = 0;
+	node->_openentry = 0;
 
 	// Discarded entries might be visible now.
 	removeDiscarded();
 
-	return nd;
+	return node;
 }
 
 /**

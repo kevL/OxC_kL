@@ -172,16 +172,16 @@ void Pathfinding::calculate(
 			endPosition.z--;
 			destinationTile = _save->getTile(endPosition);
 
-			//Log(LOG_INFO) << ". canFallDown() -1 level, endPosition = " << endPosition;
+			Log(LOG_INFO) << ". canFallDown() -1 level, endPosition = " << endPosition;
 		}
 	}
 
 	int size = _unit->getArmor()->getSize() - 1;
 	if (size > 0) // for large units only.
 	{
-			//Log(LOG_INFO) << ". checking large unit blockage";
+		//Log(LOG_INFO) << ". checking large unit blockage";
 
-		int its = 0;
+		int i = 0;
 		const int dir[3] = {4, 2, 3};
 
 		for (int
@@ -197,8 +197,8 @@ void Pathfinding::calculate(
 				if (x || y)
 				{
 					Tile* checkTile = _save->getTile(endPosition + Position(x, y, 0));
-					if (isBlocked(destinationTile, checkTile, dir[its], _unit)
-						&& isBlocked(destinationTile, checkTile, dir[its], target))
+					if (isBlocked(destinationTile, checkTile, dir[i], _unit)
+						&& isBlocked(destinationTile, checkTile, dir[i], target))
 					{
 						return;
 					}
@@ -223,7 +223,7 @@ void Pathfinding::calculate(
 						return;
 					} */
 
-					++its;
+					++i;
 				}
 			}
 		}
@@ -239,6 +239,7 @@ void Pathfinding::calculate(
 
 	// Strafing move allowed only to adjacent squares on same z. "Same z" rule mainly to simplify walking render.
 	Position startPosition = _unit->getPosition();
+
 	_strafeMove = _save->getStrafeSetting()
 		&& (SDL_GetModState() & KMOD_CTRL) != 0
 		&& startPosition.z == endPosition.z
@@ -255,7 +256,11 @@ void Pathfinding::calculate(
 	bool sneak = _unit->getFaction() == FACTION_HOSTILE && _save->getSneakySetting();
 
 	if (startPosition.z == endPosition.z
-		&& bresenhamPath(startPosition, endPosition, target, sneak))
+		&& bresenhamPath(
+					startPosition,
+					endPosition,
+					target,
+					sneak))
 	{
 		std::reverse(_path.begin(), _path.end()); // paths are stored in reverse order
 
@@ -267,7 +272,12 @@ void Pathfinding::calculate(
 	}
 
 	// Now try through A*.
-	if (!aStarPath(startPosition, endPosition, target, sneak, maxTUCost))
+	if (!aStarPath(
+				startPosition,
+				endPosition,
+				target,
+				sneak,
+				maxTUCost))
 	{
 		abortPath();
 	}
@@ -445,8 +455,13 @@ bool Pathfinding::aStarPath(
 	Log(LOG_INFO) << "Pathfinding::aStarPath()";
 
 	// reset every node, so we have to check them all
-	for (std::vector<PathfindingNode>::iterator it = _nodes.begin(); it != _nodes.end(); ++it)
-		it->reset();
+	for (std::vector<PathfindingNode>::iterator
+			i = _nodes.begin();
+			i != _nodes.end();
+			++i)
+	{
+		i->reset();
+	}
 
 	// start position is the first one in our "open" list
 	PathfindingNode* start = getNode(startPosition);
@@ -477,17 +492,23 @@ bool Pathfinding::aStarPath(
 			return true;
 		}
 
-		// Try all reachable neighbours.
-		for (int
+
+		for (int // Try all reachable neighbours.
 				direction = 0;
-				direction < 10;
+				direction < 10; // dir 0 thro 7, up/down
 				direction++)
 		{
-			//Log(LOG_INFO) << ". try direction ... " << direction;
+			Log(LOG_INFO) << ". try direction ... " << direction;
 
 			Position nextPos;
 
-			int tuCost = getTUCost(currentPos, direction, &nextPos, _unit, target, missile);
+			int tuCost = getTUCost(
+								currentPos,
+								direction,
+								&nextPos,
+								_unit,
+								target,
+								missile);
 			//Log(LOG_INFO) << ". TU Cost = " << tuCost;
 			if (tuCost >= 255) // Skip unreachable / blocked
 				continue;
@@ -500,15 +521,25 @@ bool Pathfinding::aStarPath(
 
 			PathfindingNode* nextNode = getNode(nextPos);
 			if (nextNode->isChecked()) // Our algorithm means this node is already at minimum cost.
+			{
+				Log(LOG_INFO) << ". node already Checked ... cont.";
 				continue;
+			}
 
 			_totalTUCost = currentNode->getTUCost(missile) + tuCost;
 
 			// If this node is unvisited or has only been visited from inferior paths...
-			if ((!nextNode->inOpenSet() || nextNode->getTUCost(missile) > _totalTUCost)
+			if ((!nextNode->inOpenSet()
+					|| nextNode->getTUCost(missile) > _totalTUCost)
 				&& _totalTUCost <= maxTUCost)
 			{
-				nextNode->connect(_totalTUCost, currentNode, direction, endPosition);
+				Log(LOG_INFO) << ". nodeChecked(dir) = " << direction << " totalCost = " << _totalTUCost;
+
+				nextNode->connect(
+								_totalTUCost,
+								currentNode,
+								direction,
+								endPosition);
 
 				openList.push(nextNode);
 			}
@@ -538,7 +569,7 @@ int Pathfinding::getTUCost(
 		BattleUnit* target,
 		bool missile)
 {
-	Log(LOG_INFO) << "Pathfinding::getTUCost()";
+	//Log(LOG_INFO) << "Pathfinding::getTUCost()";
 
 	_unit = unit;
 
@@ -1279,9 +1310,15 @@ bool Pathfinding::canFallDown(Tile* here)
  */
 bool Pathfinding::canFallDown(Tile* here, int size)
 {
-	for (int x = 0; x != size; ++x)
+	for (int
+			x = 0;
+			x != size;
+			++x)
 	{
-		for (int y = 0; y != size; ++y)
+		for (int
+				y = 0;
+				y != size;
+				++y)
 		{
 			Position checkPos = here->getPosition() + Position(x, y, 0);
 			Tile* checkTile = _save->getTile(checkPos);

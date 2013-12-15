@@ -53,7 +53,10 @@ namespace OpenXcom
 /**
  * Sets up an ProjectileFlyBState.
  */
-ProjectileFlyBState::ProjectileFlyBState(BattlescapeGame* parent, BattleAction action, Position origin)
+ProjectileFlyBState::ProjectileFlyBState(
+		BattlescapeGame* parent,
+		BattleAction action,
+		Position origin)
 	:
 		BattleState(parent, action),
 		_unit(0),
@@ -68,7 +71,9 @@ ProjectileFlyBState::ProjectileFlyBState(BattlescapeGame* parent, BattleAction a
 /**
  *
  */
-ProjectileFlyBState::ProjectileFlyBState(BattlescapeGame* parent, BattleAction action)
+ProjectileFlyBState::ProjectileFlyBState(
+		BattlescapeGame* parent,
+		BattleAction action)
 	:
 		BattleState(parent, action),
 		_unit(0),
@@ -250,7 +255,9 @@ void ProjectileFlyBState::init()
 			}
 
 			if (weapon->getRules()->getRange() != 0
-				&& _parent->getTileEngine()->distance(_action.actor->getPosition(), _action.target) > weapon->getRules()->getRange())
+				&& _parent->getTileEngine()->distance(
+												_action.actor->getPosition(),
+												_action.target) > weapon->getRules()->getRange())
 			{
 				Log(LOG_INFO) << ". . . out of range, EXIT";
 
@@ -267,7 +274,10 @@ void ProjectileFlyBState::init()
 //Wb.			Position originVoxel = _parent->getTileEngine()->getSightOriginVoxel(_unit) - Position(0, 0, 2);
 			Position originVoxel = _parent->getTileEngine()->getOriginVoxel(_action, 0);	// Wb.
 
-			if (!validThrowRange(&_action, originVoxel, _parent->getSave()->getTile(_action.target)))
+			if (!validThrowRange(
+							&_action,
+							originVoxel,
+							_parent->getSave()->getTile(_action.target)))
 			{
 				Log(LOG_INFO) << ". . . not valid throw range, EXIT";
 
@@ -284,10 +294,10 @@ void ProjectileFlyBState::init()
 			Log(LOG_INFO) << ". . BA_HIT";
 
 			if (!_parent->getTileEngine()->validMeleeRange(
-					_action.actor->getPosition(),
-					_action.actor->getDirection(),
-					_action.actor,
-					0))
+													_action.actor->getPosition(),
+													_action.actor->getDirection(),
+													_action.actor,
+													0))
 			{
 				Log(LOG_INFO) << ". . . out of hit range, EXIT";
 
@@ -304,9 +314,9 @@ void ProjectileFlyBState::init()
 			_parent->statePushFront(new ExplosionBState(
 					_parent,
 					Position(
-						(_action.target.x * 16) + 8,
-						(_action.target.y * 16) + 8,
-						(_action.target.z * 24) + 10),
+							(_action.target.x * 16) + 8,
+							(_action.target.y * 16) + 8,
+							(_action.target.z * 24) + 10),
 					weapon,
 					_action.actor));
 
@@ -573,15 +583,17 @@ void ProjectileFlyBState::think()
 				{
 					// it's a hot grenade to explode immediately
 					_parent->statePushFront(new ExplosionBState(
-							_parent,
-							_parent->getMap()->getProjectile()->getPosition(-1),
-							item,
-							_action.actor));
+															_parent,
+															_parent->getMap()->getProjectile()->getPosition(-1),
+															item,
+															_action.actor));
 				}
 				else
 				{
 					_parent->dropItem(pos, item);
-					if (_unit->getFaction() != FACTION_PLAYER && _projectileItem->getRules()->getBattleType() == BT_GRENADE)
+
+					if (_unit->getFaction() != FACTION_PLAYER
+						&& _projectileItem->getRules()->getBattleType() == BT_GRENADE)
 					{
 						_parent->getTileEngine()->setDangerZone(pos, item->getRules()->getExplosionRadius(), _action.actor);
 					}
@@ -596,7 +608,10 @@ void ProjectileFlyBState::think()
 				_action.target = _action.waypoints.front();
 
 				// launch the next projectile in the waypoint cascade
-				_parent->statePushNext(new ProjectileFlyBState(_parent, _action, _origin));
+				_parent->statePushNext(new ProjectileFlyBState(
+															_parent,
+															_action,
+															_origin));
 			}
 			else
 			{
@@ -621,7 +636,8 @@ void ProjectileFlyBState::think()
 
 					//Log(LOG_INFO) << ". . . . new ExplosionBState()";
 					_parent->statePushFront(new ExplosionBState(
-															_parent, _parent->getMap()->getProjectile()->getPosition(offset),
+															_parent,
+															_parent->getMap()->getProjectile()->getPosition(offset),
 															_ammo,
 															_action.actor,
 															0,
@@ -714,7 +730,7 @@ bool ProjectileFlyBState::validThrowRange(
 
 	int offset_z = 2;				// kL_note: this is prob +1 (.. +2) to get things up off of the lowest voxel of a targetTile.
 	int delta_z = origin.z - (((action->target.z * 24) + offset_z) - target->getTerrainLevel());
-	double maxDistance = static_cast<double>(getMaxThrowDistance(weight, action->actor->getStats()->strength, delta_z) + 8) / 16.;
+	double maxDistance = static_cast<double>(getMaxThrowDistance(weight, action->actor->getStats()->strength, delta_z) + 8) / 16.0;
 	// Throwing Distance was roughly = 2.5 \D7 Strength / Weight
 //	double range = 2.63 * static_cast<double>(action->actor->getStats()->strength / action->weapon->getRules()->getWeight()); // old code.
 

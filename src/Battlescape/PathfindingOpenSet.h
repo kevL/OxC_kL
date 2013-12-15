@@ -28,11 +28,13 @@ namespace OpenXcom
 
 class PathfindingNode;
 
+
 struct OpenSetEntry
 {
 	int _cost;
 	PathfindingNode* _node;
 };
+
 
 /**
  * Helper class to compare entries through pointers.
@@ -52,20 +54,24 @@ class EntryCompare
 		}
 };
 
+
 /**
  * A class that holds references to the nodes to be examined in pathfinding.
  */
 class PathfindingOpenSet
 {
+
 private:
 	std::priority_queue<OpenSetEntry*, std::vector<OpenSetEntry*>, EntryCompare> _queue;
 
 	/// Removes reachable discarded entries.
 	void removeDiscarded();
 
+
 	public:
 		/// Cleans up the set and frees allocated memory.
 		~PathfindingOpenSet();
+
 		/// Gets the next node to check.
 		PathfindingNode *pop();
 

@@ -420,7 +420,7 @@ const Position& BattleUnit::getDestination() const
 
 /**
  * Changes the BattleUnit's direction. Only used for initial unit placement.
- * kL_note: and positioning soldier when revived from unconscious status (see MedikitState).
+ * kL_note: and positioning soldier when revived from unconscious status: reviveUnconsciousUnits().
  * @param direction
  */
 void BattleUnit::setDirection(int direction)
@@ -431,21 +431,21 @@ void BattleUnit::setDirection(int direction)
 }
 
 /**
- * Changes the facedirection. Only used for strafing moves.
- * @param direction
- */
-void BattleUnit::setFaceDirection(int direction)
-{
-	_faceDirection = direction;
-}
-
-/**
  * Gets the BattleUnit's (horizontal) direction.
  * @return direction
  */
 int BattleUnit::getDirection() const
 {
 	return _direction;
+}
+
+/**
+ * Changes the facedirection. Only used for strafing moves.
+ * @param direction
+ */
+void BattleUnit::setFaceDirection(int direction)
+{
+	_faceDirection = direction;
 }
 
 /**
@@ -506,8 +506,7 @@ void BattleUnit::startWalking(
 {
 	Log(LOG_INFO) << "BattleUnit::startWalking() unitID = " << getId();
 
-//	_direction = direction;						// kL
-
+	_direction = direction;						// kL
 	_status = STATUS_WALKING;					// kL
 
 
@@ -522,14 +521,14 @@ void BattleUnit::startWalking(
 		_verticalDirection = direction;
 		_floating = true;						// kL
 	}
-	else //if (direction > 7						// kL
+	else //if (direction > 7					// kL
 		//&& _tile->hasNoFloor(tileBelow))		// kL
 	{
 		Log(LOG_INFO) << ". STATUS_WALKING";
 
 //kL		_status = STATUS_FLYING;
 //		_verticalDirection = Pathfinding::DIR_DOWN;
-		_direction = direction;
+//kL		_direction = direction;
 //		_floating = true;						// kL
 
 		_kneeled = false;
@@ -786,7 +785,7 @@ int BattleUnit::getDiagonalWalkingPhase() const
  */
 void BattleUnit::lookAt(const Position& point, bool turret)
 {
-	//Log(LOG_INFO) << "BattleUnit::lookAt() #1";// unitID = " << getId();
+	Log(LOG_INFO) << "BattleUnit::lookAt() #1";// unitID = " << getId();
 	//Log(LOG_INFO) << ". . _direction = " << _direction;
 	//Log(LOG_INFO) << ". . _toDirection = " << _toDirection;
 	//Log(LOG_INFO) << ". . _directionTurret = " << _directionTurret;
@@ -818,7 +817,7 @@ void BattleUnit::lookAt(const Position& point, bool turret)
 //kL			&& _toDirection > -1)
 		{
 			_status = STATUS_TURNING;
-			//Log(LOG_INFO) << ". . . . lookAt() -> STATUS_TURNING";
+			Log(LOG_INFO) << ". . . . lookAt() -> STATUS_TURNING";
 			// kL_note: what about Forcing the faced direction instantly?
 		}
 	}
@@ -831,7 +830,7 @@ void BattleUnit::lookAt(const Position& point, bool turret)
  */
 void BattleUnit::lookAt(int direction, bool force)
 {
-	//Log(LOG_INFO) << "BattleUnit::lookAt() #2";// unitID = " << getId();
+	Log(LOG_INFO) << "BattleUnit::lookAt() #2";// unitID = " << getId();
 	//Log(LOG_INFO) << ". . _direction = " << _direction;
 	//Log(LOG_INFO) << ". . _toDirection = " << _toDirection;
 	//Log(LOG_INFO) << ". . lookAt() direction = " << direction;
@@ -853,6 +852,7 @@ void BattleUnit::lookAt(int direction, bool force)
 		if (_toDirection != _direction)
 		{
 			_status = STATUS_TURNING;
+			Log(LOG_INFO) << ". . . . lookAt() -> STATUS_TURNING";
 		}
 //		else
 //			_status = STATUS_STANDING;	// kL
@@ -865,7 +865,7 @@ void BattleUnit::lookAt(int direction, bool force)
  */
 void BattleUnit::turn(bool turret)
 {
-	//Log(LOG_INFO) << "BattleUnit::turn()";// unitID = " << getId();
+	Log(LOG_INFO) << "BattleUnit::turn()";// unitID = " << getId();
 	//Log(LOG_INFO) << ". . _direction = " << _direction;
 	//Log(LOG_INFO) << ". . _toDirection = " << _toDirection;
 	//Log(LOG_INFO) << ". . _directionTurret = " << _directionTurret;
