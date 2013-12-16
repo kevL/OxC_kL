@@ -506,7 +506,7 @@ void BattleUnit::startWalking(
 {
 	Log(LOG_INFO) << "BattleUnit::startWalking() unitID = " << getId();
 
-	_direction = direction;						// kL
+//	_direction = direction;						// kL
 	_status = STATUS_WALKING;					// kL
 
 
@@ -548,7 +548,7 @@ void BattleUnit::startWalking(
 	}
 	else
 	{
-		Log(LOG_INFO) << ". has Floor(), STATUS_WALKING";
+		Log(LOG_INFO) << ". has Floor, STATUS_WALKING";
 
 		_floating = false;
 	}
@@ -633,7 +633,7 @@ void BattleUnit::keepWalking(Tile* tileBelow, bool cache)
 	if (!cache) // ie. if not onScreen
 	{
 //		_pos = _destination; // kL_note: I think this is causing the 'double-step'
-		middle	= 1;	// kL
+//		middle	= 1;	// kL
 		end		= 2;
 	}
 

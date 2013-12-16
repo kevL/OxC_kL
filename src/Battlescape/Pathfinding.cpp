@@ -485,6 +485,10 @@ bool Pathfinding::aStarPath(
 			PathfindingNode* pf = currentNode;
 			while (pf->getPrevNode())
 			{
+//				int prevDir = pf->getPrevDir();				// kL
+//				Log(LOG_INFO) << ". prevDir = " << prevDir;	// kL
+
+//				_path.push_back(prevDir);					// kL
 				_path.push_back(pf->getPrevDir());
 				pf = pf->getPrevNode();
 			}
@@ -498,7 +502,7 @@ bool Pathfinding::aStarPath(
 				direction < 10; // dir 0 thro 7, up/down
 				direction++)
 		{
-			Log(LOG_INFO) << ". try direction ... " << direction;
+			//Log(LOG_INFO) << ". try direction ... " << direction;
 
 			Position nextPos;
 
@@ -522,7 +526,7 @@ bool Pathfinding::aStarPath(
 			PathfindingNode* nextNode = getNode(nextPos);
 			if (nextNode->isChecked()) // Our algorithm means this node is already at minimum cost.
 			{
-				Log(LOG_INFO) << ". node already Checked ... cont.";
+				//Log(LOG_INFO) << ". node already Checked ... cont.";
 				continue;
 			}
 
@@ -533,7 +537,7 @@ bool Pathfinding::aStarPath(
 					|| nextNode->getTUCost(missile) > _totalTUCost)
 				&& _totalTUCost <= maxTUCost)
 			{
-				Log(LOG_INFO) << ". nodeChecked(dir) = " << direction << " totalCost = " << _totalTUCost;
+				//Log(LOG_INFO) << ". nodeChecked(dir) = " << direction << " totalCost = " << _totalTUCost;
 
 				nextNode->connect(
 								_totalTUCost,

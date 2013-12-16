@@ -66,6 +66,12 @@ private:
 	std::size_t
 		_unitsSpotted;
 
+	/// Handles some calculations when the walking is finished.
+	void setNormalWalkSpeed();
+
+	/// Handles some calculations when the path is finished.
+	void postPathProcedures();
+
 	/// This function continues unit movement.
 	bool doStatusWalk();
 	/// This function ends unit movement.
@@ -75,10 +81,6 @@ private:
 	/// This function turns unit during movement.
 	void doStatusTurn();
 
-	/// Handles some calculations when the path is finished.
-	void postPathProcedures();
-	/// Handles some calculations when the walking is finished.
-	void setNormalWalkSpeed();
 	/// Handles the stepping sounds.
 	void playMovementSound();
 
@@ -92,12 +94,11 @@ private:
 		~UnitWalkBState();
 
 		/// Sets the target to walk to.
-		void setTarget(
-				Position target);
+//		void setTarget(Position target);
 		/// Initializes the state.
 		void init();
 		/// Handles a cancels request.
-		void cancel();
+//		void cancel();
 		/// Runs state functionality every cycle.
 		void think();
 };

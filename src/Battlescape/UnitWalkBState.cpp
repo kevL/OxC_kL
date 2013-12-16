@@ -84,7 +84,7 @@ UnitWalkBState::~UnitWalkBState()
 void UnitWalkBState::init()
 {
 	_unit = _action.actor;
-	Log(LOG_INFO) << "UnitWalkBState::init() unitID = " << _unit->getId();
+	Log(LOG_INFO) << "\nUnitWalkBState::init() unitID = " << _unit->getId();
 
 	setNormalWalkSpeed();
 
@@ -101,6 +101,7 @@ void UnitWalkBState::init()
 
 	int dir = _pf->getStartDirection();
 	Log(LOG_INFO) << ". StartDirection(init) = " << dir;
+	Log(LOG_INFO) << ". getDirection(init) = " << _unit->getDirection();
 
 	if (!_action.strafe						// not strafing
 		&& -1 < dir && dir < 8				// moving but not up or down
@@ -114,11 +115,22 @@ void UnitWalkBState::init()
 }
 
 /**
+ * Sets the animation speed of soldiers or aliens.
+ */
+void UnitWalkBState::setNormalWalkSpeed()
+{
+	if (_unit->getFaction() == FACTION_PLAYER)
+		_parent->setStateInterval(Options::getInt("battleXcomSpeed"));
+	else
+		_parent->setStateInterval(Options::getInt("battleAlienSpeed"));
+}
+
+/**
  * Runs state functionality every cycle.
  */
 void UnitWalkBState::think()
 {
-	Log(LOG_INFO) << "***** UnitWalkBState::think() : " << _unit->getId() << " _walkPhase = " << _unit->getWalkingPhase() << " *****";
+	Log(LOG_INFO) << "\n***** UnitWalkBState::think() : " << _unit->getId() << " _walkPhase = " << _unit->getWalkingPhase() << " *****";
 
 	if (_unit->isOut(true, true))
 	{
@@ -132,13 +144,16 @@ void UnitWalkBState::think()
 	else Log(LOG_INFO) << ". . unit health: " << _unit->getHealth();
 
 
-	_newVis = false; // kL
-	_newUnitSpotted = false;
+	_newVis = false;			// kL, for xCom units
+	_newUnitSpotted = false;	// for aLien units
 	_onScreen = _unit->getVisible()
 							&& (_parent->getMap()->getCamera()->isOnScreen(_unit->getPosition())
 								|| _parent->getMap()->getCamera()->isOnScreen(_unit->getDestination()));
 	Log(LOG_INFO) << ". _onScreen = " << _onScreen;
 
+
+//	int dir = _pf->getStartDirection();		// kL: also below, in STATUS_STANDING!
+// setDirection(dir) // kL
 
 // _oO **** STATUS WALKING **** Oo_
 	if (_unit->getStatus() == STATUS_WALKING
@@ -164,17 +179,22 @@ void UnitWalkBState::think()
 			// make sure the unit sprites are up to date
 			if (_pf->getStrafeMove())
 			{
+				Log(LOG_INFO) << ". . strafe";
+
 				// This is where we fake out the strafe movement direction so the unit "moonwalks"
-				int dirTemp = _unit->getDirection();
+				int dirStrafe = _unit->getDirection();
+//				int dirStrafe = _pf->getStartDirection();
+//				int dirStrafe = dir; // kL
+
 				_unit->setDirection(_unit->getFaceDirection());
+				_parent->getMap()->cacheUnit(_unit); // draw unit.
 
-				_parent->getMap()->cacheUnit(_unit);
-
-				_unit->setDirection(dirTemp);
+				_unit->setDirection(dirStrafe);
+//				_unit->setDirection(dir);	// kL
 			}
 			else
 			{
-				Log(LOG_INFO) << ". WalkBState: _onScreen, cacheUnit()";
+				Log(LOG_INFO) << ". . no strafe, cacheUnit()";
 
 				_parent->getMap()->cacheUnit(_unit);
 			}
@@ -205,14 +225,14 @@ void UnitWalkBState::think()
 /**
  * Aborts unit walking.
  */
-void UnitWalkBState::cancel()
+/* void UnitWalkBState::cancel()
 {
 	if (_parent->getSave()->getSide() == FACTION_PLAYER
 		&& _parent->getPanicHandled())
 	{
 		_pf->abortPath();
 	}
-}
+} */
 
 /**
  * Handles some calculations when the path is finished.
@@ -299,72 +319,6 @@ void UnitWalkBState::postPathProcedures()
 
 	if (!_falling)
 		_parent->popState();
-}
-
-/**
- * Sets the animation speed of soldiers or aliens.
- */
-void UnitWalkBState::setNormalWalkSpeed()
-{
-	if (_unit->getFaction() == FACTION_PLAYER)
-		_parent->setStateInterval(Options::getInt("battleXcomSpeed"));
-	else
-		_parent->setStateInterval(Options::getInt("battleAlienSpeed"));
-}
-
-
-/**
- * Handles the stepping sounds.
- */
-void UnitWalkBState::playMovementSound()
-{
-	if ((!_unit->getVisible() && !_parent->getSave()->getDebugMode())
-		|| !_parent->getMap()->getCamera()->isOnScreen(_unit->getPosition()))
-	{
-		return;
-	}
-
-	if (_unit->getMoveSound() != -1)
-	{
-		if (_unit->getWalkingPhase() == 0) // if a sound is configured in the ruleset, play that one
-		{
-			_parent->getResourcePack()->getSound("BATTLE.CAT", _unit->getMoveSound())->play();
-		}
-	}
-	else
-	{
-		if (_unit->getStatus() == STATUS_WALKING)
-		{
-			Tile* t = _unit->getTile();
-			Tile* tBelow = _parent->getSave()->getTile(t->getPosition() + Position(0, 0, -1));
-
-			if (_unit->getWalkingPhase() == 3) // play footstep sound 1
-			{
-				if (t->getFootstepSound(tBelow)
-					&& _unit->getRaceString() != "STR_ETHEREAL")
-				{
-					_parent->getResourcePack()->getSound("BATTLE.CAT", 23 + (t->getFootstepSound(tBelow) * 2))->play();
-				}
-			}
-
-			if (_unit->getWalkingPhase() == 7) // play footstep sound 2
-			{
-				if (t->getFootstepSound(tBelow)
-					&& _unit->getRaceString() != "STR_ETHEREAL")
-				{
-					_parent->getResourcePack()->getSound("BATTLE.CAT", 22 + (t->getFootstepSound(tBelow) * 2))->play();
-				}
-			}
-		}
-		else if (_unit->getStatus() == STATUS_FLYING)
-		{
-			if (_unit->getWalkingPhase() == 1 // play default flying sound
-				&& !_falling)
-			{
-				_parent->getResourcePack()->getSound("BATTLE.CAT", 15)->play();
-			}
-		}
-	}
 }
 
 /**
@@ -458,8 +412,8 @@ bool UnitWalkBState::doStatusWalk()
 		_falling = fallCheck
 					&& _unit->getPosition().z != 0
 					&& _unit->getTile()->hasNoFloor(tileBelow)
-					&& _unit->getArmor()->getMovementType() != MT_FLY
-					&& _unit->getWalkingPhase() == 0; // <- set @ startWalking() and @ end of keepWalking()
+					&& _unit->getArmor()->getMovementType() != MT_FLY;
+//kL					&& _unit->getWalkingPhase() == 0; // <- set @ startWalking() and @ end of keepWalking()
 		if (_falling)
 		{
 			Log(LOG_INFO) << ". WalkBState, falling";
@@ -475,13 +429,12 @@ bool UnitWalkBState::doStatusWalk()
 						--y)
 				{
 					Tile* otherTileBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(x, y, -1));
-					if (otherTileBelow) Log(LOG_INFO) << ". . WalkBState, otherTileBelow exists";
-					else Log(LOG_INFO) << ". . WalkBState, otherTileBelow Does NOT exist";
+					Log(LOG_INFO) << ". . WalkBState, otherTileBelow exists";
 
 					if (otherTileBelow
 						&& otherTileBelow->getUnit())
 					{
-						Log(LOG_INFO) << ". . WalkBState, another unit already occupies lower tile";
+						Log(LOG_INFO) << ". . . WalkBState, another unit already occupies lower tile";
 
 						_falling = false;
 
@@ -493,6 +446,7 @@ bool UnitWalkBState::doStatusWalk()
 
 						return false;
 					}
+					else Log(LOG_INFO) << ". . WalkBState, otherTileBelow Does NOT contain other unit";
 				}
 			}
 		}
@@ -642,9 +596,9 @@ bool UnitWalkBState::doStatusStand_end()
  */
 bool UnitWalkBState::doStatusStand()
 {
-	Log(LOG_INFO) << ". _onScreen = " << _onScreen;
+	//Log(LOG_INFO) << ". _onScreen = " << _onScreen;
 
-	int dir = _pf->getStartDirection();		// kL: also below, in STATUS_STANDING!
+	int dir = _pf->getStartDirection();
 	Log(LOG_INFO) << ". StartDirection = " << dir;
 
 	if (_unit->isKneeled()
@@ -739,11 +693,15 @@ bool UnitWalkBState::doStatusStand()
 	*/
 //	setNormalWalkSpeed();	// kL: Done in init()
 
-//kL	int dir = _pf->getStartDirection();
-	if (_falling)
-		dir = _pf->DIR_DOWN;
+//	int dir = _pf->getStartDirection();
+	//Log(LOG_INFO) << ". getStartDirection() dir = " << dir;
 
-	Log(LOG_INFO) << ". getStartDirection() dir = " << dir;
+	if (_falling)
+	{
+		dir = _pf->DIR_DOWN;
+		Log(LOG_INFO) << ". . _falling, dir = " << dir;
+	}
+
 
 	if (dir != -1)
 	{
@@ -751,7 +709,10 @@ bool UnitWalkBState::doStatusStand()
 
 		if (_pf->getStrafeMove())
 		{
-			_unit->setFaceDirection(_unit->getDirection());
+			int dirFace = _unit->getDirection();
+			_unit->setFaceDirection(dirFace);
+
+			Log(LOG_INFO) << ". . strafeMove, setFaceDirection() <- " << dirFace;
 		}
 
 		Log(LOG_INFO) << ". pos 1";
@@ -864,7 +825,7 @@ bool UnitWalkBState::doStatusStand()
 			&& dir < _pf->DIR_UP
 			&& !_pf->getStrafeMove())
 		{
-			Log(LOG_INFO) << ". . dir != _unit->getDirection()";
+			Log(LOG_INFO) << ". . dir != _unit->getDirection() -> turn";
 
 			_unit->lookAt(dir);
 
@@ -902,7 +863,7 @@ bool UnitWalkBState::doStatusStand()
 			}
 		}
 
-		Log(LOG_INFO) << ". pos 7";
+		Log(LOG_INFO) << ". pos 5";
 
 		int size = _unit->getArmor()->getSize() - 1;
 		for (int
@@ -915,7 +876,7 @@ bool UnitWalkBState::doStatusStand()
 					y > -1;
 					--y)
 			{
-				Log(LOG_INFO) << ". . . check obstacle(unit)";
+				Log(LOG_INFO) << ". . check obstacle(unit)";
 
 				BattleUnit* unitInMyWay = _parent->getSave()->getTile(destination + Position(x, y, 0))->getUnit();
 
@@ -954,7 +915,7 @@ bool UnitWalkBState::doStatusStand()
 			}
 		}
 
-		Log(LOG_INFO) << ". pos 8";
+		Log(LOG_INFO) << ". pos 6";
 
 		dir = _pf->dequeuePath(); // now start moving
 //kL		if (_falling)
@@ -966,11 +927,11 @@ bool UnitWalkBState::doStatusStand()
 		{
 			if (_unit->spendEnergy(energy))
 			{
-				Log(LOG_INFO) << ". WalkBState: spend TU & Energy";
+				Log(LOG_INFO) << ". . WalkBState: spend TU & Energy";
 
 				Tile* tileBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(0, 0, -1));
 
-				Log(LOG_INFO) << ". WalkBState: startWalking()";
+				Log(LOG_INFO) << ". . WalkBState: startWalking()";
 				_unit->startWalking(
 								dir,
 								destination,
@@ -984,34 +945,36 @@ bool UnitWalkBState::doStatusStand()
 		// make sure the unit sprites are up to date
 		if (_onScreen)
 		{
-			Log(LOG_INFO) << ". . . _onScreen";
+			Log(LOG_INFO) << ". . _onScreen";
 
 			if (_pf->getStrafeMove())
 			{
-				Log(LOG_INFO) << ". . . (_pf->getStrafeMove()";
+				Log(LOG_INFO) << ". . . _pf->getStrafeMove()";
 
 				// This is where we fake out the strafe movement direction so the unit "moonwalks"
-				int dirTemp = _unit->getDirection();
+				int dirStrafe = _unit->getDirection();
+//				int dirStrafe = dir; // kL
+	
 				_unit->setDirection(_unit->getFaceDirection());
+//				_parent->getMap()->cacheUnit(_unit);	// kL ( see far above, re. strafe fake-out moonwalking )
 
-//				_parent->getMap()->cacheUnit(_unit);	// kL ( see far above, re. strafe fake-out moonwalking thingie )
+				_unit->setDirection(dirStrafe);
+//				_unit->setDirection(dir);
 
-				_unit->setDirection(dirTemp);
-
-				Log(LOG_INFO) << ". . . end (_pf->getStrafeMove()";
+				Log(LOG_INFO) << ". . . end strafeMove()";
 			}
 //			else	// kL
 //			{
 			Log(LOG_INFO) << ". . (_onScreen) -> cacheUnit()";
 
-			_unit->setCache(0);						// kL
+//			_unit->setCache(0);						// kL
 			_parent->getMap()->cacheUnit(_unit);
 //			}
 
 			Log(LOG_INFO) << ". . end (_onScreen)";
 		}
 
-		Log(LOG_INFO) << "EXIT (dir!=-1) : " << _unit->getId();
+		Log(LOG_INFO) << ". EXIT (dir!=-1) : " << _unit->getId();
 	}
 	else
 	{
@@ -1081,6 +1044,60 @@ void UnitWalkBState::doStatusTurn()
 		_parent->getMap()->cacheUnit(_unit);
 
 		_parent->popState();
+	}
+}
+
+/**
+ * Handles the stepping sounds.
+ */
+void UnitWalkBState::playMovementSound()
+{
+	if ((!_unit->getVisible() && !_parent->getSave()->getDebugMode())
+		|| !_parent->getMap()->getCamera()->isOnScreen(_unit->getPosition()))
+	{
+		return;
+	}
+
+	if (_unit->getMoveSound() != -1)
+	{
+		if (_unit->getWalkingPhase() == 0) // if a sound is configured in the ruleset, play that one
+		{
+			_parent->getResourcePack()->getSound("BATTLE.CAT", _unit->getMoveSound())->play();
+		}
+	}
+	else
+	{
+		if (_unit->getStatus() == STATUS_WALKING)
+		{
+			Tile* t = _unit->getTile();
+			Tile* tBelow = _parent->getSave()->getTile(t->getPosition() + Position(0, 0, -1));
+
+			if (_unit->getWalkingPhase() == 3) // play footstep sound 1
+			{
+				if (t->getFootstepSound(tBelow)
+					&& _unit->getRaceString() != "STR_ETHEREAL")
+				{
+					_parent->getResourcePack()->getSound("BATTLE.CAT", 23 + (t->getFootstepSound(tBelow) * 2))->play();
+				}
+			}
+
+			if (_unit->getWalkingPhase() == 7) // play footstep sound 2
+			{
+				if (t->getFootstepSound(tBelow)
+					&& _unit->getRaceString() != "STR_ETHEREAL")
+				{
+					_parent->getResourcePack()->getSound("BATTLE.CAT", 22 + (t->getFootstepSound(tBelow) * 2))->play();
+				}
+			}
+		}
+		else if (_unit->getStatus() == STATUS_FLYING)
+		{
+			if (_unit->getWalkingPhase() == 1 // play default flying sound
+				&& !_falling)
+			{
+				_parent->getResourcePack()->getSound("BATTLE.CAT", 15)->play();
+			}
+		}
 	}
 }
 

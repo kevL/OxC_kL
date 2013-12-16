@@ -318,10 +318,17 @@ void Map::draw()
  * @param firstcolor Offset of the first color to replace.
  * @param ncolors Amount of colors to replace.
  */
-void Map::setPalette(SDL_Color* colors, int firstcolor, int ncolors)
+void Map::setPalette(
+		SDL_Color* colors,
+		int firstcolor,
+		int ncolors)
 {
 	Surface::setPalette(colors, firstcolor, ncolors);
-	for (std::vector<MapDataSet*>::const_iterator i = _save->getMapDataSets()->begin(); i != _save->getMapDataSets()->end(); ++i)
+
+	for (std::vector<MapDataSet*>::const_iterator
+			i = _save->getMapDataSets()->begin();
+			i != _save->getMapDataSets()->end();
+			++i)
 	{
 		(*i)->getSurfaceset()->setPalette(colors, firstcolor, ncolors);
 	}
@@ -1364,10 +1371,12 @@ void Map::getSelectorPosition(Position* pos) const
 
 /**
  * Calculates the offset of a soldier, when it is walking in the middle of 2 tiles.
- * @param unit Pointer to BattleUnit.
- * @param offset Pointer to the offset to return the calculation.
+ * @param unit, Pointer to BattleUnit.
+ * @param offset, Pointer to the offset to return the calculation.
  */
-void Map::calculateWalkingOffset(BattleUnit* unit, Position* offset)
+void Map::calculateWalkingOffset(
+		BattleUnit* unit,
+		Position* offset)
 {
 	int offsetX[8] = { 1, 1, 1, 0, -1, -1, -1, 0 };
 	int offsetY[8] = { 1, 0, -1, -1, -1, 0, 1, 1 };
@@ -1530,7 +1539,7 @@ void Map::cacheUnits()
  */
 void Map::cacheUnit(BattleUnit* unit)
 {
-	//Log(LOG_INFO) << "cacheUnit() : " << unit->getId();
+	Log(LOG_INFO) << "cacheUnit() : " << unit->getId();
 
 	UnitSprite* unitSprite = new UnitSprite(_spriteWidth, _spriteHeight, 0, 0);
 	unitSprite->setPalette(this->getPalette());
@@ -1541,7 +1550,7 @@ void Map::cacheUnit(BattleUnit* unit)
 	unit->getCache(&invalid);
 	if (invalid)
 	{
-		//Log(LOG_INFO) << ". (invalid)";	// kL
+		Log(LOG_INFO) << ". (invalid)";
 
 		// 1 or 4 iterations, depending on unit size
 		for (int
@@ -1549,25 +1558,25 @@ void Map::cacheUnit(BattleUnit* unit)
 				i < numOfParts;
 				i++)
 		{
-			//Log(LOG_INFO) << ". . i = " << i;	// kL
+			//Log(LOG_INFO) << ". . i = " << i;
 
 			Surface* cache = unit->getCache(&d, i);
 			if (!cache) // no cache created yet
 			{
-				//Log(LOG_INFO) << ". . . (!cache)";	// kL
+				//Log(LOG_INFO) << ". . . (!cache)";
 
 				cache = new Surface(
 								_spriteWidth,
 								_spriteHeight);
 				cache->setPalette(this->getPalette());
 
-				//Log(LOG_INFO) << ". . . end (!cache)";	// kL
+				//Log(LOG_INFO) << ". . . end (!cache)";
 			}
 
-			//Log(LOG_INFO) << ". . setBattleUnit()";	// kL
+			//Log(LOG_INFO) << ". . setBattleUnit()";
 			unitSprite->setBattleUnit(unit, i);
 
-			//Log(LOG_INFO) << ". . getItem()";	// kL
+			//Log(LOG_INFO) << ". . getItem()";
 			BattleItem* rhandItem = unit->getItem("STR_RIGHT_HAND");
 			BattleItem* lhandItem = unit->getItem("STR_LEFT_HAND");
 			if (rhandItem)
@@ -1585,30 +1594,30 @@ void Map::cacheUnit(BattleUnit* unit)
 				unitSprite->setBattleItem(0);
 			}
 
-			//Log(LOG_INFO) << ". . setSurfaces()";	// kL
+			//Log(LOG_INFO) << ". . setSurfaces()";
 			unitSprite->setSurfaces(
 					_res->getSurfaceSet(unit->getArmor()->getSpriteSheet()),
 					_res->getSurfaceSet("HANDOB.PCK"),
 					_res->getSurfaceSet("HANDOB2.PCK"));
-			//Log(LOG_INFO) << ". . setAnimationFrame()";	// kL
+			Log(LOG_INFO) << ". . setAnimationFrame() " << _animFrame;
 			unitSprite->setAnimationFrame(_animFrame);
-			//Log(LOG_INFO) << ". . clear()";	// kL
+			//Log(LOG_INFO) << ". . clear()";
 			cache->clear();
 
-			//Log(LOG_INFO) << ". . blit() : cache = " << cache;	// kL
+			//Log(LOG_INFO) << ". . blit() : cache = " << cache;
 			unitSprite->blit(cache);
-			//Log(LOG_INFO) << ". . blit() Ok";	// kL
+			//Log(LOG_INFO) << ". . blit() Ok";
 
-			//Log(LOG_INFO) << ". . setCache()";	// kL
+			//Log(LOG_INFO) << ". . setCache()";
 			unit->setCache(cache, i);
 		}
 
-		//Log(LOG_INFO) << ". end (invalid)";	// kL
+		//Log(LOG_INFO) << ". end (invalid)";
 	}
 
 	delete unitSprite;
 
-	//Log(LOG_INFO) << "exit cacheUnit() : " << unit->getId();	// kL
+	Log(LOG_INFO) << "exit cacheUnit() : " << unit->getId();
 }
 
 /**
