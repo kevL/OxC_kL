@@ -429,8 +429,23 @@ Wb.131129
 
 	_trajectory.clear();
 
-	// apply some accuracy modifiers (todo: calculate this)
-	// This will results in a new target voxel
+	// even guided missiles drift, but how much is based on
+	// the shooter's faction, rather than accuracy.
+	// Wb.131216
+/*kL	if (_action.type == BA_LAUNCH)
+	{
+		if (_action.actor->getFaction() == FACTION_PLAYER)
+		{
+			accuracy = 0.60;
+		}
+		else
+		{
+			accuracy = 0.55;
+		}
+	} */
+
+	// apply some accuracy modifiers.
+	// This will result in a new target voxel:
 	if (_action.type != BA_LAUNCH) // <- what, no drift??!?
 		applyAccuracy(
 					originVoxel,

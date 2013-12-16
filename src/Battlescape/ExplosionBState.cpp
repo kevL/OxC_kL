@@ -279,7 +279,7 @@ void ExplosionBState::explode()
 				&& victim
 				&& victim->getArmor()->getSize() == 1
 				&& victim->getSpawnUnit().empty()
-				&& victim->getSpecialAbility() == SPECAB_NONE)
+				&& victim->getOriginalFaction() != FACTION_HOSTILE)
 			{
 				//Log(LOG_INFO) << victim->getId() << ": murderer is *zombieUnit*; !spawnUnit -> specab->RESPAWN, ->zombieUnit!";
 				// converts the victim to a zombie on death
