@@ -528,7 +528,7 @@ void BattleUnit::startWalking(
 
 //kL		_status = STATUS_FLYING;
 //		_verticalDirection = Pathfinding::DIR_DOWN;
-//kL		_direction = direction;
+		_direction = direction;
 //		_floating = true;						// kL
 
 		_kneeled = false;
