@@ -45,8 +45,8 @@ class PurchaseState
 	:
 		public State
 {
-private:
 
+private:
 	bool _allowChangeListValuesByMouseWheel;
 	int
 		_changeValueByMouseWheel,
@@ -85,7 +85,6 @@ private:
 
 
 	public:
-
 		/// Creates the Purchase state.
 		PurchaseState(
 				Game* game,

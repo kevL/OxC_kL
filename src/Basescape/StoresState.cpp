@@ -18,21 +18,27 @@
  */
 
 #include "StoresState.h"
+
 #include <sstream>
+
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
-#include "../Engine/Palette.h"
 #include "../Engine/Options.h"
-#include "../Interface/TextButton.h"
-#include "../Interface/Window.h"
+#include "../Engine/Palette.h"
+
 #include "../Interface/Text.h"
+#include "../Interface/TextButton.h"
 #include "../Interface/TextList.h"
-#include "../Savegame/SavedGame.h"
-#include "../Savegame/Base.h"
-#include "../Ruleset/Ruleset.h"
+#include "../Interface/Window.h"
+
+#include "../Resource/ResourcePack.h"
+
 #include "../Ruleset/RuleItem.h"
+#include "../Ruleset/Ruleset.h"
+
+#include "../Savegame/Base.h"
 #include "../Savegame/ItemContainer.h"
+#include "../Savegame/SavedGame.h"
 
 
 namespace OpenXcom
@@ -43,25 +49,29 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
  */
-StoresState::StoresState(Game* game, Base* base)
+StoresState::StoresState(
+		Game* game,
+		Base* base)
 	:
 		State(game),
 		_base(base)
 {
 	_window			= new Window(this, 320, 200, 0, 0);
-
 	_txtTitle		= new Text(300, 17, 10, 8);
 
 	_txtItem		= new Text(162, 9, 16, 25);
 	_txtQuantity	= new Text(84, 9, 178, 25);
 	_txtSpaceUsed	= new Text(26, 9, 262, 25);
 
-	_lstStores		= new TextList(286, 136, 16, 36);
+	_lstStores		= new TextList(278, 136, 24, 36);
 
 	_btnOk			= new TextButton(288, 16, 16, 177);
 
 
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
+	_game->setPalette(
+					_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)),
+					Palette::backPos,
+					16);
 
 	add(_window);
 	add(_btnOk);
@@ -98,23 +108,34 @@ StoresState::StoresState(Game* game, Base* base)
 	_txtSpaceUsed->setText(tr("STR_VOLUME"));		// kL
 
 	_lstStores->setColor(Palette::blockOffset(13)+10);
-	_lstStores->setColumns(3, 154, 84, 26);
+	_lstStores->setColumns(3, 146, 84, 26);
 	_lstStores->setSelectable(true);
 	_lstStores->setBackground(_window);
 	_lstStores->setMargin(8);
 
 	const std::vector<std::string>& items = _game->getRuleset()->getItemsList();
-	for (std::vector<std::string>::const_iterator i = items.begin(); i != items.end(); ++i)
+	for (std::vector<std::string>::const_iterator
+			i = items.begin();
+			i != items.end();
+			++i)
 	{
 		int qty = _base->getItems()->getItem(*i);
 		if (qty > 0)
 		{
 			RuleItem* rule = _game->getRuleset()->getItem(*i);
 
-			std::wstringstream ss, ss2;
+			std::wstringstream
+				ss,
+				ss2;
+
 			ss << qty;
 			ss2 << qty * rule->getSize();
-			_lstStores->addRow(3, tr(*i).c_str(), ss.str().c_str(), ss2.str().c_str());
+
+			_lstStores->addRow(
+							3,
+							tr(*i).c_str(),
+							ss.str().c_str(),
+							ss2.str().c_str());
 		}
 	}
 }

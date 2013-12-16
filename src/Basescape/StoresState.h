@@ -27,10 +27,11 @@ namespace OpenXcom
 {
 
 class Base;
-class TextButton;
-class Window;
 class Text;
+class TextButton;
 class TextList;
+class Window;
+
 
 /**
  * Stores window that displays all
@@ -42,20 +43,26 @@ class StoresState
 {
 	private:
 		Base* _base;
-
+		Text
+			* _txtItem,
+			* _txtQuantity,
+			* _txtSpaceUsed,
+			* _txtTitle;
 		TextButton* _btnOk;
-		Window* _window;
-		Text* _txtTitle, * _txtItem, * _txtQuantity, * _txtSpaceUsed;
 		TextList* _lstStores;
+		Window* _window;
+
 
 	public:
 		/// Creates the Stores state.
-		StoresState(Game* game, Base* base);
+		StoresState(
+				Game* game,
+				Base* base);
 		/// Cleans up the Stores state.
 		~StoresState();
 
 		/// Handler for clicking the OK button.
-		void btnOkClick(Action *action);
+		void btnOkClick(Action* action);
 };
 
 }

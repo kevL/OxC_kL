@@ -66,10 +66,9 @@ GeoscapeCraftState::GeoscapeCraftState(Game* game, Craft* craft, Globe* globe, W
 	_screen = false;
 
 	_window			= new Window(this, 224, 174, 16, 8, POPUP_BOTH); // center: 128, end: 240
-
 	_txtTitle		= new Text(192, 17, 32, 16);
 
-	_txtStatus		= new Text(192, 17, 32, 32);
+	_txtStatus		= new Text(192, 17, 32, 31);
 
 	_txtBase		= new Text(192, 9, 32, 45);
 

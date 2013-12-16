@@ -20,9 +20,10 @@
 #ifndef OPENXCOM_SELLSTATE_H
 #define OPENXCOM_SELLSTATE_H
 
-#include "../Engine/State.h"
-#include <vector>
 #include <string>
+#include <vector>
+
+#include "../Engine/State.h"
 
 
 namespace OpenXcom
@@ -37,14 +38,16 @@ enum SellType
 	SELL_ENGINEER
 };
 
-class TextButton;
-class Window;
+
+class Base;
+class Craft;
+class Soldier;
 class Text;
+class TextButton;
 class TextList;
 class Timer;
-class Base;
-class Soldier;
-class Craft;
+class Window;
+
 
 /**
  * Sell/Sack screen that lets the player sell
@@ -54,21 +57,39 @@ class SellState
 	:
 		public State
 {
+
 private:
-	Base* _base;
-	TextButton* _btnOk, * _btnCancel;
-	Window* _window;
-	Text* _txtTitle, * _txtSales, * _txtFunds, * _txtItem, * _txtQuantity, * _txtSell, * _txtValue;
-	TextList* _lstItems;
-	std::vector<int> _qtys;
-	std::vector<Soldier*> _soldiers;
-	std::vector<Craft*> _crafts;
-	std::vector<std::string> _items;
-	unsigned int _sel;
-	int _total, _hasSci, _hasEng;
-	Timer* _timerInc, * _timerDec;
-	int _changeValueByMouseWheel;
 	bool _allowChangeListValuesByMouseWheel;
+	int
+		_changeValueByMouseWheel,
+		_hasSci,
+		_hasEng,
+		_total;
+	unsigned int _sel;
+
+	Base* _base;
+	Text
+		* _txtFunds,
+		* _txtItem,
+		* _txtQuantity,
+		* _txtSales,
+		* _txtSell,
+		* _txtTitle,
+		* _txtValue;
+	TextButton
+		* _btnOk,
+		* _btnCancel;
+	TextList* _lstItems;
+	Timer
+		* _timerDec,
+		* _timerInc;
+	Window* _window;
+
+	std::vector<int> _qtys;
+	std::vector<std::string> _items;
+	std::vector<Craft*> _crafts;
+	std::vector<Soldier*> _soldiers;
+
 	/// Gets selected price.
 	int getPrice();
 	/// Gets selected quantity.
@@ -80,14 +101,18 @@ private:
 	/// Gets the index of the selected craft.
 	int getCraftIndex(unsigned selected) const;
 
+
 	public:
 		/// Creates the Sell state.
-		SellState(Game* game, Base* base);
+		SellState(
+				Game* game,
+				Base* base);
 		/// Cleans up the Sell state.
 		~SellState();
 
 		/// Runs the timers.
 		void think();
+
 		/// Handler for clicking the OK button.
 		void btnOkClick(Action* action);
 		/// Handler for clicking the Cancel button.
@@ -106,6 +131,7 @@ private:
 		void lstItemsRightArrowClick(Action* action);
 		/// Handler for pressing-down a mouse-button in the list.
 		void lstItemsMousePress(Action* action);
+
 		/// Increases the quantity of an item by one.
 		void increase();
 		/// Increases the quantity of an item by the given value.
@@ -114,6 +140,7 @@ private:
 		void decrease();
 		/// Decreases the quantity of an item by the given value.
 		void decreaseByValue(int change);
+
 		/// Updates the quantity-strings of the selected item.
 		void updateItemStrings();
 };

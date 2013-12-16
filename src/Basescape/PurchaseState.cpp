@@ -93,7 +93,7 @@ PurchaseState::PurchaseState(
 	_txtCost		= new Text(102, 9, 166, 33);
 	_txtQuantity	= new Text(60, 9, 267, 33);
 
-	_lstItems		= new TextList(294, 128, 8, 44);
+	_lstItems		= new TextList(286, 128, 16, 44);
 
 	_btnCancel		= new TextButton(134, 16, 16, 177);
 	_btnOk			= new TextButton(134, 16, 170, 177);
@@ -156,7 +156,7 @@ PurchaseState::PurchaseState(
 
 	_lstItems->setColor(Palette::blockOffset(13)+10);
 	_lstItems->setArrowColumn(227, ARROW_VERTICAL);
-	_lstItems->setColumns(4, 150, 55, 46, 32);
+	_lstItems->setColumns(4, 142, 55, 46, 32);
 	_lstItems->setSelectable(true);
 	_lstItems->setBackground(_window);
 	_lstItems->setMargin(8);
@@ -475,7 +475,10 @@ bool PurchaseState::isExcluded(std::string item)
 	std::vector<std::string> excludes = Options::getPurchaseExclusions();
 
 	bool exclude = false;
-	for (std::vector<std::string>::const_iterator s = excludes.begin(); s != excludes.end(); ++s)
+	for (std::vector<std::string>::const_iterator
+			s = excludes.begin();
+			s != excludes.end();
+			++s)
 	{
 		if (item == *s)
 		{
@@ -496,16 +499,26 @@ void PurchaseState::btnOkClick(Action*)
 {
 	_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds() - _total);
 
-	for (unsigned int i = 0; i < _qtys.size(); ++i)
+	for (unsigned int
+			i = 0;
+			i < _qtys.size();
+			++i)
 	{
 		if (_qtys[i] > 0)
 		{
 			if (i == 0) // Buy soldiers
 			{
-				for (int s = 0; s < _qtys[i]; s++)
+				for (int
+						s = 0;
+						s < _qtys[i];
+						s++)
 				{
 					Transfer* t = new Transfer(_game->getRuleset()->getPersonnelTime());
-					t->setSoldier(new Soldier(_game->getRuleset()->getSoldier("XCOM"), _game->getRuleset()->getArmor("STR_NONE_UC"), &_game->getRuleset()->getPools(), _game->getSavedGame()->getId("STR_SOLDIER")));
+					t->setSoldier(new Soldier(
+											_game->getRuleset()->getSoldier("XCOM"),
+											_game->getRuleset()->getArmor("STR_NONE_UC"),
+											&_game->getRuleset()->getPools(),
+											_game->getSavedGame()->getId("STR_SOLDIER")));
 
 					_base->getTransfers()->push_back(t);
 				}
@@ -524,9 +537,13 @@ void PurchaseState::btnOkClick(Action*)
 
 				_base->getTransfers()->push_back(t);
 			}
-			else if (i >= 3 && i < 3 + _crafts.size()) // Buy crafts
+			else if (i >= 3
+				&& i < 3 + _crafts.size()) // Buy crafts
 			{
-				for (int c = 0; c < _qtys[i]; c++)
+				for (int
+						c = 0;
+						c < _qtys[i];
+						c++)
 				{
 					RuleCraft* rc = _game->getRuleset()->getCraft(_crafts[i - 3]);
 					Transfer* t = new Transfer(rc->getTransferTime());
@@ -601,10 +618,8 @@ void PurchaseState::lstItemsLeftArrowClick(Action* action)
 	{
 		increaseByValue(1);
 
-//kL		_timerInc->setInterval(250);
-//kL		_timerDec->setInterval(250);
-		_timerInc->setInterval(280);		// kL
-		_timerDec->setInterval(280);		// kL
+		_timerInc->setInterval(280);
+		_timerDec->setInterval(280);
 	}
 }
 
@@ -649,10 +664,8 @@ void PurchaseState::lstItemsRightArrowClick(Action* action)
 	{
 		decreaseByValue(1);
 
-//kL		_timerInc->setInterval(250);
-//kL		_timerDec->setInterval(250);
-		_timerInc->setInterval(280);		// kL
-		_timerDec->setInterval(280);		// kL
+		_timerInc->setInterval(280);
+		_timerDec->setInterval(280);
 	}
 }
 
@@ -742,26 +755,47 @@ void PurchaseState::increaseByValue(int change)
 	if (_total + getPrice() > _game->getSavedGame()->getFunds())
 	{
 		_timerInc->stop();
-		_game->pushState(new ErrorMessageState(_game, "STR_NOT_ENOUGH_MONEY", Palette::blockOffset(15)+1, "BACK13.SCR", 0));
+		_game->pushState(new ErrorMessageState(
+											_game,
+											"STR_NOT_ENOUGH_MONEY",
+											Palette::blockOffset(15)+1,
+											"BACK13.SCR",
+											0));
 	}
 	else if (_sel <= 2
 		&& _pQty + 1 > _base->getAvailableQuarters() - _base->getUsedQuarters())
 	{
 		_timerInc->stop();
-		_game->pushState(new ErrorMessageState(_game, "STR_NOT_ENOUGH_LIVING_SPACE", Palette::blockOffset(15)+1, "BACK13.SCR", 0));
+		_game->pushState(new ErrorMessageState(
+											_game,
+											"STR_NOT_ENOUGH_LIVING_SPACE",
+											Palette::blockOffset(15)+1,
+											"BACK13.SCR",
+											0));
 	}
 	else if (_sel >= 3
 		&& _sel < 3 + _crafts.size()
 		&& _cQty + 1 > _base->getAvailableHangars() - _base->getUsedHangars())
 	{
 		_timerInc->stop();
-		_game->pushState(new ErrorMessageState(_game, "STR_NO_FREE_HANGARS_FOR_PURCHASE", Palette::blockOffset(15)+1, "BACK13.SCR", 0));
+		_game->pushState(new ErrorMessageState(
+											_game,
+											"STR_NO_FREE_HANGARS_FOR_PURCHASE",
+											Palette::blockOffset(15)+1,
+											"BACK13.SCR",
+											0));
 	}
 	else if (_sel >= 3 + _crafts.size()
-		&& _iQty + _game->getRuleset()->getItem(_items[_sel - 3 - _crafts.size()])->getSize() > _base->getAvailableStores() - _base->getUsedStores())
+		&& _iQty + _game->getRuleset()->getItem(_items[_sel - 3 - _crafts.size()])->getSize()
+				> _base->getAvailableStores() - _base->getUsedStores())
 	{
 		_timerInc->stop();
-		_game->pushState(new ErrorMessageState(_game, "STR_NOT_ENOUGH_STORE_SPACE", Palette::blockOffset(15)+1, "BACK13.SCR", 0));
+		_game->pushState(new ErrorMessageState(
+											_game,
+											"STR_NOT_ENOUGH_STORE_SPACE",
+											Palette::blockOffset(15)+1,
+											"BACK13.SCR",
+											0));
 	}
 	else
 	{

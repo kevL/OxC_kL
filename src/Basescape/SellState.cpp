@@ -18,32 +18,38 @@
  */
 
 #include "SellState.h"
-#include <sstream>
+
 #include <climits>
 #include <cmath>
+#include <sstream>
+
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
+#include "../Engine/Options.h"
 #include "../Engine/Palette.h"
-#include "../Interface/TextButton.h"
-#include "../Interface/Window.h"
+#include "../Engine/Timer.h"
+
 #include "../Interface/Text.h"
+#include "../Interface/TextButton.h"
 #include "../Interface/TextList.h"
-#include "../Savegame/BaseFacility.h"
-#include "../Savegame/SavedGame.h"
-#include "../Savegame/Base.h"
-#include "../Savegame/Soldier.h"
-#include "../Savegame/Craft.h"
-#include "../Savegame/ItemContainer.h"
-#include "../Ruleset/Ruleset.h"
-#include "../Ruleset/RuleItem.h"
+#include "../Interface/Window.h"
+
+#include "../Resource/ResourcePack.h"
+
 #include "../Ruleset/Armor.h"
 #include "../Ruleset/RuleCraft.h"
-#include "../Savegame/CraftWeapon.h"
 #include "../Ruleset/RuleCraftWeapon.h"
-#include "../Engine/Timer.h"
-#include "../Engine/Options.h"
+#include "../Ruleset/RuleItem.h"
+#include "../Ruleset/Ruleset.h"
+
+#include "../Savegame/Base.h"
+#include "../Savegame/BaseFacility.h"
+#include "../Savegame/Craft.h"
+#include "../Savegame/CraftWeapon.h"
+#include "../Savegame/ItemContainer.h"
+#include "../Savegame/SavedGame.h"
+#include "../Savegame/Soldier.h"
 
 
 namespace OpenXcom
@@ -54,7 +60,9 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
  */
-SellState::SellState(Game* game, Base* base)
+SellState::SellState(
+		Game* game,
+		Base* base)
 	:
 		State(game),
 		_base(base),
@@ -68,42 +76,45 @@ SellState::SellState(Game* game, Base* base)
 		_hasEng(0)
 {
 	_changeValueByMouseWheel = Options::getInt("changeValueByMouseWheel");
-	_allowChangeListValuesByMouseWheel = Options::getBool("allowChangeListValuesByMouseWheel") && _changeValueByMouseWheel;
+	_allowChangeListValuesByMouseWheel = Options::getBool("allowChangeListValuesByMouseWheel")
+											&& _changeValueByMouseWheel;
 
 	bool canSellLiveAliens=Options::getBool("canSellLiveAliens");
 
 
 	_window			= new Window(this, 320, 200, 0, 0);
-
 	_txtTitle		= new Text(310, 17, 5, 9);
 
-	_txtSales		= new Text(140, 9, 16, 24);
-	_txtFunds		= new Text(140, 9, 160, 24);
+	_txtFunds		= new Text(140, 9, 16, 24);
+	_txtSales		= new Text(140, 9, 160, 24);
 
 	_txtItem		= new Text(130, 9, 16, 33);
 	_txtQuantity	= new Text(54, 9, 166, 33);
 	_txtSell		= new Text(96, 9, 226, 33);
 	_txtValue		= new Text(40, 9, 246, 33);
 
-	_lstItems		= new TextList(294, 128, 8, 44);
+	_lstItems		= new TextList(286, 128, 16, 44);
 
 	_btnCancel		= new TextButton(134, 16, 16, 177);
 	_btnOk			= new TextButton(134, 16, 170, 177);
 
 
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
+	_game->setPalette(
+					_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)),
+					Palette::backPos,
+					16);
 
 	add(_window);
-	add(_btnOk);
-	add(_btnCancel);
 	add(_txtTitle);
-	add(_txtSales);
 	add(_txtFunds);
+	add(_txtSales);
 	add(_txtItem);
 	add(_txtQuantity);
 	add(_txtSell);
 	add(_txtValue);
 	add(_lstItems);
+	add(_btnCancel);
+	add(_btnOk);
 
 	centerAllSurfaces();
 
@@ -146,7 +157,7 @@ SellState::SellState(Game* game, Base* base)
 
 	_lstItems->setColor(Palette::blockOffset(13)+10);
 	_lstItems->setArrowColumn(182, ARROW_VERTICAL);
-	_lstItems->setColumns(4, 150, 60, 22, 55);
+	_lstItems->setColumns(4, 142, 60, 22, 55);
 	_lstItems->setSelectable(true);
 	_lstItems->setBackground(_window);
 	_lstItems->setMargin(8);
@@ -159,23 +170,39 @@ SellState::SellState(Game* game, Base* base)
 	_lstItems->onRightArrowClick((ActionHandler)& SellState::lstItemsRightArrowClick);
 	_lstItems->onMousePress((ActionHandler)& SellState::lstItemsMousePress);
 
-	for (std::vector<Soldier*>::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); ++i)
+	for (std::vector<Soldier*>::iterator
+			i = _base->getSoldiers()->begin();
+			i != _base->getSoldiers()->end();
+			++i)
 	{
 		if ((*i)->getCraft() == 0)
 		{
 			_qtys.push_back(0);
 			_soldiers.push_back(*i);
-			_lstItems->addRow(4, (*i)->getName().c_str(), L"1", L"0", Text::formatFunding(0).c_str());
+			_lstItems->addRow(
+							4,
+							(*i)->getName().c_str(),
+							L"1",
+							L"0",
+							Text::formatFunding(0).c_str());
 		}
 	}
 
-	for (std::vector<Craft*>::iterator i = _base->getCrafts()->begin(); i != _base->getCrafts()->end(); ++i)
+	for (std::vector<Craft*>::iterator
+			i = _base->getCrafts()->begin();
+			i != _base->getCrafts()->end();
+			++i)
 	{
 		if ((*i)->getStatus() != "STR_OUT")
 		{
 			_qtys.push_back(0);
 			_crafts.push_back(*i);
-			_lstItems->addRow(4, (*i)->getName(_game->getLanguage()).c_str(), L"1", L"0", Text::formatFunding((*i)->getRules()->getSellCost()).c_str());
+			_lstItems->addRow(
+							4,
+							(*i)->getName(_game->getLanguage()).c_str(),
+							L"1",
+							L"0",
+							Text::formatFunding((*i)->getRules()->getSellCost()).c_str());
 		}
 	}
 
@@ -185,7 +212,12 @@ SellState::SellState(Game* game, Base* base)
 		_hasSci = 1;
 		std::wstringstream ss;
 		ss << _base->getAvailableScientists();
-		_lstItems->addRow(4, tr("STR_SCIENTIST").c_str(), ss.str().c_str(), L"0", Text::formatFunding(0).c_str());
+		_lstItems->addRow(
+						4,
+						tr("STR_SCIENTIST").c_str(),
+						ss.str().c_str(),
+						L"0",
+						Text::formatFunding(0).c_str());
 	}
 
 	if (_base->getAvailableEngineers() > 0)
@@ -194,11 +226,19 @@ SellState::SellState(Game* game, Base* base)
 		_hasEng = 1;
 		std::wstringstream ss;
 		ss << _base->getAvailableEngineers();
-		_lstItems->addRow(4, tr("STR_ENGINEER").c_str(), ss.str().c_str(), L"0", Text::formatFunding(0).c_str());
+		_lstItems->addRow(
+						4,
+						tr("STR_ENGINEER").c_str(),
+						ss.str().c_str(),
+						L"0",
+						Text::formatFunding(0).c_str());
 	}
 
 	const std::vector<std::string>& items = _game->getRuleset()->getItemsList();
-	for (std::vector<std::string>::const_iterator i = items.begin(); i != items.end(); ++i)
+	for (std::vector<std::string>::const_iterator
+			i = items.begin();
+			i != items.end();
+			++i)
 	{
 		int qty = _base->getItems()->getItem(*i);
 		if (qty > 0
@@ -210,14 +250,20 @@ SellState::SellState(Game* game, Base* base)
 			RuleItem* rule = _game->getRuleset()->getItem(*i);
 			std::wstringstream ss;
 			ss << qty;
-			_lstItems->addRow(4, tr(*i).c_str(), ss.str().c_str(), L"0", Text::formatFunding(rule->getSellCost()).c_str());
+			_lstItems->addRow(
+							4,
+							tr(*i).c_str(),
+							ss.str().c_str(),
+							L"0",
+							Text::formatFunding(rule->getSellCost()).c_str());
 		}
 	}
 
 	_timerInc = new Timer(280);
-	_timerInc->onTimer((StateHandler)&SellState::increase);
+	_timerInc->onTimer((StateHandler)& SellState::increase);
+
 	_timerDec = new Timer(280);
-	_timerDec->onTimer((StateHandler)&SellState::decrease);
+	_timerDec->onTimer((StateHandler)& SellState::decrease);
 }
 
 /**
@@ -258,14 +304,20 @@ void SellState::btnOkClick(Action*)
 {
 	_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds() + _total);
 
-	for (unsigned int i = 0; i < _qtys.size(); ++i)
+	for (unsigned int
+			i = 0;
+			i < _qtys.size();
+			++i)
 	{
 		if (_qtys[i] > 0)
 		{
 			switch (getType(i))
 			{
 				case SELL_SOLDIER:
-					for (std::vector<Soldier*>::iterator s = _base->getSoldiers()->begin(); s != _base->getSoldiers()->end(); ++s)
+					for (std::vector<Soldier*>::iterator
+							s = _base->getSoldiers()->begin();
+							s != _base->getSoldiers()->end();
+							++s)
 					{
 						if (*s == _soldiers[i])
 						{
@@ -273,6 +325,7 @@ void SellState::btnOkClick(Action*)
 							{
 								_base->getItems()->addItem((*s)->getArmor()->getStoreItem());
 							}
+
 							_base->getSoldiers()->erase(s);
 
 							break;
@@ -286,23 +339,34 @@ void SellState::btnOkClick(Action*)
 					Craft* craft = _crafts[getCraftIndex(i)];
 
 					// Remove weapons from craft
-					for (std::vector<CraftWeapon*>::iterator w = craft->getWeapons()->begin(); w != craft->getWeapons()->end(); ++w)
+					for (std::vector<CraftWeapon*>::iterator
+							w = craft->getWeapons()->begin();
+							w != craft->getWeapons()->end();
+							++w)
 					{
 						if (*w != 0)
 						{
 							_base->getItems()->addItem((*w)->getRules()->getLauncherItem());
-							_base->getItems()->addItem((*w)->getRules()->getClipItem(), (*w)->getClipsLoaded(_game->getRuleset()));
+							_base->getItems()->addItem(
+													(*w)->getRules()->getClipItem(),
+													(*w)->getClipsLoaded(_game->getRuleset()));
 						}
 					}
 
 					// Remove items from craft
-					for (std::map<std::string, int>::iterator it = craft->getItems()->getContents()->begin(); it != craft->getItems()->getContents()->end(); ++it)
+					for (std::map<std::string, int>::iterator
+							it = craft->getItems()->getContents()->begin();
+							it != craft->getItems()->getContents()->end();
+							++it)
 					{
 						_base->getItems()->addItem(it->first, it->second);
 					}
 
 					// Remove soldiers from craft
-					for (std::vector<Soldier*>::iterator s = _base->getSoldiers()->begin(); s != _base->getSoldiers()->end(); ++s)
+					for (std::vector<Soldier*>::iterator
+							s = _base->getSoldiers()->begin();
+							s != _base->getSoldiers()->end();
+							++s)
 					{
 						if ((*s)->getCraft() == craft)
 						{
@@ -311,7 +375,10 @@ void SellState::btnOkClick(Action*)
 					}
 
 					// Clear Hangar
-					for (std::vector<BaseFacility*>::iterator f = _base->getFacilities()->begin(); f != _base->getFacilities()->end(); ++f)
+					for (std::vector<BaseFacility*>::iterator
+							f = _base->getFacilities()->begin();
+							f != _base->getFacilities()->end();
+							++f)
 					{
 						if ((*f)->getCraft() == craft)
 						{
@@ -322,7 +389,10 @@ void SellState::btnOkClick(Action*)
 					}
 
 					// Remove craft
-					for (std::vector<Craft*>::iterator c = _base->getCrafts()->begin(); c != _base->getCrafts()->end(); ++c)
+					for (std::vector<Craft*>::iterator
+							c = _base->getCrafts()->begin();
+							c != _base->getCrafts()->end();
+							++c)
 					{
 						if (*c == craft)
 						{
@@ -399,6 +469,7 @@ void SellState::lstItemsLeftArrowClick(Action* action)
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
 		increaseByValue(1);
+
 		_timerInc->setInterval(280);
 		_timerDec->setInterval(280);
 	}
@@ -444,6 +515,7 @@ void SellState::lstItemsRightArrowClick(Action* action)
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
 		decreaseByValue(1);
+
 		_timerInc->setInterval(280);
 		_timerDec->setInterval(280);
 	}
@@ -543,6 +615,7 @@ void SellState::increase()
 {
 	_timerDec->setInterval(80);
 	_timerInc->setInterval(80);
+
 	increaseByValue(1);
 }
 
@@ -569,6 +642,7 @@ void SellState::decrease()
 {
 	_timerInc->setInterval(80);
 	_timerDec->setInterval(80);
+
 	decreaseByValue(1);
 }
 
@@ -593,11 +667,16 @@ void SellState::decreaseByValue(int change)
  */
 void SellState::updateItemStrings()
 {
-	std::wstringstream ss, ss2;
+	std::wstringstream
+		ss,
+		ss2;
+
 	ss << _qtys[_sel];
 	_lstItems->setCellText(_sel, 2, ss.str());
+
 	ss2 << getQuantity() - _qtys[_sel];
 	_lstItems->setCellText(_sel, 1, ss2.str());
+
 	_txtSales->setText(tr("STR_VALUE_OF_SALES").arg(Text::formatFunding(_total)));
 }
 
