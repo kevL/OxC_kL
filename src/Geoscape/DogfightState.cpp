@@ -840,7 +840,8 @@ void DogfightState::move()
 	// Check if craft's destination hasn't been changed when window minimized.
 	Ufo* u = dynamic_cast<Ufo*>(_craft->getDestination());
 	if (u != _ufo
-		|| _craft->getLowFuel())
+		|| _craft->getLowFuel()
+		|| (_minimized && _ufo->isCrashed()))
 	{
 		endDogfight();
 

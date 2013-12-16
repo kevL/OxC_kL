@@ -26,11 +26,12 @@
 namespace OpenXcom
 {
 
-class Window;
-class Text;
-class TextButton;
 class Craft;
 class GeoscapeState;
+class Text;
+class TextButton;
+class Window;
+
 
 /**
  * Window that allows the player
@@ -38,21 +39,33 @@ class GeoscapeState;
  */
 class ConfirmLandingState
 	:
-	public State
+		public State
 {
+
 private:
+	int
+		_shade,
+		_texture;
+
 	Craft* _craft;
-	Window* _window;
-	int _texture, _shade;
-	Text* _txtMessage, * _txtBegin;
-	TextButton* _btnYes, * _btnNo;
 	GeoscapeState* _state;
+	Text
+		* _txtBegin,
+		* _txtMessage;
+	TextButton
+		* _btnNo,
+		* _btnYes;
+	Window* _window;
+
 
 	public:
 		/// Creates the Confirm Landing state.
 		ConfirmLandingState(Game* game, Craft* craft, int texture, int shade, GeoscapeState* state);
 		/// Cleans up the Confirm Landing state.
 		~ConfirmLandingState();
+
+		/// initialize the state, make a sanity check.
+		void init();
 
 		/// Handler for clicking the Yes button.
 		void btnYesClick(Action* action);
