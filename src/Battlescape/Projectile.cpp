@@ -444,8 +444,7 @@ Wb.131129
 		}
 	} */
 
-	// apply some accuracy modifiers.
-	// This will result in a new target voxel:
+	// apply some accuracy modifiers. This will result in a new target voxel:
 	if (_action.type != BA_LAUNCH) // <- what, no drift??!?
 		applyAccuracy(
 					originVoxel,
