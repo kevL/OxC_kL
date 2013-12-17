@@ -941,7 +941,7 @@ void BattlescapeGame::handleNonTargetAction()
 			{
 				if (_currentAction.actor->spendTimeUnits(_currentAction.TU))
 				{
-					Position pAttack_vector;
+/*OLD_code					Position pAttack_vector;
 					Pathfinding::directionToVector(_currentAction.actor->getDirection(), &pAttack_vector);
 					Tile* tTarget; //kL = _save->getTile(_currentAction.actor->getPosition() + pAttack_vector);
 
@@ -985,7 +985,9 @@ void BattlescapeGame::handleNonTargetAction()
 						{
 							break; // already found one, Thanks.
 						}
-					}
+					} */
+					Position voxel = _currentAction.target * Position(16, 16, 24) + Position(8,8,8 - _save->getTile(_currentAction.target)->getTerrainLevel());
+					statePushNext(new ExplosionBState(this, voxel, _currentAction.weapon, _currentAction.actor));
 				}
 				else
 				{

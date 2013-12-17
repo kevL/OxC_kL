@@ -3467,7 +3467,7 @@ int TileEngine::voxelCheck(
 {
 	//Log(LOG_INFO) << "TileEngine::voxelCheck()"; // massive lag-to-file, Do not use.
 
-	if (hit) return VOXEL_UNIT;		// kL
+	if (hit) return VOXEL_UNIT;		// kL; i think Wb may have this covered now.
 
 
 //	Tile* tileTest_old = _save->getTile(Position(pTarget_voxel.x / 16, pTarget_voxel.y / 16, pTarget_voxel.z / 24));
@@ -3475,6 +3475,7 @@ int TileEngine::voxelCheck(
 
 	Tile* tTarget = _save->getTile(pTarget_voxel / Position(16, 16, 24)); // converts to tilespace -> Tile
 	//Log(LOG_INFO) << ". tTarget kL = " << tTarget->getPosition();
+	Tile* tTarget_below = _save->getTile(tile->getPosition() + Position(0, 0, -1));
 
 	// check if we are out of the map
 	if (tTarget == 0
@@ -3487,7 +3488,9 @@ int TileEngine::voxelCheck(
 	}
 
 	if (tTarget->isVoid()
-		&& tTarget->getUnit() == 0) // <- check tileBelow ? It's done below, but this seems premature!!!
+		&& tTarget->getUnit() == 0 // <- check tileBelow ? It's done below, but this seems premature!!! haha, Wb caught it:
+		&& (!tTarget_below
+			|| tTarget_below->getUnit() == 0))
 	{
 		//Log(LOG_INFO) << "TileEngine::voxelCheck() EXIT, ret(1) -1";
 		return VOXEL_EMPTY;
@@ -3497,7 +3500,6 @@ int TileEngine::voxelCheck(
 		&& tTarget->getMapData(MapData::O_FLOOR)
 		&& tTarget->getMapData(MapData::O_FLOOR)->isGravLift())
 	{
-		Tile* tTarget_below = _save->getTile(tTarget->getPosition() + Position(0, 0, -1)); // tileBelow target
 		if (tTarget_below
 			&& tTarget_below->getMapData(MapData::O_FLOOR)
 			&& !tTarget_below->getMapData(MapData::O_FLOOR)->isGravLift())
@@ -3913,7 +3915,8 @@ bool TileEngine::validMeleeRange(
 			attacker->getPosition(),
 			dir,
 			attacker,
-			target);
+			target,
+			0);
 }
 
 /**
@@ -3928,7 +3931,8 @@ bool TileEngine::validMeleeRange(
 		Position pos,
 		int direction,
 		BattleUnit* attacker,
-		BattleUnit* target)
+		BattleUnit* target,
+		Position* dest)
 {
 	//Log(LOG_INFO) << "TileEngine::validMeleeRange()";
 	if (direction < 0 || direction > 7)
@@ -3948,20 +3952,25 @@ bool TileEngine::validMeleeRange(
 				y <= size;
 				++y)
 		{
-//kL			Tile* tileOrigin (_save->getTile(Position(pos + Position(x, y, 0))));
-//kL			Tile* tileTarget (_save->getTile(Position(pos + Position(x, y, 0) + p)));
-//kL			Tile* tileTargetAbove (_save->getTile(Position(pos + Position(x, y, 1) + p)));
-			Tile* tileOrigin		= _save->getTile(Position(pos + Position(x, y, 0)));		// kL
-			Tile* tileTarget		= _save->getTile(Position(pos + Position(x, y, 0) + p));	// kL
-			Tile* tileTargetAbove	= _save->getTile(Position(pos + Position(x, y, 1) + p));	// kL
+			Tile* tileOrigin		= _save->getTile(Position(pos + Position(x, y, 0)));
+			Tile* tileTarget		= _save->getTile(Position(pos + Position(x, y, 0) + p));
+			Tile* tileTarget_above	= _save->getTile(Position(pos + Position(x, y, 1) + p));
+			Tile* tileTarget_below	= _save->getTile(Position(pos + Position(x, y, -1) + p));
 
 			if (tileOrigin && tileTarget)
 			{
 				if (tileOrigin->getTerrainLevel() <= -16
-					&& tileTargetAbove
-					&& !tileTargetAbove->hasNoFloor(tileTarget))
+					&& tileTarget_above
+					&& !tileTarget_above->hasNoFloor(tileTarget))
 				{
-					tileTarget = tileTargetAbove;
+					tileTarget = tileTarget_above;
+				}
+				else if (tileTarget_below
+					&& tileTarget->hasNoFloor(tileTarget_below)
+					&& !tileTarget->getUnit()
+					&& tileTarget_below->getTerrainLevel() <= -16)
+				{
+					tileTarget = tileTarget_below;
 				}
 
 				if (tileTarget->getUnit())
@@ -3974,14 +3983,22 @@ bool TileEngine::validMeleeRange(
 						//Log(LOG_INFO) << ". . . target and tileUnit are same";
 
 						Position voxelOrigin = Position(tileOrigin->getPosition() * Position(16, 16, 24))
-								+ Position(
-										8,
-										8,
-										attacker->getHeight() + attacker->getFloatHeight() - 4 - tileOrigin->getTerrainLevel());
+													+ Position(
+															8,
+															8,
+															attacker->getHeight()
+																+ attacker->getFloatHeight()
+																- tileOrigin->getTerrainLevel()
+																- 4);
 
 						Position voxelTarget;
 						if (canTargetUnit(&voxelOrigin, tileTarget, &voxelTarget, attacker))
 						{
+							if (dest)
+							{
+								*dest = tileTarget->getPosition();
+							}
+
 							//Log(LOG_INFO) << "TileEngine::validMeleeRange() EXIT true";
 							return true;
 						}

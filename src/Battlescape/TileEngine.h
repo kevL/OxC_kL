@@ -35,10 +35,11 @@
 namespace OpenXcom
 {
 
-class SavedBattleGame;
-class BattleUnit;
 class BattleItem;
+class BattleUnit;
+class SavedBattleGame;
 class Tile;
+
 
 /**
  * A utility class that modifies tile properties on a battlescape map.
@@ -47,6 +48,7 @@ class Tile;
  */
 class TileEngine
 {
+
 private:
 	static const int MAX_VIEW_DISTANCE			= 20;
 	static const int MAX_VOXEL_VIEW_DISTANCE	= MAX_VIEW_DISTANCE * 16;
@@ -67,9 +69,12 @@ private:
 			int direction = -1);
 	bool _personalLighting;
 
+
 	public:
 		/// Creates a new TileEngine class.
-		TileEngine(SavedBattleGame* save, std::vector<Uint16>* voxelData);
+		TileEngine(
+				SavedBattleGame* save,
+				std::vector<Uint16>* voxelData);
 		/// Cleans up the TileEngine.
 		~TileEngine();
 
@@ -81,26 +86,34 @@ private:
 		void calculateTerrainLighting();
 		/// Recalculates lighting of the battlescape for units.
 		void calculateUnitLighting();
+
 		/// Calculates the field of view from a units view point.
 		bool calculateFOV(BattleUnit* unit);
 		/// Calculates Field of View, including line of sight of all units within range of the Position
 		void calculateFOV(const Position& position);
 		/// Recalculates FOV of all units in-game.
 		void recalculateFOV();
+
 		/// Gets the origin voxel of a unit's eyesight.
 		Position getSightOriginVoxel(BattleUnit* currentUnit);
 		/// Checks visibility of a unit on this tile.
 		bool visible(BattleUnit* currentUnit, Tile* tile);
 		/// Creates a vector of units that can spot this unit.
+
 		std::vector<BattleUnit*> getSpottingUnits(BattleUnit* unit);
 		/// Checks validity of a snap shot to this position.
 		bool canMakeSnap(BattleUnit* unit, BattleUnit* target);
 		/// Checks reaction fire.
 		bool checkReactionFire(BattleUnit* unit);
 		/// Given a vector of spotters, and a unit, picks the spotter with the highest reaction score.
-		BattleUnit* getReactor(std::vector<BattleUnit*> spotters, BattleUnit* unit);
+		BattleUnit* getReactor(
+				std::vector<BattleUnit*> spotters,
+				BattleUnit* unit);
 		/// Tries to perform a reaction snap shot to this location.
-		bool tryReactionSnap(BattleUnit* unit, BattleUnit* target);
+		bool tryReactionSnap(
+				BattleUnit* unit,
+				BattleUnit* target);
+
 		/// Handles bullet/weapon hits.
 		BattleUnit* hit(
 				const Position& pTarget_voxel,
@@ -189,7 +202,8 @@ private:
 				Position pos,
 				int direction,
 				BattleUnit* attacker,
-				BattleUnit* target);
+				BattleUnit* target,
+				Position* dest);
 		/// Gets the AI to look through a window.
 		int faceWindow(const Position& position);
 		/// Checks a unit's % exposure on a tile.

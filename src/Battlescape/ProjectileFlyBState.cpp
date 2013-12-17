@@ -297,7 +297,8 @@ void ProjectileFlyBState::init()
 													_action.actor->getPosition(),
 													_action.actor->getDirection(),
 													_action.actor,
-													0))
+													0,
+													&_action.target))
 			{
 				Log(LOG_INFO) << ". . . out of hit range, EXIT";
 
