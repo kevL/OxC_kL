@@ -146,6 +146,7 @@ void UnitWalkBState::think()
 
 	_newVis = false;			// kL, for xCom units
 	_newUnitSpotted = false;	// for aLien units
+
 	_onScreen = _unit->getVisible()
 							&& (_parent->getMap()->getCamera()->isOnScreen(_unit->getPosition())
 								|| _parent->getMap()->getCamera()->isOnScreen(_unit->getDestination()));
@@ -726,6 +727,7 @@ bool UnitWalkBState::doStatusStand()
 							_unit,
 							0,
 							false);
+		Log(LOG_INFO) << ". tu = " << tu;
 
 		// kL_note: should this include neutrals? (ie != FACTION_PLAYER; see also 32tu inflation...)
 		if (_unit->getFaction() == FACTION_HOSTILE

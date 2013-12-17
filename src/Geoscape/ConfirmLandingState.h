@@ -60,7 +60,12 @@ private:
 
 	public:
 		/// Creates the Confirm Landing state.
-		ConfirmLandingState(Game* game, Craft* craft, int texture, int shade, GeoscapeState* state);
+		ConfirmLandingState(
+				Game* game,
+				Craft* craft,
+				int texture,
+				int shade,
+				GeoscapeState* state);
 		/// Cleans up the Confirm Landing state.
 		~ConfirmLandingState();
 

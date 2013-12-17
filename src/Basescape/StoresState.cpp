@@ -63,7 +63,7 @@ StoresState::StoresState(
 	_txtQuantity	= new Text(84, 9, 178, 25);
 	_txtSpaceUsed	= new Text(26, 9, 262, 25);
 
-	_lstStores		= new TextList(278, 136, 24, 36);
+	_lstStores		= new TextList(286, 136, 16, 36);
 
 	_btnOk			= new TextButton(288, 16, 16, 177);
 
@@ -108,7 +108,7 @@ StoresState::StoresState(
 	_txtSpaceUsed->setText(tr("STR_VOLUME"));		// kL
 
 	_lstStores->setColor(Palette::blockOffset(13)+10);
-	_lstStores->setColumns(3, 146, 84, 26);
+	_lstStores->setColumns(3, 154, 84, 26);
 	_lstStores->setSelectable(true);
 	_lstStores->setBackground(_window);
 	_lstStores->setMargin(8);

@@ -633,7 +633,7 @@ void BattleUnit::keepWalking(Tile* tileBelow, bool cache)
 	if (!cache) // ie. if not onScreen
 	{
 //		_pos = _destination; // kL_note: I think this is causing the 'double-step'
-//		middle	= 1;	// kL
+		middle	= 1;	// kL: Mc'd units offscreen won't move without this (tho they turn, as if to start walking)
 		end		= 2;
 	}
 

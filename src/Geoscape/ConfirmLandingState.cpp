@@ -18,30 +18,38 @@
  */
 
 #include "ConfirmLandingState.h"
+
 #include <sstream>
-#include "../Engine/RNG.h"
+
+#include "../Battlescape/BattlescapeGenerator.h"
+#include "../Battlescape/BriefingState.h"
+
+#include "../Engine/Exception.h"
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
+#include "../Engine/Options.h"
 #include "../Engine/Palette.h"
+#include "../Engine/RNG.h"
 #include "../Engine/Surface.h"
-#include "../Interface/Window.h"
+
+#include "../Geoscape/GeoscapeState.h"
+
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
+#include "../Interface/Window.h"
+
+#include "../Resource/ResourcePack.h"
+
+#include "../Ruleset/Ruleset.h"
+
+#include "../Savegame/AlienBase.h"
+#include "../Savegame/Base.h"
+#include "../Savegame/Craft.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/SavedGame.h"
-#include "../Savegame/Craft.h"
 #include "../Savegame/Target.h"
-#include "../Savegame/Ufo.h"
-#include "../Savegame/Base.h"
-#include "../Ruleset/Ruleset.h"
 #include "../Savegame/TerrorSite.h"
-#include "../Savegame/AlienBase.h"
-#include "../Battlescape/BriefingState.h"
-#include "../Battlescape/BattlescapeGenerator.h"
-#include "../Geoscape/GeoscapeState.h"
-#include "../Engine/Exception.h"
-#include "../Engine/Options.h"
+#include "../Savegame/Ufo.h"
 
 
 namespace OpenXcom
@@ -55,7 +63,12 @@ namespace OpenXcom
  * @param shade Shade of the landing site.
  * @param state Pointer to Geoscape.
  */
-ConfirmLandingState::ConfirmLandingState(Game* game, Craft* craft, int texture, int shade, GeoscapeState* state)
+ConfirmLandingState::ConfirmLandingState(
+		Game* game,
+		Craft* craft,
+		int texture,
+		int shade,
+		GeoscapeState* state)
 	:
 		State(game),
 		_craft(craft),
@@ -64,6 +77,7 @@ ConfirmLandingState::ConfirmLandingState(Game* game, Craft* craft, int texture, 
 		_state(state)
 {
 	_screen = false;
+
 	_window		= new Window(this, 216, 160, 20, 20, POPUP_BOTH);
 
 	_txtMessage = new Text(206, 82, 25, 38);
@@ -74,7 +88,10 @@ ConfirmLandingState::ConfirmLandingState(Game* game, Craft* craft, int texture, 
 	_btnYes		= new TextButton(80, 18, 136, 151);
 
 
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(3)), Palette::backPos, 16);
+	_game->setPalette(
+					_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(3)),
+					Palette::backPos,
+					16);
 
 	add(_window);
 	add(_txtMessage);
@@ -127,7 +144,9 @@ void ConfirmLandingState::init()
 {
 	Base* b = dynamic_cast<Base*>(_craft->getDestination());
 	if (b == _craft->getBase())
+	{
 		_game->popState();
+	}
 }
 
 /**

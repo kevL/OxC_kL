@@ -264,7 +264,7 @@ DebriefingState::DebriefingState(Game* game)
 	{
 		rating = tr("STR_RATING_POOR");
 	}
-	else if (total <= 300)
+	else if (total <= 300) // try 250, even 200 (or 225)
 	{
 		rating = tr("STR_RATING_OK");
 	}

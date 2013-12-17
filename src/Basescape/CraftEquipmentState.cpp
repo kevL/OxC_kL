@@ -802,8 +802,8 @@ void CraftEquipmentState::btnInventoryClick(Action*)
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_4")->getColors());
 
 
-//	delete _game->getSavedGame()->getSavedBattle(); // kL
-	_game->getSavedGame()->setBattleGame(0);		// kL
+	delete _game->getSavedGame()->getSavedBattle(); // kL
+//	_game->getSavedGame()->setBattleGame(0);		// kL, didn't work
 		// kL_note: EquipCraft->Inventory for soldiers refuses to create after a mission.
 		// Try fix
 
