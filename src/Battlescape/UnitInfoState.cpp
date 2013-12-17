@@ -18,25 +18,32 @@
  */
 
 #include "UnitInfoState.h"
+
 #include <sstream>
-#include "../Savegame/BattleUnit.h"
-#include "../Savegame/SavedGame.h"
-#include "../Savegame/SavedBattleGame.h"
-#include "../Engine/Game.h"
-#include "../Engine/Action.h"
-#include "../Resource/ResourcePack.h"
-#include "../Engine/Language.h"
-#include "../Engine/Palette.h"
-#include "../Interface/Bar.h"
-#include "../Interface/Text.h"
-#include "../Engine/Surface.h"
-#include "../Savegame/Base.h"
-#include "../Ruleset/Ruleset.h"
-#include "../Ruleset/Armor.h"
-#include "../Ruleset/Unit.h"
-#include "../Engine/Options.h"
+
 #include "BattlescapeGame.h"
 #include "BattlescapeState.h"
+
+#include "../Engine/Action.h"
+#include "../Engine/Game.h"
+#include "../Engine/Language.h"
+#include "../Engine/Options.h"
+#include "../Engine/Palette.h"
+#include "../Engine/Surface.h"
+
+#include "../Interface/Bar.h"
+#include "../Interface/Text.h"
+
+#include "../Resource/ResourcePack.h"
+
+#include "../Ruleset/Armor.h"
+#include "../Ruleset/Ruleset.h"
+#include "../Ruleset/Unit.h"
+
+#include "../Savegame/Base.h"
+#include "../Savegame/BattleUnit.h"
+#include "../Savegame/SavedBattleGame.h"
+#include "../Savegame/SavedGame.h"
 
 
 namespace OpenXcom
@@ -44,11 +51,14 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Unit Info screen.
- * @param game Pointer to the core game.
- * @param unit Pointer to the selected unit.
- * @param parent Pointer to parent Battlescape.
+ * @param game, Pointer to the core game.
+ * @param unit, Pointer to the selected unit.
+ * @param parent, Pointer to parent Battlescape.
  */
-UnitInfoState::UnitInfoState(Game* game, BattleUnit* unit, BattlescapeState* parent)
+UnitInfoState::UnitInfoState(
+		Game* game,
+		BattleUnit* unit,
+		BattlescapeState* parent)
 	:
 		State(game),
 		_unit(unit),
@@ -387,8 +397,7 @@ UnitInfoState::~UnitInfoState()
 }
 
 /**
- * Updates unit info which can change
- * after going into other screens.
+ * Updates unit info which can change after going into other screens.
  */
 void UnitInfoState::init()
 {
@@ -462,7 +471,9 @@ void UnitInfoState::init()
 	_barStrength->setMax(_unit->getStats()->strength);
 	_barStrength->setValue(_unit->getStats()->strength);
 
-	if (_unit->getStats()->psiSkill > 0 || (Options::getBool("psiStrengthEval") && _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements())))
+	if (_unit->getStats()->psiSkill > 0
+		|| (Options::getBool("psiStrengthEval")
+			&& _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements())))
 	{
 		ss.str(L"");
 		ss << _unit->getStats()->psiStrength;

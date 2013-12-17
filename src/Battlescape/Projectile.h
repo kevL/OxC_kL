@@ -62,7 +62,7 @@ private:
 			double accuracy,
 			bool keepRange = false,
 			Tile* targetTile = 0,
-			bool extendLine = false);
+			bool extendLine = true);
 
 
 	public:

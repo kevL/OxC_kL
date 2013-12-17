@@ -92,7 +92,7 @@ SavedBattleGame::SavedBattleGame()
 		_tuReserved(BA_NONE),
 		_kneelReserved(false)
 {
-	//Log(LOG_INFO) << "Create SavedBattleGame";
+	Log(LOG_INFO) << "\nCreate SavedBattleGame";
 
 	_dragButton			= Options::getInt("battleScrollDragButton");
 	_dragInvert			= Options::getBool("battleScrollDragInvert");

@@ -2456,10 +2456,10 @@ RuleTerrain* BattlescapeGenerator::getTerrain(int tex, double lat)
 
 /**
 * Creates a mini-battle-save for managing inventory from the Geoscape.
-* Kids, don't try this at home!
-* @param craft, Pointer to craft to manage.
+* Kids, don't try this at home! yer tellin' me.
+* @param craft, Pointer to craft to handle.
 */
-void BattlescapeGenerator::runInventory(Craft *craft)
+void BattlescapeGenerator::runInventory(Craft* craft)
 {
 	// we need to fake a map for soldier placement
 	int soldiers = craft->getNumSoldiers();

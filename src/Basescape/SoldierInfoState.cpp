@@ -59,7 +59,10 @@ namespace OpenXcom
  * @param base Pointer to the base to get info from.
  * @param soldier ID of the selected soldier.
  */
-SoldierInfoState::SoldierInfoState(Game* game, Base* base, size_t soldier)
+SoldierInfoState::SoldierInfoState(
+		Game* game,
+		Base* base,
+		size_t soldier)
 	:
 		State(game),
 		_base(base),

@@ -34,6 +34,7 @@
 #include "../Engine/Game.h"
 #include "../Engine/InteractiveSurface.h"
 #include "../Engine/Language.h"
+#include "../Engine/Options.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Surface.h"
 #include "../Engine/SurfaceSet.h"
@@ -50,9 +51,8 @@
 #include "../Savegame/Soldier.h"
 
 #include "../Ruleset/Armor.h"
-#include "../Engine/Options.h"
-#include "../Ruleset/RuleItem.h"
 #include "../Ruleset/RuleInventory.h"
+#include "../Ruleset/RuleItem.h"
 #include "../Ruleset/Ruleset.h"
 
 
@@ -65,13 +65,20 @@ namespace OpenXcom
  * @param tu Does Inventory use up Time Units?
  * @param parent Pointer to parent Battlescape.
  */
-InventoryState::InventoryState(Game* game, bool tu, BattlescapeState* parent)
+InventoryState::InventoryState(
+		Game* game,
+		bool tu,
+		BattlescapeState* parent)
 	:
 		State(game),
 		_tu(tu),
 		_parent(parent)
 {
+	Log(LOG_INFO) << "\nCreate InventoryState";
+
 	_battleGame = _game->getSavedGame()->getSavedBattle();
+	Log(LOG_INFO) << ". _battleGame = " << _battleGame;
+
 	_showMoreStatsInInventoryView = Options::getBool("showMoreStatsInInventoryView");
 
 	// remove any path preview if in the middle of a battlegame
@@ -195,6 +202,8 @@ InventoryState::InventoryState(Game* game, bool tu, BattlescapeState* parent)
 	_txtReact->setVisible(_showMoreStatsInInventoryView && !_tu);
 	_txtPSkill->setVisible(_showMoreStatsInInventoryView && !_tu);
 	_txtPStr->setVisible(_showMoreStatsInInventoryView && !_tu);
+
+	Log(LOG_INFO) << "Create InventoryState EXIT";
 }
 
 /**
@@ -318,7 +327,9 @@ void InventoryState::updateStats()
 		_txtWeight->setSecondaryColor(Palette::blockOffset(3));
 	}
 	
-	_txtFAcc->setText(tr("STR_FACCURACY").arg((int)(unit->getStats()->firing * unit->getAccuracyModifier())));
+	_txtFAcc->setText(tr("STR_FACCURACY")
+									.arg(static_cast<int>(
+												static_cast<double>(unit->getStats()->firing) * unit->getAccuracyModifier())));
 
 	_txtReact->setText(tr("STR_REACT").arg(unit->getStats()->reactions));
 
@@ -348,37 +359,50 @@ void InventoryState::updateStats()
  */
 void InventoryState::saveEquipmentLayout()
 {
-	for (std::vector<BattleUnit*>::iterator i = _battleGame->getUnits()->begin(); i != _battleGame->getUnits()->end(); ++i)
+	for (std::vector<BattleUnit*>::iterator
+			i = _battleGame->getUnits()->begin();
+			i != _battleGame->getUnits()->end();
+			++i)
 	{
-		if (0 == (*i)->getGeoscapeSoldier()) continue; // we need X-Com soldiers only
+		if ((*i)->getGeoscapeSoldier() == 0) continue; // we need X-Com soldiers only
+
 
 		std::vector<EquipmentLayoutItem*>* layoutItems = (*i)->getGeoscapeSoldier()->getEquipmentLayout();
-
 		if (!layoutItems->empty()) // clear the previous save
 		{
-			for (std::vector<EquipmentLayoutItem*>::iterator j = layoutItems->begin(); j != layoutItems->end(); ++j)
+			for (std::vector<EquipmentLayoutItem*>::iterator
+					j = layoutItems->begin();
+					j != layoutItems->end();
+					++j)
 				delete *j;
 
 			layoutItems->clear();
 		}
 
 		// save the soldier's items
-		// note: with using getInventory() we are skipping the ammos loaded, (they're not owned) because we handle the loaded-ammos separately (inside)
-		for (std::vector<BattleItem*>::iterator j = (*i)->getInventory()->begin(); j != (*i)->getInventory()->end(); ++j)
+		// note: with using getInventory() we are skipping the ammos loaded,
+		// (they're not owned) because we handle the loaded-ammos separately (inside)
+		for (std::vector<BattleItem*>::iterator
+				j = (*i)->getInventory()->begin();
+				j != (*i)->getInventory()->end();
+				++j)
 		{
 			std::string ammo;
-			if ((*j)->needsAmmo() && 0 != (*j)->getAmmoItem())
+			if ((*j)->needsAmmo()
+				&& (*j)->getAmmoItem() != 0)
+			{
 				ammo = (*j)->getAmmoItem()->getRules()->getType();
+			}
 			else
 				ammo = "NONE";
 
 			layoutItems->push_back(new EquipmentLayoutItem(
-					(*j)->getRules()->getType(),
-					(*j)->getSlot()->getId(),
-					(*j)->getSlotX(),
-					(*j)->getSlotY(),
-					ammo,
-					(*j)->getExplodeTurn()));
+														(*j)->getRules()->getType(),
+														(*j)->getSlot()->getId(),
+														(*j)->getSlotX(),
+														(*j)->getSlotY(),
+														ammo,
+														(*j)->getExplodeTurn()));
 		}
 	}
 }
@@ -505,12 +529,22 @@ void InventoryState::btnGroundClick(Action*)
  */
 void InventoryState::btnRankClick(Action*)
 {
-	_game->pushState(new UnitInfoState(_game, _battleGame->getSelectedUnit(), _parent));
+	if (_parent) // kL
+		_game->pushState(new UnitInfoState(
+										_game,
+										_battleGame->getSelectedUnit(),
+										_parent));
+
+
+//	else // kL: This bit is for future attempt to get RankClick action via CraftEquipSoldierInventory.
+//	{
+//		_game->pushState(new SoldierInfoState(_game, _base, _lstSoldiers->getSelectedRow()));
+//	}
 }
 
 /**
  * Updates item info.
- * @param action Pointer to an action.
+ * @param action, Pointer to an action.
  */
 void InventoryState::invClick(Action*)
 {
@@ -518,6 +552,7 @@ void InventoryState::invClick(Action*)
 
 	_txtItem->setText(L"");
 	_txtAmmo->setText(L"");
+
 	_selAmmo->clear();
 
 	if (item != 0)
@@ -539,11 +574,13 @@ void InventoryState::invClick(Action*)
 			}
 		}
 
-		std::wstring s;
+
+		std::wstring sAmmo;
+
 		if (item->getAmmoItem() != 0
 			&& item->needsAmmo())
 		{
-			s = tr("STR_AMMO_ROUNDS_LEFT").arg(item->getAmmoItem()->getAmmoQuantity());
+			sAmmo = tr("STR_AMMO_ROUNDS_LEFT").arg(item->getAmmoItem()->getAmmoQuantity());
 
 			SDL_Rect r;
 			r.x = 0;
@@ -560,15 +597,17 @@ void InventoryState::invClick(Action*)
 
 			_selAmmo->drawRect(&r, 0);
 
-			item->getAmmoItem()->getRules()->drawHandSprite(_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"), _selAmmo);
+			item->getAmmoItem()->getRules()->drawHandSprite(
+														_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"),
+														_selAmmo);
 		}
 		else if (item->getAmmoQuantity() != 0
 			&& item->needsAmmo())
 		{
-			s = tr("STR_AMMO_ROUNDS_LEFT").arg(item->getAmmoQuantity());
+			sAmmo = tr("STR_AMMO_ROUNDS_LEFT").arg(item->getAmmoQuantity());
 		}
 
-		_txtAmmo->setText(s);
+		_txtAmmo->setText(sAmmo);
 	}
 
 	updateStats();
@@ -576,7 +615,7 @@ void InventoryState::invClick(Action*)
 
 /**
  * Takes care of any events from the core game engine.
- * @param action Pointer to an action.
+ * @param action, Pointer to an action.
  */
 void InventoryState::handle(Action* action)
 {

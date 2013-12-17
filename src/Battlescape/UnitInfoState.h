@@ -26,43 +26,98 @@
 namespace OpenXcom
 {
 
-class BattleUnit;
-class Text;
 class Bar;
-class Surface;
 class BattlescapeState;
+class BattleUnit;
+class Surface;
+class Text;
+
 
 /**
- * Unit Info screen that shows all the
- * info of a specific unit.
+ * Unit Info screen that shows all the info of a specific unit.
  */
 class UnitInfoState
 	:
 		public State
 {
+
 private:
-	BattleUnit* _unit;
+	Bar
+		* _barTimeUnits,
+		* _barEnergy,
+		* _barHealth,
+		* _barFatalWounds,
+		* _barBravery,
+		* _barMorale,
+		* _barReactions,
+		* _barFiring,
+		* _barThrowing,
+		* _barStrength,
+		* _barPsiStrength,
+		* _barPsiSkill,
+
+		* _barFrontArmor,
+		* _barLeftArmor,
+		* _barRightArmor,
+		* _barRearArmor,
+		* _barUnderArmor;
 	BattlescapeState* _parent;
-
+	BattleUnit* _unit;
 	Surface* _bg;
-	Text* _txtName;
+	Text
+		* _txtName,
 
-	Text* _txtTimeUnits, * _txtEnergy, * _txtHealth, * _txtFatalWounds, * _txtBravery, * _txtMorale, * _txtReactions, * _txtFiring, * _txtThrowing, * _txtStrength, * _txtPsiStrength, * _txtPsiSkill;
-	Text* _numTimeUnits, * _numEnergy, * _numHealth, * _numFatalWounds, * _numBravery, * _numMorale, * _numReactions, * _numFiring, * _numThrowing, * _numStrength, * _numPsiStrength, * _numPsiSkill;
-	Bar* _barTimeUnits, * _barEnergy, * _barHealth, * _barFatalWounds, * _barBravery, * _barMorale, * _barReactions, * _barFiring, * _barThrowing, * _barStrength, * _barPsiStrength, * _barPsiSkill;
+		* _txtTimeUnits,
+		* _txtEnergy,
+		* _txtHealth,
+		* _txtFatalWounds,
+		* _txtBravery,
+		* _txtMorale,
+		* _txtReactions,
+		* _txtFiring,
+		* _txtThrowing,
+		* _txtStrength,
+		* _txtPsiStrength,
+		* _txtPsiSkill,
 
-	Text* _txtFrontArmor, * _txtLeftArmor, * _txtRightArmor, * _txtRearArmor, * _txtUnderArmor;
-	Text* _numFrontArmor, * _numLeftArmor, * _numRightArmor, * _numRearArmor, * _numUnderArmor;
-	Bar* _barFrontArmor, * _barLeftArmor, * _barRightArmor, * _barRearArmor, * _barUnderArmor;
+		* _numTimeUnits,
+		* _numEnergy,
+		* _numHealth,
+		* _numFatalWounds,
+		* _numBravery,
+		* _numMorale,
+		* _numReactions,
+		* _numFiring,
+		* _numThrowing,
+		* _numStrength,
+		* _numPsiStrength,
+		* _numPsiSkill,
+
+		* _txtFrontArmor,
+		* _txtLeftArmor,
+		* _txtRightArmor,
+		* _txtRearArmor,
+		* _txtUnderArmor,
+
+		* _numFrontArmor,
+		* _numLeftArmor,
+		* _numRightArmor,
+		* _numRearArmor,
+		* _numUnderArmor;
+
 
 	public:
 		/// Creates the Unit Info state.
-		UnitInfoState(Game* game, BattleUnit* unit, BattlescapeState* parent);
+		UnitInfoState(
+				Game* game,
+				BattleUnit* unit,
+				BattlescapeState* parent);
 		/// Cleans up the Unit Info state.
 		~UnitInfoState();
 
 		/// Updates the unit info.
 		void init();
+
 		/// Handler for clicking the button.
 		void handle(Action* action);
 		/// Handler for clicking the Previous button.

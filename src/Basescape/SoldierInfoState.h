@@ -26,12 +26,13 @@
 namespace OpenXcom
 {
 
+class Bar;
 class Base;
 class Surface;
-class TextButton;
 class Text;
+class TextButton;
 class TextEdit;
-class Bar;
+
 
 /**
  * Soldier Info screen that shows all the
@@ -42,21 +43,68 @@ class SoldierInfoState
 		public State
 {
 private:
-	Base* _base;
 	size_t _soldier;
 
-	Surface* _bg, * _rank;
-	TextButton* _btnOk, * _btnPrev, * _btnNext, * _btnArmor, * _btnSack;
-	Text* _txtArmor, * _txtRank, * _txtMissions, * _txtKills, * _txtCraft, * _txtRecovery, * _txtPsionic;
+	Bar
+		* _barTimeUnits,
+		* _barStamina,
+		* _barHealth,
+		* _barBravery,
+		* _barReactions,
+		* _barFiring,
+		* _barThrowing,
+		* _barStrength,
+		* _barPsiStrength,
+		* _barPsiSkill;
+	Base* _base;
+	Surface
+		* _bg,
+		* _rank;
+	Text
+		* _txtArmor,
+		* _txtCraft,
+		* _txtKills,
+		* _txtMissions,
+		* _txtPsionic,
+		* _txtRank,
+		* _txtRecovery,
+
+		* _txtTimeUnits,
+		* _txtStamina,
+		* _txtHealth,
+		* _txtBravery,
+		* _txtReactions,
+		* _txtFiring,
+		* _txtThrowing,
+		* _txtStrength,
+		* _txtPsiStrength,
+		* _txtPsiSkill,
+
+		* _numTimeUnits,
+		* _numStamina,
+		* _numHealth,
+		* _numBravery,
+		* _numReactions,
+		* _numFiring,
+		* _numThrowing,
+		* _numStrength,
+		* _numPsiStrength,
+		* _numPsiSkill;
+	TextButton
+		* _btnArmor,
+		* _btnNext,
+		* _btnOk,
+		* _btnPrev,
+		* _btnSack;
 	TextEdit* _edtSoldier;
 
-	Text* _txtTimeUnits, * _txtStamina, * _txtHealth, * _txtBravery, * _txtReactions, * _txtFiring, * _txtThrowing, * _txtStrength, * _txtPsiStrength, * _txtPsiSkill;
-	Text* _numTimeUnits, * _numStamina, * _numHealth, * _numBravery, * _numReactions, * _numFiring, * _numThrowing, * _numStrength, * _numPsiStrength, * _numPsiSkill;
-	Bar* _barTimeUnits, * _barStamina, * _barHealth, * _barBravery, * _barReactions, * _barFiring, * _barThrowing, * _barStrength, * _barPsiStrength, * _barPsiSkill;
 
 	public:
 		/// Creates the Soldier Info state.
-		SoldierInfoState(Game* game, Base* base, size_t soldier);
+		SoldierInfoState(
+				Game* game,
+				Base* base,
+				size_t soldier);
 		/// Cleans up the Soldier Info state.
 		~SoldierInfoState();
 
