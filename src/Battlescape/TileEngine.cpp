@@ -3475,7 +3475,7 @@ int TileEngine::voxelCheck(
 
 	Tile* tTarget = _save->getTile(pTarget_voxel / Position(16, 16, 24)); // converts to tilespace -> Tile
 	//Log(LOG_INFO) << ". tTarget kL = " << tTarget->getPosition();
-	Tile* tTarget_below = _save->getTile(tile->getPosition() + Position(0, 0, -1));
+	Tile* tTarget_below = _save->getTile(tTarget->getPosition() + Position(0, 0, -1));
 
 	// check if we are out of the map
 	if (tTarget == 0
