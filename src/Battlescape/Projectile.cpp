@@ -429,11 +429,14 @@ Wb.131129
 
 	_trajectory.clear();
 
+	bool extendLine = true;
 	// even guided missiles drift, but how much is based on
 	// the shooter's faction, rather than accuracy.
 	// Wb.131216
 /*kL	if (_action.type == BA_LAUNCH)
 	{
+		extendLine = false;
+
 		if (_action.actor->getFaction() == FACTION_PLAYER)
 		{
 			accuracy = 0.60;
@@ -451,7 +454,8 @@ Wb.131129
 					&targetVoxel,
 					accuracy,
 					false,
-					targetTile);
+					targetTile,
+					extendLine);
 
 	//Log(LOG_INFO) << ". LoF calculated, Acu applied (if not BL)";
 	// finally do a line calculation and store this trajectory.
@@ -714,7 +718,7 @@ int Projectile::calculateThrow(double accuracy)
 		{
 			Position deltas = targetVoxel;
 			// apply some accuracy modifiers
-			applyAccuracy(originVoxel, &deltas, accuracy, true, _save->getTile(_action.target), true); //calling for best flavor
+			applyAccuracy(originVoxel, &deltas, accuracy, true, _save->getTile(_action.target), false); //calling for best flavor
 			deltas -= targetVoxel;
 			_trajectory.clear();
 			test = _save->getTileEngine()->calculateParabola(originVoxel, targetVoxel, true, &_trajectory, _action.actor, curvature, deltas);
@@ -746,7 +750,7 @@ int Projectile::calculateThrow(double accuracy)
  * @param accuracy, Accuracy modifier.
  * @param keepRange, Whether range affects accuracy. Default = false.
  * @param targetTile, Tile of target. Default = 0.
- * @param throwing, Whether or not projectile is being thrown. Default = false.
+ * @param extendLine, should this line get extended to maximum distance. Default = false.
  */
 void Projectile::applyAccuracy(
 		const Position& origin,
@@ -754,7 +758,7 @@ void Projectile::applyAccuracy(
 		double accuracy,
 		bool keepRange,
 		Tile* targetTile,
-		bool throwing)
+		bool extendLine)
 {
 	Log(LOG_INFO) << "Projectile::applyAccuracy()";
 
@@ -854,7 +858,7 @@ void Projectile::applyAccuracy(
 		double fi = atan2(static_cast<double>(target->z - origin.z), realDistance) + dV;
 		double cos_fi = cos(fi);
 
-		if (!throwing)
+		if (extendLine)
 		{
 			// It is a simple task - to hit a target width of 5-7 voxels. Good luck!
 			target->x = static_cast<int>(static_cast<double>(origin.x) + maxRange * cos(te) * cos_fi);
@@ -895,7 +899,7 @@ void Projectile::applyAccuracy(
 	target->y += RNG::generate(0, deviation) - deviation / 2;
 	target->z += RNG::generate(0, deviation / 2) / 2 - deviation / 8;
 	
-	if (!throwing)
+	if (extendLine)
 	{
 		double rotation, tilt;
 		rotation = atan2(double(target->y - origin.y), double(target->x - origin.x)) * 180.0 / M_PI;
