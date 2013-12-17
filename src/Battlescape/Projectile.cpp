@@ -435,7 +435,7 @@ Wb.131129
 	// Wb.131216
 /*kL	if (_action.type == BA_LAUNCH)
 	{
-		extendLine = false;
+		extendLine = _action.waypoints.size() < 2;
 
 		if (_action.actor->getFaction() == FACTION_PLAYER)
 		{

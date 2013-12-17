@@ -3470,13 +3470,8 @@ int TileEngine::voxelCheck(
 	if (hit) return VOXEL_UNIT;		// kL; i think Wb may have this covered now.
 
 
-//	Tile* tileTest_old = _save->getTile(Position(pTarget_voxel.x / 16, pTarget_voxel.y / 16, pTarget_voxel.z / 24));
-	//Log(LOG_INFO) << ". tileTest_old = " << tileTest_old->getPosition();
-
 	Tile* tTarget = _save->getTile(pTarget_voxel / Position(16, 16, 24)); // converts to tilespace -> Tile
-	//Log(LOG_INFO) << ". tTarget kL = " << tTarget->getPosition();
-	Tile* tTarget_below = _save->getTile(tTarget->getPosition() + Position(0, 0, -1));
-
+	//Log(LOG_INFO) << ". tTarget " << tTarget->getPosition();
 	// check if we are out of the map
 	if (tTarget == 0
 		|| pTarget_voxel.x < 0
@@ -3487,8 +3482,9 @@ int TileEngine::voxelCheck(
 		return VOXEL_OUTOFBOUNDS;
 	}
 
+	Tile* tTarget_below = _save->getTile(tTarget->getPosition() + Position(0, 0, -1));
 	if (tTarget->isVoid()
-		&& tTarget->getUnit() == 0 // <- check tileBelow ? It's done below, but this seems premature!!! haha, Wb caught it:
+		&& tTarget->getUnit() == 0
 		&& (!tTarget_below
 			|| tTarget_below->getUnit() == 0))
 	{
