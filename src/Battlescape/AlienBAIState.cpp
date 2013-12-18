@@ -1938,11 +1938,11 @@ void AlienBAIState::wayPointAction()
 			Position voxelPosA(
 					(CurrentPosition.x * 16) + 8,
 					(CurrentPosition.y * 16) + 8,
-					(CurrentPosition.z * 24) + 12);
+					(CurrentPosition.z * 24) + 16); // Wb. has +16
 			Position voxelPosb(
 					(LastWayPoint.x * 16) + 8,
 					(LastWayPoint.y * 16) + 8,
-					(LastWayPoint.z * 24) + 12);
+					(LastWayPoint.z * 24) + 16); // Wb. has +16
 
 			CollidesWith = _save->getTileEngine()->calculateLine(
 															voxelPosA,

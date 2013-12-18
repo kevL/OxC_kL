@@ -4205,7 +4205,7 @@ Position TileEngine::getOriginVoxel(BattleAction& action, Tile* tile)
 		// projectile is not launched from a soldier (ie. from a waypoint)
 		originVoxel.x += 8;
 		originVoxel.y += 8;
-		originVoxel.z += 12;
+		originVoxel.z += 16;
 	}
 
 	return originVoxel;

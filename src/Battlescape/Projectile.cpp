@@ -115,8 +115,7 @@ int Projectile::calculateTrajectory(double accuracy)
 	Position originVoxel, targetVoxel;
 	Tile* targetTile = 0;
 	BattleUnit* bu = _action.actor;
-
-	originVoxel = _save->getTileEngine()->getOriginVoxel(_action, _save->getTile(_origin)); // Wb.131129
+	originVoxel = _save->getTileEngine()->getOriginVoxel(_action, _save->getTile(_origin));
 
 
 	//int dirYshift[24] = {1, 3, 9, 15, 15, 13, 7, 1,  1, 1, 7, 13, 15, 15, 9, 3,  1, 2, 8, 14, 15, 14, 8, 2};
@@ -192,6 +191,22 @@ Wb.131129
 				_action.target.z * 24 + 12);	// Wb. changed this to +16
 												// prob. to give it a flat trajectory from firing pt.
 												// i Like it aimed slightly down perhaps...
+												// Wb. changed it back to +12......
+												// does he play this game or just like to 'type'
+
+		if (_action.type == BA_LAUNCH)
+		{
+			if (_action.target != _origin)
+			{
+				// launched missiles go slightly higher than the middle.
+				targetVoxel.z = 16;
+			}
+			else
+			{
+				// unless two waypoints are placed on the same tile, in which case target the floor.
+//kL				targetVoxel.z = 2;
+				targetVoxel.z = 1;
+			}
 	}
 	else // non-waypointed attack follows
 	{
