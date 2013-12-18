@@ -26,11 +26,12 @@
 namespace OpenXcom
 {
 
-class TextButton;
-class Window;
-class Text;
-class TextList;
 class Base;
+class Text;
+class TextButton;
+class TextList;
+class Window;
+
 
 /**
  * Select Armor screen that lets the player
@@ -40,19 +41,27 @@ class CraftArmorState
 	:
 		public State
 {
+
 private:
-	TextButton* _btnOk;
-	Window* _window;
-	Text* _txtTitle, * _txtName, * _txtCraft, * _txtArmor;
-	TextList* _lstSoldiers;
+	size_t _craft;
 
 	Base* _base;
-	size_t _craft;
+	TextButton* _btnOk;
+	Text
+		* _txtArmor,
+		* _txtCraft,
+		* _txtName,
+		* _txtTitle;
+	TextList* _lstSoldiers;
+	Window* _window;
 
 
 	public:
 		/// Creates the Craft Armor state.
-		CraftArmorState(Game* game, Base* base, size_t craft);
+		CraftArmorState(
+				Game* game,
+				Base* base,
+				size_t craft);
 		/// Cleans up the Craft Armor state.
 		~CraftArmorState();
 

@@ -18,15 +18,18 @@
  */
 
 #include "Soldier.h"
-#include "../Engine/RNG.h"
+
 #include "../Engine/Language.h"
+#include "../Engine/RNG.h"
+
+#include "../Ruleset/Armor.h"
+#include "../Ruleset/Ruleset.h"
+#include "../Ruleset/RuleSoldier.h"
+#include "../Ruleset/SoldierNamePool.h"
+
 #include "../Savegame/Craft.h"
 #include "../Savegame/EquipmentLayoutItem.h"
 #include "../Savegame/SoldierDeath.h"
-#include "../Ruleset/SoldierNamePool.h"
-#include "../Ruleset/RuleSoldier.h"
-#include "../Ruleset/Armor.h"
-#include "../Ruleset/Ruleset.h"
 
 
 namespace OpenXcom
@@ -39,7 +42,11 @@ namespace OpenXcom
  * @param names, List of name pools for soldier generation.
  * @param id, Pointer to unique soldier id for soldier generation.
  */
-Soldier::Soldier(RuleSoldier* rules, Armor* armor, const std::vector<SoldierNamePool*>* names, int id)
+Soldier::Soldier(
+		RuleSoldier* rules,
+		Armor* armor,
+		const std::vector<SoldierNamePool*>* names,
+		int id)
 	:
 		_name(L""),
 		_id(0),
@@ -108,7 +115,10 @@ Soldier::Soldier(RuleSoldier* rules, Armor* armor, const std::vector<SoldierName
  */
 Soldier::~Soldier()
 {
-	for (std::vector<EquipmentLayoutItem*>::iterator i = _equipmentLayout.begin(); i != _equipmentLayout.end(); ++i)
+	for (std::vector<EquipmentLayoutItem*>::iterator
+			i = _equipmentLayout.begin();
+			i != _equipmentLayout.end();
+			++i)
 	{
 		delete *i;
 	}
@@ -139,8 +149,13 @@ void Soldier::load(const YAML::Node& node, const Ruleset* rule)
 
 	if (const YAML::Node& layout = node["equipmentLayout"])
 	{
-		for (YAML::const_iterator i = layout.begin(); i != layout.end(); ++i)
+		for (YAML::const_iterator
+				i = layout.begin();
+				i != layout.end();
+				++i)
+		{
 			_equipmentLayout.push_back(new EquipmentLayoutItem(*i));
+		}
 	}
 
 	if (node["death"])
@@ -182,8 +197,13 @@ YAML::Node Soldier::save() const
 
 	if (!_equipmentLayout.empty())
 	{
-		for (std::vector<EquipmentLayoutItem*>::const_iterator i = _equipmentLayout.begin(); i != _equipmentLayout.end(); ++i)
+		for (std::vector<EquipmentLayoutItem*>::const_iterator
+				i = _equipmentLayout.begin();
+				i != _equipmentLayout.end();
+				++i)
+		{
 			node["equipmentLayout"].push_back((*i)->save());
+		}
 	}
 
 	if (_death != 0)
@@ -220,7 +240,7 @@ Craft* Soldier::getCraft() const
 }
 
 /**
- * Assigns the soldier to a new craft.
+ * Assigns the soldier to a craft.
  * @param craft Pointer to craft.
  */
 void Soldier::setCraft(Craft* craft)
@@ -231,27 +251,26 @@ void Soldier::setCraft(Craft* craft)
 /**
  * Returns the soldier's craft string, which is either the
  * soldier's wounded status, the assigned craft name, or none.
- * @param lang Language to get strings from.
- * @return Full name.
+ * @param lang, Language to get strings from.
+ * @return, Full name.
  */
 std::wstring Soldier::getCraftString(Language* lang) const
 {
-	std::wstring s;
-
+	std::wstring sCraft;
 	if (_recovery > 0)
 	{
-		s = lang->getString("STR_WOUNDED");
+		sCraft = lang->getString("STR_WOUNDED");
 	}
 	else if (_craft == 0)
 	{
-		s = lang->getString("STR_NONE_UC");
+		sCraft = lang->getString("STR_NONE_UC");
 	}
 	else
 	{
-		s = _craft->getName(lang);
+		sCraft = _craft->getName(lang);
 	}
 
-	return s;
+	return sCraft;
 }
 
 /**
@@ -278,8 +297,7 @@ std::string Soldier::getRankString() const
 }
 
 /**
- * Returns a graphic representation of
- * the soldier's military rank.
+ * Returns a graphic representation of the soldier's military rank.
  * @note THE MEANING OF LIFE
  * @return, Sprite ID for rank.
  */
@@ -303,7 +321,7 @@ SoldierRank Soldier::getRank() const
  */
 void Soldier::promoteRank()
 {
-	_rank = (SoldierRank)((int)_rank + 1);
+	_rank = (SoldierRank)(static_cast<int>(_rank) + 1);
 	if (_rank > RANK_SQUADDIE)
 	{
 		// only promotions above SQUADDIE are worth to be mentioned

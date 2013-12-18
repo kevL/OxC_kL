@@ -18,16 +18,21 @@
  */
 
 #include "TransferConfirmState.h"
+
+#include "TransferItemsState.h"
+
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
-#include "../Engine/Palette.h"
 #include "../Engine/Options.h"
+#include "../Engine/Palette.h"
+
+#include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
-#include "../Interface/Text.h"
+
+#include "../Resource/ResourcePack.h"
+
 #include "../Savegame/Base.h"
-#include "TransferItemsState.h"
 
 
 namespace OpenXcom
@@ -39,7 +44,10 @@ namespace OpenXcom
  * @param base Pointer to the destination base.
  * @param state Pointer to the Transfer state.
  */
-TransferConfirmState::TransferConfirmState(Game* game, Base* base, TransferItemsState* state)
+TransferConfirmState::TransferConfirmState(
+		Game* game,
+		Base* base,
+		TransferItemsState* state)
 	:
 		State(game),
 		_base(base),
@@ -47,9 +55,7 @@ TransferConfirmState::TransferConfirmState(Game* game, Base* base, TransferItems
 {
 	_screen = false;
 
-
 	_window		= new Window(this, 320, 80, 0, 60);
-
 	_txtTitle	= new Text(310, 17, 5, 72);
 
 	_txtCost	= new Text(60, 17, 110, 93);
@@ -59,14 +65,17 @@ TransferConfirmState::TransferConfirmState(Game* game, Base* base, TransferItems
 	_btnOk		= new TextButton(134, 16, 170, 115);
 
 
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
+	_game->setPalette(
+				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)),
+				Palette::backPos,
+				16);
 
 	add(_window);
-	add(_btnCancel);
-	add(_btnOk);
 	add(_txtTitle);
 	add(_txtCost);
 	add(_txtTotal);
+	add(_btnCancel);
+	add(_btnOk);
 
 	centerAllSurfaces();
 
@@ -121,9 +130,10 @@ void TransferConfirmState::btnCancelClick(Action*)
 void TransferConfirmState::btnOkClick(Action*)
 {
 	_state->completeTransfer();
-	_game->popState();
-	_game->popState();
-	_game->popState();
+
+	_game->popState(); // pop Confirmation (this)
+//kL	_game->popState(); // pop main Transfer
+//kL	_game->popState(); // pop choose Destination
 }
 
 }

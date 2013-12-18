@@ -18,21 +18,28 @@
  */
 
 #include "TransferBaseState.h"
+
 #include <sstream>
+
+#include "TransferItemsState.h"
+
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
-#include "../Engine/Palette.h"
 #include "../Engine/Options.h"
-#include "../Interface/TextButton.h"
-#include "../Interface/Window.h"
+#include "../Engine/Palette.h"
+
 #include "../Interface/Text.h"
+#include "../Interface/TextButton.h"
 #include "../Interface/TextList.h"
-#include "../Savegame/SavedGame.h"
+#include "../Interface/Window.h"
+
+#include "../Resource/ResourcePack.h"
+
+#include "../Ruleset/RuleRegion.h"
+
 #include "../Savegame/Base.h"
 #include "../Savegame/Region.h"
-#include "../Ruleset/RuleRegion.h"
-#include "TransferItemsState.h"
+#include "../Savegame/SavedGame.h"
 
 
 namespace OpenXcom
@@ -49,14 +56,6 @@ TransferBaseState::TransferBaseState(Game* game, Base* base)
 		_base(base),
 		_bases()
 {
-/*	_window		= new Window(this, 280, 140, 20, 30);
-	_txtTitle	= new Text(270, 17, 25, 38);
-	_txtFunds	= new Text(248, 9, 36, 54);
-	_txtName	= new Text(136, 17, 36, 65);
-	_txtArea	= new Text(56, 17, 172, 65);
-	_lstBases	= new TextList(228, 57, 36, 82);
-	_btnCancel	= new TextButton(228, 16, 36, 146); */
-
 	_window		= new Window(this, 260, 140, 30, 30);
 	_txtTitle	= new Text(250, 17, 45, 38);
 
@@ -70,7 +69,10 @@ TransferBaseState::TransferBaseState(Game* game, Base* base)
 	_btnCancel	= new TextButton(228, 16, 46, 146);
 
 
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)), Palette::backPos, 16);
+	_game->setPalette(
+				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)),
+				Palette::backPos,
+				16);
 
 	add(_window);
 	add(_btnCancel);
@@ -101,8 +103,7 @@ TransferBaseState::TransferBaseState(Game* game, Base* base)
 	_txtFunds->setText(tr("STR_CURRENT_FUNDS").arg(Text::formatFunding(_game->getSavedGame()->getFunds())));
 
 	_txtName->setColor(Palette::blockOffset(13) + 5);
-//kL	_txtName->setText(tr("STR_NAME"));
-	_txtName->setText(tr("STR_BASE_KL"));	// kL
+	_txtName->setText(tr("STR_BASE_KL"));
 	_txtName->setBig();
 
 	_txtArea->setColor(Palette::blockOffset(13) + 5);
@@ -118,22 +119,32 @@ TransferBaseState::TransferBaseState(Game* game, Base* base)
 	_lstBases->onMouseClick((ActionHandler)& TransferBaseState::lstBasesClick);
 
 	int row = 0;
-	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
+	for (std::vector<Base*>::iterator
+			i = _game->getSavedGame()->getBases()->begin();
+			i != _game->getSavedGame()->getBases()->end();
+			++i)
 	{
 		if (*i != _base)
 		{
 			std::wstring area = L""; // Get area
 
-			for (std::vector<Region*>::iterator j = _game->getSavedGame()->getRegions()->begin(); j != _game->getSavedGame()->getRegions()->end(); ++j)
+			for (std::vector<Region*>::iterator
+					j = _game->getSavedGame()->getRegions()->begin();
+					j != _game->getSavedGame()->getRegions()->end();
+					++j)
 			{
 				if ((*j)->getRules()->insideRegion((*i)->getLongitude(), (*i)->getLatitude()))
 				{
 					area = tr((*j)->getRules()->getType());
+
 					break;
 				}
 			}
 
-			_lstBases->addRow(2, (*i)->getName().c_str(), area.c_str());
+			_lstBases->addRow(
+							2,
+							(*i)->getName().c_str(),
+							area.c_str());
 			_lstBases->setCellColor(row, 1, Palette::blockOffset(13) + 5);
 			_bases.push_back(*i);
 
@@ -155,7 +166,7 @@ TransferBaseState::~TransferBaseState()
  */
 void TransferBaseState::btnCancelClick(Action*)
 {
-	_game->popState();
+	_game->popState(); // pop choose Destination (this)
 }
 
 /**
@@ -164,7 +175,10 @@ void TransferBaseState::btnCancelClick(Action*)
  */
 void TransferBaseState::lstBasesClick(Action*)
 {
-	_game->pushState(new TransferItemsState(_game, _base, _bases[_lstBases->getSelectedRow()]));
+	_game->pushState(new TransferItemsState(
+										_game,
+										_base,
+										_bases[_lstBases->getSelectedRow()]));
 }
 
 }

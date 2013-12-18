@@ -43,7 +43,6 @@
 #include "../Savegame/Soldier.h"
 
 
-
 namespace OpenXcom
 {
 
@@ -53,16 +52,18 @@ namespace OpenXcom
  * @param base, Pointer to the base to get info from.
  * @param craft, ID of the selected craft.
  */
-CraftArmorState::CraftArmorState(Game* game, Base* base, size_t craft)
+CraftArmorState::CraftArmorState(
+		Game* game,
+		Base* base,
+		size_t craft)
 	:
 		State(game),
 		_base(base),
 		_craft(craft)
 {
-//	Log(LOG_INFO) << "Create CraftArmorState";
+	Log(LOG_INFO) << "Create CraftArmorState";
 
 	_window			= new Window(this, 320, 200, 0, 0);
-
 	_txtTitle		= new Text(300, 17, 11, 10);
 
 	_txtName		= new Text(114, 9, 16, 31);
@@ -80,12 +81,12 @@ CraftArmorState::CraftArmorState(Game* game, Base* base, size_t craft)
 				16);
 
 	add(_window);
-	add(_btnOk);
 	add(_txtTitle);
 	add(_txtName);
-	add(_txtCraft);
 	add(_txtArmor);
+	add(_txtCraft);
 	add(_lstSoldiers);
+	add(_btnOk);
 
 	centerAllSurfaces();
 
@@ -113,7 +114,7 @@ CraftArmorState::CraftArmorState(Game* game, Base* base, size_t craft)
 
 	_lstSoldiers->setColor(Palette::blockOffset(13)+10);
 	_lstSoldiers->setArrowColor(Palette::blockOffset(13)+10);
-	_lstSoldiers->setArrowColumn(193, ARROW_VERTICAL);			// kL
+	_lstSoldiers->setArrowColumn(193, ARROW_VERTICAL); // kL
 	_lstSoldiers->setColumns(3, 117, 93, 78);
 	_lstSoldiers->setSelectable(true);
 	_lstSoldiers->setBackground(_window);
@@ -127,7 +128,7 @@ CraftArmorState::CraftArmorState(Game* game, Base* base, size_t craft)
 	Craft* c;											// kL
 	bool hasCraft = _base->getCrafts()->size() > 0;		// kL
 	if (hasCraft)										// kL -> KLUDGE!!!
-		c = _base->getCrafts()->at(_craft);				// kL
+		c = _base->getCrafts()->at(_craft);				// kL: This is always 0 (1st craft) when coming from SoldiersState.
 
 	int row = 0;
 	for (std::vector<Soldier*>::iterator
@@ -135,39 +136,34 @@ CraftArmorState::CraftArmorState(Game* game, Base* base, size_t craft)
 			i != _base->getSoldiers()->end();
 			++i)
 	{
-//		Log(LOG_INFO) << "CraftArmorState::CraftArmorState() iterate soldiers to createList";
-
-//		if (hasCraft)	// kL
-//kL			_lstSoldiers->addRow(3, (*i)->getName().c_str(), (*i)->getCraftString(_game->getLanguage()).c_str(), tr((*i)->getArmor()->getType()).c_str());
+		//Log(LOG_INFO) << "CraftArmorState::CraftArmorState() iterate soldiers to createList";
 		_lstSoldiers->addRow(
 							3,
 							(*i)->getName().c_str(),
 							tr((*i)->getArmor()->getType()).c_str(),
 							(*i)->getCraftString(_game->getLanguage()).c_str());
-//		else			// kL
-//			_lstSoldiers->addRow(3, (*i)->getName().c_str(), tr("STR_NONE_UC"), tr((*i)->getArmor()->getType()).c_str());	// kL
 
-//		Log(LOG_INFO) << ". . add row " << *i;
+		//Log(LOG_INFO) << ". . added row " << *i;
 
 		Uint8 color;
-//		if (_base->getCrafts()->size() > 0)		// kL
-//		{
-//			Log(LOG_INFO) << ". . . . color, Base has craft";
-
-		if ((*i)->getCraft() == c)		// kL_note: This might CTD.
+		if (!hasCraft)
 		{
-//			Log(LOG_INFO) << ". . . . color, soldier is on a craft";
-			color = Palette::blockOffset(13);
+			Log(LOG_INFO) << ". . . . color, Base has NO craft";
+			color = Palette::blockOffset(13)+10;
+		}
+		else if ((*i)->getCraft() == c)
+		{
+			Log(LOG_INFO) << ". . . . color, soldier is on 'this' craft";
+			color = Palette::blockOffset(13)+2;
 		}
 		else if ((*i)->getCraft() != 0)
 		{
-//			Log(LOG_INFO) << ". . . . color, soldier is NOT on a craft";
+			Log(LOG_INFO) << ". . . . color, soldier is on another craft";
 			color = Palette::blockOffset(15)+6;
 		}
-//		}
-		else
+		else // craft==0
 		{
-//			Log(LOG_INFO) << ". . . . color, Base has NO craft";
+			Log(LOG_INFO) << ". . . . color, soldier is not on a craft";
 			color = Palette::blockOffset(13)+10;
 		}
 
@@ -176,7 +172,7 @@ CraftArmorState::CraftArmorState(Game* game, Base* base, size_t craft)
 		row++;
 	}
 
-//	Log(LOG_INFO) << "CraftArmorState::CraftArmorState() EXIT";
+	//Log(LOG_INFO) << "CraftArmorState::CraftArmorState() EXIT";
 }
 
 /**
@@ -184,7 +180,7 @@ CraftArmorState::CraftArmorState(Game* game, Base* base, size_t craft)
  */
 CraftArmorState::~CraftArmorState()
 {
-//	Log(LOG_INFO) << "Delete CraftArmorState";
+	//Log(LOG_INFO) << "Delete CraftArmorState";
 }
 
 /**
@@ -192,7 +188,7 @@ CraftArmorState::~CraftArmorState()
  */
 void CraftArmorState::init()
 {
-	_lstSoldiers->clearList();	// kL
+	_lstSoldiers->clearList(); // kL
 
 	// kL_begin: init Armor list, from cTor
 	Craft* c;
@@ -211,23 +207,28 @@ void CraftArmorState::init()
 							3,
 							(*i)->getName().c_str(),
 							tr((*i)->getArmor()->getType()).c_str(),
-							(*i)->getCraftString(_game->getLanguage()).c_str());	// kL
-
-//kL		_lstSoldiers->setCellText(row, 2, tr((*i)->getArmor()->getType()));
-//		_lstSoldiers->setCellText(row, 1, tr((*i)->getArmor()->getType()));		// kL
+							(*i)->getCraftString(_game->getLanguage()).c_str());
 
 		// kL_begin: init Armor list, from cTor
 		Uint8 color;
-		if ((*i)->getCraft() == c)
+		if (!hasCraft)
 		{
-			color = Palette::blockOffset(13);
+			Log(LOG_INFO) << ". . . . color, Base has NO craft";
+			color = Palette::blockOffset(13)+10;
+		}
+		else if ((*i)->getCraft() == c)
+		{
+			Log(LOG_INFO) << ". . . . color, soldier is on 'this' craft";
+			color = Palette::blockOffset(13)+2;
 		}
 		else if ((*i)->getCraft() != 0)
 		{
+			Log(LOG_INFO) << ". . . . color, soldier is on another craft";
 			color = Palette::blockOffset(15)+6;
 		}
-		else
+		else // craft==0
 		{
+			Log(LOG_INFO) << ". . . . color, soldier is not on a craft";
 			color = Palette::blockOffset(13)+10;
 		}
 

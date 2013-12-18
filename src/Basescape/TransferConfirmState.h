@@ -26,11 +26,12 @@
 namespace OpenXcom
 {
 
-class TextButton;
-class Window;
-class Text;
-class TransferItemsState;
 class Base;
+class Text;
+class TextButton;
+class TransferItemsState;
+class Window;
+
 
 /**
  * Window to confirm a transfer between bases.
@@ -39,16 +40,26 @@ class TransferConfirmState
 	:
 		public State
 {
+
 private:
-	TextButton* _btnCancel, * _btnOk;
-	Window* _window;
-	Text* _txtTitle, * _txtCost, * _txtTotal;
 	Base* _base;
+	Text
+		* _txtTitle,
+		* _txtCost,
+		* _txtTotal;
+	TextButton
+		* _btnCancel,
+		* _btnOk;
 	TransferItemsState* _state;
+	Window* _window;
+
 
 	public:
 		/// Creates the Transfer Confirm state.
-		TransferConfirmState(Game* game, Base* base, TransferItemsState* state);
+		TransferConfirmState(
+				Game* game,
+				Base* base,
+				TransferItemsState* state);
 		/// Cleans up the Transfer Confirm state.
 		~TransferConfirmState();
 

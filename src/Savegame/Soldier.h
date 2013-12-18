@@ -21,7 +21,9 @@
 #define OPENXCOM_SOLDIER_H
 
 #include <string>
+
 #include <yaml-cpp/yaml.h>
+
 #include "../Ruleset/Unit.h"
 
 
@@ -38,11 +40,13 @@ enum SoldierRank
 	RANK_COMMANDER
 };
 
+
 enum SoldierGender
 {
 	GENDER_MALE,
 	GENDER_FEMALE
 };
+
 
 enum SoldierLook
 {
@@ -52,14 +56,16 @@ enum SoldierLook
 	LOOK_AFRICAN
 };
 
+
+class Armor;
 class Craft;
-class SoldierNamePool;
+class EquipmentLayoutItem;
+class Language;
 class Ruleset;
 class RuleSoldier;
-class Armor;
-class Language;
-class EquipmentLayoutItem;
 class SoldierDeath;
+class SoldierNamePool;
+
 
 /**
  * Represents a soldier hired by the player.
@@ -68,29 +74,48 @@ class SoldierDeath;
  */
 class Soldier
 {
+
 private:
+	bool
+		_psiTraining,
+		_recentlyPromoted;
+	int
+		_id,
+		_improvement,
+		_kills,
+		_missions,
+		_recovery;
+
 	std::wstring _name;
-	int _id, _improvement;
-	RuleSoldier* _rules;
-	UnitStats _initialStats, _currentStats;
-	SoldierRank _rank;
+
+	Armor* _armor;
 	Craft* _craft;
+	RuleSoldier* _rules;
+	SoldierDeath* _death;
 	SoldierGender _gender;
 	SoldierLook _look;
-	int _missions, _kills, _recovery;
-	bool _recentlyPromoted, _psiTraining;
-	Armor* _armor;
+	SoldierRank _rank;
+	UnitStats
+		_initialStats,
+		_currentStats;
+
 	std::vector<EquipmentLayoutItem*> _equipmentLayout;
-	SoldierDeath* _death;
+
 
 	public:
 		/// Creates a new soldier.
-		Soldier(RuleSoldier* rules, Armor* armor, const std::vector<SoldierNamePool*>* names = 0, int id = 0);
+		Soldier(
+				RuleSoldier* rules,
+				Armor* armor,
+				const std::vector<SoldierNamePool*>* names = 0,
+				int id = 0);
 		/// Cleans up the soldier.
 		~Soldier();
 
 		/// Loads the soldier from YAML.
-		void load(const YAML::Node& node, const Ruleset* rule);
+		void load(
+				const YAML::Node& node,
+				const Ruleset* rule);
 		/// Saves the soldier to YAML.
 		YAML::Node save() const;
 

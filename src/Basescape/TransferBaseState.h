@@ -28,11 +28,12 @@
 namespace OpenXcom
 {
 
-class TextButton;
-class Window;
-class Text;
-class TextList;
 class Base;
+class Text;
+class TextButton;
+class TextList;
+class Window;
+
 
 /**
  * Window that lets the player pick the base to transfer items to.
@@ -41,17 +42,26 @@ class TransferBaseState
 	:
 		public State
 {
+
 private:
 	Base* _base;
+	Text
+		* _txtArea,
+		* _txtFunds,
+		* _txtName,
+		* _txtTitle;
 	TextButton* _btnCancel;
-	Window* _window;
-	Text* _txtTitle, * _txtFunds, * _txtName, * _txtArea;
 	TextList* _lstBases;
+	Window* _window;
+
 	std::vector<Base*> _bases;
+
 
 	public:
 		/// Creates the Transfer Base state.
-		TransferBaseState(Game* game, Base* base);
+		TransferBaseState(
+				Game* game,
+				Base* base);
 		/// Cleans up the Transfer Base state.
 		~TransferBaseState();
 

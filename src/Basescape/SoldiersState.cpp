@@ -57,7 +57,9 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
  */
-SoldiersState::SoldiersState(Game* game, Base* base)
+SoldiersState::SoldiersState(
+		Game* game,
+		Base* base)
 	:
 		State(game),
 		_base(base)
@@ -77,18 +79,21 @@ SoldiersState::SoldiersState(Game* game, Base* base)
 	_btnOk			= new TextButton(72, 16, 237, 177);
 
 
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)), Palette::backPos, 16);
+	_game->setPalette(
+				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)),
+				Palette::backPos,
+				16);
 
 	add(_window);
-	add(_btnPsiTrain);
-	add(_btnArmor);
-	add(_btnOk);
-	add(_btnMemorial);
 	add(_txtTitle);
 	add(_txtName);
 	add(_txtRank);
 	add(_txtCraft);
 	add(_lstSoldiers);
+	add(_btnMemorial);
+	add(_btnPsiTrain);
+	add(_btnArmor);
+	add(_btnOk);
 
 	centerAllSurfaces();
 

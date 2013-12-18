@@ -853,7 +853,7 @@ void Craft::refuel()
  * while it's docked in the base.
  * @return, The ammo ID missing for rearming, or "" if none.
  */
-std::string Craft::rearm(Ruleset *rules)
+std::string Craft::rearm(Ruleset* rules)
 {
 	std::string ammo = "";
 

@@ -18,27 +18,34 @@
  */
 
 #include "CraftInfoState.h"
+
 #include <sstream>
-#include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
-#include "../Engine/Language.h"
-#include "../Engine/Palette.h"
-#include "../Engine/Options.h"
-#include "../Interface/TextButton.h"
-#include "../Interface/Window.h"
-#include "../Interface/Text.h"
-#include "../Interface/TextEdit.h"
-#include "../Engine/SurfaceSet.h"
-#include "../Engine/Action.h"
-#include "../Savegame/Craft.h"
-#include "../Ruleset/RuleCraft.h"
-#include "../Savegame/CraftWeapon.h"
-#include "../Ruleset/RuleCraftWeapon.h"
-#include "../Savegame/Base.h"
+
+#include "CraftArmorState.h"
+#include "CraftEquipmentState.h"
 #include "CraftSoldiersState.h"
 #include "CraftWeaponsState.h"
-#include "CraftEquipmentState.h"
-#include "CraftArmorState.h"
+
+#include "../Engine/Action.h"
+#include "../Engine/Game.h"
+#include "../Engine/Language.h"
+#include "../Engine/Options.h"
+#include "../Engine/Palette.h"
+#include "../Engine/SurfaceSet.h"
+
+#include "../Interface/Text.h"
+#include "../Interface/TextButton.h"
+#include "../Interface/TextEdit.h"
+#include "../Interface/Window.h"
+
+#include "../Resource/ResourcePack.h"
+
+#include "../Ruleset/RuleCraft.h"
+#include "../Ruleset/RuleCraftWeapon.h"
+
+#include "../Savegame/Base.h"
+#include "../Savegame/Craft.h"
+#include "../Savegame/CraftWeapon.h"
 
 
 namespace OpenXcom
@@ -50,7 +57,10 @@ namespace OpenXcom
  * @param base Pointer to the base to get info from.
  * @param craft ID of the selected craft.
  */
-CraftInfoState::CraftInfoState(Game* game, Base* base, size_t craft)
+CraftInfoState::CraftInfoState(
+		Game* game,
+		Base* base,
+		size_t craft)
 	:
 		State(game),
 		_base(base),
@@ -60,13 +70,10 @@ CraftInfoState::CraftInfoState(Game* game, Base* base, size_t craft)
 
 	_window		= new Window(this, 320, 200, 0, 0, POPUP_BOTH);
 
-//kL	_edtCraft	= new TextEdit(160, 16, 80, 8);
-	_edtCraft	= new TextEdit(160, 16, 80, 10);		// kL
+	_edtCraft	= new TextEdit(160, 16, 80, 10);
 
-//kL	_txtDamage	= new Text(82, 16, 14, 24);
-//kL	_txtFuel	= new Text(82, 16, 228, 24);
-	_txtFuel	= new Text(82, 17, 14, 28);				// kL
-	_txtDamage	= new Text(82, 17, 228, 28);			// kL
+	_txtFuel	= new Text(82, 17, 14, 28);
+	_txtDamage	= new Text(82, 17, 228, 28);
 
 	_btnW1		= new TextButton(24, 32, 14, 48);
 	_txtW1Name	= new Text(90, 9, 46, 48);
@@ -81,19 +88,20 @@ CraftInfoState::CraftInfoState(Game* game, Base* base, size_t craft)
 	_btnEquip	= new TextButton(64, 16, 14, 120);
 	_btnArmor	= new TextButton(64, 16, 14, 144);
 
-//kL	_sprite		= new Surface(32, 40, 144, 52);
-	_sprite		= new Surface(32, 38, 144, 50);			// kL
+	_sprite		= new Surface(32, 38, 144, 50);
 	_weapon1	= new Surface(15, 17, 121, 63);
 	_weapon2	= new Surface(15, 17, 184, 63);
 	_crew		= new Surface(220, 18, 85, 96);
 	_equip		= new Surface(220, 18, 85, 121);
 
-//kL	_btnOk		= new TextButton(64, 24, 128, 168);
-	_btnOk		= new TextButton(288, 16, 16, 177);		// kL
+	_btnOk		= new TextButton(288, 16, 16, 177);
 
 
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(3)), Palette::backPos, 16);
+	_game->setPalette(
+				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(3)),
+				Palette::backPos,
+				16);
 
 	add(_window);
 	add(_btnOk);
@@ -119,7 +127,7 @@ CraftInfoState::CraftInfoState(Game* game, Base* base, size_t craft)
 
 	centerAllSurfaces();
 
-	// Set up objects
+
 	_window->setColor(Palette::blockOffset(13)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK14.SCR"));
 
@@ -185,13 +193,14 @@ CraftInfoState::~CraftInfoState()
 }
 
 /**
- * The craft info can change
- * after going into other screens.
+ * The craft info can change after going into other screens.
  */
 void CraftInfoState::init()
 {
-	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(3)), Palette::backPos, 16);
+	_game->setPalette(
+				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(3)),
+				Palette::backPos,
+				16);
 
 	Craft* c = _base->getCrafts()->at(_craft);
 
@@ -207,10 +216,9 @@ void CraftInfoState::init()
 
 	if (c->getStatus() == "STR_REPAIRS")
 	{
-//kL		int damageDays = (int)ceil((float)c->getDamage() / c->getRules()->getRepairRate() / 24.0f);
-//kL		ss << L"\n(" << tr("STR_DAY", damageDays) << ")";
-		int damageHours = (int)ceil((float)c->getDamage() / c->getRules()->getRepairRate());	// kL
-		ss << L"\n" << tr("STR_HOUR", damageHours);												// kL. Had to add new text strings to .Lng file
+		int damageHours = static_cast<int>(
+							ceil(static_cast<float>(c->getDamage() / c->getRules()->getRepairRate()))); // kL
+		ss << L"\n" << tr("STR_HOUR", damageHours);
 	}
 
 	_txtDamage->setText(ss.str());
@@ -220,10 +228,11 @@ void CraftInfoState::init()
 
 	if (c->getStatus() == "STR_REFUELLING")
 	{
-//kL		int fuelDays = (int) ceil((float)(c->getRules()->getMaxFuel() - c->getFuel()) / c->getRules()->getRefuelRate() / 48.0f);
-//kL		ss2 << L"\n(" << tr("STR_DAY", fuelDays) << ")";
-		int fuelHours = (int) ceil((float)(c->getRules()->getMaxFuel() - c->getFuel()) / c->getRules()->getRefuelRate() / 2.0f);	// kL. Why was it 48 instead of 24?
-		ss2 << L"\n" << tr("STR_HOUR", fuelHours);																					// kL
+		int fuelHours = static_cast<int>(
+							ceil(static_cast<float>(c->getRules()->getMaxFuel() - c->getFuel())
+										/ static_cast<float>(c->getRules()->getRefuelRate())
+										/ 2.0f));
+		ss2 << L"\n" << tr("STR_HOUR", fuelHours);
 	}
 
 	_txtFuel->setText(ss2.str());
@@ -235,7 +244,12 @@ void CraftInfoState::init()
 
 		Surface* frame1 = texture->getFrame(38);
 		frame1->setY(0);
-		for (int i = 0, x = 0; i < c->getNumSoldiers(); ++i, x += 10)
+		for (int
+				i = 0,
+					x = 0;
+				i < c->getNumSoldiers();
+				++i,
+					x += 10)
 		{
 			frame1->setX(x);
 			frame1->blit(_crew);
@@ -244,14 +258,22 @@ void CraftInfoState::init()
 		Surface* frame2 = texture->getFrame(40);
 		frame2->setY(0);
 		int x = 0;
-		for (int i = 0; i < c->getNumVehicles(); ++i, x += 10)
+		for (int
+				i = 0;
+				i < c->getNumVehicles();
+				++i,
+					x += 10)
 		{
 			frame2->setX(x);
 			frame2->blit(_equip);
 		}
 
 		Surface* frame3 = texture->getFrame(39);
-		for (int i = 0; i < c->getNumEquipment(); i += 4, x += 10)
+		for (int
+				i = 0;
+				i < c->getNumEquipment();
+				i += 4,
+					x += 10)
 		{
 			frame3->setX(x);
 			frame3->blit(_equip);
@@ -345,8 +367,7 @@ void CraftInfoState::btnOkClick(Action*)
 }
 
 /**
- * Goes to the Select Armament window for
- * the first weapon.
+ * Goes to the Select Armament window for the first weapon.
  * @param action Pointer to an action.
  */
 void CraftInfoState::btnW1Click(Action*)
@@ -355,8 +376,7 @@ void CraftInfoState::btnW1Click(Action*)
 }
 
 /**
- * Goes to the Select Armament window for
- * the second weapon.
+ * Goes to the Select Armament window for the second weapon.
  * @param action Pointer to an action.
  */
 void CraftInfoState::btnW2Click(Action*)

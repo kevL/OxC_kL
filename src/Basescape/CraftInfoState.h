@@ -27,11 +27,12 @@ namespace OpenXcom
 {
 
 class Base;
-class TextButton;
-class Window;
 class Text;
+class TextButton;
 class TextEdit;
 class Surface;
+class Window;
+
 
 /**
  * Craft Info screen that shows all the
@@ -41,25 +42,49 @@ class CraftInfoState
 	:
 		public State
 {
+
 private:
-	Base* _base;
 	size_t _craft;
 
-	TextButton* _btnOk, * _btnW1, * _btnW2, * _btnCrew, * _btnEquip, * _btnArmor;
-	Window* _window;
+	Base* _base;
+	TextButton
+		* _btnArmor,
+		* _btnCrew,
+		* _btnEquip,
+		* _btnOk,
+		* _btnW1,
+		* _btnW2;
 	TextEdit* _edtCraft;
-	Text* _txtDamage, * _txtFuel;
-	Text* _txtW1Name, * _txtW1Ammo, * _txtW1Max, * _txtW2Name, * _txtW2Ammo, * _txtW2Max;
-	Surface * _sprite, * _weapon1, * _weapon2, * _crew, * _equip;
+	Text
+		* _txtDamage,
+		* _txtFuel,
+		* _txtW1Ammo,
+		* _txtW1Max,
+		* _txtW1Name,
+		* _txtW2Ammo,
+		* _txtW2Max,
+		* _txtW2Name;
+	Surface
+		* _sprite,
+		* _weapon1,
+		* _weapon2,
+		* _crew,
+		* _equip;
+	Window* _window;
+
 
 	public:
 		/// Creates the Craft Info state.
-		CraftInfoState(Game* game, Base* base, size_t craft);
+		CraftInfoState(
+				Game* game,
+				Base* base,
+				size_t craft);
 		/// Cleans up the Craft Info state.
 		~CraftInfoState();
 
 		/// Updates the craft info.
 		void init();
+
 		/// Handler for clicking the OK button.
 		void btnOkClick(Action* action);
 		/// Handler for clicking the 1 button.

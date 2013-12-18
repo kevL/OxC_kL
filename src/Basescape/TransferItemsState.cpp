@@ -110,10 +110,9 @@ TransferItemsState::TransferItemsState(
 
 
 	_game->setPalette(
-				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(
-																			Palette::blockOffset(0)),
-																			Palette::backPos,
-																			16);
+				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)),
+				Palette::backPos,
+				16);
 
 	add(_window);
 	add(_txtTitle);
@@ -382,7 +381,10 @@ void TransferItemsState::think()
  */
 void TransferItemsState::btnOkClick(Action*)
 {
-	_game->pushState(new TransferConfirmState(_game, _baseTo, this));
+	_game->pushState(new TransferConfirmState(
+											_game,
+											_baseTo,
+											this));
 }
 
 /**
@@ -393,13 +395,19 @@ void TransferItemsState::completeTransfer()
 	int time = static_cast<int>(floor(6.0 + _distance / 10.0));
 	_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds() - _total);
 
-	for (unsigned int i = 0; i < _qtys.size(); ++i)
+	for (unsigned int
+			i = 0;
+			i < _qtys.size();
+			++i)
 	{
 		if (_qtys[i] > 0)
 		{
 			if (i < _soldiers.size()) // Transfer soldiers
 			{
-				for (std::vector<Soldier*>::iterator s = _baseFrom->getSoldiers()->begin(); s != _baseFrom->getSoldiers()->end(); ++s)
+				for (std::vector<Soldier*>::iterator
+						s = _baseFrom->getSoldiers()->begin();
+						s != _baseFrom->getSoldiers()->end();
+						++s)
 				{
 					if (*s == _soldiers[i])
 					{
@@ -423,11 +431,15 @@ void TransferItemsState::completeTransfer()
 				Craft* craft =  _crafts[i - _soldiers.size()];
 
 				// Transfer soldiers inside craft
-				for (std::vector<Soldier*>::iterator s = _baseFrom->getSoldiers()->begin(); s != _baseFrom->getSoldiers()->end();)
+				for (std::vector<Soldier*>::iterator
+						s = _baseFrom->getSoldiers()->begin();
+						s != _baseFrom->getSoldiers()->end();
+						)
 				{
 					if ((*s)->getCraft() == craft)
 					{
-						if ((*s)->isInPsiTraining()) (*s)->setPsiTraining();
+						if ((*s)->isInPsiTraining())
+							(*s)->setPsiTraining();
 
 						if (craft->getStatus() == "STR_OUT")
 							_baseTo->getSoldiers()->push_back(*s);
@@ -447,7 +459,10 @@ void TransferItemsState::completeTransfer()
 				}
 
 				// Transfer craft
-				for (std::vector<Craft*>::iterator c = _baseFrom->getCrafts()->begin(); c != _baseFrom->getCrafts()->end(); ++c)
+				for (std::vector<Craft*>::iterator
+						c = _baseFrom->getCrafts()->begin();
+						c != _baseFrom->getCrafts()->end();
+						++c)
 				{
 					if (*c == craft)
 					{
@@ -476,7 +491,10 @@ void TransferItemsState::completeTransfer()
 						}
 
 						// Clear Hangar
-						for (std::vector<BaseFacility*>::iterator f = _baseFrom->getFacilities()->begin(); f != _baseFrom->getFacilities()->end(); ++f)
+						for (std::vector<BaseFacility*>::iterator
+								f = _baseFrom->getFacilities()->begin();
+								f != _baseFrom->getFacilities()->end();
+								++f)
 						{
 							if ((*f)->getCraft() == *c)
 							{
@@ -528,8 +546,8 @@ void TransferItemsState::completeTransfer()
  */
 void TransferItemsState::btnCancelClick(Action*)
 {
-	_game->popState();
-	_game->popState();
+	_game->popState(); // pop main Transfer (this)
+//kL	_game->popState(); // pop choose Destination
 }
 
 /**
