@@ -127,7 +127,8 @@ protected:
 				Position targetPos,
 				BattleUnit* attackingUnit,
 				int radius,
-				int diff) const;
+				int diff,
+				bool grenade = false) const;
 		/// Attempts to take a melee attack/charge an enemy we can see.
 		void meleeAction();
 		/// Attempts to fire a waypoint projectile at an enemy we, or one of our teammates sees.

@@ -1666,7 +1666,8 @@ bool AlienBAIState::explosiveEfficacy(
 		Position targetPos,
 		BattleUnit* attackingUnit,
 		int radius,
-		int diff) const
+		int diff,
+		bool grenade) const
 {
 	Log(LOG_INFO) << "AlienBAIState::explosiveEfficacy()";
 
@@ -1689,12 +1690,19 @@ bool AlienBAIState::explosiveEfficacy(
 //kL		desperation += 3;
 
 //kL	int eff = desperation + affected; // kL_note: no affected yet...
-	int eff = (desperation + hurt) * 2; // kL_note: no affected yet...
+	int eff = (desperation + hurt) * 2;
 
 	int distance = _save->getTileEngine()->distance(attackingUnit->getPosition(), targetPos);
-	if (distance < radius + 1)
-//kL		eff -= 3;
-		eff -= 50;		// kL
+	if (distance < radius + 1) // attacker inside blast zone
+	{
+//kL		eff -= 4;
+//		eff -= 50;		// kL
+		eff -= 35;		// kL
+		if (attackingUnit->getPosition().z == targetPos.z)
+		{
+			eff -= 15;		// kL
+		}
+	}
 
 	// we don't want to ruin our own base, but we do want to ruin XCom's day.
 	if (_save->getMissionType() == "STR_ALIEN_BASE_ASSAULT")
@@ -1755,8 +1763,8 @@ bool AlienBAIState::explosiveEfficacy(
 //kL					++eff;
 //kL					++affected;
 				}
-//kL				else if ((*i)->getFaction() == _unit->getFaction())
-				else if ((*i)->getOriginalFaction() == _unit->getFaction())		// kL
+//kL				else if ((*i)->getFaction() == attackingUnit->getFaction())
+				else if ((*i)->getOriginalFaction() == attackingUnit->getFaction())		// kL
 				{
 //kL					eff -= 2;	// friendlies count double
 					eff -= 5;		// true friendlies count half
@@ -1766,10 +1774,19 @@ bool AlienBAIState::explosiveEfficacy(
 	}
 
 	// spice things up a bit by adding a random number based on difficulty level
-//kL	eff += RNG::generate(0, diff + 1) - RNG::generate(0, 5);
-//kL	if (eff > 0 || affected >= 10)
-//kL	if (eff > 0)
-//kL		|| affected >= 3)	// kL
+//	eff += RNG::generate(0, diff + 1) - RNG::generate(0, 5);
+//	if (eff > 0 || affected >= 10)
+//	if (eff > 0)
+//		|| affected >= 3)	// kL
+
+	// don't throw grenades at single targets, unless morale is in the danger zone,
+	// or we're halfway towards panicking while bleeding to death.
+//kL	if (grenade
+//kL		&& desperation < 6
+//kL		&& enemiesAffected < 2)
+//kL	{
+//kL		return false;
+//kL	}
 
 	if (eff > 0					// kL
 		&& RNG::percent(eff))	// kL
@@ -2083,7 +2100,7 @@ void AlienBAIState::grenadeAction()
 	BattleItem* grenade = _unit->getGrenadeFromBelt();
 
 	// distance must be more than X tiles, otherwise it's too dangerous to play with explosives
-	if (explosiveEfficacy(_aggroTarget->getPosition(), _unit, grenade->getRules()->getExplosionRadius(), _attackAction->diff))
+	if (explosiveEfficacy(_aggroTarget->getPosition(), _unit, grenade->getRules()->getExplosionRadius(), _attackAction->diff, true))
 	{
 //		if (_unit->getFaction() == FACTION_HOSTILE)
 		{

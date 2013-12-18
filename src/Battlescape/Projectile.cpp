@@ -189,7 +189,9 @@ Wb.131129
 		targetVoxel = Position(
 				_action.target.x * 16 + 8,
 				_action.target.y * 16 + 8,
-				_action.target.z * 24 + 12);
+				_action.target.z * 24 + 12);	// Wb. changed this to +16
+												// prob. to give it a flat trajectory from firing pt.
+												// i Like it aimed slightly down perhaps...
 	}
 	else // non-waypointed attack follows
 	{
