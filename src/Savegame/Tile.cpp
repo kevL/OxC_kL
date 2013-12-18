@@ -852,11 +852,11 @@ int Tile::getTopItemSprite()
 /**
  * New turn preparations.
  * average out any smoke added by the number of overlaps.
- * apply fire/smoke damage to units as applicable.
+ * apply fire/smoke damage to units as applicable. kL_note: This should happen only at end Turn.
  */
 void Tile::prepareNewTurn()
 {
-	//Log(LOG_INFO) << "Tile::prepareNewTurn()";
+	Log(LOG_INFO) << "Tile::prepareNewTurn()";
 
 	// we've received new smoke in this turn, but we're not on fire, average out the smoke.
 	if (_overlaps != 0
@@ -875,36 +875,40 @@ void Tile::prepareNewTurn()
 			{
 				if (_unit->getArmor()->getSize() == 1
 					|| !_unit->tookFireDamage()) // this is how we avoid hitting the same unit multiple times.
+						// kL_note: Set the guy on fire here, set the toggle so he doesn't take
+						// damage in BattleUnit::prepareNewTurn() but don't deliver any damage here.
 				{
 					_unit->toggleFireDamage();
 
 					// battleUnit is standing on fire tile about to start burning.
-					Log(LOG_INFO) << ". ID " << _unit->getId() << " fireDamage = " << _smoke;
-
-					_unit->damage(Position(0, 0, 0), _smoke, DT_IN, true); // _smoke becomes our damage value
+					//Log(LOG_INFO) << ". ID " << _unit->getId() << " fireDamage = " << _smoke;
+//kL					_unit->damage(Position(0, 0, 0), _smoke, DT_IN, true); // _smoke becomes our damage value
 
 					if (RNG::percent(static_cast<int>(40.f * _unit->getArmor()->getDamageModifier(DT_IN)))) // try to set the unit on fire.
 					{
 						int burnTime = RNG::generate(0, static_cast<int>(5.f * _unit->getArmor()->getDamageModifier(DT_IN)));
 						if (_unit->getFire() < burnTime)
 						{
+							Log(LOG_INFO) << ". ID " << _unit->getId() << " burnTime = " << burnTime;
 							_unit->setFire(burnTime);
 						}
 					}
 				}
 			}
-			else // no fire: must be smoke
+
+			// kL_note: Take smoke also.
+//kL			else // no fire: must be smoke
+//kL			{
+			if (_unit->getOriginalFaction() != FACTION_HOSTILE) // aliens don't breathe
 			{
-				if (_unit->getOriginalFaction() != FACTION_HOSTILE) // aliens don't breathe
+				if (_unit->getArmor()->getDamageModifier(DT_SMOKE) > 0.f
+					&& _unit->getArmor()->getSize() == 1) // try to knock this guy out.
 				{
-					if (_unit->getArmor()->getDamageModifier(DT_SMOKE) > 0.f
-						&& _unit->getArmor()->getSize() == 1) // try to knock this guy out.
-					{
-						Log(LOG_INFO) << ". ID " << _unit->getId() << " smokeDamage = " << _smoke / 4;
-						_unit->damage(Position(0, 0, 0), (_smoke / 4) + 1, DT_SMOKE, true);
-					}
+					Log(LOG_INFO) << ". ID " << _unit->getId() << " smokeDamage = " << _smoke / 4;
+					_unit->damage(Position(0, 0, 0), (_smoke / 4) + 1, DT_SMOKE, true);
 				}
 			}
+//kL			}
 		}
 	}
 

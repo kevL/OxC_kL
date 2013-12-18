@@ -33,6 +33,7 @@ class RuleInventory;
 class RuleItem;
 class Tile;
 
+
 /**
  * Represents a single item in the battlescape.
  * Contains battle-related info about an item like the position, ammo quantity, ...
@@ -41,22 +42,37 @@ class Tile;
  */
 class BattleItem
 {
+
 private:
-	int _id;
-	RuleItem* _rules;
-	BattleUnit* _owner, * _previousOwner;
-	BattleUnit* _unit;
-	Tile* _tile;
-	RuleInventory* _inventorySlot;
-	int _inventoryX, _inventoryY;
+	bool
+		_droppedOnAlienTurn,
+		_XCOMProperty;
+	int
+		_ammoQuantity,
+		_explodeTurn,
+		_id,
+		_inventoryX,
+		_inventoryY,
+
+		_heal,
+		_painKiller,
+		_stimulant;
+
 	BattleItem* _ammoItem;
-	int _explodeTurn, _ammoQuantity;
-	int _painKiller, _heal, _stimulant;
-	bool _XCOMProperty, _droppedOnAlienTurn;
+	BattleUnit
+		* _owner,
+		* _previousOwner,
+		* _unit;
+	RuleInventory* _inventorySlot;
+	RuleItem* _rules;
+	Tile* _tile;
+
 
 	public:
 		/// Creates a item of the specified type.
-		BattleItem(RuleItem* rules, int* id);
+		BattleItem(
+				RuleItem* rules,
+				int* id);
 		/// Cleans up the item.
 		~BattleItem();
 

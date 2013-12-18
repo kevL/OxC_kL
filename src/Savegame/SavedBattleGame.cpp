@@ -893,7 +893,7 @@ void SavedBattleGame::endTurn()
 
 	if (_side == FACTION_PLAYER) // end of Xcom turn.
 	{
-		Log(LOG_INFO) << ". Faction_Player";
+		Log(LOG_INFO) << ". end Faction_Player";
 
 		if (_selectedUnit
 			&& _selectedUnit->getOriginalFaction() == FACTION_PLAYER)
@@ -923,7 +923,7 @@ void SavedBattleGame::endTurn()
 	}
 	else if (_side == FACTION_HOSTILE) // end of Alien turn.
 	{
-		Log(LOG_INFO) << ". Faction_Hostile";
+		Log(LOG_INFO) << ". end Faction_Hostile";
 
 		_side = FACTION_NEUTRAL;
 
@@ -964,7 +964,7 @@ void SavedBattleGame::endTurn()
 	}
 	else if (_side == FACTION_NEUTRAL) // end of Civilian turn.
 	{
-		Log(LOG_INFO) << ". Faction_Neutral";
+		Log(LOG_INFO) << ". end Faction_Neutral";
 
 		prepareNewTurn();
 		_turn++;
@@ -1398,7 +1398,10 @@ void SavedBattleGame::prepareNewTurn()
 	std::vector<Tile*> tilesOnFire;
 	std::vector<Tile*> tilesOnSmoke;
 
-	for (int i = 0; i < _mapsize_x * _mapsize_y * _mapsize_z; ++i) // prepare a list of tiles on fire
+	for (int
+			i = 0;
+			i < _mapsize_x * _mapsize_y * _mapsize_z;
+			++i) // prepare a list of tiles on fire
 	{
 		if (getTiles()[i]->getFire() > 0)
 		{
@@ -1406,7 +1409,10 @@ void SavedBattleGame::prepareNewTurn()
 		}
 	}
 
-	for (std::vector<Tile*>::iterator i = tilesOnFire.begin(); i != tilesOnFire.end(); ++i) // first: fires spread
+	for (std::vector<Tile*>::iterator
+			i = tilesOnFire.begin();
+			i != tilesOnFire.end();
+			++i) // first: fires spread
 	{
 		if ((*i)->getOverlaps() == 0) // if we haven't added fire here this turn
 		{
@@ -1414,7 +1420,10 @@ void SavedBattleGame::prepareNewTurn()
 
 			if ((*i)->getFire()) // if we're still burning
 			{
-				for (int dir = 0; dir <= 6; dir += 2) // propagate in four cardinal directions (0, 2, 4, 6)
+				for (int
+						dir = 0;
+						dir < 7;
+						dir += 2) // propagate in four cardinal directions (0, 2, 4, 6)
 				{
 					Position pos;
 					Pathfinding::directionToVector(dir, &pos);
@@ -1462,7 +1471,10 @@ void SavedBattleGame::prepareNewTurn()
 		}
 	}
 
-	for (int i = 0; i < _mapsize_x * _mapsize_y * _mapsize_z; ++i) // prepare a list of tiles on fire/with smoke in them (smoke acts as fire intensity)
+	for (int
+			i = 0;
+			i < _mapsize_x * _mapsize_y * _mapsize_z;
+			++i) // prepare a list of tiles on fire/with smoke in them (smoke acts as fire intensity)
 	{
 		if (getTiles()[i]->getSmoke() > 0)
 		{
@@ -1470,7 +1482,10 @@ void SavedBattleGame::prepareNewTurn()
 		}
 	}
 
-	for (std::vector<Tile*>::iterator i = tilesOnSmoke.begin(); i != tilesOnSmoke.end(); ++i) // now make the smoke spread.
+	for (std::vector<Tile*>::iterator
+			i = tilesOnSmoke.begin();
+			i != tilesOnSmoke.end();
+			++i) // now make the smoke spread.
 	{
 		if ((*i)->getFire() == 0) // smoke and fire follow slightly different rules.
 		{
@@ -1478,7 +1493,10 @@ void SavedBattleGame::prepareNewTurn()
 
 			if ((*i)->getSmoke()) // if we're still smoking
 			{
-				for (int dir = 0; dir <= 6; dir += 2) // spread in four cardinal directions
+				for (int
+						dir = 0;
+						dir < 7;
+						dir += 2) // spread in four cardinal directions
 				{
 					Position pos;
 					Pathfinding::directionToVector(dir, &pos);
@@ -1506,7 +1524,10 @@ void SavedBattleGame::prepareNewTurn()
 				t->addSmoke((*i)->getSmoke() / 2); // only add smoke equal to half the intensity of the fire
 			}
 
-			for (int dir = 0; dir <= 6; dir += 2) // then it spreads in the four cardinal directions.
+			for (int
+					dir = 0;
+					dir < 7;
+					dir += 2) // then it spreads in the four cardinal directions.
 			{
 				Pathfinding::directionToVector(dir, &pos);
 				t = getTile((*i)->getPosition() + pos);
@@ -1521,7 +1542,10 @@ void SavedBattleGame::prepareNewTurn()
 
 	if (!tilesOnFire.empty() || !tilesOnSmoke.empty())
 	{
-		for (int i = 0; i < _mapsize_x * _mapsize_y * _mapsize_z; ++i) // do damage to units, average out the smoke, etc.
+		for (int // do damage to units, average out the smoke, etc.
+				i = 0;
+				i < _mapsize_x * _mapsize_y * _mapsize_z;
+				++i)
 		{
 			if (getTiles()[i]->getSmoke() != 0)
 			{

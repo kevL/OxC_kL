@@ -1861,7 +1861,7 @@ void BattleUnit::prepareNewTurn()
 	TURecovery -= (TURecovery * (_fatalWounds[BODYPART_LEFTLEG] + _fatalWounds[BODYPART_RIGHTLEG] * 10)) / 100;
 	setTimeUnits(TURecovery);
 
-	if (!isOut()) // recover energy
+	if (!isOut(true, true)) // recover energy
 	{
 		int ENRecovery = getStats()->tu / 3;
 		// Each fatal wound to the body reduces the soldier's energy recovery by 10%.

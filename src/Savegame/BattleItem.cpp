@@ -18,10 +18,12 @@
  */
 
 #include "BattleItem.h"
+
 #include "BattleUnit.h"
 #include "Tile.h"
-#include "../Ruleset/RuleItem.h"
+
 #include "../Ruleset/RuleInventory.h"
+#include "../Ruleset/RuleItem.h"
 
 
 namespace OpenXcom
@@ -32,7 +34,9 @@ namespace OpenXcom
  * @param rules Pointer to ruleset.
  * @param id The id of the item.
  */
-BattleItem::BattleItem(RuleItem* rules, int* id)
+BattleItem::BattleItem(
+		RuleItem* rules,
+		int* id)
 	:
 		_id(*id),
 		_rules(rules),

@@ -218,6 +218,8 @@ InventoryState::~InventoryState()
  */
 void InventoryState::init()
 {
+	Log(LOG_INFO) << "InventoryState::init()";
+
 	BattleUnit* unit = _battleGame->getSelectedUnit();
 
 	if (unit == 0) // no selected unit, close inventory
@@ -305,6 +307,8 @@ void InventoryState::init()
 	}
 
 	updateStats();
+
+	Log(LOG_INFO) << "InventoryState::init() EXIT";
 }
 
 /**
@@ -312,6 +316,8 @@ void InventoryState::init()
  */
 void InventoryState::updateStats()
 {
+	Log(LOG_INFO) << "InventoryState::updateStats()";
+
 	BattleUnit* unit = _battleGame->getSelectedUnit();
 
 	_txtTus->setText(tr("STR_TUS").arg(unit->getTimeUnits()));
@@ -352,6 +358,8 @@ void InventoryState::updateStats()
 	{
 		_txtPStr->setText(L"");
 	}
+
+	Log(LOG_INFO) << "InventoryState::updateStats() EXIT";
 }
 
 /**
@@ -359,6 +367,8 @@ void InventoryState::updateStats()
  */
 void InventoryState::saveEquipmentLayout()
 {
+	Log(LOG_INFO) << "InventoryState::saveEquipmentLayout()";
+
 	for (std::vector<BattleUnit*>::iterator
 			i = _battleGame->getUnits()->begin();
 			i != _battleGame->getUnits()->end();
@@ -405,6 +415,8 @@ void InventoryState::saveEquipmentLayout()
 														(*j)->getExplodeTurn()));
 		}
 	}
+
+	Log(LOG_INFO) << "InventoryState::saveEquipmentLayout() EXIT";
 }
 
 /**
