@@ -113,6 +113,9 @@ private:
 
 		/// Updates the palette.
 		void init();
+		/// Re-initialize the Transfer menu, when cancelling TransferConfirmState.
+		void reinit();
+
 		/// Runs the timers.
 		void think();
 

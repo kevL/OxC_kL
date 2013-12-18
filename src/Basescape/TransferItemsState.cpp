@@ -358,10 +358,183 @@ TransferItemsState::~TransferItemsState()
 void TransferItemsState::init()
 {
 	_game->setPalette(
-				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(
-																			Palette::blockOffset(0)),
-																			Palette::backPos,
-																			16);
+				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)),
+				Palette::backPos,
+				16);
+}
+
+/**
+ * Re-initialize the Transfer menu, when cancelling TransferConfirmState.
+ */
+void TransferItemsState::reinit()
+{
+	_game->setPalette(
+				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)),
+				Palette::backPos,
+				16);
+
+	_lstItems->clearList(); // kL
+
+
+	for (std::vector<Soldier*>::iterator
+			i = _baseFrom->getSoldiers()->begin();
+			i != _baseFrom->getSoldiers()->end();
+			++i)
+	{
+		if ((*i)->getCraft() == 0)
+		{
+			_qtys.push_back(0);
+			_soldiers.push_back(*i);
+
+			_lstItems->addRow(
+							4,
+							(*i)->getName().c_str(),
+							L"1",
+							L"0",
+							L"0");
+		}
+	}
+
+	for (std::vector<Craft*>::iterator
+			i = _baseFrom->getCrafts()->begin();
+			i != _baseFrom->getCrafts()->end();
+			++i)
+	{
+		if ((*i)->getStatus() != "STR_OUT"
+			|| (_canTransferCraftsWhileAirborne
+				&& (*i)->getFuel() >= (*i)->getFuelLimit(_baseTo)))
+		{
+			_qtys.push_back(0);
+			_crafts.push_back(*i);
+
+			_lstItems->addRow(
+							4,
+							(*i)->getName(_game->getLanguage()).c_str(),
+							L"1",
+							L"0",
+							L"0");
+		}
+	}
+
+	if (_baseFrom->getAvailableScientists() > 0)
+	{
+		_qtys.push_back(0);
+
+		_hasSci = 1;
+
+		std::wstringstream
+			ss,
+			ss2;
+		ss << _baseFrom->getAvailableScientists();
+		ss2 << _baseTo->getAvailableScientists();
+
+		_lstItems->addRow(
+						4,
+						tr("STR_SCIENTIST").c_str(),
+						ss.str().c_str(),
+						L"0",
+						ss2.str().c_str());
+	}
+
+	if (_baseFrom->getAvailableEngineers() > 0)
+	{
+		_qtys.push_back(0);
+
+		_hasEng = 1;
+
+		std::wstringstream
+			ss,
+			ss2;
+		ss << _baseFrom->getAvailableEngineers();
+		ss2 << _baseTo->getAvailableEngineers();
+
+		_lstItems->addRow(
+						4,
+						tr("STR_ENGINEER").c_str(),
+						ss.str().c_str(),
+						L"0",
+						ss2.str().c_str());
+	}
+
+	const std::vector<std::string>& items = _game->getRuleset()->getItemsList();
+	for (std::vector<std::string>::const_iterator
+			i = items.begin();
+			i != items.end();
+			++i)
+	{
+		int qty = _baseFrom->getItems()->getItem(*i);
+		if (qty > 0)
+		{
+			_qtys.push_back(0);
+			_items.push_back(*i);
+
+			// kL_begin:
+			std::wstring item = tr(*i);
+
+			int tQty = _baseTo->getItems()->getItem(*i); // Returns the quantity of an item in the container.
+			for (std::vector<Transfer*>::const_iterator
+					j = _baseTo->getTransfers()->begin();
+					j != _baseTo->getTransfers()->end();
+					++j)
+			{
+				std::wstring trItem = (*j)->getName(_game->getLanguage());
+				if (item == trItem)
+				{
+					tQty += (*j)->getQuantity();
+				}
+			}
+
+			// Add qty of items & vehicles on transport craft to Transfers, _baseTo screen stock.
+			for (std::vector<Craft*>::const_iterator
+					c = _baseTo->getCrafts()->begin();
+					c != _baseTo->getCrafts()->end();
+					++c)
+			{
+				if ((*c)->getRules()->getSoldiers() > 0) // is transport craft
+				{
+					for (std::map<std::string, int>::iterator
+							t = (*c)->getItems()->getContents()->begin();
+							t != (*c)->getItems()->getContents()->end();
+							++t)
+					{
+						std::wstring ti = tr(t->first);
+						if (item == ti)
+						{
+							tQty += t->second;
+						}
+					}
+				}
+
+				if ((*c)->getRules()->getVehicles() > 0) // is transport craft capable of vehicles
+				{
+					for (std::vector<Vehicle*>::const_iterator
+							v = (*c)->getVehicles()->begin();
+							v != (*c)->getVehicles()->end();
+							++v)
+					{
+						std::wstring tv = tr((*v)->getRules()->getType());
+						if (tv == item)
+						{
+							tQty++;
+							// still have to do vehicle ammo...
+						}
+					}
+				}
+			} // kL_end.
+
+			std::wstringstream
+				ss,
+				ss2;
+			ss << qty;
+			ss2 << tQty;
+			_lstItems->addRow( // kL
+							4,
+							item.c_str(),
+							ss.str().c_str(),
+							L"0",
+							ss2.str().c_str());
+		}
+	}
 }
 
 /**
@@ -546,6 +719,11 @@ void TransferItemsState::completeTransfer()
  */
 void TransferItemsState::btnCancelClick(Action*)
 {
+	_game->setPalette( // kL, from TransferBaseState
+				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)),
+				Palette::backPos,
+				16);
+
 	_game->popState(); // pop main Transfer (this)
 //kL	_game->popState(); // pop choose Destination
 }
