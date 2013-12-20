@@ -40,6 +40,7 @@ enum ItemDamageType
 	DT_SMOKE	// 9
 };
 
+
 enum BattleType
 {
 	BT_NONE,				// 0
@@ -56,11 +57,13 @@ enum BattleType
 	BT_CORPSE				// 11
 };
 
+
 namespace OpenXcom
 {
 
 class Surface;
 class SurfaceSet;
+
 
 /**
  * Represents a specific type of item.
@@ -70,31 +73,74 @@ class SurfaceSet;
  */
 class RuleItem
 {
+
 private:
-	std::string _type, _name; // two types of objects can have the same name
-	std::vector<std::string> _requires;
+	bool
+		_arcingShot,
+		_fixedWeapon,
+		_flatRate,
+		_liveAlien,
+		_recover,
+		_twoHanded,
+		_waypoint;
+	int
+		_armor,
+		_attraction,
+		_autoShots,
+		_blastRadius,
+		_bulletSpeed,
+		_clipSize,
+		_costBuy,
+		_costSell,
+		_fireSound,
+		_hitAnimation,
+		_hitSound,
+		_invWidth,
+		_invHeight,
+		_listOrder,
+		_power,
+		_range,
+		_recoveryPoints,
+		_transferTime,
+		_turretType,
+		_tuUse,
+		_weight,
+
+		_heal,
+		_painKiller,
+		_stimulant,
+
+		_accuracyAimed,
+		_accuracyAuto,
+		_accuracyMelee,
+		_accuracySnap,
+		_tuAimed,
+		_tuAuto,
+		_tuMelee,
+		_tuSnap,
+
+		_woundRecovery,
+		_healthRecovery,
+		_stunRecovery,
+		_energyRecovery,
+
+		_bigSprite,
+		_floorSprite,
+		_handSprite,
+		_bulletSprite;
+
 	float _size;
-	int _costBuy, _costSell, _transferTime, _weight;
-	int _bigSprite, _floorSprite, _handSprite, _bulletSprite;
-	int _fireSound, _hitSound, _hitAnimation;
-	int _power;
-	std::vector<std::string> _compatibleAmmo;
-	ItemDamageType _damageType;
-	int _accuracyAuto, _accuracySnap, _accuracyAimed, _tuAuto, _tuSnap, _tuAimed;
-	int _clipSize, _accuracyMelee, _tuMelee;
+
+	std::string
+		_type,
+		_name; // two types of objects can have the same name
+
 	BattleType _battleType;
-	bool _twoHanded, _waypoint, _fixedWeapon;
-	int _invWidth, _invHeight;
-	int _painKiller, _heal, _stimulant;
-	int _woundRecovery, _healthRecovery, _stunRecovery, _energyRecovery;
-	int _tuUse;
-	int _recoveryPoints;
-	int _armor;
-	int _turretType;
-	bool _recover, _liveAlien;
-	int _blastRadius, _attraction;
-	bool _flatRate, _arcingShot;
-	int _listOrder, _range, _bulletSpeed, _autoShots;
+	ItemDamageType _damageType;
+
+	std::vector<std::string>
+		_compatibleAmmo,
+		_requires;
 
 
 	public:
@@ -216,6 +262,10 @@ private:
 		int getBulletSpeed() const;
 		/// How many auto shots does this weapon fire.
 		int getAutoShots() const;
+		/// is this item a 2 handed weapon?
+		bool isRifle() const;
+		/// is this item a single handed weapon?
+		bool isPistol() const;
 };
 
 }

@@ -1220,6 +1220,8 @@ en-US:
   STR_MANAGE_CONTAINMENT: "Alien Containment"
   STR_DETAILS: "Details: {ALT}{0}"
   STR_GO_TO_BASE: "Go to Base"
+  STR_DISABLEAUTOEQUIP: "Disable auto-equip"
+  STR_DISABLEAUTOEQUIP_DESC: "Disable auto-equipping of new soldiers before battle"
   STR_HOUR:
     one: "{N} hr"
     few: "{N} hrs"

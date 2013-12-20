@@ -103,6 +103,7 @@ OptionsAdvancedState::OptionsAdvancedState(Game* game, OptionsOrigin origin)
 	_settingBoolSet.push_back(std::pair<std::string, bool>("globeSeasons", false));
 	_settingBoolSet.push_back(std::pair<std::string, bool>("playIntro", false));
 	_settingBoolSet.push_back(std::pair<std::string, bool>("showFundsOnGeoscape", false));
+	_settingBoolSet.push_back(std::pair<std::string, bool>("disableAutoEquip", false));
 	_settingBoolSet.push_back(std::pair<std::string, bool>("showMoreStatsInInventoryView", false));
 	_settingBoolSet.push_back(std::pair<std::string, bool>("sneakyAI", false));
 	_settingBoolSet.push_back(std::pair<std::string, bool>("strafe", false));

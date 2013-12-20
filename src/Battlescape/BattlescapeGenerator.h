@@ -114,10 +114,8 @@ private:
 	BattleUnit* addCivilian(Unit* rules);
 	/// Places an item on a soldier based on equipment layout.
 	BattleItem* placeItemByLayout(BattleItem* item);
-	/// Adds an item to the game. kL_note: NOT USED ANYMORE.
-//	BattleItem* addItem(BattleItem* item, bool secondPass);
-	/// Adds an item to a unit.
-	BattleItem* addItem(RuleItem* item, BattleUnit* unit);
+	/// Adds an item to a unit and the game.
+	bool addItem(BattleItem* item, BattleUnit* unit, bool allowSecondClip = false);
 
 	/// Loads a weapon on the inventoryTile.
 	bool loadGroundWeapon(BattleItem* item);

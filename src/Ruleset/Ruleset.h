@@ -32,35 +32,36 @@
 namespace OpenXcom
 {
 
-class SavedGame;
-class SoldierNamePool;
-class RuleCountry;
-class RuleRegion;
-class RuleBaseFacility;
-class RuleCraft;
-class RuleCraftWeapon;
-class RuleItem;
-class RuleUfo;
-class RuleTerrain;
-class MapDataSet;
-class ResourcePack;
-class RuleSoldier;
-class Unit;
+class AlienDeployment;
+class AlienRace;
 class Armor;
 class ArticleDefinition;
-class RuleInventory;
-class RuleResearch;
-class RuleManufacture;
-class AlienRace;
-class AlienDeployment;
-class UfoTrajectory;
-class RuleAlienMission;
-class City;
 class Base;
-class MCDPatch;
-class ExtraSprites;
+class City;
 class ExtraSounds;
+class ExtraSprites;
 class ExtraStrings;
+class MapDataSet;
+class MCDPatch;
+class ResourcePack;
+class RuleAlienMission;
+class RuleBaseFacility;
+class RuleCountry;
+class RuleCraft;
+class RuleCraftWeapon;
+class RuleInventory;
+class RuleItem;
+class RuleManufacture;
+class RuleRegion;
+class RuleResearch;
+class RuleSoldier;
+class RuleTerrain;
+class RuleUfo;
+class SavedGame;
+class SoldierNamePool;
+class UfoTrajectory;
+class Unit;
+
 
 /**
  * Set of rules and stats for a game.
@@ -70,47 +71,83 @@ class ExtraStrings;
  */
 class Ruleset
 {
+
 protected:
-	std::vector<SoldierNamePool*> _names;
+	int
+		_initialFunding,
 
-	std::map<std::string, RuleCountry*> _countries;
-	std::map<std::string, RuleRegion*> _regions;
-	std::map<std::string, RuleBaseFacility*> _facilities;
-	std::map<std::string, RuleCraft*> _crafts;
-	std::map<std::string, RuleCraftWeapon*> _craftWeapons;
-	std::map<std::string, RuleItem*> _items;
-	std::map<std::string, RuleUfo*> _ufos;
-	std::map<std::string, RuleTerrain*> _terrains;
-	std::map<std::string, MapDataSet*> _mapDataSets;
-	std::map<std::string, RuleSoldier*> _soldiers;
-	std::map<std::string, Unit*> _units;
-	std::map<std::string, AlienRace*> _alienRaces;
-	std::map<std::string, AlienDeployment*> _alienDeployments;
-	std::map<std::string, Armor*> _armors;
-	std::map<std::string, ArticleDefinition*> _ufopaediaArticles;
-	std::map<std::string, RuleInventory*> _invs;
-	std::map<std::string, RuleResearch*> _research;
-	std::map<std::string, RuleManufacture*> _manufacture;
-	std::map<std::string, UfoTrajectory*> _ufoTrajectories;
-	std::map<std::string, RuleAlienMission*> _alienMissions;
-	std::map<std::string, MCDPatch*> _MCDPatches;
-	std::map<std::string, ExtraStrings*> _extraStrings;
+		_costEngineer,
+		_costScientist,
+		_costSoldier,
+		_timePersonnel,
 
-	std::vector<std::pair<std::string, ExtraSprites*>> _extraSprites;
-	std::vector<std::pair<std::string, ExtraSounds*>> _extraSounds;
+		_modIndex,
 
-	int _costSoldier, _costEngineer, _costScientist, _timePersonnel, _initialFunding;
-	int _modIndex, _facilityListOrder, _craftListOrder, _itemListOrder, _researchListOrder,  _manufactureListOrder, _ufopaediaListOrder;
+		_craftListOrder,
+		_facilityListOrder,
+		_invListOrder,
+		_itemListOrder,
+		_manufactureListOrder,
+		_researchListOrder,
+		_ufopaediaListOrder;
 
-	YAML::Node _startingBase;
 	GameTime _startingTime;
+	YAML::Node _startingBase;
 
-	std::vector<std::string> _countriesIndex, _regionsIndex, _facilitiesIndex, _craftsIndex, _craftWeaponsIndex, _itemsIndex, _ufosIndex;
-	std::vector<std::string> _aliensIndex, _deploymentsIndex, _armorsIndex, _ufopaediaIndex, _researchIndex, _manufactureIndex, _MCDPatchesIndex;
-	std::vector<std::string> _alienMissionsIndex, _terrainIndex, _extraSpritesIndex, _extraSoundsIndex, _extraStringsIndex;
+	std::vector<std::string>
+		_alienMissionsIndex,
+		_aliensIndex,
+		_armorsIndex,
+		_countriesIndex,
+		_craftsIndex,
+		_craftWeaponsIndex,
+		_deploymentsIndex,
+		_extraSoundsIndex,
+		_extraSpritesIndex,
+		_extraStringsIndex,
+		_facilitiesIndex,
+		_invsIndex,
+		_itemsIndex,
+		_manufactureIndex,
+		_MCDPatchesIndex,
+		_regionsIndex,
+		_researchIndex,
+		_terrainIndex,
+		_ufopaediaIndex,
+		_ufosIndex,
+
+		_psiRequirements; // it's a cache for psiStrengthEval
+
 	std::vector<std::vector<int>> _alienItemLevels;
 
-	std::vector<std::string> _psiRequirements; // it's a cache for psiStrengthEval
+	std::vector<SoldierNamePool*> _names;
+
+	std::map<std::string, AlienDeployment*> _alienDeployments;
+	std::map<std::string, AlienRace*> _alienRaces;
+	std::map<std::string, Armor*> _armors;
+	std::map<std::string, ArticleDefinition*> _ufopaediaArticles;
+	std::map<std::string, ExtraStrings*> _extraStrings;
+	std::map<std::string, MapDataSet*> _mapDataSets;
+	std::map<std::string, MCDPatch*> _MCDPatches;
+	std::map<std::string, RuleAlienMission*> _alienMissions;
+	std::map<std::string, RuleBaseFacility*> _facilities;
+	std::map<std::string, RuleCountry*> _countries;
+	std::map<std::string, RuleCraft*> _crafts;
+	std::map<std::string, RuleCraftWeapon*> _craftWeapons;
+	std::map<std::string, RuleInventory*> _invs;
+	std::map<std::string, RuleItem*> _items;
+	std::map<std::string, RuleManufacture*> _manufacture;
+	std::map<std::string, RuleRegion*> _regions;
+	std::map<std::string, RuleResearch*> _research;
+	std::map<std::string, RuleSoldier*> _soldiers;
+	std::map<std::string, RuleTerrain*> _terrains;
+	std::map<std::string, RuleUfo*> _ufos;
+	std::map<std::string, UfoTrajectory*> _ufoTrajectories;
+	std::map<std::string, Unit*> _units;
+
+	std::vector<std::pair<std::string, ExtraSounds*>> _extraSounds;
+	std::vector<std::pair<std::string, ExtraSprites*>> _extraSprites;
+
 
 	/// Loads a ruleset from a YAML file.
 	void loadFile(const std::string& filename);
@@ -118,7 +155,11 @@ protected:
 	void loadFiles(const std::string& dirname);
 
 	/// Loads a ruleset element.
-	template <typename T> T* loadRule(const YAML::Node& node, std::map<std::string, T*>* map, std::vector<std::string>* index = 0, const std::string& key = "type");
+	template <typename T> T* loadRule(
+			const YAML::Node& node,
+			std::map<std::string, T*>* map,
+			std::vector<std::string>* index = 0,
+			const std::string& key = "type");
 
 	public:
 		/// Creates a blank ruleset.
@@ -232,6 +273,8 @@ protected:
 		void sortLists();
 		/// Gets the research-requirements for Psi-Lab (it's a cache for psiStrengthEval)
 		std::vector<std::string> getPsiRequirements();
+		/// Returns the sorted list of inventories.
+		const std::vector<std::string>& getInvsList() const;
 };
 
 }

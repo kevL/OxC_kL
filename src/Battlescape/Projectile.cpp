@@ -199,13 +199,12 @@ Wb.131129
 			if (_action.target != _origin)
 			{
 				// launched missiles go slightly higher than the middle.
-				targetVoxel.z = 16;
+				targetVoxel.z += 4;
 			}
 			else
 			{
 				// unless two waypoints are placed on the same tile, in which case target the floor.
-//kL				targetVoxel.z = 2;
-				targetVoxel.z = 1;
+				targetVoxel.z -= 10;
 			}
 		}
 	}

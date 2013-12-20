@@ -20,9 +20,10 @@
 #ifndef OPENXCOM_RULEINVENTORY_H
 #define OPENXCOM_RULEINVENTORY_H
 
+#include <map>
 #include <string>
 #include <vector>
-#include <map>
+
 #include <yaml-cpp/yaml.h>
 
 
@@ -31,8 +32,11 @@ namespace OpenXcom
 
 struct RuleSlot
 {
-	int x, y;
+	int
+		x,
+		y;
 };
+
 
 enum InventoryType
 {
@@ -41,7 +45,9 @@ enum InventoryType
 	INV_GROUND
 };
 
+
 class RuleItem;
+
 
 /**
  * Represents a specific section of the inventory,
@@ -50,12 +56,19 @@ class RuleItem;
  */
 class RuleInventory
 {
+
 private:
+	int
+		_listOrder,
+		_x,
+		_y;
 	std::string _id;
-	int _x, _y;
+
 	InventoryType _type;
-	std::vector<RuleSlot> _slots;
+
 	std::map<std::string, int> _costs;
+	std::vector<RuleSlot> _slots;
+
 
 	public:
 		static const int SLOT_W = 16;
@@ -69,24 +82,33 @@ private:
 		~RuleInventory();
 
 		/// Loads inventory data from YAML.
-		void load(const YAML::Node& node);
+		void load(
+				const YAML::Node& node,
+				int listOrder);
 
 		/// Gets the inventory's id.
 		std::string getId() const;
+
 		/// Gets the X position of the inventory.
 		int getX() const;
 		/// Gets the Y position of the inventory.
 		int getY() const;
+
 		/// Gets the inventory type.
 		InventoryType getType() const;
+
 		/// Gets all the slots in the inventory.
 		std::vector<struct RuleSlot>* getSlots();
 		/// Checks for a slot in a certain position.
 		bool checkSlotInPosition(int* x, int* y) const;
 		/// Checks if an item fits in a slot.
 		bool fitItemInSlot(RuleItem* item, int x, int y) const;
+
 		/// Gets a certain cost in the inventory.
 		int getCost(RuleInventory* slot) const;
+
+		///
+		int getListOrder() const;
 };
 
 }

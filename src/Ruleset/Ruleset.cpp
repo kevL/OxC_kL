@@ -82,7 +82,8 @@ Ruleset::Ruleset()
 		_itemListOrder(0),
 		_researchListOrder(0),
 		_manufactureListOrder(0),
-		_ufopaediaListOrder(0)
+		_ufopaediaListOrder(0),
+		_invListOrder(0)
 {
 	std::string path = CrossPlatform::getDataFolder("SoldierName/"); // Check in which data dir the folder is stored
 
@@ -318,10 +319,11 @@ void Ruleset::loadFile(const std::string& filename)
 
 	for (YAML::const_iterator i = doc["invs"].begin(); i != doc["invs"].end(); ++i)
 	{
-		RuleInventory* rule = loadRule(*i, &_invs, 0, "id");
+		RuleInventory* rule = loadRule(*i, &_invs, &_invsIndex, "id");
 		if (rule != 0)
 		{
-			rule->load(*i);
+			_invListOrder += 10;
+			rule->load(*i, _invListOrder);
 		}
 	}
 
@@ -1046,6 +1048,15 @@ RuleInventory* Ruleset::getInventory(const std::string& id) const
 }
 
 /**
+ * Returns the list of inventories.
+ * @return, The list of inventories.
+ */
+const std::vector<std::string>& Ruleset::getInvsList() const
+{
+	return _invsIndex;
+}
+
+/**
  * Returns the rules for the specified research project.
  * @param id Research project type.
  * @return Rules for the research project.
@@ -1315,6 +1326,7 @@ void Ruleset::sortLists()
 	}
 
 	_craftsIndex.clear();
+
 	for (std::map<int, std::string>::const_iterator i = list.begin(); i != list.end(); ++i)
 	{
 		_craftsIndex.push_back(i->second);
@@ -1447,6 +1459,26 @@ void Ruleset::sortLists()
 	for (std::map<int, std::string>::const_iterator i = list.begin(); i != list.end(); ++i)
 	{
 		_manufactureIndex.push_back(i->second);
+	}
+
+	list.clear();
+	offset = 0;
+
+	for (std::vector<std::string>::const_iterator i = _invsIndex.begin(); i != _invsIndex.end(); ++i)
+	{
+		while (list.find(getInventory(*i)->getListOrder() + offset) != list.end())
+		{
+			++offset;
+		}
+
+		list[getInventory(*i)->getListOrder() + offset] = *i;
+	}
+
+	_invsIndex.clear();
+
+	for (std::map<int, std::string>::const_iterator i = list.begin(); i != list.end(); ++i)
+	{
+		_invsIndex.push_back(i->second);
 	}
 
 	list.clear();
