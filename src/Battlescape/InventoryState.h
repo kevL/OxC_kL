@@ -26,13 +26,14 @@
 namespace OpenXcom
 {
 
-class Surface;
-class Text;
+class BattlescapeState;
+class BattleUnit;
 class InteractiveSurface;
 class Inventory;
 class SavedBattleGame;
-class BattlescapeState;
-class BattleUnit;
+class Surface;
+class Text;
+
 
 /**
  * Screen which displays soldier's inventory.
@@ -41,19 +42,44 @@ class InventoryState
 	:
 		public State
 {
+
 private:
-	Surface* _bg, * _soldier;
-	Text* _txtName, * _txtItem, * _txtAmmo, * _txtWeight, * _txtTus, * _txtFAcc, * _txtReact, * _txtPSkill, * _txtPStr;
-	InteractiveSurface* _btnOk, * _btnPrev, * _btnNext, * _btnUnload, * _btnGround, * _btnRank;
-	Surface* _selAmmo;
+	bool
+		_showStats,
+		_tu;
+
+	BattlescapeState* _parent;
+	InteractiveSurface
+		* _btnGround,
+		* _btnNext,
+		* _btnOk,
+		* _btnPrev,
+		* _btnRank,
+		* _btnUnload;
 	Inventory* _inv;
 	SavedBattleGame* _battleGame;
-	bool _tu, _showMoreStatsInInventoryView;
-	BattlescapeState* _parent;
+	Surface
+		* _bg,
+		* _selAmmo,
+		* _soldier;
+	Text
+		* _txtName,
+		* _txtItem,
+		* _txtAmmo,
+		* _txtWeight,
+		* _txtTus,
+		* _txtFAcc,
+		* _txtReact,
+		* _txtPSkill,
+		* _txtPStr;
+
 
 	public:
 		/// Creates the Inventory state.
-		InventoryState(Game* game, bool tu, BattlescapeState* parent);
+		InventoryState(
+				Game* game,
+				bool tu,
+				BattlescapeState* parent);
 		/// Cleans up the Inventory state.
 		~InventoryState();
 
@@ -66,17 +92,17 @@ private:
 		/// Handler for clicking the OK button.
 
 		void btnOkClick(Action* action);
-		/// Handler for clicking the Previous button.
+		/// Handler for clicking the Previous soldier button.
 		void btnPrevClick(Action* action);
-		/// Handler for clicking the Next button.
+		/// Handler for clicking the Next soldier button.
 		void btnNextClick(Action* action);
-		/// Handler for clicking the Rank button.
+		/// Handler for clicking the Unload weapon button.
 		void btnUnloadClick(Action* action);
 		/// Handler for clicking on the Ground -> button.
 		void btnGroundClick(Action* action);
-		/// Handler for clicking on the inventory.
+		/// Handler for clicking the Rank button.
 		void btnRankClick(Action* action);
-		/// Handler for clicking the Unload button.
+		/// Handler for clicking on inventory items.
 		void invClick(Action* action);
 		/// Handles keypresses.
 		void handle(Action* action);

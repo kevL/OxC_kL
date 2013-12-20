@@ -99,7 +99,7 @@ BattlescapeGenerator::BattlescapeGenerator(Game* game)
 		_alienItemLevel(0),
 		_tankPos(0)		// kL
 {
-//	Log(LOG_INFO) << "Create BattlescapeGenerator";
+	//Log(LOG_INFO) << "Create BattlescapeGenerator";
 }
 
 /**
@@ -107,7 +107,7 @@ BattlescapeGenerator::BattlescapeGenerator(Game* game)
  */
 BattlescapeGenerator::~BattlescapeGenerator()
 {
-//	Log(LOG_INFO) << "Delete BattlescapeGenerator";
+	//Log(LOG_INFO) << "Delete BattlescapeGenerator";
 }
 
 /**
@@ -434,11 +434,11 @@ void BattlescapeGenerator::deployXCOM()
 				i != _craft->getVehicles()->end();
 				++i)
 		{
-			Log(LOG_INFO) << ". addXCOMVehicle " << (int)*i;
+			Log(LOG_INFO) << ". . isCraft: addXCOMVehicle " << (int)*i;
 
 			BattleUnit* unit = addXCOMVehicle(*i);
-			if (unit
-				&& !_save->getSelectedUnit())
+			if (unit)
+//kL				&& !_save->getSelectedUnit())
 			{
 				_save->setSelectedUnit(unit);
 			}
@@ -447,17 +447,16 @@ void BattlescapeGenerator::deployXCOM()
 	else if (_base != 0)
 	{
 		// add vehicles that are in the base inventory
-		// kL_note: does this exclude vehicles that are stored in Craft?
 		for (std::vector<Vehicle*>::iterator
 				i = _base->getVehicles()->begin();
 				i != _base->getVehicles()->end();
 				++i)
 		{
-			Log(LOG_INFO) << ". addXCOMVehicle " << (int)*i;
+			Log(LOG_INFO) << ". . isBase: addXCOMVehicle " << (int)*i;
 
 			BattleUnit* unit = addXCOMVehicle(*i);
-			if (unit
-				&& !_save->getSelectedUnit())
+			if (unit)
+//kL				&& !_save->getSelectedUnit())
 			{
 				_save->setSelectedUnit(unit);
 			}
@@ -477,7 +476,7 @@ void BattlescapeGenerator::deployXCOM()
 				&& ((*i)->getCraft() == 0
 					|| (*i)->getCraft()->getStatus() != "STR_OUT")))
 		{
-			Log(LOG_INFO) << ". addXCOMUnit " << (*i)->getId();
+			Log(LOG_INFO) << ". . addXCOMUnit " << (*i)->getId();
 
 			BattleUnit* unit = addXCOMUnit(new BattleUnit(
 														*i,
@@ -490,6 +489,8 @@ void BattlescapeGenerator::deployXCOM()
 			}
 		}
 	}
+
+	//Log(LOG_INFO) << ". addXCOMUnit(s) DONE";
 
 	// maybe we should assign all units to the first tile of the skyranger before the
 	// inventory pre-equip and then reassign them to their correct tile afterwards?
@@ -507,8 +508,11 @@ void BattlescapeGenerator::deployXCOM()
 		}
 	}
 
+	//Log(LOG_INFO) << ". setUnit(s) DONE";
+
 	if (_craft != 0) // add items that are in the craft
 	{
+		//Log(LOG_INFO) << ". . addCraftItems";
 		for (std::map<std::string, int>::iterator
 				i = _craft->getItems()->getContents()->begin();
 				i != _craft->getItems()->getContents()->end();
@@ -522,12 +526,15 @@ void BattlescapeGenerator::deployXCOM()
 				_craftInventoryTile->addItem(new BattleItem(
 														_game->getRuleset()->getItem(i->first),
 														_save->getCurrentItemId()),
-										_game->getRuleset()->getInventory("STR_GROUND"));
+											_game->getRuleset()->getInventory("STR_GROUND"));
 			}
 		}
+
+		//Log(LOG_INFO) << ". . addCraftItems DONE";
 	}
 	else // add items that are in the base
 	{
+		//Log(LOG_INFO) << ". . addBaseItems";
 		for (std::map<std::string, int>::iterator
 				i = _base->getItems()->getContents()->begin();
 				i != _base->getItems()->getContents()->end();
@@ -550,19 +557,20 @@ void BattlescapeGenerator::deployXCOM()
 					_craftInventoryTile->addItem(new BattleItem(
 															_game->getRuleset()->getItem(i->first),
 															_save->getCurrentItemId()),
-											_game->getRuleset()->getInventory("STR_GROUND"));
+												_game->getRuleset()->getInventory("STR_GROUND"));
 				}
 
-				std::map<std::string, int>::iterator tmp = i;
+				std::map<std::string, int>::iterator rem = i;
 
 				++i;
-				_base->getItems()->removeItem(tmp->first, tmp->second);
+				_base->getItems()->removeItem(rem->first, rem->second);
 			}
 			else
 			{
 				++i;
 			}
 		}
+		//Log(LOG_INFO) << ". . addBaseBaseItems DONE ; add BaseCraftItems";
 
 		// add items from crafts in base
 		for (std::vector<Craft*>::iterator
@@ -586,23 +594,56 @@ void BattlescapeGenerator::deployXCOM()
 					_craftInventoryTile->addItem(new BattleItem(
 															_game->getRuleset()->getItem(i->first),
 															_save->getCurrentItemId()),
-											_game->getRuleset()->getInventory("STR_GROUND"));
+												_game->getRuleset()->getInventory("STR_GROUND"));
 				}
 			}
 		}
+
+		//Log(LOG_INFO) << ". . addBaseCraftItems DONE";
 	}
 
+	//Log(LOG_INFO) << ". addItem(s) DONE";
+
+
+	// kL_note: ALL ITEMS SEEM TO STAY ON THE GROUNDTILE, _craftInventoryTile,
+	// IN THAT INVENTORY(vector) UNTIL EVERYTHING IS EQUIPPED & LOADED. Then
+	// the inventory-tile is cleaned out at the end of this function....
+	//
 	// equip soldiers based on equipment-layout
 	for (std::vector<BattleItem*>::iterator
 			i = _craftInventoryTile->getInventory()->begin();
 			i != _craftInventoryTile->getInventory()->end();
 			++i)
 	{
-		//Log(LOG_INFO) << "BattlescapeGenerator::deployXCOM(), placeItemByLayout(*item)";
+		//Log(LOG_INFO) << ". placeItemByLayout(*item)";
 		placeItemByLayout(*i);
 	}
 
+	// kL: Think I have to load ground-weapons before setting ground-tile items as xCom property..... nah.
+	for (std::vector<BattleItem*>::iterator
+			i = _craftInventoryTile->getInventory()->begin();
+			i != _craftInventoryTile->getInventory()->end();
+			++i)
+	{
+		//Log(LOG_INFO) << ". LOAD WEAPONS HERE";
+		if ((*i)->needsAmmo())
+			loadGroundWeapon(*i);
+
+/*		if ((*i)->needsAmmo()
+			&& loadGroundWeapon(*i))
+		{
+			// back to the beginning because the vector just got screwed:
+			i = _craftInventoryTile->getInventory()->begin();
+		}
+		else
+			i++; */
+	}
+
+
 	// auto-equip soldiers (only soldiers *without* layout)
+	// kL_note: This is not auto-equip anymore; now it just
+	// puts the items into the Battlescape item-vector, and
+	// assigns items as XCOMProperty.
 	for (std::vector<BattleItem*>::reverse_iterator
 			i = _craftInventoryTile->getInventory()->rbegin();
 			i != _craftInventoryTile->getInventory()->rend();
@@ -611,9 +652,9 @@ void BattlescapeGenerator::deployXCOM()
 		//Log(LOG_INFO) << "BattlescapeGenerator::deployXCOM(), addItem(*item, !SecondPass)";
 //kL		addItem(*i, false);
 
-		_save->getItems()->push_back(*i);	// kL_begin: moved up from addItem()
-
-		(*i)->setXCOMProperty(true);		// kL_begin: moved up from addItem()
+		//Log(LOG_INFO) << ". push_back, setXCOMProperty";
+		_save->getItems()->push_back(*i);	// kL: moved up from addItem()
+		(*i)->setXCOMProperty(true);		// kL: moved up from addItem()
 	}
 
 /*kL	for (std::vector<BattleItem*>::reverse_iterator
@@ -640,18 +681,20 @@ void BattlescapeGenerator::deployXCOM()
 			i = _craftInventoryTile->getInventory()->erase(i);
 		}
 		else
-		{
-			// kL_begin: LOAD WEAPONS HERE.
+/*		{
+			// kL_begin: was LOAD WEAPONS HERE.
 			if ((*i)->needsAmmo()
 				&& loadGroundWeapon(*i))
 			{
 				// back to the beginning because the vector just got screwed:
 				i = _craftInventoryTile->getInventory()->begin();
 			}
-			else
+			else */
 				++i;
-		}
+//		}
 	}
+
+	Log(LOG_INFO) << "BattlescapeGenerator::deployXCOM() EXIT";
 }
 
 /**
@@ -661,20 +704,37 @@ void BattlescapeGenerator::deployXCOM()
  */
 bool BattlescapeGenerator::loadGroundWeapon(BattleItem* item)
 {
+	//Log(LOG_INFO) << "BattlescapeGenerator::loadGroundWeapon()";
+
+	RuleInventory* ground = _game->getRuleset()->getInventory("STR_GROUND");
+	RuleInventory* righthand = _game->getRuleset()->getInventory("STR_RIGHT_HAND");
+	//Log(LOG_INFO) << ". ground & righthand RuleInventory are set";
+
 	for (std::vector<BattleItem*>::iterator
 			i = _craftInventoryTile->getInventory()->begin();
 			i != _craftInventoryTile->getInventory()->end();
 			++i)
 	{
-		if (item->setAmmoItem(*i) == 0) // success
-		{
-			// erase it from the ground!
-			_craftInventoryTile->getInventory()->erase(i);
+		//Log(LOG_INFO) << ". . iterate items for Ammo";
 
+		if ((*i)->getSlot() == ground
+			&& item->setAmmoItem(*i) == 0) // success
+		{
+			//Log(LOG_INFO) << ". . . attempt to set righthand as Inv.";
+
+			(*i)->setSlot(righthand);	// I don't think this is actually setting the ammo
+										// into anyone's right hand; I think it's just here
+										// to change the inventory-slot away from 'ground'.
+
+			// erase it from the ground! Later...
+//			_craftInventoryTile->getInventory()->erase(i);
+
+			//Log(LOG_INFO) << "BattlescapeGenerator::loadGroundWeapon() EXIT true";
 			return true;
 		}
 	}
 
+	//Log(LOG_INFO) << "BattlescapeGenerator::loadGroundWeapon() EXIT false";
 	return false;
 }
 
@@ -889,9 +949,9 @@ void BattlescapeGenerator::deployAliens(
 			Unit* rule = _game->getRuleset()->getUnit(alienName);
 			BattleUnit* unit = addAlien(rule, (*d).alienRank, outside);
 
-//			Log(LOG_INFO) << "BattlescapeGenerator::deplyAliens() do getAlienItemLevels()";
+			//Log(LOG_INFO) << "BattlescapeGenerator::deplyAliens() do getAlienItemLevels()";
 			int itemLevel = _game->getRuleset()->getAlienItemLevels().at(month).at(RNG::generate(0, 9));
-//			Log(LOG_INFO) << "BattlescapeGenerator::deplyAliens() DONE getAlienItemLevels()";
+			//Log(LOG_INFO) << "BattlescapeGenerator::deplyAliens() DONE getAlienItemLevels()";
 
 			if (unit)
 			{
@@ -1098,7 +1158,8 @@ BattleItem* BattlescapeGenerator::placeItemByLayout(BattleItem* item)
 				{
 					loaded = false;
 
-					// maybe we find the layout-ammo on the ground to load it with - yeh, maybe: as in, maybe this works maybe it doesn't
+					// maybe we find the layout-ammo on the ground to load it with -
+					// yeh, maybe: as in, maybe this works maybe it doesn't
 					for (std::vector<BattleItem*>::iterator
 							k = _craftInventoryTile->getInventory()->begin();
 							k != _craftInventoryTile->getInventory()->end()
@@ -1107,10 +1168,11 @@ BattleItem* BattlescapeGenerator::placeItemByLayout(BattleItem* item)
 					{
 						if ((*k)->getRules()->getType() == (*j)->getAmmoItem()
 							&& (*k)->getSlot() == ground	// why the redundancy?
-																// WHAT OTHER _craftInventoryTile IS THERE BUT THE GROUND TILE!!??!!!1
-							&& item->setAmmoItem(*k) == 0)		// okay, so load the damn item.
+															// WHAT OTHER _craftInventoryTile IS THERE BUT THE GROUND TILE!!??!!!1
+							&& item->setAmmoItem(*k) == 0)	// okay, so load the damn item.
 						{
 							(*k)->setSlot(righthand);		// why are you putting ammo in his right hand.....
+															// maybe just to get it off the ground so it doesn't get loaded into another weapon later.
 
 							loaded = true;
 							// note: soldier is not owner of the ammo, we are using this fact when saving equipments
@@ -2455,7 +2517,7 @@ RuleTerrain* BattlescapeGenerator::getTerrain(int tex, double lat)
 }
 
 /**
-* Creates a mini-battle-save for managing inventory from the Geoscape.
+* Creates a mini-battle-save for managing inventory from the Geoscape's CraftEquip screen.
 * Kids, don't try this at home! yer tellin' me.
 * @param craft, Pointer to craft to handle.
 */

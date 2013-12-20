@@ -675,9 +675,16 @@ void SavedBattleGame::setSelectedUnit(BattleUnit* unit)
 * @return Pointer to new selected BattleUnit, NULL if none can be selected.
 * @sa selectPlayerUnit
 */
-BattleUnit* SavedBattleGame::selectPreviousPlayerUnit(bool checkReselect, bool setReselect, bool checkInventory)
+BattleUnit* SavedBattleGame::selectPreviousPlayerUnit(
+		bool checkReselect,
+		bool setReselect,
+		bool checkInventory)
 {
-	return selectPlayerUnit(-1, checkReselect, setReselect, checkInventory);
+	return selectPlayerUnit(
+						-1,
+						checkReselect,
+						setReselect,
+						checkInventory);
 }
 
 /**
@@ -688,9 +695,16 @@ BattleUnit* SavedBattleGame::selectPreviousPlayerUnit(bool checkReselect, bool s
  * @return Pointer to new selected BattleUnit, NULL if none can be selected.
  * @sa selectPlayerUnit
  */
-BattleUnit* SavedBattleGame::selectNextPlayerUnit(bool checkReselect, bool setReselect, bool checkInventory)
+BattleUnit* SavedBattleGame::selectNextPlayerUnit(
+		bool checkReselect,
+		bool setReselect,
+		bool checkInventory)
 {
-	return selectPlayerUnit(+1, checkReselect, setReselect, checkInventory);
+	return selectPlayerUnit(
+						+1,
+						checkReselect,
+						setReselect,
+						checkInventory);
 }
 
 /**
@@ -701,7 +715,11 @@ BattleUnit* SavedBattleGame::selectNextPlayerUnit(bool checkReselect, bool setRe
  * @param checkInventory Whether to check if the unit has an inventory.
  * @return Pointer to new selected BattleUnit, NULL if none can be selected.
  */
-BattleUnit* SavedBattleGame::selectPlayerUnit(int dir, bool checkReselect, bool setReselect, bool checkInventory)
+BattleUnit* SavedBattleGame::selectPlayerUnit(
+		int dir,
+		bool checkReselect,
+		bool setReselect,
+		bool checkInventory)
 {
 	//Log(LOG_INFO) << "SavedBattleGame::selectPlayerUnit()";
 

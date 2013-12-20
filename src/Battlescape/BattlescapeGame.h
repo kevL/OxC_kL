@@ -115,15 +115,26 @@ struct BattleAction
  */
 class BattlescapeGame
 {
+
 private:
+	bool
+		_AISecondMove,
+		_endTurnRequested,
+		_kneelReserved,
+		_playedAggroSound,
+		_playerPanicHandled;
+	int _AIActionCounter;
+
 	SavedBattleGame* _save;
 	BattlescapeState* _parentState;
-	std::list<BattleState*> _states;
-	BattleActionType _tuReserved, _playerTUReserved;
-	bool _playerPanicHandled;
-	int _AIActionCounter;
+	BattleActionType
+		_tuReserved,
+		_playerTUReserved;
 	BattleAction _currentAction;
-	bool _AISecondMove;
+
+	std::list<BattleState*> _states;
+	std::vector<InfoboxOKState*> _infoboxQueue;
+
 	/// Ends the turn.
 	void endTurn();
 	/// Picks the first soldier that is panicking.
@@ -132,12 +143,8 @@ private:
 	bool handlePanickingUnit(BattleUnit* unit);
 	/// Determines whether there are any actions pending for the given unit.
 	bool noActionsPending(BattleUnit* bu);
-	///
-	std::vector<InfoboxOKState*> _infoboxQueue;
 	/// Shows the infoboxes in the queue (if any).
 	void showInfoBoxQueue();
-	///
-	bool _playedAggroSound, _endTurnRequested, _kneelReserved;
 
 
 	public:

@@ -856,7 +856,7 @@ int Tile::getTopItemSprite()
  */
 void Tile::prepareNewTurn()
 {
-	Log(LOG_INFO) << "Tile::prepareNewTurn()";
+	//Log(LOG_INFO) << "Tile::prepareNewTurn()";
 
 	// we've received new smoke in this turn, but we're not on fire, average out the smoke.
 	if (_overlaps != 0
@@ -889,7 +889,7 @@ void Tile::prepareNewTurn()
 						int burnTime = RNG::generate(0, static_cast<int>(5.f * _unit->getArmor()->getDamageModifier(DT_IN)));
 						if (_unit->getFire() < burnTime)
 						{
-							Log(LOG_INFO) << ". ID " << _unit->getId() << " burnTime = " << burnTime;
+							Log(LOG_INFO) << "Tile::prepareNewTurn() ID " << _unit->getId() << " burnTime = " << burnTime;
 							_unit->setFire(burnTime);
 						}
 					}

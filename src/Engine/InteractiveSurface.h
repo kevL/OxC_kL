@@ -16,18 +16,22 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_INTERACTIVE_SURFACE_H
 #define OPENXCOM_INTERACTIVE_SURFACE_H
 
-#include <SDL.h>
 #include <map>
-#include "Surface.h"
+
+#include <SDL.h>
+
 #include "State.h"
+#include "Surface.h"
+
 
 namespace OpenXcom
 {
 
-typedef void (State::* ActionHandler)(Action*);
+typedef void (State::*ActionHandler)(Action*);
 
 /**
  * Surface that the user can interact with.
@@ -36,72 +40,108 @@ typedef void (State::* ActionHandler)(Action*);
  * them into useful interactions with the Surface,
  * so specialized subclasses don't need to worry about it.
  */
-class InteractiveSurface : public Surface
+class InteractiveSurface
+	:
+		public Surface
 {
+
 private:
 	static const int NUM_BUTTONS = 7;
-	Uint8 _buttonsPressed;
-protected:
-	std::map<Uint8, ActionHandler> _click, _press, _release;
-	ActionHandler _in, _over, _out;
-	std::map<SDLKey, ActionHandler> _keyPress, _keyRelease;
-	bool _isHovered, _isFocused, _listButton;
 
-	/// Is this mouse button pressed?
-	bool isButtonPressed(Uint8 button = 0);
-	/// Is this mouse button event handled?
-	virtual bool isButtonHandled(Uint8 button = 0);
-	/// Set a mouse button's internal state.
-	void setButtonPressed(Uint8 button, bool pressed);
-public:
-	/// Creates a new interactive surface with the specified size and position.
-	InteractiveSurface(int width, int height, int x = 0, int y = 0);
-	/// Cleans up the interactive surface.
-	virtual ~InteractiveSurface();
-	/// Sets the surface's visibility.
-	void setVisible(bool visible);
-	/// Processes any pending events.
-	virtual void handle(Action *action, State *state);
-	/// Sets focus on this surface.
-	virtual void focus();
-	/// Removes focus from this surface.
-	virtual void deFocus();
-	/// Unpresses the surface.
-	virtual void unpress(State *state);
-	/// Hooks an action handler to a mouse click on the surface.
-	void onMouseClick(ActionHandler handler, Uint8 button = SDL_BUTTON_LEFT);
-	/// Hooks an action handler to a mouse press over the surface.
-	void onMousePress(ActionHandler handler, Uint8 button = 0);
-	/// Hooks an action handler to a mouse release over the surface.
-	void onMouseRelease(ActionHandler handler, Uint8 button = 0);
-	/// Hooks an action handler to moving the mouse into the surface.
-	void onMouseIn(ActionHandler handler);
-	/// Hooks an action handler to moving the mouse over the surface.
-	void onMouseOver(ActionHandler handler);
-	/// Hooks an action handler to moving the mouse out of the surface.
-	void onMouseOut(ActionHandler handler);
-	/// Hooks an action handler to pressing a key when the surface is focused.
-	void onKeyboardPress(ActionHandler handler, SDLKey key = SDLK_UNKNOWN);
-	/// Hooks an action handler to releasing a key when the surface is focused.
-	void onKeyboardRelease(ActionHandler handler, SDLKey key = SDLK_UNKNOWN);
-	/// Processes a mouse button press event.
-	virtual void mousePress(Action *action, State *state);
-	/// Processes a mouse button release event.
-	virtual void mouseRelease(Action *action, State *state);
-	/// Processes a mouse click event.
-	virtual void mouseClick(Action *action, State *state);
-	/// Processes a mouse hover in event.
-	virtual void mouseIn(Action *action, State *state);
-	/// Processes a mouse hover event.
-	virtual void mouseOver(Action *action, State *state);
-	/// Processes a mouse hover out event.
-	virtual void mouseOut(Action *action, State *state);
-	/// Processes a keyboard key press event.
-	virtual void keyboardPress(Action *action, State *state);
-	/// Processes a keyboard key release event.
-	virtual void keyboardRelease(Action *action, State *state);
-	/// Check this surface to see if it's a textlist button.
-	void setListButton();
+	Uint8 _buttonsPressed;
+
+
+	protected:
+		bool
+			_isFocused,
+			_isHovered,
+			_listButton;
+
+		ActionHandler
+			_in,
+			_out,
+			_over;
+
+		std::map<SDLKey, ActionHandler>
+			_keyPress,
+			_keyRelease;
+		std::map<Uint8, ActionHandler>
+			_click,
+			_press,
+			_release;
+
+		/// Is this mouse button pressed?
+		bool isButtonPressed(Uint8 button = 0);
+		/// Is this mouse button event handled?
+		virtual bool isButtonHandled(Uint8 button = 0);
+		/// Set a mouse button's internal state.
+		void setButtonPressed(Uint8 button, bool pressed);
+
+
+		public:
+			/// Creates a new interactive surface with the specified size and position.
+			InteractiveSurface(
+					int width,
+					int height,
+					int x = 0,
+					int y = 0);
+			/// Cleans up the interactive surface.
+			virtual ~InteractiveSurface();
+
+			/// Sets the surface's visibility.
+			void setVisible(bool visible);
+
+			/// Processes any pending events.
+			virtual void handle(
+					Action* action,
+					State* state);
+
+			/// Sets focus on this surface.
+			virtual void focus();
+			/// Removes focus from this surface.
+			virtual void deFocus();
+
+			/// Unpresses the surface.
+			virtual void unpress(State* state);
+
+			/// Hooks an action handler to a mouse click on the surface.
+			void onMouseClick(ActionHandler handler, Uint8 button = SDL_BUTTON_LEFT);
+			/// Hooks an action handler to a mouse press over the surface.
+			void onMousePress(ActionHandler handler, Uint8 button = 0);
+			/// Hooks an action handler to a mouse release over the surface.
+			void onMouseRelease(ActionHandler handler, Uint8 button = 0);
+			/// Hooks an action handler to moving the mouse into the surface.
+			void onMouseIn(ActionHandler handler);
+			/// Hooks an action handler to moving the mouse over the surface.
+			void onMouseOver(ActionHandler handler);
+			/// Hooks an action handler to moving the mouse out of the surface.
+			void onMouseOut(ActionHandler handler);
+
+			/// Hooks an action handler to pressing a key when the surface is focused.
+			void onKeyboardPress(ActionHandler handler, SDLKey key = SDLK_UNKNOWN);
+			/// Hooks an action handler to releasing a key when the surface is focused.
+			void onKeyboardRelease(ActionHandler handler, SDLKey key = SDLK_UNKNOWN);
+
+			/// Processes a mouse button press event.
+			virtual void mousePress(Action* action, State* state);
+			/// Processes a mouse button release event.
+			virtual void mouseRelease(Action* action, State* state);
+			/// Processes a mouse click event.
+			virtual void mouseClick(Action* action, State* state);
+			/// Processes a mouse hover in event.
+			virtual void mouseIn(Action* action, State* state);
+			/// Processes a mouse hover event.
+			virtual void mouseOver(Action* action, State* state);
+			/// Processes a mouse hover out event.
+			virtual void mouseOut(Action* action, State* state);
+
+			/// Processes a keyboard key press event.
+			virtual void keyboardPress(Action* action, State* state);
+			/// Processes a keyboard key release event.
+			virtual void keyboardRelease(Action* action, State* state);
+
+			/// Check this surface to see if it's a textlist button.
+			void setListButton();
 };
 
 }

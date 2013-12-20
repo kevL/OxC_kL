@@ -835,7 +835,7 @@ void GeoscapeState::timeAdvance()
  */
 void GeoscapeState::time5Seconds()
 {
-//	Log(LOG_INFO) << "GeoscapeState::time5Seconds()";
+	//Log(LOG_INFO) << "GeoscapeState::time5Seconds()";
 	// Game over if there are no more bases.
 	if (_game->getSavedGame()->getBases()->empty())
 	{
@@ -1464,12 +1464,10 @@ class callThink
 {
 
 private:
-
 	Game& _game;
 	const Globe& _globe;
 
 	public:
-
 		/// Store the parameters.
 		/**
 		 * @param game The game engine.

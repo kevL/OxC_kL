@@ -4055,77 +4055,60 @@ int TileEngine::faceWindow(const Position &position)
 /**
  * Returns the direction from origin to target.
  * kL_note: This function is almost identical to BattleUnit::directionTo().
- * @return direction.
+ * @return, direction.
  */
 int TileEngine::getDirectionTo(const Position& origin, const Position& target) const
 {
 	if (origin == target) return 0;	// kL. safety
+
 
 	double offset_x = target.x - origin.x;
 	double offset_y = target.y - origin.y;
 
 	// kL_note: atan2() usually takes the y-value first;
 	// and that's why things may seem so fucked up.
-//kL	double theta = atan2(offset_x, -offset_y);
 	double theta = atan2(-offset_y, offset_x); // radians: + = y > 0; - = y < 0;
 
 	// divide the pie in 4 thetas, each at 1/8th before each quarter
-//	double m_pi_8 = M_PI_4 / 2.0;
-	double m_pi_8 = M_PI / 8.0;			// a circle divided into 16 sections (rads) -> 22.5 deg
-	double d = 0.1;						// kL, a bias toward cardinal directions.
+	double m_pi_8 = M_PI / 8.0;				// a circle divided into 16 sections (rads) -> 22.5 deg
+	double d = 0.12;						// kL, a bias toward cardinal directions.
 	double pie[4] =
 	{
-//kL		(M_PI_4 * 4.0) - m_pi_8,	// 2.7488935718910690836548129603696
 		M_PI - m_pi_8 - d,					// 2.7488935718910690836548129603696	-> 157.5 deg
-//kL		(M_PI_4 * 3.0) - m_pi_8,	// 1.9634954084936207740391521145497
 		(M_PI * 3.0 / 4.0) - m_pi_8 + d,	// 1.9634954084936207740391521145497	-> 112.5 deg
-//kL		(M_PI_4 * 2.0) - m_pi_8,	// 1.1780972450961724644234912687298
 		M_PI_2 - m_pi_8 - d,				// 1.1780972450961724644234912687298	-> 67.5 deg
-//kL		(M_PI_4 * 1.0) - m_pi_8		// 0.39269908169872415480783042290994
 		m_pi_8 + d							// 0.39269908169872415480783042290994	-> 22.5 deg
 	};
 
-//kL	int dir = 0;
 	int dir = 2;
 	if (theta > pie[0] || theta < -pie[0])
 	{
-//kL		dir = 4;
 		dir = 6;
 	}
 	else if (theta > pie[1])
 	{
-//kL		dir = 3;
 		dir = 7;
 	}
 	else if (theta > pie[2])
 	{
-//kL		dir = 2;
 		dir = 0;
 	}
 	else if (theta > pie[3])
 	{
-//kL		dir = 1;
 		dir = 1;
 	}
 	else if (theta < -pie[1])
 	{
-//kL		dir = 5;
 		dir = 5;
 	}
 	else if (theta < -pie[2])
 	{
-//kL		dir = 6;
 		dir = 4;
 	}
 	else if (theta < -pie[3])
 	{
-//kL		dir = 7;
 		dir = 3;
 	}
-//	else //if (theta < pie[0])
-//	{
-//		dir = 0;
-//	}
 
 	return dir;
 }
@@ -4133,7 +4116,9 @@ int TileEngine::getDirectionTo(const Position& origin, const Position& target) c
 /**
  *
  */
-Position TileEngine::getOriginVoxel(BattleAction& action, Tile* tile)
+Position TileEngine::getOriginVoxel(
+		BattleAction& action,
+		Tile* tile)
 {
 	const int dirYshift[24] = {1,  3,  9, 15, 15, 13, 7, 1, 1,  1,  7, 13, 15, 15, 9, 3, 1,  2,  8, 14, 15, 14, 8, 2};
 	const int dirXshift[24] = {9, 15, 15, 13,  8,  1, 1, 3, 7, 13, 15, 15,  9,  3, 1, 1, 8, 14, 15, 14,  8,  2, 1, 2};
@@ -4144,7 +4129,10 @@ Position TileEngine::getOriginVoxel(BattleAction& action, Tile* tile)
 	}
 
 	Position origin = tile->getPosition();
-	Position originVoxel = Position(origin.x * 16, origin.y * 16, origin.z * 24);
+	Position originVoxel = Position(
+								origin.x * 16,
+								origin.y * 16,
+								origin.z * 24);
 
 	Tile* tileAbove = _save->getTile(origin + Position(0, 0, 1));
 
@@ -4153,10 +4141,15 @@ Position TileEngine::getOriginVoxel(BattleAction& action, Tile* tile)
 		|| action.type != BA_LAUNCH)
 	{
 		// calculate vertical offset of the starting point of the projectile
-		originVoxel.z += action.actor->getHeight() + action.actor->getFloatHeight();
-		originVoxel.z -= tile->getTerrainLevel();
-		originVoxel.z -= 4; // for good luck.
-		
+		originVoxel.z += action.actor->getHeight()
+						+ action.actor->getFloatHeight()
+						- tile->getTerrainLevel()
+						- 4; // for good luck.
+
+		if (action.type == BA_THROW)	// kL
+		{
+			originVoxel.z -= 4;			// kL
+		}
 /*kL		if (action.type == BA_THROW)
 		{
 			originVoxel.z -= 3;
@@ -4205,7 +4198,7 @@ Position TileEngine::getOriginVoxel(BattleAction& action, Tile* tile)
 		// projectile is not launched from a soldier (ie. from a waypoint)
 		originVoxel.x += 8;
 		originVoxel.y += 8;
-		originVoxel.z += 16;
+		originVoxel.z += 16; // Wb. has +16
 	}
 
 	return originVoxel;
@@ -4217,7 +4210,10 @@ Position TileEngine::getOriginVoxel(BattleAction& action, Tile* tile)
  * @param radius how far to spread out.
  * @param unit the unit that is triggering this action.
  */
-void TileEngine::setDangerZone(Position pos, int radius, BattleUnit* unit)
+void TileEngine::setDangerZone(
+		Position pos,
+		int radius,
+		BattleUnit* unit)
 {
 	Tile* tile = _save->getTile(pos);
 	if (!tile)

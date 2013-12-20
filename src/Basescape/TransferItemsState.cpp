@@ -375,6 +375,20 @@ void TransferItemsState::reinit()
 
 	_lstItems->clearList(); // kL
 
+	_qtys.clear();
+	_soldiers.clear();
+	_crafts.clear();
+	_items.clear();
+
+	_sel = 0;
+	_total = 0;
+	_pQty = 0;
+	_cQty = 0;
+	_aQty = 0;
+	_iQty = 0.0f;
+	_hasSci = 0;
+	_hasEng = 0;
+
 
 	for (std::vector<Soldier*>::iterator
 			i = _baseFrom->getSoldiers()->begin();

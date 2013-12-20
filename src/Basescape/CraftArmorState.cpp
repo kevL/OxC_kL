@@ -61,7 +61,7 @@ CraftArmorState::CraftArmorState(
 		_base(base),
 		_craft(craft)
 {
-	Log(LOG_INFO) << "Create CraftArmorState";
+	//Log(LOG_INFO) << "Create CraftArmorState";
 
 	_window			= new Window(this, 320, 200, 0, 0);
 	_txtTitle		= new Text(300, 17, 11, 10);
@@ -148,22 +148,22 @@ CraftArmorState::CraftArmorState(
 		Uint8 color;
 		if (!hasCraft)
 		{
-			Log(LOG_INFO) << ". . . . color, Base has NO craft";
+			//Log(LOG_INFO) << ". . . . color, Base has NO craft";
 			color = Palette::blockOffset(13)+10;
 		}
 		else if ((*i)->getCraft() == c)
 		{
-			Log(LOG_INFO) << ". . . . color, soldier is on 'this' craft";
-			color = Palette::blockOffset(13)+2;
+			//Log(LOG_INFO) << ". . . . color, soldier is on 'this' craft";
+			color = Palette::blockOffset(13);
 		}
 		else if ((*i)->getCraft() != 0)
 		{
-			Log(LOG_INFO) << ". . . . color, soldier is on another craft";
+			//Log(LOG_INFO) << ". . . . color, soldier is on another craft";
 			color = Palette::blockOffset(15)+6;
 		}
 		else // craft==0
 		{
-			Log(LOG_INFO) << ". . . . color, soldier is not on a craft";
+			//Log(LOG_INFO) << ". . . . color, soldier is not on a craft";
 			color = Palette::blockOffset(13)+10;
 		}
 
@@ -213,22 +213,22 @@ void CraftArmorState::init()
 		Uint8 color;
 		if (!hasCraft)
 		{
-			Log(LOG_INFO) << ". . . . color, Base has NO craft";
+			//Log(LOG_INFO) << ". . . . color, Base has NO craft";
 			color = Palette::blockOffset(13)+10;
 		}
 		else if ((*i)->getCraft() == c)
 		{
-			Log(LOG_INFO) << ". . . . color, soldier is on 'this' craft";
-			color = Palette::blockOffset(13)+2;
+			//Log(LOG_INFO) << ". . . . color, soldier is on 'this' craft";
+			color = Palette::blockOffset(13);
 		}
 		else if ((*i)->getCraft() != 0)
 		{
-			Log(LOG_INFO) << ". . . . color, soldier is on another craft";
+			//Log(LOG_INFO) << ". . . . color, soldier is on another craft";
 			color = Palette::blockOffset(15)+6;
 		}
 		else // craft==0
 		{
-			Log(LOG_INFO) << ". . . . color, soldier is not on a craft";
+			//Log(LOG_INFO) << ". . . . color, soldier is not on a craft";
 			color = Palette::blockOffset(13)+10;
 		}
 

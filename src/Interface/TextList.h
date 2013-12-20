@@ -37,45 +37,81 @@ enum ArrowOrientation
 	ARROW_HORIZONTAL
 };
 
+
 class ArrowButton;
 class Font;
 
+
 /**
  * List of Text's split into columns.
- * Contains a set of Text's that are automatically lined up by
- * rows and columns, like a big table, making it easy to manage
- * them together.
+ * Contains a set of Text's that are automatically lined up by rows
+ * and columns, like a big table, making it easy to manage them together.
  */
 class TextList
 	:
 		public InteractiveSurface
 {
+
 private:
-	std::vector< std::vector<Text*> > _texts;
-	std::vector<int> _columns;
-	Font* _big, * _small, * _font;
-	unsigned int _scroll, _visibleRows;
-	Uint8 _color, _color2;
-	std::map<int, TextHAlign> _align;
-	bool _dot, _selectable, _condensed, _contrast;
-	unsigned int _selRow;
-	Surface* _bg, * _selector;
-	ArrowButton* _up, * _down;
-	int _margin;
-	bool _scrolling;
-	std::vector<ArrowButton*> _arrowLeft, _arrowRight;
-	int _arrowPos, _scrollPos;
+	bool
+		_allowScrollOnArrowButtons,
+		_condensed,
+		_contrast,
+		_dot,
+		_scrolling,
+		_selectable;
+	int
+		_arrowPos,
+		_arrowsLeftEdge,
+		_arrowsRightEdge,
+		_margin,
+		_scrollPos;
+	unsigned int
+		_scroll,
+		_selRow,
+		_visibleRows;
+	Uint8
+		_color,
+		_color2;
+
+	ActionHandler
+		_leftClick,
+		_leftPress,
+		_leftRelease,
+		_rightClick,
+		_rightPress,
+		_rightRelease;
+	ArrowButton
+		* _up,
+		* _down;
 	ArrowOrientation _arrowType;
-	ActionHandler _leftClick, _leftPress, _leftRelease, _rightClick, _rightPress, _rightRelease;
-	bool _allowScrollOnArrowButtons;
-	int _arrowsLeftEdge, _arrowsRightEdge;
+	Font
+		* _big,
+		* _font,
+		* _small;
+	Surface
+		* _bg,
+		* _selector;
+
+	std::map<int, TextHAlign> _align;
+
+	std::vector<int> _columns;
+	std::vector<std::vector<Text*>> _texts;
+	std::vector<ArrowButton*>
+		_arrowLeft,
+		_arrowRight;
 
 	/// Updates the arrow buttons.
 	void updateArrows();
 
+
 	public:
 		/// Creates a text list with the specified size and position.
-		TextList(int width, int height, int x = 0, int y = 0);
+		TextList(
+				int width,
+				int height,
+				int x = 0,
+				int y = 0);
 		/// Cleans up the text list.
 		~TextList();
 
@@ -83,34 +119,61 @@ private:
 		void setX(int x);
 		/// Sets the Y position of the surface.
 		void setY(int y);
+
 		/// Sets the allowScrollOnArrowButtons.
 		void setAllowScrollOnArrowButtons(bool value);
+
 		/// Gets the arrowsLeftEdge.
 		int getArrowsLeftEdge();
 		/// Gets the arrowsRightEdge.
 		int getArrowsRightEdge();
+
 		/// Unpresses the surface.
 		void unpress(State* state);
+
 		/// Sets the text color of a certain cell.
-		void setCellColor(int row, int column, Uint8 color);
+		void setCellColor(
+				int row,
+				int column,
+				Uint8 color);
 		/// Sets the text color of a certain row.
-		void setRowColor(int row, Uint8 color);
+		void setRowColor(
+				int row,
+				Uint8 color);
+
 		/// Gets the text of a certain cell.
-		std::wstring getCellText(int row, int column) const;
+		std::wstring getCellText(
+				int row,
+				int column) const;
 		/// Sets the text of a certain cell.
-		void setCellText(int row, int column, const std::wstring& text);
+		void setCellText(
+				int row,
+				int column,
+				const std::wstring& text);
+
 		/// Gets the X position of a certain column.
 		int getColumnX(int column) const;
 		/// Gets the Y position of a certain row.
 		int getRowY(int row) const;
+
 		/// Adds a new row to the text list.
-		void addRow(int cols, ...);
+		void addRow(
+				int cols,
+				...);
 		/// Sets the columns in the text list.
-		void setColumns(int cols, ...);
+		void setColumns(
+				int cols,
+				...);
+
 		/// Sets the palette of the text list.
-		void setPalette(SDL_Color* colors, int firstcolor = 0, int ncolors = 256);
+		void setPalette(
+				SDL_Color* colors,
+				int firstcolor = 0,
+				int ncolors = 256);
 		/// Sets the fonts of the text list.
-		void setFonts(Font* big, Font* small);
+		void setFonts(
+				Font* big,
+				Font* small);
 		/// Sets the text color of the text list.
 		void setColor(Uint8 color);
 		/// Gets the text color of the text list.
@@ -119,32 +182,46 @@ private:
 		void setSecondaryColor(Uint8 color);
 		/// Gets the secondary color of the text list.
 		Uint8 getSecondaryColor() const;
+
 		/// Sets the text list's high contrast color setting.
 		void setHighContrast(bool contrast);
 		/// Sets the text horizontal alignment of the text list.
-		void setAlign(TextHAlign align, int col = -1);
+		void setAlign(
+				TextHAlign align,
+				int col = -1);
+
 		/// Sets whether to separate columns with dots.
 		void setDot(bool dot);
+
 		/// Sets whether the list is selectable.
 		void setSelectable(bool selectable);
+
 		/// Sets the text size to big.
 		void setBig();
 		/// Sets the text size to small.
 		void setSmall();
+
 		/// Sets whether to condense columns instead of a table like layout.
 		void setCondensed(bool condensed);
+
 		/// Sets the background for the selector.
 		void setBackground(Surface* bg);
+
 		/// Gets the selected row in the list.
 		int getSelectedRow() const;
+
 		/// Sets the margin of the text list.
 		void setMargin(int margin);
 		/// Gets the margin of the text list.
 		int getMargin() const;
+
 		/// Sets the arrow color of the text list.
 		void setArrowColor(Uint8 color);
 		/// Sets the arrow column of the text list.
-		void setArrowColumn(int pos, ArrowOrientation type);
+		void setArrowColumn(
+				int pos,
+				ArrowOrientation type);
+
 		/// Hooks an action handler to a mouse click on the left arrows.
 		void onLeftArrowClick(ActionHandler handler);
 		/// Hooks an action handler to a mouse press over the left arrows.
@@ -157,20 +234,26 @@ private:
 		void onRightArrowPress(ActionHandler handler);
 		/// Hooks an action handler to a mouse release over the right arrows.
 		void onRightArrowRelease(ActionHandler handler);
+
 		/// Clears the list.
 		void clearList();
+
 		/// Scrolls the list up.
 		void scrollUp(bool toMax);
 		/// Scrolls the list down.
 		void scrollDown(bool toMax);
 		/// Sets the list scrolling.
-		void setScrolling(bool scrolling, int scrollPos = 4);
+		void setScrolling(
+				bool scrolling,
+				int scrollPos = 4);
+
 		/// Draws the text onto the text list.
 		void draw();
 		/// Blits the text list onto another surface.
 		void blit(Surface* surface);
 		/// Thinks arrow buttons.
 		void think();
+
 		/// Handles arrow buttons.
 		void handle(Action* action, State* state);
 		/// Special handling for mouse presses.
@@ -183,6 +266,7 @@ private:
 		void mouseOver(Action* action, State* state);
 		/// Special handling for mouse hovering out.
 		void mouseOut(Action* action, State* state);
+
 		/// get the scroll depth
 		int getScroll();
 		/// set the scroll depth

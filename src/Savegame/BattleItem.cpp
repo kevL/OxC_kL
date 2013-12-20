@@ -252,7 +252,7 @@ void BattleItem::setOwner(BattleUnit* owner)
 
 /**
  * Removes the item from the previous owner and moves it to the new owner.
- * @param owner Pointer to Battleunit.
+ * @param owner, Pointer to Battleunit.
  */
 void BattleItem::moveToOwner(BattleUnit* owner)
 {
@@ -342,7 +342,10 @@ void BattleItem::setSlotY(int y)
  * @param item Item to check for overlap, or NULL if none.
  * @return True if it is covering.
  */
-bool BattleItem::occupiesSlot(int x, int y, BattleItem* item) const
+bool BattleItem::occupiesSlot(
+		int x,
+		int y,
+		BattleItem* item) const
 {
 	if (item == this)
 		return false;
@@ -376,8 +379,9 @@ BattleItem* BattleItem::getAmmoItem()
 }
 
 /**
- * Determines if the item uses ammo.
+ * Determines if the item uses (needs?) ammo.
  * No ammo is needed if the item has itself assigned as its ammoItem.
+ * See setAmmoItem()
  * @return, True if ammo is used.
  */
 bool BattleItem::needsAmmo() const
@@ -521,7 +525,7 @@ int BattleItem::getStimulantQuantity() const
 
 /**
  * Sets the XCom property flag. This is to determine at debriefing what goes into the base/craft.
- * @param flag True if it's XCom property.
+ * @param flag, True if it's XCom property.
  */
 void BattleItem::setXCOMProperty(bool flag)
 {
@@ -529,7 +533,7 @@ void BattleItem::setXCOMProperty(bool flag)
 }
 /**
  * Gets the XCom property flag. This is to determine at debriefing what goes into the base/craft.
- * @return True if it's XCom property.
+ * @return, True if it's XCom property.
  */
 bool BattleItem::getXCOMProperty() const
 {

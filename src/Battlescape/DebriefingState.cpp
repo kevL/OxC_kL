@@ -256,23 +256,23 @@ DebriefingState::DebriefingState(Game* game)
 
 	// Calculate rating
 	std::wstring rating;
-	if (total <= -150)
+	if (total <= -100)
 	{
 		rating = tr("STR_RATING_TERRIBLE");
 	}
-	else if (total <= 75)
+	else if (total <= 50)
 	{
 		rating = tr("STR_RATING_POOR");
 	}
-	else if (total <= 300) // try 250, even 200 (or 225)
+	else if (total <= 250)
 	{
 		rating = tr("STR_RATING_OK");
 	}
-	else if (total <= 800)
+	else if (total <= 500)
 	{
 		rating = tr("STR_RATING_GOOD");
 	}
-	else if (total <= 1500)
+	else if (total <= 1000)
 	{
 		rating = tr("STR_RATING_EXCELLENT");
 	}

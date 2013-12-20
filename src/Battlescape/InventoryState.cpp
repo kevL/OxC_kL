@@ -79,7 +79,7 @@ InventoryState::InventoryState(
 	_battleGame = _game->getSavedGame()->getSavedBattle();
 	Log(LOG_INFO) << ". _battleGame = " << _battleGame;
 
-	_showMoreStatsInInventoryView = Options::getBool("showMoreStatsInInventoryView");
+	_showStats = Options::getBool("showMoreStatsInInventoryView");
 
 	// remove any path preview if in the middle of a battlegame
 	if (tu
@@ -92,7 +92,7 @@ InventoryState::InventoryState(
 	_bg			= new Surface(320, 200, 0, 0);
 	_soldier	= new Surface(320, 200, 0, 0);
 	_txtName	= new Text(200, 17, 36, 6);
-	_txtTus		= new Text(40, 9, 245, _showMoreStatsInInventoryView? 32: 24);
+	_txtTus		= new Text(40, 9, 245, _showStats? 32: 24);
 
 	_txtWeight	= new Text(70, 9, 245, 24);
 	_txtFAcc	= new Text(40, 9, 245, 32);
@@ -197,11 +197,11 @@ InventoryState::InventoryState(
 	_inv->onMouseClick((ActionHandler)& InventoryState::invClick, 0);
 
 	_txtTus->setVisible(_tu);
-	_txtWeight->setVisible(_showMoreStatsInInventoryView);
-	_txtFAcc->setVisible(_showMoreStatsInInventoryView && !_tu);
-	_txtReact->setVisible(_showMoreStatsInInventoryView && !_tu);
-	_txtPSkill->setVisible(_showMoreStatsInInventoryView && !_tu);
-	_txtPStr->setVisible(_showMoreStatsInInventoryView && !_tu);
+	_txtWeight->setVisible(_showStats);
+	_txtFAcc->setVisible(_showStats && !_tu);
+	_txtReact->setVisible(_showStats && !_tu);
+	_txtPSkill->setVisible(_showStats && !_tu);
+	_txtPStr->setVisible(_showStats && !_tu);
 
 	Log(LOG_INFO) << "Create InventoryState EXIT";
 }
@@ -226,29 +226,35 @@ void InventoryState::init()
 	{
 		btnOkClick(0);
 
+		Log(LOG_INFO) << ". early out <- no selectedUnit";
 		return;
 	}
 
 	if (!unit->hasInventory()) // skip to the first unit with inventory
 	{
+		Log(LOG_INFO) << ". . unit doesn't have Inventory";
 		if (_parent)
 		{
+			Log(LOG_INFO) << ". . . _parent: select next unit";
 			_parent->selectNextPlayerUnit(false, false, true);
 		}
 		else
 		{
+			Log(LOG_INFO) << ". . . NO _parent: select next unit";
 			_battleGame->selectNextPlayerUnit(false, false, true);
 		}
 
-		if (_battleGame->getSelectedUnit() == 0						// no available unit,
-			 || !_battleGame->getSelectedUnit()->hasInventory())	// so close inventory
+		if (//kL _battleGame->getSelectedUnit() == 0 ||			// no available unit, Checked above.
+			 !_battleGame->getSelectedUnit()->hasInventory())	// so close inventory
 		{
 			btnOkClick(0);
 
+			Log(LOG_INFO) << ". . . early out <- no selectedUnit w/ Inventory";
 			return; // starting a mission with just vehicles
 		}
 		else
 		{
+			Log(LOG_INFO) << ". . . unit = selectedUnit";
 			unit = _battleGame->getSelectedUnit();
 		}
 	}
@@ -425,6 +431,8 @@ void InventoryState::saveEquipmentLayout()
  */
 void InventoryState::btnOkClick(Action*)
 {
+	Log(LOG_INFO) << "InventoryState::btnOkClick()";
+
 	if (_inv->getSelectedItem() != 0)
 		return;
 
@@ -433,6 +441,14 @@ void InventoryState::btnOkClick(Action*)
 	if (!_tu) // pre-Battle inventory equip.
 	{
 		saveEquipmentLayout();
+
+		// kL: This for early exit because access is via CraftEquip screen.
+		if (_parent == 0)
+		{
+			Log(LOG_INFO) << ". early out <- CraftEquip";
+			return;
+		}
+
 		_battleGame->resetUnitTiles();
 
 		for (std::vector<BattleUnit*>::iterator
@@ -459,6 +475,8 @@ void InventoryState::btnOkClick(Action*)
 			getTileEngine()->calculateFOV(position);
 		} */
 	}
+
+	Log(LOG_INFO) << "InventoryState::btnOkClick() EXIT";
 }
 
 /**

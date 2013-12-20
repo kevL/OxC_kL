@@ -42,7 +42,9 @@ namespace OpenXcom
  * @param parent Pointer to the Battlescape.
  * @param action Pointer to an action.
  */
-UnitTurnBState::UnitTurnBState(BattlescapeGame* parent, BattleAction action)
+UnitTurnBState::UnitTurnBState(
+		BattlescapeGame* parent,
+		BattleAction action)
 	:
 		BattleState(parent, action),
 		_unit(0),
@@ -126,13 +128,18 @@ void UnitTurnBState::think()
 	//Log(LOG_INFO) << "UnitTurnBState::think() unitID = " << _unit->getId();
 	bool thisFaction = _unit->getFaction() == _parent->getSave()->getSide();	// kL
 
-//kL	const int tu = _unit->getFaction() == _parent->getSave()->getSide() ? 1 : 0; // one turn is 1 tu unless during reaction fire.
-//	const int tu = thisFaction? 1: 0;	// kL
-	int tu = 1;											// one tu per facing change
-	if (!thisFaction) tu = 0;							// reaction fire
-//	else if (_unit->getArmor()->getSize() > 1) tu = 2;	// large units cost 2 per facing change
-	else if (_unit->getTurretType() != -1
-		&& !_action.strafe) tu = 2;						// large units cost 2 per facing change
+	int turretType = _unit->getTurretType();
+	int tu = 1;									// one tu per facing change
+	if (!thisFaction) tu = 0;					// reaction fire
+//	else if (_unit->getArmor()->getSize() > 1)
+	else if (turretType != -1
+		&& !_action.strafe)						// only for xCom vehicles. (i think)
+	{
+		if (turretType < 3)
+			tu = 3;								// tracked vehicles cost 3 per facing change
+		else
+			tu = 2;								// hover vehicles cost 2 per facing change
+	}
 
 
 //kL	if (_unit->getFaction() == _parent->getSave()->getSide()

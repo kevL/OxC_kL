@@ -18,6 +18,7 @@
  */
 
 #include "InteractiveSurface.h"
+
 #include "Action.h"
 #include "Options.h"
 
@@ -32,7 +33,11 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-InteractiveSurface::InteractiveSurface(int width, int height, int x, int y)
+InteractiveSurface::InteractiveSurface(
+		int width,
+		int height,
+		int x,
+		int y)
 	:
 		Surface(width, height, x, y),
 		_buttonsPressed(0),
@@ -52,20 +57,28 @@ InteractiveSurface::~InteractiveSurface()
 {
 }
 
+/**
+ *
+ */
 bool InteractiveSurface::isButtonHandled(Uint8 button)
 {
-	bool handled = (_click.find(0) != _click.end() ||
-					_press.find(0) != _press.end() ||
-					_release.find(0) != _release.end());
+	bool handled = (_click.find(0) != _click.end()
+					|| _press.find(0) != _press.end()
+					|| _release.find(0) != _release.end());
+
 	if (!handled && button != 0)
 	{
-		handled = (_click.find(button) != _click.end() ||
-				   _press.find(button) != _press.end() ||
-				   _release.find(button) != _release.end());
+		handled = (_click.find(button) != _click.end()
+					|| _press.find(button) != _press.end()
+					|| _release.find(button) != _release.end());
 	}
+
 	return handled;
 }
 
+/**
+ *
+ */
 bool InteractiveSurface::isButtonPressed(Uint8 button)
 {
 	if (button == 0)
@@ -78,7 +91,12 @@ bool InteractiveSurface::isButtonPressed(Uint8 button)
 	}
 }
 
-void InteractiveSurface::setButtonPressed(Uint8 button, bool pressed)
+/**
+ *
+ */
+void InteractiveSurface::setButtonPressed(
+		Uint8 button,
+		bool pressed)
 {
 	if (pressed)
 	{
@@ -111,10 +129,12 @@ void InteractiveSurface::setVisible(bool visible)
  * check if it's relevant to the surface and convert it
  * into a meaningful interaction like a "click", calling
  * the respective handlers.
- * @param action Pointer to an action.
- * @param state State that the action handlers belong to.
+ * @param action, Pointer to an action.
+ * @param state, State that the action handlers belong to.
  */
-void InteractiveSurface::handle(Action* action, State* state)
+void InteractiveSurface::handle(
+		Action* action,
+		State* state)
 {
 	if (!_visible || _hidden)
 		return;
@@ -124,11 +144,19 @@ void InteractiveSurface::handle(Action* action, State* state)
 	if (action->getDetails()->type == SDL_MOUSEBUTTONUP
 		|| action->getDetails()->type == SDL_MOUSEBUTTONDOWN)
 	{
-		action->setMouseAction(action->getDetails()->button.x, action->getDetails()->button.y, getX(), getY());
+		action->setMouseAction(
+							action->getDetails()->button.x,
+							action->getDetails()->button.y,
+							getX(),
+							getY());
 	}
 	else if (action->getDetails()->type == SDL_MOUSEMOTION)
 	{
-		action->setMouseAction(action->getDetails()->motion.x, action->getDetails()->motion.y, getX(), getY());
+		action->setMouseAction(
+							action->getDetails()->motion.x,
+							action->getDetails()->motion.y,
+							getX(),
+							getY());
 	}
 	// Modern system mouse handling: Press/releases are only triggered by button up/down events
 	// Classic X-Com mouse handling: Press/releases occur automatically with mouse movement
@@ -148,7 +176,10 @@ void InteractiveSurface::handle(Action* action, State* state)
 			if (_listButton && action->getDetails()->type == SDL_MOUSEMOTION)
 			{
 				_buttonsPressed = SDL_GetMouseState(0, 0);
-				for (Uint8 i = 1; i <= NUM_BUTTONS; ++i)
+				for (Uint8
+						i = 1;
+						i <= NUM_BUTTONS;
+						++i)
 				{
 					if (isButtonPressed(i))
 					{
@@ -166,9 +197,13 @@ void InteractiveSurface::handle(Action* action, State* state)
 			{
 				_isHovered = false;
 				mouseOut(action, state);
-				if (_listButton && action->getDetails()->type == SDL_MOUSEMOTION)
+				if (_listButton
+					&& action->getDetails()->type == SDL_MOUSEMOTION)
 				{
-					for (Uint8 i = 1; i <= NUM_BUTTONS; ++i)
+					for (Uint8
+							i = 1;
+							i <= NUM_BUTTONS;
+							++i)
 					{
 						if (isButtonPressed(i))
 						{
@@ -185,7 +220,8 @@ void InteractiveSurface::handle(Action* action, State* state)
 
 	if (action->getDetails()->type == SDL_MOUSEBUTTONDOWN)
 	{
-		if (_isHovered && !isButtonPressed(action->getDetails()->button.button))
+		if (_isHovered
+			&& !isButtonPressed(action->getDetails()->button.button))
 		{
 			setButtonPressed(action->getDetails()->button.button, true);
 			mousePress(action, state);

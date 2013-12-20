@@ -36,6 +36,7 @@ class TextList;
 class Timer;
 class Window;
 
+
 /**
  * Equipment screen that lets the player
  * pick the equipment to carry on a craft.
@@ -58,16 +59,16 @@ private:
 	Base
 		* _base;
 	Text
-		* _txtTitle,
+		* _txtAvailable,
+//kL		* _txtCrew,
 		* _txtItem,
 		* _txtStores,
-		* _txtAvailable,
-		* _txtUsed,
-		* _txtCrew;
+		* _txtTitle,
+		* _txtUsed;
 	TextButton
-		* _btnOk,
 		* _btnClear,
-		* _btnInventory;
+		* _btnInventory,
+		* _btnOk;
 	TextList
 		* _lstEquipment;
 	Timer

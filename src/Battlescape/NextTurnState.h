@@ -26,12 +26,13 @@
 namespace OpenXcom
 {
 
-class Window;
-class Text;
-class SavedBattleGame;
 class BattlescapeState;
-class TurnCounter;		// kL
+class SavedBattleGame;
+class Text;
 class Timer;
+class TurnCounter; // kL
+class Window;
+
 
 /**
  * Screen which announces the next turn.
@@ -40,24 +41,37 @@ class NextTurnState
 	:
 		public State
 {
+
 private:
-	static const int NEXT_TURN_DELAY = 500;
-	Window* _window;
-	Text* _txtTitle, * _txtTurn, * _txtSide, * _txtMessage;
-	SavedBattleGame* _battleGame;
+	static const int NEXT_TURN_DELAY = 1000;
+
 	BattlescapeState* _state;
-	TurnCounter* _turnCounter;		// kL
+	SavedBattleGame* _battleGame;
+	Text
+		* _txtTitle,
+		* _txtTurn,
+		* _txtSide,
+		* _txtMessage;
 	Timer* _timer;
+	TurnCounter* _turnCounter; // kL
+	Window* _window;
+
 
 	public:
 		/// Creates the Next Turn state.
-		NextTurnState(Game* game, SavedBattleGame* battleGame, BattlescapeState* state);
+		NextTurnState(
+				Game* game,
+				SavedBattleGame* battleGame,
+				BattlescapeState* state);
 		/// Cleans up the Next Turn state.
 		~NextTurnState();
+
 		/// Handler for clicking anything.
 		void handle(Action* action);
+
 		/// Handles the timer.
 		void think();
+
 		/// Closes the window.
 		void close();
 };

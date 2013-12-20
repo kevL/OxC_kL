@@ -1870,7 +1870,7 @@ void AlienBAIState::meleeAction()
 }
 
 /**
- * Attempts to fire a waypoint projectile at an enemy we, or one of our teammates sees.
+ * Attempts to fire a waypoint projectile at an enemy that is seen (by any aLien).
  * Waypoint targetting: pick from any units currently spotted by our allies.
  */
 void AlienBAIState::wayPointAction()
@@ -1902,6 +1902,7 @@ void AlienBAIState::wayPointAction()
 		_save->getPathfinding()->abortPath();
 	}
 
+
 	if (_aggroTarget != 0)
 	{
 		_attackAction->type = BA_LAUNCH;
@@ -1914,67 +1915,67 @@ void AlienBAIState::wayPointAction()
 			return;
 		}
 
+
 		_attackAction->waypoints.clear();
-
-		int PathDirection;
-		int CollidesWith;
-
-		Position LastWayPoint = _unit->getPosition();
-		Position LastPosition = _unit->getPosition();
-		Position CurrentPosition = _unit->getPosition();
-		Position DirectionVector;
 
 		_save->getPathfinding()->calculate(_unit, _aggroTarget->getPosition(), _aggroTarget, -1);
 
-		PathDirection = _save->getPathfinding()->dequeuePath();
-		while (PathDirection != -1)
+		Position lastPt = _unit->getPosition();
+		Position lastPos = _unit->getPosition();
+		Position curPos = _unit->getPosition();
+		Position dirVector;
+
+		int collision;
+
+		int pathDir = _save->getPathfinding()->dequeuePath();
+		while (pathDir != -1)
 		{
-			LastPosition = CurrentPosition;
+			lastPos = curPos;
 
-			_save->getPathfinding()->directionToVector(PathDirection, &DirectionVector);
+			_save->getPathfinding()->directionToVector(pathDir, &dirVector);
 
-			CurrentPosition = CurrentPosition + DirectionVector;
+			curPos = curPos + dirVector;
 
 			Position voxelPosA(
-					(CurrentPosition.x * 16) + 8,
-					(CurrentPosition.y * 16) + 8,
-					(CurrentPosition.z * 24) + 16); // Wb. has +16
-			Position voxelPosb(
-					(LastWayPoint.x * 16) + 8,
-					(LastWayPoint.y * 16) + 8,
-					(LastWayPoint.z * 24) + 16); // Wb. has +16
+					(curPos.x * 16) + 8,
+					(curPos.y * 16) + 8,
+					(curPos.z * 24) + 16); // Wb. has +16
+			Position voxelPosB(
+					(lastPt.x * 16) + 8,
+					(lastPt.y * 16) + 8,
+					(lastPt.z * 24) + 16); // Wb. has +16
 
-			CollidesWith = _save->getTileEngine()->calculateLine(
+			collision = _save->getTileEngine()->calculateLine(
 															voxelPosA,
-															voxelPosb,
+															voxelPosB,
 															false,
 															0,
 															_unit,
 															true);
 
-			if (CollidesWith > VOXEL_EMPTY
-				&& CollidesWith < VOXEL_UNIT)
+			if (collision > VOXEL_EMPTY
+				&& collision < VOXEL_UNIT)
 			{
-				_attackAction->waypoints.push_back(LastPosition);
-				LastWayPoint = LastPosition;
+				_attackAction->waypoints.push_back(lastPos);
+				lastPt = lastPos;
 			}
-			else if (CollidesWith == VOXEL_UNIT)
+			else if (collision == VOXEL_UNIT)
 			{
-				BattleUnit* target = _save->getTile(CurrentPosition)->getUnit();
+				BattleUnit* target = _save->getTile(curPos)->getUnit();
 				if (target == _aggroTarget)
 				{
-					_attackAction->waypoints.push_back(CurrentPosition);
-					LastWayPoint = CurrentPosition;
+					_attackAction->waypoints.push_back(curPos);
+					lastPt = curPos;
 				}
 			}
 
-			PathDirection = _save->getPathfinding()->dequeuePath();
+			pathDir = _save->getPathfinding()->dequeuePath();
 		}
 
 		_attackAction->target = _attackAction->waypoints.front();
 
-		if (static_cast<int>(_attackAction->waypoints.size()) > 6 + (_attackAction->diff * 2)
-			|| LastWayPoint != _aggroTarget->getPosition())
+		if (static_cast<int>(_attackAction->waypoints.size()) > (_attackAction->diff * 2) + 6
+			|| lastPt != _aggroTarget->getPosition())
 		{
 			_attackAction->type = BA_RETHINK;
 		}

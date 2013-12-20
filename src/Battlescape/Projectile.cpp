@@ -207,6 +207,7 @@ Wb.131129
 //kL				targetVoxel.z = 2;
 				targetVoxel.z = 1;
 			}
+		}
 	}
 	else // non-waypointed attack follows
 	{

@@ -63,7 +63,8 @@ ManageAlienContainmentState::ManageAlienContainmentState(Game* game, Base* base,
 		_researchedAliens(0)
 {
 	_changeValueByMouseWheel = Options::getInt("changeValueByMouseWheel");
-	_allowChangeListValuesByMouseWheel = (Options::getBool("allowChangeListValuesByMouseWheel") && _changeValueByMouseWheel);
+	_allowChangeListValuesByMouseWheel = (Options::getBool("allowChangeListValuesByMouseWheel")
+											&& _changeValueByMouseWheel);
 	_containmentLimit = Options::getBool("alienContainmentLimitEnforced");
 	_overCrowded = _containmentLimit && _base->getAvailableContainment() < _base->getUsedContainment();
 
@@ -80,7 +81,6 @@ ManageAlienContainmentState::ManageAlienContainmentState(Game* game, Base* base,
 	}
 
 	_window			= new Window(this, 320, 200, 0, 0);
-
 	_txtTitle		= new Text(310, 17, 5, 10);
 
 	_txtAvailable	= new Text(144, 9, 16, 30);
@@ -99,20 +99,24 @@ ManageAlienContainmentState::ManageAlienContainmentState(Game* game, Base* base,
 
 	if (origin == OPT_BATTLESCAPE)
 	{
-		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
+		_game->setPalette(
+					_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)),
+					Palette::backPos,
+					16);
 		_color  = Palette::blockOffset(15)-1;
 		_color2 = Palette::blockOffset(8)+10;
 	}
 	else
 	{
-		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(1)), Palette::backPos, 16);
+		_game->setPalette(
+					_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(1)),
+					Palette::backPos,
+					16);
 		_color  = Palette::blockOffset(13)+10;
 		_color2 = Palette::blockOffset(13);
 	}
 
 	add(_window);
-	add(_btnOk);
-	add(_btnCancel);
 	add(_txtTitle);
 	add(_txtAvailable);
 	add(_txtUsed);
@@ -120,6 +124,8 @@ ManageAlienContainmentState::ManageAlienContainmentState(Game* game, Base* base,
 	add(_txtLiveAliens);
 	add(_txtDeadAliens);
 	add(_lstAliens);
+	add(_btnOk);
+	add(_btnCancel);
 
 	centerAllSurfaces();
 
@@ -159,11 +165,13 @@ ManageAlienContainmentState::ManageAlienContainmentState(Game* game, Base* base,
 
 	_txtAvailable->setColor(_color);
 	_txtAvailable->setSecondaryColor(_color2);
-	_txtAvailable->setText(tr("STR_SPACE_AVAILABLE").arg(_base->getAvailableContainment() - _base->getUsedContainment()));
+	_txtAvailable->setText(tr("STR_SPACE_AVAILABLE")
+							.arg(_base->getAvailableContainment() - _base->getUsedContainment()));
 
 	_txtUsed->setColor(_color);
 	_txtUsed->setSecondaryColor(_color2);
-	_txtUsed->setText(tr("STR_SPACE_USED").arg( _base->getUsedContainment() - _researchedAliens));
+	_txtUsed->setText(tr("STR_SPACE_USED")
+						.arg( _base->getUsedContainment() - _researchedAliens));
 
 	_lstAliens->setColor(_color2);
 	_lstAliens->setArrowColor(_color);
@@ -187,21 +195,26 @@ ManageAlienContainmentState::ManageAlienContainmentState(Game* game, Base* base,
 			i != items.end();
 			++i)
 	{
-		int qty = _base->getItems()->getItem(*i);							// get Qty of each item at this base
-		if (qty > 0															// if item exists at this base
-			&& _game->getRuleset()->getItem(*i)->getAlien())				// and it's a live alien...
+		int qty = _base->getItems()->getItem(*i);				// get Qty of each item at this base
+		if (qty > 0												// if item exists at this base
+			&& _game->getRuleset()->getItem(*i)->getAlien())	// and it's a live alien...
 		{
-			_qtys.push_back(0);												// put it in the _qtys<vector> as (int)
-			_aliens.push_back(*i);											// put its name in the _aliens<vector> as (string)
+			_qtys.push_back(0);									// put it in the _qtys<vector> as (int)
+			_aliens.push_back(*i);								// put its name in the _aliens<vector> as (string)
 
 			std::wstringstream ss;
 			ss << qty;
-			_lstAliens->addRow(3, tr(*i).c_str(), ss.str().c_str(), L"0");	// show its name on the list.
+			_lstAliens->addRow(									// show its name on the list.
+							3,
+							tr(*i).c_str(),
+							ss.str().c_str(),
+							L"0");
 		}
 	}
 
 	_timerInc = new Timer(280);
 	_timerInc->onTimer((StateHandler)&ManageAlienContainmentState::increase);
+
 	_timerDec = new Timer(280);
 	_timerDec->onTimer((StateHandler)&ManageAlienContainmentState::decrease);
 }
@@ -464,7 +477,7 @@ void ManageAlienContainmentState::updateStrings()
 	ss << qty;
 	ss2 << _qtys[_sel];
 
-	_lstAliens->setRowColor(_sel, (qty != 0)? _color2 : _color);
+	_lstAliens->setRowColor(_sel, (qty != 0)? _color2: _color);
 	_lstAliens->setCellText(_sel, 1, ss.str());
 	_lstAliens->setCellText(_sel, 2, ss2.str());
 

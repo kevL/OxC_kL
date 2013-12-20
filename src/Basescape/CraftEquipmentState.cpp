@@ -76,18 +76,15 @@ CraftEquipmentState::CraftEquipmentState(
 		_craft(craft)
 {
 	_changeValueByMouseWheel = Options::getInt("changeValueByMouseWheel");
-	_allowChangeListValuesByMouseWheel =
-									Options::getBool("allowChangeListValuesByMouseWheel")
-										&& _changeValueByMouseWheel;
+	_allowChangeListValuesByMouseWheel = Options::getBool("allowChangeListValuesByMouseWheel")
+											&& _changeValueByMouseWheel;
 
 	Craft* c = _base->getCrafts()->at(_craft);
-
 	bool craftHasCrew = c->getNumSoldiers() > 0;
 	bool newBattle = game->getSavedGame()->getMonthsPassed() == -1;
 
 
 	_window			= new Window(this, 320, 200, 0, 0);
-
 	_txtTitle		= new Text(300, 17, 16, 8);
 
 	_txtAvailable	= new Text(110, 9, 16, 25);
@@ -263,8 +260,9 @@ CraftEquipmentState::CraftEquipmentState(
 	}
 
 	_timerLeft = new Timer(280);
-	_timerRight = new Timer(280);
 	_timerLeft->onTimer((StateHandler)& CraftEquipmentState::moveLeft);
+
+	_timerRight = new Timer(280);
 	_timerRight->onTimer((StateHandler)& CraftEquipmentState::moveRight);
 }
 
@@ -820,6 +818,7 @@ void CraftEquipmentState::btnInventoryClick(Action*)
 	bgen.runInventory(craft);
 
 	_game->pushState(new InventoryState(_game, false, 0));
+	Log(LOG_INFO) << "CraftEquipmentState::btnInventoryClick() EXIT";
 }
 
 }

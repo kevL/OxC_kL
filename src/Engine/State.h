@@ -47,14 +47,14 @@ class State
 {
 
 	protected:
-
 		bool _screen;
+
 		Game* _game;
+
 		std::vector<Surface*> _surfaces;
 
 
 		public:
-
 			/// Creates a new state linked to a game.
 			State(Game* game);
 			/// Cleans up the state.
@@ -87,7 +87,9 @@ class State
 			/// Get the localized text.
 			const LocalizedText& tr(const std::string& id) const;
 			/// Get the localized text.
-			LocalizedText tr(const std::string& id, unsigned n) const;
+			LocalizedText tr(
+					const std::string& id,
+					unsigned n) const;
 
 			///
 			void centerAllSurfaces();
@@ -96,7 +98,6 @@ class State
 			///
 			void applyBattlescapeTheme();
 
-			///
 			friend class Timer;
 };
 

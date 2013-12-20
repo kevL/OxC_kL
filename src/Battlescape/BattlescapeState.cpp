@@ -957,10 +957,15 @@ void BattlescapeState::mapIn(Action*)
 void BattlescapeState::btnUnitUpClick(Action*)
 {
 	if (playableUnitSelected()
-		&& _save->getPathfinding()->validateUpDown(_save->getSelectedUnit(), _save->getSelectedUnit()->getPosition(), Pathfinding::DIR_UP))
+		&& _save->getPathfinding()->validateUpDown(
+												_save->getSelectedUnit(),
+												_save->getSelectedUnit()->getPosition(),
+												Pathfinding::DIR_UP))
 	{
 		_battleGame->cancelCurrentAction();
-		_battleGame->moveUpDown(_save->getSelectedUnit(), Pathfinding::DIR_UP);
+		_battleGame->moveUpDown(
+							_save->getSelectedUnit(),
+							Pathfinding::DIR_UP);
 	}
 }
 
@@ -971,10 +976,15 @@ void BattlescapeState::btnUnitUpClick(Action*)
 void BattlescapeState::btnUnitDownClick(Action*)
 {
 	if (playableUnitSelected()
-		&& _save->getPathfinding()->validateUpDown(_save->getSelectedUnit(), _save->getSelectedUnit()->getPosition(), Pathfinding::DIR_DOWN))
+		&& _save->getPathfinding()->validateUpDown(
+												_save->getSelectedUnit(),
+												_save->getSelectedUnit()->getPosition(),
+												Pathfinding::DIR_DOWN))
 	{
 		_battleGame->cancelCurrentAction();
-		_battleGame->moveUpDown(_save->getSelectedUnit(), Pathfinding::DIR_DOWN);
+		_battleGame->moveUpDown(
+							_save->getSelectedUnit(),
+							Pathfinding::DIR_DOWN);
 	}
 }
 
@@ -984,8 +994,11 @@ void BattlescapeState::btnUnitDownClick(Action*)
  */
 void BattlescapeState::btnMapUpClick(Action*)
 {
-	if (_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
+	if (_save->getSide() == FACTION_PLAYER
+		|| _save->getDebugMode())
+	{
 		_map->getCamera()->up();
+	}
 }
 
 /**
@@ -994,8 +1007,11 @@ void BattlescapeState::btnMapUpClick(Action*)
  */
 void BattlescapeState::btnMapDownClick(Action*)
 {
-	if (_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
+	if (_save->getSide() == FACTION_PLAYER
+		|| _save->getDebugMode())
+	{
 		_map->getCamera()->down();
+	}
 }
 
 /**
@@ -1006,7 +1022,10 @@ void BattlescapeState::btnShowMapClick(Action*)
 {
 	// MiniMapState
 	if (allowButtons())
-		_game->pushState(new MiniMapState (_game, _map->getCamera(), _save));
+		_game->pushState(new MiniMapState(
+										_game,
+										_map->getCamera(),
+										_save));
 }
 
 /**
@@ -1023,9 +1042,12 @@ void BattlescapeState::btnKneelClick(Action*)
 //			Log(LOG_INFO) << "BattlescapeState::btnKneelClick()";
 			_battleGame->kneel(bu);
 
-			if (_battleGame->getPathfinding()->isPathPreviewed() && bu->isKneeled()) // kL: Moved up from below.
+			if (_battleGame->getPathfinding()->isPathPreviewed()
+				&& bu->isKneeled()) // kL: Moved up from below.
 			{
-				_battleGame->getPathfinding()->calculate(_battleGame->getCurrentAction()->actor, _battleGame->getCurrentAction()->target);
+				_battleGame->getPathfinding()->calculate(
+													_battleGame->getCurrentAction()->actor,
+													_battleGame->getCurrentAction()->target);
 				_battleGame->getPathfinding()->removePreview();
 				_battleGame->getPathfinding()->previewPath();
 			}
@@ -1063,7 +1085,10 @@ void BattlescapeState::btnInventoryClick(Action*)
 
 		_battleGame->cancelCurrentAction(true);
 
-		_game->pushState(new InventoryState(_game, !_save->getDebugMode(), this));
+		_game->pushState(new InventoryState(
+										_game,
+										!_save->getDebugMode(),
+										this));
 	}
 }
 
@@ -1125,14 +1150,20 @@ void BattlescapeState::btnPrevStopClick(Action*)
  * @param setReselect When true, flag the current unit first.
  * @param checkInventory When true, don't select a unit that has no inventory.
  */
-void BattlescapeState::selectNextPlayerUnit(bool checkReselect, bool setReselect, bool checkInventory)
+void BattlescapeState::selectNextPlayerUnit(
+		bool checkReselect,
+		bool setReselect,
+		bool checkInventory)
 {
 	if (allowButtons())
 	{
 		if (_battleGame->getCurrentAction()->type != BA_NONE)
 			return;
 
-		BattleUnit* unit = _save->selectNextPlayerUnit(checkReselect, setReselect, checkInventory);
+		BattleUnit* unit = _save->selectNextPlayerUnit(
+												checkReselect,
+												setReselect,
+												checkInventory);
 		updateSoldierInfo();
 
 		if (unit)
@@ -1150,14 +1181,20 @@ void BattlescapeState::selectNextPlayerUnit(bool checkReselect, bool setReselect
  * @param setReselect When true, flag the current unit first.
  * @param checkInventory When true, don't select a unit that has no inventory.
  */
-void BattlescapeState::selectPreviousPlayerUnit(bool checkReselect, bool setReselect, bool checkInventory)
+void BattlescapeState::selectPreviousPlayerUnit(
+		bool checkReselect,
+		bool setReselect,
+		bool checkInventory)
 {
 	if (allowButtons())
 	{
 		if (_battleGame->getCurrentAction()->type != BA_NONE)
 			return;
 
-		BattleUnit* unit = _save->selectPreviousPlayerUnit(checkReselect, setReselect, checkInventory);
+		BattleUnit* unit = _save->selectPreviousPlayerUnit(
+													checkReselect,
+													setReselect,
+													checkInventory);
 		updateSoldierInfo();
 
 		if (unit)
@@ -1201,6 +1238,7 @@ void BattlescapeState::btnEndTurnClick(Action*)
 //		_txtTooltip->setText(L"");
 		_battleGame->requestEndTurn();
 	}
+
 	Log(LOG_INFO) << "BattlescapeState::btnEndTurnClick() EXIT";
 }
 
@@ -1213,7 +1251,10 @@ void BattlescapeState::btnAbortClick(Action*)
 	if (allowButtons())
 	{
 		//Log(LOG_INFO) << "BattlescapeState::btnAbortClick()";
-		_game->pushState(new AbortMissionState(_game, _save, this));
+		_game->pushState(new AbortMissionState(
+											_game,
+											_save,
+											this));
 	}
 
 	//Log(LOG_INFO) << "BattlescapeState::btnAbortClick() EXIT";
@@ -1852,7 +1893,10 @@ inline void BattlescapeState::handle(Action* action)
 					&& (SDL_GetModState() & KMOD_CTRL) != 0)
 				{
 					debug(L"Influenza bacterium dispersed");
-					for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i !=_save->getUnits()->end(); ++i)
+					for (std::vector<BattleUnit*>::iterator
+							i = _save->getUnits()->begin();
+							i !=_save->getUnits()->end();
+							++i)
 					{
 						if ((*i)->getOriginalFaction() == FACTION_HOSTILE)
 						{

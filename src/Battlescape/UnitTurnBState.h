@@ -30,6 +30,7 @@ namespace OpenXcom
 
 class BattleUnit;
 
+
 /**
  * State for turning units.
  */
@@ -37,20 +38,27 @@ class UnitTurnBState
 	:
 		public BattleState
 {
+
 private:
-	BattleUnit* _unit;
 	bool _turret;
+
+	BattleUnit* _unit;
+
 
 	public:
 		/// Creates a new UnitTurnBState class
-		UnitTurnBState(BattlescapeGame* parent, BattleAction action);
+		UnitTurnBState(
+				BattlescapeGame* parent,
+				BattleAction action);
 		/// Cleans up the UnitTurnBState.
 		~UnitTurnBState();
 
 		/// Initializes the state.
 		void init();
+
 		/// Handles a cancels request.
 //		void cancel();
+
 		/// Runs state functionality every cycle.
 		void think();
 		/// Gets the result of the state.

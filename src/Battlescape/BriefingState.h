@@ -26,11 +26,12 @@
 namespace OpenXcom
 {
 
+class Base;
+class Craft;
+class Text;
 class TextButton;
 class Window;
-class Text;
-class Craft;
-class Base;
+
 
 /**
  * Briefing screen which displays info
@@ -38,16 +39,25 @@ class Base;
  */
 class BriefingState
 	:
-	public State
+		public State
 {
-	private:
-		TextButton* _btnOk;
-		Window* _window;
-		Text* _txtTitle, * _txtTarget, * _txtCraft, * _txtBriefing;
+
+private:
+	Text
+		* _txtBriefing,
+		* _txtCraft,
+		* _txtTarget,
+		* _txtTitle;
+	TextButton* _btnOk;
+	Window* _window;
+
 
 	public:
 		/// Creates the Briefing state.
-		BriefingState(Game* game, Craft* craft = 0, Base* base = 0);
+		BriefingState(
+				Game* game,
+				Craft* craft = 0,
+				Base* base = 0);
 		/// Cleans up the Briefing state.
 		~BriefingState();
 

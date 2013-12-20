@@ -291,7 +291,7 @@ void Map::draw()
 		}
 		else
 		{
-			_reveal = 3;
+			_reveal = 4;
 			//Log(LOG_INFO) << ". . . . . . drawTerrain() Set _reveal = " << _reveal;
 		}
 
@@ -1539,7 +1539,7 @@ void Map::cacheUnits()
  */
 void Map::cacheUnit(BattleUnit* unit)
 {
-	Log(LOG_INFO) << "cacheUnit() : " << unit->getId();
+	//Log(LOG_INFO) << "cacheUnit() : " << unit->getId();
 
 	UnitSprite* unitSprite = new UnitSprite(_spriteWidth, _spriteHeight, 0, 0);
 	unitSprite->setPalette(this->getPalette());
@@ -1550,7 +1550,7 @@ void Map::cacheUnit(BattleUnit* unit)
 	unit->getCache(&invalid);
 	if (invalid)
 	{
-		Log(LOG_INFO) << ". (invalid)";
+		//Log(LOG_INFO) << ". (invalid)";
 
 		// 1 or 4 iterations, depending on unit size
 		for (int
@@ -1617,7 +1617,7 @@ void Map::cacheUnit(BattleUnit* unit)
 
 	delete unitSprite;
 
-	Log(LOG_INFO) << "exit cacheUnit() : " << unit->getId();
+	//Log(LOG_INFO) << "exit cacheUnit() : " << unit->getId();
 }
 
 /**

@@ -18,25 +18,31 @@
  */
 
 #include "BriefingState.h"
-#include "BattlescapeState.h"
+
+#include <sstream>
+
 #include "AliensCrashState.h"
+#include "BattlescapeState.h"
+#include "InventoryState.h"
+#include "NextTurnState.h"
+
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
 #include "../Engine/Music.h"
+#include "../Engine/Options.h"
 #include "../Engine/Palette.h"
-#include "../Interface/TextButton.h"
+
 #include "../Interface/Text.h"
+#include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
-#include "InventoryState.h"
-#include "NextTurnState.h"
+
 #include "../Resource/ResourcePack.h"
+
 #include "../Savegame/Base.h"
 #include "../Savegame/Craft.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Ufo.h"
-#include <sstream>
-#include "../Engine/Options.h"
 
 
 namespace OpenXcom
@@ -48,7 +54,10 @@ namespace OpenXcom
  * @param craft Pointer to the craft in the mission.
  * @param base Pointer to the base in the mission.
  */
-BriefingState::BriefingState(Game* game, Craft* craft, Base* base)
+BriefingState::BriefingState(
+		Game* game,
+		Craft* craft,
+		Base* base)
 	:
 		State(game)
 {
@@ -57,8 +66,8 @@ BriefingState::BriefingState(Game* game, Craft* craft, Base* base)
 	_screen = false;
 
 	_window			= new Window(this, 320, 200, 0, 0);
-
 	_txtTitle		= new Text(288, 17, 16, 22);
+
 	_txtTarget		= new Text(288, 17, 16, 39);
 	_txtCraft		= new Text(288, 17, 16, 56);
 
@@ -73,18 +82,27 @@ BriefingState::BriefingState(Game* game, Craft* craft, Base* base)
 	if (mission == "STR_TERROR_MISSION"
 		|| mission == "STR_BASE_DEFENSE")
 	{
-		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)), Palette::backPos, 16);
+		_game->setPalette(
+					_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)),
+					Palette::backPos,
+					16);
 		_game->getResourcePack()->getMusic("GMENBASE")->play();
 	}
 	else if (mission == "STR_MARS_CYDONIA_LANDING"
 		|| mission == "STR_MARS_THE_FINAL_ASSAULT")
 	{
-		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
+		_game->setPalette(
+					_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)),
+					Palette::backPos,
+					16);
 		_game->getResourcePack()->getMusic("GMNEWMAR")->play();
 	}
 	else
 	{
-		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
+		_game->setPalette(
+					_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)),
+					Palette::backPos,
+					16);
 		_game->getResourcePack()->getMusic("GMDEFEND")->play();
 	}
 
@@ -196,8 +214,14 @@ void BriefingState::btnOkClick(Action*)
 	{
 		_game->pushState(bs);
 		_game->getSavedGame()->getSavedBattle()->setBattleState(bs);
-		_game->pushState(new NextTurnState(_game, _game->getSavedGame()->getSavedBattle(), bs));
-		_game->pushState(new InventoryState(_game, false, bs));
+		_game->pushState(new NextTurnState(
+										_game,
+										_game->getSavedGame()->getSavedBattle(),
+										bs));
+		_game->pushState(new InventoryState(
+										_game,
+										false,
+										bs));
 	}
 	else
 	{
