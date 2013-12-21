@@ -983,7 +983,7 @@ void BattlescapeGenerator::loadGroundWeapon(BattleItem* item)
  * @param item, Pointer to the Item.
  * @return, Pointer to the Item.
  */
-BattleItem* BattlescapeGenerator::placeItemByLayout(BattleItem* item)
+bool BattlescapeGenerator::placeItemByLayout(BattleItem* item)
 {
 	RuleInventory* ground = _game->getRuleset()->getInventory("STR_GROUND");
 	if (item->getSlot() == ground)
@@ -1042,6 +1042,8 @@ BattleItem* BattlescapeGenerator::placeItemByLayout(BattleItem* item)
 															// WHAT OTHER _craftInventoryTile IS THERE BUT THE GROUND TILE!!??!!!1
 							&& item->setAmmoItem(*k) == 0)	// okay, so load the damn item.
 						{
+							_save->getItems()->push_back(*k);
+
 							(*k)->setSlot(righthand);		// why are you putting ammo in his right hand.....
 															// maybe just to get it off the ground so it doesn't get loaded into another weapon later.
 
@@ -1062,13 +1064,15 @@ BattleItem* BattlescapeGenerator::placeItemByLayout(BattleItem* item)
 
 					item->setExplodeTurn((*j)->getExplodeTurn());
 
-					return item;
+					_save->getItems()->push_back(item);
+
+					return true;
 				}
 			}
 		}
 	}
 
-	return item;
+	return false;
 }
 
 /**

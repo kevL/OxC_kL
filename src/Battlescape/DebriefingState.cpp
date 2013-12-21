@@ -871,7 +871,8 @@ void DebriefingState::prepareDebriefing()
 			}
 			else if (origFaction == FACTION_HOSTILE
 				&& (!aborted || (*j)->isInExitArea())
-				&& faction == FACTION_PLAYER) // mind controlled units may as well count as unconscious
+				&& faction == FACTION_PLAYER // mind controlled units may as well count as unconscious
+				&& !(*j)->isOut(true, true))
 			{
 				for (std::vector<BattleItem*>::iterator
 						k = (*j)->getInventory()->begin();

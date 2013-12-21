@@ -106,7 +106,7 @@ private:
 	/// Loads a weapon on the inventoryTile.
 	void loadGroundWeapon(BattleItem* item);
 	/// Places an item on a soldier based on equipment layout.
-	BattleItem* placeItemByLayout(BattleItem* item);
+	bool placeItemByLayout(BattleItem* item);
 	/// Adds an item to a unit and the game.
 	bool addItem(
 			BattleItem* item,

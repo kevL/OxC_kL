@@ -338,7 +338,7 @@ void InventoryState::updateStats()
 	{
 		_txtWeight->setSecondaryColor(Palette::blockOffset(3));
 	}
-	
+
 	_txtFAcc->setText(tr("STR_FACCURACY")
 									.arg(static_cast<int>(
 												static_cast<double>(unit->getStats()->firing) * unit->getAccuracyModifier())));
@@ -636,6 +636,13 @@ void InventoryState::invClick(Action*)
 		{
 			sAmmo = tr("STR_AMMO_ROUNDS_LEFT").arg(item->getAmmoQuantity());
 		}
+		else if (item->getRules()->getBattleType() == BT_MEDIKIT)
+		{
+			sAmmo = tr("STR_MEDI_KIT_QUANTITIES_LEFT")
+						.arg(item->getPainKillerQuantity())
+						.arg(item->getStimulantQuantity())
+						.arg(item->getHealQuantity());
+		}
 
 		_txtAmmo->setText(sAmmo);
 	}
@@ -651,7 +658,7 @@ void InventoryState::handle(Action* action)
 {
 	State::handle(action);
 
-#ifndef __MORPHOS__	
+#ifndef __MORPHOS__
 	if (action->getDetails()->type == SDL_MOUSEBUTTONDOWN)
 	{
 		if (action->getDetails()->button.button == SDL_BUTTON_X1)

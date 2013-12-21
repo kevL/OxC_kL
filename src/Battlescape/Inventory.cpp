@@ -1090,7 +1090,10 @@ bool Inventory::canBeStacked(BattleItem* itemA, BattleItem* itemB)
 				&& itemA->getAmmoItem()->getRules() == itemB->getAmmoItem()->getRules()					// and the same ammo type
 				&& itemA->getAmmoItem()->getAmmoQuantity() == itemB->getAmmoItem()->getAmmoQuantity()))	// and the same ammo quantity
 		&& itemA->getExplodeTurn() == -1 && itemB->getExplodeTurn() == -1								// and neither is set to explode
-		&& itemA->getUnit() == 0 && itemB->getUnit() == 0);												// and neither is a corpse or unconscious unit
+		&& itemA->getUnit() == 0 && itemB->getUnit() == 0												// and neither is a corpse or unconscious unit
+		&& itemA->getPainKillerQuantity() == itemB->getPainKillerQuantity()								// and if it's a medkit, it has the same number of charges
+		&& itemA->getHealQuantity() == itemB->getHealQuantity()
+		&& itemA->getStimulantQuantity() == itemB->getStimulantQuantity());
 }
 
 }
