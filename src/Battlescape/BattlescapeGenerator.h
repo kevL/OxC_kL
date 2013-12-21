@@ -45,7 +45,8 @@ class Vehicle;
 
 
 /**
- * A utility class that generates the initial battlescape data. Taking into account mission type, craft and ufo involved, terrain type,...
+ * A utility class that generates the initial battlescape data.
+ * Taking into account mission type, craft and ufo involved, terrain type,...
  */
 class BattlescapeGenerator
 {
@@ -61,16 +62,16 @@ private:
 		_worldTexture,
 		_worldShade;
 
-	AlienBase* _alienBase;
-	Base* _base;
-	Craft* _craft;
-	Game* _game;
-	ResourcePack* _res;
-	RuleTerrain* _terrain;
-	SavedBattleGame* _save;
-	TerrorSite* _terror;
-	Tile* _craftInventoryTile;
-	Ufo* _ufo;
+	AlienBase		* _alienBase;
+	Base			* _base;
+	Craft			* _craft;
+	Game			* _game;
+	ResourcePack	* _res;
+	RuleTerrain		* _terrain;
+	SavedBattleGame	* _save;
+	TerrorSite		* _terror;
+	Tile			* _craftInventoryTile;
+	Ufo				* _ufo;
 
 	std::string _alienRace;
 
@@ -97,24 +98,13 @@ private:
 
 	/// Deploys the XCOM units on the mission.
 	void deployXCOM();
-	/// Deploys the aliens, according to the alien deployment rules.
-	void deployAliens(
-			AlienRace* race,
-			AlienDeployment* deployment);
-	/// Spawns civilians on a terror mission.
-	void deployCivilians(int civilians);
-
 	/// Adds a vehicle to the game.
-	BattleUnit* addXCOMVehicle(Vehicle* v);
+	BattleUnit* addXCOMVehicle(Vehicle* tank);
 	/// Adds a soldier to the game.
 	BattleUnit* addXCOMUnit(BattleUnit* unit);
-	/// Adds an alien to the game.
-	BattleUnit* addAlien(
-			Unit* rules,
-			int alienRank,
-			bool outside);
-	/// Adds a civlian to the game.
-	BattleUnit* addCivilian(Unit* rules);
+
+	/// Loads a weapon on the inventoryTile.
+	void loadGroundWeapon(BattleItem* item);
 	/// Places an item on a soldier based on equipment layout.
 	BattleItem* placeItemByLayout(BattleItem* item);
 	/// Adds an item to a unit and the game.
@@ -123,8 +113,20 @@ private:
 			BattleUnit* unit,
 			bool allowSecondClip = false);
 
-	/// Loads a weapon on the inventoryTile.
-	bool loadGroundWeapon(BattleItem* item);
+	/// Deploys the aliens, according to the alien deployment rules.
+	void deployAliens(
+			AlienRace* race,
+			AlienDeployment* deployment);
+	/// Adds an alien to the game.
+	BattleUnit* addAlien(
+			Unit* rules,
+			int alienRank,
+			bool outside);
+
+	/// Spawns civilians on a terror mission.
+	void deployCivilians(int civilians);
+	/// Adds a civlian to the game.
+	BattleUnit* addCivilian(Unit* rules);
 
 	/// Fills power sources with an elerium-115 object.
 	void fuelPowerSources();

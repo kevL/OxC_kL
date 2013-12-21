@@ -256,7 +256,11 @@ void BattleItem::setOwner(BattleUnit* owner)
  */
 void BattleItem::moveToOwner(BattleUnit* owner)
 {
-	_previousOwner = _owner? _owner: owner;
+//kL	_previousOwner = _owner? _owner: owner;
+	_previousOwner = owner;
+	if (_owner)
+		_previousOwner = _owner;
+
 	_owner = owner;
 
 	if (_previousOwner != 0)
@@ -525,14 +529,17 @@ int BattleItem::getStimulantQuantity() const
 
 /**
  * Sets the XCom property flag. This is to determine at debriefing what goes into the base/craft.
+ * kL_note: no, actually it's not: In its current implementation it is fundamentally useless.
  * @param flag, True if it's XCom property.
  */
 void BattleItem::setXCOMProperty(bool flag)
 {
 	_XCOMProperty = flag;
 }
+
 /**
  * Gets the XCom property flag. This is to determine at debriefing what goes into the base/craft.
+ * kL_note: no, actually it's not: In its current implementation it is fundamentally useless.
  * @return, True if it's XCom property.
  */
 bool BattleItem::getXCOMProperty() const

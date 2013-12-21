@@ -428,7 +428,7 @@ void ClearAlienBase::operator()(AlienMission* am) const
 /**
  * Prepares debriefing: gathers Aliens, Corpses, Artefacts, UFO Components.
  * Adds the items to the craft.
- * Also calculates the soldiers experience, and possible promotions.
+ * Also calculates the soldiers' experience, and possible promotions.
  * If aborted, only the things on the exit area are recovered.
  */
 void DebriefingState::prepareDebriefing()
@@ -1208,7 +1208,9 @@ void DebriefingState::prepareDebriefing()
 			}
 		}
 
-		AlienMission* am = _game->getSavedGame()->getAlienMission(_region->getRules()->getType(), "STR_ALIEN_RETALIATION");
+		AlienMission* am = _game->getSavedGame()->getAlienMission(
+															_region->getRules()->getType(),
+															"STR_ALIEN_RETALIATION");
 		for (std::vector<Ufo*>::iterator
 				i = _game->getSavedGame()->getUfos()->begin();
 				i != _game->getSavedGame()->getUfos()->end();
@@ -1251,7 +1253,10 @@ void DebriefingState::prepareDebriefing()
  * @param craft, Craft to reequip.
  * @param vehicleItemsCanBeDestroyed, Whether we can destroy the vehicles on the craft.
  */
-void DebriefingState::reequipCraft(Base* base, Craft* craft, bool vehicleItemsCanBeDestroyed)
+void DebriefingState::reequipCraft(
+		Base* base,
+		Craft* craft,
+		bool vehicleItemsCanBeDestroyed)
 {
 	//Log(LOG_INFO) << "DebriefingState::reequipCraft()";
 
@@ -1275,7 +1280,9 @@ void DebriefingState::reequipCraft(Base* base, Craft* craft, bool vehicleItemsCa
 
 			ReequipStat stat =
 			{
-				i->first, missing, craft->getName(_game->getLanguage())
+				i->first,
+				missing,
+				craft->getName(_game->getLanguage())
 			};
 
 			_missingItems.push_back(stat);
@@ -1322,7 +1329,9 @@ void DebriefingState::reequipCraft(Base* base, Craft* craft, bool vehicleItemsCa
 			int missing = i->second - qty; // missing tanks
 			ReequipStat stat =
 			{
-				i->first, missing, craft->getName(_game->getLanguage())
+				i->first,
+				missing,
+				craft->getName(_game->getLanguage())
 			};
 
 			_missingItems.push_back(stat);
@@ -1408,10 +1417,12 @@ void DebriefingState::reequipCraft(Base* base, Craft* craft, bool vehicleItemsCa
  * Recovers items from the battlescape.
  *
  * Converts the battlescape inventory into a geoscape itemcontainer.
- * @param from Items recovered from the battlescape.
- * @param base Base to add items to.
+ * @param from, Items recovered from the battlescape.
+ * @param base, Base to add items to.
  */
-void DebriefingState::recoverItems(std::vector<BattleItem*>* from, Base* base)
+void DebriefingState::recoverItems(
+		std::vector<BattleItem*>* from,
+		Base* base)
 {
 	//Log(LOG_INFO) << "DebriefingState::recoverItems()";
 

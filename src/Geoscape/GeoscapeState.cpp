@@ -1692,7 +1692,9 @@ void GeoscapeState::time30Minutes()
 				{
 					//Log(LOG_INFO) << ". handle undetected uFo";
 
-					bool detected = false, hyperdet = false;
+					bool
+						detected = false,
+						hyperdet = false;
 
 					for (std::vector<Base*>::iterator
 							b = _game->getSavedGame()->getBases()->begin();
@@ -1752,13 +1754,13 @@ void GeoscapeState::time30Minutes()
 							++b)
 					{
 						double targetRange = (*b)->insideRadarRange(*u); // -2.0 =outside range ; -1.0 =hyperdetected ; 0.0+ =targetDistance
-						if (targetRange > -2.0)
+						if (targetRange > -1.99)
 						{
 							Log(LOG_INFO) << ". . still detected";
 
 							detected = true;
 
-							if (targetRange == -1.0)
+							if (AreSame(targetRange, -1.0))
 							{
 								Log(LOG_INFO) << ". . and hyper-detected";
 

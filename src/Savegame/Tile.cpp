@@ -816,11 +816,15 @@ void Tile::addItem(BattleItem* item, RuleInventory* ground)
  */
 void Tile::removeItem(BattleItem* item)
 {
-	for (std::vector<BattleItem*>::iterator i = _inventory.begin(); i != _inventory.end(); ++i)
+	for (std::vector<BattleItem*>::iterator
+			i = _inventory.begin();
+			i != _inventory.end();
+			++i)
 	{
 		if ((*i) == item)
 		{
 			_inventory.erase(i);
+
 			break;
 		}
 	}
@@ -837,7 +841,10 @@ int Tile::getTopItemSprite()
 	int biggestWeight = -1;
 	int biggestItem = -1;
 
-	for (std::vector<BattleItem*>::iterator i = _inventory.begin(); i != _inventory.end(); ++i)
+	for (std::vector<BattleItem*>::iterator
+			i = _inventory.begin();
+			i != _inventory.end();
+			++i)
 	{
 		if ((*i)->getRules()->getWeight() > biggestWeight)
 		{
