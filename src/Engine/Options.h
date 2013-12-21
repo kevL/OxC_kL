@@ -16,11 +16,13 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_OPTIONS_H
 #define OPENXCOM_OPTIONS_H
 
 #include <string>
 #include <vector>
+
 
 namespace OpenXcom
 {
@@ -28,12 +30,24 @@ namespace OpenXcom
 /**
  * Enumeration for the battlescape scrolling types.
  */
-enum ScrollType { SCROLL_TRIGGER, SCROLL_AUTO, SCROLL_DRAG };
+enum ScrollType
+{
+	SCROLL_TRIGGER,
+	SCROLL_AUTO,
+	SCROLL_DRAG
+};
+
 
 /**
  * Enumeration for the keyboard modes.
  */
-enum KeyboardType { KEYBOARD_ON, KEYBOARD_VIRTUAL, KEYBOARD_OFF };
+enum KeyboardType
+{
+	KEYBOARD_ON,
+	KEYBOARD_VIRTUAL,
+	KEYBOARD_OFF
+};
+
 
 /**
  * Container for all the various global game options

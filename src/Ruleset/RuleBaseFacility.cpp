@@ -72,7 +72,10 @@ RuleBaseFacility::~RuleBaseFacility()
  * @param modIndex A value that offsets the sounds and sprite values to avoid conflicts.
  * @param listOrder The list weight for this facility.
  */
-void RuleBaseFacility::load(const YAML::Node &node, int modIndex, int listOrder)
+void RuleBaseFacility::load(
+		const YAML::Node &node,
+		int modIndex,
+		int listOrder)
 {
 	_type			= node["type"].as<std::string>(_type);
 	_requires		= node["requires"].as< std::vector<std::string> >(_requires);
@@ -128,7 +131,7 @@ std::string RuleBaseFacility::getType() const
  * Gets the list of research required to build this base facility.
  * @return A list of research IDs.
  */
-const std::vector<std::string> &RuleBaseFacility::getRequirements() const
+const std::vector<std::string>& RuleBaseFacility::getRequirements() const
 {
 	return _requires;
 }

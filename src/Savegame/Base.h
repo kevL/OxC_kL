@@ -20,27 +20,29 @@
 #ifndef OPENXCOM_BASE_H
 #define OPENXCOM_BASE_H
 
-#include "Target.h"
 #include <string>
 #include <vector>
+
 #include <yaml-cpp/yaml.h>
+
+#include "Target.h"
 
 
 namespace OpenXcom
 {
 
-class Ruleset;
 class BaseFacility;
-class Soldier;
 class Craft;
 class ItemContainer;
-class Transfer;
 class Language;
+class Production;
+class ResearchProject;
 class Ruleset;
 class SavedGame;
-class ResearchProject;
-class Production;
+class Soldier;
+class Transfer;
 class Vehicle;
+
 
 /**
  * Represents a player base on the globe.
@@ -50,21 +52,30 @@ class Base
 	:
 		public Target
 {
+
 private:
-	const Ruleset* _rule;
-	std::wstring _name;
-	std::vector<BaseFacility*> _facilities;
-	std::vector<Soldier*> _soldiers;
-	std::vector<Craft*> _crafts;
-	std::vector<Transfer*> _transfers;
+	bool
+		_inBattlescape,
+		_retaliationTarget;
+	int
+		_engineers,
+		_scientists;
+
 	ItemContainer* _items;
-	int _scientists, _engineers;
-	std::vector<ResearchProject*> _research;
-	std::vector<Production*> _productions;
-	bool _inBattlescape;
-	bool _retaliationTarget;
-	std::vector<Vehicle*> _vehicles;
-	std::vector<BaseFacility*> _defenses;
+	const Ruleset* _rule;
+
+	std::wstring _name;
+
+	std::vector<BaseFacility*>
+									_defenses,
+									_facilities;
+	std::vector<Craft*>				_crafts;
+	std::vector<Production*>		_productions;
+	std::vector<ResearchProject*>	_research;
+	std::vector<Soldier*>			_soldiers;
+	std::vector<Transfer*>			_transfers;
+	std::vector<Vehicle*>			_vehicles;
+
 
 	public:
 		/// Creates a new base.
@@ -73,7 +84,11 @@ private:
 		~Base();
 
 		/// Loads the base from YAML.
-		void load(const YAML::Node& node, SavedGame* save, bool newGame, bool newBattleGame = false);
+		void load(
+				const YAML::Node& node,
+				SavedGame* save,
+				bool newGame,
+				bool newBattleGame = false);
 		/// Saves the base to YAML.
 		YAML::Node save() const;
 		/// Saves the base's ID to YAML.
@@ -110,11 +125,11 @@ private:
 		/// Gets the base's total soldiers.
 		int getTotalSoldiers() const;
 		/// Gets the base's available scientists.
-		int getAvailableScientists() const;
+//kL		int getAvailableScientists() const;
 		/// Gets the base's total scientists.
 		int getTotalScientists() const;
 		/// Gets the base's available engineers.
-		int getAvailableEngineers() const;
+//kL		int getAvailableEngineers() const;
 		/// Gets the base's total engineers.
 		int getTotalEngineers() const;
 		/// Gets the base's used living quarters.
@@ -170,9 +185,9 @@ private:
 		/// kL: Research Help ala XcomUtil.
 		void researchHelp(std::string sProject);
 		/// Add a new Production to Base.
-		void addProduction(Production* p);
+		void addProduction(Production* prod);
 		/// Remove a Base's Production.
-		void removeProduction(Production* p);
+		void removeProduction(Production* prod);
 		/// Get the list of Base's Production.
 		const std::vector<Production*>& getProductions() const;
 		/// Checks if this base is hyper-wave equipped.

@@ -18,20 +18,25 @@
  */
 
 #include "Options.h"
-#include "../version.h"
+
+#include <algorithm>
+#include <fstream>
+#include <iostream>
+#include <map>
+#include <sstream>
+
 #include <SDL.h>
 #include <SDL_keysym.h>
 #include <SDL_mixer.h>
 #include <stdio.h>
-#include <iostream>
-#include <map>
-#include <sstream>
-#include <fstream>
-#include <algorithm>
+
 #include <yaml-cpp/yaml.h>
+
+#include "../version.h"
+
+#include "CrossPlatform.h"
 #include "Exception.h"
 #include "Logger.h"
-#include "CrossPlatform.h"
 
 
 namespace OpenXcom
@@ -40,14 +45,21 @@ namespace OpenXcom
 namespace Options
 {
 
-std::string _dataFolder = "";
-std::vector<std::string> _dataList;
-std::string _userFolder = "";
-std::string _configFolder = "";
-std::vector<std::string> _userList;
-std::map<std::string, std::string> _options, _commandLineOptions;
-std::vector<std::string> _rulesets;
-std::vector<std::string> _purchaseexclusions;
+std::string
+	_configFolder = "",
+	_dataFolder = "",
+	_userFolder = "";
+
+std::map<std::string, std::string>
+	_options,
+	_commandLineOptions;
+
+std::vector<std::string>
+	_dataList,
+	_purchaseexclusions,
+	_rulesets,
+	_userList;
+
 
 /**
  * Creates a default set of options based on the system.
@@ -91,8 +103,8 @@ void createDefault()
 	setBool("mute", false);
 //kL	setInt("soundVolume", MIX_MAX_VOLUME);
 //kL	setInt("musicVolume", MIX_MAX_VOLUME);
-	setInt("soundVolume", 28);		// kL
-	setInt("musicVolume", 75);		// kL
+	setInt("soundVolume", 28); // kL
+	setInt("musicVolume", 75); // kL
 //kL	setString("language", "");
 	setString("language", "en-US");
 	setInt("battleScrollSpeed", 12); // 4, 8, 12, 16, 24
@@ -116,7 +128,7 @@ void createDefault()
 	setInt("autosave", 0);
 	setInt("changeValueByMouseWheel", 10);
 //kL	setInt("audioSampleRate", 22050);
-	setInt("audioSampleRate", 11025);		// kL
+	setInt("audioSampleRate", 11025); // kL
 	setInt("audioBitDepth", 16);
 	setInt("pauseMode", 0);
 	setBool("alienContainmentLimitEnforced", false);
@@ -140,7 +152,7 @@ void createDefault()
 	setBool("borderless", false);
 	setBool("captureMouse", false);
 //kL	setBool("battleTooltips", true);
-	setBool("battleTooltips", false);		// kL
+	setBool("battleTooltips", false); // kL
 	setBool("battleHairBleach", true);
     setBool("keepAspectRatio", false);
     setBool("cursorInBlackBandsInFullscreen", false);
@@ -148,7 +160,8 @@ void createDefault()
     setBool("cursorInBlackBandsInBorderlessWindow", false);
 	setBool("newSeedOnLoad", false);
 	setBool("skipNextTurnScreen", false);
-	setBool("disableAutoEquip", false);
+//kL	setBool("disableAutoEquip", false);
+	setBool("disableAutoEquip", true); // kL
 
 	// new battle mode data
 	setInt("NewBattleMission", 0);
@@ -501,7 +514,7 @@ void updateOptions()
 	}
 
     // now apply options set on the command line, overriding defaults and those loaded from config file
-    for(std::map<std::string, std::string>::const_iterator it = _commandLineOptions.begin(); it != _commandLineOptions.end(); ++it)
+    for (std::map<std::string, std::string>::const_iterator it = _commandLineOptions.begin(); it != _commandLineOptions.end(); ++it)
     {
         _options[it->first] = it->second;
     }

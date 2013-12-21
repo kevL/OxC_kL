@@ -288,7 +288,8 @@ void ResearchInfoState::btnCancelClick(Action*)
  */
 void ResearchInfoState::setAssignedScientist()
 {
-	_txtAvailableScientist->setText(tr("STR_SCIENTISTS_AVAILABLE_UC").arg(_base->getAvailableScientists()));
+//kL	_txtAvailableScientist->setText(tr("STR_SCIENTISTS_AVAILABLE_UC").arg(_base->getAvailableScientists()));
+	_txtAvailableScientist->setText(tr("STR_SCIENTISTS_AVAILABLE_UC").arg(_base->getScientists())); // kL
 	_txtAvailableSpace->setText(tr("STR_LABORATORY_SPACE_AVAILABLE_UC").arg(_base->getFreeLaboratories()));
 	_txtAllocatedScientist->setText(tr("STR_SCIENTISTS_ALLOCATED").arg(_project->getAssigned()));
 }
@@ -394,7 +395,8 @@ void ResearchInfoState::moreByValue(int change)
 {
 	if (change <= 0) return;
 
-	int freeScientist = _base->getAvailableScientists();
+//kL	int freeScientist = _base->getAvailableScientists();
+	int freeScientist = _base->getScientists(); // kL
 	int freeSpaceLab = _base->getFreeLaboratories();
 	if (freeScientist > 0 && freeSpaceLab > 0)
 	{

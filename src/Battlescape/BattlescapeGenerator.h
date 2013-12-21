@@ -51,7 +51,6 @@ class BattlescapeGenerator
 {
 
 private:
-
 	int
 		_alienItemLevel,
 		_mapsize_x,
@@ -96,11 +95,12 @@ private:
 			int yoff,
 			int segment);
 
-
 	/// Deploys the XCOM units on the mission.
 	void deployXCOM();
 	/// Deploys the aliens, according to the alien deployment rules.
-	void deployAliens(AlienRace* race, AlienDeployment* deployment);
+	void deployAliens(
+			AlienRace* race,
+			AlienDeployment* deployment);
 	/// Spawns civilians on a terror mission.
 	void deployCivilians(int civilians);
 
@@ -109,13 +109,19 @@ private:
 	/// Adds a soldier to the game.
 	BattleUnit* addXCOMUnit(BattleUnit* unit);
 	/// Adds an alien to the game.
-	BattleUnit* addAlien(Unit* rules, int alienRank, bool outside);
+	BattleUnit* addAlien(
+			Unit* rules,
+			int alienRank,
+			bool outside);
 	/// Adds a civlian to the game.
 	BattleUnit* addCivilian(Unit* rules);
 	/// Places an item on a soldier based on equipment layout.
 	BattleItem* placeItemByLayout(BattleItem* item);
 	/// Adds an item to a unit and the game.
-	bool addItem(BattleItem* item, BattleUnit* unit, bool allowSecondClip = false);
+	bool addItem(
+			BattleItem* item,
+			BattleUnit* unit,
+			bool allowSecondClip = false);
 
 	/// Loads a weapon on the inventoryTile.
 	bool loadGroundWeapon(BattleItem* item);

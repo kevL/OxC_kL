@@ -150,7 +150,10 @@ private:
 		~RuleItem();
 
 		/// Loads item data from YAML.
-		void load(const YAML::Node& node, int modIndex, int listIndex);
+		void load(
+				const YAML::Node& node,
+				int modIndex,
+				int listIndex);
 
 		/// Gets the item's type.
 		std::string getType() const;
@@ -219,7 +222,9 @@ private:
 		/// Gets the ammo amount.
 		int getClipSize() const;
 		/// Draws the item's hand sprite onto a surface.
-		void drawHandSprite(SurfaceSet* texture, Surface* surface) const;
+		void drawHandSprite(
+				SurfaceSet* texture,
+				Surface* surface) const;
 		/// Gets the medikit heal quantity.
 		int getHealQuantity() const;
 		/// Gets the medikit pain killer quantity.

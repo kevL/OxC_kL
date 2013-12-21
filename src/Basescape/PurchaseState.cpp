@@ -126,6 +126,7 @@ PurchaseState::PurchaseState(
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& PurchaseState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)& PurchaseState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
+	_btnOk->setVisible(false);
 
 	_btnCancel->setColor(Palette::blockOffset(13)+10);
 	_btnCancel->setText(tr("STR_CANCEL"));
@@ -412,10 +413,21 @@ PurchaseState::PurchaseState(
 							++v)
 					{
 						std::wstring tv = tr((*v)->getRules()->getType());
-						if (tv == item)
+						if (item == tv)
 						{
 							tQty++;
-							// still have to do vehicle ammo...
+						}
+
+						if ((*v)->getAmmo() != 255)
+						{
+							RuleItem* tankRule = _game->getRuleset()->getItem((*v)->getRules()->getType());
+							RuleItem* ammoRule = _game->getRuleset()->getItem(tankRule->getCompatibleAmmo()->front());
+							std::wstring tv_a = tr(ammoRule->getType());
+					
+							if (item == tv_a)
+							{
+								tQty += (*v)->getAmmo();
+							}
 						}
 					}
 				}
@@ -894,6 +906,15 @@ void PurchaseState::updateItemStrings()
 	std::wstringstream ss;
 	ss << _qtys[_sel];
 	_lstItems->setCellText(_sel, 3, ss.str());
+
+	// kL_begin:
+	if (_total > 0)
+	{
+		_btnOk->setVisible(true);
+	}
+	else
+		_btnOk->setVisible(false);
+	// kL_end.
 }
 
 }

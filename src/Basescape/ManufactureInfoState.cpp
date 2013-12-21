@@ -375,7 +375,8 @@ void ManufactureInfoState::exitState()
  */
 void ManufactureInfoState::setAssignedEngineer()
 {
-	_txtAvailableEngineer->setText(tr("STR_ENGINEERS_AVAILABLE_UC").arg(_base->getAvailableEngineers()));
+//kL	_txtAvailableEngineer->setText(tr("STR_ENGINEERS_AVAILABLE_UC").arg(_base->getAvailableEngineers()));
+	_txtAvailableEngineer->setText(tr("STR_ENGINEERS_AVAILABLE_UC").arg(_base->getEngineers())); // kL
 	_txtAvailableSpace->setText(tr("STR_WORKSHOP_SPACE_AVAILABLE_UC").arg(_base->getFreeWorkshops()));
 
 	std::wstringstream s3;
@@ -408,7 +409,8 @@ void ManufactureInfoState::moreEngineer(int change)
 {
 	if (change < 1) return;
 
-	int availableEngineer = _base->getAvailableEngineers();
+//kL	int availableEngineer = _base->getAvailableEngineers();
+	int availableEngineer = _base->getEngineers(); // kL
 	int availableWorkSpace = _base->getFreeWorkshops();
 
 	if (availableEngineer > 0

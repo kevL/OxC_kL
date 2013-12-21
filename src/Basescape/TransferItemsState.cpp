@@ -134,6 +134,7 @@ TransferItemsState::TransferItemsState(
 	_btnOk->setText(tr("STR_TRANSFER"));
 	_btnOk->onMouseClick((ActionHandler)& TransferItemsState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)& TransferItemsState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
+	_btnOk->setVisible(false);
 
 	_btnCancel->setColor(Palette::blockOffset(15)+6);
 	_btnCancel->setText(tr("STR_CANCEL"));
@@ -215,7 +216,8 @@ TransferItemsState::TransferItemsState(
 		}
 	}
 
-	if (_baseFrom->getAvailableScientists() > 0)
+//kL	if (_baseFrom->getAvailableScientists() > 0)
+	if (_baseFrom->getScientists() > 0) // kL
 	{
 		_qtys.push_back(0);
 
@@ -224,8 +226,10 @@ TransferItemsState::TransferItemsState(
 		std::wstringstream
 			ss,
 			ss2;
-		ss << _baseFrom->getAvailableScientists();
-		ss2 << _baseTo->getAvailableScientists();
+//kL		ss << _baseFrom->getAvailableScientists();
+//kL		ss2 << _baseTo->getAvailableScientists();
+		ss << _baseFrom->getScientists(); // kL
+		ss2 << _baseTo->getScientists(); // kL
 
 		_lstItems->addRow(
 						4,
@@ -235,7 +239,8 @@ TransferItemsState::TransferItemsState(
 						ss2.str().c_str());
 	}
 
-	if (_baseFrom->getAvailableEngineers() > 0)
+//kL	if (_baseFrom->getAvailableEngineers() > 0)
+	if (_baseFrom->getEngineers() > 0) // kL
 	{
 		_qtys.push_back(0);
 
@@ -244,8 +249,10 @@ TransferItemsState::TransferItemsState(
 		std::wstringstream
 			ss,
 			ss2;
-		ss << _baseFrom->getAvailableEngineers();
-		ss2 << _baseTo->getAvailableEngineers();
+//kL		ss << _baseFrom->getAvailableEngineers();
+//kL		ss2 << _baseTo->getAvailableEngineers();
+		ss << _baseFrom->getEngineers(); // kL
+		ss2 << _baseTo->getEngineers(); // kL
 
 		_lstItems->addRow(
 						4,
@@ -312,10 +319,21 @@ TransferItemsState::TransferItemsState(
 							++v)
 					{
 						std::wstring tv = tr((*v)->getRules()->getType());
-						if (tv == item)
+						if (item == tv)
 						{
 							tQty++;
-							// still have to do vehicle ammo...
+						}
+
+						if ((*v)->getAmmo() != 255)
+						{
+							RuleItem* tankRule = _game->getRuleset()->getItem((*v)->getRules()->getType());
+							RuleItem* ammoRule = _game->getRuleset()->getItem(tankRule->getCompatibleAmmo()->front());
+							std::wstring tv_a = tr(ammoRule->getType());
+					
+							if (item == tv_a)
+							{
+								tQty += (*v)->getAmmo();
+							}
 						}
 					}
 				}
@@ -339,6 +357,7 @@ TransferItemsState::TransferItemsState(
 
 	_timerInc = new Timer(280);
 	_timerInc->onTimer((StateHandler)& TransferItemsState::increase);
+
 	_timerDec = new Timer(280);
 	_timerDec->onTimer((StateHandler)& TransferItemsState::decrease);
 }
@@ -390,6 +409,8 @@ void TransferItemsState::reinit()
 	_hasEng = 0;
 
 
+	_btnOk->setVisible(false);
+
 	for (std::vector<Soldier*>::iterator
 			i = _baseFrom->getSoldiers()->begin();
 			i != _baseFrom->getSoldiers()->end();
@@ -430,7 +451,8 @@ void TransferItemsState::reinit()
 		}
 	}
 
-	if (_baseFrom->getAvailableScientists() > 0)
+//kL	if (_baseFrom->getAvailableScientists() > 0)
+	if (_baseFrom->getScientists() > 0) // kL
 	{
 		_qtys.push_back(0);
 
@@ -439,8 +461,10 @@ void TransferItemsState::reinit()
 		std::wstringstream
 			ss,
 			ss2;
-		ss << _baseFrom->getAvailableScientists();
-		ss2 << _baseTo->getAvailableScientists();
+//kL		ss << _baseFrom->getAvailableScientists();
+//kL		ss2 << _baseTo->getAvailableScientists();
+		ss << _baseFrom->getScientists(); // kL
+		ss2 << _baseTo->getScientists(); // kL
 
 		_lstItems->addRow(
 						4,
@@ -450,7 +474,8 @@ void TransferItemsState::reinit()
 						ss2.str().c_str());
 	}
 
-	if (_baseFrom->getAvailableEngineers() > 0)
+//kL	if (_baseFrom->getAvailableEngineers() > 0)
+	if (_baseFrom->getEngineers() > 0) // kL
 	{
 		_qtys.push_back(0);
 
@@ -459,8 +484,10 @@ void TransferItemsState::reinit()
 		std::wstringstream
 			ss,
 			ss2;
-		ss << _baseFrom->getAvailableEngineers();
-		ss2 << _baseTo->getAvailableEngineers();
+//kL		ss << _baseFrom->getAvailableEngineers();
+//kL		ss2 << _baseTo->getAvailableEngineers();
+		ss << _baseFrom->getEngineers(); // kL
+		ss2 << _baseTo->getEngineers(); // kL
 
 		_lstItems->addRow(
 						4,
@@ -527,10 +554,21 @@ void TransferItemsState::reinit()
 							++v)
 					{
 						std::wstring tv = tr((*v)->getRules()->getType());
-						if (tv == item)
+						if (item == tv)
 						{
 							tQty++;
-							// still have to do vehicle ammo...
+						}
+
+						if ((*v)->getAmmo() != 255)
+						{
+							RuleItem* tankRule = _game->getRuleset()->getItem((*v)->getRules()->getType());
+							RuleItem* ammoRule = _game->getRuleset()->getItem(tankRule->getCompatibleAmmo()->front());
+							std::wstring tv_a = tr(ammoRule->getType());
+					
+							if (item == tv_a)
+							{
+								tQty += (*v)->getAmmo();
+							}
 						}
 					}
 				}
@@ -613,12 +651,11 @@ void TransferItemsState::completeTransfer()
 				}
 			}
 			else if (i >= _soldiers.size()
-				&& i < _soldiers.size() + _crafts.size()) // Transfer crafts
+				&& i < _soldiers.size() + _crafts.size()) // Transfer crafts w/ soldiers inside (but not items)
 			{
-				Craft* craft =  _crafts[i - _soldiers.size()];
+				Craft* craft = _crafts[i - _soldiers.size()];
 
-				// Transfer soldiers inside craft
-				for (std::vector<Soldier*>::iterator
+				for (std::vector<Soldier*>::iterator // Transfer soldiers inside craft
 						s = _baseFrom->getSoldiers()->begin();
 						s != _baseFrom->getSoldiers()->end();
 						)
@@ -645,8 +682,7 @@ void TransferItemsState::completeTransfer()
 					}
 				}
 
-				// Transfer craft
-				for (std::vector<Craft*>::iterator
+				for (std::vector<Craft*>::iterator // Transfer craft
 						c = _baseFrom->getCrafts()->begin();
 						c != _baseFrom->getCrafts()->end();
 						++c)
@@ -697,7 +733,8 @@ void TransferItemsState::completeTransfer()
 					}
 				}
 			}
-			else if (_baseFrom->getAvailableScientists() > 0
+//kL			else if (_baseFrom->getAvailableScientists() > 0
+			else if (_baseFrom->getScientists() > 0 // kL
 				&& i == _soldiers.size() + _crafts.size()) // Transfer scientists
 			{
 				_baseFrom->setScientists(_baseFrom->getScientists() - _qtys[i]);
@@ -706,7 +743,8 @@ void TransferItemsState::completeTransfer()
 
 				_baseTo->getTransfers()->push_back(t);
 			}
-			else if (_baseFrom->getAvailableEngineers() > 0
+//kL			else if (_baseFrom->getAvailableEngineers() > 0
+			else if (_baseFrom->getEngineers() > 0 // kL
 				&& i == _soldiers.size() + _crafts.size() + _hasSci) // Transfer engineers
 			{
 				_baseFrom->setEngineers(_baseFrom->getEngineers() - _qtys[i]);
@@ -898,8 +936,10 @@ int TransferItemsState::getQuantity() const
 	{
 		case TRANSFER_SOLDIER:
 		case TRANSFER_CRAFT:		return 1;
-		case TRANSFER_SCIENTIST:	return _baseFrom->getAvailableScientists();
-		case TRANSFER_ENGINEER:		return _baseFrom->getAvailableEngineers();
+//kL		case TRANSFER_SCIENTIST:	return _baseFrom->getAvailableScientists();
+//kL		case TRANSFER_ENGINEER:		return _baseFrom->getAvailableEngineers();
+		case TRANSFER_SCIENTIST:	return _baseFrom->getScientists(); // kL
+		case TRANSFER_ENGINEER:		return _baseFrom->getEngineers(); // kL
 		case TRANSFER_ITEM:			return _baseFrom->getItems()->getItem(_items[getItemIndex(_sel)]);
 	}
 
@@ -1030,8 +1070,11 @@ void TransferItemsState::increaseByValue(int change)
 		_pQty += craft->getNumSoldiers();
 		_qtys[_sel]++;
 
-		if (!_canTransferCraftsWhileAirborne || craft->getStatus() != "STR_OUT")
+		if (!_canTransferCraftsWhileAirborne
+			|| craft->getStatus() != "STR_OUT")
+		{
 			_total += getCost();
+		}
 	}
 	else if (TRANSFER_ITEM == selType
 		&& !selItem->getAlien()) // Item count
@@ -1134,9 +1177,28 @@ void TransferItemsState::decreaseByValue(int change)
  */
 void TransferItemsState::updateItemStrings()
 {
-	std::wstringstream ss;
-	ss << _qtys[_sel];
-	_lstItems->setCellText(_sel, 2, ss.str());
+//kL	std::wstringstream ss;
+//kL	ss << _qtys[_sel];
+//kL	_lstItems->setCellText(_sel, 2, ss.str());
+
+	// kL_begin:
+	std::wstringstream
+		ss,
+		ss2;
+
+	ss << getQuantity() - _qtys[_sel];
+	_lstItems->setCellText(_sel, 1, ss.str());
+
+	ss2 << _qtys[_sel];
+	_lstItems->setCellText(_sel, 2, ss2.str());
+
+	if (_total > 0)
+	{
+		_btnOk->setVisible(true);
+	}
+	else
+		_btnOk->setVisible(false);
+	// kL_end.
 }
 
 /**
@@ -1183,8 +1245,8 @@ double TransferItemsState::getDistance() const
 
 /**
  * Gets type of selected item.
- * @param selected The selected item.
- * @return The type of the selected item.
+ * @param selected, The selected item.
+ * @return, The type of the selected item.
  */
 enum TransferType TransferItemsState::getType(unsigned selected) const
 {

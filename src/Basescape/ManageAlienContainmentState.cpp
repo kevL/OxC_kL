@@ -18,29 +18,36 @@
  */
 
 #include "ManageAlienContainmentState.h"
+
 #include <sstream>
 #include <climits>
 #include <cmath>
+
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
+#include "../Engine/Options.h"
 #include "../Engine/Palette.h"
-#include "../Interface/TextButton.h"
-#include "../Interface/Window.h"
+#include "../Engine/Timer.h"
+
 #include "../Interface/Text.h"
+#include "../Interface/TextButton.h"
 #include "../Interface/TextList.h"
-#include "../Savegame/ResearchProject.h"
-#include "../Savegame/SavedGame.h"
-#include "../Savegame/Base.h"
-#include "../Savegame/ItemContainer.h"
-#include "../Ruleset/Ruleset.h"
+#include "../Interface/Window.h"
+
+#include "../Menu/ErrorMessageState.h"
+
+#include "../Resource/ResourcePack.h"
+
+#include "../Ruleset/Armor.h"
 #include "../Ruleset/RuleItem.h"
 #include "../Ruleset/RuleResearch.h"
-#include "../Ruleset/Armor.h"
-#include "../Engine/Timer.h"
-#include "../Engine/Options.h"
-#include "../Menu/ErrorMessageState.h"
+#include "../Ruleset/Ruleset.h"
+
+#include "../Savegame/Base.h"
+#include "../Savegame/ItemContainer.h"
+#include "../Savegame/ResearchProject.h"
+#include "../Savegame/SavedGame.h"
 
 
 namespace OpenXcom
@@ -52,33 +59,37 @@ namespace OpenXcom
  * @param base Pointer to the base to get info from.
  * @param origin Game section that originated this state.
  */
-ManageAlienContainmentState::ManageAlienContainmentState(Game* game, Base* base, OptionsOrigin origin)
+ManageAlienContainmentState::ManageAlienContainmentState(
+		Game* game,
+		Base* base,
+		OptionsOrigin origin)
 	:
 		State(game),
 		_base(base),
 		_qtys(),
 		_aliens(),
 		_sel(0),
-		_aliensSold(0),
-		_researchedAliens(0)
+		_aliensSold(0)
+//kL		_researchAliens(0)
 {
 	_changeValueByMouseWheel = Options::getInt("changeValueByMouseWheel");
 	_allowChangeListValuesByMouseWheel = (Options::getBool("allowChangeListValuesByMouseWheel")
 											&& _changeValueByMouseWheel);
 	_containmentLimit = Options::getBool("alienContainmentLimitEnforced");
-	_overCrowded = _containmentLimit && _base->getAvailableContainment() < _base->getUsedContainment();
+	_overCrowded = (_containmentLimit
+						&& _base->getAvailableContainment() < _base->getUsedContainment());
 
-	for (std::vector<ResearchProject*>::const_iterator
-			iter = _base->getResearch().begin();
-			iter != _base->getResearch().end();
-			++iter)
+/*kL	for (std::vector<ResearchProject*>::const_iterator
+			i = _base->getResearch().begin();
+			i != _base->getResearch().end();
+			++i)
 	{
-		const RuleResearch* research = (*iter)->getRules();
+		const RuleResearch* research = (*i)->getRules();
 		if (_game->getRuleset()->getUnit(research->getName()))
 		{
-			++_researchedAliens;
+			++_researchAliens;
 		}
-	}
+	} */
 
 	_window			= new Window(this, 320, 200, 0, 0);
 	_txtTitle		= new Text(310, 17, 5, 10);
@@ -92,9 +103,9 @@ ManageAlienContainmentState::ManageAlienContainmentState(Game* game, Base* base,
 
 	_lstAliens		= new TextList(286, 120, 16, 50);
 
-//	_btnOk			= new TextButton(_overCrowded? 288: 148, 16, _overCrowded? 16: 8, 177);
-	_btnOk			= new TextButton(134, 16, 170, 177);
 	_btnCancel		= new TextButton(134, 16, 16, 177);
+	_btnOk			= new TextButton(134, 16, 170, 177);
+//	_btnOk			= new TextButton(_overCrowded? 288: 148, 16, _overCrowded? 16: 8, 177);
 
 
 	if (origin == OPT_BATTLESCAPE)
@@ -143,10 +154,11 @@ ManageAlienContainmentState::ManageAlienContainmentState(Game* game, Base* base,
 	_btnCancel->onMouseClick((ActionHandler)& ManageAlienContainmentState::btnCancelClick);
 	_btnCancel->onKeyboardPress((ActionHandler)& ManageAlienContainmentState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
 
+	_btnOk->setVisible(false);
+
 	if (_overCrowded)
 	{
 		_btnCancel->setVisible(false);
-		_btnOk->setVisible(false);
 	}
 
 	_txtTitle->setColor((origin == OPT_BATTLESCAPE)? Palette::blockOffset(8)+5: _color);
@@ -171,7 +183,7 @@ ManageAlienContainmentState::ManageAlienContainmentState(Game* game, Base* base,
 	_txtUsed->setColor(_color);
 	_txtUsed->setSecondaryColor(_color2);
 	_txtUsed->setText(tr("STR_SPACE_USED")
-						.arg( _base->getUsedContainment() - _researchedAliens));
+						.arg(_base->getUsedContainment())); //kL - _researchAliens));
 
 	_lstAliens->setColor(_color2);
 	_lstAliens->setArrowColor(_color);
@@ -253,8 +265,7 @@ void ManageAlienContainmentState::btnOkClick(Action*)
 		if (_qtys[i] > 0)		// if _qtys<vector>(int) at position[i]
 		{
 			// check for tortured intelligence reports
-			// Should put in a for(*i) loop.....
-			_base->researchHelp(_aliens[i]);	// kL
+			_base->researchHelp(_aliens[i]); // kL
 
 			// remove the aliens
 			_base->getItems()->removeItem(_aliens[i], _qtys[i]);
@@ -472,25 +483,32 @@ void ManageAlienContainmentState::decreaseByValue(int change)
  */
 void ManageAlienContainmentState::updateStrings()
 {
-	std::wstringstream ss, ss2;
+	std::wstringstream
+		ss,
+		ss2;
+
 	int qty = getQuantity() - _qtys[_sel];
 	ss << qty;
 	ss2 << _qtys[_sel];
 
 	_lstAliens->setRowColor(_sel, (qty != 0)? _color2: _color);
-	_lstAliens->setCellText(_sel, 1, ss.str());
-	_lstAliens->setCellText(_sel, 2, ss2.str());
+	_lstAliens->setCellText(_sel, 1, ss.str());		// # in Containment
+	_lstAliens->setCellText(_sel, 2, ss2.str());	// # to torture
 
-	int aliens = _base->getUsedContainment() - _aliensSold - _researchedAliens;
+
+	int aliens = _base->getUsedContainment() - _aliensSold; //kL - _researchAliens;
 	int spaces = _base->getAvailableContainment() - _base->getUsedContainment() + _aliensSold;
-
-	bool enoughSpace = _containmentLimit? spaces > -1: true;
 
 	_txtAvailable->setText(tr("STR_SPACE_AVAILABLE").arg(spaces));
 	_txtUsed->setText(tr("STR_SPACE_USED").arg(aliens));
 
-	_btnCancel->setVisible(enoughSpace && !_overCrowded);
-	_btnOk->setVisible(enoughSpace);
+
+	bool enoughSpaceToExit = _containmentLimit? spaces > -1: true;
+
+//kL	_btnCancel->setVisible(enoughSpaceToExit && !_overCrowded);
+//kL	_btnOk->setVisible(enoughSpaceToExit);
+	_btnCancel->setVisible(!_overCrowded); // kL
+	_btnOk->setVisible(_aliensSold > 0); // kL
 }
 
 }

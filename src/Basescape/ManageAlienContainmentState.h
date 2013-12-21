@@ -20,21 +20,24 @@
 #ifndef OPENXCOM_MANAGEALIENCONTAINMENTSTATE_H
 #define OPENXCOM_MANAGEALIENCONTAINMENTSTATE_H
 
-#include "../Engine/State.h"
-#include "../Menu/OptionsBaseState.h"
-#include <vector>
 #include <string>
+#include <vector>
+
+#include "../Engine/State.h"
+
+#include "../Menu/OptionsBaseState.h"
 
 
 namespace OpenXcom
 {
 
-class TextButton;
-class Window;
+class Base;
 class Text;
+class TextButton;
 class TextList;
 class Timer;
-class Base;
+class Window;
+
 
 /**
  * ManageAlienContainment screen that lets the player manage
@@ -44,25 +47,51 @@ class ManageAlienContainmentState
 	:
 		public State
 {
+
 private:
+	bool
+		_allowChangeListValuesByMouseWheel,
+		_containmentLimit,
+		_overCrowded;
+	int
+		_aliensSold,
+		_changeValueByMouseWheel;
+//kL		_researchAliens;
+	unsigned int _sel;
+	Uint8
+		_color,
+		_color2;
+
 	Base* _base;
-	TextButton* _btnOk, * _btnCancel;
-	Window* _window;
-	Text* _txtTitle, * _txtUsed, * _txtAvailable, * _txtItem, * _txtLiveAliens, * _txtDeadAliens;
+	Text
+		* _txtAvailable,
+		* _txtDeadAliens,
+		* _txtItem,
+		* _txtLiveAliens,
+		* _txtTitle,
+		* _txtUsed;
+	TextButton
+		* _btnCancel,
+		* _btnOk;
 	TextList* _lstAliens;
-	Timer *_timerInc, *_timerDec;
+	Timer
+		* _timerDec,
+		* _timerInc;
+	Window* _window;
+
 	std::vector<int> _qtys;
 	std::vector<std::string> _aliens;
-	unsigned int _sel;
-	int _aliensSold, _researchedAliens, _changeValueByMouseWheel;
-	bool _allowChangeListValuesByMouseWheel, _containmentLimit, _overCrowded;
-	Uint8 _color, _color2;
+
 	/// Gets selected quantity.
 	int getQuantity();
 
+
 	public:
 		/// Creates the ManageAlienContainment state.
-		ManageAlienContainmentState(Game* game, Base* base, OptionsOrigin origin);
+		ManageAlienContainmentState(
+				Game* game,
+				Base* base,
+				OptionsOrigin origin);
 		/// Cleans up the ManageAlienContainment state.
 		~ManageAlienContainmentState();
 
@@ -96,6 +125,7 @@ private:
 		void decrease();
 		/// Decreases the quantity of an alien by the given value.
 		void decreaseByValue(int change);
+
 		/// Updates the quantity-strings of the selected alien.
 		void updateStrings();
 };

@@ -126,6 +126,7 @@ SellState::SellState(
 	_btnOk->setText(tr("STR_SELL_SACK"));
 	_btnOk->onMouseClick((ActionHandler)& SellState::btnOkClick);
 	_btnOk->onKeyboardPress((ActionHandler)& SellState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
+	_btnOk->setVisible(false);
 
 	_btnCancel->setColor(Palette::blockOffset(13)+10);
 	_btnCancel->setText(tr("STR_CANCEL"));
@@ -206,12 +207,14 @@ SellState::SellState(
 		}
 	}
 
-	if (_base->getAvailableScientists() > 0)
+//kL	if (_base->getAvailableScientists() > 0)
+	if (_base->getScientists() > 0) // kL
 	{
 		_qtys.push_back(0);
 		_hasSci = 1;
 		std::wstringstream ss;
-		ss << _base->getAvailableScientists();
+//kL		ss << _base->getAvailableScientists();
+		ss << _base->getScientists(); // kL
 		_lstItems->addRow(
 						4,
 						tr("STR_SCIENTIST").c_str(),
@@ -220,12 +223,14 @@ SellState::SellState(
 						Text::formatFunding(0).c_str());
 	}
 
-	if (_base->getAvailableEngineers() > 0)
+//kL	if (_base->getAvailableEngineers() > 0)
+	if (_base->getEngineers() > 0) // kL
 	{
 		_qtys.push_back(0);
 		_hasEng = 1;
 		std::wstringstream ss;
-		ss << _base->getAvailableEngineers();
+//kL		ss << _base->getAvailableEngineers();
+		ss << _base->getEngineers(); // kL
 		_lstItems->addRow(
 						4,
 						tr("STR_ENGINEER").c_str(),
@@ -321,7 +326,7 @@ void SellState::btnOkClick(Action*)
 					{
 						if (*s == _soldiers[i])
 						{
-							if((*s)->getArmor()->getStoreItem() != "STR_NONE")
+							if ((*s)->getArmor()->getStoreItem() != "STR_NONE")
 							{
 								_base->getItems()->addItem((*s)->getArmor()->getStoreItem());
 							}
@@ -561,10 +566,9 @@ void SellState::lstItemsMousePress(Action* action)
  */
 int SellState::getPrice()
 {
-	// Personnel/craft aren't worth anything
 	switch (getType(_sel))
 	{
-		case SELL_SOLDIER:
+		case SELL_SOLDIER: // Personnel/craft aren't worth anything
 		case SELL_ENGINEER:
 		case SELL_SCIENTIST:
 			return 0;
@@ -582,8 +586,7 @@ int SellState::getPrice()
 }
 
 /**
- * Gets the quantity of the currently selected item
- * on the base.
+ * Gets the quantity of the currently selected item on the base.
  * @return Quantity of selected item on the base.
  */
 int SellState::getQuantity()
@@ -596,10 +599,12 @@ int SellState::getQuantity()
 			return 1;
 
 		case SELL_SCIENTIST:
-			return _base->getAvailableScientists();
+//kL			return _base->getAvailableScientists();
+			return _base->getScientists(); // kL
 
 		case SELL_ENGINEER:
-			return _base->getAvailableEngineers();
+//kL			return _base->getAvailableEngineers();
+			return _base->getEngineers(); // kL
 
 		case SELL_ITEM:
 			return _base->getItems()->getItem(_items[getItemIndex(_sel)]);
@@ -625,7 +630,7 @@ void SellState::increase()
  */
 void SellState::increaseByValue(int change)
 {
-	if (0 >= change || getQuantity() <=_qtys[_sel])
+	if (change < 1 || _qtys[_sel] >= getQuantity())
 		return;
 
 	change = std::min(getQuantity() - _qtys[_sel], change);
@@ -652,7 +657,7 @@ void SellState::decrease()
  */
 void SellState::decreaseByValue(int change)
 {
-	if (0 >= change || 0 >= _qtys[_sel])
+	if (change < 1 || _qtys[_sel] < 1)
 		return;
 
 	change = std::min(_qtys[_sel], change);
@@ -671,13 +676,47 @@ void SellState::updateItemStrings()
 		ss,
 		ss2;
 
-	ss << _qtys[_sel];
-	_lstItems->setCellText(_sel, 2, ss.str());
+	ss << getQuantity() - _qtys[_sel];
+	_lstItems->setCellText(_sel, 1, ss.str());
 
-	ss2 << getQuantity() - _qtys[_sel];
-	_lstItems->setCellText(_sel, 1, ss2.str());
+	ss2 << _qtys[_sel];
+	_lstItems->setCellText(_sel, 2, ss2.str());
 
 	_txtSales->setText(tr("STR_VALUE_OF_SALES").arg(Text::formatFunding(_total)));
+
+	// kL_begin:
+	if (_total > 0) // or craft, soldier, scientist, engineer.
+	{
+		_btnOk->setVisible(true);
+
+		return;
+	}
+	else
+	{
+		for (unsigned int
+				i = 0;
+				i < _qtys.size();
+				++i)
+		{
+			if (_qtys[i] > 0)
+			{
+				switch (getType(i))
+				{
+					case SELL_CRAFT:
+					case SELL_SOLDIER:
+					case SELL_SCIENTIST:
+					case SELL_ENGINEER:
+						_btnOk->setVisible(true);
+
+						return;
+					break;
+				}
+			}
+		}
+	}
+
+	_btnOk->setVisible(false);
+	// kL_end.
 }
 
 /**

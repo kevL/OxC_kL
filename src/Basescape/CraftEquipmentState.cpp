@@ -546,7 +546,7 @@ void CraftEquipmentState::moveLeftByValue(int change)
 		if (!itemRule->getCompatibleAmmo()->empty())
 		{
 			// First we remove all vehicles because we want to redistribute the ammo
-			RuleItem *ammo = _game->getRuleset()->getItem(itemRule->getCompatibleAmmo()->front());
+			RuleItem* ammo = _game->getRuleset()->getItem(itemRule->getCompatibleAmmo()->front());
 
 			for (std::vector<Vehicle*>::iterator
 					i = c->getVehicles()->begin();

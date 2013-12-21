@@ -344,27 +344,31 @@ void BaseInfoState::init()
 
 	std::wstringstream ss;
 //kL	ss << _base->getAvailableSoldiers() << ":" << _base->getTotalSoldiers();
-	ss << _base->getAvailableSoldiers(true) << ":" << _base->getTotalSoldiers();	// kL
+	ss << _base->getAvailableSoldiers(true) << ":" << _base->getTotalSoldiers(); // kL
 	_numSoldiers->setText(ss.str());
 
 
 	_barSoldiers->setMax(_base->getTotalSoldiers());
 //kL	_barSoldiers->setValue(_base->getAvailableSoldiers());
-	_barSoldiers->setValue(_base->getAvailableSoldiers(true));		// kL
+	_barSoldiers->setValue(_base->getAvailableSoldiers(true)); // kL
 
 	std::wstringstream ss2;
-	ss2 << _base->getAvailableEngineers() << ":" << _base->getTotalEngineers();
+//kL	ss2 << _base->getAvailableEngineers() << ":" << _base->getTotalEngineers();
+	ss2 << _base->getEngineers() << ":" << _base->getTotalEngineers(); // kL
 	_numEngineers->setText(ss2.str());
 
 	_barEngineers->setMax(_base->getTotalEngineers());
-	_barEngineers->setValue(_base->getAvailableEngineers());
+//kL	_barEngineers->setValue(_base->getAvailableEngineers());
+	_barEngineers->setValue(_base->getEngineers()); // kL
 
 	std::wstringstream ss3;
-	ss3 << _base->getAvailableScientists() << ":" << _base->getTotalScientists();
+//kL	ss3 << _base->getAvailableScientists() << ":" << _base->getTotalScientists();
+	ss3 << _base->getScientists() << ":" << _base->getTotalScientists(); // kL
 	_numScientists->setText(ss3.str());
 
 	_barScientists->setMax(_base->getTotalScientists());
-	_barScientists->setValue(_base->getAvailableScientists());
+//kL	_barScientists->setValue(_base->getAvailableScientists());
+	_barScientists->setValue(_base->getScientists()); // kL
 
 
 	std::wstringstream ss4;

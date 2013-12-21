@@ -18,19 +18,23 @@
  */
 
 #include "OptionsAdvancedState.h"
+
+#include <algorithm>
 #include <iostream>
 #include <sstream>
-#include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
-#include "../Engine/Language.h"
-#include "../Engine/Palette.h"
-#include "../Interface/TextButton.h"
-#include "../Interface/Window.h"
-#include "../Interface/Text.h"
-#include "../Interface/TextList.h"
-#include "../Engine/Options.h"
+
 #include "../Engine/Action.h"
-#include <algorithm>
+#include "../Engine/Game.h"
+#include "../Engine/Language.h"
+#include "../Engine/Options.h"
+#include "../Engine/Palette.h"
+
+#include "../Interface/Text.h"
+#include "../Interface/TextButton.h"
+#include "../Interface/TextList.h"
+#include "../Interface/Window.h"
+
+#include "../Resource/ResourcePack.h"
 
 
 namespace OpenXcom
@@ -38,26 +42,33 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Advanced Options window.
- * @param game Pointer to the core game.
- * @param origin Game section that originated this state.
+ * @param game, Pointer to the core game.
+ * @param origin, Game section that originated this state.
  */
-OptionsAdvancedState::OptionsAdvancedState(Game* game, OptionsOrigin origin)
+OptionsAdvancedState::OptionsAdvancedState(
+		Game* game,
+		OptionsOrigin origin)
 	:
-		OptionsBaseState(game, origin)
+		OptionsBaseState(
+						game,
+						origin)
 {
 	_window			= new Window(this, 320, 200, 0, 0, POPUP_BOTH);
 	_txtTitle		= new Text(320, 17, 0, 8);
+
+	_lstOptions		= new TextList(268, 104, 20, 30);
+
+	_txtDescription	= new Text(280, 32, 20, 142);
+
 	_btnOk			= new TextButton(148, 16, 8, 176);
 	_btnCancel		= new TextButton(148, 16, 164, 176);
-	_lstOptions		= new TextList(268, 104, 20, 30);
-	_txtDescription	= new Text(280, 32, 20, 142);
 
 	add(_window);
 	add(_txtTitle);
-	add(_btnOk);
-	add(_btnCancel);
 	add(_lstOptions);
 	add(_txtDescription);
+	add(_btnOk);
+	add(_btnCancel);
 
 	centerAllSurfaces();
 
@@ -117,7 +128,10 @@ OptionsAdvancedState::OptionsAdvancedState(Game* game, OptionsOrigin origin)
 
 	_boolQuantity = _settingBoolSet.size();
 	int sel = 0;
-	for (std::vector<std::pair<std::string, bool > >::iterator i = _settingBoolSet.begin(); i != _settingBoolSet.end(); ++i)
+	for (std::vector<std::pair<std::string, bool>>::iterator
+			i = _settingBoolSet.begin();
+			i != _settingBoolSet.end();
+			++i)
 	{
 		std::string settingName = (*i).first;
 		(*i).second = Options::getBool(settingName);
@@ -133,7 +147,10 @@ OptionsAdvancedState::OptionsAdvancedState(Game* game, OptionsOrigin origin)
 	_settingIntSet.push_back(std::pair<std::string, int>("autosave", 0));
 	_settingIntSet.push_back(std::pair<std::string, int>("maxFrameSkip", 0));
 
-	for (std::vector<std::pair<std::string, int > >::iterator i = _settingIntSet.begin(); i != _settingIntSet.end(); ++i)
+	for (std::vector<std::pair<std::string, int>>::iterator
+			i = _settingIntSet.begin();
+			i != _settingIntSet.end();
+			++i)
 	{
 		std::string settingName = (*i).first;
 		(*i).second = Options::getInt(settingName);
@@ -172,12 +189,18 @@ OptionsAdvancedState::~OptionsAdvancedState()
  */
 void OptionsAdvancedState::btnOkClick(Action*)
 {
-	for (std::vector<std::pair<std::string, bool> >::iterator i = _settingBoolSet.begin(); i != _settingBoolSet.end(); ++i)
+	for (std::vector<std::pair<std::string, bool>>::iterator
+			i = _settingBoolSet.begin();
+			i != _settingBoolSet.end();
+			++i)
 	{
 		Options::setBool((*i).first, (*i).second);
 	}
 
-	for (std::vector<std::pair<std::string, int> >::iterator i = _settingIntSet.begin(); i != _settingIntSet.end(); ++i)
+	for (std::vector<std::pair<std::string, int>>::iterator
+			i = _settingIntSet.begin();
+			i != _settingIntSet.end();
+			++i)
 	{
 		Options::setInt((*i).first, (*i).second);
 	}
@@ -210,7 +233,7 @@ void OptionsAdvancedState::lstOptionsPress(Action* action)
 	if (sel < _boolQuantity)
 	{
 		_settingBoolSet.at(sel).second = !_settingBoolSet.at(sel).second;
-		settingText = _settingBoolSet.at(sel).second ? tr("STR_YES").c_str() : tr("STR_NO").c_str();
+		settingText = _settingBoolSet.at(sel).second? tr("STR_YES").c_str(): tr("STR_NO").c_str();
 	}
 	else // integer variables will need special handling
 	{
