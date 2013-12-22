@@ -26,9 +26,11 @@
 namespace OpenXcom
 {
 
-class Text;
 class Font;
+class Language;
 class Sound;
+class Text;
+
 
 /**
  * Coloured button with a text label.
@@ -41,17 +43,23 @@ class TextButton
 	:
 		public InteractiveSurface
 {
+
 private:
 	Uint8 _color;
 	Text* _text;
 	TextButton** _group;
 	bool _contrast;
 
+
 	public:
 		static Sound* soundPress;
 
 		/// Creates a new text button with the specified size and position.
-		TextButton(int width, int height, int x = 0, int y = 0);
+		TextButton(
+				int width,
+				int height,
+				int x = 0,
+				int y = 0);
 		/// Cleans up the text button.
 		~TextButton();
 
@@ -67,8 +75,11 @@ private:
 		void setSmall();
 		/// Gets the text button's current font.
 		Font* getFont() const;
-		/// Sets the text button's various fonts.
-		void setFonts(Font* big, Font* small);
+		/// Initializes the text edit's resources.
+		void initText(
+				Font* big,
+				Font* small,
+				Language* lang);
 		/// Sets the text button's high contrast color setting.
 		void setHighContrast(bool contrast);
 		/// Sets the text button's text.
@@ -78,7 +89,10 @@ private:
 		/// Sets the text button's group.
 		void setGroup(TextButton** group);
 		/// Sets the text button's palette.
-		void setPalette(SDL_Color* colors, int firstcolor = 0, int ncolors = 256);
+		void setPalette(
+				SDL_Color* colors,
+				int firstcolor = 0,
+				int ncolors = 256);
 		/// Draws the text button.
 		void draw();
 		/// Special handling for mouse presses.

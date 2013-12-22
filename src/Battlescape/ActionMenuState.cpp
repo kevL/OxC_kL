@@ -58,19 +58,25 @@ namespace OpenXcom
  * @param x Position on the x-axis.
  * @param y position on the y-axis.
  */
-ActionMenuState::ActionMenuState(Game* game, BattleAction* action, int x, int y)
+ActionMenuState::ActionMenuState(
+		Game* game,
+		BattleAction* action,
+		int x,
+		int y)
 	:
 		State(game),
 		_action(action)
 {
 	_screen = false;
 
-	for (int i = 0; i < 6; ++i)
+	for (int
+			i = 0;
+			i < 6;
+			++i)
 	{
 		_actionMenu[i] = new ActionMenuItem(
 									i,
-									_game->getResourcePack()->getFont("FONT_BIG"),
-									_game->getResourcePack()->getFont("FONT_SMALL"),
+									_game,
 									x,
 									y);
 		add(_actionMenu[i]);
@@ -167,7 +173,10 @@ ActionMenuState::~ActionMenuState()
  * @param name Action description.
  * @param id Pointer to the new item ID.
  */
-void ActionMenuState::addItem(BattleActionType ba, const std::string& name, int* id)
+void ActionMenuState::addItem(
+		BattleActionType ba,
+		const std::string& name,
+		int* id)
 {
 	std::wstring s1, s2;
 	int acc = static_cast<int>(floor(_action->actor->getFiringAccuracy(ba, _action->weapon) * 100));
@@ -184,11 +193,11 @@ void ActionMenuState::addItem(BattleActionType ba, const std::string& name, int*
 //kL		|| ba == BA_LAUNCH
 		|| ba == BA_HIT)
 	{
-//kL		s1 = tr("STR_ACC").arg(Text::formatPercentage(acc));
-		s1 = tr("STR_ACC").arg(acc);		// kL
+//kL		s1 = tr("STR_ACCURACY_SHORT").arg(Text::formatPercentage(acc));
+		s1 = tr("STR_ACCURACY_SHORT").arg(acc); // kL
 	}
 
-	s2 = tr("STR_TUS").arg(tu);
+	s2 = tr("STR_TIME_UNITS_SHORT").arg(tu);
 	_actionMenu[*id]->setAction(ba, tr(name), s1, s2, tu);
 	_actionMenu[*id]->setVisible(true);
 

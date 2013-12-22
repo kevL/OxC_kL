@@ -19,10 +19,13 @@
 
 #include "ActionMenuItem.h"
 
+#include "../Engine/Game.h"
 #include "../Engine/Palette.h"
 
 #include "../Interface/Frame.h"
 #include "../Interface/Text.h"
+
+#include "../Resource/ResourcePack.h"
 
 
 namespace OpenXcom
@@ -31,12 +34,15 @@ namespace OpenXcom
 /**
  * Sets up an Action menu item.
  * @param id, The unique identifier of the menu item.
- * @param big, Pointer to the big font.
- * @param small, Pointer to the small font.
+ * @param game, Pointer to the game.
  * @param x, Position on the x-axis.
  * @param y, Position on the y-asis.
  */
-ActionMenuItem::ActionMenuItem(int id, Font* big, Font* small, int x, int y)
+ActionMenuItem::ActionMenuItem(
+		int id,
+		Game* game,
+		int x,
+		int y)
 	:
 		InteractiveSurface(270, 40, x + 25, y - (id * 40)),
 		_id(id),
@@ -44,10 +50,14 @@ ActionMenuItem::ActionMenuItem(int id, Font* big, Font* small, int x, int y)
 		_action(BA_NONE),
 		_tu(0)
 {
+	Font
+		* big = game->getResourcePack()->getFont("FONT_BIG"),
+		* small = game->getResourcePack()->getFont("FONT_SMALL");
+	Language* lang = game->getLanguage();
+
 	_frame			= new Frame(getWidth(), getHeight(), 0, 0);
 	_txtDescription	= new Text(200, 20, 10, 13);
-//kL	_txtAcc			= new Text(100, 20, 140, 13);
-	_txtAcc			= new Text(100, 20, 139, 13);	// kL
+	_txtAcc			= new Text(100, 20, 139, 13);
 	_txtTU			= new Text(80, 20, 210, 13);
 
 	_frame->setHighContrast(true);
@@ -55,18 +65,18 @@ ActionMenuItem::ActionMenuItem(int id, Font* big, Font* small, int x, int y)
 	_frame->setBackground(Palette::blockOffset(0)+14);
 	_frame->setThickness(9);
 
-	_txtDescription->setFonts(big, small);
+	_txtDescription->initText(big, small, lang);
 	_txtDescription->setBig();
 	_txtDescription->setHighContrast(true);
 	_txtDescription->setColor(Palette::blockOffset(0)-1);
 	_txtDescription->setVisible(true);
 
-	_txtAcc->setFonts(big, small);
+	_txtAcc->initText(big, small, lang);
 	_txtAcc->setBig();
 	_txtAcc->setHighContrast(true);
 	_txtAcc->setColor(Palette::blockOffset(0)-1);
 
-	_txtTU->setFonts(big, small);
+	_txtTU->initText(big, small, lang);
 	_txtTU->setBig();
 	_txtTU->setHighContrast(true);
 	_txtTU->setColor(Palette::blockOffset(0)-1);
@@ -131,7 +141,10 @@ int ActionMenuItem::getTUs() const
  * @param firstcolor Offset of the first color to replace.
  * @param ncolors Amount of colors to replace.
  */
-void ActionMenuItem::setPalette(SDL_Color* colors, int firstcolor, int ncolors)
+void ActionMenuItem::setPalette(
+		SDL_Color* colors,
+		int firstcolor,
+		int ncolors)
 {
 	Surface::setPalette(colors, firstcolor, ncolors);
 

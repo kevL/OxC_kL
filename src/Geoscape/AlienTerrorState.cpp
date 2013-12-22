@@ -95,7 +95,7 @@ AlienTerrorState::AlienTerrorState(
 	_btnIntercept->onMouseClick((ActionHandler)& AlienTerrorState::btnInterceptClick);
 
 	_btnCentre->setColor(Palette::blockOffset(8)+5);
-	_btnCentre->setText(tr("STR_CENTER_ON_SITE_TIME_5_SECS"));
+	_btnCentre->setText(tr("STR_CENTER_ON_SITE_TIME_5_SECONDS"));
 	_btnCentre->onMouseClick((ActionHandler)& AlienTerrorState::btnCentreClick);
 
 	_btnCancel->setColor(Palette::blockOffset(8)+5);

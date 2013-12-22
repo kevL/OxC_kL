@@ -1431,7 +1431,7 @@ void Globe::drawRadars()
 
 /*	Text *label = new Text(80, 9, 0, 0);
 	label->setPalette(getPalette());
-	label->setFonts(_game->getResourcePack()->getFont("FONT_BIG"), _game->getResourcePack()->getFont("FONT_SMALL"));
+	label->initText(_game->getResourcePack()->getFont("FONT_BIG"), _game->getResourcePack()->getFont("FONT_SMALL"), _game->getLanguage());
 	label->setAlign(ALIGN_LEFT);
 	label->setColor(Palette::blockOffset(15)-1); */
 
@@ -1747,7 +1747,9 @@ void Globe::drawDetail()
 				i != _game->getResourcePack()->getPolylines()->end();
 				++i)
 		{
-			Sint16 x[2], y[2];
+			Sint16
+				x[2],
+				y[2];
 
 			for (int
 					j = 0;
@@ -1786,9 +1788,10 @@ void Globe::drawDetail()
 	{
 		Text* label = new Text(100, 9, 0, 0);
 		label->setPalette(getPalette());
-		label->setFonts(
+		label->initText(
 					_game->getResourcePack()->getFont("FONT_BIG"),
-					_game->getResourcePack()->getFont("FONT_SMALL"));
+					_game->getResourcePack()->getFont("FONT_SMALL"),
+					_game->getLanguage());
 		label->setAlign(ALIGN_CENTER);
 		label->setColor(Palette::blockOffset(14)+3);
 
@@ -1830,7 +1833,10 @@ void Globe::drawDetail()
 	{
 		Text* label = new Text(80, 9, 0, 0);
 		label->setPalette(getPalette());
-		label->setFonts(_game->getResourcePack()->getFont("FONT_BIG"), _game->getResourcePack()->getFont("FONT_SMALL"));
+		label->initText(
+					_game->getResourcePack()->getFont("FONT_BIG"),
+					_game->getResourcePack()->getFont("FONT_SMALL"),
+					_game->getLanguage());
 //kL		label->setAlign(ALIGN_CENTER);
 		label->setColor(Palette::blockOffset(10)+7);
 
@@ -1874,7 +1880,9 @@ void Globe::drawDetail()
 	// Draw the city markers
 	if (_zoom > 2)
 	{
-		Sint16 x, y;
+		Sint16
+			x,
+			y;
 
 		for (std::vector<Region*>::iterator
 				i = _game->getSavedGame()->getRegions()->begin();
@@ -1907,11 +1915,16 @@ void Globe::drawDetail()
 	{
 		Text* label = new Text(80, 9, 0, 0);
 		label->setPalette(getPalette());
-		label->setFonts(_game->getResourcePack()->getFont("FONT_BIG"), _game->getResourcePack()->getFont("FONT_SMALL"));
+		label->initText(
+					_game->getResourcePack()->getFont("FONT_BIG"),
+					_game->getResourcePack()->getFont("FONT_SMALL"),
+					_game->getLanguage());
 		label->setAlign(ALIGN_CENTER);
 		label->setColor(Palette::blockOffset(10)+7);
 
-		Sint16 x, y;
+		Sint16
+			x,
+			y;
 
 		for (std::vector<Region*>::iterator
 				i = _game->getSavedGame()->getRegions()->begin();

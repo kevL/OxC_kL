@@ -196,7 +196,7 @@ UfoDetectedState::UfoDetectedState(
 	_btnIntercept->onMouseClick((ActionHandler)& UfoDetectedState::btnInterceptClick);
 
 	_btnCentre->setColor(Palette::blockOffset(8)+5);
-	_btnCentre->setText(tr("STR_CENTER_ON_UFO_TIME_5_SECS"));
+	_btnCentre->setText(tr("STR_CENTER_ON_UFO_TIME_5_SECONDS"));
 	_btnCentre->onMouseClick((ActionHandler)& UfoDetectedState::btnCentreClick);
 	_btnCentre->onKeyboardPress((ActionHandler)& UfoDetectedState::btnCentreClick, (SDLKey)Options::getInt("keyOk"));
 

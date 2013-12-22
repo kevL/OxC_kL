@@ -18,12 +18,14 @@
  */
 
 #include "Text.h"
+
 #include <cctype>
 #include <cmath>
 #include <sstream>
+
 #include "../Engine/Font.h"
-#include "../Engine/Options.h"
 #include "../Engine/Language.h"
+#include "../Engine/Options.h"
 
 
 namespace OpenXcom
@@ -36,12 +38,21 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-Text::Text(int width, int height, int x, int y)
+Text::Text(
+		int width,
+		int height,
+		int x,
+		int y)
 	:
-		Surface(width, height, x, y),
+		Surface(
+			width,
+			height,
+			x,
+			y),
 		_big(0),
 		_small(0),
 		_font(0),
+		_lang(0),
 		_text(L""),
 		_wrap(false),
 		_invert(false),
@@ -62,10 +73,12 @@ Text::~Text()
 
 /**
  * Takes an integer value and formats it as number with separators (spacing the thousands).
- * @param value The value.
- * @return The formatted string.
+ * @param value, The value.
+ * @return, The formatted string.
  */
-std::wstring Text::formatNumber(int value, std::wstring currency)
+std::wstring Text::formatNumber(
+		int value,
+		std::wstring currency)
 {
 	// In the future, the whole setlocale thing should be removed from here.
 	// It is inconsistent with the in-game language selection: locale-specific
@@ -73,12 +86,13 @@ std::wstring Text::formatNumber(int value, std::wstring currency)
 	// language, not by system locale.
 	//setlocale(LC_MONETARY, ""); // see http://www.cplusplus.com/reference/clocale/localeconv/
 	//setlocale(LC_CTYPE, ""); // this is necessary for mbstowcs to work correctly
-	//struct lconv * lc = localeconv();
+	//struct lconv* lc = localeconv();
+
 	std::wstring thousands_sep = L"\xA0";// Language::cpToWstr(lc->mon_thousands_sep);
 
 	bool negative = (value < 0);
 	std::wstringstream ss;
-	ss << (negative? -value : value);
+	ss << (negative? -value: value);
 	std::wstring s = ss.str();
 
 	size_t spacer = s.size() - 3;
@@ -92,6 +106,7 @@ std::wstring Text::formatNumber(int value, std::wstring currency)
 	{
 		s.insert(0, currency);
 	}
+
 	if (negative)
 	{
 		s.insert(0, L"-");
@@ -147,23 +162,29 @@ void Text::setSmall()
  * Returns the font currently used by the text.
  * @return Pointer to font.
  */
-Font *Text::getFont() const
+Font* Text::getFont() const
 {
 	return _font;
 }
 
 /**
- * Changes the various fonts for the text to use.
+ * Changes the various resources needed for text rendering.
  * The different fonts need to be passed in advance since the
- * text size can change mid-text.
- * @param big Pointer to large-size font.
- * @param small Pointer to small-size font.
+ * text size can change mid-text, and the language affects
+ * how the text is rendered.
+ * @param big, Pointer to large-size font.
+ * @param small, Pointer to small-size font.
+ * @param lang, Pointer to current language.
  */
-void Text::setFonts(Font *big, Font *small)
+void Text::initText(
+		Font* big,
+		Font* small,
+		Language* lang)
 {
-	_big = big;
-	_small = small;
-	_font = _small;
+	_big	= big;
+	_small	= small;
+	_lang	= lang;
+	_font	= _small;
 
 	processText();
 }
@@ -328,7 +349,10 @@ int Text::getTextHeight() const
 int Text::getTextWidth() const
 {
 	int width = 0;
-	for (std::vector<int>::const_iterator i = _lineWidth.begin(); i != _lineWidth.end(); ++i)
+	for (std::vector<int>::const_iterator
+			i = _lineWidth.begin();
+			i != _lineWidth.end();
+			++i)
 	{
 		if (*i > width)
 		{
@@ -345,32 +369,36 @@ int Text::getTextWidth() const
  */
 void Text::processText()
 {
-	if (_font == 0)
+	if (_font == 0 || _lang == 0)
 	{
 		return;
 	}
 
-	std::wstring *s = &_text;
+	std::wstring* str = &_text;
 
 	// Use a separate string for wordwrapping text
 	if (_wrap)
 	{
 		_wrappedText = _text;
-		s = &_wrappedText;
+		str = &_wrappedText;
 	}
 
 	_lineWidth.clear();
 	_lineHeight.clear();
 
 	int width = 0, word = 0;
-	std::wstring::iterator space = s->begin();
+	size_t space = 0;
 	bool start = true;
-	Font *font = _font;
+	Font* font = _font;
 
 	// Go through the text character by character
-	for (std::wstring::iterator c = s->begin(); c <= s->end(); ++c)
+	for (size_t
+		c = 0;
+		c <= str->size();
+		++c)
 	{
-		if (c == s->end() || Font::isLinebreak(*c)) // End of the line
+		if (c == str->size()
+			|| Font::isLinebreak((*str)[c])) // End of the line
 		{
 			// Add line measurements for alignment later
 			_lineWidth.push_back(width);
@@ -379,46 +407,112 @@ void Text::processText()
 			word = 0;
 			start = true;
 
-			if (c == s->end())
+			if (c == str->size())
 				break;
 
 			// \x02 marks start of small text
-			else if (*c == 2)
+			else if ((*str)[c] == 2)
 				font = _small;
 		}
-		else if (Font::isSpace(*c)) // Keep track of spaces for wordwrapping
+		else if (Font::isSpace((*str)[c])) // Keep track of spaces for wordwrapping
 		{
 			space = c;
-			width += font->getCharSize(*c).w;
+			width += font->getCharSize((*str)[c]).w;
 			word = 0;
 			start = false;
 		}
-		else if (*c != 1) // Keep track of the width of the last line and word
+		else if ((*str)[c] != 1) // Keep track of the width of the last line and word
 		{
-			if (font->getChar(*c) == 0)
+			if (font->getChar((*str)[c]) == 0)
 			{
-				*c = L'?';
+				(*str)[c] = L'?';
 			}
-			int charWidth = font->getCharSize(*c).w;
 
+			int charWidth = font->getCharSize((*str)[c]).w;
 			width += charWidth;
 			word += charWidth;
 
 			// Wordwrap if the last word doesn't fit the line
-			if (_wrap && width > getWidth() && !start)
+			if (_wrap
+				&& width > getWidth()
+				&& !start)
 			{
-				// Go back to the last space and put a linebreak there
-				*space = L'\n';
-				width -= word + font->getCharSize(L' ').w;
+				if (_lang->getTextWrapping() == WRAP_WORDS
+					|| Font::isSpace((*str)[c]))
+				{
+					// Go back to the last space and put a linebreak there
+					(*str)[space] = L'\n';
+					width -= word + font->getCharSize(L' ').w;
+				}
+				else if (_lang->getTextWrapping() == WRAP_LETTERS)
+				{
+					// Go back to the last letter and put a linebreak there
+					str->insert(c, L"\n");
+					width -= charWidth;
+				}
+
 				_lineWidth.push_back(width);
-				_lineHeight.push_back(font->getHeight() + font->getSpacing());
-				width = word;
+				_lineHeight.push_back(font->getCharSize(L'\n').h);
+
+				if (_lang->getTextWrapping() == WRAP_WORDS)
+				{
+					width = word;
+				}
+				else if (_lang->getTextWrapping() == WRAP_LETTERS)
+				{
+					width = 0;
+				}
+
 				start = true;
 			}
 		}
 	}
 
 	_redraw = true;
+}
+
+/**
+ * Calculates the starting X position for a line of text.
+ * @param line, The line number (0 = first, etc).
+ * @return, The X position in pixels.
+ */
+int Text::getLineX(int line) const
+{
+	int x;
+
+	switch (_lang->getTextDirection())
+	{
+		case DIRECTION_LTR:
+			switch (_align)
+			{
+				case ALIGN_LEFT:
+					x = 0;
+				break;
+				case ALIGN_CENTER:
+					x = (int)ceil((getWidth() - _lineWidth[line]) / 2.0);
+				break;
+				case ALIGN_RIGHT:
+					x = getWidth() - 1 - _lineWidth[line];
+				break;
+			}
+		break;
+		case DIRECTION_RTL:
+			switch (_align)
+			{
+				case ALIGN_LEFT:
+					x = getWidth() - 1;
+				break;
+				case ALIGN_CENTER:
+					x = getWidth() - (int)ceil((getWidth() - _lineWidth[line]) / 2.0);
+				break;
+				case ALIGN_RIGHT:
+					x = _lineWidth[line];
+				break;
+			}
+		break;
+	}
+
+	return x;
 }
 
 /**
@@ -452,12 +546,20 @@ void Text::draw()
 		this->drawRect(&r, 0);
 	}
 
-	int x = 0, y = 0, line = 0, height = 0;
-	Font *font = _font;
-	int color = _color;
-	std::wstring *s = &_text;
+	int
+		x = 0,
+		y = 0,
+		line = 0,
+		height = 0,
+		color = _color;
 
-	for (std::vector<int>::iterator i = _lineHeight.begin(); i != _lineHeight.end(); ++i)
+	Font* font = _font;
+	std::wstring* s = &_text;
+
+	for (std::vector<int>::iterator
+			i = _lineHeight.begin();
+			i != _lineHeight.end();
+			++i)
 	{
 		height += *i;
 	}
@@ -468,25 +570,14 @@ void Text::draw()
 			y = 0;
 		break;
 		case ALIGN_MIDDLE:
-			y = (int)ceil((getHeight() - height) / 2.0);
+			y = static_cast<int>(ceil(static_cast<double>(getHeight() - height) / 2.0));
 		break;
 		case ALIGN_BOTTOM:
 			y = getHeight() - height;
 		break;
 	}
 
-	switch (_align)
-	{
-		case ALIGN_LEFT:
-			x = 0;
-		break;
-		case ALIGN_CENTER:
-			x = (int)ceil((getWidth() - _lineWidth[line]) / 2.0);
-		break;
-		case ALIGN_RIGHT:
-			x = (getWidth() - _lineWidth[line]) - 1;
-		break;
-	}
+	x = getLineX(line);
 
 	if (_wrap)
 	{
@@ -500,35 +591,34 @@ void Text::draw()
 		mul = 3;
 	}
 
+	// Set up text direction
+	int dir = 1;
+	if (_lang->getTextDirection() == DIRECTION_RTL)
+	{
+		dir = -1;
+	}
+
 	// Invert text by inverting the font palette on index 3 (font palettes use indices 1-5)
-	int mid = _invert ? 3 : 0;
+	int mid = _invert? 3: 0;
 
 	font->getSurface()->paletteShift(color, mul, mid);
 
 	// Draw each letter one by one
-	for (std::wstring::iterator c = s->begin(); c != s->end(); ++c)
+	for (std::wstring::iterator
+			c = s->begin();
+			c != s->end();
+			++c)
 	{
 		if (Font::isSpace(*c))
 		{
-			x += font->getCharSize(*c).w;
+			x += dir * font->getCharSize(*c).w;
 		}
 		else if (Font::isLinebreak(*c))
 		{
 			line++;
-			y += font->getCharSize(*c).h;
 
-			switch (_align)
-			{
-				case ALIGN_LEFT:
-					x = 0;
-				break;
-				case ALIGN_CENTER:
-					x = (getWidth() - _lineWidth[line]) / 2;
-				break;
-				case ALIGN_RIGHT:
-					x = getWidth() - _lineWidth[line];
-				break;
-			}
+			y += font->getCharSize(*c).h;
+			x = getLineX(line);
 
 			if (*c == L'\x02')
 			{
@@ -540,16 +630,22 @@ void Text::draw()
 		else if (*c == L'\x01')
 		{
 			font->getSurface()->paletteRestore();
-			color = (color == _color ? _color2 : _color);
+
+			color = (color == _color? _color2: _color);
 			font->getSurface()->paletteShift(color, mul, mid);
 		}
 		else
 		{
+			if (dir < 0)
+				x += dir * font->getCharSize(*c).w;
+
 			Surface* chr = font->getChar(*c);
 			chr->setX(x);
 			chr->setY(y);
 			chr->blit(this);
-			x += font->getCharSize(*c).w;
+
+			if (dir > 0)
+				x += dir * font->getCharSize(*c).w;
 		}
 	}
 

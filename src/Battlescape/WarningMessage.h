@@ -26,9 +26,10 @@
 namespace OpenXcom
 {
 
+class Font;
 class Text;
 class Timer;
-class Font;
+
 
 /**
  * Coloured box with text inside that fades out after it is displayed.
@@ -38,14 +39,23 @@ class WarningMessage
 	:
 		public Surface
 {
+
 private:
+	Uint8
+		_color,
+		_fade;
+
 	Text* _text;
 	Timer* _timer;
-	Uint8 _color, _fade;
+
 
 public:
 	/// Creates a new warning message with the specified size and position.
-	WarningMessage(int width, int height, int x = 0, int y = 0);
+	WarningMessage(
+			int width,
+			int height,
+			int x = 0,
+			int y = 0);
 	/// Cleans up the warning message.
 	~WarningMessage();
 
@@ -53,10 +63,16 @@ public:
 	void setColor(Uint8 color);
 	/// Sets the text color for the warning message.
 	void setTextColor(Uint8 color);
-	/// Sets the warning message's various fonts.
-	void setFonts(Font* big, Font* small);
+	/// Initializes the warning message's resources.
+	void initText(
+			Font* big,
+			Font* small,
+			Language* lang);
 	/// Sets the warning message's palette.
-	void setPalette(SDL_Color* colors, int firstcolor = 0, int ncolors = 256);
+	void setPalette(
+			SDL_Color* colors,
+			int firstcolor = 0,
+			int ncolors = 256);
 	/// Shows the warning message.
 	void showMessage(const std::wstring& msg);
 	/// Handles the timers.

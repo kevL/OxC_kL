@@ -30,6 +30,8 @@ namespace OpenXcom
 {
 
 class Font;
+class Language;
+
 
 /**
  * Element that is blit (rendered) onto the screen.
@@ -40,19 +42,34 @@ class Font;
  */
 class Surface
 {
+
 protected:
-	SDL_Surface* _surface;
-	int _x, _y;
-	SDL_Rect _crop;
-	bool _visible, _hidden, _redraw;
-	SDL_Color* _originalColors;
-	void* _alignedBuffer;
-	int _dx, _dy;
+	bool
+		_hidden,
+		_redraw,
+		_visible;
+	int
+		_dx,
+		_dy,
+		_x,
+		_y;
+
 	std::string _tooltip;
+
+	SDL_Color* _originalColors;
+	SDL_Rect _crop;
+	SDL_Surface* _surface;
+	void* _alignedBuffer;
+
 
 	public:
 		/// Creates a new surface with the specified size and position.
-		Surface(int width, int height, int x = 0, int y = 0, int bpp = 8);
+		Surface(
+				int width,
+				int height,
+				int x = 0,
+				int y = 0,
+				int bpp = 8);
 		/// Creates a new surface from an existing one.
 		Surface(const Surface& other);
 		/// Cleans up the surface.
@@ -80,10 +97,14 @@ protected:
 		virtual void draw();
 		/// Blits this surface onto another one.
 		virtual void blit(Surface* surface);
-		/// Sets the surface's various fonts.
-		virtual void setFonts(Font*, Font*)
+		/// Initializes the surface's various text resources.
+		virtual void initText(
+				Font*,
+				Font*,
+				Language*)
 		{
 		};
+
 		/// Copies a portion of another surface into this one.
 		void copy(Surface* surface);
 		/// Draws a filled rectangle on the surface.

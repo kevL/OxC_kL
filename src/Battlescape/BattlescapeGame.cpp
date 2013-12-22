@@ -1581,7 +1581,7 @@ bool BattlescapeGame::checkReservedTU(
 					break;
 
 					default:
-						_parentState->warning("STR_TUS_RESERVED_FOR_KNEELING_AND_FIRING");
+						_parentState->warning("STR_TIME_UNITS_RESERVED_FOR_KNEELING_AND_FIRING");
 					break;
 				}
 			}

@@ -2547,7 +2547,7 @@ items:
     handSprite: 104
     hitSound: 148
     power: 77
-    damageType: 2
+    damageType: 7
     accuracyMelee: 92
     tuMelee: 14
     clipSize: -1
@@ -6137,6 +6137,30 @@ alienDeployments:
     terrain: URBAN
   - type: STR_ALIEN_BASE_ASSAULT
     data:
+      - alienRank: 6 #terrorist1
+        lowQty: 1
+        highQty: 3
+        dQty: 1
+        percentageOutsideUfo: 0
+        itemSets:
+          -
+            []
+          -
+            []
+          -
+            []
+      - alienRank: 7
+        lowQty: 0
+        highQty: 2
+        dQty: 1
+        percentageOutsideUfo: 0
+        itemSets:
+          -
+            []
+          -
+            []
+          -
+            []
       - alienRank: 5 #soldier
         lowQty: 5
         highQty: 8
@@ -6256,30 +6280,6 @@ alienDeployments:
             - STR_HEAVY_PLASMA_CLIP
             - STR_HEAVY_PLASMA_CLIP
             - STR_ALIEN_GRENADE
-      - alienRank: 6 #terrorist1
-        lowQty: 1
-        highQty: 3
-        dQty: 2
-        percentageOutsideUfo: 0
-        itemSets:
-          -
-            []
-          -
-            []
-          -
-            []
-      - alienRank: 7 #terrorist2
-        lowQty: 0
-        highQty: 2
-        dQty: 2
-        percentageOutsideUfo: 0
-        itemSets:
-          -
-            []
-          -
-            []
-          -
-            []
     width: 50
     length: 50
     height: 2
@@ -7924,7 +7924,7 @@ ufopaedia:
     rect_stats:
       x: 160
       y: 5
-      width: 140
+      width: 160
       height: 60
     rect_text:
       x: 5
@@ -7941,7 +7941,7 @@ ufopaedia:
     rect_stats:
       x: 5
       y: 132
-      width: 140
+      width: 160
       height: 60
     rect_text:
       x: 5
@@ -7958,7 +7958,7 @@ ufopaedia:
     rect_stats:
       x: 160
       y: 5
-      width: 140
+      width: 160
       height: 60
     rect_text:
       x: 5
@@ -7973,7 +7973,7 @@ ufopaedia:
     rect_stats:
       x: 5
       y: 110
-      width: 140
+      width: 160
       height: 60
     rect_text:
       x: 5
@@ -7990,7 +7990,7 @@ ufopaedia:
     rect_stats:
       x: 160
       y: 5
-      width: 140
+      width: 160
       height: 60
     rect_text:
       x: 5
@@ -9383,6 +9383,12 @@ extraSprites:
     subY: 3
     files:
       0: Resources/BulletSprites/BulletSprites.png
+  - type: TFTDReserve
+    width: 59
+    height: 24
+    singleImage: true
+    files:
+      0: Resources/UI/reserve.png
 #kL, my Sound customizations
 #kL, the numbering is representative of their order in SAMPLE2.CAT
 extraSounds:

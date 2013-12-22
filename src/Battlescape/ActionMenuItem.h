@@ -30,8 +30,10 @@ namespace OpenXcom
 
 class Font;
 class Frame;
-class State;
+class Game;
+class Language;
 class Text;
+
 
 /**
  * A class that represents a single box in the action popup menu on the battlescape.
@@ -42,17 +44,28 @@ class ActionMenuItem
 	:
 		public InteractiveSurface
 {
+
 private:
-	int _id;
 	bool _highlighted;
+	int
+		_id,
+		_tu;
+
 	BattleActionType _action;
-	int _tu;
 	Frame* _frame;
-	Text* _txtDescription, * _txtAcc, * _txtTU;
+	Text
+		* _txtDescription,
+		* _txtAcc,
+		* _txtTU;
+
 
 	public:
 		/// Creates a new ActionMenuItem.
-		ActionMenuItem(int id, Font* big, Font* small, int x, int y);
+		ActionMenuItem(
+				int id,
+				Game* game,
+				int x,
+				int y);
 		/// Cleans up the ActionMenuItem.
 		~ActionMenuItem();
 

@@ -35,7 +35,11 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-BattlescapeMessage::BattlescapeMessage(int width, int height, int x, int y)
+BattlescapeMessage::BattlescapeMessage(
+		int width,
+		int height,
+		int x,
+		int y)
 	:
 		Surface(width, height, x, y)
 {
@@ -81,15 +85,20 @@ void BattlescapeMessage::setText(const std::wstring& message)
 }
 
 /**
- * Changes the various fonts for the message to use.
+ * Changes the various resources needed for text rendering.
  * The different fonts need to be passed in advance since the
- * text size can change mid-text.
- * @param big Pointer to large-size font.
- * @param small Pointer to small-size font.
+ * text size can change mid-text, and the language affects
+ * how the text is rendered.
+ * @param big, Pointer to large-size font.
+ * @param small, Pointer to small-size font.
+ * @param lang, Pointer to current language.
  */
-void BattlescapeMessage::setFonts(Font* big, Font* small)
+void BattlescapeMessage::initText(
+		Font* big,
+		Font* small,
+		Language* lang)
 {
-	_text->setFonts(big, small);
+	_text->initText(big, small, lang);
 	_text->setBig();
 }
 
@@ -99,7 +108,10 @@ void BattlescapeMessage::setFonts(Font* big, Font* small)
  * @param firstcolor Offset of the first color to replace.
  * @param ncolors Amount of colors to replace.
  */
-void BattlescapeMessage::setPalette(SDL_Color* colors, int firstcolor, int ncolors)
+void BattlescapeMessage::setPalette(
+		SDL_Color* colors,
+		int firstcolor,
+		int ncolors)
 {
 	Surface::setPalette(colors, firstcolor, ncolors);
 	_window->setPalette(colors, firstcolor, ncolors);

@@ -33,12 +33,16 @@ namespace OpenXcom
 
 /**
  * Sets up a blank warning message with the specified size and position.
- * @param width Width in pixels.
- * @param height Height in pixels.
- * @param x X position in pixels.
- * @param y Y position in pixels.
+ * @param width, Width in pixels.
+ * @param height, Height in pixels.
+ * @param x, X position in pixels.
+ * @param y, Y position in pixels.
  */
-WarningMessage::WarningMessage(int width, int height, int x, int y)
+WarningMessage::WarningMessage(
+		int width,
+		int height,
+		int x,
+		int y)
 	:
 		Surface(width, height, x, y),
 		_color(0),
@@ -84,15 +88,20 @@ void WarningMessage::setTextColor(Uint8 color)
 }
 
 /**
- * Changes the various fonts for the message to use.
+ * Changes the various resources needed for text rendering.
  * The different fonts need to be passed in advance since the
- * text size can change mid-text.
- * @param big Pointer to large-size font.
- * @param small Pointer to small-size font.
+ * text size can change mid-text, and the language affects
+ * how the text is rendered.
+ * @param big, Pointer to large-size font.
+ * @param small, Pointer to small-size font.
+ * @param lang, Pointer to current language.
  */
-void WarningMessage::setFonts(Font* big, Font* small)
+void WarningMessage::initText(
+		Font* big,
+		Font* small,
+		Language* lang)
 {
-	_text->setFonts(big, small);
+	_text->initText(big, small, lang);
 }
 
 /**
@@ -101,7 +110,10 @@ void WarningMessage::setFonts(Font* big, Font* small)
  * @param firstcolor Offset of the first color to replace.
  * @param ncolors Amount of colors to replace.
  */
-void WarningMessage::setPalette(SDL_Color* colors, int firstcolor, int ncolors)
+void WarningMessage::setPalette(
+		SDL_Color* colors,
+		int firstcolor,
+		int ncolors)
 {
 	Surface::setPalette(colors, firstcolor, ncolors);
 

@@ -335,7 +335,7 @@ void Map::setPalette(
 
 	_message->setPalette(colors, firstcolor, ncolors);
 	_message->setBackground(_res->getSurface("TAC00.SCR"));
-	_message->setFonts(_res->getFont("FONT_BIG"), _res->getFont("FONT_SMALL"));
+	_message->initText(_res->getFont("FONT_BIG"), _res->getFont("FONT_SMALL"), _game->getLanguage());
 	_message->setText(_game->getLanguage()->getString("STR_HIDDEN_MOVEMENT"));
 }
 

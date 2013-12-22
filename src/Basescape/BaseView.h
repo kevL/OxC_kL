@@ -29,6 +29,7 @@ namespace OpenXcom
 class Base;
 class BaseFacility;
 class Font;
+class Language;
 class RuleBaseFacility;
 class SurfaceSet;
 class Timer;
@@ -43,31 +44,51 @@ class BaseView
 	:
 		public InteractiveSurface
 {
+
 private:
 	static const int BASE_SIZE = 6;
 	static const int GRID_SIZE = 32;
 
-	Base* _base;
-	SurfaceSet* _texture;
-	BaseFacility* _facilities[BASE_SIZE][BASE_SIZE], * _selFacility;
-	Font* _big, * _small;
-	Timer* _timer;
-	Surface* _selector;
-
-	int _gridX, _gridY, _selSize;
 	bool _blink;
+	int
+		_gridX,
+		_gridY,
+		_selSize;
+
+	Base		* _base;
+	BaseFacility
+				* _facilities[BASE_SIZE][BASE_SIZE],
+				* _selFacility;
+	Font
+				* _big,
+				* _small;
+	Language	* _lang;
+	Surface		* _selector;
+	SurfaceSet	* _texture;
+	Timer		* _timer;
+
 
 	/// Updates the neighborFacility's build time. This is for internal use only (reCalcQueuedBuildings()).
-	void updateNeighborFacilityBuildTime(BaseFacility* facility, BaseFacility* neighbor);
+	void updateNeighborFacilityBuildTime(
+			BaseFacility* facility,
+			BaseFacility* neighbor);
+
 
 	public:
 		/// Creates a new base view at the specified position and size.
-		BaseView(int width, int height, int x = 0, int y = 0);
+		BaseView(
+				int width,
+				int height,
+				int x = 0,
+				int y = 0);
 		/// Cleans up the base view.
 		~BaseView();
 
-		/// Sets the base view's various fonts.
-		void setFonts(Font* big, Font* small);
+		/// Initializes the base view's various resources.
+		void initText(
+				Font* big,
+				Font* small,
+				Language* lang);
 		/// Sets the base to display.
 		void setBase(Base* base);
 		/// Sets the texture for this base view.
@@ -89,7 +110,11 @@ private:
 		/// ReCalculates the remaining build-time of all queued buildings.
 		void reCalcQueuedBuildings();
 		/// Counts the squares connected to a grid position.
-		int countConnected(int x, int y, int** grid, BaseFacility* remove = 0) const;
+		int countConnected(
+				int x,
+				int y,
+				int** grid,
+				BaseFacility* remove = 0) const;
 
 		/// Handles the timers.
 		void think();

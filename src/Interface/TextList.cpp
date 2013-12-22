@@ -333,7 +333,7 @@ void TextList::addRow(
 						getY());
 
 		txt->setPalette(this->getPalette());
-		txt->setFonts(_big, _small);
+		txt->initText(_big, _small, _lang);
 		txt->setColor(_color);
 		txt->setSecondaryColor(_color2);
 
@@ -535,18 +535,21 @@ void TextList::setPalette(
 }
 
 /**
- * Changes the various fonts of the text in the list
+ * Changes the resources for the text in the list
  * and calculates the selector and visible amount of rows.
- * @param big Pointer to large-size font.
- * @param small Pointer to small-size font.
+ * @param big, Pointer to large-size font.
+ * @param small, Pointer to small-size font.
+ * @param lang, Pointer to current language.
  */
-void TextList::setFonts(
+void TextList::initText(
 		Font* big,
-		Font* small)
+		Font* small,
+		Language* lang)
 {
-	_big = big;
-	_small = small;
-	_font = small;
+	_big	= big;
+	_small	= small;
+	_font	= small;
+	_lang	= lang;
 
 	delete _selector;
 

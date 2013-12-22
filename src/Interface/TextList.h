@@ -39,7 +39,6 @@ enum ArrowOrientation
 
 
 class ArrowButton;
-class Font;
 
 
 /**
@@ -89,6 +88,7 @@ private:
 		* _big,
 		* _font,
 		* _small;
+	Language* _lang;
 	Surface
 		* _bg,
 		* _selector;
@@ -170,10 +170,11 @@ private:
 				SDL_Color* colors,
 				int firstcolor = 0,
 				int ncolors = 256);
-		/// Sets the fonts of the text list.
-		void setFonts(
+		/// Initializes the resources for the text list.
+		void initText(
 				Font* big,
-				Font* small);
+				Font* small,
+				Language* lang);
 		/// Sets the text color of the text list.
 		void setColor(Uint8 color);
 		/// Gets the text color of the text list.

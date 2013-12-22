@@ -21,19 +21,37 @@
 #define OPENXCOM_LANGUAGE_H
 
 #include <map>
-#include <vector>
 #include <string>
+#include <vector>
+
 #include <yaml-cpp/yaml.h>
+
 #include "LocalizedText.h"
+
 #include "../Savegame/Soldier.h"
 
 
 namespace OpenXcom
 {
 
-class TextList;
+enum TextDirection
+{
+	DIRECTION_LTR,
+	DIRECTION_RTL
+};
+
+
+enum TextWrapping
+{
+	WRAP_WORDS,
+	WRAP_LETTERS
+};
+
+
 class ExtraStrings;
 class LanguagePlurality;
+class TextList;
+
 
 /**
  * Contains strings used throughout the game for localization.
@@ -41,15 +59,25 @@ class LanguagePlurality;
  */
 class Language
 {
-	private:
-		std::string _id;
-		std::map<std::string, LocalizedText> _strings;
-		LanguagePlurality* _handler;
 
-		static std::map<std::string, std::wstring> _names;
+private:
+	std::string _id;
 
-		/// Parses a text string loaded from an external file.
-		std::wstring loadString(const std::string& s) const;
+	LanguagePlurality* _handler;
+	TextDirection _direction;
+	TextWrapping _wrap;
+
+	std::map<std::string, LocalizedText> _strings;
+
+	static std::map<std::string, std::wstring> _names;
+	static std::vector<std::string>
+		_rtl,
+		_cjk;
+
+	/// Parses a text string loaded from an external file.
+	std::wstring loadString(const std::string& s) const;
+
+
 	public:
 		/// Creates a blank language.
 		Language();
@@ -76,8 +104,6 @@ class Language
 		static std::vector<std::string> getList(TextList* list);
 		/// Loads the language from a YAML file.
 		void load(const std::string& filename, ExtraStrings* extras);
-		/// Loads an OpenXcom language file.
-		void loadLng(const std::string& filename, ExtraStrings* extras);
 		/// Gets the language's ID.
 		std::string getId() const;
 		/// Gets the language's name.
@@ -90,6 +116,10 @@ class Language
 		LocalizedText getString(const std::string& id, unsigned n) const;
 		/// Get a gender-depended localized text.
 		const LocalizedText& getString(const std::string& id, SoldierGender gender) const;
+		/// Gets the direction of text in this language.
+		TextDirection getTextDirection() const;
+		/// Gets the wrapping of text in this language.
+		TextWrapping getTextWrapping() const;
 };
 
 }

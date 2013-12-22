@@ -22,20 +22,22 @@
 
 #include <list>
 #include <string>
+
 #include <SDL.h>
 
 
 namespace OpenXcom
 {
 
-class State;
-class Screen;
 class Cursor;
+class FpsCounter;
 class Language;
 class ResourcePack;
-class SavedGame;
 class Ruleset;
-class FpsCounter;
+class SavedGame;
+class Screen;
+class State;
+
 
 /**
  * The core of the game engine, manages the game's entire contents and structure.
@@ -45,24 +47,33 @@ class FpsCounter;
  */
 class Game
 {
+
 private:
-	SDL_Event _event;
-	Screen* _screen;
+	bool
+		_mouseActive,
+		_quit,
+		_init;
+
 	Cursor* _cursor;
-	Language* _lang;
-	std::list<State*> _states, _deleted;
-	ResourcePack* _res;
-	SavedGame* _save;
-	Ruleset* _rules;
-	bool _quit, _init;
 	FpsCounter* _fpsCounter;
-	bool _mouseActive;
+	Language* _lang;
+	ResourcePack* _res;
+	Ruleset* _rules;
+	SavedGame* _save;
+	Screen* _screen;
+	SDL_Event _event;
+
+
+	std::list<State*>
+		_deleted,
+		_states;
 
 #ifdef __MORPHOS__		
-	Uint32 waittime;// = 1000.0f/FPS;
-	Uint32 framestarttime;// = 0;
 	Sint32 delaytime;
+	Uint32 framestarttime;// = 0;
+	Uint32 waittime;// = 1000.0f/FPS;
 #endif
+
 
 	public:
 		/// Creates a new game and initializes SDL.
@@ -83,7 +94,10 @@ private:
 		/// Gets the FpsCounter.
 		FpsCounter* getFpsCounter() const;
 		/// Sets the game's 8bpp palette.
-		void setPalette(SDL_Color* colors, int firstcolor = 0, int ncolors = 256);
+		void setPalette(
+				SDL_Color* colors,
+				int firstcolor = 0,
+				int ncolors = 256);
 		/// Resets the state stack to a new state.
 		void setState(State* state);
 		/// Pushes a new state into the state stack.
@@ -94,8 +108,6 @@ private:
 		Language* getLanguage() const;
 		/// Loads a new language for the game.
 		void loadLanguage(const std::string& filename);
-		/// Loads a new language for the game.
-		void loadLng(const std::string& filename);
 		/// Gets the currently loaded resource pack.
 		ResourcePack* getResourcePack() const;
 		/// Sets a new resource pack for the game.

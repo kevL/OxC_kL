@@ -21,15 +21,17 @@
 #define OPENXCOM_BATTLESCAPEMESSAGE_H
 
 #include <string>
+
 #include "../Engine/Surface.h"
 
 
 namespace OpenXcom
 {
 
-class Window;
-class Text;
 class Font;
+class Text;
+class Window;
+
 
 /**
  * Generic window used to display messages
@@ -39,13 +41,19 @@ class BattlescapeMessage
 	:
 		public Surface
 {
+
 private:
 	Window* _window;
 	Text* _text;
 
+
 	public:
 		/// Creates a new Battlescape message with the specified size and position.
-		BattlescapeMessage(int width, int height, int x = 0, int y = 0);
+		BattlescapeMessage(
+				int width,
+				int height,
+				int x = 0,
+				int y = 0);
 		/// Cleans up the Battlescape message.
 		~BattlescapeMessage();
 
@@ -53,10 +61,16 @@ private:
 		void setBackground(Surface* background);
 		/// Sets the Battlescape message's text.
 		void setText(const std::wstring& message);
-		/// Sets the Battlescape message's various fonts.
-		void setFonts(Font* big, Font* small);
+		/// Initializes the Battlescape message's resources.
+		void initText(
+				Font* big,
+				Font* small,
+				Language* lang);
 		/// Sets the Battlescape message's palette.
-		void setPalette(SDL_Color* colors, int firstcolor = 0, int ncolors = 256);
+		void setPalette(
+				SDL_Color* colors,
+				int firstcolor = 0,
+				int ncolors = 256);
 		/// Blits the warning message.
 		void blit(Surface* surface);
 };
