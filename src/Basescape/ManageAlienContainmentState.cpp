@@ -507,8 +507,9 @@ void ManageAlienContainmentState::updateStrings()
 
 //kL	_btnCancel->setVisible(enoughSpaceToExit && !_overCrowded);
 //kL	_btnOk->setVisible(enoughSpaceToExit);
-	_btnCancel->setVisible(!_overCrowded); // kL
-	_btnOk->setVisible(_aliensSold > 0); // kL
+	_btnCancel->setVisible(!_overCrowded);		// kL
+	_btnOk->setVisible(_aliensSold > 0			// kL
+							&& spaces > -1);	// kL
 }
 
 }
