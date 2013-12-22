@@ -61,7 +61,12 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-Inventory::Inventory(Game* game, int width, int height, int x, int y)
+Inventory::Inventory(
+		Game* game,
+		int width,
+		int height,
+		int x,
+		int y)
 	:
 		InteractiveSurface(width, height, x, y),
 		_game(game),
@@ -80,7 +85,10 @@ Inventory::Inventory(Game* game, int width, int height, int x, int y)
 	_warning		= new WarningMessage(224, 24, 48, 176);
 	_stackNumber	= new NumberText(15, 15, 0, 0);
 
-	_warning->initText(_game->getResourcePack()->getFont("FONT_BIG"), _game->getResourcePack()->getFont("FONT_SMALL"), _game->getLanguage());
+	_warning->initText(
+					_game->getResourcePack()->getFont("FONT_BIG"),
+					_game->getResourcePack()->getFont("FONT_SMALL"),
+					_game->getLanguage());
 	_warning->setColor(Palette::blockOffset(2));
 	_warning->setTextColor(Palette::blockOffset(1) - 1);
 }
@@ -103,7 +111,10 @@ Inventory::~Inventory()
  * @param firstcolor Offset of the first color to replace.
  * @param ncolors Amount of colors to replace.
  */
-void Inventory::setPalette(SDL_Color* colors, int firstcolor, int ncolors)
+void Inventory::setPalette(
+		SDL_Color* colors,
+		int firstcolor,
+		int ncolors)
 {
 	Surface::setPalette(colors, firstcolor, ncolors);
 
@@ -155,7 +166,10 @@ void Inventory::drawGrid()
 
 	Text text = Text(80, 9, 0, 0);
 	text.setPalette(_grid->getPalette());
-	text.initText(_game->getResourcePack()->getFont("FONT_BIG"), _game->getResourcePack()->getFont("FONT_SMALL"), _game->getLanguage());
+	text.initText(
+				_game->getResourcePack()->getFont("FONT_BIG"),
+				_game->getResourcePack()->getFont("FONT_SMALL"),
+				_game->getLanguage());
 	text.setColor(Palette::blockOffset(4)-1);
 	text.setHighContrast(true);
 	Uint8 color = Palette::blockOffset(0)+8;

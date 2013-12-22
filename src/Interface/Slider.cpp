@@ -16,14 +16,19 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "Slider.h"
-#include <cmath>
+
 #include <algorithm>
+#include <cmath>
 #include <sstream>
+
 #include "../Engine/Action.h"
 #include "../Engine/Font.h"
-#include "../Interface/TextButton.h"
+
 #include "../Interface/Frame.h"
+#include "../Interface/TextButton.h"
+
 
 namespace OpenXcom
 {
@@ -35,11 +40,25 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-Slider::Slider(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _value(0.0), _min(0), _max(100), _pressed(false)
+Slider::Slider(
+		int width,
+		int height,
+		int x,
+		int y)
+	:
+		InteractiveSurface(
+			width,
+			height,
+			x,
+			y),
+		_value(0.0),
+		_min(0),
+		_max(100),
+		_pressed(false)
 {
 	_thickness = 5;
-	_frame = new Frame(width, _thickness, x, y + (height - _thickness) / 2);
-	_button = new TextButton(19, height, x, y);
+	_frame	= new Frame(width, _thickness, x, y + (height - _thickness) / 2);
+	_button	= new TextButton(19, height, x, y);
 
 	_frame->setThickness(_thickness);
 
@@ -92,7 +111,10 @@ void Slider::setY(int y)
  * @param small Pointer to small-size font.
  * @param lang Pointer to current language.
  */
-void Slider::initText(Font *big, Font *small, Language *lang)
+void Slider::initText(
+		Font* big,
+		Font* small,
+		Language* lang)
 {
 	_button->initText(big, small, lang);
 }
@@ -133,7 +155,10 @@ Uint8 Slider::getColor() const
  * @param firstcolor Offset of the first color to replace.
  * @param ncolors Amount of colors to replace.
  */
-void Slider::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
+void Slider::setPalette(
+		SDL_Color* colors,
+		int firstcolor,
+		int ncolors)
 {
 	Surface::setPalette(colors, firstcolor, ncolors);
 	_frame->setPalette(colors, firstcolor, ncolors);
@@ -146,15 +171,17 @@ void Slider::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
 * @param action Pointer to an action.
 * @param state State that the action handlers belong to.
 */
-void Slider::handle(Action *action, State *state)
+void Slider::handle(Action* action, State* state)
 {
 	InteractiveSurface::handle(action, state);
 	//_button->handle(action, state);
-	if (_pressed && (action->getDetails()->type == SDL_MOUSEMOTION || action->getDetails()->type == SDL_MOUSEBUTTONDOWN))
+	if (_pressed
+		&& (action->getDetails()->type == SDL_MOUSEMOTION
+			|| action->getDetails()->type == SDL_MOUSEBUTTONDOWN))
 	{
-		int cursorX = (int) floor(action->getDetails()->motion.x / action->getXScale());
-		double buttonX = std::min(std::max(_minX, cursorX - _button->getWidth() / 2), _maxX);
-		double val = (buttonX - getX()) / (_maxX - _minX);
+		int cursorX = static_cast<int>(floor(static_cast<double>(action->getDetails()->motion.x) / action->getXScale()));
+		double buttonX = static_cast<double>(std::min(std::max(_minX, cursorX - _button->getWidth() / 2), _maxX));
+		double val = (buttonX - static_cast<double>(getX())) / static_cast<double>(_maxX - _minX);
 		setValue(val);
 	}
 }
@@ -166,10 +193,10 @@ void Slider::handle(Action *action, State *state)
 void Slider::setValue(double value)
 {
 	_value = std::min(std::max(0.0, value), 1.0);
-	_button->setX((int) floor(getX() + (_maxX - _minX) * _value));
+	_button->setX(static_cast<int>(floor(static_cast<double>(getX()) + (static_cast<double>(_maxX - _minX) * _value))));
 
 	std::wstringstream ss;
-	int val = _min + (int)(_value * (double)(_max - _min));
+	int val = _min + static_cast<int>(_value * static_cast<double>(_max - _min));
 	ss << val;
 	_button->setText(ss.str());
 }
@@ -187,7 +214,7 @@ double Slider::getValue() const
  * Blits the slider contents.
  * to show when it's focused and editable.
  */
-void Slider::blit(Surface *surface)
+void Slider::blit(Surface* surface)
 {
 	Surface::blit(surface);
 	if (_visible && !_hidden)
@@ -202,7 +229,7 @@ void Slider::blit(Surface *surface)
  * @param action Pointer to an action.
  * @param state State that the action handlers belong to.
  */
-void Slider::mousePress(Action *action, State *state)
+void Slider::mousePress(Action* action, State* state)
 {
 	InteractiveSurface::mousePress(action, state);
 	_pressed = true;
@@ -213,11 +240,10 @@ void Slider::mousePress(Action *action, State *state)
 * @param action Pointer to an action.
 * @param state State that the action handlers belong to.
 */
-void Slider::mouseRelease(Action *action, State *state)
+void Slider::mouseRelease(Action* action, State* state)
 {
 	InteractiveSurface::mouseRelease(action, state);
 	_pressed = false;
 }
-
 
 }

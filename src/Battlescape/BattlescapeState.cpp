@@ -503,16 +503,19 @@ BattlescapeState::BattlescapeState(Game* game)
 			i < VISIBLE_MAX;
 			++i)
 	{
-		std::ostringstream key, tooltip;
+		std::ostringstream
+			key;
+//			tooltip;
 
 		key << "keyBattleCenterEnemy" << (i + 1);
 		_btnVisibleUnit[i]->onMouseClick((ActionHandler)& BattlescapeState::btnVisibleUnitClick);
 		_btnVisibleUnit[i]->onKeyboardPress((ActionHandler)& BattlescapeState::btnVisibleUnitClick, (SDLKey)Options::getInt(key.str()));
 
-		tooltip << "STR_CENTER_ON_ENEMY_" << (i + 1);
-		_btnVisibleUnit[i]->setTooltip(tooltip.str());
+//		tooltip << "STR_CENTER_ON_ENEMY_" << (i + 1);
+//		_btnVisibleUnit[i]->setTooltip(tooltip.str());
 //		_btnVisibleUnit[i]->onMouseIn((ActionHandler)& BattlescapeState::txtTooltipIn);
 //		_btnVisibleUnit[i]->onMouseOut((ActionHandler)& BattlescapeState::txtTooltipOut);
+
 		_numVisibleUnit[i]->setColor(16);
 		_numVisibleUnit[i]->setValue(i+1);
 	}
@@ -570,11 +573,12 @@ BattlescapeState::BattlescapeState(Game* game)
 
 	_game->getResourcePack()->getRandomMusic("GMTACTIC")->play();
 
-	_animTimer = new Timer(DEFAULT_ANIM_SPEED, true);
+//kL	_animTimer = new Timer(DEFAULT_ANIM_SPEED, true);
+	_animTimer = new Timer(DEFAULT_ANIM_SPEED);
 	_animTimer->onTimer((StateHandler) &BattlescapeState::animate);
 
 //kL	_gameTimer = new Timer(DEFAULT_ANIM_SPEED, true);
-	_gameTimer = new Timer(DEFAULT_ANIM_SPEED + 35, true);
+	_gameTimer = new Timer(DEFAULT_ANIM_SPEED + 32);
 	_gameTimer->onTimer((StateHandler) &BattlescapeState::handleState);
 
 	_battleGame = new BattlescapeGame(_save, this);

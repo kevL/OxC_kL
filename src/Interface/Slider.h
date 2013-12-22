@@ -16,63 +16,86 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_SLIDER_H
 #define OPENXCOM_SLIDER_H
 
 #include "../Engine/InteractiveSurface.h"
 
+
 namespace OpenXcom
 {
 
 class Font;
-class Language;
 class Frame;
+class Language;
 class TextButton;
+
 
 /**
  * Horizontal slider control to select from a range of values.
  */
-class Slider : public InteractiveSurface
+class Slider
+	:
+		public InteractiveSurface
 {
+
 private:
+	bool _pressed;
+	int
+		_thickness,
+		_min,
+		_minX,
+		_max,
+		_maxX;
+	double _value;
+
 	Frame *_frame;
 	TextButton *_button;
-	double _value;
-	int _min, _max;
-	bool _pressed;
 
-	int _thickness, _minX, _maxX;
-public:
-	/// Creates a new slider with the specified size and position.
-	Slider(int width, int height, int x = 0, int y = 0);
-	/// Cleans up the slider.
-	~Slider();
-	/// Sets the X position of the surface.
-	void setX(int x);
-	/// Sets the Y position of the surface.
-	void setY(int y);
-	/// Initializes the slider's resources.
-	void initText(Font *big, Font *small, Language *lang);
-	/// Sets the slider's high contrast color setting.
-	void setHighContrast(bool contrast);
-	/// Sets the slider's color.
-	void setColor(Uint8 color);
-	/// Gets the slider's color.
-	Uint8 getColor() const;
-	/// Sets the slider's palette.
-	void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
-	/// Sets the slider's value.
-	void setValue(double value);
-	/// Sets the slider's value.
-	double getValue() const;
-	/// Blits the slider onto another surface.
-	void blit(Surface *surface);
-	/// Moves the slider.
-	void handle(Action *action, State *state);
-	/// Special handling for mouse presses.
-	void mousePress(Action *action, State *state);
-	/// Special handling for mouse releases.
-	void mouseRelease(Action *action, State *state);
+
+	public:
+		/// Creates a new slider with the specified size and position.
+		Slider(
+				int width,
+				int height,
+				int x = 0,
+				int y = 0);
+		/// Cleans up the slider.
+		~Slider();
+
+		/// Sets the X position of the surface.
+		void setX(int x);
+		/// Sets the Y position of the surface.
+		void setY(int y);
+		/// Initializes the slider's resources.
+		void initText(
+				Font* big,
+				Font* small,
+				Language* lang);
+		/// Sets the slider's high contrast color setting.
+		void setHighContrast(bool contrast);
+		/// Sets the slider's color.
+		void setColor(Uint8 color);
+		/// Gets the slider's color.
+		Uint8 getColor() const;
+		/// Sets the slider's palette.
+		void setPalette(
+				SDL_Color* colors,
+				int firstcolor = 0,
+				int ncolors = 256);
+		/// Sets the slider's value.
+		void setValue(double value);
+		/// Sets the slider's value.
+		double getValue() const;
+		/// Blits the slider onto another surface.
+		void blit(Surface* surface);
+		/// Moves the slider.
+		void handle(Action* action, State* state);
+		/// Special handling for mouse presses.
+		void mousePress(Action* action, State* state);
+		/// Special handling for mouse releases.
+		void mouseRelease(Action* action, State* state);
 };
 
 }

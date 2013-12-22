@@ -20,15 +20,18 @@
 #define OPENXCOM_OPTIONSCONTROLSSTATE_H
 
 #include <string>
+
 #include "OptionsBaseState.h"
+
 
 namespace OpenXcom
 {
 
-class TextButton;
-class Window;
 class Text;
+class TextButton;
 class TextList;
+class Window;
+
 
 struct KeyOption
 {
@@ -37,40 +40,63 @@ struct KeyOption
 	SDLKey key;
 };
 
+
 /**
  * Controls screen which allows the user to
  * customize the various key shortcuts in the game.
  */
-class OptionsControlsState : public OptionsBaseState
+class OptionsControlsState
+	:
+		public OptionsBaseState
 {
+
 private:
-	TextButton *_btnOk, *_btnCancel;
-	Window *_window;
+	int
+		_countGeneral,
+		_countGeo,
+		_countBattle,
+		_selected;
+	Uint8
+		_colorGroup,
+		_colorSel,
+		_colorNormal;
+
+	static KeyOption
+		_controlsGeneral[],
+		_controlsGeo[],
+		_controlsBattle[];
+
+	KeyOption* _selKey;
 	Text *_txtTitle;
+	TextButton
+		*_btnOk,
+		*_btnCancel;
 	TextList *_lstControls;
-	static KeyOption _controlsGeneral[], _controlsGeo[], _controlsBattle[];
-	int _countGeneral, _countGeo, _countBattle;
-	int _selected;
-	KeyOption *_selKey;
-	Uint8 _colorGroup, _colorSel, _colorNormal;
+	Window *_window;
 
 	void addControls(KeyOption keys[], int count);
 	std::string ucWords(std::string str);
-public:
-	/// Creates the Controls state.
-	OptionsControlsState(Game *game, OptionsOrigin origin);
-	/// Cleans up the Controls state.
-	~OptionsControlsState();
-	/// Fills controls list.
-	void init();
-	/// Handler for clicking the OK button.
-	void btnOkClick(Action *action);
-	/// Handler for clicking the Cancel button.
-	void btnCancelClick(Action *action);
-	/// Handler for clicking the Controls list.
-	void lstControlsClick(Action *action);
-	/// Handler for pressing a key in the Controls list.
-	void lstControlsKeyPress(Action *action);
+
+
+	public:
+		/// Creates the Controls state.
+		OptionsControlsState(
+				Game *game,
+				OptionsOrigin origin);
+		/// Cleans up the Controls state.
+		~OptionsControlsState();
+
+		/// Fills controls list.
+		void init();
+
+		/// Handler for clicking the OK button.
+		void btnOkClick(Action *action);
+		/// Handler for clicking the Cancel button.
+		void btnCancelClick(Action *action);
+		/// Handler for clicking the Controls list.
+		void lstControlsClick(Action *action);
+		/// Handler for pressing a key in the Controls list.
+		void lstControlsKeyPress(Action *action);
 };
 
 }

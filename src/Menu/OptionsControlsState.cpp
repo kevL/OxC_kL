@@ -18,18 +18,22 @@
  */
 
 #include "OptionsControlsState.h"
+
 #include <SDL.h>
-#include "../Engine/Game.h"
-#include "../Engine/Options.h"
-#include "../Resource/ResourcePack.h"
-#include "../Engine/Language.h"
-#include "../Engine/Palette.h"
-#include "../Interface/TextButton.h"
-#include "../Interface/Window.h"
-#include "../Interface/Text.h"
-#include "../Interface/TextList.h"
+
 #include "../Engine/Action.h"
+#include "../Engine/Game.h"
+#include "../Engine/Language.h"
 #include "../Engine/Logger.h"
+#include "../Engine/Options.h"
+#include "../Engine/Palette.h"
+
+#include "../Interface/Text.h"
+#include "../Interface/TextButton.h"
+#include "../Interface/TextList.h"
+#include "../Interface/Window.h"
+
+#include "../Resource/ResourcePack.h"
 
 
 namespace OpenXcom
@@ -44,6 +48,7 @@ KeyOption OptionsControlsState::_controlsGeneral[] =
 	{"keyScreenshot", "STR_SCREENSHOT", SDLK_UNKNOWN},
 	{"keyFps", "STR_FPS_COUNTER", SDLK_UNKNOWN}
 };
+
 
 KeyOption OptionsControlsState::_controlsGeo[] =
 {
@@ -70,6 +75,7 @@ KeyOption OptionsControlsState::_controlsGeo[] =
 	{"keyQuickSave", "STR_QUICK_SAVE", SDLK_UNKNOWN},
 	{"keyQuickLoad", "STR_QUICK_LOAD", SDLK_UNKNOWN}
 };
+
 
 KeyOption OptionsControlsState::_controlsBattle[] =
 {
@@ -118,9 +124,13 @@ KeyOption OptionsControlsState::_controlsBattle[] =
  * @param game Pointer to the core game.
  * @param origin Game section that originated this state.
  */
-OptionsControlsState::OptionsControlsState(Game* game, OptionsOrigin origin)
+OptionsControlsState::OptionsControlsState(
+		Game* game,
+		OptionsOrigin origin)
 	:
-		OptionsBaseState(game, origin), _selected(-1), _selKey(0)
+		OptionsBaseState(game, origin),
+		_selected(-1),
+		_selKey(0)
 {
 	_countGeneral = 4;
 	_countGeo = 20;
@@ -195,6 +205,9 @@ OptionsControlsState::~OptionsControlsState()
 {
 }
 
+/**
+ *
+ */
 void OptionsControlsState::init()
 {
 	OptionsBaseState::init();
@@ -258,7 +271,7 @@ void OptionsControlsState::addControls(KeyOption keys[], int count)
  * Saves the controls.
  * @param action Pointer to an action.
  */
-void OptionsControlsState::btnOkClick(Action *)
+void OptionsControlsState::btnOkClick(Action*)
 {
 	for (int i = 0; i < _countGeneral; ++i)
 	{
@@ -284,7 +297,7 @@ void OptionsControlsState::btnOkClick(Action *)
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void OptionsControlsState::btnCancelClick(Action *)
+void OptionsControlsState::btnCancelClick(Action*)
 {
 	_game->popState();
 }
@@ -293,7 +306,7 @@ void OptionsControlsState::btnCancelClick(Action *)
  * Select a control for setting.
  * @param action Pointer to an action.
  */
-void OptionsControlsState::lstControlsClick(Action *action)
+void OptionsControlsState::lstControlsClick(Action* action)
 {
 	if (_selected != -1)
 	{
@@ -348,7 +361,7 @@ void OptionsControlsState::lstControlsClick(Action *action)
  * Change selected control.
  * @param action Pointer to an action.
  */
-void OptionsControlsState::lstControlsKeyPress(Action *action)
+void OptionsControlsState::lstControlsKeyPress(Action* action)
 {
 	if (_selected != -1)
 	{
