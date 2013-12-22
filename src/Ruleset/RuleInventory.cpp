@@ -18,7 +18,9 @@
  */
 
 #include "RuleInventory.h"
+
 #include <cmath>
+
 #include "RuleItem.h"
 
 
@@ -151,15 +153,25 @@ std::vector<struct RuleSlot>* RuleInventory::getSlots()
  * @param y Mouse Y position. Returns the slot's Y position.
  * @return True if there's a slot there.
  */
-bool RuleInventory::checkSlotInPosition(int* x, int* y) const
+bool RuleInventory::checkSlotInPosition(
+		int* x,
+		int* y) const
 {
-	int mouseX = *x, mouseY = *y;
+	int
+		mouseX = *x,
+		mouseY = *y;
 
 	if (_type == INV_HAND)
 	{
-		for (int xx = 0; xx < HAND_W; ++xx)
+		for (int
+				xx = 0;
+				xx < HAND_W;
+				++xx)
 		{
-			for (int yy = 0; yy < HAND_H; ++yy)
+			for (int
+					yy = 0;
+					yy < HAND_H;
+					++yy)
 			{
 				if (mouseX >= _x + xx * SLOT_W
 					&& mouseX < _x + (xx + 1) * SLOT_W
@@ -181,15 +193,18 @@ bool RuleInventory::checkSlotInPosition(int* x, int* y) const
 			&& mouseY >= _y
 			&& mouseY < 200)
 		{
-			*x = (int)floor(double(mouseX - _x) / SLOT_W);
-			*y = (int)floor(double(mouseY - _y) / SLOT_H);
+			*x = static_cast<int>(floor(static_cast<double>(mouseX - _x) / static_cast<double>(SLOT_W)));
+			*y = static_cast<int>(floor(static_cast<double>(mouseY - _y) / static_cast<double>(SLOT_H)));
 
 			return true;
 		}
 	}
 	else
 	{
-		for (std::vector<RuleSlot>::const_iterator i = _slots.begin(); i != _slots.end(); ++i)
+		for (std::vector<RuleSlot>::const_iterator
+				i = _slots.begin();
+				i != _slots.end();
+				++i)
 		{
 			if (mouseX >= _x + i->x * SLOT_W
 				&& mouseX < _x + (i->x + 1) * SLOT_W
@@ -208,14 +223,16 @@ bool RuleInventory::checkSlotInPosition(int* x, int* y) const
 }
 
 /**
- * Checks if an item completely fits when
- * placed in a certain slot.
- * @param item Pointer to item ruleset.
- * @param x Slot X position.
- * @param y Slot Y position.
- * @return True if there's a slot there.
+ * Checks if an item completely fits when placed in a certain slot.
+ * @param item, Pointer to item ruleset.
+ * @param x, Slot X position.
+ * @param y, Slot Y position.
+ * @return, True if there's a slot there.
  */
-bool RuleInventory::fitItemInSlot(RuleItem* item, int x, int y) const
+bool RuleInventory::fitItemInSlot(
+		RuleItem* item,
+		int x,
+		int y) const
 {
 	if (_type == INV_HAND)
 	{
@@ -223,21 +240,28 @@ bool RuleInventory::fitItemInSlot(RuleItem* item, int x, int y) const
 	}
 	else if (_type == INV_GROUND)
 	{
-		int width = (320 - _x) / SLOT_W;
-		int height = (200 - _y) / SLOT_H;
+		int width	= (320 - _x) / SLOT_W;
+		int height	= (200 - _y) / SLOT_H;
 		int xOffset = 0;
 
 		while (x >= xOffset + width)
 			xOffset += width;
 
-		for (int xx = x; xx < x + item->getInventoryWidth(); ++xx)
+		for (int
+				xx = x;
+				xx < x + item->getInventoryWidth();
+				++xx)
 		{
-			for (int yy = y; yy < y + item->getInventoryHeight(); ++yy)
+			for (int
+					yy = y;
+					yy < y + item->getInventoryHeight();
+					++yy)
 			{
-				if (!(xx >= xOffset
-					&& xx < xOffset + width
-					&& yy >= 0
-					&& yy < height))
+				if (!
+						(xx >= xOffset
+						&& xx < xOffset + width
+						&& yy >= 0
+						&& yy < height))
 				{
 					return false;
 				}
@@ -251,7 +275,11 @@ bool RuleInventory::fitItemInSlot(RuleItem* item, int x, int y) const
 		int totalSlots = item->getInventoryWidth() * item->getInventoryHeight();
 		int foundSlots = 0;
 
-		for (std::vector<RuleSlot>::const_iterator i = _slots.begin(); i != _slots.end() && foundSlots < totalSlots; ++i)
+		for (std::vector<RuleSlot>::const_iterator
+				i = _slots.begin();
+				i != _slots.end()
+					&& foundSlots < totalSlots;
+				++i)
 		{
 			if (i->x >= x
 				&& i->x < x + item->getInventoryWidth()

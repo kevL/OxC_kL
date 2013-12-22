@@ -618,6 +618,7 @@ void BattlescapeGenerator::deployXCOM()
 	//Log(LOG_INFO) << ". addItem(s) DONE";
 
 
+
 	// kL_note: ALL ITEMS SEEM TO STAY ON THE GROUNDTILE, _craftInventoryTile,
 	// IN THAT INVENTORY(vector) UNTIL EVERYTHING IS EQUIPPED & LOADED. Then
 	// the inventory-tile is cleaned out at the end of this function....
@@ -629,11 +630,12 @@ void BattlescapeGenerator::deployXCOM()
 			++i)
 	{
 		//Log(LOG_INFO) << ". placeItemByLayout(*item)";
+
 		placeItemByLayout(*i);
 	}
 
 	// auto-equip soldiers (only soldiers *without* layout)
-	if (!Options::getBool("disableAutoEquip"))
+/*kL	if (!Options::getBool("disableAutoEquip"))
 	{
 		for (int
 				pass = 0;
@@ -707,7 +709,9 @@ void BattlescapeGenerator::deployXCOM()
 				++j;
 			}
 		}
-	}
+	} */
+	// kL_note: no more auto-equip, Lolz.
+
 
 	// kL: Think I have to load ground-weapons before setting ground-tile items as xCom property..... nah.
 	for (std::vector<BattleItem*>::iterator
@@ -717,34 +721,10 @@ void BattlescapeGenerator::deployXCOM()
 	{
 		//Log(LOG_INFO) << ". LOAD WEAPONS HERE";
 		if ((*i)->needsAmmo())
+		{
 			loadGroundWeapon(*i);
+		}
 	}
-
-	// kL_note: This is not auto-equip anymore; now it just
-	// puts the items into the Battlescape item-vector, and
-	// assigns items as XCOMProperty.
-/*	for (std::vector<BattleItem*>::reverse_iterator
-			i = _craftInventoryTile->getInventory()->rbegin();
-			i != _craftInventoryTile->getInventory()->rend();
-			++i)
-	{
-		//Log(LOG_INFO) << "BattlescapeGenerator::deployXCOM(), addItem(*item, !SecondPass)";
-//		addItem(*i, false);
-
-		//Log(LOG_INFO) << ". push_back, setXCOMProperty";
-		_save->getItems()->push_back(*i);	// kL: moved up from addItem()
-		(*i)->setXCOMProperty(true);		// kL: moved up from addItem()
-	} */
-
-/*	for (std::vector<BattleItem*>::reverse_iterator
-			i = _craftInventoryTile->getInventory()->rbegin();
-			i != _craftInventoryTile->getInventory()->rend();
-			++i)
-	{
-		//Log(LOG_INFO) << "BattlescapeGenerator::deployXCOM(), addItem(*item, SecondPass)";
-		addItem(*i, true);
-	} */
-	// kL_note: no more auto-equip, Lolz.
 
 
 	// clean up moved items
@@ -753,15 +733,17 @@ void BattlescapeGenerator::deployXCOM()
 			i != _craftInventoryTile->getInventory()->end();
 			)
 	{
-		if ((*i)->getSlot() != ground)
+		if ((*i)->getSlot() == ground)
 		{
-			i = _craftInventoryTile->getInventory()->erase(i);
-		}
-		else
-		{
+			(*i)->setXCOMProperty(true); // kL
+
 			_save->getItems()->push_back(*i);
 
 			++i;
+		}
+		else
+		{
+			i = _craftInventoryTile->getInventory()->erase(i);
 		}
 	}
 
@@ -777,20 +759,26 @@ void BattlescapeGenerator::deployXCOM()
 BattleUnit* BattlescapeGenerator::addXCOMVehicle(Vehicle* tank)
 {
 	std::string vehicle = tank->getRules()->getType();
-	Unit* rule = _game->getRuleset()->getUnit(vehicle);
+	Unit* unitRule = _game->getRuleset()->getUnit(vehicle);
 
-	BattleUnit* unit = addXCOMUnit(new BattleUnit(
-												rule,
+	BattleUnit* tankUnit = addXCOMUnit(new BattleUnit(
+												unitRule,
 												FACTION_PLAYER,
 												_unitSequence++,
-												_game->getRuleset()->getArmor(rule->getArmor()),
+												_game->getRuleset()->getArmor(unitRule->getArmor()),
 												0));
-	if (unit)
+	if (tankUnit)
 	{
 		BattleItem* item = new BattleItem(
 									_game->getRuleset()->getItem(vehicle),
 									_save->getCurrentItemId());
-		addItem(item, unit);
+//kL		addItem(item, unit);
+		if (!addItem(item, tankUnit))	// kL
+		{
+			delete item;				// kL
+
+			return 0;					// kL
+		}
 
 		if (!tank->getRules()->getCompatibleAmmo()->empty())
 		{
@@ -798,14 +786,27 @@ BattleUnit* BattlescapeGenerator::addXCOMVehicle(Vehicle* tank)
 			BattleItem* ammoItem = new BattleItem(
 											_game->getRuleset()->getItem(ammo),
 											_save->getCurrentItemId());
-			addItem(ammoItem, unit);
+//kL			addItem(ammoItem, unit);
+			if (!addItem(ammoItem, tankUnit))	// kL
+			{
+				delete ammoItem;				// kL
+
+				return 0;						// kL
+			}
+
 			ammoItem->setAmmoQuantity(tank->getAmmo());
 		}
 
-		unit->setTurretType(tank->getRules()->getTurretType());
+		tankUnit->setTurretType(tank->getRules()->getTurretType());
+	}
+	else					// kL
+	{
+		delete tankUnit;	// kL
+
+		return 0;			// kL
 	}
 
-	return unit;
+	return tankUnit;
 }
 
 /**
@@ -932,7 +933,7 @@ BattleUnit* BattlescapeGenerator::addXCOMUnit(BattleUnit* unit)
 		}
 	}
 
-	delete unit;
+//kL	delete unit;
 
 	return 0;
 }
@@ -940,7 +941,6 @@ BattleUnit* BattlescapeGenerator::addXCOMUnit(BattleUnit* unit)
 /**
  * Loads a weapon on the inventoryTile.
  * @param item, Pointer to the weaponItem.
- * @return, True if weapon got loaded.
  */
 void BattlescapeGenerator::loadGroundWeapon(BattleItem* item)
 {
@@ -962,20 +962,15 @@ void BattlescapeGenerator::loadGroundWeapon(BattleItem* item)
 		{
 			//Log(LOG_INFO) << ". . . attempt to set righthand as Inv.";
 
+			(*i)->setXCOMProperty(true);
 			(*i)->setSlot(righthand);	// I don't think this is actually setting the ammo
 										// into anyone's right hand; I think it's just here
 										// to change the inventory-slot away from 'ground'.
-
-			// erase it from the ground! Later...
-//			_craftInventoryTile->getInventory()->erase(i);
-
-			//Log(LOG_INFO) << "BattlescapeGenerator::loadGroundWeapon() EXIT true";
-//			return true;
+			_save->getItems()->push_back(*i);
 		}
 	}
 
 	//Log(LOG_INFO) << "BattlescapeGenerator::loadGroundWeapon() EXIT false";
-//	return false;
 }
 
 /**
@@ -1038,14 +1033,14 @@ bool BattlescapeGenerator::placeItemByLayout(BattleItem* item)
 							++k)
 					{
 						if ((*k)->getRules()->getType() == (*j)->getAmmoItem()
-							&& (*k)->getSlot() == ground	// why the redundancy?
-															// WHAT OTHER _craftInventoryTile IS THERE BUT THE GROUND TILE!!??!!!1
-							&& item->setAmmoItem(*k) == 0)	// okay, so load the damn item.
+							&& (*k)->getSlot() == ground		// why the redundancy?
+																// WHAT OTHER _craftInventoryTile IS THERE BUT THE GROUND TILE!!??!!!1
+							&& item->setAmmoItem(*k) == 0)		// okay, so load the damn item.
 						{
+							(*k)->setXCOMProperty(true);
+							(*k)->setSlot(righthand);			// why are you putting ammo in his right hand.....
+																// maybe just to get it off the ground so it doesn't get loaded into another weapon later.
 							_save->getItems()->push_back(*k);
-
-							(*k)->setSlot(righthand);		// why are you putting ammo in his right hand.....
-															// maybe just to get it off the ground so it doesn't get loaded into another weapon later.
 
 							loaded = true;
 							// note: soldier is not owner of the ammo, we are using this fact when saving equipments
@@ -1056,6 +1051,8 @@ bool BattlescapeGenerator::placeItemByLayout(BattleItem* item)
 				// only place the weapon (or any other item..) onto the soldier when it's loaded with its layout-ammo (if any)
 				if (loaded)
 				{
+					item->setXCOMProperty(true); // kL
+
 					item->moveToOwner((*i));
 
 					item->setSlot(_game->getRuleset()->getInventory((*j)->getSlot()));
@@ -1076,8 +1073,9 @@ bool BattlescapeGenerator::placeItemByLayout(BattleItem* item)
 }
 
 /**
- * Adds an item to an XCom soldier (auto-equip ONLY).
- * Also adds items to aLiens via deployAliens()!
+ * Adds an item to an XCom soldier (auto-equip ONLY). kL_note: I don't use this part.
+ * kL_notes: Or an XCom tank, also adds items & terrorWeapons to aLiens, deployAliens()!
+ *
  * @param item, Pointer to the Item.
  * @param unit, Pointer to the Unit.
  * @param allowSecondClip, allow the unit to take a second clip or not
@@ -1089,11 +1087,13 @@ bool BattlescapeGenerator::addItem(
 		BattleUnit* unit,
 		bool allowSecondClip)
 {
-	int weight = 0;
+//kL	int weight = 0;
 
-	// tanks and aliens don't care about weight or multiple items,
-	// their loadouts are defined in the rulesets and more or less set in stone.
-	if (unit->getFaction() == FACTION_PLAYER
+	// tanks and aliens don't care about weight or multiple items; their
+	// loadouts are defined in the rulesets and more or less set in stone.
+
+
+/*kL	if (unit->getFaction() == FACTION_PLAYER // XCOM Soldiers!!! auto-equip
 		&& unit->hasInventory())
 	{
 		weight = unit->getCarriedWeight() + item->getRules()->getWeight();
@@ -1133,7 +1133,7 @@ bool BattlescapeGenerator::addItem(
 				}
 			}
 		}
-	}
+	} */
 
 
 //	RuleInventory* ground = _game->getRuleset()->getInventory("STR_GROUND");
@@ -1204,7 +1204,8 @@ bool BattlescapeGenerator::addItem(
 			}
 
 			// xcom weapons will already be loaded, aliens and tanks, however,
-			// get their ammo added afterwards. So let's try to load them here.
+			// [ kL_note: NOT. just aLiens & terrorist aLiens need loading ]
+			// get their ammo added after those. So let's try to load them here.
 			if ((rhWeapon->getRules()->isFixed()
 					|| unit->getFaction() != FACTION_PLAYER)
 				&& !rhWeapon->getAmmoItem()
@@ -1263,12 +1264,11 @@ bool BattlescapeGenerator::addItem(
 		break;
 	} */
 
-
 	// kL_note: Old code that does what I want:
 	switch (item->getRules()->getBattleType())
 	{
-		case BT_FIREARM:
-		case BT_MELEE:
+		case BT_FIREARM:	// kL_note: These are also terrorist weapons:
+		case BT_MELEE:		// chryssalids, cyberdiscs, zombies, sectopods, reapers, celatids, silacoids
 			if (!unit->getItem("STR_RIGHT_HAND"))
 			{
 				item->moveToOwner(unit);
@@ -1392,14 +1392,14 @@ bool BattlescapeGenerator::addItem(
 		break;
 	}
 
-	// if we could not equip the item, delete it
 	if (placed)
 	{
+		item->setXCOMProperty(unit->getFaction() == FACTION_PLAYER);
+
 		_save->getItems()->push_back(item);
 	}
 
-//kL	item->setXCOMProperty(unit->getFaction() == FACTION_PLAYER);
-
+	// kL_note: If not placed, the items are deleted from wherever this function was called.
 	return placed;
 }
 
@@ -1424,13 +1424,15 @@ void BattlescapeGenerator::deployAliens(
 
 
 	std::string alienName;	// kL
-	int quantity;			// kL
 	bool outside;			// kL
-	Unit* rule;				// kL
-	BattleUnit* unit;		// kL
-	int itemLevel;			// kL
-	RuleItem* ruleItem;		// kL
+	int
+		itemLevel,			// kL
+		quantity;			// kL
+
 	BattleItem* item;		// kL
+	BattleUnit* unit;		// kL
+	RuleItem* ruleItem;		// kL
+	Unit* unitRule;			// kL
 
 	for (std::vector<DeploymentData>::iterator
 			d = deployment->getDeploymentData()->begin();
@@ -1462,10 +1464,10 @@ void BattlescapeGenerator::deployAliens(
 				outside = RNG::generate(0, 99) < (*d).percentageOutsideUfo;
 			}
 
-//kL			Unit* rule = _game->getRuleset()->getUnit(alienName);
-//kL			BattleUnit* unit = addAlien(rule, (*d).alienRank, outside);
-			rule = _game->getRuleset()->getUnit(alienName); // kL
-			unit = addAlien(rule, (*d).alienRank, outside); // kL
+//kL			Unit* unitRule = _game->getRuleset()->getUnit(alienName);
+//kL			BattleUnit* unit = addAlien(unitRule, (*d).alienRank, outside);
+			unitRule = _game->getRuleset()->getUnit(alienName); // kL
+			unit = addAlien(unitRule, (*d).alienRank, outside); // kL
 
 			//Log(LOG_INFO) << "BattlescapeGenerator::deplyAliens() do getAlienItemLevels()";
 //kL			int itemLevel = _game->getRuleset()->getAlienItemLevels().at(month).at(RNG::generate(0, 9));
@@ -1474,11 +1476,11 @@ void BattlescapeGenerator::deployAliens(
 
 			if (unit)
 			{
-				// terrorist alien's equipment is a special case - they are fitted
+				// terrorist aliens' equipment is a special case - they are fitted
 				// with a weapon which is the alien's name with suffix _WEAPON
-				if (rule->isLivingWeapon())
+				if (unitRule->isLivingWeapon())
 				{
-					std::string terroristWeapon = rule->getRace().substr(4);
+					std::string terroristWeapon = unitRule->getRace().substr(4);
 					terroristWeapon += "_WEAPON";
 
 //kL					RuleItem* ruleItem = _game->getRuleset()->getItem(terroristWeapon);
@@ -1486,7 +1488,7 @@ void BattlescapeGenerator::deployAliens(
 					if (ruleItem)
 					{
 //kL						BattleItem* item = new BattleItem(
-						item = new BattleItem( // kL
+						item = new BattleItem( // kL, large aLiens add their weapons
 											ruleItem,
 											_save->getCurrentItemId());
 						if (!addItem(item, unit))
@@ -1498,16 +1500,16 @@ void BattlescapeGenerator::deployAliens(
 				else
 				{
 					for (std::vector<std::string>::iterator
-							it = (*d).itemSets.at(itemLevel).items.begin();
-							it != (*d).itemSets.at(itemLevel).items.end();
-							++it)
+							itemSet = (*d).itemSets.at(itemLevel).items.begin();
+							itemSet != (*d).itemSets.at(itemLevel).items.end();
+							++itemSet)
 					{
-//kL						RuleItem* ruleItem = _game->getRuleset()->getItem((*it));
-						ruleItem = _game->getRuleset()->getItem((*it)); // kL
+//kL						RuleItem* ruleItem = _game->getRuleset()->getItem(*itemSet);
+						ruleItem = _game->getRuleset()->getItem(*itemSet); // kL
 						if (ruleItem)
 						{
 //kL							BattleItem* item = new BattleItem(
-							item = new BattleItem( // kL
+							item = new BattleItem( // kL, aLiens add items
 												ruleItem,
 												_save->getCurrentItemId());
 							if (!addItem(item, unit))

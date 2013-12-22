@@ -530,6 +530,7 @@ int BattleItem::getStimulantQuantity() const
 /**
  * Sets the XCom property flag. This is to determine at debriefing what goes into the base/craft.
  * kL_note: no, actually it's not: In its current implementation it is fundamentally useless.
+ * kL_note: well it may bear only on artefacts for a Base Defense mission ....
  * @param flag, True if it's XCom property.
  */
 void BattleItem::setXCOMProperty(bool flag)
