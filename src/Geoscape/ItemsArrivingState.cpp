@@ -18,26 +18,34 @@
  */
 
 #include "ItemsArrivingState.h"
+
 #include <sstream>
+
+#include "GeoscapeState.h"
+
+#include "../Basescape/BasescapeState.h"
+
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
+#include "../Engine/Options.h"
 #include "../Engine/Palette.h"
-#include "../Interface/TextButton.h"
-#include "../Interface/Window.h"
+
 #include "../Interface/Text.h"
+#include "../Interface/TextButton.h"
 #include "../Interface/TextList.h"
-#include "../Savegame/SavedGame.h"
+#include "../Interface/Window.h"
+
+#include "../Resource/ResourcePack.h"
+
+#include "../Ruleset/RuleCraftWeapon.h"
+#include "../Ruleset/RuleItem.h"
+#include "../Ruleset/Ruleset.h"
+
 #include "../Savegame/Base.h"
-#include "../Savegame/Transfer.h"
 #include "../Savegame/Craft.h"
 #include "../Savegame/CraftWeapon.h"
-#include "../Ruleset/Ruleset.h"
-#include "../Ruleset/RuleItem.h"
-#include "../Ruleset/RuleCraftWeapon.h"
-#include "GeoscapeState.h"
-#include "../Engine/Options.h"
-#include "../Basescape/BasescapeState.h"
+#include "../Savegame/SavedGame.h"
+#include "../Savegame/Transfer.h"
 
 
 namespace OpenXcom
@@ -48,7 +56,9 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param state Pointer to the Geoscape state.
  */
-ItemsArrivingState::ItemsArrivingState(Game* game, GeoscapeState* state)
+ItemsArrivingState::ItemsArrivingState(
+		Game* game,
+		GeoscapeState* state)
 	:
 		State(game),
 		_state(state),
@@ -57,7 +67,6 @@ ItemsArrivingState::ItemsArrivingState(Game* game, GeoscapeState* state)
 	_screen = false;
 
 	_window			= new Window(this, 320, 184, 0, 8, POPUP_BOTH);
-
 	_txtTitle		= new Text(310, 17, 5, 17);
 
 	_txtItem		= new Text(144, 9, 16, 34);
@@ -66,12 +75,15 @@ ItemsArrivingState::ItemsArrivingState(Game* game, GeoscapeState* state)
 
 	_lstTransfers	= new TextList(286, 120, 16, 45);
 
-	_btnOk			= new TextButton(90, 16, 16, 169);
+	_btnGotoBase	= new TextButton(90, 16, 16, 169);
 	_btnOk5Secs		= new TextButton(90, 16, 118, 169);
-	_btnGotoBase	= new TextButton(90, 16, 220, 169);
+	_btnOk			= new TextButton(90, 16, 220, 169);
 
 
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
+	_game->setPalette(
+				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)),
+				Palette::backPos,
+				16);
 
 	add(_window);
 	add(_txtTitle);
@@ -95,7 +107,7 @@ ItemsArrivingState::ItemsArrivingState(Game* game, GeoscapeState* state)
 	_btnOk->onKeyboardPress((ActionHandler)& ItemsArrivingState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_btnOk5Secs->setColor(Palette::blockOffset(8)+5);
-	_btnOk5Secs->setText(tr("STR_OK_5_SECS"));
+	_btnOk5Secs->setText(tr("STR_OK_5_SECONDS"));
 	_btnOk5Secs->onMouseClick((ActionHandler)& ItemsArrivingState::btnOk5SecsClick);
 	_btnOk5Secs->onKeyboardPress((ActionHandler)& ItemsArrivingState::btnOk5SecsClick, (SDLKey)Options::getInt("keyGeoSpeed1"));
 
@@ -125,9 +137,15 @@ ItemsArrivingState::ItemsArrivingState(Game* game, GeoscapeState* state)
 	_lstTransfers->setBackground(_window);
 	_lstTransfers->setMargin(8);
 
-	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
+	for (std::vector<Base*>::iterator
+			i = _game->getSavedGame()->getBases()->begin();
+			i != _game->getSavedGame()->getBases()->end();
+			++i)
 	{
-		for (std::vector<Transfer*>::iterator j = (*i)->getTransfers()->begin(); j != (*i)->getTransfers()->end();)
+		for (std::vector<Transfer*>::iterator
+				j = (*i)->getTransfers()->begin();
+				j != (*i)->getTransfers()->end();
+				)
 		{
 			if ((*j)->getHours() == 0)
 			{
@@ -137,12 +155,18 @@ ItemsArrivingState::ItemsArrivingState(Game* game, GeoscapeState* state)
 				if ((*j)->getType() == TRANSFER_ITEM
 					&& _game->getRuleset()->getItem((*j)->getItems())->getBattleType() == BT_NONE)
 				{
-					for (std::vector<Craft*>::iterator c = (*i)->getCrafts()->begin(); c != (*i)->getCrafts()->end(); ++c)
+					for (std::vector<Craft*>::iterator
+							c = (*i)->getCrafts()->begin();
+							c != (*i)->getCrafts()->end();
+							++c)
 					{
 						if ((*c)->getStatus() != "STR_READY")
 							continue;
 
-						for (std::vector<CraftWeapon*>::iterator w = (*c)->getWeapons()->begin(); w != (*c)->getWeapons()->end(); ++w)
+						for (std::vector<CraftWeapon*>::iterator
+								w = (*c)->getWeapons()->begin();
+								w != (*c)->getWeapons()->end();
+								++w)
 						{
 							if (*w != 0
 								&& (*w)->getAmmo() < (*w)->getRules()->getAmmoMax())
@@ -156,7 +180,11 @@ ItemsArrivingState::ItemsArrivingState(Game* game, GeoscapeState* state)
 
 				std::wstringstream ss;
 				ss << (*j)->getQuantity();
-				_lstTransfers->addRow(3, (*j)->getName(_game->getLanguage()).c_str(), ss.str().c_str(), (*i)->getName().c_str());
+				_lstTransfers->addRow(
+									3,
+									(*j)->getName(_game->getLanguage()).c_str(),
+									ss.str().c_str(),
+									(*i)->getName().c_str());
 
 				delete *j;
 				j = (*i)->getTransfers()->erase(j);
@@ -181,7 +209,10 @@ ItemsArrivingState::~ItemsArrivingState()
  */
 void ItemsArrivingState::init()
 {
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
+	_game->setPalette(
+				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)),
+				Palette::backPos,
+				16);
 }
 
 /**
@@ -213,7 +244,10 @@ void ItemsArrivingState::btnGotoBaseClick(Action*)
 	_state->timerReset();
 
 	_game->popState();
-	_game->pushState(new BasescapeState(_game, _base, _state->getGlobe()));
+	_game->pushState(new BasescapeState(
+									_game,
+									_base,
+									_state->getGlobe()));
 }
 
 }

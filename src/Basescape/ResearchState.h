@@ -20,18 +20,20 @@
 #ifndef OPENXCOM_RESEARCHSTATE_H
 #define OPENXCOM_RESEARCHSTATE_H
 
-#include "../Engine/State.h"
 #include <SDL.h>
+
+#include "../Engine/State.h"
 
 
 namespace OpenXcom
 {
 
-class TextButton;
-class Window;
-class Text;
-class TextList;
 class Base;
+class Text;
+class TextButton;
+class TextList;
+class Window;
+
 
 /**
  * Research screen that lets the player manage
@@ -41,17 +43,30 @@ class ResearchState
 	:
 		public State
 {
+
 private:
 	Base* _base;
-	TextButton* _btnNew, * _btnOk;
-	Window* _window;
-	Text* _txtTitle, * _txtAvailable, * _txtAllocated, * _txtSpace, * _txtProject, * _txtScientists, * _txtProgress;
+	Text
+		* _txtAllocated,
+		* _txtAvailable,
+		* _txtProgress,
+		* _txtProject,
+		* _txtScientists,
+		* _txtSpace,
+		* _txtTitle;
+	TextButton
+		* _btnNew,
+		* _btnOk;
 	TextList* _lstResearch;
 	SDL_Color _oldPalette[256];
+	Window* _window;
+
 
 	public:
 		/// Creates the Research state.
-		ResearchState(Game* game, Base* base);
+		ResearchState(
+				Game* game,
+				Base* base);
 		/// Cleans up the Research state.
 		~ResearchState();
 
@@ -61,10 +76,9 @@ private:
 		void btnNewClick(Action* action);
 		/// Handler for clicking the ResearchProject list.
 		void onSelectProject(Action* action);
-		/// Fills the ResearchProject list with Base ResearchProjects.
-		void fillProjectList();
+
 		/// Updates the research list.
-		void init ();
+		void init();
 };
 
 }

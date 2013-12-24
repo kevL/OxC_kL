@@ -28,6 +28,7 @@ namespace OpenXcom
 
 class InteractiveSurface;
 
+
 /**
  * Container for all the information associated with a
  * given user action, like mouse clicks, key presses, etc.
@@ -35,15 +36,31 @@ class InteractiveSurface;
  */
 class Action
 {
+
 private:
-	SDL_Event* _ev;
-	double _scaleX, _scaleY;
-	int _topBlackBand, _leftBlackBand, _mouseX, _mouseY, _surfaceX, _surfaceY;
+	int
+		_mouseX,
+		_mouseY,
+		_surfaceX,
+		_surfaceY,
+		_topBlackBand,
+		_leftBlackBand;
+	double
+		_scaleX,
+		_scaleY;
+
 	InteractiveSurface* _sender;
+	SDL_Event* _ev;
+
 
 	public:
 		/// Creates an action with given event data.
-		Action(SDL_Event* ev, double scaleX, double scaleY, int topBlackBand, int leftBlackBand);
+		Action(
+				SDL_Event* ev,
+				double scaleX,
+				double scaleY,
+				int topBlackBand,
+				int leftBlackBand);
 		/// Cleans up the action.
 		~Action();
 
@@ -53,7 +70,11 @@ private:
 		double getYScale() const;
 
 		/// Sets the action as a mouse action.
-		void setMouseAction(int mouseX, int mouseY, int surfaceX, int surfaceY);
+		void setMouseAction(
+				int mouseX,
+				int mouseY,
+				int surfaceX,
+				int surfaceY);
 		/// Gets if the action is a mouse action.
 		bool isMouseAction() const;
 

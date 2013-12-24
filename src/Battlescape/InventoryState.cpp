@@ -74,10 +74,10 @@ InventoryState::InventoryState(
 		_tu(tu),
 		_parent(parent)
 {
-	Log(LOG_INFO) << "\nCreate InventoryState";
+	//Log(LOG_INFO) << "\nCreate InventoryState";
 
 	_battleGame = _game->getSavedGame()->getSavedBattle();
-	Log(LOG_INFO) << ". _battleGame = " << _battleGame;
+	//Log(LOG_INFO) << ". _battleGame = " << _battleGame;
 
 	_showStats = Options::getBool("showMoreStatsInInventoryView");
 
@@ -91,10 +91,11 @@ InventoryState::InventoryState(
 
 	_bg			= new Surface(320, 200, 0, 0);
 	_soldier	= new Surface(320, 200, 0, 0);
+
 	_txtName	= new Text(200, 17, 36, 6);
-	_txtTus		= new Text(40, 9, 245, _showStats? 32: 24);
 
 	_txtWeight	= new Text(70, 9, 245, 24);
+	_txtTus		= new Text(40, 9, 245, _showStats? 32: 24);
 	_txtFAcc	= new Text(40, 9, 245, 32);
 	_txtReact	= new Text(40, 9, 245, 40);
 	_txtPStr	= new Text(40, 9, 245, 48);
@@ -118,9 +119,9 @@ InventoryState::InventoryState(
 	add(_bg);
 	add(_soldier);
 	add(_txtName);
-	add(_txtTus);
 
 	add(_txtWeight);
+	add(_txtTus);
 	add(_txtFAcc);
 	add(_txtReact);
 	add(_txtPSkill);
@@ -146,13 +147,13 @@ InventoryState::InventoryState(
 	_txtName->setBig();
 	_txtName->setHighContrast(true);
 
-	_txtTus->setColor(Palette::blockOffset(4));
-	_txtTus->setSecondaryColor(Palette::blockOffset(1));
-	_txtTus->setHighContrast(true);
-
 	_txtWeight->setColor(Palette::blockOffset(4));
 	_txtWeight->setSecondaryColor(Palette::blockOffset(1));
 	_txtWeight->setHighContrast(true);
+
+	_txtTus->setColor(Palette::blockOffset(4));
+	_txtTus->setSecondaryColor(Palette::blockOffset(1));
+	_txtTus->setHighContrast(true);
 
 	_txtFAcc->setColor(Palette::blockOffset(4));
 	_txtFAcc->setSecondaryColor(Palette::blockOffset(1));
@@ -179,13 +180,21 @@ InventoryState::InventoryState(
 	_txtAmmo->setHighContrast(true);
 
 	_btnOk->onMouseClick((ActionHandler)& InventoryState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)& InventoryState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
-	_btnOk->onKeyboardPress((ActionHandler)& InventoryState::btnOkClick, (SDLKey)Options::getInt("keyBattleInventory"));
+	_btnOk->onKeyboardPress(
+						(ActionHandler)& InventoryState::btnOkClick,
+						(SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onKeyboardPress(
+						(ActionHandler)& InventoryState::btnOkClick,
+						(SDLKey)Options::getInt("keyBattleInventory"));
 
 	_btnPrev->onMouseClick((ActionHandler)& InventoryState::btnPrevClick);
-	_btnPrev->onKeyboardPress((ActionHandler)& InventoryState::btnPrevClick, (SDLKey)Options::getInt("keyBattlePrevUnit"));
+	_btnPrev->onKeyboardPress(
+						(ActionHandler)& InventoryState::btnPrevClick,
+						(SDLKey)Options::getInt("keyBattlePrevUnit"));
 	_btnNext->onMouseClick((ActionHandler)&InventoryState::btnNextClick);
-	_btnNext->onKeyboardPress((ActionHandler)& InventoryState::btnNextClick, (SDLKey)Options::getInt("keyBattleNextUnit"));
+	_btnNext->onKeyboardPress(
+						(ActionHandler)& InventoryState::btnNextClick,
+						(SDLKey)Options::getInt("keyBattleNextUnit"));
 
 	_btnUnload->onMouseClick((ActionHandler)& InventoryState::btnUnloadClick);
 	_btnGround->onMouseClick((ActionHandler)& InventoryState::btnGroundClick);
@@ -196,14 +205,14 @@ InventoryState::InventoryState(
 	_inv->setSelectedUnit(_game->getSavedGame()->getSavedBattle()->getSelectedUnit());
 	_inv->onMouseClick((ActionHandler)& InventoryState::invClick, 0);
 
-	_txtTus->setVisible(_tu);
 	_txtWeight->setVisible(_showStats);
+	_txtTus->setVisible(_tu);
 	_txtFAcc->setVisible(_showStats && !_tu);
 	_txtReact->setVisible(_showStats && !_tu);
 	_txtPSkill->setVisible(_showStats && !_tu);
 	_txtPStr->setVisible(_showStats && !_tu);
 
-	Log(LOG_INFO) << "Create InventoryState EXIT";
+	//Log(LOG_INFO) << "Create InventoryState EXIT";
 }
 
 /**
@@ -218,7 +227,7 @@ InventoryState::~InventoryState()
  */
 void InventoryState::init()
 {
-	Log(LOG_INFO) << "InventoryState::init()";
+	//Log(LOG_INFO) << "InventoryState::init()";
 
 	BattleUnit* unit = _battleGame->getSelectedUnit();
 
@@ -226,22 +235,28 @@ void InventoryState::init()
 	{
 		btnOkClick(0);
 
-		Log(LOG_INFO) << ". early out <- no selectedUnit";
+		//Log(LOG_INFO) << ". early out <- no selectedUnit";
 		return;
 	}
 
 	if (!unit->hasInventory()) // skip to the first unit with inventory
 	{
-		Log(LOG_INFO) << ". . unit doesn't have Inventory";
+		//Log(LOG_INFO) << ". . unit doesn't have Inventory";
 		if (_parent)
 		{
-			Log(LOG_INFO) << ". . . _parent: select next unit";
-			_parent->selectNextPlayerUnit(false, false, true);
+			//Log(LOG_INFO) << ". . . _parent: select next unit";
+			_parent->selectNextPlayerUnit(
+										false,
+										false,
+										true);
 		}
 		else
 		{
-			Log(LOG_INFO) << ". . . NO _parent: select next unit";
-			_battleGame->selectNextPlayerUnit(false, false, true);
+			//Log(LOG_INFO) << ". . . NO _parent: select next unit";
+			_battleGame->selectNextPlayerUnit(
+											false,
+											false,
+											true);
 		}
 
 		if (//kL _battleGame->getSelectedUnit() == 0 ||			// no available unit, Checked above.
@@ -249,12 +264,12 @@ void InventoryState::init()
 		{
 			btnOkClick(0);
 
-			Log(LOG_INFO) << ". . . early out <- no selectedUnit w/ Inventory";
+			//Log(LOG_INFO) << ". . . early out <- no selectedUnit w/ Inventory";
 			return; // starting a mission with just vehicles
 		}
 		else
 		{
-			Log(LOG_INFO) << ". . . unit = selectedUnit";
+			//Log(LOG_INFO) << ". . . unit = selectedUnit";
 			unit = _battleGame->getSelectedUnit();
 		}
 	}
@@ -266,9 +281,12 @@ void InventoryState::init()
 	_soldier->clear();
 	_btnRank->clear();
 
+
 	_txtName->setBig();
 	_txtName->setText(unit->getName(_game->getLanguage()));
+
 	_inv->setSelectedUnit(unit);
+
 
 	Soldier* s = _game->getSavedGame()->getSoldier(unit->getId());
 	if (s)
@@ -314,7 +332,7 @@ void InventoryState::init()
 
 	updateStats();
 
-	Log(LOG_INFO) << "InventoryState::init() EXIT";
+	//Log(LOG_INFO) << "InventoryState::init() EXIT";
 }
 
 /**
@@ -322,7 +340,7 @@ void InventoryState::init()
  */
 void InventoryState::updateStats()
 {
-	Log(LOG_INFO) << "InventoryState::updateStats()";
+	//Log(LOG_INFO) << "InventoryState::updateStats()";
 
 	BattleUnit* unit = _battleGame->getSelectedUnit();
 
@@ -365,7 +383,7 @@ void InventoryState::updateStats()
 		_txtPStr->setText(L"");
 	}
 
-	Log(LOG_INFO) << "InventoryState::updateStats() EXIT";
+	//Log(LOG_INFO) << "InventoryState::updateStats() EXIT";
 }
 
 /**
@@ -373,7 +391,7 @@ void InventoryState::updateStats()
  */
 void InventoryState::saveEquipmentLayout()
 {
-	Log(LOG_INFO) << "InventoryState::saveEquipmentLayout()";
+	//Log(LOG_INFO) << "InventoryState::saveEquipmentLayout()";
 
 	for (std::vector<BattleUnit*>::iterator
 			i = _battleGame->getUnits()->begin();
@@ -422,7 +440,7 @@ void InventoryState::saveEquipmentLayout()
 		}
 	}
 
-	Log(LOG_INFO) << "InventoryState::saveEquipmentLayout() EXIT";
+	//Log(LOG_INFO) << "InventoryState::saveEquipmentLayout() EXIT";
 }
 
 /**
@@ -431,7 +449,7 @@ void InventoryState::saveEquipmentLayout()
  */
 void InventoryState::btnOkClick(Action*)
 {
-	Log(LOG_INFO) << "InventoryState::btnOkClick()";
+	//Log(LOG_INFO) << "InventoryState::btnOkClick()";
 
 	if (_inv->getSelectedItem() != 0)
 		return;
@@ -445,7 +463,7 @@ void InventoryState::btnOkClick(Action*)
 		// kL: This for early exit because access is via CraftEquip screen.
 		if (_parent == 0)
 		{
-			Log(LOG_INFO) << ". early out <- CraftEquip";
+			//Log(LOG_INFO) << ". early out <- CraftEquip";
 			return;
 		}
 
@@ -464,7 +482,7 @@ void InventoryState::btnOkClick(Action*)
 	if (_battleGame->getTileEngine())
 	{
 		_battleGame->getTileEngine()->applyGravity(_battleGame->getSelectedUnit()->getTile());
-		_battleGame->getTileEngine()->calculateTerrainLighting(); // dropping/picking up flares
+		_battleGame->getTileEngine()->calculateTerrainLighting(); // dropping / picking up flares
 		_battleGame->getTileEngine()->recalculateFOV();
 
 		// from BattlescapeGame::dropItem() but can't really use this because I don't know exactly what dropped...
@@ -476,7 +494,7 @@ void InventoryState::btnOkClick(Action*)
 		} */
 	}
 
-	Log(LOG_INFO) << "InventoryState::btnOkClick() EXIT";
+	//Log(LOG_INFO) << "InventoryState::btnOkClick() EXIT";
 }
 
 /**

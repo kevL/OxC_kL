@@ -161,9 +161,7 @@ void NextTurnState::handle(Action* action)
 void NextTurnState::think()
 {
 	if (_timer)
-	{
 		_timer->think(this, 0);
-	}
 }
 
 /**

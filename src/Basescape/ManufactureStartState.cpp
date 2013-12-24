@@ -175,20 +175,25 @@ ManufactureStartState::ManufactureStartState(
 	_txtTitle->setAlign(ALIGN_CENTER);
 
 	_txtManHour->setColor(Palette::blockOffset(13)+10);
-	_txtManHour->setText(tr("STR_ENGINEER_HOURS_TO_PRODUCE_ONE_UNIT").arg(_item->getManufactureTime()));
+	_txtManHour->setText(tr("STR_ENGINEER_HOURS_TO_PRODUCE_ONE_UNIT")
+							.arg(_item->getManufactureTime()));
 
 	_txtCost->setColor(Palette::blockOffset(13)+10);
 	_txtCost->setSecondaryColor(Palette::blockOffset(13));
-	_txtCost->setText(tr("STR_COST_PER_UNIT_").arg(Text::formatFunding(_item->getManufactureCost())));
+	_txtCost->setText(tr("STR_COST_PER_UNIT_")
+							.arg(Text::formatFunding(_item->getManufactureCost())));
 
 	_txtWorkSpace->setColor(Palette::blockOffset(13)+10);
 	_txtWorkSpace->setSecondaryColor(Palette::blockOffset(13));
-	_txtWorkSpace->setText(tr("STR_WORK_SPACE_REQUIRED").arg(_item->getRequiredSpace()));
+	_txtWorkSpace->setText(tr("STR_WORK_SPACE_REQUIRED")
+							.arg(_item->getRequiredSpace()));
 
 	_btnCancel->setColor(Palette::blockOffset(13)+10);
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)& ManufactureStartState::btnCancelClick);
-	_btnCancel->onKeyboardPress((ActionHandler)& ManufactureStartState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnCancel->onKeyboardPress(
+							(ActionHandler)& ManufactureStartState::btnCancelClick,
+							(SDLKey)Options::getInt("keyCancel"));
 
 	const std::map<std::string, int>& requiredItems (_item->getRequiredItems());
 	int availableWorkSpace = _base->getFreeWorkshops();

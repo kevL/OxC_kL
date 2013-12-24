@@ -242,7 +242,10 @@ protected:
 		/// Unlocks the surface.
 		void unlock();
 		/// Offsets and optionally inverts the surface palette's colors by a set amount.
-		void paletteShift(int off, int mul, int mid = 0);
+		void paletteShift(
+				int off,
+				int mul,
+				int mid = 0);
 		/// Restores the original palette.
 		void paletteRestore();
 		/// Specific blit function to blit battlescape terrain data in different shades in a fast way.

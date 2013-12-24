@@ -26,15 +26,16 @@
 namespace OpenXcom
 {
 
-class TextButton;
-class Window;
-class Text;
-class Base;
-class RuleResearch;
-class ResearchProject;
 class ArrowButton;
-class Timer;
+class Base;
 class InteractiveSurface;
+class ResearchProject;
+class RuleResearch;
+class Text;
+class TextButton;
+class Timer;
+class Window;
+
 
 /**
  * Window which allows changing of the number of assigned scientists to a project.
@@ -43,25 +44,50 @@ class ResearchInfoState
 	:
 		public State
 {
+
 private:
-	Base* _base;
-	TextButton* _btnOk;
-	TextButton* _btnCancel;
-	ArrowButton* _btnMore, * _btnLess;
-	Window* _window;
-	Text* _txtTitle, * _txtAvailableScientist, * _txtAvailableSpace, * _txtAllocatedScientist, * _txtMore, * _txtLess;
-	void setAssignedScientist();
-	ResearchProject* _project;
-	RuleResearch* _rule;
-	void buildUi();
-	Timer* _timerMore, * _timerLess;
-	InteractiveSurface* _surface;
 	int _changeValueByMouseWheel;
 
+	ArrowButton
+		* _btnMore,
+		* _btnLess;
+	Base* _base;
+	InteractiveSurface* _surface;
+	ResearchProject* _project;
+	RuleResearch* _rule;
+	Text
+		* _txtAllocatedScientist,
+		* _txtAvailableScientist,
+		* _txtAvailableSpace,
+		* _txtLess,
+		* _txtMore,
+		* _txtTitle;
+	TextButton
+		* _btnOk;
+	TextButton
+		* _btnCancel;
+	Timer
+		* _timerLess,
+		* _timerMore;
+	Window* _window;
+
+	///
+	void setAssignedScientist();
+	///
+	void buildUi();
+
+
 	public:
-		/// Creates the ResearchProject state.
-		ResearchInfoState(Game* game, Base* base, RuleResearch* rule);
-		ResearchInfoState(Game* game, Base* base, ResearchProject* project);
+		/// Creates a ResearchProject state.
+		ResearchInfoState(
+				Game* game,
+				Base* base,
+				RuleResearch* rule);
+		/// Creates a ResearchProject state.
+		ResearchInfoState(
+				Game* game,
+				Base* base,
+				ResearchProject* project);
 		/// kL_begin: Cleans up the ResearchInfo state.
 		~ResearchInfoState(); // not implemented yet.
 		// kL_end.
@@ -70,6 +96,7 @@ private:
 		void btnOkClick(Action* action);
 		/// Handler for clicking the Cancel button.
 		void btnCancelClick(Action* action);
+
 		/// Function called every time the _timerMore timer is triggered.
 		void more();
 		/// Add given number of scientists to the project if possible
@@ -78,6 +105,7 @@ private:
 		void less();
 		/// Remove the given number of scientists from the project if possible
 		void lessByValue(int change);
+
 		/// Handler for using the mouse wheel.
 		void handleWheel(Action* action);
 		/// Handler for pressing the More button.
@@ -92,6 +120,7 @@ private:
 		void lessRelease(Action* action);
 		/// Handler for clicking the Less button.
 		void lessClick(Action* action);
+
 		/// Runs state functionality every cycle(used to update the timer).
 		void think();
 };

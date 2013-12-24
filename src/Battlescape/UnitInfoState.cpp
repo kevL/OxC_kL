@@ -65,7 +65,7 @@ UnitInfoState::UnitInfoState(
 		_parent(parent)
 {
 	_bg = new Surface(320, 200, 0, 0);
-	_txtName = new Text(312, 192, 4, 4);
+	_txtName = new Text(300, 17, 10, 4);
 
 	// kL_note: move numberUnits right 1px
 	_txtTimeUnits = new Text(120, 9, 8, 31);
@@ -592,11 +592,17 @@ void UnitInfoState::btnPrevClick(Action*)
 {
 	if (_parent)
 	{
-		_parent->selectPreviousPlayerUnit(false, false, true);
+		_parent->selectPreviousPlayerUnit(
+										false,
+										false,
+										true);
 	}
 	else
 	{
-		_game->getSavedGame()->getSavedBattle()->selectPreviousPlayerUnit(false, false, true);
+		_game->getSavedGame()->getSavedBattle()->selectPreviousPlayerUnit(
+																		false,
+																		false,
+																		true);
 	}
 
 	_unit = _game->getSavedGame()->getSavedBattle()->getSelectedUnit();
@@ -618,11 +624,17 @@ void UnitInfoState::btnNextClick(Action*)
 {
 	if (_parent)
 	{
-		_parent->selectNextPlayerUnit(false, false, true);
+		_parent->selectNextPlayerUnit(
+									false,
+									false,
+									true);
 	}
 	else
 	{
-		_game->getSavedGame()->getSavedBattle()->selectNextPlayerUnit(false, false, true);
+		_game->getSavedGame()->getSavedBattle()->selectNextPlayerUnit(
+																	false,
+																	false,
+																	true);
 	}
 
 	_unit = _game->getSavedGame()->getSavedBattle()->getSelectedUnit();

@@ -54,11 +54,16 @@ namespace OpenXcom
  * @param base Pointer to the base to get info from.
  * @param rule A RuleResearch which will be used to create a new ResearchProject
  */
-ResearchInfoState::ResearchInfoState(Game* game, Base* base, RuleResearch* rule)
+ResearchInfoState::ResearchInfoState(
+		Game* game,
+		Base* base,
+		RuleResearch* rule)
 	:
 		State(game),
 		_base(base),
-		_project(new ResearchProject(rule, (rule->getCost() * RNG::generate(50, 150)) / 100)), // time = 50 to 150%
+		_project(new ResearchProject( // time = 70 to 130%
+									rule,
+									(rule->getCost() * RNG::generate(70, 130)) / 100)),
 		_rule(rule)
 {
 	buildUi();
@@ -70,7 +75,10 @@ ResearchInfoState::ResearchInfoState(Game* game, Base* base, RuleResearch* rule)
  * @param base Pointer to the base to get info from.
  * @param project A ResearchProject to modify
  */
-ResearchInfoState::ResearchInfoState(Game* game, Base* base, ResearchProject* project)
+ResearchInfoState::ResearchInfoState(
+		Game* game,
+		Base* base,
+		ResearchProject* project)
 	:
 		State(game),
 		_base(base),
@@ -103,7 +111,11 @@ void ResearchInfoState::buildUi()
 	int start_x = (max_width - width) / 2;
 	int start_y = (max_height - height) / 2;
 
-	_surface = new InteractiveSurface(width, height, start_x, start_y);
+	_surface = new InteractiveSurface(
+									width,
+									height,
+									start_x,
+									start_y);
 	_surface->onMouseClick((ActionHandler)& ResearchInfoState::handleWheel, 0);
 
 	int button_x_border = 16;
@@ -210,11 +222,12 @@ void ResearchInfoState::buildUi()
 			&& (_game->getRuleset()->getUnit(_rule->getName())
 				|| Options::getBool("researchedItemsWillSpent")))
 		{
-			_base->getItems()->removeItem(_rule->getName(), 1);
+			_base->getItems()->removeItem(_rule->getName());
 		}
 	}
 
 	setAssignedScientist();
+
 
 	_btnMore->setColor(Palette::blockOffset(13)+5);
 	_btnMore->onMousePress((ActionHandler)& ResearchInfoState::morePress);
@@ -234,21 +247,28 @@ void ResearchInfoState::buildUi()
 
 	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->onMouseClick((ActionHandler)& ResearchInfoState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)& ResearchInfoState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
+	_btnOk->onKeyboardPress(
+						(ActionHandler)& ResearchInfoState::btnOkClick,
+						(SDLKey)Options::getInt("keyOk"));
 
 	_btnCancel->setColor(Palette::blockOffset(13)+10);
+
 
 	if (_rule)
 	{
 		_btnOk->setText(tr("STR_START_PROJECT"));
 		_btnCancel->setText(tr("STR_CANCEL_UC"));
-		_btnCancel->onKeyboardPress((ActionHandler)& ResearchInfoState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
+		_btnCancel->onKeyboardPress(
+								(ActionHandler)& ResearchInfoState::btnCancelClick,
+								(SDLKey)Options::getInt("keyCancel"));
 	}
 	else
 	{
 		_btnOk->setText(tr("STR_OK"));
 		_btnCancel->setText(tr("STR_CANCEL_PROJECT"));
-		_btnOk->onKeyboardPress((ActionHandler)& ResearchInfoState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+		_btnOk->onKeyboardPress(
+							(ActionHandler)& ResearchInfoState::btnOkClick,
+							(SDLKey)Options::getInt("keyCancel"));
 	}
 
 	_btnCancel->onMouseClick((ActionHandler)& ResearchInfoState::btnCancelClick);
@@ -289,9 +309,12 @@ void ResearchInfoState::btnCancelClick(Action*)
 void ResearchInfoState::setAssignedScientist()
 {
 //kL	_txtAvailableScientist->setText(tr("STR_SCIENTISTS_AVAILABLE_UC").arg(_base->getAvailableScientists()));
-	_txtAvailableScientist->setText(tr("STR_SCIENTISTS_AVAILABLE_UC").arg(_base->getScientists())); // kL
-	_txtAvailableSpace->setText(tr("STR_LABORATORY_SPACE_AVAILABLE_UC").arg(_base->getFreeLaboratories()));
-	_txtAllocatedScientist->setText(tr("STR_SCIENTISTS_ALLOCATED").arg(_project->getAssigned()));
+	_txtAvailableScientist->setText(tr("STR_SCIENTISTS_AVAILABLE_UC")
+								.arg(_base->getScientists())); // kL
+	_txtAvailableSpace->setText(tr("STR_LABORATORY_SPACE_AVAILABLE_UC")
+								.arg(_base->getFreeLaboratories()));
+	_txtAllocatedScientist->setText(tr("STR_SCIENTISTS_ALLOCATED")
+								.arg(_project->getAssigned()));
 }
 
 /**
@@ -393,12 +416,13 @@ void ResearchInfoState::more()
  */
 void ResearchInfoState::moreByValue(int change)
 {
-	if (change <= 0) return;
+	if (change < 1) return;
 
 //kL	int freeScientist = _base->getAvailableScientists();
 	int freeScientist = _base->getScientists(); // kL
 	int freeSpaceLab = _base->getFreeLaboratories();
-	if (freeScientist > 0 && freeSpaceLab > 0)
+	if (freeScientist > 0
+		&& freeSpaceLab > 0)
 	{
 		change = std::min(std::min(freeScientist, freeSpaceLab), change);
 		_project->setAssigned(_project->getAssigned() + change);
@@ -423,7 +447,7 @@ void ResearchInfoState::less()
  */
 void ResearchInfoState::lessByValue(int change)
 {
-	if (change <= 0) return;
+	if (change < 1) return;
 
 	int assigned = _project->getAssigned();
 	if (assigned > 0)

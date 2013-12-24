@@ -26,12 +26,13 @@
 namespace OpenXcom
 {
 
-class TextButton;
-class Window;
-class Text;
-class TextList;
-class GeoscapeState;
 class Base;
+class GeoscapeState;
+class Text;
+class TextButton;
+class TextList;
+class Window;
+
 
 /**
  * Items Arriving window that displays all
@@ -41,17 +42,28 @@ class ItemsArrivingState
 	:
 		public State
 {
+
 private:
-	GeoscapeState* _state;
 	Base* _base;
-	TextButton* _btnOk, * _btnOk5Secs, * _btnGotoBase;
-	Window* _window;
-	Text* _txtTitle, * _txtItem, * _txtQuantity, * _txtDestination;
+	GeoscapeState* _state;
+	Text
+		* _txtDestination,
+		* _txtItem,
+		* _txtQuantity,
+		* _txtTitle;
+	TextButton
+		* _btnGotoBase,
+		* _btnOk,
+		* _btnOk5Secs;
 	TextList* _lstTransfers;
+	Window* _window;
+
 
 	public:
 		/// Creates the ItemsArriving state.
-		ItemsArrivingState(Game* game, GeoscapeState* state);
+		ItemsArrivingState(
+				Game* game,
+				GeoscapeState* state);
 		/// Cleans up the ItemsArriving state.
 		~ItemsArrivingState();
 

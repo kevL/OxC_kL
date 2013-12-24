@@ -41,7 +41,9 @@ class ResearchProject
 	int _cost;
 
 	public:
-		ResearchProject(RuleResearch* project, int cost = 0);
+		ResearchProject(
+				RuleResearch* project,
+				int cost = 0);
 		// kL_note: DESTRUCTOR?
 
 		/// Game logic. Called every new day to compute time spent.
@@ -70,6 +72,8 @@ class ResearchProject
 
 		/// Get a string describing current progress.
 		std::string getResearchProgress() const;
+		/// Get a string of cost completed as a per cent value.
+		std::wstring getCostCompleted() const; // kL
 };
 
 }

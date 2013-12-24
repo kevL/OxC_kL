@@ -68,7 +68,11 @@ Inventory::Inventory(
 		int x,
 		int y)
 	:
-		InteractiveSurface(width, height, x, y),
+		InteractiveSurface(
+				width,
+				height,
+				x,
+				y),
 		_game(game),
 		_selUnit(0),
 		_selItem(0),
@@ -127,9 +131,9 @@ void Inventory::setPalette(
 
 /**
  * Changes the inventory's Time Units mode.
- * When True, inventory actions cost soldier time units (for battle).
- * When False, inventory actions don't cost anything (for pre-equip).
- * @param tu Time Units mode.
+ * - when True inventory actions cost soldier time units (for battle).
+ * - when False inventory actions don't cost anything (for pre-equip).
+ * @param tu, Time Units mode.
  */
 void Inventory::setTuMode(bool tu)
 {
@@ -138,7 +142,7 @@ void Inventory::setTuMode(bool tu)
 
 /**
  * Changes the unit to display the inventory of.
- * @param unit Pointer to battle unit.
+ * @param unit, Pointer to a battle unit.
  */
 void Inventory::setSelectedUnit(BattleUnit* unit)
 {
@@ -164,7 +168,7 @@ void Inventory::drawGrid()
 {
 	_grid->clear();
 
-	Text text = Text(80, 9, 0, 0);
+	Text text = Text(48, 9, 0, 0);
 	text.setPalette(_grid->getPalette());
 	text.initText(
 				_game->getResourcePack()->getFont("FONT_BIG"),
@@ -243,7 +247,10 @@ void Inventory::drawGrid()
 
 		// Draw label
 		text.setX(i->second->getX());
-		text.setY(i->second->getY() - text.getFont()->getHeight() - text.getFont()->getSpacing());
+		text.setY(
+				i->second->getY()
+					- text.getFont()->getHeight()
+					- text.getFont()->getSpacing());
 		text.setText(_game->getLanguage()->getString(i->second->getId()));
 		text.blit(_grid);
 	}
@@ -256,6 +263,7 @@ void Inventory::drawItems()
 {
 	_items->clear();
 
+
 	if (_selUnit != 0)
 	{
 		SurfaceSet* texture = _game->getResourcePack()->getSurfaceSet("BIGOBS.PCK");
@@ -267,6 +275,7 @@ void Inventory::drawItems()
 				++i)
 		{
 			if (*i == _selItem) continue;
+
 
 			Surface* frame = texture->getFrame((*i)->getRules()->getBigSprite());
 			if ((*i)->getSlot()->getType() == INV_SLOT)
@@ -289,7 +298,11 @@ void Inventory::drawItems()
 			texture->getFrame((*i)->getRules()->getBigSprite())->blit(_items);
 		}
 
-		Surface* stackLayer = new Surface(getWidth(), getHeight(), 0, 0);
+		Surface* stackLayer = new Surface(
+										getWidth(),
+										getHeight(),
+										0,
+										0);
 		stackLayer->setPalette(getPalette());
 
 		// Ground items
@@ -298,7 +311,8 @@ void Inventory::drawItems()
 				i != _selUnit->getTile()->getInventory()->end();
 				++i)
 		{
-			// note that you can make items invisible by setting their width or height to 0 (for example used with tank corpse items)
+			// note that you can make items invisible by setting their width
+			// or height to 0 (for example used with tank corpse items)
 			if (*i == _selItem
 				|| (*i)->getSlotX() < _groundOffset
 				|| (*i)->getRules()->getInventoryHeight() == 0
@@ -308,17 +322,22 @@ void Inventory::drawItems()
 			}
 
 			Surface* frame = texture->getFrame((*i)->getRules()->getBigSprite());
-			frame->setX((*i)->getSlot()->getX() + ((*i)->getSlotX() - _groundOffset) * RuleInventory::SLOT_W);
-			frame->setY((*i)->getSlot()->getY() + (*i)->getSlotY() * RuleInventory::SLOT_H);
+
+			frame->setX(
+						(*i)->getSlot()->getX()
+							+ ((*i)->getSlotX() - _groundOffset) * RuleInventory::SLOT_W);
+			frame->setY(
+						(*i)->getSlot()->getY()
+							+ ((*i)->getSlotY() * RuleInventory::SLOT_H));
 			texture->getFrame((*i)->getRules()->getBigSprite())->blit(_items);
 
 			if (_stackLevel[(*i)->getSlotX()][(*i)->getSlotY()] > 1)
 			{
 				_stackNumber->setX(
-						((*i)->getSlot()->getX()
-								+ (((*i)->getSlotX() + (*i)->getRules()->getInventoryWidth()) - _groundOffset)
-							* RuleInventory::SLOT_W)
-							- 3);
+								((*i)->getSlot()->getX()
+									+ (((*i)->getSlotX() + (*i)->getRules()->getInventoryWidth()) - _groundOffset)
+										* RuleInventory::SLOT_W)
+									- 3);
 
 				if (_stackLevel[(*i)->getSlotX()][(*i)->getSlotY()] > 9)
 				{
@@ -326,10 +345,10 @@ void Inventory::drawItems()
 				}
 
 				_stackNumber->setY(
-						((*i)->getSlot()->getY()
-								+ ((*i)->getSlotY() + (*i)->getRules()->getInventoryHeight())
-							* RuleInventory::SLOT_H)
-							- 5);
+								((*i)->getSlot()->getY()
+									+ ((*i)->getSlotY() + (*i)->getRules()->getInventoryHeight())
+										* RuleInventory::SLOT_H)
+									- 5);
 				_stackNumber->setValue(_stackLevel[(*i)->getSlotX()][(*i)->getSlotY()]);
 				_stackNumber->draw();
 				_stackNumber->setColor(Palette::blockOffset(4)+2);
@@ -339,9 +358,15 @@ void Inventory::drawItems()
 
 		// give it a border
 		// this is the "darker" shade that goes in the corners.
-		for (int x = -1; x <= 1; x += 2)
+		for (int
+				x = -1;
+				x <= 1;
+				x += 2)
 		{
-			for (int y = -1; y <= 1; y += 2)
+			for (int
+					y = -1;
+					y <= 1;
+					y += 2)
 			{
 				stackLayer->blitNShade(_items, x, y, 11);
 			}
@@ -369,7 +394,11 @@ void Inventory::drawItems()
  * @param x X position in slot.
  * @param y Y position in slot.
  */
-void Inventory::moveItem(BattleItem* item, RuleInventory* slot, int x, int y)
+void Inventory::moveItem(
+		BattleItem* item,
+		RuleInventory* slot,
+		int x,
+		int y)
 {
 	if (slot == 0) // Make items vanish (eg. ammo in weapons)
 	{
@@ -471,7 +500,9 @@ bool Inventory::overlapItems(
  * @param y Mouse Y position. Returns the slot's Y position.
  * @return Slot rules, or NULL if none.
  */
-RuleInventory* Inventory::getSlotInPosition(int* x, int* y) const
+RuleInventory* Inventory::getSlotInPosition(
+		int* x,
+		int* y) const
 {
 	for (std::map<std::string, RuleInventory*>::iterator
 			i = _game->getRuleset()->getInventories()->begin();
@@ -514,7 +545,9 @@ void Inventory::setSelectedItem(BattleItem* item)
 			_stackLevel[_selItem->getSlotX()][_selItem->getSlotY()] -= 1;
 		}
 
-		_selItem->getRules()->drawHandSprite(_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"), _selection);
+		_selItem->getRules()->drawHandSprite(
+										_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"),
+										_selection);
 	}
 
 	drawItems();
@@ -551,8 +584,10 @@ void Inventory::blit(Surface* surface)
  */
 void Inventory::mouseOver(Action* action, State* state)
 {
-	_selection->setX(static_cast<int>(floor(action->getAbsoluteXMouse())) - (_selection->getWidth() / 2) - _dx);
-	_selection->setY(static_cast<int>(floor(action->getAbsoluteYMouse())) - (_selection->getHeight() / 2) - _dy);
+	_selection->setX(static_cast<int>(
+									floor(action->getAbsoluteXMouse())) - (_selection->getWidth() / 2) - _dx);
+	_selection->setY(static_cast<int>(
+									floor(action->getAbsoluteYMouse())) - (_selection->getHeight() / 2) - _dy);
 
 	InteractiveSurface::mouseOver(action, state);
 }
@@ -676,9 +711,8 @@ void Inventory::mouseClick(Action* action, State* state)
 						{
 							std::wstring activated = _game->getLanguage()->getString("STR_GRENADE_IS_ACTIVATED");
 							activated += L" ";
-							activated += std::to_wstring(static_cast<long long>(item->getExplodeTurn()));
+							activated += std::to_wstring(static_cast<long long>(item->getExplodeTurn())); // <<---- fudgy!
 							_warning->showMessage(activated);
-//kL							_warning->showMessage(_game->getLanguage()->getString("STR_GRENADE_IS_ACTIVATED"));
 						}
 					}
 				}
@@ -687,10 +721,12 @@ void Inventory::mouseClick(Action* action, State* state)
 		else // Drop item
 		{
 			int x = _selection->getX()
-						+ (RuleInventory::HAND_W - _selItem->getRules()->getInventoryWidth()) * RuleInventory::SLOT_W / 2
+						+ (RuleInventory::HAND_W - _selItem->getRules()->getInventoryWidth())
+							* RuleInventory::SLOT_W / 2
 						+ RuleInventory::SLOT_W / 2,
 				y = _selection->getY()
-						+ (RuleInventory::HAND_H - _selItem->getRules()->getInventoryHeight()) * RuleInventory::SLOT_H / 2
+						+ (RuleInventory::HAND_H - _selItem->getRules()->getInventoryHeight())
+							* RuleInventory::SLOT_H / 2
 						+ RuleInventory::SLOT_H / 2;
 
 			RuleInventory* slot = getSlotInPosition(&x, &y);
@@ -860,7 +896,11 @@ void Inventory::mouseClick(Action* action, State* state)
 								}
 								else
 									// kL_note: This is where activation warning for nonProxy preBattle grenades goes...
-									_game->pushState(new PrimeGrenadeState(_game, 0, true, item));
+									_game->pushState(new PrimeGrenadeState(
+																		_game,
+																		0,
+																		true,
+																		item));
 							}
 							else item->setExplodeTurn(-1); // Unprime the grenade
 						}
@@ -873,7 +913,7 @@ void Inventory::mouseClick(Action* action, State* state)
 
 				// but Does NOT applyGravity(), so from InventoryState::btnOkClick()
 				_game->getSavedGame()->getSavedBattle()->getTileEngine()->applyGravity(_game->getSavedGame()->getSavedBattle()->getSelectedUnit()->getTile());
-				_game->getSavedGame()->getSavedBattle()->getTileEngine()->calculateTerrainLighting(); // dropping/picking up flares
+				_game->getSavedGame()->getSavedBattle()->getTileEngine()->calculateTerrainLighting(); // dropping / picking up flares
 				_game->getSavedGame()->getSavedBattle()->getTileEngine()->recalculateFOV();
 
 				// from BattlescapeGame::dropItem() but can't really use this because I don't know exactly what dropped...
@@ -948,12 +988,13 @@ void Inventory::arrangeGround(bool alterOffset)
 {
 	RuleInventory* ground = _game->getRuleset()->getInventory("STR_GROUND");
 
-	int slotsX = (320 - ground->getX()) / RuleInventory::SLOT_W;
-	int slotsY = (200 - ground->getY()) / RuleInventory::SLOT_H;
-	int x = 0;
-	int y = 0;
 	bool ok = false;
-	int xMax = 0;
+	int
+		slotsX = (320 - ground->getX()) / RuleInventory::SLOT_W,
+		slotsY = (200 - ground->getY()) / RuleInventory::SLOT_H,
+		x = 0,
+		y = 0,
+		xMax = 0;
 
 	_stackLevel.clear();
 
@@ -1059,20 +1100,36 @@ void Inventory::arrangeGround(bool alterOffset)
  * @param warning Warning message if item could not be placed.
  * @return True, if the item was successfully placed in the inventory.
  */
-bool Inventory::fitItem(RuleInventory* newSlot, BattleItem* item, std::string &warning)
+bool Inventory::fitItem(
+		RuleInventory* newSlot,
+		BattleItem* item,
+		std::string& warning)
 {
 	bool placed = false;
-	for (int y2 = 0; y2 <= newSlot->getY() / RuleInventory::SLOT_H && !placed; ++y2)
+	for (int
+			y2 = 0;
+			y2 <= newSlot->getY() / RuleInventory::SLOT_H
+				&& !placed;
+			++y2)
 	{
-		for (int x2 = 0; x2 <= newSlot->getX() / RuleInventory::SLOT_W && !placed; ++x2)
+		for (int
+				x2 = 0;
+				x2 <= newSlot->getX() / RuleInventory::SLOT_W
+					&& !placed;
+				++x2)
 		{
-			if (!overlapItems(_selUnit, item, newSlot, x2, y2) && newSlot->fitItemInSlot(item->getRules(), x2, y2))
+			if (!overlapItems(_selUnit, item, newSlot, x2, y2)
+				&& newSlot->fitItemInSlot(item->getRules(), x2, y2))
 			{
 				if (!_tu
 					|| _selUnit->spendTimeUnits(item->getSlot()->getCost(newSlot)))
 				{
 					placed = true;
-					moveItem(item, newSlot, x2, y2);
+					moveItem(
+							item,
+							newSlot,
+							x2,
+							y2);
 
 					_game->getResourcePack()->getSound("BATTLE.CAT", 38)->play();
 
@@ -1095,7 +1152,9 @@ bool Inventory::fitItem(RuleInventory* newSlot, BattleItem* item, std::string &w
  * @param itemB Second item.
  * @return True, if the items can be stacked on one another.
  */
-bool Inventory::canBeStacked(BattleItem* itemA, BattleItem* itemB)
+bool Inventory::canBeStacked(
+		BattleItem* itemA,
+		BattleItem* itemB)
 {
 	return (itemA != 0 && itemB != 0																	// both items actually exist
 		&& itemA->getRules() == itemB->getRules()														// both items have the same ruleset

@@ -1232,13 +1232,15 @@ void BattlescapeState::btnShowLayersClick(Action*)
 void BattlescapeState::btnHelpClick(Action*)
 {
 	if (allowButtons(true))
-		_game->pushState(new PauseState(_game, OPT_BATTLESCAPE));
+		_game->pushState(new PauseState(
+									_game,
+									OPT_BATTLESCAPE));
 }
 
 /**
  * Requests the end of turn. This will add a 0 to the end of the state queue,
  * so all ongoing actions, like explosions are finished first before really switching turn.
- * @param action Pointer to an action.
+ * @param action, Pointer to an action.
  */
 void BattlescapeState::btnEndTurnClick(Action*)
 {
@@ -1255,7 +1257,7 @@ void BattlescapeState::btnEndTurnClick(Action*)
 
 /**
  * Aborts the game.
- * @param action Pointer to an action.
+ * @param action, Pointer to an action.
  */
 void BattlescapeState::btnAbortClick(Action*)
 {
@@ -1273,7 +1275,7 @@ void BattlescapeState::btnAbortClick(Action*)
 
 /**
  * Shows the selected soldier's info.
- * @param action Pointer to an action.
+ * @param action, Pointer to an action.
  */
 void BattlescapeState::btnStatsClick(Action* action)
 {
@@ -1291,8 +1293,8 @@ void BattlescapeState::btnStatsClick(Action* action)
 				|| (posY < (Camera::SCROLL_BORDER * action->getYScale()) && posY > 0)
 				|| posY > (_map->getHeight() - Camera::SCROLL_BORDER) * action->getYScale())
 			{
-				// To avoid handling this event as a click
-				// on the stats button when the mouse is on the scroll-border
+				// To avoid handling this event as a click on the stats
+				// button when the mouse is on the scroll-border
 				b = false;
 			}
 		}
@@ -1307,7 +1309,11 @@ void BattlescapeState::btnStatsClick(Action* action)
 
 		_battleGame->cancelCurrentAction(true);
 
-		if (b) popup(new UnitInfoState(_game, _save->getSelectedUnit(), this));
+		if (b)
+			popup(new UnitInfoState(
+								_game,
+								_save->getSelectedUnit(),
+								this));
 	}
 }
 
@@ -1355,14 +1361,18 @@ void BattlescapeState::btnRightHandItemClick(Action*)
 
 /**
  * Centers on the unit corresponding to this button.
- * @param action Pointer to an action.
+ * @param action, Pointer to an action.
  */
 void BattlescapeState::btnVisibleUnitClick(Action* action)
 {
 	int btnID = -1;
 
 	// got to find out which button was pressed
-	for (int i = 0; i < VISIBLE_MAX && btnID == -1; ++i)
+	for (int
+			i = 0;
+			i < VISIBLE_MAX
+				&& btnID == -1;
+			++i)
 	{
 		if (action->getSender() == _btnVisibleUnit[i])
 		{
@@ -1380,7 +1390,7 @@ void BattlescapeState::btnVisibleUnitClick(Action* action)
 
 /**
  * Launches the blaster bomb.
- * @param action Pointer to an action.
+ * @param action, Pointer to an action.
  */
 void BattlescapeState::btnLaunchClick(Action* action)
 {
@@ -1390,7 +1400,7 @@ void BattlescapeState::btnLaunchClick(Action* action)
 
 /**
  * Uses psionics.
- * @param action Pointer to an action.
+ * @param action, Pointer to an action.
  */
 void BattlescapeState::btnPsiClick(Action* action)
 {
@@ -1460,56 +1470,18 @@ bool BattlescapeState::playableUnitSelected()
  */
 void BattlescapeState::updateSoldierInfo()
 {
-	Log(LOG_INFO) << "BattlescapeState::updateSoldierInfo()";
+	//Log(LOG_INFO) << "BattlescapeState::updateSoldierInfo()";
 
-	for (int i = 0; i < VISIBLE_MAX; ++i) // remove red target indicators
+	for (int // remove red target indicators
+			i = 0;
+			i < VISIBLE_MAX;
+			++i)
 	{
 		_btnVisibleUnit[i]->setVisible(false);
 		_numVisibleUnit[i]->setVisible(false);
 
 		_visibleUnit[i] = 0;
 	}
-
-	// this should be done *after* !isPlayable section below.
-	// but it's here so I can see the pretty lights....
-	//
-	// Hidden Movement reveal_start:
-/*	BattleUnit* selectedUnit;
-	if (_save->getSelectedUnit())
-	{
-		selectedUnit = _save->getSelectedUnit();
-		//Log(LOG_INFO) << ". . selectedUnit ID " << selectedUnit->getId();
-	}
-	else // safety.
-	{
-		//Log(LOG_INFO) << ". . selectedUnit = 0 return";
-		return;
-	} */
-
-/*	_save->getTileEngine()->calculateFOV(selectedUnit);
-
-	int j = 0;
-	for (std::vector<BattleUnit*>::iterator
-			i = selectedUnit->getVisibleUnits()->begin();
-			i != selectedUnit->getVisibleUnits()->end()
-				&& j < VISIBLE_MAX;
-			++i)
-	{
-		_btnVisibleUnit[j]->setVisible(true);
-		_numVisibleUnit[j]->setVisible(true);
-		_visibleUnit[j] = *i;
-
-		++j;
-	} */
-
-//	_txtName->setText(selectedUnit->getName(_game->getLanguage(), false));
-
-/*	showPsiButton(
-			selectedUnit->getOriginalFaction() == FACTION_HOSTILE
-//				&& selectedUnit->getFaction() == FACTION_HOSTILE
-				&& selectedUnit->getStats()->psiSkill > 0); */
-	// Hidden Movement reveal_end.
-
 
 	_rank->clear();
 
@@ -1525,22 +1497,10 @@ void BattlescapeState::updateSoldierInfo()
 	_numTUSnap	->setVisible(false);
 
 
-/*	Soldier* s = _game->getSavedGame()->getSoldier(selectedUnit->getId());
-	if (s != 0)
-	{
-		SurfaceSet* texture = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
-		texture->getFrame(s->getRankSprite())->blit(_rank);
-	}
-	else
-	{
-		_rank->clear();
-	} */
-
-	// -= return =-  //
-	bool isPlayable = playableUnitSelected();	// not aLien or civilian; ie. xCom Soldier
+	bool isPlayable = playableUnitSelected(); // not aLien or civilian; ie. xCom Soldier
 	//Log(LOG_INFO) << ". isPlayable = " << isPlayable;
 
-	if (!isPlayable)							// not xCom Soldier; ie. aLien or civilian
+	if (!isPlayable) // not xCom Soldier; ie. aLien or civilian
 	{
 		_txtName->setText(L"");
 
@@ -1593,11 +1553,11 @@ void BattlescapeState::updateSoldierInfo()
 	if (_save->getSelectedUnit())
 	{
 		selectedUnit = _save->getSelectedUnit();
-		Log(LOG_INFO) << ". . selectedUnit ID " << selectedUnit->getId();
+		//Log(LOG_INFO) << ". . selectedUnit ID " << selectedUnit->getId();
 	}
 	else // safety.
 	{
-		Log(LOG_INFO) << ". . selectedUnit = 0 return";
+		//Log(LOG_INFO) << ". . selectedUnit = 0 return";
 		return;
 	}
 
@@ -1660,7 +1620,7 @@ void BattlescapeState::updateSoldierInfo()
 	{
 		int tuSnap = 0;
 		if (selectedUnit->getActiveHand() == "STR_RIGHT_HAND"
-			&& rtItem->getRules()->getBattleType() == BT_FIREARM)
+			&& rtItem->getRules()->getBattleType() == BT_FIREARM) // <- put in meleehits for these!!!
 		{
 			tuSnap = selectedUnit->getActionTUs(BA_SNAPSHOT, rtItem);
 			_numTUSnap->setVisible(true);
@@ -1668,7 +1628,7 @@ void BattlescapeState::updateSoldierInfo()
 		else if (selectedUnit->getActiveHand() == "STR_LEFT_HAND"
 			&& ltItem->getRules()->getBattleType() == BT_FIREARM)
 		{
-			tuSnap = selectedUnit->getActionTUs(BA_SNAPSHOT, ltItem);
+			tuSnap = selectedUnit->getActionTUs(BA_SNAPSHOT, ltItem); // <- put in meleehits for these!!!
 			_numTUSnap->setVisible(true);
 		}
 
@@ -1677,10 +1637,13 @@ void BattlescapeState::updateSoldierInfo()
 
 	if (rtItem)
 	{
-		rtItem->getRules()->drawHandSprite(_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"), _btnRightHandItem);
+		rtItem->getRules()->drawHandSprite(
+										_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"),
+										_btnRightHandItem);
 		_btnRightHandItem->setVisible(true);
 		if (rtItem->getRules()->getBattleType() == BT_FIREARM
-			&& (rtItem->needsAmmo() || rtItem->getRules()->getClipSize() > 0))
+			&& (rtItem->needsAmmo()
+				|| rtItem->getRules()->getClipSize() > 0))
 		{
 			_numAmmoRight->setVisible(true);
 			if (rtItem->getAmmoItem())
@@ -1692,10 +1655,13 @@ void BattlescapeState::updateSoldierInfo()
 
 	if (ltItem)
 	{
-		ltItem->getRules()->drawHandSprite(_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"), _btnLeftHandItem);
+		ltItem->getRules()->drawHandSprite(
+										_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"),
+										_btnLeftHandItem);
 		_btnLeftHandItem->setVisible(true);
 		if (ltItem->getRules()->getBattleType() == BT_FIREARM
-			&& (ltItem->needsAmmo() || ltItem->getRules()->getClipSize() > 0))
+			&& (ltItem->needsAmmo()
+				|| ltItem->getRules()->getClipSize() > 0))
 		{
 			_numAmmoLeft->setVisible(true);
 			if (ltItem->getAmmoItem())
@@ -1706,13 +1672,11 @@ void BattlescapeState::updateSoldierInfo()
 	}
 
 	showPsiButton(
-			selectedUnit->getOriginalFaction() == FACTION_HOSTILE
-//				&& selectedUnit->getFaction() == FACTION_HOSTILE
-				&& selectedUnit->getStats()->psiSkill > 0);
+				selectedUnit->getOriginalFaction() == FACTION_HOSTILE
+					&& selectedUnit->getStats()->psiSkill > 0);
 
-	Log(LOG_INFO) << "BattlescapeState::updateSoldierInfo() EXIT";
+	//Log(LOG_INFO) << "BattlescapeState::updateSoldierInfo() EXIT";
 }
-// kL_end.
 
 /**
  * Draws the kneel indicator.
@@ -1725,7 +1689,7 @@ void BattlescapeState::updateSoldierInfo()
 	square.w = 2;
 	square.h = 2;
 
-	_kneel->drawRect(&square, Palette::blockOffset(5)+12); // 32=red, blockOffset(5)=browns
+	_kneel->drawRect(&square, Palette::blockOffset(5)+12);
 }
 
 /**
@@ -1733,7 +1697,9 @@ void BattlescapeState::updateSoldierInfo()
  */
 void BattlescapeState::blinkVisibleUnitButtons()
 {
-	static int delta = 1, color = 34;	// lightest red +1
+	static int
+		delta = 1,
+		color = 34;
 
 	SDL_Rect square1;	// black border
 	square1.x = 0;
@@ -1791,7 +1757,11 @@ void BattlescapeState::handleItemClick(BattleItem* item)
 			|| _save->getSelectedUnit()->getOriginalFaction() == FACTION_HOSTILE)
 		{
 			_battleGame->getCurrentAction()->weapon = item;
-			popup(new ActionMenuState(_game, _battleGame->getCurrentAction(), _icons->getX(), _icons->getY() + 16));
+			popup(new ActionMenuState(
+									_game,
+									_battleGame->getCurrentAction(),
+									_icons->getX(),
+									_icons->getY() + 16));
 		}
 		else
 		{
@@ -2018,7 +1988,8 @@ void BattlescapeState::saveAIMap()
 			}
 			else
 			{
-				if (!t->getUnit()) SDL_FillRect(img, &r, SDL_MapRGB(img->format, 0x50, 0x50, 0x50)); // gray for blocked tile
+				if (!t->getUnit())
+					SDL_FillRect(img, &r, SDL_MapRGB(img->format, 0x50, 0x50, 0x50)); // gray for blocked tile
 			}
 
 			for (int z = tilePos.z; z >= 0; --z)
@@ -2469,7 +2440,7 @@ BattlescapeGame* BattlescapeState::getBattleGame()
 /**
  * Handler for the mouse moving over the icons, disabling the tile selection cube.
  */
-void BattlescapeState::mouseInIcons(Action* /* action */)
+void BattlescapeState::mouseInIcons(Action*)
 {
 	_mouseOverIcons = true;
 }
@@ -2477,7 +2448,7 @@ void BattlescapeState::mouseInIcons(Action* /* action */)
 /**
  * Handler for the mouse going out of the icons, enabling the tile selection cube.
  */
-void BattlescapeState::mouseOutIcons(Action* /* action */)
+void BattlescapeState::mouseOutIcons(Action*)
 {
 	_mouseOverIcons = false;
 }
@@ -2493,19 +2464,21 @@ bool BattlescapeState::getMouseOverIcons() const
 
 /**
  * Determines whether the player is allowed to press buttons.
- * Buttons are disabled in the middle of a shot, during the alien turn,
- * and while a player's units are panicking.
+ * Buttons are disabled in the middle of a shot, during
+ * the alien turn,and while a player's units are panicking.
  * The save button is an exception as we want to still be able to save if something
  * goes wrong during the alien turn, and submit the save file for dissection.
  * @param allowSaving, True if the help button was clicked.
  */
 bool BattlescapeState::allowButtons(bool allowSaving) const
 {
-	return ((allowSaving
-			|| _save->getSide() == FACTION_PLAYER
-			|| _save->getDebugMode())
-		&& (_battleGame->getPanicHandled() || firstInit)
-		&& _map->getProjectile() == 0);
+	return (
+			(allowSaving
+					|| _save->getSide() == FACTION_PLAYER
+					|| _save->getDebugMode())
+				&& (_battleGame->getPanicHandled()
+					|| firstInit)
+				&& _map->getProjectile() == 0);
 }
 
 /**

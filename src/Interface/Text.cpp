@@ -146,6 +146,7 @@ std::wstring Text::formatPercentage(int value)
 void Text::setBig()
 {
 	_font = _big;
+
 	processText();
 }
 
@@ -155,6 +156,7 @@ void Text::setBig()
 void Text::setSmall()
 {
 	_font = _small;
+
 	processText();
 }
 
@@ -196,12 +198,14 @@ void Text::initText(
 void Text::setText(const std::wstring &text)
 {
 	_text = text;
+
 	processText();
+
 	// If big text won't fit the space, try small text
 	if (_font == _big
 		&& !_wrap
 		&& getTextWidth() > getWidth()
-		&& _text[_text.size()-1] != L'.')
+		&& _text[_text.size() - 1] != L'.')
 	{
 		setSmall();
 	}
@@ -227,6 +231,7 @@ void Text::setWordWrap(bool wrap)
 	if (wrap != _wrap)
 	{
 		_wrap = wrap;
+
 		processText();
 	}
 }
@@ -334,7 +339,10 @@ Uint8 Text::getSecondaryColor() const
 int Text::getTextHeight() const
 {
 	int height = 0;
-	for (std::vector<int>::const_iterator i = _lineHeight.begin(); i != _lineHeight.end(); ++i)
+	for (std::vector<int>::const_iterator
+			i = _lineHeight.begin();
+			i != _lineHeight.end();
+			++i)
 	{
 		height += *i;
 	}
@@ -376,8 +384,7 @@ void Text::processText()
 
 	std::wstring* str = &_text;
 
-	// Use a separate string for wordwrapping text
-	if (_wrap)
+	if (_wrap) // Use a separate string for wordwrapping text
 	{
 		_wrappedText = _text;
 		str = &_wrappedText;
@@ -386,23 +393,26 @@ void Text::processText()
 	_lineWidth.clear();
 	_lineHeight.clear();
 
-	int width = 0, word = 0;
-	size_t space = 0;
 	bool start = true;
+	int
+		width = 0,
+		word = 0;
+	size_t space = 0;
+
 	Font* font = _font;
 
-	// Go through the text character by character
-	for (size_t
+	for (size_t // Go through the text character by character
 		c = 0;
 		c <= str->size();
 		++c)
 	{
-		if (c == str->size()
-			|| Font::isLinebreak((*str)[c])) // End of the line
+		if (c == str->size() // End of the line
+			|| Font::isLinebreak((*str)[c]))
 		{
 			// Add line measurements for alignment later
 			_lineWidth.push_back(width);
 			_lineHeight.push_back(font->getCharSize(L'\n').h);
+
 			width = 0;
 			word = 0;
 			start = true;
@@ -410,8 +420,7 @@ void Text::processText()
 			if (c == str->size())
 				break;
 
-			// \x02 marks start of small text
-			else if ((*str)[c] == 2)
+			else if ((*str)[c] == 2) // \x02 marks start of small text
 				font = _small;
 		}
 		else if (Font::isSpace((*str)[c])) // Keep track of spaces for wordwrapping
@@ -432,8 +441,7 @@ void Text::processText()
 			width += charWidth;
 			word += charWidth;
 
-			// Wordwrap if the last word doesn't fit the line
-			if (_wrap
+			if (_wrap // Wordwrap if the last word doesn't fit the line
 				&& width > getWidth()
 				&& !start)
 			{
@@ -489,7 +497,7 @@ int Text::getLineX(int line) const
 					x = 0;
 				break;
 				case ALIGN_CENTER:
-					x = (int)ceil((getWidth() - _lineWidth[line]) / 2.0);
+					x = static_cast<int>(ceil(static_cast<double>(getWidth() - _lineWidth[line]) / 2.0));
 				break;
 				case ALIGN_RIGHT:
 					x = getWidth() - 1 - _lineWidth[line];
@@ -503,7 +511,7 @@ int Text::getLineX(int line) const
 					x = getWidth() - 1;
 				break;
 				case ALIGN_CENTER:
-					x = getWidth() - (int)ceil((getWidth() - _lineWidth[line]) / 2.0);
+					x = getWidth() - static_cast<int>(ceil(static_cast<double>(getWidth() - _lineWidth[line]) / 2.0));
 				break;
 				case ALIGN_RIGHT:
 					x = _lineWidth[line];

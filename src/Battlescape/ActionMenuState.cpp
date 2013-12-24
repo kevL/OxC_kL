@@ -107,12 +107,12 @@ ActionMenuState::ActionMenuState(
 			|| (_action->weapon->getAmmoItem()
 				&& _action->weapon->getAmmoItem()->getRules()->isWaypoint()))
 //		if (_action->weapon->getAmmoItem()
-//			&& _action->weapon->getAmmoItem()->getRules()->isWaypoint())	// kL: That really screws BL; turns launch to scope.
+//			&& _action->weapon->getAmmoItem()->getRules()->isWaypoint()) // kL: That really screws BL; turns launch to scope.
 		{
 			addItem(BA_LAUNCH, "STR_LAUNCH_MISSILE", &id);
 		}
 //kL		else
-		if (_action->weapon->getAmmoItem())		// kL
+		if (_action->weapon->getAmmoItem()) // kL
 		{
 			if (weapon->getAccuracyAuto() != 0)
 			{
@@ -130,13 +130,13 @@ ActionMenuState::ActionMenuState(
 	}
 	else if (weapon->getBattleType() == BT_MELEE)
 	{
-		if (weapon->getDamageType() == DT_STUN)		// stun rod
+		if (weapon->getDamageType() == DT_STUN) // stun rod
 		{
 			addItem(BA_HIT, "STR_STUN", &id);
 		}
 		else
 		{
-			addItem(BA_HIT, "STR_HIT_MELEE", &id);	// melee weapon
+			addItem(BA_HIT, "STR_HIT_MELEE", &id); // melee weapon
 		}
 	}
 	/** special items */
@@ -169,22 +169,18 @@ ActionMenuState::~ActionMenuState()
 
 /**
  * Adds a new menu item for an action.
- * @param ba Action type.
- * @param name Action description.
- * @param id Pointer to the new item ID.
+ * @param ba, Action type.
+ * @param name, Action description.
+ * @param id, Pointer to the new item ID.
  */
 void ActionMenuState::addItem(
 		BattleActionType ba,
 		const std::string& name,
 		int* id)
 {
-	std::wstring s1, s2;
-	int acc = static_cast<int>(floor(_action->actor->getFiringAccuracy(ba, _action->weapon) * 100));
-
-	if (ba == BA_THROW)
-		acc = static_cast<int>(floor(_action->actor->getThrowingAccuracy() * 100));
-
-	int tu = _action->actor->getActionTUs(ba, _action->weapon);
+	std::wstring
+		s1,
+		s2;
 
 	if (ba == BA_THROW
 		|| ba == BA_AIMEDSHOT
@@ -193,15 +189,29 @@ void ActionMenuState::addItem(
 //kL		|| ba == BA_LAUNCH
 		|| ba == BA_HIT)
 	{
+		int acc = static_cast<int>(floor(_action->actor->getFiringAccuracy(
+																		ba,
+																		_action->weapon) * 100.0));
+		if (ba == BA_THROW)
+			acc = static_cast<int>(floor(_action->actor->getThrowingAccuracy() * 100.0));
+
 //kL		s1 = tr("STR_ACCURACY_SHORT").arg(Text::formatPercentage(acc));
-		s1 = tr("STR_ACCURACY_SHORT").arg(acc); // kL
+		s1 = tr("STR_ACCURACY_SHORT_KL").arg(acc); // kL
 	}
 
+
+	int tu = _action->actor->getActionTUs(ba, _action->weapon);
 	s2 = tr("STR_TIME_UNITS_SHORT").arg(tu);
-	_actionMenu[*id]->setAction(ba, tr(name), s1, s2, tu);
+
+	_actionMenu[*id]->setAction(
+							ba,
+							tr(name),
+							s1,
+							s2,
+							tu);
 	_actionMenu[*id]->setVisible(true);
 
-	(*id)++; // kL_note: huh.
+	(*id)++; // kL_note: huh. oh yeah: &reference
 }
 
 /**
@@ -237,8 +247,7 @@ void ActionMenuState::btnActionMenuItemClick(Action* action)
 	RuleItem* weapon = _action->weapon->getRules();
 	int btnID = -1;
 
-	// got to find out which button was pressed
-	for (size_t
+	for (size_t // got to find out which button was pressed
 			i = 0;
 			i < sizeof(_actionMenu) / sizeof(_actionMenu[0])
 				&& btnID == -1;
@@ -265,7 +274,11 @@ void ActionMenuState::btnActionMenuItemClick(Action* action)
 			}
 			else
 			{
-				_game->pushState(new PrimeGrenadeState(_game, _action, false, 0));
+				_game->pushState(new PrimeGrenadeState(
+													_game,
+													_action,
+													false,
+													0));
 			}
 		}
 		else if (_action->type == BA_USE
@@ -313,7 +326,10 @@ void ActionMenuState::btnActionMenuItemClick(Action* action)
 			{
 				_game->popState();
 
-				_game->pushState(new MedikitState(_game, targetUnit, _action));
+				_game->pushState(new MedikitState(
+												_game,
+												targetUnit,
+												_action));
 			}
 			else
 			{
@@ -329,7 +345,9 @@ void ActionMenuState::btnActionMenuItemClick(Action* action)
 			{
 				_game->popState();
 
-				_game->pushState(new ScannerState(_game, _action));
+				_game->pushState(new ScannerState(
+												_game,
+												_action));
 			}
 			else
 			{
@@ -340,7 +358,7 @@ void ActionMenuState::btnActionMenuItemClick(Action* action)
 		}
 		else if (_action->type == BA_LAUNCH)
 		{
-			if (_action->TU > _action->actor->getTimeUnits()) // check beforehand if we have enough time units
+			if (_action->TU > _action->actor->getTimeUnits())
 			{
 				_action->result = "STR_NOT_ENOUGH_TIME_UNITS";
 			}

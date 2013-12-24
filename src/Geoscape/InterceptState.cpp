@@ -77,15 +77,15 @@ InterceptState::InterceptState(
 	_txtBase	= new Text(81, 9, 162, 64);
 	_txtWeapons	= new Text(77, 17, 243, 56);
 
-	_lstCrafts	= new TextList(294, 72, 8, 74);
+	_lstCrafts	= new TextList(285, 72, 16, 74);
 
 	_btnCancel	= new TextButton(288, 16, 16, 151);
 
 
 	_game->setPalette(
-					_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)),
-					Palette::backPos,
-					16);
+				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)),
+				Palette::backPos,
+				16);
 
 	add(_window);
 	add(_txtTitle);
@@ -105,9 +105,15 @@ InterceptState::InterceptState(
 	_btnCancel->setColor(Palette::blockOffset(8)+5);
 	_btnCancel->setText(tr("STR_CANCEL"));
 	_btnCancel->onMouseClick((ActionHandler)& InterceptState::btnCancelClick);
-	_btnCancel->onKeyboardPress((ActionHandler)& InterceptState::btnCancelClick, (SDLKey)Options::getInt("keyOk"));
-	_btnCancel->onKeyboardPress((ActionHandler)& InterceptState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
-	_btnCancel->onKeyboardPress((ActionHandler)& InterceptState::btnCancelClick, (SDLKey)Options::getInt("keyGeoIntercept"));
+	_btnCancel->onKeyboardPress(
+						(ActionHandler)& InterceptState::btnCancelClick,
+						(SDLKey)Options::getInt("keyOk"));
+	_btnCancel->onKeyboardPress(
+						(ActionHandler)& InterceptState::btnCancelClick,
+						(SDLKey)Options::getInt("keyCancel"));
+	_btnCancel->onKeyboardPress(
+						(ActionHandler)& InterceptState::btnCancelClick,
+						(SDLKey)Options::getInt("keyGeoIntercept"));
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setAlign(ALIGN_CENTER);
@@ -131,9 +137,11 @@ InterceptState::InterceptState(
 	_lstCrafts->setColumns(4, 86, 60, 81, 45);
 	_lstCrafts->setSelectable(true);
 	_lstCrafts->setBackground(_window);
-	_lstCrafts->setMargin(8);
+//	_lstCrafts->setMargin(8);
 	_lstCrafts->onMouseClick((ActionHandler)& InterceptState::lstCraftsLeftClick);
-	_lstCrafts->onMouseClick((ActionHandler)& InterceptState::lstCraftsRightClick, SDL_BUTTON_RIGHT);
+	_lstCrafts->onMouseClick(
+					(ActionHandler)& InterceptState::lstCraftsRightClick,
+					SDL_BUTTON_RIGHT);
 
 	int row = 0;
 
@@ -145,6 +153,7 @@ InterceptState::InterceptState(
 		if (_base != 0 && *i != _base)
 			continue;
 
+
 		for (std::vector<Craft*>::iterator
 				j = (*i)->getCrafts()->begin();
 				j != (*i)->getCrafts()->end();
@@ -153,33 +162,21 @@ InterceptState::InterceptState(
 			std::wstringstream ss;
 
 			if ((*j)->getNumWeapons() > 0)
-			{
 				ss << L'\x01' << (*j)->getNumWeapons() << L'\x01';
-			}
 			else
-			{
 				ss << 0;
-			}
 
 			ss << "/";
 			if ((*j)->getNumSoldiers() > 0)
-			{
 				ss << L'\x01' << (*j)->getNumSoldiers() << L'\x01';
-			}
 			else
-			{
 				ss << 0;
-			}
 
 			ss << "/";
 			if ((*j)->getNumVehicles() > 0)
-			{
 				ss << L'\x01' << (*j)->getNumVehicles() << L'\x01';
-			}
 			else
-			{
 				ss << 0;
-			}
 
 			_crafts.push_back(*j);
 			_lstCrafts->addRow(
@@ -224,7 +221,11 @@ void InterceptState::lstCraftsLeftClick(Action*)
 	_game->popState();
 
 	Craft* c = _crafts[_lstCrafts->getSelectedRow()];
-	_game->pushState(new GeoscapeCraftState(_game, c, _globe, 0));
+	_game->pushState(new GeoscapeCraftState(
+										_game,
+										c,
+										_globe,
+										0));
 }
 
 /**

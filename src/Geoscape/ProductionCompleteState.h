@@ -30,11 +30,12 @@
 namespace OpenXcom
 {
 
-class TextButton;
-class Window;
-class Text;
 class Base;
 class GeoscapeState;
+class Text;
+class TextButton;
+class Window;
+
 
 /**
  * Window used to notify the player when
@@ -44,23 +45,34 @@ class ProductionCompleteState
 	:
 		public State
 {
+
 private:
 	Base* _base;
 	GeoscapeState* _state;
 
-	TextButton* _btnOk, * _btnOk5Secs, * _btnGotoBase;
-	Window* _window;
-	Text* _txtMessage;
 	ProdProgress _endType;
+	Text* _txtMessage;
+	TextButton
+		* _btnGotoBase,
+		* _btnOk,
+		* _btnOk5Secs;
+	Window* _window;
+
 
 	public:
 		/// Creates the Production Complete state.
-		ProductionCompleteState(Game* game, Base* base, const std::wstring& item, GeoscapeState* state, ProdProgress endType = PROGRESS_COMPLETE);
+		ProductionCompleteState(
+				Game* game,
+				Base* base,
+				const std::wstring& item,
+				GeoscapeState* state,
+				ProdProgress endType = PROGRESS_COMPLETE);
 		/// Cleans up the Production Complete state.
 		~ProductionCompleteState();
 
 		/// Updates the palette.
 		void init();
+
 		/// Handler for clicking the OK button.
 		void btnOkClick(Action* action);
 		/// Handler for clicking the Ok 5sec button.

@@ -31,6 +31,7 @@ namespace OpenXcom
 class ActionMenuItem;
 class Game;
 
+
 /**
  * Window that allows the player to select a battlescape action.
  */
@@ -38,15 +39,25 @@ class ActionMenuState
 	:
 		public State
 {
+
 private:
-	BattleAction* _action;
 	ActionMenuItem* _actionMenu[6];
+	BattleAction* _action;
+
 	/// Adds a new menu item for an action.
-	void addItem(BattleActionType ba, const std::string& name, int* id);
+	void addItem(
+			BattleActionType ba,
+			const std::string& name,
+			int* id);
+
 
 	public:
 		/// Creates the Action Menu state.
-		ActionMenuState(Game* game, BattleAction* action, int x, int y);
+		ActionMenuState(
+				Game* game,
+				BattleAction* action,
+				int x,
+				int y);
 		/// Cleans up the Action Menu state.
 		~ActionMenuState();
 

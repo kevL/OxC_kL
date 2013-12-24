@@ -25,13 +25,18 @@ namespace OpenXcom
 
 /**
  * Creates a new action.
- * @param scaleX Screen's X scaling factor.
- * @param scaleY Screen's Y scaling factor.
- * @param topBlackBand Screen's top black band height.
- * @param leftBlackBand Screen's left black band width.
- * @param ev Pointer to SDL_event.
+ * @param scaleX, Screen's X scaling factor.
+ * @param scaleY, Screen's Y scaling factor.
+ * @param topBlackBand, Screen's top black band height.
+ * @param leftBlackBand, Screen's left black band width.
+ * @param ev, Pointer to SDL_event.
  */
-Action::Action(SDL_Event* ev, double scaleX, double scaleY, int topBlackBand, int leftBlackBand)
+Action::Action(
+		SDL_Event* ev,
+		double scaleX,
+		double scaleY,
+		int topBlackBand,
+		int leftBlackBand)
 	:
 		_ev(ev),
 		_scaleX(scaleX),
@@ -77,10 +82,15 @@ double Action::getYScale() const
  * @param surfaceX Surface's X position.
  * @param surfaceY Surface's Y position.
  */
-void Action::setMouseAction(int mouseX, int mouseY, int surfaceX, int surfaceY)
+void Action::setMouseAction(
+		int mouseX,
+		int mouseY,
+		int surfaceX,
+		int surfaceY)
 {
 	_mouseX = mouseX - _leftBlackBand;
 	_mouseY = mouseY - _topBlackBand;
+
 	_surfaceX = surfaceX;
 	_surfaceY = surfaceY;
 }
@@ -141,7 +151,8 @@ double Action::getAbsoluteXMouse() const
 	if (_mouseX == -1)
 		return -1;
 
-	return _mouseX / _scaleX;
+	return static_cast<double>(_mouseX) / _scaleX;
+//	return _mouseX / _scaleX;
 }
 
 /**
@@ -154,7 +165,8 @@ double Action::getAbsoluteYMouse() const
 	if (_mouseY == -1)
 		return -1;
 
-	return _mouseY / _scaleY;
+	return static_cast<double>(_mouseY) / _scaleY;
+//	return _mouseY / _scaleY;
 }
 
 /**
@@ -167,7 +179,7 @@ double Action::getRelativeXMouse() const
 	if (_mouseX == -1)
 		return -1;
 
-	return _mouseX - _surfaceX * _scaleX;
+	return static_cast<double>(_mouseX) - (static_cast<double>(_surfaceX) * _scaleX);
 }
 
 /**
@@ -180,7 +192,7 @@ double Action::getRelativeYMouse() const
 	if (_mouseY == -1)
 		return -1;
 
-	return _mouseY - _surfaceY * _scaleY;
+	return static_cast<double>(_mouseY) - (static_cast<double>(_surfaceY) * _scaleY);
 }
 
 /**

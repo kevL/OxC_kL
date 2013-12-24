@@ -44,7 +44,11 @@ ActionMenuItem::ActionMenuItem(
 		int x,
 		int y)
 	:
-		InteractiveSurface(270, 40, x + 25, y - (id * 40)),
+		InteractiveSurface(
+				270,
+				40,
+				x + 25,
+				y - (id * 40)),
 		_id(id),
 		_highlighted(false),
 		_action(BA_NONE),
@@ -55,10 +59,14 @@ ActionMenuItem::ActionMenuItem(
 		* small = game->getResourcePack()->getFont("FONT_SMALL");
 	Language* lang = game->getLanguage();
 
-	_frame			= new Frame(getWidth(), getHeight(), 0, 0);
-	_txtDescription	= new Text(200, 20, 10, 13);
-	_txtAcc			= new Text(100, 20, 139, 13);
-	_txtTU			= new Text(80, 20, 210, 13);
+	_frame			= new Frame(
+							getWidth(),
+							getHeight(),
+							0,
+							0);
+	_txtDescription	= new Text(125, 20, 10, 13);
+	_txtAcc			= new Text(70, 20, 139, 13);
+	_txtTU			= new Text(50, 20, 210, 13);
 
 	_frame->setHighContrast(true);
 	_frame->setColor(Palette::blockOffset(0)+7);
@@ -95,11 +103,11 @@ ActionMenuItem::~ActionMenuItem()
 
 /**
  * Links with an action and fills in the text fields.
- * @param action The battlescape action.
- * @param description The actions description.
- * @param accuracy The actions accuracy, including the Acc> prefix.
- * @param timeunits The timeunits string, including the TUs> prefix.
- * @param tu The timeunits value.
+ * @param action, The battlescape action.
+ * @param description, The actions description.
+ * @param accuracy, The actions accuracy, including the Acc> prefix.
+ * @param timeunits, The timeunits string, including the TUs> prefix.
+ * @param tu, The timeunits value.
  */
 void ActionMenuItem::setAction(
 		BattleActionType action,
@@ -173,7 +181,7 @@ void ActionMenuItem::draw()
 void ActionMenuItem::mouseIn(Action* action, State* state)
 {
 	_highlighted = true;
-	_frame->setBackground(Palette::blockOffset(0) + 11);
+	_frame->setBackground(Palette::blockOffset(0)+10);
 
 	draw();
 	InteractiveSurface::mouseIn(action, state);

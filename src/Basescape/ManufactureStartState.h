@@ -44,17 +44,20 @@ class ManufactureStartState
 private:
 	Base* _base;
 	RuleManufacture* _item;
-	Window* _window;
-	TextButton* _btnCancel, * _btnStart;
-	Text* _txtTitle,
-		* _txtManHour,
+	Text
 		* _txtCost,
-		* _txtWorkSpace,
-		* _txtRequiredItemsTitle,
 		* _txtItemNameColumn,
-		* _txtUnitRequiredColumn,
-		* _txtUnitAvailableColumn;
+		* _txtManHour,
+		* _txtRequiredItemsTitle,
+		* _txtTitle,
+		* _txtWorkSpace,
+		* _txtUnitAvailableColumn,
+		* _txtUnitRequiredColumn;
+	TextButton
+		* _btnCancel,
+		* _btnStart;
 	TextList* _lstRequiredItems;
+	Window* _window;
 
 
 	public:

@@ -28,23 +28,15 @@
 namespace OpenXcom
 {
 
-/*kL const float PROGRESS_LIMIT_UNKNOWN	= 0.333f;
-const float PROGRESS_LIMIT_POOR		= 0.008f;
-const float PROGRESS_LIMIT_AVERAGE	= 0.14f;
-const float PROGRESS_LIMIT_GOOD		= 0.26f; */
-/*
-const float PROGRESS_LIMIT_UNKNOWN	= 0.2f;		// kL
-const float PROGRESS_LIMIT_POOR		= 0.1f;		// kL
-const float PROGRESS_LIMIT_AVERAGE	= 0.25f;	// kL
-const float PROGRESS_LIMIT_GOOD		= 0.5f;		// kL
-*/
-const float PROGRESS_LIMIT_UNKNOWN	= 0.09f;		// kL
-const float PROGRESS_LIMIT_POOR		= 0.23f;		// kL
-const float PROGRESS_LIMIT_AVERAGE	= 0.55f;		// kL
-const float PROGRESS_LIMIT_GOOD		= 0.86f;		// kL
+const float PROGRESS_LIMIT_UNKNOWN	= 0.09f;
+const float PROGRESS_LIMIT_POOR		= 0.23f;
+const float PROGRESS_LIMIT_AVERAGE	= 0.55f;
+const float PROGRESS_LIMIT_GOOD		= 0.86f;
 
 
-ResearchProject::ResearchProject(RuleResearch* project, int cost)
+ResearchProject::ResearchProject(
+		RuleResearch* project,
+		int cost)
 	:
 		_project(project),
 		_assigned(0),
@@ -164,90 +156,86 @@ YAML::Node ResearchProject::save() const
  * Return a string describing Research progress.
  * @return, A string describing Research progress.
 */
-/*kL std::string ResearchProject::getResearchProgress() const
+/*kL
+std::string ResearchProject::getResearchProgress() const
 {
-//kL	float progress = (float)getSpent() / getRules()->getCost();
-	float progress = (float)getSpent() / (float)getRules()->getCost();	// kL
-	Log(LOG_INFO) << "ResearchProject::getResearchProgress(), progress = " << progress;
+	float progress = (float)getSpent() / getRules()->getCost();
 
 	if (getAssigned() == 0)
 	{
-		Log(LOG_INFO) << ". . none assigned.";
 		return "STR_NONE";
 	}
 	else if (progress < PROGRESS_LIMIT_UNKNOWN) // 0.2f
 	{
-		Log(LOG_INFO) << ". . progress unknown.";
 		return "STR_UNKNOWN";
 	}
 	else
 	{
-//kL		float rating = (float)getAssigned();
-//kL		rating /= getRules()->getCost();
-		float rating = (float)getAssigned() / (float)getRules()->getCost();		// kL
-		Log(LOG_INFO) << ". . . . rating = " << rating;
+		float rating = (float)getAssigned();
+		rating /= getRules()->getCost();
 
 		if (rating < PROGRESS_LIMIT_POOR) // 0.1f
 		{
-			Log(LOG_INFO) << ". . . . . . progress < POOR";
 			return "STR_POOR";
 		}
 		else if (rating < PROGRESS_LIMIT_AVERAGE) // 0.25f
 		{
-			Log(LOG_INFO) << ". . . . . . progress < AVERAGE";
 			return "STR_AVERAGE";
 		}
 		else if (rating < PROGRESS_LIMIT_GOOD) // 0.5f
 		{
-			Log(LOG_INFO) << ". . . . . . progress < GOOD";
 			return "STR_GOOD";
 		}
 
-		Log(LOG_INFO) << ". . . . . . progress = EXCELLENT"; // > 0.5f
 		return "STR_EXCELLENT";
 	}
 } */
 
 // kL_begin: ResearchProject::getResearchProgress(), rewrite so it makes sense.
+/**
+ * Return a string describing Research progress.
+ * @return, A string describing Research progress.
+*/
 std::string ResearchProject::getResearchProgress() const
 {
-//	float progress = static_cast<float>(getSpent()) / static_cast<float>(getRules()->getCost());
 	float progress = static_cast<float>(getSpent()) / static_cast<float>(getCost());
-
-//	Log(LOG_INFO) << "ResearchProject::getResearchProgress(), progress = " << progress;
-//	Log(LOG_INFO) << "ResearchProject::getResearchProgress(), getSpent() = " << getSpent();
-//	Log(LOG_INFO) << "ResearchProject::getResearchProgress(), getRules()->getCost() = " << getRules()->getCost();
 
 	if (getAssigned() == 0)
 	{
-//		Log(LOG_INFO) << ". . none assigned.";
 		return "STR_NONE";
 	}
 	else if (progress < PROGRESS_LIMIT_UNKNOWN)		// 0.1f
 	{
-//		Log(LOG_INFO) << ". . progress < unknown.";
 		return "STR_UNKNOWN";
 	}
 	else if (progress < PROGRESS_LIMIT_POOR)		// 0.2f
 	{
-//		Log(LOG_INFO) << ". . . . . . progress < POOR";
 		return "STR_POOR";
 	}
 	else if (progress < PROGRESS_LIMIT_AVERAGE)		// 0.5f
 	{
-//		Log(LOG_INFO) << ". . . . . . progress < AVERAGE";
 		return "STR_AVERAGE";
 	}
 	else if (progress < PROGRESS_LIMIT_GOOD)		// 0.8f
 	{
-//		Log(LOG_INFO) << ". . . . . . progress < GOOD";
 		return "STR_GOOD";
 	}
 	else											// > 0.8f
 	{
-//		Log(LOG_INFO) << ". . . . . . progress = EXCELLENT";
 		return "STR_EXCELLENT";
 	}
+}
+
+/**
+ * Get a string of cost completed as a per cent value.
+ */
+std::wstring ResearchProject::getCostCompleted() const
+{
+	float fProg = static_cast<float>(getSpent()) / static_cast<float>(getCost());
+	int iProg = static_cast<int>(fProg * 100.f); // truncate to 2 places
+	std::wstring sProgress = std::to_wstring(static_cast<long long>(iProg));
+
+	return sProgress;
 } // kL_end.
 
 }

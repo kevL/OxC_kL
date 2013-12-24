@@ -1602,7 +1602,7 @@ void Map::cacheUnit(BattleUnit* unit)
 					_res->getSurfaceSet(unit->getArmor()->getSpriteSheet()),
 					_res->getSurfaceSet("HANDOB.PCK"),
 					_res->getSurfaceSet("HANDOB2.PCK"));
-			Log(LOG_INFO) << ". . setAnimationFrame() " << _animFrame;
+			//Log(LOG_INFO) << ". . setAnimationFrame() " << _animFrame;
 			unitSprite->setAnimationFrame(_animFrame);
 			//Log(LOG_INFO) << ". . clear()";
 			cache->clear();

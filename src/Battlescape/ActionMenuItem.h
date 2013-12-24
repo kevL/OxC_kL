@@ -83,7 +83,10 @@ private:
 		int getTUs() const;
 
 		/// Sets the palettes.
-		void setPalette(SDL_Color* colors, int firstcolor, int ncolors);
+		void setPalette(
+				SDL_Color* colors,
+				int firstcolor,
+				int ncolors);
 		/// Redraws it.
 		void draw();
 

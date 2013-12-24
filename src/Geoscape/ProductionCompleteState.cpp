@@ -51,7 +51,12 @@ namespace OpenXcom
  * @param state Pointer to the Geoscape state.
  * @param endType What ended the production.
  */
-ProductionCompleteState::ProductionCompleteState(Game* game, Base* base, const std::wstring& item, GeoscapeState* state, ProdProgress endType)
+ProductionCompleteState::ProductionCompleteState(
+		Game* game,
+		Base* base,
+		const std::wstring& item,
+		GeoscapeState* state,
+		ProdProgress endType)
 	:
 		State(game),
 		_base(base),
@@ -63,18 +68,21 @@ ProductionCompleteState::ProductionCompleteState(Game* game, Base* base, const s
 	_window			= new Window(this, 256, 160, 32, 20, POPUP_BOTH);
 	_txtMessage		= new Text(246, 110, 37, 35);
 
-	_btnOk			= new TextButton(72, 16, 48, 154);
+	_btnGotoBase	= new TextButton(72, 16, 48, 154);
 	_btnOk5Secs		= new TextButton(72, 16, 124, 154);
-	_btnGotoBase	= new TextButton(72, 16, 200, 154);
+	_btnOk			= new TextButton(72, 16, 200, 154);
 
 
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
+	_game->setPalette(
+				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)),
+				Palette::backPos,
+				16);
 
 	add(_window);
 	add(_txtMessage);
-	add(_btnOk);
-	add(_btnOk5Secs);
 	add(_btnGotoBase);
+	add(_btnOk5Secs);
+	add(_btnOk);
 
 	centerAllSurfaces();
 
@@ -88,7 +96,7 @@ ProductionCompleteState::ProductionCompleteState(Game* game, Base* base, const s
 	_btnOk->onKeyboardPress((ActionHandler)& ProductionCompleteState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
 
 	_btnOk5Secs->setColor(Palette::blockOffset(8)+5);
-	_btnOk5Secs->setText(tr("STR_OK_5_SECS"));
+	_btnOk5Secs->setText(tr("STR_OK_5_SECONDS"));
 	_btnOk5Secs->onMouseClick((ActionHandler)& ProductionCompleteState::btnOk5SecsClick);
 	_btnOk5Secs->onKeyboardPress((ActionHandler)& ProductionCompleteState::btnOk5SecsClick, (SDLKey)Options::getInt("keyGeoSpeed1"));
 
@@ -114,16 +122,20 @@ ProductionCompleteState::ProductionCompleteState(Game* game, Base* base, const s
 	switch (_endType)
 	{
 		case PROGRESS_CONSTRUCTION:
-			s = tr("STR_CONSTRUCTION_OF_FACILITY_AT_BASE_IS_COMPLETE").arg(item).arg(base->getName());
+			s = tr("STR_CONSTRUCTION_OF_FACILITY_AT_BASE_IS_COMPLETE")
+					.arg(item).arg(base->getName());
 		break;
 		case PROGRESS_COMPLETE:
-			s = tr("STR_PRODUCTION_OF_ITEM_AT_BASE_IS_COMPLETE").arg(item).arg(base->getName());
+			s = tr("STR_PRODUCTION_OF_ITEM_AT_BASE_IS_COMPLETE")
+					.arg(item).arg(base->getName());
 		break;
 		case PROGRESS_NOT_ENOUGH_MONEY:
-			s = tr("STR_NOT_ENOUGH_MONEY_TO_PRODUCE_ITEM_AT_BASE").arg(item).arg(base->getName());
+			s = tr("STR_NOT_ENOUGH_MONEY_TO_PRODUCE_ITEM_AT_BASE")
+					.arg(item).arg(base->getName());
 		break;
 		case PROGRESS_NOT_ENOUGH_MATERIALS:
-			s = tr("STR_NOT_ENOUGH_SPECIAL_MATERIALS_TO_PRODUCE_ITEM_AT_BASE").arg(item).arg(base->getName());
+			s = tr("STR_NOT_ENOUGH_SPECIAL_MATERIALS_TO_PRODUCE_ITEM_AT_BASE")
+					.arg(item).arg(base->getName());
 		break;
 
 		default:
@@ -145,7 +157,10 @@ ProductionCompleteState::~ProductionCompleteState()
  */
 void ProductionCompleteState::init()
 {
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
+	_game->setPalette(
+				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)),
+				Palette::backPos,
+				16);
 }
 
 /**
@@ -180,11 +195,16 @@ void ProductionCompleteState::btnGotoBaseClick(Action*)
 
 	if (_endType != PROGRESS_CONSTRUCTION)
 	{
-		_game->pushState(new ManufactureState(_game, _base));
+		_game->pushState(new ManufactureState(
+											_game,
+											_base));
 	}
 	else
 	{
-		_game->pushState(new BasescapeState(_game, _base, _state->getGlobe()));
+		_game->pushState(new BasescapeState(
+										_game,
+										_base,
+										_state->getGlobe()));
 	}
 }
 

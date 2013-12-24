@@ -66,7 +66,11 @@ MiniMapView::MiniMapView(
 		Camera* camera,
 		SavedBattleGame* battleGame)
 	:
-		InteractiveSurface(w, h, x, y),
+		InteractiveSurface(
+				w,
+				h,
+				x,
+				y),
 		_game(game),
 		_camera(camera),
 		_battleGame(battleGame),
@@ -188,40 +192,39 @@ void MiniMapView::draw()
 
 	this->unlock();
 
-	// kL. looks like the crosshairs for the MiniMap
-	int centerX = getWidth() / 2;
-	int centerY = getHeight() / 2;
+
+	// kL_note: looks like the crosshairs for the MiniMap
+	int centerX = (getWidth() / 2) - 1;
+	int centerY = (getHeight() / 2) - 1;
 	int xOffset = CELL_WIDTH / 2;
 	int yOffset = CELL_HEIGHT / 2;
 
 	Uint8 color = 1 + _frame * 3;
 
-/*kL	drawLine(centerX - CELL_WIDTH, centerY - CELL_HEIGHT,
-		 centerX - xOffset, centerY - yOffset,
-		 color); // top left
-	drawLine(centerX + xOffset, centerY - yOffset,
-		 centerX + CELL_WIDTH, centerY - CELL_HEIGHT,
-		 color); // top right
-	drawLine(centerX - CELL_WIDTH, centerY + CELL_HEIGHT,
-		 centerX - xOffset, centerY + yOffset,
-		 color); // bottom left
-	drawLine(centerX + CELL_WIDTH, centerY + CELL_HEIGHT,
-		 centerX + xOffset, centerY + yOffset,
-		 color); // bottom right
-*/
-	// kL begin:
-	drawLine(centerX - CELL_WIDTH -1, centerY - CELL_HEIGHT -1,
-		 centerX - xOffset -1, centerY - yOffset -1,
-		 color); // top left
-	drawLine(centerX + xOffset -1, centerY - yOffset -1,
-		 centerX + CELL_WIDTH -1, centerY - CELL_HEIGHT -1,
-		 color); // top right
-	drawLine(centerX - CELL_WIDTH -1, centerY + CELL_HEIGHT -1,
-		 centerX - xOffset -1, centerY + yOffset -1,
-		 color); // bottom left
-	drawLine(centerX + CELL_WIDTH -1, centerY + CELL_HEIGHT -1,
-		 centerX + xOffset -1, centerY + yOffset -1,
-		 color); // bottom right // kL end.
+	drawLine( // top left
+			centerX - CELL_WIDTH,
+			centerY - CELL_HEIGHT,
+			centerX - xOffset,
+			centerY - yOffset,
+			color);
+	drawLine( // top right
+			centerX + xOffset,
+			centerY - yOffset,
+			centerX + CELL_WIDTH,
+			centerY - CELL_HEIGHT,
+			color);
+	drawLine( // bottom left
+			centerX - CELL_WIDTH,
+			centerY + CELL_HEIGHT,
+			centerX - xOffset,
+			centerY + yOffset,
+			color);
+	drawLine( // bottom right
+			centerX + CELL_WIDTH,
+			centerY + CELL_HEIGHT,
+			centerX + xOffset,
+			centerY + yOffset,
+			color);
 }
 
 /**
@@ -257,8 +260,7 @@ void MiniMapView::mousePress(Action* action, State* state)
 {
 	InteractiveSurface::mousePress(action, state);
 
-//kL	if (((Uint8) - 1) != _battleGame->getDragButton())
-	if (_battleGame->getDragButton() != -1)		// kL
+	if (_battleGame->getDragButton() != -1)
 	{
 		if (action->getDetails()->button.button == _battleGame->getDragButton())
 		{
@@ -433,8 +435,10 @@ void MiniMapView::mouseOver(Action* action, State* state)
 		}
 		else
 		{
-			newX = posBeforeMouseScrolling.x - static_cast<int>(static_cast<double>(totalMouseMoveX) / action->getXScale() / 4.);
-			newY = posBeforeMouseScrolling.y - static_cast<int>(static_cast<double>(totalMouseMoveY) / action->getYScale() / 4.);
+			newX = posBeforeMouseScrolling.x - static_cast<int>(
+													static_cast<double>(totalMouseMoveX) / action->getXScale() / 4.0);
+			newY = posBeforeMouseScrolling.y - static_cast<int>(
+													static_cast<double>(totalMouseMoveY) / action->getYScale() / 4.0);
 
 			// Keep the limits...
 			if (newX < -1) newX = -1;
@@ -447,7 +451,10 @@ void MiniMapView::mouseOver(Action* action, State* state)
 		}
 
 		// Scrolling
-		_camera->centerOnPosition(Position(newX,newY,_camera->getViewLevel()));
+		_camera->centerOnPosition(Position(
+										newX,
+										newY,
+										_camera->getViewLevel()));
 		_redraw = true;
 
 		if (_battleGame->isDragInverted())

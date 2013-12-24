@@ -34,6 +34,7 @@ class TextButton;
 class TextList;
 class Window;
 
+
 /**
  * Manufacture screen that lets the player manage
  * all the manufacturing operations of a base.
@@ -42,10 +43,9 @@ class ManufactureState
 	:
 		public State
 {
+
 private:
 	Base* _base;
-	TextButton* _btnNew, * _btnOk;
-	Window* _window;
 	Text* _txtTitle,
 		* _txtAvailable,
 		* _txtAllocated,
@@ -56,13 +56,22 @@ private:
 		* _txtProduced,
 		* _txtCost,
 		* _txtTimeLeft;
+	TextButton
+		* _btnNew,
+		* _btnOk;
 	TextList* _lstManufacture;	
 	SDL_Color _oldPalette[256];
+	Window* _window;
+
+	///
 	void lstManufactureClick(Action* action);
+
 
 	public:
 		/// Creates the Manufacture state.
-		ManufactureState(Game* game, Base* base);
+		ManufactureState(
+				Game* game,
+				Base* base);
 		/// Cleans up the Manufacture state.
 		~ManufactureState();
 

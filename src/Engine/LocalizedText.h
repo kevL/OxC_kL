@@ -16,11 +16,13 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_LOCALIZEDTEXT_H
 #define OPENXCOM_LOCALIZEDTEXT_H
 
-#include <string>
 #include <sstream>
+#include <string>
+
 
 /// @file
 
@@ -35,6 +37,8 @@
 #    define OX_REQUIRED_RESULT
 #  endif
 #endif
+
+
 namespace OpenXcom
 {
 
@@ -44,50 +48,72 @@ namespace OpenXcom
  */
 class LocalizedText
 {
-public:
-	/// Create from existing unicode string.
-	LocalizedText(const std::wstring &);
-	/// Create the empty string.
-	LocalizedText() : _text(L""), _nextArg(1) { /* Empty by design. */ }
-	/// Return constant wide string.
-	operator std::wstring const& () const OX_REQUIRED_RESULT;
-	/// Return the UTF-8 representation of this string.
-	std::string asUTF8() const OX_REQUIRED_RESULT;
-	/// Get a pointer to underlying wchat_t data.
-	const wchar_t *c_str() const OX_REQUIRED_RESULT { return _text.c_str(); }
 
-	// Argument substitution.
-	/// Replace next argument.
-	LocalizedText arg(std::wstring const &) const OX_REQUIRED_RESULT;
-	/// Replace next argument.
-	LocalizedText &arg(std::wstring const &) OX_REQUIRED_RESULT;
-	/// Replace next argument.
-	template <typename T> LocalizedText arg(T) const OX_REQUIRED_RESULT;
-	/// Replace next argument.
-	template <typename T> LocalizedText &arg(T) OX_REQUIRED_RESULT;
 private:
-	std::wstring _text; ///< The actual localized text.
-	unsigned _nextArg; ///< The next argument ID.
-	LocalizedText(const std::wstring &, unsigned);
+	unsigned _nextArg;	// the next argument ID.
+	std::wstring _text;	// the actual localized text.
+
+	LocalizedText(
+			const std::wstring &,
+			unsigned);
+
+
+	public:
+		/// Create from existing unicode string.
+		LocalizedText(const std::wstring &);
+		/// Create the empty string.
+		LocalizedText()
+			:
+				_text(L""),
+				_nextArg(1)
+		{
+		}
+
+		/// Return constant wide string.
+		operator std::wstring const& () const OX_REQUIRED_RESULT;
+		/// Return the UTF-8 representation of this string.
+		std::string asUTF8() const OX_REQUIRED_RESULT;
+		/// Get a pointer to underlying wchat_t data.
+		const wchar_t* c_str() const OX_REQUIRED_RESULT
+		{
+			return _text.c_str();
+		}
+
+		// Argument substitution.
+		/// Replace next argument.
+		LocalizedText arg(std::wstring const &) const OX_REQUIRED_RESULT;
+		/// Replace next argument.
+		LocalizedText& arg(std::wstring const &) OX_REQUIRED_RESULT;
+		/// Replace next argument.
+		template <typename T> LocalizedText arg(T) const OX_REQUIRED_RESULT;
+		/// Replace next argument.
+		template <typename T> LocalizedText& arg(T) OX_REQUIRED_RESULT;
 };
+
 
 /**
  * Create a LocalizedText from a localized std::wstring.
  */
-inline LocalizedText::LocalizedText(const std::wstring &text)
-  : _text(text), _nextArg(0)
+inline LocalizedText::LocalizedText(const std::wstring& text)
+	:
+		_text(text),
+		_nextArg(0)
 {
-	// Empty by design.
 }
+
 
 /**
  * Create a LocalizedText with some arguments already replaced.
  */
-inline LocalizedText::LocalizedText(const std::wstring &text, unsigned replaced)
-  : _text(text), _nextArg(replaced + 1)
+inline LocalizedText::LocalizedText(
+		const std::wstring &text,
+		unsigned replaced)
+	:
+		_text(text),
+		_nextArg(replaced + 1)
 {
-	// Empty by design.
 }
+
 
 /**
  * Typecast to constant std::wstring reference.
@@ -98,11 +124,12 @@ inline LocalizedText::operator std::wstring const& () const
 	return _text;
 }
 
+
 /**
  * Replace the next argument placeholder with @a val.
- * @tparam T The type of the replacement value. It should be streamable to std::owstringstream.
- * @param val The value to place in the next placeholder's position.
- * @return A translated string with all occurences of the marker replaced by @a val.
+ * @tparam T, The type of the replacement value. It should be streamable to std::owstringstream.
+ * @param val, The value to place in the next placeholder's position.
+ * @return, A translated string with all occurences of the marker replaced by @a val.
  */
 template <typename T>
 LocalizedText LocalizedText::arg(T val) const
@@ -110,19 +137,34 @@ LocalizedText LocalizedText::arg(T val) const
 	std::wostringstream os;
 	os << '{' << _nextArg << '}';
 	std::wstring marker(os.str());
+
 	size_t pos = _text.find(marker);
 	if (std::string::npos == pos)
 		return *this;
+
 	std::wstring ntext(_text);
 	os.str(L"");
 	os << val;
 	std::wstring tval(os.str());
-	for (/*empty*/ ; std::wstring::npos != pos; pos = ntext.find(marker, pos + tval.length()))
+
+	for (
+			;
+			std::wstring::npos != pos;
+			pos = ntext.find(
+							marker,
+							pos + tval.length()))
 	{
-		ntext.replace(pos, marker.length(), tval);
+		ntext.replace(
+					pos,
+					marker.length(),
+					tval);
 	}
-	return LocalizedText(ntext, _nextArg);
+
+	return LocalizedText(
+						ntext,
+						_nextArg);
 }
+
 
 /**
  * Replace the next argument placeholder with @a val.
@@ -136,27 +178,44 @@ LocalizedText &LocalizedText::arg(T val)
 	std::wostringstream os;
 	os << '{' << _nextArg << '}';
 	std::wstring marker(os.str());
+
 	size_t pos = _text.find(marker);
 	if (std::string::npos != pos)
 	{
 		os.str(L"");
 		os << val;
 		std::wstring tval(os.str());
-		for (/*empty*/ ; std::wstring::npos != pos; pos = _text.find(marker, pos + tval.length()))
+
+		for (
+				;
+				std::wstring::npos != pos;
+				pos = _text.find(
+								marker,
+								pos + tval.length()))
 		{
-			_text.replace(pos, marker.length(), tval);
+			_text.replace(
+						pos,
+						marker.length(),
+						tval);
 		}
+
 		++_nextArg;
 	}
+
 	return *this;
 }
 
+
 /// Allow streaming of LocalizedText objects.
-inline std::wostream &operator<<(std::wostream &os, const LocalizedText &txt)
+inline std::wostream &operator<<(
+							std::wostream &os,
+							const LocalizedText &txt)
 {
-	os << static_cast<std::wstring const &>(txt);
+	os << static_cast<std::wstring const&>(txt);
+
 	return os;
 }
+
 }
 
 #endif

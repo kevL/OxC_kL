@@ -1143,8 +1143,8 @@ const UfoTrajectory* Ruleset::getUfoTrajectory(const std::string& id) const
 
 /**
  * Returns the rules for the specified alien mission.
- * @param id Alien mission type.
- * @return Rules for the alien mission.
+ * @param id, Alien mission type.
+ * @return, Rules for the alien mission.
  */
 const RuleAlienMission* Ruleset::getAlienMission(const std::string& id) const
 {
@@ -1165,7 +1165,8 @@ const std::vector<std::string>& Ruleset::getAlienMissionList() const
 }
 
 
-#define CITY_EPSILON 0.00000000000001 // compensate for slight coordinate change
+//kL #define CITY_EPSILON 0.00000000000001 // compensate for slight coordinate change
+#define CITY_EPSILON 0.0000000001 // kL
 
 /**
  * @brief Match a city based on coordinates.
@@ -1177,12 +1178,10 @@ class EqualCoordinates
 {
 
 private:
-
 	double _lon, _lat;
 
 
 	public:
-
 		/// Remembers the coordinates.
 		EqualCoordinates(double lon, double lat)
 			:
@@ -1201,11 +1200,11 @@ private:
 		}
 };
 
+
 /**
- * Finds the city at coordinates @a lon, @a lat.
- * The search will only match exact coordinates.
- * @param lon The longtitude.
- * @param lat The latitude.
+ * Finds the city at coordinates @a lon, @a lat. The search will only match exact coordinates.
+ * @param lon, The longtitude.
+ * @param lat, The latitude.
  * @return A pointer to the city information, or 0 if no city was found.
  */
 const City* Ruleset::locateCity(double lon, double lat) const

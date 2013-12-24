@@ -1822,9 +1822,15 @@ void GeoscapeState::time1Hour()
 	Log(LOG_INFO) << "GeoscapeState::time1Hour()";
 
 	// Handle craft maintenance
-	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
+	for (std::vector<Base*>::iterator
+			i = _game->getSavedGame()->getBases()->begin();
+			i != _game->getSavedGame()->getBases()->end();
+			++i)
 	{
-		for (std::vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); ++j)
+		for (std::vector<Craft*>::iterator
+				j = (*i)->getCrafts()->begin();
+				j != (*i)->getCrafts()->end();
+				++j)
 		{
 			if ((*j)->getStatus() == "STR_REPAIRS")
 			{
@@ -1839,7 +1845,10 @@ void GeoscapeState::time1Hour()
 									   .arg(tr(s))
 									   .arg((*j)->getName(_game->getLanguage()))
 									   .arg((*i)->getName());
-					popup(new CraftErrorState(_game, this, msg));
+					popup(new CraftErrorState(
+											_game,
+											this,
+											msg));
 				}
 			}
 		}
@@ -1847,9 +1856,15 @@ void GeoscapeState::time1Hour()
 
 	// Handle transfers
 	bool window = false;
-	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
+	for (std::vector<Base*>::iterator
+			i = _game->getSavedGame()->getBases()->begin();
+			i != _game->getSavedGame()->getBases()->end();
+			++i)
 	{
-		for (std::vector<Transfer*>::iterator j = (*i)->getTransfers()->begin(); j != (*i)->getTransfers()->end(); ++j)
+		for (std::vector<Transfer*>::iterator
+				j = (*i)->getTransfers()->begin();
+				j != (*i)->getTransfers()->end();
+				++j)
 		{
 			(*j)->advance(*i);
 			if (!window
@@ -1862,7 +1877,9 @@ void GeoscapeState::time1Hour()
 
 	if (window)
 	{
-		popup(new ItemsArrivingState(_game, this));
+		popup(new ItemsArrivingState(
+								_game,
+								this));
 	}
 
 	// Handle Production
@@ -1877,7 +1894,10 @@ void GeoscapeState::time1Hour()
 				j != (*i)->getProductions().end();
 				++j)
 		{
-			toRemove[(*j)] = (*j)->step((*i), _game->getSavedGame(), _game->getRuleset());
+			toRemove[*j] = (*j)->step(
+									*i,
+									_game->getSavedGame(),
+									_game->getRuleset());
 		}
 
 		for (std::map<Production*, ProdProgress>::iterator
@@ -1887,8 +1907,6 @@ void GeoscapeState::time1Hour()
 		{
 			if (j->second > PROGRESS_NOT_COMPLETE)
 			{
-//				timerReset(); // kL_note: was removed.
-
 				(*i)->removeProduction(j->first);
 				popup(new ProductionCompleteState(
 												_game,
@@ -1897,15 +1915,15 @@ void GeoscapeState::time1Hour()
 													j->first->getRules()->getName()),
 													this,
 													j->second));
-//Old				popup(new ProductionCompleteState(_game, tr(j->first->getRules()->getName()), (*i)->getName(), j->second));
 			}
 		}
 	}
 }
 
+
 /**
  * This class will attempt to generate a supply mission for a base.
- * Each alien base has a 6/101 chance to generate a supply mission.
+ * Each alien base has a 4% chance to generate a supply mission.
  */
 class GenerateSupplyMission
 	:
@@ -1934,12 +1952,12 @@ private:
 
 /**
  * Check and create supply mission for the given base.
- * There is a 6/101 chance of the mission spawning. -> 6/100 (kL)
+ * There is a 4% chance of the mission spawning.
  * @param base A pointer to the alien base.
  */
 void GenerateSupplyMission::operator()(const AlienBase* base) const
 {
-	if (RNG::percent(5))
+	if (RNG::percent(4))
 	{
 		// Spawn supply mission for this base.
 		const RuleAlienMission& rule = *_ruleset.getAlienMission("STR_ALIEN_SUPPLY");
@@ -1954,6 +1972,7 @@ void GenerateSupplyMission::operator()(const AlienBase* base) const
 		_save.getAlienMissions().push_back(mission);
 	}
 }
+
 
 /**
  * Takes care of any game logic that has to

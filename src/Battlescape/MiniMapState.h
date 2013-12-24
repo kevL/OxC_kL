@@ -28,10 +28,11 @@ namespace OpenXcom
 
 class Camera;
 class InteractiveSurface;
-class Text;
 class MiniMapView;
-class Timer;
 class SavedBattleGame;
+class Text;
+class Timer;
+
 
 /**
  * The MiniMap is an overhead representation of the Battlescape map;
@@ -41,6 +42,7 @@ class MiniMapState
 	:
 		public State
 {
+
 private:
 	InteractiveSurface* _surface;
 	MiniMapView* _miniMapView;
@@ -50,9 +52,13 @@ private:
 	/// Handles Minimap animation.
 	void animate();
 
+
 	public:
 		/// Creates the MiniMapState.
-		MiniMapState(Game* game, Camera* camera, SavedBattleGame* battleGame);
+		MiniMapState(
+				Game* game,
+				Camera* camera,
+				SavedBattleGame* battleGame);
 		/// Cleans up the MiniMapState.
 		~MiniMapState();
 

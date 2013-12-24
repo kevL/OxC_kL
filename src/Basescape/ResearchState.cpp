@@ -51,13 +51,14 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
  */
-ResearchState::ResearchState(Game* game, Base* base)
+ResearchState::ResearchState(
+		Game* game,
+		Base* base)
 	:
 		State(game),
 		_base(base)
 {
 	_window			= new Window(this, 320, 200, 0, 0);
-
 	_txtTitle		= new Text(300, 17, 16, 9);
 
 	_txtAvailable	= new Text(140, 9, 16, 25);
@@ -69,17 +70,23 @@ ResearchState::ResearchState(Game* game, Base* base)
 	_txtScientists	= new Text(110, 9, 176, 47);
 	_txtProgress	= new Text(80, 9, 236, 47);
 
-	_lstResearch	= new TextList(294, 112, 8, 62);
+	_lstResearch	= new TextList(286, 112, 16, 62);
 	
 	_btnNew			= new TextButton(134, 16, 16, 177);
 	_btnOk			= new TextButton(134, 16, 170, 177);
 
 	// back up palette in case we're being called from Geoscape!
-	memcpy(_oldPalette, _game->getScreen()->getPalette(), 256 * sizeof(SDL_Color));
+	memcpy(
+		_oldPalette,
+		_game->getScreen()->getPalette(),
+		256 * sizeof(SDL_Color));
 
 
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(1)), Palette::backPos, 16);
+	_game->setPalette(
+				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(1)),
+				Palette::backPos,
+				16);
 
 	add(_window);
 	add(_btnNew);
@@ -135,13 +142,13 @@ ResearchState::ResearchState(Game* game, Base* base)
 
 	_lstResearch->setColor(Palette::blockOffset(15)+6);
 	_lstResearch->setArrowColor(Palette::blockOffset(13)+10);
-	_lstResearch->setColumns(3, 160, 60, 68);
+	_lstResearch->setColumns(4, 152, 60, 48, 20);
 	_lstResearch->setSelectable(true);
 	_lstResearch->setBackground(_window);
 	_lstResearch->setMargin(8);
 	_lstResearch->onMouseClick((ActionHandler)& ResearchState::onSelectProject);
 
-	fillProjectList();
+	init();
 }
 
 /**
@@ -157,7 +164,6 @@ ResearchState::~ResearchState()
  */
 void ResearchState::btnOkClick(Action*)
 {
-	// restore palette
 	_game->setPalette(_oldPalette);
 	
 	_game->popState();
@@ -169,7 +175,9 @@ void ResearchState::btnOkClick(Action*)
  */
 void ResearchState::btnNewClick(Action*)
 {
-	_game->pushState(new NewResearchListState(_game, _base));
+	_game->pushState(new NewResearchListState(
+											_game,
+											_base));
 }
 
 /**
@@ -180,41 +188,44 @@ void ResearchState::onSelectProject(Action*)
 {
 	const std::vector<ResearchProject*>& baseProjects(_base->getResearch());
 
-	_game->pushState(new ResearchInfoState(_game, _base, baseProjects[_lstResearch->getSelectedRow()]));
+	_game->pushState(new ResearchInfoState(
+										_game,
+										_base,
+										baseProjects[_lstResearch->getSelectedRow()]));
 }
 
 /**
- * Updates the research list
- * after going to other screens.
+ * Updates the research list after going to other screens.
  */
 void ResearchState::init()
 {
-	fillProjectList();
-}
-
-/**
- * Fills the list with Base ResearchProjects. Also updates count of available lab space and available/allocated scientists.
- */
-void ResearchState::fillProjectList()
-{
-	const std::vector<ResearchProject*>& baseProjects(_base->getResearch());
-
 	_lstResearch->clearList();
 
-	for (std::vector<ResearchProject*>::const_iterator iter = baseProjects.begin (); iter != baseProjects.end (); ++iter)
+	const std::vector<ResearchProject*>& baseProjects(_base->getResearch());
+	for (std::vector<ResearchProject*>::const_iterator
+			i = baseProjects.begin();
+			i != baseProjects.end();
+			++i)
 	{
 		std::wstringstream sstr;
-		sstr << (*iter)->getAssigned ();
-		const RuleResearch* r = (*iter)->getRules();
+		sstr << (*i)->getAssigned();
+		const RuleResearch* r = (*i)->getRules();
 
-		std::wstring wstr = tr(r->getName ());
-		_lstResearch->addRow(3, wstr.c_str(), sstr.str().c_str(), tr((*iter)->getResearchProgress()).c_str());
+		std::wstring wstr = tr(r->getName());
+		_lstResearch->addRow(
+							4,
+							wstr.c_str(),
+							sstr.str().c_str(),
+							tr((*i)->getResearchProgress()).c_str(),
+							(*i)->getCostCompleted().c_str());
 	}
 
-//kL	_txtAvailable->setText(tr("STR_SCIENTISTS_AVAILABLE").arg(_base->getAvailableScientists()));
-	_txtAvailable->setText(tr("STR_SCIENTISTS_AVAILABLE").arg(_base->getScientists())); // kL
-	_txtAllocated->setText(tr("STR_SCIENTISTS_ALLOCATED").arg(_base->getAllocatedScientists()));
-	_txtSpace->setText(tr("STR_LABORATORY_SPACE_AVAILABLE").arg(_base->getFreeLaboratories()));
+	_txtAvailable->setText(tr("STR_SCIENTISTS_AVAILABLE")
+							.arg(_base->getScientists()));
+	_txtAllocated->setText(tr("STR_SCIENTISTS_ALLOCATED")
+							.arg(_base->getAllocatedScientists()));
+	_txtSpace->setText(tr("STR_LABORATORY_SPACE_AVAILABLE")
+							.arg(_base->getFreeLaboratories()));
 }
 
 }

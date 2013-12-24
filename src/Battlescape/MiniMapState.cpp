@@ -24,6 +24,7 @@
 
 #include "Camera.h"
 #include "MiniMapView.h"
+
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
 #include "../Engine/InteractiveSurface.h"
@@ -31,7 +32,9 @@
 #include "../Engine/Palette.h"
 #include "../Engine/Screen.h"
 #include "../Engine/Timer.h"
+
 #include "../Interface/Text.h"
+
 #include "../Resource/ResourcePack.h"
 
 
@@ -43,18 +46,28 @@ namespace OpenXcom
  * @param camera The Battlescape camera.
  * @param battleGame The Battlescape save.
  */
-MiniMapState::MiniMapState(Game* game, Camera* camera, SavedBattleGame* battleGame)
+MiniMapState::MiniMapState(
+		Game* game,
+		Camera* camera,
+		SavedBattleGame* battleGame)
 	:
 		State(game)
 {
 	_surface		= new InteractiveSurface(320, 200);
-	_miniMapView	= new MiniMapView(222, 150, 49, 15, game, camera, battleGame);
+	_miniMapView	= new MiniMapView(
+									222,
+									150,
+									49,
+									15,
+									game,
+									camera,
+									battleGame);
 
 	InteractiveSurface* btnLvlUp	= new InteractiveSurface(18, 20, 24, 62);
 	InteractiveSurface* btnLvlDwn	= new InteractiveSurface(18, 20, 24, 88);
 	InteractiveSurface* btnOk		= new InteractiveSurface(32, 32, 275, 145);
 
-	_txtLevel = new Text (20, 25, 281, 75);
+	_txtLevel = new Text (20, 25, 281, 73);
 
 	add(_surface);
 	add(_miniMapView);
