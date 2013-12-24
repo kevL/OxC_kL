@@ -28,6 +28,7 @@ namespace OpenXcom
 
 class MapDataSet;
 
+
 enum SpecialTileType
 {
 	TILE,
@@ -47,12 +48,14 @@ enum SpecialTileType
 	MUST_DESTROY
 };
 
+
 enum MovementType
 {
 	MT_WALK,
 	MT_FLY,
 	MT_SLIDE
 };
+
 
 enum VoxelType
 {
@@ -67,30 +70,56 @@ enum VoxelType
 
 
 /**
- * MapData is the smallest piece of a Battlescape terrain, holding info about a certain object, wall, floor, ...
+ * MapData is the smallest piece of a Battlescape terrain,
+ * holding info about a certain object, wall, floor, ...
  * @sa MapDataSet.
  */
 class MapData
 {
+
 private:
-	MapDataSet* _dataset;
-	SpecialTileType _specialType;
-	bool _isUfoDoor, _stopLOS, _isNoFloor, _isGravLift, _isDoor, _blockFire, _blockSmoke;
-	int _yOffset, _TUWalk, _TUFly, _TUSlide, _terrainLevel, _footstepSound, _dieMCD, _altMCD, _objectType, _lightSource;
-	int _armor, _flammable, _fuel, _explosive, _bigWall;
-	int _sprite[8];
-	int _block[6];
-	int _loftID[12];
+	bool
+		_blockFire,
+		_blockSmoke,
+		_isDoor,
+		_isGravLift,
+		_isNoFloor,
+		_isUfoDoor,
+		_stopLOS;
+	int
+		_armor,
+		_altMCD,
+		_bigWall,
+		_block[6],
+		_dieMCD,
+		_explosive,
+		_flammable,
+		_footstepSound,
+		_fuel,
+		_lightSource,
+		_loftID[12],
+		_objectType,
+		_sprite[8],
+		_terrainLevel,
+		_TUWalk,
+		_TUFly,
+		_TUSlide,
+		_yOffset;
 	unsigned short _miniMapIndex;
 
+	MapDataSet* _dataset;
+	SpecialTileType _specialType;
+
+
 	public:
+		static const int O_FLOOR;
+		static const int O_WESTWALL;
+		static const int O_NORTHWALL;
+		static const int O_OBJECT;
+
 		MapData(MapDataSet* dataset);
 		~MapData();
 
-		static const int O_FLOOR		= 0;
-		static const int O_WESTWALL		= 1;
-		static const int O_NORTHWALL	= 2;
-		static const int O_OBJECT		= 3;
 
 		/// Gets the dataset this object belongs to.
 		MapDataSet* getDataset() const;

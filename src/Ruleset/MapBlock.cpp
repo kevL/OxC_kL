@@ -26,9 +26,12 @@ namespace OpenXcom
 /**
  * MapBlock construction.
  */
-MapBlock::MapBlock(RuleTerrain* terrain, std::string name, int size_x, int size_y, MapBlockType type)
+MapBlock::MapBlock(
+		std::string name,
+		int size_x,
+		int size_y,
+		MapBlockType type)
 	:
-		_terrain(terrain),
 		_name(name),
 		_size_x(size_x),
 		_size_y(size_y),

@@ -17,11 +17,13 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "RuleTerrain.h"
 #include "MapBlock.h"
 #include "MapDataSet.h"
-#include "../Engine/RNG.h"
 #include "Ruleset.h"
+#include "RuleTerrain.h"
+
+#include "../Engine/RNG.h"
+
 
 namespace OpenXcom
 {
@@ -42,7 +44,10 @@ RuleTerrain::RuleTerrain(const std::string& name)
  */
 RuleTerrain::~RuleTerrain()
 {
-	for (std::vector<MapBlock*>::iterator i = _mapBlocks.begin(); i != _mapBlocks.end(); ++i)
+	for (std::vector<MapBlock*>::iterator
+			i = _mapBlocks.begin();
+			i != _mapBlocks.end();
+			++i)
 	{
 		delete *i;
 	}
@@ -58,7 +63,11 @@ void RuleTerrain::load(const YAML::Node& node, Ruleset* ruleset)
 	if (const YAML::Node& map = node["mapDataSets"])
 	{
 		_mapDataSets.clear();
-		for (YAML::const_iterator i = map.begin(); i != map.end(); ++i)
+
+		for (YAML::const_iterator
+				i = map.begin();
+				i != map.end();
+				++i)
 		{
 			_mapDataSets.push_back(ruleset->getMapDataSet(i->as<std::string>()));
 		}
@@ -68,9 +77,16 @@ void RuleTerrain::load(const YAML::Node& node, Ruleset* ruleset)
 	{
 		_mapBlocks.clear();
 
-		for (YAML::const_iterator i = map.begin(); i != map.end(); ++i)
+		for (YAML::const_iterator
+				i = map.begin();
+				i != map.end();
+				++i)
 		{
-			MapBlock* map = new MapBlock(this, (*i)["name"].as<std::string>(), 0, 0, MT_DEFAULT);
+			MapBlock* map = new MapBlock(
+									(*i)["name"].as<std::string>(),
+									0,
+									0,
+									MT_DEFAULT);
 			map->load(*i);
 			_mapBlocks.push_back(map);
 		}
@@ -116,17 +132,26 @@ std::string RuleTerrain::getName() const
  * @param force Whether to enforce the max size.
  * @return Pointer to the mapblock.
  */
-MapBlock* RuleTerrain::getRandomMapBlock(int maxsize, MapBlockType type, bool force)
+MapBlock* RuleTerrain::getRandomMapBlock(
+		int maxsize,
+		MapBlockType type,
+		bool force)
 {
 	std::vector<MapBlock*> compliantMapBlocks;
 
-	for (std::vector<MapBlock*>::const_iterator i = _mapBlocks.begin(); i != _mapBlocks.end(); ++i)
+	for (std::vector<MapBlock*>::const_iterator
+			i = _mapBlocks.begin();
+			i != _mapBlocks.end();
+			++i)
 	{
 		if (((force && (*i)->getSizeX() == maxsize)
 				|| (!force && (*i)->getSizeX() <= maxsize))
 			&& ((*i)->getType() == type || (*i)->getSubType() == type))
 		{
-			for (int j = 0; j != (*i)->getRemainingUses(); ++j)
+			for (int
+					j = 0;
+					j != (*i)->getRemainingUses();
+					++j)
 			{
 				compliantMapBlocks.push_back((*i));
 			}
@@ -150,7 +175,10 @@ MapBlock* RuleTerrain::getRandomMapBlock(int maxsize, MapBlockType type, bool fo
  */
 MapBlock* RuleTerrain::getMapBlock(const std::string &name)
 {
-	for (std::vector<MapBlock*>::const_iterator i = _mapBlocks.begin(); i != _mapBlocks.end(); ++i)
+	for (std::vector<MapBlock*>::const_iterator
+			i = _mapBlocks.begin();
+			i != _mapBlocks.end();
+			++i)
 	{
 		if ((*i)->getName() == name)
 			return (*i);
@@ -165,11 +193,16 @@ MapBlock* RuleTerrain::getMapBlock(const std::string &name)
  * @param mapDataSetID The id of the map data set.
  * @return Pointer to MapData object.
  */
-MapData* RuleTerrain::getMapData(int* id, int* mapDataSetID) const
+MapData* RuleTerrain::getMapData(
+		int* id,
+		int* mapDataSetID) const
 {
 	MapDataSet* mdf = 0;
 
-	for (std::vector<MapDataSet*>::const_iterator i = _mapDataSets.begin(); i != _mapDataSets.end(); ++i)
+	for (std::vector<MapDataSet*>::const_iterator
+			i = _mapDataSets.begin();
+			i != _mapDataSets.end();
+			++i)
 	{
 		mdf = *i;
 
@@ -199,7 +232,10 @@ int RuleTerrain::getLargeBlockLimit() const
  */
 void RuleTerrain::resetMapBlocks()
 {
-	for (std::vector<MapBlock*>::const_iterator i = _mapBlocks.begin(); i != _mapBlocks.end(); ++i)
+	for (std::vector<MapBlock*>::const_iterator
+			i = _mapBlocks.begin();
+			i != _mapBlocks.end();
+			++i)
 	{
 		(*i)->reset();
 	}

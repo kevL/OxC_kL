@@ -338,7 +338,7 @@ void Screen::setResolution(int width, int height)
 			delete _surface;
 
 		// only HQX needs 32bpp for this surface; the OpenGL class has its own 32bpp buffer
-		_surface = new Surface((int)BASE_WIDTH, (int)BASE_HEIGHT, 0, 0, Screen::isHQXEnabled() ? 32 : 8);
+		_surface = new Surface((int)BASE_WIDTH, (int)BASE_HEIGHT, 0, 0, Screen::isHQXEnabled()? 32: 8);
 
 		if (_surface->getSurface()->format->BitsPerPixel == 8)
 			_surface->setPalette(deferredPalette);
@@ -351,8 +351,17 @@ void Screen::setResolution(int width, int height)
 	_screen = SDL_SetVideoMode(width, height, _bpp, _flags);
 	if (_screen == 0)
 	{
-		throw Exception(SDL_GetError());
+		Log(LOG_ERROR) << SDL_GetError();
+		Log(LOG_INFO) << "Attempting to set display to default resolution...";
+		_screen = SDL_SetVideoMode(640, 400, _bpp, _flags);
+		if (_screen == 0)
+		{
+			throw Exception(SDL_GetError());
+		}
 	}
+
+	Options::setInt("displayWidth", getWidth());
+	Options::setInt("displayHeoght", getHeight());
 
 	_scaleX = getWidth() / (double)BASE_WIDTH;
 	_scaleY = getHeight() / (double)BASE_HEIGHT;
@@ -432,12 +441,14 @@ void Screen::setResolution(int width, int height)
 
 	if (isOpenGLEnabled()) 
 	{
+#ifndef __NO_OPENGL
 		glOutput.init(BASE_WIDTH, BASE_HEIGHT);
 		glOutput.linear = Options::getBool("useOpenGLSmoothing"); // setting from shader file will override this, though
 		glOutput.set_shader(CrossPlatform::getDataFile(Options::getString("useOpenGLShader")).c_str());
 		glOutput.setVSync(Options::getBool("vSyncForOpenGL"));
 
 		OpenGL::checkErrors = Options::getBool("checkOpenGLErrors");
+#endif
 	}
 
 	Log(LOG_INFO) << "Display set to " << getWidth() << "x" << getHeight() << "x" << (int)_screen->format->BitsPerPixel << ".";
@@ -516,20 +527,18 @@ int Screen::getCursorLeftBlackBand() const
 void Screen::screenshot(const std::string& filename) const
 {
 	SDL_Surface* screenshot = SDL_AllocSurface(0, getWidth(), getHeight(), 24, 0xff, 0xff00, 0xff0000, 0);
-
+	
 	if (isOpenGLEnabled())
 	{
+#ifndef __NO_OPENGL
 		GLenum format = GL_RGB;
-
-		#ifndef __NO_OPENGL
 
 		for (int y = 0; y < getHeight(); ++y)
 		{
 			glReadPixels(0, getHeight()-(y+1), getWidth(), 1, format, GL_UNSIGNED_BYTE, ((Uint8*)screenshot->pixels) + y*screenshot->pitch);
 		}
 		glErrorCheck();
-		
-		#endif
+#endif
 	}
 	else
 	{

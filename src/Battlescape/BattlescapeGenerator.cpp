@@ -1705,7 +1705,6 @@ void BattlescapeGenerator::generateMap()
 
 	MapBlock
 		* dummy = new MapBlock(
-							_terrain,
 							"dummy",
 							0,
 							0,

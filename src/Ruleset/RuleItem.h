@@ -26,6 +26,9 @@
 #include <yaml-cpp/yaml.h>
 
 
+namespace OpenXcom
+{
+
 enum ItemDamageType
 {
 	DT_NONE,	// 0
@@ -57,9 +60,6 @@ enum BattleType
 	BT_CORPSE				// 11
 };
 
-
-namespace OpenXcom
-{
 
 class Surface;
 class SurfaceSet;

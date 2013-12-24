@@ -40,16 +40,30 @@ class SoldiersState
 	:
 		public State
 {
+
 private:
-	TextButton* _btnOk, * _btnPsiTrain, * _btnArmor, *_btnMemorial;
-	Window* _window;
-	Text* _txtTitle, * _txtName, * _txtRank, * _txtCraft, * _txtRecruited, * _txtLost;
-	TextList* _lstSoldiers;
 	Base *_base;
+	Text
+		* _txtCraft,
+//		* _txtLost,
+		* _txtName,
+		* _txtRank,
+//		* _txtRecruited,
+		* _txtTitle;
+	TextButton
+		* _btnArmor,
+		* _btnMemorial,
+		* _btnOk,
+		* _btnPsiTrain;
+	TextList* _lstSoldiers;
+	Window* _window;
+
 
 	public:
 		/// Creates the Soldiers state.
-		SoldiersState(Game* game, Base* base);
+		SoldiersState(
+				Game* game,
+				Base* base);
 		/// Cleans up the Soldiers state.
 		~SoldiersState();
 

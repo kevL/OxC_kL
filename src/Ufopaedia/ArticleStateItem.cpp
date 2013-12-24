@@ -87,21 +87,19 @@ ArticleStateItem::ArticleStateItem(
 		add(_txtShotType);
 		_txtShotType->setColor(Palette::blockOffset(14) + 15);
 		_txtShotType->setWordWrap(true);
-		_txtShotType->setText(tr("STR_SHOT_TYPE").c_str());
+		_txtShotType->setText(tr("STR_SHOT_TYPE"));
 
-//kL		_txtAccuracy = new Text(50, 17, 104, 66);
-		_txtAccuracy = new Text(50, 17, 108, 66);		// kL
+		_txtAccuracy = new Text(50, 17, 108, 66);
 		add(_txtAccuracy);
 		_txtAccuracy->setColor(Palette::blockOffset(14) + 15);
 		_txtAccuracy->setWordWrap(true);
-		_txtAccuracy->setText(tr("STR_ACCURACY_UC").c_str());
+		_txtAccuracy->setText(tr("STR_ACCURACY_UC"));
 
-//kL		_txtTuCost = new Text(60, 17, 158, 66);
-		_txtTuCost = new Text(60, 17, 160, 66);			// kL
+		_txtTuCost = new Text(60, 17, 160, 66);
 		add(_txtTuCost);
 		_txtTuCost->setColor(Palette::blockOffset(14)+15);
 		_txtTuCost->setWordWrap(true);
-		_txtTuCost->setText(tr("STR_TIME_UNIT_COST").c_str());
+		_txtTuCost->setText(tr("STR_TIME_UNIT_COST"));
 
 		_lstInfo = new TextList(204, 55, 8, 82);
 		add(_lstInfo);
@@ -226,23 +224,23 @@ ArticleStateItem::ArticleStateItem(
 			add(_txtDamage);
 			_txtDamage->setColor(Palette::blockOffset(14)+15);
 			_txtDamage->setAlign(ALIGN_CENTER);
-			_txtDamage->setText(tr("STR_DAMAGE_UC").c_str());
+			_txtDamage->setText(tr("STR_DAMAGE_UC"));
 
 //kL			_txtAmmo = new Text(42, 10, 272, 7);
 			_txtAmmo = new Text(45, 10, 271, 7);		// kL
 			add(_txtAmmo);
 			_txtAmmo->setColor(Palette::blockOffset(14)+15);
 			_txtAmmo->setAlign(ALIGN_CENTER);
-			_txtAmmo->setText(tr("STR_AMMO").c_str());
+			_txtAmmo->setText(tr("STR_AMMO"));
 
 			if (ammo_data->empty())
 			{
-				setDamageTypeText(_txtAmmoType[0], item);
+				_txtAmmoType[0]->setText(tr(getDamageTypeText(item->getDamageType())));
 
 				ss.str(L"");
 				ss.clear();
 				ss << item->getPower();
-				_txtAmmoDamage[0]->setText(ss.str().c_str());
+				_txtAmmoDamage[0]->setText(ss.str());
 			}
 			else
 			{
@@ -256,12 +254,12 @@ ArticleStateItem::ArticleStateItem(
 					if (Ufopaedia::isArticleAvailable(_game, ammo_article))
 					{
 						RuleItem* ammo_rule = _game->getRuleset()->getItem((*ammo_data)[i]);
-						setDamageTypeText(_txtAmmoType[i], ammo_rule);
+						_txtAmmoType[i]->setText(tr(getDamageTypeText(ammo_rule->getDamageType())));
 
 						ss.str(L"");
 						ss.clear();
 						ss << ammo_rule->getPower();
-						_txtAmmoDamage[i]->setText(ss.str().c_str());
+						_txtAmmoDamage[i]->setText(ss.str());
 
 						ammo_rule->drawHandSprite(_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"), _imageAmmo[i]);
 					}
@@ -272,12 +270,12 @@ ArticleStateItem::ArticleStateItem(
 		case BT_GRENADE:
 		case BT_PROXIMITYGRENADE:
 		case BT_MELEE:
-			setDamageTypeText(_txtAmmoType[0], item);
+			_txtAmmoType[0]->setText(tr(getDamageTypeText(item->getDamageType())));
 
 			ss.str(L"");
 			ss.clear();
 			ss << item->getPower();
-			_txtAmmoDamage[0]->setText(ss.str().c_str());
+			_txtAmmoDamage[0]->setText(ss.str());
 		break;
 
 		default:
@@ -285,41 +283,6 @@ ArticleStateItem::ArticleStateItem(
 	}
 
 	centerAllSurfaces();
-}
-
-void ArticleStateItem::setDamageTypeText(
-		Text* text_field,
-		RuleItem* ammo_rule)
-{
-	switch(ammo_rule->getDamageType())
-	{
-		case DT_AP:
-		case DT_MELEE:
-			text_field->setText(tr("STR_DAMAGE_ARMOR_PIERCING").c_str());
-		break;
-		case DT_HE:
-			text_field->setText(tr("STR_DAMAGE_HIGH_EXPLOSIVE").c_str());
-			break;
-		case DT_SMOKE:
-			text_field->setText(tr("STR_DAMAGE_SMOKE").c_str());
-		break;
-		case DT_IN:
-			text_field->setText(tr("STR_DAMAGE_INCENDIARY").c_str());
-		break;
-		case DT_LASER:
-			text_field->setText(tr("STR_DAMAGE_LASER_BEAM").c_str());
-		break;
-		case DT_PLASMA:
-			text_field->setText(tr("STR_DAMAGE_PLASMA_BEAM").c_str());
-		break;
-		case DT_STUN:
-			text_field->setText(tr("STR_DAMAGE_STUN").c_str());
-		break;
-
-		default:
-			text_field->setText(tr("STR_UNKNOWN").c_str());
-		break;
-	}
 }
 
 ArticleStateItem::~ArticleStateItem()

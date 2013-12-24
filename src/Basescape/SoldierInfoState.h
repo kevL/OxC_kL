@@ -61,7 +61,7 @@ private:
 		* _bg,
 		* _rank;
 	Text
-		* _txtArmor,
+		* _txtArmor, // kL
 		* _txtCraft,
 		* _txtKills,
 		* _txtMissions,

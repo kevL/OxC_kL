@@ -42,8 +42,6 @@ private:
 	static const int SCROLL_INTERVAL = 50;
 
 	bool
-		_keyboardScroll,
-		_mouseScroll,
 		_scrollTrigger,
 		_showAllLayers;
 	int

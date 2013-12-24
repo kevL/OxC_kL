@@ -22,6 +22,7 @@
 
 #include <string>
 #include <vector>
+
 #include <yaml-cpp/yaml.h>
 
 
@@ -30,24 +31,30 @@ namespace OpenXcom
 
 class Language;
 
+
 /**
  * Base class for targets on the globe
  * with a set of radian coordinates.
  */
 class Target
 {
+
 protected:
-	double _lon, _lat;
+	double
+		_lat,
+		_lon;
+
 	std::vector<Target*> _followers;
 
-	public:
 		/// Creates a target.
 		Target();
+
+
+public:
 		/// Cleans up the target.
 		virtual ~Target();
-
-		/// Loads the target from YAML.
-		virtual void load(const YAML::Node& node);
+		/// Loads the moving target from YAML.
+		void load(const YAML::Node& node);
 		/// Saves the target to YAML.
 		virtual YAML::Node save() const;
 		/// Saves the target's ID to YAML.

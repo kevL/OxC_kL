@@ -21,6 +21,7 @@
 #define OPENXCOM_MAPBLOCK_H
 
 #include <string>
+
 #include <yaml-cpp/yaml.h>
 
 
@@ -41,7 +42,9 @@ enum MapBlockType
 	MT_FINALCOMM
 };
 
+
 class RuleTerrain;
+
 
 /**
  * Represents a Terrain Map Block.
@@ -51,15 +54,28 @@ class RuleTerrain;
  */
 class MapBlock
 {
+
 private:
-	RuleTerrain* _terrain;
 	std::string _name;
-	int _size_x, _size_y, _size_z;
-	MapBlockType _type, _subType;
-	int _frequency, _timesUsed, _maxCount;
+	int
+		_frequency,
+		_maxCount,
+		_timesUsed,
+		_size_x,
+		_size_y,
+		_size_z;
+
+	MapBlockType
+		_subType,
+		_type;
+
 
 	public:
-		MapBlock(RuleTerrain* terrain, std::string name, int size_x, int size_y, MapBlockType type);
+		MapBlock(
+				std::string name,
+				int size_x,
+				int size_y,
+				MapBlockType type);
 		~MapBlock();
 
 		/// Loads the map block from YAML.

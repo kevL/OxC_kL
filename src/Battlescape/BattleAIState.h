@@ -28,8 +28,9 @@
 namespace OpenXcom
 {
 
-class SavedBattleGame;
 class BattleUnit;
+class SavedBattleGame;
+
 
 enum AIMode
 {
@@ -39,11 +40,13 @@ enum AIMode
 	AI_ESCAPE	// 3
 };
 
+
 /**
  * This class is used by the BattleUnit AI.
  */
 class BattleAIState
 {
+
 protected:
 	SavedBattleGame* _save;
 	BattleUnit* _unit;
@@ -51,12 +54,14 @@ protected:
 
 	public:
 		/// Creates a new BattleAIState linked to the game and a certain unit.
-		BattleAIState(SavedBattleGame* save, BattleUnit* unit);
+		BattleAIState(
+				SavedBattleGame* save,
+				BattleUnit* unit);
 		/// Cleans up the BattleAIState.
 		virtual ~BattleAIState();
 
 		/// Loads the AI state from YAML.
-		virtual void load(const YAML::Node& node);
+		void load(const YAML::Node& node);
 		/// Saves the AI state to YAML.
 		virtual YAML::Node save() const;
 

@@ -32,25 +32,33 @@ namespace OpenXcom
  */
 class MovingTarget
 	:
-	public Target
+		public Target
 {
-	protected:
-		static const double GLOBE_RADIUS;
 
-		Target* _dest;
-		double _speedLon, _speedLat, _speedRadian;
-		int _speed;
-		/// Calculates a new speed vector to the destination.
-		virtual void calculateSpeed();
+protected:
+	static const double GLOBE_RADIUS;
 
-	public:
-		/// Creates a moving target.
-		MovingTarget();
+	int _speed;
+	double
+		_speedLat,
+		_speedLon,
+		_speedRadian;
+
+	Target* _dest;
+
+	/// Calculates a new speed vector to the destination.
+	virtual void calculateSpeed();
+
+	/// Creates a moving target.
+	MovingTarget();
+
+
+public:
 		/// Cleans up the moving target.
 		virtual ~MovingTarget();
 
 		/// Loads the moving target from YAML.
-		virtual void load(const YAML::Node& node);
+		void load(const YAML::Node& node);
 		/// Saves the moving target to YAML.
 		virtual YAML::Node save() const;
 		/// Gets the moving target's destination.

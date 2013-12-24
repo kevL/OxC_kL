@@ -36,8 +36,10 @@ enum ArrowShape
 	ARROW_SMALL_RIGHT
 };
 
+
 class TextList;
 class Timer;
+
 
 /**
  * Button with an arrow on it. Can be used for
@@ -48,18 +50,25 @@ class ArrowButton
 	:
 		public ImageButton
 {
+
 private:
 	ArrowShape _shape;
 	TextList* _list;
 	Timer* _timer;
-	bool _listButton;
+
 
 protected:
 	bool isButtonHandled(Uint8 button = 0);
 
+
 	public:
 		/// Creates a new arrow button with the specified size and position.
-		ArrowButton(ArrowShape shape, int width, int height, int x = 0, int y = 0);
+		ArrowButton(
+				ArrowShape shape,
+				int width,
+				int height,
+				int x = 0,
+				int y = 0);
 		/// Cleans up the arrow button.
 		~ArrowButton();
 

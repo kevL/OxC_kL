@@ -26,6 +26,8 @@
 #include "../Engine/Font.h"
 #include "../Engine/Language.h"
 #include "../Engine/Options.h"
+#include "../Engine/ShaderDraw.h"
+#include "../Engine/ShaderMove.h"
 
 
 namespace OpenXcom
@@ -45,10 +47,10 @@ Text::Text(
 		int y)
 	:
 		Surface(
-			width,
-			height,
-			x,
-			y),
+				width,
+				height,
+				x,
+				y),
 		_big(0),
 		_small(0),
 		_font(0),
@@ -523,6 +525,29 @@ int Text::getLineX(int line) const
 	return x;
 }
 
+
+namespace
+{
+
+struct PaletteShift
+{
+	static inline void func(
+			Uint8& dest,
+			Uint8& src,
+			int off,
+			int mul,
+			int mid)
+	{
+		if (src)
+		{
+			int inverseOffset = mid? 2 * (mid - src): 0;
+			dest = off + (src * mul) + inverseOffset;
+		}
+	}
+};
+
+}
+
 /**
  * Draws all the characters in the text with a really
  * nasty complex gritty text rendering algorithm logic stuff.
@@ -609,8 +634,6 @@ void Text::draw()
 	// Invert text by inverting the font palette on index 3 (font palettes use indices 1-5)
 	int mid = _invert? 3: 0;
 
-	font->getSurface()->paletteShift(color, mul, mid);
-
 	// Draw each letter one by one
 	for (std::wstring::iterator
 			c = s->begin();
@@ -630,17 +653,13 @@ void Text::draw()
 
 			if (*c == L'\x02')
 			{
-				font->getSurface()->paletteRestore();
 				font = _small;
-				font->getSurface()->paletteShift(color, mul, mid);
 			}
 		}
 		else if (*c == L'\x01')
 		{
-			font->getSurface()->paletteRestore();
 
 			color = (color == _color? _color2: _color);
-			font->getSurface()->paletteShift(color, mul, mid);
 		}
 		else
 		{
@@ -650,15 +669,17 @@ void Text::draw()
 			Surface* chr = font->getChar(*c);
 			chr->setX(x);
 			chr->setY(y);
-			chr->blit(this);
+			ShaderDraw<PaletteShift>(
+								ShaderSurface(this, 0, 0),
+								ShaderCrop(chr),
+								ShaderScalar(color),
+								ShaderScalar(mul),
+								ShaderScalar(mid));
 
 			if (dir > 0)
 				x += dir * font->getCharSize(*c).w;
 		}
 	}
-
-	// Revert text color
-	font->getSurface()->paletteRestore();
 }
 
 }

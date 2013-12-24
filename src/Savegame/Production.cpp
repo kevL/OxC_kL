@@ -18,18 +18,22 @@
  */
 
 #include "Production.h"
-#include "../Ruleset/RuleManufacture.h"
+
+#include <limits>
+
 #include "Base.h"
-#include "SavedGame.h"
-#include "ItemContainer.h"
 #include "Craft.h"
 #include "CraftWeapon.h"
-#include "../Ruleset/Ruleset.h"
-#include "../Ruleset/RuleItem.h"
+#include "ItemContainer.h"
+#include "SavedGame.h"
+
+#include "../Engine/Options.h"
+
 #include "../Ruleset/RuleCraft.h"
 #include "../Ruleset/RuleCraftWeapon.h"
-#include "../Engine/Options.h"
-#include <limits>
+#include "../Ruleset/RuleItem.h"
+#include "../Ruleset/RuleManufacture.h"
+#include "../Ruleset/Ruleset.h"
 
 
 namespace OpenXcom
@@ -38,7 +42,9 @@ namespace OpenXcom
 /**
  *
  */
-Production::Production(const RuleManufacture* rules, int amount)
+Production::Production(
+		const RuleManufacture* rules,
+		int amount)
 	:
 		_rules(rules),
 		_amount(amount),
@@ -109,11 +115,11 @@ bool Production::enoughMoney(SavedGame* g)
 bool Production::enoughMaterials(Base* b)
 {
 	for (std::map<std::string,int>::const_iterator
-			iter = _rules->getRequiredItems().begin();
-			iter != _rules->getRequiredItems().end();
-			++iter)
+			i = _rules->getRequiredItems().begin();
+			i != _rules->getRequiredItems().end();
+			++i)
 	{
-		if (b->getItems()->getItem(iter->first) < iter->second)
+		if (b->getItems()->getItem(i->first) < i->second)
 			return false;
 	}
 
@@ -123,7 +129,10 @@ bool Production::enoughMaterials(Base* b)
 /**
  *
  */
-ProdProgress Production::step(Base* b, SavedGame* g, const Ruleset* r)
+ProdProgress Production::step(
+		Base* b,
+		SavedGame* g,
+		const Ruleset* r)
 {
 	int done = getAmountProduced();
 	_timeSpent += _engineers;
@@ -184,7 +193,10 @@ ProdProgress Production::step(Base* b, SavedGame* g, const Ruleset* r)
 					// Check if it's fuel to refuel a craft
 					if (r->getItem(i->first)->getBattleType() == BT_NONE)
 					{
-						for (std::vector<Craft*>::iterator c = b->getCrafts()->begin(); c != b->getCrafts()->end(); ++c)
+						for (std::vector<Craft*>::iterator
+								c = b->getCrafts()->begin();
+								c != b->getCrafts()->end();
+								++c)
 						{
 							if ((*c)->getStatus() != "STR_READY")
 								continue;
@@ -261,16 +273,18 @@ const RuleManufacture* Production::getRules() const
 /**
  *
  */
-void Production::startItem(Base* b, SavedGame* g)
+void Production::startItem(
+		Base* b,
+		SavedGame* g)
 {
 	g->setFunds(g->getFunds() - _rules->getManufactureCost());
 
 	for (std::map<std::string,int>::const_iterator
-			iter = _rules->getRequiredItems().begin();
-			iter != _rules->getRequiredItems().end();
-			++iter)
+			i = _rules->getRequiredItems().begin();
+			i != _rules->getRequiredItems().end();
+			++i)
 	{
-		b->getItems ()->removeItem(iter->first, iter->second);
+		b->getItems()->removeItem(i->first, i->second);
 	}
 }
 
@@ -291,12 +305,12 @@ YAML::Node Production::save() const
 {
 	YAML::Node node;
 
-	node["item"]		= getRules ()->getName ();
-	node["assigned"]	= getAssignedEngineers ();
-	node["spent"]		= getTimeSpent ();
-	node["amount"]		= getAmountTotal ();
+	node["item"]		= getRules ()->getName();
+	node["assigned"]	= getAssignedEngineers();
+	node["spent"]		= getTimeSpent();
+	node["amount"]		= getAmountTotal();
 
 	return node;
 }
 
-};
+}

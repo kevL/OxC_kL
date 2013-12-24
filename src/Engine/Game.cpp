@@ -362,12 +362,16 @@ void Game::run()
 
 	// Auto-save
 	if (_save != 0
-		&& _save->getMonthsPassed() >= 0
+		&& _save->getMonthsPassed() > -1
 		&& Options::getInt("autosave") == 3)
 	{
-		SaveState* ss = new SaveState(this, OPT_MENU, false);
-		delete ss;
+		SaveState ss = SaveState(
+								this,
+								OPT_MENU,
+								false);
 	}
+
+	Options::save();
 }
 
 /**

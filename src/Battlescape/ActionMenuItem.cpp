@@ -49,7 +49,6 @@ ActionMenuItem::ActionMenuItem(
 				40,
 				x + 25,
 				y - (id * 40)),
-		_id(id),
 		_highlighted(false),
 		_action(BA_NONE),
 		_tu(0)
