@@ -670,40 +670,40 @@ void SavedBattleGame::setSelectedUnit(BattleUnit* unit)
 /**
 * Selects the previous player unit.
 * @param checkReselect Whether to check if we should reselect a unit.
-* @param setReselect Don't reselect a unit.
+* @param setDontReselect Don't reselect a unit.
 * @param checkInventory Whether to check if the unit has an inventory.
 * @return Pointer to new selected BattleUnit, NULL if none can be selected.
-* @sa selectPlayerUnit
+* @sa selectFactionUnit
 */
-BattleUnit* SavedBattleGame::selectPreviousPlayerUnit(
+BattleUnit* SavedBattleGame::selectPreviousFactionUnit(
 		bool checkReselect,
-		bool setReselect,
+		bool setDontReselect,
 		bool checkInventory)
 {
-	return selectPlayerUnit(
+	return selectFactionUnit(
 						-1,
 						checkReselect,
-						setReselect,
+						setDontReselect,
 						checkInventory);
 }
 
 /**
  * Selects the next player unit.
  * @param checkReselect Whether to check if we should reselect a unit.
- * @param setReselect Don't reselect a unit.
+ * @param setDontReselect Don't reselect a unit.
  * @param checkInventory Whether to check if the unit has an inventory.
  * @return Pointer to new selected BattleUnit, NULL if none can be selected.
- * @sa selectPlayerUnit
+ * @sa selectFactionUnit
  */
-BattleUnit* SavedBattleGame::selectNextPlayerUnit(
+BattleUnit* SavedBattleGame::selectNextFactionUnit(
 		bool checkReselect,
-		bool setReselect,
+		bool setDontReselect,
 		bool checkInventory)
 {
-	return selectPlayerUnit(
+	return selectFactionUnit(
 						+1,
 						checkReselect,
-						setReselect,
+						setDontReselect,
 						checkInventory);
 }
 
@@ -711,20 +711,20 @@ BattleUnit* SavedBattleGame::selectNextPlayerUnit(
  * Selects the next player unit in a certain direction.
  * @param dir Direction to select, eg. -1 for previous and 1 for next.
  * @param checkReselect Whether to check if we should reselect a unit.
- * @param setReselect Don't reselect a unit.
+ * @param setDontReselect Don't reselect a unit.
  * @param checkInventory Whether to check if the unit has an inventory.
  * @return Pointer to new selected BattleUnit, NULL if none can be selected.
  */
-BattleUnit* SavedBattleGame::selectPlayerUnit(
+BattleUnit* SavedBattleGame::selectFactionUnit(
 		int dir,
 		bool checkReselect,
-		bool setReselect,
+		bool setDontReselect,
 		bool checkInventory)
 {
-	//Log(LOG_INFO) << "SavedBattleGame::selectPlayerUnit()";
+	//Log(LOG_INFO) << "SavedBattleGame::selectFactionUnit()";
 
 	if (_selectedUnit != 0
-		&& setReselect)
+		&& setDontReselect)
 	{
 		//Log(LOG_INFO) << ". dontReselect";
 		_selectedUnit->dontReselect();
@@ -949,11 +949,11 @@ void SavedBattleGame::endTurn()
 
 		// if there is no neutral team, we skip this section
 		// and instantly prepare the new turn for the player.
-		if (selectNextPlayerUnit() == 0) // this will now cycle through NEUTRAL units
+		if (selectNextFactionUnit() == 0) // this will now cycle through NEUTRAL units
 			// so shouldn't that really be 'selectNextFactionUnit()'???!
-			// see selectPlayerUnit() -> isSelectable()
+			// see selectFactionUnit() -> isSelectable()
 		{
-			//Log(LOG_INFO) << ". . nextPlayerUnit == 0";
+			//Log(LOG_INFO) << ". . nextFactionUnit == 0";
 
 			prepareNewTurn();
 			//Log(LOG_INFO) << ". . prepareNewTurn DONE";
@@ -969,16 +969,16 @@ void SavedBattleGame::endTurn()
 			}
 			else
 			{
-				//Log(LOG_INFO) << ". . . select nextPlayerUnit";
-				selectNextPlayerUnit();
+				//Log(LOG_INFO) << ". . . select nextFactionUnit";
+				selectNextFactionUnit();
 			}
 
 			while (_selectedUnit
 				&& _selectedUnit->getFaction() != FACTION_PLAYER)
 			{
 				//Log(LOG_INFO) << ". . . finding a Unit to select";
-//kL				selectNextPlayerUnit();
-				selectNextPlayerUnit(true); // kL
+//kL				selectNextFactionUnit();
+				selectNextFactionUnit(true); // kL
 			}
 		}
 	}
@@ -999,16 +999,16 @@ void SavedBattleGame::endTurn()
 		}
 		else
 		{
-			//Log(LOG_INFO) << ". . . select nextPlayerUnit";
-			selectNextPlayerUnit();
+			//Log(LOG_INFO) << ". . . select nextFactionUnit";
+			selectNextFactionUnit();
 		}
 
 		while (_selectedUnit
 			&& _selectedUnit->getFaction() != FACTION_PLAYER)
 		{
 			//Log(LOG_INFO) << ". . . finding a Unit to select";
-//kL			selectNextPlayerUnit();
-			selectNextPlayerUnit(true); // kL
+//kL			selectNextFactionUnit();
+			selectNextFactionUnit(true); // kL
 		}
 	}
 	//Log(LOG_INFO) << "done Factions";
@@ -1044,7 +1044,10 @@ void SavedBattleGame::endTurn()
 			i != _units.end();
 			++i)
 	{
-		if ((*i)->getFaction() == FACTION_PLAYER) // includes units Mc'd by xCom
+		if ((*i)->getFaction() == _side) // this causes an Mc'd unit to lose its turn.
+			(*i)->prepareNewTurn(); // reverts faction, tu/stun recovery, Fire damage, etc
+
+		if ((*i)->getFaction() == FACTION_PLAYER) // including units Mc'd by xCom
 		{
 			if ((*i)->isOut(true, true))
 			{
@@ -1053,7 +1056,7 @@ void SavedBattleGame::endTurn()
 			else if (_cheating
 				&& _side == FACTION_HOSTILE)
 			{
-				(*i)->setTurnsExposed(0);
+				(*i)->setTurnsExposed(0); // they see you.
 			}
 			else if ((*i)->getTurnsExposed() < 255
 				&& _side == FACTION_PLAYER)
@@ -1062,10 +1065,17 @@ void SavedBattleGame::endTurn()
 			}
 		}
 		else
+		{
 			(*i)->setVisible(false);
+//			(*i)->convertToFaction((*i)->getOriginalFaction());
 
-		if ((*i)->getFaction() == _side)
-			(*i)->prepareNewTurn();
+			if ((*i)->getOriginalFaction() == FACTION_HOSTILE)
+				(*i)->setTurnsExposed(0);	// aLiens always know where their buddies are,
+											// Mc'd or not.
+		}
+
+//		if ((*i)->getFaction() == _side)
+//			(*i)->prepareNewTurn();
 	}
 	//Log(LOG_INFO) << "done looping units";
 
@@ -1074,7 +1084,7 @@ void SavedBattleGame::endTurn()
 	//Log(LOG_INFO) << "done recalculateFoV";
 
 	if (_side != FACTION_PLAYER)
-		selectNextPlayerUnit();
+		selectNextFactionUnit();
 
 	Log(LOG_INFO) << "SavedBattleGame::endTurn() EXIT";
 }
@@ -1309,16 +1319,16 @@ int* SavedBattleGame::getCurrentItemId()
 
 /**
  * Finds a fitting node where a unit can spawn.
- * @param nodeRank Rank of the node (this is not the rank of the alien!).
- * @param unit Pointer to the unit (to get its position).
- * @return Pointer to the chosen node.
+ * @param nodeRank, Rank of the node (this is not the rank of the alien!).
+ * @param unit, Pointer to the unit (to get its position).
+ * @return, Pointer to the chosen node.
  */
 Node* SavedBattleGame::getSpawnNode(
 		int nodeRank,
 		BattleUnit* unit)
 {
-	int highestPriority = -1;
-	std::vector<Node*> compliantNodes;
+	std::vector<Node*> legitNodes;
+	int priority = -1;
 
 	for (std::vector<Node*>::iterator
 			i = getNodes()->begin();
@@ -1330,31 +1340,31 @@ Node* SavedBattleGame::getSpawnNode(
 				|| unit->getArmor()->getSize() == 1)				// the small unit bit is not set or the unit is small
 			&& (!((*i)->getType() & Node::TYPE_FLYING)
 				|| unit->getArmor()->getMovementType() == MT_FLY)	// the flying unit bit is not set or the unit can fly
-			&& (*i)->getPriority() > 0								// priority 0 is no spawnplace
+			&& (*i)->getPriority() > 0								// priority 0 is not spawnplace
 			&& setUnitPosition(										// check if not already occupied
 							unit,
 							(*i)->getPosition(),
 							true))
 		{
-			if ((*i)->getPriority() > highestPriority)
+			if ((*i)->getPriority() > priority)
 			{
-				highestPriority = (*i)->getPriority();
-				compliantNodes.clear();								// drop the last nodes, as we found a higher priority now
+				priority = (*i)->getPriority();
+				legitNodes.clear();									// drop the last nodes, as we found a higher priority now
 			}
 
-			if ((*i)->getPriority() == highestPriority)
+			if ((*i)->getPriority() == priority)
 			{
-				compliantNodes.push_back((*i));
+				legitNodes.push_back((*i));
 			}
 		}
 	}
 
-	if (compliantNodes.empty())
+	if (legitNodes.empty())
 		return 0;
 
-	int n = RNG::generate(0, compliantNodes.size() - 1);
+	int node = RNG::generate(0, legitNodes.size() - 1);
 
-	return compliantNodes[n];
+	return legitNodes[node];
 }
 
 /**
@@ -1368,8 +1378,8 @@ Node* SavedBattleGame::getPatrolNode(
 		BattleUnit* unit,
 		Node* fromNode)
 {
-	std::vector<Node*> compliantNodes;
-	Node* preferred = 0;
+	std::vector<Node*> legitNodes;
+	Node* biasNode = 0;
 
 	if (fromNode == 0)
 	{
@@ -1413,19 +1423,19 @@ Node* SavedBattleGame::getPatrolNode(
 			&& n->getPosition().x > 0
 			&& n->getPosition().y > 0)
 		{
-			if (!preferred 
-				|| (preferred->getRank() == Node::nodeRank[unit->getRankInt()][0]
-					&& preferred->getFlags() < n->getFlags())
-				|| preferred->getFlags() < n->getFlags())
+			if (!biasNode 
+				|| (biasNode->getRank() == Node::nodeRank[unit->getRankInt()][0]
+					&& biasNode->getFlags() < n->getFlags())
+				|| biasNode->getFlags() < n->getFlags())
 			{
-				preferred = n;
+				biasNode = n;
 			}
 
-			compliantNodes.push_back(n);
+			legitNodes.push_back(n);
 		}
 	}
 
-	if (compliantNodes.empty())
+	if (legitNodes.empty())
 	{
 		if (Options::getBool("traceAI")) Log(LOG_INFO) << (scout? "Scout ": "Guard ") << "found no patrol node! XXX XXX XXX";
 
@@ -1443,17 +1453,17 @@ Node* SavedBattleGame::getPatrolNode(
 
 	if (scout)
 	{
-		return compliantNodes[RNG::generate(0, compliantNodes.size() - 1)]; // scout picks a random destination
+		return legitNodes[RNG::generate(0, legitNodes.size() - 1)]; // scout picks a random destination
 	}
 	else
 	{
-		if (!preferred)
+		if (!biasNode)
 			return 0;
 
 		// non-scout patrols to highest value unoccupied node that's not fromNode
-		if (Options::getBool("traceAI")) Log(LOG_INFO) << "Choosing node flagged " << preferred->getFlags();
+		if (Options::getBool("traceAI")) Log(LOG_INFO) << "Choosing node flagged " << biasNode->getFlags();
 
-		return preferred;
+		return biasNode;
 	}
 }
 

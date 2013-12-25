@@ -592,14 +592,14 @@ void UnitInfoState::btnPrevClick(Action*)
 {
 	if (_parent)
 	{
-		_parent->selectPreviousPlayerUnit(
+		_parent->selectPreviousFactionUnit(
 										false,
 										false,
 										true);
 	}
 	else
 	{
-		_game->getSavedGame()->getSavedBattle()->selectPreviousPlayerUnit(
+		_game->getSavedGame()->getSavedBattle()->selectPreviousFactionUnit(
 																		false,
 																		false,
 																		true);
@@ -624,14 +624,14 @@ void UnitInfoState::btnNextClick(Action*)
 {
 	if (_parent)
 	{
-		_parent->selectNextPlayerUnit(
+		_parent->selectNextFactionUnit(
 									false,
 									false,
 									true);
 	}
 	else
 	{
-		_game->getSavedGame()->getSavedBattle()->selectNextPlayerUnit(
+		_game->getSavedGame()->getSavedBattle()->selectNextFactionUnit(
 																	false,
 																	false,
 																	true);

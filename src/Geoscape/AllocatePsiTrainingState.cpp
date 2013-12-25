@@ -69,7 +69,7 @@ AllocatePsiTrainingState::AllocatePsiTrainingState(Game* game, Base* base)
 	_txtPsiSkill	= new Text(48, 16, 182, 23);
 	_txtTraining	= new Text(34, 16, 260, 23);
 
-	_lstSoldiers	= new TextList(294, 128, 8, 42);
+	_lstSoldiers	= new TextList(293, 128, 8, 42);
 
 	_btnOk			= new TextButton(288, 16, 16, 177);
 
@@ -124,18 +124,16 @@ AllocatePsiTrainingState::AllocatePsiTrainingState(Game* game, Base* base)
 	_txtTraining->setText(tr("STR_IN_TRAINING"));
 
 	_lstSoldiers->setColor(Palette::blockOffset(13)+10);
-	_lstSoldiers->setArrowColor(Palette::blockOffset(13)+10);	// kL
+	_lstSoldiers->setArrowColor(Palette::blockOffset(13)+10);
 //kL	_lstSoldiers->setArrowColumn(-1, ARROW_VERTICAL);
-	_lstSoldiers->setArrowColumn(193, ARROW_VERTICAL);			// kL
+	_lstSoldiers->setArrowColumn(193, ARROW_VERTICAL); // kL
 	_lstSoldiers->setColumns(4, 118, 48, 78, 34);
 	_lstSoldiers->setSelectable(true);
 	_lstSoldiers->setBackground(_window);
 	_lstSoldiers->setMargin(8);
-	_lstSoldiers->onLeftArrowClick((ActionHandler)& AllocatePsiTrainingState::lstItemsLeftArrowClick_Psi);		// kL
-	_lstSoldiers->onRightArrowClick((ActionHandler)& AllocatePsiTrainingState::lstItemsRightArrowClick_Psi);	// kL
-//kL	_lstSoldiers->onMousePress((ActionHandler)& AllocatePsiTrainingState::lstSoldiersPress);
+	_lstSoldiers->onLeftArrowClick((ActionHandler)& AllocatePsiTrainingState::lstItemsLeftArrowClick_Psi);
+	_lstSoldiers->onRightArrowClick((ActionHandler)& AllocatePsiTrainingState::lstItemsRightArrowClick_Psi);
 	_lstSoldiers->onMouseClick((ActionHandler)& AllocatePsiTrainingState::lstSoldiersClick);
-//kL	_lstSoldiers->onMouseRelease((ActionHandler)& AllocatePsiTrainingState::lstSoldiersRelease);
 
 	init(); // kL
 /*kL	int row = 0;
@@ -206,12 +204,12 @@ AllocatePsiTrainingState::~AllocatePsiTrainingState()
  */
 void AllocatePsiTrainingState::init()
 {
-//kL	_game->setPalette(
-//kL				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)),
-//kL				Palette::backPos,
-//kL				16);
+	_game->setPalette(
+				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)),
+				Palette::backPos,
+				16);
 
-	_lstSoldiers->clearList();	// kL
+	_lstSoldiers->clearList();
 
 	int row = 0;
 	for (std::vector<Soldier*>::const_iterator

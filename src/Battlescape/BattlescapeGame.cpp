@@ -139,7 +139,7 @@ void BattlescapeGame::think()
 				}
 				else
 				{
-					if (_save->selectNextPlayerUnit(
+					if (_save->selectNextFactionUnit(
 												true,
 												_AISecondMove) == 0)
 					{
@@ -150,7 +150,7 @@ void BattlescapeGame::think()
 						}
 						else
 						{
-							_save->selectNextPlayerUnit();
+							_save->selectNextFactionUnit();
 							_debugPlay = true;
 						}
 					}
@@ -215,7 +215,7 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 		_AIActionCounter > 1
 		|| !unit->reselectAllowed())
 	{
-		if (_save->selectNextPlayerUnit(
+		if (_save->selectNextFactionUnit(
 									true,
 									_AISecondMove) == 0)
 		{
@@ -227,7 +227,7 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 			}
 			else
 			{
-				_save->selectNextPlayerUnit();
+				_save->selectNextFactionUnit();
 				_debugPlay = true;
 			}
 		}
@@ -453,7 +453,7 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 		_parentState->debug(L"Idle");
 		_AIActionCounter = 0;
 
-		if (_save->selectNextPlayerUnit(
+		if (_save->selectNextFactionUnit(
 									true,
 									_AISecondMove) == 0)
 		{
@@ -465,7 +465,7 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 			}
 			else
 			{
-				_save->selectNextPlayerUnit();
+				_save->selectNextFactionUnit();
 				_debugPlay = true;
 			}
 		}
@@ -1410,7 +1410,7 @@ void BattlescapeGame::popState()
 					_AIActionCounter = 0;
 
 					if (_states.empty()
-						&& _save->selectNextPlayerUnit(true) == 0)
+						&& _save->selectNextFactionUnit(true) == 0)
 					{
 						if (!_save->getDebugMode())
 						{
@@ -1419,7 +1419,7 @@ void BattlescapeGame::popState()
 						}
 						else
 						{
-							_save->selectNextPlayerUnit();
+							_save->selectNextFactionUnit();
 							_debugPlay = true;
 						}
 					}

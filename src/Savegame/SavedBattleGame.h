@@ -119,10 +119,10 @@ private:
 		_dragPixelTolerance;	// this is a cache for Options::getInt("battleScrollDragPixelTolerance")
 
 	/// Selects a soldier.
-	BattleUnit* selectPlayerUnit(
+	BattleUnit* selectFactionUnit(
 			int dir,
 			bool checkReselect = false,
-			bool setReselect = false,
+			bool setDontReselect = false,
 			bool checkInventory = false);
 
 
@@ -214,14 +214,14 @@ private:
 		/// Sets the currently selected unit.
 		void setSelectedUnit(BattleUnit* unit);
 		/// Selects the previous soldier.
-		BattleUnit* selectPreviousPlayerUnit(
+		BattleUnit* selectPreviousFactionUnit(
 				bool checkReselect = false,
-				bool setReselect = false,
+				bool setDontReselect = false,
 				bool checkInventory = false);
 		/// Selects the next soldier.
-		BattleUnit* selectNextPlayerUnit(
+		BattleUnit* selectNextFactionUnit(
 				bool checkReselect = false,
-				bool setReselect = false,
+				bool setDontReselect = false,
 				bool checkInventory = false);
 		/// Selects the unit with position on map.
 		BattleUnit* selectUnit(const Position& pos);

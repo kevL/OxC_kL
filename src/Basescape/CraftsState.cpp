@@ -67,16 +67,15 @@ CraftsState::CraftsState(
 	_txtCrew	= new Text(58, 9, 222, 49);
 	_txtHwp		= new Text(46, 9, 268, 49);
 
-	_lstCrafts	= new TextList(294, 112, 8, 59);
+	_lstCrafts	= new TextList(293, 112, 8, 59);
 
 	_btnOk		= new TextButton(288, 16, 16, 177);
 
 
 	_game->setPalette(
-				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(
-																			Palette::blockOffset(3)),
-																			Palette::backPos,
-																			16);
+				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(3)),
+				Palette::backPos,
+				16);
 
 	add(_window);
 	add(_txtTitle);
@@ -98,11 +97,13 @@ CraftsState::CraftsState(
 	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& CraftsState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)& CraftsState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& CraftsState::btnOkClick,
+					(SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(15)+1);
 	_txtTitle->setBig();
-	_txtTitle->setAlign(ALIGN_CENTER);		// kL
+	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_INTERCEPTION_CRAFT"));
 
 	_txtBase->setColor(Palette::blockOffset(15)+1);

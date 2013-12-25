@@ -154,14 +154,14 @@ private:
 		~BattlescapeState();
 
 		/// Selects the next soldier.
-		void selectNextPlayerUnit(
+		void selectNextFactionUnit(
 				bool checkReselect = false,
-				bool setReselect = false,
+				bool setDontReselect = false,
 				bool checkInventory = false);
 		/// Selects the previous soldier.
-		void selectPreviousPlayerUnit(
+		void selectPreviousFactionUnit(
 				bool checkReselect = false,
-				bool setReselect = false,
+				bool setDontReselect = false,
 				bool checkInventory = false);
 
 		/// Initilizes the battlescapestate.

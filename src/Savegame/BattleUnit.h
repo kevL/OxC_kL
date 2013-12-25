@@ -164,8 +164,8 @@ private:
 
 	std::string
 		_activeHand,
-		_zombieUnit,
-		_spawnUnit;
+		_spawnUnit,
+		_zombieUnit;
 
 	// static data
 	UnitStats _stats;
@@ -198,7 +198,7 @@ private:
 	SpecialAbility _specab;
 	Unit* _unitRules;
 
-	///
+	/// Converts an amount of experience to a stat increase.
 	int improveStat(int exp);
 
 
@@ -573,6 +573,8 @@ private:
 		/// Get unit's active hand.
 		std::string getActiveHand() const;
 
+		/// Get this unit's original faction
+		UnitFaction getOriginalFaction() const;
 		/// Convert's unit to a faction
 		void convertToFaction(UnitFaction f);
 
@@ -603,9 +605,6 @@ private:
 		void setTurnsExposed(int turns);
 		/// Set how many turns this unit will be exposed for.
 		int getTurnsExposed() const;
-
-		/// Get this unit's original faction
-		UnitFaction getOriginalFaction() const;
 
 		/// call this after the default copy constructor deletes the cache
 		void invalidateCache();

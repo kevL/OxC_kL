@@ -138,11 +138,13 @@ NextTurnState::~NextTurnState()
  */
 void NextTurnState::handle(Action* action)
 {
-//kL	State::handle(action);
+	State::handle(action);
 
-//kL	if (action->getDetails()->type == SDL_KEYDOWN
-//kL		|| action->getDetails()->type == SDL_MOUSEBUTTONDOWN)
-	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT) // kL
+	if (action->getDetails()->type == SDL_KEYDOWN
+		|| action->getDetails()->type == SDL_MOUSEBUTTONDOWN)
+//	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT) // kL
+		// That causes the aLien NextTurn screen to auto-disappear
+		// if all aLiens are Mc'd by xCom... bah!!
 	{
 		Log(LOG_INFO) << "NextTurnState::handle(RMB)";
 

@@ -70,7 +70,7 @@ CraftArmorState::CraftArmorState(
 	_txtArmor		= new Text(76, 9, 133, 31);
 	_txtCraft		= new Text(70, 9, 226, 31);
 
-	_lstSoldiers	= new TextList(294, 128, 8, 42);
+	_lstSoldiers	= new TextList(293, 128, 8, 42);
 
 	_btnOk			= new TextButton(288, 16, 16, 177);
 
@@ -97,7 +97,9 @@ CraftArmorState::CraftArmorState(
 	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& CraftArmorState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)& CraftArmorState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& CraftArmorState::btnOkClick,
+					(SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
@@ -114,13 +116,13 @@ CraftArmorState::CraftArmorState(
 
 	_lstSoldiers->setColor(Palette::blockOffset(13)+10);
 	_lstSoldiers->setArrowColor(Palette::blockOffset(13)+10);
-	_lstSoldiers->setArrowColumn(193, ARROW_VERTICAL); // kL
-	_lstSoldiers->setColumns(3, 117, 93, 78);
+	_lstSoldiers->setArrowColumn(193, ARROW_VERTICAL);
+	_lstSoldiers->setColumns(3, 117, 93, 73);
 	_lstSoldiers->setSelectable(true);
 	_lstSoldiers->setBackground(_window);
 	_lstSoldiers->setMargin(8);
-	_lstSoldiers->onLeftArrowClick((ActionHandler)& CraftArmorState::lstItemsLeftArrowClick_Armor);		// kL
-	_lstSoldiers->onRightArrowClick((ActionHandler)& CraftArmorState::lstItemsRightArrowClick_Armor);	// kL
+	_lstSoldiers->onLeftArrowClick((ActionHandler)& CraftArmorState::lstItemsLeftArrowClick_Armor);
+	_lstSoldiers->onRightArrowClick((ActionHandler)& CraftArmorState::lstItemsRightArrowClick_Armor);
 	_lstSoldiers->onMouseClick((ActionHandler)& CraftArmorState::lstSoldiersClick);
 
 

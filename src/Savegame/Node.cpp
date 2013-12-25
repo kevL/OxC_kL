@@ -23,6 +23,19 @@
 namespace OpenXcom
 {
 
+const int Node::nodeRank[8][7] =
+{
+	{4, 3, 5, 8, 7, 2, 0},	// commander
+	{4, 3, 5, 8, 7, 2, 0},	// leader
+	{5, 4, 3, 2, 7, 8, 0},	// engineer
+	{7, 6, 2, 8, 3, 4, 0},	// medic
+	{3, 4, 5, 2, 7, 8, 0},	// navigator
+	{2, 5, 3, 4, 6, 8, 0},	// soldier
+	{2, 5, 3, 4, 6, 8, 0},	// terrorist
+	{2, 5, 3, 4, 6, 8, 0}	// also terrorist
+};
+
+
 Node::Node()
 	:
 		_id(0),
@@ -47,7 +60,15 @@ Node::Node()
  * @param reserved
  * @param priority
  */
-Node::Node(int id, Position pos, int segment, int type, int rank, int flags, int reserved, int priority)
+Node::Node(
+		int id,
+		Position pos,
+		int segment,
+		int type,
+		int rank,
+		int flags,
+		int reserved,
+		int priority)
 	:
 		_id(id),
 		_pos(pos),
@@ -68,19 +89,6 @@ Node::~Node()
 {
 }
 
-
-const int Node::nodeRank[8][7] =
-{
-	{4, 3, 5, 8, 7, 2, 0},	// commander
-	{4, 3, 5, 8, 7, 2, 0},	// leader
-	{5, 4, 3, 2, 7, 8, 0},	// engineer
-	{7, 6, 2, 8, 3, 4, 0},	// medic
-	{3, 4, 5, 2, 7, 8, 0},	// navigator
-	{2, 5, 3, 4, 6, 8, 0},	// soldier
-	{2, 5, 3, 4, 6, 8, 0},	// terrorist
-	{2, 5, 3, 4, 6, 8, 0}	// also terrorist
-};
-
 /**
  * Loads the UFO from a YAML file.
  * @param node YAML node.
@@ -96,7 +104,7 @@ void Node::load(const YAML::Node &node)
 	_reserved	= node["reserved"].as<int>(_reserved);
 	_priority	= node["priority"].as<int>(_priority);
 	_allocated	= node["allocated"].as<bool>(_allocated);
-	_nodeLinks	= node["links"].as< std::vector<int> >(_nodeLinks);
+	_nodeLinks	= node["links"].as< std::vector<int>>(_nodeLinks);
 }
 
 /**
@@ -166,7 +174,9 @@ int Node::getSegment() const
 	return _segment;
 }
 
-/// get the node's paths
+/**
+ * get the node's paths
+ */
 std::vector<int>* Node::getNodeLinks()
 {
 	return &_nodeLinks;
@@ -181,26 +191,41 @@ int Node::getType() const
 	return _type;
 }
 
+/**
+ *
+ */
 bool Node::isAllocated() const
 {
 	return _allocated;
 }
 
+/**
+ *
+ */
 void Node::allocateNode()
 {
 	_allocated = true;
 }
 
+/**
+ *
+ */
 void Node::freeNode()
 {
 	_allocated = false;
 }
 
+/**
+ *
+ */
 bool Node::isTarget() const
 {
 	return _reserved == 5;
 }
 
+/**
+ *
+ */
 void Node::setType(int type)
 {
     _type = type;

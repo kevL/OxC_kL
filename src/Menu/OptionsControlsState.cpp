@@ -132,9 +132,9 @@ OptionsControlsState::OptionsControlsState(
 		_selected(-1),
 		_selKey(0)
 {
-	_countGeneral = 4;
-	_countGeo = 20;
-	_countBattle = 36;
+	_countGeneral	= 4;
+	_countGeo		= 20;
+	_countBattle	= 36;
 
 	// You can tune quick save/load hotkeys only if you choose autosave in the advanced options.
 	if (Options::getInt("autosave") == 1)
@@ -142,16 +142,16 @@ OptionsControlsState::OptionsControlsState(
 
 
 	_window			= new Window(this, 320, 200, 0, 0, POPUP_BOTH);
+	_txtTitle		= new Text(310, 17, 5, 8);
+	_lstControls	= new TextList(293, 136, 8, 30);
 	_btnOk			= new TextButton(148, 16, 8, 176);
 	_btnCancel		= new TextButton(148, 16, 164, 176);
-	_txtTitle		= new Text(310, 17, 5, 8);
-	_lstControls	= new TextList(294, 136, 8, 30);
 
 	add(_window);
-	add(_btnOk);
-	add(_btnCancel);
 	add(_txtTitle);
 	add(_lstControls);
+	add(_btnOk);
+	add(_btnCancel);
 
 	centerAllSurfaces();
 
@@ -162,12 +162,16 @@ OptionsControlsState::OptionsControlsState(
 	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&OptionsControlsState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&OptionsControlsState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
+	_btnOk->onKeyboardPress(
+					(ActionHandler)&OptionsControlsState::btnOkClick,
+					(SDLKey)Options::getInt("keyOk"));
 
 	_btnCancel->setColor(Palette::blockOffset(8)+5);
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)&OptionsControlsState::btnCancelClick);
-	_btnCancel->onKeyboardPress((ActionHandler)&OptionsControlsState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnCancel->onKeyboardPress(
+					(ActionHandler)&OptionsControlsState::btnCancelClick,
+					(SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setBig();
@@ -176,7 +180,7 @@ OptionsControlsState::OptionsControlsState(
 
 	_lstControls->setColor(Palette::blockOffset(8)+10);
 	_lstControls->setArrowColor(Palette::blockOffset(8)+5);
-	_lstControls->setColumns(2, 168, 120);
+	_lstControls->setColumns(2, 168, 117);
 	_lstControls->setSelectable(true);
 	_lstControls->setBackground(_window);
 	_lstControls->setMargin(8);

@@ -54,7 +54,9 @@ namespace OpenXcom
  * @param soldier Pointer to the Soldier.
  * @param faction Which faction the units belongs to.
  */
-BattleUnit::BattleUnit(Soldier* soldier, UnitFaction faction)
+BattleUnit::BattleUnit(
+		Soldier* soldier,
+		UnitFaction faction)
 	:
 		_faction(faction),
 		_originalFaction(faction),
@@ -162,7 +164,12 @@ BattleUnit::BattleUnit(Soldier* soldier, UnitFaction faction)
  * @param faction Which faction the units belongs to.
  * @param difficulty level (for stat adjustement)
  */
-BattleUnit::BattleUnit(Unit* unit, UnitFaction faction, int id, Armor* armor, int diff)
+BattleUnit::BattleUnit(
+		Unit* unit,
+		UnitFaction faction,
+		int id,
+		Armor* armor,
+		int diff)
 	:
 		_faction(faction),
 		_originalFaction(faction),
@@ -383,7 +390,9 @@ int BattleUnit::getId() const
  * Changes the BattleUnit's position.
  * @param pos position
  */
-void BattleUnit::setPosition(const Position& pos, bool updateLastPos)
+void BattleUnit::setPosition(
+		const Position& pos,
+		bool updateLastPos)
 {
 	if (updateLastPos)
 		_lastPos = _pos;
@@ -449,7 +458,7 @@ void BattleUnit::setFaceDirection(int direction)
 }
 
 /**
- * Gets the BattleUnit's (horizontal) face direction. Used only during strafing moves
+ * Gets the BattleUnit's (horizontal) face direction. Used only during strafing moves.
  * @return direction
  */
 int BattleUnit::getFaceDirection() const
@@ -476,7 +485,7 @@ int BattleUnit::getTurretToDirection() const
 }
 
 /**
- * Gets the BattleUnit's vertical direction. This is when going up or down.
+ * Gets the BattleUnit's vertical direction. This is when going up or down, doh!
  * @return direction
  */
 int BattleUnit::getVerticalDirection() const
@@ -783,7 +792,9 @@ int BattleUnit::getDiagonalWalkingPhase() const
  * Look at a point.
  * @param point
  */
-void BattleUnit::lookAt(const Position& point, bool turret)
+void BattleUnit::lookAt(
+		const Position& point,
+		bool turret)
 {
 	Log(LOG_INFO) << "BattleUnit::lookAt() #1";// unitID = " << getId();
 	//Log(LOG_INFO) << ". . _direction = " << _direction;
@@ -828,7 +839,9 @@ void BattleUnit::lookAt(const Position& point, bool turret)
  * Look a direction.
  * @param direction
  */
-void BattleUnit::lookAt(int direction, bool force)
+void BattleUnit::lookAt(
+		int direction,
+		bool force)
 {
 	Log(LOG_INFO) << "BattleUnit::lookAt() #2";// unitID = " << getId();
 	//Log(LOG_INFO) << ". . _direction = " << _direction;
@@ -953,11 +966,15 @@ void BattleUnit::turn(bool turret)
 			}
 		}
 
-		if		(_direction < 0) _direction = 7;
-		else if (_direction > 7) _direction = 0;
+		if (_direction < 0)
+			_direction = 7;
+		else if (_direction > 7)
+			_direction = 0;
 
-		if		(_directionTurret < 0) _directionTurret = 7;
-		else if (_directionTurret > 7) _directionTurret = 0;
+		if (_directionTurret < 0)
+			_directionTurret = 7;
+		else if (_directionTurret > 7)
+			_directionTurret = 0;
 
 		//Log(LOG_INFO) << ". . _direction = " << _direction;
 		//Log(LOG_INFO) << ". . _toDirection = " << _toDirection;
@@ -1018,7 +1035,9 @@ UnitFaction BattleUnit::getFaction() const
  * Set to true when the unit has to be redrawn from scratch.
  * @param cache
  */
-void BattleUnit::setCache(Surface* cache, int part)
+void BattleUnit::setCache(
+		Surface* cache,
+		int part)
 {
 	if (cache == 0)
 	{
@@ -1037,7 +1056,9 @@ void BattleUnit::setCache(Surface* cache, int part)
  * @param invalid
  * @return cache
  */
-Surface* BattleUnit::getCache(bool* invalid, int part) const
+Surface* BattleUnit::getCache(
+		bool* invalid,
+		int part) const
 {
 	if (part < 0) part = 0;
 	*invalid = _cacheInvalid;
@@ -1148,54 +1169,6 @@ int BattleUnit::directionTo(const Position& point) const
 	//Log(LOG_INFO) << "BattleUnit::directionTo() dir = " << dir;
 	return dir;
 }
-/*	double ox = point.x - _pos.x;
-	double oy = point.y - _pos.y;
-	double angle = atan2(ox, -oy);
-
-	// divide the pie in 4 angles each at 1/8th before each quarter
-	double pie[4] =
-	{
-		(M_PI_4 * 4.f) - M_PI_4 / 2.f,
-		(M_PI_4 * 3.f) - M_PI_4 / 2.f,
-		(M_PI_4 * 2.f) - M_PI_4 / 2.f,
-		(M_PI_4 * 1.f) - M_PI_4 / 2.f
-	};
-
-	int dir = 0;
-	if (angle > pie[0] || angle < -pie[0])
-	{
-		dir = 4;
-	}
-	else if (angle > pie[1])
-	{
-		dir = 3;
-	}
-	else if (angle > pie[2])
-	{
-		dir = 2;
-	}
-	else if (angle > pie[3])
-	{
-		dir = 1;
-	}
-	else if (angle < -pie[1])
-	{
-		dir = 5;
-	}
-	else if (angle < -pie[2])
-	{
-		dir = 6;
-	}
-	else if (angle < -pie[3])
-	{
-		dir = 7;
-	}
-	else if (angle < pie[0])
-	{
-		dir = 0;
-	}
-
-	return dir; */
 
 /**
  * Returns the soldier's amount of time units.
@@ -1240,7 +1213,11 @@ int BattleUnit::getMorale() const
  * @param type
  * @return, Damage done after adjustment
  */
-int BattleUnit::damage(const Position& relative, int power, ItemDamageType type, bool ignoreArmor)
+int BattleUnit::damage(
+		const Position& relative,
+		int power,
+		ItemDamageType type,
+		bool ignoreArmor)
 {
 	Log(LOG_INFO) << "BattleUnit::damage() ID " << getId();
 
@@ -1384,6 +1361,9 @@ void BattleUnit::healStun(int power)
 		_stunlevel = 0;
 }
 
+/**
+ *
+ */
 int BattleUnit::getStunlevel() const
 {
 	return _stunlevel;
@@ -1643,7 +1623,10 @@ bool BattleUnit::addToVisibleUnits(BattleUnit* unit)
 {
 	bool add = true;
 
-	for (std::vector<BattleUnit*>::iterator i = _unitsSpottedThisTurn.begin(); i != _unitsSpottedThisTurn.end(); ++i)
+	for (std::vector<BattleUnit*>::iterator
+			i = _unitsSpottedThisTurn.begin();
+			i != _unitsSpottedThisTurn.end();
+			++i)
 	{
 		if (dynamic_cast<BattleUnit*>(*i) == unit)
 		{
@@ -1658,7 +1641,10 @@ bool BattleUnit::addToVisibleUnits(BattleUnit* unit)
 		_unitsSpottedThisTurn.push_back(unit);
 	}
 
-	for (std::vector<BattleUnit*>::iterator i = _visibleUnits.begin(); i != _visibleUnits.end(); ++i)
+	for (std::vector<BattleUnit*>::iterator
+			i = _visibleUnits.begin();
+			i != _visibleUnits.end();
+			++i)
 	{
 		if (dynamic_cast<BattleUnit*>(*i) == unit)
 		{
@@ -1689,7 +1675,7 @@ void BattleUnit::clearVisibleUnits()
 }
 
 /**
- * Add this unit to the list of visible tiles. Returns true [if this is a new one?].
+ * Add this unit to the list of visible tiles. Returns true, or chrashes.
  * @param tile
  * @return
  */
@@ -1714,7 +1700,10 @@ std::vector<Tile*>* BattleUnit::getVisibleTiles()
  */
 void BattleUnit::clearVisibleTiles()
 {
-	for (std::vector<Tile*>::iterator j = _visibleTiles.begin(); j != _visibleTiles.end(); ++j)
+	for (std::vector<Tile*>::iterator
+			j = _visibleTiles.begin();
+			j != _visibleTiles.end();
+			++j)
 	{
 		(*j)->setVisible(-1);
 	}
@@ -1787,7 +1776,7 @@ double BattleUnit::getAccuracyModifier()
 	if (wounds > 9)
 		wounds = 9;
 
-	result *= 1.0 - (0.1 * wounds);
+	result *= 1.0 - (0.1 * static_cast<double>(wounds));
 
 	return result;
 }
@@ -1863,11 +1852,11 @@ void BattleUnit::prepareNewTurn()
 {
 	Log(LOG_INFO) << "BattleUnit::prepareNewTurn() ID " << getId();
 
-	_faction = _originalFaction; // revert to original faction
+	_faction = _originalFaction;
 
 	_unitsSpottedThisTurn.clear();
 
-	int TURecovery = getStats()->tu; // recover TUs
+	int TURecovery = getStats()->tu;
 
 	float encumbrance = static_cast<float>(getStats()->strength) / static_cast<float>(getCarriedWeight());
 	if (encumbrance < 1.f)
@@ -2208,7 +2197,7 @@ BattleItem* BattleUnit::getMainHandWeapon(bool quickest) const
 	BattleItem* weaponLeft = getItem("STR_LEFT_HAND");
 
 	bool isRight = weaponRight
-			&& weaponRight->getAmmoItem();						// itself, if no ammo required (?)
+			&& weaponRight->getAmmoItem();						// itself, if no ammo required
 //			&& weaponRight->getAmmoItem()->getAmmoQuantity();	// -1 if no ammo required (?)
 //			&& (weaponRight->getRules()->getBattleType() == BT_FIREARM
 //				|| weaponRight->getRules()->getBattleType() == BT_MELEE)
@@ -2298,8 +2287,7 @@ BattleItem* BattleUnit::getGrenadeFromBelt() const
 		&& handgrenade->getRules()->getBattleType() == BT_GRENADE)
 	{
 		return handgrenade;
-	}
-	// kL_end.
+	} // kL_end.
 
 	for (std::vector<BattleItem*>::const_iterator
 			i = _inventory.begin();
@@ -2340,7 +2328,10 @@ bool BattleUnit::checkAmmo()
 	BattleItem* ammo = 0;
 	bool wrong = true;
 
-	for (std::vector<BattleItem*>::iterator i = getInventory()->begin(); i != getInventory()->end(); ++i)
+	for (std::vector<BattleItem*>::iterator
+			i = getInventory()->begin();
+			i != getInventory()->end();
+			++i)
 	{
 		ammo = *i;
 		for (std::vector<std::string>::iterator
@@ -2450,9 +2441,8 @@ bool BattleUnit::postMissionProcedures(SavedGame* geoscape)
 {
 	Soldier* s = geoscape->getSoldier(_id);
 	if (s == 0)
-	{
 		return false;
-	}
+
 
 	updateGeoscapeStats(s);
 
@@ -2466,55 +2456,61 @@ bool BattleUnit::postMissionProcedures(SavedGame* geoscape)
 
 	if (_expBravery && stats->bravery < caps.bravery)
 	{
-		if (_expBravery > RNG::generate(0, 10)) stats->bravery += 10;
+		if (_expBravery > RNG::generate(0, 10))
+			stats->bravery += 10;
 	}
 
-	if (_expReactions && stats->reactions < caps.reactions)
+	if (_expReactions
+		&& stats->reactions < caps.reactions)
 	{
 		stats->reactions += improveStat(_expReactions);
 	}
 
-	if (_expFiring && stats->firing < caps.firing)
+	if (_expFiring
+		&& stats->firing < caps.firing)
 	{
 		stats->firing += improveStat(_expFiring);
 	}
 
-	if (_expMelee && stats->melee < caps.melee)
+	if (_expMelee
+		&& stats->melee < caps.melee)
 	{
 		stats->melee += improveStat(_expMelee);
 	}
 
-	if (_expThrowing && stats->throwing < caps.throwing)
-	{
-		stats->throwing += improveStat(_expThrowing);
-	}
-
-	if (_expPsiSkill && stats->psiSkill < caps.psiSkill)
+	if (_expPsiSkill
+		&& stats->psiSkill < caps.psiSkill)
 	{
 		stats->psiSkill += improveStat(_expPsiSkill);
 	}
 
-	if (_expBravery || _expReactions || _expFiring || _expPsiSkill || _expMelee)
+	if (_expThrowing
+		&& stats->throwing < caps.throwing)
+	{
+		stats->throwing += improveStat(_expThrowing);
+	}
+
+	if (_expBravery
+		|| _expReactions
+		|| _expFiring
+		|| _expMelee
+		|| _expPsiSkill)
 	{
 		if (s->getRank() == RANK_ROOKIE)
 			s->promoteRank();
 
 		int v = caps.tu - stats->tu;
 
-//kL		if (v > 0) stats->tu += RNG::generate(0, v/10 + 2);
-		if (v > 0) stats->tu += RNG::generate(0, (v / 10) + 2) -1;			// kL
+		if (v > 0) stats->tu += RNG::generate(0, (v / 10) + 2) - 1;
 
 		v = caps.health - stats->health;
-//kL		if (v > 0) stats->health += RNG::generate(0, v/10 + 2);
-		if (v > 0) stats->health += RNG::generate(0, (v / 10) + 2) -1;		// kL
+		if (v > 0) stats->health += RNG::generate(0, (v / 10) + 2) - 1;
 
 		v = caps.strength - stats->strength;
-//kL		if (v > 0) stats->strength += RNG::generate(0, v/10 + 2);
-		if (v > 0) stats->strength += RNG::generate(0, (v / 10) + 2) -1;	// kL
+		if (v > 0) stats->strength += RNG::generate(0, (v / 10) + 2) - 1;
 
 		v = caps.stamina - stats->stamina;
-//kL		if (v > 0) stats->stamina += RNG::generate(0, v/10 + 2);
-		if (v > 0) stats->stamina += RNG::generate(0, (v / 10) + 2) -1;		// kL
+		if (v > 0) stats->stamina += RNG::generate(0, (v / 10) + 2) - 1;
 
 		return true;
 	}
@@ -2525,9 +2521,9 @@ bool BattleUnit::postMissionProcedures(SavedGame* geoscape)
 }
 
 /**
- * Converts the number of experience to the stat increase.
- * @param Experience counter.
- * @return Stat increase.
+ * Converts an amount of experience to a stat increase.
+ * @param (int)exp, Experience counter.
+ * @return, Stat increase.
  */
 int BattleUnit::improveStat(int exp)
 {

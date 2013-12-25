@@ -434,7 +434,10 @@ FpsCounter* Game::getFpsCounter() const
  * @param firstcolor Offset of the first color to replace.
  * @param ncolors Amount of colors to replace.
  */
-void Game::setPalette(SDL_Color* colors, int firstcolor, int ncolors)
+void Game::setPalette(
+		SDL_Color* colors,
+		int firstcolor,
+		int ncolors)
 {
 	_screen->setPalette(colors, firstcolor, ncolors);
 	_cursor->setPalette(colors, firstcolor, ncolors);
@@ -450,9 +453,9 @@ void Game::setPalette(SDL_Color* colors, int firstcolor, int ncolors)
 
 /**
  * Pops all the states currently in stack and pushes in the new state.
- * A shortcut for cleaning up all the old states when they're not necessary
+ * A shortcut for cleaning up all the old states when they're not necessary,
  * like in one-way transitions.
- * @param state Pointer to the new state.
+ * @param state, Pointer to the new state.
  */
 void Game::setState(State* state)
 {
@@ -469,7 +472,7 @@ void Game::setState(State* state)
 /**
  * Pushes a new state into the top of the stack and initializes it.
  * The new state will be used once the next game cycle starts.
- * @param state Pointer to the new state.
+ * @param state, Pointer to the new state.
  */
 void Game::pushState(State* state)
 {

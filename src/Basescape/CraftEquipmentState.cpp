@@ -94,7 +94,7 @@ CraftEquipmentState::CraftEquipmentState(
 	_txtStores		= new Text(150, 9, 160, 33);
 //kL	_txtCrew		= new Text(71, 9, 244, 24);
 
-	_lstEquipment	= new TextList(294, 128, 8, 42);
+	_lstEquipment	= new TextList(293, 128, 8, 42);
 
 	_btnClear		= new TextButton(94, 16, 16, 177);
 	_btnInventory	= new TextButton(94, 16, 113, 177);
@@ -140,7 +140,9 @@ CraftEquipmentState::CraftEquipmentState(
 	_btnOk->setColor(Palette::blockOffset(15)+1);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& CraftEquipmentState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)& CraftEquipmentState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& CraftEquipmentState::btnOkClick,
+					(SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(15)+1);
 	_txtTitle->setBig();

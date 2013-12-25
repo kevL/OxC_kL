@@ -84,12 +84,15 @@ NewManufactureListState::NewManufactureListState(Game* game, Base* base)
 	_txtItem		= new Text(80, 9, 16, 58);
 	_txtCategory	= new Text(80, 9, 172, 58);
 
-	_lstManufacture	= new TextList(294, 72, 8, 70);
+	_lstManufacture	= new TextList(293, 72, 8, 70);
 
 	_btnCancel		= new TextButton(288, 16, 16, 147);
 
 
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
+	_game->setPalette(
+				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)),
+				Palette::backPos,
+				16);
 
 	add(_window);
 	add(_btnCancel);
@@ -116,7 +119,7 @@ NewManufactureListState::NewManufactureListState(Game* game, Base* base)
 	_txtCategory->setText(tr("STR_CATEGORY"));
 
 //kL	_lstManufacture->setColumns(2, int(19.5f * button_x_border), int(16.25f * button_x_border));
-	_lstManufacture->setColumns(2, 148, 130);
+	_lstManufacture->setColumns(2, 148, 129);
 	_lstManufacture->setSelectable(true);
 	_lstManufacture->setBackground(_window);
 	_lstManufacture->setMargin(16);
@@ -127,7 +130,9 @@ NewManufactureListState::NewManufactureListState(Game* game, Base* base)
 	_btnCancel->setColor(Palette::blockOffset(13)+10);
 	_btnCancel->setText(tr("STR_CANCEL"));
 	_btnCancel->onMouseClick((ActionHandler)& NewManufactureListState::btnCancelClick);
-	_btnCancel->onKeyboardPress((ActionHandler)& NewManufactureListState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnCancel->onKeyboardPress(
+					(ActionHandler)& NewManufactureListState::btnCancelClick,
+					(SDLKey)Options::getInt("keyCancel"));
 }
 
 /**

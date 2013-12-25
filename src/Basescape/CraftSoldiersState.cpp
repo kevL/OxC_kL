@@ -75,7 +75,7 @@ CraftSoldiersState::CraftSoldiersState(
 	_txtRank		= new Text(93, 9, 132, 33);
 	_txtCraft		= new Text(71, 9, 225, 33);
 
-	_lstSoldiers	= new TextList(294, 128, 8, 42);
+	_lstSoldiers	= new TextList(293, 128, 8, 42);
 
 	_btnUnload		= new TextButton(134, 16, 16, 177);
 	_btnOk			= new TextButton(134, 16, 170, 177);
@@ -106,7 +106,9 @@ CraftSoldiersState::CraftSoldiersState(
 	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& CraftSoldiersState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)& CraftSoldiersState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& CraftSoldiersState::btnOkClick,
+					(SDLKey)Options::getInt("keyCancel"));
 
 	_btnUnload->setColor(Palette::blockOffset(13)+10);
 	_btnUnload->setText(_game->getLanguage()->getString("STR_UNLOAD"));

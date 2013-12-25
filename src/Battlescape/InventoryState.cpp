@@ -245,7 +245,7 @@ void InventoryState::init()
 		if (_parent)
 		{
 			//Log(LOG_INFO) << ". . . _parent: select next unit";
-			_parent->selectNextPlayerUnit(
+			_parent->selectNextFactionUnit(
 										false,
 										false,
 										true);
@@ -253,7 +253,7 @@ void InventoryState::init()
 		else
 		{
 			//Log(LOG_INFO) << ". . . NO _parent: select next unit";
-			_battleGame->selectNextPlayerUnit(
+			_battleGame->selectNextFactionUnit(
 											false,
 											false,
 											true);
@@ -510,11 +510,11 @@ void InventoryState::btnPrevClick(Action*)
 
 	if (_parent)
 	{
-		_parent->selectPreviousPlayerUnit(false, false, true);
+		_parent->selectPreviousFactionUnit(false, false, true);
 	}
 	else
 	{
-		_battleGame->selectPreviousPlayerUnit(false, false, true);
+		_battleGame->selectPreviousFactionUnit(false, false, true);
 	}
 
 	init();
@@ -533,11 +533,11 @@ void InventoryState::btnNextClick(Action*)
 
 	if (_parent)
 	{
-		_parent->selectNextPlayerUnit(false, false, true);
+		_parent->selectNextFactionUnit(false, false, true);
 	}
 	else
 	{
-		_battleGame->selectNextPlayerUnit(false, false, true);
+		_battleGame->selectNextFactionUnit(false, false, true);
 	}
 
 	init();

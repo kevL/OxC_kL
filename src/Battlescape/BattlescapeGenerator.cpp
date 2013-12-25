@@ -1458,11 +1458,8 @@ void BattlescapeGenerator::deployAliens(
 		{
 //kL			bool outside = false;
 			outside = false; // kL
-
 			if (_ufo)
-			{
 				outside = RNG::generate(0, 99) < (*d).percentageOutsideUfo;
-			}
 
 //kL			Unit* unitRule = _game->getRuleset()->getUnit(alienName);
 //kL			BattleUnit* unit = addAlien(unitRule, (*d).alienRank, outside);
@@ -1543,11 +1540,11 @@ BattleUnit* BattlescapeGenerator::addAlien(
 									_unitSequence++,
 									_game->getRuleset()->getArmor(rules->getArmor()),
 									difficulty);
-	Node* node = 0;
 
 	/* following data is the order in which certain alien ranks spawn on certain node ranks */
 	/* note that they all can fall back to rank 0 nodes - which is scout (outside ufo) */
 
+	Node* node = 0;
 	for (int
 			i = 0;
 			i < 7

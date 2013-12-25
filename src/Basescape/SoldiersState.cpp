@@ -71,7 +71,7 @@ SoldiersState::SoldiersState(
 	_txtRank		= new Text(102, 9, 133, 31);
 	_txtCraft		= new Text(82, 9, 226, 31);
 
-	_lstSoldiers	= new TextList(294, 128, 8, 42);
+	_lstSoldiers	= new TextList(293, 128, 8, 42);
 
 	_btnMemorial	= new TextButton(72, 16, 11, 177);
 	_btnPsiTrain	= new TextButton(71, 16, 87, 177);
@@ -113,7 +113,9 @@ SoldiersState::SoldiersState(
 	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& SoldiersState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)& SoldiersState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& SoldiersState::btnOkClick,
+					(SDLKey)Options::getInt("keyCancel"));
 
 	_btnMemorial->setColor(Palette::blockOffset(13)+10);
 	_btnMemorial->setText(tr("STR_MEMORIAL"));

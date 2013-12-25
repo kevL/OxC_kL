@@ -1122,7 +1122,7 @@ void BattlescapeState::btnCenterClick(Action*)
 void BattlescapeState::btnNextSoldierClick(Action*)
 {
 	if (allowButtons())
-		selectNextPlayerUnit(true);
+		selectNextFactionUnit(true);
 }
 
 /**
@@ -1132,7 +1132,7 @@ void BattlescapeState::btnNextSoldierClick(Action*)
 void BattlescapeState::btnNextStopClick(Action*)
 {
 	if (allowButtons())
-		selectNextPlayerUnit(true, true);
+		selectNextFactionUnit(true, true);
 }
 
 /**
@@ -1142,7 +1142,7 @@ void BattlescapeState::btnNextStopClick(Action*)
 void BattlescapeState::btnPrevSoldierClick(Action*)
 {
 	if (allowButtons())
-		selectPreviousPlayerUnit(true);
+		selectPreviousFactionUnit(true);
 }
 
 /**
@@ -1152,18 +1152,18 @@ void BattlescapeState::btnPrevSoldierClick(Action*)
 void BattlescapeState::btnPrevStopClick(Action*)
 {
 	if (allowButtons())
-		selectPreviousPlayerUnit(true, true);
+		selectPreviousFactionUnit(true, true);
 }
 
 /**
  * Selects the next soldier.
  * @param checkReselect When true, don't select a unit that has been previously flagged.
- * @param setReselect When true, flag the current unit first.
+ * @param setDontReselect When true, flag the current unit first.
  * @param checkInventory When true, don't select a unit that has no inventory.
  */
-void BattlescapeState::selectNextPlayerUnit(
+void BattlescapeState::selectNextFactionUnit(
 		bool checkReselect,
-		bool setReselect,
+		bool setDontReselect,
 		bool checkInventory)
 {
 	if (allowButtons())
@@ -1171,9 +1171,9 @@ void BattlescapeState::selectNextPlayerUnit(
 		if (_battleGame->getCurrentAction()->type != BA_NONE)
 			return;
 
-		BattleUnit* unit = _save->selectNextPlayerUnit(
+		BattleUnit* unit = _save->selectNextFactionUnit(
 												checkReselect,
-												setReselect,
+												setDontReselect,
 												checkInventory);
 		updateSoldierInfo();
 
@@ -1189,12 +1189,12 @@ void BattlescapeState::selectNextPlayerUnit(
 /**
  * Selects the previous soldier.
  * @param checkReselect When true, don't select a unit that has been previously flagged.
- * @param setReselect When true, flag the current unit first.
+ * @param setDontReselect When true, flag the current unit first.
  * @param checkInventory When true, don't select a unit that has no inventory.
  */
-void BattlescapeState::selectPreviousPlayerUnit(
+void BattlescapeState::selectPreviousFactionUnit(
 		bool checkReselect,
-		bool setReselect,
+		bool setDontReselect,
 		bool checkInventory)
 {
 	if (allowButtons())
@@ -1202,9 +1202,9 @@ void BattlescapeState::selectPreviousPlayerUnit(
 		if (_battleGame->getCurrentAction()->type != BA_NONE)
 			return;
 
-		BattleUnit* unit = _save->selectPreviousPlayerUnit(
+		BattleUnit* unit = _save->selectPreviousFactionUnit(
 													checkReselect,
-													setReselect,
+													setDontReselect,
 													checkInventory);
 		updateSoldierInfo();
 
