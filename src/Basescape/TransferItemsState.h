@@ -85,7 +85,10 @@ private:
 		* _timerDec;
 	Window* _window;
 
-	std::vector<int> _qtys;
+	std::vector<int>
+		_baseQty,
+		_destQty,
+		_transferQty;
 	std::vector<std::string> _items;
 	std::vector<Craft*> _crafts;
 	std::vector<Soldier*> _soldiers;
