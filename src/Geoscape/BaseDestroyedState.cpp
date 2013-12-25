@@ -18,27 +18,34 @@
  */
 
 #include "BaseDestroyedState.h"
+
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
+#include "../Engine/Options.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Surface.h"
-#include "../Interface/Window.h"
+
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
-#include "../Savegame/SavedGame.h"
+#include "../Interface/Window.h"
+
+#include "../Resource/ResourcePack.h"
+
+#include "../Ruleset/RuleRegion.h"
+
+#include "../Savegame/AlienMission.h"
 #include "../Savegame/Base.h"
 #include "../Savegame/Region.h"
-#include "../Savegame/AlienMission.h"
+#include "../Savegame/SavedGame.h"
 #include "../Savegame/Ufo.h"
-#include "../Ruleset/RuleRegion.h"
-#include "../Engine/Options.h"
 
 
 namespace OpenXcom
 {
 
-BaseDestroyedState::BaseDestroyedState(Game* game, Base* base)
+BaseDestroyedState::BaseDestroyedState(
+		Game* game,
+		Base* base)
 	:
 		State(game),
 		_base(base)
@@ -49,11 +56,14 @@ BaseDestroyedState::BaseDestroyedState(Game* game, Base* base)
 	_txtMessage	= new Text(224, 120, 48, 30);
 	_btnOk		= new TextButton(100, 16, 110, 156);
 
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)), Palette::backPos, 16);
+	_game->setPalette(
+				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)),
+				Palette::backPos,
+				16);
 	
 	add(_window);
-	add(_btnOk);
 	add(_txtMessage);
+	add(_btnOk);
 
 	centerAllSurfaces();
 
@@ -64,8 +74,12 @@ BaseDestroyedState::BaseDestroyedState(Game* game, Base* base)
 	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& BaseDestroyedState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)& BaseDestroyedState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
-	_btnOk->onKeyboardPress((ActionHandler)& BaseDestroyedState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& BaseDestroyedState::btnOkClick,
+					(SDLKey)Options::getInt("keyOk"));
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& BaseDestroyedState::btnOkClick,
+					(SDLKey)Options::getInt("keyCancel"));
 
 	_txtMessage->setAlign(ALIGN_CENTER);
 	_txtMessage->setVerticalAlign(ALIGN_MIDDLE);
@@ -73,11 +87,15 @@ BaseDestroyedState::BaseDestroyedState(Game* game, Base* base)
 	_txtMessage->setWordWrap(true);
 	_txtMessage->setColor(Palette::blockOffset(8)+5);
 
-	_txtMessage->setText(tr("STR_THE_ALIENS_HAVE_DESTROYED_THE_UNDEFENDED_BASE").arg(_base->getName()));
+	_txtMessage->setText(tr("STR_THE_ALIENS_HAVE_DESTROYED_THE_UNDEFENDED_BASE")
+							.arg(_base->getName()));
 
 
 	std::vector<Region*>::iterator r = _game->getSavedGame()->getRegions()->begin();
-	for (; r != _game->getSavedGame()->getRegions()->end(); ++r)
+	for (
+			;
+			r != _game->getSavedGame()->getRegions()->end();
+			++r)
 	{
 		if ((*r)->getRules()->insideRegion((base)->getLongitude(), (base)->getLatitude()))
 		{
@@ -128,7 +146,10 @@ BaseDestroyedState::~BaseDestroyedState()
  */
 void BaseDestroyedState::init()
 {
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)), Palette::backPos, 16);
+	_game->setPalette(
+				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)),
+				Palette::backPos,
+				16);
 }
 
 /**

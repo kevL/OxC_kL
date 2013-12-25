@@ -1470,28 +1470,37 @@ int BattleUnit::getFallingPhase() const
 /**
  * Returns whether the soldier is out of combat, dead or unconscious.
  * A soldier that is out, cannot perform any actions, cannot be selected, but it's still a unit.
- * @return flag if out or not.
+ * @checkHealth, To check if unit still has health
+ * @checkStun, To check if unit is stunned
+ * @return bool, True if unable to function on the battlefield
  */
-bool BattleUnit::isOut(bool checkHealth, bool checkStun) const
+bool BattleUnit::isOut(
+		bool checkHealth,
+		bool checkStun) const
 {
 	//Log(LOG_INFO) << "BattleUnit::isOut() ID = " << getId();
+
+	bool ret = false;
 
 	if (checkHealth)
 	{
 		if (getHealth() == 0)
-			return true;
+			ret = true;
 	}
 
 	if (checkStun)
 	{
 		if (getStunlevel() >= getHealth())
-			return true;
+			ret = true;
 	}
 
-	if (_status == STATUS_DEAD || _status == STATUS_UNCONSCIOUS)
-		return true;
+	if (_status == STATUS_DEAD
+		|| _status == STATUS_UNCONSCIOUS)
+	{
+		ret = true;
+	}
 
-	return false;
+	return ret;
 }
 
 /**
@@ -1500,7 +1509,9 @@ bool BattleUnit::isOut(bool checkHealth, bool checkStun) const
  * @param item
  * @return TUs
  */
-int BattleUnit::getActionTUs(BattleActionType actionType, BattleItem* item)
+int BattleUnit::getActionTUs(
+		BattleActionType actionType,
+		BattleItem* item)
 {
 	if (item == 0)
 	{
@@ -1795,7 +1806,9 @@ double BattleUnit::getThrowingAccuracy()
  * @param armor Amount of armor.
  * @param side The side of the armor.
  */
-void BattleUnit::setArmor(int armor, UnitSide side)
+void BattleUnit::setArmor(
+		int armor,
+		UnitSide side)
 {
 	if (armor < 0)
 	{
@@ -1821,11 +1834,16 @@ int BattleUnit::getArmor(UnitSide side) const
  */
 int BattleUnit::getFatalWounds() const
 {
-	int sum = 0;
-	for (int i = 0; i < 6; ++i)
-		sum += _fatalWounds[i];
+	int wounds = 0;
+	for (int
+			i = 0;
+			i < 6;
+			++i)
+	{
+		wounds += _fatalWounds[i];
+	}
 
-	return sum;
+	return wounds;
 }
 
 /**
@@ -1861,7 +1879,7 @@ void BattleUnit::prepareNewTurn()
 	TURecovery -= (TURecovery * (_fatalWounds[BODYPART_LEFTLEG] + _fatalWounds[BODYPART_RIGHTLEG] * 10)) / 100;
 	setTimeUnits(TURecovery);
 
-	if (!isOut(true, true)) // recover energy
+	if (!isOut()) // recover energy
 	{
 		int ENRecovery = getStats()->tu / 3;
 		// Each fatal wound to the body reduces the soldier's energy recovery by 10%.
@@ -1877,7 +1895,8 @@ void BattleUnit::prepareNewTurn()
 	// Fire damage is also in Battlescape/BattlescapeGame::endTurn(), stand on fire tile
 	// see also, Savegame/Tile::prepareNewTurn(), catch fire on fire tile
 	// fire damage by hit is caused by TileEngine::explode()
-	if (!_hitByFire && _fire > 0) // suffer from fire
+	if (!_hitByFire
+		&& _fire > 0) // suffer from fire
 	{
 		int fireDam = static_cast<int>(_armor->getDamageModifier(DT_IN) * RNG::generate(2, 6));
 		Log(LOG_INFO) << ". fireDam = " << fireDam;
@@ -1888,7 +1907,8 @@ void BattleUnit::prepareNewTurn()
 
 	if (_health < 0) _health = 0;
 
-	if (_health == 0 && _currentAIState) // if unit is dead, AI state should be gone
+	if (_health == 0
+		&& _currentAIState) // if unit is dead, AI state should be gone
 	{
 		_currentAIState->exit();
 
@@ -1899,20 +1919,21 @@ void BattleUnit::prepareNewTurn()
 
 	if (_stunlevel > 0) healStun(1); // recover stun 1pt/turn
 
-	if (!isOut(true, true))
+	if (!isOut())
 	{
 		int percent = 100 - (2 * getMorale());
-		if (percent < 0) percent = 0;
-//kL		if (RNG::generate(0, 99) <= chance)
-		if (RNG::percent(percent))
+		if (percent > 0)
 		{
-			int type = RNG::generate(0, 99);
-			// 33% chance of berserk, panic can mean freeze or flee, but that is determined later
-			_status = (type < 33)? STATUS_BERSERK: STATUS_PANICKING;
-		}
-		else // successfully avoided panic
-		{
-			if (percent > 0) _expBravery++; // increase bravery experience counter
+			if (RNG::percent(percent))
+			{
+				_status = STATUS_PANICKING;		// panic is either flee or freeze, determined later
+				if (RNG::percent(30))			// or shoot stuff
+					_status = STATUS_BERSERK;
+			}
+			else // successfully avoided panic
+			{
+				_expBravery++;
+			}
 		}
 	}
 
@@ -1930,7 +1951,7 @@ void BattleUnit::prepareNewTurn()
 void BattleUnit::moraleChange(int change)
 {
 	if (!isFearable()
-		&& change < 0)		// kL
+		&& change < 0) // kL
 	{
 		return;
 	}
@@ -1939,8 +1960,10 @@ void BattleUnit::moraleChange(int change)
 
 	_morale += change;
 
-	if (_morale > 100)	_morale = 100;
-	if (_morale < 0)	_morale = 0;
+	if (_morale > 100)
+		_morale = 100;
+	else if (_morale < 0)
+		_morale = 0;
 }
 
 /**
@@ -2996,7 +3019,7 @@ void BattleUnit::killedBy(UnitFaction f)
  * Set the units we are charging towards.
  * @param chargeTarget Charge Target
  */
-void BattleUnit::setCharging(BattleUnit *chargeTarget)
+void BattleUnit::setCharging(BattleUnit* chargeTarget)
 {
 	_charging = chargeTarget;
 }
@@ -3011,19 +3034,28 @@ BattleUnit* BattleUnit::getCharging()
 }
 
 /**
- * Get the units carried weight in strength units.
+ * Get the unit's carried weight in strength units.
+ * @param draggingItem
  * @return weight
  */
 int BattleUnit::getCarriedWeight(BattleItem* draggingItem) const
 {
 	int weight = _armor->getWeight();
-	for (std::vector<BattleItem*>::const_iterator i = _inventory.begin(); i != _inventory.end(); ++i)
+	for (std::vector<BattleItem*>::const_iterator
+			i = _inventory.begin();
+			i != _inventory.end();
+			++i)
 	{
-		if ((*i) == draggingItem) continue;
+		if ((*i) == draggingItem)
+			continue;
 
 		weight += (*i)->getRules()->getWeight();
 
-		if ((*i)->getAmmoItem() != (*i) && (*i)->getAmmoItem()) weight += (*i)->getAmmoItem()->getRules()->getWeight();
+		if ((*i)->getAmmoItem()
+			&& (*i)->getAmmoItem() != *i)
+		{
+			weight += (*i)->getAmmoItem()->getRules()->getWeight();
+		}
 	}
 
 	return weight;
@@ -3031,18 +3063,22 @@ int BattleUnit::getCarriedWeight(BattleItem* draggingItem) const
 
 /**
  * Set how long since this unit was last exposed.
- * @param turns
+ * @param (int)turns, Set # turns unit has been exposed
  */
-void BattleUnit::setTurnsExposed (int turns)
+void BattleUnit::setTurnsExposed(int turns)
 {
 	_turnsExposed = turns;
+
+	if (_turnsExposed > 255) // kL
+		_turnsExposed = 255; // kL
+		// kL_note: should set this to -1 instead of 255.
 }
 
 /**
  * Get how long since this unit was exposed.
- * @return turns
+ * @return (int)turns, # turns unit has been exposed
  */
-int BattleUnit::getTurnsExposed () const
+int BattleUnit::getTurnsExposed() const
 {
 	return _turnsExposed;
 }
@@ -3061,8 +3097,13 @@ UnitFaction BattleUnit::getOriginalFaction() const
  */
 void BattleUnit::invalidateCache()
 {
-	for (int i = 0; i < 5; ++i)
+	for (int
+			i = 0;
+			i < 5;
+			++i)
+	{
 		_cache[i] = 0;
+	}
 
 	_cacheInvalid = true;
 }
@@ -3255,25 +3296,17 @@ void BattleUnit::contDeathSpin()
 			 return;
 		}
 		else if (1 == _spinPhase)
-		{
 			_spinPhase = 3; // 2nd CW rotation
-		}
 		else if (2 == _spinPhase)
-		{
 			_spinPhase = 4; // 2nd CCW rotation
-		}
 	}
 
 	if (0 == _spinPhase)
 	{
 		if (-1 < d && d < 4)
-		{
 			_spinPhase = 1; // 1st CW rotation
-		}
 		else
-		{
 			_spinPhase = 2; // 1st CCW rotation
-		}
 	}
 
 	if (1 == _spinPhase || 3 == _spinPhase)
@@ -3344,6 +3377,7 @@ void BattleUnit::setStopShot(bool stop)
 {
 	_stopShot = stop;
 }
+
 /**
  * to stop a unit from firing/throwing if it spots a new opponent during turning
  */
@@ -3356,12 +3390,15 @@ bool BattleUnit::getStopShot()
 /**
  * Checks if this unit can be selected. Only alive units
  * belonging to the faction can be selected.
- * @param faction The faction to compare with.
- * @param checkReselect Check if the unit is reselectable.
- * @param checkInventory Check if the unit has an inventory.
- * @return True if the unit can be selected, false otherwise.
+ * @param faction, The faction to compare with.
+ * @param checkReselect, Check if the unit is reselectable.
+ * @param checkInventory, Check if the unit has an inventory.
+ * @return, True if the unit can be selected, false otherwise.
  */
-bool BattleUnit::isSelectable(UnitFaction faction, bool checkReselect, bool checkInventory) const
+bool BattleUnit::isSelectable(
+		UnitFaction faction,
+		bool checkReselect,
+		bool checkInventory) const
 {
 	return _faction == faction
 			&& !isOut()

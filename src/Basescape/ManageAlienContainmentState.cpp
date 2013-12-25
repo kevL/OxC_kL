@@ -101,7 +101,7 @@ ManageAlienContainmentState::ManageAlienContainmentState(
 	_txtLiveAliens	= new Text(62, 9, 164, 40);
 	_txtDeadAliens	= new Text(66, 9, 230, 40);
 
-	_lstAliens		= new TextList(286, 120, 16, 50);
+	_lstAliens		= new TextList(285, 120, 16, 50);
 
 	_btnCancel		= new TextButton(134, 16, 16, 177);
 	_btnOk			= new TextButton(134, 16, 170, 177);

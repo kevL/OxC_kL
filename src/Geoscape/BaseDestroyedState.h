@@ -27,9 +27,10 @@ namespace OpenXcom
 {
 
 class Base;
-class Window;
 class Text;
 class TextButton;
+class Window;
+
 
 /**
  * Base Destroyed screen.
@@ -38,15 +39,19 @@ class BaseDestroyedState
 	:
 		public State
 {
+
 private:
-	Window* _window;
+	Base* _base;
 	Text* _txtMessage;
 	TextButton* _btnOk;
-	Base* _base;
+	Window* _window;
+
 
 	public:
 		/// Creates the Select Destination state.
-		BaseDestroyedState(Game* game, Base* base);
+		BaseDestroyedState(
+				Game* game,
+				Base* base);
 		/// Cleans up the Select Destination state.
 		~BaseDestroyedState();
 

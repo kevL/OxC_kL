@@ -73,7 +73,7 @@ ItemsArrivingState::ItemsArrivingState(
 	_txtQuantity	= new Text(52, 9, 168, 34);
 	_txtDestination	= new Text(92, 9, 220, 34);
 
-	_lstTransfers	= new TextList(286, 120, 16, 45);
+	_lstTransfers	= new TextList(285, 120, 16, 45);
 
 	_btnGotoBase	= new TextButton(90, 16, 16, 169);
 	_btnOk5Secs		= new TextButton(90, 16, 118, 169);
@@ -91,9 +91,9 @@ ItemsArrivingState::ItemsArrivingState(
 	add(_txtQuantity);
 	add(_txtDestination);
 	add(_lstTransfers);
-	add(_btnOk);
-	add(_btnOk5Secs);
 	add(_btnGotoBase);
+	add(_btnOk5Secs);
+	add(_btnOk);
 
 	centerAllSurfaces();
 
@@ -109,12 +109,16 @@ ItemsArrivingState::ItemsArrivingState(
 	_btnOk5Secs->setColor(Palette::blockOffset(8)+5);
 	_btnOk5Secs->setText(tr("STR_OK_5_SECONDS"));
 	_btnOk5Secs->onMouseClick((ActionHandler)& ItemsArrivingState::btnOk5SecsClick);
-	_btnOk5Secs->onKeyboardPress((ActionHandler)& ItemsArrivingState::btnOk5SecsClick, (SDLKey)Options::getInt("keyGeoSpeed1"));
+	_btnOk5Secs->onKeyboardPress(
+					(ActionHandler)& ItemsArrivingState::btnOk5SecsClick,
+					(SDLKey)Options::getInt("keyGeoSpeed1"));
 
 	_btnGotoBase->setColor(Palette::blockOffset(8)+5);
 	_btnGotoBase->setText(tr("STR_GO_TO_BASE"));
 	_btnGotoBase->onMouseClick((ActionHandler)& ItemsArrivingState::btnGotoBaseClick);
-	_btnGotoBase->onKeyboardPress((ActionHandler)& ItemsArrivingState::btnGotoBaseClick, (SDLKey)Options::getInt("keyOk"));
+	_btnGotoBase->onKeyboardPress(
+					(ActionHandler)& ItemsArrivingState::btnGotoBaseClick,
+					(SDLKey)Options::getInt("keyOk"));
 
 	_txtTitle->setColor(Palette::blockOffset(8)+5);
 	_txtTitle->setBig();
@@ -132,7 +136,7 @@ ItemsArrivingState::ItemsArrivingState(
 
 	_lstTransfers->setColor(Palette::blockOffset(8)+10);
 	_lstTransfers->setArrowColor(Palette::blockOffset(8)+5);
-	_lstTransfers->setColumns(3, 144, 53, 92);
+	_lstTransfers->setColumns(3, 144, 53, 80);
 	_lstTransfers->setSelectable(true);
 	_lstTransfers->setBackground(_window);
 	_lstTransfers->setMargin(8);

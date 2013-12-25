@@ -57,9 +57,10 @@ Armor::Armor(const std::string& type)
 	_stats.psiStrength	= 0;
 	_stats.melee		= 0;
 
-//	_stats = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-
-	for (int i = 0; i < DAMAGE_TYPES; i++)
+	for (int
+			i = 0;
+			i < DAMAGE_TYPES;
+			i++)
 	{
 		_damageModifier[i] = 1.f;
 	}
@@ -189,7 +190,6 @@ int Armor::getUnderArmor() const
 	return _underArmor;
 }
 
-
 /**
  * Gets the corpse item used in the Geoscape.
  * @return The name of the corpse item.
@@ -251,9 +251,9 @@ int Armor::getSize() const
  * @param dt The damageType.
  * @return The damage modifier 0->1.
  */
-float Armor::getDamageModifier(ItemDamageType dt)
+float Armor::getDamageModifier(ItemDamageType dType)
 {
-	return _damageModifier[(int)dt];
+	return _damageModifier[static_cast<int>(dType)];
 }
 
 /** Gets the loftempSet.

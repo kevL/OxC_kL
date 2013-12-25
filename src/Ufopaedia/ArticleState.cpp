@@ -17,122 +17,151 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "Ufopaedia.h"
-#include <sstream>
 #include "ArticleState.h"
+
+#include <sstream>
+
+#include "Ufopaedia.h"
+
 #include "../Engine/Game.h"
-#include "../Engine/Options.h"
-#include "../Engine/Surface.h"
 #include "../Engine/Language.h"
-#include "../Resource/ResourcePack.h"
+#include "../Engine/Options.h"
 #include "../Engine/Palette.h"
+#include "../Engine/Surface.h"
+
 #include "../Interface/TextButton.h"
+
+#include "../Resource/ResourcePack.h"
+
 #include "../Ruleset/RuleItem.h"
+
 
 namespace OpenXcom
 {
 
-	/**
-	 * Constructor
-	 * @param game Pointer to current game.
-	 * @param article_id The article id of this article state instance.
-	 */
-	ArticleState::ArticleState(Game *game, std::string article_id) :
-		State(game), _id(article_id)
-	{
-		// init background and navigation elements
-		_bg = new Surface(320, 200, 0, 0);
-		_btnOk = new TextButton(30, 14, 5, 5);
-		_btnPrev = new TextButton(30, 14, 40, 5);
-		_btnNext = new TextButton(30, 14, 75, 5);
-	}
+/**
+ * Constructor
+ * @param game, Pointer to current game.
+ * @param article_id, The article id of this state instance.
+ */
+ArticleState::ArticleState(
+		Game* game,
+		std::string article_id)
+	:
+		State(game),
+		_id(article_id)
+{
+	_bg			= new Surface(320, 200, 0, 0);
+	_btnOk		= new TextButton(30, 14, 5, 5);
+	_btnPrev	= new TextButton(30, 14, 40, 5);
+	_btnNext	= new TextButton(30, 14, 75, 5);
+}
 
-	/**
-	 * Destructor
-	 */
-	ArticleState::~ArticleState()
-	{}
+/**
+ * Destructor
+ */
+ArticleState::~ArticleState()
+{
+}
 
-	std::string ArticleState::getDamageTypeText(ItemDamageType dt) const
+/**
+ *
+ */
+std::string ArticleState::getDamageTypeText(ItemDamageType dType) const
+{
+	std::string type;
+
+	switch (dType)
 	{
-		std::string type;
-		switch (dt)
-		{
 		case DT_AP:
-		case DT_MELEE:
 			type = "STR_DAMAGE_ARMOR_PIERCING";
-			break;
-		case DT_HE:
-			type = "STR_DAMAGE_HIGH_EXPLOSIVE";
-			break;
-		case DT_SMOKE:
-			type = "STR_DAMAGE_SMOKE";
-			break;
+		break;
 		case DT_IN:
 			type = "STR_DAMAGE_INCENDIARY";
-			break;
+		break;
+		case DT_HE:
+			type = "STR_DAMAGE_HIGH_EXPLOSIVE";
+		break;
 		case DT_LASER:
 			type = "STR_DAMAGE_LASER_BEAM";
-			break;
+		break;
 		case DT_PLASMA:
 			type = "STR_DAMAGE_PLASMA_BEAM";
-			break;
+		break;
 		case DT_STUN:
 			type = "STR_DAMAGE_STUN";
-			break;
+		break;
+		case DT_MELEE:
+			type = "STR_DAMAGE_MELEE";
+		break;
+		case DT_ACID:
+			type = "STR_DAMAGE_ACID";
+		break;
+		case DT_SMOKE:
+			type = "STR_DAMAGE_SMOKE";
+		break;
+
 		default:
 			type = "STR_UNKNOWN";
-			break;
-		}
-		return type;
+		break;
 	}
 
-	/**
-	 * Set captions and click handlers for the common control elements.
-	 */
-	void ArticleState::initLayout()
-	{
-		add(_bg);
-		add(_btnOk);
-		add(_btnPrev);
-		add(_btnNext);
+	return type;
+}
 
-		_btnOk->setText(tr("STR_OK"));
-		_btnOk->onMouseClick((ActionHandler)&ArticleState::btnOkClick);
-		_btnOk->onKeyboardPress((ActionHandler)&ArticleState::btnOkClick,(SDLKey)Options::getInt("keyOk"));
-		_btnOk->onKeyboardPress((ActionHandler)&ArticleState::btnOkClick,(SDLKey)Options::getInt("keyCancel"));
-		_btnPrev->setText(L"<<");
-		_btnPrev->onMouseClick((ActionHandler)&ArticleState::btnPrevClick);
-		_btnNext->setText(L">>");
-		_btnNext->onMouseClick((ActionHandler)&ArticleState::btnNextClick);
-	}
+/**
+ * Set captions and click handlers for the common control elements.
+ */
+void ArticleState::initLayout()
+{
+	add(_bg);
+	add(_btnOk);
+	add(_btnPrev);
+	add(_btnNext);
 
-	/**
-	 * Returns to the previous screen.
-	 * @param action Pointer to an action.
-	 */
-	void ArticleState::btnOkClick(Action *)
-	{
-		_game->popState();
-		_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
-	}
+	_btnOk->setText(tr("STR_OK"));
+	_btnOk->onMouseClick((ActionHandler)& ArticleState::btnOkClick);
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& ArticleState::btnOkClick,
+					(SDLKey)Options::getInt("keyOk"));
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& ArticleState::btnOkClick,
+					(SDLKey)Options::getInt("keyCancel"));
 
-	/**
-	 * Shows the previous available article.
-	 * @param action Pointer to an action.
-	 */
-	void ArticleState::btnPrevClick(Action *)
-	{
-		Ufopaedia::prev(_game);
-	}
+	_btnPrev->setText(L"<");
+	_btnPrev->onMouseClick((ActionHandler)& ArticleState::btnPrevClick);
 
-	/**
-	 * Shows the next available article. Loops to the first.
-	 * @param action Pointer to an action.
-	 */
-	void ArticleState::btnNextClick(Action *)
-	{
-		Ufopaedia::next(_game);
-	}
+	_btnNext->setText(L">");
+	_btnNext->onMouseClick((ActionHandler)& ArticleState::btnNextClick);
+}
+
+/**
+ * Returns to the previous screen.
+ * @param action, Pointer to an action.
+ */
+void ArticleState::btnOkClick(Action*)
+{
+	_game->popState();
+
+	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
+}
+
+/**
+ * Shows the previous available article. Loops to the last.
+ * @param action, Pointer to an action.
+ */
+void ArticleState::btnPrevClick(Action*)
+{
+	Ufopaedia::prev(_game);
+}
+
+/**
+ * Shows the next available article. Loops to the first.
+ * @param action, Pointer to an action.
+ */
+void ArticleState::btnNextClick(Action*)
+{
+	Ufopaedia::next(_game);
+}
 
 }

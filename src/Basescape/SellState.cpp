@@ -93,7 +93,7 @@ SellState::SellState(
 	_txtSell		= new Text(96, 9, 226, 33);
 	_txtValue		= new Text(40, 9, 246, 33);
 
-	_lstItems		= new TextList(286, 128, 16, 44);
+	_lstItems		= new TextList(285, 128, 16, 44);
 
 	_btnCancel		= new TextButton(134, 16, 16, 177);
 	_btnOk			= new TextButton(134, 16, 170, 177);
@@ -158,7 +158,7 @@ SellState::SellState(
 
 	_lstItems->setColor(Palette::blockOffset(13)+10);
 	_lstItems->setArrowColumn(182, ARROW_VERTICAL);
-	_lstItems->setColumns(4, 142, 60, 22, 55);
+	_lstItems->setColumns(4, 142, 60, 22, 53);
 	_lstItems->setSelectable(true);
 	_lstItems->setBackground(_window);
 	_lstItems->setMargin(8);

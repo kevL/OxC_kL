@@ -25,7 +25,9 @@ namespace OpenXcom
  * Creates a new Map Data Object.
  * @param dataset The dataset this object belongs to.
  */
-MapData::MapData(MapDataSet *dataset) : _dataset(dataset)
+MapData::MapData(MapDataSet *dataset)
+	:
+		_dataset(dataset)
 {
 }
 
@@ -37,10 +39,11 @@ MapData::~MapData()
 }
 
 /* Explicit storage for MapData constants. */
-const int MapData::O_FLOOR = 0;
-const int MapData::O_WESTWALL = 1;
-const int MapData::O_NORTHWALL = 2;
-const int MapData::O_OBJECT = 3;
+const int MapData::O_FLOOR		= 0;
+const int MapData::O_WESTWALL	= 1;
+const int MapData::O_NORTHWALL	= 2;
+const int MapData::O_OBJECT		= 3;
+
 
 /**
  * Gets the dataset this object belongs to.
@@ -140,7 +143,15 @@ bool MapData::isGravLift() const
  * @param blockFire True if this blocks fire.
  * @param blockSmoke True if this blocks smoke.
  */
-void MapData::setFlags(bool isUfoDoor, bool stopLOS, bool isNoFloor, int bigWall, bool isGravLift, bool isDoor, bool blockFire, bool blockSmoke)
+void MapData::setFlags(
+		bool isUfoDoor,
+		bool stopLOS,
+		bool isNoFloor,
+		int bigWall,
+		bool isGravLift,
+		bool isDoor,
+		bool blockFire,
+		bool blockSmoke)
 {
 	_isUfoDoor	= isUfoDoor;
 	_stopLOS	= stopLOS;
@@ -189,7 +200,13 @@ int MapData::getBlock(ItemDamageType type) const
  * @param fireBlock The fire blockage.
  * @param gasBlock The gas blockage.
  */
-void MapData::setBlockValue(int lightBlock, int visionBlock, int HEBlock, int smokeBlock, int fireBlock, int gasBlock)
+void MapData::setBlockValue(
+		int lightBlock,
+		int visionBlock,
+		int HEBlock,
+		int smokeBlock,
+		int fireBlock,
+		int gasBlock)
 {
 /*	_block[0] = lightBlock; // not used...
 	_block[1] = visionBlock == 1? 255: 0;
@@ -247,7 +264,9 @@ int MapData::getObjectType() const
  * @param value Special tile type.
  * @param otype Object type.
  */
-void MapData::setSpecialType(int value, int otype)
+void MapData::setSpecialType(
+		int value,
+		int otype)
 {
 	_specialType = (SpecialTileType)value;
 	_objectType = otype;
@@ -279,7 +298,10 @@ int MapData::getTUCost(MovementType movementType) const
  * @param fly The flying TU cost.
  * @param slide The sliding TU cost.
  */
-void MapData::setTUCosts(int walk, int fly, int slide)
+void MapData::setTUCosts(
+		int walk,
+		int fly,
+		int slide)
 {
 	_TUWalk = walk;
 	_TUFly = fly;

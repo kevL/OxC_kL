@@ -746,16 +746,18 @@ BattleUnit* SavedBattleGame::selectPlayerUnit(
 		begin = _units.begin();
 		end = _units.end() - 1;
 	}
-	else //if (dir < 0)
+	else //if (dir < 1)
 	{
 		begin = _units.end() - 1;
 		end = _units.begin();
 	}
 
+
 	std::vector<BattleUnit*>::iterator i = std::find(
 			_units.begin(),
 			_units.end(),
 			_selectedUnit);
+
 	do
 	{
 		//Log(LOG_INFO) << ". do";
@@ -921,23 +923,23 @@ void SavedBattleGame::endTurn()
 
 		_side = FACTION_HOSTILE;
 
-	// kL_begin: sbg::endTurn() no Reselect xCom units!!!
-	for (std::vector<BattleUnit*>::iterator
-			i = getUnits()->begin();
-			i != getUnits()->end();
-			++i)
-	{
-		if ((*i)->getFaction() == FACTION_PLAYER)
-//			&& (*i)->getOriginalFaction() == FACTION_HOSTILE)	// (a) or
-//			&& (*i)->getOriginalFaction() != FACTION_PLAYER)	// (b) ergo, Mc'd unit
-			// wait.. let's do this for all Side_xCom.
+		// kL_begin: sbg::endTurn() no Reselect xCom units at endTurn!!!
+		for (std::vector<BattleUnit*>::iterator
+				i = getUnits()->begin();
+				i != getUnits()->end();
+				++i)
 		{
-			// either zero tu's or set no reselect:
-			(*i)->dontReselect();
-		}
-	} // kL_end.
+//			if ((*i)->getFaction() == FACTION_PLAYER) // is this mucking up aLiens' NextTurnState?
+			if ((*i)->getOriginalFaction() == FACTION_PLAYER)
 
-
+//				&& (*i)->getOriginalFaction() == FACTION_HOSTILE)	// (a) or
+//				&& (*i)->getOriginalFaction() != FACTION_PLAYER)	// (b) ergo, Mc'd unit
+				// wait.. let's do this for all Side_xCom.
+			{
+				// either zero tu's or set no reselect:
+				(*i)->dontReselect();
+			}
+		} // kL_end.
 	}
 	else if (_side == FACTION_HOSTILE) // end of Alien turn.
 	{
@@ -947,7 +949,9 @@ void SavedBattleGame::endTurn()
 
 		// if there is no neutral team, we skip this section
 		// and instantly prepare the new turn for the player.
-		if (selectNextPlayerUnit() == 0) // <-- no civilians are on the battlescape. (all units have been 'selected' during the past full-turn)
+		if (selectNextPlayerUnit() == 0) // this will now cycle through NEUTRAL units
+			// so shouldn't that really be 'selectNextFactionUnit()'???!
+			// see selectPlayerUnit() -> isSelectable()
 		{
 			//Log(LOG_INFO) << ". . nextPlayerUnit == 0";
 
@@ -958,8 +962,7 @@ void SavedBattleGame::endTurn()
 			_side = FACTION_PLAYER;
 
 			if (_lastSelectedUnit
-				&& _lastSelectedUnit->isSelectable(FACTION_PLAYER, false, false))	// intended to fixed what I fixed below(?)
-//				&& !_lastSelectedUnit->isOut())										// old code. similar to above(?)
+				&& _lastSelectedUnit->isSelectable(FACTION_PLAYER))
 			{
 				//Log(LOG_INFO) << ". . . lastSelectedUnit is aLive";
 				_selectedUnit = _lastSelectedUnit;
@@ -975,8 +978,7 @@ void SavedBattleGame::endTurn()
 			{
 				//Log(LOG_INFO) << ". . . finding a Unit to select";
 //kL				selectNextPlayerUnit();
-				selectNextPlayerUnit(true);			// kL, try this one first; they should have been marked noReselect by now.
-//				selectNextPlayerUnit(true, true);	// kL
+				selectNextPlayerUnit(true); // kL
 			}
 		}
 	}
@@ -990,8 +992,7 @@ void SavedBattleGame::endTurn()
 		_side = FACTION_PLAYER;
 
 		if (_lastSelectedUnit
-			&& _lastSelectedUnit->isSelectable(FACTION_PLAYER, false, false))	// intended to fix what I fixed below(?)
-//			&& !_lastSelectedUnit->isOut())										// old code. similar to above(?)
+			&& _lastSelectedUnit->isSelectable(FACTION_PLAYER))
 		{
 			//Log(LOG_INFO) << ". . . lastSelectedUnit is aLive";
 			_selectedUnit = _lastSelectedUnit;
@@ -1007,71 +1008,73 @@ void SavedBattleGame::endTurn()
 		{
 			//Log(LOG_INFO) << ". . . finding a Unit to select";
 //kL			selectNextPlayerUnit();
-			selectNextPlayerUnit(true);			// kL, try this one first; they should have been marked noReselect by now.
-//			selectNextPlayerUnit(true, true);	// kL
+			selectNextPlayerUnit(true); // kL
 		}
 	}
 	//Log(LOG_INFO) << "done Factions";
 
-	int liveSoldiers, liveAliens;
-	_battleState->getBattleGame()->tallyUnits(liveAliens, liveSoldiers, false);
 
+
+	// ** _side HAS ADVANCED to next faction after here!!! ** //
+
+
+	int
+		liveAliens,
+		liveSoldiers;
+	_battleState->getBattleGame()->tallyUnits(
+											liveAliens,
+											liveSoldiers,
+											false);
 	//Log(LOG_INFO) << "done tallyUnits";
 
-	// kL_begin: semi-randomize the Turn20 reveal (and the less than 3 aliens left rule).
-	int rand = RNG::generate(0, 5);
-	if (_turn > 17 + rand || liveAliens < rand)
-	// kL_end.
-//kL	if (_turn >= 20 || liveAliens < 2)
+	// kL_begin: pseudo the Turn20 reveal and the less than 3 aliens left rule.
+	if (_side == FACTION_HOSTILE)
 	{
-		_cheating = true;
-	}
-	//Log(LOG_INFO) << "done custom cheating";
-
-
-	if (_side == FACTION_PLAYER)
-	{
-		//Log(LOG_INFO) << ". Faction_Player 2";
-
-		// update the "number of turns since last spotted"
-		for (std::vector<BattleUnit*>::iterator i = _units.begin(); i != _units.end(); ++i)
+		int rand = RNG::generate(0, 5);
+		if (_turn > 17 + rand
+			|| liveAliens < rand - 1)
 		{
-			if ((*i)->getTurnsExposed() < 255)
-//kL				&& _side == FACTION_PLAYER) // kL_note: maybe should be getFaction() or getOriginalFaction()
-			{
-				(*i)->setTurnsExposed((*i)->getTurnsExposed() +	1);
-			}
+			_cheating = true;
+		}
+		//Log(LOG_INFO) << "done custom cheating";
+	}
 
-			if (_cheating
-				&& (*i)->getFaction() == FACTION_PLAYER
-				&& !(*i)->isOut(true))
+	for (std::vector<BattleUnit*>::iterator
+			i = _units.begin();
+			i != _units.end();
+			++i)
+	{
+		if ((*i)->getFaction() == FACTION_PLAYER) // includes units Mc'd by xCom
+		{
+			if ((*i)->isOut(true, true))
+			{
+				(*i)->setTurnsExposed(255);
+			}
+			else if (_cheating
+				&& _side == FACTION_HOSTILE)
 			{
 				(*i)->setTurnsExposed(0);
 			}
+			else if ((*i)->getTurnsExposed() < 255
+				&& _side == FACTION_PLAYER)
+			{
+				(*i)->setTurnsExposed((*i)->getTurnsExposed() +	1);
+			}
 		}
-	}
-	//Log(LOG_INFO) << "done Faction_Player 2";
-
-	// hide all aliens (VOF calculations below will turn them visible again)
-	for (std::vector<BattleUnit*>::iterator i = _units.begin(); i != _units.end(); ++i)
-	{
-		if ((*i)->getFaction() == _side)
-		{
-			(*i)->prepareNewTurn();
-		}
-
-		if ((*i)->getFaction() != FACTION_PLAYER)
-		{
+		else
 			(*i)->setVisible(false);
-		}
-	}
-	//Log(LOG_INFO) << "done hiding aLiens";
 
-	// re-run calculateFOV() *after* all aliens have been set not-visible
+		if ((*i)->getFaction() == _side)
+			(*i)->prepareNewTurn();
+	}
+	//Log(LOG_INFO) << "done looping units";
+
+	// redo calculateFOV() *after* aliens & civies have been set notVisible
 	_tileEngine->recalculateFOV();
 	//Log(LOG_INFO) << "done recalculateFoV";
 
-	if (_side != FACTION_PLAYER) selectNextPlayerUnit();
+	if (_side != FACTION_PLAYER)
+		selectNextPlayerUnit();
 
 	Log(LOG_INFO) << "SavedBattleGame::endTurn() EXIT";
 }
@@ -1081,7 +1084,10 @@ void SavedBattleGame::endTurn()
  */
 void SavedBattleGame::setDebugMode()
 {
-	for (int i = 0; i < _mapsize_z * _mapsize_y * _mapsize_x; ++i)
+	for (int
+			i = 0;
+			i < _mapsize_z * _mapsize_y * _mapsize_x;
+			++i)
 	{
 		_tiles[i]->setDiscovered(true, 2);
 	}
@@ -1130,7 +1136,10 @@ void SavedBattleGame::setBattleState(BattlescapeState* bs)
  */
 void SavedBattleGame::resetUnitTiles()
 {
-	for (std::vector<BattleUnit*>::iterator i = _units.begin(); i != _units.end(); ++i)
+	for (std::vector<BattleUnit*>::iterator
+			i = _units.begin();
+			i != _units.end();
+			++i)
 	{
 		if (!(*i)->isOut())
 		{
@@ -1139,21 +1148,35 @@ void SavedBattleGame::resetUnitTiles()
 			if ((*i)->getTile()
 				&& (*i)->getTile()->getUnit() == *i)
 			{
-				for (int x = size; x >= 0; x--)
+				for (int
+						x = size;
+						x >= 0;
+						x--)
 				{
-					for (int y = size; y >= 0; y--)
+					for (int
+							y = size;
+							y >= 0;
+							y--)
 					{
 						getTile((*i)->getTile()->getPosition() + Position(x, y, 0))->setUnit(0);
 					}
 				}
 			}
 
-			for (int x = size; x >= 0; x--)
+			for (int
+					x = size;
+					x >= 0;
+					x--)
 			{
-				for (int y = size; y >= 0; y--)
+				for (int
+						y = size;
+						y >= 0;
+						y--)
 				{
 					Tile* t = getTile((*i)->getPosition() + Position(x, y, 0));
-					t->setUnit((*i), getTile(t->getPosition() + Position(0, 0, -1)));
+					t->setUnit(
+							*i,
+							getTile(t->getPosition() + Position(0, 0, -1)));
 				}
 			}
 		}
@@ -1172,11 +1195,14 @@ void SavedBattleGame::resetUnitTiles()
 void SavedBattleGame::removeItem(BattleItem* item)
 {
 	// due to strange design, the item has to be removed from the tile it is on too (if it is on a tile)
-	Tile* t = item->getTile();
 	BattleUnit* b = item->getOwner();
+	Tile* t = item->getTile();
 	if (t)
 	{
-		for (std::vector<BattleItem*>::iterator it = t->getInventory()->begin(); it != t->getInventory()->end(); ++it)
+		for (std::vector<BattleItem*>::iterator
+				it = t->getInventory()->begin();
+				it != t->getInventory()->end();
+				++it)
 		{
 			if (*it == item)
 			{
@@ -1188,7 +1214,10 @@ void SavedBattleGame::removeItem(BattleItem* item)
 	}
 	else if (b)
 	{
-		for (std::vector<BattleItem*>::iterator it = b->getInventory()->begin(); it != b->getInventory()->end(); ++it)
+		for (std::vector<BattleItem*>::iterator
+				it = b->getInventory()->begin();
+				it != b->getInventory()->end();
+				++it)
 		{
 			if (*it == item)
 			{
@@ -1199,7 +1228,10 @@ void SavedBattleGame::removeItem(BattleItem* item)
 		}
 	}
 
-	for (std::vector<BattleItem*>::iterator i = _items.begin(); i != _items.end(); ++i)
+	for (std::vector<BattleItem*>::iterator
+			i = _items.begin();
+			i != _items.end();
+			++i)
 	{
 		if (*i == item)
 		{
@@ -1249,7 +1281,8 @@ void SavedBattleGame::setObjectiveDestroyed(bool flag)
 {
 	_objectiveDestroyed = flag;
 
-	if (flag && Options::getBool("battleAutoEnd"))
+	if (flag
+		&& Options::getBool("battleAutoEnd"))
 	{
 		setSelectedUnit(0);
 		_battleState->getBattleGame()->statePushBack(0);
@@ -1280,12 +1313,17 @@ int* SavedBattleGame::getCurrentItemId()
  * @param unit Pointer to the unit (to get its position).
  * @return Pointer to the chosen node.
  */
-Node* SavedBattleGame::getSpawnNode(int nodeRank, BattleUnit* unit)
+Node* SavedBattleGame::getSpawnNode(
+		int nodeRank,
+		BattleUnit* unit)
 {
 	int highestPriority = -1;
 	std::vector<Node*> compliantNodes;
 
-	for (std::vector<Node*>::iterator i = getNodes()->begin(); i != getNodes()->end(); ++i)
+	for (std::vector<Node*>::iterator
+			i = getNodes()->begin();
+			i != getNodes()->end();
+			++i)
 	{
 		if ((*i)->getRank() == nodeRank								// ranks must match
 			&& (!((*i)->getType() & Node::TYPE_SMALL)
@@ -1293,7 +1331,10 @@ Node* SavedBattleGame::getSpawnNode(int nodeRank, BattleUnit* unit)
 			&& (!((*i)->getType() & Node::TYPE_FLYING)
 				|| unit->getArmor()->getMovementType() == MT_FLY)	// the flying unit bit is not set or the unit can fly
 			&& (*i)->getPriority() > 0								// priority 0 is no spawnplace
-			&& setUnitPosition(unit, (*i)->getPosition(), true))	// check if not already occupied
+			&& setUnitPosition(										// check if not already occupied
+							unit,
+							(*i)->getPosition(),
+							true))
 		{
 			if ((*i)->getPriority() > highestPriority)
 			{
@@ -1322,14 +1363,17 @@ Node* SavedBattleGame::getSpawnNode(int nodeRank, BattleUnit* unit)
  * @param unit Pointer to the unit (to get its position).
  * @return Pointer to the choosen node.
  */
-Node* SavedBattleGame::getPatrolNode(bool scout, BattleUnit* unit, Node* fromNode)
+Node* SavedBattleGame::getPatrolNode(
+		bool scout,
+		BattleUnit* unit,
+		Node* fromNode)
 {
 	std::vector<Node*> compliantNodes;
 	Node* preferred = 0;
 
 	if (fromNode == 0)
 	{
-		if (Options::getBool("traceAI")) { Log(LOG_INFO) << "This alien got lost. :("; }
+		if (Options::getBool("traceAI")) Log(LOG_INFO) << "This alien got lost. :(";
 
 		fromNode = getNodes()->at(RNG::generate(0, getNodes()->size() - 1));
 	}
@@ -1383,11 +1427,15 @@ Node* SavedBattleGame::getPatrolNode(bool scout, BattleUnit* unit, Node* fromNod
 
 	if (compliantNodes.empty())
 	{
-		if (Options::getBool("traceAI")) { Log(LOG_INFO) << (scout? "Scout ": "Guard ") << "found no patrol node! XXX XXX XXX"; }
+		if (Options::getBool("traceAI")) Log(LOG_INFO) << (scout? "Scout ": "Guard ") << "found no patrol node! XXX XXX XXX";
 
-		if (unit->getArmor()->getSize() > 1 && !scout)
+		if (unit->getArmor()->getSize() > 1
+			&& !scout)
 		{
-			return getPatrolNode(true, unit, fromNode); // move dammit
+			return getPatrolNode(
+								true,
+								unit,
+								fromNode); // move dammit
 		}
 		else
 			return 0;
@@ -1399,10 +1447,11 @@ Node* SavedBattleGame::getPatrolNode(bool scout, BattleUnit* unit, Node* fromNod
 	}
 	else
 	{
-		if (!preferred) return 0;
+		if (!preferred)
+			return 0;
 
 		// non-scout patrols to highest value unoccupied node that's not fromNode
-		if (Options::getBool("traceAI")) { Log(LOG_INFO) << "Choosing node flagged " << preferred->getFlags(); }
+		if (Options::getBool("traceAI")) Log(LOG_INFO) << "Choosing node flagged " << preferred->getFlags();
 
 		return preferred;
 	}
@@ -1448,7 +1497,7 @@ void SavedBattleGame::prepareNewTurn()
 					Tile* t = getTile((*i)->getPosition() + pos);
 
 					if (t
-						&& getTileEngine()->horizontalBlockage((*i), t, DT_IN) == 0) // if there's no wall blocking the path of the flames...
+						&& getTileEngine()->horizontalBlockage(*i, t, DT_IN) == 0) // if there's no wall blocking the path of the flames...
 					{
 						t->ignite((*i)->getSmoke()); // attempt to set this tile on fire
 					}
@@ -1520,11 +1569,11 @@ void SavedBattleGame::prepareNewTurn()
 					Pathfinding::directionToVector(dir, &pos);
 					Tile* t = getTile((*i)->getPosition() + pos);
 					if (t
-						&& getTileEngine()->horizontalBlockage((*i), t, DT_SMOKE) == 0) // as long as there are no walls blocking us
+						&& getTileEngine()->horizontalBlockage(*i, t, DT_SMOKE) == 0) // as long as there are no blocking walls
 					{
-						if (t->getSmoke() == 0
-							|| (t->getFire() == 0 && t->getOverlaps() != 0))	// only add smoke to empty tiles, or tiles with no fire,
-																				// and smoke that was added this turn
+						if (t->getSmoke() == 0				// add smoke only to smokeless tiles,
+							|| (t->getFire() == 0			// or tiles with no fire
+								&& t->getOverlaps() != 0))	// and no smoke that was added this turn
 						{
 							t->addSmoke((*i)->getSmoke());
 						}
@@ -1550,7 +1599,7 @@ void SavedBattleGame::prepareNewTurn()
 				Pathfinding::directionToVector(dir, &pos);
 				t = getTile((*i)->getPosition() + pos);
 				if (t
-					&& getTileEngine()->horizontalBlockage((*i), t, DT_SMOKE) == 0)
+					&& getTileEngine()->horizontalBlockage(*i, t, DT_SMOKE) == 0)
 				{
 					t->addSmoke((*i)->getSmoke() / 2);
 				}
@@ -1619,6 +1668,7 @@ void SavedBattleGame::reviveUnconsciousUnits()
 				{
 					// recover from unconscious
 					(*i)->turn(false); // -> STATUS_STANDING
+
 //kL					(*i)->kneel(false);
 					if ((*i)->getOriginalFaction() == FACTION_PLAYER
 						&& (*i)->getArmor()->getSize() == 1)		// kL
@@ -1675,7 +1725,10 @@ void SavedBattleGame::removeUnconsciousBodyItem(BattleUnit* bu)
  * @param testOnly, If true then just checks if the unit can be placed at the position.
  * @return, True if the unit could be successfully placed.
  */
-bool SavedBattleGame::setUnitPosition(BattleUnit* bu, const Position& position, bool testOnly)
+bool SavedBattleGame::setUnitPosition(
+		BattleUnit* bu,
+		const Position& position,
+		bool testOnly)
 {
 	int size = bu->getArmor()->getSize() - 1;
 
@@ -1716,7 +1769,8 @@ bool SavedBattleGame::setUnitPosition(BattleUnit* bu, const Position& position, 
 		}
 	}
 
-	if (testOnly) return true;
+	if (testOnly)
+		return true;
 
 
 	for (int // set the unit in position
@@ -1735,7 +1789,9 @@ bool SavedBattleGame::setUnitPosition(BattleUnit* bu, const Position& position, 
 //				bu->setTile(getTile(position), getTile(position - Position(0, 0, 1)));
 			}
 
-			getTile(position + Position(x, y, 0))->setUnit(bu, getTile(position + Position(x, y, -1)));
+			getTile(position + Position(x, y, 0))->setUnit(
+														bu,
+														getTile(position + Position(x, y, -1)));
 		}
 	}
 
@@ -1950,7 +2006,9 @@ BattleUnit* SavedBattleGame::getHighestRanked(bool xcom)
  * @param xcom, If no unit is passed in this determines whether bonus applies to xcom/aliens
  * @return, The morale modifier
  */
-int SavedBattleGame::getMoraleModifier(BattleUnit* unit, bool xcom)
+int SavedBattleGame::getMoraleModifier(
+		BattleUnit* unit,
+		bool xcom)
 {
 	Log(LOG_INFO) << "SavedBattleGame::getMoraleModifier()";
 	int result = 100;
@@ -2081,7 +2139,9 @@ int SavedBattleGame::getMoraleModifier(BattleUnit* unit, bool xcom)
  * @param entryPoint, The position around which to attempt to place the unit.
  * @return, True if the unit was successfully placed.
  */
-bool SavedBattleGame::placeUnitNearPosition(BattleUnit* unit, Position entryPoint)
+bool SavedBattleGame::placeUnitNearPosition(
+		BattleUnit* unit,
+		Position entryPoint)
 {
 	if (setUnitPosition(unit, entryPoint))
 	{
@@ -2097,7 +2157,8 @@ bool SavedBattleGame::placeUnitNearPosition(BattleUnit* unit, Position entryPoin
 		getPathfinding()->directionToVector(dir, &offset);
 
 		Tile* t = getTile(entryPoint + offset);
-		if (t && !getPathfinding()->isBlocked(getTile(entryPoint), t, dir, 0)
+		if (t
+			&& !getPathfinding()->isBlocked(getTile(entryPoint), t, dir, 0)
 			&& setUnitPosition(unit, entryPoint + offset))
 		{
 			return true;
@@ -2131,7 +2192,10 @@ void SavedBattleGame::resetTurnCounter()
  */
 void SavedBattleGame::resetTiles()
 {
-	for (int i = 0; i != getMapSizeXYZ(); ++i)
+	for (int
+			i = 0;
+			i != getMapSizeXYZ();
+			++i)
 	{
 		_tiles[i]->setDiscovered(false, 0);
 		_tiles[i]->setDiscovered(false, 1);

@@ -60,7 +60,7 @@ SoldierMemorialState::SoldierMemorialState(Game* game)
 	_txtRank		= new Text(70, 9, 148, 36);
 	_txtDate		= new Text(86, 9, 218, 36);
 
-	_lstSoldiers	= new TextList(286, 128, 16, 44);
+	_lstSoldiers	= new TextList(285, 128, 16, 44);
 
 	_btnOk			= new TextButton(288, 16, 16, 177);
 
@@ -68,7 +68,7 @@ SoldierMemorialState::SoldierMemorialState(Game* game)
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)), Palette::backPos, 16);
 
 //kL	_game->getResourcePack()->getMusic("GMLOSE")->play();
-	_game->getResourcePack()->getMusic("GMWIN")->play();	// kL
+	_game->getResourcePack()->getMusic("GMWIN")->play(); // kL
 
 	add(_window);
 	add(_btnOk);

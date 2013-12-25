@@ -63,7 +63,7 @@ StoresState::StoresState(
 	_txtQuantity	= new Text(84, 9, 178, 25);
 	_txtSpaceUsed	= new Text(26, 9, 262, 25);
 
-	_lstStores		= new TextList(286, 136, 16, 36);
+	_lstStores		= new TextList(285, 136, 16, 36);
 
 	_btnOk			= new TextButton(288, 16, 16, 177);
 

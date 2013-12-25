@@ -93,7 +93,7 @@ PurchaseState::PurchaseState(
 	_txtCost		= new Text(102, 9, 166, 33);
 	_txtQuantity	= new Text(60, 9, 267, 33);
 
-	_lstItems		= new TextList(286, 128, 16, 44);
+	_lstItems		= new TextList(285, 128, 16, 44);
 
 	_btnCancel		= new TextButton(134, 16, 16, 177);
 	_btnOk			= new TextButton(134, 16, 170, 177);

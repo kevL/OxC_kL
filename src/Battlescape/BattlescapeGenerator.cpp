@@ -255,7 +255,7 @@ void BattlescapeGenerator::nextStage()
 	{
 		if ((*j)->getOriginalFaction() == FACTION_PLAYER)
 		{
-			if (!(*j)->isOut(true, true))
+			if (!(*j)->isOut())
 			{
 				(*j)->convertToFaction(FACTION_PLAYER);
 				(*j)->setTurnsExposed(255);

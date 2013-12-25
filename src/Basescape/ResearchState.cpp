@@ -70,7 +70,7 @@ ResearchState::ResearchState(
 	_txtScientists	= new Text(110, 9, 176, 47);
 	_txtProgress	= new Text(80, 9, 236, 47);
 
-	_lstResearch	= new TextList(286, 112, 16, 62);
+	_lstResearch	= new TextList(285, 112, 16, 62);
 	
 	_btnNew			= new TextButton(134, 16, 16, 177);
 	_btnOk			= new TextButton(134, 16, 170, 177);
@@ -142,7 +142,7 @@ ResearchState::ResearchState(
 
 	_lstResearch->setColor(Palette::blockOffset(15)+6);
 	_lstResearch->setArrowColor(Palette::blockOffset(13)+10);
-	_lstResearch->setColumns(4, 152, 60, 48, 20);
+	_lstResearch->setColumns(4, 152, 60, 48, 17);
 	_lstResearch->setSelectable(true);
 	_lstResearch->setBackground(_window);
 	_lstResearch->setMargin(8);

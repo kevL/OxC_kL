@@ -16,10 +16,13 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "ArrowButton.h"
 #include "TextList.h"
-#include "../Engine/Timer.h"
+
 #include "../Engine/Action.h"
+#include "../Engine/Timer.h"
+
 
 namespace OpenXcom
 {
@@ -32,7 +35,20 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-ArrowButton::ArrowButton(ArrowShape shape, int width, int height, int x, int y) : ImageButton(width, height, x, y), _shape(shape), _list(0)
+ArrowButton::ArrowButton(
+		ArrowShape shape,
+		int width,
+		int height,
+		int x,
+		int y)
+	:
+		ImageButton(
+				width,
+				height,
+				x,
+				y),
+		_shape(shape),
+		_list(0)
 {
 	_timer = new Timer(50);
 	_timer->onTimer((SurfaceHandler)&ArrowButton::scroll);
@@ -46,6 +62,9 @@ ArrowButton::~ArrowButton()
 	delete _timer;
 }
 
+/**
+ *
+ */
 bool ArrowButton::isButtonHandled(Uint8 button)
 {
 	if (_list != 0)
@@ -73,7 +92,7 @@ void ArrowButton::setColor(Uint8 color)
  * This makes the button scroll that list.
  * @param list Pointer to text list.
  */
-void ArrowButton::setTextList(TextList *list)
+void ArrowButton::setTextList(TextList* list)
 {
 	_list = list;
 }
@@ -343,11 +362,12 @@ void ArrowButton::scroll()
  * @param action Pointer to an action.
  * @param state State that the action handlers belong to.
  */
-void ArrowButton::mousePress(Action *action, State *state)
+void ArrowButton::mousePress(Action* action, State* state)
 {
 	ImageButton::mousePress(action, state);
 
-	if (_list != 0 && action->getDetails()->button.button == SDL_BUTTON_LEFT)
+	if (_list != 0
+		&& action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
 		_timer->start();
 	}
@@ -358,11 +378,12 @@ void ArrowButton::mousePress(Action *action, State *state)
  * @param action Pointer to an action.
  * @param state State that the action handlers belong to.
  */
-void ArrowButton::mouseRelease(Action *action, State *state)
+void ArrowButton::mouseRelease(Action* action, State* state)
 {
 	ImageButton::mouseRelease(action, state);
 
-	if (_list != 0 && action->getDetails()->button.button == SDL_BUTTON_LEFT)
+	if (_list != 0
+		&& action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
 		_timer->stop();
 	}
@@ -373,14 +394,17 @@ void ArrowButton::mouseRelease(Action *action, State *state)
  * @param action Pointer to an action.
  * @param state State that the action handlers belong to.
  */
-void ArrowButton::mouseClick(Action *action, State *state)
+void ArrowButton::mouseClick(Action* action, State* state)
 {
 	ImageButton::mouseClick(action, state);
 
-	if (0 != _list && SDL_BUTTON_RIGHT == action->getDetails()->button.button)
+	if (0 != _list
+		&& SDL_BUTTON_RIGHT == action->getDetails()->button.button)
 	{
-		if		(_shape == ARROW_BIG_UP)	_list->scrollUp(true);
-		else if	(_shape == ARROW_BIG_DOWN)	_list->scrollDown(true);
+		if (_shape == ARROW_BIG_UP)
+			_list->scrollUp(true);
+		else if (_shape == ARROW_BIG_DOWN)
+			_list->scrollDown(true);
 	}
 }
 

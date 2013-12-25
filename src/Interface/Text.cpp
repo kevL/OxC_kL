@@ -129,8 +129,7 @@ std::wstring Text::formatFunding(int funds)
 }
 
 /**
- * Takes an integer value and formats it as percentage,
- * adding a % sign.
+ * Takes an integer value and formats it as percentage by adding a % sign.
  * @param value The percentage value.
  * @return The formatted string.
  */

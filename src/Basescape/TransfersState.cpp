@@ -56,12 +56,15 @@ TransfersState::TransfersState(Game* game, Base* base)
 	_txtQuantity	= new Text(54, 9, 179, 34);
 	_txtArrivalTime	= new Text(112, 9, 254, 34);
 
-	_lstTransfers	= new TextList(286, 120, 16, 45);
+	_lstTransfers	= new TextList(285, 120, 16, 45);
 
 	_btnOk			= new TextButton(288, 16, 16, 169);
 
 
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
+	_game->setPalette(
+				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)),
+				Palette::backPos,
+				16);
 
 	add(_window);
 	add(_btnOk);
@@ -80,8 +83,12 @@ TransfersState::TransfersState(Game* game, Base* base)
 	_btnOk->setColor(Palette::blockOffset(15)+6);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& TransfersState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)& TransfersState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
-	_btnOk->onKeyboardPress((ActionHandler)& TransfersState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& TransfersState::btnOkClick,
+					(SDLKey)Options::getInt("keyOk"));
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& TransfersState::btnOkClick,
+					(SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(15)+6);
 	_txtTitle->setBig();
@@ -104,12 +111,19 @@ TransfersState::TransfersState(Game* game, Base* base)
 	_lstTransfers->setBackground(_window);
 	_lstTransfers->setMargin(8);
 
-	for (std::vector<Transfer*>::iterator i = _base->getTransfers()->begin(); i != _base->getTransfers()->end(); ++i)
+	for (std::vector<Transfer*>::iterator
+			i = _base->getTransfers()->begin();
+			i != _base->getTransfers()->end();
+			++i)
 	{
 		std::wstringstream ss, ss2;
 		ss << (*i)->getQuantity();
 		ss2 << (*i)->getHours();
-		_lstTransfers->addRow(3, (*i)->getName(_game->getLanguage()).c_str(), ss.str().c_str(), ss2.str().c_str());
+		_lstTransfers->addRow(
+							3,
+							(*i)->getName(_game->getLanguage()).c_str(),
+							ss.str().c_str(),
+							ss2.str().c_str());
 	}
 }
 

@@ -138,7 +138,7 @@ NextTurnState::~NextTurnState()
  */
 void NextTurnState::handle(Action* action)
 {
-	State::handle(action);
+//kL	State::handle(action);
 
 //kL	if (action->getDetails()->type == SDL_KEYDOWN
 //kL		|| action->getDetails()->type == SDL_MOUSEBUTTONDOWN)
@@ -176,7 +176,10 @@ void NextTurnState::close()
 	int liveAliens = 0;
 	int liveSoldiers = 0;
 
-	_state->getBattleGame()->tallyUnits(liveAliens, liveSoldiers, false);
+	_state->getBattleGame()->tallyUnits(
+									liveAliens,
+									liveSoldiers,
+									false);
 
 	if (liveAliens == 0
 		|| liveSoldiers == 0)

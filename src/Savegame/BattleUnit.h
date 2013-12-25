@@ -672,8 +672,8 @@ private:
 		/// Is this unit selectable?
 		bool isSelectable(
 				UnitFaction faction,
-				bool checkReselect,
-				bool checkInventory) const;
+				bool checkReselect = false,
+				bool checkInventory = false) const;
 
 		/// Does this unit have an inventory?
 		bool hasInventory() const;

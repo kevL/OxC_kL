@@ -76,7 +76,7 @@ ManufactureState::ManufactureState(
 	_txtCost		= new Text(50, 17, 216, 44);
 	_txtTimeLeft	= new Text(55, 17, 271, 44);
 
-	_lstManufacture	= new TextList(286, 96, 16, 70);
+	_lstManufacture	= new TextList(285, 96, 16, 70);
 
 	_btnNew			= new TextButton(134, 16, 16, 177);
 	_btnOk			= new TextButton(134, 16, 170, 177);
@@ -170,7 +170,7 @@ ManufactureState::ManufactureState(
 
 	_lstManufacture->setColor(Palette::blockOffset(13)+10);
 	_lstManufacture->setArrowColor(Palette::blockOffset(15)+9);
-	_lstManufacture->setColumns(5, 121, 29, 42, 55, 32);
+	_lstManufacture->setColumns(5, 121, 29, 42, 55, 30);
 //kL	_lstManufacture->setAlign(ALIGN_RIGHT);
 //kL	_lstManufacture->setAlign(ALIGN_LEFT, 0);
 	_lstManufacture->setSelectable(true);

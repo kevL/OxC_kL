@@ -22,7 +22,9 @@
 
 #include <string>
 #include <vector>
+
 #include <yaml-cpp/yaml.h>
+
 #include "MapData.h"
 #include "Unit.h"
 
@@ -32,22 +34,40 @@ namespace OpenXcom
 
 /**
  * Represents a specific type of armor.
- * Not only soldier armor, but also alien armor - some alien races wear Soldier Armor, Leader Armor or Commander Armor
+ * Not only soldier armor, but also alien armor - some alien
+ * races wear Soldier Armor, Leader Armor or Commander Armor
  * depending on their rank.
  */
 class Armor
 {
-public:	
-	static const int DAMAGE_TYPES = 10;
+
+	public:
+		static const int DAMAGE_TYPES = 10;
+
 private:
-	std::string _type, _spriteSheet, _spriteInv, _corpseGeo, _storeItem;
-	std::vector<std::string> _corpseBattle;
-	int _frontArmor, _sideArmor, _rearArmor, _underArmor, _drawingRoutine;
-	MovementType _movementType;
-	int _size, _weight;
+	std::string
+		_type,
+		_spriteSheet,
+		_spriteInv,
+		_corpseGeo,
+		_storeItem;
+	int
+		_frontArmor,
+		_sideArmor,
+		_rearArmor,
+		_underArmor,
+
+		_drawingRoutine,
+		_size,
+		_weight;
 	float _damageModifier[DAMAGE_TYPES];
-	std::vector<int> _loftempsSet;
+
+	MovementType _movementType;
 	UnitStats _stats;
+
+	std::vector<int> _loftempsSet;
+	std::vector<std::string> _corpseBattle;
+
 
 	public:
 		/// Creates a blank armor ruleset.
@@ -85,7 +105,7 @@ private:
 		/// Gets whether this is a normal or big unit.
 		int getSize() const;
 		/// Gets damage modifier.
-		float getDamageModifier(ItemDamageType dt);
+		float getDamageModifier(ItemDamageType dType);
 		/// Gets loftempSet
 		std::vector<int> getLoftempsSet() const;
 		/// Gets the armor's stats.

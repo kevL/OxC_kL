@@ -20,60 +20,70 @@
 #ifndef OPENXCOM_ARTICLESTATE_H
 #define OPENXCOM_ARTICLESTATE_H
 
-#include "../Engine/State.h"
-#include "../Ruleset/RuleItem.h"
 #include <string>
+
+#include "../Engine/State.h"
+
+#include "../Ruleset/RuleItem.h"
+
 
 namespace OpenXcom
 {
-	class Game;
-	class Action;
-	class Surface;
-	class TextButton;
 
-	/**
-	 * UfopaediaArticle is the base class for all articles of various types.
-	 *
-	 * It encapsulates the basic characteristics.
-	 */
+class Action;
+class Game;
+class Surface;
+class TextButton;
 
-	class ArticleState : public State
-	{
-	protected:
-		/// constructor (protected, so it can only be instantiated by derived classes)
-		ArticleState(Game *game, std::string article_id);
-		/// destructor
-		virtual ~ArticleState();
+
+/**
+ * UfopaediaArticle is the base class for all articles of various types.
+ * It encapsulates the common characteristics.
+ */
+
+class ArticleState
+	:
+		public State
+{
+
+protected:
+	std::string _id;
+
+	Surface *_bg;
+	TextButton
+		*_btnNext,
+		*_btnOk,
+		*_btnPrev;
+
+	/// constructor (it can only be instantiated by derived classes)
+	ArticleState(
+			Game* game,
+			std::string article_id);
+	/// destructor
+	virtual ~ArticleState();
+
+	/// converts damage type to string
+	std::string getDamageTypeText(ItemDamageType dType) const;
+
+	/// screen layout helpers
+	void initLayout();
+
+	/// callback for OK button
+	void btnOkClick(Action* action);
+	/// callback for PREV button
+	void btnPrevClick(Action* action);
+	/// callback for NEXT button
+	void btnNextClick(Action* action);
+
 
 	public:
 		/// return the article id
-		std::string getId() const { return _id; }
+		std::string getId() const
+		{
+			return _id;
+		}
+};
 
-	protected:
-
-		/// converts damage type to string
-		std::string getDamageTypeText(ItemDamageType dt) const;
-
-		/// screen layout helpers
-		void initLayout();
-
-		/// callback for OK button
-		void btnOkClick(Action *action);
-
-		/// callback for PREV button
-		void btnPrevClick(Action *action);
-
-		/// callback for NEXT button
-		void btnNextClick(Action *action);
-		/// the article id
-		std::string _id;
-
-		/// screen elements common to all articles!
-		Surface *_bg;
-		TextButton *_btnOk;
-		TextButton *_btnPrev;
-		TextButton *_btnNext;
-	};
 }
 
 #endif

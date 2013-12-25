@@ -16,34 +16,44 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "NewBattleState.h"
-#include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
-#include "../Ruleset/RuleItem.h"
-#include "../Ruleset/Ruleset.h"
-#include "../Engine/Language.h"
-#include "../Engine/Palette.h"
-#include "../Interface/TextButton.h"
-#include "../Interface/Window.h"
-#include "../Interface/Text.h"
-#include "../Savegame/SavedBattleGame.h"
-#include "../Savegame/SavedGame.h"
-#include "../Savegame/Base.h"
-#include "../Savegame/Craft.h"
-#include "../Savegame/ItemContainer.h"
+
+#include "../Basescape/CraftInfoState.h"
+
 #include "../Battlescape/BattlescapeGenerator.h"
 #include "../Battlescape/BattlescapeState.h"
 #include "../Battlescape/BriefingState.h"
-#include "../Savegame/Ufo.h"
-#include "../Savegame/TerrorSite.h"
-#include "../Savegame/AlienBase.h"
-#include "../Ruleset/RuleCraft.h"
-#include "../Ruleset//RuleTerrain.h"
-#include "../Engine/Music.h"
-#include "../Engine/RNG.h"
+
 #include "../Engine/Action.h"
+#include "../Engine/Game.h"
+#include "../Engine/Language.h"
+#include "../Engine/Music.h"
 #include "../Engine/Options.h"
-#include "../Basescape/CraftInfoState.h"
+#include "../Engine/Palette.h"
+#include "../Engine/RNG.h"
+
+#include "../Interface/Text.h"
+#include "../Interface/TextButton.h"
+#include "../Interface/Window.h"
+
+#include "../Resource/ResourcePack.h"
+
+#include "../Ruleset/RuleCraft.h"
+#include "../Ruleset/RuleItem.h"
+#include "../Ruleset/Ruleset.h"
+//kL #include "../Ruleset//RuleTerrain.h"
+#include "../Ruleset/RuleTerrain.h"
+
+#include "../Savegame/AlienBase.h"
+#include "../Savegame/Base.h"
+#include "../Savegame/Craft.h"
+#include "../Savegame/ItemContainer.h"
+#include "../Savegame/SavedBattleGame.h"
+#include "../Savegame/SavedGame.h"
+#include "../Savegame/TerrorSite.h"
+#include "../Savegame/Ufo.h"
+
 
 namespace OpenXcom
 {
@@ -52,30 +62,32 @@ namespace OpenXcom
  * Initializes all the elements in the New Battle window.
  * @param game Pointer to the core game.
  */
-NewBattleState::NewBattleState(Game *game) : State(game), _craft(0)
+NewBattleState::NewBattleState(Game *game)
+	:
+		State(game),
+		_craft(0)
 {
-	// Create objects
-	_window = new Window(this, 320, 200, 0, 0, POPUP_BOTH);
-	_txtTitle = new Text(320, 17, 0, 9);
-	_txtMissionType = new Text(100, 9, 5, 30);
-	_txtTerrainType = new Text(100, 9, 110, 30);
-	_txtAlienRace = new Text(100, 9, 215, 30);
-	_txtDifficulty = new Text(100, 9, 5, 70);
-	_txtDarkness = new Text(100, 9, 110, 70);
-	_txtCraft = new Text(100, 9, 215, 70);
-	_btnMissionType = new TextButton(100, 20, 5, 40);
-	_btnTerrainType = new TextButton(100, 20, 110, 40);
-	_btnAlienRace = new TextButton(100, 20, 215, 40);
-	_btnDifficulty = new TextButton(100, 20, 5, 80);
-	_btnDarkness = new TextButton(100, 20, 110, 80);
-	_btnCraft = new TextButton(100, 20, 215, 80);
-	_btnEquip = new TextButton(148, 16, 8, 154);
-	_btnRandom = new TextButton(148, 16, 164, 154);
-	_btnOk = new TextButton(148, 16, 8, 176);
-	_btnCancel = new TextButton(148, 16, 164, 176);
+	_window			= new Window(this, 320, 200, 0, 0, POPUP_BOTH);
+	_txtTitle		= new Text(320, 17, 0, 9);
+	_txtMissionType	= new Text(100, 9, 5, 30);
+	_txtTerrainType	= new Text(100, 9, 110, 30);
+	_txtAlienRace	= new Text(100, 9, 215, 30);
+	_txtDifficulty	= new Text(100, 9, 5, 70);
+	_txtDarkness	= new Text(100, 9, 110, 70);
+	_txtCraft		= new Text(100, 9, 215, 70);
+	_btnMissionType	= new TextButton(100, 20, 5, 40);
+	_btnTerrainType	= new TextButton(100, 20, 110, 40);
+	_btnAlienRace	= new TextButton(100, 20, 215, 40);
+	_btnDifficulty	= new TextButton(100, 20, 5, 80);
+	_btnDarkness	= new TextButton(100, 20, 110, 80);
+	_btnCraft		= new TextButton(100, 20, 215, 80);
+	_btnEquip		= new TextButton(148, 16, 8, 154);
+	_btnRandom		= new TextButton(148, 16, 164, 154);
+	_btnOk			= new TextButton(148, 16, 8, 176);
+	_btnCancel		= new TextButton(148, 16, 164, 176);
 	
-	_txtItemLevel = new Text(136, 9, 110, 110);
-	_btnItemLevel = new TextButton(100, 20, 110, 120);
+	_txtItemLevel	= new Text(136, 9, 110, 110);
+	_btnItemLevel	= new TextButton(100, 20, 110, 120);
 
 	add(_window);
 	add(_txtTitle);
@@ -100,7 +112,7 @@ NewBattleState::NewBattleState(Game *game) : State(game), _craft(0)
 
 	centerAllSurfaces();
 
-	// Set up objects
+
 	_window->setColor(Palette::blockOffset(8)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
@@ -130,7 +142,10 @@ NewBattleState::NewBattleState(Game *game) : State(game), _craft(0)
 	_txtItemLevel->setColor(Palette::blockOffset(8)+10);
 	_txtItemLevel->setText(tr("STR_ENEMY_WEAPON_LEVEL"));
 	
-	for (size_t i = 0; i != _game->getRuleset()->getAlienItemLevels().size(); ++i)
+	for (size_t
+			i = 0;
+			i != _game->getRuleset()->getAlienItemLevels().size();
+			++i)
 	{
 		std::ostringstream ss;
 		ss << i + 1;
@@ -140,7 +155,10 @@ NewBattleState::NewBattleState(Game *game) : State(game), _craft(0)
 	_missionTypes = _game->getRuleset()->getDeploymentsList();
 
 	const std::vector<std::string> &terrainTypes = _game->getRuleset()->getTerrainList();
-	for (std::vector<std::string>::const_iterator i = terrainTypes.begin(); i != terrainTypes.end(); ++i)
+	for (std::vector<std::string>::const_iterator
+			i = terrainTypes.begin();
+			i != terrainTypes.end();
+			++i)
 	{
 		if (_game->getRuleset()->getTerrain(*i)->getTextures()->size())
 		{
@@ -165,7 +183,10 @@ NewBattleState::NewBattleState(Game *game) : State(game), _craft(0)
 	_darkness.push_back("15");
 
 	const std::vector<std::string> &crafts = _game->getRuleset()->getCraftsList();
-	for (std::vector<std::string>::const_iterator i = crafts.begin(); i != crafts.end(); ++i)
+	for (std::vector<std::string>::const_iterator
+			i = crafts.begin();
+			i != crafts.end();
+			++i)
 	{
 		RuleCraft *rule = _game->getRuleset()->getCraft(*i);
 		if (rule->getSoldiers() > 0)
@@ -183,43 +204,47 @@ NewBattleState::NewBattleState(Game *game) : State(game), _craft(0)
 	_selCraft = Options::getInt("NewBattleCraft");
 
 	_btnMissionType->setColor(Palette::blockOffset(15)-1);
-	_btnMissionType->onMouseClick((ActionHandler)&NewBattleState::btnMissionTypeClick, 0);
+	_btnMissionType->onMouseClick((ActionHandler)& NewBattleState::btnMissionTypeClick, 0);
 
 	_btnTerrainType->setColor(Palette::blockOffset(15)-1);
-	_btnTerrainType->onMouseClick((ActionHandler)&NewBattleState::btnTerrainTypeClick, 0);
+	_btnTerrainType->onMouseClick((ActionHandler)& NewBattleState::btnTerrainTypeClick, 0);
 
 	_btnItemLevel->setColor(Palette::blockOffset(15)-1);
-	_btnItemLevel->onMouseClick((ActionHandler)&NewBattleState::btnItemLevelClick, 0);
+	_btnItemLevel->onMouseClick((ActionHandler)& NewBattleState::btnItemLevelClick, 0);
 
 	_btnAlienRace->setColor(Palette::blockOffset(15)-1);
-	_btnAlienRace->onMouseClick((ActionHandler)&NewBattleState::btnAlienRaceClick, 0);
+	_btnAlienRace->onMouseClick((ActionHandler)& NewBattleState::btnAlienRaceClick, 0);
 
 	_btnDifficulty->setColor(Palette::blockOffset(15)-1);
-	_btnDifficulty->onMouseClick((ActionHandler)&NewBattleState::btnDifficultyClick, 0);
+	_btnDifficulty->onMouseClick((ActionHandler)& NewBattleState::btnDifficultyClick, 0);
 
 	_btnDarkness->setColor(Palette::blockOffset(15)-1);
-	_btnDarkness->onMouseClick((ActionHandler)&NewBattleState::btnDarknessClick, 0);
+	_btnDarkness->onMouseClick((ActionHandler)& NewBattleState::btnDarknessClick, 0);
 
 	_btnCraft->setColor(Palette::blockOffset(15)-1);
-	_btnCraft->onMouseClick((ActionHandler)&NewBattleState::btnCraftClick, 0);
+	_btnCraft->onMouseClick((ActionHandler)& NewBattleState::btnCraftClick, 0);
 
 	_btnEquip->setColor(Palette::blockOffset(8)+5);
 	_btnEquip->setText(tr("STR_EQUIP_CRAFT"));
-	_btnEquip->onMouseClick((ActionHandler)&NewBattleState::btnEquipClick);
+	_btnEquip->onMouseClick((ActionHandler)& NewBattleState::btnEquipClick);
 
 	_btnRandom->setColor(Palette::blockOffset(8)+5);
 	_btnRandom->setText(tr("STR_RANDOM_BATTLE"));
-	_btnRandom->onMouseClick((ActionHandler)&NewBattleState::btnRandomClick);
+	_btnRandom->onMouseClick((ActionHandler)& NewBattleState::btnRandomClick);
 
 	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(tr("STR_OK"));
-	_btnOk->onMouseClick((ActionHandler)&NewBattleState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&NewBattleState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
+	_btnOk->onMouseClick((ActionHandler)& NewBattleState::btnOkClick);
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& NewBattleState::btnOkClick,
+					(SDLKey)Options::getInt("keyOk"));
 
 	_btnCancel->setColor(Palette::blockOffset(8)+5);
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
-	_btnCancel->onMouseClick((ActionHandler)&NewBattleState::btnCancelClick);
-	_btnCancel->onKeyboardPress((ActionHandler)&NewBattleState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnCancel->onMouseClick((ActionHandler)& NewBattleState::btnCancelClick);
+	_btnCancel->onKeyboardPress(
+					(ActionHandler)& NewBattleState::btnCancelClick,
+					(SDLKey)Options::getInt("keyCancel"));
 
 	_music = true;
 
@@ -230,8 +255,7 @@ NewBattleState::NewBattleState(Game *game) : State(game), _craft(0)
  *
  */
 NewBattleState::~NewBattleState()
-{
-	
+{	
 }
 
 /**
@@ -240,10 +264,13 @@ NewBattleState::~NewBattleState()
  * @param list List the index belongs to.
  * @param change Amount to change the index.
  */
-void NewBattleState::updateIndex(size_t &index, std::vector<std::string> &list, int change)
+void NewBattleState::updateIndex(
+		size_t& index,
+		std::vector<std::string>& list,
+		int change)
 {
 	int i = index;
-	if (i + change >= (int)list.size())
+	if (i + change >= static_cast<int>(list.size()))
 	{
 		index = 0;
 	}
@@ -284,10 +311,8 @@ void NewBattleState::updateButtons()
  */
 void NewBattleState::init()
 {
-	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
 
-	// Set music
 	if (!_music)
 	{
 		_music = true;
@@ -307,31 +332,64 @@ void NewBattleState::init()
  */
 void NewBattleState::initSave()
 {
-	const Ruleset *rule = _game->getRuleset();
-	SavedGame *save = new SavedGame();
-	Base *base = new Base(rule);
-	const YAML::Node &starter = _game->getRuleset()->getStartingBase();
-	base->load(starter, save, true, true);
+	const Ruleset* rule = _game->getRuleset();
+	SavedGame* save = new SavedGame();
+	Base* base = new Base(rule);
+	const YAML::Node& starter = _game->getRuleset()->getStartingBase();
+
+	base->load(
+			starter,
+			save,
+			true,
+			true);
 	save->getBases()->push_back(base);
+
 	// kill everything we don't want in this base
-	for (std::vector<Soldier*>::iterator d = base->getSoldiers()->begin(); d != base->getSoldiers()->end(); d = base->getSoldiers()->erase(d));
-	for (std::vector<Craft*>::iterator e = base->getCrafts()->begin(); e != base->getCrafts()->end(); e = base->getCrafts()->erase(e));
-	for (std::map<std::string, int>::iterator l = base->getItems()->getContents()->begin(); l != base->getItems()->getContents()->end();)
+	for (std::vector<Soldier*>::iterator
+			d = base->getSoldiers()->begin();
+			d != base->getSoldiers()->end();
+			d = base->getSoldiers()->erase(d));
+
+	for (std::vector<Craft*>::iterator
+			e = base->getCrafts()->begin();
+			e != base->getCrafts()->end();
+			e = base->getCrafts()->erase(e));
+
+	for (std::map<std::string, int>::iterator
+			l = base->getItems()->getContents()->begin();
+			l != base->getItems()->getContents()->end();
+			)
 	{
 		base->getItems()->removeItem(l->first, l->second);
 		l = base->getItems()->getContents()->begin();
 	}
-	_craft = new Craft(rule->getCraft(_crafts[_selCraft]), base, 1);
-	base->getCrafts()->push_back(_craft);
-	// Generate soldiers
-	for (int i = 0; i < 30; ++i)
-	{
-		Soldier *soldier = new Soldier(rule->getSoldier("XCOM"), rule->getArmor("STR_NONE_UC"), &rule->getPools(), save->getId("STR_SOLDIER"));
 
-        for (int n = 0; n < 5; ++n) 
+	_craft = new Craft(
+					rule->getCraft(_crafts[_selCraft]),
+					base,
+					1);
+	base->getCrafts()->push_back(_craft);
+
+
+	for (int // Generate soldiers
+			i = 0;
+			i < 30;
+			++i)
+	{
+		Soldier* soldier = new Soldier(
+									rule->getSoldier("XCOM"),
+									rule->getArmor("STR_NONE_UC"),
+									&rule->getPools(),
+									save->getId("STR_SOLDIER"));
+
+        for (int
+				n = 0;
+				n < 5;
+				++n) 
         {
             if (RNG::percent(70))
                 continue;
+
             soldier->promoteRank();
             
             UnitStats* stats = soldier->getCurrentStats();
@@ -349,13 +407,18 @@ void NewBattleState::initSave()
         }
 
 		base->getSoldiers()->push_back(soldier);
+
 		if (i < 8)
 			soldier->setCraft(_craft);
 	}
 
+
 	// Generate items
 	const std::vector<std::string> &items = rule->getItemsList();
-	for (std::vector<std::string>::const_iterator i = items.begin(); i != items.end(); ++i)
+	for (std::vector<std::string>::const_iterator
+			i = items.begin();
+			i != items.end();
+			++i)
 	{
 		RuleItem* rule = _game->getRuleset()->getItem(*i);
 		if (rule->getBattleType() != BT_CORPSE
@@ -375,7 +438,10 @@ void NewBattleState::initSave()
 
 	// Add research
 	const std::vector<std::string>& research = rule->getResearchList();
-	for (std::vector<std::string>::const_iterator i = research.begin(); i != research.end(); ++i)
+	for (std::vector<std::string>::const_iterator
+			i = research.begin();
+			i != research.end();
+			++i)
 	{
 		save->addFinishedResearch(rule->getResearch(*i));
 	}
@@ -387,28 +453,32 @@ void NewBattleState::initSave()
  * Starts the battle.
  * @param action Pointer to an action.
  */
-void NewBattleState::btnOkClick(Action *)
+void NewBattleState::btnOkClick(Action*)
 {
 	Options::save();
-	if (_missionTypes[_selMission] != "STR_BASE_DEFENSE" && _craft->getNumSoldiers() == 0 && _craft->getNumVehicles() == 0)
+
+	if (_missionTypes[_selMission] != "STR_BASE_DEFENSE"
+		&& _craft->getNumSoldiers() == 0
+		&& _craft->getNumVehicles() == 0)
 	{
 		return;
 	}
 
 	_music = false;
 
-	SavedBattleGame *bgame = new SavedBattleGame();
+	SavedBattleGame* bgame = new SavedBattleGame();
 	_game->getSavedGame()->setBattleGame(bgame);
 	bgame->setMissionType(_missionTypes[_selMission]);
-	BattlescapeGenerator bgen = BattlescapeGenerator(_game);
 
+	BattlescapeGenerator bgen = BattlescapeGenerator(_game);
 	bgen.setWorldTexture(_textures[_selTerrain]);
 
 	if (_missionTypes[_selMission] == "STR_TERROR_MISSION")
 	{
-		TerrorSite *t = new TerrorSite();
+		TerrorSite* t = new TerrorSite();
 		t->setId(1);
 		_craft->setDestination(t);
+
 		bgen.setTerrorSite(t);
 		bgen.setCraft(_craft);
 	}
@@ -418,57 +488,79 @@ void NewBattleState::btnOkClick(Action *)
 	}
 	else if (_missionTypes[_selMission] == "STR_ALIEN_BASE_ASSAULT")
 	{
-		AlienBase *b = new AlienBase();
+		AlienBase* b = new AlienBase();
 		b->setId(1);
 		_craft->setDestination(b);
+
 		bgen.setAlienBase(b);
 		bgen.setCraft(_craft);
 	}
-	else if (_missionTypes[_selMission] == "STR_MARS_CYDONIA_LANDING" || _missionTypes[_selMission] == "STR_MARS_THE_FINAL_ASSAULT")
+	else if (_missionTypes[_selMission] == "STR_MARS_CYDONIA_LANDING"
+		|| _missionTypes[_selMission] == "STR_MARS_THE_FINAL_ASSAULT")
 	{
 		bgen.setCraft(_craft);
 	}
 	else if (_craft)
 	{
-		Ufo *u = new Ufo(_game->getRuleset()->getUfo(_missionTypes[_selMission]));
+		Ufo* u = new Ufo(_game->getRuleset()->getUfo(_missionTypes[_selMission]));
 		u->setId(1);
 		_craft->setDestination(u);
+
 		bgen.setUfo(u);
 		bgen.setCraft(_craft);
+
 		if (_terrainTypes[_selTerrain] == "STR_FOREST")
 		{
 			u->setLatitude(-0.5);
 		}
+
 		// either ground assault or ufo crash
-		if (RNG::generate(0,1) == 1)
+		if (RNG::generate(0, 1) == 1)
 			bgame->setMissionType("STR_UFO_GROUND_ASSAULT");
 		else
 			bgame->setMissionType("STR_UFO_CRASH_RECOVERY");
 	}
+
 	if (_craft)
 		_craft->setSpeed(0);
-	GameDifficulty diffs[] = {DIFF_BEGINNER, DIFF_EXPERIENCED, DIFF_VETERAN, DIFF_GENIUS, DIFF_SUPERHUMAN};
+
+	GameDifficulty diffs[] =
+	{
+		DIFF_BEGINNER,
+		DIFF_EXPERIENCED,
+		DIFF_VETERAN,
+		DIFF_GENIUS,
+		DIFF_SUPERHUMAN
+	};
 	_game->getSavedGame()->setDifficulty(diffs[_selDifficulty]);
 
 	std::stringstream ss;
 	int shade = 0;
 	ss << std::dec << _darkness[_selDarkness];
 	ss >> std::dec >> shade;
+
 	bgen.setWorldShade(shade);
 	bgen.setAlienRace(_alienRaces[_selAlien]);
 	bgen.setAlienItemlevel(_selItemLevel);
 
 	bgen.run();
-	//_game->pushState(new BattlescapeState(_game));
-	Base *base = 0;
+
+//	_game->pushState(new BattlescapeState(_game));
+
+	Base* base = 0;
 	if (_missionTypes[_selMission] == "STR_BASE_DEFENSE")
 	{
 		base = _craft->getBase();
 		_craft = 0;
 	}
+
 	_game->popState();
 	_game->popState();
-	_game->pushState(new BriefingState(_game, _craft, base));
+	_game->pushState(new BriefingState(
+									_game,
+									_craft,
+									base));
+
 	_craft = 0;
 }
 
@@ -476,9 +568,10 @@ void NewBattleState::btnOkClick(Action *)
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void NewBattleState::btnCancelClick(Action *)
+void NewBattleState::btnCancelClick(Action*)
 {
 	Options::save();
+
 	_game->setSavedGame(0);
 	_game->popState();
 }
@@ -487,24 +580,24 @@ void NewBattleState::btnCancelClick(Action *)
  * Randomize the state
  * @param action Pointer to an action.
  */
-void NewBattleState::btnRandomClick(Action *)
+void NewBattleState::btnRandomClick(Action*)
 {
-	_selMission = RNG::generate(0, _missionTypes.size()-1);
-	_selAlien   = RNG::generate(0, _alienRaces.size()-1);
-	_selTerrain = RNG::generate(0, 5);
-	_selCraft   = RNG::generate(0, _crafts.size()-1);
-	_selDifficulty = RNG::generate(0, 4);
-	_selDarkness = RNG::generate(0, 5);
-	_selItemLevel = RNG::generate(0, 2);
+	_selMission		= RNG::generate(0, _missionTypes.size() - 1);
+	_selAlien		= RNG::generate(0, _alienRaces.size() - 1);
+	_selTerrain		= RNG::generate(0, 5);
+	_selCraft		= RNG::generate(0, _crafts.size() - 1);
+	_selDifficulty	= RNG::generate(0, 4);
+	_selDarkness	= RNG::generate(0, 5);
+	_selItemLevel	= RNG::generate(0, 2);
 
-	Options::setInt("NewBattleMission", _selMission);
-	Options::setInt("NewBattleTerrain", _selTerrain);
-	Options::setInt("NewBattleItemLevel", _selItemLevel);
-	Options::setInt("NewBattleItemLevel", _selItemLevel);
-	Options::setInt("NewBattleAlienRace", _selAlien);
-	Options::setInt("NewBattleDifficulty", _selDifficulty);
-	Options::setInt("NewBattleDarkness", _selDarkness);
-	Options::setInt("NewBattleCraft", _selCraft);
+	Options::setInt("NewBattleMission",		_selMission);
+	Options::setInt("NewBattleTerrain",		_selTerrain);
+	Options::setInt("NewBattleItemLevel",	_selItemLevel);
+	Options::setInt("NewBattleItemLevel",	_selItemLevel);
+	Options::setInt("NewBattleAlienRace",	_selAlien);
+	Options::setInt("NewBattleDifficulty",	_selDifficulty);
+	Options::setInt("NewBattleDarkness",	_selDarkness);
+	Options::setInt("NewBattleCraft",		_selCraft);
 
 	updateButtons();
 
@@ -515,16 +608,19 @@ void NewBattleState::btnRandomClick(Action *)
  * Shows the Craft Info screen.
  * @param action Pointer to an action.
  */
-void NewBattleState::btnEquipClick(Action *)
+void NewBattleState::btnEquipClick(Action*)
 {
-	_game->pushState(new CraftInfoState(_game, _game->getSavedGame()->getBases()->front(), 0));
+	_game->pushState(new CraftInfoState(
+									_game,
+									_game->getSavedGame()->getBases()->front(),
+									0));
 }
 
 /**
  * Changes mission type.
  * @param action Pointer to an action.
  */
-void NewBattleState::btnMissionTypeClick(Action *action)
+void NewBattleState::btnMissionTypeClick(Action* action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
@@ -534,7 +630,9 @@ void NewBattleState::btnMissionTypeClick(Action *action)
 	{
 		updateIndex(_selMission, _missionTypes, -1);
 	}
+
 	_btnMissionType->setText(tr(_missionTypes[_selMission]));
+
 	Options::setInt("NewBattleMission", _selMission);
 }
 
@@ -542,7 +640,7 @@ void NewBattleState::btnMissionTypeClick(Action *action)
  * Changes terrain type.
  * @param action Pointer to an action.
  */
-void NewBattleState::btnTerrainTypeClick(Action *action)
+void NewBattleState::btnTerrainTypeClick(Action* action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
@@ -552,7 +650,9 @@ void NewBattleState::btnTerrainTypeClick(Action *action)
 	{
 		updateIndex(_selTerrain, _terrainTypes, -1);
 	}
+
 	_btnTerrainType->setText(tr("STR_"+_terrainTypes[_selTerrain]));
+
 	Options::setInt("NewBattleTerrain", _selTerrain);
 }
 
@@ -560,7 +660,7 @@ void NewBattleState::btnTerrainTypeClick(Action *action)
  * Changes Item level.
  * @param action Pointer to an action.
  */
-void NewBattleState::btnItemLevelClick(Action *action)
+void NewBattleState::btnItemLevelClick(Action* action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
@@ -570,14 +670,18 @@ void NewBattleState::btnItemLevelClick(Action *action)
 	{
 		updateIndex(_selItemLevel, _itemLevels, -1);
 	}
+
 	unsigned int month = _selItemLevel + 1;
 	GameTime time = GameTime(6, 1, month, 1999, 12, 0, 0);
+
 	std::wostringstream ss;
 	ss << month << L" (" << tr(time.getMonthString());
+
 	if (month == _itemLevels.size())
 		ss << L"+";
 	ss << L")";
 	_btnItemLevel->setText(ss.str());
+
 	Options::setInt("NewBattleItemLevel", _selItemLevel);
 }
 
@@ -585,7 +689,7 @@ void NewBattleState::btnItemLevelClick(Action *action)
  * Changes alien race.
  * @param action Pointer to an action.
  */
-void NewBattleState::btnAlienRaceClick(Action *action)
+void NewBattleState::btnAlienRaceClick(Action* action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
@@ -595,7 +699,9 @@ void NewBattleState::btnAlienRaceClick(Action *action)
 	{
 		updateIndex(_selAlien, _alienRaces, -1);
 	}
+
 	_btnAlienRace->setText(tr(_alienRaces[_selAlien]));
+
 	Options::setInt("NewBattleAlienRace", _selAlien);
 }
 
@@ -603,7 +709,7 @@ void NewBattleState::btnAlienRaceClick(Action *action)
  * Changes difficulty level.
  * @param action Pointer to an action.
  */
-void NewBattleState::btnDifficultyClick(Action *action)
+void NewBattleState::btnDifficultyClick(Action* action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
@@ -613,7 +719,9 @@ void NewBattleState::btnDifficultyClick(Action *action)
 	{
 		updateIndex(_selDifficulty, _difficulty, -1);
 	}
+
 	_btnDifficulty->setText(tr(_difficulty[_selDifficulty]));
+
 	Options::setInt("NewBattleDifficulty", _selDifficulty);
 }
 
@@ -621,7 +729,7 @@ void NewBattleState::btnDifficultyClick(Action *action)
  * Changes darkness level
  * @param action Pointer to an action.
  */
-void NewBattleState::btnDarknessClick(Action *action)
+void NewBattleState::btnDarknessClick(Action* action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
@@ -631,7 +739,9 @@ void NewBattleState::btnDarknessClick(Action *action)
 	{
 		updateIndex(_selDarkness, _darkness, -1);
 	}
+
 	_btnDarkness->setText(Language::utf8ToWstr(_darkness[_selDarkness]));
+
 	Options::setInt("NewBattleDarkness", _selDarkness);
 }
 
@@ -639,7 +749,7 @@ void NewBattleState::btnDarknessClick(Action *action)
  * Changes player craft.
  * @param action Pointer to an action.
  */
-void NewBattleState::btnCraftClick(Action *action)
+void NewBattleState::btnCraftClick(Action* action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
@@ -649,8 +759,10 @@ void NewBattleState::btnCraftClick(Action *action)
 	{
 		updateIndex(_selCraft, _crafts, -1);
 	}
+
 	_btnCraft->setText(tr(_crafts[_selCraft]));
 	_craft->setRules(_game->getRuleset()->getCraft(_crafts[_selCraft]));
+
 	Options::setInt("NewBattleCraft", _selCraft);
 }
 

@@ -55,6 +55,8 @@ class State
 
 
 		public:
+			friend class Timer;
+
 			/// Creates a new state linked to a game.
 			State(Game* game);
 			/// Cleans up the state.
@@ -97,8 +99,6 @@ class State
 			void lowerAllSurfaces();
 			///
 			void applyBattlescapeTheme();
-
-			friend class Timer;
 };
 
 }

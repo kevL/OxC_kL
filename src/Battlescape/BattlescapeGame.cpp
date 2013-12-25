@@ -203,10 +203,9 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 		return;												// kL
 	} */ // well, that loops...
 
-
-	std::wstringstream ss;
-
 	_tuReserved = BA_NONE;
+
+
 	if (unit->getTimeUnits() < 6)
 	{
 		unit->dontReselect();
@@ -216,7 +215,9 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 		_AIActionCounter > 1
 		|| !unit->reselectAllowed())
 	{
-		if (_save->selectNextPlayerUnit(true, _AISecondMove) == 0)
+		if (_save->selectNextPlayerUnit(
+									true,
+									_AISecondMove) == 0)
 		{
 			if (!_save->getDebugMode())
 			{
@@ -284,9 +285,15 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 
 		// for some reason the unit had no AI routine assigned..
 		if (unit->getFaction() == FACTION_HOSTILE)
-			unit->setAIState(new AlienBAIState(_save, unit, 0));
+			unit->setAIState(new AlienBAIState(
+											_save,
+											unit,
+											0));
 		else
-			unit->setAIState(new CivilianBAIState(_save, unit, 0));
+			unit->setAIState(new CivilianBAIState(
+											_save,
+											unit,
+											0));
 
 		ai = unit->getCurrentAIState();
 	}
@@ -297,7 +304,7 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 		_playedAggroSound = false;
 		unit->_hidingForTurn = false;
 
-		if (_save->getTraceSetting()) { Log(LOG_INFO) << "#" << unit->getId() << "--" << unit->getType(); }
+		if (_save->getTraceSetting()) Log(LOG_INFO) << "#" << unit->getId() << "--" << unit->getType();
 	}
 	//Log(LOG_INFO) << ". _AIActionCounter DONE";
 
@@ -344,6 +351,8 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 	//Log(LOG_INFO) << ". getCharging DONE";
 
 
+	std::wstringstream ss;
+
 	if (action.type == BA_WALK)
 	{
 		ss << L"Walking to " << action.target;
@@ -356,7 +365,9 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 
 		if (_save->getPathfinding()->getStartDirection() != -1)
 		{
-			statePushBack(new UnitWalkBState(this, action));
+			statePushBack(new UnitWalkBState(
+											this,
+											action));
 		}
 	}
 	//Log(LOG_INFO) << ". BA_WALK DONE";
@@ -383,13 +394,17 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 		}
 		else
 		{
-			statePushBack(new UnitTurnBState(this, action));
+			statePushBack(new UnitTurnBState(
+											this,
+											action));
 		}
 		//Log(LOG_INFO) << ". . create Psi weapon DONE";
 
 
 		ss.clear();
-		ss << L"Attack type=" << action.type << " target=" << action.target << " weapon=" << action.weapon->getRules()->getName().c_str();
+		ss << L"Attack type=" << action.type
+				<< " target=" << action.target
+				<< " weapon=" << action.weapon->getRules()->getName().c_str();
 		_parentState->debug(ss.str());
 
 		Log(LOG_INFO) << ". attack action.Type = " << action.type
@@ -417,9 +432,11 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 				BattleUnit* unit = _save->getTile(action.target)->getUnit();
 
 				game->pushState(new InfoboxState(
-												game,
-												game->getLanguage()->getString("STR_IS_UNDER_ALIEN_CONTROL", unit->getGender())
-													.arg(unit->getName(game->getLanguage()))));
+											game,
+											game->getLanguage()->getString(
+																	"STR_IS_UNDER_ALIEN_CONTROL",
+																	unit->getGender())
+																		.arg(unit->getName(game->getLanguage()))));
 			}
 			//Log(LOG_INFO) << ". . . success MC Done";
 
@@ -436,7 +453,9 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 		_parentState->debug(L"Idle");
 		_AIActionCounter = 0;
 
-		if (_save->selectNextPlayerUnit(true, _AISecondMove) == 0)
+		if (_save->selectNextPlayerUnit(
+									true,
+									_AISecondMove) == 0)
 		{
 			if (!_save->getDebugMode())
 			{

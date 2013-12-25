@@ -53,12 +53,15 @@ CannotReequipState::CannotReequipState(Game* game, std::vector<ReequipStat> miss
 	_txtQuantity	= new Text(46, 9, 178, 77);
 	_txtCraft		= new Text(80, 9, 224, 77);
 
-	_lstItems		= new TextList(286, 88, 16, 87);
+	_lstItems		= new TextList(285, 88, 16, 87);
 
 	_btnOk			= new TextButton(288, 16, 16, 177);
 
 
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
+	_game->setPalette(
+				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)),
+				Palette::backPos,
+				16);
 	add(_window);
 	add(_btnOk);
 	add(_txtTitle);
@@ -76,8 +79,12 @@ CannotReequipState::CannotReequipState(Game* game, std::vector<ReequipStat> miss
 	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& CannotReequipState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)& CannotReequipState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
-	_btnOk->onKeyboardPress((ActionHandler)& CannotReequipState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& CannotReequipState::btnOkClick,
+					(SDLKey)Options::getInt("keyOk"));
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& CannotReequipState::btnOkClick,
+					(SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(8)+5);
 	_txtTitle->setText(tr("STR_NOT_ENOUGH_EQUIPMENT_TO_FULLY_RE_EQUIP_SQUAD"));
@@ -100,11 +107,18 @@ CannotReequipState::CannotReequipState(Game* game, std::vector<ReequipStat> miss
 	_lstItems->setBackground(_window);
 	_lstItems->setMargin(8);
 
-	for (std::vector<ReequipStat>::iterator i = missingItems.begin(); i != missingItems.end(); ++i)
+	for (std::vector<ReequipStat>::iterator
+			i = missingItems.begin();
+			i != missingItems.end();
+			++i)
 	{
 		std::wstringstream ss;
 		ss << i->qty;
-		_lstItems->addRow(3, tr(i->item).c_str(), ss.str().c_str(), i->craft.c_str());
+		_lstItems->addRow(
+						3,
+						tr(i->item).c_str(),
+						ss.str().c_str(),
+						i->craft.c_str());
 	}
 }
 
