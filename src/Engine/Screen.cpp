@@ -18,28 +18,33 @@
  */
 
 #include "Screen.h"
-#include <sstream>
+
 #include <cmath>
 #include <iomanip>
+#include <sstream>
+
 #include <limits.h>
-#include "../lodepng.h"
-#include "Exception.h"
-#include "Surface.h"
-#include "Logger.h"
-#include "Action.h"
-#include "Options.h"
-#include "CrossPlatform.h"
-#include "Zoom.h"
-#include "OpenGL.h"
-#include "Timer.h"
 #include <SDL.h>
+
+#include "../lodepng.h"
+
+#include "Action.h"
+#include "CrossPlatform.h"
+#include "Exception.h"
+#include "Logger.h"
+#include "OpenGL.h"
+#include "Options.h"
+#include "Surface.h"
+#include "Timer.h"
+#include "Zoom.h"
 
 
 namespace OpenXcom
 {
 
-int Screen::BASE_WIDTH = 320;
-int Screen::BASE_HEIGHT = 200;
+int Screen::BASE_WIDTH	= 320;
+int Screen::BASE_HEIGHT	= 200;
+
 
 /// Sets the _flags and _bpp variables based on game options; needed in more than one place now
 void Screen::makeVideoFlags()
@@ -63,7 +68,7 @@ void Screen::makeVideoFlags()
 		_flags |= SDL_FULLSCREEN;
 	}
 
-	_bpp = (Screen::isHQXEnabled() || Screen::isOpenGLEnabled()) ? 32 : 8;
+	_bpp = (Screen::isHQXEnabled() || Screen::isOpenGLEnabled())? 32: 8;
 }
 
 
@@ -76,7 +81,13 @@ void Screen::makeVideoFlags()
  * @warning Currently the game is designed for 8bpp, so there's no telling what'll
  * happen if you use a different value.
  */
-Screen::Screen(int width, int height, int bpp, bool fullscreen, int windowedModePositionX, int windowedModePositionY)
+Screen::Screen(
+		int width,
+		int height,
+		int bpp,
+		bool fullscreen,
+		int windowedModePositionX,
+		int windowedModePositionY)
 	:
 		_bpp(bpp),
 		_scaleX(1.0),
@@ -180,6 +191,7 @@ void Screen::handle(Action* action)
 		{
 			ss.str("");
 			ss << Options::getUserFolder() << "screen" << std::setfill('0') << std::setw(3) << i << ".png";
+
 			i++;
 		}
 		while (CrossPlatform::fileExists(ss.str()));
@@ -204,11 +216,22 @@ void Screen::flip()
 		|| getHeight() != BASE_HEIGHT
 		|| isOpenGLEnabled())
 	{
-		Zoom::flipWithZoom(_surface->getSurface(), _screen, _topBlackBand, _bottomBlackBand, _leftBlackBand, _rightBlackBand, &glOutput);
+		Zoom::flipWithZoom(
+					_surface->getSurface(),
+					_screen,
+					_topBlackBand,
+					_bottomBlackBand,
+					_leftBlackBand,
+					_rightBlackBand,
+					&glOutput);
 	}
 	else
 	{
-		SDL_BlitSurface(_surface->getSurface(), 0, _screen, 0);
+		SDL_BlitSurface(
+				_surface->getSurface(),
+				0,
+				_screen,
+				0);
 	}
 
 	// perform any requested palette update
@@ -217,7 +240,9 @@ void Screen::flip()
 		&& _screen->format->BitsPerPixel == 8)
 	{
 		if (_screen->format->BitsPerPixel == 8
-			&& SDL_SetColors(_screen, &(deferredPalette[_firstColor]), _firstColor, _numColors) == 0)
+			&& SDL_SetColors(
+						_screen,
+						&(deferredPalette[_firstColor]), _firstColor, _numColors) == 0)
 		{
 			Log(LOG_INFO) << "Display palette doesn't match requested palette";
 		}
@@ -246,7 +271,11 @@ void Screen::clear()
  * @param firstcolor Offset of the first color to replace.
  * @param ncolors Amount of colors to replace.
  */
-void Screen::setPalette(SDL_Color* colors, int firstcolor, int ncolors, bool immediately)
+void Screen::setPalette(
+		SDL_Color* colors,
+		int firstcolor,
+		int ncolors,
+		bool immediately)
 {
 	if (_numColors
 		&& _numColors != ncolors
@@ -265,7 +294,10 @@ void Screen::setPalette(SDL_Color* colors, int firstcolor, int ncolors, bool imm
 		_firstColor = firstcolor;
 	}
 
-	_surface->setPalette(colors, firstcolor, ncolors);
+	_surface->setPalette(
+					colors,
+					firstcolor,
+					ncolors);
 
 	// defer actual update of screen until SDL_Flip()
 	if (immediately
@@ -321,10 +353,12 @@ int Screen::getHeight() const
 /**
  * Changes the screen's resolution. The display surface
  * and palette have to be reset for this to happen properly.
- * @param width Width in pixels.
- * @param height Height in pixels.
+ * @param width, Width in pixels.
+ * @param height, Height in pixels.
  */
-void Screen::setResolution(int width, int height)
+void Screen::setResolution(
+		int width,
+		int height)
 {
 	makeVideoFlags();
 
@@ -338,7 +372,12 @@ void Screen::setResolution(int width, int height)
 			delete _surface;
 
 		// only HQX needs 32bpp for this surface; the OpenGL class has its own 32bpp buffer
-		_surface = new Surface((int)BASE_WIDTH, (int)BASE_HEIGHT, 0, 0, Screen::isHQXEnabled()? 32: 8);
+		_surface = new Surface(
+							(int)BASE_WIDTH,
+							(int)BASE_HEIGHT,
+							0,
+							0,
+							Screen::isHQXEnabled()? 32: 8);
 
 		if (_surface->getSurface()->format->BitsPerPixel == 8)
 			_surface->setPalette(deferredPalette);
@@ -361,10 +400,10 @@ void Screen::setResolution(int width, int height)
 	}
 
 	Options::setInt("displayWidth", getWidth());
-	Options::setInt("displayHeoght", getHeight());
+	Options::setInt("displayHeight", getHeight());
 
-	_scaleX = getWidth() / (double)BASE_WIDTH;
-	_scaleY = getHeight() / (double)BASE_HEIGHT;
+	_scaleX = static_cast<double>(getWidth()) / static_cast<double>(BASE_WIDTH);
+	_scaleY = static_cast<double>(getHeight()) / static_cast<double>(BASE_HEIGHT);
 
 	bool cursorInBlackBands;
 	if (!Options::getBool("keepAspectRatio"))
@@ -387,7 +426,7 @@ void Screen::setResolution(int width, int height)
 	if (_scaleX > _scaleY
 		&& Options::getBool("keepAspectRatio"))
 	{
-		int targetWidth = (int)floor(_scaleY * (double)BASE_WIDTH);
+		int targetWidth = static_cast<int>(floor(_scaleY * static_cast<double>(BASE_WIDTH)));
 
 		_topBlackBand = _bottomBlackBand = 0;
 		_leftBlackBand = (getWidth() - targetWidth) / 2;
@@ -412,7 +451,7 @@ void Screen::setResolution(int width, int height)
 	else if (_scaleY > _scaleX
 		&& Options::getBool("keepAspectRatio"))
 	{
-		int targetHeight = (int)floor(_scaleX * (double)BASE_HEIGHT);
+		int targetHeight = static_cast<int>(floor(_scaleX * static_cast<double>(BASE_HEIGHT)));
 
 		_topBlackBand = (getHeight() - targetHeight) / 2;
 		if (_topBlackBand < 0)
@@ -526,26 +565,54 @@ int Screen::getCursorLeftBlackBand() const
  */
 void Screen::screenshot(const std::string& filename) const
 {
-	SDL_Surface* screenshot = SDL_AllocSurface(0, getWidth(), getHeight(), 24, 0xff, 0xff00, 0xff0000, 0);
+	SDL_Surface* screenshot = SDL_AllocSurface(
+											0,
+											getWidth(),
+											getHeight(),
+											24,
+											0xff,
+											0xff00,
+											0xff0000,
+											0);
 	
 	if (isOpenGLEnabled())
 	{
 #ifndef __NO_OPENGL
 		GLenum format = GL_RGB;
 
-		for (int y = 0; y < getHeight(); ++y)
+		for (int
+				y = 0;
+				y < getHeight();
+				++y)
 		{
-			glReadPixels(0, getHeight()-(y+1), getWidth(), 1, format, GL_UNSIGNED_BYTE, ((Uint8*)screenshot->pixels) + y*screenshot->pitch);
+			glReadPixels(
+						0,
+						getHeight() - (y + 1),
+						getWidth(),
+						1,
+						format,
+						GL_UNSIGNED_BYTE,
+						static_cast<Uint8*>(screenshot->pixels) + y * screenshot->pitch);
 		}
+
 		glErrorCheck();
 #endif
 	}
 	else
 	{
-		SDL_BlitSurface(_screen, 0, screenshot, 0);
+		SDL_BlitSurface(
+					_screen,
+					0,
+					screenshot,
+					0);
 	}
 
-	unsigned error = lodepng::encode(filename, (const unsigned char*)(screenshot->pixels), getWidth(), getHeight(), LCT_RGB);
+	unsigned error = lodepng::encode(
+								filename,
+								(const unsigned char*)(screenshot->pixels),
+								getWidth(),
+								getHeight(),
+								LCT_RGB);
 	if (error)
 	{
 		Log(LOG_ERROR) << "Saving to PNG failed: " << lodepng_error_text(error);
@@ -555,8 +622,8 @@ void Screen::screenshot(const std::string& filename) const
 }
 
 
-/** Check whether useHQXFilter is set in Options and a compatible resolution
- *  has been selected.
+/** Check whether useHQXFilter is set in Options
+ * and a compatible resolution has been selected.
  */
 bool Screen::isHQXEnabled()
 {

@@ -367,7 +367,8 @@ GraphsState::GraphsState(Game* game)
 			{
 				current.x = x;
 
-				Uint8 color = Palette::blockOffset(10)+grid+1;
+//kL				Uint8 color = Palette::blockOffset(10)+grid+1;
+				Uint8 color = Palette::blockOffset(14)+grid+1;
 				if (grid == 4)
 				{
 					color = 0;
@@ -461,8 +462,12 @@ GraphsState::GraphsState(Game* game)
 	_btnIncome->onMousePress((ActionHandler)& GraphsState::btnIncomeClick);
 	_btnFinance->onMousePress((ActionHandler)& GraphsState::btnFinanceClick);
 	_btnGeoscape->onMousePress((ActionHandler)& GraphsState::btnGeoscapeClick);
-	_btnGeoscape->onKeyboardPress((ActionHandler)& GraphsState::btnGeoscapeClick, (SDLKey)Options::getInt("keyCancel"));
-	_btnGeoscape->onKeyboardPress((ActionHandler)& GraphsState::btnGeoscapeClick, (SDLKey)Options::getInt("keyGeoGraphs"));
+	_btnGeoscape->onKeyboardPress(
+					(ActionHandler)& GraphsState::btnGeoscapeClick,
+					(SDLKey)Options::getInt("keyCancel"));
+	_btnGeoscape->onKeyboardPress(
+					(ActionHandler)& GraphsState::btnGeoscapeClick,
+					(SDLKey)Options::getInt("keyGeoGraphs"));
 
 	centerAllSurfaces();
 }

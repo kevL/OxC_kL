@@ -42,12 +42,16 @@ class OptionsBaseState
 	:
 		public State
 {
+
 protected:
 	OptionsOrigin _origin;
 
+
 	public:
 		/// Creates the Options state.
-		OptionsBaseState(Game* game, OptionsOrigin origin);
+		OptionsBaseState(
+				Game* game,
+				OptionsOrigin origin);
 		/// Cleans up the Options state.
 		~OptionsBaseState();
 

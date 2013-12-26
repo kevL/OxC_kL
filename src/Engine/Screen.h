@@ -16,18 +16,22 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_SCREEN_H
 #define OPENXCOM_SCREEN_H
 
 #include <SDL.h>
 #include <string>
+
 #include "OpenGL.h"
+
 
 namespace OpenXcom
 {
 
 class Surface;
 class Action;
+
 
 /**
  * A display screen, handles rendering onto the game window.
@@ -39,67 +43,116 @@ class Action;
  */
 class Screen
 {
-public:
-	static int BASE_WIDTH;
-	static int BASE_HEIGHT;
+
+	public:
+		static int BASE_WIDTH;
+		static int BASE_HEIGHT;
+
 
 private:
-	SDL_Surface *_screen;
-	void *_misalignedPixelBuffer;
-	int _bpp;
-	double _scaleX, _scaleY;
-	int _topBlackBand, _bottomBlackBand, _leftBlackBand, _rightBlackBand, _cursorTopBlackBand, _cursorLeftBlackBand;
+	bool
+		_fullscreen,
+		_pushPalette;
+	int
+		_bpp,
+
+		_topBlackBand,
+		_bottomBlackBand,
+		_leftBlackBand,
+		_rightBlackBand,
+		_cursorTopBlackBand,
+		_cursorLeftBlackBand,
+
+		_firstColor,
+		_numColors;
+	double
+		_scaleX,
+		_scaleY;
 	Uint32 _flags;
-	bool _fullscreen;
-	int _zoomSurfaceY(SDL_Surface * src, SDL_Surface * dst, int flipx, int flipy);
-	SDL_Color deferredPalette[256];
-	int _numColors, _firstColor;
-	bool _pushPalette;
+
 	OpenGL glOutput;
-	Surface *_surface;
-public:
-	/// Creates a new display screen with the specified resolution.
-	Screen(int width, int height, int bpp, bool fullscreen, int windowedModePositionX, int windowedModePositionY);
-	/// Cleans up the display screen.
-	~Screen();
-	/// Gets the internal buffer.
-	Surface *getSurface();
-	/// Handles keyboard events.
-	void handle(Action *action);
-	/// Renders the screen onto the game window.
-	void flip();
-	/// Clears the screen.
-	void clear();
-	/// Sets the screen's 8bpp palette.
-	void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256, bool immediately = false);
-	/// Gets the screen's 8bpp palette.
-	SDL_Color *getPalette() const;
-	/// Gets the screen's width.
-	int getWidth() const;
-	/// Gets the screen's height.
-	int getHeight() const;
-	/// Sets the screen's display resolution.
-	void setResolution(int width, int height);
-	/// Sets whether the screen is full-screen or windowed.
-	void setFullscreen(bool full);
-	/// Gets the screen's X scale.
-	double getXScale() const;
-	/// Gets the screen's Y scale.
-	double getYScale() const;
-	/// Gets the screen's top black forbidden to cursor band's height.
-	int getCursorTopBlackBand() const;
-	/// Gets the screen's left black forbidden to cursor band's width.
-	int getCursorLeftBlackBand() const;
-	/// Takes a screenshot.
-	void screenshot(const std::string &filename) const;
-	/// Checks whether HQX is requested and works for the selected resolution
-	static bool isHQXEnabled();
-	/// Checks whether OpenGL output is requested
-	static bool isOpenGLEnabled();
-	/// Sets the _flags and _bpp variables based on game options; needed in more than one place now
-	void makeVideoFlags();
-	static int getDX();
-	static int getDY();
+	SDL_Surface* _screen;
+	Surface* _surface;
+	SDL_Color deferredPalette[256];
+
+	void* _misalignedPixelBuffer;
+
+	///
+	int _zoomSurfaceY(
+			SDL_Surface* src,
+			SDL_Surface* dst,
+			int flipx,
+			int flipy);
+
+
+	public:
+		/// Creates a new display screen with the specified resolution.
+		Screen(
+				int width,
+				int height,
+				int bpp,
+				bool fullscreen,
+				int windowedModePositionX,
+				int windowedModePositionY);
+		/// Cleans up the display screen.
+		~Screen();
+
+		/// Gets the internal buffer.
+		Surface* getSurface();
+
+		/// Handles keyboard events.
+		void handle(Action* action);
+
+		/// Renders the screen onto the game window.
+		void flip();
+		/// Clears the screen.
+		void clear();
+
+		/// Sets the screen's 8bpp palette.
+		void setPalette(
+				SDL_Color* colors,
+				int firstcolor = 0,
+				int ncolors = 256,
+				bool immediately = false);
+		/// Gets the screen's 8bpp palette.
+		SDL_Color* getPalette() const;
+
+		/// Gets the screen's width.
+		int getWidth() const;
+		/// Gets the screen's height.
+		int getHeight() const;
+
+		/// Sets the screen's display resolution.
+		void setResolution(
+				int width,
+				int height);
+		/// Sets whether the screen is full-screen or windowed.
+		void setFullscreen(bool full);
+
+		/// Gets the screen's X scale.
+		double getXScale() const;
+		/// Gets the screen's Y scale.
+		double getYScale() const;
+
+		/// Gets the screen's top black forbidden to cursor band's height.
+		int getCursorTopBlackBand() const;
+		/// Gets the screen's left black forbidden to cursor band's width.
+		int getCursorLeftBlackBand() const;
+
+		/// Takes a screenshot.
+		void screenshot(const std::string& filename) const;
+
+		/// Checks whether HQX is requested and works for the selected resolution
+		static bool isHQXEnabled();
+		/// Checks whether OpenGL output is requested
+		static bool isOpenGLEnabled();
+
+		/// Sets the _flags and _bpp variables based on game options; needed in more than one place now
+		void makeVideoFlags();
+		/// Gets the Horizontal offset from the mid-point of the screen, in pixels.
+		static int getDX();
+		/// Gets the Vertical offset from the mid-point of the screen, in pixels.
+		static int getDY();
 };
 
 }

@@ -18,13 +18,18 @@
  */
 
 #include "OptionsBaseState.h"
+
+#include "MainMenuState.h"
+
+#include "../Battlescape/BattlescapeState.h"
+
 #include "../Engine/Game.h"
 #include "../Engine/Options.h"
-#include "MainMenuState.h"
+
 #include "../Geoscape/GeoscapeState.h"
-#include "../Battlescape/BattlescapeState.h"
-#include "../Savegame/SavedGame.h"
+
 #include "../Savegame/SavedBattleGame.h"
+#include "../Savegame/SavedGame.h"
 
 
 namespace OpenXcom
@@ -35,7 +40,9 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param origin Game section that originated this state.
  */
-OptionsBaseState::OptionsBaseState(Game* game, OptionsOrigin origin)
+OptionsBaseState::OptionsBaseState(
+		Game* game,
+		OptionsOrigin origin)
 	:
 		State(game),
 		_origin(origin)
