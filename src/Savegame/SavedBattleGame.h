@@ -108,7 +108,8 @@ private:
 	std::vector<Node*>
 		_nodes;
 	std::vector<Position>
-		_tileSearch;
+		_tileSearch,
+		_storageSpace;
 
 	Uint8
 		_dragButton;			// this is a cache for Options::getString("battleScrollDragButton")
@@ -315,14 +316,18 @@ private:
 		const std::vector<Position> getTileSearch();
 		/// check if the AI has engaged cheat mode.
 		bool isCheating();
-		///
+		/// get the reserved fire mode.
 		BattleActionType getTUReserved() const;
-		///
+		/// set the reserved fire mode.
 		void setTUReserved(BattleActionType reserved);
-		///
+		/// get whether we are reserving TUs to kneel.
 		bool getKneelReserved() const;
-		///
+		/// set whether we are reserving TUs to kneel.
 		void setKneelReserved(bool reserved);
+		/// give me access to the storage tiles vector.
+		std::vector<Position>& getStorageSpace();
+		/// move all the leftover items to random locations in the storage tiles vector.
+		void randomizeItemLocations(Tile* t);
 };
 
 }

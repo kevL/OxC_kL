@@ -467,6 +467,7 @@ void InventoryState::btnOkClick(Action*)
 			return;
 		}
 
+		_battleGame->randomizeItemLocations(_battleGame->getSelectedUnit()->getTile());
 		_battleGame->resetUnitTiles();
 
 		for (std::vector<BattleUnit*>::iterator

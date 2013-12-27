@@ -1696,7 +1696,9 @@ void BattlescapeGenerator::generateMap()
 		mapDataSetIDOffset = 0,
 		craftDataSetIDOffset = 0;
 
-	std::vector<std::vector<bool>> landingzone;
+	std::vector<std::vector<bool>>
+		landingzone,
+		storageBlocks;
 	std::vector<std::vector<int>> segments;
 	std::vector<std::vector<MapBlock*>> blocks;
 
@@ -1710,9 +1712,19 @@ void BattlescapeGenerator::generateMap()
 		* ufoMap = 0;
 
 
-	blocks.resize(_mapsize_x / 10, std::vector<MapBlock*>(_mapsize_y / 10));
-	landingzone.resize(_mapsize_x / 10, std::vector<bool>(_mapsize_y / 10, false));
-	segments.resize(_mapsize_x / 10, std::vector<int>(_mapsize_y / 10, 0));
+	blocks.resize(
+			_mapsize_x / 10,
+			std::vector<MapBlock*>(_mapsize_y / 10));
+	landingzone.resize(
+			_mapsize_x / 10,
+			std::vector<bool>(_mapsize_y / 10,
+			false));
+	storageBlocks.resize(
+			_mapsize_x / 10,
+			std::vector<bool>(_mapsize_y / 10, false));
+	segments.resize(
+			_mapsize_x / 10,
+			std::vector<int>(_mapsize_y / 10, 0));
 
 	blocksToDo = (_mapsize_x / 10) * (_mapsize_y / 10);
 
@@ -1876,6 +1888,7 @@ void BattlescapeGenerator::generateMap()
 						newname << mapnum;
 
 						blocks[x][y] = _terrain->getMapBlock(newname.str());
+						storageBlocks[x][y] = ((*i)->getRules()->getStorage() > 0);
 
 						num++;
 					}
@@ -2113,12 +2126,38 @@ void BattlescapeGenerator::generateMap()
 					continue;
 
 				// general stores - there is where the items are put
-				if (blocks[i][j] == _terrain->getMapBlock("XBASE_07"))
+				if (storageBlocks[i][j])
 				{
+					for (int
+							k = i * 10;
+							k != (i + 1) * 10;
+							++k)
+					{
+						for (int
+								l = j * 10;
+								l != (j + 1) * 10;
+								++l)
+						{
+							// we only want every other tile, giving us a "checkerboard" pattern
+							if ((k + l) %2 == 0)
+							{
+								Tile* t = _save->getTile(Position(k, l, 1));
+
+								if (t
+									&& t->getMapData(MapData::O_FLOOR)
+									&& !t->getMapData(MapData::O_OBJECT))
+								{
+									_save->getStorageSpace().push_back(Position(k, l, 1));
+								}
+							}
+						}
+					}
+
+					// let's put the inventory tile on the lower floor, just to be safe.
 					_craftInventoryTile = _save->getTile(Position(
-																i * 10,
-																j * 10 + 5,
-																1));
+																(i * 10) + 5,
+																(j * 10) + 5,
+																0));
 				}
 
 				// drill east
