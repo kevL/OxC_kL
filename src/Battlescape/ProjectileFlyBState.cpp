@@ -596,7 +596,10 @@ void ProjectileFlyBState::think()
 					if (_unit->getFaction() != FACTION_PLAYER
 						&& _projectileItem->getRules()->getBattleType() == BT_GRENADE)
 					{
-						_parent->getTileEngine()->setDangerZone(pos, item->getRules()->getExplosionRadius(), _action.actor);
+						_parent->getTileEngine()->setDangerZone(
+															pos,
+															item->getRules()->getExplosionRadius(),
+															_action.actor);
 					}
 				}
 			}
@@ -643,8 +646,8 @@ void ProjectileFlyBState::think()
 															_action.actor,
 															0,
 															_action.type != BA_AUTOSHOT
-																|| _action.autoShotCounter == _action.weapon->getRules()->getAutoShots()
-																|| !_action.weapon->getAmmoItem()));
+																			|| _action.autoShotCounter == _action.weapon->getRules()->getAutoShots()
+																			|| !_action.weapon->getAmmoItem()));
 
 					if (_unit->getSpecialAbility() == SPECAB_BURNFLOOR)
 					{
@@ -653,8 +656,12 @@ void ProjectileFlyBState::think()
 
 					if (_projectileImpact == 4)
 					{
-						BattleUnit* victim = _parent->getSave()
-								->getTile(_parent->getMap()->getProjectile()->getPosition(offset) / Position(16, 16, 24))->getUnit();
+						BattleUnit* victim = _parent
+												->getSave()
+													->getTile(_parent->getMap()
+																			->getProjectile()
+																				->getPosition(offset) / Position(16, 16, 24))
+																														->getUnit();
 						if (victim
 							&& !victim->isOut()
 							&& victim->getFaction() == FACTION_HOSTILE)
@@ -695,8 +702,16 @@ void ProjectileFlyBState::cancel()
 		_parent->getMap()->getProjectile()->skipTrajectory();
 
 		Position p = _parent->getMap()->getProjectile()->getPosition();
-		if (!_parent->getMap()->getCamera()->isOnScreen(Position(p.x / 16, p.y / 16, p.z / 24)))
-			_parent->getMap()->getCamera()->centerOnPosition(Position(p.x / 16, p.y / 16, p.z / 24));
+		if (!_parent->getMap()->getCamera()->isOnScreen(Position(
+																p.x / 16,
+																p.y / 16,
+																p.z / 24)))
+		{
+			_parent->getMap()->getCamera()->centerOnPosition(Position(
+																	p.x / 16,
+																	p.y / 16,
+																	p.z / 24));
+		}
 	}
 }
 

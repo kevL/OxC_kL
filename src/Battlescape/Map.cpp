@@ -345,7 +345,7 @@ void Map::setPalette(
 /**
  * Draw the terrain.
  * Keep this function as optimised as possible. It's big to minimise overhead of function calls.
- * @param surface The surface to draw on.
+ * @param surface, The surface to draw on.
  */
 void Map::drawTerrain(Surface* surface)
 {
@@ -364,7 +364,10 @@ void Map::drawTerrain(Surface* surface)
 		endZ	= _save->getMapSizeZ() - 1;
 		
 
-	Position mapPosition, screenPosition, bulletPositionScreen;
+	Position
+		mapPosition,
+		screenPosition,
+		bulletPositionScreen;
 
 	int bulletLowX = 16000,
 		bulletLowY = 16000,
@@ -438,10 +441,14 @@ void Map::drawTerrain(Surface* surface)
 						|| bulletPositionScreen.y > _visibleMapHeight)
 //kL					&& _projectileInFOV)
 				{
-					_camera->centerOnPosition(Position(bulletLowX, bulletLowY, bulletHighZ), false);
+					// kL_note: this probably jumps screen back to shooter
+					_camera->centerOnPosition(Position(
+													bulletLowX,
+													bulletLowY,
+													bulletHighZ), false);
 				}
 			}
-			else
+			else // kL_note: and now along the projectile's trajectory.
 			{
 				Position newCam = _camera->getMapOffset();
 				if (newCam.z != bulletHighZ) // switch level
@@ -460,28 +467,28 @@ void Map::drawTerrain(Surface* surface)
 				{
 					enough = true;
 
-					if (bulletPositionScreen.x < 8)
+					if (bulletPositionScreen.x < 8)								// projectile approaches left edge of screen
 					{
 						_camera->jumpXY(
 								surface->getWidth() - 16,
 								_visibleMapHeight / 2 - bulletPositionScreen.y);
 						enough = false;
 					}
-					else if (bulletPositionScreen.x > surface->getWidth() - 8)
+					else if (bulletPositionScreen.x > surface->getWidth() - 8)	// projectile approaches right edge of screen
 					{
 						_camera->jumpXY(
 								-surface->getWidth() + 16,
 								_visibleMapHeight / 2 - bulletPositionScreen.y);
 						enough = false;
 					}
-					else if (bulletPositionScreen.y < 8)
+					else if (bulletPositionScreen.y < 8)						// projectile approaches top of screen
 					{
 						_camera->jumpXY(
 								surface->getWidth() / 2 - bulletPositionScreen.x,
 								_visibleMapHeight - 20);
 						enough = false;
 					}
-					else if (bulletPositionScreen.y > _visibleMapHeight - 8)
+					else if (bulletPositionScreen.y > _visibleMapHeight - 8)	// projectile approaches bottom of screen
 					{
 						_camera->jumpXY(
 								surface->getWidth() / 2 - bulletPositionScreen.x,
@@ -606,14 +613,22 @@ void Map::drawTerrain(Surface* surface)
 							}
 
 							tmpSurface = _res->getSurfaceSet("CURSOR.PCK")->getFrame(frameNumber);
-							tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y, 0);
+							tmpSurface->blitNShade(
+									surface,
+									screenPosition.x,
+									screenPosition.y,
+									0);
 						}
 						else if (_camera->getViewLevel() > itZ)
 						{
 							frameNumber = 2; // blue box
 
 							tmpSurface = _res->getSurfaceSet("CURSOR.PCK")->getFrame(frameNumber);
-							tmpSurface->blitNShade(surface, screenPosition.x, screenPosition.y, 0);
+							tmpSurface->blitNShade(
+									surface,
+									screenPosition.x,
+									screenPosition.y,
+									0);
 						}
 					}
 
@@ -1079,11 +1094,20 @@ void Map::drawTerrain(Surface* surface)
 
 	if (pathfinderTurnedOn)
 	{
-		for (int itZ = beginZ; itZ <= endZ; itZ++)
+		for (int
+				itZ = beginZ;
+				itZ <= endZ;
+				itZ++)
 		{
-			for (int itX = beginX; itX <= endX; itX++)
+			for (int
+					itX = beginX;
+					itX <= endX;
+					itX++)
 			{
-				for (int itY = beginY; itY <= endY; itY++)
+				for (int
+						itY = beginY;
+						itY <= endY;
+						itY++)
 				{
 					mapPosition = Position(itX, itY, itZ);
 					_camera->convertMapToScreen(mapPosition, &screenPosition);
@@ -1625,7 +1649,7 @@ void Map::cacheUnit(BattleUnit* unit)
 
 /**
  * Puts a projectile sprite on the map.
- * @param projectile Projectile to place.
+ * @param projectile, Projectile to place.
  */
 void Map::setProjectile(Projectile* projectile)
 {

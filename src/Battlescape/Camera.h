@@ -67,6 +67,7 @@ private:
 		* _scrollMouseTimer,
 		* _scrollKeyTimer;
 
+	///
 	void minMaxInt(
 			int* value,
 			const int minValue,
@@ -101,15 +102,22 @@ private:
 		void keyboardRelease(Action* action, State* state);
 
 		/// Sets the camera's scroll timers.
-		void setScrollTimer(Timer* mouse, Timer* key);
+		void setScrollTimer(
+				Timer* mouse,
+				Timer* key);
 		/// Scrolls the view for mouse-scrolling.
 		void scrollMouse();
 		/// Scrolls the view for keyboard-scrolling.
 		void scrollKey();
 		/// Scrolls the view a certain amount.
-		void scrollXY(int x, int y, bool redraw);
+		void scrollXY(
+				int x,
+				int y,
+				bool redraw);
 		/// Jumps the view (when projectile in motion).
-		void jumpXY(int x, int y);
+		void jumpXY(
+				int x,
+				int y);
 		/// Moves map layer up.
 		void up();
 		/// Move map layer down.

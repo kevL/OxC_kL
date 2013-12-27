@@ -20,8 +20,9 @@
 #ifndef OPENXCOM_NODE_H
 #define OPENXCOM_NODE_H
 
-#include "../Battlescape/Position.h"
 #include <yaml-cpp/yaml.h>
+
+#include "../Battlescape/Position.h"
 
 
 namespace OpenXcom
@@ -40,23 +41,29 @@ enum NodeRank
 	NR_MISC2
 };
 
+
 /**
  * Represents a node/spawnpoint in the battlescape, loaded from RMP files.
  * @sa http://www.ufopaedia.org/index.php?title=ROUTES
  */
 class Node
 {
+
 private:
-	int _id;
-	Position _pos;
-	int _segment;
-	std::vector<int> _nodeLinks;
-	int _type;
-	int _rank;
-	int _flags;
-	int _reserved;
-	int _priority;
 	bool _allocated;
+	int
+		_flags,
+		_id,
+		_priority,
+		_rank,
+		_reserved,
+		_segment,
+		_type;
+
+	Position _pos;
+
+	std::vector<int> _nodeLinks;
+
 
 	public:
 		static const int CRAFTSEGMENT	= 1000;
@@ -69,7 +76,16 @@ private:
 
 		/// Creates a Node.
 		Node();
-		Node(int id, Position pos, int segment, int type, int rank, int flags, int reserved, int priority);
+		///
+		Node(
+				int id,
+				Position pos,
+				int segment,
+				int type,
+				int rank,
+				int flags,
+				int reserved,
+				int priority);
 		/// Cleans up the Node.
 		~Node();
 
@@ -104,9 +120,13 @@ private:
 		{
 			return _flags < b.getFlags();
 		};
+		///
 		bool isAllocated() const;
+		///
 		void allocateNode();
+		///
 		void freeNode();
+		///
 		bool isTarget() const;
 };
 

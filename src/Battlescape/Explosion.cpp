@@ -30,7 +30,11 @@ namespace OpenXcom
  * @param big Flag to indicate it is a bullet hit (false), or a real explosion (true).
  * @param hit True for melee and psi attacks.
  */
-Explosion::Explosion(Position position, int startFrame, bool big, bool hit)
+Explosion::Explosion(
+		Position position,
+		int startFrame,
+		bool big,
+		bool hit)
 	:
 		_position(position),
 		_startFrame(startFrame),

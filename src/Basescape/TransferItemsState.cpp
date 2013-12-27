@@ -298,14 +298,13 @@ TransferItemsState::TransferItemsState(
 		{
 			_baseQty.push_back(qty);
 			_transferQty.push_back(0);
-			_destQty.push_back(_baseTo->getItems()->getItem(*i));
+//kL			_destQty.push_back(_baseTo->getItems()->getItem(*i));
 			_items.push_back(*i);
 
 			// kL_begin:
 			std::wstring item = tr(*i);
 
-//			int tQty = _baseTo->getItems()->getItem(*i); // Returns the quantity of an item in the container.
-			int tQty = _destQty.back();
+			int tQty = _baseTo->getItems()->getItem(*i); // Returns the quantity of an item in the container.
 
 			for (std::vector<Transfer*>::const_iterator
 					j = _baseTo->getTransfers()->begin();
@@ -366,7 +365,10 @@ TransferItemsState::TransferItemsState(
 						}
 					}
 				}
-			} // kL_end.
+			}
+
+			_destQty.push_back(tQty);
+			// kL_end.
 
 			std::wstringstream
 				ss1,
@@ -544,12 +546,13 @@ void TransferItemsState::reinit()
 		{
 			_baseQty.push_back(qty);
 			_transferQty.push_back(0);
-			_destQty.push_back(_baseTo->getItems()->getItem(*i));
+//			_destQty.push_back(_baseTo->getItems()->getItem(*i));
 			_items.push_back(*i);
 
 			std::wstring item = tr(*i);
 
-			int tQty = _destQty.back();
+			int tQty = _baseTo->getItems()->getItem(*i); // Returns the quantity of an item in the container.
+
 			for (std::vector<Transfer*>::const_iterator
 					j = _baseTo->getTransfers()->begin();
 					j != _baseTo->getTransfers()->end();
@@ -610,6 +613,8 @@ void TransferItemsState::reinit()
 					}
 				}
 			}
+
+			_destQty.push_back(tQty);
 
 			std::wstringstream
 				ss1,
@@ -851,7 +856,9 @@ void TransferItemsState::lstItemsLeftArrowRelease(Action* action)
  */
 void TransferItemsState::lstItemsLeftArrowClick(Action* action)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT) increaseByValue(INT_MAX);
+	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+		increaseByValue(INT_MAX);
+
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
 		increaseByValue(1);
@@ -1089,6 +1096,7 @@ void TransferItemsState::increaseByValue(int change)
 
 		return;
 	}
+
 
 	if (TRANSFER_SOLDIER == selType
 		|| TRANSFER_SCIENTIST == selType

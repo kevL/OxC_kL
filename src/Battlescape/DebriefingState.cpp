@@ -143,8 +143,12 @@ DebriefingState::DebriefingState(Game* game)
 	_btnOk->setColor(Palette::blockOffset(15)-1);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& DebriefingState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)& DebriefingState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
-	_btnOk->onKeyboardPress((ActionHandler)& DebriefingState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& DebriefingState::btnOkClick,
+					(SDLKey)Options::getInt("keyOk"));
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& DebriefingState::btnOkClick,
+					(SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(8)+5);
 	_txtTitle->setBig();
@@ -167,14 +171,12 @@ DebriefingState::DebriefingState(Game* game)
 	_lstStats->setSecondaryColor(Palette::blockOffset(8)+10);
 	_lstStats->setColumns(3, 176, 60, 64);
 	_lstStats->setDot(true);
-//	_lstStats->setSelectable(true);
 	_lstStats->setMargin(8);
 
 	_lstRecovery->setColor(Palette::blockOffset(15)-1);
 	_lstRecovery->setSecondaryColor(Palette::blockOffset(8)+10);
 	_lstRecovery->setColumns(3, 176, 60, 64);
 	_lstRecovery->setDot(true);
-//	_lstRecovery->setSelectable(true);
 	_lstRecovery->setMargin(8);
 
 	_lstTotal->setColor(Palette::blockOffset(8)+5);
@@ -272,7 +274,7 @@ DebriefingState::DebriefingState(Game* game)
 	{
 		rating = tr("STR_RATING_GOOD");
 	}
-	else if (total <= 1000)
+	else if (total <= 900)
 	{
 		rating = tr("STR_RATING_EXCELLENT");
 	}
@@ -283,7 +285,7 @@ DebriefingState::DebriefingState(Game* game)
 
 	_txtRating->setText(tr("STR_RATING").arg(rating));
 
-	// Set music
+
 	_game->getResourcePack()->getMusic("GMMARS")->play();
 
 	_game->getCursor()->setColor(Palette::blockOffset(15)+12);

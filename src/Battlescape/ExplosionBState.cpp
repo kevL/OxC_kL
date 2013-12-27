@@ -99,8 +99,8 @@ void ExplosionBState::init()
 		// all the rest hits one point:
 		// AP, melee (stun or AP), laser, plasma, acid
 		_areaOfEffect = _item->getRules()->getBattleType() != BT_MELEE
-				&& (_item->getRules()->getDamageType() == DT_HE 
-					|| _item->getRules()->getDamageType() == DT_IN 
+				&& (_item->getRules()->getDamageType() == DT_HE
+					|| _item->getRules()->getDamageType() == DT_IN
 					|| _item->getRules()->getDamageType() == DT_SMOKE
 					|| _item->getRules()->getDamageType() == DT_STUN);
 	}
@@ -111,7 +111,7 @@ void ExplosionBState::init()
 
 		_areaOfEffect = true;
 	}
-	else // cyberdisc... ?
+	else // cyberdisc...
 	{
 //kL		_power = 120;
 		_power = RNG::generate(61, 120);	// kL
@@ -120,23 +120,28 @@ void ExplosionBState::init()
 		_areaOfEffect = true;
 	}
 
-	Tile* t = _parent->getSave()->getTile(Position(_center.x / 16, _center.y / 16, _center.z / 24));
+	Tile* t = _parent->getSave()->getTile(Position(
+											_center.x / 16,
+											_center.y / 16,
+											_center.z / 24));
 	if (_areaOfEffect)
 	{
 		Log(LOG_INFO) << ". . new Explosion(AoE)'s";
 
-		if (_power)
+		if (_power > 0)
 		{
 			for (int
 					i = 0;
 					i < _power / 10;
 					i++)
 			{
-				int X = RNG::generate(-_power / 2, _power / 2);
-				int Y = RNG::generate(-_power / 2, _power / 2);
+				int
+					X = RNG::generate(-_power / 2, _power / 2),
+					Y = RNG::generate(-_power / 2, _power / 2);
 
 				Position pos = _center;
-				pos.x += X; pos.y += Y;
+				pos.x += X;
+				pos.y += Y;
 
 				int startFrame = -3;
 				if (i > 1)
@@ -171,20 +176,20 @@ void ExplosionBState::init()
 		Log(LOG_INFO) << ". . new Explosion(point)";
 
 //kL		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED / 2);
-		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED * 6 / 7);		// kL
+		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED * 6 / 7); // kL
 
 		bool hit = _item->getRules()->getBattleType() == BT_MELEE
 				|| _item->getRules()->getBattleType() == BT_PSIAMP;
 
 		Explosion* explosion = new Explosion( // animation.
-									_center,
-									_item->getRules()->getHitAnimation(),
-									false,
-									hit);
+										_center,
+										_item->getRules()->getHitAnimation(),
+										false,
+										hit);
 
 		_parent->getMap()->getExplosions()->insert(explosion);
 
-		_parent->getResourcePack()->getSound("BATTLE.CAT", _item->getRules()->getHitSound())->play(); // hit sound
+		_parent->getResourcePack()->getSound("BATTLE.CAT", _item->getRules()->getHitSound())->play();
 
 		if (_parent->getSave()->getSide() == FACTION_HOSTILE)
 			_parent->getMap()->getCamera()->centerOnPosition(t->getPosition(), false);
@@ -257,11 +262,11 @@ void ExplosionBState::explode()
 			Log(LOG_INFO) << ". . AoE, TileEngine::explode()";
 
 			save->getTileEngine()->explode(
-									_center,
-									_power,
-									_item->getRules()->getDamageType(),
-									_item->getRules()->getExplosionRadius(),
-									_unit);
+										_center,
+										_power,
+										_item->getRules()->getDamageType(),
+										_item->getRules()->getExplosionRadius(),
+										_unit);
 		}
 		else
 		{
@@ -295,22 +300,34 @@ void ExplosionBState::explode()
 
 	if (_tile)
 	{
-		save->getTileEngine()->explode(_center, _power, DT_HE, _power / 10);
+		save->getTileEngine()->explode(
+									_center,
+									_power,
+									DT_HE,
+									_power / 10);
 		terrainExplosion = true;
 	}
 
 	if (!_tile && !_item) // explosion not caused by terrain or an item, must be by a unit (cyberdisc)
 	{
-		save->getTileEngine()->explode(_center, _power, DT_HE, 6);
+		save->getTileEngine()->explode(
+									_center,
+									_power,
+									DT_HE,
+									6);
 		terrainExplosion = true;
 	}
 
 	// now check for new casualties
-	_parent->checkForCasualties(_item, _unit, false, terrainExplosion);
+	_parent->checkForCasualties(
+							_item,
+							_unit,
+							false,
+							terrainExplosion);
 
 	// if this explosion was caused by a unit shooting, now it's the time to put the gun down
 	if (_unit
-		&& !_unit->isOut(true, true) // <-- params might cause a graphic anomaly...
+		&& !_unit->isOut()
 		&& _lowerWeapon)
 	{
 		_unit->aim(false);
@@ -320,11 +337,19 @@ void ExplosionBState::explode()
 	_parent->popState();
 
 	// check for terrain explosions
-	Tile* t = save->getTileEngine()->checkForTerrainExplosions();
-	if (t)
+	Tile* tile = save->getTileEngine()->checkForTerrainExplosions();
+	if (tile)
 	{
-		Position p = Position(t->getPosition().x * 16, t->getPosition().y * 16, t->getPosition().z * 24);
-		_parent->statePushFront(new ExplosionBState(_parent, p, 0, _unit, t));
+		Position pos = Position(
+							tile->getPosition().x * 16,
+							tile->getPosition().y * 16,
+							tile->getPosition().z * 24);
+		_parent->statePushFront(new ExplosionBState(
+												_parent,
+												pos,
+												0,
+												_unit,
+												tile));
 	}
 
 	if (_item

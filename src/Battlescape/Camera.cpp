@@ -18,11 +18,15 @@
  */
 
 #define _USE_MATH_DEFINES
+
+#include "Camera.h"
+
 #include <cmath>
 #include <fstream>
-#include "Camera.h"
+
 #include "Map.h"
 #include "Position.h"
+
 #include "../Engine/Action.h"
 #include "../Engine/Options.h"
 #include "../Engine/Timer.h"
@@ -41,7 +45,14 @@ namespace OpenXcom
  * @param map Pointer to map surface.
  * @param visibleMapHeight Current height the view is at.
  */
-Camera::Camera(int spriteWidth, int spriteHeight, int mapsize_x, int mapsize_y, int mapsize_z, Map* map, int visibleMapHeight)
+Camera::Camera(
+		int spriteWidth,
+		int spriteHeight,
+		int mapsize_x,
+		int mapsize_y,
+		int mapsize_z,
+		Map* map,
+		int visibleMapHeight)
 	:
 		_scrollMouseTimer(0),
 		_scrollKeyTimer(0),
@@ -77,7 +88,9 @@ Camera::~Camera()
  * @param mouse Pointer to mouse timer.
  * @param key Pointer to key timer.
  */
-void Camera::setScrollTimer(Timer* mouse, Timer* key)
+void Camera::setScrollTimer(
+		Timer* mouse,
+		Timer* key)
 {
 	_scrollMouseTimer = mouse;
 	_scrollKeyTimer = key;
@@ -167,6 +180,7 @@ void Camera::mouseOver(Action* action, State*)
 	{
 		return;
 	}
+
 
 	if (Options::getInt("battleScrollType") == SCROLL_AUTO
 		|| _scrollTrigger)
@@ -280,7 +294,7 @@ void Camera::keyboardPress(Action* action, State*)
 		return;
 	}
 
-	int scrollSpeed = Options::getInt("battleScrollSpeed");		// kL
+	int scrollSpeed = Options::getInt("battleScrollSpeed"); // kL
 
 	int key = action->getDetails()->key.keysym.sym;
 //kL	int scrollSpeed = Options::getInt("battleScrollSpeed");
@@ -381,14 +395,21 @@ void Camera::scrollKey()
  * @param y Y deviation.
  * @param redraw Redraw map or not.
  */
-void Camera::scrollXY(int x, int y, bool redraw)
+void Camera::scrollXY(
+		int x,
+		int y,
+		bool redraw)
 {
 	_mapOffset.x += x;
 	_mapOffset.y += y;
 
 	do
 	{
-		convertScreenToMap(_screenWidth / 2, _visibleMapHeight / 2, &_center.x, &_center.y);
+		convertScreenToMap(
+					_screenWidth / 2,
+					_visibleMapHeight / 2,
+					&_center.x,
+					&_center.y);
 
 		// Handling map bounds...
 		// Ok, this is a prototype, it should be optimized.
@@ -421,6 +442,7 @@ void Camera::scrollXY(int x, int y, bool redraw)
 		{
 			_mapOffset.x -= 2;
 			_mapOffset.y += 1;
+
 			continue;
 		}
 
@@ -431,7 +453,8 @@ void Camera::scrollXY(int x, int y, bool redraw)
 	_map->refreshSelectorPosition();
 
 //kL	if (redraw) _map->invalidate();
-	if (redraw) _map->draw();		// kL, old code.
+	if (redraw)
+		_map->draw(); // kL, old code.
 }
 
 
@@ -440,12 +463,18 @@ void Camera::scrollXY(int x, int y, bool redraw)
  * @param x, X deviation.
  * @param y, Y deviation.
  */
-void Camera::jumpXY(int x, int y)
+void Camera::jumpXY(
+		int x,
+		int y)
 {
 	_mapOffset.x += x;
 	_mapOffset.y += y;
 
-	convertScreenToMap(_screenWidth / 2, _visibleMapHeight / 2, &_center.x, &_center.y);
+	convertScreenToMap(
+				_screenWidth / 2,
+				_visibleMapHeight / 2,
+				&_center.x,
+				&_center.y);
 }
 
 
@@ -504,7 +533,9 @@ void Camera::setViewLevel(int viewLevel)
  * @param mapPos Position to center on.
  * @param redraw Redraw map or not.
  */
-void Camera::centerOnPosition(const Position& mapPos, bool redraw)
+void Camera::centerOnPosition(
+		const Position& mapPos,
+		bool redraw)
 {
 	Position screenPos;
 
@@ -518,7 +549,8 @@ void Camera::centerOnPosition(const Position& mapPos, bool redraw)
 	_mapOffset.y = -(screenPos.y - (_visibleMapHeight / 2) + 16);
 	_mapOffset.z = _center.z;
 
-	if (redraw) _map->draw();
+	if (redraw)
+		_map->draw();
 }
 
 /**
@@ -539,7 +571,11 @@ Position Camera::getCenterPosition()
  * @param mapX Map x position.
  * @param mapY Map y position.
  */
-void Camera::convertScreenToMap(int screenX, int screenY, int* mapX, int* mapY) const
+void Camera::convertScreenToMap(
+		int screenX,
+		int screenY,
+		int* mapX,
+		int* mapY) const
 {
 	// add half a tileheight to the mouseposition per layer we are above the floor
 	screenY += (-_spriteWidth/2) + (_mapOffset.z) * ((_spriteHeight + _spriteWidth / 4) / 2);
@@ -562,7 +598,9 @@ void Camera::convertScreenToMap(int screenX, int screenY, int* mapX, int* mapY) 
  * @param mapPos X,Y,Z coordinates on the map.
  * @param screenPos Screen position.
  */
-void Camera::convertMapToScreen(const Position& mapPos, Position* screenPos) const
+void Camera::convertMapToScreen(
+		const Position& mapPos,
+		Position* screenPos) const
 {
 	screenPos->z = 0; // not used
 	screenPos->x = mapPos.x * (_spriteWidth / 2) - mapPos.y * (_spriteWidth / 2);
@@ -574,9 +612,14 @@ void Camera::convertMapToScreen(const Position& mapPos, Position* screenPos) con
  * @param voxelPos X,Y,Z coordinates of the voxel.
  * @param screenPos Screen position.
  */
-void Camera::convertVoxelToScreen(const Position& voxelPos, Position* screenPos) const
+void Camera::convertVoxelToScreen(
+		const Position& voxelPos,
+		Position* screenPos) const
 {
-	Position mapPosition = Position(voxelPos.x / 16, voxelPos.y / 16, voxelPos.z / 24);
+	Position mapPosition = Position(
+								voxelPos.x / 16,
+								voxelPos.y / 16,
+								voxelPos.z / 24);
 	convertMapToScreen(mapPosition, screenPos);
 
 	double dx = voxelPos.x - (mapPosition.x * 16);
@@ -627,13 +670,13 @@ void Camera::setMapOffset(Position pos)
 
 /**
  * Toggles showing all map layers.
- * @return New layer setting.
+ * @return, New layer setting.
  */
 int Camera::toggleShowAllLayers()
 {
 	_showAllLayers = !_showAllLayers;
 
-	return _showAllLayers? 2:1;
+	return _showAllLayers? 2: 1;
 }
 
 /**
@@ -647,8 +690,8 @@ bool Camera::getShowAllLayers() const
 
 /**
  * Checks if map coordinates X,Y,Z are on screen.
- * @param mapPos Coordinates to check.
- * @return True if the map coordinates are on screen.
+ * @param mapPos, Coordinates to check.
+ * @return, True if the map coordinates are on screen.
  */
 bool Camera::isOnScreen(const Position& mapPos) const
 {

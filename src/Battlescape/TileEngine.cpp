@@ -1777,17 +1777,16 @@ BattleUnit* TileEngine::hit(
 						// kL_note: wait a second. hit() creates an ExplosionBState, but ExplosionBState::explode() creates a hit() ! -> terrain..
 
 						Position unitPos = Position(
-								buTarget->getPosition().x * 16,
-								buTarget->getPosition().y * 16,
-								buTarget->getPosition().z * 24);
+												buTarget->getPosition().x * 16,
+												buTarget->getPosition().y * 16,
+												buTarget->getPosition().z * 24);
 
-						_save->getBattleGame()->statePushNext(
-								new ExplosionBState(
-										_save->getBattleGame(),
-										unitPos,
-										0,
-										buTarget,
-										0));
+						_save->getBattleGame()->statePushNext(new ExplosionBState(
+																			_save->getBattleGame(),
+																			unitPos,
+																			0,
+																			buTarget,
+																			0));
 					}
 				}
 

@@ -2008,9 +2008,13 @@ void BattlescapeGame::primaryAction(const Position& pos)
 			_currentAction.target = pos;
 			_currentAction.cameraPosition = getMap()->getCamera()->getMapOffset();
 
-			_states.push_back(new ProjectileFlyBState(this, _currentAction));
+			_states.push_back(new ProjectileFlyBState(
+													this,
+													_currentAction));
 
-			statePushFront(new UnitTurnBState(this, _currentAction)); // first of all turn towards the target
+			statePushFront(new UnitTurnBState( // first of all turn towards the target
+											this,
+											_currentAction));
 		}
 	}
 	else
@@ -2069,7 +2073,9 @@ void BattlescapeGame::primaryAction(const Position& pos)
 				getMap()->setCursorType(CT_NONE);
 				_parentState->getGame()->getCursor()->setVisible(false);
 
-				statePushBack(new UnitWalkBState(this, _currentAction));
+				statePushBack(new UnitWalkBState(
+												this,
+												_currentAction));
 			}
 		}
 	}
@@ -2103,7 +2109,9 @@ void BattlescapeGame::secondaryAction(const Position& pos)
 			&& (SDL_GetModState() & KMOD_CTRL) != 0
 			&& _save->getSelectedUnit()->getTurretType() > -1;
 
-	statePushBack(new UnitTurnBState(this, _currentAction));
+	statePushBack(new UnitTurnBState(
+									this,
+									_currentAction));
 }
 
 /**
@@ -2123,9 +2131,13 @@ void BattlescapeGame::launchAction()
 
 	_currentAction.cameraPosition = getMap()->getCamera()->getMapOffset();
 
-	_states.push_back(new ProjectileFlyBState(this, _currentAction));
+	_states.push_back(new ProjectileFlyBState(
+											this,
+											_currentAction));
 
-	statePushFront(new UnitTurnBState(this, _currentAction)); // first of all turn towards the target
+	statePushFront(new UnitTurnBState(
+									this,
+									_currentAction)); // first of all turn towards the target
 	Log(LOG_INFO) << "BattlescapeGame::launchAction() EXIT";
 }
 
@@ -2933,7 +2945,11 @@ bool BattlescapeGame::checkForProximityGrenades(BattleUnit* unit)
 								p.y = t->getPosition().y * 16 + 8;
 								p.z = t->getPosition().z * 24 + t->getTerrainLevel();
 
-								statePushNext(new ExplosionBState(this, p, *i, (*i)->getPreviousOwner()));
+								statePushNext(new ExplosionBState(
+																this,
+																p,
+																*i,
+																(*i)->getPreviousOwner()));
 
 								getSave()->removeItem(*i);
 

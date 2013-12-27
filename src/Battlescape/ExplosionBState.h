@@ -34,6 +34,7 @@ class BattleUnit;
 class BattleItem;
 class Tile;
 
+
 /**
  * Explosion state not only handles explosions, but also bullet impacts!
  * Refactoring tip : ImpactBState.
@@ -42,15 +43,21 @@ class ExplosionBState
 	:
 		public BattleState
 {
+
 private:
+	bool
+		_areaOfEffect,
+		_lowerWeapon;
+	int _power;
+
+	BattleItem* _item;
 	BattleUnit* _unit;
 	Position _center;
-	BattleItem* _item;
 	Tile* _tile;
-	int _power;
-	bool _areaOfEffect, _lowerWeapon;
+
 	/// Calculates the effects of the explosion.
 	void explode();
+
 
 	public:
 		/// Creates a new ExplosionBState class.
