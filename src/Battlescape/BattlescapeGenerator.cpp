@@ -1552,9 +1552,8 @@ BattleUnit* BattlescapeGenerator::addAlien(
 			i++)
 	{
 		if (outside)
-			node = _save->getSpawnNode(0, unit);	// when alien is instructed to spawn outside, we only look for node 0 spawnpoints
-//			node = _save->getSpawnNode(1, unit);	// kL: SavedBattleGame::getSpawnNode() eliminates node 0 spawnpoints... so go with spawn=1
-			// kL_begin: failsafe
+			node = _save->getSpawnNode(0, unit);	// Civ-Scout spawnpoints
+			// kL_begin: spawn fallbacks
 			if (node == 0)
 			{
 				node = _save->getSpawnNode(Node::nodeRank[alienRank][i], unit);

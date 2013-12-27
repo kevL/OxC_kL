@@ -677,7 +677,7 @@ double Craft::getDistanceFromBase() const
 }
 
 /**
- * Returns the amount of fuel the craft uses up while it's on the air, based on its speed.
+ * Returns the amount of fuel the craft uses up while it's in the air, based on its speed.
  * @return Fuel amount.
  */
 int Craft::getFuelConsumption() const
@@ -801,7 +801,7 @@ bool Craft::detect(Target* target) const
 }
 
 /**
- * Consumes the craft's fuel every 10 minutes while it's on the air.
+ * Consumes the craft's fuel every 10 minutes while it's in the air.
  */
 void Craft::consumeFuel()
 {
@@ -809,7 +809,7 @@ void Craft::consumeFuel()
 }
 
 /**
- * Repairs the craft's damage every hour while it's docked in the base.
+ * Repairs the craft's damage every hour while it's docked at the base.
  */
 void Craft::repair()
 {
@@ -822,7 +822,7 @@ void Craft::repair()
 }
 
 /**
- * Refuels the craft every 30 minutes while it's docked in the base.
+ * Refuels the craft every 30 minutes while it's docked at the base.
  */
 void Craft::refuel()
 {
@@ -850,7 +850,7 @@ void Craft::refuel()
 
 /**
  * Rearms the craft's weapons by adding ammo every hour
- * while it's docked in the base.
+ * while it's docked at the base.
  * @return, The ammo ID missing for rearming, or "" if none.
  */
 std::string Craft::rearm(Ruleset* rules)

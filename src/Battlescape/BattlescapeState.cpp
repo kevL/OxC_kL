@@ -132,7 +132,13 @@ BattlescapeState::BattlescapeState(Game* game)
 	// the actual map height is the total height minus the height of the buttonbar
 	int visibleMapHeight = screenHeight - iconsHeight;
 
-	_map				= new Map(_game, screenWidth, screenHeight, 0, 0, visibleMapHeight);
+	_map				= new Map(
+								_game,
+								screenWidth,
+								screenHeight,
+								0,
+								0,
+								visibleMapHeight);
 
 	_numLayers			= new NumberText(3, 5, _icons->getX() + 232, _icons->getY() + 6);
 	_rank				= new Surface(26, 23, _icons->getX() + 107, _icons->getY() + 33);
@@ -170,10 +176,21 @@ BattlescapeState::BattlescapeState(Game* game)
 	_btnRightHandItem	= new InteractiveSurface(32, 48, _icons->getX() + 280, _icons->getY() + 5);
 	_numAmmoRight		= new NumberText(30, 5, _icons->getX() + 280, _icons->getY() + 4);
 
-	for (int i = 0; i < VISIBLE_MAX; ++i)
+	for (int
+			i = 0;
+			i < VISIBLE_MAX;
+			++i)
 	{
-		_btnVisibleUnit[i] = new InteractiveSurface(15, 12, _icons->getX() + iconsWidth - 20, _icons->getY() - 16 - (i * 13));
-		_numVisibleUnit[i] = new NumberText(15, 12, _icons->getX() + iconsWidth - 14 , _icons->getY() - 12 - (i * 13));
+		_btnVisibleUnit[i] = new InteractiveSurface(
+												15,
+												12,
+												_icons->getX() + iconsWidth - 20,
+												_icons->getY() - 16 - (i * 13));
+		_numVisibleUnit[i] = new NumberText(
+										15,
+										12,
+										_icons->getX() + iconsWidth - 14,
+										_icons->getY() - 12 - (i * 13));
 	}
 
 	_numVisibleUnit[9]->setX(_numVisibleUnit[9]->getX() - 2); // center number 10
@@ -187,14 +204,14 @@ BattlescapeState::BattlescapeState(Game* game)
 	_btnLaunch	= new InteractiveSurface(
 					32,
 					24,
-					screenWidth - 32),
+					screenWidth - 32,
 					0);
 	_btnLaunch->setVisible(false);
 
 	_btnPsi		= new InteractiveSurface(
 					32,
 					24,
-					screenWidth - 32),
+					screenWidth - 32,
 					25);
 	_btnPsi->setVisible(false);
 
@@ -217,18 +234,9 @@ BattlescapeState::BattlescapeState(Game* game)
 	_txtDebug		= new Text(300, 10, 10, 0);
 //	_txtTooltip		= new Text(300, 10, _icons->getX() + 2, _icons->getY() - 10);
 
-	// kL_begin:
-//	Log(LOG_INFO) << ". new TurnCounter";
-	_turnCounter	= new TurnCounter(20, 5, 0, 0);		// kL
-//	Log(LOG_INFO) << ". new TurnCounter DONE";
+	_turnCounter	= new TurnCounter(20, 5, 0, 0); // kL
 
-//	add(_turnCounter);
-//	_turnCounter->setColor(Palette::blockOffset(9));
-//	_turnCounter->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
-//	getTurnCounter()->setColor(Palette::blockOffset(9));
-	// kL_end.
 
-	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_4")->getColors());
 
 	// Last 16 colors are a greyish gradient
@@ -410,8 +418,8 @@ BattlescapeState::BattlescapeState(Game* game)
 //	_btnNextSoldier->onMouseOut((ActionHandler)& BattlescapeState::txtTooltipOut);
 
 //kL	_btnNextStop->onMouseClick((ActionHandler)& BattlescapeState::btnNextStopClick);
-	_btnNextStop->onMouseClick((ActionHandler)& BattlescapeState::btnNextStopClick, SDL_BUTTON_LEFT);		// kL
-	_btnNextStop->onMouseClick((ActionHandler)& BattlescapeState::btnPrevStopClick, SDL_BUTTON_RIGHT);		// kL
+	_btnNextStop->onMouseClick((ActionHandler)& BattlescapeState::btnNextStopClick, SDL_BUTTON_LEFT);	// kL
+	_btnNextStop->onMouseClick((ActionHandler)& BattlescapeState::btnPrevStopClick, SDL_BUTTON_RIGHT);	// kL
 	_btnNextStop->onKeyboardPress((ActionHandler)& BattlescapeState::btnNextStopClick, (SDLKey)Options::getInt("keyBattleDeselectUnit"));
 //	_btnNextStop->setTooltip("STR_DESELECT_UNIT");
 //	_btnNextStop->onMouseIn((ActionHandler)& BattlescapeState::txtTooltipIn);
@@ -496,7 +504,9 @@ BattlescapeState::BattlescapeState(Game* game)
 
 	// shortcuts without a specific button
 //	_btnStats->onKeyboardPress((ActionHandler)& BattlescapeState::btnReloadClick, (SDLKey)Options::getInt("keyBattleReload"));
-	_btnStats->onKeyboardPress((ActionHandler)& BattlescapeState::btnPersonalLightingClick, (SDLKey)Options::getInt("keyBattlePersonalLighting"));
+	_btnStats->onKeyboardPress(
+					(ActionHandler)& BattlescapeState::btnPersonalLightingClick,
+					(SDLKey)Options::getInt("keyBattlePersonalLighting"));
 
 	for (int
 			i = 0;
@@ -509,7 +519,9 @@ BattlescapeState::BattlescapeState(Game* game)
 
 		key << "keyBattleCenterEnemy" << (i + 1);
 		_btnVisibleUnit[i]->onMouseClick((ActionHandler)& BattlescapeState::btnVisibleUnitClick);
-		_btnVisibleUnit[i]->onKeyboardPress((ActionHandler)& BattlescapeState::btnVisibleUnitClick, (SDLKey)Options::getInt(key.str()));
+		_btnVisibleUnit[i]->onKeyboardPress(
+						(ActionHandler)& BattlescapeState::btnVisibleUnitClick,
+						(SDLKey)Options::getInt(key.str()));
 
 //		tooltip << "STR_CENTER_ON_ENEMY_" << (i + 1);
 //		_btnVisibleUnit[i]->setTooltip(tooltip.str());
@@ -596,7 +608,6 @@ BattlescapeState::BattlescapeState(Game* game)
 BattlescapeState::~BattlescapeState()
 {
 //	Log(LOG_INFO) << "Delete BattlescapeState";		// kL
-
 	delete _animTimer;
 	delete _gameTimer;
 	delete _battleGame;

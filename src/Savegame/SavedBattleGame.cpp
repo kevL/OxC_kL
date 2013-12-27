@@ -929,15 +929,9 @@ void SavedBattleGame::endTurn()
 				i != getUnits()->end();
 				++i)
 		{
-//			if ((*i)->getFaction() == FACTION_PLAYER) // is this mucking up aLiens' NextTurnState?
-			if ((*i)->getOriginalFaction() == FACTION_PLAYER)
-
-//				&& (*i)->getOriginalFaction() == FACTION_HOSTILE)	// (a) or
-//				&& (*i)->getOriginalFaction() != FACTION_PLAYER)	// (b) ergo, Mc'd unit
-				// wait.. let's do this for all Side_xCom.
+			if ((*i)->getFaction() == FACTION_PLAYER)
 			{
-				// either zero tu's or set no reselect:
-				(*i)->dontReselect();
+				(*i)->dontReselect(); // either zero tu's or set no reselect
 			}
 		} // kL_end.
 	}
