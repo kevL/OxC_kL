@@ -254,7 +254,7 @@ void SavedBattleGame::load(
 		if (faction == FACTION_PLAYER)
 		{
 			if (unit->getId() == selectedUnit
-				|| (_selectedUnit == 0 && !unit->isOut(true, true)))
+				|| (_selectedUnit == 0 && !unit->isOut()))
 			{
 				_selectedUnit = unit;
 			}
@@ -1201,7 +1201,7 @@ void SavedBattleGame::resetUnitTiles()
 /**
  * Gives access to the "storage space" vector, for distribution of items in base defense missions.
  */
-std::vector<Position> &SavedBattleGame::getStorageSpace()
+std::vector<Position>& SavedBattleGame::getStorageSpace()
 {
 	return _storageSpace;
 }
@@ -1210,15 +1210,18 @@ std::vector<Position> &SavedBattleGame::getStorageSpace()
  * Move all the leftover items in base defense missions to random locations in the storage facilities
  * @param t the tile where all our goodies are initially stored.
  */
-void SavedBattleGame::randomizeItemLocations(Tile *t)
+void SavedBattleGame::randomizeItemLocations(Tile* t)
 {
 	if (!_storageSpace.empty())
 	{
-		for (std::vector<BattleItem*>::iterator it = t->getInventory()->begin(); it != t->getInventory()->end();)
+		for (std::vector<BattleItem*>::iterator
+				it = t->getInventory()->begin();
+				it != t->getInventory()->end();
+				)
 		{
 			if ((*it)->getSlot()->getId() == "STR_GROUND")
 			{
-				getTile(_storageSpace.at(RNG::generate(0, _storageSpace.size() -1)))->addItem(*it, (*it)->getSlot());
+				getTile(_storageSpace.at(RNG::generate(0, _storageSpace.size() - 1)))->addItem(*it, (*it)->getSlot());
 				it = t->getInventory()->erase(it);
 			}
 			else
@@ -1228,6 +1231,7 @@ void SavedBattleGame::randomizeItemLocations(Tile *t)
 		}
 	}
 }
+
 /**
  * Removes an item from the game. Eg. when ammo item is depleted.
  * @param item The Item to remove.
@@ -1350,7 +1354,7 @@ int* SavedBattleGame::getCurrentItemId()
 /**
  * Finds a fitting node where a unit can spawn.
  * @param nodeRank, Rank of the node (this is not the rank of the alien!).
- * @param unit, Pointer to the unit (to get its position).
+ * @param unit, Pointer to the unit (to test-set its position).
  * @return, Pointer to the chosen node.
  */
 Node* SavedBattleGame::getSpawnNode(
@@ -1366,17 +1370,17 @@ Node* SavedBattleGame::getSpawnNode(
 			++i)
 	{
 		if ((*i)->getRank() == nodeRank								// ranks must match
-			&& (!((*i)->getType() & Node::TYPE_SMALL)
-				|| unit->getArmor()->getSize() == 1)				// the small unit bit is not set or the unit is small
-			&& (!((*i)->getType() & Node::TYPE_FLYING)
-				|| unit->getArmor()->getMovementType() == MT_FLY)	// the flying unit bit is not set or the unit can fly
+			&& (!((*i)->getType() & Node::TYPE_SMALL)				// the small unit bit is not set
+				|| unit->getArmor()->getSize() == 1)					// or the unit is small
+			&& (!((*i)->getType() & Node::TYPE_FLYING)				// the flying unit bit is not set
+				|| unit->getArmor()->getMovementType() == MT_FLY)		// or the unit can fly
 			&& (*i)->getPriority() > 0								// priority 0 is not spawnplace
-			&& setUnitPosition(										// check if not already occupied
-							unit,
-							(*i)->getPosition(),
-							true))
+			&& setUnitPosition(										// check if unit can be set at this node
+							unit,										// ie. it's big enough
+							(*i)->getPosition(),						// and there's not already a unit there.
+							true))										// runs w/ false on return to bgen::addAlien()
 		{
-			if ((*i)->getPriority() > priority)
+			if ((*i)->getPriority() > priority) // hold it. This does not *weight* the nodes by priority. but so waht
 			{
 				priority = (*i)->getPriority();
 				legitNodes.clear();									// drop the last nodes, as we found a higher priority now
@@ -1761,13 +1765,13 @@ void SavedBattleGame::removeUnconsciousBodyItem(BattleUnit* bu)
 /**
  * Places units on the map. Handles large units that are placed on multiple tiles.
  * @param bu, The unit to be placed.
- * @param position, The position to place the unit.
+ * @param pos, The position to place the unit.
  * @param testOnly, If true then just checks if the unit can be placed at the position.
  * @return, True if the unit could be successfully placed.
  */
 bool SavedBattleGame::setUnitPosition(
 		BattleUnit* bu,
-		const Position& position,
+		const Position& pos,
 		bool testOnly)
 {
 	int size = bu->getArmor()->getSize() - 1;
@@ -1782,8 +1786,8 @@ bool SavedBattleGame::setUnitPosition(
 				y >= 0;
 				y--)
 		{
-			Tile* t = getTile(position + Position(x, y, 0));
-			Tile* tb = getTile(position + Position(x, y, -1));
+			Tile* t = getTile(pos + Position(x, y, 0));
+			Tile* tb = getTile(pos + Position(x, y, -1));
 			if (t == 0
 				|| (t->getUnit() != 0
 						&& t->getUnit() != bu)
@@ -1804,7 +1808,7 @@ bool SavedBattleGame::setUnitPosition(
 				dir <= 4;
 				++dir)
 		{
-			if (getPathfinding()->isBlocked(getTile(position), 0, dir, 0))
+			if (getPathfinding()->isBlocked(getTile(pos), 0, dir, 0))
 				return false;
 		}
 	}
@@ -1825,17 +1829,63 @@ bool SavedBattleGame::setUnitPosition(
 		{
 			if (x == 0 && y == 0)
 			{
-				bu->setPosition(position);
-//				bu->setTile(getTile(position), getTile(position - Position(0, 0, 1)));
+				bu->setPosition(pos);
+//				bu->setTile(getTile(pos), getTile(pos - Position(0, 0, 1)));
 			}
 
-			getTile(position + Position(x, y, 0))->setUnit(
-														bu,
-														getTile(position + Position(x, y, -1)));
+			getTile(pos + Position(x, y, 0))->setUnit(
+													bu,
+													getTile(pos + Position(x, y, -1)));
 		}
 	}
 
 	return true;
+}
+
+/**
+ * Places a unit on or near a position.
+ * @param unit, The unit to place.
+ * @param entryPoint, The position around which to attempt to place the unit.
+ * @return, True if the unit was successfully placed.
+ */
+bool SavedBattleGame::placeUnitNearPosition(
+		BattleUnit* unit,
+		Position entryPoint)
+{
+	if (setUnitPosition(unit, entryPoint))
+	{
+		return true;
+	}
+
+	for (int
+			dir = 0;
+			dir <= 7;
+			++dir)
+	{
+		Position offset;
+		getPathfinding()->directionToVector(dir, &offset);
+
+		Tile* t = getTile(entryPoint + offset);
+		if (t
+			&& !getPathfinding()->isBlocked(getTile(entryPoint), t, dir, 0)
+			&& setUnitPosition(unit, entryPoint + offset))
+		{
+			return true;
+		}
+	}
+
+	if (unit->getArmor()->getMovementType() == MT_FLY)
+	{
+		Tile* t = getTile(entryPoint + Position(0, 0, 1));
+		if (t
+			&& t->hasNoFloor(getTile(entryPoint))
+			&& setUnitPosition(unit, entryPoint + Position(0, 0, 1)))
+		{
+			return true;
+		}
+	}
+
+	return false;
 }
 
 /**
@@ -2171,52 +2221,6 @@ int SavedBattleGame::getMoraleModifier(
 	//Log(LOG_INFO) << ". totalModifier = " << result;
 
 	return result;
-}
-
-/**
- * Places a unit on or near a position.
- * @param unit, The unit to place.
- * @param entryPoint, The position around which to attempt to place the unit.
- * @return, True if the unit was successfully placed.
- */
-bool SavedBattleGame::placeUnitNearPosition(
-		BattleUnit* unit,
-		Position entryPoint)
-{
-	if (setUnitPosition(unit, entryPoint))
-	{
-		return true;
-	}
-
-	for (int
-			dir = 0;
-			dir <= 7;
-			++dir)
-	{
-		Position offset;
-		getPathfinding()->directionToVector(dir, &offset);
-
-		Tile* t = getTile(entryPoint + offset);
-		if (t
-			&& !getPathfinding()->isBlocked(getTile(entryPoint), t, dir, 0)
-			&& setUnitPosition(unit, entryPoint + offset))
-		{
-			return true;
-		}
-	}
-
-	if (unit->getArmor()->getMovementType() == MT_FLY)
-	{
-		Tile* t = getTile(entryPoint + Position(0, 0, 1));
-		if (t
-			&& t->hasNoFloor(getTile(entryPoint))
-			&& setUnitPosition(unit, entryPoint + Position(0, 0, 1)))
-		{
-			return true;
-		}
-	}
-
-	return false;
 }
 
 /**

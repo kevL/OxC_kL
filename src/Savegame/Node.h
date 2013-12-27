@@ -30,15 +30,15 @@ namespace OpenXcom
 
 enum NodeRank
 {
-	NR_SCOUT,
-	NR_XCOM,
-	NR_SOLDIER,
-	NR_NAVIGATOR,
-	NR_LEADER,
-	NR_ENGINEER,
-	NR_MISC1,
-	NR_MEDIC,
-	NR_MISC2
+	NR_SCOUT,		// #0
+	NR_XCOM,		// #1
+	NR_SOLDIER,		// #2
+	NR_NAVIGATOR,	// #3
+	NR_LEADER,		// #4
+	NR_ENGINEER,	// #5
+	NR_MISC1,		// #6
+	NR_MEDIC,		// #7
+	NR_MISC2		// #8
 };
 
 
@@ -52,13 +52,13 @@ class Node
 private:
 	bool _allocated;
 	int
-		_flags,
-		_id,
-		_priority,
-		_rank,
-		_reserved,
-		_segment,
-		_type;
+		_flags,		// might not be used at present.
+		_id,		// unique identifier
+		_priority,	// "spawn" in .Mcd
+		_rank,		// aLien rank that can spawn here
+		_reserved,	//
+		_segment,	//
+		_type;		// usable by small/large/flying units.
 
 	Position _pos;
 
@@ -68,11 +68,12 @@ private:
 	public:
 		static const int CRAFTSEGMENT	= 1000;
 		static const int UFOSEGMENT		= 2000;
-		static const int TYPE_FLYING	= 0x01;	// non-flying unit can not spawn here when this bit is set
-		static const int TYPE_SMALL		= 0x02;	// large unit can not spawn here when this bit is set
+
+		static const int TYPE_FLYING	= 0x01;	// non-flying unit cannot spawn here when this bit is set
+		static const int TYPE_SMALL		= 0x02;	// large unit cannot spawn here when this bit is set
 		static const int TYPE_DANGEROUS	= 0x04;	// an alien was shot here, stop patrolling to it like an idiot with a death wish
 
-		static const int nodeRank[8][7];		// maps alien ranks to node (.RMP) ranks		
+		static const int nodeRank[8][7];		// maps alien ranks to node (.RMP) ranks
 
 		/// Creates a Node.
 		Node();

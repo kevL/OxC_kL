@@ -31,9 +31,18 @@ const int Node::nodeRank[8][7] =
 	{7, 6, 2, 8, 3, 4, 0},	// medic
 	{3, 4, 5, 2, 7, 8, 0},	// navigator
 	{2, 5, 3, 4, 6, 8, 0},	// soldier
-	{2, 5, 3, 4, 6, 8, 0},	// terrorist
-	{2, 5, 3, 4, 6, 8, 0}	// also terrorist
-};
+	{2, 5, 3, 4, 6, 8, 0},	// terrorist1
+	{2, 5, 3, 4, 6, 8, 0}	// terrorist2
+}; // kL_note: The 2nd dimension holds fallbacks for spawning:
+//0:Civ-Scout
+//1:XCom
+//2:Soldier
+//3:Navigator
+//4:Leader/Commander
+//5:Engineer
+//6:Misc1
+//7:Medic
+//8:Misc2
 
 
 Node::Node()
@@ -91,9 +100,9 @@ Node::~Node()
 
 /**
  * Loads the UFO from a YAML file.
- * @param node YAML node.
+ * @param node, YAML node.
  */
-void Node::load(const YAML::Node &node)
+void Node::load(const YAML::Node& node)
 {
 	_id			= node["id"].as<int>(_id);
 	_pos		= node["position"].as<Position>(_pos);
@@ -104,12 +113,12 @@ void Node::load(const YAML::Node &node)
 	_reserved	= node["reserved"].as<int>(_reserved);
 	_priority	= node["priority"].as<int>(_priority);
 	_allocated	= node["allocated"].as<bool>(_allocated);
-	_nodeLinks	= node["links"].as< std::vector<int>>(_nodeLinks);
+	_nodeLinks	= node["links"].as<std::vector<int>>(_nodeLinks);
 }
 
 /**
  * Saves the UFO to a YAML file.
- * @return YAML node.
+ * @return, YAML node.
  */
 YAML::Node Node::save() const
 {

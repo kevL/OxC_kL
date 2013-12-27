@@ -257,17 +257,31 @@ private:
 		/// Gets the current item ID.
 		int* getCurrentItemId();
 		/// Gets a spawn node.
-		Node* getSpawnNode(int nodeRank, BattleUnit* unit);
+		Node* getSpawnNode(
+				int nodeRank,
+				BattleUnit* unit);
 		/// Gets a patrol node.
-		Node* getPatrolNode(bool scout, BattleUnit* unit, Node* fromNode);
+		Node* getPatrolNode(
+				bool scout,
+				BattleUnit* unit,
+				Node* fromNode);
 		/// Carries out new turn preparations.
 		void prepareNewTurn();
 		/// Revives unconscious units (healthcheck).
 		void reviveUnconsciousUnits();
 		/// Removes the body item that corresponds to the unit.
 		void removeUnconsciousBodyItem(BattleUnit* bu);
+
 		/// Sets or tries to set a unit of a certain size on a certain position of the map.
-		bool setUnitPosition(BattleUnit* bu, const Position& position, bool testOnly = false);
+		bool setUnitPosition(
+				BattleUnit* bu,
+				const Position& pos,
+				bool testOnly = false);
+		/// Attempts to place a unit on or near entryPoint.
+		bool placeUnitNearPosition(
+				BattleUnit* unit,
+				Position entryPoint);
+
 		/// Gets DragButton.
 		Uint8 getDragButton() const;
 		/// Gets DragInverted.
@@ -306,8 +320,6 @@ private:
 		int getMoraleModifier(BattleUnit* unit = 0, bool xcom = true);	// kL
 		/// Checks whether a particular faction has eyes on *unit (whether any unit on that faction sees *unit).
 //kL		bool eyesOnTarget(UnitFaction faction, BattleUnit* unit);
-		/// Attempts to place a unit on or near entryPoint.
-		bool placeUnitNearPosition(BattleUnit* unit, Position entryPoint);
 		/// Resets the turn counter.
 		void resetTurnCounter();
 		/// Resets the visibility of all tiles on the map.
