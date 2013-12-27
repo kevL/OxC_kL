@@ -187,14 +187,14 @@ BattlescapeState::BattlescapeState(Game* game)
 	_btnLaunch	= new InteractiveSurface(
 					32,
 					24,
-					static_cast<int>(static_cast<double>(game->getScreen()->getWidth()) / game->getScreen()->getXScale() - 32.0),
+					screenWidth - 32),
 					0);
 	_btnLaunch->setVisible(false);
 
 	_btnPsi		= new InteractiveSurface(
 					32,
 					24,
-					static_cast<int>(static_cast<double>(game->getScreen()->getWidth()) / game->getScreen()->getXScale() - 32.0),
+					screenWidth - 32),
 					25);
 	_btnPsi->setVisible(false);
 

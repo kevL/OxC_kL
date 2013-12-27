@@ -2147,10 +2147,15 @@ void BattlescapeGenerator::generateMap()
 							if ((k + l) %2 == 0)
 							{
 								Tile* t = _save->getTile(Position(k, l, 1));
-
+								Tile* tEast = _save->getTile(Position(k + 1, l, 1));
+								Tile* tSouth = _save->getTile(Position(k, l + 1, 1));
 								if (t
 									&& t->getMapData(MapData::O_FLOOR)
-									&& !t->getMapData(MapData::O_OBJECT))
+									&& !t->getMapData(MapData::O_OBJECT)
+									&& tEast
+									&& !tEast->getMapData(MapData::O_WESTWALL)
+									&& tSouth
+									&& !tSouth->getMapData(MapData::O_NORTHWALL))
 								{
 									_save->getStorageSpace().push_back(Position(k, l, 1));
 								}
