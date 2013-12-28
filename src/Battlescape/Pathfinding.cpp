@@ -65,7 +65,11 @@ Pathfinding::Pathfinding(SavedBattleGame* save)
 			i < _size;
 			++i)
 	{
-		_save->getTileCoords(i, &p.x, &p.y, &p.z);
+		_save->getTileCoords(
+							i,
+							&p.x,
+							&p.y,
+							&p.z);
 
 		_nodes.push_back(PathfindingNode(p));
 	}
@@ -111,6 +115,7 @@ void Pathfinding::calculate(
 	_unit = unit;
 
 	// i'm DONE with these out of bounds errors.
+	// kL_note: I really don't care what you're "DONE" with.....
 	if (endPosition.x > _save->getMapSizeX() - _unit->getArmor()->getSize()
 		|| endPosition.y > _save->getMapSizeY() - _unit->getArmor()->getSize()
 		|| endPosition.x < 0
@@ -128,10 +133,10 @@ void Pathfinding::calculate(
 	}
 
 
-	if (target != 0 && maxTUCost == -1) // pathfinding for missile
+	if (target != 0
+		&& maxTUCost == -1) // pathfinding for missile
 	{
 		maxTUCost = 10000;
-
 		_movementType = MT_FLY;
 	}
 	else
@@ -171,6 +176,8 @@ void Pathfinding::calculate(
 		{
 			endPosition.z--;
 			destinationTile = _save->getTile(endPosition);
+			// kL_note: Do i have to set something here, like 'startDir = dir'
+			// to stop falling units from swivelling (and gliding) ......
 
 			Log(LOG_INFO) << ". canFallDown() -1 level, endPosition = " << endPosition;
 		}
@@ -237,14 +244,14 @@ void Pathfinding::calculate(
 		if (abs(startPosition.y - endPosition.y) <= 1) Log(LOG_INFO)	<< "strafe Pos.y true";
 	*/// kL_end_TEST.
 
-	// Strafing move allowed only to adjacent squares on same z. "Same z" rule mainly to simplify walking render.
+	// Strafing move allowed only to adjacent squares on same z;
+	// "same z" rule mainly to simplify walking render.
 	Position startPosition = _unit->getPosition();
-
 	_strafeMove = _save->getStrafeSetting()
-		&& (SDL_GetModState() & KMOD_CTRL) != 0
-		&& startPosition.z == endPosition.z
-		&& abs(startPosition.x - endPosition.x) <= 1
-		&& abs(startPosition.y - endPosition.y) <= 1;
+					&& (SDL_GetModState() & KMOD_CTRL) != 0
+					&& startPosition.z == endPosition.z
+					&& abs(startPosition.x - endPosition.x) <= 1
+					&& abs(startPosition.y - endPosition.y) <= 1;
 /*	if (_strafeMove)
 	{
 		Log(LOG_INFO) << "Pathfinding::calculate() _strafeMove VALID";		// kL
@@ -253,7 +260,8 @@ void Pathfinding::calculate(
 		Log(LOG_INFO) << "Pathfinding::calculate() _strafeMove INVALID"; */	// kL
 
 	// look for a possible fast and accurate bresenham path and skip A*
-	bool sneak = _unit->getFaction() == FACTION_HOSTILE && _save->getSneakySetting();
+	bool sneak = _unit->getFaction() == FACTION_HOSTILE
+					&& _save->getSneakySetting();
 
 	if (startPosition.z == endPosition.z
 		&& bresenhamPath(
@@ -268,7 +276,9 @@ void Pathfinding::calculate(
 	}
 	else
 	{
-		abortPath(); // if bresenham failed, we shouldn't keep the path it was attempting, in case A* fails too.
+		// if bresenham failed, we shouldn't keep the path
+		// it was attempting, in case A* fails too.
+		abortPath();
 	}
 
 	// Now try through A*.
@@ -374,10 +384,20 @@ bool Pathfinding::bresenhamPath(
 			// get direction
 			for (dir = 0; dir < 8; ++dir)
 			{
-				if (xd[dir] == cx-lastPoint.x && yd[dir] == cy-lastPoint.y) break;
+				if (xd[dir] == cx-lastPoint.x
+					&& yd[dir] == cy-lastPoint.y)
+				{
+					break;
+				}
 			}
 
-			int tuCost = getTUCost(lastPoint, dir, &nextPoint, _unit, targetUnit, (targetUnit && maxTUCost == 10000));
+			int tuCost = getTUCost(
+								lastPoint,
+								dir,
+								&nextPoint,
+								_unit,
+								targetUnit,
+								(targetUnit && maxTUCost == 10000));
 
 			if (sneak && _save->getTile(nextPoint)->getVisible())
 			{
@@ -557,13 +577,13 @@ bool Pathfinding::aStarPath(
  * Gets the TU cost to move from 1 tile to the other (ONE STEP ONLY).
  * But also updates the endPosition, because it is possible
  * the unit goes upstairs or falls down while walking.
- * @param startPosition The position to start from.
- * @param direction The direction we are facing.
- * @param endPosition The position we want to reach.
- * @param unit The unit moving.
- * @param target The target unit.
- * @param missile Is this a guided missile?
- * @return TU cost or 255 if movement is impossible.
+ * @param startPosition, The position to start from.
+ * @param direction, The direction we are facing.
+ * @param endPosition, The position we want to reach.
+ * @param unit, The unit moving.
+ * @param target, The target unit.
+ * @param missile, Is this a guided missile?
+ * @return, TU cost or 255 if movement is impossible.
  */
 int Pathfinding::getTUCost(
 		const Position& startPosition,
@@ -583,10 +603,10 @@ int Pathfinding::getTUCost(
 	bool fellDown = false;
 	bool triedStairs = false;
 
-	int numberOfPartsGoingUp = 0;
-	int numberOfPartsGoingDown = 0;
-	int numberOfPartsFalling = 0;
-	int numberOfPartsChangingHeight = 0;
+	int partsGoingUp = 0;
+	int partsGoingDown = 0;
+	int partsFalling = 0;
+	int partsChangingHeight = 0;
 
 	int cost = 0;
 	int totalCost = 0;
@@ -613,7 +633,8 @@ int Pathfinding::getTUCost(
 			if (startTile == 0 || destinationTile == 0)
 				return 255;
 
-			if (direction < DIR_UP && startTile->getTerrainLevel() > -16)
+			if (direction < DIR_UP
+				&& startTile->getTerrainLevel() > -16)
 			{
 				// check if we can go this way
 				if (isBlocked(startTile, destinationTile, direction, target))
@@ -632,9 +653,9 @@ int Pathfinding::getTUCost(
 				&& !aboveDestination->hasNoFloor(destinationTile)
 				&& !triedStairs)
 			{
-				numberOfPartsGoingUp++;
-				if (numberOfPartsGoingUp > size)
-				{
+				partsGoingUp++;
+				if (partsGoingUp > size)	// kL_note: seems that partsGoingUp can
+				{									// never be greater than size... if large unit.
 					verticalOffset.z++;
 					endPosition->z++;
 					destinationTile = _save->getTile(*endPosition + offset);
@@ -643,14 +664,15 @@ int Pathfinding::getTUCost(
 					triedStairs = true;
 				}
 			}
-			else if ( //kL!fellDown &&
+			else if (!fellDown &&
 				_movementType != MT_FLY
 				&& belowDestination
 				&& canFallDown(destinationTile)
-				&& belowDestination->getTerrainLevel() <= -12) // kL_note: why not fall more than half tile.Z ?
+				&& belowDestination->getTerrainLevel() <= -12)	// kL_note: why not fall more than half tile.Z
+																// Because then you're doing stairs or ramp.
 			{
-				numberOfPartsGoingDown++;
-				if (numberOfPartsGoingDown == (size + 1) * (size + 1))
+				partsGoingDown++;
+				if (partsGoingDown == (size + 1) * (size + 1))
 				{
 					endPosition->z--;
 					destinationTile = _save->getTile(*endPosition + offset);
@@ -705,8 +727,8 @@ int Pathfinding::getTUCost(
 				&& !fellDown
 				&& canFallDown(startTile))
 			{
-				numberOfPartsFalling++;
-				if (numberOfPartsFalling == (size + 1) * (size + 1))
+				partsFalling++;
+				if (partsFalling == (size + 1) * (size + 1))
 				{
 					*endPosition = startPosition + Position(0, 0, -1);
 					destinationTile = _save->getTile(*endPosition + offset);
@@ -719,7 +741,7 @@ int Pathfinding::getTUCost(
 			startTile = _save->getTile(startTile->getPosition() + verticalOffset);
 
 			if (direction < DIR_UP
-				&& numberOfPartsGoingUp != 0)
+				&& partsGoingUp != 0)
 			{
 				// check if we can go this way
 				if (isBlocked(startTile, destinationTile, direction, target))
@@ -737,12 +759,12 @@ int Pathfinding::getTUCost(
 			}
 
 
-if (direction < DIR_UP) // TEST
-{
-
-			// calculate the cost by adding floor walk cost and object walk cost
-//			if (direction < DIR_UP)
+			if (direction < DIR_UP) // kL_TEST (this section is for walking over rubble only)
 			{
+
+				// calculate the cost by adding floor walk cost and object walk cost
+//				if (direction < DIR_UP)
+//				{
 				cost += destinationTile->getTUCost(MapData::O_FLOOR, _movementType);
 
 				if (!fellDown
@@ -757,110 +779,113 @@ if (direction < DIR_UP) // TEST
 				{
 					cost++;
 				}
-			}
+//				}
 
-			// if we don't want to fall down and there is no floor, we can't know the TUs so it defaults to 4
-//			if (direction < DIR_UP &&
-			if (!fellDown
-				&& destinationTile->hasNoFloor(0))
-			{
-				cost = 4;
-			}
-
-
-			int wallcost = 0;	// walking through rubble walls
-			int sides = 0;		// how many walls we cross when moving diagonally
-			int wallTU = 0;		// used to check if there's a wall that costs +TU.
-
-			if (direction == 7
-				|| direction == 0
-				|| direction == 1)
-			{
-				wallTU = startTile->getTUCost(MapData::O_NORTHWALL, _movementType);
-				if (wallTU > 0)
+				// if we don't want to fall down and there is no floor,
+				// we can't know the TUs so it defaults to 4
+//				if (direction < DIR_UP &&
+				if (!fellDown
+					&& destinationTile->hasNoFloor(0))
 				{
-//					if (direction &1) // would use this to increase diagonal wall-crossing by +50%
-//					{
-//						wallTU += wallTU / 2;
-//					}
-
-					wallcost += wallTU;
-					sides ++;
+					cost = 4;
 				}
-			}
 
-			if (direction == 1
-				|| direction == 2
-				|| direction == 3)
-			{
-				if (startTile->getPosition().z == destinationTile->getPosition().z) // don't count wallcost if it's on the floor below.
+
+				int wallcost = 0;	// walking through rubble walls
+				int sides = 0;		// how many walls we cross when moving diagonally
+				int wallTU = 0;		// used to check if there's a wall that costs +TU.
+
+				if (direction == 7
+					|| direction == 0
+					|| direction == 1)
 				{
-					wallTU = destinationTile->getTUCost(MapData::O_WESTWALL, _movementType);
+					wallTU = startTile->getTUCost(MapData::O_NORTHWALL, _movementType);
+					if (wallTU > 0)
+					{
+//						if (direction &1) // would use this to increase diagonal wall-crossing by +50%
+//						{
+//							wallTU += wallTU / 2;
+//						}
+
+						wallcost += wallTU;
+						sides ++;
+					}
+				}
+
+				if (direction == 1
+					|| direction == 2
+					|| direction == 3)
+				{
+					if (startTile->getPosition().z == destinationTile->getPosition().z) // don't count wallcost if it's on the floor below.
+					{
+						wallTU = destinationTile->getTUCost(MapData::O_WESTWALL, _movementType);
+						if (wallTU > 0)
+						{
+							wallcost += wallTU;
+							sides ++;
+						}
+					}
+				}
+
+				if (direction == 3
+					|| direction == 4
+					|| direction == 5)
+				{
+					if (startTile->getPosition().z == destinationTile->getPosition().z) // don't count wallcost if it's on the floor below.
+					{
+						wallTU = destinationTile->getTUCost(MapData::O_NORTHWALL, _movementType);
+						if (wallTU > 0)
+						{
+							wallcost += wallTU;
+							sides ++;
+						}
+					}
+				}
+
+				if (direction == 5
+					|| direction == 6
+					|| direction == 7)
+				{
+					wallTU = startTile->getTUCost(MapData::O_WESTWALL, _movementType);
 					if (wallTU > 0)
 					{
 						wallcost += wallTU;
 						sides ++;
 					}
 				}
-			}
 
-			if (direction == 3
-				|| direction == 4
-				|| direction == 5)
-			{
-				if (startTile->getPosition().z == destinationTile->getPosition().z) // don't count wallcost if it's on the floor below.
+				// diagonal walking (uneven directions) costs 50% more tu's
+				// kL_note: this is moved up so that objects don't cost +150% tu;
+				// instead, let them keep a flat +100% to step onto
+				// -- note that Walls also do not take +150 tu to step over diagonally....
+//				if (direction < DIR_UP &&
+				if (direction & 1)
 				{
-					wallTU = destinationTile->getTUCost(MapData::O_NORTHWALL, _movementType);
-					if (wallTU > 0)
+					cost = static_cast<int>(static_cast<float>(cost) * 1.5f);
+
+					if (sides == 2)
+						wallcost /= 2; // average of the wall-sides crossed
+
+					wallcost += 1; // kL. <- arbitrary inflation.
+				}
+
+				cost += wallcost;
+
+				// diagonal walking (uneven directions) costs 50% more tu's
+/*				if (direction < DIR_UP
+					&& direction &1)
+				{
+					if (sides > 1)
 					{
-						wallcost += wallTU;
-						sides ++;
+						wallcost /= 2;
 					}
-				}
-			}
 
-			if (direction == 5
-				|| direction == 6
-				|| direction == 7)
-			{
-				wallTU = startTile->getTUCost(MapData::O_WESTWALL, _movementType);
-				if (wallTU > 0)
-				{
-					wallcost += wallTU;
-					sides ++;
-				}
-			}
-
-			// diagonal walking (uneven directions) costs 50% more tu's
-			// kL_note: this is moved up so that objects don't cost +150% tu;
-			// instead, let them keep a flat +100% to step onto
-			// -- note that Walls also do not take +150 tu to step over diagonally....
-//			if (direction < DIR_UP &&
-			if (direction &1)
-			{
-				cost = static_cast<int>(static_cast<float>(cost) * 1.5f);
-
-				if (sides == 2)
-					wallcost /= 2; // average of the wall-sides crossed
-			}
-
-			cost += wallcost;
-
-			// diagonal walking (uneven directions) costs 50% more tu's
-/*			if (direction < DIR_UP
-				&& direction &1)
-			{
-				if (sides > 1)
-				{
-					wallcost /= 2;
+					cost = static_cast<int>(static_cast<double>(cost) * 1.5);
 				}
 
-				cost = static_cast<int>(static_cast<double>(cost) * 1.5);
-			}
+				cost += wallcost; */
 
-			cost += wallcost; */
-
-} // end_TEST
+			} // kL_TEST_end.
 
 
 			if (_unit->getFaction() == FACTION_HOSTILE
@@ -871,7 +896,8 @@ if (direction < DIR_UP) // TEST
 
 			// Strafing costs +1 for forwards-ish or sidewards, propose +2 for backwards-ish directions
 			// Maybe if flying then it makes no difference?
-			if (_save->getStrafeSetting() && _strafeMove)
+			if (_save->getStrafeSetting()
+				&& _strafeMove)
 			{
 				if (size)
 				{
@@ -881,9 +907,10 @@ if (direction < DIR_UP) // TEST
 				}
 				else
 				{
-					if (std::min(abs(8 + direction - _unit->getDirection()),
+					if (std::min(
+								abs(8 + direction - _unit->getDirection()),
 								std::min(abs(_unit->getDirection() - direction),
-									abs(8 + _unit->getDirection() - direction)))
+								abs(8 + _unit->getDirection() - direction)))
 							> 2)
 					{
 						// Strafing backwards-ish currently unsupported, turn it off and continue.
@@ -924,7 +951,7 @@ if (direction < DIR_UP) // TEST
 		}
 		// also check if we change level, that there are two parts changing level,
 		// so a big sized unit can not go up a small sized stairs
-		else if (numberOfPartsChangingHeight == 1)
+		else if (partsChangingHeight == 1)
 		{
 			return 255;
 		}
@@ -944,7 +971,9 @@ if (direction < DIR_UP) // TEST
  * @param direction, Source direction
  * @param vector, Pointer to a position (which acts as a vector)
  */
-void Pathfinding::directionToVector(int const direction, Position* vector)
+void Pathfinding::directionToVector(
+		int const direction,
+		Position* vector)
 {
 	int x[10] = { 0,  1,  1,  1,  0, -1, -1, -1,  0,  0};
 	int y[10] = {-1, -1,  0,  1,  1,  1,  0, -1,  0,  0};
@@ -960,12 +989,19 @@ void Pathfinding::directionToVector(int const direction, Position* vector)
  * @param vector, Reference to a position (which acts as a vector)
  * @param dir, Reference to a direction
  */
-void Pathfinding::vectorToDirection(const Position& vector, int& dir)
+void Pathfinding::vectorToDirection(
+		const Position& vector,
+		int& dir)
 {
 	dir = -1;
-	int x[8] = {  0,  1,  1,  1,  0, -1, -1, -1 };
-	int y[8] = { -1, -1,  0,  1,  1,  1,  0, -1 };
-	for (int i = 0; i < 8; ++i)
+
+	int x[8] = { 0,  1,  1,  1,  0, -1, -1, -1};
+	int y[8] = {-1, -1,  0,  1,  1,  1,  0, -1};
+
+	for (int
+			i = 0;
+			i < 8;
+			++i)
 	{
 		if (x[i] == vector.x
 			&& y[i] == vector.y)

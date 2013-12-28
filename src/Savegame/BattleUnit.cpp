@@ -519,7 +519,7 @@ void BattleUnit::startWalking(
 	_status = STATUS_WALKING;					// kL
 
 
-	if (direction > 7)
+	if (direction >= Pathfinding::DIR_UP)
 //		&& _tile->hasNoFloor(tileBelow)			// kL
 //		&& _armor->getMovementType() == MT_FLY)	// kL
 	{
@@ -661,11 +661,11 @@ void BattleUnit::keepWalking(Tile* tileBelow, bool cache)
 
 		// we officially reached our destination tile
 		_status = STATUS_STANDING;
-
 		_walkPhase = 0;
 		_verticalDirection = 0;
 
-		if (_floating && !_tile->hasNoFloor(tileBelow))
+		if (_floating
+			&& !_tile->hasNoFloor(tileBelow))
 		{
 			_floating = false;
 		}

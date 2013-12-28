@@ -130,7 +130,8 @@ void UnitWalkBState::setNormalWalkSpeed()
  */
 void UnitWalkBState::think()
 {
-	Log(LOG_INFO) << "\n***** UnitWalkBState::think() : " << _unit->getId() << " _walkPhase = " << _unit->getWalkingPhase() << " *****";
+	Log(LOG_INFO)	<< "\n***** UnitWalkBState::think() : " << _unit->getId()
+					<< " _walkPhase = " << _unit->getWalkingPhase() << " *****";
 
 	if (_unit->isOut(true, true))
 	{
@@ -148,8 +149,8 @@ void UnitWalkBState::think()
 	_newUnitSpotted = false;	// for aLien units
 
 	_onScreen = _unit->getVisible()
-							&& (_parent->getMap()->getCamera()->isOnScreen(_unit->getPosition())
-								|| _parent->getMap()->getCamera()->isOnScreen(_unit->getDestination()));
+					&& (_parent->getMap()->getCamera()->isOnScreen(_unit->getPosition())
+						|| _parent->getMap()->getCamera()->isOnScreen(_unit->getDestination()));
 	Log(LOG_INFO) << ". _onScreen = " << _onScreen;
 
 
@@ -488,6 +489,49 @@ bool UnitWalkBState::doStatusWalk()
  */
 bool UnitWalkBState::doStatusStand_end()
 {
+/*
+	Tile* tileBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(0, 0, -1));
+	bool fallCheck = true;
+
+	int size = _unit->getArmor()->getSize() - 1;
+	for (int
+			x = size;
+			x > -1;
+			x--)
+	{
+		for (int
+				y = size;
+				y > -1;
+				y--)
+		{
+			Tile* otherTileBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(x, y, -1));
+
+			if (_unit->getArmor()->getMovementType() == MT_FLY
+				|| !_parent->getSave()->getTile(
+											_unit->getPosition()
+												+ Position(x, y, 0))->hasNoFloor(otherTileBelow))
+			{
+				Log(LOG_INFO) << ". . . WalkBState, hasFloor or is Flying ( fallCheck set FALSE )";
+				fallCheck = false;
+			}
+
+			Log(LOG_INFO) << ". . WalkBState, remove unit from previous tile";
+			_parent->getSave()->getTile(_unit->getLastPosition() + Position(x, y, 0))->setUnit(0);
+		}
+	}
+
+	_falling = fallCheck
+		&& _unit->getPosition().z != 0
+		&& _unit->getTile()->hasNoFloor(tileBelow)
+		&& _unit->getArmor()->getMovementType() != MT_FLY;
+//kL		&& _unit->getWalkingPhase() == 0; // <- set @ startWalking() and @ end of keepWalking()
+
+*/ // kL <- get ready.
+
+//	_falling = false; <- don't forget to turn it off somewhere!!!
+
+
+
 //	_tileSwitchDone = false;	// kL
 
 	// if the unit burns floortiles, burn floortiles
@@ -920,8 +964,8 @@ bool UnitWalkBState::doStatusStand()
 		Log(LOG_INFO) << ". pos 6";
 
 		dir = _pf->dequeuePath(); // now start moving
-//kL		if (_falling)
-//kL			dir = _pf->DIR_DOWN;		// kL_note: set above, if it hasn't changed...
+		if (_falling)
+			dir = _pf->DIR_DOWN;		// kL_note: set above, if it hasn't changed...
 		Log(LOG_INFO) << ". dequeuePath() dir = " << dir;
 
 

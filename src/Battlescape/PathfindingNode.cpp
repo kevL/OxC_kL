@@ -126,7 +126,7 @@ void PathfindingNode::connect(
 		Position d = target - _pos;
 		d *= d;
 		_tuGuess = 4 * static_cast<int>(
-									sqrt(static_cast<double>(d.x) + static_cast<double>(d.y) + static_cast<double>(d.z)));
+								sqrt(static_cast<double>(d.x) + static_cast<double>(d.y) + static_cast<double>(d.z)));
 	}
 }
 

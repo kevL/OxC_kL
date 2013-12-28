@@ -108,8 +108,11 @@ void ProjectileFlyBState::init()
 	}
 	_initialized = true;
 
+
 	BattleItem* weapon = _action.weapon;
-	_projectileItem = 0;
+	_ammo = weapon->getAmmoItem();
+	_unit = _action.actor;
+//kL	_projectileItem = 0; // already initialized.
 
 	if (!weapon) // can't shoot without weapon
 	{
@@ -118,16 +121,14 @@ void ProjectileFlyBState::init()
 
 		return;
 	}
-
-	if (!_parent->getSave()->getTile(_action.target)) // invalid target position
+	else if (!_parent->getSave()->getTile(_action.target)) // invalid target position
 	{
 		Log(LOG_INFO) << ". no target, EXIT";
 		_parent->popState();
 
 		return;
 	}
-
-	if (_parent->getPanicHandled()
+	else if (_parent->getPanicHandled()
 		&& _action.actor->getTimeUnits() < _action.TU)
 	{
 		Log(LOG_INFO) << ". not enough time units, EXIT";
@@ -136,11 +137,7 @@ void ProjectileFlyBState::init()
 
 		return;
 	}
-
-	_unit = _action.actor;
-	_ammo = weapon->getAmmoItem();
-
-	if (_unit->isOut(true, true))
+	else if (_unit->isOut(true, true))
 //		|| _unit->getHealth() == 0
 //		|| _unit->getHealth() < _unit->getStunlevel())
 	{
@@ -150,9 +147,8 @@ void ProjectileFlyBState::init()
 
 		return;
 	}
-
 	// kL_begin: ProjectileFlyBState::init() Give back time units; pre-end Reaction Fire. +stopShot!!
-	if (_unit->getStopShot())
+	else if (_unit->getStopShot())
 	{
 		// do I have to refund TU's for this??? YES. done
 		// when are TU subtracted for a primaryAction firing/throwing action?
@@ -164,9 +160,7 @@ void ProjectileFlyBState::init()
 		Log(LOG_INFO) << ". stopShot, refund TUs.";
 		return;
 	}
-
-
-	if (_unit->getFaction() != _parent->getSave()->getSide()) // reaction fire
+	else if (_unit->getFaction() != _parent->getSave()->getSide()) // reaction fire
 	{
 		if (_parent->getSave()->getTile(_action.target)->getUnit())
 		{
@@ -191,18 +185,6 @@ void ProjectileFlyBState::init()
 			Log(LOG_INFO) << ". . reactionFire refund (no targetUnit) EXIT";
 			return;
 		} // kL_end.
-
-		// no ammo or target is dead: give the time units back and cancel the shot.
-/*kL: above.		if (_ammo == 0
-			|| !_parent->getSave()->getTile(_action.target)->getUnit()
-			|| _parent->getSave()->getTile(_action.target)->getUnit()->isOut(true, true)
-			|| _parent->getSave()->getTile(_action.target)->getUnit() != _parent->getSave()->getSelectedUnit())
-		{
-			_unit->setTimeUnits(_unit->getTimeUnits() + _unit->getActionTUs(_action.type, _action.weapon));
-			_parent->popState();
-
-			return;
-		} */
 	}
 
 	// autoshot will default back to snapshot if it's not possible
@@ -243,8 +225,7 @@ void ProjectileFlyBState::init()
 
 				return;
 			}
-
-			if (_ammo->getAmmoQuantity() == 0)
+			else if (_ammo->getAmmoQuantity() == 0)
 			{
 				Log(LOG_INFO) << ". . . no ammo Quantity, EXIT";
 
@@ -253,8 +234,7 @@ void ProjectileFlyBState::init()
 
 				return;
 			}
-
-			if (weapon->getRules()->getRange() != 0
+			else if (weapon->getRules()->getRange() != 0
 				&& _parent->getTileEngine()->distance(
 												_action.actor->getPosition(),
 												_action.target) > weapon->getRules()->getRange())
@@ -770,7 +750,10 @@ bool ProjectileFlyBState::validThrowRange(
 /**
  *
  */
-int ProjectileFlyBState::getMaxThrowDistance(int weight, int strength, int level)
+int ProjectileFlyBState::getMaxThrowDistance(
+		int weight,
+		int strength,
+		int level)
 {
 	Log(LOG_INFO) << "ProjectileFlyBState::getMaxThrowDistance()";
 

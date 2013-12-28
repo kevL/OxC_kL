@@ -39,20 +39,30 @@ class ProjectileFlyBState
 	:
 		public BattleState
 {
+
 private:
-	BattleUnit* _unit;
-	BattleItem* _ammo;
-	BattleItem* _projectileItem;
-	Position _origin;
+	bool _initialized;
 	int _projectileImpact;
+
+	BattleItem
+		* _ammo,
+		* _projectileItem;
+	BattleUnit* _unit;
+	Position _origin;
+
 	/// Tries to create a projectile sprite.
 	bool createNewProjectile();
-	bool _initialized;
+
 
 	public:
 		/// Creates a new ProjectileFly class
-		ProjectileFlyBState(BattlescapeGame* parent, BattleAction action);
-		ProjectileFlyBState(BattlescapeGame* parent, BattleAction action, Position origin);
+		ProjectileFlyBState(
+				BattlescapeGame* parent,
+				BattleAction action);
+		ProjectileFlyBState(
+				BattlescapeGame* parent,
+				BattleAction action,
+				Position origin);
 		/// Cleans up the ProjectileFly.
 		~ProjectileFlyBState();
 
@@ -62,10 +72,17 @@ private:
 		void cancel();
 		/// Runs state functionality every cycle.
 		void think();
+
 		/// Validates the throwing range.
-		static bool validThrowRange(BattleAction* action, Position origin, Tile* target);
+		static bool validThrowRange(
+				BattleAction* action,
+				Position origin,
+				Tile* target);
 		///
-		static int getMaxThrowDistance(int weight, int strength, int level);
+		static int getMaxThrowDistance(
+				int weight,
+				int strength,
+				int level);
 };
 
 }
