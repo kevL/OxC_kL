@@ -866,7 +866,8 @@ int Pathfinding::getTUCost(
 					if (sides == 2)
 						wallcost /= 2; // average of the wall-sides crossed
 
-					wallcost += 1; // kL. <- arbitrary inflation.
+					if (wallcost)
+						wallcost += 1; // kL. <- arbitrary inflation.
 				}
 
 				cost += wallcost;
