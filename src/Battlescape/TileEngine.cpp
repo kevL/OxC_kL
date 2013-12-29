@@ -1864,9 +1864,14 @@ void TileEngine::explode(
 
 	int vertdec = 1000; // default flat explosion
 
-	int exHeight = Options::getInt("battleExplosionHeight");
-	if (exHeight < 0) exHeight = 0;
-	if (exHeight > 3) exHeight = 3;
+	int exHeight = std::max(
+						0,
+						std::min(
+								3,
+								Options::getInt("battleExplosionHeight")));
+//	int exHeight = Options::getInt("battleExplosionHeight");
+//	if (exHeight < 0) exHeight = 0;
+//	if (exHeight > 3) exHeight = 3;
 	switch (exHeight)
 	{
 		case 1:
@@ -1948,135 +1953,190 @@ void TileEngine::explode(
 					ret = tilesAffected.insert(dest); // check if we had this tile already
 					if (ret.second)
 					{
-						if (type == DT_STUN) // power 0 - 200%
+						switch (type)
 						{
-							if (dest->getUnit())
-							{
-//kL								dest->getUnit()->damage(Position(0, 0, 0), RNG::generate(0, power_ * 2), type);
-								int powerUnit = RNG::generate(1, power_ * 2);
-								Log(LOG_INFO) << ". . . powerUnit = " << powerUnit << " DT_STUN";
-								dest->getUnit()->damage(Position(0, 0, 0), powerUnit, type);	// kL
-							}
-
-							for (std::vector<BattleItem*>::iterator
-									it = dest->getInventory()->begin();
-									it != dest->getInventory()->end();
-									++it)
-							{
-								if ((*it)->getUnit())
+							case DT_STUN: // power 0 - 200%
+								if (dest->getUnit())
 								{
-//kL									(*it)->getUnit()->damage(Position(0, 0, 0), RNG::generate(0, power_ * 2), type);
-									int powerCorpse = RNG::generate(1, power_ * 2);
-									Log(LOG_INFO) << ". . . . powerCorpse = " << powerCorpse << " DT_STUN";
-									(*it)->getUnit()->damage(Position(0, 0, 0), powerCorpse, type);		// kL
-								}
-							}
-						}
-
-						if (type == DT_HE) // power 50 - 150%, 60% of that if kneeled.
-						{
-							//Log(LOG_INFO) << ". . type == DT_HE";
-
-							BattleUnit* targetUnit = dest->getUnit();
-
-							if (targetUnit)
-							{
-								int powerVsUnit = static_cast<int>(
-										RNG::generate(static_cast<float>(power_) * 0.5f, static_cast<float>(power_) * 1.5f));
-								Log(LOG_INFO) << ". . . powerVsUnit = " << powerVsUnit << " DT_HE";
-	
-								if (targetUnit->isKneeled())
-								{
-									powerVsUnit = powerVsUnit * 3 / 5;
-									Log(LOG_INFO) << ". . . powerVsUnit(kneeled) = " << powerVsUnit << " DT_HE";
-								}
-
-								targetUnit->damage(
-										Position(0, 0, 0),
-										powerVsUnit,
-										type);
-							}
-
-							bool done = false;
-							while (!done) // kL_note: what the fuck kind of a loop is this ??!!1?
-							{
-								done = dest->getInventory()->empty();
-								for (std::vector<BattleItem*>::iterator
-										it = dest->getInventory()->begin();
-										it != dest->getInventory()->end();
-										)
-								{
-									if (power_ > (*it)->getRules()->getArmor())
+									if (distance(dest->getPosition(), Position(centerX, centerY, centerZ)) < 2)
 									{
-										if ((*it)->getUnit()
-											&& (*it)->getUnit()->getStatus() == STATUS_UNCONSCIOUS)
-										{
-											Log(LOG_INFO) << ". . . . Frank blow'd up.";
-											(*it)->getUnit()->instaKill();
-										}
-
-										Log(LOG_INFO) << ". . . item destroyed";
-										_save->removeItem((*it));
-
-										break;
+//kL										dest->getUnit()->damage(Position(0, 0, 0), RNG::generate(0, power_*2), type);
+										int powerVsUnit = RNG::generate(1, power_ * 2); // kL
+										Log(LOG_INFO) << ". . . powerVsUnit = " << powerVsUnit << " DT_STUN";
+										dest->getUnit()->damage(
+															Position(0, 0, 0),
+															powerVsUnit,
+															type); // kL
 									}
 									else
 									{
-										++it;
-										done = (it == dest->getInventory()->end());
+//kL										dest->getUnit()->damage(Position(centerX, centerY, centerZ) - dest->getPosition(), RNG::generate(0, power_*2), type);
+										int powerVsUnit = RNG::generate(1, power_ * 2); // kL
+										Log(LOG_INFO) << ". . . powerVsUnit = " << powerVsUnit << " DT_STUN, GZ";
+										dest->getUnit()->damage(
+															Position(
+																centerX,
+																centerY,
+																centerZ) - dest->getPosition(),
+															powerVsUnit,
+															type); // kL
 									}
 								}
-							}
-						}
-						//Log(LOG_INFO) << ". type == DT_HE DONE";
 
-						// kL_note: Could do instant smoke inhalation damage here (sorta like Fire or Stun).
-						if (type == DT_SMOKE) // smoke from explosions always stay 6 to 14 turns - power of a smoke grenade is 60
-						{
-							if (dest->getSmoke() < 10)
-							{
-								dest->setFire(0);
-								dest->setSmoke(RNG::generate(7, 15));
-							}
-						}
-
-						if (type == DT_IN
-							&& !dest->isVoid())
-						{
-							if (dest->getFire() == 0)
-							{
-								dest->setFire(dest->getFuel() + 1);
-								dest->setSmoke(std::max(1, std::min(15 - (dest->getFlammability() / 10), 12)));
-							}
-
-							if (dest->getUnit())
-							// kL_note: fire damage is also caused by BattlescapeGame::endTurn() -- but previously by BattleUnit::prepareNewTurn()!!!!
-							{
-								float resistance = dest->getUnit()->getArmor()->getDamageModifier(DT_IN);
-								if (resistance > 0.f)
+								for (std::vector<BattleItem*>::iterator
+										it = dest->getInventory()->begin();
+										it != dest->getInventory()->end();
+										++it)
 								{
-//kL									int fire = RNG::generate(4, 11);					// <- why is this not based on power_
-									int fire = RNG::generate(power_ / 4, power_ * 3 / 4);	// kL: 25 - 50%
-
-//kL									dest->getUnit()->damage(Position(0, 0, 12-dest->getTerrainLevel()), RNG::generate(5, 10), DT_IN, true);
-									dest->getUnit()->damage(
-														Position(
-																0,
-																0,
-																12 - dest->getTerrainLevel()),
-															fire,
-															DT_IN,
-															true);		// kL
-									Log(LOG_INFO) << ". . DT_IN : " << dest->getUnit()->getId() << " takes " << fire << " fire";
-
-//kL									int burnTime = RNG::generate(0, int(5 * resistance));
-									int burnTime = RNG::generate(0, static_cast<int>(5.f * resistance));	// kL
-									if (dest->getUnit()->getFire() < burnTime)
+									if ((*it)->getUnit())
 									{
-										dest->getUnit()->setFire(burnTime); // catch fire and burn
+//kL										(*it)->getUnit()->damage(Position(0, 0, 0), RNG::generate(0, power_ *2), type);
+										int powerVsCorpse = RNG::generate(1, power_ * 2); // kL
+										Log(LOG_INFO) << ". . . . powerVsCorpse = " << powerVsCorpse << " DT_STUN, not GZ";
+										(*it)->getUnit()->damage(
+															Position(0, 0, 0),
+															powerVsCorpse,
+															type); // kL
+									}
+								}
+							break;
+							case DT_HE: // power 50 - 150%, 60% of that if kneeled.
+							{
+								//Log(LOG_INFO) << ". . type == DT_HE";
+
+								BattleUnit* targetUnit = dest->getUnit();
+
+								if (targetUnit)
+								{
+									if (distance(dest->getPosition(), Position(centerX, centerY, centerZ)) < 2)
+									{
+										// ground zero effect is in effect
+//kL										dest->getUnit()->damage(Position(0, 0, 0), (int)(RNG::generate(power_/2.0, power_*1.5)), type);
+										int powerVsUnit = static_cast<int>(
+															RNG::generate(static_cast<float>(power_) * 0.5f, static_cast<float>(power_) * 1.5f)); // kL
+										Log(LOG_INFO) << ". . . powerVsUnit = " << powerVsUnit << " DT_HE, GZ";
+
+										if (targetUnit->isKneeled()) // kL
+										{
+											powerVsUnit = powerVsUnit * 4 / 5; // kL, 80% dam
+											Log(LOG_INFO) << ". . . powerVsUnit(kneeled) = " << powerVsUnit << " DT_HE, GZ";
+										}
+
+										targetUnit->damage(
+														Position(0, 0, 0),
+														powerVsUnit,
+														type);
+
+									}
+									else
+									{
+										// directional damage relative to explosion position.
+										// units above the explosion will be hit in the legs, units lateral to or below will be hit in the torso
+//kL										dest->getUnit()->damage(Position(centerX, centerY, centerZ + 5) - dest->getPosition(), (int)(RNG::generate(power_/2.0, power_*1.5)), type);
+										int powerVsUnit = static_cast<int>(
+															RNG::generate(static_cast<float>(power_) * 0.5f, static_cast<float>(power_) * 1.5f)); // kL
+										Log(LOG_INFO) << ". . . powerVsUnit = " << powerVsUnit << " DT_HE, not GZ";
+
+										if (targetUnit->isKneeled()) // kL
+										{
+											powerVsUnit = powerVsUnit * 3 / 5; // kL, 60% dam
+											Log(LOG_INFO) << ". . . powerVsUnit(kneeled) = " << powerVsUnit << " DT_HE, not GZ";
+										}
+
+										targetUnit->damage(
+														Position(
+															centerX,
+															centerY,
+															centerZ + 5) - dest->getPosition(),
+														powerVsUnit,
+														type);
+
+									}
+								}
+
+								bool done = false;
+								while (!done)
+								{
+									done = dest->getInventory()->empty();
+
+									for (std::vector<BattleItem*>::iterator
+											it = dest->getInventory()->begin();
+											it != dest->getInventory()->end();
+											)
+									{
+										if (power_ > (*it)->getRules()->getArmor())
+										{
+											if ((*it)->getUnit()
+												&& (*it)->getUnit()->getStatus() == STATUS_UNCONSCIOUS)
+											{
+												Log(LOG_INFO) << ". . . . Frank blow'd up.";
+												(*it)->getUnit()->instaKill();
+											}
+
+											Log(LOG_INFO) << ". . . item destroyed";
+											_save->removeItem((*it));
+
+											break;
+										}
+										else
+										{
+											++it;
+											done = (it == dest->getInventory()->end());
+										}
 									}
 								}
 							}
+							break;
+							case DT_SMOKE: // smoke from explosions always stay 6 to 14 turns - power of a smoke grenade is 60
+								// kL_note: Could do instant smoke inhalation damage here (sorta like Fire or Stun).
+								if (dest->getSmoke() < 10)
+								{
+									dest->setFire(0);
+									dest->setSmoke(RNG::generate(7, 15));
+								}
+							break;
+							case DT_IN:
+								if (!dest->isVoid())
+								{
+									if (dest->getFire() == 0)
+									{
+										dest->setFire(dest->getFuel() + 1);
+										dest->setSmoke(std::max(1, std::min(15 - (dest->getFlammability() / 10), 12)));
+									}
+
+									// kL_note: fire damage is also caused by BattlescapeGame::endTurn() -- but previously by BattleUnit::prepareNewTurn()!!!!
+									if (dest->getUnit())
+									{
+										float resistance = dest->getUnit()->getArmor()->getDamageModifier(DT_IN);
+										if (resistance > 0.f)
+										{
+//kL											int fire = RNG::generate(4, 11);					// <- why is this not based on power_
+											int fire = RNG::generate(power_ / 4, power_ * 3 / 4);	// kL: 25 - 50%
+
+//kL											dest->getUnit()->damage(Position(0, 0, 12-dest->getTerrainLevel()), RNG::generate(5, 10), DT_IN, true);
+											dest->getUnit()->damage(
+																Position(
+																		0,
+																		0,
+																		12 - dest->getTerrainLevel()),
+																	fire,
+																	DT_IN,
+																	true);		// kL
+											Log(LOG_INFO) << ". . DT_IN : " << dest->getUnit()->getId() << " takes " << fire << " fire";
+
+//kL											int burnTime = RNG::generate(0, int(5 * resistance));
+											int burnTime = RNG::generate(0, static_cast<int>(5.f * resistance));	// kL
+											if (dest->getUnit()->getFire() < burnTime)
+											{
+												dest->getUnit()->setFire(burnTime); // catch fire and burn
+											}
+										}
+									}
+								}
+							break;
+
+							default:
+							break;
 						}
 
 						if (unit
