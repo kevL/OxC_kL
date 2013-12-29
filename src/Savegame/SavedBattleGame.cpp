@@ -1390,7 +1390,7 @@ Node* SavedBattleGame::getSpawnNode(
 	if (legitNodes.empty())
 		return 0;
 
-	int node = RNG::generate(0, legitNodes.size() - 1);
+	int node = RNG::generate(0, static_cast<int>(legitNodes.size()) - 1);
 
 	return legitNodes[node];
 }

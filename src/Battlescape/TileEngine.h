@@ -56,18 +56,21 @@ private:
 
 	static const int heightFromCenter[11];
 
+	bool _personalLighting;
 	SavedBattleGame* _save;
 	std::vector<Uint16>* _voxelData;
+
+	///
 	void addLight(
 			const Position& voxelTarget,
 			int power,
 			int layer);
+	///
 	int blockage(
 			Tile* tile,
 			const int part,
 			ItemDamageType type,
 			int direction = -1);
-	bool _personalLighting;
 
 
 	public:
@@ -97,7 +100,9 @@ private:
 		/// Gets the origin voxel of a unit's eyesight.
 		Position getSightOriginVoxel(BattleUnit* currentUnit);
 		/// Checks visibility of a unit on this tile.
-		bool visible(BattleUnit* currentUnit, Tile* tile);
+		bool visible(
+				BattleUnit* currentUnit,
+				Tile* tile);
 		/// Creates a vector of units that can spot this unit.
 
 		std::vector<BattleUnit*> getSpottingUnits(BattleUnit* unit);
@@ -148,7 +153,9 @@ private:
 				bool rClick = false,
 				int dir = -1);
 		/// Opens any doors this door is connected to.
-		void checkAdjacentDoors(Position pos, int part);
+		void checkAdjacentDoors(
+				Position pos,
+				int part);
 		/// Closes ufo doors.
 		int closeUfoDoors();
 
@@ -185,9 +192,14 @@ private:
 		/// Turn XCom soldier's personal lighting on or off.
 		void togglePersonalLighting();
 		/// Checks the distance between two positions.
-		int distance(const Position& pos1, const Position& pos2) const;
+		int distance(
+				const Position& pos1,
+				const Position& pos2) const;
 		/// Checks the distance squared between two positions.
-		int distanceSq(const Position& pos1, const Position& pos2, bool considerZ = true) const;
+		int distanceSq(
+				const Position& pos1,
+				const Position& pos2,
+				bool considerZ = true) const;
 		/// Attempts a panic or mind control action.
 		bool psiAttack(BattleAction* action);
 		/// Applies gravity to anything that occupy this tile.

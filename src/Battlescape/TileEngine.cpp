@@ -66,12 +66,15 @@ namespace OpenXcom
 
 const int TileEngine::heightFromCenter[11] = {0, -2, +2, -4, +4, -6, +6, -8, +8, -12, +12};
 
+
 /**
  * Sets up a TileEngine.
  * @param save Pointer to SavedBattleGame object.
  * @param voxelData List of voxel data.
  */
-TileEngine::TileEngine(SavedBattleGame* save, std::vector<Uint16>* voxelData)
+TileEngine::TileEngine(
+		SavedBattleGame* save,
+		std::vector<Uint16>* voxelData)
 	:
 		_save(save),
 		_voxelData(voxelData),
@@ -113,7 +116,13 @@ void TileEngine::calculateSunShading(Tile* tile)
 	// At night/dusk sun isn't dropping shades blocked by roofs
 	if (_save->getGlobalShade() <= 4)
 	{
-		if (verticalBlockage(_save->getTile(Position(tile->getPosition().x, tile->getPosition().y, _save->getMapSizeZ() - 1)), tile, DT_NONE))
+		if (verticalBlockage(_save->getTile(
+										Position(
+												tile->getPosition().x,
+												tile->getPosition().y,
+												_save->getMapSizeZ() - 1)),
+										tile,
+										DT_NONE))
 		{
 			power -= 2;
 		}
@@ -215,7 +224,7 @@ void TileEngine::calculateUnitLighting()
 		// add lighting of soldiers
 		if (_personalLighting
 			&& (*i)->getFaction() == FACTION_PLAYER
-			&& !(*i)->isOut(true, true))
+			&& !(*i)->isOut())
 		{
 			addLight(
 					(*i)->getPosition(),
@@ -240,17 +249,29 @@ void TileEngine::calculateUnitLighting()
  * @param power, Power.
  * @param layer, Light is separated in 3 layers: Ambient, Static and Dynamic.
  */
-void TileEngine::addLight(const Position& voxelTarget, int power, int layer)
+void TileEngine::addLight(
+		const Position& voxelTarget,
+		int power,
+		int layer)
 {
 	// only loop through the positive quadrant.
-	for (int x = 0; x <= power; ++x)
+	for (int
+			x = 0;
+			x <= power;
+			++x)
 	{
-		for (int y = 0; y <= power; ++y)
+		for (int
+				y = 0;
+				y <= power;
+				++y)
 		{
-			for (int z = 0; z < _save->getMapSizeZ(); z++)
+			for (int
+					z = 0;
+					z < _save->getMapSizeZ();
+					z++)
 			{
 //kL				int distance = int(floor(sqrt(float(x * x + y * y)) + 0.5));
-				int distance = (int)floor(sqrt((float)(x * x + y * y)));		// kL
+				int distance = static_cast<int>(floor(sqrt(static_cast<float>(x * x + y * y)))); // kL
 
 				if (_save->getTile(Position(voxelTarget.x + x, voxelTarget.y + y, z)))
 					_save->getTile(Position(voxelTarget.x + x, voxelTarget.y + y, z))->addLight(power - distance, layer);
@@ -281,13 +302,13 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 //	if (unit->getId() == 1000001) kL_Debug = true;
 
 
-	unit->clearVisibleUnits();			// kL:below
-	unit->clearVisibleTiles();			// kL:below
+	unit->clearVisibleUnits();		// kL:below
+	unit->clearVisibleTiles();		// kL:below
 
-	if (unit->isOut(true, true))		// kL:below (check health, check stun, check status)
+	if (unit->isOut(true, true))	// kL:below (check health, check stun, check status)
 		return false;
 
-	bool ret = false;					// kL
+	bool ret = false;				// kL
 
 	size_t preVisibleUnits = unit->getUnitsSpottedThisTurn().size();
 	//if (kL_Debug) Log(LOG_INFO) << ". . . . preVisibleUnits = " << (int)preVisibleUnits;
@@ -481,7 +502,13 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 									_trajectory.clear();
 
 									//Log(LOG_INFO) << ". . calculateLine()";
-									int tst = calculateLine(pPlayer, test, true, &_trajectory, unit, false);
+									int tst = calculateLine(
+														pPlayer,
+														test,
+														true,
+														&_trajectory,
+														unit,
+														false);
 									//Log(LOG_INFO) << ". . . . calculateLine() tst = " << tst;
 
 									size_t trajectorySize = _trajectory.size();
@@ -597,7 +624,10 @@ void TileEngine::recalculateFOV()
 {
 	//Log(LOG_INFO) << "TileEngine::recalculateFOV(), calculateFOV() calls";
 
-	for (std::vector<BattleUnit*>::iterator bu = _save->getUnits()->begin(); bu != _save->getUnits()->end(); ++bu)
+	for (std::vector<BattleUnit*>::iterator
+			bu = _save->getUnits()->begin();
+			bu != _save->getUnits()->end();
+			++bu)
 	{
 		if ((*bu)->getTile() != 0)
 		{
@@ -657,7 +687,9 @@ Position TileEngine::getSightOriginVoxel(BattleUnit* currentUnit)
  * @param tile, The tile to check for
  * @return, True if visible.
  */
-bool TileEngine::visible(BattleUnit* currentUnit, Tile* tile)
+bool TileEngine::visible(
+		BattleUnit* currentUnit,
+		Tile* tile)
 {
 	//Log(LOG_INFO) << "TileEngine::visible()";
 	//Log(LOG_INFO) << ". spotter / reactor ID = " << currentUnit->getId();
@@ -685,7 +717,9 @@ bool TileEngine::visible(BattleUnit* currentUnit, Tile* tile)
 		return true;
 	}
 
-	float realDist = static_cast<float>(distance(currentUnit->getPosition(), targetUnit->getPosition()));
+	float realDist = static_cast<float>(distance(
+											currentUnit->getPosition(),
+											targetUnit->getPosition()));
 	if (realDist > MAX_VIEW_DISTANCE)
 	{
 		//Log(LOG_INFO) << ". . too far to see Tile, ret FALSE";
@@ -1042,7 +1076,14 @@ bool TileEngine::canTargetUnit(
 
 			_trajectory.clear();
 
-			int test = calculateLine(*originVoxel, *scanVoxel, false, &_trajectory, excludeUnit, true, false);
+			int test = calculateLine(
+								*originVoxel,
+								*scanVoxel,
+								false,
+								&_trajectory,
+								excludeUnit,
+								true,
+								false);
 			if (test == VOXEL_UNIT)
 			{
 				for (int
@@ -1497,7 +1538,9 @@ bool TileEngine::checkReactionFire(BattleUnit* unit)
  * @param unit, The unit to check scores against.
  * @return, The unit with initiative.
  */
-BattleUnit* TileEngine::getReactor(std::vector<BattleUnit*> spotters, BattleUnit* unit)
+BattleUnit* TileEngine::getReactor(
+		std::vector<BattleUnit*> spotters,
+		BattleUnit* unit)
 {
 	Log(LOG_INFO) << "TileEngine::getReactor() vs targetID " << unit->getId();
 
@@ -1546,7 +1589,9 @@ BattleUnit* TileEngine::getReactor(std::vector<BattleUnit*> spotters, BattleUnit
  * @param target, The unit to check sight TO.
  * @return, True if the action should (theoretically) succeed.
  */
-bool TileEngine::tryReactionSnap(BattleUnit* unit, BattleUnit* target)
+bool TileEngine::tryReactionSnap(
+		BattleUnit* unit,
+		BattleUnit* target)
 {
 	//Log(LOG_INFO) << "TileEngine::tryReactionSnap() reactID " << unit->getId() << " vs targetID " << target->getId();
 	BattleAction action;
@@ -1596,7 +1641,11 @@ bool TileEngine::tryReactionSnap(BattleUnit* unit, BattleUnit* target)
 			}
 
 			if (action.weapon->getAmmoItem()->getRules()->getExplosionRadius()
-				&& aggro->explosiveEfficacy(action.target, unit, action.weapon->getAmmoItem()->getRules()->getExplosionRadius(), -1) == false)
+				&& aggro->explosiveEfficacy(
+										action.target,
+										unit,
+										action.weapon->getAmmoItem()->getRules()->getExplosionRadius(),
+										-1) == false)
 			{
 				action.targeting = false;
 			}
@@ -1612,8 +1661,12 @@ bool TileEngine::tryReactionSnap(BattleUnit* unit, BattleUnit* target)
 			action.cameraPosition = _save->getBattleState()->getMap()->getCamera()->getMapOffset();	// kL, was above under "BattleAction action;"
 			action.actor = unit;																	// kL, was above under "BattleAction action;"
 
-			_save->getBattleGame()->statePushBack(new UnitTurnBState(_save->getBattleGame(), action));
-			_save->getBattleGame()->statePushBack(new ProjectileFlyBState(_save->getBattleGame(), action));
+			_save->getBattleGame()->statePushBack(new UnitTurnBState(
+																_save->getBattleGame(),
+																action));
+			_save->getBattleGame()->statePushBack(new ProjectileFlyBState(
+																	_save->getBattleGame(),
+																	action));
 
 			return true;
 		}
@@ -1675,7 +1728,13 @@ BattleUnit* TileEngine::hit(
 		// This is returning part < 4 when using a stunRod against a unit outside the north (or east) UFO wall. ERROR!!!
 		// later: Now it's returning VOXEL_EMPTY (-1) when a silicoid attacks a poor civvie!!!!! And on acid-spits!!!
 //kL		int const part = voxelCheck(pTarget_voxel, attacker);
-		int const part = voxelCheck(pTarget_voxel, attacker, false, false, 0, hit);		// kL
+		int const part = voxelCheck(
+								pTarget_voxel,
+								attacker,
+								false,
+								false,
+								0,
+								hit); // kL
 		Log(LOG_INFO) << ". voxelCheck() ret part = " << part;
 
 		if (VOXEL_EMPTY < part && part < VOXEL_UNIT	// 4 terrain parts ( #0 - #3 )
@@ -1707,7 +1766,10 @@ BattleUnit* TileEngine::hit(
 
 				// it's possible we have a unit below the actual tile, when he stands on a stairs and sticks his head up into the above tile.
 				// kL_note: yeah, just like in LoS calculations!!!! cf. visible() etc etc .. idiots.
-				Tile* tileBelow = _save->getTile(Position(pTarget_voxel.x / 16, pTarget_voxel.y / 16, (pTarget_voxel.z / 24) - 1));
+				Tile* tileBelow = _save->getTile(Position(
+														pTarget_voxel.x / 16,
+														pTarget_voxel.y / 16,
+														pTarget_voxel.z / 24 - 1));
 				if (tileBelow
 					&& tileBelow->getUnit())
 				{
@@ -1847,9 +1909,9 @@ void TileEngine::explode(
 {
 	Log(LOG_INFO) << "TileEngine::explode() power = " << power << " ; type = " << (int)type << " ; maxRadius = " << maxRadius;
 
-	double centerZ = static_cast<double>((voxelTarget.z / 24) + 0.5);		// kL
-	double centerX = static_cast<double>((voxelTarget.x / 16) + 0.5);		// kL
-	double centerY = static_cast<double>((voxelTarget.y / 16) + 0.5);		// kL
+	double centerZ = static_cast<double>((voxelTarget.z / 24) + 0.5); // kL
+	double centerX = static_cast<double>((voxelTarget.x / 16) + 0.5); // kL
+	double centerY = static_cast<double>((voxelTarget.y / 16) + 0.5); // kL
 
 	int power_;
 
@@ -1886,23 +1948,38 @@ void TileEngine::explode(
 			vertdec = 10;		// kL
 	}
 
-	for (int fi = -90; fi <= 90; fi += 5)
+	for (int
+			fi = -90;
+			fi <= 90;
+			fi += 5)
 //	for (int fi = 0; fi <= 0; fi += 10)
 	{
 		// raytrace every 3 degrees makes sure we cover all tiles in a circle.
-		for (int te = 0; te <= 360; te += 3)
+		for (int
+				te = 0;
+				te <= 360;
+				te += 3)
 		{
 			double cos_te = cos(static_cast<double>(te) * M_PI / 180.0);
 			double sin_te = sin(static_cast<double>(te) * M_PI / 180.0);
 			double sin_fi = sin(static_cast<double>(fi) * M_PI / 180.0);
 			double cos_fi = cos(static_cast<double>(fi) * M_PI / 180.0);
 
-			Tile* origin = _save->getTile(Position((int)centerX, (int)centerY, (int)centerZ));
-			double l = 0.0;
-			double vx, vy, vz;
-			int tileX, tileY, tileZ;
-			power_ = power + 1;
+			Tile* origin = _save->getTile(Position(
+												static_cast<int>(centerX),
+												static_cast<int>(centerY),
+												static_cast<int>(centerZ)));
+			double
+				l = 0.0,
+				vx,
+				vy,
+				vz;
+			int
+				tileX,
+				tileY,
+				tileZ;
 
+			power_ = power + 1;
 			while (power_ > 0
 				&& l <= static_cast<double>(maxRadius))
 			{
@@ -1958,7 +2035,10 @@ void TileEngine::explode(
 							case DT_STUN: // power 0 - 200%
 								if (dest->getUnit())
 								{
-									if (distance(dest->getPosition(), Position(centerX, centerY, centerZ)) < 2)
+									if (distance(dest->getPosition(), Position(
+																			static_cast<int>(centerX),
+																			static_cast<int>(centerY),
+																			static_cast<int>(centerZ))) < 2)
 									{
 //kL										dest->getUnit()->damage(Position(0, 0, 0), RNG::generate(0, power_*2), type);
 										int powerVsUnit = RNG::generate(1, power_ * 2); // kL
@@ -1975,9 +2055,9 @@ void TileEngine::explode(
 										Log(LOG_INFO) << ". . . powerVsUnit = " << powerVsUnit << " DT_STUN, GZ";
 										dest->getUnit()->damage(
 															Position(
-																centerX,
-																centerY,
-																centerZ) - dest->getPosition(),
+																static_cast<int>(centerX),
+																static_cast<int>(centerY),
+																static_cast<int>(centerZ)) - dest->getPosition(),
 															powerVsUnit,
 															type); // kL
 									}
@@ -2005,10 +2085,12 @@ void TileEngine::explode(
 								//Log(LOG_INFO) << ". . type == DT_HE";
 
 								BattleUnit* targetUnit = dest->getUnit();
-
 								if (targetUnit)
 								{
-									if (distance(dest->getPosition(), Position(centerX, centerY, centerZ)) < 2)
+									if (distance(dest->getPosition(), Position(
+																			static_cast<int>(centerX),
+																			static_cast<int>(centerY),
+																			static_cast<int>(centerZ))) < 2)
 									{
 										// ground zero effect is in effect
 //kL										dest->getUnit()->damage(Position(0, 0, 0), (int)(RNG::generate(power_/2.0, power_*1.5)), type);
@@ -2025,8 +2107,7 @@ void TileEngine::explode(
 										targetUnit->damage(
 														Position(0, 0, 0),
 														powerVsUnit,
-														type);
-
+														type); // kL
 									}
 									else
 									{
@@ -2045,12 +2126,11 @@ void TileEngine::explode(
 
 										targetUnit->damage(
 														Position(
-															centerX,
-															centerY,
-															centerZ + 5) - dest->getPosition(),
+															static_cast<int>(centerX),
+															static_cast<int>(centerY),
+															static_cast<int>(centerZ) + 5) - dest->getPosition(),
 														powerVsUnit,
-														type);
-
+														type); // kL
 									}
 								}
 
@@ -2101,7 +2181,11 @@ void TileEngine::explode(
 									if (dest->getFire() == 0)
 									{
 										dest->setFire(dest->getFuel() + 1);
-										dest->setSmoke(std::max(1, std::min(15 - (dest->getFlammability() / 10), 12)));
+										dest->setSmoke(std::max(
+															1,
+															std::min(
+																	15 - (dest->getFlammability() / 10),
+																	12)));
 									}
 
 									// kL_note: fire damage is also caused by BattlescapeGame::endTurn() -- but previously by BattleUnit::prepareNewTurn()!!!!
@@ -2119,13 +2203,13 @@ void TileEngine::explode(
 																		0,
 																		0,
 																		12 - dest->getTerrainLevel()),
-																	fire,
-																	DT_IN,
-																	true);		// kL
+																fire,
+																DT_IN,
+																true); // kL
 											Log(LOG_INFO) << ". . DT_IN : " << dest->getUnit()->getId() << " takes " << fire << " fire";
 
 //kL											int burnTime = RNG::generate(0, int(5 * resistance));
-											int burnTime = RNG::generate(0, static_cast<int>(5.f * resistance));	// kL
+											int burnTime = RNG::generate(0, static_cast<int>(5.f * resistance)); // kL
 											if (dest->getUnit()->getFire() < burnTime)
 											{
 												dest->getUnit()->setFire(burnTime); // catch fire and burn
@@ -2163,7 +2247,10 @@ void TileEngine::explode(
 	{
 		Log(LOG_INFO) << ". explode Tiles";
 
-		for (std::set<Tile*>::iterator i = tilesAffected.begin(); i != tilesAffected.end(); ++i)
+		for (std::set<Tile*>::iterator
+				i = tilesAffected.begin();
+				i != tilesAffected.end();
+				++i)
 		{
 			if (detonate(*i))
 				_save->setObjectiveDestroyed(true);

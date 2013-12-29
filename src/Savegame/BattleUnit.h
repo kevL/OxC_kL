@@ -353,7 +353,7 @@ private:
 //kL		bool isOut() const;
 		bool isOut(
 				bool checkHealth = false,
-				bool checkStun = false) const;		// kL
+				bool checkStun = false) const; // kL
 
 		/// Get the number of time units a certain action takes.
 		int getActionTUs(
@@ -650,7 +650,7 @@ private:
 		/// Continues a death spin.
 		void contDeathSpin();
 		/// Regulates init, direction & duration of the death spin-cycle.
-		int getSpinPhase();
+		int getSpinPhase() const;
 		/// Sets the spinPhase of a unit.
 		void setSpinPhase(int spinphase);
 
@@ -665,7 +665,7 @@ private:
 		/// to stop a unit from firing/throwing if it spots a new opponent during turning
 		void setStopShot(bool stop);
 		/// to stop a unit from firing/throwing if it spots a new opponent during turning
-		bool getStopShot();
+		bool getStopShot() const;
 		// kL_end.
 
 		/// Is this unit selectable?

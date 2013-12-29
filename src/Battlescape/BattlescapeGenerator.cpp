@@ -621,7 +621,7 @@ void BattlescapeGenerator::deployXCOM()
 
 	// kL_note: ALL ITEMS SEEM TO STAY ON THE GROUNDTILE, _craftInventoryTile,
 	// IN THAT INVENTORY(vector) UNTIL EVERYTHING IS EQUIPPED & LOADED. Then
-	// the inventory-tile is cleaned out at the end of this function....
+	// the inventory-tile is cleaned up at the end of this function....
 	//
 	// equip soldiers based on equipment-layout
 	for (std::vector<BattleItem*>::iterator
@@ -906,9 +906,7 @@ BattleUnit* BattlescapeGenerator::addXCOMUnit(BattleUnit* unit)
 							_save->getUnits()->push_back(unit);									// add unit to vector of Units.
 
 							if (_save->getTileEngine())
-							{
 								_save->getTileEngine()->calculateFOV(unit);						// it's all good: do Field of View for unit!
-							}
 
 							unit->deriveRank();
 
@@ -921,9 +919,7 @@ BattleUnit* BattlescapeGenerator::addXCOMUnit(BattleUnit* unit)
 					_save->getUnits()->push_back(unit);											// add unit to vector of Units.
 
 					if (_save->getTileEngine())
-					{
 						_save->getTileEngine()->calculateFOV(unit);								// it's all good: do Field of View for unit!
-					}
 
 					unit->deriveRank();
 
@@ -1053,7 +1049,7 @@ bool BattlescapeGenerator::placeItemByLayout(BattleItem* item)
 				{
 					item->setXCOMProperty(true); // kL
 
-					item->moveToOwner((*i));
+					item->moveToOwner(*i);
 
 					item->setSlot(_game->getRuleset()->getInventory((*j)->getSlot()));
 					item->setSlotX((*j)->getSlotX());
@@ -1379,10 +1375,10 @@ bool BattlescapeGenerator::addItem(
 			}
 		break;
 		case BT_MINDPROBE:
-			if (!unit->getItem("STR_BACK_PACK")) // kL
+			if (!unit->getItem("STR_BACK_PACK"))
 			{
 				item->moveToOwner(unit);
-				item->setSlot(_game->getRuleset()->getInventory("STR_BACK_PACK")); // kL
+				item->setSlot(_game->getRuleset()->getInventory("STR_BACK_PACK"));
 
 				placed = true;
 			}
@@ -1552,7 +1548,7 @@ BattleUnit* BattlescapeGenerator::addAlien(
 			i++)
 	{
 		if (outside)
-			node = _save->getSpawnNode(0, unit);	// Civ-Scout spawnpoints
+			node = _save->getSpawnNode(0, unit); // Civ-Scout spawnpoints
 			// kL_begin: spawn fallbacks
 			if (node == 0)
 			{

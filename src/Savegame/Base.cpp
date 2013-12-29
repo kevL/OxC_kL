@@ -1243,7 +1243,7 @@ void Base::removeResearch(ResearchProject* project)
 		//Log(LOG_INFO) << ". . sProject = " << sProject;
 		// eg. Base::removeResearch() sProject = STR_REAPER_CORPSE
 
-		researchHelp(sProject);		// kL
+		researchHelp(sProject);
 		// kL_end.
 
 		_research.erase(i);

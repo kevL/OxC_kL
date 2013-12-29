@@ -171,6 +171,7 @@ void UnitWalkBState::think()
 		if (_unit->getStatus() == STATUS_STANDING)
 		{
 			Log(LOG_INFO) << "Hey we got to STATUS_STANDING in UnitWalkBState _WALKING or _FLYING !!!" ;
+//			_falling = false; // kL
 
 			if (!doStatusStand_end()) return;
 		}
@@ -243,8 +244,8 @@ void UnitWalkBState::postPathProcedures()
 {
 	Log(LOG_INFO) << "UnitWalkBState::postPathProcedures(), unit = " << _unit->getId();
 
-	_tileSwitchDone = false; // kL
-
+	_tileSwitchDone = false;	// kL
+//	_falling = false;			// kL
 	_action.TU = 0;
 
 	if (_unit->getFaction() != FACTION_PLAYER)
@@ -282,7 +283,9 @@ void UnitWalkBState::postPathProcedures()
 				action.targeting = true;
 
 				_unit->setCharging(0);
-				_parent->statePushBack(new ProjectileFlyBState(_parent, action));
+				_parent->statePushBack(new ProjectileFlyBState(
+															_parent,
+															action));
 			}
 		}
 		else if (_unit->_hidingForTurn)
@@ -353,12 +356,12 @@ bool UnitWalkBState::doStatusWalk()
 	}
 
 	// unit moved from one tile to the other, update the tiles & investigate new flooring
-	if (!_tileSwitchDone	// kL
+	if (!_tileSwitchDone // kL
 		&& _unit->getPosition() != _unit->getLastPosition())
 	{
-		Log(LOG_INFO) << ". tile switch from _lastpos to _pos."; // 
+		Log(LOG_INFO) << ". tile switch from _lastpos to _pos.";
 
-		_tileSwitchDone = true;		// kL
+		_tileSwitchDone = true; // kL
 		bool fallCheck = true;
 
 		int size = _unit->getArmor()->getSize() - 1;
@@ -386,8 +389,9 @@ bool UnitWalkBState::doStatusWalk()
 				Log(LOG_INFO) << ". . WalkBState, remove unit from previous tile";
 				_parent->getSave()->getTile(_unit->getLastPosition() + Position(x, y, 0))->setUnit(0);
 			}
-		}
+		} // -> moved to doStatusStand_end()
 
+//		int size = _unit->getArmor()->getSize() - 1; // kL
 		for (int
 				x = size;
 				x > -1;
@@ -414,8 +418,8 @@ bool UnitWalkBState::doStatusWalk()
 		_falling = fallCheck
 					&& _unit->getPosition().z != 0
 					&& _unit->getTile()->hasNoFloor(tileBelow)
-					&& _unit->getArmor()->getMovementType() != MT_FLY;
-//kL					&& _unit->getWalkingPhase() == 0; // <- set @ startWalking() and @ end of keepWalking()
+					&& _unit->getArmor()->getMovementType() != MT_FLY // -> moved to doStatusStand_end()
+					&& _unit->getWalkingPhase() == 0; // <- set @ startWalking() and @ end of keepWalking()
 		if (_falling)
 		{
 			Log(LOG_INFO) << ". WalkBState, falling";
@@ -489,8 +493,8 @@ bool UnitWalkBState::doStatusWalk()
  */
 bool UnitWalkBState::doStatusStand_end()
 {
-/*
-	Tile* tileBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(0, 0, -1));
+// kL_begin: Try doing the _falling check at the end of each tile's walk-cycle
+/*	Tile* tileBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(0, 0, -1));
 	bool fallCheck = true;
 
 	int size = _unit->getArmor()->getSize() - 1;
@@ -523,11 +527,9 @@ bool UnitWalkBState::doStatusStand_end()
 	_falling = fallCheck
 		&& _unit->getPosition().z != 0
 		&& _unit->getTile()->hasNoFloor(tileBelow)
-		&& _unit->getArmor()->getMovementType() != MT_FLY;
+		&& _unit->getArmor()->getMovementType() != MT_FLY; */
 //kL		&& _unit->getWalkingPhase() == 0; // <- set @ startWalking() and @ end of keepWalking()
-
-*/ // kL <- get ready.
-
+// kL_end.
 //	_falling = false; <- don't forget to turn it off somewhere!!!
 
 
@@ -618,14 +620,14 @@ bool UnitWalkBState::doStatusStand_end()
 		}
 		else
 		{
-			Log(LOG_INFO) << ". . WalkBState: checkReactionFire() returned FALSE... no caching";
+			Log(LOG_INFO) << ". . WalkBState: checkReactionFire() FALSE... no caching";
 		}
 	}
 	else // <<-- Looks like we gotta make it fall here!!! (if unit *ends* its total walk sequence on empty air.
 			// And, fall *before* spotting new units, else Abort will likely make it float...
 
 	{
-		Log(LOG_INFO) << ". . WalkBState: falling, myNew cache... didn't work.";
+		Log(LOG_INFO) << ". . WalkBState: falling";
 
 //		_unit->setCache(0);
 //		_parent->getMap()->cacheUnit(_unit);
@@ -777,8 +779,10 @@ bool UnitWalkBState::doStatusStand()
 		if (_unit->getFaction() == FACTION_HOSTILE
 			&& _parent->getSave()->getTile(destination)->getFire() > 0)
 		{
+			Log(LOG_INFO) << ". . subtract tu inflation for a fireTile";
 			// we artificially inflate the TU cost by 32 points in getTUCost under these conditions, so we have to deflate it here.
 			tu -= 32;
+			Log(LOG_INFO) << ". . subtract tu inflation for a fireTile DONE";
 		}
 
 		Log(LOG_INFO) << ". pos 2";

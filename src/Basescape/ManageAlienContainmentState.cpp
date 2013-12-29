@@ -147,12 +147,16 @@ ManageAlienContainmentState::ManageAlienContainmentState(
 	_btnOk->setColor(_color);
 	_btnOk->setText(tr("STR_REMOVE_SELECTED"));
 	_btnOk->onMouseClick((ActionHandler)& ManageAlienContainmentState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)& ManageAlienContainmentState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& ManageAlienContainmentState::btnOkClick,
+					(SDLKey)Options::getInt("keyOk"));
 
 	_btnCancel->setColor(_color);
 	_btnCancel->setText(tr("STR_CANCEL"));
 	_btnCancel->onMouseClick((ActionHandler)& ManageAlienContainmentState::btnCancelClick);
-	_btnCancel->onKeyboardPress((ActionHandler)& ManageAlienContainmentState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnCancel->onKeyboardPress(
+					(ActionHandler)& ManageAlienContainmentState::btnCancelClick,
+					(SDLKey)Options::getInt("keyCancel"));
 
 	_btnOk->setVisible(false);
 
@@ -264,16 +268,22 @@ void ManageAlienContainmentState::btnOkClick(Action*)
 	{
 		if (_qtys[i] > 0)		// if _qtys<vector>(int) at position[i]
 		{
-			// check for tortured intelligence reports
-			_base->researchHelp(_aliens[i]); // kL
+			// kL_begin:
+			for (unsigned int
+					j = 0;
+					j <	_qtys[i];
+					++j)
+			{
+				_base->researchHelp(_aliens[i]);
+			} // kL_end.
 
 			// remove the aliens
 			_base->getItems()->removeItem(_aliens[i], _qtys[i]);
 
 			// add the corpses
 			_base->getItems()->addItem(
-					_game->getRuleset()->getArmor(_game->getRuleset()->getUnit(_aliens[i])->getArmor())->getCorpseGeoscape(),
-					_qtys[i]);
+									_game->getRuleset()->getArmor(_game->getRuleset()->getUnit(_aliens[i])->getArmor())->getCorpseGeoscape(),
+									_qtys[i]);
 		}
 	}
 

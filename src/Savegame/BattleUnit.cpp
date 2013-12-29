@@ -657,7 +657,7 @@ void BattleUnit::keepWalking(Tile* tileBelow, bool cache)
 
 	if (_walkPhase >= end)
 	{
-		Log(LOG_INFO) << ". end, STATUS_STANDING";
+		Log(LOG_INFO) << ". end -> STATUS_STANDING";
 
 		// we officially reached our destination tile
 		_status = STATUS_STANDING;
@@ -1459,8 +1459,24 @@ bool BattleUnit::isOut(
 		bool checkStun) const
 {
 	//Log(LOG_INFO) << "BattleUnit::isOut() ID = " << getId();
+	if (checkHealth
+		&& getHealth() == 0)
+	{
+			return true;
+	}
+	else if (checkStun
+		&& getStunlevel() >= getHealth())
+	{
+			return true;
+	}
+	else if (_status == STATUS_DEAD
+		|| _status == STATUS_UNCONSCIOUS)
+	{
+		return true;
+	}
 
-	bool ret = false;
+	return false;
+/*	bool ret = false;
 
 	if (checkHealth)
 	{
@@ -1480,7 +1496,7 @@ bool BattleUnit::isOut(
 		ret = true;
 	}
 
-	return ret;
+	return ret; */
 }
 
 /**
@@ -3325,7 +3341,7 @@ void BattleUnit::contDeathSpin()
  * Regulates init, direction & duration of the death spin-cycle.
  * @ return int, Tracks deathspin rotation
  */
-int BattleUnit::getSpinPhase()
+int BattleUnit::getSpinPhase() const
 {
 	return _spinPhase;
 }
@@ -3377,7 +3393,7 @@ void BattleUnit::setStopShot(bool stop)
 /**
  * to stop a unit from firing/throwing if it spots a new opponent during turning
  */
-bool BattleUnit::getStopShot()
+bool BattleUnit::getStopShot() const
 {
 	return _stopShot;
 }
