@@ -1734,12 +1734,18 @@ void BattlescapeGenerator::generateMap()
 		// pick a random ufo mapblock, can have all kinds of sizes
 		ufoMap = _ufo->getRules()->getBattlescapeTerrainData()->getRandomMapBlock(999, MT_DEFAULT);
 
-		ufoX = RNG::generate(0, _mapsize_y / 10 - ufoMap->getSizeX() / 10);
-		ufoY = RNG::generate(0, _mapsize_x / 10 - ufoMap->getSizeY() / 10);
+		ufoX = RNG::generate(0, (_mapsize_x / 10) - (ufoMap->getSizeX() / 10));
+		ufoY = RNG::generate(0, (_mapsize_y / 10) - (ufoMap->getSizeY() / 10));
 
-		for (int i = 0; i < ufoMap->getSizeX() / 10; ++i)
+		for (int
+				i = 0;
+				i < ufoMap->getSizeX() / 10;
+				++i)
 		{
-			for (int j = 0; j < ufoMap->getSizeY() / 10; ++j)
+			for (int
+					j = 0;
+					j < ufoMap->getSizeY() / 10;
+					++j)
 			{
 				landingzone[ufoX + i][ufoY + j] = true;
 				blocks[ufoX + i][ufoY + j] = _terrain->getRandomMapBlock(10, MT_LANDINGZONE);
@@ -1760,14 +1766,20 @@ void BattlescapeGenerator::generateMap()
 
 		while (!placed)
 		{
-			craftX = RNG::generate(0, _mapsize_y / 10 - craftMap->getSizeX() / 10);
-			craftY = RNG::generate(0, _mapsize_x / 10 - craftMap->getSizeY() / 10);
+			craftX = RNG::generate(0, (_mapsize_x / 10) - (craftMap->getSizeX() / 10));
+			craftY = RNG::generate(0, (_mapsize_y / 10) - (craftMap->getSizeY() / 10));
 
 			placed = true;
 
-			for (int i = 0; i < craftMap->getSizeX() / 10; ++i) // check if this place is ok
+			for (int // check if this place is ok
+					i = 0;
+					i < craftMap->getSizeX() / 10;
+					++i)
 			{
-				for (int j = 0; j < craftMap->getSizeY() / 10; ++j)
+				for (int
+						j = 0;
+						j < craftMap->getSizeY() / 10;
+						++j)
 				{
 					if (landingzone[craftX + i][craftY + j])
 					{
@@ -1778,9 +1790,15 @@ void BattlescapeGenerator::generateMap()
 
 			if (placed) // if ok, allocate it
 			{
-				for (int i = 0; i < craftMap->getSizeX() / 10; ++i)
+				for (int
+						i = 0;
+						i < craftMap->getSizeX() / 10;
+						++i)
 				{
-					for (int j = 0; j < craftMap->getSizeY() / 10; ++j)
+					for (int
+							j = 0;
+							j < craftMap->getSizeY() / 10;
+							++j)
 					{
 						landingzone[craftX + i][craftY + j] = true;
 						blocks[craftX + i][craftY + j] = _terrain->getRandomMapBlock(10, MT_LANDINGZONE);
@@ -1809,8 +1827,8 @@ void BattlescapeGenerator::generateMap()
 			|| (roadY >= craftY
 				&& roadY < craftY + (craftMap->getSizeY() / 10)))
 		{
-			roadX = RNG::generate(0, (_mapsize_y / 10) - 1);
-			roadY = RNG::generate(0, (_mapsize_x / 10) - 1);
+			roadX = RNG::generate(0, (_mapsize_x / 10) - 1);
+			roadY = RNG::generate(0, (_mapsize_y / 10) - 1);
 		}
 
 		if (twoRoads)
@@ -1921,8 +1939,8 @@ void BattlescapeGenerator::generateMap()
 	else if (_save->getMissionType() == "STR_ALIEN_BASE_ASSAULT"
 		|| _save->getMissionType() == "STR_MARS_THE_FINAL_ASSAULT")
 	{
-		int randX = RNG::generate(0, _mapsize_y / 10 - 2);
-		int randY = RNG::generate(0, _mapsize_x / 10 - 2);
+		int randX = RNG::generate(0, (_mapsize_x / 10) - 2);
+		int randY = RNG::generate(0, (_mapsize_y / 10) - 2);
 
 		// add the command center
 		blocks[randX][randY] = _terrain->getRandomMapBlock(
@@ -1941,12 +1959,15 @@ void BattlescapeGenerator::generateMap()
 		blocksToDo--;
 
 		// add two lifts (not on top of the command center)
-		for (int i = 0; i < 2; i++)
+		for (int
+				i = 0;
+				i < 2;
+				i++)
 		{
 			while (blocks[randX][randY] != NULL)
 			{
-				randX = RNG::generate(0, (_mapsize_y / 10) - 1);
-				randY = RNG::generate(0, (_mapsize_x / 10) - 1);
+				randX = RNG::generate(0, (_mapsize_x / 10) - 1);
+				randY = RNG::generate(0, (_mapsize_y / 10) - 1);
 			}
 
 			// add the lift
@@ -1957,15 +1978,15 @@ void BattlescapeGenerator::generateMap()
 	}
 	else if (_save->getMissionType() == "STR_MARS_CYDONIA_LANDING")
 	{
-		int randX = RNG::generate(0, _mapsize_y / 10 - 2);
-		int randY = RNG::generate(0, _mapsize_x / 10 - 2);
+		int randX = RNG::generate(0, (_mapsize_x / 10) - 2);
+		int randY = RNG::generate(0, (_mapsize_y / 10) - 2);
 
 		// add one lift
 		while (blocks[randX][randY] != NULL
 			|| landingzone[randX][randY])
 		{
-			randX = RNG::generate(0, _mapsize_y / 10 - 1);
-			randY = RNG::generate(0, _mapsize_x / 10 - 1);
+			randX = RNG::generate(0, (_mapsize_x / 10) - 1);
+			randY = RNG::generate(0, (_mapsize_y / 10) - 1);
 		}
 
 		// add the lift
@@ -1984,8 +2005,8 @@ void BattlescapeGenerator::generateMap()
 	while (curLarge != maxLarge
 		&& tries <= 50)
 	{
-		int randX = RNG::generate(0, _mapsize_y / 10 - 2);
-		int randY = RNG::generate(0, _mapsize_x / 10 - 2);
+		int randX = RNG::generate(0, (_mapsize_x / 10) - 2);
+		int randY = RNG::generate(0, (_mapsize_y / 10) - 2);
 		if (!blocks[randX][randY]
 			&& !blocks[randX + 1][randY]
 			&& !blocks[randX + 1][randY + 1]
@@ -2081,10 +2102,20 @@ void BattlescapeGenerator::generateMap()
 			if (blocks[itX][itY] != 0
 				&& blocks[itX][itY] != dummy)
 			{
-				loadMAP(blocks[itX][itY], itX * 10, itY * 10, _terrain, 0);
+				loadMAP(
+					blocks[itX][itY],
+					itX * 10,
+					itY * 10,
+					_terrain,
+					0);
+
 				if (!landingzone[itX][itY])
 				{
-					loadRMP(blocks[itX][itY], itX * 10, itY * 10, segment++);
+					loadRMP(
+						blocks[itX][itY],
+						itX * 10,
+						itY * 10,
+						segment++);
 				}
 			}
 		}
@@ -2322,12 +2353,27 @@ void BattlescapeGenerator::generateMap()
 			craftDataSetIDOffset++;
 		}
 
-		loadMAP(ufoMap, ufoX * 10, ufoY * 10, _ufo->getRules()->getBattlescapeTerrainData(), mapDataSetIDOffset);
-		loadRMP(ufoMap, ufoX * 10, ufoY * 10, Node::UFOSEGMENT);
+		loadMAP(
+			ufoMap,
+			ufoX * 10,
+			ufoY * 10,
+			_ufo->getRules()->getBattlescapeTerrainData(),
+			mapDataSetIDOffset);
+		loadRMP(
+			ufoMap,
+			ufoX * 10,
+			ufoY * 10,
+			Node::UFOSEGMENT);
 
-		for (int i = 0; i < ufoMap->getSizeX() / 10; ++i)
+		for (int
+				i = 0;
+				i < ufoMap->getSizeX() / 10;
+				++i)
 		{
-			for (int j = 0; j < ufoMap->getSizeY() / 10; j++)
+			for (int
+					j = 0;
+					j < ufoMap->getSizeY() / 10;
+					j++)
 			{
 				segments[ufoX + i][ufoY + j] = Node::UFOSEGMENT;
 			}
@@ -2354,17 +2400,17 @@ void BattlescapeGenerator::generateMap()
 		}
 
 		loadMAP(
-				craftMap,
-				craftX * 10,
-				craftY * 10,
-				_craft->getRules()->getBattlescapeTerrainData(),
-				mapDataSetIDOffset + craftDataSetIDOffset,
-				true);
+			craftMap,
+			craftX * 10,
+			craftY * 10,
+			_craft->getRules()->getBattlescapeTerrainData(),
+			mapDataSetIDOffset + craftDataSetIDOffset,
+			true);
 		loadRMP(
-				craftMap,
-				craftX * 10,
-				craftY * 10,
-				Node::CRAFTSEGMENT);
+			craftMap,
+			craftX * 10,
+			craftY * 10,
+			Node::CRAFTSEGMENT);
 
 		for (int
 				i = 0;

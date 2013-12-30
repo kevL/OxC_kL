@@ -251,7 +251,7 @@ LocalizedText State::tr(
 }
 
 /**
- *
+ * centers all the surfaces on the screen.
  */
 void State::centerAllSurfaces()
 {
@@ -266,7 +266,7 @@ void State::centerAllSurfaces()
 }
 
 /**
- *
+ * drop all the surfaces by half the screen height
  */
 void State::lowerAllSurfaces()
 {
@@ -280,7 +280,7 @@ void State::lowerAllSurfaces()
 }
 
 /**
- *
+ * switch all the colours to something a little more battlescape appropriate.
  */
 void State::applyBattlescapeTheme()
 {
@@ -338,6 +338,31 @@ void State::applyBattlescapeTheme()
 		{
 			slider->setColor(Palette::blockOffset(0)-1);
 			slider->setHighContrast(true);
+		}
+	}
+}
+
+/**
+ * redraw all the text-type surfaces.
+ */
+void State::redrawText()
+{
+	for (std::vector<Surface*>::iterator
+			i = _surfaces.begin();
+			i != _surfaces.end();
+			++i)
+	{
+		Text* text = dynamic_cast<Text*>(*i);
+		TextButton* button = dynamic_cast<TextButton*>(*i);
+		TextEdit* edit = dynamic_cast<TextEdit*>(*i);
+		TextList* list = dynamic_cast<TextList*>(*i);
+
+		if (text
+			|| button
+			|| edit
+			|| list)
+		{
+			(*i)->draw();
 		}
 	}
 }

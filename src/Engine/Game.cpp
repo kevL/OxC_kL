@@ -296,13 +296,21 @@ void Game::run()
 					_fpsCounter->handle(&action);
 					_states.back()->handle(&action);
 
-					if (Options::getBool("debug"))
+					if (action.getDetails()->type == SDL_KEYDOWN
+						&& Options::getBool("debug"))
 					{
-						if (action.getDetails()->type == SDL_KEYDOWN
-							&& action.getDetails()->key.keysym.sym == SDLK_t
+						if (action.getDetails()->key.keysym.sym == SDLK_t
 							&& (SDL_GetModState() & KMOD_CTRL) != 0)
 						{
 							setState(new TestState(this));
+						}
+						// "ctrl-u" debug UI
+						else if (action.getDetails()->key.keysym.sym == SDLK_u
+							&& (SDL_GetModState() & KMOD_CTRL) != 0)
+						{
+							Options::setBool("debugUi", !Options::getBool("debugUi"));
+
+							_states.back()->redrawText();
 						}
 					}
 				break;
