@@ -922,6 +922,7 @@ void SavedBattleGame::endTurn()
 		}
 
 		_side = FACTION_HOSTILE;
+		_selectedUnit = 0;
 
 		// kL_begin: sbg::endTurn() no Reselect xCom units at endTurn!!!
 		for (std::vector<BattleUnit*>::iterator
@@ -951,6 +952,7 @@ void SavedBattleGame::endTurn()
 
 			prepareNewTurn();
 			//Log(LOG_INFO) << ". . prepareNewTurn DONE";
+
 			_turn++;
 
 			_side = FACTION_PLAYER;
