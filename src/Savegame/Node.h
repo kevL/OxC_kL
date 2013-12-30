@@ -97,36 +97,53 @@ private:
 
 		/// get the node's id
 		int getID() const;
+
 		/// get the node's paths
 		std::vector<int>* getNodeLinks();
+
 		/// Gets node's rank.
 		NodeRank getRank() const;
+
 		/// Gets node's priority.
 		int getPriority() const;
+
 		/// Gets the node's position.
 		const Position& getPosition() const;
+
 		/// Gets the node's segment.
 		int getSegment() const;
+
 		/// Gets the node's type.
 		int getType() const;
 		/// Sets the node's type, surprisingly
 		void setType(int type);
+
 		/// gets "flags" variable, which is really the patrolling desirability value
 		int getFlags()
 		{
 			return _flags;
 		}
 		/// compares the _flags variables of the nodes (for the purpose of patrol decisions!)
-		bool operator<(Node &b)
+		bool operator<(Node& b)
 		{
 			return _flags < b.getFlags();
 		};
+			// kL_note: In SavedBattleGame::getPatrolNodes() I changed "<" to ">"
+			// wonder if that matters here. So:
+		/// compares the _flags variables of the nodes (for the purpose of patrol decisions!)
+		bool operator>(Node& b)
+		{
+			return _flags > b.getFlags();
+		};
+
 		///
 		bool isAllocated() const;
 		///
 		void allocateNode();
+
 		///
 		void freeNode();
+
 		///
 		bool isTarget() const;
 };

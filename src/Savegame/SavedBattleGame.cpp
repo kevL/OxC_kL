@@ -1406,60 +1406,73 @@ Node* SavedBattleGame::getPatrolNode(
 		BattleUnit* unit,
 		Node* fromNode)
 {
-	std::vector<Node*> legitNodes;
-	Node* biasNode = 0;
-
 	if (fromNode == 0)
 	{
 		if (Options::getBool("traceAI")) Log(LOG_INFO) << "This alien got lost. :(";
 
-		fromNode = getNodes()->at(RNG::generate(0, getNodes()->size() - 1));
+		fromNode = getNodes()->at(RNG::generate(0, static_cast<int>(getNodes()->size()) - 1));
 	}
 
+
+	std::vector<Node*> legitNodes;
+	Node* bestNode = 0;
+	Node* node = 0;
+
 	// scouts roam all over while all others shuffle around to adjacent nodes at most:
-	int const end = scout? getNodes()->size(): fromNode->getNodeLinks()->size();
+//kL	int const linksEnd = scout? getNodes()->size(): fromNode->getNodeLinks()->size();
+	int linksEnd = fromNode->getNodeLinks()->size();
+	if (scout)
+		linksEnd = getNodes()->size();
 
 	for (int
 			i = 0;
-			i < end;
+			i < linksEnd;
 			++i)
 	{
 		if (!scout
 			&& fromNode->getNodeLinks()->at(i) < 1)
 		{
-			continue;
+			continue; // nothing to patrol to
 		}
 
-		Node* n = getNodes()->at(scout? i: fromNode->getNodeLinks()->at(i));
+//kL		node = getNodes()->at(scout? i: fromNode->getNodeLinks()->at(i));
+		if (scout)
+			node = getNodes()->at(i);
+		else
+			node = getNodes()->at(fromNode->getNodeLinks()->at(i));
 
-		if ((n->getFlags() > 0
-				|| n->getRank() > 0
+		if ((node->getFlags() > 0
+				|| node->getRank() > 0
 				|| scout)											// for non-scouts we find a node with a desirability above 0
-			&& (!(n->getType() & Node::TYPE_SMALL)
-				|| unit->getArmor()->getSize() == 1)				// the small unit bit is not set or the unit is small
-			&& (!(n->getType() & Node::TYPE_FLYING)
-				|| unit->getArmor()->getMovementType() == MT_FLY)	// the flying unit bit is not set or the unit can fly
-			&& !n->isAllocated()									// check if not allocated
-			&& !(n->getType() & Node::TYPE_DANGEROUS)				// don't go there if an alien got shot there; stupid behavior like that 
-			&& setUnitPosition(unit, n->getPosition(), true)		// check if not already occupied
-			&& getTile(n->getPosition())
-			&& !getTile(n->getPosition())->getFire()				// you are not a firefighter; do not patrol into fire
-			&& (unit->getFaction() != FACTION_HOSTILE
-				|| !getTile(n->getPosition())->getDangerous())		// aliens don't run into a grenade blast
-			&& (!scout
-				|| n != fromNode)									// scouts push forward
-			&& n->getPosition().x > 0
-			&& n->getPosition().y > 0)
+			&& (!(node->getType() & Node::TYPE_SMALL)				// the small unit bit is not set
+				|| unit->getArmor()->getSize() == 1)					// or the unit is small
+			&& (!(node->getType() & Node::TYPE_FLYING)				// the flying unit bit is not set
+				|| unit->getArmor()->getMovementType() == MT_FLY)		// or the unit can fly
+			&& !node->isAllocated()									// check if not allocated
+			&& !(node->getType() & Node::TYPE_DANGEROUS)			// don't go there if an alien got shot there; stupid behavior like that 
+			&& setUnitPosition(										// check if unit can be set at this node
+							unit,										// ie. it's big enough
+							node->getPosition(),						// and there's not already a unit there.
+							true)										// but don't actually set the unit...
+			&& getTile(node->getPosition())							// the node is on a tile
+			&& !getTile(node->getPosition())->getFire()				// you are not a firefighter; do not patrol into fire
+			&& (!getTile(node->getPosition())->getDangerous()		// aliens don't run into a grenade blast
+				|| unit->getFaction() != FACTION_HOSTILE)				// but civies do!
+			&& (node != fromNode									// scouts push forward
+				|| !scout)												// others can mill around.. ie, stand there
+			&& node->getPosition().x > 0							// x-pos valid
+			&& node->getPosition().y > 0)							// y-pos valid
 		{
-			if (!biasNode 
-				|| (biasNode->getRank() == Node::nodeRank[unit->getRankInt()][0]
-					&& biasNode->getFlags() < n->getFlags())
-				|| biasNode->getFlags() < n->getFlags())
+			if (!bestNode
+//kL				|| (bestNode->getRank() == Node::nodeRank[unit->getRankInt()][0]
+//kL					&& bestNode->getFlags() < node->getFlags())
+//kL				|| bestNode->getFlags() < node->getFlags())
+				|| bestNode->getFlags() > node->getFlags()) // <- !!!!! NODES HAVE FLAGS !!!!! ->
 			{
-				biasNode = n;
+				bestNode = node; // for non-scouts
 			}
 
-			legitNodes.push_back(n);
+			legitNodes.push_back(node); // for scouts
 		}
 	}
 
@@ -1470,28 +1483,32 @@ Node* SavedBattleGame::getPatrolNode(
 		if (unit->getArmor()->getSize() > 1
 			&& !scout)
 		{
+//			return Sectopod::CTD();
 			return getPatrolNode(
 								true,
 								unit,
-								fromNode); // move dammit
+								fromNode); // move damnit
 		}
 		else
 			return 0;
 	}
 
-	if (scout)
+	if (scout) // picks a random destination
 	{
-		return legitNodes[RNG::generate(0, legitNodes.size() - 1)]; // scout picks a random destination
+//kL		return legitNodes[RNG::generate(0, static_cast<int>(legitNodes.size()) - 1)];
+		size_t legit = static_cast<size_t>(RNG::generate(0, static_cast<int>(legitNodes.size()) - 1));
+
+		return legitNodes[legit];
 	}
 	else
 	{
-		if (!biasNode)
+		if (!bestNode)
 			return 0;
 
 		// non-scout patrols to highest value unoccupied node that's not fromNode
-		if (Options::getBool("traceAI")) Log(LOG_INFO) << "Choosing node flagged " << biasNode->getFlags();
+		if (Options::getBool("traceAI")) Log(LOG_INFO) << "Choosing node flagged " << bestNode->getFlags();
 
-		return biasNode;
+		return bestNode;
 	}
 }
 
