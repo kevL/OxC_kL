@@ -269,7 +269,7 @@ void ManageAlienContainmentState::btnOkClick(Action*)
 		if (_qtys[i] > 0)		// if _qtys<vector>(int) at position[i]
 		{
 			// kL_begin:
-			for (unsigned int
+			for (int
 					j = 0;
 					j <	_qtys[i];
 					++j)

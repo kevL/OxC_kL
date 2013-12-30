@@ -33,16 +33,17 @@ const int Node::nodeRank[8][7] =
 	{2, 5, 3, 4, 6, 8, 0},	// soldier
 	{2, 5, 3, 4, 6, 8, 0},	// terrorist1
 	{2, 5, 3, 4, 6, 8, 0}	// terrorist2
-}; // kL_note: The 2nd dimension holds fallbacks for spawning:
-//0:Civ-Scout
-//1:XCom
-//2:Soldier
-//3:Navigator
-//4:Leader/Commander
-//5:Engineer
-//6:Misc1
-//7:Medic
-//8:Misc2
+};	// kL_note: The 2nd dimension holds fallbacks for spawning:
+		//0:Civ-Scout
+		//1:XCom
+		//2:Soldier
+		//3:Navigator
+		//4:Leader/Commander
+		//5:Engineer
+		//6:Misc1
+		//7:Medic
+		//8:Misc2
+	// See Node.h, enum NodeRank
 
 
 Node::Node()

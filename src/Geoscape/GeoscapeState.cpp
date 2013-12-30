@@ -839,7 +839,7 @@ void GeoscapeState::time5Seconds()
 		switch ((*i)->getStatus())
 		{
 			case Ufo::FLYING:
-				Log(LOG_INFO) << "GeoscapeState::time5Seconds(), Ufo::FLYING";
+				//Log(LOG_INFO) << "GeoscapeState::time5Seconds(), Ufo::FLYING";
 
 				if (!_zoomInEffectTimer->isRunning()
 					&& !_zoomOutEffectTimer->isRunning())

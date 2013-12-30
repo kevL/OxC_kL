@@ -1455,12 +1455,16 @@ void BattlescapeGenerator::deployAliens(
 //kL			bool outside = false;
 			outside = false; // kL
 			if (_ufo)
-				outside = RNG::generate(0, 99) < (*d).percentageOutsideUfo;
+//kL				outside = RNG::generate(0, 99) < (*d).percentageOutsideUfo;
+				outside = RNG::percent((*d).percentageOutsideUfo); // kL
 
 //kL			Unit* unitRule = _game->getRuleset()->getUnit(alienName);
 //kL			BattleUnit* unit = addAlien(unitRule, (*d).alienRank, outside);
 			unitRule = _game->getRuleset()->getUnit(alienName); // kL
-			unit = addAlien(unitRule, (*d).alienRank, outside); // kL
+			unit = addAlien(
+						unitRule,
+						(*d).alienRank,
+						outside); // kL
 
 			//Log(LOG_INFO) << "BattlescapeGenerator::deplyAliens() do getAlienItemLevels()";
 //kL			int itemLevel = _game->getRuleset()->getAlienItemLevels().at(month).at(RNG::generate(0, 9));
@@ -1541,6 +1545,23 @@ BattleUnit* BattlescapeGenerator::addAlien(
 	/* note that they all can fall back to rank 0 nodes - which is scout (outside ufo) */
 
 	Node* node = 0;
+
+	if (outside)
+		node = _save->getSpawnNode(0, unit); // Civ-Scout spawnpoints
+
+	if (!node)
+	{
+		for (int
+				i = 0;
+				i < 7
+					&& !node;
+				i++)
+		{
+			node = _save->getSpawnNode(Node::nodeRank[alienRank][i], unit);
+		}
+	}
+/*kL: This code places all aliens in the UFO, for some reason.
+		Or without my addition it groups them up in a hovel...
 	for (int
 			i = 0;
 			i < 7
@@ -1556,7 +1577,7 @@ BattleUnit* BattlescapeGenerator::addAlien(
 			} // kL_end.
 		else
 			node = _save->getSpawnNode(Node::nodeRank[alienRank][i], unit);
-	}
+	} */
 
 	if (node
 		&& _save->setUnitPosition(unit, node->getPosition()))
