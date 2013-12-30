@@ -175,9 +175,13 @@ ManageAlienContainmentState::ManageAlienContainmentState(
 
 	_txtLiveAliens->setColor(_color);
 	_txtLiveAliens->setText(tr("STR_LIVE_ALIENS"));
+//kL	_txtLiveAliens->setWordWrap(true);
+//kL	_txtLiveAliens->setVerticalAlign(ALIGN_BOTTOM);
 
 	_txtDeadAliens->setColor(_color);
 	_txtDeadAliens->setText(tr("STR_DEAD_ALIENS"));
+//kL	_txtDeadAliens->setWordWrap(true);
+//kL	_txtDeadAliens->setVerticalAlign(ALIGN_BOTTOM);
 
 	_txtAvailable->setColor(_color);
 	_txtAvailable->setSecondaryColor(_color2);
