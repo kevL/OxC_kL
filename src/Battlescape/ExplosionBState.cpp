@@ -114,16 +114,16 @@ void ExplosionBState::init()
 	else // cyberdisc...
 	{
 //kL		_power = 120;
-		_power = RNG::generate(61, 120);	// kL
+		_power = RNG::generate(61, 120); // kL
 		Log(LOG_INFO) << ". _power(Cyberdisc) = " << _power;
 
 		_areaOfEffect = true;
 	}
 
 	Tile* t = _parent->getSave()->getTile(Position(
-											_center.x / 16,
-											_center.y / 16,
-											_center.z / 24));
+												_center.x / 16,
+												_center.y / 16,
+												_center.z / 24));
 	if (_areaOfEffect)
 	{
 		Log(LOG_INFO) << ". . new Explosion(AoE)'s";
@@ -132,12 +132,15 @@ void ExplosionBState::init()
 		{
 			for (int
 					i = 0;
-					i < _power / 10;
+//kL					i < _power / 10;
+					i < _power / 12; // kL
 					i++)
 			{
 				int
-					X = RNG::generate(-_power / 2, _power / 2),
-					Y = RNG::generate(-_power / 2, _power / 2);
+//					X = RNG::generate(-_power / 2, _power / 2),
+//					Y = RNG::generate(-_power / 2, _power / 2);
+					X = RNG::generate(-_power / 3, _power / 3),
+					Y = RNG::generate(-_power / 3, _power / 3);
 
 				Position pos = _center;
 				pos.x += X;
@@ -150,21 +153,26 @@ void ExplosionBState::init()
 				}
 
 //kL				Explosion* explosion = new Explosion(p, RNG::generate(-3, 6), true);
-//				Explosion* explosion = new Explosion(pos, -3, true);			// kL
-				Explosion* explosion = new Explosion(pos, startFrame, true);	// kL
+//				Explosion* explosion = new Explosion(pos, -3, true); // kL
+				Explosion* explosion = new Explosion(
+													pos,
+													startFrame,
+													true); // kL
 
 				_parent->getMap()->getExplosions()->insert(explosion); // add the explosion on the map
 			}
 
 //kL			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED);
-			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED * 6 / 7);		// kL
+			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED * 6 / 7); // kL
 
 			if (_power < 80)
 				_parent->getResourcePack()->getSound("BATTLE.CAT", 12)->play();
 			else
 				_parent->getResourcePack()->getSound("BATTLE.CAT", 5)->play();
 
-			_parent->getMap()->getCamera()->centerOnPosition(t->getPosition(), false);
+			_parent->getMap()->getCamera()->centerOnPosition(
+															t->getPosition(),
+															false);
 		}
 		else
 		{
@@ -189,10 +197,14 @@ void ExplosionBState::init()
 
 		_parent->getMap()->getExplosions()->insert(explosion);
 
-		_parent->getResourcePack()->getSound("BATTLE.CAT", _item->getRules()->getHitSound())->play();
+		_parent->getResourcePack()->getSound(
+										"BATTLE.CAT",
+										_item->getRules()->getHitSound())->play();
 
 		if (_parent->getSave()->getSide() == FACTION_HOSTILE)
-			_parent->getMap()->getCamera()->centerOnPosition(t->getPosition(), false);
+			_parent->getMap()->getCamera()->centerOnPosition(
+															t->getPosition(),
+															false);
 
 /*kL		if (hit
 			&& t->getVisible())
@@ -212,7 +224,7 @@ void ExplosionBState::think()
 {
 	for (std::set<Explosion*>::const_iterator
 			i = _parent->getMap()->getExplosions()->begin(),
-				inext = i;
+			inext = i;
 			i != _parent->getMap()->getExplosions()->end();
 			i = inext)
 	{
@@ -278,7 +290,7 @@ void ExplosionBState::explode()
 														_power,
 														_item->getRules()->getDamageType(),
 														_unit,
-														hit);	// kL add.
+														hit); // kL add.
 
 			if (!_unit->getZombieUnit().empty() // check if this unit turns others into zombies
 				&& victim

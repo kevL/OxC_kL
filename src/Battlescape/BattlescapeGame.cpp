@@ -197,10 +197,10 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 {
 	Log(LOG_INFO) << "BattlescapeGame::handleAI()";
 
-/*	if (unit->getFaction() == FACTION_PLAYER)				// kL, try getOriginalFaction() Lol.
+/*	if (unit->getFaction() == FACTION_PLAYER)	// kL, try getOriginalFaction() Lol.
 	{
 		Log(LOG_INFO) << ". got a Faction_Player trying to AI ! Aborting...";
-		return;												// kL
+		return;									// kL
 	} */ // well, that loops...
 
 	_tuReserved = BA_NONE;
@@ -344,7 +344,9 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 		if (unit->getAggroSound() != -1
 			&& !_playedAggroSound)
 		{
-			getResourcePack()->getSound("BATTLE.CAT", unit->getAggroSound())->play();
+			getResourcePack()->getSound(
+									"BATTLE.CAT",
+									unit->getAggroSound())->play();
 			_playedAggroSound = true;
 		}
 	}
@@ -360,7 +362,10 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 
 		if (_save->getTile(action.target))
 		{
-			_save->getPathfinding()->calculate(action.actor, action.target);//, _save->getTile(action.target)->getUnit());
+			_save->getPathfinding()->calculate(
+											action.actor,
+											action.target);
+//											_save->getTile(action.target)->getUnit());
 		}
 
 		if (_save->getPathfinding()->getStartDirection() != -1)
@@ -1901,8 +1906,13 @@ void BattlescapeGame::primaryAction(const Position& pos)
 			{
 				if (_currentAction.actor->spendTimeUnits(_currentAction.TU))
 				{
-					_parentState->getGame()->getResourcePack()->getSound("BATTLE.CAT", _currentAction.weapon->getRules()->getHitSound())->play();
-					_parentState->getGame()->pushState(new UnitInfoState(_parentState->getGame(), _save->selectUnit(pos), _parentState));
+					_parentState->getGame()->getResourcePack()->getSound(
+																	"BATTLE.CAT",
+																	_currentAction.weapon->getRules()->getHitSound())->play();
+					_parentState->getGame()->pushState(new UnitInfoState(
+																	_parentState->getGame(),
+																	_save->selectUnit(pos),
+																	_parentState));
 
 					cancelCurrentAction();
 				}

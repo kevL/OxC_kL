@@ -25,10 +25,10 @@ namespace OpenXcom
 
 /**
  * Sets up a Explosion sprite with the specified size and position.
- * @param position Explosion center position in voxel x/y/z.
- * @param startFrame A startframe - can be used to offset different explosions at different frames.
- * @param big Flag to indicate it is a bullet hit (false), or a real explosion (true).
- * @param hit True for melee and psi attacks.
+ * @param position, Explosion center position in voxel x/y/z.
+ * @param startFrame, A startframe - can be used to offset different explosions at different frames.
+ * @param big, Flag to indicate it is a bullet hit (false), or a real explosion (true).
+ * @param hit, True for melee and psi attacks.
  */
 Explosion::Explosion(
 		Position position,
@@ -53,7 +53,7 @@ Explosion::~Explosion()
 
 /**
  * Animates the explosion further.
- * @return, false If the animation is finished
+ * @return, False if the animation is finished
  */
 bool Explosion::animate()
 {

@@ -154,8 +154,8 @@ void UnitWalkBState::think()
 	Log(LOG_INFO) << ". _onScreen = " << _onScreen;
 
 
-//	int dir = _pf->getStartDirection();		// kL: also below, in STATUS_STANDING!
-// setDirection(dir) // kL
+//	int dir = _pf->getStartDirection(); // kL: also below, in STATUS_STANDING!
+// setDirection(dir)					// kL
 
 // _oO **** STATUS WALKING **** Oo_
 	if (_unit->getStatus() == STATUS_WALKING
@@ -193,7 +193,7 @@ void UnitWalkBState::think()
 				_parent->getMap()->cacheUnit(_unit); // draw unit.
 
 				_unit->setDirection(dirStrafe);
-//				_unit->setDirection(dir);	// kL
+//				_unit->setDirection(dir); // kL
 			}
 			else
 			{
@@ -350,14 +350,15 @@ bool UnitWalkBState::doStatusWalk()
 	{
 		Log(LOG_INFO) << ". WalkBState, !falling Abort path";
 
-		_unit->lookAt(_unit->getDestination(), _unit->getTurretType() != -1);	// turn to undiscovered unit
+		_unit->lookAt(_unit->getDestination(), _unit->getTurretType() != -1); // turn to undiscovered unit
 
 		_pf->abortPath();
 	}
 
 	// unit moved from one tile to the other, update the tiles & investigate new flooring
-	if (!_tileSwitchDone // kL
-		&& _unit->getPosition() != _unit->getLastPosition())
+//TEST!	if (!_tileSwitchDone // kL
+//TEST!		&& _unit->getPosition() != _unit->getLastPosition())
+	if (_unit->getPosition() != _unit->getLastPosition()) // TEST!
 	{
 		Log(LOG_INFO) << ". tile switch from _lastpos to _pos.";
 
@@ -462,7 +463,8 @@ bool UnitWalkBState::doStatusWalk()
 			&& _unit->getVisible()) */
 		// kL_note: Let's try this, maintain camera focus centered on Visible aliens during (un)hidden movement
 		if (_unit->getVisible()								// kL
-			&& _unit->getFaction() != FACTION_PLAYER)		// kL
+			&& _unit->getFaction() != FACTION_PLAYER		// kL
+			&& !_parent->getMap()->getCamera()->isOnScreen(_unit->getPosition())) // kL_TEST!
 		{
 			_parent->getMap()->getCamera()->centerOnPosition(_unit->getPosition());
 		}

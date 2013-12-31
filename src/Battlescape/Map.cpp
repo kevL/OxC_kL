@@ -77,7 +77,8 @@
 namespace OpenXcom
 {
 
-bool kL_preReveal = true;		// kL
+bool kL_preReveal = true; // kL
+
 
 /**
  * Sets up a map with the specified size and position.
@@ -96,7 +97,11 @@ Map::Map(
 		int y,
 		int visibleMapHeight)
 	:
-		InteractiveSurface(width, height, x, y),
+		InteractiveSurface(
+				width,
+				height,
+				x,
+				y),
 		_game(game),
 		_arrow(0),
 		_selectorX(0),
@@ -110,6 +115,7 @@ Map::Map(
 		_visibleMapHeight(visibleMapHeight),
 		_unitDying(false),
 		_reveal(0)
+//		_animUp(true) // kL
 {
 	//Log(LOG_INFO) << "Create Map";
 
@@ -195,7 +201,10 @@ void Map::init()
 				x < 9;
 				++x)
 		{
-			_arrow->setPixel(x, y, pixels[x + (y * 9)]);
+			_arrow->setPixel(
+							x,
+							y,
+							pixels[x + (y * 9)]);
 		}
 	}
 	_arrow->unlock();
@@ -231,14 +240,21 @@ void Map::draw()
 
 	_projectileInFOV = _save->getDebugMode();
 	if (_projectile)
+//kL		&& _save->getSide() == FACTION_PLAYER)
 	{
+		Log(LOG_INFO) << "Map::draw() _projectile = true";
+
 		t = _save->getTile(Position(
 								_projectile->getPosition(0).x / 16,
 								_projectile->getPosition(0).y / 16,
 								_projectile->getPosition(0).z / 24));
-		if (_save->getSide() == FACTION_PLAYER
-			|| (t && t->getVisible()))
+		if (t
+//kL			&& t->getVisible())
+			&& (t->getVisible()							// kL
+				|| _save->getSide() != FACTION_PLAYER))	// kL: shows projectile during aLien berserk
 		{
+			Log(LOG_INFO) << "Map::draw() _projectileInFOV = true";
+
 			_projectileInFOV = true;
 		}
 	}
@@ -256,7 +272,9 @@ void Map::draw()
 									(*i)->getPosition().y / 16,
 									(*i)->getPosition().z / 24));
 			if (t
-				&& ((*i)->isBig() || t->getVisible()))
+				&& ((*i)->isBig()
+					|| t->getVisible()
+					|| _save->getSide() != FACTION_PLAYER))	// kL: shows hit-explosion during aLien berserk
 			{
 				_explosionInFOV = true;
 
@@ -276,9 +294,10 @@ void Map::draw()
 		drawTerrain(this);
 	} */
 
-	if ((_save->getSelectedUnit() && _save->getSelectedUnit()->getVisible())
-		|| _unitDying
+	if ((_save->getSelectedUnit()
+			&& _save->getSelectedUnit()->getVisible())
 		|| _save->getSelectedUnit() == 0
+		|| _unitDying
 		|| _save->getDebugMode()
 		|| _projectileInFOV
 		|| _explosionInFOV
@@ -427,7 +446,9 @@ void Map::drawTerrain(Surface* surface)
 		bulletHighZ = bulletHighZ / 24;
 
 		// if the projectile is outside the viewport - center it back on it
-		_camera->convertVoxelToScreen(_projectile->getPosition(), &bulletPositionScreen);
+		_camera->convertVoxelToScreen(
+								_projectile->getPosition(),
+								&bulletPositionScreen);
 
 		if (_projectileInFOV)
 		{
@@ -441,7 +462,7 @@ void Map::drawTerrain(Surface* surface)
 						|| bulletPositionScreen.y > _visibleMapHeight)
 //kL					&& _projectileInFOV)
 				{
-					// kL_note: this probably jumps screen back to shooter
+					// kL_note: this probably jumps screen back to shooter shooting.
 					_camera->centerOnPosition(Position(
 													bulletLowX,
 													bulletLowY,
@@ -458,7 +479,9 @@ void Map::drawTerrain(Surface* surface)
 //kL					if (_projectileInFOV)
 //					{
 					_camera->setMapOffset(newCam);
-					_camera->convertVoxelToScreen(_projectile->getPosition(), &bulletPositionScreen);
+					_camera->convertVoxelToScreen(
+											_projectile->getPosition(),
+											&bulletPositionScreen);
 //					}
 				}
 
@@ -496,7 +519,9 @@ void Map::drawTerrain(Surface* surface)
 						enough = false;
 					}
 
-					_camera->convertVoxelToScreen(_projectile->getPosition(), &bulletPositionScreen);
+					_camera->convertVoxelToScreen(
+											_projectile->getPosition(),
+											&bulletPositionScreen);
 				}
 				while (!enough);
 			}
@@ -504,10 +529,26 @@ void Map::drawTerrain(Surface* surface)
 	}
 
 	// get corner map coordinates to give rough boundaries in which tiles to redraw are
-	_camera->convertScreenToMap(0, 0, &beginX, &d);
-	_camera->convertScreenToMap(surface->getWidth(), 0, &d, &beginY);
-	_camera->convertScreenToMap(surface->getWidth(), surface->getHeight(), &endX, &d);
-	_camera->convertScreenToMap(0, surface->getHeight(), &d, &endY);
+	_camera->convertScreenToMap(
+							0,
+							0,
+							&beginX,
+							&d);
+	_camera->convertScreenToMap(
+							surface->getWidth(),
+							0,
+							&d,
+							&beginY);
+	_camera->convertScreenToMap(
+							surface->getWidth(),
+							surface->getHeight(),
+							&endX,
+							&d);
+	_camera->convertScreenToMap(
+							0,
+							surface->getHeight(),
+							&d,
+							&endY);
 
 	beginY -= (_camera->getViewLevel() * 2);
 	beginX -= (_camera->getViewLevel() * 2);
@@ -542,8 +583,13 @@ void Map::drawTerrain(Surface* surface)
 					itY <= endY;
 					itY++)
 			{
-				mapPosition = Position(itX, itY, itZ);
-				_camera->convertMapToScreen(mapPosition, &screenPosition);
+				mapPosition = Position(
+									itX,
+									itY,
+									itZ);
+				_camera->convertMapToScreen(
+										mapPosition,
+										&screenPosition);
 				screenPosition += _camera->getMapOffset();
 
 				// only render cells that are inside the surface
@@ -718,7 +764,8 @@ void Map::drawTerrain(Surface* surface)
 					}
 
 					// check if we got bullet && it is in Field Of View
-					if (_projectile && _projectileInFOV)
+					if (_projectile
+						&& _projectileInFOV)
 					{
 						tmpSurface = 0;
 
@@ -736,7 +783,9 @@ void Map::drawTerrain(Surface* surface)
 								&& voxelPos.z / 24 == itZ
 								&& _save->getTileEngine()->isVoxelVisible(voxelPos))
 							{
-								_camera->convertVoxelToScreen(voxelPos, &bulletPositionScreen);
+								_camera->convertVoxelToScreen(
+															voxelPos,
+															&bulletPositionScreen);
 								tmpSurface->blitNShade(
 										surface,
 										bulletPositionScreen.x - 16,
@@ -753,7 +802,9 @@ void Map::drawTerrain(Surface* surface)
 								&& voxelPos.z / 24 == itZ
 								&& _save->getTileEngine()->isVoxelVisible(voxelPos))
 							{
-								_camera->convertVoxelToScreen(voxelPos, &bulletPositionScreen);
+								_camera->convertVoxelToScreen(
+															voxelPos,
+															&bulletPositionScreen);
 								tmpSurface->blitNShade(
 										surface,
 										bulletPositionScreen.x - 16,
@@ -769,7 +820,10 @@ void Map::drawTerrain(Surface* surface)
 								&& itY >= bulletLowY
 								&& itY <= bulletHighY)
 							{
-								for (int i = 0; i < BULLET_SPRITES; ++i)
+								for (int
+										i = 0;
+										i < BULLET_SPRITES;
+										++i)
 								{
 									tmpSurface = _res->getSurfaceSet("Projectiles")->getFrame(_projectile->getParticle(i));
 									if (tmpSurface)
@@ -782,7 +836,9 @@ void Map::drawTerrain(Surface* surface)
 											&& voxelPos.z / 24 == itZ
 											&& _save->getTileEngine()->isVoxelVisible(voxelPos))
 										{
-											_camera->convertVoxelToScreen(voxelPos, &bulletPositionScreen);
+											_camera->convertVoxelToScreen(
+																		voxelPos,
+																		&bulletPositionScreen);
 
 											bulletPositionScreen.x -= tmpSurface->getWidth() / 2;
 											bulletPositionScreen.y -= tmpSurface->getHeight() / 2;
@@ -800,7 +856,9 @@ void Map::drawTerrain(Surface* surface)
 											&& voxelPos.z / 24 == itZ
 											&& _save->getTileEngine()->isVoxelVisible(voxelPos))
 										{
-											_camera->convertVoxelToScreen(voxelPos, &bulletPositionScreen);
+											_camera->convertVoxelToScreen(
+																		voxelPos,
+																		&bulletPositionScreen);
 
 											bulletPositionScreen.x -= tmpSurface->getWidth() / 2;
 											bulletPositionScreen.y -= tmpSurface->getHeight() / 2;
@@ -1171,7 +1229,7 @@ void Map::drawTerrain(Surface* surface)
 //							{
 //								wpColor = 15;
 //							}
-							_numWaypid->setColor(Palette::blockOffset(12)+7);		// kL
+							_numWaypid->setColor(Palette::blockOffset(12)+8); // kL
 
 //							Log(LOG_INFO) << "Map::drawTerrain() terrain = " << _game->getRuleset()->getTerrain("POLAR")->getName();
 
@@ -1192,7 +1250,7 @@ void Map::drawTerrain(Surface* surface)
 	}
 
 //kL	unit = (BattleUnit*)_save->getSelectedUnit();
-	unit = dynamic_cast<BattleUnit*>(_save->getSelectedUnit());		// kL
+	unit = dynamic_cast<BattleUnit*>(_save->getSelectedUnit()); // kL
 	if (unit
 		&& (_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
 		&& unit->getPosition().z <= _camera->getViewLevel())
@@ -1317,10 +1375,12 @@ void Map::mouseOver(Action* action, State* state)
 {
 	InteractiveSurface::mouseOver(action, state);
 	_camera->mouseOver(action, state);
-	_mouseX = (int)action->getAbsoluteXMouse();
-	_mouseY = (int)action->getAbsoluteYMouse();
+	_mouseX = static_cast<int>(action->getAbsoluteXMouse());
+	_mouseY = static_cast<int>(action->getAbsoluteYMouse());
 
-	setSelectorPosition(_mouseX, _mouseY);
+	setSelectorPosition(
+					_mouseX,
+					_mouseY);
 }
 
 /**
@@ -1331,6 +1391,20 @@ void Map::animate(bool redraw)
 {
 	_animFrame++;
 	if (_animFrame == 8) _animFrame = 0;
+
+	// kL_begin:
+/*	if (_animUp)
+	{
+		_animFrame++;
+		if (_animFrame == 7)
+			_animUp = false;
+	}
+	else
+	{
+		_animFrame--;
+		if (_animFrame == 0)
+			_animUp = true;
+	} */ // kL_end.
 
 	// animate tiles
 	for (int
@@ -1365,7 +1439,9 @@ void Map::animate(bool redraw)
  * @param mx mouse x position.
  * @param my mouse y position.
  */
-void Map::setSelectorPosition(int mx, int my)
+void Map::setSelectorPosition(
+		int mx,
+		int my)
 {
 	int
 		oldX = _selectorX,
@@ -1405,15 +1481,19 @@ void Map::calculateWalkingOffset(
 		BattleUnit* unit,
 		Position* offset)
 {
-	int offsetX[8] = { 1, 1, 1, 0, -1, -1, -1, 0 };
-	int offsetY[8] = { 1, 0, -1, -1, -1, 0, 1, 1 };
-	int phase = unit->getWalkingPhase() + unit->getDiagonalWalkingPhase();
+	int
+		offsetX[8] = {1, 1,  1,  0, -1, -1, -1, 0},
+		offsetY[8] = {1, 0, -1, -1, -1,  0,  1, 1},
 
-	int dir = unit->getDirection();
-	int midphase = 4 + 4 * (dir %2);
-	int endphase = 8 + 8 * (dir %2);
+		phase = unit->getWalkingPhase() + unit->getDiagonalWalkingPhase(),
 
-	int size = unit->getArmor()->getSize();
+		dir = unit->getDirection(),
+
+		midphase = 4 + 4 * (dir %2),
+		endphase = 8 + 8 * (dir %2),
+
+		size = unit->getArmor()->getSize();
+
 	if (size > 1)
 	{
 		if (dir < 1 || dir > 4)
@@ -1448,8 +1528,8 @@ void Map::calculateWalkingOffset(
 	{
 		if (phase < midphase)
 		{
-			int fromLevel = getTerrainLevel(unit->getPosition(), size);
-			int toLevel = getTerrainLevel(unit->getDestination(), size);
+			int fromLevel = getTerrainLevel(unit->getPosition(), size),
+				toLevel = getTerrainLevel(unit->getDestination(), size);
 
 			if (unit->getPosition().z > unit->getDestination().z)
 			{
@@ -1462,7 +1542,7 @@ void Map::calculateWalkingOffset(
 				toLevel = -24*(unit->getDestination().z - unit->getPosition().z) + abs(toLevel);
 			}
 
-			offset->y += ((fromLevel * (endphase - phase)) / endphase) + ((toLevel * (phase)) / endphase);
+			offset->y += ((fromLevel * (endphase - phase)) / endphase) + ((toLevel * phase) / endphase);
 		}
 		else
 		{
@@ -1482,7 +1562,7 @@ void Map::calculateWalkingOffset(
 				fromLevel = 24*(unit->getDestination().z - unit->getLastPosition().z) - abs(fromLevel);
 			}
 
-			offset->y += ((fromLevel * (endphase - phase)) / endphase) + ((toLevel * (phase)) / endphase);
+			offset->y += ((fromLevel * (endphase - phase)) / endphase) + ((toLevel * phase) / endphase);
 		}
 	}
 	else
@@ -1499,7 +1579,9 @@ void Map::calculateWalkingOffset(
   * @param size, Size of the unit we want to get the level from.
   * @return, terrainlevel.
   */
-int Map::getTerrainLevel(Position pos, int size)
+int Map::getTerrainLevel(
+		Position pos,
+		int size)
 {
 	int lowestLevel = 0;
 	int lowTest = 0;
@@ -1528,9 +1610,12 @@ int Map::getTerrainLevel(Position pos, int size)
  * @param type Cursor type.
  * @param size Size of cursor.
  */
-void Map::setCursorType(CursorType type, int size)
+void Map::setCursorType(
+		CursorType type,
+		int size)
 {
 	_cursorType = type;
+
 	if (_cursorType == CT_NORMAL)
 		_cursorSize = size;
 	else
@@ -1568,11 +1653,21 @@ void Map::cacheUnit(BattleUnit* unit)
 {
 	//Log(LOG_INFO) << "cacheUnit() : " << unit->getId();
 
-	UnitSprite* unitSprite = new UnitSprite(_spriteWidth, _spriteHeight, 0, 0);
+	UnitSprite* unitSprite = new UnitSprite(
+										_spriteWidth,
+										_spriteHeight,
+										0,
+										0);
 	unitSprite->setPalette(this->getPalette());
-	bool invalid = false;
-	bool d = false;
-	int numOfParts = unit->getArmor()->getSize() == 1? 1: (unit->getArmor()->getSize() * 2);
+
+//kL	int parts = unit->getArmor()->getSize() == 1? 1: (unit->getArmor()->getSize() * 2);
+	int parts = unit->getArmor()->getSize() * 2;
+	if (unit->getArmor()->getSize() == 1)
+		parts = 1;
+
+	bool
+		d = false,
+		invalid = false;
 
 	unit->getCache(&invalid);
 	if (invalid)
@@ -1582,7 +1677,7 @@ void Map::cacheUnit(BattleUnit* unit)
 		// 1 or 4 iterations, depending on unit size
 		for (int
 				i = 0;
-				i < numOfParts;
+				i < parts;
 				i++)
 		{
 			//Log(LOG_INFO) << ". . i = " << i;
@@ -1606,20 +1701,23 @@ void Map::cacheUnit(BattleUnit* unit)
 			//Log(LOG_INFO) << ". . getItem()";
 			BattleItem* rhandItem = unit->getItem("STR_RIGHT_HAND");
 			BattleItem* lhandItem = unit->getItem("STR_LEFT_HAND");
-			if (rhandItem)
-			{
-				unitSprite->setBattleItem(rhandItem);
-			}
-
-			if (lhandItem)
-			{
-				unitSprite->setBattleItem(lhandItem);
-			}
-
 			if (!lhandItem && !rhandItem)
 			{
 				unitSprite->setBattleItem(0);
 			}
+			else
+			{
+				if (rhandItem)
+				{
+					unitSprite->setBattleItem(rhandItem);
+				}
+
+				if (lhandItem)
+				{
+					unitSprite->setBattleItem(lhandItem);
+				}
+			}
+
 
 			//Log(LOG_INFO) << ". . setSurfaces()";
 			unitSprite->setSurfaces(
@@ -1714,14 +1812,16 @@ std::vector<Position>* Map::getWaypoints()
  * @param button Index of the button.
  * @param pressed The state of the button.
  */
-void Map::setButtonsPressed(Uint8 button, bool pressed)
+void Map::setButtonsPressed(
+		Uint8 button,
+		bool pressed)
 {
 	setButtonPressed(button, pressed);
 }
 
 /**
  * Sets the unitDying flag.
- * @param flag True if the unit is dying.
+ * @param flag, True if the unit is dying.
  */
 void Map::setUnitDying(bool flag)
 {
@@ -1733,7 +1833,9 @@ void Map::setUnitDying(bool flag)
  */
 void Map::refreshSelectorPosition()
 {
-	setSelectorPosition(_mouseX, _mouseY);
+	setSelectorPosition(
+					_mouseX,
+					_mouseY);
 }
 
 }

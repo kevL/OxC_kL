@@ -91,10 +91,11 @@ CraftEquipmentState::CraftEquipmentState(
 	_txtUsed		= new Text(110, 9, 130, 25);
 
 	_txtItem		= new Text(144, 9, 16, 33);
-	_txtStores		= new Text(150, 9, 160, 33);
+	_txtStores		= new Text(50, 9, 171, 33);
+	_txtCraft		= new Text(50, 9, 256, 33);
 //kL	_txtCrew		= new Text(71, 9, 244, 24);
 
-	_lstEquipment	= new TextList(293, 128, 8, 42);
+	_lstEquipment	= new TextList(285, 128, 16, 42);
 
 	_btnClear		= new TextButton(94, 16, 16, 177);
 	_btnInventory	= new TextButton(94, 16, 113, 177);
@@ -114,6 +115,7 @@ CraftEquipmentState::CraftEquipmentState(
 	add(_txtUsed);
 	add(_txtItem);
 	add(_txtStores);
+	add(_txtCraft);
 //kL	add(_txtCrew);
 	add(_lstEquipment);
 	add(_btnClear);
@@ -135,7 +137,7 @@ CraftEquipmentState::CraftEquipmentState(
 	_btnInventory->setText(tr("STR_INVENTORY"));
 	_btnInventory->onMouseClick((ActionHandler)& CraftEquipmentState::btnInventoryClick);
 	_btnInventory->setVisible(craftHasCrew && !newBattle);
-//	_btnInventory->setVisible(craftHasCrew || newBattle);		// kL
+//	_btnInventory->setVisible(craftHasCrew || newBattle); // kL
 
 	_btnOk->setColor(Palette::blockOffset(15)+1);
 	_btnOk->setText(tr("STR_OK"));
@@ -154,6 +156,9 @@ CraftEquipmentState::CraftEquipmentState(
 	_txtStores->setColor(Palette::blockOffset(15)+1);
 	_txtStores->setText(tr("STR_STORES"));
 
+	_txtCraft->setColor(Palette::blockOffset(15)+1);
+	_txtCraft->setText(tr("STR_CRAFT"));
+
 	_txtAvailable->setColor(Palette::blockOffset(15)+1);
 	_txtAvailable->setSecondaryColor(Palette::blockOffset(13));
 	_txtAvailable->setText(tr("STR_SPACE_AVAILABLE").arg(c->getSpaceAvailable()));
@@ -167,12 +172,12 @@ CraftEquipmentState::CraftEquipmentState(
 //kL	std::wstringstream ss3;
 //kL	ss3 << tr("STR_SOLDIERS_UC") << "> " << L'\x01'<< c->getNumSoldiers();
 //kL	_txtCrew->setText(ss3.str());
-//	_txtCrew->setText(tr("STR_SOLDIERS_UC").arg(c->getNumSoldiers()));		// kL
+//	_txtCrew->setText(tr("STR_SOLDIERS_UC").arg(c->getNumSoldiers())); // kL
 
 	_lstEquipment->setColor(Palette::blockOffset(13)+10);
 	_lstEquipment->setArrowColor(Palette::blockOffset(15)+1);
 	_lstEquipment->setArrowColumn(203, ARROW_HORIZONTAL);
-	_lstEquipment->setColumns(3, 154, 85, 41);
+	_lstEquipment->setColumns(3, 147, 85, 41);
 	_lstEquipment->setSelectable(true);
 	_lstEquipment->setBackground(_window);
 	_lstEquipment->setMargin(8);
@@ -282,8 +287,7 @@ CraftEquipmentState::~CraftEquipmentState()
 */
 void CraftEquipmentState::init()
 {
-	_game->setPalette(
-				_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());
+	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());
 	_game->setPalette(
 				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)),
 				Palette::backPos,

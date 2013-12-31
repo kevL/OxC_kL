@@ -329,10 +329,10 @@ bool ProjectileFlyBState::createNewProjectile()
 	++_action.autoShotCounter;
 
 	Projectile* projectile = new Projectile(
-									_parent->getResourcePack(),
-									_parent->getSave(),
-									_action,
-									_origin);
+										_parent->getResourcePack(),
+										_parent->getSave(),
+										_action,
+										_origin);
 
 	// add the projectile on the map
 	_parent->getMap()->setProjectile(projectile);
@@ -609,7 +609,8 @@ void ProjectileFlyBState::think()
 
 				if (_projectileImpact != 5) // NOT out of map
 				{
-					// explosions impact not inside the voxel but two steps back (projectiles generally move 2 voxels at a time)
+					// explosions impact not inside the voxel but two steps back;
+					// projectiles generally move 2 voxels at a time
 					int offset = 0;
 					if (_ammo
 						&& (_ammo->getRules()->getDamageType() == DT_HE
@@ -636,12 +637,9 @@ void ProjectileFlyBState::think()
 
 					if (_projectileImpact == 4)
 					{
-						BattleUnit* victim = _parent
-												->getSave()
-													->getTile(_parent->getMap()
-																			->getProjectile()
-																				->getPosition(offset) / Position(16, 16, 24))
-																														->getUnit();
+						BattleUnit* victim = _parent->getSave()->getTile(
+												_parent->getMap()->getProjectile()->getPosition(offset) / Position(16, 16, 24))
+													->getUnit();
 						if (victim
 							&& !victim->isOut()
 							&& victim->getFaction() == FACTION_HOSTILE)
@@ -650,7 +648,7 @@ void ProjectileFlyBState::think()
 							if (aggro != 0)
 							{
 								aggro->setWasHit();
-								_unit->setTurnsExposed(0);
+								_unit->setTurnsExposed(0); // kL_note: might want to remark this!
 							}
 						}
 					}

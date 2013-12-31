@@ -179,9 +179,10 @@ private:
 		/// Get the list of base's ResearchProject.
 		const std::vector<ResearchProject*>& getResearch() const;
 		/// Add a new ResearchProject to the Base.
-		void addResearch(ResearchProject*);
+		void addResearch(ResearchProject* project);
 		/// Remove a ResearchProject from the Base.
-		void removeResearch(ResearchProject*);
+//kL		void removeResearch(ResearchProject*);
+		void removeResearch(ResearchProject* project, bool help = true); // kL
 		/// kL: Research Help ala XcomUtil.
 		void researchHelp(std::string sProject);
 		/// Add a new Production to Base.

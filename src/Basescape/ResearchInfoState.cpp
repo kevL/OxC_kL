@@ -296,10 +296,10 @@ void ResearchInfoState::btnCancelClick(Action*)
 		&& (_game->getRuleset()->getUnit(ruleResearch->getName())
 			|| Options::getBool("researchedItemsWillSpent")))
 	{
-		_base->getItems()->addItem(ruleResearch->getName(), 1);
+		_base->getItems()->addItem(ruleResearch->getName());
 	}
 
-	_base->removeResearch(_project);
+	_base->removeResearch(_project, false);
 	_game->popState();
 }
 

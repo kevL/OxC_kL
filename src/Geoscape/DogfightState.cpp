@@ -64,6 +64,7 @@ namespace OpenXcom
 
 const int DogfightState::_timeScale = 75;
 
+
 // UFO blobs graphics ...
 const int DogfightState::_ufoBlobs[8][13][13] =
 {
@@ -197,6 +198,7 @@ const int DogfightState::_ufoBlobs[8][13][13] =
 	}
 };
 
+
 // Projectile blobs
 const int DogfightState::_projectileBlobs[4][6][3] =
 {
@@ -238,6 +240,7 @@ const int DogfightState::_projectileBlobs[4][6][3] =
 	}
 };
 
+
 /**
  * Initializes all the elements in the Dogfight window.
  * @param game, Pointer to the core game.
@@ -246,10 +249,10 @@ const int DogfightState::_projectileBlobs[4][6][3] =
  * @param ufo, Pointer to the UFO being intercepted.
  */
 DogfightState::DogfightState(
-			Game* game,
-			Globe* globe,
-			Craft* craft,
-			Ufo* ufo)
+		Game* game,
+		Globe* globe,
+		Craft* craft,
+		Ufo* ufo)
 	:
 		State(game),
 		_globe(globe),
@@ -280,7 +283,6 @@ DogfightState::DogfightState(
 	_screen = false;
 
 	_craft->setInDogfight(true);
-	// Create objects
 	
 	_window					= new Surface(160, 96, _x, _y);
 	_battle					= new Surface(77, 74, _x + 3, _y + 3);
@@ -336,7 +338,7 @@ DogfightState::DogfightState(
 	add(_btnMinimizedIcon);
 	add(_txtInterceptionNumber);
 
-	// Set up objects
+
 	Surface* graphic;
 	graphic = _game->getResourcePack()->getSurface("INTERWIN.DAT");
 	graphic->setX(0);
@@ -411,7 +413,7 @@ DogfightState::DogfightState(
 	_txtDistance->setText(L"640");
 
 	_txtStatus->setColor(Palette::blockOffset(5)+9);
-	_txtStatus->setAlign(ALIGN_CENTER);		// kL
+	_txtStatus->setAlign(ALIGN_CENTER); // kL
 	_txtStatus->setText(tr("STR_STANDOFF"));
 
 	SurfaceSet* set = _game->getResourcePack()->getSurfaceSet("INTICON.PCK");
@@ -431,16 +433,23 @@ DogfightState::DogfightState(
 	_txtInterceptionNumber->setText(ss1.str());
 	_txtInterceptionNumber->setVisible(false);
 
-	for (int i = 0; i < _craft->getRules()->getWeapons(); ++i)
+	for (int
+			i = 0;
+			i < _craft->getRules()->getWeapons();
+			++i)
 	{
 		CraftWeapon* w = _craft->getWeapons()->at(i);
 		if (w == 0)
 			continue;
 
-		Surface* weapon = 0, * range = 0;
+		Surface
+			* range = 0,
+			* weapon = 0;
 		Text* ammo = 0;
+		int
+			x1,
+			x2;
 
-		int x1, x2;
 		if (i == 0)
 		{
 			weapon = _weapon1;
@@ -460,7 +469,6 @@ DogfightState::DogfightState(
 
 		// Draw weapon icon
 		frame = set->getFrame(w->getRules()->getSprite() + 5);
-		
 		frame->setX(0);
 		frame->setY(0);
 		frame->blit(weapon);
@@ -476,7 +484,10 @@ DogfightState::DogfightState(
 		range->lock();
 
 		int rangeY = range->getHeight() - w->getRules()->getRange(), connectY = 57;
-		for (int x = x1; x <= x1 + 18; x += 2)
+		for (int
+				x = x1;
+				x <= x1 + 18;
+				x += 2)
 		{
 			range->setPixel(x, rangeY, color);
 		}
@@ -493,12 +504,18 @@ DogfightState::DogfightState(
 			maxY = rangeY;
 		}
 
-		for (int y = minY; y <= maxY; ++y)
+		for (int
+				y = minY;
+				y <= maxY;
+				++y)
 		{
 			range->setPixel(x1 + x2, y, color);
 		}
 
-		for (int x = x2; x <= x2 + 2; ++x)
+		for (int
+				x = x2;
+				x <= x2 + 2;
+				++x)
 		{
 			range->setPixel(x, connectY, color);
 		}
@@ -540,24 +557,17 @@ DogfightState::DogfightState(
 	_w2Timer->onTimer((StateHandler)& DogfightState::fireWeapon2);
 
 	_ufoWtimer->onTimer((StateHandler)& DogfightState::ufoFireWeapon);
-//kL	_ufoFireInterval = _ufo->getRules()->getWeaponReload() - (int)(_game->getSavedGame()->getDifficulty());
-//kL	_ufoFireInterval = (RNG::generate(0, _ufoFireInterval) + _ufoFireInterval) * _timeScale;
-	_ufoFireInterval =
-					_ufo->getRules()->getWeaponReload()
-						- (2 * static_cast<int>(_game->getSavedGame()->getDifficulty()));	// kL
+	_ufoFireInterval = _ufo->getRules()->getWeaponReload()
+						- (2 * static_cast<int>(_game->getSavedGame()->getDifficulty()));
 	if (_ufoFireInterval < 1)
-		_ufoFireInterval = 1;																// kL
-	_ufoFireInterval =
-				(_ufoFireInterval + RNG::generate(1, _ufoFireInterval))
-					* _timeScale;
+		_ufoFireInterval = 1;
+	_ufoFireInterval = (_ufoFireInterval + RNG::generate(1, _ufoFireInterval)) * _timeScale;
 	_ufoWtimer->setInterval(_ufoFireInterval);
 
 	_ufoEscapeTimer->onTimer((StateHandler)& DogfightState::ufoBreakOff);
-	int ufoBreakOffInterval =
-						(_ufo->getRules()->getBreakOffTime() + RNG::generate(0, _ufo->getRules()->getBreakOffTime())
-//kL							- 15 * (int)(_game->getSavedGame()->getDifficulty())) * _timeScale;
-								- 30 * static_cast<int>(_game->getSavedGame()->getDifficulty()))
-							* _timeScale;	// kL
+	int ufoBreakOffInterval = (_ufo->getRules()->getBreakOffTime() + RNG::generate(1, _ufo->getRules()->getBreakOffTime())
+									- (30 * static_cast<int>(_game->getSavedGame()->getDifficulty())))
+								* _timeScale;
 	_ufoEscapeTimer->setInterval(ufoBreakOffInterval);
 
 	_craftDamageAnimTimer->onTimer((StateHandler)& DogfightState::animateCraftDamage);
@@ -580,12 +590,12 @@ DogfightState::DogfightState(
 	{
 		_ufoSize = 3;
 	}
-	else
+	else // very large
 	{
 		_ufoSize = 4;
 	}
 
-	// Get crafts height. Used for damage indication.
+	// Get craft's height. Used for damage indication.
 	int x =_damage->getWidth() / 2;
 	for (int
 			y = 0;
@@ -1001,7 +1011,7 @@ void DogfightState::move()
 					{
 						// Formula delivered by Volutar
 //kL						int damage = RNG::generate(0, _ufo->getRules()->getWeaponPower());
-						int damage = RNG::generate(10, _ufo->getRules()->getWeaponPower());		// kL
+						int damage = RNG::generate(10, _ufo->getRules()->getWeaponPower()); // kL
 						if (damage)
 						{
 							_craft->setDamage(_craft->getDamage() + damage);
@@ -1346,7 +1356,6 @@ void DogfightState::fireWeapon1()
 		CraftWeapon* w1 = _craft->getWeapons()->at(0);
 		if (w1->setAmmo(w1->getAmmo() - 1))
 		{
-
 			std::wstringstream ss;
 			ss << w1->getAmmo();
 			_txtAmmo1->setText(ss.str());
@@ -1372,7 +1381,6 @@ void DogfightState::fireWeapon2()
 		CraftWeapon* w2 = _craft->getWeapons()->at(1);
 		if (w2->setAmmo(w2->getAmmo() - 1))
 		{
-
 			std::wstringstream ss;
 			ss << w2->getAmmo();
 			_txtAmmo2->setText(ss.str());
@@ -1393,15 +1401,12 @@ void DogfightState::fireWeapon2()
  */
 void DogfightState::ufoFireWeapon()
 {
-//kL	_ufoFireInterval = _ufo->getRules()->getWeaponReload() - (int)(_game->getSavedGame()->getDifficulty());
-//kL	_ufoFireInterval = (RNG::generate(0, _ufoFireInterval) + _ufoFireInterval) * _timeScale;
-	_ufoFireInterval =
-				_ufo->getRules()->getWeaponReload()
-					- (2 * static_cast<int>(_game->getSavedGame()->getDifficulty()));	// kL
+	_ufoFireInterval = _ufo->getRules()->getWeaponReload()
+						- (2 * static_cast<int>(_game->getSavedGame()->getDifficulty()));
 	if (_ufoFireInterval < 1)
-		_ufoFireInterval = 1;															// kL
+		_ufoFireInterval = 1;
 	_ufoFireInterval = (_ufoFireInterval + RNG::generate(1, _ufoFireInterval))
-							* _timeScale;
+						* _timeScale;
 	_ufoWtimer->setInterval(_ufoFireInterval);
 
 	setStatus("STR_UFO_RETURN_FIRE");
@@ -1873,12 +1878,16 @@ void DogfightState::weapon2Click(Action*)
  * @param weaponNo - number of weapon for which colors must be changed.
  * @param currentState - state of weapon (enabled = true, disabled = false).
  */
-void DogfightState::recolor(const int weaponNo, const bool currentState)
+void DogfightState::recolor(
+		const int weaponNo,
+		const bool currentState)
 {
 	InteractiveSurface* weapon = 0;
 	Text* ammo = 0;
 	Surface* range = 0;
-	int weaponAndAmmoOffset = 24, rangeOffset = 7;
+	int
+		weaponAndAmmoOffset = 24,
+		rangeOffset = 7;
 
 	if (weaponNo == 0)
 	{
@@ -2063,27 +2072,48 @@ void DogfightState::calculateWindowPosition()
  */
 void DogfightState::moveWindow()
 {
-	_window->setX(_x); _window->setY(_y);
-	_battle->setX(_x + 3); _battle->setY(_y + 3);
-	_weapon1->setX(_x + 4); _weapon1->setY(_y + 52);
-	_range1->setX(_x + 19); _range1->setY(_y + 3);
-	_weapon2->setX(_x + 64); _weapon2->setY(_y + 52);
-	_range2->setX(_x + 43); _range2->setY(_y + 3);
-	_damage->setX(_x + 93); _damage->setY(_y + 40);
-	_btnMinimize->setX(_x); _btnMinimize->setY(_y);
-	_preview->setX(_x); _preview->setY(_y);
-	_btnStandoff->setX(_x + 83); _btnStandoff->setY(_y + 4);
-	_btnCautious->setX(_x + 120); _btnCautious->setY(_y + 4);
-	_btnStandard->setX(_x + 83); _btnStandard->setY(_y + 20);
-	_btnAggressive->setX(_x + 120); _btnAggressive->setY(_y + 20);
-	_btnDisengage->setX(_x + 120); _btnDisengage->setY(_y + 36);
-	_btnUfo->setX(_x + 120); _btnUfo->setY(_y + 52);
-	_txtAmmo1->setX(_x + 4); _txtAmmo1->setY(_y + 70);
-	_txtAmmo2->setX(_x + 64); _txtAmmo2->setY(_y + 70);
-	_txtDistance->setX(_x + 116); _txtDistance->setY(_y + 72);
-	_txtStatus->setX(_x + 4); _txtStatus->setY(_y + 85);
-	_btnMinimizedIcon->setX(_minimizedIconX); _btnMinimizedIcon->setY(_minimizedIconY);
-	_txtInterceptionNumber->setX(_minimizedIconX + 18); _txtInterceptionNumber->setY(_minimizedIconY + 6);
+	_window->setX(_x);
+	_window->setY(_y);
+	_battle->setX(_x + 3);
+	_battle->setY(_y + 3);
+	_weapon1->setX(_x + 4);
+	_weapon1->setY(_y + 52);
+	_range1->setX(_x + 19);
+	_range1->setY(_y + 3);
+	_weapon2->setX(_x + 64);
+	_weapon2->setY(_y + 52);
+	_range2->setX(_x + 43);
+	_range2->setY(_y + 3);
+	_damage->setX(_x + 93);
+	_damage->setY(_y + 40);
+	_btnMinimize->setX(_x);
+	_btnMinimize->setY(_y);
+	_preview->setX(_x);
+	_preview->setY(_y);
+	_btnStandoff->setX(_x + 83);
+	_btnStandoff->setY(_y + 4);
+	_btnCautious->setX(_x + 120);
+	_btnCautious->setY(_y + 4);
+	_btnStandard->setX(_x + 83);
+	_btnStandard->setY(_y + 20);
+	_btnAggressive->setX(_x + 120);
+	_btnAggressive->setY(_y + 20);
+	_btnDisengage->setX(_x + 120);
+	_btnDisengage->setY(_y + 36);
+	_btnUfo->setX(_x + 120);
+	_btnUfo->setY(_y + 52);
+	_txtAmmo1->setX(_x + 4);
+	_txtAmmo1->setY(_y + 70);
+	_txtAmmo2->setX(_x + 64);
+	_txtAmmo2->setY(_y + 70);
+	_txtDistance->setX(_x + 116);
+	_txtDistance->setY(_y + 72);
+	_txtStatus->setX(_x + 4);
+	_txtStatus->setY(_y + 85);
+	_btnMinimizedIcon->setX(_minimizedIconX);
+	_btnMinimizedIcon->setY(_minimizedIconY);
+	_txtInterceptionNumber->setX(_minimizedIconX + 18);
+	_txtInterceptionNumber->setY(_minimizedIconY + 6);
 }
 
 /**

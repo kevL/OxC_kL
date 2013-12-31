@@ -20,19 +20,21 @@
 #ifndef OPENXCOM_NEWMANUFACTURELISTSTATE_H
 #define OPENXCOM_NEWMANUFACTURELISTSTATE_H
 
-#include "../Engine/State.h"
 #include <vector>
+
+#include "../Engine/State.h"
 
 
 namespace OpenXcom
 {
 
 class Base;
-class TextButton;
-class Window;
-class Text;
-class TextList;
 class RuleManufacture;
+class Text;
+class TextButton;
+class TextList;
+class Window;
+
 
 /**
  * Screen which list possible productions.
@@ -41,26 +43,34 @@ class NewManufactureListState
 	:
 		public State
 {
+
 private:
 	Base* _base;
-	TextButton* _btnCancel;
-	Window* _window;
 	Text* _txtTitle, * _txtItem, * _txtCategory;
+	TextButton* _btnCancel;
 	TextList* _lstManufacture;
+	Window* _window;
+
 	std::vector<RuleManufacture*> _possibleProductions;
+
 
 	public:
 		/// Creates the state.
-		NewManufactureListState(Game* game, Base* base);
+		NewManufactureListState(
+				Game* game,
+				Base* base);
 
 		/// Initializes state.
-		void init ();
+		void init();
+
+		/// Fills the list of possible productions.
+		void fillProductionList();
+
 		/// Handler for clicking the OK button.
 		void btnCancelClick(Action* action);
 		/// Handler for clicking on the list.
 		void lstProdClick(Action* action);
-		/// Fills the list of possible productions.
-		void fillProductionList();
+
 };
 
 }

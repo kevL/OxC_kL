@@ -53,7 +53,9 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
  */
-NewManufactureListState::NewManufactureListState(Game* game, Base* base)
+NewManufactureListState::NewManufactureListState(
+		Game* game,
+		Base* base)
 	:
 		State(game),
 		_base(base)
@@ -162,15 +164,28 @@ void NewManufactureListState::lstProdClick(Action*)
 	if (rule->getCategory() == "STR_CRAFT"
 		&& _base->getAvailableHangars() - _base->getUsedHangars() == 0)
 	{
-		_game->pushState(new ErrorMessageState(_game, "STR_NO_FREE_HANGARS_FOR_CRAFT_PRODUCTION", Palette::blockOffset(15)+1, "BACK17.SCR", 6));
+		_game->pushState(new ErrorMessageState(
+											_game,
+											"STR_NO_FREE_HANGARS_FOR_CRAFT_PRODUCTION",
+											Palette::blockOffset(15)+1,
+											"BACK17.SCR",
+											6));
 	}
 	else if (rule->getRequiredSpace() > _base->getFreeWorkshops())
 	{
-		_game->pushState(new ErrorMessageState(_game, "STR_NOT_ENOUGH_WORK_SPACE", Palette::blockOffset(15)+1, "BACK17.SCR", 6));
+		_game->pushState(new ErrorMessageState(
+											_game,
+											"STR_NOT_ENOUGH_WORK_SPACE",
+											Palette::blockOffset(15)+1,
+											"BACK17.SCR",
+											6));
 	}
 	else
 	{
-		_game->pushState(new ManufactureStartState(_game, _base, rule));
+		_game->pushState(new ManufactureStartState(
+												_game,
+												_base,
+												rule));
 	}
 }
 
@@ -182,11 +197,21 @@ void NewManufactureListState::fillProductionList()
 {
 	_lstManufacture->clearList();
 	_possibleProductions.clear();
-	_game->getSavedGame()->getAvailableProductions(_possibleProductions, _game->getRuleset(), _base);
 
-	for (std::vector<RuleManufacture *>::iterator it = _possibleProductions.begin (); it != _possibleProductions.end (); ++it)
+	_game->getSavedGame()->getAvailableProductions(
+												_possibleProductions,
+												_game->getRuleset(),
+												_base);
+
+	for (std::vector<RuleManufacture *>::iterator
+			it = _possibleProductions.begin();
+			it != _possibleProductions.end();
+			++it)
 	{
-		_lstManufacture->addRow(2, tr((*it)->getName()).c_str(), tr((*it)->getCategory ()).c_str());
+		_lstManufacture->addRow(
+								2,
+								tr((*it)->getName()).c_str(),
+								tr((*it)->getCategory ()).c_str());
 	}
 }
 

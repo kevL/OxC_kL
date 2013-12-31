@@ -16,11 +16,14 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_SOUND_H
 #define OPENXCOM_SOUND_H
 
-#include <SDL_mixer.h>
 #include <string>
+
+#include <SDL_mixer.h>
+
 
 namespace OpenXcom
 {
@@ -31,19 +34,26 @@ namespace OpenXcom
  */
 class Sound
 {
+
 private:
 	Mix_Chunk *_sound;
-public:
-	/// Creates a blank sound effect.
-	Sound();
-	/// Cleans up the sound effect.
-	~Sound();
-	/// Loads sound from the specified file.
-	void load(const std::string &filename);
-	/// Loads sound from a chunk of memory.
-	void load(const void *data, unsigned int size);
-	/// Plays the sound.
-	void play(int channel = -1) const;
+
+
+	public:
+		/// Creates a blank sound effect.
+		Sound();
+		/// Cleans up the sound effect.
+		~Sound();
+
+		/// Loads sound from the specified file.
+		void load(const std::string& filename);
+		/// Loads sound from a chunk of memory.
+		void load(
+				const void* data,
+				unsigned int size);
+
+		/// Plays the sound.
+		void play(int channel = -1) const;
 };
 
 }

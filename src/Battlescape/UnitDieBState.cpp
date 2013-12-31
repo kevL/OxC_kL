@@ -18,27 +18,32 @@
  */
 
 #include "UnitDieBState.h"
-#include "ExplosionBState.h"
-#include "TileEngine.h"
+
 #include "BattlescapeState.h"
-#include "Map.h"
 #include "Camera.h"
-#include "../Engine/Game.h"
-#include "../Savegame/BattleItem.h"
-#include "../Savegame/BattleUnit.h"
-#include "../Savegame/SavedBattleGame.h"
-#include "../Savegame/Tile.h"
-#include "../Resource/ResourcePack.h"
-#include "../Ruleset/Ruleset.h"
-#include "../Engine/Sound.h"
-#include "../Engine/RNG.h"
-#include "../Engine/Options.h"
-#include "../Engine/Language.h"
-#include "../Ruleset/Armor.h"
-#include "../Ruleset/Unit.h"
+#include "ExplosionBState.h"
 #include "InfoboxOKState.h"
 #include "InfoboxState.h"
+#include "Map.h"
+#include "TileEngine.h"
+
+#include "../Engine/Game.h"
+#include "../Engine/Language.h"
+#include "../Engine/Options.h"
+#include "../Engine/RNG.h"
+#include "../Engine/Sound.h"
+
+#include "../Resource/ResourcePack.h"
+
+#include "../Ruleset/Armor.h"
+#include "../Ruleset/Ruleset.h"
+#include "../Ruleset/Unit.h"
+
+#include "../Savegame/BattleItem.h"
+#include "../Savegame/BattleUnit.h"
 #include "../Savegame/Node.h"
+#include "../Savegame/SavedBattleGame.h"
+#include "../Savegame/Tile.h"
 
 
 namespace OpenXcom
@@ -51,7 +56,11 @@ namespace OpenXcom
  * @param damageType Type of damage that caused the death.
  * @param noSound Whether to disable the death sound.
  */
-UnitDieBState::UnitDieBState(BattlescapeGame* parent, BattleUnit* unit, ItemDamageType damageType, bool noSound)
+UnitDieBState::UnitDieBState(
+		BattlescapeGame* parent,
+		BattleUnit* unit,
+		ItemDamageType damageType,
+		bool noSound)
 	:
 		BattleState(parent),
 		_unit(unit),
@@ -66,25 +75,19 @@ UnitDieBState::UnitDieBState(BattlescapeGame* parent, BattleUnit* unit, ItemDama
 		_unit->startFalling();
 
 		while (_unit->getStatus() == STATUS_COLLAPSING)
-		{
 			_unit->keepFalling();
-		}
 	}
 	else */
 //	{
 	if (_unit->getFaction() == FACTION_PLAYER)
-	{
-		_parent->getMap()->setUnitDying(true);
-	}
+		_parent->getMap()->setUnitDying(true); // reveal the Map.
 
-	if (!_parent->getMap()->getCamera()->isOnScreen(_unit->getPosition()))	// kL
-	{
+	if (!_parent->getMap()->getCamera()->isOnScreen(_unit->getPosition())) // kL
 		_parent->getMap()->getCamera()->centerOnPosition(_unit->getPosition());
-	}
 
 	// kL_note: this is only necessary when spawning a chryssalid from a zombie. See below
 	_originalDir = _unit->getDirection();
-	_unit->setDirection(_originalDir);		// kL. Stop Turning f!!!
+//	_unit->setDirection(_originalDir); // kL. Stop Turning f!!!
 	_unit->setSpinPhase(-1);
 
 	// kL_begin:
@@ -127,9 +130,7 @@ spawnUnit: ""
 			_unit->instaKill();
 
 			if (!_noSound)
-			{
 				playDeathSound();
-			}
 		}
 		else
 			_unit->knockOut();
@@ -145,11 +146,16 @@ spawnUnit: ""
         std::vector<Node*>* nodes = _parent->getSave()->getNodes();
         if (!nodes) return; // this better not happen.
 
-        for (std::vector<Node*>::iterator n = nodes->begin(); n != nodes->end(); ++n)
+        for (std::vector<Node*>::iterator
+				node = nodes->begin();
+				node != nodes->end();
+				++node)
         {
-            if (_parent->getSave()->getTileEngine()->distanceSq((*n)->getPosition(), _unit->getPosition()) < 4)
+            if (_parent->getSave()->getTileEngine()->distanceSq(
+															(*node)->getPosition(),
+															_unit->getPosition()) < 4)
             {
-                (*n)->setType((*n)->getType() | Node::TYPE_DANGEROUS);
+                (*node)->setType((*node)->getType() | Node::TYPE_DANGEROUS);
             }
         }
     }
@@ -204,14 +210,13 @@ void UnitDieBState::think()
 	{
 		//Log(LOG_INFO) << ". . !isOut";
 
-		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED);			// kL
+		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED); // kL
 		_unit->startFalling(); // -> STATUS_COLLAPSING
 
-		if (!_noSound)		// kL
-		{
+		if (!_noSound) // kL
 			playDeathSound();
-		}
 	}
+
 //	else		// kL*****
 	if (_unit->isOut())
 	{
@@ -234,10 +239,10 @@ void UnitDieBState::think()
 		}
 
 		_parent->getMap()->setUnitDying(false);
+
 		if (_unit->getTurnsExposed() < 255)
-		{
 			_unit->setTurnsExposed(255);
-		}
+
 
 		if (!_unit->getSpawnUnit().empty()) // converts the dead zombie to a chryssalid
 		{
@@ -253,9 +258,7 @@ void UnitDieBState::think()
 			//Log(LOG_INFO) << ". . got back from lookAt() in think ...";
 		}
 		else
-		{
 			convertUnitToCorpse();
-		}
 
 		_parent->getTileEngine()->calculateUnitLighting();
 		_parent->popState();
@@ -273,13 +276,13 @@ void UnitDieBState::think()
 					{
 						game->pushState(new InfoboxOKState(game,
 								game->getLanguage()->getString("STR_HAS_DIED_FROM_A_FATAL_WOUND", _unit->getGender())
-								.arg(_unit->getName(game->getLanguage()))));
+									.arg(_unit->getName(game->getLanguage()))));
 					}
 					else if (Options::getBool("battleNotifyDeath"))
 					{
 						game->pushState(new InfoboxOKState(game,
 								game->getLanguage()->getString("STR_HAS_BEEN_KILLED", _unit->getGender())
-								.arg(_unit->getName(game->getLanguage()))));
+									.arg(_unit->getName(game->getLanguage()))));
 					}
 				}
 			}
@@ -287,7 +290,7 @@ void UnitDieBState::think()
 			{
 				game->pushState(new InfoboxOKState(game,
 						game->getLanguage()->getString("STR_HAS_BECOME_UNCONSCIOUS", _unit->getGender())
-						.arg(_unit->getName(game->getLanguage()))));
+							.arg(_unit->getName(game->getLanguage()))));
 			}
 		}
 
@@ -338,9 +341,13 @@ void UnitDieBState::convertUnitToCorpse()
 			|| _unit->getStatus() == STATUS_UNCONSCIOUS;
 
 	// move inventory from unit to the ground for non-large units
-	if (size == 1 && dropItems)
+	if (size == 1
+		&& dropItems)
 	{
-		for (std::vector<BattleItem*>::iterator i = _unit->getInventory()->begin(); i != _unit->getInventory()->end(); ++i)
+		for (std::vector<BattleItem*>::iterator
+				i = _unit->getInventory()->begin();
+				i != _unit->getInventory()->end();
+				++i)
 		{
 			_parent->dropItem(_unit->getPosition(), (*i));
 
@@ -365,19 +372,31 @@ void UnitDieBState::convertUnitToCorpse()
 	_unit->setTile(0); // remove unit-tile link
 
 	int i = 0;
-	for (int y = 0; y < size; y++)
+	for (int
+			y = 0;
+			y < size;
+			y++)
 	{
-		for (int x = 0; x < size; x++)
+		for (int
+				x = 0;
+				x < size;
+				x++)
 		{
-			BattleItem *corpse = new BattleItem(_parent->getRuleset()->getItem(_unit->getArmor()->getCorpseBattlescape()[i]), _parent->getSave()->getCurrentItemId());
+			BattleItem* corpse = new BattleItem(
+											_parent->getRuleset()->getItem(_unit->getArmor()->getCorpseBattlescape()[i]),
+											_parent->getSave()->getCurrentItemId());
 			corpse->setUnit(_unit);
 
-			if (_parent->getSave()->getTile(lastPosition + Position(x, y, 0))->getUnit() == _unit) // check in case unit was displaced by another unit
+			// check in case unit was displaced by another unit
+			if (_parent->getSave()->getTile(lastPosition + Position(x, y, 0))->getUnit() == _unit)
 			{
 				_parent->getSave()->getTile(lastPosition + Position(x, y, 0))->setUnit(0);
 			}
 
-			_parent->dropItem(lastPosition + Position(x, y, 0), corpse, true);
+			_parent->dropItem(
+							lastPosition + Position(x, y, 0),
+							corpse,
+							true);
 
 			i++;
 		}

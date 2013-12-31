@@ -1215,7 +1215,7 @@ const std::vector<ResearchProject*>& Base::getResearch() const
 
 /**
  * Add a new ResearchProject to Base
- * @param project The project to add
+ * @param project, The project to add
 */
 void Base::addResearch(ResearchProject* project)
 {
@@ -1226,7 +1226,7 @@ void Base::addResearch(ResearchProject* project)
  * Remove a ResearchProject from base
  * @param project, The project to remove
 */
-void Base::removeResearch(ResearchProject* project)
+void Base::removeResearch(ResearchProject* project, bool help)
 {
 	//Log(LOG_INFO) << "Base::removeResearch()";
 	_scientists += project->getAssigned();
@@ -1238,12 +1238,16 @@ void Base::removeResearch(ResearchProject* project)
 						project);
 	if (i != _research.end())
 	{
-		// kL_begin: Add Research Help here. aLien must be interrogated at same Base as project-help goes to (for now).
-		std::string sProject = project->getRules()->getName();
-		//Log(LOG_INFO) << ". . sProject = " << sProject;
-		// eg. Base::removeResearch() sProject = STR_REAPER_CORPSE
+		// kL_begin: Add Research Help here. aLien must be interrogated
+		// at same Base as project-help goes to (for now).
+		if (help)
+		{
+			std::string sProject = project->getRules()->getName();
+			//Log(LOG_INFO) << ". . sProject = " << sProject;
+			// eg. Base::removeResearch() sProject = STR_REAPER_CORPSE
 
-		researchHelp(sProject);
+			researchHelp(sProject);
+		}
 		// kL_end.
 
 		_research.erase(i);

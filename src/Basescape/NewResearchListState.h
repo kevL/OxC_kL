@@ -28,12 +28,13 @@
 namespace OpenXcom
 {
 
-class TextButton;
-class Window;
-class Text;
-class TextList;
 class Base;
 class RuleResearch;
+class Text;
+class TextButton;
+class TextList;
+class Window;
+
 
 /**
  * Window which displays possible research projects.
@@ -42,25 +43,34 @@ class NewResearchListState
 	:
 		public State
 {
+
 private:
 	Base* _base;
-	TextButton* _btnCancel;
-	Window* _window;
 	Text* _txtTitle;
+	TextButton* _btnCancel;
 	TextList* _lstResearch;
-	void onSelectProject(Action* action);
+	Window* _window;
+
 	std::vector<RuleResearch*> _projects;
+
+	///
+	void onSelectProject(Action* action);
+
 
 	public:
 		/// Creates the New research list state.
-		NewResearchListState(Game* game, Base* base);
-		/// Handler for clicking the OK button.
-		void btnCancelClick(Action* action);
+		NewResearchListState(
+				Game* game,
+				Base* base);
+
+		/// Initializes the state.
+		void init();
 
 		/// Fills the ResearchProject list with possible ResearchProjects.
 		void fillProjectList();
-		/// Initializes the state.
-		void init();
+
+		/// Handler for clicking the OK button.
+		void btnCancelClick(Action* action);
 };
 
 }

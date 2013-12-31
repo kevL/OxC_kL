@@ -18,24 +18,30 @@
  */
 
 #include "SoldierMemorialState.h"
-#include <sstream>
+
 #include <iomanip>
+#include <sstream>
+
+#include "SoldierInfoState.h"
+
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
-#include "../Engine/Music.h"
 #include "../Engine/Language.h"
-#include "../Engine/Palette.h"
+#include "../Engine/Music.h"
 #include "../Engine/Options.h"
-#include "../Interface/TextButton.h"
-#include "../Interface/Window.h"
+#include "../Engine/Palette.h"
+
 #include "../Interface/Text.h"
+#include "../Interface/TextButton.h"
 #include "../Interface/TextList.h"
-#include "../Savegame/SavedGame.h"
+#include "../Interface/Window.h"
+
+#include "../Resource/ResourcePack.h"
+
 #include "../Savegame/Base.h"
+#include "../Savegame/GameTime.h"
+#include "../Savegame/SavedGame.h"
 #include "../Savegame/Soldier.h"
 #include "../Savegame/SoldierDeath.h"
-#include "../Savegame/GameTime.h"
-#include "SoldierInfoState.h"
 
 
 namespace OpenXcom
@@ -65,7 +71,10 @@ SoldierMemorialState::SoldierMemorialState(Game* game)
 	_btnOk			= new TextButton(288, 16, 16, 177);
 
 
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)), Palette::backPos, 16);
+	_game->setPalette(
+				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)),
+				Palette::backPos,
+				16);
 
 //kL	_game->getResourcePack()->getMusic("GMLOSE")->play();
 	_game->getResourcePack()->getMusic("GMWIN")->play(); // kL
@@ -89,7 +98,9 @@ SoldierMemorialState::SoldierMemorialState(Game* game)
 	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& SoldierMemorialState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)& SoldierMemorialState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& SoldierMemorialState::btnOkClick,
+					(SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
@@ -107,7 +118,10 @@ SoldierMemorialState::SoldierMemorialState(Game* game)
 
 	int lost = _game->getSavedGame()->getDeadSoldiers()->size();
 	int recruited = lost;
-	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
+	for (std::vector<Base*>::iterator
+			i = _game->getSavedGame()->getBases()->begin();
+			i != _game->getSavedGame()->getBases()->end();
+			++i)
 	{
 		recruited += (*i)->getTotalSoldiers();
 	}
@@ -128,7 +142,10 @@ SoldierMemorialState::SoldierMemorialState(Game* game)
 	_lstSoldiers->setMargin(8);
 	_lstSoldiers->onMouseClick((ActionHandler)& SoldierMemorialState::lstSoldiersClick);
 
-	for (std::vector<Soldier*>::reverse_iterator i = _game->getSavedGame()->getDeadSoldiers()->rbegin(); i != _game->getSavedGame()->getDeadSoldiers()->rend(); ++i)
+	for (std::vector<Soldier*>::reverse_iterator
+			i = _game->getSavedGame()->getDeadSoldiers()->rbegin();
+			i != _game->getSavedGame()->getDeadSoldiers()->rend();
+			++i)
 	{
 		SoldierDeath* death = (*i)->getDeath();
 
@@ -136,7 +153,13 @@ SoldierMemorialState::SoldierMemorialState(Game* game)
 		saveDay << death->getTime()->getDayString(_game->getLanguage());
 		saveMonth << tr(death->getTime()->getMonthString());
 		saveYear << death->getTime()->getYear();
-		_lstSoldiers->addRow(5, (*i)->getName().c_str(), tr((*i)->getRankString()).c_str(), saveDay.str().c_str(), saveMonth.str().c_str(), saveYear.str().c_str());
+		_lstSoldiers->addRow(
+							5,
+							(*i)->getName().c_str(),
+							tr((*i)->getRankString()).c_str(),
+							saveDay.str().c_str(),
+							saveMonth.str().c_str(),
+							saveYear.str().c_str());
 	}
 }
 

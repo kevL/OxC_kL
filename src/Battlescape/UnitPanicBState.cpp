@@ -18,7 +18,9 @@
  */
 
 #include "UnitPanicBState.h"
+
 #include "../Savegame/BattleUnit.h"
+
 
 namespace OpenXcom
 {
@@ -28,7 +30,12 @@ namespace OpenXcom
  * @param parent Pointer to the Battlescape.
  * @param unit Panicking unit.
  */
-UnitPanicBState::UnitPanicBState(BattlescapeGame *parent, BattleUnit *unit) : BattleState(parent), _unit(unit)
+UnitPanicBState::UnitPanicBState(
+		BattlescapeGame* parent,
+		BattleUnit* unit)
+	:
+		BattleState(parent),
+		_unit(unit)
 {
 	// nothing to see here
 }
@@ -56,9 +63,8 @@ void UnitPanicBState::think()
 	if (_unit)
 	{
 		if (!_unit->isOut())
-		{
 			_unit->abortTurn(); // set the unit status to standing in case it wasn't otherwise changed from berserk/panicked
-		}
+
 		_unit->setTimeUnits(0);
 	}
 

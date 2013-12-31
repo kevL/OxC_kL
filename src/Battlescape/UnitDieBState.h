@@ -21,6 +21,7 @@
 #define OPENXCOM_UNITDIEBSTATE_H
 
 #include "BattleState.h"
+
 #include "../Ruleset/RuleItem.h"
 
 
@@ -30,6 +31,7 @@ namespace OpenXcom
 class BattlescapeGame;
 class BattleUnit;
 
+
 /* Refactoring tip : UnitDieBState */
 /**
  * State for dying units.
@@ -38,15 +40,22 @@ class UnitDieBState
 	:
 		public BattleState
 {
+
 private:
-	BattleUnit* _unit;
-	ItemDamageType _damageType;
 	bool _noSound;
 	int _originalDir;
 
+	BattleUnit* _unit;
+	ItemDamageType _damageType;
+
+
 	public:
 		/// Creates a new UnitDieBState class
-		UnitDieBState(BattlescapeGame* parent, BattleUnit* unit, ItemDamageType damageType, bool noSound);
+		UnitDieBState(
+				BattlescapeGame* parent,
+				BattleUnit* unit,
+				ItemDamageType damageType,
+				bool noSound);
 		/// Cleans up the UnitDieBState.
 		~UnitDieBState();
 
@@ -56,8 +65,10 @@ private:
 		void cancel();
 		/// Runs state functionality every cycle.
 		void think();
+
 		/// Converts a unit to a corpse.
 		void convertUnitToCorpse();
+
 		/// Plays the death sound.
 		void playDeathSound();
 		/// Gets the result of the state.

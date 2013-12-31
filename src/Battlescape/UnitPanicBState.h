@@ -19,34 +19,45 @@
 #ifndef OPENXCOM_UNITPANICBSTATE_H
 #define OPENXCOM_UNITPANICBSTATE_H
 
-#include "BattleState.h"
 #include <string>
+
+#include "BattleState.h"
+
 
 namespace OpenXcom
 {
 
 class BattleUnit;
 
+
 /**
  * State for panicking units.
  */
-class UnitPanicBState : public BattleState
+class UnitPanicBState
+	:
+		public BattleState
 {
+
 private:
-	BattleUnit *_unit;
-public:
-	/// Creates a new UnitPanicBState class
-	UnitPanicBState(BattlescapeGame *parent, BattleUnit *unit);
-	/// Cleans up the UnitPanicBState.
-	~UnitPanicBState();
-	/// Initializes the state.
-	void init();
-	/// Handles a cancels request.
-	void cancel();
-	/// Runs state functionality every cycle.
-	void think();
-	/// Gets the result of the state.
-//	std::string getResult() const;
+	BattleUnit* _unit;
+
+
+	public:
+		/// Creates a new UnitPanicBState class
+		UnitPanicBState(
+				BattlescapeGame* parent,
+				BattleUnit* unit);
+		/// Cleans up the UnitPanicBState.
+		~UnitPanicBState();
+
+		/// Initializes the state.
+		void init();
+		/// Handles a cancels request.
+		void cancel();
+		/// Runs state functionality every cycle.
+		void think();
+		/// Gets the result of the state.
+//		std::string getResult() const;
 };
 
 }

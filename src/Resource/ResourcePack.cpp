@@ -63,42 +63,66 @@ ResourcePack::~ResourcePack()
 	delete _muteMusic;
 	delete _muteSound;
 
-	for (std::map<std::string, Font*>::iterator i = _fonts.begin(); i != _fonts.end(); ++i)
+	for (std::map<std::string, Font*>::iterator
+			i = _fonts.begin();
+			i != _fonts.end();
+			++i)
 	{
 		delete i->second;
 	}
 
-	for (std::map<std::string, Surface*>::iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
+	for (std::map<std::string, Surface*>::iterator
+			i = _surfaces.begin();
+			i != _surfaces.end();
+			++i)
 	{
 		delete i->second;
 	}
 
-	for (std::map<std::string, SurfaceSet*>::iterator i = _sets.begin(); i != _sets.end(); ++i)
+	for (std::map<std::string, SurfaceSet*>::iterator
+			i = _sets.begin();
+			i != _sets.end();
+			++i)
 	{
 		delete i->second;
 	}
 
-	for (std::list<Polygon*>::iterator i = _polygons.begin(); i != _polygons.end(); ++i)
+	for (std::list<Polygon*>::iterator
+			i = _polygons.begin();
+			i != _polygons.end();
+			++i)
 	{
 		delete *i;
 	}
 
-	for (std::list<Polyline*>::iterator i = _polylines.begin(); i != _polylines.end(); ++i)
+	for (std::list<Polyline*>::iterator
+			i = _polylines.begin();
+			i != _polylines.end();
+			++i)
 	{
 		delete *i;
 	}
 
-	for (std::map<std::string, Palette*>::iterator i = _palettes.begin(); i != _palettes.end(); ++i)
+	for (std::map<std::string, Palette*>::iterator
+			i = _palettes.begin();
+			i != _palettes.end();
+			++i)
 	{
 		delete i->second;
 	}
 
-	for (std::map<std::string, Music*>::iterator i = _musics.begin(); i != _musics.end(); ++i)
+	for (std::map<std::string, Music*>::iterator
+			i = _musics.begin();
+			i != _musics.end();
+			++i)
 	{
 		delete i->second;
 	}
 
-	for (std::map<std::string, SoundSet*>::iterator i = _sounds.begin(); i != _sounds.end(); ++i)
+	for (std::map<std::string, SoundSet*>::iterator
+			i = _sounds.begin();
+			i != _sounds.end();
+			++i)
 	{
 		delete i->second;
 	}
@@ -126,6 +150,7 @@ Font* ResourcePack::getFont(const std::string& name) const
 Surface* ResourcePack::getSurface(const std::string& name) const
 {
 	std::map<std::string, Surface*>::const_iterator i = _surfaces.find(name);
+
 	if (_surfaces.end() != i)
 		return i->second;
 	else
@@ -140,6 +165,7 @@ Surface* ResourcePack::getSurface(const std::string& name) const
 SurfaceSet* ResourcePack::getSurfaceSet(const std::string& name) const
 {
 	std::map<std::string, SurfaceSet*>::const_iterator i = _sets.find(name);
+
 	if (_sets.end() != i)
 		return i->second;
 	else
@@ -178,6 +204,7 @@ Music* ResourcePack::getMusic(const std::string& name) const
 	else
 	{
 		std::map<std::string, Music*>::const_iterator i = _musics.find(name);
+
 		if (_musics.end() != i)
 			return i->second;
 		else
@@ -213,17 +240,19 @@ Music* ResourcePack::getRandomMusic(const std::string& name) const
 		if (_musics.empty())
 			return _muteMusic;
 		else
-			return music[RNG::generate(0, music.size() - 1)];
+			return music[RNG::generate(0, static_cast<int>(music.size()) - 1)];
 	}
 }
 
 /**
  * Returns a specific sound from the resource set.
- * @param set Name of the sound set.
- * @param sound ID of the sound.
- * @return Pointer to the sound.
+ * @param set, Name of the sound set.
+ * @param sound, ID of the sound.
+ * @return, Pointer to the sound.
  */
-Sound* ResourcePack::getSound(const std::string& set, unsigned int sound) const
+Sound* ResourcePack::getSound(
+		const std::string& set,
+		unsigned int sound) const
 {
 	if (Options::getBool("mute"))
 	{
@@ -232,6 +261,7 @@ Sound* ResourcePack::getSound(const std::string& set, unsigned int sound) const
 	else
 	{
 		std::map<std::string, SoundSet*>::const_iterator i = _sounds.find(set);
+
 		if (_sounds.end() != i)
 			return i->second->getSound(sound);
 		else
@@ -244,9 +274,10 @@ Sound* ResourcePack::getSound(const std::string& set, unsigned int sound) const
  * @param name Name of the palette.
  * @return Pointer to the palette.
  */
-Palette* ResourcePack::getPalette(const std::string &name) const
+Palette* ResourcePack::getPalette(const std::string& name) const
 {
 	std::map<std::string, Palette*>::const_iterator i = _palettes.find(name);
+
 	if (_palettes.end() != i)
 		return i->second;
 	else
@@ -259,20 +290,32 @@ Palette* ResourcePack::getPalette(const std::string &name) const
  * @param firstcolor Offset of the first color to replace.
  * @param ncolors Amount of colors to replace.
  */
-void ResourcePack::setPalette(SDL_Color* colors, int firstcolor, int ncolors)
+void ResourcePack::setPalette(
+		SDL_Color* colors,
+		int firstcolor,
+		int ncolors)
 {
-	for (std::map<std::string, Font*>::iterator i = _fonts.begin(); i != _fonts.end(); ++i)
+	for (std::map<std::string, Font*>::iterator
+			i = _fonts.begin();
+			i != _fonts.end();
+			++i)
 	{
 		i->second->getSurface()->setPalette(colors, firstcolor, ncolors);
 	}
 
-	for (std::map<std::string, Surface*>::iterator i = _surfaces.begin(); i != _surfaces.end(); ++i)
+	for (std::map<std::string, Surface*>::iterator
+			i = _surfaces.begin();
+			i != _surfaces.end();
+			++i)
 	{
 		if (i->first.substr(i->first.length() - 3, i->first.length()) != "LBM")
 			i->second->setPalette(colors, firstcolor, ncolors);
 	}
 
-	for (std::map<std::string, SurfaceSet*>::iterator i = _sets.begin(); i != _sets.end(); ++i)
+	for (std::map<std::string, SurfaceSet*>::iterator
+			i = _sets.begin();
+			i != _sets.end();
+			++i)
 	{
 		i->second->setPalette(colors, firstcolor, ncolors);
 	}

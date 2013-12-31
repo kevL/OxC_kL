@@ -50,13 +50,15 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
  */
-NewResearchListState::NewResearchListState(Game* game, Base* base)
+NewResearchListState::NewResearchListState(
+		Game* game,
+		Base* base)
 	:
 		State(game),
 		_base(base)
 {
 	int width = 230;
-	int height = 136; // multiplicity of the 8 pixels [17x8=136]
+	int height = 136; // multiple of 8 pixels [17x8=136]
 	int max_width = 320;
 	int max_height = 200;
 	int start_x = (max_width - width) / 2;
@@ -68,7 +70,13 @@ NewResearchListState::NewResearchListState(Game* game, Base* base)
 
 	_screen = false;
 
-	_window			= new Window(this, width, height, start_x, start_y, POPUP_BOTH);
+	_window			= new Window(
+								this,
+								width,
+								height,
+								start_x,
+								start_y,
+								POPUP_BOTH);
 
 	_txtTitle		= new Text(width - 2 * button_x_border,
 						button_height,
@@ -100,7 +108,9 @@ NewResearchListState::NewResearchListState(Game* game, Base* base)
 	_btnCancel->setColor(Palette::blockOffset(15)+6);
 	_btnCancel->setText(tr("STR_CANCEL"));
 	_btnCancel->onMouseClick((ActionHandler)& NewResearchListState::btnCancelClick);
-	_btnCancel->onKeyboardPress((ActionHandler)& NewResearchListState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnCancel->onKeyboardPress(
+					(ActionHandler)& NewResearchListState::btnCancelClick,
+					(SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setAlign(ALIGN_CENTER);
@@ -130,7 +140,10 @@ void NewResearchListState::init()
  */
 void NewResearchListState::onSelectProject(Action*)
 {
-	_game->pushState(new ResearchInfoState(_game, _base, _projects[_lstResearch->getSelectedRow()]));
+	_game->pushState(new ResearchInfoState(
+										_game,
+										_base,
+										_projects[_lstResearch->getSelectedRow()]));
 }
 
 /**
@@ -149,14 +162,20 @@ void NewResearchListState::fillProjectList()
 {
 	_projects.clear();
 	_lstResearch->clearList();
-	_game->getSavedGame()->getAvailableResearchProjects(_projects, _game->getRuleset(), _base);
+
+	_game->getSavedGame()->getAvailableResearchProjects(
+													_projects,
+													_game->getRuleset(),
+													_base);
 
 	std::vector<RuleResearch*>::iterator it = _projects.begin();
 	while (it != _projects.end())
 	{
 		if ((*it)->getRequirements().empty())
 		{
-			_lstResearch->addRow(1, tr((*it)->getName()).c_str());
+			_lstResearch->addRow(
+								1,
+								tr((*it)->getName()).c_str());
 
 			++it;
 		}

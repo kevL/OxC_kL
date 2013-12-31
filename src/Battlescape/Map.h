@@ -29,7 +29,8 @@
 namespace OpenXcom
 {
 
-extern bool kL_preReveal;	// kL
+extern bool kL_preReveal; // kL
+
 
 class BattlescapeMessage;
 class BattleUnit;
@@ -63,11 +64,11 @@ class Map
 {
 
 private:
-
 	static const int SCROLL_INTERVAL	= 20;
 	static const int BULLET_SPRITES		= 35;
 
 	bool
+//		_animUp, // kL
 		_explosionInFOV,
 		_launch,
 		_projectileInFOV,
@@ -103,11 +104,12 @@ private:
 	///
 	void drawTerrain(Surface* surface);
 	///
-	int getTerrainLevel(Position pos, int size);
+	int getTerrainLevel(
+			Position pos,
+			int size);
 
 
 	public:
-
 		/// Creates a new map at the specified position and size.
 		Map(
 				Game* game,
@@ -147,15 +149,21 @@ private:
 		void animate(bool redraw);
 
 		/// Sets the battlescape selector position relative to mouseposition.
-		void setSelectorPosition(int mx, int my);
+		void setSelectorPosition(
+				int mx,
+				int my);
 		/// Gets the currently selected position.
 		void getSelectorPosition(Position* pos) const;
 
 		/// Calculates the offset of a soldier, when it is walking in the middle of 2 tiles.
-		void calculateWalkingOffset(BattleUnit* unit, Position* offset);
+		void calculateWalkingOffset(
+				BattleUnit* unit,
+				Position* offset);
 
 		/// Sets the 3D cursor type.
-		void setCursorType(CursorType type, int size = 1);
+		void setCursorType(
+				CursorType type,
+				int size = 1);
 		/// Gets the 3D cursor type.
 		CursorType getCursorType() const;
 
@@ -185,7 +193,9 @@ private:
 		std::vector<Position>* getWaypoints();
 
 		/// Set mouse-buttons' pressed state.
-		void setButtonsPressed(Uint8 button, bool pressed);
+		void setButtonsPressed(
+				Uint8 button,
+				bool pressed);
 
 		/// Sets the unitDying flag.
 		void setUnitDying(bool flag);

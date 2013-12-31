@@ -205,9 +205,9 @@ private:
 	public:
 		static const int MAX_SOLDIER_ID = 1000000;
 
-		/// scratch value for AI's left hand to tell its right hand what's up...
-		bool _hidingForTurn; // don't zone out and start patrolling again
-		///
+		// scratch value for AI's left hand to tell its right hand what's up...
+		// don't zone out and start patrolling again
+		bool _hidingForTurn;
 		Position lastCover;
 
 		/// Creates a BattleUnit.
@@ -557,7 +557,7 @@ private:
 		/// Get the unit's rank string.
 		std::string getRankString() const;
 		/// Get the unit's race string.
-		std::string getRaceString() const;		// kL
+		std::string getRaceString() const; // kL
 
 		/// Get the geoscape-soldier object.
 		Soldier* getGeoscapeSoldier() const;

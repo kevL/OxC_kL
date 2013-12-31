@@ -27,6 +27,7 @@
 
 #include <SDL.h>
 
+
 namespace OpenXcom
 {
 
@@ -40,6 +41,7 @@ class SoundSet;
 class Surface;
 class SurfaceSet;
 
+
 /**
  * Packs of external game media.
  * Resource packs contain all the game media that's
@@ -51,49 +53,59 @@ class SurfaceSet;
  */
 class ResourcePack
 {
+
 private:
 	Music* _muteMusic;
 	Sound* _muteSound;
 
-protected:
-	std::map<std::string, Palette*> _palettes;
-	std::map<std::string, Font*> _fonts;
-	std::map<std::string, Surface*> _surfaces;
-	std::map<std::string, SurfaceSet*> _sets;
-	std::map<std::string, SoundSet*> _sounds;
-	std::list<Polygon*> _polygons;
-	std::list<Polyline*> _polylines;
-	std::map<std::string, Music*> _musics;
-	std::vector<Uint16> _voxelData;
 
-	public:
-		/// Create a new resource pack with a folder's contents.
-		ResourcePack();
-		/// Cleans up the resource pack.
-		virtual ~ResourcePack();
+	protected:
+		std::list<Polygon*>		_polygons;
+		std::list<Polyline*>	_polylines;
 
-		/// Gets a particular font.
-		Font* getFont(const std::string& name) const;
-		/// Gets a particular surface.
-		Surface* getSurface(const std::string& name) const;
-		/// Gets a particular surface set.
-		SurfaceSet* getSurfaceSet(const std::string& name) const;
-		/// Gets the list of world polygons.
-		std::list<Polygon*>* getPolygons();
-		/// Gets the list of world polylines.
-		std::list<Polyline*>* getPolylines();
-		/// Gets a particular music.
-		Music* getMusic(const std::string& name) const;
-		/// Gets a random music.
-		Music* getRandomMusic(const std::string& name) const;
-		/// Gets a particular sound.
-		Sound* getSound(const std::string& set, unsigned int sound) const;
-		/// Gets a particular palette.
-		Palette* getPalette(const std::string& name) const;
-		/// Sets a new palette.
-		void setPalette(SDL_Color* colors, int firstcolor, int ncolors);
-		/// Gets list of voxel data.
-		std::vector<Uint16>* getVoxelData();
+		std::map<std::string, Font*>		_fonts;
+		std::map<std::string, Music*>		_musics;
+		std::map<std::string, Palette*>		_palettes;
+		std::map<std::string, Surface*>		_surfaces;
+		std::map<std::string, SurfaceSet*>	_sets;
+		std::map<std::string, SoundSet*>	_sounds;
+
+		std::vector<Uint16> _voxelData;
+
+
+		public:
+			/// Create a new resource pack with a folder's contents.
+			ResourcePack();
+			/// Cleans up the resource pack.
+			virtual ~ResourcePack();
+
+			/// Gets a particular font.
+			Font* getFont(const std::string& name) const;
+			/// Gets a particular surface.
+			Surface* getSurface(const std::string& name) const;
+			/// Gets a particular surface set.
+			SurfaceSet* getSurfaceSet(const std::string& name) const;
+			/// Gets the list of world polygons.
+			std::list<Polygon*>* getPolygons();
+			/// Gets the list of world polylines.
+			std::list<Polyline*>* getPolylines();
+			/// Gets a particular music.
+			Music* getMusic(const std::string& name) const;
+			/// Gets a random music.
+			Music* getRandomMusic(const std::string& name) const;
+			/// Gets a particular sound.
+			Sound* getSound(
+					const std::string& set,
+					unsigned int sound) const;
+			/// Gets a particular palette.
+			Palette* getPalette(const std::string& name) const;
+			/// Sets a new palette.
+			void setPalette(
+					SDL_Color* colors,
+					int firstcolor,
+					int ncolors);
+			/// Gets list of voxel data.
+			std::vector<Uint16>* getVoxelData();
 };
 
 }

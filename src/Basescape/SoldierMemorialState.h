@@ -26,11 +26,12 @@
 namespace OpenXcom
 {
 
-class TextButton;
-class Window;
-class Text;
-class TextList;
 class Base;
+class Text;
+class TextButton;
+class TextList;
+class Window;
+
 
 /**
  * Screen that shows all the soldiers
@@ -40,11 +41,19 @@ class SoldierMemorialState
 	:
 		public State
 {
+
 private:
 	TextButton* _btnOk;
 	Window* _window;
-	Text* _txtTitle, * _txtName, * _txtRank, * _txtDate, * _txtRecruited, * _txtLost;
+	Text
+		* _txtDate,
+		* _txtLost,
+		* _txtName,
+		* _txtRank,
+		* _txtRecruited,
+		* _txtTitle;
 	TextList* _lstSoldiers;
+
 
 	public:
 		/// Creates the Soldiers state.

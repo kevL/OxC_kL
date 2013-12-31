@@ -16,12 +16,16 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "Sound.h"
+
 #include <SDL.h>
+
 #include "Exception.h"
-#include "Options.h"
-#include "Logger.h"
 #include "Language.h"
+#include "Logger.h"
+#include "Options.h"
+
 
 namespace OpenXcom
 {
@@ -29,7 +33,9 @@ namespace OpenXcom
 /**
  * Initializes a new sound effect.
  */
-Sound::Sound() : _sound(0)
+Sound::Sound()
+	:
+		_sound(0)
 {
 }
 
@@ -43,9 +49,9 @@ Sound::~Sound()
 
 /**
  * Loads a sound file from a specified filename.
- * @param filename Filename of the sound file.
+ * @param filename, Filename of the sound file.
  */
-void Sound::load(const std::string &filename)
+void Sound::load(const std::string& filename)
 {
 	// SDL only takes UTF-8 filenames
 	// so here's an ugly hack to match this ugly reasoning
@@ -61,12 +67,14 @@ void Sound::load(const std::string &filename)
 
 /**
  * Loads a sound file from a specified memory chunk.
- * @param data Pointer to the sound file in memory
- * @param size Size of the sound file in bytes.
+ * @param data, Pointer to the sound file in memory
+ * @param size, Size of the sound file in bytes.
  */
-void Sound::load(const void *data, unsigned int size)
+void Sound::load(
+		const void* data,
+		unsigned int size)
 {
-	SDL_RWops *rw = SDL_RWFromConstMem(data, size);
+	SDL_RWops* rw = SDL_RWFromConstMem(data, size);
 	_sound = Mix_LoadWAV_RW(rw, 1);
 	if (_sound == 0)
 	{
@@ -79,7 +87,9 @@ void Sound::load(const void *data, unsigned int size)
  */
 void Sound::play(int channel) const
 {
-	if (!Options::getBool("mute") && _sound != 0 && Mix_PlayChannel(channel, _sound, 0) == -1)
+	if (!Options::getBool("mute")
+		&& _sound != 0
+		&& Mix_PlayChannel(channel, _sound, 0) == -1)
 	{
 		Log(LOG_WARNING) << Mix_GetError();
 	}

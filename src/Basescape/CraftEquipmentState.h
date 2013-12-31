@@ -63,6 +63,7 @@ private:
 //kL		* _txtCrew,
 		* _txtItem,
 		* _txtStores,
+		* _txtCraft,
 		* _txtTitle,
 		* _txtUsed;
 	TextButton

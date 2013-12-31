@@ -410,7 +410,7 @@ const Position& BattleUnit::getPosition() const
 }
 
 /**
- * Gets the BattleUnit's position.
+ * Gets the BattleUnit's last position.
  * @return position
  */
 const Position& BattleUnit::getLastPosition() const

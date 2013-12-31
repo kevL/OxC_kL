@@ -31,6 +31,7 @@ namespace OpenXcom
 
 const int STANDOFF_DIST = 560;
 
+
 class Craft;
 class CraftWeaponProjectile;
 class Globe;
@@ -49,6 +50,7 @@ class DogfightState
 	:
 		public State
 {
+
 private:
 	static const int _ufoBlobs[8][13][13];
 	static const int _projectileBlobs[4][6][3];
@@ -130,6 +132,7 @@ private:
 	// Ends the dogfight.
 	void endDogfight();
 
+
 	public:
 		/// Creates the Dogfight state.
 		DogfightState(
@@ -195,14 +198,16 @@ private:
 		void weapon2Click(Action* action);
 
 		/// Changes colors of weapon icons, range indicators and ammo texts base on current weapon state.
-		void recolor(const int weaponNo, const bool currentState);
+		void recolor(
+				const int weaponNo,
+				const bool currentState);
 
 		/// Returns true if state is minimized.
 		bool isMinimized() const;
 		/// Sets state minimized or maximized.
 		void setMinimized(const bool minimized);
 		/// Handler for clicking the minimized interception window icon.
-		void btnMinimizedIconClick(Action *action);
+		void btnMinimizedIconClick(Action* action);
 
 		/// Gets interception number.
 		int getInterceptionNumber() const;
