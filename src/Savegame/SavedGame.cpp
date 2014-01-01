@@ -193,13 +193,15 @@ SavedGame::~SavedGame()
 }
 
 /**
- * Gets all the saves found in the user folder
- * and adds them to a text list.
- * @param list Text list.
- * @param lang Loaded language.
- * @param details List of savegame details.
+ * Gets all the saves found in the user folder and adds them to a text list.
+ * @param list, Text list.
+ * @param lang, Loaded language.
+ * @param details, List of savegame details.
  */
-std::vector<std::string> SavedGame::getList(TextList* list, Language* lang, std::vector<std::wstring>* details)
+std::vector<std::string> SavedGame::getList(
+		TextList* list,
+		Language* lang,
+		std::vector<std::wstring>* details)
 {
 	details->clear();
 	std::vector<std::string> saves = CrossPlatform::getFolderContents(Options::getUserFolder(), "sav");
@@ -244,7 +246,13 @@ std::vector<std::string> SavedGame::getList(TextList* list, Language* lang, std:
 				wstr = Language::fsToWstr(s);
 			}
 
-			list->addRow(5, wstr.c_str(), saveTime.str().c_str(), saveDay.str().c_str(), saveMonth.str().c_str(), saveYear.str().c_str());
+			list->addRow(
+						5,
+						wstr.c_str(),
+						saveTime.str().c_str(),
+						saveDay.str().c_str(),
+						saveMonth.str().c_str(),
+						saveYear.str().c_str());
 		}
 		catch (Exception &e)
 		{
@@ -269,7 +277,9 @@ std::vector<std::string> SavedGame::getList(TextList* list, Language* lang, std:
  * @param filename YAML filename.
  * @param rule Ruleset for the saved game.
  */
-void SavedGame::load(const std::string& filename, Ruleset* rule)
+void SavedGame::load(
+		const std::string& filename,
+		Ruleset* rule)
 {
 	//Log(LOG_INFO) << "SavedGame::load()";
 

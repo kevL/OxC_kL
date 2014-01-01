@@ -498,7 +498,8 @@ uint8_t Base::detect(Target* target) const
 	}
 	else
 	{
-		int percent = 0;
+//		int chance = 0;
+		float chance = 0;
 
 		for (std::vector<BaseFacility*>::const_iterator
 				f = _facilities.begin();
@@ -512,9 +513,10 @@ uint8_t Base::detect(Target* target) const
 
 				if (targetDistance < radarRange)
 				{
-					percent += (*f)->getRules()->getRadarChance();
+//					chance += (*f)->getRules()->getRadarChance();
+					chance += static_cast<float>((*f)->getRules()->getRadarChance());
 					Log(LOG_INFO) << ". . radarRange = " << (int)radarRange;
-					Log(LOG_INFO) << ". . . percent(base) = " << percent;
+					Log(LOG_INFO) << ". . . chance(base) = " << (int)chance;
 				}
 				else
 				{
@@ -523,23 +525,29 @@ uint8_t Base::detect(Target* target) const
 			}
 		}
 
-		if (percent == 0)
+//		if (chance == 0)
+		if (AreSame(chance, 0.f))
 			return 0;
 		else
 		{
 			Ufo* u = dynamic_cast<Ufo*>(target);
 			if (u != 0)
 			{
-				percent += u->getVisibility();
-				Log(LOG_INFO) << ". . percent(base + ufo) = " << percent;
+				chance += static_cast<float>(u->getVisibility());
+				Log(LOG_INFO) << ". . chance(base + ufo) = " << (int)chance;
 			}
 
-			if (percent < 1)
+			// need to divide by 3, since Geoscape-detection was moved from 30m to 10m time-slot.
+			chance /= 3.f;
+			// and convert to int:
+			int iChance = static_cast<int>(chance);
+
+			if (iChance < 1)
 				return 0;
 			else
 			{
-				ret = static_cast<uint8_t>(RNG::percent(percent));
-				Log(LOG_INFO) << ". detected = " << static_cast<int>(ret);
+				ret = static_cast<uint8_t>(RNG::percent(iChance));
+				Log(LOG_INFO) << ". detected = " << (int)ret;
 			}
 		}
 	}

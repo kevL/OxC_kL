@@ -73,7 +73,7 @@ ManufactureState::ManufactureState(
 	_txtItem		= new Text(120, 9, 16, 52);
 	_txtEngineers	= new Text(45, 9, 145, 52);
 	_txtProduced	= new Text(40, 9, 174, 44);
-	_txtCost		= new Text(50, 17, 216, 44);
+	_txtCost		= new Text(50, 17, 215, 44);
 	_txtTimeLeft	= new Text(55, 17, 271, 44);
 
 	_lstManufacture	= new TextList(285, 96, 16, 70);
@@ -95,8 +95,6 @@ ManufactureState::ManufactureState(
 				16);
 
 	add(_window);
-	add(_btnNew);
-	add(_btnOk);
 	add(_txtTitle);
 	add(_txtAvailable);
 	add(_txtAllocated);
@@ -108,6 +106,8 @@ ManufactureState::ManufactureState(
 	add(_txtCost);
 	add(_txtTimeLeft);
 	add(_lstManufacture);
+	add(_btnNew);
+	add(_btnOk);
 
 	centerAllSurfaces();
 
@@ -170,7 +170,7 @@ ManufactureState::ManufactureState(
 
 	_lstManufacture->setColor(Palette::blockOffset(13)+10);
 	_lstManufacture->setArrowColor(Palette::blockOffset(15)+9);
-	_lstManufacture->setColumns(5, 121, 29, 42, 55, 30);
+	_lstManufacture->setColumns(5, 121, 29, 41, 56, 30);
 //kL	_lstManufacture->setAlign(ALIGN_RIGHT);
 //kL	_lstManufacture->setAlign(ALIGN_LEFT, 0);
 	_lstManufacture->setSelectable(true);
