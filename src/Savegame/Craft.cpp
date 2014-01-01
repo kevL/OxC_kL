@@ -788,7 +788,7 @@ bool Craft::detect(Target* target) const
 
 	double radarRange = static_cast<double>(_rules->getRadarRange());
 	//Log(LOG_INFO) << ". radarRange = " << radarRange;
-	if (radarRange == 0.0)
+	if (AreSame(radarRange, 0.0))
 		return false;
 
 	double targetDistance = getDistance(target) * 3440.0;

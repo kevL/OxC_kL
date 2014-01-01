@@ -1469,7 +1469,7 @@ void GeoscapeState::time10Minutes()
 
 			if (!(*u)->getDetected())
 			{
-				//Log(LOG_INFO) << ". handle undetected uFo";
+				Log(LOG_INFO) << ". handle undetected uFo";
 
 				bool
 					detected = false,
@@ -1481,7 +1481,9 @@ void GeoscapeState::time10Minutes()
 							&& !hyperdet;
 						++b)
 				{
-					switch ((*b)->detect(*u))
+					Log(LOG_INFO) << ". Base detection";
+
+					switch (static_cast<int>((*b)->detect(*u)))
 					{
 						case 2:
 							Log(LOG_INFO) << ". detect() = 2, hyperDet";
@@ -1526,7 +1528,7 @@ void GeoscapeState::time10Minutes()
 			}
 			else // ufo is already detected
 			{
-				//Log(LOG_INFO) << ". handle previously detected uFo";
+				Log(LOG_INFO) << ". handle previously detected uFo";
 
 				bool hyperdet = false; // (*u)->getHyperDetected();
 				bool detected = false;
@@ -1537,6 +1539,8 @@ void GeoscapeState::time10Minutes()
 							&& !hyperdet;
 						++b)
 				{
+					Log(LOG_INFO) << ". Base re-detection";
+
 					double targetRange = (*b)->insideRadarRange(*u); // -2.0 =outside range ; -1.0 =hyperdetected ; 0.0+ =targetDistance
 					if (targetRange > -1.99)
 					{
