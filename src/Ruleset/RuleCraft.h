@@ -20,16 +20,18 @@
 #ifndef OPENXCOM_RULECRAFT_H
 #define OPENXCOM_RULECRAFT_H
 
-#include <vector>
 #include <string>
+#include <vector>
+
 #include <yaml-cpp/yaml.h>
 
 
 namespace OpenXcom
 {
 
-class RuleTerrain;
 class Ruleset;
+class RuleTerrain;
+
 
 /**
  * Represents a specific type of craft.
@@ -39,16 +41,36 @@ class Ruleset;
  */
 class RuleCraft
 {
-	private:
-		std::string _type;
-		std::vector<std::string> _requires;
-		int _sprite;
-		int _fuelMax, _damageMax, _speedMax, _accel, _weapons, _soldiers, _vehicles, _costBuy, _costRent, _costSell;
-		std::string _refuelItem;
-		int _repairRate, _refuelRate, _radarRange, _transferTime, _score;
-		RuleTerrain* _battlescapeTerrainData;
-		bool _spacecraft;
-		int _listOrder;
+private:
+	bool _spacecraft;
+	int
+		_costBuy,
+		_costRent,
+		_costSell,
+		_listOrder,
+		_radarRange,
+		_refuelRate,
+		_repairRate,
+		_score,
+		_sprite,
+		_transferTime,
+
+		_fuelMax,
+		_damageMax,
+		_speedMax,
+		_accel,
+		_weapons,
+		_soldiers,
+		_vehicles;
+
+	std::string
+		_refuelItem,
+		_type;
+
+	RuleTerrain* _battlescapeTerrainData;
+
+	std::vector<std::string> _requires;
+
 
 	public:
 		/// Creates a blank craft ruleset.
@@ -57,13 +79,21 @@ class RuleCraft
 		~RuleCraft();
 
 		/// Loads craft data from YAML.
-		void load(const YAML::Node& node, Ruleset* ruleset, int modIndex, int nextCraftIndex);
+		void load(
+				const YAML::Node& node,
+				Ruleset* ruleset,
+				int modIndex,
+				int nextCraftIndex);
+
 		/// Gets the craft's type.
 		std::string getType() const;
+
 		/// Gets the craft's requirements.
 		const std::vector<std::string>& getRequirements() const;
+
 		/// Gets the craft's sprite.
 		int getSprite() const;
+
 		/// Gets the craft's maximum fuel.
 		int getMaxFuel() const;
 		/// Gets the craft's maximum damage.
@@ -72,20 +102,24 @@ class RuleCraft
 		int getMaxSpeed() const;
 		/// Gets the craft's acceleration.
 		int getAcceleration() const;
+
 		/// Gets the craft's weapon capacity.
 		int getWeapons() const;
 		/// Gets the craft's soldier capacity.
 		int getSoldiers() const;
 		/// Gets the craft's vehicle capacity.
 		int getVehicles() const;
+
 		/// Gets the craft's cost.
 		int getBuyCost() const;
 		/// Gets the craft's rent for a month.
 		int getRentCost() const;
 		/// Gets the craft's value.
 		int getSellCost() const;
+
 		/// Gets the craft's refuel item.
 		std::string getRefuelItem() const;
+
 		/// Gets the craft's repair rate.
 		int getRepairRate() const;
 		/// Gets the craft's refuel rate.
@@ -94,12 +128,16 @@ class RuleCraft
 		int getRadarRange() const;
 		/// Gets the craft's transfer time.
 		int getTransferTime() const;
+
 		/// Gets the craft's score.
 		int getScore() const;
+
 		/// Gets the craft's terrain data.
 		RuleTerrain* getBattlescapeTerrainData();
-		/// Checks if this craft is capable of travelling to mars.
+
+		/// Checks if this craft is capable of travelling to Mars.
 		bool getSpacecraft() const;
+
 		/// Gets the list weight for this craft.
 		int getListOrder() const;
 };

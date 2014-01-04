@@ -16,37 +16,44 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_SOLDIERDEATH_H
 #define OPENXCOM_SOLDIERDEATH_H
 
 #include <yaml-cpp/yaml.h>
+
 #include "GameTime.h"
+
 
 namespace OpenXcom
 {
 
 class GameTime;
 
+
 /**
  * Stores info about a soldier's death.
  */
 class SoldierDeath
 {
+
 private:
 	GameTime _time;
-public:
-	/// Creates a death.
-	SoldierDeath();
-	/// Cleans up the death.
-	~SoldierDeath();
-	/// Loads the death from YAML.
-	void load(const YAML::Node& node);
-	/// Saves the death to YAML.
-	YAML::Node save() const;
-	/// Gets the death time.
-	const GameTime *getTime() const;
-	/// Sets the death time.
-	void setTime(GameTime *time);
+
+	public:
+		/// Creates a death.
+		SoldierDeath();
+		/// Cleans up the death.
+		~SoldierDeath();
+
+		/// Loads the death from YAML.
+		void load(const YAML::Node& node);
+		/// Saves the death to YAML.
+		YAML::Node save() const;
+		/// Gets the death time.
+		const GameTime* getTime() const;
+		/// Sets the death time.
+		void setTime(GameTime* time);
 };
 
 }

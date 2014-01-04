@@ -35,17 +35,17 @@ class Language;
 
 enum TextHAlign
 {
-	ALIGN_LEFT,
-	ALIGN_CENTER,
-	ALIGN_RIGHT
+	ALIGN_LEFT,		// 0
+	ALIGN_CENTER,	// 1
+	ALIGN_RIGHT		// 2
 };
 
 
 enum TextVAlign
 {
-	ALIGN_TOP,
-	ALIGN_MIDDLE,
-	ALIGN_BOTTOM
+	ALIGN_TOP,		// 0
+	ALIGN_MIDDLE,	// 1
+	ALIGN_BOTTOM	// 2
 };
 
 

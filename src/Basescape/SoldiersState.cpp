@@ -169,10 +169,10 @@ void SoldiersState::init()
 			++i)
 	{
 		_lstSoldiers->addRow(
-				3,
-				(*i)->getName().c_str(),
-				tr((*i)->getRankString()).c_str(),
-				(*i)->getCraftString(_game->getLanguage()).c_str());
+							3,
+							(*i)->getName().c_str(),
+							tr((*i)->getRankString()).c_str(),
+							(*i)->getCraftString(_game->getLanguage()).c_str());
 
 		if ((*i)->getCraft() == 0)
 		{
@@ -204,7 +204,9 @@ void SoldiersState::btnOkClick(Action*)
  */
 void SoldiersState::btnPsiTrainingClick(Action*)
 {
-	_game->pushState(new AllocatePsiTrainingState(_game, _base));
+	_game->pushState(new AllocatePsiTrainingState(
+												_game,
+												_base));
 }
 
 /**
@@ -214,7 +216,10 @@ void SoldiersState::btnPsiTrainingClick(Action*)
  */
 void SoldiersState::btnArmorClick_Soldier(Action*)
 {
-	_game->pushState(new CraftArmorState(_game, _base, (size_t)0));
+	_game->pushState(new CraftArmorState(
+										_game,
+										_base,
+										static_cast<size_t>(0)));
 }
 
 /**
@@ -240,7 +245,10 @@ void SoldiersState::lstSoldiersClick(Action* action)
 		return;
 	}
 
-	_game->pushState(new SoldierInfoState(_game, _base, _lstSoldiers->getSelectedRow()));
+	_game->pushState(new SoldierInfoState(
+										_game,
+										_base,
+										_lstSoldiers->getSelectedRow()));
 }
 
 /**

@@ -48,7 +48,10 @@ namespace OpenXcom
  * @param base Pointer to the base to get info from.
  * @param state Pointer to the base state to refresh.
  */
-BuildFacilitiesState::BuildFacilitiesState(Game* game, Base* base, State* state)
+BuildFacilitiesState::BuildFacilitiesState(
+		Game* game,
+		Base* base,
+		State* state)
 	:
 		State(game),
 		_base(base),
@@ -57,11 +60,16 @@ BuildFacilitiesState::BuildFacilitiesState(Game* game, Base* base, State* state)
 {
 	_screen = false;
 
-	_window			= new Window(this, 128, 160, 192, 40, POPUP_VERTICAL);
-	_btnOk			= new TextButton(112, 16, 200, 176);
-	_lstFacilities	= new TextList(112, 104, 200, 64);
+	_window			= new Window(
+								this,
+								128,
+								160,
+								192,
+								40,
+								POPUP_VERTICAL);
 	_txtTitle		= new Text(118, 17, 197, 48);
-
+	_lstFacilities	= new TextList(112, 104, 200, 64);
+	_btnOk			= new TextButton(112, 16, 200, 176);
 
 	_game->setPalette(
 				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)),
@@ -69,9 +77,9 @@ BuildFacilitiesState::BuildFacilitiesState(Game* game, Base* base, State* state)
 				16);
 
 	add(_window);
-	add(_btnOk);
 	add(_txtTitle);
 	add(_lstFacilities);
+	add(_btnOk);
 
 	centerAllSurfaces();
 
@@ -82,7 +90,9 @@ BuildFacilitiesState::BuildFacilitiesState(Game* game, Base* base, State* state)
 	_btnOk->setColor(Palette::blockOffset(13)+5);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& BuildFacilitiesState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)& BuildFacilitiesState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& BuildFacilitiesState::btnOkClick,
+					(SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(13));
 	_txtTitle->setBig();
@@ -91,11 +101,12 @@ BuildFacilitiesState::BuildFacilitiesState(Game* game, Base* base, State* state)
 
 	_lstFacilities->setColor(Palette::blockOffset(13)+5);
 	_lstFacilities->setArrowColor(Palette::blockOffset(13)+5);
-	_lstFacilities->setColumns(1, 112);
+	_lstFacilities->setColumns(1, 109);
 	_lstFacilities->setSelectable(true);
-	_lstFacilities->setScrolling(true, -12);
+//kL	_lstFacilities->setScrolling(true, -12);
+	_lstFacilities->setScrolling(false); // kL
 	_lstFacilities->setBackground(_window);
-	_lstFacilities->setMargin(2);
+	_lstFacilities->setMargin(3);
 	_lstFacilities->onMouseClick((ActionHandler)& BuildFacilitiesState::lstFacilitiesClick);
 
 	PopulateBuildList();
@@ -133,7 +144,9 @@ void BuildFacilitiesState::PopulateBuildList()
 			i != _facilities.end();
 			++i)
 	{
-		_lstFacilities->addRow(1, tr((*i)->getType()).c_str());
+		_lstFacilities->addRow(
+							1,
+							tr((*i)->getType()).c_str());
 	}
 }
 

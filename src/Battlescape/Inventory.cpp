@@ -373,7 +373,10 @@ void Inventory::drawItems()
 		}
 
 		// this is the "slightly darker" version that goes in four cardinals.
-		for (int z = -1; z <= 1; z += 2)
+		for (int
+				z = -1;
+				z <= 1;
+				z += 2)
 		{
 			stackLayer->blitNShade(_items, z, 0, 8);
 			stackLayer->blitNShade(_items, 0, z, 8);
@@ -585,9 +588,9 @@ void Inventory::blit(Surface* surface)
 void Inventory::mouseOver(Action* action, State* state)
 {
 	_selection->setX(static_cast<int>(
-									floor(action->getAbsoluteXMouse())) - (_selection->getWidth() / 2) - _dx);
+						floor(action->getAbsoluteXMouse())) - (_selection->getWidth() / 2) - _dx);
 	_selection->setY(static_cast<int>(
-									floor(action->getAbsoluteYMouse())) - (_selection->getHeight() / 2) - _dy);
+						floor(action->getAbsoluteYMouse())) - (_selection->getHeight() / 2) - _dy);
 
 	InteractiveSurface::mouseOver(action, state);
 }
@@ -867,7 +870,8 @@ void Inventory::mouseClick(Action* action, State* state)
 	{
 		if (_selItem == 0)
 		{
-			if (!_tu) // kL_note: ie. TurnUnits have not been instantiated yet: ergo preBattlescape inventory screen is active.
+			if (!_tu)	// kL_note: ie. TurnUnits have not been instantiated yet:
+						// ergo preBattlescape inventory screen is active.
 			{
 				int x = static_cast<int>(floor(action->getAbsoluteXMouse())) - _dx,
 					y = static_cast<int>(floor(action->getAbsoluteYMouse())) - _dy;
@@ -912,9 +916,11 @@ void Inventory::mouseClick(Action* action, State* state)
 				_game->popState(); // Closes the inventory window on right-click (if not in preBattle equip screen!)
 
 				// but Does NOT applyGravity(), so from InventoryState::btnOkClick()
-				_game->getSavedGame()->getSavedBattle()->getTileEngine()->applyGravity(_game->getSavedGame()->getSavedBattle()->getSelectedUnit()->getTile());
-				_game->getSavedGame()->getSavedBattle()->getTileEngine()->calculateTerrainLighting(); // dropping / picking up flares
-				_game->getSavedGame()->getSavedBattle()->getTileEngine()->recalculateFOV();
+				SavedBattleGame* battleGame = _game->getSavedGame()->getSavedBattle();
+				TileEngine* tileEngine = battleGame->getTileEngine();
+				tileEngine->applyGravity(battleGame->getSelectedUnit()->getTile());
+				tileEngine->calculateTerrainLighting(); // dropping / picking up flares
+				tileEngine->recalculateFOV();
 
 				// from BattlescapeGame::dropItem() but can't really use this because I don't know exactly what dropped...
 				// could figure it out via what's on Ground but meh.

@@ -40,8 +40,8 @@ class CraftsState
 	:
 		public State
 {
-private:
 
+private:
 	Base* _base;
 	Text
 		* _txtBase,
@@ -57,7 +57,6 @@ private:
 
 
 	public:
-
 		/// Creates the Crafts state.
 		CraftsState(
 				Game* game,

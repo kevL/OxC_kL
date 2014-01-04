@@ -67,31 +67,37 @@ enum BattleActionType
 
 struct BattleAction
 {
-	BattleActionType type;
-	BattleUnit* actor;
-	BattleItem* weapon;
-	Position target;
-	std::list<Position> waypoints;
-	int TU;
-	bool targeting;
-	int value;
+	bool
+		desperate, // ignoring newly-spotted units
+		finalAction,
+		run,
+		strafe,
+		targeting;
+	int
+		autoShotCounter,
+		diff,
+		finalFacing,
+		number, // first action of turn, second, etc.?
+		TU,
+		value;
+
 	std::string result;
-	bool strafe, run;
-	int diff;
-	int autoShotCounter;
-	Position cameraPosition;
-    bool desperate; // ignoring newly-spotted units
-	int finalFacing;
-	bool finalAction;
-    int number; // first action of turn, second, etc.?
+
+	BattleActionType type;
+	BattleItem* weapon;
+	BattleUnit* actor;
+	Position
+		cameraPosition,
+		target;
+
+	std::list<Position> waypoints;
+
 
 	BattleAction()
 		:
 			type(BA_NONE),
 			actor(0),
 			weapon(0),
-//			target(0, 0, 0),	// kL
-//waypoints
 			TU(0),
 			targeting(false),
 			value(0),
@@ -159,6 +165,7 @@ private:
 		void think();
 		/// Initializes the Battlescape game.
 		void init();
+
 		/// Determines whether a playable unit is selected.
 		bool playableUnitSelected();
 		/// Handles states timer.
@@ -184,18 +191,21 @@ private:
 		/// Checks if a unit panics.
 //kL		void checkForPanic(BattleUnit *unit);
 		/// Checks reserved tu.
-		bool checkReservedTU(BattleUnit* bu,
+		bool checkReservedTU(
+				BattleUnit* bu,
 				int tu,
 				bool justChecking = false);
 		/// Handles unit AI.
 		void handleAI(BattleUnit* unit);
 		/// Drops an item and affects it with gravity.
-		void dropItem(const Position& position,
+		void dropItem(
+				const Position& position,
 				BattleItem* item,
 				bool newItem = false,
 				bool removeItem = false);
 		/// Converts a unit into a unit of another type.
-		BattleUnit* convertUnit(BattleUnit* unit,
+		BattleUnit* convertUnit(
+				BattleUnit* unit,
 				std::string newType);
 		/// Handles kneeling action.
 		bool kneel(BattleUnit* bu);
@@ -214,12 +224,14 @@ private:
 		/// Handler for the psi button.
 		void psiButtonAction();
 		/// Moves a unit up or down.
-		void moveUpDown(BattleUnit* unit,
+		void moveUpDown(
+				BattleUnit* unit,
 				int dir);
 		/// Requests the end of the turn (wait for explosions etc to really end the turn).
 		void requestEndTurn();
 		/// Sets the TU reserved type.
-		void setTUReserved(BattleActionType tur,
+		void setTUReserved(
+				BattleActionType tur,
 				bool player);
 		/// Sets up the cursor taking into account the action.
 		void setupCursor();
@@ -247,18 +259,22 @@ private:
 		/// Checks through all the items on the ground and picks one.
 		BattleItem* surveyItems(BattleAction* action);
 		/// Evaluates if it's worthwhile to take this item.
-		bool worthTaking(BattleItem* item,
+		bool worthTaking(
+				BattleItem* item,
 				BattleAction* action);
 		/// Picks the item up from the ground.
-		int takeItemFromGround(BattleItem* item,
+		int takeItemFromGround(
+				BattleItem* item,
 				BattleAction* action);
 		/// Assigns the item to a slot (stolen from battlescapeGenerator::addItem()).
-		bool takeItem(BattleItem* item,
+		bool takeItem(
+				BattleItem* item,
 				BattleAction* action);
 		/// Returns the type of action that is reserved.
 		BattleActionType getReservedAction();
 		/// Tallies the living units, converting them if necessary.
-		void tallyUnits(int& liveAliens,
+		void tallyUnits(
+				int& liveAliens,
 				int& liveSoldiers,
 				bool convert);
 		/// Sets the kneel reservation setting.

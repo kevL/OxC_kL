@@ -90,7 +90,7 @@ SellState::SellState(
 
 	_txtItem		= new Text(130, 9, 16, 33);
 	_txtQuantity	= new Text(54, 9, 166, 33);
-	_txtSell		= new Text(96, 9, 226, 33);
+	_txtSell		= new Text(20, 9, 226, 33);
 	_txtValue		= new Text(40, 9, 246, 33);
 
 	_lstItems		= new TextList(285, 128, 16, 44);
@@ -100,9 +100,9 @@ SellState::SellState(
 
 
 	_game->setPalette(
-					_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)),
-					Palette::backPos,
-					16);
+				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)),
+				Palette::backPos,
+				16);
 
 	add(_window);
 	add(_txtTitle);
@@ -125,13 +125,17 @@ SellState::SellState(
 	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(tr("STR_SELL_SACK"));
 	_btnOk->onMouseClick((ActionHandler)& SellState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)& SellState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& SellState::btnOkClick,
+					(SDLKey)Options::getInt("keyOk"));
 	_btnOk->setVisible(false);
 
 	_btnCancel->setColor(Palette::blockOffset(13)+10);
 	_btnCancel->setText(tr("STR_CANCEL"));
 	_btnCancel->onMouseClick((ActionHandler)& SellState::btnCancelClick);
-	_btnCancel->onKeyboardPress((ActionHandler)& SellState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnCancel->onKeyboardPress(
+					(ActionHandler)& SellState::btnCancelClick,
+					(SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
@@ -139,10 +143,12 @@ SellState::SellState(
 	_txtTitle->setText(tr("STR_SELL_ITEMS_SACK_PERSONNEL"));
 
 	_txtSales->setColor(Palette::blockOffset(13)+10);
-	_txtSales->setText(tr("STR_VALUE_OF_SALES").arg(Text::formatFunding(_total)));
+	_txtSales->setText(tr("STR_VALUE_OF_SALES")
+						.arg(Text::formatFunding(_total)));
 
 	_txtFunds->setColor(Palette::blockOffset(13)+10);
-	_txtFunds->setText(tr("STR_FUNDS").arg(Text::formatFunding(_game->getSavedGame()->getFunds())));
+	_txtFunds->setText(tr("STR_FUNDS")
+						.arg(Text::formatFunding(_game->getSavedGame()->getFunds())));
 
 	_txtItem->setColor(Palette::blockOffset(13)+10);
 	_txtItem->setText(tr("STR_ITEM"));

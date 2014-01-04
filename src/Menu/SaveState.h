@@ -21,6 +21,7 @@
 #define OPENXCOM__SAVESTATE_H
 
 #include <string>
+
 #include "SavedGameState.h"
 
 
@@ -28,6 +29,7 @@ namespace OpenXcom
 {
 
 class TextEdit;
+
 
 /**
  * Save Game screen for listing info on available
@@ -37,25 +39,38 @@ class SaveState
 	:
 		public SavedGameState
 {
+
 private:
-	TextEdit* _edtSave;
+	int
+		_previousSelectedRow,
+		_selectedRow;
+
 	std::wstring _selected;
-	int _previousSelectedRow, _selectedRow;
+
+	TextEdit* _edtSave;
+
 
 	public:
 		/// Creates the Save Game state.
-		SaveState(Game* game, OptionsOrigin origin);
+		SaveState(
+				Game* game,
+				OptionsOrigin origin);
 		/// Creates the Quick Save Game state.
-		SaveState(Game* game, OptionsOrigin origin, bool showMsg);
+		SaveState(
+				Game* game,
+				OptionsOrigin origin,
+				bool showMsg);
 		/// Cleans up the Save Game state.
 		~SaveState();
 
 		/// Updates the savegame list.
 		void updateList();
+
 		/// Handler for pressing a key on the Save edit.
 		void edtSaveKeyPress(Action* action);
 		/// Handler for clicking the Saves list.
 		void lstSavesPress(Action* action);
+
 		/// Quick save game.
 		void quickSave(const std::string& filename);
 };

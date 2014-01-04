@@ -26,12 +26,12 @@
 namespace OpenXcom
 {
 
-class Ufo;
-class TextButton;
-class Window;
-class Text;
-class TextList;
 class GeoscapeState;
+class Text;
+class TextButton;
+class TextList;
+class Ufo;
+class Window;
 
 
 /**

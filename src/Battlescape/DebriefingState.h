@@ -44,7 +44,9 @@ class Window;
 
 struct DebriefingStat
 {
-	DebriefingStat(std::string _item, bool recovery)
+	DebriefingStat(
+			std::string _item,
+			bool recovery = false)
 		:
 			item(_item),
 			qty(0),
@@ -53,10 +55,11 @@ struct DebriefingStat
 	{
 	};
 
-	std::string item;
-	int qty;
-	int score;
 	bool recovery;
+	int
+		qty,
+		score;
+	std::string item;
 };
 
 
@@ -67,6 +70,7 @@ struct ReequipStat
 	std::wstring craft;
 };
 
+
 /**
  * Debriefing screen shown after a Battlescape
  * mission that displays the results.
@@ -75,28 +79,52 @@ class DebriefingState
 	:
 		public State
 {
+
 private:
-	Region* _region;
-	Country* _country;
+	bool
+		_destroyBase,
+		_manageContainment,
+		_noContainment;
+	int _containmentLimit;
+
 	Base* _base;
-	std::vector<DebriefingStat*> _stats;
+	Country* _country;
+	Region* _region;
+	Text
+		* _txtItem,
+		* _txtQuantity,
+		* _txtRating,
+		* _txtRecovery,
+		* _txtScore,
+		* _txtTitle;
 	TextButton* _btnOk;
+	TextList
+		* _lstRecovery,
+		* _lstStats,
+		* _lstTotal;
 	Window* _window;
-	Text* _txtTitle, * _txtItem, * _txtQuantity, * _txtScore, * _txtRecovery, * _txtRating;
-	TextList* _lstStats, * _lstRecovery, * _lstTotal;
-	std::vector<ReequipStat> _missingItems;
+
 	std::map<RuleItem*, int> _rounds;
+	std::vector<ReequipStat> _missingItems;
+	std::vector<DebriefingStat*> _stats;
 
 	/// Adds to the debriefing stats.
-	void addStat(const std::string& name, int quantity, int score);
+	void addStat(
+			const std::string& name,
+			int quantity,
+			int score);
 	/// Prepares debriefing.
 	void prepareDebriefing();
 	/// Recovers items from the battlescape.
-	void recoverItems(std::vector<BattleItem*>* from, Base* base);
+	void recoverItems(
+			std::vector<BattleItem*>* from,
+			Base* base);
 	/// Reequips a craft after a mission.
-	void reequipCraft(Base* base, Craft* craft, bool vehicleItemsCanBeDestroyed);
-	bool _noContainment, _manageContainment, _destroyBase;
-	int _containmentLimit;
+	void reequipCraft(
+			Base* base,
+			Craft* craft,
+			bool vehicleItemsCanBeDestroyed);
+
 
 	public:
 		/// Creates the Debriefing state.

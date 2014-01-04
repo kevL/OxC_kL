@@ -26,12 +26,13 @@
 namespace OpenXcom
 {
 
-class TextButton;
-class Window;
-class Text;
 class Craft;
 class Globe;
+class Text;
+class TextButton;
 class Waypoint;
+class Window;
+
 
 /**
  * Craft window that displays info about
@@ -41,20 +42,43 @@ class GeoscapeCraftState
 	:
 		public State
 {
+
 private:
 	Craft* _craft;
 	Globe* _globe;
+	Text
+		* _txtAltitude,
+		* _txtBase,
+		* _txtDamage,
+		* _txtFuel,
+		* _txtHWP,
+		* _txtMaxSpeed,
+		* _txtRedirect,
+		* _txtSoldier,
+		* _txtSpeed,
+		* _txtStatus,
+		* _txtTitle,
+		* _txtW1Ammo,
+		* _txtW1Name,
+		* _txtW2Ammo,
+		* _txtW2Name;
+	TextButton
+		* _btnBase,
+		* _btnCancel,
+		* _btnCenter,
+		* _btnPatrol,
+		* _btnTarget;
 	Waypoint* _waypoint;
-
-	TextButton* _btnBase, * _btnTarget, * _btnPatrol, * _btnCancel;
-	TextButton* _btnCenter;
 	Window* _window;
-	Text* _txtTitle, * _txtStatus, * _txtBase, * _txtSpeed, * _txtMaxSpeed, * _txtAltitude, * _txtFuel, * _txtDamage,
-			* _txtW1Name, * _txtW1Ammo, * _txtW2Name, * _txtW2Ammo, * _txtRedirect, * _txtHWP, * _txtSoldier;
+
 
 	public:
 		/// Creates the Geoscape Craft state.
-		GeoscapeCraftState(Game* game, Craft* craft, Globe* globe, Waypoint* waypoint);
+		GeoscapeCraftState(
+				Game* game,
+				Craft* craft,
+				Globe* globe,
+				Waypoint* waypoint);
 		/// Cleans up the Geoscape Craft state.
 		~GeoscapeCraftState();
 

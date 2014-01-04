@@ -40,6 +40,7 @@ class PsiTrainingState
 	:
 		public State
 {
+
 private:
 	TextButton
 		* _btnOk,

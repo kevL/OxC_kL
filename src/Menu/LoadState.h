@@ -33,18 +33,24 @@ class LoadState
 	:
 		public SavedGameState
 {
-	public:
-		/// Creates the Load Game state.
-		LoadState(Game* game, OptionsOrigin origin);
-		/// Creates the Quick Load Game state.
-		LoadState(Game* game, OptionsOrigin origin, bool showMsg);
-		/// Cleans up the Load Game state.
-		~LoadState();
 
-		/// Handler for clicking the Saves list.
-		void lstSavesPress(Action* action);
-		/// Quick load game.
-		void quickLoad(const std::string& filename);
+public:
+	/// Creates the Load Game state.
+	LoadState(
+			Game* game,
+			OptionsOrigin origin);
+	/// Creates the Quick Load Game state.
+	LoadState(
+			Game* game,
+			OptionsOrigin origin,
+			bool showMsg);
+	/// Cleans up the Load Game state.
+	~LoadState();
+
+	/// Handler for clicking the Saves list.
+	void lstSavesPress(Action* action);
+	/// Quick load game.
+	void quickLoad(const std::string& filename);
 };
 
 }

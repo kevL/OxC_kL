@@ -67,7 +67,13 @@ CraftWeaponsState::CraftWeaponsState(
 {
 	_screen = false;
 
-	_window			= new Window(this, 220, 160, 50, 20, POPUP_BOTH);
+	_window			= new Window(
+								this,
+								220,
+								160,
+								50,
+								20,
+								POPUP_BOTH);
 	_txtTitle		= new Text(200, 17, 60, 32);
 
 	_txtArmament	= new Text(98, 9, 66, 53);
@@ -101,7 +107,9 @@ CraftWeaponsState::CraftWeaponsState(
 	_btnCancel->setColor(Palette::blockOffset(15)+6);
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)& CraftWeaponsState::btnCancelClick);
-	_btnCancel->onKeyboardPress((ActionHandler)& CraftWeaponsState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnCancel->onKeyboardPress(
+					(ActionHandler)& CraftWeaponsState::btnCancelClick,
+					(SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(15)+6);
 	_txtTitle->setBig();
@@ -171,7 +179,7 @@ CraftWeaponsState::~CraftWeaponsState()
 
 /**
  * Returns to the previous screen.
- * @param action Pointer to an action.
+ * @param action, Pointer to an action
  */
 void CraftWeaponsState::btnCancelClick(Action*)
 {
@@ -180,7 +188,7 @@ void CraftWeaponsState::btnCancelClick(Action*)
 
 /**
  * Equips the weapon on the craft and returns to the previous screen.
- * @param action Pointer to an action.
+ * @param action, Pointer to an action
  */
 void CraftWeaponsState::lstWeaponsClick(Action*)
 {
@@ -189,9 +197,8 @@ void CraftWeaponsState::lstWeaponsClick(Action*)
 	{
 		_base->getItems()->addItem(current->getRules()->getLauncherItem());
 		_base->getItems()->addItem(
-				current->getRules()->getClipItem(),
-// OLD.				static_cast<int>(floor(static_cast<double>(current->getAmmo() / current->getRules()->getRearmRate()))));
-				current->getClipsLoaded(_game->getRuleset()));
+								current->getRules()->getClipItem(),
+								current->getClipsLoaded(_game->getRuleset()));
 
 		delete current;
 		_base->getCrafts()->at(_craft)->getWeapons()->at(_weapon) = 0;
@@ -199,7 +206,9 @@ void CraftWeaponsState::lstWeaponsClick(Action*)
 
 	if (_weapons[_lstWeapons->getSelectedRow()] != 0) // Equip new weapon
 	{
-		CraftWeapon* sel = new CraftWeapon(_weapons[_lstWeapons->getSelectedRow()], 0);
+		CraftWeapon* sel = new CraftWeapon(
+									_weapons[_lstWeapons->getSelectedRow()],
+									0);
 		sel->setRearming(true);
 
 		_base->getItems()->removeItem(sel->getRules()->getLauncherItem());

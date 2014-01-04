@@ -26,12 +26,13 @@
 namespace OpenXcom
 {
 
-class TextButton;
-class Window;
-class Text;
 class Craft;
 class Globe;
+class Text;
+class TextButton;
+class Window;
 //class GeoscapeState;	// kL
+
 
 /**
  * Window displayed when a craft
@@ -41,23 +42,31 @@ class CraftPatrolState
 	:
 		public State
 {
-	private:
-		Craft* _craft;
-		Globe* _globe;
+private:
+	Craft* _craft;
+//	GeoscapeState* _gs;		// kL
+	Globe* _globe;
+	Text
+		* _txtDestination,
+		* _txtPatrolling;
+	TextButton
+		* _btnOk,
+		* _btnRedirect;
+	Window* _window;
 
-		TextButton* _btnOk, * _btnRedirect;
-		Window* _window;
-		Text* _txtDestination, * _txtPatrolling;
-//		GeoscapeState* _gs;		// kL
 
 	public:
 		/// Creates the Geoscape Craft state.
-		CraftPatrolState(Game* game, Craft* craft, Globe* globe);
+		CraftPatrolState(
+				Game* game,
+				Craft* craft,
+				Globe* globe);
 		/// Cleans up the Geoscape Craft state.
 		~CraftPatrolState();
 
 		/// Updates the palette.
 		void init();
+
 		/// Handler for clicking the OK button.
 		void btnOkClick(Action* action);
 		/// Handler for clicking the Redirect Craft button.

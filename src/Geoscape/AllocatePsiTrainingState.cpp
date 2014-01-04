@@ -52,14 +52,15 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param base Pointer to the base to handle.
  */
-AllocatePsiTrainingState::AllocatePsiTrainingState(Game* game, Base* base)
+AllocatePsiTrainingState::AllocatePsiTrainingState(
+		Game* game,
+		Base* base)
 	:
 		State(game)
 {
 	_base = base;
 
 	_window			= new Window(this, 320, 200, 0, 0);
-
 	_txtTitle		= new Text(300, 17, 10, 8);
 
 	_txtRemaining	= new Text(100, 8, 12, 20);
@@ -99,7 +100,9 @@ AllocatePsiTrainingState::AllocatePsiTrainingState(Game* game, Base* base)
 	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& AllocatePsiTrainingState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)& AllocatePsiTrainingState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& AllocatePsiTrainingState::btnOkClick,
+					(SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
@@ -219,9 +222,15 @@ void AllocatePsiTrainingState::init()
 	{
 		_soldiers.push_back(*s);
 
-		std::wstringstream ssStr, ssSkl;
+		std::wstringstream
+			ssStr,
+			ssSkl;
 
-		if ((*s)->getCurrentStats()->psiSkill > 0
+
+		int minPsi = (*s)->getRules()->getMinStats().psiSkill; // kL
+
+//kL		if ((*s)->getCurrentStats()->psiSkill > 0
+		if ((*s)->getCurrentStats()->psiSkill >= minPsi // kL
 			|| (Options::getBool("psiStrengthEval")
 				&& _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements())))
 		{
@@ -232,14 +241,16 @@ void AllocatePsiTrainingState::init()
 			ssStr << tr("STR_UNKNOWN").c_str();
 		}
 
-		if ((*s)->getCurrentStats()->psiSkill > 0)
+//kL		if ((*s)->getCurrentStats()->psiSkill > 0)
+		if ((*s)->getCurrentStats()->psiSkill >= minPsi) // kL
 		{
 			ssSkl << (*s)->getCurrentStats()->psiSkill; //kL << "/+" << (*s)->getImprovement();
 		}
 		else
 		{
 //kL			ssSkl << "0/+0";
-			ssSkl << "0";
+//			ssSkl << "0"; // kL
+			ssSkl << tr("STR_UNKNOWN").c_str(); // kL
 		}
 
 		if ((*s)->isInPsiTraining())

@@ -1578,9 +1578,6 @@
     <ClInclude Include="Ruleset\ExtraSounds.h">
       <Filter>Ruleset</Filter>
     </ClInclude>
-    <ClInclude Include="Interface\Slider.h">
-      <Filter>Interface</Filter>
-    </ClInclude>
     <ClInclude Include="Interface\Frame.h">
       <Filter>Interface</Filter>
     </ClInclude>
@@ -1625,6 +1622,9 @@
     </ClInclude>
     <ClInclude Include="Basescape\SoldierMemorialState.h">
       <Filter>Basescape</Filter>
+    </ClInclude>
+    <ClInclude Include="Interface\Slider.h">
+      <Filter>Interface</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -59,15 +59,15 @@ CraftsState::CraftsState(
 	_window		= new Window(this, 320, 200, 0, 0);
 	_txtTitle	= new Text(300, 17, 10, 8);
 
-	_txtBase	= new Text(298, 17, 16, 25);
+	_txtBase	= new Text(294, 17, 16, 25);
 
 	_txtName	= new Text(94, 9, 16, 49);
-	_txtStatus	= new Text(50, 9, 110, 49);
-	_txtWeapon	= new Text(50, 17, 175, 41);
-	_txtCrew	= new Text(58, 9, 222, 49);
-	_txtHwp		= new Text(46, 9, 268, 49);
+	_txtStatus	= new Text(50, 9, 118, 49);
+	_txtWeapon	= new Text(45, 17, 183, 41);
+	_txtCrew	= new Text(35, 9, 230, 49);
+	_txtHwp		= new Text(25, 9, 276, 49);
 
-	_lstCrafts	= new TextList(293, 112, 8, 59);
+	_lstCrafts	= new TextList(285, 112, 16, 59);
 
 	_btnOk		= new TextButton(288, 16, 16, 177);
 
@@ -128,7 +128,7 @@ CraftsState::CraftsState(
 
 	_lstCrafts->setColor(Palette::blockOffset(13)+10);
 	_lstCrafts->setArrowColor(Palette::blockOffset(15)+1);
-	_lstCrafts->setColumns(5, 94, 65, 47, 46, 28);
+	_lstCrafts->setColumns(5, 94, 65, 47, 38, 28);
 	_lstCrafts->setSelectable(true);
 	_lstCrafts->setBackground(_window);
 	_lstCrafts->setMargin(8);
@@ -167,9 +167,9 @@ void CraftsState::init()
 						5,
 						(*i)->getName(_game->getLanguage()).c_str(),
 						tr((*i)->getStatus()).c_str(),
-							ss.str().c_str(),
-							ss2.str().c_str(),
-							ss3.str().c_str());
+						ss.str().c_str(),
+						ss2.str().c_str(),
+						ss3.str().c_str());
 	}
 }
 

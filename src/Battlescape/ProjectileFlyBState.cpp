@@ -385,7 +385,9 @@ bool ProjectileFlyBState::createNewProjectile()
 	}
 	else if (_action.weapon->getRules()->getArcingShot()) // special code for the "spit" trajectory
 	{
-		_projectileImpact = projectile->calculateThrow(_unit->getFiringAccuracy(_action.type, _action.weapon));
+		_projectileImpact = projectile->calculateThrow(_unit->getFiringAccuracy(
+																			_action.type,
+																			_action.weapon));
 		Log(LOG_INFO) << ". acid spit, part = " << _projectileImpact;
 
 		if (_projectileImpact != VOXEL_EMPTY
@@ -396,7 +398,9 @@ bool ProjectileFlyBState::createNewProjectile()
 
 			// and we have a lift-off
 			if (_action.weapon->getRules()->getFireSound() != -1)
-				_parent->getResourcePack()->getSound("BATTLE.CAT", _action.weapon->getRules()->getFireSound())->play();
+				_parent->getResourcePack()->getSound(
+												"BATTLE.CAT",
+												_action.weapon->getRules()->getFireSound())->play();
 
 			if (!_parent->getSave()->getDebugMode()
 				&& _action.type != BA_LAUNCH
@@ -423,7 +427,9 @@ bool ProjectileFlyBState::createNewProjectile()
 	{
 		// validMeleeRange/target has been validated.
 //		_projectileImpact = 4;
-		_projectileImpact = projectile->calculateTrajectory(_unit->getFiringAccuracy(_action.type, _action.weapon));
+		_projectileImpact = projectile->calculateTrajectory(_unit->getFiringAccuracy(
+																				_action.type,
+																				_action.weapon));
 		Log(LOG_INFO) << ". melee attack! part = " << _projectileImpact;
 
 		_unit->aim(true); // set the soldier in an aiming position
@@ -431,7 +437,9 @@ bool ProjectileFlyBState::createNewProjectile()
 
 		// and we have a hit!
 		if (_action.weapon->getRules()->getFireSound() != -1)
-			_parent->getResourcePack()->getSound("BATTLE.CAT", _action.weapon->getRules()->getFireSound())->play();
+			_parent->getResourcePack()->getSound(
+											"BATTLE.CAT",
+											_action.weapon->getRules()->getFireSound())->play();
 
 /*		if (!_parent->getSave()->getDebugMode()
 			&& _action.type != BA_LAUNCH
@@ -446,7 +454,9 @@ bool ProjectileFlyBState::createNewProjectile()
 		// kL_note: what, you recalculate the trajectory after it was already done above,
 		// and, don't even use it other than to find out if it already hit or not?!??
 		// Not to mention that melee attacks ***don't even need to use a trajectory***
-		_projectileImpact = projectile->calculateTrajectory(_unit->getFiringAccuracy(_action.type, _action.weapon));
+		_projectileImpact = projectile->calculateTrajectory(_unit->getFiringAccuracy(
+																				_action.type,
+																				_action.weapon));
 		Log(LOG_INFO) << ". shoot weapon, part = " << _projectileImpact;
 
 		if (_projectileImpact != VOXEL_EMPTY
@@ -459,7 +469,9 @@ bool ProjectileFlyBState::createNewProjectile()
 
 			// and we have a lift-off
 			if (_action.weapon->getRules()->getFireSound() != -1)
-				_parent->getResourcePack()->getSound("BATTLE.CAT", _action.weapon->getRules()->getFireSound())->play();
+				_parent->getResourcePack()->getSound(
+												"BATTLE.CAT",
+												_action.weapon->getRules()->getFireSound())->play();
 
 			if (!_parent->getSave()->getDebugMode()
 				&& _action.type != BA_LAUNCH

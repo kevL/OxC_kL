@@ -95,8 +95,9 @@ TargetInfoState::TargetInfoState(
 	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(tr("STR_CANCEL_UC"));
 	_btnOk->onMouseClick((ActionHandler)& TargetInfoState::btnOkClick);
-//	_btnOk->onKeyboardPress((ActionHandler)& TargetInfoState::btnOkClick, (SDLKey)Options::getInt("keyOk")); // removed by Sup.
-	_btnOk->onKeyboardPress((ActionHandler)& TargetInfoState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& TargetInfoState::btnOkClick,
+					(SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(8)+10);
 	_txtTitle->setBig();

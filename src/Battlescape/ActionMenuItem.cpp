@@ -45,10 +45,10 @@ ActionMenuItem::ActionMenuItem(
 		int y)
 	:
 		InteractiveSurface(
-				270,
-				40,
-				x + 25,
-				y - (id * 40)),
+			270,
+			40,
+			x + 25,
+			y - (id * 40)),
 		_highlighted(false),
 		_action(BA_NONE),
 		_tu(0)
@@ -63,9 +63,10 @@ ActionMenuItem::ActionMenuItem(
 							getHeight(),
 							0,
 							0);
-	_txtDescription	= new Text(125, 20, 10, 13);
-	_txtAcc			= new Text(70, 20, 139, 13);
-	_txtTU			= new Text(50, 20, 210, 13);
+//TEST!	_txtDescription	= new Text(141, 20, 10, 13);
+	_txtDescription	= new Text(160, 20, 10, 13); // TEST!
+	_txtAcc			= new Text(63, 20, 151, 13);
+	_txtTU			= new Text(50, 20, 214, 13);
 
 	_frame->setHighContrast(true);
 	_frame->setColor(Palette::blockOffset(0)+7);

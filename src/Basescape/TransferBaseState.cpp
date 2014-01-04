@@ -50,14 +50,16 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
  */
-TransferBaseState::TransferBaseState(Game* game, Base* base)
+TransferBaseState::TransferBaseState(
+		Game* game,
+		Base* base)
 	:
 		State(game),
 		_base(base),
 		_bases()
 {
 	_window		= new Window(this, 260, 140, 30, 30);
-	_txtTitle	= new Text(250, 17, 45, 38);
+	_txtTitle	= new Text(228, 16, 46, 40);
 
 	_txtFunds	= new Text(100, 9, 46, 54);
 
@@ -91,16 +93,19 @@ TransferBaseState::TransferBaseState(Game* game, Base* base)
 	_btnCancel->setColor(Palette::blockOffset(13) + 5);
 	_btnCancel->setText(tr("STR_CANCEL"));
 	_btnCancel->onMouseClick((ActionHandler)& TransferBaseState::btnCancelClick);
-	_btnCancel->onKeyboardPress((ActionHandler)& TransferBaseState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnCancel->onKeyboardPress(
+					(ActionHandler)& TransferBaseState::btnCancelClick,
+					(SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(13) + 5);
 	_txtTitle->setBig();
-	_txtTitle->setAlign(ALIGN_CENTER);
+	_txtTitle->setAlign(ALIGN_RIGHT);
 	_txtTitle->setText(tr("STR_SELECT_DESTINATION_BASE"));
 
 	_txtFunds->setColor(Palette::blockOffset(13) + 5);
 	_txtFunds->setSecondaryColor(Palette::blockOffset(13));
-	_txtFunds->setText(tr("STR_CURRENT_FUNDS").arg(Text::formatFunding(_game->getSavedGame()->getFunds())));
+	_txtFunds->setText(tr("STR_CURRENT_FUNDS")
+						.arg(Text::formatFunding(_game->getSavedGame()->getFunds())));
 
 	_txtName->setColor(Palette::blockOffset(13) + 5);
 	_txtName->setText(tr("STR_BASE_KL"));
@@ -133,7 +138,9 @@ TransferBaseState::TransferBaseState(Game* game, Base* base)
 					j != _game->getSavedGame()->getRegions()->end();
 					++j)
 			{
-				if ((*j)->getRules()->insideRegion((*i)->getLongitude(), (*i)->getLatitude()))
+				if ((*j)->getRules()->insideRegion(
+												(*i)->getLongitude(),
+												(*i)->getLatitude()))
 				{
 					area = tr((*j)->getRules()->getType());
 
@@ -145,7 +152,10 @@ TransferBaseState::TransferBaseState(Game* game, Base* base)
 							2,
 							(*i)->getName().c_str(),
 							area.c_str());
-			_lstBases->setCellColor(row, 1, Palette::blockOffset(13) + 5);
+			_lstBases->setCellColor(
+								row,
+								1,
+								Palette::blockOffset(13) + 5);
 			_bases.push_back(*i);
 
 			row++;

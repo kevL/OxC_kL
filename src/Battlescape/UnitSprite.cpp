@@ -61,10 +61,10 @@ UnitSprite::UnitSprite(
 		int y)
 	:
 		Surface(
-				width,
-				height,
-				x,
-				y),
+			width,
+			height,
+			x,
+			y),
 		_unit(0),
 		_itemA(0),
 		_itemB(0),
@@ -108,7 +108,9 @@ void UnitSprite::setSurfaces(
  * @param unit Pointer to the BattleUnit.
  * @param part The part number for large units.
  */
-void UnitSprite::setBattleUnit(BattleUnit* unit, int part)
+void UnitSprite::setBattleUnit(
+		BattleUnit* unit,
+		int part)
 {
 	_unit = unit;
 	_part = part;
@@ -120,7 +122,8 @@ void UnitSprite::setBattleUnit(BattleUnit* unit, int part)
  * Links this sprite to a BattleItem to get the data for rendering.
  * @param item Pointer to the BattleItem.
  */
-void UnitSprite::setBattleItem(BattleItem* item)
+void UnitSprite::setBattleItem(
+		BattleItem* item)
 {
 	if (item)
 	{
@@ -140,12 +143,17 @@ namespace
 
 struct ColorFace
 {
-	static const Uint8 ColorGroup = 15<<4;
+	static const Uint8 ColorGroup = 15 << 4;
 	static const Uint8 ColorShade = 15;
 
 	static const Uint8 Hair = 9 << 4;
 	static const Uint8 Face = 6 << 4;
-	static inline void func(Uint8& src, const Uint8& hair_color, const Uint8& face_color, int, int)
+	static inline void func(
+			Uint8& src,
+			const Uint8& hair_color,
+			const Uint8& face_color,
+			int,
+			int)
 	{
 		if ((src & ColorGroup) == Hair)
 		{
@@ -159,6 +167,7 @@ struct ColorFace
 };
 
 }
+
 
 /**
  * Sets the animation frame for animated units.
@@ -985,17 +994,21 @@ void UnitSprite::drawRoutine4()
 	}
 
 	Surface
-			* s = 0,
-			* itemA = 0,
-			* itemB = 0;
+		* s = 0,
+		* itemA = 0,
+		* itemB = 0;
 
-	const int stand = 0, walk = 8, die = 72;
-	const int offX[8] = { 8, 10, 7, 4, -9, -11, -7, -3 };	// for the weapons
-	const int offY[8] = { -6, -3, 0, 2, 0, -4, -7, -9 };	// for the weapons
-	const int offX2[8] = { -8, 3, 5, 12, 6, -1, -5, -13 };	// for the weapons
-	const int offY2[8] = { 1, -4, -2, 0, 3, 3, 5, 0 };		// for the weapons
-	const int offX3[8] = { 0, 6, 6, 12, -4, -5, -5, -13 };	// for the left handed rifles
-	const int offY3[8] = { -4, -4, -1, 0, 5, 0, 1, 0 };		// for the left handed rifles
+	const int
+		stand = 0,
+		walk = 8,
+		die = 72,
+
+		offX[8]		= { 8, 10,  7,  4, -9, -11, -7,  -3},	// for the weapons
+		offY[8]		= {-6, -3,  0,  2,  0,  -4, -7,  -9},	// for the weapons
+		offX2[8]	= {-8,  3,  5, 12,  6,  -1, -5, -13},	// for the weapons
+		offY2[8]	= { 1, -4, -2,  0,  3,   3,  5,   0},	// for the weapons
+		offX3[8]	= { 0,  6,  6, 12, -4,  -5, -5, -13},	// for the left handed rifles
+		offY3[8]	= {-4, -4, -1,  0,  5,   0,  1,   0};	// for the left handed rifles
 
 /*kL	if (_unit->isOut())
 	{
@@ -1010,10 +1023,10 @@ void UnitSprite::drawRoutine4()
 
 		return;
 	}
-	else if (_unit->getStatus() == STATUS_WALKING)
-	{
-		s = _unitSurface->getFrame(walk + (8 * _unit->getDirection()) + _unit->getWalkingPhase());
-	}
+//kL	else if (_unit->getStatus() == STATUS_WALKING)
+//kL	{
+//kL		s = _unitSurface->getFrame(walk + (8 * _unit->getDirection()) + _unit->getWalkingPhase());
+//kL	}
 	else
 	{
 		s = _unitSurface->getFrame(stand + _unit->getDirection());

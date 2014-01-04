@@ -18,20 +18,25 @@
  */
 
 #include "SaveState.h"
+
 #include <cstdio>
-#include "../Engine/Logger.h"
-#include "../Engine/CrossPlatform.h"
-#include "../Savegame/SavedGame.h"
-#include "../Engine/Game.h"
-#include "../Engine/Action.h"
-#include "../Engine/Exception.h"
-#include "../Engine/Language.h"
-#include "../Engine/Palette.h"
-#include "../Engine/Options.h"
-#include "../Interface/TextList.h"
-#include "../Interface/TextEdit.h"
-#include "ErrorMessageState.h"
+
 #include "DeleteGameState.h"
+#include "ErrorMessageState.h"
+
+#include "../Engine/Action.h"
+#include "../Engine/CrossPlatform.h"
+#include "../Engine/Exception.h"
+#include "../Engine/Game.h"
+#include "../Engine/Language.h"
+#include "../Engine/Logger.h"
+#include "../Engine/Options.h"
+#include "../Engine/Palette.h"
+
+#include "../Interface/TextEdit.h"
+#include "../Interface/TextList.h"
+
+#include "../Savegame/SavedGame.h"
 
 
 namespace OpenXcom
@@ -42,15 +47,19 @@ namespace OpenXcom
  * @param game, Pointer to the core game.
  * @param origin, Game section that originated this state.
  */
-SaveState::SaveState(Game* game, OptionsOrigin origin)
+SaveState::SaveState(
+		Game* game,
+		OptionsOrigin origin)
 	:
-		SavedGameState(game, origin, 1),
+		SavedGameState(
+			game,
+			origin,
+			1),
 		_selected(L""),
 		_previousSelectedRow(-1),
 		_selectedRow(-1)
 {
 	_edtSave = new TextEdit(168, 9, 0, 0);
-
 	add(_edtSave);
 
 	_txtTitle->setText(tr("STR_SELECT_SAVE_POSITION"));
@@ -68,11 +77,15 @@ SaveState::SaveState(Game* game, OptionsOrigin origin)
  * @param origin Game section that originated this state.
  * @param showMsg True if need to show messages like "Loading game" or "Saving game".
  */
-SaveState::SaveState(Game* game, OptionsOrigin origin, bool showMsg)
+SaveState::SaveState(
+		Game* game,
+		OptionsOrigin origin,
+		bool showMsg)
 	:
 		SavedGameState(game, origin, 1, showMsg)
 {
 	game->getSavedGame()->setName(L"autosave");
+
 	quickSave("autosave");
 }
 
@@ -89,9 +102,14 @@ SaveState::~SaveState()
 void SaveState::updateList()
 {
 	_lstSaves->clearList();
-	_lstSaves->addRow(1, tr("STR_NEW_SAVED_GAME").c_str());
+	_lstSaves->addRow(
+					1,
+					tr("STR_NEW_SAVED_GAME").c_str());
 
-	_saves = SavedGame::getList(_lstSaves, _game->getLanguage(), &_details);
+	_saves = SavedGame::getList(
+							_lstSaves,
+							_game->getLanguage(),
+							&_details);
 }
 
 /**
@@ -110,15 +128,26 @@ void SaveState::lstSavesPress(Action* action)
 			case -1: // first click on the savegame list
 			break;
 			case 0:
-				_lstSaves->setCellText(_previousSelectedRow	, 0, tr("STR_NEW_SAVED_GAME"));
+				_lstSaves->setCellText(
+									_previousSelectedRow,
+									0,
+									tr("STR_NEW_SAVED_GAME"));
 			break;
 
 			default:
-				_lstSaves->setCellText(_previousSelectedRow	, 0, _selected);
+				_lstSaves->setCellText(
+									_previousSelectedRow,
+									0,
+									_selected);
 		}
 
-		_selected = _lstSaves->getCellText(_lstSaves->getSelectedRow(), 0);
-		_lstSaves->setCellText(_lstSaves->getSelectedRow(), 0, L"");
+		_selected = _lstSaves->getCellText(
+										_lstSaves->getSelectedRow(),
+										0);
+		_lstSaves->setCellText(
+							_lstSaves->getSelectedRow(),
+							0,
+							L"");
 
 		if (_lstSaves->getSelectedRow() == 0)
 		{
@@ -134,12 +163,19 @@ void SaveState::lstSavesPress(Action* action)
 		_edtSave->setY(_lstSaves->getRowY(_selectedRow));
 		_edtSave->setVisible(true);
 		_edtSave->focus();
+
 		_lstSaves->setScrolling(false);
 	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT
 		&& _lstSaves->getSelectedRow())
 	{
-		_game->pushState(new DeleteGameState(_game, _origin, _lstSaves->getCellText(_lstSaves->getSelectedRow(), 0), this));
+		_game->pushState(new DeleteGameState(
+										_game,
+										_origin,
+										_lstSaves->getCellText(
+											_lstSaves->getSelectedRow(),
+											0),
+										this));
 	}
 }
 
@@ -229,9 +265,19 @@ void SaveState::quickSave(const std::string& filename)
 		error << tr("STR_SAVE_UNSUCCESSFUL") << L'\x02' << Language::fsToWstr(e.what());
 
 		if (_origin != OPT_BATTLESCAPE)
-			_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(8)+10, "BACK01.SCR", 6));
+			_game->pushState(new ErrorMessageState(
+												_game,
+												error.str(),
+												Palette::blockOffset(8)+10,
+												"BACK01.SCR",
+												6));
 		else
-			_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(0), "TAC00.SCR", -1));
+			_game->pushState(new ErrorMessageState(
+												_game,
+												error.str(),
+												Palette::blockOffset(0),
+												"TAC00.SCR",
+												-1));
 	}
 	catch (YAML::Exception &e)
 	{
@@ -240,9 +286,19 @@ void SaveState::quickSave(const std::string& filename)
 		error << tr("STR_SAVE_UNSUCCESSFUL") << L'\x02' << Language::fsToWstr(e.what());
 
 		if (_origin != OPT_BATTLESCAPE)
-			_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(8)+10, "BACK01.SCR", 6));
+			_game->pushState(new ErrorMessageState(
+												_game,
+												error.str(),
+												Palette::blockOffset(8)+10,
+												"BACK01.SCR",
+												6));
 		else
-			_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(0), "TAC00.SCR", -1));
+			_game->pushState(new ErrorMessageState(
+												_game,
+												error.str(),
+												Palette::blockOffset(0),
+												"TAC00.SCR",
+												-1));
 	}
 }
 

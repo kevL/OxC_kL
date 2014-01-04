@@ -68,7 +68,13 @@ CraftInfoState::CraftInfoState(
 {
 //	Log(LOG_INFO) << "Create CraftInfoState";
 
-	_window		= new Window(this, 320, 200, 0, 0, POPUP_BOTH);
+	_window		= new Window(
+							this,
+							320,
+							200,
+							0,
+							0,
+							POPUP_BOTH);
 
 	_edtCraft	= new TextEdit(160, 16, 80, 10);
 
@@ -76,9 +82,9 @@ CraftInfoState::CraftInfoState(
 	_txtDamage	= new Text(82, 17, 228, 28);
 
 	_btnW1		= new TextButton(24, 32, 14, 48);
-	_txtW1Name	= new Text(90, 9, 46, 48);
-	_txtW2Name	= new Text(90, 9, 204, 48);
 	_btnW2		= new TextButton(24, 32, 282, 48);
+	_txtW1Name	= new Text(78, 9, 46, 48);
+	_txtW2Name	= new Text(78, 9, 204, 48);
 	_txtW1Ammo	= new Text(60, 9, 46, 64);
 	_txtW2Ammo	= new Text(60, 9, 204, 64);
 	_txtW1Max	= new Text(60, 9, 46, 72);
@@ -104,26 +110,26 @@ CraftInfoState::CraftInfoState(
 				16);
 
 	add(_window);
-	add(_btnOk);
+	add(_edtCraft);
+	add(_txtFuel);
+	add(_txtDamage);
 	add(_btnW1);
 	add(_btnW2);
+	add(_txtW1Name);
+	add(_txtW2Name);
+	add(_txtW1Ammo);
+	add(_txtW2Ammo);
+	add(_txtW1Max);
+	add(_txtW2Max);
 	add(_btnCrew);
 	add(_btnEquip);
 	add(_btnArmor);
-	add(_edtCraft);
-	add(_txtDamage);
-	add(_txtFuel);
-	add(_txtW1Name);
-	add(_txtW1Ammo);
-	add(_txtW1Max);
-	add(_txtW2Name);
-	add(_txtW2Ammo);
-	add(_txtW2Max);
 	add(_sprite);
 	add(_weapon1);
 	add(_weapon2);
 	add(_crew);
 	add(_equip);
+	add(_btnOk);
 
 	centerAllSurfaces();
 
@@ -134,7 +140,9 @@ CraftInfoState::CraftInfoState(
 	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& CraftInfoState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)& CraftInfoState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& CraftInfoState::btnOkClick,
+					(SDLKey)Options::getInt("keyCancel"));
 
 	_btnW1->setColor(Palette::blockOffset(13)+10);
 	_btnW1->setText(L"1");
@@ -213,31 +221,33 @@ void CraftInfoState::init()
 	texture->getFrame(c->getRules()->getSprite() + 33)->setY(0);
 	texture->getFrame(c->getRules()->getSprite() + 33)->blit(_sprite);
 
-	std::wstringstream ss;
-	ss << tr("STR_DAMAGE_UC_").arg(Text::formatPercentage(c->getDamagePercentage()));
 
+	std::wstringstream
+		ss1,
+		ss2;
+
+	ss1 << tr("STR_DAMAGE_UC_").arg(Text::formatPercentage(c->getDamagePercentage()));
 	if (c->getStatus() == "STR_REPAIRS")
 	{
-		int damageHours = static_cast<int>(
-							ceil(static_cast<float>(c->getDamage() / c->getRules()->getRepairRate()))); // kL
-		ss << L"\n" << tr("STR_HOUR", damageHours);
+		int damageHrs = static_cast<int>(
+							ceil(static_cast<float>(c->getDamage())
+								/ static_cast<float>(c->getRules()->getRepairRate())
+								/ 2.f));
+		ss1 << L"\n" << tr("STR_HOUR", damageHrs);
 	}
+	_txtDamage->setText(ss1.str());
 
-	_txtDamage->setText(ss.str());
-
-	std::wstringstream ss2;
 	ss2 << tr("STR_FUEL").arg(Text::formatPercentage(c->getFuelPercentage()));
-
 	if (c->getStatus() == "STR_REFUELLING")
 	{
-		int fuelHours = static_cast<int>(
+		int fuelHrs = static_cast<int>(
 							ceil(static_cast<float>(c->getRules()->getMaxFuel() - c->getFuel())
-										/ static_cast<float>(c->getRules()->getRefuelRate())
-										/ 2.0f));
-		ss2 << L"\n" << tr("STR_HOUR", fuelHours);
+								/ static_cast<float>(c->getRules()->getRefuelRate())
+								/ 2.f));
+		ss2 << L"\n" << tr("STR_HOUR", fuelHrs);
 	}
-
 	_txtFuel->setText(ss2.str());
+
 
 	if (c->getRules()->getSoldiers() > 0)
 	{
@@ -326,7 +336,7 @@ void CraftInfoState::init()
 		CraftWeapon* w2 = c->getWeapons()->at(1);
 		if (w2 != 0)
 		{
-			Surface *frame = texture->getFrame(w2->getRules()->getSprite() + 48);
+			Surface* frame = texture->getFrame(w2->getRules()->getSprite() + 48);
 			frame->setX(0);
 			frame->setY(0);
 			frame->blit(_weapon2);
@@ -374,7 +384,21 @@ void CraftInfoState::btnOkClick(Action*)
  */
 void CraftInfoState::btnW1Click(Action*)
 {
-	_game->pushState(new CraftWeaponsState(_game, _base, _craft, 0));
+//	_game->setPalette( // kL
+//					_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)),
+//					Palette::backPos,
+//					16);
+/* int SDL_FillRect(
+		SDL_Surface* dst,
+		const SDL_Rect* rect,
+		Uint32 color); */
+
+
+	_game->pushState(new CraftWeaponsState(
+										_game,
+										_base,
+										_craft,
+										0));
 }
 
 /**
@@ -383,7 +407,16 @@ void CraftInfoState::btnW1Click(Action*)
  */
 void CraftInfoState::btnW2Click(Action*)
 {
-	_game->pushState(new CraftWeaponsState(_game, _base, _craft, 1));
+//	_game->setPalette( // kL
+//					_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)),
+//					Palette::backPos,
+//					16);
+
+	_game->pushState(new CraftWeaponsState(
+										_game,
+										_base,
+										_craft,
+										1));
 }
 
 /**
@@ -392,7 +425,10 @@ void CraftInfoState::btnW2Click(Action*)
  */
 void CraftInfoState::btnCrewClick(Action*)
 {
-	_game->pushState(new CraftSoldiersState(_game, _base, _craft));
+	_game->pushState(new CraftSoldiersState(
+										_game,
+										_base,
+										_craft));
 }
 
 /**
@@ -401,7 +437,10 @@ void CraftInfoState::btnCrewClick(Action*)
  */
 void CraftInfoState::btnEquipClick(Action*)
 {
-	_game->pushState(new CraftEquipmentState(_game, _base, _craft));
+	_game->pushState(new CraftEquipmentState(
+										_game,
+										_base,
+										_craft));
 }
 
 /**
@@ -410,7 +449,10 @@ void CraftInfoState::btnEquipClick(Action*)
  */
 void CraftInfoState::btnArmorClick(Action*)
 {
-	_game->pushState(new CraftArmorState(_game, _base, _craft));
+	_game->pushState(new CraftArmorState(
+									_game,
+									_base,
+									_craft));
 }
 
 /**

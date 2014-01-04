@@ -230,7 +230,6 @@ void InventoryState::init()
 	//Log(LOG_INFO) << "InventoryState::init()";
 
 	BattleUnit* unit = _battleGame->getSelectedUnit();
-
 	if (unit == 0) // no selected unit, close inventory
 	{
 		btnOkClick(0);
@@ -238,26 +237,21 @@ void InventoryState::init()
 		//Log(LOG_INFO) << ". early out <- no selectedUnit";
 		return;
 	}
-
-	if (!unit->hasInventory()) // skip to the first unit with inventory
+	else if (!unit->hasInventory()) // skip to the first unit with inventory
 	{
 		//Log(LOG_INFO) << ". . unit doesn't have Inventory";
 		if (_parent)
-		{
 			//Log(LOG_INFO) << ". . . _parent: select next unit";
 			_parent->selectNextFactionUnit(
 										false,
 										false,
 										true);
-		}
 		else
-		{
 			//Log(LOG_INFO) << ". . . NO _parent: select next unit";
 			_battleGame->selectNextFactionUnit(
 											false,
 											false,
 											true);
-		}
 
 		if (//kL _battleGame->getSelectedUnit() == 0 ||			// no available unit, Checked above.
 			 !_battleGame->getSelectedUnit()->hasInventory())	// so close inventory
@@ -268,10 +262,8 @@ void InventoryState::init()
 			return; // starting a mission with just vehicles
 		}
 		else
-		{
 			//Log(LOG_INFO) << ". . . unit = selectedUnit";
 			unit = _battleGame->getSelectedUnit();
-		}
 	}
 
 //kL	if (_parent)
@@ -349,28 +341,20 @@ void InventoryState::updateStats()
 	int weight = unit->getCarriedWeight(_inv->getSelectedItem());
 	_txtWeight->setText(tr("STR_WEIGHT").arg(weight).arg(unit->getStats()->strength));
 	if (weight > unit->getStats()->strength)
-	{
 		_txtWeight->setSecondaryColor(Palette::blockOffset(2)+5);
-	}
 	else
-	{
 		_txtWeight->setSecondaryColor(Palette::blockOffset(3));
-	}
 
 	_txtFAcc->setText(tr("STR_ACCURACY_SHORT")
-									.arg(static_cast<int>(
-												static_cast<double>(unit->getStats()->firing) * unit->getAccuracyModifier())));
+						.arg(static_cast<int>(
+								static_cast<double>(unit->getStats()->firing) * unit->getAccuracyModifier())));
 
 	_txtReact->setText(tr("STR_REACTIONS_SHORT").arg(unit->getStats()->reactions));
 
 	if (unit->getStats()->psiSkill > 0)
-	{
 		_txtPSkill->setText(tr("STR_PSIONIC_SKILL_SHORT").arg(unit->getStats()->psiSkill));
-	}
 	else
-	{
 		_txtPSkill->setText(L"");
-	}
 
 	if (unit->getStats()->psiSkill > 0
 		|| (Options::getBool("psiStrengthEval")
@@ -379,9 +363,7 @@ void InventoryState::updateStats()
 		_txtPStr->setText(tr("STR_PSIONIC_STRENGTH_SHORT").arg(unit->getStats()->psiStrength));
 	}
 	else
-	{
 		_txtPStr->setText(L"");
-	}
 
 	//Log(LOG_INFO) << "InventoryState::updateStats() EXIT";
 }
@@ -462,10 +444,8 @@ void InventoryState::btnOkClick(Action*)
 
 		// kL: This for early exit because access is via CraftEquip screen.
 		if (_parent == 0)
-		{
 			//Log(LOG_INFO) << ". early out <- CraftEquip";
 			return;
-		}
 
 		_battleGame->randomizeItemLocations(_battleGame->getSelectedUnit()->getTile());
 		_battleGame->resetUnitTiles();
@@ -480,11 +460,13 @@ void InventoryState::btnOkClick(Action*)
 		}
 	}
 
-	if (_battleGame->getTileEngine())
+
+	TileEngine* tileEngine = _battleGame->getTileEngine();
+	if (tileEngine)
 	{
-		_battleGame->getTileEngine()->applyGravity(_battleGame->getSelectedUnit()->getTile());
-		_battleGame->getTileEngine()->calculateTerrainLighting(); // dropping / picking up flares
-		_battleGame->getTileEngine()->recalculateFOV();
+		tileEngine->applyGravity(_battleGame->getSelectedUnit()->getTile());
+		tileEngine->calculateTerrainLighting(); // dropping / picking up flares
+		tileEngine->recalculateFOV();
 
 		// from BattlescapeGame::dropItem() but can't really use this because I don't know exactly what dropped...
 		// could figure it out via what's on Ground but meh.
@@ -505,18 +487,12 @@ void InventoryState::btnOkClick(Action*)
 void InventoryState::btnPrevClick(Action*)
 {
 	if (_inv->getSelectedItem() != 0)
-	{
 		return;
-	}
 
 	if (_parent)
-	{
 		_parent->selectPreviousFactionUnit(false, false, true);
-	}
 	else
-	{
 		_battleGame->selectPreviousFactionUnit(false, false, true);
-	}
 
 	init();
 }
@@ -528,18 +504,12 @@ void InventoryState::btnPrevClick(Action*)
 void InventoryState::btnNextClick(Action*)
 {
 	if (_inv->getSelectedItem() != 0)
-	{
 		return;
-	}
 
 	if (_parent)
-	{
 		_parent->selectNextFactionUnit(false, false, true);
-	}
 	else
-	{
 		_battleGame->selectNextFactionUnit(false, false, true);
-	}
 
 	init();
 }
@@ -578,14 +548,14 @@ void InventoryState::btnGroundClick(Action*)
  */
 void InventoryState::btnRankClick(Action*)
 {
-	if (_parent) // kL
-		_game->pushState(new UnitInfoState(
-										_game,
-										_battleGame->getSelectedUnit(),
-										_parent));
+//	if (_parent) // kL
+	_game->pushState(new UnitInfoState(
+									_game,
+									_battleGame->getSelectedUnit(),
+									_parent));
 
 
-//	else // kL: This bit is for future attempt to get RankClick action via CraftEquipSoldierInventory.
+//	else // kL: This bit is for future attempt to get RankClick action via CraftEquipSoldierInventory. haha, see above
 //	{
 //		_game->pushState(new SoldierInfoState(_game, _base, _lstSoldiers->getSelectedRow()));
 //	}
@@ -614,13 +584,9 @@ void InventoryState::invClick(Action*)
 		else
 		{
 			if (_game->getSavedGame()->isResearched(item->getRules()->getRequirements()))
-			{
 				_txtItem->setText(tr(item->getRules()->getName()));
-			}
 			else
-			{
 				_txtItem->setText(tr("STR_ALIEN_ARTIFACT"));
-			}
 		}
 
 

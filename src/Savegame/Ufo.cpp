@@ -418,13 +418,15 @@ std::string Ufo::getAltitude() const
 void Ufo::setAltitude(const std::string& altitude)
 {
 	_altitude = altitude;
+
 	if (_altitude != "STR_GROUND")
-	{
 		_status = FLYING;
-	}
 	else
 	{
-		_status = isCrashed()? CRASHED: LANDED;
+		if (isCrashed())
+			_status = CRASHED;
+		else
+			_status = LANDED;
 	}
 }
 

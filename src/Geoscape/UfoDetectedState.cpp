@@ -169,12 +169,16 @@ UfoDetectedState::UfoDetectedState(
 					tr("STR_SIZE_UC").c_str(),
 					tr(_ufo->getRules()->getSize()).c_str());
 	_lstInfo->setCellColor(0, 1, Palette::blockOffset(8)+10);
-	std::string altitude = _ufo->getAltitude() == "STR_GROUND"? "STR_GROUNDED": _ufo->getAltitude();
+
+	std::string alt = _ufo->getAltitude();
+	if (alt == "STR_GROUND")
+		alt = "STR_GROUNDED";
 	_lstInfo->addRow(
 					2,
 					tr("STR_ALTITUDE").c_str(),
-					tr(altitude).c_str());
+					tr(alt).c_str());
 	_lstInfo->setCellColor(1, 1, Palette::blockOffset(8)+10);
+
 	std::string heading = _ufo->getDirection();
 	if (_ufo->getStatus() != Ufo::FLYING)
 	{
@@ -185,6 +189,7 @@ UfoDetectedState::UfoDetectedState(
 					tr("STR_HEADING").c_str(),
 					tr(heading).c_str());
 	_lstInfo->setCellColor(2, 1, Palette::blockOffset(8)+10);
+
 	_lstInfo->addRow(
 					2,
 					tr("STR_SPEED").c_str(),
@@ -198,12 +203,16 @@ UfoDetectedState::UfoDetectedState(
 	_btnCentre->setColor(Palette::blockOffset(8)+5);
 	_btnCentre->setText(tr("STR_CENTER_ON_UFO_TIME_5_SECONDS"));
 	_btnCentre->onMouseClick((ActionHandler)& UfoDetectedState::btnCentreClick);
-	_btnCentre->onKeyboardPress((ActionHandler)& UfoDetectedState::btnCentreClick, (SDLKey)Options::getInt("keyOk"));
+	_btnCentre->onKeyboardPress(
+					(ActionHandler)& UfoDetectedState::btnCentreClick,
+					(SDLKey)Options::getInt("keyOk"));
 
 	_btnCancel->setColor(Palette::blockOffset(8)+5);
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)& UfoDetectedState::btnCancelClick);
-	_btnCancel->onKeyboardPress((ActionHandler)& UfoDetectedState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnCancel->onKeyboardPress(
+					(ActionHandler)& UfoDetectedState::btnCancelClick,
+					(SDLKey)Options::getInt("keyCancel"));
 
 	if (hyper)
 	{

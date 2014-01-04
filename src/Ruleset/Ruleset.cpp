@@ -1135,6 +1135,7 @@ std::vector<OpenXcom::RuleBaseFacility*> Ruleset::getCustomBaseFacilities() cons
 const UfoTrajectory* Ruleset::getUfoTrajectory(const std::string& id) const
 {
 	std::map<std::string, UfoTrajectory*>::const_iterator i = _ufoTrajectories.find(id);
+
 	if (_ufoTrajectories.end() != i)
 		return i->second;
 	else
@@ -1179,7 +1180,6 @@ class EqualCoordinates
 
 private:
 	double _lon, _lat;
-
 
 	public:
 		/// Remembers the coordinates.

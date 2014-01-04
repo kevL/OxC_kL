@@ -630,10 +630,9 @@ int Craft::getDamage() const
 void Craft::setDamage(int damage)
 {
 	_damage = damage;
+
 	if (_damage < 0)
-	{
 		_damage = 0;
-	}
 }
 
 /**
@@ -754,27 +753,17 @@ void Craft::checkup()
 		available++;
 
 		if ((*i)->getAmmo() >= (*i)->getRules()->getAmmoMax())
-		{
 			full++;
-		}
 		else
-		{
 			(*i)->setRearming(true);
-		}
 	}
 
 	if (_damage > 0)
-	{
 		_status = "STR_REPAIRS";
-	}
 	else if (available != full)
-	{
 		_status = "STR_REARMING";
-	}
 	else
-	{
 		_status = "STR_REFUELLING";
-	}
 }
 
 /**
@@ -810,47 +799,20 @@ void Craft::consumeFuel()
 
 /**
  * Repairs the craft's damage every hour while it's docked at the base.
+ * kL_note: now every half-hour.
  */
 void Craft::repair()
 {
 	setDamage(_damage - _rules->getRepairRate());
 
-	if (_damage <= 0)
-	{
+//kL	if (_damage <= 0)
+	if (_damage == 0) // kL
 		_status = "STR_REARMING";
-	}
-}
-
-/**
- * Refuels the craft every 30 minutes while it's docked at the base.
- */
-void Craft::refuel()
-{
-	setFuel(_fuel + _rules->getRefuelRate());
-
-	if (_fuel >= _rules->getMaxFuel())
-	{
-		_status = "STR_READY";
-
-		for (std::vector<CraftWeapon*>::iterator
-				i = _weapons.begin();
-				i != _weapons.end();
-				++i)
-		{
-			if (*i
-				&& (*i)->isRearming())
-			{
-				_status = "STR_REARMING";
-
-				break;
-			}
-		}
-	}
 }
 
 /**
  * Rearms the craft's weapons by adding ammo every hour
- * while it's docked at the base.
+ * while it's docked at the base. kL_note: now every half-hour.
  * @return, The ammo ID missing for rearming, or "" if none.
  */
 std::string Craft::rearm(Ruleset* rules)
@@ -901,6 +863,33 @@ std::string Craft::rearm(Ruleset* rules)
 	}
 
 	return ammo;
+}
+
+/**
+ * Refuels the craft every 30 minutes while it's docked at the base.
+ */
+void Craft::refuel()
+{
+	setFuel(_fuel + _rules->getRefuelRate());
+
+	if (_fuel >= _rules->getMaxFuel())
+	{
+		_status = "STR_READY";
+
+		for (std::vector<CraftWeapon*>::iterator
+				i = _weapons.begin();
+				i != _weapons.end();
+				++i)
+		{
+			if (*i
+				&& (*i)->isRearming())
+			{
+				_status = "STR_REARMING";
+
+				break;
+			}
+		}
+	}
 }
 
 /**

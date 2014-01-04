@@ -28,9 +28,9 @@ namespace OpenXcom
 
 enum OptionsOrigin
 {
-	OPT_MENU,
-	OPT_GEOSCAPE,
-	OPT_BATTLESCAPE
+	OPT_MENU,		// 0
+	OPT_GEOSCAPE,	// 1
+	OPT_BATTLESCAPE	// 2
 };
 
 

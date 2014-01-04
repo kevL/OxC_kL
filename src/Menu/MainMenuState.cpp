@@ -47,21 +47,20 @@ namespace OpenXcom
  * Initializes all the elements in the Main Menu window.
  * @param game Pointer to the core game.
  */
-MainMenuState::MainMenuState(Game *game)
+MainMenuState::MainMenuState(Game* game)
 	:
 		State(game)
 {
 	_window			= new Window(this, 256, 160, 32, 20, POPUP_BOTH);
+	_txtTitle		= new Text(256, 30, 32, 56);
 
-	_txtTitle		= new Text(256, 30, 32, 45);
+	_btnNewGame		= new TextButton(92, 20, 64, 88);
+	_btnNewBattle	= new TextButton(92, 20, 164, 88);
 
-	_btnNewGame		= new TextButton(92, 20, 64, 90);
-	_btnNewBattle	= new TextButton(92, 20, 164, 90);
+	_btnLoad		= new TextButton(92, 20, 64, 116);
+	_btnOptions		= new TextButton(92, 20, 164, 116);
 
-	_btnLoad		= new TextButton(92, 20, 64, 118);
-	_btnOptions		= new TextButton(92, 20, 164, 118);
-
-	_btnQuit		= new TextButton(192, 20, 64, 146);
+	_btnQuit		= new TextButton(192, 20, 64, 144);
 
 
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
@@ -71,12 +70,12 @@ MainMenuState::MainMenuState(Game *game)
 					16);
 
 	add(_window);
+	add(_txtTitle);
 	add(_btnNewGame);
 	add(_btnNewBattle);
 	add(_btnLoad);
 	add(_btnOptions);
 	add(_btnQuit);
-	add(_txtTitle);
 
 	centerAllSurfaces();
 
@@ -109,8 +108,9 @@ MainMenuState::MainMenuState(Game *game)
 	_txtTitle->setBig();
 
 	std::wstringstream title;
-	title << tr("STR_OPENXCOM") << L"\x02";
-	title << Language::utf8ToWstr(OPENXCOM_VERSION_SHORT) << Language::utf8ToWstr(OPENXCOM_VERSION_GIT);
+	title << tr("STR_OPENXCOM"); //kL << L"\x02";
+//kL	title << Language::utf8ToWstr(OPENXCOM_VERSION_SHORT) << Language::utf8ToWstr(OPENXCOM_VERSION_GIT);
+//	title << Language::utf8ToWstr(OPENXCOM_VERSION_GIT); // kL
 	_txtTitle->setText(title.str());
 
 
@@ -163,7 +163,9 @@ void MainMenuState::btnNewBattleClick(Action*)
  */
 void MainMenuState::btnLoadClick(Action*)
 {
-	_game->pushState(new LoadState(_game, OPT_MENU));
+	_game->pushState(new LoadState(
+								_game,
+								OPT_MENU));
 }
 
 /**
@@ -172,7 +174,9 @@ void MainMenuState::btnLoadClick(Action*)
  */
 void MainMenuState::btnOptionsClick(Action*)
 {
-	_game->pushState(new OptionsState(_game, OPT_MENU));
+	_game->pushState(new OptionsState(
+									_game,
+									OPT_MENU));
 }
 
 /**

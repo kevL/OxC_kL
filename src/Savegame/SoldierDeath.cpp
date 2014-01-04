@@ -16,7 +16,9 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "SoldierDeath.h"
+
 
 namespace OpenXcom
 {
@@ -25,7 +27,9 @@ namespace OpenXcom
  * Initializes a death event.
  * @time Time when the death occurred.
  */
-SoldierDeath::SoldierDeath() : _time(0,0,0,0,0,0,0)
+SoldierDeath::SoldierDeath()
+	:
+		_time(0, 0, 0, 0, 0, 0, 0)
 {
 }
 
@@ -40,7 +44,7 @@ SoldierDeath::~SoldierDeath()
  * Loads the death from a YAML file.
  * @param node YAML node.
  */
-void SoldierDeath::load(const YAML::Node &node)
+void SoldierDeath::load(const YAML::Node& node)
 {
 	_time.load(node["time"]);
 }
@@ -52,7 +56,9 @@ void SoldierDeath::load(const YAML::Node &node)
 YAML::Node SoldierDeath::save() const
 {
 	YAML::Node node;
+
 	node["time"] = _time.save();
+
 	return node;
 }
 
@@ -60,7 +66,7 @@ YAML::Node SoldierDeath::save() const
  * Returns the time of death of this soldier.
  * @return Pointer to the time.
  */
-const GameTime *SoldierDeath::getTime() const
+const GameTime* SoldierDeath::getTime() const
 {
 	return &_time;
 }
@@ -69,7 +75,7 @@ const GameTime *SoldierDeath::getTime() const
  * Changes the time of death of this soldier.
  * @param time Pointer to the time.
  */
-void SoldierDeath::setTime(GameTime *time)
+void SoldierDeath::setTime(GameTime* time)
 {
 	_time = *time;
 }

@@ -59,9 +59,11 @@ namespace
  * @param width number of pixel in row
  * @return pitch in bytes
  */
-inline int GetPitch(int bpp, int width)
+inline int GetPitch(
+		int bpp,
+		int width)
 {
-	return ((bpp/8) * width + 15) & ~0xF;
+	return ((bpp / 8) * width + 15) & ~0xF;
 }
  
 /**
@@ -71,7 +73,10 @@ inline int GetPitch(int bpp, int width)
  * @param height number of rows
  * @return pointer to memory
  */
-inline void* NewAligned(int bpp, int width, int height)
+inline void* NewAligned(
+		int bpp,
+		int width,
+		int height)
 {
 	const int pitch = GetPitch(bpp, width);
 	const int total = pitch * height;
@@ -103,6 +108,7 @@ inline void* NewAligned(int bpp, int width, int height)
 #endif
 
 	memset(buffer, 0, total);
+
 	return buffer;
 }
 
@@ -123,6 +129,7 @@ inline void DeleteAligned(void* buffer)
 }
 
 } //namespace
+
 
 /**
  * Sets up a blank 8bpp surface with the specified size and position,
@@ -157,8 +164,8 @@ Surface::Surface(
 								height,
 								bpp,
 								GetPitch(
-										bpp,
-										width),
+									bpp,
+									width),
 								0,
 								0,
 								0,
@@ -175,6 +182,7 @@ Surface::Surface(
 	_crop.h = 0;
 	_crop.x = 0;
 	_crop.y = 0;
+
 	_dx = Screen::getDX();
 	_dy = Screen::getDY();
 }
@@ -196,15 +204,16 @@ Surface::Surface(const Surface& other)
 
 		_alignedBuffer = NewAligned(bpp, width, height);
 		_surface = SDL_CreateRGBSurfaceFrom(
-									_alignedBuffer,
-									width,
-									height,
-									bpp,
-									pitch,
-									0,
-									0,
-									0,
-									0);
+										_alignedBuffer,
+										width,
+										height,
+										bpp,
+										pitch,
+										0,
+										0,
+										0,
+										0);
+
 		SDL_SetColorKey(_surface, SDL_SRCCOLORKEY, 0);
 		//can't call 'setPalette' because it's a vitual function and it don't work correctly in constructor
 		SDL_SetColors(
@@ -212,6 +221,7 @@ Surface::Surface(const Surface& other)
 				other.getPalette(),
 				0,
 				255);
+
 		memcpy(
 			_alignedBuffer,
 			other._alignedBuffer,
@@ -233,13 +243,16 @@ Surface::Surface(const Surface& other)
 
 	_x = other._x;
 	_y = other._y;
+
 	_crop.w = other._crop.w;
 	_crop.h = other._crop.h;
 	_crop.x = other._crop.x;
 	_crop.y = other._crop.y;
+
 	_visible = other._visible;
 	_hidden = other._hidden;
 	_redraw = other._redraw;
+
 	_dx = other._dx;
 	_dy = other._dy;
 }
@@ -272,14 +285,21 @@ void Surface::loadScr(const std::string& filename)
 		throw Exception(filename + " not found");
 	}
 
-	std::vector<char> buffer((std::istreambuf_iterator<char>(imgFile)), (std::istreambuf_iterator<char>()));
+	std::vector<char> buffer(
+						(std::istreambuf_iterator<char>(imgFile)),
+						(std::istreambuf_iterator<char>()));
 
 	// Lock the surface
 	lock();
 
-	int x = 0, y = 0;
+	int
+		x = 0,
+		y = 0;
 
-	for (std::vector<char>::iterator i = buffer.begin(); i != buffer.end(); ++i)
+	for (std::vector<char>::iterator
+			i = buffer.begin();
+			i != buffer.end();
+			++i)
 	{
 		setPixelIterative(&x, &y, *i);
 	}
@@ -289,8 +309,7 @@ void Surface::loadScr(const std::string& filename)
 }
 
 /**
- * Loads the contents of an image file of a
- * known format into the surface.
+ * Loads the contents of an image file of a known format into the surface.
  * @param filename Filename of the image.
  */
 void Surface::loadImage(const std::string& filename)
@@ -325,7 +344,9 @@ void Surface::loadImage(const std::string& filename)
 void Surface::loadSpk(const std::string& filename)
 {
 	// Load file and put pixels in surface
-	std::ifstream imgFile (filename.c_str(), std::ios::in | std::ios::binary);
+	std::ifstream imgFile(
+						filename.c_str(),
+						std::ios::in | std::ios::binary);
 	if (!imgFile)
 	{
 		throw Exception(filename + " not found");
@@ -336,30 +357,46 @@ void Surface::loadSpk(const std::string& filename)
 
 	Uint16 flag;
 	Uint8 value;
-	int x = 0, y = 0;
+	int
+		x = 0,
+		y = 0;
 
-	while (imgFile.read((char*)& flag, sizeof(flag)))
+	while (imgFile.read(
+					(char*)& flag,
+					sizeof(flag)))
 	{
 		flag = SDL_SwapLE16(flag);
 
 		if (flag == 65535)
 		{
-			imgFile.read((char*)& flag, sizeof(flag));
+			imgFile.read(
+					(char*)& flag,
+					sizeof(flag));
 			flag = SDL_SwapLE16(flag);
 
-			for (int i = 0; i < flag * 2; ++i)
+			for (int
+					i = 0;
+					i < flag * 2;
+					++i)
 			{
 				setPixelIterative(&x, &y, 0);
 			}
 		}
 		else if (flag == 65534)
 		{
-			imgFile.read((char*)& flag, sizeof(flag));
+			imgFile.read(
+					(char*)& flag,
+					sizeof(flag));
 			flag = SDL_SwapLE16(flag);
 
-			for (int i = 0; i < flag * 2; ++i)
+			for (int
+					i = 0;
+					i < flag * 2;
+					++i)
 			{
-				imgFile.read((char*)& value, 1);
+				imgFile.read(
+							(char*)& value,
+							1);
 				setPixelIterative(&x, &y, value);
 			}
 		}
@@ -372,16 +409,17 @@ void Surface::loadSpk(const std::string& filename)
 }
 
 /**
- * Loads the contents of a TFTD BDY image file into
- * the surface. BDY files are compressed with a custom
- * algorithm.
+ * Loads the contents of a TFTD BDY image file into the surface;
+ * BDY files are compressed with a custom algorithm.
  * @param filename Filename of the BDY image.
  * @sa http://www.ufopaedia.org/index.php?title=Image_Formats#BDY
  */
 void Surface::loadBdy(const std::string& filename)
 {
 	// Load file and put pixels in surface
-	std::ifstream imgFile (filename.c_str(), std::ios::in | std::ios::binary);
+	std::ifstream imgFile(
+						filename.c_str(),
+						std::ios::in | std::ios::binary);
 	if (!imgFile)
 	{
 		throw Exception(filename + " not found");
@@ -392,17 +430,27 @@ void Surface::loadBdy(const std::string& filename)
 
 	Uint8 dataByte;
 	int pixelCnt;
-	int x = 0, y = 0;
-	int currentRow = 0;
+	int
+		x = 0,
+		y = 0,
+		currentRow = 0;
 
-	while (imgFile.read((char*)& dataByte, sizeof(dataByte)))
+	while (imgFile.read(
+					(char*)& dataByte,
+					sizeof(dataByte)))
 	{
 		if (dataByte >= 129)
 		{
-			pixelCnt = 257 - (int)dataByte;
-			imgFile.read((char*)& dataByte, sizeof(dataByte));
+			pixelCnt = 257 - static_cast<int>(dataByte);
+			imgFile.read(
+					(char*)& dataByte,
+					sizeof(dataByte));
+
 			currentRow = y;
-			for (int i = 0; i < pixelCnt; ++i)
+			for (int
+					i = 0;
+					i < pixelCnt;
+					++i)
 			{
 				if (currentRow == y) // avoid overscan into next row
 					setPixelIterative(&x, &y, dataByte);
@@ -410,11 +458,17 @@ void Surface::loadBdy(const std::string& filename)
 		}
 		else
 		{
-			pixelCnt = 1 + (int) dataByte;
+			pixelCnt = 1 + static_cast<int>(dataByte);
+
 			currentRow = y;
-			for (int i = 0; i < pixelCnt; ++i)
+			for (int
+					i = 0;
+					i < pixelCnt;
+					++i)
 			{
-				imgFile.read((char*)& dataByte, sizeof(dataByte));
+				imgFile.read(
+						(char*)& dataByte,
+						sizeof(dataByte));
 				if (currentRow == y) // avoid overscan into next row
 					setPixelIterative(&x, &y, dataByte);
 			}
@@ -428,8 +482,7 @@ void Surface::loadBdy(const std::string& filename)
 }
 
 /**
- * Clears the entire contents of the surface, resulting
- * in a blank image.
+ * Clears the entire contents of the surface, resulting in a blank image.
  */
 void Surface::clear()
 {
@@ -441,9 +494,16 @@ void Surface::clear()
 
 	if (_surface->flags & SDL_SWSURFACE)
 	{
-		memset(_surface->pixels, 0, _surface->h * _surface->pitch);
+		memset(
+			_surface->pixels,
+			0,
+			_surface->h * _surface->pitch);
 	}
-	else SDL_FillRect(_surface, &square, 0);
+	else
+		SDL_FillRect(
+				_surface,
+				&square,
+				0);
 }
 
 /**
@@ -452,18 +512,23 @@ void Surface::clear()
  * @param off, Amount to shift.
  * @param min, Minimum color to shift to.
  * @param max, Maximum color to shift to.
- * @param mul, Shift multiplier.
+ * @param mult, Shift multiplier.
  */
-void Surface::offset(int off, int min, int max, int mul)
+void Surface::offset(
+		int off,
+		int min,
+		int max,
+		int mult)
 {
-	if (off == 0)
-		return;
+	if (off == 0) return;
+
 
 	// Lock the surface
 	lock();
 
 	for (int
-			x = 0, y = 0;
+			x = 0,
+				y = 0;
 			x < getWidth()
 				&& y < getHeight();
 			)
@@ -473,11 +538,11 @@ void Surface::offset(int off, int min, int max, int mul)
 
 		if (off > 0)
 		{
-			p = (pixel * mul) + off;
+			p = (pixel * mult) + off;
 		}
 		else
 		{
-			p = (pixel + off) / mul;
+			p = (pixel + off) / mult;
 		}
 
 		if (min != -1
@@ -515,12 +580,20 @@ void Surface::invert(Uint8 mid)
 	// Lock the surface
 	lock();
 
-	for (int x = 0, y = 0; x < getWidth() && y < getHeight();)
+	for (int
+			x = 0,
+				y = 0;
+			x < getWidth()
+				&& y < getHeight();
+			)
 	{
 		Uint8 pixel = getPixel(x, y);
 		if (pixel > 0)
 		{
-			setPixelIterative(&x, &y, pixel + 2 * ((int)mid - (int)pixel));
+			setPixelIterative(
+							&x,
+							&y,
+							pixel + 2 * (static_cast<int>(mid) - static_cast<int>(pixel)));
 		}
 		else
 		{
@@ -549,6 +622,7 @@ void Surface::think()
 void Surface::draw()
 {
 	_redraw = false;
+
 	clear();
 }
 
@@ -563,14 +637,17 @@ void Surface::blit(Surface* surface)
 {
 //	Log(LOG_INFO) << "blit()";	// kL
 
-	if (_visible && !_hidden)
+	if (_visible
+		&& !_hidden)
 	{
-		if (_redraw) draw();
+		if (_redraw)
+			draw();
 
 		SDL_Rect* cropper;
 		SDL_Rect target;
 
-		if (_crop.w == 0 && _crop.h == 0)
+		if (_crop.w == 0
+			&& _crop.h == 0)
 		{
 			cropper = 0;
 		}
@@ -582,7 +659,11 @@ void Surface::blit(Surface* surface)
 		target.x = getX();
 		target.y = getY();
 
-		SDL_BlitSurface(_surface, cropper, surface->getSurface(), &target);
+		SDL_BlitSurface(
+					_surface,
+					cropper,
+					surface->getSurface(),
+					&target);
 	}
 }
 
@@ -601,7 +682,11 @@ void Surface::copy(Surface* surface)
 	from.w = getWidth();
 	from.h = getHeight();
 
-	SDL_BlitSurface(surface->getSurface(), &from, _surface, 0);
+	SDL_BlitSurface(
+				surface->getSurface(),
+				&from,
+				_surface,
+				0);
 }
 
 /**
@@ -609,9 +694,14 @@ void Surface::copy(Surface* surface)
  * @param rect Pointer to Rect.
  * @param color Color of the rectangle.
  */
-void Surface::drawRect(SDL_Rect* rect, Uint8 color)
+void Surface::drawRect(
+		SDL_Rect* rect,
+		Uint8 color)
 {
-	SDL_FillRect(_surface, rect, color);
+	SDL_FillRect(
+			_surface,
+			rect,
+			color);
 }
 
 /**
@@ -622,9 +712,22 @@ void Surface::drawRect(SDL_Rect* rect, Uint8 color)
  * @param y2 End y coordinate in pixels.
  * @param color Color of the line.
  */
-void Surface::drawLine(Sint16 x1, Sint16 y1, Sint16 x2, Sint16 y2, Uint8 color)
+void Surface::drawLine(
+		Sint16 x1,
+		Sint16 y1,
+		Sint16 x2,
+		Sint16 y2,
+		Uint8 color)
 {
-	lineColor(_surface, x1, y1, x2, y2, Palette::getRGBA(getPalette(), color));
+	lineColor(
+			_surface,
+			x1,
+			y1,
+			x2,
+			y2,
+			Palette::getRGBA(
+				getPalette(),
+				color));
 }
 
 /**
@@ -634,9 +737,20 @@ void Surface::drawLine(Sint16 x1, Sint16 y1, Sint16 x2, Sint16 y2, Uint8 color)
  * @param r Radius in pixels.
  * @param color Color of the circle.
  */
-void Surface::drawCircle(Sint16 x, Sint16 y, Sint16 r, Uint8 color)
+void Surface::drawCircle(
+		Sint16 x,
+		Sint16 y,
+		Sint16 r,
+		Uint8 color)
 {
-	filledCircleColor(_surface, x, y, r, Palette::getRGBA(getPalette(), color));
+	filledCircleColor(
+					_surface,
+					x,
+					y,
+					r,
+					Palette::getRGBA(
+						getPalette(),
+						color));
 }
 
 /**
@@ -646,9 +760,20 @@ void Surface::drawCircle(Sint16 x, Sint16 y, Sint16 r, Uint8 color)
  * @param n Number of points.
  * @param color Color of the polygon.
  */
-void Surface::drawPolygon(Sint16* x, Sint16* y, int n, Uint8 color)
+void Surface::drawPolygon(
+		Sint16* x,
+		Sint16* y,
+		int n,
+		Uint8 color)
 {
-	filledPolygonColor(_surface, x, y, n, Palette::getRGBA(getPalette(), color));
+	filledPolygonColor(
+					_surface,
+					x,
+					y,
+					n,
+					Palette::getRGBA(
+						getPalette(),
+						color));
 }
 
 /**
@@ -660,9 +785,22 @@ void Surface::drawPolygon(Sint16* x, Sint16* y, int n, Uint8 color)
  * @param dx X offset of texture relative to the screen.
  * @param dy Y offset of texture relative to the screen.
  */
-void Surface::drawTexturedPolygon(Sint16* x, Sint16* y, int n, Surface* texture, int dx, int dy)
+void Surface::drawTexturedPolygon(
+		Sint16* x,
+		Sint16* y,
+		int n,
+		Surface* texture,
+		int dx,
+		int dy)
 {
-	texturedPolygon(_surface, x, y, n, texture->getSurface(), dx, dy);
+	texturedPolygon(
+				_surface,
+				x,
+				y,
+				n,
+				texture->getSurface(),
+				dx,
+				dy);
 }
 
 /**
@@ -672,9 +810,20 @@ void Surface::drawTexturedPolygon(Sint16* x, Sint16* y, int n, Surface* texture,
  * @param s Character string to draw.
  * @param color Color of string.
  */
-void Surface::drawString(Sint16 x, Sint16 y, const char* s, Uint8 color)
+void Surface::drawString(
+		Sint16 x,
+		Sint16 y,
+		const char* s,
+		Uint8 color)
 {
-	stringColor(_surface, x, y, s, Palette::getRGBA(getPalette(), color));
+	stringColor(
+			_surface,
+			x,
+			y,
+			s,
+			Palette::getRGBA(
+				getPalette(),
+				color));
 }
 
 /**
@@ -759,9 +908,16 @@ SDL_Rect* Surface::getCrop()
  * @param firstcolor Offset of the first color to replace.
  * @param ncolors Amount of colors to replace.
  */
-void Surface::setPalette(SDL_Color* colors, int firstcolor, int ncolors)
+void Surface::setPalette(
+		SDL_Color* colors,
+		int firstcolor,
+		int ncolors)
 {
-	SDL_SetColors(_surface, colors, firstcolor, ncolors);
+	SDL_SetColors(
+				_surface,
+				colors,
+				firstcolor,
+				ncolors);
 }
 
 /**
@@ -797,60 +953,73 @@ void Surface::unlock()
 	SDL_UnlockSurface(_surface);
 }
 
+
 /**
  * helper class used for Surface::blitNShade
  */
 struct ColorReplace
 {
-	/**
-	* Function used by ShaderDraw in Surface::blitNShade
-	* set shade and replace color in that surface
-	* @param dest destination pixel
-	* @param src source pixel
-	* @param shade value of shade of this surface
-	* @param newColor new color to set (it should be offseted by 4)
-	*/
-	static inline void func(Uint8& dest, const Uint8& src, const int& shade, const int& newColor, const int&)
+/**
+* Function used by ShaderDraw in Surface::blitNShade
+* set shade and replace color in that surface
+* @param dest destination pixel
+* @param src source pixel
+* @param shade value of shade of this surface
+* @param newColor new color to set (it should be offseted by 4)
+*/
+static inline void func(
+		Uint8& dest,
+		const Uint8& src,
+		const int& shade,
+		const int& newColor,
+		const int&)
+{
+	if (src)
 	{
-		if (src)
-		{
-			const int newShade = (src&15) + shade;
-			if (newShade > 15)
-				// so dark it would flip over to another color - make it black instead
-				dest = 15;
-			else
-				dest = newColor | newShade;
-		}
+		const int newShade = (src&15) + shade;
+		if (newShade > 15)
+			// so dark it would flip over to another color - make it black instead
+			dest = 15;
+		else
+			dest = newColor | newShade;
 	}
+}
 };
+
 
 /**
  * helper class used for Surface::blitNShade
  */
 struct StandartShade
 {
-	/**
-	* Function used by ShaderDraw in Surface::blitNShade
-	* set shade
-	* @param dest destination pixel
-	* @param src source pixel
-	* @param shade value of shade of this surface
-	* @param notused
-	* @param notused
-	*/
-	static inline void func(Uint8& dest, const Uint8& src, const int& shade, const int&, const int&)
+/**
+* Function used by ShaderDraw in Surface::blitNShade
+* set shade
+* @param dest destination pixel
+* @param src source pixel
+* @param shade value of shade of this surface
+* @param notused
+* @param notused
+*/
+static inline void func(
+		Uint8& dest,
+		const Uint8& src,
+		const int& shade,
+		const int&,
+		const int&)
+{
+	if (src)
 	{
-		if (src)
-		{
-			const int newShade = (src&15) + shade;
-			if (newShade > 15)
-				// so dark it would flip over to another color - make it black instead
-				dest = 15;
-			else
-				dest = (src&(15<<4)) | newShade;
-		}
+		const int newShade = (src&15) + shade;
+		if (newShade > 15)
+			// so dark it would flip over to another color - make it black instead
+			dest = 15;
+		else
+			dest = (src&(15<<4)) | newShade;
 	}
+}
 };
+
 
 /**
  * Specific blit function to blit battlescape terrain data in different shades in a fast way.
@@ -872,6 +1041,7 @@ void Surface::blitNShade(
 		int newBaseColor)
 {
 	ShaderMove<Uint8> src(this, x, y);
+
 	if (half)
 	{
 		GraphSubset g = src.getDomain();
@@ -883,10 +1053,17 @@ void Surface::blitNShade(
 	{
 		--newBaseColor;
 		newBaseColor <<= 4;
-		ShaderDraw<ColorReplace>(ShaderSurface(surface), src, ShaderScalar(off), ShaderScalar(newBaseColor));
+		ShaderDraw<ColorReplace>(
+							ShaderSurface(surface),
+							src,
+							ShaderScalar(off),
+							ShaderScalar(newBaseColor));
 	}
 	else
-		ShaderDraw<StandartShade>(ShaderSurface(surface), src, ShaderScalar(off));
+		ShaderDraw<StandartShade>(
+							ShaderSurface(surface),
+							src,
+							ShaderScalar(off));
 }
 
 /**
@@ -897,11 +1074,17 @@ void Surface::invalidate()
 	_redraw = true;
 }
 
+/**
+ *
+ */
 void Surface::setDX(int dx)
 {
 	_dx = dx;
 }
 
+/**
+ *
+ */
 void Surface::setDY(int dy)
 {
 	_dy = dy;
@@ -912,19 +1095,21 @@ void Surface::setDY(int dy)
  * for example for showing in tooltips.
  * @return String ID.
  */
+/* kL: not used
 std::string Surface::getTooltip() const
 {
 	return _tooltip;
-}
+} */
 
 /**
 * Changes the help description of this surface,
 * for example for showing in tooltips.
 * @param str String ID.
 */
+/* kL: not used
 void Surface::setTooltip(const std::string& tooltip)
 {
 	_tooltip = tooltip;
-}
+} */
 
 }

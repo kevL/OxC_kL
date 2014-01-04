@@ -295,6 +295,7 @@ DogfightState::DogfightState(
 	_btnMinimize			= new InteractiveSurface(12, 12, _x, _y);
 	_preview				= new InteractiveSurface(160, 96, _x, _y);
 	_btnStandoff			= new ImageButton(36, 15, _x + 83, _y + 4);
+	_mode = _btnStandoff;
 	_btnCautious			= new ImageButton(36, 15, _x + 120, _y + 4);
 	_btnStandard			= new ImageButton(36, 15, _x + 83, _y + 20);
 	_btnAggressive			= new ImageButton(36, 15, _x + 120, _y + 20);
@@ -311,7 +312,6 @@ DogfightState::DogfightState(
 	_moveTimer				= new Timer(20);
 	_w1Timer				= new Timer(0);
 	_w2Timer				= new Timer(0);
-	_mode = _btnStandoff;
 	_ufoWtimer				= new Timer(0);
 	_ufoEscapeTimer			= new Timer(0);
 	_craftDamageAnimTimer	= new Timer(500);
@@ -406,14 +406,13 @@ DogfightState::DogfightState(
 	_btnUfo->onMouseClick((ActionHandler)& DogfightState::btnUfoClick);
 
 	_txtAmmo1->setColor(Palette::blockOffset(5)+9);
-
 	_txtAmmo2->setColor(Palette::blockOffset(5)+9);
 
 	_txtDistance->setColor(Palette::blockOffset(5)+9);
 	_txtDistance->setText(L"640");
 
 	_txtStatus->setColor(Palette::blockOffset(5)+9);
-	_txtStatus->setAlign(ALIGN_CENTER); // kL
+	_txtStatus->setAlign(ALIGN_CENTER);
 	_txtStatus->setText(tr("STR_STANDOFF"));
 
 	SurfaceSet* set = _game->getResourcePack()->getSurfaceSet("INTICON.PCK");
@@ -443,8 +442,8 @@ DogfightState::DogfightState(
 			continue;
 
 		Surface
-			* range = 0,
-			* weapon = 0;
+			* weapon = 0,
+			* range = 0;
 		Text* ammo = 0;
 		int
 			x1,
@@ -483,7 +482,10 @@ DogfightState::DogfightState(
 
 		range->lock();
 
-		int rangeY = range->getHeight() - w->getRules()->getRange(), connectY = 57;
+		int
+			rangeY = range->getHeight() - w->getRules()->getRange(),
+			connectY = 57;
+
 		for (int
 				x = x1;
 				x <= x1 + 18;
@@ -649,7 +651,8 @@ void DogfightState::think()
 	{
 		_moveTimer->think(this, 0);
 
-		if (!_endDogfight && !_minimized) // check _endDogfight again, because moveTimer can change it
+		if (!_endDogfight // check _endDogfight again, because moveTimer can change it
+			&& !_minimized)
 		{
 			_animTimer->think(this, 0);
 			_w1Timer->think(this, 0);
@@ -659,7 +662,8 @@ void DogfightState::think()
 			_craftDamageAnimTimer->think(this, 0);
 		}
 		else if (!_endDogfight
-			&& (_craft->getDestination() != _ufo || _ufo->getStatus() == Ufo::LANDED))
+			&& (_craft->getDestination() != _ufo
+				|| _ufo->getStatus() == Ufo::LANDED))
 		{
 			endDogfight();
 		}
@@ -973,7 +977,10 @@ void DogfightState::move()
 
 						setStatus("STR_UFO_HIT");
 						_currentRadius += 4;
-						_game->getResourcePack()->getSound("GEO.CAT", 12)->play();
+						_game->getResourcePack()->getSound(
+														"GEO.CAT",
+														12)
+													->play();
 
 						p->remove();
 					}
@@ -1017,7 +1024,10 @@ void DogfightState::move()
 							_craft->setDamage(_craft->getDamage() + damage);
 							drawCraftDamage();
 							setStatus("STR_INTERCEPTOR_DAMAGED");
-							_game->getResourcePack()->getSound("GEO.CAT", 10)->play();
+							_game->getResourcePack()->getSound(
+															"GEO.CAT",
+															10)
+														->play();
 
 							if ((_mode == _btnCautious
 //kL								&& _craft->getDamagePercentage() >= 50)
@@ -1148,7 +1158,7 @@ void DogfightState::move()
 	// Check when battle is over.
 	if (_end == true
 		&& (((_currentDist > 640 || _minimized)
-			&& (_mode == _btnDisengage || _ufoBreakingOff == true))
+				&& (_mode == _btnDisengage || _ufoBreakingOff == true))
 			|| (_timeout == 0
 				&& (_ufo->isCrashed() || _craft->isDestroyed()))))
 	{
@@ -1174,7 +1184,10 @@ void DogfightState::move()
 		setStatus("STR_INTERCEPTOR_DESTROYED");
 
 		_timeout += 30;
-		_game->getResourcePack()->getSound("GEO.CAT", 13)->play();
+		_game->getResourcePack()->getSound(
+										"GEO.CAT",
+										13)
+									->play();
 
 		finalRun = true;
 		_destroyCraft = true;
@@ -1193,7 +1206,10 @@ void DogfightState::move()
 		_ufo->setSpeed(0);
 
 		AlienMission* mission = _ufo->getMission();
-		mission->ufoShotDown(*_ufo, *_game, *_globe);
+		mission->ufoShotDown(
+						*_ufo,
+						*_game,
+						*_globe);
 
 		// Check for retaliation trigger.
 //kL		if (!RNG::percent(4 * (24 - static_cast<int>(_game->getSavedGame()->getDifficulty())))) // <- too clever by half.
@@ -1212,7 +1228,9 @@ void DogfightState::move()
 			}
 
 			// Difference from original: No retaliation until final UFO lands (Original: Is spawned).
-			if (!_game->getSavedGame()->getAlienMission(targetRegion, "STR_ALIEN_RETALIATION"))
+			if (!_game->getSavedGame()->getAlienMission(
+													targetRegion,
+													"STR_ALIEN_RETALIATION"))
 			{
 				const RuleAlienMission& rule = *_game->getRuleset()->getAlienMission("STR_ALIEN_RETALIATION");
 				AlienMission* mission = new AlienMission(rule);
@@ -1227,6 +1245,10 @@ void DogfightState::move()
 		}
 
 		_ufoEscapeTimer->stop();
+
+		double ufoLon = _ufo->getLongitude();
+		double ufoLat = _ufo->getLatitude();
+
 		if (_ufo->isDestroyed())
 		{
 			if (_ufo->getShotDownByCraftId() == _craft->getId())
@@ -1236,7 +1258,9 @@ void DogfightState::move()
 						country != _game->getSavedGame()->getCountries()->end();
 						++country)
 				{
-					if ((*country)->getRules()->insideCountry(_ufo->getLongitude(), _ufo->getLatitude()))
+					if ((*country)->getRules()->insideCountry(
+															ufoLon,
+															ufoLat))
 					{
 						(*country)->addActivityXcom(_ufo->getRules()->getScore() * 2);
 
@@ -1249,7 +1273,9 @@ void DogfightState::move()
 						region != _game->getSavedGame()->getRegions()->end();
 						++region)
 				{
-					if ((*region)->getRules()->insideRegion(_ufo->getLongitude(), _ufo->getLatitude()))
+					if ((*region)->getRules()->insideRegion(
+														ufoLon,
+														ufoLat))
 					{
 						(*region)->addActivityXcom(_ufo->getRules()->getScore() * 2);
 
@@ -1258,7 +1284,10 @@ void DogfightState::move()
 				}
 
 				setStatus("STR_UFO_DESTROYED");
-				_game->getResourcePack()->getSound("GEO.CAT", 10)->play(); // 11
+				_game->getResourcePack()->getSound(
+												"GEO.CAT",
+												11)
+											->play();
 			}
 
 			_destroyUfo = true;
@@ -1268,14 +1297,19 @@ void DogfightState::move()
 			if (_ufo->getShotDownByCraftId() == _craft->getId())
 			{
 				setStatus("STR_UFO_CRASH_LANDS");
-				_game->getResourcePack()->getSound("GEO.CAT", 10)->play();
+				_game->getResourcePack()->getSound(
+												"GEO.CAT",
+												11)
+											->play();
 
 				for(std::vector<Country*>::iterator
 						country = _game->getSavedGame()->getCountries()->begin();
 						country != _game->getSavedGame()->getCountries()->end();
 						++country)
 				{
-					if ((*country)->getRules()->insideCountry(_ufo->getLongitude(), _ufo->getLatitude()))
+					if ((*country)->getRules()->insideCountry(
+															ufoLon,
+															ufoLat))
 					{
 						(*country)->addActivityXcom(_ufo->getRules()->getScore());
 
@@ -1288,7 +1322,9 @@ void DogfightState::move()
 						region != _game->getSavedGame()->getRegions()->end();
 						++region)
 				{
-					if ((*region)->getRules()->insideRegion(_ufo->getLongitude(), _ufo->getLatitude()))
+					if ((*region)->getRules()->insideRegion(
+														ufoLon,
+														ufoLat))
 					{
 						(*region)->addActivityXcom(_ufo->getRules()->getScore());
 
@@ -1297,7 +1333,9 @@ void DogfightState::move()
 				}
 			}
 
-			if (!_globe->insideLand(_ufo->getLongitude(), _ufo->getLatitude()))
+			if (!_globe->insideLand(
+								ufoLon,
+								ufoLat))
 			{
 				_ufo->setStatus(Ufo::DESTROYED);
 				_destroyUfo = true;
@@ -1365,7 +1403,10 @@ void DogfightState::fireWeapon1()
 			p->setHorizontalPosition(HP_LEFT);
 			_projectiles.push_back(p);
 
-			_game->getResourcePack()->getSound("GEO.CAT", w1->getRules()->getSound())->play();
+			_game->getResourcePack()->getSound(
+											"GEO.CAT",
+											w1->getRules()->getSound())
+										->play();
 		}
 	}
 }
@@ -1390,7 +1431,10 @@ void DogfightState::fireWeapon2()
 			p->setHorizontalPosition(HP_RIGHT);
 			_projectiles.push_back(p);
 
-			_game->getResourcePack()->getSound("GEO.CAT", w2->getRules()->getSound())->play();
+			_game->getResourcePack()->getSound(
+											"GEO.CAT",
+											w2->getRules()->getSound())
+										->play();
 		}
 	}
 }
@@ -1467,8 +1511,7 @@ void DogfightState::maximumDistance()
 			i < _craft->getWeapons()->end();
 			++i)
 	{
-		if (*i == 0)
-			continue;
+		if (*i == 0) continue;
 
 		if ((*i)->getRules()->getRange() < min
 			&& (*i)->getAmmo() > 0)
@@ -1509,7 +1552,7 @@ void DogfightState::btnMinimizeClick(Action*)
 	{
 		if (_currentDist >= STANDOFF_DIST)
 		{
-//			GeoscapeState::getZoomOutTimer()->start();	// kL
+//			GeoscapeState::getZoomOutTimer()->start(); // kL
 
 			setMinimized(true);
 
@@ -1533,6 +1576,7 @@ void DogfightState::btnMinimizeClick(Action*)
 			_txtDistance->setVisible(false);
 			_preview->setVisible(false);
 			_txtStatus->setVisible(false);
+
 			_btnMinimizedIcon->setVisible(true);
 			_txtInterceptionNumber->setVisible(true);
 
@@ -1861,6 +1905,7 @@ void DogfightState::drawProjectile(const CraftWeaponProjectile* p)
 void DogfightState::weapon1Click(Action*)
 {
 	_weapon1Enabled = !_weapon1Enabled;
+
 	recolor(0, _weapon1Enabled);
 }
 
@@ -1870,32 +1915,34 @@ void DogfightState::weapon1Click(Action*)
 void DogfightState::weapon2Click(Action*)
 {
 	_weapon2Enabled = !_weapon2Enabled;
+
 	recolor(1, _weapon2Enabled);
 }
 
 /**
- * Changes colors of weapon icons, range indicators and ammo texts base on current weapon state.
- * @param weaponNo - number of weapon for which colors must be changed.
- * @param currentState - state of weapon (enabled = true, disabled = false).
+ * Changes the colors of craft's weapon icons, range
+ * indicators, and ammo texts base on current weapon state.
+ * @param weaponPod, Craft weapon for which colors must be changed
+ * @param enabled, State of weapon
  */
 void DogfightState::recolor(
-		const int weaponNo,
-		const bool currentState)
+		const int weaponPod,
+		const bool enabled)
 {
+	int
+		offset1 = 25,	//kL 24
+		offset2 = 8;	//kL 7
 	InteractiveSurface* weapon = 0;
 	Text* ammo = 0;
 	Surface* range = 0;
-	int
-		weaponAndAmmoOffset = 24,
-		rangeOffset = 7;
 
-	if (weaponNo == 0)
+	if (weaponPod == 0)
 	{
 		weapon = _weapon1;
 		ammo = _txtAmmo1;
 		range = _range1;
 	}
-	else if (weaponNo == 1)
+	else if (weaponPod == 1)
 	{
 		weapon = _weapon2;
 		ammo = _txtAmmo2;
@@ -1906,17 +1953,17 @@ void DogfightState::recolor(
 		return;
 	}
 
-	if (currentState)
+	if (enabled)
 	{
-		weapon->offset(-weaponAndAmmoOffset);
-		ammo->offset(-weaponAndAmmoOffset);
-		range->offset(-rangeOffset);
+		weapon->offset(-offset1);
+		ammo->offset(-offset1);
+		range->offset(-offset2);
 	}
 	else
 	{
-		weapon->offset(weaponAndAmmoOffset);
-		ammo->offset(weaponAndAmmoOffset);
-		range->offset(rangeOffset);
+		weapon->offset(offset1);
+		ammo->offset(offset1);
+		range->offset(offset2);
 	}
 }
 
@@ -1961,6 +2008,7 @@ void DogfightState::btnMinimizedIconClick(Action*)
 	_txtAmmo2->setVisible(true);
 	_txtDistance->setVisible(true);
 	_txtStatus->setVisible(true);
+
 	_btnMinimizedIcon->setVisible(false);
 	_txtInterceptionNumber->setVisible(false);
 	_preview->setVisible(false);
@@ -2074,44 +2122,64 @@ void DogfightState::moveWindow()
 {
 	_window->setX(_x);
 	_window->setY(_y);
+
 	_battle->setX(_x + 3);
 	_battle->setY(_y + 3);
+
 	_weapon1->setX(_x + 4);
 	_weapon1->setY(_y + 52);
+
 	_range1->setX(_x + 19);
 	_range1->setY(_y + 3);
+
 	_weapon2->setX(_x + 64);
 	_weapon2->setY(_y + 52);
+
 	_range2->setX(_x + 43);
 	_range2->setY(_y + 3);
+
 	_damage->setX(_x + 93);
 	_damage->setY(_y + 40);
+
 	_btnMinimize->setX(_x);
 	_btnMinimize->setY(_y);
+
 	_preview->setX(_x);
 	_preview->setY(_y);
+
 	_btnStandoff->setX(_x + 83);
 	_btnStandoff->setY(_y + 4);
+
 	_btnCautious->setX(_x + 120);
 	_btnCautious->setY(_y + 4);
+
 	_btnStandard->setX(_x + 83);
 	_btnStandard->setY(_y + 20);
+
 	_btnAggressive->setX(_x + 120);
 	_btnAggressive->setY(_y + 20);
+
 	_btnDisengage->setX(_x + 120);
 	_btnDisengage->setY(_y + 36);
+
 	_btnUfo->setX(_x + 120);
 	_btnUfo->setY(_y + 52);
+
 	_txtAmmo1->setX(_x + 4);
 	_txtAmmo1->setY(_y + 70);
+
 	_txtAmmo2->setX(_x + 64);
 	_txtAmmo2->setY(_y + 70);
+
 	_txtDistance->setX(_x + 116);
 	_txtDistance->setY(_y + 72);
+
 	_txtStatus->setX(_x + 4);
 	_txtStatus->setY(_y + 85);
+
 	_btnMinimizedIcon->setX(_minimizedIconX);
 	_btnMinimizedIcon->setY(_minimizedIconY);
+
 	_txtInterceptionNumber->setX(_minimizedIconX + 18);
 	_txtInterceptionNumber->setY(_minimizedIconY + 6);
 }

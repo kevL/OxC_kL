@@ -21,6 +21,7 @@
 #define OPENXCOM_RULESOLDIER_H
 
 #include <string>
+
 #include "../Ruleset/Unit.h"
 
 
@@ -34,11 +35,22 @@ namespace OpenXcom
  */
 class RuleSoldier
 {
+
 private:
-	std::string _type;
-	UnitStats _minStats, _maxStats, _statCaps;
-	std::string _armor;
-	int _standHeight, _kneelHeight, _floatHeight;
+	int
+		_floatHeight,
+		_kneelHeight,
+		_standHeight;
+
+	std::string
+		_armor,
+		_type;
+
+	UnitStats
+		_minStats,
+		_maxStats,
+		_statCaps;
+
 
 	public:
 		/// Creates a blank unit ruleset.
@@ -51,18 +63,21 @@ private:
 
 		/// Gets the unit's type.
 		std::string getType() const;
+
 		/// Gets the minimum stats for the random stats generator.
 		UnitStats getMinStats() const;
 		/// Gets the maximum stats for the random stats generator.
 		UnitStats getMaxStats() const;
 		/// Gets the stat caps.
 		UnitStats getStatCaps() const;
+
 		/// Gets the height of the soldier when it's standing.
 		int getStandHeight() const;
 		/// Gets the height of the soldier when it's kneeling.
 		int getKneelHeight() const;
 		/// Gets the elevation of the soldier when it's flying.
 		int getFloatHeight() const;
+
 		/// Gets the armor name.
 		std::string getArmor() const;
 };

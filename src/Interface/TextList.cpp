@@ -67,7 +67,7 @@ TextList::TextList(
 		_arrowRight(),
 		_arrowPos(-1),
 //kL		_scrollPos(4),
-		_scrollPos(0),		// kL
+		_scrollPos(0), // kL
 		_arrowType(ARROW_VERTICAL),
 		_leftClick(0),
 		_leftPress(0),
@@ -83,7 +83,7 @@ TextList::TextList(
 						13,
 						13,
 						getX() + getWidth() + _scrollPos,
-						getY() + 1); // - 2
+						getY()); // - 2
 	_up->setVisible(false);
 	_up->setTextList(this);
 
@@ -327,10 +327,10 @@ void TextList::addRow(
 	{
 		// Place text
 		Text* txt = new Text(
-						_columns[i],
-						_font->getHeight(),
-						_margin + rowX,
-						getY());
+							_columns[i],
+							_font->getHeight(),
+							_margin + rowX,
+							getY());
 
 		txt->setPalette(this->getPalette());
 		txt->initText(_big, _small, _lang);
@@ -356,7 +356,8 @@ void TextList::addRow(
 		txt->setText(va_arg(args, wchar_t*));
 
 		// Places dots between text
-		if (_dot && i < cols - 1)
+		if (_dot
+			&& i < cols - 1)
 		{
 			std::wstring buf = txt->getText();
 
@@ -625,8 +626,7 @@ Uint8 TextList::getSecondaryColor() const
 }
 
 /**
- * Enables/disables high contrast color. Mostly used for
- * Battlescape text.
+ * Enables/disables high contrast color. Mostly used for Battlescape text.
  * @param contrast High contrast setting.
  */
 void TextList::setHighContrast(bool contrast)
@@ -953,9 +953,13 @@ void TextList::scrollUp(bool toMax)
 {
 	if (!_scrolling) return;
 
-	if (_texts.size() > _visibleRows && _scroll > 0)
+	if (_texts.size() > _visibleRows
+		&& _scroll > 0)
 	{
-		if (toMax) _scroll=0; else _scroll--;
+		if (toMax)
+			_scroll = 0;
+		else
+			_scroll--;
 
 		_redraw = true;
 	}
@@ -975,7 +979,7 @@ void TextList::scrollDown(bool toMax)
 		&& _scroll < _texts.size() - _visibleRows)
 	{
 		if (toMax)
-			_scroll=_texts.size()-_visibleRows;
+			_scroll = _texts.size()-_visibleRows;
 		else
 			_scroll++;
 
@@ -986,21 +990,22 @@ void TextList::scrollDown(bool toMax)
 }
 
 /**
- * Updates the visibility of the arrow buttons according to
- * the current scroll position.
+ * Updates the visibility of the arrow buttons
+ * according to the current scroll position.
  */
 void TextList::updateArrows()
 {
 	_up->setVisible(_texts.size() > _visibleRows
-											&& _scroll > 0);
+					&& _scroll > 0);
+
 	_down->setVisible(_texts.size() > _visibleRows
-											&& _scroll < _texts.size() - _visibleRows);
+						&& _scroll < _texts.size() - _visibleRows);
 }
 
 /**
  * Changes whether the list can be scrolled.
- * @param scrolling True to allow scrolling, false otherwise.
- * @param scrollPos Custom X position for the scroll buttons.
+ * @param scrolling, True to allow scrolling, false otherwise.
+ * @param scrollPos, Custom +/- x_offset for the scroll buttons.
  */
 void TextList::setScrolling(
 		bool scrolling,
@@ -1008,7 +1013,7 @@ void TextList::setScrolling(
 {
 	_scrolling = scrolling;
 
-	if (scrollPos != _scrollPos)
+	if (_scrollPos != scrollPos)
 	{
 		_scrollPos = scrollPos;
 
@@ -1221,8 +1226,9 @@ void TextList::mouseOver(Action* action, State* state)
 						0,
 						static_cast<int>(
 							static_cast<int>(_scroll)
-								+ static_cast<int>(floor(action->getRelativeYMouse()
-												/ (static_cast<double>(y) * action->getYScale())))));
+							+ static_cast<int>(
+											floor(action->getRelativeYMouse()
+											/ (static_cast<double>(y) * action->getYScale())))));
 
 		if (_selRow < _texts.size())
 		{

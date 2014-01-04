@@ -20,16 +20,18 @@
 #ifndef OPENXCOM_ABANDONGAMESTATE_H
 #define OPENXCOM_ABANDONGAMESTATE_H
 
-#include "../Engine/State.h"
 #include "OptionsBaseState.h"
+
+#include "../Engine/State.h"
 
 
 namespace OpenXcom
 {
 
+class Text;
 class TextButton;
 class Window;
-class Text;
+
 
 /**
  * Abandon Game window shown before
@@ -39,15 +41,22 @@ class AbandonGameState
 	:
 		public State
 {
+
 private:
 	OptionsOrigin _origin;
-	TextButton* _btnYes, * _btnNo;
-	Window* _window;
+
 	Text* _txtTitle;
+	TextButton
+		* _btnYes,
+		* _btnNo;
+	Window* _window;
+
 
 	public:
 		/// Creates the Abandon Game state.
-		AbandonGameState(Game* game, OptionsOrigin origin);
+		AbandonGameState(
+				Game* game,
+				OptionsOrigin origin);
 		/// Cleans up the Abandon Game state.
 		~AbandonGameState();
 

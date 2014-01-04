@@ -107,6 +107,7 @@ private:
 		/// Sets the animation frame.
 		void setAnimationFrame(
 				int frame);
+
 		/// Draws the unit.
 		void draw();
 };

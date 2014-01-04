@@ -420,12 +420,16 @@ int Tile::closeUfoDoor()
  * @param flag true/false
  * @param part 0-2 westwall/northwall/content+floor
  */
-void Tile::setDiscovered(bool flag, int part)
+void Tile::setDiscovered(
+		bool flag,
+		int part)
 {
 	if (_discovered[part] != flag)
 	{
 		_discovered[part] = flag;
-		if (part == 2 && flag == true)
+
+		if (part == 2
+			&& flag == true)
 		{
 			_discovered[0] = true;
 			_discovered[1] = true;
@@ -433,9 +437,7 @@ void Tile::setDiscovered(bool flag, int part)
 
 		// if light on tile changes, units and objects on it change light too
 		if (_unit != 0)
-		{
 			_unit->setCache(0);
-		}
 	}
 }
 
@@ -631,7 +633,8 @@ int Tile::getFuel() const
 }
 
 /**
- * Ignite starts fire on a tile, it will burn <fuel> rounds. Fuel of a tile is the highest fuel of it's objects.
+ * Ignite starts fire on a tile, it will burn <fuel> rounds.
+ * Fuel of a tile is the highest fuel of its objects.
  * NOT the sum of the fuel of the objects!
  */
 void Tile::ignite(int power)
@@ -729,7 +732,7 @@ void Tile::setUnit(
 
 /**
  * Set the amount of turns this tile is on fire. 0 = no fire.
- * @param fire : amount of turns this tile is on fire.
+ * @param (int)fire, Amount of turns this tile is on fire
  */
 void Tile::setFire(int fire)
 {
@@ -739,7 +742,7 @@ void Tile::setFire(int fire)
 
 /**
  * Get the amount of turns this tile is on fire. 0 = no fire.
- * @return fire : amount of turns this tile is on fire.
+ * @return int, Amount of turns this tile is on fire
  */
 int Tile::getFire() const
 {
@@ -748,7 +751,7 @@ int Tile::getFire() const
 
 /**
  * Set the amount of turns this tile is smoking. 0 = no smoke.
- * @param smoke : amount of turns this tile is smoking.
+ * @param (int)smoke, Amount of turns this tile is smoking
  */
 void Tile::addSmoke(int smoke)
 {
@@ -770,7 +773,7 @@ void Tile::addSmoke(int smoke)
 
 /**
  * Set the amount of turns this tile is smoking. 0 = no smoke.
- * @param smoke : amount of turns this tile will be smoking.
+ * @param (int)smoke, Amount of turns this tile will be smoking
  */
 void Tile::setSmoke(int smoke)
 {
@@ -780,7 +783,7 @@ void Tile::setSmoke(int smoke)
 
 /**
  * Get the amount of turns this tile is smoking. 0 = no smoke.
- * @return smoke : amount of turns this tile will be smoking.
+ * @return int, Amount of turns this tile will be smoking
  */
 int Tile::getSmoke() const
 {
@@ -790,7 +793,7 @@ int Tile::getSmoke() const
 /**
  * Get the number of frames the fire or smoke animation is off-sync.
  * To void fire and smoke animations of different tiles moving nice in sync - it looks fake.
- * @return offset
+ * @return int, Offset
  */
 int Tile::getAnimationOffset() const
 {
@@ -802,7 +805,9 @@ int Tile::getAnimationOffset() const
  * @param item
  * @param ground
  */
-void Tile::addItem(BattleItem* item, RuleInventory* ground)
+void Tile::addItem(
+		BattleItem* item,
+		RuleInventory* ground)
 {
 	item->setSlot(ground);
 	_inventory.push_back(item);

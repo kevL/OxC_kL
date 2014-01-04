@@ -193,7 +193,9 @@ SoldierInfoState::SoldierInfoState(
 	_btnOk->setColor(Palette::blockOffset(15)+6);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& SoldierInfoState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)& SoldierInfoState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& SoldierInfoState::btnOkClick,
+					(SDLKey)Options::getInt("keyCancel"));
 
 	_btnPrev->setColor(Palette::blockOffset(15)+6);
 	_btnPrev->setText(L"<");
@@ -235,6 +237,7 @@ SoldierInfoState::SoldierInfoState(
 	_txtPsionic->setColor(Palette::blockOffset(15)+1);
 	_txtPsionic->setText(tr("STR_IN_PSIONIC_TRAINING"));
 
+
 	_txtTimeUnits->setColor(Palette::blockOffset(15)+1);
 	_txtTimeUnits->setText(tr("STR_TIME_UNITS"));
 
@@ -244,6 +247,7 @@ SoldierInfoState::SoldierInfoState(
 	_barTimeUnits->setColor2(Palette::blockOffset(3)+4);
 	_barTimeUnits->setScale(1.0);
 	_barTimeUnits->setInvert(true);
+
 
 	_txtStamina->setColor(Palette::blockOffset(15)+1);
 	_txtStamina->setText(tr("STR_STAMINA"));
@@ -255,6 +259,7 @@ SoldierInfoState::SoldierInfoState(
 	_barStamina->setScale(1.0);
 	_barStamina->setInvert(true);
 
+
 	_txtHealth->setColor(Palette::blockOffset(15)+1);
 	_txtHealth->setText(tr("STR_HEALTH"));
 
@@ -264,6 +269,7 @@ SoldierInfoState::SoldierInfoState(
 	_barHealth->setColor2(Palette::blockOffset(2)+4);
 	_barHealth->setScale(1.0);
 	_barHealth->setInvert(true);
+
 
 	_txtBravery->setColor(Palette::blockOffset(15)+1);
 	_txtBravery->setText(tr("STR_BRAVERY"));
@@ -275,6 +281,7 @@ SoldierInfoState::SoldierInfoState(
 	_barBravery->setScale(1.0);
 	_barBravery->setInvert(true);
 
+
 	_txtReactions->setColor(Palette::blockOffset(15)+1);
 	_txtReactions->setText(tr("STR_REACTIONS"));
 
@@ -284,6 +291,7 @@ SoldierInfoState::SoldierInfoState(
 	_barReactions->setColor2(Palette::blockOffset(1)+4);
 	_barReactions->setScale(1.0);
 	_barReactions->setInvert(true);
+
 
 	_txtFiring->setColor(Palette::blockOffset(15)+1);
 	_txtFiring->setText(tr("STR_FIRING_ACCURACY"));
@@ -295,6 +303,7 @@ SoldierInfoState::SoldierInfoState(
 	_barFiring->setScale(1.0);
 	_barFiring->setInvert(true);
 
+
 	_txtThrowing->setColor(Palette::blockOffset(15)+1);
 	_txtThrowing->setText(tr("STR_THROWING_ACCURACY"));
 
@@ -304,6 +313,7 @@ SoldierInfoState::SoldierInfoState(
 	_barThrowing->setColor2(Palette::blockOffset(10)+4);
 	_barThrowing->setScale(1.0);
 	_barThrowing->setInvert(true);
+
 
 	_txtStrength->setColor(Palette::blockOffset(15)+1);
 	_txtStrength->setText(tr("STR_STRENGTH"));
@@ -315,6 +325,7 @@ SoldierInfoState::SoldierInfoState(
 	_barStrength->setScale(1.0);
 	_barStrength->setInvert(true);
 
+
 	_txtPsiStrength->setColor(Palette::blockOffset(15)+1);
 	_txtPsiStrength->setText(tr("STR_PSIONIC_STRENGTH"));
 
@@ -324,6 +335,7 @@ SoldierInfoState::SoldierInfoState(
 	_barPsiStrength->setColor2(Palette::blockOffset(11)+4);
 	_barPsiStrength->setScale(1.0);
 	_barPsiStrength->setInvert(true);
+
 
 	_txtPsiSkill->setColor(Palette::blockOffset(15)+1);
 	_txtPsiSkill->setText(tr("STR_PSIONIC_SKILL"));
@@ -371,115 +383,107 @@ void SoldierInfoState::init()
 	texture->getFrame(s->getRankSprite())->setY(0);
 	texture->getFrame(s->getRankSprite())->blit(_rank);
 
-	std::wstringstream ss;
-	ss << current->tu;
-	_numTimeUnits->setText(ss.str());
+	std::wstringstream
+		ss1,
+		ss2,
+		ss3,
+		ss4,
+		ss5,
+		ss6,
+		ss7,
+		ss8,
+		ss9,
+		ss10;
+
+	ss1 << current->tu;
+	_numTimeUnits->setText(ss1.str());
 	if (current->tu > initial->tu)
 	{
 		_barTimeUnits->setMax(current->tu);
-	}
-	else
-		_barTimeUnits->setMax(initial->tu);
-	_barTimeUnits->setValue(current->tu);
-	if (current->tu > initial->tu)
-	{
 		_barTimeUnits->setValue2(initial->tu);
 	}
 	else
+	{
+		_barTimeUnits->setMax(initial->tu);
 		_barTimeUnits->setValue2(current->tu);
+	}
+	_barTimeUnits->setValue(current->tu);
 
-	std::wstringstream ss2;
 	ss2 << current->stamina;
 	_numStamina->setText(ss2.str());
 	if (current->stamina > initial->stamina)
 	{
 		_barStamina->setMax(current->stamina);
-	}
-	else
-		_barStamina->setMax(initial->stamina);
-	_barStamina->setValue(current->stamina);
-	if (current->stamina > initial->stamina)
-	{
 		_barStamina->setValue2(initial->stamina);
 	}
 	else
+	{
+		_barStamina->setMax(initial->stamina);
 		_barStamina->setValue2(current->stamina);
+	}
+	_barStamina->setValue(current->stamina);
 
-	std::wstringstream ss3;
 	ss3 << current->health;
 	_numHealth->setText(ss3.str());
 	if (current->health > initial->health)
 	{
 		_barHealth->setMax(current->health);
-	}
-	else
-		_barHealth->setMax(initial->health);
-	_barHealth->setValue(current->health);
-	if (current->health > initial->health)
-	{
 		_barHealth->setValue2(initial->health);
 	}
 	else
+	{
+		_barHealth->setMax(initial->health);
 		_barHealth->setValue2(current->health);
+	}
+	_barHealth->setValue(current->health);
 
-	std::wstringstream ss4;
 	ss4 << current->bravery;
 	_numBravery->setText(ss4.str());
 	_barBravery->setMax(current->bravery);
 	_barBravery->setValue(current->bravery);
 	_barBravery->setValue2(initial->bravery);
 
-	std::wstringstream ss5;
 	ss5 << current->reactions;
 	_numReactions->setText(ss5.str());
 	_barReactions->setMax(current->reactions);
 	_barReactions->setValue(current->reactions);
 	_barReactions->setValue2(initial->reactions);
 
-	std::wstringstream ss6;
 	ss6 << current->firing;
 	_numFiring->setText(ss6.str());
 	_barFiring->setMax(current->firing);
 	_barFiring->setValue(current->firing);
 	_barFiring->setValue2(initial->firing);
 
-	std::wstringstream ss7;
 	ss7 << current->throwing;
 	_numThrowing->setText(ss7.str());
 	_barThrowing->setMax(current->throwing);
 	_barThrowing->setValue(current->throwing);
 	_barThrowing->setValue2(initial->throwing);
 
-	std::wstringstream ss8;
 	ss8 << current->strength;
 	_numStrength->setText(ss8.str());
 	if (current->strength > initial->strength)
 	{
 		_barStrength->setMax(current->strength);
-	}
-	else
-		_barStrength->setMax(initial->strength);
-	_barStrength->setValue(current->strength);
-	if (current->strength > initial->strength)
-	{
 		_barStrength->setValue2(initial->strength);
 	}
 	else
+	{
+		_barStrength->setMax(initial->strength);
 		_barStrength->setValue2(current->strength);
+	}
+	_barStrength->setValue(current->strength);
 
-	std::wstring wsArmor;
+
+	std::wstring
+		armor,
+		craft;
+
 	std::string armorType = s->getArmor()->getType();
-	wsArmor = tr(armorType);
+	armor = tr(armorType);
+	_btnArmor->setText(armor);
 
-	_btnArmor->setText(wsArmor);
-
-	_btnSack->setVisible(!(s->getCraft() && s->getCraft()->getStatus() == "STR_OUT"));
-
-	_txtRank->setText(tr("STR_RANK_").arg(tr(s->getRankString())));
-	_txtMissions->setText(tr("STR_MISSIONS").arg(s->getMissions()));
-	_txtKills->setText(tr("STR_KILLS").arg(s->getKills()));
-
-	std::wstring craft;
 	if (s->getCraft() == 0)
 	{
 		craft = tr("STR_NONE_UC");
@@ -499,15 +503,23 @@ void SoldierInfoState::init()
 		_txtRecovery->setText(L"");
 	}
 
+	_txtRank->setText(tr("STR_RANK_").arg(tr(s->getRankString())));
+	_txtMissions->setText(tr("STR_MISSIONS").arg(s->getMissions()));
+	_txtKills->setText(tr("STR_KILLS").arg(s->getKills()));
+
 	_txtPsionic->setVisible(s->isInPsiTraining());
 
-	if (current->psiSkill > 0
+	_btnSack->setVisible(!(s->getCraft() && s->getCraft()->getStatus() == "STR_OUT"));
+
+
+	int minPsi = s->getRules()->getMinStats().psiSkill;
+
+	if (current->psiSkill >= minPsi
 		|| (Options::getBool("psiStrengthEval")
 			&& _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements())))
 	{
-		std::wstringstream ss14;
-		ss14 << current->psiStrength;
-		_numPsiStrength->setText(ss14.str());
+		ss9 << current->psiStrength;
+		_numPsiStrength->setText(ss9.str());
 		_barPsiStrength->setMax(current->psiStrength);
 		_barPsiStrength->setValue(current->psiStrength);
 		_barPsiStrength->setValue2(initial->psiStrength);
@@ -523,11 +535,10 @@ void SoldierInfoState::init()
 		_barPsiStrength->setVisible(false);
 	}
 
-	if (current->psiSkill > 0)
+	if (current->psiSkill >= minPsi)
 	{
-		std::wstringstream ss15;
-		ss15 << current->psiSkill;
-		_numPsiSkill->setText(ss15.str());
+		ss10 << current->psiSkill;
+		_numPsiSkill->setText(ss10.str());
 		_barPsiSkill->setMax(current->psiSkill);
 		_barPsiSkill->setValue(current->psiSkill);
 		_barPsiSkill->setValue2(initial->psiSkill);
@@ -564,6 +575,7 @@ void SoldierInfoState::edtSoldierKeyPress(Action* action)
 void SoldierInfoState::btnOkClick(Action*)
 {
 	_base->getSoldiers()->at(_soldier)->setName(_edtSoldier->getText());
+
 	_game->popState();
 }
 
@@ -613,7 +625,10 @@ void SoldierInfoState::btnArmorClick(Action*)
 		|| (_base->getSoldiers()->at(_soldier)->getCraft()
 			&& _base->getSoldiers()->at(_soldier)->getCraft()->getStatus() != "STR_OUT"))
 	{
-		_game->pushState(new SoldierArmorState(_game, _base, _soldier));
+		_game->pushState(new SoldierArmorState(
+											_game,
+											_base,
+											_soldier));
 	}
 }
 
@@ -625,7 +640,10 @@ void SoldierInfoState::btnSackClick(Action*)
 {
 	Soldier* soldier = _base->getSoldiers()->at(_soldier);
 
-	_game->pushState(new SackSoldierState(_game, _base, soldier));
+	_game->pushState(new SackSoldierState(
+										_game,
+										_base,
+										soldier));
 }
 
 }

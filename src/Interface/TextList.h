@@ -33,8 +33,8 @@ namespace OpenXcom
 
 enum ArrowOrientation
 {
-	ARROW_VERTICAL,
-	ARROW_HORIZONTAL
+	ARROW_VERTICAL,		// 0
+	ARROW_HORIZONTAL	// 1
 };
 
 
@@ -246,7 +246,8 @@ private:
 		/// Sets the list scrolling.
 		void setScrolling(
 				bool scrolling,
-				int scrollPos = 4);
+//kL				int scrollPos = 4);
+				int scrollPos = 0); // kL
 
 		/// Draws the text onto the text list.
 		void draw();

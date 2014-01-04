@@ -18,18 +18,24 @@
  */
 
 #include "CraftPatrolState.h"
+
 #include <string>
+
+#include "GeoscapeCraftState.h"
+
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
+#include "../Engine/Options.h"
 #include "../Engine/Palette.h"
+
+#include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
-#include "../Interface/Text.h"
+
+#include "../Resource/ResourcePack.h"
+
 #include "../Savegame/Craft.h"
 #include "../Savegame/Target.h"
-#include "GeoscapeCraftState.h"
-#include "../Engine/Options.h"
 
 
 namespace OpenXcom
@@ -41,7 +47,10 @@ namespace OpenXcom
  * @param craft Pointer to the craft to display.
  * @param globe Pointer to the Geoscape globe.
  */
-CraftPatrolState::CraftPatrolState(Game* game, Craft* craft, Globe* globe)
+CraftPatrolState::CraftPatrolState(
+		Game* game,
+		Craft* craft,
+		Globe* globe)
 	:
 		State(game),
 		_craft(craft),
@@ -58,13 +67,16 @@ CraftPatrolState::CraftPatrolState(Game* game, Craft* craft, Globe* globe)
 	_btnRedirect	= new TextButton(144, 16, 58, 159);
 
 
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)), Palette::backPos, 16);
+	_game->setPalette(
+				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)),
+				Palette::backPos,
+				16);
 
 	add(_window);
-	add(_btnOk);
-	add(_btnRedirect);
 	add(_txtDestination);
 	add(_txtPatrolling);
+	add(_btnOk);
+	add(_btnRedirect);
 
 	centerAllSurfaces();
 
@@ -75,20 +87,24 @@ CraftPatrolState::CraftPatrolState(Game* game, Craft* craft, Globe* globe)
 	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& CraftPatrolState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)& CraftPatrolState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& CraftPatrolState::btnOkClick,
+					(SDLKey)Options::getInt("keyCancel"));
 
 	_btnRedirect->setColor(Palette::blockOffset(8)+5);
 	_btnRedirect->setText(tr("STR_REDIRECT_CRAFT"));
 	_btnRedirect->onMouseClick((ActionHandler)& CraftPatrolState::btnRedirectClick);
-	_btnRedirect->onKeyboardPress((ActionHandler)& CraftPatrolState::btnRedirectClick, (SDLKey)Options::getInt("keyOk"));
+	_btnRedirect->onKeyboardPress(
+					(ActionHandler)& CraftPatrolState::btnRedirectClick,
+					(SDLKey)Options::getInt("keyOk"));
 
 	_txtDestination->setColor(Palette::blockOffset(15)-1);
 	_txtDestination->setBig();
 	_txtDestination->setAlign(ALIGN_CENTER);
 	_txtDestination->setWordWrap(true);
 	_txtDestination->setText(tr("STR_CRAFT_HAS_REACHED_DESTINATION")
-							 .arg(_craft->getName(_game->getLanguage()))
-							 .arg(_craft->getDestination()->getName(_game->getLanguage())));
+								 .arg(_craft->getName(_game->getLanguage()))
+								 .arg(_craft->getDestination()->getName(_game->getLanguage())));
 
 	_txtPatrolling->setColor(Palette::blockOffset(15)-1);
 	_txtPatrolling->setBig();
@@ -108,7 +124,10 @@ CraftPatrolState::~CraftPatrolState()
  */
 void CraftPatrolState::init()
 {
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)), Palette::backPos, 16);
+	_game->setPalette(
+				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)),
+				Palette::backPos,
+				16);
 }
 
 /**
@@ -127,7 +146,11 @@ void CraftPatrolState::btnOkClick(Action*)
 void CraftPatrolState::btnRedirectClick(Action*)
 {
 	_game->popState();
-	_game->pushState(new GeoscapeCraftState(_game, _craft, _globe, 0));
+	_game->pushState(new GeoscapeCraftState(
+										_game,
+										_craft,
+										_globe,
+										0));
 }
 
 }

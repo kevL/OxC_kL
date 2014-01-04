@@ -482,7 +482,7 @@ void Base::setEngineers(int engineers)
  */
 uint8_t Base::detect(Target* target) const
 {
-	Log(LOG_INFO) << "Base::detect()";
+	Log(LOG_INFO) << "Base::detect() -> " << getName().c_str();
 	uint8_t ret = 0;
 
 	double targetDistance = insideRadarRange(target);

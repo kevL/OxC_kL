@@ -20,19 +20,22 @@
 #ifndef OPENXCOM__SAVEDGAMESTATE_H
 #define OPENXCOM__SAVEDGAMESTATE_H
 
-#include "../Engine/State.h"
-#include "OptionsBaseState.h"
-#include <vector>
 #include <string>
+#include <vector>
+
+#include "OptionsBaseState.h"
+
+#include "../Engine/State.h"
 
 
 namespace OpenXcom
 {
 
-class TextButton;
-class Window;
 class Text;
+class TextButton;
 class TextList;
+class Window;
+
 
 /**
  * Base class for saved game screens which
@@ -42,22 +45,43 @@ class SavedGameState
 	:
 		public State
 {
+
 protected:
-	TextButton* _btnCancel;
-	Window* _window;
-	Text* _txtTitle, * _txtName, * _txtTime, * _txtDate, * _txtStatus, * _txtDelete, * _txtDetails;
-	TextList* _lstSaves;
+	bool
+		_showMsg,
+		_noUI;
+	int _firstValidRow;
+
 	OptionsOrigin _origin;
-	bool _showMsg, _noUI;
+
+	Text
+		* _txtTitle,
+		* _txtName,
+		* _txtTime,
+		* _txtDate,
+		* _txtStatus,
+		* _txtDelete,
+		* _txtDetails;
+	TextButton* _btnCancel;
+	TextList* _lstSaves;
+	Window* _window;
+
 	std::vector<std::string> _saves;
 	std::vector<std::wstring> _details;
-	int _firstValidRow;
+
 
 	public:
 		/// Creates the Saved Game state.
-		SavedGameState(Game* game, OptionsOrigin origin, int firstValidRow);
+		SavedGameState(
+				Game* game,
+				OptionsOrigin origin,
+				int firstValidRow);
 		/// Creates the Saved Game state (autosave option).
-		SavedGameState(Game* game, OptionsOrigin origin, int firstValidRow, bool showMsg);
+		SavedGameState(
+				Game* game,
+				OptionsOrigin origin,
+				int firstValidRow,
+				bool showMsg);
 		/// Cleans up the Saved Game state.
 		virtual ~SavedGameState();
 

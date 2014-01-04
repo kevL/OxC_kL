@@ -36,10 +36,10 @@ class Timer;
  */
 enum WindowPopup
 {
-	POPUP_NONE,
-	POPUP_HORIZONTAL,
-	POPUP_VERTICAL,
-	POPUP_BOTH
+	POPUP_NONE,			// 0
+	POPUP_HORIZONTAL,	// 1
+	POPUP_VERTICAL,		// 2
+	POPUP_BOTH			// 3
 };
 
 
@@ -53,18 +53,25 @@ class Window
 	:
 		public Surface
 {
+
 private:
 	static const double POPUP_SPEED;
-	Surface* _bg;
-	Uint8 _color;
-	WindowPopup _popup;
+
+	bool
+		_contrast,
+		_screen;
 	double _popupStep;
-	Timer* _timer;
-	State* _state;
-	bool _contrast, _screen;
+
+	State*		_state;
+	Surface*	_bg;
+	Timer*		_timer;
+	Uint8		_color;
+	WindowPopup	_popup;
+
 
 	public:
 		static Sound* soundPopup[3];
+
 		/// Creates a new window with the specified size and position.
 		Window(State* state,
 				int width,
@@ -77,12 +84,15 @@ private:
 
 		/// Sets the background surface.
 		void setBackground(Surface* bg);
+
 		/// Sets the border color.
 		void setColor(Uint8 color);
 		/// Gets the border color.
 		Uint8 getColor() const;
+
 		/// Sets the high contrast color setting.
 		void setHighContrast(bool contrast);
+
 		/// Handles the timers.
 		void think();
 		/// Popups the window.

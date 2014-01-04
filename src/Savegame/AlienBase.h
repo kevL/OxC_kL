@@ -16,12 +16,16 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_ALIENBASE_H
 #define OPENXCOM_ALIENBASE_H
 
-#include "Target.h"
 #include <string>
+
 #include <yaml-cpp/yaml.h>
+
+#include "Target.h"
+
 
 namespace OpenXcom
 {
@@ -29,41 +33,51 @@ namespace OpenXcom
 /**
  * Represents an alien base on the world.
  */
-class AlienBase : public Target
+class AlienBase
+	:
+		public Target
 {
 private:
+	bool _inBattlescape, _discovered;
 	int _id;
 	std::string _race;
-	bool _inBattlescape, _discovered;
-public:
-	/// Creates an alien base.
-	AlienBase();
-	/// Cleans up the alien base.
-	~AlienBase();
-	/// Loads the alien base from YAML.
-	void load(const YAML::Node& node);
-	/// Saves the alien base to YAML.
-	YAML::Node save() const;
-	/// Saves the alien base's ID to YAML.
-	YAML::Node saveId() const;
-	/// Gets the alien base's ID.
-	int getId() const;
-	/// Sets the alien base's ID.
-	void setId(int id);
-	/// Gets the alien base's name.
-	std::wstring getName(Language *lang) const;
-	/// Gets the alien base's amount of active hours..
-	std::string getAlienRace() const;
-	/// Sets the alien base's alien race.
-	void setAlienRace(const std::string &race);
-	/// Sets the alien base's battlescape status.
-	void setInBattlescape(bool inbattle);
-	/// Gets the alien base's battlescape status.
-	bool isInBattlescape() const;
-	/// Gets the alien base's discovered status.
-	bool isDiscovered() const;
-	/// Sets the alien base's discovered status.
-	void setDiscovered(bool discovered);
+
+
+	public:
+		/// Creates an alien base.
+		AlienBase();
+		/// Cleans up the alien base.
+		~AlienBase();
+
+		/// Loads the alien base from YAML.
+		void load(const YAML::Node& node);
+		/// Saves the alien base to YAML.
+		YAML::Node save() const;
+		/// Saves the alien base's ID to YAML.
+		YAML::Node saveId() const;
+
+		/// Gets the alien base's ID.
+		int getId() const;
+		/// Sets the alien base's ID.
+		void setId(int id);
+
+		/// Gets the alien base's name.
+		std::wstring getName(Language *lang) const;
+
+		/// Gets the alien base's amount of active hours..
+		std::string getAlienRace() const;
+		/// Sets the alien base's alien race.
+		void setAlienRace(const std::string &race);
+
+		/// Sets the alien base's battlescape status.
+		void setInBattlescape(bool inbattle);
+		/// Gets the alien base's battlescape status.
+		bool isInBattlescape() const;
+
+		/// Gets the alien base's discovered status.
+		bool isDiscovered() const;
+		/// Sets the alien base's discovered status.
+		void setDiscovered(bool discovered);
 };
 
 }

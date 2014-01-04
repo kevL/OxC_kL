@@ -242,7 +242,7 @@ void Map::draw()
 	if (_projectile)
 //kL		&& _save->getSide() == FACTION_PLAYER)
 	{
-		Log(LOG_INFO) << "Map::draw() _projectile = true";
+		//Log(LOG_INFO) << "Map::draw() _projectile = true";
 
 		t = _save->getTile(Position(
 								_projectile->getPosition(0).x / 16,
@@ -253,7 +253,7 @@ void Map::draw()
 			&& (t->getVisible()							// kL
 				|| _save->getSide() != FACTION_PLAYER))	// kL: shows projectile during aLien berserk
 		{
-			Log(LOG_INFO) << "Map::draw() _projectileInFOV = true";
+			//Log(LOG_INFO) << "Map::draw() _projectileInFOV = true";
 
 			_projectileInFOV = true;
 		}
@@ -960,28 +960,27 @@ void Map::drawTerrain(Surface* surface)
 					}
 
 					// Draw smoke/fire
-					if (tile->getSmoke() && tile->isDiscovered(2))
+					if (tile->getSmoke()
+						&& tile->isDiscovered(2))
 					{
 						frameNumber = 0;
 
-						if (!tile->getFire())
-						{
-							// see http://www.ufopaedia.org/images/c/cb/Smoke.gif
+						if (!tile->getFire()) // see http://www.ufopaedia.org/images/c/cb/Smoke.gif
 //kL							frameNumber = 8 + static_cast<int>(floor((static_cast<double>(tile->getSmoke()) / 6.0) - 0.1));
-//							frameNumber = 8 + static_cast<int>(floor(static_cast<double>(tile->getSmoke()) / 2.0));		// kL
-							frameNumber = 8 + (tile->getSmoke() / 2); // kL
-						}
+							frameNumber = 8 + (tile->getSmoke() / 2); // kL. getSmoke = 1..15 -> frameNumber = 8..15
 
-						if ((_animFrame / 2) + tile->getAnimationOffset() > 3)
-						{
-							frameNumber += ((_animFrame / 2) + tile->getAnimationOffset() - 4);
-						}
+						int curFrame = (_animFrame / 2) + tile->getAnimationOffset(); // animFrame = 0..7 (0..3), offset = 0..3 -> curFrame = 0..6 (0..3, 1..4, 2..5, 3..6)
+//kL						if (curFrame > 3)
+//kL							frameNumber += curFrame - 4;
+						if (curFrame < 5)					// kL
+							frameNumber += curFrame;
 						else
-						{
-							frameNumber += (_animFrame / 2) + tile->getAnimationOffset();
-						}
+							frameNumber += curFrame - 3;	// kL
 
-						tmpSurface = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frameNumber);
+						//Log(LOG_INFO) << "Map::drawTerrain() smokeFrames";
+						//Log(LOG_INFO) << ". frameNumber = " << frameNumber;
+
+						tmpSurface = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frameNumber); // smokeFrames in smoke.pck: 8..19 (12 frames)
 						tmpSurface->blitNShade(
 								surface,
 								screenPosition.x,

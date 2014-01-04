@@ -107,7 +107,7 @@ void Pathfinding::calculate(
 		BattleUnit* target,
 		int maxTUCost)
 {
-	Log(LOG_INFO) << "Pathfinding::calculate()";
+	//Log(LOG_INFO) << "Pathfinding::calculate()";
 
 	_totalTUCost = 0;
 	_path.clear();
@@ -179,7 +179,7 @@ void Pathfinding::calculate(
 			// kL_note: Do i have to set something here, like 'startDir = dir'
 			// to stop falling units from swivelling (and gliding) ......
 
-			Log(LOG_INFO) << ". canFallDown() -1 level, endPosition = " << endPosition;
+			//Log(LOG_INFO) << ". canFallDown() -1 level, endPosition = " << endPosition;
 		}
 	}
 
@@ -310,7 +310,7 @@ bool Pathfinding::bresenhamPath(
 		bool sneak,
 		int maxTUCost)
 {
-	Log(LOG_INFO) << "Pathfinding::bresenhamPath()";
+	//Log(LOG_INFO) << "Pathfinding::bresenhamPath()";
 
 	int xd[8] = {0, 1, 1, 1, 0, -1, -1, -1};
 	int yd[8] = {-1, -1, 0, 1, 1, 1, 0, -1};
@@ -472,7 +472,7 @@ bool Pathfinding::aStarPath(
 		bool sneak,
 		int maxTUCost)
 {
-	Log(LOG_INFO) << "Pathfinding::aStarPath()";
+	//Log(LOG_INFO) << "Pathfinding::aStarPath()";
 
 	// reset every node, so we have to check them all
 	for (std::vector<PathfindingNode>::iterator

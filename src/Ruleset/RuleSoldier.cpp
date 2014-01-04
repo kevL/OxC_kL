@@ -39,9 +39,6 @@ RuleSoldier::RuleSoldier(const std::string& type)
 		_maxStats(),
 		_statCaps()
 {
-//kL	_minStats = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-//kL	_maxStats = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-//kL	_statCaps = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 }
 
 /**

@@ -32,7 +32,6 @@
 
 namespace OpenXcom
 {
-
 /**
  * Sets up a blank text with the specified size and position.
  * @param width Width in pixels.
@@ -47,10 +46,10 @@ Text::Text(
 		int y)
 	:
 		Surface(
-				width,
-				height,
-				x,
-				y),
+			width,
+			height,
+			x,
+			y),
 		_big(0),
 		_small(0),
 		_font(0),
@@ -98,7 +97,8 @@ std::wstring Text::formatNumber(
 	std::wstring s = ss.str();
 
 	size_t spacer = s.size() - 3;
-	while (spacer > 0 && spacer < s.size())
+	while (spacer > 0
+		&& spacer < s.size())
 	{
 		s.insert(spacer, thousands_sep);
 		spacer -= 3;
@@ -196,7 +196,7 @@ void Text::initText(
  * Changes the string displayed on screen.
  * @param text Text string.
  */
-void Text::setText(const std::wstring &text)
+void Text::setText(const std::wstring& text)
 {
 	_text = text;
 
@@ -229,7 +229,7 @@ std::wstring Text::getText() const
  */
 void Text::setWordWrap(bool wrap)
 {
-	if (wrap != _wrap)
+	if (_wrap != wrap)
 	{
 		_wrap = wrap;
 
@@ -498,7 +498,8 @@ int Text::getLineX(int line) const
 					x = 0;
 				break;
 				case ALIGN_CENTER:
-					x = static_cast<int>(ceil(static_cast<double>(getWidth() - _lineWidth[line]) / 2.0));
+					x = static_cast<int>(
+							ceil(static_cast<double>(getWidth() - _lineWidth[line]) / 2.0));
 				break;
 				case ALIGN_RIGHT:
 					x = getWidth() - 1 - _lineWidth[line];
@@ -512,7 +513,8 @@ int Text::getLineX(int line) const
 					x = getWidth() - 1;
 				break;
 				case ALIGN_CENTER:
-					x = getWidth() - static_cast<int>(ceil(static_cast<double>(getWidth() - _lineWidth[line]) / 2.0));
+					x = getWidth() - static_cast<int>(
+							ceil(static_cast<double>(getWidth() - _lineWidth[line]) / 2.0));
 				break;
 				case ALIGN_RIGHT:
 					x = _lineWidth[line];
@@ -527,25 +529,25 @@ int Text::getLineX(int line) const
 
 namespace
 {
-
 struct PaletteShift
 {
 	static inline void func(
 			Uint8& dest,
 			Uint8& src,
 			int off,
-			int mul,
+			int mult,
 			int mid)
 	{
 		if (src)
 		{
 			int inverseOffset = mid? 2 * (mid - src): 0;
-			dest = off + (src * mul) + inverseOffset;
+			dest = off + (src * mult) + inverseOffset;
 		}
 	}
 };
 
 }
+
 
 /**
  * Draws all the characters in the text with a really
@@ -564,15 +566,14 @@ void Text::draw()
 	if (Options::getBool("debugUi"))
 	{
 		SDL_Rect r;
-
 		r.w = getWidth();
 		r.h = getHeight();
 		r.x = 0;
 		r.y = 0;
 		this->drawRect(&r, 5);
 
-		r.w-=2;
-		r.h-=2;
+		r.w -= 2;
+		r.h -= 2;
 		r.x++;
 		r.y++;
 		this->drawRect(&r, 0);
@@ -602,7 +603,8 @@ void Text::draw()
 			y = 0;
 		break;
 		case ALIGN_MIDDLE:
-			y = static_cast<int>(ceil(static_cast<double>(getHeight() - height) / 2.0));
+			y = static_cast<int>(
+					ceil(static_cast<double>(getHeight() - height) / 2.0));
 		break;
 		case ALIGN_BOTTOM:
 			y = getHeight() - height;
@@ -617,10 +619,10 @@ void Text::draw()
 	}
 
 	// Set up text color
-	int mul = 1;
+	int mult = 1;
 	if (_contrast)
 	{
-		mul = 3;
+		mult = 3;
 	}
 
 	// Set up text direction
@@ -672,7 +674,7 @@ void Text::draw()
 								ShaderSurface(this, 0, 0),
 								ShaderCrop(chr),
 								ShaderScalar(color),
-								ShaderScalar(mul),
+								ShaderScalar(mult),
 								ShaderScalar(mid));
 
 			if (dir > 0)

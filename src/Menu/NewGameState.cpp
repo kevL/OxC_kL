@@ -18,17 +18,22 @@
  */
 
 #include "NewGameState.h"
+
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
-#include "../Ruleset/Ruleset.h"
 #include "../Engine/Language.h"
+#include "../Engine/Options.h"
 #include "../Engine/Palette.h"
+
+#include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
-#include "../Interface/Text.h"
-#include "../Geoscape/GeoscapeState.h"
+
 #include "../Geoscape/BuildNewBaseState.h"
-#include "../Engine/Options.h"
+#include "../Geoscape/GeoscapeState.h"
+
+#include "../Resource/ResourcePack.h"
+
+#include "../Ruleset/Ruleset.h"
 
 
 namespace OpenXcom
@@ -43,7 +48,6 @@ NewGameState::NewGameState(Game* game)
 		State(game)
 {
 	_window			= new Window(this, 192, 180, 64, 10, POPUP_VERTICAL);
-
 	_txtTitle		= new Text(192, 17, 64, 21);
 
 	_btnBeginner	= new TextButton(160, 18, 80, 42);
@@ -54,13 +58,13 @@ NewGameState::NewGameState(Game* game)
 	_btnCancel		= new TextButton(160, 18, 80, 158);
 
 	add(_window);
+	add(_txtTitle);
 	add(_btnBeginner);
 	add(_btnExperienced);
 	add(_btnVeteran);
 	add(_btnGenius);
 	add(_btnSuperhuman);
 	add(_btnCancel);
-	add(_txtTitle);
 
 	centerAllSurfaces();
 
@@ -91,7 +95,9 @@ NewGameState::NewGameState(Game* game)
 	_btnCancel->setColor(Palette::blockOffset(8)+5);
 	_btnCancel->setText(tr("STR_CANCEL"));
 	_btnCancel->onMouseClick((ActionHandler)& NewGameState::btnCancelClick);
-	_btnCancel->onKeyboardPress((ActionHandler)& NewGameState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnCancel->onKeyboardPress(
+					(ActionHandler)& NewGameState::btnCancelClick,
+					(SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(8)+10);
 	_txtTitle->setAlign(ALIGN_CENTER);
@@ -119,7 +125,11 @@ void NewGameState::newGame(GameDifficulty diff)
 	_game->setState(gs);
 	gs->init();
 
-	_game->pushState(new BuildNewBaseState(_game, _game->getSavedGame()->getBases()->back(), gs->getGlobe(), true));
+	_game->pushState(new BuildNewBaseState(
+										_game,
+										_game->getSavedGame()->getBases()->back(),
+										gs->getGlobe(),
+										true));
 }
 
 /**

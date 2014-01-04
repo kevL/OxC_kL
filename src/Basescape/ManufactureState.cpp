@@ -74,7 +74,7 @@ ManufactureState::ManufactureState(
 	_txtEngineers	= new Text(45, 9, 145, 52);
 	_txtProduced	= new Text(40, 9, 174, 44);
 	_txtCost		= new Text(50, 17, 215, 44);
-	_txtTimeLeft	= new Text(55, 17, 271, 44);
+	_txtTimeLeft	= new Text(25, 17, 271, 44);
 
 	_lstManufacture	= new TextList(285, 96, 16, 70);
 

@@ -131,7 +131,9 @@ Soldier::~Soldier()
  * @param node YAML node.
  * @param rule Game ruleset.
  */
-void Soldier::load(const YAML::Node& node, const Ruleset* rule)
+void Soldier::load(
+		const YAML::Node& node,
+		const Ruleset* rule)
 {
 	_id				= node["id"].as<int>(_id);
 	_name			= Language::utf8ToWstr(node["name"].as<std::string>());
@@ -305,7 +307,6 @@ int Soldier::getRankSprite() const
 {
 	return 42 + _rank;
 }
-
 
 /**
  * Returns the soldier's military rank.
@@ -490,27 +491,29 @@ std::vector<EquipmentLayoutItem*>* Soldier::getEquipmentLayout()
 /**
  * Trains a soldier's Psychic abilities
  * kL_note: called from GeoscapeState, per 1month
+ * kL_note: I don't use this, btw.
  */
 void Soldier::trainPsi()
 {
 // http://www.ufopaedia.org/index.php?title=Psi_Skill
-// End of Month		Psi Lab		Increase
-// Psi Skill		Range		Average
-// 0-16				16-24		20.0
-// 17-50			5-12		8.5
-// 51+				1-3			2.0
+// -End of Month PsiLab Increase-
+// Skill	Range	Average
+// 0-16		16-24	20.0
+// 17-50	5-12	8.5
+// 51+		1-3		2.0
 
 	_improvement = 0;
-	int const psiCap = _rules->getStatCaps().psiSkill;	// kL
+	int const psiCap = _rules->getStatCaps().psiSkill; // kL
 
 	// -10 days : tolerance threshold for switch from anytimePsiTraining option.
-	// If soldier has psiSkill -10..-1, he was trained 20..59 days. 81.7% probability, he was trained more that 30 days.
+	// If soldier has psiSkill -10..-1, he was trained 20..59 days.
+	// 81.7% probability, he was trained more than 30 days.
 	if (_currentStats.psiSkill < _rules->getMinStats().psiSkill - 10)
 	{
 		_currentStats.psiSkill = _rules->getMinStats().psiSkill;
 	}
 //kL	else if (_currentStats.psiSkill <= _rules->getMaxStats().psiSkill)
-	else if (_currentStats.psiSkill < 17)		// kL
+	else if (_currentStats.psiSkill < 17) // kL
 	{
 //kL		int max = _rules->getMaxStats().psiSkill + _rules->getMaxStats().psiSkill / 2;
 //kL		_improvement = RNG::generate(_rules->getMaxStats().psiSkill, max);
@@ -531,9 +534,9 @@ void Soldier::trainPsi()
 	_currentStats.psiSkill += _improvement;
 
 	if (_currentStats.psiSkill > psiCap)	// kL
-	{										// kL
+	{
 		_currentStats.psiSkill = psiCap;	// kL
-	}										// kL
+	}
 
 	// kL_note: This isn't right; in Orig. the only way to increase psiSkill
 	// when it was over 100 is to keep the soldier in training.
@@ -543,48 +546,51 @@ void Soldier::trainPsi()
 
 /**
  * Trains a soldier's Psychic abilities (anytimePsiTraining option)
- * kL_note: called from GeoscapeState, per 1day
+ * kL_note: called from GeoscapeState, per 1day. Re-write done.
  */
 void Soldier::trainPsi1Day()
 {
-	if (!_psiTraining)
-	{
-		_improvement = 0;
+	// kL_note: don't think this is used for anything.
+	// oh right, it's used in AllocatePsiTrainingState...
+	// ... i don't use it.
+	_improvement = 0;
 
+	if (!_psiTraining) return;
+
+
+	int const psiSkill = _currentStats.psiSkill;
+	int const rulesMin = _rules->getMinStats().psiSkill;
+
+	if (psiSkill >= _rules->getStatCaps().psiSkill) // hard cap.
+	{
 		return;
 	}
-
-	int const psiCap = _rules->getStatCaps().psiSkill;	// kL
-
-	if (_currentStats.psiSkill > 0)
+	else if (psiSkill >= rulesMin) // farther along
 	{
-//kL		if (8 * 100 >= _currentStats.psiSkill * RNG::generate(1, 100)
-//kL			&& _currentStats.psiSkill < _rules->getStatCaps().psiSkill)
-		if (_currentStats.psiSkill < psiCap								// kL
-			&& _currentStats.psiSkill * RNG::generate(1, 100) < 801)	// kL
+		int chance = std::max(1, std::min(100, 500 / psiSkill));
+		if (RNG::percent(chance))
 		{
 			++_improvement;
 			++_currentStats.psiSkill;
 		}
 	}
-//kL	else if (_currentStats.psiSkill < _rules->getMinStats().psiSkill)
-	else if (_currentStats.psiSkill < 0)		// kL
+	else if (psiSkill == rulesMin - 1) // ready to go
 	{
-		if (++_currentStats.psiSkill == _rules->getMinStats().psiSkill)	// initial training is over
-		{
-			_improvement = _rules->getMaxStats().psiSkill + RNG::generate(0, _rules->getMaxStats().psiSkill / 2);
-			_currentStats.psiSkill = _improvement;
-		}
-	}
-	else // minStats.psiSkill <= 0 && _currentStats.psiSkill == minStats.psiSkill
-	{
-		_currentStats.psiSkill -= RNG::generate(30, 60); // set initial training from 30 to 60 days
-	}
+		_improvement = RNG::generate(
+								rulesMin,
+								_rules->getMaxStats().psiSkill);
 
-	if (_currentStats.psiSkill > psiCap)				// kL
-	{													// kL
-		_currentStats.psiSkill = psiCap;				// kL
-	}													// kL
+		_currentStats.psiSkill = _improvement;
+	}
+	else // start here
+	{
+		if (RNG::percent(1))
+		{
+			_currentStats.psiSkill = rulesMin - 1;
+		}
+		else
+			_currentStats.psiSkill = rulesMin - 2;
+	}
 }
 
 /**
@@ -635,7 +641,10 @@ void Soldier::die(SoldierDeath* death)
 	_recentlyPromoted = false;
 	_recovery = 0;
 
-	for (std::vector<EquipmentLayoutItem*>::iterator i = _equipmentLayout.begin(); i != _equipmentLayout.end(); ++i)
+	for (std::vector<EquipmentLayoutItem*>::iterator
+			i = _equipmentLayout.begin();
+			i != _equipmentLayout.end();
+			++i)
 	{
 		delete *i;
 	}

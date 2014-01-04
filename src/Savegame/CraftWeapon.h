@@ -21,15 +21,17 @@
 #define OPENXCOM_CRAFTWEAPON_H
 
 #include <string>
+
 #include <yaml-cpp/yaml.h>
 
 
 namespace OpenXcom
 {
 
-class RuleCraftWeapon;
 class CraftWeaponProjectile;
+class RuleCraftWeapon;
 class Ruleset;
+
 
 /**
  * Represents a craft weapon equipped by a craft.
@@ -39,13 +41,16 @@ class Ruleset;
 class CraftWeapon
 {
 private:
-	RuleCraftWeapon* _rules;
-	int _ammo;
 	bool _rearming;
+	int _ammo;
+	RuleCraftWeapon* _rules;
+
 
 	public:
 		/// Creates a craft weapon of the specified type.
-		CraftWeapon(RuleCraftWeapon* rules, int ammo);
+		CraftWeapon(
+				RuleCraftWeapon* rules,
+				int ammo);
 		/// Cleans up the craft weapon.
 		~CraftWeapon();
 
@@ -66,10 +71,13 @@ private:
 		/// Sets the craft weapon's rearming status
 		void setRearming(bool rearming);
 		/// Rearms the craft weapon.
-		int rearm(const int available, const int clipSize);
+		int rearm(
+				const int available,
+				const int clipSize);
 
 		/// Fires the craft weapon. Used during dogfights.
 		CraftWeaponProjectile* fire() const;
+
 		/// get how many clips are loaded into this weapon.
 		int getClipsLoaded(Ruleset* ruleset);
 };

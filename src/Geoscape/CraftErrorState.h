@@ -21,16 +21,18 @@
 #define OPENXCOM_CRAFTERRORSTATE_H
 
 #include <string>
+
 #include "../Engine/State.h"
 
 
 namespace OpenXcom
 {
 
+class GeoscapeState;
+class Text;
 class TextButton;
 class Window;
-class Text;
-class GeoscapeState;
+
 
 /**
  * Window used to notify the player when
@@ -38,22 +40,27 @@ class GeoscapeState;
  */
 class CraftErrorState
 	:
-	public State
+		public State
 {
-	private:
-		GeoscapeState* _state;
-		TextButton* _btnOk, * _btnOk5Secs;
-		Window* _window;
-		Text* _txtMessage;
+private:
+	GeoscapeState* _state;
+	Text* _txtMessage;
+	TextButton* _btnOk, * _btnOk5Secs;
+	Window* _window;
+
 
 	public:
 		/// Creates the Craft Error state.
-		CraftErrorState(Game* game, GeoscapeState* state, const std::wstring& msg);
+		CraftErrorState(
+				Game* game,
+				GeoscapeState* state,
+				const std::wstring& msg);
 		/// Cleans up the Craft Error state.
 		~CraftErrorState();
 
 		/// Updates the palette.
 		void init();
+
 		/// Handler for clicking the OK button.
 		void btnOkClick(Action* action);
 		/// Handler for clicking the OK 5 Secs button.

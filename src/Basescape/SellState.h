@@ -31,11 +31,11 @@ namespace OpenXcom
 
 enum SellType
 {
-	SELL_SOLDIER,
-	SELL_CRAFT,
-	SELL_ITEM,
-	SELL_SCIENTIST,
-	SELL_ENGINEER
+	SELL_SOLDIER,	// 0
+	SELL_CRAFT,		// 1
+	SELL_ITEM,		// 2
+	SELL_SCIENTIST,	// 3
+	SELL_ENGINEER	// 4
 };
 
 

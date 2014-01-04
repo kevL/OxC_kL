@@ -84,7 +84,9 @@ private:
 		~AlienMission();
 
 		/// Loads the mission from YAML.
-		void load(const YAML::Node& node, SavedGame& game);
+		void load(
+				const YAML::Node& node,
+				SavedGame& game);
 		/// Saves the mission to YAML.
 		YAML::Node save() const;
 
@@ -133,7 +135,9 @@ private:
 		bool isOver() const;
 
 		/// Handle UFO spawning for the mission.
-		void think(Game& engine, const Globe& globe);
+		void think(
+				Game& engine,
+				const Globe& globe);
 		/// Initialize with values from rules.
 		void start(unsigned initialCount = 0);
 

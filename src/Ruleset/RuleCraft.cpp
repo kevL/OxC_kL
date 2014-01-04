@@ -31,27 +31,27 @@ namespace OpenXcom
  */
 RuleCraft::RuleCraft(const std::string& type)
 	:
-    _type(type),
-	_sprite(-1),
-	_fuelMax(0),
-	_damageMax(0),
-	_speedMax(0),
-	_accel(0),
-    _weapons(0),
-	_soldiers(0),
-	_vehicles(0),
-	_costBuy(0),
-	_costRent(0),
-	_costSell(0),
-	_refuelItem(""),
-	_repairRate(1),
-	_refuelRate(1),
-	_radarRange(600),
-	_transferTime(0),
-	_score(0),
-	_battlescapeTerrainData(0),
-	_spacecraft(false),
-	_listOrder(0)
+		_type(type),
+		_sprite(-1),
+		_fuelMax(0),
+		_damageMax(0),
+		_speedMax(0),
+		_accel(0),
+		_weapons(0),
+		_soldiers(0),
+		_vehicles(0),
+		_costBuy(0),
+		_costRent(0),
+		_costSell(0),
+		_refuelItem(""),
+		_repairRate(1),
+		_refuelRate(1),
+		_radarRange(600),
+		_transferTime(0),
+		_score(0),
+		_battlescapeTerrainData(0),
+		_spacecraft(false),
+		_listOrder(0)
 {
 }
 
@@ -70,14 +70,17 @@ RuleCraft::~RuleCraft()
  * @param modIndex A value that offsets the sounds and sprite values to avoid conflicts.
  * @param listOrder The list weight for this craft.
  */
-void RuleCraft::load(const YAML::Node& node, Ruleset* ruleset, int modIndex, int listOrder)
+void RuleCraft::load(
+		const YAML::Node& node,
+		Ruleset* ruleset,
+		int modIndex,
+		int listOrder)
 {
-	_type = node["type"].as<std::string>(_type);
-	_requires = node["requires"].as< std::vector<std::string> >(_requires);
-	_sprite = node["sprite"].as<int>(_sprite);
+	_type		= node["type"].as<std::string>(_type);
+	_requires	= node["requires"].as< std::vector<std::string> >(_requires);
+	_sprite		= node["sprite"].as<int>(_sprite);
 
-	// this is an offset in BASEBITS.PCK, and two in INTICONS.PCK
-	if (_sprite > 4)
+	if (_sprite > 4) // this is an offset in BASEBITS.PCK, and two in INTICONS.PCK
 		_sprite += modIndex;
 
 	_fuelMax		= node["fuelMax"].as<int>(_fuelMax);
@@ -244,7 +247,7 @@ std::string RuleCraft::getRefuelItem() const
 
 /**
  * Gets how much damage is removed from the craft while repairing.
- * @return The amount of damage.
+ * @return, The amount of damage.
  */
 int RuleCraft::getRepairRate() const
 {

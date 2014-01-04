@@ -41,27 +41,32 @@ class AllocatePsiTrainingState
 	:
 		public State
 {
+
 private:
-	TextButton* _btnOk;
-	Window* _window;
-	Text
-		* _txtTitle,
-		* _txtTraining,
-		* _txtName,
-		* _txtCraft,
-		* _txtRemaining,
-		* _txtPsiStrength,
-		* _txtPsiSkill;
-	TextList* _lstSoldiers;
-	std::vector<Soldier*> _soldiers;
-	unsigned int _sel;
 	int _labSpace;
+	unsigned int _sel;
+
 	Base* _base;
+	Text
+		* _txtCraft,
+		* _txtName,
+		* _txtPsiSkill,
+		* _txtPsiStrength,
+		* _txtRemaining,
+		* _txtTitle,
+		* _txtTraining;
+	TextButton* _btnOk;
+	TextList* _lstSoldiers;
+	Window* _window;
+
+	std::vector<Soldier*> _soldiers;
 
 
 	public:
 		/// Creates the Psi Training state.
-		AllocatePsiTrainingState(Game* game, Base* base);
+		AllocatePsiTrainingState(
+				Game* game,
+				Base* base);
 		/// Cleans up the Psi Training state.
 		~AllocatePsiTrainingState();
 

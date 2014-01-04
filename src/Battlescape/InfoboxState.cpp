@@ -18,13 +18,16 @@
  */
 
 #include "InfoboxState.h"
+
 #include <string>
+
+#include "../Engine/Action.h"
 #include "../Engine/Game.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Timer.h"
-#include "../Interface/Text.h"
+
 #include "../Interface/Frame.h"
-#include "../Engine/Action.h"
+#include "../Interface/Text.h"
 
 
 namespace OpenXcom
@@ -35,14 +38,14 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param msg Message string.
  */
-InfoboxState::InfoboxState(Game* game, const std::wstring& msg)
+InfoboxState::InfoboxState(
+		Game* game,
+		const std::wstring& msg)
 	:
 		State(game)
 {
 	_screen = false;
 
-//kL	_frame	= new Frame(261, 122, 34, 10);
-//kL	_text	= new Text(251, 112, 39, 15);
 	_frame	= new Frame(260, 90, 30, 27);
 	_text	= new Text(250, 80, 35, 32);
 

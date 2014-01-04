@@ -26,13 +26,14 @@
 namespace OpenXcom
 {
 
+class Base;
 class BaseView;
+class Globe;
 class MiniBaseView;
 class Text;
 class TextButton;
 class TextEdit;
-class Base;
-class Globe;
+
 
 /**
  * Basescape screen that shows a base's layout
@@ -45,26 +46,34 @@ class BasescapeState
 private:
 	BaseView* _view;
 	MiniBaseView* _mini;
-	Text* _txtFacility, * _txtLocation, * _txtFunds;
+	Text
+		* _txtFacility,
+		* _txtLocation,
+		* _txtFunds;
 	TextEdit* _edtBase;
 	TextButton
-			* _btnNewBase,
-			* _btnBaseInfo,
-			* _btnSoldiers,
-			* _btnCrafts,
-			* _btnFacilities,
-			* _btnResearch,
-			* _btnManufacture,
-			* _btnTransfer,
-			* _btnPurchase,
-			* _btnSell,
-			* _btnGeoscape;
+		* _btnAliens, // kL
+		* _btnNewBase,
+		* _btnBaseInfo,
+		* _btnSoldiers,
+		* _btnCrafts,
+		* _btnFacilities,
+		* _btnResearch,
+		* _btnManufacture,
+		* _btnTransfer,
+		* _btnPurchase,
+		* _btnSell,
+		* _btnGeoscape;
 	Base* _base;
 	Globe* _globe;
 
+
 	public:
 		/// Creates the Basescape state.
-		BasescapeState(Game* game, Base* base, Globe* globe);
+		BasescapeState(
+				Game* game,
+				Base* base,
+				Globe* globe);
 		/// Cleans up the Basescape state.
 		~BasescapeState();
 
@@ -72,6 +81,9 @@ private:
 		void init();
 		/// Sets a new base to display.
 		void setBase(Base* base);
+
+		/// Handler for clicking the Alien Containment button.
+		void btnAliens(Action* action); // kL
 		/// Handler for clicking the Build New Base button.
 		void btnNewBaseClick(Action* action);
 		/// Handler for clicking the Base Information button.

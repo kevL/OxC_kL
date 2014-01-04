@@ -16,9 +16,13 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "AlienBase.h"
+
 #include <sstream>
+
 #include "../Engine/Language.h"
+
 
 namespace OpenXcom
 {
@@ -26,7 +30,12 @@ namespace OpenXcom
 /**
  * Initializes an alien base
  */
-AlienBase::AlienBase() : Target(), _id(0), _inBattlescape(false), _discovered(false)
+AlienBase::AlienBase()
+	:
+		Target(),
+		_id(0),
+		_inBattlescape(false),
+		_discovered(false)
 {
 }
 
@@ -44,10 +53,11 @@ AlienBase::~AlienBase()
 void AlienBase::load(const YAML::Node &node)
 {
 	Target::load(node);
-	_id = node["id"].as<int>(_id);
-	_race = node["race"].as<std::string>(_race);
-	_inBattlescape = node["inBattlescape"].as<bool>(_inBattlescape);
-	_discovered = node["discovered"].as<bool>(_discovered);
+
+	_id				= node["id"].as<int>(_id);
+	_race			= node["race"].as<std::string>(_race);
+	_inBattlescape	= node["inBattlescape"].as<bool>(_inBattlescape);
+	_discovered		= node["discovered"].as<bool>(_discovered);
 }
 
 /**
@@ -57,12 +67,16 @@ void AlienBase::load(const YAML::Node &node)
 YAML::Node AlienBase::save() const
 {
 	YAML::Node node = Target::save();
-	node["id"] = _id;
-	node["race"] = _race;
+
+	node["id"]		= _id;
+	node["race"]	= _race;
+
 	if (_inBattlescape)
-		node["inBattlescape"] = _inBattlescape;
+		node["inBattlescape"]	= _inBattlescape;
+
 	if (_discovered)
-		node["discovered"] = _discovered;
+		node["discovered"]		= _discovered;
+
 	return node;
 }
 
@@ -73,8 +87,10 @@ YAML::Node AlienBase::save() const
 YAML::Node AlienBase::saveId() const
 {
 	YAML::Node node = Target::saveId();
-	node["type"] = "STR_ALIEN_BASE";
-	node["id"] = _id;
+
+	node["type"]	= "STR_ALIEN_BASE";
+	node["id"]		= _id;
+
 	return node;
 }
 
@@ -101,7 +117,7 @@ void AlienBase::setId(int id)
  * @param lang Language to get strings from.
  * @return Full name.
  */
-std::wstring AlienBase::getName(Language *lang) const
+std::wstring AlienBase::getName(Language* lang) const
 {
 	return lang->getString("STR_ALIEN_BASE_").arg(_id);
 }
@@ -119,7 +135,7 @@ std::string AlienBase::getAlienRace() const
  * Changes the alien race currently residing in the alien base.
  * @param race Alien race.
  */
-void AlienBase::setAlienRace(const std::string &race)
+void AlienBase::setAlienRace(const std::string& race)
 {
 	_race = race;
 }

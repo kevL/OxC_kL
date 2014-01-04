@@ -1734,7 +1734,7 @@ void GeoscapeState::time30Minutes()
 			expireCrashedUfo());
 	//Log(LOG_INFO) << ". . handled crashed UFO expirations";
 
-	// Handle craft refueling.
+	// Handle craft maintenance
 	for (std::vector<Base*>::iterator
 			i = _game->getSavedGame()->getBases()->begin();
 			i != _game->getSavedGame()->getBases()->end();
@@ -1745,6 +1745,41 @@ void GeoscapeState::time30Minutes()
 				j != (*i)->getCrafts()->end();
 				++j)
 		{
+		}
+	}
+
+	// Handle craft maintenance & refueling.
+	for (std::vector<Base*>::iterator
+			i = _game->getSavedGame()->getBases()->begin();
+			i != _game->getSavedGame()->getBases()->end();
+			++i)
+	{
+		for (std::vector<Craft*>::iterator
+				j = (*i)->getCrafts()->begin();
+				j != (*i)->getCrafts()->end();
+				++j)
+		{
+			// kL_begin: moved down from time1Hour()
+			if ((*j)->getStatus() == "STR_REPAIRS")
+			{
+				(*j)->repair();
+			}
+			else if ((*j)->getStatus() == "STR_REARMING")
+			{
+				std::string s = (*j)->rearm(_game->getRuleset());
+				if (s != "")
+				{
+					std::wstring msg = tr("STR_NOT_ENOUGH_ITEM_TO_REARM_CRAFT_AT_BASE")
+									   .arg(tr(s))
+									   .arg((*j)->getName(_game->getLanguage()))
+									   .arg((*i)->getName());
+					popup(new CraftErrorState(
+											_game,
+											this,
+											msg));
+				}
+			}
+			else // kL_end.
 			if ((*j)->getStatus() == "STR_REFUELLING")
 			{
 				std::string item = (*j)->getRules()->getRefuelItem();
@@ -1766,7 +1801,10 @@ void GeoscapeState::time30Minutes()
 										   .arg(tr(item))
 										   .arg((*j)->getName(_game->getLanguage()))
 										   .arg((*i)->getName());
-						popup(new CraftErrorState(_game, this, msg));
+						popup(new CraftErrorState(
+												_game,
+												this,
+												msg));
 
 						if ((*j)->getFuel() > 0)
 							(*j)->setStatus("STR_READY");
@@ -1984,6 +2022,7 @@ void GeoscapeState::time1Hour()
 	Log(LOG_INFO) << "GeoscapeState::time1Hour()";
 
 	// Handle craft maintenance
+/*kL, moved down to time30Minutes()
 	for (std::vector<Base*>::iterator
 			i = _game->getSavedGame()->getBases()->begin();
 			i != _game->getSavedGame()->getBases()->end();
@@ -2014,7 +2053,7 @@ void GeoscapeState::time1Hour()
 				}
 			}
 		}
-	}
+	} */
 
 	// Handle transfers
 	bool window = false;
@@ -2073,10 +2112,9 @@ void GeoscapeState::time1Hour()
 				popup(new ProductionCompleteState(
 												_game,
 												*i,
-												tr(
-													j->first->getRules()->getName()),
-													this,
-													j->second));
+												tr(j->first->getRules()->getName()),
+												this,
+												j->second));
 			}
 		}
 	}

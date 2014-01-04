@@ -103,7 +103,7 @@ ActionMenuState::ActionMenuState(
 
 	if (weapon->getBattleType() == BT_FIREARM)
 	{
-		if (weapon->isWaypoint()	// kL_note: removing this might muck w/ hovertank-fusion actionMenu.
+		if (weapon->isWaypoint() // kL_note: removing this might muck w/ hovertank-fusion actionMenu.
 			|| (_action->weapon->getAmmoItem()
 				&& _action->weapon->getAmmoItem()->getRules()->isWaypoint()))
 //		if (_action->weapon->getAmmoItem()
@@ -223,7 +223,7 @@ void ActionMenuState::handle(Action* action)
 	State::handle(action);
 //kL	if (action->getDetails()->type == SDL_MOUSEBUTTONDOWN
 //kL		&& action->getDetails()->button.button == SDL_BUTTON_RIGHT)
-	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)		// kL
+	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT) // kL
 	{
 		_game->popState();
 	}

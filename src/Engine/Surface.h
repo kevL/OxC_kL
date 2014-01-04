@@ -84,7 +84,11 @@ protected:
 		void loadImage(const std::string& filename);
 
 		/// Offsets the surface's colors by a set amount.
-		void offset(int off, int min = -1, int max = -1, int mul = 1);
+		void offset(
+				int off,
+				int min = -1,
+				int max = -1,
+				int mult = 1);
 		/// Inverts the surface's colors.
 		void invert(Uint8 mid);
 		/// Runs surface functionality every cycle
@@ -107,20 +111,48 @@ protected:
 		/// Copies a portion of another surface into this one.
 		void copy(Surface* surface);
 		/// Draws a filled rectangle on the surface.
-		void drawRect(SDL_Rect* rect, Uint8 color);
+		void drawRect(
+				SDL_Rect* rect,
+				Uint8 color);
 		/// Draws a line on the surface.
-		void drawLine(Sint16 x1, Sint16 y1, Sint16 x2, Sint16 y2, Uint8 color);
+		void drawLine(
+				Sint16 x1,
+				Sint16 y1,
+				Sint16 x2,
+				Sint16 y2,
+				Uint8 color);
 		/// Draws a filled circle on the surface.
-		void drawCircle(Sint16 x, Sint16 y, Sint16 r, Uint8 color);
+		void drawCircle(
+				Sint16 x,
+				Sint16 y,
+				Sint16 r,
+				Uint8 color);
 		/// Draws a filled polygon on the surface.
-		void drawPolygon(Sint16* x, Sint16* y, int n, Uint8 color);
+		void drawPolygon(
+				Sint16* x,
+				Sint16* y,
+				int n,
+				Uint8 color);
 		/// Draws a textured polygon on the surface.
-		void drawTexturedPolygon(Sint16* x, Sint16* y, int n, Surface* texture, int dx, int dy);
+		void drawTexturedPolygon(
+				Sint16* x,
+				Sint16* y,
+				int n,
+				Surface* texture,
+				int dx,
+				int dy);
 		/// Draws a string on the surface.
-		void drawString(Sint16 x, Sint16 y, const char* s, Uint8 color);
+		void drawString(
+				Sint16 x,
+				Sint16 y,
+				const char* s,
+				Uint8 color);
 
 		/// Sets the surface's palette.
-		virtual void setPalette(SDL_Color* colors, int firstcolor = 0, int ncolors = 256);
+		virtual void setPalette(
+				SDL_Color* colors,
+				int firstcolor = 0,
+				int ncolors = 256);
 
 		/**
 		 * Returns the surface's 8bpp palette.
@@ -139,10 +171,12 @@ protected:
 		virtual void setY(int y);
 		/// Gets the Y position of the surface.
 		int getY() const;
+
 		/// Sets the surface's visibility.
 		void setVisible(bool visible);
 		/// Gets the surface's visibility.
 		bool getVisible() const;
+
 		/// Resets the cropping rectangle for the surface.
 		void resetCrop();
 		/// Gets the cropping rectangle for the surface.
@@ -155,7 +189,10 @@ protected:
 		 * @param y, Y position of the pixel.
 		 * @param pixel, New color for the pixel.
 		 */
-		void setPixel(int x, int y, Uint8 pixel) // setPixelColor
+		void setPixel( // setPixelColor
+				int x,
+				int y,
+				Uint8 pixel)
 		{
 			if (x < 0
 				|| x >= getWidth()
@@ -166,7 +203,9 @@ protected:
 			}
 
 			static_cast<Uint8*>(_surface->pixels)
-					[y * static_cast<int>(_surface->pitch) + x * static_cast<int>(_surface->format->BytesPerPixel)] = pixel;
+						[(y * static_cast<int>(_surface->pitch))
+						+ (x * static_cast<int>(_surface->format->BytesPerPixel))]
+					= pixel;
 		}
 
 		/**
@@ -176,9 +215,12 @@ protected:
 		 * @param y, Pointer to the Y position of the pixel. Changed to the next Y position in the sequence.
 		 * @param pixel, New color for the pixel.
 		 */
-		void setPixelIterative(int* x, int* y, Uint8 pixel)
+		void setPixelIterative( // setPixelColorIterative
+				int* x,
+				int* y,
+				Uint8 pixel)
 		{
-			setPixel(*x, *y, pixel); // setPixelColor
+			setPixel(*x, *y, pixel);
 
 			(*x)++;
 			if (*x == getWidth())
@@ -194,7 +236,9 @@ protected:
 		 * @param y Y position of the pixel.
 		 * @return Color of the pixel.
 		 */
-		Uint8 getPixel(int x, int y) const // getPixelColor
+		Uint8 getPixel( // getPixelColor
+				int x,
+				int y) const
 		{
 			if (x < 0
 				|| x >= getWidth()
@@ -204,7 +248,9 @@ protected:
 				return 0;
 			}
 
-			return static_cast<Uint8*>(_surface->pixels)[y * _surface->pitch + x * _surface->format->BytesPerPixel];
+			return static_cast<Uint8*>(_surface->pixels)
+					[(y * static_cast<int>(_surface->pitch))
+					+ (x * static_cast<int>(_surface->format->BytesPerPixel))];
 		}
 
 		/**
@@ -224,7 +270,6 @@ protected:
 		{
 			return _surface->w;
 		}
-
 		/**
 		 * Returns the height of the surface.
 		 * @return Height in pixels
@@ -236,10 +281,12 @@ protected:
 
 		/// Sets the surface's special hidden flag.
 		void setHidden(bool hidden);
+
 		/// Locks the surface.
 		void lock();
 		/// Unlocks the surface.
 		void unlock();
+
 		/// Specific blit function to blit battlescape terrain data in different shades in a fast way.
 		void blitNShade(
 				Surface* surface,
@@ -248,16 +295,19 @@ protected:
 				int off,
 				bool half = false,
 				int newBaseColor = 0);
+
 		/// Invalidate the surface: force it to be redrawn
 		void invalidate();
+
 		///
 		void setDX(int dx);
 		///
 		void setDY(int dy);
+
 		/// Gets the tooltip of the surface.
-		std::string getTooltip() const;
+//kL		std::string getTooltip() const;
 		/// Sets the tooltip of the surface.
-		void setTooltip(const std::string& tooltip);	
+//kL		void setTooltip(const std::string& tooltip);	
 };
 
 }

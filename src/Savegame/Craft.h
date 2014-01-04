@@ -50,7 +50,6 @@ class Craft
 		public MovingTarget
 {
 private:
-
 	bool
 		_inBattlescape,
 		_inDogfight,
@@ -61,18 +60,18 @@ private:
 		_id,
 		_interceptionOrder;
 
-	Base* _base;
-	ItemContainer* _items;
-	RuleCraft* _rules;
+	std::string		_status;
+	std::wstring	_name;
 
-	std::string _status;
-	std::wstring _name;
-	std::vector<CraftWeapon*> _weapons;
-	std::vector<Vehicle*> _vehicles;
+	Base*			_base;
+	ItemContainer*	_items;
+	RuleCraft*		_rules;
+
+	std::vector<CraftWeapon*>	_weapons;
+	std::vector<Vehicle*>		_vehicles;
 
 
 	public:
-
 		/// Creates a craft of the specified type.
 		Craft(
 				RuleCraft* rules,
@@ -170,21 +169,24 @@ private:
 		/// Returns the craft to its base.
 		void returnToBase();
 
+		/// Handles craft logic.
+		void think();
+
+		/// Does a craft full checkup.
+		void checkup();
+
 		/// Checks if a target is detected by the craft's radar.
 		bool detect(Target* target) const;
 
-		/// Handles craft logic.
-		void think();
-		/// Does a craft full checkup.
-		void checkup();
 		/// Consumes the craft's fuel.
 		void consumeFuel();
+
 		/// Repairs the craft.
 		void repair();
-		/// Refuels the craft.
-		void refuel();
 		/// Rearms the craft.
 		std::string rearm(Ruleset* rules);
+		/// Refuels the craft.
+		void refuel();
 
 		/// Sets the craft's battlescape status.
 		void setInBattlescape(bool inbattle);

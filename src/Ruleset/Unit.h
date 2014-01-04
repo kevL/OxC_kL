@@ -21,6 +21,7 @@
 #define OPENXCOM_UNIT_H
 
 #include <string>
+
 #include <yaml-cpp/yaml.h>
 
 
@@ -29,28 +30,30 @@ namespace OpenXcom
 
 enum SpecialAbility
 {
-	SPECAB_NONE,
-	SPECAB_EXPLODEONDEATH,
-	SPECAB_BURNFLOOR,
-	SPECAB_RESPAWN
+	SPECAB_NONE,			// 0
+	SPECAB_EXPLODEONDEATH,	// 1
+	SPECAB_BURNFLOOR,		// 2
+	SPECAB_RESPAWN			// 3
 };
+
 
 /**
  * This struct holds some plain unit attribute data together.
  */
 struct UnitStats
 {
-	int tu,
-	stamina,
-	health,
-	bravery,
-	reactions,
-	firing,
-	throwing,
-	strength,
-	psiStrength,
-	psiSkill,
-	melee;
+	int
+		tu,
+		stamina,
+		health,
+		bravery,
+		reactions,
+		firing,
+		throwing,
+		strength,
+		psiStrength,
+		psiSkill,
+		melee;
 
 //	http://courses.cms.caltech.edu/cs11/material/cpp/donnie/cpp-ops.html
 /*  MyClass& MyClass::operator=(const MyClass &rhs) {
@@ -108,8 +111,8 @@ struct UnitStats
 
 		UnitStats& operator+=(const UnitStats& stats)
 		{
-			if (this != &stats)	// kL
-			{					// kL
+			if (this != &stats) // kL
+			{
 				tu			+= stats.tu;
 				stamina		+= stats.stamina;
 				health		+= stats.health;
@@ -121,7 +124,7 @@ struct UnitStats
 				psiStrength	+= stats.psiStrength;
 				psiSkill	+= stats.psiSkill;
 				melee		+= stats.melee;
-			}					// kL
+			}
 
 			return *this;
 		}
@@ -129,39 +132,54 @@ struct UnitStats
 		UnitStats operator+(const UnitStats& stats) const
 		{
 			return UnitStats(
-					tu			+ stats.tu,
-					stamina		+ stats.stamina,
-					health		+ stats.health,
-					bravery		+ stats.bravery,
-					reactions	+ stats.reactions,
-					firing		+ stats.firing,
-					throwing	+ stats.throwing,
-					strength	+ stats.strength,
-					psiStrength	+ stats.psiStrength,
-					psiSkill	+ stats.psiSkill,
-					melee		+ stats.melee);
+						tu			+ stats.tu,
+						stamina		+ stats.stamina,
+						health		+ stats.health,
+						bravery		+ stats.bravery,
+						reactions	+ stats.reactions,
+						firing		+ stats.firing,
+						throwing	+ stats.throwing,
+						strength	+ stats.strength,
+						psiStrength	+ stats.psiStrength,
+						psiSkill	+ stats.psiSkill,
+						melee		+ stats.melee);
 		}
 };
 
 
 /**
- * Represents the static data for a unit that is generated on the battlescape, this includes: HWPs, aliens and civilians.
+ * Represents the static data for a unit that is generated on
+ * the battlescape, this includes: HWPs, aliens and civilians.
  * @sa Soldier BattleUnit
  */
 class Unit
 {
+
 private:
-	std::string _type;
-	std::string _race;
-	std::string _rank;
-	UnitStats _stats;
-	std::string _armor;
-	int _standHeight, _kneelHeight, _floatHeight;
-	int _value, _deathSound, _aggroSound, _moveSound;
-	int _intelligence, _aggression;
-	SpecialAbility _specab;
-	std::string _zombieUnit, _spawnUnit;
 	bool _livingWeapon;
+	int
+		_floatHeight,
+		_kneelHeight,
+		_standHeight;
+	int
+		_aggression,
+		_aggroSound,
+		_deathSound,
+		_intelligence,
+		_moveSound,
+		_value;
+
+	std::string
+		_armor,
+		_race,
+		_rank,
+		_type,
+		_spawnUnit,
+		_zombieUnit;
+
+	SpecialAbility _specab;
+	UnitStats _stats;
+
 
 	public:
 		/// Creates a blank unit ruleset.

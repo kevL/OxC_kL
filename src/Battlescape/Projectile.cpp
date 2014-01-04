@@ -477,11 +477,11 @@ Wb.131129
 	//Log(LOG_INFO) << ". LoF calculated, Acu applied (if not BL)";
 	// finally do a line calculation and store this trajectory.
 	int ret = _save->getTileEngine()->calculateLine(
-													originVoxel,
-													targetVoxel,
-													true,
-													&_trajectory,
-													bu);
+												originVoxel,
+												targetVoxel,
+												true,
+												&_trajectory,
+												bu);
 
 	Log(LOG_INFO) << ". ret = " << ret;
 	return ret;
@@ -563,7 +563,7 @@ Wb.131129
 			(_action.target.x * 16) + 8,
 			(_action.target.y * 16) + 8,
 //kL			(_action.target.z * 24) + 2);
-			(_action.target.z * 24) + 1);		// kL
+			(_action.target.z * 24) + 1); // kL
 	targetVoxel.z -= _save->getTile(_action.target)->getTerrainLevel();
 
 	if (_action.type != BA_THROW) // celatid acid-spit
@@ -841,17 +841,17 @@ void Projectile::applyAccuracy(
 		switch (_action.type)
 		{
 			case BA_AUTOSHOT:
-				baseDeviation += 0.18 / (accuracy - accuracyPenalty + 0.19); // was 0.25 (too accurate)
+				baseDeviation += 0.18 / (accuracy - accuracyPenalty + 0.18); // was 0.25 (too accurate)
 			break;
 			case BA_SNAPSHOT:
-				baseDeviation += 0.15 / (accuracy - accuracyPenalty + 0.19);
+				baseDeviation += 0.15 / (accuracy - accuracyPenalty + 0.18);
 			break;
 			case BA_AIMEDSHOT:
-				baseDeviation += 0.12 / (accuracy - accuracyPenalty + 0.19);
+				baseDeviation += 0.12 / (accuracy - accuracyPenalty + 0.18);
 			break;
 
 			default:
-				baseDeviation += 0.15 / (accuracy - accuracyPenalty + 0.19);
+				baseDeviation += 0.15 / (accuracy - accuracyPenalty + 0.18);
 			break;
 		}
 		// kL_end.
@@ -868,7 +868,7 @@ void Projectile::applyAccuracy(
 
 		// the angle deviations are spread using a normal distribution for baseDeviation (+-3s with precision 99,7%)
 		double dH = RNG::boxMuller(0.0, baseDeviation / 6.0); // horizontal miss in radian
-		double dV = RNG::boxMuller(0.0, baseDeviation /(6.0 * 1.72));	// kL
+		double dV = RNG::boxMuller(0.0, baseDeviation /(6.0 * 1.72)); // kL
 //kL		double dV = RNG::boxMuller(0.0, baseDeviation /(6.0 * 2));
 
 		double te = atan2(static_cast<double>(target->y - origin.y), static_cast<double>(target->x - origin.x)) + dH;

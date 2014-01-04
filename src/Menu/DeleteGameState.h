@@ -20,38 +20,54 @@
 #define OPENXCOM_DELETEGAMESTATE_H
 
 #include <string>
+
 #include "OptionsBaseState.h"
+
 #include "../Engine/State.h"
+
 
 namespace OpenXcom
 {
 
-class TextButton;
-class Window;
 class Text;
+class TextButton;
 class SavedGameState;
+class Window;
+
 
 /**
  * window used to confirm save game deletion.
  */
-class DeleteGameState : public State
+class DeleteGameState
+	:
+		public State
 {
 private:
-	TextButton *_btnNo, *_btnYes;
-	Window *_window;
-	Text *_txtMessage;
-	SavedGameState *_parent;
-	std::string _filename;
 	OptionsOrigin _origin;
-public:
-	/// Creates the Confirm state.
-	DeleteGameState(Game *game, OptionsOrigin origin, const std::wstring &save, SavedGameState *parent);
-	/// Cleans up the Confirm state.
-	~DeleteGameState();
-	/// Handler for clicking the confirm button.
-	void btnYesClick(Action *action);
-	/// Handler for clicking the cancel button.
-	void btnNoClick(Action *action);
+	SavedGameState* _parent;
+	Text* _txtMessage;
+	TextButton
+		* _btnNo,
+		* _btnYes;
+	Window* _window;
+
+	std::string _filename;
+
+
+	public:
+		/// Creates the Confirm state.
+		DeleteGameState(
+				Game* game,
+				OptionsOrigin origin,
+				const std::wstring& save,
+				SavedGameState* parent);
+		/// Cleans up the Confirm state.
+		~DeleteGameState();
+
+		/// Handler for clicking the confirm button.
+		void btnYesClick(Action* action);
+		/// Handler for clicking the cancel button.
+		void btnNoClick(Action* action);
 };
 
 }

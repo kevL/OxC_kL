@@ -18,18 +18,24 @@
  */
 
 #include "AbandonGameState.h"
+
 #include <sstream>
+
+#include "MainMenuState.h"
+#include "SaveState.h"
+
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
+#include "../Engine/Options.h"
 #include "../Engine/Palette.h"
+
+#include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
-#include "../Interface/Text.h"
+
+#include "../Resource/ResourcePack.h"
+
 #include "../Savegame/SavedGame.h"
-#include "MainMenuState.h"
-#include "../Engine/Options.h"
-#include "SaveState.h"
 
 
 namespace OpenXcom
@@ -40,7 +46,9 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param origin Game section that originated this state.
  */
-AbandonGameState::AbandonGameState(Game* game, OptionsOrigin origin)
+AbandonGameState::AbandonGameState(
+		Game* game,
+		OptionsOrigin origin)
 	:
 		State(game),
 		_origin(origin)
@@ -59,8 +67,6 @@ AbandonGameState::AbandonGameState(Game* game, OptionsOrigin origin)
 
 
 	_window		= new Window(this, 216, 160, x, 20, POPUP_BOTH);
-
-//	_txtTitle	= new Text(206, 17, x + 5, 78);
 	_txtTitle	= new Text(206, 33, x + 5, 73);
 
 	_btnNo		= new TextButton(55, 20, x + 30, 132);
@@ -80,12 +86,16 @@ AbandonGameState::AbandonGameState(Game* game, OptionsOrigin origin)
 	_btnYes->setColor(Palette::blockOffset(15)-1);
 	_btnYes->setText(tr("STR_YES"));
 	_btnYes->onMouseClick((ActionHandler)& AbandonGameState::btnYesClick);
-	_btnYes->onKeyboardPress((ActionHandler)& AbandonGameState::btnYesClick, (SDLKey)Options::getInt("keyOk"));
+	_btnYes->onKeyboardPress(
+					(ActionHandler)& AbandonGameState::btnYesClick,
+					(SDLKey)Options::getInt("keyOk"));
 
 	_btnNo->setColor(Palette::blockOffset(15)-1);
 	_btnNo->setText(tr("STR_NO"));
 	_btnNo->onMouseClick((ActionHandler)& AbandonGameState::btnNoClick);
-	_btnNo->onKeyboardPress((ActionHandler)& AbandonGameState::btnNoClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnNo->onKeyboardPress(
+					(ActionHandler)& AbandonGameState::btnNoClick,
+					(SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setAlign(ALIGN_CENTER);
@@ -113,7 +123,10 @@ void AbandonGameState::btnYesClick(Action*)
 {
 	if (Options::getInt("autosave") == 3)
 	{
-		SaveState* ss = new SaveState(_game, _origin, false);
+		SaveState* ss = new SaveState(
+									_game,
+									_origin,
+									false);
 		delete ss;
 	}
 

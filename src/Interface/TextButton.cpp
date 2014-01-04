@@ -18,10 +18,13 @@
  */
 
 #include "TextButton.h"
+
 #include <SDL.h>
+
 #include "Text.h"
-#include "../Engine/Sound.h"
+
 #include "../Engine/Action.h"
+#include "../Engine/Sound.h"
 
 
 namespace OpenXcom
@@ -38,9 +41,17 @@ Sound* TextButton::soundPress = 0;
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-TextButton::TextButton(int width, int height, int x, int y)
+TextButton::TextButton(
+		int width,
+		int height,
+		int x,
+		int y)
 	:
-		InteractiveSurface(width, height, x, y),
+		InteractiveSurface(
+			width,
+			height,
+			x,
+			y),
 		_color(0),
 		_group(0),
 		_contrast(false)
@@ -191,7 +202,10 @@ void TextButton::setGroup(TextButton** group)
  * @param firstcolor Offset of the first color to replace.
  * @param ncolors Amount of colors to replace.
  */
-void TextButton::setPalette(SDL_Color* colors, int firstcolor, int ncolors)
+void TextButton::setPalette(
+		SDL_Color* colors,
+		int firstcolor,
+		int ncolors)
 {
 	Surface::setPalette(colors, firstcolor, ncolors);
 	_text->setPalette(colors, firstcolor, ncolors);
@@ -204,22 +218,23 @@ void TextButton::setPalette(SDL_Color* colors, int firstcolor, int ncolors)
 void TextButton::draw()
 {
 	Surface::draw();
+
 	SDL_Rect square;
-
-	int mul = 1;
-	if (_contrast)
-	{
-		mul = 2;
-	}
-
-	int color = _color + 1 * mul;
-
 	square.x = 0;
 	square.y = 0;
 	square.w = getWidth();
 	square.h = getHeight();
 
-	for (int i = 0; i < 5; ++i)
+	int mult = 1;
+	if (_contrast)
+		mult = 2;
+
+	int color = _color + 1 * mult;
+
+	for (int
+			i = 0;
+			i < 5;
+			++i)
 	{
 		drawRect(&square, color);
 
@@ -235,18 +250,18 @@ void TextButton::draw()
 		switch (i)
 		{
 			case 0:
-				color = _color + 5 * mul;
+				color = _color + 5 * mult;
 				setPixel(square.w, 0, color);
 			break;
 			case 1:
-				color = _color + 2 * mul;
+				color = _color + 2 * mult;
 			break;
 			case 2:
-				color = _color + 4 * mul;
-				setPixel(square.w+1, 1, color);
+				color = _color + 4 * mult;
+				setPixel(square.w + 1, 1, color);
 			break;
 			case 3:
-				color = _color + 3 * mul;
+				color = _color + 3 * mult;
 			break;
 		}
 	}
@@ -258,11 +273,9 @@ void TextButton::draw()
 		press = (*_group == this);
 
 	if (press)
-	{
-		this->invert(_color + 3 * mul);
-	}
-	_text->setInvert(press);
+		this->invert(_color + 3 * mult);
 
+	_text->setInvert(press);
 	_text->blit(this);
 }
 
@@ -296,7 +309,6 @@ void TextButton::mousePress(Action* action, State* state)
 		}
 
 		draw();
-//		_redraw = true;
 	}
 
 	InteractiveSurface::mousePress(action, state);
@@ -310,10 +322,7 @@ void TextButton::mousePress(Action* action, State* state)
 void TextButton::mouseRelease(Action* action, State* state)
 {
 	if (isButtonHandled(action->getDetails()->button.button))
-	{	
 		draw();
-//		_redraw = true;
-	}
 
 	InteractiveSurface::mouseRelease(action, state);
 }

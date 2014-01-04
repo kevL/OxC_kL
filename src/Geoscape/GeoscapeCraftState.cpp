@@ -56,7 +56,11 @@ namespace OpenXcom
  * @param globe, Pointer to the Geoscape globe.
  * @param waypoint, Pointer to the last UFO position (if redirecting the craft).
  */
-GeoscapeCraftState::GeoscapeCraftState(Game* game, Craft* craft, Globe* globe, Waypoint* waypoint)
+GeoscapeCraftState::GeoscapeCraftState(
+		Game* game,
+		Craft* craft,
+		Globe* globe,
+		Waypoint* waypoint)
 	:
 		State(game),
 		_craft(craft),
@@ -65,12 +69,12 @@ GeoscapeCraftState::GeoscapeCraftState(Game* game, Craft* craft, Globe* globe, W
 {
 	_screen = false;
 
-	_window			= new Window(this, 224, 174, 16, 8, POPUP_BOTH); // center: 128, end: 240
+	_window			= new Window(this, 224, 174, 16, 8, POPUP_BOTH);
 	_txtTitle		= new Text(192, 17, 32, 16);
 
 	_txtStatus		= new Text(192, 17, 32, 31);
 
-	_txtBase		= new Text(192, 9, 32, 45);
+	_txtBase		= new Text(192, 9, 32, 44);
 
 	_txtRedirect	= new Text(120, 17, 120, 46);
 
@@ -91,12 +95,6 @@ GeoscapeCraftState::GeoscapeCraftState(Game* game, Craft* craft, Globe* globe, W
 	_txtW2Name		= new Text(120, 9, 32, 100);
 	_txtW2Ammo		= new Text(80, 9, 160, 100);
 
-/*	_btnTarget		= new TextButton(176, 14, 40, 112);
-	_btnBase		= new TextButton(176, 14, 40, 127);
-	_btnCenter		= new TextButton(176, 14, 40, 142);
-	_btnPatrol		= new TextButton(176, 14, 40, 157);
-	_btnCancel		= new TextButton(176, 14, 40, 172); */
-
 	_btnTarget		= new TextButton(90, 16, 32, 113);
 	_btnBase		= new TextButton(90, 16, 134, 113);
 
@@ -106,7 +104,10 @@ GeoscapeCraftState::GeoscapeCraftState(Game* game, Craft* craft, Globe* globe, W
 	_btnCancel		= new TextButton(90, 16, 134, 157);
 
 
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)), Palette::backPos, 16);
+	_game->setPalette(
+				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)),
+				Palette::backPos,
+				16);
 
 	add(_window);
 	add(_btnCenter);
@@ -155,7 +156,9 @@ GeoscapeCraftState::GeoscapeCraftState(Game* game, Craft* craft, Globe* globe, W
 	_btnCancel->setColor(Palette::blockOffset(8)+5);
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)& GeoscapeCraftState::btnCancelClick);
-	_btnCancel->onKeyboardPress((ActionHandler)& GeoscapeCraftState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnCancel->onKeyboardPress(
+					(ActionHandler)& GeoscapeCraftState::btnCancelClick,
+					(SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setBig();
@@ -165,55 +168,42 @@ GeoscapeCraftState::GeoscapeCraftState(Game* game, Craft* craft, Globe* globe, W
 	_txtStatus->setSecondaryColor(Palette::blockOffset(8)+10);
 //kL	_txtStatus->setWordWrap(true);
 
+	std::string stat = _craft->getStatus();
 	std::wstring status;
 	if (_waypoint != 0)
-	{
 		status = tr("STR_INTERCEPTING_UFO").arg(_waypoint->getId());
-	}
 	else if (_craft->getLowFuel())
-	{
 		status = tr("STR_LOW_FUEL_RETURNING_TO_BASE");
-	}
 	// kL_begin: craft string, Based
-	else if (_craft->getStatus() == "STR_READY"
-				|| _craft->getStatus() == "STR_REPAIRS"
-				|| _craft->getStatus() == "STR_REFUELLING"
-				|| _craft->getStatus() == "STR_REARMING")
+	else if (stat == "STR_READY"
+				|| stat == "STR_REPAIRS"
+				|| stat == "STR_REFUELLING"
+				|| stat == "STR_REARMING")
 	{
 		status = tr("STR_BASED");
 	}
 	// Could add "Damaged - returning to base" around here.
 	// kL_end.
 	else if (_craft->getDestination() == 0)
-	{
 		status = tr("STR_PATROLLING");
-	}
 	else if (_craft->getDestination() == (Target*)_craft->getBase())
-	{
 		status = tr("STR_RETURNING_TO_BASE");
-	}
 	else
 	{
 		Ufo* u = dynamic_cast<Ufo*>(_craft->getDestination());
 		if (u != 0)
 		{
 			if (_craft->isInDogfight())
-			{
 				status = tr("STR_TAILING_UFO");
-			}
 			else if (u->getStatus() == Ufo::FLYING)
-			{
 				status = tr("STR_INTERCEPTING_UFO").arg(u->getId());
-			}
 			else
-			{
-				status = tr("STR_DESTINATION_UC_").arg(u->getName(_game->getLanguage()));
-			}
+				status = tr("STR_DESTINATION_UC_")
+							.arg(u->getName(_game->getLanguage()));
 		}
 		else
-		{
-			status = tr("STR_DESTINATION_UC_").arg(_craft->getDestination()->getName(_game->getLanguage()));
-		}
+			status = tr("STR_DESTINATION_UC_")
+						.arg(_craft->getDestination()->getName(_game->getLanguage()));
 	}
 
 	_txtStatus->setText(tr("STR_STATUS_").arg(status));
@@ -227,55 +217,51 @@ GeoscapeCraftState::GeoscapeCraftState(Game* game, Craft* craft, Globe* globe, W
 //kL	_txtSpeed->setText(tr("STR_SPEED_").arg(Text::formatNumber(_craft->getSpeed())));
 
 	// kL_begin: set craftSpeed to UFO when in chase.
-	std::wstringstream ss3;
+	std::wstringstream
+		ss1,
+		ss2,
+		ss3;
+
 	if (_craft->isInDogfight())
-	{
-		ss3 << tr("STR_SPEED_").arg("UFO");
-	}
+		ss1 << tr("STR_SPEED_").arg("UFO");
 	// kL_note: If in dogfight or more accurately in chase_mode, insert UFO speed.
 	else
-	{
-		ss3 << tr("STR_SPEED_").arg(Text::formatNumber(_craft->getSpeed()));
-	}
-	_txtSpeed->setText(ss3.str());
+		ss1 << tr("STR_SPEED_").arg(Text::formatNumber(_craft->getSpeed()));
+
+	_txtSpeed->setText(ss1.str());
 	// kL_end.
 
 	_txtMaxSpeed->setColor(Palette::blockOffset(15)-1);
 	_txtMaxSpeed->setSecondaryColor(Palette::blockOffset(8)+5);
-	_txtMaxSpeed->setText(tr("STR_MAXIMUM_SPEED_UC").arg(Text::formatNumber(_craft->getRules()->getMaxSpeed())));
+	_txtMaxSpeed->setText(tr("STR_MAXIMUM_SPEED_UC")
+							.arg(Text::formatNumber(_craft->getRules()->getMaxSpeed())));
 
 	// kL_begin: GeoscapeCraftState, add #Soldier on transports.
 	_txtSoldier->setColor(Palette::blockOffset(15)-1);
 	_txtSoldier->setSecondaryColor(Palette::blockOffset(8)+5);
-	std::wstringstream ss12;
-	ss12 << tr("STR_SOLDIERS") << " " << L'\x01' << _craft->getNumSoldiers();
-	_txtSoldier->setText(ss12.str());
+	ss2 << tr("STR_SOLDIERS") << " " << L'\x01' << _craft->getNumSoldiers();
+	_txtSoldier->setText(ss2.str());
 	// kL_end.
 
 	_txtAltitude->setColor(Palette::blockOffset(15)-1);
 	_txtAltitude->setSecondaryColor(Palette::blockOffset(8)+5);
-//kL	std::string altitude = _craft->getAltitude() == "STR_GROUND" ? "STR_GROUNDED" : _craft->getAltitude();
 	// kL_begin: GeoscapeCraftState, set altitude.
-	std::string altitude;
-	if (_craft->getAltitude() == "STR_GROUND"
-		|| _craft->getStatus() == "STR_READY"
-		|| _craft->getStatus() == "STR_REPAIRS"
-		|| _craft->getStatus() == "STR_REFUELLING"
-		|| _craft->getStatus() == "STR_REARMING")
+	std::string alt = _craft->getAltitude();
+	if (alt == "STR_GROUND"
+		|| stat == "STR_READY"
+		|| stat == "STR_REPAIRS"
+		|| stat == "STR_REFUELLING"
+		|| stat == "STR_REARMING")
 	{
-		altitude = "STR_GROUNDED";
-	}
-	else
-		altitude = _craft->getAltitude();
-	// kL_end.
-	_txtAltitude->setText(tr("STR_ALTITUDE_").arg(tr(altitude)));
+		alt = "STR_GROUNDED";
+	} // kL_end.
+	_txtAltitude->setText(tr("STR_ALTITUDE_").arg(tr(alt)));
 
 	// kL_begin: GeoscapeCraftState, add #HWP on transports.
 	_txtHWP->setColor(Palette::blockOffset(15)-1);
 	_txtHWP->setSecondaryColor(Palette::blockOffset(8)+5);
-	std::wstringstream ss11;
-	ss11 << tr("STR_HWPS") << " " << L'\x01' << _craft->getNumVehicles();
-	_txtHWP->setText(ss11.str());
+	ss3 << tr("STR_HWPS") << " " << L'\x01' << _craft->getNumVehicles();
+	_txtHWP->setText(ss3.str());
 	// kL_end.
 
 	_txtFuel->setColor(Palette::blockOffset(15)-1);
@@ -330,13 +316,9 @@ GeoscapeCraftState::GeoscapeCraftState(Game* game, Craft* craft, Globe* globe, W
 	_txtRedirect->setText(tr("STR_REDIRECT_CRAFT"));
 
 	if (_waypoint == 0)
-	{
 		_txtRedirect->setVisible(false);
-	}
 	else
-	{
 		_btnCancel->setText(tr("STR_GO_TO_LAST_KNOWN_UFO_POSITION"));
-	}
 
 /*kL	if (_craft->getLowFuel())
 	{
@@ -346,14 +328,14 @@ GeoscapeCraftState::GeoscapeCraftState(Game* game, Craft* craft, Globe* globe, W
 	} */
 
 	// kL_begin: set Base button visibility FALSE for already-Based crafts.
-	if (_craft->getStatus() == "STR_READY")
+	if (stat == "STR_READY")
 	{
 		_btnBase->setVisible(false);
 		_btnPatrol->setVisible(false);
 	}
-	else if (_craft->getStatus() == "STR_REPAIRS"
-		|| _craft->getStatus() == "STR_REFUELLING"
-		|| _craft->getStatus() == "STR_REARMING"
+	else if (stat == "STR_REPAIRS"
+		|| stat == "STR_REFUELLING"
+		|| stat == "STR_REARMING"
 		|| _craft->getLowFuel())
 	{
 		_btnBase->setVisible(false);
@@ -361,9 +343,7 @@ GeoscapeCraftState::GeoscapeCraftState(Game* game, Craft* craft, Globe* globe, W
 		_btnPatrol->setVisible(false);
 	}
 	else if (_craft->getDestination() == (Target*)_craft->getBase())
-	{
 		_btnBase->setVisible(false);
-	}
 
 	if (_craft->getRules()->getSoldiers() == 0)
 		_txtSoldier->setVisible(false);
@@ -384,7 +364,10 @@ GeoscapeCraftState::~GeoscapeCraftState()
  */
 void GeoscapeCraftState::init()
 {
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)), Palette::backPos, 16);
+	_game->setPalette(
+				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)),
+				Palette::backPos,
+				16);
 }
 
 // kL_begin: center craft on Globe.
@@ -395,9 +378,11 @@ void GeoscapeCraftState::init()
 void GeoscapeCraftState::btnCenterClick(Action*)
 {
 	_game->popState();
-	_globe->center(_craft->getLongitude(), _craft->getLatitude());
-}
-// kL_end.
+
+	_globe->center(
+				_craft->getLongitude(),
+				_craft->getLatitude());
+} // kL_end.
 
 /**
  * Returns the craft back to its base.
@@ -418,7 +403,10 @@ void GeoscapeCraftState::btnBaseClick(Action*)
 void GeoscapeCraftState::btnTargetClick(Action*)
 {
 	_game->popState();
-	_game->pushState(new SelectDestinationState(_game, _craft, _globe));
+	_game->pushState(new SelectDestinationState(
+											_game,
+											_craft,
+											_globe));
 
 	delete _waypoint;
 }
@@ -448,7 +436,7 @@ void GeoscapeCraftState::btnCancelClick(Action*) // kL_note: "scout"/go to last 
 		_craft->setDestination(_waypoint);
 	}
 
-	_game->popState(); // Cancel
+	_game->popState(); // and Cancel.
 }
 
 }

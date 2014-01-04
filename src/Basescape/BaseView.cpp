@@ -49,9 +49,17 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-BaseView::BaseView(int width, int height, int x, int y)
+BaseView::BaseView(
+		int width,
+		int height,
+		int x,
+		int y)
 	:
-		InteractiveSurface(width, height, x, y),
+		InteractiveSurface(
+				width,
+				height,
+				x,
+				y),
 		_base(0),
 		_texture(0),
 		_selFacility(0),
@@ -126,11 +134,20 @@ void BaseView::setBase(Base* base)
 			_facilities[x][y] = 0;
 
 	// Fill grid with base facilities
-	for (std::vector<BaseFacility*>::iterator i = _base->getFacilities()->begin(); i != _base->getFacilities()->end(); ++i)
+	for (std::vector<BaseFacility*>::iterator
+			i = _base->getFacilities()->begin();
+			i != _base->getFacilities()->end();
+			++i)
 	{
-		for (int y = (*i)->getY(); y < (*i)->getY() + (*i)->getRules()->getSize(); ++y)
+		for (int
+				y = (*i)->getY();
+				y < (*i)->getY() + (*i)->getRules()->getSize();
+				++y)
 		{
-			for (int x = (*i)->getX(); x < (*i)->getX() + (*i)->getRules()->getSize(); ++x)
+			for (int
+					x = (*i)->getX();
+					x < (*i)->getX() + (*i)->getRules()->getSize();
+					++x)
 			{
 				_facilities[x][y] = *i;
 			}
@@ -408,7 +425,11 @@ void BaseView::updateNeighborFacilityBuildTime(BaseFacility* facility, BaseFacil
  * @param remove Facility to ignore (in case of facility dismantling).
  * @return Number of squares connected to the starting position.
  */
-int BaseView::countConnected(int x, int y, int** grid, BaseFacility* remove) const
+int BaseView::countConnected(
+		int x,
+		int y,
+		int** grid,
+		BaseFacility* remove) const
 {
 	bool newgrid = (grid == 0);
 
@@ -417,11 +438,17 @@ int BaseView::countConnected(int x, int y, int** grid, BaseFacility* remove) con
 	{
 		grid = new int*[BASE_SIZE];
 
-		for (int xx = 0; xx < BASE_SIZE; ++xx)
+		for (int
+				xx = 0;
+				xx < BASE_SIZE;
+				++xx)
 		{
 			grid[xx] = new int[BASE_SIZE];
 
-			for (int yy = 0; yy < BASE_SIZE; ++yy)
+			for (int
+					yy = 0;
+					yy < BASE_SIZE;
+					++yy)
 			{
 				if (_facilities[xx][yy] == 0
 					|| _facilities[xx][yy] == remove)
@@ -488,7 +515,10 @@ int BaseView::countConnected(int x, int y, int** grid, BaseFacility* remove) con
 	// Delete connection grid
 	if (newgrid)
 	{
-		for (int xx = 0; xx < BASE_SIZE; ++xx)
+		for (int
+				xx = 0;
+				xx < BASE_SIZE;
+				++xx)
 		{
 			delete[] grid[xx];
 		}
@@ -551,9 +581,15 @@ void BaseView::draw()
 	Surface::draw();
 
 	// Draw grid squares
-	for (int x = 0; x < 8; ++x)
+	for (int
+			x = 0;
+			x < 8;
+			++x)
 	{
-		for (int y = 0; y < 8; ++y)
+		for (int
+				y = 0;
+				y < 8;
+				++y)
 		{
 			Surface* frame = _texture->getFrame(0);
 			frame->setX(x * GRID_SIZE);
@@ -562,23 +598,32 @@ void BaseView::draw()
 		}
 	}
 
-	std::vector<Craft*>::iterator craft = _base->getCrafts()->begin();
 
-	for (std::vector<BaseFacility*>::iterator i = _base->getFacilities()->begin(); i != _base->getFacilities()->end(); ++i)
+	for (std::vector<BaseFacility*>::iterator
+			i = _base->getFacilities()->begin();
+			i != _base->getFacilities()->end();
+			++i)
 	{
 		// Draw facility shape
 		int num = 0;
 
-		for (int y = (*i)->getY(); y < (*i)->getY() + (*i)->getRules()->getSize(); ++y)
+		for (int
+				y = (*i)->getY();
+				y < (*i)->getY() + (*i)->getRules()->getSize();
+				++y)
 		{
-			for (int x = (*i)->getX(); x < (*i)->getX() + (*i)->getRules()->getSize(); ++x)
+			for (int
+					x = (*i)->getX();
+					x < (*i)->getX() + (*i)->getRules()->getSize();
+					++x)
 			{
 				Surface* frame;
 
 				if ((*i)->getBuildTime() == 0)
 					frame = _texture->getFrame((*i)->getRules()->getSpriteShape() + num);
 				else
-					frame = _texture->getFrame((*i)->getRules()->getSpriteShape() + num + 2 + (*i)->getRules()->getSize());
+					frame = _texture->getFrame((*i)->getRules()->getSpriteShape()
+													+ num + 2 + (*i)->getRules()->getSize());
 
 				frame->setX(x * GRID_SIZE);
 				frame->setY(y * GRID_SIZE);
@@ -589,7 +634,10 @@ void BaseView::draw()
 		}
 	}
 
-	for (std::vector<BaseFacility*>::iterator i = _base->getFacilities()->begin(); i != _base->getFacilities()->end(); ++i)
+	for (std::vector<BaseFacility*>::iterator
+			i = _base->getFacilities()->begin();
+			i != _base->getFacilities()->end();
+			++i)
 	{
 		// Draw connectors
 		if ((*i)->getBuildTime() == 0)
@@ -598,7 +646,10 @@ void BaseView::draw()
 			int x = (*i)->getX() + (*i)->getRules()->getSize();
 			if (x < BASE_SIZE)
 			{
-				for (int y = (*i)->getY(); y < (*i)->getY() + (*i)->getRules()->getSize(); ++y)
+				for (int
+						y = (*i)->getY();
+						y < (*i)->getY() + (*i)->getRules()->getSize();
+						++y)
 				{
 					if (_facilities[x][y] != 0
 						&& _facilities[x][y]->getBuildTime() == 0)
@@ -616,7 +667,10 @@ void BaseView::draw()
 			int y = (*i)->getY() + (*i)->getRules()->getSize();
 			if (y < BASE_SIZE)
 			{
-				for (int x = (*i)->getX(); x < (*i)->getX() + (*i)->getRules()->getSize(); ++x)
+				for (int
+						x = (*i)->getX();
+						x < (*i)->getX() + (*i)->getRules()->getSize();
+						++x)
 				{
 					if (_facilities[x][y] != 0
 						&& _facilities[x][y]->getBuildTime() == 0)
@@ -632,14 +686,26 @@ void BaseView::draw()
 		}
 	}
 
-	for (std::vector<BaseFacility*>::iterator i = _base->getFacilities()->begin(); i != _base->getFacilities()->end(); ++i)
+
+	std::vector<Craft*>::iterator craft = _base->getCrafts()->begin();
+
+	for (std::vector<BaseFacility*>::iterator
+			i = _base->getFacilities()->begin();
+			i != _base->getFacilities()->end();
+			++i)
 	{
 		// Draw facility graphic
 		int num = 0;
 
-		for (int y = (*i)->getY(); y < (*i)->getY() + (*i)->getRules()->getSize(); ++y)
+		for (int
+				y = (*i)->getY();
+				y < (*i)->getY() + (*i)->getRules()->getSize();
+				++y)
 		{
-			for (int x = (*i)->getX(); x < (*i)->getX() + (*i)->getRules()->getSize(); ++x)
+			for (int
+					x = (*i)->getX();
+					x < (*i)->getX() + (*i)->getRules()->getSize();
+					++x)
 			{
 				if ((*i)->getRules()->getSize() == 1)
 				{
@@ -686,23 +752,30 @@ void BaseView::draw()
 		// Draw time remaining
 		if ((*i)->getBuildTime() > 0)
 		{
-			Text* text = new Text(GRID_SIZE * (*i)->getRules()->getSize(), 16, 0, 0);
+			Text* text = new Text(
+								GRID_SIZE * (*i)->getRules()->getSize(),
+								16,
+								0,
+								0);
 
 			text->setPalette(getPalette());
-			text->initText(_big, _small, _lang);
+			text->initText(
+						_big,
+						_small,
+						_lang);
 //kL			text->setX((*i)->getX() * GRID_SIZE);
-			text->setX(((*i)->getX() * GRID_SIZE) - 1);		// kL
+			text->setX(((*i)->getX() * GRID_SIZE) - 1); // kL
 			text->setY((*i)->getY() * GRID_SIZE + (GRID_SIZE * (*i)->getRules()->getSize() - 16) / 2);
 			text->setBig();
 
 			std::wstringstream ss;
 			ss << (*i)->getBuildTime();
-
 			text->setAlign(ALIGN_CENTER);
 			text->setColor(Palette::blockOffset(13)+5);
 			text->setText(ss.str());
 
 			text->blit(this);
+
 			delete text;
 		}
 	}
@@ -729,8 +802,10 @@ void BaseView::blit(Surface* surface)
  */
 void BaseView::mouseOver(Action* action, State* state)
 {
-	_gridX = static_cast<int>(floor(action->getRelativeXMouse() / (GRID_SIZE * action->getXScale())));
-	_gridY = static_cast<int>(floor(action->getRelativeYMouse() / (GRID_SIZE * action->getYScale())));
+	_gridX = static_cast<int>(
+				floor(action->getRelativeXMouse() / (static_cast<double>(GRID_SIZE) * action->getXScale())));
+	_gridY = static_cast<int>(
+				floor(action->getRelativeYMouse() / (static_cast<double>(GRID_SIZE) * action->getYScale())));
 
 	if (_gridX >= 0
 		&& _gridX < BASE_SIZE

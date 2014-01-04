@@ -199,8 +199,8 @@ private:
 
 		/// Changes colors of weapon icons, range indicators and ammo texts base on current weapon state.
 		void recolor(
-				const int weaponNo,
-				const bool currentState);
+				const int weaponPod,
+				const bool enabled);
 
 		/// Returns true if state is minimized.
 		bool isMinimized() const;

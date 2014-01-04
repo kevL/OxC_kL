@@ -16,19 +16,25 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "DeleteGameState.h"
+
+#include "ErrorMessageState.h"
+#include "SavedGameState.h"
+
 #include "../Engine/CrossPlatform.h"
+#include "../Engine/Exception.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Palette.h"
-#include "../Interface/Text.h"
-#include "../Interface/Window.h"
-#include "../Interface/TextButton.h"
-#include "../Resource/ResourcePack.h"
-#include "SavedGameState.h"
 #include "../Engine/Options.h"
-#include "../Engine/Exception.h"
-#include "ErrorMessageState.h"
+#include "../Engine/Palette.h"
+
+#include "../Interface/Text.h"
+#include "../Interface/TextButton.h"
+#include "../Interface/Window.h"
+
+#include "../Resource/ResourcePack.h"
+
 
 namespace OpenXcom
 {
@@ -40,7 +46,15 @@ namespace OpenXcom
  * @param save Name of the save file to delete.
  * @param parent Pointer to SavedGameState.
  */
-DeleteGameState::DeleteGameState(Game *game, OptionsOrigin origin, const std::wstring &save, SavedGameState *parent) : State(game), _parent(parent), _origin(origin)
+DeleteGameState::DeleteGameState(
+		Game* game,
+		OptionsOrigin origin,
+		const std::wstring& save,
+		SavedGameState* parent)
+	:
+		State(game),
+		_parent(parent),
+		_origin(origin)
 {
 #ifdef _WIN32
 	std::string file = Language::wstrToCp(save);
@@ -50,38 +64,46 @@ DeleteGameState::DeleteGameState(Game *game, OptionsOrigin origin, const std::ws
 	_filename = Options::getUserFolder() + file + ".sav";
 	_screen = false;
 
-	// Create objects
-	_window = new Window(this, 256, 120, 32, 40, POPUP_BOTH);
-	_btnYes = new TextButton(60, 18, 90, 112);
-	_btnNo = new TextButton(60, 18, 170, 112);
-	_txtMessage = new Text(246, 32, 37, 70);
 
-	// Set palette
+	_window		= new Window(this, 256, 120, 32, 40, POPUP_BOTH);
+	_txtMessage	= new Text(246, 32, 37, 70);
+
+	_btnNo		= new TextButton(60, 18, 90, 112);
+	_btnYes		= new TextButton(60, 18, 170, 112);
+
+
 	if (_origin != OPT_BATTLESCAPE)
 	{
-		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
+		_game->setPalette(
+					_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)),
+					Palette::backPos,
+					16);
 	}
 
 	add(_window);
-	add(_btnYes);
-	add(_btnNo);
 	add(_txtMessage);
+	add(_btnNo);
+	add(_btnYes);
 
 	centerAllSurfaces();
 
-	// Set up objects
+
 	_window->setColor(Palette::blockOffset(8)+10);
 	_window->setBackground(game->getResourcePack()->getSurface("BACK01.SCR"));
 
 	_btnYes->setColor(Palette::blockOffset(8)+10);
 	_btnYes->setText(tr("STR_YES"));
 	_btnYes->onMouseClick((ActionHandler)&DeleteGameState::btnYesClick);
-	_btnYes->onKeyboardPress((ActionHandler)&DeleteGameState::btnYesClick, (SDLKey)Options::getInt("keyOk"));
+	_btnYes->onKeyboardPress(
+					(ActionHandler)&DeleteGameState::btnYesClick,
+					(SDLKey)Options::getInt("keyOk"));
 
 	_btnNo->setColor(Palette::blockOffset(8)+10);
 	_btnNo->setText(tr("STR_NO"));
 	_btnNo->onMouseClick((ActionHandler)&DeleteGameState::btnNoClick);
-	_btnNo->onKeyboardPress((ActionHandler)&DeleteGameState::btnNoClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnNo->onKeyboardPress(
+					(ActionHandler)&DeleteGameState::btnNoClick,
+					(SDLKey)Options::getInt("keyCancel"));
 
 	_txtMessage->setColor(Palette::blockOffset(8)+10);
 	_txtMessage->setAlign(ALIGN_CENTER);
@@ -100,25 +122,33 @@ DeleteGameState::DeleteGameState(Game *game, OptionsOrigin origin, const std::ws
  */
 DeleteGameState::~DeleteGameState()
 {
-
 }
 
-void DeleteGameState::btnNoClick(Action *)
+void DeleteGameState::btnNoClick(Action*)
 {
 	_game->popState();
 }
 
-void DeleteGameState::btnYesClick(Action *)
+void DeleteGameState::btnYesClick(Action*)
 {
 	_game->popState();
+
 	if (!CrossPlatform::deleteFile(_filename))
 	{
 		std::wstring error = tr("STR_DELETE_UNSUCCESSFUL");
+
 		if (_origin != OPT_BATTLESCAPE)
-			_game->pushState(new ErrorMessageState(_game, error, Palette::blockOffset(8)+10, "BACK01.SCR", 6));
+			_game->pushState(new ErrorMessageState(
+												_game,
+												error,
+												Palette::blockOffset(8)+10, "BACK01.SCR", 6));
 		else
-			_game->pushState(new ErrorMessageState(_game, error, Palette::blockOffset(0), "TAC00.SCR", -1));
+			_game->pushState(new ErrorMessageState(
+												_game,
+												error,
+												Palette::blockOffset(0), "TAC00.SCR", -1));
 	}
+
 	_parent->updateList();
 }
 

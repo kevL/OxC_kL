@@ -31,7 +31,7 @@
 namespace OpenXcom
 {
 
-const double Window::POPUP_SPEED = 0.08;
+const double Window::POPUP_SPEED = 0.07; //kL 0.08;
 
 Sound* Window::soundPopup[3] = {0, 0, 0};
 
@@ -53,7 +53,11 @@ Window::Window(
 		int y,
 		WindowPopup popup)
 	:
-		Surface(width, height, x, y),
+		Surface(
+			width,
+			height,
+			x,
+			y),
 		_bg(0),
 		_color(0),
 		_popup(popup),
@@ -72,6 +76,7 @@ Window::Window(
 	else
 	{
 		_timer->start();
+
 		if (_state != 0)
 		{
 			_screen = state->isScreen();
@@ -156,11 +161,12 @@ void Window::popup()
 {
 	if (AreSame(_popupStep, 0.0))
 	{
-		int sound = RNG::generate(0, 2);
-		if (soundPopup[sound] != 0)
-		{
-			soundPopup[sound]->play();
-		}
+//kL		int sound = RNG::generate(0, 2);
+		int sound = RNG::generate(1, 2); // kL
+//kL		if (soundPopup[sound] != 0)
+//		{
+		soundPopup[sound]->play();
+//		}
 	}
 
 	if (_popupStep < 1.0)
@@ -192,44 +198,54 @@ void Window::popup()
 void Window::draw()
 {
 	Surface::draw();
+
+
 	SDL_Rect square;
 
 	if (_popup == POPUP_HORIZONTAL || _popup == POPUP_BOTH)
 	{
-		square.x = (int)((getWidth() - getWidth() * _popupStep) / 2);
-		square.w = (int)(getWidth() * _popupStep);
+		square.x = static_cast<Sint16>(
+				(static_cast<double>(getWidth()) - (static_cast<double>(getWidth()) * _popupStep)) / 2);
+		square.w = static_cast<Uint16>(
+				static_cast<double>(getWidth()) * _popupStep);
 	}
 	else
 	{
 		square.x = 0;
-		square.w = getWidth();
+		square.w = static_cast<Uint16>(getWidth());
 	}
 
 	if (_popup == POPUP_VERTICAL || _popup == POPUP_BOTH)
 	{
-		square.y = (int)((getHeight() - getHeight() * _popupStep) / 2);
-		square.h = (int)(getHeight() * _popupStep);
+		square.y = static_cast<Sint16>(
+				(static_cast<double>(getHeight()) - (static_cast<double>(getHeight()) * _popupStep)) / 2.0);
+		square.h = static_cast<Uint16>(
+				static_cast<double>(getHeight()) * _popupStep);
 	}
 	else
 	{
 		square.y = 0;
-		square.h = getHeight();
+		square.h = static_cast<Uint16>(getHeight());
 	}
 
-	int mul = 1;
+	Uint8 mult = 1;
 	if (_contrast)
 	{
-		mul = 2;
+		mult = 2;
 	}
-	Uint8 color = _color + 3 * mul;
+	Uint8 color = _color + 3 * mult;
 
-	for (int i = 0; i < 5; ++i)
+	for (int
+			i = 0;
+			i < 5;
+			++i)
 	{
 		drawRect(&square, color);
+
 		if (i < 2)
-			color -= 1 * mul;
+			color -= 1 * mult;
 		else
-			color += 1 * mul;
+			color += 1 * mult;
 
 		square.x++;
 		square.y++;
@@ -247,12 +263,13 @@ void Window::draw()
 
 	if (_bg != 0)
 	{
-		_bg->getCrop()->x = getX() + square.x - _dx;
-		_bg->getCrop()->y = getY() + square.y - _dy;
-		_bg->getCrop()->w = square.w ;
-		_bg->getCrop()->h = square.h ;
-		_bg->setX(square.x);
-		_bg->setY(square.y);
+		_bg->getCrop()->x = static_cast<Sint16>(getX() + static_cast<int>(square.x) - _dx);
+		_bg->getCrop()->y = static_cast<Sint16>(getY() + static_cast<int>(square.y) - _dy);
+		_bg->getCrop()->w = square.w;
+		_bg->getCrop()->h = square.h;
+
+		_bg->setX(static_cast<int>(square.x));
+		_bg->setY(static_cast<int>(square.y));
 
 		_bg->blit(this);
 	}

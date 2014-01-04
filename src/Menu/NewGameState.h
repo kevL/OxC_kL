@@ -20,16 +20,18 @@
 #ifndef OPENXCOM_NEWGAMESTATE_H
 #define OPENXCOM_NEWGAMESTATE_H
 
-#include "../Engine/State.h"
 #include "../Savegame/SavedGame.h"
+
+#include "../Engine/State.h"
 
 
 namespace OpenXcom
 {
 
+class Text;
 class TextButton;
 class Window;
-class Text;
+
 
 /**
  * New Game window that displays a list
@@ -40,10 +42,18 @@ class NewGameState
 	:
 		public State
 {
+
 private:
-	TextButton* _btnBeginner, * _btnExperienced, * _btnVeteran, * _btnGenius, * _btnSuperhuman, * _btnCancel;
+	TextButton
+		* _btnBeginner,
+		* _btnExperienced,
+		* _btnVeteran,
+		* _btnGenius,
+		* _btnSuperhuman,
+		* _btnCancel;
 	Window* _window;
 	Text* _txtTitle;
+
 
 	public:
 		/// Creates the New Game state.
@@ -53,6 +63,7 @@ private:
 
 		/// Creates a new game.
 		void newGame(GameDifficulty diff);
+
 		/// Handler for clicking the Beginner button.
 		void btnBeginnerClick(Action* action);
 		/// Handler for clicking the Experienced button.

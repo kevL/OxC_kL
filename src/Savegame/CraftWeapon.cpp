@@ -18,10 +18,12 @@
  */
 
 #include "CraftWeapon.h"
-#include "../Ruleset/RuleCraftWeapon.h"
-#include "../Ruleset/Ruleset.h"
-#include "../Ruleset/RuleItem.h"
+
 #include "CraftWeaponProjectile.h"
+
+#include "../Ruleset/RuleCraftWeapon.h"
+#include "../Ruleset/RuleItem.h"
+#include "../Ruleset/Ruleset.h"
 
 
 namespace OpenXcom
@@ -32,7 +34,9 @@ namespace OpenXcom
  * @param rules Pointer to ruleset.
  * @param ammo Initial ammo.
  */
-CraftWeapon::CraftWeapon(RuleCraftWeapon* rules, int ammo)
+CraftWeapon::CraftWeapon(
+		RuleCraftWeapon* rules,
+		int ammo)
 	:
 		_rules(rules),
 		_ammo(ammo),
@@ -83,7 +87,7 @@ RuleCraftWeapon* CraftWeapon::getRules() const
 
 /**
  * Returns the ammo contained in this craft weapon.
- * @return Weapon ammo.
+ * @return, Weapon ammo
  */
 int CraftWeapon::getAmmo() const
 {
@@ -92,11 +96,12 @@ int CraftWeapon::getAmmo() const
 
 /**
  * Changes the ammo contained in this craft weapon.
- * @param ammo Weapon ammo.
+ * @param ammo, Weapon ammo
  */
 bool CraftWeapon::setAmmo(int ammo)
 {
 	_ammo = ammo;
+
 	if (_ammo < 0)
 	{
 		_ammo = 0;
@@ -105,16 +110,14 @@ bool CraftWeapon::setAmmo(int ammo)
 	}
 
 	if (_ammo > _rules->getAmmoMax())
-	{
 		_ammo = _rules->getAmmoMax();
-	}
 
 	return true;
 }
 
 /**
  * Returns whether this craft weapon needs rearming.
- * @return Rearming status.
+ * @return, Rearming status
  */
 bool CraftWeapon::isRearming() const
 {
@@ -124,7 +127,7 @@ bool CraftWeapon::isRearming() const
 /**
  * Changes whether this craft weapon needs rearming
  * (for example, in case there's no more ammo).
- * @param rearming Rearming status.
+ * @param rearming, Rearming status
  */
 void CraftWeapon::setRearming(bool rearming)
 {
@@ -133,11 +136,13 @@ void CraftWeapon::setRearming(bool rearming)
 
 /**
  * Rearms this craft weapon's ammo.
- * @param available number of clips available.
- * @param clipSize number of rounds in said clips.
- * @return number of clips used.
+ * @param available, The number of clips available
+ * @param clipSize, The number of rounds in said clips
+ * @return, The number of clips used
  */
-int CraftWeapon::rearm(const int available, const int clipSize)
+int CraftWeapon::rearm(
+		const int available,
+		const int clipSize)
 {
 	int used = 0;
 
@@ -166,8 +171,8 @@ int CraftWeapon::rearm(const int available, const int clipSize)
 }
 
 /*
- * Fires a projectile from crafts weapon.
- * @return Pointer to the new projectile.
+ * Fires a projectile from craft's weapon.
+ * @return, Pointer to the new projectile
  */
 CraftWeaponProjectile* CraftWeapon::fire() const
 {
@@ -183,21 +188,24 @@ CraftWeaponProjectile* CraftWeapon::fire() const
 }
 
 /*
- * get how many clips are loaded into this weapon.
- * @param ruleset a pointer to the core ruleset.
- * @return number of clips loaded.
+ * Get how many clips are loaded in this weapon.
+ * @param ruleset, A pointer to the core ruleset
+ * @return, The number of clips loaded
  */
-int CraftWeapon::getClipsLoaded(Ruleset *ruleset)
+int CraftWeapon::getClipsLoaded(Ruleset* ruleset)
 {
-	int retVal = (int)floor((double)_ammo / _rules->getRearmRate());
-	RuleItem *clip = ruleset->getItem(_rules->getClipItem());
+	int ret = static_cast<int>(
+					floor(static_cast<float>(_ammo) / static_cast<float>(_rules->getRearmRate())));
 
-	if (clip && clip->getClipSize() > 0)
+	RuleItem* clip = ruleset->getItem(_rules->getClipItem());
+	if (clip
+		&& clip->getClipSize() > 0)
 	{
-		retVal = (int)floor((double)_ammo / clip->getClipSize());
+		ret = static_cast<int>(
+					floor(static_cast<float>(_ammo) / static_cast<float>(clip->getClipSize())));
 	}
 
-	return retVal;
+	return ret;
 }
 
 }

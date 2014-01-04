@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_BUILDFACILITIESSTATE_H
 #define OPENXCOM_BUILDFACILITIESSTATE_H
 
@@ -34,6 +35,7 @@ class TextButton;
 class TextList;
 class Window;
 
+
 /**
  * Window shown with all the facilities
  * available to build.
@@ -42,26 +44,33 @@ class BuildFacilitiesState
 	:
 		public State
 {
+
 protected:
 	Base* _base;
 	State* _state;
 	std::vector<RuleBaseFacility*> _facilities;
 
-	TextButton* _btnOk;
-	Window* _window;
 	Text* _txtTitle;
+	TextButton* _btnOk;
 	TextList* _lstFacilities;
+	Window* _window;
+
 
 	public:
 		/// Creates the Build Facilities state.
-		BuildFacilitiesState(Game* game, Base* base, State* state);
+		BuildFacilitiesState(
+				Game* game,
+				Base* base,
+				State* state);
 		/// Cleans up the Build Facilities state.
 		~BuildFacilitiesState();
 
 		/// Populates the build option list.
 		virtual void PopulateBuildList();
+
 		/// Updates the base stats.
 		void init();
+
 		/// Handler for clicking the OK button.
 		void btnOkClick(Action* action);
 		/// Handler for clicking the Facilities list.

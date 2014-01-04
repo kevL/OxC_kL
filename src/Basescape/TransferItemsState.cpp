@@ -103,7 +103,7 @@ TransferItemsState::TransferItemsState(
 
 
 	_window					= new Window(this, 320, 200, 0, 0);
-	_txtTitle				= new Text(310, 17, 5, 9);
+	_txtTitle				= new Text(310, 16, 5, 9);
 
 	_txtItem				= new Text(128, 9, 16, 24);
 	_txtQuantity			= new Text(35, 9, 141, 24);

@@ -18,21 +18,27 @@
  */
 
 #include "LoadState.h"
-#include "../Engine/Logger.h"
-#include "../Savegame/SavedGame.h"
-#include "../Savegame/SavedBattleGame.h"
-#include "../Engine/CrossPlatform.h"
-#include "../Engine/Game.h"
-#include "../Engine/Exception.h"
-#include "../Engine/Language.h"
-#include "../Engine/Palette.h"
+
+#include "DeleteGameState.h"
+#include "ErrorMessageState.h"
+
+#include "../Battlescape/BattlescapeState.h"
+
 #include "../Engine/Action.h"
+#include "../Engine/CrossPlatform.h"
+#include "../Engine/Exception.h"
+#include "../Engine/Game.h"
+#include "../Engine/Language.h"
+#include "../Engine/Logger.h"
+#include "../Engine/Palette.h"
+
 #include "../Interface/Text.h"
 #include "../Interface/TextList.h"
+
 #include "../Geoscape/GeoscapeState.h"
-#include "ErrorMessageState.h"
-#include "../Battlescape/BattlescapeState.h"
-#include "DeleteGameState.h"
+
+#include "../Savegame/SavedBattleGame.h"
+#include "../Savegame/SavedGame.h"
 
 
 namespace OpenXcom
@@ -43,9 +49,14 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param origin Game section that originated this state.
  */
-LoadState::LoadState(Game* game, OptionsOrigin origin)
+LoadState::LoadState(
+		Game* game,
+		OptionsOrigin origin)
 	:
-		SavedGameState(game, origin, 0)
+		SavedGameState(
+			game,
+			origin,
+			0)
 {
 	_txtTitle->setText(tr("STR_SELECT_GAME_TO_LOAD"));
 
@@ -58,9 +69,16 @@ LoadState::LoadState(Game* game, OptionsOrigin origin)
  * @param origin Game section that originated this state.
  * @param showMsg True if need to show messages like "Loading game" or "Saving game".
  */
-LoadState::LoadState(Game* game, OptionsOrigin origin, bool showMsg)
+LoadState::LoadState(
+		Game* game,
+		OptionsOrigin origin,
+		bool showMsg)
 	:
-		SavedGameState(game, origin, 0, showMsg)
+		SavedGameState(
+			game,
+			origin,
+			0,
+			showMsg)
 {
 	quickLoad("autosave");
 }
@@ -84,7 +102,13 @@ void LoadState::lstSavesPress(Action* action)
 	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
-		_game->pushState(new DeleteGameState(_game, _origin, _lstSaves->getCellText(_lstSaves->getSelectedRow(), 0), this));
+		_game->pushState(new DeleteGameState(
+										_game,
+										_origin,
+										_lstSaves->getCellText(
+											_lstSaves->getSelectedRow(),
+											0),
+										this));
 	}
 }
 
@@ -99,13 +123,17 @@ void LoadState::quickLoad(const std::string& filename)
 	SavedGame* s = new SavedGame();
 	try
 	{
-		s->load(filename, _game->getRuleset());
+		s->load(
+				filename,
+				_game->getRuleset());
+
 		_game->setSavedGame(s);
 		_game->setState(new GeoscapeState(_game));
 
 		if (_game->getSavedGame()->getSavedBattle() != 0)
 		{
 			_game->getSavedGame()->getSavedBattle()->loadMapResources(_game);
+
 			BattlescapeState* bs = new BattlescapeState(_game);
 			_game->pushState(bs);
 			_game->getSavedGame()->getSavedBattle()->setBattleState(bs);
@@ -114,12 +142,24 @@ void LoadState::quickLoad(const std::string& filename)
 	catch (Exception& e)
 	{
 		Log(LOG_ERROR) << e.what();
+
 		std::wstringstream error;
 		error << tr("STR_LOAD_UNSUCCESSFUL") << L'\x02' << Language::fsToWstr(e.what());
+
 		if (_origin != OPT_BATTLESCAPE)
-			_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(8)+10, "BACK01.SCR", 6));
+			_game->pushState(new ErrorMessageState(
+												_game,
+												error.str(),
+												Palette::blockOffset(8)+10,
+												"BACK01.SCR",
+												6));
 		else
-			_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(0), "TAC00.SCR", -1));
+			_game->pushState(new ErrorMessageState(
+												_game,
+												error.str(),
+												Palette::blockOffset(0),
+												"TAC00.SCR",
+												-1));
 
 		if (_game->getSavedGame() == s)
 			_game->setSavedGame(0);
@@ -129,12 +169,24 @@ void LoadState::quickLoad(const std::string& filename)
 	catch (YAML::Exception& e)
 	{
 		Log(LOG_ERROR) << e.what();
+
 		std::wstringstream error;
 		error << tr("STR_LOAD_UNSUCCESSFUL") << L'\x02' << Language::fsToWstr(e.what());
+
 		if (_origin != OPT_BATTLESCAPE)
-			_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(8)+10, "BACK01.SCR", 6));
+			_game->pushState(new ErrorMessageState(
+												_game,
+												error.str(),
+												Palette::blockOffset(8)+10,
+												"BACK01.SCR",
+												6));
 		else
-			_game->pushState(new ErrorMessageState(_game, error.str(), Palette::blockOffset(0), "TAC00.SCR", -1));
+			_game->pushState(new ErrorMessageState(
+												_game,
+												error.str(),
+												Palette::blockOffset(0),
+												"TAC00.SCR",
+												-1));
 
 		if (_game->getSavedGame() == s)
 			_game->setSavedGame(0);

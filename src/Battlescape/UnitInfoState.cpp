@@ -471,7 +471,11 @@ void UnitInfoState::init()
 	_barStrength->setMax(_unit->getStats()->strength);
 	_barStrength->setValue(_unit->getStats()->strength);
 
-	if (_unit->getStats()->psiSkill > 0
+
+	int minPsi = _game->getSavedGame()->getSoldier(_unit->getId())->getRules()->getMinStats().psiSkill; // kL, shit..
+
+//kL	if (_unit->getStats()->psiSkill > 0
+	if (_unit->getStats()->psiSkill >= minPsi // kL
 		|| (Options::getBool("psiStrengthEval")
 			&& _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements())))
 	{
@@ -492,7 +496,8 @@ void UnitInfoState::init()
 		_barPsiStrength->setVisible(false);
 	}
 
-	if (_unit->getStats()->psiSkill > 0)
+//kL	if (_unit->getStats()->psiSkill > 0
+	if (_unit->getStats()->psiSkill >= minPsi) // kL
 	{
 		ss.str(L"");
 		ss << _unit->getStats()->psiSkill;

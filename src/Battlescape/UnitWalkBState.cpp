@@ -356,9 +356,9 @@ bool UnitWalkBState::doStatusWalk()
 	}
 
 	// unit moved from one tile to the other, update the tiles & investigate new flooring
-//TEST!	if (!_tileSwitchDone // kL
-//TEST!		&& _unit->getPosition() != _unit->getLastPosition())
-	if (_unit->getPosition() != _unit->getLastPosition()) // TEST!
+	if (!_tileSwitchDone										// kL
+		&& _unit->getPosition() != _unit->getLastPosition())	// kL
+//kL	if (_unit->getPosition() != _unit->getLastPosition())
 	{
 		Log(LOG_INFO) << ". tile switch from _lastpos to _pos.";
 

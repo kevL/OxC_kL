@@ -18,19 +18,23 @@
  */
 
 #include "SavedGameState.h"
-#include "../Engine/Logger.h"
-#include "../Savegame/SavedGame.h"
-#include "../Engine/Game.h"
+
 #include "../Engine/Exception.h"
-#include "../Engine/Options.h"
-#include "../Engine/Screen.h"
-#include "../Resource/ResourcePack.h"
+#include "../Engine/Game.h"
 #include "../Engine/Language.h"
+#include "../Engine/Logger.h"
+#include "../Engine/Options.h"
 #include "../Engine/Palette.h"
-#include "../Interface/TextButton.h"
-#include "../Interface/Window.h"
+#include "../Engine/Screen.h"
+
 #include "../Interface/Text.h"
+#include "../Interface/TextButton.h"
 #include "../Interface/TextList.h"
+#include "../Interface/Window.h"
+
+#include "../Resource/ResourcePack.h"
+
+#include "../Savegame/SavedGame.h"
 
 
 namespace OpenXcom
@@ -41,7 +45,10 @@ namespace OpenXcom
  * @param game, Pointer to the core game.
  * @param origin, Game section that originated this state.
  */
-SavedGameState::SavedGameState(Game* game, OptionsOrigin origin, int firstValidRow)
+SavedGameState::SavedGameState(
+		Game* game,
+		OptionsOrigin origin,
+		int firstValidRow)
 	:
 		State(game),
 		_origin(origin),
@@ -52,17 +59,15 @@ SavedGameState::SavedGameState(Game* game, OptionsOrigin origin, int firstValidR
 	_screen = false;
 
 	_window		= new Window(this, 320, 200, 0, 0, POPUP_BOTH);
-
 	_txtTitle	= new Text(310, 17, 5, 8);
 
 	_txtDelete	= new Text(310, 9, 5, 23);
 
 	_txtName	= new Text(176, 9, 16, 32);
-	_txtTime	= new Text(30, 9, 190, 32);
-	_txtDate	= new Text(84, 9, 220, 32);
+	_txtTime	= new Text(30, 9, 192, 32);
+	_txtDate	= new Text(84, 9, 222, 32);
 
-	_lstSaves	= new TextList(284, 120, 16, 41); // when editing, the up/down arrow jogs a few px right.
-//_lstSaves->setColumns(5, 168, 30, 26, 24, 32);
+	_lstSaves	= new TextList(285, 120, 16, 41); // when editing, the up/down arrow jogs a few px right.
 
 	_txtStatus	= new Text(320, 17, 0, 92);
 	_txtDetails = new Text(288, 9, 16, 165);
@@ -71,11 +76,13 @@ SavedGameState::SavedGameState(Game* game, OptionsOrigin origin, int firstValidR
 
 	if (_origin != OPT_BATTLESCAPE)
 	{
-		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
+		_game->setPalette(
+					_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)),
+					Palette::backPos,
+					16);
 	}
 
 	add(_window);
-	add(_btnCancel);
 	add(_txtTitle);
 	add(_txtDelete);
 	add(_txtName);
@@ -84,6 +91,7 @@ SavedGameState::SavedGameState(Game* game, OptionsOrigin origin, int firstValidR
 	add(_lstSaves);
 	add(_txtStatus);
 	add(_txtDetails);
+	add(_btnCancel);
 
 	centerAllSurfaces();
 
@@ -95,7 +103,9 @@ SavedGameState::SavedGameState(Game* game, OptionsOrigin origin, int firstValidR
 
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)& SavedGameState::btnCancelClick);
-	_btnCancel->onKeyboardPress((ActionHandler)& SavedGameState::btnCancelClick, (SDLKey) Options::getInt("keyCancel"));
+	_btnCancel->onKeyboardPress(
+					(ActionHandler)& SavedGameState::btnCancelClick,
+					(SDLKey) Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setBig();
@@ -114,13 +124,13 @@ SavedGameState::SavedGameState(Game* game, OptionsOrigin origin, int firstValidR
 	_txtDate->setColor(Palette::blockOffset(15)-1);
 	_txtDate->setText(tr("STR_DATE"));
 
-	_txtStatus->setColor(Palette::blockOffset(6)+4);	// kL, lavender
+	_txtStatus->setColor(Palette::blockOffset(6)+4);
 	_txtStatus->setBig();
 	_txtStatus->setAlign(ALIGN_CENTER);
 
 	_lstSaves->setColor(Palette::blockOffset(8)+10);
 	_lstSaves->setArrowColor(Palette::blockOffset(8)+5);
-	_lstSaves->setColumns(5, 168, 30, 26, 24, 32);
+	_lstSaves->setColumns(5, 168, 30, 26, 24, 28);
 	_lstSaves->setSelectable(true);
 	_lstSaves->setBackground(_window);
 	_lstSaves->setMargin(8);
@@ -138,7 +148,11 @@ SavedGameState::SavedGameState(Game* game, OptionsOrigin origin, int firstValidR
  * @param origin, Game section that originated this state.
  * @param showMsg, True if need to show messages like "Loading game" or "Saving game".
  */
-SavedGameState::SavedGameState(Game* game, OptionsOrigin origin, int firstValidRow, bool showMsg)
+SavedGameState::SavedGameState(
+		Game* game,
+		OptionsOrigin origin,
+		int firstValidRow,
+		bool showMsg)
 	:
 		State(game),
 		_origin(origin),
@@ -148,7 +162,11 @@ SavedGameState::SavedGameState(Game* game, OptionsOrigin origin, int firstValidR
 {
 	if (_showMsg)
 	{
-		_txtStatus = new Text(320, 17, Screen::getDX(), Screen::getDY() + 64);
+		_txtStatus = new Text(
+							320,
+							17,
+							Screen::getDX(),
+							Screen::getDY() + 64);
 		add(_txtStatus);
 
 		_txtStatus->setBig();
@@ -156,12 +174,12 @@ SavedGameState::SavedGameState(Game* game, OptionsOrigin origin, int firstValidR
 
 		if (origin == OPT_BATTLESCAPE)
 		{
-			_txtStatus->setColor(Palette::blockOffset(13)+5);	// kL, blue
+			_txtStatus->setColor(Palette::blockOffset(13)+5);
 			_txtStatus->setHighContrast(true);
 		}
 		else
 		{
-			_txtStatus->setColor(Palette::blockOffset(11)+3);	// kL, purple
+			_txtStatus->setColor(Palette::blockOffset(11)+3);
 		}
 	}
 }
@@ -189,7 +207,10 @@ void SavedGameState::init()
 
 	if (_origin != OPT_BATTLESCAPE)
 	{
-		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
+		_game->setPalette(
+					_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)),
+					Palette::backPos,
+					16);
 	}
 	else
 	{
@@ -212,7 +233,10 @@ void SavedGameState::init()
 void SavedGameState::updateList()
 {
 	_lstSaves->clearList();
-	_saves = SavedGame::getList(_lstSaves, _game->getLanguage(), &_details);
+	_saves = SavedGame::getList(
+							_lstSaves,
+							_game->getLanguage(),
+							&_details);
 }
 
 /**
@@ -222,7 +246,9 @@ void SavedGameState::updateList()
 void SavedGameState::updateStatus(const std::string& msg)
 {
 	_txtStatus->setText(tr(msg));
+
 	blit();
+
 	_game->getScreen()->flip();
 }
 
