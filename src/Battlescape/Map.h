@@ -46,12 +46,12 @@ class Timer;
 
 enum CursorType
 {
-	CT_NONE,
-	CT_NORMAL,
-	CT_AIM,
-	CT_PSI,
-	CT_WAYPOINT,
-	CT_THROW
+	CT_NONE,		// 0
+	CT_NORMAL,		// 1
+	CT_AIM,			// 2
+	CT_PSI,			// 3
+	CT_WAYPOINT,	// 4
+	CT_THROW		// 5
 };
 
 

@@ -64,10 +64,9 @@ UnitInfoState::UnitInfoState(
 		_unit(unit),
 		_parent(parent)
 {
-	_bg = new Surface(320, 200, 0, 0);
-	_txtName = new Text(300, 17, 10, 4);
+	_bg			= new Surface(320, 200, 0, 0);
+	_txtName	= new Text(300, 17, 10, 4);
 
-	// kL_note: move numberUnits right 1px
 	_txtTimeUnits = new Text(120, 9, 8, 31);
 	_numTimeUnits = new Text(18, 9, 151, 31);
 	_barTimeUnits = new Bar(170, 5, 170, 32);
@@ -402,88 +401,104 @@ UnitInfoState::~UnitInfoState()
 void UnitInfoState::init()
 {
 	std::wstringstream ss;
-	ss << _unit->getTimeUnits();
-	_numTimeUnits->setText(ss.str());
-	_barTimeUnits->setMax(_unit->getStats()->tu);
-	_barTimeUnits->setValue(_unit->getTimeUnits());
+	int stat;
+	double arbitraryVariable;
+	int minPsi = 0;
 
-	ss.str(L"");
-	if (_unit->getType() == "SOLDIER") // aliens have their rank in their "name", soldiers don't
+	if (_unit->getType() == "SOLDIER")
 	{
 		ss << tr(_unit->getRankString());
 		ss << " ";
+
+		minPsi = _game->getSavedGame()->getSoldier(_unit->getId())->getRules()->getMinStats().psiSkill - 1; // kL, shit..
 	}
 	ss << _unit->getName(_game->getLanguage(), BattlescapeGame::_debugPlay);
 	_txtName->setText(ss.str());
 
+	stat = _unit->getTimeUnits();
 	ss.str(L"");
-	ss << _unit->getEnergy();
+	ss << stat;
+	_numTimeUnits->setText(ss.str());
+	_barTimeUnits->setMax(static_cast<double>(_unit->getStats()->tu));
+	_barTimeUnits->setValue(static_cast<double>(stat));
+
+	stat = _unit->getEnergy();
+	ss.str(L"");
+	ss << stat;
 	_numEnergy->setText(ss.str());
-	_barEnergy->setMax(_unit->getStats()->stamina);
-	_barEnergy->setValue(_unit->getEnergy());
+	_barEnergy->setMax(static_cast<double>(_unit->getStats()->stamina));
+	_barEnergy->setValue(static_cast<double>(stat));
 
+	stat = _unit->getHealth();
 	ss.str(L"");
-	ss << _unit->getHealth();
+	ss << stat;
 	_numHealth->setText(ss.str());
-	_barHealth->setMax(_unit->getStats()->health);
-	_barHealth->setValue(_unit->getHealth());
-	_barHealth->setValue2(_unit->getStunlevel());
+	_barHealth->setMax(static_cast<double>(_unit->getStats()->health));
+	_barHealth->setValue(static_cast<double>(stat));
+	_barHealth->setValue2(static_cast<double>(_unit->getStunlevel()));
 
+	stat = _unit->getFatalWounds();
 	ss.str(L"");
-	ss << _unit->getFatalWounds();
+	ss << stat;
 	_numFatalWounds->setText(ss.str());
-	_barFatalWounds->setMax(_unit->getFatalWounds());
-	_barFatalWounds->setValue(_unit->getFatalWounds());
+	_barFatalWounds->setMax(static_cast<double>(stat));
+	_barFatalWounds->setValue(static_cast<double>(stat));
 
+	stat = _unit->getStats()->bravery;
 	ss.str(L"");
-	ss << _unit->getStats()->bravery;
+	ss << stat;
 	_numBravery->setText(ss.str());
-	_barBravery->setMax(_unit->getStats()->bravery);
-	_barBravery->setValue(_unit->getStats()->bravery);
+	_barBravery->setMax(static_cast<double>(stat));
+	_barBravery->setValue(static_cast<double>(stat));
 
+	stat = _unit->getMorale();
 	ss.str(L"");
-	ss << _unit->getMorale();
+	ss << stat;
 	_numMorale->setText(ss.str());
 	_barMorale->setMax(100);
-	_barMorale->setValue(_unit->getMorale());
+	_barMorale->setValue(static_cast<double>(stat));
 
+	stat = _unit->getStats()->reactions;
 	ss.str(L"");
-	ss << _unit->getStats()->reactions;
+	ss << stat;
 	_numReactions->setText(ss.str());
-	_barReactions->setMax(_unit->getStats()->reactions);
-	_barReactions->setValue(_unit->getStats()->reactions);
+	_barReactions->setMax(static_cast<double>(stat));
+	_barReactions->setValue(static_cast<double>(stat));
 
+	arbitraryVariable = static_cast<double>(_unit->getStats()->firing);
+	stat = static_cast<int>(arbitraryVariable * _unit->getAccuracyModifier());
 	ss.str(L"");
-	ss << (int)(_unit->getStats()->firing * _unit->getAccuracyModifier());
+	ss << stat;
 	_numFiring->setText(ss.str());
-	_barFiring->setMax(_unit->getStats()->firing);
-	_barFiring->setValue(_unit->getStats()->firing * _unit->getAccuracyModifier());
+	_barFiring->setMax(arbitraryVariable);
+	_barFiring->setValue(static_cast<double>(stat));
 
+	arbitraryVariable = static_cast<double>(_unit->getStats()->throwing);
+	stat = static_cast<int>(arbitraryVariable * _unit->getAccuracyModifier());
 	ss.str(L"");
-	ss << (int)(_unit->getStats()->throwing * _unit->getAccuracyModifier());
+	ss << stat;
 	_numThrowing->setText(ss.str());
-	_barThrowing->setMax(_unit->getStats()->throwing);
-	_barThrowing->setValue(_unit->getStats()->throwing * _unit->getAccuracyModifier());
+	_barThrowing->setMax(arbitraryVariable);
+	_barThrowing->setValue(static_cast<double>(stat));
 
+	stat = _unit->getStats()->strength;
 	ss.str(L"");
-	ss << _unit->getStats()->strength;
+	ss << stat;
 	_numStrength->setText(ss.str());
-	_barStrength->setMax(_unit->getStats()->strength);
-	_barStrength->setValue(_unit->getStats()->strength);
+	_barStrength->setMax(static_cast<double>(stat));
+	_barStrength->setValue(static_cast<double>(stat));
 
 
-	int minPsi = _game->getSavedGame()->getSoldier(_unit->getId())->getRules()->getMinStats().psiSkill; // kL, shit..
-
-//kL	if (_unit->getStats()->psiSkill > 0
-	if (_unit->getStats()->psiSkill >= minPsi // kL
+	if (_unit->getStats()->psiSkill > minPsi
 		|| (Options::getBool("psiStrengthEval")
 			&& _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements())))
 	{
+		stat = _unit->getStats()->psiStrength;
 		ss.str(L"");
-		ss << _unit->getStats()->psiStrength;
+		ss << stat;
 		_numPsiStrength->setText(ss.str());
-		_barPsiStrength->setMax(_unit->getStats()->psiStrength);
-		_barPsiStrength->setValue(_unit->getStats()->psiStrength);
+		_barPsiStrength->setMax(static_cast<double>(stat));
+		_barPsiStrength->setValue(static_cast<double>(stat));
 
 		_txtPsiStrength->setVisible(true);
 		_numPsiStrength->setVisible(true);
@@ -496,14 +511,14 @@ void UnitInfoState::init()
 		_barPsiStrength->setVisible(false);
 	}
 
-//kL	if (_unit->getStats()->psiSkill > 0
-	if (_unit->getStats()->psiSkill >= minPsi) // kL
+	if (_unit->getStats()->psiSkill > minPsi)
 	{
+		stat = _unit->getStats()->psiSkill;
 		ss.str(L"");
-		ss << _unit->getStats()->psiSkill;
+		ss << stat;
 		_numPsiSkill->setText(ss.str());
-		_barPsiSkill->setMax(_unit->getStats()->psiSkill);
-		_barPsiSkill->setValue(_unit->getStats()->psiSkill);
+		_barPsiSkill->setMax(static_cast<double>(stat));
+		_barPsiSkill->setValue(static_cast<double>(stat));
 
 		_txtPsiSkill->setVisible(true);
 		_numPsiSkill->setVisible(true);
@@ -516,35 +531,41 @@ void UnitInfoState::init()
 		_barPsiSkill->setVisible(false);
 	}
 
+	stat = _unit->getArmor(SIDE_FRONT);
 	ss.str(L"");
-	ss << _unit->getArmor(SIDE_FRONT);
+	ss << stat;
 	_numFrontArmor->setText(ss.str());
-	_barFrontArmor->setMax(_unit->getArmor()->getFrontArmor());
-	_barFrontArmor->setValue(_unit->getArmor(SIDE_FRONT));
+	_barFrontArmor->setMax(static_cast<double>(_unit->getArmor()->getFrontArmor()));
+	_barFrontArmor->setValue(static_cast<double>(stat));
 
+	arbitraryVariable = _unit->getArmor()->getSideArmor(); // haha!!
+	stat = _unit->getArmor(SIDE_LEFT);
 	ss.str(L"");
-	ss << _unit->getArmor(SIDE_LEFT);
+	ss << stat;
 	_numLeftArmor->setText(ss.str());
-	_barLeftArmor->setMax(_unit->getArmor()->getSideArmor());
-	_barLeftArmor->setValue(_unit->getArmor(SIDE_LEFT));
+	_barLeftArmor->setMax(arbitraryVariable);
+	_barLeftArmor->setValue(static_cast<double>(stat));
 
+	stat = _unit->getArmor(SIDE_RIGHT);
 	ss.str(L"");
-	ss << _unit->getArmor(SIDE_RIGHT);
+	ss << stat;
 	_numRightArmor->setText(ss.str());
-	_barRightArmor->setMax(_unit->getArmor()->getSideArmor());
-	_barRightArmor->setValue(_unit->getArmor(SIDE_RIGHT));
+	_barRightArmor->setMax(arbitraryVariable);
+	_barRightArmor->setValue(static_cast<double>(stat));
 
+	stat = _unit->getArmor(SIDE_REAR);
 	ss.str(L"");
-	ss << _unit->getArmor(SIDE_REAR);
+	ss << stat;
 	_numRearArmor->setText(ss.str());
 	_barRearArmor->setMax(_unit->getArmor()->getRearArmor());
-	_barRearArmor->setValue(_unit->getArmor(SIDE_REAR));
+	_barRearArmor->setValue(static_cast<double>(stat));
 
+	stat = _unit->getArmor(SIDE_UNDER);
 	ss.str(L"");
-	ss << _unit->getArmor(SIDE_UNDER);
+	ss << stat;
 	_numUnderArmor->setText(ss.str());
 	_barUnderArmor->setMax(_unit->getArmor()->getUnderArmor());
-	_barUnderArmor->setValue(_unit->getArmor(SIDE_UNDER));
+	_barUnderArmor->setValue(static_cast<double>(stat));
 }
 
 /**
@@ -581,8 +602,8 @@ void UnitInfoState::handle(Action* action)
 		{
 			btnPrevClick(action);
 		}
-		else if (action->getDetails()->key.keysym.sym == Options::getInt("keyCancel") ||
-				 action->getDetails()->key.keysym.sym == Options::getInt("keyBattleStats"))
+		else if (action->getDetails()->key.keysym.sym == Options::getInt("keyCancel")
+			|| action->getDetails()->key.keysym.sym == Options::getInt("keyBattleStats"))
 		{
 			_game->popState();
 		}

@@ -65,7 +65,7 @@ CraftsState::CraftsState(
 	_txtStatus	= new Text(50, 9, 118, 49);
 	_txtWeapon	= new Text(45, 17, 183, 41);
 	_txtCrew	= new Text(35, 9, 230, 49);
-	_txtHwp		= new Text(25, 9, 276, 49);
+	_txtHwp		= new Text(25, 9, 268, 49);
 
 	_lstCrafts	= new TextList(285, 112, 16, 59);
 

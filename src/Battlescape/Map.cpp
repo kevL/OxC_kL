@@ -98,10 +98,10 @@ Map::Map(
 		int visibleMapHeight)
 	:
 		InteractiveSurface(
-				width,
-				height,
-				x,
-				y),
+			width,
+			height,
+			x,
+			y),
 		_game(game),
 		_arrow(0),
 		_selectorX(0),
@@ -294,6 +294,9 @@ void Map::draw()
 		drawTerrain(this);
 	} */
 
+
+	SavedBattleGame* _battle = _game->getSavedGame()->getSavedBattle(); // kL, getIcons() etc.
+
 	if ((_save->getSelectedUnit()
 			&& _save->getSelectedUnit()->getVisible())
 		|| _save->getSelectedUnit() == 0
@@ -314,6 +317,9 @@ void Map::draw()
 			//Log(LOG_INFO) << ". . . . . . drawTerrain() Set _reveal = " << _reveal;
 		}
 
+		if (_battle->getSide() == FACTION_PLAYER)
+			_battle->getBattleState()->getIcons()->setVisible(true);
+
 		drawTerrain(this);
 	}
 	else // "hidden movement"
@@ -325,6 +331,8 @@ void Map::draw()
 			//Log(LOG_INFO) << ". . . . . . kL_preReveal, set " << kL_preReveal;
 			//Log(LOG_INFO) << ". . . . . . _reveal, set " << _reveal;
 		}
+
+		_battle->getBattleState()->getIcons()->setVisible(false);
 
 		//Log(LOG_INFO) << ". . . . blit( hidden movement )";
 		_message->blit(this);

@@ -43,7 +43,7 @@ class SavedBattleGame;
 class Surface;
 class Text;
 class Timer;
-class TurnCounter;		// kL
+class TurnCounter; // kL
 class WarningMessage;
 
 
@@ -94,7 +94,7 @@ private:
 		* _btnNextSoldier,
 		* _btnNextStop,
 		* _btnShowLayers,
-		* _btnHelp,
+		* _btnOptions,
 
 		* _btnEndTurn,
 		* _btnAbort,
@@ -283,8 +283,11 @@ private:
 //		void txtTooltipIn(Action* action);
 		/// Handler for hiding tooltip.
 //		void txtTooltipOut(Action* action);
+
 		/// kL. Gets the TurnCounter.
-		TurnCounter* getTurnCounter() const;	// kL
+		TurnCounter* getTurnCounter() const; // kL
+		/// kL. Get the Icons.
+		InteractiveSurface* getIcons() const; // kL
 };
 
 }

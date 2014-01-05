@@ -235,6 +235,7 @@ private:
 				bool player);
 		/// Sets up the cursor taking into account the action.
 		void setupCursor();
+
 		/// Gets the map.
 		Map* getMap();
 		/// Gets the save.
@@ -245,6 +246,7 @@ private:
 		Pathfinding* getPathfinding();
 		/// Gets the resourcepack.
 		ResourcePack* getResourcePack();
+
 		/// Gets the ruleset.
 		const Ruleset* getRuleset() const;
 		///

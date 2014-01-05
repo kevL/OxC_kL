@@ -123,10 +123,10 @@ BattlescapeState::BattlescapeState(Game* game)
 
 	// Create buttonbar - this should be on the centerbottom of the screen
 	_icons				= new InteractiveSurface(
-								iconsWidth,
-								iconsHeight,
-								(screenWidth / 2) - (iconsWidth / 2),
-								screenHeight - iconsHeight);
+											iconsWidth,
+											iconsHeight,
+											(screenWidth / 2) - (iconsWidth / 2),
+											screenHeight - iconsHeight);
 
 	// Create the battlemap view
 	// the actual map height is the total height minus the height of the buttonbar
@@ -156,7 +156,7 @@ BattlescapeState::BattlescapeState(Game* game)
 	_btnNextSoldier		= new InteractiveSurface(32, 16, _icons->getX() + 176, _icons->getY());
 	_btnNextStop		= new InteractiveSurface(32, 16, _icons->getX() + 176, _icons->getY() + 16);
 	_btnShowLayers		= new InteractiveSurface(32, 16, _icons->getX() + 208, _icons->getY());
-	_btnHelp			= new InteractiveSurface(32, 16, _icons->getX() + 208, _icons->getY() + 16);
+	_btnOptions			= new InteractiveSurface(32, 16, _icons->getX() + 208, _icons->getY() + 16);
 	_btnEndTurn			= new InteractiveSurface(32, 16, _icons->getX() + 240, _icons->getY());
 	_btnAbort			= new InteractiveSurface(32, 16, _icons->getX() + 240, _icons->getY() + 16);
 	_btnStats			= new InteractiveSurface(164, 23, _icons->getX() + 107, _icons->getY() + 33);
@@ -260,7 +260,10 @@ BattlescapeState::BattlescapeState(Game* game)
 		{3,		3,		6,		0}
 	};
 
-	_game->setPalette(color, Palette::backPos + 16, 16);
+	_game->setPalette(
+					color,
+					Palette::backPos + 16,
+					16);
 
 	// Fix system colors
 	_game->getCursor()->setColor(Palette::blockOffset(9));
@@ -282,7 +285,7 @@ BattlescapeState::BattlescapeState(Game* game)
 	add(_btnNextSoldier);
 	add(_btnNextStop);
 	add(_btnShowLayers);
-	add(_btnHelp);
+	add(_btnOptions);
 	add(_btnEndTurn);
 	add(_btnAbort);
 	add(_btnStats);
@@ -460,13 +463,13 @@ BattlescapeState::BattlescapeState(Game* game)
 //	_btnShowLayers->onMouseIn((ActionHandler)& BattlescapeState::txtTooltipIn);
 //	_btnShowLayers->onMouseOut((ActionHandler)& BattlescapeState::txtTooltipOut);
 
-	_btnHelp->onMouseClick((ActionHandler)& BattlescapeState::btnHelpClick);
-	_btnHelp->onKeyboardPress(
+	_btnOptions->onMouseClick((ActionHandler)& BattlescapeState::btnHelpClick);
+	_btnOptions->onKeyboardPress(
 					(ActionHandler)& BattlescapeState::btnHelpClick,
 					(SDLKey)Options::getInt("keyBattleOptions"));
-//	_btnHelp->setTooltip("STR_OPTIONS");
-//	_btnHelp->onMouseIn((ActionHandler)& BattlescapeState::txtTooltipIn);
-//	_btnHelp->onMouseOut((ActionHandler)& BattlescapeState::txtTooltipOut);
+//	_btnOptions->setTooltip("STR_OPTIONS");
+//	_btnOptions->onMouseIn((ActionHandler)& BattlescapeState::txtTooltipIn);
+//	_btnOptions->onMouseOut((ActionHandler)& BattlescapeState::txtTooltipOut);
 
 	_btnEndTurn->onMouseClick((ActionHandler)& BattlescapeState::btnEndTurnClick);
 	_btnEndTurn->onKeyboardPress(
@@ -1350,7 +1353,7 @@ void BattlescapeState::btnStatsClick(Action* action)
 {
 	if (playableUnitSelected())
 	{
-		bool b = true;
+		bool edge = false;
 		if (SCROLL_TRIGGER == Options::getInt("battleScrollType")
 			&& SDL_MOUSEBUTTONUP == action->getDetails()->type
 			&& SDL_BUTTON_LEFT == action->getDetails()->button.button)
@@ -1364,7 +1367,7 @@ void BattlescapeState::btnStatsClick(Action* action)
 			{
 				// To avoid handling this event as a click on the stats
 				// button when the mouse is on the scroll-border
-				b = false;
+				edge = true;
 			}
 		}
 
@@ -1373,12 +1376,13 @@ void BattlescapeState::btnStatsClick(Action* action)
 		{
 			_battleGame->getCurrentAction()->waypoints.clear();
 			_battleGame->getMap()->getWaypoints()->clear();
+
 			showLaunchButton(false);
 		}
 
 		_battleGame->cancelCurrentAction(true);
 
-		if (b)
+		if (!edge)
 			popup(new UnitInfoState(
 								_game,
 								_save->getSelectedUnit(),
@@ -2622,12 +2626,21 @@ bool BattlescapeState::allowButtons(bool allowSaving) const
 } */
 
 /**
- * Returns the TurnCounter used by the game.
+ * kL. Returns the TurnCounter used by the game.
  * @return, Pointer to the TurnCounter.
  */
 TurnCounter* BattlescapeState::getTurnCounter() const
 {
 	return _turnCounter;
+}
+
+/**
+ * kL. Get the Icons.
+ * @return, Pointer to the Icon hotbar.
+ */
+InteractiveSurface* BattlescapeState::getIcons() const
+{
+	return _icons;
 }
 
 }

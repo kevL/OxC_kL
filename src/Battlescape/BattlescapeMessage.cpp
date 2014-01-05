@@ -41,16 +41,28 @@ BattlescapeMessage::BattlescapeMessage(
 		int x,
 		int y)
 	:
-		Surface(width, height, x, y)
+		Surface(
+			width,
+			height,
+			x,
+			y)
 {
-	_window = new Window(0, width, height, x, y, POPUP_NONE);
+	_window = new Window(
+						0,
+						width,
+						height,
+						x,
+						y,
+						POPUP_NONE);
 	_window->setColor(Palette::blockOffset(0)-1);
 	_window->setHighContrast(true);
 
 	// 'hidden movement' text
-//kL	_text = new Text(width, height, x, y);
-//	_text = new Text(width - 7, height - 10, x, y + 10);	// kL, good for default font
-	_text = new Text(width - 10, height - 17, x, y + 17);	// kL, PS-adapted font
+	_text = new Text(
+					width - 10,
+					height - 17,
+					x,
+					y + 17);
 	_text->setColor(Palette::blockOffset(0)-1);
 	_text->setAlign(ALIGN_CENTER);
 	_text->setVerticalAlign(ALIGN_MIDDLE);
