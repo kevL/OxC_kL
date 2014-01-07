@@ -18,13 +18,17 @@
  */
 
 #include "MapDataSet.h"
-#include "MapData.h"
+
 #include <fstream>
 #include <sstream>
+
 #include <SDL_endian.h>
+
+#include "MapData.h"
+
+#include "../Engine/CrossPlatform.h"
 #include "../Engine/Exception.h"
 #include "../Engine/SurfaceSet.h"
-#include "../Engine/CrossPlatform.h"
 
 
 namespace OpenXcom
@@ -32,6 +36,7 @@ namespace OpenXcom
 
 MapData* MapDataSet::_blankTile = 0;
 MapData* MapDataSet::_scorchedTile = 0;
+
 
 /**
  * MapDataSet construction.
@@ -59,7 +64,10 @@ MapDataSet::~MapDataSet()
  */
 void MapDataSet::load(const YAML::Node& node)
 {
-	for (YAML::const_iterator i = node.begin(); i != node.end(); ++i)
+	for (YAML::const_iterator
+			i = node.begin();
+			i != node.end();
+			++i)
 	{
 		_name = i->as<std::string>(_name);
 	}
@@ -159,7 +167,7 @@ void MapDataSet::loadData()
 		unsigned char Fuel;
 		unsigned char Light_Source;
 		unsigned char Target_Type;
-		unsigned char u61;
+		unsigned char Xcom_Base;
 		unsigned char u62;
 	};
 #pragma pack(pop)
@@ -183,14 +191,22 @@ void MapDataSet::loadData()
 		_objects.push_back(to);
 
 		// set all the terrain-object properties:
-		for (int frame = 0; frame < 8; frame++)
+		for (int
+				frame = 0;
+				frame < 8;
+				frame++)
 		{
 			to->setSprite(frame,(int)mcd.Frame[frame]);
 		}
 
 		to->setYOffset((int)mcd.P_Level);
-		to->setSpecialType((int)mcd.Target_Type, (int)mcd.Tile_Type);
-		to->setTUCosts((int)mcd.TU_Walk, (int)mcd.TU_Fly, (int)mcd.TU_Slide);
+		to->setSpecialType(
+				(int)mcd.Target_Type,
+				(int)mcd.Tile_Type);
+		to->setTUCosts(
+				(int)mcd.TU_Walk,
+				(int)mcd.TU_Fly,
+				(int)mcd.TU_Slide);
 		to->setFlags(
 				mcd.UFO_Door != 0,
 				mcd.Stop_LOS != 0,
@@ -199,7 +215,8 @@ void MapDataSet::loadData()
 				mcd.Gravlift != 0,
 				mcd.Door != 0,
 				mcd.Block_Fire != 0,
-				mcd.Block_Smoke != 0);
+				mcd.Block_Smoke != 0,
+				mcd.Xcom_Base != 0);
 		to->setTerrainLevel((int)mcd.T_Level);
 		to->setFootstepSound((int)mcd.Footstep);
 		to->setAltMCD((int)(mcd.Alt_MCD));
@@ -220,7 +237,10 @@ void MapDataSet::loadData()
 		mcd.ScanG = SDL_SwapLE16(mcd.ScanG);
 		to->setMiniMapIndex(mcd.ScanG);
 
-		for (int layer = 0; layer < 12; layer++)
+		for (int
+				layer = 0;
+				layer < 12;
+				layer++)
 		{
 			int loft = (int)mcd.LOFT[layer];
 			to->setLoftID(loft, layer);
@@ -255,14 +275,24 @@ void MapDataSet::loadData()
 		if ((*i)->getObjectType() == MapData::O_FLOOR
 			&& (*i)->getBlock(DT_HE) == 0)
 		{
-//kL			(*i)->setBlockValue(1, 1, (*i)->getArmor(), 1, 1, (*i)->getArmor());
-			int armor = (*i)->getArmor();						// kL
-			(*i)->setBlockValue(1, 1, armor, 1, 1, armor);		// kL
+			int armor = (*i)->getArmor();
+			(*i)->setBlockValue(
+							1,
+							1,
+							armor,
+							1,
+							1,
+							armor);
 
 			if ((*i)->getDieMCD())
 			{
-//kL				_objects.at((*i)->getDieMCD())->setBlockValue(1, 1, (*i)->getArmor(), 1, 1, (*i)->getArmor());
-				_objects.at((*i)->getDieMCD())->setBlockValue(1, 1, armor, 1, 1, armor);	// kL
+				_objects.at((*i)->getDieMCD())->setBlockValue(
+															1,
+															1,
+															armor,
+															1,
+															1,
+															armor);
 			}
 		}
 	}
@@ -272,7 +302,9 @@ void MapDataSet::loadData()
 	s1 << "TERRAIN/" << _name << ".PCK";
 	s2 << "TERRAIN/" << _name << ".TAB";
 	_surfaceSet = new SurfaceSet(32, 40);
-	_surfaceSet->loadPck(CrossPlatform::getDataFile(s1.str()), CrossPlatform::getDataFile(s2.str()));
+	_surfaceSet->loadPck(
+					CrossPlatform::getDataFile(s1.str()),
+					CrossPlatform::getDataFile(s2.str()));
 }
 
 /**
@@ -282,7 +314,10 @@ void MapDataSet::unloadData()
 {
 	if (_loaded)
 	{
-		for (std::vector<MapData*>::iterator i = _objects.begin(); i != _objects.end(); ++i)
+		for (std::vector<MapData*>::iterator
+				i = _objects.begin();
+				i != _objects.end();
+				++i)
 		{
 			delete *i;
 		}

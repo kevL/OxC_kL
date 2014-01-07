@@ -50,8 +50,7 @@ class TileEngine;
 
 /**
  * The battlescape data that gets written to disk when the game is saved.
- * A saved game holds all the variable info in a game like mapdata,
- * soldiers, items, etc.
+ * A saved game holds all the variable info in a game like mapdata, soldiers, items, etc.
  */
 class SavedBattleGame
 {
@@ -75,46 +74,34 @@ private:
 		_traceAI,
 		_unitsFalling;
 
-	BattleActionType
-		_tuReserved;
-	UnitFaction
-		_side;
+	BattleActionType _tuReserved;
+	UnitFaction _side;
 
-	BattlescapeState
-		* _battleState;
+	BattlescapeState* _battleState;
 	BattleUnit
 		* _selectedUnit,
 		* _lastSelectedUnit;
-	Pathfinding
-		* _pathfinding;
-	Tile
-		** _tiles;
-	TileEngine
-		* _tileEngine;
+	Pathfinding* _pathfinding;
+	Tile** _tiles;
+	TileEngine* _tileEngine;
 
-//kL	std::vector<BattleUnit*> _exposedUnits;
-	std::string
-		_missionType;
+	std::string _missionType;
 
-	std::list<BattleUnit*>
-		_fallingUnits;
+	std::list<BattleUnit*> _fallingUnits;
 
-	std::vector<BattleItem*>
-		_items;
+	std::vector<BattleItem*> _items;
 	std::vector<BattleUnit*>
+//kL		_exposedUnits,
 		_units;
-	std::vector<MapDataSet*>
-		_mapDataSets;
-	std::vector<Node*>
-		_nodes;
+	std::vector<MapDataSet*> _mapDataSets;
+	std::vector<Node*> _nodes;
 	std::vector<Position>
 		_tileSearch,
 		_storageSpace;
+	std::vector<std::vector<std::pair<int, int>>> _baseModules;
 
-	Uint8
-		_dragButton;			// this is a cache for Options::getString("battleScrollDragButton")
-	bool
-		_dragInvert;			// this is a cache for Options::getString("battleScrollDragInvert")
+	Uint8 _dragButton;			// this is a cache for Options::getString("battleScrollDragButton")
+	bool _dragInvert;			// this is a cache for Options::getString("battleScrollDragInvert")
 	int
 		_dragTimeTolerance,		// this is a cache for Options::getInt("battleScrollDragTimeTolerance")
 		_dragPixelTolerance;	// this is a cache for Options::getInt("battleScrollDragPixelTolerance")
@@ -340,6 +327,10 @@ private:
 		std::vector<Position>& getStorageSpace();
 		/// move all the leftover items to random locations in the storage tiles vector.
 		void randomizeItemLocations(Tile* t);
+		/// get a reference to the baseModules map.
+		std::vector<std::vector<std::pair<int, int>>>& getModuleMap();
+		/// calculate the number of map modules remaining
+		void calculateModuleMap();
 };
 
 }

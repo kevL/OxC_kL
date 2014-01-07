@@ -54,6 +54,8 @@ class Base
 {
 
 private:
+	static const int BASE_SIZE = 6;
+
 	bool
 		_inBattlescape,
 		_retaliationTarget;
@@ -182,7 +184,9 @@ private:
 		void addResearch(ResearchProject* project);
 		/// Remove a ResearchProject from the Base.
 //kL		void removeResearch(ResearchProject*);
-		void removeResearch(ResearchProject* project, bool help = true); // kL
+		void removeResearch(
+				ResearchProject* project,
+				bool help = true); // kL
 		/// kL: Research Help ala XcomUtil.
 		void researchHelp(std::string sProject);
 		/// Add a new Production to Base.
@@ -220,6 +224,16 @@ private:
 		std::vector<BaseFacility*>* getDefenses();
 		/// Gets the base's vehicles.
 		std::vector<Vehicle*>* getVehicles();
+		/// Check all the module connections.
+		void checkModuleConnections();
+		/// Check a single coordinate for module connection.
+		bool checkConnected(
+				int x,
+				int y,
+				int** grid,
+				BaseFacility* (&facilities)[BASE_SIZE][BASE_SIZE]) const;
+		/// Destroy a facility and deal with the side effects.
+		void destroyFacility(std::vector<BaseFacility*>::iterator& facility);
 };
 
 }

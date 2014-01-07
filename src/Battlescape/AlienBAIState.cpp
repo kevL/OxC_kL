@@ -503,13 +503,20 @@ void AlienBAIState::setupPatrol()
 		// assume closest node as "from node"
 		// on same level to avoid strange things, and the node has to match unit size or it will freeze
 		int closest = 1000000;
-		for (std::vector<Node*>::iterator i = _save->getNodes()->begin(); i != _save->getNodes()->end(); ++i)
+		for (std::vector<Node*>::iterator
+				i = _save->getNodes()->begin();
+				i != _save->getNodes()->end();
+				++i)
 		{
 			node = *i;
-			int d = _save->getTileEngine()->distanceSq(_unit->getPosition(), node->getPosition());
+			int d = _save->getTileEngine()->distanceSq(
+													_unit->getPosition(),
+													node->getPosition());
+
 			if (_unit->getPosition().z == node->getPosition().z 
 				&& d < closest 
-				&& (!(node->getType() & Node::TYPE_SMALL) || _unit->getArmor()->getSize() == 1))
+				&& (!(node->getType() & Node::TYPE_SMALL)
+					|| _unit->getArmor()->getSize() == 1))
 			{
 				_fromNode = node;
 				closest = d;
@@ -518,7 +525,8 @@ void AlienBAIState::setupPatrol()
 	}
 
 	int triesLeft = 5;
-	while (_toNode == 0 && triesLeft)
+	while (_toNode == 0
+		&& triesLeft)
 	{
 		triesLeft--;
 
@@ -547,31 +555,42 @@ void AlienBAIState::setupPatrol()
 			}
 		}
 
-		// in base defense missions, the smaller aliens walk towards target nodes - or if there, shoot objects around them
+		// in base defense missions, the non-large aliens walk towards
+		// target nodes - or once there, shoot objects thereabouts
 		else if (_unit->getArmor()->getSize() == 1)
 		{
 			// can i shoot an object?
 			if (_fromNode->isTarget()
 				&& _unit->getMainHandWeapon()
-				&& _unit->getMainHandWeapon()->getAmmoItem()->getRules()->getDamageType() != DT_HE)
+				&& _unit->getMainHandWeapon()->getAmmoItem()->getRules()->getDamageType() != DT_HE
+				&& _save->getModuleMap()[_fromNode->getPosition().x / 10][_fromNode->getPosition().y / 10].second > 0)
 			{
 				// scan this room for objects to destroy
 				int x = (_unit->getPosition().x / 10) * 10;
 				int y = (_unit->getPosition().y / 10) * 10;
-				for (int i = x; i < x + 9; i++)
+				for (int
+						i = x;
+						i < x + 9;
+						i++)
 				{
-					for (int j = y; j < y + 9; j++)
+					for (int
+							j = y;
+							j < y + 9;
+							j++)
 					{
 						MapData* md = _save->getTile(Position(i, j, 1))->getMapData(MapData::O_OBJECT);
 						if (md
-							&& md->getDieMCD()
-							&& md->getArmor() < 60)
+							&& md->isBaseModule()
+//							&& md->getDieMCD()
+//							&& md->getArmor() < 60)
 						{
-							_patrolAction->actor = _unit;
-							_patrolAction->target = Position(i, j, 1);
-							_patrolAction->weapon = _patrolAction->actor->getMainHandWeapon();
-							_patrolAction->type = BA_SNAPSHOT;
-							_patrolAction->TU = _patrolAction->actor->getActionTUs(_patrolAction->type, _patrolAction->weapon);
+							_patrolAction->actor	= _unit;
+							_patrolAction->target	= Position(i, j, 1);
+							_patrolAction->weapon	= _patrolAction->actor->getMainHandWeapon();
+							_patrolAction->type		= BA_SNAPSHOT;
+							_patrolAction->TU		= _patrolAction->actor->getActionTUs(
+																					_patrolAction->type,
+																					_patrolAction->weapon);
 
 							return;
 						}
@@ -582,9 +601,13 @@ void AlienBAIState::setupPatrol()
 			{
 				// find closest high value target which is not already allocated
 				int closest = 1000000;
-				for (std::vector<Node*>::iterator i = _save->getNodes()->begin(); i != _save->getNodes()->end(); ++i)
+				for (std::vector<Node*>::iterator
+						i = _save->getNodes()->begin();
+						i != _save->getNodes()->end();
+						++i)
 				{
-					if ((*i)->isTarget() && !(*i)->isAllocated())
+					if ((*i)->isTarget()
+						&& !(*i)->isAllocated())
 					{
 						node = *i;
 						int d = _save->getTileEngine()->distanceSq(_unit->getPosition(), node->getPosition());
@@ -602,10 +625,16 @@ void AlienBAIState::setupPatrol()
 
 		if (_toNode == 0)
 		{
-			_toNode = _save->getPatrolNode(scout, _unit, _fromNode);
+			_toNode = _save->getPatrolNode(
+										scout,
+										_unit,
+										_fromNode);
 			if (_toNode == 0)
 			{
-				_toNode = _save->getPatrolNode(!scout, _unit, _fromNode);
+				_toNode = _save->getPatrolNode(
+											!scout,
+											_unit,
+											_fromNode);
 			}
 		}
 

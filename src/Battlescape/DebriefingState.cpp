@@ -57,6 +57,7 @@
 #include "../Savegame/AlienBase.h"
 #include "../Savegame/AlienMission.h"
 #include "../Savegame/Base.h"
+#include "../Savegame/BaseFacility.h"
 #include "../Savegame/BattleItem.h"
 #include "../Savegame/Country.h"
 #include "../Savegame/Craft.h"
@@ -565,8 +566,8 @@ void DebriefingState::prepareDebriefing()
 			base = *i;
 			base->setInBattlescape(false);
 
-			double baseLon = (*i)->getLongitude();
-			double baseLat = (*i)->getLatitude();
+			double baseLon = base->getLongitude();
+			double baseLat = base->getLatitude();
 
 			for (std::vector<Region*>::iterator
 					k = save->getRegions()->begin();
@@ -602,6 +603,28 @@ void DebriefingState::prepareDebriefing()
 			{
 				_destroyBase = true;
 			}
+
+			bool facilDestroyed = false;
+			for (std::vector<BaseFacility*>::iterator
+					k = base->getFacilities()->begin();
+					k != base->getFacilities()->end();
+					)
+			{
+				// this facility was demolished
+				if (battle->getModuleMap()[(*k)->getX()][(*k)->getY()].second == 0)
+				{
+					facilDestroyed = true;
+					base->destroyFacility(k);
+				}
+				else
+				{
+					++k;
+				}
+			}
+
+			// that may cause the base to become disjointed, check connections
+			if (facilDestroyed)
+				base->checkModuleConnections();
 		}
 	}
 

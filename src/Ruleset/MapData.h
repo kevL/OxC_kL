@@ -79,6 +79,7 @@ class MapData
 
 private:
 	bool
+		_baseModule,
 		_blockFire,
 		_blockSmoke,
 		_isDoor,
@@ -138,11 +139,26 @@ private:
 		/// Gets whether this is a grav lift.
 		bool isGravLift() const;
 		/// Sets all kinds of flags.
-		void setFlags(bool isUfoDoor, bool stopLOS, bool isNoFloor, int bigWall, bool isGravLift, bool isDoor, bool blockFire, bool blockSmoke);
+		void setFlags(
+				bool isUfoDoor,
+				bool stopLOS,
+				bool isNoFloor,
+				int bigWall,
+				bool isGravLift,
+				bool isDoor,
+				bool blockFire,
+				bool blockSmoke,
+				bool baseModule);
 		/// Gets the amount of blockage of a certain type.
 		int getBlock(ItemDamageType type) const;
 		/// Sets the amount of blockage for all types.
-		void setBlockValue(int lightBlock, int visionBlock, int HEBlock, int smokeBlock, int fireBlock, int gasBlock);
+		void setBlockValue(
+				int lightBlock,
+				int visionBlock,
+				int HEBlock,
+				int smokeBlock,
+				int fireBlock,
+				int gasBlock);
 		/// Gets the offset on the Y axis when drawing this object.
 		int getYOffset() const;
 		/// Sets the offset on the Y axis for drawing this object.
@@ -209,6 +225,8 @@ private:
 		void setTUFly(const int TUFly);
 		/// Sets the TUSlide value.
 		void setTUSlide(const int TUSlide);
+		/// Check if this is an xcom base object.
+		bool isBaseModule();
 };
 
 }

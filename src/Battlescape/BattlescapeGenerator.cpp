@@ -392,6 +392,8 @@ void BattlescapeGenerator::run()
 		{
 			_save->getTiles()[i]->setDiscovered(true, 2);
 		}
+
+		_save->calculateModuleMap();
 	}
 
 	if (_save->getMissionType() == "STR_ALIEN_BASE_ASSAULT"
@@ -2896,6 +2898,7 @@ void BattlescapeGenerator::runInventory(Craft* craft)
 													false,
 													false,
 													0,
+													false,
 													false,
 													false,
 													false,

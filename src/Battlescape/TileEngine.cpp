@@ -1699,7 +1699,7 @@ BattleUnit* TileEngine::hit(
 			<< " : power = " << power
 			<< " : type = " << static_cast<int>(type);
 
-	if (type != DT_NONE)	// TEST for Psi-attack.
+	if (type != DT_NONE) // TEST for Psi-attack.
 	{
 		//Log(LOG_INFO) << "DT_ type = " << static_cast<int>(type);
 
@@ -1716,17 +1716,12 @@ BattleUnit* TileEngine::hit(
 			return 0;
 		}
 
-//kL		BattleUnit* buTarget = tile->getUnit();
-		BattleUnit* buTarget = 0;			// kL_begin:
+		BattleUnit* buTarget = 0;
 		if (tile->getUnit())
 		{
 			buTarget = tile->getUnit();
 			Log(LOG_INFO) << ". . buTarget Valid ID = " << buTarget->getId();
 		}
-//		else
-//			buTarget = 0; // kL_end.
-
-//kL		int adjustedDamage = 0;
 
 		// This is returning part < 4 when using a stunRod against a unit outside the north (or east) UFO wall. ERROR!!!
 		// later: Now it's returning VOXEL_EMPTY (-1) when a silicoid attacks a poor civvie!!!!! And on acid-spits!!!
@@ -1740,7 +1735,7 @@ BattleUnit* TileEngine::hit(
 								hit); // kL
 		Log(LOG_INFO) << ". voxelCheck() ret part = " << part;
 
-		if (VOXEL_EMPTY < part && part < VOXEL_UNIT	// 4 terrain parts ( #0 - #3 )
+		if (VOXEL_EMPTY < part && part < VOXEL_UNIT	// 4 terrain parts ( 0..3 )
 			&& type != DT_STUN)						// kL, workaround for Stunrod.
 		{
 			Log(LOG_INFO) << ". . terrain hit";
@@ -1748,10 +1743,23 @@ BattleUnit* TileEngine::hit(
 //kL			const int randPower = RNG::generate(power / 4, power * 3 / 4); // RNG::boxMuller(power, power/6)
 			power = RNG::generate(power / 4, power * 3 / 4);
 			Log(LOG_INFO) << ". . RNG::generate(power) = " << power;
+
+			if (part == VOXEL_OBJECT
+				&& _save->getMissionType() == "STR_BASE_DEFENSE")
+			{
+				if (power >= tile->getMapData(MapData::O_OBJECT)->getArmor()
+					&& tile->getMapData(VOXEL_OBJECT)->isBaseModule())
+				{
+					_save->getModuleMap()[(center.x / 16) / 10][(center.y / 16) / 10].second--;
+				}
+			}
+
+			// kL_note: This may be necessary only on aLienBase missions...
 			if (tile->damage(part, power))
 			{
 				_save->setObjectiveDestroyed(true);
 			}
+
 			// kL_note: This would be where to adjust damage based on effectiveness of weapon vs Terrain!
 		}
 		else if (part == VOXEL_UNIT)	// battleunit part
@@ -1760,7 +1768,7 @@ BattleUnit* TileEngine::hit(
 			Log(LOG_INFO) << ". . battleunit hit";
 
 			// power 0 - 200% -> 1 - 200%
-//kL			const int randPower = RNG::generate(1, power * 2); // RNG::boxMuller(power, power/3)
+//kL			const int randPower = RNG::generate(1, power * 2); // RNG::boxMuller(power, power / 3)
 			int verticaloffset = 0;
 
 			if (!buTarget)
@@ -1803,7 +1811,7 @@ BattleUnit* TileEngine::hit(
 //kL				const int randPower	= RNG::generate(1, power * 2);	// kL_above
 				power = RNG::generate(1, power * 2);
 				Log(LOG_INFO) << ". . . RNG::generate(power) = " << power;
-				bool ignoreArmor = (type == DT_STUN);			// kL. stun ignores armor... does now! UHM....
+				bool ignoreArmor = (type == DT_STUN); // kL. stun ignores armor... does now! UHM....
 				int adjustedDamage = buTarget->damage(relPos, power, type, ignoreArmor);
 				Log(LOG_INFO) << ". . . adjustedDamage = " << adjustedDamage;
 
@@ -2344,6 +2352,14 @@ bool TileEngine::detonate(Tile* tile)
 							{
 								tiles[i]->setSmoke(std::max(0, std::min(smoke, 15)));
 							}
+						}
+
+						if (_save->getMissionType() == "STR_BASE_DEFENSE"
+							&& i == 6
+							&& tile->getMapData(MapData::O_OBJECT)
+							&& tile->getMapData(V_OBJECT)->isBaseModule())
+						{
+							_save->getModuleMap()[tile->getPosition().x / 10][tile->getPosition().y / 10].second--;
 						}
 
 						if (tiles[i]->destroy(parts[i]))
