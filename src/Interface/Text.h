@@ -124,7 +124,7 @@ private:
 				Language* lang);
 
 		/// Sets the text's string.
-		void setText(const std::wstring &text);
+		void setText(const std::wstring& text);
 		/// Gets the text's string.
 		std::wstring getText() const;
 

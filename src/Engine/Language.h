@@ -36,15 +36,15 @@ namespace OpenXcom
 
 enum TextDirection
 {
-	DIRECTION_LTR,
-	DIRECTION_RTL
+	DIRECTION_LTR,	// 0
+	DIRECTION_RTL	// 1
 };
 
 
 enum TextWrapping
 {
-	WRAP_WORDS,
-	WRAP_LETTERS
+	WRAP_WORDS,		// 0
+	WRAP_LETTERS	// 1
 };
 
 
@@ -96,26 +96,45 @@ private:
 		static std::wstring cpToWstr(const std::string& src);
 		/// Converts a filesystem string to wide-string.
 		static std::wstring fsToWstr(const std::string &src);
+
 		/// Replaces a substring.
-		static void replace(std::string& str, const std::string& find, const std::string& replace);
+		static void replace(
+				std::string& str,
+				const std::string& find,
+				const std::string& replace);
 		/// Replaces a substring.
-		static void replace(std::wstring& str, const std::wstring& find, const std::wstring& replace);
+		static void replace(
+				std::wstring& str,
+				const std::wstring& find,
+				const std::wstring& replace);
+
 		/// Gets list of languages in the data directory.
 		static std::vector<std::string> getList(TextList* list);
+
 		/// Loads the language from a YAML file.
-		void load(const std::string& filename, ExtraStrings* extras);
+		void load(
+				const std::string& filename,
+				ExtraStrings* extras);
+
 		/// Gets the language's ID.
 		std::string getId() const;
 		/// Gets the language's name.
 		std::wstring getName() const;
+
 		/// Outputs the language to a HTML file.
 		void toHtml(const std::string& filename) const;
+
 		/// Get a localized text.
 		const LocalizedText& getString(const std::string& id) const;
 		/// Get a quantity-depended localized text.
-		LocalizedText getString(const std::string& id, unsigned n) const;
+		LocalizedText getString(
+				const std::string& id,
+				unsigned n) const;
 		/// Get a gender-depended localized text.
-		const LocalizedText& getString(const std::string& id, SoldierGender gender) const;
+		const LocalizedText& getString(
+				const std::string& id,
+				SoldierGender gender) const;
+
 		/// Gets the direction of text in this language.
 		TextDirection getTextDirection() const;
 		/// Gets the wrapping of text in this language.

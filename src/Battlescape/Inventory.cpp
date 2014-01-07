@@ -714,7 +714,8 @@ void Inventory::mouseClick(Action* action, State* state)
 						{
 							std::wstring activated = _game->getLanguage()->getString("STR_GRENADE_IS_ACTIVATED");
 							activated += L" ";
-							activated += std::to_wstring(static_cast<long long>(item->getExplodeTurn())); // <<---- fudgy!
+//							activated += std::to_wstring(static_cast<long long>(item->getExplodeTurn())); // <<---- fudgy!
+							activated += Text::formatNumber(item->getExplodeTurn());
 							_warning->showMessage(activated);
 						}
 					}

@@ -53,7 +53,7 @@ protected:
 	MovingTarget();
 
 
-public:
+	public:
 		/// Cleans up the moving target.
 		virtual ~MovingTarget();
 
@@ -61,14 +61,17 @@ public:
 		void load(const YAML::Node& node);
 		/// Saves the moving target to YAML.
 		virtual YAML::Node save() const;
+
 		/// Gets the moving target's destination.
 		Target* getDestination() const;
 		/// Sets the moving target's destination.
 		virtual void setDestination(Target* dest);
+
 		/// Gets the moving target's speed.
 		int getSpeed() const;
 		/// Sets the moving target's speed.
 		void setSpeed(int speed);
+
 		/// Has the moving target reached its destination?
 		bool reachedDestination() const;
 		/// Move towards the destination.

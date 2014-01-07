@@ -16,11 +16,13 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_LANGUAGEPLURALITY_H
 #define OPENXCOM_LANGUAGEPLURALITY_H
 
-#include <string>
 #include <map>
+#include <string>
+
 
 namespace OpenXcom
 {
@@ -31,24 +33,39 @@ namespace OpenXcom
 */
 class LanguagePlurality
 {
-public:
-	/// Allow proper destruction through base pointer.
-	virtual ~LanguagePlurality() { /* Empty by design. */ }
-	/// Get dictionary key suffix for value of @a n.
-	/**
-	@param count The number controlling the plurality.
-	@return Pointer to the zero-terminated suffix string.
-	*/
-	virtual const char *getSuffix(unsigned n) const = 0;
-	/// Create a concrete instance for a given language.
-	static LanguagePlurality *create(const std::string &language);
 
-protected:
-	LanguagePlurality() { /* Empty by design. */ }
 private:
-	typedef LanguagePlurality *(*PFCreate)();
+	typedef LanguagePlurality* (*PFCreate)();
+
 	static std::map<std::string, PFCreate> s_factoryFunctions;
+
+
+	protected:
+		///
+		LanguagePlurality()
+		{
+			/* Empty by design. */
+		}
+
+
+		public:
+			/// Allow proper destruction through base pointer.
+			virtual ~LanguagePlurality()
+			{
+				/* Empty by design. */
+			}
+
+			/// Get dictionary key suffix for value of @a n.
+			/**
+			 * @param count The number controlling the plurality.
+			 * @return Pointer to the zero-terminated suffix string.
+			 */
+			virtual const char* getSuffix(unsigned n) const = 0;
+
+			/// Create a concrete instance for a given language.
+			static LanguagePlurality* create(const std::string& language);
 };
+
 }
 
 #endif

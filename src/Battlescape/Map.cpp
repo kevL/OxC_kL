@@ -318,7 +318,7 @@ void Map::draw()
 		}
 
 		if (_battle->getSide() == FACTION_PLAYER)
-			_battle->getBattleState()->getIcons()->setVisible(true);
+			_battle->getBattleState()->toggleIcons(true);
 
 		drawTerrain(this);
 	}
@@ -332,7 +332,7 @@ void Map::draw()
 			//Log(LOG_INFO) << ". . . . . . _reveal, set " << _reveal;
 		}
 
-		_battle->getBattleState()->getIcons()->setVisible(false);
+		_battle->getBattleState()->toggleIcons(false);
 
 		//Log(LOG_INFO) << ". . . . blit( hidden movement )";
 		_message->blit(this);

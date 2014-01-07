@@ -16,7 +16,9 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "Frame.h"
+
 
 namespace OpenXcom
 {
@@ -30,7 +32,21 @@ namespace OpenXcom
  * @param y Y position in pixels.
  * @param popup Popup animation.
  */
-Frame::Frame(int width, int height, int x, int y) : Surface(width, height, x, y), _color(0), _bg(0), _thickness(5), _contrast(false)
+Frame::Frame(
+		int width,
+		int height,
+		int x,
+		int y)
+	:
+		Surface(
+			width,
+			height,
+			x,
+			y),
+		_color(0),
+		_bg(0),
+		_thickness(5),
+		_contrast(false)
 {
 }
 
@@ -80,8 +96,7 @@ Uint8 Frame::getBackground() const
 }
 
 /**
- * Enables/disables high contrast color. Mostly used for
- * Battlescape UI.
+ * Enables/disables high contrast color. Mostly used for Battlescape UI.
  * @param contrast High contrast setting.
  */
 void Frame::setHighContrast(bool contrast)
@@ -102,36 +117,44 @@ void Frame::setThickness(int thickness)
 
 /**
  * Draws the bordered frame with a graphic background.
- * The background never moves with the frame, it's
- * always aligned to the top-left corner of the screen
- * and cropped to fit the inside area.
+ * The background never moves with the frame, it's  always aligned to the
+ * top-left corner of the screen and cropped to fit the inside area.
  */
 void Frame::draw()
 {
 	Surface::draw();
-	SDL_Rect square;
 
+	SDL_Rect square;
 	square.x = 0;
 	square.w = getWidth();
 	square.y = 0;
 	square.h = getHeight();
 
-	int mul = 1;
+	int mult = 1;
 	if (_contrast)
 	{
-		mul = 2;
+		mult = 2;
 	}
-	Uint8 color = _color + 3 * mul;
 
-	for (int i = 0; i < _thickness; ++i)
+	Uint8 color = _color + 3 * mult;
+
+	for (int
+			i = 0;
+			i < _thickness;
+			++i)
 	{
-		drawRect(&square, color);
+		drawRect(
+				&square,
+				color);
+
 		if (i < _thickness / 2)
-			color -= 1 * mul;
+			color -= 1 * mult;
 		else
-			color += 1 * mul;
+			color += 1 * mult;
+
 		square.x++;
 		square.y++;
+
 		if (square.w >= 2)
 			square.w -= 2;
 		else
@@ -142,7 +165,10 @@ void Frame::draw()
 		else
 			square.h = 1;
 	}
-	drawRect(&square, _bg);
+
+	drawRect(
+			&square,
+			_bg);
 }
 
 }

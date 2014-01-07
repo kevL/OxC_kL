@@ -68,7 +68,7 @@ private:
 		* _btnCenter,
 		* _btnPatrol,
 		* _btnTarget;
-	Waypoint* _waypoint;
+	Waypoint* _waypoint; // kL_note: Doesn't seem to be used... really.
 	Window* _window;
 
 

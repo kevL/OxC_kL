@@ -513,7 +513,8 @@ void GraphsState::latestTally()
 			if (offset < GRAPH_MAX_BUTTONS)
 			{
 //				_numRegionActivityAlien.at(offset)->setValue((*iter)->getActivityAlien().back());
-				_numRegionActivityAlien.at(offset)->setText(std::to_wstring(static_cast<long long>((*iter)->getActivityAlien().back())));
+//				_numRegionActivityAlien.at(offset)->setText(std::to_wstring(static_cast<long long>((*iter)->getActivityAlien().back())));
+				_numRegionActivityAlien.at(offset)->setText(Text::formatNumber((*iter)->getActivityAlien().back()));
 
 				offset++;
 			}
@@ -532,7 +533,8 @@ void GraphsState::latestTally()
 			if (offset < GRAPH_MAX_BUTTONS)
 			{
 //				_numCountryActivityAlien.at(offset)->setValue((*iter)->getActivityAlien().back());
-				_numCountryActivityAlien.at(offset)->setText(std::to_wstring(static_cast<long long>((*iter)->getActivityAlien().back())));
+//				_numCountryActivityAlien.at(offset)->setText(std::to_wstring(static_cast<long long>((*iter)->getActivityAlien().back())));
+				_numCountryActivityAlien.at(offset)->setText(Text::formatNumber((*iter)->getActivityAlien().back()));
 
 				offset++;
 			}
@@ -551,7 +553,8 @@ void GraphsState::latestTally()
 			if (offset < GRAPH_MAX_BUTTONS)
 			{
 //				_numRegionActivityXCom.at(offset)->setValue((*iter)->getActivityXcom().back());
-				_numRegionActivityXCom.at(offset)->setText(std::to_wstring(static_cast<long long>((*iter)->getActivityXcom().back())));
+//				_numRegionActivityXCom.at(offset)->setText(std::to_wstring(static_cast<long long>((*iter)->getActivityXcom().back())));
+				_numRegionActivityXCom.at(offset)->setText(Text::formatNumber((*iter)->getActivityXcom().back()));
 
 				offset++;
 			}
@@ -570,7 +573,8 @@ void GraphsState::latestTally()
 			if (offset < GRAPH_MAX_BUTTONS)
 			{
 //				_numCountryActivityXCom.at(offset)->setValue((*iter)->getActivityXcom().back());
-				_numCountryActivityXCom.at(offset)->setText(std::to_wstring(static_cast<long long>((*iter)->getActivityXcom().back())));
+//				_numCountryActivityXCom.at(offset)->setText(std::to_wstring(static_cast<long long>((*iter)->getActivityXcom().back())));
+				_numCountryActivityXCom.at(offset)->setText(Text::formatNumber((*iter)->getActivityXcom().back()));
 
 				offset++;
 			}
@@ -1540,10 +1544,11 @@ void GraphsState::drawFinanceLines()
 
 		if (entry == 0) // values are stored backwards. So take 1st value for last.
 		{
-			_numScore->setColor(49); // should be medium cyan
+			_numScore->setColor(49);
 			_numScore->setAlign(ALIGN_RIGHT);
-//			_numScore->setValue(static_cast<unsigned int>(score[entry])); // heh, this could be signed/unsigned quirky!
-			std::wstring txtScore = std::to_wstring(static_cast<long long>(score[entry]));
+//			std::wstring txtScore = setValue(score[entry]);
+//			std::wstring txtScore = std::to_wstring(static_cast<long long>(score[entry]));
+			std::wstring txtScore = Text::formatNumber(score[entry]);
 			_numScore->setText(txtScore);
 		}
 

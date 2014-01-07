@@ -16,76 +16,96 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "Language.h"
-#include <assert.h>
+
 #include <locale>
 #include <fstream>
 #include <cassert>
+
+#include <assert.h>
+
 #include "CrossPlatform.h"
-#include "Logger.h"
 #include "Exception.h"
-#include "Options.h"
-#include "LocalizedText.h"
 #include "LanguagePlurality.h"
-#include "../Ruleset/ExtraStrings.h"
+#include "LocalizedText.h"
+#include "Logger.h"
+#include "Options.h"
+
 #include "../Interface/TextList.h"
+
+#include "../Ruleset/ExtraStrings.h"
+
 #ifdef _WIN32
 #ifndef NOMINMAX
 #define NOMINMAX
 #endif
+
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #endif
+
 
 namespace OpenXcom
 {
 
 std::map<std::string, std::wstring> Language::_names;
-std::vector<std::string> Language::_rtl, Language::_cjk;
+std::vector<std::string>
+	Language::_rtl,
+	Language::_cjk;
+
 
 /**
  * Initializes an empty language file.
  */
-Language::Language() : _id(""), _strings(), _handler(0), _direction(DIRECTION_LTR), _wrap(WRAP_WORDS)
+Language::Language()
+	:
+		_id(""),
+		_strings(),
+		_handler(0),
+		_direction(DIRECTION_LTR),
+		_wrap(WRAP_WORDS)
 {
 	// maps don't have initializers :(
 	if (_names.empty())
 	{
-		_names["en-US"] = utf8ToWstr("English (US)");
-		_names["en-GB"] = utf8ToWstr("English (UK)");
-		_names["bg-BG"] = utf8ToWstr("Български");
-		_names["cs-CZ"] = utf8ToWstr("Česky");
-		_names["da"] = utf8ToWstr("Dansk");
-		_names["de"] = utf8ToWstr("Deutsch");
-		_names["es"] = utf8ToWstr("Español (ES)");
-		_names["es-419"] = utf8ToWstr("Español (AL)");
-		_names["fr"] = utf8ToWstr("Français");
-		_names["fi"] = utf8ToWstr("Suomi");
-		_names["grk"] = utf8ToWstr("Ελληνικά");
-		_names["hu-HU"] = utf8ToWstr("Magyar");
-		_names["it"] = utf8ToWstr("Italiano");
-		_names["ja-JP"] = utf8ToWstr("日本語");
-		_names["ko"] = utf8ToWstr("한국어");
-		_names["nl"] = utf8ToWstr("Nederlands");
-		_names["no"] = utf8ToWstr("Norsk");
-		_names["pl-PL"] = utf8ToWstr("Polski");
-		_names["pt-PT"] = utf8ToWstr("Português (PT)");
-		_names["ro"] = utf8ToWstr("Română");
-		_names["ru"] = utf8ToWstr("Русский");
-		_names["sv"] = utf8ToWstr("Svenska");
-		_names["tr-TR"] = utf8ToWstr("Türkçe");
-		_names["uk"] = utf8ToWstr("Українська");
-		_names["zh-CN"] = utf8ToWstr("中文");
-		_names["zh-TW"] = utf8ToWstr("文言");
+		_names["en-US"]		= utf8ToWstr("English (US)");
+		_names["en-GB"]		= utf8ToWstr("English (UK)");
+		_names["bg-BG"]		= utf8ToWstr("Български");
+		_names["cs-CZ"]		= utf8ToWstr("Česky");
+		_names["da"]		= utf8ToWstr("Dansk");
+		_names["de"]		= utf8ToWstr("Deutsch");
+		_names["es"]		= utf8ToWstr("Español (ES)");
+		_names["es-419"]	= utf8ToWstr("Español (AL)");
+		_names["fr"]		= utf8ToWstr("Français");
+		_names["fi"]		= utf8ToWstr("Suomi");
+		_names["grk"]		= utf8ToWstr("Ελληνικά");
+		_names["hu-HU"]		= utf8ToWstr("Magyar");
+		_names["it"]		= utf8ToWstr("Italiano");
+		_names["ja-JP"]		= utf8ToWstr("日本語");
+		_names["ko"]		= utf8ToWstr("한국어");
+		_names["nl"]		= utf8ToWstr("Nederlands");
+		_names["no"]		= utf8ToWstr("Norsk");
+		_names["pl-PL"]		= utf8ToWstr("Polski");
+		_names["pt-PT"]		= utf8ToWstr("Português (PT)");
+		_names["ro"]		= utf8ToWstr("Română");
+		_names["ru"]		= utf8ToWstr("Русский");
+		_names["sv"]		= utf8ToWstr("Svenska");
+		_names["tr-TR"]		= utf8ToWstr("Türkçe");
+		_names["uk"]		= utf8ToWstr("Українська");
+		_names["zh-CN"]		= utf8ToWstr("中文");
+		_names["zh-TW"]		= utf8ToWstr("文言");
 	}
+
 	if (_rtl.empty())
 	{
 		_rtl.push_back("he");
 	}
+
 	if (_cjk.empty())
 	{
 		_cjk.push_back("ja-JP");
-		//_cjk.push_back("ko");  has spacing between words
+//		_cjk.push_back("ko"); // has spacing between words
 		_cjk.push_back("zh-CN");
 		_cjk.push_back("zh-TW");
 	}
@@ -110,23 +130,51 @@ std::string Language::wstrToUtf8(const std::wstring& src)
 {
 	if (src.empty())
 		return "";
+
 #ifdef _WIN32
-	int size = WideCharToMultiByte(CP_UTF8, 0, &src[0], (int)src.size(), NULL, 0, NULL, NULL);
+	int size = WideCharToMultiByte(
+								CP_UTF8,
+								0,
+								&src[0],
+								(int)src.size(),
+								NULL,
+								0,
+								NULL,
+								NULL);
     std::string str(size, 0);
-	WideCharToMultiByte(CP_UTF8, 0, &src[0], (int)src.size(), &str[0], size, NULL, NULL);
+	WideCharToMultiByte(
+					CP_UTF8,
+					0,
+					&src[0],
+					(int)src.size(),
+					&str[0],
+					size,
+					NULL,
+					NULL);
+
 	return str;
 #else
 	std::string out;
     unsigned int codepoint = 0;
-    for (std::wstring::const_iterator i = src.begin(); i != src.end(); ++i)
+
+    for (std::wstring::const_iterator
+			i = src.begin();
+			i != src.end();
+			++i)
     {
 		wchar_t ch = *i;
-        if (ch >= 0xd800 && ch <= 0xdbff)
+        if (ch >= 0xd800
+			&& ch <= 0xdbff)
+		{
             codepoint = ((ch - 0xd800) << 10) + 0x10000;
+		}
         else
         {
-            if (ch >= 0xdc00 && ch <= 0xdfff)
+            if (ch >= 0xdc00
+				&& ch <= 0xdfff)
+			{
                 codepoint |= ch - 0xdc00;
+			}
             else
                 codepoint = ch;
 
@@ -150,9 +198,11 @@ std::string Language::wstrToUtf8(const std::wstring& src)
                 out.append(1, static_cast<char>(0x80 | ((codepoint >> 6) & 0x3f)));
                 out.append(1, static_cast<char>(0x80 | (codepoint & 0x3f)));
             }
+
             codepoint = 0;
         }
     }
+
     return out;
 #endif
 }
@@ -167,18 +217,44 @@ std::string Language::wstrToCp(const std::wstring& src)
 {
 	if (src.empty())
 		return "";
+
 #ifdef _WIN32
-	int size = WideCharToMultiByte(CP_ACP, 0, &src[0], (int)src.size(), NULL, 0, NULL, NULL);
+	int size = WideCharToMultiByte(
+								CP_ACP,
+								0,
+								&src[0],
+								(int)src.size(),
+								NULL,
+								0,
+								NULL,
+								NULL);
 	std::string str(size, 0);
-	WideCharToMultiByte(CP_ACP, 0, &src[0], (int)src.size(), &str[0], size, NULL, NULL);
+	WideCharToMultiByte(
+					CP_ACP,
+					0,
+					&src[0],
+					(int)src.size(),
+					&str[0],
+					size,
+					NULL,
+					NULL);
+
 	return str;
 #else
 	const int MAX = 500;
 	char buffer[MAX];
-	setlocale(LC_ALL, "");
-	wcstombs(buffer, src.c_str(), MAX);
-	setlocale(LC_ALL, "C");
+	setlocale(
+			LC_ALL,
+			"");
+	wcstombs(
+			buffer,
+			src.c_str(),
+			MAX);
+	setlocale(
+			LC_ALL,
+			"C");
 	std::string str(buffer);
+
 	return str;
 #endif
 }
@@ -192,8 +268,10 @@ std::string Language::wstrToCp(const std::wstring& src)
 std::string Language::wstrToFs(const std::wstring& src)
 {
 #ifdef _WIN32
+
 	return Language::wstrToCp(src);
 #else
+
 	return Language::wstrToUtf8(src);
 #endif
 }
@@ -209,16 +287,34 @@ std::wstring Language::utf8ToWstr(const std::string& src)
 {
 	if (src.empty())
 		return L"";
+
 #ifdef _WIN32
-	int size = MultiByteToWideChar(CP_UTF8, 0, &src[0], (int)src.size(), NULL, 0);
+	int size = MultiByteToWideChar(
+								CP_UTF8,
+								0,
+								&src[0],
+								(int)src.size(),
+								NULL,
+								0);
     std::wstring wstr(size, 0);
-    MultiByteToWideChar(CP_UTF8, 0, &src[0], (int)src.size(), &wstr[0], size);
+    MultiByteToWideChar(
+					CP_UTF8,
+					0,
+					&src[0],
+					(int)src.size(),
+					&wstr[0],
+					size);
+
 	return wstr;
 #else
 	std::wstring out;
     unsigned int codepoint = 0;
     int following = 0;
-    for (std::string::const_iterator i = src.begin(); i != src.end(); ++i)
+
+    for (std::string::const_iterator
+			i = src.begin();
+			i != src.end();
+			++i)
     {
         unsigned char ch = *i;
         if (ch <= 0x7f)
@@ -258,9 +354,11 @@ std::wstring Language::utf8ToWstr(const std::string& src)
             }
             else
                 out.append(1, static_cast<wchar_t>(codepoint));
+
             codepoint = 0;
         }
     }
+
     return out;
 #endif
 }
@@ -275,19 +373,42 @@ std::wstring Language::cpToWstr(const std::string& src)
 {
 	if (src.empty())
 		return L"";
+
 #ifdef _WIN32
-	int size = MultiByteToWideChar(CP_ACP, 0, &src[0], (int)src.size(), NULL, 0);
+	int size = MultiByteToWideChar(
+								CP_ACP,
+								0,
+								&src[0],
+								(int)src.size(),
+								NULL,
+								0);
     std::wstring wstr(size, 0);
-    MultiByteToWideChar(CP_ACP, 0, &src[0], (int)src.size(), &wstr[0], size);
+    MultiByteToWideChar(
+					CP_ACP,
+					0,
+					&src[0],
+					(int)src.size(),
+					&wstr[0],
+					size);
+
 	return wstr;
 #else
 	const int MAX = 500;
 	wchar_t buffer[MAX + 1];
-	setlocale(LC_ALL, "");
-	size_t len = mbstowcs(buffer, src.c_str(), MAX);
-	setlocale(LC_ALL, "C");
+	setlocale(
+			LC_ALL,
+			"");
+	size_t len = mbstowcs(
+						buffer,
+						src.c_str(),
+						MAX);
+	setlocale(
+			LC_ALL,
+			"C");
+
 	if (len == (size_t)-1)
 		return L"?";
+
 	return std::wstring(buffer, len);
 #endif
 }
@@ -301,8 +422,10 @@ std::wstring Language::cpToWstr(const std::string& src)
 std::wstring Language::fsToWstr(const std::string& src)
 {
 #ifdef _WIN32
+
 	return Language::cpToWstr(src);
 #else
+
 	return Language::utf8ToWstr(src);
 #endif
 }
@@ -313,11 +436,22 @@ std::wstring Language::fsToWstr(const std::string& src)
  * @param find The substring to find.
  * @param replace The substring to replace it with.
  */
-void Language::replace(std::string &str, const std::string &find, const std::string &replace)
+void Language::replace(
+		std::string& str,
+		const std::string& find,
+		const std::string& replace)
 {
-	for (size_t i = str.find(find); i != std::string::npos; i = str.find(find, i + replace.length()))
+	for (size_t
+			i = str.find(find);
+			i != std::string::npos;
+			i = str.find(
+						find,
+						i + replace.length()))
 	{
-		str.replace(i, find.length(), replace);
+		str.replace(
+				i,
+				find.length(),
+				replace);
 	}
 }
 
@@ -327,11 +461,22 @@ void Language::replace(std::string &str, const std::string &find, const std::str
  * @param find The substring to find.
  * @param replace The substring to replace it with.
  */
-void Language::replace(std::wstring &str, const std::wstring &find, const std::wstring &replace)
+void Language::replace(
+		std::wstring& str,
+		const std::wstring& find,
+		const std::wstring& replace)
 {
-	for (size_t i = str.find(find); i != std::wstring::npos; i = str.find(find, i + replace.length()))
+	for (size_t
+			i = str.find(find);
+			i != std::wstring::npos;
+			i = str.find(
+						find,
+						i + replace.length()))
 	{
-		str.replace(i, find.length(), replace);
+		str.replace(
+				i,
+				find.length(),
+				replace);
 	}
 }
 
@@ -341,16 +486,23 @@ void Language::replace(std::wstring &str, const std::wstring &find, const std::w
  * @param list Text list.
  * @return List of language filenames.
  */
-std::vector<std::string> Language::getList(TextList *list)
+std::vector<std::string> Language::getList(TextList* list)
 {
-	std::vector<std::string> langs = CrossPlatform::getFolderContents(CrossPlatform::getDataFolder("Language/"), "yml");
+	std::vector<std::string> langs = CrossPlatform::getFolderContents(
+																CrossPlatform::getDataFolder("Language/"),
+																"yml");
 
-	for (std::vector<std::string>::iterator i = langs.begin(); i != langs.end(); ++i)
+	for (std::vector<std::string>::iterator
+			i = langs.begin();
+			i != langs.end();
+			++i)
 	{
 		(*i) = CrossPlatform::noExt(*i);
+
 		if (list != 0)
 		{
 			std::wstring name;
+
 			std::map<std::string, std::wstring>::iterator lang = _names.find(*i);
 			if (lang != _names.end())
 			{
@@ -360,9 +512,13 @@ std::vector<std::string> Language::getList(TextList *list)
 			{
 				name = Language::fsToWstr(*i);
 			}
-			list->addRow(1, name.c_str());
+
+			list->addRow(
+						1,
+						name.c_str());
 		}
 	}
+
 	return langs;
 }
 
@@ -373,40 +529,57 @@ std::vector<std::string> Language::getList(TextList *list)
  * @param filename Filename of the YAML file.
  * @param extras Pointer to extra strings from ruleset.
  */
-void Language::load(const std::string &filename, ExtraStrings *extras)
+void Language::load(
+		const std::string& filename,
+		ExtraStrings* extras)
 {
 	_strings.clear();
 
 	YAML::Node doc = YAML::LoadFile(filename);
 	_id = doc.begin()->first.as<std::string>();
 	YAML::Node lang = doc.begin()->second;
-	for (YAML::const_iterator i = lang.begin(); i != lang.end(); ++i)
+
+	for (YAML::const_iterator
+			i = lang.begin();
+			i != lang.end();
+			++i)
 	{
-		// Regular strings
-		if (i->second.IsScalar())
+		if (i->second.IsScalar()) // regular strings
 		{
 			_strings[i->first.as<std::string>()] = loadString(i->second.as<std::string>());
 		}
-		// Strings with plurality
-		else if (i->second.IsMap())
+		else if (i->second.IsMap()) // strings with plurality
 		{
-			for (YAML::const_iterator j = i->second.begin(); j != i->second.end(); ++j)
+			for (YAML::const_iterator
+					j = i->second.begin();
+					j != i->second.end();
+					++j)
 			{
 				std::string s = i->first.as<std::string>() + "_" + j->first.as<std::string>();
 				_strings[s] = loadString(j->second.as<std::string>());
 			}
 		}
 	}
+
 	if (extras)
 	{
-		for (std::map<std::string, std::string>::const_iterator i = extras->getStrings()->begin(); i != extras->getStrings()->end(); ++i)
+		for (std::map<std::string, std::string>::const_iterator
+				i = extras->getStrings()->begin();
+				i != extras->getStrings()->end();
+				++i)
 		{
 			_strings[i->first] = loadString(i->second);
 		}
 	}
+
 	delete _handler;
 	_handler = LanguagePlurality::create(_id);
-	if (std::find(_rtl.begin(), _rtl.end(), _id) == _rtl.end())
+
+	if (std::find(
+				_rtl.begin(),
+				_rtl.end(),
+				_id)
+			== _rtl.end())
 	{
 		_direction = DIRECTION_LTR;
 	}
@@ -414,7 +587,12 @@ void Language::load(const std::string &filename, ExtraStrings *extras)
 	{
 		_direction = DIRECTION_RTL;
 	}
-	if (std::find(_cjk.begin(), _cjk.end(), _id) == _cjk.end())
+
+	if (std::find(
+				_cjk.begin(),
+				_cjk.end(),
+				_id)
+			== _cjk.end())
 	{
 		_wrap = WRAP_WORDS;
 	}
@@ -430,12 +608,14 @@ void Language::load(const std::string &filename, ExtraStrings *extras)
 * @param string Original UTF-8 string.
 * @return New widechar string.
 */
-std::wstring Language::loadString(const std::string &string) const
+std::wstring Language::loadString(const std::string& string) const
 {
 	std::string s = string;
+
 	replace(s, "{NEWLINE}", "\n");
 	replace(s, "{SMALLLINE}", "\x02");
 	replace(s, "{ALT}", "\x01");
+
 	return utf8ToWstr(s);
 }
 
@@ -463,16 +643,19 @@ std::wstring Language::getName() const
  * @param id ID of the string.
  * @return String with the requested ID.
  */
-const LocalizedText &Language::getString(const std::string &id) const
+const LocalizedText& Language::getString(const std::string& id) const
 {
 	static LocalizedText hack(L"");
+
 	if (id.empty())
 		return hack;
+
 	std::map<std::string, LocalizedText>::const_iterator s = _strings.find(id);
 	if (s == _strings.end())
 	{
 		Log(LOG_WARNING) << id << " not found in " << Options::getString("language");
 		hack = LocalizedText(utf8ToWstr(id));
+
 		return hack;
 	}
 	else
@@ -489,29 +672,42 @@ const LocalizedText &Language::getString(const std::string &id) const
  * @param n Number to use to decide the proper form.
  * @return String with the requested ID.
  */
-LocalizedText Language::getString(const std::string &id, unsigned n) const
+LocalizedText Language::getString(const std::string& id, unsigned n) const
 {
 	assert(!id.empty());
+
 	std::map<std::string, LocalizedText>::const_iterator s = _strings.end();
 	if (0 == n)
 	{
 		// Try specialized form.
 		s = _strings.find(id + "_zero");
 	}
+
 	if (s == _strings.end())
 	{
 		// Try proper form by language
 		s = _strings.find(id + _handler->getSuffix(n));
 	}
+
 	if (s == _strings.end())
 	{
 		Log(LOG_WARNING) << id << " not found in " << Options::getString("language");
+
 		return LocalizedText(utf8ToWstr(id));
 	}
+
 	std::wstringstream ss;
 	ss << n;
-	std::wstring marker(L"{N}"), val(ss.str()), txt(s->second);
-	replace(txt, marker, val);
+
+	std::wstring
+		marker(L"{N}"),
+		val(ss.str()),
+		txt(s->second);
+	replace(
+			txt,
+			marker,
+			val);
+
 	return txt;
 }
 
@@ -521,7 +717,9 @@ LocalizedText Language::getString(const std::string &id, unsigned n) const
  * @param id ID of the string.
  * @return String with the requested ID.
  */
-const LocalizedText &Language::getString(const std::string &id, SoldierGender gender) const
+const LocalizedText& Language::getString(
+		const std::string& id,
+		SoldierGender gender) const
 {
 	std::string genderId;
 	if (gender == GENDER_MALE)
@@ -532,6 +730,7 @@ const LocalizedText &Language::getString(const std::string &id, SoldierGender ge
 	{
 		genderId = id + "_FEMALE";
 	}
+
 	return getString(genderId);
 }
 
@@ -540,18 +739,27 @@ const LocalizedText &Language::getString(const std::string &id, SoldierGender ge
  * to an HTML table.
  * @param filename HTML file.
  */
-void Language::toHtml(const std::string &filename) const
+void Language::toHtml(const std::string& filename) const
 {
 	std::ofstream htmlFile (filename.c_str(), std::ios::out);
 	htmlFile << "<table border=\"1\" width=\"100%\">" << std::endl;
 	htmlFile << "<tr><th>ID String</th><th>English String</th></tr>" << std::endl;
-	for (std::map<std::string, LocalizedText>::const_iterator i = _strings.begin(); i != _strings.end(); ++i)
+
+	for (std::map<std::string, LocalizedText>::const_iterator
+			i = _strings.begin();
+			i != _strings.end();
+			++i)
 	{
 		htmlFile << "<tr><td>" << i->first << "</td><td>";
+
 		std::string s = wstrToUtf8(i->second);
-		for (std::string::const_iterator j = s.begin(); j != s.end(); ++j)
+		for (std::string::const_iterator
+				j = s.begin();
+				j != s.end();
+				++j)
 		{
-			if (*j == 2 || *j == '\n')
+			if (*j == 2
+				|| *j == '\n')
 			{
 				htmlFile << "<br />";
 			}
@@ -560,8 +768,10 @@ void Language::toHtml(const std::string &filename) const
 				htmlFile << *j;
 			}
 		}
+
 		htmlFile << "</td></tr>" << std::endl;
 	}
+
 	htmlFile << "</table>" << std::endl;
 	htmlFile.close();
 }

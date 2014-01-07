@@ -27,9 +27,10 @@ namespace OpenXcom
 {
 
 class Craft;
-class Window;
 class Text;
 class TextButton;
+class Window;
+
 
 /**
  * Screen that allows the player
@@ -39,20 +40,27 @@ class ConfirmCydoniaState
 	:
 		public State
 {
+
 private:
 	Window* _window;
 	Text* _txtMessage;
-	TextButton* _btnNo, * _btnYes;
+	TextButton
+		* _btnNo,
+		* _btnYes;
 	Craft* _craft;
+
 
 	public:
 		/// Creates the Select Destination state.
-		ConfirmCydoniaState(Game* game, Craft* craft);
+		ConfirmCydoniaState(
+				Game* game,
+				Craft* craft);
 		/// Cleans up the Select Destination state.
 		~ConfirmCydoniaState();
 
 		/// Updates the palette.
 		void init();
+
 		/// Handler for clicking the Cancel button.
 		void btnNoClick(Action* action);
 		/// Handler for clicking the Cydonia mission button.

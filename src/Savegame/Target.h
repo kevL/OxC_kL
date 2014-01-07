@@ -50,7 +50,7 @@ protected:
 		Target();
 
 
-public:
+	public:
 		/// Cleans up the target.
 		virtual ~Target();
 		/// Loads the moving target from YAML.
@@ -68,10 +68,13 @@ public:
 		double getLatitude() const;
 		/// Sets the target's latitude.
 		void setLatitude(double lat);
+
 		/// Gets the target's name.
 		virtual std::wstring getName(Language* lang) const = 0;
+
 		/// Gets the target's followers.
 		std::vector<Target*>* getFollowers();
+
 		/// Gets the distance to another target.
 		double getDistance(const Target* target) const;
 };

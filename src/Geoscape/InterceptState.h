@@ -47,26 +47,31 @@ class InterceptState
 		public State
 {
 
-	private:
+private:
+	Uint8 _cellColor;
 
-		Base* _base;
-		Globe* _globe;
-		Target *_target;
-		Text
-			* _txtBase,
-			* _txtCraft,
-			* _txtStatus,
-			* _txtTitle,
-			* _txtWeapons;
-		TextButton* _btnCancel;
-		TextList* _lstCrafts;
-		Window* _window;
+	Base* _base;
+	Globe* _globe;
+	Target* _target; // kL_note: Doesn't seem to be used... really.
+	Text
+		* _txtBase,
+		* _txtCraft,
+		* _txtStatus,
+//		* _txtTitle,
+		* _txtWeapons;
+	TextButton* _btnCancel;
+	TextList* _lstCrafts;
+	Window* _window;
 
-		std::vector<Craft*> _crafts;
+	std::vector<std::wstring> _bases;
+
+	std::vector<Craft*> _crafts;
+
+	/// A more descriptive state of the Craft.
+	std::wstring getAltStatus(Craft* craft);
 
 
 	public:
-
 		/// Creates the Intercept state.
 		InterceptState(
 				Game* game,
@@ -78,10 +83,17 @@ class InterceptState
 
 		/// Handler for clicking the Cancel button.
 		void btnCancelClick(Action* action);
+
 		/// Handler for clicking the Crafts list.
 		void lstCraftsLeftClick(Action* action);
 		/// Handler for right clicking the Crafts list.
 		void lstCraftsRightClick(Action* action);
+
+		// kL. These two are from SavedGameState:
+		/// Handler for moving the mouse over a list item.
+		void lstCraftsMouseOver(Action* action); // kL
+		/// Handler for moving the mouse outside the list borders.
+		void lstCraftsMouseOut(Action* action); // kL
 };
 
 }

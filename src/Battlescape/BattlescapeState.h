@@ -287,7 +287,9 @@ private:
 		/// kL. Gets the TurnCounter.
 		TurnCounter* getTurnCounter() const; // kL
 		/// kL. Get the Icons.
-		InteractiveSurface* getIcons() const; // kL
+//		InteractiveSurface* getIcons() const; // kL
+		/// kL. Toggles the icons' surfaces' visibility for Hidden Movement.
+		void toggleIcons(bool vis); // kL
 };
 
 }

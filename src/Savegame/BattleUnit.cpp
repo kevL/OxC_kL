@@ -3276,7 +3276,7 @@ int BattleUnit::getCoverReserve() const
 // kL_begin:
 /**
  * Initializes a death spin.
- * see Battlescape/UnitDieBState.cpp, ctor
+ * see Battlescape/UnitDieBState.cpp, cTor
  */
 void BattleUnit::initDeathSpin()
 {
@@ -3290,16 +3290,23 @@ void BattleUnit::initDeathSpin()
 /**
  * Continues a death spin.
  * see Battlescape/UnitDieBState.cpp, think()
+ * _spinPhases:
+				-1 = no spin
+				 0 = start spin
+				 1 = CW spin, 1st rotation
+				 2 = CCW spin, 1st rotation
+				 3 = CW spin, 2nd rotation
+				 4 = CCW spin, 2nd rotation
  */
 void BattleUnit::contDeathSpin()
 {
 	//Log(LOG_INFO) << "BattleUnit::contDeathSpin()" << " [target]: " << (getId());
 
-	int d = _direction;
-	if (3 == d) // if facing player, 1 rotation left
+	int dir = _direction;
+	if (dir == 3) // if facing player, 1 rotation left
 	{
-//		Log(LOG_INFO) << ". d_init = " << d;
-		if (3 == _spinPhase || 4 == _spinPhase) // start = 0, BattleUnit::deathPirouette()
+//		Log(LOG_INFO) << ". d_init = " << dir;
+		if (_spinPhase == 3 || _spinPhase == 4) // start = 0
 		{
 //			Log(LOG_INFO) << ". . _spinPhase = " << _spinPhase << " [ return ]";
 			 _spinPhase = -1; // end.
@@ -3307,33 +3314,43 @@ void BattleUnit::contDeathSpin()
 
 			 return;
 		}
-		else if (1 == _spinPhase)
+		else if (_spinPhase == 1)
 			_spinPhase = 3; // 2nd CW rotation
-		else if (2 == _spinPhase)
+		else if (_spinPhase == 2)
 			_spinPhase = 4; // 2nd CCW rotation
 	}
 
-	if (0 == _spinPhase)
+	if (_spinPhase == 0)
 	{
-		if (-1 < d && d < 4)
-			_spinPhase = 1; // 1st CW rotation
+		if (-1 < dir && dir < 4)
+		{
+			if (dir == 3)
+				_spinPhase = 3; // only 1 CW rotation
+			else
+				_spinPhase = 1; // 1st CW rotation
+		}
 		else
-			_spinPhase = 2; // 1st CCW rotation
+		{
+			if (dir == 3)
+				_spinPhase = 4; // only 1 CCW rotation
+			else
+				_spinPhase = 2; // 1st CCW rotation
+		}
 	}
 
-	if (1 == _spinPhase || 3 == _spinPhase)
+	if (_spinPhase == 1 || _spinPhase == 3)
 	{
-		d++;
-		if (8 == d) d = 0;
+		dir++;
+		if (dir == 8) dir = 0;
 	}
 	else
 	{
-		d--;
-		if (-1 == d) d = 7;
+		dir--;
+		if (dir == -1) dir = 7;
 	}
 
-//	Log(LOG_INFO) << ". d_final = " << d;
-	setDirection(d);
+//	Log(LOG_INFO) << ". d_final = " << dir;
+	setDirection(dir);
 	_cacheInvalid = true;
 }
 

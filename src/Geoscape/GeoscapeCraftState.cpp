@@ -110,14 +110,10 @@ GeoscapeCraftState::GeoscapeCraftState(
 				16);
 
 	add(_window);
-	add(_btnCenter);
-	add(_btnBase);
-	add(_btnTarget);
-	add(_btnPatrol);
-	add(_btnCancel);
 	add(_txtTitle);
 	add(_txtStatus);
 	add(_txtBase);
+	add(_txtRedirect);
 	add(_txtSpeed);
 	add(_txtMaxSpeed);
 	add(_txtSoldier);
@@ -129,7 +125,12 @@ GeoscapeCraftState::GeoscapeCraftState(
 	add(_txtW1Ammo);
 	add(_txtW2Name);
 	add(_txtW2Ammo);
-	add(_txtRedirect);
+
+	add(_btnTarget);
+	add(_btnBase);
+	add(_btnCenter);
+	add(_btnPatrol);
+	add(_btnCancel);
 
 	centerAllSurfaces();
 
@@ -170,9 +171,10 @@ GeoscapeCraftState::GeoscapeCraftState(
 
 	std::string stat = _craft->getStatus();
 	std::wstring status;
-	if (_waypoint != 0)
+/*	if (_waypoint != 0)
 		status = tr("STR_INTERCEPTING_UFO").arg(_waypoint->getId());
-	else if (_craft->getLowFuel())
+	else */
+	if (_craft->getLowFuel())
 		status = tr("STR_LOW_FUEL_RETURNING_TO_BASE");
 	// kL_begin: craft string, Based
 	else if (stat == "STR_READY"
@@ -186,7 +188,7 @@ GeoscapeCraftState::GeoscapeCraftState(
 	// kL_end.
 	else if (_craft->getDestination() == 0)
 		status = tr("STR_PATROLLING");
-	else if (_craft->getDestination() == (Target*)_craft->getBase())
+	else if (_craft->getDestination() == dynamic_cast<Target*>(_craft->getBase()))
 		status = tr("STR_RETURNING_TO_BASE");
 	else
 	{

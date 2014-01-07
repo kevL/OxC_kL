@@ -49,6 +49,7 @@ class Craft
 	:
 		public MovingTarget
 {
+
 private:
 	bool
 		_inBattlescape,
@@ -60,15 +61,15 @@ private:
 		_id,
 		_interceptionOrder;
 
-	std::string		_status;
-	std::wstring	_name;
+	std::string _status;
+	std::wstring _name;
 
-	Base*			_base;
-	ItemContainer*	_items;
-	RuleCraft*		_rules;
+	Base* _base;
+	ItemContainer* _items;
+	RuleCraft* _rules;
 
-	std::vector<CraftWeapon*>	_weapons;
-	std::vector<Vehicle*>		_vehicles;
+	std::vector<CraftWeapon*> _weapons;
+	std::vector<Vehicle*> _vehicles;
 
 
 	public:

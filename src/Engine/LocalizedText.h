@@ -106,7 +106,7 @@ inline LocalizedText::LocalizedText(const std::wstring& text)
  * Create a LocalizedText with some arguments already replaced.
  */
 inline LocalizedText::LocalizedText(
-		const std::wstring &text,
+		const std::wstring& text,
 		unsigned replaced)
 	:
 		_text(text),
@@ -207,7 +207,7 @@ LocalizedText &LocalizedText::arg(T val)
 
 
 /// Allow streaming of LocalizedText objects.
-inline std::wostream &operator<<(
+inline std::wostream& operator<<(
 							std::wostream &os,
 							const LocalizedText &txt)
 {

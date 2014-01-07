@@ -49,18 +49,16 @@ class Ufo
 {
 
 	public:
-
 		enum UfoStatus
 		{
-			FLYING,
-			LANDED,
-			CRASHED,
-			DESTROYED
+			FLYING,		// 0
+			LANDED,		// 1
+			CRASHED,	// 2
+			DESTROYED	// 3
 		};
 
 
 private:
-
 	bool
 		_detected,
 		_hyperDetected,
@@ -91,7 +89,6 @@ private:
 
 
 	public:
-
 		/// Creates a UFO of the specified type.
 		Ufo(RuleUfo* rules);
 		/// Cleans up the UFO.

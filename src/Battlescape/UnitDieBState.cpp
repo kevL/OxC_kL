@@ -67,7 +67,7 @@ UnitDieBState::UnitDieBState(
 		_damageType(damageType),
 		_noSound(noSound)
 {
-	//Log(LOG_INFO) << "Create UnitDieBState";
+	Log(LOG_INFO) << "Create UnitDieBState";
 
 	// don't show the "fall to death" animation when a unit is blasted with explosives or he is already unconscious
 /*kL	if (_damageType == DT_HE || _unit->getStatus() == STATUS_UNCONSCIOUS)
@@ -80,20 +80,27 @@ UnitDieBState::UnitDieBState(
 	else */
 //	{
 	if (_unit->getFaction() == FACTION_PLAYER)
+	{
 		_parent->getMap()->setUnitDying(true); // reveal the Map.
+		//Log(LOG_INFO) << ". setUnitDying DONE";
 
-	if (!_parent->getMap()->getCamera()->isOnScreen(_unit->getPosition())) // kL
-		_parent->getMap()->getCamera()->centerOnPosition(_unit->getPosition());
+		if (!_parent->getMap()->getCamera()->isOnScreen(_unit->getPosition())) // kL
+			_parent->getMap()->getCamera()->centerOnPosition(_unit->getPosition());
+
+		//Log(LOG_INFO) << ". centerOnPosition DONE";
+	}
 
 	// kL_note: this is only necessary when spawning a chryssalid from a zombie. See below
 	_originalDir = _unit->getDirection();
-//	_unit->setDirection(_originalDir); // kL. Stop Turning f!!!
+	_unit->setDirection(_originalDir); // kL. Stop Turning f!!!
 	_unit->setSpinPhase(-1);
+	//Log(LOG_INFO) << ". setSpinPhase DONE";
 
 	// kL_begin:
 	if (_unit->getVisible())
 //		&& _parent->getMap()->getCamera()->isOnScreen(_unit->getPosition()))
 	{
+		//Log(LOG_INFO) << ". . unit Visible";
 		if (!_unit->getSpawnUnit().empty())	// nb. getSpawnUnit() is a member of both BattleUnit & Unit...
 //			&& _unit->getSpecialAbility() == 0) // this comes into play because Soldiers & Civilians, (health=0) eg, can have SpawnUnit set and SpecAb set too.
 												// but should they spin or not spin??? Did they spin because they're already dead...?
@@ -123,6 +130,7 @@ spawnUnit: ""
 	}
 	else // unit is not onScreen and/or not visible.
 	{
+		//Log(LOG_INFO) << ". . unit NOT Visible";
 //		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED);
 
 		if (_unit->getHealth() == 0)
@@ -140,9 +148,11 @@ spawnUnit: ""
 
 	_unit->clearVisibleTiles();
 	_unit->clearVisibleUnits();
+	//Log(LOG_INFO) << ". clear Tiles & Units DONE";
 
     if (_unit->getFaction() == FACTION_HOSTILE)
     {
+		//Log(LOG_INFO) << ". . unit is Faction_Hostile";
         std::vector<Node*>* nodes = _parent->getSave()->getNodes();
         if (!nodes) return; // this better not happen.
 
@@ -151,14 +161,18 @@ spawnUnit: ""
 				node != nodes->end();
 				++node)
         {
-            if (_parent->getSave()->getTileEngine()->distanceSq(
+            if (*node // kL
+				&& _parent->getSave()->getTileEngine()->distanceSq(
 															(*node)->getPosition(),
 															_unit->getPosition()) < 4)
             {
+				//Log(LOG_INFO) << ". . . set Node danger";
                 (*node)->setType((*node)->getType() | Node::TYPE_DANGEROUS);
+				//Log(LOG_INFO) << ". . . set Node danger DONE";
             }
         }
     }
+	Log(LOG_INFO) << "Create UnitDieBState EXIT cTor";
 }
 
 /**
@@ -274,23 +288,32 @@ void UnitDieBState::think()
 				{
 					if (_damageType == DT_NONE)
 					{
-						game->pushState(new InfoboxOKState(game,
-								game->getLanguage()->getString("STR_HAS_DIED_FROM_A_FATAL_WOUND", _unit->getGender())
-									.arg(_unit->getName(game->getLanguage()))));
+						game->pushState(new InfoboxOKState(
+														game,
+														game->getLanguage()->getString(
+																					"STR_HAS_DIED_FROM_A_FATAL_WOUND",
+																					_unit->getGender())
+																				.arg(_unit->getName(game->getLanguage()))));
 					}
 					else if (Options::getBool("battleNotifyDeath"))
 					{
-						game->pushState(new InfoboxOKState(game,
-								game->getLanguage()->getString("STR_HAS_BEEN_KILLED", _unit->getGender())
-									.arg(_unit->getName(game->getLanguage()))));
+						game->pushState(new InfoboxOKState(
+														game,
+														game->getLanguage()->getString(
+																					"STR_HAS_BEEN_KILLED",
+																					_unit->getGender())
+																				.arg(_unit->getName(game->getLanguage()))));
 					}
 				}
 			}
 			else
 			{
-				game->pushState(new InfoboxOKState(game,
-						game->getLanguage()->getString("STR_HAS_BECOME_UNCONSCIOUS", _unit->getGender())
-							.arg(_unit->getName(game->getLanguage()))));
+				game->pushState(new InfoboxOKState(
+												game,
+												game->getLanguage()->getString(
+																			"STR_HAS_BECOME_UNCONSCIOUS",
+																			_unit->getGender())
+																		.arg(_unit->getName(game->getLanguage()))));
 			}
 		}
 
@@ -300,9 +323,13 @@ void UnitDieBState::think()
 		{
 			int liveAliens = 0;
 			int liveSoldiers = 0;
-			_parent->tallyUnits(liveAliens, liveSoldiers, false);
+			_parent->tallyUnits(
+							liveAliens,
+							liveSoldiers,
+							false);
 
-			if (liveAliens == 0 || liveSoldiers == 0)
+			if (liveAliens == 0
+				|| liveSoldiers == 0)
 			{
 				_parent->getSave()->setSelectedUnit(0);
 				_parent->requestEndTurn();
@@ -337,8 +364,8 @@ void UnitDieBState::convertUnitToCorpse()
 	BattleItem* itemToKeep = 0;
 
 	bool dropItems = !Options::getBool("weaponSelfDestruction")
-			|| _unit->getOriginalFaction() != FACTION_HOSTILE
-			|| _unit->getStatus() == STATUS_UNCONSCIOUS;
+						|| _unit->getOriginalFaction() != FACTION_HOSTILE
+						|| _unit->getStatus() == STATUS_UNCONSCIOUS;
 
 	// move inventory from unit to the ground for non-large units
 	if (size == 1

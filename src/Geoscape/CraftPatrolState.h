@@ -31,7 +31,6 @@ class Globe;
 class Text;
 class TextButton;
 class Window;
-//class GeoscapeState;	// kL
 
 
 /**
@@ -42,9 +41,9 @@ class CraftPatrolState
 	:
 		public State
 {
+
 private:
 	Craft* _craft;
-//	GeoscapeState* _gs;		// kL
 	Globe* _globe;
 	Text
 		* _txtDestination,
@@ -56,12 +55,12 @@ private:
 
 
 	public:
-		/// Creates the Geoscape Craft state.
+		/// Creates the Geoscape CraftPatrol state.
 		CraftPatrolState(
 				Game* game,
 				Craft* craft,
 				Globe* globe);
-		/// Cleans up the Geoscape Craft state.
+		/// Cleans up the Geoscape CraftPatrol state.
 		~CraftPatrolState();
 
 		/// Updates the palette.

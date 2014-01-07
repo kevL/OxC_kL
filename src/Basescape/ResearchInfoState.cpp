@@ -248,8 +248,8 @@ void ResearchInfoState::buildUi()
 	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->onMouseClick((ActionHandler)& ResearchInfoState::btnOkClick);
 	_btnOk->onKeyboardPress(
-						(ActionHandler)& ResearchInfoState::btnOkClick,
-						(SDLKey)Options::getInt("keyOk"));
+					(ActionHandler)& ResearchInfoState::btnOkClick,
+					(SDLKey)Options::getInt("keyOk"));
 
 	_btnCancel->setColor(Palette::blockOffset(13)+10);
 
@@ -259,16 +259,16 @@ void ResearchInfoState::buildUi()
 		_btnOk->setText(tr("STR_START_PROJECT"));
 		_btnCancel->setText(tr("STR_CANCEL_UC"));
 		_btnCancel->onKeyboardPress(
-								(ActionHandler)& ResearchInfoState::btnCancelClick,
-								(SDLKey)Options::getInt("keyCancel"));
+						(ActionHandler)& ResearchInfoState::btnCancelClick,
+						(SDLKey)Options::getInt("keyCancel"));
 	}
 	else
 	{
 		_btnOk->setText(tr("STR_OK"));
 		_btnCancel->setText(tr("STR_CANCEL_PROJECT"));
 		_btnOk->onKeyboardPress(
-							(ActionHandler)& ResearchInfoState::btnOkClick,
-							(SDLKey)Options::getInt("keyCancel"));
+						(ActionHandler)& ResearchInfoState::btnOkClick,
+						(SDLKey)Options::getInt("keyCancel"));
 	}
 
 	_btnCancel->onMouseClick((ActionHandler)& ResearchInfoState::btnCancelClick);
@@ -310,11 +310,11 @@ void ResearchInfoState::setAssignedScientist()
 {
 //kL	_txtAvailableScientist->setText(tr("STR_SCIENTISTS_AVAILABLE_UC").arg(_base->getAvailableScientists()));
 	_txtAvailableScientist->setText(tr("STR_SCIENTISTS_AVAILABLE_UC")
-								.arg(_base->getScientists())); // kL
+									.arg(_base->getScientists())); // kL
 	_txtAvailableSpace->setText(tr("STR_LABORATORY_SPACE_AVAILABLE_UC")
-								.arg(_base->getFreeLaboratories()));
+									.arg(_base->getFreeLaboratories()));
 	_txtAllocatedScientist->setText(tr("STR_SCIENTISTS_ALLOCATED")
-								.arg(_project->getAssigned()));
+									.arg(_project->getAssigned()));
 }
 
 /**

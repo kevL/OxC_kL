@@ -1130,7 +1130,10 @@ void Globe::cache(std::list<Polygon*>* polygons, std::list<Polygon*>* cache)
  * @param firstcolor, Offset of the first color to replace.
  * @param ncolors, Amount of colors to replace.
  */
-void Globe::setPalette(SDL_Color* colors, int firstcolor, int ncolors)
+void Globe::setPalette(
+		SDL_Color* colors,
+		int firstcolor,
+		int ncolors)
 {
 	Surface::setPalette(colors, firstcolor, ncolors);
 	
@@ -2241,16 +2244,21 @@ void Globe::blit(Surface* surface)
  */
 void Globe::mousePress(Action* action, State* state)
 {
-	double lon, lat;
+	double
+		lon,
+		lat;
+
 	cartToPolar(
 			static_cast<Sint16>(floor(action->getAbsoluteXMouse())),
 			static_cast<Sint16>(floor(action->getAbsoluteYMouse())),
 			&lon,
 			&lat);
 
-	// Check for errors
-	if (lat == lat && lon == lon)
+	if (lat == lat // Check for errors
+		&& lon == lon)
+	{
 		InteractiveSurface::mousePress(action, state);
+	}
 }
 
 /**
@@ -2260,16 +2268,21 @@ void Globe::mousePress(Action* action, State* state)
  */
 void Globe::mouseRelease(Action* action, State* state)
 {
-	double lon, lat;
+	double
+		lon,
+		lat;
+
 	cartToPolar(
 			static_cast<Sint16>(floor(action->getAbsoluteXMouse())),
 			static_cast<Sint16>(floor(action->getAbsoluteYMouse())),
 			&lon,
 			&lat);
 
-	// Check for errors
-	if (lat == lat && lon == lon)
+	if (lat == lat // Check for errors
+		&& lon == lon)
+	{
 		InteractiveSurface::mouseRelease(action, state);
+	}
 }
 
 /**
@@ -2289,15 +2302,18 @@ void Globe::mouseClick(Action* action, State* state)
 		zoomOut();
 	}
 
-	double lon, lat;
+	double
+		lon,
+		lat;
+
 	cartToPolar(
 			static_cast<Sint16>(floor(action->getAbsoluteXMouse())),
 			static_cast<Sint16>(floor(action->getAbsoluteYMouse())),
 			&lon,
 			&lat);
 	
-	// Check for errors
-	if (lat == lat && lon == lon)
+	if (lat == lat // Check for errors
+		&& lon == lon)
 	{
 		InteractiveSurface::mouseClick(action, state);
 
@@ -2335,7 +2351,11 @@ void Globe::keyboardPress(Action* action, State* state)
  * @param texture pointer to texture ID returns -1 when polygon not found
  * @param shade pointer to shade
  */
-void Globe::getPolygonTextureAndShade(double lon, double lat, int* texture, int* shade) const
+void Globe::getPolygonTextureAndShade(
+		double lon,
+		double lat,
+		int* texture,
+		int* shade) const
 {
 	// this is shade conversion from 0..31 levels of geoscape to battlescape levels 0..15
 	int worldshades[32] =
@@ -2347,12 +2367,19 @@ void Globe::getPolygonTextureAndShade(double lon, double lat, int* texture, int*
 	};
 
 	*texture = -1;
-	*shade = worldshades[CreateShadow::getShadowValue(0, Cord(0.0, 0.0, 1.0), getSunDirection(lon, lat), 0)];
+	*shade = worldshades[CreateShadow::getShadowValue(
+													0,
+													Cord(0.0, 0.0, 1.0),
+													getSunDirection(lon, lat),
+													0)];
 
 	// We're only temporarily changing cenLon/cenLat so the "const" is actually preserved
 	Globe* const globe = const_cast<Globe* const>(this); // WARNING: BAD CODING PRACTICE
 
-	double oldLon = _cenLon, oldLat = _cenLat;
+	double
+		oldLon = _cenLon,
+		oldLat = _cenLat;
+
 	globe->_cenLon = lon;
 	globe->_cenLat = lat;
 
@@ -2404,23 +2431,6 @@ bool Globe::isZoomedOutToMax() const
 		return false;
 	}
 }
-
-/**
- * kL. Checks if the globe is zoomed to a certain level.
- * @param level, The level to zoom out to.
- * @return, Returns true if globe has reached the level.
- */
-/* bool Globe::isZoomedToLevel(size_t level) const
-{
-	if (_zoom == level)
-	{
-		return true;
-	}
-	else
-	{
-		return false;
-	}
-} */
 
 /**
  *

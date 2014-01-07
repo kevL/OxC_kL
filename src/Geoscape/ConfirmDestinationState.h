@@ -26,11 +26,12 @@
 namespace OpenXcom
 {
 
-class Window;
-class Text;
-class TextButton;
 class Craft;
 class Target;
+class Text;
+class TextButton;
+class Window;
+
 
 /**
  * Window that allows the player to confirm a craft's new destination.
@@ -39,16 +40,23 @@ class ConfirmDestinationState
 	:
 		public State
 {
+
 private:
 	Craft* _craft;
 	Target* _target;
-	Window* _window;
 	Text* _txtTarget;
-	TextButton* _btnOk, * _btnCancel;
+	TextButton
+		* _btnCancel,
+		* _btnOk;
+	Window* _window;
+
 
 	public:
 		/// Creates the Confirm Destination state.
-		ConfirmDestinationState(Game* game, Craft* craft, Target* target);
+		ConfirmDestinationState(
+				Game* game,
+				Craft* craft,
+				Target* target);
 		/// Cleans up the Confirm Destination state.
 		~ConfirmDestinationState();
 

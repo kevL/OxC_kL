@@ -900,11 +900,13 @@ void BattlescapeGame::checkForCasualties(
 			{
 				if (hiddenExplosion) // this is instant death from UFO powersources, without screaming sounds
 				{
+					//Log(LOG_INFO) << ". . hiddenExplosion-PS!!!";
 					statePushNext(new UnitDieBState(
 												this,
 												*x,
 												DT_HE,
 												true));
+					//Log(LOG_INFO) << ". . hiddenExplosion-PS!!! done.";
 				}
 				else
 				{
@@ -941,15 +943,16 @@ void BattlescapeGame::checkForCasualties(
 		}
 	}
 
-	BattleUnit* bu = _save->getSelectedUnit();
-
-	if (_save->getSide() == FACTION_PLAYER)
+	if (!hiddenExplosion // showPsiButton() ought already be false at mission start.
+		&& _save->getSide() == FACTION_PLAYER)
 	{
-		_parentState->showPsiButton(
-				bu
-				&& bu->getOriginalFaction() == FACTION_HOSTILE
-				&& bu->getStats()->psiSkill > 0
-				&& !bu->isOut());
+		BattleUnit* bu = _save->getSelectedUnit();
+		if (bu)
+		{
+			_parentState->showPsiButton(bu->getOriginalFaction() == FACTION_HOSTILE
+										&& bu->getStats()->psiSkill > 0
+										&& !bu->isOut());
+		}
 	}
 
 	Log(LOG_INFO) << "BattlescapeGame::checkForCasualties() EXIT";

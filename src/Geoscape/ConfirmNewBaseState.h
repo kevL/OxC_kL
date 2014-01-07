@@ -32,6 +32,7 @@ class Text;
 class TextButton;
 class Globe;
 
+
 /**
  * Screen that allows the player
  * to confirm a new base on the globe.
@@ -41,17 +42,27 @@ class ConfirmNewBaseState
 	:
 		public State
 {
+
 private:
+	int _cost;
+
 	Base* _base;
 	Globe* _globe;
+	Text
+		* _txtArea,
+		* _txtCost;
+	TextButton
+		* _btnCancel,
+		* _btnOk;
 	Window* _window;
-	Text* _txtCost, * _txtArea;
-	TextButton* _btnOk, * _btnCancel;
-	int _cost;
+
 
 	public:
 		/// Creates the Confirm New Base state.
-		ConfirmNewBaseState(Game* game, Base* base, Globe* globe);
+		ConfirmNewBaseState(
+				Game* game,
+				Base* base,
+				Globe* globe);
 		/// Cleans up the Confirm New Base state.
 		~ConfirmNewBaseState();
 

@@ -233,6 +233,7 @@ void SavedGameState::init()
 void SavedGameState::updateList()
 {
 	_lstSaves->clearList();
+
 	_saves = SavedGame::getList(
 							_lstSaves,
 							_game->getLanguage(),

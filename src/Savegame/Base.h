@@ -67,14 +67,14 @@ private:
 	std::wstring _name;
 
 	std::vector<BaseFacility*>
-									_defenses,
-									_facilities;
-	std::vector<Craft*>				_crafts;
-	std::vector<Production*>		_productions;
-	std::vector<ResearchProject*>	_research;
-	std::vector<Soldier*>			_soldiers;
-	std::vector<Transfer*>			_transfers;
-	std::vector<Vehicle*>			_vehicles;
+		_defenses,
+		_facilities;
+	std::vector<Craft*> _crafts;
+	std::vector<Production*> _productions;
+	std::vector<ResearchProject*> _research;
+	std::vector<Soldier*> _soldiers;
+	std::vector<Transfer*> _transfers;
+	std::vector<Vehicle*> _vehicles;
 
 
 	public:
@@ -121,7 +121,7 @@ private:
 		/// Checks if a target is inside the base's radar range.
 		double insideRadarRange(Target* target) const;
 		/// Gets the base's available soldiers.
-		int getAvailableSoldiers(bool checkCombatReadiness = false) const;
+		int getAvailableSoldiers(bool combatReady = false) const;
 		/// Gets the base's total soldiers.
 		int getTotalSoldiers() const;
 		/// Gets the base's available scientists.

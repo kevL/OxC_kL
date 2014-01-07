@@ -16,8 +16,11 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "LocalizedText.h"
+
 #include "Language.h"
+
 
 namespace OpenXcom
 {
@@ -35,11 +38,21 @@ LocalizedText LocalizedText::arg(std::wstring const &val) const
 	size_t pos = _text.find(marker);
 	if (std::wstring::npos == pos)
 		return *this;
+
 	std::wstring ntext(_text);
-	for (/*empty*/ ; std::wstring::npos != pos; pos = ntext.find(marker, pos + val.length()))
+	for (
+			;
+			std::wstring::npos != pos;
+			pos = ntext.find(
+							marker,
+							pos + val.length()))
 	{
-		ntext.replace(pos, marker.length(), val);
+		ntext.replace(
+					pos,
+					marker.length(),
+					val);
 	}
+
 	return LocalizedText(ntext, _nextArg);
 }
 
@@ -56,12 +69,22 @@ LocalizedText &LocalizedText::arg(std::wstring const &val)
 	size_t pos = _text.find(marker);
 	if (std::wstring::npos != pos)
 	{
-		for (/*empty*/ ; std::wstring::npos != pos; pos = _text.find(marker, pos + val.length()))
+		for (
+				;
+				std::wstring::npos != pos;
+				pos = _text.find(
+								marker,
+								pos + val.length()))
 		{
-			_text.replace(pos, marker.length(), val);
+			_text.replace(
+						pos,
+						marker.length(),
+						val);
 		}
+
 		++_nextArg;
 	}
+
 	return *this;
 }
 

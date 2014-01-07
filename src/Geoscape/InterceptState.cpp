@@ -22,7 +22,7 @@
 #include <sstream>
 
 #include "ConfirmDestinationState.h"
-#include "GeoscapeCraftState.h"		// kL
+#include "GeoscapeCraftState.h" // kL
 #include "Globe.h"
 #include "SelectDestinationState.h"
 
@@ -50,10 +50,10 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Intercept window.
- * @param game Pointer to the core game.
- * @param globe Pointer to the Geoscape globe.
- * @param base Pointer to base to show contained crafts (NULL to show all crafts).
- * @param target Pointer to target to intercept (NULL to ask user for target).
+ * @param game, Pointer to the core game.
+ * @param globe, Pointer to the Geoscape globe.
+ * @param base, Pointer to base to show contained crafts (NULL to show all crafts).
+ * @param target, Pointer to target to intercept (NULL to ask user for target).
  */
 InterceptState::InterceptState(
 		Game* game,
@@ -65,17 +65,27 @@ InterceptState::InterceptState(
 		_globe(globe),
 		_base(base),
 		_target(target),
-		_crafts()
+		_crafts(),
+		_bases()
 {
 	_screen = false;
 
-	_window		= new Window(this, 320, 144, 0, 30, POPUP_HORIZONTAL);
-	_txtTitle	= new Text(300, 17, 10, 40);
+	_window		= new Window(
+							this,
+							320,
+							144,
+							0,
+							30,
+							POPUP_HORIZONTAL);
+//	_txtTitle	= new Text(240, 17, 70, 40);
+
+//	_txtBase	= new Text(80, 9, 16, 45); // might do getRegion in here also.
+//	_txtBase	= new Text(80, 17, 16, 40);
+	_txtBase	= new Text(288, 17, 16, 41);
 
 	_txtCraft	= new Text(86, 9, 16, 64);
-	_txtStatus	= new Text(60, 9, 102, 64);
-	_txtBase	= new Text(81, 9, 162, 64);
-	_txtWeapons	= new Text(77, 17, 243, 56);
+	_txtStatus	= new Text(53, 9, 117, 64);
+	_txtWeapons	= new Text(67, 17, 243, 56);
 
 	_lstCrafts	= new TextList(285, 72, 16, 74);
 
@@ -88,7 +98,7 @@ InterceptState::InterceptState(
 				16);
 
 	add(_window);
-	add(_txtTitle);
+//	add(_txtTitle);
 	add(_txtCraft);
 	add(_txtStatus);
 	add(_txtBase);
@@ -115,10 +125,10 @@ InterceptState::InterceptState(
 						(ActionHandler)& InterceptState::btnCancelClick,
 						(SDLKey)Options::getInt("keyGeoIntercept"));
 
-	_txtTitle->setColor(Palette::blockOffset(15)-1);
-	_txtTitle->setAlign(ALIGN_CENTER);
-	_txtTitle->setBig();
-	_txtTitle->setText(tr("STR_LAUNCH_INTERCEPTION"));
+//	_txtTitle->setColor(Palette::blockOffset(15)-1);
+//	_txtTitle->setAlign(ALIGN_CENTER);
+//	_txtTitle->setBig();
+//	_txtTitle->setText(tr("STR_LAUNCH_INTERCEPTION"));
 
 	_txtCraft->setColor(Palette::blockOffset(8)+5);
 	_txtCraft->setText(tr("STR_CRAFT"));
@@ -127,21 +137,25 @@ InterceptState::InterceptState(
 	_txtStatus->setText(tr("STR_STATUS"));
 
 	_txtBase->setColor(Palette::blockOffset(8)+5);
-	_txtBase->setText(tr("STR_BASE"));
+	_txtBase->setBig();
+//	_txtBase->setText(L"");
+	_txtBase->setText(tr("STR_INTERCEPT"));
 
 	_txtWeapons->setColor(Palette::blockOffset(8)+5);
 	_txtWeapons->setText(tr("STR_WEAPONS_CREW_HWPS"));
 
 	_lstCrafts->setColor(Palette::blockOffset(15)-1);
 	_lstCrafts->setSecondaryColor(Palette::blockOffset(8)+10);
-	_lstCrafts->setColumns(4, 86, 60, 81, 45);
+	_lstCrafts->setColumns(3, 93, 126, 50);
 	_lstCrafts->setSelectable(true);
+	_lstCrafts->setMargin(8);
 	_lstCrafts->setBackground(_window);
-//	_lstCrafts->setMargin(8);
 	_lstCrafts->onMouseClick((ActionHandler)& InterceptState::lstCraftsLeftClick);
 	_lstCrafts->onMouseClick(
 					(ActionHandler)& InterceptState::lstCraftsRightClick,
 					SDL_BUTTON_RIGHT);
+	_lstCrafts->onMouseOver((ActionHandler)& InterceptState::lstCraftsMouseOver);
+	_lstCrafts->onMouseOut((ActionHandler)& InterceptState::lstCraftsMouseOut);
 
 	int row = 0;
 
@@ -150,15 +164,22 @@ InterceptState::InterceptState(
 			i != _game->getSavedGame()->getBases()->end();
 			++i)
 	{
-		if (_base != 0 && *i != _base)
+		if (_base != 0
+			&& *i != _base)
+		{
 			continue;
-
+		}
 
 		for (std::vector<Craft*>::iterator
 				j = (*i)->getCrafts()->begin();
 				j != (*i)->getCrafts()->end();
 				++j)
 		{
+			_crafts.push_back(*j);
+
+			std::wstring wsBase = (*i)->getName().c_str();
+			_bases.push_back(wsBase);
+
 			std::wstringstream ss;
 
 			if ((*j)->getNumWeapons() > 0)
@@ -178,21 +199,30 @@ InterceptState::InterceptState(
 			else
 				ss << 0;
 
-			_crafts.push_back(*j);
+
+			std::wstring status = getAltStatus(*j);
 			_lstCrafts->addRow(
-							4,
+							3,
 							(*j)->getName(_game->getLanguage()).c_str(),
-							tr((*j)->getStatus()).c_str(),
-							(*i)->getName().c_str(),
+							status.c_str(),
 							ss.str().c_str());
 
-			if ((*j)->getStatus() == "STR_READY")
-			{
-				_lstCrafts->setCellColor(row, 1, Palette::blockOffset(8)+10);
-			}
+			_lstCrafts->setCellColor(row, 1, _cellColor);
+//			if ((*j)->getStatus() == "STR_READY")
+//				_lstCrafts->setCellColor(row, 1, Palette::blockOffset(8)+10);
+//			colorStatusCell();
+			_lstCrafts->setCellHighContrast(
+										row,
+										1,
+										true);
 
 			row++;
 		}
+	}
+
+	if (_base)
+	{
+		_txtBase->setText(_base->getName());
 	}
 }
 
@@ -201,6 +231,80 @@ InterceptState::InterceptState(
  */
 InterceptState::~InterceptState()
 {
+}
+
+/**
+ * A more descriptive state of the Craft.
+ */
+std::wstring InterceptState::getAltStatus(Craft* craft)
+{
+	std::string stat = craft->getStatus();
+	if (stat != "STR_OUT")
+	{
+		if (stat == "STR_READY")
+			_cellColor = Palette::blockOffset(7)+0;
+		else if (stat == "STR_REFUELLING")
+			_cellColor = Palette::blockOffset(10)+2;
+		else if (stat == "STR_REARMING")
+			_cellColor = Palette::blockOffset(10)+5;
+		else if (stat == "STR_REPAIRS")
+			_cellColor = Palette::blockOffset(10)+8;
+
+		return tr(stat);
+	}
+
+	std::wstring status;
+
+/*	Waypoint* wayPt = dynamic_cast<Waypoint*>(craft->getDestination());
+	if (wayPt != 0)
+		status = tr("STR_INTERCEPTING_UFO").arg(wayPt->getId());
+	else */
+	if (craft->getLowFuel())
+	{
+		status = tr("STR_LOW_FUEL_RETURNING_TO_BASE");
+		_cellColor = Palette::blockOffset(14)+8;
+	}
+	else if (craft->getDestination() == 0)
+	{
+		status = tr("STR_PATROLLING");
+		_cellColor = Palette::blockOffset(5)+5;
+	}
+	else if (craft->getDestination() == dynamic_cast<Target*>(craft->getBase()))
+	{
+		status = tr("STR_RETURNING_TO_BASE");
+		_cellColor = Palette::blockOffset(14)+4;
+	}
+	else
+	{
+		Ufo* ufo = dynamic_cast<Ufo*>(craft->getDestination());
+		if (ufo != 0)
+		{
+			if (craft->isInDogfight())
+			{
+				status = tr("STR_TAILING_UFO");
+				_cellColor = Palette::blockOffset(8)+0;
+			}
+			else if (ufo->getStatus() == Ufo::FLYING)
+			{
+				status = tr("STR_INTERCEPTING_UFO").arg(ufo->getId());
+				_cellColor = Palette::blockOffset(0)+12;
+			}
+			else
+			{
+				status = tr("STR_DESTINATION_UC_")
+							.arg(ufo->getName(_game->getLanguage()));
+				_cellColor = Palette::blockOffset(0)+13;
+			}
+		}
+		else
+		{
+			status = tr("STR_DESTINATION_UC_")
+						.arg(craft->getDestination()->getName(_game->getLanguage()));
+				_cellColor = Palette::blockOffset(8)+10;
+		}
+	}
+
+	return status;
 }
 
 /**
@@ -237,7 +341,39 @@ void InterceptState::lstCraftsRightClick(Action*)
 	_game->popState();
 
 	Craft* c = _crafts[_lstCrafts->getSelectedRow()];
-	_globe->center(c->getLongitude(), c->getLatitude());
+	_globe->center(
+				c->getLongitude(),
+				c->getLatitude());
+}
+
+// kL. These two are from SavedGameState:
+/**
+ * Shows Base label.
+ */
+void InterceptState::lstCraftsMouseOver(Action*)
+{
+	if (_base) return;
+
+	std::wstring wsBase;
+
+	int sel = _lstCrafts->getSelectedRow();
+	if (sel < static_cast<int>(_bases.size()))
+	{
+		wsBase = _bases[sel];
+	}
+
+	_txtBase->setText(wsBase);
+}
+
+/**
+ * Hides Base label.
+ */
+void InterceptState::lstCraftsMouseOut(Action*)
+{
+	if (_base) return;
+
+//	_txtBase->setText(L"");
+	_txtBase->setText(tr("STR_INTERCEPT"));
 }
 
 }

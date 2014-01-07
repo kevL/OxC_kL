@@ -336,35 +336,51 @@ void InventoryState::updateStats()
 
 	BattleUnit* unit = _battleGame->getSelectedUnit();
 
-	_txtTus->setText(tr("STR_TIME_UNITS_SHORT").arg(unit->getTimeUnits()));
+	if (_tu)
+		_txtTus->setText(tr("STR_TIME_UNITS_SHORT").arg(unit->getTimeUnits()));
 
-	int weight = unit->getCarriedWeight(_inv->getSelectedItem());
-	_txtWeight->setText(tr("STR_WEIGHT").arg(weight).arg(unit->getStats()->strength));
-	if (weight > unit->getStats()->strength)
-		_txtWeight->setSecondaryColor(Palette::blockOffset(2)+5);
-	else
-		_txtWeight->setSecondaryColor(Palette::blockOffset(3));
 
-	_txtFAcc->setText(tr("STR_ACCURACY_SHORT")
-						.arg(static_cast<int>(
-								static_cast<double>(unit->getStats()->firing) * unit->getAccuracyModifier())));
-
-	_txtReact->setText(tr("STR_REACTIONS_SHORT").arg(unit->getStats()->reactions));
-
-	if (unit->getStats()->psiSkill > 0)
-		_txtPSkill->setText(tr("STR_PSIONIC_SKILL_SHORT").arg(unit->getStats()->psiSkill));
-	else
-		_txtPSkill->setText(L"");
-
-	if (unit->getStats()->psiSkill > 0
-		|| (Options::getBool("psiStrengthEval")
-			&& _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements())))
+	if (_showStats)
 	{
-		_txtPStr->setText(tr("STR_PSIONIC_STRENGTH_SHORT").arg(unit->getStats()->psiStrength));
-	}
-	else
-		_txtPStr->setText(L"");
+		int str = unit->getStats()->strength;
+		int weight = unit->getCarriedWeight(_inv->getSelectedItem());
+		_txtWeight->setText(tr("STR_WEIGHT").arg(weight).arg(str));
+		if (weight > str)
+			_txtWeight->setSecondaryColor(Palette::blockOffset(2)+5);
+		else
+			_txtWeight->setSecondaryColor(Palette::blockOffset(3));
 
+		if (!_tu)
+		{
+			_txtFAcc->setText(tr("STR_ACCURACY_SHORT")
+								.arg(static_cast<int>(
+										static_cast<double>(unit->getStats()->firing) * unit->getAccuracyModifier())));
+
+			_txtReact->setText(tr("STR_REACTIONS_SHORT").arg(unit->getStats()->reactions));
+
+
+			int minPsi = 0;
+			if (unit->getType() == "SOLDIER")
+			{
+				minPsi = _game->getSavedGame()->getSoldier(unit->getId())->getRules()->getMinStats().psiSkill - 1;
+			}
+
+			int psiSkill = unit->getStats()->psiSkill;
+			if (psiSkill > minPsi)
+				_txtPSkill->setText(tr("STR_PSIONIC_SKILL_SHORT").arg(psiSkill));
+			else
+				_txtPSkill->setText(L"");
+
+			if (psiSkill > minPsi
+				|| (Options::getBool("psiStrengthEval")
+					&& _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements())))
+			{
+				_txtPStr->setText(tr("STR_PSIONIC_STRENGTH_SHORT").arg(unit->getStats()->psiStrength));
+			}
+			else
+				_txtPStr->setText(L"");
+		}
+	}
 	//Log(LOG_INFO) << "InventoryState::updateStats() EXIT";
 }
 
@@ -490,9 +506,15 @@ void InventoryState::btnPrevClick(Action*)
 		return;
 
 	if (_parent)
-		_parent->selectPreviousFactionUnit(false, false, true);
+		_parent->selectPreviousFactionUnit(
+										false,
+										false,
+										true);
 	else
-		_battleGame->selectPreviousFactionUnit(false, false, true);
+		_battleGame->selectPreviousFactionUnit(
+											false,
+											false,
+											true);
 
 	init();
 }
@@ -507,9 +529,15 @@ void InventoryState::btnNextClick(Action*)
 		return;
 
 	if (_parent)
-		_parent->selectNextFactionUnit(false, false, true);
+		_parent->selectNextFactionUnit(
+									false,
+									false,
+									true);
 	else
-		_battleGame->selectNextFactionUnit(false, false, true);
+		_battleGame->selectNextFactionUnit(
+										false,
+										false,
+										true);
 
 	init();
 }

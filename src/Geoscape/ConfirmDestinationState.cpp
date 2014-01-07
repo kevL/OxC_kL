@@ -18,21 +18,26 @@
  */
 
 #include "ConfirmDestinationState.h"
+
 #include <sstream>
+
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
+#include "../Engine/Options.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Surface.h"
-#include "../Interface/Window.h"
+
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
-#include "../Savegame/SavedGame.h"
+#include "../Interface/Window.h"
+
+#include "../Resource/ResourcePack.h"
+
+#include "../Savegame/Base.h"
 #include "../Savegame/Craft.h"
+#include "../Savegame/SavedGame.h"
 #include "../Savegame/Target.h"
 #include "../Savegame/Waypoint.h"
-#include "../Savegame/Base.h"
-#include "../Engine/Options.h"
 
 
 namespace OpenXcom
@@ -44,7 +49,10 @@ namespace OpenXcom
  * @param craft Pointer to the craft to retarget.
  * @param target Pointer to the selected target (NULL if it's just a point on the globe).
  */
-ConfirmDestinationState::ConfirmDestinationState(Game* game, Craft* craft, Target* target)
+ConfirmDestinationState::ConfirmDestinationState(
+		Game* game,
+		Craft* craft,
+		Target* target)
 	:
 		State(game),
 		_craft(craft),
@@ -64,11 +72,17 @@ ConfirmDestinationState::ConfirmDestinationState(Game* game, Craft* craft, Targe
 	if (w != 0
 		&& w->getId() == 0)
 	{
-		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
+		_game->setPalette(
+					_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)),
+					Palette::backPos,
+					16);
 	}
 	else
 	{
-		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)), Palette::backPos, 16);
+		_game->setPalette(
+					_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)),
+					Palette::backPos,
+					16);
 	}
 
 	add(_window);
@@ -87,7 +101,8 @@ ConfirmDestinationState::ConfirmDestinationState(Game* game, Craft* craft, Targe
 	_txtTarget->setAlign(ALIGN_CENTER);
 	_txtTarget->setVerticalAlign(ALIGN_MIDDLE);
 //	_txtTarget->setWordWrap(true);
-	if (w != 0 && w->getId() == 0)
+	if (w != 0
+		&& w->getId() == 0)
 	{
 		_txtTarget->setText(tr("STR_TARGET_WAY_POINT"));
 	}
@@ -98,13 +113,17 @@ ConfirmDestinationState::ConfirmDestinationState(Game* game, Craft* craft, Targe
 
 	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(tr("STR_OK"));
-	_btnOk->onMouseClick((ActionHandler) &ConfirmDestinationState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler) &ConfirmDestinationState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
+	_btnOk->onMouseClick((ActionHandler)& ConfirmDestinationState::btnOkClick);
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& ConfirmDestinationState::btnOkClick,
+					(SDLKey)Options::getInt("keyOk"));
 
 	_btnCancel->setColor(Palette::blockOffset(8)+5);
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
-	_btnCancel->onMouseClick((ActionHandler) &ConfirmDestinationState::btnCancelClick);
-	_btnCancel->onKeyboardPress((ActionHandler) &ConfirmDestinationState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnCancel->onMouseClick((ActionHandler)& ConfirmDestinationState::btnCancelClick);
+	_btnCancel->onKeyboardPress(
+					(ActionHandler)& ConfirmDestinationState::btnCancelClick,
+					(SDLKey)Options::getInt("keyCancel"));
 }
 
 /**
@@ -121,7 +140,8 @@ ConfirmDestinationState::~ConfirmDestinationState()
 void ConfirmDestinationState::btnOkClick(Action*)
 {
 	Waypoint* w = dynamic_cast<Waypoint*>(_target);
-	if (w != 0 && w->getId() == 0)
+	if (w != 0
+		&& w->getId() == 0)
 	{
 		w->setId(_game->getSavedGame()->getId("STR_WAYPOINT"));
 		_game->getSavedGame()->getWaypoints()->push_back(w);
@@ -133,9 +153,16 @@ void ConfirmDestinationState::btnOkClick(Action*)
 	if (_craft->getInterceptionOrder() == 0)
 	{
 		int maxInterceptionOrder = 0;
-		for (std::vector<Base*>::iterator baseIt = _game->getSavedGame()->getBases()->begin(); baseIt != _game->getSavedGame()->getBases()->end(); ++baseIt)
+
+		for (std::vector<Base*>::iterator
+				baseIt = _game->getSavedGame()->getBases()->begin();
+				baseIt != _game->getSavedGame()->getBases()->end();
+				++baseIt)
 		{
-			for (std::vector<Craft*>::iterator craftIt = (*baseIt)->getCrafts()->begin(); craftIt != (*baseIt)->getCrafts()->end(); ++craftIt)
+			for (std::vector<Craft*>::iterator
+					craftIt = (*baseIt)->getCrafts()->begin();
+					craftIt != (*baseIt)->getCrafts()->end();
+					++craftIt)
 			{
 				if ((*craftIt)->getInterceptionOrder() > maxInterceptionOrder)
 				{
@@ -158,7 +185,8 @@ void ConfirmDestinationState::btnOkClick(Action*)
 void ConfirmDestinationState::btnCancelClick(Action*)
 {
 	Waypoint* w = dynamic_cast<Waypoint*>(_target);
-	if (w != 0 && w->getId() == 0)
+	if (w != 0
+		&& w->getId() == 0)
 	{
 		delete w;
 	}

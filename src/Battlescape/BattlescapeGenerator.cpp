@@ -2763,8 +2763,7 @@ void BattlescapeGenerator::explodePowerSources()
 	{
 		if (_save->getTiles()[i]->getMapData(MapData::O_OBJECT)
 			&& _save->getTiles()[i]->getMapData(MapData::O_OBJECT)->getSpecialType() == UFO_POWER_SOURCE
-//kL			&& RNG::percent(75))
-			&& RNG::percent(80))	// kL
+			&& RNG::percent(80))
 		{
 			Position pos;
 			pos.x = _save->getTiles()[i]->getPosition().x * 16;
@@ -2773,11 +2772,13 @@ void BattlescapeGenerator::explodePowerSources()
 
 //kL			_save->getTileEngine()->explode(pos, 180+RNG::generate(0,70), DT_HE, 10);
 
-			// ((x^3)/32000)+50, x= 0..200									// kL
-			int rand = RNG::generate(1, 200);								// kL
-			int power = static_cast<int>(((pow(static_cast<double>(rand), 3)) / 32000.0) + 50.0);	// kL
-			Log(LOG_INFO) << "BattlescapeGenerator::explodePowerSources() power = " << power;
-			_save->getTileEngine()->explode(pos, power, DT_HE, 21);			// kL
+			// ((x^3)/32000)+50, x= 0..200
+			int rand = RNG::generate(1, 200); // kL
+			int power = static_cast<int>(((pow(static_cast<double>(rand), 3)) / 32000.0) + 50.0); // kL
+
+//			power = 300; // TEST!
+			Log(LOG_INFO) << "BattlescapeGenerator::explodePowerSources() power = " << power << " TEST~!";
+			_save->getTileEngine()->explode(pos, power, DT_HE, 21); // kL
 		}
 	}
 }

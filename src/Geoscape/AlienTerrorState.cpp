@@ -73,9 +73,9 @@ AlienTerrorState::AlienTerrorState(
 
 
 	_game->setPalette(
-			_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(3)),
-			Palette::backPos,
-			16);
+				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(3)),
+				Palette::backPos,
+				16);
 
 	add(_window);
 	add(_btnIntercept);
@@ -101,7 +101,9 @@ AlienTerrorState::AlienTerrorState(
 	_btnCancel->setColor(Palette::blockOffset(8)+5);
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)& AlienTerrorState::btnCancelClick);
-	_btnCancel->onKeyboardPress((ActionHandler)& AlienTerrorState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnCancel->onKeyboardPress(
+					(ActionHandler)& AlienTerrorState::btnCancelClick,
+					(SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(8)+5);
 	_txtTitle->setBig();
@@ -141,7 +143,9 @@ void AlienTerrorState::btnInterceptClick(Action*)
 {
 	_state->timerReset();
 
-	_state->getGlobe()->center(_terror->getLongitude(), _terror->getLatitude());
+	_state->getGlobe()->center(
+							_terror->getLongitude(),
+							_terror->getLatitude());
 	_game->popState();
 
 	_game->pushState(new InterceptState(
@@ -159,7 +163,9 @@ void AlienTerrorState::btnCentreClick(Action*)
 {
 	_state->timerReset();
 
-	_state->getGlobe()->center(_terror->getLongitude(), _terror->getLatitude());
+	_state->getGlobe()->center(
+							_terror->getLongitude(),
+							_terror->getLatitude());
 	_game->popState();
 }
 

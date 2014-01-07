@@ -106,11 +106,11 @@ TransferItemsState::TransferItemsState(
 	_txtTitle				= new Text(310, 16, 5, 9);
 
 	_txtItem				= new Text(128, 9, 16, 24);
-	_txtQuantity			= new Text(35, 9, 141, 24);
-	_txtAmountTransfer		= new Text(60, 9, 187, 24);
-	_txtAmountDestination	= new Text(63, 9, 246, 24);
+	_txtQuantity			= new Text(35, 9, 160, 24);
+	_txtAmountTransfer		= new Text(60, 9, 200, 24);
+	_txtAmountDestination	= new Text(62, 9, 247, 24);
 
-	_lstItems				= new TextList(293, 136, 8, 35);
+	_lstItems				= new TextList(285, 136, 16, 35);
 
 	_btnCancel				= new TextButton(134, 16, 16, 177);
 	_btnOk					= new TextButton(134, 16, 170, 177);
@@ -173,8 +173,8 @@ TransferItemsState::TransferItemsState(
 
 	_lstItems->setColor(Palette::blockOffset(15)+1);
 	_lstItems->setArrowColor(Palette::blockOffset(13)+10);
-	_lstItems->setArrowColumn(181, ARROW_VERTICAL);
-	_lstItems->setColumns(4, 144, 56, 31, 20);
+	_lstItems->setArrowColumn(172, ARROW_VERTICAL);
+	_lstItems->setColumns(4, 136, 56, 31, 20);
 	_lstItems->setSelectable(true);
 	_lstItems->setBackground(_window);
 	_lstItems->setMargin(8);

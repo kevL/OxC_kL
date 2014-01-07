@@ -307,8 +307,8 @@ int TextList::getRowY(int row) const
 /**
  * Adds a new row of text to the list, automatically creating
  * the required Text objects lined up where they need to be.
- * @param cols Number of columns.
- * @param ... Text for each cell in the new row.
+ * @param cols, Number of columns.
+ * @param ..., Text for each cell in the new row.
  */
 void TextList::addRow(
 		int cols,
@@ -325,8 +325,7 @@ void TextList::addRow(
 			i < cols;
 			++i)
 	{
-		// Place text
-		Text* txt = new Text(
+		Text* txt = new Text( // Place text
 							_columns[i],
 							_font->getHeight(),
 							_margin + rowX,
@@ -338,20 +337,14 @@ void TextList::addRow(
 		txt->setSecondaryColor(_color2);
 
 		if (_align[i])
-		{
 			txt->setAlign(_align[i]);
-		}
 
 		txt->setHighContrast(_contrast);
 
 		if (_font == _big)
-		{
 			txt->setBig();
-		}
 		else
-		{
 			txt->setSmall();
-		}
 
 		txt->setText(va_arg(args, wchar_t*));
 
@@ -374,13 +367,9 @@ void TextList::addRow(
 		temp.push_back(txt);
 
 		if (_condensed)
-		{
 			rowX += txt->getTextWidth();
-		}
 		else
-		{
 			rowX += _columns[i];
-		}
 	}
 
 	_texts.push_back(temp);
@@ -627,7 +616,7 @@ Uint8 TextList::getSecondaryColor() const
 
 /**
  * Enables/disables high contrast color. Mostly used for Battlescape text.
- * @param contrast High contrast setting.
+ * @param contrast, High contrast setting.
  */
 void TextList::setHighContrast(bool contrast)
 {
@@ -646,6 +635,22 @@ void TextList::setHighContrast(bool contrast)
 			(*j)->setHighContrast(contrast);
 		}
 	}
+}
+
+/**
+ * Changes the contrast of a specific Text object in the list.
+ * @param row, Row number.
+ * @param column, Column number.
+ * @param contrast, Contrast setting.
+ */
+void TextList::setCellHighContrast( // kL
+		int row,
+		int column,
+		bool contrast)
+{
+	_texts[row][column]->setHighContrast(contrast);
+
+	_redraw = true;
 }
 
 /**
@@ -995,11 +1000,13 @@ void TextList::scrollDown(bool toMax)
  */
 void TextList::updateArrows()
 {
-	_up->setVisible(_texts.size() > _visibleRows
-					&& _scroll > 0);
+	_up->setVisible(
+				_texts.size() > _visibleRows
+				&& _scroll > 0);
 
-	_down->setVisible(_texts.size() > _visibleRows
-						&& _scroll < _texts.size() - _visibleRows);
+	_down->setVisible(
+				_texts.size() > _visibleRows
+				&& _scroll < _texts.size() - _visibleRows);
 }
 
 /**

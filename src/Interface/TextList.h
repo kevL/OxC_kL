@@ -186,6 +186,12 @@ private:
 
 		/// Sets the text list's high contrast color setting.
 		void setHighContrast(bool contrast);
+		/// Sets the contrast of a certain cell.
+		void setCellHighContrast( // kL
+				int row,
+				int column,
+				bool contrast);
+
 		/// Sets the text horizontal alignment of the text list.
 		void setAlign(
 				TextHAlign align,

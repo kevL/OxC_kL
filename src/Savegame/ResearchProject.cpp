@@ -233,9 +233,10 @@ std::wstring ResearchProject::getCostCompleted() const
 {
 	float fProg = static_cast<float>(getSpent()) / static_cast<float>(getCost());
 	int iProg = static_cast<int>(fProg * 100.f); // truncate to 2 places
-	std::wstring sProgress = std::to_wstring(static_cast<long long>(iProg));
+//	std::wstring sProgress = std::to_wstring(static_cast<long long>(iProg));
+	std::wstring wsProgress = Text::formatPercentage(iProg);
 
-	return sProgress;
+	return wsProgress;
 } // kL_end.
 
 }

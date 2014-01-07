@@ -2638,9 +2638,18 @@ TurnCounter* BattlescapeState::getTurnCounter() const
  * kL. Get the Icons.
  * @return, Pointer to the Icon hotbar.
  */
-InteractiveSurface* BattlescapeState::getIcons() const
+/* InteractiveSurface* BattlescapeState::getIcons() const
 {
 	return _icons;
+} */
+
+/**
+ * kL. Toggles the icons' surfaces' visibility for Hidden Movement.
+ */
+void BattlescapeState::toggleIcons(bool vis)
+{
+	_icons->setVisible(vis);
+	_numLayers->setVisible(vis);
 }
 
 }

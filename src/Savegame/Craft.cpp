@@ -643,7 +643,7 @@ void Craft::setDamage(int damage)
 int Craft::getDamagePercentage() const
 {
 	return static_cast<int>(
-			floor(static_cast<double>(_damage) / static_cast<double>(_rules->getMaxDamage()) * 100));
+			floor(static_cast<double>(_damage) / static_cast<double>(_rules->getMaxDamage()) * 100.0));
 }
 
 /**
@@ -676,7 +676,7 @@ double Craft::getDistanceFromBase() const
 }
 
 /**
- * Returns the amount of fuel the craft uses up while it's in the air, based on its speed.
+ * Returns the amount of fuel the craft uses while it's in the air, based on speed.
  * @return Fuel amount.
  */
 int Craft::getFuelConsumption() const

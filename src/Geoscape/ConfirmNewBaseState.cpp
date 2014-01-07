@@ -18,21 +18,28 @@
  */
 
 #include "ConfirmNewBaseState.h"
+
+#include "BaseNameState.h"
+
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
+#include "../Engine/Options.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Surface.h"
-#include "../Interface/Window.h"
+
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
-#include "../Savegame/SavedGame.h"
-#include "../Savegame/Region.h"
-#include "../Ruleset/RuleRegion.h"
-#include "../Savegame/Base.h"
-#include "BaseNameState.h"
+#include "../Interface/Window.h"
+
 #include "../Menu/ErrorMessageState.h"
-#include "../Engine/Options.h"
+
+#include "../Resource/ResourcePack.h"
+
+#include "../Ruleset/RuleRegion.h"
+
+#include "../Savegame/Base.h"
+#include "../Savegame/Region.h"
+#include "../Savegame/SavedGame.h"
 
 
 namespace OpenXcom
@@ -44,7 +51,10 @@ namespace OpenXcom
  * @param base Pointer to the base to place.
  * @param globe Pointer to the Geoscape globe.
  */
-ConfirmNewBaseState::ConfirmNewBaseState(Game* game, Base* base, Globe* globe)
+ConfirmNewBaseState::ConfirmNewBaseState(
+		Game* game,
+		Base* base,
+		Globe* globe)
 	:
 		State(game),
 		_base(base),
@@ -54,19 +64,22 @@ ConfirmNewBaseState::ConfirmNewBaseState(Game* game, Base* base, Globe* globe)
 	_screen = false;
 
 	_window		= new Window(this, 224, 72, 16, 64);
-	_btnOk		= new TextButton(54, 14, 68, 106);
-	_btnCancel	= new TextButton(54, 14, 138, 106);
 	_txtCost	= new Text(120, 9, 68, 80);
 	_txtArea	= new Text(120, 9, 68, 90);
+	_btnCancel	= new TextButton(54, 14, 68, 106);
+	_btnOk		= new TextButton(54, 14, 138, 106);
 
 
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
+	_game->setPalette(
+				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)),
+				Palette::backPos,
+				16);
 
 	add(_window);
-	add(_btnOk);
-	add(_btnCancel);
 	add(_txtCost);
 	add(_txtArea);
+	add(_btnCancel);
+	add(_btnOk);
 
 	centerAllSurfaces();
 
@@ -77,17 +90,26 @@ ConfirmNewBaseState::ConfirmNewBaseState(Game* game, Base* base, Globe* globe)
 	_btnOk->setColor(Palette::blockOffset(15)-1);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& ConfirmNewBaseState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)& ConfirmNewBaseState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& ConfirmNewBaseState::btnOkClick,
+					(SDLKey)Options::getInt("keyOk"));
 
 	_btnCancel->setColor(Palette::blockOffset(15)-1);
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)& ConfirmNewBaseState::btnCancelClick);
-	_btnCancel->onKeyboardPress((ActionHandler)& ConfirmNewBaseState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnCancel->onKeyboardPress(
+					(ActionHandler)& ConfirmNewBaseState::btnCancelClick,
+					(SDLKey)Options::getInt("keyCancel"));
 
 	std::wstring area;
-	for (std::vector<Region*>::iterator i = _game->getSavedGame()->getRegions()->begin(); i != _game->getSavedGame()->getRegions()->end(); ++i)
+	for (std::vector<Region*>::iterator
+			i = _game->getSavedGame()->getRegions()->begin();
+			i != _game->getSavedGame()->getRegions()->end();
+			++i)
 	{
-		if ((*i)->getRules()->insideRegion(_base->getLongitude(), _base->getLatitude()))
+		if ((*i)->getRules()->insideRegion(
+										_base->getLongitude(),
+										_base->getLatitude()))
 		{
 			_cost = (*i)->getRules()->getBaseCost();
 			area = tr((*i)->getRules()->getType());
@@ -122,11 +144,20 @@ void ConfirmNewBaseState::btnOkClick(Action*)
 	{
 		_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds() - _cost);
 		_game->getSavedGame()->getBases()->push_back(_base);
-		_game->pushState(new BaseNameState(_game, _base, _globe, false));
+		_game->pushState(new BaseNameState(
+										_game,
+										_base,
+										_globe,
+										false));
 	}
 	else
 	{
-		_game->pushState(new ErrorMessageState(_game, "STR_NOT_ENOUGH_MONEY", Palette::blockOffset(8)+10, "BACK01.SCR", 0));
+		_game->pushState(new ErrorMessageState(
+											_game,
+											"STR_NOT_ENOUGH_MONEY",
+											Palette::blockOffset(8)+10,
+											"BACK01.SCR",
+											0));
 	}
 }
 
@@ -137,6 +168,7 @@ void ConfirmNewBaseState::btnOkClick(Action*)
 void ConfirmNewBaseState::btnCancelClick(Action*)
 {
 	_globe->onMouseOver(0);
+
 	_game->popState();
 }
 

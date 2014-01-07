@@ -18,10 +18,14 @@
  */
 
 #define _USE_MATH_DEFINES
+
 #include "Target.h"
+
 #include <cmath>
-#include "../Engine/Language.h"
+
 #include "Craft.h"
+
+#include "../Engine/Language.h"
 
 
 namespace OpenXcom
@@ -43,7 +47,10 @@ Target::Target()
  */
 Target::~Target()
 {
-	for (size_t i = 0; i < _followers.size(); ++i)
+	for (size_t
+			i = 0;
+			i < _followers.size();
+			++i)
 	{
 		Craft* craft = dynamic_cast<Craft*>(_followers[i]);
 		if (craft)
@@ -110,10 +117,10 @@ void Target::setLongitude(double lon)
 
 	// Keep between 0 and 2xPI
 	while (_lon < 0)
-		_lon += 2 * M_PI;
+		_lon += 2.0 * M_PI;
 
-	while (_lon >= 2 * M_PI)
-		_lon -= 2 * M_PI;
+	while (_lon >= 2.0 * M_PI)
+		_lon -= 2.0 * M_PI;
 }
 
 /**
@@ -133,16 +140,16 @@ void Target::setLatitude(double lat)
 {
 	_lat = lat;
 
-	// Keep between -PI/2 and PI/2
-	if (_lat < -M_PI / 2)
+	// keep it between -pi/2 and pi/2
+	if (_lat < -(M_PI / 2.0))
 	{
 		_lat = M_PI - _lat;
 		setLongitude(_lon + M_PI);
 	}
-	else if (_lat > M_PI / 2)
+	else if (_lat > M_PI / 2.0)
 	{
 //kL		_lat = -M_PI + _lat;
-		_lat = _lat - M_PI;		// kL
+		_lat = _lat - M_PI; // kL
 		setLongitude(_lon - M_PI);
 	}
 }
@@ -163,7 +170,12 @@ std::vector<Target*>* Target::getFollowers()
  */
 double Target::getDistance(const Target* target) const
 {
-	return acos(cos(_lat) * cos(target->getLatitude()) * cos(target->getLongitude() - _lon) + sin(_lat) * sin(target->getLatitude()));
+	return acos(
+			cos(_lat)
+				* cos(target->getLatitude())
+				* cos(target->getLongitude() - _lon)
+			+ sin(_lat)
+				* sin(target->getLatitude()));
 }
 
 }
