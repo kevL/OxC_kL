@@ -50,8 +50,7 @@ class GraphsState
 {
 
 private:
-	static const unsigned int
-		GRAPH_MAX_BUTTONS = 16;
+	static const unsigned int GRAPH_MAX_BUTTONS = 16;
 
 	bool
 		_alien,
@@ -60,8 +59,8 @@ private:
 		_income;
 
 	unsigned int // will be only between 0 and size()
-		_btnRegionsOffset,
-		_btnCountriesOffset;
+		_btnCountriesOffset,
+		_btnRegionsOffset;
 
 	InteractiveSurface
 		* _bg,
@@ -81,19 +80,13 @@ private:
 		* _txtMonths,
 		* _txtYears;
 	ToggleTextButton
-		* _btnRegionTotal,
-		* _btnCountryTotal;
+		* _btnCountryTotal,
+		* _btnRegionTotal;
 
 	std::vector<bool> _financeToggles;
 	std::vector<GraphBtnInfo*>
 		_regionToggles,
 		_countryToggles;
-//	std::vector<NumberText*>
-	std::vector<Text*>
-		_numCountryActivityAlien,
-		_numCountryActivityXCom,
-		_numRegionActivityAlien,
-		_numRegionActivityXCom;
 	std::vector<Surface*>
 		_alienCountryLines,
 		_alienRegionLines,
@@ -101,7 +94,13 @@ private:
 		_incomeLines,
 		_xcomCountryLines,
 		_xcomRegionLines;
-	std::vector<Text*> _txtScale;
+//	std::vector<NumberText*>
+	std::vector<Text*>
+		_numCountryActivityAlien,
+		_numCountryActivityXCom,
+		_numRegionActivityAlien,
+		_numRegionActivityXCom,
+		_txtScale;
 	std::vector<ToggleTextButton*>
 		_btnRegions,
 		_btnCountries,

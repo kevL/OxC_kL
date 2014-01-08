@@ -1448,10 +1448,13 @@ int BattleUnit::getFallingPhase() const
 }
 
 /**
- * Returns whether the soldier is out of combat, dead or unconscious.
- * A soldier that is out, cannot perform any actions, cannot be selected, but it's still a unit.
- * @checkHealth, To check if unit still has health
- * @checkStun, To check if unit is stunned
+ * Returns whether the unit is out of combat, ie dead or unconscious.
+ * A unit that is Out, cannot perform any actions,
+ * and cannot be selected, but it's still a unit.
+ * @note checkHealth and checkStun are early returns and therefore
+ * should generally not be used to test a negation: eg, !isOut()
+ * @param checkHealth, Check if unit still has health
+ * @param checkStun, Check if unit is stunned
  * @return bool, True if unable to function on the battlefield
  */
 bool BattleUnit::isOut(
@@ -1631,13 +1634,15 @@ bool BattleUnit::getVisible() const
 }
 
 /**
- * Add this unit to the list of visible units.
- * @param unit, Seen unit.
- * @return, True if this is a new one.
+ * Add this unit to a vector of spotted and/or visible units.
+ * @param unit, A seen unit.
+ * @return, True if the seen unit was NOT previously flagged as visible.
+ * @note, xCom soldiers are always considered "visible";
+ *			only aLiens go vis/Invis
  */
 bool BattleUnit::addToVisibleUnits(BattleUnit* unit)
 {
-	bool add = true;
+	bool addUnit = true;
 
 	for (std::vector<BattleUnit*>::iterator
 			i = _unitsSpottedThisTurn.begin();
@@ -1646,16 +1651,15 @@ bool BattleUnit::addToVisibleUnits(BattleUnit* unit)
 	{
 		if (dynamic_cast<BattleUnit*>(*i) == unit)
 		{
-			add = false;
+			addUnit = false;
 
 			break;
 		}
 	}
 
-	if (add)
-	{
+	if (addUnit)
 		_unitsSpottedThisTurn.push_back(unit);
-	}
+
 
 	for (std::vector<BattleUnit*>::iterator
 			i = _visibleUnits.begin();
@@ -1734,14 +1738,16 @@ void BattleUnit::clearVisibleTiles()
  * @param item
  * @return firing Accuracy
  */
-double BattleUnit::getFiringAccuracy(BattleActionType actionType, BattleItem* item)
+double BattleUnit::getFiringAccuracy(
+		BattleActionType actionType,
+		BattleItem* item)
 {
 	//Log(LOG_INFO) << "BattleUnit::getFiringAccuracy(), unitID " << getId() << " /  getStats()->firing" << getStats()->firing;
 
 	if (actionType == BA_HIT) // quick out.
 	{
 		return static_cast<double>(item->getRules()->getAccuracyMelee()) / 100.0;
-//		return static_cast<double>(item->getRules()->getAccuracyMelee()) / 100.0 * getAccuracyModifier();	// kL
+//		return static_cast<double>(item->getRules()->getAccuracyMelee()) / 100.0 * getAccuracyModifier(); // kL
 	}
 
 
@@ -1760,11 +1766,11 @@ double BattleUnit::getFiringAccuracy(BattleActionType actionType, BattleItem* it
 		weaponAcc = item->getRules()->getAccuracySnap();
 	}
 
-	double result = static_cast<double>(getStats()->firing) / 100.0;
-	result *= weaponAcc / 100.0;
+	double ret = static_cast<double>(getStats()->firing) / 100.0;
+	ret *= weaponAcc / 100.0;
 
 	if (_kneeled)
-		result *= 1.16;
+		ret *= 1.16;
 
 	if (item->getRules()->isTwoHanded())
 	{
@@ -1772,11 +1778,11 @@ double BattleUnit::getFiringAccuracy(BattleActionType actionType, BattleItem* it
 		if (getItem("STR_RIGHT_HAND") != 0
 			&& getItem("STR_LEFT_HAND") != 0)
 		{
-			result *= 0.79;
+			ret *= 0.79;
 		}
 	}
 
-	return result * getAccuracyModifier();
+	return ret * getAccuracyModifier();
 }
 
 /**
@@ -1786,15 +1792,15 @@ double BattleUnit::getFiringAccuracy(BattleActionType actionType, BattleItem* it
  */
 double BattleUnit::getAccuracyModifier()
 {
-	double result = static_cast<double>(_health) / static_cast<double>(getStats()->health);
+	double ret = static_cast<double>(_health) / static_cast<double>(getStats()->health);
 
 	int wounds = _fatalWounds[BODYPART_HEAD] + _fatalWounds[BODYPART_RIGHTARM];
 	if (wounds > 9)
 		wounds = 9;
 
-	result *= 1.0 - (0.1 * static_cast<double>(wounds));
+	ret *= 1.0 - (0.1 * static_cast<double>(wounds));
 
-	return result;
+	return ret;
 }
 
 /**
@@ -3123,6 +3129,7 @@ void BattleUnit::invalidateCache()
 /**
  * kL_note: This pertains only to individual soldiers;
  * ie, what has *this* soldier spotted this turn.
+ * Update: now pertains only to aLien units.
  */
 std::vector<BattleUnit*> BattleUnit::getUnitsSpottedThisTurn()
 {

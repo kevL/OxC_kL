@@ -2382,9 +2382,9 @@ void GeoscapeState::time1Day()
 						++iter2)
 				{
 					if ((*iter)->getRules()->getName() == (*iter2)->getRules()->getName()
-						&&  _game->getRuleset()->getUnit((*iter2)->getRules()->getName()) == 0)
+						&& _game->getRuleset()->getUnit((*iter2)->getRules()->getName()) == 0)
 					{
-						(*j)->removeResearch(*iter2);
+						(*j)->removeResearch(*iter2, false);
 
 						break;
 					}

@@ -32,6 +32,7 @@ class TextButton;
 class TextList;
 class Window;
 
+
 /**
  * Soldiers screen that lets the player
  * manage all the soldiers in a base.
@@ -44,6 +45,7 @@ class SoldiersState
 private:
 	Base *_base;
 	Text
+		* _txtBaseLabel,
 		* _txtCraft,
 //		* _txtLost,
 		* _txtName,

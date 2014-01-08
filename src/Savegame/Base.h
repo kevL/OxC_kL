@@ -188,7 +188,7 @@ private:
 				ResearchProject* project,
 				bool help = true); // kL
 		/// kL: Research Help ala XcomUtil.
-		void researchHelp(std::string sProject);
+		void researchHelp(std::string aLien);
 		/// Add a new Production to Base.
 		void addProduction(Production* prod);
 		/// Remove a Base's Production.

@@ -93,6 +93,7 @@ ManageAlienContainmentState::ManageAlienContainmentState(
 
 	_window			= new Window(this, 320, 200, 0, 0);
 	_txtTitle		= new Text(310, 17, 5, 10);
+	_txtBaseLabel	= new Text(80, 9, 16, 10);
 
 	_txtAvailable	= new Text(144, 9, 16, 30);
 	_txtUsed		= new Text(144, 9, 160, 30);
@@ -129,6 +130,7 @@ ManageAlienContainmentState::ManageAlienContainmentState(
 
 	add(_window);
 	add(_txtTitle);
+	add(_txtBaseLabel);
 	add(_txtAvailable);
 	add(_txtUsed);
 	add(_txtItem);
@@ -169,6 +171,9 @@ ManageAlienContainmentState::ManageAlienContainmentState(
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_MANAGE_CONTAINMENT"));
+
+	_txtBaseLabel->setColor((origin == OPT_BATTLESCAPE)? Palette::blockOffset(8)+5: _color);
+	_txtBaseLabel->setText(_base->getName(_game->getLanguage()));
 
 	_txtItem->setColor(_color);
 	_txtItem->setText(tr("STR_ALIEN"));

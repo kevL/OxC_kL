@@ -49,6 +49,7 @@ private:
 	Text
 		* _txtAllocated,
 		* _txtAvailable,
+		* _txtBaseLabel,
 		* _txtProgress,
 		* _txtProject,
 		* _txtScientists,

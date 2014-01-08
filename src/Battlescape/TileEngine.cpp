@@ -207,11 +207,11 @@ void TileEngine::calculateTerrainLighting()
 void TileEngine::calculateUnitLighting()
 {
 	const int layer = 2;				// Dynamic lighting layer.
-	const int personalLightPower = 15;	// amount of light a unit generates
+//kL	const int personalLightPower = 15;	// amount of light a unit generates
+	const int personalLightPower = 11;	// kL, Try it...
 	const int fireLightPower = 15;		// amount of light a fire generates
 
-	// reset all light to 0 first
-	for (int
+	for (int // reset all light to 0 first
 			i = 0;
 			i < _save->getMapSizeXYZ();
 			++i)
@@ -224,10 +224,10 @@ void TileEngine::calculateUnitLighting()
 			i != _save->getUnits()->end();
 			++i)
 	{
-		// add lighting of soldiers
-		if (_personalLighting
+		if (_personalLighting // add lighting of soldiers
 			&& (*i)->getFaction() == FACTION_PLAYER
-			&& !(*i)->isOut())
+//kL			&& !(*i)->isOut())
+			&& (*i)->getHealth() != 0) // kL, Let unconscious soldiers glow.
 		{
 			addLight(
 					(*i)->getPosition(),
@@ -273,8 +273,7 @@ void TileEngine::addLight(
 					z < _save->getMapSizeZ();
 					z++)
 			{
-//kL				int distance = int(floor(sqrt(float(x * x + y * y)) + 0.5));
-				int distance = static_cast<int>(floor(sqrt(static_cast<float>(x * x + y * y)))); // kL
+				int distance = static_cast<int>(floor(sqrt(static_cast<float>(x * x + y * y))));
 
 				if (_save->getTile(Position(voxelTarget.x + x, voxelTarget.y + y, z)))
 					_save->getTile(Position(voxelTarget.x + x, voxelTarget.y + y, z))->addLight(power - distance, layer);
@@ -298,23 +297,18 @@ void TileEngine::addLight(
  * @return, True when new aliens are spotted.
  */
 bool TileEngine::calculateFOV(BattleUnit* unit)
-//bool TileEngine::calculateFOV(BattleUnit* unit, bool bPos)	// kL
 {
 	//Log(LOG_INFO) << "TileEngine::calculateFOV() for ID " << unit->getId();
-//	bool kL_Debug = false;
-//	if (unit->getId() == 1000001) kL_Debug = true;
+	unit->clearVisibleUnits();	// kL:below
+	unit->clearVisibleTiles();	// kL:below
 
-
-	unit->clearVisibleUnits();		// kL:below
-	unit->clearVisibleTiles();		// kL:below
-
-	if (unit->isOut(true, true))	// kL:below (check health, check stun, check status)
+	if (unit->isOut(true, true)) // kL:below (check health, check stun, check status)
 		return false;
 
-	bool ret = false;				// kL
+	bool ret = false; // kL
 
-	size_t preVisibleUnits = unit->getUnitsSpottedThisTurn().size();
-	//if (kL_Debug) Log(LOG_INFO) << ". . . . preVisibleUnits = " << (int)preVisibleUnits;
+	size_t preVisUnits = unit->getUnitsSpottedThisTurn().size();
+	//Log(LOG_INFO) << ". . . . preVisUnits = " << (int)preVisUnits;
 
 
 	int direction;
@@ -357,7 +351,10 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 	Position test;
 
 //kL	if (unit->getHeight() + unit->getFloatHeight() + -_save->getTile(unit->getPosition())->getTerrainLevel() >= 24 + 4)
-	if (unit->getHeight() + unit->getFloatHeight() - _save->getTile(unitPos)->getTerrainLevel() >= 24 + 4)	// kL
+	if (unit->getHeight()
+				+ unit->getFloatHeight()
+				- _save->getTile(unitPos)->getTerrainLevel()
+			>= 24 + 4)
 	{
 		++unitPos.z;
 	}
@@ -407,7 +404,7 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 
 //	int dist = distance(position, (*i)->getPosition());
 				const int distanceSqr = x * x + y * y;
-//				const int distanceSqr = x * x + y * y + z * z;	// kL
+//				const int distanceSqr = x * x + y * y + z * z; // kL
 				//Log(LOG_INFO) << "distanceSqr = " << distanceSqr << " ; x = " << x << " ; y = " << y << " ; z = " << z; // <- HUGE write to file.
 				//Log(LOG_INFO) << "x = " << x << " ; y = " << y << " ; z = " << z; // <- HUGE write to file.
 
@@ -433,19 +430,21 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 						//Log(LOG_INFO) << "inside getTile(test)";
 						BattleUnit* visUnit = _save->getTile(test)->getUnit();
 
-						//if (kL_Debug) Log(LOG_INFO) << ". . calculateFOV(), visible() CHECK.. " << visUnit->getId();
+						//Log(LOG_INFO) << ". . calculateFOV(), visible() CHECK.. " << visUnit->getId();
 						if (visUnit
 							&& !visUnit->isOut(true, true)
-							&& visible(unit, _save->getTile(test))) // reveal units & tiles <- This seems uneven.
+							&& visible(
+									unit,
+									_save->getTile(test))) // reveal units & tiles <- This seems uneven.
 						{
 							//Log(LOG_INFO) << ". . visible() TRUE : unitID = " << unit->getId() << " ; visID = " << visUnit->getId();
 							//Log(LOG_INFO) << ". . calcFoV, distance = " << distance(unit->getPosition(), visUnit->getPosition());
 
-							//if (kL_Debug) Log(LOG_INFO) << ". . calculateFOV(), visible() TRUE " << visUnit->getId();
-							if (!visUnit->getVisible())		// kL,  spottedID = " << visUnit->getId();
+							//Log(LOG_INFO) << ". . calculateFOV(), visible() TRUE " << visUnit->getId();
+							if (!visUnit->getVisible()) // kL, spottedID = " << visUnit->getId();
 							{
 								//Log(LOG_INFO) << ". . calculateFOV(), getVisible() FALSE";
-								ret = true;						// kL
+								ret = true; // kL
 							}
 							//Log(LOG_INFO) << ". . calculateFOV(), visUnit -> getVisible() = " << !ret;
 
@@ -456,26 +455,28 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 								visUnit->getTile()->setDiscovered(true, 2); // kL_below. sprite caching for floor+content: DO I WANT THIS.
 								visUnit->setVisible(true);
 							}
-							//if (kL_Debug) Log(LOG_INFO) << ". . calculateFOV(), FACTION_PLAYER, Done";
+							//Log(LOG_INFO) << ". . calculateFOV(), FACTION_PLAYER, Done";
 
-							if ((visUnit->getFaction() == FACTION_HOSTILE && unit->getFaction() != FACTION_HOSTILE)		// kL_note: or not Neutral?
-								|| (visUnit->getFaction() != FACTION_HOSTILE && unit->getFaction() == FACTION_HOSTILE))	// kL_note: what about Mc'd spooters?
+							if ((visUnit->getFaction() == FACTION_HOSTILE
+									&& unit->getFaction() != FACTION_HOSTILE)	// kL_note: or not Neutral?
+								|| (visUnit->getFaction() != FACTION_HOSTILE
+									&& unit->getFaction() == FACTION_HOSTILE))	// kL_note: what about Mc'd spooters?
 							{
 								//Log(LOG_INFO) << ". . . opposite Factions, add Tile & visUnit to visList";
 
-								unit->addToVisibleUnits(visUnit);
+								unit->addToVisibleUnits(visUnit); // kL_note: This returns a boolean; i can use that......
 								unit->addToVisibleTiles(visUnit->getTile());
 
 								if (unit->getFaction() == FACTION_HOSTILE)
 //kL									&& visUnit->getFaction() != FACTION_HOSTILE)
 								{
-									//if (kL_Debug) Log(LOG_INFO) << ". . calculateFOV(), spotted Unit FACTION_HOSTILE, setTurnsExposed()";
+									//Log(LOG_INFO) << ". . calculateFOV(), spotted Unit FACTION_HOSTILE, setTurnsExposed()";
 									visUnit->setTurnsExposed(0);
 								}
 							}
-							//if (kL_Debug) Log(LOG_INFO) << ". . calculateFOV(), opposite Factions, Done";
+							//Log(LOG_INFO) << ". . calculateFOV(), opposite Factions, Done";
 						}
-						//if (kL_Debug) Log(LOG_INFO) << ". . calculateFOV(), visUnit EXISTS & isVis, Done";
+						//Log(LOG_INFO) << ". . calculateFOV(), visUnit EXISTS & isVis, Done";
 
 						if (unit->getFaction() == FACTION_PLAYER) // reveal extra tiles
 						{
@@ -497,7 +498,10 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 										yPlayer++)
 								{
 									//Log(LOG_INFO) << ". . . . calculateLine() inside for(2) Loop";
-									Position pPlayer = unitPos + Position(xPlayer, yPlayer, 0);
+									Position pPlayer = unitPos + Position(
+																		xPlayer,
+																		yPlayer,
+																		0);
 
 // int calculateLine(const Position& origin, const Position& target, bool storeTrajectory, std::vector<Position>* trajectory,
 //		BattleUnit* excludeUnit, bool doVoxelCheck = true, bool onlyVisible = false, BattleUnit* excludeAllBut = 0);
@@ -570,7 +574,7 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 	// this way we stop if there are the same amount of visible units, but a
 	// different unit is seen, or we stop if there are more visible units seen
 		&& !unit->getVisibleUnits()->empty()
-		&& unit->getUnitsSpottedThisTurn().size() > preVisibleUnits)
+		&& unit->getUnitsSpottedThisTurn().size() > preVisUnits)
 	{
 		//Log(LOG_INFO) << "TileEngine::calculateFOV() Player NOT ret TRUE";
 		return true;
@@ -607,7 +611,9 @@ void TileEngine::calculateFOV(const Position& position)
 	{
 		//Log(LOG_INFO) << ". iterate ID = " << (*i)->getId();
 
-		int dist = distance(position, (*i)->getPosition());
+		int dist = distance(
+						position,
+						(*i)->getPosition());
 		//Log(LOG_INFO) << ". distance to Pos& = " << dist;
 		if (dist <= MAX_VIEW_DISTANCE)
 		{
@@ -647,17 +653,15 @@ void TileEngine::recalculateFOV()
 Position TileEngine::getSightOriginVoxel(BattleUnit* currentUnit)
 {
 	// determine the origin (and target) voxels for calculations
-//	Position originVoxel;
-//kL	originVoxel = Position((currentUnit->getPosition().x * 16) + 7, (currentUnit->getPosition().y * 16) + 8, currentUnit->getPosition().z * 24);
 	Position originVoxel = Position(
-			(currentUnit->getPosition().x * 16) + 8,
-			(currentUnit->getPosition().y * 16) + 8,
-			currentUnit->getPosition().z * 24);			// kL
+								currentUnit->getPosition().x * 16 + 8,
+								currentUnit->getPosition().y * 16 + 8,
+								currentUnit->getPosition().z * 24);
 
-//kL	originVoxel.z += -_save->getTile(currentUnit->getPosition())->getTerrainLevel();
-//	originVoxel.z -= _save->getTile(currentUnit->getPosition())->getTerrainLevel();		// kL
-	originVoxel.z += currentUnit->getHeight() + currentUnit->getFloatHeight()
-			- _save->getTile(currentUnit->getPosition())->getTerrainLevel() - 2; // two voxels lower (nose level)
+	originVoxel.z += currentUnit->getHeight()
+					+ currentUnit->getFloatHeight()
+					- _save->getTile(currentUnit->getPosition())->getTerrainLevel()
+					- 2; // two voxels lower (nose level)
 		// kL_note: Can make this equivalent to LoF origin, perhaps.....
 		// hey, here's an idea: make Snaps & Auto shoot from hip, Aimed from shoulders or eyes.
 
@@ -672,7 +676,8 @@ Position TileEngine::getSightOriginVoxel(BattleUnit* currentUnit)
 	} */
 
 	if (originVoxel.z >= (currentUnit->getPosition().z + 1) * 24
-		&& (!tileAbove || !tileAbove->hasNoFloor(0)))
+		&& (!tileAbove
+			|| !tileAbove->hasNoFloor(0)))
 	{
 		while (originVoxel.z >= (currentUnit->getPosition().z + 1) * 24)
 		{
@@ -752,10 +757,10 @@ bool TileEngine::visible(
 	// kL_note: Is an intermediary object *not* obstructing viewing
 	// or targetting, when it should be?? Like, around corners?
 	unitIsSeen = canTargetUnit(
-			&originVoxel,
-			tile,
-			&scanVoxel,
-			currentUnit);
+							&originVoxel,
+							tile,
+							&scanVoxel,
+							currentUnit);
 
 	if (unitIsSeen)
 	{
@@ -770,11 +775,11 @@ bool TileEngine::visible(
 		_trajectory.clear();
 
 		calculateLine(
-				originVoxel,
-				scanVoxel,
-				true,
-				&_trajectory,
-				currentUnit);
+					originVoxel,
+					scanVoxel,
+					true,
+					&_trajectory,
+					currentUnit);
 
 		// visible() - Check if targetUnit is really targetUnit.
 /*		Log(LOG_INFO) << ". . . . identifying targetUnit @ end of trajectory...";
@@ -811,14 +816,14 @@ bool TileEngine::visible(
 		{
 			//Log(LOG_INFO) << ". . . . . . tracing Trajectory...";
 			if (t != _save->getTile(Position(
-					_trajectory.at(i).x / 16,
-					_trajectory.at(i).y / 16,
-					_trajectory.at(i).z / 24)))
+										_trajectory.at(i).x / 16,
+										_trajectory.at(i).y / 16,
+										_trajectory.at(i).z / 24)))
 			{
 				t = _save->getTile(Position(
-						_trajectory.at(i).x / 16,
-						_trajectory.at(i).y / 16,
-						_trajectory.at(i).z / 24));
+										_trajectory.at(i).x / 16,
+										_trajectory.at(i).y / 16,
+										_trajectory.at(i).z / 24));
 			}
 			// the 'origin tile' now steps along through voxel/tile-space, picking up extra
 			// weight (subtracting distance for both distance and obscuration) as it goes
@@ -995,9 +1000,9 @@ bool TileEngine::canTargetUnit(
 {
 //kL	Position targetVoxel = Position((tile->getPosition().x * 16) + 7, (tile->getPosition().y * 16) + 8, tile->getPosition().z * 24);
 	Position targetVoxel = Position(
-			tile->getPosition().x * 16 + 8,
-			tile->getPosition().y * 16 + 8,
-			tile->getPosition().z * 24);
+								tile->getPosition().x * 16 + 8,
+								tile->getPosition().y * 16 + 8,
+								tile->getPosition().z * 24);
 
 	std::vector<Position> _trajectory;
 
@@ -1030,7 +1035,8 @@ bool TileEngine::canTargetUnit(
 	// vector manipulation to make scan work in view-space
 	Position relPos = targetVoxel - *originVoxel;
 
-	float normal = static_cast<float>(unitRadius) / sqrt(static_cast<float>(relPos.x * relPos.x + relPos.y * relPos.y));
+	float normal = static_cast<float>(unitRadius)
+					/ sqrt(static_cast<float>(relPos.x * relPos.x + relPos.y * relPos.y));
 	int relX = static_cast<int>(floor(static_cast<float>(relPos.y) * normal + 0.5f));
 	int relY = static_cast<int>(floor(static_cast<float>(-relPos.x) * normal + 0.5f));
 
@@ -1043,7 +1049,7 @@ bool TileEngine::canTargetUnit(
 		-relY,	relX
 	};
 
-	if (!potentialUnit->isOut(true, true))
+	if (!potentialUnit->isOut())
 	{
 		heightRange = potentialUnit->getHeight();
 	}
@@ -1156,9 +1162,9 @@ bool TileEngine::canTargetTile(
 	};
 
 	Position targetVoxel = Position(
-			tile->getPosition().x * 16,
-			tile->getPosition().y * 16,
-			tile->getPosition().z * 24);
+								tile->getPosition().x * 16,
+								tile->getPosition().y * 16,
+								tile->getPosition().z * 24);
 
 	std::vector<Position> _trajectory;
 
@@ -1329,7 +1335,8 @@ bool TileEngine::canTargetTile(
  */
 std::vector<BattleUnit*> TileEngine::getSpottingUnits(BattleUnit* unit)
 {
-	Log(LOG_INFO) << "TileEngine::getSpottingUnits() targetID " << (unit)->getId() << " : initi = " << (int)(unit)->getInitiative();
+	Log(LOG_INFO) << "TileEngine::getSpottingUnits() targetID " << (unit)->getId()
+									<< " : initi = " << (int)(unit)->getInitiative();
 
 	Tile* tile = unit->getTile();
 
@@ -1693,7 +1700,7 @@ BattleUnit* TileEngine::hit(
 		int power,
 		ItemDamageType type,
 		BattleUnit* attacker,
-		bool hit)	// kL add.
+		bool hit) // kL add.
 {
 	Log(LOG_INFO) << "TileEngine::hit() by ID " << attacker->getId() << " @ " << attacker->getPosition()
 			<< " : power = " << power
@@ -1702,8 +1709,6 @@ BattleUnit* TileEngine::hit(
 	if (type != DT_NONE) // TEST for Psi-attack.
 	{
 		//Log(LOG_INFO) << "DT_ type = " << static_cast<int>(type);
-
-
 		Tile* tile = _save->getTile(Position(
 										pTarget_voxel.x / 16,
 										pTarget_voxel.y / 16,
@@ -1739,9 +1744,10 @@ BattleUnit* TileEngine::hit(
 			&& type != DT_STUN)						// kL, workaround for Stunrod.
 		{
 			Log(LOG_INFO) << ". . terrain hit";
-			// power 25% to 75%
 //kL			const int randPower = RNG::generate(power / 4, power * 3 / 4); // RNG::boxMuller(power, power/6)
-			power = RNG::generate(power / 4, power * 3 / 4);
+			power = RNG::generate( // 25% to 75%
+								power / 4,
+								power * 3 / 4);
 			Log(LOG_INFO) << ". . RNG::generate(power) = " << power;
 
 			if (part == VOXEL_OBJECT
@@ -1750,7 +1756,7 @@ BattleUnit* TileEngine::hit(
 				if (power >= tile->getMapData(MapData::O_OBJECT)->getArmor()
 					&& tile->getMapData(VOXEL_OBJECT)->isBaseModule())
 				{
-					_save->getModuleMap()[(center.x / 16) / 10][(center.y / 16) / 10].second--;
+					_save->getModuleMap()[(pTarget_voxel.x / 16) / 10][(pTarget_voxel.y / 16) / 10].second--;
 				}
 			}
 
@@ -1802,10 +1808,10 @@ BattleUnit* TileEngine::hit(
 				const Position relPos = pTarget_voxel - targetPos - Position(0, 0, verticaloffset); */
 				int const size = buTarget->getArmor()->getSize() * 8;
 				Position const targetPos = (buTarget->getPosition() * Position(16, 16, 24)) // convert tilespace to voxelspace
-						+ Position(
-								size,
-								size,
-								buTarget->getFloatHeight() - tile->getTerrainLevel());
+											+ Position(
+													size,
+													size,
+													buTarget->getFloatHeight() - tile->getTerrainLevel());
 				Position const relPos = pTarget_voxel - targetPos - Position(0, 0, verticaloffset);
 
 //kL				const int randPower	= RNG::generate(1, power * 2);	// kL_above
@@ -1838,13 +1844,13 @@ BattleUnit* TileEngine::hit(
 					}
 				}
 
-				if (buTarget->getSpecialAbility() == SPECAB_EXPLODEONDEATH
-					&& !buTarget->isOut() // <- don't explode if stunned. Maybe... kL
-					&& buTarget->getHealth() == 0)	// kL
+				if (buTarget->getSpecialAbility() == SPECAB_EXPLODEONDEATH // cyberdiscs
+					&& buTarget->getHealth() == 0		// kL
+					&& !buTarget->isOut(false, true))	// don't explode if stunned. Maybe...
 //kL					(buTarget->getHealth() == 0 || buTarget->getStunlevel() >= buTarget->getHealth()))
 				{
-					if (type != DT_STUN
-						&& type != DT_HE)
+					if (type != DT_STUN					// don't explode if stunned. Maybe... see above.
+						&& type != DT_HE)				// don't explode if taken down w/ explosives
 					{
 						Log(LOG_INFO) << ". . . . new ExplosionBState(), !DT_STUN & !DT_HE";
 						// kL_note: wait a second. hit() creates an ExplosionBState, but ExplosionBState::explode() creates a hit() ! -> terrain..
@@ -2105,8 +2111,9 @@ void TileEngine::explode(
 									{
 										// ground zero effect is in effect
 //kL										dest->getUnit()->damage(Position(0, 0, 0), (int)(RNG::generate(power_/2.0, power_*1.5)), type);
-										int powerVsUnit = static_cast<int>(
-															RNG::generate(static_cast<float>(power_) * 0.5f, static_cast<float>(power_) * 1.5f)); // kL
+										int powerVsUnit = static_cast<int>(RNG::generate( // 50% to 150%
+																	static_cast<float>(power_) * 0.5f,
+																	static_cast<float>(power_) * 1.5f)); // kL
 										Log(LOG_INFO) << ". . . powerVsUnit = " << powerVsUnit << " DT_HE, GZ";
 
 										if (targetUnit->isKneeled()) // kL
@@ -2125,8 +2132,9 @@ void TileEngine::explode(
 										// directional damage relative to explosion position.
 										// units above the explosion will be hit in the legs, units lateral to or below will be hit in the torso
 //kL										dest->getUnit()->damage(Position(centerX, centerY, centerZ + 5) - dest->getPosition(), (int)(RNG::generate(power_/2.0, power_*1.5)), type);
-										int powerVsUnit = static_cast<int>(
-															RNG::generate(static_cast<float>(power_) * 0.5f, static_cast<float>(power_) * 1.5f)); // kL
+										int powerVsUnit = static_cast<int>(RNG::generate( // 50% to 150%
+																	static_cast<float>(power_) * 0.5f,
+																	static_cast<float>(power_) * 1.5f)); // kL
 										Log(LOG_INFO) << ". . . powerVsUnit = " << powerVsUnit << " DT_HE, not GZ";
 
 										if (targetUnit->isKneeled()) // kL
@@ -2205,8 +2213,10 @@ void TileEngine::explode(
 										float resistance = dest->getUnit()->getArmor()->getDamageModifier(DT_IN);
 										if (resistance > 0.f)
 										{
-//kL											int fire = RNG::generate(4, 11);					// <- why is this not based on power_
-											int fire = RNG::generate(power_ / 4, power_ * 3 / 4);	// kL: 25 - 50%
+//kL											int fire = RNG::generate(4, 11); // <- why is this not based on power_
+											int fire = RNG::generate( // 25% - 75%
+																	power_ / 4,
+																	power_ * 3 / 4); // kL: 25 - 50%
 
 //kL											dest->getUnit()->damage(Position(0, 0, 12-dest->getTerrainLevel()), RNG::generate(5, 10), DT_IN, true);
 											dest->getUnit()->damage(
@@ -2297,14 +2307,26 @@ bool TileEngine::detonate(Tile* tile)
 
 	bool objective = false;
 
-	Tile* tiles[7];
 	static const int parts[7] = {0, 1, 2, 0, 1, 2, 3};
-
 	Position pos = tile->getPosition();
-	tiles[0] = _save->getTile(Position(pos.x, pos.y, pos.z + 1)); // ceiling
-	tiles[1] = _save->getTile(Position(pos.x + 1, pos.y, pos.z)); // east wall
-	tiles[2] = _save->getTile(Position(pos.x, pos.y + 1, pos.z)); // south wall
-	tiles[3] = tiles[4] = tiles[5] = tiles[6] = tile;
+
+	Tile* tiles[7];
+	tiles[0] = _save->getTile(Position( // ceiling
+									pos.x,
+									pos.y,
+									pos.z + 1));
+	tiles[1] = _save->getTile(Position( // east wall
+									pos.x + 1,
+									pos.y,
+									pos.z));
+	tiles[2] = _save->getTile(Position( // south wall
+									pos.x,
+									pos.y + 1,
+									pos.z));
+	tiles[3]	= tiles[4]
+				= tiles[5]
+				= tiles[6]
+				= tile;
 
 	if (explosive)
 	{
@@ -2357,7 +2379,7 @@ bool TileEngine::detonate(Tile* tile)
 						if (_save->getMissionType() == "STR_BASE_DEFENSE"
 							&& i == 6
 							&& tile->getMapData(MapData::O_OBJECT)
-							&& tile->getMapData(V_OBJECT)->isBaseModule())
+							&& tile->getMapData(VOXEL_OBJECT)->isBaseModule())
 						{
 							_save->getModuleMap()[tile->getPosition().x / 10][tile->getPosition().y / 10].second--;
 						}

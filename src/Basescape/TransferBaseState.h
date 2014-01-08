@@ -47,6 +47,7 @@ private:
 	Base* _base;
 	Text
 		* _txtArea,
+		* _txtBaseLabel,
 		* _txtFunds,
 		* _txtName,
 		* _txtTitle;

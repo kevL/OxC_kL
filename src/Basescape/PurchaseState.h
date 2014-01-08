@@ -57,21 +57,22 @@ private:
 	float _iQty;
 
 	Base* _base;
-	Timer
-		* _timerInc,
-		* _timerDec;
-	TextButton
-		* _btnOk,
-		* _btnCancel;
-	Window* _window;
 	Text
+		* _txtBaseLabel,
 		* _txtCost,
 		* _txtFunds,
 		* _txtItem,
 		* _txtPurchases,
 		* _txtQuantity,
 		* _txtTitle;
+	TextButton
+		* _btnCancel,
+		* _btnOk;
 	TextList* _lstItems;
+	Timer
+		* _timerDec,
+		* _timerInc;
+	Window* _window;
 
 	std::vector<int> _qtys;
 	std::vector<std::string>

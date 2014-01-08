@@ -85,6 +85,7 @@ PurchaseState::PurchaseState(
 
 	_window			= new Window(this, 320, 200, 0, 0);
 	_txtTitle		= new Text(310, 17, 5, 9);
+	_txtBaseLabel	= new Text(80, 9, 16, 9);
 
 	_txtFunds		= new Text(140, 9, 16, 24);
 	_txtPurchases	= new Text(140, 9, 160, 24);
@@ -100,13 +101,13 @@ PurchaseState::PurchaseState(
 
 
 	_game->setPalette(
-				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(
-																			Palette::blockOffset(0)),
-																			Palette::backPos,
-																			16);
+				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)),
+				Palette::backPos,
+				16);
 
 	add(_window);
 	add(_txtTitle);
+	add(_txtBaseLabel);
 	add(_txtFunds);
 	add(_txtPurchases);
 	add(_txtItem);
@@ -125,26 +126,35 @@ PurchaseState::PurchaseState(
 	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& PurchaseState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)& PurchaseState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& PurchaseState::btnOkClick,
+					(SDLKey)Options::getInt("keyOk"));
 	_btnOk->setVisible(false);
 
 	_btnCancel->setColor(Palette::blockOffset(13)+10);
 	_btnCancel->setText(tr("STR_CANCEL"));
 	_btnCancel->onMouseClick((ActionHandler)& PurchaseState::btnCancelClick);
-	_btnCancel->onKeyboardPress((ActionHandler)& PurchaseState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnCancel->onKeyboardPress(
+					(ActionHandler)& PurchaseState::btnCancelClick,
+					(SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_PURCHASE_HIRE_PERSONNEL"));
 
+	_txtBaseLabel->setColor(Palette::blockOffset(13)+10);
+	_txtBaseLabel->setText(_base->getName(_game->getLanguage()));
+
 	_txtFunds->setColor(Palette::blockOffset(13)+10);
 	_txtFunds->setSecondaryColor(Palette::blockOffset(13));
-	_txtFunds->setText(tr("STR_CURRENT_FUNDS").arg(Text::formatFunding(_game->getSavedGame()->getFunds())));
+	_txtFunds->setText(tr("STR_CURRENT_FUNDS")
+						.arg(Text::formatFunding(_game->getSavedGame()->getFunds())));
 
 	_txtPurchases->setColor(Palette::blockOffset(13)+10);
 	_txtPurchases->setSecondaryColor(Palette::blockOffset(13));
-	_txtPurchases->setText(tr("STR_COST_OF_PURCHASES").arg(Text::formatFunding(_total)));
+	_txtPurchases->setText(tr("STR_COST_OF_PURCHASES")
+						.arg(Text::formatFunding(_total)));
 
 	_txtItem->setColor(Palette::blockOffset(13)+10);
 	_txtItem->setText(tr("STR_ITEM"));
@@ -170,18 +180,24 @@ PurchaseState::PurchaseState(
 	_lstItems->onRightArrowClick((ActionHandler)& PurchaseState::lstItemsRightArrowClick);
 	_lstItems->onMousePress((ActionHandler)& PurchaseState::lstItemsMousePress);
 
-	_qtys.push_back(0);
-	std::wstringstream ss;
-	ss << _base->getTotalSoldiers();
+	std::wstringstream
+		ss1,
+		ss2,
+		ss3,
+		ss4,
+		ss5,
+		ss6,
+		ss7;
+
+	ss1 << _base->getTotalSoldiers();
 	_lstItems->addRow(
 					4,
 					tr("STR_SOLDIER").c_str(),
 					Text::formatFunding(_game->getRuleset()->getSoldierCost() * 2).c_str(),
-					ss.str().c_str(),
+					ss1.str().c_str(),
 					L"0");
-
 	_qtys.push_back(0);
-	std::wstringstream ss2;
+
 	ss2 << _base->getTotalScientists();
 	_lstItems->addRow(
 					4,
@@ -189,9 +205,8 @@ PurchaseState::PurchaseState(
 					Text::formatFunding(_game->getRuleset()->getScientistCost() * 2).c_str(),
 					ss2.str().c_str(),
 					L"0");
-
 	_qtys.push_back(0);
-	std::wstringstream ss3;
+
 	ss3 << _base->getTotalEngineers();
 	_lstItems->addRow(
 					4,
@@ -199,6 +214,7 @@ PurchaseState::PurchaseState(
 					Text::formatFunding(_game->getRuleset()->getEngineerCost() * 2).c_str(),
 					ss3.str().c_str(),
 					L"0");
+	_qtys.push_back(0);
 
 
 	// Add craft-types to purchase list.
@@ -213,8 +229,8 @@ PurchaseState::PurchaseState(
 		if (rule->getBuyCost() > 0
 			&& _game->getSavedGame()->isResearched(rule->getRequirements()))
 		{
-			_crafts.push_back(*i);
 			_qtys.push_back(0);
+			_crafts.push_back(*i);
 
 			int crafts = 0;
 			for (std::vector<Craft*>::iterator
@@ -226,7 +242,6 @@ PurchaseState::PurchaseState(
 					crafts++;
 			}
 
-			std::wstringstream ss4;
 			ss4 << crafts;
 			_lstItems->addRow(
 							4,
@@ -255,8 +270,8 @@ PurchaseState::PurchaseState(
 			&& launcher->getBuyCost() > 0
 			&& !isExcluded(launcher->getType()))
 		{
-			_items.push_back(launcher->getType());
 			_qtys.push_back(0);
+			_items.push_back(launcher->getType());
 
 			std::wstring item = tr(launcher->getType());
 			// kL_begin: Add qty of craft weapons in transit to Purchase screen stores.
@@ -273,7 +288,6 @@ PurchaseState::PurchaseState(
 				}
 			} // kL_end.
 
-			std::wstringstream ss5;
 //kL			ss5 << _base->getItems()->getItem(launcher->getType());
 			ss5 << tQty; // kL
 			_lstItems->addRow(
@@ -305,8 +319,8 @@ PurchaseState::PurchaseState(
 			&& clip->getBuyCost() > 0
 			&& !isExcluded(clip->getType()))
 		{
-			_items.push_back(clip->getType());
 			_qtys.push_back(0);
+			_items.push_back(clip->getType());
 
 			std::wstring item = tr(clip->getType());
 			// kL_begin: Add qty of clips in transit to Purchase screen stores.
@@ -323,16 +337,15 @@ PurchaseState::PurchaseState(
 				}
 			} // kL_end.
 
-			std::wstringstream ss5;
 //kL			ss5 << _base->getItems()->getItem(clip->getType());
-			ss5 << tQty; // kL
+			ss6 << tQty; // kL
 
-			item.insert(0, L"  ");
+			item.insert(0, L" - ");
 			_lstItems->addRow(
 							4,
 							item.c_str(),
 							Text::formatFunding(clip->getBuyCost()).c_str(),
-							ss5.str().c_str(),
+							ss6.str().c_str(),
 							L"0");
 
 			for (std::vector<std::string>::iterator
@@ -362,8 +375,8 @@ PurchaseState::PurchaseState(
 		if (rule->getBuyCost() > 0
 			&& !isExcluded(*i))
 		{
-			_items.push_back(*i);
 			_qtys.push_back(0);
+			_items.push_back(*i);
 
 			std::wstring item = tr(*i);
 
@@ -433,19 +446,18 @@ PurchaseState::PurchaseState(
 				}
 			} // kL_end.
 
-			std::wstringstream ss5;
-			ss5 << tQty; // kL
+			ss7 << tQty; // kL
 
 			if (rule->getBattleType() == BT_AMMO)
 			{
-				item.insert(0, L"  ");
+				item.insert(0, L" - ");
 			}
 
 			_lstItems->addRow(
 							4,
 							item.c_str(),
 							Text::formatFunding(rule->getBuyCost()).c_str(),
-							ss5.str().c_str(),
+							ss7.str().c_str(),
 							L"0");
 		}
 	}
@@ -844,7 +856,7 @@ void PurchaseState::increaseByValue(int change)
 			}
 
 			change = std::min(maxByStores, change);
-			_iQty += ((float)(change)) * storesNeededPerItem;
+			_iQty += (static_cast<float>(change) * storesNeededPerItem);
 		}
 
 		_qtys[_sel] += change;
@@ -859,10 +871,8 @@ void PurchaseState::increaseByValue(int change)
  */
 void PurchaseState::decrease()
 {
-//kL	_timerInc->setInterval(50);
-//kL	_timerDec->setInterval(50);
-	_timerDec->setInterval(80);		// kL
-	_timerInc->setInterval(80);		// kL
+	_timerDec->setInterval(80);
+	_timerInc->setInterval(80);
 
 	decreaseByValue(1);
 }
@@ -887,7 +897,8 @@ void PurchaseState::decreaseByValue(int change)
 	}
 	else // Item count
 	{
-		_iQty -= _game->getRuleset()->getItem(_items[_sel - 3 - _crafts.size()])->getSize() * ((float)(change));
+		_iQty -= _game->getRuleset()->getItem(_items[_sel - 3 - _crafts.size()])->getSize()
+																* static_cast<float>(change);
 	}
 
 	_qtys[_sel] -= change;
@@ -901,7 +912,8 @@ void PurchaseState::decreaseByValue(int change)
  */
 void PurchaseState::updateItemStrings()
 {
-	_txtPurchases->setText(tr("STR_COST_OF_PURCHASES").arg(Text::formatFunding(_total)));
+	_txtPurchases->setText(tr("STR_COST_OF_PURCHASES")
+							.arg(Text::formatFunding(_total)));
 
 	std::wstringstream ss;
 	ss << _qtys[_sel];

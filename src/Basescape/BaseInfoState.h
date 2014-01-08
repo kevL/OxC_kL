@@ -35,6 +35,7 @@ class Text;
 class TextButton;
 class TextEdit;
 
+
 /**
  * Base Info screen that shows all the
  * stats of a base from the Basescape.
@@ -43,33 +44,76 @@ class BaseInfoState
 	:
 		public State
 {
+
 private:
+	bool _containmentLimit;
+
 	Base* _base;
 	BasescapeState* _state;
-
-	Surface* _bg;
 	MiniBaseView* _mini;
-	TextButton* _btnOk, * _btnTransfers, * _btnStores, * _btnMonthlyCosts;
+	Surface* _bg;
+	Text
+		* _txtPersonnel,
+		* _txtSpace;
+	TextButton
+		* _btnMonthlyCosts,
+		* _btnOk,
+		* _btnStores,
+		* _btnTransfers;
 	TextEdit* _edtBase;
 
-	Text* _txtPersonnel, * _txtSoldiers, * _txtEngineers, * _txtScientists;
-	Text* _numSoldiers, * _numEngineers, * _numScientists;
-	Bar* _barSoldiers, * _barEngineers, * _barScientists;
+	Text
+		* _txtSoldiers,
+		* _txtEngineers,
+		* _txtScientists,
+		* _numSoldiers,
+		* _numEngineers,
+		* _numScientists;
+	Bar
+		* _barSoldiers,
+		* _barEngineers,
+		* _barScientists;
 
-	Text* _txtSpace, * _txtQuarters, * _txtStores, * _txtLaboratories, * _txtWorkshops, * _txtContainment, * _txtHangars;
-	Text* _numQuarters, * _numStores, * _numLaboratories, * _numWorkshops, * _numContainment, * _numHangars;
-	Bar* _barQuarters, * _barStores, * _barLaboratories, * _barWorkshops, * _barContainment, * _barHangars;
+	Text
+		* _txtQuarters,
+		* _txtStores,
+		* _txtLaboratories,
+		* _txtWorkshops,
+		* _txtContainment,
+		* _txtHangars,
+		* _numQuarters,
+		* _numStores,
+		* _numLaboratories,
+		* _numWorkshops,
+		* _numContainment,
+		* _numHangars;
+	Bar
+		* _barQuarters,
+		* _barStores,
+		* _barLaboratories,
+		* _barWorkshops,
+		* _barContainment,
+		* _barHangars;
 
-	Text* _txtDefense, * _txtShortRange, * _txtLongRange;
-	Text* _numDefense, * _numShortRange, * _numLongRange;
-	Bar* _barDefense, * _barShortRange, * _barLongRange;
-
-	bool _containmentLimit;
+	Text
+		* _txtDefense,
+		* _txtShortRange,
+		* _txtLongRange,
+		* _numDefense,
+		* _numShortRange,
+		* _numLongRange;
+	Bar
+		* _barDefense,
+		* _barShortRange,
+		* _barLongRange;
 
 
 	public:
 		/// Creates the Base Info state.
-		BaseInfoState(Game* game, Base* base, BasescapeState* state);
+		BaseInfoState(
+				Game* game,
+				Base* base,
+				BasescapeState* state);
 		/// Cleans up the Base Info state.
 		~BaseInfoState();
 

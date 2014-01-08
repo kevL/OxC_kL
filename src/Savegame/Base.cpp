@@ -1179,7 +1179,7 @@ int Base::getMonthlyMaintenace() const
 /**
  * Remove a Production from the Base.
  * @param p A pointer to a Production
-*/
+ */
 void Base::removeProduction(Production* prod)
 {
 	_engineers += prod->getAssignedEngineers();
@@ -1206,7 +1206,7 @@ const std::vector<Production*>& Base::getProductions() const
 /**
  * Add a new Production to the Base
  * @param p A pointer to a Production
-*/
+ */
 void Base::addProduction(Production* prod)
 {
 	_productions.push_back(prod);
@@ -1215,7 +1215,7 @@ void Base::addProduction(Production* prod)
 /**
  * Returns the list of all base's ResearchProject
  * @return list of base's ResearchProject
-*/
+ */
 const std::vector<ResearchProject*>& Base::getResearch() const
 {
 	return _research;
@@ -1224,17 +1224,20 @@ const std::vector<ResearchProject*>& Base::getResearch() const
 /**
  * Add a new ResearchProject to Base
  * @param project, The project to add
-*/
+ */
 void Base::addResearch(ResearchProject* project)
 {
 	_research.push_back(project);
 }
 
 /**
- * Remove a ResearchProject from base
+ * Remove a ResearchProject from base.
  * @param project, The project to remove
-*/
-void Base::removeResearch(ResearchProject* project, bool help)
+ * @param help, True to apply researchHelp()
+ */
+void Base::removeResearch(
+		ResearchProject* project,
+		bool help)
 {
 	//Log(LOG_INFO) << "Base::removeResearch()";
 	_scientists += project->getAssigned();
@@ -1247,14 +1250,14 @@ void Base::removeResearch(ResearchProject* project, bool help)
 	if (i != _research.end())
 	{
 		// kL_begin: Add Research Help here. aLien must be interrogated
-		// at same Base as project-help goes to (for now).
+		// at same Base as project-help applies to for now.
 		if (help)
 		{
-			std::string sProject = project->getRules()->getName();
-			//Log(LOG_INFO) << ". . sProject = " << sProject;
-			// eg. Base::removeResearch() sProject = STR_REAPER_CORPSE
+			std::string aLien = project->getRules()->getName();
+			//Log(LOG_INFO) << ". . aLien = " << aLien;
+			// eg. Base::removeResearch() aLien = STR_REAPER_CORPSE
 
-			researchHelp(sProject);
+			researchHelp(aLien);
 		}
 		// kL_end.
 
@@ -1264,9 +1267,9 @@ void Base::removeResearch(ResearchProject* project, bool help)
 
 /**
  * kL: Research Help ala XcomUtil.
- * @param sProject, name of the alien getting interrogated
+ * @param aLien, Name of the alien that got interrogated
  */
-void Base::researchHelp(std::string sProject)
+void Base::researchHelp(std::string aLien)
 {
 	bool found = false;
 	float
@@ -1274,11 +1277,11 @@ void Base::researchHelp(std::string sProject)
 		cost;
 	std::string help;
 
-	if (sProject == "STR_FLOATER_SOLDIER"
-		|| sProject == "STR_SNAKEMAN_SOLDIER"
-		|| sProject == "STR_MUTON_SOLDIER"
-		|| sProject == "STR_SECTOID_SOLDIER"
-		|| sProject == "STR_ETHEREAL_SOLDIER")
+	if (aLien == "STR_FLOATER_SOLDIER"
+		|| aLien == "STR_SNAKEMAN_SOLDIER"
+		|| aLien == "STR_MUTON_SOLDIER"
+		|| aLien == "STR_SECTOID_SOLDIER"
+		|| aLien == "STR_ETHEREAL_SOLDIER")
 	{
 		for (std::vector<ResearchProject*>::const_iterator
 				i = _research.begin();
@@ -1353,10 +1356,10 @@ void Base::researchHelp(std::string sProject)
 				(*i)->setSpent(static_cast<int>(cost) - 1);
 		}
 	}
-	else if (sProject == "STR_FLOATER_NAVIGATOR"
-		|| sProject == "STR_SNAKEMAN_NAVIGATOR"
-		|| sProject == "STR_MUTON_NAVIGATOR"
-		|| sProject == "STR_SECTOID_NAVIGATOR")
+	else if (aLien == "STR_FLOATER_NAVIGATOR"
+		|| aLien == "STR_SNAKEMAN_NAVIGATOR"
+		|| aLien == "STR_MUTON_NAVIGATOR"
+		|| aLien == "STR_SECTOID_NAVIGATOR")
 	{
 		for (std::vector<ResearchProject*>::const_iterator
 				i = _research.begin();
@@ -1472,9 +1475,9 @@ void Base::researchHelp(std::string sProject)
 				(*i)->setSpent(static_cast<int>(cost) - 1);
 		}
 	}
-	else if (sProject == "STR_FLOATER_MEDIC"
-		|| sProject == "STR_SNAKEMAN_MEDIC"
-		|| sProject == "STR_SECTOID_MEDIC")
+	else if (aLien == "STR_FLOATER_MEDIC"
+		|| aLien == "STR_SNAKEMAN_MEDIC"
+		|| aLien == "STR_SECTOID_MEDIC")
 	{
 		for (std::vector<ResearchProject*>::const_iterator
 				i = _research.begin();
@@ -1541,10 +1544,10 @@ void Base::researchHelp(std::string sProject)
 				(*i)->setSpent(static_cast<int>(cost) - 1);
 		}
 	}
-	else if (sProject == "STR_FLOATER_ENGINEER"
-		|| sProject == "STR_SNAKEMAN_ENGINEER"
-		|| sProject == "STR_MUTON_ENGINEER"
-		|| sProject == "STR_SECTOID_ENGINEER")
+	else if (aLien == "STR_FLOATER_ENGINEER"
+		|| aLien == "STR_SNAKEMAN_ENGINEER"
+		|| aLien == "STR_MUTON_ENGINEER"
+		|| aLien == "STR_SECTOID_ENGINEER")
 	{
 		for (std::vector<ResearchProject*>::const_iterator
 				i = _research.begin();
@@ -1636,10 +1639,10 @@ void Base::researchHelp(std::string sProject)
 				(*i)->setSpent(static_cast<int>(cost) - 1);
 		}
 	}
-	else if (sProject == "STR_FLOATER_LEADER"
-		|| sProject == "STR_SNAKEMAN_LEADER"
-		|| sProject == "STR_SECTOID_LEADER"
-		|| sProject == "STR_ETHEREAL_LEADER")
+	else if (aLien == "STR_FLOATER_LEADER"
+		|| aLien == "STR_SNAKEMAN_LEADER"
+		|| aLien == "STR_SECTOID_LEADER"
+		|| aLien == "STR_ETHEREAL_LEADER")
 	{
 		for (std::vector<ResearchProject*>::const_iterator
 				i = _research.begin();
@@ -1745,10 +1748,10 @@ void Base::researchHelp(std::string sProject)
 				(*i)->setSpent(static_cast<int>(cost) - 1);
 		}
 	}
-	else if (sProject == "STR_FLOATER_COMMANDER"
-		|| sProject == "STR_SNAKEMAN_COMMANDER"
-		|| sProject == "STR_SECTOID_COMMANDER"
-		|| sProject == "STR_ETHEREAL_COMMANDER")
+	else if (aLien == "STR_FLOATER_COMMANDER"
+		|| aLien == "STR_SNAKEMAN_COMMANDER"
+		|| aLien == "STR_SECTOID_COMMANDER"
+		|| aLien == "STR_ETHEREAL_COMMANDER")
 	{
 		for (std::vector<ResearchProject*>::const_iterator
 				i = _research.begin();
@@ -2082,19 +2085,19 @@ bool isCompleted::operator()(const BaseFacility* facility) const
 	unsigned completedFacilities = std::count_if(_facilities.begin(), _facilities.end(), isCompleted());
 	return (completedFacilities / 6 + 15) / (mindShields + 1);
 } */
-// kL_begin: rewrite getDetectionChance() using floats.
+// kL_begin: rewrite getDetectionChance()
 int Base::getDetectionChance() const
 {
 	Log(LOG_INFO) << "Base::getDetectionChance()";
 
-	int shields = static_cast<int>(std::count_if(
-											_facilities.begin(),
-											_facilities.end(),
-											isMindShield()));
 	int facilities = static_cast<int>(std::count_if(
 												_facilities.begin(),
 												_facilities.end(),
 												isCompleted()));
+	int shields = static_cast<int>(std::count_if(
+											_facilities.begin(),
+											_facilities.end(),
+											isMindShield()));
 
 	facilities = (facilities / 6) + 9;
 	shields = (shields * 2) + 1;
@@ -2196,14 +2199,17 @@ void Base::setupDefenses()
 															rule->getClipSize(),
 															size));
 
-				_items->removeItem(itemId, iqty);
+				_items->removeItem(
+								itemId,
+								iqty);
 			}
 			else // so this vehicle needs ammo
 			{
 				RuleItem* ammo = _rule->getItem(rule->getCompatibleAmmo()->front());
 
 				int baqty = _items->getItem(ammo->getType()); // Ammo Quantity for this vehicle-type on the base
-				if (0 >= baqty || 0 >= iqty)
+				if (baqty < 1
+					|| iqty < 1)
 				{
 					++i;
 
@@ -2225,11 +2231,18 @@ void Base::setupDefenses()
 
 					if (j < remainder) ++newAmmo;
 
-					_vehicles.push_back(new Vehicle(rule, newAmmo, size));
-					_items->removeItem(ammo->getType(), newAmmo);
+					_vehicles.push_back(new Vehicle(
+												rule,
+												newAmmo,
+												size));
+					_items->removeItem(
+									ammo->getType(),
+									newAmmo);
 				}
 
-				_items->removeItem(itemId, canBeAdded);
+				_items->removeItem(
+								itemId,
+								canBeAdded);
 			}
 
 			i = _items->getContents()->begin(); // we have to start over because iterator is broken because of the removeItem
@@ -2417,8 +2430,8 @@ bool Base::checkConnected(
 
 	if (newgrid) // delete connection grid
 	{
-		for (int 
-				x = 0;
+		for (int
+				xx = 0;
 				xx < BASE_SIZE;
 				++xx)
 		{

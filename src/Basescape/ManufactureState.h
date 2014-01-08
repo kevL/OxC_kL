@@ -46,21 +46,23 @@ class ManufactureState
 
 private:
 	Base* _base;
-	Text* _txtTitle,
+	SDL_Color _oldPalette[256];
+	Text
 		* _txtAvailable,
 		* _txtAllocated,
-		* _txtSpace,
+		* _txtBaseLabel,
+		* _txtCost,
+		* _txtEngineers,
 		* _txtFunds,
 		* _txtItem,
-		* _txtEngineers,
 		* _txtProduced,
-		* _txtCost,
-		* _txtTimeLeft;
+		* _txtSpace,
+		* _txtTimeLeft,
+		* _txtTitle;
 	TextButton
 		* _btnNew,
 		* _btnOk;
 	TextList* _lstManufacture;	
-	SDL_Color _oldPalette[256];
 	Window* _window;
 
 	///
@@ -77,12 +79,14 @@ private:
 
 		/// Updates the production list.
 		void init();
+
+		/// Fills the list of base productions.
+		void fillProductionList();
+
 		/// Handler for clicking the OK button.
 		void btnOkClick(Action* action);
 		/// Handler for the New Production button.
 		void btnNewProductionClick(Action* action);
-		/// Fills the list of base productions.
-		void fillProductionList();
 };
 
 }

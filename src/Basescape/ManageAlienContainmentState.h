@@ -65,6 +65,7 @@ private:
 	Base* _base;
 	Text
 		* _txtAvailable,
+		* _txtBaseLabel,
 		* _txtDeadAliens,
 		* _txtItem,
 		* _txtLiveAliens,

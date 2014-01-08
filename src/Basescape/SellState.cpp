@@ -84,6 +84,7 @@ SellState::SellState(
 
 	_window			= new Window(this, 320, 200, 0, 0);
 	_txtTitle		= new Text(310, 17, 5, 9);
+	_txtBaseLabel	= new Text(80, 9, 16, 9);
 
 	_txtFunds		= new Text(140, 9, 16, 24);
 	_txtSales		= new Text(140, 9, 160, 24);
@@ -106,6 +107,7 @@ SellState::SellState(
 
 	add(_window);
 	add(_txtTitle);
+	add(_txtBaseLabel);
 	add(_txtFunds);
 	add(_txtSales);
 	add(_txtItem);
@@ -141,6 +143,9 @@ SellState::SellState(
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_SELL_ITEMS_SACK_PERSONNEL"));
+
+	_txtBaseLabel->setColor(Palette::blockOffset(13)+10);
+	_txtBaseLabel->setText(_base->getName(_game->getLanguage()));
 
 	_txtSales->setColor(Palette::blockOffset(13)+10);
 	_txtSales->setText(tr("STR_VALUE_OF_SALES")

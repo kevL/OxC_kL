@@ -235,39 +235,53 @@ void UnitSprite::drawRoutine0()
 	{
 		// unit is drawn as an item
 		return;
-	}
-	// kL_end.
+	} // kL_end.
 
 	Surface
-			* torso = 0,
-			* legs = 0,
-			* leftArm = 0,
-			* rightArm = 0,
-			* itemA = 0,
-			* itemB = 0;
+			* torso		= 0,
+			* legs		= 0,
+			* leftArm	= 0,
+			* rightArm	= 0,
+			* itemA		= 0,
+			* itemB		= 0;
 
 	// magic numbers
-	const int maleTorso = 32, femaleTorso = 267, legsStand = 16, legsKneel = 24, die = 264, legsFloat = 275;
-	const int larmStand = 0, rarmStand = 8, rarm1H = 232, larm2H = 240, rarm2H = 248, rarmShoot = 256;
-	const int legsWalk[8] = { 56, 56+24, 56+24*2, 56+24*3, 56+24*4, 56+24*5, 56+24*6, 56+24*7 };
-	const int larmWalk[8] = { 40, 40+24, 40+24*2, 40+24*3, 40+24*4, 40+24*5, 40+24*6, 40+24*7 };
-	const int rarmWalk[8] = { 48, 48+24, 48+24*2, 48+24*3, 48+24*4, 48+24*5, 48+24*6, 48+24*7 };
-	const int yoffWalk[8] = {1, 0, -1, 0, 1, 0, -1, 0};			// bobbing up and down
-	const int alternateyoffWalk[8] = {1, 1, 0, 0, 1, 1, 0, 0};	// bobbing up and down (muton)
-	const int offX[8] = { 8, 10, 7, 4, -9, -11, -7, -3 };		// for the weapons
-	const int offY[8] = { -6, -3, 0, 2, 0, -4, -7, -9 };		// for the weapons
-	const int offX2[8] = { -8, 3, 5, 12, 6, -1, -5, -13 };		// for the left handed weapons
-	const int offY2[8] = { 1, -4, -2, 0, 3, 3, 5, 0 };			// for the left handed weapons
-	const int offX3[8] = { 0, 0, 2, 2, 0, 0, 0, 0 };			// for the weapons (muton)
-	const int offY3[8] = { -3, -3, -1, -1, -1, -3, -3, -2 };	// for the weapons (muton)
-	const int offX4[8] = { -8, 2, 7, 14, 7, -2, -4, -8 };		// for the left handed weapons
-	const int offY4[8] = { -3, -3, -1, 0, 3, 3, 0, 1 };			// for the left handed weapons
-	const int offX5[8] = { -1, 1, 1, 2, 0, -1, 0, 0 };			// for the weapons (muton)
-	const int offY5[8] = { 1, -1, -1, -1, -1, -2, -3, 0 };		// for the weapons (muton)
-	const int offX6[8] = { 0, 6, 6, 12, -4, -5, -5, -13 };		// for the left handed rifles
-	const int offY6[8] = { -4, -4, -1, 0, 5, 0, 1, 0 };			// for the left handed rifles
-	const int offX7[8] = { 0, 6, 8, 12, 2, -5, -5, -13 };		// for the left handed rifles (muton)
-	const int offY7[8] = { -4, -6, -1, 0, 3, 0, 1, 0 };			// for the left handed rifles (muton)
+	const int
+		maleTorso	=  32,
+		femaleTorso	= 267,
+		legsStand	=  16,
+		legsKneel	=  24,
+		die			= 264,
+		legsFloat	= 275;
+	const int
+		larmStand	=   0,
+		rarmStand	=   8,
+		rarm1H		= 232,
+		larm2H		= 240,
+		rarm2H		= 248,
+		rarmShoot	= 256;
+	const int
+		legsWalk[8] = {56, 56+24, 56+24*2, 56+24*3, 56+24*4, 56+24*5, 56+24*6, 56+24*7},
+		larmWalk[8] = {40, 40+24, 40+24*2, 40+24*3, 40+24*4, 40+24*5, 40+24*6, 40+24*7},
+		rarmWalk[8] = {48, 48+24, 48+24*2, 48+24*3, 48+24*4, 48+24*5, 48+24*6, 48+24*7};
+
+	const int yoffWalk[8]		= { 1,  0, -1,  0,  1,  0, -1,  0}; // bobbing up and down
+	const int yoffWalk_alt[8]	= { 1,  1,  0,  0,  1,  1,  0,  0}; // bobbing up and down (muton)
+	const int offX[8]			= { 8, 10,  7,  4, -9,-11, -7, -3}; // for the weapons
+	const int offY[8]			= {-6, -3,  0,  2,  0, -4, -7, -9}; // for the weapons
+	const int offX2[8]			= {-8,  3,  5, 12,  6, -1, -5,-13}; // for the left handed weapons
+	const int offY2[8]			= { 1, -4, -2,  0,  3,  3,  5,  0}; // for the left handed weapons
+	const int offX3[8]			= { 0,  0,  2,  2,  0,  0,  0,  0}; // for the weapons (muton)
+	const int offY3[8]			= {-3, -3, -1, -1, -1, -3, -3, -2}; // for the weapons (muton)
+	const int offX4[8]			= {-8,  2,  7, 14,  7, -2, -4, -8}; // for the left handed weapons
+	const int offY4[8]			= {-3, -3, -1,  0,  3,  3,  0,  1}; // for the left handed weapons
+	const int offX5[8]			= {-1,  1,  1,  2,  0, -1,  0,  0}; // for the weapons (muton)
+	const int offY5[8]			= { 1, -1, -1, -1, -1, -2, -3,  0}; // for the weapons (muton)
+	const int offX6[8]			= { 0,  6,  6,  12,-4, -5, -5,-13}; // for the left handed rifles
+	const int offY6[8]			= {-4, -4, -1,  0,  5,  0,  1,  0}; // for the left handed rifles
+	const int offX7[8]			= { 0,  6,  8, 12,  2, -5, -5,-13}; // for the left handed rifles (muton)
+	const int offY7[8]			= {-4, -6, -1,  0,  3,  0,  1,  0}; // for the left handed rifles (muton)
+
 	const int offYKneel = 4;
 
 /*kL	if (_unit->isOut())
@@ -281,7 +295,8 @@ void UnitSprite::drawRoutine0()
 		torso = _unitSurface->getFrame(die + _unit->getFallingPhase());
 		torso->blit(this);
 
-		if (_unit->getGeoscapeSoldier() && _hairBleach)
+		if (_unit->getGeoscapeSoldier()
+			&& _hairBleach)
 		{
 			SoldierLook look = _unit->getGeoscapeSoldier()->getLook();
 
@@ -308,7 +323,10 @@ void UnitSprite::drawRoutine0()
 				}
 
 				lock();
-				ShaderDraw<ColorFace>(ShaderSurface(this), ShaderScalar(hair_color), ShaderScalar(face_color));
+				ShaderDraw<ColorFace>(
+									ShaderSurface(this),
+									ShaderScalar(hair_color),
+									ShaderScalar(face_color));
 				unlock();
 			}
 		}
@@ -339,11 +357,13 @@ void UnitSprite::drawRoutine0()
 	// when walking, torso(fixed sprite) has to be animated up/down
 	if (isWalking)
 	{
-//		Log(LOG_INFO) << "UnitSprite::drawRoutine0() : " << _unit->getId() << " STATUS_WALKING";	// kL
+//		Log(LOG_INFO) << "UnitSprite::drawRoutine0() : " << _unit->getId() << " STATUS_WALKING";
 
-		torso->setY(yoffWalk[_unit->getWalkingPhase()]);
-		if (_drawingRoutine == 10)
-			torso->setY(alternateyoffWalk[_unit->getWalkingPhase()]);
+		if (_drawingRoutine == 10) // muton
+			torso->setY(yoffWalk_alt[_unit->getWalkingPhase()]);
+		else
+			torso->setY(yoffWalk[_unit->getWalkingPhase()]);
+
 		legs = _unitSurface->getFrame(legsWalk[_unit->getDirection()] + _unit->getWalkingPhase());
 		leftArm = _unitSurface->getFrame(larmWalk[_unit->getDirection()] + _unit->getWalkingPhase());
 		rightArm = _unitSurface->getFrame(rarmWalk[_unit->getDirection()] + _unit->getWalkingPhase());
@@ -352,20 +372,18 @@ void UnitSprite::drawRoutine0()
 	{
 		if (isKneeled)
 		{
-//			Log(LOG_INFO) << "UnitSprite::drawRoutine0() : " << _unit->getId() << " isKneeled";	// kL
-
+//			Log(LOG_INFO) << "UnitSprite::drawRoutine0() : " << _unit->getId() << " isKneeled";
 			legs = _unitSurface->getFrame(legsKneel + _unit->getDirection());
 		}
-		else if (_unit->isFloating() && _unit->getArmor()->getMovementType() == MT_FLY)
+		else if (_unit->isFloating()
+			&& _unit->getArmor()->getMovementType() == MT_FLY)
 		{
-//			Log(LOG_INFO) << "UnitSprite::drawRoutine0() : " << _unit->getId() << " isFloating in FlyingSuit";	// kL
-
+//			Log(LOG_INFO) << "UnitSprite::drawRoutine0() : " << _unit->getId() << " isFloating in FlyingSuit";
 			legs = _unitSurface->getFrame(legsFloat + _unit->getDirection());
 		}
 		else
 		{
-//			Log(LOG_INFO) << "UnitSprite::drawRoutine0() : " << _unit->getId() << " etc.";	// kL
-
+//			Log(LOG_INFO) << "UnitSprite::drawRoutine0() : " << _unit->getId() << " etc.";
 			legs = _unitSurface->getFrame(legsStand + _unit->getDirection());
 		}
 
@@ -436,11 +454,11 @@ void UnitSprite::drawRoutine0()
 		{
 			if (_drawingRoutine == 10)
 			{
-				rightArm->setY(alternateyoffWalk[_unit->getWalkingPhase()]);
+				rightArm->setY(yoffWalk_alt[_unit->getWalkingPhase()]);
 
-				itemA->setY(itemA->getY() + alternateyoffWalk[_unit->getWalkingPhase()]);
+				itemA->setY(itemA->getY() + yoffWalk_alt[_unit->getWalkingPhase()]);
 				if (_itemA->getRules()->isTwoHanded())
-					leftArm->setY(alternateyoffWalk[_unit->getWalkingPhase()]);
+					leftArm->setY(yoffWalk_alt[_unit->getWalkingPhase()]);
 			}
 			else
 			{
@@ -504,10 +522,10 @@ void UnitSprite::drawRoutine0()
 		{
 			if (_drawingRoutine == 10)
 			{
-				leftArm->setY(alternateyoffWalk[_unit->getWalkingPhase()]);
-				itemB->setY(itemB->getY() + alternateyoffWalk[_unit->getWalkingPhase()]);
+				leftArm->setY(yoffWalk_alt[_unit->getWalkingPhase()]);
+				itemB->setY(itemB->getY() + yoffWalk_alt[_unit->getWalkingPhase()]);
 				if (_itemB->getRules()->isTwoHanded())
-					rightArm->setY(alternateyoffWalk[_unit->getWalkingPhase()]);
+					rightArm->setY(yoffWalk_alt[_unit->getWalkingPhase()]);
 			}
 			else
 			{
@@ -551,7 +569,8 @@ void UnitSprite::drawRoutine0()
 	Surface* newLeftArm		= new Surface(*leftArm);
 	Surface* newRightArm	= new Surface(*rightArm);
 
-	if (_unit->getGeoscapeSoldier() && _hairBleach)
+	if (_unit->getGeoscapeSoldier()
+		&& _hairBleach)
 	{
 		SoldierLook look = _unit->getGeoscapeSoldier()->getLook();
 		if (look)
@@ -577,20 +596,33 @@ void UnitSprite::drawRoutine0()
 			}
 
 			lock();
-			ShaderDraw<ColorFace>(ShaderSurface(newLeftArm), ShaderScalar(hair_color), ShaderScalar(face_color));
-			ShaderDraw<ColorFace>(ShaderSurface(newRightArm), ShaderScalar(hair_color), ShaderScalar(face_color));
-			ShaderDraw<ColorFace>(ShaderSurface(newTorso), ShaderScalar(hair_color), ShaderScalar(face_color));
-			ShaderDraw<ColorFace>(ShaderSurface(newLegs), ShaderScalar(hair_color), ShaderScalar(face_color));
+			ShaderDraw<ColorFace>(
+							ShaderSurface(newLeftArm),
+							ShaderScalar(hair_color),
+							ShaderScalar(face_color));
+			ShaderDraw<ColorFace>(
+							ShaderSurface(newRightArm),
+							ShaderScalar(hair_color),
+							ShaderScalar(face_color));
+			ShaderDraw<ColorFace>(
+							ShaderSurface(newTorso),
+							ShaderScalar(hair_color),
+							ShaderScalar(face_color));
+			ShaderDraw<ColorFace>(
+							ShaderSurface(newLegs),
+							ShaderScalar(hair_color),
+							ShaderScalar(face_color));
 			unlock();
 
-			torso = newTorso;
-			legs = newLegs;
-			leftArm = newLeftArm;
-			rightArm = newRightArm;
+			torso		= newTorso;
+			legs		= newLegs;
+			leftArm		= newLeftArm;
+			rightArm	= newRightArm;
 		}
 	}
 
-	// blit order depends on unit direction, and whether we are holding a 2 handed weapon.
+	// blit order depends on unit direction
+	// and whether we are holding a 2 handed weapon.
 	switch (_unit->getDirection())
 	{
 		case 0:
@@ -716,8 +748,7 @@ void UnitSprite::drawRoutine1()
 	{
 		// unit is drawn as an item
 		return;
-	}
-	// kL_end.
+	} // kL_end.
 
 	Surface
 			* torso = 0,
@@ -1157,8 +1188,7 @@ void UnitSprite::drawRoutine6()
 	{
 		// unit is drawn as an item
 		return;
-	}
-	// kL_end.
+	} // kL_end.
 
 	Surface
 			* torso = 0,
@@ -1385,8 +1415,7 @@ void UnitSprite::drawRoutine7()
 	{
 		// unit is drawn as an item
 		return;
-	}
-	// kL_end.
+	} // kL_end.
 
 	Surface
 			* torso = 0,
@@ -1482,8 +1511,7 @@ void UnitSprite::drawRoutine8()
 	{
 		// unit is drawn as an item
 		return;
-	}
-	// kL_end.
+	} // kL_end.
 
 	Surface* legs = 0;
 
@@ -1519,8 +1547,7 @@ void UnitSprite::drawRoutine9()
 	{
 		// unit is drawn as an item
 		return;
-	}
-	// kL_end.
+	} // kL_end.
 
 	Surface* torso = 0;
 
@@ -1548,10 +1575,10 @@ void UnitSprite::drawRoutine9()
 void UnitSprite::sortRifles()
 {
 //kL	if (_itemA && _itemA->getRules()->isTwoHanded())
-	if (_itemA)		// kL
+	if (_itemA) // kL
 	{
 //kL		if (_itemB && _itemB->getRules()->isTwoHanded())
-		if (_itemB)		// kL
+		if (_itemB) // kL
 		{
 			if (_unit->getActiveHand() == "STR_LEFT_HAND")
 			{
@@ -1566,7 +1593,7 @@ void UnitSprite::sortRifles()
 		}
 	}
 //kL	else if (_itemB && _itemB->getRules()->isTwoHanded())
-	else if (_itemB)	// kL
+	else if (_itemB) // kL
 	{
 		if (_unit->getStatus() != STATUS_AIMING)
 		{

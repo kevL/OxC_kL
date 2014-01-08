@@ -70,6 +70,7 @@ private:
 	Base* _base;
 	Text
 		* _txtFunds,
+		* _txtBaseLabel,
 		* _txtItem,
 		* _txtQuantity,
 		* _txtSales,

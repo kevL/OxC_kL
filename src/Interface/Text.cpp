@@ -79,7 +79,8 @@ Text::~Text()
  */
 std::wstring Text::formatNumber(
 		int value,
-		std::wstring currency)
+		std::wstring currency,
+		bool space)
 {
 	// In the future, the whole setlocale thing should be removed from here.
 	// It is inconsistent with the in-game language selection: locale-specific
@@ -89,32 +90,44 @@ std::wstring Text::formatNumber(
 	//setlocale(LC_CTYPE, ""); // this is necessary for mbstowcs to work correctly
 	//struct lconv* lc = localeconv();
 
-	std::wstring thousands_sep = L"\xA0";// Language::cpToWstr(lc->mon_thousands_sep);
+	std::wstringstream ss;
 
 	bool negative = (value < 0);
-	std::wstringstream ss;
 	ss << (negative? -value: value);
-	std::wstring s = ss.str();
 
-	size_t spacer = s.size() - 3;
-	while (spacer > 0
-		&& spacer < s.size())
+	std::wstring ret = ss.str();
+
+	if (space)
 	{
-		s.insert(spacer, thousands_sep);
-		spacer -= 3;
+		std::wstring thousands = L"\xA0"; // Language::cpToWstr(lc->mon_thousands_sep);
+
+		size_t spacer = ret.size() - 3;
+		while (spacer > 0
+			&& spacer < ret.size())
+		{
+			ret.insert(
+					spacer,
+					thousands);
+
+			spacer -= 3;
+		}
 	}
 
 	if (!currency.empty())
 	{
-		s.insert(0, currency);
+		ret.insert(
+				0,
+				currency);
 	}
 
 	if (negative)
 	{
-		s.insert(0, L"-");
+		ret.insert(
+				0,
+				L"-");
 	}
 
-	return s;
+	return ret;
 }
 
 /**

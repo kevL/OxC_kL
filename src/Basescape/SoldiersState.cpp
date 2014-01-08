@@ -66,6 +66,7 @@ SoldiersState::SoldiersState(
 {
 	_window			= new Window(this, 320, 200, 0, 0);
 	_txtTitle		= new Text(300, 17, 10, 11);
+	_txtBaseLabel	= new Text(80, 9, 16, 11);
 
 	_txtName		= new Text(114, 9, 16, 31);
 	_txtRank		= new Text(102, 9, 133, 31);
@@ -86,6 +87,7 @@ SoldiersState::SoldiersState(
 
 	add(_window);
 	add(_txtTitle);
+	add(_txtBaseLabel);
 	add(_txtName);
 	add(_txtRank);
 	add(_txtCraft);
@@ -101,10 +103,20 @@ SoldiersState::SoldiersState(
 	_window->setColor(Palette::blockOffset(15)+1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK02.SCR"));
 
+	_txtTitle->setColor(Palette::blockOffset(13)+10);
+	_txtTitle->setBig();
+	_txtTitle->setAlign(ALIGN_CENTER);
+	_txtTitle->setText(tr("STR_SOLDIER_LIST"));
+
+	_txtBaseLabel->setColor(Palette::blockOffset(13)+10);
+	_txtBaseLabel->setText(_base->getName(_game->getLanguage()));
+
 	_btnPsiTrain->setColor(Palette::blockOffset(13)+10);
 	_btnPsiTrain->setText(tr("STR_PSIONIC_TRAINING"));
 	_btnPsiTrain->onMouseClick((ActionHandler)& SoldiersState::btnPsiTrainingClick);
-	_btnPsiTrain->setVisible(Options::getBool("anytimePsiTraining") && _base->getAvailablePsiLabs() > 0);
+	_btnPsiTrain->setVisible(
+						Options::getBool("anytimePsiTraining")
+						&& _base->getAvailablePsiLabs() > 0);
 
 	_btnArmor->setColor(Palette::blockOffset(13)+10);
 	_btnArmor->setText(tr("STR_ARMOR"));
@@ -120,11 +132,6 @@ SoldiersState::SoldiersState(
 	_btnMemorial->setColor(Palette::blockOffset(13)+10);
 	_btnMemorial->setText(tr("STR_MEMORIAL"));
 	_btnMemorial->onMouseClick((ActionHandler)& SoldiersState::btnMemorialClick);
-
-	_txtTitle->setColor(Palette::blockOffset(13)+10);
-	_txtTitle->setBig();
-	_txtTitle->setAlign(ALIGN_CENTER);
-	_txtTitle->setText(tr("STR_SOLDIER_LIST"));
 
 	_txtName->setColor(Palette::blockOffset(15)+1);
 	_txtName->setText(tr("STR_NAME_UC"));

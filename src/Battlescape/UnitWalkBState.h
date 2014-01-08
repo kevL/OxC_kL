@@ -24,7 +24,7 @@
 
 #include "BattlescapeGame.h"
 #include "BattleState.h"
-#include "Position.h"
+//#include "Position.h"
 
 
 namespace OpenXcom
@@ -46,40 +46,36 @@ class UnitWalkBState
 private:
 	bool
 		_falling,
-		_newUnitSpotted,
-		_newVis, // kL
+//		_newUnitSpotted,
+//		_newVis, // kL
 		_onScreen,
-		_turnBeforeFirstStep,
-		_tileSwitchDone; // kL
-	int
-		_preMovementCost;
+//		_tileSwitchDone, // kL
+		_turnBeforeFirstStep;
+	int _preMovementCost;
+	size_t _unitsSpotted;
 
-	BattleUnit
-		* _unit;
-	Pathfinding
-		* _pf;
-	Position
-		_target;
-	TileEngine
-		* _terrain;
+	BattleUnit* _unit;
+	Pathfinding* _pf;
+//	Position _target;
+	TileEngine* _terrain;
 
-	std::size_t
-		_unitsSpotted;
-
-	/// Handles some calculations when the walking is finished.
-	void setNormalWalkSpeed();
-
-	/// Handles some calculations when the path is finished.
-	void postPathProcedures();
-
+	/// This function begins unit movement.
+	bool doStatusStand();
 	/// This function continues unit movement.
 	bool doStatusWalk();
 	/// This function ends unit movement.
 	bool doStatusStand_end();
-	/// This function begins unit movement.
-	bool doStatusStand();
 	/// This function turns unit during movement.
 	void doStatusTurn();
+
+	/// Handles some calculations when the path is finished.
+	void postPathProcedures();
+
+	/// kL. Checks visibility for new opponents.
+	bool visForUnits();
+
+	/// Handles some calculations when the walking is finished.
+	void setNormalWalkSpeed();
 
 	/// Handles the stepping sounds.
 	void playMovementSound();
@@ -97,8 +93,8 @@ private:
 //		void setTarget(Position target);
 		/// Initializes the state.
 		void init();
-		/// Handles a cancels request.
-//		void cancel();
+		/// Handles a cancel request.
+		void cancel();
 		/// Runs state functionality every cycle.
 		void think();
 };

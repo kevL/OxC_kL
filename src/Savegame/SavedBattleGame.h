@@ -174,7 +174,11 @@ private:
 		}
 
 		/// Converts a tile index to its coordinates.
-		void getTileCoords(int index, int* x, int* y, int* z) const;
+		void getTileCoords(
+				int index,
+				int* x,
+				int* y,
+				int* z) const;
 
 		/**
 		 * Gets the Tile at a given position on the map.

@@ -466,7 +466,9 @@ void Tile::resetLight(int layer)
  * @param light Amount of light to add.
  * @param layer Light is separated in 3 layers: Ambient, Static and Dynamic.
  */
-void Tile::addLight(int light, int layer)
+void Tile::addLight(
+		int light,
+		int layer)
 {
 	if (_light[layer] < light)
 		_light[layer] = light;
@@ -481,7 +483,10 @@ int Tile::getShade() const
 {
 	int light = 0;
 
-	for (int layer = 0; layer < LIGHTLAYERS; layer++)
+	for (int
+			layer = 0;
+			layer < LIGHTLAYERS;
+			layer++)
 	{
 		if (_light[layer] > light)
 			light = _light[layer];
@@ -724,7 +729,9 @@ void Tile::setUnit(
 {
 	if (unit != 0)
 	{
-		unit->setTile(this, tileBelow);
+		unit->setTile(
+					this,
+					tileBelow);
 	}
 
 	_unit = unit;

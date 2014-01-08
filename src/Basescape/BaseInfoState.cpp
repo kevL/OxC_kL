@@ -54,7 +54,10 @@ namespace OpenXcom
  * @param base Pointer to the base to get info from.
  * @param state Pointer to the Basescape state.
  */
-BaseInfoState::BaseInfoState(Game* game, Base* base, BasescapeState* state)
+BaseInfoState::BaseInfoState(
+		Game* game,
+		Base* base,
+		BasescapeState* state)
 	:
 		State(game),
 		_base(base),
@@ -188,7 +191,10 @@ BaseInfoState::BaseInfoState(Game* game, Base* base, BasescapeState* state)
 	_mini->setTexture(_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK"));
 	_mini->setBases(_game->getSavedGame()->getBases());
 
-	for (unsigned int i = 0; i < _game->getSavedGame()->getBases()->size(); ++i)
+	for (unsigned int
+			i = 0;
+			i < _game->getSavedGame()->getBases()->size();
+			++i)
 	{
 		if (_game->getSavedGame()->getBases()->at(i) == _base)
 		{
@@ -199,10 +205,16 @@ BaseInfoState::BaseInfoState(Game* game, Base* base, BasescapeState* state)
 	}
 	_mini->onMouseClick((ActionHandler)& BaseInfoState::miniClick);
 
+	_edtBase->setColor(Palette::blockOffset(15)+1);
+	_edtBase->setBig();
+	_edtBase->onKeyboardPress((ActionHandler)& BaseInfoState::edtBaseKeyPress);
+
 	_btnOk->setColor(Palette::blockOffset(15)+6);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& BaseInfoState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)& BaseInfoState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& BaseInfoState::btnOkClick,
+					(SDLKey)Options::getInt("keyCancel"));
 
 	_btnTransfers->setColor(Palette::blockOffset(15)+6);
 	_btnTransfers->setText(tr("STR_TRANSFERS_UC"));
@@ -216,35 +228,24 @@ BaseInfoState::BaseInfoState(Game* game, Base* base, BasescapeState* state)
 	_btnMonthlyCosts->setText(tr("STR_MONTHLY_COSTS"));
 	_btnMonthlyCosts->onMouseClick((ActionHandler)& BaseInfoState::btnMonthlyCostsClick);
 
-	_edtBase->setColor(Palette::blockOffset(15)+1);
-	_edtBase->setBig();
-	_edtBase->onKeyboardPress((ActionHandler)& BaseInfoState::edtBaseKeyPress);
-
-
 	_txtPersonnel->setColor(Palette::blockOffset(15)+1);
 	_txtPersonnel->setText(tr("STR_PERSONNEL_AVAILABLE_PERSONNEL_TOTAL"));
 
 	_txtSoldiers->setColor(Palette::blockOffset(13)+5);
 	_txtSoldiers->setText(tr("STR_SOLDIERS"));
-
 	_numSoldiers->setColor(Palette::blockOffset(13));
-
 	_barSoldiers->setColor(Palette::blockOffset(1));
 	_barSoldiers->setScale(1.0);
 
 	_txtEngineers->setColor(Palette::blockOffset(13)+5);
 	_txtEngineers->setText(tr("STR_ENGINEERS"));
-
 	_numEngineers->setColor(Palette::blockOffset(13));
-
 	_barEngineers->setColor(Palette::blockOffset(1));
 	_barEngineers->setScale(1.0);
 
 	_txtScientists->setColor(Palette::blockOffset(13)+5);
 	_txtScientists->setText(tr("STR_SCIENTISTS"));
-
 	_numScientists->setColor(Palette::blockOffset(13));
-
 	_barScientists->setColor(Palette::blockOffset(1));
 	_barScientists->setScale(1.0);
 
@@ -254,33 +255,25 @@ BaseInfoState::BaseInfoState(Game* game, Base* base, BasescapeState* state)
 
 	_txtQuarters->setColor(Palette::blockOffset(13)+5);
 	_txtQuarters->setText(tr("STR_LIVING_QUARTERS_PLURAL"));
-
 	_numQuarters->setColor(Palette::blockOffset(13));
-
 	_barQuarters->setColor(Palette::blockOffset(3));
 	_barQuarters->setScale(0.5);
 
 	_txtStores->setColor(Palette::blockOffset(13)+5);
 	_txtStores->setText(tr("STR_STORES"));
-
 	_numStores->setColor(Palette::blockOffset(13));
-
 	_barStores->setColor(Palette::blockOffset(3));
 	_barStores->setScale(0.5);
 
 	_txtLaboratories->setColor(Palette::blockOffset(13)+5);
 	_txtLaboratories->setText(tr("STR_LABORATORIES"));
-
 	_numLaboratories->setColor(Palette::blockOffset(13));
-
 	_barLaboratories->setColor(Palette::blockOffset(3));
 	_barLaboratories->setScale(0.5);
 
 	_txtWorkshops->setColor(Palette::blockOffset(13)+5);
 	_txtWorkshops->setText(tr("STR_WORK_SHOPS"));
-
 	_numWorkshops->setColor(Palette::blockOffset(13));
-
 	_barWorkshops->setColor(Palette::blockOffset(3));
 	_barWorkshops->setScale(0.5);
 
@@ -288,42 +281,32 @@ BaseInfoState::BaseInfoState(Game* game, Base* base, BasescapeState* state)
 	{
 		_txtContainment->setColor(Palette::blockOffset(13)+5);
 		_txtContainment->setText(tr("STR_ALIEN_CONTAINMENT"));
-
 		_numContainment->setColor(Palette::blockOffset(13));
-
 		_barContainment->setColor(Palette::blockOffset(3));
 		_barContainment->setScale(0.5);
 	}
 
 	_txtHangars->setColor(Palette::blockOffset(13)+5);
 	_txtHangars->setText(tr("STR_HANGARS"));
-
 	_numHangars->setColor(Palette::blockOffset(13));
-
 	_barHangars->setColor(Palette::blockOffset(3));
 	_barHangars->setScale(18.0);
 
 	_txtDefense->setColor(Palette::blockOffset(13)+5);
 	_txtDefense->setText(tr("STR_DEFENSE_STRENGTH"));
-
 	_numDefense->setColor(Palette::blockOffset(13));
-
 	_barDefense->setColor(Palette::blockOffset(2));
 	_barDefense->setScale(0.125);
 
 	_txtShortRange->setColor(Palette::blockOffset(13)+5);
 	_txtShortRange->setText(tr("STR_SHORT_RANGE_DETECTION"));
-
 	_numShortRange->setColor(Palette::blockOffset(13));
-
 	_barShortRange->setColor(Palette::blockOffset(8));
 	_barShortRange->setScale(25.0);
 
 	_txtLongRange->setColor(Palette::blockOffset(13)+5);
 	_txtLongRange->setText(tr("STR_LONG_RANGE_DETECTION"));
-
 	_numLongRange->setColor(Palette::blockOffset(13));
-
 	_barLongRange->setColor(Palette::blockOffset(8));
 	_barLongRange->setScale(25.0);
 }
@@ -342,99 +325,86 @@ void BaseInfoState::init()
 {
 	_edtBase->setText(_base->getName());
 
-	std::wstringstream ss;
+	std::wstringstream
+		ss1,
+		ss2,
+		ss3,
+		ss4,
+		ss5,
+		ss6,
+		ss7,
+		ss8,
+		ss9,
+		ss10,
+		ss11,
+		ss12;
+
 //kL	ss << _base->getAvailableSoldiers() << ":" << _base->getTotalSoldiers();
-	ss << _base->getAvailableSoldiers(true) << ":" << _base->getTotalSoldiers(); // kL
-	_numSoldiers->setText(ss.str());
-
-
+	ss1 << _base->getAvailableSoldiers(true) << ":" << _base->getTotalSoldiers(); // kL
+	_numSoldiers->setText(ss1.str());
 	_barSoldiers->setMax(_base->getTotalSoldiers());
 //kL	_barSoldiers->setValue(_base->getAvailableSoldiers());
 	_barSoldiers->setValue(_base->getAvailableSoldiers(true)); // kL
 
-	std::wstringstream ss2;
 //kL	ss2 << _base->getAvailableEngineers() << ":" << _base->getTotalEngineers();
 	ss2 << _base->getEngineers() << ":" << _base->getTotalEngineers(); // kL
 	_numEngineers->setText(ss2.str());
-
 	_barEngineers->setMax(_base->getTotalEngineers());
 //kL	_barEngineers->setValue(_base->getAvailableEngineers());
 	_barEngineers->setValue(_base->getEngineers()); // kL
 
-	std::wstringstream ss3;
 //kL	ss3 << _base->getAvailableScientists() << ":" << _base->getTotalScientists();
 	ss3 << _base->getScientists() << ":" << _base->getTotalScientists(); // kL
 	_numScientists->setText(ss3.str());
-
 	_barScientists->setMax(_base->getTotalScientists());
 //kL	_barScientists->setValue(_base->getAvailableScientists());
 	_barScientists->setValue(_base->getScientists()); // kL
 
-
-	std::wstringstream ss4;
 	ss4 << _base->getUsedQuarters() << ":" << _base->getAvailableQuarters();
 	_numQuarters->setText(ss4.str());
-
 	_barQuarters->setMax(_base->getAvailableQuarters());
 	_barQuarters->setValue(_base->getUsedQuarters());
 
-	std::wstringstream ss5;
 	ss5 << _base->getUsedStores() << ":" << _base->getAvailableStores();
 	_numStores->setText(ss5.str());
-
 	_barStores->setMax(_base->getAvailableStores());
 	_barStores->setValue(_base->getUsedStores());
 
-	std::wstringstream ss6;
 	ss6 << _base->getUsedLaboratories() << ":" << _base->getAvailableLaboratories();
 	_numLaboratories->setText(ss6.str());
-
 	_barLaboratories->setMax(_base->getAvailableLaboratories());
 	_barLaboratories->setValue(_base->getUsedLaboratories());
 
-	std::wstringstream ss7;
 	ss7 << _base->getUsedWorkshops() << ":" << _base->getAvailableWorkshops();
 	_numWorkshops->setText(ss7.str());
-
 	_barWorkshops->setMax(_base->getAvailableWorkshops());
 	_barWorkshops->setValue(_base->getUsedWorkshops());
 
 	if (_containmentLimit)
 	{
-		std::wstringstream ss72;
-		ss72 << _base->getUsedContainment() << ":" << _base->getAvailableContainment();
-		_numContainment->setText(ss72.str());
-
+		ss8 << _base->getUsedContainment() << ":" << _base->getAvailableContainment();
+		_numContainment->setText(ss8.str());
 		_barContainment->setMax(_base->getAvailableContainment());
 		_barContainment->setValue(_base->getUsedContainment());
 	}
 
-	std::wstringstream ss8;
-	ss8 << _base->getUsedHangars() << ":" << _base->getAvailableHangars();
-	_numHangars->setText(ss8.str());
-
+	ss9 << _base->getUsedHangars() << ":" << _base->getAvailableHangars();
+	_numHangars->setText(ss9.str());
 	_barHangars->setMax(_base->getAvailableHangars());
 	_barHangars->setValue(_base->getUsedHangars());
 
-
-	std::wstringstream ss9;
-	ss9 << _base->getDefenseValue();
-	_numDefense->setText(ss9.str());
-
+	ss10 << _base->getDefenseValue();
+	_numDefense->setText(ss10.str());
 	_barDefense->setMax(_base->getDefenseValue());
 	_barDefense->setValue(_base->getDefenseValue());
 
-	std::wstringstream ss10;
-	ss10 << _base->getShortRangeDetection();
-	_numShortRange->setText(ss10.str());
-
+	ss11 << _base->getShortRangeDetection();
+	_numShortRange->setText(ss11.str());
 	_barShortRange->setMax(_base->getShortRangeDetection());
 	_barShortRange->setValue(_base->getShortRangeDetection());
 
-	std::wstringstream ss11;
-	ss11 << _base->getLongRangeDetection();
-	_numLongRange->setText(ss11.str());
-
+	ss12 << _base->getLongRangeDetection();
+	_numLongRange->setText(ss12.str());
 	_barLongRange->setMax(_base->getLongRangeDetection());
 	_barLongRange->setValue(_base->getLongRangeDetection());
 }
@@ -486,7 +456,9 @@ void BaseInfoState::btnOkClick(Action*)
  */
 void BaseInfoState::btnTransfersClick(Action*)
 {
-	_game->pushState(new TransfersState(_game, _base));
+	_game->pushState(new TransfersState(
+									_game,
+									_base));
 }
 
 /**
@@ -495,7 +467,9 @@ void BaseInfoState::btnTransfersClick(Action*)
  */
 void BaseInfoState::btnStoresClick(Action*)
 {
-	_game->pushState(new StoresState(_game, _base));
+	_game->pushState(new StoresState(
+								_game,
+								_base));
 }
 
 /**
@@ -504,7 +478,9 @@ void BaseInfoState::btnStoresClick(Action*)
  */
 void BaseInfoState::btnMonthlyCostsClick(Action*)
 {
-	_game->pushState(new MonthlyCostsState(_game, _base));
+	_game->pushState(new MonthlyCostsState(
+										_game,
+										_base));
 }
 
 }

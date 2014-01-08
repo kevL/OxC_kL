@@ -58,17 +58,18 @@ TransferBaseState::TransferBaseState(
 		_base(base),
 		_bases()
 {
-	_window		= new Window(this, 260, 140, 30, 30);
-	_txtTitle	= new Text(228, 16, 46, 40);
+	_window			= new Window(this, 260, 140, 30, 30);
+	_txtTitle		= new Text(228, 16, 46, 40);
+	_txtBaseLabel	= new Text(80, 9, 46, 40);
 
-	_txtFunds	= new Text(100, 9, 46, 54);
+	_txtFunds		= new Text(100, 9, 46, 54);
 
-	_txtName	= new Text(80, 17, 46, 65);
-	_txtArea	= new Text(60, 17, 182, 65);
+	_txtName		= new Text(80, 17, 46, 65);
+	_txtArea		= new Text(60, 17, 182, 65);
 
-	_lstBases	= new TextList(228, 57, 46, 82);
+	_lstBases		= new TextList(228, 57, 46, 82);
 
-	_btnCancel	= new TextButton(228, 16, 46, 146);
+	_btnCancel		= new TextButton(228, 16, 46, 146);
 
 
 	_game->setPalette(
@@ -77,12 +78,13 @@ TransferBaseState::TransferBaseState(
 				16);
 
 	add(_window);
-	add(_btnCancel);
 	add(_txtTitle);
+	add(_txtBaseLabel);
 	add(_txtFunds);
 	add(_txtName);
 	add(_txtArea);
 	add(_lstBases);
+	add(_btnCancel);
 
 	centerAllSurfaces();
 
@@ -101,6 +103,9 @@ TransferBaseState::TransferBaseState(
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_RIGHT);
 	_txtTitle->setText(tr("STR_SELECT_DESTINATION_BASE"));
+
+	_txtBaseLabel->setColor(Palette::blockOffset(13) + 5);
+	_txtBaseLabel->setText(_base->getName(_game->getLanguage()));
 
 	_txtFunds->setColor(Palette::blockOffset(13) + 5);
 	_txtFunds->setSecondaryColor(Palette::blockOffset(13));

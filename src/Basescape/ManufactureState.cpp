@@ -63,6 +63,7 @@ ManufactureState::ManufactureState(
 {
 	_window			= new Window(this, 320, 200, 0, 0);
 	_txtTitle		= new Text(300, 17, 16, 9);
+	_txtBaseLabel	= new Text(80, 9, 16, 9);
 
 	_txtAvailable	= new Text(140, 9, 16, 25);
 	_txtAllocated	= new Text(140, 9, 160, 25);
@@ -96,6 +97,7 @@ ManufactureState::ManufactureState(
 
 	add(_window);
 	add(_txtTitle);
+	add(_txtBaseLabel);
 	add(_txtAvailable);
 	add(_txtAllocated);
 	add(_txtSpace);
@@ -117,19 +119,22 @@ ManufactureState::ManufactureState(
 
 	_btnNew->setColor(Palette::blockOffset(13)+10);
 	_btnNew->setText(tr("STR_NEW_PRODUCTION"));
-	_btnNew->onMouseClick((ActionHandler)&ManufactureState::btnNewProductionClick);
+	_btnNew->onMouseClick((ActionHandler)& ManufactureState::btnNewProductionClick);
 
 	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)&ManufactureState::btnOkClick);
 	_btnOk->onKeyboardPress(
-						(ActionHandler)&ManufactureState::btnOkClick,
+						(ActionHandler)& ManufactureState::btnOkClick,
 						(SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(15)+6);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_CURRENT_PRODUCTION"));
+
+	_txtBaseLabel->setColor(Palette::blockOffset(15)+6);
+	_txtBaseLabel->setText(_base->getName(_game->getLanguage()));
 
 	_txtAvailable->setColor(Palette::blockOffset(15)+6);
 	_txtAvailable->setSecondaryColor(Palette::blockOffset(13));
@@ -304,7 +309,7 @@ void ManufactureState::fillProductionList()
  */
 void ManufactureState::lstManufactureClick(Action*)
 {
-	const std::vector<Production*> productions(_base->getProductions ());
+	const std::vector<Production*> productions(_base->getProductions());
 	_game->pushState(new ManufactureInfoState(
 											_game,
 											_base,

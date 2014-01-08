@@ -580,7 +580,7 @@ void AlienBAIState::setupPatrol()
 					{
 						MapData* md = _save->getTile(Position(i, j, 1))->getMapData(MapData::O_OBJECT);
 						if (md
-							&& md->isBaseModule()
+							&& md->isBaseModule())
 //							&& md->getDieMCD()
 //							&& md->getArmor() < 60)
 						{

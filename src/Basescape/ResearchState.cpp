@@ -60,6 +60,7 @@ ResearchState::ResearchState(
 {
 	_window			= new Window(this, 320, 200, 0, 0);
 	_txtTitle		= new Text(300, 17, 16, 9);
+	_txtBaseLabel	= new Text(80, 9, 16, 9);
 
 	_txtAvailable	= new Text(140, 9, 16, 25);
 	_txtAllocated	= new Text(140, 9, 160, 25);
@@ -89,9 +90,8 @@ ResearchState::ResearchState(
 				16);
 
 	add(_window);
-	add(_btnNew);
-	add(_btnOk);
 	add(_txtTitle);
+	add(_txtBaseLabel);
 	add(_txtAvailable);
 	add(_txtAllocated);
 	add(_txtSpace);
@@ -99,6 +99,8 @@ ResearchState::ResearchState(
 	add(_txtScientists);
 	add(_txtProgress);
 	add(_lstResearch);
+	add(_btnNew);
+	add(_btnOk);
 
 	centerAllSurfaces();
 
@@ -121,6 +123,9 @@ ResearchState::ResearchState(
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_CURRENT_RESEARCH"));
+
+	_txtBaseLabel->setColor(Palette::blockOffset(13)+10);
+	_txtBaseLabel->setText(_base->getName(_game->getLanguage()));
 
 	_txtAvailable->setColor(Palette::blockOffset(13)+10);
 	_txtAvailable->setSecondaryColor(Palette::blockOffset(13));

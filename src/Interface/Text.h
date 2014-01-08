@@ -103,7 +103,8 @@ private:
 		/// Formats an integer value as number with separators.
 		static std::wstring formatNumber(
 				int value,
-				std::wstring currency = L"");
+				std::wstring currency = L"",
+				bool space = true);
 		/// Formats an integer value as currency.
 		static std::wstring formatFunding(int funds);
 		/// Formats an integer value as percentage.
