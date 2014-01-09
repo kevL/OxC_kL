@@ -3990,8 +3990,8 @@ bool TileEngine::psiAttack(BattleAction* action)
 
 /**
  * Applies gravity to a tile. Causes items and units to drop.
- * @param t Tile.
- * @return Tile where the items end up in eventually.
+ * @param t, Tile.
+ * @return, Tile where the items end up eventually.
  */
 Tile* TileEngine::applyGravity(Tile* t)
 {
@@ -4003,15 +4003,14 @@ Tile* TileEngine::applyGravity(Tile* t)
 		return t;
 	}
 
-
 	Position p = t->getPosition();
 	Tile* rt = t;
 	Tile* rtb;
-	BattleUnit* occupant = t->getUnit();
 
-	if (occupant
-		&& (occupant->getArmor()->getMovementType() != MT_FLY
-			|| occupant->isOut()))
+	BattleUnit* occupant = t->getUnit();
+	if (occupant)
+//		&& (occupant->getArmor()->getMovementType() != MT_FLY
+//			|| occupant->isOut()))
 	{
 		Position unitPos = occupant->getPosition();
 		while (unitPos.z >= 0)
@@ -4030,8 +4029,14 @@ Tile* TileEngine::applyGravity(Tile* t)
 							&& canFall;
 						++x)
 				{
-					rt = _save->getTile(Position(unitPos.x + x, unitPos.y + y, unitPos.z));
-					rtb = _save->getTile(Position(unitPos.x + x, unitPos.y + y, unitPos.z - 1)); // below
+					rt = _save->getTile(Position(
+											unitPos.x + x,
+											unitPos.y + y,
+											unitPos.z));
+					rtb = _save->getTile(Position( // below
+											unitPos.x + x,
+											unitPos.y + y,
+											unitPos.z - 1));
 					if (!rt->hasNoFloor(rtb))
 					{
 						canFall = false;
@@ -4041,7 +4046,6 @@ Tile* TileEngine::applyGravity(Tile* t)
 
 			if (!canFall) break;
 
-
 			unitPos.z--;
 		}
 
@@ -4050,14 +4054,27 @@ Tile* TileEngine::applyGravity(Tile* t)
 			if (occupant->getHealth() != 0
 				&& occupant->getStunlevel() < occupant->getHealth())
 			{
-				occupant->startWalking(
+				if (occupant->getArmor()->getMovementType() == MT_FLY)
+				{
+					// move to the position you're already in. this will unset the kneeling flag, set the floating flag, etc.
+					occupant->startWalking(
+									occupant->getDirection(),
+									occupant->getPosition(),
+									_save->getTile(occupant->getPosition() + Position(0, 0, -1)),
+									true);
+					// and set our status to standing (rather than walking or flying) to avoid weirdness.
+					occupant->abortTurn();
+				}
+				else
+				{
+					occupant->startWalking(
 									Pathfinding::DIR_DOWN,
 									occupant->getPosition() + Position(0, 0, -1),
 									_save->getTile(occupant->getPosition() + Position(0, 0, -1)),
 									true);
-
-				//Log(LOG_INFO) << "TileEngine::applyGravity(), addFallingUnit() ID " << occupant->getId();
-				_save->addFallingUnit(occupant);
+					//Log(LOG_INFO) << "TileEngine::applyGravity(), addFallingUnit() ID " << occupant->getId();
+					_save->addFallingUnit(occupant);
+				}
 			}
 			else
 			{
@@ -4085,10 +4102,14 @@ Tile* TileEngine::applyGravity(Tile* t)
 	rt = t;
 
 	bool canFall = true;
-	while (p.z >= 0 && canFall)
+	while (p.z >= 0
+		&& canFall)
 	{
 		rt = _save->getTile(p);
-		rtb = _save->getTile(Position(p.x, p.y, p.z - 1)); // below
+		rtb = _save->getTile(Position( // below
+									p.x,
+									p.y,
+									p.z - 1));
 		if (!rt->hasNoFloor(rtb))
 			canFall = false;
 
