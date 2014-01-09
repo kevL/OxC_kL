@@ -80,6 +80,7 @@ SoldierInfoState::SoldierInfoState(
 	_btnArmor		= new TextButton(73, 16, 162, 32);
 
 	_edtSoldier		= new TextEdit(200, 16, 40, 9);
+	_btnAutoStat	= new TextButton(46, 17, 219, 7); // kL
 	_btnSack		= new TextButton(46, 17, 267, 7);
 
 	_txtRank		= new Text(130, 9, 0, 49);
@@ -136,6 +137,7 @@ SoldierInfoState::SoldierInfoState(
 	add(_btnNext);
 	add(_btnArmor);
 	add(_edtSoldier);
+	add(_btnAutoStat); // kL
 	add(_btnSack);
 	add(_txtArmor);
 	add(_txtRank);
@@ -215,6 +217,10 @@ SoldierInfoState::SoldierInfoState(
 	_btnSack->setColor(Palette::blockOffset(15)+6);
 	_btnSack->setText(tr("STR_SACK"));
 	_btnSack->onMouseClick((ActionHandler)& SoldierInfoState::btnSackClick);
+
+	_btnAutoStat->setColor(Palette::blockOffset(15)+6);
+	_btnAutoStat->setText(tr("STR_AUTOSTAT"));
+	_btnAutoStat->onMouseClick((ActionHandler)& SoldierInfoState::btnAutoStat);
 
 	_txtArmor->setColor(Palette::blockOffset(13));
 	_txtArmor->setText(tr("STR_ARMOR"));
@@ -556,6 +562,94 @@ void SoldierInfoState::init()
 }
 
 /**
+ * kL. Automatically renames a soldier according to its statistics.
+ */
+void SoldierInfoState::btnAutoStat()
+{
+	_edtSoldier->deFocus();
+	_base->getSoldiers()->at(_soldier)->setName(_edtSoldier->getText());
+
+	Soldier* s = _base->getSoldiers()->at(_soldier);
+
+	std::wstringstream stat;
+
+	int rank = s->getRank();
+	switch (rank)
+	{
+		case 0: stat << "r.";
+		break;
+		case 1: stat << "q.";
+		break;
+		case 2: stat << "t.";
+		break;
+		case 3: stat << "p.";
+		break;
+		case 4: stat << "n.";
+		break;
+		case 5: stat << "x.";
+		break;
+
+		default: stat << "";
+		break;
+	}
+
+	UnitStats* current = s->getCurrentStats();
+
+	stat << current->firing << ".";
+	stat << current->reactions << ".";
+	stat << current->strength;
+
+	int bravery = current->bravery;
+	switch (bravery)
+	{
+		case 10: stat << "a";
+		break;
+		case 20: stat << "b";
+		break;
+		case 30: stat << "c";
+		break;
+		case 40: stat << "d";
+		break;
+		case 50: stat << "e";
+		break;
+		case 60: stat << "f";
+		break;
+		case 70: stat << "g";
+		break;
+		case 80: stat << "h";
+		break;
+		case 90: stat << "i";
+		break;
+		case 100: stat << "j";
+		break;
+
+		default: stat << "";
+		break;
+	}
+
+	int minPsi = s->getRules()->getMinStats().psiSkill;
+	if (current->psiSkill >= minPsi)
+	{
+		int psiStr = current->psiStrength;
+		int psiSkl = current->psiSkill;
+
+		int psiDefense = psiStr + psiSkl / 5;
+		int psiAttack = psiStr * psiSkl / 100;
+
+		stat << psiDefense;
+
+		if (psiSkl >= s->getRules()->getMaxStats().psiSkill)
+			stat << ":";
+		else
+			stat << ".";
+
+		stat << psiAttack;
+	}
+
+	_edtSoldier->setText(stat.str());
+}
+
+/**
  * Changes the soldier's name.
  * @param action Pointer to an action.
  */
@@ -574,6 +668,7 @@ void SoldierInfoState::edtSoldierKeyPress(Action* action)
  */
 void SoldierInfoState::btnOkClick(Action*)
 {
+	_edtSoldier->deFocus(); // kL
 	_base->getSoldiers()->at(_soldier)->setName(_edtSoldier->getText());
 
 	_game->popState();
@@ -638,6 +733,9 @@ void SoldierInfoState::btnArmorClick(Action*)
  */
 void SoldierInfoState::btnSackClick(Action*)
 {
+	_edtSoldier->deFocus(); // kL
+	_base->getSoldiers()->at(_soldier)->setName(_edtSoldier->getText()); // kL
+
 	Soldier* soldier = _base->getSoldiers()->at(_soldier);
 
 	_game->pushState(new SackSoldierState(

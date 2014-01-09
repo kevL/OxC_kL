@@ -95,8 +95,12 @@ private:
 		* _btnNext,
 		* _btnOk,
 		* _btnPrev,
+		* _btnAutoStat, // kL
 		* _btnSack;
 	TextEdit* _edtSoldier;
+
+	/// kL. Automatically renames a soldier according to its statistics.
+	void btnAutoStat();
 
 
 	public:
@@ -110,6 +114,7 @@ private:
 
 		/// Updates the soldier info.
 		void init();
+
 		/// Handler for pressing a key on the Name edit.
 		void edtSoldierKeyPress(Action* action);
 		/// Handler for clicking the OK button.

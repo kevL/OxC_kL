@@ -16,12 +16,16 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "TextEdit.h"
+
 #include <sstream>
+
 #include "../Engine/Action.h"
 #include "../Engine/Font.h"
-#include "../Engine/Timer.h"
 #include "../Engine/Options.h"
+#include "../Engine/Timer.h"
+
 
 namespace OpenXcom
 {
@@ -33,12 +37,27 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-TextEdit::TextEdit(int width, int height, int x, int y) : InteractiveSurface(width, height, x, y), _value(L""), _blink(true), _ascii(L'A'), _caretPos(0), _numerical(false)
+TextEdit::TextEdit(
+		int width,
+		int height,
+		int x,
+		int y)
+	:
+		InteractiveSurface(
+			width,
+			height,
+			x,
+			y),
+		_value(L""),
+		_blink(true),
+		_ascii(L'A'),
+		_caretPos(0),
+		_numerical(false)
 {
 	_isFocused = false;
 	_text = new Text(width, height, 0, 0);
 	_timer = new Timer(100);
-	_timer->onTimer((SurfaceHandler)&TextEdit::blink);
+	_timer->onTimer((SurfaceHandler)& TextEdit::blink);
 	_caret = new Text(16, 17, 0, 0);
 	_caret->setText(L"|");
 }
@@ -51,37 +70,42 @@ TextEdit::~TextEdit()
 	delete _text;
 	delete _caret;
 	delete _timer;
+
 	// In case it was left focused
 	SDL_EnableKeyRepeat(0, SDL_DEFAULT_REPEAT_INTERVAL);
 }
 
 /**
- * Starts the blinking animation when
- * the text edit is focused.
+ * Starts the blinking animation when the text edit is focused.
  */
 void TextEdit::focus()
 {
 	if (!_isFocused)
 	{
-		SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
+		SDL_EnableKeyRepeat(
+				SDL_DEFAULT_REPEAT_DELAY,
+				SDL_DEFAULT_REPEAT_INTERVAL);
+
 		_caretPos = _value.length();
 		_blink = true;
 		_timer->start();
 		_redraw = true;
 	}
+
 	InteractiveSurface::focus();
 }
 
 /**
-* Stops the blinking animation when
-* the text edit is defocused.
+ * Stops the blinking animation when the text edit is defocused.
  */
 void TextEdit::deFocus()
 {
 	InteractiveSurface::deFocus();
+
 	_blink = false;
 	_redraw = true;
 	_timer->stop();
+
 	SDL_EnableKeyRepeat(0, SDL_DEFAULT_REPEAT_INTERVAL);
 }
 
@@ -111,7 +135,10 @@ void TextEdit::setSmall()
  * @param small Pointer to small-size font.
  * @param lang Pointer to current language.
  */
-void TextEdit::initText(Font *big, Font *small, Language *lang)
+void TextEdit::initText(
+		Font* big,
+		Font* small,
+		Language* lang)
 {
 	_text->initText(big, small, lang);
 	_caret->initText(big, small, lang);
@@ -121,7 +148,7 @@ void TextEdit::initText(Font *big, Font *small, Language *lang)
  * Changes the string displayed on screen.
  * @param text Text string.
  */
-void TextEdit::setText(const std::wstring &text)
+void TextEdit::setText(const std::wstring& text)
 {
 	_value = text;
 	_caretPos = _value.length();
@@ -246,9 +273,13 @@ Uint8 TextEdit::getSecondaryColor() const
  * @param firstcolor Offset of the first color to replace.
  * @param ncolors Amount of colors to replace.
  */
-void TextEdit::setPalette(SDL_Color *colors, int firstcolor, int ncolors)
+void TextEdit::setPalette(
+		SDL_Color* colors,
+		int firstcolor,
+		int ncolors)
 {
 	Surface::setPalette(colors, firstcolor, ncolors);
+
 	_text->setPalette(colors, firstcolor, ncolors);
 	_caret->setPalette(colors, firstcolor, ncolors);
 }
@@ -278,39 +309,51 @@ void TextEdit::blink()
 void TextEdit::draw()
 {
 	Surface::draw();
+
 	_text->setText(_value);
+
 	if (Options::getInt("keyboardMode") == KEYBOARD_OFF)
 	{
 		std::wstring newValue = _value;
+
 		if (_isFocused && _blink)
 		{
 			newValue += _ascii;
 			_text->setText(newValue);
 		}
 	}
+
 	clear();
 	_text->blit(this);
+
 	if (Options::getInt("keyboardMode") == KEYBOARD_ON)
 	{
-		if (_isFocused && _blink)
+		if (_isFocused
+			&& _blink)
 		{
 			int x = 0;
+
 			switch (_text->getAlign())
 			{
-			case ALIGN_LEFT:
-				x = 0;
+				case ALIGN_LEFT:
+					x = 0;
 				break;
-			case ALIGN_CENTER:
-				x = (_text->getWidth() - _text->getTextWidth()) / 2;
+				case ALIGN_CENTER:
+					x = (_text->getWidth() - _text->getTextWidth()) / 2;
 				break;
-			case ALIGN_RIGHT:
-				x = _text->getWidth() - _text->getTextWidth();
+				case ALIGN_RIGHT:
+					x = _text->getWidth() - _text->getTextWidth();
 				break;
 			}
-			for (unsigned int i = 0; i < _caretPos; ++i)
+
+			for (unsigned int
+					i = 0;
+					i < _caretPos;
+					++i)
 			{
 				x += _text->getFont()->getCharSize(_value[i]).w;
 			}
+
 			_caret->setX(x);
 			_caret->blit(this);
 		}
@@ -330,7 +373,10 @@ bool TextEdit::exceedsMaxWidth(wchar_t c)
 	std::wstring s = _value;
 
 	s += c;
-	for (std::wstring::iterator i = s.begin(); i < s.end(); ++i)
+	for (std::wstring::iterator
+			i = s.begin();
+			i < s.end();
+			++i)
 	{
 		w += _text->getFont()->getCharSize(*i).w;
 	}
@@ -343,7 +389,7 @@ bool TextEdit::exceedsMaxWidth(wchar_t c)
  * @param action Pointer to an action.
  * @param state State that the action handlers belong to.
  */
-void TextEdit::mousePress(Action *action, State *state)
+void TextEdit::mousePress(Action* action, State* state)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
@@ -353,124 +399,128 @@ void TextEdit::mousePress(Action *action, State *state)
 		}
 		else
 		{
-			double mouseX = action->getRelativeXMouse();
-			double scaleX = action->getXScale();
-			double w = 0;
+			double
+				mouseX = action->getRelativeXMouse(),
+				scaleX = action->getXScale(),
+				w = 0;
 			int c = 0;
-			for (std::wstring::iterator i = _value.begin(); i < _value.end(); ++i)
+
+			for (std::wstring::iterator
+					i = _value.begin();
+					i < _value.end();
+					++i)
 			{
 				if (mouseX <= w)
 				{
 					break;
 				}
-				w += (double)_text->getFont()->getCharSize(*i).w / 2 * scaleX;
+
+				w += static_cast<double>(_text->getFont()->getCharSize(*i).w / 2) * scaleX;
 				if (mouseX <= w)
 				{
 					break;
 				}
+
 				c++;
-				w += (double) _text->getFont()->getCharSize(*i).w / 2 * scaleX;
+				w += static_cast<double>(_text->getFont()->getCharSize(*i).w / 2) * scaleX;
 			}
+
 			_caretPos = c;
 		}
 	}
+
 	InteractiveSurface::mousePress(action, state);
 }
 
 /**
- * Changes the text edit according to keyboard input, and
- * unfocuses the text if Enter is pressed.
+ * Changes the text edit according to keyboard input,
+ * and unfocuses the text if Enter is pressed.
  * @param action Pointer to an action.
  * @param state State that the action handlers belong to.
  */
-void TextEdit::keyboardPress(Action *action, State *state)
+void TextEdit::keyboardPress(Action* action, State* state)
 {
 	if (Options::getInt("keyboardMode") == KEYBOARD_OFF)
 	{
 		switch (action->getDetails()->key.keysym.sym)
 		{
-		case SDLK_UP:
-			_ascii++;
-			if (_ascii > L'~')
-			{
-				_ascii = L' ';
-			}
+			case SDLK_UP:
+				_ascii++;
+				if (_ascii > L'~')
+					_ascii = L' ';
 			break;
-		case SDLK_DOWN:
-			_ascii--;
-			if (_ascii < L' ')
-			{
-				_ascii = L'~';
-			}
+			case SDLK_DOWN:
+				_ascii--;
+				if (_ascii < L' ')
+					_ascii = L'~';
 			break;
-		case SDLK_LEFT:
-			if (_value.length() > 0)
-			{
-				_value.resize(_value.length() - 1);
-			}
+			case SDLK_LEFT:
+				if (_value.length() > 0)
+					_value.resize(_value.length() - 1);
 			break;
-		case SDLK_RIGHT:
-			if (!exceedsMaxWidth(_ascii))
-			{
-				_value += _ascii;
-			}
+			case SDLK_RIGHT:
+				if (!exceedsMaxWidth(_ascii))
+					_value += _ascii;
 			break;
-		default: break;
+
+			default:
+			break;
 		}
 	}
 	else if (Options::getInt("keyboardMode") == KEYBOARD_ON)
 	{
 		switch (action->getDetails()->key.keysym.sym)
 		{
-		case SDLK_LEFT:
-			if (_caretPos > 0)
-			{
-				_caretPos--;
-			}
+			case SDLK_LEFT:
+				if (_caretPos > 0)
+					_caretPos--;
 			break;
-		case SDLK_RIGHT:
-			if (_caretPos < _value.length())
-			{
-				_caretPos++;
-			}
+			case SDLK_RIGHT:
+				if (_caretPos < _value.length())
+					_caretPos++;
 			break;
-		case SDLK_HOME:
-			_caretPos = 0;
+			case SDLK_HOME:
+				_caretPos = 0;
 			break;
-		case SDLK_END:
-			_caretPos = _value.length();
+			case SDLK_END:
+				_caretPos = _value.length();
 			break;
-		case SDLK_BACKSPACE:
-			if (_caretPos > 0)
-			{
-				_value.erase(_caretPos - 1, 1);
-				_caretPos--;
-			}
+			case SDLK_BACKSPACE:
+				if (_caretPos > 0)
+					_value.erase(_caretPos - 1, 1);
+					_caretPos--;
 			break;
-		case SDLK_DELETE:
-			if (_caretPos < _value.length())
-			{
-				_value.erase(_caretPos, 1);
-			}
+			case SDLK_DELETE:
+				if (_caretPos < _value.length())
+					_value.erase(_caretPos, 1);
 			break;
-		case SDLK_RETURN:
-		case SDLK_KP_ENTER:
-			if (!_value.empty())
-			{
-				deFocus();
-			}
+			case SDLK_RETURN:
+			case SDLK_KP_ENTER:
+				if (!_value.empty())
+					deFocus();
 			break;
-		default:
-			Uint16 key = action->getDetails()->key.keysym.unicode;
-			if (((_numerical && key >= L'0' && key <= L'9') ||
-				(!_numerical && ((key >= L' ' && key <= L'~') || key >= 160))) &&
-				!exceedsMaxWidth((wchar_t)key))
-			{
-				_value.insert(_caretPos, 1, (wchar_t)action->getDetails()->key.keysym.unicode);
-				_caretPos++;
-			}
+
+			default:
+				Uint16 key = action->getDetails()->key.keysym.unicode;
+
+				if (((_numerical
+						&& key >= L'0'
+						&& key <= L'9')
+					|| (!_numerical
+						&& ((key >= L' '
+								&& key <= L'~')
+							|| key >= 160)))
+					&& !exceedsMaxWidth(static_cast<wchar_t>(key)))
+				{
+					_value.insert(
+								_caretPos,
+								1,
+								static_cast<wchar_t>(action->getDetails()->key.keysym.unicode));
+					_caretPos++;
+				}
 		}
 	}
+
 	_redraw = true;
 
 	InteractiveSurface::keyboardPress(action, state);
