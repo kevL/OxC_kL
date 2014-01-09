@@ -133,6 +133,15 @@ void Transfer::setCraft(Craft *craft)
 }
 
 /**
+ * Gets the craft being transferred.
+ * @return a Pointer to craft.
+ */
+Craft *Transfer::getCraft()
+{
+	return _craft;
+}
+
+/**
  * Returns the items being transferred.
  * @return Item ID.
  */

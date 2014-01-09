@@ -201,6 +201,8 @@ private:
 		int getUsedPsiLabs() const;
 		/// Gets the base's total available psi lab space.
 		int getAvailablePsiLabs() const;
+		/// Gets the base's total free psi lab space.
+		int getFreePsiLabs() const;
 		/// Gets the total amount of Containment Space.
 		int getAvailableContainment() const;
 		/// Gets the total amount of used Containment Space.
