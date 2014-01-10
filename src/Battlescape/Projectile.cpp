@@ -229,7 +229,7 @@ Wb.131129
 						_action.target.x * 16 + 8,
 						_action.target.y * 16 + 8,
 //kL						_action.target.z * 24);
-						_action.target.z * 24 + 1);		// kL
+						_action.target.z * 24 + 1); // kL
 			}
 			else	// kL_note: huh? Is this for storing _trajectory??? ... no. might be
 					// setting &targetVoxel tho. Or "_action.target" ( targetTile ) even......
@@ -356,7 +356,10 @@ Wb.131129
 					&& _save->getTile(hitPos)->getUnit() == 0)
 			{
 				// must be poking head up from the belowTile
-				hitPos = Position(hitPos.x, hitPos.y, hitPos.z - 1);
+				hitPos = Position(
+								hitPos.x,
+								hitPos.y,
+								hitPos.z - 1);
 			}
 
 			if (hitPos != _action.target
@@ -543,16 +546,16 @@ Wb.131129
 		bu = _save->getTile(_origin)->getUnit();
 	}
 	else if (_save->getTile(Position(
-			_origin.x,
-			_origin.y,
-			_origin.z - 1))->
-					getUnit())
+								_origin.x,
+								_origin.y,
+								_origin.z - 1))->
+							getUnit())
 	{
 		bu = _save->getTile(Position(
-				_origin.x,
-				_origin.y,
-				_origin.z - 1))->
-						getUnit();
+								_origin.x,
+								_origin.y,
+								_origin.z - 1))->
+							getUnit();
 	}
 
 	Position originVoxel = _save->getTileEngine()->getOriginVoxel(_action, 0); // Wb.131129
@@ -579,16 +582,16 @@ Wb.131129
 			&& _save->getTile(_action.target)->hasNoFloor(0))
 		{
 			if (_save->getTile(Position(
-					_action.target.x,
-					_action.target.y,
-					_action.target.z - 1))
-							->getUnit())
+									_action.target.x,
+									_action.target.y,
+									_action.target.z - 1))->
+								getUnit())
 			{
 				targetUnit = _save->getTile(Position(
-						_action.target.x,
-						_action.target.y,
-						_action.target.z - 1))
-								->getUnit();
+												_action.target.x,
+												_action.target.y,
+												_action.target.z - 1))->
+											getUnit();
 			}
 		}
 

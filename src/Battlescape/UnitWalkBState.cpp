@@ -56,7 +56,9 @@ UnitWalkBState::UnitWalkBState(
 		BattlescapeGame* parent,
 		BattleAction action)
 	:
-		BattleState(parent, action),
+		BattleState(
+			parent,
+			action),
 		_unit(0),
 		_pf(0),
 		_terrain(0),
@@ -151,6 +153,7 @@ void UnitWalkBState::think()
 //	int dir = _pf->getStartDirection(); // kL: also below, in STATUS_STANDING!
 // setDirection(dir)					// kL
 
+
 // _oO **** STATUS WALKING **** Oo_
 	if (_unit->getStatus() == STATUS_WALKING
 		|| _unit->getStatus() == STATUS_FLYING)
@@ -198,6 +201,7 @@ void UnitWalkBState::think()
 		}
 	}
 
+
 // _oO **** STATUS STANDING **** Oo_
 	if (_unit->getStatus() == STATUS_STANDING
 		|| _unit->getStatus() == STATUS_PANICKING)
@@ -207,9 +211,9 @@ void UnitWalkBState::think()
 		if (!doStatusStand()) return;
 	}
 
+
 // _oO **** STATUS TURNING **** Oo_
-// _oO **** STATUS TURNING **** Oo_
-	if (_unit->getStatus() == STATUS_TURNING)	// turning during walking costs no tu
+	if (_unit->getStatus() == STATUS_TURNING) // turning during walking costs no tu
 	{
 		Log(LOG_INFO) << "STATUS_TURNING : " << _unit->getId();
 

@@ -1014,16 +1014,16 @@ bool TileEngine::canTargetUnit(
 	if (potentialUnit == excludeUnit)
 		return false; // skip self
 
-	int targetMinHeight = targetVoxel.z - tile->getTerrainLevel();
-	targetMinHeight += potentialUnit->getFloatHeight();
-
-	int targetMaxHeight = targetMinHeight;
-	int targetCenterHeight;
+	int targetMinHeight =
+						targetVoxel.z
+						- tile->getTerrainLevel()
+						+ potentialUnit->getFloatHeight(),
+		targetMaxHeight = targetMinHeight,
+		targetCenterHeight,
 	// if there is an other unit on target tile, we assume we want to check against this unit's height
-	int heightRange;
-
-	int unitRadius = potentialUnit->getLoftemps(); // width == loft in default loftemps set
-	int targetSize = potentialUnit->getArmor()->getSize() - 1;
+		heightRange,
+		unitRadius = potentialUnit->getLoftemps(), // width == loft in default loftemps set
+		targetSize = potentialUnit->getArmor()->getSize() - 1;
 	if (targetSize > 0)
 	{
 		unitRadius = 3;
@@ -1034,10 +1034,11 @@ bool TileEngine::canTargetUnit(
 
 	float normal = static_cast<float>(unitRadius)
 					/ sqrt(static_cast<float>(relPos.x * relPos.x + relPos.y * relPos.y));
-	int relX = static_cast<int>(floor(static_cast<float>(relPos.y) * normal + 0.5f));
-	int relY = static_cast<int>(floor(static_cast<float>(-relPos.x) * normal + 0.5f));
+	int
+		relX = static_cast<int>(floor(static_cast<float>(relPos.y) * normal + 0.5f)),
+		relY = static_cast<int>(floor(static_cast<float>(-relPos.x) * normal + 0.5f)),
 
-	int sliceTargets[10] =
+		sliceTargets[10] =
 	{
 		0,		0,
 		relX,	relY,
@@ -3851,9 +3852,9 @@ int TileEngine::distanceSq(
 }
 
 /**
- * Attempts a panic or mind control action.
- * @param action, Pointer to an action
- * @return, Whether it failed or succeeded
+ * Attempts a panic or mind-control action.
+ * @param action, Pointer to a BattleAction.
+ * @return bool, True if it succeeded.
  */
 bool TileEngine::psiAttack(BattleAction* action)
 {
@@ -3882,14 +3883,17 @@ bool TileEngine::psiAttack(BattleAction* action)
 				+ (static_cast<double>(victim->getStats()->psiSkill) / 5.0);
 		Log(LOG_INFO) << ". . . defenseStr = " << (int)defenseStr;
 
-		double d = static_cast<double>(distance(action->actor->getPosition(), action->target));
+		double d = static_cast<double>(distance(
+											action->actor->getPosition(),
+											action->target));
 		Log(LOG_INFO) << ". . . d = " << d;
 
 		attackStr -= d;
 
 		attackStr -= defenseStr;
 		if (action->type == BA_MINDCONTROL)
-			attackStr += 25.0;
+//kL			attackStr += 25.0;
+			attackStr += 5.0; // kL
 		else
 			attackStr += 45.0;
 
@@ -3897,23 +3901,23 @@ bool TileEngine::psiAttack(BattleAction* action)
 		attackStr /= 56.0;
 
 		action->actor->addPsiExp();
-		int percent = static_cast<int>(attackStr);
-		Log(LOG_INFO) << ". . . attackStr Success @ " << percent;
-		if (percent > 0
-			&& RNG::percent(percent))
+
+		int chance = static_cast<int>(attackStr);
+		Log(LOG_INFO) << ". . . attackStr Success @ " << chance;
+		if (chance > 0
+			&& RNG::percent(chance))
 		{
 			Log(LOG_INFO) << ". . Success";
+			action->actor->addPsiExp();
+			action->actor->addPsiExp();
 
-			action->actor->addPsiExp();
-			action->actor->addPsiExp();
 			if (action->type == BA_PANIC)
 			{
 				Log(LOG_INFO) << ". . . action->type == BA_PANIC";
 
-//kL				int moraleLoss = (110 - _save->getTile(action->target)->getUnit()->getStats()->bravery);
-				int moraleLoss = (110 - victim->getStats()->bravery);		// kL
+				int moraleLoss = (110 - victim->getStats()->bravery);
 				if (moraleLoss > 0)
-					_save->getTile(action->target)->getUnit()->moraleChange(-moraleLoss);
+					victim->moraleChange(-moraleLoss);
 			}
 			else //if (action->type == BA_MINDCONTROL)
 			{
@@ -3936,9 +3940,13 @@ bool TileEngine::psiAttack(BattleAction* action)
 					int liveAliens = 0;
 					int liveSoldiers = 0;
 
-					_save->getBattleGame()->tallyUnits(liveAliens, liveSoldiers, false);
+					_save->getBattleGame()->tallyUnits(
+													liveAliens,
+													liveSoldiers,
+													false);
 
-					if (liveAliens == 0 || liveSoldiers == 0)
+					if (liveAliens == 0
+						|| liveSoldiers == 0)
 					{
 						_save->setSelectedUnit(0);
 						_save->getBattleGame()->requestEndTurn();

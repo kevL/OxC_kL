@@ -191,7 +191,7 @@ void BattlescapeGame::init()
 
 /**
  * Handles the processing of the AI states of a unit.
- * @param unit, Pointer to a unit
+ * @param unit, Pointer to a BattleUnit.
  */
 void BattlescapeGame::handleAI(BattleUnit* unit)
 {
@@ -271,7 +271,7 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 
 	unit->setVisible(false);
 
-	// might need this populate _visibleUnit for a newly-created alien
+	// might need this: populate _visibleUnit for a newly-created alien
 	//Log(LOG_INFO) << "BattlescapeGame::handleAI(), calculateFOV() call";
 	_save->getTileEngine()->calculateFOV(unit->getPosition());
 		// it might also help chryssalids realize they've zombified someone and need to move on;
@@ -344,16 +344,17 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 		if (unit->getAggroSound() != -1
 			&& !_playedAggroSound)
 		{
+			_playedAggroSound = true;
+
 			getResourcePack()->getSound(
 									"BATTLE.CAT",
 									unit->getAggroSound())->play();
-			_playedAggroSound = true;
 		}
 	}
 	//Log(LOG_INFO) << ". getCharging DONE";
 
 
-	std::wstringstream ss;
+	std::wstringstream ss; // debug.
 
 	if (action.type == BA_WALK)
 	{
@@ -418,7 +419,9 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 
 
 		Log(LOG_INFO) << ". . call ProjectileFlyBState()";
-		statePushBack(new ProjectileFlyBState(this, action));
+		statePushBack(new ProjectileFlyBState(
+											this,
+											action));
 		//Log(LOG_INFO) << ". . ProjectileFlyBState DONE";
 
 		if (action.type == BA_MINDCONTROL
@@ -503,7 +506,7 @@ bool BattlescapeGame::kneel(BattleUnit* bu)
 		tu = 8;
 
 	if (bu->getType() == "SOLDIER"
-		&& !bu->isFloating() // kL_note: This prevents flying soldiers from 'kneeling' .....
+		&& !bu->isFloating() // kL_note: This prevented flying soldiers from 'kneeling' .....
 		&& checkReservedTU(bu, tu))
 	{
 		if (bu->spendTimeUnits(tu))

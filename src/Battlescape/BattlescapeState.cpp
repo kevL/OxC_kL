@@ -177,19 +177,22 @@ BattlescapeState::BattlescapeState(Game* game)
 	_numAmmoRight		= new NumberText(30, 5, _icons->getX() + 280, _icons->getY() + 4);
 
 	for (int
-			i = 0;
+			i = 0,
+				offset_x = 0;		// kL
 			i < VISIBLE_MAX;
 			++i)
 	{
+		if (i > 9) offset_x = 20;	// kL
+
 		_btnVisibleUnit[i] = new InteractiveSurface(
 												15,
 												12,
-												_icons->getX() + iconsWidth - 20,
+												_icons->getX() + iconsWidth - 20 - offset_x,
 												_icons->getY() - 16 - (i * 13));
 		_numVisibleUnit[i] = new NumberText(
 										15,
 										12,
-										_icons->getX() + iconsWidth - 14,
+										_icons->getX() + iconsWidth - 14 - offset_x,
 										_icons->getY() - 12 - (i * 13));
 	}
 

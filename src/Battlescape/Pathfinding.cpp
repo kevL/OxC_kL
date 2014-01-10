@@ -125,9 +125,9 @@ void Pathfinding::calculate(
 	}
 
 	// check if destination is not blocked
-	Tile* destinationTile = _save->getTile(endPosition);
-	if (isBlocked(destinationTile, MapData::O_FLOOR, target)
-		|| isBlocked(destinationTile, MapData::O_OBJECT, target))
+	Tile* destTile = _save->getTile(endPosition);
+	if (isBlocked(destTile, MapData::O_FLOOR, target)
+		|| isBlocked(destTile, MapData::O_OBJECT, target))
 	{
 		return;
 	}
@@ -144,9 +144,9 @@ void Pathfinding::calculate(
 
 
 	// check if destination is not blocked
-/*kL	Tile* destinationTile = _save->getTile(endPosition);
-	if (isBlocked(destinationTile, MapData::O_FLOOR, target)
-		|| isBlocked(destinationTile, MapData::O_OBJECT, target))
+/*kL	Tile* destTile = _save->getTile(endPosition);
+	if (isBlocked(destTile, MapData::O_FLOOR, target)
+		|| isBlocked(destTile, MapData::O_OBJECT, target))
 	{
 		return;
 	} */ // kL: moved up.
@@ -159,23 +159,23 @@ void Pathfinding::calculate(
 /*kL	if (isOnStairs(startPosition, endPosition))
 	{
 		endPosition.z++;
-		destinationTile = _save->getTile(endPosition);
+		destTile = _save->getTile(endPosition);
 	} */
 
-	while (destinationTile->getTerrainLevel() == -24
+	while (destTile->getTerrainLevel() == -24
 		&& endPosition.z != _save->getMapSizeZ())
 	{
 		endPosition.z++;
-		destinationTile = _save->getTile(endPosition);
+		destTile = _save->getTile(endPosition);
 	}
 
 	// check if we have a floor, else lower destination
 	if (_movementType != MT_FLY)
 	{
-		while (canFallDown(destinationTile, _unit->getArmor()->getSize())) // for large & small units.
+		while (canFallDown(destTile, _unit->getArmor()->getSize())) // for large & small units.
 		{
 			endPosition.z--;
-			destinationTile = _save->getTile(endPosition);
+			destTile = _save->getTile(endPosition);
 			// kL_note: Do i have to set something here, like 'startDir = dir'
 			// to stop falling units from swivelling (and gliding) ......
 
@@ -204,8 +204,8 @@ void Pathfinding::calculate(
 				if (x || y)
 				{
 					Tile* checkTile = _save->getTile(endPosition + Position(x, y, 0));
-					if (isBlocked(destinationTile, checkTile, dir[i], _unit)
-						&& isBlocked(destinationTile, checkTile, dir[i], target))
+					if (isBlocked(destTile, checkTile, dir[i], _unit)
+						&& isBlocked(destTile, checkTile, dir[i], target))
 					{
 						return;
 					}
@@ -220,8 +220,8 @@ void Pathfinding::calculate(
 							return;
 						}
 					}
-/*kL, ^					if ((isBlocked(destinationTile, checkTile, dir[its], unit)
-							&& isBlocked(destinationTile, checkTile, dir[its], target))
+/*kL, ^					if ((isBlocked(destTile, checkTile, dir[its], unit)
+							&& isBlocked(destTile, checkTile, dir[its], target))
 						|| (checkTile->getUnit()
 							&& checkTile->getUnit() != unit
 							&& checkTile->getUnit()->getVisible()
@@ -625,22 +625,22 @@ int Pathfinding::getTUCost(
 			Position offset = Position(x, y, 0);
 
 			Tile* startTile			= _save->getTile(startPosition + offset);
-			Tile* destinationTile	= _save->getTile(*endPosition + offset);
+			Tile* destTile	= _save->getTile(*endPosition + offset);
 			Tile* belowDestination	= _save->getTile(*endPosition + offset + Position(0, 0, -1));
 			Tile* aboveDestination	= _save->getTile(*endPosition + offset + Position(0, 0, 1));
 
 			// this means the destination is probably outside the map
-			if (startTile == 0 || destinationTile == 0)
+			if (startTile == 0 || destTile == 0)
 				return 255;
 
 			if (direction < DIR_UP
 				&& startTile->getTerrainLevel() > -16)
 			{
 				// check if we can go this way
-				if (isBlocked(startTile, destinationTile, direction, target))
+				if (isBlocked(startTile, destTile, direction, target))
 					return 255;
 
-				if (startTile->getTerrainLevel() - destinationTile->getTerrainLevel() > 8)
+				if (startTile->getTerrainLevel() - destTile->getTerrainLevel() > 8)
 					return 255;
 			}
 
@@ -650,7 +650,7 @@ int Pathfinding::getTUCost(
 			// if we are on a stairs try to go up a level
 			if (direction < DIR_UP
 				&& startTile->getTerrainLevel() <= -16
-				&& !aboveDestination->hasNoFloor(destinationTile)
+				&& !aboveDestination->hasNoFloor(destTile)
 				&& !triedStairs)
 			{
 				partsGoingUp++;
@@ -658,7 +658,7 @@ int Pathfinding::getTUCost(
 				{									// never be greater than size... if large unit.
 					verticalOffset.z++;
 					endPosition->z++;
-					destinationTile = _save->getTile(*endPosition + offset);
+					destTile = _save->getTile(*endPosition + offset);
 					belowDestination = _save->getTile(*endPosition + Position(x, y, -1));
 
 					triedStairs = true;
@@ -667,7 +667,7 @@ int Pathfinding::getTUCost(
 			else if (!fellDown &&
 				_movementType != MT_FLY
 				&& belowDestination
-				&& canFallDown(destinationTile)
+				&& canFallDown(destTile)
 				&& belowDestination->getTerrainLevel() <= -12)	// kL_note: why not fall more than half tile.Z
 																// Because then you're doing stairs or ramp.
 			{
@@ -675,7 +675,7 @@ int Pathfinding::getTUCost(
 				if (partsGoingDown == (size + 1) * (size + 1))
 				{
 					endPosition->z--;
-					destinationTile = _save->getTile(*endPosition + offset);
+					destTile = _save->getTile(*endPosition + offset);
 					belowDestination = _save->getTile(*endPosition + Position(x, y, -1));
 
 					fellDown = true;
@@ -696,17 +696,17 @@ int Pathfinding::getTUCost(
 			}
 
 			// this means the destination is probably outside the map
-			if (!destinationTile)
+			if (!destTile)
 				return 255;
 
 			if (direction < DIR_UP
 				&& endPosition->z == startTile->getPosition().z)
 			{
 				// check if we can go this way
-				if (isBlocked(startTile, destinationTile, direction, target))
+				if (isBlocked(startTile, destTile, direction, target))
 					return 255;
 
-				if (startTile->getTerrainLevel() - destinationTile->getTerrainLevel() > 8)
+				if (startTile->getTerrainLevel() - destTile->getTerrainLevel() > 8)
 					return 255;
 			}
 			else if (direction >= DIR_UP)
@@ -731,7 +731,7 @@ int Pathfinding::getTUCost(
 				if (partsFalling == (size + 1) * (size + 1))
 				{
 					*endPosition = startPosition + Position(0, 0, -1);
-					destinationTile = _save->getTile(*endPosition + offset);
+					destTile = _save->getTile(*endPosition + offset);
 					belowDestination = _save->getTile(*endPosition + Position(x, y, -1));
 					fellDown = true;
 					direction = DIR_DOWN;
@@ -744,16 +744,16 @@ int Pathfinding::getTUCost(
 				&& partsGoingUp != 0)
 			{
 				// check if we can go this way
-				if (isBlocked(startTile, destinationTile, direction, target))
+				if (isBlocked(startTile, destTile, direction, target))
 					return 255;
 
-				if (startTile->getTerrainLevel() - destinationTile->getTerrainLevel() > 8)
+				if (startTile->getTerrainLevel() - destTile->getTerrainLevel() > 8)
 					return 255;
 			}
 
 			// check if the destination tile can be walked over
-			if (isBlocked(destinationTile, MapData::O_FLOOR, target)
-				|| isBlocked(destinationTile, MapData::O_OBJECT, target))
+			if (isBlocked(destTile, MapData::O_FLOOR, target)
+				|| isBlocked(destTile, MapData::O_OBJECT, target))
 			{
 				return 255;
 			}
@@ -765,13 +765,13 @@ int Pathfinding::getTUCost(
 				// calculate the cost by adding floor walk cost and object walk cost
 //				if (direction < DIR_UP)
 //				{
-				cost += destinationTile->getTUCost(MapData::O_FLOOR, _movementType);
+				cost += destTile->getTUCost(MapData::O_FLOOR, _movementType);
 
 				if (!fellDown
 					&& !triedStairs
-					&& destinationTile->getMapData(MapData::O_OBJECT))
+					&& destTile->getMapData(MapData::O_OBJECT))
 				{
-					cost += destinationTile->getTUCost(MapData::O_OBJECT, _movementType);
+					cost += destTile->getTUCost(MapData::O_OBJECT, _movementType);
 				}
 
 				// climbing up a level costs one extra
@@ -785,7 +785,7 @@ int Pathfinding::getTUCost(
 				// we can't know the TUs so it defaults to 4
 //				if (direction < DIR_UP &&
 				if (!fellDown
-					&& destinationTile->hasNoFloor(0))
+					&& destTile->hasNoFloor(0))
 				{
 					cost = 4;
 				}
@@ -816,9 +816,9 @@ int Pathfinding::getTUCost(
 					|| direction == 2
 					|| direction == 3)
 				{
-					if (startTile->getPosition().z == destinationTile->getPosition().z) // don't count wallcost if it's on the floor below.
+					if (startTile->getPosition().z == destTile->getPosition().z) // don't count wallcost if it's on the floor below.
 					{
-						wallTU = destinationTile->getTUCost(MapData::O_WESTWALL, _movementType);
+						wallTU = destTile->getTUCost(MapData::O_WESTWALL, _movementType);
 						if (wallTU > 0)
 						{
 							wallcost += wallTU;
@@ -831,9 +831,9 @@ int Pathfinding::getTUCost(
 					|| direction == 4
 					|| direction == 5)
 				{
-					if (startTile->getPosition().z == destinationTile->getPosition().z) // don't count wallcost if it's on the floor below.
+					if (startTile->getPosition().z == destTile->getPosition().z) // don't count wallcost if it's on the floor below.
 					{
-						wallTU = destinationTile->getTUCost(MapData::O_NORTHWALL, _movementType);
+						wallTU = destTile->getTUCost(MapData::O_NORTHWALL, _movementType);
 						if (wallTU > 0)
 						{
 							wallcost += wallTU;
@@ -890,7 +890,7 @@ int Pathfinding::getTUCost(
 
 
 			if (_unit->getFaction() == FACTION_HOSTILE
-				&& destinationTile->getFire() > 0)
+				&& destTile->getFire() > 0)
 			{
 				cost += 32; // try to find a better path, but don't exclude this path entirely.
 			}
@@ -938,15 +938,15 @@ int Pathfinding::getTUCost(
 		totalCost /= (size + 1) * (size + 1); // ie. /=4
 
 		Tile* startTile = _save->getTile(*endPosition + Position(1, 1, 0));
-		Tile* destinationTile = _save->getTile(*endPosition);
+		Tile* destTile = _save->getTile(*endPosition);
 
 		int tmpDirection = 7;
-		if (isBlocked(startTile, destinationTile, tmpDirection, target))
+		if (isBlocked(startTile, destTile, tmpDirection, target))
 		{
 			return 255;
 		}
 		else if (!fellDown
-			&& abs(startTile->getTerrainLevel() - destinationTile->getTerrainLevel()) > 10)
+			&& abs(startTile->getTerrainLevel() - destTile->getTerrainLevel()) > 10)
 		{
 			return 255;
 		}
@@ -1194,7 +1194,8 @@ bool Pathfinding::isBlocked(
 	if (missileTarget != 0
 		&& tile->getMapData(part)
 		&& (tile->getMapData(part)->isDoor()
-			|| (tile->getMapData(part)->isUFODoor() && !tile->isUfoDoorOpen(part))))
+			|| (tile->getMapData(part)->isUFODoor()
+				&& !tile->isUfoDoorOpen(part))))
 	{
 		return true;
 	}
@@ -1349,7 +1350,9 @@ bool Pathfinding::canFallDown(Tile* here)
  * @param size, The size of the unit.
  * @return, True if a unit can fall down.
  */
-bool Pathfinding::canFallDown(Tile* here, int size)
+bool Pathfinding::canFallDown(
+		Tile* here,
+		int size)
 {
 	for (int
 			x = 0;
@@ -1425,39 +1428,45 @@ bool Pathfinding::canFallDown(Tile* here, int size)
 } */
 
 /**
- * Checks, for the up/down button, if the movement is valid. Either there
- * is a grav lift or the unit can fly and there are no obstructions.
- * @param bu Pointer to unit.
- * @param startPosition Unit starting position.
- * @param direction Up or Down
- * @return bool Whether it's valid.
+ * Checks, for the up/down button, if the movement is valid. Either
+ * there is a grav lift or the unit can fly and there are no obstructions.
+ * @param bu, Pointer to unit.
+ * @param startPosition, Unit starting position.
+ * @param direction, Up or Down
+ * @return bool, True if movement is valid.
  */
-bool Pathfinding::validateUpDown(BattleUnit* bu, Position startPosition, int const direction)
+bool Pathfinding::validateUpDown(
+		BattleUnit* bu,
+		Position startPosition,
+		int const direction)
 {
 	Position endPosition;
-	directionToVector(direction, &endPosition);
+	directionToVector(
+				direction,
+				&endPosition);
 	endPosition += startPosition;
 
 	Tile* startTile = _save->getTile(startPosition);
-	Tile* destinationTile = _save->getTile(endPosition);
+	Tile* destTile = _save->getTile(endPosition);
 
 	if (startTile->getMapData(MapData::O_FLOOR)
 		&& startTile->getMapData(MapData::O_FLOOR)->isGravLift()
-		&& destinationTile
-		&& destinationTile->getMapData(MapData::O_FLOOR)
-		&& destinationTile->getMapData(MapData::O_FLOOR)->isGravLift())
+		&& destTile
+		&& destTile->getMapData(MapData::O_FLOOR)
+		&& destTile->getMapData(MapData::O_FLOOR)->isGravLift())
 	{
 		return true;
 	}
-	else if (bu->getArmor()->getMovementType() == MT_FLY)
+	else if (bu->getArmor()->getMovementType() == MT_FLY
+		&& !bu->isKneeled()) // kL
 	{
 		Tile* belowStart = _save->getTile(startPosition + Position(0, 0, -1));
 
 		if ((direction == DIR_UP
-				&& destinationTile
-				&& !destinationTile->getMapData(MapData::O_FLOOR)) // flying up only possible when there is no roof
+				&& destTile
+				&& !destTile->getMapData(MapData::O_FLOOR)) // flying up only possible when there is no roof
 			|| (direction == DIR_DOWN
-				&& destinationTile
+				&& destTile
 				&& startTile->hasNoFloor(belowStart))) // falling down only possible when there is no floor
 		{
 			return true;

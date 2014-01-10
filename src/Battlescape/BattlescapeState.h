@@ -56,7 +56,8 @@ class BattlescapeState
 {
 
 private:
-	static const int VISIBLE_MAX = 10;
+//kL	static const int VISIBLE_MAX = 10;
+	static const int VISIBLE_MAX = 20; // kL
 
 	bool
 		_mouseOverIcons,
@@ -285,11 +286,11 @@ private:
 //		void txtTooltipOut(Action* action);
 
 		/// kL. Gets the TurnCounter.
-		TurnCounter* getTurnCounter() const; // kL
+		TurnCounter* getTurnCounter() const;
 		/// kL. Get the Icons.
-//		InteractiveSurface* getIcons() const; // kL
+//		InteractiveSurface* getIcons() const;
 		/// kL. Toggles the icons' surfaces' visibility for Hidden Movement.
-		void toggleIcons(bool vis); // kL
+		void toggleIcons(bool vis);
 };
 
 }

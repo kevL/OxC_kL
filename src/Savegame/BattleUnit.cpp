@@ -1521,10 +1521,12 @@ int BattleUnit::getActionTUs(
 	switch (actionType)
 	{
 		case BA_PRIME:
-			cost = 50; // maybe this should go in the ruleset
+//kL			cost = 50; // maybe this should go in the ruleset
+			cost = 45; // kL
 		break;
 		case BA_THROW:
-			cost = 25;
+//kL			cost = 25; // maybe this should go in the ruleset
+			cost = 23; // kL
 		break;
 		case BA_AUTOSHOT:
 			cost = item->getRules()->getTUAuto();
@@ -1553,10 +1555,10 @@ int BattleUnit::getActionTUs(
 
 	// if it's a percentage, apply it to unit TUs
 	if (!item->getRules()->getFlatRate()
-		|| actionType == BA_THROW
-		|| actionType == BA_PRIME)
+		|| actionType == BA_PRIME
+		|| actionType == BA_THROW)
 	{
-		cost = static_cast<int>(floor(static_cast<float>(getStats()->tu * (cost)) / 100.f));
+		cost = static_cast<int>(floor(static_cast<float>(getStats()->tu * cost) / 100.f));
 	}
 
 	return cost;

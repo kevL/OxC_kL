@@ -117,7 +117,9 @@ protected:
 		/// Selects a random known target.
 		bool selectRandomTarget();
 		/// Selects the nearest reachable point relative to a target.
-		bool selectPointNearTarget(BattleUnit* target, int maxTUs) const;
+		bool selectPointNearTarget(
+				BattleUnit* target,
+				int maxTUs) const;
 		/// re-evaluate our situation, and make a decision from our available options.
 		void evaluateAIMode();
 		/// Selects a suitable position from which to attack.
@@ -144,7 +146,10 @@ protected:
 		/// Performs a melee attack action.
 		void meleeAttack();
 		///
-		bool validTarget(BattleUnit* unit, bool assessDanger, bool includeCivs) const;
+		bool validTarget(
+				BattleUnit* unit,
+				bool assessDanger,
+				bool includeCivs) const;
 };
 
 }

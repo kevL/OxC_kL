@@ -583,6 +583,7 @@ int RuleItem::getTUUse() const
  * Returns the item's max explosion radius.
  * Small explosions don't have a restriction. Larger explosions are restricted
  * using a formula, with a maximum of radius 10 no matter how large the explosion.
+ * kL_note: nah...
  * @return The radius.
  */
 int RuleItem::getExplosionRadius() const
@@ -606,10 +607,11 @@ int RuleItem::getExplosionRadius() const
 		radius = _blastRadius;
 	}
 
+/*kL. I hate caps...
 	if (radius > 11)
 	{
 		radius = 11;
-	}
+	} */
 
 	return radius;
 }
