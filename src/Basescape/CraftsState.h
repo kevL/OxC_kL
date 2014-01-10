@@ -42,6 +42,8 @@ class CraftsState
 {
 
 private:
+	Uint8 _cellColor;
+
 	Base* _base;
 	Text
 		* _txtBase,
@@ -54,6 +56,9 @@ private:
 	TextButton* _btnOk;
 	TextList* _lstCrafts;
 	Window* _window;
+
+	/// A more descriptive state of the Craft.
+	std::wstring getAltStatus(Craft* craft); // odd, this doesn't need class Craft declaration...?
 
 
 	public:

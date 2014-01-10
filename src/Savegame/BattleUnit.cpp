@@ -2075,6 +2075,8 @@ void BattleUnit::setTile(
 		Tile* tile,
 		Tile* tileBelow)
 {
+	Log(LOG_INFO) << "BattleUnit::setTile()";
+
 	_tile = tile;
 	if (!_tile)
 	{
@@ -2090,6 +2092,7 @@ void BattleUnit::setTile(
 	{
 		_status = STATUS_FLYING;
 		_floating = true;
+		Log(LOG_INFO) << ". STATUS_WALKING, _floating = " << _floating;
 	}
 	else if (_status == STATUS_FLYING
 		&& !_tile->hasNoFloor(tileBelow)
@@ -2097,18 +2100,22 @@ void BattleUnit::setTile(
 	{
 		_status = STATUS_WALKING;
 		_floating = false;
+		Log(LOG_INFO) << ". STATUS_FLYING, _floating = " << _floating;
 	}
-	else if (_status == STATUS_STANDING				// kL. keeping this section in tho it was taken out
-		&& _armor->getMovementType() == MT_FLY)		// when STATUS_UNCONSCIOUS below was inserted.
+/*	else if (_status == STATUS_STANDING			// kL. keeping this section in tho it was taken out
+		&& _armor->getMovementType() == MT_FLY)	// when STATUS_UNCONSCIOUS below was inserted.
+												// Problem: when loading a save, _floating goes TRUE!
 	{
 		_floating = _tile->hasNoFloor(tileBelow);
-	}
+		Log(LOG_INFO) << ". STATUS_STANDING, _floating = " << _floating;
+	} */
 	else if (_status == STATUS_UNCONSCIOUS) // <- kL_note: not so sure having flying unconscious soldiers is a good deal.
 	{
-		_floating =
-				_armor->getMovementType() == MT_FLY
+		_floating = _armor->getMovementType() == MT_FLY
 					&& _tile->hasNoFloor(tileBelow);
+		Log(LOG_INFO) << ". STATUS_UNCONSCIOUS, _floating = " << _floating;
 	}
+	Log(LOG_INFO) << "BattleUnit::setTile() EXIT";
 }
 
 /**

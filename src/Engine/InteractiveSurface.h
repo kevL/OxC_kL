@@ -75,7 +75,9 @@ private:
 		/// Is this mouse button event handled?
 		virtual bool isButtonHandled(Uint8 button = 0);
 		/// Set a mouse button's internal state.
-		void setButtonPressed(Uint8 button, bool pressed);
+		void setButtonPressed(
+				Uint8 button,
+				bool pressed);
 
 
 		public:

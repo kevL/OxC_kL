@@ -16,18 +16,22 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_SURFACESET_H
 #define OPENXCOM_SURFACESET_H
 
-#include <vector>
 #include <map>
 #include <string>
+#include <vector>
+
 #include <SDL.h>
+
 
 namespace OpenXcom
 {
 
 class Surface;
+
 
 /**
  * Container of a set of surfaces.
@@ -37,33 +41,52 @@ class Surface;
  */
 class SurfaceSet
 {
+
 private:
-	int _width, _height;
+	int
+		_height,
+		_width;
 	std::map<int, Surface*> _frames;
+
+
 public:
-	/// Crates a surface set with frames of the specified size.
-	SurfaceSet(int width, int height);
+	/// Creates a surface set with frames of the specified size.
+	SurfaceSet
+			(int width,
+			int height);
 	/// Creates a surface set from an existing one.
 	SurfaceSet(const SurfaceSet& other);
 	/// Cleans up the surface set.
 	~SurfaceSet();
+
 	/// Loads an X-Com set of PCK/TAB image files.
-	void loadPck(const std::string &pck, const std::string &tab = "");
+	void loadPck(
+			const std::string& pck,
+			const std::string& tab = "");
 	/// Loads an X-Com DAT image file.
-	void loadDat(const std::string &filename);
+	void loadDat(const std::string& filename);
+
 	/// Gets a particular frame from the set.
-	Surface *getFrame(int i);
+	Surface* getFrame(int i);
 	/// Creates a new surface and returns a pointer to it.
-	Surface *addFrame(int i);
+	Surface* addFrame(int i);
+
 	/// Gets the width of all frames.
 	int getWidth() const;
 	/// Gets the height of all frames.
 	int getHeight() const;
+
 	/// Gets the total frames in the set.
 	int getTotalFrames() const;
+
 	/// Sets the surface set's palette.
-	void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
-	std::map<int, Surface*> *getFrames();
+	void setPalette(
+			SDL_Color* colors,
+			int firstcolor = 0,
+			int ncolors = 256);
+
+	///
+	std::map<int, Surface*>* getFrames();
 };
 
 }

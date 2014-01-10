@@ -16,13 +16,18 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "Transfer.h"
+
 #include "Base.h"
-#include "Soldier.h"
 #include "Craft.h"
 #include "ItemContainer.h"
+#include "Soldier.h"
+
 #include "../Engine/Language.h"
+
 #include "../Ruleset/Ruleset.h"
+
 
 namespace OpenXcom
 {
@@ -31,7 +36,16 @@ namespace OpenXcom
  * Initializes a transfer.
  * @param hours Hours in-transit.
  */
-Transfer::Transfer(int hours) : _hours(hours), _soldier(0), _craft(0), _itemId(""), _itemQty(0), _scientists(0), _engineers(0), _delivered(false)
+Transfer::Transfer(int hours)
+	:
+		_hours(hours),
+		_soldier(0),
+		_craft(0),
+		_itemId(""),
+		_itemQty(0),
+		_scientists(0),
+		_engineers(0),
+		_delivered(false)
 {
 }
 
@@ -53,27 +67,39 @@ Transfer::~Transfer()
  * @param base Destination base.
  * @param rule Game ruleset.
  */
-void Transfer::load(const YAML::Node &node, Base *base, const Ruleset *rule)
+void Transfer::load(
+		const YAML::Node& node,
+		Base* base,
+		const Ruleset* rule)
 {
 	_hours = node["hours"].as<int>(_hours);
 
-	if (const YAML::Node &soldier = node["soldier"])
+	if (const YAML::Node& soldier = node["soldier"])
 	{
-		_soldier = new Soldier(rule->getSoldier("XCOM"), rule->getArmor("STR_NONE_UC"));
-		_soldier->load(soldier, rule);
+		_soldier = new Soldier(
+							rule->getSoldier("XCOM"),
+							rule->getArmor("STR_NONE_UC"));
+		_soldier->load(
+					soldier,
+					rule);
 	}
 
-	if (const YAML::Node &craft = node["craft"])
+	if (const YAML::Node& craft = node["craft"])
 	{
-		_craft = new Craft(rule->getCraft(craft["type"].as<std::string>()), base);
-		_craft->load(craft, rule, 0);
+		_craft = new Craft(
+						rule->getCraft(craft["type"].as<std::string>()),
+						base);
+		_craft->load(
+					craft,
+					rule,
+					0);
 	}
 
-	_itemId = node["itemId"].as<std::string>(_itemId);
-	_itemQty = node["itemQty"].as<int>(_itemQty);
-	_scientists = node["scientists"].as<int>(_scientists);
-	_engineers = node["engineers"].as<int>(_engineers);
-	_delivered = node["delivered"].as<bool>(_delivered);
+	_itemId		= node["itemId"].as<std::string>(_itemId);
+	_itemQty	= node["itemQty"].as<int>(_itemQty);
+	_scientists	= node["scientists"].as<int>(_scientists);
+	_engineers	= node["engineers"].as<int>(_engineers);
+	_delivered	= node["delivered"].as<bool>(_delivered);
 }
 
 /**
@@ -83,33 +109,24 @@ void Transfer::load(const YAML::Node &node, Base *base, const Ruleset *rule)
 YAML::Node Transfer::save() const
 {
 	YAML::Node node;
+
 	node["hours"] = _hours;
 	if (_soldier != 0)
-	{
 		node["soldier"] = _soldier->save();
-	}
 	else if (_craft != 0)
-	{
 		node["craft"] = _craft->save();
-	}
 	else if (_itemQty != 0)
 	{
 		node["itemId"] = _itemId;
 		node["itemQty"] = _itemQty;
 	}
 	else if (_scientists != 0)
-	{
 		node["scientists"] = _scientists;
-	}
 	else if (_engineers != 0)
-	{
 		node["engineers"] = _engineers;
-	}
 
 	if (_delivered)
-	{
 		node["delivered"] = _delivered;
-	}
 
 	return node;
 }
@@ -118,47 +135,9 @@ YAML::Node Transfer::save() const
  * Changes the soldier being transferred.
  * @param soldier Pointer to soldier.
  */
-void Transfer::setSoldier(Soldier *soldier)
+void Transfer::setSoldier(Soldier* soldier)
 {
 	_soldier = soldier;
-}
-
-/**
- * Changes the craft being transferred.
- * @param craft Pointer to craft.
- */
-void Transfer::setCraft(Craft *craft)
-{
-	_craft = craft;
-}
-
-/**
- * Gets the craft being transferred.
- * @return a Pointer to craft.
- */
-Craft *Transfer::getCraft()
-{
-	return _craft;
-}
-
-/**
- * Returns the items being transferred.
- * @return Item ID.
- */
-std::string Transfer::getItems() const
-{
-	return _itemId;
-}
-
-/**
- * Changes the items being transferred.
- * @param id Item identifier.
- * @param qty Item quantity.
- */
-void Transfer::setItems(const std::string &id, int qty)
-{
-	_itemId = id;
-	_itemQty = qty;
 }
 
 /**
@@ -180,28 +159,60 @@ void Transfer::setEngineers(int engineers)
 }
 
 /**
+ * Changes the craft being transferred.
+ * @param craft Pointer to craft.
+ */
+void Transfer::setCraft(Craft* craft)
+{
+	_craft = craft;
+}
+
+/**
+ * Gets the craft being transferred.
+ * @return a Pointer to craft.
+ */
+Craft* Transfer::getCraft()
+{
+	return _craft;
+}
+
+/**
+ * Returns the items being transferred.
+ * @return Item ID.
+ */
+std::string Transfer::getItems() const
+{
+	return _itemId;
+}
+
+/**
+ * Changes the items being transferred.
+ * @param id Item identifier.
+ * @param qty Item quantity.
+ */
+void Transfer::setItems(
+		const std::string& id,
+		int qty)
+{
+	_itemId = id;
+	_itemQty = qty;
+}
+
+/**
  * Returns the name of the contents of the transfer.
  * @param lang Language to get strings from.
  * @return Name string.
  */
-std::wstring Transfer::getName(Language *lang) const
+std::wstring Transfer::getName(Language* lang) const
 {
 	if (_soldier != 0)
-	{
 		return _soldier->getName();
-	}
 	else if (_craft != 0)
-	{
 		return _craft->getName(lang);
-	}
 	else if (_scientists != 0)
-	{
 		return lang->getString("STR_SCIENTISTS");
-	}
 	else if (_engineers != 0)
-	{
 		return lang->getString("STR_ENGINEERS");
-	}
 
 	return lang->getString(_itemId);
 }
@@ -223,17 +234,11 @@ int Transfer::getHours() const
 int Transfer::getQuantity() const
 {
 	if (_itemQty != 0)
-	{
 		return _itemQty;
-	}
 	else if (_scientists != 0)
-	{
 		return _scientists;
-	}
 	else if (_engineers != 0)
-	{
 		return _engineers;
-	}
 
 	return 1;
 }
@@ -245,21 +250,13 @@ int Transfer::getQuantity() const
 TransferType Transfer::getType() const
 {
 	if (_soldier != 0)
-	{
 		return TRANSFER_SOLDIER;
-	}
 	else if (_craft != 0)
-	{
 		return TRANSFER_CRAFT;
-	}
 	else if (_scientists != 0)
-	{
 		return TRANSFER_SCIENTIST;
-	}
 	else if (_engineers != 0)
-	{
 		return TRANSFER_ENGINEER;
-	}
 
 	return TRANSFER_ITEM;
 }
@@ -269,15 +266,14 @@ TransferType Transfer::getType() const
  * the delivery once it's arrived.
  * @param base Pointer to destination base.
  */
-void Transfer::advance(Base *base)
+void Transfer::advance(Base* base)
 {
 	_hours--;
+
 	if (_hours == 0)
 	{
 		if (_soldier != 0)
-		{
 			base->getSoldiers()->push_back(_soldier);
-		}
 		else if (_craft != 0)
 		{
 			base->getCrafts()->push_back(_craft);
@@ -285,17 +281,11 @@ void Transfer::advance(Base *base)
 			_craft->checkup();
 		}
 		else if (_itemQty != 0)
-		{
 			base->getItems()->addItem(_itemId, _itemQty);
-		}
 		else if (_scientists != 0)
-		{
 			base->setScientists(base->getScientists() + _scientists);
-		}
 		else if (_engineers != 0)
-		{
 			base->setEngineers(base->getEngineers() + _engineers);
-		}
 
 		_delivered = true;
 	}

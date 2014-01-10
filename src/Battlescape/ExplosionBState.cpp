@@ -114,7 +114,7 @@ void ExplosionBState::init()
 	else // cyberdisc...
 	{
 //kL		_power = 120;
-		_power = RNG::generate(61, 120); // kL
+		_power = RNG::generate(61, 135); // kL
 		Log(LOG_INFO) << ". _power(Cyberdisc) = " << _power;
 
 		_areaOfEffect = true;
@@ -130,45 +130,33 @@ void ExplosionBState::init()
 
 		if (_power > 0)
 		{
-//			int frame = 0;
-//			int counter = (_power/5) / 5;
+			Position pos = _center; // voxelspace
+			int
+				startFrame = 0, // less than 0 delays start (8 frames total)
+				offset = _power / 2,
+				count = _power / 20;
+			if (count < 1) count = 1;
+
 			for (int
 					i = 0;
-//kL					i < _power / 10;
-					i < _power / 12; // kL
+					i < count;
 					i++)
 			{
-				int
-//					X = RNG::generate(-_power / 2, _power / 2),
-//					Y = RNG::generate(-_power / 2, _power / 2);
-					X = RNG::generate(-_power / 3, _power / 3),
-					Y = RNG::generate(-_power / 3, _power / 3);
-
-				Position pos = _center;
-				pos.x += X;
-				pos.y += Y;
-
-				int startFrame = -3; // delays the anim-start
-				if (i > 1)
+				if (i > 0) // 1st exp. is always centered.
 				{
-					startFrame = RNG::generate(0, 9) - 3;
+					startFrame = RNG::generate(0, i);
+
+					pos.x += RNG::generate(-offset, offset);
+					pos.y += RNG::generate(-offset, offset);
 				}
 
-//				Explosion* explosion = new Explosion(p, frame, true);
-//kL				Explosion* explosion = new Explosion(p, RNG::generate(-3, 6), true);
-//				Explosion* explosion = new Explosion(pos, -3, true); // kL
+//				Explosion* explosion = new Explosion(p, startFrame, true);
 				Explosion* explosion = new Explosion(
 													pos,
-													startFrame,
-													true); // kL
+													-startFrame,
+													true);
 
 				_parent->getMap()->getExplosions()->insert(explosion); // add the explosion on the map
-
-//				if (i > 0
-//					&& i %counter == 0)
-//				{
-//					--frame;
-//				}
 			}
 
 //kL			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED);

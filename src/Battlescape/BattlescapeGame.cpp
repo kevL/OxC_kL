@@ -491,17 +491,19 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 
 /**
  * Toggles the Kneel/Standup status of the unit.
- * @param bu Pointer to a unit.
- * @return If the action succeeded.
+ * @param bu, Pointer to a unit.
+ * @return, True if the action succeeded.
  */
 bool BattlescapeGame::kneel(BattleUnit* bu)
 {
 	Log(LOG_INFO) << "BattlescapeGame::kneel()";
 
-	int tu = bu->isKneeled()? 8: 4;
+	int tu = 4;
+	if (bu->isKneeled())
+		tu = 8;
 
 	if (bu->getType() == "SOLDIER"
-		&& !bu->isFloating()		// kL_note: This prevents flying soldiers from 'kneeling' .....
+		&& !bu->isFloating() // kL_note: This prevents flying soldiers from 'kneeling' .....
 		&& checkReservedTU(bu, tu))
 	{
 		if (bu->spendTimeUnits(tu))
@@ -530,7 +532,6 @@ bool BattlescapeGame::kneel(BattleUnit* bu)
 void BattlescapeGame::endTurn()
 {
 	Log(LOG_INFO) << "BattlescapeGame::endTurn()";
-
 
 	_tuReserved = _playerTUReserved;
 	_debugPlay = false;

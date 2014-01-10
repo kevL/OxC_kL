@@ -139,11 +139,10 @@ void TileEngine::calculateSunShading(Tile* tile)
   */
 void TileEngine::calculateTerrainLighting()
 {
-	const int layer = 1; // Static lighting layer.
-	const int fireLightPower = 15; // amount of light a fire generates
+	const int layer = 1;			// Static lighting layer.
+	const int fireLightPower = 15;	// amount of light a fire generates
 
-	// reset all light to 0 first
-	for (int
+	for (int // reset all light to 0 first
 			i = 0;
 			i < _save->getMapSizeXYZ();
 			++i)
@@ -151,8 +150,7 @@ void TileEngine::calculateTerrainLighting()
 		_save->getTiles()[i]->resetLight(layer);
 	}
 
-	// add lighting of terrain
-	for (int
+	for (int // add lighting of terrain
 			i = 0;
 			i < _save->getMapSizeXYZ();
 			++i)
@@ -176,8 +174,7 @@ void TileEngine::calculateTerrainLighting()
 					layer);
 		}
 
-		// fires
-		if (_save->getTiles()[i]->getFire())
+		if (_save->getTiles()[i]->getFire()) // fires
 		{
 			addLight(
 					_save->getTiles()[i]->getPosition(),
@@ -206,10 +203,10 @@ void TileEngine::calculateTerrainLighting()
   */
 void TileEngine::calculateUnitLighting()
 {
-	const int layer = 2;				// Dynamic lighting layer.
+	const int layer = 2;					// Dynamic lighting layer.
 //kL	const int personalLightPower = 15;	// amount of light a unit generates
-	const int personalLightPower = 11;	// kL, Try it...
-	const int fireLightPower = 15;		// amount of light a fire generates
+	const int personalLightPower = 14;		// kL, Try it...
+	const int fireLightPower = 15;			// amount of light a fire generates
 
 	for (int // reset all light to 0 first
 			i = 0;

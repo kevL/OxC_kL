@@ -109,6 +109,7 @@ CraftsState::CraftsState(
 	_txtBase->setColor(Palette::blockOffset(15)+1);
 	_txtBase->setBig();
 	_txtBase->setText(tr("STR_BASE_").arg(_base->getName()));
+//	_txtBase->setText(_base->getName(_game->getLanguage()));
 
 	_txtName->setColor(Palette::blockOffset(15)+1);
 	_txtName->setText(tr("STR_NAME_UC"));
@@ -150,11 +151,15 @@ void CraftsState::init()
 {
 	_lstCrafts->clearList();
 
+	int r = 0;
+
 	for (std::vector<Craft*>::iterator
 			i = _base->getCrafts()->begin();
 			i != _base->getCrafts()->end();
 			++i)
 	{
+		std::wstring status = getAltStatus(*i);
+
 		std::wstringstream
 			ss,
 			ss2,
@@ -166,11 +171,103 @@ void CraftsState::init()
 		_lstCrafts->addRow(
 						5,
 						(*i)->getName(_game->getLanguage()).c_str(),
-						tr((*i)->getStatus()).c_str(),
+//						tr((*i)->getStatus()).c_str(),
+						status.c_str(),
 						ss.str().c_str(),
 						ss2.str().c_str(),
 						ss3.str().c_str());
+
+		_lstCrafts->setCellColor(r, 1, _cellColor);
+//		if ((*j)->getStatus() == "STR_READY")
+//			_lstCrafts->setCellColor(row, 1, Palette::blockOffset(8)+10);
+//		colorStatusCell();
+		_lstCrafts->setCellHighContrast(
+									r,
+									1,
+									true);
+
+		r++;
 	}
+}
+
+/**
+ * kL. A more descriptive state of the Craft.
+ */
+std::wstring CraftsState::getAltStatus(Craft* craft)
+{
+	std::string stat = craft->getStatus();
+	if (stat != "STR_OUT")
+	{
+		if (stat == "STR_READY")
+			_cellColor = Palette::blockOffset(7)+0;
+		else if (stat == "STR_REFUELLING")
+			_cellColor = Palette::blockOffset(10)+2;
+		else if (stat == "STR_REARMING")
+			_cellColor = Palette::blockOffset(10)+5;
+		else if (stat == "STR_REPAIRS")
+			_cellColor = Palette::blockOffset(10)+8;
+
+		return tr(stat);
+	}
+
+	std::wstring status;
+
+/*	Waypoint* wayPt = dynamic_cast<Waypoint*>(craft->getDestination());
+	if (wayPt != 0)
+		status = tr("STR_INTERCEPTING_UFO").arg(wayPt->getId());
+	else */
+	if (craft->getLowFuel())
+	{
+//		status = tr("STR_LOW_FUEL_RETURNING_TO_BASE");
+		status = tr("STR_LOW_FUEL");
+		_cellColor = Palette::blockOffset(14)+8;
+	}
+	else if (craft->getDestination() == 0)
+	{
+		status = tr("STR_PATROLLING");
+		_cellColor = Palette::blockOffset(5)+5;
+	}
+	else if (craft->getDestination() == dynamic_cast<Target*>(craft->getBase()))
+	{
+//		status = tr("STR_RETURNING_TO_BASE");
+		status = tr("STR_BASE");
+		_cellColor = Palette::blockOffset(14)+4;
+	}
+	else
+	{
+		Ufo* ufo = dynamic_cast<Ufo*>(craft->getDestination());
+		if (ufo != 0)
+		{
+			if (craft->isInDogfight()) // chase
+			{
+//				status = tr("STR_TAILING_UFO");
+				status = tr("STR_UFO_").arg(ufo->getId());
+				_cellColor = Palette::blockOffset(8)+0;
+			}
+			else if (ufo->getStatus() == Ufo::FLYING) // intercept
+			{
+//				status = tr("STR_INTERCEPTING_UFO").arg(ufo->getId());
+				status = tr("STR_UFO_").arg(ufo->getId());
+				_cellColor = Palette::blockOffset(0)+12;
+			}
+			else // landed
+			{
+//				status = tr("STR_DESTINATION_UC_")
+//							.arg(ufo->getName(_game->getLanguage()));
+				status = ufo->getName(_game->getLanguage());
+				_cellColor = Palette::blockOffset(0)+13;
+			}
+		}
+		else // crashed,terrorSite,alienBase
+		{
+//			status = tr("STR_DESTINATION_UC_")
+//						.arg(craft->getDestination()->getName(_game->getLanguage()));
+			status = craft->getDestination()->getName(_game->getLanguage());
+			_cellColor = Palette::blockOffset(8)+10;
+		}
+	}
+
+	return status;
 }
 
 /**

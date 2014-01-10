@@ -18,20 +18,26 @@
  */
 
 #include "MonthlyCostsState.h"
+
 #include <sstream>
+
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
-#include "../Engine/Palette.h"
 #include "../Engine/Options.h"
-#include "../Interface/TextButton.h"
-#include "../Interface/Window.h"
+#include "../Engine/Palette.h"
+
 #include "../Interface/Text.h"
+#include "../Interface/TextButton.h"
 #include "../Interface/TextList.h"
+#include "../Interface/Window.h"
+
+#include "../Resource/ResourcePack.h"
+
+#include "../Ruleset/RuleCraft.h"
+#include "../Ruleset/Ruleset.h"
+
 #include "../Savegame/Base.h"
 #include "../Savegame/SavedGame.h"
-#include "../Ruleset/Ruleset.h"
-#include "../Ruleset/RuleCraft.h"
 
 
 namespace OpenXcom
@@ -42,7 +48,9 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
  */
-MonthlyCostsState::MonthlyCostsState(Game* game, Base* base)
+MonthlyCostsState::MonthlyCostsState(
+		Game* game,
+		Base* base)
 	:
 		State(game),
 		_base(base)
@@ -50,6 +58,7 @@ MonthlyCostsState::MonthlyCostsState(Game* game, Base* base)
 	_window			= new Window(this, 320, 200, 0, 0);
 
 	_txtTitle		= new Text(300, 17, 11, 10);
+//	_txtBaseLabel	= new Text(80, 9, 224, 10);
 
 	_txtCost		= new Text(80, 9, 141, 31);
 	_txtQuantity	= new Text(55, 9, 211, 31);
@@ -76,6 +85,7 @@ MonthlyCostsState::MonthlyCostsState(Game* game, Base* base)
 
 	add(_window);
 	add(_txtTitle);
+//	add(_txtBaseLabel);
 	add(_txtCost);
 	add(_txtQuantity);
 	add(_txtTotal);
@@ -106,7 +116,12 @@ MonthlyCostsState::MonthlyCostsState(Game* game, Base* base)
 
 	_txtTitle->setColor(Palette::blockOffset(15)+1);
 	_txtTitle->setBig();
-	_txtTitle->setText(tr("STR_MONTHLY_COSTS"));
+//	_txtTitle->setText(tr("STR_MONTHLY_COSTS"));
+	_txtTitle->setText(tr("STR_MONTHLY_COSTS_").arg(_base->getName()));
+
+//	_txtBaseLabel->setColor(Palette::blockOffset(15)+1);
+//	_txtBaseLabel->setAlign(ALIGN_RIGHT);
+//	_txtBaseLabel->setText(_base->getName(_game->getLanguage()));
 
 	_txtCost->setColor(Palette::blockOffset(15)+1);
 	_txtCost->setText(tr("STR_COST_PER_UNIT"));
@@ -149,7 +164,8 @@ MonthlyCostsState::MonthlyCostsState(Game* game, Base* base)
 							tr(*i).c_str(),
 							Text::formatFunding(craft->getRentCost()).c_str(),
 							ss2.str().c_str(),
-							Text::formatFunding(_base->getCraftCount(*i) * craft->getRentCost()).c_str());
+							Text::formatFunding(_base->getCraftCount(*i)
+												* craft->getRentCost()).c_str());
 		}
 	}
 
@@ -168,7 +184,8 @@ MonthlyCostsState::MonthlyCostsState(Game* game, Base* base)
 						tr("STR_SOLDIERS").c_str(),
 						Text::formatFunding(_game->getRuleset()->getSoldierCost()).c_str(),
 						ss4.str().c_str(),
-						Text::formatFunding(_base->getSoldiers()->size() * _game->getRuleset()->getSoldierCost()).c_str());
+						Text::formatFunding(_base->getSoldiers()->size()
+											* _game->getRuleset()->getSoldierCost()).c_str());
 
 	ss5 << _base->getTotalEngineers();
 	_lstSalaries->addRow(
@@ -176,7 +193,8 @@ MonthlyCostsState::MonthlyCostsState(Game* game, Base* base)
 						tr("STR_ENGINEERS").c_str(),
 						Text::formatFunding(_game->getRuleset()->getEngineerCost()).c_str(),
 						ss5.str().c_str(),
-						Text::formatFunding(_base->getTotalEngineers() * _game->getRuleset()->getEngineerCost()).c_str());
+						Text::formatFunding(_base->getTotalEngineers()
+											* _game->getRuleset()->getEngineerCost()).c_str());
 
 	ss6 << _base->getTotalScientists();
 	_lstSalaries->addRow(
@@ -184,7 +202,8 @@ MonthlyCostsState::MonthlyCostsState(Game* game, Base* base)
 						tr("STR_SCIENTISTS").c_str(),
 						Text::formatFunding(_game->getRuleset()->getScientistCost()).c_str(),
 						ss6.str().c_str(),
-						Text::formatFunding(_base->getTotalScientists() * _game->getRuleset()->getScientistCost()).c_str());
+						Text::formatFunding(_base->getTotalScientists()
+											* _game->getRuleset()->getScientistCost()).c_str());
 
 	_lstMaintenance->setColor(Palette::blockOffset(13)+10);
 	_lstMaintenance->setColumns(2, 239, 54);

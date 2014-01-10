@@ -68,39 +68,40 @@ CraftInfoState::CraftInfoState(
 {
 //	Log(LOG_INFO) << "Create CraftInfoState";
 
-	_window		= new Window(
-							this,
-							320,
-							200,
-							0,
-							0,
-							POPUP_BOTH);
+	_window			= new Window(
+								this,
+								320,
+								200,
+								0,
+								0,
+								POPUP_BOTH);
 
-	_edtCraft	= new TextEdit(160, 16, 80, 10);
+	_edtCraft		= new TextEdit(160, 16, 80, 10);
+	_txtBaseLabel	= new Text(80, 9, 16, 10);
 
-	_txtFuel	= new Text(82, 17, 14, 28);
-	_txtDamage	= new Text(82, 17, 228, 28);
+	_txtFuel		= new Text(82, 17, 16, 28);
+	_txtDamage		= new Text(82, 17, 228, 28);
 
-	_btnW1		= new TextButton(24, 32, 14, 48);
-	_btnW2		= new TextButton(24, 32, 282, 48);
-	_txtW1Name	= new Text(78, 9, 46, 48);
-	_txtW2Name	= new Text(78, 9, 204, 48);
-	_txtW1Ammo	= new Text(60, 9, 46, 64);
-	_txtW2Ammo	= new Text(60, 9, 204, 64);
-	_txtW1Max	= new Text(60, 9, 46, 72);
-	_txtW2Max	= new Text(60, 9, 204, 72);
+	_btnW1			= new TextButton(24, 32, 16, 48);
+	_btnW2			= new TextButton(24, 32, 282, 48);
+	_txtW1Name		= new Text(78, 9, 46, 48);
+	_txtW2Name		= new Text(78, 9, 204, 48);
+	_txtW1Ammo		= new Text(60, 9, 46, 64);
+	_txtW2Ammo		= new Text(60, 9, 204, 64);
+	_txtW1Max		= new Text(60, 9, 46, 72);
+	_txtW2Max		= new Text(60, 9, 204, 72);
 
-	_btnCrew	= new TextButton(64, 16, 14, 96);
-	_btnEquip	= new TextButton(64, 16, 14, 120);
-	_btnArmor	= new TextButton(64, 16, 14, 144);
+	_btnCrew		= new TextButton(64, 16, 16, 96);
+	_btnEquip		= new TextButton(64, 16, 16, 120);
+	_btnArmor		= new TextButton(64, 16, 16, 144);
 
-	_sprite		= new Surface(32, 38, 144, 50);
-	_weapon1	= new Surface(15, 17, 121, 63);
-	_weapon2	= new Surface(15, 17, 184, 63);
-	_crew		= new Surface(220, 18, 85, 96);
-	_equip		= new Surface(220, 18, 85, 121);
+	_sprite			= new Surface(32, 38, 144, 50);
+	_weapon1		= new Surface(15, 17, 121, 63);
+	_weapon2		= new Surface(15, 17, 184, 63);
+	_crew			= new Surface(220, 18, 85, 96);
+	_equip			= new Surface(220, 18, 85, 121);
 
-	_btnOk		= new TextButton(288, 16, 16, 177);
+	_btnOk			= new TextButton(288, 16, 16, 177);
 
 
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());
@@ -111,6 +112,7 @@ CraftInfoState::CraftInfoState(
 
 	add(_window);
 	add(_edtCraft);
+	add(_txtBaseLabel);
 	add(_txtFuel);
 	add(_txtDamage);
 	add(_btnW1);
@@ -136,6 +138,14 @@ CraftInfoState::CraftInfoState(
 
 	_window->setColor(Palette::blockOffset(13)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK14.SCR"));
+
+	_edtCraft->setColor(Palette::blockOffset(13)+10);
+	_edtCraft->setBig();
+	_edtCraft->setAlign(ALIGN_CENTER);
+	_edtCraft->onKeyboardPress((ActionHandler)& CraftInfoState::edtCraftKeyPress);
+
+	_txtBaseLabel->setColor(Palette::blockOffset(13)+10);
+	_txtBaseLabel->setText(_base->getName(_game->getLanguage()));
 
 	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(tr("STR_OK"));
@@ -163,11 +173,6 @@ CraftInfoState::CraftInfoState(
 	_btnArmor->setColor(Palette::blockOffset(13)+10);
 	_btnArmor->setText(tr("STR_ARMOR"));
 	_btnArmor->onMouseClick((ActionHandler)& CraftInfoState::btnArmorClick);
-
-	_edtCraft->setColor(Palette::blockOffset(13)+10);
-	_edtCraft->setBig();
-	_edtCraft->setAlign(ALIGN_CENTER);
-	_edtCraft->onKeyboardPress((ActionHandler)& CraftInfoState::edtCraftKeyPress);
 
 	_txtDamage->setColor(Palette::blockOffset(13)+10);
 	_txtDamage->setSecondaryColor(Palette::blockOffset(13));

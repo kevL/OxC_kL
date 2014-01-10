@@ -573,7 +573,7 @@ void Surface::offset(
 /**
  * Inverts all the colors in the surface according to a middle point.
  * Used for effects like shifting a button between pressed and unpressed.
- * @param mid Middle point.
+ * @param mid, Middle point.
  */
 void Surface::invert(Uint8 mid)
 {
@@ -593,7 +593,8 @@ void Surface::invert(Uint8 mid)
 			setPixelIterative(
 							&x,
 							&y,
-							pixel + 2 * (static_cast<int>(mid) - static_cast<int>(pixel)));
+							pixel +
+								2 * (static_cast<int>(mid) - static_cast<int>(pixel)));
 		}
 		else
 		{

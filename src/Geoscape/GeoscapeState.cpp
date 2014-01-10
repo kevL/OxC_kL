@@ -371,71 +371,99 @@ GeoscapeState::GeoscapeState(Game* game)
 
 	_btnDetail->copy(_bg);
 //	_btnDetail->setColor(Palette::blockOffset(15)+5);
-	_btnDetail->onMouseClick((ActionHandler)& GeoscapeState::btnDetailClick, SDL_BUTTON_LEFT);
-	_btnDetail->onMouseClick((ActionHandler)& GeoscapeState::btnDetailClick, SDL_BUTTON_RIGHT);
+	_btnDetail->onMouseClick(
+					(ActionHandler)& GeoscapeState::btnDetailClick,
+					SDL_BUTTON_LEFT);
+	_btnDetail->onMouseClick(
+					(ActionHandler)& GeoscapeState::btnDetailClick,
+					SDL_BUTTON_RIGHT);
 //	_btnDetail->onKeyboardPress((ActionHandler)& GeoscapeState::btnDetailClick, (SDLKey)Options::getInt("keyGeoToggleDetail"));
 
 	// kL_begin: revert to ImageButtons.
 	_btnIntercept->copy(_bg);
 	_btnIntercept->setColor(Palette::blockOffset(15)+5);
 	_btnIntercept->onMouseClick((ActionHandler)& GeoscapeState::btnInterceptClick);
-	_btnIntercept->onKeyboardPress((ActionHandler)& GeoscapeState::btnInterceptClick, (SDLKey)Options::getInt("keyGeoIntercept"));
+	_btnIntercept->onKeyboardPress(
+					(ActionHandler)& GeoscapeState::btnInterceptClick,
+					(SDLKey)Options::getInt("keyGeoIntercept"));
 
 	_btnBases->copy(_bg);
 	_btnBases->setColor(Palette::blockOffset(15)+5);
 	_btnBases->onMouseClick((ActionHandler)& GeoscapeState::btnBasesClick);
-	_btnBases->onKeyboardPress((ActionHandler)& GeoscapeState::btnBasesClick, (SDLKey)Options::getInt("keyGeoBases"));
+	_btnBases->onKeyboardPress(
+					(ActionHandler)& GeoscapeState::btnBasesClick,
+					(SDLKey)Options::getInt("keyGeoBases"));
 
 	_btnGraphs->copy(_bg);
 	_btnGraphs->setColor(Palette::blockOffset(15)+5);
 	_btnGraphs->onMouseClick((ActionHandler)& GeoscapeState::btnGraphsClick);
-	_btnGraphs->onKeyboardPress((ActionHandler)& GeoscapeState::btnGraphsClick, (SDLKey)Options::getInt("keyGeoGraphs"));
+	_btnGraphs->onKeyboardPress(
+					(ActionHandler)& GeoscapeState::btnGraphsClick,
+					(SDLKey)Options::getInt("keyGeoGraphs"));
 
 	_btnUfopaedia->copy(_bg);
 	_btnUfopaedia->setColor(Palette::blockOffset(15)+5);
 	_btnUfopaedia->onMouseClick((ActionHandler)& GeoscapeState::btnUfopaediaClick);
-	_btnUfopaedia->onKeyboardPress((ActionHandler)& GeoscapeState::btnUfopaediaClick, (SDLKey)Options::getInt("keyGeoUfopedia"));
+	_btnUfopaedia->onKeyboardPress(
+					(ActionHandler)& GeoscapeState::btnUfopaediaClick,
+					(SDLKey)Options::getInt("keyGeoUfopedia"));
 
 	_btnOptions->copy(_bg);
 	_btnOptions->setColor(Palette::blockOffset(15)+5);
 	_btnOptions->onMouseClick((ActionHandler)& GeoscapeState::btnOptionsClick);
-	_btnOptions->onKeyboardPress((ActionHandler)& GeoscapeState::btnOptionsClick, (SDLKey)Options::getInt("keyGeoOptions"));
+	_btnOptions->onKeyboardPress(
+					(ActionHandler)& GeoscapeState::btnOptionsClick,
+					(SDLKey)Options::getInt("keyGeoOptions"));
 
 	_btnFunding->copy(_bg);
 	_btnFunding->setColor(Palette::blockOffset(15)+5);
 	_btnFunding->onMouseClick((ActionHandler)& GeoscapeState::btnFundingClick);
-	_btnFunding->onKeyboardPress((ActionHandler)& GeoscapeState::btnFundingClick, (SDLKey)Options::getInt("keyGeoFunding"));
+	_btnFunding->onKeyboardPress(
+					(ActionHandler)& GeoscapeState::btnFundingClick,
+					(SDLKey)Options::getInt("keyGeoFunding"));
 
 
 	_btn5Secs->copy(_bg);
 	_btn5Secs->setColor(Palette::blockOffset(15)+5);
 	_btn5Secs->setGroup(&_timeSpeed);
-	_btn5Secs->onKeyboardPress((ActionHandler)& GeoscapeState::btnTimerClick, (SDLKey)Options::getInt("keyGeoSpeed1"));
+	_btn5Secs->onKeyboardPress(
+					(ActionHandler)& GeoscapeState::btnTimerClick,
+					(SDLKey)Options::getInt("keyGeoSpeed1"));
 
 	_btn1Min->copy(_bg);
 	_btn1Min->setColor(Palette::blockOffset(15)+5);
 	_btn1Min->setGroup(&_timeSpeed);
-	_btn1Min->onKeyboardPress((ActionHandler)& GeoscapeState::btnTimerClick, (SDLKey)Options::getInt("keyGeoSpeed2"));
+	_btn1Min->onKeyboardPress(
+					(ActionHandler)& GeoscapeState::btnTimerClick,
+					(SDLKey)Options::getInt("keyGeoSpeed2"));
 
 	_btn5Mins->copy(_bg);
 	_btn5Mins->setColor(Palette::blockOffset(15)+5);
 	_btn5Mins->setGroup(&_timeSpeed);
-	_btn5Mins->onKeyboardPress((ActionHandler)& GeoscapeState::btnTimerClick, (SDLKey)Options::getInt("keyGeoSpeed3"));
+	_btn5Mins->onKeyboardPress(
+					(ActionHandler)& GeoscapeState::btnTimerClick,
+					(SDLKey)Options::getInt("keyGeoSpeed3"));
 
 	_btn30Mins->copy(_bg);
 	_btn30Mins->setColor(Palette::blockOffset(15)+5);
 	_btn30Mins->setGroup(&_timeSpeed);
-	_btn30Mins->onKeyboardPress((ActionHandler)& GeoscapeState::btnTimerClick, (SDLKey)Options::getInt("keyGeoSpeed4"));
+	_btn30Mins->onKeyboardPress(
+					(ActionHandler)& GeoscapeState::btnTimerClick,
+					(SDLKey)Options::getInt("keyGeoSpeed4"));
 
 	_btn1Hour->copy(_bg);
 	_btn1Hour->setColor(Palette::blockOffset(15)+5);
 	_btn1Hour->setGroup(&_timeSpeed);
-	_btn1Hour->onKeyboardPress((ActionHandler)& GeoscapeState::btnTimerClick, (SDLKey)Options::getInt("keyGeoSpeed5"));
+	_btn1Hour->onKeyboardPress(
+					(ActionHandler)& GeoscapeState::btnTimerClick,
+					(SDLKey)Options::getInt("keyGeoSpeed5"));
 
 	_btn1Day->copy(_bg);
 	_btn1Day->setColor(Palette::blockOffset(15)+5);
 	_btn1Day->setGroup(&_timeSpeed);
-	_btn1Day->onKeyboardPress((ActionHandler)& GeoscapeState::btnTimerClick, (SDLKey)Options::getInt("keyGeoSpeed6"));
+	_btn1Day->onKeyboardPress(
+					(ActionHandler)& GeoscapeState::btnTimerClick,
+					(SDLKey)Options::getInt("keyGeoSpeed6"));
 	// kL_end.
 
 /*kL	_btnRotateLeft->onMousePress((ActionHandler)& GeoscapeState::btnRotateLeftPress);
@@ -483,12 +511,12 @@ GeoscapeState::GeoscapeState(Game* game)
 		_txtMin->setSmall();
 		_txtMinSep->setSmall();
 	}
-	else // kL
+	else						// kL
 	{
-		_txtHour->setBig(); // kL
-		_txtHourSep->setBig(); // kL
-		_txtMin->setBig(); // kL
-		_txtMinSep->setBig(); // kL
+		_txtHour->setBig();		// kL
+		_txtHourSep->setBig();	// kL
+		_txtMin->setBig();		// kL
+		_txtMinSep->setBig();	// kL
 	}
 
 //kL	if (_showFundsOnGeoscape) _txtHour->setSmall(); else _txtHour->setBig();
@@ -583,7 +611,7 @@ void GeoscapeState::handle(Action* action)
 		// "ctrl-d" - enable debug mode
 		if (Options::getBool("debug")
 			&& action->getDetails()->key.keysym.sym == SDLK_d
-			&& (SDL_GetModState() &KMOD_CTRL) != 0)
+			&& (SDL_GetModState() & KMOD_CTRL) != 0)
 		{
 			_game->getSavedGame()->setDebugMode();
 			if (_game->getSavedGame()->getDebugMode())
@@ -599,12 +627,18 @@ void GeoscapeState::handle(Action* action)
 		else if (action->getDetails()->key.keysym.sym == Options::getInt("keyQuickSave")
 			&& Options::getInt("autosave") == 1)
 		{
-			_game->pushState(new SaveState(_game, OPT_GEOSCAPE, true));
+			_game->pushState(new SaveState(
+										_game,
+										OPT_GEOSCAPE,
+										true));
 		}
 		else if (action->getDetails()->key.keysym.sym == Options::getInt("keyQuickLoad")
 			&& Options::getInt("autosave") == 1)
 		{
-			_game->pushState(new LoadState(_game, OPT_GEOSCAPE, true));
+			_game->pushState(new LoadState(
+										_game,
+										OPT_GEOSCAPE,
+										true));
 		}
 	}
 
@@ -667,6 +701,7 @@ void GeoscapeState::think()
 	_zoomOutEffectTimer->think(this, 0);
 	_dogfightStartTimer->think(this, 0);
 
+
 	if (_game->getSavedGame()->getMonthsPassed() == -1)
 	{
 		_game->getSavedGame()->addMonth();
@@ -674,20 +709,23 @@ void GeoscapeState::think()
 		determineAlienMissions(true);
 
 		_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds()
-				- _game->getSavedGame()->getBaseMaintenance()
-				- _game->getSavedGame()->getBases()->front()->getPersonnelMaintenance());
+																	- _game->getSavedGame()->getBaseMaintenance()
+																	- _game->getSavedGame()->getBases()->front()->getPersonnelMaintenance());
 	}
 
 	if (_popups.empty()
 		&& _dogfights.empty()
-		&& (!_zoomInEffectTimer->isRunning() || _zoomInEffectDone)
-		&& (!_zoomOutEffectTimer->isRunning() || _zoomOutEffectDone))
+		&& (!_zoomInEffectTimer->isRunning()
+			|| _zoomInEffectDone)
+		&& (!_zoomOutEffectTimer->isRunning()
+			|| _zoomOutEffectDone))
 	{
 		_timer->think(this, 0); // Handle timers
 	}
 	else
 	{
-		if (!_dogfights.empty() || _minimizedDogfights != 0)
+		if (!_dogfights.empty()
+			|| _minimizedDogfights != 0)
 		{
 			handleDogfights();
 		}
@@ -851,7 +889,10 @@ void GeoscapeState::time5Seconds()
 						size_t tsCount = _game->getSavedGame()->getTerrorSites()->size();
 						AlienMission* mission = (*i)->getMission();
 						bool detected = (*i)->getDetected();
-						mission->ufoReachedWaypoint(**i, *_game, *_globe);
+						mission->ufoReachedWaypoint(
+												**i,
+												*_game,
+												*_globe);
 
 						if (detected != (*i)->getDetected() // kL_note <- how is this possible?
 							&& !(*i)->getFollowers()->empty())
@@ -860,7 +901,7 @@ void GeoscapeState::time5Seconds()
 								((*i)->getTrajectory().getID() == "__RETALIATION_ASSAULT_RUN"
 									&& (*i)->getStatus() ==  Ufo::LANDED))
 							{
-								timerReset();	// kL
+								timerReset(); // kL
 								popup(new UfoLostState(
 													_game,
 													(*i)->getName(_game->getLanguage())));
@@ -928,7 +969,10 @@ void GeoscapeState::time5Seconds()
 				{
 					AlienMission* mission = (*i)->getMission();
 					bool detected = (*i)->getDetected();
-					mission->ufoLifting(**i, *_game, *_globe);
+					mission->ufoLifting(
+									**i,
+									*_game,
+									*_globe);
 
 					if (detected != (*i)->getDetected() // kL_note <- how is this possible?
 						&& !(*i)->getFollowers()->empty())
@@ -973,7 +1017,9 @@ void GeoscapeState::time5Seconds()
 						country != _game->getSavedGame()->getCountries()->end();
 						++country)
 				{
-					if ((*country)->getRules()->insideCountry((*j)->getLongitude(), (*j)->getLatitude()))
+					if ((*country)->getRules()->insideCountry(
+															(*j)->getLongitude(),
+															(*j)->getLatitude()))
 					{
 						(*country)->addActivityXcom(-(*j)->getRules()->getScore());
 
@@ -986,7 +1032,9 @@ void GeoscapeState::time5Seconds()
 						region != _game->getSavedGame()->getRegions()->end();
 						++region)
 				{
-					if ((*region)->getRules()->insideRegion((*j)->getLongitude(), (*j)->getLatitude()))
+					if ((*region)->getRules()->insideRegion(
+														(*j)->getLongitude(),
+														(*j)->getLatitude()))
 					{
 						(*region)->addActivityXcom(-(*j)->getRules()->getScore());
 
@@ -1021,8 +1069,12 @@ void GeoscapeState::time5Seconds()
 						w->setLatitude(u->getLatitude());
 						w->setId(u->getId());
 
-						timerReset();	// kL
-						popup(new GeoscapeCraftState(_game, (*j), _globe, w));
+						timerReset(); // kL
+						popup(new GeoscapeCraftState(
+													_game,
+													*j,
+													_globe,
+													w));
 					}
 				}
 
@@ -1080,9 +1132,8 @@ void GeoscapeState::time5Seconds()
 									_dogfightStartTimer->start();
 								}
 
-								if (!_battleMusic)
+								if (!_battleMusic) // set music
 								{
-									// Set music
 									_game->getResourcePack()->getMusic("GMINTER")->play();
 									_battleMusic = true;
 								}
@@ -1097,7 +1148,9 @@ void GeoscapeState::time5Seconds()
 								if (!(*j)->isInDogfight())
 								{
 									// look up polygons texture
-									int texture, shade;
+									int
+										texture,
+										shade;
 									_globe->getPolygonTextureAndShade(
 																	u->getLongitude(),
 																	u->getLatitude(),
@@ -1105,7 +1158,7 @@ void GeoscapeState::time5Seconds()
 																	&shade);
 									timerReset();
 
-									timerReset();	// kL
+									timerReset(); // kL
 									popup(new ConfirmLandingState(
 																_game,
 																*j,
@@ -1123,7 +1176,7 @@ void GeoscapeState::time5Seconds()
 				}
 				else if (w != 0)
 				{
-					timerReset();	// kL
+					timerReset(); // kL
 					popup(new CraftPatrolState(
 											_game,
 											*j,
@@ -2384,7 +2437,9 @@ void GeoscapeState::time1Day()
 					if ((*iter)->getRules()->getName() == (*iter2)->getRules()->getName()
 						&& _game->getRuleset()->getUnit((*iter2)->getRules()->getName()) == 0)
 					{
-						(*j)->removeResearch(*iter2, false);
+						(*j)->removeResearch(
+											*iter2,
+											false);
 
 						break;
 					}
@@ -2565,7 +2620,10 @@ void GeoscapeState::time1Month()
 	timerReset();
 
 	_game->getSavedGame()->monthlyFunding();
-	popup(new MonthlyReportState(_game, psi, _globe));
+	popup(new MonthlyReportState(
+								_game,
+								psi,
+								_globe));
 
 	// Handle Xcom Operatives discovering bases
 	if (!_game->getSavedGame()->getAlienBases()->empty())
@@ -2599,7 +2657,9 @@ void GeoscapeState::timerReset()
 {
 	SDL_Event ev;
 	ev.button.button = SDL_BUTTON_LEFT;
-	Action act(&ev, _game->getScreen()->getXScale(),
+	Action act(
+			&ev,
+			_game->getScreen()->getXScale(),
 			_game->getScreen()->getYScale(),
 			_game->getScreen()->getCursorTopBlackBand(),
 			_game->getScreen()->getCursorLeftBlackBand());
@@ -2655,7 +2715,10 @@ void GeoscapeState::globeClick(Action* action)
 	// Clicking markers on the globe
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		std::vector<Target*> targets = _globe->getTargets(mouseX, mouseY, false);
+		std::vector<Target*> targets = _globe->getTargets(
+														mouseX,
+														mouseY,
+														false);
 		if (!targets.empty())
 		{
 			_game->pushState(new MultipleTargetsState(
@@ -2750,7 +2813,7 @@ void GeoscapeState::btnBasesClick(Action*)
  */
 void GeoscapeState::btnGraphsClick(Action*)
 {
-	timerReset();	// kL
+	timerReset(); // kL
 
 	_game->pushState(new GraphsState(_game));
 }
@@ -2761,7 +2824,7 @@ void GeoscapeState::btnGraphsClick(Action*)
  */
 void GeoscapeState::btnUfopaediaClick(Action*)
 {
-	timerReset();	// kL
+	timerReset(); // kL
 
 	Ufopaedia::open(_game);
 }
@@ -2772,7 +2835,7 @@ void GeoscapeState::btnUfopaediaClick(Action*)
  */
 void GeoscapeState::btnOptionsClick(Action*)
 {
-	timerReset();	// kL
+	timerReset(); // kL
 
 	_game->pushState(new PauseState(_game, OPT_GEOSCAPE));
 }
@@ -2783,7 +2846,7 @@ void GeoscapeState::btnOptionsClick(Action*)
  */
 void GeoscapeState::btnFundingClick(Action*)
 {
-	timerReset();	// kL
+	timerReset(); // kL
 
 	_game->pushState(new FundingState(_game));
 }
@@ -2928,9 +2991,9 @@ void GeoscapeState::zoomInEffect()
 void GeoscapeState::zoomOutEffect()
 {
 	if (_globe->isZoomedOutToMax()
-		|| _game->getSavedGame()->getGlobeZoom() <= _zoomInter)		// kL
+		|| _game->getSavedGame()->getGlobeZoom() <= _zoomInter)	// kL
 	{
-		_zoomInter = 0;												// kL
+		_zoomInter = 0;											// kL
 
 		_zoomOutEffectDone = true;
 		_zoomOutEffectTimer->stop();
@@ -3076,7 +3139,9 @@ int GeoscapeState::getFirstFreeDogfightSlot()
  * @param base Base to defend.
  * @param ufo Ufo attacking base.
  */
-void GeoscapeState::handleBaseDefense(Base* base, Ufo* ufo)
+void GeoscapeState::handleBaseDefense(
+		Base* base,
+		Ufo* ufo)
 {
     // Whatever happens in the base defense, the UFO has finished its duty
 	ufo->setStatus(Ufo::DESTROYED);
@@ -3093,12 +3158,17 @@ void GeoscapeState::handleBaseDefense(Base* base, Ufo* ufo)
 		bgen.run();
 
 		musicStop();
-		popup(new BriefingState(_game, 0, base));
+		popup(new BriefingState(
+							_game,
+							0,
+							base));
 	}
 	else
 	{
 	    // Please garrison your bases in future
-		popup(new BaseDestroyedState(_game, base));
+		popup(new BaseDestroyedState(
+									_game,
+									base));
 	}
 }
 
@@ -3118,7 +3188,9 @@ void GeoscapeState::determineAlienMissions(bool atGameStart)
 	std::vector<std::string> regions = _game->getRuleset()->getRegionsList();
 	do
 	{
-		region = _game->getRuleset()->getRegion(regions[RNG::generate(0, regions.size() - 1)]);
+		region = _game->getRuleset()->getRegion(regions[RNG::generate(
+																	0,
+																	regions.size() - 1)]);
 	}
 	while (region->getCities()->empty());
 
@@ -3183,7 +3255,7 @@ void GeoscapeState::determineAlienMissions(bool atGameStart)
 }
 
 /**
- * 
+ *
  */
 void GeoscapeState::btnTimerClick(Action* action)
 {

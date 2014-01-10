@@ -58,6 +58,7 @@ StoresState::StoresState(
 {
 	_window			= new Window(this, 320, 200, 0, 0);
 	_txtTitle		= new Text(300, 17, 10, 8);
+	_txtBaseLabel	= new Text(80, 9, 224, 8);
 
 	_txtItem		= new Text(162, 9, 16, 25);
 	_txtQuantity	= new Text(84, 9, 178, 25);
@@ -69,17 +70,18 @@ StoresState::StoresState(
 
 
 	_game->setPalette(
-					_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)),
-					Palette::backPos,
-					16);
+				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)),
+				Palette::backPos,
+				16);
 
 	add(_window);
-	add(_btnOk);
 	add(_txtTitle);
+	add(_txtBaseLabel);
 	add(_txtItem);
 	add(_txtQuantity);
 	add(_txtSpaceUsed);
 	add(_lstStores);
+	add(_btnOk);
 
 	centerAllSurfaces();
 
@@ -90,12 +92,20 @@ StoresState::StoresState(
 	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& StoresState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)& StoresState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
-	_btnOk->onKeyboardPress((ActionHandler)& StoresState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& StoresState::btnOkClick,
+					(SDLKey)Options::getInt("keyOk"));
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& StoresState::btnOkClick,
+					(SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
 	_txtTitle->setText(tr("STR_STORES"));
+
+	_txtBaseLabel->setColor(Palette::blockOffset(13)+10);
+	_txtBaseLabel->setAlign(ALIGN_RIGHT);
+	_txtBaseLabel->setText(_base->getName(_game->getLanguage()));
 
 	_txtItem->setColor(Palette::blockOffset(13)+10);
 	_txtItem->setText(tr("STR_ITEM"));
@@ -105,7 +115,7 @@ StoresState::StoresState(
 
 	_txtSpaceUsed->setColor(Palette::blockOffset(13)+10);
 //kL	_txtSpaceUsed->setText(tr("STR_SPACE_USED_UC"));
-	_txtSpaceUsed->setText(tr("STR_VOLUME"));		// kL
+	_txtSpaceUsed->setText(tr("STR_VOLUME")); // kL
 
 	_lstStores->setColor(Palette::blockOffset(13)+10);
 	_lstStores->setColumns(3, 154, 84, 26);

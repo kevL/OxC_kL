@@ -47,19 +47,15 @@ class CraftEquipmentState
 {
 
 private:
-	bool
-		_allowChangeListValuesByMouseWheel;
-	int
-		_changeValueByMouseWheel;
-	unsigned int
-		_sel;
-	size_t
-		_craft;
+	bool _allowChangeListValuesByMouseWheel;
+	int _changeValueByMouseWheel;
+	unsigned int _sel;
+	size_t _craft;
 
-	Base
-		* _base;
+	Base* _base;
 	Text
 		* _txtAvailable,
+		* _txtBaseLabel,
 //kL		* _txtCrew,
 		* _txtItem,
 		* _txtStores,
@@ -70,16 +66,13 @@ private:
 		* _btnClear,
 		* _btnInventory,
 		* _btnOk;
-	TextList
-		* _lstEquipment;
+	TextList * _lstEquipment;
 	Timer
 		* _timerLeft,
 		* _timerRight;
-	Window
-		* _window;
+	Window * _window;
 
-	std::vector<std::string>
-		_items;
+	std::vector<std::string> _items;
 
 	/// Updates quantities of item.
 	void updateQuantity();

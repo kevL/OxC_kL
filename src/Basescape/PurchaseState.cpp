@@ -224,6 +224,8 @@ PurchaseState::PurchaseState(
 			i != crafts.end();
 			++i)
 	{
+		ss4.str(L"");
+
 		RuleCraft* rule = _game->getRuleset()->getCraft(*i);
 
 		if (rule->getBuyCost() > 0
@@ -262,6 +264,9 @@ PurchaseState::PurchaseState(
 			i != cweapons.end();
 			++i)
 	{
+		ss5.str(L"");
+		ss6.str(L"");
+
 		// Special handling for treating craft weapons as items
 		RuleCraftWeapon* rule = _game->getRuleset()->getCraftWeapon(*i);
 		RuleItem* launcher = _game->getRuleset()->getItem(rule->getLauncherItem()); // kL
@@ -337,10 +342,10 @@ PurchaseState::PurchaseState(
 				}
 			} // kL_end.
 
-//kL			ss5 << _base->getItems()->getItem(clip->getType());
+//kL			ss6 << _base->getItems()->getItem(clip->getType());
 			ss6 << tQty; // kL
 
-			item.insert(0, L" - ");
+			item.insert(0, L"  ");
 			_lstItems->addRow(
 							4,
 							item.c_str(),
@@ -370,6 +375,8 @@ PurchaseState::PurchaseState(
 			i != items.end();
 			++i)
 	{
+		ss7.str(L"");
+
 		RuleItem* rule = _game->getRuleset()->getItem(*i);
 
 		if (rule->getBuyCost() > 0
@@ -450,7 +457,7 @@ PurchaseState::PurchaseState(
 
 			if (rule->getBattleType() == BT_AMMO)
 			{
-				item.insert(0, L" - ");
+				item.insert(0, L"  ");
 			}
 
 			_lstItems->addRow(

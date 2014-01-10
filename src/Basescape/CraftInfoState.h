@@ -56,6 +56,7 @@ private:
 		* _btnW2;
 	TextEdit* _edtCraft;
 	Text
+		* _txtBaseLabel,
 		* _txtDamage,
 		* _txtFuel,
 		* _txtW1Ammo,

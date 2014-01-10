@@ -78,10 +78,7 @@ InterceptState::InterceptState(
 							30,
 							POPUP_HORIZONTAL);
 //	_txtTitle	= new Text(240, 17, 70, 40);
-
-//	_txtBase	= new Text(80, 9, 16, 45); // might do getRegion in here also.
-//	_txtBase	= new Text(80, 17, 16, 40);
-	_txtBase	= new Text(288, 17, 16, 41);
+	_txtBase	= new Text(288, 17, 16, 41); // might do getRegion in here also.
 
 	_txtCraft	= new Text(86, 9, 16, 64);
 	_txtStatus	= new Text(53, 9, 117, 64);
@@ -99,9 +96,9 @@ InterceptState::InterceptState(
 
 	add(_window);
 //	add(_txtTitle);
+	add(_txtBase);
 	add(_txtCraft);
 	add(_txtStatus);
-	add(_txtBase);
 	add(_txtWeapons);
 	add(_lstCrafts);
 	add(_btnCancel);
@@ -157,7 +154,7 @@ InterceptState::InterceptState(
 	_lstCrafts->onMouseOver((ActionHandler)& InterceptState::lstCraftsMouseOver);
 	_lstCrafts->onMouseOut((ActionHandler)& InterceptState::lstCraftsMouseOut);
 
-	int row = 0;
+	int r = 0;
 
 	for (std::vector<Base*>::iterator
 			i = _game->getSavedGame()->getBases()->begin();
@@ -207,16 +204,16 @@ InterceptState::InterceptState(
 							status.c_str(),
 							ss.str().c_str());
 
-			_lstCrafts->setCellColor(row, 1, _cellColor);
+			_lstCrafts->setCellColor(r, 1, _cellColor);
 //			if ((*j)->getStatus() == "STR_READY")
 //				_lstCrafts->setCellColor(row, 1, Palette::blockOffset(8)+10);
 //			colorStatusCell();
 			_lstCrafts->setCellHighContrast(
-										row,
+										r,
 										1,
 										true);
 
-			row++;
+			r++;
 		}
 	}
 
@@ -234,7 +231,7 @@ InterceptState::~InterceptState()
 }
 
 /**
- * A more descriptive state of the Craft.
+ * kL. A more descriptive state of the Craft.
  */
 std::wstring InterceptState::getAltStatus(Craft* craft)
 {
@@ -300,7 +297,7 @@ std::wstring InterceptState::getAltStatus(Craft* craft)
 		{
 			status = tr("STR_DESTINATION_UC_")
 						.arg(craft->getDestination()->getName(_game->getLanguage()));
-				_cellColor = Palette::blockOffset(8)+10;
+			_cellColor = Palette::blockOffset(8)+10;
 		}
 	}
 

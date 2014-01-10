@@ -601,7 +601,7 @@ BattlescapeState::BattlescapeState(Game* game)
 
 	_txtName->setColor(Palette::blockOffset(8));
 	_txtName->setHighContrast(true);
-	_numTUSnap->setColor(Palette::blockOffset(0)+7);
+	_numTUSnap->setColor(Palette::blockOffset(0)+8);
 	_numTimeUnits->setColor(Palette::blockOffset(4));
 	_numEnergy->setColor(Palette::blockOffset(1));
 	_numHealth->setColor(Palette::blockOffset(2)+11);

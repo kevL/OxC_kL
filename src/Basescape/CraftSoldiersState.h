@@ -26,11 +26,12 @@
 namespace OpenXcom
 {
 
-class TextButton;
-class Window;
-class Text;
-class TextList;
 class Base;
+class Text;
+class TextButton;
+class TextList;
+class Window;
+
 
 /**
  * Select Squad screen that lets the player
@@ -40,37 +41,41 @@ class CraftSoldiersState
 	:
 		public State
 {
+
 private:
-//kL	TextButton *_btnOk;
-	TextButton
-		* _btnOk,
-		* _btnUnload;	// kL
-	Window* _window;
-	Text
-		* _txtTitle,
-		* _txtName,
-		* _txtRank,
-		* _txtCraft,
-		* _txtAvailable,
-		* _txtUsed;
-	TextList* _lstSoldiers;
+	size_t _craft;
 
 	Base* _base;
-	size_t _craft;
+	Text
+		* _txtAvailable,
+		* _txtBaseLabel,
+		* _txtCraft,
+		* _txtName,
+		* _txtRank,
+		* _txtTitle,
+		* _txtUsed;
+	TextButton
+		* _btnOk,
+		* _btnUnload;
+	TextList* _lstSoldiers;
+	Window* _window;
 
 
 	public:
 		/// Creates the Craft Soldiers state.
-		CraftSoldiersState(Game* game, Base* base, size_t craft);
+		CraftSoldiersState(
+				Game* game,
+				Base* base,
+				size_t craft);
 		/// Cleans up the Craft Soldiers state.
 		~CraftSoldiersState();
 
 		/// Handler for clicking the OK button.
 		void btnOkClick(Action* action);
-		/// Handler for clicking the Unload button.
+		/// kL. Handler for clicking the Unload button.
 		/// * NB: This relies on no two transport craft having the same name!!!!!
 		/// * See, void CraftInfoState::edtCraftKeyPress(Action* action) etc.
-		void btnUnloadClick(Action* action);	// kL
+		void btnUnloadClick(Action* action);
 
 		/// Shows Soldiers in a list.
 		void populateList();

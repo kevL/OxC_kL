@@ -104,7 +104,7 @@ Base::~Base()
 					k != _vehicles.end();
 					++k)
 			{
-				if ((*k) == (*j)) // to avoid calling a vehicle's destructor twice
+				if (*k == *j) // to avoid calling a vehicle's destructor twice
 				{
 					_vehicles.erase(k);
 
@@ -1002,7 +1002,7 @@ int Base::getAllocatedScientists() const
 			i != research.end();
 			++i)
 	{
-		total += (*i)->getAssigned ();
+		total += (*i)->getAssigned();
 	}
 
 	return total;

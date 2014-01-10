@@ -41,16 +41,18 @@ class StoresState
 	:
 		public State
 {
-	private:
-		Base* _base;
-		Text
-			* _txtItem,
-			* _txtQuantity,
-			* _txtSpaceUsed,
-			* _txtTitle;
-		TextButton* _btnOk;
-		TextList* _lstStores;
-		Window* _window;
+
+private:
+	Base* _base;
+	Text
+		* _txtBaseLabel,
+		* _txtItem,
+		* _txtQuantity,
+		* _txtSpaceUsed,
+		* _txtTitle;
+	TextButton* _btnOk;
+	TextList* _lstStores;
+	Window* _window;
 
 
 	public:

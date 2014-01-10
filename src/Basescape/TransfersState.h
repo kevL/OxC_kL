@@ -31,24 +31,33 @@ class Window;
 class Text;
 class TextList;
 
+
 /**
  * Transfers window that displays all the items currently in-transit to a base.
  */
 class TransfersState
 	:
-	public State
+		public State
 {
-	private:
-		Base* _base;
 
-		TextButton* _btnOk;
-		Window* _window;
-		Text* _txtTitle, * _txtItem, * _txtQuantity, * _txtArrivalTime;
-		TextList* _lstTransfers;
+private:
+	Base* _base;
+	Text
+		* _txtArrivalTime,
+		* _txtBaseLabel,
+		* _txtItem,
+		* _txtQuantity,
+		* _txtTitle;
+	TextButton* _btnOk;
+	TextList* _lstTransfers;
+	Window* _window;
+
 
 	public:
 		/// Creates the Transfers state.
-		TransfersState(Game* game, Base* base);
+		TransfersState(
+				Game* game,
+				Base* base);
 		/// Cleans up the Transfers state.
 		~TransfersState();
 

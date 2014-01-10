@@ -16,40 +16,61 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_MONTHLYCOSTSSTATE_H
 #define OPENXCOM_MONTHLYCOSTSSTATE_H
 
 #include "../Engine/State.h"
 
+
 namespace OpenXcom
 {
 
 class Base;
-class TextButton;
-class Window;
 class Text;
+class TextButton;
 class TextList;
+class Window;
+
 
 /**
  * Monthly Costs screen that displays all
  * the maintenance costs of a particular base.
  */
-class MonthlyCostsState : public State
+class MonthlyCostsState
+	:
+		public State
 {
-private:
-	Base *_base;
 
-	TextButton *_btnOk;
+private:
+	Base* _base;
+	Text
+//		* _txtBaseLabel,
+		* _txtCost,
+		* _txtIncome,
+		* _txtQuantity,
+		* _txtRental,
+		* _txtSalaries,
+		* _txtTitle,
+		* _txtTotal;
+	TextButton* _btnOk;
+	TextList
+		* _lstCrafts,
+		* _lstMaintenance,
+		* _lstSalaries,
+		* _lstTotal;
 	Window *_window;
-	Text *_txtTitle, *_txtCost, *_txtQuantity, *_txtTotal, *_txtRental, *_txtSalaries, *_txtIncome;
-	TextList *_lstCrafts, *_lstSalaries, *_lstMaintenance, *_lstTotal;
-public:
-	/// Creates the Monthly Costs state.
-	MonthlyCostsState(Game *game, Base *base);
-	/// Cleans up the Monthly Costs state.
-	~MonthlyCostsState();
-	/// Handler for clicking the OK button.
-	void btnOkClick(Action *action);
+
+
+	public:
+		/// Creates the Monthly Costs state.
+		MonthlyCostsState(
+				Game* game,
+				Base* base);
+		/// Cleans up the Monthly Costs state.
+		~MonthlyCostsState();
+		/// Handler for clicking the OK button.
+		void btnOkClick(Action* action);
 };
 
 }

@@ -49,6 +49,7 @@ private:
 	TextButton* _btnOk;
 	Text
 		* _txtArmor,
+		* _txtBaseLabel,
 		* _txtCraft,
 		* _txtName,
 		* _txtTitle;

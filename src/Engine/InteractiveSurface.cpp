@@ -39,7 +39,11 @@ InteractiveSurface::InteractiveSurface(
 		int x,
 		int y)
 	:
-		Surface(width, height, x, y),
+		Surface(
+			width,
+			height,
+			x,
+			y),
 		_buttonsPressed(0),
 		_in(0),
 		_over(0),
@@ -173,7 +177,8 @@ void InteractiveSurface::handle(
 				mouseIn(action, state);
 			}
 
-			if (_listButton && action->getDetails()->type == SDL_MOUSEMOTION)
+			if (_listButton
+				&& action->getDetails()->type == SDL_MOUSEMOTION)
 			{
 				_buttonsPressed = SDL_GetMouseState(0, 0);
 				for (Uint8
@@ -292,8 +297,8 @@ void InteractiveSurface::unpress(State* state)
  * Called every time there's a mouse press over the surface.
  * Allows the surface to have custom functionality for this action,
  * and can be called externally to simulate the action.
- * @param action Pointer to an action.
- * @param state State that the action handlers belong to.
+ * @param action, Pointer to an action.
+ * @param state, State that the action handlers belong to.
  */
 void InteractiveSurface::mousePress(Action* action, State* state)
 {

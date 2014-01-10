@@ -16,22 +16,34 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_TRANSFER_H
 #define OPENXCOM_TRANSFER_H
 
 #include <string>
+
 #include <yaml-cpp/yaml.h>
+
 
 namespace OpenXcom
 {
 
-enum TransferType { TRANSFER_SOLDIER, TRANSFER_CRAFT, TRANSFER_ITEM, TRANSFER_SCIENTIST, TRANSFER_ENGINEER };
+enum TransferType
+{
+	TRANSFER_SOLDIER,	// 0
+	TRANSFER_CRAFT,		// 1
+	TRANSFER_ITEM,		// 2
+	TRANSFER_SCIENTIST,	// 3
+	TRANSFER_ENGINEER	// 4
+};
 
-class Soldier;
+
+class Base;
 class Craft;
 class Language;
-class Base;
 class Ruleset;
+class Soldier;
+
 
 /**
  * Represents an item transfer.
@@ -40,46 +52,66 @@ class Ruleset;
  */
 class Transfer
 {
+
 private:
-	int _hours;
-	Soldier *_soldier;
-	Craft *_craft;
-	std::string _itemId;
-	int _itemQty, _scientists, _engineers;
 	bool _delivered;
-public:
-	/// Creates a new transfer.
-	Transfer(int hours);
-	/// Cleans up the transfer.
-	~Transfer();
-	/// Loads the transfer from YAML.
-	void load(const YAML::Node& node, Base *base, const Ruleset *rule);
-	/// Saves the transfer to YAML.
-	YAML::Node save() const;
-	/// Sets the soldier of the transfer.
-	void setSoldier(Soldier *soldier);
-	/// Sets the craft of the transfer.
-	void setCraft(Craft *craft);
-	/// Gets the craft of the transfer.
-	Craft *getCraft();
-	/// Gets the items of the transfer.
-	std::string getItems() const;
-	/// Sets the items of the transfer.
-	void setItems(const std::string &id, int qty = 1);
-	/// Sets the scientists of the transfer.
-	void setScientists(int scientists);
-	/// Sets the engineers of the transfer.
-	void setEngineers(int engineers);
-	/// Gets the name of the transfer.
-	std::wstring getName(Language *lang) const;
-	/// Gets the hours remaining of the transfer.
-	int getHours() const;
-	/// Gets the quantity of the transfer.
-	int getQuantity() const;
-	/// Gets the type of the transfer.
-	TransferType getType() const;
-	/// Advances the transfer.
-	void advance(Base *base);
+	int
+		_engineers,
+		_hours,
+		_itemQty,
+		_scientists;
+
+	std::string _itemId;
+
+	Craft *_craft;
+	Soldier *_soldier;
+
+
+	public:
+		/// Creates a new transfer.
+		Transfer(int hours);
+		/// Cleans up the transfer.
+		~Transfer();
+
+		/// Loads the transfer from YAML.
+		void load(
+				const YAML::Node& node,
+				Base* base,
+				const Ruleset* rule);
+		/// Saves the transfer to YAML.
+		YAML::Node save() const;
+
+		/// Sets the scientists of the transfer.
+		void setScientists(int scientists);
+		/// Sets the engineers of the transfer.
+		void setEngineers(int engineers);
+		/// Sets the soldier of the transfer.
+		void setSoldier(Soldier* soldier);
+
+		/// Sets the craft of the transfer.
+		void setCraft(Craft* craft);
+		/// Gets the craft of the transfer.
+		Craft* getCraft();
+
+		/// Gets the items of the transfer.
+		std::string getItems() const;
+		/// Sets the items of the transfer.
+		void setItems(
+				const std::string& id,
+				int qty = 1);
+
+		/// Gets the name of the transfer.
+		std::wstring getName(Language* lang) const;
+
+		/// Gets the hours remaining of the transfer.
+		int getHours() const;
+		/// Gets the quantity of the transfer.
+		int getQuantity() const;
+		/// Gets the type of the transfer.
+		TransferType getType() const;
+
+		/// Advances the transfer.
+		void advance(Base* base);
 };
 
 }

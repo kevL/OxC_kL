@@ -18,18 +18,23 @@
  */
 
 #include "TransfersState.h"
+
 #include <sstream>
+
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
-#include "../Engine/Palette.h"
 #include "../Engine/Options.h"
-#include "../Interface/TextButton.h"
-#include "../Interface/Window.h"
+#include "../Engine/Palette.h"
+
 #include "../Interface/Text.h"
+#include "../Interface/TextButton.h"
 #include "../Interface/TextList.h"
-#include "../Savegame/SavedGame.h"
+#include "../Interface/Window.h"
+
+#include "../Resource/ResourcePack.h"
+
 #include "../Savegame/Base.h"
+#include "../Savegame/SavedGame.h"
 #include "../Savegame/Transfer.h"
 
 
@@ -41,7 +46,9 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
  */
-TransfersState::TransfersState(Game* game, Base* base)
+TransfersState::TransfersState(
+		Game* game,
+		Base* base)
 	:
 		State(game),
 		_base(base)
@@ -49,8 +56,8 @@ TransfersState::TransfersState(Game* game, Base* base)
 	_screen = false;
 
 	_window			= new Window(this, 320, 184, 0, 8, POPUP_BOTH);
-
 	_txtTitle		= new Text(288, 17, 16, 17);
+	_txtBaseLabel	= new Text(80, 9, 16, 17);
 
 	_txtItem		= new Text(114, 9, 16, 34);
 	_txtQuantity	= new Text(54, 9, 179, 34);
@@ -67,12 +74,13 @@ TransfersState::TransfersState(Game* game, Base* base)
 				16);
 
 	add(_window);
-	add(_btnOk);
 	add(_txtTitle);
+	add(_txtBaseLabel);
 	add(_txtItem);
 	add(_txtQuantity);
 	add(_txtArrivalTime);
 	add(_lstTransfers);
+	add(_btnOk);
 
 	centerAllSurfaces();
 
@@ -94,6 +102,9 @@ TransfersState::TransfersState(Game* game, Base* base)
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_TRANSFERS"));
+
+	_txtBaseLabel->setColor(Palette::blockOffset(15)+6);
+	_txtBaseLabel->setText(_base->getName(_game->getLanguage()));
 
 	_txtItem->setColor(Palette::blockOffset(15)+6);
 	_txtItem->setText(tr("STR_ITEM"));

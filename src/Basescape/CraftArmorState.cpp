@@ -65,6 +65,7 @@ CraftArmorState::CraftArmorState(
 
 	_window			= new Window(this, 320, 200, 0, 0);
 	_txtTitle		= new Text(300, 17, 11, 10);
+	_txtBaseLabel	= new Text(80, 9, 224, 10);
 
 	_txtName		= new Text(114, 9, 16, 31);
 	_txtArmor		= new Text(76, 9, 133, 31);
@@ -82,6 +83,7 @@ CraftArmorState::CraftArmorState(
 
 	add(_window);
 	add(_txtTitle);
+	add(_txtBaseLabel);
 	add(_txtName);
 	add(_txtArmor);
 	add(_txtCraft);
@@ -104,6 +106,10 @@ CraftArmorState::CraftArmorState(
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
 	_txtTitle->setText(tr("STR_SELECT_ARMOR"));
+
+	_txtBaseLabel->setColor(Palette::blockOffset(13)+10);
+	_txtBaseLabel->setAlign(ALIGN_RIGHT);
+	_txtBaseLabel->setText(_base->getName(_game->getLanguage()));
 
 	_txtName->setColor(Palette::blockOffset(13)+10);
 	_txtName->setText(tr("STR_NAME_UC"));

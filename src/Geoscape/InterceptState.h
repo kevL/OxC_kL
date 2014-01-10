@@ -67,7 +67,7 @@ private:
 
 	std::vector<Craft*> _crafts;
 
-	/// A more descriptive state of the Craft.
+	/// kL. A more descriptive state of the Craft.
 	std::wstring getAltStatus(Craft* craft);
 
 

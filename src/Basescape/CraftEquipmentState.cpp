@@ -86,6 +86,7 @@ CraftEquipmentState::CraftEquipmentState(
 
 	_window			= new Window(this, 320, 200, 0, 0);
 	_txtTitle		= new Text(300, 17, 16, 8);
+	_txtBaseLabel	= new Text(80, 9, 224, 8);
 
 	_txtAvailable	= new Text(110, 9, 16, 25);
 	_txtUsed		= new Text(110, 9, 130, 25);
@@ -102,7 +103,7 @@ CraftEquipmentState::CraftEquipmentState(
 //kL	_btnOk			= new TextButton((craftHasCrew || newBattle) ? 148 : 288, 16, (craftHasCrew || newBattle) ? 164 : 16, 176);
 	_btnOk			= new TextButton(94, 16, 210, 177);
 
-	// Set palette
+
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());
 	_game->setPalette(
 				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)),
@@ -111,6 +112,7 @@ CraftEquipmentState::CraftEquipmentState(
 
 	add(_window);
 	add(_txtTitle);
+	add(_txtBaseLabel);
 	add(_txtAvailable);
 	add(_txtUsed);
 	add(_txtItem);
@@ -149,6 +151,10 @@ CraftEquipmentState::CraftEquipmentState(
 	_txtTitle->setColor(Palette::blockOffset(15)+1);
 	_txtTitle->setBig();
 	_txtTitle->setText(tr("STR_EQUIPMENT_FOR_CRAFT").arg(c->getName(_game->getLanguage())));
+
+	_txtBaseLabel->setColor(Palette::blockOffset(15)+1);
+	_txtBaseLabel->setAlign(ALIGN_RIGHT);
+	_txtBaseLabel->setText(_base->getName(_game->getLanguage()));
 
 	_txtItem->setColor(Palette::blockOffset(15)+1);
 	_txtItem->setText(tr("STR_ITEM"));

@@ -79,7 +79,7 @@ SoldierInfoState::SoldierInfoState(
 	_txtArmor		= new Text(30, 9, 130, 35);
 	_btnArmor		= new TextButton(73, 16, 162, 32);
 
-	_edtSoldier		= new TextEdit(200, 16, 40, 9);
+	_edtSoldier		= new TextEdit(179, 16, 40, 9);
 	_btnAutoStat	= new TextButton(46, 17, 219, 7); // kL
 	_btnSack		= new TextButton(46, 17, 267, 7);
 
@@ -378,16 +378,16 @@ void SoldierInfoState::init()
 		_soldier = 0;
 	}
 
-	Soldier* s = _base->getSoldiers()->at(_soldier);
+	Soldier* soldier = _base->getSoldiers()->at(_soldier);
 	_edtSoldier->setBig();
-	_edtSoldier->setText(s->getName());
-	UnitStats* initial = s->getInitStats();
-	UnitStats* current = s->getCurrentStats();
+	_edtSoldier->setText(soldier->getName());
+	UnitStats* initial = soldier->getInitStats();
+	UnitStats* current = soldier->getCurrentStats();
 
 	SurfaceSet* texture = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
-	texture->getFrame(s->getRankSprite())->setX(0);
-	texture->getFrame(s->getRankSprite())->setY(0);
-	texture->getFrame(s->getRankSprite())->blit(_rank);
+	texture->getFrame(soldier->getRankSprite())->setX(0);
+	texture->getFrame(soldier->getRankSprite())->setY(0);
+	texture->getFrame(soldier->getRankSprite())->blit(_rank);
 
 	std::wstringstream
 		ss1,
@@ -486,39 +486,49 @@ void SoldierInfoState::init()
 		armor,
 		craft;
 
-	std::string armorType = s->getArmor()->getType();
+	std::string armorType = soldier->getArmor()->getType();
 	armor = tr(armorType);
 	_btnArmor->setText(armor);
+	if (soldier->getCraft()
+		&& soldier->getCraft()->getStatus() == "STR_OUT")
+	{
+		_btnArmor->setColor(Palette::blockOffset(4)+9);
+	}
+	else
+		_btnArmor->setColor(Palette::blockOffset(15)+6);
 
-	if (s->getCraft() == 0)
+	if (soldier->getCraft() == 0)
 	{
 		craft = tr("STR_NONE_UC");
 	}
 	else
 	{
-		craft = s->getCraft()->getName(_game->getLanguage());
+		craft = soldier->getCraft()->getName(_game->getLanguage());
 	}
 	_txtCraft->setText(tr("STR_CRAFT_").arg(craft));
 
-	if (s->getWoundRecovery() > 0)
+	if (soldier->getWoundRecovery() > 0)
 	{
-		_txtRecovery->setText(tr("STR_WOUND_RECOVERY").arg(tr("STR_DAY", s->getWoundRecovery())));
+		_txtRecovery->setText(tr("STR_WOUND_RECOVERY")
+								.arg(tr("STR_DAY", soldier->getWoundRecovery())));
 	}
 	else
 	{
 		_txtRecovery->setText(L"");
 	}
 
-	_txtRank->setText(tr("STR_RANK_").arg(tr(s->getRankString())));
-	_txtMissions->setText(tr("STR_MISSIONS").arg(s->getMissions()));
-	_txtKills->setText(tr("STR_KILLS").arg(s->getKills()));
+	_txtRank->setText(tr("STR_RANK_").arg(tr(soldier->getRankString())));
+	_txtMissions->setText(tr("STR_MISSIONS").arg(soldier->getMissions()));
+	_txtKills->setText(tr("STR_KILLS").arg(soldier->getKills()));
 
-	_txtPsionic->setVisible(s->isInPsiTraining());
+	_txtPsionic->setVisible(soldier->isInPsiTraining());
 
-	_btnSack->setVisible(!(s->getCraft() && s->getCraft()->getStatus() == "STR_OUT"));
+	_btnSack->setVisible(!
+					(soldier->getCraft()
+						&& soldier->getCraft()->getStatus() == "STR_OUT"));
 
 
-	int minPsi = s->getRules()->getMinStats().psiSkill;
+	int minPsi = soldier->getRules()->getMinStats().psiSkill;
 
 	if (current->psiSkill >= minPsi
 		|| (Options::getBool("psiStrengthEval")
@@ -564,36 +574,37 @@ void SoldierInfoState::init()
 /**
  * kL. Automatically renames a soldier according to its statistics.
  */
-void SoldierInfoState::btnAutoStat()
+void SoldierInfoState::btnAutoStat(Action*)
 {
-	_edtSoldier->deFocus();
-	_base->getSoldiers()->at(_soldier)->setName(_edtSoldier->getText());
+	//Log(LOG_INFO) << "SoldierInfoState::btnAutoStat()";
+	Soldier* soldier = _base->getSoldiers()->at(_soldier);
 
-	Soldier* s = _base->getSoldiers()->at(_soldier);
+	_edtSoldier->deFocus();
+	soldier->setName(_edtSoldier->getText());
 
 	std::wstringstream stat;
 
-	int rank = s->getRank();
+	int rank = soldier->getRank();
 	switch (rank)
 	{
-		case 0: stat << "r.";
+		case 0: stat << "r";
 		break;
-		case 1: stat << "q.";
+		case 1: stat << "q";
 		break;
-		case 2: stat << "t.";
+		case 2: stat << "t";
 		break;
-		case 3: stat << "p.";
+		case 3: stat << "p";
 		break;
-		case 4: stat << "n.";
+		case 4: stat << "n";
 		break;
-		case 5: stat << "x.";
+		case 5: stat << "x";
 		break;
 
 		default: stat << "";
 		break;
 	}
 
-	UnitStats* current = s->getCurrentStats();
+	UnitStats* current = soldier->getCurrentStats();
 
 	stat << current->firing << ".";
 	stat << current->reactions << ".";
@@ -627,7 +638,7 @@ void SoldierInfoState::btnAutoStat()
 		break;
 	}
 
-	int minPsi = s->getRules()->getMinStats().psiSkill;
+	int minPsi = soldier->getRules()->getMinStats().psiSkill;
 	if (current->psiSkill >= minPsi)
 	{
 		int psiStr = current->psiStrength;
@@ -638,7 +649,7 @@ void SoldierInfoState::btnAutoStat()
 
 		stat << psiDefense;
 
-		if (psiSkl >= s->getRules()->getMaxStats().psiSkill)
+		if (psiSkl >= soldier->getRules()->getStatCaps().psiSkill)
 			stat << ":";
 		else
 			stat << ".";
@@ -646,7 +657,12 @@ void SoldierInfoState::btnAutoStat()
 		stat << psiAttack;
 	}
 
-	_edtSoldier->setText(stat.str());
+	//Log(LOG_INFO) << ". set Soldier name : " << stat;
+	_base->getSoldiers()->at(_soldier)->setName(stat.str());
+
+	//Log(LOG_INFO) << ". re-init";
+	init();
+	//Log(LOG_INFO) << "SoldierInfoState::btnAutoStat() EXIT";
 }
 
 /**
@@ -713,12 +729,14 @@ void SoldierInfoState::btnNextClick(Action*)
  */
 void SoldierInfoState::btnArmorClick(Action*)
 {
-	_edtSoldier->deFocus();
-	_base->getSoldiers()->at(_soldier)->setName(_edtSoldier->getText());
+	Soldier* soldier = _base->getSoldiers()->at(_soldier);
 
-	if (!_base->getSoldiers()->at(_soldier)->getCraft()
-		|| (_base->getSoldiers()->at(_soldier)->getCraft()
-			&& _base->getSoldiers()->at(_soldier)->getCraft()->getStatus() != "STR_OUT"))
+	_edtSoldier->deFocus();
+	soldier->setName(_edtSoldier->getText());
+
+	if (!
+		(soldier->getCraft()
+			&& soldier->getCraft()->getStatus() == "STR_OUT"))
 	{
 		_game->pushState(new SoldierArmorState(
 											_game,
@@ -733,10 +751,10 @@ void SoldierInfoState::btnArmorClick(Action*)
  */
 void SoldierInfoState::btnSackClick(Action*)
 {
-	_edtSoldier->deFocus(); // kL
-	_base->getSoldiers()->at(_soldier)->setName(_edtSoldier->getText()); // kL
-
 	Soldier* soldier = _base->getSoldiers()->at(_soldier);
+
+	_edtSoldier->deFocus(); // kL
+	soldier->setName(_edtSoldier->getText()); // kL
 
 	_game->pushState(new SackSoldierState(
 										_game,

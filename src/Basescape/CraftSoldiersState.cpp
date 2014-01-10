@@ -67,6 +67,7 @@ CraftSoldiersState::CraftSoldiersState(
 	_window			= new Window(this, 320, 200, 0, 0);
 
 	_txtTitle		= new Text(300, 17, 16, 8);
+	_txtBaseLabel	= new Text(80, 9, 224, 8);
 
 	_txtAvailable	= new Text(110, 9, 16, 24);
 	_txtUsed		= new Text(110, 9, 122, 24);
@@ -87,15 +88,16 @@ CraftSoldiersState::CraftSoldiersState(
 				16);
 
 	add(_window);
-	add(_btnOk);
-	add(_btnUnload);
 	add(_txtTitle);
+	add(_txtBaseLabel);
+	add(_txtAvailable);
+	add(_txtUsed);
 	add(_txtName);
 	add(_txtRank);
 	add(_txtCraft);
-	add(_txtAvailable);
-	add(_txtUsed);
 	add(_lstSoldiers);
+	add(_btnUnload);
+	add(_btnOk);
 
 	centerAllSurfaces();
 
@@ -116,6 +118,10 @@ CraftSoldiersState::CraftSoldiersState(
 
 	_txtTitle->setColor(Palette::blockOffset(15)+6);
 	_txtTitle->setBig();
+
+	_txtBaseLabel->setColor(Palette::blockOffset(15)+6);
+	_txtBaseLabel->setAlign(ALIGN_RIGHT);
+	_txtBaseLabel->setText(_base->getName(_game->getLanguage()));
 
 	Craft *c = _base->getCrafts()->at(_craft);
 	_txtTitle->setText(tr("STR_SELECT_SQUAD_FOR_CRAFT").arg(c->getName(_game->getLanguage())));
@@ -168,32 +174,8 @@ void CraftSoldiersState::btnOkClick(Action*)
 	_game->popState();
 }
 
-// kL_begin:
-/*
-Elasticboy
-http://stackoverflow.com/questions/15333259/c-stdwstring-to-stdstring-quick-and-dirty-conversion-for-use-as-key-in
-Here is some code I use in my projects to convert string to wstring or wstring to string.
-I don't know if it is the best way to do it but it works pretty well:
-
-#include <string>
-**
-* Convert a std::string into a std::wstring
-*
-std::wstring string_to_wstring(const std::string& str)
-{
-    return std::wstring(str.begin(), str.end());
-}
-**
-* Convert a std::wstring into a std::string
-*
-std::string wstring_to_string(const std::wstring& wstr)
-{
-    return std::string(wstr.begin(), wstr.end());
-}
-Edit: As Emilio Garavaglia pointed it out, it works only if the characters are ASCII, otherwise it will loose information. */
-
 /**
- * Unloads all soldiers from current transport craft.
+ * kL. Unloads all soldiers from current transport craft.
  * NB: This relies on no two transport craft having the same name!!!!!
  * See, void CraftInfoState::edtCraftKeyPress(Action* action) etc.
  *
@@ -217,7 +199,7 @@ void CraftSoldiersState::btnUnloadClick(Action*)
 	}
 
 	// iterate over all listRows and change their stringText and lineColor
-	Uint8 color;
+	Uint8 color = Palette::blockOffset(13)+10;
 	for (unsigned
 			r = 0;
 			r < _base->getSoldiers()->size();
@@ -227,24 +209,13 @@ void CraftSoldiersState::btnUnloadClick(Action*)
 		if (craft2 == craft1) // if row pertains to this craft
 		{
 			_lstSoldiers->setCellText(r, 2, _game->getLanguage()->getString("STR_NONE_UC"));
-
-			color = Palette::blockOffset(13)+10;
 			_lstSoldiers->setRowColor(r, color);
 		}
 	}
 
-/*	std::wstringstream ss;
-	ss << _game->getLanguage()->getString("STR_SPACE_AVAILABLE") << L'\x01' << c->getSpaceAvailable();
-	_txtAvailable->setText(ss.str());
-
-	std::wstringstream ss2;
-	ss2 << _game->getLanguage()->getString("STR_SPACE_USED") << L'\x01' << c->getSpaceUsed();
-	_txtUsed->setText(ss2.str()); */
-
 	_txtAvailable->setText(tr("STR_SPACE_AVAILABLE").arg(c->getSpaceAvailable()));
 	_txtUsed->setText(tr("STR_SPACE_USED").arg(c->getSpaceUsed()));
 }
-// kL_end.
 
 /**
  * Shows the soldiers in a list.
@@ -261,10 +232,10 @@ void CraftSoldiersState::populateList()
 			++i)
 	{
 		_lstSoldiers->addRow(
-				3,
-				(*i)->getName().c_str(),
-				tr((*i)->getRankString()).c_str(),
-				(*i)->getCraftString(_game->getLanguage()).c_str());
+							3,
+							(*i)->getName().c_str(),
+							tr((*i)->getRankString()).c_str(),
+							(*i)->getCraftString(_game->getLanguage()).c_str());
 
 		Uint8 color;
 
