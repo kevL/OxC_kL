@@ -1061,6 +1061,7 @@ Surface* BattleUnit::getCache(
 		int part) const
 {
 	if (part < 0) part = 0;
+
 	*invalid = _cacheInvalid;
 
 	return _cache[part];
@@ -2077,7 +2078,7 @@ void BattleUnit::setTile(
 		Tile* tile,
 		Tile* tileBelow)
 {
-	Log(LOG_INFO) << "BattleUnit::setTile()";
+	//Log(LOG_INFO) << "BattleUnit::setTile()";
 
 	_tile = tile;
 	if (!_tile)
@@ -2094,7 +2095,7 @@ void BattleUnit::setTile(
 	{
 		_status = STATUS_FLYING;
 		_floating = true;
-		Log(LOG_INFO) << ". STATUS_WALKING, _floating = " << _floating;
+		//Log(LOG_INFO) << ". STATUS_WALKING, _floating = " << _floating;
 	}
 	else if (_status == STATUS_FLYING
 		&& !_tile->hasNoFloor(tileBelow)
@@ -2102,7 +2103,7 @@ void BattleUnit::setTile(
 	{
 		_status = STATUS_WALKING;
 		_floating = false;
-		Log(LOG_INFO) << ". STATUS_FLYING, _floating = " << _floating;
+		//Log(LOG_INFO) << ". STATUS_FLYING, _floating = " << _floating;
 	}
 /*	else if (_status == STATUS_STANDING			// kL. keeping this section in tho it was taken out
 		&& _armor->getMovementType() == MT_FLY)	// when STATUS_UNCONSCIOUS below was inserted.
@@ -2115,9 +2116,9 @@ void BattleUnit::setTile(
 	{
 		_floating = _armor->getMovementType() == MT_FLY
 					&& _tile->hasNoFloor(tileBelow);
-		Log(LOG_INFO) << ". STATUS_UNCONSCIOUS, _floating = " << _floating;
+		//Log(LOG_INFO) << ". STATUS_UNCONSCIOUS, _floating = " << _floating;
 	}
-	Log(LOG_INFO) << "BattleUnit::setTile() EXIT";
+	//Log(LOG_INFO) << "BattleUnit::setTile() EXIT";
 }
 
 /**

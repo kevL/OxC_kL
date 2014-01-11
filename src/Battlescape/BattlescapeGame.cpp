@@ -505,25 +505,32 @@ bool BattlescapeGame::kneel(BattleUnit* bu)
 	if (bu->isKneeled())
 		tu = 8;
 
-	if (bu->getType() == "SOLDIER"
-		&& !bu->isFloating() // kL_note: This prevented flying soldiers from 'kneeling' .....
-		&& checkReservedTU(bu, tu))
+	if (bu->getType() == "SOLDIER")
 	{
-		if (bu->spendTimeUnits(tu))
+		if (!bu->isFloating()) // kL_note: This prevents flying soldiers from 'kneeling' .....
 		{
-			bu->kneel(!bu->isKneeled());
-			// kneeling or standing up can reveal new terrain or units. I guess.
-			getTileEngine()->calculateFOV(bu);
-			getMap()->cacheUnits();
-			_parentState->updateSoldierInfo();
-			getTileEngine()->checkReactionFire(bu);
+			if (checkReservedTU(bu, tu))
+			{
+				if (bu->spendTimeUnits(tu))
+				{
+					bu->kneel(!bu->isKneeled());
+					// kneeling or standing up can reveal new terrain or units. I guess. -> sure can!
+					getTileEngine()->calculateFOV(bu);
 
-			return true;
+					getMap()->cacheUnits();
+					_parentState->updateSoldierInfo();
+					getTileEngine()->checkReactionFire(bu);
+
+					return true;
+				}
+				else // not enough tu
+					_parentState->warning("STR_NOT_ENOUGH_TIME_UNITS");
+			}
+			else // tu Reserved
+				_parentState->warning("STR_TIME_UNITS_RESERVED");
 		}
-		else
-		{
-			_parentState->warning("STR_NOT_ENOUGH_TIME_UNITS");
-		}
+		else // floating
+			_parentState->warning("STR_ACTION_NOT_ALLOWED");
 	}
 
 	return false;

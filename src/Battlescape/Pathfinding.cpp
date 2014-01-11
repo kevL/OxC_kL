@@ -1333,7 +1333,8 @@ bool Pathfinding::isBlocked(
  * @param here, The current tile.
  * @return, True if a unit can fall down.
  */
-// aha! (kL) This is why that sectoid stood in the air: it walked off the top of a building but there was a cyberdisc below!!! NOT.
+// aha! (kL) This is why that sectoid stood in the air: it walked off
+// the top of a building but there was a cyberdisc below!!! NOT.
 bool Pathfinding::canFallDown(Tile* here)
 {
 	if (here->getPosition().z == 0) // already on lowest maplevel
@@ -1368,13 +1369,13 @@ bool Pathfinding::canFallDown(
 			Tile* checkTile = _save->getTile(checkPos);
 			if (!canFallDown(checkTile))
 			{
-				Log(LOG_INFO) << "Pathfinding::canFallDown() ret FALSE";
+				//Log(LOG_INFO) << "Pathfinding::canFallDown() ret FALSE";
 				return false;
 			}
 		}
 	}
 
-	Log(LOG_INFO) << "Pathfinding::canFallDown() ret TRUE";
+	//Log(LOG_INFO) << "Pathfinding::canFallDown() ret TRUE";
 	return true;
 }
 

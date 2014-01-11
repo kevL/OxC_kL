@@ -2774,13 +2774,17 @@ void BattlescapeGenerator::explodePowerSources()
 
 //kL			_save->getTileEngine()->explode(pos, 180+RNG::generate(0,70), DT_HE, 10);
 
-			// ((x^3)/32000)+50, x= 0..200
-			int rand = RNG::generate(1, 200); // kL
-			int power = static_cast<int>(((pow(static_cast<double>(rand), 3)) / 32000.0) + 50.0); // kL
+			// ((x^3)/32000)+50, x= 50..300
+			int rand = RNG::generate(1, 200);														// kL
+			int power = static_cast<int>(((pow(static_cast<double>(rand), 3)) / 32000.0) + 50.0);	// kL
 
 //			power = 300; // TEST!
-			Log(LOG_INFO) << "BattlescapeGenerator::explodePowerSources() power = " << power << " TEST~!";
-			_save->getTileEngine()->explode(pos, power, DT_HE, 21); // kL
+			Log(LOG_INFO) << "BattlescapeGenerator::explodePowerSources() power = " << power;
+			_save->getTileEngine()->explode(														// kL
+										pos,
+										power,
+										DT_HE,
+										21);
 		}
 	}
 }
@@ -2804,7 +2808,7 @@ bool BattlescapeGenerator::placeUnitNearFriend(BattleUnit* unit)
 {
 	Position entryPoint = Position(-1, -1, -1);
 //kL	int tries = 100;
-	int tries = 2;		// kL: these guys were getting too cramped up.
+	int tries = 2; // kL: these guys were getting too cramped up.
 	while (entryPoint == Position(-1, -1, -1)
 		&& tries)
 	{

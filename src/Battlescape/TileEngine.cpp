@@ -1008,7 +1008,7 @@ bool TileEngine::canTargetUnit(
 	{
 		potentialUnit = tile->getUnit();
 		if (potentialUnit == 0)
-			return false; // no unit in this tile, even if it elevated and appearing in it.
+			return false; // no unit in this tile, even if it's elevated and appearing in it.
 	}
 
 	if (potentialUnit == excludeUnit)
