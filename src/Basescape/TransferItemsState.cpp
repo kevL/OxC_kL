@@ -103,7 +103,9 @@ TransferItemsState::TransferItemsState(
 
 
 	_window					= new Window(this, 320, 200, 0, 0);
-	_txtTitle				= new Text(310, 16, 5, 9);
+	_txtTitle				= new Text(300, 16, 10, 9);
+	_txtBaseFrom			= new Text(80, 9, 16, 9);
+	_txtBaseTo				= new Text(80, 9, 224, 9);
 
 	_txtItem				= new Text(128, 9, 16, 24);
 	_txtQuantity			= new Text(35, 9, 160, 24);
@@ -123,6 +125,8 @@ TransferItemsState::TransferItemsState(
 
 	add(_window);
 	add(_txtTitle);
+	add(_txtBaseFrom);
+	add(_txtBaseTo);
 	add(_txtItem);
 	add(_txtQuantity);
 	add(_txtAmountTransfer);
@@ -156,6 +160,13 @@ TransferItemsState::TransferItemsState(
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_TRANSFER"));
+
+	_txtBaseFrom->setColor(Palette::blockOffset(13)+10);
+	_txtBaseFrom->setText(_baseFrom->getName());
+
+	_txtBaseTo->setColor(Palette::blockOffset(13)+10);
+	_txtBaseTo->setAlign(ALIGN_RIGHT);
+	_txtBaseTo->setText(_baseTo->getName());
 
 	_txtItem->setColor(Palette::blockOffset(13)+10);
 	_txtItem->setText(tr("STR_ITEM"));

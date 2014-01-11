@@ -50,7 +50,6 @@ class TransferItemsState
 {
 
 private:
-
 	bool
 		_allowChangeListValuesByMouseWheel,
 		_canTransferCraftsWhileAirborne,
@@ -71,18 +70,20 @@ private:
 		* _baseFrom,
 		* _baseTo;
 	Text
-		* _txtTitle,
+		* _txtAmountDestination,
+		* _txtAmountTransfer,
+		* _txtBaseFrom,
+		* _txtBaseTo,
 		* _txtItem,
 		* _txtQuantity,
-		* _txtAmountTransfer,
-		* _txtAmountDestination;
+		* _txtTitle;
 	TextButton
 		* _btnCancel,
 		* _btnOk;
 	TextList* _lstItems;
 	Timer
-		* _timerInc,
-		* _timerDec;
+		* _timerDec,
+		* _timerInc;
 	Window* _window;
 
 	std::vector<int>
