@@ -307,13 +307,9 @@ void SavedGame::load(
 
 	_time->load(brief["time"]);
 	if (brief["name"])
-	{
 		_name = Language::utf8ToWstr(brief["name"].as<std::string>());
-	}
 	else
-	{
 		_name = Language::fsToWstr(filename);
-	}
 
 	// Get full save data
 	YAML::Node doc = file[1];
@@ -343,17 +339,25 @@ void SavedGame::load(
 	_globeLat				= doc["globeLat"].as<double>(_globeLat);
 	_globeZoom				= doc["globeZoom"].as<int>(_globeZoom);
 
-	_ids = doc["ids"].as< std::map<std::string, int> >(_ids);
+	_ids = doc["ids"].as< std::map<std::string, int>>(_ids);
 
-	for (YAML::const_iterator i = doc["countries"].begin(); i != doc["countries"].end(); ++i)
+	for (YAML::const_iterator
+			i = doc["countries"].begin();
+			i != doc["countries"].end();
+			++i)
 	{
 		std::string type = (*i)["type"].as<std::string>();
-		Country* c = new Country(rule->getCountry(type), false);
+		Country* c = new Country(
+							rule->getCountry(type),
+							false);
 		c->load(*i);
 		_countries.push_back(c);
 	}
 
-	for (YAML::const_iterator i = doc["regions"].begin(); i != doc["regions"].end(); ++i)
+	for (YAML::const_iterator
+			i = doc["regions"].begin();
+			i != doc["regions"].end();
+			++i)
 	{
 		std::string type = (*i)["type"].as<std::string>();
 		Region* r = new Region(rule->getRegion(type));
@@ -362,7 +366,10 @@ void SavedGame::load(
 	}
 
 	// Alien bases must be loaded before alien missions
-	for (YAML::const_iterator i = doc["alienBases"].begin(); i != doc["alienBases"].end(); ++i)
+	for (YAML::const_iterator
+			i = doc["alienBases"].begin();
+			i != doc["alienBases"].end();
+			++i)
 	{
 		AlienBase* b = new AlienBase();
 		b->load(*i);
@@ -370,70 +377,110 @@ void SavedGame::load(
 	}
 
 	// Missions must be loaded before UFOs.
-	const YAML::Node &missions = doc["alienMissions"];
-	for (YAML::const_iterator it = missions.begin(); it != missions.end(); ++it)
+	const YAML::Node& missions = doc["alienMissions"];
+	for (YAML::const_iterator
+			it = missions.begin();
+			it != missions.end();
+			++it)
 	{
 		std::string missionType = (*it)["type"].as<std::string>();
 		const RuleAlienMission& mRule = *rule->getAlienMission(missionType);
 		std::auto_ptr<AlienMission> mission(new AlienMission(mRule));
-		mission->load(*it, *this);
+		mission->load(
+					*it,
+					*this);
 		_activeMissions.push_back(mission.release());
 	}
 
-	for (YAML::const_iterator i = doc["ufos"].begin(); i != doc["ufos"].end(); ++i)
+	for (YAML::const_iterator
+			i = doc["ufos"].begin();
+			i != doc["ufos"].end();
+			++i)
 	{
 		std::string type = (*i)["type"].as<std::string>();
 		Ufo* u = new Ufo(rule->getUfo(type));
-		u->load(*i, *rule, *this);
+		u->load(
+				*i,
+				*rule,
+				*this);
 		_ufos.push_back(u);
 	}
 
-	for (YAML::const_iterator i = doc["waypoints"].begin(); i != doc["waypoints"].end(); ++i)
+	for (YAML::const_iterator
+			i = doc["waypoints"].begin();
+			i != doc["waypoints"].end();
+			++i)
 	{
 		Waypoint* w = new Waypoint();
 		w->load(*i);
 		_waypoints.push_back(w);
 	}
 
-	for (YAML::const_iterator i = doc["terrorSites"].begin(); i != doc["terrorSites"].end(); ++i)
+	for (YAML::const_iterator
+			i = doc["terrorSites"].begin();
+			i != doc["terrorSites"].end();
+			++i)
 	{
 		TerrorSite* t = new TerrorSite();
 		t->load(*i);
 		_terrorSites.push_back(t);
 	}
 
-	for (YAML::const_iterator i = doc["bases"].begin(); i != doc["bases"].end(); ++i)
+	for (YAML::const_iterator
+			i = doc["bases"].begin();
+			i != doc["bases"].end();
+			++i)
 	{
 		Base* b = new Base(rule);
-		b->load(*i, this, false);
+		b->load(
+				*i,
+				this,
+				false);
 		_bases.push_back(b);
 	}
 
-	for (YAML::const_iterator it = doc["discovered"].begin(); it != doc["discovered"].end(); ++it)
+	for (YAML::const_iterator
+			it = doc["discovered"].begin();
+			it != doc["discovered"].end();
+			++it)
 	{
 		std::string research = it->as<std::string>();
 		_discovered.push_back(rule->getResearch(research));
 	}
 	
 	const YAML::Node& research = doc["poppedResearch"];
-	for (YAML::const_iterator it = research.begin(); it != research.end(); ++it)
+	for (YAML::const_iterator
+			it = research.begin();
+			it != research.end();
+			++it)
 	{
 		std::string research = it->as<std::string>();
 		_poppedResearch.push_back(rule->getResearch(research));
 	}
+
 	_alienStrategy->load(rule, doc["alienStrategy"]);
 
-	for (YAML::const_iterator i = doc["deadSoldiers"].begin(); i != doc["deadSoldiers"].end(); ++i)
+	for (YAML::const_iterator
+			i = doc["deadSoldiers"].begin();
+			i != doc["deadSoldiers"].end();
+			++i)
 	{
-		Soldier *s = new Soldier(rule->getSoldier("XCOM"), rule->getArmor("STR_NONE_UC"));
-		s->load(*i, rule);
+		Soldier* s = new Soldier(
+							rule->getSoldier("XCOM"),
+							rule->getArmor("STR_NONE_UC"));
+		s->load(
+				*i,
+				rule);
 		_deadSoldiers.push_back(s);
 	}
 
 	if (const YAML::Node& battle = doc["battleGame"])
 	{
 		_battleGame = new SavedBattleGame();
-		_battleGame->load(battle, rule, this);
+		_battleGame->load(
+						battle,
+						rule,
+						this);
 	}
 }
 
@@ -492,62 +539,95 @@ void SavedGame::save(const std::string& filename) const
 	node["globeZoom"]			= _globeZoom;
 	node["ids"]					= _ids;
 
-	for (std::vector<Country*>::const_iterator i = _countries.begin(); i != _countries.end(); ++i)
+	for (std::vector<Country*>::const_iterator
+			i = _countries.begin();
+			i != _countries.end();
+			++i)
 	{
 		node["countries"].push_back((*i)->save());
 	}
 
-	for (std::vector<Region*>::const_iterator i = _regions.begin(); i != _regions.end(); ++i)
+	for (std::vector<Region*>::const_iterator
+			i = _regions.begin();
+			i != _regions.end();
+			++i)
 	{
 		node["regions"].push_back((*i)->save());
 	}
 
-	for (std::vector<Base*>::const_iterator i = _bases.begin(); i != _bases.end(); ++i)
+	for (std::vector<Base*>::const_iterator
+			i = _bases.begin();
+			i != _bases.end();
+			++i)
 	{
 		node["bases"].push_back((*i)->save());
 	}
 
-	for (std::vector<Waypoint*>::const_iterator i = _waypoints.begin(); i != _waypoints.end(); ++i)
+	for (std::vector<Waypoint*>::const_iterator
+			i = _waypoints.begin();
+			i != _waypoints.end();
+			++i)
 	{
 		node["waypoints"].push_back((*i)->save());
 	}
 
-	for (std::vector<TerrorSite*>::const_iterator i = _terrorSites.begin(); i != _terrorSites.end(); ++i)
+	for (std::vector<TerrorSite*>::const_iterator
+			i = _terrorSites.begin();
+			i != _terrorSites.end();
+			++i)
 	{
 		node["terrorSites"].push_back((*i)->save());
 	}
 
 	// Alien bases must be saved before alien missions.
-	for (std::vector<AlienBase*>::const_iterator i = _alienBases.begin(); i != _alienBases.end(); ++i)
+	for (std::vector<AlienBase*>::const_iterator
+			i = _alienBases.begin();
+			i != _alienBases.end();
+			++i)
 	{
 		node["alienBases"].push_back((*i)->save());
 	}
 
 	// Missions must be saved before UFOs, but after alien bases.
-	for (std::vector<AlienMission*>::const_iterator i = _activeMissions.begin(); i != _activeMissions.end(); ++i)
+	for (std::vector<AlienMission*>::const_iterator
+			i = _activeMissions.begin();
+			i != _activeMissions.end();
+			++i)
 	{
 		node["alienMissions"].push_back((*i)->save());
 	}
 
 	// UFOs must be after missions
-	for (std::vector<Ufo*>::const_iterator i = _ufos.begin(); i != _ufos.end(); ++i)
+	for (std::vector<Ufo*>::const_iterator
+			i = _ufos.begin();
+			i != _ufos.end();
+			++i)
 	{
 		node["ufos"].push_back((*i)->save());
 	}
 
-	for (std::vector<const RuleResearch*>::const_iterator i = _discovered.begin(); i != _discovered.end(); ++i)
+	for (std::vector<const RuleResearch*>::const_iterator
+			i = _discovered.begin();
+			i != _discovered.end();
+			++i)
 	{
 		node["discovered"].push_back((*i)->getName());
 	}
 
-	for (std::vector<const RuleResearch*>::const_iterator i = _poppedResearch.begin(); i != _poppedResearch.end(); ++i)
+	for (std::vector<const RuleResearch*>::const_iterator
+			i = _poppedResearch.begin();
+			i != _poppedResearch.end();
+			++i)
 	{
 		node["poppedResearch"].push_back((*i)->getName());
 	}
 
 	node["alienStrategy"] = _alienStrategy->save();
 
-	for (std::vector<Soldier*>::const_iterator i = _deadSoldiers.begin(); i != _deadSoldiers.end(); ++i)
+	for (std::vector<Soldier*>::const_iterator
+			i = _deadSoldiers.begin();
+			i != _deadSoldiers.end();
+			++i)
 	{
 		node["deadSoldiers"].push_back((*i)->save());
 	}

@@ -56,7 +56,6 @@ SoldierMemorialState::SoldierMemorialState(Game* game)
 		State(game)
 {
 	_window			= new Window(this, 320, 200, 0, 0);
-
 	_txtTitle		= new Text(310, 17, 5, 9);
 
 	_txtRecruited	= new Text(110, 9, 16, 25);
@@ -80,18 +79,18 @@ SoldierMemorialState::SoldierMemorialState(Game* game)
 	_game->getResourcePack()->getMusic("GMWIN")->play(); // kL
 
 	add(_window);
-	add(_btnOk);
 	add(_txtTitle);
+	add(_txtRecruited);
+	add(_txtLost);
 	add(_txtName);
 	add(_txtRank);
 	add(_txtDate);
-	add(_txtRecruited);
-	add(_txtLost);
 	add(_lstSoldiers);
+	add(_btnOk);
 
 	centerAllSurfaces();
 
-	// Set up objects
+
 	_window->setColor(Palette::blockOffset(13)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK02.SCR"));
 
@@ -149,10 +148,15 @@ SoldierMemorialState::SoldierMemorialState(Game* game)
 	{
 		SoldierDeath* death = (*i)->getDeath();
 
-		std::wstringstream saveDay, saveMonth, saveYear;
+		std::wstringstream
+			saveDay,
+			saveMonth,
+			saveYear;
+
 		saveDay << death->getTime()->getDayString(_game->getLanguage());
 		saveMonth << tr(death->getTime()->getMonthString());
 		saveYear << death->getTime()->getYear();
+
 		_lstSoldiers->addRow(
 							5,
 							(*i)->getName().c_str(),

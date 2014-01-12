@@ -16,8 +16,11 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "GameTime.h"
+
 #include "../Engine/Language.h"
+
 
 namespace OpenXcom
 {
@@ -32,7 +35,22 @@ namespace OpenXcom
  * @param minute Starting minute.
  * @param second Starting second.
  */
-GameTime::GameTime(int weekday, int day, int month, int year, int hour, int minute, int second) : _second(second), _minute(minute), _hour(hour), _weekday(weekday), _day(day), _month(month), _year(year)
+GameTime::GameTime(
+		int weekday,
+		int day,
+		int month,
+		int year,
+		int hour,
+		int minute,
+		int second)
+	:
+		_second(second),
+		_minute(minute),
+		_hour(hour),
+		_weekday(weekday),
+		_day(day),
+		_month(month),
+		_year(year)
 {
 }
 
@@ -47,15 +65,15 @@ GameTime::~GameTime()
  * Loads the time from a YAML file.
  * @param node YAML node.
  */
-void GameTime::load(const YAML::Node &node)
+void GameTime::load(const YAML::Node& node)
 {
-	_second = node["second"].as<int>(_second);
-	_minute = node["minute"].as<int>(_minute);
-	_hour = node["hour"].as<int>(_hour);
-	_weekday = node["weekday"].as<int>(_weekday);
-	_day = node["day"].as<int>(_day);
-	_month = node["month"].as<int>(_month);
-	_year = node["year"].as<int>(_year);
+	_second		= node["second"].as<int>(_second);
+	_minute		= node["minute"].as<int>(_minute);
+	_hour		= node["hour"].as<int>(_hour);
+	_weekday	= node["weekday"].as<int>(_weekday);
+	_day		= node["day"].as<int>(_day);
+	_month		= node["month"].as<int>(_month);
+	_year		= node["year"].as<int>(_year);
 }
 
 /**
@@ -65,13 +83,15 @@ void GameTime::load(const YAML::Node &node)
 YAML::Node GameTime::save() const
 {
 	YAML::Node node;
-	node["second"] = _second;
-	node["minute"] = _minute;
-	node["hour"] = _hour;
-	node["weekday"] = _weekday;
-	node["day"] = _day;
-	node["month"] = _month;
-	node["year"] = _year;
+
+	node["second"]	= _second;
+	node["minute"]	= _minute;
+	node["hour"]	= _hour;
+	node["weekday"]	= _weekday;
+	node["day"]		= _day;
+	node["month"]	= _month;
+	node["year"]	= _year;
+
 	return node;
 }
 
@@ -79,54 +99,61 @@ YAML::Node GameTime::save() const
  * Advances the ingame time by 5 seconds, automatically correcting
  * the other components when necessary and sending out a trigger when
  * a certain time span has elapsed for time-dependent events.
- * @return Time span trigger.
+ * @return, Time span trigger.
  */
 TimeTrigger GameTime::advance()
 {
-	TimeTrigger trigger = TIME_5SEC;
-	int monthDays[] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
-	// Leap year
-	if ((_year % 4 == 0) && !(_year % 100 == 0 && _year % 400 != 0))
-		monthDays[1]++;
-
 	_second += 5;
+	TimeTrigger trigger = TIME_5SEC;
+
+	int monthDays[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+	if (_year %4 == 0 // leap year
+		&& !(_year %100 == 0 && _year %400 != 0))
+	{
+		monthDays[1]++;
+	}
+
 
 	if (_second >= 60)
 	{
-		_minute++;
 		_second = 0;
-		if (_minute % 10 == 0)
-		{
+
+		_minute++;
+		if (_minute %10 == 0)
 			trigger = TIME_10MIN;
-		}
-		if (_minute % 30 == 0)
-		{
+
+		if (_minute %30 == 0)
 			trigger = TIME_30MIN;
-		}
 	}
+
 	if (_minute >= 60)
 	{
-		_hour++;
 		_minute = 0;
+
+		_hour++;
 		trigger = TIME_1HOUR;
 	}
+
 	if (_hour >= 24)
 	{
-		_day++;
-		_weekday++;
 		_hour = 0;
+
+		_weekday++;
+		_day++;
 		trigger = TIME_1DAY;
 	}
+
 	if (_weekday > 7)
-	{
 		_weekday = 1;
-	}
+
 	if (_day > monthDays[_month - 1])
 	{
 		_day = 1;
+
 		_month++;
 		trigger = TIME_1MONTH;
 	}
+
 	if (_month > 12)
 	{
 		_month = 1;
@@ -179,7 +206,17 @@ int GameTime::getWeekday() const
  */
 std::string GameTime::getWeekdayString() const
 {
-	std::string weekdays[] = {"STR_SUNDAY", "STR_MONDAY", "STR_TUESDAY", "STR_WEDNESDAY", "STR_THURSDAY", "STR_FRIDAY", "STR_SATURDAY"};
+	std::string weekdays[] =
+	{
+		"STR_SUNDAY",
+		"STR_MONDAY",
+		"STR_TUESDAY",
+		"STR_WEDNESDAY",
+		"STR_THURSDAY",
+		"STR_FRIDAY",
+		"STR_SATURDAY"
+	};
+
 	return weekdays[_weekday - 1];
 }
 
@@ -197,27 +234,31 @@ int GameTime::getDay() const
  * the cardinal operator for the current ingame day.
  * @return Day string ID.
  */
-std::wstring GameTime::getDayString(Language *lang) const
+std::wstring GameTime::getDayString(Language* lang) const
 {
 	std::string s;
+
 	switch (_day)
 	{
-	case 1:
-	case 21:
-	case 31:
-		s = "STR_DATE_FIRST";
+		case 1:
+		case 21:
+		case 31:
+			s = "STR_DATE_FIRST";
 		break;
-	case 2:
-	case 22:
-		s = "STR_DATE_SECOND";
+		case 2:
+		case 22:
+			s = "STR_DATE_SECOND";
 		break;
-	case 3:
-	case 23:
-		s = "STR_DATE_THIRD";
+		case 3:
+		case 23:
+			s = "STR_DATE_THIRD";
 		break;
-	default:
-		s = "STR_DATE_FOURTH";
+
+		default:
+			s = "STR_DATE_FOURTH";
+		break;
 	}
+
 	return lang->getString(s).arg(_day);
 }
 
@@ -237,7 +278,22 @@ int GameTime::getMonth() const
  */
 std::string GameTime::getMonthString() const
 {
-	std::string months[] = {"STR_JAN", "STR_FEB", "STR_MAR", "STR_APR", "STR_MAY", "STR_JUN", "STR_JUL", "STR_AUG", "STR_SEP", "STR_OCT", "STR_NOV", "STR_DEC"};
+	std::string months[] =
+	{
+		"STR_JAN",
+		"STR_FEB",
+		"STR_MAR",
+		"STR_APR",
+		"STR_MAY",
+		"STR_JUN",
+		"STR_JUL",
+		"STR_AUG",
+		"STR_SEP",
+		"STR_OCT",
+		"STR_NOV",
+		"STR_DEC"
+	};
+
 	return months[_month - 1];
 }
 
@@ -258,7 +314,7 @@ int GameTime::getYear() const
  */
 double GameTime::getDaylight() const
 {
-	return (double)((((((_hour + 18) % 24) * 60) + _minute) * 60) + _second) / (60 * 60 * 24);
+	return static_cast<double>(((((((_hour + 18) %24) * 60) + _minute) * 60) + _second) / (60 * 60 * 24));
 }
 
 }

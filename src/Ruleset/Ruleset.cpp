@@ -88,7 +88,10 @@ Ruleset::Ruleset()
 	std::string path = CrossPlatform::getDataFolder("SoldierName/"); // Check in which data dir the folder is stored
 
 	std::vector<std::string> names = CrossPlatform::getFolderContents(path, "nam"); // Add soldier names
-	for (std::vector<std::string>::iterator i = names.begin(); i != names.end(); ++i)
+	for (std::vector<std::string>::iterator
+			i = names.begin();
+			i != names.end();
+			++i)
 	{
 		std::string file = CrossPlatform::noExt(*i);
 		SoldierNamePool* pool = new SoldierNamePool();
@@ -213,12 +216,12 @@ Ruleset::~Ruleset()
 		delete i->second;
 	}
 
-	for (std::vector< std::pair<std::string, ExtraSprites*>>::const_iterator i = _extraSprites.begin (); i != _extraSprites.end (); ++i)
+	for (std::vector<std::pair<std::string, ExtraSprites*>>::const_iterator i = _extraSprites.begin (); i != _extraSprites.end (); ++i)
 	{
 		delete i->second;
 	}
 
-	for (std::vector< std::pair<std::string, ExtraSounds*>>::const_iterator i = _extraSounds.begin (); i != _extraSounds.end (); ++i)
+	for (std::vector<std::pair<std::string, ExtraSounds*>>::const_iterator i = _extraSounds.begin (); i != _extraSounds.end (); ++i)
 	{
 		delete i->second;
 	}
@@ -437,7 +440,9 @@ void Ruleset::loadFile(const std::string& filename)
 		}
 
 		_ufopaediaListOrder += 100;
-		rule->load(*i, _ufopaediaListOrder);
+		rule->load(
+				*i,
+				_ufopaediaListOrder);
 	}
 
  //	_startingBase->load(i->second, 0);
@@ -544,7 +549,10 @@ void Ruleset::loadFile(const std::string& filename)
 void Ruleset::loadFiles(const std::string& dirname)
 {
 	std::vector<std::string> names = CrossPlatform::getFolderContents(dirname, "rul");
-	for (std::vector<std::string>::iterator i = names.begin(); i != names.end(); ++i)
+	for (std::vector<std::string>::iterator
+			i = names.begin();
+			i != names.end();
+			++i)
 	{
 		loadFile(dirname + *i);
 	}
@@ -554,7 +562,11 @@ void Ruleset::loadFiles(const std::string& dirname)
  *
  */
 template <typename T>
-T* Ruleset::loadRule(const YAML::Node& node, std::map<std::string, T*>* map, std::vector<std::string>* index, const std::string& key)
+T* Ruleset::loadRule(
+		const YAML::Node& node,
+		std::map<std::string, T*>* map,
+		std::vector<std::string>* index,
+		const std::string& key)
 {
 	T* rule = 0;
 	if (node[key])
@@ -586,7 +598,10 @@ T* Ruleset::loadRule(const YAML::Node& node, std::map<std::string, T*>* map, std
 
 		if (index != 0)
 		{
-			std::vector<std::string>::iterator idx = std::find(index->begin(), index->end(), type);
+			std::vector<std::string>::iterator idx = std::find(
+															index->begin(),
+															index->end(),
+															type);
 			if (idx != index->end())
 			{
 				index->erase(idx);
@@ -606,16 +621,23 @@ SavedGame* Ruleset::newSave() const
 	SavedGame* save = new SavedGame();
 
 	// Add countries
-	for (std::vector<std::string>::const_iterator i = _countriesIndex.begin(); i != _countriesIndex.end(); ++i)
+	for (std::vector<std::string>::const_iterator
+			i = _countriesIndex.begin();
+			i != _countriesIndex.end();
+			++i)
 	{
 		save->getCountries()->push_back(new Country(getCountry(*i)));
 	}
 
 	// Adjust funding to total $6M
 //kL	int missing = ((_initialFunding - save->getCountryFunding()/1000) / (int)save->getCountries()->size()) * 1000;
-	for (std::vector<Country*>::iterator i = save->getCountries()->begin(); i != save->getCountries()->end(); ++i)
+	for (std::vector<Country*>::iterator
+			i = save->getCountries()->begin();
+			i != save->getCountries()->end();
+			++i)
 	{
-		int funding = (*i)->getFunding().back(); //kL + missing;
+//kL		int funding = (*i)->getFunding().back() + missing;
+		int funding = (*i)->getFunding().back(); // kL
 		if (funding < 0)
 		{
 			funding = (*i)->getFunding().back();
@@ -627,26 +649,42 @@ SavedGame* Ruleset::newSave() const
 	save->setFunds(save->getCountryFunding());
 
 	// Add regions
-	for (std::vector<std::string>::const_iterator i = _regionsIndex.begin(); i != _regionsIndex.end(); ++i)
+	for (std::vector<std::string>::const_iterator
+			i = _regionsIndex.begin();
+			i != _regionsIndex.end();
+			++i)
 	{
 		save->getRegions()->push_back(new Region(getRegion(*i)));
 	}
 
 	// Set up starting base
 	Base* base = new Base(this);
-	base->load(_startingBase, save, true);
+	base->load(
+			_startingBase,
+			save,
+			true);
 
 	// Correct IDs
-	for (std::vector<Craft*>::const_iterator i = base->getCrafts()->begin(); i != base->getCrafts()->end(); ++i)
+	for (std::vector<Craft*>::const_iterator
+			i = base->getCrafts()->begin();
+			i != base->getCrafts()->end();
+			++i)
 	{
 		save->getId((*i)->getRules()->getType());
 	}
 
 	// Generate soldiers
 	int soldiers = _startingBase["randomSoldiers"].as<int>(0);
-	for (int i = 0; i < soldiers; ++i)
+	for (int
+			i = 0;
+			i < soldiers;
+			++i)
 	{
-		Soldier* soldier = new Soldier(getSoldier("XCOM"), getArmor("STR_NONE_UC"), &_names, save->getId("STR_SOLDIER"));
+		Soldier* soldier = new Soldier(
+									getSoldier("XCOM"),
+									getArmor("STR_NONE_UC"),
+									&_names,
+									save->getId("STR_SOLDIER"));
 		soldier->setCraft(base->getCrafts()->front());
 		base->getSoldiers()->push_back(soldier);
 	}
@@ -675,7 +713,10 @@ const std::vector<SoldierNamePool*>& Ruleset::getPools() const
 RuleCountry* Ruleset::getCountry(const std::string& id) const
 {
 	std::map<std::string, RuleCountry*>::const_iterator i = _countries.find(id);
-	if (_countries.end() != i) return i->second; else return 0;
+	if (_countries.end() != i)
+		return i->second;
+	else
+		return 0;
 }
 
 /**
@@ -695,7 +736,10 @@ const std::vector<std::string>& Ruleset::getCountriesList() const
 RuleRegion* Ruleset::getRegion(const std::string& id) const
 {
 	std::map<std::string, RuleRegion*>::const_iterator i = _regions.find(id);
-	if (_regions.end() != i) return i->second; else return 0;
+	if (_regions.end() != i)
+		return i->second;
+	else
+		return 0;
 }
 
 /**
@@ -716,7 +760,10 @@ const std::vector<std::string>& Ruleset::getRegionsList() const
 RuleBaseFacility* Ruleset::getBaseFacility(const std::string& id) const
 {
 	std::map<std::string, RuleBaseFacility*>::const_iterator i = _facilities.find(id);
-	if (_facilities.end() != i) return i->second; else return 0;
+	if (_facilities.end() != i)
+		return i->second;
+	else
+		return 0;
 }
 
 /**
@@ -737,7 +784,10 @@ const std::vector<std::string>& Ruleset::getBaseFacilitiesList() const
 RuleCraft* Ruleset::getCraft(const std::string& id) const
 {
 	std::map<std::string, RuleCraft*>::const_iterator i = _crafts.find(id);
-	if (_crafts.end() != i) return i->second; else return 0;
+	if (_crafts.end() != i)
+		return i->second;
+	else
+		return 0;
 }
 
 /**
@@ -758,7 +808,10 @@ const std::vector<std::string>& Ruleset::getCraftsList() const
 RuleCraftWeapon* Ruleset::getCraftWeapon(const std::string& id) const
 {
 	std::map<std::string, RuleCraftWeapon*>::const_iterator i = _craftWeapons.find(id);
-	if (_craftWeapons.end() != i) return i->second; else return 0;
+	if (_craftWeapons.end() != i)
+		return i->second;
+	else
+		return 0;
 }
 
 /**
@@ -802,7 +855,10 @@ const std::vector<std::string>& Ruleset::getItemsList() const
 RuleUfo* Ruleset::getUfo(const std::string& id) const
 {
 	std::map<std::string, RuleUfo*>::const_iterator i = _ufos.find(id);
-	if (_ufos.end() != i) return i->second; else return 0;
+	if (_ufos.end() != i)
+		return i->second;
+	else
+		return 0;
 }
 
 /**
@@ -1166,8 +1222,10 @@ const std::vector<std::string>& Ruleset::getAlienMissionList() const
 }
 
 
-//kL #define CITY_EPSILON 0.00000000000001 // compensate for slight coordinate change
-#define CITY_EPSILON 0.0000000001 // kL
+
+//kL #define CITY_EPSILON 0.00000000000001 // compensate for slight coordinate change. 1e-14
+#define CITY_EPSILON 0.0000000001 // kL. 1e-10
+
 
 /**
  * @brief Match a city based on coordinates.
@@ -1183,7 +1241,9 @@ private:
 
 	public:
 		/// Remembers the coordinates.
-		EqualCoordinates(double lon, double lat)
+		EqualCoordinates(
+				double lon,
+				double lat)
 			:
 				_lon(lon),
 				_lat(lat)
@@ -1207,7 +1267,9 @@ private:
  * @param lat, The latitude.
  * @return A pointer to the city information, or 0 if no city was found.
  */
-const City* Ruleset::locateCity(double lon, double lat) const
+const City* Ruleset::locateCity(
+		double lon,
+		double lat) const
 {
 	for (std::map<std::string, RuleRegion*>::const_iterator
 			rr = _regions.begin();

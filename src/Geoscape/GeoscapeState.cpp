@@ -709,8 +709,8 @@ void GeoscapeState::think()
 		determineAlienMissions(true);
 
 		_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds()
-																	- _game->getSavedGame()->getBaseMaintenance()
-																	- _game->getSavedGame()->getBases()->front()->getPersonnelMaintenance());
+									- _game->getSavedGame()->getBaseMaintenance()
+									- _game->getSavedGame()->getBases()->front()->getPersonnelMaintenance());
 	}
 
 	if (_popups.empty()
@@ -762,20 +762,22 @@ void GeoscapeState::timeDisplay()
 	sec = sec / 30 * 5;
 	if (sec == 2) sec = 0;
 
-	std::wstringstream ss;
-//	ss << std::setfill(L'0') << std::setw(2) << _game->getSavedGame()->getTime()->getSecond();
-	ss << sec;
-	_txtSec->setText(ss.str());
+	std::wstringstream
+		ss1, // sec
+		ss2, // min
+		ss3, // hr
+		ss4, // dy
+		ss5; // yr.
+//	ss1 << std::setfill(L'0') << std::setw(2) << _game->getSavedGame()->getTime()->getSecond();
+	ss1 << sec;
+	_txtSec->setText(ss1.str());
 
-	std::wstringstream ss2;
 	ss2 << std::setfill(L'0') << std::setw(2) << _game->getSavedGame()->getTime()->getMinute();
 	_txtMin->setText(ss2.str());
 
-	std::wstringstream ss3;
 	ss3 << _game->getSavedGame()->getTime()->getHour();
 	_txtHour->setText(ss3.str());
 
-	std::wstringstream ss4;
 	ss4 << _game->getSavedGame()->getTime()->getDayString(_game->getLanguage());
 	_txtDay->setText(ss4.str());
 
@@ -783,7 +785,6 @@ void GeoscapeState::timeDisplay()
 
 	_txtMonth->setText(tr(_game->getSavedGame()->getTime()->getMonthString()));
 
-	std::wstringstream ss5;
 	ss5 << _game->getSavedGame()->getTime()->getYear();
 	_txtYear->setText(ss5.str());
 }

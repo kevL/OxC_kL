@@ -16,21 +16,34 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_GAMETIME_H
 #define OPENXCOM_GAMETIME_H
 
 #include <string>
+
 #include <yaml-cpp/yaml.h>
+
 
 namespace OpenXcom
 {
 
 class Language;
 
+
 /**
  * Enumerator for time periods.
  */
-enum TimeTrigger { TIME_5SEC, TIME_10MIN, TIME_30MIN, TIME_1HOUR, TIME_1DAY, TIME_1MONTH };
+enum TimeTrigger
+{
+	TIME_5SEC,	// 0
+	TIME_10MIN,	// 1
+	TIME_30MIN,	// 2
+	TIME_1HOUR,	// 3
+	TIME_1DAY,	// 4
+	TIME_1MONTH	// 5
+};
+
 
 /**
  * Stores the current ingame time/date according to GMT.
@@ -39,41 +52,65 @@ enum TimeTrigger { TIME_5SEC, TIME_10MIN, TIME_30MIN, TIME_1HOUR, TIME_1DAY, TIM
  */
 class GameTime
 {
+
 private:
-	int _second, _minute, _hour, _weekday, _day, _month, _year;
-public:
-	/// Creates a new ingame time at a certain point.
-	GameTime(int weekday, int day, int month, int year, int hour, int minute, int second);
-	/// Cleans up the ingame time.
-	~GameTime();
-	/// Loads the time from YAML.
-	void load(const YAML::Node& node);
-	/// Saves the time to YAML.
-	YAML::Node save() const;
-	/// Advances the time by 5 seconds.
-	TimeTrigger advance();
-	/// Gets the ingame second.
-	int getSecond() const;
-	/// Gets the ingame minute.
-	int getMinute() const;
-	/// Gets the ingame hour.
-	int getHour() const;
-	/// Gets the ingame weekday.
-	int getWeekday() const;
-	// Gets a string version of the ingame weekday.
-	std::string getWeekdayString() const;
-	/// Gets the ingame day.
-	int getDay() const;
-	// Gets a string version of the ingame day.
-	std::wstring getDayString(Language *lang) const;
-	/// Gets the ingame month.
-	int getMonth() const;
-	// Gets a string version of the ingame month.
-	std::string getMonthString() const;
-	/// Gets the ingame year.
-	int getYear() const;
-	/// Gets the position of the daylight according to the ingame time.
-	double getDaylight() const;
+	int
+		_second,
+		_minute,
+		_hour,
+		_weekday,
+		_day,
+		_month,
+		_year;
+
+
+	public:
+		/// Creates a new ingame time at a certain point.
+		GameTime(
+				int weekday,
+				int day,
+				int month,
+				int year,
+				int hour,
+				int minute,
+				int second);
+		/// Cleans up the ingame time.
+		~GameTime();
+
+		/// Loads the time from YAML.
+		void load(const YAML::Node& node);
+		/// Saves the time to YAML.
+		YAML::Node save() const;
+
+		/// Advances the time by 5 seconds.
+		TimeTrigger advance();
+
+		/// Gets the ingame second.
+		int getSecond() const;
+		/// Gets the ingame minute.
+		int getMinute() const;
+		/// Gets the ingame hour.
+		int getHour() const;
+
+		/// Gets the ingame weekday.
+		int getWeekday() const;
+		// Gets a string version of the ingame weekday.
+		std::string getWeekdayString() const;
+
+		/// Gets the ingame day.
+		int getDay() const;
+		// Gets a string version of the ingame day.
+		std::wstring getDayString(Language* lang) const;
+
+		/// Gets the ingame month.
+		int getMonth() const;
+		// Gets a string version of the ingame month.
+		std::string getMonthString() const;
+
+		/// Gets the ingame year.
+		int getYear() const;
+		/// Gets the position of the daylight according to the ingame time.
+		double getDaylight() const;
 };
 
 }

@@ -50,6 +50,7 @@ private:
 		void load(const YAML::Node& node);
 		/// Saves the death to YAML.
 		YAML::Node save() const;
+
 		/// Gets the death time.
 		const GameTime* getTime() const;
 		/// Sets the death time.

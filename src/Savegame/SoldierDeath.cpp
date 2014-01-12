@@ -72,7 +72,7 @@ const GameTime* SoldierDeath::getTime() const
 }
 
 /**
- * Changes the time of death of this soldier.
+ * Sets the time of death of this soldier.
  * @param time Pointer to the time.
  */
 void SoldierDeath::setTime(GameTime* time)
