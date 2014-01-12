@@ -777,9 +777,33 @@ void DebriefingState::prepareDebriefing()
 			j != battle->getUnits()->end();
 			++j)
 	{
+/*		if ((*j)->getSpawnUnit() != "") // kL_note: why'd i move this down below????
+		{
+			type = (*j)->getSpawnUnit();
+		} */
+
 		if (!(*j)->getTile())
 		{
-			(*j)->setTile(battle->getTile((*j)->getPosition())); // this, why
+//			(*j)->setTile(battle->getTile((*j)->getPosition())); // this, why: Wb's new code follows
+			Position pos = (*j)->getPosition();
+			if (pos == Position(-1, -1, -1))
+			{
+				for (std::vector<BattleItem*>::iterator k = battle->getItems()->begin(); k != battle->getItems()->end(); ++k)
+				{
+					if ((*k)->getUnit() && (*k)->getUnit() == *j)
+					{
+						if ((*k)->getOwner())
+						{
+							pos = (*k)->getOwner()->getPosition();
+						}
+						else if ((*k)->getTile())
+						{
+							pos = (*k)->getTile()->getPosition();
+						}
+					}
+				}
+			}
+			(*j)->setTile(battle->getTile(pos));
 		}
 
 		UnitFaction origFaction = (*j)->getOriginalFaction();
