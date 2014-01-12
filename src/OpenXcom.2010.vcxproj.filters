@@ -805,6 +805,7 @@
     <ClCompile Include="Basescape\SoldierMemorialState.cpp">
       <Filter>Basescape</Filter>
     </ClCompile>
+    <ClCompile Include="Savegame\SoldierDead.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -1626,6 +1627,7 @@
     <ClInclude Include="Interface\Slider.h">
       <Filter>Interface</Filter>
     </ClInclude>
+    <ClInclude Include="Savegame\SoldierDead.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Geoscape">
