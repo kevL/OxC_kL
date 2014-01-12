@@ -196,7 +196,6 @@ MonthlyReportState::MonthlyReportState(
 	std::wstringstream ss3;
 	if (_fundingDiff > 0) ss3 << '+';
 	ss3 << Text::formatFunding(_fundingDiff);
-
 	_txtChange->setColor(Palette::blockOffset(15)-1);
 	_txtChange->setSecondaryColor(Palette::blockOffset(8)+10);
 	_txtChange->setText(tr("STR_FUNDING_CHANGE").arg(ss3.str()));
@@ -221,13 +220,18 @@ MonthlyReportState::MonthlyReportState(
 	{
 		satisFactionString = tr("STR_YOU_HAVE_NOT_SUCCEEDED");
 
-		_pactList.erase(_pactList.begin(), _pactList.end());
-		_happyList.erase(_happyList.begin(), _happyList.end());
-		_sadList.erase(_sadList.begin(), _sadList.end());
+		_pactList.erase(
+					_pactList.begin(),
+					_pactList.end());
+		_happyList.erase(
+					_happyList.begin(),
+					_happyList.end());
+		_sadList.erase(
+					_sadList.begin(),
+					_sadList.end());
 
 		_gameOver = true; // you lose.
 	}
-
 	ss4 << satisFactionString;
 
 	bool resetWarning = true;
@@ -239,9 +243,15 @@ MonthlyReportState::MonthlyReportState(
 			{
 				ss4 << "\n\n" << tr("STR_YOU_HAVE_NOT_SUCCEEDED");
 
-				_pactList.erase(_pactList.begin(), _pactList.end());
-				_happyList.erase(_happyList.begin(), _happyList.end());
-				_sadList.erase(_sadList.begin(), _sadList.end());
+				_pactList.erase(
+							_pactList.begin(),
+							_pactList.end());
+				_happyList.erase(
+							_happyList.begin(),
+							_happyList.end());
+				_sadList.erase(
+							_sadList.begin(),
+							_sadList.end());
 
 				_gameOver = true; // you lose.
 			}
@@ -305,13 +315,17 @@ void MonthlyReportState::calculateChanges()
 {
 	// initialize all our variables.
 	_lastMonthsRating = 0;
-	int xcomSubTotal = 0;
-	int xcomTotal = 0;
-	int alienTotal = 0;
-	int monthOffset = _game->getSavedGame()->getFundsList().size() - 2;
 
-	int lastMonthOffset = _game->getSavedGame()->getFundsList().size() - 3;
-	if (lastMonthOffset < 0) lastMonthOffset += 2;
+	int
+		xcomSubTotal	= 0,
+		xcomTotal		= 0,
+		alienTotal		= 0,
+
+		monthOffset		= _game->getSavedGame()->getFundsList().size() - 2,
+		lastMonthOffset	= _game->getSavedGame()->getFundsList().size() - 3;
+
+	if (lastMonthOffset < 0)
+		lastMonthOffset += 2;
 
 	// update activity meters, calculate a total score based
 	// on regional activity and gather last month's score
@@ -323,8 +337,7 @@ void MonthlyReportState::calculateChanges()
 		(*k)->newMonth();
 
 		if ((*k)->getActivityXcom().size() > 2)
-			_lastMonthsRating +=
-							(*k)->getActivityXcom().at(lastMonthOffset)
+			_lastMonthsRating += (*k)->getActivityXcom().at(lastMonthOffset)
 								- (*k)->getActivityAlien().at(lastMonthOffset);
 
 		xcomSubTotal += (*k)->getActivityXcom().at(monthOffset);
@@ -355,12 +368,13 @@ void MonthlyReportState::calculateChanges()
 		}
 
 		// determine satisfaction level, sign pacts, adjust funding and update activity meters,
-		(*k)->newMonth(xcomTotal, alienTotal);
+		(*k)->newMonth(
+					xcomTotal,
+					alienTotal);
 
 		// and after they've made their decisions, calculate the difference,
 		// and add them to the appropriate lists.
-		_fundingDiff +=
-					(*k)->getFunding().back()
+		_fundingDiff += (*k)->getFunding().back()
 						- (*k)->getFunding().at((*k)->getFunding().size()
 						- 2);
 

@@ -63,7 +63,9 @@ Base::Base(const Ruleset* rule)
 		_scientists(0),
 		_engineers(0),
 		_inBattlescape(false),
-		_retaliationTarget(false)
+		_retaliationTarget(false),
+		_cashIncome(0),	// kL
+		_cashSpent(0)	// kL
 {
 	_items = new ItemContainer();
 }
@@ -163,9 +165,12 @@ void Base::load(
 		bool newBattleGame)
 {
 	Target::load(node);
+
 	_name = Language::utf8ToWstr(node["name"].as<std::string>(""));
 
-	if (!newGame || !Options::getBool("customInitialBase") || newBattleGame)
+	if (!newGame
+		|| !Options::getBool("customInitialBase")
+		|| newBattleGame)
 	{
 		for (YAML::const_iterator
 				i = node["facilities"].begin();
@@ -173,7 +178,9 @@ void Base::load(
 				++i)
 		{
 			std::string type = (*i)["type"].as<std::string>();
-			BaseFacility* f = new BaseFacility(_rule->getBaseFacility(type), this);
+			BaseFacility* f = new BaseFacility(
+											_rule->getBaseFacility(type),
+											this);
 			f->load(*i);
 
 			_facilities.push_back(f);
@@ -186,8 +193,13 @@ void Base::load(
 			++i)
 	{
 		std::string type = (*i)["type"].as<std::string>();
-		Craft* c = new Craft(_rule->getCraft(type), this);
-		c->load(*i, _rule, save);		
+		Craft* c = new Craft(
+						_rule->getCraft(type),
+						this);
+		c->load(
+				*i,
+				_rule,
+				save);		
 
 		_crafts.push_back(c);
 	}
@@ -239,7 +251,8 @@ void Base::load(
 		if (std::find(
 					_rule->getItemsList().begin(),
 					_rule->getItemsList().end(),
-					i->first) == _rule->getItemsList().end())
+					i->first)
+				== _rule->getItemsList().end())
 		{
 			_items->getContents()->erase(i++);
 		}
@@ -252,6 +265,8 @@ void Base::load(
 	_scientists		= node["scientists"].as<int>(_scientists);
 	_engineers		= node["engineers"].as<int>(_engineers);
 	_inBattlescape	= node["inBattlescape"].as<bool>(_inBattlescape);
+	_cashIncome		= node["cashIncome"].as<int>(_cashIncome);	// kL
+	_cashSpent		= node["cashSpent"].as<int>(_cashSpent);	// kL
 
 	for (YAML::const_iterator
 			i = node["transfers"].begin();
@@ -260,7 +275,10 @@ void Base::load(
 	{
 		int hours = (*i)["hours"].as<int>();
 		Transfer* t = new Transfer(hours);
-		t->load(*i, this, _rule);
+		t->load(
+				*i,
+				this,
+				_rule);
 
 		_transfers.push_back(t);
 	}
@@ -283,7 +301,9 @@ void Base::load(
 			++i)
 	{
 		std::string item = (*i)["item"].as<std::string>();
-		Production* p = new Production(_rule->getManufacture(item), 0);
+		Production* p = new Production(
+									_rule->getManufacture(item),
+									0);
 		p->load(*i);
 
 		_productions.push_back(p);
@@ -330,6 +350,8 @@ YAML::Node Base::save() const
 	node["scientists"]		= _scientists;
 	node["engineers"]		= _engineers;
 	node["inBattlescape"]	= _inBattlescape;
+	node["cashIncome"]		= _cashIncome;	// kL
+	node["cashSpent"]		= _cashSpent;	// kL
 
 	for (std::vector<Transfer*>::const_iterator
 			i = _transfers.begin();
@@ -498,7 +520,6 @@ uint8_t Base::detect(Target* target) const
 	}
 	else
 	{
-//		int chance = 0;
 		float chance = 0;
 
 		for (std::vector<BaseFacility*>::const_iterator
@@ -513,7 +534,6 @@ uint8_t Base::detect(Target* target) const
 
 				if (targetDistance < radarRange)
 				{
-//					chance += (*f)->getRules()->getRadarChance();
 					chance += static_cast<float>((*f)->getRules()->getRadarChance());
 					Log(LOG_INFO) << ". . radarRange = " << (int)radarRange;
 					Log(LOG_INFO) << ". . . chance(base) = " << (int)chance;
@@ -525,7 +545,6 @@ uint8_t Base::detect(Target* target) const
 			}
 		}
 
-//		if (chance == 0)
 		if (AreSame(chance, 0.f))
 			return 0;
 		else
@@ -638,7 +657,7 @@ int Base::getAvailableSoldiers(bool combatReady) const
  */
 int Base::getTotalSoldiers() const
 {
-	size_t total = _soldiers.size();
+	int total = static_cast<int>(_soldiers.size());
 
 	for (std::vector<Transfer*>::const_iterator
 			i = _transfers.begin();
@@ -770,13 +789,14 @@ int Base::getAvailableQuarters() const
  */
 int Base::getUsedStores() const
 {
-	double total = _items->getTotalSize(_rule);
+	float total = static_cast<float>(_items->getTotalSize(_rule));
+
 	for (std::vector<Craft*>::const_iterator
 			i = _crafts.begin();
 			i != _crafts.end();
 			++i)
 	{
-		total += (*i)->getItems()->getTotalSize(_rule);
+		total += static_cast<float>((*i)->getItems()->getTotalSize(_rule));
 
 		for (std::vector<Vehicle*>::const_iterator
 				j = (*i)->getVehicles()->begin();
@@ -794,11 +814,11 @@ int Base::getUsedStores() const
 	{
 		if ((*i)->getType() == TRANSFER_ITEM)
 		{
-			total += (*i)->getQuantity() * _rule->getItem((*i)->getItems())->getSize();
+			total += static_cast<float>((*i)->getQuantity()) * _rule->getItem((*i)->getItems())->getSize();
 		}
 	}
 
-	return (int)floor(total);
+	return static_cast<int>(floor(total));
 }
 
 /**
@@ -912,7 +932,7 @@ int Base::getAvailableWorkshops() const
  */
 int Base::getUsedHangars() const
 {
-	size_t total = _crafts.size();
+	int total = static_cast<int>(_crafts.size());
 
 	for (std::vector<Transfer*>::const_iterator
 			i = _transfers.begin();
@@ -983,7 +1003,7 @@ int Base::getFreeWorkshops() const
  * Return psilab space not in use
  * @return psilab space not in use
 */
-int Base::getFreePsiLabs () const
+int Base::getFreePsiLabs() const
 {
 	return getAvailablePsiLabs() - getUsedPsiLabs();
 }
@@ -1051,7 +1071,7 @@ int Base::getDefenseValue() const
 
 /**
  * Returns the total amount of short range detection facilities in the base.
- * @return Defense value.
+ * @return Short Range Detection value.
  */
 int Base::getShortRangeDetection() const
 {
@@ -1064,7 +1084,7 @@ int Base::getShortRangeDetection() const
 	{
 		if ((*i)->getBuildTime() == 0
 			&& (*i)->getRules()->getRadarRange() == 1500)
-				// kL_note: that should be based off a string value.
+				// kL_note: that should be based off a string or Ruleset value.
 		{
 			total++;
 		}
@@ -1075,7 +1095,7 @@ int Base::getShortRangeDetection() const
 
 /**
  * Returns the total amount of long range detection facilities in the base.
- * @return Defense value.
+ * @return Long Range Detection value.
  */
 int Base::getLongRangeDetection() const
 {
@@ -1088,7 +1108,7 @@ int Base::getLongRangeDetection() const
 	{
 		if ((*i)->getBuildTime() == 0
 			&& (*i)->getRules()->getRadarRange() > 1500)
-				// kL_note: that should be based off a string value.
+				// kL_note: that should be based off a string or Ruleset value.
 		{
 			total++;
 		}
@@ -1145,9 +1165,9 @@ int Base::getCraftMaintenance() const
  */
 int Base::getPersonnelMaintenance() const
 {
-	size_t total = 0;
+	int total = 0;
 
-	total += _soldiers.size() * _rule->getSoldierCost();
+	total += static_cast<int>(_soldiers.size()) * _rule->getSoldierCost();
 	total += getTotalEngineers() * _rule->getEngineerCost();
 	total += getTotalScientists() * _rule->getScientistCost();
 
@@ -1194,9 +1214,9 @@ void Base::removeProduction(Production* prod)
 	_engineers += prod->getAssignedEngineers();
 
 	std::vector<Production*>::iterator i = std::find(
-													_productions.begin(),
-													_productions.end(),
-													prod);
+												_productions.begin(),
+												_productions.end(),
+												prod);
 	if (i != _productions.end())
 	{
 		_productions.erase(i);
@@ -2010,9 +2030,9 @@ bool Base::isInBattlescape() const
  * Changes the base's battlescape status.
  * @param inbattle True if it's in battle, False otherwise.
  */
-void Base::setInBattlescape(bool inbattle)
+void Base::setInBattlescape(bool inBattle)
 {
-	_inBattlescape = inbattle;
+	_inBattlescape = inBattle;
 }
 
 /**
@@ -2281,6 +2301,7 @@ std::vector<Vehicle*>* Base::getVehicles()
 void Base::checkModuleConnections()
 {
 	BaseFacility* connectionMap[BASE_SIZE][BASE_SIZE];
+
 	for (int
 			x = 0;
 			x != BASE_SIZE;
@@ -2342,10 +2363,7 @@ void Base::checkModuleConnections()
 
 			destroyFacility(i);
 		}
-		else
-		{
-			++i;
-		}
+		else ++i;
 	}
 }
 
@@ -2529,10 +2547,7 @@ void Base::destroyFacility(std::vector<BaseFacility*>::iterator& facility)
 
 					break;
 				}
-				else
-				{
-					++i;
-				}
+				else ++i;
 			}
 
 			if (remove
@@ -2639,7 +2654,7 @@ void Base::destroyFacility(std::vector<BaseFacility*>::iterator& facility)
 		// we won't destroy the items physically AT the base,
 		// but any items in transit will end up at the dead letter office.
 		if (!_transfers.empty()
-			&& getAvailableStores() - (getUsedStores() - (*facility)->getRules()->getStorage()) < 0)
+			&& getAvailableStores() - getUsedStores() - (*facility)->getRules()->getStorage() < 0)
 		{
 			for (std::vector<Transfer*>::iterator
 					i = _transfers.begin();
@@ -2652,10 +2667,7 @@ void Base::destroyFacility(std::vector<BaseFacility*>::iterator& facility)
 
 					i = _transfers.erase(i);
 				}
-				else
-				{
-					++i;
-				}
+				else ++i;
 			}
 		}
 	}
@@ -2663,7 +2675,7 @@ void Base::destroyFacility(std::vector<BaseFacility*>::iterator& facility)
 	{
 		// as above, we won't actually fire people, but we'll block any new ones coming in.
 		if (!_transfers.empty()
-			&& getAvailableQuarters() - (getUsedQuarters() - (*facility)->getRules()->getPersonnel()) < 0)
+			&& getAvailableQuarters() - getUsedQuarters() - (*facility)->getRules()->getPersonnel() < 0)
 		{
 			for (std::vector<Transfer*>::iterator
 					i = _transfers.begin();
@@ -2696,10 +2708,7 @@ void Base::destroyFacility(std::vector<BaseFacility*>::iterator& facility)
 
 					i = _transfers.erase(i);
 				}
-				else
-				{
-					++i;
-				}
+				else ++i;
 			}
 		}
 	}
@@ -2707,5 +2716,43 @@ void Base::destroyFacility(std::vector<BaseFacility*>::iterator& facility)
 	delete *facility;
 	facility = _facilities.erase(facility);
 }
+
+// kL_begin: Base, for GraphsState monthly expenditures etc.
+/**
+ * Increase the Base's cash income amount by 'cash'.
+ * @param (int)cash, The amount to increase _cashIncome by
+ */
+void Base::setCashIncome(int cash)
+{
+	_cashIncome += cash;
+}
+
+/**
+ * Get the Base's current cash income value.
+ * @return int, The Base's current _cashIncome amount
+ */
+int Base::getCashIncome() const
+{
+	return _cashIncome;
+}
+
+/**
+ * Increase the Base's cash spent amount by 'cash'.
+ * @param (int)cash, The amount to increase _cashSpent by
+ */
+void Base::setCashSpent(int cash)
+{
+	_cashSpent += cash;
+}
+
+/**
+ * Get the Base's current cash spent value.
+ * @return int, The Base's current _cashSpent amount
+ */
+int Base::getCashSpent() const
+{
+	return _cashSpent;
+}
+// kL_end.
 
 }

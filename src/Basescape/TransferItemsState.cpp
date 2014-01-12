@@ -672,6 +672,7 @@ void TransferItemsState::completeTransfer()
 {
 	int time = static_cast<int>(floor(6.0 + _distance / 10.0));
 	_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds() - _total);
+	_baseFrom->setCashSpent(_total); // kL
 
 	for (unsigned int
 			i = 0;

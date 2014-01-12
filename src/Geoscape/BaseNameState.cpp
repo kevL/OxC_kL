@@ -18,18 +18,23 @@
  */
 
 #include "BaseNameState.h"
-#include "../Engine/Game.h"
-#include "../Engine/Action.h"
-#include "../Resource/ResourcePack.h"
-#include "../Engine/Language.h"
-#include "../Engine/Palette.h"
-#include "../Interface/Window.h"
-#include "../Interface/Text.h"
-#include "../Interface/TextEdit.h"
-#include "../Interface/TextButton.h"
-#include "../Savegame/Base.h"
+
 #include "../Basescape/PlaceLiftState.h"
+
+#include "../Engine/Action.h"
+#include "../Engine/Game.h"
+#include "../Engine/Language.h"
 #include "../Engine/Options.h"
+#include "../Engine/Palette.h"
+
+#include "../Interface/Text.h"
+#include "../Interface/TextButton.h"
+#include "../Interface/TextEdit.h"
+#include "../Interface/Window.h"
+
+#include "../Resource/ResourcePack.h"
+
+#include "../Savegame/Base.h"
 
 
 namespace OpenXcom
@@ -42,7 +47,11 @@ namespace OpenXcom
  * @param globe Pointer to the Geoscape globe.
  * @param first Is this the first base in the game?
  */
-BaseNameState::BaseNameState(Game* game, Base* base, Globe* globe, bool first)
+BaseNameState::BaseNameState(
+		Game* game,
+		Base* base,
+		Globe* globe,
+		bool first)
 	:
 		State(game),
 		_base(base),
@@ -59,12 +68,15 @@ BaseNameState::BaseNameState(Game* game, Base* base, Globe* globe, bool first)
 	_btnOk		= new TextButton(162, 16, 47, 118);
 
 
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
+	_game->setPalette(
+				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)),
+				Palette::backPos,
+				16);
 
 	add(_window);
-	add(_btnOk);
 	add(_txtTitle);
 	add(_edtName);
+	add(_btnOk);
 
 	centerAllSurfaces();
 
@@ -76,10 +88,11 @@ BaseNameState::BaseNameState(Game* game, Base* base, Globe* globe, bool first)
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& BaseNameState::btnOkClick);
 //	_btnOk->onKeyboardPress((ActionHandler)& BaseNameState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
-	_btnOk->onKeyboardPress((ActionHandler)& BaseNameState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& BaseNameState::btnOkClick,
+					(SDLKey)Options::getInt("keyCancel"));
 
-	// something must be in the name before it is acceptable
-	_btnOk->setVisible(false);
+	_btnOk->setVisible(false); // something must be in the name before it is acceptable
 
 	_txtTitle->setColor(Palette::blockOffset(8)+5);
 	_txtTitle->setAlign(ALIGN_CENTER);
@@ -105,8 +118,10 @@ BaseNameState::~BaseNameState()
 void BaseNameState::nameBase()
 {
 	_base->setName(_edtName->getText());
+
 	_game->popState();
 	_game->popState();
+
 
 	if (!_first)
 	{
@@ -116,7 +131,11 @@ void BaseNameState::nameBase()
 	if (!_first
 		|| Options::getBool("customInitialBase"))
 	{
-		_game->pushState(new PlaceLiftState(_game, _base, _globe, _first));
+		_game->pushState(new PlaceLiftState(
+										_game,
+										_base,
+										_globe,
+										_first));
 	}
 }
 

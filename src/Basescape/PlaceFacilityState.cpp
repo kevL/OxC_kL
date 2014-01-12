@@ -16,23 +16,33 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "PlaceFacilityState.h"
+
+#include <limits>
 #include <sstream>
+
+#include "BaseView.h"
+
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
+#include "../Engine/Options.h"
 #include "../Engine/Palette.h"
+
+#include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
-#include "../Interface/Text.h"
-#include "BaseView.h"
+
+#include "../Menu/ErrorMessageState.h"
+
+#include "../Resource/ResourcePack.h"
+
+#include "../Ruleset/RuleBaseFacility.h"
+
 #include "../Savegame/Base.h"
 #include "../Savegame/BaseFacility.h"
-#include "../Ruleset/RuleBaseFacility.h"
 #include "../Savegame/SavedGame.h"
-#include "../Menu/ErrorMessageState.h"
-#include "../Engine/Options.h"
-#include <limits>
+
 
 namespace OpenXcom
 {
@@ -43,28 +53,38 @@ namespace OpenXcom
  * @param base Pointer to the base to get info from.
  * @param rule Pointer to the facility ruleset to build.
  */
-PlaceFacilityState::PlaceFacilityState(Game *game, Base *base, RuleBaseFacility *rule) : State(game), _base(base), _rule(rule)
+PlaceFacilityState::PlaceFacilityState(
+		Game* game,
+		Base* base,
+		RuleBaseFacility* rule)
+	:
+		State(game),
+		_base(base),
+		_rule(rule)
 {
 	_screen = false;
 
-	// Create objects
-	_window = new Window(this, 128, 160, 192, 40);
-	_view = new BaseView(192, 192, 0, 8);
-	_btnCancel = new TextButton(112, 16, 200, 176);
-	_txtFacility = new Text(110, 9, 202, 50);
-	_txtCost = new Text(110, 9, 202, 62);
-	_numCost = new Text(110, 17, 202, 70);
-	_txtTime = new Text(110, 9, 202, 90);
-	_numTime = new Text(110, 17, 202, 98);
-	_txtMaintenance = new Text(110, 9, 202, 118);
-	_numMaintenance = new Text(110, 17, 202, 126);
 
-	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
+	_window			= new Window(this, 128, 160, 192, 40);
+
+	_view			= new BaseView(192, 192, 0, 8);
+	_txtFacility	= new Text(110, 9, 202, 50);
+	_txtCost		= new Text(110, 9, 202, 62);
+	_numCost		= new Text(110, 17, 202, 70);
+	_txtTime		= new Text(110, 9, 202, 90);
+	_numTime		= new Text(110, 17, 202, 98);
+	_txtMaintenance	= new Text(110, 9, 202, 118);
+	_numMaintenance	= new Text(110, 17, 202, 126);
+	_btnCancel		= new TextButton(112, 16, 200, 176);
+
+
+	_game->setPalette(
+				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)),
+				Palette::backPos,
+				16);
 
 	add(_window);
 	add(_view);
-	add(_btnCancel);
 	add(_txtFacility);
 	add(_txtCost);
 	add(_numCost);
@@ -72,22 +92,25 @@ PlaceFacilityState::PlaceFacilityState(Game *game, Base *base, RuleBaseFacility 
 	add(_numTime);
 	add(_txtMaintenance);
 	add(_numMaintenance);
+	add(_btnCancel);
 
 	centerAllSurfaces();
 
-	// Set up objects
+
 	_window->setColor(Palette::blockOffset(13)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
 	_view->setTexture(_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK"));
 	_view->setBase(_base);
 	_view->setSelectable(rule->getSize());
-	_view->onMouseClick((ActionHandler)&PlaceFacilityState::viewClick);
+	_view->onMouseClick((ActionHandler)& PlaceFacilityState::viewClick);
 
 	_btnCancel->setColor(Palette::blockOffset(13)+10);
 	_btnCancel->setText(tr("STR_CANCEL"));
-	_btnCancel->onMouseClick((ActionHandler)&PlaceFacilityState::btnCancelClick);
-	_btnCancel->onKeyboardPress((ActionHandler)&PlaceFacilityState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnCancel->onMouseClick((ActionHandler)& PlaceFacilityState::btnCancelClick);
+	_btnCancel->onKeyboardPress(
+					(ActionHandler)& PlaceFacilityState::btnCancelClick,
+					(SDLKey)Options::getInt("keyCancel"));
 
 	_txtFacility->setColor(Palette::blockOffset(13)+10);
 	_txtFacility->setText(tr(_rule->getType()));
@@ -119,14 +142,13 @@ PlaceFacilityState::PlaceFacilityState(Game *game, Base *base, RuleBaseFacility 
  */
 PlaceFacilityState::~PlaceFacilityState()
 {
-
 }
 
 /**
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void PlaceFacilityState::btnCancelClick(Action *)
+void PlaceFacilityState::btnCancelClick(Action*)
 {
 	_game->popState();
 }
@@ -135,31 +157,52 @@ void PlaceFacilityState::btnCancelClick(Action *)
  * Processes clicking on facilities.
  * @param action Pointer to an action.
  */
-void PlaceFacilityState::viewClick(Action *)
+void PlaceFacilityState::viewClick(Action*)
 {
 	if (!_view->isPlaceable(_rule))
 	{
 		_game->popState();
-		_game->pushState(new ErrorMessageState(_game, "STR_CANNOT_BUILD_HERE", Palette::blockOffset(15)+1, "BACK01.SCR", 6));
+		_game->pushState(new ErrorMessageState(
+											_game,
+											"STR_CANNOT_BUILD_HERE",
+											Palette::blockOffset(15)+1,
+											"BACK01.SCR",
+											6));
 	}
 	else if (_game->getSavedGame()->getFunds() < _rule->getBuildCost())
 	{
 		_game->popState();
-		_game->pushState(new ErrorMessageState(_game, "STR_NOT_ENOUGH_MONEY", Palette::blockOffset(15)+1, "BACK01.SCR", 6));
+		_game->pushState(new ErrorMessageState(
+											_game,
+											"STR_NOT_ENOUGH_MONEY",
+											Palette::blockOffset(15)+1,
+											"BACK01.SCR",
+											6));
 	}
 	else
 	{
-		BaseFacility *fac = new BaseFacility(_rule, _base);
+		BaseFacility* fac = new BaseFacility(
+										_rule,
+										_base);
+
 		fac->setX(_view->getGridX());
 		fac->setY(_view->getGridY());
 		fac->setBuildTime(_rule->getBuildTime());
+
 		_base->getFacilities()->push_back(fac);
+
 		if (Options::getBool("allowBuildingQueue"))
 		{
-			if (_view->isQueuedBuilding(_rule)) fac->setBuildTime(std::numeric_limits<int>::max());
+			if (_view->isQueuedBuilding(_rule))
+				fac->setBuildTime(std::numeric_limits<int>::max());
+
 			_view->reCalcQueuedBuildings();
 		}
-		_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds() - _rule->getBuildCost());
+
+		int cost = _rule->getBuildCost();
+		_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds() - cost);
+		_base->setCashSpent(cost); // kL
+
 		_game->popState();
 	}
 }

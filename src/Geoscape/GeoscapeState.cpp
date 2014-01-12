@@ -2216,7 +2216,9 @@ void GenerateSupplyMission::operator()(const AlienBase* base) const
 		const RuleAlienMission& rule = *_ruleset.getAlienMission("STR_ALIEN_SUPPLY");
 
 		AlienMission* mission = new AlienMission(rule);
-		mission->setRegion(_save.locateRegion(*base)->getRules()->getType(), _ruleset);
+		mission->setRegion(
+					_save.locateRegion(*base)->getRules()->getType(),
+					_ruleset);
 		mission->setId(_save.getId("ALIEN_MISSIONS"));
 		mission->setRace(base->getAlienRace());
 		mission->setAlienBase(base);
@@ -2486,7 +2488,9 @@ void GeoscapeState::time1Day()
 				k != _game->getSavedGame()->getRegions()->end();
 				++k)
 		{
-			if ((*k)->getRules()->insideRegion((*b)->getLongitude(), (*b)->getLatitude()))
+			if ((*k)->getRules()->insideRegion(
+											(*b)->getLongitude(),
+											(*b)->getLatitude()))
 			{
 				// kL_begin:
 				int pts = static_cast<int>(_game->getSavedGame()->getDifficulty()) + 1;
@@ -2505,7 +2509,9 @@ void GeoscapeState::time1Day()
 				k != _game->getSavedGame()->getCountries()->end();
 				++k)
 		{
-			if ((*k)->getRules()->insideCountry((*b)->getLongitude(), (*b)->getLatitude()))
+			if ((*k)->getRules()->insideCountry(
+											(*b)->getLongitude(),
+											(*b)->getLatitude()))
 			{
 				// kL_begin:
 				int pts = static_cast<int>(_game->getSavedGame()->getDifficulty()) + 1;
@@ -2576,16 +2582,22 @@ void GeoscapeState::time1Month()
 					i != _game->getSavedGame()->getRegions()->end();
 					++i)
 			{
-				if ((*i)->getRules()->insideRegion((*b)->getLongitude(), (*b)->getLatitude()))
+				if ((*i)->getRules()->insideRegion(
+												(*b)->getLongitude(),
+												(*b)->getLatitude()))
 				{
-					if (!_game->getSavedGame()->getAlienMission((*i)->getRules()->getType(), "STR_ALIEN_RETALIATION"))
+					if (!_game->getSavedGame()->getAlienMission(
+															(*i)->getRules()->getType(),
+															"STR_ALIEN_RETALIATION"))
 					{
 						const RuleAlienMission& rule = *_game->getRuleset()->getAlienMission("STR_ALIEN_RETALIATION");
 						AlienMission* mission = new AlienMission(rule);
 						mission->setId(_game->getSavedGame()->getId("ALIEN_MISSIONS"));
-						mission->setRegion((*i)->getRules()->getType(), *_game->getRuleset());
+						mission->setRegion(
+										(*i)->getRules()->getType(),
+										*_game->getRuleset());
 
-						int race = RNG::generate(0, _game->getRuleset()->getAlienRacesList().size() - 2); // -2 to avoid "MIXED" race
+						int race = RNG::generate(0, static_cast<int>(_game->getRuleset()->getAlienRacesList().size()) - 2); // -2 to avoid "MIXED" race
 						mission->setRace(_game->getRuleset()->getAlienRacesList().at(race));
 						mission->start();
 						_game->getSavedGame()->getAlienMissions().push_back(mission);
@@ -2616,9 +2628,9 @@ void GeoscapeState::time1Month()
 		}
 	}
 
-	// Handle funding
 	timerReset();
 
+	// Handle funding
 	_game->getSavedGame()->monthlyFunding();
 	popup(new MonthlyReportState(
 								_game,

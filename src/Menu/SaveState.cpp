@@ -82,7 +82,11 @@ SaveState::SaveState(
 		OptionsOrigin origin,
 		bool showMsg)
 	:
-		SavedGameState(game, origin, 1, showMsg)
+		SavedGameState(
+			game,
+			origin,
+			1,
+			showMsg)
 {
 	game->getSavedGame()->setName(L"autosave");
 
@@ -191,7 +195,9 @@ void SaveState::edtSaveKeyPress(Action* action)
 		updateStatus("STR_SAVING_GAME");
 		_game->getSavedGame()->setName(_edtSave->getText());
 
-		std::string oldFilename, newFilename;
+		std::string
+			oldFilename,
+			newFilename;
 #ifdef _WIN32
 		newFilename = CrossPlatform::sanitizeFilename(Language::wstrToCp(_edtSave->getText()));
 #else
@@ -221,7 +227,9 @@ void SaveState::edtSaveKeyPress(Action* action)
 
 			std::string oldPath = Options::getUserFolder() + oldFilename + ".sav";
 			std::string newPath = Options::getUserFolder() + newFilename + ".sav";
-			rename(oldPath.c_str(), newPath.c_str());
+			rename(
+				oldPath.c_str(),
+				newPath.c_str());
 		}
 
 		_game->popState();

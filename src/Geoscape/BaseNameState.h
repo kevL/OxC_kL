@@ -21,6 +21,7 @@
 #define OPENXCOM_BASENAMESTATE_H
 
 #include "../Engine/State.h"
+
 #include "Globe.h"
 
 
@@ -28,11 +29,12 @@ namespace OpenXcom
 {
 
 class Base;
-class Window;
-class Text;
-class TextEdit;
-class TextButton;
 class Globe;
+class Text;
+class TextButton;
+class TextEdit;
+class Window;
+
 
 /**
  * Window used to input a name for a new base.
@@ -43,18 +45,25 @@ class BaseNameState
 	:
 		public State
 {
+
 private:
+	bool _first;
+
 	Base* _base;
 	Globe* _globe;
-	Window* _window;
 	Text* _txtTitle;
-	TextEdit* _edtName;
 	TextButton* _btnOk;
-	bool _first;
+	TextEdit* _edtName;
+	Window* _window;
+
 
 	public:
 		/// Creates the Base Name state.
-		BaseNameState(Game* game, Base* base, Globe* globe, bool first);
+		BaseNameState(
+				Game* game,
+				Base* base,
+				Globe* globe,
+				bool first);
 		/// Cleans up the Base Name state.
 		~BaseNameState();
 

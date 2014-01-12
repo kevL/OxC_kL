@@ -76,60 +76,48 @@ private:
 		_detail,
 		_radarLines,
 		_warned;
-	double
-		_globeLat,
-		_globeLon;
 	int
 		_globeZoom,
 		_monthsPassed;
+	double
+		_globeLat,
+		_globeLon;
 
-	GameDifficulty
-		_difficulty;
+	GameDifficulty _difficulty;
 
-	AlienStrategy
-		* _alienStrategy;
-	GameTime
-		* _time;
-	SavedBattleGame
-		* _battleGame;
+	AlienStrategy* _alienStrategy;
+	GameTime* _time;
+	SavedBattleGame* _battleGame;
 
-	std::wstring
-		_name;
+	std::wstring _name;
 	std::string
 		_graphRegionToggles,
 		_graphCountryToggles,
 		_graphFinanceToggles;
 
-	std::map<std::string, int>
-		_ids;
+	std::map<std::string, int> _ids;
 
 	std::vector<int>
+		_expenditure,	// kL
 		_funds,
+		_income,		// kL
 		_maintenance,
 		_researchScores;
 
-	std::vector<AlienBase*>
-		_alienBases;
-	std::vector<AlienMission*>
-		_activeMissions;
-	std::vector<Base*>
-		_bases;
-	std::vector<Country*>
-		_countries;
-	std::vector<Region*>
-		_regions;
+	std::vector<AlienBase*> _alienBases;
+	std::vector<AlienMission*> _activeMissions;
+	std::vector<Base*> _bases;
+	std::vector<Country*> _countries;
+	std::vector<Region*> _regions;
 	std::vector<const RuleResearch*>
 		_discovered,
 		_poppedResearch;
-	std::vector<Soldier*>
-		_deadSoldiers;
-	std::vector<TerrorSite*>
-		_terrorSites;
-	std::vector<Ufo*>
-		_ufos;
-	std::vector<Waypoint*>
-		_waypoints;
+	std::vector<Soldier*> _deadSoldiers;
+	std::vector<TerrorSite*> _terrorSites;
+	std::vector<Ufo*> _ufos;
+	std::vector<Waypoint*> _waypoints;
 
+	///
 	void getDependableResearchBasic(
 			std::vector<RuleResearch*>& dependables,
 			const RuleResearch* research,
@@ -150,7 +138,9 @@ private:
 				std::vector<std::wstring>* details);
 
 		/// Loads a saved game from YAML.
-		void load(const std::string& filename, Ruleset* rule);
+		void load(
+				const std::string& filename,
+				Ruleset* rule);
 		/// Saves a saved game to YAML.
 		void save(const std::string& filename) const;
 
@@ -163,13 +153,6 @@ private:
 		GameDifficulty getDifficulty() const;
 		/// Sets the game difficulty.
 		void setDifficulty(GameDifficulty difficulty);
-
-		/// Gets the current funds.
-		int getFunds() const;
-		/// Gets the list of funds from previous months.
-		const std::vector<int>& getFundsList() const;
-		/// Sets new funds.
-		void setFunds(int funds);
 
 		/// Gets the current globe longitude.
 		double getGlobeLongitude() const;
@@ -187,6 +170,20 @@ private:
 
 		/// Handles monthly funding.
 		void monthlyFunding();
+
+		/// Gets the current funds.
+		int getFunds() const;
+		/// Gets the list of funds from previous months.
+		const std::vector<int>& getFundsList() const;
+		/// Sets new funds.
+		void setFunds(int funds);
+
+		/// return a list of maintenance costs
+		std::vector<int> getMaintenances();
+		/// kL. Return the list of monthly income values.
+		std::vector<int> getIncomeList(); // kL
+		/// kL. Return the list of monthly expenditure values.
+		std::vector<int> getExpenditureList(); // kL
 
 		/// Gets the current game time.
 		GameTime* getTime() const;
@@ -223,7 +220,9 @@ private:
 		void setBattleGame(SavedBattleGame* battleGame);
 
 		/// Add a finished ResearchProject
-		void addFinishedResearch(const RuleResearch* r, const Ruleset* ruleset = NULL);
+		void addFinishedResearch(
+				const RuleResearch* r,
+				const Ruleset* ruleset = NULL);
 		/// Get the list of already discovered research projects
 		const std::vector<const RuleResearch*>& getDiscoveredResearch() const;
 		/// Get the list of ResearchProject which can be researched in a Base
@@ -275,8 +274,6 @@ private:
 		/// Gets debug mode.
 		bool getDebugMode() const;
 
-		/// return a list of maintenance costs
-		std::vector<int> getMaintenances();
 		/// sets the research score for the month
 		void addResearchScore(int score);
 		/// gets the list of research scores

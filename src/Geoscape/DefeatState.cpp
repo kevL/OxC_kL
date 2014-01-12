@@ -16,18 +16,26 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "DefeatState.h"
+
 #include <sstream>
+
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
-#include "../Engine/Language.h"
-#include "../Engine/Palette.h"
-#include "../Interface/Text.h"
 #include "../Engine/InteractiveSurface.h"
-#include "../Savegame/SavedGame.h"
-#include "../Menu/MainMenuState.h"
+#include "../Engine/Language.h"
 #include "../Engine/Music.h"
+#include "../Engine/Palette.h"
 #include "../Engine/Timer.h"
+
+#include "../Interface/Text.h"
+
+#include "../Menu/MainMenuState.h"
+
+#include "../Resource/ResourcePack.h"
+
+#include "../Savegame/SavedGame.h"
+
 
 namespace OpenXcom
 {
@@ -36,22 +44,29 @@ namespace OpenXcom
  * Initializes all the elements in the Defeat screen.
  * @param game Pointer to the core game.
  */
-DefeatState::DefeatState(Game *game) : State(game), _screenNumber(0)
+DefeatState::DefeatState(Game* game)
+	:
+		State(game),
+		_screenNumber(0)
 {
-	// Create objects
 	_screen = new InteractiveSurface(320, 200, 0, 0);
+
 	_txtText.push_back(new Text(190, 104, 0, 0));
 	_txtText.push_back(new Text(200, 34, 32, 0));
+
 	_timer = new Timer(20000);
 
 	add(_screen);
 
-	// Set up objects
-	_screen->onMouseClick((ActionHandler)&DefeatState::windowClick);
+
+	_screen->onMouseClick((ActionHandler)& DefeatState::windowClick);
 	
 	_game->getResourcePack()->getMusic("GMLOSE")->play();
 
-	for (int text = 0; text != 2; ++text)
+	for (int
+			text = 0;
+			text != 2;
+			++text)
 	{
 		std::ostringstream ss2;
 		ss2 << "STR_GAME_OVER_" << text+1;
@@ -63,7 +78,7 @@ DefeatState::DefeatState(Game *game) : State(game), _screenNumber(0)
 
 	centerAllSurfaces();
 
-	_timer->onTimer((StateHandler)&DefeatState::windowClick);
+	_timer->onTimer((StateHandler)& DefeatState::windowClick);
 	_timer->start();
 }
 
@@ -75,11 +90,17 @@ DefeatState::~DefeatState()
 	delete _timer;
 }
 
+/**
+ *
+ */
 void DefeatState::init()
 {
 	nextScreen();
 }
 
+/**
+ *
+ */
 void DefeatState::think()
 {
 	_timer->think(this, 0);
@@ -89,7 +110,7 @@ void DefeatState::think()
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void DefeatState::windowClick(Action *)
+void DefeatState::windowClick(Action*)
 {
 	if(_screenNumber == 2)
 	{
@@ -101,9 +122,13 @@ void DefeatState::windowClick(Action *)
 		nextScreen();
 }
 
+/**
+ *
+ */
 void DefeatState::nextScreen()
 {
 	++_screenNumber;
+
 	std::ostringstream ss;
 	ss << "PICT" << _screenNumber+3 << ".LBM";
 	_game->setPalette(_game->getResourcePack()->getSurface(ss.str())->getPalette());
@@ -112,6 +137,7 @@ void DefeatState::nextScreen()
 	_txtText[_screenNumber-1]->setPalette(_game->getResourcePack()->getSurface(ss.str())->getPalette());
 	_txtText[_screenNumber-1]->setColor(Palette::blockOffset(15)+9);
 	_txtText[_screenNumber-1]->setVisible(true);
+
 	if (_screenNumber > 1)
 		_txtText[_screenNumber-2]->setVisible(false);
 }

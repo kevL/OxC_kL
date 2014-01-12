@@ -304,8 +304,12 @@ void ManufactureInfoState::buildUi()
 	_btnOk->setColor(Palette::blockOffset(15)+6);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& ManufactureInfoState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)& ManufactureInfoState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
-	_btnOk->onKeyboardPress((ActionHandler)& ManufactureInfoState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& ManufactureInfoState::btnOkClick,
+					(SDLKey)Options::getInt("keyOk"));
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& ManufactureInfoState::btnOkClick,
+					(SDLKey)Options::getInt("keyCancel"));
 
 	_btnStop->setColor(Palette::blockOffset(15)+6);
 	_btnStop->setText(tr("STR_STOP_PRODUCTION"));
@@ -351,7 +355,9 @@ void ManufactureInfoState::btnOkClick(Action*)
 {
 	if (_item)
 	{
-		_production->startItem(_base, _game->getSavedGame());
+		_production->startItem(
+							_base,
+							_game->getSavedGame());
 	}
 
 	exitState();

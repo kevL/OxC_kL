@@ -60,6 +60,8 @@ private:
 		_inBattlescape,
 		_retaliationTarget;
 	int
+		_cashSpent,		// kL
+		_cashIncome,	// kL
 		_engineers,
 		_scientists;
 
@@ -208,7 +210,7 @@ private:
 		/// Gets the total amount of used Containment Space.
 		int getUsedContainment() const;
 		/// Sets the craft's battlescape status.
-		void setInBattlescape(bool inbattle);
+		void setInBattlescape(bool inBattle);
 		/// Gets if the craft is in battlescape.
 		bool isInBattlescape() const;
 		/// Mark this base for alien retaliation.
@@ -236,6 +238,17 @@ private:
 				BaseFacility* (&facilities)[BASE_SIZE][BASE_SIZE]) const;
 		/// Destroy a facility and deal with the side effects.
 		void destroyFacility(std::vector<BaseFacility*>::iterator& facility);
+
+		// kL_begin: Base, for GraphsState monthly expenditures etc.
+		/// Increase (or decrease) the base's total income amount.
+		void setCashIncome(int cash);
+		/// Get the base's total income amount.
+		int getCashIncome() const;
+		/// Increase (or decrease) the base's total spent amount.
+		void setCashSpent(int cash);
+		/// Get the base's total spent amount.
+		int getCashSpent() const;
+		// kL_end.
 };
 
 }

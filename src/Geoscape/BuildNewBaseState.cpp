@@ -56,7 +56,11 @@ namespace OpenXcom
  * @param globe Pointer to the Geoscape globe.
  * @param first Is this the first base in the game?
  */
-BuildNewBaseState::BuildNewBaseState(Game* game, Base* base, Globe* globe, bool first)
+BuildNewBaseState::BuildNewBaseState(
+		Game* game,
+		Base* base,
+		Globe* globe,
+		bool first)
 	:
 		State(game),
 		_base(base),
@@ -152,7 +156,9 @@ BuildNewBaseState::BuildNewBaseState(Game* game, Base* base, Globe* globe, bool 
 	_btnCancel->setColor(Palette::blockOffset(15)-1);
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)& BuildNewBaseState::btnCancelClick);
-	_btnCancel->onKeyboardPress((ActionHandler)& BuildNewBaseState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnCancel->onKeyboardPress(
+					(ActionHandler)& BuildNewBaseState::btnCancelClick,
+					(SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setText(tr("STR_SELECT_SITE_FOR_NEW_BASE"));
@@ -226,9 +232,17 @@ void BuildNewBaseState::globeHover(Action* action)
 
 void BuildNewBaseState::hoverRedraw(void)
 {
-	double lon, lat;
-	_globe->cartToPolar(_mousex, _mousey, &lon, &lat);
-	_globe->setNewBaseHoverPos(lon, lat);
+	double
+		lon,
+		lat;
+	_globe->cartToPolar(
+					_mousex,
+					_mousey,
+					&lon,
+					&lat);
+	_globe->setNewBaseHoverPos(
+							lon,
+							lat);
 
 	_globe->setNewBaseHover();
 	
@@ -249,12 +263,18 @@ void BuildNewBaseState::hoverRedraw(void)
  */
 void BuildNewBaseState::globeClick(Action* action)
 {
-	double lon, lat;
+	double
+		lon,
+		lat;
 	int
 		mouseX = static_cast<int>(floor(action->getAbsoluteXMouse())),
 		mouseY = static_cast<int>(floor(action->getAbsoluteYMouse()));
 
-	_globe->cartToPolar(mouseX, mouseY, &lon, &lat);
+	_globe->cartToPolar(
+					mouseX,
+					mouseY,
+					&lon,
+					&lat);
 
 	// Ignore window clicks
 	if (mouseY < 28)
@@ -281,11 +301,18 @@ void BuildNewBaseState::globeClick(Action* action)
 
 			if (_first)
 			{
-				_game->pushState(new BaseNameState(_game, _base, _globe, _first));
+				_game->pushState(new BaseNameState(
+												_game,
+												_base,
+												_globe,
+												_first));
 			}
 			else
 			{
-				_game->pushState(new ConfirmNewBaseState(_game, _base, _globe));
+				_game->pushState(new ConfirmNewBaseState(
+													_game,
+													_base,
+													_globe));
 			}
 		}
 	}
@@ -406,6 +433,7 @@ void BuildNewBaseState::globeClick(Action* action)
 void BuildNewBaseState::btnCancelClick(Action*)
 {
 	delete _base;
+
 	_game->popState();
 }
 

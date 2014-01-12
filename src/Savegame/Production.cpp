@@ -155,7 +155,10 @@ ProdProgress Production::step(
 			{
 				if (_rules->getCategory() == "STR_CRAFT")
 				{
-					Craft* craft = new Craft(r->getCraft(i->first), b, g->getId(i->first));
+					Craft* craft = new Craft(
+											r->getCraft(i->first),
+											b,
+											g->getId(i->first));
 					craft->setStatus("STR_REFUELLING");
 					b->getCrafts()->push_back(craft);
 
@@ -211,6 +214,7 @@ ProdProgress Production::step(
 						&& getAmountTotal() == std::numeric_limits<int>::max())
 					{
 						g->setFunds(g->getFunds() + (r->getItem(i->first)->getSellCost() * i->second));
+						b->setCashIncome(r->getItem(i->first)->getSellCost() * i->second); // kL
 					}
 					else
 						b->getItems()->addItem(i->first, i->second);
@@ -277,7 +281,9 @@ void Production::startItem(
 		Base* b,
 		SavedGame* g)
 {
-	g->setFunds(g->getFunds() - _rules->getManufactureCost());
+	int cost = _rules->getManufactureCost();
+	g->setFunds(g->getFunds() - cost);
+	b->setCashSpent(cost); // kL
 
 	for (std::map<std::string,int>::const_iterator
 			i = _rules->getRequiredItems().begin();

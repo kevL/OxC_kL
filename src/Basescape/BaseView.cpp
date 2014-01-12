@@ -56,10 +56,10 @@ BaseView::BaseView(
 		int y)
 	:
 		InteractiveSurface(
-				width,
-				height,
-				x,
-				y),
+			width,
+			height,
+			x,
+			y),
 		_base(0),
 		_texture(0),
 		_selFacility(0),
@@ -403,7 +403,9 @@ void BaseView::reCalcQueuedBuildings()
  * @param facility Pointer to a base facility.
  * @param neighbor Pointer to a neighboring base facility.
  */
-void BaseView::updateNeighborFacilityBuildTime(BaseFacility* facility, BaseFacility* neighbor)
+void BaseView::updateNeighborFacilityBuildTime(
+		BaseFacility* facility,
+		BaseFacility* neighbor)
 {
 	if (0 != facility
 		&& 0 != neighbor

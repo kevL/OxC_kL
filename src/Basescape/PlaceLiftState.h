@@ -28,8 +28,9 @@ namespace OpenXcom
 
 class Base;
 class BaseView;
-class Text;
 class Globe;
+class Text;
+
 
 /**
  * Screen shown when the player has to
@@ -39,16 +40,23 @@ class PlaceLiftState
 	:
 		public State
 {
+
 private:
-	Base* _base;
-	Globe* _globe;
-	BaseView* _view;
-	Text* _txtTitle;
 	bool _first;
+
+	Base* _base;
+	BaseView* _view;
+	Globe* _globe;
+	Text* _txtTitle;
+
 
 	public:
 		/// Creates the Place Lift state.
-		PlaceLiftState(Game* game, Base* base, Globe* globe, bool first);
+		PlaceLiftState(
+				Game* game,
+				Base* base,
+				Globe* globe,
+				bool first);
 		/// Cleans up the Place Lift state.
 		~PlaceLiftState();
 

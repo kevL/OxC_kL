@@ -54,7 +54,6 @@ FundingState::FundingState(Game* game)
 	_screen = false;
 
 	_window			= new Window(this, 320, 200, 0, 0, POPUP_BOTH);
-
 	_txtTitle		= new Text(300, 17, 10, 9);
 
 	_txtCountry		= new Text(100, 9, 16, 25);
@@ -67,16 +66,19 @@ FundingState::FundingState(Game* game)
 	_btnOk			= new TextButton(288, 16, 16, 177);
 
 
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
+	_game->setPalette(
+				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)),
+				Palette::backPos,
+				16);
 
 	add(_window);
-	add(_btnOk);
 	add(_txtTitle);
 	add(_txtCountry);
 	add(_txtFunding);
 	add(_txtChange);
 	add(_lstCountries);
 	add(_lstTotal);
+	add(_btnOk);
 
 	centerAllSurfaces();
 
@@ -87,9 +89,15 @@ FundingState::FundingState(Game* game)
 	_btnOk->setColor(Palette::blockOffset(15)-1);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& FundingState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)& FundingState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
-	_btnOk->onKeyboardPress((ActionHandler)& FundingState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
-	_btnOk->onKeyboardPress((ActionHandler)& FundingState::btnOkClick, (SDLKey)Options::getInt("keyGeoFunding"));
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& FundingState::btnOkClick,
+					(SDLKey)Options::getInt("keyOk"));
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& FundingState::btnOkClick,
+					(SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& FundingState::btnOkClick,
+					(SDLKey)Options::getInt("keyGeoFunding"));
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setAlign(ALIGN_CENTER);

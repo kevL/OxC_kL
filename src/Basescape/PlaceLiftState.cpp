@@ -18,21 +18,28 @@
  */
 
 #include "PlaceLiftState.h"
+
 #include <sstream>
+
+#include "BasescapeState.h"
+#include "BaseView.h"
+#include "SelectStartFacilityState.h"
+
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
+
+#include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
-#include "../Interface/Text.h"
-#include "BaseView.h"
+
+#include "../Resource/ResourcePack.h"
+
 #include "../Savegame/Base.h"
 #include "../Savegame/BaseFacility.h"
+
 #include "../Ruleset/RuleBaseFacility.h"
 #include "../Ruleset/Ruleset.h"
-#include "BasescapeState.h"
-#include "SelectStartFacilityState.h"
 
 
 namespace OpenXcom
@@ -45,17 +52,21 @@ namespace OpenXcom
  * @param globe Pointer to the Geoscape globe.
  * @param first Is this a custom starting base?
  */
-PlaceLiftState::PlaceLiftState(Game* game, Base* base, Globe* globe, bool first)
+PlaceLiftState::PlaceLiftState(
+		Game* game,
+		Base* base,
+		Globe* globe,
+		bool first)
 	:
 		State(game),
 		_base(base),
-		_globe(globe),_first(first)
+		_globe(globe),
+		_first(first)
 {
-	// Create objects
 	_view		= new BaseView(192, 192, 0, 8);
 	_txtTitle	= new Text(320, 9, 0, 0);
 
-	// Set palette
+
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());
 
 	add(_view);
@@ -63,11 +74,11 @@ PlaceLiftState::PlaceLiftState(Game* game, Base* base, Globe* globe, bool first)
 
 	centerAllSurfaces();
 
-	// Set up objects
+
 	_view->setTexture(_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK"));
 	_view->setBase(_base);
 	_view->setSelectable(_game->getRuleset()->getBaseFacility("STR_ACCESS_LIFT")->getSize());
-	_view->onMouseClick((ActionHandler)&PlaceLiftState::viewClick);
+	_view->onMouseClick((ActionHandler)& PlaceLiftState::viewClick);
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setText(tr("STR_SELECT_POSITION_FOR_ACCESS_LIFT"));
@@ -86,19 +97,29 @@ PlaceLiftState::~PlaceLiftState()
  */
 void PlaceLiftState::viewClick(Action*)
 {
-	BaseFacility* fac = new BaseFacility(_game->getRuleset()->getBaseFacility("STR_ACCESS_LIFT"), _base);
+	BaseFacility* fac = new BaseFacility(
+									_game->getRuleset()->getBaseFacility("STR_ACCESS_LIFT"),
+									_base);
 	fac->setX(_view->getGridX());
 	fac->setY(_view->getGridY());
 
 	_base->getFacilities()->push_back(fac);
+
 	_game->popState();
 
-	BasescapeState* bState = new BasescapeState(_game, _base, _globe);
+	BasescapeState* bState = new BasescapeState(
+											_game,
+											_base,
+											_globe);
 	_game->pushState(bState);
 
 	if (_first)
 	{
-		_game->pushState(new SelectStartFacilityState(_game, _base, bState, _globe));
+		_game->pushState(new SelectStartFacilityState(
+													_game,
+													_base,
+													bState,
+													_globe));
 	}
 }
 

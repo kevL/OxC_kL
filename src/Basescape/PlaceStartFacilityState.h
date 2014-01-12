@@ -35,12 +35,18 @@ class PlaceStartFacilityState
 	:
 		public PlaceFacilityState
 {
+
 private:
 	SelectStartFacilityState* _select;
 
+
 	public:
 		/// Creates the Place Facility state.
-		PlaceStartFacilityState(Game* game, Base* base, SelectStartFacilityState* select, RuleBaseFacility* rule);
+		PlaceStartFacilityState(
+				Game* game,
+				Base* base,
+				SelectStartFacilityState* select,
+				RuleBaseFacility* rule);
 		/// Cleans up the Place Facility state.
 		~PlaceStartFacilityState();
 

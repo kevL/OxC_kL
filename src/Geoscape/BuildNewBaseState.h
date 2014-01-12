@@ -29,35 +29,47 @@ namespace OpenXcom
 class Base;
 class Globe;
 class InteractiveSurface;
-class Timer;
-class Window;
 class Text;
 class TextButton;
+class Timer;
+class Window;
+
 
 /**
- * Screen that allows the player
- * to place a new base on the globe.
+ * Screen that allows the player to place a new base on the globe.
  */
 class BuildNewBaseState
 	:
 		public State
 {
+
 private:
+	bool
+		_first,
+		_oldshowradar;
+	int
+		_mousex,
+		_mousey;
+	double
+		_oldlat,
+		_oldlon;
+
 	Base* _base;
 	Globe* _globe;
 //	InteractiveSurface* _btnRotateLeft, * _btnRotateRight, * _btnRotateUp, * _btnRotateDown, * _btnZoomIn, * _btnZoomOut;
-	Window* _window;
 	Text* _txtTitle;
 	TextButton* _btnCancel;
 	Timer* _hoverTimer;
-	bool _first;
-	bool _oldshowradar;
-	double _oldlat,_oldlon;
-	int _mousex, _mousey;
+	Window* _window;
+
 
 	public:
 		/// Creates the Build New Base state.
-		BuildNewBaseState(Game* game, Base* base, Globe* globe, bool first);
+		BuildNewBaseState(
+				Game* game,
+				Base* base,
+				Globe* globe,
+				bool first);
 		/// Cleans up the Build New Base state.
 		~BuildNewBaseState();
 
@@ -65,6 +77,7 @@ private:
 		void init();
 		/// Runs the timer.
 		void think();
+
 		/// Handles actions.
 		void handle(Action* action);
 		/// Handler for clicking the globe.

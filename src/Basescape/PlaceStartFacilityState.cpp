@@ -18,17 +18,23 @@
  */
 
 #include "PlaceStartFacilityState.h"
+
+#include "BaseView.h"
+#include "SelectStartFacilityState.h"
+
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
+
 #include "../Interface/Text.h"
-#include "BaseView.h"
+
+#include "../Menu/ErrorMessageState.h"
+
+#include "../Ruleset/RuleBaseFacility.h"
+
 #include "../Savegame/Base.h"
 #include "../Savegame/BaseFacility.h"
-#include "../Ruleset/RuleBaseFacility.h"
 #include "../Savegame/SavedGame.h"
-#include "../Menu/ErrorMessageState.h"
-#include "SelectStartFacilityState.h"
 
 
 namespace OpenXcom
@@ -41,11 +47,19 @@ namespace OpenXcom
  * @param select Pointer to the selection state.
  * @param rule Pointer to the facility ruleset to build.
  */
-PlaceStartFacilityState::PlaceStartFacilityState(Game* game, Base* base, SelectStartFacilityState* select, RuleBaseFacility* rule)
+PlaceStartFacilityState::PlaceStartFacilityState(
+		Game* game,
+		Base* base,
+		SelectStartFacilityState* select,
+		RuleBaseFacility* rule)
 	:
-		PlaceFacilityState(game, base, rule), _select(select)
+		PlaceFacilityState(
+			game,
+			base,
+			rule),
+		_select(select)
 {
-	_view->onMouseClick((ActionHandler)&PlaceStartFacilityState::viewClick);
+	_view->onMouseClick((ActionHandler)& PlaceStartFacilityState::viewClick);
 
 	_numCost->setText(tr("STR_NONE"));
 	_numTime->setText(tr("STR_NONE"));
@@ -67,17 +81,26 @@ void PlaceStartFacilityState::viewClick(Action*)
 	if (!_view->isPlaceable(_rule))
 	{
 		_game->popState();
-		_game->pushState(new ErrorMessageState(_game, "STR_CANNOT_BUILD_HERE", Palette::blockOffset(15)+1, "BACK01.SCR", 6));
+		_game->pushState(new ErrorMessageState(
+											_game,
+											"STR_CANNOT_BUILD_HERE",
+											Palette::blockOffset(15)+1,
+											"BACK01.SCR",
+											6));
 	}
 	else
 	{
-		BaseFacility* fac = new BaseFacility(_rule, _base);
+		BaseFacility* fac = new BaseFacility(
+										_rule,
+										_base);
 
 		fac->setX(_view->getGridX());
 		fac->setY(_view->getGridY());
 
 		_base->getFacilities()->push_back(fac);
+
 		_game->popState();
+
 		_select->facilityBuilt();
 	}
 }

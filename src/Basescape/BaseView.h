@@ -89,6 +89,7 @@ private:
 				Font* big,
 				Font* small,
 				Language* lang);
+
 		/// Sets the base to display.
 		void setBase(Base* base);
 		/// Sets the texture for this base view.
@@ -124,6 +125,7 @@ private:
 		void draw();
 		/// Blits the base view onto another surface.
 		void blit(Surface* surface);
+
 		/// Special handling for mouse hovers.
 		void mouseOver(Action* action, State* state);
 		/// Special handling for mouse hovering out.

@@ -18,8 +18,10 @@
  */
 
 #include "BaseFacility.h"
-#include "../Ruleset/RuleBaseFacility.h"
+
 #include "Base.h"
+
+#include "../Ruleset/RuleBaseFacility.h"
 
 
 namespace OpenXcom
@@ -30,7 +32,9 @@ namespace OpenXcom
  * @param rules Pointer to ruleset.
  * @param base Pointer to base of origin.
  */
-BaseFacility::BaseFacility(RuleBaseFacility* rules, Base* base)
+BaseFacility::BaseFacility(
+		RuleBaseFacility* rules,
+		Base* base)
 	:
 		_rules(rules),
 		_base(base),

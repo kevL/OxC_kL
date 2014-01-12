@@ -128,14 +128,21 @@ BasescapeState::BasescapeState(
 
 
 	_view->setTexture(_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK"));
-	_view->onMouseClick((ActionHandler)& BasescapeState::viewLeftClick, SDL_BUTTON_LEFT);
-	_view->onMouseClick((ActionHandler)& BasescapeState::viewRightClick, SDL_BUTTON_RIGHT);
+	_view->onMouseClick(
+					(ActionHandler)& BasescapeState::viewLeftClick,
+					SDL_BUTTON_LEFT);
+	_view->onMouseClick(
+					(ActionHandler)& BasescapeState::viewRightClick,
+					SDL_BUTTON_RIGHT);
 	_view->onMouseOver((ActionHandler)& BasescapeState::viewMouseOver);
 	_view->onMouseOut((ActionHandler)& BasescapeState::viewMouseOut);
 
 	_mini->setTexture(_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK"));
 	_mini->setBases(_game->getSavedGame()->getBases());
-	for (unsigned int i = 0; i < _game->getSavedGame()->getBases()->size(); ++i)
+	for (unsigned
+			i = 0;
+			i < _game->getSavedGame()->getBases()->size();
+			++i)
 	{
 		if (_game->getSavedGame()->getBases()->at(i) == _base)
 		{
@@ -259,17 +266,16 @@ void BasescapeState::init()
 			_mini->setSelectedBase(0);
 		}
 	}
-	else
+	else // Use a blank base for special case when player has no bases
 	{
-		_base = new Base(_game->getRuleset()); // Use a blank base for special case when player has no bases
+		_base = new Base(_game->getRuleset());
 	}
 
 	_view->setBase(_base);
 	_mini->draw();
 	_edtBase->setText(_base->getName());
 
-	// Get area
-	for (std::vector<Region*>::iterator
+	for (std::vector<Region*>::iterator // Get region
 			i = _game->getSavedGame()->getRegions()->begin();
 			i != _game->getSavedGame()->getRegions()->end();
 			++i)

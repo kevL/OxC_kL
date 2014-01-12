@@ -319,6 +319,7 @@ int SellState::getCraftIndex(unsigned selected) const
 void SellState::btnOkClick(Action*)
 {
 	_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds() + _total);
+	_base->setCashIncome(_total); // kL
 
 	for (unsigned int
 			i = 0;
@@ -704,14 +705,14 @@ void SellState::updateItemStrings()
 	}
 	else
 	{
-		for (unsigned int
+		for (size_t
 				i = 0;
 				i < _qtys.size();
 				++i)
 		{
 			if (_qtys[i] > 0)
 			{
-				switch (getType(i))
+				switch (getType(static_cast<unsigned>(i)))
 				{
 					case SELL_CRAFT:
 					case SELL_SOLDIER:
@@ -761,7 +762,11 @@ enum SellType SellState::getType(unsigned selected) const
  */
 int SellState::getItemIndex(unsigned selected) const
 {
-	return selected - _soldiers.size() - _crafts.size() - _hasSci - _hasEng;
+	return static_cast<int>(selected)
+			- static_cast<int>(_soldiers.size())
+			- static_cast<int>(_crafts.size())
+			- _hasSci
+			- _hasEng;
 }
 
 }

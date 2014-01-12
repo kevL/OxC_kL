@@ -529,6 +529,7 @@ bool PurchaseState::isExcluded(std::string item)
 void PurchaseState::btnOkClick(Action*)
 {
 	_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds() - _total);
+	_base->setCashSpent(_total); // kL
 
 	for (unsigned int
 			i = 0;
@@ -767,10 +768,8 @@ int PurchaseState::getPrice()
  */
 void PurchaseState::increase()
 {
-//kL	_timerDec->setInterval(50);
-//kL	_timerInc->setInterval(50);
-	_timerDec->setInterval(80);		// kL
-	_timerInc->setInterval(80);		// kL
+	_timerDec->setInterval(80);
+	_timerInc->setInterval(80);
 
 	increaseByValue(1);
 }
@@ -781,7 +780,7 @@ void PurchaseState::increase()
  */
 void PurchaseState::increaseByValue(int change)
 {
-	if (0 >= change) return;
+	if (change < 1) return;
 
 	if (_total + getPrice() > _game->getSavedGame()->getFunds())
 	{
@@ -833,23 +832,20 @@ void PurchaseState::increaseByValue(int change)
 		int maxByMoney = (_game->getSavedGame()->getFunds() - _total) / getPrice();
 		change = std::min(maxByMoney, change);
 
-		if (_sel <= 2)
+		if (_sel <= 2) // Personnel count
 		{
-			// Personnel count
 			int maxByQuarters = _base->getAvailableQuarters() - _base->getUsedQuarters() - _pQty;
 			change = std::min(maxByQuarters, change);
 			_pQty += change;
 		}
-		else if (_sel >= 3 && _sel < 3 + _crafts.size())
+		else if (_sel >= 3 && _sel < 3 + _crafts.size()) // Craft count
 		{
-			// Craft count
 			int maxByHangars = _base->getAvailableHangars() - _base->getUsedHangars() - _cQty;
 			change = std::min(maxByHangars, change);
 			_cQty += change;
 		}
-		else if (_sel >= 3 + _crafts.size())
+		else if (_sel >= 3 + _crafts.size()) // Item count
 		{
-			// Item count
 			float storesNeededPerItem = _game->getRuleset()->getItem(_items[_sel - 3 - _crafts.size()])->getSize();
 			float freeStores = static_cast<float>(_base->getAvailableStores() - _base->getUsedStores()) - _iQty;
 			int maxByStores;
@@ -890,7 +886,8 @@ void PurchaseState::decrease()
  */
 void PurchaseState::decreaseByValue(int change)
 {
-	if (0 >= change || 0 >= _qtys[_sel]) return;
+	if (change < 1
+		|| _qtys[_sel] < 1) return;
 
 	change = std::min(_qtys[_sel], change);
 
@@ -904,8 +901,8 @@ void PurchaseState::decreaseByValue(int change)
 	}
 	else // Item count
 	{
-		_iQty -= _game->getRuleset()->getItem(_items[_sel - 3 - _crafts.size()])->getSize()
-																* static_cast<float>(change);
+		_iQty -= _game->getRuleset()->getItem(_items[_sel - 3 - _crafts.size()])
+										->getSize() * static_cast<float>(change);
 	}
 
 	_qtys[_sel] -= change;

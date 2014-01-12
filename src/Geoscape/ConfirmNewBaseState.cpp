@@ -101,7 +101,7 @@ ConfirmNewBaseState::ConfirmNewBaseState(
 					(ActionHandler)& ConfirmNewBaseState::btnCancelClick,
 					(SDLKey)Options::getInt("keyCancel"));
 
-	std::wstring area;
+	std::wstring region;
 	for (std::vector<Region*>::iterator
 			i = _game->getSavedGame()->getRegions()->begin();
 			i != _game->getSavedGame()->getRegions()->end();
@@ -112,7 +112,7 @@ ConfirmNewBaseState::ConfirmNewBaseState(
 										_base->getLatitude()))
 		{
 			_cost = (*i)->getRules()->getBaseCost();
-			area = tr((*i)->getRules()->getType());
+			region = tr((*i)->getRules()->getType());
 
 			break;
 		}
@@ -124,7 +124,7 @@ ConfirmNewBaseState::ConfirmNewBaseState(
 
 	_txtArea->setColor(Palette::blockOffset(15)-1);
 	_txtArea->setSecondaryColor(Palette::blockOffset(8)+10);
-	_txtArea->setText(tr("STR_AREA_").arg(area));
+	_txtArea->setText(tr("STR_AREA_").arg(region));
 }
 
 /**
@@ -143,6 +143,8 @@ void ConfirmNewBaseState::btnOkClick(Action*)
 	if (_game->getSavedGame()->getFunds() >= _cost)
 	{
 		_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds() - _cost);
+		_base->setCashSpent(_cost); // kL
+
 		_game->getSavedGame()->getBases()->push_back(_base);
 		_game->pushState(new BaseNameState(
 										_game,

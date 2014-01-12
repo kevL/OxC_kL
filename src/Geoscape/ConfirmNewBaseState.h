@@ -27,10 +27,10 @@ namespace OpenXcom
 {
 
 class Base;
-class Window;
+class Globe;
 class Text;
 class TextButton;
-class Globe;
+class Window;
 
 
 /**

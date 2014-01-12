@@ -80,7 +80,6 @@ NewManufactureListState::NewManufactureListState(
 	_btnOk			= new TextButton (width - 2 * button_x_border, button_height, start_x + button_x_border, start_y + height - button_height - button_y_border); */
 
 	_window			= new Window(this, 320, 140, 0, 30, POPUP_BOTH);
-
 	_txtTitle		= new Text(300, 16, 10, 39);
 
 	_txtItem		= new Text(80, 9, 16, 58);
@@ -97,11 +96,11 @@ NewManufactureListState::NewManufactureListState(
 				16);
 
 	add(_window);
-	add(_btnCancel);
 	add(_txtTitle);
 	add(_txtItem);
 	add(_txtCategory);
 	add(_lstManufacture);
+	add(_btnCancel);
 
 	centerAllSurfaces();
 
@@ -160,7 +159,7 @@ void NewManufactureListState::btnCancelClick(Action*)
 */
 void NewManufactureListState::lstProdClick(Action*)
 {
-	RuleManufacture *rule = _possibleProductions[_lstManufacture->getSelectedRow()];
+	RuleManufacture* rule = _possibleProductions[_lstManufacture->getSelectedRow()];
 	if (rule->getCategory() == "STR_CRAFT"
 		&& _base->getAvailableHangars() - _base->getUsedHangars() == 0)
 	{

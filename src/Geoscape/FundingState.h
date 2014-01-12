@@ -39,20 +39,28 @@ class FundingState
 	:
 		public State
 {
+
 private:
+	Text
+		* _txtChange,
+		* _txtCountry,
+		* _txtFunding,
+		* _txtTitle;
 	TextButton* _btnOk;
+	TextList
+		* _lstCountries,
+		* _lstTotal;
 	Window* _window;
-	Text* _txtTitle, * _txtCountry, * _txtFunding, * _txtChange;
-	TextList* _lstCountries, * _lstTotal;
 
-public:
-	/// Creates the Funding state.
-	FundingState(Game* game);
-	/// Cleans up the Funding state.
-	~FundingState();
 
-	/// Handler for clicking the OK button.
-	void btnOkClick(Action* action);
+	public:
+		/// Creates the Funding state.
+		FundingState(Game* game);
+		/// Cleans up the Funding state.
+		~FundingState();
+
+		/// Handler for clicking the OK button.
+		void btnOkClick(Action* action);
 };
 
 }
