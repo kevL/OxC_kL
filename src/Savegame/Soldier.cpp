@@ -19,6 +19,9 @@
 
 #include "Soldier.h"
 
+#include "SoldierDead.h" // kL
+//#include "SoldierDeath.h" // kL
+
 #include "../Engine/Language.h"
 #include "../Engine/RNG.h"
 
@@ -85,7 +88,7 @@ Soldier::Soldier(
 
 		_initialStats.psiSkill = minStats.psiSkill;
 
-		_currentStats = _initialStats;	
+		_currentStats = _initialStats;
 
 		if (!names->empty())
 		{
@@ -618,19 +621,21 @@ int Soldier::getImprovement()
 }
 
 /**
- * Returns the soldier's death details.
+ * Returns the soldier's death time.
  * @return, Pointer to death data. NULL if no death has occured.
  */
-SoldierDeath* Soldier::getDeath() const
+/*kL SoldierDeath* Soldier::getDeath() const
 {
 	return _death;
-}
+} */
 
 /**
  * Kills the soldier in the Geoscape.
  * @param, death Pointer to death data.
+ * @return SoldierDead*, Pointer to a DeadSoldier template.
  */
-void Soldier::die(SoldierDeath* death)
+//kL void Soldier::die(SoldierDeath* death)
+SoldierDead* Soldier::die(SoldierDeath* death)
 {
 	delete _death;
 	_death = death;
@@ -650,6 +655,29 @@ void Soldier::die(SoldierDeath* death)
 	}
 
 	_equipmentLayout.clear();
+
+	// kL_begin:
+	SoldierDead* dead = new SoldierDead(
+									_name,
+									_id,
+									_rank,
+									_gender,
+									_look,
+									_missions,
+									_kills,
+									_death);
+/*										L"",
+										0,
+										RANK_ROOKIE,
+										GENDER_MALE,
+										LOOK_BLONDE,
+										0,
+										0,
+										NULL); */
+
+	return dead;
+//	SavedGame::getDeadSoldiers()->push_back(ds);
+	// kL_end.
 }
 
 }

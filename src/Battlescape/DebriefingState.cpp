@@ -66,6 +66,7 @@
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Soldier.h"
+#include "../Savegame/SoldierDead.h" // kL
 #include "../Savegame/SoldierDeath.h"
 #include "../Savegame/TerrorSite.h"
 #include "../Savegame/Tile.h"
@@ -798,7 +799,7 @@ void DebriefingState::prepareDebriefing()
 			else if (origFaction == FACTION_PLAYER)
 			{
 				Soldier* soldier = save->getSoldier((*j)->getId());
-				if (soldier != 0)
+				if (soldier != 0) // xCom soldier.
 				{
 					addStat(
 						"STR_XCOM_OPERATIVES_KILLED",
@@ -810,15 +811,21 @@ void DebriefingState::prepareDebriefing()
 							i != base->getSoldiers()->end();
 							++i)
 					{
-						if ((*i) == soldier)
+						if (*i == soldier) // the specific soldier at Base..
 						{
 							(*j)->updateGeoscapeStats(*i);
+
 							SoldierDeath* death = new SoldierDeath();
 							death->setTime(new GameTime(*save->getTime()));
 
-							(*i)->die(death);
-							save->getDeadSoldiers()->push_back(*i);
-							base->getSoldiers()->erase(i);
+//kL							(*i)->die(death);
+//kL							save->getDeadSoldiers()->push_back(*i);
+							SoldierDead* dead = (*i)->die(death);		// kL, converts Soldier to SoldierDead class instance.
+							save->getDeadSoldiers()->push_back(dead);	// kL
+
+							base->getSoldiers()->erase(i);			// erase Base soldier
+							delete save->getSoldier((*j)->getId()); // kL, delete SavedGame soldier
+																	// uh, what 'bout err GeoscapeSoldier etc.
 
 							break;
 						}
@@ -909,15 +916,21 @@ void DebriefingState::prepareDebriefing()
 								i != base->getSoldiers()->end();
 								++i)
 						{
-							if ((*i) == soldier)
+							if (*i == soldier)
 							{
 								(*j)->updateGeoscapeStats(*i);
+
 								SoldierDeath* death = new SoldierDeath();
 								death->setTime(new GameTime(*save->getTime()));
 
-								(*i)->die(death);
-								save->getDeadSoldiers()->push_back(*i);
-								base->getSoldiers()->erase(i);
+//kL								(*i)->die(death);
+//kL								save->getDeadSoldiers()->push_back(*i);
+								SoldierDead* dead = (*i)->die(death);		// kL, converts Soldier to SoldierDead class instance.
+								save->getDeadSoldiers()->push_back(dead);	// kL
+
+								base->getSoldiers()->erase(i);			// erase Base soldier
+								delete save->getSoldier((*j)->getId()); // kL, delete SavedGame soldier
+																		// uh, what 'bout err GeoscapeSoldier etc.
 
 								break;
 							}

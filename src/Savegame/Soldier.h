@@ -63,6 +63,7 @@ class EquipmentLayoutItem;
 class Language;
 class Ruleset;
 class RuleSoldier;
+class SoldierDead; // kL
 class SoldierDeath;
 class SoldierNamePool;
 
@@ -181,10 +182,12 @@ private:
 		void setPsiTraining();
 		/// returns this soldier's psionic improvement score for this month.
 		int getImprovement();
-		/// Gets the soldier death info.
-		SoldierDeath* getDeath() const;
-		/// Kills the soldier.
-		void die(SoldierDeath* death);
+
+		/// Gets the soldier death time.
+//kL		SoldierDeath* getDeath() const;
+		/// Kills the soldier and sends it to the dead soldiers' List.
+//kL		void die(SoldierDeath* death);
+		SoldierDead* die(SoldierDeath* death);
 };
 
 }

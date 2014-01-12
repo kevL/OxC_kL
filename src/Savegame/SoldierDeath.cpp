@@ -57,7 +57,7 @@ YAML::Node SoldierDeath::save() const
 {
 	YAML::Node node;
 
-	node["time"] = _time.save();
+	node["time"] = _time.save(true);
 
 	return node;
 }

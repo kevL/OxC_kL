@@ -80,7 +80,8 @@ private:
 		/// Loads the time from YAML.
 		void load(const YAML::Node& node);
 		/// Saves the time to YAML.
-		YAML::Node save() const;
+//kL		YAML::Node save() const;
+		YAML::Node save(bool memorial = false) const; // kL
 
 		/// Advances the time by 5 seconds.
 		TimeTrigger advance();

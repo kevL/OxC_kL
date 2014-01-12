@@ -39,6 +39,7 @@
 #include "ResearchProject.h"
 #include "SavedBattleGame.h"
 #include "Soldier.h"
+#include "SoldierDead.h" // kL
 #include "TerrorSite.h"
 #include "Ufo.h"
 #include "Waypoint.h"
@@ -144,49 +145,77 @@ SavedGame::SavedGame()
 SavedGame::~SavedGame()
 {
 	delete _time;
-	for (std::vector<Country*>::iterator i = _countries.begin(); i != _countries.end(); ++i)
+	for (std::vector<Country*>::iterator
+			i = _countries.begin();
+			i != _countries.end();
+			++i)
 	{
 		delete *i;
 	}
 
-	for (std::vector<Region*>::iterator i = _regions.begin(); i != _regions.end(); ++i)
+	for (std::vector<Region*>::iterator
+			i = _regions.begin();
+			i != _regions.end();
+			++i)
 	{
 		delete *i;
 	}
 
-	for (std::vector<Base*>::iterator i = _bases.begin(); i != _bases.end(); ++i)
+	for (std::vector<Base*>::iterator
+			i = _bases.begin();
+			i != _bases.end();
+			++i)
 	{
 		delete *i;
 	}
 
-	for (std::vector<Ufo*>::iterator i = _ufos.begin(); i != _ufos.end(); ++i)
+	for (std::vector<Ufo*>::iterator
+			i = _ufos.begin();
+			i != _ufos.end();
+			++i)
 	{
 		delete *i;
 	}
 
-	for (std::vector<Waypoint*>::iterator i = _waypoints.begin(); i != _waypoints.end(); ++i)
+	for (std::vector<Waypoint*>::iterator
+			i = _waypoints.begin();
+			i != _waypoints.end();
+			++i)
 	{
 		delete *i;
 	}
 
-	for (std::vector<TerrorSite*>::iterator i = _terrorSites.begin(); i != _terrorSites.end(); ++i)
+	for (std::vector<TerrorSite*>::iterator
+			i = _terrorSites.begin();
+			i != _terrorSites.end();
+			++i)
 	{
 		delete *i;
 	}
 
-	for (std::vector<AlienBase*>::iterator i = _alienBases.begin(); i != _alienBases.end(); ++i)
+	for (std::vector<AlienBase*>::iterator
+			i = _alienBases.begin();
+			i != _alienBases.end();
+			++i)
  	{
 		delete *i;
 	}
 
 	delete _alienStrategy;
 
-	for (std::vector<AlienMission*>::iterator i = _activeMissions.begin(); i != _activeMissions.end(); ++i)
+	for (std::vector<AlienMission*>::iterator
+			i = _activeMissions.begin();
+			i != _activeMissions.end();
+			++i)
 	{
 		delete *i;
 	}
 
-	for (std::vector<Soldier*>::iterator i = _deadSoldiers.begin(); i != _deadSoldiers.end(); ++i)
+//kL	for (std::vector<Soldier*>::iterator
+	for (std::vector<SoldierDead*>::iterator // kL
+			i = _deadSoldiers.begin();
+			i != _deadSoldiers.end();
+			++i)
 	{
 		delete *i;
 	}
@@ -339,7 +368,7 @@ void SavedGame::load(
 	_globeLat				= doc["globeLat"].as<double>(_globeLat);
 	_globeZoom				= doc["globeZoom"].as<int>(_globeZoom);
 
-	_ids = doc["ids"].as< std::map<std::string, int>>(_ids);
+	_ids = doc["ids"].as<std::map<std::string, int>>(_ids);
 
 	for (YAML::const_iterator
 			i = doc["countries"].begin();
@@ -465,13 +494,24 @@ void SavedGame::load(
 			i != doc["deadSoldiers"].end();
 			++i)
 	{
-		Soldier* s = new Soldier(
+/*kL		Soldier* s = new Soldier(
 							rule->getSoldier("XCOM"),
-							rule->getArmor("STR_NONE_UC"));
-		s->load(
+							rule->getArmor("STR_NONE_UC")); */
+		SoldierDead* ds = new SoldierDead( // kL
+										L"",
+										0,
+										RANK_ROOKIE,
+										GENDER_MALE,
+										LOOK_BLONDE,
+										0,
+										0,
+										NULL);
+/*kL		s->load(
 				*i,
-				rule);
-		_deadSoldiers.push_back(s);
+				rule); */
+		ds->load(*i);							// kL
+//kL		_deadSoldiers.push_back(s);
+		_deadSoldiers.push_back(ds);			// kL
 	}
 
 	if (const YAML::Node& battle = doc["battleGame"])
@@ -624,7 +664,8 @@ void SavedGame::save(const std::string& filename) const
 
 	node["alienStrategy"] = _alienStrategy->save();
 
-	for (std::vector<Soldier*>::const_iterator
+//kL	for (std::vector<Soldier*>::const_iterator
+	for (std::vector<SoldierDead*>::const_iterator // kL
 			i = _deadSoldiers.begin();
 			i != _deadSoldiers.end();
 			++i)
@@ -2023,8 +2064,11 @@ void SavedGame::removePoppedResearch(const RuleResearch* research)
  * Returns the list of dead soldiers.
  * @return Pointer to soldier list.
  */
-std::vector<Soldier*>* SavedGame::getDeadSoldiers()
+//kL std::vector<Soldier*>* SavedGame::getDeadSoldiers()
+std::vector<SoldierDead*>* SavedGame::getDeadSoldiers() // kL
 {
+	Log(LOG_INFO) << "SavedGame::getDeadSoldiers()";
+
 	return &_deadSoldiers;
 }
 

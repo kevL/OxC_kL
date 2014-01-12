@@ -22,7 +22,7 @@
 #include <iomanip>
 #include <sstream>
 
-#include "SoldierInfoState.h"
+//kL #include "SoldierInfoState.h"
 
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
@@ -40,7 +40,8 @@
 #include "../Savegame/Base.h"
 #include "../Savegame/GameTime.h"
 #include "../Savegame/SavedGame.h"
-#include "../Savegame/Soldier.h"
+//kL#include "../Savegame/Soldier.h"
+#include "../Savegame/SoldierDead.h" // kL
 #include "../Savegame/SoldierDeath.h"
 
 
@@ -141,11 +142,14 @@ SoldierMemorialState::SoldierMemorialState(Game* game)
 	_lstSoldiers->setMargin(8);
 	_lstSoldiers->onMouseClick((ActionHandler)& SoldierMemorialState::lstSoldiersClick);
 
-	for (std::vector<Soldier*>::reverse_iterator
+	Log(LOG_INFO) << "SoldierMemorialState::SoldierMemorialState() -> getDeadSoldiers";
+//kL	for (std::vector<Soldier*>::reverse_iterator
+	for (std::vector<SoldierDead*>::reverse_iterator // kL
 			i = _game->getSavedGame()->getDeadSoldiers()->rbegin();
 			i != _game->getSavedGame()->getDeadSoldiers()->rend();
 			++i)
 	{
+		Log(LOG_INFO) << ". dead soldier, getSoldierDeath & addRow etc";
 		SoldierDeath* death = (*i)->getDeath();
 
 		std::wstringstream
@@ -181,6 +185,7 @@ SoldierMemorialState::~SoldierMemorialState()
 void SoldierMemorialState::btnOkClick(Action*)
 {
 	_game->popState();
+
 	_game->getResourcePack()->getRandomMusic("GMGEO")->play();
 }
 
@@ -190,7 +195,7 @@ void SoldierMemorialState::btnOkClick(Action*)
  */
 void SoldierMemorialState::lstSoldiersClick(Action*)
 {
-	//_game->pushState(new SoldierInfoState(_game, _base, _lstSoldiers->getSelectedRow()));
+//	_game->pushState(new SoldierInfoState(_game, _base, _lstSoldiers->getSelectedRow()));
 }
 
 }

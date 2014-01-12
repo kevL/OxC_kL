@@ -42,6 +42,7 @@ class RuleResearch;
 class Ruleset;
 class SavedBattleGame;
 class Soldier;
+class SoldierDead; // kL
 class Target;
 class TerrorSite;
 class TextList;
@@ -112,7 +113,8 @@ private:
 	std::vector<const RuleResearch*>
 		_discovered,
 		_poppedResearch;
-	std::vector<Soldier*> _deadSoldiers;
+//kL	std::vector<Soldier*> _deadSoldiers;
+	std::vector<SoldierDead*> _deadSoldiers; // kL
 	std::vector<TerrorSite*> _terrorSites;
 	std::vector<Ufo*> _ufos;
 	std::vector<Waypoint*> _waypoints;
@@ -350,7 +352,8 @@ private:
 		void removePoppedResearch(const RuleResearch* research);
 
 		/// Gets the list of dead soldiers.
-		std::vector<Soldier*>* getDeadSoldiers();
+//kL		std::vector<Soldier*>* getDeadSoldiers();
+		std::vector<SoldierDead*>* getDeadSoldiers(); // kL
 };
 
 }

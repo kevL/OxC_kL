@@ -67,10 +67,18 @@ GameTime::~GameTime()
  */
 void GameTime::load(const YAML::Node& node)
 {
-	_second		= node["second"].as<int>(_second);
-	_minute		= node["minute"].as<int>(_minute);
-	_hour		= node["hour"].as<int>(_hour);
-	_weekday	= node["weekday"].as<int>(_weekday);
+	if (node["second"]) // kL
+		_second		= node["second"].as<int>(_second);
+
+	if (node["minute"]) // kL
+		_minute		= node["minute"].as<int>(_minute);
+
+	if (node["hour"]) // kL
+		_hour		= node["hour"].as<int>(_hour);
+
+	if (node["weekday"]) // kL
+		_weekday	= node["weekday"].as<int>(_weekday);
+
 	_day		= node["day"].as<int>(_day);
 	_month		= node["month"].as<int>(_month);
 	_year		= node["year"].as<int>(_year);
@@ -80,14 +88,17 @@ void GameTime::load(const YAML::Node& node)
  * Saves the time to a YAML file.
  * @return YAML node.
  */
-YAML::Node GameTime::save() const
+YAML::Node GameTime::save(bool memorial) const
 {
 	YAML::Node node;
 
-	node["second"]	= _second;
-	node["minute"]	= _minute;
-	node["hour"]	= _hour;
-	node["weekday"]	= _weekday;
+	if (!memorial) // kL
+	{
+		node["second"]	= _second;
+		node["minute"]	= _minute;
+		node["hour"]	= _hour;
+		node["weekday"]	= _weekday;
+	}
 	node["day"]		= _day;
 	node["month"]	= _month;
 	node["year"]	= _year;
