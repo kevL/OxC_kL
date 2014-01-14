@@ -240,10 +240,13 @@ std::string OptionsControlsState::ucWords(std::string str)
 		str[0] = toupper(str[0]);
 	}
 
-	for (size_t i = str.find_first_of(' '); i != std::string::npos; i = str.find_first_of(' ', i+1))
+	for (size_t
+			i = str.find_first_of(' ');
+			i != std::string::npos;
+			i = str.find_first_of(' ', i + 1))
 	{
-		if (str.length() > i+1)
-			str[i+1] = toupper(str[i+1]);
+		if (str.length() > i + 1)
+			str[i + 1] = toupper(str[i + 1]);
 		else
 			break;
 	}

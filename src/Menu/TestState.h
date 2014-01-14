@@ -24,14 +24,15 @@
 namespace OpenXcom
 {
 
-class SurfaceSet;
-class Surface;
-class TextButton;
-class Window;
-class Text;
-class TextList;
 class NumberText;
 class Slider;
+class Surface;
+class SurfaceSet;
+class Text;
+class TextButton;
+class TextList;
+class Window;
+
 
 /**
  * A state purely for testing game functionality.
@@ -41,27 +42,36 @@ class Slider;
  * put aside for actual game states. Useful as a
  * sandbox / testing ground.
  */
-class TestState : public State
+class TestState
+	:
+		public State
 {
+
 private:
-	SurfaceSet *_set;
-	TextButton *_button;
-	Window *_window;
-	Text *_text;
-	NumberText *_number;
-	TextList *_list;
-	Slider *_slider;
 	int _i;
 
+	NumberText* _number;
+	Slider* _slider;
+	SurfaceSet* _set;
+	Text* _text;
+	TextButton* _button;
+	TextList* _list;
+	Window* _window;
+
 	/// Creates a surface with every color in the palette.
-	SDL_Surface *testSurface();
-public:
-	/// Creates the Test state.
-	TestState(Game *game);
-	/// Cleans up the Test state.
-	~TestState();
-	void think();
-	void blit();
+	SDL_Surface* testSurface();
+
+
+	public:
+		/// Creates the Test state.
+		TestState(Game* game);
+		/// Cleans up the Test state.
+		~TestState();
+
+		///
+		void think();
+		///
+		void blit();
 };
 
 }

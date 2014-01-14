@@ -1280,7 +1280,9 @@ const City* Ruleset::locateCity(
 		std::vector<City*>::const_iterator citer = std::find_if(
 															cities.begin(),
 															cities.end(),
-															EqualCoordinates(lon, lat));
+															EqualCoordinates(
+																			lon,
+																			lat));
 		if (citer != cities.end())
 		{
 			return *citer;

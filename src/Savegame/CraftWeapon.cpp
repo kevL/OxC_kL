@@ -68,6 +68,7 @@ void CraftWeapon::load(const YAML::Node& node)
 YAML::Node CraftWeapon::save() const
 {
 	YAML::Node node;
+
 	node["type"]			= _rules->getType();
 	node["ammo"]			= _ammo;
 	if (_rearming)
@@ -96,7 +97,9 @@ int CraftWeapon::getAmmo() const
 
 /**
  * Changes the ammo contained in this craft weapon.
+ * Also maintains min/max levels.
  * @param ammo, Weapon ammo
+ * @return bool, True if there was enough ammo to fire.
  */
 bool CraftWeapon::setAmmo(int ammo)
 {
@@ -109,8 +112,9 @@ bool CraftWeapon::setAmmo(int ammo)
 		return false;
 	}
 
-	if (_ammo > _rules->getAmmoMax())
-		_ammo = _rules->getAmmoMax();
+	int maxAmmo = _rules->getAmmoMax();
+	if (_ammo > maxAmmo)
+		_ammo = maxAmmo;
 
 	return true;
 }

@@ -22,6 +22,7 @@
 
 #include <string>
 #include <vector>
+
 #include <yaml-cpp/yaml.h>
 
 
@@ -36,16 +37,41 @@ namespace OpenXcom
  */
 class RuleBaseFacility
 {
+
 private:
-	std::string _type;
+	bool
+		_grav,
+		_hyper,
+		_lift,
+		_mind;
+	int
+		_aliens,
+		_buildCost,
+		_buildTime,
+		_crafts,
+		_defense,
+		_fireSound,
+		_hitRatio,
+		_hitSound,
+		_labs,
+		_listOrder,
+		_monthlyCost,
+		_personnel,
+		_psiLabs,
+		_radarChance,
+		_radarRange,
+		_size,
+		_spriteFacility,
+		_spriteShape,
+		_storage,
+		_workshops;
+
+	std::string
+		_mapName,
+		_type;
+
 	std::vector<std::string> _requires;
-	int _spriteShape, _spriteFacility;
-	bool _lift, _hyper, _mind, _grav;
-	int _size, _buildCost, _buildTime, _monthlyCost;
-	int _storage, _personnel, _aliens, _crafts, _labs, _workshops, _psiLabs;
-	int _radarRange, _radarChance, _defense, _hitRatio, _fireSound, _hitSound;
-	std::string _mapName;
-	int _listOrder;
+
 
 	public:
 		/// Creates a blank facility ruleset.
@@ -54,18 +80,25 @@ private:
 		~RuleBaseFacility();
 
 		/// Loads the facility from YAML.
-		void load(const YAML::Node& node, int modIndex, int listOrder);
+		void load(
+				const YAML::Node& node,
+				int modIndex,
+				int listOrder);
 
 		/// Gets the facility's type.
 		std::string getType() const;
+
 		/// Gets the facility's requirements.
 		const std::vector<std::string>& getRequirements() const;
+
 		/// Gets the facility's shape sprite.
 		int getSpriteShape() const;
 		/// Gets the facility's content sprite.
 		int getSpriteFacility() const;
+
 		/// Gets the facility's size.
 		int getSize() const;
+
 		/// Gets if the facility is an access lift.
 		bool isLift() const;
 		/// Gets if the facility has hyperwave detection.
@@ -74,12 +107,14 @@ private:
 		bool isMindShield() const;
 		/// Gets if the facility is a grav shield.
 		bool isGravShield() const;
+
 		/// Gets the facility's construction cost.
 		int getBuildCost() const;
 		/// Gets the facility's construction time.
 		int getBuildTime() const;
 		/// Gets the facility's monthly cost.
 		int getMonthlyCost() const;
+
 		/// Gets the facility's storage capacity.
 		int getStorage() const;
 		/// Gets the facility's personnel capacity.
@@ -94,20 +129,25 @@ private:
 		int getWorkshops() const;
 		/// Gets the facility's psi-training capacity.
 		int getPsiLaboratories() const;
+
 		/// Gets the facility's radar range.
 		int getRadarRange() const;
 		/// Gets the facility's detection chance.
 		int getRadarChance() const;
+
 		/// Gets the facility's defense value.
 		int getDefenseValue() const;
 		/// Gets the facility's weapon hit ratio.
 		int getHitRatio() const;
+
 		/// Gets the facility's battlescape map name.
 		std::string getMapName() const;
+
 		/// Gets the facility's fire sound.
 		int getFireSound() const;
 		/// Gets the facility's hit sound.
 		int getHitSound() const;
+
 		/// Gets the facility's list weight.
 		int getListOrder() const;
 };

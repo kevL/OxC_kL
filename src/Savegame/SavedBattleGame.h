@@ -170,7 +170,7 @@ private:
 		 */
 		inline int getTileIndex(const Position& pos) const
 		{
-			return (pos.z * _mapsize_y * _mapsize_x) + (pos.y * _mapsize_x + pos.x);
+			return (pos.z * _mapsize_y * _mapsize_x) + ((pos.y * _mapsize_x) + pos.x);
 		}
 
 		/// Converts a tile index to its coordinates.

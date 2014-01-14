@@ -216,7 +216,11 @@ void BaseView::setSelectable(int size)
 	_selSize = size;
 	if (_selSize > 0)
 	{
-		_selector = new Surface(size * GRID_SIZE, size * GRID_SIZE, _x, _y);
+		_selector = new Surface(
+							size * GRID_SIZE,
+							size * GRID_SIZE,
+							_x,
+							_y);
 		_selector->setPalette(getPalette());
 
 		SDL_Rect r;

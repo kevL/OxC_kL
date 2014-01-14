@@ -540,7 +540,7 @@ Wb.131129
 	}
 */
 
-	BattleUnit* bu;
+	BattleUnit* bu = 0;
 	if (_save->getTile(_origin)->getUnit())
 	{
 		bu = _save->getTile(_origin)->getUnit();
@@ -571,7 +571,7 @@ Wb.131129
 
 	if (_action.type != BA_THROW) // celatid acid-spit
 	{
-		BattleUnit* targetUnit;
+		BattleUnit* targetUnit = 0;
 		if (_save->getTile(_action.target)->getUnit())
 		{
 			targetUnit = _save->getTile(_action.target)->getUnit();

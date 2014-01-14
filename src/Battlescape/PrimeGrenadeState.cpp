@@ -122,8 +122,8 @@ PrimeGrenadeState::PrimeGrenadeState(
 
 		square.x = 1;
 		square.y = 1;
-		square.w = _button[i]->getWidth()-2;
-		square.h = _button[i]->getHeight()-2;
+		square.w = _button[i]->getWidth() - 2;
+		square.h = _button[i]->getHeight() - 2;
 		_button[i]->drawRect(&square, Palette::blockOffset(6)+12);
 
 		std::wstringstream ss;

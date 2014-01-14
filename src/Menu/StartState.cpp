@@ -18,22 +18,26 @@
  */
 
 #include "StartState.h"
-#include <SDL.h>
+
 #include <assert.h>
-#include "../Engine/Logger.h"
-#include "../Engine/Game.h"
-#include "../Engine/Action.h"
-#include "../Engine/Surface.h"
-#include "../Engine/Exception.h"
-#include "../Engine/Options.h"
-#include "../Engine/Language.h"
-#include "../Engine/Flc.h"
-#include "../Engine/CrossPlatform.h"
-#include "../Engine/Screen.h"
-#include "../Engine/Music.h"
-#include "../Engine/Sound.h"
-#include "../Ruleset/Ruleset.h"
+#include <SDL.h>
+
 #include "MainMenuState.h"
+
+#include "../Engine/Action.h"
+#include "../Engine/CrossPlatform.h"
+#include "../Engine/Exception.h"
+#include "../Engine/Flc.h"
+#include "../Engine/Game.h"
+#include "../Engine/Language.h"
+#include "../Engine/Logger.h"
+#include "../Engine/Music.h"
+#include "../Engine/Options.h"
+#include "../Engine/Screen.h"
+#include "../Engine/Sound.h"
+#include "../Engine/Surface.h"
+
+#include "../Ruleset/Ruleset.h"
 
 
 namespace OpenXcom
@@ -48,12 +52,12 @@ StartState::StartState(Game* game)
 		State(game),
 		_load(LOADING_NONE)
 {
-	// Create objects
-	int dx = (Options::getInt("baseXResolution") - 320) / 2;
-	int dy = (Options::getInt("baseYResolution") - 200) / 2;
+	int
+		dx = (Options::getInt("baseXResolution") - 320) / 2,
+		dy = (Options::getInt("baseYResolution") - 200) / 2;
 	_surface = new Surface(320, 200, dx, dy);
 
-	// Set palette
+
 	SDL_Color bnw[3];
 
 	bnw[0].r = 0;
@@ -70,7 +74,7 @@ StartState::StartState(Game* game)
 
 	add(_surface);
 
-	// Set up objects
+
 	_surface->drawString(120, 96, "Loading...", 1);
 }
 
@@ -88,7 +92,6 @@ typedef struct
 	int sound;
 	int volume;
 } soundInFile;
-
 
 // the pure MS-DOS experience
 static soundInFile introCatOnlySounds[] =
@@ -121,7 +124,6 @@ static soundInFile introCatOnlySounds[] =
 	{"INTRO.CAT", 0x18, 32}
 };
 
-
 static soundInFile sample3CatOnlySounds[] =
 {
 	{"SAMPLE3.CAT", 24, 32},	// machine gun
@@ -151,8 +153,6 @@ static soundInFile sample3CatOnlySounds[] =
 	{"SAMPLE3.CAT", 18, 32},	// takeoff
 	{"SAMPLE3.CAT", 20, 32}		// another takeoff/landing sound?? if it exists?
 };
-
-
 
 // an attempt at a mix of (subjectively) the best sounds from the two versions
 // difficult because we can't find a definitive map from old sequence numbers to SAMPLE3.CAT indexes
@@ -347,6 +347,7 @@ static void musicDone()
 	Flc::flc.quit = true;
 }
 
+
 static struct AudioSequence
 {
 	ResourcePack* rp;
@@ -361,7 +362,7 @@ static struct AudioSequence
 	{
 	}
 
-	void operator ()()
+	void operator()()
 	{
 		while (Flc::flc.FrameCount >= introSoundTrack[trackPosition].frameNumber)
 		{
@@ -398,17 +399,23 @@ static struct AudioSequence
 			}
 			else if (command <= 0x19)
 			{
-				for (soundInFile **sounds = introSounds; *sounds; ++sounds) // try hybrid sound set, then intro.cat or sample3.cat alone
+				for (soundInFile**
+						sounds = introSounds;
+						*sounds;
+						++sounds) // try hybrid sound set, then intro.cat or sample3.cat alone
 				{
-					soundInFile *sf = (*sounds) + command;
-					int channel = trackPosition % 4; // use at most four channels to play sound effects
+					soundInFile* sf = (*sounds) + command;
+					int channel = trackPosition %4; // use at most four channels to play sound effects
 					Log(LOG_DEBUG) << "playing: " << sf->catFile << ":" << sf->sound << " for index " << command;
 
 					s = rp->getSound(sf->catFile, sf->sound);
 					if (s)
 					{
 						s->play(channel);
-						Mix_Volume(channel, sf->volume);
+						Mix_Volume(
+								channel,
+								sf->volume);
+
 						break;
 					}
 					else Log(LOG_DEBUG) << "Couldn't play " << sf->catFile << ":" << sf->sound;
@@ -417,7 +424,6 @@ static struct AudioSequence
 
 			++trackPosition;
 		}
-
 	}
 } *audioSequence;
 
@@ -506,39 +512,68 @@ void StartState::think()
 
 #ifndef __NO_MUSIC
 					// fade out!
-					Mix_FadeOutChannel(-1, 45*20);
+					Mix_FadeOutChannel(-1, 45 * 20);
 
 					// SDL_Mixer has trouble with native midi and volume on windows, which is the most likely use case, so f@%# it.
-					if (Mix_GetMusicType(0) != MUS_MID) { Mix_FadeOutMusic(45*20); }
-					else { Mix_HaltMusic(); }
+					if (Mix_GetMusicType(0) != MUS_MID)
+					{
+						Mix_FadeOutMusic(45 * 20);
+					}
+					else
+					{
+						Mix_HaltMusic();
+					}
 #endif
 
 					SDL_Color pal[256];
 					SDL_Color pal2[256];
-					memcpy(pal, _game->getScreen()->getPalette(), sizeof (SDL_Color) * 256);
+					memcpy(
+							pal,
+							_game->getScreen()->getPalette(),
+							sizeof (SDL_Color) * 256);
 
-					for (int i = 20; i > 0; --i)
+					for (int
+							i = 20;
+							i > 0;
+							--i)
 					{
 						SDL_Event event;
 
-						if (SDL_PollEvent(&event) && event.type == SDL_KEYDOWN) break;
-
-						for (int color = 0; color < 256; ++color)
+						if (SDL_PollEvent(&event)
+							&& event.type == SDL_KEYDOWN)
 						{
-							pal2[color].r = (((int)pal[color].r) * i) / 20;
-							pal2[color].g = (((int)pal[color].g) * i) / 20;
-							pal2[color].b = (((int)pal[color].b) * i) / 20;
+							break;
 						}
 
-						_game->getScreen()->setPalette(pal2, 0, 256, true);
+						for (int
+								color = 0;
+								color < 256;
+								++color)
+						{
+//kL							pal2[color].r = (((int)pal[color].r) * i) / 20;
+//kL							pal2[color].g = (((int)pal[color].g) * i) / 20;
+//kL							pal2[color].b = (((int)pal[color].b) * i) / 20;
+							pal2[color].r = static_cast<Uint8>((static_cast<int>(pal[color].r) * i) / 20); // kL
+							pal2[color].g = static_cast<Uint8>((static_cast<int>(pal[color].g) * i) / 20); // kL
+							pal2[color].b = static_cast<Uint8>((static_cast<int>(pal[color].b) * i) / 20); // kL
+						}
+
+						_game->getScreen()->setPalette(
+													pal2,
+													0,
+													256,
+													true);
 						_game->getScreen()->flip();
+
 						SDL_Delay(45);
 					}
 
 					_game->getScreen()->clear();
 					_game->getScreen()->flip();
 
-					_game->setVolume(Options::getInt("soundVolume"), Options::getInt("musicVolume"));
+					_game->setVolume(
+								Options::getInt("soundVolume"),
+								Options::getInt("musicVolume"));
 
 #ifndef __NO_MUSIC
 					Mix_HaltChannel(-1);

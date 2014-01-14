@@ -53,7 +53,9 @@ LocalizedText LocalizedText::arg(std::wstring const &val) const
 					val);
 	}
 
-	return LocalizedText(ntext, _nextArg);
+	return LocalizedText(
+						ntext,
+						_nextArg);
 }
 
 /**
@@ -61,7 +63,7 @@ LocalizedText LocalizedText::arg(std::wstring const &val) const
  * @param val The value to place in the next placeholder's position.
  * @return The translated string with all occurences of the marker replaced by @a val.
  */
-LocalizedText &LocalizedText::arg(std::wstring const &val)
+LocalizedText& LocalizedText::arg(std::wstring const &val)
 {
 	std::wostringstream os;
 	os << '{' << _nextArg << '}';

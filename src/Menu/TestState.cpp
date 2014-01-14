@@ -16,25 +16,32 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "TestState.h"
-#include <iostream>
+
 #include <fstream>
+#include <iostream>
+
 #include <SDL.h>
+
+#include "../Engine/Exception.h"
+#include "../Engine/Font.h"
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Screen.h"
-#include "../Engine/SurfaceSet.h"
 #include "../Engine/Surface.h"
-#include "../Engine/Exception.h"
-#include "../Engine/Font.h"
-#include "../Interface/TextButton.h"
-#include "../Interface/Window.h"
-#include "../Interface/Text.h"
-#include "../Interface/TextList.h"
+#include "../Engine/SurfaceSet.h"
+
 #include "../Interface/NumberText.h"
 #include "../Interface/Slider.h"
+#include "../Interface/Text.h"
+#include "../Interface/TextButton.h"
+#include "../Interface/TextList.h"
+#include "../Interface/Window.h"
+
+#include "../Resource/ResourcePack.h"
+
 
 namespace OpenXcom
 {
@@ -43,21 +50,26 @@ namespace OpenXcom
  * Initializes all the elements in the test screen.
  * @param game Pointer to the core game.
  */
-TestState::TestState(Game *game) : State(game)
+TestState::TestState(Game* game)
+	:
+		State(game)
 {
-	// Create objects
-	_window = new Window(this, 300, 180, 10, 10);
-	_text = new Text(280, 120, 20, 50);
-	_button = new TextButton(100, 20, 110, 150);
-	_list = new TextList(300, 180, 10, 10);
-	_number = new NumberText(50, 5, 200, 25);
+	_window	= new Window(this, 300, 180, 10, 10);
+	_text	= new Text(280, 120, 20, 50);
+	_button	= new TextButton(100, 20, 110, 150);
+	_list	= new TextList(300, 180, 10, 10);
+	_number	= new NumberText(50, 5, 200, 25);
+	_slider	= new Slider(100, 15, 50, 50);
+
 	_set = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
 	_set->getFrame(1);
-	_slider = new Slider(100, 15, 50, 50);
 
-	// Set palette
+
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)), Palette::backPos, 16);
+	_game->setPalette(
+				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)),
+				Palette::backPos,
+				16);
 
 	add(_window);
 	add(_button);
@@ -68,7 +80,7 @@ TestState::TestState(Game *game) : State(game)
 
 	centerAllSurfaces();
 
-	// Set up objects
+
 	_window->setColor(Palette::blockOffset(15)+1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK04.SCR"));
 
@@ -76,11 +88,11 @@ TestState::TestState(Game *game) : State(game)
 	_button->setText(L"LOLOLOL");
 
 	_text->setColor(Palette::blockOffset(15)+1);
-	//_text->setBig();
+//	_text->setBig();
 	_text->setWordWrap(true);
 	_text->setAlign(ALIGN_CENTER);
 	_text->setVerticalAlign(ALIGN_MIDDLE);
-	//_text->setText(tr("STR_COUNCIL_TERMINATED"));
+//	_text->setText(tr("STR_COUNCIL_TERMINATED"));
 
 	_list->setColor(Palette::blockOffset(15)+1);
 	_list->setColumns(3, 100, 50, 100);
@@ -104,21 +116,27 @@ TestState::TestState(Game *game) : State(game)
 	//_game->getResourcePack()->getFont("FONT_SMALL")->fix("../../../Small.bmp", 128);
 }
 
+/**
+ *
+ */
 TestState::~TestState()
 {
-
 }
 
+/**
+ *
+ */
 void TestState::think()
 {
 	State::think();
 
-	/*
-	_text->setText(tr(_i));
-	_i++;
-	*/
+/*	_text->setText(tr(_i));
+	_i++; */
 }
 
+/**
+ *
+ */
 void TestState::blit()
 {
 	State::blit();
@@ -132,28 +150,39 @@ void TestState::blit()
  * testing 8bpp functionality, still useful for debugging palette issues.
  * @return Test surface.
  */
-SDL_Surface *TestState::testSurface()
+SDL_Surface* TestState::testSurface()
 {
-	SDL_Surface *surface;
+	SDL_Surface* surface;
 
-	// Create surface
-	surface = SDL_CreateRGBSurface(SDL_HWSURFACE, 256, 25, 8, 0, 0, 0, 0);
+	surface = SDL_CreateRGBSurface(
+								SDL_HWSURFACE,
+								256,
+								25,
+								8,
+								0,
+								0,
+								0,
+								0);
 
 	if (surface == 0)
 	{
 		throw Exception(SDL_GetError());
 	}
 
-	// Lock the surface
 	SDL_LockSurface(surface);
 
-	Uint8 *index = (Uint8 *)surface->pixels;
+	Uint8* index = (Uint8*)surface->pixels;
+	for (int
+			j = 0;
+			j < 25;
+			++j)
+		for (int
+				i = 0;
+				i < 256;
+				i++,
+					++index)
+			*index = static_cast<Uint8>(i);
 
-	for (int j = 0; j < 25; ++j)
-		for (int i = 0; i < 256; i++, ++index)
-			*index = i;
-
-	// Unlock the surface
 	SDL_UnlockSurface(surface);
 
 	return surface;

@@ -133,7 +133,7 @@ CraftArmorState::CraftArmorState(
 
 
 //kL	Craft* c = _base->getCrafts()->at(_craft);
-	Craft* c;											// kL
+	Craft* c = 0;											// kL
 	bool hasCraft = _base->getCrafts()->size() > 0;		// kL
 	if (hasCraft)										// kL -> KLUDGE!!!
 		c = _base->getCrafts()->at(_craft);				// kL: This is always 0 (1st craft) when coming from SoldiersState.
@@ -199,7 +199,7 @@ void CraftArmorState::init()
 	_lstSoldiers->clearList(); // kL
 
 	// kL_begin: init Armor list, from cTor
-	Craft* c;
+	Craft* c = 0;
 	bool hasCraft = _base->getCrafts()->size() > 0;
 	if (hasCraft)
 		c = _base->getCrafts()->at(_craft);

@@ -17,13 +17,17 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <assert.h>
 #include "AlienStrategy.h"
+
+#include <assert.h>
+
 #include "SavedGame.h"
 #include "WeightedOptions.h"
+
 #include "../Engine/RNG.h"
-#include "../Ruleset/Ruleset.h"
+
 #include "../Ruleset/RuleRegion.h"
+#include "../Ruleset/Ruleset.h"
 
 
 namespace OpenXcom
@@ -79,7 +83,9 @@ void AlienStrategy::init(const Ruleset* rules)
  * @param rules Pointer to the game ruleset.
  * @param node YAML node.
  */
-void AlienStrategy::load(const Ruleset*, const YAML::Node& node)
+void AlienStrategy::load(
+		const Ruleset*,
+		const YAML::Node& node)
 {
 	for (MissionsByRegion::iterator
 			ii = _regionMissions.begin();
@@ -105,7 +111,9 @@ void AlienStrategy::load(const Ruleset*, const YAML::Node& node)
 
 		std::auto_ptr<WeightedOptions> options(new WeightedOptions());
 		options->load(missions);
-		_regionMissions.insert(std::make_pair(region, options.release()));
+		_regionMissions.insert(std::make_pair(
+											region,
+											options.release()));
 	}
 }
 
@@ -171,7 +179,9 @@ const std::string AlienStrategy::chooseRandomMission(const std::string& region) 
  * @param mission The mission id.
  * @return If there are no more regions with missions available.
  */
-bool AlienStrategy::removeMission(const std::string& region, const std::string& mission)
+bool AlienStrategy::removeMission(
+		const std::string& region,
+		const std::string& mission)
 {
 	MissionsByRegion::iterator found = _regionMissions.find(region);
 	assert(found != _regionMissions.end());

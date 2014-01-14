@@ -1705,11 +1705,19 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* unit)
 			{
 				BattleItem* item = unit->getItem("STR_RIGHT_HAND");
 				if (item)
-					dropItem(unit->getPosition(), item, false, true);
+					dropItem(
+							unit->getPosition(),
+							item,
+							false,
+							true);
 
 				item = unit->getItem("STR_LEFT_HAND");
 				if (item)
-					dropItem(unit->getPosition(), item, false, true);
+					dropItem(
+							unit->getPosition(),
+							item,
+							false,
+							true);
 
 				unit->setCache(0);
 
@@ -1719,7 +1727,9 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* unit)
 						unit->getPosition().z);
 				if (_save->getTile(ba.target)) // only walk towards it when the place exists
 				{
-					_save->getPathfinding()->calculate(ba.actor, ba.target);
+					_save->getPathfinding()->calculate(
+													ba.actor,
+													ba.target);
 
 					statePushBack(new UnitWalkBState(
 													this,
@@ -1953,8 +1963,8 @@ void BattlescapeGame::primaryAction(const Position& pos)
 				if (builtinpsi)
 				{
 					_currentAction.weapon = new BattleItem(
-							_parentState->getGame()->getRuleset()->getItem("ALIEN_PSI_WEAPON"),
-							_save->getCurrentItemId());
+													_parentState->getGame()->getRuleset()->getItem("ALIEN_PSI_WEAPON"),
+													_save->getCurrentItemId());
 				}
 
 				_currentAction.TU = _currentAction.weapon->getRules()->getTUUse();

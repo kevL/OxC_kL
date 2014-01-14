@@ -153,7 +153,9 @@ Map::Map(
 	_scrollKeyTimer = new Timer(SCROLL_INTERVAL);
 	_scrollKeyTimer->onTimer((SurfaceHandler)& Map::scrollKey);
 
-	_camera->setScrollTimer(_scrollMouseTimer, _scrollKeyTimer);
+	_camera->setScrollTimer(
+						_scrollMouseTimer,
+						_scrollKeyTimer);
 }
 
 /**
@@ -295,8 +297,6 @@ void Map::draw()
 	} */
 
 
-	SavedBattleGame* _battle = _game->getSavedGame()->getSavedBattle(); // kL, getIcons() etc.
-
 	if ((_save->getSelectedUnit()
 			&& _save->getSelectedUnit()->getVisible())
 		|| _save->getSelectedUnit() == 0
@@ -317,8 +317,8 @@ void Map::draw()
 			//Log(LOG_INFO) << ". . . . . . drawTerrain() Set _reveal = " << _reveal;
 		}
 
-		if (_battle->getSide() == FACTION_PLAYER)
-			_battle->getBattleState()->toggleIcons(true);
+		if (_save->getSide() == FACTION_PLAYER)
+			_save->getBattleState()->toggleIcons(true);
 
 		drawTerrain(this);
 	}
@@ -332,7 +332,7 @@ void Map::draw()
 			//Log(LOG_INFO) << ". . . . . . _reveal, set " << _reveal;
 		}
 
-		_battle->getBattleState()->toggleIcons(false);
+		_save->getBattleState()->toggleIcons(false);
 
 		//Log(LOG_INFO) << ". . . . blit( hidden movement )";
 		_message->blit(this);
@@ -376,7 +376,7 @@ void Map::setPalette(
  */
 void Map::drawTerrain(Surface* surface)
 {
-	int frameNumber = 0;
+	int frame = 0;
 
 	Surface* tmpSurface;
 	Tile* tile;
@@ -568,7 +568,8 @@ void Map::drawTerrain(Surface* surface)
 	bool pathfinderTurnedOn = _save->getPathfinding()->isPathPreviewed();
 
 	if (!_waypoints.empty()
-		|| (pathfinderTurnedOn && _previewSetting >= 2))
+		|| (pathfinderTurnedOn
+			&& _previewSetting >= 2))
 	{
 		_numWaypid = new NumberText(15, 15, 20, 30);
 		_numWaypid->setPalette(getPalette());
@@ -612,9 +613,7 @@ void Map::drawTerrain(Surface* surface)
 						continue;
 
 					if (tile->isDiscovered(2))
-					{
 						tileShade = tile->getShade();
-					}
 					else
 					{
 						tileShade = 16;
@@ -650,23 +649,23 @@ void Map::drawTerrain(Surface* surface)
 								if (unit
 									&& (unit->getVisible() || _save->getDebugMode()))
 								{
-									frameNumber = (_animFrame %2); // yellow box
+									frame = (_animFrame %2); // yellow box
 								}
 								else
-									frameNumber = 0; // red box
+									frame = 0; // red box
 							}
 							else
 							{
 								if (unit
 									&& (unit->getVisible() || _save->getDebugMode()))
 								{
-									frameNumber = 7 + (_animFrame / 2); // yellow animated crosshairs
+									frame = 7 + (_animFrame / 2); // yellow animated crosshairs
 								}
 								else
-									frameNumber = 6; // red static crosshairs
+									frame = 6; // red static crosshairs
 							}
 
-							tmpSurface = _res->getSurfaceSet("CURSOR.PCK")->getFrame(frameNumber);
+							tmpSurface = _res->getSurfaceSet("CURSOR.PCK")->getFrame(frame);
 							tmpSurface->blitNShade(
 									surface,
 									screenPosition.x,
@@ -675,9 +674,9 @@ void Map::drawTerrain(Surface* surface)
 						}
 						else if (_camera->getViewLevel() > itZ)
 						{
-							frameNumber = 2; // blue box
+							frame = 2; // blue box
 
-							tmpSurface = _res->getSurfaceSet("CURSOR.PCK")->getFrame(frameNumber);
+							tmpSurface = _res->getSurfaceSet("CURSOR.PCK")->getFrame(frame);
 							tmpSurface->blitNShade(
 									surface,
 									screenPosition.x,
@@ -906,8 +905,8 @@ void Map::drawTerrain(Surface* surface)
 
 							if (unit->getFire() > 0)
 							{
-								frameNumber = 4 + (_animFrame / 2);
-								tmpSurface = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frameNumber);
+								frame = 4 + (_animFrame / 2);
+								tmpSurface = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
 								tmpSurface->blitNShade(
 										surface,
 										screenPosition.x + offset.x,
@@ -955,8 +954,8 @@ void Map::drawTerrain(Surface* surface)
 
 								if (tunit->getFire() > 0)
 								{
-									frameNumber = 4 + (_animFrame / 2);
-									tmpSurface = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frameNumber);
+									frame = 4 + (_animFrame / 2);
+									tmpSurface = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
 									tmpSurface->blitNShade(
 											surface,
 											screenPosition.x + offset.x,
@@ -971,24 +970,24 @@ void Map::drawTerrain(Surface* surface)
 					if (tile->getSmoke()
 						&& tile->isDiscovered(2))
 					{
-						frameNumber = 0;
+						frame = 0;
 
 						if (!tile->getFire()) // see http://www.ufopaedia.org/images/c/cb/Smoke.gif
-//kL							frameNumber = 8 + static_cast<int>(floor((static_cast<double>(tile->getSmoke()) / 6.0) - 0.1));
-							frameNumber = 8 + (tile->getSmoke() / 2); // kL. getSmoke = 1..15 -> frameNumber = 8..15
+//kL							frame = 8 + static_cast<int>(floor((static_cast<double>(tile->getSmoke()) / 6.0) - 0.1));
+							frame = 8 + (tile->getSmoke() / 2); // kL. getSmoke = 1..15 -> frame = 8..15
 
 						int curFrame = (_animFrame / 2) + tile->getAnimationOffset(); // animFrame = 0..7 (0..3), offset = 0..3 -> curFrame = 0..6 (0..3, 1..4, 2..5, 3..6)
 //kL						if (curFrame > 3)
-//kL							frameNumber += curFrame - 4;
+//kL							frame += curFrame - 4;
 						if (curFrame < 5)					// kL
-							frameNumber += curFrame;
+							frame += curFrame;
 						else
-							frameNumber += curFrame - 3;	// kL
+							frame += curFrame - 3;	// kL
 
 						//Log(LOG_INFO) << "Map::drawTerrain() smokeFrames";
-						//Log(LOG_INFO) << ". frameNumber = " << frameNumber;
+						//Log(LOG_INFO) << ". frame = " << frame;
 
-						tmpSurface = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frameNumber); // smokeFrames in smoke.pck: 8..19 (12 frames)
+						tmpSurface = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame); // smokeFrames in smoke.pck: 8..19 (12 frames)
 						tmpSurface->blitNShade(
 								surface,
 								screenPosition.x,
@@ -1062,23 +1061,23 @@ void Map::drawTerrain(Surface* surface)
 								if (unit
 									&& (unit->getVisible() || _save->getDebugMode()))
 								{
-									frameNumber = 3 + (_animFrame %2); // yellow box
+									frame = 3 + (_animFrame %2); // yellow box
 								}
 								else
-									frameNumber = 3; // red box
+									frame = 3; // red box
 							}
 							else
 							{
 								if (unit
 									&& (unit->getVisible() || _save->getDebugMode()))
 								{
-									frameNumber = 7 + (_animFrame / 2); // yellow animated crosshairs
+									frame = 7 + (_animFrame / 2); // yellow animated crosshairs
 								}
 								else
-									frameNumber = 6; // red static crosshairs
+									frame = 6; // red static crosshairs
 							}
 
-							tmpSurface = _res->getSurfaceSet("CURSOR.PCK")->getFrame(frameNumber);
+							tmpSurface = _res->getSurfaceSet("CURSOR.PCK")->getFrame(frame);
 							tmpSurface->blitNShade(
 									surface,
 									screenPosition.x,
@@ -1087,9 +1086,9 @@ void Map::drawTerrain(Surface* surface)
 						}
 						else if (_camera->getViewLevel() > itZ)
 						{
-							frameNumber = 5; // blue box
+							frame = 5; // blue box
 
-							tmpSurface = _res->getSurfaceSet("CURSOR.PCK")->getFrame(frameNumber);
+							tmpSurface = _res->getSurfaceSet("CURSOR.PCK")->getFrame(frame);
 							tmpSurface->blitNShade(
 									surface,
 									screenPosition.x,
@@ -1100,9 +1099,9 @@ void Map::drawTerrain(Surface* surface)
 						if (_cursorType > 2
 							&& _camera->getViewLevel() == itZ)
 						{
-							int frame[6] = {0, 0, 0, 11, 13, 15};
+							int aFrame[6] = {0, 0, 0, 11, 13, 15};
 
-							tmpSurface = _res->getSurfaceSet("CURSOR.PCK")->getFrame(frame[_cursorType] + (_animFrame / 4));
+							tmpSurface = _res->getSurfaceSet("CURSOR.PCK")->getFrame(aFrame[_cursorType] + (_animFrame / 4));
 							tmpSurface->blitNShade(
 									surface,
 									screenPosition.x,
@@ -1276,16 +1275,22 @@ void Map::drawTerrain(Surface* surface)
 		{
 			_arrow->blitNShade(
 					surface,
-					screenPosition.x + offset.x + (_spriteWidth / 2) - (_arrow->getWidth() / 2),
-					screenPosition.y + offset.y - _arrow->getHeight() + static_cast<int>(4.0 * sin((static_cast<double>(_animFrame) * 6.28) / 8.0)),
+					screenPosition.x
+						+ offset.x
+						+ (_spriteWidth / 2)
+						- (_arrow->getWidth() / 2),
+					screenPosition.y
+						+ offset.y
+						- _arrow->getHeight()
+						+ static_cast<int>(
+								4.0 * sin((static_cast<double>(_animFrame) * 6.28) / 8.0)),
 					0);
 		}
 	}
 
 	delete _numWaypid;
 
-	// check if we got big explosions
-	if (_explosionInFOV)
+	if (_explosionInFOV) // check if we got big explosions
 	{
 		for (std::set<Explosion*>::const_iterator
 				i = _explosions.begin();
@@ -1392,12 +1397,13 @@ void Map::mouseOver(Action* action, State* state)
 
 /**
  * Handles animating tiles. 8 Frames per animation.
- * @param redraw Redraw the battlescape?
+ * @param redraw, Redraw the battlescape?
  */
 void Map::animate(bool redraw)
 {
 	_animFrame++;
-	if (_animFrame == 8) _animFrame = 0;
+	if (_animFrame == 8)
+		_animFrame = 0;
 
 	// kL_begin:
 /*	if (_animUp)
@@ -1438,7 +1444,8 @@ void Map::animate(bool redraw)
 		}
 	}
 
-	if (redraw) _redraw = true;
+	if (redraw)
+		_redraw = true;
 }
 
 /**

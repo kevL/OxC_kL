@@ -21,6 +21,7 @@
 #define OPENXCOM_ALIENSTRATEGY_H
 
 #include <yaml-cpp/yaml.h>
+
 #include "WeightedOptions.h"
 
 
@@ -29,11 +30,13 @@ namespace OpenXcom
 
 class Ruleset;
 
+
 /**
  * Stores the information about alien strategy.
  */
 class AlienStrategy
 {
+
 private:
 	/// The chances of each region to be targeted for a mission.
 	WeightedOptions _regionChances;
@@ -43,6 +46,7 @@ private:
 	// Disable copy and assignments.
 	AlienStrategy(const AlienStrategy&);
 	AlienStrategy &operator=(const AlienStrategy&);
+
 
 	public:
 		/// Create an AlienStrategy with no data.
@@ -56,14 +60,18 @@ private:
 		/// Initialize values according to the rules.
 		void init(const Ruleset* rules);
 		/// Loads the data from YAML.
-		void load(const Ruleset* rules, const YAML::Node& node);
+		void load(
+				const Ruleset* rules,
+				const YAML::Node& node);
 
 		/// Choose a random region for a regular mission.
 		const std::string chooseRandomRegion(const Ruleset* rules);
 		/// Choose a random mission for a region.
 		const std::string chooseRandomMission(const std::string& region) const;
 		/// Remove a region and mission from the list of posibilities.
-		bool removeMission(const std::string& region, const std::string& mission);
+		bool removeMission(
+				const std::string& region,
+				const std::string& mission);
 };
 
 }

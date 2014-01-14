@@ -102,6 +102,7 @@ private:
 		std::wstring getName(Language* lang = 0) const;
 		/// Sets the base's name.
 		void setName(const std::wstring& name);
+
 		/// Gets the base's facilities.
 		std::vector<BaseFacility*>* getFacilities();
 		/// Gets the base's soldiers.
@@ -110,8 +111,10 @@ private:
 		std::vector<Craft*>* getCrafts();
 		/// Gets the base's transfers.
 		std::vector<Transfer*>* getTransfers();
+
 		/// Gets the base's items.
 		ItemContainer* getItems();
+
 		/// Gets the base's scientists.
 		int getScientists() const;
 		/// Sets the base's scientists.
@@ -120,10 +123,12 @@ private:
 		int getEngineers() const;
 		/// Sets the base's engineers.
 		void setEngineers(int engineers);
+
 		/// Checks if a target is detected by the base's radar.
 		uint8_t detect(Target* target) const;
 		/// Checks if a target is inside the base's radar range.
 		double insideRadarRange(Target* target) const;
+
 		/// Gets the base's available soldiers.
 		int getAvailableSoldiers(bool combatReady = false) const;
 		/// Gets the base's total soldiers.
@@ -136,40 +141,53 @@ private:
 //kL		int getAvailableEngineers() const;
 		/// Gets the base's total engineers.
 		int getTotalEngineers() const;
+
 		/// Gets the base's used living quarters.
 		int getUsedQuarters() const;
 		/// Gets the base's available living quarters.
 		int getAvailableQuarters() const;
+
 		/// Gets the base's used storage space.
 		int getUsedStores() const;
 		/// Gets the base's available storage space.
 		int getAvailableStores() const;
+
 		/// Gets the base's used laboratory space.
 		int getUsedLaboratories() const;
 		/// Gets the base's available laboratory space.
 		int getAvailableLaboratories() const;
+
 		/// Gets the base's used workshop space.
 		int getUsedWorkshops() const;
 		/// Gets the base's available workshop space.
 		int getAvailableWorkshops() const;
+
 		/// Gets the base's used hangars.
 		int getUsedHangars() const;
 		/// Gets the base's available hangars.
 		int getAvailableHangars() const;
+
 		/// Get the number of available space lab (not used by a ResearchProject).
 		int getFreeLaboratories () const;
 		/// Get the number of available space lab (not used by a Production).
 		int getFreeWorkshops() const;
+
 		///
 		int getAllocatedScientists() const;
 		///
 		int getAllocatedEngineers() const;
+
 		/// Gets the base's defense value.
 		int getDefenseValue() const;
 		/// Gets the base's short range detection.
 		int getShortRangeDetection() const;
+		/// kL. Gets the base's short range detection value.
+		int getShortRangeValue() const;
 		/// Gets the base's long range detection.
 		int getLongRangeDetection() const;
+		/// kL. Gets the base's long range detection.
+		int getLongRangeValue() const;
+
 		/// Gets the base's crafts of a certain type.
 		int getCraftCount(const std::string& craft) const;
 		/// Gets the base's craft maintenance.
@@ -180,6 +198,7 @@ private:
 		int getFacilityMaintenance() const;
 		/// Gets the base's total monthly maintenance.
 		int getMonthlyMaintenace() const;
+
 		/// Get the list of base's ResearchProject.
 		const std::vector<ResearchProject*>& getResearch() const;
 		/// Add a new ResearchProject to the Base.
@@ -191,43 +210,53 @@ private:
 				bool help = true); // kL
 		/// kL: Research Help ala XcomUtil.
 		void researchHelp(std::string aLien);
+
 		/// Add a new Production to Base.
 		void addProduction(Production* prod);
 		/// Remove a Base's Production.
 		void removeProduction(Production* prod);
 		/// Get the list of Base's Production.
 		const std::vector<Production*>& getProductions() const;
+
 		/// Checks if this base is hyper-wave equipped.
 		bool getHyperDetection() const;
+
 		/// Gets the base's used psi lab space.
 		int getUsedPsiLabs() const;
 		/// Gets the base's total available psi lab space.
 		int getAvailablePsiLabs() const;
 		/// Gets the base's total free psi lab space.
 		int getFreePsiLabs() const;
+
 		/// Gets the total amount of Containment Space.
 		int getAvailableContainment() const;
 		/// Gets the total amount of used Containment Space.
 		int getUsedContainment() const;
+
 		/// Sets the craft's battlescape status.
 		void setInBattlescape(bool inBattle);
 		/// Gets if the craft is in battlescape.
 		bool isInBattlescape() const;
+
 		/// Mark this base for alien retaliation.
 		void setRetaliationStatus(bool mark = true);
 		/// Gets the retaliation status of this base.
 		bool getRetaliationStatus() const;
+
 		/// Get the detection chance for this base.
 //kL		unsigned getDetectionChance() const;
 		int getDetectionChance() const;
+
 		/// Gets how many Grav Shields the base has
 		int getGravShields() const;
 		///
 		void setupDefenses();
 		/// Get a list of Defensive Facilities
 		std::vector<BaseFacility*>* getDefenses();
+
 		/// Gets the base's vehicles.
 		std::vector<Vehicle*>* getVehicles();
+
 		/// Check all the module connections.
 		void checkModuleConnections();
 		/// Check a single coordinate for module connection.

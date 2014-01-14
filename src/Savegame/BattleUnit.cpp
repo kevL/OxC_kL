@@ -3193,39 +3193,39 @@ bool BattleUnit::checkViewSector(Position pos) const
 		case 0:
 			if (dx + dy >= 0 && dy - dx >= 0)
 				return true;
-//		break;
+		break;
 		case 1:
 			if (dx >= 0 && dy >= 0)
 				return true;
-//		break;
+		break;
 		case 2:
 			if (dx + dy >= 0 && dy - dx <= 0)
 				return true;
-//		break;
+		break;
 		case 3:
 			if (dy <= 0 && dx >= 0)
 				return true;
-//		break;
+		break;
 		case 4:
 			if (dx + dy <= 0 && dy - dx <= 0)
 				return true;
-//		break;
+		break;
 		case 5:
 			if (dx <= 0 && dy <= 0)
 				return true;
-//		break;
+		break;
 		case 6:
 			if (dx + dy <= 0 && dy - dx >= 0)
 				return true;
-//		break;
+		break;
 		case 7:
 			if (dy >= 0 && dx <= 0)
 				return true;
-//		break;
+		break;
 
 		default:
 			return false;
-//		break;
+		break;
 	}
 
 	return false;

@@ -94,7 +94,7 @@ SavedBattleGame::SavedBattleGame()
 {
 	Log(LOG_INFO) << "\nCreate SavedBattleGame";
 
-	_dragButton			= Options::getInt("battleScrollDragButton");
+	_dragButton			= static_cast<Uint8>(Options::getInt("battleScrollDragButton"));
 	_dragInvert			= Options::getBool("battleScrollDragInvert");
 	_dragTimeTolerance	= Options::getInt("battleScrollDragTimeTolerance");
 	_dragPixelTolerance	= Options::getInt("battleScrollDragPixelTolerance");
@@ -121,23 +121,35 @@ SavedBattleGame::~SavedBattleGame()
 {
 //	Log(LOG_INFO) << "Delete SavedBattleGame";
 
-	for (int i = 0; i < _mapsize_z * _mapsize_y * _mapsize_x; ++i)
+	for (int
+			i = 0;
+			i < _mapsize_z * _mapsize_y * _mapsize_x;
+			++i)
 	{
 		delete _tiles[i];
 	}
 	delete[] _tiles;
 
-	for (std::vector<Node*>::iterator i = _nodes.begin(); i != _nodes.end(); ++i)
+	for (std::vector<Node*>::iterator
+			i = _nodes.begin();
+			i != _nodes.end();
+			++i)
 	{
 		delete *i;
 	}
 
-	for (std::vector<BattleUnit*>::iterator i = _units.begin(); i != _units.end(); ++i)
+	for (std::vector<BattleUnit*>::iterator
+			i = _units.begin();
+			i != _units.end();
+			++i)
 	{
 		delete *i;
 	}
 
-	for (std::vector<BattleItem*>::iterator i = _items.begin(); i != _items.end(); ++i)
+	for (std::vector<BattleItem*>::iterator
+			i = _items.begin();
+			i != _items.end();
+			++i)
 	{
 		delete *i;
 	}
@@ -167,19 +179,28 @@ void SavedBattleGame::load(
 	_turn				= node["turn"].as<int>(_turn);
 	int selectedUnit	= node["selectedUnit"].as<int>();
 
-	for (YAML::const_iterator i = node["mapdatasets"].begin(); i != node["mapdatasets"].end(); ++i)
+	for (YAML::const_iterator
+			i = node["mapdatasets"].begin();
+			i != node["mapdatasets"].end();
+			++i)
 	{
 		std::string name = i->as<std::string>();
 		MapDataSet* mds = new MapDataSet(name);
 		_mapDataSets.push_back(mds);
 	}
 
-	initMap(_mapsize_x, _mapsize_y, _mapsize_z);
+	initMap(
+			_mapsize_x,
+			_mapsize_y,
+			_mapsize_z);
 
 	if (!node["tileTotalBytesPer"])
 	{
 		// binary tile data not found, load old-style text tiles :(
-		for (YAML::const_iterator i = node["tiles"].begin(); i != node["tiles"].end(); ++i)
+		for (YAML::const_iterator
+				i = node["tiles"].begin();
+				i != node["tiles"].end();
+				++i)
 		{
 			Position pos = (*i)["position"].as<Position>();
 			getTile(pos)->load((*i));
@@ -191,7 +212,11 @@ void SavedBattleGame::load(
 		Tile::SerializationKey serKey;
 		size_t totalTiles = node["totalTiles"].as<size_t>();
 
-        memset(&serKey, 0, sizeof(Tile::SerializationKey));
+        memset(
+				&serKey,
+				0,
+				sizeof(Tile::SerializationKey));
+
 		serKey.index			= node["tileIndexSize"].as<Uint8>(serKey.index);
 		serKey.totalBytes		= node["tileTotalBytesPer"].as<Uint32>(serKey.totalBytes);
 		serKey._fire			= node["tileFireSize"].as<Uint8>(serKey._fire);
@@ -229,14 +254,20 @@ void SavedBattleGame::load(
 		}
 	}
 
-	for (YAML::const_iterator i = node["nodes"].begin(); i != node["nodes"].end(); ++i)
+	for (YAML::const_iterator
+			i = node["nodes"].begin();
+			i != node["nodes"].end();
+			++i)
 	{
 		Node* n = new Node();
 		n->load(*i);
 		_nodes.push_back(n);
 	}
 
-	for (YAML::const_iterator i = node["units"].begin(); i != node["units"].end(); ++i)
+	for (YAML::const_iterator
+			i = node["units"].begin();
+			i != node["units"].end();
+			++i)
 	{
 		UnitFaction faction = (UnitFaction)(*i)["faction"].as<int>();
 		int id = (*i)["soldierId"].as<int>();
@@ -245,7 +276,9 @@ void SavedBattleGame::load(
 		if (id < BattleUnit::MAX_SOLDIER_ID) // Unit is linked to a geoscape soldier
 		{
 			// look up the matching soldier
-			unit = new BattleUnit(savedGame->getSoldier(id), faction);
+			unit = new BattleUnit(
+								savedGame->getSoldier(id),
+								faction);
 		}
 		else
 		{
@@ -268,7 +301,8 @@ void SavedBattleGame::load(
 		if (faction == FACTION_PLAYER)
 		{
 			if (unit->getId() == selectedUnit
-				|| (_selectedUnit == 0 && !unit->isOut()))
+				|| (_selectedUnit == 0
+					&& !unit->isOut()))
 			{
 				_selectedUnit = unit;
 			}
@@ -286,18 +320,19 @@ void SavedBattleGame::load(
 			if (const YAML::Node& ai = (*i)["AI"])
 			{
 				BattleAIState* aiState;
+
 				if (faction == FACTION_NEUTRAL)
-				{
-					aiState = new CivilianBAIState(this, unit, 0);
-				}
+					aiState = new CivilianBAIState(
+												this,
+												unit,
+												0);
 				else if (faction == FACTION_HOSTILE)
-				{
-					aiState = new AlienBAIState(this, unit, 0);
-				}
+					aiState = new AlienBAIState(
+											this,
+											unit,
+											0);
 				else
-				{
 					continue;
-				}
 
 				aiState->load(ai);
 				unit->setAIState(aiState);
@@ -308,14 +343,19 @@ void SavedBattleGame::load(
 	// matches up tiles and units
 	resetUnitTiles();
 
-	for (YAML::const_iterator i = node["items"].begin(); i != node["items"].end(); ++i)
+	for (YAML::const_iterator
+			i = node["items"].begin();
+			i != node["items"].end();
+			++i)
 	{
 		std::string type = (*i)["type"].as<std::string>();
 		_itemId = (*i)["id"].as<int>(_itemId);
 
 		if (type != "0")
 		{
-			BattleItem* item = new BattleItem(rule->getItem(type), &_itemId);
+			BattleItem* item = new BattleItem(
+											rule->getItem(type),
+											&_itemId);
 			item->load(*i);
 			type = (*i)["inventoryslot"].as<std::string>();
 
@@ -326,17 +366,16 @@ void SavedBattleGame::load(
 			int unit = (*i)["unit"].as<int>();
 
 			// match up items and units
-			for (std::vector<BattleUnit*>::iterator bu = _units.begin(); bu != _units.end(); ++bu)
+			for (std::vector<BattleUnit*>::iterator
+					bu = _units.begin();
+					bu != _units.end();
+					++bu)
 			{
 				if ((*bu)->getId() == owner)
-				{
 					item->moveToOwner(*bu);
-				}
 
 				if ((*bu)->getId() == unit)
-				{
 					item->setUnit(*bu);
-				}
 			}
 
 			// match up items and tiles
@@ -355,12 +394,19 @@ void SavedBattleGame::load(
 
 	// tie ammo items to their weapons, running through the items again
 	std::vector<BattleItem*>::iterator weaponi = _items.begin();
-	for (YAML::const_iterator i = node["items"].begin(); i != node["items"].end(); ++i, ++weaponi)
+	for (YAML::const_iterator
+			i = node["items"].begin();
+			i != node["items"].end();
+			++i,
+				++weaponi)
 	{
 		int ammo = (*i)["ammoItem"].as<int>();
 		if (ammo != -1)
 		{
-			for (std::vector<BattleItem*>::iterator ammoi = _items.begin(); ammoi != _items.end(); ++ammoi)
+			for (std::vector<BattleItem*>::iterator
+					ammoi = _items.begin();
+					ammoi != _items.end();
+					++ammoi)
 			{
 				if ((*ammoi)->getId() == ammo)
 				{
@@ -379,32 +425,47 @@ void SavedBattleGame::load(
 
 /**
  * Loads the resources required by the map in the battle save.
- * @param game Pointer to the game.
+ * @param game, Pointer to the game.
  */
 void SavedBattleGame::loadMapResources(Game* game)
 {
 	ResourcePack* res = game->getResourcePack();
-	for (std::vector<MapDataSet*>::const_iterator i = _mapDataSets.begin(); i != _mapDataSets.end(); ++i)
+
+	for (std::vector<MapDataSet*>::const_iterator
+			i = _mapDataSets.begin();
+			i != _mapDataSets.end();
+			++i)
 	{
 		(*i)->loadData();
 
 		if (game->getRuleset()->getMCDPatch((*i)->getName()))
-		{
 			game->getRuleset()->getMCDPatch((*i)->getName())->modifyData(*i);
-		}
 	}
 
-	int mdsID, mdID;
+	int
+		mdID,
+		mdsID;
 
-	for (int i = 0; i < _mapsize_z * _mapsize_y * _mapsize_x; ++i)
+	for (int
+			i = 0;
+			i < _mapsize_z * _mapsize_y * _mapsize_x;
+			++i)
 	{
-		for (int part = 0; part < 4; part++)
+		for (int
+				part = 0;
+				part < 4;
+				part++)
 		{
 			_tiles[i]->getMapData(&mdID, &mdsID, part);
 
-			if (mdID != -1 && mdsID != -1)
+			if (mdID != -1
+				&& mdsID != -1)
 			{
-				_tiles[i]->setMapData(_mapDataSets[mdsID]->getObjects()->at(mdID), mdID, mdsID, part);
+				_tiles[i]->setMapData(
+								_mapDataSets[mdsID]->getObjects()->at(mdID),
+								mdID,
+								mdsID,
+								part);
 			}
 		}
 	}
@@ -436,9 +497,12 @@ YAML::Node SavedBattleGame::save() const
 	node["missionType"]		= _missionType;
 	node["globalshade"]		= _globalShade;
 	node["turn"]			= _turn;
-	node["selectedUnit"]	= (_selectedUnit?_selectedUnit->getId():-1);
+	node["selectedUnit"]	= (_selectedUnit? _selectedUnit->getId(): -1);
 
-	for (std::vector<MapDataSet*>::const_iterator i = _mapDataSets.begin(); i != _mapDataSets.end(); ++i)
+	for (std::vector<MapDataSet*>::const_iterator
+			i = _mapDataSets.begin();
+			i != _mapDataSets.end();
+			++i)
 	{
 		node["mapdatasets"].push_back((*i)->getName());
 	}
@@ -465,7 +529,10 @@ YAML::Node SavedBattleGame::save() const
 	Uint8* tileData = (Uint8*) calloc(tileDataSize, 1);
 	Uint8* w = tileData;
 
-	for (int i = 0; i < _mapsize_z * _mapsize_y * _mapsize_x; ++i)
+	for (int
+			i = 0;
+			i < _mapsize_z * _mapsize_y * _mapsize_x;
+			++i)
 	{
 		if (!_tiles[i]->isVoid())
 		{
@@ -484,7 +551,10 @@ YAML::Node SavedBattleGame::save() const
 	free(tileData);
 #endif
 
-	for (std::vector<Node*>::const_iterator i = _nodes.begin(); i != _nodes.end(); ++i)
+	for (std::vector<Node*>::const_iterator
+			i = _nodes.begin();
+			i != _nodes.end();
+			++i)
 	{
 		node["nodes"].push_back((*i)->save());
 	}
@@ -494,18 +564,24 @@ YAML::Node SavedBattleGame::save() const
 		node["moduleMap"] = _baseModules;
 	}
 
-	for (std::vector<BattleUnit*>::const_iterator i = _units.begin(); i != _units.end(); ++i)
+	for (std::vector<BattleUnit*>::const_iterator
+			i = _units.begin();
+			i != _units.end();
+			++i)
 	{
 		node["units"].push_back((*i)->save());
 	}
 
-	for (std::vector<BattleItem*>::const_iterator i = _items.begin(); i != _items.end(); ++i)
+	for (std::vector<BattleItem*>::const_iterator
+			i = _items.begin();
+			i != _items.end();
+			++i)
 	{
 		node["items"].push_back((*i)->save());
 	}
 
-	node["tuReserved"] = (int)_tuReserved;
-    node["kneelReserved"] = _kneelReserved;
+	node["tuReserved"]		= static_cast<int>(_tuReserved);
+    node["kneelReserved"]	= _kneelReserved;
 
 	return node;
 }
@@ -566,7 +642,11 @@ void SavedBattleGame::initMap(
 			++i)
 	{
 		Position pos;
-		getTileCoords(i, &pos.x, &pos.y, &pos.z);
+		getTileCoords(
+					i,
+					&pos.x,
+					&pos.y,
+					&pos.z);
 
 		_tiles[i] = new Tile(pos);
 	}
@@ -579,7 +659,9 @@ void SavedBattleGame::initMap(
 void SavedBattleGame::initUtilities(ResourcePack* res)
 {
 	_pathfinding = new Pathfinding(this);
-	_tileEngine = new TileEngine(this, res->getVoxelData());
+	_tileEngine = new TileEngine(
+								this,
+								res->getVoxelData());
 }
 
 /**
@@ -661,7 +743,11 @@ int SavedBattleGame::getMapSizeXYZ() const
  * @param y Pointer to the Y coordinate.
  * @param z Pointer to the Z coordinate.
  */
-void SavedBattleGame::getTileCoords(int index, int* x, int* y, int* z) const
+void SavedBattleGame::getTileCoords(
+		int index,
+		int* x,
+		int* y,
+		int* z) const
 {
 	*z = index / (_mapsize_y * _mapsize_x);
 	*y = (index %(_mapsize_y * _mapsize_x)) / _mapsize_x;
@@ -759,7 +845,10 @@ BattleUnit* SavedBattleGame::selectFactionUnit(
 		return 0;
 	}
 
-	std::vector<BattleUnit*>::iterator begin, end;
+	std::vector<BattleUnit*>::iterator
+		begin,
+		end;
+
 	if (dir > 0)
 	{
 		begin = _units.begin();
@@ -822,7 +911,10 @@ BattleUnit* SavedBattleGame::selectFactionUnit(
 			return _selectedUnit;
 		}
 	}
-	while (!(*i)->isSelectable(_side, checkReselect, checkInventory));
+	while (!(*i)->isSelectable(
+							_side,
+							checkReselect,
+							checkInventory));
 
 
 	//Log(LOG_INFO) << ". fallthrough, ret selectedUnit = *i";
@@ -840,14 +932,13 @@ BattleUnit* SavedBattleGame::selectUnit(const Position& pos)
 {
 	BattleUnit* bu = getTile(pos)->getUnit();
 
-	if (bu && bu->isOut())
+	if (bu
+		&& bu->isOut())
 	{
 		return 0;
 	}
 	else
-	{
 		return bu;
-	}
 }
 
 /**
@@ -1142,7 +1233,7 @@ BattlescapeState* SavedBattleGame::getBattleState()
  * Gets the BattlescapeState.
  * @return Pointer to the BattlescapeState.
  */
-BattlescapeGame *SavedBattleGame::getBattleGame()
+BattlescapeGame* SavedBattleGame::getBattleGame()
 {
 	return _battleState->getBattleGame();
 }
@@ -1207,9 +1298,7 @@ void SavedBattleGame::resetUnitTiles()
 		}
 
 		if ((*i)->getFaction() == FACTION_PLAYER)
-		{
 			(*i)->setVisible(true);
-		}
 	}
 }
  
@@ -1222,8 +1311,8 @@ std::vector<Position>& SavedBattleGame::getStorageSpace()
 }
 
 /**
- * Move all the leftover items in base defense missions to random locations in the storage facilities
- * @param t the tile where all our goodies are initially stored.
+ * Move all the leftover items in base defense missions to random locations in the storage facilities.
+ * @param t, The tile where all the goodies are initially stored.
  */
 void SavedBattleGame::randomizeItemLocations(Tile* t)
 {
@@ -1236,13 +1325,15 @@ void SavedBattleGame::randomizeItemLocations(Tile* t)
 		{
 			if ((*it)->getSlot()->getId() == "STR_GROUND")
 			{
-				getTile(_storageSpace.at(RNG::generate(0, _storageSpace.size() - 1)))->addItem(*it, (*it)->getSlot());
+				getTile(_storageSpace.at(RNG::generate(0, _storageSpace.size() - 1)))
+						->addItem(
+								*it,
+								(*it)->getSlot());
+
 				it = t->getInventory()->erase(it);
 			}
 			else
-			{
 				++it;
-			}
 		}
 	}
 }

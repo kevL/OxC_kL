@@ -672,7 +672,9 @@ const LocalizedText& Language::getString(const std::string& id) const
  * @param n Number to use to decide the proper form.
  * @return String with the requested ID.
  */
-LocalizedText Language::getString(const std::string& id, unsigned n) const
+LocalizedText Language::getString(
+		const std::string& id,
+		unsigned n) const
 {
 	assert(!id.empty());
 

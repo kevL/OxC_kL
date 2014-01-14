@@ -289,7 +289,7 @@ void TileEngine::addLight(
 }
 
 /**
- * Calculates line of sight of a soldier.
+ * Calculates line of sight of a BattleUnit.
  * @param unit, Unit to check line of sight of.
  * @return, True when new aliens are spotted.
  */
@@ -326,8 +326,11 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 //kL	int sign_y[8] = {-1, -1, -1, +1, +1, +1, -1, -1};	// is this right? (ie. 3pos & 5neg, why not 4pos & 4neg )
 	int sign_y[8] = {-1, -1, +1, +1, +1, +1, -1, -1};		// kL: note it does not matter.
 
-	int y1, y2;
 	bool diag = false;
+	int
+		y1 = 0,
+		y2 = 0;
+
 	if (direction %2)
 	{
 		diag = true;
@@ -1169,8 +1172,12 @@ bool TileEngine::canTargetTile(
 	int* spiralArray;
 	int spiralCount;
 
-	int minZ, maxZ;
-	bool minZfound = false, maxZfound = false;
+	int
+		minZ = 0,
+		maxZ = 0;
+	bool
+		minZfound = false,
+		maxZfound = false;
 
 	if (part == MapData::O_OBJECT)
 	{
@@ -1361,8 +1368,10 @@ std::vector<BattleUnit*> TileEngine::getSpottingUnits(BattleUnit* unit)
 //			Position targetVoxel;
 
 			AlienBAIState* aggro = dynamic_cast<AlienBAIState*>((*bu)->getCurrentAIState());
-			if (((*bu)->checkViewSector(unit->getPosition())			// spotter is looking in the right direction
-					|| (aggro != 0 && aggro->getWasHit()))				// spotter has been aggro'd
+			if ((((*bu)->checkViewSector(unit->getPosition())			// spotter is looking in the right direction
+						|| (*bu)->getFaction() == FACTION_HOSTILE)		//		or is a psycho-aLien!
+//kL					|| (aggro != 0 && aggro->getWasHit()))
+					|| (aggro && aggro->getWasHit()))					// spotter has AIstate & been aggro'd.
 //				&& canTargetUnit(&originVoxel, tile, &targetVoxel, *bu)	// can actually target the unit, checked by "visible()",
 																		// although origin is placed 2 voxels lower here.
 				&& visible(*bu, tile))									// can actually see the unit through smoke/fire & within viewRange
@@ -3458,7 +3467,7 @@ bool TileEngine::validateThrow(BattleAction* action) // superceded by Wb.131129 
 
 	if (action->type != BA_THROW)
 	{
-		BattleUnit* targetUnit;
+		BattleUnit* targetUnit = 0;
 		if (tile->getUnit())
 		{
 			targetUnit = tile->getUnit();
@@ -3893,7 +3902,7 @@ bool TileEngine::psiAttack(BattleAction* action)
 		attackStr -= defenseStr;
 		if (action->type == BA_MINDCONTROL)
 //kL			attackStr += 25.0;
-			attackStr += 5.0; // kL
+			attackStr += 15.0; // kL
 		else
 			attackStr += 45.0;
 
@@ -3903,6 +3912,16 @@ bool TileEngine::psiAttack(BattleAction* action)
 		action->actor->addPsiExp();
 
 		int chance = static_cast<int>(attackStr);
+
+//		std::string& info = tr("STR_UFO_").arg(ufo->getId())
+		std::stringstream info;
+		if (action->type == BA_PANIC)
+			info << "panic ";
+		else
+			info << "control ";
+		info << chance;
+		_save->getBattleState()->warning(info.str()); // kL, info.
+
 		Log(LOG_INFO) << ". . . attackStr Success @ " << chance;
 		if (chance > 0
 			&& RNG::percent(chance))

@@ -522,7 +522,7 @@ void ManageAlienContainmentState::updateStrings()
 	_txtUsed->setText(tr("STR_SPACE_USED").arg(aliens));
 
 
-	bool enoughSpaceToExit = _containmentLimit? spaces > -1: true;
+//kL	bool enoughSpaceToExit = _containmentLimit? spaces > -1: true;
 
 //kL	_btnCancel->setVisible(enoughSpaceToExit && !_overCrowded);
 //kL	_btnOk->setVisible(enoughSpaceToExit);

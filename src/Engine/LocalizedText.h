@@ -70,10 +70,10 @@ private:
 		}
 
 		/// Return constant wide string.
-		operator std::wstring const& () const OX_REQUIRED_RESULT;
+		operator std::wstring const &() const OX_REQUIRED_RESULT;
 		/// Return the UTF-8 representation of this string.
 		std::string asUTF8() const OX_REQUIRED_RESULT;
-		/// Get a pointer to underlying wchat_t data.
+		/// Get a pointer to underlying wchar_t data.
 		const wchar_t* c_str() const OX_REQUIRED_RESULT
 		{
 			return _text.c_str();
@@ -101,7 +101,6 @@ inline LocalizedText::LocalizedText(const std::wstring& text)
 {
 }
 
-
 /**
  * Create a LocalizedText with some arguments already replaced.
  */
@@ -114,16 +113,14 @@ inline LocalizedText::LocalizedText(
 {
 }
 
-
 /**
  * Typecast to constant std::wstring reference.
  * This is used to avoid copying when the string will not change.
  */
-inline LocalizedText::operator std::wstring const& () const
+inline LocalizedText::operator std::wstring const &() const
 {
 	return _text;
 }
-
 
 /**
  * Replace the next argument placeholder with @a val.
@@ -173,7 +170,7 @@ LocalizedText LocalizedText::arg(T val) const
  * @return The translated string with all occurences of the marker replaced by @a val.
  */
 template <typename T>
-LocalizedText &LocalizedText::arg(T val)
+LocalizedText& LocalizedText::arg(T val)
 {
 	std::wostringstream os;
 	os << '{' << _nextArg << '}';

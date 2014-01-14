@@ -72,7 +72,7 @@ BuildNewBaseState::BuildNewBaseState(
 		_mousey(0)
 {
 	int dx = Screen::getDX();
-	int dy = Screen::getDY();
+//kL	int dy = Screen::getDY();
 
 	_screen = false;
 

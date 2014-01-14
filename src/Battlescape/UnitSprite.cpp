@@ -1020,8 +1020,7 @@ void UnitSprite::drawRoutine4()
 {
 	if (_unit->isOut())
 	{
-		// unit is drawn as an item
-		return;
+		return; // unit is drawn as an item
 	}
 
 	Surface
@@ -1031,7 +1030,7 @@ void UnitSprite::drawRoutine4()
 
 	const int
 		stand = 0,
-		walk = 8,
+//kL		walk = 8,
 		die = 72,
 
 		offX[8]		= { 8, 10,  7,  4, -9, -11, -7,  -3},	// for the weapons
@@ -1065,10 +1064,11 @@ void UnitSprite::drawRoutine4()
 
 	sortRifles();
 
-	if (_itemA && !_itemA->getRules()->isFixed())
+	if (_itemA
+		&& !_itemA->getRules()->isFixed())
 	{
-		// draw handob item
-		if (_unit->getStatus() == STATUS_AIMING && _itemA->getRules()->isTwoHanded())
+		if (_unit->getStatus() == STATUS_AIMING // draw handob item
+			&& _itemA->getRules()->isTwoHanded())
 		{
 			int dir = (_unit->getDirection() + 2) %8;
 			itemA = _itemSurfaceA->getFrame(_itemA->getRules()->getHandSprite() + dir);
@@ -1092,8 +1092,8 @@ void UnitSprite::drawRoutine4()
 		}
 	}
 
-	// if we are dual wielding...
-	if (_itemB && !_itemB->getRules()->isFixed())
+	if (_itemB // if dual wielding...
+		&& !_itemB->getRules()->isFixed())
 	{
 		itemB = _itemSurfaceB->getFrame(_itemB->getRules()->getHandSprite() + _unit->getDirection());
 		if (!_itemB->getRules()->isTwoHanded())
@@ -1107,7 +1107,8 @@ void UnitSprite::drawRoutine4()
 			itemB->setY(0);
 		}
 
-		if (_unit->getStatus() == STATUS_AIMING && _itemB->getRules()->isTwoHanded())
+		if (_unit->getStatus() == STATUS_AIMING
+			&& _itemB->getRules()->isTwoHanded())
 		{
 			int dir = (_unit->getDirection() + 2) %8;
 			itemB = _itemSurfaceB->getFrame(_itemB->getRules()->getHandSprite() + dir);

@@ -142,8 +142,8 @@ private:
 	void handleItemClick(BattleItem* item);
 	/// Shifts the red colors of the visible unit buttons backgrounds.
 	void blinkVisibleUnitButtons();
-	/// Draws the kneel indicator.
-	void BattlescapeState::drawKneelIndicator();
+	/// kL. Draws the kneel indicator.
+	void drawKneelIndicator();
 
 
 	public:

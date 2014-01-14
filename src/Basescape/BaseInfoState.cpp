@@ -338,75 +338,100 @@ void BaseInfoState::init()
 		ss10,
 		ss11,
 		ss12;
+	int var,
+		var2;
 
+	var = _base->getTotalSoldiers();
+	var2 = _base->getAvailableSoldiers(true);
 //kL	ss << _base->getAvailableSoldiers() << ":" << _base->getTotalSoldiers();
-	ss1 << _base->getAvailableSoldiers(true) << ":" << _base->getTotalSoldiers(); // kL
+	ss1 << var2 << ":" << var; // kL
 	_numSoldiers->setText(ss1.str());
-	_barSoldiers->setMax(_base->getTotalSoldiers());
+	_barSoldiers->setMax(var);
 //kL	_barSoldiers->setValue(_base->getAvailableSoldiers());
-	_barSoldiers->setValue(_base->getAvailableSoldiers(true)); // kL
+	_barSoldiers->setValue(var2); // kL
 
+	var = _base->getTotalEngineers();
+	var2 = _base->getEngineers();
 //kL	ss2 << _base->getAvailableEngineers() << ":" << _base->getTotalEngineers();
-	ss2 << _base->getEngineers() << ":" << _base->getTotalEngineers(); // kL
+	ss2 << var2 << ":" << var; // kL
 	_numEngineers->setText(ss2.str());
-	_barEngineers->setMax(_base->getTotalEngineers());
+	_barEngineers->setMax(var);
 //kL	_barEngineers->setValue(_base->getAvailableEngineers());
-	_barEngineers->setValue(_base->getEngineers()); // kL
+	_barEngineers->setValue(var2); // kL
 
+	var = _base->getTotalScientists();
+	var2 = _base->getScientists();
 //kL	ss3 << _base->getAvailableScientists() << ":" << _base->getTotalScientists();
-	ss3 << _base->getScientists() << ":" << _base->getTotalScientists(); // kL
+	ss3 << var2 << ":" << var; // kL
 	_numScientists->setText(ss3.str());
-	_barScientists->setMax(_base->getTotalScientists());
+	_barScientists->setMax(var);
 //kL	_barScientists->setValue(_base->getAvailableScientists());
-	_barScientists->setValue(_base->getScientists()); // kL
+	_barScientists->setValue(var2); // kL
 
-	ss4 << _base->getUsedQuarters() << ":" << _base->getAvailableQuarters();
+	var = _base->getAvailableQuarters();
+	var2 = _base->getUsedQuarters();
+	ss4 << var2 << ":" << var;
 	_numQuarters->setText(ss4.str());
-	_barQuarters->setMax(_base->getAvailableQuarters());
-	_barQuarters->setValue(_base->getUsedQuarters());
+	_barQuarters->setMax(var);
+	_barQuarters->setValue(var2);
 
-	ss5 << _base->getUsedStores() << ":" << _base->getAvailableStores();
+	var = _base->getAvailableStores();
+	var2 = _base->getUsedStores();
+	ss5 << var2 << ":" << var;
 	_numStores->setText(ss5.str());
-	_barStores->setMax(_base->getAvailableStores());
-	_barStores->setValue(_base->getUsedStores());
+	_barStores->setMax(var);
+	_barStores->setValue(var2);
 
-	ss6 << _base->getUsedLaboratories() << ":" << _base->getAvailableLaboratories();
+	var = _base->getAvailableLaboratories();
+	var2 = _base->getUsedLaboratories();
+	ss6 << var2 << ":" << var;
 	_numLaboratories->setText(ss6.str());
-	_barLaboratories->setMax(_base->getAvailableLaboratories());
-	_barLaboratories->setValue(_base->getUsedLaboratories());
+	_barLaboratories->setMax(var);
+	_barLaboratories->setValue(var2);
 
-	ss7 << _base->getUsedWorkshops() << ":" << _base->getAvailableWorkshops();
+	var = _base->getAvailableWorkshops();
+	var2 = _base->getUsedWorkshops();
+	ss7 << var2 << ":" << var;
 	_numWorkshops->setText(ss7.str());
-	_barWorkshops->setMax(_base->getAvailableWorkshops());
-	_barWorkshops->setValue(_base->getUsedWorkshops());
+	_barWorkshops->setMax(var);
+	_barWorkshops->setValue(var2);
 
 	if (_containmentLimit)
 	{
-		ss8 << _base->getUsedContainment() << ":" << _base->getAvailableContainment();
+		var = _base->getAvailableContainment();
+		var2 = _base->getUsedContainment();
+		ss8 << var2 << ":" << var;
 		_numContainment->setText(ss8.str());
-		_barContainment->setMax(_base->getAvailableContainment());
-		_barContainment->setValue(_base->getUsedContainment());
+		_barContainment->setMax(var);
+		_barContainment->setValue(var2);
 	}
 
-	ss9 << _base->getUsedHangars() << ":" << _base->getAvailableHangars();
+	var = _base->getAvailableHangars();
+	var2 = _base->getUsedHangars();
+	ss9 << var2 << ":" << var;
 	_numHangars->setText(ss9.str());
-	_barHangars->setMax(_base->getAvailableHangars());
-	_barHangars->setValue(_base->getUsedHangars());
+	_barHangars->setMax(var);
+	_barHangars->setValue(var2);
 
-	ss10 << _base->getDefenseValue();
+	var = _base->getDefenseValue();
+	ss10 << var;
 	_numDefense->setText(ss10.str());
-	_barDefense->setMax(_base->getDefenseValue());
-	_barDefense->setValue(_base->getDefenseValue());
+	_barDefense->setMax(var);
+	_barDefense->setValue(var);
 
-	ss11 << _base->getShortRangeDetection();
+	var = _base->getShortRangeDetection();
+//kL	ss11 << _base->getShortRangeDetection();
+	ss11 << _base->getShortRangeValue(); // kL
 	_numShortRange->setText(ss11.str());
-	_barShortRange->setMax(_base->getShortRangeDetection());
-	_barShortRange->setValue(_base->getShortRangeDetection());
+	_barShortRange->setMax(var);
+	_barShortRange->setValue(var);
 
-	ss12 << _base->getLongRangeDetection();
+	var = _base->getLongRangeDetection();
+//kL	ss12 << _base->getLongRangeDetection();
+	ss12 << _base->getLongRangeValue(); // kL
 	_numLongRange->setText(ss12.str());
-	_barLongRange->setMax(_base->getLongRangeDetection());
-	_barLongRange->setValue(_base->getLongRangeDetection());
+	_barLongRange->setMax(var);
+	_barLongRange->setValue(var);
 }
 
 /**

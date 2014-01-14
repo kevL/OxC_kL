@@ -34,6 +34,7 @@ class Window;
 class Text;
 class TextButton;
 
+
 /**
  * UfopaediaStartState is the screen that opens when clicking Ufopaedia button in Geoscape.
  * Presents buttons to all sections of Ufopaedia, opening a UfopaediaSelectState on click.
@@ -42,6 +43,7 @@ class UfopaediaStartState
 	:
 		public State
 {
+
 protected:
 	static const int NUM_SECTIONS = 9;
 	static const std::string SECTIONS[NUM_SECTIONS];

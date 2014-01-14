@@ -69,6 +69,9 @@ UnitDieBState::UnitDieBState(
 {
 	Log(LOG_INFO) << "Create UnitDieBState";
 
+	if (!_noSound)			// kL
+		playDeathSound();	// kL
+
 	// don't show the "fall to death" animation when a unit is blasted with explosives or he is already unconscious
 /*kL	if (_damageType == DT_HE || _unit->getStatus() == STATUS_UNCONSCIOUS)
 	{
@@ -137,8 +140,8 @@ spawnUnit: ""
 		{
 			_unit->instaKill();
 
-			if (!_noSound)
-				playDeathSound();
+//			if (!_noSound)
+//				playDeathSound();
 		}
 		else
 			_unit->knockOut();
@@ -227,8 +230,8 @@ void UnitDieBState::think()
 		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED); // kL
 		_unit->startFalling(); // -> STATUS_COLLAPSING
 
-		if (!_noSound) // kL
-			playDeathSound();
+//		if (!_noSound) // kL
+//kL			playDeathSound(); // moved to cTor.
 	}
 
 //	else		// kL*****
@@ -287,34 +290,28 @@ void UnitDieBState::think()
 				if (_unit->getArmor()->getSize() == 1)
 				{
 					if (_damageType == DT_NONE)
-					{
 						game->pushState(new InfoboxOKState(
 														game,
 														game->getLanguage()->getString(
 																					"STR_HAS_DIED_FROM_A_FATAL_WOUND",
 																					_unit->getGender())
 																				.arg(_unit->getName(game->getLanguage()))));
-					}
 					else if (Options::getBool("battleNotifyDeath"))
-					{
 						game->pushState(new InfoboxOKState(
 														game,
 														game->getLanguage()->getString(
 																					"STR_HAS_BEEN_KILLED",
 																					_unit->getGender())
 																				.arg(_unit->getName(game->getLanguage()))));
-					}
 				}
 			}
 			else
-			{
 				game->pushState(new InfoboxOKState(
 												game,
 												game->getLanguage()->getString(
 																			"STR_HAS_BECOME_UNCONSCIOUS",
 																			_unit->getGender())
 																		.arg(_unit->getName(game->getLanguage()))));
-			}
 		}
 
 		// if all units from either faction are killed - auto-end the mission.
@@ -338,7 +335,6 @@ void UnitDieBState::think()
 	}
 
 	_parent->getMap()->cacheUnit(_unit);
-
 	//Log(LOG_INFO) << "UnitDieBState::think() EXIT";
 }
 
@@ -379,13 +375,9 @@ void UnitDieBState::convertUnitToCorpse()
 			_parent->dropItem(_unit->getPosition(), (*i));
 
 			if (!(*i)->getRules()->isFixed())
-			{
 				(*i)->setOwner(0);
-			}
 			else
-			{
 				itemToKeep = *i;
-			}
 		}
 	}
 
@@ -435,21 +427,23 @@ void UnitDieBState::convertUnitToCorpse()
  */
 void UnitDieBState::playDeathSound()
 {
-	if ((_unit->getType() == "SOLDIER" && _unit->getGender() == GENDER_MALE)
+	if ((_unit->getType() == "SOLDIER"
+			&& _unit->getGender() == GENDER_MALE)
 		|| _unit->getType() == "MALE_CIVILIAN")
 	{
 		int iSound = RNG::generate(41, 43);
 		//Log(LOG_INFO) << "UnitDieBState::playDeathSound(), male iSound = " << iSound;
 //kL		_parent->getResourcePack()->getSound("BATTLE.CAT", RNG::generate(41, 43))->play();
-		_parent->getResourcePack()->getSound("BATTLE.CAT", iSound)->play();		// kL
+		_parent->getResourcePack()->getSound("BATTLE.CAT", iSound)->play(); // kL
 	}
-	else if ((_unit->getType() == "SOLDIER" && _unit->getGender() == GENDER_FEMALE)
+	else if ((_unit->getType() == "SOLDIER"
+			&& _unit->getGender() == GENDER_FEMALE)
 		|| _unit->getType() == "FEMALE_CIVILIAN")
 	{
 		int iSound = RNG::generate(44, 46);
 		//Log(LOG_INFO) << "UnitDieBState::playDeathSound(), female iSound = " << iSound;
 //kL		_parent->getResourcePack()->getSound("BATTLE.CAT", RNG::generate(44, 46))->play();
-		_parent->getResourcePack()->getSound("BATTLE.CAT", iSound)->play();		// kL
+		_parent->getResourcePack()->getSound("BATTLE.CAT", iSound)->play(); // kL
 	}
 	else
 	{

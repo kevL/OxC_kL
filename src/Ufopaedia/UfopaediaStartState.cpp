@@ -64,7 +64,7 @@ UfopaediaStartState::UfopaediaStartState(Game* game)
 	_window		= new Window(this, 256, 180, 32, 10, POPUP_BOTH);
 	_txtTitle	= new Text(224, 17, 48, 24);
 
-	int y = 47;
+	int y = 45;
 	for (int
 			i = 0;
 			i < NUM_SECTIONS;
@@ -113,8 +113,12 @@ UfopaediaStartState::UfopaediaStartState(Game* game)
 	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& UfopaediaStartState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)& UfopaediaStartState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
-	_btnOk->onKeyboardPress((ActionHandler)& UfopaediaStartState::btnOkClick, (SDLKey)Options::getInt("keyGeoUfopedia"));
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& UfopaediaStartState::btnOkClick,
+					(SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& UfopaediaStartState::btnOkClick,
+					(SDLKey)Options::getInt("keyGeoUfopedia"));
 }
 
 /**

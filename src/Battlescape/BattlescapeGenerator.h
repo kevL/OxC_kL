@@ -79,7 +79,9 @@ private:
 	/// Generates a new battlescape map.
 	void generateMap();
 	/// Gets battlescape terrain.
-	RuleTerrain* getTerrain(int tex, double lat);
+	RuleTerrain* getTerrain(
+			int tex,
+			double lat);
 
 	/// Loads an XCom MAP file.
 	int loadMAP(
@@ -110,8 +112,8 @@ private:
 	/// Adds an item to a unit and the game.
 	bool addItem(
 			BattleItem* item,
-			BattleUnit* unit,
-			bool allowSecondClip = false);
+			BattleUnit* unit);
+//			bool allowSecondClip = false
 
 	/// Deploys the aliens, according to the alien deployment rules.
 	void deployAliens(

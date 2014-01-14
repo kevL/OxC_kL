@@ -197,7 +197,7 @@ InterceptState::InterceptState(
 				ss << 0;
 
 
-			std::wstring status = getAltStatus(*j);
+			std::wstring status = getAltStatus(*j); // kL
 			_lstCrafts->addRow(
 							3,
 							(*j)->getName(_game->getLanguage()).c_str(),
@@ -218,9 +218,7 @@ InterceptState::InterceptState(
 	}
 
 	if (_base)
-	{
 		_txtBase->setText(_base->getName());
-	}
 }
 
 /**
@@ -239,13 +237,13 @@ std::wstring InterceptState::getAltStatus(Craft* craft)
 	if (stat != "STR_OUT")
 	{
 		if (stat == "STR_READY")
-			_cellColor = Palette::blockOffset(7)+0;
+			_cellColor = Palette::blockOffset(7)-2;
 		else if (stat == "STR_REFUELLING")
 			_cellColor = Palette::blockOffset(10)+2;
 		else if (stat == "STR_REARMING")
-			_cellColor = Palette::blockOffset(10)+5;
+			_cellColor = Palette::blockOffset(10)+4;
 		else if (stat == "STR_REPAIRS")
-			_cellColor = Palette::blockOffset(10)+8;
+			_cellColor = Palette::blockOffset(10)+6;
 
 		return tr(stat);
 	}
@@ -259,45 +257,45 @@ std::wstring InterceptState::getAltStatus(Craft* craft)
 	if (craft->getLowFuel())
 	{
 		status = tr("STR_LOW_FUEL_RETURNING_TO_BASE");
-		_cellColor = Palette::blockOffset(14)+8;
+		_cellColor = Palette::blockOffset(9)+4;
 	}
 	else if (craft->getDestination() == 0)
 	{
 		status = tr("STR_PATROLLING");
-		_cellColor = Palette::blockOffset(5)+5;
+		_cellColor = Palette::blockOffset(5)+3;
 	}
 	else if (craft->getDestination() == dynamic_cast<Target*>(craft->getBase()))
 	{
 		status = tr("STR_RETURNING_TO_BASE");
-		_cellColor = Palette::blockOffset(14)+4;
+		_cellColor = Palette::blockOffset(9)+2;
 	}
 	else
 	{
 		Ufo* ufo = dynamic_cast<Ufo*>(craft->getDestination());
 		if (ufo != 0)
 		{
-			if (craft->isInDogfight())
+			if (craft->isInDogfight()) // chase
 			{
 				status = tr("STR_TAILING_UFO");
-				_cellColor = Palette::blockOffset(8)+0;
+				_cellColor = Palette::blockOffset(11);
 			}
-			else if (ufo->getStatus() == Ufo::FLYING)
+			else if (ufo->getStatus() == Ufo::FLYING) // intercept
 			{
 				status = tr("STR_INTERCEPTING_UFO").arg(ufo->getId());
-				_cellColor = Palette::blockOffset(0)+12;
+				_cellColor = Palette::blockOffset(11)+1;
 			}
-			else
+			else // landed
 			{
 				status = tr("STR_DESTINATION_UC_")
 							.arg(ufo->getName(_game->getLanguage()));
-				_cellColor = Palette::blockOffset(0)+13;
+				_cellColor = Palette::blockOffset(11)+2;
 			}
 		}
-		else
+		else // crashed,terrorSite,alienBase
 		{
 			status = tr("STR_DESTINATION_UC_")
 						.arg(craft->getDestination()->getName(_game->getLanguage()));
-			_cellColor = Palette::blockOffset(8)+10;
+			_cellColor = Palette::blockOffset(11)+3;
 		}
 	}
 

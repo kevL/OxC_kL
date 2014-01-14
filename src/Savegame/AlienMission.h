@@ -60,7 +60,9 @@ private:
 	const AlienBase* _base;
 	const RuleAlienMission& _rule;
 
-	std::string _region, _race;
+	std::string
+		_race,
+		_region;
 
 	/// Spawns a UFO, based on mission rules.
 	Ufo* spawnUfo(

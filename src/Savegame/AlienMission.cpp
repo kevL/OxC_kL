@@ -112,12 +112,13 @@ AlienMission::~AlienMission()
 
 class matchById: public std::unary_function<const AlienBase*, bool>
 {
+
 private:
 	int _id;
 
+
 	public:
-		/// Remember ID.
-		matchById(int id)
+		matchById(int id) /// Remember ID.
 			:
 				_id(id)
 		{
@@ -130,6 +131,7 @@ private:
 			return ab->getId() == _id;
 		}
 };
+
 
 /**
  * @param node The YAML node containing the data.
@@ -223,8 +225,10 @@ class FindMarkedXCOMBase
 	:
 		public std::unary_function<const Base*, bool>
 {
+
 private:
 	const RuleRegion& _region;
+
 
 	public:
 		FindMarkedXCOMBase(const RuleRegion& region)
@@ -348,10 +352,10 @@ Ufo* AlienMission::spawnUfo(
 	{
 		const RuleRegion& regionRules = *ruleset.getRegion(_region);
 
-		std::vector<Base*>::const_iterator found =
-				std::find_if(game.getBases()->begin(),
-				game.getBases()->end(),
-				FindMarkedXCOMBase(regionRules));
+		std::vector<Base*>::const_iterator found = std::find_if(
+															game.getBases()->begin(),
+															game.getBases()->end(),
+															FindMarkedXCOMBase(regionRules));
 
 		if (found != game.getBases()->end())
 		{
@@ -398,7 +402,9 @@ Ufo* AlienMission::spawnUfo(
 
 		// Our destination is always an alien base.
 		Ufo* ufo = new Ufo(const_cast<RuleUfo*>(&ufoRule));
-		ufo->setMissionInfo(this, &trajectory);
+		ufo->setMissionInfo(
+						this,
+						&trajectory);
 		const RuleRegion& regionRules = *ruleset.getRegion(_region);
 
 		std::pair<double, double> pos;
@@ -493,6 +499,7 @@ void AlienMission::start(unsigned initialCount)
 	}
 }
 
+
 /** @brief Match a base from it's coordinates.
  * This function object uses coordinates to match a base.
  */
@@ -500,8 +507,12 @@ class MatchBaseCoordinates
 	:
 		public std::unary_function<const Base*, bool>
 {
+
 private:
-	double _lon, _lat;
+	double
+		_lon,
+		_lat;
+
 
 	public:
 		/// Remember the query coordinates.
@@ -519,10 +530,11 @@ private:
 		bool operator()(const Base* base) const
 		{
 			return
-				AreSame(base->getLongitude(), _lon)
+					AreSame(base->getLongitude(), _lon)
 					&& AreSame(base->getLatitude(), _lat);
 		}
 };
+
 
 /**
  * This function is called when one of the mission's UFOs arrives at its current destination.
@@ -605,8 +617,10 @@ void AlienMission::ufoReachedWaypoint(
 			terrorSite->setSecondsRemaining(4 * 3600 + RNG::generate(0, 6) * 3600);	// 4hr. + (0 to 6) hrs.
 			terrorSite->setAlienRace(_race);
 
-			const City* city = rules.locateCity(ufo.getLongitude(), ufo.getLatitude());
-			assert(city);
+//kL			const City* city = rules.locateCity(
+//kL											ufo.getLongitude(),
+//kL											ufo.getLatitude());
+//kL			assert(city);
 
 			game.getTerrorSites()->push_back(terrorSite);
 
@@ -654,6 +668,7 @@ void AlienMission::ufoReachedWaypoint(
 		{
 			// Set timer for UFO on the ground.
 			ufo.setSecondsRemaining(ufo.getTrajectory().groundTimer());
+
 			if (ufo.getDetected()
 				&& ufo.getLandId() == 0)
 			{
@@ -818,8 +833,8 @@ const AlienBase* AlienMission::getAlienBase() const
 
 /**
  * Add alien points to the country and region at the coordinates given
- * @param lon Longitudinal coordinates to check
- * @param lat Lattitudinal coordinates to check
+ * @param lon, Longitudinal coordinates to check
+ * @param lat, Latitudinal coordinates to check
  */
 void AlienMission::addScore(
 		const double lon,

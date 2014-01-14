@@ -18,7 +18,9 @@
  */
 
 #include "TerrorSite.h"
+
 #include <sstream>
+
 #include "../Engine/Language.h"
 
 
@@ -30,10 +32,10 @@ namespace OpenXcom
  */
 TerrorSite::TerrorSite()
 	:
-	Target(),
-	_id(0),
-	_secondsRemaining(0),
-	_inBattlescape(false)
+		Target(),
+		_id(0),
+		_secondsRemaining(0),
+		_inBattlescape(false)
 {
 }
 

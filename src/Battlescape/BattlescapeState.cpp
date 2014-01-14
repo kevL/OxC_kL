@@ -1755,7 +1755,7 @@ void BattlescapeState::updateSoldierInfo()
 }
 
 /**
- * Draws the kneel indicator.
+ * kL. Draws the kneel indicator.
  */
  void BattlescapeState::drawKneelIndicator()
  {
@@ -2004,22 +2004,34 @@ inline void BattlescapeState::handle(Action* action)
  */
 void BattlescapeState::saveAIMap()
 {
+	// kL_note: Not used:
 	Uint32 start = SDL_GetTicks();
 
 	BattleUnit* unit = _save->getSelectedUnit();
-
 	if (!unit) return;
 
 
-	int w = _save->getMapSizeX();
-	int h = _save->getMapSizeY();
+	int
+		w = _save->getMapSizeX(),
+		h = _save->getMapSizeY();
 	Position pos(unit->getPosition());
 
 	int expMax = 0;
 
-	SDL_Surface* img = SDL_AllocSurface(0, w * 8, h * 8, 24, 0xff, 0xff00, 0xff0000, 0);
+	SDL_Surface* img = SDL_AllocSurface(
+									0,
+									w * 8,
+									h * 8,
+									24,
+									0xff,
+									0xff00,
+									0xff0000,
+									0);
 //	Log(LOG_INFO) << "unit = " << unit->getId();
-	memset(img->pixels, 0, img->pitch * img->h);
+	memset(
+		img->pixels,
+		0,
+		img->pitch * img->h);
 
 	Position tilePos(pos);
 
@@ -2027,25 +2039,41 @@ void BattlescapeState::saveAIMap()
 	r.h = 8;
 	r.w = 8;
 
-	for (int y = 0; y < h; ++y)
+	for (int
+			y = 0;
+			y < h;
+			++y)
 	{
 		tilePos.y = y;
-		for (int x = 0; x < w; ++x)
+		for (int
+				x = 0;
+				x < w;
+				++x)
 		{
 			tilePos.x = x;
 			Tile* t = _save->getTile(tilePos);
 
-			if (!t) continue;
-			if (!t->isDiscovered(2)) continue;
+			if (!t)
+				continue;
+
+			if (!t->isDiscovered(2))
+				continue;
 		}
 	}
 
-	if (expMax < 100) expMax = 100;
+	if (expMax < 100)
+		expMax = 100;
 
-	for (int y = 0; y < h; ++y)
+	for (int
+			y = 0;
+			y < h;
+			++y)
 	{
 		tilePos.y = y;
-		for (int x = 0; x < w; ++x)
+		for (int
+				x = 0;
+				x < w;
+				++x)
 		{
 			tilePos.x = x;
 			Tile* t = _save->getTile(tilePos);
@@ -2068,9 +2096,16 @@ void BattlescapeState::saveAIMap()
 					SDL_FillRect(img, &r, SDL_MapRGB(img->format, 0x50, 0x50, 0x50)); // gray for blocked tile
 			}
 
-			for (int z = tilePos.z; z >= 0; --z)
+			for (int
+					z = tilePos.z;
+					z >= 0;
+					--z)
 			{
-				Position pos(tilePos.x, tilePos.y, z);
+				Position pos(
+							tilePos.x,
+							tilePos.y,
+							z);
+
 				t = _save->getTile(pos);
 				BattleUnit* wat = t->getUnit();
 				if (wat)
@@ -2079,13 +2114,37 @@ void BattlescapeState::saveAIMap()
 					{
 						case FACTION_HOSTILE:
 							// #4080C0 is Volutar Blue
-							characterRGBA(img, r.x, r.y, (tilePos.z - z)? 'a': 'A', 0x40, 0x80, 0xC0, 0xff);
+							characterRGBA(
+										img,
+										r.x,
+										r.y,
+										(tilePos.z - z)? 'a': 'A',
+										0x40,
+										0x80,
+										0xC0,
+										0xff);
 						break;
 						case FACTION_PLAYER:
-							characterRGBA(img, r.x, r.y, (tilePos.z - z)? 'x': 'X', 255, 255, 127, 0xff);
+							characterRGBA(
+										img,
+										r.x,
+										r.y,
+										(tilePos.z - z)? 'x': 'X',
+										255,
+										255,
+										127,
+										0xff);
 						break;
 						case FACTION_NEUTRAL:
-							characterRGBA(img, r.x, r.y, (tilePos.z - z)? 'c': 'C', 255, 127, 127, 0xff);
+							characterRGBA(
+										img,
+										r.x,
+										r.y,
+										(tilePos.z - z)? 'c': 'C',
+										255,
+										127,
+										127,
+										0xff);
 						break;
 					}
 
@@ -2103,13 +2162,31 @@ void BattlescapeState::saveAIMap()
 			if (t->getMapData(MapData::O_NORTHWALL)
 				&& t->getMapData(MapData::O_NORTHWALL)->getTUCost(MT_FLY) == 255)
 			{
-				lineRGBA(img, r.x, r.y, r.x + r.w, r.y, 0x50, 0x50, 0x50, 255);
+				lineRGBA(
+						img,
+						r.x,
+						r.y,
+						r.x + r.w,
+						r.y,
+						0x50,
+						0x50,
+						0x50,
+						255);
 			}
 
 			if (t->getMapData(MapData::O_WESTWALL)
 				&& t->getMapData(MapData::O_WESTWALL)->getTUCost(MT_FLY) == 255)
 			{
-				lineRGBA(img, r.x, r.y, r.x, r.y + r.h, 0x50, 0x50, 0x50, 255);
+				lineRGBA(
+						img,
+						r.x,
+						r.y,
+						r.x,
+						r.y + r.h,
+						0x50,
+						0x50,
+						0x50,
+						255);
 			}
 		}
 	}
@@ -2118,7 +2195,15 @@ void BattlescapeState::saveAIMap()
 
 	ss.str("");
 	ss << "z = " << tilePos.z;
-	stringRGBA(img, 12, 12, ss.str().c_str(), 0, 0, 0, 0x7f);
+	stringRGBA(
+			img,
+			12,
+			12,
+			ss.str().c_str(),
+			0,
+			0,
+			0,
+			0x7f);
 
 	int i = 0;
 	do
@@ -2131,7 +2216,12 @@ void BattlescapeState::saveAIMap()
 	while (CrossPlatform::fileExists(ss.str()));
 
 
-	unsigned error = lodepng::encode(ss.str(), (const unsigned char*)img->pixels, img->w, img->h, LCT_RGB);
+	unsigned error = lodepng::encode(
+									ss.str(),
+									static_cast<const unsigned char*>(img->pixels),
+									img->w,
+									img->h,
+									LCT_RGB);
 	if (error)
 	{
 		Log(LOG_ERROR) << "Saving to PNG failed: " << lodepng_error_text(error);
@@ -2163,26 +2253,33 @@ void BattlescapeState::saveVoxelView()
 	BattleUnit* bu = _save->getSelectedUnit();
 	if (bu == 0) return; // no unit selected
 
+	bool
+		_debug = _save->getDebugMode(),
+		black = false;
+	int test;
+	double
+		ang_x = 0.0,
+		ang_y = 0.0,
+		dist = 0.0,
+		dir = static_cast<double>(bu->getDirection() + 4) / 4.0 * M_PI;
+
+	std::ostringstream ss;
+
+	std::vector<unsigned char> image;
 	std::vector<Position> _trajectory;
 
-	double ang_x, ang_y;
-	bool black;
-	Tile* tile;
-	std::ostringstream ss;
-	std::vector<unsigned char> image;
-	int test;
-
-	Position originVoxel = getBattleGame()->getTileEngine()->getSightOriginVoxel(bu);
-
-	Position targetVoxel, hitPos;
-
-	double dist;
-	bool _debug = _save->getDebugMode();
-	double dir = static_cast<double>(bu->getDirection() + 4) / 4. * M_PI;
+	Position
+		originVoxel = getBattleGame()->getTileEngine()->getSightOriginVoxel(bu),
+		targetVoxel,
+		hitPos;
+	Tile* tile = 0;
 
 	image.clear();
 
-	for (int y = -256 + 32; y < 256 + 32; ++y)
+	for (int
+			y = -256 + 32;
+			y < 256 + 32;
+			++y)
 	{
 		ang_y = (((double)y)/640*M_PI+M_PI/2);
 //		ang_y = (static_cast<double>(y)) / 640. * M_PI + M_PI / 2.;	// kL
@@ -2196,9 +2293,17 @@ void BattlescapeState::saveVoxelView()
 			targetVoxel.z=originVoxel.z + (int)(cos(ang_y) * 1024);
 
 			_trajectory.clear();
-			test = _save->getTileEngine()->calculateLine(originVoxel, targetVoxel, false, &_trajectory, bu, true, !_debug) +1;
+			test = _save->getTileEngine()->calculateLine(
+													originVoxel,
+													targetVoxel,
+													false,
+													&_trajectory,
+													bu,
+													true,
+													!_debug)
+												+ 1;
 			black = true;
-			if (test!=0 && test!=6)
+			if (test != 0 && test != 6)
 			{
 				tile = _save->getTile(Position(_trajectory.at(0).x/16, _trajectory.at(0).y/16, _trajectory.at(0).z/24));
 				if (_debug

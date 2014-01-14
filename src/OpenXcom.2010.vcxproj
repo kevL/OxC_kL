@@ -158,6 +158,8 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
       <CompileAs>Default</CompileAs>
+      <FloatingPointModel>Fast</FloatingPointModel>
+      <MinimalRebuild>false</MinimalRebuild>
     </ClCompile>
     <Link>
       <AdditionalDependencies>yaml-cpp.lib;SDL.lib;SDLmain.lib;SDL_gfx.lib;SDL_image.lib;SDL_mixer.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -179,6 +181,7 @@
       <ManifestFile>$(IntDir)$(TargetName)$(TargetExt).intermediate.manifest</ManifestFile>
       <TurnOffAssemblyGeneration>false</TurnOffAssemblyGeneration>
       <Version>$(Version)kL</Version>
+      <LinkErrorReporting>NoErrorReport</LinkErrorReporting>
     </Link>
     <PostBuildEvent>
       <Command>copy /y "$(ProjectDir)..\deps\lib\$(Platform)\*.dll" "$(ProjectDir)..\bin\$(Platform)\"</Command>

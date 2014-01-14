@@ -933,87 +933,114 @@ void GraphsState::btnFinanceListClick(Action* action)
 }
 
 /**
- * remove all elements from view
+ * Remove all elements from view.
  */
 void GraphsState::resetScreen()
 {
-	for (std::vector<Surface*>::iterator iter = _alienRegionLines.begin(); iter != _alienRegionLines.end(); ++iter)
+	for (std::vector<Surface*>::iterator
+			i = _alienRegionLines.begin();
+			i != _alienRegionLines.end();
+			++i)
 	{
-		(*iter)->setVisible(false);
+		(*i)->setVisible(false);
 	}
 
-	for (std::vector<Surface*>::iterator iter = _alienCountryLines.begin(); iter != _alienCountryLines.end(); ++iter)
+	for (std::vector<Surface*>::iterator
+			i = _alienCountryLines.begin();
+			i != _alienCountryLines.end();
+			++i)
 	{
-		(*iter)->setVisible(false);
+		(*i)->setVisible(false);
 	}
 
-	for (std::vector<Surface*>::iterator iter = _xcomRegionLines.begin(); iter != _xcomRegionLines.end(); ++iter)
+	for (std::vector<Surface*>::iterator
+			i = _xcomRegionLines.begin();
+			i != _xcomRegionLines.end();
+			++i)
 	{
-		(*iter)->setVisible(false);
+		(*i)->setVisible(false);
 	}
 
-	for (std::vector<Surface*>::iterator iter = _xcomCountryLines.begin(); iter != _xcomCountryLines.end(); ++iter)
+	for (std::vector<Surface*>::iterator
+			i = _xcomCountryLines.begin();
+			i != _xcomCountryLines.end();
+			++i)
 	{
-		(*iter)->setVisible(false);
+		(*i)->setVisible(false);
 	}
 
-	for (std::vector<Surface*>::iterator iter = _incomeLines.begin(); iter != _incomeLines.end(); ++iter)
+	for (std::vector<Surface*>::iterator
+			i = _incomeLines.begin();
+			i != _incomeLines.end();
+			++i)
 	{
-		(*iter)->setVisible(false);
+		(*i)->setVisible(false);
 	}
 
-	for (std::vector<Surface*>::iterator iter = _financeLines.begin(); iter != _financeLines.end(); ++iter)
+	for (std::vector<Surface*>::iterator
+			i = _financeLines.begin();
+			i != _financeLines.end();
+			++i)
 	{
-		(*iter)->setVisible(false);
+		(*i)->setVisible(false);
 	}
 
 
-	for (std::vector<ToggleTextButton*>::iterator iter = _btnRegions.begin(); iter != _btnRegions.end(); ++iter)
+	for (std::vector<ToggleTextButton*>::iterator
+			i = _btnRegions.begin();
+			i != _btnRegions.end();
+			++i)
 	{
-		(*iter)->setVisible(false);
+		(*i)->setVisible(false);
 	}
 
-	for (std::vector<ToggleTextButton*>::iterator iter = _btnCountries.begin(); iter != _btnCountries.end(); ++iter)
+	for (std::vector<ToggleTextButton*>::iterator
+			i = _btnCountries.begin();
+			i != _btnCountries.end();
+			++i)
 	{
-		(*iter)->setVisible(false);
+		(*i)->setVisible(false);
 	}
 
-	for (std::vector<ToggleTextButton*>::iterator iter = _btnFinances.begin(); iter != _btnFinances.end(); ++iter)
+	for (std::vector<ToggleTextButton*>::iterator
+			i = _btnFinances.begin();
+			i != _btnFinances.end();
+			++i)
 	{
-		(*iter)->setVisible(false);
+		(*i)->setVisible(false);
 	}
 
 
 	for (std::vector<Text*>::iterator
-			iter = _numRegionActivityAlien.begin();
-			iter != _numRegionActivityAlien.end();
-			++iter)
+			i = _numRegionActivityAlien.begin();
+			i != _numRegionActivityAlien.end();
+			++i)
 	{
-		(*iter)->setVisible(false);
+		(*i)->setVisible(false);
 	}
 
 	for (std::vector<Text*>::iterator
-			iter = _numCountryActivityAlien.begin();
-			iter != _numCountryActivityAlien.end();
-			++iter)
+			i = _numCountryActivityAlien.begin();
+			i != _numCountryActivityAlien.end();
+			++i)
 	{
-		(*iter)->setVisible(false);
+		(*i)->setVisible(false);
 	}
 
 	for (std::vector<Text*>::iterator
-			iter = _numRegionActivityXCom.begin();
-			iter != _numRegionActivityXCom.end();
-			++iter)
+			i = _numRegionActivityXCom.begin();
+			i != _numRegionActivityXCom.end();
+			++i)
 	{
-		(*iter)->setVisible(false);
+		(*i)->setVisible(false);
 	}
 
 	for (std::vector<Text*>::iterator
-			iter = _numCountryActivityXCom.begin();
-			iter != _numCountryActivityXCom.end();
-			++iter)
+			i = _numCountryActivityXCom.begin();
+			i != _numCountryActivityXCom.end();
+			++i)
 	{
-		(*iter)->setVisible(false);
+		(*i)->setVisible(false);
 	}
 
 
@@ -1024,7 +1051,7 @@ void GraphsState::resetScreen()
 }
 
 /**
- * updates the text on the vertical scale
+ * Update the text on the vertical scale.
  */
 void GraphsState::updateScale(
 		double lowerLimit,
@@ -1170,7 +1197,7 @@ void GraphsState::drawCountryLines()
 	double low = static_cast<double>(lowerLimit);
 
 //	int test = _income? 50: 100;
-	int test = 50;
+	int test = 10;
 	int grid = 9; // cells in grid
 
 	while (range > static_cast<double>(test * grid))
@@ -1431,7 +1458,7 @@ void GraphsState::drawRegionLines()
 	double range = static_cast<double>(upperLimit - lowerLimit);
 	double low = static_cast<double>(lowerLimit);
 
-	int test = 50;
+	int test = 10;
 	int grid = 9; // cells in grid
 
 	while (range > static_cast<double>(test * grid))
@@ -1733,7 +1760,7 @@ void GraphsState::drawFinanceLines() // Council Analytics
 	double range = static_cast<double>(upperLimit - lowerLimit);
 	double low = static_cast<double>(lowerLimit);
 
-	int test = 200;
+	int test = 100;
 	int grid = 9;
 
 	while (range > static_cast<double>(test * grid))

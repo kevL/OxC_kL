@@ -1082,8 +1082,8 @@ bool BattlescapeGenerator::placeItemByLayout(BattleItem* item)
  */
 bool BattlescapeGenerator::addItem(
 		BattleItem* item,
-		BattleUnit* unit,
-		bool allowSecondClip)
+		BattleUnit* unit)
+//		bool allowSecondClip
 {
 //kL	int weight = 0;
 

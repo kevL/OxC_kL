@@ -1071,22 +1071,58 @@ int Base::getDefenseValue() const
 
 /**
  * Returns the total amount of short range detection facilities in the base.
- * @return Short Range Detection value.
+ * @return, Short Range Detection value.
  */
 int Base::getShortRangeDetection() const
 {
-	int total = 0;
+	int
+		total = 0,
+		range = 0;
 
 	for (std::vector<BaseFacility*>::const_iterator
 			i = _facilities.begin();
 			i != _facilities.end();
 			++i)
 	{
-		if ((*i)->getBuildTime() == 0
-			&& (*i)->getRules()->getRadarRange() == 1500)
-				// kL_note: that should be based off a string or Ruleset value.
+		if ((*i)->getBuildTime() == 0)
 		{
-			total++;
+			range = (*i)->getRules()->getRadarRange();
+				// kL_note: that should be based off a string or Ruleset value.
+			if (range
+				&& range < 1501)
+			{
+				total++;
+			}
+		}
+	}
+
+	return total;
+}
+
+/**
+ * kL. Returns the total %value of short range detection facilities in the base.
+ * @return, Short Range Detection %value.
+ */
+int Base::getShortRangeValue() const
+{
+	int
+		total = 0,
+		range = 0;
+
+	for (std::vector<BaseFacility*>::const_iterator
+			i = _facilities.begin();
+			i != _facilities.end();
+			++i)
+	{
+		if ((*i)->getBuildTime() == 0)
+		{
+			range = (*i)->getRules()->getRadarRange();
+				// kL_note: that should be based off a string or Ruleset value.
+			if (range
+				&& range < 1501)
+			{
+				total += (*i)->getRules()->getRadarChance();
+			}
 		}
 	}
 
@@ -1111,6 +1147,30 @@ int Base::getLongRangeDetection() const
 				// kL_note: that should be based off a string or Ruleset value.
 		{
 			total++;
+		}
+	}
+
+	return total;
+}
+
+/**
+ * Returns the total %value of long range detection facilities in the base.
+ * @return, Long Range Detection %value.
+ */
+int Base::getLongRangeValue() const
+{
+	int total = 0;
+
+	for (std::vector<BaseFacility*>::const_iterator
+			i = _facilities.begin();
+			i != _facilities.end();
+			++i)
+	{
+		if ((*i)->getBuildTime() == 0
+			&& (*i)->getRules()->getRadarRange() > 1500)
+				// kL_note: that should be based off a string or Ruleset value.
+		{
+			total += (*i)->getRules()->getRadarChance();
 		}
 	}
 
@@ -2421,7 +2481,7 @@ bool Base::checkConnected(
 	}
 
 	// add connected (neighboring) facilities to grid
-	int total = 1;
+//kL	int total = 1;
 	grid[x][y]++;
 	bool ret = facilities[x][y]->getRules()->isLift();
 

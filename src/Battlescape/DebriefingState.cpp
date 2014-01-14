@@ -777,32 +777,31 @@ void DebriefingState::prepareDebriefing()
 			j != battle->getUnits()->end();
 			++j)
 	{
-/*		if ((*j)->getSpawnUnit() != "") // kL_note: why'd i move this down below????
+		if (!(*j)->getTile()) // handle unconscious units; This unit is not on a tile...
 		{
-			type = (*j)->getSpawnUnit();
-		} */
-
-		if (!(*j)->getTile())
-		{
-//			(*j)->setTile(battle->getTile((*j)->getPosition())); // this, why: Wb's new code follows
 			Position pos = (*j)->getPosition();
-			if (pos == Position(-1, -1, -1))
+			if (pos == Position(-1, -1, -1)) // in fact, this Unit is in limbo...
 			{
-				for (std::vector<BattleItem*>::iterator k = battle->getItems()->begin(); k != battle->getItems()->end(); ++k)
+				for (std::vector<BattleItem*>::iterator // so look for its corpse...
+						k = battle->getItems()->begin();
+						k != battle->getItems()->end();
+						++k)
 				{
-					if ((*k)->getUnit() && (*k)->getUnit() == *j)
+					if ((*k)->getUnit()
+						&& (*k)->getUnit() == *j) // found it: corpse is a dead BattleUnit!!
 					{
-						if ((*k)->getOwner())
+						if ((*k)->getOwner()) // corpse of BattleUnit has an Owner (ie. is being carried by another BattleUnit)
 						{
-							pos = (*k)->getOwner()->getPosition();
+							pos = (*k)->getOwner()->getPosition(); // Put the corpse down.. slowly.
 						}
-						else if ((*k)->getTile())
+						else if ((*k)->getTile()) // corpse of BattleUnit is laying around somewhere
 						{
-							pos = (*k)->getTile()->getPosition();
+							pos = (*k)->getTile()->getPosition(); // you're not dead yet, Get up.
 						}
 					}
 				}
 			}
+
 			(*j)->setTile(battle->getTile(pos));
 		}
 

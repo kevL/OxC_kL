@@ -16,12 +16,16 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_TERRORSITE_H
 #define OPENXCOM_TERRORSITE_H
 
-#include "Target.h"
 #include <string>
+
 #include <yaml-cpp/yaml.h>
+
+#include "Target.h"
+
 
 namespace OpenXcom
 {
@@ -29,42 +33,53 @@ namespace OpenXcom
 /**
  * Represents an alien terror site on the world.
  */
-class TerrorSite : public Target
+class TerrorSite
+	:
+		public Target
 {
+
 private:
+	bool _inBattlescape;
 	int _id;
 	unsigned _secondsRemaining;
 	std::string _race;
-	bool _inBattlescape;
-public:
-	/// Creates a terror site.
-	TerrorSite();
-	/// Cleans up the terror site.
-	~TerrorSite();
-	/// Loads the terror site from YAML.
-	void load(const YAML::Node& node);
-	/// Saves the terror site to YAML.
-	YAML::Node save() const;
-	/// Saves the terror site's ID to YAML.
-	YAML::Node saveId() const;
-	/// Gets the terror site's ID.
-	int getId() const;
-	/// Sets the terror site's ID.
-	void setId(int id);
-	/// Gets the terror site's name.
-	std::wstring getName(Language *lang) const;
-	/// Gets the seconds until this terror site expires.
-	unsigned getSecondsRemaining() const;
-	/// Sets the seconds until this terror site expires.
-	void setSecondsRemaining(unsigned seconds);
-	/// Gets the terror site's alien race.
-	std::string getAlienRace() const;
-	/// Sets the terror site's alien race.
-	void setAlienRace(const std::string &race);
-	/// Sets the TerrorSite's battlescape status.
-	void setInBattlescape(bool inbattle);
-	/// Gets if the TerrorSite is in battlescape.
-	bool isInBattlescape() const;
+
+
+	public:
+		/// Creates a terror site.
+		TerrorSite();
+		/// Cleans up the terror site.
+		~TerrorSite();
+
+		/// Loads the terror site from YAML.
+		void load(const YAML::Node& node);
+		/// Saves the terror site to YAML.
+		YAML::Node save() const;
+		/// Saves the terror site's ID to YAML.
+		YAML::Node saveId() const;
+
+		/// Gets the terror site's ID.
+		int getId() const;
+		/// Sets the terror site's ID.
+		void setId(int id);
+
+		/// Gets the terror site's name.
+		std::wstring getName(Language* lang) const;
+
+		/// Gets the seconds until this terror site expires.
+		unsigned getSecondsRemaining() const;
+		/// Sets the seconds until this terror site expires.
+		void setSecondsRemaining(unsigned seconds);
+
+		/// Gets the terror site's alien race.
+		std::string getAlienRace() const;
+		/// Sets the terror site's alien race.
+		void setAlienRace(const std::string& race);
+
+		/// Sets the TerrorSite's battlescape status.
+		void setInBattlescape(bool inbattle);
+		/// Gets if the TerrorSite is in battlescape.
+		bool isInBattlescape() const;
 };
 
 }

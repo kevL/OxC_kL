@@ -263,7 +263,7 @@ void Text::setInvert(bool invert)
 
 /**
  * Enables/disables high contrast color. Mostly used for Battlescape UI.
- * @param contrast High contrast setting.
+ * @param contrast, High contrast setting.
  */
 void Text::setHighContrast(bool contrast)
 {
@@ -500,7 +500,7 @@ void Text::processText()
  */
 int Text::getLineX(int line) const
 {
-	int x;
+	int x = 0;
 
 	switch (_lang->getTextDirection())
 	{
@@ -636,6 +636,7 @@ void Text::draw()
 	if (_contrast)
 	{
 		mult = 3;
+//		mult = 4; // kL
 	}
 
 	// Set up text direction
@@ -672,7 +673,6 @@ void Text::draw()
 		}
 		else if (*c == L'\x01')
 		{
-
 			color = (color == _color? _color2: _color);
 		}
 		else

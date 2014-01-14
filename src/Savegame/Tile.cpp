@@ -18,17 +18,20 @@
  */
 
 #include "Tile.h"
+
+#include "BattleItem.h"
+#include "BattleUnit.h"
+#include "SerializationHelper.h"
+
+#include "../Engine/Exception.h"
+#include "../Engine/RNG.h"
+#include "../Engine/Surface.h"
+#include "../Engine/SurfaceSet.h"
+
+#include "../Ruleset/Armor.h"
 #include "../Ruleset/MapData.h"
 #include "../Ruleset/MapDataSet.h"
-#include "../Engine/SurfaceSet.h"
-#include "../Engine/Surface.h"
-#include "../Engine/RNG.h"
-#include "../Engine/Exception.h"
-#include "BattleUnit.h"
-#include "BattleItem.h"
 #include "../Ruleset/RuleItem.h"
-#include "../Ruleset/Armor.h"
-#include "SerializationHelper.h"
 
 
 namespace OpenXcom
@@ -57,11 +60,11 @@ Tile::Tile(const Position& pos)
 		_explosive(0),
 		_pos(pos),
 		_unit(0),
-		_animationOffset(0),
+		_animOffset(0),
 		_markerColor(0),
 		_visible(false),
 		_preview(-1),
-		_TUMarker(0),
+		_tuMarker(0),
 		_overlaps(0),
 		_danger(false)
 {
@@ -70,7 +73,7 @@ Tile::Tile(const Position& pos)
 		_objects[i] = 0;
 		_mapDataID[i] = -1;
 		_mapDataSetID[i] = -1;
-		_currentFrame[i] = 0;
+		_currFrame[i] = 0;
 	}
 
 	for (int layer = 0; layer < LIGHTLAYERS; layer++)
@@ -100,7 +103,10 @@ Tile::~Tile()
 void Tile::load(const YAML::Node& node)
 {
 	//_position = node["position"].as<Position>(_position);
-	for (int i = 0; i < 4; i++)
+	for (int
+			i = 0;
+			i < 4;
+			i++)
 	{
 		_mapDataID[i] = node["mapDataID"][i].as<int>(_mapDataID[i]);
 		_mapDataSetID[i] = node["mapDataSetID"][i].as<int>(_mapDataSetID[i]);
@@ -108,21 +114,21 @@ void Tile::load(const YAML::Node& node)
 
 	_fire = node["fire"].as<int>(_fire);
 	_smoke = node["smoke"].as<int>(_smoke);
+	_animOffset = node["animOffset"].as<int>(_animOffset); // kL
 
-	for (int i = 0; i < 3; i++)
+	for (int
+			i = 0;
+			i < 3;
+			i++)
 	{
 		_discovered[i] = node["discovered"][i].as<bool>();
 	}
 
 	if (node["openDoorWest"])
-	{
-		_currentFrame[1] = 7;
-	}
+		_currFrame[1] = 7;
 
 	if (node["openDoorNorth"])
-	{
-		_currentFrame[2] = 7;
-	}
+		_currFrame[2] = 7;
 }
 
 /**
@@ -143,12 +149,13 @@ void Tile::loadBinary(Uint8* buffer, Tile::SerializationKey& serKey)
 	_smoke = unserializeInt(&buffer, serKey._smoke);
 	_fire = unserializeInt(&buffer, serKey._fire);
 
-    Uint8 boolFields = unserializeInt(&buffer, serKey.boolFields);
-	_discovered[0] = (boolFields & 1) ? true : false;
-	_discovered[1] = (boolFields & 2) ? true : false;
-	_discovered[2] = (boolFields & 4) ? true : false;
-	_currentFrame[1] = (boolFields & 8) ? 7 : 0;
-	_currentFrame[2] = (boolFields & 0x10) ? 7 : 0;
+//kL    Uint8 boolFields = unserializeInt(&buffer, serKey.boolFields);
+    Uint8 boolFields = static_cast<Uint8>(unserializeInt(&buffer, serKey.boolFields)); // kL
+	_discovered[0] = (boolFields & 1)? true: false;
+	_discovered[1] = (boolFields & 2)? true: false;
+	_discovered[2] = (boolFields & 4)? true: false;
+	_currFrame[1] = (boolFields & 8)? 7: 0;
+	_currFrame[2] = (boolFields & 0x10)? 7: 0;
 }
 
 /**
@@ -168,10 +175,14 @@ YAML::Node Tile::save() const
 
 	if (_smoke) node["smoke"] = _smoke;
 	if (_fire) node["fire"] = _fire;
+	if (_animOffset) node["animOffset"] = _animOffset; // kL
 
 	if (_discovered[0] || _discovered[1] || _discovered[2])
 	{
-		for (int i = 0; i < 3; i++)
+		for (int
+				i = 0;
+				i < 3;
+				i++)
 		{
 			node["discovered"].push_back(_discovered[i]);
 		}
@@ -256,7 +267,7 @@ int Tile::getTUCost(int part, MovementType movementType) const
 	if (_objects[part])
 	{
 		if (_objects[part]->isUFODoor()
-			&& _currentFrame[part] == 7)
+			&& _currFrame[part] == 7)
 		{
 			return 0;
 		}
@@ -373,7 +384,7 @@ int Tile::openDoor(int part, BattleUnit* unit, BattleActionType reserve)
 	}
 
 	if (_objects[part]->isUFODoor()
-		&& _currentFrame[part] == 0) // ufo door part 0 - door is closed
+		&& _currFrame[part] == 0) // ufo door part 0 - door is closed
 	{
 		if (unit
 			&& unit->getTimeUnits() < _objects[part]->getTUCost(unit->getArmor()->getMovementType())
@@ -382,13 +393,13 @@ int Tile::openDoor(int part, BattleUnit* unit, BattleActionType reserve)
 			return 4;
 		}
 
-		_currentFrame[part] = 1; // start opening door
+		_currFrame[part] = 1; // start opening door
 
 		return 1;
 	}
 
 	if (_objects[part]->isUFODoor()
-		&& _currentFrame[part] != 7) // ufo door != part 7 - door is still opening
+		&& _currFrame[part] != 7) // ufo door != part 7 - door is still opening
 	{
 		return 3;
 	}
@@ -407,7 +418,7 @@ int Tile::closeUfoDoor()
 	{
 		if (isUfoDoorOpen(part))
 		{
-			_currentFrame[part] = 0;
+			_currFrame[part] = 0;
 			retval = 1;
 		}
 	}
@@ -648,9 +659,7 @@ void Tile::ignite(int power)
 	{
 		power = power - (getFlammability() / 10) + 15;
 		if (power < 0)
-		{
 			power = 0;
-		}
 
 		if (RNG::percent(power))
 		{
@@ -659,7 +668,7 @@ void Tile::ignite(int power)
 				_smoke = 15 - std::max(1, std::min((getFlammability() / 10), 12));
 				_overlaps = 1;
 				_fire = getFuel() + 1;
-				_animationOffset = RNG::generate(0, 3);
+				_animOffset = RNG::generate(0, 3);
 			}
 		}
 	}
@@ -681,13 +690,14 @@ void Tile::animate()
 	{
 		if (_objects[i])
 		{
-			if (_objects[i]->isUFODoor()
-				&& (_currentFrame[i] == 0 || _currentFrame[i] == 7)) // ufo door is static
+			if (_objects[i]->isUFODoor() // ufo door is static
+				&& (_currFrame[i] == 0
+					|| _currFrame[i] == 7))
 			{
 				continue;
 			}
 
-			newframe = _currentFrame[i] + 1;
+			newframe = _currFrame[i] + 1;
 
 			if (_objects[i]->isUFODoor()
 				&& _objects[i]->getSpecialType() == START_POINT
@@ -697,13 +707,21 @@ void Tile::animate()
 			}
 
 			if (newframe == 8)
-			{
 				newframe = 0;
-			}
 
-			_currentFrame[i] = newframe;
+			_currFrame[i] = newframe;
 		}
 	}
+}
+
+/**
+ * Get the number of frames the fire or smoke animation is off-sync.
+ * To void fire and smoke animations of different tiles moving nice in sync - it looks fake.
+ * @return int, Offset
+ */
+int Tile::getAnimationOffset() const
+{
+	return _animOffset;
 }
 
 /**
@@ -716,7 +734,7 @@ Surface* Tile::getSprite(int part) const
 	if (_objects[part] == 0)
 		return 0;
 
-	return _objects[part]->getDataset()->getSurfaceset()->getFrame(_objects[part]->getSprite(_currentFrame[part]));
+	return _objects[part]->getDataset()->getSurfaceset()->getFrame(_objects[part]->getSprite(_currFrame[part]));
 }
 
 /**
@@ -744,7 +762,7 @@ void Tile::setUnit(
 void Tile::setFire(int fire)
 {
 	_fire = fire;
-	_animationOffset = RNG::generate(0, 3);
+	_animOffset = RNG::generate(0, 3);
 }
 
 /**
@@ -765,15 +783,12 @@ void Tile::addSmoke(int smoke)
 	if (_fire == 0)
 	{
 		if (_overlaps == 0)
-		{
 			_smoke = std::max(1, std::min(_smoke + smoke, 15));
-		}
 		else
-		{
 			_smoke += smoke;
-		}
 
-		_animationOffset = RNG::generate(0, 3);
+		_animOffset = RNG::generate(0, 3);
+
 		addOverlap();
 	}
 }
@@ -785,7 +800,7 @@ void Tile::addSmoke(int smoke)
 void Tile::setSmoke(int smoke)
 {
 	_smoke = smoke;
-	_animationOffset = RNG::generate(0, 3);
+	_animOffset = RNG::generate(0, 3);
 }
 
 /**
@@ -795,16 +810,6 @@ void Tile::setSmoke(int smoke)
 int Tile::getSmoke() const
 {
 	return _smoke;
-}
-
-/**
- * Get the number of frames the fire or smoke animation is off-sync.
- * To void fire and smoke animations of different tiles moving nice in sync - it looks fake.
- * @return int, Offset
- */
-int Tile::getAnimationOffset() const
-{
-	return _animationOffset;
 }
 
 /**
@@ -1000,7 +1005,7 @@ int Tile::getPreview() const
  */
 void Tile::setTUMarker(int tu)
 {
-	_TUMarker = tu;
+	_tuMarker = tu;
 }
 
 /**
@@ -1008,7 +1013,7 @@ void Tile::setTUMarker(int tu)
  */
 int Tile::getTUMarker() const
 {
-	return _TUMarker;
+	return _tuMarker;
 }
 
 /**

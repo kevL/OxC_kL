@@ -22,12 +22,19 @@
 
 #include <SDL_types.h>
 
+
 namespace OpenXcom
 {
 
-int unserializeInt(Uint8 **buffer, Uint8 sizeKey);
-void serializeInt(Uint8 **buffer, Uint8 sizeKey, int value);
-
+///
+int unserializeInt(
+		Uint8** buffer,
+		Uint8 sizeKey);
+///
+void serializeInt(
+		Uint8** buffer,
+		Uint8 sizeKey,
+		int value);
 }
 
 #endif

@@ -87,7 +87,7 @@ ArticleStateUfo::ArticleStateUfo(Game* game, ArticleDefinitionUfo* defs)
 */
 	if (ufo->getModSprite() == "")
 	{
-		graphic->getCrop()->y = 140 + 52 * ufo->getSprite();
+		graphic->getCrop()->y = 140 + 52 * static_cast<Sint16>(ufo->getSprite());
 		graphic->getCrop()->h = 52;
 	}
 	else

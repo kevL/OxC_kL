@@ -16,36 +16,54 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_STARTSTATE_H
 #define OPENXCOM_STARTSTATE_H
 
 #include "../Engine/State.h"
+
 #include "../Resource/XcomResourcePack.h"
+
 
 namespace OpenXcom
 {
 
 class Surface;
 
-enum LoadingPhase { LOADING_NONE, LOADING_STARTED, LOADING_FAILED, LOADING_SUCCESSFUL };
+
+enum LoadingPhase
+{
+	LOADING_NONE,		// 0
+	LOADING_STARTED,	// 1
+	LOADING_FAILED,		// 2
+	LOADING_SUCCESSFUL	// 3
+};
+
 
 /**
  * Initializes the game and loads all required content.
  */
-class StartState : public State
+class StartState
+	:
+		public State
 {
+
 private:
 	Surface *_surface;
 	LoadingPhase _load;
-public:
-	/// Creates the Start state.
-	StartState(Game *game);
-	/// Cleans up the Start state.
-	~StartState();
-	/// Loads the game resources.
-	void think();
-	/// Handles key clicks.
-	void handle(Action *action);
+
+
+	public:
+		/// Creates the Start state.
+		StartState(Game* game);
+		/// Cleans up the Start state.
+		~StartState();
+
+		/// Loads the game resources.
+		void think();
+
+		/// Handles key clicks.
+		void handle(Action* action);
 };
 
 }

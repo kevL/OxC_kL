@@ -1763,8 +1763,8 @@ bool AlienBAIState::explosiveEfficacy(
 		Position targetPos,
 		BattleUnit* attackingUnit,
 		int radius,
-		int diff,
-		bool grenade) const
+		int diff) const
+//		bool grenade) const
 {
 	Log(LOG_INFO) << "AlienBAIState::explosiveEfficacy()";
 
@@ -2226,8 +2226,8 @@ void AlienBAIState::grenadeAction()
 						_aggroTarget->getPosition(),
 						_unit,
 						grenade->getRules()->getExplosionRadius(),
-						_attackAction->diff,
-						true))
+						_attackAction->diff))
+//						true))
 	{
 //		if (_unit->getFaction() == FACTION_HOSTILE)
 		{
