@@ -2507,6 +2507,10 @@ void BattlescapeState::popup(State* state)
 void BattlescapeState::finishBattle(bool abort, int inExitArea)
 {
 	//Log(LOG_INFO) << "BattlescapeState::finishBattle()";
+	while (!_game->isState(this))
+	{
+		_game->popState();
+	}
 
 	_game->getCursor()->setVisible(true);
 	std::string nextStage = "";

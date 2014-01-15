@@ -317,6 +317,7 @@ void BattleUnit::load(const YAML::Node& node)
 	_charging			= 0;
 	_specab				= (SpecialAbility)node["specab"].as<int>(_specab);
 	_spawnUnit			= node["spawnUnit"].as<std::string>(_spawnUnit);
+	_motionPoints		= node["motionPoints"].as<int>(0);
 
 	for (int i = 0; i < 5; i++)
 		_currentArmor[i]	= node["armor"][i].as<int>(_currentArmor[i]);
@@ -362,17 +363,19 @@ YAML::Node BattleUnit::save() const
 	node["rankInt"]			= _rankInt;
 	node["moraleRestored"]	= _moraleRestored;
 	node["killedBy"]		= (int)_killedBy;
+	node["specab"]			= (int)_specab;
+	node["motionPoints"]	= _motionPoints;
 
 	for (int i = 0; i < 5; i++) node["armor"].push_back(_currentArmor[i]);
 	for (int i = 0; i < 6; i++) node["fatalWounds"].push_back(_fatalWounds[i]);
 
-	if (getCurrentAIState()) node["AI"]							= getCurrentAIState()->save();
-	if (_originalFaction != _faction) node["originalFaction"]	= (int)_originalFaction;
-	if (_kills) node["kills"]									= _kills;
+	if (getCurrentAIState()) node["AI"]			= getCurrentAIState()->save();
+	if (_originalFaction != _faction)
+		node["originalFaction"]					= (int)_originalFaction;
+	if (_kills) node["kills"]					= _kills;
 	if (_faction == FACTION_PLAYER
-		&& _dontReselect) node["dontReselect"]					= _dontReselect;
-	node["specab"]												= (int)_specab;
-	if (!_spawnUnit.empty()) node["spawnUnit"]					= _spawnUnit;
+		&& _dontReselect) node["dontReselect"]	= _dontReselect;
+	if (!_spawnUnit.empty()) node["spawnUnit"]	= _spawnUnit;
 
 	return node;
 }

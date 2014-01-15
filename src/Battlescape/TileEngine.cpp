@@ -57,6 +57,7 @@
 #include "../Savegame/BattleItem.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/SavedBattleGame.h"
+#include "../Savegame/SavedGame.h"
 #include "../Savegame/Soldier.h"
 #include "../Savegame/Tile.h"
 
@@ -1433,14 +1434,16 @@ bool TileEngine::canMakeSnap(BattleUnit* unit, BattleUnit* target)
 	else
 		weapon = unit->getMainHandWeapon(); // kL_note: no longer returns grenades. good
 
-	if (weapon																		// has a weapon
-		&& (weapon->getRules()->getBattleType() == BT_MELEE							// has a melee weapon
-			&& validMeleeRange(unit, target, unit->getDirection()					// is in melee range
-			&& unit->getTimeUnits() >= unit->getActionTUs(BA_HIT, weapon))			// has enough TU
-		|| (weapon->getRules()->getBattleType() == BT_FIREARM						// has a gun
-			&& weapon->getRules()->getTUSnap()										// can make snapshot
-//			&& weapon->getAmmoItem()												// gun is loaded, checked in "getMainHandWeapon()"
-			&& unit->getTimeUnits() >= unit->getActionTUs(BA_SNAPSHOT, weapon))))	// has enough TU
+	if (weapon																			// has a weapon
+		&& ((weapon->getRules()->getBattleType() == BT_MELEE							// has a melee weapon
+				&& validMeleeRange(unit, target, unit->getDirection()					// is in melee range
+				&& unit->getTimeUnits() >= unit->getActionTUs(BA_HIT, weapon))			// has enough TU
+			|| (weapon->getRules()->getBattleType() == BT_FIREARM						// has a gun
+				&& weapon->getRules()->getTUSnap()										// can make snapshot
+//				&& weapon->getAmmoItem()												// gun is loaded, checked in "getMainHandWeapon()"
+				&& unit->getTimeUnits() >= unit->getActionTUs(BA_SNAPSHOT, weapon))))	// has enough TU
+		&& (unit->getOriginalFaction() != FACTION_PLAYER
+			|| _save->getGeoscapeSave()->isResearched(weapon->getRules()->getRequirements())))
 	{
 		//Log(LOG_INFO) << ". ret TRUE";
 		return true;
