@@ -73,7 +73,7 @@ UfopaediaStartState::UfopaediaStartState(Game* game)
 		_btnSection[i] = new TextButton(224, 12, 48, y);
 		y += 13;
 	}
-	_btnOk = new TextButton(112, 16, 104, y + 2);
+	_btnOk = new TextButton(112, 16, 104, y + 3);
 
 
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());

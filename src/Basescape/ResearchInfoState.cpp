@@ -125,7 +125,12 @@ void ResearchInfoState::buildUi()
 
 	_screen = false;
 
-	_window					= new Window(this, width, height, start_x, start_y);
+	_window					= new Window(
+										this,
+										width,
+										height,
+										start_x,
+										start_y);
 
 	_txtTitle				= new Text(width - 2 * button_x_border,
 										button_height,

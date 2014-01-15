@@ -1371,7 +1371,8 @@ std::vector<BattleUnit*> TileEngine::getSpottingUnits(BattleUnit* unit)
 			if ((((*bu)->checkViewSector(unit->getPosition())			// spotter is looking in the right direction
 						|| (*bu)->getFaction() == FACTION_HOSTILE)		//		or is a psycho-aLien!
 //kL					|| (aggro != 0 && aggro->getWasHit()))
-					|| (aggro && aggro->getWasHit()))					// spotter has AIstate & been aggro'd.
+					|| (aggro											// spotter has AIstate
+						&& aggro->getWasHit()))							// & been aggro'd.
 //				&& canTargetUnit(&originVoxel, tile, &targetVoxel, *bu)	// can actually target the unit, checked by "visible()",
 																		// although origin is placed 2 voxels lower here.
 				&& visible(*bu, tile))									// can actually see the unit through smoke/fire & within viewRange

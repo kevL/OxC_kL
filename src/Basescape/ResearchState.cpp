@@ -73,8 +73,9 @@ ResearchState::ResearchState(
 
 	_lstResearch	= new TextList(285, 112, 16, 62);
 	
-	_btnNew			= new TextButton(134, 16, 16, 177);
-	_btnOk			= new TextButton(134, 16, 170, 177);
+	_btnAliens		= new TextButton(92, 16, 16, 177); // kL
+	_btnNew			= new TextButton(92, 16, 115, 177);
+	_btnOk			= new TextButton(92, 16, 211, 177);
 
 	// back up palette in case we're being called from Geoscape!
 	memcpy(
@@ -99,6 +100,7 @@ ResearchState::ResearchState(
 	add(_txtScientists);
 	add(_txtProgress);
 	add(_lstResearch);
+	add(_btnAliens); // kL
 	add(_btnNew);
 	add(_btnOk);
 
@@ -107,6 +109,10 @@ ResearchState::ResearchState(
 
 	_window->setColor(Palette::blockOffset(13)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK05.SCR"));
+
+	_btnAliens->setColor(Palette::blockOffset(15)+6);
+	_btnAliens->setText(tr("STR_ALIENS"));
+	_btnAliens->onMouseClick((ActionHandler)& ResearchState::btnAliens);
 
 	_btnNew->setColor(Palette::blockOffset(15)+6);
 	_btnNew->setText(tr("STR_NEW_PROJECT"));
@@ -188,6 +194,18 @@ void ResearchState::btnNewClick(Action*)
 }
 
 /**
+ * Goes to the Manage Alien Containment screen.
+ * @param action Pointer to an action.
+ */
+void ResearchState::btnAliens(Action*) // kL
+{
+	_game->pushState(new ManageAlienContainmentState(
+													_game,
+													_base,
+													OPT_GEOSCAPE));
+}
+
+/**
  * Displays the list of possible ResearchProjects.
  * @param action Pointer to an action.
  */
@@ -233,6 +251,21 @@ void ResearchState::init()
 							.arg(_base->getAllocatedScientists()));
 	_txtSpace->setText(tr("STR_LABORATORY_SPACE_AVAILABLE")
 							.arg(_base->getFreeLaboratories()));
+
+	// kL_begin:
+	_btnAliens->setVisible(false);
+	for (std::vector<BaseFacility*>::iterator
+			i = _base->getFacilities()->begin();
+			i != _base->getFacilities()->end();
+			++i)
+	{
+		if ((*i)->getRules()->getAliens() > 0)
+		{
+			_btnAliens->setVisible(true);
+
+			break;
+		}
+	} // kL_end.
 }
 
 }

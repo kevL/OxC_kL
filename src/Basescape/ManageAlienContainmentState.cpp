@@ -144,7 +144,10 @@ ManageAlienContainmentState::ManageAlienContainmentState(
 
 
 	_window->setColor(_color);
-	_window->setBackground(_game->getResourcePack()->getSurface((origin == OPT_BATTLESCAPE)? "BACK04.SCR": "BACK05.SCR"));
+	if (origin == OPT_BATTLESCAPE)
+		_window->setBackground(_game->getResourcePack()->getSurface("BACK04.SCR"));
+	else
+		_window->setBackground(_game->getResourcePack()->getSurface("BACK05.SCR"));
 
 	_btnOk->setColor(_color);
 	_btnOk->setText(tr("STR_REMOVE_SELECTED"));
@@ -161,18 +164,21 @@ ManageAlienContainmentState::ManageAlienContainmentState(
 					(SDLKey)Options::getInt("keyCancel"));
 
 	_btnOk->setVisible(false);
-
 	if (_overCrowded)
-	{
 		_btnCancel->setVisible(false);
-	}
 
-	_txtTitle->setColor((origin == OPT_BATTLESCAPE)? Palette::blockOffset(8)+5: _color);
+	if (origin == OPT_BATTLESCAPE)
+		_txtTitle->setColor(Palette::blockOffset(8)+5);
+	else
+		_txtTitle->setColor(_color);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_MANAGE_CONTAINMENT"));
 
-	_txtBaseLabel->setColor((origin == OPT_BATTLESCAPE)? Palette::blockOffset(8)+5: _color);
+	if (origin == OPT_BATTLESCAPE)
+		_txtBaseLabel->setColor(Palette::blockOffset(8)+5);
+	else
+		_txtBaseLabel->setColor(_color);
 	_txtBaseLabel->setText(_base->getName(_game->getLanguage()));
 
 	_txtItem->setColor(_color);
@@ -287,11 +293,15 @@ void ManageAlienContainmentState::btnOkClick(Action*)
 			} // kL_end.
 
 			// remove the aliens
-			_base->getItems()->removeItem(_aliens[i], _qtys[i]);
+			_base->getItems()->removeItem(
+										_aliens[i],
+										_qtys[i]);
 
 			// add the corpses
 			_base->getItems()->addItem(
-									_game->getRuleset()->getArmor(_game->getRuleset()->getUnit(_aliens[i])->getArmor())->getCorpseGeoscape(),
+									_game->getRuleset()->getArmor(
+															_game->getRuleset()->getUnit(_aliens[i])->getArmor()
+														)->getCorpseGeoscape(),
 									_qtys[i]);
 		}
 	}

@@ -46,6 +46,7 @@ class ResearchState
 
 private:
 	Base* _base;
+	SDL_Color _oldPalette[256];
 	Text
 		* _txtAllocated,
 		* _txtAvailable,
@@ -56,10 +57,10 @@ private:
 		* _txtSpace,
 		* _txtTitle;
 	TextButton
+		* _btnAliens, // kL
 		* _btnNew,
 		* _btnOk;
 	TextList* _lstResearch;
-	SDL_Color _oldPalette[256];
 	Window* _window;
 
 
@@ -75,6 +76,8 @@ private:
 		void btnOkClick(Action* action);
 		/// Handler for clicking the New Research button.
 		void btnNewClick(Action* action);
+		/// Handler for clicking the Alien Containment button.
+		void btnAliens(Action* action); // kL
 		/// Handler for clicking the ResearchProject list.
 		void onSelectProject(Action* action);
 

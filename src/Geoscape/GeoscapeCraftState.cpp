@@ -274,6 +274,7 @@ GeoscapeCraftState::GeoscapeCraftState(
 	_txtDamage->setSecondaryColor(Palette::blockOffset(8)+5);
 	_txtDamage->setText(tr("STR_DAMAGE_UC_").arg(Text::formatPercentage(_craft->getDamagePercentage())));
 
+
 	_txtW1Name->setColor(Palette::blockOffset(15)-1);
 	_txtW1Name->setSecondaryColor(Palette::blockOffset(8)+5);
 
@@ -289,7 +290,8 @@ GeoscapeCraftState::GeoscapeCraftState(
 	}
 	else
 	{
-		_txtW1Name->setText(tr("STR_WEAPON_ONE").arg(tr("STR_NONE_UC")));
+//kL		_txtW1Name->setText(tr("STR_WEAPON_ONE").arg(tr("STR_NONE_UC")));
+		_txtW1Name->setVisible(false); // kL
 		_txtW1Ammo->setVisible(false);
 	}
 
@@ -308,9 +310,11 @@ GeoscapeCraftState::GeoscapeCraftState(
 	}
 	else
 	{
-		_txtW2Name->setText(tr("STR_WEAPON_TWO").arg(tr("STR_NONE_UC")));
+//kL		_txtW2Name->setText(tr("STR_WEAPON_TWO").arg(tr("STR_NONE_UC")));
+		_txtW2Name->setVisible(false); // kL
 		_txtW2Ammo->setVisible(false);
 	}
+
 
 	_txtRedirect->setColor(Palette::blockOffset(15)-1);
 	_txtRedirect->setBig();
