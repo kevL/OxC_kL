@@ -1421,7 +1421,9 @@ std::vector<BattleUnit*> TileEngine::getSpottingUnits(BattleUnit* unit)
  * @param target, The unit to check sight TO.
  * @return, True if the target is valid.
  */
-bool TileEngine::canMakeSnap(BattleUnit* unit, BattleUnit* target)
+bool TileEngine::canMakeSnap(
+		BattleUnit* unit,
+		BattleUnit* target)
 {
 	//Log(LOG_INFO) << "TileEngine::canMakeSnap() reactID " << unit->getId() << " vs targetID " << target->getId();
 
@@ -1434,15 +1436,22 @@ bool TileEngine::canMakeSnap(BattleUnit* unit, BattleUnit* target)
 	else
 		weapon = unit->getMainHandWeapon(); // kL_note: no longer returns grenades. good
 
-	if (weapon																			// has a weapon
-		&& ((weapon->getRules()->getBattleType() == BT_MELEE							// has a melee weapon
-				&& validMeleeRange(unit, target, unit->getDirection()					// is in melee range
-				&& unit->getTimeUnits() >= unit->getActionTUs(BA_HIT, weapon))			// has enough TU
-			|| (weapon->getRules()->getBattleType() == BT_FIREARM						// has a gun
-				&& weapon->getRules()->getTUSnap()										// can make snapshot
-//				&& weapon->getAmmoItem()												// gun is loaded, checked in "getMainHandWeapon()"
-				&& unit->getTimeUnits() >= unit->getActionTUs(BA_SNAPSHOT, weapon))))	// has enough TU
-		&& (unit->getOriginalFaction() != FACTION_PLAYER
+	if (weapon																// has a weapon
+		&& ((weapon->getRules()->getBattleType() == BT_MELEE				// has a melee weapon
+				&& validMeleeRange(
+								unit,
+								target,
+								unit->getDirection()						// is in melee range
+				&& unit->getTimeUnits() >= unit->getActionTUs(
+															BA_HIT,
+															weapon))		// has enough TU
+			|| (weapon->getRules()->getBattleType() == BT_FIREARM			// has a gun
+				&& weapon->getRules()->getTUSnap()							// can make snapshot
+//				&& weapon->getAmmoItem()									// gun is loaded, checked in "getMainHandWeapon()"
+				&& unit->getTimeUnits() >= unit->getActionTUs(
+															BA_SNAPSHOT,
+															weapon))))		// has enough TU
+		&& (unit->getOriginalFaction() == FACTION_HOSTILE					// is aLien, or has researched weapon.
 			|| _save->getGeoscapeSave()->isResearched(weapon->getRules()->getRequirements())))
 	{
 		//Log(LOG_INFO) << ". ret TRUE";
