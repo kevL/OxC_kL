@@ -95,8 +95,8 @@ ManageAlienContainmentState::ManageAlienContainmentState(
 	_txtTitle		= new Text(310, 17, 5, 10);
 	_txtBaseLabel	= new Text(80, 9, 16, 10);
 
-	_txtAvailable	= new Text(144, 9, 16, 30);
-	_txtUsed		= new Text(144, 9, 160, 30);
+	_txtUsed		= new Text(144, 9, 16, 30);
+	_txtAvailable	= new Text(144, 9, 160, 30);
 
 	_txtItem		= new Text(144, 9, 16, 40);
 	_txtLiveAliens	= new Text(62, 9, 164, 40);

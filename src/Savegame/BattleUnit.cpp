@@ -2232,45 +2232,38 @@ BattleItem* BattleUnit::getMainHandWeapon(bool quickest) const
 	BattleItem* weaponLeft = getItem("STR_LEFT_HAND");
 
 	bool isRight = weaponRight
-			&& weaponRight->getAmmoItem();						// itself, if no ammo required
-//			&& weaponRight->getAmmoItem()->getAmmoQuantity();	// -1 if no ammo required (?)
+			&& weaponRight->getAmmoItem()
+			&& weaponRight->getAmmoItem()->getAmmoQuantity();
 //			&& (weaponRight->getRules()->getBattleType() == BT_FIREARM
 //				|| weaponRight->getRules()->getBattleType() == BT_MELEE)
 	bool isLeft = weaponLeft
-			&& weaponLeft->getAmmoItem();
-//			&& weaponLeft->getAmmoItem()->getAmmoQuantity();
+			&& weaponLeft->getAmmoItem()
+			&& weaponLeft->getAmmoItem()->getAmmoQuantity();
 //			&& (weaponLeft->getRules()->getBattleType() == BT_FIREARM
 //				|| weaponLeft->getRules()->getBattleType() == BT_MELEE);
 
 	if (!isRight && !isLeft)
-	{
 		return 0;
-	}
 	else if (!isLeft && isRight)
-	{
 		return weaponRight;
-	}
 	else if (!isRight && isLeft)
-	{
 		return weaponLeft;
-	}
-	else // if (isRight && isLeft).
+	else // (isRight && isLeft).
 	{
-		int tuRight = weaponRight->getRules()->getBattleType() == BT_MELEE?
-				weaponRight->getRules()->getTUMelee()
-				: weaponRight->getRules()->getTUSnap();
-		int tuLeft = weaponLeft->getRules()->getBattleType() == BT_MELEE?
-				weaponLeft->getRules()->getTUMelee()
-				: weaponLeft->getRules()->getTUSnap();
+		RuleItem* rightRule = weaponRight->getRules();
+		int tuRight = rightRule->getBattleType() == BT_MELEE?
+									rightRule->getTUMelee()
+								: rightRule->getTUSnap();
+
+		RuleItem* leftRule = weaponLeft->getRules();
+		int tuLeft = leftRule->getBattleType() == BT_MELEE?
+									leftRule->getTUMelee()
+								: leftRule->getTUSnap();
 
 		if (tuRight <= tuLeft)
-		{
 			return quickest? weaponRight: weaponLeft;
-		}
 		else
-		{
 			return quickest? weaponLeft: weaponRight;
-		}
 	}
 
 	return 0;
@@ -2443,9 +2436,10 @@ void BattleUnit::addThrowingExp()
 }
 
 /**
- * Adds one to the psionic exp counter.
+ * Adds qty to the psionic exp counter.
+ * @param (int)qty, Amount to add.
  */
-void BattleUnit::addPsiExp()
+void BattleUnit::addPsiExp(int qty)
 {
 	_expPsiSkill++;
 }
@@ -2952,8 +2946,8 @@ void BattleUnit::setActiveHand(const std::string& hand)
 
 /**
  * Get unit's active hand.
- * Must have an item in that hand. Else, switch to
- * other hand or use default @ right Hand.
+ * Must have an item in that hand. Else, switch
+ * to other hand or use default @ right Hand.
  */
 std::string BattleUnit::getActiveHand() const
 {

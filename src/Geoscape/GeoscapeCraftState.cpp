@@ -96,11 +96,9 @@ GeoscapeCraftState::GeoscapeCraftState(
 	_txtW2Ammo		= new Text(80, 9, 160, 100);
 
 	_btnTarget		= new TextButton(90, 16, 32, 113);
-	_btnBase		= new TextButton(90, 16, 134, 113);
-
+	_btnPatrol		= new TextButton(90, 16, 134, 113);
 	_btnCenter		= new TextButton(192, 16, 32, 135);
-
-	_btnPatrol		= new TextButton(90, 16, 32, 157);
+	_btnBase		= new TextButton(90, 16, 32, 157);
 	_btnCancel		= new TextButton(90, 16, 134, 157);
 
 

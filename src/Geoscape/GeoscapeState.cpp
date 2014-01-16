@@ -1506,7 +1506,10 @@ void GeoscapeState::time10Minutes()
 		}
 
 		// Now mark the bases as discovered.
-		std::for_each(discovered.begin(), discovered.end(), SetRetaliationStatus());
+		std::for_each(
+					discovered.begin(),
+					discovered.end(),
+					SetRetaliationStatus());
 	}
 
 
@@ -1595,7 +1598,8 @@ void GeoscapeState::time10Minutes()
 				{
 					Log(LOG_INFO) << ". Base re-detection";
 
-					double targetRange = (*b)->insideRadarRange(*u); // -2.0 =outside range ; -1.0 =hyperdetected ; 0.0+ =targetDistance
+					// -2.0 =outside range ; -1.0 =hyperdetected ; 0.0+ =targetDistance
+					double targetRange = (*b)->insideRadarRange(*u);
 					if (targetRange > -1.99)
 					{
 						Log(LOG_INFO) << ". . still detected";

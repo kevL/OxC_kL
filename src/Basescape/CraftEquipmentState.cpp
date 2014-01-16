@@ -88,8 +88,8 @@ CraftEquipmentState::CraftEquipmentState(
 	_txtTitle		= new Text(300, 17, 16, 8);
 	_txtBaseLabel	= new Text(80, 9, 224, 8);
 
-	_txtAvailable	= new Text(110, 9, 16, 25);
-	_txtUsed		= new Text(110, 9, 130, 25);
+	_txtUsed		= new Text(110, 9, 16, 25);
+	_txtAvailable	= new Text(110, 9, 160, 25);
 
 	_txtItem		= new Text(144, 9, 16, 33);
 	_txtStores		= new Text(50, 9, 171, 33);
@@ -182,7 +182,7 @@ CraftEquipmentState::CraftEquipmentState(
 
 	_lstEquipment->setColor(Palette::blockOffset(13)+10);
 	_lstEquipment->setArrowColor(Palette::blockOffset(15)+1);
-	_lstEquipment->setArrowColumn(203, ARROW_HORIZONTAL);
+	_lstEquipment->setArrowColumn(188, ARROW_HORIZONTAL);
 	_lstEquipment->setColumns(3, 147, 85, 41);
 	_lstEquipment->setSelectable(true);
 	_lstEquipment->setBackground(_window);

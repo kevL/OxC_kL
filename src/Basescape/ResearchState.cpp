@@ -68,14 +68,14 @@ ResearchState::ResearchState(
 	_txtSpace		= new Text(100, 9, 16, 34);
 
 	_txtProject		= new Text(110, 9, 16, 47);
-	_txtScientists	= new Text(55, 9, 176, 47);
-	_txtProgress	= new Text(55, 9, 236, 47);
+	_txtScientists	= new Text(55, 9, 173, 47);
+	_txtProgress	= new Text(55, 9, 232, 47);
 
 	_lstResearch	= new TextList(285, 112, 16, 62);
 	
 	_btnAliens		= new TextButton(92, 16, 16, 177); // kL
-	_btnNew			= new TextButton(92, 16, 115, 177);
-	_btnOk			= new TextButton(92, 16, 211, 177);
+	_btnNew			= new TextButton(92, 16, 114, 177);
+	_btnOk			= new TextButton(92, 16, 212, 177);
 
 	// back up palette in case we're being called from Geoscape!
 	memcpy(
@@ -155,7 +155,7 @@ ResearchState::ResearchState(
 
 	_lstResearch->setColor(Palette::blockOffset(15)+6);
 	_lstResearch->setArrowColor(Palette::blockOffset(13)+10);
-	_lstResearch->setColumns(4, 152, 60, 48, 17);
+	_lstResearch->setColumns(4, 149, 59, 48, 17);
 	_lstResearch->setSelectable(true);
 	_lstResearch->setBackground(_window);
 	_lstResearch->setMargin(8);

@@ -3910,7 +3910,8 @@ bool TileEngine::psiAttack(BattleAction* action)
 											action->target));
 		Log(LOG_INFO) << ". . . d = " << d;
 
-		attackStr -= d;
+//kL		attackStr -= d;
+		attackStr -= d * 2; // kL
 
 		attackStr -= defenseStr;
 		if (action->type == BA_MINDCONTROL)
@@ -3940,8 +3941,7 @@ bool TileEngine::psiAttack(BattleAction* action)
 			&& RNG::percent(chance))
 		{
 			Log(LOG_INFO) << ". . Success";
-			action->actor->addPsiExp();
-			action->actor->addPsiExp();
+			action->actor->addPsiExp(2);
 
 			if (action->type == BA_PANIC)
 			{

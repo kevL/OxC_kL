@@ -973,21 +973,20 @@ void Map::drawTerrain(Surface* surface)
 						frame = 0;
 
 						if (!tile->getFire()) // see http://www.ufopaedia.org/images/c/cb/Smoke.gif
-//kL							frame = 8 + static_cast<int>(floor((static_cast<double>(tile->getSmoke()) / 6.0) - 0.1));
-							frame = 8 + (tile->getSmoke() / 2); // kL. getSmoke = 1..15 -> frame = 8..15
+							frame = 8 + (tile->getSmoke() / 2); // getSmoke = 1..15 -> frame = 8..15
 
-						int curFrame = (_animFrame / 2) + tile->getAnimationOffset(); // animFrame = 0..7 (0..3), offset = 0..3 -> curFrame = 0..6 (0..3, 1..4, 2..5, 3..6)
-//kL						if (curFrame > 3)
-//kL							frame += curFrame - 4;
-						if (curFrame < 5)					// kL
+						// animFrame = 0..7 (0..3), offset = 0..3 -> curFrame = 0..6 (0..3, 1..4, 2..5, 3..6)
+						int curFrame = (_animFrame / 2) + tile->getAnimationOffset();
+						if (curFrame < 7)
 							frame += curFrame;
 						else
-							frame += curFrame - 3;	// kL
+							frame += curFrame - 7;
 
 						//Log(LOG_INFO) << "Map::drawTerrain() smokeFrames";
 						//Log(LOG_INFO) << ". frame = " << frame;
 
-						tmpSurface = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame); // smokeFrames in smoke.pck: 8..19 (12 frames)
+						// smokeFrames in smoke.pck: 8..19 (12 frames)
+						tmpSurface = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
 						tmpSurface->blitNShade(
 								surface,
 								screenPosition.x,

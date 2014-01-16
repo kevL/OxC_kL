@@ -186,8 +186,8 @@ void BattleItem::setExplodeTurn(int turn)
 }
 
 /**
- * Gets the quantity of ammo in this item.
- * @return, Ammo quantity.
+ * Gets the quantity of ammo in this ammo-item.
+ * @return, Ammo quantity: 0 if item is not ammo; -1 if item is a weapon.
  */
 int BattleItem::getAmmoQuantity() const
 {
@@ -375,7 +375,7 @@ bool BattleItem::occupiesSlot(
 
 /**
  * Gets an item's currently loaded ammo item.
- * @return, The ammo item; 0 if it doesn't need ammo
+ * @return, A required ammo item. -1 if item is ammo, or the weaponID if item is its own ammo.
  */
 BattleItem* BattleItem::getAmmoItem()
 {
@@ -385,7 +385,7 @@ BattleItem* BattleItem::getAmmoItem()
 /**
  * Determines if the item uses (needs?) ammo.
  * No ammo is needed if the item has itself assigned as its ammoItem.
- * See setAmmoItem()
+ * See set/getAmmoItem()
  * @return, True if ammo is used.
  */
 bool BattleItem::needsAmmo() const

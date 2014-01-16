@@ -604,7 +604,7 @@ BattlescapeState::BattlescapeState(Game* game)
 
 	_txtName->setColor(Palette::blockOffset(8));
 	_txtName->setHighContrast(true);
-	_numTUSnap->setColor(Palette::blockOffset(0)+8);
+	_numTUSnap->setColor(Palette::blockOffset(0)+7);
 	_numTimeUnits->setColor(Palette::blockOffset(4));
 	_numEnergy->setColor(Palette::blockOffset(1));
 	_numHealth->setColor(Palette::blockOffset(2)+11);
@@ -1695,17 +1695,26 @@ void BattlescapeState::updateSoldierInfo()
 	if (selectedUnit->getActiveHand() != "")
 	{
 		int tuSnap = 0;
+
 		if (selectedUnit->getActiveHand() == "STR_RIGHT_HAND"
-			&& rtItem->getRules()->getBattleType() == BT_FIREARM) // <- put in meleehits for these!!!
+			&& (rtItem->getRules()->getBattleType() == BT_FIREARM
+				|| rtItem->getRules()->getBattleType() == BT_MELEE))
 		{
-			tuSnap = selectedUnit->getActionTUs(BA_SNAPSHOT, rtItem);
 			_numTUSnap->setVisible(true);
+
+			tuSnap = selectedUnit->getActionTUs(BA_SNAPSHOT, rtItem);
+			if (!tuSnap)
+				tuSnap = selectedUnit->getActionTUs(BA_HIT, rtItem);
 		}
 		else if (selectedUnit->getActiveHand() == "STR_LEFT_HAND"
-			&& ltItem->getRules()->getBattleType() == BT_FIREARM)
+			&& (ltItem->getRules()->getBattleType() == BT_FIREARM
+				|| ltItem->getRules()->getBattleType() == BT_MELEE))
 		{
-			tuSnap = selectedUnit->getActionTUs(BA_SNAPSHOT, ltItem); // <- put in meleehits for these!!!
 			_numTUSnap->setVisible(true);
+
+			tuSnap = selectedUnit->getActionTUs(BA_SNAPSHOT, ltItem);
+			if (!tuSnap)
+				tuSnap = selectedUnit->getActionTUs(BA_HIT, ltItem);
 		}
 
 		_numTUSnap->setValue(tuSnap);
@@ -1717,6 +1726,7 @@ void BattlescapeState::updateSoldierInfo()
 										_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"),
 										_btnRightHandItem);
 		_btnRightHandItem->setVisible(true);
+
 		if (rtItem->getRules()->getBattleType() == BT_FIREARM
 			&& (rtItem->needsAmmo()
 				|| rtItem->getRules()->getClipSize() > 0))
@@ -1735,6 +1745,7 @@ void BattlescapeState::updateSoldierInfo()
 										_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"),
 										_btnLeftHandItem);
 		_btnLeftHandItem->setVisible(true);
+
 		if (ltItem->getRules()->getBattleType() == BT_FIREARM
 			&& (ltItem->needsAmmo()
 				|| ltItem->getRules()->getClipSize() > 0))
@@ -1749,7 +1760,7 @@ void BattlescapeState::updateSoldierInfo()
 
 	showPsiButton(
 				selectedUnit->getOriginalFaction() == FACTION_HOSTILE
-					&& selectedUnit->getStats()->psiSkill > 0);
+				&& selectedUnit->getStats()->psiSkill > 0);
 
 	//Log(LOG_INFO) << "BattlescapeState::updateSoldierInfo() EXIT";
 }

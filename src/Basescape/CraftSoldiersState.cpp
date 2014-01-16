@@ -69,14 +69,14 @@ CraftSoldiersState::CraftSoldiersState(
 	_txtTitle		= new Text(300, 17, 16, 8);
 	_txtBaseLabel	= new Text(80, 9, 224, 8);
 
-	_txtAvailable	= new Text(110, 9, 16, 24);
-	_txtUsed		= new Text(110, 9, 122, 24);
+	_txtUsed		= new Text(110, 9, 16, 24);
+	_txtAvailable	= new Text(110, 9, 160, 24);
 
 	_txtName		= new Text(116, 9, 16, 33);
-	_txtRank		= new Text(93, 9, 132, 33);
+	_txtRank		= new Text(93, 9, 140, 33);
 	_txtCraft		= new Text(71, 9, 225, 33);
 
-	_lstSoldiers	= new TextList(293, 128, 8, 42);
+	_lstSoldiers	= new TextList(285, 128, 16, 42);
 
 	_btnUnload		= new TextButton(134, 16, 16, 177);
 	_btnOk			= new TextButton(134, 16, 170, 177);
@@ -145,8 +145,8 @@ CraftSoldiersState::CraftSoldiersState(
 
 	_lstSoldiers->setColor(Palette::blockOffset(13)+10);
 	_lstSoldiers->setArrowColor(Palette::blockOffset(15)+6);
-	_lstSoldiers->setArrowColumn(192, ARROW_VERTICAL);
-	_lstSoldiers->setColumns(3, 116, 93, 71);
+	_lstSoldiers->setArrowColumn(180, ARROW_VERTICAL);
+	_lstSoldiers->setColumns(3, 116, 85, 71);
 	_lstSoldiers->setSelectable(true);
 	_lstSoldiers->setBackground(_window);
 	_lstSoldiers->setMargin(8);

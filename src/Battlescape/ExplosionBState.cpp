@@ -134,7 +134,7 @@ void ExplosionBState::init()
 			int
 				startFrame = 0, // less than 0 delays start (8 frames total)
 				offset = _power / 2,
-				count = _power / 20;
+				count = _power / 15;
 			if (count < 1) count = 1;
 
 			for (int
@@ -144,7 +144,7 @@ void ExplosionBState::init()
 			{
 				if (i > 0) // 1st exp. is always centered.
 				{
-					startFrame = RNG::generate(0, i);
+					startFrame = RNG::generate(-i, 0) - i;
 
 					pos.x += RNG::generate(-offset, offset);
 					pos.y += RNG::generate(-offset, offset);
@@ -153,7 +153,7 @@ void ExplosionBState::init()
 //				Explosion* explosion = new Explosion(p, startFrame, true);
 				Explosion* explosion = new Explosion(
 													pos,
-													-startFrame,
+													startFrame,
 													true);
 
 				_parent->getMap()->getExplosions()->insert(explosion); // add the explosion on the map

@@ -245,8 +245,8 @@ void BattlescapeGenerator::nextStage()
 	generateMap();
 
 
-	int highestSoldierID = 0;
 	bool selectedFirstSoldier = false;
+	int highestSoldierID = 0;
 
 	for (std::vector<BattleUnit*>::iterator
 			j = _save->getUnits()->begin();
@@ -337,9 +337,17 @@ void BattlescapeGenerator::nextStage()
  */
 void BattlescapeGenerator::run()
 {
-	AlienDeployment* ruleDeploy = _game->getRuleset()->getDeployment(_ufo? _ufo->getRules()->getType(): _save->getMissionType());
+//kL	AlienDeployment* ruleDeploy = _game->getRuleset()->getDeployment(_ufo? _ufo->getRules()->getType(): _save->getMissionType());
+	AlienDeployment* ruleDeploy = 0;
+	if (_ufo)
+		ruleDeploy = _game->getRuleset()->getDeployment(_ufo->getRules()->getType());
+	else
+		ruleDeploy = _game->getRuleset()->getDeployment(_save->getMissionType());
 
-	ruleDeploy->getDimensions(&_mapsize_x, &_mapsize_y, &_mapsize_z);
+	ruleDeploy->getDimensions(
+						&_mapsize_x,
+						&_mapsize_y,
+						&_mapsize_z);
 
 	_unitSequence = BattleUnit::MAX_SOLDIER_ID; // geoscape soldier IDs should stay below this number
 
@@ -349,39 +357,41 @@ void BattlescapeGenerator::run()
 		if (_ufo)
 			lat = _ufo->getLatitude();
 
-		_terrain = getTerrain(_worldTexture, lat);
+		_terrain = getTerrain(
+							_worldTexture,
+							lat);
 	}
 	else
-	{
 		_terrain = _game->getRuleset()->getTerrain(ruleDeploy->getTerrain());
-	}
 
 	if (ruleDeploy->getShade() != -1)
-	{
 		_worldShade = ruleDeploy->getShade();
-	}
 
 	// creates the tile objects
-	_save->initMap(_mapsize_x, _mapsize_y, _mapsize_z);
+	_save->initMap(
+				_mapsize_x,
+				_mapsize_y,
+				_mapsize_z);
 	_save->initUtilities(_res);
 
 	// let's generate the map now and store it inside the tile objects
 	generateMap();
 
-	if (_craft != 0 || _base != 0)
+	if (_craft != 0
+		|| _base != 0)
 	{
 		deployXCOM();
 	}
 
-	deployAliens(_game->getRuleset()->getAlienRace(_alienRace), ruleDeploy);
+	deployAliens(
+			_game->getRuleset()->getAlienRace(_alienRace),
+			ruleDeploy);
 	deployCivilians(ruleDeploy->getCivilians());
 
 	fuelPowerSources();
 
 	if (_save->getMissionType() ==  "STR_UFO_CRASH_RECOVERY")
-	{
 		explodePowerSources();
-	}
 
 	if (_save->getMissionType() == "STR_BASE_DEFENSE")
 	{
@@ -436,7 +446,7 @@ void BattlescapeGenerator::deployXCOM()
 
 	if (_craft != 0)
 	{
-		_base = _craft->getBase();	// kL_above
+		_base = _craft->getBase(); // kL_above
 
 		// add all vehicles that are in the craft - a vehicle is actually an item,
 		// which you will never see as it is converted to a unit;

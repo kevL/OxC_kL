@@ -477,8 +477,8 @@ private:
 		void addFiringExp();
 		/// Adds one to the throwing exp counter.
 		void addThrowingExp();
-		/// Adds one to the psi exp counter.
-		void addPsiExp();
+		/// Adds qty to the psi exp counter.
+		void addPsiExp(int qty = 1); // kL
 		/// Adds one to the melee exp counter.
 		void addMeleeExp();
 
