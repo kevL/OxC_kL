@@ -17,8 +17,8 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "RuleUfo.h"
 #include "RuleTerrain.h"
+#include "RuleUfo.h"
 
 
 namespace OpenXcom
@@ -59,7 +59,9 @@ RuleUfo::~RuleUfo()
  * @param node YAML node.
  * @param ruleset Ruleset for the UFO.
  */
-void RuleUfo::load(const YAML::Node& node, Ruleset* ruleset)
+void RuleUfo::load(
+		const YAML::Node& node,
+		Ruleset* ruleset)
 {
 	_type			= node["type"].as<std::string>(_type);
 	_size			= node["size"].as<std::string>(_size);
@@ -72,6 +74,7 @@ void RuleUfo::load(const YAML::Node& node, Ruleset* ruleset)
 	_score			= node["score"].as<int>(_score);
 	_reload			= node["reload"].as<int>(_reload);
 	_breakOffTime	= node["breakOffTime"].as<int>(_breakOffTime);
+	_modSprite		= node["modSprite"].as<std::string>(_modSprite);
 
 	if (const YAML::Node& terrain = node["battlescapeTerrainData"])
 	{
@@ -80,7 +83,6 @@ void RuleUfo::load(const YAML::Node& node, Ruleset* ruleset)
 		_battlescapeTerrainData = rule;
 	}
 
-	_modSprite		= node["modSprite"].as<std::string>(_modSprite);
 }
 
 /**
@@ -110,25 +112,15 @@ std::string RuleUfo::getSize() const
 int RuleUfo::getRadius() const
 {
 	if (_size == "STR_VERY_SMALL")
-	{
 		return 2;
-	}
 	else if (_size == "STR_SMALL")
-	{
 		return 3;
-	}
 	else if (_size == "STR_MEDIUM_UC")
-	{
 		return 4;
-	}
 	else if (_size == "STR_LARGE")
-	{
 		return 5;
-	}
 	else if (_size == "STR_VERY_LARGE")
-	{
 		return 6;
-	}
 
 	return 0;
 }

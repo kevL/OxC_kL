@@ -1430,7 +1430,10 @@ void GeoscapeState::time10Minutes()
 					(*c)->returnToBase();
 
 					timerReset(); // kL
-					popup(new LowFuelState(_game, (*c), this));
+					popup(new LowFuelState(
+										_game,
+										*c,
+										this));
 				}
 
 				if ((*c)->getDestination() == 0) // patrol for aLien bases.

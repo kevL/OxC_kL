@@ -108,13 +108,13 @@ void Tile::load(const YAML::Node& node)
 			i < 4;
 			i++)
 	{
-		_mapDataID[i] = node["mapDataID"][i].as<int>(_mapDataID[i]);
-		_mapDataSetID[i] = node["mapDataSetID"][i].as<int>(_mapDataSetID[i]);
+		_mapDataID[i]		= node["mapDataID"][i].as<int>(_mapDataID[i]);
+		_mapDataSetID[i]	= node["mapDataSetID"][i].as<int>(_mapDataSetID[i]);
 	}
 
-	_fire = node["fire"].as<int>(_fire);
-	_smoke = node["smoke"].as<int>(_smoke);
-	_animOffset = node["animOffset"].as<int>(_animOffset); // kL
+	_fire		= node["fire"].as<int>(_fire);
+	_smoke		= node["smoke"].as<int>(_smoke);
+	_animOffset	= node["animOffset"].as<int>(_animOffset); // kL
 
 	for (int
 			i = 0;
@@ -173,9 +173,9 @@ YAML::Node Tile::save() const
 		node["mapDataSetID"].push_back(_mapDataSetID[i]);
 	}
 
-	if (_smoke) node["smoke"] = _smoke;
-	if (_fire) node["fire"] = _fire;
-	if (_animOffset) node["animOffset"] = _animOffset; // kL
+	if (_smoke) node["smoke"]			= _smoke;
+	if (_fire) node["fire"]				= _fire;
+	if (_animOffset) node["animOffset"]	= _animOffset; // kL
 
 	if (_discovered[0] || _discovered[1] || _discovered[2])
 	{
@@ -188,8 +188,8 @@ YAML::Node Tile::save() const
 		}
 	}
 
-	if (isUfoDoorOpen(1)) node["openDoorWest"] = true;
-	if (isUfoDoorOpen(2)) node["openDoorNorth"] = true;
+	if (isUfoDoorOpen(1)) node["openDoorWest"]	= true;
+	if (isUfoDoorOpen(2)) node["openDoorNorth"]	= true;
 
 	return node;
 }

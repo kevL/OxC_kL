@@ -588,7 +588,7 @@ DogfightState::DogfightState(
 		_ufoSize = 4;
 
 	// Get craft's height. Used for damage indication.
-	int x =_damage->getWidth() / 2;
+	int x = _damage->getWidth() / 2;
 	for (int
 			y = 0;
 			y < _damage->getHeight();
@@ -669,6 +669,7 @@ void DogfightState::animateCraftDamage()
 		return;
 
 	--_currentCraftDamageColor;
+
 	if (_currentCraftDamageColor < 13)
 		_currentCraftDamageColor = 14;
 
@@ -683,15 +684,14 @@ void DogfightState::drawCraftDamage()
 	if (_minimized)
 		return;
 
-	if (_craft->getDamagePercentage() != 0)
+	int damagePercent = _craft->getDamagePercentage();
+	if (damagePercent > 0)
 	{
 		if (!_craftDamageAnimTimer->isRunning())
 			_craftDamageAnimTimer->start();
 
-		int damagePercentage = _craft->getDamagePercentage();
-		int rowsToColor =
-					static_cast<int>(
-						floor(static_cast<double>(_craftHeight) * static_cast<double>(damagePercentage) / 100.0));
+		int rowsToColor = static_cast<int>(
+							floor(static_cast<double>(_craftHeight * damagePercent) / 100.0));
 		if (rowsToColor == 0)
 			return;
 
@@ -704,16 +704,19 @@ void DogfightState::drawCraftDamage()
 				++y)
 		{
 			rowColored = false;
+
 			for (int
 					x = 0;
 					x < _damage->getWidth();
 					++x)
 			{
 				int pixelColor = _damage->getPixel(x, y);
+
 				if (pixelColor == 13
 					|| pixelColor == 14)
 				{
 					_damage->setPixel(x, y, _currentCraftDamageColor);
+
 					rowColored = true;
 				}
 

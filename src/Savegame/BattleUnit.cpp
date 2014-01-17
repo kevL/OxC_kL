@@ -568,7 +568,7 @@ void BattleUnit::startWalking(
 	_walkPhase = 0;
 	_destination = destination;
 	_lastPos = _pos;
-	_cacheInvalid = cache;
+//kL	_cacheInvalid = cache; // trying to stop the now infamous double-step...
 
 	Log(LOG_INFO) << "BattleUnit::startWalking() EXIT";
 }
@@ -609,7 +609,9 @@ void BattleUnit::startWalking(
 /**
  * This will increment the walking phase.
  */
-void BattleUnit::keepWalking(Tile* tileBelow, bool cache)
+void BattleUnit::keepWalking(
+		Tile* tileBelow,
+		bool cache)
 {
 	Log(LOG_INFO) << "BattleUnit::keepWalking() unitID = " << getId();
 

@@ -593,14 +593,11 @@ int Craft::getFuel() const
 void Craft::setFuel(int fuel)
 {
 	_fuel = fuel;
+
 	if (_fuel > _rules->getMaxFuel())
-	{
 		_fuel = _rules->getMaxFuel();
-	}
 	else if (_fuel < 0)
-	{
 		_fuel = 0;
-	}
 }
 
 /**
@@ -611,7 +608,7 @@ void Craft::setFuel(int fuel)
 int Craft::getFuelPercentage() const
 {
 	return static_cast<int>(
-			floor(static_cast<double>(_fuel) / static_cast<double>(_rules->getMaxFuel()) * 100.0));
+			floor((static_cast<double>(_fuel) / static_cast<double>(_rules->getMaxFuel())) * 100.0));
 }
 
 /**
@@ -643,7 +640,7 @@ void Craft::setDamage(int damage)
 int Craft::getDamagePercentage() const
 {
 	return static_cast<int>(
-			floor(static_cast<double>(_damage) / static_cast<double>(_rules->getMaxDamage()) * 100.0));
+			floor((static_cast<double>(_damage) / static_cast<double>(_rules->getMaxDamage())) * 100.0));
 }
 
 /**
@@ -704,7 +701,7 @@ int Craft::getFuelLimit() const
 int Craft::getFuelLimit(Base* base) const
 {
 	return static_cast<int>(
-			floor(static_cast<double>(getFuelConsumption()) * getDistance(base) / (_speedRadian * 120.0)));
+			floor((static_cast<double>(getFuelConsumption()) * getDistance(base)) / (_speedRadian * 120.0)));
 }
 
 /**

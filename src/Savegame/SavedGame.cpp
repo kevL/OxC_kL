@@ -1839,19 +1839,19 @@ std::vector<int> SavedGame::getResearchScores()
  * return the list of income scores
  * @return list of income scores.
  */
-std::vector<int> SavedGame::getIncomes()
+/*std::vector<int> SavedGame::getIncomes()
 {
 	return _income;
-}
+} */
 
 /**
  * return the list of expenditures scores
  * @return list of expenditures scores.
  */
-std::vector<int> SavedGame::getExpenditures()
+/*std::vector<int> SavedGame::getExpenditures()
 {
 	return _expenditure;
-}
+} */
 
 /**
  * return if the player has been 

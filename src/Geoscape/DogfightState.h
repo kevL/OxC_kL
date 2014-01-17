@@ -86,10 +86,8 @@ private:
 
 	std::vector<CraftWeaponProjectile*> _projectiles;
 
-	Craft
-		* _craft;
-	Globe
-		* _globe;
+	Craft* _craft;
+	Globe* _globe;
 	ImageButton
 		* _btnStandoff,
 		* _btnCautious,
@@ -97,15 +95,13 @@ private:
 		* _btnAggressive,
 		* _btnDisengage,
 		* _btnUfo;
-	ImageButton
-		* _mode;
+	ImageButton* _mode;
 	InteractiveSurface
 		* _btnMinimize,
 		* _preview,
 		* _weapon1,
 		* _weapon2;
-	InteractiveSurface
-		* _btnMinimizedIcon;
+	InteractiveSurface* _btnMinimizedIcon;
 	Surface
 		* _window,
 		* _battle,
@@ -126,8 +122,7 @@ private:
 		* _ufoWtimer,
 		* _ufoEscapeTimer,
 		* _craftDamageAnimTimer;
-	Ufo
-		* _ufo;
+	Ufo* _ufo;
 
 	// Ends the dogfight.
 	void endDogfight();

@@ -970,22 +970,25 @@ void Map::drawTerrain(Surface* surface)
 					if (tile->getSmoke()
 						&& tile->isDiscovered(2))
 					{
-						frame = 0;
-
-						if (!tile->getFire()) // see http://www.ufopaedia.org/images/c/cb/Smoke.gif
+						// oXc _animFrames cycle from 0..7
+						frame = 0;	// this will be the SPRITE # on the orig SpriteSheet
+									// see http://www.ufopaedia.org/images/c/cb/Smoke.gif
+						if (!tile->getFire())
+							// smoke sprites start at #8 on the spritesheet:
 							frame = 8 + (tile->getSmoke() / 2); // getSmoke = 1..15 -> frame = 8..15
 
-						// animFrame = 0..7 (0..3), offset = 0..3 -> curFrame = 0..6 (0..3, 1..4, 2..5, 3..6)
-						int curFrame = (_animFrame / 2) + tile->getAnimationOffset();
-						if (curFrame < 7)
-							frame += curFrame;
+						// _animFrame = 1..8 -> 0..4, offset = 0..3 -> spriteOffset = 0..7 (0..4, 1..5, 2..6, 3..7)
+						int spriteOffset = ((_animFrame + 1) / 2) + tile->getAnimationOffset();
+						if (spriteOffset > 3)
+							frame += spriteOffset - 4;
 						else
-							frame += curFrame - 7;
+							frame += spriteOffset;
 
 						//Log(LOG_INFO) << "Map::drawTerrain() smokeFrames";
 						//Log(LOG_INFO) << ". frame = " << frame;
 
 						// smokeFrames in smoke.pck: 8..19 (12 frames)
+						// fireFrames in smoke.pck: 0..7 (8 frames, separated into 2 x 4-frame sets)
 						tmpSurface = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
 						tmpSurface->blitNShade(
 								surface,
