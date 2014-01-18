@@ -1317,7 +1317,7 @@ items:
     costSell: 50
     transferTime: 48
     weight: 1
-    bigSprite: -1 # It must be -1 to avoid putting it to the base-defense battlescape. Original value: 12
+    bigSprite: -1
     floorSprite: 12
     hitSound: 113
     hitAnimation: 26
@@ -1356,7 +1356,7 @@ items:
     costSell: 1000
     transferTime: 48
     weight: 1
-    bigSprite: -1 # It must be -1 to avoid putting it to the base-defense battlescape. Original value: 16
+    bigSprite: -1
     floorSprite: 16
     hitSound: 100
     hitAnimation: 0
@@ -1442,7 +1442,7 @@ items:
     costSell: 15750
     transferTime: 48
     weight: 1
-    bigSprite: -1 # It must be -1 to avoid putting it to the base-defense battlescape. Original value: 36
+    bigSprite: -1
     floorSprite: 35
     hitSound: 100
     hitAnimation: 0
