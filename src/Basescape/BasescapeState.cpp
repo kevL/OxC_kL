@@ -222,6 +222,7 @@ BasescapeState::~BasescapeState()
 {
 	// Clean up any temporary bases
 	bool exists = false;
+
 	for (std::vector<Base*>::iterator
 			i = _game->getSavedGame()->getBases()->begin();
 			i != _game->getSavedGame()->getBases()->end()
@@ -237,9 +238,7 @@ BasescapeState::~BasescapeState()
 	}
 
 	if (!exists)
-	{
 		delete _base;
-	}
 }
 
 /**
@@ -250,6 +249,7 @@ void BasescapeState::init()
 	if (!_game->getSavedGame()->getBases()->empty())
 	{
 		bool exists = false;
+
 		for (std::vector<Base*>::iterator
 				i = _game->getSavedGame()->getBases()->begin();
 				i != _game->getSavedGame()->getBases()->end()
@@ -267,9 +267,8 @@ void BasescapeState::init()
 		}
 	}
 	else // Use a blank base for special case when player has no bases
-	{
 		_base = new Base(_game->getRuleset());
-	}
+
 
 	_view->setBase(_base);
 	_mini->draw();
@@ -296,19 +295,47 @@ void BasescapeState::init()
 	_btnNewBase->setVisible(_game->getSavedGame()->getBases()->size() < 8);
 
 	// kL_begin:
-	_btnAliens->setVisible(false);
+	bool hasFunds = (_game->getSavedGame()->getFunds() > 0);
+	bool hasQuarters = false;
+	bool hasHangar = false;
+	bool hasAlienCont = false;
+	bool hasLabs = false;
+	bool hasProd = false;
+	bool hasStores = false;
+
 	for (std::vector<BaseFacility*>::iterator
 			i = _base->getFacilities()->begin();
 			i != _base->getFacilities()->end();
 			++i)
 	{
-		if ((*i)->getRules()->getAliens() > 0)
-		{
-			_btnAliens->setVisible(true);
+		if ((*i)->getRules()->getPersonnel() > 0)
+			hasQuarters = true;
 
-			break;
-		}
-	} // kL_end.
+		if ((*i)->getRules()->getCrafts() > 0)
+			hasHangar = true;
+
+		if ((*i)->getRules()->getAliens() > 0)
+			hasAlienCont = true;
+
+		if ((*i)->getRules()->getLaboratories() > 0)
+			hasLabs = true;
+
+		if ((*i)->getRules()->getWorkshops() > 0)
+			hasProd = true;
+
+		if ((*i)->getRules()->getStorage() > 0)
+			hasStores = true;
+	}
+
+	_btnSoldiers->setVisible(hasQuarters);
+	_btnCrafts->setVisible(hasHangar);
+	_btnAliens->setVisible(hasAlienCont);
+	_btnResearch->setVisible(hasLabs);
+	_btnManufacture->setVisible(hasProd);
+	_btnSell->setVisible(hasStores || hasQuarters || hasHangar || hasAlienCont);
+	_btnPurchase->setVisible(hasFunds && (hasStores || hasQuarters || hasHangar));
+	_btnTransfer->setVisible(hasFunds && (hasStores || hasQuarters || hasHangar));
+	_btnFacilities->setVisible(hasFunds); // kL_end.
 }
 
 /**
@@ -486,8 +513,7 @@ void BasescapeState::viewLeftClick(Action*)
 	BaseFacility* fac = _view->getSelectedFacility();
 	if (fac != 0)
 	{
-		// Pre-calculate values to ensure base stays connected
-		int
+		int // Pre-calculate values to ensure base stays connected
 			x = -1,
 			y = -1,
 			squares = 0;
@@ -546,10 +572,12 @@ void BasescapeState::viewRightClick(Action*)
 {
 	BaseFacility* f = _view->getSelectedFacility();
 	if (f == 0)
+	{
 		_game->pushState(new BaseInfoState(
 										_game,
 										_base,
 										this));
+	}
 	else if (f->getRules()->getCrafts() > 0)
 	{
 		if (f->getCraft() == 0)
@@ -574,7 +602,10 @@ void BasescapeState::viewRightClick(Action*)
 			}
 	}
 	else if (f->getRules()->getStorage() > 0)
-		_game->pushState(new SellState(
+//		_game->pushState(new SellState(
+//									_game,
+//									_base));
+		_game->pushState(new StoresState(
 									_game,
 									_base));
 	else if (f->getRules()->getPersonnel() > 0)
@@ -600,8 +631,11 @@ void BasescapeState::viewRightClick(Action*)
 														_game,
 														_base,
 														OPT_GEOSCAPE));
-	else if (f->getRules()->isLift()
-			|| f->getRules()->getRadarRange() > 0)
+	else if (f->getRules()->isLift())
+		_game->pushState(new MonthlyCostsState(
+											_game,
+											_base));
+	else if (f->getRules()->getRadarRange() > 0)
 		_game->popState();
 }
 

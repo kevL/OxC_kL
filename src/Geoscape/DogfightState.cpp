@@ -559,22 +559,29 @@ DogfightState::DogfightState(
 	_w2Timer->onTimer((StateHandler)& DogfightState::fireWeapon2);
 
 	_ufoWtimer->onTimer((StateHandler)& DogfightState::ufoFireWeapon);
-	_ufoFireInterval = _ufo->getRules()->getWeaponReload()
-						- (2 * static_cast<int>(_game->getSavedGame()->getDifficulty()));
+	_ufoFireInterval = (_ufo->getRules()->getWeaponReload()
+							+ RNG::generate(1, _ufo->getRules()->getWeaponReload() / 2)
+							- (2 * static_cast<int>(_game->getSavedGame()->getDifficulty())))
+						* _timeScale;
+//	_ufoFireInterval = RNG::generate(5, _ufoFireInterval);
 	if (_ufoFireInterval < 1)
 		_ufoFireInterval = 1;
-	_ufoFireInterval = (_ufoFireInterval + RNG::generate(1, _ufoFireInterval)) * _timeScale;
 	_ufoWtimer->setInterval(_ufoFireInterval);
 
 	_ufoEscapeTimer->onTimer((StateHandler)& DogfightState::ufoBreakOff);
-	int ufoBreakOffInterval = (_ufo->getRules()->getBreakOffTime() + RNG::generate(1, _ufo->getRules()->getBreakOffTime())
-									- (30 * static_cast<int>(_game->getSavedGame()->getDifficulty())))
+	int ufoBreakOffInterval = (_ufo->getRules()->getBreakOffTime()
+									+ RNG::generate(0, _ufo->getRules()->getBreakOffTime() / 2)
+									- (10 * static_cast<int>(_game->getSavedGame()->getDifficulty())))
 								* _timeScale;
+	if (ufoBreakOffInterval < 10)
+		ufoBreakOffInterval = 10;
+	else
+		ufoBreakOffInterval = RNG::generate(10, ufoBreakOffInterval);
 	_ufoEscapeTimer->setInterval(ufoBreakOffInterval);
 
 	_craftDamageAnimTimer->onTimer((StateHandler)& DogfightState::animateCraftDamage);
 
-	// Set UFO size - going to be moved to Ufo class to implement simultanous dogfights.
+	// Set UFO size - going to be moved to Ufo class to implement simultaneous dogfights.
 	std::string ufoSize = _ufo->getRules()->getSize();
 	if (ufoSize.compare("STR_VERY_SMALL") == 0)
 		_ufoSize = 0;

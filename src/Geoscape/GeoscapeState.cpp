@@ -141,7 +141,9 @@ GeoscapeState::GeoscapeState(Game* game)
 		_dogfights(),
 		_dogfightsToBeStarted(),
 		_minimizedDogfights(0),
-		_zoomInter(0) // kL
+		_zoomInter(0),	// kL
+		_interLon(0.0),	// kL
+		_interLat(0.0)	// kL
 {
 	int screenWidth = Options::getInt("baseXResolution");
 	int screenHeight = Options::getInt("baseYResolution");
@@ -1127,7 +1129,13 @@ void GeoscapeState::time5Seconds()
 									_pause = true;
 									timerReset();
 
-									_globe->center((*j)->getLongitude(), (*j)->getLatitude());
+									// store the current Globe co-ords. Globe will reset to this after dogfight ends.
+									_interLon = _game->getSavedGame()->getGlobeLongitude(),	// kL
+									_interLat = _game->getSavedGame()->getGlobeLatitude();	// kL
+
+									_globe->center(
+												(*j)->getLongitude(),
+												(*j)->getLatitude());
 
 									startDogfight();
 									_dogfightStartTimer->start();
@@ -1139,7 +1147,7 @@ void GeoscapeState::time5Seconds()
 									_battleMusic = true;
 								}
 							}
-							break;
+						break;
 						case Ufo::LANDED:
 						case Ufo::CRASHED:
 						case Ufo::DESTROYED: // Just before expiration
@@ -1148,8 +1156,7 @@ void GeoscapeState::time5Seconds()
 							{
 								if (!(*j)->isInDogfight())
 								{
-									// look up polygons texture
-									int
+									int // look up polygons texture
 										texture,
 										shade;
 									_globe->getPolygonTextureAndShade(
@@ -1158,8 +1165,6 @@ void GeoscapeState::time5Seconds()
 																	&texture,
 																	&shade);
 									timerReset();
-
-									timerReset(); // kL
 									popup(new ConfirmLandingState(
 																_game,
 																*j,
@@ -1172,7 +1177,7 @@ void GeoscapeState::time5Seconds()
 							{
 								(*j)->returnToBase();
 							}
-							break;
+						break;
 					}
 				}
 				else if (w != 0)
@@ -1188,8 +1193,9 @@ void GeoscapeState::time5Seconds()
 				{
 					if ((*j)->getNumSoldiers() > 0)
 					{
-						// look up polygons texture
-						int texture, shade;
+						int // look up polygons texture
+							texture,
+							shade;
 						_globe->getPolygonTextureAndShade(
 														t->getLongitude(),
 														t->getLatitude(),
@@ -1205,9 +1211,7 @@ void GeoscapeState::time5Seconds()
 													this));
 					}
 					else
-					{
 						(*j)->returnToBase();
-					}
 				}
 				else if (b != 0)
 				{
@@ -1215,7 +1219,7 @@ void GeoscapeState::time5Seconds()
 					{
 						if ((*j)->getNumSoldiers() > 0)
 						{
-							int
+							int // look up polygons texture
 								texture,
 								shade;
 							_globe->getPolygonTextureAndShade(
@@ -1233,9 +1237,7 @@ void GeoscapeState::time5Seconds()
 														this));
 						}
 						else
-						{
 							(*j)->returnToBase();
-						}
 					}
 				}
 			}
@@ -1266,9 +1268,7 @@ void GeoscapeState::time5Seconds()
 						d = _dogfights.erase(d);
 					}
 					else
-					{
 						++d;
-					}
 				}
 			}
 
@@ -1276,9 +1276,7 @@ void GeoscapeState::time5Seconds()
 			i = _game->getSavedGame()->getUfos()->erase(i);
 		}
 		else
-		{
 			++i;
-		}
 	}
 
 	// Clean up unused waypoints
@@ -1293,9 +1291,7 @@ void GeoscapeState::time5Seconds()
 			i = _game->getSavedGame()->getWaypoints()->erase(i);
 		}
 		else
-		{
 			++i;
-		}
 	}
 }
 
@@ -3011,9 +3007,9 @@ void GeoscapeState::zoomInEffect()
 void GeoscapeState::zoomOutEffect()
 {
 	if (_globe->isZoomedOutToMax()
-		|| _game->getSavedGame()->getGlobeZoom() <= _zoomInter)	// kL
+		|| _game->getSavedGame()->getGlobeZoom() <= _zoomInter) // kL
 	{
-		_zoomInter = 0;											// kL
+		_zoomInter = 0; // kL
 
 		_zoomOutEffectDone = true;
 		_zoomOutEffectTimer->stop();
@@ -3021,9 +3017,11 @@ void GeoscapeState::zoomOutEffect()
 		init();
 	}
 	else
-	{
 		_globe->zoomOut();
-	}
+
+	_globe->center( // kL
+				_interLon,
+				_interLat);
 }
 
 /**
@@ -3031,7 +3029,8 @@ void GeoscapeState::zoomOutEffect()
  */
 void GeoscapeState::handleDogfights()
 {
-	if (_dogfights.size() == _minimizedDogfights) // if all dogfights are minimized rotate the globe, etc.
+	// if all dogfights are minimized rotate the globe, etc.
+	if (_dogfights.size() == _minimizedDogfights)
 	{
 		_pause = false;
 		_timer->think(this, 0);
@@ -3084,9 +3083,7 @@ int GeoscapeState::minimizedDogfightsCount()
 			++d)
 	{
 		if ((*d)->isMinimized())
-		{
 			++minimizedDogfights;
-		}
 	}
 
 	return minimizedDogfights;
@@ -3098,14 +3095,12 @@ int GeoscapeState::minimizedDogfightsCount()
 void GeoscapeState::startDogfight()
 {
 	if (_zoomInter == 0)
-		_zoomInter = _game->getSavedGame()->getGlobeZoom(); // kL
+		_zoomInter = _game->getSavedGame()->getGlobeZoom();	// kL
 
 	if (!_globe->isZoomedInToMax())
 	{
 		if (!_zoomInEffectTimer->isRunning())
-		{
 			_zoomInEffectTimer->start();
-		}
 	}
 	else
 	{
@@ -3128,9 +3123,7 @@ void GeoscapeState::startDogfight()
 				d = _dogfights.begin();
 				d != _dogfights.end();
 				++d)
-		{
 			(*d)->setInterceptionsCount(_dogfights.size());
-		}
 	}
 }
 
@@ -3146,9 +3139,7 @@ int GeoscapeState::getFirstFreeDogfightSlot()
 			++d)
 	{
 		if ((*d)->getInterceptionNumber() == slotNo)
-		{
 			++slotNo;
-		}
 	}
 
 	return slotNo;
@@ -3184,12 +3175,10 @@ void GeoscapeState::handleBaseDefense(
 							base));
 	}
 	else
-	{
 	    // Please garrison your bases in future
 		popup(new BaseDestroyedState(
 									_game,
 									base));
-	}
 }
 
 /**

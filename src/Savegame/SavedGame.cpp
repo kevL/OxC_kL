@@ -1618,9 +1618,7 @@ Soldier* SavedGame::getSoldier(int id) const
 				++j)
 		{
 			if ((*j)->getId() == id)
-			{
 				return *j;
-			}
 		}
 	}
 
@@ -1836,26 +1834,7 @@ std::vector<int> SavedGame::getResearchScores()
 }
 
 /**
- * return the list of income scores
- * @return list of income scores.
- */
-/*std::vector<int> SavedGame::getIncomes()
-{
-	return _income;
-} */
-
-/**
- * return the list of expenditures scores
- * @return list of expenditures scores.
- */
-/*std::vector<int> SavedGame::getExpenditures()
-{
-	return _expenditure;
-} */
-
-/**
- * return if the player has been 
- * warned about poor performance.
+ * return if the player has been warned about poor performance.
  * @return true or false.
  */
 bool SavedGame::getWarned() const

@@ -66,6 +66,9 @@ private:
 		_zoomInter; // kL
 	size_t
 		_minimizedDogfights;
+	double
+		_interLon,
+		_interLat;
 
 	Globe
 		* _globe;

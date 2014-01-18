@@ -52,7 +52,6 @@ class Globe
 {
 
 private:
-
 	static const int NUM_TEXTURES	= 13;
 	static const int NUM_LANDSHADES	= 48;
 	static const int NUM_SEASHADES	= 72;
@@ -105,21 +104,32 @@ private:
 
 
 	/// Checks if a point is behind the globe.
-	bool pointBack(double lon, double lat) const;
-	/// Return latitude of last visible to player point on given longitude.
+	bool pointBack(
+			double lon,
+			double lat) const;
+	/// Return latitude of last visible-to-player point on given longitude.
 	double lastVisibleLat(double lon) const;
 	/// Checks if a point is inside a polygon.
-	bool insidePolygon(double lon, double lat, Polygon* poly) const;
+	bool insidePolygon(
+			double lon,
+			double lat,
+			Polygon* poly) const;
 	/// Checks if a target is near a point.
-	bool targetNear(Target* target, int x, int y) const;
+	bool targetNear(
+			Target* target,
+			int x,
+			int y) const;
 	/// Caches a set of polygons.
-	void cache(std::list<Polygon*>* polygons, std::list<Polygon*>* cache);
+	void cache(
+			std::list<Polygon*>* polygons,
+			std::list<Polygon*>* cache);
 	/// Get position of sun relative to given position in polar cords and date.
-	Cord getSunDirection(double lon, double lat) const;
+	Cord getSunDirection(
+			double lon,
+			double lat) const;
 
 
 	public:
-
 		/// Creates a new globe at the specified position and size.
 		Globe(Game* game,
 				int cenX,
@@ -179,13 +189,16 @@ private:
 //		void zoomMin();
 		/// Zooms the globe maximum.
 //		void zoomMax();
-		/// kL. Gets the globe's current zoom level.
-//		size_t getZoomLevel();
+
 		/// Centers the globe on a point.
-		void center(double lon, double lat);
+		void center(
+				double lon,
+				double lat);
 
 		/// Checks if a point is inside land.
-		bool insideLand(double lon, double lat) const;
+		bool insideLand(
+				double lon,
+				double lat) const;
 
 		/// Turns on/off the globe detail.
 		void toggleDetail();
@@ -254,7 +267,10 @@ private:
 		/// Get the localized text.
 		const LocalizedText& tr(const std::string& id) const;
 		/// Get the localized text.
-		LocalizedText tr(const std::string& id, unsigned n) const;
+		LocalizedText tr(
+				const std::string& id,
+				unsigned n) const;
+
 		/// Draw globe range circle.
 		void drawGlobeCircle(
 				double lat,
@@ -272,7 +288,9 @@ private:
 				Sint16 Color);
 
 		/// Sets hover base position.
-		void setNewBaseHoverPos(double lon, double lat);
+		void setNewBaseHoverPos(
+				double lon,
+				double lat);
 		/// Turns on new base hover mode.
 		void setNewBaseHover(void);
 		/// Turns off new base hover mode.

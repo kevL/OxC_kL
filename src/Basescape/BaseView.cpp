@@ -122,8 +122,7 @@ void BaseView::setBase(Base* base)
 	_base = base;
 	_selFacility = 0;
 
-	// Clear grid
-	for (int
+	for (int // clear grid
 			x = 0;
 			x < BASE_SIZE;
 			++x)
@@ -133,26 +132,19 @@ void BaseView::setBase(Base* base)
 				++y)
 			_facilities[x][y] = 0;
 
-	// Fill grid with base facilities
-	for (std::vector<BaseFacility*>::iterator
+	for (std::vector<BaseFacility*>::iterator // fill grid with base facilities
 			i = _base->getFacilities()->begin();
 			i != _base->getFacilities()->end();
 			++i)
-	{
 		for (int
 				y = (*i)->getY();
 				y < (*i)->getY() + (*i)->getRules()->getSize();
 				++y)
-		{
 			for (int
 					x = (*i)->getX();
 					x < (*i)->getX() + (*i)->getRules()->getSize();
 					++x)
-			{
 				_facilities[x][y] = *i;
-			}
-		}
-	}
 
 	_redraw = true;
 }
@@ -177,7 +169,8 @@ BaseFacility* BaseView::getSelectedFacility() const
 }
 
 /**
- * Prevents any mouseover bugs on dismantling base facilities before setBase has had time to update the base.
+ * Prevents any mouseover bugs on dismantling base facilities
+ * before setBase has had time to update the base.
  */
 void BaseView::resetSelectedFacility()
 {
@@ -187,8 +180,7 @@ void BaseView::resetSelectedFacility()
 
 
 /**
- * Returns the X position of the grid square
- * the mouse is currently over.
+ * Returns the X position of the grid square the mouse is currently over.
  * @return X position on the grid.
  */
 int BaseView::getGridX() const
@@ -197,8 +189,7 @@ int BaseView::getGridX() const
 }
 
 /**
- * Returns the Y position of the grid square
- * the mouse is currently over.
+ * Returns the Y position of the grid square the mouse is currently over.
  * @return Y position on the grid.
  */
 int BaseView::getGridY() const
@@ -214,6 +205,7 @@ int BaseView::getGridY() const
 void BaseView::setSelectable(int size)
 {
 	_selSize = size;
+
 	if (_selSize > 0)
 	{
 		_selector = new Surface(
@@ -239,9 +231,7 @@ void BaseView::setSelectable(int size)
 		_selector->setVisible(false);
 	}
 	else
-	{
 		delete _selector;
-	}
 }
 
 /**
@@ -252,8 +242,7 @@ void BaseView::setSelectable(int size)
  */
 bool BaseView::isPlaceable(RuleBaseFacility* rule) const
 {
-	// Check if square isn't occupied
-	for (int
+	for (int // check if square is occupied
 			y = _gridY;
 			y < _gridY + rule->getSize();
 			++y)
@@ -264,24 +253,21 @@ bool BaseView::isPlaceable(RuleBaseFacility* rule) const
 				++x)
 		{
 			if (x < 0
-					|| x >= BASE_SIZE
-					|| y < 0
-					|| y >= BASE_SIZE)
+				|| x >= BASE_SIZE
+				|| y < 0
+				|| y >= BASE_SIZE)
 			{
 				return false;
 			}
 
 			if (_facilities[x][y] != 0)
-			{
 				return false;
-			}
 		}
 	}
 
 	bool bq = Options::getBool("allowBuildingQueue");
 
-	// Check for another facility to connect to
-	for (int
+	for (int // check for another facility to connect to
 			i = 0;
 			i < rule->getSize();
 			++i)
@@ -357,7 +343,7 @@ void BaseView::reCalcQueuedBuildings()
 	{
 		if ((*i)->getBuildTime() > 0)
 		{
-			// Set all queued buildings to infinite.
+			// set all queued buildings to infinite.
 			if ((*i)->getBuildTime() > (*i)->getRules()->getBuildTime())
 				(*i)->setBuildTime(std::numeric_limits<int>::max());
 
@@ -365,8 +351,7 @@ void BaseView::reCalcQueuedBuildings()
 		}
 	}
 
-	// Applying a simple Dijkstra Algorithm
-	while (!facilities.empty())
+	while (!facilities.empty()) // applying a simple Dijkstra Algorithm
 	{
 		std::vector<BaseFacility*>::iterator min = facilities.begin();
 		for (std::vector<BaseFacility*>::iterator
@@ -380,7 +365,9 @@ void BaseView::reCalcQueuedBuildings()
 		facilities.erase(min);
 
 		RuleBaseFacility* rule = facility->getRules();
-		int x = facility->getX(), y = facility->getY();
+		int
+			x = facility->getX(),
+			y = facility->getY();
 
 		for (int
 				i = 0;
@@ -403,7 +390,8 @@ void BaseView::reCalcQueuedBuildings()
 }
 
 /**
- * Updates the neighborFacility's build time. This is for internal use only (reCalcQueuedBuildings()).
+ * Updates the neighborFacility's build time.
+ * This is for internal use only (reCalcQueuedBuildings()).
  * @param facility Pointer to a base facility.
  * @param neighbor Pointer to a neighboring base facility.
  */
@@ -439,8 +427,7 @@ int BaseView::countConnected(
 {
 	bool newgrid = (grid == 0);
 
-	// Create connection grid
-	if (newgrid)
+	if (newgrid) // create connection grid
 	{
 		grid = new int*[BASE_SIZE];
 
@@ -478,56 +465,69 @@ int BaseView::countConnected(
 		return 0;
 	}
 
-	// Add connected (neighbor) facilities to grid
+	// add connected (neighbor) facilities to grid
 	int total = 1;
 	grid[x][y]++;
 
-	if (0 == _facilities[x][y]->getBuildTime()
-		|| (x - 1 >= 0
-			&& 0 != _facilities[x - 1][y]
+	if (_facilities[x][y]->getBuildTime() == 0
+		|| (x - 1 > -1
+			&& _facilities[x - 1][y] != 0
 			&& (_facilities[x - 1][y] == _facilities[x][y]
 				|| _facilities[x - 1][y]->getBuildTime() > _facilities[x - 1][y]->getRules()->getBuildTime())))
 	{
-		total += countConnected(x - 1, y, grid, remove);
+		total += countConnected(
+							x - 1,
+							y,
+							grid,
+							remove);
 	}
 
-	if (0 == _facilities[x][y]->getBuildTime()
-		|| (y - 1 >= 0
+	if (_facilities[x][y]->getBuildTime() == 0
+		|| (y - 1 > -1
 			&& 0 != _facilities[x][y - 1]
 			&& (_facilities[x][y - 1] == _facilities[x][y]
 				|| _facilities[x][y - 1]->getBuildTime() > _facilities[x][y - 1]->getRules()->getBuildTime())))
 	{
-		total += countConnected(x, y - 1, grid, remove);
+		total += countConnected(
+							x,
+							y - 1,
+							grid,
+							remove);
 	}
 
-	if (0 == _facilities[x][y]->getBuildTime()
+	if (_facilities[x][y]->getBuildTime() == 0
 		|| (x + 1 < BASE_SIZE
-			&& 0 != _facilities[x + 1][y]
+			&& _facilities[x + 1][y] != 0
 			&& (_facilities[x + 1][y] == _facilities[x][y]
 				|| _facilities[x + 1][y]->getBuildTime() > _facilities[x + 1][y]->getRules()->getBuildTime())))
 	{
-		total += countConnected(x + 1, y, grid, remove);
+		total += countConnected(
+							x + 1,
+							y,
+							grid,
+							remove);
 	}
 
-	if (0 == _facilities[x][y]->getBuildTime()
+	if (_facilities[x][y]->getBuildTime() == 0
 		|| (y + 1 < BASE_SIZE
-			&& 0 != _facilities[x][y + 1]
+			&& _facilities[x][y + 1] != 0
 			&& (_facilities[x][y + 1] == _facilities[x][y]
 				|| _facilities[x][y + 1]->getBuildTime() > _facilities[x][y + 1]->getRules()->getBuildTime())))
 	{
-		total += countConnected(x, y + 1, grid, remove);
+		total += countConnected(
+							x,
+							y + 1,
+							grid,
+							remove);
 	}
 
-	// Delete connection grid
-	if (newgrid)
+	if (newgrid) // delete connection grid
 	{
 		for (int
 				xx = 0;
 				xx < BASE_SIZE;
 				++xx)
-		{
 			delete[] grid[xx];
-		}
 
 		delete[] grid;
 	}
@@ -553,6 +553,7 @@ void BaseView::blink()
 	if (_selSize > 0)
 	{
 		SDL_Rect r;
+
 		if (_blink)
 		{
 			r.w = _selector->getWidth();
@@ -579,15 +580,14 @@ void BaseView::blink()
 }
 
 /**
- * Draws the view of all the facilities in the base, connectors
- * between them and crafts landed in hangars.
+ * Draws the view of all the facilities in the base,
+ * connectors between them, and crafts based in hangars.
  */
 void BaseView::draw()
 {
 	Surface::draw();
 
-	// Draw grid squares
-	for (int
+	for (int // draw grid squares
 			x = 0;
 			x < 8;
 			++x)
@@ -610,10 +610,9 @@ void BaseView::draw()
 			i != _base->getFacilities()->end();
 			++i)
 	{
-		// Draw facility shape
 		int num = 0;
 
-		for (int
+		for (int // draw facility shape
 				y = (*i)->getY();
 				y < (*i)->getY() + (*i)->getRules()->getSize();
 				++y)
@@ -645,10 +644,9 @@ void BaseView::draw()
 			i != _base->getFacilities()->end();
 			++i)
 	{
-		// Draw connectors
-		if ((*i)->getBuildTime() == 0)
+		if ((*i)->getBuildTime() == 0) // draw connectors
 		{
-			// Facilities to the right
+			// facilities to the right
 			int x = (*i)->getX() + (*i)->getRules()->getSize();
 			if (x < BASE_SIZE)
 			{
@@ -669,7 +667,7 @@ void BaseView::draw()
 				}
 			}
 
-			// Facilities to the bottom
+			// facilities to the bottom
 			int y = (*i)->getY() + (*i)->getRules()->getSize();
 			if (y < BASE_SIZE)
 			{
@@ -700,8 +698,7 @@ void BaseView::draw()
 			i != _base->getFacilities()->end();
 			++i)
 	{
-		// Draw facility graphic
-		int num = 0;
+		int num = 0; // draw facility graphic
 
 		for (int
 				y = (*i)->getY();
@@ -726,8 +723,7 @@ void BaseView::draw()
 			}
 		}
 
-		// Draw crafts
-		if ((*i)->getBuildTime() == 0
+		if ((*i)->getBuildTime() == 0 // draw crafts
 			&& (*i)->getRules()->getCrafts() > 0)
 		{
 			if (craft != _base->getCrafts()->end())
@@ -755,8 +751,7 @@ void BaseView::draw()
 			}
 		}
 
-		// Draw time remaining
-		if ((*i)->getBuildTime() > 0)
+		if ((*i)->getBuildTime() > 0) // draw time remaining
 		{
 			Text* text = new Text(
 								GRID_SIZE * (*i)->getRules()->getSize(),
@@ -796,9 +791,7 @@ void BaseView::blit(Surface* surface)
 	Surface::blit(surface);
 
 	if (_selector != 0)
-	{
 		_selector->blit(surface);
-	}
 }
 
 /**
@@ -830,18 +823,14 @@ void BaseView::mouseOver(Action* action, State* state)
 				_selector->setVisible(true);
 			}
 			else
-			{
 				_selector->setVisible(false);
-			}
 		}
 	}
 	else
 	{
 		_selFacility = 0;
 		if (_selSize > 0)
-		{
 			_selector->setVisible(false);
-		}
 	}
 
 	InteractiveSurface::mouseOver(action, state);
@@ -856,9 +845,7 @@ void BaseView::mouseOut(Action* action, State* state)
 {
 	_selFacility = 0;
 	if (_selSize > 0)
-	{
 		_selector->setVisible(false);
-	}
 
 	InteractiveSurface::mouseOut(action, state);
 }

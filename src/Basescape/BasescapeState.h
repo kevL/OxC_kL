@@ -43,6 +43,7 @@ class BasescapeState
 	:
 		public State
 {
+
 private:
 	BaseView* _view;
 	MiniBaseView* _mini;
