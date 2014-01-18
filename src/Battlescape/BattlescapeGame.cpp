@@ -497,7 +497,7 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
  * @param bu, Pointer to a unit.
  * @return, True if the action succeeded.
  */
-bool BattlescapeGame::kneel(BattleUnit* bu)
+bool BattlescapeGame::kneel(BattleUnit* bu, bool calcFoV)
 {
 	Log(LOG_INFO) << "BattlescapeGame::kneel()";
 
@@ -515,10 +515,11 @@ bool BattlescapeGame::kneel(BattleUnit* bu)
 				{
 					bu->kneel(!bu->isKneeled());
 					// kneeling or standing up can reveal new terrain or units. I guess. -> sure can!
-					getTileEngine()->calculateFOV(bu);
+					// but updateSoldierInfo() also does does calculateFOV(), so ...
+//					getTileEngine()->calculateFOV(bu);
 
 					getMap()->cacheUnits();
-					_parentState->updateSoldierInfo();
+					_parentState->updateSoldierInfo(false); // <- also does calculateFOV() !
 					getTileEngine()->checkReactionFire(bu);
 
 					return true;

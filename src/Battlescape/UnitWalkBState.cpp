@@ -69,7 +69,8 @@ UnitWalkBState::UnitWalkBState(
 //		_tileSwitchDone(false), // kL
 //		_newUnitSpotted(false),
 //		_newVis(false), // kL
-		_onScreen(false)
+		_onScreen(false),
+		_walkCam(0)
 {
 	Log(LOG_INFO) << "Create UnitWalkBState";
 }
@@ -95,6 +96,7 @@ void UnitWalkBState::init()
 	_pf = _parent->getPathfinding();
 	_terrain = _parent->getTileEngine();
 //	_target = _action.target;
+	_walkCam = _parent->getMap()->getCamera();
 
 	// kL_note: This is used only for aLiens
 	_unitsSpotted = _unit->getUnitsSpottedThisTurn().size();
@@ -145,8 +147,8 @@ void UnitWalkBState::think()
 
 	// kL_note: Does this really need to be specc'd every _walkPhase increment?
 	_onScreen = _unit->getVisible()
-				&& (_parent->getMap()->getCamera()->isOnScreen(_unit->getPosition())
-					|| _parent->getMap()->getCamera()->isOnScreen(_unit->getDestination()));
+				&& (_walkCam->isOnScreen(_unit->getPosition())
+					|| _walkCam->isOnScreen(_unit->getDestination()));
 	Log(LOG_INFO) << ". _onScreen = " << _onScreen;
 
 
@@ -252,23 +254,24 @@ bool UnitWalkBState::doStatusStand()
 	{
 		Log(LOG_INFO) << ". kneeled, and path UpDown INVALID";
 
-		if (_parent->kneel(_unit))
+		if (_parent->kneel(_unit, false))
 		{
 			Log(LOG_INFO) << ". . Stand up";
 
 //			_newVis = _terrain->calculateFOV(_unit);
+//			bool newVis = visForUnits();
 
 			_unit->setCache(0);
 			_parent->getMap()->cacheUnit(_unit);
 
-/*			if (_newVis)
+/*			if (newVis)
 			{
 				Log(LOG_INFO) << ". . _newVis = TRUE, Abort path";
 
 				_pf->abortPath();
 
-//				_unit->setCache(0);
-//				_parent->getMap()->cacheUnit(_unit);
+				_unit->setCache(0);
+				_parent->getMap()->cacheUnit(_unit);
 
 				_parent->popState();
 
@@ -382,11 +385,13 @@ bool UnitWalkBState::doStatusStand()
 
 		Log(LOG_INFO) << ". pos 2";
 
-		if (_falling) tu = 0;
-//kL		int energy = tu;
+		if (_falling)
+			tu = 0;
 
+//kL		int energy = tu;
 		// kL_begin: UnitWalkBState::think(), no stamina required to go up/down GravLifts.
 		int energy = 0;
+
 //		if (!(_parent->getSave()->getTile(_unit->getPosition())->getMapData(MapData::O_FLOOR)->isGravLift()
 //			&& _parent->getSave()->getTile(destination)->getMapData(MapData::O_FLOOR)->isGravLift()))
 		if (_parent->getSave()->getTile(_unit->getPosition())->getMapData(MapData::O_FLOOR)
@@ -529,9 +534,7 @@ bool UnitWalkBState::doStatusStand()
 				BattleUnit* unitBelowMyWay = 0;
 				Tile* belowDest = _parent->getSave()->getTile(destination + Position(x, y, -1));
 				if (belowDest)
-				{
 					unitBelowMyWay = belowDest->getUnit();
-				}
 
 				// can't walk into units in this tile, or on top of other units sticking their head into this tile
 				if (!_falling
@@ -771,31 +774,27 @@ bool UnitWalkBState::doStatusWalk()
 			}
 		}
 
-/*kL		if (!_parent->getMap()->getCamera()->isOnScreen(_unit->getPosition())
+/*kL		if (!_walkCam->isOnScreen(_unit->getPosition())
 			&& _unit->getFaction() != FACTION_PLAYER
 			&& _unit->getVisible()) */
 		// kL_note: Let's try this, maintain camera focus centered on Visible aliens during (un)hidden movement
 		if (_unit->getVisible()							// kL
 			&& _unit->getFaction() != FACTION_PLAYER	// kL
-			&& !_parent->getMap()->getCamera()->isOnScreen(_unit->getPosition())) // kL_TEST!
+			&& !_walkCam->isOnScreen(_unit->getPosition())) // kL_TEST!
 		{
-			_parent->getMap()->getCamera()->centerOnPosition(_unit->getPosition());
+			_walkCam->centerOnPosition(_unit->getPosition());
 		}
 
 		// if the unit changed level, camera changes level with it. kL_begin:
-		if (_parent->getMap()->getCamera()->getViewLevel() != _unit->getPosition().z)
+		if (_walkCam->getViewLevel() != _unit->getPosition().z)
 		{
-			int delta_z = _unit->getPosition().z - _parent->getMap()->getCamera()->getViewLevel();
+			int delta_z = _unit->getPosition().z - _walkCam->getViewLevel();
 			if (delta_z > 0)
-			{
-				_parent->getMap()->getCamera()->up();
-			}
+				_walkCam->up();
 			else
-			{
-				_parent->getMap()->getCamera()->down();
-			}
+				_walkCam->down();
 		} // kL_end.
-//kL		_parent->getMap()->getCamera()->setViewLevel(_unit->getPosition().z);
+//kL		_walkCam->setViewLevel(_unit->getPosition().z);
 	}
 
 	return true;
@@ -870,27 +869,24 @@ bool UnitWalkBState::doStatusStand_end()
 	_terrain->calculateUnitLighting(); // move our personal lighting with us
 
 	if (_unit->getFaction() != FACTION_PLAYER)
-	{
 		_unit->setVisible(false);
-	}
 
 
-//	_newVis = _unit->getFaction() == FACTION_PLAYER
-//				&& _terrain->calculateFOV(_unit);
-//	bool newVis = visForUnits();
+	// This needs to be done *before* the calculateFOV(pos)
+	// or else any newVis will be marked Visible before
+	// visForUnits() catches that new unit as !Visible.
+	bool newVis = visForUnits();
 
-
-	// kL_note: This calculates or 'refreshes' the Field of View
+	// This calculates or 'refreshes' the Field of View
 	// of all units within maximum distance (20 tiles) of this unit.
 	_terrain->calculateFOV(_unit->getPosition());
-
-	bool newVis = visForUnits();
 
 /*	_newUnitSpotted = !_falling
 						&& !_action.desperate
 						&& _parent->getPanicHandled()
 						&& _unitsSpotted < _unit->getUnitsSpottedThisTurn().size()
 						&& _unit->getFaction() != FACTION_PLAYER; */
+
 
 	if (_parent->checkForProximityGrenades(_unit))
 	{
@@ -901,14 +897,8 @@ bool UnitWalkBState::doStatusStand_end()
 
 	if (newVis)
 	{
-		if (_unit->getFaction() == FACTION_PLAYER)
-		{
-			Log(LOG_INFO) << ". . _newVis = TRUE, Abort path";
-		}
-		else if (_unit->getFaction() != FACTION_PLAYER)
-		{
-			Log(LOG_INFO) << ". . _newUnitSpotted = TRUE, Abort path";
-		}
+		if (_unit->getFaction() == FACTION_PLAYER) Log(LOG_INFO) << ". . _newVis = TRUE, Abort path";
+		else if (_unit->getFaction() != FACTION_PLAYER) Log(LOG_INFO) << ". . _newUnitSpotted = TRUE, Abort path";
 
 		_pf->abortPath();
 
@@ -1105,20 +1095,26 @@ void UnitWalkBState::postPathProcedures()
  */
 bool UnitWalkBState::visForUnits()
 {
-	if (_falling) return false;
+	if (_falling)
+		return false;
+
+	bool newVis = false;
 
 	if (_unit->getFaction() == FACTION_PLAYER)
 	{
-		return _terrain->calculateFOV(_unit);
+		newVis = _terrain->calculateFOV(_unit);
+		Log(LOG_INFO) << "UnitWalkBState::visForUnits() : Faction_Player, vis = " << newVis;
 	}
 	else
 	{
-		return //!_unitsSpotted < _unit->getUnitsSpottedThisTurn().size()
-					_unit->getUnitsSpottedThisTurn().size() > _unitsSpotted
+		newVis = _unit->getUnitsSpottedThisTurn().size() > _unitsSpotted
 					&& !_action.desperate
 					&& !_unit->getCharging()
 					&& _parent->getPanicHandled();
+		Log(LOG_INFO) << "UnitWalkBState::visForUnits() : Faction_!Player, vis = " << newVis;
 	}
+
+	return newVis;
 }
 
 /**
@@ -1137,8 +1133,9 @@ void UnitWalkBState::setNormalWalkSpeed()
  */
 void UnitWalkBState::playMovementSound()
 {
-	if ((!_unit->getVisible() && !_parent->getSave()->getDebugMode())
-		|| !_parent->getMap()->getCamera()->isOnScreen(_unit->getPosition()))
+	if ((!_unit->getVisible()
+			&& !_parent->getSave()->getDebugMode())
+		|| !_walkCam->isOnScreen(_unit->getPosition()))
 	{
 		return;
 	}
@@ -1146,9 +1143,10 @@ void UnitWalkBState::playMovementSound()
 	if (_unit->getMoveSound() != -1)
 	{
 		if (_unit->getWalkingPhase() == 0) // if a sound is configured in the ruleset, play that one
-		{
-			_parent->getResourcePack()->getSound("BATTLE.CAT", _unit->getMoveSound())->play();
-		}
+			_parent->getResourcePack()->getSound(
+												"BATTLE.CAT",
+												_unit->getMoveSound())
+											->play();
 	}
 	else
 	{
@@ -1162,7 +1160,10 @@ void UnitWalkBState::playMovementSound()
 				if (t->getFootstepSound(tBelow)
 					&& _unit->getRaceString() != "STR_ETHEREAL")
 				{
-					_parent->getResourcePack()->getSound("BATTLE.CAT", 23 + (t->getFootstepSound(tBelow) * 2))->play();
+					_parent->getResourcePack()->getSound(
+														"BATTLE.CAT",
+														23 + (t->getFootstepSound(tBelow) * 2))
+													->play();
 				}
 			}
 
@@ -1171,7 +1172,10 @@ void UnitWalkBState::playMovementSound()
 				if (t->getFootstepSound(tBelow)
 					&& _unit->getRaceString() != "STR_ETHEREAL")
 				{
-					_parent->getResourcePack()->getSound("BATTLE.CAT", 22 + (t->getFootstepSound(tBelow) * 2))->play();
+					_parent->getResourcePack()->getSound(
+														"BATTLE.CAT",
+														22 + (t->getFootstepSound(tBelow) * 2))
+													->play();
 				}
 			}
 		}
@@ -1180,7 +1184,10 @@ void UnitWalkBState::playMovementSound()
 			if (_unit->getWalkingPhase() == 1 // play default flying sound
 				&& !_falling)
 			{
-				_parent->getResourcePack()->getSound("BATTLE.CAT", 15)->play();
+				_parent->getResourcePack()->getSound(
+													"BATTLE.CAT",
+													15)
+												->play();
 			}
 		}
 	}

@@ -31,6 +31,7 @@ namespace OpenXcom
 {
 
 class BattleUnit;
+class Camera;
 class Pathfinding;
 class TileEngine;
 
@@ -55,6 +56,7 @@ private:
 	size_t _unitsSpotted;
 
 	BattleUnit* _unit;
+	Camera* _walkCam;
 	Pathfinding* _pf;
 //	Position _target;
 	TileEngine* _terrain;

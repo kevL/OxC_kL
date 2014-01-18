@@ -233,7 +233,7 @@ private:
 		/// Determines whether a playable unit is selected.
 		bool playableUnitSelected();
 		/// Updates soldier name/rank/tu/energy/health/morale.
-		void updateSoldierInfo();
+		void updateSoldierInfo(bool calcFoV = true);
 		/// Animates map objects on the map, also smoke,fire, ...
 		void animate();
 		/// Handles the battle game state.

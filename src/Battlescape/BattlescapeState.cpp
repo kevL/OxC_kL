@@ -1544,7 +1544,7 @@ bool BattlescapeState::playableUnitSelected()
 /**
  * Updates a unit's onScreen stats & info.
  */
-void BattlescapeState::updateSoldierInfo()
+void BattlescapeState::updateSoldierInfo(bool calcFoV)
 {
 	//Log(LOG_INFO) << "BattlescapeState::updateSoldierInfo()";
 
@@ -1638,7 +1638,8 @@ void BattlescapeState::updateSoldierInfo()
 	}
 
 
-	_save->getTileEngine()->calculateFOV(selectedUnit);
+	if (calcFoV)
+		_save->getTileEngine()->calculateFOV(selectedUnit);
 
 	int j = 0;
 	for (std::vector<BattleUnit*>::iterator

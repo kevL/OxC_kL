@@ -132,10 +132,11 @@ void ExplosionBState::init()
 		{
 			Position pos = _center; // voxelspace
 			int
-				startFrame = 0, // less than 0 delays start (8 frames total)
-				offset = _power / 2,
+				startFrame = 0, // less than 0 will delay anim-start (total 8 Frames)
+				offset = _power / 3,
 				count = _power / 15;
-			if (count < 1) count = 1;
+			if (count < 1)
+				count = 1;
 
 			for (int
 					i = 0;
@@ -144,7 +145,7 @@ void ExplosionBState::init()
 			{
 				if (i > 0) // 1st exp. is always centered.
 				{
-					startFrame = RNG::generate(-i, 0) - i;
+					startFrame = RNG::generate(-i, 0) - i / 2;
 
 					pos.x += RNG::generate(-offset, offset);
 					pos.y += RNG::generate(-offset, offset);

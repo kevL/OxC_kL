@@ -89,17 +89,17 @@ BasescapeState::BasescapeState(
 
 	_mini			= new MiniBaseView(128, 20, 192, 35);
 
-	_btnAliens		= new TextButton(128, 12, 192, 56); // kL
-	_btnNewBase		= new TextButton(128, 12, 192, 68);
-	_btnBaseInfo	= new TextButton(128, 12, 192, 80);
-	_btnSoldiers	= new TextButton(128, 12, 192, 92);
-	_btnCrafts		= new TextButton(128, 12, 192, 104);
-	_btnFacilities	= new TextButton(128, 12, 192, 116);
-	_btnResearch	= new TextButton(128, 12, 192, 128);
-	_btnManufacture	= new TextButton(128, 12, 192, 140);
+	_btnBaseInfo	= new TextButton(128, 12, 192, 56);
+	_btnSoldiers	= new TextButton(128, 12, 192, 68);
+	_btnCrafts		= new TextButton(128, 12, 192, 80);
+	_btnAliens		= new TextButton(128, 12, 192, 92);
+	_btnResearch	= new TextButton(128, 12, 192, 104);
+	_btnManufacture	= new TextButton(128, 12, 192, 116);
+	_btnSell		= new TextButton(128, 12, 192, 128);
+	_btnPurchase	= new TextButton(128, 12, 192, 140);
 	_btnTransfer	= new TextButton(128, 12, 192, 152);
-	_btnPurchase	= new TextButton(128, 12, 192, 164);
-	_btnSell		= new TextButton(128, 12, 192, 176);
+	_btnFacilities	= new TextButton(128, 12, 192, 164);
+	_btnNewBase		= new TextButton(128, 12, 192, 176);
 	_btnGeoscape	= new TextButton(128, 12, 192, 188);
 
 
@@ -111,7 +111,7 @@ BasescapeState::BasescapeState(
 	add(_edtBase);
 	add(_txtLocation);
 	add(_txtFunds);
-	add(_btnAliens); // kL
+	add(_btnAliens);
 	add(_btnNewBase);
 	add(_btnBaseInfo);
 	add(_btnSoldiers);

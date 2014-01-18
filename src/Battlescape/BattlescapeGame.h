@@ -208,7 +208,9 @@ private:
 				BattleUnit* unit,
 				std::string newType);
 		/// Handles kneeling action.
-		bool kneel(BattleUnit* bu);
+		bool kneel(
+				BattleUnit* bu,
+				bool calcFoV = true);
 		/// Cancels the current action.
 		bool cancelCurrentAction(bool bForce = false);
 		/// Gets a pointer to access action members directly.

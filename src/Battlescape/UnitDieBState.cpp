@@ -87,8 +87,9 @@ UnitDieBState::UnitDieBState(
 		_parent->getMap()->setUnitDying(true); // reveal the Map.
 		//Log(LOG_INFO) << ". setUnitDying DONE";
 
-		if (!_parent->getMap()->getCamera()->isOnScreen(_unit->getPosition())) // kL
-			_parent->getMap()->getCamera()->centerOnPosition(_unit->getPosition());
+		Camera* deathCam = _parent->getMap()->getCamera();
+		if (!deathCam->isOnScreen(_unit->getPosition())) // kL
+			deathCam->centerOnPosition(_unit->getPosition());
 
 		//Log(LOG_INFO) << ". centerOnPosition DONE";
 	}
@@ -131,7 +132,8 @@ spawnUnit: ""
 			_unit->initDeathSpin(); // -> STATUS_TURNING, death animation spin; Savegame/BattleUnit.cpp
 		}
 	}
-	else // unit is not onScreen and/or not visible.
+	else // unit is not Visible.
+		// kL_note: A floating unit seemed to enter here, while Visible...
 	{
 		//Log(LOG_INFO) << ". . unit NOT Visible";
 //		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED);
@@ -157,7 +159,8 @@ spawnUnit: ""
     {
 		//Log(LOG_INFO) << ". . unit is Faction_Hostile";
         std::vector<Node*>* nodes = _parent->getSave()->getNodes();
-        if (!nodes) return; // this better not happen.
+        if (!nodes)
+			return; // this better not happen.
 
         for (std::vector<Node*>::iterator
 				node = nodes->begin();
@@ -205,8 +208,7 @@ void UnitDieBState::think()
 		// kL_begin:
 		if (_unit->getSpinPhase() > -1)
 		{
-			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED * 2 / 7);
-
+//			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED * 3 / 7);
 			_unit->contDeathSpin(); // -> STATUS_STANDING 
 			//Log(LOG_INFO) << ". . . . got back from contDeathSpin()";
 		}
@@ -260,11 +262,12 @@ void UnitDieBState::think()
 		if (_unit->getTurnsExposed() < 255)
 			_unit->setTurnsExposed(255);
 
-
 		if (!_unit->getSpawnUnit().empty()) // converts the dead zombie to a chryssalid
 		{
 			//Log(LOG_INFO) << ". . unit is _spawnUnit -> converting !";
-			BattleUnit* newUnit = _parent->convertUnit(_unit, _unit->getSpawnUnit());
+			BattleUnit* newUnit = _parent->convertUnit(
+													_unit,
+													_unit->getSpawnUnit());
 			newUnit->lookAt(_originalDir);
 //			newUnit->lookAt(_originalDir, true);	// kL, fast turn back to original facing. Nope...
 //			newUnit->setDirection(_originalDir);	// kL
@@ -353,11 +356,8 @@ void UnitDieBState::convertUnitToCorpse()
 	_parent->getSave()->getBattleState()->showPsiButton(false);
 	_parent->getSave()->removeUnconsciousBodyItem(_unit); // in case the unit was unconscious
 
-	Position lastPosition = _unit->getPosition();
-
-	int size = _unit->getArmor()->getSize();
-
 	BattleItem* itemToKeep = 0;
+	int size = _unit->getArmor()->getSize();
 
 	bool dropItems = !Options::getBool("weaponSelfDestruction")
 						|| _unit->getOriginalFaction() != FACTION_HOSTILE
@@ -372,7 +372,9 @@ void UnitDieBState::convertUnitToCorpse()
 				i != _unit->getInventory()->end();
 				++i)
 		{
-			_parent->dropItem(_unit->getPosition(), (*i));
+			_parent->dropItem(
+							_unit->getPosition(),
+							*i);
 
 			if (!(*i)->getRules()->isFixed())
 				(*i)->setOwner(0);
@@ -384,13 +386,15 @@ void UnitDieBState::convertUnitToCorpse()
 	_unit->getInventory()->clear();
 
 	if (itemToKeep != 0)
-	{
 		_unit->getInventory()->push_back(itemToKeep);
-	}
 
 	_unit->setTile(0); // remove unit-tile link
 
+
+	Position lastPos = _unit->getPosition();
+	Tile* tSelf = 0;
 	int i = 0;
+
 	for (int
 			y = 0;
 			y < size;
@@ -407,13 +411,12 @@ void UnitDieBState::convertUnitToCorpse()
 			corpse->setUnit(_unit);
 
 			// check in case unit was displaced by another unit
-			if (_parent->getSave()->getTile(lastPosition + Position(x, y, 0))->getUnit() == _unit)
-			{
-				_parent->getSave()->getTile(lastPosition + Position(x, y, 0))->setUnit(0);
-			}
+			tSelf = _parent->getSave()->getTile(lastPos + Position(x, y, 0));
+			if (tSelf->getUnit() == _unit)
+				tSelf->setUnit(0);
 
 			_parent->dropItem(
-							lastPosition + Position(x, y, 0),
+							lastPos + Position(x, y, 0),
 							corpse,
 							true);
 
@@ -434,7 +437,10 @@ void UnitDieBState::playDeathSound()
 		int iSound = RNG::generate(41, 43);
 		//Log(LOG_INFO) << "UnitDieBState::playDeathSound(), male iSound = " << iSound;
 //kL		_parent->getResourcePack()->getSound("BATTLE.CAT", RNG::generate(41, 43))->play();
-		_parent->getResourcePack()->getSound("BATTLE.CAT", iSound)->play(); // kL
+		_parent->getResourcePack()->getSound(
+											"BATTLE.CAT",
+											iSound)
+										->play(); // kL
 	}
 	else if ((_unit->getType() == "SOLDIER"
 			&& _unit->getGender() == GENDER_FEMALE)
@@ -443,12 +449,16 @@ void UnitDieBState::playDeathSound()
 		int iSound = RNG::generate(44, 46);
 		//Log(LOG_INFO) << "UnitDieBState::playDeathSound(), female iSound = " << iSound;
 //kL		_parent->getResourcePack()->getSound("BATTLE.CAT", RNG::generate(44, 46))->play();
-		_parent->getResourcePack()->getSound("BATTLE.CAT", iSound)->play(); // kL
+		_parent->getResourcePack()->getSound(
+											"BATTLE.CAT",
+											iSound)
+										->play(); // kL
 	}
 	else
-	{
-		_parent->getResourcePack()->getSound("BATTLE.CAT", _unit->getDeathSound())->play();
-	}
+		_parent->getResourcePack()->getSound(
+											"BATTLE.CAT",
+											_unit->getDeathSound())
+										->play();
 }
 
 }

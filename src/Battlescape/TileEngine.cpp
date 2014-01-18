@@ -132,7 +132,9 @@ void TileEngine::calculateSunShading(Tile* tile)
 		}
 	}
 
-	tile->addLight(power, layer);
+	tile->addLight(
+				power,
+				layer);
 }
 
 /**
@@ -175,13 +177,11 @@ void TileEngine::calculateTerrainLighting()
 					layer);
 		}
 
-		if (_save->getTiles()[i]->getFire()) // fires
-		{
+		if (_save->getTiles()[i]->getFire())
 			addLight(
 					_save->getTiles()[i]->getPosition(),
 					fireLightPower,
 					layer);
-		}
 
 		for (std::vector<BattleItem*>::iterator
 				it = _save->getTiles()[i]->getInventory()->begin();
@@ -189,12 +189,10 @@ void TileEngine::calculateTerrainLighting()
 				++it)
 		{
 			if ((*it)->getRules()->getBattleType() == BT_FLARE)
-			{
 				addLight(
 						_save->getTiles()[i]->getPosition(),
 						(*it)->getRules()->getPower(),
 						layer);
-			}
 		}
 	}
 }
@@ -235,12 +233,10 @@ void TileEngine::calculateUnitLighting()
 
 		// add lighting of units on fire
 		if ((*i)->getFire())
-		{
 			addLight(
 					(*i)->getPosition(),
 					fireLightPower,
 					layer);
-		}
 	}
 }
 
@@ -296,7 +292,7 @@ void TileEngine::addLight(
  */
 bool TileEngine::calculateFOV(BattleUnit* unit)
 {
-	//Log(LOG_INFO) << "TileEngine::calculateFOV() for ID " << unit->getId();
+	Log(LOG_INFO) << "TileEngine::calculateFOV() for ID " << unit->getId();
 	unit->clearVisibleUnits();	// kL:below
 	unit->clearVisibleTiles();	// kL:below
 
@@ -308,7 +304,6 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 	size_t preVisUnits = unit->getUnitsSpottedThisTurn().size();
 	//Log(LOG_INFO) << ". . . . preVisUnits = " << (int)preVisUnits;
 
-
 	int direction;
 	if (_save->getStrafeSetting()
 		&& unit->getTurretType() > -1)
@@ -316,16 +311,15 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 		direction = unit->getTurretDirection();
 	}
 	else
-	{
 		direction = unit->getDirection();
-	}
 	//Log(LOG_INFO) << ". direction = " << direction;
 
 	bool swap = (direction == 0 || direction == 4);
 
-	int sign_x[8] = {+1, +1, +1, +1, -1, -1, -1, -1};
+	int
+		sign_x[8] = {+1, +1, +1, +1, -1, -1, -1, -1},
 //kL	int sign_y[8] = {-1, -1, -1, +1, +1, +1, -1, -1};	// is this right? (ie. 3pos & 5neg, why not 4pos & 4neg )
-	int sign_y[8] = {-1, -1, +1, +1, +1, +1, -1, -1};		// kL: note it does not matter.
+		sign_y[8] = {-1, -1, +1, +1, +1, +1, -1, -1};		// kL: note it does not matter.
 
 	bool diag = false;
 	int
@@ -404,16 +398,16 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 				//Log(LOG_INFO) << "for (int z = 0; z < _save->getMapSizeZ(); z++), z = " << z;
 
 //	int dist = distance(position, (*i)->getPosition());
-				const int distanceSqr = x * x + y * y;
-//				const int distanceSqr = x * x + y * y + z * z; // kL
-				//Log(LOG_INFO) << "distanceSqr = " << distanceSqr << " ; x = " << x << " ; y = " << y << " ; z = " << z; // <- HUGE write to file.
+				const int distSqr = x * x + y * y;
+//				const int distSqr = x * x + y * y + z * z; // kL
+				//Log(LOG_INFO) << "distSqr = " << distSqr << " ; x = " << x << " ; y = " << y << " ; z = " << z; // <- HUGE write to file.
 				//Log(LOG_INFO) << "x = " << x << " ; y = " << y << " ; z = " << z; // <- HUGE write to file.
 
 				test.z = z;
 
-				if (distanceSqr <= MAX_VIEW_DISTANCE * MAX_VIEW_DISTANCE)
+				if (distSqr <= MAX_VIEW_DISTANCE * MAX_VIEW_DISTANCE)
 				{
-					//Log(LOG_INFO) << "inside distanceSqr";
+					//Log(LOG_INFO) << "inside distSqr";
 
 //kL					test.x = center.x + sign_x[direction] * (swap? y: x);
 //kL					test.y = center.y + sign_y[direction] * (swap? x: y);
@@ -433,7 +427,7 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 
 						//Log(LOG_INFO) << ". . calculateFOV(), visible() CHECK.. " << visUnit->getId();
 						if (visUnit
-							&& !visUnit->isOut(true, true)
+							&& !visUnit->isOut()
 							&& visible(
 									unit,
 									_save->getTile(test))) // reveal units & tiles <- This seems uneven.
@@ -441,7 +435,7 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 							//Log(LOG_INFO) << ". . visible() TRUE : unitID = " << unit->getId() << " ; visID = " << visUnit->getId();
 							//Log(LOG_INFO) << ". . calcFoV, distance = " << distance(unit->getPosition(), visUnit->getPosition());
 
-							//Log(LOG_INFO) << ". . calculateFOV(), visible() TRUE " << visUnit->getId();
+							//Log(LOG_INFO) << ". . calculateFOV(), visible() TRUE id = " << visUnit->getId();
 							if (!visUnit->getVisible()) // kL, spottedID = " << visUnit->getId();
 							{
 								//Log(LOG_INFO) << ". . calculateFOV(), getVisible() FALSE";
@@ -451,7 +445,7 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 
 							if (unit->getFaction() == FACTION_PLAYER)
 							{
-								//if (kL_Debug) Log(LOG_INFO) << ". . calculateFOV(), FACTION_PLAYER, set spottedTile & spottedUnit visible";
+								//Log(LOG_INFO) << ". . calculateFOV(), FACTION_PLAYER, set spottedTile & spottedUnit visible";
 								visUnit->getTile()->setVisible(+1);
 								visUnit->getTile()->setDiscovered(true, 2); // kL_below. sprite caching for floor+content: DO I WANT THIS.
 								visUnit->setVisible(true);
@@ -519,30 +513,36 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 														false);
 									//Log(LOG_INFO) << ". . . . calculateLine() tst = " << tst;
 
-									size_t trajectorySize = _trajectory.size();
+									size_t trajSize = _trajectory.size();
 
 									if (tst > 127) // last tile is blocked thus must be cropped
-										--trajectorySize;
+										--trajSize;
 
 									for (size_t
 											i = 0;
-											i < trajectorySize;
+											i < trajSize;
 											i++)
 									{
 										//Log(LOG_INFO) << ". . . . calculateLine() inside for(3) Loop";
-										Position pTrajectory = _trajectory.at(i);
+										Position pTraj = _trajectory.at(i);
 
 										// mark every tile of line as visible (as in original)
 										// this is needed because of bresenham narrow stroke. 
-										_save->getTile(pTrajectory)->setVisible(+1);
-										_save->getTile(pTrajectory)->setDiscovered(true, 2); // sprite caching for floor+content
+										_save->getTile(pTraj)->setVisible(+1);
+										_save->getTile(pTraj)->setDiscovered(true, 2); // sprite caching for floor+content
 
 										// walls to the east or south of a visible tile, we see that too
-										Tile* t = _save->getTile(Position(pTrajectory.x + 1, pTrajectory.y, pTrajectory.z));
+										Tile* t = _save->getTile(Position(
+																		pTraj.x + 1,
+																		pTraj.y,
+																		pTraj.z));
 										if (t)
 											t->setDiscovered(true, 0);
 
-										t = _save->getTile(Position(pTrajectory.x, pTrajectory.y + 1, pTrajectory.z));
+										t = _save->getTile(Position(
+																pTraj.x,
+																pTraj.y + 1,
+																pTraj.z));
 										if (t)
 											t->setDiscovered(true, 1);
 									}
@@ -553,7 +553,7 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 					}
 					//Log(LOG_INFO) << ". . calculateFOV(), getTile(test) Done";
 				}
-				//Log(LOG_INFO) << ". . calculateFOV(), distanceSqr Done";
+				//Log(LOG_INFO) << ". . calculateFOV(), distSqr Done";
 			}
 			//Log(LOG_INFO) << ". . calculateFOV(), getMapSizeZ() Done";
 		}
@@ -1889,8 +1889,9 @@ BattleUnit* TileEngine::hit(
 					}
 				}
 
-				if (buTarget->getOriginalFaction() == FACTION_HOSTILE
-					&& attacker->getOriginalFaction() == FACTION_PLAYER
+				if (buTarget->getOriginalFaction() == FACTION_HOSTILE	// target is aLien Mc'd or not.
+					&& attacker->getOriginalFaction() == FACTION_PLAYER	// shooter is Xcom
+					&& attacker->getFaction() == FACTION_PLAYER			// shooter is not Mc'd Xcom
 					&& type != DT_NONE)
 				{
 					Log(LOG_INFO) << ". . addFiringExp() - huh, even for Melee?";
@@ -1905,9 +1906,9 @@ BattleUnit* TileEngine::hit(
 		//Log(LOG_INFO) << ". applyGravity()";
 		applyGravity(tile);
 		//Log(LOG_INFO) << ". calculateSunShading()";
-		calculateSunShading();							// roofs could have been destroyed
+		calculateSunShading();								// roofs could have been destroyed
 		//Log(LOG_INFO) << ". calculateTerrainLighting()";
-		calculateTerrainLighting();						// fires could have been started
+		calculateTerrainLighting();							// fires could have been started
 		//Log(LOG_INFO) << ". calculateFOV()";
 		calculateFOV(pTarget_voxel / Position(16, 16, 24));	// walls & objects could have been ruined
 
@@ -2266,9 +2267,10 @@ void TileEngine::explode(
 
 						if (unit
 							&& dest->getUnit()
-							&& unit->getOriginalFaction() == FACTION_PLAYER			// kL
-							&& unit->getFaction() == FACTION_PLAYER					// kL
-							&& dest->getUnit()->getFaction() != FACTION_PLAYER)		// kL
+							&& unit->getOriginalFaction() == FACTION_PLAYER					// kL, shooter is Xcom
+							&& unit->getFaction() == FACTION_PLAYER							// kL, shooter is not Mc'd Xcom
+							&& dest->getUnit()->getOriginalFaction() == FACTION_HOSTILE)	// kL, target is aLien Mc'd or not.
+																							//		no Xp for shooting civies...
 //							&& dest->getUnit()->getFaction() != unit->getFaction())
 						{
 							unit->addFiringExp();
