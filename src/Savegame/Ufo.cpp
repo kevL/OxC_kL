@@ -67,7 +67,8 @@ Ufo::Ufo(RuleUfo* rules)
 		_trajectory(0),
 		_detected(false),
 		_hyperDetected(false),
-		_shootingAt(0)
+		_shootingAt(0),
+		_crashPS(0)
 {
 }
 
@@ -159,6 +160,7 @@ void Ufo::load(
 	_hyperDetected		= node["hyperDetected"].as<bool>(_hyperDetected);
 	_secondsRemaining	= node["secondsRemaining"].as<int>(_secondsRemaining);
 	_inBattlescape		= node["inBattlescape"].as<bool>(_inBattlescape);
+	_crashPS			= node["crashPS"].as<int>(_crashPS);
 
 	double lon = _lon;
 	double lat = _lat;
@@ -228,13 +230,10 @@ YAML::Node Ufo::save() const
 	node["type"]		= _rules->getType();
 	node["id"]			= _id;
 	if (_crashId)
-	{
 		node["crashId"]	= _crashId;
-	}
 	else if (_landId)
-	{
 		node["landId"]	= _landId;
-	}
+
 	node["damage"]		= _damage;
 	node["altitude"]	= _altitude;
 	node["direction"]	= _direction;
@@ -250,6 +249,7 @@ YAML::Node Ufo::save() const
 	node["mission"]			= _mission->getId();
 	node["trajectory"]		= _trajectory->getID();
 	node["trajectoryPoint"]	= _trajectoryPoint;
+	node["crashPS"]			= _crashPS;
 
 	return node;
 }
@@ -338,19 +338,25 @@ int Ufo::getDamage() const
 void Ufo::setDamage(int damage)
 {
 	_damage = damage;
+
 	if (_damage < 0)
-	{
 		_damage = 0;
-	}
 
 	if (_damage >= _rules->getMaxDamage())
-	{
 		_status = DESTROYED;
-	}
 	else if (_damage >= _rules->getMaxDamage() / 2)
-	{
 		_status = CRASHED;
-	}
+}
+
+/**
+ * kL. Returns the ratio between the amount of damage this uFo
+ * has taken and the total it can take before it's destroyed.
+ * @return, Percentage of damage.
+ */
+int Ufo::getDamagePercentage() const
+{
+	return static_cast<int>(
+			floor((static_cast<double>(_damage) / static_cast<double>(_rules->getMaxDamage())) * 100.0));
 }
 
 /**
@@ -822,6 +828,22 @@ int Ufo::getCrashId() const
 void Ufo::setCrashId(int id)
 {
 	_crashId = id;
+}
+
+/**
+ * kL. Gets the UFO's powerSource explosive power factor.
+ */
+int Ufo::getCrashPS() const
+{
+	return _crashPS;
+}
+
+/**
+ * kL. Sets the UFO's powerSource explosive power factor.
+ */
+void Ufo::setCrashPS(int percDamage)
+{
+	_crashPS = percDamage;
 }
 
 }

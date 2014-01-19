@@ -202,7 +202,7 @@ const int DogfightState::_ufoBlobs[8][13][13] =
 // Projectile blobs
 const int DogfightState::_projectileBlobs[4][6][3] =
 {
-		/*0 STR_STINGRAY_MISSILE ?*/
+	// 0 STR_STINGRAY_MISSILE
 	{
 		{0, 1, 0},
 		{1, 9, 1},
@@ -211,7 +211,7 @@ const int DogfightState::_projectileBlobs[4][6][3] =
 		{0, 2, 0},
 		{0, 1, 0}
 	},
-		/*1 STR_AVALANCHE_MISSILE ?*/
+	// 1 STR_AVALANCHE_MISSILE
 	{
 		{1, 2, 1},
 		{2, 9, 2},
@@ -220,7 +220,7 @@ const int DogfightState::_projectileBlobs[4][6][3] =
 		{0, 2, 0},
 		{0, 1, 0}
 	},
-		/*2 STR_CANNON_ROUND ?*/
+	// 2 STR_CANNON_ROUND
 	{
 		{0, 0, 0},
 		{0, 7, 0},
@@ -229,7 +229,7 @@ const int DogfightState::_projectileBlobs[4][6][3] =
 		{0, 0, 0},
 		{0, 0, 0}
 	},
-		/*3 STR_FUSION_BALL ?*/
+	// 3 STR_FUSION_BALL
 	{
 		{2, 4, 2},
 		{4, 9, 4},
@@ -595,7 +595,8 @@ DogfightState::DogfightState(
 		_ufoSize = 4;
 
 	// Get craft's height. Used for damage indication.
-	int x = _damage->getWidth() / 2;
+//kL	int x = _damage->getWidth() / 2;
+	int x = 12; // kL: the sprites aren't centered, but 12 is consistently their center
 	for (int
 			y = 0;
 			y < _damage->getHeight();
@@ -941,7 +942,9 @@ void DogfightState::move()
 					if (RNG::percent(p->getAccuracy())) // UFO hit.
 					{
 						// Formula delivered by Volutar
-						int damage = RNG::generate(p->getDamage() / 2, p->getDamage());
+						int damage = RNG::generate(
+												p->getDamage() / 2,
+												p->getDamage());
 						_ufo->setDamage(_ufo->getDamage() + damage);
 
 						if (_ufo->isCrashed())
@@ -986,7 +989,9 @@ void DogfightState::move()
 					{
 						// Formula delivered by Volutar
 //kL						int damage = RNG::generate(0, _ufo->getRules()->getWeaponPower());
-						int damage = RNG::generate(10, _ufo->getRules()->getWeaponPower()); // kL
+						int damage = RNG::generate(
+												10,
+												_ufo->getRules()->getWeaponPower()); // kL
 						if (damage)
 						{
 							_craft->setDamage(_craft->getDamage() + damage);
@@ -1122,7 +1127,8 @@ void DogfightState::move()
 		}
 
 		if (!_destroyCraft
-			&& (_destroyUfo || _mode == _btnDisengage))
+			&& (_destroyUfo
+				|| _mode == _btnDisengage))
 		{
 			_craft->returnToBase();
 		}
@@ -1291,7 +1297,7 @@ void DogfightState::move()
 				_ufo->setStatus(Ufo::DESTROYED);
 				_destroyUfo = true;
 			}
-			else
+			else // set up Crash site.
 			{
 				// kL_note: This is how long, in seconds, the crashed uFo remains....
 				_ufo->setSecondsRemaining(RNG::generate(24, 96) * 3600);
@@ -1299,6 +1305,10 @@ void DogfightState::move()
 
 				if (_ufo->getCrashId() == 0)
 					_ufo->setCrashId(_game->getSavedGame()->getId("STR_CRASH_SITE"));
+
+				int percDamage = _ufo->getDamagePercentage(); // kL
+				Log(LOG_INFO) << "DogfightState::move(), crashPS = " << percDamage;
+				_ufo->setCrashPS(percDamage); // kL
 			}
 		}
 

@@ -634,8 +634,8 @@ void Craft::setDamage(int damage)
 
 /**
  * Returns the ratio between the amount of damage this craft
- * can take and the total it can take before it's destroyed.
- * @return Percentage of damage.
+ * has taken and the total it can take before it's destroyed.
+ * @return, Percentage of damage.
  */
 int Craft::getDamagePercentage() const
 {

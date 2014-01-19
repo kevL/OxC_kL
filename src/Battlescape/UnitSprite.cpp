@@ -263,10 +263,12 @@ void UnitSprite::drawRoutine0()
 	const int
 		legsWalk[8] = {56, 56+24, 56+24*2, 56+24*3, 56+24*4, 56+24*5, 56+24*6, 56+24*7},
 		larmWalk[8] = {40, 40+24, 40+24*2, 40+24*3, 40+24*4, 40+24*5, 40+24*6, 40+24*7},
+// #firstFrame#				72		96		120			144		168		192		216
 		rarmWalk[8] = {48, 48+24, 48+24*2, 48+24*3, 48+24*4, 48+24*5, 48+24*6, 48+24*7};
 
 	const int yoffWalk[8]		= { 1,  0, -1,  0,  1,  0, -1,  0}; // bobbing up and down
 	const int yoffWalk_alt[8]	= { 1,  1,  0,  0,  1,  1,  0,  0}; // bobbing up and down (muton)
+//	const int yoffWalk_alt[8]	= { 0,  0,  0,  0,  0,  0,  0,  0}; // kL_TEST.
 	const int offX[8]			= { 8, 10,  7,  4, -9,-11, -7, -3}; // for the weapons
 	const int offY[8]			= {-6, -3,  0,  2,  0, -4, -7, -9}; // for the weapons
 	const int offX2[8]			= {-8,  3,  5, 12,  6, -1, -5,-13}; // for the left handed weapons
@@ -354,8 +356,7 @@ void UnitSprite::drawRoutine0()
 	bool isWalking = _unit->getStatus() == STATUS_WALKING;
 	bool isKneeled = _unit->isKneeled();
 
-	// when walking, torso(fixed sprite) has to be animated up/down
-	if (isWalking)
+	if (isWalking) // when walking, torso(fixed sprite) has to be animated up/down
 	{
 //		Log(LOG_INFO) << "UnitSprite::drawRoutine0() : " << _unit->getId() << " STATUS_WALKING";
 
@@ -393,11 +394,10 @@ void UnitSprite::drawRoutine0()
 
 	sortRifles();
 
-	// holding an item
-	if (_itemA)
+	if (_itemA) // holding an item
 	{
-		// draw handob item
-		if (_unit->getStatus() == STATUS_AIMING && _itemA->getRules()->isTwoHanded())
+		if (_unit->getStatus() == STATUS_AIMING // draw handob item
+			&& _itemA->getRules()->isTwoHanded())
 		{
 			int dir = (_unit->getDirection() + 2) %8;
 			itemA = _itemSurfaceA->getFrame(_itemA->getRules()->getHandSprite() + dir);
@@ -427,8 +427,7 @@ void UnitSprite::drawRoutine0()
 			}
 		}
 
-		// draw arms holding the item
-		if (_itemA->getRules()->isTwoHanded())
+		if (_itemA->getRules()->isTwoHanded()) // draw arms holding the item
 		{
 			leftArm = _unitSurface->getFrame(larm2H + _unit->getDirection());
 
@@ -444,13 +443,16 @@ void UnitSprite::drawRoutine0()
 		else
 		{
 			if (_drawingRoutine == 10) // missing/wrong arms on muton here, investigate spriteset
+			{
 				rightArm = _unitSurface->getFrame(rarm2H + _unit->getDirection());
+			}
 			else
+			{
 				rightArm = _unitSurface->getFrame(rarm1H + _unit->getDirection());
+			}
 		}
 
-		// the fixed arm(s) have to be animated up/down when walking
-		if (isWalking)
+		if (isWalking) // the fixed arm(s) have to be animated up/down when walking
 		{
 			if (_drawingRoutine == 10)
 			{
@@ -458,7 +460,9 @@ void UnitSprite::drawRoutine0()
 
 				itemA->setY(itemA->getY() + yoffWalk_alt[_unit->getWalkingPhase()]);
 				if (_itemA->getRules()->isTwoHanded())
+				{
 					leftArm->setY(yoffWalk_alt[_unit->getWalkingPhase()]);
+				}
 			}
 			else
 			{
@@ -466,13 +470,14 @@ void UnitSprite::drawRoutine0()
 
 				itemA->setY(itemA->getY() + yoffWalk[_unit->getWalkingPhase()]);
 				if (_itemA->getRules()->isTwoHanded())
+				{
 					leftArm->setY(yoffWalk[_unit->getWalkingPhase()]);
+				}
 			}
 		}
 	}
 
-	// if we are left handed or dual wielding...
-	if (_itemB)
+	if (_itemB) // if we are left handed or dual wielding...
 	{
 		leftArm = _unitSurface->getFrame(larm2H + _unit->getDirection());
 
@@ -537,8 +542,7 @@ void UnitSprite::drawRoutine0()
 		}
 	}
 
-	// offset everything but legs when kneeled
-	if (isKneeled)
+	if (isKneeled) // offset everything but legs when kneeled
 	{
 		leftArm->setY(offYKneel);
 		rightArm->setY(offYKneel);
@@ -553,8 +557,7 @@ void UnitSprite::drawRoutine0()
 		torso->setY(0);
 	}
 
-	// items are calculated for soldier height (22) - some aliens are smaller, so item is drawn lower.
-	if (itemA)
+	if (itemA) // items are calculated for soldier height (22) - some aliens are smaller, so item is drawn lower.
 	{
 		itemA->setY(itemA->getY() + (22 - _unit->getStandHeight()));
 	}
@@ -620,6 +623,7 @@ void UnitSprite::drawRoutine0()
 			rightArm	= newRightArm;
 		}
 	}
+
 
 	// blit order depends on unit direction
 	// and whether we are holding a 2 handed weapon.
@@ -717,7 +721,8 @@ void UnitSprite::drawRoutine0()
 				itemA ? itemA->blit(this) : void();
 				itemB ? itemB->blit(this) : void();
 				leftArm->blit(this);
-				legs->blit(this);torso->blit(this);
+				legs->blit(this);
+				torso->blit(this);
 			}
 			else
 			{

@@ -98,7 +98,7 @@ BattlescapeGenerator::BattlescapeGenerator(Game* game)
 		_craftInventoryTile(0),
 		_alienRace(""),
 		_alienItemLevel(0),
-		_tankPos(0)		// kL
+		_tankPos(0) // kL
 {
 	//Log(LOG_INFO) << "Create BattlescapeGenerator";
 }
@@ -137,7 +137,8 @@ void BattlescapeGenerator::setUfo(Ufo* ufo)
  */
 void BattlescapeGenerator::setWorldTexture(int texture)
 {
-	if (texture < 0) texture = 0;
+	if (texture < 0)
+		texture = 0;
 
 	_worldTexture = texture;
 }
@@ -215,9 +216,7 @@ void BattlescapeGenerator::nextStage()
 		}
 
 		if ((*j)->getTile())
-		{
 			(*j)->getTile()->setUnit(0);
-		}
 
 		(*j)->setTile(0);
 		(*j)->setPosition(Position(-1, -1, -1), false);
@@ -2764,18 +2763,20 @@ void BattlescapeGenerator::fuelPowerSources()
 }
 
 /**
- * When a UFO crashes, there is a 75% chance for each powersource to explode. kL_note: 80%
+ * When a UFO crashes, there is a 75% chance for each powersource to explode.
+ * kL_note: 80% -> now depends entirely on how much damage the UFO took during dogfight!!!!
  */
 void BattlescapeGenerator::explodePowerSources()
 {
+	Log(LOG_INFO) << "BattlescapeGenerator::explodePowerSources()";
 	for (int
 			i = 0;
 			i < _save->getMapSizeXYZ();
 			++i)
 	{
 		if (_save->getTiles()[i]->getMapData(MapData::O_OBJECT)
-			&& _save->getTiles()[i]->getMapData(MapData::O_OBJECT)->getSpecialType() == UFO_POWER_SOURCE
-			&& RNG::percent(80))
+			&& _save->getTiles()[i]->getMapData(MapData::O_OBJECT)->getSpecialType() == UFO_POWER_SOURCE)
+//kL			&& RNG::percent(80))
 		{
 			Position pos;
 			pos.x = _save->getTiles()[i]->getPosition().x * 16;
@@ -2784,13 +2785,21 @@ void BattlescapeGenerator::explodePowerSources()
 
 //kL			_save->getTileEngine()->explode(pos, 180+RNG::generate(0,70), DT_HE, 10);
 
+			int percDamage = _ufo->getCrashPS(); // kL ( range: 50+ to 100- )
+			Log(LOG_INFO) << ". percDamage = " << percDamage;
+				// kL_note: that might be fetchable with the simpler _ufo->getDamagePercentage() function...!
+				// ah, but it wouldn't get written to Save..
+			double rand = RNG::generate(0.0, 2.0) * static_cast<double>(percDamage);	// kL
+			Log(LOG_INFO) << ". rand = " << (int)rand;
+			int power = static_cast<int>(((pow(rand, 3)) / 32000.0) + 50.0);			// kL
+
 			// ((x^3)/32000)+50, x= 50..300
-			int rand = RNG::generate(1, 200);														// kL
-			int power = static_cast<int>(((pow(static_cast<double>(rand), 3)) / 32000.0) + 50.0);	// kL
+//			int rand = RNG::generate(1, 200);														// kL
+//			int power = static_cast<int>(((pow(static_cast<double>(rand), 3)) / 32000.0) + 50.0);	// kL
 
 //			power = 300; // TEST!
-			Log(LOG_INFO) << "BattlescapeGenerator::explodePowerSources() power = " << power;
-			_save->getTileEngine()->explode(														// kL
+			Log(LOG_INFO) << ". power = " << power;
+			_save->getTileEngine()->explode( // kL
 										pos,
 										power,
 										DT_HE,

@@ -69,7 +69,8 @@ private:
 		_crashId,
 		_landId,
 		_shootingAt,
-		_shotDownByCraftId;
+		_shotDownByCraftId,
+		_crashPS; // kL
 	unsigned
 		_secondsRemaining,
 		_trajectoryPoint;
@@ -121,6 +122,8 @@ private:
 		int getDamage() const;
 		/// Sets the UFO's amount of damage.
 		void setDamage(int damage);
+		/// kL. Gets the UFO's percentage of damage.
+		int getDamagePercentage() const;
 
 		/// Gets the UFO's detection status.
 		bool getDetected() const;
@@ -221,6 +224,11 @@ private:
 		int getCrashId() const;
 		/// Sets the UFO's crash site ID.
 		void setCrashId(int id);
+
+		/// kL. Gets the UFO's powerSource explosive-power-factor.
+		int getCrashPS() const;
+		/// kL. Sets the UFO's powerSource explosive-power-factor.
+		void setCrashPS(int percDamage);
 };
 
 }

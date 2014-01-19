@@ -75,12 +75,12 @@ SoldierInfoState::SoldierInfoState(
 	_btnPrev		= new TextButton(29, 16, 0, 32);
 	_btnOk			= new TextButton(49, 16, 30, 32);
 	_btnNext		= new TextButton(29, 16, 80, 32);
+	_btnAutoStat	= new TextButton(49, 16, 110, 32);
 
-	_txtArmor		= new Text(30, 9, 130, 35);
-	_btnArmor		= new TextButton(73, 16, 162, 32);
+	_txtArmor		= new Text(30, 9, 208, 35);
+	_btnArmor		= new TextButton(73, 16, 240, 32);
 
 	_edtSoldier		= new TextEdit(179, 16, 40, 9);
-	_btnAutoStat	= new TextButton(46, 17, 219, 7); // kL
 	_btnSack		= new TextButton(46, 17, 267, 7);
 
 	_txtRank		= new Text(130, 9, 0, 49);

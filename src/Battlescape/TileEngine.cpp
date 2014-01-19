@@ -1945,7 +1945,8 @@ void TileEngine::explode(
 			int maxRadius,
 			BattleUnit* unit)
 {
-	Log(LOG_INFO) << "TileEngine::explode() power = " << power << " ; type = " << (int)type << " ; maxRadius = " << maxRadius;
+	Log(LOG_INFO) << "TileEngine::explode() power = " << power
+		<< " ; type = " << (int)type << " ; maxRadius = " << maxRadius;
 
 	double centerZ = static_cast<double>((voxelTarget.z / 24) + 0.5); // kL
 	double centerX = static_cast<double>((voxelTarget.x / 16) + 0.5); // kL
@@ -1964,9 +1965,9 @@ void TileEngine::explode(
 		Log(LOG_INFO) << ". DT_IN power = " << power;
 	}
 
-	int vertdec = 1000; // default flat explosion
-
-	int exHeight = std::max(
+	int
+		vertdec = 1000, // default flat explosion
+		exHeight = std::max(
 						0,
 						std::min(
 								3,
@@ -1978,24 +1979,22 @@ void TileEngine::explode(
 	{
 		case 1:
 			vertdec = 30;
-			break;
+		break;
 		case 2:
-//kL			vertdec = 10;
-			vertdec = 20;		// kL
-			break;
+			vertdec = 20;
+		break;
 		case 3:
-//kL			vertdec = 5;
-			vertdec = 10;		// kL
+			vertdec = 10;
+		break;
 	}
 
+//	for (int fi = 0; fi <= 0; fi += 10)
 	for (int
 			fi = -90;
 			fi <= 90;
 			fi += 5)
-//	for (int fi = 0; fi <= 0; fi += 10)
 	{
-		// raytrace every 3 degrees makes sure we cover all tiles in a circle.
-		for (int
+		for (int // raytracing every 3 degrees makes sure we cover all tiles in a circle.
 				te = 0;
 				te <= 360;
 				te += 3)
@@ -2019,8 +2018,9 @@ void TileEngine::explode(
 				tileY,
 				tileZ;
 
-			penetration = power_; // Wb.140118
 			power_ = power + 1;
+			penetration = power_; // Wb.140118
+
 			while (power_ > 0
 				&& l <= static_cast<double>(maxRadius))
 			{
@@ -2032,7 +2032,10 @@ void TileEngine::explode(
 				tileX = static_cast<int>(floor(vx));
 				tileY = static_cast<int>(floor(vy));
 
-				Tile* dest = _save->getTile(Position(tileX, tileY, tileZ));
+				Tile* dest = _save->getTile(Position(
+													tileX,
+													tileY,
+													tileZ));
 
 				if (!dest) break; // out of map!
 
@@ -2056,7 +2059,16 @@ void TileEngine::explode(
 							power_ -= 5; // diagonal movement costs an extra 50% for fire.
 					}
 
-					penetration = power_ - (horizontalBlockage(origin, dest, type) + verticalBlockage(origin, dest, type)) * 2; // Wb.140118
+					penetration = power_ // Wb.140118
+									- (horizontalBlockage(
+														origin,
+														dest,
+														type)
+											+ verticalBlockage(
+															origin,
+															dest,
+															type))
+										* 2;
 				}
 
 //Wb				if (power_ > 0)
@@ -2139,8 +2151,8 @@ void TileEngine::explode(
 										// ground zero effect is in effect
 //kL										dest->getUnit()->damage(Position(0, 0, 0), (int)(RNG::generate(power_/2.0, power_*1.5)), type);
 										int powerVsUnit = static_cast<int>(RNG::generate( // 50% to 150%
-																	static_cast<float>(power_) * 0.5f,
-																	static_cast<float>(power_) * 1.5f)); // kL
+																	static_cast<double>(power_) * 0.5,
+																	static_cast<double>(power_) * 1.5)); // kL
 										Log(LOG_INFO) << ". . . powerVsUnit = " << powerVsUnit << " DT_HE, GZ";
 
 										if (targetUnit->isKneeled()) // kL
@@ -2160,8 +2172,8 @@ void TileEngine::explode(
 										// units above the explosion will be hit in the legs, units lateral to or below will be hit in the torso
 //kL										dest->getUnit()->damage(Position(centerX, centerY, centerZ + 5) - dest->getPosition(), (int)(RNG::generate(power_/2.0, power_*1.5)), type);
 										int powerVsUnit = static_cast<int>(RNG::generate( // 50% to 150%
-																	static_cast<float>(power_) * 0.5f,
-																	static_cast<float>(power_) * 1.5f)); // kL
+																	static_cast<double>(power_) * 0.5,
+																	static_cast<double>(power_) * 1.5)); // kL
 										Log(LOG_INFO) << ". . . powerVsUnit = " << powerVsUnit << " DT_HE, not GZ";
 
 										if (targetUnit->isKneeled()) // kL
@@ -2329,7 +2341,7 @@ void TileEngine::explode(
  */
 bool TileEngine::detonate(Tile* tile)
 {
-	//Log(LOG_INFO) << "TileEngine::detonate()";
+	Log(LOG_INFO) << "TileEngine::detonate()";
 
 	int explosive = tile->getExplosive();
 	tile->setExplosive(0, true);
@@ -2359,13 +2371,18 @@ bool TileEngine::detonate(Tile* tile)
 
 	if (explosive)
 	{
-		int remainingPower = explosive;
-		int flam = tile->getFlammability();
-		int fuel = tile->getFuel() + 1;
-
 		// explosions create smoke which only stays 1 or 2 turns; kL_note: or 3
 		// smoke added to an already smoking tile will increase smoke to max.15
-		tile->setSmoke(std::max(1, std::min(tile->getSmoke() + RNG::generate(0, 3), 15)));
+		tile->setSmoke(
+					std::max(
+							1,
+							std::min(
+									tile->getSmoke() + RNG::generate(0, 3),
+									15)));
+
+		int fuel = tile->getFuel() + 1;
+		int flam = tile->getFlammability();
+		int remainingPower = explosive;
 
 		for (int
 				i = 0;
@@ -2376,15 +2393,14 @@ bool TileEngine::detonate(Tile* tile)
 				&& tiles[i]->getMapData(parts[i]))
 			{
 				remainingPower = explosive;
-				while (remainingPower >= 0
+				while (remainingPower > -1
 					&& tiles[i]->getMapData(parts[i]))
 				{
 					remainingPower -= 2 * tiles[i]->getMapData(parts[i])->getArmor();
 					if (remainingPower >= 0)
 					{
 						int volume = 0;
-						// get the volume of the object by checking its loftemps objects.
-						for (int
+						for (int // get the volume of the object by checking its loftemps objects.
 								j = 0;
 								j < 12;
 								j++)
@@ -2397,12 +2413,18 @@ bool TileEngine::detonate(Tile* tile)
 						{
 							tiles[i]->setFire(0);
 
-							int smoke = RNG::generate(0, (volume / 2) + 2);
-							smoke += (volume / 2) + 1;
+							int
+								smoke = RNG::generate(
+													0,
+													(volume / 2) + 2);
+								smoke += (volume / 2) + 1;
+
 							if (smoke > tiles[i]->getSmoke())
-							{
-								tiles[i]->setSmoke(std::max(0, std::min(smoke, 15)));
-							}
+								tiles[i]->setSmoke(std::max(
+														0,
+														std::min(
+																smoke,
+																15)));
 						}
 
 						if (_save->getMissionType() == "STR_BASE_DEFENSE"
@@ -2414,9 +2436,7 @@ bool TileEngine::detonate(Tile* tile)
 						}
 
 						if (tiles[i]->destroy(parts[i]))
-						{
 							objective = true;
-						}
 
 						if (tiles[i]->getMapData(parts[i]))
 						{
@@ -2426,15 +2446,20 @@ bool TileEngine::detonate(Tile* tile)
 					}
 				}
 
-				if (2 * flam < remainingPower)
+				if (remainingPower > flam * 2)
 				{
 					tile->setFire(fuel);
-					tile->setSmoke(std::max(1, std::min(15 - (flam / 10), 12)));
+					tile->setSmoke(std::max(
+										1,
+										std::min(
+												15 - (flam / 10),
+												12)));
 				}
 			}
 		}
 	}
 
+	Log(LOG_INFO) << "TileEngine::detonate() EXIT, objective = " << objective;
 	return objective;
 }
 
@@ -2484,7 +2509,7 @@ int TileEngine::verticalBlockage(
 
 	int x = startTile->getPosition().x;
 	int y = startTile->getPosition().y;
-	int z = startTile->getPosition().z;		// kL
+	int z = startTile->getPosition().z; // kL
 
 	if (direction < 0) // down
 	{
@@ -2573,7 +2598,9 @@ int TileEngine::horizontalBlockage(
 		return 0;
 
 	int direction; // kL_note: should this be (int&)
-	Pathfinding::vectorToDirection(endTile->getPosition() - startTile->getPosition(), direction);
+	Pathfinding::vectorToDirection(
+								endTile->getPosition() - startTile->getPosition(),
+								direction);
 
 	if (direction == -1)
 		return 0;
@@ -2608,8 +2635,9 @@ int TileEngine::horizontalBlockage(
 				if (!endTile->getMapData(MapData::O_OBJECT)) // Wb.+
 				{
 					block += (blockage(_save->getTile(startTile->getPosition() + oneTileEast), MapData::O_OBJECT, type, direction)
-							+ blockage(_save->getTile(startTile->getPosition() + oneTileNorth), MapData::O_OBJECT, type, 4)
-							+ blockage(_save->getTile(startTile->getPosition() + oneTileNorth), MapData::O_OBJECT, type, 2)) / 2;
+								+ blockage(_save->getTile(startTile->getPosition() + oneTileNorth), MapData::O_OBJECT, type, 4)
+								+ blockage(_save->getTile(startTile->getPosition() + oneTileNorth), MapData::O_OBJECT, type, 2))
+							/ 2;
 				} // Wb.-
 
 /*				if (type == DT_HE)
@@ -2625,7 +2653,7 @@ int TileEngine::horizontalBlockage(
 			}
 		break;
 		case 2: // east
-			block = blockage(endTile,MapData::O_WESTWALL, type);
+			block = blockage(endTile, MapData::O_WESTWALL, type);
 		break;
 		case 3: // south east
 			if (type == DT_NONE)
@@ -2651,7 +2679,8 @@ int TileEngine::horizontalBlockage(
 				if (!endTile->getMapData(MapData::O_OBJECT)) // Wb+
 				{
 					block += (blockage(_save->getTile(startTile->getPosition() + oneTileSouth), MapData::O_OBJECT, type, 2)
-							+ blockage(_save->getTile(startTile->getPosition() + oneTileEast), MapData::O_OBJECT, type, 4)) / 2;
+								+ blockage(_save->getTile(startTile->getPosition() + oneTileEast), MapData::O_OBJECT, type, 4))
+							/ 2;
 				} // Wb-
 
 /*				if (type == DT_HE)
@@ -2686,12 +2715,13 @@ int TileEngine::horizontalBlockage(
 //Wb.						+ (blockage(_save->getTile(startTile->getPosition() + oneTileWest), MapData::O_OBJECT, type, 2)
 //huh							+ blockage(_save->getTile(startTile->getPosition() + oneTileWest), MapData::O_OBJECT, type, 4)) / 2;
 
-				if (!endTile->getMapData(MapData::O_OBJECT))
+				if (!endTile->getMapData(MapData::O_OBJECT)) // Wb+
 				{
 					block += (blockage(_save->getTile(startTile->getPosition() + oneTileSouth), MapData::O_OBJECT, type, direction)
-							+ blockage(_save->getTile(startTile->getPosition() + oneTileWest), MapData::O_OBJECT, type, 2)
-							+ blockage(_save->getTile(startTile->getPosition() + oneTileWest), MapData::O_OBJECT, type, 4))/2;
-				}
+								+ blockage(_save->getTile(startTile->getPosition() + oneTileWest), MapData::O_OBJECT, type, 2)
+								+ blockage(_save->getTile(startTile->getPosition() + oneTileWest), MapData::O_OBJECT, type, 4))
+							/ 2;
+				} // Wb-
 
 /*				if (type == DT_HE)
 					block += (blockage(_save->getTile(startTile->getPosition() + oneTileSouth), MapData::O_OBJECT, type, 0) +
@@ -2725,11 +2755,12 @@ int TileEngine::horizontalBlockage(
 //Wb.					+ (blockage(_save->getTile(startTile->getPosition() + oneTileNorth), MapData::O_OBJECT, type, 4)
 //Wb.						+ blockage(_save->getTile(startTile->getPosition() + oneTileWest), MapData::O_OBJECT, type, 2))/2;
 
-				if (!endTile->getMapData(MapData::O_OBJECT))
+				if (!endTile->getMapData(MapData::O_OBJECT)) // Wb+
 				{
 					block += (blockage(_save->getTile(startTile->getPosition() + oneTileNorth), MapData::O_OBJECT, type, 4)
-							+ blockage(_save->getTile(startTile->getPosition() + oneTileWest), MapData::O_OBJECT, type, 2)) / 2;
-				}
+								+ blockage(_save->getTile(startTile->getPosition() + oneTileWest), MapData::O_OBJECT, type, 2))
+							/ 2;
+				} // Wb-
 
 /*				if (type == DT_HE)
 					block += (blockage(_save->getTile(startTile->getPosition() + oneTileNorth), MapData::O_OBJECT, type, 4) +

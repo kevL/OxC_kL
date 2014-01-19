@@ -57,12 +57,12 @@ BattlescapeMessage::BattlescapeMessage(
 	_window->setColor(Palette::blockOffset(0)-1);
 	_window->setHighContrast(true);
 
-	// 'hidden movement' text
+	// 'Hidden Movement' text
 	_text = new Text(
 					width - 12,
-					height - 13,
+					height - 12,
 					x,
-					y + 13);
+					y + 12);
 	_text->setColor(Palette::blockOffset(0)-1);
 	_text->setAlign(ALIGN_CENTER);
 	_text->setVerticalAlign(ALIGN_MIDDLE);
