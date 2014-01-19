@@ -64,14 +64,15 @@ private:
 		_weapon1Enabled,
 		_weapon2Enabled,
 		_minimized,
-		_endDogfight;
+		_endDogfight,
+		_lastHitAnimFrame;
 	int
 		_timeout,
 		_currentDist,
 		_targetDist,
 		_currentRadius,
 		_ufoFireInterval,
-		_ufoHitFrame;
+//		_ufoHitFrame;
 	int
 		_ufoSize,
 		_craftHeight,

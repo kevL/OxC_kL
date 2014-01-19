@@ -261,7 +261,7 @@ DogfightState::DogfightState(
 		_timeout(50),
 		_currentDist(640),
 		_targetDist(560),
-		_ufoHitFrame(0),
+//		_ufoHitFrame(0),
 		_end(false),
 		_destroyUfo(false),
 		_destroyCraft(false),
@@ -278,7 +278,8 @@ DogfightState::DogfightState(
 		_x(0),
 		_y(0),
 		_minimizedIconX(0),
-		_minimizedIconY(0)
+		_minimizedIconY(0),
+		_lastHitAnimFrame(false)
 {
 	_screen = false;
 
@@ -801,22 +802,15 @@ void DogfightState::animate()
 	else
 		_timeout--;
 
-	// Animate UFO hit.
-	bool lastHitAnimFrame = false;
-	if (_ufoHitFrame > 0)
-	{
-		--_ufoHitFrame;
-
-		if (_ufoHitFrame == 0)
-			lastHitAnimFrame = true;
-	}
-
 	// Animate UFO crash landing.
+	bool lastHitAnimFrame = false;
 	if (_ufo->isCrashed()
-		&& _ufoHitFrame == 0
-		&& !lastHitAnimFrame)
+		&& _ufo->getHitFrame() == 0)
 	{
-		--_ufoSize;
+		if (_lastHitAnimFrame)
+			--_ufoSize;
+		else
+			_lastHitAnimFrame = true;
 	}
 }
 
@@ -933,6 +927,17 @@ void DogfightState::move()
 
 			if (p->getDirection() == D_UP) // Projectiles fired by interceptor.
 			{
+				// Check if projectile passed its maximum range.
+				if (p->getGlobalType() == CWPGT_MISSILE)
+				{
+					if (p->getPosition() / 8 >= p->getRange())
+					{
+						p->remove();
+
+						continue;
+					}
+				}
+
 				// Projectile reached the UFO - determine if it's been hit.
 				if ((p->getPosition() >= _currentDist
 						|| (p->getGlobalType() == CWPGT_BEAM
@@ -948,10 +953,14 @@ void DogfightState::move()
 						_ufo->setDamage(_ufo->getDamage() + damage);
 
 						if (_ufo->isCrashed())
+						{
 							_ufo->setShotDownByCraftId(_craft->getId());
+							_ufoBreakingOff = false;
+							_ufo->setSpeed(0);
+						}
 
-						if (_ufoHitFrame == 0)
-							_ufoHitFrame = 3;
+						if (_ufo->getHitFrame() == 0)
+							_ufo->setHitFrame(3);
 
 						setStatus("STR_UFO_HIT");
 						_currentRadius += 4;
@@ -971,12 +980,10 @@ void DogfightState::move()
 					}
 				}
 
-				if (p->getGlobalType() == CWPGT_MISSILE) // Check if projectile passed its maximum range.
+				if (p->getGlobalType() == CWPGT_MISSILE
+					&& !_ufo->isCrashed())
 				{
-					if (p->getPosition() / 8 > p->getRange())
-						p->remove();
-					else if (!_ufo->isCrashed())
-						projectileInFlight = true;
+					projectileInFlight = true;
 				}
 			}
 			else if (p->getDirection() == D_DOWN) // Projectiles fired by UFO.
@@ -1156,11 +1163,11 @@ void DogfightState::move()
 		_w2Timer->stop();
 	}
 	
-	if (!_end // end dogfight if UFO is crashed.
+	if (!_end // end dogfight if UFO is crashed, or destroyed.
 		&& _ufo->isCrashed())
 	{
-		_ufoBreakingOff = false;
-		_ufo->setSpeed(0);
+//		_ufoBreakingOff = false;
+//		_ufo->setSpeed(0);
 
 		AlienMission* mission = _ufo->getMission();
 		mission->ufoShotDown(
@@ -1316,12 +1323,12 @@ void DogfightState::move()
 		if (_ufo->getShotDownByCraftId() != _craft->getId())
 		{
 			_timeout += 50;
-			_ufoHitFrame = 3;
+			_ufo->setHitFrame(3);
 		}
 
-		_ufoBreakingOff = false;
+//		_ufoBreakingOff = false;
 		finalRun = true;
-		_ufo->setSpeed(0);
+//		_ufo->setSpeed(0);
 	}
 
 	if (!_end
@@ -1742,7 +1749,7 @@ void DogfightState::drawUfo()
 				x < 13;
 				++x)
 		{
-			Uint8 pixelOffset = _ufoBlobs[_ufoSize + _ufoHitFrame][y][x];
+			Uint8 pixelOffset = _ufoBlobs[_ufoSize + _ufo->getHitFrame()][y][x];
 			if (pixelOffset == 0)
 			{
 				continue;
@@ -1750,7 +1757,7 @@ void DogfightState::drawUfo()
 			else
 			{
 				if (_ufo->isCrashed()
-					|| _ufoHitFrame > 0)
+					|| _ufo->getHitFrame() > 0)
 				{
 					pixelOffset *= 2;
 				}

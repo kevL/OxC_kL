@@ -69,6 +69,7 @@ private:
 		_crashId,
 		_landId,
 		_shootingAt,
+		_hitFrame,
 		_shotDownByCraftId,
 		_crashPS; // kL
 	unsigned
@@ -224,6 +225,11 @@ private:
 		int getCrashId() const;
 		/// Sets the UFO's crash site ID.
 		void setCrashId(int id);
+
+		/// Gets the UFO's hit frame.
+		int getHitFrame() const;
+		/// Sets the UFO's hit frame.
+		void setHitFrame(int frame);
 
 		/// kL. Gets the UFO's powerSource explosive-power-factor.
 		int getCrashPS() const;

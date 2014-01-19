@@ -68,6 +68,7 @@ Ufo::Ufo(RuleUfo* rules)
 		_detected(false),
 		_hyperDetected(false),
 		_shootingAt(0),
+		_hitFrame(0),
 		_crashPS(0)
 {
 }
@@ -828,6 +829,18 @@ int Ufo::getCrashId() const
 void Ufo::setCrashId(int id)
 {
 	_crashId = id;
+}
+
+/// Gets the UFO's hit frame.
+int Ufo::getHitFrame() const
+{
+	return _hitFrame;
+}
+
+/// Sets the UFO's hit frame.
+void Ufo::setHitFrame(int frame)
+{
+	_hitFrame = frame;
 }
 
 /**
