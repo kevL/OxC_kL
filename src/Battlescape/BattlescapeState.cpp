@@ -1042,16 +1042,27 @@ void BattlescapeState::mapIn(Action*)
  */
 void BattlescapeState::btnUnitUpClick(Action*)
 {
-	if (playableUnitSelected()
-		&& _save->getPathfinding()->validateUpDown(
+	if (!playableUnitSelected()) return;
+
+	int valid = _save->getPathfinding()->validateUpDown(
 												_save->getSelectedUnit(),
 												_save->getSelectedUnit()->getPosition(),
-												Pathfinding::DIR_UP))
+												Pathfinding::DIR_UP);
+
+	if (valid > 0) // gravLift or flying
 	{
 		_battleGame->cancelCurrentAction();
 		_battleGame->moveUpDown(
 							_save->getSelectedUnit(),
 							Pathfinding::DIR_UP);
+	}
+	else if (valid == -1) // kneeling
+	{
+		warning("STR_ACTION_NOT_ALLOWED_KNEEL");
+	}
+	else // blocked, roof
+	{
+		warning("STR_ACTION_NOT_ALLOWED_ROOF");
 	}
 }
 
@@ -1061,16 +1072,23 @@ void BattlescapeState::btnUnitUpClick(Action*)
  */
 void BattlescapeState::btnUnitDownClick(Action*)
 {
-	if (playableUnitSelected()
-		&& _save->getPathfinding()->validateUpDown(
+	if (!playableUnitSelected()) return;
+
+	int valid = _save->getPathfinding()->validateUpDown(
 												_save->getSelectedUnit(),
 												_save->getSelectedUnit()->getPosition(),
-												Pathfinding::DIR_DOWN))
+												Pathfinding::DIR_DOWN);
+
+	if (valid > 0) // gravLift or flying
 	{
 		_battleGame->cancelCurrentAction();
 		_battleGame->moveUpDown(
 							_save->getSelectedUnit(),
 							Pathfinding::DIR_DOWN);
+	}
+	else // blocked, floor
+	{
+		warning("STR_ACTION_NOT_ALLOWED_FLOOR");
 	}
 }
 

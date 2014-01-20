@@ -32,6 +32,7 @@ class BattleUnit;
 class BattleItem;
 class Tile;
 
+
 /**
  * A projectile state.
  */
@@ -55,15 +56,16 @@ private:
 
 
 	public:
-		/// Creates a new ProjectileFly class
+		/// Creates a new ProjectileFlyB class
 		ProjectileFlyBState(
 				BattlescapeGame* parent,
 				BattleAction action);
+		/// Creates a new ProjectileFlyB class
 		ProjectileFlyBState(
 				BattlescapeGame* parent,
 				BattleAction action,
 				Position origin);
-		/// Cleans up the ProjectileFly.
+		/// Cleans up the ProjectileFlyB.
 		~ProjectileFlyBState();
 
 		/// Initializes the state.

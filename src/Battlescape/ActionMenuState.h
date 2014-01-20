@@ -46,8 +46,8 @@ private:
 
 	/// Adds a new menu item for an action.
 	void addItem(
-			BattleActionType ba,
-			const std::string& name,
+			BattleActionType baType,
+			const std::string& desc,
 			int* id);
 
 

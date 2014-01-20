@@ -2764,7 +2764,7 @@ void BattlescapeGenerator::fuelPowerSources()
 
 /**
  * When a UFO crashes, there is a 75% chance for each powersource to explode.
- * kL_note: 80% -> now depends entirely on how much damage the UFO took during dogfight!!!!
+ * kL_note: 80% -> plus explosive power depends on damage taken during dogfight!!!!
  */
 void BattlescapeGenerator::explodePowerSources()
 {
@@ -2775,8 +2775,8 @@ void BattlescapeGenerator::explodePowerSources()
 			++i)
 	{
 		if (_save->getTiles()[i]->getMapData(MapData::O_OBJECT)
-			&& _save->getTiles()[i]->getMapData(MapData::O_OBJECT)->getSpecialType() == UFO_POWER_SOURCE)
-//kL			&& RNG::percent(80))
+			&& _save->getTiles()[i]->getMapData(MapData::O_OBJECT)->getSpecialType() == UFO_POWER_SOURCE
+			&& RNG::percent(80))
 		{
 			Position pos;
 			pos.x = _save->getTiles()[i]->getPosition().x * 16;

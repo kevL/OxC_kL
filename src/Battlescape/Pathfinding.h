@@ -58,6 +58,7 @@ private:
 
 	/// Gets the node at a position.
 	PathfindingNode* getNode(const Position& pos);
+
 	/// Determines whether a tile blocks a movementType.
 	bool isBlocked(
 			Tile* tile,
@@ -78,35 +79,39 @@ private:
 			BattleUnit* missileTarget,
 			bool sneak = false,
 			int maxTUCost = 1000);
+
 	/// Determines whether a unit can fall down from this tile.
 	bool canFallDown(Tile* destinationTile);
 	/// Determines whether a unit can fall down from this tile.
-	bool canFallDown(Tile* destinationTile, int size);
+	bool canFallDown(
+			Tile* destinationTile,
+			int size);
 	/// Determines the additional TU cost of going one step from
 	/// start to destination if going through a closed UFO door.
 //	int getOpeningUfoDoorCost(int direction, Position start, Position destination);
 
 
 	public:
-		static const int DIR_UP = 8;
-		static const int DIR_DOWN = 9;
-		static const int O_BIGWALL = -1;
+		static const int DIR_UP		= 8;
+		static const int DIR_DOWN	= 9;
+		static const int O_BIGWALL	= -1;
 
 		enum bigWallTypes
 		{
-			BLOCK = 1,
-			BIGWALLNESW,
-			BIGWALLNWSE,
-			BIGWALLWEST,
-			BIGWALLNORTH,
-			BIGWALLEAST,
-			BIGWALLSOUTH,
-			BIGWALLEASTANDSOUTH
+			BLOCK = 1,			// 1
+			BIGWALLNESW,		// 2
+			BIGWALLNWSE,		// 3
+			BIGWALLWEST,		// 4
+			BIGWALLNORTH,		// 5
+			BIGWALLEAST,		// 6
+			BIGWALLSOUTH,		// 7
+			BIGWALLEASTANDSOUTH	// 8
 		};
 
 		std::vector<int> _path;
 
 
+		/// cTor
 		Pathfinding(SavedBattleGame* save);
 		/// Cleans up the Pathfinding.
 		~Pathfinding();
@@ -157,7 +162,7 @@ private:
 		}
 
 		/// Checks if the movement is valid, for the up/down button.
-		bool validateUpDown(
+		int validateUpDown(
 				BattleUnit* bu,
 				Position startPosition,
 				int const direction);

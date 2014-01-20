@@ -71,7 +71,7 @@ private:
 		_currentDist,
 		_targetDist,
 		_currentRadius,
-		_ufoFireInterval,
+		_ufoFireInterval;
 //		_ufoHitFrame;
 	int
 		_ufoSize,

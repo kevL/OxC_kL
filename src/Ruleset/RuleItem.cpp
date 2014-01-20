@@ -593,9 +593,7 @@ int RuleItem::getExplosionRadius() const
 	if (_blastRadius == -1)
 	{
 		if (_damageType == DT_IN)
-		{
 			radius = (_power / 30) + 1;
-		}
 		else if (_damageType == DT_HE
 			|| _damageType == DT_STUN)
 		{
@@ -603,9 +601,7 @@ int RuleItem::getExplosionRadius() const
 		}
 	}
 	else
-	{
 		radius = _blastRadius;
-	}
 
 /*kL. I hate caps...
 	if (radius > 11)
@@ -732,7 +728,9 @@ int RuleItem::getAutoShots() const
 */
 bool RuleItem::isRifle() const
 {
-	return (_battleType == BT_FIREARM || _battleType == BT_MELEE) && _twoHanded;
+	return (_battleType == BT_FIREARM
+				|| _battleType == BT_MELEE)
+			&& _twoHanded;
 }
 
 /**
@@ -741,7 +739,9 @@ bool RuleItem::isRifle() const
 */
 bool RuleItem::isPistol() const
 {
-	return (_battleType == BT_FIREARM || _battleType == BT_MELEE) && !_twoHanded;
+	return (_battleType == BT_FIREARM
+				|| _battleType == BT_MELEE)
+			&& !_twoHanded;
 }
 
 }

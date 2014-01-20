@@ -68,13 +68,14 @@ enum BattleActionType
 struct BattleAction
 {
 	bool
+		autoShotKill, // kL
 		desperate, // ignoring newly-spotted units
 		finalAction,
 		run,
 		strafe,
 		targeting;
 	int
-		autoShotCounter,
+		autoShotCount,
 		diff,
 		finalFacing,
 		number, // first action of turn, second, etc.?
@@ -105,7 +106,8 @@ struct BattleAction
 			strafe(false),
 			run(false),
 			diff(0),
-			autoShotCounter(0),
+			autoShotCount(0),
+			autoShotKill(false), // kL
 			cameraPosition(0, 0, -1),
 			desperate(false),
 			finalFacing(-1),

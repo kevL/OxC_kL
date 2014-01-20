@@ -703,8 +703,14 @@ int Pathfinding::getTUCost(
 				&& endPosition->z == startTile->getPosition().z)
 			{
 				// check if we can go this way
-				if (isBlocked(startTile, destTile, direction, target))
+				if (isBlocked(
+							startTile,
+							destTile,
+							direction,
+							target))
+				{
 					return 255;
+				}
 
 				if (startTile->getTerrainLevel() - destTile->getTerrainLevel() > 8)
 					return 255;
@@ -712,14 +718,16 @@ int Pathfinding::getTUCost(
 			else if (direction >= DIR_UP)
 			{
 				// check if we can go up or down through gravlift or fly
-				if (validateUpDown(unit, startPosition + offset, direction))
+				if (validateUpDown(
+								unit,
+								startPosition + offset,
+								direction)
+							> 0)
 				{
 					cost = 8; // vertical movement by flying suit or grav lift
 				}
 				else
-				{
 					return 255;
-				}
 			}
 
 			// check if we have floor, else fall down
@@ -1434,9 +1442,13 @@ bool Pathfinding::canFallDown(
  * @param bu, Pointer to unit.
  * @param startPosition, Unit starting position.
  * @param direction, Up or Down
- * @return bool, True if movement is valid.
+ * @return int,
+				0:blocked (stop),
+				1:gravLift (go),
+				2:flying (go unless blocked),
+				-1:kneeling (stop unless on gravLift).
  */
-bool Pathfinding::validateUpDown(
+int Pathfinding::validateUpDown(
 		BattleUnit* bu,
 		Position startPosition,
 		int const direction)
@@ -1456,10 +1468,15 @@ bool Pathfinding::validateUpDown(
 		&& destTile->getMapData(MapData::O_FLOOR)
 		&& destTile->getMapData(MapData::O_FLOOR)->isGravLift())
 	{
-		return true;
+//		return true;
+		return 1; // gravLift, kneeling or not, flying or not: Go
 	}
-	else if (bu->getArmor()->getMovementType() == MT_FLY
-		&& !bu->isKneeled()) // kL
+	else if (bu->isKneeled())
+	{
+		return -1; // stop.
+	}
+	else if (bu->getArmor()->getMovementType() == MT_FLY)
+//		&& !bu->isKneeled()) // kL
 	{
 		Tile* belowStart = _save->getTile(startPosition + Position(0, 0, -1));
 
@@ -1470,11 +1487,13 @@ bool Pathfinding::validateUpDown(
 				&& destTile
 				&& startTile->hasNoFloor(belowStart))) // falling down only possible when there is no floor
 		{
-			return true;
+//			return true;
+			return 2;
 		}
 	}
 
-	return false;
+//	return false;
+	return 0; // not gravLift, not flying, or blocked (not kneeling too, friend). Stop!
 }
 
 /**

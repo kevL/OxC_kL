@@ -75,10 +75,10 @@ ActionMenuState::ActionMenuState(
 			++i)
 	{
 		_actionMenu[i] = new ActionMenuItem(
-									i,
-									_game,
-									x,
-									y);
+										i,
+										_game,
+										x,
+										y);
 		add(_actionMenu[i]);
 
 		_actionMenu[i]->setVisible(false);
@@ -90,9 +90,7 @@ ActionMenuState::ActionMenuState(
 	int id = 0;
 
 	if (!weapon->isFixed()) // throwing (if not a fixed weapon)
-	{
 		addItem(BA_THROW, "STR_THROW", &id);
-	}
 
 	if ((weapon->getBattleType() == BT_GRENADE
 			|| weapon->getBattleType() == BT_PROXIMITYGRENADE)
@@ -115,39 +113,27 @@ ActionMenuState::ActionMenuState(
 		if (_action->weapon->getAmmoItem()) // kL
 		{
 			if (weapon->getAccuracyAuto() != 0)
-			{
 				addItem(BA_AUTOSHOT, "STR_AUTO_SHOT", &id);
-			}
+
 			if (weapon->getAccuracySnap() != 0)
-			{
 				addItem(BA_SNAPSHOT, "STR_SNAP_SHOT", &id);
-			}
+
 			if (weapon->getAccuracyAimed() != 0)
-			{
 				addItem(BA_AIMEDSHOT, "STR_AIMED_SHOT", &id);
-			}
 		}
 	}
 	else if (weapon->getBattleType() == BT_MELEE)
 	{
 		if (weapon->getDamageType() == DT_STUN) // stun rod
-		{
 			addItem(BA_HIT, "STR_STUN", &id);
-		}
 		else
-		{
 			addItem(BA_HIT, "STR_HIT_MELEE", &id); // melee weapon
-		}
 	}
 	/** special items */
 	else if (weapon->getBattleType() == BT_MEDIKIT)
-	{
 		addItem(BA_USE, "STR_USE_MEDI_KIT", &id);
-	}
 	else if (weapon->getBattleType() == BT_SCANNER)
-	{
 		addItem(BA_USE, "STR_USE_SCANNER", &id);
-	}
 	else if (weapon->getBattleType() == BT_PSIAMP
 		&& _action->actor->getStats()->psiSkill > 0)
 	{
@@ -155,9 +141,7 @@ ActionMenuState::ActionMenuState(
 		addItem(BA_PANIC, "STR_PANIC_UNIT", &id);
 	}
 	else if (weapon->getBattleType() == BT_MINDPROBE)
-	{
 		addItem(BA_USE, "STR_USE_MIND_PROBE", &id);
-	}
 }
 
 /**
@@ -169,30 +153,30 @@ ActionMenuState::~ActionMenuState()
 
 /**
  * Adds a new menu item for an action.
- * @param ba, Action type.
- * @param name, Action description.
+ * @param baType, Action type.
+ * @param desc, Action description.
  * @param id, Pointer to the new item ID.
  */
 void ActionMenuState::addItem(
-		BattleActionType ba,
-		const std::string& name,
+		BattleActionType baType,
+		const std::string& desc,
 		int* id)
 {
 	std::wstring
 		s1,
 		s2;
 
-	if (ba == BA_THROW
-		|| ba == BA_AIMEDSHOT
-		|| ba == BA_SNAPSHOT
-		|| ba == BA_AUTOSHOT
-//kL		|| ba == BA_LAUNCH
-		|| ba == BA_HIT)
+	if (baType == BA_THROW
+		|| baType == BA_AIMEDSHOT
+		|| baType == BA_SNAPSHOT
+		|| baType == BA_AUTOSHOT
+//kL		|| baType == BA_LAUNCH
+		|| baType == BA_HIT)
 	{
 		int acc = static_cast<int>(floor(_action->actor->getFiringAccuracy(
-																		ba,
+																		baType,
 																		_action->weapon) * 100.0));
-		if (ba == BA_THROW)
+		if (baType == BA_THROW)
 			acc = static_cast<int>(floor(_action->actor->getThrowingAccuracy() * 100.0));
 
 //kL		s1 = tr("STR_ACCURACY_SHORT").arg(Text::formatPercentage(acc));
@@ -200,12 +184,12 @@ void ActionMenuState::addItem(
 	}
 
 
-	int tu = _action->actor->getActionTUs(ba, _action->weapon);
+	int tu = _action->actor->getActionTUs(baType, _action->weapon);
 	s2 = tr("STR_TIME_UNITS_SHORT").arg(tu);
 
 	_actionMenu[*id]->setAction(
-							ba,
-							tr(name),
+							baType,
+							tr(desc),
 							s1,
 							s2,
 							tu);
@@ -221,6 +205,7 @@ void ActionMenuState::addItem(
 void ActionMenuState::handle(Action* action)
 {
 	State::handle(action);
+
 //kL	if (action->getDetails()->type == SDL_MOUSEBUTTONDOWN
 //kL		&& action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT) // kL
@@ -254,9 +239,7 @@ void ActionMenuState::btnActionMenuItemClick(Action* action)
 			++i)
 	{
 		if (action->getSender() == _actionMenu[i])
-		{
 			btnID = i;
-		}
 	}
 
 	if (btnID != -1)
@@ -269,17 +252,14 @@ void ActionMenuState::btnActionMenuItemClick(Action* action)
 			if (weapon->getBattleType() == BT_PROXIMITYGRENADE)
 			{
 				_action->value = 0;
-
 				_game->popState();
 			}
 			else
-			{
 				_game->pushState(new PrimeGrenadeState(
 													_game,
 													_action,
 													false,
 													0));
-			}
 		}
 		else if (_action->type == BA_USE
 			&& weapon->getBattleType() == BT_MEDIKIT)
@@ -325,7 +305,6 @@ void ActionMenuState::btnActionMenuItemClick(Action* action)
 			if (targetUnit)
 			{
 				_game->popState();
-
 				_game->pushState(new MedikitState(
 												_game,
 												targetUnit,
@@ -334,7 +313,6 @@ void ActionMenuState::btnActionMenuItemClick(Action* action)
 			else
 			{
 				_action->result = "STR_THERE_IS_NO_ONE_THERE";
-
 				_game->popState();
 			}
 		}
@@ -344,7 +322,6 @@ void ActionMenuState::btnActionMenuItemClick(Action* action)
 			if (_action->actor->spendTimeUnits(_action->TU)) // spend TUs first, then show the scanner
 			{
 				_game->popState();
-
 				_game->pushState(new ScannerState(
 												_game,
 												_action));
@@ -352,16 +329,13 @@ void ActionMenuState::btnActionMenuItemClick(Action* action)
 			else
 			{
 				_action->result = "STR_NOT_ENOUGH_TIME_UNITS";
-
 				_game->popState();
 			}
 		}
 		else if (_action->type == BA_LAUNCH)
 		{
 			if (_action->TU > _action->actor->getTimeUnits())
-			{
 				_action->result = "STR_NOT_ENOUGH_TIME_UNITS";
-			}
 			else if (_action->weapon->getAmmoItem() == 0
 				|| (_action->weapon->getAmmoItem()
 					&& _action->weapon->getAmmoItem()->getAmmoQuantity() == 0))
@@ -369,13 +343,12 @@ void ActionMenuState::btnActionMenuItemClick(Action* action)
 				_action->result = "STR_NO_AMMUNITION_LOADED";
 			}
 			else
-			{
 				_action->targeting = true;
-			}
 
 			_game->popState();
 		}
-		else if ((_action->type == BA_STUN || _action->type == BA_HIT)
+		else if ((_action->type == BA_STUN
+				|| _action->type == BA_HIT)
 			&& weapon->getBattleType() == BT_MELEE)
 		{
 			if (!_game->getSavedGame()->getSavedBattle()->getTileEngine()->validMeleeRange(
@@ -384,16 +357,13 @@ void ActionMenuState::btnActionMenuItemClick(Action* action)
 																					_action->actor,
 																					0,
 																					&_action->target))
-			{
 				_action->result = "STR_THERE_IS_NO_ONE_THERE";
-			}
 
 			_game->popState();
 		}
 		else
 		{
 			_action->targeting = true;
-
 			_game->popState();
 		}
 	}

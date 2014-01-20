@@ -120,69 +120,85 @@ void ExplosionBState::init()
 		_areaOfEffect = true;
 	}
 
-	Tile* t = _parent->getSave()->getTile(Position(
-												_center.x / 16,
-												_center.y / 16,
-												_center.z / 24));
+
+//kL	Tile* tileCenter = _parent->getSave()->getTile(Position(
+//kL												_center.x / 16,
+//kL												_center.y / 16,
+//kL												_center.z / 24));
+	Position posCenter_voxel = _center; // voxelspace
+	Position posCenter = Position(
+								_center.x / 16,
+								_center.y / 16,
+								_center.z / 24);
+
 	if (_areaOfEffect)
 	{
 		Log(LOG_INFO) << ". . new Explosion(AoE)'s";
 
 		if (_power > 0)
 		{
-			Position pos = _center; // voxelspace
+//kL			Position posCenter_voxel = _center; // voxelspace
 			int
 				startFrame = 0, // less than 0 will delay anim-start (total 8 Frames)
-				offset = _power / 3,
-				count = _power / 15;
-			if (count < 1)
-				count = 1;
+//				offset = _power / 2,
+//				animQty = _power / 14;
+				radius = _item->getRules()->getExplosionRadius(),
+				offset = radius * 5, // voxelspace
+				animQty = static_cast<int>(
+								sqrt(static_cast<double>(radius) * static_cast<double>(_power)))
+							/ 6;
+			if (animQty < 1)
+				animQty = 1;
 
 			for (int
 					i = 0;
-					i < count;
+					i < animQty;
 					i++)
 			{
 				if (i > 0) // 1st exp. is always centered.
 				{
 					startFrame = RNG::generate(-i, 0) - i / 2;
 
-					pos.x += RNG::generate(-offset, offset);
-					pos.y += RNG::generate(-offset, offset);
+					posCenter_voxel.x += RNG::generate(-offset, offset);
+					posCenter_voxel.y += RNG::generate(-offset, offset);
 				}
 
 //				Explosion* explosion = new Explosion(p, startFrame, true);
-				Explosion* explosion = new Explosion(
-													pos,
+
+				Explosion* explosion = new Explosion( // animation
+													posCenter_voxel + Position(20, 20, 0), // jogg the anim down a few pixels. Tks.
 													startFrame,
 													true);
 
 				_parent->getMap()->getExplosions()->insert(explosion); // add the explosion on the map
 			}
 
-//kL			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED);
-			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED * 6 / 7); // kL
+			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED);
+//			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED * 8 / 7); // kL
 
 			if (_power < 80)
 				_parent->getResourcePack()->getSound("BATTLE.CAT", 12)->play();
 			else
 				_parent->getResourcePack()->getSound("BATTLE.CAT", 5)->play();
 
-			_parent->getMap()->getCamera()->centerOnPosition(
-															t->getPosition(),
+//			if (!_parent->getMap()->getCamera()->isOnScreen(tileCenter->getPosition()))
+//				_parent->getMap()->getCamera()->centerOnPosition(
+//																tileCenter->getPosition(),
+//																false);
+			if (!_parent->getMap()->getCamera()->isOnScreen(posCenter))
+				_parent->getMap()->getCamera()->centerOnPosition(
+															posCenter,
 															false);
 		}
 		else
-		{
 			_parent->popState();
-		}
 	}
 	else // create a bullet hit, or melee hit, or psi-hit, or acid spit
 	{
 		Log(LOG_INFO) << ". . new Explosion(point)";
 
 //kL		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED / 2);
-		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED * 6 / 7); // kL
+		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED * 5 / 7); // kL
 
 		bool hit = _item->getRules()->getBattleType() == BT_MELEE
 				|| _item->getRules()->getBattleType() == BT_PSIAMP;
@@ -199,13 +215,21 @@ void ExplosionBState::init()
 										"BATTLE.CAT",
 										_item->getRules()->getHitSound())->play();
 
-		if (_parent->getSave()->getSide() == FACTION_HOSTILE)
+//kL		if (_parent->getSave()->getSide() == FACTION_HOSTILE)
+//		if (!_parent->getMap()->getCamera()->isOnScreen(tileCenter->getPosition()))
+//			_parent->getMap()->getCamera()->centerOnPosition(
+//															tileCenter->getPosition(),
+//															false);
+		if (_parent->getSave()->getSide() == FACTION_HOSTILE
+			|| !_parent->getMap()->getCamera()->isOnScreen(posCenter))
+		{
 			_parent->getMap()->getCamera()->centerOnPosition(
-															t->getPosition(),
-															false);
+														posCenter,
+														false);
+		}
 
 /*kL		if (hit
-			&& t->getVisible())
+			&& tileCenter->getVisible())
 		{
 			_parent->getMap()->getCamera()->centerOnPosition(Position(_center.x / 16, _center.y / 16, _center.z / 24));
 		} */
@@ -222,7 +246,7 @@ void ExplosionBState::think()
 {
 	for (std::set<Explosion*>::const_iterator
 			i = _parent->getMap()->getExplosions()->begin(),
-			inext = i;
+				inext = i;
 			i != _parent->getMap()->getExplosions()->end();
 			i = inext)
 	{
@@ -233,9 +257,7 @@ void ExplosionBState::think()
 			_parent->getMap()->getExplosions()->erase((*i));
 
 			if (_parent->getMap()->getExplosions()->empty())
-			{
 				explode();
-			}
 		}
 	}
 }
@@ -253,14 +275,12 @@ void ExplosionBState::cancel()
 void ExplosionBState::explode()
 {
 	Log(LOG_INFO) << "ExplosionBState::explode()";
-
 	SavedBattleGame* save = _parent->getSave();
 
 	// after the animation is done, the real explosion/hit takes place
 	if (_item)
 	{
 		Log(LOG_INFO) << ". _item is VALID";
-
 		if (!_unit
 			&& _item->getPreviousOwner())
 		{
@@ -270,7 +290,6 @@ void ExplosionBState::explode()
 		if (_areaOfEffect)
 		{
 			Log(LOG_INFO) << ". . AoE, TileEngine::explode()";
-
 			save->getTileEngine()->explode(
 										_center,
 										_power,
@@ -281,7 +300,6 @@ void ExplosionBState::explode()
 		else
 		{
 			Log(LOG_INFO) << ". . not AoE, TileEngine::hit()";
-
 			bool hit = _item->getRules()->getBattleType() == BT_MELEE;
 			BattleUnit* victim = save->getTileEngine()->hit(
 														_center,
@@ -318,7 +336,8 @@ void ExplosionBState::explode()
 		terrainExplosion = true;
 	}
 
-	if (!_tile && !_item) // explosion not caused by terrain or an item, must be by a unit (cyberdisc)
+	if (!_tile // explosion not caused by terrain or an item, must be by a unit (cyberdisc)
+		&& !_item)
 	{
 		save->getTileEngine()->explode(
 									_center,
@@ -328,15 +347,14 @@ void ExplosionBState::explode()
 		terrainExplosion = true;
 	}
 
-	// now check for new casualties
-	_parent->checkForCasualties(
+
+	_parent->checkForCasualties( // now check for new casualties
 							_item,
 							_unit,
 							false,
 							terrainExplosion);
 
-	// if this explosion was caused by a unit shooting, now it's the time to put the gun down
-	if (_unit
+	if (_unit // if this explosion was caused by a unit shooting, now it's the time to put the gun down
 		&& !_unit->isOut()
 		&& _lowerWeapon)
 	{
@@ -346,17 +364,17 @@ void ExplosionBState::explode()
 	_parent->getMap()->cacheUnits();
 	_parent->popState();
 
-	// check for terrain explosions
+
 	Tile* tile = save->getTileEngine()->checkForTerrainExplosions();
-	if (tile)
+	if (tile) // check for terrain explosions
 	{
-		Position pos = Position(
-							tile->getPosition().x * 16,
-							tile->getPosition().y * 16,
-							tile->getPosition().z * 24);
+		Position pVoxel = Position(
+								tile->getPosition().x * 16,
+								tile->getPosition().y * 16,
+								tile->getPosition().z * 24);
 		_parent->statePushFront(new ExplosionBState(
 												_parent,
-												pos,
+												pVoxel,
 												0,
 												_unit,
 												tile));
@@ -380,7 +398,6 @@ void ExplosionBState::explode()
 			}
 		}
 	}
-
 	Log(LOG_INFO) << "ExplosionBState::explode() EXIT";
 }
 

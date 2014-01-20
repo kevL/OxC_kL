@@ -54,7 +54,7 @@ private:
 	BattleActionType _action;
 	Frame* _frame;
 	Text
-		* _txtDescription,
+		* _txtDesc,
 		* _txtAcc,
 		* _txtTU;
 

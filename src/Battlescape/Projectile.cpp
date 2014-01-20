@@ -83,15 +83,16 @@ Projectile::Projectile(
 		if (_action.type == BA_THROW)
 		{
 			Log(LOG_INFO) << "Create Projectile -> BA_THROW";
-
-			_speed = _speed * 5 / 7;	// kL
+			_speed = _speed * 5 / 7; // kL
 			_sprite =_res->getSurfaceSet("FLOOROB.PCK")->getFrame(getItem()->getRules()->getFloorSprite());
 		}
 		else // ba_SHOOT!! or hit, or spit.... probly Psi-attack also.
 		{
 			Log(LOG_INFO) << "Create Projectile -> not BA_THROW";
-
-			_speed = std::max(1, _speed + _action.weapon->getRules()->getBulletSpeed());
+			_speed = std::max(
+							1,
+							_speed
+								+ _action.weapon->getRules()->getBulletSpeed());
 		}
 	}
 }
@@ -112,36 +113,36 @@ int Projectile::calculateTrajectory(double accuracy)
 {
 	Log(LOG_INFO) << "Projectile::calculateTrajectory()";
 
-	Position originVoxel, targetVoxel;
-	Tile* targetTile = 0;
 	BattleUnit* bu = _action.actor;
-	originVoxel = _save->getTileEngine()->getOriginVoxel(_action, _save->getTile(_origin));
+	Tile* targetTile = 0;
+	Position
+		targetVoxel,
+		originVoxel;
+	originVoxel = _save->getTileEngine()->getOriginVoxel(
+													_action,
+													_save->getTile(_origin));
 
-
-	//int dirYshift[24] = {1, 3, 9, 15, 15, 13, 7, 1,  1, 1, 7, 13, 15, 15, 9, 3,  1, 2, 8, 14, 15, 14, 8, 2};
-	//int dirXshift[24] = {9, 15, 15, 13, 8, 1, 1, 3,  7, 13, 15, 15, 9, 3, 1, 1,  8, 14, 15, 14, 8, 2, 1, 2};
+//	int dirYshift[24] = {1, 3, 9, 15, 15, 13, 7, 1,  1, 1, 7, 13, 15, 15, 9, 3,  1, 2, 8, 14, 15, 14, 8, 2};
+//	int dirXshift[24] = {9, 15, 15, 13, 8, 1, 1, 3,  7, 13, 15, 15, 9, 3, 1, 1,  8, 14, 15, 14, 8, 2, 1, 2};
 	// maybe if i get around to making that function to calculate a firepoint origin for fire
 	// point estimations i'll use the array above so i'll leave it commented for the time being.
 
-/*
-Wb.131129
+/* Wb.131129
 	originVoxel = Position(
-			_origin.x * 16,
-			_origin.y * 16,
-			_origin.z * 24);
+					_origin.x * 16,
+					_origin.y * 16,
+					_origin.z * 24);
 
 	// tanks etc. shoot from lower right corner(center of unit) of primary(upper left) part.
-	// kL_note: "bu" looks redundant w/ "_action.actor" ...
 
 	// take into account soldier height and terrain level if the projectile is launched from a soldier
 	if (_action.actor->getPosition() == _origin)
 	{
 		// calculate offset of the starting point of the projectile
-		originVoxel.z +=
-				bu->getHeight()
-					+ bu->getFloatHeight()
-					-_save->getTile(_origin)->getTerrainLevel()
-					- 4; // 2 voxels lower than LoS origin.
+		originVoxel.z += bu->getHeight()
+						+ bu->getFloatHeight()
+						-_save->getTile(_origin)->getTerrainLevel()
+						- 4; // 2 voxels lower than LoS origin.
 
 		if (originVoxel.z >= (_origin.z + 1) * 24)
 		{
@@ -154,9 +155,7 @@ Wb.131129
 			else
 			{
 				while (originVoxel.z >= (_origin.z + 1) * 24)
-				{
 					originVoxel.z--;
-				}
 
 				originVoxel.z -= 4; // keep originVoxel 4 voxels below any ceiling.
 			}
@@ -175,235 +174,234 @@ Wb.131129
 		originVoxel.x += 8;
 		originVoxel.y += 8;
 		originVoxel.z += 12;
-	}
-*/
+	} */
 
-	// TARGETTING //
+
+	//** TARGETTING ****
 	if (_action.type == BA_LAUNCH
 		|| (SDL_GetModState() & KMOD_CTRL) != 0
 		|| !_save->getBattleGame()->getPanicHandled())
 		// kL_note: Ctrl+LMB could check for tile-parts... cf below.
 	{
-		// target nothing, targets the middle of the tile
-		targetVoxel = Position(
-				_action.target.x * 16 + 8,
-				_action.target.y * 16 + 8,
-				_action.target.z * 24 + 12);	// Wb. changed this to +16
-												// prob. to give it a flat trajectory from firing pt.
-												// i Like it aimed slightly down perhaps...
-												// Wb. changed it back to +12......
-												// does he play this game or just like to 'type'
+		targetVoxel = Position( // target nothing, targets the middle of the tile
+							_action.target.x * 16 + 8,
+							_action.target.y * 16 + 8,
+							_action.target.z * 24 + 12);
 
 		if (_action.type == BA_LAUNCH)
 		{
 			if (_action.target != _origin)
-			{
 				// launched missiles go slightly higher than the middle.
 				targetVoxel.z += 4;
-			}
 			else
-			{
 				// unless two waypoints are placed on the same tile, in which case target the floor.
 				targetVoxel.z -= 10;
-			}
 		}
 	}
 	else // non-waypointed attack follows
 	{
 		// determine the target voxel.
-		// aim at the center of the unit, the object, the walls or the floor (in that priority)
+		// aim at the center of the unit, the object, the walls or the floor (in that priority).
 		// if there is no LOF to the center, try elsewhere outward.
 		// Then store this target voxel.
 		targetTile = _save->getTile(_action.target);
 
-		if (targetTile->getUnit() != 0) // aiming at Unit.
+//		if (targetTile->getUnit() != 0) // aiming at Unit.
+		if (targetTile->getUnit()) // aiming at Unit.
 		{
 			Log(LOG_INFO) << ". targetTile has unit";
-
-			if (_origin == _action.target
+			if (_origin == _action.target // shot at tileSelf.
 				|| targetTile->getUnit() == _action.actor)
 			{
-				// don't shoot at yourself but shoot at the floor
 				// kL_note: this shot at walls in Orig.
-				targetVoxel = Position(
-						_action.target.x * 16 + 8,
-						_action.target.y * 16 + 8,
-//kL						_action.target.z * 24);
-						_action.target.z * 24 + 1); // kL
+				targetVoxel = Position( // don't shoot at yourself but shoot at the floor
+									_action.target.x * 16 + 8,
+									_action.target.y * 16 + 8,
+//kL									_action.target.z * 24);
+									_action.target.z * 24 + 1); // kL
 			}
 			else	// kL_note: huh? Is this for storing _trajectory??? ... no. might be
 					// setting &targetVoxel tho. Or "_action.target" ( targetTile ) even......
 			{
 				_save->getTileEngine()->canTargetUnit(
-						&originVoxel,
-						targetTile,
-						&targetVoxel,
-						bu);
+												&originVoxel,
+												targetTile,
+												&targetVoxel,
+												bu);
 			}
 		}
+		// kL_begin: AutoShot vs. tile w/ dead or stunned Unit just sprays through the middle of the tile.
+		// note, however, this also affects attempts to target a tile where there is/was(?) a dead unit...
+		// So let's narrow it down some........... ie. to do this correctly I'd need some sort of 'autoShotKill' boolean
+		else if (_action.autoShotCount > 1
+			&& _action.autoShotKill) // note: If targetUnit is still alive after the first shot, see ABOVE^^
+//			&& targetTile->getUnit()
+//			&& targetTile->getUnit()->isOut(true, true)) // NOT Working
+//		_action.autoShotKill //_action.autoShotCount
+//			&& _action.autoShotCount < _action.weapon->getRules()->getAutoShots())
+		{
+			Log(LOG_INFO) << ". targetTile vs. Autoshot!";
+			targetVoxel = Position( // target nothing, targets the middle of the tile
+								_action.target.x * 16 + 8,
+								_action.target.y * 16 + 8,
+								_action.target.z * 24 + 12);
+		} // kL_end.
 		else if (targetTile->getMapData(MapData::O_OBJECT) != 0) // aiming at content-Object.
 		{
 			Log(LOG_INFO) << ". targetTile has content-object";
-
 			if (!_save->getTileEngine()->canTargetTile(
-					&originVoxel,
-					targetTile,
-					MapData::O_OBJECT,
-					&targetVoxel,
-					bu))
+													&originVoxel,
+													targetTile,
+													MapData::O_OBJECT,
+													&targetVoxel,
+													bu))
 			{
 				targetVoxel = Position(
-						_action.target.x * 16 + 8,
-						_action.target.y * 16 + 8,
-//kL						_action.target.z * 24 + 8);
-						_action.target.z * 24 + 6);		// kL
+									_action.target.x * 16 + 8,
+									_action.target.y * 16 + 8,
+//kL									_action.target.z * 24 + 8);
+									_action.target.z * 24 + 6);		// kL
 			}
 		}
 		else if (targetTile->getMapData(MapData::O_NORTHWALL) != 0) // aiming at Northwall
 		{
 			Log(LOG_INFO) << ". targetTile has northwall";
-
 			if (!_save->getTileEngine()->canTargetTile(
-					&originVoxel,
-					targetTile,
-					MapData::O_NORTHWALL,
-					&targetVoxel,
-					bu))
+													&originVoxel,
+													targetTile,
+													MapData::O_NORTHWALL,
+													&targetVoxel,
+													bu))
 			{
 				targetVoxel = Position(
-						_action.target.x * 16 + 8,
-//kL						_action.target.y * 16,
-						_action.target.y * 16 + 1,		// kL
-//kL						_action.target.z * 24 + 9);
-						_action.target.z * 24 + 10);	// kL
+									_action.target.x * 16 + 8,
+//kL									_action.target.y * 16,
+									_action.target.y * 16 + 1,		// kL
+//kL									_action.target.z * 24 + 9);
+									_action.target.z * 24 + 10);	// kL
 			}
 		}
 		else if (targetTile->getMapData(MapData::O_WESTWALL) != 0) // aiming at Westwall
 		{
 			Log(LOG_INFO) << ". targetTile has westwall";
-
 			if (!_save->getTileEngine()->canTargetTile(
-					&originVoxel,
-					targetTile,
-					MapData::O_WESTWALL,
-					&targetVoxel,
-					bu))
+													&originVoxel,
+													targetTile,
+													MapData::O_WESTWALL,
+													&targetVoxel,
+													bu))
 			{
 				targetVoxel = Position(
-//kL						_action.target.x * 16,
-						_action.target.x * 16 + 1,		// kL
-						_action.target.y * 16 + 8,
-//kL						_action.target.z * 24 + 9);
-						_action.target.z * 24 + 10);	// kL
+//kL									_action.target.x * 16,
+									_action.target.x * 16 + 1,		// kL
+									_action.target.y * 16 + 8,
+//kL									_action.target.z * 24 + 9);
+									_action.target.z * 24 + 10);	// kL
 			}
 		}
 		else if (targetTile->getMapData(MapData::O_FLOOR) != 0) // aiming at Floor
 		{
 			Log(LOG_INFO) << ". targetTile has floor";
-
 			// kL_note: This is not allowing floortiles to be targetted properly.
 			// Wb did an update, so check it out.... +2 voxels on the z-axis
 			if (!_save->getTileEngine()->canTargetTile(
-					&originVoxel,
-					targetTile,
-					MapData::O_FLOOR,
-					&targetVoxel,
-					bu))
+													&originVoxel,
+													targetTile,
+													MapData::O_FLOOR,
+													&targetVoxel,
+													bu))
 			{
 				//Log(LOG_INFO) << ". can't target floorTile";
-
 				targetVoxel = Position(
-						_action.target.x * 16 + 8,
-						_action.target.y * 16 + 8,
-//kL						_action.target.z * 24 + 2);
-						_action.target.z * 24 + 1);		// kL
+									_action.target.x * 16 + 8,
+									_action.target.y * 16 + 8,
+//kL									_action.target.z * 24 + 2);
+									_action.target.z * 24 + 1);		// kL
 			}
 		}
 		else // aiming at empty space.
 		{
 			Log(LOG_INFO) << ". targetTile is void";
-
-			// target nothing, targets the middle of the tile
-			targetVoxel = Position(
-					_action.target.x * 16 + 8,
-					_action.target.y * 16 + 8,
-					_action.target.z * 24 + 12);
+			targetVoxel = Position( // target nothing, targets the middle of the tile
+								_action.target.x * 16 + 8,
+								_action.target.y * 16 + 8,
+								_action.target.z * 24 + 12);
 		}
 
 
-		int test = VOXEL_EMPTY;
+/*kL		int test = VOXEL_EMPTY;
 		test = _save->getTileEngine()->calculateLine(
 												originVoxel,
 												targetVoxel,
 												false,
 												&_trajectory,
 												bu);
-
-		//Log(LOG_INFO) << ". test = " << test;
+		Log(LOG_INFO) << ". test = " << test;
 
 		if (test != VOXEL_EMPTY
-				&& !_trajectory.empty()
-				&& _action.actor->getFaction() == FACTION_PLAYER
-				&& _action.autoShotCounter == 1)
+			&& !_trajectory.empty()
+			&& _action.actor->getFaction() == FACTION_PLAYER // -> huh?
+			&& _action.autoShotCount == 1)
 		{
 			Position hitPos = Position(
-					_trajectory.at(0).x / 16,
-					_trajectory.at(0).y / 16,
-					_trajectory.at(0).z / 24);
-
+									_trajectory.at(0).x / 16,
+									_trajectory.at(0).y / 16,
+									_trajectory.at(0).z / 24);
 			if (test == VOXEL_UNIT
-					&& _save->getTile(hitPos)
-					&& _save->getTile(hitPos)->getUnit() == 0)
+				&& _save->getTile(hitPos)
+				&& _save->getTile(hitPos)->getUnit() == 0)
 			{
-				// must be poking head up from the belowTile
-				hitPos = Position(
+				hitPos = Position( // must be poking head up from the belowTile
 								hitPos.x,
 								hitPos.y,
 								hitPos.z - 1);
 			}
 
+
 			if (hitPos != _action.target
 				&& _action.result == "")
 			{
-				//Log(LOG_INFO) << ". . hitPos != target";
-
+				Log(LOG_INFO) << ". . hitPos != target";
 				if (test == VOXEL_NORTHWALL) // re-calculate for Northwall south of targetTile
 				{
-					//Log(LOG_INFO) << ". . . test == 2";
-
+					Log(LOG_INFO) << ". . . test == 2, northwall";
 					if (hitPos.y - 1 != _action.target.y)
 //					if (hitPos.y - 1 == _action.target.y)
 					{
 						//Log(LOG_INFO) << ". . . . no Acu modifi perhaps";
-
 						_trajectory.clear();
+
+						Log(LOG_INFO) << ". . . . Voxel_Empty.";
 						return VOXEL_EMPTY;
-/*						return _save->getTileEngine()->calculateLine(
-								originVoxel,
-								targetVoxel,
-								true,
-								&_trajectory,
-								bu); */
+//						return _save->getTileEngine()->calculateLine(
+//																originVoxel,
+//																targetVoxel,
+//																true,
+//																&_trajectory,
+//																bu);
 					}
 				}
 				else if (test == VOXEL_WESTWALL) // re-calculate for Westwall east of targetTile
 				{
-					//Log(LOG_INFO) << ". . . test == 1";
-
+					Log(LOG_INFO) << ". . . test == 1, westwall";
 					if (hitPos.x - 1 != _action.target.x)
 //					if (hitPos.x - 1 == _action.target.x)
 					{
 						//Log(LOG_INFO) << ". . . . no Acu modifi perhaps";
 						_trajectory.clear();
+
+						Log(LOG_INFO) << ". . . . Voxel_Empty.";
 						return VOXEL_EMPTY;
-/*						return _save->getTileEngine()->calculateLine(
-								originVoxel,
-								targetVoxel,
-								true,
-								&_trajectory,
-								bu); */
+//						return _save->getTileEngine()->calculateLine(
+//																originVoxel,
+//																targetVoxel,
+//																true,
+//																&_trajectory,
+//																bu);
 					}
-				}
+				} *
+
+
 /*				// kL_begin: Projectile::calculateTrajectory() NOW TARGETS FLOORS.
 				else if (test == 0)
 				{
@@ -413,20 +411,22 @@ Wb.131129
 //					if (hitPos.z - 1 == _action.target.z)
 //					{
 						//Log(LOG_INFO) << ". . . . no Acu modifi perhaps";
-
 					_trajectory.clear();
 
 //					return -1;
 					return _save->getTileEngine()->calculateLine(
-							originVoxel,
-							targetVoxel,
-							true,
-							&_trajectory,
-							bu);
+															originVoxel,
+															targetVoxel,
+															true,
+															&_trajectory,
+															bu);
 //					}
 				} */// kL_end.
-				else if (test == VOXEL_UNIT)
+
+
+/*kL				else if (test == VOXEL_UNIT)
 				{
+					Log(LOG_INFO) << ". . . test == 4, unit";
 					BattleUnit* hitUnit = _save->getTile(hitPos)->getUnit();
 					BattleUnit* targetUnit = targetTile->getUnit();
 
@@ -434,6 +434,7 @@ Wb.131129
 					{
 						_trajectory.clear();
 
+						Log(LOG_INFO) << ". . . . Voxel_Empty.";
 						return VOXEL_EMPTY;
 					}
 				}
@@ -441,15 +442,16 @@ Wb.131129
 				{
 					_trajectory.clear();
 
+					Log(LOG_INFO) << ". . . Voxel_Empty.";
 					return VOXEL_EMPTY;
 				}
 			}
-		}
+		} */
 	}
 
 	_trajectory.clear();
 
-	bool extendLine = true;
+//	bool extendLine = true;
 	// even guided missiles drift, but how much is based on
 	// the shooter's faction, rather than accuracy.
 	// Wb.131216
@@ -458,24 +460,20 @@ Wb.131129
 		extendLine = _action.waypoints.size() < 2;
 
 		if (_action.actor->getFaction() == FACTION_PLAYER)
-		{
 			accuracy = 0.60;
-		}
 		else
-		{
 			accuracy = 0.55;
-		}
 	} */
 
 	// apply some accuracy modifiers. This will result in a new target voxel:
-	if (_action.type != BA_LAUNCH) // <- what, no drift??!?
+	if (_action.type != BA_LAUNCH) // <- what, no drift??!? Could base this on.. psiSkill, or somethin'
 		applyAccuracy(
 					originVoxel,
 					&targetVoxel,
 					accuracy,
 					false,
-					targetTile,
-					extendLine);
+					targetTile);
+//					extendLine); // default: True
 
 	//Log(LOG_INFO) << ". LoF calculated, Acu applied (if not BL)";
 	// finally do a line calculation and store this trajectory.
@@ -512,9 +510,9 @@ Wb.131129
 
 	Position originVoxel;
 	originVoxel = Position(
-			_origin.x * 16 + 8,
-			_origin.y * 16 + 8,
-			_origin.z * 24);
+						_origin.x * 16 + 8,
+						_origin.y * 16 + 8,
+						_origin.z * 24);
 	originVoxel.z += -_save->getTile(_origin)->getTerrainLevel();
 
 	originVoxel.z += bu->getHeight() + bu->getFloatHeight();
@@ -527,16 +525,12 @@ Wb.131129
 			|| !tileAbove->hasNoFloor(0))
 		{
 			while (originVoxel.z > (_origin.z + 1) * 24)
-			{
 				originVoxel.z--;
-			}
 
 			originVoxel.z -= 4;
 		}
 		else
-		{
 			_origin.z++;
-		}
 	}
 */
 
@@ -558,24 +552,21 @@ Wb.131129
 							getUnit();
 	}
 
-	Position originVoxel = _save->getTileEngine()->getOriginVoxel(_action, 0); // Wb.131129
+	Position originVoxel = _save->getTileEngine()->getOriginVoxel(_action, 0);
 
-	// determine the target voxel; aim at the center of the floor
-	Position targetVoxel;
+	Position targetVoxel; // determine the target voxel; aim at the center of the floor
 	targetVoxel = Position(
-			(_action.target.x * 16) + 8,
-			(_action.target.y * 16) + 8,
-//kL			(_action.target.z * 24) + 2);
-			(_action.target.z * 24) + 1); // kL
+					(_action.target.x * 16) + 8,
+					(_action.target.y * 16) + 8,
+//kL					(_action.target.z * 24) + 2);
+					(_action.target.z * 24) + 1); // kL
 	targetVoxel.z -= _save->getTile(_action.target)->getTerrainLevel();
 
 	if (_action.type != BA_THROW) // celatid acid-spit
 	{
 		BattleUnit* targetUnit = 0;
 		if (_save->getTile(_action.target)->getUnit())
-		{
 			targetUnit = _save->getTile(_action.target)->getUnit();
-		}
 
 		if (!targetUnit
 			&& _action.target.z > 0
@@ -596,9 +587,7 @@ Wb.131129
 		}
 
 		if (targetUnit)
-		{
 			targetVoxel.z += (targetUnit->getHeight() / 2) + targetUnit->getFloatHeight();
-		}
 	}
 
 	// we try several different arcs to try and reach our goal.
@@ -607,7 +596,8 @@ Wb.131129
 	bool found = false;
 	double arc = 1.0;
 
-	while (!found && arc < 5.0)
+	while (!found
+		&& arc < 5.0)
 	{
 		int check = _save->getTileEngine()->calculateParabola(
 														originVoxel,
@@ -635,12 +625,11 @@ Wb.131129
 	Log(LOG_INFO) << ". arc = " << arc;
 
 	if (arc >= 5.0)
-	{
 		return VOXEL_EMPTY;
-	}
 
 	// apply some accuracy modifiers
-	if (accuracy > 1.0) accuracy = 1.0;
+	if (accuracy > 1.0)
+		accuracy = 1.0;
 
 	static const double maxDeviation = 0.08;
 	static const double minDeviation = 0.0;
@@ -649,6 +638,7 @@ Wb.131129
 	Log(LOG_INFO) << ". baseDeviation = " << baseDeviation;
 
 	_trajectory.clear();
+
 	int result = VOXEL_OUTOFBOUNDS;
 
 	// finally do a line calculation and store this trajectory.
@@ -664,10 +654,11 @@ Wb.131129
 	// finally do a line calculation and store this trajectory, make sure it's valid.
 	while (result == VOXEL_OUTOFBOUNDS)
 	{
-		double deviation = RNG::boxMuller(0, baseDeviation);
+		double deviation = RNG::boxMuller(0.0, baseDeviation);
 		Log(LOG_INFO) << ". . deviation = " << deviation + 1.0;
 
 		_trajectory.clear();
+
 		result = _save->getTileEngine()->calculateParabola(
 													originVoxel,
 													targetVoxel,
@@ -782,8 +773,9 @@ void Projectile::applyAccuracy(
 {
 	Log(LOG_INFO) << "Projectile::applyAccuracy()";
 
-	int xdiff = origin.x - target->x;
-	int ydiff = origin.y - target->y;
+	int
+		xdiff = origin.x - target->x,
+		ydiff = origin.y - target->y;
 	double realDistance = sqrt(static_cast<double>(xdiff * xdiff) + static_cast<double>(ydiff * ydiff));
 
 	// maxRange is the maximum range a projectile shall ever travel in voxel space
@@ -813,8 +805,11 @@ void Projectile::applyAccuracy(
 
 			// If unit is kneeled, then accuracy reduced by 5%.
 			// This is a compromise, because vertical deviation is 2 times less.
-			if (targetUnit && targetUnit->isKneeled())
+			if (targetUnit
+				&& targetUnit->isKneeled())
+			{
 				accuracyPenalty += 0.063;
+			}
 		}
 		else
 			accuracyPenalty = 0.015 * static_cast<double>(_save->getGlobalShade()); // Shade can be from 0 (day) to 15 (night).
@@ -862,21 +857,26 @@ void Projectile::applyAccuracy(
 		// 0.02 is the min angle deviation for best accuracy (+-3s = 0.02 radian).
 		// kL_note: changed to min 0.006 deviation.
 //kL		if (baseDeviation < 0.02) baseDeviation = 0.02;
-		if (baseDeviation < 0.001)
+		if (baseDeviation < 0.0001)
 		{
-			Log(LOG_INFO) << ". baseDeviation low-capped @ 0.001";
-			baseDeviation = 0.001;		// kL
+			Log(LOG_INFO) << ". baseDeviation low-capped @ 0.0001";
+			baseDeviation = 0.0001;		// kL
 		}
 		else Log(LOG_INFO) << ". baseDeviation = " << baseDeviation;
 
 		// the angle deviations are spread using a normal distribution for baseDeviation (+-3s with precision 99,7%)
-		double dH = RNG::boxMuller(0.0, baseDeviation / 6.0); // horizontal miss in radian
-		double dV = RNG::boxMuller(0.0, baseDeviation /(6.0 * 1.72)); // kL
+		double
+			dH = RNG::boxMuller(0.0, baseDeviation / 6.0), // horizontal miss in radian
+			dV = RNG::boxMuller(0.0, baseDeviation /(6.0 * 1.72)), // kL
 //kL		double dV = RNG::boxMuller(0.0, baseDeviation /(6.0 * 2));
 
-		double te = atan2(static_cast<double>(target->y - origin.y), static_cast<double>(target->x - origin.x)) + dH;
-		double fi = atan2(static_cast<double>(target->z - origin.z), realDistance) + dV;
-		double cos_fi = cos(fi);
+			te = atan2(
+					static_cast<double>(target->y - origin.y),
+					static_cast<double>(target->x - origin.x)) + dH,
+			fi = atan2(
+					static_cast<double>(target->z - origin.z),
+					realDistance) + dV,
+			cos_fi = cos(fi);
 
 		if (extendLine)
 		{
@@ -921,8 +921,12 @@ void Projectile::applyAccuracy(
 	
 	if (extendLine)
 	{
-		double rotation, tilt;
-		rotation = atan2(double(target->y - origin.y), double(target->x - origin.x)) * 180.0 / M_PI;
+		double
+			rotation,
+			tilt;
+		rotation = atan2(
+					double(target->y - origin.y),
+					double(target->x - origin.x)) * 180.0 / M_PI;
 		tilt = atan2(
 				double(target->z - origin.z),
 				sqrt(double(target->x - origin.x) * double(target->x - origin.x)
@@ -966,10 +970,11 @@ void Projectile::applyAccuracy(
 
 		// calculate new target
 		// this new target can be very far out of the map, but we don't care about that right now
-		double cos_fi = cos(tilt * M_PI / 180.0);
-		double sin_fi = sin(tilt * M_PI / 180.0);
-		double cos_te = cos(rotation * M_PI / 180.0);
-		double sin_te = sin(rotation * M_PI / 180.0);
+		double
+			cos_fi = cos(tilt * M_PI / 180.0),
+			sin_fi = sin(tilt * M_PI / 180.0),
+			cos_te = cos(rotation * M_PI / 180.0),
+			sin_te = sin(rotation * M_PI / 180.0);
 
 		target->x = static_cast<int>(static_cast<double>(origin.x) + maxRange * cos_te * cos_fi);
 		target->y = static_cast<int>(static_cast<double>(origin.y) + maxRange * sin_te * cos_fi);

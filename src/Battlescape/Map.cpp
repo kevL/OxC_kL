@@ -313,7 +313,7 @@ void Map::draw()
 		}
 		else
 		{
-			_reveal = 4;
+			_reveal = 3;
 			//Log(LOG_INFO) << ". . . . . . drawTerrain() Set _reveal = " << _reveal;
 		}
 

@@ -1231,13 +1231,13 @@ int BattleUnit::damage(
 	UnitBodyPart bodypart = BODYPART_TORSO;
 
 	if (power < 1)
-	{
 		return 0;
-	}
 
-	power = static_cast<int>(floor(static_cast<float>(power) * _armor->getDamageModifier(type)));
+	power = static_cast<int>(
+					floor(static_cast<float>(power) * _armor->getDamageModifier(type)));
 
-	if (type == DT_SMOKE) type = DT_STUN; // smoke doesn't do real damage, but stun damage
+	if (type == DT_SMOKE) // smoke doesn't do real damage, but stun damage
+		type = DT_STUN;
 
 	if (!ignoreArmor)
 	{
@@ -1317,23 +1317,17 @@ int BattleUnit::damage(
 	if (power > 0)
 	{
 		if (type == DT_STUN)
-		{
 			_stunlevel += power;
-		}
 		else
 		{
 			_health -= power; // health damage
 			if (_health < 0)
-			{
 				_health = 0;
-			}
 
 			if (type != DT_IN)
 			{
-				if (_armor->getSize() == 1)
-				{
-					_stunlevel += RNG::generate(0, power / 4); // conventional weapons can cause additional stun damage
-				}
+				if (_armor->getSize() == 1) // conventional weapons can cause additional stun damage
+					_stunlevel += RNG::generate(0, power / 4);
 
 				if (isWoundable()) // fatal wounds
 				{
@@ -1349,8 +1343,10 @@ int BattleUnit::damage(
 		}
 	}
 
-	int ret = power < 0? 0: power;
-	Log(LOG_INFO) << "BattleUnit::damage() ret " << ret;
+	int ret = power;
+	if (ret < 1)
+		ret = 0;
+	Log(LOG_INFO) << "BattleUnit::damage() ret PenetratedPower " << ret;
 
 	return ret;
 }
@@ -1384,19 +1380,17 @@ int BattleUnit::getStunlevel() const
 void BattleUnit::knockOut(BattlescapeGame* battle)
 {
 	if (getArmor()->getSize() > 1) // large units die
-	{
 		_health = 0;
-	}
 	else if (_spawnUnit != "")
 	{
 		setSpecialAbility(SPECAB_NONE);
-		BattleUnit* newUnit = battle->convertUnit(this, _spawnUnit);
+		BattleUnit* newUnit = battle->convertUnit(
+												this,
+												_spawnUnit);
 		newUnit->knockOut(battle);
 	}
 	else
-	{
 		_stunlevel = _health;
-	}
 }
 
 /**
@@ -1417,7 +1411,8 @@ void BattleUnit::keepFalling()
 	_fallPhase++;
 
 	int endFrame = 3;
-	if (_spawnUnit != "" && _specab != SPECAB_RESPAWN) // <- is a Zombie! kL_note
+	if (_spawnUnit != ""
+		&& _specab != SPECAB_RESPAWN) // <- is a Zombie! kL_note
 	// kL_note: so.. units with a spawnUnit string but not specAb 3 set get the transformation anim.
 	{
 		endFrame = 18;
@@ -1430,13 +1425,11 @@ void BattleUnit::keepFalling()
 		if (_health == 0)
 		{
 			//Log(LOG_INFO) << "BattleUnit::keepFalling() " << getId() << ". . STATUS_DEAD";
-
 			_status = STATUS_DEAD;
 		}
 		else
 		{
 			//Log(LOG_INFO) << "BattleUnit::keepFalling() " << getId() << ". . STATUS_UNCONSCIOUS";
-
 			_status = STATUS_UNCONSCIOUS;
 		}
 	}

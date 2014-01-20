@@ -58,26 +58,25 @@ ActionMenuItem::ActionMenuItem(
 		* small = game->getResourcePack()->getFont("FONT_SMALL");
 	Language* lang = game->getLanguage();
 
-	_frame			= new Frame(
-							getWidth(),
-							getHeight(),
-							0,
-							0);
-//TEST!	_txtDescription	= new Text(141, 20, 10, 13);
-	_txtDescription	= new Text(160, 20, 10, 13); // TEST!
-	_txtAcc			= new Text(63, 20, 151, 13);
-	_txtTU			= new Text(50, 20, 214, 13);
+	_frame		= new Frame(
+						getWidth(),
+						getHeight(),
+						0,
+						0);
+	_txtDesc	= new Text(160, 20, 10, 13);
+	_txtAcc		= new Text(63, 20, 151, 13);
+	_txtTU		= new Text(50, 20, 214, 13);
 
 	_frame->setHighContrast(true);
 	_frame->setColor(Palette::blockOffset(0)+7);
 	_frame->setBackground(Palette::blockOffset(0)+14);
 	_frame->setThickness(9);
 
-	_txtDescription->initText(big, small, lang);
-	_txtDescription->setBig();
-	_txtDescription->setHighContrast(true);
-	_txtDescription->setColor(Palette::blockOffset(0)-1);
-	_txtDescription->setVisible(true);
+	_txtDesc->initText(big, small, lang);
+	_txtDesc->setBig();
+	_txtDesc->setHighContrast(true);
+	_txtDesc->setColor(Palette::blockOffset(0)-1);
+	_txtDesc->setVisible(true);
 
 	_txtAcc->initText(big, small, lang);
 	_txtAcc->setBig();
@@ -96,7 +95,7 @@ ActionMenuItem::ActionMenuItem(
 ActionMenuItem::~ActionMenuItem()
 {
 	delete _frame;
-	delete _txtDescription;
+	delete _txtDesc;
 	delete _txtAcc;
 	delete _txtTU;
 }
@@ -117,7 +116,7 @@ void ActionMenuItem::setAction(
 		int tu)
 {
 	_action = action;
-	_txtDescription->setText(description);
+	_txtDesc->setText(description);
 	_txtAcc->setText(accuracy);
 	_txtTU->setText(timeunits);
 	_tu = tu;
@@ -157,7 +156,7 @@ void ActionMenuItem::setPalette(
 	Surface::setPalette(colors, firstcolor, ncolors);
 
 	_frame->setPalette(colors, firstcolor, ncolors);
-	_txtDescription->setPalette(colors, firstcolor, ncolors);
+	_txtDesc->setPalette(colors, firstcolor, ncolors);
 	_txtAcc->setPalette(colors, firstcolor, ncolors);
 	_txtTU->setPalette(colors, firstcolor, ncolors);
 }
@@ -168,7 +167,7 @@ void ActionMenuItem::setPalette(
 void ActionMenuItem::draw()
 {
 	_frame->blit(this);
-	_txtDescription->blit(this);
+	_txtDesc->blit(this);
 	_txtAcc->blit(this);
 	_txtTU->blit(this);
 }

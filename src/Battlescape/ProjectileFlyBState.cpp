@@ -154,7 +154,10 @@ void ProjectileFlyBState::init()
 		// when are TU subtracted for a primaryAction firing/throwing action?
 		_unit->setStopShot(false);
 
-		_unit->setTimeUnits(_unit->getTimeUnits() + _unit->getActionTUs(_action.type, _action.weapon));
+		_unit->setTimeUnits(_unit->getTimeUnits()
+									+ _unit->getActionTUs(
+													_action.type,
+													_action.weapon));
 		_parent->popState();
 
 		Log(LOG_INFO) << ". stopShot, refund TUs.";
@@ -170,7 +173,10 @@ void ProjectileFlyBState::init()
 				|| targetUnit->isOut(true, true)
 				|| targetUnit != _parent->getSave()->getSelectedUnit())
 			{
-				_unit->setTimeUnits(_unit->getTimeUnits() + _unit->getActionTUs(_action.type, _action.weapon));
+				_unit->setTimeUnits(_unit->getTimeUnits()
+											+ _unit->getActionTUs(
+															_action.type,
+															_action.weapon));
 				_parent->popState();
 
 				Log(LOG_INFO) << ". . . reactionFire refund (targetUnit exists) EXIT";
@@ -179,7 +185,10 @@ void ProjectileFlyBState::init()
 		}
 		else
 		{
-			_unit->setTimeUnits(_unit->getTimeUnits() + _unit->getActionTUs(_action.type, _action.weapon));
+			_unit->setTimeUnits(_unit->getTimeUnits()
+										+ _unit->getActionTUs(
+														_action.type,
+														_action.weapon));
 			_parent->popState();
 
 			Log(LOG_INFO) << ". . reactionFire refund (no targetUnit) EXIT";
@@ -214,7 +223,7 @@ void ProjectileFlyBState::init()
 		case BA_AIMEDSHOT:
 		case BA_AUTOSHOT:
 		case BA_LAUNCH:
-			Log(LOG_INFO) << ". . BA_SNAPSHOT/AIMEDSHOT/AUTOSHOT/LAUNCH";
+			Log(LOG_INFO) << ". . BA_SNAPSHOT,AIMEDSHOT,AUTOSHOT, or LAUNCH";
 
 			if (_ammo == 0)
 			{
@@ -234,10 +243,11 @@ void ProjectileFlyBState::init()
 
 				return;
 			}
-			else if (weapon->getRules()->getRange() != 0
+			else if (weapon->getRules()->getRange() > 0
 				&& _parent->getTileEngine()->distance(
 												_action.actor->getPosition(),
-												_action.target) > weapon->getRules()->getRange())
+												_action.target)
+											> weapon->getRules()->getRange())
 			{
 				Log(LOG_INFO) << ". . . out of range, EXIT";
 
@@ -252,7 +262,7 @@ void ProjectileFlyBState::init()
 			Log(LOG_INFO) << ". . BA_THROW";
 
 //Wb.			Position originVoxel = _parent->getTileEngine()->getSightOriginVoxel(_unit) - Position(0, 0, 2);
-			Position originVoxel = _parent->getTileEngine()->getOriginVoxel(_action, 0);	// Wb.
+			Position originVoxel = _parent->getTileEngine()->getOriginVoxel(_action, 0); // Wb.
 
 			if (!validThrowRange(
 							&_action,
@@ -293,13 +303,13 @@ void ProjectileFlyBState::init()
 			Log(LOG_INFO) << ". . BA_PANIC/MINDCONTROL, new ExplosionBState, EXIT";
 
 			_parent->statePushFront(new ExplosionBState(
-					_parent,
-					Position(
-							(_action.target.x * 16) + 8,
-							(_action.target.y * 16) + 8,
-							(_action.target.z * 24) + 10),
-					weapon,
-					_action.actor));
+													_parent,
+													Position(
+															(_action.target.x * 16) + 8,
+															(_action.target.y * 16) + 8,
+															(_action.target.z * 24) + 10),
+													weapon,
+													_action.actor));
 
 			return;
 		break;
@@ -325,8 +335,7 @@ void ProjectileFlyBState::init()
 bool ProjectileFlyBState::createNewProjectile()
 {
 	Log(LOG_INFO) << "ProjectileFlyBState::createNewProjectile() -> create Projectile";
-
-	++_action.autoShotCounter;
+	++_action.autoShotCount;
 
 	Projectile* projectile = new Projectile(
 										_parent->getResourcePack(),
@@ -400,7 +409,8 @@ bool ProjectileFlyBState::createNewProjectile()
 			if (_action.weapon->getRules()->getFireSound() != -1)
 				_parent->getResourcePack()->getSound(
 												"BATTLE.CAT",
-												_action.weapon->getRules()->getFireSound())->play();
+												_action.weapon->getRules()->getFireSound())
+											->play();
 
 			if (!_parent->getSave()->getDebugMode()
 				&& _action.type != BA_LAUNCH
@@ -439,7 +449,8 @@ bool ProjectileFlyBState::createNewProjectile()
 		if (_action.weapon->getRules()->getFireSound() != -1)
 			_parent->getResourcePack()->getSound(
 											"BATTLE.CAT",
-											_action.weapon->getRules()->getFireSound())->play();
+											_action.weapon->getRules()->getFireSound())
+										->play();
 
 /*		if (!_parent->getSave()->getDebugMode()
 			&& _action.type != BA_LAUNCH
@@ -459,6 +470,10 @@ bool ProjectileFlyBState::createNewProjectile()
 																				_action.weapon));
 		Log(LOG_INFO) << ". shoot weapon, part = " << _projectileImpact;
 
+		if (_projectileImpact == VOXEL_UNIT)	// kL
+			_action.autoShotKill = true;		// kL
+
+
 		if (_projectileImpact != VOXEL_EMPTY
 			|| _action.type == BA_LAUNCH)
 		{
@@ -471,7 +486,8 @@ bool ProjectileFlyBState::createNewProjectile()
 			if (_action.weapon->getRules()->getFireSound() != -1)
 				_parent->getResourcePack()->getSound(
 												"BATTLE.CAT",
-												_action.weapon->getRules()->getFireSound())->play();
+												_action.weapon->getRules()->getFireSound())
+											->play();
 
 			if (!_parent->getSave()->getDebugMode()
 				&& _action.type != BA_LAUNCH
@@ -511,26 +527,27 @@ void ProjectileFlyBState::think()
 	/* TODO refactoring : store the projectile in this state, instead of getting it from the map each time? */
 	if (_parent->getMap()->getProjectile() == 0)
 	{
-		Tile* t = _parent->getSave()->getTile(_action.actor->getPosition());
-		Tile* tBelow = _parent->getSave()->getTile(_action.actor->getPosition() + Position(0, 0, -1));
+		Tile
+			* t = _parent->getSave()->getTile(_action.actor->getPosition()),
+			* tBelow = _parent->getSave()->getTile(_action.actor->getPosition() + Position(0, 0, -1));
 
-		bool hasFloor = t && !t->hasNoFloor(tBelow);
-		bool unitCanFly = _action.actor->getArmor()->getMovementType() == MT_FLY;
+		bool
+			hasFloor = t && !t->hasNoFloor(tBelow),
+			unitCanFly = _action.actor->getArmor()->getMovementType() == MT_FLY;
 
 		if (_action.type == BA_AUTOSHOT
-			&& _action.autoShotCounter < _action.weapon->getRules()->getAutoShots()
+			&& _action.autoShotCount < _action.weapon->getRules()->getAutoShots()
 			&& !_action.actor->isOut()
 			&& _ammo->getAmmoQuantity() != 0
-			&& (hasFloor || unitCanFly))
+			&& (hasFloor
+				|| unitCanFly))
 		{
 			createNewProjectile();
 		}
 		else
 		{
 			if (_action.cameraPosition.z != -1)
-			{
 				_parent->getMap()->getCamera()->setMapOffset(_action.cameraPosition);
-			}
 
 			if (_action.type != BA_PANIC
 				&& _action.type != BA_MINDCONTROL
@@ -540,9 +557,7 @@ void ProjectileFlyBState::think()
 			}
 
 			if (!_action.actor->isOut())
-			{
 				_unit->abortTurn();
-			}
 
 			_parent->popState();
 		}
@@ -561,21 +576,17 @@ void ProjectileFlyBState::think()
 				pos.z /= 24;
 
 				if (pos.y > _parent->getSave()->getMapSizeY())
-				{
 					pos.y--;
-				}
+
 				if (pos.x > _parent->getSave()->getMapSizeX())
-				{
 					pos.x--;
-				}
 
 				BattleItem* item = _parent->getMap()->getProjectile()->getItem();
 				if (Options::getBool("battleInstantGrenade")
 					&& item->getRules()->getBattleType() == BT_GRENADE
 					&& item->getExplodeTurn() == 0)
 				{
-					// it's a hot grenade to explode immediately
-					_parent->statePushFront(new ExplosionBState(
+					_parent->statePushFront(new ExplosionBState( // it's a hot grenade to explode immediately
 															_parent,
 															_parent->getMap()->getProjectile()->getPosition(-1),
 															item,
@@ -639,19 +650,17 @@ void ProjectileFlyBState::think()
 															_action.actor,
 															0,
 															_action.type != BA_AUTOSHOT
-																			|| _action.autoShotCounter == _action.weapon->getRules()->getAutoShots()
-																			|| !_action.weapon->getAmmoItem()));
+																|| _action.autoShotCount == _action.weapon->getRules()->getAutoShots()
+																|| !_action.weapon->getAmmoItem()));
 
 					if (_unit->getSpecialAbility() == SPECAB_BURNFLOOR)
-					{
 						_parent->getSave()->getTile(_action.target)->ignite(15);
-					}
 
 					if (_projectileImpact == 4)
 					{
 						BattleUnit* victim = _parent->getSave()->getTile(
-												_parent->getMap()->getProjectile()->getPosition(offset) / Position(16, 16, 24))
-													->getUnit();
+																	_parent->getMap()->getProjectile()->getPosition(offset) / Position(16, 16, 24))
+																->getUnit();
 						if (victim
 							&& !victim->isOut()
 							&& victim->getFaction() == FACTION_HOSTILE)
@@ -666,7 +675,7 @@ void ProjectileFlyBState::think()
 					}
 				}
 				else if (_action.type != BA_AUTOSHOT
-					|| _action.autoShotCounter == _action.weapon->getRules()->getAutoShots()
+					|| _action.autoShotCount == _action.weapon->getRules()->getAutoShots()
 					|| !_action.weapon->getAmmoItem())
 				{
 					_unit->aim(false);
