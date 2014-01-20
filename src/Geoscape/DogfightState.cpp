@@ -270,6 +270,7 @@ DogfightState::DogfightState(
 		_weapon2Enabled(true),
 		_minimized(false),
 		_endDogfight(false),
+		_animatingHit(false),
 		_ufoSize(0),
 		_craftHeight(0),
 		_currentCraftDamageColor(13),
@@ -278,8 +279,7 @@ DogfightState::DogfightState(
 		_x(0),
 		_y(0),
 		_minimizedIconX(0),
-		_minimizedIconY(0),
-		_lastHitAnimFrame(false)
+		_minimizedIconY(0)
 {
 	_screen = false;
 
@@ -802,15 +802,26 @@ void DogfightState::animate()
 	else
 		_timeout--;
 
-	// Animate UFO crash landing.
+	// Animate UFO hit.
 	bool lastHitAnimFrame = false;
-	if (_ufo->isCrashed()
-		&& _ufo->getHitFrame() == 0)
+	if (_animatingHit
+		&& _ufo->getHitFrame() > 0)
 	{
-		if (_lastHitAnimFrame)
-			--_ufoSize;
-		else
-			_lastHitAnimFrame = true;
+		_ufo->setHitFrame(_ufo->getHitFrame() - 1);
+
+		if (_ufo->getHitFrame() == 0)
+		{
+			_animatingHit = false;
+			lastHitAnimFrame = true;
+		}
+	}
+
+	// Animate UFO crash landing.
+	if (_ufo->isCrashed()
+		&& _ufo->getHitFrame() == 0
+		&& !lastHitAnimFrame)
+	{
+		--_ufoSize;
 	}
 }
 
@@ -960,7 +971,10 @@ void DogfightState::move()
 						}
 
 						if (_ufo->getHitFrame() == 0)
+						{
+							_animatingHit = true;
 							_ufo->setHitFrame(3);
+						}
 
 						setStatus("STR_UFO_HIT");
 						_currentRadius += 4;

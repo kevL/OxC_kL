@@ -65,7 +65,7 @@ private:
 		_weapon2Enabled,
 		_minimized,
 		_endDogfight,
-		_lastHitAnimFrame;
+		_animatingHit;
 	int
 		_timeout,
 		_currentDist,
