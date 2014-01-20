@@ -249,7 +249,7 @@ TransferItemsState::TransferItemsState(
 		_baseQty.push_back(_baseFrom->getScientists()); // kL
 		_transferQty.push_back(0);
 //kL		_destQty.push_back(_baseTo->getAvailableScientists());
-		_destQty.push_back(_baseTo->getScientists()); // kL
+		_destQty.push_back(_baseTo->getTotalScientists()); // kL
 		_hasSci = 1;
 
 		std::wstringstream
@@ -277,7 +277,7 @@ TransferItemsState::TransferItemsState(
 		_baseQty.push_back(_baseFrom->getEngineers()); // kL
 		_transferQty.push_back(0);
 //kL		_destQty.push_back(_baseTo->getAvailableEngineers());
-		_destQty.push_back(_baseTo->getEngineers()); // kL
+		_destQty.push_back(_baseTo->getTotalEngineers()); // kL
 		_hasEng = 1;
 
 		std::wstringstream
@@ -506,7 +506,7 @@ void TransferItemsState::reinit()
 	{
 		_baseQty.push_back(_baseFrom->getScientists());
 		_transferQty.push_back(0);
-		_destQty.push_back(_baseTo->getScientists());
+		_destQty.push_back(_baseTo->getTotalScientists());
 		_hasSci = 1;
 
 		std::wstringstream
@@ -529,7 +529,7 @@ void TransferItemsState::reinit()
 	{
 		_baseQty.push_back(_baseFrom->getEngineers());
 		_transferQty.push_back(0);
-		_destQty.push_back(_baseTo->getEngineers());
+		_destQty.push_back(_baseTo->getTotalEngineers());
 		_hasEng = 1;
 
 		std::wstringstream
