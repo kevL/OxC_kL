@@ -4287,7 +4287,7 @@ Tile* TileEngine::applyGravity(Tile* t)
 					_save->addFallingUnit(occupant);
 				}
 			}
-			else
+			else if (occupant->isOut())
 			{
 				Position origin = occupant->getPosition();
 

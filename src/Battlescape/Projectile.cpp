@@ -786,7 +786,7 @@ void Projectile::applyAccuracy(
 	if (_action.type == BA_HIT)
 		maxRange = 45.0; // up to 2 tiles diagonally (as in the case of reaper v reaper)
 
-	if (Options::getBool("battleRangeBasedAccuracy"))
+	if (Options::getBool("battleRangeBasedAccuracy") && _action.type != BA_THROW)
 	{
 		double accuracyPenalty = 0.0;
 
