@@ -47,8 +47,6 @@
 namespace OpenXcom
 {
 
-//bool const kL_bDebug = false;
-
 /**
  * Sets up an UnitWalkBState.
  */
@@ -66,9 +64,7 @@ UnitWalkBState::UnitWalkBState(
 		_turnBeforeFirstStep(false),
 		_unitsSpotted(0),
 		_preMovementCost(0),
-//		_tileSwitchDone(false), // kL
-//		_newUnitSpotted(false),
-//		_newVis(false), // kL
+		_tileSwitchDone(false), // kL
 		_onScreen(false),
 		_walkCam(0)
 {
@@ -101,21 +97,17 @@ void UnitWalkBState::init()
 	// kL_note: This is used only for aLiens
 	_unitsSpotted = _unit->getUnitsSpottedThisTurn().size();
 
-//	if (_parent->getSave()->getTraceSetting())
-//	{
-//		Log(LOG_INFO) << "Walking from: " << _unit->getPosition() << ", to " << _target;
 	Log(LOG_INFO) << ". walking from " << _unit->getPosition() << " to " << _action.target;
-//	}
 
 	int dir = _pf->getStartDirection();
 	//Log(LOG_INFO) << ". StartDirection(init) = " << dir;
 	//Log(LOG_INFO) << ". getDirection(init) = " << _unit->getDirection();
-
 	if (!_action.strafe						// not strafing
 		&& -1 < dir && dir < 8				// moving but not up or down
 		&& dir != _unit->getDirection())	// not facing in direction of movement
 	{
 		// kL_note: if unit is not facing in the direction that it's about to walk toward...
+		// This makes the unit expend tu's if it spots a new alien when turning, but stops before actually walking.
 		_turnBeforeFirstStep = true;
 	}
 
@@ -127,8 +119,8 @@ void UnitWalkBState::init()
  */
 void UnitWalkBState::think()
 {
-	Log(LOG_INFO)	<< "\n***** UnitWalkBState::think() : " << _unit->getId()
-					<< " _walkPhase = " << _unit->getWalkingPhase() << " *****";
+	Log(LOG_INFO)	<< "\n***** UnitWalkBState::think() : " << _unit->getId();
+					//<< " _walkPhase = " << _unit->getWalkingPhase() << " *****";
 
 	if (_unit->isOut(true, true))
 	{
@@ -139,21 +131,21 @@ void UnitWalkBState::think()
 
 		return;
 	}
-	else Log(LOG_INFO) << ". . unit health: " << _unit->getHealth();
+	//else Log(LOG_INFO) << ". . unit health: " << _unit->getHealth();
 
+	// kL_note: moved here from doStatusWalk()
+	// kL_note: Let's try this, maintain camera focus centered on Visible aliens during (un)hidden movement
+	if (_unit->getVisible()								// kL
+		&& _unit->getFaction() != FACTION_PLAYER		// kL
+		&& !_walkCam->isOnScreen(_unit->getPosition())) // kL_TEST!
+	{
+		_walkCam->centerOnPosition(_unit->getPosition());
+	}
 
-//	_newVis = false;			// kL, for xCom units
-//	_newUnitSpotted = false;	// for aLien units
-
-	// kL_note: Does this really need to be specc'd every _walkPhase increment?
 	_onScreen = _unit->getVisible()
 				&& (_walkCam->isOnScreen(_unit->getPosition())
-					|| _walkCam->isOnScreen(_unit->getDestination()));
+					|| _walkCam->isOnScreen(_unit->getDestination())); // kL
 	Log(LOG_INFO) << ". _onScreen = " << _onScreen;
-
-
-//	int dir = _pf->getStartDirection(); // kL: also below, in STATUS_STANDING!
-// setDirection(dir)					// kL
 
 
 // _oO **** STATUS WALKING **** Oo_
@@ -172,6 +164,11 @@ void UnitWalkBState::think()
 			Log(LOG_INFO) << "Hey we got to STATUS_STANDING in UnitWalkBState _WALKING or _FLYING !!!" ;
 //			_falling = false; // kL
 
+			// kL_begin: if the unit changed level, camera changes level with it.
+			if (_walkCam->getViewLevel() != _unit->getPosition().z)
+				_walkCam->setViewLevel(_unit->getPosition().z);
+			// kL_end.
+
 			if (!doStatusStand_end()) return;
 		}
 		else if (_onScreen) // still walking....
@@ -182,10 +179,9 @@ void UnitWalkBState::think()
 			if (_pf->getStrafeMove())
 			{
 				Log(LOG_INFO) << ". . strafe";
-
 				// This is where we fake out the strafe movement direction so the unit "moonwalks"
 				int dirStrafe = _unit->getDirection();
-//				int dirStrafe = _pf->getStartDirection();
+//				int dirStrafe = _pf->getStartDirection(); // kL
 //				int dirStrafe = dir; // kL
 
 				_unit->setDirection(_unit->getFaceDirection());
@@ -197,7 +193,6 @@ void UnitWalkBState::think()
 			else
 			{
 				Log(LOG_INFO) << ". . no strafe, cacheUnit()";
-
 				_parent->getMap()->cacheUnit(_unit);
 			}
 		}
@@ -245,7 +240,6 @@ void UnitWalkBState::cancel()
 bool UnitWalkBState::doStatusStand()
 {
 	//Log(LOG_INFO) << ". _onScreen = " << _onScreen;
-
 	int dir = _pf->getStartDirection();
 	Log(LOG_INFO) << ". StartDirection = " << dir;
 
@@ -254,29 +248,14 @@ bool UnitWalkBState::doStatusStand()
 	{
 		Log(LOG_INFO) << ". kneeled, and path UpDown INVALID";
 
-		if (_parent->kneel(_unit, false))
+		if (_parent->kneel(
+						_unit,
+						false))
 		{
 			Log(LOG_INFO) << ". . Stand up";
 
-//			_newVis = _terrain->calculateFOV(_unit);
-//			bool newVis = visForUnits();
-
 			_unit->setCache(0);
 			_parent->getMap()->cacheUnit(_unit);
-
-/*			if (newVis)
-			{
-				Log(LOG_INFO) << ". . _newVis = TRUE, Abort path";
-
-				_pf->abortPath();
-
-				_unit->setCache(0);
-				_parent->getMap()->cacheUnit(_unit);
-
-				_parent->popState();
-
-				return false;		
-			} */
 		}
 		else
 		{
@@ -289,36 +268,22 @@ bool UnitWalkBState::doStatusStand()
 		}
 	}
 
-
-//	_tileSwitchDone = false;				// kL
+	_tileSwitchDone = false;				// kL
 //	_unit->setCache(0);						// kL
 //	_parent->getMap()->cacheUnit(_unit);	// kL
 
-
-/*	_newVis = _unit->getFaction() == FACTION_PLAYER
-		&& _terrain->calculateFOV(_unit);
-	_newUnitSpotted = // !_action.desperate &&
-		_parent->getPanicHandled()
-		&& _unitsSpotted < _unit->getUnitsSpottedThisTurn().size()
-		&& _unit->getFaction() != FACTION_PLAYER; */
-
-
 	bool newVis = visForUnits();
-	// check if we did spot new units
-/*	if ((_newVis // kL
-			|| (_newUnitSpotted
-				&& !(_action.desperate || _unit->getCharging())))
-		&& !_falling) */
 	if (newVis)
 	{
 		//if (_parent->getSave()->getTraceSetting()) { Log(LOG_INFO) << "Uh-oh! Company!"; }
 		Log(LOG_INFO) << "Uh-oh! STATUS_STANDING or PANICKING Company!";
-		if (_unit->getFaction() == FACTION_PLAYER) Log(LOG_INFO) << ". . _newVis = TRUE, postPathProcedures";
-		else if (_unit->getFaction() != FACTION_PLAYER) Log(LOG_INFO) << ". . _newUnitSpotted = TRUE, postPathProcedures";
+		//if (_unit->getFaction() == FACTION_PLAYER) Log(LOG_INFO) << ". . _newVis = TRUE, postPathProcedures";
+		//else if (_unit->getFaction() != FACTION_PLAYER) Log(LOG_INFO) << ". . _newUnitSpotted = TRUE, postPathProcedures";
 
 		_unit->_hidingForTurn = false; // clearly we're not hidden now
 
-//		_unit->setCache(0); // kL
+		_unit->setCache(0);	// kL. Calls to cacheUnit() are bogus without setCache(0) first...!
+							// although _cacheInvalid might be set elsewhere but i doubt it.
 		_parent->getMap()->cacheUnit(_unit);
 
 		postPathProcedures();
@@ -339,14 +304,13 @@ bool UnitWalkBState::doStatusStand()
 //	setNormalWalkSpeed(); // kL: Done in init()
 
 //	int dir = _pf->getStartDirection();
-	//Log(LOG_INFO) << ". getStartDirection() dir = " << dir;
+//	Log(LOG_INFO) << ". getStartDirection() dir = " << dir;
 
 	if (_falling)
 	{
 		dir = _pf->DIR_DOWN;
 		Log(LOG_INFO) << ". . _falling, dir = " << dir;
 	}
-
 
 	if (dir != -1)
 	{
@@ -502,8 +466,6 @@ bool UnitWalkBState::doStatusStand()
 			{
 				Log(LOG_INFO) << ". . . door #0";
 				_parent->getResourcePack()->getSound("BATTLE.CAT", 3)->play(); // normal door
-
-//				return false; // kL. don't start walking yet, wait for the normal door to open
 			}
 			else if (door == 1)
 			{
@@ -565,42 +527,43 @@ bool UnitWalkBState::doStatusStand()
 			}
 		}
 
-		Log(LOG_INFO) << ". pos 6";
-
+		//Log(LOG_INFO) << ". dequeuePath()";
 		dir = _pf->dequeuePath(); // now start moving
+
 		if (_falling)
 			dir = _pf->DIR_DOWN;
 		Log(LOG_INFO) << ". dequeuePath() dir = " << dir;
 
+		if (dir == _pf->DIR_UP)	// kL
+			_walkCam->up();		// kL
 
-		if (_unit->spendTimeUnits(tu))
+		if (_unit->spendTimeUnits(tu)		// These were checked above and don't really need to
+			&& _unit->spendEnergy(energy))	// be checked again here. Only subtract required.
 		{
-			if (_unit->spendEnergy(energy))
-			{
-				Log(LOG_INFO) << ". . WalkBState: spend TU & Energy";
+			//Log(LOG_INFO) << ". . WalkBState: spend TU & Energy";
 
-				Tile* tileBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(0, 0, -1));
+			Tile* tileBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(0, 0, -1));
 
-				Log(LOG_INFO) << ". . WalkBState: startWalking()";
-				_unit->startWalking(
-								dir,
-								destination,
-								tileBelow,
-								_onScreen);
+			Log(LOG_INFO) << ". . WalkBState: startWalking()";
+			_unit->startWalking(
+							dir,
+							destination,
+							tileBelow,
+							_onScreen);
 
-				_turnBeforeFirstStep = false;
-			}
+			_turnBeforeFirstStep = false;
 		}
 
 		// make sure the unit sprites are up to date
 		// kL_note: This could probably go up under spend tu+energy. but.....
-		if (_onScreen)
+		// And since Status_Stand algorithm doesn't actually draw anything
+		// REMARK It.
+/*kL		if (_onScreen)
 		{
-			Log(LOG_INFO) << ". . _onScreen";
-
+			//Log(LOG_INFO) << ". . _onScreen";
 			if (_pf->getStrafeMove())
 			{
-				Log(LOG_INFO) << ". . . _pf->getStrafeMove()";
+				Log(LOG_INFO) << ". . . (_onScreen) -> _pf->getStrafeMove()";
 
 				// This is where we fake out the strafe movement direction so the unit "moonwalks"
 				int dirStrafe = _unit->getDirection();
@@ -623,7 +586,7 @@ bool UnitWalkBState::doStatusStand()
 //			}
 
 			Log(LOG_INFO) << ". . end (_onScreen)";
-		}
+		} */
 		Log(LOG_INFO) << ". EXIT (dir!=-1) : " << _unit->getId();
 	}
 	else // dir == -1
@@ -650,22 +613,21 @@ bool UnitWalkBState::doStatusWalk()
 	if (_parent->getSave()->getTile(_unit->getDestination())->getUnit() == 0  // next tile must be not occupied
 		// kL_note: and, if not flying, the position directly below the tile must not be occupied...
 		// Had that happen with a sectoid left standing in the air because a cyberdisc was 2 levels below it.
+		// btw, these have probably been already checked...
 		|| _parent->getSave()->getTile(_unit->getDestination())->getUnit() == _unit)
 	{
 		Log(LOG_INFO) << ". WalkBState, keepWalking()";
-
 		playMovementSound();
 
 		tBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(0, 0, -1));
-		_unit->keepWalking(
+		_unit->keepWalking( // advances _walkPhase
 						tBelow,
-						_onScreen); // advances _walkPhase
+						_onScreen);
 	}
 	else if (!_falling)
 	{
 		Log(LOG_INFO) << ". WalkBState, !falling Abort path";
-
-		_unit->lookAt( // turn to undiscovered unit
+		_unit->lookAt( // turn to blocking unit
 					_unit->getDestination(),
 					_unit->getTurretType() != -1);
 
@@ -673,12 +635,13 @@ bool UnitWalkBState::doStatusWalk()
 	}
 
 	// unit moved from one tile to the other, update the tiles & investigate new flooring
-//	if (!_tileSwitchDone										// kL
-//		&& _unit->getPosition() != _unit->getLastPosition())	// kL
-	if (_unit->getPosition() != _unit->getLastPosition())
+	if (!_tileSwitchDone // kL
+		&& _unit->getPosition() != _unit->getLastPosition())
 	{
-		Log(LOG_INFO) << ". tile switch from _lastpos to _pos.";
-//		_tileSwitchDone = true; // kL
+		Log(LOG_INFO) << ". tile switch from _lastpos to _destination";
+		// BattleUnit::startWalking() sets _lastpos = _pos, then
+		// BattleUnit::keepWalking (_walkPhase == middle) sets _pos = _destination
+		_tileSwitchDone = true; // kL
 
 		bool fallCheck = true;
 
@@ -700,11 +663,11 @@ bool UnitWalkBState::doStatusWalk()
 											_unit->getPosition() + Position(x, y, 0))
 										->hasNoFloor(tBelow))
 				{
-					Log(LOG_INFO) << ". . . WalkBState, hasFloor or is Flying ( fallCheck set FALSE )";
+					Log(LOG_INFO) << ". . . hasFloor ( fallCheck set FALSE )";
 					fallCheck = false;
 				}
 
-				Log(LOG_INFO) << ". . WalkBState, remove unit from previous tile";
+				Log(LOG_INFO) << ". . remove unit from previous tile";
 				_parent->getSave()->getTile(
 										_unit->getLastPosition() + Position(x, y, 0))
 									->setUnit(0);
@@ -721,8 +684,7 @@ bool UnitWalkBState::doStatusWalk()
 					y > -1;
 					y--)
 			{
-				Log(LOG_INFO) << ". . WalkBState, set unit on new tile";
-
+				Log(LOG_INFO) << ". . set unit on new tile";
 				_parent->getSave()->getTile(
 										_unit->getPosition() + Position(x, y, 0))
 									->setUnit(
@@ -735,12 +697,12 @@ bool UnitWalkBState::doStatusWalk()
 		_falling = fallCheck
 					&& _unit->getPosition().z != 0
 //kL					&& _unit->getTile()->hasNoFloor(tileBelow) // kL_note: Done above.
-					&& _unit->getArmor()->getMovementType() != MT_FLY // -> moved to doStatusStand_end()
+					&& _unit->getArmor()->getMovementType() != MT_FLY // -> sorta move to doStatusStand_end()
 					&& _unit->getWalkingPhase() == 0; // <- set @ startWalking() and @ end of keepWalking()
+
 		if (_falling)
 		{
-			Log(LOG_INFO) << ". WalkBState, falling";
-
+			Log(LOG_INFO) << ". falling";
 			for (int
 					x = size;
 					x > -1;
@@ -752,12 +714,12 @@ bool UnitWalkBState::doStatusWalk()
 						--y)
 				{
 					tBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(x, y, -1));
-					Log(LOG_INFO) << ". . WalkBState, otherTileBelow exists";
+					if (tBelow) Log(LOG_INFO) << ". . otherTileBelow exists";
 
 					if (tBelow
 						&& tBelow->getUnit())
 					{
-						Log(LOG_INFO) << ". . . WalkBState, another unit already occupies lower tile";
+						Log(LOG_INFO) << ". . . another unit already occupies lower tile";
 
 						_falling = false;
 
@@ -769,23 +731,21 @@ bool UnitWalkBState::doStatusWalk()
 
 						return false;
 					}
-					else Log(LOG_INFO) << ". . WalkBState, otherTileBelow Does NOT contain other unit";
+					else Log(LOG_INFO) << ". . otherTileBelow Does NOT contain other unit";
 				}
 			}
 		}
 
-/*kL		if (!_walkCam->isOnScreen(_unit->getPosition())
-			&& _unit->getFaction() != FACTION_PLAYER
-			&& _unit->getVisible()) */
+		// kL_note: try moving this up into think().
 		// kL_note: Let's try this, maintain camera focus centered on Visible aliens during (un)hidden movement
-		if (_unit->getVisible()							// kL
-			&& _unit->getFaction() != FACTION_PLAYER	// kL
+/*		if (_unit->getVisible()								// kL
+			&& _unit->getFaction() != FACTION_PLAYER		// kL
 			&& !_walkCam->isOnScreen(_unit->getPosition())) // kL_TEST!
 		{
 			_walkCam->centerOnPosition(_unit->getPosition());
 		}
 
-		// if the unit changed level, camera changes level with it. kL_begin:
+		// kL_begin: if the unit changed level, camera changes level with it.
 		if (_walkCam->getViewLevel() != _unit->getPosition().z)
 		{
 			int delta_z = _unit->getPosition().z - _walkCam->getViewLevel();
@@ -793,7 +753,7 @@ bool UnitWalkBState::doStatusWalk()
 				_walkCam->up();
 			else
 				_walkCam->down();
-		} // kL_end.
+		} // kL_end. */
 //kL		_walkCam->setViewLevel(_unit->getPosition().z);
 	}
 
@@ -847,7 +807,7 @@ bool UnitWalkBState::doStatusStand_end()
 //	_falling = false; <- don't forget to turn it off somewhere!!!
 
 
-//	_tileSwitchDone = false; // kL
+	_tileSwitchDone = false; // kL
 
 	// if the unit burns floortiles, burn floortiles
 	if (_unit->getSpecialAbility() == SPECAB_BURNFLOOR)
@@ -886,7 +846,6 @@ bool UnitWalkBState::doStatusStand_end()
 						&& _parent->getPanicHandled()
 						&& _unitsSpotted < _unit->getUnitsSpottedThisTurn().size()
 						&& _unit->getFaction() != FACTION_PLAYER; */
-
 
 	if (_parent->checkForProximityGrenades(_unit))
 	{
@@ -933,7 +892,6 @@ bool UnitWalkBState::doStatusStand_end()
 	}
 	else // <<-- Looks like we gotta make it fall here!!! (if unit *ends* its total walk sequence on empty air.
 			// And, fall *before* spotting new units, else Abort will likely make it float...
-
 	{
 		Log(LOG_INFO) << ". . WalkBState: falling";
 
@@ -955,19 +913,6 @@ void UnitWalkBState::doStatusTurn()
 
 	_unit->turn();
 
-	// calculateFOV() is unreliable for setting the _newUnitSpotted bool,
-	// as it can be called from various other places in the code, ie:
-	// doors opening (& explosions/terrain destruction?), and that messes up the result.
-	// kL_note: But let's do it anyway!
-/*	_newVis = _unit->getFaction() == FACTION_PLAYER
-		&& _terrain->calculateFOV(_unit);
-	_newUnitSpotted = //kL !!_falling && _action.desperate &&
-		_unit->getFaction() != FACTION_PLAYER
-		&& _unitsSpotted < _unit->getUnitsSpottedThisTurn().size()
-		&& _parent->getPanicHandled(); */
-
-	bool newVis = visForUnits(); // kL
-
 	if (_onScreen) // make sure the unit sprites are up to date
 	{
 		Log(LOG_INFO) << ". cacheUnit()";
@@ -976,10 +921,11 @@ void UnitWalkBState::doStatusTurn()
 		_parent->getMap()->cacheUnit(_unit);
 	}
 
-/*	if ((_newVis
-			|| (_newUnitSpotted
-				&& !(_action.desperate || _unit->getCharging())))
-		&& !_falling) */
+	// calculateFOV() is unreliable for setting the _newUnitSpotted bool,
+	// as it can be called from various other places in the code, ie:
+	// doors opening (& explosions/terrain destruction?), and that messes up the result.
+	// kL_note: But let's do it anyway!
+	bool newVis = visForUnits(); // kL
 	if (newVis) // kL
 	{
 		if (_turnBeforeFirstStep)
@@ -1007,17 +953,16 @@ void UnitWalkBState::postPathProcedures()
 {
 	Log(LOG_INFO) << "UnitWalkBState::postPathProcedures(), unit = " << _unit->getId();
 
-//	_tileSwitchDone = false;	// kL
+	_tileSwitchDone = false;	// kL
 //	_falling = false;			// kL
 	_action.TU = 0;
 
 	if (_unit->getFaction() != FACTION_PLAYER)
 	{
 		int dir = _action.finalFacing;
+
 		if (_action.finalAction)
-		{
 			_unit->dontReselect();
-		}
 
 		if (_unit->getCharging() != 0)
 		{
@@ -1052,9 +997,7 @@ void UnitWalkBState::postPathProcedures()
 			}
 		}
 		else if (_unit->_hidingForTurn)
-		{
 			dir = _unit->getDirection() + 4;
-		}
 
 		if (dir != -1)
 		{
@@ -1065,7 +1008,7 @@ void UnitWalkBState::postPathProcedures()
 			{
 				_unit->turn();
 				_parent->getTileEngine()->calculateFOV(_unit);
-					// kL_note: might need newVis/newUnitSpotted -> abort
+				// kL_note: might need newVis/newUnitSpotted -> abort
 			}
 
 			_unit->setCache(0);
@@ -1074,10 +1017,9 @@ void UnitWalkBState::postPathProcedures()
 		}
 	}
 	else if (!_parent->getPanicHandled())
-	{
 		// todo: set the unit to aggrostate and try to find cover
 		_unit->setTimeUnits(0);
-	}
+
 
 	_terrain->calculateUnitLighting();
 	_terrain->calculateFOV(_unit);

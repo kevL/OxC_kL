@@ -1820,7 +1820,8 @@ BattleUnit* TileEngine::hit(
 			{
 				Log(LOG_INFO) << ". . . buTarget NOT Valid, check tileBelow";
 
-				// it's possible we have a unit below the actual tile, when he stands on a stairs and sticks his head up into the above tile.
+				// it's possible we have a unit below the actual tile, when he
+				// stands on a stairs and sticks his head up into the above tile.
 				// kL_note: yeah, just like in LoS calculations!!!! cf. visible() etc etc .. idiots.
 				Tile* tileBelow = _save->getTile(Position(
 														pTarget_voxel.x / 16,
@@ -1888,16 +1889,22 @@ BattleUnit* TileEngine::hit(
 					}
 				}
 
+				Log(LOG_INFO) << ". . check for Cyberdisc expl.";
+				Log(LOG_INFO) << ". . health = " << buTarget->getHealth();
+				Log(LOG_INFO) << ". . stunLevel = " << buTarget->getStunlevel();
 				if (buTarget->getSpecialAbility() == SPECAB_EXPLODEONDEATH // cyberdiscs
-					&& buTarget->getHealth() == 0		// kL
-					&& !buTarget->isOut(false, true))	// don't explode if stunned. Maybe...
+					&& buTarget->getHealth() == 0)		// kL
+//					&& !buTarget->isOut(false, true))	// kL. don't explode if stunned. Maybe... wrong!!!
+														// Cannot be STATUS_DEAD OR STATUS_UNCONSCIOUS!
 //kL					(buTarget->getHealth() == 0 || buTarget->getStunlevel() >= buTarget->getHealth()))
 				{
-					if (type != DT_STUN					// don't explode if stunned. Maybe... see above.
-						&& type != DT_HE)				// don't explode if taken down w/ explosives
+					Log(LOG_INFO) << ". . . Cyberdisc down!!";
+					if (type != DT_STUN		// don't explode if stunned. Maybe... see above.
+						&& type != DT_HE)	// don't explode if taken down w/ explosives
 					{
 						Log(LOG_INFO) << ". . . . new ExplosionBState(), !DT_STUN & !DT_HE";
-						// kL_note: wait a second. hit() creates an ExplosionBState, but ExplosionBState::explode() creates a hit() ! -> terrain..
+						// kL_note: wait a second. hit() creates an ExplosionBState,
+						// but ExplosionBState::explode() creates a hit() ! -> terrain..
 
 						Position unitPos = Position(
 												buTarget->getPosition().x * 16,
@@ -2134,7 +2141,8 @@ void TileEngine::explode(
 									}
 									else
 									{
-//kL										dest->getUnit()->damage(Position(centerX, centerY, centerZ) - dest->getPosition(), RNG::generate(0, power_*2), type);
+//kL										dest->getUnit()->damage(Position(centerX, centerY, centerZ) - dest->getPosition(),
+//kL																						RNG::generate(0, power_*2), type);
 										int powerVsUnit = RNG::generate(1, power_ * 2); // kL
 										Log(LOG_INFO) << ". . . powerVsUnit = " << powerVsUnit << " DT_STUN, GZ";
 										dest->getUnit()->damage(
@@ -2277,7 +2285,8 @@ void TileEngine::explode(
 																	12)));
 									}
 
-									// kL_note: fire damage is also caused by BattlescapeGame::endTurn() -- but previously by BattleUnit::prepareNewTurn()!!!!
+									// kL_note: fire damage is also caused by BattlescapeGame::endTurn()
+									// -- but previously by BattleUnit::prepareNewTurn()!!!!
 									if (dest->getUnit())
 									{
 										float resistance = dest->getUnit()->getArmor()->getDamageModifier(DT_IN);
@@ -2288,7 +2297,8 @@ void TileEngine::explode(
 																	power_ / 4,
 																	power_ * 3 / 4); // kL: 25 - 50%
 
-//kL											dest->getUnit()->damage(Position(0, 0, 12-dest->getTerrainLevel()), RNG::generate(5, 10), DT_IN, true);
+//kL											dest->getUnit()->damage(Position(0, 0, 12-dest->getTerrainLevel()),
+//kL																			RNG::generate(5, 10), DT_IN, true);
 											dest->getUnit()->damage(
 																Position(
 																		0,
@@ -2365,7 +2375,8 @@ void TileEngine::explode(
 }
 
 /**
- * Applies the explosive power to the tile parts. This is where the actual destruction takes place.
+ * Applies the explosive power to the tile parts.
+ * This is where the actual destruction takes place.
  * Must affect 7 objects (6 box sides and the object inside).
  * @param tile, Tile affected.
  * @return, True if the objective was destroyed.
@@ -4081,24 +4092,30 @@ bool TileEngine::psiAttack(BattleAction* action)
 		attackStr *= 100.0;
 		attackStr /= 56.0;
 
-		action->actor->addPsiExp();
+		if (action->actor->getOriginalFaction() == FACTION_PLAYER)
+			action->actor->addPsiExp();
 
 		int chance = static_cast<int>(attackStr);
 
-//		std::string& info = tr("STR_UFO_").arg(ufo->getId())
-		std::stringstream info;
-		if (action->type == BA_PANIC)
-			info << "panic ";
-		else
-			info << "control ";
-		info << chance;
-		_save->getBattleState()->warning(info.str()); // kL, info.
+//TEMP!!!		if (_save->getSide() == FACTION_PLAYER)
+		{
+//			std::string& info = tr("STR_UFO_").arg(ufo->getId())
+			std::stringstream info;
+			if (action->type == BA_PANIC)
+				info << "panic ";
+			else
+				info << "control ";
+			info << chance;
+			// note: this is a bit borky 'cause it's looking for a string in YAML ...
+			_save->getBattleState()->warning(info.str()); // kL, info.
+		}
 
 		Log(LOG_INFO) << ". . . attackStr Success @ " << chance;
 		if (RNG::percent(chance))
 		{
 			Log(LOG_INFO) << ". . Success";
-			action->actor->addPsiExp(2);
+			if (action->actor->getOriginalFaction() == FACTION_PLAYER)
+				action->actor->addPsiExp(2);
 
 			if (action->type == BA_PANIC)
 			{

@@ -55,6 +55,7 @@ Ufo::Ufo(RuleUfo* rules)
 		_rules(rules),
 		_id(0),
 		_crashId(0),
+		_crashPS(0),
 		_landId(0),
 		_damage(0),
 		_direction("STR_NORTH"),
@@ -68,8 +69,7 @@ Ufo::Ufo(RuleUfo* rules)
 		_detected(false),
 		_hyperDetected(false),
 		_shootingAt(0),
-		_hitFrame(0),
-		_crashPS(0)
+		_hitFrame(0)
 {
 }
 
@@ -90,15 +90,11 @@ Ufo::~Ufo()
 			i = _followers.begin();
 		}
 		else
-		{
 			 ++i;
-		}
 	}
 
 	if (_mission)
-	{
 		_mission->decreaseLiveUfos();
-	}
 
 	if (_dest)
 	{
@@ -111,6 +107,7 @@ Ufo::~Ufo()
 	}
 }
 
+
 /**
  * Match AlienMission based on the unique ID.
  */
@@ -121,6 +118,7 @@ class matchMissionID
 
 private:
 	int _id;
+
 
 	public:
 		/// Store ID for later comparisons.
@@ -138,6 +136,7 @@ private:
 		}
 };
 
+
 /**
  * Loads the UFO from a YAML file.
  * @param node YAML node.
@@ -153,6 +152,7 @@ void Ufo::load(
 
 	_id					= node["id"].as<int>(_id);
 	_crashId			= node["crashId"].as<int>(_crashId);
+	_crashPS			= node["crashPS"].as<int>(_crashPS);
 	_landId				= node["landId"].as<int>(_landId);
 	_damage				= node["damage"].as<int>(_damage);
 	_altitude			= node["altitude"].as<std::string>(_altitude);
@@ -161,10 +161,10 @@ void Ufo::load(
 	_hyperDetected		= node["hyperDetected"].as<bool>(_hyperDetected);
 	_secondsRemaining	= node["secondsRemaining"].as<int>(_secondsRemaining);
 	_inBattlescape		= node["inBattlescape"].as<bool>(_inBattlescape);
-	_crashPS			= node["crashPS"].as<int>(_crashPS);
 
-	double lon = _lon;
-	double lat = _lat;
+	double
+		lon = _lon,
+		lat = _lat;
 	if (const YAML::Node& dest = node["dest"])
 	{
 		lon = dest["lon"].as<double>();
@@ -176,40 +176,28 @@ void Ufo::load(
 	_dest->setLatitude(lat);
 
 	if (const YAML::Node& status = node["status"])
-	{
 		_status = (UfoStatus)status.as<int>();
-	}
 	else
 	{
 		if (_damage >= _rules->getMaxDamage())
-		{
 			_status = DESTROYED;
-		}
 		else if (_damage >= _rules->getMaxDamage() / 2)
-		{
 			_status = CRASHED;
-		}
 		else if (_altitude == "STR_GROUND")
-		{
 			_status = LANDED;
-		}
 		else
-		{
 			_status = FLYING;
-		}
 	}
 
-	int missionID		= node["mission"].as<int>();
+	int missionID = node["mission"].as<int>();
 
 	std::vector<AlienMission*>::const_iterator found = std::find_if(
 																game.getAlienMissions().begin(),
 																game.getAlienMissions().end(),
 																matchMissionID(missionID));
 	if (found == game.getAlienMissions().end())
-	{
 		// Corrupt save file.
 		throw Exception("Unknown mission, save file is corrupt.");
-	}
 
 	_mission = *found;
 
@@ -231,7 +219,10 @@ YAML::Node Ufo::save() const
 	node["type"]		= _rules->getType();
 	node["id"]			= _id;
 	if (_crashId)
+	{
 		node["crashId"]	= _crashId;
+		node["crashPS"]	= _crashPS;
+	}
 	else if (_landId)
 		node["landId"]	= _landId;
 
@@ -250,7 +241,6 @@ YAML::Node Ufo::save() const
 	node["mission"]			= _mission->getId();
 	node["trajectory"]		= _trajectory->getID();
 	node["trajectoryPoint"]	= _trajectoryPoint;
-	node["crashPS"]			= _crashPS;
 
 	return node;
 }

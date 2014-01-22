@@ -1905,7 +1905,10 @@ void AlienBAIState::meleeAction()
 	if (_aggroTarget != 0
 		&& !_aggroTarget->isOut(true, true))
 	{
-		if (_save->getTileEngine()->validMeleeRange(_unit, _aggroTarget, _unit->getDirection()))
+		if (_save->getTileEngine()->validMeleeRange(
+												_unit,
+												_aggroTarget,
+												_unit->getDirection()))
 		{
 			meleeAttack();
 
@@ -1924,7 +1927,9 @@ void AlienBAIState::meleeAction()
 			i != _save->getUnits()->end();
 			++i)
 	{
-		int newDistance = _save->getTileEngine()->distance(_unit->getPosition(), (*i)->getPosition());
+		int newDistance = _save->getTileEngine()->distance(
+														_unit->getPosition(),
+														(*i)->getPosition());
 		if (newDistance > 20
 			|| !validTarget(*i, true, true))
 		{
@@ -1934,7 +1939,7 @@ void AlienBAIState::meleeAction()
 		// pick closest living unit that we can move to
 		if ((newDistance < distance
 				|| newDistance == 1)
-			&& !(*i)->isOut(true, true))
+			&& !(*i)->isOut())
 		{
 			if (newDistance == 1 || selectPointNearTarget(*i, chargeReserve))
 			{
@@ -2335,9 +2340,9 @@ bool AlienBAIState::psiAction()
 					dist = _save->getTileEngine()->distance(
 															(*i)->getPosition(),
 															_unit->getPosition()),
-					rand = RNG::generate(0, 100);
+					rand = RNG::generate(1, 50);
 
-				Log(LOG_INFO) << ". . . defense = " << defense;
+				Log(LOG_INFO) << "\n. . . defense = " << defense;
 				Log(LOG_INFO) << ". . . dist = " << dist;
 				Log(LOG_INFO) << ". . . rand = " << rand;
 				Log(LOG_INFO) << ". . . LoS = " << static_cast<int>(LoS) * 50;
@@ -2362,7 +2367,7 @@ bool AlienBAIState::psiAction()
 			|| chance < -10
 			|| RNG::percent(10))
 		{
-			//Log(LOG_INFO) << "AlienBAIState::psiAction() EXIT 1, false";
+			Log(LOG_INFO) << "AlienBAIState::psiAction() EXIT 1, False";
 			return false;
 		}
 
@@ -2373,13 +2378,13 @@ bool AlienBAIState::psiAction()
 		{
 			if (_attackAction->weapon->getAmmoItem()->getRules()->getPower() > chance)
 			{
-				//Log(LOG_INFO) << "AlienBAIState::psiAction() EXIT 2, false";
+				//Log(LOG_INFO) << "AlienBAIState::psiAction() EXIT 2, False";
 				return false;
 			}
 		}
 		else if (RNG::generate(35, 155) > chance)
 		{
-			//Log(LOG_INFO) << "AlienBAIState::psiAction() EXIT 3, false";
+			//Log(LOG_INFO) << "AlienBAIState::psiAction() EXIT 3, False";
 			return false;
 		} */
 
@@ -2395,21 +2400,23 @@ bool AlienBAIState::psiAction()
 				bravery = _aggroTarget->getStats()->bravery,
 				panicOdds = 110 - bravery, // ie, moraleHit
 				moraleResult = morale - panicOdds;
-			Log(LOG_INFO) << ". . panicOdds1 = " << panicOdds;
+			Log(LOG_INFO) << ". . panicOdds_1 = " << panicOdds;
 
 			if (moraleResult < 0)
 				panicOdds -= bravery / 2;
 			else if (moraleResult < 50)
 				panicOdds -= bravery;
+			else
+				panicOdds -= bravery * 2;
 
-			Log(LOG_INFO) << ". . panicOdds2 = " << panicOdds;
-			if (RNG::percent(panicOdds))
+			Log(LOG_INFO) << ". . panicOdds_2 = " << panicOdds;
+			if (RNG::percent(panicOdds + RNG::generate(0, 99)))
 			{
 				Log(LOG_INFO) << ". do Panic";
 				_psiAction->target = _aggroTarget->getPosition();
 				_psiAction->type = BA_PANIC;
 
-				//Log(LOG_INFO) << "AlienBAIState::psiAction() EXIT 2, true";
+				//Log(LOG_INFO) << "AlienBAIState::psiAction() EXIT 2, True";
 				return true;
 			}
 		}
@@ -2418,11 +2425,11 @@ bool AlienBAIState::psiAction()
 		_psiAction->target = _aggroTarget->getPosition();
 		_psiAction->type = BA_MINDCONTROL;
 
-		//Log(LOG_INFO) << "AlienBAIState::psiAction() EXIT 3, true";
+		//Log(LOG_INFO) << "AlienBAIState::psiAction() EXIT 3, True";
 		return true;
 	}
 
-	//Log(LOG_INFO) << "AlienBAIState::psiAction() EXIT 4, false";
+	Log(LOG_INFO) << "AlienBAIState::psiAction() EXIT 4, False";
 	return false;
 }
 

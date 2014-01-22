@@ -21,6 +21,7 @@
 #define OPENXCOM_BATTLESTATE_H
 
 #include <string>
+
 #include "BattlescapeGame.h"
 
 
@@ -29,19 +30,24 @@ namespace OpenXcom
 
 class BattlescapeGame;
 
+
 /**
  * This class sets the battlescape in a certain sub-state.
  * These states can be triggered by the player or the AI.
  */
 class BattleState
 {
+
 protected:
-	BattlescapeGame* _parent;
 	BattleAction _action;
+	BattlescapeGame* _parent;
+
 
 	public:
 		/// Creates a new BattleState linked to the game.
-		BattleState(BattlescapeGame* parent, BattleAction action);
+		BattleState(
+				BattlescapeGame* parent,
+				BattleAction action);
 		/// Creates a new BattleState linked to the game.
 		BattleState(BattlescapeGame* parent);
 		/// Cleans up the BattleState.
@@ -53,6 +59,7 @@ protected:
 		virtual void cancel();
 		/// Runs state functionality every cycle.
 		virtual void think();
+
 		/// Gets a copy of the action.
 		BattleAction getAction() const;
 };

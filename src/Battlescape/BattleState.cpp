@@ -28,7 +28,9 @@ namespace OpenXcom
  * @param parent Pointer to the parent state.
  * @param action Struct containing info about the action.
  */
-BattleState::BattleState(BattlescapeGame* parent, BattleAction action)
+BattleState::BattleState(
+		BattlescapeGame* parent,
+		BattleAction action)
 	:
 		_parent(parent),
 		_action(action)

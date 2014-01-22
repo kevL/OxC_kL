@@ -1677,9 +1677,9 @@ void Map::cacheUnit(BattleUnit* unit)
 	unitSprite->setPalette(this->getPalette());
 
 //kL	int parts = unit->getArmor()->getSize() == 1? 1: (unit->getArmor()->getSize() * 2);
-	int parts = unit->getArmor()->getSize() * 2;
-	if (unit->getArmor()->getSize() == 1)
-		parts = 1;
+	int parts = 1;									// kL
+	if (unit->getArmor()->getSize() > 1)			// kL
+		parts = unit->getArmor()->getSize() * 2;	// kL
 
 	bool
 		d = false,
@@ -1702,12 +1702,10 @@ void Map::cacheUnit(BattleUnit* unit)
 			if (!cache) // no cache created yet
 			{
 				//Log(LOG_INFO) << ". . . (!cache)";
-
 				cache = new Surface(
 								_spriteWidth,
 								_spriteHeight);
 				cache->setPalette(this->getPalette());
-
 				//Log(LOG_INFO) << ". . . end (!cache)";
 			}
 
@@ -1717,21 +1715,18 @@ void Map::cacheUnit(BattleUnit* unit)
 			//Log(LOG_INFO) << ". . getItem()";
 			BattleItem* rhandItem = unit->getItem("STR_RIGHT_HAND");
 			BattleItem* lhandItem = unit->getItem("STR_LEFT_HAND");
-			if (!lhandItem && !rhandItem)
+			if (!lhandItem
+				&& !rhandItem)
 			{
 				unitSprite->setBattleItem(0);
 			}
 			else
 			{
 				if (rhandItem)
-				{
 					unitSprite->setBattleItem(rhandItem);
-				}
 
 				if (lhandItem)
-				{
 					unitSprite->setBattleItem(lhandItem);
-				}
 			}
 
 
@@ -1752,12 +1747,10 @@ void Map::cacheUnit(BattleUnit* unit)
 			//Log(LOG_INFO) << ". . setCache()";
 			unit->setCache(cache, i);
 		}
-
 		//Log(LOG_INFO) << ". end (invalid)";
 	}
 
 	delete unitSprite;
-
 	//Log(LOG_INFO) << "exit cacheUnit() : " << unit->getId();
 }
 

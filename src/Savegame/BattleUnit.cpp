@@ -516,60 +516,36 @@ void BattleUnit::startWalking(
 		Tile* tileBelow,
 		bool cache)
 {
-	Log(LOG_INFO) << "BattleUnit::startWalking() unitID = " << getId();
-
-//	_direction = direction;						// kL
-	_status = STATUS_WALKING;					// kL
-
-
-	if (direction >= Pathfinding::DIR_UP)
-//		&& _tile->hasNoFloor(tileBelow)			// kL
-//		&& _armor->getMovementType() == MT_FLY)	// kL
-	{
-		Log(LOG_INFO) << ". STATUS_FLYING";
-
-		_status = STATUS_FLYING;
-
-		_verticalDirection = direction;
-		_floating = true;						// kL
-	}
-	else //if (direction > 7					// kL
-		//&& _tile->hasNoFloor(tileBelow))		// kL
-	{
-		Log(LOG_INFO) << ". STATUS_WALKING";
-
-//kL		_status = STATUS_FLYING;
-//		_verticalDirection = Pathfinding::DIR_DOWN;
-		_direction = direction;
-//		_floating = true;						// kL
-
-		_kneeled = false;
-	}
-//	else // just walking along ...
-//	{
-//		_floating = false;
-//		_kneeled = false;
-//	}
-
-	if (_tile->hasNoFloor(tileBelow))
-	{
-		Log(LOG_INFO) << ". hasNoFloor(), STATUS_FLYING";
-
-		_status = STATUS_FLYING;
-		_floating = true;
-	}
-	else
-	{
-		Log(LOG_INFO) << ". has Floor, STATUS_WALKING";
-
-		_floating = false;
-	}
-
+	Log(LOG_INFO) << "BattleUnit::startWalking() ID = " << getId()
+					<< " _walkPhase = 0";
 	_walkPhase = 0;
 	_destination = destination;
 	_lastPos = _pos;
-//kL	_cacheInvalid = cache; // trying to stop the now infamous double-step...
+//kL	_cacheInvalid = cache; // there's no movement here, This not needed.
 
+	if (direction >= Pathfinding::DIR_UP)
+	{
+		Log(LOG_INFO) << ". STATUS_FLYING, up.down";
+		_status = STATUS_FLYING;
+		_floating = true;
+		_verticalDirection = direction;
+	}
+	else if (_tile->hasNoFloor(tileBelow))
+	{
+		Log(LOG_INFO) << ". STATUS_FLYING, no Floor";
+		_status = STATUS_FLYING;
+		_floating = true;
+		_kneeled = false;
+		_direction = direction;
+	}
+	else
+	{
+		Log(LOG_INFO) << ". STATUS_WALKING";
+		_status = STATUS_WALKING;
+		_floating = false;
+		_kneeled = false;
+		_direction = direction;
+	}
 	Log(LOG_INFO) << "BattleUnit::startWalking() EXIT";
 }
 /*kL void BattleUnit::startWalking(int direction, const Position &destination, Tile *tileBelowMe, bool cache)
@@ -613,11 +589,10 @@ void BattleUnit::keepWalking(
 		Tile* tileBelow,
 		bool cache)
 {
-	Log(LOG_INFO) << "BattleUnit::keepWalking() unitID = " << getId();
-
 	_walkPhase++;
-	Log(LOG_INFO) << ". _walkPhase = " << _walkPhase;
 
+	Log(LOG_INFO) << "BattleUnit::keepWalking() ID = " << getId()
+					<< " _walkPhase = " << _walkPhase;
 	int
 		middle,
 		end;
@@ -626,29 +601,25 @@ void BattleUnit::keepWalking(
 	{
 		middle = 4;
 		end = 8;
-//		middle	= 8;		// kL
-//		end		= 16;		// kL
 	}
-	else
+	else // diagonal walking takes double the steps
 	{
-		// diagonal walking takes double the steps
 		middle	= 4 + 4 * (_direction %2);
 		end		= 8 + 8 * (_direction %2);
 
 		if (_armor->getSize() > 1)
 		{
-			if (1 > _direction || _direction > 4) // dir = 0,7,6,5 (upscreen)
+			if (_direction < 1 || 4 < _direction) // dir = 0,7,6,5 (up x3 or left)
 				middle = end;
 			else
 				middle = 1;
 		}
 	}
 
-	if (!cache) // ie. if not onScreen
+	if (!cache) // ie. not onScreen
 	{
-//		_pos = _destination; // kL_note: I think this is causing the 'double-step'
-		middle	= 1;	// kL: Mc'd units offscreen won't move without this (tho they turn, as if to start walking)
-		end		= 2;
+		middle = 1; // kL: Mc'd units offscreen won't move without this (tho they turn, as if to start walking)
+		end = 2;
 	}
 
 	if (_walkPhase == middle)
@@ -656,15 +627,13 @@ void BattleUnit::keepWalking(
 		// we assume we reached our destination tile
 		// this is actually a drawing hack, so soldiers are not overlapped by floortiles
 		// kL_note: which they (large units) are half the time anyway...
-//		_lastPos = _pos;	// kL
 		_pos = _destination;
 	}
 
-	if (_walkPhase >= end)
+	if (_walkPhase >= end) // officially reached the destination tile
 	{
 		Log(LOG_INFO) << ". end -> STATUS_STANDING";
 
-		// we officially reached our destination tile
 		_status = STATUS_STANDING;
 		_walkPhase = 0;
 		_verticalDirection = 0;
@@ -675,18 +644,16 @@ void BattleUnit::keepWalking(
 			_floating = false;
 		}
 
-		if (_faceDirection > -1)
+		if (_faceDirection > -1) // finish strafing move facing the correct way.
 		{
-			// Finish strafing move facing the correct way.
 			_direction = _faceDirection;
 			_faceDirection = -1;
 		} 
 
+
 		// motion points calculation for the motion scanner blips
 		if (_armor->getSize() > 1)
-		{
 			_motionPoints += 30;
-		}
 		else
 		{
 			// sectoids actually have less motion points but instead of creating
@@ -699,7 +666,6 @@ void BattleUnit::keepWalking(
 	}
 
 	_cacheInvalid = cache;
-
 	Log(LOG_INFO) << "BattleUnit::keepWalking() EXIT";
 }
 /*kL void BattleUnit::keepWalking(Tile *tileBelowMe, bool cache)
@@ -1039,15 +1005,14 @@ UnitFaction BattleUnit::getFaction() const
  * Sets the unit's cache flag.
  * Set to true when the unit has to be redrawn from scratch.
  * @param cache
+ * @param part
  */
 void BattleUnit::setCache(
 		Surface* cache,
 		int part)
 {
 	if (cache == 0)
-	{
 		_cacheInvalid = true;
-	}
 	else
 	{
 		_cache[part] = cache;
@@ -1065,7 +1030,8 @@ Surface* BattleUnit::getCache(
 		bool* invalid,
 		int part) const
 {
-	if (part < 0) part = 0;
+	if (part < 0)
+		part = 0;
 
 	*invalid = _cacheInvalid;
 
@@ -1113,8 +1079,11 @@ void BattleUnit::aim(bool aiming)
 	else
 		_status = STATUS_STANDING;
 
-	if (_visible || _faction == FACTION_PLAYER)
+	if (_visible
+		|| _faction == FACTION_PLAYER)
+	{
 		_cacheInvalid = true;
+	}
 }
 
 /**
@@ -1225,7 +1194,7 @@ int BattleUnit::damage(
 		ItemDamageType type,
 		bool ignoreArmor)
 {
-	Log(LOG_INFO) << "BattleUnit::damage() ID " << getId();
+	Log(LOG_INFO) << "BattleUnit::damage(), ID " << getId();
 
 	UnitSide side = SIDE_FRONT;
 	UnitBodyPart bodypart = BODYPART_TORSO;
@@ -1235,6 +1204,8 @@ int BattleUnit::damage(
 
 	power = static_cast<int>(
 					floor(static_cast<float>(power) * _armor->getDamageModifier(type)));
+	Log(LOG_INFO) << "BattleUnit::damage(), type = " << (int)type
+								<< " ModifiedPower " << power;
 
 	if (type == DT_SMOKE) // smoke doesn't do real damage, but stun damage
 		type = DT_STUN;
@@ -1343,12 +1314,11 @@ int BattleUnit::damage(
 		}
 	}
 
-	int ret = power;
-	if (ret < 1)
-		ret = 0;
-	Log(LOG_INFO) << "BattleUnit::damage() ret PenetratedPower " << ret;
+	if (power < 1)
+		power = 0;
+	Log(LOG_INFO) << "BattleUnit::damage() ret PenetratedPower " << power;
 
-	return ret;
+	return power;
 }
 
 /**

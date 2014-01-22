@@ -126,7 +126,7 @@ void UnitTurnBState::init()
 void UnitTurnBState::think()
 {
 	//Log(LOG_INFO) << "UnitTurnBState::think() unitID = " << _unit->getId();
-	bool thisFaction = _unit->getFaction() == _parent->getSave()->getSide();	// kL
+	bool thisFaction = _unit->getFaction() == _parent->getSave()->getSide(); // kL
 
 	int turretType = _unit->getTurretType();
 	int tu = 1;									// one tu per facing change
@@ -143,7 +143,7 @@ void UnitTurnBState::think()
 
 
 //kL	if (_unit->getFaction() == _parent->getSave()->getSide()
-	if (thisFaction		// kL
+	if (thisFaction // kL
 		&& _parent->getPanicHandled()
 		&& !_action.targeting
 		&& !_parent->checkReservedTU(_unit, tu))
@@ -154,10 +154,9 @@ void UnitTurnBState::think()
 
 //kL		return;
 	}
-	else	// kL
+	else // kL
 	if (_unit->spendTimeUnits(tu))
 	{
-//kL		size_t unitSpotted = _unit->getUnitsSpottedThisTurn().size();
 		size_t unitsSpotted = _unit->getUnitsSpottedThisTurn().size();
 
 		_unit->turn(_turret);	// kL_note: -> STATUS_STANDING
@@ -173,7 +172,6 @@ void UnitTurnBState::think()
 			|| (thisFaction												// kL
 				&& _parent->getPanicHandled()
 				&& _action.type == BA_NONE
-//kL				&& _unit->getUnitsSpottedThisTurn().size() > unitSpotted)
 				&& _unit->getUnitsSpottedThisTurn().size() > unitsSpotted	// kL
 				&& _unit->getFaction() != FACTION_PLAYER))					// kL
 		{
@@ -188,7 +186,10 @@ void UnitTurnBState::think()
 
 			//Log(LOG_INFO) << "UnitTurnBState::think(), abortTurn()";
 			_unit->abortTurn();			// -> STATUS_STANDING.
-			_unit->setStopShot(true);	// kL
+
+			// keep this for Faction_Player only, till I figure out the AI better:
+			if (_unit->getFaction() == FACTION_PLAYER)	// kL
+				_unit->setStopShot(true);				// kL
 
 			// kL_note: Can i pop the state (ProjectileFlyBState) here if we came from
 			// BattlescapeGame::primaryAction() and as such STOP a unit from shooting

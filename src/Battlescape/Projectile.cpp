@@ -835,6 +835,8 @@ void Projectile::applyAccuracy(
 				baseDeviation += 0.29 / (accuracy - accuracyPenalty + 0.23);
 			break;
 		} */
+
+		// NOTE: This should be done on the weapons themselves!!!!
 		double baseDeviation = 0.0;
 		switch (_action.type)
 		{
@@ -845,7 +847,7 @@ void Projectile::applyAccuracy(
 				baseDeviation += 0.15 / (accuracy - accuracyPenalty + 0.18);
 			break;
 			case BA_AIMEDSHOT:
-				baseDeviation += 0.12 / (accuracy - accuracyPenalty + 0.18);
+				baseDeviation += 0.13 / (accuracy - accuracyPenalty + 0.18);
 			break;
 
 			default:

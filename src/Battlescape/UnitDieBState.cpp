@@ -88,8 +88,13 @@ UnitDieBState::UnitDieBState(
 		//Log(LOG_INFO) << ". setUnitDying DONE";
 
 		Camera* deathCam = _parent->getMap()->getCamera();
+
 		if (!deathCam->isOnScreen(_unit->getPosition())) // kL
 			deathCam->centerOnPosition(_unit->getPosition());
+
+		// if the unit changed level, camera changes level with it. kL_begin:
+		if (deathCam->getViewLevel() != _unit->getPosition().z)
+			deathCam->setViewLevel(_unit->getPosition().z);
 
 		//Log(LOG_INFO) << ". centerOnPosition DONE";
 	}
@@ -136,7 +141,7 @@ spawnUnit: ""
 		// kL_note: A floating unit seemed to enter here, while Visible...
 	{
 		//Log(LOG_INFO) << ". . unit NOT Visible";
-//		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED);
+		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED);
 
 		if (_unit->getHealth() == 0)
 		{
@@ -187,6 +192,7 @@ spawnUnit: ""
 UnitDieBState::~UnitDieBState()
 {
 	//Log(LOG_INFO) << "Delete UnitDieBState";
+	_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED); // kL
 }
 
 void UnitDieBState::init()

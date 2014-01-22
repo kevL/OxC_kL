@@ -687,7 +687,6 @@ void ProjectileFlyBState::think()
 			_parent->getMap()->setProjectile(0);
 		}
 	}
-
 	//Log(LOG_INFO) << "ProjectileFlyBState::think() EXIT";
 }
 
@@ -776,7 +775,7 @@ int ProjectileFlyBState::getMaxThrowDistance(
 {
 	Log(LOG_INFO) << "ProjectileFlyBState::getMaxThrowDistance()";
 
-	double curZ = level + 0.5;
+	double curZ = static_cast<double>(level) + 0.5;
 	double delta_z = 1.0;
 
 	int dist = 0;
@@ -788,7 +787,8 @@ int ProjectileFlyBState::getMaxThrowDistance(
 		else
 			curZ += delta_z * 8.0;
 
-		if (curZ < 0.0 && delta_z < 0.0) // roll back
+		if (curZ < 0.0
+			&& delta_z < 0.0) // roll back
 		{
 			delta_z = std::max(delta_z, -1.0);
 			if (abs(delta_z) > 1e-10) // rollback horizontal

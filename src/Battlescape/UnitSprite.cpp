@@ -187,6 +187,7 @@ void UnitSprite::draw()
  	Surface::draw();
 
 	_drawingRoutine = _unit->getArmor()->getDrawingRoutine();
+	//Log(LOG_INFO) << "UnitSprite::draw() Routine " << _drawingRoutine;
 	switch (_drawingRoutine)
 	{
 		case 0:
@@ -230,6 +231,7 @@ void UnitSprite::draw()
  */
 void UnitSprite::drawRoutine0()
 {
+	Log(LOG_INFO) << "** UnitSprite::drawRoutine0()";
 	// kL_begin:
 	if (_unit->isOut())
 	{

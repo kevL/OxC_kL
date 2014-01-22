@@ -522,7 +522,10 @@ int Camera::getViewLevel() const
 void Camera::setViewLevel(int viewLevel)
 {
 	_mapOffset.z = viewLevel;
-	minMaxInt(&_mapOffset.z, 0, _mapsize_z - 1);
+	minMaxInt(
+			&_mapOffset.z,
+			0,
+			_mapsize_z - 1);
 
 	_map->draw();
 }
@@ -530,8 +533,8 @@ void Camera::setViewLevel(int viewLevel)
 
 /**
  * Centers map on a certain position.
- * @param mapPos Position to center on.
- * @param redraw Redraw map or not.
+ * @param mapPos, Position to center on.
+ * @param redraw, Redraw map or not.
  */
 void Camera::centerOnPosition(
 		const Position& mapPos,
@@ -541,9 +544,18 @@ void Camera::centerOnPosition(
 
 	_center = mapPos;
 
-	minMaxInt(&_center.x, -1, _mapsize_y);
-	minMaxInt(&_center.y, -1, _mapsize_x);
-	convertMapToScreen(_center, &screenPos);
+	minMaxInt(
+			&_center.x,
+			-1,
+			_mapsize_y);
+	minMaxInt(
+			&_center.y,
+			-1,
+			_mapsize_x);
+
+	convertMapToScreen(
+					_center,
+					&screenPos);
 
 	_mapOffset.x = -(screenPos.x - (_screenWidth / 2) + 16);
 	_mapOffset.y = -(screenPos.y - (_visibleMapHeight / 2) + 16);
@@ -701,9 +713,9 @@ bool Camera::isOnScreen(const Position& mapPos) const
 	screenPos.y += _mapOffset.y;
 
 	return screenPos.x >= -24
-		&& screenPos.x <= _screenWidth + 24
-		&& screenPos.y >= -32
-		&& screenPos.y <= _screenHeight - 48;
+			&& screenPos.x <= _screenWidth + 24
+			&& screenPos.y >= -32
+			&& screenPos.y <= _screenHeight - 48;
 }
 
 }

@@ -78,6 +78,7 @@ ExplosionBState::ExplosionBState(
  */
 ExplosionBState::~ExplosionBState()
 {
+	_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED); // kL
 }
 
 /**
@@ -99,10 +100,10 @@ void ExplosionBState::init()
 		// all the rest hits one point:
 		// AP, melee (stun or AP), laser, plasma, acid
 		_areaOfEffect = _item->getRules()->getBattleType() != BT_MELEE
-				&& (_item->getRules()->getDamageType() == DT_HE
-					|| _item->getRules()->getDamageType() == DT_IN
-					|| _item->getRules()->getDamageType() == DT_SMOKE
-					|| _item->getRules()->getDamageType() == DT_STUN);
+						&& (_item->getRules()->getDamageType() == DT_HE
+							|| _item->getRules()->getDamageType() == DT_IN
+							|| _item->getRules()->getDamageType() == DT_SMOKE
+							|| _item->getRules()->getDamageType() == DT_STUN);
 	}
 	else if (_tile)
 	{
@@ -121,29 +122,35 @@ void ExplosionBState::init()
 	}
 
 
-//kL	Tile* tileCenter = _parent->getSave()->getTile(Position(
-//kL												_center.x / 16,
-//kL												_center.y / 16,
-//kL												_center.z / 24));
-	Position posCenter_voxel = _center; // voxelspace
-	Position posCenter = Position(
-								_center.x / 16,
-								_center.y / 16,
-								_center.z / 24);
+	Tile* tileCenter = _parent->getSave()->getTile(Position(
+												_center.x / 16,
+												_center.y / 16,
+												_center.z / 24));
+//	Position posCenter_voxel = _center;	// kL
+//	Position posCenter = Position(		// kL
+//								_center.x / 16,
+//								_center.y / 16,
+//								_center.z / 24);
 
 	if (_areaOfEffect)
 	{
-		Log(LOG_INFO) << ". . new Explosion(AoE)'s";
+		Log(LOG_INFO) << ". . new Explosion(AoE)";
 
 		if (_power > 0)
 		{
-//kL			Position posCenter_voxel = _center; // voxelspace
+			Position posCenter_voxel = _center; // voxelspace
 			int
-				startFrame = 0, // less than 0 will delay anim-start (total 8 Frames)
+				startFrame = 0; // less than 0 will delay anim-start (total 8 Frames)
 //				offset = _power / 2,
 //				animQty = _power / 14;
-				radius = _item->getRules()->getExplosionRadius(),
-				offset = radius * 5, // voxelspace
+			int radius = 1;
+			if (_item)
+				radius = _item->getRules()->getExplosionRadius();
+			if (radius < 1)
+				radius = _power / 10;	// <- for cyberdiscs... they crash if using just getExplosionRadius(),
+										// because they're not items, and don't have a _blastRadius value.
+
+			int offset = radius * 5, // voxelspace
 				animQty = static_cast<int>(
 								sqrt(static_cast<double>(radius) * static_cast<double>(_power)))
 							/ 6;
@@ -181,14 +188,14 @@ void ExplosionBState::init()
 			else
 				_parent->getResourcePack()->getSound("BATTLE.CAT", 5)->play();
 
-//			if (!_parent->getMap()->getCamera()->isOnScreen(tileCenter->getPosition()))
-//				_parent->getMap()->getCamera()->centerOnPosition(
-//																tileCenter->getPosition(),
-//																false);
-			if (!_parent->getMap()->getCamera()->isOnScreen(posCenter))
+			if (!_parent->getMap()->getCamera()->isOnScreen(tileCenter->getPosition()))
 				_parent->getMap()->getCamera()->centerOnPosition(
-															posCenter,
-															false);
+																tileCenter->getPosition(),
+																false);
+//			if (!_parent->getMap()->getCamera()->isOnScreen(posCenter))
+//				_parent->getMap()->getCamera()->centerOnPosition(
+//															posCenter,
+//															false);
 		}
 		else
 			_parent->popState();
@@ -215,17 +222,18 @@ void ExplosionBState::init()
 										"BATTLE.CAT",
 										_item->getRules()->getHitSound())->play();
 
-//kL		if (_parent->getSave()->getSide() == FACTION_HOSTILE)
-//		if (!_parent->getMap()->getCamera()->isOnScreen(tileCenter->getPosition()))
-//			_parent->getMap()->getCamera()->centerOnPosition(
-//															tileCenter->getPosition(),
-//															false);
 		if (_parent->getSave()->getSide() == FACTION_HOSTILE
-			|| !_parent->getMap()->getCamera()->isOnScreen(posCenter))
+			|| !_parent->getMap()->getCamera()->isOnScreen(tileCenter->getPosition())) // kL
 		{
 			_parent->getMap()->getCamera()->centerOnPosition(
-														posCenter,
-														false);
+															tileCenter->getPosition(),
+															false);
+//		if (_parent->getSave()->getSide() == FACTION_HOSTILE
+//			|| !_parent->getMap()->getCamera()->isOnScreen(posCenter))
+//		{
+//			_parent->getMap()->getCamera()->centerOnPosition(
+//														posCenter,
+//														false);
 		}
 
 /*kL		if (hit

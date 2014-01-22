@@ -47,10 +47,8 @@ class UnitWalkBState
 private:
 	bool
 		_falling,
-//		_newUnitSpotted,
-//		_newVis, // kL
 		_onScreen,
-//		_tileSwitchDone, // kL
+		_tileSwitchDone, // kL
 		_turnBeforeFirstStep;
 	int _preMovementCost;
 	size_t _unitsSpotted;
