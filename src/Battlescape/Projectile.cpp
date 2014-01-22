@@ -862,14 +862,14 @@ void Projectile::applyAccuracy(
 		if (baseDeviation < 0.0001)
 		{
 			Log(LOG_INFO) << ". baseDeviation low-capped @ 0.0001";
-			baseDeviation = 0.0001;		// kL
+			baseDeviation = 0.0001; // kL
 		}
 		else Log(LOG_INFO) << ". baseDeviation = " << baseDeviation;
 
 		// the angle deviations are spread using a normal distribution for baseDeviation (+-3s with precision 99,7%)
 		double
 			dH = RNG::boxMuller(0.0, baseDeviation / 6.0), // horizontal miss in radian
-			dV = RNG::boxMuller(0.0, baseDeviation /(6.0 * 1.72)), // kL
+			dV = RNG::boxMuller(0.0, baseDeviation /(6.0 * 1.75)), // kL
 //kL		double dV = RNG::boxMuller(0.0, baseDeviation /(6.0 * 2));
 
 			te = atan2(

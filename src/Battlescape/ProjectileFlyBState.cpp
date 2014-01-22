@@ -744,7 +744,8 @@ bool ProjectileFlyBState::validThrowRange(
 
 	int offset_z = 2;				// kL_note: this is prob +1 (.. +2) to get things up off of the lowest voxel of a targetTile.
 	int delta_z = origin.z - (((action->target.z * 24) + offset_z) - target->getTerrainLevel());
-	double maxDistance = static_cast<double>(getMaxThrowDistance(weight, action->actor->getStats()->strength, delta_z) + 8) / 16.0;
+	double maxDistance = static_cast<double>(
+							getMaxThrowDistance(weight, action->actor->getStats()->strength, delta_z) + 8) / 16.0;
 	// Throwing Distance was roughly = 2.5 \D7 Strength / Weight
 //	double range = 2.63 * static_cast<double>(action->actor->getStats()->strength / action->weapon->getRules()->getWeight()); // old code.
 
@@ -759,8 +760,11 @@ bool ProjectileFlyBState::validThrowRange(
 	distance -= static_cast<double>(delta_z); */
 
 	// since getMaxThrowDistance seems to return 1 less than maxDistance, use "< realDistance" for this determination:
-	bool ret = static_cast<int>(realDistance) < static_cast<int>(maxDistance);
-	Log(LOG_INFO) << ". realDistance " << (int)realDistance << " < maxDistance " << (int)maxDistance << " : return " << ret;
+//	bool ret = static_cast<int>(realDistance) < static_cast<int>(maxDistance);
+	bool ret = realDistance < maxDistance;
+	Log(LOG_INFO) << ". realDistance " << (int)realDistance
+					<< " < maxDistance " << (int)maxDistance
+					<< " : return " << ret;
 
 	return ret;
 }

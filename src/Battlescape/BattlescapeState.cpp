@@ -671,7 +671,7 @@ BattlescapeState::BattlescapeState(Game* game)
  */
 BattlescapeState::~BattlescapeState()
 {
-//	Log(LOG_INFO) << "Delete BattlescapeState";		// kL
+//	Log(LOG_INFO) << "Delete BattlescapeState";
 	delete _animTimer;
 	delete _gameTimer;
 	delete _battleGame;
@@ -891,7 +891,6 @@ void BattlescapeState::mapPress(Action* action)
 			mouseScrollingStartTime = SDL_GetTicks();
 		}
 	}
-
 	//Log(LOG_INFO) << "BattlescapeState::mapPress() EXIT";
 }
 
@@ -929,15 +928,10 @@ void BattlescapeState::mapClick(Action* action)
 	{
 		// While scrolling, other buttons are ineffective
 		if (action->getDetails()->button.button == _save->getDragButton())
-		{
 				isMouseScrolling = false;
-		}
 		else
-		{
 			//Log(LOG_INFO) << ". . isMouseScrolled = FALSE, return";
-
 			return;
-		}
 
 		// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
 		if (!mouseMovedOverThreshold
@@ -948,23 +942,15 @@ void BattlescapeState::mapClick(Action* action)
 		}
 
 		if (isMouseScrolled)
-		{
 			//Log(LOG_INFO) << ". . isMouseScrolled == TRUE, return";
-
 			return;
-		}
 	}
 
 	// right-click aborts walking state
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
-	{
 		if (_battleGame->cancelCurrentAction())
-		{
 			//Log(LOG_INFO) << ". . cancelCurrentAction()";
-
 			return;
-		}
-	}
 
 	// don't handle mouseclicks below y=144px, because they are in the buttons area (it overlaps with map surface)
 	int my = int(action->getAbsoluteYMouse());
@@ -978,10 +964,10 @@ void BattlescapeState::mapClick(Action* action)
 	}
 
 	// don't accept leftclicks if there is no cursor or there is an action busy
-	if (_map->getCursorType() == CT_NONE || _battleGame->isBusy())
+	if (_map->getCursorType() == CT_NONE
+		|| _battleGame->isBusy())
 	{
 		//Log(LOG_INFO) << ". . _map->getCursorType() == CT_NONE || _battleGame->isBusy()";
-
 		return;
 	}
 
@@ -999,7 +985,6 @@ void BattlescapeState::mapClick(Action* action)
 	if (_save->getTile(pos) != 0) // don't allow to click into void
 	{
 		//Log(LOG_INFO) << ". . getTile(pos) != 0";
-
 		if ((action->getDetails()->button.button == SDL_BUTTON_RIGHT
 				|| (action->getDetails()->button.button == SDL_BUTTON_LEFT
 					&& (SDL_GetModState() & KMOD_ALT) != 0))
@@ -1011,14 +996,10 @@ void BattlescapeState::mapClick(Action* action)
 			//Log(LOG_INFO) << ". . secondaryAction(pos) DONE";
 		}
 		else if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
-		{
 			//Log(LOG_INFO) << ". . playableUnit NOT Selected()";
-
 			_battleGame->primaryAction(pos);
 			//Log(LOG_INFO) << ". . primaryAction(pos) DONE";
-		}
 	}
-
 	//Log(LOG_INFO) << "BattlescapeState::mapClick() EXIT";
 }
 
@@ -1029,7 +1010,6 @@ void BattlescapeState::mapClick(Action* action)
 void BattlescapeState::mapIn(Action*)
 {
 	//Log(LOG_INFO) << "BattlescapeState::mapIn()";
-
 	isMouseScrolling = false;
 	_map->setButtonsPressed(SDL_BUTTON_RIGHT, false);
 
@@ -1057,13 +1037,9 @@ void BattlescapeState::btnUnitUpClick(Action*)
 							Pathfinding::DIR_UP);
 	}
 	else if (valid == -1) // kneeling
-	{
 		warning("STR_ACTION_NOT_ALLOWED_KNEEL");
-	}
 	else // blocked, roof
-	{
 		warning("STR_ACTION_NOT_ALLOWED_ROOF");
-	}
 }
 
 /**
@@ -1087,9 +1063,7 @@ void BattlescapeState::btnUnitDownClick(Action*)
 							Pathfinding::DIR_DOWN);
 	}
 	else // blocked, floor
-	{
 		warning("STR_ACTION_NOT_ALLOWED_FLOOR");
-	}
 }
 
 /**
@@ -1124,7 +1098,6 @@ void BattlescapeState::btnMapDownClick(Action*)
  */
 void BattlescapeState::btnShowMapClick(Action*)
 {
-	// MiniMapState
 	if (allowButtons())
 		_game->pushState(new MiniMapState(
 										_game,
@@ -1144,10 +1117,11 @@ void BattlescapeState::btnKneelClick(Action*)
 		if (bu)
 		{
 //			Log(LOG_INFO) << "BattlescapeState::btnKneelClick()";
-			_battleGame->kneel(bu);
+//kL			_battleGame->kneel(bu);
 
-			if (_battleGame->getPathfinding()->isPathPreviewed()
-				&& bu->isKneeled()) // kL: Moved up from below.
+			if (_battleGame->kneel(bu) // kL
+				&& _battleGame->getPathfinding()->isPathPreviewed())
+//kL				&& bu->isKneeled()) // update any path preview if unit kneels
 			{
 				_battleGame->getPathfinding()->calculate(
 													_battleGame->getCurrentAction()->actor,
@@ -1156,14 +1130,6 @@ void BattlescapeState::btnKneelClick(Action*)
 				_battleGame->getPathfinding()->previewPath();
 			}
 		}
-
-		// update any path preview if unit kneels
-/*kL		if (_battleGame->getPathfinding()->isPathPreviewed() && bu->isKneeled())
-		{
-			_battleGame->getPathfinding()->calculate(_battleGame->getCurrentAction()->actor, _battleGame->getCurrentAction()->target);
-			_battleGame->getPathfinding()->removePreview();
-			_battleGame->getPathfinding()->previewPath();
-		} */
 	}
 }
 
@@ -1203,9 +1169,7 @@ void BattlescapeState::btnInventoryClick(Action*)
 void BattlescapeState::btnCenterClick(Action*)
 {
 	if (playableUnitSelected())
-	{
 		_map->getCamera()->centerOnPosition(_save->getSelectedUnit()->getPosition());
-	}
 }
 
 /**

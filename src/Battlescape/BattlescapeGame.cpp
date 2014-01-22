@@ -457,7 +457,6 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 	if (action.type == BA_NONE)
 	{
 		//Log(LOG_INFO) << ". . in action.type None";
-
 		_parentState->debug(L"Idle");
 		_AIActionCounter = 0;
 
@@ -483,9 +482,7 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 			getMap()->getCamera()->centerOnPosition(_save->getSelectedUnit()->getPosition());
 
 			if (_save->getSelectedUnit()->getId() <= unit->getId())
-			{
 				_AISecondMove = true;
-			}
 		}
 	}
 
@@ -497,7 +494,9 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
  * @param bu, Pointer to a unit.
  * @return, True if the action succeeded.
  */
-bool BattlescapeGame::kneel(BattleUnit* bu, bool calcFoV)
+bool BattlescapeGame::kneel(
+		BattleUnit* bu,
+		bool calcFoV)
 {
 	Log(LOG_INFO) << "BattlescapeGame::kneel()";
 

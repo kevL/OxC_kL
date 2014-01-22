@@ -112,25 +112,20 @@ void ExplosionBState::init()
 
 		_areaOfEffect = true;
 	}
-	else // cyberdisc...
+	else // cyberdiscs!!!
 	{
-//kL		_power = 120;
-		_power = RNG::generate(61, 135); // kL
+		_power = RNG::generate(61, 135);
 		Log(LOG_INFO) << ". _power(Cyberdisc) = " << _power;
 
 		_areaOfEffect = true;
 	}
 
 
-	Tile* tileCenter = _parent->getSave()->getTile(Position(
-												_center.x / 16,
-												_center.y / 16,
-												_center.z / 24));
-//	Position posCenter_voxel = _center;	// kL
-//	Position posCenter = Position(		// kL
-//								_center.x / 16,
-//								_center.y / 16,
-//								_center.z / 24);
+	Position posCenter = Position(
+								_center.x / 16,
+								_center.y / 16,
+								_center.z / 24);
+	Tile* tileCenter = _parent->getSave()->getTile(posCenter);
 
 	if (_areaOfEffect)
 	{
@@ -173,7 +168,7 @@ void ExplosionBState::init()
 //				Explosion* explosion = new Explosion(p, startFrame, true);
 
 				Explosion* explosion = new Explosion( // animation
-													posCenter_voxel + Position(20, 20, 0), // jogg the anim down a few pixels. Tks.
+													posCenter_voxel + Position(23, 23, 0), // jogg the anim down a few pixels. Tks.
 													startFrame,
 													true);
 
@@ -188,14 +183,14 @@ void ExplosionBState::init()
 			else
 				_parent->getResourcePack()->getSound("BATTLE.CAT", 5)->play();
 
-			if (!_parent->getMap()->getCamera()->isOnScreen(tileCenter->getPosition()))
-				_parent->getMap()->getCamera()->centerOnPosition(
-																tileCenter->getPosition(),
-																false);
-//			if (!_parent->getMap()->getCamera()->isOnScreen(posCenter))
-//				_parent->getMap()->getCamera()->centerOnPosition(
-//															posCenter,
-//															false);
+//kL			if (!_parent->getMap()->getCamera()->isOnScreen(tileCenter->getPosition()))
+//kL				_parent->getMap()->getCamera()->centerOnPosition(
+//kL																tileCenter->getPosition(),
+//kL																false);
+			if (!_parent->getMap()->getCamera()->isOnScreen(posCenter))	// kL
+				_parent->getMap()->getCamera()->centerOnPosition(		// kL
+															posCenter,	// kL
+															false);		// kL
 		}
 		else
 			_parent->popState();
@@ -222,27 +217,20 @@ void ExplosionBState::init()
 										"BATTLE.CAT",
 										_item->getRules()->getHitSound())->play();
 
-		if (_parent->getSave()->getSide() == FACTION_HOSTILE
-			|| !_parent->getMap()->getCamera()->isOnScreen(tileCenter->getPosition())) // kL
+//kL		if (_parent->getSave()->getSide() == FACTION_HOSTILE
+//			|| !_parent->getMap()->getCamera()->isOnScreen(tileCenter->getPosition())) // kL
+//kL		{
+//kL			_parent->getMap()->getCamera()->centerOnPosition(
+//kL															tileCenter->getPosition(),
+//kL															false);
+		if (_parent->getSave()->getSide() == FACTION_HOSTILE			// kL
+			|| !_parent->getMap()->getCamera()->isOnScreen(posCenter))	// kL
 		{
-			_parent->getMap()->getCamera()->centerOnPosition(
-															tileCenter->getPosition(),
-															false);
-//		if (_parent->getSave()->getSide() == FACTION_HOSTILE
-//			|| !_parent->getMap()->getCamera()->isOnScreen(posCenter))
-//		{
-//			_parent->getMap()->getCamera()->centerOnPosition(
-//														posCenter,
-//														false);
+			_parent->getMap()->getCamera()->centerOnPosition(			// kL
+														posCenter,		// kL
+														false);			// kL
 		}
-
-/*kL		if (hit
-			&& tileCenter->getVisible())
-		{
-			_parent->getMap()->getCamera()->centerOnPosition(Position(_center.x / 16, _center.y / 16, _center.z / 24));
-		} */
 	}
-
 	Log(LOG_INFO) << "ExplosionBState::init() EXIT";
 }
 
@@ -279,13 +267,13 @@ void ExplosionBState::cancel()
 
 /**
  * Calculates the effects of the explosion.
+ * After the animation is done, the real explosion/hit takes place here!
  */
 void ExplosionBState::explode()
 {
 	Log(LOG_INFO) << "ExplosionBState::explode()";
 	SavedBattleGame* save = _parent->getSave();
 
-	// after the animation is done, the real explosion/hit takes place
 	if (_item)
 	{
 		Log(LOG_INFO) << ". _item is VALID";

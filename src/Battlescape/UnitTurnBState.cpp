@@ -161,7 +161,7 @@ void UnitTurnBState::think()
 
 		_unit->turn(_turret);	// kL_note: -> STATUS_STANDING
 //kL		_parent->getTileEngine()->calculateFOV(_unit);
-		bool newVis = _parent->getTileEngine()->calculateFOV(_unit);	// kL
+		bool newVis = _parent->getTileEngine()->calculateFOV(_unit); // kL
 
 		_unit->setCache(0);
 		_parent->getMap()->cacheUnit(_unit);
@@ -169,7 +169,7 @@ void UnitTurnBState::think()
 //kL		if (_unit->getFaction() == _parent->getSave()->getSide()
 		if ((newVis
 				&& _unit->getFaction() == FACTION_PLAYER)
-			|| (thisFaction												// kL
+			|| (thisFaction													// kL
 				&& _parent->getPanicHandled()
 				&& _action.type == BA_NONE
 				&& _unit->getUnitsSpottedThisTurn().size() > unitsSpotted	// kL
