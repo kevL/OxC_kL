@@ -938,17 +938,6 @@ void DogfightState::move()
 
 			if (p->getDirection() == D_UP) // Projectiles fired by interceptor.
 			{
-				// Check if projectile passed its maximum range.
-				if (p->getGlobalType() == CWPGT_MISSILE)
-				{
-					if (p->getPosition() / 8 >= p->getRange())
-					{
-						p->remove();
-
-						continue;
-					}
-				}
-
 				// Projectile reached the UFO - determine if it's been hit.
 				if ((p->getPosition() >= _currentDist
 						|| (p->getGlobalType() == CWPGT_BEAM
@@ -994,10 +983,13 @@ void DogfightState::move()
 					}
 				}
 
-				if (p->getGlobalType() == CWPGT_MISSILE
-					&& !_ufo->isCrashed())
+				// Check if projectile passed its maximum range.
+				if (p->getGlobalType() == CWPGT_MISSILE)
 				{
-					projectileInFlight = true;
+					if (p->getPosition() / 8 >= p->getRange())
+						p->remove();
+					else if (!_ufo->isCrashed())
+						projectileInFlight = true;
 				}
 			}
 			else if (p->getDirection() == D_DOWN) // Projectiles fired by UFO.
