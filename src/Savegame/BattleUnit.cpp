@@ -791,7 +791,7 @@ void BattleUnit::lookAt(
 		const Position& point,
 		bool turret)
 {
-	Log(LOG_INFO) << "BattleUnit::lookAt() #1";// unitID = " << getId();
+	Log(LOG_INFO) << "BattleUnit::lookAt() #1";
 	//Log(LOG_INFO) << ". . _direction = " << _direction;
 	//Log(LOG_INFO) << ". . _toDirection = " << _toDirection;
 	//Log(LOG_INFO) << ". . _directionTurret = " << _directionTurret;
@@ -803,7 +803,6 @@ void BattleUnit::lookAt(
 	if (turret)
 	{
 		//Log(LOG_INFO) << ". . . . has turret.";
-
 		_toDirectionTurret = dir;
 		//Log(LOG_INFO) << ". . . . . . _toDirTur = " << _toDirectionTurret;
 		if (_toDirectionTurret != _directionTurret)
@@ -819,8 +818,6 @@ void BattleUnit::lookAt(
 		_toDirection = dir;
 		//Log(LOG_INFO) << ". . . . . . _toDir = " << _toDirection;
 		if (_toDirection != _direction)
-//kL			&& _toDirection < 8
-//kL			&& _toDirection > -1)
 		{
 			_status = STATUS_TURNING;
 			Log(LOG_INFO) << ". . . . lookAt() -> STATUS_TURNING";
@@ -838,20 +835,13 @@ void BattleUnit::lookAt(
 		int direction,
 		bool force)
 {
-	Log(LOG_INFO) << "BattleUnit::lookAt() #2";// unitID = " << getId();
-	//Log(LOG_INFO) << ". . _direction = " << _direction;
-	//Log(LOG_INFO) << ". . _toDirection = " << _toDirection;
-	//Log(LOG_INFO) << ". . lookAt() direction = " << direction;
-
+	//Log(LOG_INFO) << "BattleUnit::lookAt() #2";
 	if (force)
 	{
 		_toDirection = direction;
 		_direction = direction;
-
-//		Log(LOG_INFO) << "BattleUnit::lookAt() - " << this->getId() << " - force Status_Standing";
-//		_status = STATUS_STANDING;	// kL. idk... seems to screw up UnitDieBDeath sequence
 	}
-	else // !force
+	else
 	{
 		if (direction < 0 || 7 < direction)
 			return;
@@ -862,10 +852,8 @@ void BattleUnit::lookAt(
 			_status = STATUS_TURNING;
 			Log(LOG_INFO) << ". . . . lookAt() -> STATUS_TURNING";
 		}
-//		else
-//			_status = STATUS_STANDING;	// kL
 	}
-	//Log(LOG_INFO) << "BattleUnit::lookAt() #2 EXIT";// unitID = " << getId();
+	//Log(LOG_INFO) << "BattleUnit::lookAt() #2 EXIT";
 }
 
 /**
@@ -873,7 +861,7 @@ void BattleUnit::lookAt(
  */
 void BattleUnit::turn(bool turret)
 {
-	Log(LOG_INFO) << "BattleUnit::turn()";// unitID = " << getId();
+	Log(LOG_INFO) << "BattleUnit::turn()";
 	//Log(LOG_INFO) << ". . _direction = " << _direction;
 	//Log(LOG_INFO) << ". . _toDirection = " << _toDirection;
 	//Log(LOG_INFO) << ". . _directionTurret = " << _directionTurret;

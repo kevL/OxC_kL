@@ -157,13 +157,9 @@ void UnitDieBState::think()
 	{
 		//Log(LOG_INFO) << ". . STATUS_TURNING";
 		if (_unit->getSpinPhase() > -1)
-		{
 			_unit->contDeathSpin(); // -> STATUS_STANDING 
-		}
 		else
-		{
 			_unit->turn(); // -> STATUS_STANDING
-		}
 	}
 // #3
 	else if (_unit->getStatus() == STATUS_COLLAPSING)
@@ -200,7 +196,7 @@ void UnitDieBState::think()
 			BattleUnit* newUnit = _parent->convertUnit(
 													_unit,
 													_unit->getSpawnUnit());
-			newUnit->lookAt(_originalDir);
+			newUnit->lookAt(_originalDir); // kL_note: This seems to need a state to initiate turn() ...
 
 			newUnit->setCache(0);					// kL
 			_parent->getMap()->cacheUnit(newUnit);	// kL
