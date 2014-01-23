@@ -257,6 +257,8 @@ private:
 
 		/// Gets the unit's status.
 		UnitStatus getStatus() const;
+		/// kL. Sets a unit's status.
+		void setStatus(int status);
 
 		/// Start the walkingPhase
 		void startWalking(
@@ -654,8 +656,6 @@ private:
 		/// Sets the spinPhase of a unit.
 		void setSpinPhase(int spinphase);
 
-		/// Sets a unit's status.
-//		void setStatus(UnitStatus* status);
 		/// Set a unit to STATUS_UNCONSCIOUS.
 		void knockOut();
 

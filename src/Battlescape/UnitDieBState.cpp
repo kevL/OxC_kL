@@ -69,120 +69,33 @@ UnitDieBState::UnitDieBState(
 {
 	Log(LOG_INFO) << "Create UnitDieBState";
 
-	if (!_noSound)			// kL
-		playDeathSound();	// kL
-
-	// don't show the "fall to death" animation when a unit is blasted with explosives or he is already unconscious
-/*kL	if (_damageType == DT_HE || _unit->getStatus() == STATUS_UNCONSCIOUS)
-	{
-		_unit->startFalling();
-
-		while (_unit->getStatus() == STATUS_COLLAPSING)
-			_unit->keepFalling();
-	}
-	else */
-//	{
-	if (_unit->getFaction() == FACTION_PLAYER)
-	{
-		_parent->getMap()->setUnitDying(true); // reveal the Map.
-		//Log(LOG_INFO) << ". setUnitDying DONE";
-
-		Camera* deathCam = _parent->getMap()->getCamera();
-
-		if (!deathCam->isOnScreen(_unit->getPosition())) // kL
-			deathCam->centerOnPosition(_unit->getPosition());
-
-		// if the unit changed level, camera changes level with it. kL_begin:
-		if (deathCam->getViewLevel() != _unit->getPosition().z)
-			deathCam->setViewLevel(_unit->getPosition().z);
-
-		//Log(LOG_INFO) << ". centerOnPosition DONE";
-	}
-
-	// kL_note: this is only necessary when spawning a chryssalid from a zombie. See below
-	_originalDir = _unit->getDirection();
-	_unit->setDirection(_originalDir); // kL. Stop Turning f!!!
-	_unit->setSpinPhase(-1);
-	//Log(LOG_INFO) << ". setSpinPhase DONE";
-
-	// kL_begin:
-	if (_unit->getVisible())
-//		&& _parent->getMap()->getCamera()->isOnScreen(_unit->getPosition()))
-	{
-		//Log(LOG_INFO) << ". . unit Visible";
-		if (!_unit->getSpawnUnit().empty())	// nb. getSpawnUnit() is a member of both BattleUnit & Unit...
-//			&& _unit->getSpecialAbility() == 0) // this comes into play because Soldiers & Civilians, (health=0) eg, can have SpawnUnit set and SpecAb set too.
-												// but should they spin or not spin??? Did they spin because they're already dead...?
-/*
-_ZOMBIE_ -> nospin
-specab: 0
-spawnUnit: STR_CHRYSSALID_TERRORIST
-_ChryssalidTerrorist_ -> spin!!
-specab: 0
-spawnUnit: ""
-*/
-		{
-			//Log(LOG_INFO) << _unit->getId() << " is a zombie.";
-
-			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED * 8 / 7); // slow the zombie down so I can watch this....
-			// unit goes into status TURNING to prepare for a nice dead animation
-			_unit->lookAt(3); // else -> STATUS_STANDING (...), look toward the player for the transformation sequence.
-			//Log(LOG_INFO) << ". . got back from lookAt() in cTor ...";
-		}
-		else
-		{
-			//Log(LOG_INFO) << _unit->getId() << " is NOT a zombie. initiate Spin!";
-
-			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED * 2 / 7);
-			_unit->initDeathSpin(); // -> STATUS_TURNING, death animation spin; Savegame/BattleUnit.cpp
-		}
-	}
-	else // unit is not Visible.
-		// kL_note: A floating unit seemed to enter here, while Visible...
-	{
-		//Log(LOG_INFO) << ". . unit NOT Visible";
-		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED);
-
-		if (_unit->getHealth() == 0)
-		{
-			_unit->instaKill();
-
-//			if (!_noSound)
-//				playDeathSound();
-		}
-		else
-			_unit->knockOut();
-	}
-	// kL_end.
-//	}
-
 	_unit->clearVisibleTiles();
 	_unit->clearVisibleUnits();
-	//Log(LOG_INFO) << ". clear Tiles & Units DONE";
 
-    if (_unit->getFaction() == FACTION_HOSTILE)
-    {
+	_originalDir = _unit->getDirection();
+	_unit->setDirection(_originalDir);
+	_unit->setSpinPhase(-1);
+
+	if (_unit->getFaction() == FACTION_HOSTILE)
+	{
 		//Log(LOG_INFO) << ". . unit is Faction_Hostile";
-        std::vector<Node*>* nodes = _parent->getSave()->getNodes();
-        if (!nodes)
-			return; // this better not happen.
+		std::vector<Node*>* nodes = _parent->getSave()->getNodes();
+		if (!nodes) return; // this better not happen.
 
-        for (std::vector<Node*>::iterator
+		for (std::vector<Node*>::iterator
 				node = nodes->begin();
 				node != nodes->end();
 				++node)
-        {
-            if (*node // kL
-				&& _parent->getSave()->getTileEngine()->distanceSq(
+		{
+			if (_parent->getSave()->getTileEngine()->distanceSq(
 															(*node)->getPosition(),
-															_unit->getPosition()) < 4)
-            {
-				//Log(LOG_INFO) << ". . . set Node danger";
-                (*node)->setType((*node)->getType() | Node::TYPE_DANGEROUS);
-				//Log(LOG_INFO) << ". . . set Node danger DONE";
-            }
-        }
-    }
+															_unit->getPosition())
+														< 4)
+			{
+				(*node)->setType((*node)->getType() | Node::TYPE_DANGEROUS);
+			}
+		}
+	}
 	Log(LOG_INFO) << "Create UnitDieBState EXIT cTor";
 }
 
@@ -191,12 +104,45 @@ spawnUnit: ""
  */
 UnitDieBState::~UnitDieBState()
 {
-	//Log(LOG_INFO) << "Delete UnitDieBState";
-	_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED); // kL
+	Log(LOG_INFO) << "Delete UnitDieBState";
 }
 
+/**
+ *
+ */
 void UnitDieBState::init()
 {
+	Log(LOG_INFO) << "UnitDieBState::init()";
+	if (!_noSound)
+		playDeathSound();
+
+	if (_unit->getVisible())
+	{
+		Camera* deathCam = _parent->getMap()->getCamera();
+		if (!deathCam->isOnScreen(_unit->getPosition()))
+			deathCam->centerOnPosition(_unit->getPosition());
+
+		if (_unit->getFaction() == FACTION_PLAYER)
+			_parent->getMap()->setUnitDying(true);
+
+		if (!_unit->getSpawnUnit().empty())
+		{
+			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED * 8 / 7);
+			_unit->lookAt(3);
+		}
+		else
+		{
+			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED * 3 / 7);
+			_unit->initDeathSpin();
+		}
+	}
+	else
+	{
+		if (_unit->getHealth() == 0)
+			_unit->instaKill();
+		else
+			_unit->knockOut();
+	}
 }
 
 /**
@@ -205,65 +151,45 @@ void UnitDieBState::init()
  */
 void UnitDieBState::think()
 {
-	//Log(LOG_INFO) << "UnitDieBState::think() - " << _unit->getId();
-
+	Log(LOG_INFO) << "UnitDieBState::think() ID " << _unit->getId();
+// #1
 	if (_unit->getStatus() == STATUS_TURNING)
 	{
 		//Log(LOG_INFO) << ". . STATUS_TURNING";
-
-		// kL_begin:
 		if (_unit->getSpinPhase() > -1)
 		{
-//			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED * 3 / 7);
 			_unit->contDeathSpin(); // -> STATUS_STANDING 
-			//Log(LOG_INFO) << ". . . . got back from contDeathSpin()";
 		}
 		else
 		{
-		// kL_end.
 			_unit->turn(); // -> STATUS_STANDING
-			//Log(LOG_INFO) << ". . . . got back from turn()";
 		}
 	}
+// #3
 	else if (_unit->getStatus() == STATUS_COLLAPSING)
 	{
 		//Log(LOG_INFO) << ". . STATUS_COLLAPSING";
-
 		_unit->keepFalling(); // -> STATUS_DEAD or STATUS_UNCONSCIOUS ( ie. isOut() )
 	}
-	else if (!_unit->isOut())
+// #2
+	else if (!_unit->isOut()) // this ought be Status_Standing also.
 	{
 		//Log(LOG_INFO) << ". . !isOut";
-
-		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED); // kL
+		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED);
 		_unit->startFalling(); // -> STATUS_COLLAPSING
-
-//		if (!_noSound) // kL
-//kL			playDeathSound(); // moved to cTor.
 	}
 
-//	else		// kL*****
-	if (_unit->isOut())
+// #4
+	if (_unit->isOut()) // and this ought be Status_Dead.
 	{
 		//Log(LOG_INFO) << ". . unit isOut";
-
-		// kL_note: I think this is doubling because I remarked DT_HE in the constructor. nah... Yes!
-		// but leave it in 'cause it gives a coolia .. doubling effect !!! In fact,
-		// try it for *EVERYONE** ( but it could be a cool effect that is reserved for HE deaths ) <- ok.
-/*kL		if (!_noSound
-			&& _damageType == DT_HE
-			&& _unit->getStatus() != STATUS_UNCONSCIOUS)
-		{
-			playDeathSound();
-		} */
+		_parent->getMap()->setUnitDying(false);
 
 		if (_unit->getStatus() == STATUS_UNCONSCIOUS
 			&& _unit->getSpecialAbility() == SPECAB_EXPLODEONDEATH)
 		{
 			_unit->instaKill();
 		}
-
-		_parent->getMap()->setUnitDying(false);
 
 		if (_unit->getTurnsExposed() < 255)
 			_unit->setTurnsExposed(255);
@@ -275,8 +201,6 @@ void UnitDieBState::think()
 													_unit,
 													_unit->getSpawnUnit());
 			newUnit->lookAt(_originalDir);
-//			newUnit->lookAt(_originalDir, true);	// kL, fast turn back to original facing. Nope...
-//			newUnit->setDirection(_originalDir);	// kL
 
 			newUnit->setCache(0);					// kL
 			_parent->getMap()->cacheUnit(newUnit);	// kL
@@ -285,6 +209,7 @@ void UnitDieBState::think()
 		}
 		else
 			convertUnitToCorpse();
+
 
 		_parent->getTileEngine()->calculateUnitLighting();
 		_parent->popState();
@@ -344,7 +269,7 @@ void UnitDieBState::think()
 	}
 
 	_parent->getMap()->cacheUnit(_unit);
-	//Log(LOG_INFO) << "UnitDieBState::think() EXIT";
+	Log(LOG_INFO) << "UnitDieBState::think() EXIT";
 }
 
 /**
@@ -440,25 +365,25 @@ void UnitDieBState::playDeathSound()
 			&& _unit->getGender() == GENDER_MALE)
 		|| _unit->getType() == "MALE_CIVILIAN")
 	{
+//kL		_parent->getResourcePack()->getSound("BATTLE.CAT", RNG::generate(41, 43))->play();
 		int iSound = RNG::generate(41, 43);
 		//Log(LOG_INFO) << "UnitDieBState::playDeathSound(), male iSound = " << iSound;
-//kL		_parent->getResourcePack()->getSound("BATTLE.CAT", RNG::generate(41, 43))->play();
 		_parent->getResourcePack()->getSound(
 											"BATTLE.CAT",
 											iSound)
-										->play(); // kL
+										->play();
 	}
 	else if ((_unit->getType() == "SOLDIER"
 			&& _unit->getGender() == GENDER_FEMALE)
 		|| _unit->getType() == "FEMALE_CIVILIAN")
 	{
+//kL		_parent->getResourcePack()->getSound("BATTLE.CAT", RNG::generate(44, 46))->play();
 		int iSound = RNG::generate(44, 46);
 		//Log(LOG_INFO) << "UnitDieBState::playDeathSound(), female iSound = " << iSound;
-//kL		_parent->getResourcePack()->getSound("BATTLE.CAT", RNG::generate(44, 46))->play();
 		_parent->getResourcePack()->getSound(
 											"BATTLE.CAT",
 											iSound)
-										->play(); // kL
+										->play();
 	}
 	else
 		_parent->getResourcePack()->getSound(

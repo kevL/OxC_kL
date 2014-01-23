@@ -119,11 +119,14 @@ bool Timer::isRunning() const
  * @param state State that the action handler belongs to.
  * @param surface Surface that the action handler belongs to.
  */
-void Timer::think(State* state, Surface* surface)
+void Timer::think(
+	State* state,
+	Surface* surface)
 {
 	// must be signed to permit negative numbers
 	Sint64 now = slowTick();
-	// this is used to make sure we stop calling *_state on *state in the loop once *state has been popped and deallocated
+	// this is used to make sure we stop calling *_state on *state
+	// in the loop once *state has been popped and deallocated:
 	Game* game = state? state->_game: 0;
 //	assert(!game || game->isState(state));
 
@@ -138,7 +141,8 @@ void Timer::think(State* state, Surface* surface)
 						&& now - _frameSkipStart >= _interval;
 					++i)
 			{
-				if (state != 0 && _state != 0)
+				if (state != 0
+					&& _state != 0)
 				{
 					(state->*_state)();
 				}

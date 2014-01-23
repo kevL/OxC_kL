@@ -181,8 +181,8 @@ void ExplosionBState::init()
 				_parent->getMap()->getExplosions()->insert(explosion); // add the explosion on the map
 			}
 
-			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED);
-//			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED * 8 / 7); // kL
+//kL			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED);
+			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED * 8 / 7); // kL
 
 			if (_power < 80)
 				_parent->getResourcePack()->getSound("BATTLE.CAT", 12)->play();
@@ -206,7 +206,7 @@ void ExplosionBState::init()
 		Log(LOG_INFO) << ". . new Explosion(point)";
 
 //kL		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED / 2);
-		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED * 5 / 7); // kL
+		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED * 6 / 7); // kL
 
 		bool hit = _item->getRules()->getBattleType() == BT_MELEE
 				|| _item->getRules()->getBattleType() == BT_PSIAMP;

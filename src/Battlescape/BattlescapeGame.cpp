@@ -169,7 +169,6 @@ void BattlescapeGame::think()
 		if (_save->getUnitsFalling())
 		{
 			//Log(LOG_INFO) << "BattlescapeGame::think(), get/setUnitsFalling() ID " << _save->getSelectedUnit()->getId();
-
 			statePushFront(new UnitFallBState(this));
 			_save->setUnitsFalling(false);
 		}
@@ -184,9 +183,7 @@ void BattlescapeGame::think()
 void BattlescapeGame::init()
 {
 	if (_save->getSide() == FACTION_PLAYER)
-	{
 		_playerPanicHandled = false;
-	}
 }
 
 /**
@@ -1531,7 +1528,7 @@ bool BattlescapeGame::noActionsPending(BattleUnit* bu)
 
 /**
  * Sets the timer interval for think() calls of the state.
- * @param interval An interval in ms.
+ * @param interval, An interval in ms.
  */
 void BattlescapeGame::setStateInterval(Uint32 interval)
 {

@@ -1377,7 +1377,7 @@ void BattlescapeState::btnStatsClick(Action* action)
 
 /**
  * Shows an action popup menu. When clicked, creates the action.
- * @param action Pointer to an action.
+ * @param action, Pointer to an action.
  */
 void BattlescapeState::btnLeftHandItemClick(Action*)
 {
@@ -1388,11 +1388,11 @@ void BattlescapeState::btnLeftHandItemClick(Action*)
 		// concession for touch devices: 
 		// click on the item to cancel action, and don't pop up a menu to select a new one
 		// TODO: wrap this in an IFDEF ?
-		if (_battleGame->getCurrentAction()->targeting)
-		{
-			_battleGame->cancelCurrentAction();
-			return;
-		}
+//kL		if (_battleGame->getCurrentAction()->targeting)
+//kL		{
+//kL			_battleGame->cancelCurrentAction();
+//kL			return;
+//kL		}
 
 		_battleGame->cancelCurrentAction();
 
@@ -1407,7 +1407,7 @@ void BattlescapeState::btnLeftHandItemClick(Action*)
 
 /**
  * Shows an action popup menu. When clicked, create the action.
- * @param action Pointer to an action.
+ * @param action, Pointer to an action.
  */
 void BattlescapeState::btnRightHandItemClick(Action*)
 {
@@ -1418,11 +1418,11 @@ void BattlescapeState::btnRightHandItemClick(Action*)
 		// concession for touch devices: 
 		// click on the item to cancel action, and don't pop up a menu to select a new one
 		// TODO: wrap this in an IFDEF ?
-		if (_battleGame->getCurrentAction()->targeting)
-		{
-			_battleGame->cancelCurrentAction();
-			return;
-		}
+//kL		if (_battleGame->getCurrentAction()->targeting)
+//kL		{
+//kL			_battleGame->cancelCurrentAction();
+//kL			return;
+//kL		}
 
 		_battleGame->cancelCurrentAction();
 
@@ -1858,9 +1858,7 @@ void BattlescapeState::handleItemClick(BattleItem* item)
 									_icons->getY() + 16));
 		}
 		else
-		{
 			warning("STR_UNABLE_TO_USE_ALIEN_ARTIFACT_UNTIL_RESEARCHED");
-		}
 	}
 }
 

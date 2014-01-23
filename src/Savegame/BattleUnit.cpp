@@ -506,6 +506,30 @@ UnitStatus BattleUnit::getStatus() const
 }
 
 /**
+ * kL. Sets a unit's status.
+ * @ param status, See UnitStatus enum.
+ */
+void BattleUnit::setStatus(int status)
+{
+	switch (status)
+	{
+		case 0: _status = STATUS_STANDING;		break;
+		case 1: _status = STATUS_WALKING;		break;
+		case 2: _status = STATUS_FLYING;		break;
+		case 3: _status = STATUS_TURNING;		break;
+		case 4: _status = STATUS_AIMING;		break;
+		case 5: _status = STATUS_COLLAPSING;	break;
+		case 6: _status = STATUS_DEAD;			break;
+		case 7: _status = STATUS_UNCONSCIOUS;	break;
+		case 8: _status = STATUS_PANICKING;		break;
+		case 9: _status = STATUS_BERSERK;		break;
+
+		default:
+		break;
+	}
+}
+
+/**
  * Initialises variables to start walking.
  * @param direction, Which way to walk.
  * @param destination, The position we should end up on.
@@ -959,16 +983,14 @@ void BattleUnit::turn(bool turret)
 	if (turret)
 	{
 		 if (_toDirectionTurret == _directionTurret)
-		 {
 			//Log(LOG_INFO) << "BattleUnit::turn() " << getId() << "Turret - STATUS_STANDING (turn has ended)";
 			_status = STATUS_STANDING; // we officially reached our destination
-		 }
 	}
 	else if (_toDirection == _direction
-			|| _status == STATUS_UNCONSCIOUS)	// kL_note: I didn't know Unconscious could turn...
-												// learn something new every day.
-												// It's used when reviving unconscious soldiers;
-												// they need to go to STATUS_STANDING.
+		|| _status == STATUS_UNCONSCIOUS)	// kL_note: I didn't know Unconscious could turn...
+											// learn something new every day.
+											// It's used when reviving unconscious soldiers;
+											// they need to go to STATUS_STANDING.
 	{
 		//Log(LOG_INFO) << "BattleUnit::turn() " << getId() << " - STATUS_STANDING (turn has ended)";
 		_status = STATUS_STANDING; // we officially reached our destination
@@ -1393,15 +1415,11 @@ void BattleUnit::keepFalling()
 		_fallPhase--;
 
 		if (_health == 0)
-		{
 			//Log(LOG_INFO) << "BattleUnit::keepFalling() " << getId() << ". . STATUS_DEAD";
 			_status = STATUS_DEAD;
-		}
 		else
-		{
 			//Log(LOG_INFO) << "BattleUnit::keepFalling() " << getId() << ". . STATUS_UNCONSCIOUS";
 			_status = STATUS_UNCONSCIOUS;
-		}
 	}
 
 	_cacheInvalid = true;
@@ -3350,15 +3368,6 @@ void BattleUnit::setSpinPhase(int spinphase)
 {
 	_spinPhase = spinphase;
 }
-
-/**
- * Sets a unit's status.
- * @ param status,
- */
-/* void setStatus(UnitStatus status)
-{
-	UnitStatus::STATUS_DEAD = status;
-} */
 
 /**
  * Set a unit to STATUS_UNCONSCIOUS.
