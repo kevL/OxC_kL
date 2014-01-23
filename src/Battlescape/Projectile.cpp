@@ -786,9 +786,10 @@ void Projectile::applyAccuracy(
 	if (_action.type == BA_HIT)
 		maxRange = 45.0; // up to 2 tiles diagonally (as in the case of reaper v reaper)
 
-	if (Options::getBool("battleRangeBasedAccuracy") && _action.type != BA_THROW)
+	if (Options::getBool("battleRangeBasedAccuracy")
+		&& _action.type != BA_THROW)
 	{
-		double accuracyPenalty = 0.0;
+		double accPenalty = 0.0;
 
 		if (targetTile
 			&& targetTile->getUnit())
@@ -798,21 +799,21 @@ void Projectile::applyAccuracy(
 			if (targetUnit
 				&& targetUnit->getFaction() == FACTION_HOSTILE)
 			{
-				accuracyPenalty = 0.015 * static_cast<double>(targetTile->getShade()); // Shade can be from 0 to 15
+				accPenalty = 0.015 * static_cast<double>(targetTile->getShade()); // Shade can be from 0 to 15
 			}
 //			else
-//				accuracyPenalty = 0.0; // Enemy units can see in the dark.
+//				accPenalty = 0.0; // Enemy units can see in the dark.
 
 			// If unit is kneeled, then accuracy reduced by 5%.
 			// This is a compromise, because vertical deviation is 2 times less.
 			if (targetUnit
 				&& targetUnit->isKneeled())
 			{
-				accuracyPenalty += 0.063;
+				accPenalty += 0.063;
 			}
 		}
 		else
-			accuracyPenalty = 0.015 * static_cast<double>(_save->getGlobalShade()); // Shade can be from 0 (day) to 15 (night).
+			accPenalty = 0.015 * static_cast<double>(_save->getGlobalShade()); // Shade can be from 0 (day) to 15 (night).
 
 		// kL_begin: modify rangedBasedAccuracy (shot-modes).
 //		baseDeviation = -0.15;
@@ -820,19 +821,19 @@ void Projectile::applyAccuracy(
 		switch (_action.type)
 		{
 			case BA_AUTOSHOT:
-				baseDeviation += 0.32 / (accuracy - accuracyPenalty + 0.23);
+				baseDeviation += 0.32 / (accuracy - accPenalty + 0.23);
 			break;
 			case BA_SNAPSHOT:
-//				baseDeviation += 0.28 / (accuracy - accuracyPenalty + 0.24);
-				baseDeviation += 0.29 / (accuracy - accuracyPenalty + 0.23);
+//				baseDeviation += 0.28 / (accuracy - accPenalty + 0.24);
+				baseDeviation += 0.29 / (accuracy - accPenalty + 0.23);
 			break;
 			case BA_AIMEDSHOT:
-//				baseDeviation += 0.23 / (accuracy - accuracyPenalty + 0.23);
-				baseDeviation += 0.24 / (accuracy - accuracyPenalty + 0.23);
+//				baseDeviation += 0.23 / (accuracy - accPenalty + 0.23);
+				baseDeviation += 0.24 / (accuracy - accPenalty + 0.23);
 			break;
 
 			default:
-				baseDeviation += 0.29 / (accuracy - accuracyPenalty + 0.23);
+				baseDeviation += 0.29 / (accuracy - accPenalty + 0.23);
 			break;
 		} */
 
@@ -841,17 +842,17 @@ void Projectile::applyAccuracy(
 		switch (_action.type)
 		{
 			case BA_AUTOSHOT:
-				baseDeviation += 0.18 / (accuracy - accuracyPenalty + 0.18); // was 0.25 (too accurate)
+				baseDeviation += 0.18 / (accuracy - accPenalty + 0.18); // was 0.25 (too accurate)
 			break;
 			case BA_SNAPSHOT:
-				baseDeviation += 0.15 / (accuracy - accuracyPenalty + 0.18);
+				baseDeviation += 0.15 / (accuracy - accPenalty + 0.18);
 			break;
 			case BA_AIMEDSHOT:
-				baseDeviation += 0.13 / (accuracy - accuracyPenalty + 0.18);
+				baseDeviation += 0.13 / (accuracy - accPenalty + 0.18);
 			break;
 
 			default:
-				baseDeviation += 0.15 / (accuracy - accuracyPenalty + 0.18);
+				baseDeviation += 0.15 / (accuracy - accPenalty + 0.18);
 			break;
 		}
 		// kL_end.
@@ -915,7 +916,9 @@ void Projectile::applyAccuracy(
 	else
 		deviation += 10;				// accuracy of 109 or greater will become 1 (tightest spread)
 	
-	deviation = std::max(1, zShift * deviation / 200);	// range ratio
+	deviation = std::max(				// range ratio
+						1,
+						zShift * deviation / 200);
 		
 	target->x += RNG::generate(0, deviation) - deviation / 2;
 	target->y += RNG::generate(0, deviation) - deviation / 2;

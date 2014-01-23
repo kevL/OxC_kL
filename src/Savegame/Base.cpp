@@ -234,9 +234,7 @@ void Base::load(
 			}
 		}
 		else
-		{
 			s->setCraft(0);
-		}
 
 		_soldiers.push_back(s);
 	}
@@ -257,9 +255,7 @@ void Base::load(
 			_items->getContents()->erase(i++);
 		}
 		else
-		{
 			++i;
-		}
 	}
 
 	_scientists		= node["scientists"].as<int>(_scientists);
@@ -539,9 +535,7 @@ uint8_t Base::detect(Target* target) const
 					Log(LOG_INFO) << ". . . chance(base) = " << (int)chance;
 				}
 				else
-				{
 					Log(LOG_INFO) << ". . target out of Range";
-				}
 			}
 		}
 
@@ -665,9 +659,7 @@ int Base::getTotalSoldiers() const
 			++i)
 	{
 		if ((*i)->getType() == TRANSFER_SOLDIER)
-		{
 			total += (*i)->getQuantity();
-		}
 	}
 
 	return total;
@@ -696,9 +688,7 @@ int Base::getTotalScientists() const
 			++i)
 	{
 		if ((*i)->getType() == TRANSFER_SCIENTIST)
-		{
 			total += (*i)->getQuantity();
-		}
 	}
 
 	const std::vector<ResearchProject*>& research(getResearch());
@@ -736,9 +726,7 @@ int Base::getTotalEngineers() const
 			++i)
 	{
 		if ((*i)->getType() == TRANSFER_ENGINEER)
-		{
 			total += (*i)->getQuantity();
-		}
 	}
 
 	for (std::vector<Production*>::const_iterator
@@ -775,9 +763,7 @@ int Base::getAvailableQuarters() const
 			++i)
 	{
 		if ((*i)->getBuildTime() == 0)
-		{
 			total += (*i)->getRules()->getPersonnel();
-		}
 	}
 
 	return total;
@@ -813,9 +799,7 @@ int Base::getUsedStores() const
 			++i)
 	{
 		if ((*i)->getType() == TRANSFER_ITEM)
-		{
 			total += static_cast<float>((*i)->getQuantity()) * _rule->getItem((*i)->getItems())->getSize();
-		}
 	}
 
 	return static_cast<int>(floor(total));
@@ -835,9 +819,7 @@ int Base::getAvailableStores() const
 			++i)
 	{
 		if ((*i)->getBuildTime() == 0)
-		{
 			total += (*i)->getRules()->getStorage();
-		}
 	}
 
 	return total;
@@ -877,9 +859,7 @@ int Base::getAvailableLaboratories() const
 			++i)
 	{
 		if ((*i)->getBuildTime() == 0)
-		{
 			total += (*i)->getRules()->getLaboratories();
-		}
 	}
 
 	return total;
@@ -918,9 +898,7 @@ int Base::getAvailableWorkshops() const
 			++i)
 	{
 		if ((*i)->getBuildTime() == 0)
-		{
 			total += (*i)->getRules()->getWorkshops();
-		}
 	}
 
 	return total;
@@ -940,9 +918,7 @@ int Base::getUsedHangars() const
 			++i)
 	{
 		if ((*i)->getType() == TRANSFER_CRAFT)
-		{
 			total += (*i)->getQuantity();
-		}
 	}
 
 	for (std::vector<Production*>::const_iterator
@@ -951,9 +927,7 @@ int Base::getUsedHangars() const
 			++i)
 	{
 		if ((*i)->getRules()->getCategory() == "STR_CRAFT")
-		{
 			total += ((*i)->getAmountTotal() - (*i)->getAmountProduced());
-		}
 	}
 
 	return total;
@@ -973,9 +947,7 @@ int Base::getAvailableHangars() const
 			++i)
 	{
 		if ((*i)->getBuildTime() == 0)
-		{
 			total += (*i)->getRules()->getCrafts();
-		}
 	}
 
 	return total;
@@ -1061,9 +1033,7 @@ int Base::getDefenseValue() const
 			++i)
 	{
 		if ((*i)->getBuildTime() == 0)
-		{
 			total += (*i)->getRules()->getDefenseValue();
-		}
 	}
 
 	return total;
@@ -1192,9 +1162,7 @@ int Base::getCraftCount(const std::string& craft) const
 			++i)
 	{
 		if ((*i)->getRules()->getType() == craft)
-		{
 			total++;
-		}
 	}
 
 	return total;
@@ -1248,9 +1216,7 @@ int Base::getFacilityMaintenance() const
 			++i)
 	{
 		if ((*i)->getBuildTime() == 0)
-		{
 			total += (*i)->getRules()->getMonthlyCost();
-		}
 	}
 
 	return total;
@@ -1278,9 +1244,7 @@ void Base::removeProduction(Production* prod)
 												_productions.end(),
 												prod);
 	if (i != _productions.end())
-	{
 		_productions.erase(i);
-	}
 }
 
 /**
@@ -1347,8 +1311,7 @@ void Base::removeResearch(
 			// eg. Base::removeResearch() aLien = STR_REAPER_CORPSE
 
 			researchHelp(aLien);
-		}
-		// kL_end.
+		} // kL_end.
 
 		_research.erase(i);
 	}
@@ -1973,9 +1936,7 @@ int Base::getAvailablePsiLabs() const
 			++f)
 	{
 		if ((*f)->getBuildTime() == 0)
-		{
 			total += (*f)->getRules()->getPsiLaboratories();
-		}
 	}
 
 	return total;
@@ -1995,9 +1956,7 @@ int Base::getUsedPsiLabs() const
 			++s)
 	{
 		if ((*s)->isInPsiTraining())
-		{
 			total ++;
-		}
 	}
 
 	return total;
@@ -2017,9 +1976,7 @@ int Base::getUsedContainment() const
 			++i)
 	{
 		if (_rule->getItem((i)->first)->getAlien())
-		{
 			total += (i)->second;
-		}
 	}
 
 	for (std::vector<Transfer*>::const_iterator
@@ -2027,12 +1984,10 @@ int Base::getUsedContainment() const
 			i != _transfers.end();
 			++i)
 	{
-		if ((*i)->getType() == TRANSFER_ITEM)
+		if ((*i)->getType() == TRANSFER_ITEM
+			&& _rule->getItem((*i)->getItems())->getAlien())
 		{
-			if (_rule->getItem((*i)->getItems())->getAlien())
-			{
-				total += (*i)->getQuantity();
-			}
+			total += (*i)->getQuantity();
 		}
 	}
 
@@ -2069,9 +2024,7 @@ int Base::getAvailableContainment() const
 			++i)
 	{
 		if ((*i)->getBuildTime() == 0)
-		{
 			total += (*i)->getRules()->getAliens();
-		}
 	}
 
 	return total;
@@ -2133,9 +2086,7 @@ struct isMindShield
 bool isMindShield::operator()(const BaseFacility* facility) const
 {
 	if (facility->getBuildTime() != 0)
-	{
 		return false; // Still building this
-	}
 
 	return facility->getRules()->isMindShield();
 }
@@ -2274,9 +2225,7 @@ void Base::setupDefenses()
 		{
 			int size = 4;
 			if (_rule->getUnit(itemId))
-			{
 				size = _rule->getArmor(_rule->getUnit(itemId)->getArmor())->getSize();
-			}
 
 			if (rule->getCompatibleAmmo()->empty()) // so this vehicle does not need ammo
 			{
@@ -2317,8 +2266,8 @@ void Base::setupDefenses()
 						++j)
 				{
 					newAmmo = newAmmoPerVehicle;
-
-					if (j < remainder) ++newAmmo;
+					if (j < remainder)
+						++newAmmo;
 
 					_vehicles.push_back(new Vehicle(
 												rule,
@@ -2336,7 +2285,8 @@ void Base::setupDefenses()
 
 			i = _items->getContents()->begin(); // we have to start over because iterator is broken because of the removeItem
 		}
-		else ++i;
+		else
+			++i;
 	}
 }
 
@@ -2423,7 +2373,8 @@ void Base::checkModuleConnections()
 
 			destroyFacility(i);
 		}
-		else ++i;
+		else
+			++i;
 	}
 }
 
@@ -2460,13 +2411,9 @@ bool Base::checkConnected(
 					++yy)
 			{
 				if (facilities[xx][yy] == 0)
-				{
 					grid[xx][yy] = -1;
-				}
 				else
-				{
 					grid[xx][yy] = 0;
-				}
 			}
 		}
 	}
@@ -2554,9 +2501,7 @@ void Base::destroyFacility(std::vector<BaseFacility*>::iterator& facility)
 						++i)
 				{
 					if ((*i)->getCraft() == (*facility)->getCraft())
-					{
 						(*i)->setCraft(0);
-					}
 				}
 			}
 
@@ -2607,7 +2552,8 @@ void Base::destroyFacility(std::vector<BaseFacility*>::iterator& facility)
 
 					break;
 				}
-				else ++i;
+				else
+					++i;
 			}
 
 			if (remove
@@ -2727,7 +2673,8 @@ void Base::destroyFacility(std::vector<BaseFacility*>::iterator& facility)
 
 					i = _transfers.erase(i);
 				}
-				else ++i;
+				else
+					++i;
 			}
 		}
 	}
@@ -2768,7 +2715,8 @@ void Base::destroyFacility(std::vector<BaseFacility*>::iterator& facility)
 
 					i = _transfers.erase(i);
 				}
-				else ++i;
+				else
+					++i;
 			}
 		}
 	}
@@ -2812,7 +2760,6 @@ void Base::setCashSpent(int cash)
 int Base::getCashSpent() const
 {
 	return _cashSpent;
-}
-// kL_end.
+} // kL_end.
 
 }

@@ -20,7 +20,9 @@
 #define OPENXCOM_CITY_H
 
 #include <string>
+
 #include <yaml-cpp/yaml.h>
+
 
 namespace OpenXcom
 {
@@ -31,22 +33,34 @@ namespace OpenXcom
  */
 class City
 {
+
 private:
+	double
+		_lon,
+		_lat;
+
 	std::string _name;
-	double _lon, _lat;
-public:
-	/// Creates a new city at a certain position.
-	City(const std::string &name, double lon, double lat);
-	/// Cleans up the city.
-	~City();
-	/// Loads the city from YAML.
-	void load(const YAML::Node& node);
-	/// Gets the city's name.
-	std::string getName() const;
-	/// Gets the city's latitude.
-	double getLatitude() const;
-	/// Gets the city's longitude.
-	double getLongitude() const;
+
+
+	public:
+		/// Creates a new city at a certain position.
+		City(
+				const std::string& name,
+				double lon,
+				double lat);
+		/// Cleans up the city.
+		~City();
+
+		/// Loads the city from YAML.
+		void load(const YAML::Node& node);
+
+		/// Gets the city's name.
+		std::string getName() const;
+
+		/// Gets the city's latitude.
+		double getLatitude() const;
+		/// Gets the city's longitude.
+		double getLongitude() const;
 };
 
 }

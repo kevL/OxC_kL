@@ -4262,8 +4262,9 @@ Tile* TileEngine::applyGravity(Tile* t)
 
 		if (unitPos != occupant->getPosition())
 		{
-			if (occupant->getHealth() != 0
-				&& occupant->getStunlevel() < occupant->getHealth())
+//kL			if (occupant->getHealth() != 0
+//kL				&& occupant->getStunlevel() < occupant->getHealth())
+			if (!occupant->isOut(true, true)) // kL
 			{
 				if (occupant->getArmor()->getMovementType() == MT_FLY)
 				{
@@ -4287,7 +4288,7 @@ Tile* TileEngine::applyGravity(Tile* t)
 					_save->addFallingUnit(occupant);
 				}
 			}
-			else if (occupant->isOut())
+			else if (occupant->isOut(true, true))
 			{
 				Position origin = occupant->getPosition();
 
@@ -4386,8 +4387,8 @@ bool TileEngine::validMeleeRange(
 		Position* dest)
 {
 	//Log(LOG_INFO) << "TileEngine::validMeleeRange()";
-	if (direction < 0 || direction > 7)
-		return false;
+	if (direction < 0 || direction > 7) return false;
+
 
 	Position p;
 	Pathfinding::directionToVector(
@@ -4520,7 +4521,7 @@ int TileEngine::getDirectionTo(
 		const Position& origin,
 		const Position& target) const
 {
-	if (origin == target) return 0;	// kL. safety
+	if (origin == target) return 0; // kL. safety
 
 
 	double offset_x = target.x - origin.x;
@@ -4528,7 +4529,9 @@ int TileEngine::getDirectionTo(
 
 	// kL_note: atan2() usually takes the y-value first;
 	// and that's why things may seem so fucked up.
-	double theta = atan2(-offset_y, offset_x); // radians: + = y > 0; - = y < 0;
+	double theta = atan2( // radians: + = y > 0; - = y < 0;
+						-offset_y,
+						offset_x);
 
 	// divide the pie in 4 thetas, each at 1/8th before each quarter
 	double m_pi_8 = M_PI / 8.0;				// a circle divided into 16 sections (rads) -> 22.5 deg
@@ -4543,33 +4546,19 @@ int TileEngine::getDirectionTo(
 
 	int dir = 2;
 	if (theta > pie[0] || theta < -pie[0])
-	{
 		dir = 6;
-	}
 	else if (theta > pie[1])
-	{
 		dir = 7;
-	}
 	else if (theta > pie[2])
-	{
 		dir = 0;
-	}
 	else if (theta > pie[3])
-	{
 		dir = 1;
-	}
 	else if (theta < -pie[1])
-	{
 		dir = 5;
-	}
 	else if (theta < -pie[2])
-	{
 		dir = 4;
-	}
 	else if (theta < -pie[3])
-	{
 		dir = 3;
-	}
 
 	return dir;
 }
@@ -4585,9 +4574,7 @@ Position TileEngine::getOriginVoxel(
 	const int dirXshift[24] = {9, 15, 15, 13,  8,  1, 1, 3, 7, 13, 15, 15,  9,  3, 1, 1, 8, 14, 15, 14,  8,  2, 1, 2};
 
 	if (!tile)
-	{
 		tile = action.actor->getTile();
-	}
 
 	Position origin = tile->getPosition();
 	Position originVoxel = Position(
@@ -4608,17 +4595,13 @@ Position TileEngine::getOriginVoxel(
 						- 4; // for good luck.
 
 		if (action.type == BA_THROW)	// kL
-		{
 			originVoxel.z -= 4;			// kL
-		}
-/*kL		if (action.type == BA_THROW)
-		{
+/*kL
+		if (action.type == BA_THROW)
 			originVoxel.z -= 3;
-		}
 		else
-		{
 			originVoxel.z -= 4;
-		} */
+*/
 
 		if (originVoxel.z >= (origin.z + 1) * 24)
 		{
@@ -4630,9 +4613,7 @@ Position TileEngine::getOriginVoxel(
 			else
 			{
 				while (originVoxel.z >= (origin.z + 1) * 24)
-				{
 					originVoxel.z--;
-				}
 
 				originVoxel.z -= 4;
 			}
@@ -4640,9 +4621,7 @@ Position TileEngine::getOriginVoxel(
 
 		int offset = 0;
 		if (action.actor->getArmor()->getSize() > 1)
-		{
 			offset = 16;
-		}
 		else if (action.weapon == action.weapon->getOwner()->getItem("STR_LEFT_HAND")
 			&& !action.weapon->getRules()->isTwoHanded())
 		{

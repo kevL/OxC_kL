@@ -134,6 +134,9 @@ CraftsState::CraftsState(
 	_lstCrafts->setBackground(_window);
 	_lstCrafts->setMargin(8);
 	_lstCrafts->onMouseClick((ActionHandler)& CraftsState::lstCraftsClick);
+	_lstCrafts->onMouseClick(
+					(ActionHandler)& CraftsState::lstCraftsRightClick,
+					SDL_BUTTON_RIGHT);
 }
 
 /**
@@ -272,7 +275,7 @@ std::wstring CraftsState::getAltStatus(Craft* craft)
 
 /**
  * Returns to the previous screen.
- * @param action Pointer to an action.
+ * @param action, Pointer to an action.
  */
 void CraftsState::btnOkClick(Action*)
 {
@@ -281,7 +284,7 @@ void CraftsState::btnOkClick(Action*)
 
 /**
  * Shows the selected craft's info.
- * @param action Pointer to an action.
+ * @param action, Pointer to an action.
  */
 void CraftsState::lstCraftsClick(Action*)
 {
@@ -292,6 +295,23 @@ void CraftsState::lstCraftsClick(Action*)
 										_base,
 										_lstCrafts->getSelectedRow()));
 	}
+}
+
+/**
+ * kL. Pops out of Basescape and centers craft on Geoscape.
+ * @param action, Pointer to an action.
+ */
+void CraftsState::lstCraftsRightClick(Action*)
+{
+	Craft* c = _base->getCrafts()->at(_lstCrafts->getSelectedRow());
+	_game->getSavedGame()->setGlobeLongitude(c->getLongitude());
+	_game->getSavedGame()->setGlobeLatitude(c->getLatitude());
+
+	kL_reCenter = true;
+
+
+	_game->popState(); // close Crafts window.
+	_game->popState(); // close Basescape view.
 }
 
 }

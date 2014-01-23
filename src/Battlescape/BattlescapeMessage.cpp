@@ -59,7 +59,7 @@ BattlescapeMessage::BattlescapeMessage(
 
 	// 'Hidden Movement' text
 	_text = new Text(
-					width - 12,
+					width - 10,
 					height - 12,
 					x,
 					y + 12);

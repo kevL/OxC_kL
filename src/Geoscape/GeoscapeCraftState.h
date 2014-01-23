@@ -84,6 +84,7 @@ private:
 
 		/// Updates the palette.
 		void init();
+
 		/// Handler for clicking the Center button.
 		void btnCenterClick(Action* action);
 		/// Handler for clicking the Return To Base button.

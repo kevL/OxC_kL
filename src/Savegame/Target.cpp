@@ -54,9 +54,7 @@ Target::~Target()
 	{
 		Craft* craft = dynamic_cast<Craft*>(_followers[i]);
 		if (craft)
-		{
 			craft->returnToBase();
-		}
 	}
 }
 

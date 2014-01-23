@@ -604,9 +604,7 @@ void GeoscapeState::blit()
 void GeoscapeState::handle(Action* action)
 {
 	if (_dogfights.size() == _minimizedDogfights)
-	{
 		State::handle(action);
-	}
 
 	if (action->getDetails()->type == SDL_KEYDOWN)
 	{
@@ -617,13 +615,9 @@ void GeoscapeState::handle(Action* action)
 		{
 			_game->getSavedGame()->setDebugMode();
 			if (_game->getSavedGame()->getDebugMode())
-			{
 				_txtDebug->setText(L"DEBUG MODE");
-			}
 			else
-			{
 				_txtDebug->setText(L"");
-			}
 		}
 		// quick save and quick load
 		else if (action->getDetails()->key.keysym.sym == Options::getInt("keyQuickSave")
@@ -675,16 +669,13 @@ void GeoscapeState::init()
 	_globe->draw();
 
 	// Set music if it's not already playing
-	if (!_music && !_battleMusic)
+	if (!_music
+		&& !_battleMusic)
 	{
 		if (_game->getSavedGame()->getMonthsPassed() == -1)
-		{
 			_game->getResourcePack()->getMusic("GMGEO1")->play();
-		}
 		else
-		{
 			_game->getResourcePack()->getRandomMusic("GMGEO")->play();
-		}
 
 		_music = true;
 	}
@@ -756,9 +747,7 @@ void GeoscapeState::think()
 void GeoscapeState::timeDisplay()
 {
 	if (_showFundsOnGeoscape)
-	{
 		_txtFunds->setText(Text::formatFunding(_game->getSavedGame()->getFunds()));
-	}
 
 	int sec = _game->getSavedGame()->getTime()->getSecond();
 	sec = sec / 30 * 5;

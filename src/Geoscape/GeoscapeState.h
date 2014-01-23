@@ -62,16 +62,13 @@ private:
 		_showFundsOnGeoscape, // this is a cache for Options::getBool("showFundsOnGeoscape")
 		_zoomInEffectDone,
 		_zoomOutEffectDone;
-	int
-		_zoomInter; // kL
-	size_t
-		_minimizedDogfights;
+	int _zoomInter; // kL
+	size_t _minimizedDogfights;
 	double
 		_interLon,
 		_interLat;
 
-	Globe
-		* _globe;
+	Globe* _globe;
 	ImageButton
 		* _btnIntercept,
 		* _btnBases,
@@ -89,8 +86,7 @@ private:
 		* _btnDetail,
 		* _timeSpeed;
 //	InteractiveSurface* _btnRotateLeft, * _btnRotateRight, * _btnRotateUp, * _btnRotateDown, * _btnZoomIn, * _btnZoomOut;
-	Surface
-		* _bg;
+	Surface* _bg;
 	Text
 		* _txtDebug,
 		* _txtFunds,
@@ -109,15 +105,13 @@ private:
 		* _zoomOutEffectTimer,
 		* _dogfightStartTimer;
 
-	std::vector<State*>
-		_popups;
+	std::vector<State*> _popups;
 	std::vector<DogfightState*>
 		_dogfights,
 		_dogfightsToBeStarted;
 
 	/// Handle alien mission generation.
-	void determineAlienMissions(
-			bool atGameStart = false);
+	void determineAlienMissions(bool atGameStart = false);
 
 
 	public:

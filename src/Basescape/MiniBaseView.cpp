@@ -97,7 +97,7 @@ void MiniBaseView::setSelectedBase(unsigned int base)
 {
 	_base = base;
 
-//	_gs->setCurrentBase((Uint8)_base);	// kL
+//	_gs->setCurrentBase((Uint8)_base); // kL
 	kL_currentBase = base;
 
 	_redraw = true;

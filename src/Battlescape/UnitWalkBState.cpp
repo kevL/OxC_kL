@@ -119,7 +119,7 @@ void UnitWalkBState::init()
  */
 void UnitWalkBState::think()
 {
-	Log(LOG_INFO)	<< "\n***** UnitWalkBState::think() : " << _unit->getId();
+	Log(LOG_INFO) << "\n***** UnitWalkBState::think() : " << _unit->getId();
 					//<< " _walkPhase = " << _unit->getWalkingPhase() << " *****";
 
 	if (_unit->isOut(true, true))
@@ -204,7 +204,6 @@ void UnitWalkBState::think()
 		|| _unit->getStatus() == STATUS_PANICKING)
 	{
 		Log(LOG_INFO) << "STATUS_STANDING or PANICKING : " << _unit->getId();
-
 		if (!doStatusStand()) return;
 	}
 
@@ -213,7 +212,6 @@ void UnitWalkBState::think()
 	if (_unit->getStatus() == STATUS_TURNING) // turning during walking costs no tu
 	{
 		Log(LOG_INFO) << "STATUS_TURNING : " << _unit->getId();
-
 		doStatusTurn();
 	}
 
@@ -239,7 +237,7 @@ void UnitWalkBState::cancel()
  */
 bool UnitWalkBState::doStatusStand()
 {
-	//Log(LOG_INFO) << ". _onScreen = " << _onScreen;
+	Log(LOG_INFO) << "***** UnitWalkBState::doStatusStand() : " << _unit->getId();
 	int dir = _pf->getStartDirection();
 	Log(LOG_INFO) << ". StartDirection = " << dir;
 
@@ -324,8 +322,7 @@ bool UnitWalkBState::doStatusStand()
 			Log(LOG_INFO) << ". . strafeMove, setFaceDirection() <- " << dirFace;
 		}
 
-		Log(LOG_INFO) << ". pos 1";
-
+		Log(LOG_INFO) << ". getTUCost() & destination";
 		// gets tu cost, but also gets the destination position.
 		Position destination;
 		int tu = _pf->getTUCost(
@@ -344,13 +341,16 @@ bool UnitWalkBState::doStatusStand()
 			Log(LOG_INFO) << ". . subtract tu inflation for a fireTile";
 			// we artificially inflate the TU cost by 32 points in getTUCost under these conditions, so we have to deflate it here.
 			tu -= 32;
-			Log(LOG_INFO) << ". . subtract tu inflation for a fireTile DONE";
+			//Log(LOG_INFO) << ". . subtract tu inflation for a fireTile DONE";
 		}
 
-		Log(LOG_INFO) << ". pos 2";
+		//Log(LOG_INFO) << ". pos 2";
 
 		if (_falling)
+		{
+			Log(LOG_INFO) << ". . falling, set tu 0";
 			tu = 0;
+		}
 
 //kL		int energy = tu;
 		// kL_begin: UnitWalkBState::think(), no stamina required to go up/down GravLifts.
@@ -368,7 +368,7 @@ bool UnitWalkBState::doStatusStand()
 			energy = tu;
 		} // kL_end.
 
-		Log(LOG_INFO) << ". pos 3";
+		//Log(LOG_INFO) << ". pos 3";
 
 		if (_action.run)
 		{
@@ -383,7 +383,7 @@ bool UnitWalkBState::doStatusStand()
 //kL			energy = 0;
 //kL		}
 
-		Log(LOG_INFO) << ". pos 4";
+		Log(LOG_INFO) << ". check tu + stamina, etc.";
 
 		if (tu > _unit->getTimeUnits())
 		{
@@ -476,7 +476,7 @@ bool UnitWalkBState::doStatusStand()
 			}
 		}
 
-		Log(LOG_INFO) << ". pos 5";
+		Log(LOG_INFO) << ". check size for obstacles";
 
 		int size = _unit->getArmor()->getSize() - 1;
 		for (int
@@ -531,7 +531,10 @@ bool UnitWalkBState::doStatusStand()
 		dir = _pf->dequeuePath(); // now start moving
 
 		if (_falling)
+		{
+			Log(LOG_INFO) << ". . falling, _pf->DIR_DOWN";
 			dir = _pf->DIR_DOWN;
+		}
 		Log(LOG_INFO) << ". dequeuePath() dir = " << dir;
 
 		if (dir == _pf->DIR_UP)	// kL
@@ -608,6 +611,7 @@ bool UnitWalkBState::doStatusStand()
  */
 bool UnitWalkBState::doStatusWalk()
 {
+	Log(LOG_INFO) << "***** UnitWalkBState::doStatusWalk() : " << _unit->getId();
 	Tile* tBelow = 0;
 
 	if (_parent->getSave()->getTile(_unit->getDestination())->getUnit() == 0  // next tile must be not occupied
@@ -637,6 +641,11 @@ bool UnitWalkBState::doStatusWalk()
 	// unit moved from one tile to the other, update the tiles & investigate new flooring
 	if (!_tileSwitchDone // kL
 		&& _unit->getPosition() != _unit->getLastPosition())
+		// ( _pos != _lastpos ) <- set equal at Start, _walkPhase == 0.
+		// this clicks over in keepWalking(_walkPhase == middle)
+		// rougly _walkPhase == 4
+		// when _pos sets equal to _destination.
+		// So. How does _falling ever equate TRUE, if it has to be flagged on _walkPhase == 0 only?
 	{
 		Log(LOG_INFO) << ". tile switch from _lastpos to _destination";
 		// BattleUnit::startWalking() sets _lastpos = _pos, then
@@ -697,8 +706,8 @@ bool UnitWalkBState::doStatusWalk()
 		_falling = fallCheck
 					&& _unit->getPosition().z != 0
 //kL					&& _unit->getTile()->hasNoFloor(tileBelow) // kL_note: Done above.
-					&& _unit->getArmor()->getMovementType() != MT_FLY // -> sorta move to doStatusStand_end()
-					&& _unit->getWalkingPhase() == 0; // <- set @ startWalking() and @ end of keepWalking()
+					&& _unit->getArmor()->getMovementType() != MT_FLY; // -> sorta move to doStatusStand_end()
+//kL					&& _unit->getWalkingPhase() == 0; // <- set @ startWalking() and @ end of keepWalking()
 
 		if (_falling)
 		{
@@ -767,6 +776,7 @@ bool UnitWalkBState::doStatusWalk()
  */
 bool UnitWalkBState::doStatusStand_end()
 {
+	Log(LOG_INFO) << "***** UnitWalkBState::doStatusStand_end() : " << _unit->getId();
 // kL_begin: Try doing the _falling check at the end of each tile's walk-cycle
 /*	Tile* tileBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(0, 0, -1));
 	bool fallCheck = true;
@@ -908,6 +918,7 @@ bool UnitWalkBState::doStatusStand_end()
  */
 void UnitWalkBState::doStatusTurn()
 {
+	Log(LOG_INFO) << "***** UnitWalkBState::doStatusTurn() : " << _unit->getId();
 	if (_turnBeforeFirstStep) // except before the first step.
 		_preMovementCost++;
 
@@ -932,8 +943,8 @@ void UnitWalkBState::doStatusTurn()
 			_unit->spendTimeUnits(_preMovementCost);
 
 		Log(LOG_INFO) << "Egads! STATUS_TURNING reveals new units!!! I must pause!";
-		if (_unit->getFaction() == FACTION_PLAYER) Log(LOG_INFO) << ". . _newVis = TRUE, Abort path, popState";
-		else if (_unit->getFaction() != FACTION_PLAYER) Log(LOG_INFO) << ". . _newUnitSpotted = TRUE, Abort path, popState";
+		//if (_unit->getFaction() == FACTION_PLAYER) Log(LOG_INFO) << ". . _newVis = TRUE, Abort path, popState";
+		//else if (_unit->getFaction() != FACTION_PLAYER) Log(LOG_INFO) << ". . _newUnitSpotted = TRUE, Abort path, popState";
 
 		_unit->_hidingForTurn = false;
 

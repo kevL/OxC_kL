@@ -1683,7 +1683,7 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 			&& (rtItem->getRules()->getBattleType() == BT_FIREARM
 				|| rtItem->getRules()->getBattleType() == BT_MELEE))
 		{
-			_numTUSnap->setVisible(true);
+//			_numTUSnap->setVisible(true);
 
 			tuSnap = selectedUnit->getActionTUs(BA_SNAPSHOT, rtItem);
 			if (!tuSnap)
@@ -1693,14 +1693,20 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 			&& (ltItem->getRules()->getBattleType() == BT_FIREARM
 				|| ltItem->getRules()->getBattleType() == BT_MELEE))
 		{
-			_numTUSnap->setVisible(true);
+//			_numTUSnap->setVisible(true);
 
 			tuSnap = selectedUnit->getActionTUs(BA_SNAPSHOT, ltItem);
 			if (!tuSnap)
 				tuSnap = selectedUnit->getActionTUs(BA_HIT, ltItem);
 		}
 
-		_numTUSnap->setValue(tuSnap);
+		if (tuSnap)
+		{
+			_numTUSnap->setValue(tuSnap);
+			_numTUSnap->setVisible(true);
+		}
+//		else
+//			_numTUSnap->setVisible(false);
 	}
 
 	if (rtItem)

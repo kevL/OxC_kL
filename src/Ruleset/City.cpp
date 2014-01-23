@@ -16,9 +16,13 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #define _USE_MATH_DEFINES
+
 #include "City.h"
+
 #include <math.h>
+
 
 namespace OpenXcom
 {
@@ -29,7 +33,14 @@ namespace OpenXcom
  * @param lon Longitude of the city.
  * @param lat Latitude of the city.
  */
-City::City(const std::string &name, double lon, double lat): _name(name), _lon(lon), _lat(lat)
+City::City(
+		const std::string& name,
+		double lon,
+		double lat)
+	:
+		_name(name),
+		_lon(lon),
+		_lat(lat)
 {
 }
 
@@ -46,9 +57,9 @@ City::~City()
  */
 void City::load(const YAML::Node &node)
 {
-	_name = node["name"].as<std::string>(_name);
-	_lon = node["lon"].as<double>(_lon) * M_PI / 180;
-	_lat = node["lat"].as<double>(_lat) * M_PI / 180;
+	_name	= node["name"].as<std::string>(_name);
+	_lon	= node["lon"].as<double>(_lon) * M_PI / 180.0;
+	_lat	= node["lat"].as<double>(_lat) * M_PI / 180.0;
 }
 
 /**

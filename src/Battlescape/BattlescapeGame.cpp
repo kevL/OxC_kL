@@ -768,7 +768,8 @@ void BattlescapeGame::checkForCasualties(
 			BattleUnit* victim = *x;
 			Log(LOG_INFO) << ". victim = " << (*x)->getId();
 
-			if (killer)
+			if (killer
+				&& killer->getTurretType() == -1) // not a Tank.
 			{
 				Log(LOG_INFO) << ". killer = " << killer->getId();
 
@@ -777,9 +778,9 @@ void BattlescapeGame::checkForCasualties(
 				int bonus = 100;
 				if (killer->getOriginalFaction() == FACTION_PLAYER)
 				{
-					bonus = _save->getMoraleModifier();
-
 					killer->addKillCount();
+
+					bonus = _save->getMoraleModifier();
 				}
 				else if (killer->getOriginalFaction() == FACTION_HOSTILE)
 				{
@@ -788,14 +789,13 @@ void BattlescapeGame::checkForCasualties(
 
 				// killer's boost
 				if ((victim->getOriginalFaction() == FACTION_PLAYER
-						&& killer->getOriginalFaction() == FACTION_HOSTILE)
-					|| (victim->getOriginalFaction() == FACTION_HOSTILE
-						&& killer->getOriginalFaction() == FACTION_PLAYER))
+							&& killer->getOriginalFaction() == FACTION_HOSTILE)
+						|| (victim->getOriginalFaction() == FACTION_HOSTILE
+							&& killer->getOriginalFaction() == FACTION_PLAYER))
 				{
 					int boost = 10 * bonus / 100;
 					killer->moraleChange(boost); // double what rest of squad gets below
-
-					Log(LOG_INFO) << ". . killer boost + " << boost;
+					Log(LOG_INFO) << ". . killer boost +" << boost;
 				}
 
 				// killer (mc'd or not) will get a penalty with friendly fire (mc'd or not)
@@ -805,8 +805,7 @@ void BattlescapeGame::checkForCasualties(
 				{
 					int hit = 5000 / bonus;
 					killer->moraleChange(-hit); // huge hit!
-
-					Log(LOG_INFO) << ". . FF hit, killer - " << hit;
+					Log(LOG_INFO) << ". . FF hit, killer -" << hit;
 				}
 
 				if (victim->getOriginalFaction() == FACTION_NEUTRAL) // civilian kills
@@ -815,14 +814,12 @@ void BattlescapeGame::checkForCasualties(
 					{
 						int civdeath = 2000 / bonus;
 						killer->moraleChange(-civdeath);
-
-						Log(LOG_INFO) << ". . civdeath by xCom, soldier - " << civdeath;
+						Log(LOG_INFO) << ". . civdeath by xCom, soldier -" << civdeath;
 					}
 					else if (killer->getOriginalFaction() == FACTION_HOSTILE)
 					{
 						killer->moraleChange(20); // no leadership bonus for aLiens executing civies: it's their job.
-
-						Log(LOG_INFO) << ". . civdeath by aLien, killer + " << 20;
+						Log(LOG_INFO) << ". . civdeath by aLien, killer +" << 20;
 					}
 				}
 			}
@@ -830,10 +827,13 @@ void BattlescapeGame::checkForCasualties(
 			// cycle through units and do all faction
 //kL			if (victim->getFaction() != FACTION_NEUTRAL) // civie deaths now affect other Factions.
 			{
-				int solo = _save->getMoraleModifier(victim); // penalty for the death of a unit; civilians return standard 100.
-
+				// penalty for the death of a unit; civilians return standard 100.
+				int solo = _save->getMoraleModifier(victim);
 				// these two are faction bonuses ('losers' mitigates the loss of solo, 'winners' boosts solo)
-				int losers = 100, winners = 100;
+				int
+					losers = 100,
+					winners = 100;
+
 				if (victim->getOriginalFaction() == FACTION_HOSTILE)
 				{
 					losers = _save->getMoraleModifier(0, false);
@@ -853,7 +853,8 @@ void BattlescapeGame::checkForCasualties(
 						++i)
 				{
 					if (!(*i)->isOut(true, true)
-						&& (*i)->getArmor()->getSize() == 1) // not a large unit
+//						&& (*i)->getArmor()->getSize() == 1) // not a large unit
+						&& (*i)->getTurretType() == -1) // not a Tank.
 					{
 						if (victim->getOriginalFaction() == (*i)->getOriginalFaction()
 							|| (victim->getOriginalFaction() == FACTION_NEUTRAL				// for civie-death,
@@ -871,7 +872,7 @@ void BattlescapeGame::checkForCasualties(
 								(*i)->moraleChange(-bravery);
 							}
 
-							Log(LOG_INFO) << ". . . loser - " << bravery;
+							Log(LOG_INFO) << ". . . loser -" << bravery;
 
 							if (killer
 								&& killer->getFaction() == FACTION_PLAYER
@@ -893,7 +894,7 @@ void BattlescapeGame::checkForCasualties(
 							int boost = winners / 10;
 							(*i)->moraleChange(boost);
 
-							Log(LOG_INFO) << ". . . winner + " << boost;
+							Log(LOG_INFO) << ". . . winner +" << boost;
 						}
 					}
 				}

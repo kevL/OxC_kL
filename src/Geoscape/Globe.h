@@ -32,6 +32,9 @@
 namespace OpenXcom
 {
 
+extern bool kL_reCenter;
+
+
 class Game;
 class LocalizedText;
 class Polygon;

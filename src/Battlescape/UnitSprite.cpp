@@ -231,7 +231,7 @@ void UnitSprite::draw()
  */
 void UnitSprite::drawRoutine0()
 {
-	Log(LOG_INFO) << "** UnitSprite::drawRoutine0()";
+	//Log(LOG_INFO) << "** UnitSprite::drawRoutine0()";
 	// kL_begin:
 	if (_unit->isOut())
 	{

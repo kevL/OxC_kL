@@ -20,8 +20,10 @@
 #define _USE_MATH_DEFINES
 
 #include "RuleCountry.h"
-#include "../Engine/RNG.h"
+
 #include <math.h>
+
+#include "../Engine/RNG.h"
 
 
 namespace OpenXcom
@@ -62,14 +64,17 @@ void RuleCountry::load(const YAML::Node& node)
 	_labelLat		= node["labelLat"].as<double>(_labelLat) * M_PI / 180;
 
 	std::vector<std::vector<double>> areas;
-	areas			= node["areas"].as<std::vector<std::vector<double>>>(areas);
+	areas = node["areas"].as<std::vector<std::vector<double>>>(areas);
 
-	for (size_t i = 0; i != areas.size(); ++i)
+	for (size_t
+			i = 0;
+			i != areas.size();
+			++i)
 	{
-		_lonMin.push_back(areas[i][0] * M_PI / 180);
-		_lonMax.push_back(areas[i][1] * M_PI / 180);
-		_latMin.push_back(areas[i][2] * M_PI / 180);
-		_latMax.push_back(areas[i][3] * M_PI / 180);
+		_lonMin.push_back(areas[i][0] * M_PI / 180.0);
+		_lonMax.push_back(areas[i][1] * M_PI / 180.0);
+		_latMin.push_back(areas[i][2] * M_PI / 180.0);
+		_latMax.push_back(areas[i][3] * M_PI / 180.0);
 	}
 }
 
@@ -127,19 +132,26 @@ double RuleCountry::getLabelLatitude() const
  * @param lat Latitude in radians.
  * @return True if it's inside, false if it's outside.
  */
-bool RuleCountry::insideCountry(double lon, double lat) const
+bool RuleCountry::insideCountry(
+		double lon,
+		double lat) const
 {
-	for (unsigned int i = 0; i < _lonMin.size(); ++i)
+	for (unsigned
+			i = 0;
+			i < _lonMin.size();
+			++i)
 	{
-		bool inLon, inLat;
+		bool
+			inLon,
+			inLat;
 
 		if (_lonMin[i] <= _lonMax[i])
-			inLon = lon >= _lonMin[i] && lon < _lonMax[i];
+			inLon = (lon >= _lonMin[i] && lon < _lonMax[i]);
 		else
 			inLon = (lon >= _lonMin[i] && lon < 6.283)
 					|| (lon >= 0 && lon < _lonMax[i]);
 
-		inLat = lat >= _latMin[i] && lat < _latMax[i];
+		inLat = (lat >= _latMin[i] && lat < _latMax[i]);
 
 		if (inLon && inLat)
 			return true;

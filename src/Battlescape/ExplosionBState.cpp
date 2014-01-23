@@ -138,20 +138,26 @@ void ExplosionBState::init()
 				startFrame = 0; // less than 0 will delay anim-start (total 8 Frames)
 //				offset = _power / 2,
 //				animQty = _power / 14;
-			int radius = 1;
+			int radius = 0;
 			if (_item)
+			{
 				radius = _item->getRules()->getExplosionRadius();
-			if (radius < 1)
-				radius = _power / 10;	// <- for cyberdiscs... they crash if using just getExplosionRadius(),
-										// because they're not items, and don't have a _blastRadius value.
+				Log(LOG_INFO) << ". . . getExplosionRadius() -> " << radius;
+			}
+//			if (radius < 1)
+			else
+				radius = _power / 10; // <- for cyberdiscs & terrain expl.... CTD if using getExplosionRadius(),
+			Log(LOG_INFO) << ". . . radius = " << radius;
 
-			int offset = radius * 5, // voxelspace
+			int offset = radius * 9, // voxelspace
 				animQty = static_cast<int>(
 								sqrt(static_cast<double>(radius) * static_cast<double>(_power)))
 							/ 6;
 			if (animQty < 1)
 				animQty = 1;
 
+			Log(LOG_INFO) << ". . . offset(total) = " << offset;
+			Log(LOG_INFO) << ". . . animQty = " << animQty;
 			for (int
 					i = 0;
 					i < animQty;
@@ -168,7 +174,7 @@ void ExplosionBState::init()
 //				Explosion* explosion = new Explosion(p, startFrame, true);
 
 				Explosion* explosion = new Explosion( // animation
-													posCenter_voxel + Position(23, 23, 0), // jogg the anim down a few pixels. Tks.
+													posCenter_voxel + Position(22, 22, 0), // jogg the anim down a few pixels. Tks.
 													startFrame,
 													true);
 

@@ -341,7 +341,7 @@ void InterceptState::lstCraftsRightClick(Action*)
 				c->getLatitude());
 }
 
-// kL. These two are from SavedGameState:
+// kL_begin: These two are from SavedGameState:
 /**
  * Shows Base label.
  */
@@ -353,9 +353,7 @@ void InterceptState::lstCraftsMouseOver(Action*)
 
 	int sel = _lstCrafts->getSelectedRow();
 	if (sel < static_cast<int>(_bases.size()))
-	{
 		wsBase = _bases[sel];
-	}
 
 	_txtBase->setText(wsBase);
 }
@@ -369,6 +367,6 @@ void InterceptState::lstCraftsMouseOut(Action*)
 
 //	_txtBase->setText(L"");
 	_txtBase->setText(tr("STR_INTERCEPT"));
-}
+} // kL_end.
 
 }
