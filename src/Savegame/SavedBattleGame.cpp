@@ -221,6 +221,7 @@ void SavedBattleGame::load(
 		serKey.totalBytes		= node["tileTotalBytesPer"].as<Uint32>(serKey.totalBytes);
 		serKey._fire			= node["tileFireSize"].as<Uint8>(serKey._fire);
 		serKey._smoke			= node["tileSmokeSize"].as<Uint8>(serKey._smoke);
+		serKey._animOffset		= node["tileOffsetSize"].as<Uint8>(serKey._animOffset); // kL
 		serKey._mapDataID		= node["tileIDSize"].as<Uint8>(serKey._mapDataID);
 		serKey._mapDataSetID	= node["tileSetIDSize"].as<Uint8>(serKey._mapDataSetID);
 		serKey.boolFields		= node["tileBoolFieldsSize"].as<Uint8>(1); // boolean flags used to be stored in an unmentioned byte (Uint8) :|
@@ -521,6 +522,7 @@ YAML::Node SavedBattleGame::save() const
 	node["tileTotalBytesPer"]	= Tile::serializationKey.totalBytes;
 	node["tileFireSize"]		= Tile::serializationKey._fire;
 	node["tileSmokeSize"]		= Tile::serializationKey._smoke;
+	node["tileOffsetSize"]		= Tile::serializationKey._animOffset; // kL
 	node["tileIDSize"]			= Tile::serializationKey._mapDataID;
 	node["tileSetIDSize"]		= Tile::serializationKey._mapDataSetID;
     node["tileBoolFieldsSize"]	= Tile::serializationKey.boolFields;

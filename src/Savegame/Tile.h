@@ -89,6 +89,7 @@ protected:
 			Uint8 _mapDataID;
 			Uint8 _smoke;
 			Uint8 _fire;
+			Uint8 _animOffset; // kL
 			Uint8 boolFields;
 			Uint32 totalBytes; // per structure, including any data not mentioned here and accounting for all array members!
 		} serializationKey;

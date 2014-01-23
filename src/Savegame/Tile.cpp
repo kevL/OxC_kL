@@ -45,8 +45,10 @@ Tile::SerializationKey Tile::serializationKey =
 	2,	// _mapDataID, four of these
 	1,	// _fire
 	1,	// _smoke
+	1,	// _animOffset
 	1,	// one 8-bit bool field
-	4 + (2 * 4) + (2 * 4) + 1 + 1 + 1	// total bytes to save one tile
+//kL	4 + (2 * 4) + (2 * 4) + 1 + 1 + 1	// total bytes to save one tile
+	4 + (2 * 4) + (2 * 4) + 1 + 1 + 1 + 1	// kL
 };
 
 /**
@@ -68,7 +70,10 @@ Tile::Tile(const Position& pos)
 		_overlaps(0),
 		_danger(false)
 {
-	for (int i = 0; i < 4; ++i)
+	for (int
+			i = 0;
+			i < 4;
+			++i)
 	{
 		_objects[i] = 0;
 		_mapDataID[i] = -1;
@@ -76,13 +81,19 @@ Tile::Tile(const Position& pos)
 		_currFrame[i] = 0;
 	}
 
-	for (int layer = 0; layer < LIGHTLAYERS; layer++)
+	for (int
+			layer = 0;
+			layer < LIGHTLAYERS;
+			layer++)
 	{
 		_light[layer] = 0;
 		_lastLight[layer] = -1;
 	}
 
-	for (int i = 0; i < 3; ++i)
+	for (int
+			i = 0;
+			i < 3;
+			++i)
 	{
 		_discovered[i] = false;
 	}
@@ -135,7 +146,9 @@ void Tile::load(const YAML::Node& node)
  * Load the tile from binary.
  * @param buffer pointer to buffer.
  */
-void Tile::loadBinary(Uint8* buffer, Tile::SerializationKey& serKey)
+void Tile::loadBinary(
+		Uint8* buffer,
+		Tile::SerializationKey& serKey)
 {
 	_mapDataID[0] = unserializeInt(&buffer, serKey._mapDataID);
 	_mapDataID[1] = unserializeInt(&buffer, serKey._mapDataID);
@@ -148,6 +161,7 @@ void Tile::loadBinary(Uint8* buffer, Tile::SerializationKey& serKey)
 
 	_smoke = unserializeInt(&buffer, serKey._smoke);
 	_fire = unserializeInt(&buffer, serKey._fire);
+	_animOffset = unserializeInt(&buffer, serKey._animOffset); // kL
 
 //kL    Uint8 boolFields = unserializeInt(&buffer, serKey.boolFields);
     Uint8 boolFields = static_cast<Uint8>(unserializeInt(&buffer, serKey.boolFields)); // kL
@@ -211,10 +225,11 @@ void Tile::saveBinary(Uint8** buffer) const
 
 	serializeInt(buffer, serializationKey._smoke, _smoke);
 	serializeInt(buffer, serializationKey._fire, _fire);
+	serializeInt(buffer, serializationKey._animOffset, _animOffset); // kL
 
-	Uint8 boolFields = (_discovered[0]?1:0) + (_discovered[1]?2:0) + (_discovered[2]?4:0);
-	boolFields |= isUfoDoorOpen(1) ? 8 : 0; // west
-	boolFields |= isUfoDoorOpen(2) ? 0x10 : 0; // north?
+	Uint8 boolFields = (_discovered[0]? 1: 0) + (_discovered[1]? 2: 0) + (_discovered[2]? 4: 0);
+	boolFields |= isUfoDoorOpen(1)? 8: 0; // west
+	boolFields |= isUfoDoorOpen(2)? 0x10: 0; // north?
 	serializeInt(buffer, serializationKey.boolFields, boolFields);
 }
 
@@ -224,7 +239,11 @@ void Tile::saveBinary(Uint8** buffer) const
  * @param newObjectID The ID in the total list of the objects of this battlegame.
  * @param part the part number
  */
-void Tile::setMapData(MapData* dat, int mapDataID, int mapDataSetID, int part)
+void Tile::setMapData(
+		MapData* dat,
+		int mapDataID,
+		int mapDataSetID,
+		int part)
 {
 	_objects[part] = dat;
 	_mapDataID[part] = mapDataID;
@@ -236,7 +255,10 @@ void Tile::setMapData(MapData* dat, int mapDataID, int mapDataSetID, int part)
  * @param part the part number
  * @return the object ID
  */
-void Tile::getMapData(int* mapDataID, int* mapDataSetID, int part) const
+void Tile::getMapData(
+		int* mapDataID,
+		int* mapDataSetID,
+		int part) const
 {
 	*mapDataID = _mapDataID[part];
 	*mapDataSetID = _mapDataSetID[part];
@@ -262,7 +284,9 @@ bool Tile::isVoid() const
  * @param movementType
  * @return TU cost
  */
-int Tile::getTUCost(int part, MovementType movementType) const
+int Tile::getTUCost(
+		int part,
+		MovementType movementType) const
 {
 	if (_objects[part])
 	{

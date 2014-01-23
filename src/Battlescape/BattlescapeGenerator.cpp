@@ -733,9 +733,7 @@ void BattlescapeGenerator::deployXCOM()
 	{
 		//Log(LOG_INFO) << ". LOAD WEAPONS HERE";
 		if ((*i)->needsAmmo())
-		{
 			loadGroundWeapon(*i);
-		}
 	}
 
 
@@ -754,9 +752,7 @@ void BattlescapeGenerator::deployXCOM()
 			++i;
 		}
 		else
-		{
 			i = _craftInventoryTile->getInventory()->erase(i);
-		}
 	}
 
 	Log(LOG_INFO) << "BattlescapeGenerator::deployXCOM() EXIT";
