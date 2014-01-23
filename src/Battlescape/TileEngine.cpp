@@ -2266,7 +2266,8 @@ void TileEngine::explode(
 							break;
 							case DT_SMOKE:	// smoke from explosions always stay 6 to 14 turns - power of a smoke grenade is 60
 											// kL_note: Could do instant smoke inhalation damage here (sorta like Fire or Stun).
-								if (dest->getSmoke() < 10)
+								if (dest->getSmoke() < 10
+									&& dest->getTerrainLevel() > -24)
 								{
 									dest->setFire(0);
 									dest->setSmoke(RNG::generate(7, 15));
