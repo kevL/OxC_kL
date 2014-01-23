@@ -52,6 +52,7 @@ class BattlescapeGenerator
 {
 
 private:
+	bool _allowAutoLoadout;
 	int
 		_alienItemLevel,
 		_mapsize_x,

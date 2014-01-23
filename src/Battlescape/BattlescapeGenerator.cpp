@@ -101,6 +101,7 @@ BattlescapeGenerator::BattlescapeGenerator(Game* game)
 		_tankPos(0) // kL
 {
 	//Log(LOG_INFO) << "Create BattlescapeGenerator";
+	_allowAutoLoadout = !Options::getBool("disableAutoEquip");
 }
 
 /**
@@ -646,8 +647,8 @@ void BattlescapeGenerator::deployXCOM()
 	}
 
 	// auto-equip soldiers (only soldiers *without* layout)
-/*kL	if (!Options::getBool("disableAutoEquip"))
-	{
+//	if (!Options::getBool("disableAutoEquip"))
+/*kL	{
 		for (int
 				pass = 0;
 				pass != 4;
@@ -1186,7 +1187,7 @@ bool BattlescapeGenerator::addItem(
 				}
 			}
 
-			if (loaded)
+			if (loaded && (unit->getGeoscapeSoldier() == 0 || _allowAutoLoadout))
 			{
 				if (!unit->getItem("STR_RIGHT_HAND")
 					&& unit->getStats()->strength * 0.66 >= weight)
@@ -1226,6 +1227,8 @@ bool BattlescapeGenerator::addItem(
 			}
 
 		default:
+		if ((unit->getGeoscapeSoldier() == 0 || _allowAutoLoadout))
+		{
 			if (unit->getStats()->strength >= weight)
 			{
 				for (std::vector<std::string>::const_iterator
@@ -1268,6 +1271,7 @@ bool BattlescapeGenerator::addItem(
 					}
 				}
 			}
+		}
 		break;
 	} */
 
