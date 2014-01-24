@@ -29,8 +29,10 @@ namespace OpenXcom
 class Bar;
 class BattlescapeState;
 class BattleUnit;
+class SavedBattleGame;
 class Surface;
 class Text;
+class TextButton;
 
 
 /**
@@ -42,6 +44,10 @@ class UnitInfoState
 {
 
 private:
+	bool
+		_fromInventory,
+		_mindProbe;
+
 	Bar
 		* _barTimeUnits,
 		* _barEnergy,
@@ -63,6 +69,7 @@ private:
 		* _barUnderArmor;
 	BattlescapeState* _parent;
 	BattleUnit* _unit;
+	SavedBattleGame *_battleGame;
 	Surface* _bg;
 	Text
 		* _txtName,
@@ -104,6 +111,9 @@ private:
 		* _numRightArmor,
 		* _numRearArmor,
 		* _numUnderArmor;
+	TextButton
+		* _btnNext,
+		* _btnPrev;
 
 
 	public:
@@ -111,7 +121,9 @@ private:
 		UnitInfoState(
 				Game* game,
 				BattleUnit* unit,
-				BattlescapeState* parent);
+				BattlescapeState* parent,
+				bool fromInventory,
+				bool mindProbe);
 		/// Cleans up the Unit Info state.
 		~UnitInfoState();
 

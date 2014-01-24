@@ -204,9 +204,7 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 
 
 	if (unit->getTimeUnits() < 6)
-	{
 		unit->dontReselect();
-	}
 
 	if (//kL unit->getTimeUnits() < 6 ||
 		_AIActionCounter > 1
@@ -231,12 +229,12 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 
 		if (_save->getSelectedUnit())
 		{
+			_parentState->updateSoldierInfo();
+
 			getMap()->getCamera()->centerOnPosition(_save->getSelectedUnit()->getPosition());
 
 			if (_save->getSelectedUnit()->getId() <= unit->getId())
-			{
 				_AISecondMove = true;
-			}
 		}
 
 		_AIActionCounter = 0;
@@ -359,19 +357,15 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 		_parentState->debug(ss.str());
 
 		if (_save->getTile(action.target))
-		{
 			_save->getPathfinding()->calculate(
 											action.actor,
 											action.target);
 //											_save->getTile(action.target)->getUnit());
-		}
 
 		if (_save->getPathfinding()->getStartDirection() != -1)
-		{
 			statePushBack(new UnitWalkBState(
 											this,
 											action));
-		}
 	}
 	//Log(LOG_INFO) << ". BA_WALK DONE";
 
@@ -396,11 +390,9 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 			action.TU = action.weapon->getRules()->getTUUse();
 		}
 		else
-		{
 			statePushBack(new UnitTurnBState(
 											this,
 											action));
-		}
 		//Log(LOG_INFO) << ". . create Psi weapon DONE";
 
 
@@ -476,6 +468,8 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 
 		if (_save->getSelectedUnit())
 		{
+			_parentState->updateSoldierInfo();
+
 			getMap()->getCamera()->centerOnPosition(_save->getSelectedUnit()->getPosition());
 
 			if (_save->getSelectedUnit()->getId() <= unit->getId())
@@ -1947,7 +1941,9 @@ void BattlescapeGame::primaryAction(const Position& pos)
 					_parentState->getGame()->pushState(new UnitInfoState(
 																	_parentState->getGame(),
 																	_save->selectUnit(pos),
-																	_parentState));
+																	_parentState,
+																	false,
+																	true));
 
 					cancelCurrentAction();
 				}
@@ -2085,15 +2081,17 @@ void BattlescapeGame::primaryAction(const Position& pos)
 		}
 		else if (playableUnitSelected())
 		{
-			if (_currentAction.target != pos
-				&& bPreviewed)
+			bool modifierPressed = (SDL_GetModState() & KMOD_CTRL) != 0;
+			if (bPreviewed
+				&& (_currentAction.target != pos
+					|| _save->getPathfinding()->isModifierUsed() != modifierPressed))
 			{
 				_save->getPathfinding()->removePreview();
 			}
 
 			_currentAction.run = false;
 			_currentAction.strafe = _save->getStrafeSetting()
-									&& (SDL_GetModState() & KMOD_CTRL) != 0
+									&& modifierPressed
 									&& _save->getSelectedUnit()->getTurretType() == -1;
 
 			if (_currentAction.strafe

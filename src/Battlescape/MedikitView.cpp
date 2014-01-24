@@ -56,6 +56,7 @@ const std::string PARTS_STRING[6] =
 MedikitView::MedikitView (int w, int h, int x, int y, Game * game, BattleUnit *unit, Text *partTxt, Text *woundTxt)
 	: InteractiveSurface(w, h, x, y), _game(game), _selectedPart(0), _unit(unit), _partTxt(partTxt), _woundTxt(woundTxt)
 {
+	updateSelectedPart();
 	_redraw = true;
 }
 
@@ -128,4 +129,19 @@ int MedikitView::getSelectedPart() const
 	return _selectedPart;
 }
 
+/**
+ * Updates the selected body part.
+ * If there is a wounded body part, selects that.
+ * Otherwise does not change the selected part.
+ */
+void MedikitView::updateSelectedPart()
+{
+	for (int i = 0; i < 6; ++i)
+	{
+		if (_unit->getFatalWound(i))
+		{
+			_selectedPart = i;
+			break;
+		}
+	}
 }

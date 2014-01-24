@@ -73,7 +73,8 @@ SellState::SellState(
 		_sel(0),
 		_total(0),
 		_hasSci(0),
-		_hasEng(0)
+		_hasEng(0),
+		_itemOffset(0)
 {
 	_changeValueByMouseWheel = Options::getInt("changeValueByMouseWheel");
 	_allowChangeListValuesByMouseWheel = Options::getBool("allowChangeListValuesByMouseWheel")
@@ -148,10 +149,12 @@ SellState::SellState(
 	_txtBaseLabel->setText(_base->getName(_game->getLanguage()));
 
 	_txtSales->setColor(Palette::blockOffset(13)+10);
+	_txtSales->setSecondaryColor(Palette::blockOffset(13));
 	_txtSales->setText(tr("STR_VALUE_OF_SALES")
 						.arg(Text::formatFunding(_total)));
 
 	_txtFunds->setColor(Palette::blockOffset(13)+10);
+	_txtFunds->setSecondaryColor(Palette::blockOffset(13));
 	_txtFunds->setText(tr("STR_FUNDS")
 						.arg(Text::formatFunding(_game->getSavedGame()->getFunds())));
 
@@ -197,6 +200,8 @@ SellState::SellState(
 							L"1",
 							L"0",
 							Text::formatFunding(0).c_str());
+
+			++_itemOffset;
 		}
 	}
 
@@ -215,6 +220,8 @@ SellState::SellState(
 							L"1",
 							L"0",
 							Text::formatFunding((*i)->getRules()->getSellCost()).c_str());
+
+			++_itemOffset;
 		}
 	}
 
@@ -232,6 +239,8 @@ SellState::SellState(
 						ss.str().c_str(),
 						L"0",
 						Text::formatFunding(0).c_str());
+
+		++_itemOffset;
 	}
 
 //kL	if (_base->getAvailableEngineers() > 0)
@@ -248,6 +257,8 @@ SellState::SellState(
 						ss.str().c_str(),
 						L"0",
 						Text::formatFunding(0).c_str());
+
+		++_itemOffset;
 	}
 
 	const std::vector<std::string>& items = _game->getRuleset()->getItemsList();
@@ -266,12 +277,36 @@ SellState::SellState(
 			RuleItem* rule = _game->getRuleset()->getItem(*i);
 			std::wstringstream ss;
 			ss << qty;
-			_lstItems->addRow(
-							4,
-							tr(*i).c_str(),
-							ss.str().c_str(),
-							L"0",
-							Text::formatFunding(rule->getSellCost()).c_str());
+
+			std::wstring item = tr(*i);
+			if (rule->getBattleType() == BT_AMMO
+				|| (rule->getBattleType() == BT_NONE
+					&& rule->getClipSize() > 0))
+			{
+				item.insert(0, L"  ");
+				_lstItems->addRow(
+								4,
+								item.c_str(),
+								ss.str().c_str(),
+								L"0",
+								Text::formatFunding(rule->getSellCost()).c_str());
+				_lstItems->setRowColor(_qtys.size() - 1, Palette::blockOffset(15) + 6);
+			}
+			else
+			{
+				_lstItems->addRow(
+								4,
+								item.c_str(),
+								ss.str().c_str(),
+								L"0",
+								Text::formatFunding(rule->getSellCost()).c_str());
+			}
+//			_lstItems->addRow(
+//							4,
+//							tr(*i).c_str(),
+//							ss.str().c_str(),
+//							L"0",
+//							Text::formatFunding(rule->getSellCost()).c_str());
 		}
 	}
 
@@ -695,6 +730,24 @@ void SellState::updateItemStrings()
 	_lstItems->setCellText(_sel, 2, ss2.str());
 
 	_txtSales->setText(tr("STR_VALUE_OF_SALES").arg(Text::formatFunding(_total)));
+
+	if (_qtys[_sel] > 0)
+		_lstItems->setRowColor(_sel, Palette::blockOffset(13));
+	else
+	{
+		_lstItems->setRowColor(_sel, Palette::blockOffset(13) + 10);
+
+		if (_sel > _itemOffset)
+		{
+			RuleItem* rule = _game->getRuleset()->getItem(_items[_sel - _itemOffset]);
+			if (rule->getBattleType() == BT_AMMO
+				|| (rule->getBattleType() == BT_NONE
+					&& rule->getClipSize() > 0))
+			{
+				_lstItems->setRowColor(_sel, Palette::blockOffset(15) + 6);
+			}
+		}
+	}
 
 	// kL_begin:
 	if (_total > 0) // or craft, soldier, scientist, engineer.

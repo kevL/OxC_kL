@@ -53,6 +53,7 @@ Pathfinding::Pathfinding(SavedBattleGame* save)
 		_nodes(),
 		_unit(0),
 		_pathPreviewed(false)
+		, _modifierUsed(false)
 {
 	_size = _save->getMapSizeXYZ();
 
@@ -1603,9 +1604,7 @@ bool Pathfinding::previewPath(bool bRemove)
 
 	int tus = _unit->getTimeUnits();
 	if (_unit->isKneeled())
-	{
 		tus -= 8;
-	}
 
 	int energy = _unit->getEnergy();
 	int size = _unit->getArmor()->getSize() - 1;
@@ -1618,9 +1617,11 @@ bool Pathfinding::previewPath(bool bRemove)
 		_save->getBattleGame()->setTUReserved(BA_AUTOSHOT, false);
 	}
 
-	bool running = (SDL_GetModState() & KMOD_CTRL) != 0
-		&& _unit->getArmor()->getSize() == 1
-		&& _path.size() > 1;
+	_modifierUsed = (SDL_GetModState() & KMOD_CTRL) != 0;
+	bool running = _save->getStrafeSetting()
+					&& _modifierUsed
+					&& _unit->getArmor()->getSize() == 1
+					&& _path.size() > 1;
 
 	for (std::vector<int>::reverse_iterator
 			i = _path.rbegin();
@@ -1646,20 +1647,27 @@ bool Pathfinding::previewPath(bool bRemove)
 		tus -= tu;
 		total += tu;
 
-		bool reserve = _save->getBattleGame()->checkReservedTU(_unit, total, true);
+		bool reserve = _save->getBattleGame()->checkReservedTU(
+															_unit,
+															total,
+															true);
 
 		pos = destination;
-		for (int x = size; x >= 0; x--)
+		for (int
+				x = size;
+				x > -1;
+				x--)
 		{
-			for (int y = size; y >= 0; y--)
+			for (int
+					y = size;
+					y > -1;
+					y--)
 			{
 				Tile* tile = _save->getTile(pos + Position(x, y, 0));
 				if (!bRemove)
 				{
 					if (i == _path.rend() - 1)
-					{
 						tile->setPreview(10);
-					}
 					else
 					{
 						int nextDir = *(i + 1);
@@ -1693,9 +1701,7 @@ bool Pathfinding::previewPath(bool bRemove)
 	}
 
 	if (switchBack)
-	{
 		_save->getBattleGame()->setTUReserved(BA_NONE, false);
-	}
 
 	return true;
 }
@@ -1706,8 +1712,7 @@ bool Pathfinding::previewPath(bool bRemove)
  */
 bool Pathfinding::removePreview()
 {
-	if (!_pathPreviewed)
-		return false;
+	if (!_pathPreviewed) return false;
 
 	previewPath(true);
 
@@ -1819,14 +1824,20 @@ bool Pathfinding::getStrafeMove() const
 void Pathfinding::setUnit(BattleUnit* unit)
 {
 	_unit = unit;
+
 	if (unit != 0)
-	{
 		_movementType = unit->getArmor()->getMovementType();
-	}
 	else
-	{
 		_movementType = MT_WALK;
-	}
+}
+
+/**
+ * Checks whether a modifier key was used to enable strafing or running.
+ * @return, True if a modifier was used.
+ */
+bool Pathfinding::isModifierUsed() const
+{
+	return _modifierUsed;
 }
 
 }

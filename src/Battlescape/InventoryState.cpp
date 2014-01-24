@@ -81,13 +81,6 @@ InventoryState::InventoryState(
 
 	_showStats = Options::getBool("showMoreStatsInInventoryView");
 
-	// remove any path preview if in the middle of a battlegame
-	if (tu
-		|| _game->getSavedGame()->getSavedBattle()->getDebugMode())
-	{
-		_battleGame->getPathfinding()->removePreview();
-	}
-
 
 	_bg			= new Surface(320, 200, 0, 0);
 	_soldier	= new Surface(320, 200, 0, 0);
@@ -466,14 +459,14 @@ void InventoryState::btnOkClick(Action*)
 		_battleGame->randomizeItemLocations(_battleGame->getSelectedUnit()->getTile());
 		_battleGame->resetUnitTiles();
 
-		for (std::vector<BattleUnit*>::iterator
+/*		for (std::vector<BattleUnit*>::iterator
 				i = _battleGame->getUnits()->begin();
 				i != _battleGame->getUnits()->end();
 				++i)
 		{
 			if ((*i)->getFaction() == _battleGame->getSide())
 				(*i)->prepareNewTurn();
-		}
+		} */
 	}
 
 
@@ -576,17 +569,12 @@ void InventoryState::btnGroundClick(Action*)
  */
 void InventoryState::btnRankClick(Action*)
 {
-//	if (_parent) // kL
 	_game->pushState(new UnitInfoState(
 									_game,
 									_battleGame->getSelectedUnit(),
-									_parent));
-
-
-//	else // kL: This bit is for future attempt to get RankClick action via CraftEquipSoldierInventory. haha, see above
-//	{
-//		_game->pushState(new SoldierInfoState(_game, _base, _lstSoldiers->getSelectedRow()));
-//	}
+									_parent,
+									true,
+									false));
 }
 
 /**

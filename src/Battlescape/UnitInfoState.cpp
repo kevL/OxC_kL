@@ -33,6 +33,7 @@
 
 #include "../Interface/Bar.h"
 #include "../Interface/Text.h"
+#include "../Interface/TextButton.h"
 
 #include "../Resource/ResourcePack.h"
 
@@ -58,12 +59,18 @@ namespace OpenXcom
 UnitInfoState::UnitInfoState(
 		Game* game,
 		BattleUnit* unit,
-		BattlescapeState* parent)
+		BattlescapeState* parent,
+		bool fromInventory,
+		bool mindProbe)
 	:
 		State(game),
 		_unit(unit),
-		_parent(parent)
+		_parent(parent),
+		_fromInventory(fromInventory),
+		_mindProbe(mindProbe)
 {
+	_battleGame = _game->getSavedGame()->getSavedBattle();
+
 	_bg			= new Surface(320, 200, 0, 0);
 	_txtName	= new Text(300, 17, 10, 4);
 
@@ -135,6 +142,12 @@ UnitInfoState::UnitInfoState(
 	_numUnderArmor = new Text(18, 9, 151, 191);
 	_barUnderArmor = new Bar(170, 5, 170, 192);
 
+	if (!_mindProbe)
+	{
+		_btnPrev = new TextButton(20, 18, 2, 2);
+		_btnNext = new TextButton(20, 18, 298, 2);
+	}
+
 	add(_bg);
 	add(_txtName);
 
@@ -205,6 +218,12 @@ UnitInfoState::UnitInfoState(
 	add(_txtUnderArmor);
 	add(_numUnderArmor);
 	add(_barUnderArmor);
+
+	if (!_mindProbe)
+	{
+		add(_btnPrev);
+		add(_btnNext);
+	}
 
 	centerAllSurfaces();
 
@@ -386,6 +405,23 @@ UnitInfoState::UnitInfoState(
 
 	_barUnderArmor->setColor(Palette::blockOffset(5));
 	_barUnderArmor->setScale(1.0);
+
+	if (!_mindProbe)
+	{
+		_btnPrev->setText(L"<<");
+		_btnPrev->setColor(Palette::blockOffset(4));
+		_btnPrev->onMouseClick((ActionHandler)& UnitInfoState::btnPrevClick);
+		_btnPrev->onKeyboardPress(
+						(ActionHandler)& UnitInfoState::btnPrevClick,
+						(SDLKey)Options::getInt("keyBattlePrevUnit"));
+		_btnNext->setText(L">>");
+		_btnNext->setColor(Palette::blockOffset(4));
+		_btnNext->onMouseClick((ActionHandler)& UnitInfoState::btnNextClick);
+		_btnNext->onKeyboardPress(
+						(ActionHandler)& UnitInfoState::btnNextClick,
+						(SDLKey)Options::getInt("keyBattleNextUnit"));
+	}
+
 }
 
 /**
@@ -575,7 +611,6 @@ void UnitInfoState::init()
 void UnitInfoState::handle(Action* action)
 {
 	State::handle(action);
-//	SavedBattleGame* battleGame = _game->getSavedGame()->getSavedBattle();
 	if (action->getDetails()->type == SDL_MOUSEBUTTONDOWN)
 	{
 		if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
@@ -584,11 +619,11 @@ void UnitInfoState::handle(Action* action)
 		}
 		else if (action->getDetails()->button.button == SDL_BUTTON_X1)
 		{
-			btnNextClick(action);
+			if (!_mindProbe) btnNextClick(action);
 		}
 		else if (action->getDetails()->button.button == SDL_BUTTON_X2)
 		{
-			btnPrevClick(action);
+			if (!_mindProbe) btnPrevClick(action);
 		}
 	}
 
@@ -596,11 +631,11 @@ void UnitInfoState::handle(Action* action)
 	{
 		if (action->getDetails()->key.keysym.sym == Options::getInt("keyBattleNextUnit"))
 		{
-			btnNextClick(action);
+			if (!_mindProbe) btnNextClick(action);
 		}
 		else if (action->getDetails()->key.keysym.sym == Options::getInt("keyBattlePrevUnit"))
 		{
-			btnPrevClick(action);
+			if (!_mindProbe) btnPrevClick(action);
 		}
 		else if (action->getDetails()->key.keysym.sym == Options::getInt("keyCancel")
 			|| action->getDetails()->key.keysym.sym == Options::getInt("keyBattleStats"))
@@ -611,67 +646,61 @@ void UnitInfoState::handle(Action* action)
 }
 
 /**
-* Selects the previous soldier.
+* Selects the previous unit.
 * @param action Pointer to an action.
 */
 void UnitInfoState::btnPrevClick(Action*)
 {
 	if (_parent)
 	{
+		// so we are here from a Battlescape Game
 		_parent->selectPreviousFactionUnit(
 										false,
 										false,
-										true);
+										_fromInventory);
 	}
 	else
 	{
-		_game->getSavedGame()->getSavedBattle()->selectPreviousFactionUnit(
-																		false,
-																		false,
-																		true);
+		// so we are here from the Craft Equipment screen
+		_battleGame->selectPreviousFactionUnit(
+											false,
+											false,
+											true);
 	}
 
-	_unit = _game->getSavedGame()->getSavedBattle()->getSelectedUnit();
+	_unit = _battleGame->getSelectedUnit();
 	if (_unit != 0)
-	{
 		init();
-	}
 	else
-	{
 		_game->popState();
-	}
 }
 
 /**
-* Selects the next soldier.
+* Selects the next unit.
 * @param action Pointer to an action.
 */
 void UnitInfoState::btnNextClick(Action*)
 {
 	if (_parent)
-	{
+	{ // so we are here from a Battlescape Game
 		_parent->selectNextFactionUnit(
 									false,
 									false,
-									true);
+									_fromInventory);
 	}
 	else
-	{
-		_game->getSavedGame()->getSavedBattle()->selectNextFactionUnit(
-																	false,
-																	false,
-																	true);
+	{ // so we are here from the Craft Equipment screen
+		_battleGame->selectNextFactionUnit(
+										false,
+										false,
+										true);
 	}
 
-	_unit = _game->getSavedGame()->getSavedBattle()->getSelectedUnit();
+	_unit = _battleGame->getSelectedUnit();
 	if (_unit != 0)
-	{
 		init();
-	}
 	else
-	{
 		_game->popState();
-	}
 }
 
 }

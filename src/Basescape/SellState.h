@@ -64,6 +64,7 @@ private:
 		_changeValueByMouseWheel,
 		_hasSci,
 		_hasEng,
+		_itemOffset,
 		_total;
 	unsigned int _sel;
 

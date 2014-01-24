@@ -61,7 +61,8 @@ private:
 		_total,
 		_changeValueByMouseWheel,
 		_hasEng,
-		_hasSci;
+		_hasSci,
+		_itemOffset;
 	unsigned int _sel;
 	float _iQty;
 	double _distance;

@@ -261,6 +261,7 @@ void MedikitState::onHealClick(Action*)
 					rule->getHealthRecovery());
 
 		_item->setHealQuantity(--heal);
+		_medikitView->updateSelectedPart();
 		_medikitView->invalidate();
 
 		update();

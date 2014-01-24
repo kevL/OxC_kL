@@ -88,12 +88,13 @@ TransferItemsState::TransferItemsState(
 		_pQty(0),
 		_cQty(0),
 		_aQty(0),
-		_iQty(0.0f),
+		_iQty(0.f),
 
 		_hasSci(0),
 		_hasEng(0),
 
-		_distance(0.0)
+		_distance(0.0),
+		_itemOffset(0)
 {
 	_changeValueByMouseWheel			= Options::getInt("changeValueByMouseWheel");
 	_allowChangeListValuesByMouseWheel	= Options::getBool("allowChangeListValuesByMouseWheel")
@@ -182,7 +183,8 @@ TransferItemsState::TransferItemsState(
 	_txtAmountDestination->setText(tr("STR_AMOUNT_AT_DESTINATION"));
 	_txtAmountDestination->setWordWrap(true);
 
-	_lstItems->setColor(Palette::blockOffset(15)+1);
+//	_lstItems->setColor(Palette::blockOffset(15)+1);
+	_lstItems->setColor(Palette::blockOffset(13)+10);
 	_lstItems->setArrowColor(Palette::blockOffset(13)+10);
 	_lstItems->setArrowColumn(172, ARROW_VERTICAL);
 	_lstItems->setColumns(4, 136, 56, 31, 20);
@@ -216,6 +218,8 @@ TransferItemsState::TransferItemsState(
 							L"1",
 							L"0",
 							L"0");
+
+			++_itemOffset;
 		}
 	}
 
@@ -239,6 +243,8 @@ TransferItemsState::TransferItemsState(
 							L"1",
 							L"0",
 							L"0");
+
+			++_itemOffset;
 		}
 	}
 
@@ -268,6 +274,8 @@ TransferItemsState::TransferItemsState(
 						ss1.str().c_str(),
 						L"0",
 						ss2.str().c_str());
+
+		++_itemOffset;
 	}
 
 //kL	if (_baseFrom->getAvailableEngineers() > 0)
@@ -296,6 +304,8 @@ TransferItemsState::TransferItemsState(
 						ss1.str().c_str(),
 						L"0",
 						ss2.str().c_str());
+
+		++_itemOffset;
 	}
 
 	const std::vector<std::string>& items = _game->getRuleset()->getItemsList();
@@ -387,12 +397,34 @@ TransferItemsState::TransferItemsState(
 			ss1 << qty;
 			ss2 << tQty; // kL
 //kL			ss2 << _destQty.back();
-			_lstItems->addRow( // kL
-							4,
-							item.c_str(),
-							ss1.str().c_str(),
-							L"0",
-							ss2.str().c_str());
+//			_lstItems->addRow( // kL
+//							4,
+//							item.c_str(),
+//							ss1.str().c_str(),
+//							L"0",
+//							ss2.str().c_str());
+			std::wstring item = tr(*i);
+			RuleItem* rule = _game->getRuleset()->getItem(*i);
+			if (rule->getBattleType() == BT_AMMO
+				|| (rule->getBattleType() == BT_NONE
+					&& rule->getClipSize() > 0))
+			{
+				item.insert(0, L"  ");
+				_lstItems->addRow(
+								4,
+								item.c_str(),
+								ss.str().c_str(),
+								L"0",
+								ss2.str().c_str());
+				_lstItems->setRowColor(_baseQty.size() - 1, Palette::blockOffset(15) + 6);
+			}
+			else
+				_lstItems->addRow(
+								4,
+								item.c_str(),
+								ss.str().c_str(),
+								L"0",
+								ss2.str().c_str());
 		}
 	}
 
@@ -1259,10 +1291,26 @@ void TransferItemsState::updateItemStrings()
 	ss3 << _destQty[_sel];
 	_lstItems->setCellText(_sel, 3, ss3.str());
 
-	if (_total > 0)
+	if (_transferQty[_sel] > 0)
+		_lstItems->setRowColor(_sel, Palette::blockOffset(13));
+	else
 	{
-		_btnOk->setVisible(true);
+		_lstItems->setRowColor(_sel, Palette::blockOffset(13) + 10);
+
+		if (_sel > _itemOffset)
+		{
+			RuleItem* rule = _game->getRuleset()->getItem(_items[_sel - _itemOffset]);
+			if (rule->getBattleType() == BT_AMMO
+				|| (rule->getBattleType() == BT_NONE
+					&& rule->getClipSize() > 0))
+			{
+				_lstItems->setRowColor(_sel, Palette::blockOffset(15) + 6);
+			}
+		}
 	}
+
+	if (_total > 0)
+		_btnOk->setVisible(true);
 	else
 		_btnOk->setVisible(false);
 	// kL_end.

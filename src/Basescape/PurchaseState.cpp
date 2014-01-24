@@ -75,7 +75,8 @@ PurchaseState::PurchaseState(
 		_total(0),
 		_pQty(0),
 		_cQty(0),
-		_iQty(0.0f)
+		_iQty(0.f),
+		_itemOffset(0)
 {
 	_changeValueByMouseWheel = Options::getInt("changeValueByMouseWheel");
 	_allowChangeListValuesByMouseWheel =
@@ -216,6 +217,7 @@ PurchaseState::PurchaseState(
 					L"0");
 	_qtys.push_back(0);
 
+	_itemOffset = 3;
 
 	// Add craft-types to purchase list.
 	const std::vector<std::string>& crafts = _game->getRuleset()->getCraftsList();
@@ -233,6 +235,8 @@ PurchaseState::PurchaseState(
 		{
 			_qtys.push_back(0);
 			_crafts.push_back(*i);
+
+			++_itemOffset;
 
 			int crafts = 0;
 			for (std::vector<Craft*>::iterator
@@ -923,11 +927,27 @@ void PurchaseState::updateItemStrings()
 	ss << _qtys[_sel];
 	_lstItems->setCellText(_sel, 3, ss.str());
 
+	if (_qtys[_sel] > 0)
+		_lstItems->setRowColor(_sel, Palette::blockOffset(13));
+	else
+	{
+		_lstItems->setRowColor(_sel, Palette::blockOffset(13) + 10);
+
+		if (_sel > _itemOffset)
+		{
+			RuleItem* rule = _game->getRuleset()->getItem(_items[_sel - _itemOffset]);
+			if (rule->getBattleType() == BT_AMMO
+				|| (rule->getBattleType() == BT_NONE
+					&& rule->getClipSize() > 0))
+			{
+				_lstItems->setRowColor(_sel, Palette::blockOffset(15) + 6);
+			}
+		}
+	}
+
 	// kL_begin:
 	if (_total > 0)
-	{
 		_btnOk->setVisible(true);
-	}
 	else
 		_btnOk->setVisible(false);
 	// kL_end.

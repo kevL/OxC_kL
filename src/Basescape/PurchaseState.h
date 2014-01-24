@@ -51,6 +51,7 @@ private:
 	int
 		_changeValueByMouseWheel,
 		_cQty,
+		_itemOffset,
 		_pQty,
 		_total;
 	unsigned int _sel;
