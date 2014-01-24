@@ -104,7 +104,6 @@ void UnitFallBState::think()
 			|| (*unit)->getStunlevel() >= (*unit)->getHealth())
 		{
 			Log(LOG_INFO) << ". dead OR stunned, Erase & cont";
-
 			unit = _parent->getSave()->getFallingUnits()->erase(unit);
 			continue;
 		}
@@ -112,8 +111,8 @@ void UnitFallBState::think()
 		if ((*unit)->getStatus() == STATUS_TURNING)
 		{
 			Log(LOG_INFO) << ". STATUS_TURNING, abortTurn()";
-
-			(*unit)->abortTurn();
+//kL			(*unit)->abortTurn();
+			(*unit)->setStatus(STATUS_STANDING); // kL
 		}
 
 		bool

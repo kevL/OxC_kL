@@ -289,7 +289,7 @@ private:
 		/// Turn to the destination direction.
 		void turn(bool turret = false);
 		/// Abort turning.
-		void abortTurn();
+//kL		void abortTurn();
 
 		/// Gets the soldier's gender.
 		SoldierGender getGender() const;

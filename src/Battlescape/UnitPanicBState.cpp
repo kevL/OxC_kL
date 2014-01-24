@@ -63,7 +63,8 @@ void UnitPanicBState::think()
 	if (_unit)
 	{
 		if (!_unit->isOut())
-			_unit->abortTurn(); // set the unit status to standing in case it wasn't otherwise changed from berserk/panicked
+//kL			_unit->abortTurn(); // set the unit status to standing in case it wasn't otherwise changed from berserk/panicked
+			_unit->setStatus(STATUS_STANDING); // kL
 
 		_unit->setTimeUnits(0);
 	}

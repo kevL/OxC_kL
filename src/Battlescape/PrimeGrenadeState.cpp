@@ -160,7 +160,8 @@ void PrimeGrenadeState::handle(Action* action)
 	if (action->getDetails()->type == SDL_MOUSEBUTTONDOWN
 		&& action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
-		if (!_inInventoryView) _action->value = -1;
+		if (!_inInventoryView)
+			_action->value = -1;
 
 		_game->popState();
 	}
@@ -176,7 +177,8 @@ void PrimeGrenadeState::btnClick(Action* action)
 
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
-		if (!_inInventoryView) _action->value = btnID;
+		if (!_inInventoryView)
+			_action->value = btnID;
 
 		_game->popState();
 
@@ -184,24 +186,22 @@ void PrimeGrenadeState::btnClick(Action* action)
 	}
 
 	// got to find out which button was pressed
-	for (int i = 0; i < 24 && btnID == -1; ++i)
+	for (int
+			i = 0;
+			i < 24
+				&& btnID == -1;
+			++i)
 	{
 		if (action->getSender() == _button[i])
-		{
 			btnID = i;
-		}
 	}
 
 	if (btnID != -1)
 	{
 		if (_inInventoryView)
-		{
 			_grenadeInInventory->setExplodeTurn(0 + btnID);
-		}
 		else
-		{
 			_action->value = btnID;
-		}
 
 		_game->popState(); // kL_note: get rid of the Timer menu
 

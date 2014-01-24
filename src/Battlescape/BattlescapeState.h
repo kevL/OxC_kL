@@ -244,10 +244,16 @@ private:
 		Game* getGame() const;
 		/// Gets map.
 		Map* getMap() const;
+
 		/// Show debug message.
 		void debug(const std::wstring& message);
 		/// Show warning message.
-		void warning(const std::string& message);
+//kL		void warning(const std::string& message);
+		void warning( // kL
+				const std::string& message,
+				const bool useArg = false,
+				const int arg = -1);
+
 		/// Handles keypresses.
 		void handle(Action* action);
 		/// Displays a popup window.

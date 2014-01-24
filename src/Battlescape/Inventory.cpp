@@ -615,9 +615,7 @@ void Inventory::mouseClick(Action* action, State* state)
 			if (slot != 0)
 			{
 				if (slot->getType() == INV_GROUND)
-				{
 					x += _groundOffset;
-				}
 
 				BattleItem* item = _selUnit->getItem(slot, x, y);
 				if (item != 0)
@@ -645,13 +643,9 @@ void Inventory::mouseClick(Action* action, State* state)
 
 								default:
 									if (item->getRules()->getInventoryHeight() > 2)
-									{
 										newSlot = _game->getRuleset()->getInventory("STR_BACK_PACK");
-									}
 									else
-									{
 										newSlot = _game->getRuleset()->getInventory("STR_BELT");
-									}
 								break;
 							}
 						}
@@ -672,18 +666,14 @@ void Inventory::mouseClick(Action* action, State* state)
 								{
 									newSlot = wildCard->second;
 									if (newSlot->getType() == INV_GROUND)
-									{
 										continue;
-									}
 
 									placed = fitItem(newSlot, item, warning);
 								}
 							}
 
 							if (!placed)
-							{
 								_stackLevel[item->getSlotX()][item->getSlotY()] += 1;
-							}
 						}
 						else
 						{
@@ -696,26 +686,22 @@ void Inventory::mouseClick(Action* action, State* state)
 								arrangeGround(false);
 							}
 							else
-							{
 								warning = "STR_NOT_ENOUGH_TIME_UNITS";
-							}
 						}
 
 						if (!placed)
-						{
 							_warning->showMessage(_game->getLanguage()->getString(warning));
-						}
 					}
 					else
 					{
 						setSelectedItem(item);
 
-						if (item->getExplodeTurn() > -1)
+						int explTurn = item->getExplodeTurn();
+						if (explTurn > -1)
 						{
-							std::wstring activated = _game->getLanguage()->getString("STR_GRENADE_IS_ACTIVATED");
-							activated += L" ";
-//							activated += std::to_wstring(static_cast<long long>(item->getExplodeTurn())); // <<---- fudgy!
-							activated += Text::formatNumber(item->getExplodeTurn());
+							std::wstring activated = Text::formatNumber(explTurn) + L" ";
+							activated += _game->getLanguage()->getString("STR_GRENADE_IS_ACTIVATED");
+							activated += L" " + Text::formatNumber(explTurn);
 							_warning->showMessage(activated);
 						}
 					}
@@ -737,17 +723,16 @@ void Inventory::mouseClick(Action* action, State* state)
 			if (slot != 0)
 			{
 				if (slot->getType() == INV_GROUND)
-				{
 					x += _groundOffset;
-				}
 
 				BattleItem* item = _selUnit->getItem(slot, x, y);
 
 				bool canStack = (slot->getType() == INV_GROUND
 									&& canBeStacked(item, _selItem));
 
-				if (item == 0
-					|| item == _selItem || canStack) // Put item in empty slot, or stack it, if possible.
+				if (item == 0 // Put item in empty slot, or stack it, if possible.
+					|| item == _selItem
+					|| canStack)
 				{
 					if (!overlapItems(_selUnit, _selItem, slot, x, y)
 						&& slot->fitItemInSlot(_selItem->getRules(), x, y))
@@ -758,17 +743,13 @@ void Inventory::mouseClick(Action* action, State* state)
 							moveItem(_selItem, slot, x, y);
 
 							if (slot->getType() == INV_GROUND)
-							{
 								_stackLevel[x][y] += 1;
-							}
 
 							setSelectedItem(0);
 							_game->getResourcePack()->getSound("BATTLE.CAT", 38)->play();
 						}
 						else
-						{
 							_warning->showMessage(_game->getLanguage()->getString("STR_NOT_ENOUGH_TIME_UNITS"));
-						}
 					}
 					else if (canStack)
 					{
@@ -781,9 +762,7 @@ void Inventory::mouseClick(Action* action, State* state)
 							_game->getResourcePack()->getSound("BATTLE.CAT", 38)->play();
 						}
 						else
-						{
 							_warning->showMessage(_game->getLanguage()->getString("STR_NOT_ENOUGH_TIME_UNITS"));
-						}
 					}
 				}
 				else if (!item->getRules()->getCompatibleAmmo()->empty()) // Put item in weapon
@@ -803,15 +782,11 @@ void Inventory::mouseClick(Action* action, State* state)
 					}
 
 					if (wrong)
-					{
 						_warning->showMessage(_game->getLanguage()->getString("STR_WRONG_AMMUNITION_FOR_THIS_WEAPON"));
-					}
 					else
 					{
 						if (item->getAmmoItem() != 0)
-						{
 							_warning->showMessage(_game->getLanguage()->getString("STR_WEAPON_IS_ALREADY_LOADED"));
-						}
 						else if (!_tu
 							|| _selUnit->spendTimeUnits(15))
 						{
@@ -822,14 +797,10 @@ void Inventory::mouseClick(Action* action, State* state)
 							_game->getResourcePack()->getSound("BATTLE.CAT", 17)->play();
 
 							if (item->getSlot()->getType() == INV_GROUND)
-							{
 								arrangeGround(false);
-							}
 						}
 						else
-						{
 							_warning->showMessage(_game->getLanguage()->getString("STR_NOT_ENOUGH_TIME_UNITS"));
-						}
 					}
 				}
 				// else swap the item positions?
@@ -859,9 +830,7 @@ void Inventory::mouseClick(Action* action, State* state)
 							_game->getResourcePack()->getSound("BATTLE.CAT", 38)->play();
 						}
 						else
-						{
 							_warning->showMessage(_game->getLanguage()->getString("STR_NOT_ENOUGH_TIME_UNITS"));
-						}
 					}
 				}
 			}
@@ -881,9 +850,7 @@ void Inventory::mouseClick(Action* action, State* state)
 				if (slot != 0)
 				{
 					if (slot->getType() == INV_GROUND)
-					{
 						x += _groundOffset;
-					}
 
 					BattleItem *item = _selUnit->getItem(slot, x, y);
 					if (item != 0)
@@ -896,8 +863,12 @@ void Inventory::mouseClick(Action* action, State* state)
 							{
 								if (BT_PROXIMITYGRENADE == itemType)
 								{
-									_warning->showMessage(_game->getLanguage()->getString("STR_GRENADE_IS_ACTIVATED"));
 									item->setExplodeTurn(0);
+
+									std::wstring activated = Text::formatNumber(0) + L" ";
+									activated += _game->getLanguage()->getString("STR_GRENADE_IS_ACTIVATED");
+									activated += L" " + Text::formatNumber(0);
+									_warning->showMessage(activated);
 								}
 								else
 									// kL_note: This is where activation warning for nonProxy preBattle grenades goes...
@@ -907,7 +878,8 @@ void Inventory::mouseClick(Action* action, State* state)
 																		true,
 																		item));
 							}
-							else item->setExplodeTurn(-1); // Unprime the grenade
+							else
+								item->setExplodeTurn(-1); // Unprime the grenade
 						}
 					}
 				}
@@ -935,9 +907,7 @@ void Inventory::mouseClick(Action* action, State* state)
 		else
 		{
 			if (_selItem->getSlot()->getType() == INV_GROUND)
-			{
 				_stackLevel[_selItem->getSlotX()][_selItem->getSlotY()] += 1;
-			}
 
 			setSelectedItem(0); // Return item to original position
 		}

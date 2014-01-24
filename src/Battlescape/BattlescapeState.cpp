@@ -1904,18 +1904,23 @@ Map* BattlescapeState::getMap() const
 void BattlescapeState::debug(const std::wstring& message)
 {
 	if (_save->getDebugMode())
-	{
 		_txtDebug->setText(message);
-	}
 }
 
 /**
  * Shows a warning message.
  * @param message Warning message.
  */
-void BattlescapeState::warning(const std::string& message)
+//kL void BattlescapeState::warning(const std::string& message)
+void BattlescapeState::warning( // kL
+		const std::string& message,
+		const bool useArg,
+		const int arg)
 {
-	_warning->showMessage(tr(message));
+	if (!useArg)										// kL
+		_warning->showMessage(tr(message));
+	else												// kL
+		_warning->showMessage(tr(message).arg(arg));	// kL
 }
 
 /**

@@ -4099,17 +4099,27 @@ bool TileEngine::psiAttack(BattleAction* action)
 		int chance = static_cast<int>(attackStr);
 
 //TEMP!!!		if (_save->getSide() == FACTION_PLAYER)
-		{
+//		{
 //			std::string& info = tr("STR_UFO_").arg(ufo->getId())
-			std::stringstream info;
+/*			std::stringstream info;
 			if (action->type == BA_PANIC)
 				info << "panic ";
 			else
 				info << "control ";
 			info << chance;
 			// note: this is a bit borky 'cause it's looking for a string in YAML ...
-			_save->getBattleState()->warning(info.str()); // kL, info.
-		}
+			_save->getBattleState()->warning(info.str()); */// kL, info.
+
+		std::string info = "";
+		if (action->type == BA_PANIC)
+			info = "STR_PANIC";
+		else
+			info = "STR_CONTROL";
+		_save->getBattleState()->warning(
+										info,
+										true,
+										chance);
+//		}
 
 		Log(LOG_INFO) << ". . . attackStr Success @ " << chance;
 		if (RNG::percent(chance))
@@ -4135,7 +4145,8 @@ bool TileEngine::psiAttack(BattleAction* action)
 				calculateUnitLighting();
 				victim->setTimeUnits(victim->getStats()->tu);
 				victim->allowReselect();
-				victim->abortTurn(); // resets unit status to STANDING
+//kL				victim->abortTurn(); // resets unit status to STANDING
+				victim->setStatus(STATUS_STANDING); // kL
 
 				// if all units from either faction are mind controlled - auto-end the mission.
 				if (_save->getSide() == FACTION_PLAYER
@@ -4276,7 +4287,8 @@ Tile* TileEngine::applyGravity(Tile* t)
 									_save->getTile(occupant->getPosition() + Position(0, 0, -1)),
 									true);
 					// and set our status to standing (rather than walking or flying) to avoid weirdness.
-					occupant->abortTurn();
+//kL					occupant->abortTurn();
+					occupant->setStatus(STATUS_STANDING); // kL
 				}
 				else
 				{
@@ -4536,7 +4548,7 @@ int TileEngine::getDirectionTo(
 
 	// divide the pie in 4 thetas, each at 1/8th before each quarter
 	double m_pi_8 = M_PI / 8.0;				// a circle divided into 16 sections (rads) -> 22.5 deg
-	double d = 0.12;						// kL, a bias toward cardinal directions.
+	double d = 0.0;							// kL, a bias toward cardinal directions. (0.1..0.12)
 	double pie[4] =
 	{
 		M_PI - m_pi_8 - d,					// 2.7488935718910690836548129603696	-> 157.5 deg

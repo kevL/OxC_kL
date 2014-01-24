@@ -874,7 +874,8 @@ void BattleUnit::turn(bool turret)
 		if (_directionTurret == _toDirectionTurret)
 		{
 			//Log(LOG_INFO) << ". . _d = _tD, abort";
-			abortTurn();
+//kL			abortTurn();
+			_status = STATUS_STANDING; // kL
 
 			return;
 		}
@@ -887,7 +888,8 @@ void BattleUnit::turn(bool turret)
 		if (_direction == _toDirection)
 		{
 			//Log(LOG_INFO) << ". . _d = _tD, abort";
-			abortTurn();
+//kL			abortTurn();
+			_status = STATUS_STANDING; // kL
 
 			return;
 		}
@@ -909,7 +911,8 @@ void BattleUnit::turn(bool turret)
 
 					_direction++;
 				}
-				else _directionTurret++;
+				else
+					_directionTurret++;
 			}
 			else
 			{
@@ -920,7 +923,8 @@ void BattleUnit::turn(bool turret)
 
 					_direction--;
 				}
-				else _directionTurret--;
+				else
+					_directionTurret--;
 			}
 		}
 		else
@@ -934,7 +938,8 @@ void BattleUnit::turn(bool turret)
 
 					_direction--;
 				}
-				else _directionTurret--;
+				else
+					_directionTurret--;
 			}
 			else
 			{
@@ -945,7 +950,8 @@ void BattleUnit::turn(bool turret)
 
 					_direction++;
 				}
-				else _directionTurret++;
+				else
+					_directionTurret++;
 			}
 		}
 
@@ -964,8 +970,11 @@ void BattleUnit::turn(bool turret)
 		//Log(LOG_INFO) << ". . _directionTurret = " << _directionTurret;
 		//Log(LOG_INFO) << ". . _toDirectionTurret = " << _toDirectionTurret;
 
-		if (_visible || _faction == FACTION_PLAYER) // kL_note: Faction_player should *always* be _visible...
+		if (_visible
+			|| _faction == FACTION_PLAYER) // kL_note: Faction_player should *always* be _visible...
+		{
 			_cacheInvalid = true;
+		}
 	}
 
 	if (turret)
@@ -989,10 +998,11 @@ void BattleUnit::turn(bool turret)
 /**
  * Stops the turning towards the target direction.
  */
+/*kL: now uses setStatus()...
 void BattleUnit::abortTurn()
 {
 	_status = STATUS_STANDING;
-}
+} */
 
 /**
  * Gets the soldier's gender.
@@ -1112,7 +1122,7 @@ int BattleUnit::directionTo(const Position& point) const
 
 	// divide the pie in 4 thetas, each at 1/8th before each quarter
 	double m_pi_8 = M_PI / 8.0;			// a circle divided into 16 sections (rads) -> 22.5 deg
-	double d = 0.1;						// kL, a bias toward cardinal directions.
+	double d = 0.0;						// kL, a bias toward cardinal directions. (0.1..0.12)
 	double pie[4] =
 	{
 		M_PI - m_pi_8 - d,					// 2.7488935718910690836548129603696	-> 157.5 deg
@@ -1123,33 +1133,19 @@ int BattleUnit::directionTo(const Position& point) const
 
 	int dir = 2;
 	if (theta > pie[0] || theta < -pie[0])
-	{
 		dir = 6;
-	}
 	else if (theta > pie[1])
-	{
 		dir = 7;
-	}
 	else if (theta > pie[2])
-	{
 		dir = 0;
-	}
 	else if (theta > pie[3])
-	{
 		dir = 1;
-	}
 	else if (theta < -pie[1])
-	{
 		dir = 5;
-	}
 	else if (theta < -pie[2])
-	{
 		dir = 4;
-	}
 	else if (theta < -pie[3])
-	{
 		dir = 3;
-	}
 
 	//Log(LOG_INFO) << "BattleUnit::directionTo() dir = " << dir;
 	return dir;

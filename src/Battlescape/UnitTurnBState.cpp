@@ -85,7 +85,9 @@ void UnitTurnBState::init()
 				&& (_action.strafe
 					|| _action.targeting);
 
-	_unit->lookAt(_action.target, _turret);	// -> STATUS_TURNING
+	_unit->lookAt( // -> STATUS_TURNING
+				_action.target,
+				_turret);
 
 //	_unit->setCache(0);						// kL, done in UnitTurnBState::think()
 //	_parent->getMap()->cacheUnit(_unit);	// kL, done in UnitTurnBState::think()
@@ -97,23 +99,21 @@ void UnitTurnBState::init()
 		{
 			int door = _parent->getTileEngine()->unitOpensDoor(_unit, true);
 			if (door == 0)
-			{
 				//Log(LOG_INFO) << ". open door PlaySound";
-				_parent->getResourcePack()->getSound("BATTLE.CAT", 3)->play(); // normal door
-			}
+				_parent->getResourcePack()->getSound( // normal door
+													"BATTLE.CAT",
+													3)
+												->play();
 			else if (door == 1)
-			{
 				//Log(LOG_INFO) << ". open uFo door PlaySound";
-				_parent->getResourcePack()->getSound("BATTLE.CAT", RNG::generate(20, 21))->play(); // ufo door
-			}
+				_parent->getResourcePack()->getSound( // ufo door
+													"BATTLE.CAT",
+													RNG::generate(20, 21))
+												->play();
 			else if (door == 4)
-			{
 				_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
-			}
 			else if (door == 5)
-			{
 				_action.result = "STR_TUS_RESERVED";
-			}
 		}
 
 		_parent->popState();
@@ -149,7 +149,9 @@ void UnitTurnBState::think()
 		&& !_parent->checkReservedTU(_unit, tu))
 	{
 		//Log(LOG_INFO) << "UnitTurnBState::think(), abortTurn() popState()";
-		_unit->abortTurn();		// -> STATUS_STANDING.
+//kL		_unit->abortTurn(); // -> STATUS_STANDING.
+		_unit->setStatus(STATUS_STANDING); // kL
+
 		_parent->popState();
 
 //kL		return;
@@ -159,7 +161,7 @@ void UnitTurnBState::think()
 	{
 		size_t unitsSpotted = _unit->getUnitsSpottedThisTurn().size();
 
-		_unit->turn(_turret);	// kL_note: -> STATUS_STANDING
+		_unit->turn(_turret); // kL_note: -> STATUS_STANDING
 //kL		_parent->getTileEngine()->calculateFOV(_unit);
 		bool newVis = _parent->getTileEngine()->calculateFOV(_unit); // kL
 
@@ -185,7 +187,8 @@ void UnitTurnBState::think()
 			//}
 
 			//Log(LOG_INFO) << "UnitTurnBState::think(), abortTurn()";
-			_unit->abortTurn();			// -> STATUS_STANDING.
+//kL			_unit->abortTurn(); // -> STATUS_STANDING.
+			_unit->setStatus(STATUS_STANDING); // kL
 
 			// keep this for Faction_Player only, till I figure out the AI better:
 			if (_unit->getFaction() == FACTION_PLAYER)	// kL
@@ -197,28 +200,27 @@ void UnitTurnBState::think()
 		}
 
 		if (_unit->getStatus() == STATUS_STANDING)
-		{
 			//Log(LOG_INFO) << "UnitTurnBState::think(), popState()";
 			_parent->popState();
-		}
 	}
 	else if (_parent->getPanicHandled())
 	{
 		_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
 
 		//Log(LOG_INFO) << "UnitTurnBState::think(), abortTurn() popState() 2";
-		_unit->abortTurn();		// -> STATUS_STANDING.
+//kL		_unit->abortTurn(); // -> STATUS_STANDING.
+		_unit->setStatus(STATUS_STANDING); // kL
+
 		_parent->popState();
 	}
-
 	//Log(LOG_INFO) << "UnitTurnBState::think() EXIT";
 }
 
 /**
  * Unit turning cannot be cancelled.
  */
-//void UnitTurnBState::cancel()
-//{
-//}
+void UnitTurnBState::cancel()
+{
+}
 
 }

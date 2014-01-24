@@ -557,7 +557,8 @@ void ProjectileFlyBState::think()
 			}
 
 			if (!_action.actor->isOut())
-				_unit->abortTurn();
+//kL				_unit->abortTurn();
+				_unit->setStatus(STATUS_STANDING); // kL
 
 			_parent->popState();
 		}
@@ -718,7 +719,7 @@ void ProjectileFlyBState::cancel()
  * @param action, The BattleAction struct
  * @param origin, Position of origin in voxelspace
  * @param target, The target tile
- * @return, True when the range is valid
+ * @return, True if the range is valid
  */
 bool ProjectileFlyBState::validThrowRange(
 		BattleAction* action,
@@ -727,9 +728,8 @@ bool ProjectileFlyBState::validThrowRange(
 {
 	Log(LOG_INFO) << "ProjectileFlyBState::validThrowRange()";
 
-	if (action->type != BA_THROW)	// kL_note: huh? if *NOT* throw???
-//		&& target->getUnit())		// but if there is a unit in targetTile??
-									// ah okay, this is a celatid spit.
+	if (action->type != BA_THROW) // this is a celatid spit.
+//		&& target->getUnit())
 	{
 //		offset_z = target->getUnit()->getHeight() / 2 + target->getUnit()->getFloatHeight();
 		return true;
@@ -742,16 +742,28 @@ bool ProjectileFlyBState::validThrowRange(
 		weight += action->weapon->getAmmoItem()->getRules()->getWeight();
 	}
 
-	int offset_z = 2;				// kL_note: this is prob +1 (.. +2) to get things up off of the lowest voxel of a targetTile.
-	int delta_z = origin.z - (((action->target.z * 24) + offset_z) - target->getTerrainLevel());
-	double maxDistance = static_cast<double>(
-							getMaxThrowDistance(weight, action->actor->getStats()->strength, delta_z) + 8) / 16.0;
+	int offset_z = 2; // kL_note: this is prob +1 (.. +2) to get things up off of the lowest voxel of a targetTile.
+//	int delta_z = origin.z
+//					- (((action->target.z * 24)
+//						+ offset_z)
+//						- target->getTerrainLevel());
+	int delta_z = origin.z // voxelspace
+						- (action->target.z * 24)
+						- offset_z
+						+ target->getTerrainLevel();
+	double maxDist = static_cast<double>(
+							getMaxThrowDistance( // tilespace
+											weight,
+											action->actor->getStats()->strength,
+											delta_z)
+										+ 8)
+									/ 16.0;
 	// Throwing Distance was roughly = 2.5 \D7 Strength / Weight
 //	double range = 2.63 * static_cast<double>(action->actor->getStats()->strength / action->weapon->getRules()->getWeight()); // old code.
 
 	int delta_x = action->actor->getPosition().x - action->target.x;
 	int delta_y = action->actor->getPosition().y - action->target.y;
-	double realDistance = sqrt(static_cast<double>((delta_x * delta_x) + (delta_y * delta_y)));
+	double throwDist = sqrt(static_cast<double>((delta_x * delta_x) + (delta_y * delta_y)));
 
 	// throwing off a building of 1 level lets you throw 2 tiles further than normal range,
 	// throwing up the roof of this building lets your throw 2 tiles less further
@@ -759,11 +771,11 @@ bool ProjectileFlyBState::validThrowRange(
 	distance -= static_cast<double>(delta_z);
 	distance -= static_cast<double>(delta_z); */
 
-	// since getMaxThrowDistance seems to return 1 less than maxDistance, use "< realDistance" for this determination:
-//	bool ret = static_cast<int>(realDistance) < static_cast<int>(maxDistance);
-	bool ret = realDistance < maxDistance;
-	Log(LOG_INFO) << ". realDistance " << (int)realDistance
-					<< " < maxDistance " << (int)maxDistance
+	// since getMaxThrowDistance seems to return 1 less than maxDist, use "< throwDist" for this determination:
+//	bool ret = static_cast<int>(throwDist) < static_cast<int>(maxDist);
+	bool ret = throwDist < maxDist;
+	Log(LOG_INFO) << ". throwDist " << (int)throwDist
+					<< " < maxDist " << (int)maxDist
 					<< " : return " << ret;
 
 	return ret;

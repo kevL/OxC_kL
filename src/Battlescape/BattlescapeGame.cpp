@@ -1001,7 +1001,18 @@ void BattlescapeGame::handleNonTargetAction()
 			if (_currentAction.actor->spendTimeUnits(_currentAction.TU))
 			{
 				_currentAction.weapon->setExplodeTurn(_currentAction.value);
-				_parentState->warning("STR_GRENADE_IS_ACTIVATED");
+
+/* kL_begin: This might be useful ...
+				int explTurn = _currentAction.weapon->getExplodeTurn();
+				if (explTurn > -1)
+				{
+					std::wstring activated = Text::formatNumber(explTurn) + L" ";
+					activated += _game->getLanguage()->getString("STR_GRENADE_IS_ACTIVATED");
+					activated += L" " + Text::formatNumber(explTurn);
+					_warning->showMessage(activated);
+				} */
+//kL				_parentState->warning("STR_GRENADE_IS_ACTIVATED");
+				_parentState->warning("STR_GRENADE_IS_ACTIVATED_", true, _currentAction.weapon->getExplodeTurn()); // kL
 //				_parentState->warning(_game->getLanguage()->getString("STR_GRENADE_IS_ACTIVATED"));		// kL
 			}
 			else
@@ -1690,7 +1701,8 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* unit)
 																	.arg(unit->getName(game->getLanguage()))));
 	}
 
-	unit->abortTurn(); // makes the unit go to status STANDING :p
+//kL	unit->abortTurn(); // makes the unit go to status STANDING :p
+	unit->setStatus(STATUS_STANDING); // kL :P
 
 	int flee = RNG::generate(0, 99);
 	BattleAction ba;
