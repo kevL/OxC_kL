@@ -30,10 +30,10 @@
 namespace OpenXcom
 {
 
+class BattleUnit;
 class SavedBattleGame;
 class PathfindingNode;
 class Tile;
-class BattleUnit;
 
 
 /**

@@ -52,13 +52,11 @@ Pathfinding::Pathfinding(SavedBattleGame* save)
 		_save(save),
 		_nodes(),
 		_unit(0),
-		_pathPreviewed(false)
-		, _modifierUsed(false)
+		_pathPreviewed(false),
+		_modifierUsed(false)
 {
 	_size = _save->getMapSizeXYZ();
-
-	// Initialize one node per tile
-	_nodes.reserve(_size);
+	_nodes.reserve(_size); // initialize one node per tile.
 
 	Position p;
 	for (int
@@ -71,7 +69,6 @@ Pathfinding::Pathfinding(SavedBattleGame* save)
 							&p.x,
 							&p.y,
 							&p.z);
-
 		_nodes.push_back(PathfindingNode(p));
 	}
 }
@@ -251,8 +248,8 @@ void Pathfinding::calculate(
 	_strafeMove = _save->getStrafeSetting()
 					&& (SDL_GetModState() & KMOD_CTRL) != 0
 					&& startPosition.z == endPosition.z
-					&& abs(startPosition.x - endPosition.x) <= 1
-					&& abs(startPosition.y - endPosition.y) <= 1;
+					&& abs(startPosition.x - endPosition.x) < 2
+					&& abs(startPosition.y - endPosition.y) < 2;
 /*	if (_strafeMove)
 	{
 		Log(LOG_INFO) << "Pathfinding::calculate() _strafeMove VALID";		// kL
@@ -271,7 +268,9 @@ void Pathfinding::calculate(
 					target,
 					sneak))
 	{
-		std::reverse(_path.begin(), _path.end()); // paths are stored in reverse order
+		std::reverse( // paths are stored in reverse order
+				_path.begin(),
+				_path.end());
 
 		return;
 	}
@@ -282,8 +281,7 @@ void Pathfinding::calculate(
 		abortPath();
 	}
 
-	// Now try through A*.
-	if (!aStarPath(
+	if (!aStarPath( // now try through A*
 				startPosition,
 				endPosition,
 				target,
@@ -313,25 +311,31 @@ bool Pathfinding::bresenhamPath(
 {
 	//Log(LOG_INFO) << "Pathfinding::bresenhamPath()";
 
-	int xd[8] = {0, 1, 1, 1, 0, -1, -1, -1};
-	int yd[8] = {-1, -1, 0, 1, 1, 1, 0, -1};
+	int
+		xd[8] = { 0, 1, 1, 1, 0,-1,-1,-1},
+		yd[8] = {-1,-1, 0, 1, 1, 1, 0,-1},
 
-	int x, x0, x1, delta_x, step_x;
-	int y, y0, y1, delta_y, step_y;
-	int z, z0, z1, delta_z, step_z;
-	int swap_xy, swap_xz;
-	int drift_xy, drift_xz;
-	int cx, cy, cz;
+		x, x0, x1, delta_x, step_x,
+		y, y0, y1, delta_y, step_y,
+		z, z0, z1, delta_z, step_z,
+
+		swap_xy, swap_xz,
+		drift_xy, drift_xz,
+
+		cx, cy, cz,
+
+		dir,
+		lastTUCost = -1;
+
 	Position lastPoint(origin);
-	int dir;
-	int lastTUCost = -1;
 	Position nextPoint;
+
 	_totalTUCost = 0;
 
 	// start and end points
-	x0 = origin.x;	 x1 = target.x;
-	y0 = origin.y;	 y1 = target.y;
-	z0 = origin.z;	 z1 = target.z;
+	x0 = origin.x;	x1 = target.x;
+	y0 = origin.y;	y1 = target.y;
+	z0 = origin.z;	z1 = target.z;
 
 	// 'steep' xy Line, make longest delta x plane
 	swap_xy = abs(y1 - y0) > abs(x1 - x0);
@@ -360,19 +364,24 @@ bool Pathfinding::bresenhamPath(
 	drift_xz = (delta_x / 2);
 
 	// direction of line
-	step_x = 1; if (x0 > x1) { step_x = -1; }
-	step_y = 1; if (y0 > y1) { step_y = -1; }
-	step_z = 1; if (z0 > z1) { step_z = -1; }
+	step_x = 1; if (x0 > x1) step_x = -1;
+	step_y = 1; if (y0 > y1) step_y = -1;
+	step_z = 1; if (z0 > z1) step_z = -1;
 
 	// starting point
 	y = y0;
 	z = z0;
 
 	// step through longest delta (which we have swapped to x)
-	for (x = x0; x != (x1 + step_x); x += step_x)
+	for (
+			x = x0;
+			x != (x1 + step_x);
+			x += step_x)
 	{
 		// copy position
-		cx = x;	cy = y;	cz = z;
+		cx = x;
+		cy = y;
+		cz = z;
 
 		// unswap (in reverse)
 		if (swap_xz) std::swap(cx, cz);
@@ -382,8 +391,12 @@ bool Pathfinding::bresenhamPath(
 		{
 			Position realNextPoint = Position(cx, cy, cz);
 			nextPoint = realNextPoint;
+
 			// get direction
-			for (dir = 0; dir < 8; ++dir)
+			for (
+					dir = 0;
+					dir < 8;
+					++dir)
 			{
 				if (xd[dir] == cx-lastPoint.x
 					&& yd[dir] == cy-lastPoint.y)
@@ -406,7 +419,7 @@ bool Pathfinding::bresenhamPath(
 			}
 
 			// delete the following
-			bool isDiagonal = (dir&1);
+			bool isDiagonal = (dir & 1);
 			int lastTUCostDiagonal = lastTUCost + lastTUCost / 2;
 			int tuCostDiagonal = tuCost + tuCost / 2;
 			if (nextPoint == realNextPoint
@@ -415,7 +428,11 @@ bool Pathfinding::bresenhamPath(
 					|| (isDiagonal && tuCost == lastTUCostDiagonal)
 					|| (!isDiagonal && tuCostDiagonal == lastTUCost)
 					|| lastTUCost == -1)
-				&& !isBlocked(_save->getTile(lastPoint), _save->getTile(nextPoint), dir, targetUnit))
+				&& !isBlocked(
+						_save->getTile(lastPoint),
+						_save->getTile(nextPoint),
+						dir,
+						targetUnit))
 			{
 				_path.push_back(dir);
 			}
@@ -423,6 +440,7 @@ bool Pathfinding::bresenhamPath(
 			{
 				return false;
 			}
+
 			if (targetUnit == 0
 				&& tuCost != 255)
 			{
@@ -506,10 +524,6 @@ bool Pathfinding::aStarPath(
 			PathfindingNode* pf = currentNode;
 			while (pf->getPrevNode())
 			{
-//				int prevDir = pf->getPrevDir();				// kL
-//				Log(LOG_INFO) << ". prevDir = " << prevDir;	// kL
-
-//				_path.push_back(prevDir);					// kL
 				_path.push_back(pf->getPrevDir());
 				pf = pf->getPrevNode();
 			}
@@ -601,16 +615,18 @@ int Pathfinding::getTUCost(
 	directionToVector(direction, endPosition);
 	*endPosition += startPosition;
 
-	bool fellDown = false;
-	bool triedStairs = false;
+	bool
+		fellDown	= false,
+		triedStairs	= false;
 
-	int partsGoingUp = 0;
-	int partsGoingDown = 0;
-	int partsFalling = 0;
-	int partsChangingHeight = 0;
+	int
+		partsGoingUp		= 0,
+		partsGoingDown		= 0,
+		partsFalling		= 0,
+		partsChangingHeight	= 0,
 
-	int cost = 0;
-	int totalCost = 0;
+		cost		= 0,
+		totalCost	= 0;
 
 	int size = _unit->getArmor()->getSize() - 1;
 	for (int
@@ -626,8 +642,8 @@ int Pathfinding::getTUCost(
 			Position offset = Position(x, y, 0);
 
 			Tile* startTile			= _save->getTile(startPosition + offset);
-			Tile* destTile	= _save->getTile(*endPosition + offset);
-			Tile* belowDestination	= _save->getTile(*endPosition + offset + Position(0, 0, -1));
+			Tile* destTile			= _save->getTile(*endPosition + offset);
+			Tile* belowDestination	= _save->getTile(*endPosition + offset + Position(0, 0,-1));
 			Tile* aboveDestination	= _save->getTile(*endPosition + offset + Position(0, 0, 1));
 
 			// this means the destination is probably outside the map
@@ -739,11 +755,11 @@ int Pathfinding::getTUCost(
 				partsFalling++;
 				if (partsFalling == (size + 1) * (size + 1))
 				{
-					*endPosition = startPosition + Position(0, 0, -1);
-					destTile = _save->getTile(*endPosition + offset);
-					belowDestination = _save->getTile(*endPosition + Position(x, y, -1));
-					fellDown = true;
-					direction = DIR_DOWN;
+					*endPosition		= startPosition + Position(0, 0, -1);
+					destTile			= _save->getTile(*endPosition + offset);
+					belowDestination	= _save->getTile(*endPosition + Position(x, y, -1));
+					fellDown			= true;
+					direction			= DIR_DOWN;
 				}
 			}
 
@@ -768,12 +784,8 @@ int Pathfinding::getTUCost(
 			}
 
 
-			if (direction < DIR_UP) // kL_TEST (this section is for walking over rubble only)
+			if (direction < DIR_UP) // kL_TEST (this section is for walking over walls only)
 			{
-
-				// calculate the cost by adding floor walk cost and object walk cost
-//				if (direction < DIR_UP)
-//				{
 				cost += destTile->getTUCost(MapData::O_FLOOR, _movementType);
 
 				if (!fellDown
@@ -788,19 +800,16 @@ int Pathfinding::getTUCost(
 				{
 					cost++;
 				}
-//				}
 
 				// if we don't want to fall down and there is no floor,
 				// we can't know the TUs so it defaults to 4
-//				if (direction < DIR_UP &&
 				if (!fellDown
 					&& destTile->hasNoFloor(0))
 				{
 					cost = 4;
 				}
 
-
-				int wallcost = 0;	// walking through rubble walls
+				int wallcost = 0;	// walking through walls
 				int sides = 0;		// how many walls we cross when moving diagonally
 				int wallTU = 0;		// used to check if there's a wall that costs +TU.
 
@@ -867,7 +876,6 @@ int Pathfinding::getTUCost(
 				// kL_note: this is moved up so that objects don't cost +150% tu;
 				// instead, let them keep a flat +100% to step onto
 				// -- note that Walls also do not take +150 tu to step over diagonally....
-//				if (direction < DIR_UP &&
 				if (direction & 1)
 				{
 					cost = static_cast<int>(static_cast<float>(cost) * 1.5f);
@@ -880,21 +888,6 @@ int Pathfinding::getTUCost(
 				}
 
 				cost += wallcost;
-
-				// diagonal walking (uneven directions) costs 50% more tu's
-/*				if (direction < DIR_UP
-					&& direction &1)
-				{
-					if (sides > 1)
-					{
-						wallcost /= 2;
-					}
-
-					cost = static_cast<int>(static_cast<double>(cost) * 1.5);
-				}
-
-				cost += wallcost; */
-
 			} // kL_TEST_end.
 
 
@@ -911,19 +904,20 @@ int Pathfinding::getTUCost(
 			{
 				if (size)
 				{
-					// 4-tile units not supported.
-					// Turn off strafe move and continue
+					// 4-tile units not supported, Turn off strafe move and continue
 					_strafeMove = false;
 				}
-				else
+/*kL				else
 				{
 					if (std::min(
 								abs(8 + direction - _unit->getDirection()),
-								std::min(abs(_unit->getDirection() - direction),
-								abs(8 + _unit->getDirection() - direction)))
+								std::min(
+										abs(_unit->getDirection() - direction),
+										abs(8 + _unit->getDirection() - direction)))
 							> 2)
 					{
 						// Strafing backwards-ish currently unsupported, turn it off and continue.
+						// kL_note: Try it anyway.
 						_strafeMove = false;
 					}
 					else
@@ -933,7 +927,19 @@ int Pathfinding::getTUCost(
 							cost += 1;
 						}
 					}
-				}
+				} */
+				// kL_begin:
+				else if (_unit->getDirection() != direction)
+				{
+					int delta = std::min(
+										abs(8 + direction - _unit->getDirection()),
+										std::min(
+												abs(_unit->getDirection() - direction),
+												abs(8 + _unit->getDirection() - direction)));
+					if (delta == 4)
+						delta = 2;
+					cost += delta;
+				} // kL_end.
 			}
 
 			totalCost += cost;
@@ -968,7 +974,9 @@ int Pathfinding::getTUCost(
 	}
 
 	if (missile)
+	{
 		return 0;
+	}
 	else
 	{
 		//Log(LOG_INFO) << "Pathfinding::getTUCost() ret = " << totalCost;
@@ -1005,8 +1013,8 @@ void Pathfinding::vectorToDirection(
 {
 	dir = -1;
 
-	int x[8] = { 0,  1,  1,  1,  0, -1, -1, -1};
-	int y[8] = {-1, -1,  0,  1,  1,  1,  0, -1};
+	int x[8] = { 0, 1, 1, 1, 0,-1,-1,-1};
+	int y[8] = {-1,-1, 0, 1, 1, 1, 0,-1};
 
 	for (int
 			i = 0;
@@ -1239,10 +1247,10 @@ bool Pathfinding::isBlocked(
 
 	const Position currentPosition = startTile->getPosition();
 
-	static const Position oneTileNorth	= Position( 0, -1,  0);
-	static const Position oneTileEast	= Position( 1,  0,  0);
-	static const Position oneTileSouth	= Position( 0,  1,  0);
-	static const Position oneTileWest	= Position(-1,  0,  0);
+	static const Position oneTileNorth	= Position( 0,-1, 0);
+	static const Position oneTileEast	= Position( 1, 0, 0);
+	static const Position oneTileSouth	= Position( 0, 1, 0);
+	static const Position oneTileWest	= Position(-1, 0, 0);
 
 	switch (direction)
 	{
@@ -1469,7 +1477,6 @@ int Pathfinding::validateUpDown(
 		&& destTile->getMapData(MapData::O_FLOOR)
 		&& destTile->getMapData(MapData::O_FLOOR)->isGravLift())
 	{
-//		return true;
 		return 1; // gravLift, kneeling or not, flying or not: Go
 	}
 	else if (bu->isKneeled())
@@ -1477,7 +1484,6 @@ int Pathfinding::validateUpDown(
 		return -1; // stop.
 	}
 	else if (bu->getArmor()->getMovementType() == MT_FLY)
-//		&& !bu->isKneeled()) // kL
 	{
 		Tile* belowStart = _save->getTile(startPosition + Position(0, 0, -1));
 
@@ -1488,12 +1494,10 @@ int Pathfinding::validateUpDown(
 				&& destTile
 				&& startTile->hasNoFloor(belowStart))) // falling down only possible when there is no floor
 		{
-//			return true;
 			return 2;
 		}
 	}
 
-//	return false;
 	return 0; // not gravLift, not flying, or blocked (not kneeling too, friend). Stop!
 }
 
@@ -1591,11 +1595,9 @@ int Pathfinding::validateUpDown(
  */
 bool Pathfinding::previewPath(bool bRemove)
 {
-	if (_path.empty())
-		return false;
+	if (_path.empty()) return false;
 
-	if (!bRemove && _pathPreviewed)
-		return false;
+	if (!bRemove && _pathPreviewed) return false;
 
 	_pathPreviewed = !bRemove;
 
@@ -1630,11 +1632,16 @@ bool Pathfinding::previewPath(bool bRemove)
 	{
 		int dir = *i;
 		// gets tu cost, but also gets the destination position.
-		int tu = getTUCost(pos, dir, &destination, _unit, 0, false);
+		int tu = getTUCost(
+						pos,
+						dir,
+						&destination,
+						_unit,
+						0,
+						false);
 
 		if (running)
 		{
-//			tu *= 0.75;
 			tu = tu * 3 / 4;
 		}
 
@@ -1673,7 +1680,8 @@ bool Pathfinding::previewPath(bool bRemove)
 						int nextDir = *(i + 1);
 						tile->setPreview(nextDir);
 					}
-						tile->setTUMarker(tus);
+
+					tile->setTUMarker(tus);
 				}
 				else
 				{
@@ -1735,7 +1743,9 @@ bool Pathfinding::isPathPreviewed() const
  * @param tuMax The maximum cost of the path to each tile.
  * @return An array of reachable tiles, sorted in ascending order of cost. The first tile is the start location.
  */
-std::vector<int> Pathfinding::findReachable(BattleUnit* unit, int tuMax)
+std::vector<int> Pathfinding::findReachable(
+		BattleUnit* unit,
+		int tuMax)
 {
 	//Log(LOG_INFO) << "Pathfinding::findReachable()";
 
@@ -1760,27 +1770,33 @@ std::vector<int> Pathfinding::findReachable(BattleUnit* unit, int tuMax)
 		PathfindingNode* currentNode = unvisited.pop();
 		Position const &currentPos = currentNode->getPosition();
 
-		for (int
+		for (int // Try all reachable neighbours.
 				direction = 0;
 				direction < 10;
-				direction++)									// Try all reachable neighbours.
+				direction++)
 		{
 			Position nextPos;
 
-			int tuCost = getTUCost(currentPos, direction, &nextPos, unit, 0, false);
-			if (tuCost == 255)									// Skip unreachable / blocked
+			int tuCost = getTUCost(
+								currentPos,
+								direction,
+								&nextPos,
+								unit,
+								0,
+								false);
+			if (tuCost == 255) // Skip unreachable / blocked
 				continue;
 
-			if (currentNode->getTUCost(false) + tuCost > tuMax)	// Run out of TUs
+			if (currentNode->getTUCost(false) + tuCost > tuMax) // Run out of TUs
 				continue;
 
 			PathfindingNode* nextNode = getNode(nextPos);
-			if (nextNode->isChecked())							// Our algorithm means this node is already at minimum cost.
+			if (nextNode->isChecked()) // Our algorithm means this node is already at minimum cost.
 				continue;
 
 			int totalTuCost = currentNode->getTUCost(false) + tuCost;
 			if (!nextNode->inOpenSet()
-				|| nextNode->getTUCost(false) > totalTuCost)	// If this node is unvisited or visited from a better path.
+				|| nextNode->getTUCost(false) > totalTuCost) // If this node is unvisited or visited from a better path.
 			{
 				nextNode->connect(totalTuCost, currentNode, direction);
 

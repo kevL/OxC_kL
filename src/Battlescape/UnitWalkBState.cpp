@@ -334,17 +334,18 @@ bool UnitWalkBState::doStatusStand()
 							false);
 		Log(LOG_INFO) << ". tu = " << tu;
 
+		Tile* tileDest = _parent->getSave()->getTile(destination);
 		// kL_note: should this include neutrals? (ie != FACTION_PLAYER; see also 32tu inflation...)
 		if (_unit->getFaction() == FACTION_HOSTILE
-			&& _parent->getSave()->getTile(destination)->getFire() > 0)
+			&& tileDest
+			&& tileDest->getFire() > 0)
 		{
 			Log(LOG_INFO) << ". . subtract tu inflation for a fireTile";
-			// we artificially inflate the TU cost by 32 points in getTUCost under these conditions, so we have to deflate it here.
+			// we artificially inflate the TU cost by 32 points in getTUCost
+			// under these conditions, so we have to deflate it here.
 			tu -= 32;
 			//Log(LOG_INFO) << ". . subtract tu inflation for a fireTile DONE";
 		}
-
-		//Log(LOG_INFO) << ". pos 2";
 
 		if (_falling)
 		{
@@ -352,39 +353,34 @@ bool UnitWalkBState::doStatusStand()
 			tu = 0;
 		}
 
-//kL		int energy = tu;
+		int energy = tu;
+
+		Tile* tilePos = _parent->getSave()->getTile(_unit->getPosition());
 		// kL_begin: UnitWalkBState::think(), no stamina required to go up/down GravLifts.
-		int energy = 0;
-
-//		if (!(_parent->getSave()->getTile(_unit->getPosition())->getMapData(MapData::O_FLOOR)->isGravLift()
-//			&& _parent->getSave()->getTile(destination)->getMapData(MapData::O_FLOOR)->isGravLift()))
-		if (_parent->getSave()->getTile(_unit->getPosition())->getMapData(MapData::O_FLOOR)
-			&& _parent->getSave()->getTile(_unit->getPosition())->getMapData(MapData::O_FLOOR)->isGravLift()
-			&& _parent->getSave()->getTile(destination)
-			&& _parent->getSave()->getTile(destination)->getMapData(MapData::O_FLOOR)
-			&& _parent->getSave()->getTile(destination)->getMapData(MapData::O_FLOOR)->isGravLift())
+		if (dir >= _pf->DIR_UP
+			&& tilePos->getMapData(MapData::O_FLOOR)
+			&& tilePos->getMapData(MapData::O_FLOOR)->isGravLift())
+//			&& tileDest
+//			&& tileDest->getMapData(MapData::O_FLOOR)
+//			&& tileDest->getMapData(MapData::O_FLOOR)->isGravLift())
 		{
-			Log(LOG_INFO) << ". . NOT using GravLift";
-			energy = tu;
+			Log(LOG_INFO) << ". . using GravLift";
+			energy = 0;
 		} // kL_end.
-
-		//Log(LOG_INFO) << ". pos 3";
-
-		if (_action.run)
-		{
-//kL			tu *= 0.75;
-//kL			energy *= 1.5;
-			tu = tu * 3 / 4;			// kL
-			energy = energy * 3 / 2;	// kL
-		}
 
 //kL		if (dir >= Pathfinding::DIR_UP)
 //kL		{
 //kL			energy = 0;
 //kL		}
 
-		Log(LOG_INFO) << ". check tu + stamina, etc.";
+		if (_action.run)
+		{
+			tu = tu * 3 / 4;
+			energy = energy * 3 / 2;
+			// kL_note: Should figure a way to reduce reaction fire vs. Running opponents.
+		}
 
+		Log(LOG_INFO) << ". check tu + stamina, etc.";
 		if (tu > _unit->getTimeUnits())
 		{
 			Log(LOG_INFO) << ". . tu > _unit->getTimeUnits()";
@@ -404,9 +400,9 @@ bool UnitWalkBState::doStatusStand()
 
 			return false;
 		}
-		else if (energy / 2 > _unit->getEnergy())
+		else if (energy > _unit->getEnergy())
 		{
-			Log(LOG_INFO) << ". . energy / 2 > _unit->getEnergy()";
+			Log(LOG_INFO) << ". . energy > _unit->getEnergy()";
 
 			if (_parent->getPanicHandled())
 			{
@@ -1088,14 +1084,15 @@ void UnitWalkBState::playMovementSound()
 {
 	if ((!_unit->getVisible()
 			&& !_parent->getSave()->getDebugMode())
-		|| !_walkCam->isOnScreen(_unit->getPosition()))
+		|| (!_walkCam->isOnScreen(_unit->getPosition())
+			&& !_walkCam->isOnScreen(_unit->getDestination())))
 	{
 		return;
 	}
 
 	if (_unit->getMoveSound() != -1)
 	{
-		if (_unit->getWalkingPhase() == 0) // if a sound is configured in the ruleset, play that one
+		if (_unit->getWalkingPhase() == 0)								// if a sound is configured in the ruleset, play it.
 			_parent->getResourcePack()->getSound(
 												"BATTLE.CAT",
 												_unit->getMoveSound())
@@ -1108,39 +1105,45 @@ void UnitWalkBState::playMovementSound()
 			Tile* t = _unit->getTile();
 			Tile* tBelow = _parent->getSave()->getTile(t->getPosition() + Position(0, 0, -1));
 
-			if (_unit->getWalkingPhase() == 3) // play footstep sound 1
+			if (_unit->getWalkingPhase() == 3)							// play footstep sound 1
 			{
-				if (t->getFootstepSound(tBelow)
-					&& _unit->getRaceString() != "STR_ETHEREAL")
-				{
+				if (t->getFootstepSound(tBelow))
+//					&& _unit->getRaceString() != "STR_ETHEREAL")
 					_parent->getResourcePack()->getSound(
 														"BATTLE.CAT",
 														23 + (t->getFootstepSound(tBelow) * 2))
 													->play();
-				}
 			}
 
-			if (_unit->getWalkingPhase() == 7) // play footstep sound 2
+			if (_unit->getWalkingPhase() == 7)							// play footstep sound 2
 			{
-				if (t->getFootstepSound(tBelow)
-					&& _unit->getRaceString() != "STR_ETHEREAL")
-				{
+				if (t->getFootstepSound(tBelow))
+//					&& _unit->getRaceString() != "STR_ETHEREAL")
 					_parent->getResourcePack()->getSound(
 														"BATTLE.CAT",
 														22 + (t->getFootstepSound(tBelow) * 2))
 													->play();
-				}
 			}
 		}
 		else if (_unit->getStatus() == STATUS_FLYING)
 		{
-			if (_unit->getWalkingPhase() == 1 // play default flying sound
-				&& !_falling)
+			if (_unit->getWalkingPhase() == 1)							// play default flying sound
 			{
-				_parent->getResourcePack()->getSound(
-													"BATTLE.CAT",
-													15)
-												->play();
+				if (_falling)											// thunk.
+					_parent->getResourcePack()->getSound(
+														"BATTLE.CAT",
+														38)
+													->play();
+				else if (!_unit->isFloating())							// GravLift
+					_parent->getResourcePack()->getSound(
+														"BATTLE.CAT",
+														40)
+													->play();
+				else if (!_falling)										// hoverSound
+					_parent->getResourcePack()->getSound(
+														"BATTLE.CAT",
+														15)
+													->play();
 			}
 		}
 	}

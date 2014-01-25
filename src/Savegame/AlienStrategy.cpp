@@ -71,10 +71,14 @@ void AlienStrategy::init(const Ruleset* rules)
 			++rr)
 	{
 		RuleRegion* region = rules->getRegion(*rr);
-		_regionChances.set(*rr, region->getWeight());
+		_regionChances.set(
+						*rr,
+						region->getWeight());
 
 		WeightedOptions* missions = new WeightedOptions(region->getAvailableMissions());
-		_regionMissions.insert(std::make_pair(*rr, missions));
+		_regionMissions.insert(std::make_pair(
+											*rr,
+											missions));
 	}
 }
 

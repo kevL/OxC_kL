@@ -255,8 +255,10 @@ BattleUnit::BattleUnit(
 	_currentArmor[SIDE_REAR]	= _armor->getRearArmor();
 	_currentArmor[SIDE_UNDER]	= _armor->getUnderArmor();
 
-	for (int i = 0; i < 6; ++i) _fatalWounds[i] = 0;
-	for (int i = 0; i < 5; ++i) _cache[i] = 0;
+	for (int i = 0; i < 6; ++i)
+		_fatalWounds[i] = 0;
+	for (int i = 0; i < 5; ++i)
+		_cache[i] = 0;
 
 	_activeHand = "STR_RIGHT_HAND";
 
@@ -270,10 +272,10 @@ BattleUnit::BattleUnit(
 BattleUnit::~BattleUnit()
 {
 	//Log(LOG_INFO) << "Delete BattleUnit";
-
 	for (int i = 0; i < 5; ++i)
 	{
-		if (_cache[i]) delete _cache[i];
+		if (_cache[i])
+			delete _cache[i];
 	}
 
 //	delete _currentAIState;
@@ -549,10 +551,20 @@ void BattleUnit::startWalking(
 
 	if (direction >= Pathfinding::DIR_UP)
 	{
-		Log(LOG_INFO) << ". STATUS_FLYING, up.down";
-		_status = STATUS_FLYING;
-		_floating = true;
+		_status = STATUS_FLYING; // controls walking sound in UnitWalkBState, what else
 		_verticalDirection = direction;
+
+		if (_tile->getMapData(MapData::O_FLOOR)
+			&& _tile->getMapData(MapData::O_FLOOR)->isGravLift())
+		{
+			Log(LOG_INFO) << ". STATUS_FLYING, using GravLift";
+			_floating = false;
+		}
+		else
+		{
+			Log(LOG_INFO) << ". STATUS_FLYING, up.down";
+			_floating = true;
+		}
 	}
 	else if (_tile->hasNoFloor(tileBelow))
 	{
@@ -1554,22 +1566,19 @@ bool BattleUnit::spendTimeUnits(int tu)
 
 /**
  * Spend energy if it can. Return false if it can't.
- * @param tu
+ * @param energy
  * @return flag if it could spend the time units or not.
  */
-bool BattleUnit::spendEnergy(int tu)
+bool BattleUnit::spendEnergy(int energy)
 {
-	int eu = tu / 2;
-	if (eu <= _energy)
+	if (energy <= _energy)
 	{
-		_energy -= eu;
+		_energy -= energy;
 
 		return true;
 	}
-	else
-	{
-		return false;
-	}
+
+	return false;
 }
 
 /**
@@ -1579,6 +1588,15 @@ bool BattleUnit::spendEnergy(int tu)
 void BattleUnit::setTimeUnits(int tu)
 {
 	_tu = tu;
+}
+
+/**
+ * Set a specific number of energy.
+ * @param energy
+ */
+void BattleUnit::setEnergy(int energy)
+{
+	_energy = energy;
 }
 
 /**
@@ -1597,13 +1615,9 @@ void BattleUnit::setVisible(bool flag)
 bool BattleUnit::getVisible() const
 {
 	if (getFaction() == FACTION_PLAYER)
-	{
 		return true;
-	}
 	else
-	{
 		return _visible;
-	}
 }
 
 /**
@@ -2049,7 +2063,6 @@ void BattleUnit::setTile(
 		Tile* tileBelow)
 {
 	//Log(LOG_INFO) << "BattleUnit::setTile()";
-
 	_tile = tile;
 	if (!_tile)
 	{
@@ -2362,8 +2375,8 @@ bool BattleUnit::checkAmmo()
 bool BattleUnit::isInExitArea(SpecialTileType stt) const
 {
 	return _tile
-		&& _tile->getMapData(MapData::O_FLOOR)
-		&& (_tile->getMapData(MapData::O_FLOOR)->getSpecialType() == stt);
+			&& _tile->getMapData(MapData::O_FLOOR)
+			&& _tile->getMapData(MapData::O_FLOOR)->getSpecialType() == stt;
 }
 
 /**
@@ -2966,15 +2979,6 @@ void BattleUnit::instaKill()
 int BattleUnit::getAggroSound() const
 {
 	return _aggroSound;
-}
-
-/**
- * Set a specific number of energy.
- * @param tu
- */
-void BattleUnit::setEnergy(int energy)
-{
-	_energy = energy;
 }
 
 /**

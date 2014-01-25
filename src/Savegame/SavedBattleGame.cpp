@@ -2137,7 +2137,7 @@ bool SavedBattleGame::getUnitsFalling() const
 
 /**
  * Checks the strafe setting.
- * @return True if strafing has been enabled.
+ * @return, True if strafing has been enabled.
  */
 bool SavedBattleGame::getStrafeSetting() const
 {

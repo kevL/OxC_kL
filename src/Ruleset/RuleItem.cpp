@@ -192,7 +192,7 @@ void RuleItem::load(const YAML::Node& node, int modIndex, int listOrder)
 
 /**
  * Gets the item type. Each item has a unique type.
- * @return The item's type.
+ * @return, The item's type.
  */
 
 std::string RuleItem::getType() const
@@ -202,7 +202,7 @@ std::string RuleItem::getType() const
 
 /**
  * Gets the language string that names this item. This is not necessarily unique.
- * @return  The item's name.
+ * @return, The item's name.
  */
 std::string RuleItem::getName() const
 {

@@ -114,7 +114,17 @@ void ProjectileFlyBState::init()
 	_unit = _action.actor;
 //kL	_projectileItem = 0; // already initialized.
 
-	if (!weapon) // can't shoot without weapon
+	if (_unit->isOut(true, true))
+//		|| _unit->getHealth() == 0
+//		|| _unit->getHealth() < _unit->getStunlevel())
+	{
+		// something went wrong - we can't shoot when dead or unconscious, or if we're about to fall over.
+		Log(LOG_INFO) << ". actor is Out, EXIT";
+		_parent->popState();
+
+		return;
+	}
+	else if (!weapon) // can't shoot without weapon
 	{
 		Log(LOG_INFO) << ". no weapon, EXIT";
 		_parent->popState();
@@ -129,20 +139,10 @@ void ProjectileFlyBState::init()
 		return;
 	}
 	else if (_parent->getPanicHandled()
-		&& _action.actor->getTimeUnits() < _action.TU)
+		&& _unit->getTimeUnits() < _action.TU)
 	{
 		Log(LOG_INFO) << ". not enough time units, EXIT";
 		_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
-		_parent->popState();
-
-		return;
-	}
-	else if (_unit->isOut(true, true))
-//		|| _unit->getHealth() == 0
-//		|| _unit->getHealth() < _unit->getStunlevel())
-	{
-		// something went wrong - we can't shoot when dead or unconscious, or if we're about to fall over.
-		Log(LOG_INFO) << ". actor is Out, EXIT";
 		_parent->popState();
 
 		return;

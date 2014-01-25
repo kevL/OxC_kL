@@ -49,9 +49,8 @@ class AlienMission
 {
 
 private:
-
 	int _uniqueID;
-	unsigned int
+	unsigned
 		_liveUfos,
 		_nextUfoCounter,
 		_nextWave,
@@ -78,7 +77,6 @@ private:
 
 
 	public:
-
 		// Data
 		/// Creates a mission of the specified type.
 		AlienMission(const RuleAlienMission& rule);

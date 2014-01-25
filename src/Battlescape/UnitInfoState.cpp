@@ -408,14 +408,14 @@ UnitInfoState::UnitInfoState(
 
 	if (!_mindProbe)
 	{
-		_btnPrev->setText(L"<<");
-		_btnPrev->setColor(Palette::blockOffset(4));
+		_btnPrev->setText(L"<");
+		_btnPrev->setColor(Palette::blockOffset(4)+4);
 		_btnPrev->onMouseClick((ActionHandler)& UnitInfoState::btnPrevClick);
 		_btnPrev->onKeyboardPress(
 						(ActionHandler)& UnitInfoState::btnPrevClick,
 						(SDLKey)Options::getInt("keyBattlePrevUnit"));
-		_btnNext->setText(L">>");
-		_btnNext->setColor(Palette::blockOffset(4));
+		_btnNext->setText(L">");
+		_btnNext->setColor(Palette::blockOffset(4)+4);
 		_btnNext->onMouseClick((ActionHandler)& UnitInfoState::btnNextClick);
 		_btnNext->onKeyboardPress(
 						(ActionHandler)& UnitInfoState::btnNextClick,
@@ -437,8 +437,6 @@ UnitInfoState::~UnitInfoState()
 void UnitInfoState::init()
 {
 	std::wstringstream ss;
-	int stat;
-	double arbitraryVariable;
 	int minPsi = 0;
 
 	if (_unit->getType() == "SOLDIER")
@@ -451,7 +449,7 @@ void UnitInfoState::init()
 	ss << _unit->getName(_game->getLanguage(), BattlescapeGame::_debugPlay);
 	_txtName->setText(ss.str());
 
-	stat = _unit->getTimeUnits();
+	int stat = _unit->getTimeUnits();
 	ss.str(L"");
 	ss << stat;
 	_numTimeUnits->setText(ss.str());
@@ -501,7 +499,7 @@ void UnitInfoState::init()
 	_barReactions->setMax(static_cast<double>(stat));
 	_barReactions->setValue(static_cast<double>(stat));
 
-	arbitraryVariable = static_cast<double>(_unit->getStats()->firing);
+	double arbitraryVariable = static_cast<double>(_unit->getStats()->firing);
 	stat = static_cast<int>(arbitraryVariable * _unit->getAccuracyModifier());
 	ss.str(L"");
 	ss << stat;
@@ -611,19 +609,28 @@ void UnitInfoState::init()
 void UnitInfoState::handle(Action* action)
 {
 	State::handle(action);
+
 	if (action->getDetails()->type == SDL_MOUSEBUTTONDOWN)
 	{
 		if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 		{
+			if (_fromInventory
+				&& !_unit->hasInventory())
+			{
+				_game->popState(); // tanks require double pop here.
+			}
+
 			_game->popState();
 		}
 		else if (action->getDetails()->button.button == SDL_BUTTON_X1)
 		{
-			if (!_mindProbe) btnNextClick(action);
+			if (!_mindProbe)
+				btnNextClick(action);
 		}
 		else if (action->getDetails()->button.button == SDL_BUTTON_X2)
 		{
-			if (!_mindProbe) btnPrevClick(action);
+			if (!_mindProbe)
+				btnPrevClick(action);
 		}
 	}
 
@@ -631,15 +638,23 @@ void UnitInfoState::handle(Action* action)
 	{
 		if (action->getDetails()->key.keysym.sym == Options::getInt("keyBattleNextUnit"))
 		{
-			if (!_mindProbe) btnNextClick(action);
+			if (!_mindProbe)
+				btnNextClick(action);
 		}
 		else if (action->getDetails()->key.keysym.sym == Options::getInt("keyBattlePrevUnit"))
 		{
-			if (!_mindProbe) btnPrevClick(action);
+			if (!_mindProbe)
+				btnPrevClick(action);
 		}
 		else if (action->getDetails()->key.keysym.sym == Options::getInt("keyCancel")
 			|| action->getDetails()->key.keysym.sym == Options::getInt("keyBattleStats"))
 		{
+			if (_fromInventory
+				&& !_unit->hasInventory())
+			{
+				_game->popState(); // tanks require double pop here.
+			}
+
 			_game->popState();
 		}
 	}
@@ -651,22 +666,16 @@ void UnitInfoState::handle(Action* action)
 */
 void UnitInfoState::btnPrevClick(Action*)
 {
-	if (_parent)
-	{
-		// so we are here from a Battlescape Game
+	if (_parent) // so we are here from a Battlescape Game
 		_parent->selectPreviousFactionUnit(
 										false,
-										false,
-										_fromInventory);
-	}
-	else
-	{
-		// so we are here from the Craft Equipment screen
+										false);
+//kL										_fromInventory);
+	else // so we are here from the Craft Equipment screen
 		_battleGame->selectPreviousFactionUnit(
 											false,
 											false,
-											true);
-	}
+											true); // no tanks.
 
 	_unit = _battleGame->getSelectedUnit();
 	if (_unit != 0)
@@ -681,20 +690,16 @@ void UnitInfoState::btnPrevClick(Action*)
 */
 void UnitInfoState::btnNextClick(Action*)
 {
-	if (_parent)
-	{ // so we are here from a Battlescape Game
+	if (_parent) // so we are here from a Battlescape Game
 		_parent->selectNextFactionUnit(
 									false,
-									false,
-									_fromInventory);
-	}
-	else
-	{ // so we are here from the Craft Equipment screen
+									false);
+//kL									_fromInventory);
+	else // so we are here from the Craft Equipment screen
 		_battleGame->selectNextFactionUnit(
 										false,
 										false,
-										true);
-	}
+										true); // no tanks.
 
 	_unit = _battleGame->getSelectedUnit();
 	if (_unit != 0)

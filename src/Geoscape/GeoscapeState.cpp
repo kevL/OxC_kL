@@ -1438,7 +1438,7 @@ void GeoscapeState::time10Minutes()
 
 						if (targetDistance < craftRadar)
 						{
-							int chance = 50 - (static_cast<int>(targetDistance / craftRadar) * 50);
+							int chance = 50 - static_cast<int>(targetDistance / craftRadar * 50.0);
 							Log(LOG_INFO) << ". . craft in Range, chance = " << chance;
 
 							if (RNG::percent(chance))
@@ -1763,13 +1763,13 @@ void GeoscapeState::time30Minutes()
 	{
 		if ((*am)->isOver())
 		{
+			Log(LOG_INFO) << ". aLienMission isOver() : " << (*am)->getType();
+
 			delete *am;
 			am = _game->getSavedGame()->getAlienMissions().erase(am);
 		}
 		else
-		{
 			++am;
-		}
 	}
 	//Log(LOG_INFO) << ". . removed finished missions";
 
@@ -1779,20 +1779,6 @@ void GeoscapeState::time30Minutes()
 			_game->getSavedGame()->getUfos()->end(),
 			expireCrashedUfo());
 	//Log(LOG_INFO) << ". . handled crashed UFO expirations";
-
-	// Handle craft maintenance
-	for (std::vector<Base*>::iterator
-			i = _game->getSavedGame()->getBases()->begin();
-			i != _game->getSavedGame()->getBases()->end();
-			++i)
-	{
-		for (std::vector<Craft*>::iterator
-				j = (*i)->getCrafts()->begin();
-				j != (*i)->getCrafts()->end();
-				++j)
-		{
-		}
-	}
 
 	// Handle craft maintenance & refueling.
 	for (std::vector<Base*>::iterator

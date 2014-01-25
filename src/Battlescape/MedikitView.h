@@ -16,10 +16,12 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_MEDIKITVIEW_H
 #define OPENXCOM_MEDIKITVIEW_H
 
 #include "../Engine/InteractiveSurface.h"
+
 
 namespace OpenXcom
 {
@@ -27,27 +29,49 @@ namespace OpenXcom
 class BattleUnit;
 class Text;
 
+
 /**
  * Display a view of unit wounds
  */
-class MedikitView : public InteractiveSurface
+class MedikitView
+	:
+		public InteractiveSurface
 {
-	Game * _game;
-	/// Handles clicking on the body view.
-	void mouseClick (Action *action, State *state);
+
+private:
 	int _selectedPart;
-	BattleUnit *_unit;
-	Text *_partTxt, *_woundTxt;
-public:
-	/// Creates the MedikitView.
-	MedikitView (int w, int h, int x, int y, Game * game, BattleUnit *unit, Text *partTxt, Text *woundTxt);
-	/// Draws the body view.
-	void draw();
-	/// Gets the selected body part.
-	int getSelectedPart() const;
-	/// Updates the seleted body part.
-	void updateSelectedPart();
+
+	BattleUnit* _unit;
+	Game* _game;
+	Text
+		* _partTxt,
+		* _woundTxt;
+
+	/// Handles clicking on the body view.
+	void mouseClick(Action* action, State* state);
+
+
+	public:
+		/// Creates the MedikitView.
+		MedikitView(
+				int w,
+				int h,
+				int x,
+				int y,
+				Game* game,
+				BattleUnit* unit,
+				Text* partTxt,
+				Text* woundTxt);
+
+		/// Draws the body view.
+		void draw();
+
+		/// Gets the selected body part.
+		int getSelectedPart() const;
+		/// Updates the seleted body part.
+		void updateSelectedPart();
 };
+
 }
 
 #endif

@@ -64,9 +64,10 @@ private:
 		_changeValueByMouseWheel,
 		_hasSci,
 		_hasEng,
-		_itemOffset,
 		_total;
-	unsigned int _sel;
+	unsigned
+		_itemOffset,
+		_sel;
 
 	Base* _base;
 	Text

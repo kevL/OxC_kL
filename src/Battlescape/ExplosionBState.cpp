@@ -189,14 +189,14 @@ void ExplosionBState::init()
 			else
 				_parent->getResourcePack()->getSound("BATTLE.CAT", 5)->play();
 
-//kL			if (!_parent->getMap()->getCamera()->isOnScreen(tileCenter->getPosition()))
-//kL				_parent->getMap()->getCamera()->centerOnPosition(
-//kL																tileCenter->getPosition(),
-//kL																false);
-			if (!_parent->getMap()->getCamera()->isOnScreen(posCenter))	// kL
-				_parent->getMap()->getCamera()->centerOnPosition(		// kL
-															posCenter,	// kL
-															false);		// kL
+			Camera* explodeCam = _parent->getMap()->getCamera();
+			if (explodeCam->getViewLevel() != posCenter.z)	// kL
+				explodeCam->setViewLevel(posCenter.z);		// kL
+
+//			if (!explodeCam->isOnScreen(posCenter))		// kL
+			explodeCam->centerOnPosition(			// kL
+										posCenter,	// kL
+										false);		// kL
 		}
 		else
 			_parent->popState();
@@ -223,18 +223,17 @@ void ExplosionBState::init()
 										"BATTLE.CAT",
 										_item->getRules()->getHitSound())->play();
 
-//kL		if (_parent->getSave()->getSide() == FACTION_HOSTILE
-//			|| !_parent->getMap()->getCamera()->isOnScreen(tileCenter->getPosition())) // kL
-//kL		{
-//kL			_parent->getMap()->getCamera()->centerOnPosition(
-//kL															tileCenter->getPosition(),
-//kL															false);
-		if (_parent->getSave()->getSide() == FACTION_HOSTILE			// kL
-			|| !_parent->getMap()->getCamera()->isOnScreen(posCenter))	// kL
+		Camera* explodeCam = _parent->getMap()->getCamera();
+		if (explodeCam->getViewLevel() != posCenter.z)	// kL
+			explodeCam->setViewLevel(posCenter.z);		// kL
+
+		if (_parent->getSave()->getSide() == FACTION_HOSTILE	// kL
+			|| !explodeCam->isOnScreen(posCenter))				// kL
 		{
-			_parent->getMap()->getCamera()->centerOnPosition(			// kL
-														posCenter,		// kL
-														false);			// kL
+			explodeCam->centerOnPosition(						// kL
+										posCenter,				// kL
+										false);					// kL
+
 		}
 	}
 	Log(LOG_INFO) << "ExplosionBState::init() EXIT";

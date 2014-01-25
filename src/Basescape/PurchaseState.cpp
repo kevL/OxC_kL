@@ -262,6 +262,7 @@ PurchaseState::PurchaseState(
 	std::vector<std::string> items = _game->getRuleset()->getItemsList();
 
 	// Add craft Weapon-types to purchase list.
+	// WB-removed: 140124 begin:
 	const std::vector<std::string>& cweapons = _game->getRuleset()->getCraftWeaponsList();
 	for (std::vector<std::string>::const_iterator
 			i = cweapons.begin();
@@ -320,7 +321,6 @@ PurchaseState::PurchaseState(
 			}
 		}
 
-
 		// Handle craft weapon ammo.
 		RuleItem* clip = _game->getRuleset()->getItem(rule->getClipItem()); // kL
 
@@ -370,7 +370,7 @@ PurchaseState::PurchaseState(
 				}
 			}
 		}
-	}
+	} // end WB-removed: 140124.
 
 
 	// Add items to purchase list.
@@ -459,17 +459,36 @@ PurchaseState::PurchaseState(
 
 			ss7 << tQty; // kL
 
-			if (rule->getBattleType() == BT_AMMO)
+			if (rule->getBattleType() == BT_AMMO
+				 || (rule->getBattleType() == BT_NONE
+					&& rule->getClipSize() > 0))
 			{
 				item.insert(0, L"  ");
+
+				_lstItems->addRow(
+								4,
+								item.c_str(),
+								Text::formatFunding(rule->getBuyCost()).c_str(),
+								ss7.str().c_str(),
+								L"0");
+				_lstItems->setRowColor(_qtys.size() - 1, Palette::blockOffset(15) + 6);
+			}
+			else
+			{
+				_lstItems->addRow(
+								4,
+								item.c_str(),
+								Text::formatFunding(rule->getBuyCost()).c_str(),
+								ss7.str().c_str(),
+								L"0");
 			}
 
-			_lstItems->addRow(
-							4,
-							item.c_str(),
-							Text::formatFunding(rule->getBuyCost()).c_str(),
-							ss7.str().c_str(),
-							L"0");
+//			_lstItems->addRow(
+//							4,
+//							item.c_str(),
+//							Text::formatFunding(rule->getBuyCost()).c_str(),
+//							ss7.str().c_str(),
+//							L"0");
 		}
 	}
 
@@ -945,12 +964,10 @@ void PurchaseState::updateItemStrings()
 		}
 	}
 
-	// kL_begin:
 	if (_total > 0)
 		_btnOk->setVisible(true);
 	else
 		_btnOk->setVisible(false);
-	// kL_end.
 }
 
 }

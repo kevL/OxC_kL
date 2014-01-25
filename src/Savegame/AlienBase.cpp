@@ -151,7 +151,7 @@ bool AlienBase::isInBattlescape() const
 
 /**
  * Sets the alien base's battlescape status.
- * @param inbattle .
+ * @param inbattle
  */
 void AlienBase::setInBattlescape(bool inbattle)
 {
@@ -160,7 +160,7 @@ void AlienBase::setInBattlescape(bool inbattle)
 
 /**
  * Gets the alien base's battlescape status.
- * @return bool.
+ * @return bool
  */
 bool AlienBase::isDiscovered() const
 {
@@ -169,7 +169,7 @@ bool AlienBase::isDiscovered() const
 
 /**
  * Sets the alien base's discovered status.
- * @param discovered.
+ * @param discovered
  */
 void AlienBase::setDiscovered(bool discovered)
 {

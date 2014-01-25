@@ -28,11 +28,12 @@
 namespace OpenXcom
 {
 
+class BattleItem;
+class BattleUnit;
 class InteractiveSurface;
 class MedikitView;
 class Text;
-class BattleItem;
-class BattleUnit;
+
 
 /**
  * The Medikit User Interface. Medikit is an item for healing a soldier.
@@ -41,12 +42,21 @@ class MedikitState
 	:
 		public State
 {
+
+private:
+	BattleAction* _action;
+	BattleItem* _item;
+	BattleUnit
+		* _targetUnit,
+		* _unit;
 	InteractiveSurface* _surface;
 	MedikitView* _medikitView;
-	Text* _pkText, * _stimulantTxt, * _healTxt, * _partTxt, * _woundTxt;
-	BattleUnit* _targetUnit, * _unit;
-	BattleItem* _item;
-	BattleAction* _action;
+	Text
+		* _healTxt,
+		* _partTxt,
+		* _pkText,
+		* _stimulantTxt,
+		* _woundTxt;
 
 	/// Handler for the end button.
 	void onEndClick(Action* action);
@@ -56,14 +66,20 @@ class MedikitState
 	void onStimulantClick(Action* action);
 	/// Handler for the pain killer button.
 	void onPainKillerClick(Action* action);
+
 	/// Updates the medikit interface.
 	void update();
 
-public:
-	/// Creates the MedikitState.
-	MedikitState(Game* game, BattleUnit* targetUnit, BattleAction* action);
-	/// Handler for right-clicking anything.
-	void handle(Action* action);
+
+	public:
+		/// Creates the MedikitState.
+		MedikitState(
+				Game* game,
+				BattleUnit* targetUnit,
+				BattleAction* action);
+
+		/// Handler for right-clicking anything.
+		void handle(Action* action);
 };
 
 }

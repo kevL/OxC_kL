@@ -2789,7 +2789,12 @@ void BattlescapeGenerator::explodePowerSources()
 			Log(LOG_INFO) << ". percDamage = " << percDamage;
 				// kL_note: that might be fetchable with the simpler _ufo->getDamagePercentage() function...!
 				// ah, but it wouldn't get written to Save..
-			double rand = RNG::generate(0.0, 2.0) * static_cast<double>(percDamage);	// kL
+			if (RNG::percent(percDamage / 10))
+			{
+				percDamage = RNG::generate(1, 100);
+				Log(LOG_INFO) << ". . Alt percDamage = " << percDamage;
+			}
+			double rand = RNG::generate(1.0, 2.0) * static_cast<double>(percDamage);	// kL
 			Log(LOG_INFO) << ". rand = " << (int)rand;
 			int power = static_cast<int>(((pow(rand, 3)) / 32000.0) + 50.0);			// kL
 

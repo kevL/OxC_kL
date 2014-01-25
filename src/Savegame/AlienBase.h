@@ -37,9 +37,13 @@ class AlienBase
 	:
 		public Target
 {
+
 private:
-	bool _inBattlescape, _discovered;
+	bool
+		_inBattlescape,
+		_discovered;
 	int _id;
+
 	std::string _race;
 
 

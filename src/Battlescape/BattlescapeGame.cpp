@@ -2096,8 +2096,9 @@ void BattlescapeGame::primaryAction(const Position& pos)
 
 			if (_currentAction.strafe
 				&& _save->getTileEngine()->distance(
-												_currentAction.actor->getPosition(),
-												pos) > 1)
+													_currentAction.actor->getPosition(),
+													pos)
+												> 1)
 			{
 				_currentAction.run = true;
 				_currentAction.strafe = false;

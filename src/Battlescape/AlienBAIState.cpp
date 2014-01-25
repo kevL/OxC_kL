@@ -2298,6 +2298,8 @@ bool AlienBAIState::psiAction()
 
 	if (_unit->getTimeUnits() < _escapeTUs + tuCost) // has the required TUs and can still make it to cover
 	{
+		Log(LOG_INFO) << ". not enough Tu, EXIT";
+
 		return false;
 	}
 	else // do it.
@@ -2307,9 +2309,8 @@ bool AlienBAIState::psiAction()
 			chance = 0,
 			chance2 = 0;
 
-		int attackStr = static_cast<int>(
-									static_cast<float>(_unit->getStats()->psiStrength)
-								* static_cast<float>(_unit->getStats()->psiSkill) / 50.f);
+		int attackStr = static_cast<int>(floor(
+							static_cast<float>(_unit->getStats()->psiStrength * _unit->getStats()->psiSkill) / 50.f));
 		Log(LOG_INFO) << ". . attackStr = " << attackStr;
 
 		for (std::vector<BattleUnit*>::const_iterator
@@ -2339,13 +2340,15 @@ bool AlienBAIState::psiAction()
 					defense = (*i)->getStats()->psiStrength,
 					dist = _save->getTileEngine()->distance(
 															(*i)->getPosition(),
-															_unit->getPosition()),
+															_unit->getPosition())
+														* 2,
 					rand = RNG::generate(1, 50);
 
-				Log(LOG_INFO) << "\n. . . defense = " << defense;
+				Log(LOG_INFO) << ". . . ";
+				Log(LOG_INFO) << ". . . defense = " << defense;
 				Log(LOG_INFO) << ". . . dist = " << dist;
 				Log(LOG_INFO) << ". . . rand = " << rand;
-				Log(LOG_INFO) << ". . . LoS = " << static_cast<int>(LoS) * 50;
+				Log(LOG_INFO) << ". . . LoS = " << (int)LoS * 50;
 
 
 				chance2 = attackStr
@@ -2367,7 +2370,7 @@ bool AlienBAIState::psiAction()
 			|| chance < -10
 			|| RNG::percent(10))
 		{
-			Log(LOG_INFO) << "AlienBAIState::psiAction() EXIT 1, False";
+			Log(LOG_INFO) << "AlienBAIState::psiAction() EXIT, False : not good.";
 			return false;
 		}
 
@@ -2388,14 +2391,13 @@ bool AlienBAIState::psiAction()
 			return false;
 		} */
 
-		if (_traceAI) Log(LOG_INFO) << "making a psionic attack this turn";
+		//if (_traceAI) Log(LOG_INFO) << "making a psionic attack this turn";
 
 		int morale = _aggroTarget->getMorale();
 		if (morale > 0)		// panicAtk is valid since target has morale to chew away
 //			&& chance < 30)	// esp. when aLien atkStr is low
 		{
 			Log(LOG_INFO) << ". . test if MC or Panic";
-
 			int
 				bravery = _aggroTarget->getStats()->bravery,
 				panicOdds = 110 - bravery, // ie, moraleHit
@@ -2412,24 +2414,22 @@ bool AlienBAIState::psiAction()
 			Log(LOG_INFO) << ". . panicOdds_2 = " << panicOdds;
 			if (RNG::percent(panicOdds + RNG::generate(0, 99)))
 			{
-				Log(LOG_INFO) << ". do Panic";
 				_psiAction->target = _aggroTarget->getPosition();
 				_psiAction->type = BA_PANIC;
 
-				//Log(LOG_INFO) << "AlienBAIState::psiAction() EXIT 2, True";
+				Log(LOG_INFO) << "AlienBAIState::psiAction() EXIT . do Panic vs " << _aggroTarget->getId();
 				return true;
 			}
 		}
 
-		Log(LOG_INFO) << ". do MindControl";
 		_psiAction->target = _aggroTarget->getPosition();
 		_psiAction->type = BA_MINDCONTROL;
 
-		//Log(LOG_INFO) << "AlienBAIState::psiAction() EXIT 3, True";
+		Log(LOG_INFO) << "AlienBAIState::psiAction() EXIT . do MindControl vs " << _aggroTarget->getId();
 		return true;
 	}
 
-	Log(LOG_INFO) << "AlienBAIState::psiAction() EXIT 4, False";
+	Log(LOG_INFO) << "AlienBAIState::psiAction() EXIT, False";
 	return false;
 }
 
@@ -2468,10 +2468,11 @@ bool AlienBAIState::validTarget(
 		bool assessDanger,
 		bool includeCivs) const
 {
-	if (unit->isOut(true, true)									// ignore units that are dead/unconscious
-		|| _intelligence < unit->getTurnsExposed()				// they must be units that we "know" about
-		|| (assessDanger && unit->getTile()->getDangerous())	// they haven't been grenaded
-		|| unit->getFaction() == FACTION_HOSTILE)				// and they mustn't be on our side
+	if (unit->isOut(true, true)						// ignore units that are dead/unconscious
+		|| _intelligence < unit->getTurnsExposed()	// they must be units that we "know" about
+		|| (assessDanger
+			&& unit->getTile()->getDangerous())		// they haven't been grenaded
+		|| unit->getFaction() == FACTION_HOSTILE)	// and they mustn't be on our side
 	{
 		return false;
 	}

@@ -403,7 +403,7 @@ TransferItemsState::TransferItemsState(
 //							ss1.str().c_str(),
 //							L"0",
 //							ss2.str().c_str());
-			std::wstring item = tr(*i);
+//kL			std::wstring item = tr(*i);
 			RuleItem* rule = _game->getRuleset()->getItem(*i);
 			if (rule->getBattleType() == BT_AMMO
 				|| (rule->getBattleType() == BT_NONE
@@ -413,7 +413,7 @@ TransferItemsState::TransferItemsState(
 				_lstItems->addRow(
 								4,
 								item.c_str(),
-								ss.str().c_str(),
+								ss1.str().c_str(),
 								L"0",
 								ss2.str().c_str());
 				_lstItems->setRowColor(_baseQty.size() - 1, Palette::blockOffset(15) + 6);
@@ -422,7 +422,7 @@ TransferItemsState::TransferItemsState(
 				_lstItems->addRow(
 								4,
 								item.c_str(),
-								ss.str().c_str(),
+								ss1.str().c_str(),
 								L"0",
 								ss2.str().c_str());
 		}
@@ -486,6 +486,7 @@ void TransferItemsState::reinit()
 	_iQty = 0.0f;
 	_hasSci = 0;
 	_hasEng = 0;
+	_itemOffset = 0;
 
 
 	_btnOk->setVisible(false);
@@ -508,6 +509,8 @@ void TransferItemsState::reinit()
 							L"1",
 							L"0",
 							L"0");
+
+			++_itemOffset;
 		}
 	}
 
@@ -531,6 +534,8 @@ void TransferItemsState::reinit()
 							L"1",
 							L"0",
 							L"0");
+
+			++_itemOffset;
 		}
 	}
 
@@ -555,6 +560,8 @@ void TransferItemsState::reinit()
 						ss1.str().c_str(),
 						L"0",
 						ss2.str().c_str());
+
+		++_itemOffset;
 	}
 
 	if (_baseFrom->getEngineers() > 0)
@@ -576,6 +583,8 @@ void TransferItemsState::reinit()
 						ss1.str().c_str(),
 						L"0",
 						ss2.str().c_str());
+
+		++_itemOffset;
 	}
 
 	const std::vector<std::string>& items = _game->getRuleset()->getItemsList();
@@ -664,12 +673,33 @@ void TransferItemsState::reinit()
 				ss2;
 			ss1 << qty;
 			ss2 << tQty;
-			_lstItems->addRow(
-							4,
-							item.c_str(),
-							ss1.str().c_str(),
-							L"0",
-							ss2.str().c_str());
+//			_lstItems->addRow(
+//							4,
+//							item.c_str(),
+//							ss1.str().c_str(),
+//							L"0",
+//							ss2.str().c_str());
+			RuleItem* rule = _game->getRuleset()->getItem(*i);
+			if (rule->getBattleType() == BT_AMMO
+				|| (rule->getBattleType() == BT_NONE
+					&& rule->getClipSize() > 0))
+			{
+				item.insert(0, L"  ");
+				_lstItems->addRow(
+								4,
+								item.c_str(),
+								ss1.str().c_str(),
+								L"0",
+								ss2.str().c_str());
+				_lstItems->setRowColor(_baseQty.size() - 1, Palette::blockOffset(15) + 6);
+			}
+			else
+				_lstItems->addRow(
+								4,
+								item.c_str(),
+								ss1.str().c_str(),
+								L"0",
+								ss2.str().c_str());
 		}
 	}
 }
@@ -722,10 +752,8 @@ void TransferItemsState::completeTransfer()
 				{
 					if (*s == _soldiers[i])
 					{
-						if((*s)->isInPsiTraining())
-						{
+						if ((*s)->isInPsiTraining())
 							(*s)->setPsiTraining();
-						}
 
 						Transfer* t = new Transfer(time);
 						t->setSoldier(*s);
@@ -763,9 +791,7 @@ void TransferItemsState::completeTransfer()
 						s = _baseFrom->getSoldiers()->erase(s);
 					}
 					else
-					{
 						++s;
-					}
 				}
 
 				for (std::vector<Craft*>::iterator // Transfer craft
@@ -982,6 +1008,7 @@ void TransferItemsState::lstItemsMousePress(Action* action)
 	{
 		_timerInc->stop();
 		_timerDec->stop();
+
 		if (_allowChangeListValuesByMouseWheel
 			&& action->getAbsoluteXMouse() >= _lstItems->getArrowsLeftEdge()
 			&& action->getAbsoluteXMouse() <= _lstItems->getArrowsRightEdge())
@@ -993,25 +1020,49 @@ void TransferItemsState::lstItemsMousePress(Action* action)
 
 /**
  * Gets the transfer cost of the currently selected item.
- * @return Transfer cost.
+ * @return, Transfer cost
  */
 int TransferItemsState::getCost() const
 {
-	int cost = 0;
+	//Log(LOG_INFO) << "TransferItemsState::getCost()";
+	float cost = 0.f;
+
 	if (TRANSFER_ITEM == getType(_sel)) // Item cost
 	{
-		cost = 1;
+		RuleItem* rule = _game->getRuleset()->getItem(_items[_sel - _itemOffset]);
+		if (rule->getType() == "STR_ALIEN_ALLOYS")
+		{
+			//Log(LOG_INFO) << ". transfer Alloys";
+			cost = 0.01f;
+		}
+		else if (rule->getType() == "STR_ELERIUM_115")
+		{
+			//Log(LOG_INFO) << ". transfer Elerium";
+			cost = 0.1f;
+		}
+		else
+		{
+			//Log(LOG_INFO) << ". transfer Item";
+			cost = 1.f;
+		}
 	}
 	else if (TRANSFER_CRAFT == getType(_sel)) // Craft cost
 	{
-		cost = 25;
+		//Log(LOG_INFO) << ". transfer Craft";
+		cost = 100.f;
 	}
 	else // Personnel cost
 	{
-		cost = 5;
+		//Log(LOG_INFO) << ". transfer Personel";
+		cost = 10.f;
 	}
 
-	return static_cast<int>(floor(_distance * static_cast<double>(cost)));
+//	float fCost = static_cast<float>(floor(_distance * cost));
+	int iCost = static_cast<int>(ceil(static_cast<float>(_distance) * cost));
+	//Log(LOG_INFO) << ". . _distance = " << _distance;
+	//Log(LOG_INFO) << ". . cost = " << iCost;
+
+	return iCost;
 }
 
 /**
@@ -1192,7 +1243,8 @@ void TransferItemsState::increaseByValue(int change)
 		_transferQty[_sel] += change;
 		_total += getCost() * change;
 	}
-	else if (TRANSFER_ITEM == selType && selItem->getAlien()) // Live Aliens count
+	else if (TRANSFER_ITEM == selType
+		&& selItem->getAlien()) // Live Aliens count
 	{
 		int freeContainment = _containmentLimit? _baseTo->getAvailableContainment() - _baseTo->getUsedContainment() - _aQty: INT_MAX;
 		change = std::min(std::min(freeContainment, getQuantity() - _transferQty[_sel]), change);
@@ -1223,14 +1275,16 @@ void TransferItemsState::decrease()
  */
 void TransferItemsState::decreaseByValue(int change)
 {
-	const enum TransferType selType = getType(_sel);
-	if (change < 1
-		|| _transferQty[_sel] < 1) return;
+	if (change < 1 || _transferQty[_sel] < 1)
+		return;
 
 
+	change = std::min(
+					_transferQty[_sel],
+					change);
 	Craft* craft = 0;
-	change = std::min(_transferQty[_sel], change);
 
+	const enum TransferType selType = getType(_sel);
 	if (TRANSFER_SOLDIER == selType
 		|| TRANSFER_SCIENTIST == selType
 		|| TRANSFER_ENGINEER == selType) // Personnel count
@@ -1247,7 +1301,7 @@ void TransferItemsState::decreaseByValue(int change)
 	else if (TRANSFER_ITEM == selType) // Item count
 	{
 		const RuleItem* selItem = _game->getRuleset()->getItem(_items[getItemIndex(_sel)]);
-		if (!selItem->getAlien() )
+		if (!selItem->getAlien())
 		{
 			_iQty -= selItem->getSize() * (static_cast<float>(change));
 		}
@@ -1262,7 +1316,7 @@ void TransferItemsState::decreaseByValue(int change)
 	_transferQty[_sel] -= change;
 
 	if (!_canTransferCraftsWhileAirborne
-		|| 0 == craft
+		|| craft == 0
 		|| craft->getStatus() != "STR_OUT")
 	{
 		_total -= getCost() * change;
@@ -1276,7 +1330,6 @@ void TransferItemsState::decreaseByValue(int change)
  */
 void TransferItemsState::updateItemStrings()
 {
-	// kL_begin:
 	std::wstringstream
 		ss1,
 		ss2,
@@ -1313,7 +1366,6 @@ void TransferItemsState::updateItemStrings()
 		_btnOk->setVisible(true);
 	else
 		_btnOk->setVisible(false);
-	// kL_end.
 }
 
 /**
@@ -1355,7 +1407,7 @@ double TransferItemsState::getDistance() const
 	y[2] = y[1] - y[0];
 	z[2] = z[1] - z[0];
 
-	return sqrt(x[2] * x[2] + y[2] * y[2] + z[2] * z[2]);
+	return sqrt((x[2] * x[2]) + (y[2] * y[2]) + (z[2] * z[2]));
 }
 
 /**

@@ -364,7 +364,7 @@ private:
 		/// Spend time units if it can.
 		bool spendTimeUnits(int tu);
 		/// Spend energy if it can.
-		bool spendEnergy(int tu);
+		bool spendEnergy(int energy);
 		/// Set time units.
 		void setTimeUnits(int tu);
 		/// Sets the unit's energy level.

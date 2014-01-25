@@ -465,6 +465,7 @@ void SellState::btnOkClick(Action*)
 				break;
 				case SELL_ITEM:
 					_base->getItems()->removeItem(_items[getItemIndex(i)], _qtys[i]);
+				break;
 			}
 		}
 	}
@@ -749,7 +750,6 @@ void SellState::updateItemStrings()
 		}
 	}
 
-	// kL_begin:
 	if (_total > 0) // or craft, soldier, scientist, engineer.
 	{
 		_btnOk->setVisible(true);
@@ -781,7 +781,6 @@ void SellState::updateItemStrings()
 	}
 
 	_btnOk->setVisible(false);
-	// kL_end.
 }
 
 /**
