@@ -205,7 +205,6 @@ int BaseView::getGridY() const
 void BaseView::setSelectable(int size)
 {
 	_selSize = size;
-
 	if (_selSize > 0)
 	{
 		_selector = new Surface(
@@ -399,8 +398,8 @@ void BaseView::updateNeighborFacilityBuildTime(
 		BaseFacility* facility,
 		BaseFacility* neighbor)
 {
-	if (0 != facility
-		&& 0 != neighbor
+	if (facility != 0
+		&& neighbor != 0
 		&& neighbor->getBuildTime() > neighbor->getRules()->getBuildTime()
 		&& facility->getBuildTime() + neighbor->getRules()->getBuildTime() < neighbor->getBuildTime())
 	{
@@ -612,16 +611,12 @@ void BaseView::draw()
 					(*i)->setCraft(*craft);
 				}
 				else
-				{
 					(*i)->setCraft(0);
-				}
 
 				++craft;
 			}
 			else
-			{
 				(*i)->setCraft(0);
-			}
 		}
 
 		if ((*i)->getBuildTime() > 0) // draw time remaining
@@ -702,6 +697,7 @@ void BaseView::mouseOver(Action* action, State* state)
 	else
 	{
 		_selFacility = 0;
+
 		if (_selSize > 0)
 			_selector->setVisible(false);
 	}
@@ -717,6 +713,7 @@ void BaseView::mouseOver(Action* action, State* state)
 void BaseView::mouseOut(Action* action, State* state)
 {
 	_selFacility = 0;
+
 	if (_selSize > 0)
 		_selector->setVisible(false);
 

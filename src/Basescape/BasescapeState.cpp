@@ -513,7 +513,7 @@ void BasescapeState::viewLeftClick(Action*)
 	BaseFacility* fac = _view->getSelectedFacility();
 	if (fac != 0)
 	{
-		if (fac->inUse()) // facility in Use.
+		if (fac->inUse())
 		{
 			_game->pushState(new ErrorMessageState(
 												_game,
