@@ -756,8 +756,8 @@ int Projectile::calculateThrow(double accuracy)
 
 /**
  * Calculates the new target in voxel space, based on the given accuracy modifier.
- * @param origin, Startposition of the trajectory.
- * @param target, Endpoint of the trajectory.
+ * @param origin, Startposition of the trajectory in voxels.
+ * @param target, Endpoint of the trajectory in voxels.
  * @param accuracy, Accuracy modifier.
  * @param keepRange, Whether range affects accuracy. Default = false.
  * @param targetTile, Tile of target. Default = 0.
@@ -786,28 +786,39 @@ void Projectile::applyAccuracy(
 	if (_action.type == BA_HIT)
 		maxRange = 45.0; // up to 2 tiles diagonally (as in the case of reaper v reaper)
 
-	if (Options::getBool("battleUFOExtenderAccuracy")
-		&& _action.type != BA_THROW
-		&& _action.type != BA_HIT)
+// Wb newer:
+	if (_action.type != BA_THROW && _action.type != BA_HIT)
 	{
-		int penaltyDistance = Options::getInt("extenderAccuracyAimedDistance");
+		double modifier = 0.0;
+		int upperLimit = weapon->getAimRange();
+		int lowerLimit = weapon->getMinRange();
 
-		if (_action.type == BA_AUTOSHOT)
+
+		if (Options::getBool("battleUFOExtenderAccuracy")
 		{
-			penaltyDistance = Options::getInt("extenderAccuracyAutoDistance");
-		}
-		else if (_action.type == BA_SNAPSHOT)
-		{
-			penaltyDistance = Options::getInt("extenderAccuracySnapDistance");
+
+			if (_action.type == BA_AUTOSHOT)
+			{
+				upperLimit = weapon->getAutoRange();
+			}
+			else if (_action.type == BA_SNAPSHOT)
+			{
+				upperLimit = weapon->getSnapRange();
+			}
 		}
 
-		if (penaltyDistance < targetDist)
+		if (targetDist / 16 < lowerLimit)
 		{
-			accuracy -= (static_cast<double>(Options::getInt("extenderAccuracyDropoff"))
-							* (targetDist - static_cast<double>(penaltyDistance)))
-						/ 100.0;
+			modifier = (weapon->getDropoff() * (lowerLimit - targetDist / 16)) / 100;
 		}
-	}
+		else if (upperLimit < realDistance / 16)
+		{
+			modifier = (weapon->getDropoff() * (targetDist / 16 - upperLimit)) / 100;
+		}
+
+		accuracy = std::max(0.0, accuracy - modifier);
+	} // Wb.end.
+
 
 	if (Options::getBool("battleRangeBasedAccuracy"))
 //kL		&& _action.type != BA_THROW)
@@ -855,8 +866,7 @@ void Projectile::applyAccuracy(
 			default: // throw.
 				baseDeviation += 0.15 / (accuracy - accPenalty + 0.18);
 			break;
-		}
-		// kL_end.
+		} // kL_end.
 
 		// 0.02 is the min angle deviation for best accuracy (+-3s = 0.02 radian).
 //kL		if (baseDeviation < 0.02) baseDeviation = 0.02;

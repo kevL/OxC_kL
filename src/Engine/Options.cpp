@@ -178,12 +178,7 @@ void createDefault()
 	setBool("skipNextTurnScreen", false);
 //kL	setBool("disableAutoEquip", false);
 	setBool("disableAutoEquip", true); // kL
-
 	setBool("battleUFOExtenderAccuracy", false);
-	setInt("extenderAccuracyAimedDistance", 200);
-	setInt("extenderAccuracySnapDistance", 15);
-	setInt("extenderAccuracyAutoDistance", 7);
-	setInt("extenderAccuracyDropoff", 2);
 
 
 	// new battle mode data

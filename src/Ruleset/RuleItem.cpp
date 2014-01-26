@@ -84,7 +84,12 @@ RuleItem::RuleItem(const std::string& type)
 		_flatRate(false),
 		_arcingShot(false),
 		_listOrder(0),
-		_range(0),
+		_maxRange(200),
+		_aimRange(200),
+		_snapRange(15),
+		_autoRange(7),
+		_minRange(0),
+		_dropoff(2),
 		_bulletSpeed(0),
 		_autoShots(3)
 {
@@ -180,7 +185,12 @@ void RuleItem::load(const YAML::Node& node, int modIndex, int listOrder)
 	_flatRate				= node["flatRate"].as<bool>(_flatRate);
 	_arcingShot				= node["arcingShot"].as<bool>(_arcingShot);
 	_listOrder				= node["listOrder"].as<int>(_listOrder);
-	_range					= node["maxRange"].as<int>(_range);
+	_maxRange				= node["maxRange"].as<int>(_maxRange);
+	_aimRange				= node["aimRange"].as<int>(_aimRange);
+	_snapRange				= node["snapRange"].as<int>(_snapRange);
+	_autoRange				= node["autoRange"].as<int>(_autoRange);
+	_minRange				= node["minRange"].as<int>(_minRange);
+	_dropoff				= node["dropoff"].as<int>(_dropoff);
 	_bulletSpeed			= node["bulletSpeed"].as<int>(_bulletSpeed);
 	_autoShots				= node["autoShots"].as<int>(_autoShots);
 
@@ -696,12 +706,57 @@ int RuleItem::getListOrder() const
 }
 
 /**
- * Gets the maximim range of this weapon (0 = unlimited)
+ * Gets the maximum range of this weapon
  * @return The maximum range.
  */
-int RuleItem::getRange() const
+int RuleItem::getMaxRange() const
 {
-	return _range;
+	return _maxRange;
+}
+
+/**
+ * Gets the maximum effective range of this weapon when using Aimed Shot.
+ * @return The maximum range.
+ */
+int RuleItem::getAimRange() const
+{
+	return _aimRange;
+}
+
+/**
+ * Gets the maximim effective range of this weapon for Snap Shot.
+ * @return The maximum range.
+ */
+int RuleItem::getSnapRange() const
+{
+	return _snapRange;
+}
+
+/**
+ * Gets the maximim effective range of this weapon for Auto Shot.
+ * @return The maximum range.
+ */
+int RuleItem::getAutoRange() const
+{
+	return _autoRange;
+}
+
+/**
+ * Gets the minimum effective range of this weapon.
+ * @return The minimum effective range.
+ */
+int RuleItem::getMinRange() const
+{
+	return _minRange;
+}
+
+/**
+ * Gets the accuracy dropoff value of this weapon.
+ * @return The per-tile dropoff.
+ */
+int RuleItem::getDropoff() const
+{
+	return _dropoff;
 }
 
 /**
