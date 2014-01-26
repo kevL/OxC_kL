@@ -57,20 +57,14 @@ private:
 		xBeforeMouseScrolling,
 		yBeforeMouseScrolling;
 
-	Camera
-		* _camera;
-	Game
-		* _game;
-	SavedBattleGame
-		* _battleGame;
-	SurfaceSet
-		* _set;
+	Camera* _camera;
+	Game* _game;
+	SavedBattleGame* _battleGame;
+	SurfaceSet* _set;
 
 	// these two are required for right-button scrolling on the minimap
-	Position
-		posBeforeMouseScrolling;
-	Uint32
-		mouseScrollingStartTime;
+	Position posBeforeMouseScrolling;
+	Uint32 mouseScrollingStartTime;
 
 	/// Handles pressing on the MiniMap.
 	void mousePress(Action* action, State* state);

@@ -32,9 +32,9 @@ namespace OpenXcom
  */
 enum ScrollType
 {
-	SCROLL_TRIGGER,
-	SCROLL_AUTO,
-	SCROLL_DRAG
+	SCROLL_TRIGGER,	// 0
+	SCROLL_AUTO,	// 1
+	SCROLL_DRAG		// 2
 };
 
 
@@ -43,9 +43,9 @@ enum ScrollType
  */
 enum KeyboardType
 {
-	KEYBOARD_ON,
-	KEYBOARD_VIRTUAL,
-	KEYBOARD_OFF
+	KEYBOARD_ON,		// 0
+	KEYBOARD_VIRTUAL,	// 1
+	KEYBOARD_OFF		// 2
 };
 
 
@@ -55,42 +55,52 @@ enum KeyboardType
  */
 namespace Options
 {
-	/// Restores default options.
-	void createDefault();
-	/// Initializes the options settings.
-	bool init(int argc, char** args);
-	/// Loads options from YAML.
-	void load(const std::string &filename = "options");
-	/// Saves options to YAML.
-	void save(const std::string &filename = "options");
-	/// Gets the game's data folder.
-	std::string getDataFolder();
-	/// Sets the game's data folder.
-	void setDataFolder(const std::string &folder);
-	/// Gets the game's data list.
-	std::vector<std::string> *getDataList();
-	/// Gets the game's user folder.
-	std::string getUserFolder();
-	/// Sets the game's data, user and config folders.
-	void setFolders();
-	/// Update game options from config file and command line.
-	void updateOptions();
-	/// Gets a string option.
-	std::string getString(const std::string& id);
-	/// Gets an integer option.
-	int getInt(const std::string& id);
-	/// Gets a boolean option.
-	bool getBool(const std::string& id);
-	/// Sets a string option.
-	void setString(const std::string& id, const std::string& value);
-	/// Sets an integer option.
-	void setInt(const std::string& id, int value);
-	/// Sets a boolean option.
-	void setBool(const std::string& id, bool value);
-	/// Gets the list of rulesets to use.
-	std::vector<std::string> getRulesets();
-	/// Gets the list of rulesets to use.
-	std::vector<std::string> getPurchaseExclusions();
+
+/// Restores default options.
+void createDefault();
+/// Initializes the options settings.
+bool init(
+		int argc,
+		char** args);
+/// Loads options from YAML.
+void load(const std::string& filename = "options");
+/// Saves options to YAML.
+void save(const std::string& filename = "options");
+/// Gets the game's data folder.
+std::string getDataFolder();
+/// Sets the game's data folder.
+void setDataFolder(const std::string& folder);
+/// Gets the game's data list.
+std::vector<std::string>* getDataList();
+/// Gets the game's user folder.
+std::string getUserFolder();
+/// Sets the game's data, user and config folders.
+void setFolders();
+/// Update game options from config file and command line.
+void updateOptions();
+/// Gets a string option.
+std::string getString(const std::string& id);
+/// Gets an integer option.
+int getInt(const std::string& id);
+/// Gets a boolean option.
+bool getBool(const std::string& id);
+/// Sets a string option.
+void setString(
+		const std::string& id,
+		const std::string& value);
+/// Sets an integer option.
+void setInt(
+		const std::string& id,
+		int value);
+/// Sets a boolean option.
+void setBool(
+		const std::string& id,
+		bool value);
+/// Gets the list of rulesets to use.
+std::vector<std::string> getRulesets();
+/// Gets the list of rulesets to use.
+std::vector<std::string> getPurchaseExclusions();
+
 }
 
 }

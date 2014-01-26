@@ -86,15 +86,13 @@ MiniMapView::MiniMapView(
  */
 void MiniMapView::draw()
 {
-	int _startX = _camera->getCenterPosition().x - ((getWidth() / CELL_WIDTH) / 2);
-	int _startY = _camera->getCenterPosition().y - ((getHeight() / CELL_HEIGHT) / 2);
+	int
+		_startX = _camera->getCenterPosition().x - ((getWidth() / CELL_WIDTH) / 2),
+		_startY = _camera->getCenterPosition().y - ((getHeight() / CELL_HEIGHT) / 2);
 
 	InteractiveSurface::draw();
 
-	if (!_set)
-	{
-		return;
-	}
+	if (!_set) return;
 
 	SDL_Rect current;
 	current.x = current.y = 0;
@@ -103,7 +101,6 @@ void MiniMapView::draw()
 	drawRect(&current, 0);
 
 	this->lock();
-
 	for (int
 			lvl = 0;
 			lvl <= _camera->getCenterPosition().z;
@@ -189,7 +186,6 @@ void MiniMapView::draw()
 			py++;
 		}
 	}
-
 	this->unlock();
 
 
@@ -349,7 +345,10 @@ void MiniMapView::mouseClick(Action* action, State* state)
 		// center the camera on this new position
 		int newX = _camera->getCenterPosition().x + xOff;
 		int newY = _camera->getCenterPosition().y + yOff;
-		_camera->centerOnPosition(Position(newX, newY, _camera->getViewLevel()));
+		_camera->centerOnPosition(Position(
+										newX,
+										newY,
+										_camera->getViewLevel()));
 
 		_redraw = true;
 	}
@@ -411,8 +410,10 @@ void MiniMapView::mouseOver(Action* action, State* state)
 									|| std::abs(totalMouseMoveY) > _battleGame->getDragPixelTolerance();
 
 		// Calculate the move
-		int newX;
-		int newY;
+		int
+			newX,
+			newY;
+
 		if (_battleGame->isDragInverted())
 		{
 			mouseScrollX += action->getDetails()->motion.xrel;
@@ -490,9 +491,7 @@ void MiniMapView::animate()
 {
 	_frame++;
 	if (_frame > MAX_FRAME)
-	{
 		_frame = 0;
-	}
 
 	_redraw = true;
 }

@@ -95,8 +95,7 @@ private:
 	ResourcePack* _res;
 	SavedBattleGame* _save;
 	Surface* _arrow;
-	Text
-		* _txtAccuracy;
+	Text* _txtAccuracy;
 	Timer
 		* _scrollMouseTimer,
 		* _scrollKeyTimer;

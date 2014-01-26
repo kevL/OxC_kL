@@ -84,12 +84,16 @@ OptionsAdvancedState::OptionsAdvancedState(
 	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& OptionsAdvancedState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)& OptionsAdvancedState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& OptionsAdvancedState::btnOkClick,
+					(SDLKey)Options::getInt("keyOk"));
 
 	_btnCancel->setColor(Palette::blockOffset(8)+5);
 	_btnCancel->setText(tr("STR_CANCEL"));
 	_btnCancel->onMouseClick((ActionHandler)& OptionsAdvancedState::btnCancelClick);
-	_btnCancel->onKeyboardPress((ActionHandler)& OptionsAdvancedState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnCancel->onKeyboardPress(
+					(ActionHandler)& OptionsAdvancedState::btnCancelClick,
+					(SDLKey)Options::getInt("keyCancel"));
 	
 	_txtDescription->setColor(Palette::blockOffset(8)+10);
 	_txtDescription->setWordWrap(true);
@@ -106,6 +110,7 @@ OptionsAdvancedState::OptionsAdvancedState(
 	_settingBoolSet.push_back(std::pair<std::string, bool>("battleAutoEnd", false));
 	_settingBoolSet.push_back(std::pair<std::string, bool>("battleInstantGrenade", false));
 	_settingBoolSet.push_back(std::pair<std::string, bool>("battleNotifyDeath", false));
+	_settingBoolSet.push_back(std::pair<std::string, bool>("battleRangeBasedAccuracy", false));
 	_settingBoolSet.push_back(std::pair<std::string, bool>("battleUFOExtenderAccuracy", false));
 	_settingBoolSet.push_back(std::pair<std::string, bool>("canManufactureMoreItemsPerHour", false));
 	_settingBoolSet.push_back(std::pair<std::string, bool>("canTransferCraftsWhileAirborne", false));
@@ -128,6 +133,7 @@ OptionsAdvancedState::OptionsAdvancedState(
 
 	_boolQuantity = _settingBoolSet.size();
 	int sel = 0;
+
 	for (std::vector<std::pair<std::string, bool>>::iterator
 			i = _settingBoolSet.begin();
 			i != _settingBoolSet.end();
@@ -135,9 +141,16 @@ OptionsAdvancedState::OptionsAdvancedState(
 	{
 		std::string settingName = (*i).first;
 		(*i).second = Options::getBool(settingName);
-		std::wstring setting =  (*i).second ? tr("STR_YES").c_str() : tr("STR_NO").c_str();
-		transform(settingName.begin(), settingName.end(), settingName.begin(), toupper);
-		_lstOptions->addRow(2, tr("STR_" + settingName).c_str(), setting.c_str());
+		std::wstring setting = (*i).second? tr("STR_YES").c_str(): tr("STR_NO").c_str();
+		transform(
+				settingName.begin(),
+				settingName.end(),
+				settingName.begin(),
+				toupper);
+		_lstOptions->addRow(
+						2,
+						tr("STR_" + settingName).c_str(),
+						setting.c_str());
 
 		++sel;
 	}
@@ -154,17 +167,22 @@ OptionsAdvancedState::OptionsAdvancedState(
 	{
 		std::string settingName = (*i).first;
 		(*i).second = Options::getInt(settingName);
+
 		std::wstringstream ss;
 		if (i->first == "battleNewPreviewPath")
-		{
 			ss << updatePathString(sel - _settingBoolSet.size()).c_str();
-		}
 		else
-		{
 			ss << i->second;
-		}
-		transform(settingName.begin(), settingName.end(), settingName.begin(), toupper);
-		_lstOptions->addRow(2, tr("STR_" + settingName).c_str(), ss.str().c_str());
+
+		transform(
+				settingName.begin(),
+				settingName.end(),
+				settingName.begin(),
+				toupper);
+		_lstOptions->addRow(
+						2,
+						tr("STR_" + settingName).c_str(),
+						ss.str().c_str());
 
 		++sel;
 	}
@@ -240,62 +258,54 @@ void OptionsAdvancedState::lstOptionsPress(Action* action)
 		size_t intSel = sel - _boolQuantity;
 		int increment = 1;
 		if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
-		{
 			increment = -1;
-		}
 
 		std::wstringstream ss;
+
 		switch (intSel)
 		{
 			case 0: // pathfinding setting
 				_settingIntSet.at(intSel).second += increment;
+
 				if (_settingIntSet.at(intSel).second == 4)
-				{
 					_settingIntSet.at(intSel).second = 0;
-				}
 
 				if (_settingIntSet.at(intSel).second == -1)
-				{
 					_settingIntSet.at(intSel).second = 3;
-				}
 
 				ss << updatePathString(intSel).c_str();
 			break;
 			case 1: // explosion height
 				_settingIntSet.at(intSel).second += increment;
+
 				if (_settingIntSet.at(intSel).second == 4)
-				{
 					_settingIntSet.at(intSel).second = 0;
-				}
 
 				if (_settingIntSet.at(intSel).second == -1)
-				{
 					_settingIntSet.at(intSel).second = 3;
-				}
+
 				ss << _settingIntSet.at(intSel).second;
 			break;
 			case 2: // autosave
 				_settingIntSet.at(intSel).second = ++_settingIntSet.at(intSel).second %4;
+
 				ss << _settingIntSet.at(intSel).second;
 			break;
 			case 3: // frame skip
 				_settingIntSet.at(intSel).second += increment;
 
 				if (_settingIntSet.at(intSel).second > 10)
-				{
 					_settingIntSet.at(intSel).second = 0;
-				}
 
 				if (_settingIntSet.at(intSel).second < 0)
-				{
 					_settingIntSet.at(intSel).second = 10;
-				}
 
 				ss << _settingIntSet.at(intSel).second;
 			break;
 
 			default:
 				_settingIntSet.at(intSel).second += increment;
+
 				ss << _settingIntSet.at(intSel).second;
 			break;
 		}
@@ -316,15 +326,15 @@ void OptionsAdvancedState::lstOptionsMouseOver(Action*)
 	std::string settingName;
 
 	if (sel < _boolQuantity)
-	{
 		settingName = _settingBoolSet.at(sel).first;
-	}
 	else
-	{
 		settingName = _settingIntSet.at(sel - _boolQuantity).first;
-	}
 
-	transform(settingName.begin(), settingName.end(), settingName.begin(), toupper);
+	transform(
+			settingName.begin(),
+			settingName.end(),
+			settingName.begin(),
+			toupper);
 	ss << "STR_" << settingName.c_str() << "_DESC";
 	_txtDescription->setText(tr(ss.str()).c_str());
 }

@@ -82,8 +82,10 @@ void createDefault()
 	setInt("keyboardMode", KEYBOARD_ON);
 #endif
 
-	setBool("anytimePsiTraining", false);
-	setBool("playIntro", true);
+//kL	setBool("anytimePsiTraining", false);
+	setBool("anytimePsiTraining", true); // kL
+//kL	setBool("playIntro", true);
+	setBool("playIntro", false); // kL
 	setInt("maxFrameSkip", 0);
 	setBool("traceAI", false);
 	setBool("sneakyAI", false);
@@ -117,13 +119,15 @@ void createDefault()
 	setInt("battleXcomSpeed", 30); // 40, 30, 20, 10, 5, 1
 	setInt("battleAlienSpeed", 30); // 40, 30, 20, 10, 5, 1
 	setBool("battleInstantGrenade", false); // set to true if you want to play with the alternative grenade handling
-	setInt("battleExplosionHeight", 0); //0, 1, 2, 3
+//kL	setInt("battleExplosionHeight", 0); // 0, 1, 2, 3
+	setInt("battleExplosionHeight", 2); // kL: 0, 1, 2, 3
 	setInt("battleNewPreviewPath", 0); // requires double-click to confirm moves 0 = none, 1 = arrows, 2 = numbers, 3 = full
 //kL	setBool("battleRangeBasedAccuracy", false);
 	setBool("battleRangeBasedAccuracy", true); // kL
 	setBool("fpsCounter", false);
 	setBool("craftLaunchAlways", false);
-	setBool("globeSeasons", false);
+//kL	setBool("globeSeasons", false);
+	setBool("globeSeasons", true); // kL
 	setBool("globeAllRadarsOnBaseBuild", true);
 	setBool("allowChangeListValuesByMouseWheel", false); // It applies only for lists, not for scientists/engineers screen
 	setInt("autosave", 0);
@@ -138,7 +142,7 @@ void createDefault()
 	setBool("canSellLiveAliens", true); // kL
 	setBool("canTransferCraftsWhileAirborne", false); // When the craft can reach the destination base with its fuel
 //kL	setBool("canManufactureMoreItemsPerHour", false);
-	setBool("canManufactureMoreItemsPerHour", truee); // kL
+	setBool("canManufactureMoreItemsPerHour", true); // kL
 //kL	setBool("customInitialBase", false);
 	setBool("customInitialBase", true); // kL
 //kL	setBool("aggressiveRetaliation", false);
@@ -165,11 +169,11 @@ void createDefault()
 //kL	setBool("battleTooltips", true);
 	setBool("battleTooltips", false); // kL
 	setBool("battleHairBleach", true);
-    setBool("keepAspectRatio", false);
-    setBool("cursorInBlackBandsInFullscreen", false);
-//kL    setBool("cursorInBlackBandsInWindow", true);
-    setBool("cursorInBlackBandsInWindow", false); // kL
-    setBool("cursorInBlackBandsInBorderlessWindow", false);
+	setBool("keepAspectRatio", false);
+	setBool("cursorInBlackBandsInFullscreen", false);
+//kL	setBool("cursorInBlackBandsInWindow", true);
+	setBool("cursorInBlackBandsInWindow", false); // kL
+	setBool("cursorInBlackBandsInBorderlessWindow", false);
 	setBool("newSeedOnLoad", false);
 	setBool("skipNextTurnScreen", false);
 //kL	setBool("disableAutoEquip", false);
@@ -319,7 +323,9 @@ void createDefault()
  * @param argc Number of arguments.
  * @param args Array of argument strings.
  */
-void loadArgs(int argc, char** args)
+void loadArgs(
+		int argc,
+		char** args)
 {
 	for (int i = 1; i < argc; ++i)
 	{
@@ -378,7 +384,9 @@ void loadArgs(int argc, char** args)
  * @param argc Number of arguments.
  * @param args Array of argument strings.
  */
-bool showHelp(int argc, char** args)
+bool showHelp(
+		int argc,
+		char** args)
 {
 	std::ostringstream help;
 	help << "OpenXcom v" << OPENXCOM_VERSION_SHORT << std::endl;
@@ -424,7 +432,9 @@ bool showHelp(int argc, char** args)
  * @param args Array of argument strings.
  * @return Was initialized.
  */
-bool init(int argc, char** args)
+bool init(
+		int argc,
+		char** args)
 {
 	if (showHelp(argc, args))
 		return false;
@@ -469,18 +479,18 @@ bool init(int argc, char** args)
 void setFolders()
 {
 	_dataList = CrossPlatform::findDataFolders();
-    if (_dataFolder != "")
-    {
+	if (_dataFolder != "")
+	{
 		_dataList.insert(_dataList.begin(), _dataFolder);
-    }
+	}
 
 	if (_userFolder == "")
-    {
-        std::vector<std::string> user = CrossPlatform::findUserFolders();
-        _configFolder = CrossPlatform::findConfigFolder();
+	{
+		std::vector<std::string> user = CrossPlatform::findUserFolders();
+		_configFolder = CrossPlatform::findConfigFolder();
 
 		// Look for an existing user folder
-        for (std::vector<std::string>::iterator i = user.begin(); i != user.end(); ++i)
+		for (std::vector<std::string>::iterator i = user.begin(); i != user.end(); ++i)
 		{
 			if (CrossPlatform::folderExists(*i))
 			{
@@ -532,18 +542,18 @@ void updateOptions()
 		save();
 	}
 
-    // now apply options set on the command line, overriding defaults and those loaded from config file
-    for (std::map<std::string, std::string>::const_iterator it = _commandLineOptions.begin(); it != _commandLineOptions.end(); ++it)
-    {
-        _options[it->first] = it->second;
-    }
+	// now apply options set on the command line, overriding defaults and those loaded from config file
+	for (std::map<std::string, std::string>::const_iterator it = _commandLineOptions.begin(); it != _commandLineOptions.end(); ++it)
+	{
+		_options[it->first] = it->second;
+	}
 }
 
 /**
  * Loads options from a YAML file.
  * @param filename YAML filename.
  */
-void load(const std::string &filename)
+void load(const std::string& filename)
 {
 	std::string s = _configFolder + filename + ".cfg";
 
@@ -568,7 +578,7 @@ void load(const std::string &filename)
  * Saves options to a YAML file.
  * @param filename YAML filename.
  */
-void save(const std::string &filename)
+void save(const std::string& filename)
 {
 	std::string s = _configFolder + filename + ".cfg";
 	std::ofstream sav(s.c_str());
@@ -606,7 +616,7 @@ std::string getDataFolder()
  * and X-Com files are loaded from.
  * @param folder Full path to Data folder.
  */
-void setDataFolder(const std::string &folder)
+void setDataFolder(const std::string& folder)
 {
 	_dataFolder = folder;
 }
@@ -615,7 +625,7 @@ void setDataFolder(const std::string &folder)
  * Returns the game's list of possible Data folders.
  * @return List of Data paths.
  */
-std::vector<std::string> *getDataList()
+std::vector<std::string>* getDataList()
 {
 	return &_dataList;
 }
@@ -678,7 +688,9 @@ bool getBool(const std::string& id)
  * @param id Option ID.
  * @param value New option value.
  */
-void setString(const std::string& id, const std::string& value)
+void setString(
+		const std::string& id,
+		const std::string& value)
 {
 	_options[id] = value;
 }
@@ -688,7 +700,9 @@ void setString(const std::string& id, const std::string& value)
  * @param id Option ID.
  * @param value New option value.
  */
-void setInt(const std::string& id, int value)
+void setInt(
+		const std::string& id,
+		int value)
 {
 	std::ostringstream ss;
 	ss << std::dec << value;
@@ -700,7 +714,9 @@ void setInt(const std::string& id, int value)
  * @param id Option ID.
  * @param value New option value.
  */
-void setBool(const std::string& id, bool value)
+void setBool(
+		const std::string& id,
+		bool value)
 {
 	std::ostringstream ss;
 	ss << std::boolalpha << value;

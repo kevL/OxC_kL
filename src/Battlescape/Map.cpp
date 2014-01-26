@@ -1097,46 +1097,74 @@ void Map::drawTerrain(Surface* surface)
 									screenPosition.y,
 									0);
 
-							// Wb_begin: 140125, UFOExtender Accuracy.
-							if (_cursorType == CT_AIM
-								&& Options::getBool("battleUFOExtenderAccuracy"))
+							// UFOExtender Accuracy.
+/*kL							if (_cursorType == CT_AIM)
 							{
 								BattleAction* action = _save->getBattleGame()->getCurrentAction();
+								int accuracy = static_cast<int>(
+													_save->getSelectedUnit()->getFiringAccuracy(
+																						action->type,
+																						action->weapon)
+																					* 100.0);
+//kL								std::stringstream ss;
+								std::wstringstream ss; // kL
 
-								std::stringstream ss;
-								int accuracy = (int)(_save->getSelectedUnit()->getFiringAccuracy(action->type, action->weapon) * 100);
-								int distance = _save->getTileEngine()->distance(Position (itX, itY,itZ), action->actor->getPosition());
-								int penaltyDistance = 0;
-								switch (action->type)
+								if (Options::getBool("battleUFOExtenderAccuracy"))
 								{
-								case BA_AIMEDSHOT:
-									penaltyDistance = Options::getInt("extenderAccuracyAimedDistance");
-									break;
-								case BA_SNAPSHOT:
-									penaltyDistance = Options::getInt("extenderAccuracySnapDistance");
-									break;
-								case BA_AUTOSHOT:
-									penaltyDistance = Options::getInt("extenderAccuracyAutoDistance");
-									break;
-								default:
-									break;
-								}
-								if (distance > penaltyDistance)
-								{
-									accuracy -= (distance - penaltyDistance) * Options::getInt("extenderAccuracyDropoff");
-									_txtAccuracy->setColor(Palette::blockOffset(1)-1);
-								}
+//									BattleAction* action = _save->getBattleGame()->getCurrentAction();
+
+									int
+										penaltyDistance = 0,
+										distance = _save->getTileEngine()->distance(
+																				Position(
+																						itX,
+																						itY,
+																						itZ),
+																				action->actor->getPosition());
+
+									switch (action->type)
+									{
+										case BA_AIMEDSHOT:
+											penaltyDistance = Options::getInt("extenderAccuracyAimedDistance");
+										break;
+										case BA_SNAPSHOT:
+											penaltyDistance = Options::getInt("extenderAccuracySnapDistance");
+										break;
+										case BA_AUTOSHOT:
+											penaltyDistance = Options::getInt("extenderAccuracyAutoDistance");
+										break;
+
+										default:
+										break;
+									}
+
+									if (distance > penaltyDistance)
+									{
+										accuracy -= (distance - penaltyDistance) * Options::getInt("extenderAccuracyDropoff");
+										_txtAccuracy->setColor(Palette::blockOffset(1)-1);
+									}
+									else
+										_txtAccuracy->setColor(Palette::blockOffset(4)-1);
+
+									ss << accuracy;
+//kL									ss << "%";
+//kL									_txtAccuracy->setText(Language::utf8ToWstr(ss.str().c_str()).c_str());
+									_txtAccuracy->setText(ss.str()); // kL
+								} // _end.
 								else
 								{
 									_txtAccuracy->setColor(Palette::blockOffset(4)-1);
+									ss << accuracy;
+									_txtAccuracy->setText(ss.str());
 								}
-								ss << accuracy;
-								ss << "%";
-								_txtAccuracy->setText(Language::utf8ToWstr(ss.str().c_str()).c_str());
+
 								_txtAccuracy->draw();
-								_txtAccuracy->blitNShade(surface, screenPosition.x, screenPosition.y, 0);
-							}
-							// Wb_end.
+								_txtAccuracy->blitNShade(
+													surface,
+													screenPosition.x,
+													screenPosition.y,
+													0);
+							} */
 						}
 						else if (_camera->getViewLevel() > itZ)
 						{
