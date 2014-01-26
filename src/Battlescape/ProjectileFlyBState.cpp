@@ -248,10 +248,11 @@ void ProjectileFlyBState::init()
 
 				return;
 			}
-			else if (_parent->getTileEngine()->distance(
-													_action.actor->getPosition(),
-													_action.target)
-												> weapon->getRules()->getMaxRange())
+			else if (weapon->getRules()->getMaxRange() > 0
+				&& _parent->getTileEngine()->distance(
+												_action.actor->getPosition(),
+												_action.target)
+											> weapon->getRules()->getMaxRange())
 			{
 				Log(LOG_INFO) << ". . . out of range, EXIT";
 

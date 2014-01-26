@@ -34,10 +34,12 @@ class NumberText
 	:
 		public Surface
 {
+
 private:
-	unsigned int _value;
+	unsigned _value;
 	Surface* _chars[10];
 	Uint8 _color;
+
 
 	public:
 		/// Creates a new number text with the specified size and position.
@@ -50,13 +52,15 @@ private:
 		~NumberText();
 
 		/// Sets the number text's value.
-		void setValue(unsigned int value);
+		void setValue(unsigned value);
 		/// Gets the number text's value.
-		unsigned int getValue() const;
+		unsigned getValue() const;
+
 		/// Sets the number text's color.
 		void setColor(Uint8 color);
 		/// Gets the number text's color.
 		Uint8 getColor() const;
+
 		/// Sets the number text's palette.
 		void setPalette(
 				SDL_Color* colors,

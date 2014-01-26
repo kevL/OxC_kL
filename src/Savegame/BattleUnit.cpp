@@ -1742,26 +1742,20 @@ double BattleUnit::getFiringAccuracy(
 	//Log(LOG_INFO) << "BattleUnit::getFiringAccuracy(), unitID " << getId() << " /  getStats()->firing" << getStats()->firing;
 
 	if (actionType == BA_HIT) // quick out.
-	{
 		return static_cast<double>(item->getRules()->getAccuracyMelee()) / 100.0;
 //		return static_cast<double>(item->getRules()->getAccuracyMelee()) / 100.0 * getAccuracyModifier(); // kL
-	}
 
 
 	double weaponAcc = 0.0;
 	if (actionType == BA_AIMEDSHOT
-		|| actionType == BA_LAUNCH)
+		|| actionType == BA_LAUNCH) // is this needed right now.
 	{
 		weaponAcc = item->getRules()->getAccuracyAimed();
 	}
 	else if (actionType == BA_AUTOSHOT)
-	{
 		weaponAcc = item->getRules()->getAccuracyAuto();
-	}
 	else
-	{
 		weaponAcc = item->getRules()->getAccuracySnap();
-	}
 
 	double ret = static_cast<double>(getStats()->firing) / 100.0;
 	ret *= weaponAcc / 100.0;

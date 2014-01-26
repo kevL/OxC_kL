@@ -40,10 +40,10 @@ NumberText::NumberText(
 		int y)
 	:
 		Surface(
-				width,
-				height,
-				x,
-				y),
+			width,
+			height,
+			x,
+			y),
 		_value(0),
 		_color(0)
 {
@@ -203,16 +203,14 @@ NumberText::~NumberText()
 			i = 0;
 			i < 10;
 			++i)
-	{
 		delete _chars[i];
-	}
 }
 
 /**
  * Changes the value used to render the number.
  * @param value, Number value.
  */
-void NumberText::setValue(unsigned int value)
+void NumberText::setValue(unsigned value)
 {
 	_value = value;
 
@@ -223,7 +221,7 @@ void NumberText::setValue(unsigned int value)
  * Returns the value used to render the number.
  * @return, Number value.
  */
-unsigned int NumberText::getValue() const
+unsigned NumberText::getValue() const
 {
 	return _value;
 }
@@ -268,12 +266,10 @@ void NumberText::setPalette(
 			i = 0;
 			i < 10;
 			++i)
-	{
 		_chars[i]->setPalette(
 							colors,
 							firstcolor,
 							ncolors);
-	}
 }
 
 /**

@@ -124,10 +124,8 @@ Map::Map(
 
 	_previewSetting = Options::getInt("battleNewPreviewPath");
 
-	if (Options::getBool("traceAI"))
-	{
-		_previewSetting = 3; // turn everything on because we want to see the markers.
-	}
+	// turn everything on because we want to see the markers.
+	if (Options::getBool("traceAI")) _previewSetting = 3;
 
 	_res = _game->getResourcePack();
 	_spriteWidth = _res->getSurfaceSet("BLANKS.PCK")->getFrame(0)->getWidth();
@@ -160,14 +158,16 @@ Map::Map(
 						_scrollMouseTimer,
 						_scrollKeyTimer);
 
-	_txtAccuracy = new Text(24, 9, 0, 0);
+/*kL	_txtAccuracy = new Text(24, 9, 0, 0);
 	_txtAccuracy->setSmall();
 	_txtAccuracy->setPalette(_game->getScreen()->getPalette());
 	_txtAccuracy->setHighContrast(true);
 	_txtAccuracy->initText(
 						_res->getFont("FONT_BIG"),
 						_res->getFont("FONT_SMALL"),
-						_game->getLanguage());
+						_game->getLanguage()); */
+	_txtAccuracy = new NumberText(24, 9, 0, 0);					// kL
+	_txtAccuracy->setPalette(_game->getScreen()->getPalette());	// kL
 }
 
 /**
@@ -205,6 +205,7 @@ void Map::init()
 
 	_arrow = new Surface(9, 9);
 	_arrow->setPalette(this->getPalette());
+
 	_arrow->lock();
 	for (int
 			y = 0;
@@ -582,7 +583,7 @@ void Map::drawTerrain(Surface* surface)
 
 	if (!_waypoints.empty()
 		|| (pathfinderTurnedOn
-			&& _previewSetting >= 2))
+			&& _previewSetting > 1))
 	{
 		_numWaypid = new NumberText(15, 15, 20, 30);
 		_numWaypid->setPalette(getPalette());
@@ -1100,32 +1101,32 @@ void Map::drawTerrain(Surface* surface)
 									0);
 
 							// UFO extender accuracy: display adjusted accuracy value on crosshair.
-/*kL							if (_cursorType == CT_AIM)
+							if (_cursorType == CT_AIM) // kL_note: Gotta account for Throwing in here. (use throwRange.. for color, & calc. acc.)
 							{
 								BattleAction* action = _save->getBattleGame()->getCurrentAction();
-								RuleItem* weapon = action->weapon->getRules();
 								int accuracy = static_cast<int>(
 													_save->getSelectedUnit()->getFiringAccuracy(
 																						action->type,
 																						action->weapon)
 																					* 100.0);
+								Uint8 color = 51; //Palette::blockOffset(3)+3; // kL
 //kL								std::stringstream ss;
-								std::wstringstream ss; // kL
+//								std::wstringstream ss; // kL
 
-								if (Options::getBool("battleUFOExtenderAccuracy"))
+//kL_TEST:								if (Options::getBool("battleUFOExtenderAccuracy"))
 								{
 //									BattleAction* action = _save->getBattleGame()->getCurrentAction();
+									RuleItem* weapon = action->weapon->getRules();
 
 									int
-										penaltyDistance = 0,
+										upperLimit = 200,
+										lowerLimit = weapon->getMinRange(),
 										distance = _save->getTileEngine()->distance(
 																				Position(
 																						itX,
 																						itY,
 																						itZ),
-																				action->actor->getPosition()),
-										upperLimit = 200,
-										lowerLimit = weapon->getMinRange();
+																				action->actor->getPosition());
 
 									switch (action->type)
 									{
@@ -1144,36 +1145,44 @@ void Map::drawTerrain(Surface* surface)
 									}
 
 									// first, assume shot is adjusted and set the text amber.
-									_txtAccuracy->setColor(Palette::blockOffset(1)-1);
+//kL									_txtAccuracy->setColor(Palette::blockOffset(1)-1);
+//kL									color = 15; //Palette::blockOffset(1)-1; // kL
 
 									if (distance > upperLimit)
+									{
 										accuracy -= (distance - upperLimit) * weapon->getDropoff();
-									else if (distance < lowerLimit)
-										accuracy -= (lowerLimit - distance) * weapon->getDropoff();
-									else
-										// no adjustment made: set it to green.
+										color = 19; //Palette::blockOffset(1)+3; // kL
 									}
+									else if (distance < lowerLimit)
+									{
+										accuracy -= (lowerLimit - distance) * weapon->getDropoff();
+										color = 19; //Palette::blockOffset(1)+3; // kL
+									}
+//kL									else // no adjustment made: set it to green.
+//kL										_txtAccuracy->setColor(Palette::blockOffset(4)-1);
 
-									// zero accuracy or out of range: set it red.
-									if (accuracy < 1
+									if (accuracy < 1 // zero accuracy or out of range: set it red.
 										|| distance > weapon->getMaxRange())
 									{
 										accuracy = 0;
-										_txtAccuracy->setColor(Palette::blockOffset(2)-1);
+//kL										_txtAccuracy->setColor(Palette::blockOffset(2)-1);
+										color = 35; //Palette::blockOffset(2)+3;
 									}
 
-									ss << accuracy;
+//kL									ss << accuracy;
 //kL									ss << "%";
-									_txtAccuracy->setText(Language::utf8ToWstr(ss.str().c_str()).c_str());
+//kL									_txtAccuracy->setText(Language::utf8ToWstr(ss.str().c_str()).c_str());
 								}
 
+								_txtAccuracy->setValue(static_cast<unsigned>(accuracy));
+								_txtAccuracy->setColor(color);
 								_txtAccuracy->draw();
 								_txtAccuracy->blitNShade(
 													surface,
 													screenPosition.x,
 													screenPosition.y,
 													0);
-							} */
+							}
 						}
 						else if (_camera->getViewLevel() > itZ)
 						{

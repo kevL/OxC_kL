@@ -36,12 +36,13 @@ class BattlescapeMessage;
 class BattleUnit;
 class Camera;
 class Explosion;
+class NumberText; // kL
 class Position;
 class Projectile;
 class ResourcePack;
 class SavedBattleGame;
 class Surface;
-class Text;
+//kL class Text;
 class Timer;
 
 
@@ -91,11 +92,12 @@ private:
 	Camera* _camera;
 	CursorType _cursorType;
 	Game* _game;
+	NumberText* _txtAccuracy; // kL
 	Projectile* _projectile;
 	ResourcePack* _res;
 	SavedBattleGame* _save;
 	Surface* _arrow;
-	Text* _txtAccuracy;
+//kL	Text* _txtAccuracy;
 	Timer
 		* _scrollMouseTimer,
 		* _scrollKeyTimer;

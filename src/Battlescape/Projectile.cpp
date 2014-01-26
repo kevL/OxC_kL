@@ -83,7 +83,7 @@ Projectile::Projectile(
 		if (_action.type == BA_THROW)
 		{
 			Log(LOG_INFO) << "Create Projectile -> BA_THROW";
-			_speed = _speed * 5 / 7; // kL
+			_speed = _speed * 4 / 7; // kL
 			_sprite =_res->getSurfaceSet("FLOOROB.PCK")->getFrame(getItem()->getRules()->getFloorSprite());
 		}
 		else // ba_SHOOT!! or hit, or spit.... probly Psi-attack also.
@@ -91,8 +91,7 @@ Projectile::Projectile(
 			Log(LOG_INFO) << "Create Projectile -> not BA_THROW";
 			_speed = std::max(
 							1,
-							_speed
-								+ _action.weapon->getRules()->getBulletSpeed());
+							_speed + _action.weapon->getRules()->getBulletSpeed());
 		}
 	}
 }
@@ -785,44 +784,36 @@ void Projectile::applyAccuracy(
 
 	if (_action.type == BA_HIT)
 		maxRange = 45.0; // up to 2 tiles diagonally (as in the case of reaper v reaper)
-
-// Wb newer:
-	if (_action.type != BA_THROW && _action.type != BA_HIT)
+	else if (_action.type != BA_THROW)
 	{
-		double modifier = 0.0;
-		int upperLimit = weapon->getAimRange();
-		int lowerLimit = weapon->getMinRange();
+		RuleItem *weapon = _action.weapon->getRules();
+		int
+			lowerLimit = weapon->getMinRange(),
+			upperLimit = weapon->getAimRange();
 
-
-		if (Options::getBool("battleUFOExtenderAccuracy")
+		if (Options::getBool("battleUFOExtenderAccuracy"))
 		{
-
-			if (_action.type == BA_AUTOSHOT)
-			{
-				upperLimit = weapon->getAutoRange();
-			}
-			else if (_action.type == BA_SNAPSHOT)
-			{
+			if (_action.type == BA_SNAPSHOT)
 				upperLimit = weapon->getSnapRange();
-			}
+			else if (_action.type == BA_AUTOSHOT)
+				upperLimit = weapon->getAutoRange();
 		}
 
-		if (targetDist / 16 < lowerLimit)
-		{
-			modifier = (weapon->getDropoff() * (lowerLimit - targetDist / 16)) / 100;
-		}
-		else if (upperLimit < realDistance / 16)
-		{
-			modifier = (weapon->getDropoff() * (targetDist / 16 - upperLimit)) / 100;
-		}
+		double modifier = 0.0;
+		int targetDist_tSpace = static_cast<int>(targetDist / 16.0);
+		if (targetDist_tSpace < lowerLimit)
+			modifier = static_cast<double>((weapon->getDropoff() * (lowerLimit - targetDist_tSpace)) / 100);
+		else if (upperLimit < targetDist_tSpace)
+			modifier = static_cast<double>((weapon->getDropoff() * (targetDist_tSpace - upperLimit)) / 100);
 
-		accuracy = std::max(0.0, accuracy - modifier);
-	} // Wb.end.
+		accuracy = std::max(
+							0.0,
+							accuracy - modifier);
+	}
 
-
-	if (Options::getBool("battleRangeBasedAccuracy"))
+	if (Options::getBool("battleRangeBasedAccuracy")
+		&& _action.type != BA_HIT)
 //kL		&& _action.type != BA_THROW)
-//kL		&& _action.type != BA_HIT)
 	{
 		double accPenalty = 0.0;
 
@@ -834,7 +825,7 @@ void Projectile::applyAccuracy(
 			if (targetUnit // Shade can be from 0 to 15
 				&& targetUnit->getFaction() == FACTION_HOSTILE)
 			{
-				accPenalty = 0.015 * static_cast<double>(targetTile->getShade());
+				accPenalty = 0.017 * static_cast<double>(targetTile->getShade());
 			}
 
 			// If targetUnit is kneeled, then accuracy reduced by ~6%.
@@ -846,7 +837,7 @@ void Projectile::applyAccuracy(
 			}
 		}
 		else // Shade can be from 0 (day) to 15 (night).
-			accPenalty = 0.015 * static_cast<double>(_save->getGlobalShade());
+			accPenalty = 0.017 * static_cast<double>(_save->getGlobalShade());
 
 		// kL_begin: modify rangedBasedAccuracy (shot-modes).
 		// NOTE: This should be done on the weapons themselves!!!!
@@ -863,8 +854,8 @@ void Projectile::applyAccuracy(
 				baseDeviation += 0.13 / (accuracy - accPenalty + 0.18);
 			break;
 
-			default: // throw.
-				baseDeviation += 0.15 / (accuracy - accPenalty + 0.18);
+			default: // throw. Or hit.
+				baseDeviation += 0.16 / (accuracy - accPenalty + 0.18);
 			break;
 		} // kL_end.
 
@@ -941,6 +932,7 @@ void Projectile::applyAccuracy(
 		double
 			rotation,
 			tilt;
+
 		rotation = atan2(
 					double(target->y - origin.y),
 					double(target->x - origin.x)) * 180.0 / M_PI;

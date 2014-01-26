@@ -114,18 +114,14 @@ std::wstring Text::formatNumber(
 	}
 
 	if (!currency.empty())
-	{
 		ret.insert(
 				0,
 				currency);
-	}
 
 	if (negative)
-	{
 		ret.insert(
 				0,
 				L"-");
-	}
 
 	return ret;
 }
@@ -377,9 +373,7 @@ int Text::getTextWidth() const
 			++i)
 	{
 		if (*i > width)
-		{
 			width = *i;
-		}
 	}
 
 	return width;
@@ -392,9 +386,7 @@ int Text::getTextWidth() const
 void Text::processText()
 {
 	if (_font == 0 || _lang == 0)
-	{
 		return;
-	}
 
 	std::wstring* str = &_text;
 
@@ -447,9 +439,7 @@ void Text::processText()
 		else if ((*str)[c] != 1) // Keep track of the width of the last line and word
 		{
 			if (font->getChar((*str)[c]) == 0)
-			{
 				(*str)[c] = L'?';
-			}
 
 			int charWidth = font->getCharSize((*str)[c]).w;
 			width += charWidth;
@@ -477,13 +467,9 @@ void Text::processText()
 				_lineHeight.push_back(font->getCharSize(L'\n').h);
 
 				if (_lang->getTextWrapping() == WRAP_WORDS)
-				{
 					width = word;
-				}
 				else if (_lang->getTextWrapping() == WRAP_LETTERS)
-				{
 					width = 0;
-				}
 
 				start = true;
 			}
@@ -542,6 +528,7 @@ int Text::getLineX(int line) const
 
 namespace
 {
+
 struct PaletteShift
 {
 	static inline void func(
@@ -571,9 +558,7 @@ void Text::draw()
 	Surface::draw();
 
 	if (_text.empty() || _font == 0)
-	{
 		return;
-	}
 
 	// Show text borders for debugging
 	if (Options::getBool("debugUi"))
@@ -627,24 +612,18 @@ void Text::draw()
 	x = getLineX(line);
 
 	if (_wrap)
-	{
 		s = &_wrappedText;
-	}
 
 	// Set up text color
 	int mult = 1;
 	if (_contrast)
-	{
 		mult = 3;
 //		mult = 4; // kL
-	}
 
 	// Set up text direction
 	int dir = 1;
 	if (_lang->getTextDirection() == DIRECTION_RTL)
-	{
 		dir = -1;
-	}
 
 	// Invert text by inverting the font palette on index 3 (font palettes use indices 1-5)
 	int mid = _invert? 3: 0;
@@ -656,9 +635,7 @@ void Text::draw()
 			++c)
 	{
 		if (Font::isSpace(*c))
-		{
 			x += dir * font->getCharSize(*c).w;
-		}
 		else if (Font::isLinebreak(*c))
 		{
 			line++;
@@ -672,9 +649,7 @@ void Text::draw()
 			}
 		}
 		else if (*c == L'\x01')
-		{
 			color = (color == _color? _color2: _color);
-		}
 		else
 		{
 			if (dir < 0)

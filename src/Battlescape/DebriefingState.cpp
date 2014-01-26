@@ -1081,7 +1081,7 @@ void DebriefingState::prepareDebriefing()
 								addStat(
 										"STR_UFO_POWER_SOURCE",
 										1,
-										25); // kL
+										20); // kL
 							break;
 							case UFO_NAVIGATION:
 								addStat(
