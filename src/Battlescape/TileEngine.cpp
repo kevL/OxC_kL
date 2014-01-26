@@ -4144,6 +4144,7 @@ bool TileEngine::psiAttack(BattleAction* action)
 				calculateFOV(victim->getPosition());
 				calculateUnitLighting();
 				victim->setTimeUnits(victim->getStats()->tu);
+				victim->setEnergy(victim->getStats()->stamina); // kL
 				victim->allowReselect();
 //kL				victim->abortTurn(); // resets unit status to STANDING
 				victim->setStatus(STATUS_STANDING); // kL

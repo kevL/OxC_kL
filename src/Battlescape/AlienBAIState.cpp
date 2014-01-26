@@ -287,9 +287,7 @@ void AlienBAIState::think(BattleAction* action)
 		return;
 	}
 	else
-	{
 		_didPsi = false;
-	}
 
 	bool evaluate = false;
 
@@ -2305,13 +2303,15 @@ bool AlienBAIState::psiAction()
 	else // do it.
 	{
 		_aggroTarget = 0;
+
+		bool noTarget = true;
 		int
 			chance = 0,
 			chance2 = 0;
 
 		int attackStr = static_cast<int>(floor(
 							static_cast<float>(_unit->getStats()->psiStrength * _unit->getStats()->psiSkill) / 50.f));
-		Log(LOG_INFO) << ". . attackStr = " << attackStr;
+		Log(LOG_INFO) << ". . attackStr = " << attackStr << " ID = " << _unit->getId();
 
 		for (std::vector<BattleUnit*>::const_iterator
 				i = _save->getUnits()->begin();
@@ -2345,21 +2345,32 @@ bool AlienBAIState::psiAction()
 					rand = RNG::generate(1, 50);
 
 				Log(LOG_INFO) << ". . . ";
+				Log(LOG_INFO) << ". . . targetID = " << (*i)->getId();
 				Log(LOG_INFO) << ". . . defense = " << defense;
 				Log(LOG_INFO) << ". . . dist = " << dist;
 				Log(LOG_INFO) << ". . . rand = " << rand;
-				Log(LOG_INFO) << ". . . LoS = " << (int)LoS * 50;
+				Log(LOG_INFO) << ". . . LoS = " << (int)LoS * 35;
 
 
 				chance2 = attackStr
 							- defense
 							- dist
 							+ rand
-							+ static_cast<int>(LoS) * 50;
+							+ static_cast<int>(LoS) * 35;
 				Log(LOG_INFO) << ". . . chance2 = " << chance2;
 
-				if (chance2 > chance)
+				if (chance2 == chance
+					&& (RNG::percent(50)
+						|| noTarget))
 				{
+					noTarget = false;
+
+					_aggroTarget = *i;
+				}
+				else if (chance2 > chance)
+				{
+					noTarget = false;
+
 					chance = chance2;
 					_aggroTarget = *i;
 				}
@@ -2367,7 +2378,7 @@ bool AlienBAIState::psiAction()
 		}
 
 		if (!_aggroTarget
-			|| chance < -10
+			|| chance < 0
 			|| RNG::percent(10))
 		{
 			Log(LOG_INFO) << "AlienBAIState::psiAction() EXIT, False : not good.";
@@ -2412,7 +2423,9 @@ bool AlienBAIState::psiAction()
 				panicOdds -= bravery * 2;
 
 			Log(LOG_INFO) << ". . panicOdds_2 = " << panicOdds;
-			if (RNG::percent(panicOdds + RNG::generate(0, 99)))
+			panicOdds += (RNG::generate(26, 75) - (attackStr / 5));
+			Log(LOG_INFO) << ". . panicOdds_3 = " << panicOdds;
+			if (RNG::percent(panicOdds))
 			{
 				_psiAction->target = _aggroTarget->getPosition();
 				_psiAction->type = BA_PANIC;

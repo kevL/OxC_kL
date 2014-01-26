@@ -67,13 +67,12 @@ UnitTurnBState::~UnitTurnBState()
 void UnitTurnBState::init()
 {
 	//Log(LOG_INFO) << "UnitTurnBState::init()";
-
-	_unit = _action.actor;
-	_action.TU = 0;
+	//Log(LOG_INFO) << "UnitTurnBState::init() unitID = "
+			//<< _action.actor->getId() << "_action.strafe = " << _action.strafe;
+	_unit		= _action.actor;
+	_action.TU	= 0;
 
 	_unit->setStopShot(false); // kL
-
-	//Log(LOG_INFO) << "UnitTurnBState::init() unitID = " << _unit->getId() << "_action.strafe = " << _action.strafe;
 
 	if (_unit->getFaction() == FACTION_PLAYER)
 		_parent->setStateInterval(Options::getInt("battleXcomSpeed"));
@@ -126,11 +125,15 @@ void UnitTurnBState::init()
 void UnitTurnBState::think()
 {
 	//Log(LOG_INFO) << "UnitTurnBState::think() unitID = " << _unit->getId();
-	bool thisFaction = _unit->getFaction() == _parent->getSave()->getSide(); // kL
+	bool
+		factSide = (_unit->getFaction() == _parent->getSave()->getSide()),	// kL
+		factPlayer = _unit->getFaction() == FACTION_PLAYER;						// kL
 
-	int turretType = _unit->getTurretType();
-	int tu = 1;									// one tu per facing change
-	if (!thisFaction) tu = 0;					// reaction fire
+	int
+		turretType = _unit->getTurretType(),
+		tu = 1;									// one tu per facing change
+	if (!factSide)								// reaction fire permits free turning
+		tu = 0;
 //	else if (_unit->getArmor()->getSize() > 1)
 	else if (turretType != -1
 		&& !_action.strafe)						// only for xCom vehicles. (i think)
@@ -143,14 +146,17 @@ void UnitTurnBState::think()
 
 
 //kL	if (_unit->getFaction() == _parent->getSave()->getSide()
-	if (thisFaction // kL
+	if (factSide // kL
 		&& _parent->getPanicHandled()
 		&& !_action.targeting
-		&& !_parent->checkReservedTU(_unit, tu))
+		&& !_parent->checkReservedTU(
+									_unit,
+									tu))
 	{
 		//Log(LOG_INFO) << "UnitTurnBState::think(), abortTurn() popState()";
 //kL		_unit->abortTurn(); // -> STATUS_STANDING.
-		_unit->setStatus(STATUS_STANDING); // kL
+		_unit->setStatus(STATUS_STANDING);	// kL
+//		_unit->setStopShot(false);			// kL
 
 		_parent->popState();
 
@@ -170,12 +176,12 @@ void UnitTurnBState::think()
 
 //kL		if (_unit->getFaction() == _parent->getSave()->getSide()
 		if ((newVis
-				&& _unit->getFaction() == FACTION_PLAYER)
-			|| (thisFaction													// kL
-				&& _parent->getPanicHandled()
+				&& factPlayer)
+			|| (factSide													// kL
+				&& !factPlayer												// kL
 				&& _action.type == BA_NONE
-				&& _unit->getUnitsSpottedThisTurn().size() > unitsSpotted	// kL
-				&& _unit->getFaction() != FACTION_PLAYER))					// kL
+				&& _parent->getPanicHandled()
+				&& _unit->getUnitsSpottedThisTurn().size() > unitsSpotted))	// kL
 		{
 			//if (_unit->getFaction() == FACTION_PLAYER)
 			//{
@@ -191,8 +197,13 @@ void UnitTurnBState::think()
 			_unit->setStatus(STATUS_STANDING); // kL
 
 			// keep this for Faction_Player only, till I figure out the AI better:
-			if (_unit->getFaction() == FACTION_PLAYER)	// kL
-				_unit->setStopShot(true);				// kL
+			if (factPlayer					// kL
+				&& factSide					// kL
+				&& _action.targeting)		// kL
+			{
+				Log(LOG_INFO) << "UnitTurnBState::think(), setStopShot ID = " << _unit->getId();
+				_unit->setStopShot(true);	// kL
+			}
 
 			// kL_note: Can i pop the state (ProjectileFlyBState) here if we came from
 			// BattlescapeGame::primaryAction() and as such STOP a unit from shooting
@@ -209,7 +220,8 @@ void UnitTurnBState::think()
 
 		//Log(LOG_INFO) << "UnitTurnBState::think(), abortTurn() popState() 2";
 //kL		_unit->abortTurn(); // -> STATUS_STANDING.
-		_unit->setStatus(STATUS_STANDING); // kL
+		_unit->setStatus(STATUS_STANDING);	// kL
+//		_unit->setStopShot(false);			// kL
 
 		_parent->popState();
 	}

@@ -380,6 +380,14 @@ bool UnitWalkBState::doStatusStand()
 			// kL_note: Should figure a way to reduce reaction fire vs. Running opponents.
 		}
 
+		if (_unit->getArmor()->getType() == "STR_FLYING_SUIT_UC"
+			|| _unit->getArmor()->getType() == "STR_POWER_SUIT_UC")
+		{
+			energy -= 1;
+		}
+		else if (_unit->getArmor()->getType() == "STR_PERSONAL_ARMOR_UC")
+			energy += 1;
+
 		Log(LOG_INFO) << ". check tu + stamina, etc.";
 		if (tu > _unit->getTimeUnits())
 		{

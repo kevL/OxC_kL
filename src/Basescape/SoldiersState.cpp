@@ -67,6 +67,7 @@ SoldiersState::SoldiersState(
 	_window			= new Window(this, 320, 200, 0, 0);
 	_txtTitle		= new Text(300, 17, 10, 11);
 	_txtBaseLabel	= new Text(80, 9, 16, 11);
+	_txtSoldiers	= new Text(20, 9, 284, 11);
 
 	_txtName		= new Text(114, 9, 16, 31);
 	_txtRank		= new Text(102, 9, 133, 31);
@@ -88,6 +89,7 @@ SoldiersState::SoldiersState(
 	add(_window);
 	add(_txtTitle);
 	add(_txtBaseLabel);
+	add(_txtSoldiers);
 	add(_txtName);
 	add(_txtRank);
 	add(_txtCraft);
@@ -110,6 +112,12 @@ SoldiersState::SoldiersState(
 
 	_txtBaseLabel->setColor(Palette::blockOffset(13)+10);
 	_txtBaseLabel->setText(_base->getName(_game->getLanguage()));
+
+	_txtSoldiers->setColor(Palette::blockOffset(13)+10);
+	_txtSoldiers->setAlign(ALIGN_RIGHT);
+	std::wstringstream ss;
+	ss << _base->getTotalSoldiers();
+	_txtSoldiers->setText(ss.str());
 
 	_btnPsiTrain->setColor(Palette::blockOffset(13)+10);
 	_btnPsiTrain->setText(tr("STR_PSIONIC_TRAINING"));
@@ -284,9 +292,7 @@ void SoldiersState::lstItemsLeftArrowClick_Soldier(Action* action)
 							static_cast<Uint16>(action->getYMouse() - static_cast<int>(8.0 * action->getYScale())));
 				}
 				else
-				{
 					_lstSoldiers->scrollUp(false);
-				}
 			}
 			else
 			{
@@ -329,9 +335,7 @@ void SoldiersState::lstItemsRightArrowClick_Soldier(Action* action)
 							static_cast<Uint16>(action->getYMouse() + static_cast<int>(8.0 * action->getYScale())));
 				}
 				else
-				{
 					_lstSoldiers->scrollDown(false);
-				}
 			}
 			else
 			{

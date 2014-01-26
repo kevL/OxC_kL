@@ -388,6 +388,9 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 									_parentState->getGame()->getRuleset()->getItem("ALIEN_PSI_WEAPON"),
 									_save->getCurrentItemId());
 			action.TU = action.weapon->getRules()->getTUUse();
+
+			if (!action.weapon->getRules()->getFlatRate()) // kL
+				action.TU = static_cast<int>(floor(static_cast<float>(action.actor->getStats()->tu * action.TU) / 100.f)); // kL
 		}
 		else
 			statePushBack(new UnitTurnBState(

@@ -34,8 +34,7 @@ class Window;
 
 
 /**
- * Soldiers screen that lets the player
- * manage all the soldiers in a base.
+ * Soldiers screen that lets the player manage all the soldiers in a base.
  */
 class SoldiersState
 	:
@@ -43,7 +42,7 @@ class SoldiersState
 {
 
 private:
-	Base *_base;
+	Base* _base;
 	Text
 		* _txtBaseLabel,
 		* _txtCraft,
@@ -51,6 +50,7 @@ private:
 		* _txtName,
 		* _txtRank,
 //		* _txtRecruited,
+		* _txtSoldiers,
 		* _txtTitle;
 	TextButton
 		* _btnArmor,

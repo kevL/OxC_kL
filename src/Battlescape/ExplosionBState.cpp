@@ -209,7 +209,7 @@ void ExplosionBState::init()
 		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED * 6 / 7); // kL
 
 		bool hit = _item->getRules()->getBattleType() == BT_MELEE
-				|| _item->getRules()->getBattleType() == BT_PSIAMP;
+				|| _item->getRules()->getBattleType() == BT_PSIAMP; // includes aLien psi-weapon.
 
 		Explosion* explosion = new Explosion( // animation.
 										_center,
@@ -220,8 +220,9 @@ void ExplosionBState::init()
 		_parent->getMap()->getExplosions()->insert(explosion);
 
 		_parent->getResourcePack()->getSound(
-										"BATTLE.CAT",
-										_item->getRules()->getHitSound())->play();
+											"BATTLE.CAT",
+											_item->getRules()->getHitSound())
+										->play();
 
 		Camera* explodeCam = _parent->getMap()->getCamera();
 		if (explodeCam->getViewLevel() != posCenter.z)	// kL
@@ -336,9 +337,7 @@ void ExplosionBState::explode()
 									_power / 10);
 		terrainExplosion = true;
 	}
-
-	if (!_tile // explosion not caused by terrain or an item, must be by a unit (cyberdisc)
-		&& !_item)
+	else if (!_item) // explosion not caused by terrain or an item, must be by a unit (cyberdisc)
 	{
 		save->getTileEngine()->explode(
 									_center,

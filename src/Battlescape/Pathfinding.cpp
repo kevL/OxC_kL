@@ -1607,22 +1607,31 @@ bool Pathfinding::previewPath(bool bRemove)
 	int tus = _unit->getTimeUnits();
 	if (_unit->isKneeled())
 		tus -= 8;
+		// That is not right when going up/down GravLifts kneeled ...!
 
-	int energy = _unit->getEnergy();
-	int size = _unit->getArmor()->getSize() - 1;
-	int total = 0;
+	int
+		energy = _unit->getEnergy(),
+		size = _unit->getArmor()->getSize() - 1,
+		total = 0;
+	bool
+		bPowered = _unit->getArmor()->getType() == "STR_FLYING_SUIT_UC"
+					|| _unit->getArmor()->getType() == "STR_POWER_SUIT_UC",
+		bLaden = _unit->getArmor()->getType() == "STR_PERSONAL_ARMOR_UC";
+
 	bool switchBack = false;
-
 	if (_save->getBattleGame()->getReservedAction() == BA_NONE)
 	{
 		switchBack = true;
-		_save->getBattleGame()->setTUReserved(BA_AUTOSHOT, false);
+		_save->getBattleGame()->setTUReserved(
+											BA_AUTOSHOT,
+											false);
 	}
 
 	_modifierUsed = (SDL_GetModState() & KMOD_CTRL) != 0;
 	bool running = _save->getStrafeSetting()
 					&& _modifierUsed
-					&& _unit->getArmor()->getSize() == 1
+//kL					&& _unit->getArmor()->getSize() == 1
+					&& !size // kL
 					&& _path.size() > 1;
 
 	for (std::vector<int>::reverse_iterator
@@ -1639,21 +1648,28 @@ bool Pathfinding::previewPath(bool bRemove)
 						_unit,
 						0,
 						false);
-
 		if (running)
 		{
+			energy -= tu * 3 / 2;
 			tu = tu * 3 / 4;
 		}
+		else
+			energy -= tu;
 
-		energy -= tu / 2;
+		if (bLaden)
+			energy -= 1;
+		else if (bPowered)
+			energy += 1;
+		// kL_note: should put my gravLift energy-reduction in here. See UnitWalkBState
+
+//kL		energy -= tu / 2;
 //kL		if (dir >= Pathfinding::DIR_UP)
 //kL		{
 //kL			energy = 0;
 //kL		}
-		// kL_note: should put my gravLift energy-reduction in here.
+
 		tus -= tu;
 		total += tu;
-
 		bool reserve = _save->getBattleGame()->checkReservedTU(
 															_unit,
 															total,
@@ -1692,7 +1708,8 @@ bool Pathfinding::previewPath(bool bRemove)
 				int color = 0;
 				if (!bRemove)
 				{
-					if (tus >= 0 && energy >= 0)
+					if (tus > -1
+						&& energy > -1)
 					{
 						if (reserve)
 							color = 4;
@@ -1709,7 +1726,9 @@ bool Pathfinding::previewPath(bool bRemove)
 	}
 
 	if (switchBack)
-		_save->getBattleGame()->setTUReserved(BA_NONE, false);
+		_save->getBattleGame()->setTUReserved(
+											BA_NONE,
+											false);
 
 	return true;
 }

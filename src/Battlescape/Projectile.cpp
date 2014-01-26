@@ -776,18 +776,18 @@ void Projectile::applyAccuracy(
 	int
 		xdiff = origin.x - target->x,
 		ydiff = origin.y - target->y;
-	double realDistance = sqrt(static_cast<double>(xdiff * xdiff) + static_cast<double>(ydiff * ydiff));
+	double targetDist = sqrt(static_cast<double>(xdiff * xdiff) + static_cast<double>(ydiff * ydiff));
 
 	// maxRange is the maximum range a projectile shall ever travel in voxel space
 	double maxRange = 16000.0; // 1000 tiles in voxelspace
 	if (keepRange)
-		maxRange = realDistance;
+		maxRange = targetDist;
 
 	if (_action.type == BA_HIT)
 		maxRange = 45.0; // up to 2 tiles diagonally (as in the case of reaper v reaper)
 
-	if (Options::getBool("battleRangeBasedAccuracy")
-		&& _action.type != BA_THROW)
+	if (Options::getBool("battleRangeBasedAccuracy"))
+//kL		&& _action.type != BA_THROW)
 	{
 		double accPenalty = 0.0;
 
@@ -796,15 +796,13 @@ void Projectile::applyAccuracy(
 		{
 			BattleUnit* targetUnit = targetTile->getUnit();
 
-			if (targetUnit
+			if (targetUnit // Shade can be from 0 to 15
 				&& targetUnit->getFaction() == FACTION_HOSTILE)
 			{
-				accPenalty = 0.015 * static_cast<double>(targetTile->getShade()); // Shade can be from 0 to 15
+				accPenalty = 0.015 * static_cast<double>(targetTile->getShade());
 			}
-//			else
-//				accPenalty = 0.0; // Enemy units can see in the dark.
 
-			// If unit is kneeled, then accuracy reduced by 5%.
+			// If targetUnit is kneeled, then accuracy reduced by ~6%.
 			// This is a compromise, because vertical deviation is 2 times less.
 			if (targetUnit
 				&& targetUnit->isKneeled())
@@ -812,37 +810,16 @@ void Projectile::applyAccuracy(
 				accPenalty += 0.063;
 			}
 		}
-		else
-			accPenalty = 0.015 * static_cast<double>(_save->getGlobalShade()); // Shade can be from 0 (day) to 15 (night).
+		else // Shade can be from 0 (day) to 15 (night).
+			accPenalty = 0.015 * static_cast<double>(_save->getGlobalShade());
 
 		// kL_begin: modify rangedBasedAccuracy (shot-modes).
-//		baseDeviation = -0.15;
-/*		baseDeviation = -0.13;
-		switch (_action.type)
-		{
-			case BA_AUTOSHOT:
-				baseDeviation += 0.32 / (accuracy - accPenalty + 0.23);
-			break;
-			case BA_SNAPSHOT:
-//				baseDeviation += 0.28 / (accuracy - accPenalty + 0.24);
-				baseDeviation += 0.29 / (accuracy - accPenalty + 0.23);
-			break;
-			case BA_AIMEDSHOT:
-//				baseDeviation += 0.23 / (accuracy - accPenalty + 0.23);
-				baseDeviation += 0.24 / (accuracy - accPenalty + 0.23);
-			break;
-
-			default:
-				baseDeviation += 0.29 / (accuracy - accPenalty + 0.23);
-			break;
-		} */
-
 		// NOTE: This should be done on the weapons themselves!!!!
 		double baseDeviation = 0.0;
 		switch (_action.type)
 		{
 			case BA_AUTOSHOT:
-				baseDeviation += 0.18 / (accuracy - accPenalty + 0.18); // was 0.25 (too accurate)
+				baseDeviation += 0.18 / (accuracy - accPenalty + 0.18);
 			break;
 			case BA_SNAPSHOT:
 				baseDeviation += 0.15 / (accuracy - accPenalty + 0.18);
@@ -851,14 +828,13 @@ void Projectile::applyAccuracy(
 				baseDeviation += 0.13 / (accuracy - accPenalty + 0.18);
 			break;
 
-			default:
+			default: // throw.
 				baseDeviation += 0.15 / (accuracy - accPenalty + 0.18);
 			break;
 		}
 		// kL_end.
 
 		// 0.02 is the min angle deviation for best accuracy (+-3s = 0.02 radian).
-		// kL_note: changed to min 0.006 deviation.
 //kL		if (baseDeviation < 0.02) baseDeviation = 0.02;
 		if (baseDeviation < 0.0001)
 		{
@@ -875,10 +851,12 @@ void Projectile::applyAccuracy(
 
 			te = atan2(
 					static_cast<double>(target->y - origin.y),
-					static_cast<double>(target->x - origin.x)) + dH,
+					static_cast<double>(target->x - origin.x))
+				+ dH,
 			fi = atan2(
 					static_cast<double>(target->z - origin.z),
-					realDistance) + dV,
+					targetDist)
+				+ dV,
 			cos_fi = cos(fi);
 
 		if (extendLine)

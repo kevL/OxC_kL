@@ -434,7 +434,7 @@ bool Soldier::isPromoted()
 
 /**
  * Returns the unit's current armor.
- * @return Pointer to armor data.
+ * @return, Pointer to armor data.
  */
 Armor* Soldier::getArmor() const
 {

@@ -132,7 +132,7 @@ void UnitDieBState::init()
 		}
 		else
 		{
-			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED * 3 / 7);
+			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED * 2 / 7);
 			_unit->initDeathSpin();
 		}
 	}

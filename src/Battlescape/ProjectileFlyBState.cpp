@@ -107,6 +107,7 @@ void ProjectileFlyBState::init()
 		return;
 	}
 	_initialized = true;
+	Log(LOG_INFO) << ". getStopShot() = " << _action.actor->getStopShot();
 
 
 	BattleItem* weapon = _action.weapon;
@@ -120,6 +121,7 @@ void ProjectileFlyBState::init()
 	{
 		// something went wrong - we can't shoot when dead or unconscious, or if we're about to fall over.
 		Log(LOG_INFO) << ". actor is Out, EXIT";
+		_unit->setStopShot(false); // kL
 		_parent->popState();
 
 		return;
@@ -127,6 +129,7 @@ void ProjectileFlyBState::init()
 	else if (!weapon) // can't shoot without weapon
 	{
 		Log(LOG_INFO) << ". no weapon, EXIT";
+		_unit->setStopShot(false); // kL
 		_parent->popState();
 
 		return;
@@ -134,6 +137,7 @@ void ProjectileFlyBState::init()
 	else if (!_parent->getSave()->getTile(_action.target)) // invalid target position
 	{
 		Log(LOG_INFO) << ". no target, EXIT";
+		_unit->setStopShot(false); // kL
 		_parent->popState();
 
 		return;
@@ -143,6 +147,7 @@ void ProjectileFlyBState::init()
 	{
 		Log(LOG_INFO) << ". not enough time units, EXIT";
 		_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
+		_unit->setStopShot(false); // kL
 		_parent->popState();
 
 		return;
@@ -160,7 +165,7 @@ void ProjectileFlyBState::init()
 													_action.weapon));
 		_parent->popState();
 
-		Log(LOG_INFO) << ". stopShot, refund TUs.";
+		Log(LOG_INFO) << ". stopShot ID = " << _unit->getId() << ", refund TUs.";
 		return;
 	}
 	else if (_unit->getFaction() != _parent->getSave()->getSide()) // reaction fire
@@ -223,7 +228,7 @@ void ProjectileFlyBState::init()
 		case BA_AIMEDSHOT:
 		case BA_AUTOSHOT:
 		case BA_LAUNCH:
-			Log(LOG_INFO) << ". . BA_SNAPSHOT,AIMEDSHOT,AUTOSHOT, or LAUNCH";
+			Log(LOG_INFO) << ". . BA_SNAPSHOT, AIMEDSHOT, AUTOSHOT, or LAUNCH";
 
 			if (_ammo == 0)
 			{
@@ -374,7 +379,10 @@ bool ProjectileFlyBState::createNewProjectile()
 			_unit->setCache(0);
 			_parent->getMap()->cacheUnit(_unit);
 
-			_parent->getResourcePack()->getSound("BATTLE.CAT", 39)->play();
+			_parent->getResourcePack()->getSound(
+												"BATTLE.CAT",
+												39)
+											->play();
 
 			_unit->addThrowingExp();
 		}
@@ -569,7 +577,10 @@ void ProjectileFlyBState::think()
 		{
 			if (_action.type == BA_THROW)
 			{
-				_parent->getResourcePack()->getSound("BATTLE.CAT", 38)->play();
+				_parent->getResourcePack()->getSound(
+													"BATTLE.CAT",
+													38)
+												->play();
 
 				Position pos = _parent->getMap()->getProjectile()->getPosition(-1);
 				pos.x /= 16;

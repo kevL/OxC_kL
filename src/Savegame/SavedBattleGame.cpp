@@ -1152,8 +1152,8 @@ void SavedBattleGame::endTurn()
 			i != _units.end();
 			++i)
 	{
-		if ((*i)->getFaction() == _side) // this causes an Mc'd unit to lose its turn.
-			(*i)->prepareNewTurn(); // reverts faction, tu/stun recovery, Fire damage, etc
+		if ((*i)->getFaction() == _side)	// this causes an Mc'd unit to lose its turn.
+			(*i)->prepareNewTurn();			// reverts faction, tu/stun recovery, Fire damage, etc
 
 		if ((*i)->getFaction() == FACTION_PLAYER) // including units Mc'd by xCom
 		{

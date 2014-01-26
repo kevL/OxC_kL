@@ -127,10 +127,14 @@ BattleUnit::BattleUnit(
 	int rankbonus = 0;
 	switch (soldier->getRank())
 	{
-		case RANK_SERGEANT:		rankbonus =	1;	break;
-		case RANK_CAPTAIN:		rankbonus =	3;	break;
-		case RANK_COLONEL:		rankbonus =	6;	break;
-		case RANK_COMMANDER:	rankbonus =	10;	break;
+//		case RANK_SERGEANT:		rankbonus =	1;	break;
+//		case RANK_CAPTAIN:		rankbonus =	3;	break;
+//		case RANK_COLONEL:		rankbonus =	6;	break;
+//		case RANK_COMMANDER:	rankbonus =	10;	break;
+		case RANK_SERGEANT:		rankbonus =	5;	break;
+		case RANK_CAPTAIN:		rankbonus =	15;	break;
+		case RANK_COLONEL:		rankbonus =	30;	break;
+		case RANK_COMMANDER:	rankbonus =	50;	break;
 
 		default:				rankbonus =	0;	break;
 	}
@@ -149,8 +153,10 @@ BattleUnit::BattleUnit(
 	_currentArmor[SIDE_REAR]	= _armor->getRearArmor();
 	_currentArmor[SIDE_UNDER]	= _armor->getUnderArmor();
 
-	for (int i = 0; i < 6; ++i) _fatalWounds[i] = 0;
-	for (int i = 0; i < 5; ++i) _cache[i] = 0;
+	for (int i = 0; i < 6; ++i)
+		_fatalWounds[i] = 0;
+	for (int i = 0; i < 5; ++i)
+		_cache[i] = 0;
 
 	_activeHand = "STR_RIGHT_HAND";
 
@@ -212,7 +218,8 @@ BattleUnit::BattleUnit(
 		_unitRules(unit),
 		_rankInt(-1),
 		_turretType(-1),
-		_hidingForTurn(false)
+		_hidingForTurn(false),
+		_stopShot(false) // kL
 {
 	//Log(LOG_INFO) << "Create BattleUnit 2 : alien ID = " << getId();
 
@@ -223,9 +230,7 @@ BattleUnit::BattleUnit(
 	_stats	= *unit->getStats();
 	_stats	+= *_armor->getStats();	// armors may modify effective stats
 	if (faction == FACTION_HOSTILE)
-	{
 		adjustStats(diff);
-	}
 
 	_tu			= _stats.tu;
 	_energy		= _stats.stamina;
@@ -320,6 +325,7 @@ void BattleUnit::load(const YAML::Node& node)
 	_specab				= (SpecialAbility)node["specab"].as<int>(_specab);
 	_spawnUnit			= node["spawnUnit"].as<std::string>(_spawnUnit);
 	_motionPoints		= node["motionPoints"].as<int>(0);
+	_activeHand			= node["activeHand"].as<std::string>(_activeHand); // kL
 
 	for (int i = 0; i < 5; i++)
 		_currentArmor[i]	= node["armor"][i].as<int>(_currentArmor[i]);
@@ -367,9 +373,13 @@ YAML::Node BattleUnit::save() const
 	node["killedBy"]		= (int)_killedBy;
 	node["specab"]			= (int)_specab;
 	node["motionPoints"]	= _motionPoints;
+	// could put (if not tank) here:
+	node["activeHand"]		= _activeHand; // kL
 
-	for (int i = 0; i < 5; i++) node["armor"].push_back(_currentArmor[i]);
-	for (int i = 0; i < 6; i++) node["fatalWounds"].push_back(_fatalWounds[i]);
+	for (int i = 0; i < 5; i++)
+		node["armor"].push_back(_currentArmor[i]);
+	for (int i = 0; i < 6; i++)
+		node["fatalWounds"].push_back(_fatalWounds[i]);
 
 	if (getCurrentAIState()) node["AI"]			= getCurrentAIState()->save();
 	if (_originalFaction != _faction)
@@ -1862,27 +1872,39 @@ void BattleUnit::prepareNewTurn()
 	Log(LOG_INFO) << "BattleUnit::prepareNewTurn() ID " << getId();
 
 	_faction = _originalFaction;
+	//Log(LOG_INFO) << ". _stopShot is " << _stopShot << " setFALSE";
+	//_stopShot = false;
 
 	_unitsSpottedThisTurn.clear();
 
-	int TURecovery = getStats()->tu;
+	int tuRecovery = getStats()->tu;
 
 	float encumbrance = static_cast<float>(getStats()->strength) / static_cast<float>(getCarriedWeight());
 	if (encumbrance < 1.f)
 	{
-		TURecovery = static_cast<int>(encumbrance * static_cast<float>(TURecovery));
+		tuRecovery = static_cast<int>(encumbrance * static_cast<float>(tuRecovery));
 	}
 
 	// Each fatal wound to the left or right leg reduces the soldier's TUs by 10%.
-	TURecovery -= (TURecovery * (_fatalWounds[BODYPART_LEFTLEG] + _fatalWounds[BODYPART_RIGHTLEG] * 10)) / 100;
-	setTimeUnits(TURecovery);
+	tuRecovery -= (tuRecovery * (_fatalWounds[BODYPART_LEFTLEG] + _fatalWounds[BODYPART_RIGHTLEG] * 10)) / 100;
+	setTimeUnits(tuRecovery);
 
 	if (!isOut()) // recover energy
 	{
-		int ENRecovery = getStats()->tu / 3;
+//kL		int enRecovery = getStats()->tu / 3;
+		// kL_begin: advanced Energy recovery
+		int enRecovery = getStats()->stamina;
+		if (isKneeled())
+			enRecovery /= 2;					// kneeled xCom
+		else if (getFaction() == FACTION_PLAYER)
+			enRecovery /= 3;					// xCom
+		else
+			enRecovery = enRecovery * 2 / 3;	// aLiens & civies
+		// kL_end.
+
 		// Each fatal wound to the body reduces the soldier's energy recovery by 10%.
-		ENRecovery -= (_energy * (_fatalWounds[BODYPART_TORSO] * 10)) / 100;
-		_energy += ENRecovery;
+		enRecovery -= (_energy * (_fatalWounds[BODYPART_TORSO] * 10)) / 100;
+		_energy += enRecovery;
 
 		if (_energy > getStats()->stamina)
 			_energy = getStats()->stamina;
@@ -1903,7 +1925,8 @@ void BattleUnit::prepareNewTurn()
 		_fire--;
 	}
 
-	if (_health < 0) _health = 0;
+	if (_health < 0)
+		_health = 0;
 
 	if (_health == 0
 		&& _currentAIState) // if unit is dead, AI state should be gone
@@ -1915,24 +1938,20 @@ void BattleUnit::prepareNewTurn()
 		_currentAIState = 0;
 	}
 
-	if (_stunlevel > 0) healStun(1); // recover stun 1pt/turn
+	if (_stunlevel > 0)
+		healStun(1); // recover stun 1pt/turn
 
 	if (!isOut())
 	{
-		int percent = 100 - (2 * getMorale());
-		if (percent > 0)
+		int panicChance = 100 - (2 * getMorale());
+		if (RNG::percent(panicChance))
 		{
-			if (RNG::percent(percent))
-			{
-				_status = STATUS_PANICKING;		// panic is either flee or freeze, determined later
-				if (RNG::percent(30))			// or shoot stuff
-					_status = STATUS_BERSERK;
-			}
-			else // successfully avoided panic
-			{
-				_expBravery++;
-			}
+			_status = STATUS_PANICKING;		// panic is either flee or freeze (determined later)
+			if (RNG::percent(30))
+				_status = STATUS_BERSERK;	// or shoot stuff.
 		}
+		else								// successfully avoided Panic
+			_expBravery++;
 	}
 
 	_hitByFire = false;
@@ -2538,14 +2557,12 @@ int BattleUnit::improveStat(int exp)
 {
 	double tier = 4.0;
 
-	if (exp <= 10)
+	if (exp < 11)
 	{
 		tier = 3.0;
 
-		if (exp <= 5)
-		{
+		if (exp < 6)
 			tier = exp > 2? 2.0: 1.0;
-		}
 	}
 
 	return static_cast<int>((tier / 2.0) + RNG::generate(0.0, tier));
@@ -2565,22 +2582,25 @@ int BattleUnit::getMiniMapSpriteIndex() const
 	// * 12-23 : Xcom HWP
 	// * 24-35 : Alien big terror unit(cyberdisk, ...)
 	if (isOut(true, true))
-	{
 		return 9;
-	}
 
 	switch (getFaction())
 	{
 		case FACTION_HOSTILE:
-			if (_armor->getSize() == 1)	return 3;
-			else						return 24;
+			if (_armor->getSize() == 1)
+				return 3;
+			else
+				return 24;
 		break;
-		case FACTION_NEUTRAL:			return 6;
+		case FACTION_NEUTRAL:
+			return 6;
 		break;
 
 		default:
-			if (_armor->getSize() == 1)	return 0;
-			else						return 12;
+			if (_armor->getSize() == 1)
+				return 0;
+			else
+				return 12;
 		break;
 	}
 }
@@ -2604,9 +2624,9 @@ int BattleUnit::getTurretType() const
 }
 
 /**
- * Get the amount of fatal wound for a body part
- * @param part The body part (in the range 0-5)
- * @return The amount of fatal wound of a body part
+ * Get the amount of fatal wound for a body part.
+ * @param part, The body part (in the range 0-5)
+ * @return, The amount of fatal wound of a body part
  */
 int BattleUnit::getFatalWound(int part) const
 {
@@ -2617,12 +2637,15 @@ int BattleUnit::getFatalWound(int part) const
 }
 
 /**
- * Heal a fatal wound of the soldier
- * @param part the body part to heal
- * @param woundAmount the amount of fatal wound healed
- * @param healthAmount The amount of health to add to soldier health
+ * Heal a fatal wound of the soldier.
+ * @param part, The body part to heal
+ * @param woundAmount, The amount of fatal wound healed
+ * @param healthAmount, The amount of health to add to soldier health
  */
-void BattleUnit::heal(int part, int woundAmount, int healthAmount)
+void BattleUnit::heal(
+		int part,
+		int woundAmount,
+		int healthAmount)
 {
 	if (part < 0 || part > 5)
 		return;
@@ -2636,28 +2659,32 @@ void BattleUnit::heal(int part, int woundAmount, int healthAmount)
 	if (_health > getStats()->health)
 		_health = getStats()->health;
 
-	moraleChange(healthAmount);		// kL
+	moraleChange(healthAmount);
 }
 
 /**
- * Restore soldier morale
+ * Restore soldier morale.
  */
 void BattleUnit::painKillers()
 {
 	int lostHealth = getStats()->health - _health;
 	if (lostHealth > _moraleRestored)
 	{
-		_morale = std::min(100, (lostHealth - _moraleRestored + _morale));
+		_morale = std::min(
+						100,
+						lostHealth - _moraleRestored + _morale);
 		_moraleRestored = lostHealth;
 	}
 }
 
 /**
- * Restore soldier energy and reduce stun level
- * @param energy The amount of energy to add
- * @param s The amount of stun level to reduce
+ * Restore soldier energy and reduce stun level.
+ * @param energy, The amount of energy to add
+ * @param stun, The amount of stun level to reduce
  */
-void BattleUnit::stimulant(int energy, int stun)
+void BattleUnit::stimulant(
+		int energy,
+		int stun)
 {
 	_energy += energy;
 	if (_energy > getStats()->stamina)
@@ -2667,8 +2694,8 @@ void BattleUnit::stimulant(int energy, int stun)
 }
 
 /**
- * Get motion points for the motion scanner. More points
- * is a larger blip on the scanner.
+ * Get motion points for the motion scanner.
+ * More points is a larger blip on the scanner.
  * @return points.
  */
 int BattleUnit::getMotionPoints() const
@@ -2678,9 +2705,9 @@ int BattleUnit::getMotionPoints() const
 
 /**
  * Gets the unit's armor.
- * @return Pointer to armor.
+ * @return, Pointer to armor.
  */
-Armor *BattleUnit::getArmor() const
+Armor* BattleUnit::getArmor() const
 {
 	return _armor;		
 }
@@ -2692,9 +2719,12 @@ Armor *BattleUnit::getArmor() const
  * @param lang Pointer to language.
  * @return name Widecharstring of the unit's name.
  */
-std::wstring BattleUnit::getName(Language* lang, bool debugAppendId) const
+std::wstring BattleUnit::getName(
+		Language* lang,
+		bool debugAppendId) const
 {
-	if (_type != "SOLDIER" && lang != 0)
+	if (_type != "SOLDIER"
+		&& lang != 0)
 	{
 		std::wstring ret;
 
@@ -2931,6 +2961,8 @@ void BattleUnit::setActiveHand(const std::string& hand)
  */
 std::string BattleUnit::getActiveHand() const
 {
+	// NOTE: what about Tanks? Does this work in canMakeSnap() for reaction fire???
+
 	if (getItem(_activeHand)) // has an item in the already active Hand.
 	{
 		return _activeHand;
