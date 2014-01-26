@@ -547,11 +547,11 @@ void Camera::centerOnPosition(
 	minMaxInt(
 			&_center.x,
 			-1,
-			_mapsize_y);
+			_mapsize_x);
 	minMaxInt(
 			&_center.y,
 			-1,
-			_mapsize_x);
+			_mapsize_y);
 
 	convertMapToScreen(
 					_center,
@@ -601,8 +601,14 @@ void Camera::convertScreenToMap(
 	*mapX /= (_spriteWidth / 4);
 	*mapY /= _spriteWidth;
 
-	minMaxInt(mapX, -1, _mapsize_y);
-	minMaxInt(mapY, -1, _mapsize_x);
+	minMaxInt(
+			mapX,
+			-1,
+			_mapsize_x);
+	minMaxInt(
+			mapY,
+			-1,
+			_mapsize_y);
 }
 
 /**

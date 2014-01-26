@@ -786,8 +786,27 @@ void Projectile::applyAccuracy(
 	if (_action.type == BA_HIT)
 		maxRange = 45.0; // up to 2 tiles diagonally (as in the case of reaper v reaper)
 
+/* Wb_begin: 140125, UFOExtender Acu.
+	if (Options::getBool("battleUFOExtenderAccuracy") && _action.type != BA_THROW && _action.type != BA_HIT)
+	{
+		int penaltyDistance = Options::getInt("extenderAccuracyAimedDistance");
+		if (_action.type == BA_AUTOSHOT)
+		{
+			penaltyDistance = Options::getInt("extenderAccuracyAutoDistance");
+		}
+		else if (_action.type == BA_SNAPSHOT)
+		{
+			penaltyDistance = Options::getInt("extenderAccuracySnapDistance");
+		}
+		if (penaltyDistance < realDistance)
+		{
+			accuracy -= (Options::getInt("extenderAccuracyDropoff") * (realDistance - penaltyDistance)) / 100;
+		}
+	} */ // Wb_end.
+
 	if (Options::getBool("battleRangeBasedAccuracy"))
 //kL		&& _action.type != BA_THROW)
+//kL		&& _action.type != BA_HIT)
 	{
 		double accPenalty = 0.0;
 

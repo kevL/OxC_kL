@@ -41,6 +41,7 @@ class Projectile;
 class ResourcePack;
 class SavedBattleGame;
 class Surface;
+class Text;
 class Timer;
 
 
@@ -94,6 +95,8 @@ private:
 	ResourcePack* _res;
 	SavedBattleGame* _save;
 	Surface* _arrow;
+	Text
+		* _txtAccuracy;
 	Timer
 		* _scrollMouseTimer,
 		* _scrollKeyTimer;

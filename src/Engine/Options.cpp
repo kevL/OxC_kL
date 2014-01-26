@@ -119,7 +119,8 @@ void createDefault()
 	setBool("battleInstantGrenade", false); // set to true if you want to play with the alternative grenade handling
 	setInt("battleExplosionHeight", 0); //0, 1, 2, 3
 	setInt("battleNewPreviewPath", 0); // requires double-click to confirm moves 0 = none, 1 = arrows, 2 = numbers, 3 = full
-	setBool("battleRangeBasedAccuracy", false);
+//kL	setBool("battleRangeBasedAccuracy", false);
+	setBool("battleRangeBasedAccuracy", true); // kL
 	setBool("fpsCounter", false);
 	setBool("craftLaunchAlways", false);
 	setBool("globeSeasons", false);
@@ -131,18 +132,27 @@ void createDefault()
 	setInt("audioSampleRate", 11025); // kL
 	setInt("audioBitDepth", 16);
 	setInt("pauseMode", 0);
-	setBool("alienContainmentLimitEnforced", false);
-	setBool("canSellLiveAliens", false);
+//kL	setBool("alienContainmentLimitEnforced", false);
+	setBool("alienContainmentLimitEnforced", true); // kL
+//kL	setBool("canSellLiveAliens", false);
+	setBool("canSellLiveAliens", true); // kL
 	setBool("canTransferCraftsWhileAirborne", false); // When the craft can reach the destination base with its fuel
-	setBool("canManufactureMoreItemsPerHour", false);
-	setBool("customInitialBase", false);
-	setBool("aggressiveRetaliation", false);
-	setBool("strafe", false);
-	setBool("battleNotifyDeath", false);
+//kL	setBool("canManufactureMoreItemsPerHour", false);
+	setBool("canManufactureMoreItemsPerHour", truee); // kL
+//kL	setBool("customInitialBase", false);
+	setBool("customInitialBase", true); // kL
+//kL	setBool("aggressiveRetaliation", false);
+	setBool("aggressiveRetaliation", true); // kL
+//kL	setBool("strafe", false);
+	setBool("strafe", true); // kL
+//kL	setBool("battleNotifyDeath", false);
+	setBool("battleNotifyDeath", true); // kL
 	setBool("allowBuildingQueue", false);
-	setBool("allowAutoSellProduction", false);
+//kL	setBool("allowAutoSellProduction", false);
+	setBool("allowAutoSellProduction", true); // kL
 	setBool("showFundsOnGeoscape", false);
-	setBool("showMoreStatsInInventoryView", false);
+//kL	setBool("showMoreStatsInInventoryView", false);
+	setBool("showMoreStatsInInventoryView", true); // kL
 	setBool("allowResize", false);
 	setInt("windowedModePositionX", -1);
 	setInt("windowedModePositionY", -1);
@@ -150,18 +160,27 @@ void createDefault()
 	setBool("allowPsionicCapture", false);
 	setBool("psiStrengthEval", false);
 	setBool("borderless", false);
-	setBool("captureMouse", false);
+//kL	setBool("captureMouse", false);
+	setBool("captureMouse", true); // kL
 //kL	setBool("battleTooltips", true);
 	setBool("battleTooltips", false); // kL
 	setBool("battleHairBleach", true);
     setBool("keepAspectRatio", false);
     setBool("cursorInBlackBandsInFullscreen", false);
-    setBool("cursorInBlackBandsInWindow", true);
+//kL    setBool("cursorInBlackBandsInWindow", true);
+    setBool("cursorInBlackBandsInWindow", false); // kL
     setBool("cursorInBlackBandsInBorderlessWindow", false);
 	setBool("newSeedOnLoad", false);
 	setBool("skipNextTurnScreen", false);
 //kL	setBool("disableAutoEquip", false);
 	setBool("disableAutoEquip", true); // kL
+
+	setBool("battleUFOExtenderAccuracy", false);
+	setInt("extenderAccuracyAimedDistance", 200);
+	setInt("extenderAccuracySnapDistance", 15);
+	setInt("extenderAccuracyAutoDistance", 7);
+	setInt("extenderAccuracyDropoff", 2);
+
 
 	// new battle mode data
 	setInt("NewBattleMission", 0);
