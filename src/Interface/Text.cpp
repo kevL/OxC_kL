@@ -494,7 +494,6 @@ int Text::getLineX(int line) const
 			switch (_align)
 			{
 				case ALIGN_LEFT:
-					x = 0;
 				break;
 				case ALIGN_CENTER:
 					x = static_cast<int>(

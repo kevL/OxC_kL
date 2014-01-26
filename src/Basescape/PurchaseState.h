@@ -53,9 +53,8 @@ private:
 		_cQty,
 		_pQty,
 		_total;
-	unsigned
-		_itemOffset,
-		_sel;
+	unsigned _sel;
+	size_t _itemOffset;
 	float _iQty;
 
 	Base* _base;

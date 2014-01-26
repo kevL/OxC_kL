@@ -62,9 +62,8 @@ private:
 		_changeValueByMouseWheel,
 		_hasEng,
 		_hasSci;
-	unsigned
-		_itemOffset,
-		_sel;
+	unsigned _sel;
+	size_t _itemOffset;
 	float _iQty;
 	double _distance;
 

@@ -513,27 +513,6 @@ void BasescapeState::viewLeftClick(Action*)
 	BaseFacility* fac = _view->getSelectedFacility();
 	if (fac != 0)
 	{
-		int // Pre-calculate values to ensure base stays connected
-			x = -1,
-			y = -1,
-			squares = 0;
-
-		for (std::vector<BaseFacility*>::iterator
-				i = _base->getFacilities()->begin();
-				i != _base->getFacilities()->end();
-				++i)
-		{
-			if ((*i)->getRules()->isLift())
-			{
-				x = (*i)->getX();
-				y = (*i)->getY();
-			}
-
-			squares += (*i)->getRules()->getSize() * (*i)->getRules()->getSize();
-		}
-
-		squares -= fac->getRules()->getSize() * fac->getRules()->getSize();
-
 		if (fac->inUse()) // facility in Use.
 		{
 			_game->pushState(new ErrorMessageState(
@@ -543,8 +522,7 @@ void BasescapeState::viewLeftClick(Action*)
 												"BACK13.SCR",
 												6));
 		}
-		// disconnected facilities. ( occupied squares connected to Access Lift < total squares occupied by base )
-		else if (_view->countConnected(x, y, 0, fac) < squares)
+		else if (_base->getDisconnectedFacilities(fac).size() > 0) // would base become disconnected...
 		{
 			_game->pushState(new ErrorMessageState(
 												_game,

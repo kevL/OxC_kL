@@ -702,7 +702,6 @@ Wb.131129
 int Projectile::calculateThrow(double accuracy)
 {
 	Tile *targetTile = _save->getTile(_action.target);
-	Position origin = _action.actor->getPosition();
 		
 	Position originVoxel = _save->getTileEngine()->getOriginVoxel(_action, 0);
 	Position targetVoxel = _action.target * Position(16,16,24) + Position(8,8, (2 + -targetTile->getTerrainLevel()));

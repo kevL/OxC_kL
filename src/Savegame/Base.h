@@ -256,17 +256,12 @@ private:
 
 		/// Gets the base's vehicles.
 		std::vector<Vehicle*>* getVehicles();
-
-		/// Check all the module connections.
-		void checkModuleConnections();
-		/// Check a single coordinate for module connection.
-		bool checkConnected(
-				int x,
-				int y,
-				int** grid,
-				BaseFacility* (&facilities)[BASE_SIZE][BASE_SIZE]) const;
-		/// Destroy a facility and deal with the side effects.
-		void destroyFacility(std::vector<BaseFacility*>::iterator& facility);
+		/// Destroys all disconnected facilities in the base.
+		void destroyDisconnectedFacilities();
+		/// Gets a sorted list of the facilities(=iterators) NOT connected to the Access Lift.
+		std::list<std::vector<BaseFacility*>::iterator> getDisconnectedFacilities(BaseFacility* remove);
+		/// destroy a facility and deal with the side effects.
+		void destroyFacility(std::vector<BaseFacility*>::iterator facility);
 
 		// kL_begin: Base, for GraphsState monthly expenditures etc.
 		/// Increase (or decrease) the base's total income amount.

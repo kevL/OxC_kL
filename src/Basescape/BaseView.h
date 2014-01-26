@@ -110,12 +110,6 @@ private:
 		bool isQueuedBuilding(RuleBaseFacility* rule) const;
 		/// ReCalculates the remaining build-time of all queued buildings.
 		void reCalcQueuedBuildings();
-		/// Counts the squares connected to a grid position.
-		int countConnected(
-				int x,
-				int y,
-				int** grid,
-				BaseFacility* remove = 0) const;
 
 		/// Handles the timers.
 		void think();
