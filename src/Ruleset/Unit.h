@@ -255,7 +255,9 @@ struct convert<OpenXcom::UnitStats>
 		return node;
 	}
 
-	static bool decode(const Node& node, OpenXcom::UnitStats& rhs)
+	static bool decode(
+			const Node& node,
+			OpenXcom::UnitStats& rhs)
 	{
 		if (!node.IsMap()) return false;
 

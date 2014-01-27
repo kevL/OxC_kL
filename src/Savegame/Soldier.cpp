@@ -108,9 +108,7 @@ Soldier::Soldier(
 	}
 
 	if (id != 0)
-	{
 		_id = id;
-	}
 }
 
 /**
@@ -122,9 +120,7 @@ Soldier::~Soldier()
 			i = _equipmentLayout.begin();
 			i != _equipmentLayout.end();
 			++i)
-	{
 		delete *i;
-	}
 
 	delete _death;
 }
@@ -158,9 +154,7 @@ void Soldier::load(
 				i = layout.begin();
 				i != layout.end();
 				++i)
-		{
 			_equipmentLayout.push_back(new EquipmentLayoutItem(*i));
-		}
 	}
 
 	if (node["death"])
@@ -183,12 +177,8 @@ YAML::Node Soldier::save() const
 	node["initialStats"]	= _initialStats;
 	node["currentStats"]	= _currentStats;
 	node["rank"]			= (int)_rank;
-
 	if (_craft != 0)
-	{
 		node["craft"]		= _craft->saveId();
-	}
-
 	node["gender"]			= (int)_gender;
 	node["look"]			= (int)_look;
 	node["missions"]		= _missions;
@@ -206,9 +196,7 @@ YAML::Node Soldier::save() const
 				i = _equipmentLayout.begin();
 				i != _equipmentLayout.end();
 				++i)
-		{
 			node["equipmentLayout"].push_back((*i)->save());
-		}
 	}
 
 	if (_death != 0)
@@ -263,17 +251,11 @@ std::wstring Soldier::getCraftString(Language* lang) const
 {
 	std::wstring sCraft;
 	if (_recovery > 0)
-	{
 		sCraft = lang->getString("STR_WOUNDED");
-	}
 	else if (_craft == 0)
-	{
 		sCraft = lang->getString("STR_NONE_UC");
-	}
 	else
-	{
 		sCraft = _craft->getName(lang);
-	}
 
 	return sCraft;
 }
@@ -326,11 +308,8 @@ SoldierRank Soldier::getRank() const
 void Soldier::promoteRank()
 {
 	_rank = (SoldierRank)(static_cast<int>(_rank) + 1);
-	if (_rank > RANK_SQUADDIE)
-	{
-		// only promotions above SQUADDIE are worth to be mentioned
+	if (_rank > RANK_SQUADDIE) // only promotions above SQUADDIE are worth mentioning.
 		_recentlyPromoted = true;
-	}
 }
 
 /**
@@ -466,12 +445,8 @@ int Soldier::getWoundRecovery() const
 void Soldier::setWoundRecovery(int recovery)
 {
 	_recovery = recovery;
-
-	// dismiss from craft
-	if (_recovery > 0)
-	{
+	if (_recovery > 0) // dismiss from craft
 		_craft = 0;
-	}
 }
 
 /**
@@ -548,29 +523,27 @@ void Soldier::trainPsi()
 }
 
 /**
- * Trains a soldier's Psychic abilities (anytimePsiTraining option)
+ * Trains a soldier's Psychic abilities ('anytimePsiTraining' option)
  * kL_note: called from GeoscapeState, per 1day. Re-write done.
  */
 void Soldier::trainPsi1Day()
 {
-	// kL_note: don't think this is used for anything.
-	// oh right, it's used in AllocatePsiTrainingState...
-	// ... i don't use it.
-	_improvement = 0;
+	_improvement = 0; // was used in AllocatePsiTrainingState.
 
 	if (!_psiTraining) return;
-
 
 	int const psiSkill = _currentStats.psiSkill;
 	int const rulesMin = _rules->getMinStats().psiSkill;
 
 	if (psiSkill >= _rules->getStatCaps().psiSkill) // hard cap.
-	{
 		return;
-	}
 	else if (psiSkill >= rulesMin) // farther along
 	{
-		int chance = std::max(1, std::min(100, 500 / psiSkill));
+		int chance = std::max(
+							1,
+							std::min(
+									100,
+									500 / psiSkill));
 		if (RNG::percent(chance))
 		{
 			++_improvement;
@@ -588,9 +561,7 @@ void Soldier::trainPsi1Day()
 	else // start here
 	{
 		if (RNG::percent(1))
-		{
 			_currentStats.psiSkill = rulesMin - 1;
-		}
 		else
 			_currentStats.psiSkill = rulesMin - 2;
 	}
@@ -650,9 +621,7 @@ SoldierDead* Soldier::die(SoldierDeath* death)
 			i = _equipmentLayout.begin();
 			i != _equipmentLayout.end();
 			++i)
-	{
 		delete *i;
-	}
 
 	_equipmentLayout.clear();
 

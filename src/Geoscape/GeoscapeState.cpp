@@ -2209,8 +2209,7 @@ void GenerateSupplyMission::operator()(const AlienBase* base) const
 
 
 /**
- * Takes care of any game logic that has to
- * run every game day, like constructions.
+ * Takes care of any game logic that has to run every game day, like constructions.
  */
 void GeoscapeState::time1Day()
 {
@@ -2221,41 +2220,32 @@ void GeoscapeState::time1Day()
 			i != _game->getSavedGame()->getBases()->end();
 			++i)
 	{
-		// Handle facility construction
-		for (std::vector<BaseFacility*>::iterator
+		for (std::vector<BaseFacility*>::iterator // Handle facility construction
 				j = (*i)->getFacilities()->begin();
 				j != (*i)->getFacilities()->end();
 				++j)
-		{
 			if ((*j)->getBuildTime() > 0)
 			{
 				(*j)->build();
 				if ((*j)->getBuildTime() == 0)
-				{
 					popup(new ProductionCompleteState(
 													_game,
 													*i,
 													tr((*j)->getRules()->getType()),
 													this,
 													PROGRESS_CONSTRUCTION));
-				}
 			}
-		}
 
-		// Handle science project
-		std::vector<ResearchProject*> finished;
+		std::vector<ResearchProject*> finished; // Handle science project
 		for (std::vector<ResearchProject*>::const_iterator
 				iter = (*i)->getResearch().begin();
 				iter != (*i)->getResearch().end();
 				++iter)
-		{
 			if ((*iter)->step())
 			{
 				timerReset(); // kL
-
 				finished.push_back(*iter);
 			}
-		}
 
 		for (std::vector<ResearchProject*>::const_iterator
 				iter = finished.begin();
@@ -2284,7 +2274,6 @@ void GeoscapeState::time1Day()
 			if ((*iter)->getRules()->getGetOneFree().size() != 0)
 			{
 				std::vector<std::string> possibilities;
-
 				for (std::vector<std::string>::const_iterator
 						f = (*iter)->getRules()->getGetOneFree().begin();
 						f != (*iter)->getRules()->getGetOneFree().end();
@@ -2295,17 +2284,11 @@ void GeoscapeState::time1Day()
 							discovered = _game->getSavedGame()->getDiscoveredResearch().begin();
 							discovered != _game->getSavedGame()->getDiscoveredResearch().end();
 							++discovered)
-					{
 						if (*f == (*discovered)->getName())
-						{
 							newFound = false;
-						}
-					}
 
 					if (newFound)
-					{
 						possibilities.push_back(*f);
-					}
 				}
 
 				if (possibilities.size() != 0)
@@ -2314,14 +2297,14 @@ void GeoscapeState::time1Day()
 					std::string sel = possibilities.at(pick);
 					bonus = _game->getRuleset()->getResearch(sel);
 
-					_game->getSavedGame()->addFinishedResearch(bonus, _game->getRuleset());
+					_game->getSavedGame()->addFinishedResearch(
+															bonus,
+															_game->getRuleset());
 
 					if (bonus->getLookup() != "")
-					{
 						_game->getSavedGame()->addFinishedResearch(
 																_game->getRuleset()->getResearch(bonus->getLookup()),
 																_game->getRuleset());
-					}
 				}
 			}
 
@@ -2331,19 +2314,15 @@ void GeoscapeState::time1Day()
 			std::string name =  research->getLookup();
 			if (name == "") research->getName();
 			if (_game->getSavedGame()->isResearched(name))
-			{
 				newResearch = 0;
-			}
 
 			_game->getSavedGame()->addFinishedResearch(
 													research,
 													_game->getRuleset());
 			if (research->getLookup() != "")
-			{
 				_game->getSavedGame()->addFinishedResearch(
 														_game->getRuleset()->getResearch(research->getLookup()),
 														_game->getRuleset());
-			}
 
 			popup(new ResearchCompleteState(
 										_game,
@@ -2364,8 +2343,7 @@ void GeoscapeState::time1Day()
 														_game->getRuleset(),
 														*i);
 
-			// check for possible researching weapon before clip
-			if (newResearch)
+			if (newResearch) // check for possible researching weapon before clip
 			{
 				RuleItem* item = _game->getRuleset()->getItem(newResearch->getName());
 				if (item
@@ -2397,67 +2375,50 @@ void GeoscapeState::time1Day()
 											newPossibleResearch));
 
 			if (!newPossibleManufacture.empty())
-			{
 				popup(new NewPossibleManufactureState(
 													_game,
 													*i,
 													newPossibleManufacture));
-			}
 
-			// now iterate through all the bases and remove this project from their labs
-			for (std::vector<Base*>::iterator
+			for (std::vector<Base*>::iterator // now iterate through all the bases and remove this project from their labs
 					j = _game->getSavedGame()->getBases()->begin();
 					j != _game->getSavedGame()->getBases()->end();
 					++j)
-			{
 				for (std::vector<ResearchProject*>::const_iterator
 						iter2 = (*j)->getResearch().begin();
 						iter2 != (*j)->getResearch().end();
 						++iter2)
-				{
 					if ((*iter)->getRules()->getName() == (*iter2)->getRules()->getName()
 						&& _game->getRuleset()->getUnit((*iter2)->getRules()->getName()) == 0)
 					{
 						(*j)->removeResearch(
 											*iter2,
 											false);
-
 						break;
 					}
-				}
-			}
 
 			delete *iter;
 		}
 
-		// Handle soldier wounds
-		for (std::vector<Soldier*>::iterator
+		for (std::vector<Soldier*>::iterator // Handle soldier wounds
 				j = (*i)->getSoldiers()->begin();
 				j != (*i)->getSoldiers()->end();
 				++j)
-		{
 			if ((*j)->getWoundRecovery() > 0)
-			{
 				(*j)->heal();
-			}
-		}
 
-		// Handle psionic training
-		if ((*i)->getAvailablePsiLabs() > 0
+		if ((*i)->getAvailablePsiLabs() > 0 // Handle psionic training
 			&& Options::getBool("anytimePsiTraining"))
 		{
 			for (std::vector<Soldier*>::const_iterator
 					s = (*i)->getSoldiers()->begin();
 					s != (*i)->getSoldiers()->end();
 					++s)
-			{
 				(*s)->trainPsi1Day();
-			}
 		}
 	}
 
-	// handle regional and country points for alien bases
-	for (std::vector<AlienBase*>::const_iterator
+	for (std::vector<AlienBase*>::const_iterator // handle regional and country points for alien bases
 			b = _game->getSavedGame()->getAlienBases()->begin();
 			b != _game->getSavedGame()->getAlienBases()->end();
 			++b)
@@ -2466,55 +2427,48 @@ void GeoscapeState::time1Day()
 				k = _game->getSavedGame()->getRegions()->begin();
 				k != _game->getSavedGame()->getRegions()->end();
 				++k)
-		{
 			if ((*k)->getRules()->insideRegion(
 											(*b)->getLongitude(),
 											(*b)->getLatitude()))
 			{
+//kL				(*k)->addActivityAlien(5);
 				// kL_begin:
 				int pts = static_cast<int>(_game->getSavedGame()->getDifficulty()) + 1;
 				pts *= 5; // try 6+
 				(*k)->addActivityAlien(pts);
 				// kL_end.
 
-//kL				(*k)->addActivityAlien(5);
-
 				break;
 			}
-		}
 
 		for (std::vector<Country*>::iterator
 				k = _game->getSavedGame()->getCountries()->begin();
 				k != _game->getSavedGame()->getCountries()->end();
 				++k)
-		{
 			if ((*k)->getRules()->insideCountry(
 											(*b)->getLongitude(),
 											(*b)->getLatitude()))
 			{
+//kL				(*k)->addActivityAlien(5);
 				// kL_begin:
 				int pts = static_cast<int>(_game->getSavedGame()->getDifficulty()) + 1;
 				pts *= 5; // try 6+
 				(*k)->addActivityAlien(pts);
 				// kL_end.
 
-//kL				(*k)->addActivityAlien(5);
-
 				break;
 			}
-		}
 	}
 
-	// Handle resupply of alien bases.
-	std::for_each(
+	std::for_each( // Handle resupply of alien bases.
 				_game->getSavedGame()->getAlienBases()->begin(),
 				_game->getSavedGame()->getAlienBases()->end(),
 				GenerateSupplyMission(
 									*_game->getRuleset(),
 									*_game->getSavedGame()));
 
-	// Autosave
-	if (Options::getInt("autosave") > 1)
+
+	if (Options::getInt("autosave") > 1) // Autosave
 		_game->pushState(new SaveState(
 									_game,
 									OPT_GEOSCAPE,

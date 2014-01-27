@@ -40,13 +40,11 @@ enum SoldierRank
 	RANK_COMMANDER	// 5
 };
 
-
 enum SoldierGender
 {
 	GENDER_MALE,	// 0
 	GENDER_FEMALE	// 1
 };
-
 
 enum SoldierLook
 {
