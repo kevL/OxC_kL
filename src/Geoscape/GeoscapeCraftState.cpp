@@ -21,6 +21,7 @@
 
 #include <sstream>
 
+#include "Globe.h"
 #include "SelectDestinationState.h"
 
 #include "../Engine/Game.h"

@@ -21,6 +21,7 @@
 
 #include <sstream>
 
+#include "ManageAlienContainmentState.h"
 #include "NewResearchListState.h"
 #include "ResearchInfoState.h"
 
@@ -37,9 +38,11 @@
 
 #include "../Resource/ResourcePack.h"
 
+#include "../Ruleset/RuleBaseFacility.h"
 #include "../Ruleset/RuleResearch.h"
 
 #include "../Savegame/Base.h"
+#include "../Savegame/BaseFacility.h"
 #include "../Savegame/ResearchProject.h"
 
 
@@ -72,7 +75,7 @@ ResearchState::ResearchState(
 	_txtProgress	= new Text(55, 9, 232, 47);
 
 	_lstResearch	= new TextList(285, 112, 16, 62);
-	
+
 	_btnAliens		= new TextButton(92, 16, 16, 177); // kL
 	_btnNew			= new TextButton(92, 16, 114, 177);
 	_btnOk			= new TextButton(92, 16, 212, 177);
@@ -178,7 +181,7 @@ ResearchState::~ResearchState()
 void ResearchState::btnOkClick(Action*)
 {
 	_game->setPalette(_oldPalette);
-	
+
 	_game->popState();
 }
 

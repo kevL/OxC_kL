@@ -19,10 +19,12 @@
 
 #include "CraftArmorState.h"
 
+#include <climits>
 #include <string>
 
 #include "SoldierArmorState.h"
 
+#include "../Engine/Action.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
 #include "../Engine/Options.h"
@@ -252,7 +254,7 @@ void CraftArmorState::init()
  * @param action Pointer to an action.
  */
 void CraftArmorState::btnOkClick(Action*)
-//void CraftArmorState::btnOkClick(Action* action)		// kL
+//void CraftArmorState::btnOkClick(Action* action) // kL
 {
 	_game->popState();
 }
@@ -262,7 +264,7 @@ void CraftArmorState::btnOkClick(Action*)
  * @param action Pointer to an action.
  */
 // void CraftArmorState::lstSoldiersClick(Action*)
-void CraftArmorState::lstSoldiersClick(Action* action)		// kL
+void CraftArmorState::lstSoldiersClick(Action* action) // kL
 {
 	// kL: Taken from CraftSoldiersState::lstSoldiersClick()
 	double mx = action->getAbsoluteXMouse();
@@ -333,7 +335,7 @@ void CraftArmorState::lstItemsRightArrowClick_Armor(Action* action)
 	{
 		int row = _lstSoldiers->getSelectedRow();
 		size_t numSoldiers = _base->getSoldiers()->size();
-	
+
 		if (0 < numSoldiers
 			&& INT_MAX >= numSoldiers
 			&& row < static_cast<int>(numSoldiers) - 1)

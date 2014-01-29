@@ -39,6 +39,7 @@
 #include "../Resource/ResourcePack.h"
 
 #include "../Ruleset/Armor.h"
+#include "../Ruleset/Ruleset.h"
 
 #include "../Savegame/BattleItem.h"
 #include "../Savegame/BattleUnit.h"
@@ -451,7 +452,7 @@ void AlienBAIState::think(BattleAction* action)
  */
 void AlienBAIState::setWasHit()
 {
-	_wasHit = true; 
+	_wasHit = true;
 }
 
 /*
@@ -515,8 +516,8 @@ void AlienBAIState::setupPatrol()
 													_unit->getPosition(),
 													node->getPosition());
 
-			if (_unit->getPosition().z == node->getPosition().z 
-				&& d < closest 
+			if (_unit->getPosition().z == node->getPosition().z
+				&& d < closest
 				&& (!(node->getType() & Node::TYPE_SMALL)
 					|| _unit->getArmor()->getSize() == 1))
 			{
@@ -755,7 +756,7 @@ void AlienBAIState::setupAmbush()
 			_ambushAction->type = BA_WALK;
 
 			// i should really make a function for this
-			origin = (_ambushAction->target * Position(16,16,24)) + 
+			origin = (_ambushAction->target * Position(16,16,24)) +
 					// 4 because -2 is eyes and 2 below that is the rifle (or at least that's my understanding)
 					Position(8, 8, _unit->getHeight() + _unit->getFloatHeight()
 							- _save->getTile(_ambushAction->target)->getTerrainLevel() - 4);
@@ -946,7 +947,7 @@ void AlienBAIState::setupEscape()
 				_escapeAction->target = _unit->lastCover;
 			}
 		}
-		else if (tries < 121) 
+		else if (tries < 121)
 		{
 			// looking for cover
 			_escapeAction->target.x += randomTileSearch[tries].x;

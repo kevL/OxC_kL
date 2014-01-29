@@ -43,6 +43,7 @@
 #include "../Savegame/Base.h"
 #include "../Savegame/Craft.h"
 #include "../Savegame/SavedGame.h"
+#include "../Savegame/Ufo.h"
 
 
 namespace OpenXcom

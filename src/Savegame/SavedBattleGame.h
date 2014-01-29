@@ -98,7 +98,7 @@ private:
 	std::vector<Position>
 		_tileSearch,
 		_storageSpace;
-	std::vector<std::vector<std::pair<int, int>>> _baseModules;
+	std::vector<std::vector<std::pair<int, int> > > _baseModules;
 
 	Uint8 _dragButton;			// this is a cache for Options::getString("battleScrollDragButton")
 	bool _dragInvert;			// this is a cache for Options::getString("battleScrollDragInvert")
@@ -332,7 +332,7 @@ private:
 		/// move all the leftover items to random locations in the storage tiles vector.
 		void randomizeItemLocations(Tile* t);
 		/// get a reference to the baseModules map.
-		std::vector<std::vector<std::pair<int, int>>>& getModuleMap();
+		std::vector<std::vector<std::pair<int, int> > >& getModuleMap();
 		/// calculate the number of map modules remaining
 		void calculateModuleMap();
 		/// a shortcut to the geoscape save.

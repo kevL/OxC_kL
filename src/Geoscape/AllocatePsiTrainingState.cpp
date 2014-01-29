@@ -19,6 +19,7 @@
 
 #include "AllocatePsiTrainingState.h"
 
+#include <climits>
 #include <sstream>
 
 #include "GeoscapeState.h"
@@ -38,6 +39,7 @@
 #include "../Resource/ResourcePack.h"
 
 #include "../Ruleset/Ruleset.h"
+#include "../Ruleset/RuleSoldier.h"
 
 #include "../Savegame/Base.h"
 #include "../Savegame/SavedGame.h"
@@ -394,7 +396,7 @@ void AllocatePsiTrainingState::lstItemsRightArrowClick_Psi(Action* action)
 	{
 		int row = _lstSoldiers->getSelectedRow();
 		size_t numSoldiers = _base->getSoldiers()->size();
-	
+
 		if (0 < numSoldiers
 			&& INT_MAX >= numSoldiers
 			&& row < static_cast<int>(numSoldiers) - 1)

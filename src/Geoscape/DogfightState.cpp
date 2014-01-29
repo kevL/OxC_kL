@@ -26,6 +26,7 @@
 
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
+#include "../Engine/Logger.h"
 #include "../Engine/Music.h"
 #include "../Engine/Palette.h"
 #include "../Engine/RNG.h"
@@ -68,8 +69,8 @@ const int DogfightState::_timeScale = 75;
 // UFO blobs graphics ...
 const int DogfightState::_ufoBlobs[8][13][13] =
 {
-		/*0 STR_VERY_SMALL */ 
-	{ 
+		/*0 STR_VERY_SMALL */
+	{
 		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -284,7 +285,7 @@ DogfightState::DogfightState(
 	_screen = false;
 
 	_craft->setInDogfight(true);
-	
+
 	_window					= new Surface(160, 96, _x, _y);
 	_battle					= new Surface(77, 74, _x + 3, _y + 3);
 	_weapon1				= new InteractiveSurface(15, 17, _x + 4, _y + 52);
@@ -292,7 +293,7 @@ DogfightState::DogfightState(
 	_weapon2				= new InteractiveSurface(15, 17, _x + 64, _y + 52);
 	_range2					= new Surface(21, 74, _x + 43, _y + 3);
 	_damage					= new Surface(22, 25, _x + 93, _y + 40);
-	
+
 	_btnMinimize			= new InteractiveSurface(12, 12, _x, _y);
 	_preview				= new InteractiveSurface(160, 96, _x, _y);
 	_btnStandoff			= new ImageButton(36, 15, _x + 83, _y + 4);
@@ -795,7 +796,7 @@ void DogfightState::animate()
 	{
 		drawProjectile(*it);
 	}
-	
+
 	// Clears text after a while
 	if (_timeout == 0)
 		_txtStatus->setText(L"");
@@ -844,7 +845,7 @@ void DogfightState::move()
 
 		return;
 	}
-	
+
 	if (_minimized
 		&& _ufo->getSpeed() > _craft->getSpeed())
 	{
@@ -921,7 +922,7 @@ void DogfightState::move()
 			// If UFOs ever fire anything but beams, those positions need to be adjusted here though.
 		}
 
-		_currentDist += distanceChange; 
+		_currentDist += distanceChange;
 
 		std::wstringstream ss;
 		ss << _currentDist;
@@ -1029,7 +1030,7 @@ void DogfightState::move()
 				}
 			}
 		}
-		
+
 		// Remove projectiles that hit or missed their target.
 		for (std::vector<CraftWeaponProjectile*>::iterator
 				it = _projectiles.begin();
@@ -1168,7 +1169,7 @@ void DogfightState::move()
 		_w1Timer->stop();
 		_w2Timer->stop();
 	}
-	
+
 	if (!_end // end dogfight if UFO is crashed, or destroyed.
 		&& _ufo->isCrashed())
 	{
@@ -2000,7 +2001,7 @@ void DogfightState::calculateWindowPosition()
 {
 	_minimizedIconX = 5;
 	_minimizedIconY = (5 * _interceptionNumber) + (16 * (_interceptionNumber - 1));
-	
+
 	if (_interceptionsCount == 1)
 	{
 		_x = 80;

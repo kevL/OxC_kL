@@ -91,7 +91,7 @@ void Armor::load(const YAML::Node& node)
 	}
 	else if (node["corpseBattle"])
 	{
-		_corpseBattle	= node["corpseBattle"].as<std::vector<std::string>>();
+		_corpseBattle	= node["corpseBattle"].as<std::vector<std::string> >();
 		_corpseGeo		= _corpseBattle[0];
 	}
 	_corpseGeo		= node["corpseGeo"].as<std::string>(_corpseGeo);
@@ -119,7 +119,7 @@ void Armor::load(const YAML::Node& node)
 		}
 	}
 
-	_loftempsSet = node["loftempsSet"].as<std::vector<int>>(_loftempsSet);
+	_loftempsSet = node["loftempsSet"].as<std::vector<int> >(_loftempsSet);
 	if (node["loftemps"])
 	{
 		_loftempsSet.push_back(node["loftemps"].as<int>());

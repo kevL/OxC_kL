@@ -22,6 +22,7 @@
 #include <cmath>
 
 #include "PrimeGrenadeState.h"
+#include "TileEngine.h"
 #include "WarningMessage.h"
 
 #include "../Engine/Action.h"

@@ -24,6 +24,7 @@
 #include "SerializationHelper.h"
 
 #include "../Engine/Exception.h"
+#include "../Engine/Logger.h"
 #include "../Engine/RNG.h"
 #include "../Engine/Surface.h"
 #include "../Engine/SurfaceSet.h"

@@ -23,6 +23,7 @@
 #include <string>
 #include <climits>
 
+#include "CraftArmorState.h"
 #include "SoldierInfoState.h"
 #include "SoldierMemorialState.h"
 
@@ -316,7 +317,7 @@ void SoldiersState::lstItemsRightArrowClick_Soldier(Action* action)
 	{
 		int row = _lstSoldiers->getSelectedRow();
 		size_t numSoldiers = _base->getSoldiers()->size();
-	
+
 		if (0 < numSoldiers
 			&& INT_MAX >= numSoldiers
 			&& row < static_cast<int>(numSoldiers) - 1)

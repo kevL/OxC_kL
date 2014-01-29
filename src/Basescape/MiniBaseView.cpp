@@ -25,7 +25,7 @@
 #include "../Engine/Palette.h"
 #include "../Engine/SurfaceSet.h"
 
-//#include "../Geoscape/GeoscapeState.h"	// kL
+#include "../Geoscape/GeoscapeState.h"
 
 #include "../Ruleset/RuleBaseFacility.h"
 

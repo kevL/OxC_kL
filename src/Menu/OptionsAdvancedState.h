@@ -55,8 +55,8 @@ private:
 	Window* _window;
 
 	// intentionally avoiding using a map here, to avoid auto-sorting.
-	std::vector<std::pair<std::string, bool>> _settingBoolSet;
-	std::vector<std::pair<std::string, int>> _settingIntSet;
+	std::vector<std::pair<std::string, bool> > _settingBoolSet;
+	std::vector<std::pair<std::string, int> > _settingIntSet;
 
 
 	public:

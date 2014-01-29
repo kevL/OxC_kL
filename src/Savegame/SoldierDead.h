@@ -24,7 +24,10 @@
 
 #include <yaml-cpp/yaml.h>
 
+//#include "../Ruleset/RuleSoldier.h"
 //#include "../Ruleset/Unit.h"
+
+#include "../Savegame/Soldier.h"
 
 
 namespace OpenXcom
@@ -36,6 +39,9 @@ class Language;
 //class RuleSoldier;
 class Soldier;
 class SoldierDeath;
+//enum SoldierGender;
+//enum SoldierLook;
+//enum SoldierRank;
 
 
 /**

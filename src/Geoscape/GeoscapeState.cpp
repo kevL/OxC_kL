@@ -30,6 +30,8 @@
 #include <iomanip>
 #include <sstream>
 
+#include "../aresame.h"
+
 #include "AlienBaseState.h"
 #include "AlienTerrorState.h"
 #include "BaseDefenseState.h"
@@ -64,6 +66,7 @@
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
+#include "../Engine/Logger.h"
 #include "../Engine/Music.h"
 #include "../Engine/Options.h"
 #include "../Engine/Palette.h"
@@ -74,6 +77,7 @@
 
 #include "../Interface/Cursor.h"
 #include "../Interface/FpsCounter.h"
+#include "../Interface/ImageButton.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 
@@ -495,7 +499,7 @@ GeoscapeState::GeoscapeState(Game* game)
 	_btnZoomOut->onMouseClick((ActionHandler)& GeoscapeState::btnZoomOutLeftClick, SDL_BUTTON_LEFT);
 	_btnZoomOut->onMouseClick((ActionHandler)& GeoscapeState::btnZoomOutRightClick, SDL_BUTTON_RIGHT);
 	_btnZoomOut->onKeyboardPress((ActionHandler)& GeoscapeState::btnZoomOutLeftClick, (SDLKey)Options::getInt("keyGeoZoomOut"));
-	
+
 	// dirty hacks to get the rotate buttons to work in "classic" style
 	_btnRotateLeft->setListButton();
 	_btnRotateRight->setListButton();

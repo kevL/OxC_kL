@@ -29,6 +29,7 @@
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
+#include "../Engine/Logger.h"
 #include "../Engine/Options.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Timer.h"

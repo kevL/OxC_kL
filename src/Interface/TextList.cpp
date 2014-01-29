@@ -102,7 +102,7 @@ TextList::TextList(
  */
 TextList::~TextList()
 {
-	for (std::vector<std::vector<Text*>>::iterator
+	for (std::vector<std::vector<Text*> >::iterator
 			i = _texts.begin();
 			i < _texts.end();
 			++i)
@@ -467,7 +467,7 @@ void TextList::setPalette(
 					firstcolor,
 					ncolors);
 
-	for (std::vector<std::vector<Text*>>::iterator
+	for (std::vector<std::vector<Text*> >::iterator
 			i = _texts.begin();
 			i < _texts.end();
 			++i)
@@ -572,7 +572,7 @@ void TextList::setColor(Uint8 color)
 	_up->setColor(color);
 	_down->setColor(color);
 
-	for (std::vector<std::vector<Text*>>::iterator
+	for (std::vector<std::vector<Text*> >::iterator
 			i = _texts.begin();
 			i < _texts.end();
 			++i)
@@ -622,7 +622,7 @@ void TextList::setHighContrast(bool contrast)
 {
 	_contrast = contrast;
 
-	for (std::vector<std::vector<Text*>>::iterator
+	for (std::vector<std::vector<Text*> >::iterator
 			i = _texts.begin();
 			i < _texts.end();
 			++i)
@@ -929,7 +929,7 @@ void TextList::onRightArrowRelease(ActionHandler handler)
  */
 void TextList::clearList()
 {
-	for (std::vector<std::vector<Text*>>::iterator
+	for (std::vector<std::vector<Text*> >::iterator
 			i = _texts.begin();
 			i < _texts.end();
 			++i)

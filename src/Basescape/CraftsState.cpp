@@ -28,6 +28,8 @@
 #include "../Engine/Options.h"
 #include "../Engine/Palette.h"
 
+#include "../Geoscape/Globe.h"
+
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/TextList.h"
@@ -39,6 +41,8 @@
 
 #include "../Savegame/Base.h"
 #include "../Savegame/Craft.h"
+#include "../Savegame/SavedGame.h"
+#include "../Savegame/Ufo.h"
 
 
 namespace OpenXcom

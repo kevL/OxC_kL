@@ -28,9 +28,11 @@
 #include "ManageAlienContainmentState.h"
 #include "ManufactureState.h"
 #include "MiniBaseView.h"
+#include "MonthlyCostsState.h"
 #include "PurchaseState.h"
 #include "ResearchState.h"
 #include "SellState.h"
+#include "StoresState.h"
 #include "SoldiersState.h"
 #include "TransferBaseState.h"
 
@@ -580,9 +582,9 @@ void BasescapeState::viewRightClick(Action*)
 			}
 	}
 	else if (f->getRules()->getStorage() > 0)
-//		_game->pushState(new SellState(
-//									_game,
-//									_base));
+//kL		_game->pushState(new SellState(
+//kL									_game,
+//kL									_base));
 		_game->pushState(new StoresState(
 									_game,
 									_base));

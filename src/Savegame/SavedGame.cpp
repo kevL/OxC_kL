@@ -358,16 +358,16 @@ void SavedGame::load(
 	_graphRegionToggles		= doc["graphRegionToggles"].as<std::string>(_graphRegionToggles);
 	_graphCountryToggles	= doc["graphCountryToggles"].as<std::string>(_graphCountryToggles);
 	_graphFinanceToggles	= doc["graphFinanceToggles"].as<std::string>(_graphFinanceToggles);
-	_funds					= doc["funds"].as<std::vector<int>>(_funds);
-	_maintenance			= doc["maintenance"].as<std::vector<int>>(_maintenance);
-	_researchScores			= doc["researchScores"].as<std::vector<int>>(_researchScores);
-	_income					= doc["income"].as<std::vector<int>>(_income);				// kL
-	_expenditure			= doc["expenditure"].as<std::vector<int>>(_expenditure);	// kL
+	_funds					= doc["funds"].as<std::vector<int> >(_funds);
+	_maintenance			= doc["maintenance"].as<std::vector<int> >(_maintenance);
+	_researchScores			= doc["researchScores"].as<std::vector<int> >(_researchScores);
+	_income					= doc["income"].as<std::vector<int> >(_income);				// kL
+	_expenditure			= doc["expenditure"].as<std::vector<int> >(_expenditure);	// kL
 	_warned					= doc["warned"].as<bool>(_warned);
 	_globeLon				= doc["globeLon"].as<double>(_globeLon);
 	_globeLat				= doc["globeLat"].as<double>(_globeLat);
 	_globeZoom				= doc["globeZoom"].as<int>(_globeZoom);
-	_ids					= doc["ids"].as<std::map<std::string, int>>(_ids);
+	_ids					= doc["ids"].as<std::map<std::string, int> >(_ids);
 
 	for (YAML::const_iterator
 			i = doc["countries"].begin();
@@ -475,7 +475,7 @@ void SavedGame::load(
 		std::string research = it->as<std::string>();
 		_discovered.push_back(rule->getResearch(research));
 	}
-	
+
 	const YAML::Node& research = doc["poppedResearch"];
 	for (YAML::const_iterator
 			it = research.begin();
@@ -1169,7 +1169,7 @@ void SavedGame::getAvailableResearchProjects(
 																				discovered.begin(),
 																				discovered.end(),
 																				research);
-		
+
 		bool liveAlien = (ruleset->getUnit(research->getName()) != 0);
 
 		if (itDiscovered != discovered.end ())
@@ -1209,7 +1209,7 @@ void SavedGame::getAvailableResearchProjects(
 																			research->getUnlocked().begin(),
 																			research->getUnlocked().end(),
 																			"STR_CYDONIA_DEP");
-				
+
 				bool leader = (leaderCheck != research->getUnlocked().end());
 				bool cmnder = (cmnderCheck != research->getUnlocked().end());
 
@@ -1343,7 +1343,7 @@ bool SavedGame::isResearchAvailable(
 		return true;
 	}
 	else if (liveAlien)
-	{		
+	{
 		if (!r->getGetOneFree().empty())
 		{
 			for (std::vector<std::string>::const_iterator
@@ -1369,7 +1369,7 @@ bool SavedGame::isResearchAvailable(
 																		r->getUnlocked().begin(),
 																		r->getUnlocked().end(),
 																		"STR_CYDONIA_DEP");
-				
+
 			bool leader = (leaderCheck != r->getUnlocked().end());
 			bool cmnder = (cmnderCheck != r->getUnlocked().end());
 

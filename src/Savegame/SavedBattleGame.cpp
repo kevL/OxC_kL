@@ -206,7 +206,7 @@ void SavedBattleGame::load(
 			getTile(pos)->load((*i));
 		}
 	}
-	else 
+	else
 	{
 		// load key to how the tile data was saved
 		Tile::SerializationKey serKey;
@@ -226,7 +226,7 @@ void SavedBattleGame::load(
 		serKey._mapDataSetID	= node["tileSetIDSize"].as<Uint8>(serKey._mapDataSetID);
 		serKey.boolFields		= node["tileBoolFieldsSize"].as<Uint8>(1); // boolean flags used to be stored in an unmentioned byte (Uint8) :|
 
-		// load binary tile data! 
+		// load binary tile data!
 		YAML::Binary binTiles = node["binTiles"].as<YAML::Binary>();
 
 		Uint8* r = (Uint8*)binTiles.data();
@@ -245,7 +245,7 @@ void SavedBattleGame::load(
 	{
 		if (node["moduleMap"])
 		{
-			_baseModules = node["moduleMap"].as<std::vector<std::vector<std::pair<int, int>>>>();
+			_baseModules = node["moduleMap"].as<std::vector<std::vector<std::pair<int, int> > > >();
 		}
 		else
 		{
@@ -1303,7 +1303,7 @@ void SavedBattleGame::resetUnitTiles()
 			(*i)->setVisible(true);
 	}
 }
- 
+
 /**
  * Gives access to the "storage space" vector, for distribution of items in base defense missions.
  */
@@ -1563,7 +1563,7 @@ Node* SavedBattleGame::getPatrolNode(
 			&& (!(node->getType() & Node::TYPE_FLYING)				// the flying unit bit is not set
 				|| unit->getArmor()->getMovementType() == MT_FLY)		// or the unit can fly
 			&& !node->isAllocated()									// check if not allocated
-			&& !(node->getType() & Node::TYPE_DANGEROUS)			// don't go there if an alien got shot there; stupid behavior like that 
+			&& !(node->getType() & Node::TYPE_DANGEROUS)			// don't go there if an alien got shot there; stupid behavior like that
 			&& setUnitPosition(										// check if unit can be set at this node
 							unit,										// ie. it's big enough
 							node->getPosition(),						// and there's not already a unit there.
@@ -2432,7 +2432,7 @@ void SavedBattleGame::setKneelReserved(bool reserved)
  * -1 for "no items" 0 for "destroyed" and any actual number represents how many left.
  * @Return the base module damage map.
  */
-std::vector<std::vector<std::pair<int, int>>>& SavedBattleGame::getModuleMap()
+std::vector<std::vector<std::pair<int, int> > >& SavedBattleGame::getModuleMap()
 {
 	return _baseModules;
 }
@@ -2446,7 +2446,7 @@ void SavedBattleGame::calculateModuleMap()
 {
 	_baseModules.resize(
 				_mapsize_x / 10,
-				std::vector<std::pair<int, int>>(
+				std::vector<std::pair<int, int> >(
 											_mapsize_y / 10,
 											std::make_pair(-1, -1)));
 

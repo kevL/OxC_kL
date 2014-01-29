@@ -99,7 +99,7 @@ private:
 
 	std::list<Polygon*> _cacheLand;
 	/// normal of each pixel in earth globe per zoom level
-	std::vector<std::vector<Cord>> _earthData;
+	std::vector<std::vector<Cord> > _earthData;
 	/// data sample used for noise in shading
 	std::vector<Sint16> _randomNoiseData;
 	/// list of dimension of earth on screen per zoom level

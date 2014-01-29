@@ -43,17 +43,18 @@
 
 #include "../Resource/ResourcePack.h"
 
+#include "../Ruleset/Armor.h"
+#include "../Ruleset/RuleInventory.h"
+#include "../Ruleset/RuleItem.h"
+#include "../Ruleset/Ruleset.h"
+#include "../Ruleset/RuleSoldier.h"
+
 #include "../Savegame/BattleItem.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/EquipmentLayoutItem.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Soldier.h"
-
-#include "../Ruleset/Armor.h"
-#include "../Ruleset/RuleInventory.h"
-#include "../Ruleset/RuleItem.h"
-#include "../Ruleset/Ruleset.h"
 
 
 namespace OpenXcom

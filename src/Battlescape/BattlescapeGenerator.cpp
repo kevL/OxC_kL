@@ -34,6 +34,7 @@
 #include "../Engine/Exception.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
+#include "../Engine/Logger.h"
 #include "../Engine/Options.h"
 #include "../Engine/RNG.h"
 
@@ -684,7 +685,7 @@ void BattlescapeGenerator::deployXCOM()
 						default:
 						break;
 					}
-				
+
 					if (add)
 					{
 						for (std::vector<BattleUnit*>::iterator
@@ -1450,7 +1451,7 @@ void BattlescapeGenerator::deployAliens(
 		alienName = race->getMember((*d).alienRank); // kL
 
 //kL		int quantity;
-		
+
 		if (_game->getSavedGame()->getDifficulty() < DIFF_VETERAN)
 			quantity = (*d).lowQty + RNG::generate(0, (*d).dQty);										// beginner/experienced
 		else if (_game->getSavedGame()->getDifficulty() < DIFF_SUPERHUMAN)
@@ -1728,11 +1729,11 @@ void BattlescapeGenerator::generateMap()
 		mapDataSetIDOffset = 0,
 		craftDataSetIDOffset = 0;
 
-	std::vector<std::vector<bool>>
+	std::vector<std::vector<bool> >
 		landingzone,
 		storageBlocks;
-	std::vector<std::vector<int>> segments;
-	std::vector<std::vector<MapBlock*>> blocks;
+	std::vector<std::vector<int> > segments;
+	std::vector<std::vector<MapBlock*> > blocks;
 
 	MapBlock
 		* dummy = new MapBlock(
@@ -2749,7 +2750,7 @@ void BattlescapeGenerator::fuelPowerSources()
 			i < _save->getMapSizeXYZ();
 			++i)
 	{
-		if (_save->getTiles()[i]->getMapData(MapData::O_OBJECT) 
+		if (_save->getTiles()[i]->getMapData(MapData::O_OBJECT)
 			&& _save->getTiles()[i]->getMapData(MapData::O_OBJECT)->getSpecialType() == UFO_POWER_SOURCE)
 		{
 			BattleItem* elerium = new BattleItem(

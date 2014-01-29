@@ -94,7 +94,7 @@ OptionsAdvancedState::OptionsAdvancedState(
 	_btnCancel->onKeyboardPress(
 					(ActionHandler)& OptionsAdvancedState::btnCancelClick,
 					(SDLKey)Options::getInt("keyCancel"));
-	
+
 	_txtDescription->setColor(Palette::blockOffset(8)+10);
 	_txtDescription->setWordWrap(true);
 
@@ -134,7 +134,7 @@ OptionsAdvancedState::OptionsAdvancedState(
 	_boolQuantity = _settingBoolSet.size();
 	int sel = 0;
 
-	for (std::vector<std::pair<std::string, bool>>::iterator
+	for (std::vector<std::pair<std::string, bool> >::iterator
 			i = _settingBoolSet.begin();
 			i != _settingBoolSet.end();
 			++i)
@@ -160,7 +160,7 @@ OptionsAdvancedState::OptionsAdvancedState(
 	_settingIntSet.push_back(std::pair<std::string, int>("autosave", 0));
 	_settingIntSet.push_back(std::pair<std::string, int>("maxFrameSkip", 0));
 
-	for (std::vector<std::pair<std::string, int>>::iterator
+	for (std::vector<std::pair<std::string, int> >::iterator
 			i = _settingIntSet.begin();
 			i != _settingIntSet.end();
 			++i)
@@ -207,7 +207,7 @@ OptionsAdvancedState::~OptionsAdvancedState()
  */
 void OptionsAdvancedState::btnOkClick(Action*)
 {
-	for (std::vector<std::pair<std::string, bool>>::iterator
+	for (std::vector<std::pair<std::string, bool> >::iterator
 			i = _settingBoolSet.begin();
 			i != _settingBoolSet.end();
 			++i)
@@ -215,7 +215,7 @@ void OptionsAdvancedState::btnOkClick(Action*)
 		Options::setBool((*i).first, (*i).second);
 	}
 
-	for (std::vector<std::pair<std::string, int>>::iterator
+	for (std::vector<std::pair<std::string, int> >::iterator
 			i = _settingIntSet.begin();
 			i != _settingIntSet.end();
 			++i)

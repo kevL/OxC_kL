@@ -216,12 +216,12 @@ Ruleset::~Ruleset()
 		delete i->second;
 	}
 
-	for (std::vector<std::pair<std::string, ExtraSprites*>>::const_iterator i = _extraSprites.begin (); i != _extraSprites.end (); ++i)
+	for (std::vector<std::pair<std::string, ExtraSprites*> >::const_iterator i = _extraSprites.begin (); i != _extraSprites.end (); ++i)
 	{
 		delete i->second;
 	}
 
-	for (std::vector<std::pair<std::string, ExtraSounds*>>::const_iterator i = _extraSounds.begin (); i != _extraSounds.end (); ++i)
+	for (std::vector<std::pair<std::string, ExtraSounds*> >::const_iterator i = _extraSounds.begin (); i != _extraSounds.end (); ++i)
 	{
 		delete i->second;
 	}
@@ -474,7 +474,7 @@ void Ruleset::loadFile(const std::string& filename)
 		}
 	}
 
-	_alienItemLevels = doc["alienItemLevels"].as< std::vector< std::vector<int>> >(_alienItemLevels);
+	_alienItemLevels = doc["alienItemLevels"].as< std::vector< std::vector<int> > >(_alienItemLevels);
 
 	for (YAML::const_iterator i = doc["MCDPatches"].begin(); i != doc["MCDPatches"].end(); ++i)
 	{
@@ -1296,7 +1296,7 @@ const City* Ruleset::locateCity(
  * Gets the alien item level table.
  * @return A deep array containing the alien item levels.
  */
-const std::vector<std::vector<int>>& Ruleset::getAlienItemLevels() const
+const std::vector<std::vector<int> >& Ruleset::getAlienItemLevels() const
 {
 	return _alienItemLevels;
 }
@@ -1328,7 +1328,7 @@ MCDPatch* Ruleset::getMCDPatch(const std::string id) const
  * Gets the list of external sprites.
  * @return The list of external sprites.
  */
-std::vector<std::pair<std::string, ExtraSprites*>> Ruleset::getExtraSprites() const
+std::vector<std::pair<std::string, ExtraSprites*> > Ruleset::getExtraSprites() const
 {
 	return _extraSprites;
 }
@@ -1337,7 +1337,7 @@ std::vector<std::pair<std::string, ExtraSprites*>> Ruleset::getExtraSprites() co
  * Gets the list of external sounds.
  * @return The list of external sounds.
  */
-std::vector<std::pair<std::string, ExtraSounds*>> Ruleset::getExtraSounds() const
+std::vector<std::pair<std::string, ExtraSounds*> > Ruleset::getExtraSounds() const
 {
 	return _extraSounds;
 }
@@ -1397,7 +1397,7 @@ void Ruleset::sortLists()
 
 	list.clear();
 	offset = 0;
-	
+
 	for (std::vector<std::string>::const_iterator i = _facilitiesIndex.begin(); i != _facilitiesIndex.end(); ++i)
 	{
 		while (list.find(getBaseFacility(*i)->getListOrder() + offset) != list.end())
@@ -1417,7 +1417,7 @@ void Ruleset::sortLists()
 
 	list.clear();
 	offset = 0;
-	
+
 	for (std::vector<std::string>::const_iterator i = _craftWeaponsIndex.begin(); i != _craftWeaponsIndex.end(); ++i)
 	{
 		while (list.find(getItem(getCraftWeapon(*i)->getLauncherItem())->getListOrder() + offset) != list.end())
@@ -1437,7 +1437,7 @@ void Ruleset::sortLists()
 
 	list.clear();
 	offset = 0;
-	
+
 	int alternateEntry = 0;
 	for (std::vector<std::string>::const_iterator i = _armorsIndex.begin(); i != _armorsIndex.end(); ++i)
 	{
@@ -1466,7 +1466,7 @@ void Ruleset::sortLists()
 
 	list.clear();
 	offset = 0;
-	
+
 	for (std::vector<std::string>::const_iterator i = _ufopaediaIndex.begin(); i != _ufopaediaIndex.end(); ++i)
 	{
 		while (list.find(getUfopaediaArticle(*i)->getListOrder() + offset) != list.end())
@@ -1486,7 +1486,7 @@ void Ruleset::sortLists()
 
 	list.clear();
 	offset = 0;
-	
+
 	for (std::vector<std::string>::const_iterator i = _researchIndex.begin(); i != _researchIndex.end(); ++i)
 	{
 		while (list.find(getResearch(*i)->getListOrder() + offset) != list.end())
@@ -1506,7 +1506,7 @@ void Ruleset::sortLists()
 
 	list.clear();
 	offset = 0;
-	
+
 	for (std::vector<std::string>::const_iterator i = _manufactureIndex.begin(); i != _manufactureIndex.end(); ++i)
 	{
 		while (list.find(getManufacture(*i)->getListOrder() + offset) != list.end())

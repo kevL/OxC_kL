@@ -96,7 +96,7 @@ private:
 	std::map<int, TextHAlign> _align;
 
 	std::vector<int> _columns;
-	std::vector<std::vector<Text*>> _texts;
+	std::vector<std::vector<Text*> > _texts;
 	std::vector<ArrowButton*>
 		_arrowLeft,
 		_arrowRight;

@@ -18,21 +18,29 @@
  */
 
 #include "AbortMissionState.h"
+
 #include <sstream>
 #include <vector>
+
+#include "BattlescapeState.h"
+
+#include "../Engine/Action.h"
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
+#include "../Engine/Logger.h"
+#include "../Engine/Options.h"
 #include "../Engine/Palette.h"
-#include "../Interface/Window.h"
+
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
-#include "../Engine/Action.h"
-#include "../Savegame/SavedBattleGame.h"
-#include "BattlescapeState.h"
-#include "../Engine/Options.h"
+#include "../Interface/Window.h"
+
+#include "../Resource/ResourcePack.h"
+
 #include "../Ruleset/AlienDeployment.h"
 #include "../Ruleset/Ruleset.h"
+
+#include "../Savegame/SavedBattleGame.h"
 
 
 namespace OpenXcom
@@ -44,7 +52,10 @@ namespace OpenXcom
  * @param battleGame Pointer to the saved game.
  * @param state Pointer to the Battlescape state.
  */
-AbortMissionState::AbortMissionState(Game* game, SavedBattleGame* battleGame, BattlescapeState* state)
+AbortMissionState::AbortMissionState(
+        Game* game,
+        SavedBattleGame* battleGame,
+        BattlescapeState* state)
 	:
 		State(game),
 		_battleGame(battleGame),
@@ -90,15 +101,15 @@ AbortMissionState::AbortMissionState(Game* game, SavedBattleGame* battleGame, Ba
 		if ((*i)->getOriginalFaction() == FACTION_PLAYER
 			&& !(*i)->isOut())
 		{
-			if ((nextStage != "" && (*i)->isInExitArea(END_POINT))
-				|| ((*i)->isInExitArea() && nextStage == ""))
+			if ((nextStage != ""
+                    && (*i)->isInExitArea(END_POINT))
+				|| (nextStage == ""
+                    && (*i)->isInExitArea()))
 			{
 				_inExitArea++;
 			}
 			else
-			{
 				_outExitArea++;
-			}
 		}
 	}
 
@@ -133,14 +144,20 @@ AbortMissionState::AbortMissionState(Game* game, SavedBattleGame* battleGame, Ba
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->setHighContrast(true);
 	_btnOk->onMouseClick((ActionHandler)& AbortMissionState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)& AbortMissionState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
+	_btnOk->onKeyboardPress(
+                    (ActionHandler)& AbortMissionState::btnOkClick,
+                    (SDLKey)Options::getInt("keyOk"));
 
 	_btnCancel->setColor(Palette::blockOffset(0)-1);
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->setHighContrast(true);
 	_btnCancel->onMouseClick((ActionHandler)& AbortMissionState::btnCancelClick);
-	_btnCancel->onKeyboardPress((ActionHandler)& AbortMissionState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
-	_btnCancel->onKeyboardPress((ActionHandler)& AbortMissionState::btnCancelClick, (SDLKey)Options::getInt("keyBattleAbort"));
+	_btnCancel->onKeyboardPress(
+                    (ActionHandler)& AbortMissionState::btnCancelClick,
+                    (SDLKey)Options::getInt("keyCancel"));
+	_btnCancel->onKeyboardPress(
+                    (ActionHandler)& AbortMissionState::btnCancelClick,
+                    (SDLKey)Options::getInt("keyBattleAbort"));
 }
 
 /**

@@ -26,6 +26,7 @@
 
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
+#include "../Engine/Logger.h"
 #include "../Engine/Music.h"
 #include "../Engine/Options.h"
 #include "../Engine/Palette.h"

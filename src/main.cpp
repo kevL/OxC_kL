@@ -19,15 +19,19 @@
 
 #include <exception>
 #include <sstream>
+
 #include "version.h"
-#include "Engine/Logger.h"
+
 #include "Engine/CrossPlatform.h"
 #include "Engine/Game.h"
+#include "Engine/Logger.h"
 #include "Engine/Options.h"
+
 #include "Menu/StartState.h"
 
 
-/** @mainpage
+/**
+ * @mainpage
  * @author OpenXcom Developers
  *
  * OpenXcom is an open-source clone of the original X-Com
@@ -35,9 +39,9 @@
  * on every class contained in the source code and its public methods.
  * The code itself also contains in-line comments for more complicated
  * code blocks. Hopefully all of this will make the code a lot more
- * readable for you in case you which to learn or make use of it in
+ * readable for you in case you wish to learn or make use of it in
  * your own projects, though note that all the source code is licensed
- * under the GNU General Public License. Enjoy!
+ * under the GNU General Public License. Enjoy!!!!
  */
 
 using namespace OpenXcom;
@@ -60,9 +64,11 @@ int main(int argc, char** args)
 
 		std::ostringstream title;
 //kL		title << "OpenXcom " << OPENXCOM_VERSION_SHORT << OPENXCOM_VERSION_GIT;
-		title << "openXcom " << OPENXCOM_VERSION_SHORT << OPENXCOM_VERSION_GIT;		// kL
+		title << "openXcom " << OPENXCOM_VERSION_SHORT << OPENXCOM_VERSION_GIT; // kL
 		game = new Game(title.str());
-		game->setVolume(Options::getInt("soundVolume"), Options::getInt("musicVolume"));
+		game->setVolume(
+					Options::getInt("soundVolume"),
+					Options::getInt("musicVolume"));
 		game->setState(new StartState(game));
 		game->run();
 #ifndef _DEBUG

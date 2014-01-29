@@ -53,7 +53,7 @@ namespace OpenXcom
 
 namespace
 {
-	
+
 struct HairBleach
 {
 	static const Uint8 ColorGroup = 15<<4;
@@ -61,9 +61,15 @@ struct HairBleach
 
 	static const Uint8 Hair = 9 << 4;
 	static const Uint8 Face = 6 << 4;
-	static inline void func(Uint8& src, const Uint8& cutoff, int, int, int)
+	static inline void func(
+			Uint8& src,
+			const Uint8& cutoff,
+			int,
+			int,
+			int)
 	{
-		if(src > cutoff && src <= Face + 15)
+		if (src > cutoff
+			&& src <= Face + 15)
 		{
 			src = Hair + (src & ColorShade) - 6; //make hair color like male in xcom_0.pck
 		}
@@ -71,12 +77,15 @@ struct HairBleach
 };
 
 }
-	
+
+
 /**
  * Initializes the resource pack by loading all the resources
  * contained in the original game folder.
  */
-XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprites*>> extraSprites, std::vector<std::pair<std::string, ExtraSounds*>> extraSounds)
+XcomResourcePack::XcomResourcePack(
+		std::vector<std::pair<std::string, ExtraSprites*> > extraSprites,
+		std::vector<std::pair<std::string, ExtraSounds*> > extraSounds)
 	:
 		ResourcePack()
 {
@@ -360,8 +369,8 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 			}
 		}
 		delete gmcat;
-#endif		
-		
+#endif
+
 		// Load sounds
 		std::string catsId[] = {"GEO.CAT",
 								"BATTLE.CAT"};
@@ -417,7 +426,7 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 			wav = true;
 			s->loadCat(CrossPlatform::getDataFile("SOUND/SAMPLE3.CAT"), true);
 		}
-		
+
 	}
 
 	TextButton::soundPress = getSound("GEO.CAT", 0);
@@ -426,11 +435,14 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 	Window::soundPopup[2] = getSound("GEO.CAT", 3);
 
 	loadBattlescapeResources(); // TODO load this at battlescape start, unload at battlescape end?
-	
+
 	Log(LOG_INFO) << "Loading extra resources from ruleset...";
 	bool debugOutput = Options::getBool("debug");
-	
-	for (std::vector<std::pair<std::string, ExtraSprites*>>::const_iterator i = extraSprites.begin(); i != extraSprites.end(); ++i)
+
+	for (
+			std::vector<std::pair<std::string, ExtraSprites*> >::const_iterator i = extraSprites.begin();
+			i != extraSprites.end();
+			++i)
 	{
 		std::string sheetName = i->first;
 		ExtraSprites* spritePack = i->second;
@@ -483,7 +495,7 @@ XcomResourcePack::XcomResourcePack(std::vector<std::pair<std::string, ExtraSprit
 			{
 				Log(LOG_INFO) << "Adding/Replacing items in surface set: " << sheetName;
 			}
-			
+
 			if (subdivision && debugOutput)
 			{
 				int frames = (spritePack->getWidth() / spritePack->getSubX())*(spritePack->getHeight() / spritePack->getSubY());
@@ -742,7 +754,7 @@ void XcomResourcePack::loadBattlescapeResources()
 	s2 << "UFOGRAPH/" << "SMOKE.TAB";
 	_sets["SMOKE.PCK"] = new SurfaceSet(32, 40);
 	_sets["SMOKE.PCK"]->loadPck(CrossPlatform::getDataFile(s.str()), CrossPlatform::getDataFile(s2.str()));
-	
+
 	s.str("");
 	s2.str("");
 	s << "UFOGRAPH/" << "HIT.PCK";

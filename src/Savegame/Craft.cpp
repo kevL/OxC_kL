@@ -24,6 +24,8 @@
 #include <cmath>
 #include <sstream>
 
+#include "../aresame.h"
+
 #include "AlienBase.h"
 #include "Base.h"
 #include "CraftWeapon.h"
@@ -35,6 +37,7 @@
 #include "Waypoint.h"
 
 #include "../Engine/Language.h"
+#include "../Engine/Logger.h"
 
 #include "../Ruleset/RuleCraft.h"
 #include "../Ruleset/RuleCraftWeapon.h"

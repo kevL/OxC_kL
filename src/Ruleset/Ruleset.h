@@ -118,7 +118,7 @@ protected:
 
 		_psiRequirements; // it's a cache for psiStrengthEval
 
-	std::vector<std::vector<int>> _alienItemLevels;
+	std::vector<std::vector<int> > _alienItemLevels;
 
 	std::vector<SoldierNamePool*> _names;
 
@@ -145,8 +145,8 @@ protected:
 	std::map<std::string, UfoTrajectory*> _ufoTrajectories;
 	std::map<std::string, Unit*> _units;
 
-	std::vector<std::pair<std::string, ExtraSounds*>> _extraSounds;
-	std::vector<std::pair<std::string, ExtraSprites*>> _extraSprites;
+	std::vector<std::pair<std::string, ExtraSounds*> > _extraSounds;
+	std::vector<std::pair<std::string, ExtraSprites*> > _extraSprites;
 
 
 	/// Loads a ruleset from a YAML file.
@@ -258,15 +258,15 @@ protected:
 		/// Gets the city at the specified coordinates.
 		const City* locateCity(double lon, double lat) const;
 		/// Gets the alien item level table.
-		const std::vector<std::vector<int>>& getAlienItemLevels() const;
+		const std::vector<std::vector<int> >& getAlienItemLevels() const;
 		/// Gets the Defined starting base.
 		const YAML::Node& getStartingBase();
 		/// Gets an MCDPatch.
 		MCDPatch* getMCDPatch(const std::string name) const;
 		/// Gets the list of external Sprites.
-		std::vector<std::pair<std::string, ExtraSprites*>> getExtraSprites() const;
+		std::vector<std::pair<std::string, ExtraSprites*> > getExtraSprites() const;
 		/// Gets the list of external Sounds.
-		std::vector<std::pair<std::string, ExtraSounds*>> getExtraSounds() const;
+		std::vector<std::pair<std::string, ExtraSounds*> > getExtraSounds() const;
 		/// Gets the list of external Strings.
 		std::map<std::string, ExtraStrings*> getExtraStrings() const;
 		/// Sorts all our lists according to their weight.

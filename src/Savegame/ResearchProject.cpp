@@ -21,6 +21,8 @@
 
 #include <algorithm>
 
+#include "../Interface/Text.h"
+
 #include "../Ruleset/RuleResearch.h"
 #include "../Ruleset/Ruleset.h"
 

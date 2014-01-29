@@ -32,6 +32,7 @@
 #include "TileEngine.h"
 
 #include "../Engine/Game.h"
+#include "../Engine/Logger.h"
 #include "../Engine/Options.h"
 #include "../Engine/Sound.h"
 
@@ -173,7 +174,7 @@ void ProjectileFlyBState::init()
 		if (_parent->getSave()->getTile(_action.target)->getUnit())
 		{
 			BattleUnit* targetUnit = _parent->getSave()->getTile(_action.target)->getUnit();
-		
+
 			if (_ammo == 0
 				|| targetUnit->isOut(true, true)
 				|| targetUnit != _parent->getSave()->getSelectedUnit())

@@ -29,6 +29,7 @@
 #include "TileEngine.h"
 
 #include "../Engine/Game.h"
+#include "../Engine/Logger.h"
 #include "../Engine/Options.h"
 
 #include "../Resource/ResourcePack.h"

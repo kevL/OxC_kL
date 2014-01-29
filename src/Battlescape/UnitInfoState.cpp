@@ -39,6 +39,7 @@
 
 #include "../Ruleset/Armor.h"
 #include "../Ruleset/Ruleset.h"
+#include "../Ruleset/RuleSoldier.h"
 #include "../Ruleset/Unit.h"
 
 #include "../Savegame/Base.h"

@@ -29,6 +29,7 @@
 
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
+#include "../Engine/Logger.h"
 #include "../Engine/Options.h"
 #include "../Engine/RNG.h"
 #include "../Engine/Sound.h"
@@ -157,7 +158,7 @@ void UnitDieBState::think()
 	{
 		//Log(LOG_INFO) << ". . STATUS_TURNING";
 		if (_unit->getSpinPhase() > -1)
-			_unit->contDeathSpin(); // -> STATUS_STANDING 
+			_unit->contDeathSpin(); // -> STATUS_STANDING
 		else
 			_unit->turn(); // -> STATUS_STANDING
 	}

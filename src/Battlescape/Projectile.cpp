@@ -30,6 +30,7 @@
 #include "../aresame.h"
 
 #include "../Engine/Game.h"
+#include "../Engine/Logger.h"
 #include "../Engine/Options.h"
 #include "../Engine/RNG.h"
 #include "../Engine/Surface.h"
@@ -702,7 +703,7 @@ Wb.131129
 int Projectile::calculateThrow(double accuracy)
 {
 	Tile *targetTile = _save->getTile(_action.target);
-		
+
 	Position originVoxel = _save->getTileEngine()->getOriginVoxel(_action, 0);
 	Position targetVoxel = _action.target * Position(16,16,24) + Position(8,8, (2 + -targetTile->getTerrainLevel()));
 
@@ -917,15 +918,15 @@ void Projectile::applyAccuracy(
 		deviation += 50;				// add extra spread to "miss" cloud
 	else
 		deviation += 10;				// accuracy of 109 or greater will become 1 (tightest spread)
-	
+
 	deviation = std::max(				// range ratio
 						1,
 						zShift * deviation / 200);
-		
+
 	target->x += RNG::generate(0, deviation) - deviation / 2;
 	target->y += RNG::generate(0, deviation) - deviation / 2;
 	target->z += RNG::generate(0, deviation / 2) / 2 - deviation / 8;
-	
+
 	if (extendLine)
 	{
 		double

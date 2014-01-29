@@ -20,11 +20,13 @@
 #ifndef OPENXCOM_BASE_H
 #define OPENXCOM_BASE_H
 
+#include <cstdint> // kL, VC compiler in C::B wants 'uint8_t'/'Unit8' typedef'd... or something!!
 #include <string>
 #include <vector>
 
 #include <yaml-cpp/yaml.h>
 
+//#include "SDL_stdinc.h" // kL, VC compiler in C::B wants 'Unit8' typedef'd... or something!!
 #include "Target.h"
 
 

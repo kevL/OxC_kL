@@ -20,6 +20,7 @@
 #ifndef OPENXCOM_BATTLESCAPEGENERATOR_H
 #define OPENXCOM_BATTLESCAPEGENERATOR_H
 
+#include <string> // kL
 
 namespace OpenXcom
 {

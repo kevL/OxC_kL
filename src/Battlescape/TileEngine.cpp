@@ -527,7 +527,7 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 										Position pTraj = _trajectory.at(i);
 
 										// mark every tile of line as visible (as in original)
-										// this is needed because of bresenham narrow stroke. 
+										// this is needed because of bresenham narrow stroke.
 										_save->getTile(pTraj)->setVisible(+1);
 										_save->getTile(pTraj)->setDiscovered(true, 2); // sprite caching for floor+content
 
@@ -1565,7 +1565,7 @@ bool TileEngine::checkReactionFire(BattleUnit* unit)
 			// ... not working!
 //			if (unit->isOut(true, true))	// <- try this down there also.
 //				break;
-			
+
 			// nice shot, kid. don't get too cocky.
 			reactor = getReactor(spotters, unit);
 			//Log(LOG_INFO) << ". . NEXT AT BAT : " << reactor->getId();
@@ -2829,7 +2829,7 @@ int TileEngine::horizontalBlockage(
 	}
 	else // type == DT_NONE
 	{
-        if (block <= 127) 
+        if (block <= 127)
         {
             direction += 4;
             if (direction > 7)
@@ -3013,7 +3013,7 @@ int TileEngine::unitOpensDoor(
 					&& door == -1;
 				y++)
 		{
-			std::vector<std::pair<Position, int>> checkPositions;
+			std::vector<std::pair<Position, int> > checkPositions;
 			Tile* tile = _save->getTile(
 									unit->getPosition()
 										+ Position(x, y, z));
@@ -3066,7 +3066,7 @@ int TileEngine::unitOpensDoor(
 			}
 
 			int part = 0;
-			for (std::vector<std::pair<Position, int>>::const_iterator
+			for (std::vector<std::pair<Position, int> >::const_iterator
 					i = checkPositions.begin();
 					i != checkPositions.end()
 						&& door == -1;

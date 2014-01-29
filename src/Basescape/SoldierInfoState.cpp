@@ -42,6 +42,7 @@
 #include "../Ruleset/Armor.h"
 #include "../Ruleset/RuleCraft.h"
 #include "../Ruleset/Ruleset.h"
+#include "../Ruleset/RuleSoldier.h"
 
 #include "../Savegame/Base.h"
 #include "../Savegame/Craft.h"
@@ -121,11 +122,11 @@ SoldierInfoState::SoldierInfoState(
 	_txtStrength	= new Text(120, 9, 6, 166);
 	_numStrength	= new Text(18, 9, 131, 166);
 	_barStrength	= new Bar(170, 7, 150, 166);
-	
+
 	_txtPsiStrength	= new Text(120, 9, 6, 178);
 	_numPsiStrength	= new Text(18, 9, 131, 178);
 	_barPsiStrength	= new Bar(170, 7, 150, 178);
-	
+
 	_txtPsiSkill	= new Text(120, 9, 6, 190);
 	_numPsiSkill	= new Text(18, 9, 131, 190);
 	_barPsiSkill	= new Bar(170, 7, 150, 190);

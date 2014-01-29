@@ -43,6 +43,7 @@
 
 #include "../Resource/ResourcePack.h"
 
+#include "../Ruleset/RuleCraft.h"
 #include "../Ruleset/RuleCraftWeapon.h"
 #include "../Ruleset/RuleItem.h"
 #include "../Ruleset/Ruleset.h"
@@ -55,6 +56,7 @@
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Soldier.h"
 #include "../Savegame/Transfer.h"
+#include "../Savegame/Vehicle.h"
 
 
 namespace OpenXcom
@@ -1228,7 +1230,7 @@ void TransferItemsState::increaseByValue(int change)
 
 		int freeStoresForItem;
 		if (AreSame(storesNeededPerItem, 0.f))
-		{ 
+		{
 			freeStoresForItem = INT_MAX;
 		}
 		else

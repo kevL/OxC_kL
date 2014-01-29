@@ -27,6 +27,7 @@ namespace OpenXcom
 {
 
 class Base;
+class Craft;
 class Text;
 class TextButton;
 class TextList;
@@ -58,7 +59,7 @@ private:
 	Window* _window;
 
 	/// A more descriptive state of the Craft.
-	std::wstring getAltStatus(Craft* craft); // odd, this doesn't need class Craft declaration...?
+	std::wstring getAltStatus(Craft* craft);
 
 
 	public:

@@ -73,13 +73,13 @@ void RuleAlienMission::load(const YAML::Node& node)
 {
 	_type	= node["type"].as<std::string>(_type);
 	_points	= node["points"].as<int>(_points);
-	_waves	= node["waves"].as< std::vector<MissionWave>>(_waves);
+	_waves	= node["waves"].as< std::vector<MissionWave> >(_waves);
 
 	// Only allow full replacement of mission racial distribution.
 	if (const YAML::Node& weights = node["raceWeights"])
 	{
 		typedef std::map<unsigned, WeightedOptions*> Associative;
-		typedef std::vector<std::pair<unsigned, WeightedOptions*>> Linear;
+		typedef std::vector<std::pair<unsigned, WeightedOptions*> > Linear;
 
 		Associative assoc;
 		// Place in the associative container so we can index by month and keep entries sorted.
@@ -144,7 +144,7 @@ void RuleAlienMission::load(const YAML::Node& node)
  */
 const std::string RuleAlienMission::generateRace(unsigned const monthsPassed) const
 {
-	std::vector<std::pair<unsigned, WeightedOptions*>>::const_reverse_iterator
+	std::vector<std::pair<unsigned, WeightedOptions*> >::const_reverse_iterator
 			race = _raceDistribution.rbegin();
 
 	while (monthsPassed < race->first)
@@ -158,7 +158,7 @@ const std::string RuleAlienMission::generateRace(unsigned const monthsPassed) co
  */
 RuleAlienMission::~RuleAlienMission()
 {
-	for (std::vector<std::pair<unsigned, WeightedOptions*>>::const_iterator
+	for (std::vector<std::pair<unsigned, WeightedOptions*> >::const_iterator
 			ii = _raceDistribution.begin();
 			ii != _raceDistribution.end();
 			++ii)

@@ -63,8 +63,8 @@ void RuleCountry::load(const YAML::Node& node)
 	_labelLon		= node["labelLon"].as<double>(_labelLon) * M_PI / 180;
 	_labelLat		= node["labelLat"].as<double>(_labelLat) * M_PI / 180;
 
-	std::vector<std::vector<double>> areas;
-	areas = node["areas"].as<std::vector<std::vector<double>>>(areas);
+	std::vector<std::vector<double> > areas;
+	areas = node["areas"].as<std::vector<std::vector<double> > >(areas);
 
 	for (size_t
 			i = 0;

@@ -60,7 +60,7 @@ private:
 		* _selection;
 	WarningMessage* _warning;
 
-	std::map<int, std::map<int, int>> _stackLevel;
+	std::map<int, std::map<int, int> > _stackLevel;
 
 	/// Moves an item to a specified slot.
 	void moveItem(

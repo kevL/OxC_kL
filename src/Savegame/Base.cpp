@@ -25,6 +25,8 @@
 #include <cmath>
 #include <stack>
 
+#include "../aresame.h"
+
 #include "BaseFacility.h"
 #include "Craft.h"
 #include "ItemContainer.h"
@@ -37,6 +39,7 @@
 #include "Vehicle.h"
 
 #include "../Engine/Language.h"
+#include "../Engine/Logger.h"
 #include "../Engine/Options.h"
 #include "../Engine/RNG.h"
 
@@ -200,7 +203,7 @@ void Base::load(
 		c->load(
 				*i,
 				_rule,
-				save);		
+				save);
 
 		_crafts.push_back(c);
 	}
@@ -610,7 +613,7 @@ double Base::insideRadarRange(Target* target) const
 			}
 		}
 	}
-	
+
 	return ret;
 }
 
@@ -1917,7 +1920,7 @@ bool Base::getHyperDetection() const
 			&& (*f)->getRules()->isHyperwave())
 		{
 			return true;
-		}		
+		}
 	}
 
 	return false;

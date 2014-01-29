@@ -36,6 +36,7 @@
 
 #include "../Engine/Exception.h"
 #include "../Engine/Language.h"
+#include "../Engine/Logger.h"
 
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleUfo.h"

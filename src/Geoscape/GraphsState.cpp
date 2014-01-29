@@ -41,6 +41,7 @@
 #include "../Ruleset/RuleCountry.h"
 #include "../Ruleset/RuleRegion.h"
 
+#include "../Savegame/Base.h"
 #include "../Savegame/Country.h"
 #include "../Savegame/GameTime.h"
 #include "../Savegame/Region.h"
@@ -105,7 +106,7 @@ GraphsState::GraphsState(Game* game)
 
 
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_2")->getColors());
-	
+
 	add(_bg);
 	add(_btnUfoRegion);
 	add(_btnUfoCountry);
@@ -236,7 +237,7 @@ GraphsState::GraphsState(Game* game)
 
 	add(_btnRegionTotal);
 
-	
+
 	offset = 0;
 	for (std::vector<Country*>::iterator
 			iter = _game->getSavedGame()->getCountries()->begin();
@@ -300,7 +301,7 @@ GraphsState::GraphsState(Game* game)
 
 		++offset;
 	}
-	
+
 	if (_countryToggles.size() < GRAPH_MAX_BUTTONS)
 		_btnCountryTotal = new ToggleTextButton(
 											65,
@@ -334,7 +335,7 @@ GraphsState::GraphsState(Game* game)
 	add(_incomeLines.at(offset));
 
 	add(_btnCountryTotal);
-	
+
 
 	for (int
 			iter = 0;
@@ -388,7 +389,7 @@ GraphsState::GraphsState(Game* game)
 		_regionToggles[i]->_pushed = ('0' == graphRegionToggles[i])? false: true;
 		if (_regionToggles.size() - 1 == i)
 			_btnRegionTotal->setPressed(_regionToggles[i]->_pushed);
-		else if (i < GRAPH_MAX_BUTTONS) 
+		else if (i < GRAPH_MAX_BUTTONS)
 			_btnRegions.at(i)->setPressed(_regionToggles[i]->_pushed);
 	}
 
@@ -448,7 +449,7 @@ GraphsState::GraphsState(Game* game)
 				if (grid == 4)
 				{
 					color = 0;
-				} 
+				}
 
 				_bg->drawRect(&current, color);
 			}
@@ -526,7 +527,7 @@ GraphsState::GraphsState(Game* game)
 	_game->getResourcePack()->getSurface("GRAPHS.SPK")->blit(_bg);
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setColor(Palette::blockOffset(8)+7);
-	
+
 	_txtFactor->setText(L"$1000");
 	_txtFactor->setColor(Palette::blockOffset(8)+7);
 
@@ -889,7 +890,7 @@ void GraphsState::btnRegionListClick(Action* action)
 	}
 
 	_regionToggles.at(number + _btnRegionsOffset)->_pushed = button->getPressed();
-	
+
 	drawLines();
 }
 
@@ -925,7 +926,7 @@ void GraphsState::btnFinanceListClick(Action* action)
 {
 	size_t number = (action->getSender()->getY() - Screen::getDY()) / 16;
 	ToggleTextButton* button = _btnFinances.at(number);
-	
+
 	_financeLines.at(number)->setVisible(!_financeToggles.at(number));
 	_financeToggles.at(number) = button->getPressed();
 

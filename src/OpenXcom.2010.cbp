@@ -1,0 +1,3388 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="OpenXcom" />
+		<Option pch_mode="2" />
+		<Option compiler="msvc10" />
+		<Build>
+			<Target title="Release Win32">
+				<Option output="../bin/Win32/Release/OpenXcom.exe" prefix_auto="0" extension_auto="0" />
+				<Option object_output="../obj/Win32/Release" />
+				<Option type="0" />
+				<Option compiler="msvc10" />
+				<Compiler>
+					<Add option="-DLODEPNG_NO_COMPILE_DECODER" />
+					<Add option="-DLODEPNG_NO_COMPILE_ANCILLARY_CHUNKS" />
+					<Add option="-DWIN32" />
+					<Add option="-D_CRT_SECURE_NO_DEPRECATE" />
+					<Add option="-DNDEBUG" />
+					<Add option="-D_CONSOLE" />
+				</Compiler>
+			</Target>
+			<Target title="Debug Win32">
+				<Option output="../bin/Win32/Debug/OpenXcom.exe" prefix_auto="0" extension_auto="0" />
+				<Option object_output="../obj/Win32/Debug" />
+				<Option type="0" />
+				<Option compiler="msvc10" />
+				<Compiler>
+					<Add option="-DLODEPNG_NO_COMPILE_DECODER" />
+					<Add option="-DLODEPNG_NO_COMPILE_ANCILLARY_CHUNKS" />
+					<Add option="-DWIN32" />
+					<Add option="-D_CRT_SECURE_NO_DEPRECATE" />
+					<Add option="-D_DEBUG" />
+					<Add option="-D_CONSOLE" />
+					<Add option="-D_SCL_SECURE_NO_WARNINGS" />
+				</Compiler>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="/MD" />
+			<Add option="/Gd" />
+			<Add option="/GL" />
+			<Add option="/fp:fast" />
+			<Add option="/EHc" />
+			<Add option="/EHs" />
+			<Add option="/GS" />
+			<Add option="/Oy" />
+			<Add option="/O2" />
+			<Add option="/W3" />
+			<Add option="/Zc:wchar_t" />
+			<Add option="/Zc:forScope" />
+			<Add option="/MP" />
+			<Add option="/Gm-" />
+			<Add option="/WX-" />
+			<Add option="/analyze-" />
+			<Add option="/errorReport:queue" />
+			<Add directory="F:/GIT/OpenXcom/deps/include" />
+			<Add directory="F:/GIT/OpenXcom/deps/include/SDL" />
+			<Add directory="F:/GIT/OpenXcom/deps/include/yaml-cpp" />
+			<Add directory="F:/GIT/OpenXcom/deps/include/boost" />
+			<Add directory="C:/Program Files/Microsoft Visual Studio 10.0/VC/include" />
+			<Add directory="C:/Program Files/Microsoft SDKs/Windows/v7.0A/include" />
+		</Compiler>
+		<ResourceCompiler>
+			<Add directory="C:/Program Files/Microsoft Visual Studio 10.0/VC/include" />
+			<Add directory="C:/Program Files/Microsoft SDKs/Windows/v7.0A/include" />
+		</ResourceCompiler>
+		<Linker>
+			<Add option="/MACHINE:X86" />
+			<Add option="/DYNAMICBASE:NO" />
+			<Add option="/LTCG" />
+			<Add option="/TLBID:1" />
+			<Add option="/OPT:REF" />
+			<Add option="/OPT:ICF" />
+			<Add option="/SUBSYSTEM:WINDOWS" />
+			<Add option="/NOLOGO" />
+			<Add option="/INCREMENTAL:NO" />
+			<Add option="/VERBOSE:Lib" />
+			<Add option='/VERSION:&quot;1.0.0.kL&quot;' />
+			<Add library="yaml-cpp" />
+			<Add library="SDLmain" />
+			<Add library="SDL_gfx" />
+			<Add library="SDL_image" />
+			<Add library="SDL_mixer" />
+			<Add library="SDL" />
+			<Add library="OpenGL32" />
+			<Add library="WinSpool" />
+			<Add library="AdvAPI32" />
+			<Add library="ComDlg32" />
+			<Add library="Gdi32" />
+			<Add library="Kernel32" />
+			<Add library="odbc32" />
+			<Add library="odbccp32" />
+			<Add library="Ole32" />
+			<Add library="OleAut32" />
+			<Add library="shell32" />
+			<Add library="User32" />
+			<Add library="Uuid" />
+			<Add directory="../deps/lib/Win32" />
+			<Add directory="C:/Program Files/Microsoft SDKs/Windows/v7.0A/Lib" />
+			<Add directory="C:/Program Files/Microsoft Visual Studio 10.0/VC/lib" />
+		</Linker>
+		<Unit filename="../media/openxcom.ico" />
+		<Unit filename="Basescape/BaseInfoState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Basescape/BaseInfoState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Basescape/BaseView.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Basescape/BaseView.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Basescape/BasescapeState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Basescape/BasescapeState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Basescape/BuildFacilitiesState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Basescape/BuildFacilitiesState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Basescape/CraftArmorState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Basescape/CraftArmorState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Basescape/CraftEquipmentState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Basescape/CraftEquipmentState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Basescape/CraftInfoState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Basescape/CraftInfoState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Basescape/CraftSoldiersState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Basescape/CraftSoldiersState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Basescape/CraftWeaponsState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Basescape/CraftWeaponsState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Basescape/CraftsState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Basescape/CraftsState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Basescape/DismantleFacilityState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Basescape/DismantleFacilityState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Basescape/ManageAlienContainmentState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Basescape/ManageAlienContainmentState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Basescape/ManufactureInfoState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Basescape/ManufactureInfoState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Basescape/ManufactureStartState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Basescape/ManufactureStartState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Basescape/ManufactureState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Basescape/ManufactureState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Basescape/MiniBaseView.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Basescape/MiniBaseView.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Basescape/MonthlyCostsState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Basescape/MonthlyCostsState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Basescape/NewManufactureListState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Basescape/NewManufactureListState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Basescape/NewResearchListState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Basescape/NewResearchListState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Basescape/PlaceFacilityState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Basescape/PlaceFacilityState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Basescape/PlaceLiftState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Basescape/PlaceLiftState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Basescape/PlaceStartFacilityState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Basescape/PlaceStartFacilityState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Basescape/PurchaseState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Basescape/PurchaseState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Basescape/ResearchInfoState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Basescape/ResearchInfoState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Basescape/ResearchState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Basescape/ResearchState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Basescape/SackSoldierState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Basescape/SackSoldierState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Basescape/SelectStartFacilityState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Basescape/SelectStartFacilityState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Basescape/SellState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Basescape/SellState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Basescape/SoldierArmorState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Basescape/SoldierArmorState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Basescape/SoldierInfoState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Basescape/SoldierInfoState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Basescape/SoldierMemorialState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Basescape/SoldierMemorialState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Basescape/SoldiersState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Basescape/SoldiersState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Basescape/StoresState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Basescape/StoresState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Basescape/TransferBaseState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Basescape/TransferBaseState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Basescape/TransferConfirmState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Basescape/TransferConfirmState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Basescape/TransferItemsState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Basescape/TransferItemsState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Basescape/TransfersState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Basescape/TransfersState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/AbortMissionState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/AbortMissionState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/ActionMenuItem.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/ActionMenuItem.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/ActionMenuState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/ActionMenuState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/AlienBAIState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/AlienBAIState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/AliensCrashState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/AliensCrashState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/BattleAIState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/BattleAIState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/BattleState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/BattleState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/BattlescapeGame.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/BattlescapeGame.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/BattlescapeGenerator.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/BattlescapeGenerator.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/BattlescapeMessage.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/BattlescapeMessage.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/BattlescapeState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/BattlescapeState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/BriefingState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/BriefingState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/Camera.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/Camera.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/CannotReequipState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/CannotReequipState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/CivilianBAIState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/CivilianBAIState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/DebriefingState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/DebriefingState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/Explosion.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/Explosion.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/ExplosionBState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/ExplosionBState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/InfoboxOKState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/InfoboxOKState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/InfoboxState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/InfoboxState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/Inventory.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/Inventory.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/InventoryState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/InventoryState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/Map.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/Map.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/MedikitState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/MedikitState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/MedikitView.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/MedikitView.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/MiniMapState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/MiniMapState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/MiniMapView.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/MiniMapView.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/NextTurnState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/NextTurnState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/NoContainmentState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/NoContainmentState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/Pathfinding.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/Pathfinding.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/PathfindingNode.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/PathfindingNode.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/PathfindingOpenSet.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/PathfindingOpenSet.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/Position.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/Position.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/PrimeGrenadeState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/PrimeGrenadeState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/Projectile.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/Projectile.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/ProjectileFlyBState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/ProjectileFlyBState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/PromotionsState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/PromotionsState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/ScannerState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/ScannerState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/ScannerView.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/ScannerView.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/TileEngine.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/TileEngine.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/UnitDieBState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/UnitDieBState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/UnitFallBState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/UnitFallBState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/UnitInfoState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/UnitInfoState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/UnitPanicBState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/UnitPanicBState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/UnitSprite.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/UnitSprite.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/UnitTurnBState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/UnitTurnBState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/UnitWalkBState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/UnitWalkBState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/WarningMessage.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Battlescape/WarningMessage.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Engine/Action.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Engine/Action.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Engine/CatFile.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Engine/CatFile.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Engine/CrossPlatform.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Engine/CrossPlatform.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Engine/Exception.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Engine/Exception.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Engine/FastLineClip.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Engine/FastLineClip.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Engine/Flc.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Engine/Flc.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Engine/Font.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Engine/Font.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Engine/GMCat.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Engine/GMCat.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Engine/Game.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Engine/Game.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Engine/GraphSubset.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Engine/InteractiveSurface.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Engine/InteractiveSurface.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Engine/Language.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Engine/Language.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Engine/LanguagePlurality.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Engine/LanguagePlurality.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Engine/LocalizedText.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Engine/LocalizedText.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Engine/Logger.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Engine/Music.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Engine/Music.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Engine/OpenGL.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Engine/OpenGL.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Engine/Options.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Engine/Options.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Engine/Palette.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Engine/Palette.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Engine/RNG.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Engine/RNG.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Engine/Scalers/common.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Engine/Scalers/hq2x.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Engine/Scalers/hq3x.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Engine/Scalers/hq4x.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Engine/Scalers/hqx.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Engine/Scalers/init.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Engine/Scalers/scale2x.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Engine/Scalers/scale2x.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Engine/Scalers/scale3x.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Engine/Scalers/scale3x.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Engine/Scalers/scalebit.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Engine/Scalers/scalebit.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Engine/Screen.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Engine/Screen.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Engine/ShaderDraw.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Engine/ShaderDrawHelper.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Engine/ShaderMove.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Engine/ShaderRepeat.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Engine/Sound.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Engine/Sound.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Engine/SoundSet.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Engine/SoundSet.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Engine/State.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Engine/State.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Engine/Surface.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Engine/Surface.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Engine/SurfaceSet.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Engine/SurfaceSet.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Engine/Timer.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Engine/Timer.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Engine/Zoom.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Engine/Zoom.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Geoscape/AlienBaseState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Geoscape/AlienBaseState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Geoscape/AlienTerrorState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Geoscape/AlienTerrorState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Geoscape/AllocatePsiTrainingState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Geoscape/AllocatePsiTrainingState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Geoscape/BaseDefenseState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Geoscape/BaseDefenseState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Geoscape/BaseDestroyedState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Geoscape/BaseDestroyedState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Geoscape/BaseNameState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Geoscape/BaseNameState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Geoscape/BuildNewBaseState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Geoscape/BuildNewBaseState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Geoscape/ConfirmCydoniaState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Geoscape/ConfirmCydoniaState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Geoscape/ConfirmDestinationState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Geoscape/ConfirmDestinationState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Geoscape/ConfirmLandingState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Geoscape/ConfirmLandingState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Geoscape/ConfirmNewBaseState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Geoscape/ConfirmNewBaseState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Geoscape/CraftErrorState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Geoscape/CraftErrorState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Geoscape/CraftPatrolState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Geoscape/CraftPatrolState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Geoscape/DefeatState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Geoscape/DefeatState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Geoscape/DogfightState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Geoscape/DogfightState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Geoscape/FundingState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Geoscape/FundingState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Geoscape/GeoscapeCraftState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Geoscape/GeoscapeCraftState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Geoscape/GeoscapeState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Geoscape/GeoscapeState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Geoscape/Globe.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Geoscape/Globe.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Geoscape/GraphsState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Geoscape/GraphsState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Geoscape/InterceptState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Geoscape/InterceptState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Geoscape/ItemsArrivingState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Geoscape/ItemsArrivingState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Geoscape/LowFuelState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Geoscape/LowFuelState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Geoscape/MonthlyReportState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Geoscape/MonthlyReportState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Geoscape/MultipleTargetsState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Geoscape/MultipleTargetsState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Geoscape/NewPossibleManufactureState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Geoscape/NewPossibleManufactureState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Geoscape/NewPossibleResearchState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Geoscape/NewPossibleResearchState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Geoscape/Polygon.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Geoscape/Polygon.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Geoscape/Polyline.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Geoscape/Polyline.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Geoscape/ProductionCompleteState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Geoscape/ProductionCompleteState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Geoscape/PsiTrainingState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Geoscape/PsiTrainingState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Geoscape/ResearchCompleteState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Geoscape/ResearchCompleteState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Geoscape/ResearchRequiredState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Geoscape/ResearchRequiredState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Geoscape/SelectDestinationState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Geoscape/SelectDestinationState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Geoscape/TargetInfoState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Geoscape/TargetInfoState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Geoscape/UfoDetectedState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Geoscape/UfoDetectedState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Geoscape/UfoLostState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Geoscape/UfoLostState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Geoscape/VictoryState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Geoscape/VictoryState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Interface/ArrowButton.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Interface/ArrowButton.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Interface/Bar.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Interface/Bar.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Interface/Cursor.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Interface/Cursor.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Interface/FpsCounter.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Interface/FpsCounter.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Interface/Frame.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Interface/Frame.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Interface/ImageButton.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Interface/ImageButton.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Interface/NumberText.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Interface/NumberText.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Interface/Slider.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Interface/Slider.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Interface/Text.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Interface/Text.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Interface/TextButton.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Interface/TextButton.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Interface/TextEdit.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Interface/TextEdit.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Interface/TextList.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Interface/TextList.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Interface/ToggleTextButton.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Interface/ToggleTextButton.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Interface/TurnCounter.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Interface/TurnCounter.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Interface/Window.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Interface/Window.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Menu/AbandonGameState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Menu/AbandonGameState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Menu/DeleteGameState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Menu/DeleteGameState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Menu/ErrorMessageState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Menu/ErrorMessageState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Menu/LoadState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Menu/LoadState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Menu/MainMenuState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Menu/MainMenuState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Menu/NewBattleState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Menu/NewBattleState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Menu/NewGameState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Menu/NewGameState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Menu/OptionsAdvancedState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Menu/OptionsAdvancedState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Menu/OptionsBaseState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Menu/OptionsBaseState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Menu/OptionsBattlescapeState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Menu/OptionsBattlescapeState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Menu/OptionsControlsState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Menu/OptionsControlsState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Menu/OptionsLanguageState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Menu/OptionsLanguageState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Menu/OptionsState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Menu/OptionsState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Menu/PauseState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Menu/PauseState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Menu/SaveState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Menu/SaveState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Menu/SavedGameState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Menu/SavedGameState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Menu/StartState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Menu/StartState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Menu/TestState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Menu/TestState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="OpenXcom.rc">
+			<Option compilerVar="WINDRES" />
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Resource/ResourcePack.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Resource/ResourcePack.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Resource/XcomResourcePack.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Resource/XcomResourcePack.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Ruleset/AlienDeployment.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Ruleset/AlienDeployment.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Ruleset/AlienRace.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Ruleset/AlienRace.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Ruleset/Armor.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Ruleset/Armor.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Ruleset/ArticleDefinition.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Ruleset/ArticleDefinition.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Ruleset/City.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Ruleset/City.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Ruleset/ExtraSounds.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Ruleset/ExtraSounds.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Ruleset/ExtraSprites.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Ruleset/ExtraSprites.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Ruleset/ExtraStrings.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Ruleset/ExtraStrings.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Ruleset/MCDPatch.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Ruleset/MCDPatch.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Ruleset/MapBlock.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Ruleset/MapBlock.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Ruleset/MapData.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Ruleset/MapData.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Ruleset/MapDataSet.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Ruleset/MapDataSet.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Ruleset/RuleAlienMission.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Ruleset/RuleAlienMission.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Ruleset/RuleBaseFacility.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Ruleset/RuleBaseFacility.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Ruleset/RuleCountry.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Ruleset/RuleCountry.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Ruleset/RuleCraft.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Ruleset/RuleCraft.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Ruleset/RuleCraftWeapon.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Ruleset/RuleCraftWeapon.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Ruleset/RuleInventory.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Ruleset/RuleInventory.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Ruleset/RuleItem.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Ruleset/RuleItem.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Ruleset/RuleManufacture.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Ruleset/RuleManufacture.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Ruleset/RuleRegion.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Ruleset/RuleRegion.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Ruleset/RuleResearch.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Ruleset/RuleResearch.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Ruleset/RuleSoldier.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Ruleset/RuleSoldier.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Ruleset/RuleTerrain.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Ruleset/RuleTerrain.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Ruleset/RuleUfo.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Ruleset/RuleUfo.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Ruleset/Ruleset.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Ruleset/Ruleset.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Ruleset/SoldierNamePool.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Ruleset/SoldierNamePool.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Ruleset/UfoTrajectory.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Ruleset/UfoTrajectory.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Ruleset/Unit.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Ruleset/Unit.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Savegame/AlienBase.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Savegame/AlienBase.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Savegame/AlienMission.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Savegame/AlienMission.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Savegame/AlienStrategy.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Savegame/AlienStrategy.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Savegame/Base.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Savegame/Base.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Savegame/BaseFacility.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Savegame/BaseFacility.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Savegame/BattleItem.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Savegame/BattleItem.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Savegame/BattleUnit.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Savegame/BattleUnit.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Savegame/Country.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Savegame/Country.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Savegame/Craft.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Savegame/Craft.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Savegame/CraftWeapon.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Savegame/CraftWeapon.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Savegame/CraftWeaponProjectile.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Savegame/CraftWeaponProjectile.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Savegame/EquipmentLayoutItem.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Savegame/EquipmentLayoutItem.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Savegame/GameTime.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Savegame/GameTime.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Savegame/ItemContainer.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Savegame/ItemContainer.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Savegame/MovingTarget.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Savegame/MovingTarget.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Savegame/Node.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Savegame/Node.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Savegame/Production.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Savegame/Production.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Savegame/Region.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Savegame/Region.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Savegame/ResearchProject.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Savegame/ResearchProject.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Savegame/SavedBattleGame.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Savegame/SavedBattleGame.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Savegame/SavedGame.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Savegame/SavedGame.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Savegame/SerializationHelper.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Savegame/SerializationHelper.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Savegame/Soldier.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Savegame/Soldier.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Savegame/SoldierDead.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Savegame/SoldierDead.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Savegame/SoldierDeath.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Savegame/SoldierDeath.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Savegame/Target.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Savegame/Target.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Savegame/TerrorSite.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Savegame/TerrorSite.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Savegame/Tile.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Savegame/Tile.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Savegame/Transfer.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Savegame/Transfer.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Savegame/Ufo.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Savegame/Ufo.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Savegame/Vehicle.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Savegame/Vehicle.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Savegame/Waypoint.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Savegame/Waypoint.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Savegame/WeightedOptions.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Savegame/WeightedOptions.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Ufopaedia/ArticleState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Ufopaedia/ArticleState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Ufopaedia/ArticleStateArmor.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Ufopaedia/ArticleStateArmor.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Ufopaedia/ArticleStateBaseFacility.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Ufopaedia/ArticleStateBaseFacility.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Ufopaedia/ArticleStateCraft.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Ufopaedia/ArticleStateCraft.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Ufopaedia/ArticleStateCraftWeapon.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Ufopaedia/ArticleStateCraftWeapon.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Ufopaedia/ArticleStateItem.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Ufopaedia/ArticleStateItem.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Ufopaedia/ArticleStateText.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Ufopaedia/ArticleStateText.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Ufopaedia/ArticleStateTextImage.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Ufopaedia/ArticleStateTextImage.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Ufopaedia/ArticleStateUfo.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Ufopaedia/ArticleStateUfo.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Ufopaedia/ArticleStateVehicle.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Ufopaedia/ArticleStateVehicle.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Ufopaedia/Ufopaedia.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Ufopaedia/Ufopaedia.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Ufopaedia/UfopaediaSelectState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Ufopaedia/UfopaediaSelectState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Ufopaedia/UfopaediaStartState.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="Ufopaedia/UfopaediaStartState.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="aresame.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="dirent.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="lodepng.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="lodepng.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="main.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="pch.cpp">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="pch.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="resource.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Unit filename="version.h">
+			<Option target="Debug Win32" />
+			<Option target="Debug x64" />
+			<Option target="Release Win32" />
+			<Option target="Release x64" />
+		</Unit>
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+			<lib_finder disable_auto="1" />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

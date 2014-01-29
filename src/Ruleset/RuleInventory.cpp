@@ -92,8 +92,8 @@ void RuleInventory::load(
 
 	_type = (InventoryType)node["type"].as<int>(_type);
 
-	_slots = node["slots"].as< std::vector<RuleSlot>>(_slots);
-	_costs = node["costs"].as< std::map<std::string, int>>(_costs);
+	_slots = node["slots"].as< std::vector<RuleSlot> >(_slots);
+	_costs = node["costs"].as< std::map<std::string, int> >(_costs);
 
 	_listOrder = node["listOrder"].as<int>(listOrder);
 }

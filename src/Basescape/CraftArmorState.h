@@ -46,13 +46,13 @@ private:
 	size_t _craft;
 
 	Base* _base;
-	TextButton* _btnOk;
 	Text
 		* _txtArmor,
 		* _txtBaseLabel,
 		* _txtCraft,
 		* _txtName,
 		* _txtTitle;
+	TextButton* _btnOk;
 	TextList* _lstSoldiers;
 	Window* _window;
 
@@ -70,6 +70,7 @@ private:
 		void init();
 		/// Handler for clicking the OK button.
 		void btnOkClick(Action* action);
+
 		/// Handler for clicking the Soldiers list.
 		void lstSoldiersClick(Action* action);
 

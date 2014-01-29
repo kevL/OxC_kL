@@ -52,6 +52,7 @@
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Soldier.h"
 #include "../Savegame/Transfer.h"
+#include "../Savegame/Vehicle.h"
 
 
 namespace OpenXcom
@@ -447,7 +448,7 @@ PurchaseState::PurchaseState(
 							RuleItem* tankRule = _game->getRuleset()->getItem((*v)->getRules()->getType());
 							RuleItem* ammoRule = _game->getRuleset()->getItem(tankRule->getCompatibleAmmo()->front());
 							std::wstring tv_a = tr(ammoRule->getType());
-					
+
 							if (item == tv_a)
 							{
 								tQty += (*v)->getAmmo();
