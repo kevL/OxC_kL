@@ -75,8 +75,15 @@ MiniMapView::MiniMapView(
 		_camera(camera),
 		_battleGame(battleGame),
 		_frame(0),
-		isMouseScrolling(false),
-		isMouseScrolled(false)
+		_isMouseScrolling(false),
+		_isMouseScrolled(false),
+		_xBeforeMouseScrolling(0),
+		_yBeforeMouseScrolling(0),
+		_mouseScrollX(0),
+		_mouseScrollY(0),
+		_totalMouseMoveX(0),
+		_totalMouseMoveY(0),
+		_mouseMovedOverThreshold(false)
 {
 	_set = _game->getResourcePack()->getSurfaceSet("SCANG.DAT");
 }
@@ -260,19 +267,21 @@ void MiniMapView::mousePress(Action* action, State* state)
 	{
 		if (action->getDetails()->button.button == _battleGame->getDragButton())
 		{
-			isMouseScrolling = true;
-			isMouseScrolled = false;
+			_isMouseScrolling = true;
+			_isMouseScrolled = false;
 
-			SDL_GetMouseState(&xBeforeMouseScrolling, &yBeforeMouseScrolling);
-			posBeforeMouseScrolling = _camera->getCenterPosition();
+			SDL_GetMouseState(
+							&_xBeforeMouseScrolling,
+							&_yBeforeMouseScrolling);
+			_posBeforeMouseScrolling = _camera->getCenterPosition();
 
-			mouseScrollX = 0;
-			mouseScrollY = 0;
-			totalMouseMoveX = 0;
-			totalMouseMoveY = 0;
+			_mouseScrollX = 0;
+			_mouseScrollY = 0;
+			_totalMouseMoveX = 0;
+			_totalMouseMoveY = 0;
 
-			mouseMovedOverThreshold = false;
-			mouseScrollingStartTime = SDL_GetTicks();
+			_mouseMovedOverThreshold = false;
+			_mouseScrollingStartTime = SDL_GetTicks();
 		}
 	}
 }
@@ -290,46 +299,47 @@ void MiniMapView::mouseClick(Action* action, State* state)
 	// the mouse-release event is missed for any reason.
 	// However if the SDL is also missed the release event, then it is to no avail :(
 	// (this part handles the release if it is missed and now an other button is used)
-	if (isMouseScrolling)
+	if (_isMouseScrolling)
 	{
+		// so we missed again the mouse-release :(
 		if (action->getDetails()->button.button != _battleGame->getDragButton()
-			&& 0 == (SDL_GetMouseState(0, 0) & SDL_BUTTON(_battleGame->getDragButton()))) // so we missed again the mouse-release :(
+			&& 0 == (SDL_GetMouseState(0, 0) & SDL_BUTTON(_battleGame->getDragButton())))
 		{
 			// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
-			if (!mouseMovedOverThreshold
-				&& SDL_GetTicks() - mouseScrollingStartTime <= static_cast<Uint32>(_battleGame->getDragTimeTolerance()))
+			if (!_mouseMovedOverThreshold
+				&& SDL_GetTicks() - _mouseScrollingStartTime <= static_cast<Uint32>(_battleGame->getDragTimeTolerance()))
 			{
 				_camera->centerOnPosition(posBeforeMouseScrolling);
 
 				_redraw = true;
 			}
 
-			isMouseScrolled = isMouseScrolling = false;
+			_isMouseScrolled = _isMouseScrolling = false;
 		}
 	}
 
 	// Drag-Scroll release: release mouse-scroll-mode
-	if (isMouseScrolling)
+	if (_isMouseScrolling)
 	{
 		// While scrolling, other buttons are ineffective
 		if (action->getDetails()->button.button == _battleGame->getDragButton())
 		{
-			isMouseScrolling = false;
+			_isMouseScrolling = false;
 		}
 		else
 			return;
 
 		// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
-		if (!mouseMovedOverThreshold
-			&& SDL_GetTicks() - mouseScrollingStartTime <= static_cast<Uint32>(_battleGame->getDragTimeTolerance()))
+		if (!_mouseMovedOverThreshold
+			&& SDL_GetTicks() - _mouseScrollingStartTime <= static_cast<Uint32>(_battleGame->getDragTimeTolerance()))
 		{
-			isMouseScrolled = false;
-			_camera->centerOnPosition(posBeforeMouseScrolling);
+			_isMouseScrolled = false;
+			_camera->centerOnPosition(_posBeforeMouseScrolling);
 
 			_redraw = true;
 		}
 
-		if (isMouseScrolled)
+		if (_isMouseScrolled)
 			return;
 	}
 
@@ -369,7 +379,7 @@ void MiniMapView::mouseOver(Action* action, State* state)
 {
 	InteractiveSurface::mouseOver(action, state);
 
-	if (isMouseScrolling
+	if (_isMouseScrolling
 		&& action->getDetails()->type == SDL_MOUSEMOTION)
 	{
 		// The following is the workaround for a rare problem where sometimes
@@ -379,35 +389,37 @@ void MiniMapView::mouseOver(Action* action, State* state)
 		if (0 == (SDL_GetMouseState(0, 0) & SDL_BUTTON(_battleGame->getDragButton()))) // so we missed again the mouse-release :(
 		{
 			// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
-			if (!mouseMovedOverThreshold
-				&& SDL_GetTicks() - mouseScrollingStartTime <= static_cast<Uint32>(_battleGame->getDragTimeTolerance()))
+			if (!_mouseMovedOverThreshold
+				&& SDL_GetTicks() - _mouseScrollingStartTime <= static_cast<Uint32>(_battleGame->getDragTimeTolerance()))
 			{
 					_camera->centerOnPosition(posBeforeMouseScrolling);
 
 					_redraw = true;
 			}
 
-			isMouseScrolled = isMouseScrolling = false;
+			_isMouseScrolled = _isMouseScrolling = false;
 
 			return;
 		}
 
-		isMouseScrolled = true;
+		_isMouseScrolled = true;
 
 		if (_battleGame->isDragInverted())
 		{
 			// Set the mouse cursor back
 			SDL_EventState(SDL_MOUSEMOTION, SDL_IGNORE);
-			SDL_WarpMouse(xBeforeMouseScrolling, yBeforeMouseScrolling);
+			SDL_WarpMouse(
+						_xBeforeMouseScrolling,
+						_yBeforeMouseScrolling);
 			SDL_EventState(SDL_MOUSEMOTION, SDL_ENABLE);
 		}
 
 		// Check the threshold
-		totalMouseMoveX += action->getDetails()->motion.xrel;
-		totalMouseMoveY += action->getDetails()->motion.yrel;
-		if (!mouseMovedOverThreshold)
-			mouseMovedOverThreshold = std::abs(totalMouseMoveX) > _battleGame->getDragPixelTolerance()
-									|| std::abs(totalMouseMoveY) > _battleGame->getDragPixelTolerance();
+		_totalMouseMoveX += action->getDetails()->motion.xrel;
+		_totalMouseMoveY += action->getDetails()->motion.yrel;
+		if (!_mouseMovedOverThreshold)
+			_mouseMovedOverThreshold = std::abs(_totalMouseMoveX) > _battleGame->getDragPixelTolerance()
+										|| std::abs(_totalMouseMoveY) > _battleGame->getDragPixelTolerance();
 
 		// Calculate the move
 		int
@@ -416,30 +428,30 @@ void MiniMapView::mouseOver(Action* action, State* state)
 
 		if (_battleGame->isDragInverted())
 		{
-			mouseScrollX += action->getDetails()->motion.xrel;
-			mouseScrollY += action->getDetails()->motion.yrel;
-			newX = posBeforeMouseScrolling.x + mouseScrollX / 4;
-			newY = posBeforeMouseScrolling.y + mouseScrollY / 4;
+			_mouseScrollX += action->getDetails()->motion.xrel;
+			_mouseScrollY += action->getDetails()->motion.yrel;
+			newX = _posBeforeMouseScrolling.x + _mouseScrollX / 4;
+			newY = _posBeforeMouseScrolling.y + _mouseScrollY / 4;
 
 			// Keep the limits...
 			if (newX < -1 || _camera->getMapSizeX() < newX)
 			{
-				mouseScrollX -= action->getDetails()->motion.xrel;
-				newX = posBeforeMouseScrolling.x + mouseScrollX / 4;
+				_mouseScrollX -= action->getDetails()->motion.xrel;
+				newX = _posBeforeMouseScrolling.x + _mouseScrollX / 4;
 			}
 
 			if (newY < -1 || _camera->getMapSizeY() < newY)
 			{
-				mouseScrollY -= action->getDetails()->motion.yrel;
-				newY = posBeforeMouseScrolling.y + mouseScrollY / 4;
+				_mouseScrollY -= action->getDetails()->motion.yrel;
+				newY = _posBeforeMouseScrolling.y + _mouseScrollY / 4;
 			}
 		}
 		else
 		{
-			newX = posBeforeMouseScrolling.x - static_cast<int>(
-													static_cast<double>(totalMouseMoveX) / action->getXScale() / 4.0);
-			newY = posBeforeMouseScrolling.y - static_cast<int>(
-													static_cast<double>(totalMouseMoveY) / action->getYScale() / 4.0);
+			newX = _posBeforeMouseScrolling.x - static_cast<int>(
+													static_cast<double>(_totalMouseMoveX) / action->getXScale() / 4.0);
+			newY = _posBeforeMouseScrolling.y - static_cast<int>(
+													static_cast<double>(_totalMouseMoveY) / action->getYScale() / 4.0);
 
 			// Keep the limits...
 			if (newX < -1) newX = -1;
@@ -461,8 +473,8 @@ void MiniMapView::mouseOver(Action* action, State* state)
 		if (_battleGame->isDragInverted())
 		{
 			// We don't want to look the mouse-cursor jumping :)
-			action->getDetails()->motion.x = xBeforeMouseScrolling;
-			action->getDetails()->motion.y = yBeforeMouseScrolling;
+			action->getDetails()->motion.x = _xBeforeMouseScrolling;
+			action->getDetails()->motion.y = _yBeforeMouseScrolling;
 
 			_game->getCursor()->handle(action);
 		}
@@ -479,7 +491,7 @@ void MiniMapView::mouseIn(Action* action, State* state)
 {
 	InteractiveSurface::mouseIn(action, state);
 
-	isMouseScrolling = false;
+	_isMouseScrolling = false;
 
 	setButtonPressed(SDL_BUTTON_RIGHT, false);
 }

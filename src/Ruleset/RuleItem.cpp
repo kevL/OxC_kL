@@ -602,22 +602,23 @@ int RuleItem::getExplosionRadius() const
 
 	if (_blastRadius == -1)
 	{
+		// heavy explosions, incendiary, smoke or stun bombs create AOE explosions
+		// all the rest hits one point: AP, melee (stun or AP), laser, plasma, acid.
 		if (_damageType == DT_IN)
 			radius = (_power / 30) + 1;
 		else if (_damageType == DT_HE
-			|| _damageType == DT_STUN)
+			|| _damageType == DT_STUN
+			|| _damageType == DT_SMOKE)
 		{
 			radius = _power / 20;
 		}
 	}
-	else
+	else // unless a blast radius is actually defined.
 		radius = _blastRadius;
 
-/*kL. I hate caps...
-	if (radius > 11)
-	{
-		radius = 11;
-	} */
+	// kL. I hate caps...
+//	if (radius > 11)
+//		radius = 11;
 
 	return radius;
 }

@@ -75,8 +75,6 @@ private:
 	Surface* _surface;
 	SDL_Color deferredPalette[256];
 
-	void* _misalignedPixelBuffer;
-
 	///
 	int _zoomSurfaceY(
 			SDL_Surface* src,

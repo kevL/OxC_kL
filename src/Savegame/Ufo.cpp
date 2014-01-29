@@ -67,6 +67,7 @@ Ufo::Ufo(RuleUfo* rules)
 		_shotDownByCraftId(-1),
 		_mission(0),
 		_trajectory(0),
+		_trajectoryPoint(0),
 		_detected(false),
 		_hyperDetected(false),
 		_shootingAt(0),

@@ -445,9 +445,18 @@ void Ruleset::loadFile(const std::string& filename)
 				_ufopaediaListOrder);
 	}
 
- //	_startingBase->load(i->second, 0);
-	if (doc["startingBase"])
-		_startingBase = YAML::Node(doc["startingBase"]);
+//	_startingBase->load(i->second, 0);
+//	if (doc["startingBase"])
+//		_startingBase = YAML::Node(doc["startingBase"]);
+
+	// Bases can't be copied, so for savegame purposes we store the node instead
+	YAML::Node base = doc["startingBase"];
+	if (base)
+		for (YAML::const_iterator
+				i = base.begin();
+				i != base.end();
+				++i)
+			_startingBase[i->first.as<std::string>()] = YAML::Node(i->second);
 
  	_startingTime.load(doc["startingTime"]);
  	_costSoldier = doc["costSoldier"].as<int>(_costSoldier);

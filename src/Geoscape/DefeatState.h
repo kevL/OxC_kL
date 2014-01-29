@@ -42,8 +42,8 @@ class DefeatState
 private:
 	int _screenNumber;
 
-	InteractiveSurface *_screen;
-	Timer *_timer;
+	InteractiveSurface* _window;
+	Timer* _timer;
 
 	std::vector<Text*> _txtText;
 

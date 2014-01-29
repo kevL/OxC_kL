@@ -65,6 +65,7 @@ BaseView::BaseView(
 		_selFacility(0),
 		_big(0),
 		_small(0),
+		_lang(0),
 		_gridX(0),
 		_gridY(0),
 		_selSize(0),

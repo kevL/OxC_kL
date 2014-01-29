@@ -73,7 +73,8 @@ namespace OpenXcom
 
 UfoTrajectory::UfoTrajectory(const std::string& id)
 	:
-		_id(id)
+		_id(id),
+		_groundTimer(0)
 {
 }
 

@@ -95,6 +95,7 @@ Screen::Screen(
 		_fullscreen(fullscreen),
 		_numColors(0),
 		_firstColor(0),
+		_pushPalette(false),
 		_surface(0)
 {
 	char* prev = (char*)"";

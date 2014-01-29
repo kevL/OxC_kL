@@ -97,6 +97,10 @@ namespace OpenXcom
 AlienMission::AlienMission(const RuleAlienMission& rule)
 	:
 		_rule(rule),
+		_nextWave(0),
+		_nextUfoCounter(0),
+		_spawnCountdown(0),
+		_liveUfos(0),
 		_uniqueID(0),
 		_base(0)
 {

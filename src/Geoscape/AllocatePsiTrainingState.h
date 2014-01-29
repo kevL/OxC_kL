@@ -48,7 +48,6 @@ private:
 
 	Base* _base;
 	Text
-		* _txtCraft,
 		* _txtName,
 		* _txtPsiSkill,
 		* _txtPsiStrength,

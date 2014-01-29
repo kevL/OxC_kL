@@ -358,6 +358,8 @@ static struct AudioSequence
 	AudioSequence(ResourcePack* resources)
 		:
 			rp(resources),
+			m(0),
+			s(0),
 			trackPosition(0)
 	{
 	}

@@ -58,7 +58,8 @@ AllocatePsiTrainingState::AllocatePsiTrainingState(
 		Game* game,
 		Base* base)
 	:
-		State(game)
+		State(game),
+		_sel(0)
 {
 	_base = base;
 

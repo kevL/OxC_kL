@@ -53,7 +53,10 @@ Pathfinding::Pathfinding(SavedBattleGame* save)
 		_nodes(),
 		_unit(0),
 		_pathPreviewed(false),
-		_modifierUsed(false)
+		_strafeMove(false),
+		_totalTUCost(0),
+		_modifierUsed(false),
+		_movementType(MT_WALK)
 {
 	_size = _save->getMapSizeXYZ();
 	_nodes.reserve(_size); // initialize one node per tile.

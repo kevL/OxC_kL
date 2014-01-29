@@ -89,6 +89,7 @@ BattlescapeGenerator::BattlescapeGenerator(Game* game)
 		_ufo(0),
 		_base(0),
 		_terror(0),
+		_alienBase(0),
 		_terrain(0),
 		_mapsize_x(0),
 		_mapsize_y(0),

@@ -70,7 +70,6 @@ private:
 		_timeout,
 		_currentDist,
 		_targetDist,
-		_currentRadius,
 		_ufoFireInterval;
 //		_ufoHitFrame;
 	int

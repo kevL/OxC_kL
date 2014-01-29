@@ -72,7 +72,8 @@ UnitSprite::UnitSprite(
 		_itemSurfaceA(0),
 		_itemSurfaceB(0),
 		_part(0),
-		_animationFrame(0)
+		_animationFrame(0),
+		_drawingRoutine(0)
 {
 	_hairBleach = Options::getBool("battleHairBleach");
 }

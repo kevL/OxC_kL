@@ -73,80 +73,80 @@ UnitInfoState::UnitInfoState(
 	_battleGame = _game->getSavedGame()->getSavedBattle();
 
 	_bg			= new Surface(320, 200, 0, 0);
-	_txtName	= new Text(300, 17, 10, 4);
+	_txtName	= new Text(288, 17, 16, 4);
 
-	_txtTimeUnits = new Text(120, 9, 8, 31);
+	_txtTimeUnits = new Text(140, 9, 8, 31);
 	_numTimeUnits = new Text(18, 9, 151, 31);
 	_barTimeUnits = new Bar(170, 5, 170, 32);
 
-	_txtEnergy = new Text(120, 9, 8, 41);
+	_txtEnergy = new Text(140, 9, 8, 41);
 	_numEnergy = new Text(18, 9, 151, 41);
 	_barEnergy = new Bar(170, 5, 170, 42);
 
-	_txtHealth = new Text(120, 9, 8, 51);
+	_txtHealth = new Text(140, 9, 8, 51);
 	_numHealth = new Text(18, 9, 151, 51);
 	_barHealth = new Bar(170, 5, 170, 52);
 
-	_txtFatalWounds = new Text(120, 9, 8, 61);
+	_txtFatalWounds = new Text(140, 9, 8, 61);
 	_numFatalWounds = new Text(18, 9, 151, 61);
 	_barFatalWounds = new Bar(170, 5, 170, 62);
 
-	_txtBravery = new Text(120, 9, 8, 71);
+	_txtBravery = new Text(140, 9, 8, 71);
 	_numBravery = new Text(18, 9, 151, 71);
 	_barBravery = new Bar(170, 5, 170, 72);
 
-	_txtMorale = new Text(120, 9, 8, 81);
+	_txtMorale = new Text(140, 9, 8, 81);
 	_numMorale = new Text(18, 9, 151, 81);
 	_barMorale = new Bar(170, 5, 170, 82);
 
-	_txtReactions = new Text(120, 9, 8, 91);
+	_txtReactions = new Text(140, 9, 8, 91);
 	_numReactions = new Text(18, 9, 151, 91);
 	_barReactions = new Bar(170, 5, 170, 92);
 
-	_txtFiring = new Text(120, 9, 8, 101);
+	_txtFiring = new Text(140, 9, 8, 101);
 	_numFiring = new Text(18, 9, 151, 101);
 	_barFiring = new Bar(170, 5, 170, 102);
 
-	_txtThrowing = new Text(120, 9, 8, 111);
+	_txtThrowing = new Text(140, 9, 8, 111);
 	_numThrowing = new Text(18, 9, 151, 111);
 	_barThrowing = new Bar(170, 5, 170, 112);
 
-	_txtStrength = new Text(120, 9, 8, 121);
+	_txtStrength = new Text(140, 9, 8, 121);
 	_numStrength = new Text(18, 9, 151, 121);
 	_barStrength = new Bar(170, 5, 170, 122);
 
-	_txtPsiStrength = new Text(120, 9, 8, 131);
+	_txtPsiStrength = new Text(140, 9, 8, 131);
 	_numPsiStrength = new Text(18, 9, 151, 131);
 	_barPsiStrength = new Bar(170, 5, 170, 132);
 
-	_txtPsiSkill = new Text(120, 9, 8, 141);
+	_txtPsiSkill = new Text(140, 9, 8, 141);
 	_numPsiSkill = new Text(18, 9, 151, 141);
 	_barPsiSkill = new Bar(170, 5, 170, 142);
 
-	_txtFrontArmor = new Text(120, 9, 8, 151);
+	_txtFrontArmor = new Text(140, 9, 8, 151);
 	_numFrontArmor= new Text(18, 9, 151, 151);
 	_barFrontArmor = new Bar(170, 5, 170, 152);
 
-	_txtLeftArmor = new Text(120, 9, 8, 161);
+	_txtLeftArmor = new Text(140, 9, 8, 161);
 	_numLeftArmor = new Text(18, 9, 151, 161);
 	_barLeftArmor = new Bar(170, 5, 170, 162);
 
-	_txtRightArmor = new Text(120, 9, 8, 171);
+	_txtRightArmor = new Text(140, 9, 8, 171);
 	_numRightArmor = new Text(18, 9, 151, 171);
 	_barRightArmor = new Bar(170, 5, 170, 172);
 
-	_txtRearArmor = new Text(120, 9, 8, 181);
+	_txtRearArmor = new Text(140, 9, 8, 181);
 	_numRearArmor = new Text(18, 9, 151, 181);
 	_barRearArmor = new Bar(170, 5, 170, 182);
 
-	_txtUnderArmor = new Text(120, 9, 8, 191);
+	_txtUnderArmor = new Text(140, 9, 8, 191);
 	_numUnderArmor = new Text(18, 9, 151, 191);
 	_barUnderArmor = new Bar(170, 5, 170, 192);
 
 	if (!_mindProbe)
 	{
-		_btnPrev = new TextButton(20, 18, 2, 2);
-		_btnNext = new TextButton(20, 18, 298, 2);
+		_btnPrev = new TextButton(14, 18, 2, 2);
+		_btnNext = new TextButton(14, 18, 304, 2);
 	}
 
 	add(_bg);
@@ -448,6 +448,7 @@ void UnitInfoState::init()
 		minPsi = _game->getSavedGame()->getSoldier(_unit->getId())->getRules()->getMinStats().psiSkill - 1; // kL, shit..
 	}
 	ss << _unit->getName(_game->getLanguage(), BattlescapeGame::_debugPlay);
+	_txtName->setBig();
 	_txtName->setText(ss.str());
 
 	int stat = _unit->getTimeUnits();

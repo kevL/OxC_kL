@@ -61,16 +61,16 @@ private:
 
 	bool
 		_mouseOverIcons,
-		firstInit,
-		isMouseScrolled,
-		isMouseScrolling,
-		mouseMovedOverThreshold;
+		_firstInit,
+		_isMouseScrolled,
+		_isMouseScrolling,
+		_mouseMovedOverThreshold;
 	int
-		totalMouseMoveX,
-		totalMouseMoveY,
-		xBeforeMouseScrolling,
-		yBeforeMouseScrolling;
-	Uint32 mouseScrollingStartTime;
+		_totalMouseMoveX,
+		_totalMouseMoveY,
+		_xBeforeMouseScrolling,
+		_yBeforeMouseScrolling;
+	Uint32 _mouseScrollingStartTime;
 	std::string _currentTooltip;
 
 	Bar
@@ -122,7 +122,7 @@ private:
 		* _numLayers,
 		* _numAmmoLeft,
 		* _numAmmoRight;
-	Position mapOffsetBeforeMouseScrolling;
+	Position _mapOffsetBeforeMouseScrolling;
 	SavedBattleGame* _save;
 	Surface
 		* _rank,

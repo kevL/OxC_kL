@@ -44,8 +44,7 @@ private:
 	BattleItem
 		* _itemA,
 		* _itemB;
-	BattleUnit
-		* _unit;
+	BattleUnit* _unit;
 	SurfaceSet
 		* _itemSurfaceA,
 		* _itemSurfaceB,

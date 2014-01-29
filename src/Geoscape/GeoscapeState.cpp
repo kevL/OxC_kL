@@ -2355,20 +2355,23 @@ void GeoscapeState::time1Day()
 					&& !item->getCompatibleAmmo()->empty())
 				{
 					RuleManufacture* man = _game->getRuleset()->getManufacture(item->getType());
-					std::vector<std::string> req = man->getRequirements();
-					RuleItem* ammo = _game->getRuleset()->getItem(item->getCompatibleAmmo()->front());
 					if (man
-						&& ammo
-						&& std::find(
-									req.begin(),
-									req.end(),
-									ammo->getType())
-								!= req.end()
-						&& !_game->getSavedGame()->isResearched(man->getRequirements()))
+						&& !man->getRequirements().empty())
 					{
-						popup(new ResearchRequiredState(
-													_game,
-													item));
+						const std::vector<std::string> &req = man->getRequirements();
+						RuleItem* ammo = _game->getRuleset()->getItem(item->getCompatibleAmmo()->front());
+						if (ammo
+							&& std::find(
+										req.begin(),
+										req.end(),
+										ammo->getType())
+									!= req.end()
+							&& !_game->getSavedGame()->isResearched(man->getRequirements()))
+						{
+							popup(new ResearchRequiredState(
+														_game,
+														item));
+						}
 					}
 				}
 			}

@@ -61,7 +61,8 @@ namespace OpenXcom
 
 RuleAlienMission::RuleAlienMission(const std::string& type)
 	:
-		_type(type)
+		_type(type),
+		_points(0)
 {
 }
 
