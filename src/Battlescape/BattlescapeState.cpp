@@ -812,7 +812,7 @@ void BattlescapeState::mapOver(Action* action)
 		{
 			// Check if we have to revoke the scrolling, because it
 			// was too short in time, so it was a click
-			if (!mouseMovedOverThreshold
+			if (!_mouseMovedOverThreshold
 				&& SDL_GetTicks() - _mouseScrollingStartTime <= static_cast<Uint32>(_save->getDragTimeTolerance()))
 			{
 				_map->getCamera()->setMapOffset(_mapOffsetBeforeMouseScrolling);
@@ -1416,7 +1416,7 @@ void BattlescapeState::btnLeftHandItemClick(Action*)
 
 	if (playableUnitSelected())
 	{
-		// concession for touch devices: 
+		// concession for touch devices:
 		// click on the item to cancel action, and don't pop up a menu to select a new one
 		// TODO: wrap this in an IFDEF ?
 //kL		if (_battleGame->getCurrentAction()->targeting)
@@ -1446,7 +1446,7 @@ void BattlescapeState::btnRightHandItemClick(Action*)
 
 	if (playableUnitSelected())
 	{
-		// concession for touch devices: 
+		// concession for touch devices:
 		// click on the item to cancel action, and don't pop up a menu to select a new one
 		// TODO: wrap this in an IFDEF ?
 //kL		if (_battleGame->getCurrentAction()->targeting)
@@ -2300,7 +2300,7 @@ void BattlescapeState::saveVoxelView()
 		255, 255, 255,
 		224, 192,   0,	// xcom unit
 		255,  64, 128	// neutral unit
-	};	
+	};
 
 	BattleUnit* bu = _save->getSelectedUnit();
 	if (bu == 0) return; // no unit selected
