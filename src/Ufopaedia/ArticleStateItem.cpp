@@ -240,10 +240,9 @@ ArticleStateItem::ArticleStateItem(
 				ss.str(L"");
 				ss.clear();
 				ss << item->getPower();
-					if (item->getShotgunPellets())
-					{
-						ss << L"x" << item->getShotgunPellets();
-					}
+				if (item->getShotgunPellets())
+					ss << L"x" << item->getShotgunPellets();
+
 				_txtAmmoDamage[0]->setText(ss.str());
 			}
 			else
@@ -263,10 +262,9 @@ ArticleStateItem::ArticleStateItem(
 						ss.str(L"");
 						ss.clear();
 						ss << ammo_rule->getPower();
-							if (ammo_rule->getShotgunPellets())
-							{
-								ss << L"x" << ammo_rule->getShotgunPellets();
-							}
+						if (ammo_rule->getShotgunPellets())
+							ss << L"x" << ammo_rule->getShotgunPellets();
+
 						_txtAmmoDamage[i]->setText(ss.str());
 
 						ammo_rule->drawHandSprite(_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"), _imageAmmo[i]);
