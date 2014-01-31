@@ -1,5 +1,5 @@
-/*
- * Copyright 2010-2013 OpenXcom Developers.
+/**
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -25,9 +25,11 @@
 
 
 template <class _Tx>
-inline bool AreSame(const _Tx& l, const _Tx& r)
+inline bool AreSame(
+		const _Tx& l,
+		const _Tx& r)
 {
-	return std::fabs(l-r) <= std::numeric_limits<_Tx>::epsilon();
+	return std::fabs(l - r) <= std::numeric_limits<_Tx>::epsilon();
 }
 
 #endif

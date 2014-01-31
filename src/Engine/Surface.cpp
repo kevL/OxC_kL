@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -65,7 +65,7 @@ inline int GetPitch(
 {
 	return ((bpp / 8) * width + 15) & ~0xF;
 }
- 
+
 /**
  * Helper function creating aligned buffer
  * @param bpp bytes per pixel

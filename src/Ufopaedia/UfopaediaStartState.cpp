@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -99,7 +99,7 @@ UfopaediaStartState::UfopaediaStartState(Game* game)
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_UFOPAEDIA"));
-		
+
 	for (int
 			i = 0;
 			i < NUM_SECTIONS;
@@ -108,7 +108,7 @@ UfopaediaStartState::UfopaediaStartState(Game* game)
 		_btnSection[i]->setColor(Palette::blockOffset(8)+5);
 		_btnSection[i]->setText(tr(SECTIONS[i]));
 		_btnSection[i]->onMouseClick((ActionHandler)& UfopaediaStartState::btnSectionClick);
-	}		
+	}
 
 	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(tr("STR_OK"));

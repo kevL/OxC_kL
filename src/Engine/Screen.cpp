@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -110,7 +110,7 @@ Screen::Screen(
 
 		std::ostringstream ss;
 		ss << "SDL_VIDEO_WINDOW_POS=" << std::dec << windowedModePositionX << "," << windowedModePositionY;
-		
+
 		SDL_putenv(const_cast<char*>(ss.str().c_str()));
 	}
 
@@ -251,7 +251,7 @@ void Screen::flip()
 		_numColors = 0;
 		_pushPalette = false;
 	}
-	
+
 	if (SDL_Flip(_screen) == -1)
 	{
 		throw Exception(SDL_GetError());
@@ -384,7 +384,7 @@ void Screen::setResolution(
 			_surface->setPalette(deferredPalette);
 	}
 
-	SDL_SetColorKey(_surface->getSurface(), 0, 0); // turn off color key! 
+	SDL_SetColorKey(_surface->getSurface(), 0, 0); // turn off color key!
 
 	Log(LOG_INFO) << "Attempting to set display to " << width << "x" << height << "x" << _bpp << "...";
 
@@ -447,7 +447,7 @@ void Screen::setResolution(
 		else
 		{
 			_cursorLeftBlackBand = 0;
-		}		
+		}
 	}
 	else if (_scaleY > _scaleX
 		&& Options::getBool("keepAspectRatio"))
@@ -472,14 +472,14 @@ void Screen::setResolution(
 		else
 		{
 			_cursorTopBlackBand = 0;
-		}		
+		}
 	}
 	else
 	{
 		_topBlackBand = _bottomBlackBand = _leftBlackBand = _rightBlackBand = _cursorTopBlackBand = _cursorLeftBlackBand = 0;
 	}
 
-	if (isOpenGLEnabled()) 
+	if (isOpenGLEnabled())
 	{
 #ifndef __NO_OPENGL
 		glOutput.init(BASE_WIDTH, BASE_HEIGHT);
@@ -575,7 +575,7 @@ void Screen::screenshot(const std::string& filename) const
 											0xff00,
 											0xff0000,
 											0);
-	
+
 	if (isOpenGLEnabled())
 	{
 #ifndef __NO_OPENGL

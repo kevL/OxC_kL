@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -299,7 +299,7 @@ void TextButton::mousePress(Action* action, State* state)
 	}
 
 	if (isButtonHandled(action->getDetails()->button.button))
-	{		
+	{
 		if (soundPress != 0
 			&& _group == 0
 			&& action->getDetails()->button.button != SDL_BUTTON_WHEELUP

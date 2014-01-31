@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -47,7 +47,7 @@ class UfopaediaStartState
 protected:
 	static const int NUM_SECTIONS = 9;
 	static const std::string SECTIONS[NUM_SECTIONS];
-		
+
 	Window* _window;
 	Text* _txtTitle;
 	TextButton* _btnOk;

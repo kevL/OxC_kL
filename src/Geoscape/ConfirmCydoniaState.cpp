@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -113,7 +113,7 @@ void ConfirmCydoniaState::btnYesClick(Action*)
 {
 	_game->popState();
 	_game->popState();
-	
+
 	SavedBattleGame* bgame = new SavedBattleGame();
 	_game->getSavedGame()->setBattleGame(bgame);
 	bgame->setMissionType("STR_MARS_CYDONIA_LANDING");

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -81,7 +81,7 @@ protected:
 	public:
 		static const int NOT_CALCULATED = -1;
 
-		static struct SerializationKey 
+		static struct SerializationKey
 		{
 			// how many bytes to store for each variable or each member of array of the same name
 			Uint8 index; // for indexing the actual tile array
@@ -93,7 +93,7 @@ protected:
 			Uint8 boolFields;
 			Uint32 totalBytes; // per structure, including any data not mentioned here and accounting for all array members!
 		} serializationKey;
-	
+
 		/// Creates a tile.
 		Tile(const Position& pos);
 		/// Cleans up a tile.

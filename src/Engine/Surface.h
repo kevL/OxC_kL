@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -307,7 +307,7 @@ protected:
 		/// Gets the tooltip of the surface.
 //kL		std::string getTooltip() const;
 		/// Sets the tooltip of the surface.
-//kL		void setTooltip(const std::string& tooltip);	
+//kL		void setTooltip(const std::string& tooltip);
 };
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -18,123 +18,139 @@
  */
 
 #include "Ufopaedia.h"
-#include "../Ruleset/ArticleDefinition.h"
-#include "ArticleStateVehicle.h"
+
 #include <sstream>
+
+#include "ArticleStateVehicle.h"
+
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Surface.h"
+
 #include "../Resource/ResourcePack.h"
+
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/TextList.h"
+
+#include "../Ruleset/Armor.h"
+#include "../Ruleset/ArticleDefinition.h"
+#include "../Ruleset/RuleItem.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/Unit.h"
-#include "../Ruleset/Armor.h"
-#include "../Ruleset/RuleItem.h"
+
 
 namespace OpenXcom
 {
 
-	ArticleStateVehicle::ArticleStateVehicle(Game *game, ArticleDefinitionVehicle *defs) : ArticleState(game, defs->id)
+ArticleStateVehicle::ArticleStateVehicle(
+		Game* game,
+		ArticleDefinitionVehicle* defs)
+	:
+		ArticleState(
+			game,
+			defs->id)
+{
+	Unit* unit = _game->getRuleset()->getUnit(defs->id);
+	Armor* armor = _game->getRuleset()->getArmor(unit->getArmor());
+	RuleItem* item = _game->getRuleset()->getItem(defs->id);
+
+	_txtTitle	= new Text(310, 17, 5, 23);
+	_txtInfo	= new Text(300, 150, 10, 122);
+	_lstStats	= new TextList(300, 89, 10, 48);
+
+
+	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_3")->getColors());
+//	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)), Palette::backPos, 16);
+
+	ArticleState::initLayout();
+
+	add(_txtTitle);
+	add(_txtInfo);
+	add(_lstStats);
+
+
+	_game->getResourcePack()->getSurface("BACK10.SCR")->blit(_bg);
+	_btnOk->setColor(Palette::blockOffset(5));
+	_btnPrev->setColor(Palette::blockOffset(5));
+	_btnNext->setColor(Palette::blockOffset(5));
+
+	_txtTitle->setColor(Palette::blockOffset(15)+4);
+	_txtTitle->setBig();
+	_txtTitle->setText(Ufopaedia::buildText(_game, defs->title));
+
+	_txtInfo->setColor(Palette::blockOffset(15)-1);
+	_txtInfo->setWordWrap(true);
+	_txtInfo->setText(Ufopaedia::buildText(_game, defs->text));
+
+	_lstStats->setColor(Palette::blockOffset(15)+4);
+	_lstStats->setColumns(2, 175, 145);
+	_lstStats->setDot(true);
+
+	std::wstringstream ss;
+	ss << unit->getStats()->tu;
+	_lstStats->addRow(2, tr("STR_TIME_UNITS").c_str(), ss.str().c_str());
+
+	std::wstringstream ss2;
+	ss2 << unit->getStats()->health;
+	_lstStats->addRow(2, tr("STR_HEALTH").c_str(), ss2.str().c_str());
+
+	std::wstringstream ss3;
+	ss3 << armor->getFrontArmor();
+	_lstStats->addRow(2, tr("STR_FRONT_ARMOR").c_str(), ss3.str().c_str());
+
+	std::wstringstream ss4;
+	ss4 << armor->getSideArmor();
+	_lstStats->addRow(2, tr("STR_LEFT_ARMOR").c_str(), ss4.str().c_str());
+
+	std::wstringstream ss5;
+	ss5 << armor->getSideArmor();
+	_lstStats->addRow(2, tr("STR_RIGHT_ARMOR").c_str(), ss5.str().c_str());
+
+	std::wstringstream ss6;
+	ss6 << armor->getRearArmor();
+	_lstStats->addRow(2, tr("STR_REAR_ARMOR").c_str(), ss6.str().c_str());
+
+	std::wstringstream ss7;
+	ss7 << armor->getUnderArmor();
+	_lstStats->addRow(2, tr("STR_UNDER_ARMOR").c_str(), ss7.str().c_str());
+
+//kL	_lstStats->addRow(2, tr("STR_WEAPON").c_str(), tr(defs->weapon).c_str());
+	_lstStats->addRow(2, tr("STR_WEAPON_LC").c_str(), tr(defs->weapon).c_str()); // kL
+
+	if (!item->getCompatibleAmmo()->empty())
 	{
-		Unit *unit = _game->getRuleset()->getUnit(defs->id);
-		Armor *armor = _game->getRuleset()->getArmor(unit->getArmor());
-		RuleItem *item = _game->getRuleset()->getItem(defs->id);
+		RuleItem* ammo = _game->getRuleset()->getItem(item->getCompatibleAmmo()->front());
 
-		// add screen elements
-		_txtTitle = new Text(310, 17, 5, 23);
-		_txtInfo = new Text(300, 150, 10, 122);
-		_lstStats = new TextList(300, 89, 10, 48);
+		std::wstringstream ss8;
+		ss8 << ammo->getPower();
+		_lstStats->addRow(2, tr("STR_WEAPON_POWER").c_str(), ss8.str().c_str());
 
-		// Set palette
-		_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_3")->getColors());
-//		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)), Palette::backPos, 16);
+//kL		_lstStats->addRow(2, tr("STR_AMMUNITION").c_str(), tr(ammo->getName()).c_str());
+		_lstStats->addRow(2, tr("STR_ORDNANCE_LC").c_str(), tr(ammo->getName()).c_str()); // kL
 
-		ArticleState::initLayout();
+		std::wstringstream ss9;
+		ss9 << ammo->getClipSize();
+		_lstStats->addRow(2, tr("STR_ROUNDS").c_str(), ss9.str().c_str());
 
-		// add other elements
-		add(_txtTitle);
-		add(_txtInfo);
-		add(_lstStats);
-
-		// Set up objects
-		_game->getResourcePack()->getSurface("BACK10.SCR")->blit(_bg);
-		_btnOk->setColor(Palette::blockOffset(5));
-		_btnPrev->setColor(Palette::blockOffset(5));
-		_btnNext->setColor(Palette::blockOffset(5));
-
-		_txtTitle->setColor(Palette::blockOffset(15)+4);
-		_txtTitle->setBig();
-		_txtTitle->setText(Ufopaedia::buildText(_game, defs->title));
-
-		_txtInfo->setColor(Palette::blockOffset(15)-1);
-		_txtInfo->setWordWrap(true);
-		_txtInfo->setText(Ufopaedia::buildText(_game, defs->text));
-
-		_lstStats->setColor(Palette::blockOffset(15)+4);
-		_lstStats->setColumns(2, 175, 145);
-		_lstStats->setDot(true);
-		
-		std::wstringstream ss;
-		ss << unit->getStats()->tu;
-		_lstStats->addRow(2, tr("STR_TIME_UNITS").c_str(), ss.str().c_str());
-		
-		std::wstringstream ss2;
-		ss2 << unit->getStats()->health;
-		_lstStats->addRow(2, tr("STR_HEALTH").c_str(), ss2.str().c_str());
-		
-		std::wstringstream ss3;
-		ss3 << armor->getFrontArmor();
-		_lstStats->addRow(2, tr("STR_FRONT_ARMOR").c_str(), ss3.str().c_str());
-		
-		std::wstringstream ss4;
-		ss4 << armor->getSideArmor();
-		_lstStats->addRow(2, tr("STR_LEFT_ARMOR").c_str(), ss4.str().c_str());
-		
-		std::wstringstream ss5;
-		ss5 << armor->getSideArmor();
-		_lstStats->addRow(2, tr("STR_RIGHT_ARMOR").c_str(), ss5.str().c_str());
-		
-		std::wstringstream ss6;
-		ss6 << armor->getRearArmor();
-		_lstStats->addRow(2, tr("STR_REAR_ARMOR").c_str(), ss6.str().c_str());
-		
-		std::wstringstream ss7;
-		ss7 << armor->getUnderArmor();
-		_lstStats->addRow(2, tr("STR_UNDER_ARMOR").c_str(), ss7.str().c_str());
-		
-//kL		_lstStats->addRow(2, tr("STR_WEAPON").c_str(), tr(defs->weapon).c_str());
-		_lstStats->addRow(2, tr("STR_WEAPON_LC").c_str(), tr(defs->weapon).c_str());	// kL
-				
-		if (!item->getCompatibleAmmo()->empty())
-		{
-			RuleItem *ammo = _game->getRuleset()->getItem(item->getCompatibleAmmo()->front());
-
-			std::wstringstream ss8;
-			ss8 << ammo->getPower();
-			_lstStats->addRow(2, tr("STR_WEAPON_POWER").c_str(), ss8.str().c_str());
-
-//kL			_lstStats->addRow(2, tr("STR_AMMUNITION").c_str(), tr(ammo->getName()).c_str());
-			_lstStats->addRow(2, tr("STR_ORDNANCE_LC").c_str(), tr(ammo->getName()).c_str());	// kL
-			
-			std::wstringstream ss9;
-			ss9 << ammo->getClipSize();
-			_lstStats->addRow(2, tr("STR_ROUNDS").c_str(), ss9.str().c_str());
-			
-			_txtInfo->setY(138);
-		}
-		else
-		{
-			std::wstringstream ss8;
-			ss8 << item->getPower();
-			_lstStats->addRow(2, tr("STR_WEAPON_POWER").c_str(), ss8.str().c_str());
-		}
-		centerAllSurfaces();
+		_txtInfo->setY(138);
+	}
+	else
+	{
+		std::wstringstream ss8;
+		ss8 << item->getPower();
+		_lstStats->addRow(2, tr("STR_WEAPON_POWER").c_str(), ss8.str().c_str());
 	}
 
-	ArticleStateVehicle::~ArticleStateVehicle()
-	{}
+	centerAllSurfaces();
+}
+
+/**
+ *
+ */
+ ArticleStateVehicle::~ArticleStateVehicle()
+{
+}
 
 }

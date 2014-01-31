@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -60,7 +60,7 @@ DefeatState::DefeatState(Game* game)
 
 
 	_window->onMouseClick((ActionHandler)& DefeatState::windowClick);
-	
+
 	_game->getResourcePack()->getMusic("GMLOSE")->play();
 
 	for (int

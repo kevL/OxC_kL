@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -143,7 +143,7 @@ static int zoomSurface2X_64bit(
 #else
 /**
  *  Optimized 8 bit zoomer for resizing by a factor of 2. Doesn't flip.
- *  32-bit version for sad old x86 chips which run out of registers 
+ *  32-bit version for sad old x86 chips which run out of registers
  *  with the 64-bit version.
  *  Used internally by _zoomSurfaceY() below.
  *  source and dest. widths must be multiples of 4 bytes for 32-bit access
@@ -185,7 +185,7 @@ static int zoomSurface2X_32bit(
 
 			// boo
 			dataSrc = SDL_SwapLE32(dataSrc);
-			
+
 			dataDst = SDL_SwapLE32( (dataSrc & 0xFF) | ((dataSrc & 0xFFFF) << 8) |
 				((dataSrc & 0xFF00) << 16)  );
 
@@ -194,7 +194,7 @@ static int zoomSurface2X_32bit(
 			pixelDst++; // forward 4 bytes!
 			pixelDst2++;
 
-			dataSrc >>= 16; 
+			dataSrc >>= 16;
 
 			dataDst = SDL_SwapLE32( (dataSrc & 0xFF) | ((dataSrc & 0xFFFF) << 8) |
 				((dataSrc & 0xFF00) << 16)  );
@@ -225,7 +225,7 @@ static int zoomSurface4X_64bit(
 	Uint8 *pixelDstRow = (Uint8*)dst->pixels;
 	int sx, sy;
 	static bool proclaimed = false;
-	
+
 	if (!proclaimed)
 	{
 		proclaimed = true;
@@ -242,9 +242,9 @@ static int zoomSurface4X_64bit(
 			// boo
 			(void)SDL_SwapLE64(dataSrc);
 			/* expanded form of of data shift:
-			dataDst = (dataSrc & 0xFF) | ((dataSrc & 0xFF) << 8) | 
+			dataDst = (dataSrc & 0xFF) | ((dataSrc & 0xFF) << 8) |
 				((dataSrc & 0xFF) << 16 | ((datasrc & 0xFF) << 24) |
-				((dataSrc & 0xFF00 ) << 24) | ((dataSrc & 0xFF00) << 32)  | 
+				((dataSrc & 0xFF00 ) << 24) | ((dataSrc & 0xFF00) << 32)  |
 				((dataSrc & 0xFF00 ) << 40) | ((dataSrc & 0xFF00) << 48) ;
 				 */
 			for (int i = 0; i < 4; ++i)
@@ -785,7 +785,7 @@ int Zoom::_zoomSurfaceY(
 
 	}
 
-	// if we're scaling by a factor of 2 or 4, try to use a more efficient function	
+	// if we're scaling by a factor of 2 or 4, try to use a more efficient function
 
 	if (src->format->BytesPerPixel == 1 && dst->format->BytesPerPixel == 1)
 	{
@@ -794,7 +794,7 @@ int Zoom::_zoomSurfaceY(
 		static bool _haveSSE2 = haveSSE2();
 
 		if (_haveSSE2 &&
-			!((ptrdiff_t)src->pixels % 16) && 
+			!((ptrdiff_t)src->pixels % 16) &&
 			!((ptrdiff_t)dst->pixels % 16)) // alignment check
 		{
 			if (dst->w == src->w * 2 && dst->h == src->h * 2) return  zoomSurface2X_SSE2(src, dst);

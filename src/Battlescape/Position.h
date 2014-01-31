@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -64,7 +64,7 @@ public:
 		x = pos.x;
 		y = pos.y;
 		z = pos.z;
-		
+
 		return *this;
 	}
 
@@ -77,7 +77,7 @@ public:
 		x += pos.x;
 		y += pos.y;
 		z += pos.z;
-		
+
 		return *this;
 	}
 
@@ -90,7 +90,7 @@ public:
 		x-=pos.x;
 		y-=pos.y;
 		z-=pos.z;
-		
+
 		return *this;
 	}
 
@@ -103,7 +103,7 @@ public:
 		x *= pos.x;
 		y *= pos.y;
 		z *= pos.z;
-		
+
 		return *this;
 	}
 	Position operator* (const int v) const
@@ -115,10 +115,10 @@ public:
 		x *= v;
 		y *= v;
 		z *= v;
-		
+
 		return *this;
 	}
-	
+
 	Position operator/ (const Position& pos) const
 	{
 		return Position(x / pos.x, y / pos.y, z / pos.z);
@@ -128,7 +128,7 @@ public:
 		x /= pos.x;
 		y /= pos.y;
 		z /= pos.z;
-		
+
 		return *this;
 	}
     Position operator/ (const int v) const
@@ -140,9 +140,9 @@ public:
 		x /= v;
 		y /= v;
 		z /= v;
-		
+
 		return *this;
-	} // kL_end.	
+	} // kL_end.
 
 	/// == operator
     bool operator== (const Position& pos) const

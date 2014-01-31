@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -221,7 +221,7 @@ void CivilianBAIState::think(BattleAction* action)
 			if (_traceAI) Log(LOG_INFO) << "Re-Evaluated, now using " << AIMode << " behaviour";
 		}
 	}
-	
+
 	switch (_AIMode)
 	{
 		case AI_ESCAPE:
@@ -379,7 +379,7 @@ void CivilianBAIState::setupEscape()
 
 	Position bestTile(0, 0, 0);
 	Tile* tile = 0;
-	
+
 	// weights for various factors when choosing a tile to withdraw to;
 	// they're subjective, should be hand-tuned, may need tweaking.
 	const int EXPOSURE_PENALTY			= 10;
@@ -394,7 +394,7 @@ void CivilianBAIState::setupEscape()
 	std::vector<int> reachable = _save->getPathfinding()->findReachable(_unit, tu);
 	std::vector<Position> randomTileSearch = _save->getTileSearch();
 	std::random_shuffle(randomTileSearch.begin(), randomTileSearch.end());
-	
+
 	int unitsSpotting = getSpottingUnits(_unit->getPosition());
 	int currentTilePref = 15;
 
@@ -405,16 +405,16 @@ void CivilianBAIState::setupEscape()
 	{
 		// start looking in a direction away from the enemy
 		_escapeAction->target = _unit->getPosition();
-					
+
 		// cornered at the edge of the map perhaps?
 /*kL		if (!_save->getTile(_escapeAction->target))
 		{
 			_escapeAction->target = _unit->getPosition(); // <- kL_note: looks redundant to me.
 		} */
-		
+
 		score = 0;
 
-		if (tries < 121) 
+		if (tries < 121)
 		{
 			// looking for cover
 			_escapeAction->target.x += randomTileSearch[tries].x;
@@ -422,7 +422,7 @@ void CivilianBAIState::setupEscape()
 
 			score = BASE_SYSTEMATIC_SUCCESS;
 
-			if (_escapeAction->target == _unit->getPosition()) 
+			if (_escapeAction->target == _unit->getPosition())
 			{
 				if (unitsSpotting > 0)
 				{
@@ -441,9 +441,9 @@ void CivilianBAIState::setupEscape()
 			if (tries == 121
 				&& _traceAI)
 			{
-				Log(LOG_INFO) << "best score after systematic search was: " << bestTileScore; 
+				Log(LOG_INFO) << "best score after systematic search was: " << bestTileScore;
 			}
-						
+
 			score = BASE_DESPERATE_SUCCESS; // ruuuuuuun
 
 			_escapeAction->target = _unit->getPosition();
@@ -455,7 +455,7 @@ void CivilianBAIState::setupEscape()
 			{
 				_escapeAction->target.z = 0;
 			}
-			else if (_escapeAction->target.z >= _save->getMapSizeZ()) 
+			else if (_escapeAction->target.z >= _save->getMapSizeZ())
 			{
 				_escapeAction->target.z = _unit->getPosition().z;
 			}
@@ -486,9 +486,9 @@ void CivilianBAIState::setupEscape()
 
 		int spotters = 0;
 
-		if (!tile) 
+		if (!tile)
 		{
-			// no you can't quit the battlefield by running off the map. 
+			// no you can't quit the battlefield by running off the map.
 			score = -100001;
 		}
 		else
@@ -503,7 +503,7 @@ void CivilianBAIState::setupEscape()
 			{
 				continue;
 			}
-					
+
 			if (_spottingEnemies || spotters)
 			{
 				if (_spottingEnemies <= spotters)
@@ -570,8 +570,8 @@ void CivilianBAIState::setupEscape()
 	{
 		_save->getTile(_escapeAction->target)->setMarkerColor(13);
 	}
-				
-	if (bestTileScore <= -100000) 
+
+	if (bestTileScore <= -100000)
 	{
 		if (_traceAI) Log(LOG_INFO) << "Escape estimation failed.";
 
@@ -623,8 +623,8 @@ void CivilianBAIState::setupPatrol()
 			int dist = _save->getTileEngine()->distanceSq(
 													_unit->getPosition(),
 													node->getPosition());
-			if (_unit->getPosition().z == node->getPosition().z 
-				&& dist < closest 
+			if (_unit->getPosition().z == node->getPosition().z
+				&& dist < closest
 				&& node->getType() & Node::TYPE_SMALL)
 			{
 				_fromNode = node;
@@ -720,7 +720,7 @@ void CivilianBAIState::evaluateAIMode()
 	{
 		escapeOdds *= 1.1;
 	}
-	
+
 	switch (_unit->getAggression())
 	{
 		case 0:
@@ -730,7 +730,7 @@ void CivilianBAIState::evaluateAIMode()
 			escapeOdds *= 0.7;
 		break;
 	}
-	
+
 	if (_spottingEnemies)
 	{
 		escapeOdds = 10.0 * escapeOdds * static_cast<double>((_spottingEnemies + 10)) / 100.0;
@@ -739,7 +739,7 @@ void CivilianBAIState::evaluateAIMode()
 	{
 		escapeOdds /= 2.0;
 	}
-	
+
 	double decision = 1.0 + RNG::generate(0.0, patrolOdds + escapeOdds);
 	if (decision > escapeOdds)
 	{

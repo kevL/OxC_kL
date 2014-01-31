@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -98,7 +98,7 @@ BuildNewBaseState::BuildNewBaseState(
 	_hoverTimer		= new Timer(80);
 	_hoverTimer->onTimer((StateHandler)&BuildNewBaseState::hoverRedraw);
 	_hoverTimer->start();
-	
+
 
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
 
@@ -143,7 +143,7 @@ BuildNewBaseState::BuildNewBaseState(
 	_btnZoomOut->onMouseClick((ActionHandler)&BuildNewBaseState::btnZoomOutLeftClick, SDL_BUTTON_LEFT);
 	_btnZoomOut->onMouseClick((ActionHandler)&BuildNewBaseState::btnZoomOutRightClick, SDL_BUTTON_RIGHT);
 	_btnZoomOut->onKeyboardPress((ActionHandler)&BuildNewBaseState::btnZoomOutLeftClick, (SDLKey)Options::getInt("keyGeoZoomOut"));
-	
+
 	// dirty hacks to get the rotate buttons to work in "classic" style
 	_btnRotateLeft->setListButton();
 	_btnRotateRight->setListButton();
@@ -245,7 +245,7 @@ void BuildNewBaseState::hoverRedraw(void)
 							lat);
 
 	_globe->setNewBaseHover();
-	
+
 	if (_globe->getShowRadar()
 		&& !(AreSame(_oldlat, lat) && AreSame(_oldlon, lon)))
 	{

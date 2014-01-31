@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -133,7 +133,7 @@ OptionsState::OptionsState(
 
 		Log(LOG_WARNING) << "Couldn't get display resolutions";
 	}
-		
+
 	if (Options::getBool("fullscreen"))
 		_displayMode = _btnDisplayFullscreen;
 	else
@@ -204,7 +204,7 @@ OptionsState::OptionsState(
 	_btnControls->setColor(Palette::blockOffset(8)+5);
 	_btnControls->setText(tr("STR_CONTROLS"));
 	_btnControls->onMouseClick((ActionHandler)& OptionsState::btnControlsClick);
-	
+
 	_btnAdvanced->setColor(Palette::blockOffset(8)+5);
 	_btnAdvanced->setText(tr("STR_ADVANCED"));
 	_btnAdvanced->onMouseClick((ActionHandler)& OptionsState::btnAdvancedClick);
@@ -247,14 +247,14 @@ OptionsState::OptionsState(
 	_btnDisplayFullscreen->setColor(Palette::blockOffset(15)-1);
 	_btnDisplayFullscreen->setText(tr("STR_FULLSCREEN"));
 	_btnDisplayFullscreen->setGroup(&_displayMode);
-	
+
 	_filters.push_back("-");
 	_filters.push_back("Scale");
 	_filters.push_back("HQX");
 	_filterPaths.push_back("");
 	_filterPaths.push_back("");
 	_filterPaths.push_back("");
-	
+
 	#ifndef __NO_SHADERS
 	std::vector<std::string> filters = CrossPlatform::getFolderContents(
 															CrossPlatform::getDataFolder(GL_FOLDER),
@@ -272,7 +272,7 @@ OptionsState::OptionsState(
 		_filterPaths.push_back(path);
 	}
 	#endif
-	
+
 	_selFilter = 0;
 	if (Options::getBool("useOpenGL"))
 	{
@@ -442,7 +442,7 @@ void OptionsState::btnDefaultClick(Action*)
 	_game->getScreen()->setResolution(Options::getInt("displayWidth"), Options::getInt("displayHeight"));
 	_game->getScreen()->setFullscreen(Options::getBool("fullscreen"));
 	_game->setVolume(Options::getInt("soundVolume"), Options::getInt("musicVolume"));
-	
+
 	_game->popState(); */
 
 	_game->pushState(new OptionsBattlescapeState(_game, _origin));

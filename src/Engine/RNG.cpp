@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -131,7 +131,7 @@ unsigned int random()
 
         mti = 0;
     }
-  
+
     y = mt[mti++];
     y ^= CMATH_TEMPERING_SHIFT_U(y);
     y ^= CMATH_TEMPERING_SHIFT_S(y) & CMATH_TEMPERING_MASK_B;

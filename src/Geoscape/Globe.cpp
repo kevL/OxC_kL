@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -81,7 +81,7 @@ bool kL_reCenter = false;
 
 namespace
 {
-	
+
 /// helper class for Globe for drawing earth globe with shadows
 struct GlobeStaticData
 {
@@ -97,7 +97,7 @@ struct GlobeStaticData
 	 * @param r radius of sphere
 	 * @param x cord of point where we getting this vector
 	 * @param y cord of point where we getting this vector
-	 * @return normal vector of sphere surface 
+	 * @return normal vector of sphere surface
 	 */
 	inline Cord circle_norm(
 			double ox,
@@ -127,8 +127,8 @@ struct GlobeStaticData
 			return ret;
 		}
 	}
-	
-	// initialization	
+
+	// initialization
 	GlobeStaticData()
 		:
 			random_surf_size(60)
@@ -730,7 +730,7 @@ void Globe::loadDat(
 	{
 		Polygon* poly;
 		int points;
-		
+
 		for (int
 				i = 0;
 				i < 10;
@@ -1192,9 +1192,9 @@ void Globe::setPalette(
 		int ncolors)
 {
 	Surface::setPalette(colors, firstcolor, ncolors);
-	
+
 	_texture->setPalette(colors, firstcolor, ncolors);
-	
+
 	_countries->setPalette(colors, firstcolor, ncolors);
 	_markers->setPalette(colors, firstcolor, ncolors);
 	_mkXcomBase->setPalette(colors, firstcolor, ncolors);
@@ -1356,7 +1356,7 @@ void Globe::drawLand()
 /**
  * Get position of sun from point on globe
  * @param lon lontidue of position
- * @param lat latitude of position 
+ * @param lat latitude of position
  * @return position of sun
  */
 Cord Globe::getSunDirection(
@@ -1474,7 +1474,7 @@ void Globe::XuLine(
 	bool inv;
 	Sint16 tcol;
 	double len,x0,y0,SX,SY;
-	if (abs((int)y2-(int)y1) > abs((int)x2-(int)x1)) 
+	if (abs((int)y2-(int)y1) > abs((int)x2-(int)x1))
 	{
 		len=abs((int)y2-(int)y1);
 		inv=false;
@@ -2523,7 +2523,7 @@ void Globe::mouseRelease(Action* action, State* state)
  * @param state State that the action handlers belong to.
  */
 void Globe::mouseClick(Action* action, State* state)
-{	
+{
 	if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
 	{
 		zoomIn();
@@ -2542,7 +2542,7 @@ void Globe::mouseClick(Action* action, State* state)
 			static_cast<Sint16>(floor(action->getAbsoluteYMouse())),
 			&lon,
 			&lat);
-	
+
 	if (lat == lat // Check for errors
 		&& lon == lon)
 	{

@@ -1,22 +1,29 @@
 #ifndef __OXC_PCH_H
 #define __OXC_PCH_H
 
-// uncomment to check memory leaks in VS
+// kL: heads up!
+#pragma message("kL: Compiling PCH.H")
+
+
+// To check memory leaks in VS:
 //#define _CRTDBG_MAP_ALLOC
 //#include <stdlib.h>
 //#include <crtdbg.h>
+
 #ifdef __APPLE__
 #include <OpenGL/gl.h>
 #include <OpenGL/glu.h>
 #include <OpenGL/glext.h>
 #include <GLUT/glut.h>
-
 #endif
+
 #include <algorithm>
 #include <cassert>
 #include <cctype>
 #include <climits>
+
 #define _USE_MATH_DEFINES
+
 #include <cmath>
 #include <cstdarg>
 #include <cstring>
@@ -32,11 +39,14 @@
 #include <limits>
 #include <list>
 #include <locale>
+
 #ifndef __APPLE__
 #include <stdlib.h>
 #endif
+
 #include <map>
 #include <queue>
+
 #include <SDL_endian.h>
 #include <SDL_gfxPrimitives.h>
 #include <SDL_image.h>
@@ -56,19 +66,21 @@
 #include <typeinfo>
 #include <utility>
 #include <vector>
+
 #ifdef _WIN32
-#ifndef NOMINMAX
-#define NOMINMAX
-#endif
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-//#include <shlobj.h>
-//#include <shlwapi.h>
-#include <direct.h>
+	#ifndef NOMINMAX
+	#define NOMINMAX
+	#endif
+
+	#define WIN32_LEAN_AND_MEAN
+	#include <windows.h>
+//	#include <shlobj.h>
+//	#include <shlwapi.h>
+	#include <direct.h>
 #else
-#include <unistd.h>
-#include <sys/param.h>
-#include <pwd.h>
+	#include <unistd.h>
+	#include <sys/param.h>
+	#include <pwd.h>
 #endif
 
 #ifdef __MORPHOS__
@@ -79,6 +91,9 @@
 
 #include "./aresame.h"
 #include "./version.h"
+#include "./lodepng.h"
+#include "./dirent.h"
+
 
 // uncomment to check memory leaks in VS
 //#ifdef _DEBUG
@@ -88,7 +103,9 @@
 //#endif
 //#endif
 
+/*
 #include "./Engine/State.h"
+
 #include "./Basescape/TransferConfirmState.h"
 
 #include "./Engine/ShaderMove.h"
@@ -126,7 +143,9 @@
 #include "./Engine/Music.h"
 #include "./Engine/Language.h"
 #include "./Engine/ShaderDrawHelper.h"
-#include "./dirent.h"
+
+//kL #include "./dirent.h"
+
 #include "./Battlescape/PathfindingNode.h"
 #include "./Battlescape/PrimeGrenadeState.h"
 #include "./Battlescape/UnitInfoState.h"
@@ -139,7 +158,9 @@
 #include "./Battlescape/WarningMessage.h"
 #include "./Battlescape/PathfindingOpenSet.h"
 #include "./Battlescape/TileEngine.h"
+
 #include "./Menu/OptionsBattlescapeState.h"
+
 #include "./Battlescape/ScannerView.h"
 #include "./Battlescape/Inventory.h"
 #include "./Battlescape/BattlescapeGame.h"
@@ -175,6 +196,7 @@
 #include "./Battlescape/Projectile.h"
 #include "./Battlescape/Map.h"
 #include "./Battlescape/UnitTurnBState.h"
+
 #include "./Ufopaedia/ArticleStateBaseFacility.h"
 #include "./Ufopaedia/ArticleStateItem.h"
 #include "./Ufopaedia/ArticleStateCraftWeapon.h"
@@ -188,6 +210,7 @@
 #include "./Ufopaedia/ArticleState.h"
 #include "./Ufopaedia/ArticleStateVehicle.h"
 #include "./Ufopaedia/UfopaediaStartState.h"
+
 #include "./Basescape/TransferBaseState.h"
 #include "./Basescape/BuildFacilitiesState.h"
 #include "./Basescape/ResearchState.h"
@@ -223,6 +246,7 @@
 #include "./Basescape/CraftSoldiersState.h"
 #include "./Basescape/MonthlyCostsState.h"
 #include "./Basescape/PlaceStartFacilityState.h"
+
 #include "./Geoscape/NewPossibleManufactureState.h"
 #include "./Geoscape/LowFuelState.h"
 #include "./Geoscape/UfoDetectedState.h"
@@ -261,6 +285,7 @@
 #include "./Geoscape/ConfirmLandingState.h"
 #include "./Geoscape/ConfirmDestinationState.h"
 #include "./Geoscape/ItemsArrivingState.h"
+
 #include "./Ruleset/RuleInventory.h"
 #include "./Ruleset/RuleUfo.h"
 #include "./Ruleset/RuleResearch.h"
@@ -286,6 +311,7 @@
 #include "./Ruleset/City.h"
 #include "./Ruleset/AlienDeployment.h"
 #include "./Ruleset/RuleTerrain.h"
+
 #include "./Interface/ToggleTextButton.h"
 #include "./Interface/TextButton.h"
 #include "./Interface/TextEdit.h"
@@ -300,7 +326,9 @@
 #include "./Interface/TextList.h"
 #include "./Interface/Slider.h"
 #include "./Interface/Frame.h"
-#include "./lodepng.h"
+
+//kL #include "./lodepng.h"
+
 #include "./Menu/SaveState.h"
 #include "./Menu/DeleteGameState.h"
 #include "./Menu/ErrorMessageState.h"
@@ -316,6 +344,7 @@
 #include "./Menu/MainMenuState.h"
 #include "./Menu/AbandonGameState.h"
 #include "./Menu/PauseState.h"
+
 #include "./Resource/ResourcePack.h"
 #include "./Resource/XcomResourcePack.h"
 #include "./Savegame/MovingTarget.h"
@@ -347,8 +376,11 @@
 #include "./Savegame/Target.h"
 #include "./Savegame/SerializationHelper.h"
 #include "./Savegame/Soldier.h"
+#include "./Savegame/SoldierDeath.h" // kL
+#include "./Savegame/SoldierDead.h" // kL
 #include "./Savegame/AlienStrategy.h"
 #include "./Savegame/EquipmentLayoutItem.h"
-#include "./Menu/OptionsAdvancedState.h"
+
+#include "./Menu/OptionsAdvancedState.h" */
 
 #endif

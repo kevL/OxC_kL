@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -27,8 +27,8 @@
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 // the following macros interfere with std::max and std::min as used throughout...
-#undef min 
-#undef max 
+#undef min
+#undef max
 #ifndef LOCALE_INVARIANT
 #define LOCALE_INVARIANT 0x007f
 #endif
@@ -75,7 +75,7 @@ protected:
 		virtual ~Logger();
 
 		std::ostringstream& get(SeverityLevel level = LOG_INFO);
-	
+
 		static SeverityLevel& reportingLevel();
 		static std::string& logFile();
 		static std::string toString(SeverityLevel level);
@@ -137,10 +137,10 @@ inline std::string now()
     const int MAX_LEN = 25, MAX_RESULT = 80;
 #ifdef _WIN32
     char date[MAX_LEN], time[MAX_LEN];
-	if (GetDateFormatA(LOCALE_INVARIANT, 0, 0, 
+	if (GetDateFormatA(LOCALE_INVARIANT, 0, 0,
             "dd'-'MM'-'yyyy", date, MAX_LEN) == 0)
         return "Error in Now()";
-    if (GetTimeFormatA(LOCALE_INVARIANT, TIME_FORCE24HOURFORMAT, 0, 
+    if (GetTimeFormatA(LOCALE_INVARIANT, TIME_FORCE24HOURFORMAT, 0,
             "HH':'mm':'ss", time, MAX_LEN) == 0)
         return "Error in Now()";
 
@@ -154,7 +154,7 @@ inline std::string now()
 	timeinfo = localtime(&rawtime);
     strftime(buffer, MAX_LEN, "%d-%m-%Y %H:%M:%S", timeinfo);
     char result[MAX_RESULT] = {0};
-    sprintf(result, "%s", buffer); 
+    sprintf(result, "%s", buffer);
 #endif
     return result;
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -694,7 +694,7 @@ void BattleUnit::keepWalking(
 		{
 			_direction = _faceDirection;
 			_faceDirection = -1;
-		} 
+		}
 
 
 		// motion points calculation for the motion scanner blips
@@ -742,7 +742,7 @@ void BattleUnit::keepWalking(
 	}
 
 	_walkPhase++;
-	
+
 
 	if (_walkPhase == middle)
 	{
@@ -765,7 +765,7 @@ void BattleUnit::keepWalking(
 			// Finish strafing move facing the correct way.
 			_direction = _faceDirection;
 			_faceDirection = -1;
-		} 
+		}
 
 		// motion points calculation for the motion scanner blips
 		if (_armor->getSize() > 1)
@@ -775,7 +775,7 @@ void BattleUnit::keepWalking(
 		else
 		{
 			// sectoids actually have less motion points
-			// but instead of create yet another variable, 
+			// but instead of create yet another variable,
 			// I used the height of the unit instead (logical)
 			if (getStandHeight() > 16)
 				_motionPoints += 4;
@@ -2048,7 +2048,7 @@ void BattleUnit::think(BattleAction* action)
 void BattleUnit::setAIState(BattleAIState* aiState)
 {
 	if (_currentAIState)
-	{		
+	{
 		_currentAIState->exit();
 
 		delete _currentAIState;
@@ -2703,7 +2703,7 @@ int BattleUnit::getMotionPoints() const
  */
 Armor* BattleUnit::getArmor() const
 {
-	return _armor;		
+	return _armor;
 }
 
 /**
@@ -2837,7 +2837,7 @@ bool BattleUnit::isFearable() const
 
 /**
  * Get the unit's intelligence. Is the number of turns AI remembers a soldier's position.
- * @return intelligence 
+ * @return intelligence
  */
 int BattleUnit::getIntelligence() const
 {
@@ -3141,7 +3141,7 @@ std::vector<BattleUnit*> BattleUnit::getUnitsSpottedThisTurn()
 }
 
 /**
- * 
+ *
  */
 void BattleUnit::setRankInt(int rank)
 {
@@ -3149,7 +3149,7 @@ void BattleUnit::setRankInt(int rank)
 }
 
 /**
- * 
+ *
  */
 int BattleUnit::getRankInt() const
 {
@@ -3157,7 +3157,7 @@ int BattleUnit::getRankInt() const
 }
 
 /**
- * 
+ *
  */
 void BattleUnit::deriveRank()
 {
@@ -3269,7 +3269,7 @@ void BattleUnit::toggleFireDamage()
 }
 
 /**
- * 
+ *
  */
 void BattleUnit::setCoverReserve(int reserve)
 {
@@ -3277,7 +3277,7 @@ void BattleUnit::setCoverReserve(int reserve)
 }
 
 /**
- * 
+ *
  */
 int BattleUnit::getCoverReserve() const
 {

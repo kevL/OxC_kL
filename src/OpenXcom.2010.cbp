@@ -3,7 +3,6 @@
 	<FileVersion major="1" minor="6" />
 	<Project>
 		<Option title="OpenXcom" />
-		<Option pch_mode="2" />
 		<Option compiler="msvc10" />
 		<Build>
 			<Target title="Release Win32">
@@ -12,13 +11,15 @@
 				<Option type="0" />
 				<Option compiler="msvc10" />
 				<Compiler>
-					<Add option="-DLODEPNG_NO_COMPILE_DECODER" />
-					<Add option="-DLODEPNG_NO_COMPILE_ANCILLARY_CHUNKS" />
-					<Add option="-DWIN32" />
-					<Add option="-D_CRT_SECURE_NO_DEPRECATE" />
-					<Add option="-DNDEBUG" />
-					<Add option="-D_CONSOLE" />
+					<Add option="/DNDEBUG" />
 				</Compiler>
+				<Linker>
+					<Add option="/INCREMENTAL:NO" />
+				</Linker>
+				<ExtraCommands>
+					<Add after="cmd /c copy F:\GIT\OpenXcom\bin\Win32\Release\OpenXcom.exe F:\openXcom /y" />
+					<Mode after="always" />
+				</ExtraCommands>
 			</Target>
 			<Target title="Debug Win32">
 				<Option output="../bin/Win32/Debug/OpenXcom.exe" prefix_auto="0" extension_auto="0" />
@@ -26,38 +27,44 @@
 				<Option type="0" />
 				<Option compiler="msvc10" />
 				<Compiler>
-					<Add option="-DLODEPNG_NO_COMPILE_DECODER" />
-					<Add option="-DLODEPNG_NO_COMPILE_ANCILLARY_CHUNKS" />
-					<Add option="-DWIN32" />
-					<Add option="-D_CRT_SECURE_NO_DEPRECATE" />
-					<Add option="-D_DEBUG" />
-					<Add option="-D_CONSOLE" />
-					<Add option="-D_SCL_SECURE_NO_WARNINGS" />
+					<Add option="/Zi" />
+					<Add option="/D_DEBUG" />
 				</Compiler>
+				<Linker>
+					<Add option="/DEBUG" />
+				</Linker>
 			</Target>
 		</Build>
 		<Compiler>
 			<Add option="/MD" />
+			<Add option="/MP" />
+			<Add option="/arch:SSE2" />
 			<Add option="/Gd" />
 			<Add option="/GL" />
+			<Add option="/Gm-" />
 			<Add option="/fp:fast" />
 			<Add option="/EHc" />
 			<Add option="/EHs" />
 			<Add option="/GS" />
-			<Add option="/Oy" />
 			<Add option="/O2" />
 			<Add option="/W3" />
 			<Add option="/Zc:wchar_t" />
 			<Add option="/Zc:forScope" />
-			<Add option="/MP" />
-			<Add option="/Gm-" />
-			<Add option="/WX-" />
-			<Add option="/analyze-" />
-			<Add option="/errorReport:queue" />
-			<Add directory="F:/GIT/OpenXcom/deps/include" />
-			<Add directory="F:/GIT/OpenXcom/deps/include/SDL" />
-			<Add directory="F:/GIT/OpenXcom/deps/include/yaml-cpp" />
-			<Add directory="F:/GIT/OpenXcom/deps/include/boost" />
+			<Add option='/FI&quot;F:\GIT\OpenXcom\src\pch.h&quot;' />
+			<Add option='/Yu&quot;F:\GIT\OpenXcom\src\pch.h&quot;' />
+			<Add option='/Fp&quot;F:\GIT\OpenXcom\src\pch.pch&quot;' />
+			<Add option="/DLODEPNG_NO_COMPILE_DECODER" />
+			<Add option="/DLODEPNG_NO_COMPILE_ANCILLARY_CHUNKS" />
+			<Add option="/D_WIN32" />
+			<Add option="/D_CRT_SECURE_NO_DEPRECATE" />
+			<Add option="/D_CONSOLE" />
+			<Add option="/D_SCL_SECURE_NO_WARNINGS" />
+			<Add option="/D_UNICODE" />
+			<Add option="/DUNICODE" />
+			<Add directory="../deps/include" />
+			<Add directory="../deps/include/SDL" />
+			<Add directory="../deps/include/yaml-cpp" />
+			<Add directory="../deps/include/boost" />
 			<Add directory="C:/Program Files/Microsoft Visual Studio 10.0/VC/include" />
 			<Add directory="C:/Program Files/Microsoft SDKs/Windows/v7.0A/include" />
 		</Compiler>
@@ -66,17 +73,15 @@
 			<Add directory="C:/Program Files/Microsoft SDKs/Windows/v7.0A/include" />
 		</ResourceCompiler>
 		<Linker>
+			<Add option='&quot;F:\GIT\OpenXcom\src\pch.obj&quot;' />
 			<Add option="/MACHINE:X86" />
 			<Add option="/DYNAMICBASE:NO" />
 			<Add option="/LTCG" />
 			<Add option="/TLBID:1" />
 			<Add option="/OPT:REF" />
 			<Add option="/OPT:ICF" />
-			<Add option="/SUBSYSTEM:WINDOWS" />
-			<Add option="/NOLOGO" />
-			<Add option="/INCREMENTAL:NO" />
-			<Add option="/VERBOSE:Lib" />
-			<Add option='/VERSION:&quot;1.0.0.kL&quot;' />
+			<Add option="/VERBOSE:LIB" />
+			<Add option="/VERSION:0.9" />
 			<Add library="yaml-cpp" />
 			<Add library="SDLmain" />
 			<Add library="SDL_gfx" />
@@ -84,6 +89,7 @@
 			<Add library="SDL_mixer" />
 			<Add library="SDL" />
 			<Add library="OpenGL32" />
+			<Add library="Uuid" />
 			<Add library="WinSpool" />
 			<Add library="AdvAPI32" />
 			<Add library="ComDlg32" />
@@ -95,7 +101,6 @@
 			<Add library="OleAut32" />
 			<Add library="shell32" />
 			<Add library="User32" />
-			<Add library="Uuid" />
 			<Add directory="../deps/lib/Win32" />
 			<Add directory="C:/Program Files/Microsoft SDKs/Windows/v7.0A/Lib" />
 			<Add directory="C:/Program Files/Microsoft Visual Studio 10.0/VC/lib" />
@@ -3355,12 +3360,13 @@
 			<Option target="Release x64" />
 		</Unit>
 		<Unit filename="pch.cpp">
-			<Option target="Debug Win32" />
-			<Option target="Debug x64" />
-			<Option target="Release Win32" />
-			<Option target="Release x64" />
+			<Option compile="0" />
+			<Option link="0" />
 		</Unit>
 		<Unit filename="pch.h">
+			<Option compile="1" />
+			<Option weight="0" />
+			<Option compiler="msvc10" use="1" buildCommand='$compiler /nologo $options $includes /c /Tp&quot;$file&quot; /Yc&quot;F:\GIT\OpenXcom\src\pch.h&quot;' />
 			<Option target="Debug Win32" />
 			<Option target="Debug x64" />
 			<Option target="Release Win32" />

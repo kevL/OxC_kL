@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -575,7 +575,7 @@ bool UnitWalkBState::doStatusStand()
 				// This is where we fake out the strafe movement direction so the unit "moonwalks"
 				int dirStrafe = _unit->getDirection();
 //				int dirStrafe = dir; // kL
-	
+
 				_unit->setDirection(_unit->getFaceDirection());
 //				_parent->getMap()->cacheUnit(_unit); // kL ( see far above, re. strafe fake-out moonwalking )
 

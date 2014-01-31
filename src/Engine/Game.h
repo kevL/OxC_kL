@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -68,7 +68,7 @@ private:
 		_deleted,
 		_states;
 
-#ifdef __MORPHOS__		
+#ifdef __MORPHOS__
 	Sint32 delaytime;
 	Uint32 framestarttime;// = 0;
 	Uint32 waittime;// = 1000.0f/FPS;

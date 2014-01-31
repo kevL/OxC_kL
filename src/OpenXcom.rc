@@ -25,18 +25,18 @@ LANGUAGE LANG_PORTUGUESE, SUBLANG_PORTUGUESE
 // TEXTINCLUDE
 //
 
-1 TEXTINCLUDE 
+1 TEXTINCLUDE
 BEGIN
     "resource.h\0"
 END
 
-2 TEXTINCLUDE 
+2 TEXTINCLUDE
 BEGIN
     "#include ""afxres.h""\r\n"
     "\0"
 END
 
-3 TEXTINCLUDE 
+3 TEXTINCLUDE
 BEGIN
     "\r\n"
     "\0"
@@ -68,12 +68,14 @@ BEGIN
         BLOCK "000004b0"
         BEGIN
             VALUE "CompanyName", "OpenXcom Developers"
-            VALUE "FileDescription", "OpenXcom"
+//kL            VALUE "FileDescription", "OpenXcom"
+            VALUE "FileDescription", "OpenXcom_kL"
             VALUE "FileVersion", OPENXCOM_VERSION_LONG
             VALUE "InternalName", "OpenXcom.exe"
-            VALUE "LegalCopyright", "Copyright 2010-2013 OpenXcom Developers"
+            VALUE "LegalCopyright", "Copyright 2010-2014 OpenXcom Developers"
             VALUE "OriginalFilename", "OpenXcom.exe"
-            VALUE "ProductName", "OpenXcom"
+//kL            VALUE "ProductName", "OpenXcom"
+            VALUE "ProductName", "OpenXcom_kL"
             VALUE "ProductVersion", OPENXCOM_VERSION_LONG
         END
     END

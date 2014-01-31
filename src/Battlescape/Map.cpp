@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -406,7 +406,7 @@ void Map::drawTerrain(Surface* surface)
 		endZ	= _camera->getViewLevel();
 	if (_camera->getShowAllLayers())
 		endZ	= _save->getMapSizeZ() - 1;
-		
+
 
 	Position
 		mapPosition,
@@ -1538,7 +1538,7 @@ void Map::animate(bool redraw)
 			++i)
 	{
 		if (((*i)->getArmor()->getSize() > 1
-				&& (*i)->getArmor()->getMovementType() == MT_FLY) 
+				&& (*i)->getArmor()->getMovementType() == MT_FLY)
 			|| (*i)->getArmor()->getDrawingRoutine() == 8
 			|| (*i)->getArmor()->getDrawingRoutine() == 9)
 		{

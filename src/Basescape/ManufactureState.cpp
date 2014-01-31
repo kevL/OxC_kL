@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -162,7 +162,7 @@ ManufactureState::ManufactureState(
 	_txtProduced->setText(tr("STR_UNITS_PRODUCED"));
 	_txtProduced->setWordWrap(true);
 	_txtProduced->setVerticalAlign(ALIGN_BOTTOM);
-	
+
 	_txtCost->setColor(Palette::blockOffset(15)+1);
 	_txtCost->setText(tr("STR_COST__PER__UNIT"));
 	_txtCost->setWordWrap(true);
@@ -210,7 +210,7 @@ void ManufactureState::btnOkClick(Action*)
 {
 	// restore palette
 	_game->setPalette(_oldPalette);
-	
+
 	_game->popState();
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -85,7 +85,7 @@ NewBattleState::NewBattleState(Game *game)
 	_btnRandom		= new TextButton(148, 16, 164, 154);
 	_btnOk			= new TextButton(148, 16, 8, 176);
 	_btnCancel		= new TextButton(148, 16, 164, 176);
-	
+
 	_txtItemLevel	= new Text(136, 9, 110, 110);
 	_btnItemLevel	= new TextButton(100, 20, 110, 120);
 
@@ -138,10 +138,10 @@ NewBattleState::NewBattleState(Game *game)
 
 	_txtCraft->setColor(Palette::blockOffset(8)+10);
 	_txtCraft->setText(tr("STR_CRAFT"));
-	
+
 	_txtItemLevel->setColor(Palette::blockOffset(8)+10);
 	_txtItemLevel->setText(tr("STR_ENEMY_WEAPON_LEVEL"));
-	
+
 	for (size_t
 			i = 0;
 			i != _game->getRuleset()->getAlienItemLevels().size();
@@ -194,7 +194,7 @@ NewBattleState::NewBattleState(Game *game)
 			_crafts.push_back(*i);
 		}
 	}
-	
+
 	_selMission = Options::getInt("NewBattleMission");
 	_selTerrain = Options::getInt("NewBattleTerrain");
 	_selItemLevel = Options::getInt("NewBattleItemLevel");
@@ -255,7 +255,7 @@ NewBattleState::NewBattleState(Game *game)
  *
  */
 NewBattleState::~NewBattleState()
-{	
+{
 }
 
 /**
@@ -385,13 +385,13 @@ void NewBattleState::initSave()
         for (int
 				n = 0;
 				n < 5;
-				++n) 
+				++n)
         {
             if (RNG::percent(70))
                 continue;
 
             soldier->promoteRank();
-            
+
             UnitStats* stats = soldier->getCurrentStats();
             stats->tu			+= RNG::generate(0, 5);
             stats->stamina		+= RNG::generate(0, 5);

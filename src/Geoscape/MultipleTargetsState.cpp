@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -80,7 +80,7 @@ MultipleTargetsState::MultipleTargetsState(
 		int winY = (200 - winHeight) / 2;
 		int listY = winY + BORDER + OUTER_MARGIN;
 		int btnY = listY + listHeight + INNER_MARGIN;
-		
+
 		_window = new Window(this, 136, winHeight, 60, winY);
 		_btnCancel = new TextButton(116, BUTTON_HEIGHT, 70, btnY);
 		_lstTargets = new TextList(116, listHeight, 70, listY); */

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -81,7 +81,7 @@ AlienBaseState::AlienBaseState(
 
 	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
-	
+
 	_btnOk->setColor(Palette::blockOffset(8)+10);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& AlienBaseState::btnOkClick);
@@ -101,7 +101,7 @@ AlienBaseState::AlienBaseState(
 			i != _game->getSavedGame()->getCountries()->end();
 			++i)
 	{
-		if ((*i)->getRules()->insideCountry(_base->getLongitude(), _base->getLatitude())) 
+		if ((*i)->getRules()->insideCountry(_base->getLongitude(), _base->getLatitude()))
 		{
 			country = tr((*i)->getRules()->getType());
 
@@ -114,7 +114,7 @@ AlienBaseState::AlienBaseState(
 			i != _game->getSavedGame()->getRegions()->end();
 			++i)
 	{
-		if ((*i)->getRules()->insideRegion(_base->getLongitude(), _base->getLatitude())) 
+		if ((*i)->getRules()->insideRegion(_base->getLongitude(), _base->getLatitude()))
 		{
 			region = tr((*i)->getRules()->getType());
 

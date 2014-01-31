@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -306,7 +306,7 @@ void MonthlyReportState::init()
 }
 
 /**
- * Update all our activity counters, gather all our scores, 
+ * Update all our activity counters, gather all our scores,
  * get our countries to sign pacts, adjust their fundings,
  * assess their satisfaction, and finally calculate our overall
  * total score, with thanks to Volutar for the formulae.

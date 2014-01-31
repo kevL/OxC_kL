@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -151,7 +151,7 @@ private:
 
 		/// Reset all the elements on screen.
 		void resetScreen();
-		/// Update the scale 
+		/// Update the scale
 		void updateScale(
 				double lowerLimit,
 				double upperLimit,

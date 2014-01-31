@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -36,7 +36,7 @@ class Window;
 /**
  * Screen that allows the player
  * to confirm a new base on the globe.
- * Note: This is different from the starting base screen, BaseNameState 
+ * Note: This is different from the starting base screen, BaseNameState
  */
 class ConfirmNewBaseState
 	:

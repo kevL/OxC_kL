@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -22,28 +22,37 @@
 
 #include "ArticleState.h"
 
+
 namespace OpenXcom
 {
-	class Game;
-	class Text;
-	class TextList;
-	class ArticleDefinitionVehicle;
 
-	/**
-	 * ArticleStateVehicle hasa caption, text and a stats block.
-	 */
+class ArticleDefinitionVehicle;
+class Game;
+class Text;
+class TextList;
 
-	class ArticleStateVehicle : public ArticleState
-	{
+
+/**
+ * ArticleStateVehicle hasa caption, text and a stats block.
+ */
+class ArticleStateVehicle : public ArticleState
+{
+
+protected:
+	Text
+		* _txtInfo,
+		* _txtTitle;
+	TextList *_lstStats;
+
+
 	public:
-		ArticleStateVehicle(Game *game, ArticleDefinitionVehicle *article_defs);
+		ArticleStateVehicle(
+				Game* game,
+				ArticleDefinitionVehicle* article_defs);
 		virtual ~ArticleStateVehicle();
 
-	protected:
-		Text *_txtTitle;
-		Text *_txtInfo;
-		TextList *_lstStats;
-	};
+};
+
 }
 
 #endif

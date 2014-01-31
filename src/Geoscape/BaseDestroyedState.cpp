@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -60,7 +60,7 @@ BaseDestroyedState::BaseDestroyedState(
 				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)),
 				Palette::backPos,
 				16);
-	
+
 	add(_window);
 	add(_txtMessage);
 	add(_btnOk);

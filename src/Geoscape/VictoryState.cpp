@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -50,7 +50,7 @@ VictoryState::VictoryState(Game *game) : State(game), _screenNumber(0)
 	add(_window);
 	// Set up objects
 	_window->onMouseClick((ActionHandler)&VictoryState::windowClick);
-	
+
 	_game->getResourcePack()->getMusic("GMWIN")->play();
 
 	for (int text = 0; text != 5; ++text)

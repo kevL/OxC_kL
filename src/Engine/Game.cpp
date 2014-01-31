@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -153,7 +153,7 @@ Game::Game(const std::string& title)
 	// Create blank language
 	_lang = new Language();
 
-#ifdef __MORPHOS__	
+#ifdef __MORPHOS__
 	waittime = 1000.0f / Options::getInt("FPS");	//20 - FPS
 	framestarttime = 0;
 #endif
@@ -350,14 +350,14 @@ void Game::run()
 		// Save on CPU
 		switch (runningState)
 		{
-			case RUNNING: 
+			case RUNNING:
 #ifdef __MORPHOS__
 				delaytime = waittime - (SDL_GetTicks() - framestarttime);
 				if(delaytime > 0)
 					SDL_Delay((Uint32)delaytime);
 				framestarttime = SDL_GetTicks();
 #else
-				SDL_Delay(1); 
+				SDL_Delay(1);
 #endif
 
 			break; // Save CPU from going 100%

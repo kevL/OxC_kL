@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -144,7 +144,7 @@ static soundInFile sample3CatOnlySounds[] =
 	{"SAMPLE3.CAT", 30, 32},	// energise
 	{"SAMPLE3.CAT", 21, 32},	// hatch
 	{"SAMPLE3.CAT", 0, 64},		// phizz -- no equivalent in sample3.cat?
-	{"SAMPLE3.CAT", 13, 32},	// warning 
+	{"SAMPLE3.CAT", 13, 32},	// warning
 	{"SAMPLE3.CAT", 14, 32},	// detected
 	{"SAMPLE3.CAT", 19, 64},	// UFO flyby whoosh?
 	{"SAMPLE3.CAT", 3, 32},		// growl
@@ -177,7 +177,7 @@ static soundInFile hybridIntroSounds[] =
 	{"SAMPLE3.CAT", 30, 32},	// energise
 	{"SAMPLE3.CAT", 21, 32},	// hatch
 	{"INTRO.CAT", 0x11, 64},	// phizz
-	{"SAMPLE3.CAT", 13, 32},	// warning 
+	{"SAMPLE3.CAT", 13, 32},	// warning
 	{"SAMPLE3.CAT", 14, 32},	// detected
 	{"SAMPLE3.CAT", 19, 64},	// UFO flyby whoosh?
 	{"INTRO.CAT", 0x15, 32},	// growl
