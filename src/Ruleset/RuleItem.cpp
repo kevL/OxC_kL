@@ -91,7 +91,8 @@ RuleItem::RuleItem(const std::string& type)
 		_minRange(0),
 		_dropoff(2),
 		_bulletSpeed(0),
-		_autoShots(3)
+		_autoShots(3),
+		_shotgunPellets(0)
 {
 }
 
@@ -193,6 +194,7 @@ void RuleItem::load(const YAML::Node& node, int modIndex, int listOrder)
 	_dropoff				= node["dropoff"].as<int>(_dropoff);
 	_bulletSpeed			= node["bulletSpeed"].as<int>(_bulletSpeed);
 	_autoShots				= node["autoShots"].as<int>(_autoShots);
+	_shotgunPellets			= node["shotgunPellets"].as<int>(_shotgunPellets);
 
 	if (!_listOrder)
 	{
@@ -798,6 +800,11 @@ bool RuleItem::isPistol() const
 	return (_battleType == BT_FIREARM
 				|| _battleType == BT_MELEE)
 			&& !_twoHanded;
+}
+
+int RuleItem::getShotgunPellets() const
+{
+	return _shotgunPellets;
 }
 
 }

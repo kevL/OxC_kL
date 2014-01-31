@@ -44,6 +44,7 @@
 #include "../Savegame/BattleItem.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/SavedBattleGame.h"
+#include "Explosion.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Tile.h"
 
@@ -574,6 +575,14 @@ void ProjectileFlyBState::think()
 	}
 	else // impact !
 	{
+		if (_action.type != BA_THROW
+			&& _ammo
+			&& _ammo->getRules()->getShotgunPellets() != 0)
+		{
+			// shotgun pellets move to their terminal location instantly as fast as possible
+			_parent->getMap()->getProjectile()->skipTrajectory();
+		}
+
 		if (!_parent->getMap()->getProjectile()->move())
 		{
 			if (_action.type == BA_THROW)
@@ -665,6 +674,58 @@ void ProjectileFlyBState::think()
 															_action.type != BA_AUTOSHOT
 																|| _action.autoShotCount == _action.weapon->getRules()->getAutoShots()
 																|| !_action.weapon->getAmmoItem()));
+
+					// special shotgun behaviour: trace extra projectile paths, and add bullet hits at their termination points.
+					if (_ammo
+						&& _ammo->getRules()->getShotgunPellets() != 0)
+					{
+						int i = 1;
+						while (i != _ammo->getRules()->getShotgunPellets())
+						{
+							// create a projectile
+							Projectile* proj = new Projectile(
+														_parent->getResourcePack(),
+														_parent->getSave(),
+														_action,
+														_origin);
+
+							// let it trace to the point where it hits
+							_projectileImpact = proj->calculateTrajectory(
+																	std::max(
+																			0.0,
+																			_unit->getFiringAccuracy(
+																								_action.type,
+																								_action.weapon)
+																							- i * 0.05));
+
+							if (_projectileImpact != VOXEL_EMPTY)
+							{
+								// as above: skip the shot to the end of its path
+								proj->skipTrajectory();
+
+								// insert an explosion and hit 
+								if (_projectileImpact != VOXEL_OUTOFBOUNDS)
+								{
+									Explosion* explosion = new Explosion(
+																		proj->getPosition(1),
+																		_ammo->getRules()->getHitAnimation(),
+																		false,
+																		false);
+
+									_parent->getMap()->getExplosions()->insert(explosion);
+									_parent->getSave()->getTileEngine()->hit(
+																			proj->getPosition(1),
+																			_ammo->getRules()->getPower(),
+																			_ammo->getRules()->getDamageType(),
+																			_unit);
+								}
+
+								++i;
+							}
+
+							delete proj;
+						}
+					}
 
 					if (_unit->getSpecialAbility() == SPECAB_BURNFLOOR)
 						_parent->getSave()->getTile(_action.target)->ignite(15);

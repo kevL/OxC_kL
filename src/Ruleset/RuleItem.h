@@ -109,6 +109,7 @@ private:
 		_hitSound,
 		_hitAnimation,
 		_power,
+		_shotgunPellets,
 
 		_accuracyAimed,
 		_accuracyAuto,
@@ -319,6 +320,8 @@ private:
 		int getMinRange() const;
 		/// Get the accuracy dropoff of this weapon.
 		int getDropoff() const;
+		///
+		int getShotgunPellets() const;
 };
 
 }
