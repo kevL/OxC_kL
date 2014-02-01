@@ -151,6 +151,7 @@ private:
 		_requires;
 
 
+	std::string _zombieUnit;
 	public:
 		/// Creates a blank item ruleset.
 		RuleItem(const std::string& type);
@@ -322,6 +323,8 @@ private:
 		int getDropoff() const;
 		///
 		int getShotgunPellets() const;
+		/// Gets the unit's zombie unit.
+		std::string getZombieUnit() const;
 };
 
 }

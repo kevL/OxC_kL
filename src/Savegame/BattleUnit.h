@@ -164,8 +164,7 @@ private:
 
 	std::string
 		_activeHand,
-		_spawnUnit,
-		_zombieUnit;
+		_spawnUnit;
 
 	// static data
 	UnitStats _stats;
@@ -583,8 +582,6 @@ private:
 		/// Set health to 0 and set status dead
 		void instaKill();
 
-		/// Gets the unit's zombie unit.
-		std::string getZombieUnit() const;
 		/// Gets the unit's spawn unit.
 		std::string getSpawnUnit() const;
 		/// Sets the unit's spawn unit.

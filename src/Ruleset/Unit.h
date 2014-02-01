@@ -174,8 +174,7 @@ private:
 		_race,
 		_rank,
 		_type,
-		_spawnUnit,
-		_zombieUnit;
+		_spawnUnit;
 
 	SpecialAbility _specab;
 	UnitStats _stats;
@@ -217,8 +216,6 @@ private:
 		int getAggression() const;
 		/// Gets the alien's special ability.
 		int getSpecialAbility() const;
-		/// Gets the unit's zombie unit.
-		std::string getZombieUnit() const;
 		/// Gets the unit's spawn unit.
 		std::string getSpawnUnit() const;
 		/// Gets the unit's war cry.

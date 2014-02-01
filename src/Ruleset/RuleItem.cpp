@@ -92,7 +92,8 @@ RuleItem::RuleItem(const std::string& type)
 		_dropoff(2),
 		_bulletSpeed(0),
 		_autoShots(3),
-		_shotgunPellets(0)
+		_shotgunPellets(0),
+		_zombieUnit("")
 {
 }
 
@@ -109,7 +110,10 @@ RuleItem::~RuleItem()
  * @param modIndex Offsets the sounds and sprite values to avoid conflicts.
  * @param listOrder The list weight for this item.
  */
-void RuleItem::load(const YAML::Node& node, int modIndex, int listOrder)
+void RuleItem::load(
+		const YAML::Node& node,
+		int modIndex,
+		int listOrder)
 {
 	_type					= node["type"].as<std::string>(_type);
 	_name					= node["name"].as<std::string>(_name);
@@ -217,11 +221,10 @@ void RuleItem::load(const YAML::Node& node, int modIndex, int listOrder)
 	_bulletSpeed			= node["bulletSpeed"].as<int>(_bulletSpeed);
 	_autoShots				= node["autoShots"].as<int>(_autoShots);
 	_shotgunPellets			= node["shotgunPellets"].as<int>(_shotgunPellets);
+	_zombieUnit				= node["zombieUnit"].as<std::string>(_zombieUnit);
 
 	if (!_listOrder)
-	{
 		_listOrder = listOrder;
-	}
 }
 
 /**
@@ -827,6 +830,24 @@ bool RuleItem::isPistol() const
 int RuleItem::getShotgunPellets() const
 {
 	return _shotgunPellets;
+}
+
+/**
+ * Gets the number of projectiles this ammo shoots at once.
+ * @return The number of projectiles.
+ */
+int RuleItem::getShotgunPellets() const
+{
+	return _shotgunPellets;
+}
+
+/**
+ * Gets the unit that the victim is morphed into when attacked.
+ * @return The weapon's zombie unit.
+ */
+std::string RuleItem::getZombieUnit() const
+{
+	return _zombieUnit;
 }
 
 }

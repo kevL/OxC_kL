@@ -48,7 +48,6 @@ Unit::Unit(const std::string& type)
 		_intelligence(0),
 		_aggression(0),
 		_specab(SPECAB_NONE),
-		_zombieUnit(""),
 		_spawnUnit(""),
 		_livingWeapon(false)
 {
@@ -86,7 +85,6 @@ void Unit::load(const YAML::Node& node)
 	_intelligence	= node["intelligence"].as<int>(_intelligence);
 	_aggression		= node["aggression"].as<int>(_aggression);
 	_specab			= (SpecialAbility)node["specab"].as<int>(_specab);
-	_zombieUnit		= node["zombieUnit"].as<std::string>(_zombieUnit);
 	_spawnUnit		= node["spawnUnit"].as<std::string>(_spawnUnit);
 	_livingWeapon	= node["livingWeapon"].as<bool>(_livingWeapon);
 }
@@ -216,15 +214,6 @@ int Unit::getAggression() const
 int Unit::getSpecialAbility() const
 {
 	return (int)_specab;
-}
-
-/**
- * Gets the unit that the victim is morphed into when attacked.
- * @return The unit's zombie unit.
- */
-std::string Unit::getZombieUnit() const
-{
-	return _zombieUnit;
 }
 
 /**

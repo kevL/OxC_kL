@@ -312,7 +312,7 @@ void ExplosionBState::explode()
 														_unit,
 														hit); // kL add.
 
-			if (!_unit->getZombieUnit().empty() // check if this unit turns others into zombies
+			if (!_item->getRules()->getZombieUnit().empty() // check if this unit turns others into zombies
 				&& victim
 				&& victim->getArmor()->getSize() == 1
 				&& victim->getSpawnUnit().empty()
@@ -322,7 +322,7 @@ void ExplosionBState::explode()
 				//Log(LOG_INFO) << victim->getId() << ": murderer is *zombieUnit*; !spawnUnit -> specab->RESPAWN, ->zombieUnit!";
 				// converts the victim to a zombie on death
 				victim->setSpecialAbility(SPECAB_RESPAWN);
-				victim->setSpawnUnit(_unit->getZombieUnit());
+				victim->setSpawnUnit(_item->getRules()->getZombieUnit());
 			}
 		}
 	}

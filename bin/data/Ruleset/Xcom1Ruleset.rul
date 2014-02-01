@@ -2518,6 +2518,7 @@ items:
     invWidth: 2
     invHeight: 3
     recover: false
+    zombieUnit: STR_ZOMBIE
   - type: CELATID_WEAPON
     weight: 3
     bigSprite: -2
@@ -5140,7 +5141,6 @@ units:
     aggroSound: 149
     intelligence: 2
     aggression: 2
-    zombieUnit: STR_ZOMBIE
     livingWeapon: true
   - type: STR_SILACOID_TERRORIST
     race: STR_SILACOID
