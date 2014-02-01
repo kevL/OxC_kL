@@ -193,9 +193,7 @@ void CraftSoldiersState::btnUnloadClick(Action*)
 			++i)
 	{
 		if ((*i)->getCraft() == c) // if soldier is on this Craft, unload them
-		{
 			(*i)->setCraft(0);
-		}
 	}
 
 	// iterate over all listRows and change their stringText and lineColor
@@ -240,17 +238,11 @@ void CraftSoldiersState::populateList()
 		Uint8 color;
 
 		if ((*i)->getCraft() == c)
-		{
 			color = Palette::blockOffset(13);
-		}
 		else if ((*i)->getCraft() != 0)
-		{
 			color = Palette::blockOffset(15)+6;
-		}
 		else
-		{
 			color = Palette::blockOffset(13)+10;
-		}
 
 		_lstSoldiers->setRowColor(row, color);
 
@@ -278,15 +270,11 @@ void CraftSoldiersState::lstItemsLeftArrowClick(Action* action)
 				_base->getSoldiers()->at(row - 1) = s;
 
 				if (row != _lstSoldiers->getScroll())
-				{
 					SDL_WarpMouse(
 							static_cast<Uint16>(action->getLeftBlackBand() + action->getXMouse()),
 							static_cast<Uint16>(action->getTopBlackBand() + action->getYMouse() - static_cast<int>(8.0 * action->getYScale())));
-				}
 				else
-				{
 					_lstSoldiers->scrollUp(false);
-				}
 			}
 			else
 			{
@@ -323,15 +311,11 @@ void CraftSoldiersState::lstItemsRightArrowClick(Action* action)
 				_base->getSoldiers()->at(row + 1) = s;
 
 				if (row != 15 + _lstSoldiers->getScroll())
-				{
 					SDL_WarpMouse(
 							static_cast<Uint16>(action->getLeftBlackBand() + action->getXMouse()),
 							static_cast<Uint16>(action->getTopBlackBand() + action->getYMouse() + static_cast<int>(8.0 * action->getYScale())));
-				}
 				else
-				{
 					_lstSoldiers->scrollDown(false);
-				}
 			}
 			else
 			{
