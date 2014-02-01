@@ -78,10 +78,13 @@ void RuleCraft::load(
 {
 	_type		= node["type"].as<std::string>(_type);
 	_requires	= node["requires"].as< std::vector<std::string> >(_requires);
-	_sprite		= node["sprite"].as<int>(_sprite);
 
-	if (_sprite > 4) // this is an offset in BASEBITS.PCK, and two in INTICONS.PCK
-		_sprite += modIndex;
+	if (node["sprite"])
+	{
+		_sprite		= node["sprite"].as<int>(_sprite);
+		if (_sprite > 4) // this is an offset in BASEBITS.PCK, and two in INTICONS.PCK
+			_sprite += modIndex;
+	}
 
 	_fuelMax		= node["fuelMax"].as<int>(_fuelMax);
 	_damageMax		= node["damageMax"].as<int>(_damageMax);

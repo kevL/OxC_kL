@@ -120,15 +120,26 @@ void RuleItem::load(const YAML::Node& node, int modIndex, int listOrder)
 	_transferTime			= node["transferTime"].as<int>(_transferTime);
 	_weight					= node["weight"].as<int>(_weight);
 
-	_bigSprite				= node["bigSprite"].as<int>(_bigSprite);
-	if (_bigSprite > 56)	// BIGOBS.PCK: 57 entries
-		_bigSprite			+= modIndex;
-	_floorSprite			= node["floorSprite"].as<int>(_floorSprite);
-	if (_floorSprite > 72)	// FLOOROB.PCK: 73 entries
-		_floorSprite		+= modIndex;
-	_handSprite				= node["handSprite"].as<int>(_handSprite);
-	if (_handSprite > 127)	// HANDOBS.PCK: 128 entries
-		_handSprite			+= modIndex;
+	if (node["bigSprite"])
+	{
+		_bigSprite			= node["bigSprite"].as<int>(_bigSprite);
+		if (_bigSprite > 56) // BIGOBS.PCK: 57 entries
+			_bigSprite		+= modIndex;
+	}
+
+	if (node["floorSprite"])
+	{
+		_floorSprite		= node["floorSprite"].as<int>(_floorSprite);
+		if (_floorSprite > 72) // FLOOROB.PCK: 73 entries
+			_floorSprite	+= modIndex;
+	}
+
+	if (node["handSprite"])
+	{
+		_handSprite			= node["handSprite"].as<int>(_handSprite);
+		if (_handSprite > 127) // HANDOBS.PCK: 128 entries
+			_handSprite		+= modIndex;
+	}
 
 	if (node["bulletSprite"])
 	{
@@ -138,15 +149,26 @@ void RuleItem::load(const YAML::Node& node, int modIndex, int listOrder)
 			_bulletSprite	+= modIndex;
 	}
 
-	_fireSound				= node["fireSound"].as<int>(_fireSound);
-	if (_fireSound > 54)	// BATTLE.CAT: 55 entries
-		_fireSound			+= modIndex;
-	_hitSound				= node["hitSound"].as<int>(_hitSound);
-	if (_hitSound > 54)		// BATTLE.CAT: 55 entries
-		_hitSound			+= modIndex;
-	_hitAnimation			= node["hitAnimation"].as<int>(_hitAnimation);
-	if (_hitAnimation > 55)	// SMOKE.PCK: 56 entries
-		_hitAnimation		+= modIndex;
+	if (node["fireSound"])
+	{
+		_fireSound			= node["fireSound"].as<int>(_fireSound);
+		if (_fireSound > 54) // BATTLE.CAT: 55 entries
+			_fireSound		+= modIndex;
+	}
+
+	if (node["hitSound"])
+	{		
+		_hitSound			= node["hitSound"].as<int>(_hitSound);
+		if (_hitSound > 54) // BATTLE.CAT: 55 entries
+			_hitSound		+= modIndex;
+	}
+
+	if (node["hitAnimation"])
+	{		
+		_hitAnimation		= node["hitAnimation"].as<int>(_hitAnimation);
+		if (_hitAnimation > 55) // SMOKE.PCK: 56 entries
+			_hitAnimation	+= modIndex;
+	}
 
 	_power					= node["power"].as<int>(_power);
 	_compatibleAmmo			= node["compatibleAmmo"].as< std::vector<std::string> >(_compatibleAmmo);
