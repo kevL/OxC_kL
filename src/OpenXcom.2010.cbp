@@ -3364,7 +3364,6 @@
 			<Option link="0" />
 		</Unit>
 		<Unit filename="pch.h">
-			<Option compile="1" />
 			<Option weight="0" />
 			<Option compiler="msvc10" use="1" buildCommand='$compiler /nologo $options $includes /c /Tp&quot;$file&quot; /Yc&quot;F:\GIT\OpenXcom\src\pch.h&quot;' />
 			<Option target="Debug Win32" />
