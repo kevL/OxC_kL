@@ -161,14 +161,14 @@ void RuleItem::load(
 	}
 
 	if (node["hitSound"])
-	{		
+	{
 		_hitSound			= node["hitSound"].as<int>(_hitSound);
 		if (_hitSound > 54) // BATTLE.CAT: 55 entries
 			_hitSound		+= modIndex;
 	}
 
 	if (node["hitAnimation"])
-	{		
+	{
 		_hitAnimation		= node["hitAnimation"].as<int>(_hitAnimation);
 		if (_hitAnimation > 55) // SMOKE.PCK: 56 entries
 			_hitAnimation	+= modIndex;
@@ -825,11 +825,6 @@ bool RuleItem::isPistol() const
 	return (_battleType == BT_FIREARM
 				|| _battleType == BT_MELEE)
 			&& !_twoHanded;
-}
-
-int RuleItem::getShotgunPellets() const
-{
-	return _shotgunPellets;
 }
 
 /**

@@ -18,6 +18,7 @@
  */
 
 #include "ImageButton.h"
+
 #include "../Engine/Action.h"
 
 
@@ -31,9 +32,17 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-ImageButton::ImageButton(int width, int height, int x, int y)
+ImageButton::ImageButton(
+		int width,
+		int height,
+		int x,
+		int y)
 	:
-		InteractiveSurface(width, height, x, y),
+		InteractiveSurface(
+			width,
+			height,
+			x,
+			y),
 		_color(0),
 		_group(0),
 		_inverted(false)
@@ -109,7 +118,7 @@ void ImageButton::mousePress(Action* action, State* state)
 	InteractiveSurface::mousePress(action, state);
 }
 
-/*
+/**
  * Sets the button as the released button if it's part of a group.
  * @param action, Pointer to an action.
  * @param state, State that the action handlers belong to.
@@ -117,13 +126,24 @@ void ImageButton::mousePress(Action* action, State* state)
 void ImageButton::mouseRelease(Action* action, State* state)
 {
 	if (_inverted
-			&& isButtonHandled(action->getDetails()->button.button))
+		&& isButtonHandled(action->getDetails()->button.button))
 	{
 		_inverted = false;
 		invert(_color + 3);
 	}
 
 	InteractiveSurface::mouseRelease(action, state);
+}
+
+/**
+ * kL. Releases the _mode buttons in Geoscape::DogfightState,
+ * sets _btnStandoff as depressed (auto-disengage if damaged).
+ */
+void ImageButton::releaseDogfight()
+{
+	(*_group)->invert((*_group)->getColor() + 3);
+	*_group = this;
+	invert(_color + 3);
 }
 
 }

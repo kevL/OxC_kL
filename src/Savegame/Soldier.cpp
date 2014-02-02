@@ -78,7 +78,7 @@ Soldier::Soldier(
 		_initialStats.tu			= RNG::generate(minStats.tu, maxStats.tu);
 		_initialStats.stamina		= RNG::generate(minStats.stamina, maxStats.stamina);
 		_initialStats.health		= RNG::generate(minStats.health, maxStats.health);
-		_initialStats.bravery		= RNG::generate(minStats.bravery/10, maxStats.bravery/10)*10;
+		_initialStats.bravery		= RNG::generate(minStats.bravery / 10, maxStats.bravery / 10) * 10;
 		_initialStats.reactions		= RNG::generate(minStats.reactions, maxStats.reactions);
 		_initialStats.firing		= RNG::generate(minStats.firing, maxStats.firing);
 		_initialStats.throwing		= RNG::generate(minStats.throwing, maxStats.throwing);
@@ -86,7 +86,8 @@ Soldier::Soldier(
 		_initialStats.psiStrength	= RNG::generate(minStats.psiStrength, maxStats.psiStrength);
 		_initialStats.melee			= RNG::generate(minStats.melee, maxStats.melee);
 
-		_initialStats.psiSkill = minStats.psiSkill;
+//kL		_initialStats.psiSkill = minStats.psiSkill;
+		_initialStats.psiSkill = minStats.psiSkill - 2; // kL
 
 		_currentStats = _initialStats;
 
@@ -562,8 +563,8 @@ void Soldier::trainPsi1Day()
 	{
 		if (RNG::percent(1))
 			_currentStats.psiSkill = rulesMin - 1;
-		else
-			_currentStats.psiSkill = rulesMin - 2;
+//		else
+//			_currentStats.psiSkill = rulesMin - 2;
 	}
 }
 

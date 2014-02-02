@@ -37,14 +37,20 @@ class ImageButton
 	:
 		public InteractiveSurface
 {
+
 protected:
+	bool _inverted;
 	Uint8 _color;
 	ImageButton** _group;
-	bool _inverted;
+
 
 	public:
 		/// Creates a new image button with the specified size and position.
-		ImageButton(int width, int height, int x = 0, int y = 0);
+		ImageButton(
+				int width,
+				int height,
+				int x = 0,
+				int y = 0);
 		/// Cleans up the image button.
 		virtual ~ImageButton();
 
@@ -52,12 +58,16 @@ protected:
 		void setColor(Uint8 color);
 		/// Gets the image button's color.
 		Uint8 getColor() const;
+
 		/// Sets the image button's group.
 		void setGroup(ImageButton** group);
 		/// Special handling for mouse presses.
 		void mousePress(Action* action, State* state);
 		/// Special handling for mouse releases.
 		void mouseRelease(Action* action, State* state);
+
+		/// kL. Releases the _mode buttons in Geoscape::DogfightState
+		void releaseDogfight();
 };
 
 }

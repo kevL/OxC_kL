@@ -75,6 +75,7 @@ private:
 	int
 		_ufoSize,
 		_craftHeight,
+		_craftHeight_pre,
 		_currentCraftDamageColor,
 		_interceptionsCount,
 		_interceptionNumber;

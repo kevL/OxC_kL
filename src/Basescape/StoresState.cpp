@@ -123,6 +123,10 @@ StoresState::StoresState(
 	_lstStores->setBackground(_window);
 	_lstStores->setMargin(8);
 
+
+	bool isAmmo = false;
+	int row = 0;
+
 	const std::vector<std::string>& items = _game->getRuleset()->getItemsList();
 	for (std::vector<std::string>::const_iterator
 			i = items.begin();
@@ -132,6 +136,8 @@ StoresState::StoresState(
 		int qty = _base->getItems()->getItem(*i);
 		if (qty > 0)
 		{
+			isAmmo = false;
+
 			RuleItem* rule = _game->getRuleset()->getItem(*i);
 
 			std::wstringstream
@@ -141,11 +147,26 @@ StoresState::StoresState(
 			ss << qty;
 			ss2 << qty * rule->getSize();
 
+			std::wstring item = tr(*i);
+			if (rule->getBattleType() == BT_AMMO
+				 || (rule->getBattleType() == BT_NONE
+					&& rule->getClipSize() > 0))
+			{
+				isAmmo = true;
+				item.insert(0, L"  ");
+			}
+
 			_lstStores->addRow(
 							3,
-							tr(*i).c_str(),
+//							tr(*i).c_str(),
+							item.c_str(),
 							ss.str().c_str(),
 							ss2.str().c_str());
+
+			if (isAmmo)
+				_lstStores->setRowColor(row, Palette::blockOffset(15)+6);
+
+			row++;
 		}
 	}
 }

@@ -294,9 +294,7 @@ PurchaseState::PurchaseState(
 			{
 				std::wstring trItem = (*j)->getName(_game->getLanguage());
 				if (item == trItem)
-				{
 					tQty += (*j)->getQuantity();
-				}
 			} // kL_end.
 
 //kL			ss5 << _base->getItems()->getItem(launcher->getType());
@@ -342,9 +340,7 @@ PurchaseState::PurchaseState(
 			{
 				std::wstring trItem = (*j)->getName(_game->getLanguage());
 				if (item == trItem)
-				{
 					tQty += (*j)->getQuantity();
-				}
 			} // kL_end.
 
 //kL			ss6 << _base->getItems()->getItem(clip->getType());
@@ -404,9 +400,7 @@ PurchaseState::PurchaseState(
 				std::wstring trItem = (*j)->getName(_game->getLanguage());
 //				std::wstring trItem = tr(*j);
 				if (item == trItem)
-				{
 					tQty += (*j)->getQuantity();
-				}
 			}
 
 			// Add qty of items & vehicles on transport craft to Purchase screen stock.
@@ -424,9 +418,7 @@ PurchaseState::PurchaseState(
 					{
 						std::wstring ti = tr(t->first);
 						if (ti == item)
-						{
 							tQty += t->second;
-						}
 					}
 				}
 
@@ -439,9 +431,7 @@ PurchaseState::PurchaseState(
 					{
 						std::wstring tv = tr((*v)->getRules()->getType());
 						if (item == tv)
-						{
 							tQty++;
-						}
 
 						if ((*v)->getAmmo() != 255)
 						{
@@ -450,9 +440,7 @@ PurchaseState::PurchaseState(
 							std::wstring tv_a = tr(ammoRule->getType());
 
 							if (item == tv_a)
-							{
 								tQty += (*v)->getAmmo();
-							}
 						}
 					}
 				}
@@ -472,18 +460,15 @@ PurchaseState::PurchaseState(
 								Text::formatFunding(rule->getBuyCost()).c_str(),
 								ss7.str().c_str(),
 								L"0");
-				_lstItems->setRowColor(_qtys.size() - 1, Palette::blockOffset(15) + 6);
+				_lstItems->setRowColor(_qtys.size() - 1, Palette::blockOffset(15)+6);
 			}
 			else
-			{
 				_lstItems->addRow(
 								4,
 								item.c_str(),
 								Text::formatFunding(rule->getBuyCost()).c_str(),
 								ss7.str().c_str(),
 								L"0");
-			}
-
 //			_lstItems->addRow(
 //							4,
 //							item.c_str(),
@@ -655,9 +640,7 @@ void PurchaseState::lstItemsLeftArrowPress(Action* action)
 void PurchaseState::lstItemsLeftArrowRelease(Action* action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
-	{
 		_timerInc->stop();
-	}
 }
 
 /**
@@ -701,9 +684,7 @@ void PurchaseState::lstItemsRightArrowPress(Action* action)
 void PurchaseState::lstItemsRightArrowRelease(Action* action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
-	{
 		_timerDec->stop();
-	}
 }
 
 /**
@@ -874,13 +855,9 @@ void PurchaseState::increaseByValue(int change)
 			float freeStores = static_cast<float>(_base->getAvailableStores() - _base->getUsedStores()) - _iQty;
 			int maxByStores;
 			if (AreSame(storesNeededPerItem, 0.f))
-			{
 		        maxByStores = INT_MAX;
-			}
 			else
-			{
 				maxByStores = static_cast<int>(floor(freeStores / storesNeededPerItem));
-			}
 
 			change = std::min(maxByStores, change);
 			_iQty += (static_cast<float>(change) * storesNeededPerItem);

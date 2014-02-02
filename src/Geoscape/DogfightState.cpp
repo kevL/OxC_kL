@@ -274,6 +274,7 @@ DogfightState::DogfightState(
 		_animatingHit(false),
 		_ufoSize(0),
 		_craftHeight(0),
+		_craftHeight_pre(0), // kL
 		_currentCraftDamageColor(13),
 		_interceptionsCount(0),
 		_interceptionNumber(0),
@@ -292,16 +293,19 @@ DogfightState::DogfightState(
 	_range1					= new Surface(21, 74, _x + 19, _y + 3);
 	_weapon2				= new InteractiveSurface(15, 17, _x + 64, _y + 52);
 	_range2					= new Surface(21, 74, _x + 43, _y + 3);
-	_damage					= new Surface(22, 25, _x + 93, _y + 40);
+//kL	_damage					= new Surface(22, 25, _x + 93, _y + 40);
+	_damage					= new Surface(22, 20, _x + 93, _y + 40);
 
 	_btnMinimize			= new InteractiveSurface(12, 12, _x, _y);
 	_preview				= new InteractiveSurface(160, 96, _x, _y);
+
 	_btnStandoff			= new ImageButton(36, 15, _x + 83, _y + 4);
-	_mode = _btnStandoff;
 	_btnCautious			= new ImageButton(36, 15, _x + 120, _y + 4);
 	_btnStandard			= new ImageButton(36, 15, _x + 83, _y + 20);
 	_btnAggressive			= new ImageButton(36, 15, _x + 120, _y + 20);
 	_btnDisengage			= new ImageButton(36, 15, _x + 120, _y + 36);
+	_mode = _btnStandoff;
+
 	_btnUfo					= new ImageButton(36, 17, _x + 120, _y + 52);
 	_txtAmmo1				= new Text(16, 9, _x + 4, _y + 70);
 	_txtAmmo2				= new Text(16, 9, _x + 64, _y + 70);
@@ -400,8 +404,8 @@ DogfightState::DogfightState(
 
 	_btnDisengage->copy(_window);
 	_btnDisengage->setColor(Palette::blockOffset(5)+1);
-	_btnDisengage->onMouseClick((ActionHandler)& DogfightState::btnDisengageClick);
 	_btnDisengage->setGroup(&_mode);
+	_btnDisengage->onMouseClick((ActionHandler)& DogfightState::btnDisengageClick);
 
 	_btnUfo->copy(_window);
 	_btnUfo->setColor(Palette::blockOffset(5)+1);
@@ -604,12 +608,19 @@ DogfightState::DogfightState(
 			y < _damage->getHeight();
 			++y)
 	{
+		++_craftHeight_pre; // kL
+
 		Uint8 pixelColor = _damage->getPixel(x, y);
 		if (pixelColor >= Palette::blockOffset(10)
-			|| pixelColor < Palette::blockOffset(11))
+//kL			|| pixelColor < Palette::blockOffset(11))
+			&& pixelColor < Palette::blockOffset(11)) // kL
 		{
+			--_craftHeight_pre; // kL
 			++_craftHeight;
 		}
+
+		if (y == _damage->getHeight() - (_craftHeight + _craftHeight_pre)) // kL
+			break; // kL
 	}
 
 	drawCraftDamage();
@@ -702,6 +713,7 @@ void DogfightState::drawCraftDamage()
 
 		int rowsToColor = static_cast<int>(
 							floor(static_cast<double>(_craftHeight * damagePercent) / 100.0));
+
 		if (rowsToColor == 0)
 			return;
 
@@ -709,7 +721,8 @@ void DogfightState::drawCraftDamage()
 		bool rowColored = false;
 
 		for (int
-				y = 0;
+//kL				y = 0;
+				y = _craftHeight_pre; // kL
 				y < _damage->getHeight();
 				++y)
 		{
@@ -729,7 +742,7 @@ void DogfightState::drawCraftDamage()
 
 					rowColored = true;
 				}
-
+				else // kL
 				if (pixelColor >= Palette::blockOffset(10)
 					&& pixelColor < Palette::blockOffset(11))
 				{
@@ -1003,8 +1016,8 @@ void DogfightState::move()
 						// Formula delivered by Volutar
 //kL						int damage = RNG::generate(0, _ufo->getRules()->getWeaponPower());
 						int damage = RNG::generate(
-												10,
-												_ufo->getRules()->getWeaponPower()); // kL
+												10, // kL
+												_ufo->getRules()->getWeaponPower());
 						if (damage)
 						{
 							_craft->setDamage(_craft->getDamage() + damage);
@@ -1020,7 +1033,19 @@ void DogfightState::move()
 								|| (_mode == _btnStandard
 									&& _craft->getDamagePercentage() > 35))
 							{
-								_targetDist = STANDOFF_DIST;
+								// kL_begin: taken from btnStandoffClick() below.
+								if (!_ufo->isCrashed()
+									&& !_craft->isDestroyed()
+									&& !_ufoBreakingOff)
+								{
+//									_mode = _btnStandoff; // kL_add
+									_btnStandoff->releaseDogfight(); // kL_add
+
+									_end = false;
+									setStatus("STR_STANDOFF");
+									_targetDist = STANDOFF_DIST;
+								} // kL_end.
+//								_targetDist = STANDOFF_DIST;
 							}
 						}
 					}
@@ -1044,9 +1069,7 @@ void DogfightState::move()
 				it = _projectiles.erase(it);
 			}
 			else
-			{
 				++it;
-			}
 		}
 
 		for (int // handle weapons and craft distance.
