@@ -20,6 +20,8 @@
 #ifndef OPENXCOM_RNG_H
 #define OPENXCOM_RNG_H
 
+#include <algorithm>
+
 
 namespace OpenXcom
 {
@@ -42,6 +44,8 @@ namespace RNG
 	unsigned int getSeed();
 
 	/// Generates a random integer number.
+	int generate(int max);
+	/// Generates a random integer number.
 	int generate(
 			int min,
 			int max);
@@ -57,6 +61,20 @@ namespace RNG
 
 	/// Generates a percentage chance.
 	bool percent(int value);
+
+	/// Shuffles a list randomly.
+	/**
+	 * Randomly changes the orders of the elements in a list.
+	 * @param list The container to randomize.
+	 */
+	template <typename T>
+	void shuffle(T &list)
+	{
+		std::random_shuffle(
+				list.begin(),
+				list.end(),
+				(int (&)(int))generate);
+	}
 }
 
 }
