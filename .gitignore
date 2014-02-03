@@ -90,3 +90,7 @@ cmake/
 res/linux/
 res/mac/
 temp/
+temp/*.*
+#kL: ignore Code::Blocks (except .cbp & .depend)
+*.cscope_file_list
+*.layout

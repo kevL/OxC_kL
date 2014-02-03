@@ -353,6 +353,7 @@ PurchaseState::PurchaseState(
 							Text::formatFunding(clip->getBuyCost()).c_str(),
 							ss6.str().c_str(),
 							L"0");
+			_lstItems->setRowColor(_qtys.size() - 1, Palette::blockOffset(15)+6); // kL
 
 			for (std::vector<std::string>::iterator
 					j = items.begin();
@@ -469,12 +470,6 @@ PurchaseState::PurchaseState(
 								Text::formatFunding(rule->getBuyCost()).c_str(),
 								ss7.str().c_str(),
 								L"0");
-//			_lstItems->addRow(
-//							4,
-//							item.c_str(),
-//							Text::formatFunding(rule->getBuyCost()).c_str(),
-//							ss7.str().c_str(),
-//							L"0");
 		}
 	}
 
@@ -928,7 +923,7 @@ void PurchaseState::updateItemStrings()
 		_lstItems->setRowColor(_sel, Palette::blockOffset(13));
 	else
 	{
-		_lstItems->setRowColor(_sel, Palette::blockOffset(13) + 10);
+		_lstItems->setRowColor(_sel, Palette::blockOffset(13)+10);
 
 		if (_sel > _itemOffset)
 		{
@@ -937,7 +932,7 @@ void PurchaseState::updateItemStrings()
 				|| (rule->getBattleType() == BT_NONE
 					&& rule->getClipSize() > 0))
 			{
-				_lstItems->setRowColor(_sel, Palette::blockOffset(15) + 6);
+				_lstItems->setRowColor(_sel, Palette::blockOffset(15)+6);
 			}
 		}
 	}

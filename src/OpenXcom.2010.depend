@@ -4965,7 +4965,7 @@
 1391290317 f:\git\openxcom\src\interface\arrowbutton.h
 	"ImageButton.h"
 
-1391372765 f:\git\openxcom\src\interface\imagebutton.h
+1391373230 f:\git\openxcom\src\interface\imagebutton.h
 	"../Engine/InteractiveSurface.h"
 
 1391290317 f:\git\openxcom\src\ruleset\rulemanufacture.h
@@ -7504,7 +7504,7 @@
 	"../Resource/ResourcePack.h"
 	"../Savegame/SavedGame.h"
 
-1391290316 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
+1391372837 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
 	"DogfightState.h"
 	<cstdlib>
 	<sstream>
