@@ -166,7 +166,7 @@ void init(unsigned int seed)
 int generate(int max)
 {
 	unsigned int num = random();
-	return (int)(num % max);
+	return static_cast<int>(num %max);
 }
 
 /**

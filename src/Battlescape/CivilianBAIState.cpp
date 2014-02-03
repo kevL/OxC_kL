@@ -393,10 +393,10 @@ void CivilianBAIState::setupEscape()
 
 	std::vector<int> reachable = _save->getPathfinding()->findReachable(_unit, tu);
 	std::vector<Position> randomTileSearch = _save->getTileSearch();
-	RNG::shuffle(randomTileSearch);
-//	std::random_shuffle(
-//					randomTileSearch.begin(),
-//					randomTileSearch.end());
+//kL	RNG::shuffle(randomTileSearch);
+	std::random_shuffle(
+					randomTileSearch.begin(),
+					randomTileSearch.end());
 
 	int unitsSpotting = getSpottingUnits(_unit->getPosition());
 	int currentTilePref = 15;

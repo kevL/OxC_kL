@@ -924,10 +924,10 @@ void AlienBAIState::setupEscape()
 	int tu = _unit->getTimeUnits() / 2;
 	std::vector<int> reachable = _save->getPathfinding()->findReachable(_unit, tu);
 	std::vector<Position> randomTileSearch = _save->getTileSearch();
-	RNG::shuffle(randomTileSearch);
-//	std::random_shuffle(
-//					randomTileSearch.begin(),
-//					randomTileSearch.end());
+//kL	RNG::shuffle(randomTileSearch);
+	std::random_shuffle(
+					randomTileSearch.begin(),
+					randomTileSearch.end());
 
 	while (tries < 150 && !coverFound)
 	{
@@ -1669,7 +1669,10 @@ bool AlienBAIState::findFirePoint()
 		return false;
 
 	std::vector<Position> randomTileSearch = _save->getTileSearch();
-	RNG::shuffle(randomTileSearch);
+//kL	RNG::shuffle(randomTileSearch);
+	std::random_shuffle(
+					randomTileSearch.begin(),
+					randomTileSearch.end());
 
 	const int BASE_SYSTEMATIC_SUCCESS	= 100;
 	const int FAST_PASS_THRESHOLD		= 125;

@@ -67,14 +67,14 @@ namespace RNG
 	 * Randomly changes the orders of the elements in a list.
 	 * @param list The container to randomize.
 	 */
-	template <typename T>
+/*kL	template <typename T>
 	void shuffle(T &list)
 	{
 		std::random_shuffle(
 				list.begin(),
 				list.end(),
 				(int (&)(int))generate);
-	}
+	} */
 }
 
 }
