@@ -2639,7 +2639,8 @@ void GeoscapeState::time1Month()
 								_globe));
 
 	// Handle Xcom Operatives discovering bases
-	if (!_game->getSavedGame()->getAlienBases()->empty())
+	if (!_game->getSavedGame()->getAlienBases()->empty()
+//kL		&& RNG::percent(20))
 	{
 		for (std::vector<AlienBase*>::const_iterator
 				b = _game->getSavedGame()->getAlienBases()->begin();
@@ -2647,7 +2648,7 @@ void GeoscapeState::time1Month()
 				++b)
 		{
 			if (!(*b)->isDiscovered()
-				&& RNG::percent(5))
+				&& RNG::percent(5)) // kL_note: set this per gameDifficulty.
 			{
 				(*b)->setDiscovered(true);
 

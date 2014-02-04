@@ -159,17 +159,6 @@ void init(unsigned int seed)
 }
 
 /**
- * Generates a random positive integer up to a number.
- * @param max Maximum number, exclusive.
- * @return Generated number.
- */
-int generate(int max)
-{
-	unsigned int num = random();
-	return static_cast<int>(num %max);
-}
-
-/**
  * Generates a random integer number within a certain range.
  * @param min Minimum number, inclusive.
  * @param max Maximum number, inclusive.
@@ -256,5 +245,17 @@ bool percent(int value)
 	return (generate(0, 99) < value);
 }
 
+/**
+ * Generates a random positive integer up to a number.
+ * @param max Maximum number, exclusive.
+ * @return, Generated number.
+ */
+int generateEx(int max)
+{
+	unsigned int num = random();
+	return static_cast<int>(num %max);
 }
+
+}
+
 }

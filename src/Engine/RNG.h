@@ -43,9 +43,7 @@ namespace RNG
 	/// Gets the seed in use.
 	unsigned int getSeed();
 
-	/// Generates a random integer number.
-	int generate(int max);
-	/// Generates a random integer number.
+	/// Generates a random integer number, inclusive.
 	int generate(
 			int min,
 			int max);
@@ -62,19 +60,22 @@ namespace RNG
 	/// Generates a percentage chance.
 	bool percent(int value);
 
+	/// Generates a random integer number, exclusive.
+	int generateEx(int max);
+
 	/// Shuffles a list randomly.
 	/**
 	 * Randomly changes the orders of the elements in a list.
 	 * @param list The container to randomize.
 	 */
-/*kL	template <typename T>
-	void shuffle(T &list)
+	template <typename T> // Ss. Take 2!
+	void shuffle(T& list)
 	{
 		std::random_shuffle(
-				list.begin(),
-				list.end(),
-				(int (&)(int))generate);
-	} */
+						list.begin(),
+						list.end(),
+						generateEx);
+	}
 }
 
 }

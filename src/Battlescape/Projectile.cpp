@@ -90,9 +90,23 @@ Projectile::Projectile(
 		else // ba_SHOOT!! or hit, or spit.... probly Psi-attack also.
 		{
 			Log(LOG_INFO) << "Create Projectile -> not BA_THROW";
-			_speed = std::max(
-							1,
-							_speed + _action.weapon->getRules()->getBulletSpeed());
+//			_speed = std::max(
+//							1,
+//							_speed + _action.weapon->getRules()->getBulletSpeed());
+			if (_action.weapon->getRules()->getBulletSpeed() != 0)
+			{
+				_speed = std::max(
+								1,
+								_speed + _action.weapon->getRules()->getBulletSpeed());
+			}
+			else if (_action.weapon->getAmmoItem()
+				&& _action.weapon->getAmmoItem()->getRules()->getBulletSpeed() != 0)
+			{
+				_speed = std::max(
+								1,
+								_speed + _action.weapon->getAmmoItem()->getRules()->getBulletSpeed());
+			}
+
 		}
 	}
 }

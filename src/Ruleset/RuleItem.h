@@ -105,6 +105,7 @@ private:
 		_blastRadius,
 		_bulletSpeed,
 		_clipSize,
+		_explosionSpeed,
 		_fireSound,
 		_hitSound,
 		_hitAnimation,
@@ -300,6 +301,8 @@ private:
 
 		/// How fast does a projectile fired from this weapon travel?
 		int getBulletSpeed() const;
+		/// How fast does the explosion animation play?
+		int getExplosionSpeed() const;
 
 		/// How many auto shots does this weapon fire.
 		int getAutoShots() const;
@@ -323,7 +326,7 @@ private:
 		int getDropoff() const;
 		///
 		int getShotgunPellets() const;
-		/// Gets the unit's zombie unit.
+		/// Gets a weapon's zombie unit, if any.
 		std::string getZombieUnit() const;
 };
 

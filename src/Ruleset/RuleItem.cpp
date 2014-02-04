@@ -91,6 +91,7 @@ RuleItem::RuleItem(const std::string& type)
 		_minRange(0),
 		_dropoff(2),
 		_bulletSpeed(0),
+		_explosionSpeed(0),
 		_autoShots(3),
 		_shotgunPellets(0),
 		_zombieUnit("")
@@ -219,6 +220,7 @@ void RuleItem::load(
 	_minRange				= node["minRange"].as<int>(_minRange);
 	_dropoff				= node["dropoff"].as<int>(_dropoff);
 	_bulletSpeed			= node["bulletSpeed"].as<int>(_bulletSpeed);
+	_explosionSpeed			= node["explosionSpeed"].as<int>(_explosionSpeed);
 	_autoShots				= node["autoShots"].as<int>(_autoShots);
 	_shotgunPellets			= node["shotgunPellets"].as<int>(_shotgunPellets);
 	_zombieUnit				= node["zombieUnit"].as<std::string>(_zombieUnit);
@@ -794,6 +796,15 @@ int RuleItem::getDropoff() const
 int RuleItem::getBulletSpeed() const
 {
 	return _bulletSpeed;
+}
+
+/**
+ * Gets the speed at which this bullet explodes.
+ * @return The speed.
+ */
+int RuleItem::getExplosionSpeed() const
+{
+	return _explosionSpeed;
 }
 
 /**
