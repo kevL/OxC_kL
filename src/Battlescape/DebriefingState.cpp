@@ -811,6 +811,7 @@ void DebriefingState::prepareDebriefing()
 							delete save->getSoldier((*j)->getId()); // kL, delete SavedGame soldier
 																	// uh, what 'bout err GeoscapeSoldier etc.
 
+							// should delete GameTime here.
 							break;
 						}
 					}

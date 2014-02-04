@@ -145,6 +145,7 @@ SavedGame::SavedGame()
 SavedGame::~SavedGame()
 {
 	delete _time;
+
 	for (std::vector<Country*>::iterator
 			i = _countries.begin();
 			i != _countries.end();
@@ -889,7 +890,7 @@ std::vector<int> SavedGame::getExpenditureList() // kL
 
 /**
  * Returns the current time of the game.
- * @return Pointer to the game time.
+ * @return, Pointer to the game time.
  */
 GameTime* SavedGame::getTime() const
 {
@@ -898,7 +899,7 @@ GameTime* SavedGame::getTime() const
 
 /**
  * Changes the current time of the game.
- * @param time Game time.
+ * @param time, Game time.
  */
 void SavedGame::setTime(GameTime time)
 {
@@ -1601,8 +1602,8 @@ bool SavedGame::isResearched(const std::vector<std::string>& research) const
 
 /**
  * Returns pointer to the Soldier given its unique ID.
- * @param id A soldier's unique id.
- * @return Pointer to Soldier.
+ * @param id, A soldier's unique id.
+ * @return, Pointer to Soldier.
  */
 Soldier* SavedGame::getSoldier(int id) const
 {
@@ -2063,7 +2064,7 @@ void SavedGame::removePoppedResearch(const RuleResearch* research)
 //kL std::vector<Soldier*>* SavedGame::getDeadSoldiers()
 std::vector<SoldierDead*>* SavedGame::getDeadSoldiers() // kL
 {
-	Log(LOG_INFO) << "SavedGame::getDeadSoldiers()";
+	//Log(LOG_INFO) << "SavedGame::getDeadSoldiers()";
 
 	return &_deadSoldiers;
 }

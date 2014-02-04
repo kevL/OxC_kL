@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
@@ -17,10 +17,11 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "UfoLostState.h"
+#include "SoldierDiedState.h"
 
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
+#include "../Engine/Logger.h"
 #include "../Engine/Options.h"
 #include "../Engine/Palette.h"
 
@@ -35,19 +36,20 @@ namespace OpenXcom
 {
 
 /**
- * Initializes all the elements in the Ufo Lost window.
- * @param game Pointer to the core game.
- * @param id Name of the UFO.
+ * Initializes all the elements in the Soldier Died window.
+ * @param game, Pointer to the core game.
+ * @param name, Name of the Soldier.
  */
-UfoLostState::UfoLostState(
+SoldierDiedState::SoldierDiedState(
 		Game* game,
-		std::wstring id)
+		std::wstring name)
 	:
 		State(game),
-		_id(id)
+		_name(name)
 {
-	_screen = false;
+	Log(LOG_INFO) << "create SoldierDiedState";
 
+	_screen = false;
 
 	_window		= new Window(this, 192, 104, 32, 48, POPUP_BOTH);
 	_txtTitle	= new Text(160, 30, 48, 72);
@@ -71,34 +73,36 @@ UfoLostState::UfoLostState(
 
 	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(tr("STR_OK"));
-	_btnOk->onMouseClick((ActionHandler)& UfoLostState::btnOkClick);
+	_btnOk->onMouseClick((ActionHandler)& SoldierDiedState::btnOkClick);
 	_btnOk->onKeyboardPress(
-					(ActionHandler)& UfoLostState::btnOkClick,
+					(ActionHandler)& SoldierDiedState::btnOkClick,
 					(SDLKey)Options::getInt("keyOk"));
 	_btnOk->onKeyboardPress(
-					(ActionHandler)& UfoLostState::btnOkClick,
+					(ActionHandler)& SoldierDiedState::btnOkClick,
 					(SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(8)+5);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
-	std::wstring s = _id;
-	s += L'\n';
-	s += tr("STR_TRACKING_LOST");
-	_txtTitle->setText(s);
+	std::wstring msg = _name;
+	msg += L'\n';
+	msg += tr("STR_SOLDIER_DIED");
+	_txtTitle->setText(msg);
+
+	//Log(LOG_INFO) << "create SoldierDiedState EXIT";
 }
 
 /**
  *
  */
-UfoLostState::~UfoLostState()
+SoldierDiedState::~SoldierDiedState()
 {
 }
 
 /**
  * Resets the palette.
  */
-void UfoLostState::init()
+void SoldierDiedState::init()
 {
 	_game->setPalette(
 				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)),
@@ -108,11 +112,12 @@ void UfoLostState::init()
 
 /**
  * Returns to the previous screen.
- * @param action Pointer to an action.
+ * @param action, Pointer to an action.
  */
-void UfoLostState::btnOkClick(Action*)
+void SoldierDiedState::btnOkClick(Action*)
 {
 	_game->popState();
 }
 
 }
+

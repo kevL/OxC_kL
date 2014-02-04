@@ -25,7 +25,7 @@ namespace OpenXcom
 
 /**
  * Initializes a death event.
- * @time Time when the death occurred.
+ * @time, Time when the death occurred.
  */
 SoldierDeath::SoldierDeath()
 	:
@@ -42,7 +42,7 @@ SoldierDeath::~SoldierDeath()
 
 /**
  * Loads the death from a YAML file.
- * @param node YAML node.
+ * @param node, YAML node.
  */
 void SoldierDeath::load(const YAML::Node& node)
 {
@@ -51,7 +51,7 @@ void SoldierDeath::load(const YAML::Node& node)
 
 /**
  * Saves the death to a YAML file.
- * @returns YAML node.
+ * @return, YAML node.
  */
 YAML::Node SoldierDeath::save() const
 {
@@ -64,7 +64,7 @@ YAML::Node SoldierDeath::save() const
 
 /**
  * Returns the time of death of this soldier.
- * @return Pointer to the time.
+ * @return, Pointer to the time.
  */
 const GameTime* SoldierDeath::getTime() const
 {
@@ -73,7 +73,7 @@ const GameTime* SoldierDeath::getTime() const
 
 /**
  * Sets the time of death of this soldier.
- * @param time Pointer to the time.
+ * @param time, Pointer to the time.
  */
 void SoldierDeath::setTime(GameTime* time)
 {

@@ -121,7 +121,9 @@ Soldier::~Soldier()
 			i = _equipmentLayout.begin();
 			i != _equipmentLayout.end();
 			++i)
+	{
 		delete *i;
+	}
 
 	delete _death;
 }
@@ -137,6 +139,7 @@ void Soldier::load(
 {
 	_id				= node["id"].as<int>(_id);
 	_name			= Language::utf8ToWstr(node["name"].as<std::string>());
+//	_name			= Language::utf8ToWstr(node["name"].as<std::wstring>()); // kL
 	_initialStats	= node["initialStats"].as<UnitStats>(_initialStats);
 	_currentStats	= node["currentStats"].as<UnitStats>(_currentStats);
 	_rank			= (SoldierRank)node["rank"].as<int>();
@@ -158,6 +161,8 @@ void Soldier::load(
 			_equipmentLayout.push_back(new EquipmentLayoutItem(*i));
 	}
 
+	// kL_note: This may be obsolete, since SoldierDead was put in.
+	// ie, SoldierDeath should be part of SoldierDead, not class Soldier here.
 	if (node["death"])
 	{
 		_death = new SoldierDeath();
@@ -200,6 +205,8 @@ YAML::Node Soldier::save() const
 			node["equipmentLayout"].push_back((*i)->save());
 	}
 
+	// kL_note: This may be obsolete, since SoldierDead was put in.
+	// ie, SoldierDeath should be part of SoldierDead, not class Soldier.
 	if (_death != 0)
 		node["death"] = _death->save();
 
@@ -207,8 +214,46 @@ YAML::Node Soldier::save() const
 }
 
 /**
+ * Returns the soldier's rules.
+ * @return rulesoldier
+ */
+RuleSoldier* Soldier::getRules() const
+{
+	return _rules;
+}
+
+/**
+ * Add a mission to the counter.
+ */
+/**
+ * Get pointer to initial stats.
+ */
+UnitStats* Soldier::getInitStats()
+{
+	return &_initialStats;
+}
+
+/**
+ * Get pointer to current stats.
+ */
+UnitStats* Soldier::getCurrentStats()
+{
+	return &_currentStats;
+}
+
+/**
+ * Returns the soldier's unique ID. Each soldier
+ * can be identified by its ID. (not its name)
+ * @return, Unique ID.
+ */
+int Soldier::getId() const
+{
+	return _id;
+}
+
+/**
  * Returns the soldier's full name.
- * @return Soldier name.
+ * @return, Soldier name.
  */
 std::wstring Soldier::getName() const
 {
@@ -217,7 +262,7 @@ std::wstring Soldier::getName() const
 
 /**
  * Changes the soldier's full name.
- * @param name Soldier name.
+ * @param name, Soldier name.
  */
 void Soldier::setName(const std::wstring& name)
 {
@@ -226,7 +271,7 @@ void Soldier::setName(const std::wstring& name)
 
 /**
  * Returns the craft the soldier is assigned to.
- * @return Pointer to craft.
+ * @return, Pointer to craft.
  */
 Craft* Soldier::getCraft() const
 {
@@ -235,7 +280,7 @@ Craft* Soldier::getCraft() const
 
 /**
  * Assigns the soldier to a craft.
- * @param craft Pointer to craft.
+ * @param, craft Pointer to craft.
  */
 void Soldier::setCraft(Craft* craft)
 {
@@ -313,6 +358,11 @@ void Soldier::promoteRank()
 		_recentlyPromoted = true;
 }
 
+void Soldier::addMissionCount()
+{
+	_missions++;
+}
+
 /**
  * Returns the soldier's amount of missions.
  * @return Missions.
@@ -320,6 +370,14 @@ void Soldier::promoteRank()
 int Soldier::getMissions() const
 {
 	return _missions;
+}
+
+/**
+ * Add a kill to the counter.
+ */
+void Soldier::addKillCount(int count)
+{
+	_kills += count;
 }
 
 /**
@@ -347,57 +405,6 @@ SoldierGender Soldier::getGender() const
 SoldierLook Soldier::getLook() const
 {
 	return _look;
-}
-
-/**
- * Returns the soldier's rules.
- * @return rulesoldier
- */
-RuleSoldier* Soldier::getRules() const
-{
-	return _rules;
-}
-
-/**
- * Returns the soldier's unique ID. Each soldier
- * can be identified by its ID. (not it's name)
- * @return Unique ID.
- */
-int Soldier::getId() const
-{
-	return _id;
-}
-
-/**
- * Add a mission to the counter.
- */
-void Soldier::addMissionCount()
-{
-	_missions++;
-}
-
-/**
- * Add a kill to the counter.
- */
-void Soldier::addKillCount(int count)
-{
-	_kills += count;
-}
-
-/**
- * Get pointer to initial stats.
- */
-UnitStats* Soldier::getInitStats()
-{
-	return &_initialStats;
-}
-
-/**
- * Get pointer to current stats.
- */
-UnitStats* Soldier::getCurrentStats()
-{
-	return &_currentStats;
 }
 
 /**

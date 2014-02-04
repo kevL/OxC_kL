@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
@@ -2314,10 +2314,11 @@ std::vector<Vehicle*>* Base::getVehicles()
 void Base::destroyDisconnectedFacilities()
 {
 	std::list<std::vector<BaseFacility*>::iterator> disFacs = getDisconnectedFacilities(0);
-	for (std::list<std::vector<BaseFacility*>::iterator>::reverse_iterator i = disFacs.rbegin(); i != disFacs.rend(); ++i)
-	{
+	for (std::list<std::vector<BaseFacility*>::iterator>::reverse_iterator
+			i = disFacs.rbegin();
+			i != disFacs.rend();
+			++i)
 		destroyFacility(*i);
-	}
 }
 
 /**
@@ -2325,85 +2326,147 @@ void Base::destroyDisconnectedFacilities()
  * @param remove Facility to ignore (in case of facility dismantling).
  * @return a sorted list of iterators pointing to elements in _facilities.
  */
-std::list<std::vector<BaseFacility*>::iterator> Base::getDisconnectedFacilities(BaseFacility *remove)
+std::list<std::vector<BaseFacility*>::iterator> Base::getDisconnectedFacilities(BaseFacility* remove)
 {
 	std::list<std::vector<BaseFacility*>::iterator> result;
 
-	if (remove != 0 && remove->getRules()->isLift())
-	{ // Theoretically this is impossible, but sanity check is good :)
-		for (std::vector<BaseFacility*>::iterator i = _facilities.begin(); i != _facilities.end(); ++i)
-		{
+	if (remove != 0
+		&& remove->getRules()->isLift()) // Theoretically this is impossible, but sanity check is good :)
+	{
+		for (std::vector<BaseFacility*>::iterator
+				i = _facilities.begin();
+				i != _facilities.end();
+				++i)
 			if ((*i) != remove) result.push_back(i);
-		}
+
 		return result;
 	}
 
-	std::vector<std::pair<std::vector<BaseFacility*>::iterator, bool>*> facilitiesConnStates;
-	std::pair<std::vector<BaseFacility*>::iterator, bool> *grid[BASE_SIZE][BASE_SIZE];
-	BaseFacility *lift = 0;
+	std::vector<std::pair<std::vector<BaseFacility*>::iterator, bool>* > facilitiesConnStates;
+	std::pair<std::vector<BaseFacility*>::iterator, bool>* grid[BASE_SIZE][BASE_SIZE];
+	BaseFacility* lift = 0;
 
-	for (int x = 0; x < BASE_SIZE; ++x)
-	{
-		for (int y = 0; y < BASE_SIZE; ++y)
-		{
+	for (int
+			x = 0;
+			x < BASE_SIZE;
+			++x)
+		for (int
+				y = 0;
+				y < BASE_SIZE;
+				++y)
 			grid[x][y] = 0;
-		}
-	}
+
 
 	// Ok, fill up the grid(+facilitiesConnStates), and search the lift
-	for (std::vector<BaseFacility*>::iterator i = _facilities.begin(); i != _facilities.end(); ++i)
-	{
+	for (std::vector<BaseFacility*>::iterator
+			i = _facilities.begin();
+			i != _facilities.end();
+			++i)
 		if ((*i) != remove)
 		{
-			if ((*i)->getRules()->isLift()) lift = (*i);
-			for (int x = 0; x != (*i)->getRules()->getSize(); ++x)
-			{
-				for (int y = 0; y != (*i)->getRules()->getSize(); ++y)
+			if ((*i)->getRules()->isLift())
+				lift = *i;
+			for (int
+					x = 0;
+					x != (*i)->getRules()->getSize();
+					++x)
+				for (int
+						y = 0;
+						y != (*i)->getRules()->getSize();
+						++y)
 				{
-					std::pair<std::vector<BaseFacility*>::iterator, bool> *p = new std::pair<std::vector<BaseFacility*>::iterator, bool>(i,false);
+					std::pair<std::vector<BaseFacility*>::iterator, bool>* p =
+						new std::pair<std::vector<BaseFacility*>::iterator, bool>(i, false);
 					facilitiesConnStates.push_back(p);
 					grid[(*i)->getX() + x][(*i)->getY() + y] = p;
 				}
+		}
+
+	// we're in real trouble if this happens...
+	if (lift == 0)
+		//TODO: something clever.
+		return result;
+
+
+	// Now make the recursion manually using a stack
+	std::stack<std::pair<int, int> > stack;
+	stack.push(std::make_pair(
+							lift->getX(),
+							lift->getY()));
+	while (!stack.empty())
+	{
+		int
+			x = stack.top().first,
+			y = stack.top().second;
+		stack.pop();
+
+		if (x >= 0
+			&& x < BASE_SIZE
+			&& y >= 0
+			&& y < BASE_SIZE
+			&& grid[x][y] != 0
+			&& !grid[x][y]->second)
+		{
+			grid[x][y]->second = true;
+
+			BaseFacility* fac = *(grid[x][y]->first);
+
+			BaseFacility* neighborLeft = (x - 1 >= 0 && grid[x - 1][y] != 0)? *(grid[x - 1][y]->first): 0;
+			BaseFacility* neighborRight = (x + 1 < BASE_SIZE && grid[x + 1][y] != 0)? *(grid[x + 1][y]->first): 0;
+
+			BaseFacility* neighborTop = (y - 1 >= 0 && grid[x][y - 1] != 0)? *(grid[x][y - 1]->first): 0;
+			BaseFacility* neighborBottom = (y + 1 < BASE_SIZE && grid[x][y + 1] != 0)? *(grid[x][y + 1]->first): 0;
+
+			if (fac->getBuildTime() == 0
+				|| (neighborLeft != 0
+					&& (neighborLeft == fac
+						|| neighborLeft->getBuildTime() > neighborLeft->getRules()->getBuildTime())))
+			{
+				stack.push(std::make_pair(x-1,y));
+			}
+
+			if (fac->getBuildTime() == 0
+				|| (neighborRight != 0
+					&& (neighborRight == fac
+						|| neighborRight->getBuildTime() > neighborRight->getRules()->getBuildTime())))
+			{
+				stack.push(std::make_pair(x+1,y));
+			}
+
+			if (fac->getBuildTime() == 0
+				|| (neighborTop != 0
+					&& (neighborTop == fac
+						|| neighborTop->getBuildTime() > neighborTop->getRules()->getBuildTime())))
+			{
+				stack.push(std::make_pair(x,y-1));
+			}
+
+			if (fac->getBuildTime() == 0
+				|| (neighborBottom != 0
+					&& (neighborBottom == fac
+						|| neighborBottom->getBuildTime() > neighborBottom->getRules()->getBuildTime())))
+			{
+				stack.push(std::make_pair(x,y+1));
 			}
 		}
 	}
 
-	// we're in real trouble if this happens...
-	if (lift == 0)
+	BaseFacility* lastFacility = 0;
+	for (std::vector<std::pair<std::vector<BaseFacility*>::iterator, bool>* >::iterator
+			i = facilitiesConnStates.begin();
+			i != facilitiesConnStates.end();
+			++i)
 	{
-		//TODO: something clever.
-		return result;
-	}
-
-	// Now make the recursion manually using a stack
-	std::stack<std::pair<int, int> > stack;
-	stack.push(std::make_pair(lift->getX(),lift->getY()));
-	while (!stack.empty())
-	{
-		int x = stack.top().first, y = stack.top().second;
-		stack.pop();
-		if (x >= 0 && x < BASE_SIZE && y >= 0 && y < BASE_SIZE && grid[x][y] != 0 && !grid[x][y]->second)
-		{
-			grid[x][y]->second = true;
-			BaseFacility *fac = *(grid[x][y]->first);
-			BaseFacility *neighborLeft = (x-1 >= 0 && grid[x-1][y] != 0) ? *(grid[x-1][y]->first) : 0;
-			BaseFacility *neighborRight = (x+1 < BASE_SIZE && grid[x+1][y] != 0) ? *(grid[x+1][y]->first) : 0;
-			BaseFacility *neighborTop = (y-1 >= 0 && grid[x][y-1] != 0) ? *(grid[x][y-1]->first) : 0;
-			BaseFacility *neighborBottom= (y+1 < BASE_SIZE && grid[x][y+1] != 0) ? *(grid[x][y+1]->first) : 0;
-			if ((fac->getBuildTime() == 0) || (neighborLeft != 0 && (neighborLeft == fac || neighborLeft->getBuildTime() > neighborLeft->getRules()->getBuildTime()))) stack.push(std::make_pair(x-1,y));
-			if ((fac->getBuildTime() == 0) || (neighborRight != 0 && (neighborRight == fac || neighborRight->getBuildTime() > neighborRight->getRules()->getBuildTime()))) stack.push(std::make_pair(x+1,y));
-			if ((fac->getBuildTime() == 0) || (neighborTop != 0 && (neighborTop == fac || neighborTop->getBuildTime() > neighborTop->getRules()->getBuildTime()))) stack.push(std::make_pair(x,y-1));
-			if ((fac->getBuildTime() == 0) || (neighborBottom != 0 && (neighborBottom == fac || neighborBottom->getBuildTime() > neighborBottom->getRules()->getBuildTime()))) stack.push(std::make_pair(x,y+1));
-		}
-	}
-
-	BaseFacility *lastFacility = 0;
-	for (std::vector<std::pair<std::vector<BaseFacility*>::iterator, bool>*>::iterator i = facilitiesConnStates.begin(); i != facilitiesConnStates.end(); ++i)
-	{
-		// Not a connected fac.? -> push its iterator into the list!
+		// Not a connected fac? -> push its iterator into the list!
 		// Oh, and we don't want duplicates (facilities with bigger sizes like hangar)
-		if (*((*i)->first) != lastFacility && !(*i)->second) result.push_back((*i)->first);
+		if (*((*i)->first) != lastFacility
+			&& !(*i)->second)
+		{
+			result.push_back((*i)->first);
+		}
+
 		lastFacility = *((*i)->first);
+
 		delete *i; // We don't need the pair anymore.
 	}
 

@@ -1874,9 +1874,7 @@ void BattleUnit::prepareNewTurn()
 
 	float encumbrance = static_cast<float>(getStats()->strength) / static_cast<float>(getCarriedWeight());
 	if (encumbrance < 1.f)
-	{
 		tuRecovery = static_cast<int>(encumbrance * static_cast<float>(tuRecovery));
-	}
 
 	// Each fatal wound to the left or right leg reduces the soldier's TUs by 10%.
 	tuRecovery -= (tuRecovery * (_fatalWounds[BODYPART_LEFTLEG] + _fatalWounds[BODYPART_RIGHTLEG] * 10)) / 100;
@@ -1887,15 +1885,18 @@ void BattleUnit::prepareNewTurn()
 //kL		int enRecovery = getStats()->tu / 3;
 		// kL_begin: advanced Energy recovery
 		int enRecovery = getStats()->stamina;
-		if (isKneeled())
-			enRecovery /= 2;					// kneeled xCom
-		else if (getFaction() == FACTION_PLAYER)
-			enRecovery /= 3;					// xCom
-		else
-			enRecovery = enRecovery * 2 / 3;	// aLiens & civies
-		// kL_end.
+		if (_turretType < 0) // is NOT xCom Tank (which get full energy-recovery).
+		{
+			if (isKneeled())
+				enRecovery /= 2;					// kneeled xCom
+			else if (getFaction() == FACTION_PLAYER)
+				enRecovery /= 3;					// xCom & Mc'd aliens
+			else
+				enRecovery = enRecovery * 2 / 3;	// aLiens & civies
+		} // kL_end.
 
 		// Each fatal wound to the body reduces the soldier's energy recovery by 10%.
+		// kL_note: Only xCom gets fatal wounds, atm.
 		enRecovery -= (_energy * (_fatalWounds[BODYPART_TORSO] * 10)) / 100;
 		_energy += enRecovery;
 
@@ -3405,8 +3406,7 @@ void BattleUnit::setStopShot(bool stop)
 bool BattleUnit::getStopShot() const
 {
 	return _stopShot;
-}
-// kL_end.
+} // kL_end.
 
 /**
  * Checks if this unit can be selected. Only alive units
@@ -3434,7 +3434,8 @@ bool BattleUnit::isSelectable(
  */
 bool BattleUnit::hasInventory() const
 {
-	return _armor->getSize() == 1 && _rank != "STR_LIVE_TERRORIST";
+	return _armor->getSize() == 1
+		&& _rank != "STR_LIVE_TERRORIST";
 }
 
 }

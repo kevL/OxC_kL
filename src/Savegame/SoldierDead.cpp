@@ -131,11 +131,11 @@ void SoldierDead::load(
 	_kills			= node["kills"].as<int>(_kills);
 //	_armor			= rule->getArmor(node["armor"].as<std::string>());
 
-	if (node["death"])
-	{
-		_death = new SoldierDeath();
-		_death->load(node["death"]);
-	}
+//	if (node["death"])
+//	{
+	_death = new SoldierDeath();
+	_death->load(node["death"]);
+//	}
 }
 
 /**
@@ -157,8 +157,8 @@ YAML::Node SoldierDead::save() const
 	node["kills"]			= _kills;
 //	node["armor"]			= _armor->getType();
 
-	if (_death != 0)
-		node["death"] = _death->save();
+//	if (_death != 0)
+	node["death"] = _death->save();
 
 	return node;
 }
@@ -313,7 +313,7 @@ std::string SoldierDead::getRankString() const
 } */
 
 /**
- * Returns the dead soldier's death details.
+ * Returns the dead soldier's time of death.
  * @return, Pointer to death data. NULL if no death has occured.
  */
 SoldierDeath* SoldierDead::getDeath() const

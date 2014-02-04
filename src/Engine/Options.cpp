@@ -121,7 +121,7 @@ void createDefault()
 	setBool("battleInstantGrenade", false); // set to true if you want to play with the alternative grenade handling
 //kL	setInt("battleExplosionHeight", 0); // 0, 1, 2, 3
 	setInt("battleExplosionHeight", 2); // kL: 0, 1, 2, 3
-	setInt("battleNewPreviewPath", 0); // requires double-click to confirm moves 0 = none, 1 = arrows, 2 = numbers, 3 = full
+	setInt("battleNewPreviewPath", 3); // requires double-click to confirm moves 0 = none, 1 = arrows, 2 = numbers, 3 = full
 //kL	setBool("battleRangeBasedAccuracy", false);
 	setBool("battleRangeBasedAccuracy", true); // kL
 	setBool("fpsCounter", false);

@@ -27,13 +27,13 @@ namespace OpenXcom
 
 /**
  * Initializes a new ingame time with a certain starting point.
- * @param weekday Starting weekday.
- * @param day Starting day.
- * @param month Starting month.
- * @param year Starting year.
- * @param hour Starting hour.
- * @param minute Starting minute.
- * @param second Starting second.
+ * @param weekday, Starting weekday.
+ * @param day, Starting day.
+ * @param month, Starting month.
+ * @param year, Starting year.
+ * @param hour, Starting hour.
+ * @param minute, Starting minute.
+ * @param second, Starting second.
  */
 GameTime::GameTime(
 		int weekday,

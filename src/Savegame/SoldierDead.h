@@ -130,7 +130,7 @@ private:
 		/// Sets the dead soldier armor.
 //		void setArmor(Armor* armor);
 
-		/// Gets the dead soldier death info.
+		/// Gets the dead soldier's time of death.
 		SoldierDeath* getDeath() const;
 };
 

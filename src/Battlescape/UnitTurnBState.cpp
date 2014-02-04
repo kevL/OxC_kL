@@ -128,7 +128,7 @@ void UnitTurnBState::think()
 	//Log(LOG_INFO) << "UnitTurnBState::think() unitID = " << _unit->getId();
 	bool
 		factSide = (_unit->getFaction() == _parent->getSave()->getSide()),	// kL
-		factPlayer = _unit->getFaction() == FACTION_PLAYER;						// kL
+		factPlayer = _unit->getFaction() == FACTION_PLAYER;					// kL
 
 	int
 		turretType = _unit->getTurretType(),

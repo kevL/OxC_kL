@@ -1954,6 +1954,8 @@
 			<Option target="Release Win32" />
 			<Option target="Release x64" />
 		</Unit>
+		<Unit filename="Geoscape/SoldierDiedState.cpp" />
+		<Unit filename="Geoscape/SoldierDiedState.h" />
 		<Unit filename="Geoscape/TargetInfoState.cpp">
 			<Option target="Debug Win32" />
 			<Option target="Debug x64" />

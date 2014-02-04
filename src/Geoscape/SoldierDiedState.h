@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
@@ -17,8 +17,8 @@
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef OPENXCOM_UFOLOSTSTATE_H
-#define OPENXCOM_UFOLOSTSTATE_H
+#ifndef OPENXCOM_SOLDIERDIEDSTATE_H
+#define OPENXCOM_SOLDIERDIEDSTATE_H
 
 #include <string>
 
@@ -34,16 +34,16 @@ class Window;
 
 
 /**
- * Notifies the player when a targeted UFO
- * goes outside radar range.
+ * Notifies the player when a soldier dies
+ * due to critical injuries while in Sickbay.
  */
-class UfoLostState
+class SoldierDiedState
 	:
 		public State
 {
 
 private:
-	std::wstring _id;
+	std::wstring _name;
 
 	Text* _txtTitle;
 	TextButton* _btnOk;
@@ -51,12 +51,12 @@ private:
 
 
 	public:
-		/// Creates the Ufo Lost state.
-		UfoLostState(
+		/// Creates the Soldier Died state.
+		SoldierDiedState(
 				Game* game,
-				std::wstring id);
-		/// Cleans up the Ufo Lost state.
-		~UfoLostState();
+				std::wstring name);
+		/// Cleans up the Soldier Died state.
+		~SoldierDiedState();
 
 		/// Updates the palette.
 		void init();
@@ -68,3 +68,4 @@ private:
 }
 
 #endif
+
