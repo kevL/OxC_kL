@@ -146,8 +146,8 @@ UnitInfoState::UnitInfoState(
 
 	if (!_mindProbe)
 	{
-		_btnPrev	= new TextButton(16, 18, 2, 2);
-		_btnNext	= new TextButton(16, 18, 302, 2);
+		_btnPrev	= new TextButton(17, 18, 2, 2);
+		_btnNext	= new TextButton(17, 18, 301, 2);
 	}
 
 	add(_bg);

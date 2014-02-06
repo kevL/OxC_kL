@@ -95,9 +95,11 @@ void createDefault()
 	setInt("baseYResolution", 200);
 	setBool("useScaleFilter", false);
 	setBool("useHQXFilter", false);
-	setBool("useOpenGL", false);
+//kL	setBool("useOpenGL", false);
+	setBool("useOpenGL", true); // kL
 	setBool("checkOpenGLErrors", false);
-	setString("useOpenGLShader", "Shaders/Openxcom.OpenGL.shader");
+//kL	setString("useOpenGLShader", "Shaders/Openxcom.OpenGL.shader");
+	setString("useOpenGLShader", "Shaders/Raw.OpenGL.shader"); // kL
 	setBool("vSyncForOpenGL", true);
 	setBool("useOpenGLSmoothing", true);
 	setBool("debug", false);
@@ -111,17 +113,20 @@ void createDefault()
 	setString("language", "en-US");
 	setInt("battleScrollSpeed", 12); // 4, 8, 12, 16, 24
 	setInt("battleScrollType", SCROLL_AUTO);
-	setInt("battleScrollDragButton", SDL_BUTTON_MIDDLE);
+//kL	setInt("battleScrollDragButton", SDL_BUTTON_MIDDLE);
+	setInt("battleScrollDragButton", SDL_BUTTON_RIGHT); // kL
 	setBool("battleScrollDragInvert", false); // true drags away from the cursor, false drags towards (like a grab)
 	setInt("battleScrollDragTimeTolerance", 300); // miliSecond
 	setInt("battleScrollDragPixelTolerance", 10); // count of pixels
 	setInt("battleFireSpeed", 6); // 2, 4, 6, 8, 10, 12
 	setInt("battleXcomSpeed", 30); // 40, 30, 20, 10, 5, 1
-	setInt("battleAlienSpeed", 30); // 40, 30, 20, 10, 5, 1
+//kL	setInt("battleAlienSpeed", 30); // 40, 30, 20, 10, 5, 1
+	setInt("battleAlienSpeed", 50); // 40, 30, 20, 10, 5, 1
 	setBool("battleInstantGrenade", false); // set to true if you want to play with the alternative grenade handling
 //kL	setInt("battleExplosionHeight", 0); // 0, 1, 2, 3
 	setInt("battleExplosionHeight", 2); // kL: 0, 1, 2, 3
-	setInt("battleNewPreviewPath", 3); // requires double-click to confirm moves 0 = none, 1 = arrows, 2 = numbers, 3 = full
+//kL	setInt("battleNewPreviewPath", 0); // requires double-click to confirm moves 0 = none, 1 = arrows, 2 = numbers, 3 = full
+	setInt("battleNewPreviewPath", 3); // kL
 //kL	setBool("battleRangeBasedAccuracy", false);
 	setBool("battleRangeBasedAccuracy", true); // kL
 	setBool("fpsCounter", false);
@@ -130,7 +135,8 @@ void createDefault()
 	setBool("globeSeasons", true); // kL
 	setBool("globeAllRadarsOnBaseBuild", true);
 	setBool("allowChangeListValuesByMouseWheel", false); // It applies only for lists, not for scientists/engineers screen
-	setInt("autosave", 0);
+//kL	setInt("autosave", 0);
+	setInt("autosave", 1); // kL
 	setInt("changeValueByMouseWheel", 10);
 //kL	setInt("audioSampleRate", 22050);
 	setInt("audioSampleRate", 11025); // kL

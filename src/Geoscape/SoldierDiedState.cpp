@@ -42,18 +42,21 @@ namespace OpenXcom
  */
 SoldierDiedState::SoldierDiedState(
 		Game* game,
-		std::wstring name)
+		std::wstring name,
+		std::wstring base)
 	:
 		State(game),
-		_name(name)
+		_name(name),
+		_base(base)
 {
 	Log(LOG_INFO) << "create SoldierDiedState";
 
 	_screen = false;
 
 	_window		= new Window(this, 192, 104, 32, 48, POPUP_BOTH);
-	_txtTitle	= new Text(160, 30, 48, 72);
-	_btnOk		= new TextButton(80, 14, 88, 114);
+	_txtTitle	= new Text(160, 44, 48, 58);
+	_txtBase	= new Text(160, 9, 48, 104);
+	_btnOk		= new TextButton(80, 16, 88, 126);
 
 
 	_game->setPalette(
@@ -63,6 +66,7 @@ SoldierDiedState::SoldierDiedState(
 
 	add(_window);
 	add(_txtTitle);
+	add(_txtBase);
 	add(_btnOk);
 
 	centerAllSurfaces();
@@ -84,10 +88,16 @@ SoldierDiedState::SoldierDiedState(
 	_txtTitle->setColor(Palette::blockOffset(8)+5);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
+	_txtTitle->setVerticalAlign(ALIGN_MIDDLE);
 	std::wstring msg = _name;
 	msg += L'\n';
 	msg += tr("STR_SOLDIER_DIED");
 	_txtTitle->setText(msg);
+
+	_txtBase->setColor(Palette::blockOffset(8)+5);
+	_txtBase->setSmall();
+	_txtBase->setAlign(ALIGN_CENTER);
+	_txtBase->setText(_base);
 
 	//Log(LOG_INFO) << "create SoldierDiedState EXIT";
 }

@@ -799,7 +799,7 @@ void DebriefingState::prepareDebriefing()
 						{
 							(*j)->updateGeoscapeStats(*i);
 
-							SoldierDeath* death = new SoldierDeath();
+/*							SoldierDeath* death = new SoldierDeath();
 							death->setTime(new GameTime(*save->getTime()));
 
 //kL							(*i)->die(death);
@@ -810,8 +810,25 @@ void DebriefingState::prepareDebriefing()
 							base->getSoldiers()->erase(i);			// erase Base soldier
 							delete save->getSoldier((*j)->getId()); // kL, delete SavedGame soldier
 																	// uh, what 'bout err GeoscapeSoldier etc.
+*/
+							// kL_begin: sorta mirror GeoscapeState::time1Day()
+							GameTime* time = new GameTime(*save->getTime());
 
-							// should delete GameTime here.
+							SoldierDeath* death = new SoldierDeath();
+							death->setTime(time);
+
+							delete time;
+
+							SoldierDead* dead = (*i)->die(death); // converts Soldier to SoldierDead class instance.
+							save->getDeadSoldiers()->push_back(dead);
+
+							int iD = (*j)->getId(); // get ID from battleunit; could also use (*i) instead.
+
+							base->getSoldiers()->erase(i); // erase Soldier from Base_soldiers vector.
+
+							delete save->getSoldier(iD); // delete Soldier instance.
+
+							// note: Could return any armor the soldier was wearing to Stores. CHEATER!!!!!
 							break;
 						}
 					}
@@ -898,7 +915,7 @@ void DebriefingState::prepareDebriefing()
 							{
 								(*j)->updateGeoscapeStats(*i);
 
-								SoldierDeath* death = new SoldierDeath();
+/*								SoldierDeath* death = new SoldierDeath();
 								death->setTime(new GameTime(*save->getTime()));
 
 //kL								(*i)->die(death);
@@ -910,6 +927,25 @@ void DebriefingState::prepareDebriefing()
 								delete save->getSoldier((*j)->getId()); // kL, delete SavedGame soldier
 																		// uh, what 'bout err GeoscapeSoldier etc.
 
+								break; */
+								// kL_begin: sorta mirror GeoscapeState::time1Day()
+								GameTime* time = new GameTime(*save->getTime());
+
+								SoldierDeath* death = new SoldierDeath();
+								death->setTime(time);
+
+								delete time;
+
+								SoldierDead* dead = (*i)->die(death); // converts Soldier to SoldierDead class instance.
+								save->getDeadSoldiers()->push_back(dead);
+
+								int iD = (*j)->getId(); // get ID from battleunit; could also use (*i) instead.
+
+								base->getSoldiers()->erase(i); // erase Soldier from Base_soldiers vector.
+
+								delete save->getSoldier(iD); // delete Soldier instance.
+
+								// note: Could return any armor the soldier was wearing to Stores. CHEATER!!!!!
 								break;
 							}
 						}
@@ -971,9 +1007,7 @@ void DebriefingState::prepareDebriefing()
 					}
 				}
 				else
-				{
 					base->getItems()->addItem(corpseItem);
-				}
 			}
 			else if (origFaction == FACTION_NEUTRAL)
 			{
@@ -1249,12 +1283,11 @@ void DebriefingState::prepareDebriefing()
 	// reequip craft after a non-base-defense mission;
 	// of course only if it's not lost already, that case craft=0
 	if (craft)
-	{
 		reequipCraft(
 					base,
 					craft,
 					true);
-	}
+
 //	else // kL, maybe...
 	// reequip crafts (only which is on the base) after a base defense mission;
 	// we MUST check the missionType here, to avoid non-base-defense missions case

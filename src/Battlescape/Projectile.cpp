@@ -856,36 +856,39 @@ void Projectile::applyAccuracy(
 		// kL_begin: modify rangedBasedAccuracy (shot-modes).
 		// NOTE: This should be done on the weapons themselves!!!!
 		double baseDeviation = 0.0;
+		if (_action.actor->getFaction() == FACTION_PLAYER)
+			baseDeviation = 0.08; // give the poor aLiens an aiming advantage vs. xCom & Mc'd units
+		double baseDivisor = accuracy - accPenalty + 0.18;
 		switch (_action.type)
 		{
 			case BA_AUTOSHOT:
-				baseDeviation += 0.18 / (accuracy - accPenalty + 0.18);
+				baseDeviation += 0.18 / baseDivisor;
 			break;
 			case BA_SNAPSHOT:
-				baseDeviation += 0.15 / (accuracy - accPenalty + 0.18);
+				baseDeviation += 0.15 / baseDivisor;
 			break;
 			case BA_AIMEDSHOT:
-				baseDeviation += 0.13 / (accuracy - accPenalty + 0.18);
+				baseDeviation += 0.13 / baseDivisor;
 			break;
 
 			default: // throw. Or hit.
-				baseDeviation += 0.16 / (accuracy - accPenalty + 0.18);
+				baseDeviation += 0.16 / baseDivisor;
 			break;
 		} // kL_end.
 
 		// 0.02 is the min angle deviation for best accuracy (+-3s = 0.02 radian).
 //kL		if (baseDeviation < 0.02) baseDeviation = 0.02;
-		if (baseDeviation < 0.0001)
+		if (baseDeviation < 0.01)
 		{
-			Log(LOG_INFO) << ". baseDeviation low-capped @ 0.0001";
-			baseDeviation = 0.0001; // kL
+			Log(LOG_INFO) << ". baseDeviation low-capped @ 0.01";
+			baseDeviation = 0.01; // kL
 		}
 		else Log(LOG_INFO) << ". baseDeviation = " << baseDeviation;
 
 		// the angle deviations are spread using a normal distribution for baseDeviation (+-3s with precision 99,7%)
 		double
 			dH = RNG::boxMuller(0.0, baseDeviation / 6.0), // horizontal miss in radian
-			dV = RNG::boxMuller(0.0, baseDeviation /(6.0 * 1.75)), // kL
+			dV = RNG::boxMuller(0.0, baseDeviation / (6.0 * 1.75)), // kL
 //kL		double dV = RNG::boxMuller(0.0, baseDeviation /(6.0 * 2));
 
 			te = atan2(

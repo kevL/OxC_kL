@@ -67,10 +67,10 @@ MiniMapView::MiniMapView(
 		SavedBattleGame* battleGame)
 	:
 		InteractiveSurface(
-				w,
-				h,
-				x,
-				y),
+			w,
+			h,
+			x,
+			y),
 		_game(game),
 		_camera(camera),
 		_battleGame(battleGame),
@@ -130,7 +130,7 @@ void MiniMapView::draw()
 				MapData* data = 0;
 
 				Tile* t = 0;
-				Position p (px, py, lvl);
+				Position p (px, py, lvl); // <- initialization. kL_note:
 				t = _battleGame->getTile(p);
 
 				if (!t)
@@ -142,27 +142,28 @@ void MiniMapView::draw()
 
 				int tileShade = 16;
 				if (t->isDiscovered(2))
-				{
 					tileShade = t->getShade();
-				}
 
 				for (int
 						i = 0;
 						i < 4;
 						i++)
 				{
-					data = t->getMapData(i);
 					Surface* s = 0;
 
-					if (data && data->getMiniMapIndex())
+					data = t->getMapData(i);
+					if (data
+						&& data->getMiniMapIndex())
 					{
-						s = _set->getFrame (data->getMiniMapIndex()+35);
+						s = _set->getFrame(data->getMiniMapIndex() + 35);
 					}
 
 					if (s)
-					{
-						s->blitNShade(this, x, y, tileShade);
-					}
+						s->blitNShade(
+									this,
+									x,
+									y,
+									tileShade);
 				}
 
 				if (t->getUnit()
@@ -175,7 +176,11 @@ void MiniMapView::draw()
 					frame += _frame * size * size;
 
 					Surface* s = _set->getFrame(frame);
-					s->blitNShade(this, x, y, 0);
+					s->blitNShade(
+								this,
+								x,
+								y,
+								0);
 				}
 
 				if (t->isDiscovered(2)
@@ -184,7 +189,11 @@ void MiniMapView::draw()
 					int frame = 9 + _frame;
 
 					Surface* s = _set->getFrame(frame);
-					s->blitNShade(this, x, y, 0);
+					s->blitNShade(
+								this,
+								x,
+								y,
+								0);
 				}
 
 				px++;
@@ -303,14 +312,13 @@ void MiniMapView::mouseClick(Action* action, State* state)
 	{
 		// so we missed again the mouse-release :(
 		if (action->getDetails()->button.button != _battleGame->getDragButton()
-			&& 0 == (SDL_GetMouseState(0, 0) & SDL_BUTTON(_battleGame->getDragButton())))
+			&& (SDL_GetMouseState(0, 0) & SDL_BUTTON(_battleGame->getDragButton())) == 0)
 		{
 			// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
 			if (!_mouseMovedOverThreshold
 				&& SDL_GetTicks() - _mouseScrollingStartTime <= static_cast<Uint32>(_battleGame->getDragTimeTolerance()))
 			{
 				_camera->centerOnPosition(_posBeforeMouseScrolling);
-
 				_redraw = true;
 			}
 
@@ -323,9 +331,7 @@ void MiniMapView::mouseClick(Action* action, State* state)
 	{
 		// While scrolling, other buttons are ineffective
 		if (action->getDetails()->button.button == _battleGame->getDragButton())
-		{
 			_isMouseScrolling = false;
-		}
 		else
 			return;
 
@@ -335,7 +341,6 @@ void MiniMapView::mouseClick(Action* action, State* state)
 		{
 			_isMouseScrolled = false;
 			_camera->centerOnPosition(_posBeforeMouseScrolling);
-
 			_redraw = true;
 		}
 
@@ -359,14 +364,10 @@ void MiniMapView::mouseClick(Action* action, State* state)
 										newX,
 										newY,
 										_camera->getViewLevel()));
-
 		_redraw = true;
 	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
-	{
-	   // Closes the window on right-click.
-		_game->popState();
-	}
+		_game->popState(); // Closes the window on right-click.
 }
 
 /**
@@ -386,14 +387,13 @@ void MiniMapView::mouseOver(Action* action, State* state)
 		// the mouse-release event is missed for any reason.
 		// However if the SDL is also missed the release event, then it is to no avail :(
 		// (checking: is the dragScroll-mouse-button still pressed?)
-		if (0 == (SDL_GetMouseState(0, 0) & SDL_BUTTON(_battleGame->getDragButton()))) // so we missed again the mouse-release :(
+		if ((SDL_GetMouseState(0, 0) & SDL_BUTTON(_battleGame->getDragButton())) == 0) // so we missed again the mouse-release :(
 		{
 			// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
 			if (!_mouseMovedOverThreshold
 				&& SDL_GetTicks() - _mouseScrollingStartTime <= static_cast<Uint32>(_battleGame->getDragTimeTolerance()))
 			{
 					_camera->centerOnPosition(_posBeforeMouseScrolling);
-
 					_redraw = true;
 			}
 
@@ -407,11 +407,15 @@ void MiniMapView::mouseOver(Action* action, State* state)
 		if (_battleGame->isDragInverted())
 		{
 			// Set the mouse cursor back
-			SDL_EventState(SDL_MOUSEMOTION, SDL_IGNORE);
+			SDL_EventState(
+						SDL_MOUSEMOTION,
+						SDL_IGNORE);
 			SDL_WarpMouse(
 						_xBeforeMouseScrolling,
 						_yBeforeMouseScrolling);
-			SDL_EventState(SDL_MOUSEMOTION, SDL_ENABLE);
+			SDL_EventState(
+						SDL_MOUSEMOTION,
+						SDL_ENABLE);
 		}
 
 		// Check the threshold
@@ -419,7 +423,7 @@ void MiniMapView::mouseOver(Action* action, State* state)
 		_totalMouseMoveY += action->getDetails()->motion.yrel;
 		if (!_mouseMovedOverThreshold)
 			_mouseMovedOverThreshold = std::abs(_totalMouseMoveX) > _battleGame->getDragPixelTolerance()
-										|| std::abs(_totalMouseMoveY) > _battleGame->getDragPixelTolerance();
+									|| std::abs(_totalMouseMoveY) > _battleGame->getDragPixelTolerance();
 
 		// Calculate the move
 		int

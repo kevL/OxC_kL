@@ -22,7 +22,7 @@
 #include <cmath>
 #include <sstream>
 
-#include "WarningMessage.h" // kL
+//#include "WarningMessage.h" // kL
 
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
@@ -203,10 +203,10 @@ void PrimeGrenadeState::btnClick(Action* action)
 		else
 			_action->value = btnID;
 
-		_game->popState(); // kL_note: get rid of the Timer menu
+		_game->popState(); // get rid of the Timer menu
 
 		if (!_inInventoryView)
-			_game->popState(); // kL_note: get rid of the Action menu.
+			_game->popState(); // get rid of the Action menu.
 	}
 }
 

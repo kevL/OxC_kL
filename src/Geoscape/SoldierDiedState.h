@@ -43,9 +43,13 @@ class SoldierDiedState
 {
 
 private:
-	std::wstring _name;
+	std::wstring
+		_base,
+		_name;
 
-	Text* _txtTitle;
+	Text
+		* _txtBase,
+		* _txtTitle;
 	TextButton* _btnOk;
 	Window* _window;
 
@@ -54,7 +58,8 @@ private:
 		/// Creates the Soldier Died state.
 		SoldierDiedState(
 				Game* game,
-				std::wstring name);
+				std::wstring name,
+				std::wstring base);
 		/// Cleans up the Soldier Died state.
 		~SoldierDiedState();
 

@@ -44,7 +44,11 @@ class MiniMapState
 {
 
 private:
-	InteractiveSurface* _surface;
+	InteractiveSurface
+		* _btnLvlDwn,
+		* _btnLvlUp,
+		* _btnOk,
+		* _surface;
 	MiniMapView* _miniMapView;
 	Text* _txtLevel;
 	Timer* _timerAnimate;

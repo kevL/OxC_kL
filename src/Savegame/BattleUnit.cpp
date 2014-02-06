@@ -1944,7 +1944,7 @@ void BattleUnit::prepareNewTurn()
 			if (RNG::percent(30))
 				_status = STATUS_BERSERK;	// or shoot stuff.
 		}
-		else								// successfully avoided Panic
+		else if (panicChance > 0)			// successfully avoided Panic
 			_expBravery++;
 	}
 
@@ -2461,24 +2461,26 @@ void BattleUnit::updateGeoscapeStats(Soldier* soldier)
  */
 bool BattleUnit::postMissionProcedures(SavedGame* geoscape)
 {
-	Soldier* s = geoscape->getSoldier(_id);
-	if (s == 0)
+	Soldier* soldier = geoscape->getSoldier(_id);
+	if (soldier == 0)
 		return false;
 
 
-	updateGeoscapeStats(s);
+	updateGeoscapeStats(soldier); // missions & kills
 
-	UnitStats* stats = s->getCurrentStats();
-	const UnitStats caps = s->getRules()->getStatCaps();
+	UnitStats* stats = soldier->getCurrentStats();
+	const UnitStats caps = soldier->getRules()->getStatCaps();
 
 	int healthLoss = stats->health - _health;
-	s->setWoundRecovery(RNG::generate(
+	soldier->setWoundRecovery(RNG::generate(
 							static_cast<int>((static_cast<double>(healthLoss) * 0.5)),
 							static_cast<int>((static_cast<double>(healthLoss) * 1.5))));
 
-	if (_expBravery && stats->bravery < caps.bravery)
+	if (_expBravery
+		&& stats->bravery < caps.bravery)
 	{
-		if (_expBravery > RNG::generate(0, 10))
+//kL		if (_expBravery > RNG::generate(0, 10))
+		if (_expBravery > RNG::generate(0, 9)) // kL
 			stats->bravery += 10;
 	}
 
@@ -2518,28 +2520,29 @@ bool BattleUnit::postMissionProcedures(SavedGame* geoscape)
 		|| _expMelee
 		|| _expPsiSkill)
 	{
-		if (s->getRank() == RANK_ROOKIE)
-			s->promoteRank();
+		if (soldier->getRank() == RANK_ROOKIE)
+			soldier->promoteRank();
 
-		int v = caps.tu - stats->tu;
+		int delta = caps.tu - stats->tu;
+		if (delta > 0)
+			stats->tu += RNG::generate(0, (delta / 10) + 2) - 1;
 
-		if (v > 0) stats->tu += RNG::generate(0, (v / 10) + 2) - 1;
+		delta = caps.health - stats->health;
+		if (delta > 0)
+			stats->health += RNG::generate(0, (delta / 10) + 2) - 1;
 
-		v = caps.health - stats->health;
-		if (v > 0) stats->health += RNG::generate(0, (v / 10) + 2) - 1;
+		delta = caps.strength - stats->strength;
+		if (delta > 0)
+			stats->strength += RNG::generate(0, (delta / 10) + 2) - 1;
 
-		v = caps.strength - stats->strength;
-		if (v > 0) stats->strength += RNG::generate(0, (v / 10) + 2) - 1;
-
-		v = caps.stamina - stats->stamina;
-		if (v > 0) stats->stamina += RNG::generate(0, (v / 10) + 2) - 1;
+		delta = caps.stamina - stats->stamina;
+		if (delta > 0)
+			stats->stamina += RNG::generate(0, (delta / 10) + 2) - 1;
 
 		return true;
 	}
 	else
-	{
 		return false;
-	}
 }
 
 /**

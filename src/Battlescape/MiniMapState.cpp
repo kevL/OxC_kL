@@ -63,17 +63,18 @@ MiniMapState::MiniMapState(
 									camera,
 									battleGame);
 
-	InteractiveSurface* btnLvlUp	= new InteractiveSurface(18, 20, 24, 62);
-	InteractiveSurface* btnLvlDwn	= new InteractiveSurface(18, 20, 24, 88);
-	InteractiveSurface* btnOk		= new InteractiveSurface(32, 32, 275, 145);
+	_btnLvlUp	= new InteractiveSurface(18, 20, 24, 62);
+	_btnLvlDwn	= new InteractiveSurface(18, 20, 24, 88);
+	_btnOk		= new InteractiveSurface(32, 32, 275, 145);
 
-	_txtLevel = new Text (20, 25, 281, 73);
+	_txtLevel	= new Text (20, 25, 281, 73);
+
 
 	add(_surface);
 	add(_miniMapView);
-	add(btnLvlUp);
-	add(btnLvlDwn);
-	add(btnOk);
+	add(_btnLvlUp);
+	add(_btnLvlDwn);
+	add(_btnOk);
 	add(_txtLevel);
 
 	centerAllSurfaces();
@@ -94,12 +95,16 @@ MiniMapState::MiniMapState(
 	_game->getResourcePack()->getSurface("SCANBORD.PCK")->blit(_surface);
 
 
-	btnLvlUp->onMouseClick((ActionHandler)& MiniMapState::btnLevelUpClick);
-	btnLvlDwn->onMouseClick((ActionHandler)& MiniMapState::btnLevelDownClick);
+	_btnLvlUp->onMouseClick((ActionHandler)& MiniMapState::btnLevelUpClick);
+	_btnLvlDwn->onMouseClick((ActionHandler)& MiniMapState::btnLevelDownClick);
 
-	btnOk->onMouseClick((ActionHandler)& MiniMapState::btnOkClick);
-	btnOk->onKeyboardPress((ActionHandler)& MiniMapState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
-	btnOk->onKeyboardPress((ActionHandler)& MiniMapState::btnOkClick, (SDLKey)Options::getInt("keyBattleMap"));
+	_btnOk->onMouseClick((ActionHandler)& MiniMapState::btnOkClick);
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& MiniMapState::btnOkClick,
+					(SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& MiniMapState::btnOkClick,
+					(SDLKey)Options::getInt("keyBattleMap"));
 
 	_txtLevel->setBig();
 	_txtLevel->setColor(Palette::blockOffset(4));
@@ -134,13 +139,9 @@ void MiniMapState::handle(Action* action)
 	if (action->getDetails()->type == SDL_MOUSEBUTTONDOWN)
 	{
 		if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
-		{
 			btnLevelDownClick(action);
-		}
 		else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN)
-		{
 			btnLevelUpClick(action);
-		}
 	}
 }
 
@@ -171,13 +172,13 @@ void MiniMapState::btnLevelUpClick(Action*)
 void MiniMapState::btnLevelDownClick(Action*)
 {
 	std::wstringstream s;
-	s << _miniMapView->down ();
+	s << _miniMapView->down();
 	_txtLevel->setText(s.str());
 }
 
 /**
  * Animation handler. Updates the minimap view animation.
-*/
+ */
 void MiniMapState::animate()
 {
 	_miniMapView->animate();
@@ -185,8 +186,8 @@ void MiniMapState::animate()
 
 /**
  * Handles timers.
-*/
-void MiniMapState::think ()
+ */
+void MiniMapState::think()
 {
 	State::think();
 	_timerAnimate->think(this, 0);

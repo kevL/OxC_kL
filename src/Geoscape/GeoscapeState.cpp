@@ -2434,15 +2434,16 @@ void GeoscapeState::time1Day()
 
 				int hurt = static_cast<int>(static_cast<float>(wounds) / static_cast<float>((*s)->getCurrentStats()->health) * 100.f);
 				Log(LOG_INFO) << ". . hurt = " << hurt << "%";
-				if (hurt > 10) // more than 10% wounded
-//TEMP.					&& RNG::percent(hurt / 5)) // %chance to die today
+				if (hurt > 10 // more than 10% wounded
+					&& RNG::percent(hurt / 5)) // %chance to die today
 				{
 					Log(LOG_INFO) << ". . . he's dead, Jim!!";
 					 // kill soldier. (lifted from Battlescape/DebriefingState::prepareDebriefing()
 					timerReset();
 					popup(new SoldierDiedState(
 											_game,
-											(*s)->getName()));
+											(*s)->getName(),
+											(*b)->getName()));
 
 					GameTime* time = new GameTime(*_game->getSavedGame()->getTime());
 					//Log(LOG_INFO) << "year = " << time->getYear();
@@ -2463,7 +2464,7 @@ void GeoscapeState::time1Day()
 
 					delete _game->getSavedGame()->getSoldier(iD); // delete Soldier instance.
 
-					++s;
+					--s;
 					// note: Could return any armor the soldier was wearing to Stores.
 				}
 				else
@@ -2552,6 +2553,10 @@ void GeoscapeState::time1Month()
 
 	_game->getSavedGame()->addMonth();
 
+	// kL_note: Used for determining % retaliation & % agents discovering aLienBases.
+	int diff = static_cast<int>(_game->getSavedGame()->getDifficulty()); // kL
+
+
 	// Determine alien mission for this month.
 	determineAlienMissions();
 
@@ -2562,7 +2567,7 @@ void GeoscapeState::time1Month()
 
 	bool newRetaliation = false;
 //kL	if (monthsPassed > 13 - static_cast<int>(_game->getSavedGame()->getDifficulty())
-	if (RNG::percent(monthsPassed * static_cast<int>(_game->getSavedGame()->getDifficulty())) // kL
+	if (RNG::percent(monthsPassed * diff + 3) // kL, Beginner == %0
 		|| _game->getSavedGame()->isResearched("STR_THE_MARTIAN_SOLUTION"))
 	{
 		newRetaliation = true;
@@ -2598,7 +2603,11 @@ void GeoscapeState::time1Month()
 										(*i)->getRules()->getType(),
 										*_game->getRuleset());
 
-						int race = RNG::generate(0, static_cast<int>(_game->getRuleset()->getAlienRacesList().size()) - 2); // -2 to avoid "MIXED" race
+						int race = RNG::generate(
+											0,
+											static_cast<int>(
+													_game->getRuleset()->getAlienRacesList().size())
+												- 2); // -2 to avoid "MIXED" race
 						mission->setRace(_game->getRuleset()->getAlienRacesList().at(race));
 						mission->start();
 						_game->getSavedGame()->getAlienMissions().push_back(mission);
@@ -2611,8 +2620,8 @@ void GeoscapeState::time1Month()
 			}
 		}
 
-		if ((*b)->getAvailablePsiLabs() > 0
-			&& !Options::getBool("anytimePsiTraining"))
+		if (!Options::getBool("anytimePsiTraining")
+			&& (*b)->getAvailablePsiLabs() > 0)
 		{
 			psi = true;
 
@@ -2639,8 +2648,10 @@ void GeoscapeState::time1Month()
 								_globe));
 
 	// Handle Xcom Operatives discovering bases
-	if (!_game->getSavedGame()->getAlienBases()->empty()
-//kL		&& RNG::percent(20))
+	int revDiff = 20 - (diff * 5); // kL, Superhuman == 0%
+	if (RNG::percent(revDiff + 50) // kL
+//kL	if (RNG::percent(20)
+		&& !_game->getSavedGame()->getAlienBases()->empty())
 	{
 		for (std::vector<AlienBase*>::const_iterator
 				b = _game->getSavedGame()->getAlienBases()->begin();
@@ -2648,16 +2659,18 @@ void GeoscapeState::time1Month()
 				++b)
 		{
 			if (!(*b)->isDiscovered()
-				&& RNG::percent(5)) // kL_note: set this per gameDifficulty.
+//				&& RNG::percent(5)) // kL
+				&& RNG::percent(revDiff + 5)) // kL
 			{
 				(*b)->setDiscovered(true);
 
+				// kL_note: hopefully this doesn't hang on multiple popups.
 				popup(new AlienBaseState(
 										_game,
 										*b,
 										this));
 
-				break;
+//kL				break;
 			}
 		}
 	}

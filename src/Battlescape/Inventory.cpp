@@ -70,10 +70,10 @@ Inventory::Inventory(
 		int y)
 	:
 		InteractiveSurface(
-				width,
-				height,
-				x,
-				y),
+			width,
+			height,
+			x,
+			y),
 		_game(game),
 		_selUnit(0),
 		_selItem(0),
@@ -83,10 +83,10 @@ Inventory::Inventory(
 	_grid			= new Surface(width, height, x, y);
 	_items			= new Surface(width, height, x, y);
 	_selection		= new Surface(
-							RuleInventory::HAND_W * RuleInventory::SLOT_W,
-							RuleInventory::HAND_H * RuleInventory::SLOT_H,
-							x,
-							y);
+								RuleInventory::HAND_W * RuleInventory::SLOT_W,
+								RuleInventory::HAND_H * RuleInventory::SLOT_H,
+								x,
+								y);
 	_warning		= new WarningMessage(224, 24, 48, 176);
 	_stackNumber	= new NumberText(15, 15, 0, 0);
 
@@ -700,9 +700,15 @@ void Inventory::mouseClick(Action* action, State* state)
 						int explTurn = item->getExplodeTurn();
 						if (explTurn > -1)
 						{
-							std::wstring activated = Text::formatNumber(explTurn) + L" ";
+							std::wstring activated = L"";
+							if (explTurn > 0)
+								activated += Text::formatNumber(explTurn) + L" ";
+
 							activated += _game->getLanguage()->getString("STR_GRENADE_IS_ACTIVATED");
-							activated += L" " + Text::formatNumber(explTurn);
+
+							if (explTurn > 0)
+								activated += L" " + Text::formatNumber(explTurn);
+
 							_warning->showMessage(activated);
 						}
 					}
@@ -866,9 +872,11 @@ void Inventory::mouseClick(Action* action, State* state)
 								{
 									item->setExplodeTurn(0);
 
-									std::wstring activated = Text::formatNumber(0) + L" ";
-									activated += _game->getLanguage()->getString("STR_GRENADE_IS_ACTIVATED");
-									activated += L" " + Text::formatNumber(0);
+//									std::wstring activated = Text::formatNumber(0) + L" ";
+//									activated += _game->getLanguage()->getString("STR_GRENADE_IS_ACTIVATED");
+//									activated += L" " + Text::formatNumber(0);
+
+									std::wstring activated = _game->getLanguage()->getString("STR_GRENADE_IS_ACTIVATED");
 									_warning->showMessage(activated);
 								}
 								else
@@ -1009,9 +1017,7 @@ void Inventory::arrangeGround(bool alterOffset)
 						xd++)
 				{
 					if ((x + xd) %slotsX < x %slotsX)
-					{
 						ok = false;
-					}
 					else
 					{
 						for (int
@@ -1024,9 +1030,7 @@ void Inventory::arrangeGround(bool alterOffset)
 							ok = (item == 0);
 
 							if (canBeStacked(item, *i))
-							{
 								ok = true;
-							}
 						}
 					}
 				}
@@ -1037,9 +1041,7 @@ void Inventory::arrangeGround(bool alterOffset)
 					(*i)->setSlotY(y);
 					// only increase the stack level if the item is actually visible.
 					if ((*i)->getRules()->getInventoryWidth())
-					{
 						_stackLevel[x][y] += 1;
-					}
 
 					xMax = std::max(xMax, x + (*i)->getRules()->getInventoryWidth());
 				}
@@ -1059,13 +1061,9 @@ void Inventory::arrangeGround(bool alterOffset)
 	if (alterOffset)
 	{
 		if (xMax >= _groundOffset + slotsX - 1)
-		{
 			_groundOffset += slotsX - 1;
-		}
 		else
-		{
 			_groundOffset = 0;
-		}
 	}
 
 	drawItems();
@@ -1114,9 +1112,7 @@ bool Inventory::fitItem(
 					drawItems();
 				}
 				else
-				{
 					warning = "STR_NOT_ENOUGH_TIME_UNITS";
-				}
 			}
 		}
 	}

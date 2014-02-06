@@ -176,7 +176,7 @@ void ExplosionBState::init()
 //				Explosion* explosion = new Explosion(p, startFrame, true);
 
 				Explosion* explosion = new Explosion( // animation
-													posCenter_voxel + Position(22, 22, 0), // jogg the anim down a few pixels. Tks.
+													posCenter_voxel + Position(18, 18, 0), // jogg the anim down a few pixels. Tks.
 													startFrame,
 													true);
 
