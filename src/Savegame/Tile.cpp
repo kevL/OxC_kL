@@ -386,7 +386,10 @@ int Tile::getFootstepSound(Tile* tileBelow) const
  * @param part
  * @return a value: 0(normal door), 1(ufo door) or -1 if no door opened or 3 if ufo door(=animated) is still opening 4 if not enough TUs
  */
-int Tile::openDoor(int part, BattleUnit* unit, BattleActionType reserve)
+int Tile::openDoor(
+		int part,
+		BattleUnit* unit,
+		BattleActionType reserve)
 {
 	if (!_objects[part]) return -1;
 

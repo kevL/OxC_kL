@@ -1043,9 +1043,7 @@ void SavedBattleGame::endTurn()
 				++i)
 		{
 			if ((*i)->getFaction() == FACTION_PLAYER)
-			{
 				(*i)->dontReselect(); // either zero tu's or set no reselect
-			}
 		} // kL_end.
 	}
 	else if (_side == FACTION_HOSTILE) // end of Alien turn.
@@ -1064,7 +1062,6 @@ void SavedBattleGame::endTurn()
 
 			prepareNewTurn();
 			//Log(LOG_INFO) << ". . prepareNewTurn DONE";
-
 			_turn++;
 
 			_side = FACTION_PLAYER;
@@ -1076,10 +1073,8 @@ void SavedBattleGame::endTurn()
 				_selectedUnit = _lastSelectedUnit;
 			}
 			else
-			{
 				//Log(LOG_INFO) << ". . . select nextFactionUnit";
 				selectNextFactionUnit();
-			}
 
 			while (_selectedUnit
 				&& _selectedUnit->getFaction() != FACTION_PLAYER)
@@ -1106,10 +1101,8 @@ void SavedBattleGame::endTurn()
 			_selectedUnit = _lastSelectedUnit;
 		}
 		else
-		{
 			//Log(LOG_INFO) << ". . . select nextFactionUnit";
 			selectNextFactionUnit();
-		}
 
 		while (_selectedUnit
 			&& _selectedUnit->getFaction() != FACTION_PLAYER)
@@ -1158,9 +1151,7 @@ void SavedBattleGame::endTurn()
 		if ((*i)->getFaction() == FACTION_PLAYER) // including units Mc'd by xCom
 		{
 			if ((*i)->isOut(true, true))
-			{
 				(*i)->setTurnsExposed(255);
-			}
 			else if (_cheating
 				&& _side == FACTION_HOSTILE)
 			{
@@ -1640,9 +1631,7 @@ void SavedBattleGame::prepareNewTurn()
 			++i) // prepare a list of tiles on fire
 	{
 		if (getTiles()[i]->getFire() > 0)
-		{
 			tilesOnFire.push_back(getTiles()[i]);
-		}
 	}
 
 	for (std::vector<Tile*>::iterator
@@ -1682,14 +1671,10 @@ void SavedBattleGame::prepareNewTurn()
 						&& (*i)->getMapData(MapData::O_OBJECT)->getArmor() != 255)
 					{
 						if ((*i)->destroy(MapData::O_OBJECT))
-						{
 							_objectiveDestroyed = true;
-						}
 
 						if ((*i)->destroy(MapData::O_FLOOR))
-						{
 							_objectiveDestroyed = true;
-						}
 					}
 				}
 				else if ((*i)->getMapData(MapData::O_FLOOR))
@@ -1698,9 +1683,7 @@ void SavedBattleGame::prepareNewTurn()
 						&& (*i)->getMapData(MapData::O_FLOOR)->getArmor() != 255)
 					{
 						if ((*i)->destroy(MapData::O_FLOOR))
-						{
 							_objectiveDestroyed = true;
-						}
 					}
 				}
 			}
@@ -1713,9 +1696,7 @@ void SavedBattleGame::prepareNewTurn()
 			++i) // prepare a list of tiles on fire/with smoke in them (smoke acts as fire intensity)
 	{
 		if (getTiles()[i]->getSmoke() > 0)
-		{
 			tilesOnSmoke.push_back(getTiles()[i]);
-		}
 	}
 
 	for (std::vector<Tile*>::iterator
@@ -1776,7 +1757,8 @@ void SavedBattleGame::prepareNewTurn()
 		}
 	}
 
-	if (!tilesOnFire.empty() || !tilesOnSmoke.empty())
+	if (!tilesOnFire.empty()
+		|| !tilesOnSmoke.empty())
 	{
 		for (int // do damage to units, average out the smoke, etc.
 				i = 0;
@@ -1784,9 +1766,7 @@ void SavedBattleGame::prepareNewTurn()
 				++i)
 		{
 			if (getTiles()[i]->getSmoke() != 0)
-			{
 				getTiles()[i]->prepareNewTurn();
-			}
 		}
 
 		getTileEngine()->calculateTerrainLighting(); // fires could have been started, stopped or smoke could reveal/conceal units.

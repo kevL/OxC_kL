@@ -625,6 +625,7 @@ BattlescapeState::BattlescapeState(Game* game)
 	_barHealth->setColor(Palette::blockOffset(2));
 	_barHealth->setColor2(Palette::blockOffset(5)+2);
 	_barHealth->setScale(1.0);
+//	_barHealth->setScale(0.75); // kL
 	_barMorale->setColor(Palette::blockOffset(12));
 	_barMorale->setScale(1.0);
 
@@ -1697,7 +1698,7 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 		texture->getFrame(s->getRankSprite())->blit(_rank);
 	}
 
-	_numTimeUnits	->setValue(selectedUnit->getTimeUnits());
+/*	_numTimeUnits	->setValue(selectedUnit->getTimeUnits());
 	_barTimeUnits	->setMax(selectedUnit->getStats()->tu);
 	_barTimeUnits	->setValue(selectedUnit->getTimeUnits());
 
@@ -1711,8 +1712,32 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 	_barHealth		->setValue2(selectedUnit->getStunlevel());
 
 	_numMorale		->setValue(selectedUnit->getMorale());
-	_barMorale		->setMax(100);
-	_barMorale		->setValue(selectedUnit->getMorale());
+	_barMorale		->setMax(100.0);
+	_barMorale		->setValue(selectedUnit->getMorale()); */
+
+	double stat = static_cast<double>(selectedUnit->getStats()->tu);
+	int tu = selectedUnit->getTimeUnits();
+	_numTimeUnits->setValue(static_cast<unsigned>(tu));
+	_barTimeUnits->setMax(100.0);
+	_barTimeUnits->setValue(static_cast<double>(tu) / stat * 100.0);
+
+	stat = static_cast<double>(selectedUnit->getStats()->stamina);
+	int energy = selectedUnit->getEnergy();
+	_numEnergy->setValue(static_cast<unsigned>(energy));
+	_barEnergy->setMax(100.0);
+	_barEnergy->setValue(static_cast<double>(energy) / stat * 100.0);
+
+	stat = static_cast<double>(selectedUnit->getStats()->health);
+	int health = selectedUnit->getHealth();
+	_numHealth->setValue(static_cast<unsigned>(health));
+	_barHealth->setMax(100.0);
+	_barHealth->setValue(static_cast<double>(health) / stat * 100.0);
+	_barHealth->setValue2(static_cast<double>(selectedUnit->getStunlevel()) / stat * 100.0);
+
+	int morale = selectedUnit->getMorale();
+	_numMorale->setValue(static_cast<unsigned>(morale));
+	_barMorale->setMax(100.0);
+	_barMorale->setValue(morale);
 
 	if (selectedUnit->isKneeled())
 	{

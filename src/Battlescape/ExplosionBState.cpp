@@ -151,7 +151,7 @@ void ExplosionBState::init()
 				radius = _power / 10; // <- for cyberdiscs & terrain expl.... CTD if using getExplosionRadius(),
 			Log(LOG_INFO) << ". . . radius = " << radius;
 
-			int offset = radius * 9, // voxelspace
+			int offset = radius * 8, // voxelspace
 				animQty = static_cast<int>(
 								sqrt(static_cast<double>(radius) * static_cast<double>(_power)))
 							/ 6;
@@ -176,7 +176,7 @@ void ExplosionBState::init()
 //				Explosion* explosion = new Explosion(p, startFrame, true);
 
 				Explosion* explosion = new Explosion( // animation
-													posCenter_voxel + Position(18, 18, 0), // jogg the anim down a few pixels. Tks.
+													posCenter_voxel + Position(15, 15, 0), // jogg the anim down a few pixels. Tks.
 													startFrame,
 													true);
 

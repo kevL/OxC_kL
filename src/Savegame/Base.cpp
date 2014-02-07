@@ -1532,7 +1532,6 @@ void Base::researchHelp(std::string aLien)
 		}
 	}
 	else if (aLien == "STR_FLOATER_MEDIC"
-		|| aLien == "STR_SNAKEMAN_MEDIC"
 		|| aLien == "STR_SECTOID_MEDIC")
 	{
 		for (std::vector<ResearchProject*>::const_iterator
@@ -1555,7 +1554,8 @@ void Base::researchHelp(std::string aLien)
 						<< ", cost = " << (int)cost
 						<< ", newSpent = " << (*i)->getSpent();
 			}
-			else if (help == "STR_ALIEN_ORIGINS")
+			else if (help == "STR_ALIEN_ORIGINS"
+				|| help == "STR_ALIEN_ENTERTAINMENT")
 			{
 				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.2f)));
 				found = true;
@@ -1565,7 +1565,27 @@ void Base::researchHelp(std::string aLien)
 						<< ", cost = " << (int)cost
 						<< ", newSpent = " << (*i)->getSpent();
 			}
-			else if (help == "STR_ALIEN_REPRODUCTION")
+			else if (help == "STR_MEDI_KIT")
+			{
+				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.4f)));
+				found = true;
+
+				Log(LOG_INFO) << ". . Medic.4 : help = " << help
+						<< ", spent = " << (int)spent
+						<< ", cost = " << (int)cost
+						<< ", newSpent = " << (*i)->getSpent();
+			}
+			else if (help == "STR_ETHEREAL_CORPSE"
+				|| help == "STR_SECTOPOD_CORPSE"
+				|| help == "STR_SECTOID_CORPSE"
+				|| help == "STR_CYBERDISC_CORPSE"
+				|| help == "STR_SNAKEMAN_CORPSE"
+				|| help == "STR_CHRYSSALID_CORPSE"
+				|| help == "STR_MUTON_CORPSE"
+				|| help == "STR_SILACOID_CORPSE"
+				|| help == "STR_CELATID_CORPSE"
+				|| help == "STR_FLOATER_CORPSE"
+				|| help == "STR_REAPER_CORPSE")
 			{
 				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.5f)));
 				found = true;
@@ -1575,16 +1595,25 @@ void Base::researchHelp(std::string aLien)
 						<< ", cost = " << (int)cost
 						<< ", newSpent = " << (*i)->getSpent();
 			}
-			else if (help == "STR_MEDI_KIT"
-				|| help == "STR_PSI_AMP"
+			else if (help == "STR_PSI_AMP"
 				|| help == "STR_SMALL_LAUNCHER"
 				|| help == "STR_STUN_BOMB"
 				|| help == "STR_MIND_PROBE"
-				|| help == "STR_ALIEN_FOOD"
-				|| help == "STR_ALIEN_SURGERY"
-				|| help == "STR_EXAMINATION_ROOM"
 				|| help == "STR_MIND_SHIELD"
 				|| help == "STR_PSI_LAB")
+			{
+				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.6f)));
+				found = true;
+
+				Log(LOG_INFO) << ". . Medic.6 : help = " << help
+						<< ", spent = " << (int)spent
+						<< ", cost = " << (int)cost
+						<< ", newSpent = " << (*i)->getSpent();
+			}
+			else if (help == "STR_ALIEN_FOOD"
+				|| help == "STR_ALIEN_SURGERY"
+				|| help == "STR_EXAMINATION_ROOM"
+				|| help == "STR_ALIEN_REPRODUCTION")
 			{
 				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.8f)));
 				found = true;

@@ -131,8 +131,7 @@ int Projectile::calculateTrajectory(double accuracy)
 	Tile* targetTile = 0;
 	Position
 		targetVoxel,
-		originVoxel;
-	originVoxel = _save->getTileEngine()->getOriginVoxel(
+		originVoxel = _save->getTileEngine()->getOriginVoxel(
 													_action,
 													_save->getTile(_origin));
 
@@ -236,13 +235,11 @@ int Projectile::calculateTrajectory(double accuracy)
 			}
 			else	// kL_note: huh? Is this for storing _trajectory??? ... no. might be
 					// setting &targetVoxel tho. Or "_action.target" ( targetTile ) even......
-			{
 				_save->getTileEngine()->canTargetUnit(
 												&originVoxel,
 												targetTile,
 												&targetVoxel,
 												bu);
-			}
 		}
 		// kL_begin: AutoShot vs. tile w/ dead or stunned Unit just sprays through the middle of the tile.
 		// note, however, this also affects attempts to target a tile where there is/was(?) a dead unit...
@@ -567,9 +564,7 @@ Wb.131129
 	}
 
 	Position originVoxel = _save->getTileEngine()->getOriginVoxel(_action, 0);
-
-	Position targetVoxel; // determine the target voxel; aim at the center of the floor
-	targetVoxel = Position(
+	Position targetVoxel = Position( // determine the target voxel; aim at the center of the floor
 					(_action.target.x * 16) + 8,
 					(_action.target.y * 16) + 8,
 //kL					(_action.target.z * 24) + 2);
@@ -788,47 +783,55 @@ void Projectile::applyAccuracy(
 
 	int
 		xdiff = origin.x - target->x,
-		ydiff = origin.y - target->y;
-	double targetDist = sqrt(static_cast<double>(xdiff * xdiff) + static_cast<double>(ydiff * ydiff));
+		ydiff = origin.y - target->y,
+		zdiff = origin.z - target->z; // kL
+//kL	double targetDist = sqrt(static_cast<double>(xdiff * xdiff) + static_cast<double>(ydiff * ydiff));
+	double targetDist = sqrt(
+							  static_cast<double>(xdiff * xdiff)
+							+ static_cast<double>(ydiff * ydiff)
+							+ static_cast<double>(zdiff * zdiff)); // kL
 
 	// maxRange is the maximum range a projectile shall ever travel in voxel space
-	double maxRange = 16000.0; // 1000 tiles in voxelspace
+	double maxRange = 16000.0; // vSpace == 1000 tiles in tSpace.
 	if (keepRange)
 		maxRange = targetDist;
 
 	if (_action.type == BA_HIT)
-		maxRange = 45.0; // up to 2 tiles diagonally (as in the case of reaper v reaper)
-	else if (_action.type != BA_THROW)
+		maxRange = 45.0; // up to 2 tiles diagonally (as in the case of reaper vs reaper)
+	else if (Options::getBool("battleUFOExtenderAccuracy") // kL
+		&& _action.type != BA_THROW)
 	{
-		RuleItem *weapon = _action.weapon->getRules();
+		RuleItem* weaponRule = _action.weapon->getRules();
 		int
-			lowerLimit = weapon->getMinRange(),
-			upperLimit = weapon->getAimRange();
+			lowerLimit = weaponRule->getMinRange(),
+			upperLimit = weaponRule->getAimRange();
 
-		if (Options::getBool("battleUFOExtenderAccuracy"))
-		{
-			if (_action.type == BA_SNAPSHOT)
-				upperLimit = weapon->getSnapRange();
-			else if (_action.type == BA_AUTOSHOT)
-				upperLimit = weapon->getAutoRange();
-		}
+//kL		if (Options::getBool("battleUFOExtenderAccuracy"))
+//		{
+		if (_action.type == BA_SNAPSHOT)
+			upperLimit = weaponRule->getSnapRange();
+		else if (_action.type == BA_AUTOSHOT)
+			upperLimit = weaponRule->getAutoRange();
+//		}
 
 		double modifier = 0.0;
 		int targetDist_tSpace = static_cast<int>(targetDist / 16.0);
 		if (targetDist_tSpace < lowerLimit)
-			modifier = static_cast<double>((weapon->getDropoff() * (lowerLimit - targetDist_tSpace)) / 100);
+			modifier = static_cast<double>((weaponRule->getDropoff() * (lowerLimit - targetDist_tSpace)) / 100);
 		else if (upperLimit < targetDist_tSpace)
-			modifier = static_cast<double>((weapon->getDropoff() * (targetDist_tSpace - upperLimit)) / 100);
+			modifier = static_cast<double>((weaponRule->getDropoff() * (targetDist_tSpace - upperLimit)) / 100);
 
 		accuracy = std::max(
 							0.0,
 							accuracy - modifier);
 	}
 
-	if (Options::getBool("battleRangeBasedAccuracy")
-		&& _action.type != BA_HIT)
+	if (Options::getBool("battleRangeBasedAccuracy"))
+//kL		&& _action.type != BA_HIT)
 //kL		&& _action.type != BA_THROW)
 	{
+		if (_action.type == BA_HIT) return;
+
 		double accPenalty = 0.0;
 
 		if (targetTile
@@ -889,7 +892,7 @@ void Projectile::applyAccuracy(
 		double
 			dH = RNG::boxMuller(0.0, baseDeviation / 6.0), // horizontal miss in radian
 			dV = RNG::boxMuller(0.0, baseDeviation / (6.0 * 1.75)), // kL
-//kL		double dV = RNG::boxMuller(0.0, baseDeviation /(6.0 * 2));
+//kL		dV = RNG::boxMuller(0.0, baseDeviation / (6.0 * 2.0));
 
 			te = atan2(
 					static_cast<double>(target->y - origin.y),
@@ -914,6 +917,8 @@ void Projectile::applyAccuracy(
 	}
 
 	// Wb's new nonRangeBased target formula. 2013 nov 12
+	// kL_note: I've bypassed all this; beware of 'extendLine' below
+	// for BLs though... comes from calculateTrajectory() above....
 	int xDist = abs(origin.x - target->x);
 	int yDist = abs(origin.y - target->y);
 	int zDist = abs(origin.z - target->z);

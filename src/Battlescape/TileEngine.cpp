@@ -715,29 +715,26 @@ bool TileEngine::visible(
 	//Log(LOG_INFO) << ". target ID = " << targetUnit->getId();
 
 	if (targetUnit->isOut(true, true))
-	{
 		//Log(LOG_INFO) << ". . target is Dead, ret FALSE";
 		return false;
-	}
 
 	if (currentUnit->getFaction() == targetUnit->getFaction())
-	{
 		//Log(LOG_INFO) << ". . target is Friend, ret TRUE";
 		return true;
-	}
 
 	float realDist = static_cast<float>(distance(
 											currentUnit->getPosition(),
 											targetUnit->getPosition()));
 	if (realDist > MAX_VIEW_DISTANCE)
-	{
 		//Log(LOG_INFO) << ". . too far to see Tile, ret FALSE";
 		return false;
-	}
 
 	// aliens can see in the dark, xcom can see at a distance of 9 or less, further if there's enough light.
 	if (currentUnit->getFaction() == FACTION_PLAYER
-		&& distance(currentUnit->getPosition(), tile->getPosition()) > 9
+		&& distance(
+					currentUnit->getPosition(),
+					tile->getPosition())
+				> 9
 		&& tile->getShade() > MAX_DARKNESS_TO_SEE_UNITS)
 	{
 		//Log(LOG_INFO) << ". . too dark to see Tile, ret FALSE";
@@ -1052,19 +1049,17 @@ bool TileEngine::canTargetUnit(
 	};
 
 	if (!potentialUnit->isOut())
-	{
 		heightRange = potentialUnit->getHeight();
-	}
 	else
-	{
 		heightRange = 12;
-	}
 
 	targetMaxHeight += heightRange;
 	targetCenterHeight = (targetMaxHeight + targetMinHeight) / 2;
 	heightRange /= 2;
-	if (heightRange > 10) heightRange = 10;
-	if (heightRange < 0) heightRange = 0;
+	if (heightRange > 10)
+		heightRange = 10;
+	if (heightRange < 0)
+		heightRange = 0;
 
 	// scan ray from top to bottom plus different parts of target cylinder
 	for (int

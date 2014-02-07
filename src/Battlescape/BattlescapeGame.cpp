@@ -1009,13 +1009,17 @@ void BattlescapeGame::handleNonTargetAction()
 					_warning->showMessage(activated);
 				} */
 //kL				_parentState->warning("STR_GRENADE_IS_ACTIVATED");
-				_parentState->warning("STR_GRENADE_IS_ACTIVATED_", true, _currentAction.weapon->getExplodeTurn()); // kL
-//				_parentState->warning(_game->getLanguage()->getString("STR_GRENADE_IS_ACTIVATED"));		// kL
+				int explTurn = _currentAction.weapon->getExplodeTurn();					// kL
+				if (!explTurn)															// kL
+					_parentState->warning("STR_GRENADE_IS_ACTIVATED");					// kL
+				else
+					_parentState->warning("STR_GRENADE_IS_ACTIVATED_", true, explTurn);	// kL
+//				_parentState->warning(_game->getLanguage()->getString("STR_GRENADE_IS_ACTIVATED")); // kL
 			}
 			else
 			{
 				_parentState->warning("STR_NOT_ENOUGH_TIME_UNITS");
-//				_parentState->warning(_game->getLanguage()->getString("STR_NOT_ENOUGH_TIME_UNITS"));	// kL
+//				_parentState->warning(_game->getLanguage()->getString("STR_NOT_ENOUGH_TIME_UNITS")); // kL
 			}
 		}
 		else // kL

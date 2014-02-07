@@ -79,48 +79,48 @@ BaseInfoState::BaseInfoState(
 	_txtPersonnel		= new Text(300, 9, 8, 30);
 	_txtSoldiers		= new Text(114, 9, 8, 41);
 	_numSoldiers		= new Text(40, 9, 126, 41);
-	_barSoldiers		= new Bar(150, 5, 166, 43);
+	_barSoldiers		= new Bar(154, 5, 166, 43);
 	_txtEngineers		= new Text(114, 9, 8, 51);
 	_numEngineers		= new Text(40, 9, 126, 51);
-	_barEngineers		= new Bar(150, 5, 166, 53);
+	_barEngineers		= new Bar(154, 5, 166, 53);
 	_txtScientists		= new Text(114, 9, 8, 61);
 	_numScientists		= new Text(40, 9, 126, 61);
-	_barScientists		= new Bar(150, 5, 166, 63);
+	_barScientists		= new Bar(154, 5, 166, 63);
 
 	_txtSpace			= new Text(300, 9, 8, 72);
 	_txtQuarters		= new Text(114, 9, 8, 83);
 	_numQuarters		= new Text(40, 9, 126, 83);
-	_barQuarters		= new Bar(150, 5, 166, 85);
+	_barQuarters		= new Bar(154, 5, 166, 85);
 	_txtStores			= new Text(114, 9, 8, 93);
 	_numStores			= new Text(40, 9, 126, 93);
-	_barStores			= new Bar(150, 5, 166, 95);
+	_barStores			= new Bar(154, 5, 166, 95);
 	_txtLaboratories	= new Text(114, 9, 8, 103);
 	_numLaboratories	= new Text(40, 9, 126, 103);
-	_barLaboratories	= new Bar(150, 5, 166, 105);
+	_barLaboratories	= new Bar(154, 5, 166, 105);
 	_txtWorkshops		= new Text(114, 9, 8, 113);
 	_numWorkshops		= new Text(40, 9, 126, 113);
-	_barWorkshops		= new Bar(150, 5, 166, 115);
+	_barWorkshops		= new Bar(154, 5, 166, 115);
 
 	if (_containmentLimit)
 	{
 		_txtContainment = new Text(114, 9, 8, 123);
 		_numContainment = new Text(40, 9, 126, 123);
-		_barContainment = new Bar(150, 5, 166, 125);
+		_barContainment = new Bar(154, 5, 166, 125);
 	}
 
 	_txtHangars			= new Text(114, 9, 8, _containmentLimit? 133: 123);
 	_numHangars			= new Text(40, 9, 126, _containmentLimit? 133: 123);
-	_barHangars			= new Bar(150, 5, 166, _containmentLimit? 135: 125);
+	_barHangars			= new Bar(154, 5, 166, _containmentLimit? 135: 125);
 
 	_txtDefense			= new Text(114, 9, 8, _containmentLimit? 147: 138);
 	_numDefense			= new Text(40, 9, 126, _containmentLimit? 147: 138);
-	_barDefense			= new Bar(150, 5, 166, _containmentLimit? 149: 140);
+	_barDefense			= new Bar(154, 5, 166, _containmentLimit? 149: 140);
 	_txtShortRange		= new Text(114, 9, 8, _containmentLimit? 157: 153);
 	_numShortRange		= new Text(40, 9, 126, _containmentLimit? 157: 153);
-	_barShortRange		= new Bar(150, 5, 166, _containmentLimit? 159: 155);
+	_barShortRange		= new Bar(154, 5, 166, _containmentLimit? 159: 155);
 	_txtLongRange		= new Text(114, 9, 8, _containmentLimit? 167: 163);
 	_numLongRange		= new Text(40, 9, 126, _containmentLimit? 167: 163);
-	_barLongRange		= new Bar(150, 5, 166, _containmentLimit? 169: 165);
+	_barLongRange		= new Bar(154, 5, 166, _containmentLimit? 169: 165);
 
 	add(_bg);
 	add(_mini);

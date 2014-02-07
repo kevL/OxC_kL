@@ -293,8 +293,7 @@ DogfightState::DogfightState(
 	_range1					= new Surface(21, 74, _x + 19, _y + 3);
 	_weapon2				= new InteractiveSurface(15, 17, _x + 64, _y + 52);
 	_range2					= new Surface(21, 74, _x + 43, _y + 3);
-//kL	_damage					= new Surface(22, 25, _x + 93, _y + 40);
-	_damage					= new Surface(22, 20, _x + 93, _y + 40);
+	_damage					= new Surface(22, 25, _x + 93, _y + 40);
 
 	_btnMinimize			= new InteractiveSurface(12, 12, _x, _y);
 	_preview				= new InteractiveSurface(160, 96, _x, _y);
