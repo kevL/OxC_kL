@@ -1300,16 +1300,20 @@ class DetectXCOMBase
 {
 
 private:
+	const int _difficulty;
 	const Base& _base; // !< The target base.
 
 	public:
 		/// Create a detector for the given base.
-		DetectXCOMBase(const Base& base)
+		DetectXCOMBase(
+				const Base& base,
+				int difficulty)
 			:
-				_base(base)
+				_base(base),
+				_difficulty(difficulty)
 		{
 			//Log(LOG_INFO) << "DetectXCOMBase";
-			/* Empty by design.  */
+			/* Empty by design. */
 		}
 
 		/// Attempt detection
@@ -1357,7 +1361,7 @@ bool DetectXCOMBase::operator()(const Ufo* ufo) const
 		}
 		else
 		{
-			int chance = _base.getDetectionChance();
+			int chance = _base.getDetectionChance(_difficulty);
 			if (chance > 0)
 			{
 				if (ufo->getMissionType() == "STR_ALIEN_RETALIATION"
@@ -1460,6 +1464,7 @@ void GeoscapeState::time10Minutes()
 		}
 	}
 
+	int diff = static_cast<int>(_game->getSavedGame()->getDifficulty());
 	if (Options::getBool("aggressiveRetaliation"))
 	{
 		// Detect as many bases as possible.
@@ -1472,7 +1477,7 @@ void GeoscapeState::time10Minutes()
 			std::vector<Ufo*>::const_iterator u = std::find_if(
 					_game->getSavedGame()->getUfos()->begin(),
 					_game->getSavedGame()->getUfos()->end(),
-					DetectXCOMBase(**b));
+					DetectXCOMBase(**b, diff));
 			if (u != _game->getSavedGame()->getUfos()->end())
 			{
 				Log(LOG_INFO) << ". xBase found, set RetaliationStatus";
@@ -1493,7 +1498,7 @@ void GeoscapeState::time10Minutes()
 			std::vector<Ufo*>::const_iterator u = std::find_if(
 					_game->getSavedGame()->getUfos()->begin(),
 					_game->getSavedGame()->getUfos()->end(),
-					DetectXCOMBase(**b));
+					DetectXCOMBase(**b, diff));
 			if (u != _game->getSavedGame()->getUfos()->end())
 			{
 				discovered[_game->getSavedGame()->locateRegion(**b)] = *b;

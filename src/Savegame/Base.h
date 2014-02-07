@@ -247,7 +247,7 @@ private:
 
 		/// Get the detection chance for this base.
 //kL		unsigned getDetectionChance() const;
-		int getDetectionChance() const;
+		int getDetectionChance(int difficulty) const;
 
 		/// Gets how many Grav Shields the base has
 		int getGravShields() const;

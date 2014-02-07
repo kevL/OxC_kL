@@ -2152,14 +2152,14 @@ bool isCompleted::operator()(const BaseFacility* facility) const
  * Big bases without mindshields are easier to detect.
  * @return, The detection chance.
  */
-/*kL unsigned Base::getDetectionChance() const
+/*kL unsigned Base::getDetectionChance(int difficulty) const
 {
 	unsigned mindShields = std::count_if(_facilities.begin(), _facilities.end(), isMindShield());
 	unsigned completedFacilities = std::count_if(_facilities.begin(), _facilities.end(), isCompleted());
-	return (completedFacilities / 6 + 15) / (mindShields + 1);
+	return ((completedFacilities / 6 + 15) / (mindShields + 1)) * (int)(1 + difficulty / 2);
 } */
 // kL_begin: rewrite getDetectionChance()
-int Base::getDetectionChance() const
+int Base::getDetectionChance(int difficulty) const
 {
 	Log(LOG_INFO) << "Base::getDetectionChance()";
 
@@ -2176,8 +2176,9 @@ int Base::getDetectionChance() const
 	shields = (shields * 2) + 1;
 	Log(LOG_INFO) << ". facilities = " << facilities;
 	Log(LOG_INFO) << ". shields = " << shields;
+	Log(LOG_INFO) << ". difficulty = " << difficulty;
 
-	int detchance = facilities / shields;
+	int detchance = (facilities / shields) + difficulty;
 	Log(LOG_INFO) << ". detchance = " << detchance;
 
 	return detchance;
