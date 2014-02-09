@@ -49,7 +49,7 @@ private:
 		_psi;
 	int
 		_fundingDiff,
-		_lastMonthsRating,
+		_ratingLastMonth,
 		_ratingTotal;
 
 	Globe* _globe;

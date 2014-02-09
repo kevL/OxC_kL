@@ -95,7 +95,10 @@ std::string RuleCountry::getType() const
  */
 int RuleCountry::generateFunding() const
 {
-	return RNG::generate(_fundingBase, _fundingBase * 2) * 1000;
+	return RNG::generate(
+					_fundingBase,
+					_fundingBase * 2)
+				* 1000;
 }
 
 /**

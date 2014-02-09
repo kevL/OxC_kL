@@ -109,7 +109,7 @@ private:
 		_floating,
 //kL		_hitByFire,
 		_kneeled,
-		_showVisUnits,
+//		_showVisUnits, // kL
 		_stopShot, // kL, to stop a unit from firing/throwing if it spots a new opponent during turning
 		_visible;
 	int

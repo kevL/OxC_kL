@@ -19,6 +19,7 @@
 
 #include "Country.h"
 
+#include "../Engine/Logger.h"
 #include "../Engine/RNG.h"
 
 #include "../Ruleset/RuleCountry.h"
@@ -32,7 +33,9 @@ namespace OpenXcom
  * @param rules Pointer to ruleset.
  * @param gen Generate new funding.
  */
-Country::Country(RuleCountry* rules, bool gen)
+Country::Country(
+		RuleCountry* rules,
+		bool gen)
 	:
 		_rules(rules),
 		_pact(false),
@@ -41,9 +44,7 @@ Country::Country(RuleCountry* rules, bool gen)
 		_satisfaction(2)
 {
 	if (gen)
-	{
 		_funding.push_back(_rules->generateFunding());
-	}
 
 	_activityAlien.push_back(0);
 	_activityXcom.push_back(0);
@@ -176,52 +177,92 @@ const std::vector<int>& Country::getActivityAlien() const
 
 void Country::newMonth(
 		int xcomTotal,
-		int alienTotal)
+		int alienTotal,
+		int diff) // kL
 {
+	Log(LOG_INFO) << "Country::newMonth()";
 	_satisfaction = 2;
 
-	int funding = getFunding().back();
-	int good = (xcomTotal / 10) + _activityXcom.back();
-	int bad = (alienTotal / 20) + _activityAlien.back();
-	int oldFunding = _funding.back() / 1000;
-	int newFunding = (oldFunding * RNG::generate(5, 20) / 100) * 1000;
+	int
+		funding = getFunding().back(),
 
-	if (bad <= good + 30)
+		xCom = (xcomTotal / 10) + _activityXcom.back(),
+		aLien = (alienTotal / 20) + _activityAlien.back(),
+
+		oldFunding = _funding.back() / 1000,
+		newFunding = (oldFunding * RNG::generate(5, 20) / 100) * 1000;
+
+	// kL_begin:
+	if (xCom > aLien + ((diff + 1) * 20)) // country auto. increases funding
 	{
-		if (good > bad + 30)
-		{
-			if (RNG::generate(0, good) > bad)
-			{
-				// don't go over the cap
-				int cap = getRules()->getFundingCap() * 1000;
-				if (funding + newFunding > cap)
-					newFunding = cap - funding;
+		Log(LOG_INFO) << ". auto funding increase";
+		int cap = getRules()->getFundingCap() * 1000;
 
-				if (newFunding)
-					_satisfaction = 3;
-			}
-		}
+		if (funding + newFunding > cap)
+			newFunding = cap - funding;
+
+		if (newFunding)
+			_satisfaction = 3;
 	}
-	else
+	else if (xCom - (diff * 20) > aLien) // 50-50 increase/decrease funding
 	{
-		if (RNG::generate(0, bad) > good)
+		Log(LOG_INFO) << ". possible funding increase/decrease";
+		if (RNG::generate(0, xCom) > aLien)
 		{
+			Log(LOG_INFO) << ". . funding increase";
+			int cap = getRules()->getFundingCap() * 1000;
+
+			if (funding + newFunding > cap)
+				newFunding = cap - funding;
+
 			if (newFunding)
-			{
-				newFunding = -newFunding;
-				_satisfaction = 1;
-			}
+				_satisfaction = 3;
+		}
+		else if (RNG::generate(0, aLien) > xCom
+			&& newFunding)
+		{
+			Log(LOG_INFO) << ". . funding decrease";
+			newFunding = -newFunding;
+			_satisfaction = 1;
 		}
 	}
+	else if (newFunding) // auto. funding decrease
+	{
+		Log(LOG_INFO) << ". auto funding decrease";
+		newFunding = -newFunding;
+		_satisfaction = 1;
+	} // kL_end.
 
-	// about to be in cahoots
-	if (_newPact && !_pact)
+/*kL
+if (aLien < xCom + 30) // if aLien is above xCom by 30 or less
+	{
+		if (aLien + 30 < xCom // if aLien is beneath xCom by 30 or more
+			&& RNG::generate(0, xCom) > aLien)
+		{
+			int cap = getRules()->getFundingCap() * 1000;
+
+			if (funding + newFunding > cap)
+				newFunding = cap - funding;
+
+			if (newFunding)
+				_satisfaction = 3;
+		}
+	}
+	else if (RNG::generate(0, aLien) > xCom
+		&& newFunding)
+	{
+		newFunding = -newFunding;
+		_satisfaction = 1;
+	} */
+
+	if (_newPact // about to be in cahoots
+		&& !_pact)
 	{
 		_newPact = false;
 		_pact = true;
 
 //kL		addActivityAlien(150);
-		addActivityAlien(250);		// kL
+		addActivityAlien(250); // kL
 	}
 
 	// set the new funding and reset the activity meters

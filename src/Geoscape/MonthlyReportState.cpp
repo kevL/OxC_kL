@@ -66,7 +66,7 @@ MonthlyReportState::MonthlyReportState(
 		_gameOver(false),
 		_ratingTotal(0),
 		_fundingDiff(0),
-		_lastMonthsRating(0),
+		_ratingLastMonth(0),
 		_happyList(0),
 		_sadList(0),
 		_pactList(0)
@@ -109,8 +109,12 @@ MonthlyReportState::MonthlyReportState(
 	_btnOk->setColor(Palette::blockOffset(8)+10);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& MonthlyReportState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)& MonthlyReportState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
-	_btnOk->onKeyboardPress((ActionHandler)& MonthlyReportState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& MonthlyReportState::btnOkClick,
+					(SDLKey)Options::getInt("keyOk"));
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& MonthlyReportState::btnOkClick,
+					(SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setBig();
@@ -125,7 +129,7 @@ MonthlyReportState::MonthlyReportState(
 	_txtFailure->setVisible(false);
 
 
-	calculateChanges();
+	calculateChanges(); // <- sets Rating.
 
 	int
 		month = _game->getSavedGame()->getTime()->getMonth() - 1,
@@ -156,16 +160,16 @@ MonthlyReportState::MonthlyReportState(
 		default: m = "";
 	}
 
+	_txtMonth->setColor(Palette::blockOffset(15)-1);
+	_txtMonth->setSecondaryColor(Palette::blockOffset(8)+10);
+	_txtMonth->setText(tr("STR_MONTH").arg(tr(m)).arg(year));
+
 	int difficulty_threshold = 250 * (static_cast<int>(_game->getSavedGame()->getDifficulty()) - 4);
 		// 0 -> -1000
 		// 1 -> -750
 		// 2 -> -500
 		// 3 -> -250
 		// 4 -> 0
-
-	_txtMonth->setColor(Palette::blockOffset(15)-1);
-	_txtMonth->setSecondaryColor(Palette::blockOffset(8)+10);
-	_txtMonth->setText(tr("STR_MONTH").arg(tr(m)).arg(year));
 
 	// Calculate rating
 	std::wstring rating = tr("STR_RATING_TERRIBLE");
@@ -215,7 +219,7 @@ MonthlyReportState::MonthlyReportState(
 		satisFactionString = tr("STR_COUNCIL_IS_GENERALLY_SATISFIED");
 	}
 
-	if (_lastMonthsRating <= difficulty_threshold
+	if (_ratingLastMonth <= difficulty_threshold
 		&& _ratingTotal <= difficulty_threshold)
 	{
 		satisFactionString = tr("STR_YOU_HAVE_NOT_SUCCEEDED");
@@ -313,13 +317,13 @@ void MonthlyReportState::init()
  */
 void MonthlyReportState::calculateChanges()
 {
-	// initialize all our variables.
-	_lastMonthsRating = 0;
+	// initialize all variables.
+	_ratingLastMonth = 0;
 
 	int
-		xcomSubTotal	= 0,
-		xcomTotal		= 0,
-		alienTotal		= 0,
+		xComSubTotal	= 0,
+		xComTotal		= 0,
+		aLienTotal		= 0,
 
 		monthOffset		= _game->getSavedGame()->getFundsList().size() - 2,
 		lastMonthOffset	= _game->getSavedGame()->getFundsList().size() - 3;
@@ -337,20 +341,23 @@ void MonthlyReportState::calculateChanges()
 		(*k)->newMonth();
 
 		if ((*k)->getActivityXcom().size() > 2)
-			_lastMonthsRating += (*k)->getActivityXcom().at(lastMonthOffset)
-								- (*k)->getActivityAlien().at(lastMonthOffset);
+			_ratingLastMonth += (*k)->getActivityXcom().at(lastMonthOffset)
+							- (*k)->getActivityAlien().at(lastMonthOffset);
 
-		xcomSubTotal += (*k)->getActivityXcom().at(monthOffset);
-		alienTotal += (*k)->getActivityAlien().at(monthOffset);
+		xComSubTotal += (*k)->getActivityXcom().at(monthOffset);
+		aLienTotal += (*k)->getActivityAlien().at(monthOffset);
 	}
 
 	// apply research bonus AFTER calculating our total, because this bonus applies
 	// to the council ONLY, and shouldn't influence each country's decision.
-	xcomTotal = _game->getSavedGame()->getResearchScores().at(monthOffset) + xcomSubTotal;
-	_game->getSavedGame()->getResearchScores().at(monthOffset) += 400;
+	// kL_note: And yet you _do_ add it in to country->newMonth() decisions...!
+	// So, hey, I'll take it out for you.. just a sec.
+	xComTotal = _game->getSavedGame()->getResearchScores().at(monthOffset) + xComSubTotal;
+
+	_game->getSavedGame()->getResearchScores().at(monthOffset) += 400; // what's this "400" for...? See below, too.
 
 	if (_game->getSavedGame()->getResearchScores().size() > 2)
-		_lastMonthsRating += _game->getSavedGame()->getResearchScores().at(lastMonthOffset);
+		_ratingLastMonth += _game->getSavedGame()->getResearchScores().at(lastMonthOffset);
 
 
 	// now that we have our totals we can send the relevant info to the countries
@@ -363,20 +370,20 @@ void MonthlyReportState::calculateChanges()
 		// add them to the list of new pact members; this is done BEFORE initiating
 		// a new month because the _newPact flag will be reset in the process <-
 		if ((*k)->getNewPact())
-		{
 			_pactList.push_back((*k)->getRules()->getType());
-		}
 
 		// determine satisfaction level, sign pacts, adjust funding and update activity meters,
+		int diff = static_cast<int>(_game->getSavedGame()->getDifficulty()); // kL
 		(*k)->newMonth(
-					xcomTotal,
-					alienTotal);
+//kL					xComTotal,
+					xComSubTotal, // kL, There. done
+					aLienTotal,
+					diff); // kL
 
 		// and after they've made their decisions, calculate the difference,
 		// and add them to the appropriate lists.
 		_fundingDiff += (*k)->getFunding().back()
-						- (*k)->getFunding().at((*k)->getFunding().size()
-						- 2);
+					- (*k)->getFunding().at((*k)->getFunding().size() - 2);
 
 		switch ((*k)->getSatisfaction())
 		{
@@ -393,7 +400,7 @@ void MonthlyReportState::calculateChanges()
 	}
 
 	// calculate total.
-	_ratingTotal = xcomTotal - alienTotal + 400;
+	_ratingTotal = xComTotal - aLienTotal + 400; // what's this "400" for...? See above, too.
 }
 
 /**
@@ -449,9 +456,7 @@ std::wstring MonthlyReportState::countryList(
 	{
 		ss << "\n\n";
 		if (countries.size() == 1)
-		{
 			ss << tr(singular).arg(tr(countries.front()));
-		}
 		else
 		{
 			LocalizedText list = tr(countries.front());

@@ -99,8 +99,8 @@ BattleUnit::BattleUnit(
 		_rankInt(-1),
 		_turretType(-1),
 		_hidingForTurn(false),
-		_stopShot(false), // kL
-		_showVisUnits(true) // kL
+		_stopShot(false) // kL
+//		_showVisUnits(true) // kL
 {
 	//Log(LOG_INFO) << "Create BattleUnit 1 : soldier ID = " << getId();
 
@@ -220,8 +220,8 @@ BattleUnit::BattleUnit(
 		_rankInt(-1),
 		_turretType(-1),
 		_hidingForTurn(false),
-		_stopShot(false), // kL
-		_showVisUnits(true) // kL
+		_stopShot(false) // kL
+//		_showVisUnits(true) // kL
 {
 	//Log(LOG_INFO) << "Create BattleUnit 2 : alien ID = " << getId();
 
@@ -278,11 +278,12 @@ BattleUnit::BattleUnit(
 BattleUnit::~BattleUnit()
 {
 	//Log(LOG_INFO) << "Delete BattleUnit";
-	for (int i = 0; i < 5; ++i)
-	{
+	for (int
+			i = 0;
+			i < 5;
+			++i)
 		if (_cache[i])
 			delete _cache[i];
-	}
 
 //	delete _currentAIState;
 }
