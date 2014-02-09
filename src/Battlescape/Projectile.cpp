@@ -68,12 +68,14 @@ Projectile::Projectile(
 		ResourcePack* res,
 		SavedBattleGame* save,
 		BattleAction action,
-		Position origin)
+		Position origin,
+		Position targetVoxel)
 	:
 		_res(res),
 		_save(save),
 		_action(action),
 		_origin(origin),
+		_targetVoxel(targetVoxel),
 		_position(0)
 {
 	// this is the number of pixels the sprite will move between frames
@@ -128,7 +130,8 @@ int Projectile::calculateTrajectory(double accuracy)
 	Log(LOG_INFO) << "Projectile::calculateTrajectory()";
 
 	BattleUnit* bu = _action.actor;
-	Tile* targetTile = 0;
+	Tile* targetTile = _save->getTile(_action.target);
+//	Tile* targetTile = 0;
 	Position
 		targetVoxel,
 		originVoxel = _save->getTileEngine()->getOriginVoxel(
@@ -191,6 +194,7 @@ int Projectile::calculateTrajectory(double accuracy)
 
 
 	//** TARGETTING ****
+//Wb. begin deletion...
 	if (_action.type == BA_LAUNCH
 		|| (SDL_GetModState() & KMOD_CTRL) != 0
 		|| !_save->getBattleGame()->getPanicHandled())
@@ -338,6 +342,7 @@ int Projectile::calculateTrajectory(double accuracy)
 								_action.target.y * 16 + 8,
 								_action.target.z * 24 + 12);
 		}
+//Wb... end deletion
 
 
 /*kL		int test = VOXEL_EMPTY;
@@ -353,6 +358,8 @@ int Projectile::calculateTrajectory(double accuracy)
 			&& !_trajectory.empty()
 			&& _action.actor->getFaction() == FACTION_PLAYER // -> huh?
 			&& _action.autoShotCount == 1)
+//			&& (SDL_GetModState() & KMOD_CTRL) == 0 // Wb.add
+//			&& _save->getBattleGame()->getPanicHandled()) // Wb.add
 		{
 			Position hitPos = Position(
 									_trajectory.at(0).x / 16,
@@ -410,7 +417,7 @@ int Projectile::calculateTrajectory(double accuracy)
 //																&_trajectory,
 //																bu);
 					}
-				} *
+				} */
 
 
 /*				// kL_begin: Projectile::calculateTrajectory() NOW TARGETS FLOORS.
@@ -480,7 +487,7 @@ int Projectile::calculateTrajectory(double accuracy)
 	if (_action.type != BA_LAUNCH) // <- what, no drift??!? Could base this on.. psiSkill, or somethin'
 		applyAccuracy(
 					originVoxel,
-					&targetVoxel,
+					&_targetVoxel,
 					accuracy,
 					false,
 					targetTile);
@@ -490,7 +497,7 @@ int Projectile::calculateTrajectory(double accuracy)
 	// finally do a line calculation and store this trajectory.
 	int ret = _save->getTileEngine()->calculateLine(
 												originVoxel,
-												targetVoxel,
+												_targetVoxel,
 												true,
 												&_trajectory,
 												bu);

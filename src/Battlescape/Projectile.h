@@ -45,10 +45,12 @@ class Projectile
 
 private:
 	int _speed;
-	unsigned int _position;
+	unsigned _position;
 
 	BattleAction _action;
-	Position _origin;
+	Position
+		_origin,
+		_targetVoxel;
 	ResourcePack* _res;
 	SavedBattleGame* _save;
 	Surface* _sprite;
@@ -71,7 +73,8 @@ private:
 				ResourcePack* res,
 				SavedBattleGame* save,
 				BattleAction action,
-				Position origin);
+				Position origin,
+				Position target);
 		/// Cleans up the Projectile.
 		~Projectile();
 

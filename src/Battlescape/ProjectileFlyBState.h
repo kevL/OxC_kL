@@ -49,7 +49,9 @@ private:
 		* _ammo,
 		* _projectileItem;
 	BattleUnit* _unit;
-	Position _origin;
+	Position
+		_origin,
+		_targetVoxel;
 
 	/// Tries to create a projectile sprite.
 	bool createNewProjectile();
