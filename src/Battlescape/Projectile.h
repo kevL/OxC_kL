@@ -49,8 +49,8 @@ private:
 
 	BattleAction _action;
 	Position
-		_origin,
-		_targetVoxel;
+		_origin;
+//kL		_targetVoxel; // Wb.140209
 	ResourcePack* _res;
 	SavedBattleGame* _save;
 	Surface* _sprite;
@@ -73,8 +73,8 @@ private:
 				ResourcePack* res,
 				SavedBattleGame* save,
 				BattleAction action,
-				Position origin,
-				Position target);
+				Position origin);
+//kL				Position target); // Wb.140209
 		/// Cleans up the Projectile.
 		~Projectile();
 

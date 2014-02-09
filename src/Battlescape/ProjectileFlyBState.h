@@ -50,8 +50,8 @@ private:
 		* _projectileItem;
 	BattleUnit* _unit;
 	Position
-		_origin,
-		_targetVoxel;
+		_origin;
+//kL		_targetVoxel; // Wb.140209
 
 	/// Tries to create a projectile sprite.
 	bool createNewProjectile();

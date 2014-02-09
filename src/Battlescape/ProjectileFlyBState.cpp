@@ -330,7 +330,7 @@ void ProjectileFlyBState::init()
 		break;
 	}
 
-// Wb. moved in from Projectile
+// Wb.140209 moved in from Projectile::calculateTrajectory()
 /*
 	if (_action.type == BA_LAUNCH || (SDL_GetModState() & KMOD_CTRL) != 0 || !_parent->getPanicHandled())
 	{
@@ -407,7 +407,7 @@ void ProjectileFlyBState::init()
 		}
 	}
 */
-// Wb. end move from Projectile
+// Wb.140209 ...end moved in from Projectile.
 
 	createNewProjectile();
 	Log(LOG_INFO) << "ProjectileFlyBState::init() EXIT";
@@ -427,8 +427,8 @@ bool ProjectileFlyBState::createNewProjectile()
 										_parent->getResourcePack(),
 										_parent->getSave(),
 										_action,
-										_origin,
-										_targetVoxel);
+										_origin);
+//kL										_targetVoxel); // Wb.140209
 
 	// add the projectile on the map
 	_parent->getMap()->setProjectile(projectile);
@@ -767,8 +767,8 @@ void ProjectileFlyBState::think()
 														_parent->getResourcePack(),
 														_parent->getSave(),
 														_action,
-														_origin,
-														_targetVoxel);
+														_origin);
+//kL														_targetVoxel); // Wb.140209
 
 							// let it trace to the point where it hits
 							_projectileImpact = proj->calculateTrajectory(
@@ -784,7 +784,7 @@ void ProjectileFlyBState::think()
 								// as above: skip the shot to the end of its path
 								proj->skipTrajectory();
 
-								// insert an explosion and hit 
+								// insert an explosion and hit
 								if (_projectileImpact != VOXEL_OUTOFBOUNDS)
 								{
 									Explosion* explosion = new Explosion(
@@ -859,12 +859,10 @@ void ProjectileFlyBState::cancel()
 																p.x / 16,
 																p.y / 16,
 																p.z / 24)))
-		{
 			_parent->getMap()->getCamera()->centerOnPosition(Position(
 																	p.x / 16,
 																	p.y / 16,
 																	p.z / 24));
-		}
 	}
 }
 

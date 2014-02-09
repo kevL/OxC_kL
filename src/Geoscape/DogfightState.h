@@ -70,20 +70,19 @@ private:
 		_timeout,
 		_currentDist,
 		_targetDist,
-		_ufoFireInterval;
-//		_ufoHitFrame;
-	int
+
 		_ufoSize,
 		_craftHeight,
 		_craftHeight_pre,
 		_currentCraftDamageColor,
+		_interceptionNumber,
 		_interceptionsCount,
-		_interceptionNumber;
-	int
+
 		_x,
 		_y,
 		_minimizedIconX,
 		_minimizedIconY;
+	Uint32 _ufoFireInterval;
 
 	std::vector<CraftWeaponProjectile*> _projectiles;
 
@@ -125,7 +124,7 @@ private:
 		* _craftDamageAnimTimer;
 	Ufo* _ufo;
 
-	// Ends the dogfight.
+	/// Ends the dogfight.
 	void endDogfight();
 
 

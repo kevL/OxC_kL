@@ -5711,7 +5711,7 @@
 	<yaml-cpp/yaml.h>
 	"BattlescapeGame.h"
 
-1391393811 f:\git\openxcom\src\battlescape\projectileflybstate.h
+1391984759 f:\git\openxcom\src\battlescape\projectileflybstate.h
 	"BattleState.h"
 	"Position.h"
 
@@ -6386,7 +6386,7 @@
 	"../Ruleset/MapDataSet.h"
 	"../Ruleset/RuleItem.h"
 
-1391393811 f:\git\openxcom\src\battlescape\projectile.h
+1391984778 f:\git\openxcom\src\battlescape\projectile.h
 	<vector>
 	"BattlescapeGame.h"
 	"Position.h"
@@ -6545,7 +6545,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1391669592 source:f:\git\openxcom\src\battlescape\projectile.cpp
+1391974886 source:f:\git\openxcom\src\battlescape\projectile.cpp
 	"Projectile.h"
 	<cmath>
 	"BattlescapeGame.h"
@@ -6570,7 +6570,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1391393811 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
+1391974886 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
 	"ProjectileFlyBState.h"
 	<cmath>
 	"AlienBAIState.h"
@@ -7505,7 +7505,7 @@
 	"../Resource/ResourcePack.h"
 	"../Savegame/SavedGame.h"
 
-1391733540 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
+1391981421 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
 	"DogfightState.h"
 	<cstdlib>
 	<sstream>
@@ -7541,7 +7541,7 @@
 	"../Savegame/AlienMission.h"
 	"../Savegame/AlienStrategy.h"
 
-1391393812 f:\git\openxcom\src\geoscape\dogfightstate.h
+1391981421 f:\git\openxcom\src\geoscape\dogfightstate.h
 	<vector>
 	<string>
 	"../Engine/State.h"
@@ -7886,7 +7886,7 @@
 	"GeoscapeState.h"
 	"../Engine/Options.h"
 
-1391393812 source:f:\git\openxcom\src\geoscape\monthlyreportstate.cpp
+1391929154 source:f:\git\openxcom\src\geoscape\monthlyreportstate.cpp
 	"MonthlyReportState.h"
 	<cmath>
 	<sstream>
@@ -8340,7 +8340,7 @@
 	"OptionsBaseState.h"
 	"../Engine/State.h"
 
-1391393812 source:f:\git\openxcom\src\menu\newbattlestate.cpp
+1391919362 source:f:\git\openxcom\src\menu\newbattlestate.cpp
 	"NewBattleState.h"
 	"../Basescape/CraftInfoState.h"
 	"../Battlescape/BattlescapeGenerator.h"
@@ -9058,7 +9058,7 @@
 1391393812 source:f:\git\openxcom\src\ruleset\rulebasefacility.cpp
 	"RuleBaseFacility.h"
 
-1391393812 source:f:\git\openxcom\src\ruleset\rulecountry.cpp
+1391921031 source:f:\git\openxcom\src\ruleset\rulecountry.cpp
 	"RuleCountry.h"
 	<math.h>
 	"../Engine/RNG.h"
@@ -9251,7 +9251,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1391859799 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1391921041 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	<cmath>
 	<sstream>
@@ -9273,8 +9273,9 @@
 	"../Ruleset/RuleSoldier.h"
 	"../Ruleset/Unit.h"
 
-1391393813 source:f:\git\openxcom\src\savegame\country.cpp
+1391974382 source:f:\git\openxcom\src\savegame\country.cpp
 	"Country.h"
+	"../Engine/Logger.h"
 	"../Engine/RNG.h"
 	"../Ruleset/RuleCountry.h"
 

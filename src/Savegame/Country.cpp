@@ -191,6 +191,8 @@ void Country::newMonth(
 
 		oldFunding = _funding.back() / 1000,
 		newFunding = (oldFunding * RNG::generate(5, 20) / 100) * 1000;
+//		newFunding = _funding.back() * RNG::generate(5, 20) / 100; // kL
+			// but earlier formula maintains a nice $1000 multiple.
 
 	// kL_begin:
 	if (xCom > aLien + ((diff + 1) * 20)) // country auto. increases funding
