@@ -509,7 +509,7 @@ void NewBattleState::btnOkClick(Action*)
 		bgen.setUfo(u);
 		bgen.setCraft(_craft);
 
-		if (_terrainTypes[_selTerrain] == "STR_FOREST")
+		if (_terrainTypes[_selTerrain] == "FOREST")
 		{
 			u->setLatitude(-0.5);
 		}
