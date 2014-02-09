@@ -249,9 +249,7 @@ void Map::draw()
 
 	// kL_note: removed setting this in BattlescapeGame::handleState().
 /*kL	if (!_redraw)
-	{
-		return;
-	} */
+		return; */
 
 	Surface::draw();
 
@@ -262,18 +260,15 @@ void Map::draw()
 //kL		&& _save->getSide() == FACTION_PLAYER)
 	{
 		//Log(LOG_INFO) << "Map::draw() _projectile = true";
-
 		t = _save->getTile(Position(
 								_projectile->getPosition(0).x / 16,
 								_projectile->getPosition(0).y / 16,
 								_projectile->getPosition(0).z / 24));
 		if (t
-//kL			&& t->getVisible())
-			&& (t->getVisible()							// kL
+			&& (t->getVisible()
 				|| _save->getSide() != FACTION_PLAYER))	// kL: shows projectile during aLien berserk
 		{
 			//Log(LOG_INFO) << "Map::draw() _projectileInFOV = true";
-
 			_projectileInFOV = true;
 		}
 	}
@@ -324,15 +319,11 @@ void Map::draw()
 		|| (_reveal && !kL_preReveal))
 	{
 		if (_reveal && !kL_preReveal)
-		{
 			_reveal--;
 			//Log(LOG_INFO) << ". . . . . . drawTerrain() _reveal = " << _reveal;
-		}
 		else
-		{
 			_reveal = 3;
 			//Log(LOG_INFO) << ". . . . . . drawTerrain() Set _reveal = " << _reveal;
-		}
 
 		if (_save->getSide() == FACTION_PLAYER)
 			_save->getBattleState()->toggleIcons(true);
@@ -626,8 +617,7 @@ void Map::drawTerrain(Surface* surface)
 				{
 					tile = _save->getTile(mapPosition);
 
-					if (!tile)
-						continue;
+					if (!tile) continue;
 
 					if (tile->isDiscovered(2))
 						tileShade = tile->getShade();
@@ -1260,24 +1250,26 @@ void Map::drawTerrain(Surface* surface)
 	}
 
 	if (pathfinderTurnedOn)
-	{
 		for (int
 				itZ = beginZ;
 				itZ <= endZ;
 				itZ++)
-		{
 			for (int
 					itX = beginX;
 					itX <= endX;
 					itX++)
-			{
 				for (int
 						itY = beginY;
 						itY <= endY;
 						itY++)
 				{
-					mapPosition = Position(itX, itY, itZ);
-					_camera->convertMapToScreen(mapPosition, &screenPosition);
+					mapPosition = Position(
+										itX,
+										itY,
+										itZ);
+					_camera->convertMapToScreen(
+											mapPosition,
+											&screenPosition);
 					screenPosition += _camera->getMapOffset();
 
 					// only render cells that are inside the surface
@@ -1303,7 +1295,6 @@ void Map::drawTerrain(Surface* surface)
 							{
 								tmpSurface = _res->getSurfaceSet("Pathfinding")->getFrame(23);
 								if (tmpSurface)
-								{
 									tmpSurface->blitNShade(
 											surface,
 											screenPosition.x - 16,
@@ -1311,13 +1302,11 @@ void Map::drawTerrain(Surface* surface)
 											0,
 											false,
 											tile->getMarkerColor());
-								}
 							}
 
 							int overlay = tile->getPreview() + 11;
 							tmpSurface = _res->getSurfaceSet("Pathfinding")->getFrame(overlay);
 							if (tmpSurface)
-							{
 								tmpSurface->blitNShade(
 										surface,
 										screenPosition.x - 16,
@@ -1325,19 +1314,18 @@ void Map::drawTerrain(Surface* surface)
 										0,
 										false,
 										tile->getMarkerColor());
-							}
 						}
 
-						if (_previewSetting >= 2)
+						if (_previewSetting > 1)
 						{
-							int tuMarker = std::max(0, tile->getTUMarker());
+							int tuMarker = std::max(
+												0,
+												tile->getTUMarker());
 
 							// kL_note: Set pathfinder/ pathpreview number color.
 //							Log(LOG_INFO) << "Map::drawTerrain() mapname = " << _ruleTerrain->getName();
 //							if (_ruleTerrain->getName() == "STR_POLAR")
-//							{
 //								wpColor = 15;
-//							}
 							_numWaypid->setColor(Palette::blockOffset(12)+8); // kL
 
 //							Log(LOG_INFO) << "Map::drawTerrain() terrain = " << _game->getRuleset()->getTerrain("POLAR")->getName();
@@ -1345,7 +1333,10 @@ void Map::drawTerrain(Surface* surface)
 							_numWaypid->setValue(tuMarker);
 							_numWaypid->draw();
 
-							int off = tile->getTUMarker() > 9? 4: 2;
+							int off = 2;
+							if (tile->getTUMarker() > 9)
+								int off = 4;
+
 							_numWaypid->blitNShade(
 									surface,
 									screenPosition.x + 16 - off,
@@ -1354,55 +1345,53 @@ void Map::drawTerrain(Surface* surface)
 						}
 					}
 				}
-			}
-		}
-	}
 
 //kL	unit = (BattleUnit*)_save->getSelectedUnit();
 	unit = dynamic_cast<BattleUnit*>(_save->getSelectedUnit()); // kL
 	if (unit
-		&& (_save->getSide() == FACTION_PLAYER || _save->getDebugMode())
+		&& (_save->getSide() == FACTION_PLAYER
+			|| _save->getDebugMode())
 		&& unit->getPosition().z <= _camera->getViewLevel())
 	{
-		_camera->convertMapToScreen(unit->getPosition(), &screenPosition);
+		_camera->convertMapToScreen(
+								unit->getPosition(),
+								&screenPosition);
 		screenPosition += _camera->getMapOffset();
 
 		Position offset;
-		calculateWalkingOffset(unit, &offset);
+		calculateWalkingOffset(
+							unit,
+							&offset);
 		if (unit->getArmor()->getSize() > 1)
-		{
 			offset.y += 4;
-		}
 
 		if (this->getCursorType() != CT_NONE)
-		{
 			_arrow->blitNShade(
-					surface,
-					screenPosition.x
-						+ offset.x
-						+ (_spriteWidth / 2)
-						- (_arrow->getWidth() / 2),
-					screenPosition.y
-						+ offset.y
-						- _arrow->getHeight()
-						+ static_cast<int>(
-								4.0 * sin((static_cast<double>(_animFrame) * 6.28) / 8.0)),
-					0);
-		}
+							surface,
+							screenPosition.x
+								+ offset.x
+								+ (_spriteWidth / 2)
+								- (_arrow->getWidth() / 2),
+							screenPosition.y
+								+ offset.y
+								- _arrow->getHeight()
+								+ static_cast<int>(
+									4.0 * sin((static_cast<double>(_animFrame) * 6.28) / 8.0)),
+							0);
 	}
 
 	delete _numWaypid;
 
 	if (_explosionInFOV) // check if we got big explosions
-	{
 		for (std::set<Explosion*>::const_iterator
 				i = _explosions.begin();
 				i != _explosions.end();
 				++i)
 		{
-			_camera->convertVoxelToScreen((*i)->getPosition(), &bulletPositionScreen);
+			_camera->convertVoxelToScreen(
+									(*i)->getPosition(),
+									&bulletPositionScreen);
 			if ((*i)->isBig())
-			{
 				if ((*i)->getCurrentFrame() > -1)
 				{
 					tmpSurface = _res->getSurfaceSet("X1.PCK")->getFrame((*i)->getCurrentFrame());
@@ -1412,7 +1401,6 @@ void Map::drawTerrain(Surface* surface)
 							bulletPositionScreen.y - 64,
 							0);
 				}
-			}
 			else if ((*i)->isHit())
 			{
 				tmpSurface = _res->getSurfaceSet("HIT.PCK")->getFrame((*i)->getCurrentFrame());
@@ -1432,7 +1420,6 @@ void Map::drawTerrain(Surface* surface)
 						0);
 			}
 		}
-	}
 
 	surface->unlock();
 }

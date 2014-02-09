@@ -89,7 +89,7 @@ BattleUnit::BattleUnit(
 		_expMelee(0),
 		_motionPoints(0),
 		_kills(0),
-		_hitByFire(false),
+//kL		_hitByFire(false),
 		_moraleRestored(0),
 		_coverReserve(0),
 		_charging(0),
@@ -99,7 +99,8 @@ BattleUnit::BattleUnit(
 		_rankInt(-1),
 		_turretType(-1),
 		_hidingForTurn(false),
-		_stopShot(false) // kL
+		_stopShot(false), // kL
+		_showVisUnits(true) // kL
 {
 	//Log(LOG_INFO) << "Create BattleUnit 1 : soldier ID = " << getId();
 
@@ -208,7 +209,7 @@ BattleUnit::BattleUnit(
 		_expMelee(0),
 		_motionPoints(0),
 		_kills(0),
-		_hitByFire(false),
+//kL		_hitByFire(false),
 		_moraleRestored(0),
 		_coverReserve(0),
 		_charging(0),
@@ -219,7 +220,8 @@ BattleUnit::BattleUnit(
 		_rankInt(-1),
 		_turretType(-1),
 		_hidingForTurn(false),
-		_stopShot(false) // kL
+		_stopShot(false), // kL
+		_showVisUnits(true) // kL
 {
 	//Log(LOG_INFO) << "Create BattleUnit 2 : alien ID = " << getId();
 
@@ -1226,8 +1228,7 @@ int BattleUnit::damage(
 	UnitSide side = SIDE_FRONT;
 	UnitBodyPart bodypart = BODYPART_TORSO;
 
-	if (power < 1)
-		return 0;
+	if (power < 1) return 0;
 
 	power = static_cast<int>(
 					floor(static_cast<float>(power) * _armor->getDamageModifier(type)));
@@ -1240,9 +1241,7 @@ int BattleUnit::damage(
 	if (!ignoreArmor)
 	{
 		if (relative == Position(0, 0, 0))
-		{
 			side = SIDE_UNDER;
-		}
 		else
 		{
 			int relativeDirection;
@@ -1283,9 +1282,7 @@ int BattleUnit::damage(
 			}
 
 			if (relative.z > getHeight())
-			{
 				bodypart = BODYPART_HEAD;
-			}
 			else if (relative.z > 4)
 			{
 				switch (side)
@@ -1304,7 +1301,9 @@ int BattleUnit::damage(
 					case SIDE_RIGHT:	bodypart = BODYPART_RIGHTLEG; 	break;
 
 					default:
-						bodypart = (UnitBodyPart)RNG::generate(BODYPART_RIGHTLEG, BODYPART_LEFTLEG);
+						bodypart = (UnitBodyPart)RNG::generate(
+															BODYPART_RIGHTLEG,
+															BODYPART_LEFTLEG);
 				}
 			}
 		}
@@ -1343,7 +1342,7 @@ int BattleUnit::damage(
 
 	if (power < 1)
 		power = 0;
-	Log(LOG_INFO) << "BattleUnit::damage() ret PenetratedPower " << power;
+	Log(LOG_INFO) << "BattleUnit::damage() ret Penetrating Power " << power;
 
 	return power;
 }
@@ -1663,9 +1662,7 @@ bool BattleUnit::addToVisibleUnits(BattleUnit* unit)
 			++i)
 	{
 		if (dynamic_cast<BattleUnit*>(*i) == unit)
-		{
 			return false;
-		}
 	}
 
 	_visibleUnits.push_back(unit);
@@ -1909,15 +1906,15 @@ void BattleUnit::prepareNewTurn()
 	// Fire damage is also in Battlescape/BattlescapeGame::endTurn(), stand on fire tile
 	// see also, Savegame/Tile::prepareNewTurn(), catch fire on fire tile
 	// fire damage by hit is caused by TileEngine::explode()
-	if (!_hitByFire
-		&& _fire > 0) // suffer from fire
+/*kL	if (//kL !_hitByFire &&
+		_fire > 0) // suffer from fire
 	{
 		int fireDam = static_cast<int>(_armor->getDamageModifier(DT_IN) * RNG::generate(2, 6));
 		Log(LOG_INFO) << ". fireDam = " << fireDam;
 		_health -= fireDam;
 
 		_fire--;
-	}
+	} */
 
 	if (_health < 0)
 		_health = 0;
@@ -1948,7 +1945,7 @@ void BattleUnit::prepareNewTurn()
 			_expBravery++;
 	}
 
-	_hitByFire = false;
+//kL	_hitByFire = false;
 	_dontReselect = false;
 	_motionPoints = 0;
 
@@ -3249,18 +3246,18 @@ void BattleUnit::adjustStats(const int diff)
  * Did this unit already take fire damage this turn?
  * (used to avoid damaging large units multiple times.)
  */
-bool BattleUnit::tookFireDamage() const
+/*kL bool BattleUnit::getTookFire() const
 {
 	return _hitByFire;
-}
+} */
 
 /**
  * Toggle the state of the fire damage tracking boolean.
  */
-void BattleUnit::toggleFireDamage()
+/*kL void BattleUnit::setTookFire()
 {
 	_hitByFire = !_hitByFire;
-}
+} */
 
 /**
  *
@@ -3409,7 +3406,24 @@ void BattleUnit::setStopShot(bool stop)
 bool BattleUnit::getStopShot() const
 {
 	return _stopShot;
-} // kL_end.
+}
+
+/**
+ *
+ */
+/* void BattleUnit::setShowVisUnits(bool show)
+{
+	_showVisUnits = show;
+} */
+
+/**
+ *
+ */
+/* bool BattleUnit::getShowVisUnits() const
+{
+	return _showVisUnits;
+} */
+// kL_end.
 
 /**
  * Checks if this unit can be selected. Only alive units

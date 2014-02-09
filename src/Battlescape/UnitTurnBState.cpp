@@ -51,7 +51,7 @@ UnitTurnBState::UnitTurnBState(
 		_unit(0),
 		_turret(false)
 {
-	//Log(LOG_INFO) << "Create UnitTurnBState";
+	Log(LOG_INFO) << "Create UnitTurnBState";
 }
 
 /**
@@ -60,6 +60,8 @@ UnitTurnBState::UnitTurnBState(
 UnitTurnBState::~UnitTurnBState()
 {
 	//Log(LOG_INFO) << "Delete UnitTurnBState";
+//	_unit->setShowVisUnits(true); // kL
+//	_parent->getBattlescapeState()->toggleVisUnits(true); // kL
 }
 
 /**
@@ -67,13 +69,14 @@ UnitTurnBState::~UnitTurnBState()
  */
 void UnitTurnBState::init()
 {
-	//Log(LOG_INFO) << "UnitTurnBState::init()";
-	//Log(LOG_INFO) << "UnitTurnBState::init() unitID = "
-			//<< _action.actor->getId() << "_action.strafe = " << _action.strafe;
-	_unit		= _action.actor;
-	_action.TU	= 0;
+	Log(LOG_INFO) << "UnitTurnBState::init() unitID = "
+			<< _action.actor->getId() << "_action.strafe = " << _action.strafe;
+	_unit = _action.actor;
+	_action.TU = 0;
 
 	_unit->setStopShot(false); // kL
+//	_unit->setShowVisUnits(false); // kL
+//	_parent->getBattlescapeState()->toggleVisUnits(false); // kL
 
 	if (_unit->getFaction() == FACTION_PLAYER)
 		_parent->setStateInterval(Options::getInt("battleXcomSpeed"));
@@ -82,8 +85,8 @@ void UnitTurnBState::init()
 
 	// if the unit has a turret and we are turning during targeting, then only the turret turns
 	_turret = _unit->getTurretType() != -1
-				&& (_action.strafe
-					|| _action.targeting);
+			&& (_action.strafe
+				|| _action.targeting);
 
 	_unit->lookAt( // -> STATUS_TURNING
 				_action.target,
@@ -97,7 +100,9 @@ void UnitTurnBState::init()
 	{
 		if (_action.type == BA_NONE)
 		{
-			int door = _parent->getTileEngine()->unitOpensDoor(_unit, true);
+			int door = _parent->getTileEngine()->unitOpensDoor(
+															_unit,
+															true);
 			if (door == 0)
 				//Log(LOG_INFO) << ". open door PlaySound";
 				_parent->getResourcePack()->getSound( // normal door
@@ -116,6 +121,9 @@ void UnitTurnBState::init()
 				_action.result = "STR_TUS_RESERVED";
 		}
 
+//		_unit->setShowVisUnits(true); // kL
+//		_parent->getBattlescapeState()->toggleVisUnits(true); // kL
+
 		_parent->popState();
 	}
 }
@@ -128,7 +136,7 @@ void UnitTurnBState::think()
 	//Log(LOG_INFO) << "UnitTurnBState::think() unitID = " << _unit->getId();
 	bool
 		factSide = (_unit->getFaction() == _parent->getSave()->getSide()),	// kL
-		factPlayer = _unit->getFaction() == FACTION_PLAYER;					// kL
+		factPlayer = (_unit->getFaction() == FACTION_PLAYER);				// kL
 
 	int
 		turretType = _unit->getTurretType(),
@@ -158,6 +166,9 @@ void UnitTurnBState::think()
 //kL		_unit->abortTurn(); // -> STATUS_STANDING.
 		_unit->setStatus(STATUS_STANDING);	// kL
 //		_unit->setStopShot(false);			// kL
+
+//		_unit->setShowVisUnits(true); // kL
+//		_parent->getBattlescapeState()->toggleVisUnits(true); // kL
 
 		_parent->popState();
 
@@ -212,8 +223,15 @@ void UnitTurnBState::think()
 		}
 
 		if (_unit->getStatus() == STATUS_STANDING)
+		{
 			//Log(LOG_INFO) << "UnitTurnBState::think(), popState()";
+//			_unit->setShowVisUnits(true); // kL
+//			_parent->getBattlescapeState()->toggleVisUnits(true); // kL
+
 			_parent->popState();
+		}
+		else
+			_parent->getBattlescapeState()->refreshVisUnits(); // kL
 	}
 	else if (_parent->getPanicHandled())
 	{
@@ -223,6 +241,9 @@ void UnitTurnBState::think()
 //kL		_unit->abortTurn(); // -> STATUS_STANDING.
 		_unit->setStatus(STATUS_STANDING);	// kL
 //		_unit->setStopShot(false);			// kL
+
+//		_unit->setShowVisUnits(true); // kL
+//		_parent->getBattlescapeState()->toggleVisUnits(true); // kL
 
 		_parent->popState();
 	}

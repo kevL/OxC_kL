@@ -330,7 +330,7 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 	{
 		diag = true;
 
-		y1 = 0;
+//		y1 = 0;
 		y2 = MAX_VIEW_DISTANCE;
 	}
 
@@ -427,7 +427,7 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 
 						//Log(LOG_INFO) << ". . calculateFOV(), visible() CHECK.. " << visUnit->getId();
 						if (visUnit
-							&& !visUnit->isOut()
+							&& !visUnit->isOut(true, true)
 							&& visible(
 									unit,
 									_save->getTile(test))) // reveal units & tiles <- This seems uneven.
@@ -700,8 +700,7 @@ bool TileEngine::visible(
 		BattleUnit* currentUnit,
 		Tile* tile)
 {
-	//Log(LOG_INFO) << "TileEngine::visible()";
-	//Log(LOG_INFO) << ". spotter / reactor ID = " << currentUnit->getId();
+	//Log(LOG_INFO) << "TileEngine::visible() spotterID = " << currentUnit->getId();
 
 	// if there is no tile or no unit, we can't see it
 	if (!tile
@@ -711,12 +710,13 @@ bool TileEngine::visible(
 	}
 
 	BattleUnit* targetUnit = tile->getUnit();
-
 	//Log(LOG_INFO) << ". target ID = " << targetUnit->getId();
 
 	if (targetUnit->isOut(true, true))
+	{
 		//Log(LOG_INFO) << ". . target is Dead, ret FALSE";
 		return false;
+	}
 
 	if (currentUnit->getFaction() == targetUnit->getFaction())
 		//Log(LOG_INFO) << ". . target is Friend, ret TRUE";
@@ -730,16 +730,18 @@ bool TileEngine::visible(
 		return false;
 
 	// aliens can see in the dark, xcom can see at a distance of 9 or less, further if there's enough light.
+	//Log(LOG_INFO) << ". tileShade = " << tile->getShade();
 	if (currentUnit->getFaction() == FACTION_PLAYER
 		&& distance(
 					currentUnit->getPosition(),
 					tile->getPosition())
 				> 9
-		&& tile->getShade() > MAX_DARKNESS_TO_SEE_UNITS)
+		&& tile->getShade() > MAX_SHADE_TO_SEE_UNITS)
 	{
 		//Log(LOG_INFO) << ". . too dark to see Tile, ret FALSE";
 		return false;
 	}
+	//else Log(LOG_INFO) << ". . see Tile : Unit in light = " << tile->getUnit()->getId();
 
 
 	// for large units origin voxel is in the middle ( not anymore )
@@ -762,7 +764,7 @@ bool TileEngine::visible(
 
 	if (unitIsSeen)
 	{
-		//Log(LOG_INFO) << ". . . canTargetUnit()";
+		//Log(LOG_INFO) << ". . . canTargetUnit(), unitIsSeen";
 
 		// now check if we really see it taking into account smoke tiles
 		// initial smoke "density" of a smoke grenade is around 15 per tile
@@ -868,7 +870,7 @@ bool TileEngine::visible(
 		}
 	}
 
-	//Log(LOG_INFO) << ". unitIsSeen = " << unitIsSeen;
+	//Log(LOG_INFO) << ". Ret unitIsSeen = " << unitIsSeen;
 	return unitIsSeen;
 }
 
@@ -1391,9 +1393,7 @@ std::vector<BattleUnit*> TileEngine::getSpottingUnits(BattleUnit* unit)
 				&& visible(*bu, tile))									// can actually see the unit through smoke/fire & within viewRange
 			{
 				if ((*bu)->getFaction() == FACTION_PLAYER)
-				{
 					unit->setVisible(true);
-				}
 
 				(*bu)->addToVisibleUnits(unit);
 
@@ -1902,8 +1902,10 @@ BattleUnit* TileEngine::hit(
 						// but ExplosionBState::explode() creates a hit() ! -> terrain..
 
 						Position unitPos = Position(
-												buTarget->getPosition().x * 16,
-												buTarget->getPosition().y * 16,
+//kL												buTarget->getPosition().x * 16,
+//kL												buTarget->getPosition().y * 16,
+												buTarget->getPosition().x * 16 + 8, // kL
+												buTarget->getPosition().y * 16 + 8, // kL
 												buTarget->getPosition().z * 24);
 
 						_save->getBattleGame()->statePushNext(new ExplosionBState(
@@ -1975,9 +1977,9 @@ void TileEngine::explode(
 	Log(LOG_INFO) << "TileEngine::explode() power = " << power
 		<< " ; type = " << (int)type << " ; maxRadius = " << maxRadius;
 
-	double centerZ = static_cast<double>((voxelTarget.z / 24) + 0.5); // kL
-	double centerX = static_cast<double>((voxelTarget.x / 16) + 0.5); // kL
-	double centerY = static_cast<double>((voxelTarget.y / 16) + 0.5); // kL
+	double centerZ = static_cast<double>((voxelTarget.z / 24) + 0.5);
+	double centerX = static_cast<double>((voxelTarget.x / 16) + 0.5);
+	double centerY = static_cast<double>((voxelTarget.y / 16) + 0.5);
 
 	int
 		power_,
@@ -1994,15 +1996,12 @@ void TileEngine::explode(
 
 	int
 		vertdec = 1000, // default flat explosion
-		exHeight = std::max(
+		explHeight = std::max(
 						0,
 						std::min(
 								3,
 								Options::getInt("battleExplosionHeight")));
-//	int exHeight = Options::getInt("battleExplosionHeight");
-//	if (exHeight < 0) exHeight = 0;
-//	if (exHeight > 3) exHeight = 3;
-	switch (exHeight)
+	switch (explHeight)
 	{
 		case 1:
 			vertdec = 30;
@@ -2059,18 +2058,17 @@ void TileEngine::explode(
 				tileX = static_cast<int>(floor(vx));
 				tileY = static_cast<int>(floor(vy));
 
-				Tile* dest = _save->getTile(Position(
+				Tile* destTile = _save->getTile(Position(
 													tileX,
 													tileY,
 													tileZ));
 
-				if (!dest) break; // out of map!
+				if (!destTile) break; // out of map!
 
 
 				// blockage by terrain is deducted from the explosion power
 				if (std::abs(l) > 0) // no need to block epicentrum
 				{
-//Wb.140118					power_ -= (horizontalBlockage(origin, dest, type) + verticalBlockage(origin, dest, type)) * 2;
 					power_ -= 10; // explosive damage decreases by 10 per tile
 					if (origin->getPosition().z != tileZ) // 3d explosion factor
 						power_ -= vertdec;
@@ -2079,87 +2077,85 @@ void TileEngine::explode(
 					{
 						int dir;
 						Pathfinding::vectorToDirection(
-													origin->getPosition() - dest->getPosition(),
+													origin->getPosition() - destTile->getPosition(),
 													dir);
 
 						if (dir != -1 && dir %2)
 							power_ -= 5; // diagonal movement costs an extra 50% for fire.
 					}
 
-					penetration = power_ // Wb.140118
+					penetration = power_
 									- (horizontalBlockage(
 														origin,
-														dest,
+														destTile,
 														type)
 											+ verticalBlockage(
 															origin,
-															dest,
+															destTile,
 															type))
 										* 2;
 				}
 
-//Wb				if (power_ > 0)
-				if (penetration > 0) // Wb.
+				if (penetration > 0)
 				{
 					//Log(LOG_INFO) << ". power_ > 0";
-
 					if (type == DT_HE)
 					{
 						// explosives do 1/2 damage to terrain and 1/2 up to 3/2
 						// random damage to units (the halving is handled elsewhere)
-						dest->setExplosive(power_);
+						destTile->setExplosive(power_);
 					}
 
-					ret = tilesAffected.insert(dest); // check if we had this tile already
+					ret = tilesAffected.insert(destTile); // check if we had this tile already
 					if (ret.second)
 					{
 						switch (type)
 						{
 							case DT_STUN: // power 0 - 200%
-								if (dest->getUnit())
+								if (destTile->getUnit())
 								{
 									if (distance(
-												dest->getPosition(),
+												destTile->getPosition(),
 												Position(
 														static_cast<int>(centerX),
 														static_cast<int>(centerY),
 														static_cast<int>(centerZ)))
 													< 2)
 									{
-//kL										dest->getUnit()->damage(Position(0, 0, 0), RNG::generate(0, power_*2), type);
+//kL										destTile->getUnit()->damage(Position(0, 0, 0), RNG::generate(0, power_*2), type);
 										int powerVsUnit = RNG::generate(1, power_ * 2); // kL
-										Log(LOG_INFO) << ". . . powerVsUnit = " << powerVsUnit << " DT_STUN";
-										dest->getUnit()->damage(
+										Log(LOG_INFO) << ". . . powerVsUnit = " << powerVsUnit << " DT_STUN, GZ";
+										destTile->getUnit()->damage(
 															Position(0, 0, 0),
 															powerVsUnit,
 															type); // kL
 									}
 									else
 									{
-//kL										dest->getUnit()->damage(Position(centerX, centerY, centerZ) - dest->getPosition(),
+//kL										destTile->getUnit()->damage(Position(centerX, centerY, centerZ) - destTile->getPosition(),
 //kL																						RNG::generate(0, power_*2), type);
 										int powerVsUnit = RNG::generate(1, power_ * 2); // kL
-										Log(LOG_INFO) << ". . . powerVsUnit = " << powerVsUnit << " DT_STUN, GZ";
-										dest->getUnit()->damage(
+										Log(LOG_INFO) << ". . . powerVsUnit = " << powerVsUnit << " DT_STUN, not GZ";
+										destTile->getUnit()->damage(
 															Position(
 																static_cast<int>(centerX),
 																static_cast<int>(centerY),
-																static_cast<int>(centerZ)) - dest->getPosition(),
+																static_cast<int>(centerZ)) - destTile->getPosition(),
 															powerVsUnit,
 															type); // kL
 									}
 								}
 
 								for (std::vector<BattleItem*>::iterator
-										it = dest->getInventory()->begin();
-										it != dest->getInventory()->end();
+										it = destTile->getInventory()->begin();
+										it != destTile->getInventory()->end();
 										++it)
 								{
 									if ((*it)->getUnit())
 									{
 //kL										(*it)->getUnit()->damage(Position(0, 0, 0), RNG::generate(0, power_ *2), type);
 										int powerVsCorpse = RNG::generate(1, power_ * 2); // kL
-										Log(LOG_INFO) << ". . . . powerVsCorpse = " << powerVsCorpse << " DT_STUN, not GZ";
+										Log(LOG_INFO) << ". . . . powerVsCorpse = " << powerVsCorpse << " DT_STUN";
 										(*it)->getUnit()->damage(
 															Position(0, 0, 0),
 															powerVsCorpse,
@@ -2171,11 +2167,11 @@ void TileEngine::explode(
 							{
 								//Log(LOG_INFO) << ". . type == DT_HE";
 
-								BattleUnit* targetUnit = dest->getUnit();
+								BattleUnit* targetUnit = destTile->getUnit();
 								if (targetUnit)
 								{
 									if (distance(
-												dest->getPosition(),
+												destTile->getPosition(),
 												Position(
 														static_cast<int>(centerX),
 														static_cast<int>(centerY),
@@ -2183,7 +2179,7 @@ void TileEngine::explode(
 													< 2)
 									{
 										// ground zero effect is in effect
-//kL										dest->getUnit()->damage(Position(0, 0, 0), (int)(RNG::generate(power_/2.0, power_*1.5)), type);
+//kL										destTile->getUnit()->damage(Position(0, 0, 0), (int)(RNG::generate(power_/2.0, power_*1.5)), type);
 										int powerVsUnit = static_cast<int>(RNG::generate( // 50% to 150%
 																	static_cast<double>(power_) * 0.5,
 																	static_cast<double>(power_) * 1.5)); // kL
@@ -2204,7 +2200,7 @@ void TileEngine::explode(
 									{
 										// directional damage relative to explosion position.
 										// units above the explosion will be hit in the legs, units lateral to or below will be hit in the torso
-//kL										dest->getUnit()->damage(Position(centerX, centerY, centerZ + 5) - dest->getPosition(), (int)(RNG::generate(power_/2.0, power_*1.5)), type);
+//kL										destTile->getUnit()->damage(Position(centerX, centerY, centerZ + 5) - destTile->getPosition(), (int)(RNG::generate(power_/2.0, power_*1.5)), type);
 										int powerVsUnit = static_cast<int>(RNG::generate( // 50% to 150%
 																	static_cast<double>(power_) * 0.5,
 																	static_cast<double>(power_) * 1.5)); // kL
@@ -2220,97 +2216,92 @@ void TileEngine::explode(
 														Position(
 															static_cast<int>(centerX),
 															static_cast<int>(centerY),
-															static_cast<int>(centerZ) + 5) - dest->getPosition(),
+															static_cast<int>(centerZ) + 5) - destTile->getPosition(),
 														powerVsUnit,
 														type); // kL
 									}
 								}
 
-								bool done = false;
-								while (!done)
+								// So i made some adjustments....
+								for (std::vector<BattleItem*>::iterator
+										item = destTile->getInventory()->begin();
+										item != destTile->getInventory()->end();
+										++item)
 								{
-									done = dest->getInventory()->empty();
-
-									for (std::vector<BattleItem*>::iterator
-											it = dest->getInventory()->begin();
-											it != dest->getInventory()->end();
-											)
+									if (power_ > (*item)->getRules()->getArmor())
 									{
-										if (power_ > (*it)->getRules()->getArmor())
+										if ((*item)->getUnit()
+											&& (*item)->getUnit()->getStatus() == STATUS_UNCONSCIOUS)
 										{
-											if ((*it)->getUnit()
-												&& (*it)->getUnit()->getStatus() == STATUS_UNCONSCIOUS)
-											{
-												Log(LOG_INFO) << ". . . . Frank blow'd up.";
-												(*it)->getUnit()->instaKill();
-											}
-
-											Log(LOG_INFO) << ". . . item destroyed";
-											_save->removeItem((*it));
-
-											break;
+											Log(LOG_INFO) << ". . . . Frankie blow'd up.";
+											(*item)->getUnit()->instaKill();
 										}
-										else
-										{
-											++it;
-											done = (it == dest->getInventory()->end());
-										}
+
+										Log(LOG_INFO) << ". . . item destroyed";
+										_save->removeItem((*item));
+
+										--item;
 									}
 								}
 							}
 							break;
 							case DT_SMOKE:	// smoke from explosions always stay 6 to 14 turns - power of a smoke grenade is 60
 											// kL_note: Could do instant smoke inhalation damage here (sorta like Fire or Stun).
-								if (dest->getSmoke() < 10
-									&& dest->getTerrainLevel() > -24)
+								if (destTile->getSmoke() < 10
+									&& destTile->getTerrainLevel() > -24)
 								{
-									dest->setFire(0);
-									dest->setSmoke(RNG::generate(7, 15));
+									destTile->setFire(0);
+									destTile->setSmoke(RNG::generate(7, 15));
 								}
 							break;
 							case DT_IN:
-								if (!dest->isVoid())
+								if (!destTile->isVoid())
 								{
-									if (dest->getFire() == 0)
+									// kL_note: So, this just sets a tile on fire/smoking regardless of its content.
+									// cf. Tile::ignite() -> well, not regardless, but automatically. That is,
+									// ignite() checks for Flammability first: if (getFlammability() == 255) don't do it.
+									// So this is, like, napalm from an incendiary round, while ignite() is for parts
+									// of the tile itself self-igniting.
+									if (destTile->getFire() == 0)
 									{
-										dest->setFire(dest->getFuel() + 1);
-										dest->setSmoke(std::max(
+										destTile->setFire(destTile->getFuel() + 1);
+										destTile->setSmoke(std::max(
 															1,
 															std::min(
-																	15 - (dest->getFlammability() / 10),
+																	15 - (destTile->getFlammability() / 10),
 																	12)));
 									}
 
 									// kL_note: fire damage is also caused by BattlescapeGame::endTurn()
 									// -- but previously by BattleUnit::prepareNewTurn()!!!!
-									if (dest->getUnit())
+									BattleUnit* targetUnit = destTile->getUnit();
+									if (targetUnit)
 									{
-										float resistance = dest->getUnit()->getArmor()->getDamageModifier(DT_IN);
-										if (resistance > 0.f)
+										float modifier = targetUnit->getArmor()->getDamageModifier(DT_IN);
+										if (modifier > 0.f)
 										{
-//kL											int fire = RNG::generate(4, 11); // <- why is this not based on power_
-											int fire = RNG::generate( // 25% - 75%
+//kL											int fire = RNG::generate(4, 11);
+											int firePower = RNG::generate( // kL: 25% - 75%
 																	power_ / 4,
-																	power_ * 3 / 4); // kL: 25 - 50%
+																	power_ * 3 / 4);
 
-//kL											dest->getUnit()->damage(Position(0, 0, 12-dest->getTerrainLevel()),
+//kL											destTile->getUnit()->damage(Position(0, 0, 12-destTile->getTerrainLevel()),
 //kL																			RNG::generate(5, 10), DT_IN, true);
-											dest->getUnit()->damage(
-																Position(
-																		0,
-																		0,
-																		12 - dest->getTerrainLevel()),
-																fire,
-																DT_IN,
-																true); // kL
-											Log(LOG_INFO) << ". . DT_IN : " << dest->getUnit()->getId() << " takes " << fire << " fire";
+											targetUnit->damage(
+															Position(
+																	0,
+																	0,
+																	12 - destTile->getTerrainLevel()),
+															firePower,
+															DT_IN,
+															true); // kL
+											Log(LOG_INFO) << ". . DT_IN : " << targetUnit->getId() << " takes " << firePower << " firePower";
 
-//kL											int burnTime = RNG::generate(0, int(5 * resistance));
-											int burnTime = RNG::generate(0, static_cast<int>(5.f * resistance)); // kL
-											if (dest->getUnit()->getFire() < burnTime)
-											{
-												dest->getUnit()->setFire(burnTime); // catch fire and burn
-											}
+											int burnTime = RNG::generate(
+																	0,
+																	static_cast<int>(5.f * modifier));
+											if (targetUnit->getFire() < burnTime)
+												targetUnit->setFire(burnTime); // catch fire and burn
 										}
 									}
 								}
@@ -2321,20 +2312,20 @@ void TileEngine::explode(
 						}
 
 						if (unit
-							&& dest->getUnit()
-							&& unit->getOriginalFaction() == FACTION_PLAYER					// kL, shooter is Xcom
-							&& unit->getFaction() == FACTION_PLAYER							// kL, shooter is not Mc'd Xcom
-							&& dest->getUnit()->getOriginalFaction() == FACTION_HOSTILE)	// kL, target is aLien Mc'd or not.
-																							//		no Xp for shooting civies...
-//							&& dest->getUnit()->getFaction() != unit->getFaction())
+							&& destTile->getUnit()
+							&& unit->getOriginalFaction() == FACTION_PLAYER						// kL, shooter is Xcom
+							&& unit->getFaction() == FACTION_PLAYER								// kL, shooter is not Mc'd Xcom
+							&& destTile->getUnit()->getOriginalFaction() == FACTION_HOSTILE)	// kL, target is aLien Mc'd or not.
+																								//		no Xp for shooting civies...
+//							&& destTile->getUnit()->getFaction() != unit->getFaction())
 						{
 							unit->addFiringExp();
 						}
 					}
 				}
 
-				power_ = penetration; // Wb.
-				origin = dest;
+				power_ = penetration;
+				origin = destTile;
 
 				l++;
 			}

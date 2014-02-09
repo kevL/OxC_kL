@@ -289,6 +289,9 @@ private:
 		bool getKneelReserved();
 		/// Checks for and triggers proximity grenades.
 		bool checkForProximityGrenades(BattleUnit* unit);
+
+		/// kL. Gets the BattlescapeState.
+		BattlescapeState* getBattlescapeState() const;
 };
 
 }

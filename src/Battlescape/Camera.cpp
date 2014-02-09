@@ -108,13 +108,9 @@ void Camera::minMaxInt(
 		const int maxValue) const
 {
 	if (*value < minValue)
-	{
 		*value = minValue;
-	}
 	else if (*value > maxValue)
-	{
 		*value = maxValue;
-	}
 }
 
 /**
@@ -125,13 +121,9 @@ void Camera::minMaxInt(
 void Camera::mousePress(Action* action, State*)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
-	{
 		down();
-	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN)
-	{
 		up();
-	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_LEFT
 		&& Options::getInt("battleScrollType") == SCROLL_TRIGGER)
 	{
@@ -157,10 +149,12 @@ void Camera::mouseRelease(Action* action, State*)
 
 		int posX = action->getXMouse();
 		int posY = action->getYMouse();
-		if ((posX < SCROLL_BORDER * action->getXScale() && posX > 0)
-				|| (posX > (_screenWidth - SCROLL_BORDER) * action->getXScale())
-				|| (posY < SCROLL_BORDER * action->getYScale() && posY > 0)
-				|| (posY > (_screenHeight - SCROLL_BORDER) * action->getYScale()))
+		if ((posX > 0
+				&& posX < SCROLL_BORDER * action->getXScale())
+			|| posX > (_screenWidth - SCROLL_BORDER) * action->getXScale()
+			|| (posY > 0
+				&& posY < SCROLL_BORDER * action->getYScale())
+			|| posY > (_screenHeight - SCROLL_BORDER) * action->getYScale())
 		{
 			// A cheap hack to avoid handling this event as a click
 			// on the map when the mouse is on the scroll-border
@@ -176,10 +170,7 @@ void Camera::mouseRelease(Action* action, State*)
  */
 void Camera::mouseOver(Action* action, State*)
 {
-	if (_map->getCursorType() == CT_NONE)
-	{
-		return;
-	}
+	if (_map->getCursorType() == CT_NONE) return;
 
 
 	if (Options::getInt("battleScrollType") == SCROLL_AUTO
@@ -190,21 +181,18 @@ void Camera::mouseOver(Action* action, State*)
 		int scrollSpeed = Options::getInt("battleScrollSpeed");
 
 //kL		if (posX < (SCROLL_BORDER * action->getXScale()) && posX >= 0) // left scroll
-		if (posX < SCROLL_BORDER * action->getXScale())		// kL
+		if (posX < SCROLL_BORDER * action->getXScale()) // kL
 		{
 			_scrollMouseX = scrollSpeed;
 
 			// if close to top or bottom, also scroll diagonally
 //kL			if (posY < (SCROLL_DIAGONAL_EDGE * action->getYScale()) && posY >= 0) // down left
-			if (posY < SCROLL_DIAGONAL_EDGE * action->getYScale())		// kL
-			{
+			if (posY < SCROLL_DIAGONAL_EDGE * action->getYScale()) // kL
 				_scrollMouseY = scrollSpeed / 2;
-			}
 			else if (posY > (_screenHeight - SCROLL_DIAGONAL_EDGE) * action->getYScale()) // up left
-			{
 				_scrollMouseY = -scrollSpeed / 2;
-			}
-			else _scrollMouseY = 0;		// kL
+			else
+				_scrollMouseY = 0; // kL
 		}
 		else if (posX > (_screenWidth - SCROLL_BORDER) * action->getXScale()) // right scroll
 		{
@@ -212,29 +200,24 @@ void Camera::mouseOver(Action* action, State*)
 
 			// if close to top or bottom, also scroll diagonally
 //kL			if (posY <= (SCROLL_DIAGONAL_EDGE * action->getYScale()) && posY >= 0) // down right
-			if (posY < SCROLL_DIAGONAL_EDGE * action->getYScale())		// kL
-			{
+			if (posY < SCROLL_DIAGONAL_EDGE * action->getYScale()) // kL
 				_scrollMouseY = scrollSpeed / 2;
-			}
 			else if (posY > (_screenHeight - SCROLL_DIAGONAL_EDGE) * action->getYScale()) // up right
-			{
 				_scrollMouseY = -scrollSpeed / 2;
-			}
-			else _scrollMouseY = 0;		// kL
+			else
+				_scrollMouseY = 0; // kL
 		}
 		else if (posX)
-		{
 			_scrollMouseX = 0;
-		}
 
 //kL		if (posY < (SCROLL_BORDER * action->getYScale()) && posY >= 0) // up scroll
-		if (posY < SCROLL_BORDER * action->getYScale())		// kL
+		if (posY < SCROLL_BORDER * action->getYScale()) // kL
 		{
 			_scrollMouseY = scrollSpeed;
 
 			// if close to left or right edge, also scroll diagonally
 //kL			if (posX < (SCROLL_DIAGONAL_EDGE * action->getXScale()) && posX > 0) // up left
-			if (posX < SCROLL_DIAGONAL_EDGE * action->getXScale())	// kL
+			if (posX < SCROLL_DIAGONAL_EDGE * action->getXScale()) // kL
 			{
 				_scrollMouseX = scrollSpeed;
 				_scrollMouseY /= 2;
@@ -251,7 +234,7 @@ void Camera::mouseOver(Action* action, State*)
 
 			// if close to left or right edge, also scroll diagonally
 //kL			if (posX < (SCROLL_DIAGONAL_EDGE * action->getXScale()) && posX >= 0) // down left
-			if (posX < SCROLL_DIAGONAL_EDGE * action->getXScale())		// kL
+			if (posX < SCROLL_DIAGONAL_EDGE * action->getXScale()) // kL
 			{
 				_scrollMouseX = scrollSpeed;
 				_scrollMouseY /= 2;
@@ -262,12 +245,14 @@ void Camera::mouseOver(Action* action, State*)
 				_scrollMouseY /= 2;
 			}
 		}
-		else if (posY && _scrollMouseX == 0)
+		else if (posY
+			&& _scrollMouseX == 0)
 		{
 			_scrollMouseY = 0;
 		}
 
-		if ((_scrollMouseX || _scrollMouseY)
+		if ((_scrollMouseX
+				|| _scrollMouseY)
 			&& !_scrollMouseTimer->isRunning()
 			&& !_scrollKeyTimer->isRunning())
 		{
@@ -289,33 +274,22 @@ void Camera::mouseOver(Action* action, State*)
  */
 void Camera::keyboardPress(Action* action, State*)
 {
-	if (_map->getCursorType() == CT_NONE)
-	{
-		return;
-	}
+	if (_map->getCursorType() == CT_NONE) return;
 
-	int scrollSpeed = Options::getInt("battleScrollSpeed"); // kL
+	int scrollSpeed = Options::getInt("battleScrollSpeed");
 
 	int key = action->getDetails()->key.keysym.sym;
-//kL	int scrollSpeed = Options::getInt("battleScrollSpeed");
 	if (key == Options::getInt("keyBattleLeft"))
-	{
 		_scrollKeyX = scrollSpeed;
-	}
 	else if (key == Options::getInt("keyBattleRight"))
-	{
 		_scrollKeyX = -scrollSpeed;
-	}
 	else if (key == Options::getInt("keyBattleUp"))
-	{
 		_scrollKeyY = scrollSpeed;
-	}
 	else if (key == Options::getInt("keyBattleDown"))
-	{
 		_scrollKeyY = -scrollSpeed;
-	}
 
-	if ((_scrollKeyX || _scrollKeyY)
+	if ((_scrollKeyX
+			|| _scrollKeyY)
 		&& !_scrollKeyTimer->isRunning()
 		&& !_scrollMouseTimer->isRunning())
 	{
@@ -336,30 +310,20 @@ void Camera::keyboardPress(Action* action, State*)
  */
 void Camera::keyboardRelease(Action* action, State*)
 {
-	if (_map->getCursorType() == CT_NONE)
-	{
-		return;
-	}
+	if (_map->getCursorType() == CT_NONE) return;
 
 	int key = action->getDetails()->key.keysym.sym;
 	if (key == Options::getInt("keyBattleLeft"))
-	{
 		_scrollKeyX = 0;
-	}
 	else if (key == Options::getInt("keyBattleRight"))
-	{
 		_scrollKeyX = 0;
-	}
 	else if (key == Options::getInt("keyBattleUp"))
-	{
 		_scrollKeyY = 0;
-	}
 	else if (key == Options::getInt("keyBattleDown"))
-	{
 		_scrollKeyY = 0;
-	}
 
-	if ((_scrollKeyX || _scrollKeyY)
+	if ((_scrollKeyX
+			|| _scrollKeyY)
 		&& !_scrollKeyTimer->isRunning()
 		&& !_scrollMouseTimer->isRunning())
 	{
@@ -378,7 +342,10 @@ void Camera::keyboardRelease(Action* action, State*)
  */
 void Camera::scrollMouse()
 {
-	scrollXY(_scrollMouseX, _scrollMouseY, true);
+	scrollXY(
+			_scrollMouseX,
+			_scrollMouseY,
+			true);
 }
 
 /**
@@ -386,7 +353,10 @@ void Camera::scrollMouse()
  */
 void Camera::scrollKey()
 {
-	scrollXY(_scrollKeyX, _scrollKeyY, true);
+	scrollXY(
+			_scrollKeyX,
+			_scrollKeyY,
+			true);
 }
 
 /**
@@ -452,8 +422,8 @@ void Camera::scrollXY(
 
 	_map->refreshSelectorPosition();
 
-//kL	if (redraw) _map->invalidate();
 	if (redraw)
+//kL		_map->invalidate();
 		_map->draw(); // kL, old code.
 }
 

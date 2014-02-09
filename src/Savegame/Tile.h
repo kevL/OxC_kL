@@ -31,7 +31,6 @@
 #include "../Ruleset/MapData.h"
 
 
-
 namespace OpenXcom
 {
 

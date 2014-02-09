@@ -922,7 +922,7 @@ void BattlescapeState::mapClick(Action* action)
 	if (_isMouseScrolling)
 	{
 		if (action->getDetails()->button.button != _save->getDragButton()
-			&& 0 == (SDL_GetMouseState(0, 0) & SDL_BUTTON(_save->getDragButton())))
+			&& (SDL_GetMouseState(0, 0) & SDL_BUTTON(_save->getDragButton())) == 0)
 			// so we missed again the mouse-release :(
 		{
 			// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
@@ -941,7 +941,7 @@ void BattlescapeState::mapClick(Action* action)
 	{
 		// While scrolling, other buttons are ineffective
 		if (action->getDetails()->button.button == _save->getDragButton())
-				_isMouseScrolling = false;
+			_isMouseScrolling = false;
 		else
 			//Log(LOG_INFO) << ". . isMouseScrolled = FALSE, return";
 			return;
@@ -1162,9 +1162,8 @@ void BattlescapeState::btnInventoryClick(Action*)
 		{
 			if ((*i)->getFaction() == _save->getSide())
 				(*i)->prepareNewTurn();
-			{
-				updateSoldierInfo();
-			}
+
+			updateSoldierInfo();
 		}
 	}
 
@@ -1570,7 +1569,8 @@ void BattlescapeState::btnPersonalLightingClick(Action*)
  */
 bool BattlescapeState::playableUnitSelected()
 {
-	return _save->getSelectedUnit() != 0 && allowButtons();
+	return _save->getSelectedUnit() != 0
+			&& allowButtons();
 }
 
 /**
@@ -1578,7 +1578,7 @@ bool BattlescapeState::playableUnitSelected()
  */
 void BattlescapeState::updateSoldierInfo(bool calcFoV)
 {
-	//Log(LOG_INFO) << "BattlescapeState::updateSoldierInfo()";
+	Log(LOG_INFO) << "BattlescapeState::updateSoldierInfo( " << calcFoV << " )";
 
 	for (int // remove red target indicators
 			i = 0;
@@ -1657,35 +1657,39 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 	}
 
 
-	BattleUnit* selectedUnit;
+	BattleUnit* selectedUnit = 0;
 	if (_save->getSelectedUnit())
 	{
 		selectedUnit = _save->getSelectedUnit();
 		//Log(LOG_INFO) << ". . selectedUnit ID " << selectedUnit->getId();
 	}
 	else // safety.
-	{
 		//Log(LOG_INFO) << ". . selectedUnit = 0 return";
 		return;
-	}
 
 
 	if (calcFoV)
 		_save->getTileEngine()->calculateFOV(selectedUnit);
+
+//	if (selectedUnit->getShowVisUnits()) // kL
+//	{
+//	Log(LOG_INFO) << ". . showVisUnits = " << selectedUnit->getShowVisUnits();
 
 	int j = 0;
 	for (std::vector<BattleUnit*>::iterator
 			i = selectedUnit->getVisibleUnits()->begin();
 			i != selectedUnit->getVisibleUnits()->end()
 				&& j < VISIBLE_MAX;
-			++i)
+			++i,
+				++j) // kL
 	{
 		_btnVisibleUnit[j]->setVisible(true);
 		_numVisibleUnit[j]->setVisible(true);
 
 		_visibleUnit[j] = *i;
 
-		++j;
+//kL		++j;
+//		}
 	}
 
 
@@ -1719,20 +1723,25 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 	int tu = selectedUnit->getTimeUnits();
 	_numTimeUnits->setValue(static_cast<unsigned>(tu));
 	_barTimeUnits->setMax(100.0);
-	_barTimeUnits->setValue(static_cast<double>(tu) / stat * 100.0);
+//	_barTimeUnits->setValue(static_cast<double>(tu) / stat * 100.0);
+	_barTimeUnits->setValue(ceil(
+							static_cast<double>(tu) / stat * 100.0));
 
 	stat = static_cast<double>(selectedUnit->getStats()->stamina);
 	int energy = selectedUnit->getEnergy();
 	_numEnergy->setValue(static_cast<unsigned>(energy));
 	_barEnergy->setMax(100.0);
-	_barEnergy->setValue(static_cast<double>(energy) / stat * 100.0);
+	_barEnergy->setValue(ceil(
+							static_cast<double>(energy) / stat * 100.0));
 
 	stat = static_cast<double>(selectedUnit->getStats()->health);
 	int health = selectedUnit->getHealth();
 	_numHealth->setValue(static_cast<unsigned>(health));
 	_barHealth->setMax(100.0);
-	_barHealth->setValue(static_cast<double>(health) / stat * 100.0);
-	_barHealth->setValue2(static_cast<double>(selectedUnit->getStunlevel()) / stat * 100.0);
+	_barHealth->setValue(ceil(
+							static_cast<double>(health) / stat * 100.0));
+	_barHealth->setValue2(ceil(
+							static_cast<double>(selectedUnit->getStunlevel()) / stat * 100.0));
 
 	int morale = selectedUnit->getMorale();
 	_numMorale->setValue(static_cast<unsigned>(morale));
@@ -2581,13 +2590,13 @@ void BattlescapeState::popup(State* state)
  * @param inExitArea, Number of soldiers in the exit area OR number of survivors
  *		when battle finished due to either all aliens or objective being destroyed.
  */
-void BattlescapeState::finishBattle(bool abort, int inExitArea)
+void BattlescapeState::finishBattle(
+		bool abort,
+		int inExitArea)
 {
 	//Log(LOG_INFO) << "BattlescapeState::finishBattle()";
 	while (!_game->isState(this))
-	{
 		_game->popState();
-	}
 
 	_game->getCursor()->setVisible(true);
 	std::string nextStage = "";
@@ -2623,7 +2632,8 @@ void BattlescapeState::finishBattle(bool abort, int inExitArea)
 		_game->popState();
 
 		if (abort
-			|| (!abort  && inExitArea == 0))
+			|| (!abort
+				&& inExitArea == 0))
 		{
 			//Log(LOG_INFO) << ". . missionAborted";
 			// abort was done or no player is still alive
@@ -2635,11 +2645,9 @@ void BattlescapeState::finishBattle(bool abort, int inExitArea)
 				_game->pushState(new DefeatState(_game));
 			}
 			else
-			{
 				//Log(LOG_INFO) << ". . . new DebriefingState";
 				_game->pushState(new DebriefingState(_game));
 				//Log(LOG_INFO) << ". . . new DebriefingState DONE";
-			}
 		}
 		else
 		{
@@ -2651,9 +2659,7 @@ void BattlescapeState::finishBattle(bool abort, int inExitArea)
 				_game->pushState(new VictoryState(_game));
 			}
 			else
-			{
 				_game->pushState(new DebriefingState(_game));
-			}
 		}
 
 		//Log(LOG_INFO) << ". . set Cursor & FPS colors";
@@ -2839,6 +2845,95 @@ void BattlescapeState::toggleIcons(bool vis)
 {
 	_icons->setVisible(vis);
 	_numLayers->setVisible(vis);
+}
+
+/**
+ * kL. Toggles the visUnits' surfaces' visibility for UnitWalk/TurnBStates.
+ */
+/* void BattlescapeState::toggleVisUnits(bool vis)
+{
+	Log(LOG_INFO) << "BattlescapeState::toggleVisUnits() " << vis;
+	if (!playableUnitSelected()) return;
+
+
+	if (!vis)
+	{
+		for (int // remove red target indicators
+				i = 0;
+				i < VISIBLE_MAX;
+				++i)
+		{
+			_btnVisibleUnit[i]->setVisible(false);
+			_numVisibleUnit[i]->setVisible(false);
+
+			_visibleUnit[i] = 0;
+		}
+	}
+	else
+	{
+		BattleUnit* selectedUnit = 0;
+		if (_save->getSelectedUnit())
+		{
+			selectedUnit = _save->getSelectedUnit();
+			Log(LOG_INFO) << ". selUnit ID " << selectedUnit->getId();
+		}
+
+		int j = 0;
+		for (std::vector<BattleUnit*>::iterator
+				i = selectedUnit->getVisibleUnits()->begin();
+				i != selectedUnit->getVisibleUnits()->end()
+					&& j < VISIBLE_MAX;
+				++i,
+					++j) // kL
+		{
+			_btnVisibleUnit[j]->setVisible(true);
+			_numVisibleUnit[j]->setVisible(true);
+
+			_visibleUnit[j] = *i;
+		}
+	}
+} */
+
+/**
+ * kL. Refreshes the visUnits indicators for UnitWalk/TurnBStates.
+ */
+void BattlescapeState::refreshVisUnits()
+{
+	Log(LOG_INFO) << "BattlescapeState::refreshVisUnits()";
+	if (!playableUnitSelected()) return;
+
+
+	for (int // remove red target indicators
+			i = 0;
+			i < VISIBLE_MAX;
+			++i)
+	{
+		_btnVisibleUnit[i]->setVisible(false);
+		_numVisibleUnit[i]->setVisible(false);
+
+		_visibleUnit[i] = 0;
+	}
+
+	BattleUnit* selectedUnit = 0;
+	if (_save->getSelectedUnit())
+	{
+		selectedUnit = _save->getSelectedUnit();
+		Log(LOG_INFO) << ". selUnit ID " << selectedUnit->getId();
+	}
+
+	int j = 0;
+	for (std::vector<BattleUnit*>::iterator
+			i = selectedUnit->getVisibleUnits()->begin();
+			i != selectedUnit->getVisibleUnits()->end()
+				&& j < VISIBLE_MAX;
+			++i,
+				++j) // kL
+	{
+		_btnVisibleUnit[j]->setVisible(true);
+		_numVisibleUnit[j]->setVisible(true);
+
+		_visibleUnit[j] = *i;
+	}
 }
 
 }

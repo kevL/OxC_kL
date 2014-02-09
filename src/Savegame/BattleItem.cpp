@@ -192,9 +192,7 @@ void BattleItem::setExplodeTurn(int turn)
 int BattleItem::getAmmoQuantity() const
 {
 	if (_rules->getClipSize() == -1) // is Laser, etc.
-	{
 		return 255;
-	}
 
 	return _ammoQuantity;
 }
@@ -358,19 +356,16 @@ bool BattleItem::occupiesSlot(
 		return true;
 
 	if (item == 0)
-	{
 		return (x >= _inventoryX
 				&& x < _inventoryX + _rules->getInventoryWidth()
 				&& y >= _inventoryY
 				&& y < _inventoryY + _rules->getInventoryHeight());
-	}
 	else
-	{
-		return !(x >= _inventoryX + _rules->getInventoryWidth()
+		return !(
+				x >= _inventoryX + _rules->getInventoryWidth()
 				|| x + item->getRules()->getInventoryWidth() <= _inventoryX
 				|| y >= _inventoryY + _rules->getInventoryHeight()
 				|| y + item->getRules()->getInventoryHeight() <= _inventoryY);
-	}
 }
 
 /**
@@ -416,14 +411,12 @@ int BattleItem::setAmmoItem(BattleItem* item)
 			i = _rules->getCompatibleAmmo()->begin();
 			i != _rules->getCompatibleAmmo()->end();
 			++i)
-	{
 		if (*i == item->getRules()->getType())
 		{
 			_ammoItem = item;
 
 			return 0;
 		}
-	}
 
 	return -2;
 }
@@ -549,8 +542,9 @@ bool BattleItem::getXCOMProperty() const
 }
 
 /**
- * Gets the "dropped on non-player turn" flag. This is to determine whether or not
- * aliens should attempt to pick this item up, as items dropped by the player may be "honey traps".
+ * Gets the "dropped on non-player turn" flag. This is to determine whether or not aliens
+ * should attempt to pick this item up, as items dropped by the player may be "honey traps".
+ * kL_note: holy shit that's cynical. (or just fascits)
  * @return True if the aliens dropped the item.
  */
 bool BattleItem::getTurnFlag() const
@@ -559,8 +553,8 @@ bool BattleItem::getTurnFlag() const
 }
 
 /**
- * Sets the "dropped on non-player turn" flag. This is set when the item is dropped in the battlescape
- * or picked up in the inventory screen.
+ * Sets the "dropped on non-player turn" flag. This is set when the item
+ * is dropped in the battlescape or picked up in the inventory screen.
  * @param flag True if the aliens dropped the item.
  */
 void BattleItem::setTurnFlag(bool flag)

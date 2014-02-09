@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
@@ -20,16 +20,18 @@
 #ifndef OPENXCOM_INFOBOXOKSTATE_H
 #define OPENXCOM_INFOBOXOKSTATE_H
 
-#include "../Engine/State.h"
 #include <string>
+
+#include "../Engine/State.h"
 
 
 namespace OpenXcom
 {
 
-class TextButton;
 class Frame;
 class Text;
+class TextButton;
+
 
 /**
  * Notifies the player about things like soldiers going unconscious or dying from wounds.
@@ -38,14 +40,18 @@ class InfoboxOKState
 	:
 		public State
 {
+
 private:
-	TextButton* _btnOk;
 	Frame* _frame;
 	Text* _txtTitle;
+	TextButton* _btnOk;
+
 
 	public:
 		/// Creates the InfoboxOKState.
-		InfoboxOKState(Game* game, const std::wstring& msg);
+		InfoboxOKState(
+				Game* game,
+				const std::wstring& msg);
 		/// Cleans up the InfoboxOKState.
 		~InfoboxOKState();
 

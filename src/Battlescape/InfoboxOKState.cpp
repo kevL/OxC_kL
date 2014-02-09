@@ -18,14 +18,16 @@
  */
 
 #include "InfoboxOKState.h"
+
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
+#include "../Engine/Options.h"
 #include "../Engine/Palette.h"
-#include "../Interface/TextButton.h"
+
+#include "../Interface/Cursor.h"
 #include "../Interface/Frame.h"
 #include "../Interface/Text.h"
-#include "../Interface/Cursor.h"
-#include "../Engine/Options.h"
+#include "../Interface/TextButton.h"
 
 
 namespace OpenXcom
@@ -36,7 +38,9 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param msg Message string.
  */
-InfoboxOKState::InfoboxOKState(Game* game, const std::wstring& msg)
+InfoboxOKState::InfoboxOKState(
+		Game* game,
+		const std::wstring& msg)
 	:
 		State(game)
 {
@@ -69,8 +73,12 @@ InfoboxOKState::InfoboxOKState(Game* game, const std::wstring& msg)
 	_btnOk->setColor(Palette::blockOffset(1)-1);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& InfoboxOKState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)& InfoboxOKState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
-	_btnOk->onKeyboardPress((ActionHandler)& InfoboxOKState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& InfoboxOKState::btnOkClick,
+					(SDLKey)Options::getInt("keyOk"));
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& InfoboxOKState::btnOkClick,
+					(SDLKey)Options::getInt("keyCancel"));
 	_btnOk->setHighContrast(true);
 
 	_game->getCursor()->setVisible(true);

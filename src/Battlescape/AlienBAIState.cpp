@@ -2238,40 +2238,38 @@ void AlienBAIState::grenadeAction()
 //						true))
 	{
 //		if (_unit->getFaction() == FACTION_HOSTILE)
+//		{
+		int tu = 0;
+
+		if (!_grenade)
+			tu += 4; // 4TUs for picking up the grenade ( kL_note: unless it's already in-hand..... )
+		tu += _unit->getActionTUs(BA_PRIME, grenade);
+		tu += _unit->getActionTUs(BA_THROW, grenade);
+
+		if (tu <= _unit->getStats()->tu) // do we have enough TUs to prime and throw the grenade?
 		{
-			int tu = 0;
-
-			if (!_grenade)
-			{
-				tu += 4; // 4TUs for picking up the grenade ( kL_note: unless it's already in-hand..... )
-			}
-			tu += _unit->getActionTUs(BA_PRIME, grenade);
-			tu += _unit->getActionTUs(BA_THROW, grenade);
-
-			if (tu <= _unit->getStats()->tu) // do we have enough TUs to prime and throw the grenade?
-			{
-				BattleAction action;
-				action.actor	= _unit;
-				action.target	= _aggroTarget->getPosition();
-				action.weapon	= grenade;
-				action.type		= BA_THROW;
+			BattleAction action;
+			action.actor	= _unit;
+			action.target	= _aggroTarget->getPosition();
+			action.weapon	= grenade;
+			action.type		= BA_THROW;
 
 /* Wb.131129
-			Position originVoxel = _save->getTileEngine()->getOriginVoxel(action, 0);
-			Position targetVoxel = action.target * Position (16,16,24) + Position (8,8, (2 + -_save->getTile(action.target)->getTerrainLevel()));
-			if (_save->getTileEngine()->validateThrow(action, originVoxel, targetVoxel)) // are we within range
+		Position originVoxel = _save->getTileEngine()->getOriginVoxel(action, 0);
+		Position targetVoxel = action.target * Position (16,16,24) + Position (8,8, (2 + -_save->getTile(action.target)->getTerrainLevel()));
+		if (_save->getTileEngine()->validateThrow(action, originVoxel, targetVoxel)) // are we within range
 */
-				if (_save->getTileEngine()->validateThrow(&action)) // are we within range
-				{
-					_attackAction->target	= action.target;
-					_attackAction->weapon	= grenade;
-					_attackAction->type		= BA_THROW;
+			if (_save->getTileEngine()->validateThrow(&action)) // are we within range
+			{
+				_attackAction->target	= action.target;
+				_attackAction->weapon	= grenade;
+				_attackAction->type		= BA_THROW;
 
-					_rifle = false;
-					_melee = false;
-				}
+				_rifle = false;
+				_melee = false;
 			}
 		}
+//		}
 	}
 }
 

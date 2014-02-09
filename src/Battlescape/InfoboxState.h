@@ -41,6 +41,7 @@ class InfoboxState
 	:
 		public State
 {
+
 private:
 	Text* _text;
 	Frame* _frame;

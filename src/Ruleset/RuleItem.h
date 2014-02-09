@@ -50,8 +50,8 @@ enum BattleType
 	BT_FIREARM,				// 1
 	BT_AMMO,				// 2
 	BT_MELEE,				// 3
-	BT_GRENADE,				// 4
-	BT_PROXIMITYGRENADE,	// 5 // kL_note: where is SMOKEGRENADE ?!?!? (and Alien_Grenade)
+	BT_GRENADE,				// 4 -> includes SmokeGrenade, HE-Satchel, and AlienGrenade (see Ruleset)
+	BT_PROXIMITYGRENADE,	// 5
 	BT_MEDIKIT,				// 6
 	BT_SCANNER,				// 7
 	BT_MINDPROBE,			// 8

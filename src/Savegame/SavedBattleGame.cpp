@@ -1197,9 +1197,7 @@ void SavedBattleGame::setDebugMode()
 			i = 0;
 			i < _mapsize_z * _mapsize_y * _mapsize_x;
 			++i)
-	{
 		_tiles[i]->setDiscovered(true, 2);
-	}
 
 	_debugMode = true;
 }
@@ -1261,22 +1259,17 @@ void SavedBattleGame::resetUnitTiles()
 						x = size;
 						x >= 0;
 						x--)
-				{
 					for (int
 							y = size;
 							y >= 0;
 							y--)
-					{
 						getTile((*i)->getTile()->getPosition() + Position(x, y, 0))->setUnit(0);
-					}
-				}
 			}
 
 			for (int
 					x = size;
 					x >= 0;
 					x--)
-			{
 				for (int
 						y = size;
 						y >= 0;
@@ -1287,7 +1280,6 @@ void SavedBattleGame::resetUnitTiles()
 							*i,
 							getTile(t->getPosition() + Position(0, 0, -1)));
 				}
-			}
 		}
 
 		if ((*i)->getFaction() == FACTION_PLAYER)
@@ -1380,7 +1372,7 @@ void SavedBattleGame::removeItem(BattleItem* item)
 		{
 			_items.erase(i);
 
-			break;
+			return;
 		}
 	}
 
@@ -1482,20 +1474,19 @@ Node* SavedBattleGame::getSpawnNode(
 			if ((*i)->getPriority() > priority) // hold it. This does not *weight* the nodes by priority. but so waht
 			{
 				priority = (*i)->getPriority();
-				legitNodes.clear();									// drop the last nodes, as we found a higher priority now
+				legitNodes.clear(); // drop the last nodes, as we found a higher priority now
 			}
 
 			if ((*i)->getPriority() == priority)
-			{
 				legitNodes.push_back((*i));
-			}
 		}
 	}
 
-	if (legitNodes.empty())
-		return 0;
+	if (legitNodes.empty()) return 0;
 
-	int node = RNG::generate(0, static_cast<int>(legitNodes.size()) - 1);
+	int node = RNG::generate(
+						0,
+						static_cast<int>(legitNodes.size()) - 1);
 
 	return legitNodes[node];
 }
@@ -1622,6 +1613,7 @@ Node* SavedBattleGame::getPatrolNode(
  */
 void SavedBattleGame::prepareNewTurn()
 {
+	Log(LOG_INFO) << "SavedBattleGame::prepareNewTurn()";
 	std::vector<Tile*> tilesOnFire;
 	std::vector<Tile*> tilesOnSmoke;
 
@@ -1655,7 +1647,11 @@ void SavedBattleGame::prepareNewTurn()
 					Tile* t = getTile((*i)->getPosition() + pos);
 
 					if (t
-						&& getTileEngine()->horizontalBlockage(*i, t, DT_IN) == 0) // if there's no wall blocking the path of the flames...
+						&& getTileEngine()->horizontalBlockage(
+															*i,
+															t,
+															DT_IN)
+														== 0) // if there's no wall blocking the path of the flames...
 					{
 						t->ignite((*i)->getSmoke()); // attempt to set this tile on fire
 					}
@@ -1690,19 +1686,19 @@ void SavedBattleGame::prepareNewTurn()
 		}
 	}
 
-	for (int
+	for (int // prepare a list of tiles on fire/with smoke in them (smoke acts as fire intensity)
 			i = 0;
 			i < _mapsize_x * _mapsize_y * _mapsize_z;
-			++i) // prepare a list of tiles on fire/with smoke in them (smoke acts as fire intensity)
+			++i)
 	{
 		if (getTiles()[i]->getSmoke() > 0)
 			tilesOnSmoke.push_back(getTiles()[i]);
 	}
 
-	for (std::vector<Tile*>::iterator
+	for (std::vector<Tile*>::iterator // now make the smoke spread.
 			i = tilesOnSmoke.begin();
 			i != tilesOnSmoke.end();
-			++i) // now make the smoke spread.
+			++i)
 	{
 		if ((*i)->getFire() == 0) // smoke and fire follow slightly different rules.
 		{
@@ -1710,16 +1706,20 @@ void SavedBattleGame::prepareNewTurn()
 
 			if ((*i)->getSmoke()) // if we're still smoking
 			{
-				for (int
+				for (int // spread in four cardinal directions
 						dir = 0;
 						dir < 7;
-						dir += 2) // spread in four cardinal directions
+						dir += 2)
 				{
 					Position pos;
 					Pathfinding::directionToVector(dir, &pos);
 					Tile* t = getTile((*i)->getPosition() + pos);
 					if (t
-						&& getTileEngine()->horizontalBlockage(*i, t, DT_SMOKE) == 0) // as long as there are no blocking walls
+						&& getTileEngine()->horizontalBlockage( // as long as there are no blocking walls
+															*i,
+															t,
+															DT_SMOKE)
+														== 0)
 					{
 						if (t->getSmoke() == 0				// add smoke only to smokeless tiles,
 							|| (t->getFire() == 0			// or tiles with no fire
@@ -1749,7 +1749,11 @@ void SavedBattleGame::prepareNewTurn()
 				Pathfinding::directionToVector(dir, &pos);
 				t = getTile((*i)->getPosition() + pos);
 				if (t
-					&& getTileEngine()->horizontalBlockage(*i, t, DT_SMOKE) == 0)
+					&& getTileEngine()->horizontalBlockage(
+														*i,
+														t,
+														DT_SMOKE)
+													== 0)
 				{
 					t->addSmoke((*i)->getSmoke() / 2);
 				}
@@ -1813,7 +1817,9 @@ void SavedBattleGame::reviveUnconsciousUnits()
 				&& (*i)->getStunlevel() < (*i)->getHealth()
 				&& (*i)->getHealth() > 0)
 			{
-				if (placeUnitNearPosition((*i), originalPosition))
+				if (placeUnitNearPosition(
+										*i,
+										originalPosition))
 				{
 					// recover from unconscious
 					(*i)->turn(false); // -> STATUS_STANDING
@@ -1833,10 +1839,10 @@ void SavedBattleGame::reviveUnconsciousUnits()
 					(*i)->setDirection(RNG::generate(0, 7));		// kL
 					(*i)->setTimeUnits(0);							// kL
 
-					getTileEngine()->calculateFOV((*i));
+					getTileEngine()->calculateFOV(*i);
 					getTileEngine()->calculateUnitLighting();
 
-					removeUnconsciousBodyItem((*i));
+					removeUnconsciousBodyItem(*i);
 
 					break;
 				}
@@ -1846,24 +1852,21 @@ void SavedBattleGame::reviveUnconsciousUnits()
 }
 
 /**
- * Removes the body item that corresponds to the unit.
+ * Removes the body item (corpse) that corresponds to a unit.
  */
 void SavedBattleGame::removeUnconsciousBodyItem(BattleUnit* bu)
 {
-	// remove the unconscious body item corresponding to this unit
 	for (std::vector<BattleItem*>::iterator
-			it = getItems()->begin();
-			it != getItems()->end();
-			)
+			corpse = getItems()->begin();
+			corpse != getItems()->end();
+			++corpse)
 	{
-		if ((*it)->getUnit() == bu)
+		if ((*corpse)->getUnit() == bu)
 		{
-			removeItem(*it);
+			removeItem(*corpse);
 
-			break;
+			return;
 		}
-
-		++it;
 	}
 }
 
@@ -1895,10 +1898,10 @@ bool SavedBattleGame::setUnitPosition(
 			Tile* tb = getTile(pos + Position(x, y, -1));
 			if (t == 0
 				|| (t->getUnit() != 0
-						&& t->getUnit() != bu)
+					&& t->getUnit() != bu)
 				|| t->getTUCost(MapData::O_OBJECT, bu->getArmor()->getMovementType()) == 255
 				|| (t->hasNoFloor(tb)
-						&& bu->getArmor()->getMovementType() != MT_FLY))
+					&& bu->getArmor()->getMovementType() != MT_FLY))
 			{
 				return false;
 			}
@@ -1957,10 +1960,9 @@ bool SavedBattleGame::placeUnitNearPosition(
 		BattleUnit* unit,
 		Position entryPoint)
 {
-	if (setUnitPosition(unit, entryPoint))
-	{
-		return true;
-	}
+	if (setUnitPosition(
+					unit,
+					entryPoint)) return true;
 
 	for (int
 			dir = 0;

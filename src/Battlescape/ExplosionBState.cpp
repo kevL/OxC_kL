@@ -127,7 +127,7 @@ void ExplosionBState::init()
 								_center.x / 16,
 								_center.y / 16,
 								_center.z / 24);
-	Tile* tileCenter = _parent->getSave()->getTile(posCenter);
+//	Tile* tileCenter = _parent->getSave()->getTile(posCenter);
 
 	if (_areaOfEffect)
 	{
@@ -151,7 +151,7 @@ void ExplosionBState::init()
 				radius = _power / 10; // <- for cyberdiscs & terrain expl.... CTD if using getExplosionRadius(),
 			Log(LOG_INFO) << ". . . radius = " << radius;
 
-			int offset = radius * 8, // voxelspace
+			int offset = radius * 7, // voxelspace
 				animQty = static_cast<int>(
 								sqrt(static_cast<double>(radius) * static_cast<double>(_power)))
 							/ 6;
@@ -176,7 +176,7 @@ void ExplosionBState::init()
 //				Explosion* explosion = new Explosion(p, startFrame, true);
 
 				Explosion* explosion = new Explosion( // animation
-													posCenter_voxel + Position(15, 15, 0), // jogg the anim down a few pixels. Tks.
+													posCenter_voxel + Position(12, 12, 0), // jogg the anim down a few pixels. Tks.
 													startFrame,
 													true);
 

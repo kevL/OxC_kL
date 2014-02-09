@@ -155,20 +155,23 @@ void Tile::loadBinary(
 	_mapDataID[1] = unserializeInt(&buffer, serKey._mapDataID);
 	_mapDataID[2] = unserializeInt(&buffer, serKey._mapDataID);
 	_mapDataID[3] = unserializeInt(&buffer, serKey._mapDataID);
+
 	_mapDataSetID[0] = unserializeInt(&buffer, serKey._mapDataSetID);
 	_mapDataSetID[1] = unserializeInt(&buffer, serKey._mapDataSetID);
 	_mapDataSetID[2] = unserializeInt(&buffer, serKey._mapDataSetID);
 	_mapDataSetID[3] = unserializeInt(&buffer, serKey._mapDataSetID);
 
-	_smoke = unserializeInt(&buffer, serKey._smoke);
-	_fire = unserializeInt(&buffer, serKey._fire);
-	_animOffset = unserializeInt(&buffer, serKey._animOffset); // kL
+	_smoke		= unserializeInt(&buffer, serKey._smoke);
+	_fire		= unserializeInt(&buffer, serKey._fire);
+	_animOffset	= unserializeInt(&buffer, serKey._animOffset); // kL
 
 //kL    Uint8 boolFields = unserializeInt(&buffer, serKey.boolFields);
     Uint8 boolFields = static_cast<Uint8>(unserializeInt(&buffer, serKey.boolFields)); // kL
+
 	_discovered[0] = (boolFields & 1)? true: false;
 	_discovered[1] = (boolFields & 2)? true: false;
 	_discovered[2] = (boolFields & 4)? true: false;
+
 	_currFrame[1] = (boolFields & 8)? 7: 0;
 	_currFrame[2] = (boolFields & 0x10)? 7: 0;
 }
@@ -180,9 +183,13 @@ void Tile::loadBinary(
 YAML::Node Tile::save() const
 {
 	YAML::Node node;
+
 	node["position"] = _pos;
 
-	for (int i = 0; i < 4; i++)
+	for (int
+			i = 0;
+			i < 4;
+			i++)
 	{
 		node["mapDataID"].push_back(_mapDataID[i]);
 		node["mapDataSetID"].push_back(_mapDataSetID[i]);
@@ -192,19 +199,21 @@ YAML::Node Tile::save() const
 	if (_fire) node["fire"]				= _fire;
 	if (_animOffset) node["animOffset"]	= _animOffset; // kL
 
-	if (_discovered[0] || _discovered[1] || _discovered[2])
+	if (_discovered[0]
+		|| _discovered[1]
+		|| _discovered[2])
 	{
 		for (int
 				i = 0;
 				i < 3;
 				i++)
-		{
 			node["discovered"].push_back(_discovered[i]);
-		}
 	}
 
-	if (isUfoDoorOpen(1)) node["openDoorWest"]	= true;
-	if (isUfoDoorOpen(2)) node["openDoorNorth"]	= true;
+	if (isUfoDoorOpen(1))
+		node["openDoorWest"] = true;
+	if (isUfoDoorOpen(2))
+		node["openDoorNorth"] = true;
 
 	return node;
 }
@@ -219,6 +228,7 @@ void Tile::saveBinary(Uint8** buffer) const
 	serializeInt(buffer, serializationKey._mapDataID, _mapDataID[1]);
 	serializeInt(buffer, serializationKey._mapDataID, _mapDataID[2]);
 	serializeInt(buffer, serializationKey._mapDataID, _mapDataID[3]);
+
 	serializeInt(buffer, serializationKey._mapDataSetID, _mapDataSetID[0]);
 	serializeInt(buffer, serializationKey._mapDataSetID, _mapDataSetID[1]);
 	serializeInt(buffer, serializationKey._mapDataSetID, _mapDataSetID[2]);
@@ -229,9 +239,14 @@ void Tile::saveBinary(Uint8** buffer) const
 	serializeInt(buffer, serializationKey._animOffset, _animOffset); // kL
 
 	Uint8 boolFields = (_discovered[0]? 1: 0) + (_discovered[1]? 2: 0) + (_discovered[2]? 4: 0);
+
 	boolFields |= isUfoDoorOpen(1)? 8: 0; // west
 	boolFields |= isUfoDoorOpen(2)? 0x10: 0; // north?
-	serializeInt(buffer, serializationKey.boolFields, boolFields);
+
+	serializeInt(
+				buffer,
+				serializationKey.boolFields,
+				boolFields);
 }
 
 /**
@@ -442,7 +457,10 @@ int Tile::closeUfoDoor()
 {
 	int retval = 0;
 
-	for (int part = 0; part < 4; part++)
+	for (int
+			part = 0;
+			part < 4;
+			part++)
 	{
 		if (isUfoDoorOpen(part))
 		{
@@ -597,18 +615,17 @@ bool Tile::destroy(int part)
 /* damage terrain  - check against armor
  * @return bool, Return true objective was destroyed
  */
-bool Tile::damage(int part, int power)
+bool Tile::damage(
+		int part,
+		int power)
 {
 	//Log(LOG_INFO) << "Tile::destroy()";
 
 	bool objective = false;
 
 	if (power >= _objects[part]->getArmor())
-	{
-		Log(LOG_INFO) << ". . destroy(part)";
-
+		//Log(LOG_INFO) << ". . destroy(part)";
 		objective = destroy(part);
-	}
 
 	//Log(LOG_INFO) << ". ret = " << objective;
 	return objective;
@@ -617,12 +634,15 @@ bool Tile::damage(int part, int power)
 /**
  * Set a "virtual" explosive on this tile. We mark a tile this way to detonate it later.
  * We do it this way, because the same tile can be visited multiple times by an "explosion ray".
- * The explosive power on the tile is some kind of moving MAXIMUM of the explosive rays that passes it.
+ * The explosive power on the tile is some kind of moving MAXIMUM of the explosive rays that pass it.
  * @param power
  */
-void Tile::setExplosive(int power, bool force)
+void Tile::setExplosive(
+		int power,
+		bool force)
 {
-	if (force || _explosive < power)
+	if (force
+		|| _explosive < power)
 	{
 		_explosive = power;
 	}
@@ -637,27 +657,23 @@ int Tile::getExplosive() const
 }
 
 /**
- * Flammability of a tile is the lowest flammability of it's objects.
- * @return Flammability : the lower the value, the higher the chance the tile/object catches fire.
+ * Flammability of a tile is the lowest flammability of its objects.
+ * @return, The lower the value, the higher the chance the tile/object catches fire.
  */
 int Tile::getFlammability() const
 {
-	int flam = 255;
+	int burn = 255; // not burnable.
 
 	if (_objects[3])
-	{
-		flam = _objects[3]->getFlammable();
-	}
+		burn = _objects[3]->getFlammable();
 	else if (_objects[0])
-	{
-		flam = _objects[0]->getFlammable();
-	}
+		burn = _objects[0]->getFlammable();
 
-	return flam;
+	return burn;
 }
 
 /**
- * Fuel of a tile is the lowest flammability of it's objects.
+ * Fuel of a tile is the lowest flammability of its objects.
  * @return how long to burn.
  */
 int Tile::getFuel() const
@@ -665,13 +681,9 @@ int Tile::getFuel() const
 	int fuel = 0;
 
 	if (_objects[3])
-	{
 		fuel = _objects[3]->getFuel();
-	}
 	else if (_objects[0])
-	{
 		fuel = _objects[0]->getFuel();
-	}
 
 	return fuel;
 }
@@ -683,19 +695,27 @@ int Tile::getFuel() const
  */
 void Tile::ignite(int power)
 {
-	if (getFlammability() != 255)
+	if (_fire == 0)
 	{
-		power = power - (getFlammability() / 10) + 15;
-		if (power < 0)
-			power = 0;
-
-		if (RNG::percent(power))
+		int burn = getFlammability(); // <- lower is better :)
+		if (burn != 255)
 		{
-			if (_fire == 0)
+			power = power - (burn / 10) + 15;
+			if (RNG::percent(power))
 			{
-				_smoke = 15 - std::max(1, std::min((getFlammability() / 10), 12));
-				_overlaps = 1;
+//kL				_smoke = 15 - std::max(
+//kL									1,
+//kL									std::min(
+//kL											burn / 10,
+//kL											12));
+				// kL. from TileEngine::explode()
+				_smoke = std::max(
+								1,
+								std::min(
+										15 - (burn / 10),
+										12));
 				_fire = getFuel() + 1;
+				_overlaps = 1;
 				_animOffset = RNG::generate(0, 3);
 			}
 		}
@@ -774,18 +794,16 @@ void Tile::setUnit(
 		Tile* tileBelow)
 {
 	if (unit != 0)
-	{
 		unit->setTile(
 					this,
 					tileBelow);
-	}
 
 	_unit = unit;
 }
 
 /**
- * Set the amount of turns this tile is on fire. 0 = no fire.
- * @param (int)fire, Amount of turns this tile is on fire
+ * Set the amount of turns this tile will be on fire. 0 = no fire.
+ * @param (int)fire, Amount of turns this tile will be on fire
  */
 void Tile::setFire(int fire)
 {
@@ -795,7 +813,7 @@ void Tile::setFire(int fire)
 
 /**
  * Get the amount of turns this tile is on fire. 0 = no fire.
- * @return int, Amount of turns this tile is on fire
+ * @return int, Amount of turns this tile will be on fire
  */
 int Tile::getFire() const
 {
@@ -804,14 +822,18 @@ int Tile::getFire() const
 
 /**
  * Set the amount of turns this tile is smoking. 0 = no smoke.
- * @param (int)smoke, Amount of turns this tile is smoking
+ * @param (int)smoke, Amount of turns this tile will be smoking
  */
 void Tile::addSmoke(int smoke)
 {
 	if (_fire == 0)
 	{
 		if (_overlaps == 0)
-			_smoke = std::max(1, std::min(_smoke + smoke, 15));
+			_smoke = std::max(
+							1,
+							std::min(
+									_smoke + smoke,
+									15));
 		else
 			_smoke += smoke;
 
@@ -822,7 +844,7 @@ void Tile::addSmoke(int smoke)
 }
 
 /**
- * Set the amount of turns this tile is smoking. 0 = no smoke.
+ * Set the amount of turns this tile will be smoking. 0 = no smoke.
  * @param (int)smoke, Amount of turns this tile will be smoking
  */
 void Tile::setSmoke(int smoke)
@@ -832,7 +854,7 @@ void Tile::setSmoke(int smoke)
 }
 
 /**
- * Get the amount of turns this tile is smoking. 0 = no smoke.
+ * Get the amount of turns this tile will be smoking. 0 = no smoke.
  * @return int, Amount of turns this tile will be smoking
  */
 int Tile::getSmoke() const
@@ -915,52 +937,65 @@ void Tile::prepareNewTurn()
 		&& _smoke != 0
 		&& _fire == 0)
 	{
-		_smoke = std::max(0, std::min((_smoke / _overlaps) - 1, 15));
+		_smoke = std::max(
+						0,
+						std::min(
+								(_smoke / _overlaps) - 1,
+								15));
 	}
 
-	if (_smoke) // if we still have smoke/fire
+
+	if (_unit
+		&& !_unit->isOut(true)
+		&& _unit->getArmor()->getSize() == 1) // large units don't catch fire, i Guess - nor do Smoke
 	{
-		if (_unit
-			&& !_unit->isOut(true))
+		if (_fire)
 		{
-			if (_fire)
-			{
-				if (_unit->getArmor()->getSize() == 1
-					|| !_unit->tookFireDamage()) // this is how we avoid hitting the same unit multiple times.
-						// kL_note: Set the guy on fire here, set the toggle so he doesn't take
-						// damage in BattleUnit::prepareNewTurn() but don't deliver any damage here.
-				{
-					_unit->toggleFireDamage();
-
-					// battleUnit is standing on fire tile about to start burning.
-					//Log(LOG_INFO) << ". ID " << _unit->getId() << " fireDamage = " << _smoke;
-//kL					_unit->damage(Position(0, 0, 0), _smoke, DT_IN, true); // _smoke becomes our damage value
-
-					if (RNG::percent(static_cast<int>(40.f * _unit->getArmor()->getDamageModifier(DT_IN)))) // try to set the unit on fire.
-					{
-						int burnTime = RNG::generate(0, static_cast<int>(5.f * _unit->getArmor()->getDamageModifier(DT_IN)));
-						if (_unit->getFire() < burnTime)
-						{
-							Log(LOG_INFO) << "Tile::prepareNewTurn() ID " << _unit->getId() << " burnTime = " << burnTime;
-							_unit->setFire(burnTime);
-						}
-					}
-				}
-			}
-
-			// kL_note: Take smoke also.
-//kL			else // no fire: must be smoke
+//kL			if (_unit->getArmor()->getSize() == 1
+//kL				|| !_unit->getTookFire()) // this is how to avoid hitting the same unit multiple times.
+					// kL_note: Set the guy on fire here, set the toggle so he doesn't take
+					// damage in BattleUnit::prepareNewTurn() but don't deliver any damage here.
 //kL			{
-			if (_unit->getOriginalFaction() != FACTION_HOSTILE) // aliens don't breathe
+//kL				_unit->toggleFireDamage();
+
+				// battleUnit is standing on fire tile about to start burning.
+				//Log(LOG_INFO) << ". ID " << _unit->getId() << " fireDamage = " << _smoke;
+//kL				_unit->damage(Position(0, 0, 0), _smoke, DT_IN, true); // _smoke becomes our damage value
+
+			float modifier = _unit->getArmor()->getDamageModifier(DT_IN);
+			int burnChance = static_cast<int>(40.f * modifier);
+			Log(LOG_INFO) << "Tile::prepareNewTurn(), ID " << _unit->getId() << " burnChance = " << burnChance;
+			if (RNG::percent(burnChance)) // try to set the unit on fire.
 			{
-				if (_unit->getArmor()->getDamageModifier(DT_SMOKE) > 0.f
-					&& _unit->getArmor()->getSize() == 1) // try to knock this guy out.
+				int burnTime = RNG::generate(0, static_cast<int>(5.f * modifier));
+				if (burnTime > _unit->getFire())
 				{
-					Log(LOG_INFO) << ". ID " << _unit->getId() << " smokeDamage = " << _smoke / 4;
-					_unit->damage(Position(0, 0, 0), (_smoke / 4) + 1, DT_SMOKE, true);
+					Log(LOG_INFO) << ". burnTime = " << burnTime;
+					_unit->setFire(burnTime);
 				}
 			}
 //kL			}
+		}
+//		else	// no fire: must be smoke -> keep this in, because I don't want something quirky happening
+				// like a unit catching fire and going unconscious, although I doubt it matters!! So,
+				// leave it out 'cause I'm sure there are other ways to pass out while on fire.
+		// kL_note: Take smoke also.
+		// kL_note: I could make unconscious units suffer more smoke inhalation... not yet.
+
+		if (_smoke) // if we still have smoke/fire
+		{
+			if (_unit->getOriginalFaction() != FACTION_HOSTILE // aliens don't breathe
+				&& _unit->getArmor()->getSize() == 1 // does not affect tanks. (could use turretType)
+				&& _unit->getArmor()->getDamageModifier(DT_SMOKE) > 0.f) // try to knock this soldier out.
+			{
+				int smokePower = (_smoke / 4) + 1;
+				Log(LOG_INFO) << ". damage -> ID " << _unit->getId() << " smokePower = " << smokePower;
+				_unit->damage(
+							Position(0, 0, 0),
+							smokePower,
+							DT_SMOKE, // -> DT_STUN
+							true);
+			}
 		}
 	}
 

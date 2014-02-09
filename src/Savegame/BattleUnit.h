@@ -107,8 +107,9 @@ private:
 		_cacheInvalid,
 		_dontReselect,
 		_floating,
-		_hitByFire,
+//kL		_hitByFire,
 		_kneeled,
+		_showVisUnits,
 		_stopShot, // kL, to stop a unit from firing/throwing if it spots a new opponent during turning
 		_visible;
 	int
@@ -631,13 +632,13 @@ private:
 		void adjustStats(const int diff);
 		/// Halve the unit's armor values.
 		void halveArmor();
-
+/*kL
 		/// did this unit already take fire damage this turn? (used to avoid damaging large units multiple times.)
-		bool tookFireDamage() const;
-
+		// kL_note: wtf? If a tank et al. sits in an inferno, BLAST IT!!!!!
+		bool getTookFire() const;
 		/// switch the state of the fire damage tracker.
-		void toggleFireDamage();
-
+		void setTookFire();
+*/
 		///
 		void setCoverReserve(int reserve);
 		///
@@ -663,6 +664,11 @@ private:
 		void setStopShot(bool stop);
 		/// to stop a unit from firing/throwing if it spots a new opponent during turning
 		bool getStopShot() const;
+
+		///
+//		void setShowVisUnits(bool show);
+		///
+//		bool getShowVisUnits() const;
 		// kL_end.
 
 		/// Is this unit selectable?

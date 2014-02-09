@@ -297,6 +297,10 @@ private:
 //		InteractiveSurface* getIcons() const;
 		/// kL. Toggles the icons' surfaces' visibility for Hidden Movement.
 		void toggleIcons(bool vis);
+		/// kL. Toggles the visUnits' surfaces' visibility for UnitWalk/TurnBStates.
+//		void toggleVisUnits(bool vis);
+		/// kL. Refreshes the visUnits' surfaces' visibility for UnitWalk/TurnBStates.
+		void refreshVisUnits();
 };
 
 }

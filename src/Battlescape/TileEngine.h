@@ -52,7 +52,7 @@ class TileEngine
 private:
 	static const int MAX_VIEW_DISTANCE			= 20;
 	static const int MAX_VOXEL_VIEW_DISTANCE	= MAX_VIEW_DISTANCE * 16;
-	static const int MAX_DARKNESS_TO_SEE_UNITS	= 9;
+	static const int MAX_SHADE_TO_SEE_UNITS		= 9;
 
 	static const int heightFromCenter[11];
 
