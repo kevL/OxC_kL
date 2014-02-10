@@ -41,7 +41,7 @@ CMakeLists.txt
 #cmake/modules
 
 # -deps
-/deps/
+/deps/include/
 
 # -docs
 /docs/
