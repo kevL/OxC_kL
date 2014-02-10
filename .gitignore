@@ -66,4 +66,4 @@ CMakeLists.txt
 
 # -temp
 /temp/
-#temp/*
+/temp/*
