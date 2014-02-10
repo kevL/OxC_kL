@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=OpenXcom
+Comment=An open-source clone of the famous X-COM game
+Exec=openxcom
+Terminal=false
+Icon=openxcom
+Categories=Game;StrategyGame;
