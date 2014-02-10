@@ -48,6 +48,12 @@ CMakeLists.txt
 
 # -install
 /install/
+/install/debian/
+/install/debian/patches/
+/install/debian/source/
+/install/gentoo/
+/install/opensuse/
+/install/win/
 
 # -m4
 /m4/
@@ -56,9 +62,10 @@ CMakeLists.txt
 /obj/Win32/
 
 # -res
-#res/linux/icons
+/res/linux/icons/
 /res/linux/
 /res/mac/
+/res/
 
 # -src
 /src/ipch/
