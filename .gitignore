@@ -89,9 +89,10 @@ docs/
 cmake/
 res/linux/
 res/mac/
-temp/
-temp/*.*
+[Tt]emp*/
 #kL: ignore Code::Blocks (except .cbp & .depend)
 *.cscope_file_list
 *.layout
 [Dd]esktop.ini
+
+temp
