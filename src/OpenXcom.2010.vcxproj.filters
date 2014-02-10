@@ -806,6 +806,7 @@
       <Filter>Basescape</Filter>
     </ClCompile>
     <ClCompile Include="Savegame\SoldierDead.cpp" />
+    <ClCompile Include="Geoscape\SoldierDiedState.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -1628,6 +1629,7 @@
       <Filter>Interface</Filter>
     </ClInclude>
     <ClInclude Include="Savegame\SoldierDead.h" />
+    <ClInclude Include="Geoscape\SoldierDiedState.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Geoscape">

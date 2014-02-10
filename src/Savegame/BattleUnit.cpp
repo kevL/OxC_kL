@@ -100,7 +100,6 @@ BattleUnit::BattleUnit(
 		_turretType(-1),
 		_hidingForTurn(false),
 		_stopShot(false) // kL
-//		_showVisUnits(true) // kL
 {
 	//Log(LOG_INFO) << "Create BattleUnit 1 : soldier ID = " << getId();
 
@@ -221,7 +220,6 @@ BattleUnit::BattleUnit(
 		_turretType(-1),
 		_hidingForTurn(false),
 		_stopShot(false) // kL
-//		_showVisUnits(true) // kL
 {
 	//Log(LOG_INFO) << "Create BattleUnit 2 : alien ID = " << getId();
 
@@ -1137,7 +1135,7 @@ void BattleUnit::aim(bool aiming)
  */
 int BattleUnit::directionTo(const Position& point) const
 {
-	if (_pos == point) return 0;	// kL. safety
+	if (_pos == point) return 0; // kL. safety
 
 	double offset_x = point.x - _pos.x;
 	double offset_y = point.y - _pos.y;
@@ -1146,7 +1144,7 @@ int BattleUnit::directionTo(const Position& point) const
 
 	// divide the pie in 4 thetas, each at 1/8th before each quarter
 	double m_pi_8 = M_PI / 8.0;			// a circle divided into 16 sections (rads) -> 22.5 deg
-	double d = 0.0;						// kL, a bias toward cardinal directions. (0.1..0.12)
+	double d = 0.1;						// kL, a bias toward cardinal directions. (0.1..0.12)
 	double pie[4] =
 	{
 		M_PI - m_pi_8 - d,					// 2.7488935718910690836548129603696	-> 157.5 deg
@@ -2967,7 +2965,6 @@ std::string BattleUnit::getActiveHand() const
 	return "";
 	// kL_end.
 
-
 /*kL	if (getItem("STR_LEFT_HAND"))
 		return "STR_LEFT_HAND";
 
@@ -3060,8 +3057,7 @@ int BattleUnit::getCarriedWeight(BattleItem* draggingItem) const
 			i != _inventory.end();
 			++i)
 	{
-		if ((*i) == draggingItem)
-			continue;
+		if ((*i) == draggingItem) continue;
 
 		weight += (*i)->getRules()->getWeight();
 
@@ -3304,14 +3300,14 @@ void BattleUnit::initDeathSpin()
 void BattleUnit::contDeathSpin()
 {
 	//Log(LOG_INFO) << "BattleUnit::contDeathSpin()" << " [target]: " << (getId());
-
 	int dir = _direction;
 	if (dir == 3) // if facing player, 1 rotation left
 	{
-//		Log(LOG_INFO) << ". d_init = " << dir;
-		if (_spinPhase == 3 || _spinPhase == 4) // start = 0
+		//Log(LOG_INFO) << ". d_init = " << dir;
+		if (_spinPhase == 3
+			|| _spinPhase == 4)
 		{
-//			Log(LOG_INFO) << ". . _spinPhase = " << _spinPhase << " [ return ]";
+			//Log(LOG_INFO) << ". . _spinPhase = " << _spinPhase << " [ return ]";
 			 _spinPhase = -1; // end.
 			_status = STATUS_STANDING;
 
@@ -3323,7 +3319,7 @@ void BattleUnit::contDeathSpin()
 			_spinPhase = 4; // 2nd CCW rotation
 	}
 
-	if (_spinPhase == 0)
+	if (_spinPhase == 0) // start!
 	{
 		if (-1 < dir && dir < 4)
 		{
@@ -3341,15 +3337,18 @@ void BattleUnit::contDeathSpin()
 		}
 	}
 
-	if (_spinPhase == 1 || _spinPhase == 3)
+	if (_spinPhase == 1
+		|| _spinPhase == 3)
 	{
 		dir++;
-		if (dir == 8) dir = 0;
+		if (dir == 8)
+			dir = 0;
 	}
 	else
 	{
 		dir--;
-		if (dir == -1) dir = 7;
+		if (dir == -1)
+			dir = 7;
 	}
 
 //	Log(LOG_INFO) << ". d_final = " << dir;
@@ -3407,24 +3406,7 @@ void BattleUnit::setStopShot(bool stop)
 bool BattleUnit::getStopShot() const
 {
 	return _stopShot;
-}
-
-/**
- *
- */
-/* void BattleUnit::setShowVisUnits(bool show)
-{
-	_showVisUnits = show;
-} */
-
-/**
- *
- */
-/* bool BattleUnit::getShowVisUnits() const
-{
-	return _showVisUnits;
-} */
-// kL_end.
+} // kL_end.
 
 /**
  * Checks if this unit can be selected. Only alive units

@@ -109,7 +109,6 @@ private:
 		_floating,
 //kL		_hitByFire,
 		_kneeled,
-//		_showVisUnits, // kL
 		_stopShot, // kL, to stop a unit from firing/throwing if it spots a new opponent during turning
 		_visible;
 	int
@@ -664,11 +663,6 @@ private:
 		void setStopShot(bool stop);
 		/// to stop a unit from firing/throwing if it spots a new opponent during turning
 		bool getStopShot() const;
-
-		///
-//		void setShowVisUnits(bool show);
-		///
-//		bool getShowVisUnits() const;
 		// kL_end.
 
 		/// Is this unit selectable?

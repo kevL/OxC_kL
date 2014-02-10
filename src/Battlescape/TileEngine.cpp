@@ -4535,7 +4535,7 @@ int TileEngine::getDirectionTo(
 
 	// divide the pie in 4 thetas, each at 1/8th before each quarter
 	double m_pi_8 = M_PI / 8.0;				// a circle divided into 16 sections (rads) -> 22.5 deg
-	double d = 0.0;							// kL, a bias toward cardinal directions. (0.1..0.12)
+	double d = 0.1;							// kL, a bias toward cardinal directions. (0.1..0.12)
 	double pie[4] =
 	{
 		M_PI - m_pi_8 - d,					// 2.7488935718910690836548129603696	-> 157.5 deg

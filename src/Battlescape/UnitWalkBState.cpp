@@ -125,28 +125,15 @@ void UnitWalkBState::init()
 void UnitWalkBState::think()
 {
 	Log(LOG_INFO) << "\n***** UnitWalkBState::think() : " << _unit->getId();
-					//<< " _walkPhase = " << _unit->getWalkingPhase() << " *****";
 
 	if (_unit->isOut(true, true))
 	{
 		Log(LOG_INFO) << ". . isOut() abort.";
-//		_unit->setShowVisUnits(true); // kL
-//		_parent->getBattlescapeState()->toggleVisUnits(true); // kL
 
 		_pf->abortPath();
 		_parent->popState();
 
 		return;
-	}
-	//else Log(LOG_INFO) << ". . unit health: " << _unit->getHealth();
-
-	// kL_note: moved here from doStatusWalk()
-	// kL_note: Let's try this, maintain camera focus centered on Visible aliens during (un)hidden movement
-	if (_unit->getVisible()								// kL
-		&& _unit->getFaction() != FACTION_PLAYER		// kL
-		&& !_walkCam->isOnScreen(_unit->getPosition())) // kL_TEST!
-	{
-		_walkCam->centerOnPosition(_unit->getPosition());
 	}
 
 	_onScreen = _unit->getVisible()
@@ -160,6 +147,11 @@ void UnitWalkBState::think()
 		|| _unit->getStatus() == STATUS_FLYING)
 	{
 		Log(LOG_INFO) << "STATUS_WALKING or FLYING : " << _unit->getId();
+		// kL_begin:
+		int dest_z = _unit->getDestination().z;
+		if (_walkCam->getViewLevel() < dest_z)
+			_walkCam->setViewLevel(dest_z);
+		// kL_end.
 
 		if (!doStatusWalk()) return;
 
@@ -170,14 +162,20 @@ void UnitWalkBState::think()
 		{
 			Log(LOG_INFO) << "Hey we got to STATUS_STANDING in UnitWalkBState _WALKING or _FLYING !!!" ;
 //			_falling = false; // kL
+			// kL_begin:
+			if (_unit->getVisible())
+			{
+				int dest_z = _unit->getDestination().z;
+				if (_unit->getFaction() != FACTION_PLAYER
+					&& !_walkCam->isOnScreen(_unit->getPosition()))
+				{
+					_walkCam->centerOnPosition(_unit->getPosition());
+				}
+				else if (_walkCam->getViewLevel() > dest_z)
+					_walkCam->setViewLevel(dest_z);
+			} // kL_end.
 
-			// kL_begin: if the unit changed level, camera changes level with it.
-			if (_walkCam->getViewLevel() != _unit->getPosition().z)
-				_walkCam->setViewLevel(_unit->getPosition().z);
-			// kL_end.
-
-			if (!doStatusStand_end())
-				return;
+			if (!doStatusStand_end()) return;
 			else
 				_parent->getBattlescapeState()->refreshVisUnits(); // kL
 		}
@@ -214,6 +212,19 @@ void UnitWalkBState::think()
 		|| _unit->getStatus() == STATUS_PANICKING)
 	{
 		Log(LOG_INFO) << "STATUS_STANDING or PANICKING : " << _unit->getId();
+		// kL_begin:
+		if (_unit->getVisible())
+		{
+			int pos_z = _unit->getPosition().z;
+			if (_unit->getFaction() != FACTION_PLAYER
+				&& !_walkCam->isOnScreen(_unit->getPosition()))
+			{
+				_walkCam->centerOnPosition(_unit->getPosition());
+			}
+			else if (_walkCam->getViewLevel() != pos_z)
+				_walkCam->setViewLevel(pos_z);
+		} // kL_end.
+
 		if (!doStatusStand()) return;
 	}
 
@@ -227,8 +238,6 @@ void UnitWalkBState::think()
 //		_parent->getBattlescapeState()->refreshVisUnits(); // kL
 	}
 
-//	_unit->setShowVisUnits(true); // kL
-//	_parent->getBattlescapeState()->toggleVisUnits(true); // kL
 	Log(LOG_INFO) << "think() : " << _unit->getId() << " EXIT ";
 }
 
@@ -240,9 +249,6 @@ void UnitWalkBState::cancel()
 	if (_parent->getSave()->getSide() == FACTION_PLAYER
 		&& _parent->getPanicHandled())
 	{
-//		_unit->setShowVisUnits(true); // kL
-//		_parent->getBattlescapeState()->toggleVisUnits(true); // kL
-
 		_pf->abortPath();
 	}
 }
@@ -275,8 +281,6 @@ bool UnitWalkBState::doStatusStand()
 		else
 		{
 			_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
-//			_unit->setShowVisUnits(true); // kL
-//			_parent->getBattlescapeState()->toggleVisUnits(true); // kL, Probably already covered by an updateSoldierInfo()
 
 			_pf->abortPath();
 			_parent->popState();
@@ -411,9 +415,6 @@ bool UnitWalkBState::doStatusStand()
 		if (tu > _unit->getTimeUnits())
 		{
 			Log(LOG_INFO) << ". . tu > _unit->getTimeUnits()";
-//			_unit->setShowVisUnits(true); // kL
-//			_parent->getBattlescapeState()->toggleVisUnits(true); // kL
-
 			if (_parent->getPanicHandled()
 				&& tu < 255)
 			{
@@ -432,13 +433,8 @@ bool UnitWalkBState::doStatusStand()
 		else if (energy > _unit->getEnergy())
 		{
 			Log(LOG_INFO) << ". . energy > _unit->getEnergy()";
-//			_unit->setShowVisUnits(true); // kL
-//			_parent->getBattlescapeState()->toggleVisUnits(true); // kL
-
 			if (_parent->getPanicHandled())
-			{
 				_action.result = "STR_NOT_ENOUGH_ENERGY";
-			}
 
 			_pf->abortPath();
 
@@ -453,9 +449,6 @@ bool UnitWalkBState::doStatusStand()
 			&& _parent->checkReservedTU(_unit, tu) == false)
 		{
 			Log(LOG_INFO) << ". . checkReservedTU(_unit, tu) == false";
-//			_unit->setShowVisUnits(true); // kL
-//			_parent->getBattlescapeState()->toggleVisUnits(true); // kL
-
 			_pf->abortPath();
 
 			_unit->setCache(0);
@@ -470,7 +463,6 @@ bool UnitWalkBState::doStatusStand()
 			&& !_pf->getStrafeMove())
 		{
 			Log(LOG_INFO) << ". . dir != _unit->getDirection() -> turn";
-
 			_unit->lookAt(dir);
 
 			_unit->setCache(0);
@@ -542,9 +534,6 @@ bool UnitWalkBState::doStatusStand()
 							// kL_note: this appears to be only +2 in Pathfinding....
 				{
 					Log(LOG_INFO) << ". . . obstacle(unit) -> abortPath()";
-//					_unit->setShowVisUnits(true); // kL
-//					_parent->getBattlescapeState()->toggleVisUnits(true); // kL
-
 					_action.TU = 0;
 					_pf->abortPath();
 
@@ -568,8 +557,8 @@ bool UnitWalkBState::doStatusStand()
 		}
 		Log(LOG_INFO) << ". dequeuePath() dir = " << dir;
 
-		if (dir == _pf->DIR_UP)	// kL
-			_walkCam->up();		// kL
+//		if (dir == _pf->DIR_UP)	// kL
+//			_walkCam->up();		// kL
 
 		if (_unit->spendTimeUnits(tu)		// These were checked above and don't really need to
 			&& _unit->spendEnergy(energy))	// be checked again here. Only subtract required.
@@ -890,9 +879,6 @@ bool UnitWalkBState::doStatusStand_end()
 
 	if (_parent->checkForProximityGrenades(_unit))
 	{
-//		_unit->setShowVisUnits(true); // kL
-//		_parent->getBattlescapeState()->toggleVisUnits(true); // kL
-
 		_parent->popState();
 
 		return false;
@@ -902,9 +888,6 @@ bool UnitWalkBState::doStatusStand_end()
 	{
 		if (_unit->getFaction() == FACTION_PLAYER) Log(LOG_INFO) << ". . _newVis = TRUE, Abort path";
 		else if (_unit->getFaction() != FACTION_PLAYER) Log(LOG_INFO) << ". . _newUnitSpotted = TRUE, Abort path";
-
-//		_unit->setShowVisUnits(true); // kL
-//		_parent->getBattlescapeState()->toggleVisUnits(true); // kL
 
 		_pf->abortPath();
 
@@ -923,9 +906,6 @@ bool UnitWalkBState::doStatusStand_end()
 		if (_terrain->checkReactionFire(_unit)) // unit got fired upon - stop walking
 		{
 			Log(LOG_INFO) << ". . . cacheUnit";
-//			_unit->setShowVisUnits(true); // kL
-//			_parent->getBattlescapeState()->toggleVisUnits(true); // kL
-
 			_unit->setCache(0);
 			_parent->getMap()->cacheUnit(_unit);
 
@@ -982,8 +962,6 @@ void UnitWalkBState::doStatusTurn()
 		//if (_unit->getFaction() == FACTION_PLAYER) Log(LOG_INFO) << ". . _newVis = TRUE, Abort path, popState";
 		//else if (_unit->getFaction() != FACTION_PLAYER) Log(LOG_INFO) << ". . _newUnitSpotted = TRUE, Abort path, popState";
 
-//		_unit->setShowVisUnits(true); // kL
-//		_parent->getBattlescapeState()->toggleVisUnits(true); // kL
 		_unit->_hidingForTurn = false;
 
 		_pf->abortPath();
@@ -1003,9 +981,6 @@ void UnitWalkBState::doStatusTurn()
 void UnitWalkBState::postPathProcedures()
 {
 	Log(LOG_INFO) << "UnitWalkBState::postPathProcedures(), unit = " << _unit->getId();
-//	_unit->setShowVisUnits(true); // kL
-//	_parent->getBattlescapeState()->toggleVisUnits(true); // kL
-
 	_tileSwitchDone = false;	// kL
 //	_falling = false;			// kL
 	_action.TU = 0;
@@ -1118,9 +1093,9 @@ bool UnitWalkBState::visForUnits()
 void UnitWalkBState::setNormalWalkSpeed()
 {
 	if (_unit->getFaction() == FACTION_PLAYER)
-		_parent->setStateInterval(Options::getInt("battleXcomSpeed"));
+		_parent->setStateInterval(static_cast<Uint32>(Options::getInt("battleXcomSpeed")));
 	else
-		_parent->setStateInterval(Options::getInt("battleAlienSpeed"));
+		_parent->setStateInterval(static_cast<Uint32>(Options::getInt("battleAlienSpeed")));
 }
 
 /**

@@ -2830,15 +2830,6 @@ TurnCounter* BattlescapeState::getTurnCounter() const
 }
 
 /**
- * kL. Get the Icons.
- * @return, Pointer to the Icon hotbar.
- */
-/* InteractiveSurface* BattlescapeState::getIcons() const
-{
-	return _icons;
-} */
-
-/**
  * kL. Toggles the icons' surfaces' visibility for Hidden Movement.
  */
 void BattlescapeState::toggleIcons(bool vis)
@@ -2846,53 +2837,6 @@ void BattlescapeState::toggleIcons(bool vis)
 	_icons->setVisible(vis);
 	_numLayers->setVisible(vis);
 }
-
-/**
- * kL. Toggles the visUnits' surfaces' visibility for UnitWalk/TurnBStates.
- */
-/* void BattlescapeState::toggleVisUnits(bool vis)
-{
-	Log(LOG_INFO) << "BattlescapeState::toggleVisUnits() " << vis;
-	if (!playableUnitSelected()) return;
-
-
-	if (!vis)
-	{
-		for (int // remove red target indicators
-				i = 0;
-				i < VISIBLE_MAX;
-				++i)
-		{
-			_btnVisibleUnit[i]->setVisible(false);
-			_numVisibleUnit[i]->setVisible(false);
-
-			_visibleUnit[i] = 0;
-		}
-	}
-	else
-	{
-		BattleUnit* selectedUnit = 0;
-		if (_save->getSelectedUnit())
-		{
-			selectedUnit = _save->getSelectedUnit();
-			Log(LOG_INFO) << ". selUnit ID " << selectedUnit->getId();
-		}
-
-		int j = 0;
-		for (std::vector<BattleUnit*>::iterator
-				i = selectedUnit->getVisibleUnits()->begin();
-				i != selectedUnit->getVisibleUnits()->end()
-					&& j < VISIBLE_MAX;
-				++i,
-					++j) // kL
-		{
-			_btnVisibleUnit[j]->setVisible(true);
-			_numVisibleUnit[j]->setVisible(true);
-
-			_visibleUnit[j] = *i;
-		}
-	}
-} */
 
 /**
  * kL. Refreshes the visUnits indicators for UnitWalk/TurnBStates.

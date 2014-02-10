@@ -538,8 +538,7 @@ void Map::drawTerrain(Surface* surface)
 					_camera->convertVoxelToScreen(
 											_projectile->getPosition(),
 											&bulletPositionScreen);
-				}
-				while (!enough);
+				} while (!enough);
 			}
 		}
 	}
@@ -730,23 +729,19 @@ void Map::drawTerrain(Surface* surface)
 								wallShade = tileShade;
 
 							if (tile->getMapData(MapData::O_WESTWALL))
-							{
 								tmpSurface->blitNShade(
 										surface,
 										screenPosition.x,
 										screenPosition.y - tile->getMapData(MapData::O_NORTHWALL)->getYOffset(),
 										wallShade,
 										true);
-							}
 							else
-							{
 								tmpSurface->blitNShade(
 										surface,
 										screenPosition.x,
 										screenPosition.y - tile->getMapData(MapData::O_NORTHWALL)->getYOffset(),
 										wallShade,
 										false);
-							}
 						}
 
 						// Draw object
@@ -955,9 +950,7 @@ void Map::drawTerrain(Surface* surface)
 										ttile->getShade());
 
 								if (tunit->getArmor()->getSize() > 1)
-								{
 									offset.y += 4;
-								}
 
 								if (tunit->getFire() > 0)
 								{
@@ -1392,6 +1385,7 @@ void Map::drawTerrain(Surface* surface)
 									(*i)->getPosition(),
 									&bulletPositionScreen);
 			if ((*i)->isBig())
+			{
 				if ((*i)->getCurrentFrame() > -1)
 				{
 					tmpSurface = _res->getSurfaceSet("X1.PCK")->getFrame((*i)->getCurrentFrame());
@@ -1401,6 +1395,7 @@ void Map::drawTerrain(Surface* surface)
 							bulletPositionScreen.y - 64,
 							0);
 				}
+			}
 			else if ((*i)->isHit())
 			{
 				tmpSurface = _res->getSurfaceSet("HIT.PCK")->getFrame((*i)->getCurrentFrame());

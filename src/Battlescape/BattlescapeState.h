@@ -293,12 +293,8 @@ private:
 
 		/// kL. Gets the TurnCounter.
 		TurnCounter* getTurnCounter() const;
-		/// kL. Get the Icons.
-//		InteractiveSurface* getIcons() const;
 		/// kL. Toggles the icons' surfaces' visibility for Hidden Movement.
 		void toggleIcons(bool vis);
-		/// kL. Toggles the visUnits' surfaces' visibility for UnitWalk/TurnBStates.
-//		void toggleVisUnits(bool vis);
 		/// kL. Refreshes the visUnits' surfaces' visibility for UnitWalk/TurnBStates.
 		void refreshVisUnits();
 };
