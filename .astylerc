@@ -1,9 +1,0 @@
-style=allman
-indent=tab
-pad-oper
-pad-header
-unpad-paren
-fill-empty-lines
-add-brackets
-align-pointer=name
-mode=c
