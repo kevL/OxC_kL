@@ -443,8 +443,7 @@ DogfightState::DogfightState(
 			++i)
 	{
 		CraftWeapon* w = _craft->getWeapons()->at(i);
-		if (w == 0)
-			continue;
+		if (w == 0) continue;
 
 		Surface
 			* weapon = 0,
@@ -486,7 +485,6 @@ DogfightState::DogfightState(
 		Uint8 color = Palette::blockOffset(7) - 1;
 
 		range->lock();
-
 		int
 			rangeY = range->getHeight() - w->getRules()->getRange(),
 			connectY = 57;
@@ -496,10 +494,16 @@ DogfightState::DogfightState(
 				x <= x1 + 18;
 				x += 2)
 		{
-			range->setPixel(x, rangeY, color);
+			range->setPixel(
+						x,
+						rangeY,
+						color);
 		}
 
-		int minY = 0, maxY = 0;
+		int
+			minY = 0,
+			maxY = 0;
+
 		if (rangeY < connectY)
 		{
 			minY = rangeY;
@@ -516,7 +520,10 @@ DogfightState::DogfightState(
 				y <= maxY;
 				++y)
 		{
-			range->setPixel(x1 + x2, y, color);
+			range->setPixel(
+						x1 + x2,
+						y,
+						color);
 		}
 
 		for (int
@@ -524,9 +531,11 @@ DogfightState::DogfightState(
 				x <= x2 + 2;
 				++x)
 		{
-			range->setPixel(x, connectY, color);
+			range->setPixel(
+						x,
+						connectY,
+						color);
 		}
-
 		range->unlock();
 	}
 
@@ -603,25 +612,33 @@ DogfightState::DogfightState(
 
 	// Get craft's height. Used for damage indication.
 //kL	int x = _damage->getWidth() / 2;
-	int x = 12; // kL: the sprites aren't centered, but 12 is consistently their center
 	for (int
 			y = 0;
 			y < _damage->getHeight();
 			++y)
 	{
-		++_craftHeight_pre; // kL
+		// kL_begin:
+		Uint8 pixelColor = _damage->getPixel(11, y);
+		bool isCraftColor = pixelColor >= Palette::blockOffset(10)
+							&& pixelColor < Palette::blockOffset(11);
 
-		Uint8 pixelColor = _damage->getPixel(x, y);
-		if (pixelColor >= Palette::blockOffset(10)
-//kL			|| pixelColor < Palette::blockOffset(11))
-			&& pixelColor < Palette::blockOffset(11)) // kL
+		if (_craftHeight
+			&& !isCraftColor)
 		{
-			--_craftHeight_pre; // kL
-			++_craftHeight;
+			break;
 		}
+		else if (isCraftColor)
+			++_craftHeight;
+		else
+			++_craftHeight_pre;
+		// kL_end.
 
-		if (y == _damage->getHeight() - (_craftHeight + _craftHeight_pre)) // kL
-			break; // kL
+/*		Uint8 pixelColor = _damage->getPixel(x, y);
+		if (pixelColor >= Palette::blockOffset(10)
+			|| pixelColor < Palette::blockOffset(11))
+		{
+			++_craftHeight;
+		} */
 	}
 
 	drawCraftDamage();
@@ -687,77 +704,94 @@ void DogfightState::think()
  */
 void DogfightState::animateCraftDamage()
 {
-	if (_minimized)
-		return;
+	if (_minimized) return;
 
 	--_currentCraftDamageColor;
 
-	if (_currentCraftDamageColor < 13)
-		_currentCraftDamageColor = 14;
+//kL	if (_currentCraftDamageColor < 13)
+//kL		_currentCraftDamageColor = 14;
+	if (_currentCraftDamageColor < 13) // kL, 11/12 == yellow
+		_currentCraftDamageColor = 15; // kL, black
 
 	drawCraftDamage();
 }
 
 /**
- * Draws interceptor damage according to percentage of HP's left.
+ * Draws interceptor damage according to percentage of HPs left.
  */
 void DogfightState::drawCraftDamage()
 {
-	if (_minimized)
-		return;
+	if (_minimized) return;
 
+	//Log(LOG_INFO) << "DogfightState::drawCraftDamage()";
 	int damagePercent = _craft->getDamagePercentage();
+	//Log(LOG_INFO) << ". percDamage = " << damagePercent;
 	if (damagePercent > 0)
 	{
 		if (!_craftDamageAnimTimer->isRunning())
 			_craftDamageAnimTimer->start();
 
 		int rowsToColor = static_cast<int>(
-							floor(static_cast<double>(_craftHeight * damagePercent) / 100.0));
+								floor(static_cast<double>(_craftHeight * damagePercent) / 100.0));
+//								ceil(static_cast<double>(_craftHeight * damagePercent) / 100.0)); // kL
 
 		if (rowsToColor == 0)
 			return;
+		else if (damagePercent > 99)
+			rowsToColor += 1;
 
-		int rowsColored = 0;
-		bool rowColored = false;
+//kL		int rowsColored = 0;
+//kL		bool rowColored = false;
 
 		for (int
 //kL				y = 0;
 				y = _craftHeight_pre; // kL
-				y < _damage->getHeight();
+//kL				y < _damage->getHeight();
+//				y < _craftHeight_pre + _craftHeight + 1; // kL
+				y < _craftHeight_pre + rowsToColor; // kL
 				++y)
 		{
-			rowColored = false;
+//kL			rowColored = false;
 
 			for (int
-					x = 0;
-					x < _damage->getWidth();
+//kL					x = 0;
+					x = 1; // kL
+//kL					x < _damage->getWidth();
+					x < 23; // kL
 					++x)
 			{
 				int pixelColor = _damage->getPixel(x, y);
 
-				if (pixelColor == 13
-					|| pixelColor == 14)
+				// cycle color of already damaged bits
+//kL				if (pixelColor == 13		// red
+//kL					|| pixelColor == 14)	// red darker
+				if (pixelColor > 10		// kL (v. animateCraftDamage(), above)
+					&& pixelColor < 16)	// kL psychedelic.
 				{
-					_damage->setPixel(x, y, _currentCraftDamageColor);
+					_damage->setPixel(
+									x,
+									y,
+									_currentCraftDamageColor);
 
-					rowColored = true;
+//kL					rowColored = true;
 				}
 				else // kL
 				if (pixelColor >= Palette::blockOffset(10)
 					&& pixelColor < Palette::blockOffset(11))
 				{
-					_damage->setPixel(x, y, _currentCraftDamageColor);
+					_damage->setPixel(
+									x,
+									y,
+									_currentCraftDamageColor);
 
-					rowColored = true;
+//kL					rowColored = true;
 				}
 			}
 
-			if (rowColored)
-				++rowsColored;
+//kL			if (rowColored)
+//kL				++rowsColored;
 
-			if (rowsColored == rowsToColor)
-				break;
+//kL			if (rowsColored == rowsToColor) break;
 		}
 	}
 }
@@ -767,8 +801,7 @@ void DogfightState::drawCraftDamage()
  */
 void DogfightState::animate()
 {
-	if (_minimized)
-		return;
+	if (_minimized) return;
 
 	// Animate radar waves and other stuff.
 	for (int
@@ -783,15 +816,19 @@ void DogfightState::animate()
 		{
 			Uint8 radarPixelColor = _window->getPixel(x, y);
 			if (radarPixelColor >= Palette::blockOffset(7)
-				&& radarPixelColor < Palette::blockOffset(7) + 16)
+//kL				&& radarPixelColor < Palette::blockOffset(7) + 16)
+				&& radarPixelColor < Palette::blockOffset(8)) // kL
 			{
 				++radarPixelColor;
-				if (radarPixelColor >= Palette::blockOffset(7) + 16)
-				{
-					radarPixelColor = Palette::blockOffset(7);
-				}
 
-				_window->setPixel(x, y, radarPixelColor);
+//kL				if (radarPixelColor >= Palette::blockOffset(7) + 16)
+				if (radarPixelColor >= Palette::blockOffset(8)) // kL
+					radarPixelColor = Palette::blockOffset(7);
+
+				_window->setPixel(
+								x,
+								y,
+								radarPixelColor);
 			}
 		}
 	}
