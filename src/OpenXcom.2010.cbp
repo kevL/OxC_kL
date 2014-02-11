@@ -105,7 +105,7 @@
 			<Add directory="C:/Program Files/Microsoft SDKs/Windows/v7.0A/Lib" />
 			<Add directory="C:/Program Files/Microsoft Visual Studio 10.0/VC/lib" />
 		</Linker>
-		<Unit filename="../media/openxcom.ico" />
+		<Unit filename="../res/windows/openxcom.ico" />
 		<Unit filename="Basescape/BaseInfoState.cpp">
 			<Option target="Debug Win32" />
 			<Option target="Debug x64" />

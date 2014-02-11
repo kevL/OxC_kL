@@ -26,6 +26,6 @@
 #define OPENXCOM_VERSION_NUMBER 0,9,0,0
 // #define OPENXCOM_VERSION_NUMBER 0,9,0,kL
 //kL #define OPENXCOM_VERSION_GIT ""
-#define OPENXCOM_VERSION_GIT "kL's" // kL
+#define OPENXCOM_VERSION_GIT "oXc_kL" // kL
 
 #endif
