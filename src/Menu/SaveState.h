@@ -28,6 +28,7 @@
 namespace OpenXcom
 {
 
+//class SavedGameState; // kL
 class TextEdit;
 
 
@@ -50,29 +51,37 @@ private:
 	TextEdit* _edtSave;
 
 
-	public:
-		/// Creates the Save Game state.
-		SaveState(
-				Game* game,
-				OptionsOrigin origin);
-		/// Creates the Quick Save Game state.
-		SaveState(
-				Game* game,
-				OptionsOrigin origin,
-				bool showMsg);
-		/// Cleans up the Save Game state.
-		~SaveState();
+		public:
+			/// Creates the Save Game state.
+			SaveState(
+					Game* game,
+					OptionsOrigin origin);
+			/// Creates the Quick Save Game state.
+			SaveState(
+					Game* game,
+					OptionsOrigin origin,
+					bool showMsg);
+			/// Cleans up the Save Game state.
+			~SaveState();
 
-		/// Updates the savegame list.
-		void updateList();
+			/// Updates the savegame list.
+			void updateList();
 
-		/// Handler for pressing a key on the Save edit.
-		void edtSaveKeyPress(Action* action);
-		/// Handler for clicking the Saves list.
-		void lstSavesPress(Action* action);
+			/// Handler for pressing a key on the Save edit.
+			void edtSaveKeyPress(Action* action);
+			/// Handler for clicking the Saves list.
+			void lstSavesPress(Action* action);
 
-		/// Quick save game.
-		void quickSave(const std::string& filename);
+			/// Quick save game.
+			void quickSave(const std::string& filename);
+
+			/// kL. Get the currently edited slot.
+//			TextEdit* getEdit() const; // kL
+			/// kL. Get the currently selected row.
+//			int getSelectedRow() const; // kL
+
+//friend void SavedGameState::btnOkClick(Action*); // kL
+
 };
 
 }

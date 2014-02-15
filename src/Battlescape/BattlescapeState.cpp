@@ -2068,12 +2068,18 @@ inline void BattlescapeState::handle(Action* action)
 			else if (action->getDetails()->key.keysym.sym == (SDLKey)Options::getInt("keyQuickSave")
 				&& Options::getInt("autosave") == 1)
 			{
-				_game->pushState(new SaveState(_game, OPT_BATTLESCAPE, true));
+				_game->pushState(new SaveState(
+											_game,
+											OPT_BATTLESCAPE,
+											true));
 			}
 			else if (action->getDetails()->key.keysym.sym == (SDLKey)Options::getInt("keyQuickLoad")
 				&& Options::getInt("autosave") == 1)
 			{
-				_game->pushState(new LoadState(_game, OPT_BATTLESCAPE, true));
+				_game->pushState(new LoadState(
+											_game,
+											OPT_BATTLESCAPE,
+											true));
 			}
 
 			// voxel view dump

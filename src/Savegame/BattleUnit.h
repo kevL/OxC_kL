@@ -110,7 +110,8 @@ private:
 //kL		_hitByFire,
 		_kneeled,
 		_stopShot, // kL, to stop a unit from firing/throwing if it spots a new opponent during turning
-		_visible;
+		_visible,
+		_dashing; // kL
 	int
 		_coverReserve,
 		_currentArmor[5],
@@ -663,6 +664,11 @@ private:
 		void setStopShot(bool stop);
 		/// to stop a unit from firing/throwing if it spots a new opponent during turning
 		bool getStopShot() const;
+
+		/// Set a unit as dashing.
+		void setDashing(bool dash);
+		/// Get if a unit is dashing.
+		bool getDashing() const;
 		// kL_end.
 
 		/// Is this unit selectable?

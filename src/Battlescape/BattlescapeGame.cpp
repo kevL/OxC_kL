@@ -724,9 +724,9 @@ void BattlescapeGame::endTurn()
 	//Log(LOG_INFO) << ". done updates";
 
 	bool battleComplete = (liveAliens == 0 || liveSoldiers == 0);
-	if ((_save->getSide() != FACTION_NEUTRAL
-			|| battleComplete)
-		&& _endTurnRequested)
+	if (_endTurnRequested
+		&& (_save->getSide() != FACTION_NEUTRAL
+			|| battleComplete))
 	{
 		//Log(LOG_INFO) << ". . pushState(nextTurnState)";
 		_parentState->getGame()->pushState(new NextTurnState(
@@ -791,7 +791,7 @@ void BattlescapeGame::checkForCasualties(
 							&& killer->getOriginalFaction() == FACTION_PLAYER))
 				{
 					int boost = 10 * bonus / 100;
-					killer->moraleChange(boost); // double what rest of squad gets below
+					killer->moraleChange(boost); // doubles what rest of squad gets below
 					Log(LOG_INFO) << ". . killer boost +" << boost;
 				}
 
@@ -1231,7 +1231,7 @@ void BattlescapeGame::popState()
 	if (_save->getTraceSetting())
 	{
 		Log(LOG_INFO) << "BattlescapeGame::popState() #" << _AIActionCounter << " with "
-			<< (_save->getSelectedUnit() ? _save->getSelectedUnit()->getTimeUnits() : -9999) << " TU";
+			<< (_save->getSelectedUnit()? _save->getSelectedUnit()->getTimeUnits(): -9999) << " TU";
 	}
 
 	if (_states.empty())
@@ -1378,7 +1378,6 @@ void BattlescapeGame::popState()
 		else
 		{
 			//Log(LOG_INFO) << ". action -> NOT Faction_Player";
-
 			action.actor->spendTimeUnits(action.TU); // spend TUs
 
 			if (_save->getSide() != FACTION_PLAYER
@@ -1413,9 +1412,7 @@ void BattlescapeGame::popState()
 					}
 
 					if (_save->getSelectedUnit())
-					{
 						getMap()->getCamera()->centerOnPosition(_save->getSelectedUnit()->getPosition());
-					}
 				}
 			}
 			else if (_debugPlay)
@@ -1468,7 +1465,7 @@ void BattlescapeGame::popState()
 
 	// the currently selected unit died or became unconscious or disappeared inexplicably
 	if (_save->getSelectedUnit() == 0
-		|| _save->getSelectedUnit()->isOut())
+		|| _save->getSelectedUnit()->isOut(true, true))
 	{
 		//Log(LOG_INFO) << ". huh hey wot)";
 
@@ -2075,6 +2072,7 @@ void BattlescapeGame::primaryAction(const Position& pos)
 													pos)
 												> 1)
 			{
+				_currentAction.actor->setDashing(true); // kL
 				_currentAction.run = true;
 				_currentAction.strafe = false;
 			}

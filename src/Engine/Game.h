@@ -50,9 +50,9 @@ class Game
 
 private:
 	bool
+		_init,
 		_mouseActive,
-		_quit,
-		_init;
+		_quit;
 
 	Cursor* _cursor;
 	FpsCounter* _fpsCounter;
@@ -62,7 +62,6 @@ private:
 	SavedGame* _save;
 	Screen* _screen;
 	SDL_Event _event;
-
 
 	std::list<State*>
 		_deleted,

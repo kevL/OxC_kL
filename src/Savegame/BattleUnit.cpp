@@ -99,7 +99,8 @@ BattleUnit::BattleUnit(
 		_rankInt(-1),
 		_turretType(-1),
 		_hidingForTurn(false),
-		_stopShot(false) // kL
+		_stopShot(false), // kL
+		_dashing(false) // kL
 {
 	//Log(LOG_INFO) << "Create BattleUnit 1 : soldier ID = " << getId();
 
@@ -219,7 +220,8 @@ BattleUnit::BattleUnit(
 		_rankInt(-1),
 		_turretType(-1),
 		_hidingForTurn(false),
-		_stopShot(false) // kL
+		_stopShot(false), // kL
+		_dashing(false) // kL
 {
 	//Log(LOG_INFO) << "Create BattleUnit 2 : alien ID = " << getId();
 
@@ -1745,12 +1747,12 @@ double BattleUnit::getFiringAccuracy(
 	if (actionType == BA_AIMEDSHOT
 		|| actionType == BA_LAUNCH) // is this needed right now.
 	{
-		weaponAcc = item->getRules()->getAccuracyAimed();
+		weaponAcc = static_cast<double>(item->getRules()->getAccuracyAimed());
 	}
 	else if (actionType == BA_AUTOSHOT)
-		weaponAcc = item->getRules()->getAccuracyAuto();
+		weaponAcc = static_cast<double>(item->getRules()->getAccuracyAuto());
 	else
-		weaponAcc = item->getRules()->getAccuracySnap();
+		weaponAcc = static_cast<double>(item->getRules()->getAccuracySnap());
 
 	double ret = static_cast<double>(getStats()->firing) / 100.0;
 	ret *= weaponAcc / 100.0;
@@ -1888,8 +1890,11 @@ void BattleUnit::prepareNewTurn()
 			else if (getFaction() == FACTION_PLAYER)
 				enRecovery /= 3;					// xCom & Mc'd aliens
 			else
-				enRecovery = enRecovery * 2 / 3;	// aLiens & civies
-		} // kL_end.
+				enRecovery = enRecovery * 2 / 3;	// non-Mc'd aLiens & civies
+		}
+		else // xCom tank.
+			enRecovery = enRecovery * 4 / 5;
+		// kL_end.
 
 		// Each fatal wound to the body reduces the soldier's energy recovery by 10%.
 		// kL_note: Only xCom gets fatal wounds, atm.
@@ -3406,6 +3411,22 @@ void BattleUnit::setStopShot(bool stop)
 bool BattleUnit::getStopShot() const
 {
 	return _stopShot;
+}
+
+/**
+ * Set a unit as dashing.
+ */
+void BattleUnit::setDashing(bool dash)
+{
+	_dashing = dash;
+}
+
+/**
+ * Get if a unit is dashing.
+ */
+bool BattleUnit::getDashing() const
+{
+	return _dashing;
 } // kL_end.
 
 /**

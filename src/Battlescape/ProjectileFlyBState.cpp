@@ -117,6 +117,16 @@ void ProjectileFlyBState::init()
 	_unit = _action.actor;
 //kL	_projectileItem = 0; // already initialized.
 
+	// kL_begin:
+	BattleUnit* targetUnit = _parent->getSave()->getTile(_action.target)->getUnit();
+	if (targetUnit
+		&& targetUnit->getFaction() != _parent->getSave()->getSide())
+//		&& targetUnit->getDashing())
+	{
+		Log(LOG_INFO) << ". targetUnit dashing, set FALSE";
+		targetUnit->setDashing(false);
+	} // kL_end.
+
 	if (_unit->isOut(true, true))
 //		|| _unit->getHealth() == 0
 //		|| _unit->getHealth() < _unit->getStunlevel())
@@ -172,10 +182,11 @@ void ProjectileFlyBState::init()
 	}
 	else if (_unit->getFaction() != _parent->getSave()->getSide()) // reaction fire
 	{
-		if (_parent->getSave()->getTile(_action.target)->getUnit())
+//kL		if (_parent->getSave()->getTile(_action.target)->getUnit())
+//kL		{
+//kL			BattleUnit* targetUnit = _parent->getSave()->getTile(_action.target)->getUnit();
+		if (targetUnit) // kL
 		{
-			BattleUnit* targetUnit = _parent->getSave()->getTile(_action.target)->getUnit();
-
 			if (_ammo == 0
 				|| targetUnit->isOut(true, true)
 				|| targetUnit != _parent->getSave()->getSelectedUnit())

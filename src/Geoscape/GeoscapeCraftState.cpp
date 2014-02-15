@@ -167,19 +167,20 @@ GeoscapeCraftState::GeoscapeCraftState(
 	_txtStatus->setColor(Palette::blockOffset(15)-1);
 	_txtStatus->setSecondaryColor(Palette::blockOffset(8)+10);
 //kL	_txtStatus->setWordWrap(true);
-
 	std::string stat = _craft->getStatus();
 	std::wstring status;
 /*	if (_waypoint != 0)
 		status = tr("STR_INTERCEPTING_UFO").arg(_waypoint->getId());
 	else */
-	if (_craft->getLowFuel())
+	bool lowFuel = _craft->getLowFuel();
+	if (lowFuel)
 		status = tr("STR_LOW_FUEL_RETURNING_TO_BASE");
 	// kL_begin: craft string, Based
-	else if (stat == "STR_READY"
+	else if (stat != "STR_OUT")
+/*				stat == "STR_READY"
 				|| stat == "STR_REPAIRS"
 				|| stat == "STR_REFUELLING"
-				|| stat == "STR_REARMING")
+				|| stat == "STR_REARMING") */
 	{
 		status = tr("STR_BASED");
 	}
@@ -206,7 +207,6 @@ GeoscapeCraftState::GeoscapeCraftState(
 			status = tr("STR_DESTINATION_UC_")
 						.arg(_craft->getDestination()->getName(_game->getLanguage()));
 	}
-
 	_txtStatus->setText(tr("STR_STATUS_").arg(status));
 
 	_txtBase->setColor(Palette::blockOffset(15)-1);
@@ -325,30 +325,30 @@ GeoscapeCraftState::GeoscapeCraftState(
 	else
 		_btnCancel->setText(tr("STR_GO_TO_LAST_KNOWN_UFO_POSITION"));
 
-/*kL	if (_craft->getLowFuel())
-	{
-		_btnBase->setVisible(false);
-		_btnTarget->setVisible(false);
-		_btnPatrol->setVisible(false);
-	} */
-
 	// kL_begin: set Base button visibility FALSE for already-Based crafts.
-	if (stat == "STR_READY")
+	// note these could be set up there where status was set.....
+	if (stat != "STR_OUT"
+		|| lowFuel)
 	{
 		_btnBase->setVisible(false);
 		_btnPatrol->setVisible(false);
+
+		if (stat == "STR_REPAIRS"
+			|| stat == "STR_REFUELLING"
+			|| stat == "STR_REARMING"
+			|| lowFuel)
+		{
+			_btnTarget->setVisible(false);
+		}
 	}
-	else if (stat == "STR_REPAIRS"
-		|| stat == "STR_REFUELLING"
-		|| stat == "STR_REARMING"
-		|| _craft->getLowFuel())
+	else
 	{
-		_btnBase->setVisible(false);
-		_btnTarget->setVisible(false);
-		_btnPatrol->setVisible(false);
+		if (_craft->getDestination() == dynamic_cast<Target*>(_craft->getBase()))
+			_btnBase->setVisible(false);
+
+		if (_craft->getDestination() == 0)
+			_btnPatrol->setVisible(false);
 	}
-	else if (_craft->getDestination() == (Target*)_craft->getBase())
-		_btnBase->setVisible(false);
 
 	if (_craft->getRules()->getSoldiers() == 0)
 		_txtSoldier->setVisible(false);

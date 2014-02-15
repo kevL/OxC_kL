@@ -127,7 +127,7 @@ Projectile::~Projectile()
  */
 int Projectile::calculateTrajectory(double accuracy)
 {
-	Log(LOG_INFO) << "Projectile::calculateTrajectory()";
+	Log(LOG_INFO) << "Projectile::calculateTrajectory(), accuracy = " << accuracy;
 
 	BattleUnit* bu = _action.actor;
 	Tile* targetTile = _save->getTile(_action.target); // Wb.140209
@@ -136,8 +136,8 @@ int Projectile::calculateTrajectory(double accuracy)
 //Wb.140209		targetVoxel,
 		targetVoxel, // kL
 		originVoxel = _save->getTileEngine()->getOriginVoxel(
-													_action,
-													_save->getTile(_origin));
+														_action,
+														_save->getTile(_origin));
 
 //	int dirYshift[24] = {1, 3, 9, 15, 15, 13, 7, 1,  1, 1, 7, 13, 15, 15, 9, 3,  1, 2, 8, 14, 15, 14, 8, 2};
 //	int dirXshift[24] = {9, 15, 15, 13, 8, 1, 1, 3,  7, 13, 15, 15, 9, 3, 1, 1,  8, 14, 15, 14, 8, 2, 1, 2};
@@ -345,6 +345,69 @@ int Projectile::calculateTrajectory(double accuracy)
 		}
 //Wb.140209 ...end deletion
 
+		// kL_begin:
+		// I believe this causes a "no LoF" warning to return: no shot allowed.
+		// taken up from all that stuff below this...
+		int test = _save->getTileEngine()->calculateLine(
+												originVoxel,
+												targetVoxel,
+												false,
+												&_trajectory,
+												bu);
+		Log(LOG_INFO) << ". test = " << test;
+
+		if (test != VOXEL_EMPTY
+			&& !_trajectory.empty()
+//kL			&& _action.actor->getFaction() == FACTION_PLAYER
+				// will that let/stop aLiens from shooting their mates?
+				// I want them to *not* try shooting through their mates....
+			&& _action.autoShotCount == 1
+			&& (SDL_GetModState() & KMOD_CTRL) == 0
+			&& _save->getBattleGame()->getPanicHandled())
+		{
+			Position hitPos = Position(
+									_trajectory.at(0).x / 16,
+									_trajectory.at(0).y / 16,
+									_trajectory.at(0).z / 24);
+			if (test == VOXEL_UNIT
+				&& _save->getTile(hitPos)
+				&& _save->getTile(hitPos)->getUnit() == 0)
+			{
+				hitPos = Position( // must be poking head up from the belowTile
+								hitPos.x,
+								hitPos.y,
+								hitPos.z - 1);
+			}
+
+
+			if (hitPos != _action.target
+				&& _action.result == "")
+			{
+				Log(LOG_INFO) << ". . hitPos != target";
+				if (test == VOXEL_UNIT)
+				{
+					Log(LOG_INFO) << ". . . test == 4, unit";
+					BattleUnit* hitUnit = _save->getTile(hitPos)->getUnit();
+					BattleUnit* targetUnit = targetTile->getUnit();
+
+					if (hitUnit != targetUnit
+						&& (hitUnit->getVisible()
+							|| (hitUnit->getOriginalFaction() == FACTION_HOSTILE
+								&& targetUnit->getOriginalFaction() == FACTION_HOSTILE)))
+					{
+						_trajectory.clear();
+
+						Log(LOG_INFO) << ". . . . Voxel_Empty.";
+						return VOXEL_EMPTY;
+					}
+					else if (targetUnit->getDashing())
+					{
+						accuracy -= 0.333;
+						Log(LOG_INFO) << ". . . . targetUnit is Dashing!!! accuracy = ";
+					}
+				}
+			}
+		} // kL_end.
 
 /*kL		int test = VOXEL_EMPTY;
 		test = _save->getTileEngine()->calculateLine(
@@ -802,7 +865,8 @@ void Projectile::applyAccuracy(
 							+ static_cast<double>(zdiff * zdiff)); // kL
 
 	// maxRange is the maximum range a projectile shall ever travel in voxel space
-	double maxRange = 16000.0; // vSpace == 1000 tiles in tSpace.
+//kL	double maxRange = 16000.0; // vSpace == 1000 tiles in tSpace.
+	double maxRange = 3200.0; // kL. vSpace == 200 tiles in tSpace.
 	if (keepRange)
 		maxRange = targetDist;
 
@@ -870,7 +934,7 @@ void Projectile::applyAccuracy(
 		// NOTE: This should be done on the weapons themselves!!!!
 		double baseDeviation = 0.0;
 		if (_action.actor->getFaction() == FACTION_PLAYER)
-			baseDeviation = 0.08; // give the poor aLiens an aiming advantage vs. xCom & Mc'd units
+			baseDeviation = 0.08; // give the poor aLiens an aiming advantage over xCom & Mc'd units
 		double baseDivisor = accuracy - accPenalty + 0.18;
 		switch (_action.type)
 		{

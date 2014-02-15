@@ -735,8 +735,7 @@ void DogfightState::drawCraftDamage()
 								floor(static_cast<double>(_craftHeight * damagePercent) / 100.0));
 //								ceil(static_cast<double>(_craftHeight * damagePercent) / 100.0)); // kL
 
-		if (rowsToColor == 0)
-			return;
+		if (rowsToColor == 0) return;
 		else if (damagePercent > 99)
 			rowsToColor += 1;
 

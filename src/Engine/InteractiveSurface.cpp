@@ -86,13 +86,9 @@ bool InteractiveSurface::isButtonHandled(Uint8 button)
 bool InteractiveSurface::isButtonPressed(Uint8 button)
 {
 	if (button == 0)
-	{
 		return (_buttonsPressed != 0);
-	}
 	else
-	{
 		return (_buttonsPressed & SDL_BUTTON(button)) != 0;
-	}
 }
 
 /**
@@ -103,13 +99,9 @@ void InteractiveSurface::setButtonPressed(
 		bool pressed)
 {
 	if (pressed)
-	{
 		_buttonsPressed = _buttonsPressed | SDL_BUTTON(button);
-	}
 	else
-	{
 		_buttonsPressed = _buttonsPressed & (!SDL_BUTTON(button));
-	}
 }
 
 /**
@@ -121,11 +113,8 @@ void InteractiveSurface::setVisible(bool visible)
 {
 	Surface::setVisible(visible);
 
-	// Unpress button if it was hidden
-	if (!_visible)
-	{
+	if (!_visible) // Unpress button if it was hidden
 		unpress(0);
-	}
 }
 
 /**
@@ -140,8 +129,7 @@ void InteractiveSurface::handle(
 		Action* action,
 		State* state)
 {
-	if (!_visible || _hidden)
-		return;
+	if (!_visible || _hidden) return;
 
 	action->setSender(this);
 
@@ -155,13 +143,12 @@ void InteractiveSurface::handle(
 							getY());
 	}
 	else if (action->getDetails()->type == SDL_MOUSEMOTION)
-	{
 		action->setMouseAction(
 							action->getDetails()->motion.x,
 							action->getDetails()->motion.y,
 							getX(),
 							getY());
-	}
+
 	// Modern system mouse handling: Press/releases are only triggered by button up/down events
 	// Classic X-Com mouse handling: Press/releases occur automatically with mouse movement
 	if (action->isMouseAction())
@@ -211,9 +198,7 @@ void InteractiveSurface::handle(
 							++i)
 					{
 						if (isButtonPressed(i))
-						{
 							setButtonPressed(i, false);
-						}
 
 						action->getDetails()->button.button = i;
 						mouseRelease(action, state);
@@ -239,28 +224,22 @@ void InteractiveSurface::handle(
 			setButtonPressed(action->getDetails()->button.button, false);
 			mouseRelease(action, state);
 			if (_isHovered)
-			{
 				mouseClick(action, state);
-			}
 		}
 	}
 
 	if (_isFocused)
 	{
 		if (action->getDetails()->type == SDL_KEYDOWN)
-		{
 			keyboardPress(action, state);
-		}
 		else if (action->getDetails()->type == SDL_KEYUP)
-		{
 			keyboardRelease(action, state);
-		}
 	}
 }
 
 /**
- * Marks ths surface as focused. Surfaces will only receive
- * keyboard events if focused.
+ * Marks the surface as focused.
+ * Surfaces will only receive keyboard events if focused.
  */
 void InteractiveSurface::focus()
 {
@@ -268,7 +247,7 @@ void InteractiveSurface::focus()
 }
 
 /**
- * Marks ths surface as unfocused.
+ * Marks the surface as unfocused.
  */
 void InteractiveSurface::deFocus()
 {
@@ -310,6 +289,7 @@ void InteractiveSurface::mousePress(Action* action, State* state)
 		ActionHandler handler = allHandler->second;
 		(state->*handler)(action);
 	}
+
 	if (oneHandler != _press.end())
 	{
 		ActionHandler handler = oneHandler->second;
@@ -377,9 +357,7 @@ void InteractiveSurface::mouseClick(Action* action, State* state)
 void InteractiveSurface::mouseIn(Action* action, State* state)
 {
 	if (_in != 0)
-	{
 		(state->*_in)(action);
-	}
 }
 
 /**
@@ -392,9 +370,7 @@ void InteractiveSurface::mouseIn(Action* action, State* state)
 void InteractiveSurface::mouseOver(Action* action, State* state)
 {
 	if (_over != 0)
-	{
 		(state->*_over)(action);
-	}
 }
 
 /**
@@ -407,9 +383,7 @@ void InteractiveSurface::mouseOver(Action* action, State* state)
 void InteractiveSurface::mouseOut(Action* action, State* state)
 {
 	if (_out != 0)
-	{
 		(state->*_out)(action);
-	}
 }
 
 /**
@@ -430,9 +404,10 @@ void InteractiveSurface::keyboardPress(Action* action, State* state)
 		(state->*handler)(action);
 	}
 
-	// Check if Ctrl, Alt and Shift aren't pressed
-	bool mod = ((action->getDetails()->key.keysym.mod & (KMOD_CTRL|KMOD_ALT|KMOD_SHIFT)) != 0);
-	if (oneHandler != _keyPress.end() && !mod)
+	// Check if Ctrl, Alt and Shift are pressed
+	bool mod = (action->getDetails()->key.keysym.mod & (KMOD_CTRL | KMOD_ALT | KMOD_SHIFT)) != 0;
+	if (oneHandler != _keyPress.end()
+		&& !mod)
 	{
 		ActionHandler handler = oneHandler->second;
 		(state->*handler)(action);
@@ -457,9 +432,10 @@ void InteractiveSurface::keyboardRelease(Action* action, State* state)
 		(state->*handler)(action);
 	}
 
-	// Check if Ctrl, Alt and Shift aren't pressed
-	bool mod = ((action->getDetails()->key.keysym.mod & (KMOD_CTRL|KMOD_ALT|KMOD_SHIFT)) != 0);
-	if (oneHandler != _keyRelease.end() && !mod)
+	// Check if Ctrl, Alt and Shift are pressed
+	bool mod = (action->getDetails()->key.keysym.mod & (KMOD_CTRL | KMOD_ALT | KMOD_SHIFT)) != 0;
+	if (oneHandler != _keyRelease.end()
+		&& !mod)
 	{
 		ActionHandler handler = oneHandler->second;
 		(state->*handler)(action);
@@ -474,13 +450,9 @@ void InteractiveSurface::keyboardRelease(Action* action, State* state)
 void InteractiveSurface::onMouseClick(ActionHandler handler, Uint8 button)
 {
 	if (handler != 0)
-	{
 		_click[button] = handler;
-	}
 	else
-	{
 		_click.erase(button);
-	}
 }
 
 /**
@@ -491,13 +463,9 @@ void InteractiveSurface::onMouseClick(ActionHandler handler, Uint8 button)
 void InteractiveSurface::onMousePress(ActionHandler handler, Uint8 button)
 {
 	if (handler != 0)
-	{
 		_press[button] = handler;
-	}
 	else
-	{
 		_press.erase(button);
-	}
 }
 
 /**
@@ -508,13 +476,9 @@ void InteractiveSurface::onMousePress(ActionHandler handler, Uint8 button)
 void InteractiveSurface::onMouseRelease(ActionHandler handler, Uint8 button)
 {
 	if (handler != 0)
-	{
 		_release[button] = handler;
-	}
 	else
-	{
 		_release.erase(button);
-	}
 }
 
 /**
@@ -552,13 +516,9 @@ void InteractiveSurface::onMouseOut(ActionHandler handler)
 void InteractiveSurface::onKeyboardPress(ActionHandler handler, SDLKey key)
 {
 	if (handler != 0)
-	{
 		_keyPress[key] = handler;
-	}
 	else
-	{
 		_keyPress.erase(key);
-	}
 }
 
 /**
@@ -569,13 +529,9 @@ void InteractiveSurface::onKeyboardPress(ActionHandler handler, SDLKey key)
 void InteractiveSurface::onKeyboardRelease(ActionHandler handler, SDLKey key)
 {
 	if (handler != 0)
-	{
 		_keyRelease[key] = handler;
-	}
 	else
-	{
 		_keyRelease.erase(key);
-	}
 }
 
 /**

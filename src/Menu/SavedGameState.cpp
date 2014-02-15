@@ -19,6 +19,7 @@
 
 #include "SavedGameState.h"
 
+//#include "../Engine/CrossPlatform.h" // kL
 #include "../Engine/Exception.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
@@ -29,8 +30,11 @@
 
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
+//#include "../Interface/TextEdit.h" // kL
 #include "../Interface/TextList.h"
 #include "../Interface/Window.h"
+
+//#include "../Menu/SaveState.h" // kL
 
 #include "../Resource/ResourcePack.h"
 
@@ -49,12 +53,15 @@ SavedGameState::SavedGameState(
 		Game* game,
 		OptionsOrigin origin,
 		int firstValidRow)
+//		SaveState* saveState) // kL
 	:
 		State(game),
 		_origin(origin),
 		_showMsg(true),
 		_noUI(false),
-		_firstValidRow(firstValidRow)
+		_firstValidRow(firstValidRow),
+		_inEditMode(false) // kL
+//		_saveState(saveState) // kL
 {
 	_screen = false;
 
@@ -72,15 +79,14 @@ SavedGameState::SavedGameState(
 	_txtStatus	= new Text(320, 17, 0, 92);
 	_txtDetails = new Text(288, 9, 16, 165);
 
-	_btnCancel	= new TextButton(288, 16, 16, 177);
+	_btnCancel	= new TextButton(134, 16, 16, 177);
+	_btnOk		= new TextButton(134, 16, 170, 177); // kL
 
 	if (_origin != OPT_BATTLESCAPE)
-	{
 		_game->setPalette(
 					_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)),
 					Palette::backPos,
 					16);
-	}
 
 	add(_window);
 	add(_txtTitle);
@@ -92,6 +98,7 @@ SavedGameState::SavedGameState(
 	add(_txtStatus);
 	add(_txtDetails);
 	add(_btnCancel);
+	add(_btnOk);
 
 	centerAllSurfaces();
 
@@ -100,12 +107,21 @@ SavedGameState::SavedGameState(
 	_window->setBackground(game->getResourcePack()->getSurface("BACK01.SCR"));
 
 	_btnCancel->setColor(Palette::blockOffset(8)+5);
-
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)& SavedGameState::btnCancelClick);
 	_btnCancel->onKeyboardPress(
 					(ActionHandler)& SavedGameState::btnCancelClick,
 					(SDLKey) Options::getInt("keyCancel"));
+
+	// kL_begin:
+	_btnOk->setColor(Palette::blockOffset(8)+5);
+	_btnOk->setText(tr("STR_OK"));
+//	_btnOk->onMouseClick((ActionHandler)& SavedGameState::btnOkClick);
+//	_btnOk->onKeyboardPress(
+//					(ActionHandler)& SavedGameState::btnOkClick,
+//					(SDLKey) Options::getInt("keyCancel"));
+	_btnOk->setVisible(false);
+	// kL_end.
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setBig();
@@ -158,7 +174,9 @@ SavedGameState::SavedGameState(
 		_origin(origin),
 		_showMsg(showMsg),
 		_noUI(true),
-		_firstValidRow(firstValidRow)
+		_firstValidRow(firstValidRow),
+		_inEditMode(false) // kL
+//		_saveState(0) // kL
 {
 	if (_showMsg)
 	{
@@ -178,9 +196,7 @@ SavedGameState::SavedGameState(
 			_txtStatus->setHighContrast(true);
 		}
 		else
-		{
 			_txtStatus->setColor(Palette::blockOffset(11)+3);
-		}
 	}
 }
 
@@ -206,16 +222,12 @@ void SavedGameState::init()
 	_txtStatus->setText(L"");
 
 	if (_origin != OPT_BATTLESCAPE)
-	{
 		_game->setPalette(
 					_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)),
 					Palette::backPos,
 					16);
-	}
 	else
-	{
 		applyBattlescapeTheme();
-	}
 
 	try
 	{
@@ -263,20 +275,90 @@ void SavedGameState::btnCancelClick(Action*)
 }
 
 /**
+ * kL. Saves to the selected slot.
+ * @param action Pointer to an action.
+ */
+void SavedGameState::btnOkClick(Action*) // kL
+{
+/*	Log(LOG_INFO) << "SavedGameState::btnOkClick()";
+	if (!_inEditMode) return;
+	else
+	{
+		_btnOk->setVisible(false);
+		_inEditMode = false;
+	}
+
+	Log(LOG_INFO) << ". updateStatus";
+	updateStatus("STR_SAVING_GAME");
+	_game->getSavedGame()->setName(_edtSave->getText());
+	Log(LOG_INFO) << ". setName";
+//	_game->getSavedGame()->setName(_saveState->getEdit()->getText()); // kL
+
+	std::string
+		oldFilename,
+		newFilename;
+
+	Log(LOG_INFO) << ". sanitizeFilename";
+#ifdef _WIN32
+	newFilename = CrossPlatform::sanitizeFilename(Language::wstrToCp(_edtSave->getText()));
+//	newFilename = CrossPlatform::sanitizeFilename(Language::wstrToCp(_saveState->getEdit()->getText())); // kL
+#else
+	newFilename = CrossPlatform::sanitizeFilename(Language::wstrToUtf8(_edtSave->getText()));
+//	newFilename = CrossPlatform::sanitizeFilename(Language::wstrToUtf8(_saveState->getEdit()->getText())); // kL
+#endif
+
+	Log(LOG_INFO) << ". getSelectedRow";
+	if (_selectedRow > 0)
+//	if (_saveState->getSelectedRow() > 0) // kL
+	{
+		Log(LOG_INFO) << ". . CrossPlatform::noExt";
+		oldFilename = CrossPlatform::noExt(_saves[_selectedRow - 1]);
+//		oldFilename = CrossPlatform::noExt(_saves[_saveState->getSelectedRow() - 1]); // kL
+	}
+	else
+	{
+		Log(LOG_INFO) << ". . fileExists";
+		while (CrossPlatform::fileExists(Options::getUserFolder() + newFilename + ".sav"))
+			newFilename += "_";
+
+		oldFilename = newFilename;
+	}
+
+	Log(LOG_INFO) << ". quickSave";
+	quickSave(oldFilename);
+//	_saveState->quickSave(oldFilename); // kL
+	if (oldFilename != newFilename)
+	{
+		while (CrossPlatform::fileExists(Options::getUserFolder() + newFilename + ".sav"))
+			newFilename += "_";
+
+		std::string oldPath = Options::getUserFolder() + oldFilename + ".sav";
+		std::string newPath = Options::getUserFolder() + newFilename + ".sav";
+		rename(
+			oldPath.c_str(),
+			newPath.c_str());
+	}
+	Log(LOG_INFO) << "SavedGameState::btnOkClick() EXIT"; */
+}
+
+/**
  *
  */
 void SavedGameState::lstSavesMouseOver(Action*)
 {
-	std::wstring wstr;
-
-	int sel = _lstSaves->getSelectedRow() - _firstValidRow;
-	if (sel > -1
-		&& sel < static_cast<int>(_saves.size()))
+	if (!_inEditMode) // kL
 	{
-		wstr = _details[sel];
-	}
+		std::wstring wstr;
 
-	_txtDetails->setText(tr("STR_DETAILS").arg(wstr));
+		int sel = _lstSaves->getSelectedRow() - _firstValidRow;
+		if (sel > -1
+			&& sel < static_cast<int>(_saves.size()))
+		{
+			wstr = _details[sel];
+		}
+
+		_txtDetails->setText(tr("STR_DETAILS").arg(wstr));
+	}
 }
 
 /**
@@ -284,7 +366,8 @@ void SavedGameState::lstSavesMouseOver(Action*)
  */
 void SavedGameState::lstSavesMouseOut(Action*)
 {
-	_txtDetails->setText(tr("STR_DETAILS").arg(L""));
+	if (!_inEditMode) // kL
+		_txtDetails->setText(tr("STR_DETAILS").arg(L""));
 }
 
 }

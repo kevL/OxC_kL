@@ -27,23 +27,29 @@
 
 #include <sstream>
 #include <SDL_mixer.h>
-#include "State.h"
-#include "Screen.h"
-#include "Language.h"
-#include "Logger.h"
-#include "../Interface/Cursor.h"
-#include "../Interface/FpsCounter.h"
-#include "../Resource/ResourcePack.h"
-#include "../Ruleset/Ruleset.h"
-#include "../Savegame/SavedGame.h"
-#include "Palette.h"
+
 #include "Action.h"
+#include "CrossPlatform.h"
 #include "Exception.h"
 #include "InteractiveSurface.h"
+#include "Language.h"
+#include "Logger.h"
 #include "Options.h"
-#include "CrossPlatform.h"
+#include "Palette.h"
+#include "Screen.h"
+#include "State.h"
+
+#include "../Interface/Cursor.h"
+#include "../Interface/FpsCounter.h"
+
 #include "../Menu/SaveState.h"
 #include "../Menu/TestState.h"
+
+#include "../Resource/ResourcePack.h"
+
+#include "../Ruleset/Ruleset.h"
+
+#include "../Savegame/SavedGame.h"
 
 
 namespace OpenXcom
@@ -154,7 +160,7 @@ Game::Game(const std::string& title)
 	_lang = new Language();
 
 #ifdef __MORPHOS__
-	waittime = 1000.0f / Options::getInt("FPS");	//20 - FPS
+	waittime = 1000.0f / Options::getInt("FPS"); // 20 - FPS
 	framestarttime = 0;
 #endif
 }
@@ -168,7 +174,10 @@ Game::~Game()
 
 	Mix_HaltChannel(-1);
 
-	for (std::list<State*>::iterator i = _states.begin(); i != _states.end(); ++i)
+	for (std::list<State*>::iterator
+			i = _states.begin();
+			i != _states.end();
+			++i)
 	{
 		delete *i;
 	}
@@ -195,26 +204,26 @@ void Game::run()
 {
 	enum ApplicationState
 	{
-		RUNNING = 0,
-		SLOWED = 1,
-		PAUSED = 2
+		RUNNING	= 0,
+		SLOWED	= 1,
+		PAUSED	= 2
 	}
 	runningState = RUNNING;
 
 	static const ApplicationState kbFocusRun[4] =
 	{
-		RUNNING,
-		RUNNING,
-		SLOWED,
-		PAUSED
+		RUNNING,	// 0
+		RUNNING,	// 0
+		SLOWED,		// 1
+		PAUSED		// 2
 	};
 
 	static const ApplicationState stateRun[4] =
 	{
-		SLOWED,
-		PAUSED,
-		PAUSED,
-		PAUSED
+		SLOWED,		// 1
+		PAUSED,		// 2
+		PAUSED,		// 2
+		PAUSED		// 2
 	};
 
 	int pauseMode = Options::getInt("pauseMode");
@@ -247,7 +256,12 @@ void Game::run()
 			ev.motion.x = x;
 			ev.motion.y = y;
 
-			Action action = Action(&ev, _screen->getXScale(), _screen->getYScale(), _screen->getCursorTopBlackBand(), _screen->getCursorLeftBlackBand());
+			Action action = Action(
+								&ev,
+								_screen->getXScale(),
+								_screen->getYScale(),
+								_screen->getCursorTopBlackBand(),
+								_screen->getCursorLeftBlackBand());
 			_states.back()->handle(&action);
 		}
 
@@ -265,12 +279,12 @@ void Game::run()
 					switch (reinterpret_cast<SDL_ActiveEvent*>(&_event)->state)
 					{
 						case SDL_APPACTIVE:
-							runningState = reinterpret_cast<SDL_ActiveEvent*>(&_event)->gain ? RUNNING : stateRun[pauseMode];
+							runningState = reinterpret_cast<SDL_ActiveEvent*>(&_event)->gain? RUNNING: stateRun[pauseMode];
 						break;
 						case SDL_APPMOUSEFOCUS: // We consciously ignore it.
 						break;
 						case SDL_APPINPUTFOCUS:
-							runningState = reinterpret_cast<SDL_ActiveEvent*>(&_event)->gain ? RUNNING : kbFocusRun[pauseMode];
+							runningState = reinterpret_cast<SDL_ActiveEvent*>(&_event)->gain? RUNNING: kbFocusRun[pauseMode];
 						break;
 					}
 				break;
@@ -290,7 +304,12 @@ void Game::run()
 					runningState = RUNNING;			// re-gain focus on mouse-over or keypress.
 													// Go on, feed the event to others
 				default:
-					Action action = Action(&_event, _screen->getXScale(), _screen->getYScale(), _screen->getCursorTopBlackBand(), _screen->getCursorLeftBlackBand());
+					Action action = Action(
+										&_event,
+										_screen->getXScale(),
+										_screen->getYScale(),
+										_screen->getCursorTopBlackBand(),
+										_screen->getCursorLeftBlackBand());
 					_screen->handle(&action);
 					_cursor->handle(&action);
 					_fpsCounter->handle(&action);
@@ -333,9 +352,13 @@ void Game::run()
 				{
 					--i;
 				}
-				while (i != _states.begin() && !(*i)->isScreen());
+				while (i != _states.begin()
+					&& !(*i)->isScreen());
 
-				for (; i != _states.end(); ++i)
+				for (
+						;
+						i != _states.end();
+						++i)
 				{
 					(*i)->blit();
 				}
@@ -454,9 +477,7 @@ void Game::setPalette(
 	_fpsCounter->setPalette(colors, firstcolor, ncolors);
 
 	if (_res != 0)
-	{
 		_res->setPalette(colors, firstcolor, ncolors);
-	}
 }
 
 /**
@@ -468,9 +489,7 @@ void Game::setPalette(
 void Game::setState(State* state)
 {
 	while (!_states.empty())
-	{
 		popState();
-	}
 
 	pushState(state);
 
@@ -521,27 +540,18 @@ void Game::loadLanguage(const std::string& filename)
 	std::ostringstream ss;
 	ss << "Language/" << filename << ".yml";
 
-	ExtraStrings *strings = 0;
+	ExtraStrings* strings = 0;
 	std::map<std::string, ExtraStrings *> extraStrings = _rules->getExtraStrings();
 	if (!extraStrings.empty())
 	{
 		if (extraStrings.find(filename) != extraStrings.end())
-		{
 			strings = extraStrings[filename];
-		}
-		// Fallback
-		else if (extraStrings.find("en-US") != extraStrings.end())
-		{
+		else if (extraStrings.find("en-US") != extraStrings.end()) // Fallback
 			strings = extraStrings["en-US"];
-		}
 		else if (extraStrings.find("en-GB") != extraStrings.end())
-		{
 			strings = extraStrings["en-GB"];
-		}
 		else
-		{
 			strings = extraStrings.begin()->second;
-		}
 	}
 
 	_lang->load(CrossPlatform::getDataFile(ss.str()), strings);
@@ -603,10 +613,11 @@ void Game::loadRuleset()
 	_rules = new Ruleset();
 
 	std::vector<std::string> rulesets = Options::getRulesets();
-	for (std::vector<std::string>::iterator i = rulesets.begin(); i != rulesets.end(); ++i)
-	{
+	for (std::vector<std::string>::iterator
+			i = rulesets.begin();
+			i != rulesets.end();
+			++i)
 		_rules->load(*i);
-	}
 
 	_rules->sortLists();
 }
@@ -629,7 +640,8 @@ void Game::setMouseActive(bool active)
  */
 bool Game::isState(State* state) const
 {
-	return !_states.empty() && _states.back() == state;
+	return !_states.empty()
+			&& _states.back() == state;
 }
 
 /**

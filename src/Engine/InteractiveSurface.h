@@ -35,10 +35,9 @@ typedef void (State::*ActionHandler)(Action*);
 
 /**
  * Surface that the user can interact with.
- * Specialized version of the standard Surface that
- * processes all the various SDL events and turns
- * them into useful interactions with the Surface,
- * so specialized subclasses don't need to worry about it.
+ * Specialized version of the standard Surface that processes all the various
+ * SDL events and turns them into useful interactions with the Surface, so
+ * specialized subclasses don't need to worry about it.
  */
 class InteractiveSurface
 	:

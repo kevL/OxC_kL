@@ -320,7 +320,6 @@ bool UnitWalkBState::doStatusStand()
 	else
 //kL		_parent->setStateInterval(0);
 		_parent->setStateInterval(11); // kL
-		// kL_note: mute footstep sounds. Trying...
 	*/
 //	setNormalWalkSpeed(); // kL: Done in init()
 
@@ -376,40 +375,48 @@ bool UnitWalkBState::doStatusStand()
 			tu = 0;
 		}
 
+
 		int energy = tu;
-
-		Tile* tilePos = _parent->getSave()->getTile(_unit->getPosition());
-		// kL_begin: UnitWalkBState::think(), no stamina required to go up/down GravLifts.
-		if (dir >= _pf->DIR_UP
-			&& tilePos->getMapData(MapData::O_FLOOR)
-			&& tilePos->getMapData(MapData::O_FLOOR)->isGravLift())
-//			&& tileDest
-//			&& tileDest->getMapData(MapData::O_FLOOR)
-//			&& tileDest->getMapData(MapData::O_FLOOR)->isGravLift())
-		{
-			Log(LOG_INFO) << ". . using GravLift";
-			energy = 0;
-		} // kL_end.
-
-//kL		if (dir >= Pathfinding::DIR_UP)
-//kL		{
-//kL			energy = 0;
-//kL		}
 
 		if (_action.run)
 		{
 			tu = tu * 3 / 4;
 			energy = energy * 3 / 2;
-			// kL_note: Should figure a way to reduce reaction fire vs. Running opponents.
 		}
 
-		if (_unit->getArmor()->getType() == "STR_FLYING_SUIT_UC"
-			|| _unit->getArmor()->getType() == "STR_POWER_SUIT_UC")
+		Tile* tilePos = _parent->getSave()->getTile(_unit->getPosition());
+		bool gravLift = (dir >= _pf->DIR_UP
+						&& tilePos->getMapData(MapData::O_FLOOR)
+						&& tilePos->getMapData(MapData::O_FLOOR)->isGravLift());
+//						&& tileDest
+//						&& tileDest->getMapData(MapData::O_FLOOR)
+//						&& tileDest->getMapData(MapData::O_FLOOR)->isGravLift())
+		if (!gravLift)
 		{
-			energy -= 1;
+			if (_unit->getArmor()->getType() == "STR_FLYING_SUIT_UC")
+			{
+				energy -= 2; // zippy.
+				if (energy < 0)
+					energy = 0;
+			}
+			else if (_unit->getArmor()->getType() == "STR_POWER_SUIT_UC")
+			{
+				energy -= 1; // good stuff
+				if (energy < 0)
+					energy = 0;
+			}
+			// else if (coveralls) Normal energy expenditure
+			else if (_unit->getArmor()->getType() == "STR_PERSONAL_ARMOR_UC")
+			{
+				energy += 1; // *clunk*clunk*
+			}
 		}
-		else if (_unit->getArmor()->getType() == "STR_PERSONAL_ARMOR_UC")
-			energy += 1;
+		else // (gravLift)
+		{
+			Log(LOG_INFO) << ". . using GravLift";
+			energy = 0;
+		}
+
 
 		Log(LOG_INFO) << ". check tu + stamina, etc.";
 		if (tu > _unit->getTimeUnits())

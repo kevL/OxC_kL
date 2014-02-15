@@ -33,6 +33,7 @@
 #include "../Engine/Options.h"
 #include "../Engine/Palette.h"
 
+#include "../Interface/TextButton.h" // kL
 #include "../Interface/TextEdit.h"
 #include "../Interface/TextList.h"
 
@@ -59,7 +60,14 @@ SaveState::SaveState(
 		_previousSelectedRow(-1),
 		_selectedRow(-1)
 {
+//	new SavedGameState( // kL
+//			game,
+//			origin,
+//			1,
+//			this);
+
 	_edtSave = new TextEdit(168, 9, 0, 0);
+
 	add(_edtSave);
 
 	_txtTitle->setText(tr("STR_SELECT_SAVE_POSITION"));
@@ -124,6 +132,9 @@ void SaveState::lstSavesPress(Action* action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
+		_btnOk->setVisible(true); // kL
+		_inEditMode = true; // kL
+
 		_previousSelectedRow = _selectedRow;
 		_selectedRow = _lstSaves->getSelectedRow();
 
@@ -159,9 +170,7 @@ void SaveState::lstSavesPress(Action* action)
 			_selected = L"";
 		}
 		else
-		{
 			_edtSave->setText(_selected);
-		}
 
 		_edtSave->setX(_lstSaves->getColumnX(0));
 		_edtSave->setY(_lstSaves->getRowY(_selectedRow));
@@ -177,8 +186,8 @@ void SaveState::lstSavesPress(Action* action)
 										_game,
 										_origin,
 										_lstSaves->getCellText(
-											_lstSaves->getSelectedRow(),
-											0),
+														_lstSaves->getSelectedRow(),
+														0),
 										this));
 	}
 }
@@ -192,6 +201,9 @@ void SaveState::edtSaveKeyPress(Action* action)
 	if (action->getDetails()->key.keysym.sym == SDLK_RETURN
 		|| action->getDetails()->key.keysym.sym == SDLK_KP_ENTER)
 	{
+		_btnOk->setVisible(false); // kL
+		_inEditMode = false; // kL
+
 		updateStatus("STR_SAVING_GAME");
 		_game->getSavedGame()->setName(_edtSave->getText());
 
@@ -204,15 +216,11 @@ void SaveState::edtSaveKeyPress(Action* action)
 		newFilename = CrossPlatform::sanitizeFilename(Language::wstrToUtf8(_edtSave->getText()));
 #endif
 		if (_selectedRow > 0)
-		{
-			oldFilename = CrossPlatform::noExt(_saves[_selectedRow-1]);
-		}
+			oldFilename = CrossPlatform::noExt(_saves[_selectedRow - 1]);
 		else
 		{
 			while (CrossPlatform::fileExists(Options::getUserFolder() + newFilename + ".sav"))
-			{
 				newFilename += "_";
-			}
 
 			oldFilename = newFilename;
 		}
@@ -221,9 +229,7 @@ void SaveState::edtSaveKeyPress(Action* action)
 		if (oldFilename != newFilename)
 		{
 			while (CrossPlatform::fileExists(Options::getUserFolder() + newFilename + ".sav"))
-			{
 				newFilename += "_";
-			}
 
 			std::string oldPath = Options::getUserFolder() + oldFilename + ".sav";
 			std::string newPath = Options::getUserFolder() + newFilename + ".sav";
@@ -309,5 +315,21 @@ void SaveState::quickSave(const std::string& filename)
 												-1));
 	}
 }
+
+/**
+ * kL. Get the currently edited slot.
+ */
+/* TextEdit* SaveState::getEdit() const // kL
+{
+	return _edtSave;
+} */
+
+/**
+ * kL. Get the currently selected row.
+ */
+/* int SaveState::getSelectedRow() const // kL
+{
+	return _selectedRow;
+} */
 
 }

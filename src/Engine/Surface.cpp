@@ -522,10 +522,7 @@ void Surface::offset(
 {
 	if (off == 0) return;
 
-
-	// Lock the surface
-	lock();
-
+	lock(); // Lock the surface
 	for (int
 			x = 0,
 				y = 0;
@@ -537,13 +534,9 @@ void Surface::offset(
 		int p;							// the new color
 
 		if (off > 0)
-		{
 			p = (pixel * mult) + off;
-		}
 		else
-		{
 			p = (pixel + off) / mult;
-		}
 
 		if (min != -1
 			&& p < min)
@@ -557,17 +550,11 @@ void Surface::offset(
 		}
 
 		if (pixel > 0)
-		{
 			setPixelIterative(&x, &y, p);
-		}
 		else
-		{
 			setPixelIterative(&x, &y, 0);
-		}
 	}
-
-	// Unlock the surface
-	unlock();
+	unlock(); // Unlock the surface
 }
 
 /**
@@ -589,17 +576,13 @@ void Surface::invert(Uint8 mid)
 	{
 		Uint8 pixel = getPixel(x, y);
 		if (pixel > 0)
-		{
 			setPixelIterative(
 							&x,
 							&y,
 							pixel +
 								2 * (static_cast<int>(mid) - static_cast<int>(pixel)));
-		}
 		else
-		{
 			setPixelIterative(&x, &y, 0);
-		}
 	}
 
 	// Unlock the surface
@@ -653,9 +636,7 @@ void Surface::blit(Surface* surface)
 			cropper = 0;
 		}
 		else
-		{
 			cropper = &_crop;
-		}
 
 		target.x = getX();
 		target.y = getY();
@@ -977,7 +958,7 @@ static inline void func(
 {
 	if (src)
 	{
-		const int newShade = (src&15) + shade;
+		const int newShade = (src & 15) + shade;
 		if (newShade > 15)
 			// so dark it would flip over to another color - make it black instead
 			dest = 15;
@@ -1011,12 +992,12 @@ static inline void func(
 {
 	if (src)
 	{
-		const int newShade = (src&15) + shade;
+		const int newShade = (src & 15) + shade;
 		if (newShade > 15)
 			// so dark it would flip over to another color - make it black instead
 			dest = 15;
 		else
-			dest = (src&(15<<4)) | newShade;
+			dest = (src & (15 << 4)) | newShade;
 	}
 }
 };

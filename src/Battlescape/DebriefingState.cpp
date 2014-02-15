@@ -392,6 +392,7 @@ class ClearAlienBase
 private:
 	const AlienBase* _base;
 
+
 	public:
 		/// Remembers the base.
 		ClearAlienBase(const AlienBase* base)
@@ -458,16 +459,17 @@ void DebriefingState::prepareDebriefing()
 	SavedGame* save = _game->getSavedGame();
 	SavedBattleGame* battle = save->getSavedBattle();
 
-	bool aborted = battle->isAborted();
-	bool success = !aborted;
+	bool
+		aborted = battle->isAborted(),
+		success = !aborted;
 
 	Craft* craft = 0;
 	std::vector<Craft*>::iterator craftIterator;
 
 	Base* base = 0;
 
-	int soldierExit = 0;	// if this stays 0 the craft is lost...
-	int soldierLive = 0;	// if this stays 0 the craft is lost...
+	int soldierExit = 0; // if this stays 0 the craft is lost...
+	int soldierLive = 0; // if this stays 0 the craft is lost...
 	int soldierOut = 0;
 
 	for (std::vector<Base*>::iterator
@@ -953,7 +955,8 @@ void DebriefingState::prepareDebriefing()
 				}
 			}
 			else if (origFaction == FACTION_HOSTILE
-				&& (!aborted || (*j)->isInExitArea())
+				&& (!aborted
+					|| (*j)->isInExitArea())
 				&& faction == FACTION_PLAYER // mind controlled units may as well count as unconscious
 				&& !(*j)->isOut())
 			{
@@ -1011,11 +1014,14 @@ void DebriefingState::prepareDebriefing()
 			}
 			else if (origFaction == FACTION_NEUTRAL)
 			{
-				if (aborted || soldierLive == 0) // if mission fails, all civilians die
+				if (aborted
+					|| soldierLive == 0) // if mission fails, all civilians die
+				{
 					addStat(
 							"STR_CIVILIANS_KILLED_BY_ALIENS",
 							1,
 							-value); // kL
+				}
 				else
 					addStat(
 							"STR_CIVILIANS_SAVED",
@@ -1026,8 +1032,9 @@ void DebriefingState::prepareDebriefing()
 	}
 
 	if (craft != 0
-		&& ((soldierExit == 0 && aborted)
-				|| soldierLive == 0))
+		&& ((soldierExit == 0
+				&& aborted)
+			|| soldierLive == 0))
 	{
 		addStat(
 				"STR_XCOM_CRAFT_LOST",
@@ -1077,8 +1084,9 @@ void DebriefingState::prepareDebriefing()
 	}
 
 
-	if ((!aborted || success)	// RECOVER UFO:
-		&& soldierLive > 0)		// Run through all tiles to recover UFO components and items.
+	if ((!aborted
+			|| success)		// RECOVER UFO:
+		&& soldierLive > 0)	// Run through all tiles to recover UFO components and items.
 	{
 		if (mission == "STR_BASE_DEFENSE")
 			_txtTitle->setText(tr("STR_BASE_IS_SAVED"));
@@ -1411,7 +1419,6 @@ void DebriefingState::reequipCraft(
 			_missingItems.push_back(stat);
 		}
 	}
-
 
 	// Now let's see the vehicles
 	ItemContainer craftVehicles;

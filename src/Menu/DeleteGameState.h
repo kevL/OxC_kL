@@ -42,6 +42,7 @@ class DeleteGameState
 	:
 		public State
 {
+
 private:
 	OptionsOrigin _origin;
 	SavedGameState* _parent;

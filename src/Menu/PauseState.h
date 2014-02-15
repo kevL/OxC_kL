@@ -20,16 +20,18 @@
 #ifndef OPENXCOM_PAUSESTATE_H
 #define OPENXCOM_PAUSESTATE_H
 
-#include "../Engine/State.h"
 #include "OptionsBaseState.h"
+
+#include "../Engine/State.h"
 
 
 namespace OpenXcom
 {
 
+class Text;
 class TextButton;
 class Window;
-class Text;
+
 
 /**
  * Options window shown for loading/saving/quitting the game.
@@ -40,15 +42,24 @@ class PauseState
 	:
 		public State
 {
+
 private:
 	OptionsOrigin _origin;
-	TextButton* _btnLoad, * _btnSave, * _btnAbandon, * _btnOptions, * _btnCancel;
-	Window* _window;
 	Text* _txtTitle;
+	TextButton
+		* _btnLoad,
+		* _btnSave,
+		* _btnAbandon,
+		* _btnOptions,
+		* _btnCancel;
+	Window* _window;
+
 
 	public:
 		/// Creates the Pause state.
-		PauseState(Game* game, OptionsOrigin origin);
+		PauseState(
+				Game* game,
+				OptionsOrigin origin);
 		/// Cleans up the Pause state.
 		~PauseState();
 

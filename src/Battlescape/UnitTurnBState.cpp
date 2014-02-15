@@ -135,22 +135,22 @@ void UnitTurnBState::think()
 {
 	//Log(LOG_INFO) << "UnitTurnBState::think() unitID = " << _unit->getId();
 	bool
-		factSide = (_unit->getFaction() == _parent->getSave()->getSide()),	// kL
-		factPlayer = (_unit->getFaction() == FACTION_PLAYER);				// kL
-
+		factPlayer	= _unit->getFaction() == FACTION_PLAYER,
+		factSide	= _unit->getFaction() == _parent->getSave()->getSide();
 	int
-		turretType = _unit->getTurretType(),
-		tu = 1;									// one tu per facing change
-	if (!factSide)								// reaction fire permits free turning
+		tu = 1,					// one tu per facing change
+		turretType = _unit->getTurretType();
+
+	if (!factSide)				// reaction fire permits free turning
 		tu = 0;
-//	else if (_unit->getArmor()->getSize() > 1)
-	else if (turretType != -1
-		&& !_action.strafe)						// only for xCom vehicles. (i think)
+	else if (turretType != -1	// if xCom tank
+		&& !_action.strafe		// but not swivelling turret
+		&& !_action.targeting)	// or not taking a shot at something...
 	{
-		if (turretType < 3)
-			tu = 3;								// tracked vehicles cost 3 per facing change
-		else
-			tu = 2;								// hover vehicles cost 2 per facing change
+		if (turretType < 3)		// tracked vehicles cost 3 per facing change
+			tu = 3;
+		else					// hover vehicles cost 2 per facing change
+			tu = 2;
 	}
 
 

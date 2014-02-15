@@ -45,7 +45,11 @@ TextList::TextList(
 		int x,
 		int y)
 	:
-		InteractiveSurface(width, height, x, y),
+		InteractiveSurface(
+			width,
+			height,
+			x,
+			y),
 		_texts(),
 		_columns(),
 		_big(0),

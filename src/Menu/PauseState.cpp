@@ -18,18 +18,22 @@
  */
 
 #include "PauseState.h"
-#include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
-#include "../Engine/Language.h"
-#include "../Engine/Palette.h"
-#include "../Interface/TextButton.h"
-#include "../Interface/Window.h"
-#include "../Interface/Text.h"
+
 #include "AbandonGameState.h"
 #include "LoadState.h"
-#include "SaveState.h"
-#include "../Engine/Options.h"
 #include "OptionsState.h"
+#include "SaveState.h"
+
+#include "../Engine/Game.h"
+#include "../Engine/Language.h"
+#include "../Engine/Options.h"
+#include "../Engine/Palette.h"
+
+#include "../Interface/Text.h"
+#include "../Interface/TextButton.h"
+#include "../Interface/Window.h"
+
+#include "../Resource/ResourcePack.h"
 
 
 namespace OpenXcom
@@ -40,22 +44,18 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param origin Game section that originated this state.
  */
-PauseState::PauseState(Game* game, OptionsOrigin origin)
+PauseState::PauseState(
+		Game* game,
+		OptionsOrigin origin)
 	:
 		State(game),
 		_origin(origin)
 {
 	_screen = false;
 
-	int x;
+	int x = 52;
 	if (_origin == OPT_GEOSCAPE)
-	{
 		x = 20;
-	}
-	else
-	{
-		x = 52;
-	}
 
 
 	_window		= new Window(this, 216, 158, x, 20, POPUP_BOTH);
@@ -71,17 +71,18 @@ PauseState::PauseState(Game* game, OptionsOrigin origin)
 
 
 	if (_origin != OPT_BATTLESCAPE)
-	{
-		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
-	}
+		_game->setPalette(
+					_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)),
+					Palette::backPos,
+					16);
 
 	add(_window);
+	add(_txtTitle);
 	add(_btnLoad);
 	add(_btnSave);
 	add(_btnAbandon);
 	add(_btnOptions);
 	add(_btnCancel);
-	add(_txtTitle);
 
 	centerAllSurfaces();
 
@@ -108,11 +109,17 @@ PauseState::PauseState(Game* game, OptionsOrigin origin)
 	_btnCancel->setColor(Palette::blockOffset(15)-1);
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)& PauseState::btnCancelClick);
-	_btnCancel->onKeyboardPress((ActionHandler)& PauseState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnCancel->onKeyboardPress(
+					(ActionHandler)& PauseState::btnCancelClick,
+					(SDLKey)Options::getInt("keyCancel"));
 	if (origin == OPT_GEOSCAPE)
-		_btnCancel->onKeyboardPress((ActionHandler)& PauseState::btnCancelClick, (SDLKey)Options::getInt("keyGeoOptions"));
+		_btnCancel->onKeyboardPress(
+						(ActionHandler)& PauseState::btnCancelClick,
+						(SDLKey)Options::getInt("keyGeoOptions"));
 	else if (origin == OPT_BATTLESCAPE)
-		_btnCancel->onKeyboardPress((ActionHandler)& PauseState::btnCancelClick, (SDLKey)Options::getInt("keyBattleOptions"));
+		_btnCancel->onKeyboardPress(
+						(ActionHandler)& PauseState::btnCancelClick,
+						(SDLKey)Options::getInt("keyBattleOptions"));
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setAlign(ALIGN_CENTER);
@@ -126,9 +133,7 @@ PauseState::PauseState(Game* game, OptionsOrigin origin)
 	}
 
 	if (_origin == OPT_BATTLESCAPE)
-	{
 		applyBattlescapeTheme();
-	}
 }
 
 /**
@@ -144,11 +149,11 @@ PauseState::~PauseState()
  */
 void PauseState::init()
 {
-	// Set palette
 	if (_origin != OPT_BATTLESCAPE)
-	{
-		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
-	}
+		_game->setPalette(
+					_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)),
+					Palette::backPos,
+					16);
 }
 
 /**
@@ -157,7 +162,9 @@ void PauseState::init()
  */
 void PauseState::btnLoadClick(Action*)
 {
-	_game->pushState(new LoadState(_game, _origin));
+	_game->pushState(new LoadState(
+								_game,
+								_origin));
 }
 
 /**
@@ -166,7 +173,9 @@ void PauseState::btnLoadClick(Action*)
  */
 void PauseState::btnSaveClick(Action*)
 {
-	_game->pushState(new SaveState(_game, _origin));
+	_game->pushState(new SaveState(
+								_game,
+								_origin));
 }
 
 /**
@@ -175,7 +184,9 @@ void PauseState::btnSaveClick(Action*)
 */
 void PauseState::btnOptionsClick(Action*)
 {
-	_game->pushState(new OptionsState(_game, _origin));
+	_game->pushState(new OptionsState(
+									_game,
+									_origin));
 }
 
 /**
@@ -184,7 +195,9 @@ void PauseState::btnOptionsClick(Action*)
  */
 void PauseState::btnAbandonClick(Action*)
 {
-	_game->pushState(new AbandonGameState(_game, _origin));
+	_game->pushState(new AbandonGameState(
+										_game,
+										_origin));
 }
 
 /**

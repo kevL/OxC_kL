@@ -140,6 +140,7 @@ void ExplosionBState::init()
 				startFrame = 0; // less than 0 will delay anim-start (total 8 Frames)
 //				offset = _power / 2,
 //				animQty = _power / 14;
+
 			int radius = 0;
 			if (_item)
 			{
@@ -151,7 +152,7 @@ void ExplosionBState::init()
 				radius = _power / 10; // <- for cyberdiscs & terrain expl.... CTD if using getExplosionRadius(),
 			Log(LOG_INFO) << ". . . radius = " << radius;
 
-			int offset = radius * 7, // voxelspace
+			int offset = radius * 6, // voxelspace
 				animQty = static_cast<int>(
 								sqrt(static_cast<double>(radius) * static_cast<double>(_power)))
 							/ 6;

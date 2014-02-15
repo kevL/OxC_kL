@@ -23,6 +23,7 @@
 #include <string>
 #include <vector>
 
+//#include "SaveState.h" // kL
 #include "OptionsBaseState.h"
 
 #include "../Engine/State.h"
@@ -31,6 +32,7 @@
 namespace OpenXcom
 {
 
+//class SaveState; // kL
 class Text;
 class TextButton;
 class TextList;
@@ -44,60 +46,68 @@ class Window;
 class SavedGameState
 	:
 		public State
+//		private SaveState // kL
 {
 
-protected:
-	bool
-		_showMsg,
-		_noUI;
-	int _firstValidRow;
+	protected:
+		bool
+			_inEditMode, // kL
+			_showMsg,
+			_noUI;
+		int _firstValidRow;
 
-	OptionsOrigin _origin;
+		OptionsOrigin _origin;
 
-	Text
-		* _txtTitle,
-		* _txtName,
-		* _txtTime,
-		* _txtDate,
-		* _txtStatus,
-		* _txtDelete,
-		* _txtDetails;
-	TextButton* _btnCancel;
-	TextList* _lstSaves;
-	Window* _window;
+//		SaveState* _saveState; // kL
+		Text
+			* _txtTitle,
+			* _txtName,
+			* _txtTime,
+			* _txtDate,
+			* _txtStatus,
+			* _txtDelete,
+			* _txtDetails;
+		TextButton
+			* _btnCancel,
+			* _btnOk; // kL
+		TextList* _lstSaves;
+		Window* _window;
 
-	std::vector<std::string> _saves;
-	std::vector<std::wstring> _details;
+		std::vector<std::string> _saves;
+		std::vector<std::wstring> _details;
 
 
-	public:
-		/// Creates the Saved Game state.
-		SavedGameState(
-				Game* game,
-				OptionsOrigin origin,
-				int firstValidRow);
-		/// Creates the Saved Game state (autosave option).
-		SavedGameState(
-				Game* game,
-				OptionsOrigin origin,
-				int firstValidRow,
-				bool showMsg);
-		/// Cleans up the Saved Game state.
-		virtual ~SavedGameState();
+		public:
+			/// Creates the Saved Game state.
+			SavedGameState(
+					Game* game,
+					OptionsOrigin origin,
+					int firstValidRow);
+//					SaveState* saveState = 0); // kL
+			/// Creates the Saved Game state (autosave option).
+			SavedGameState(
+					Game* game,
+					OptionsOrigin origin,
+					int firstValidRow,
+					bool showMsg);
+			/// Cleans up the Saved Game state.
+			virtual ~SavedGameState();
 
-		/// Updates the palette.
-		void init();
-		/// Updates the savegame list.
-		virtual void updateList();
-		/// Updates the status message.
-		void updateStatus(const std::string& msg);
+			/// Updates the palette.
+			void init();
+			/// Updates the savegame list.
+			virtual void updateList();
+			/// Updates the status message.
+			void updateStatus(const std::string& msg);
 
-		/// Handler for clicking the Cancel button.
-		void btnCancelClick(Action* action);
-		/// Handler for moving the mouse over a list item.
-		void lstSavesMouseOver(Action* action);
-		/// Handler for moving the mouse outside the list borders.
-		void lstSavesMouseOut(Action* action);
+			/// Handler for clicking the Cancel button.
+			void btnCancelClick(Action* action);
+			/// kL. Handler for clicking the Cancel button.
+			void btnOkClick(Action* action); // kL
+			/// Handler for moving the mouse over a list item.
+			void lstSavesMouseOver(Action* action);
+			/// Handler for moving the mouse outside the list borders.
+			void lstSavesMouseOut(Action* action);
 };
 
 }
