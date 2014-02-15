@@ -330,11 +330,11 @@ void InventoryState::updateStats()
 
 	BattleUnit* unit = _battleGame->getSelectedUnit();
 
-	if (_tu)
+	if (_tu) // kL
 		_txtTus->setText(tr("STR_TIME_UNITS_SHORT").arg(unit->getTimeUnits()));
 
 
-	if (_showStats)
+	if (_showStats) // kL
 	{
 		int str = unit->getStats()->strength;
 		int weight = unit->getCarriedWeight(_inv->getSelectedItem());
@@ -344,11 +344,15 @@ void InventoryState::updateStats()
 		else
 			_txtWeight->setSecondaryColor(Palette::blockOffset(3));
 
-		if (!_tu)
+		if (!_tu) // kL
 		{
 			_txtFAcc->setText(tr("STR_ACCURACY_SHORT")
 								.arg(static_cast<int>(
-										static_cast<double>(unit->getStats()->firing) * unit->getAccuracyModifier())));
+										unit->getStats()->firing * unit->getHealth())
+									/ unit->getStats()->health));
+//			_txtFAcc->setText(tr("STR_ACCURACY_SHORT")
+//								.arg(static_cast<int>(
+//										static_cast<double>(unit->getStats()->firing) * unit->getAccuracyModifier())));
 
 			_txtReact->setText(tr("STR_REACTIONS_SHORT").arg(unit->getStats()->reactions));
 

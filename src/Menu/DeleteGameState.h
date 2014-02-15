@@ -31,7 +31,6 @@ namespace OpenXcom
 
 class Text;
 class TextButton;
-class SavedGameState;
 class Window;
 
 
@@ -45,7 +44,6 @@ class DeleteGameState
 
 private:
 	OptionsOrigin _origin;
-	SavedGameState* _parent;
 	Text* _txtMessage;
 	TextButton
 		* _btnNo,
@@ -60,8 +58,7 @@ private:
 		DeleteGameState(
 				Game* game,
 				OptionsOrigin origin,
-				const std::wstring& save,
-				SavedGameState* parent);
+				const std::wstring& save);
 		/// Cleans up the Confirm state.
 		~DeleteGameState();
 

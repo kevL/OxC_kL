@@ -133,11 +133,11 @@ int Projectile::calculateTrajectory(double accuracy)
 	Tile* targetTile = _save->getTile(_action.target); // Wb.140209
 //	Tile* targetTile = 0; // kL
 	Position
-//Wb.140209		targetVoxel,
-		targetVoxel, // kL
+		targetVoxel,
 		originVoxel = _save->getTileEngine()->getOriginVoxel(
 														_action,
 														_save->getTile(_origin));
+//kL	return calculateTrajectory(accuracy, originVoxel); // <-- LoL
 
 //	int dirYshift[24] = {1, 3, 9, 15, 15, 13, 7, 1,  1, 1, 7, 13, 15, 15, 9, 3,  1, 2, 8, 14, 15, 14, 8, 2};
 //	int dirXshift[24] = {9, 15, 15, 13, 8, 1, 1, 3,  7, 13, 15, 15, 9, 3, 1, 1,  8, 14, 15, 14, 8, 2, 1, 2};

@@ -185,6 +185,7 @@ void createDefault()
 //kL	setBool("disableAutoEquip", false);
 	setBool("disableAutoEquip", true); // kL
 	setBool("battleUFOExtenderAccuracy", false);
+	setInt("saveOrder", SORT_DATE_DESC);
 
 
 	// new battle mode data

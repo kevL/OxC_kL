@@ -21,6 +21,7 @@
 #define __OXC_TOGGLETEXTBUTTON_H
 
 #include "TextButton.h"
+
 #include "../Engine/Action.h"
 #include "../Engine/State.h"
 
@@ -32,13 +33,19 @@ class ToggleTextButton
 	:
 		public TextButton
 {
+
 private:
-	bool _isPressed, _filterSound;
+	bool _isPressed;
 	int _invertMid;
 	TextButton* _fakeGroup;
 
+
 	public:
-		ToggleTextButton(int width, int height, int x, int y, bool filterSound = false);
+		ToggleTextButton(
+				int width,
+				int height,
+				int x,
+				int y);
 		~ToggleTextButton(void);
 
 		void draw();

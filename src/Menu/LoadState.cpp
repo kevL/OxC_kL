@@ -98,7 +98,7 @@ void LoadState::lstSavesPress(Action* action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		quickLoad(CrossPlatform::noExt(_saves[_lstSaves->getSelectedRow()]));
+		quickLoad(_saves[_lstSaves->getSelectedRow()].fileName);
 	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
@@ -107,8 +107,7 @@ void LoadState::lstSavesPress(Action* action)
 										_origin,
 										_lstSaves->getCellText(
 											_lstSaves->getSelectedRow(),
-											0),
-										this));
+											0)));
 	}
 }
 

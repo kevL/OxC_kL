@@ -1090,11 +1090,14 @@ void Map::drawTerrain(Surface* surface)
 							if (_cursorType == CT_AIM) // kL_note: Gotta account for Throwing in here. (use throwRange.. for color, & calc. acc.)
 							{
 								BattleAction* action = _save->getBattleGame()->getCurrentAction();
-								int accuracy = static_cast<int>(
-													_save->getSelectedUnit()->getFiringAccuracy(
+								int accuracy = _save->getSelectedUnit()->getFiringAccuracy(
 																						action->type,
-																						action->weapon)
-																					* 100.0);
+																						action->weapon);
+//								int accuracy = static_cast<int>(
+//													_save->getSelectedUnit()->getFiringAccuracy(
+//																						action->type,
+//																						action->weapon)
+//																					* 100.0);
 								Uint8 color = 51; //Palette::blockOffset(3)+3; // kL
 //kL								std::stringstream ss;
 //								std::wstringstream ss; // kL

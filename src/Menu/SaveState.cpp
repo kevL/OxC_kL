@@ -33,7 +33,7 @@
 #include "../Engine/Options.h"
 #include "../Engine/Palette.h"
 
-#include "../Interface/TextButton.h" // kL
+#include "../Interface/TextButton.h"
 #include "../Interface/TextEdit.h"
 #include "../Interface/TextList.h"
 
@@ -66,13 +66,22 @@ SaveState::SaveState(
 //			1,
 //			this);
 
-	_edtSave = new TextEdit(168, 9, 0, 0);
+	_edtSave		= new TextEdit(168, 9, 0, 0);
+	_btnSaveGame	= new TextButton(80, 16, 60, 172);
 
 	add(_edtSave);
+	add(_btnSaveGame);
+
 
 	_txtTitle->setText(tr("STR_SELECT_SAVE_POSITION"));
 
 	_lstSaves->onMousePress((ActionHandler)& SaveState::lstSavesPress);
+
+	_btnCancel->setX(180); // <<--
+
+	_btnSaveGame->setColor(Palette::blockOffset(8)+5);
+	_btnSaveGame->setText(tr("STR_SAVE_GAME"));
+	_btnSaveGame->onMouseClick((ActionHandler)& SaveState::btnSaveGameClick);
 
 	_edtSave->setColor(Palette::blockOffset(8)+10);
 	_edtSave->setVisible(false);
@@ -109,19 +118,15 @@ SaveState::~SaveState()
 }
 
 /**
- * Updates the save game list with a current list of available savegames.
+ * Updates the save game list with the current list of available savedgames.
  */
 void SaveState::updateList()
 {
-	_lstSaves->clearList();
 	_lstSaves->addRow(
 					1,
 					tr("STR_NEW_SAVED_GAME").c_str());
 
-	_saves = SavedGame::getList(
-							_lstSaves,
-							_game->getLanguage(),
-							&_details);
+	SavedGameState::updateList();
 }
 
 /**
@@ -187,8 +192,7 @@ void SaveState::lstSavesPress(Action* action)
 										_origin,
 										_lstSaves->getCellText(
 														_lstSaves->getSelectedRow(),
-														0),
-										this));
+														0)));
 	}
 }
 
@@ -201,46 +205,56 @@ void SaveState::edtSaveKeyPress(Action* action)
 	if (action->getDetails()->key.keysym.sym == SDLK_RETURN
 		|| action->getDetails()->key.keysym.sym == SDLK_KP_ENTER)
 	{
-		_btnOk->setVisible(false); // kL
-		_inEditMode = false; // kL
-
-		updateStatus("STR_SAVING_GAME");
-		_game->getSavedGame()->setName(_edtSave->getText());
-
-		std::string
-			oldFilename,
-			newFilename;
-#ifdef _WIN32
-		newFilename = CrossPlatform::sanitizeFilename(Language::wstrToCp(_edtSave->getText()));
-#else
-		newFilename = CrossPlatform::sanitizeFilename(Language::wstrToUtf8(_edtSave->getText()));
-#endif
-		if (_selectedRow > 0)
-			oldFilename = CrossPlatform::noExt(_saves[_selectedRow - 1]);
-		else
-		{
-			while (CrossPlatform::fileExists(Options::getUserFolder() + newFilename + ".sav"))
-				newFilename += "_";
-
-			oldFilename = newFilename;
-		}
-
-		quickSave(oldFilename);
-		if (oldFilename != newFilename)
-		{
-			while (CrossPlatform::fileExists(Options::getUserFolder() + newFilename + ".sav"))
-				newFilename += "_";
-
-			std::string oldPath = Options::getUserFolder() + oldFilename + ".sav";
-			std::string newPath = Options::getUserFolder() + newFilename + ".sav";
-			rename(
-				oldPath.c_str(),
-				newPath.c_str());
-		}
-
-		_game->popState();
-		_game->popState();
+		saveGame();
 	}
+}
+
+/**
+ * Saves the selected save.
+ * @param action Pointer to an action.
+ */
+void SaveState::btnSaveGameClick(Action*)
+{
+	if (_selectedRow != -1)
+		saveGame();
+}
+
+void SaveState::saveGame()
+{
+	updateStatus("STR_SAVING_GAME");
+
+	_game->getSavedGame()->setName(_edtSave->getText());
+	std::string
+		oldFilename,
+		newFilename;
+
+	newFilename = CrossPlatform::sanitizeFilename(Language::wstrToFs(_edtSave->getText()));
+
+	if (_selectedRow > 0)
+		oldFilename = _saves[_selectedRow-1].fileName;
+	else
+	{
+		while (CrossPlatform::fileExists(Options::getUserFolder() + newFilename + ".sav"))
+			newFilename += "_";
+
+		oldFilename = newFilename;
+	}
+
+	quickSave(oldFilename);
+	if (oldFilename != newFilename)
+	{
+		while (CrossPlatform::fileExists(Options::getUserFolder() + newFilename + ".sav"))
+			newFilename += "_";
+
+		std::string oldPath = Options::getUserFolder() + oldFilename + ".sav";
+		std::string newPath = Options::getUserFolder() + newFilename + ".sav";
+		rename(
+			oldPath.c_str(),
+			newPath.c_str());
+	}
+
+	_game->popState();
+	_game->popState();
 }
 
 /**

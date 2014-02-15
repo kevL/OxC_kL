@@ -502,6 +502,7 @@ void UnitInfoState::init()
 	_barReactions->setMax(static_cast<double>(stat));
 	_barReactions->setValue(static_cast<double>(stat));
 
+//kL	ss << (int)((_unit->getStats()->firing * _unit->getHealth()) / _unit->getStats()->health);
 	double arbitraryVariable = static_cast<double>(_unit->getStats()->firing);
 	stat = static_cast<int>(arbitraryVariable * _unit->getAccuracyModifier());
 	ss.str(L"");
@@ -509,7 +510,9 @@ void UnitInfoState::init()
 	_numFiring->setText(ss.str());
 	_barFiring->setMax(arbitraryVariable);
 	_barFiring->setValue(static_cast<double>(stat));
+//kL	_barFiring->setValue((_unit->getStats()->firing * _unit->getHealth()) / _unit->getStats()->health);
 
+//kL	ss << (int)((_unit->getStats()->throwing * _unit->getHealth()) / _unit->getStats()->health);
 	arbitraryVariable = static_cast<double>(_unit->getStats()->throwing);
 	stat = static_cast<int>(arbitraryVariable * _unit->getAccuracyModifier());
 	ss.str(L"");
@@ -517,6 +520,7 @@ void UnitInfoState::init()
 	_numThrowing->setText(ss.str());
 	_barThrowing->setMax(arbitraryVariable);
 	_barThrowing->setValue(static_cast<double>(stat));
+//kL	_barThrowing->setValue((_unit->getStats()->throwing * _unit->getHealth()) / _unit->getStats()->health);
 
 	stat = _unit->getStats()->strength;
 	ss.str(L"");

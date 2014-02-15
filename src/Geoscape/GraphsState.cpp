@@ -150,6 +150,7 @@ GraphsState::GraphsState(Game* game)
 		// initially add the GRAPH_MAX_BUTTONS having the first region's information
 		if (offset < GRAPH_MAX_BUTTONS)
 		{
+//kL			_btnRegions.push_back(new ToggleTextButton(80, 11, 0, offset*11));
 			_btnRegions.push_back(new ToggleTextButton(
 													65,
 													10,
@@ -205,6 +206,7 @@ GraphsState::GraphsState(Game* game)
 	}
 
 	if (_regionToggles.size() < GRAPH_MAX_BUTTONS)
+//kL		_btnRegionTotal = new ToggleTextButton(80, 11, 0, _regionToggles.size()*11);
 		_btnRegionTotal = new ToggleTextButton(
 											65,
 											10,
@@ -212,6 +214,7 @@ GraphsState::GraphsState(Game* game)
 											_regionToggles.size() * 10,
 											true);
 	else
+//kL		_btnRegionTotal = new ToggleTextButton(80, 11, 0, GRAPH_MAX_BUTTONS*11);
 		_btnRegionTotal = new ToggleTextButton(
 											65,
 											10,
@@ -252,6 +255,7 @@ GraphsState::GraphsState(Game* game)
 		// initially add the GRAPH_MAX_BUTTONS having the first country's information
 		if (offset < GRAPH_MAX_BUTTONS)
 		{
+//kL			_btnCountries.push_back(new ToggleTextButton(80, 11, 0, offset*11));
 			_btnCountries.push_back(new ToggleTextButton(
 													65,
 													10,
@@ -303,6 +307,7 @@ GraphsState::GraphsState(Game* game)
 	}
 
 	if (_countryToggles.size() < GRAPH_MAX_BUTTONS)
+//kL		_btnCountryTotal = new ToggleTextButton(80, 11, 0, _countryToggles.size()*11);
 		_btnCountryTotal = new ToggleTextButton(
 											65,
 											10,
@@ -310,6 +315,7 @@ GraphsState::GraphsState(Game* game)
 											_countryToggles.size() * 10,
 											true);
 	else
+//kL		_btnCountryTotal = new ToggleTextButton(80, 11, 0, GRAPH_MAX_BUTTONS*11);
 		_btnCountryTotal = new ToggleTextButton(
 											65,
 											10,
@@ -874,6 +880,7 @@ void GraphsState::btnFinanceClick(Action*)
  */
 void GraphsState::btnRegionListClick(Action* action)
 {
+//kL	size_t number = (action->getSender()->getY()-_game->getScreen()->getDY())/11;
 	size_t number = (action->getSender()->getY() - Screen::getDY()) / 10;
 	ToggleTextButton* button = 0;
 
@@ -899,6 +906,7 @@ void GraphsState::btnRegionListClick(Action* action)
  */
 void GraphsState::btnCountryListClick(Action* action)
 {
+//kL	size_t number = (action->getSender()->getY()-_game->getScreen()->getDY())/11;
 	size_t number = (action->getSender()->getY() - Screen::getDY()) / 10;
 	ToggleTextButton* button = 0;
 
@@ -924,6 +932,7 @@ void GraphsState::btnCountryListClick(Action* action)
  */
 void GraphsState::btnFinanceListClick(Action* action)
 {
+//kL	size_t number = (action->getSender()->getY()-_game->getScreen()->getDY())/11;
 	size_t number = (action->getSender()->getY() - Screen::getDY()) / 16;
 	ToggleTextButton* button = _btnFinances.at(number);
 

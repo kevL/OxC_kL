@@ -32,7 +32,7 @@
 #include "../Engine/Language.h"
 #include "../Engine/Options.h"
 #include "../Engine/Palette.h"
-#include "../Engine/RNG.h"
+//#include "../Engine/RNG.h"
 
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"

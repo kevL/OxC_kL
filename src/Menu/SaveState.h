@@ -28,7 +28,7 @@
 namespace OpenXcom
 {
 
-//class SavedGameState; // kL
+class TextButton;
 class TextEdit;
 
 
@@ -48,6 +48,7 @@ private:
 
 	std::wstring _selected;
 
+	TextButton* _btnSaveGame;
 	TextEdit* _edtSave;
 
 
@@ -69,9 +70,13 @@ private:
 
 			/// Handler for pressing a key on the Save edit.
 			void edtSaveKeyPress(Action* action);
+			/// Handler for clicking on the Save Game button.
+			void btnSaveGameClick(Action *action);
 			/// Handler for clicking the Saves list.
 			void lstSavesPress(Action* action);
 
+			/// Save game.
+			void saveGame();
 			/// Quick save game.
 			void quickSave(const std::string& filename);
 

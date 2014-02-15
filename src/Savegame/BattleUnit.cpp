@@ -1732,7 +1732,7 @@ void BattleUnit::clearVisibleTiles()
  * @param item
  * @return firing Accuracy
  */
-double BattleUnit::getFiringAccuracy(
+/* double BattleUnit::getFiringAccuracy(
 		BattleActionType actionType,
 		BattleItem* item)
 {
@@ -1771,14 +1771,55 @@ double BattleUnit::getFiringAccuracy(
 	}
 
 	return ret * getAccuracyModifier();
-}
+} */
+
+// Wb.140214_begin:
+/**
+ * Calculate firing accuracy.
+ * Formula = accuracyStat * weaponAccuracy * kneelingbonus(1.15) * one-handPenalty(0.8) * woundsPenalty(% health) * critWoundsPenalty (-10%/wound)
+ * @param actionType
+ * @param item
+ * @return firing Accuracy
+ */
+int BattleUnit::getFiringAccuracy(
+		BattleActionType actionType,
+		BattleItem* item)
+{
+	int weaponAcc = item->getRules()->getAccuracySnap();
+	if (actionType == BA_AIMEDSHOT
+		|| actionType == BA_LAUNCH) // kL_note: make this 100%
+	{
+		weaponAcc = item->getRules()->getAccuracyAimed();
+	}
+	else if (actionType == BA_AUTOSHOT)
+		weaponAcc = item->getRules()->getAccuracyAuto();
+	else if (actionType == BA_HIT)
+		return item->getRules()->getAccuracyMelee();
+
+	int result = getStats()->firing * weaponAcc / 100;
+
+	if (_kneeled)
+		result = result * 116 / 100;
+
+	if (item->getRules()->isTwoHanded())
+	{
+		// two handed weapon, means one hand should be empty
+		if (getItem("STR_RIGHT_HAND") != 0
+			&& getItem("STR_LEFT_HAND") != 0)
+		{
+			result = result * 79 / 100;
+		}
+	}
+
+	return result * getAccuracyModifier(item) / 100;
+} // Wb_end.
 
 /**
  * To calculate firing accuracy. Takes health and fatal wounds into account.
  * Formula = accuracyStat * woundsPenalty(% health) * critWoundsPenalty (-10%/wound)
  * @return modifier
  */
-double BattleUnit::getAccuracyModifier()
+/* double BattleUnit::getAccuracyModifier()
 {
 	double ret = static_cast<double>(_health) / static_cast<double>(getStats()->health);
 
@@ -1789,7 +1830,36 @@ double BattleUnit::getAccuracyModifier()
 	ret *= 1.0 - (0.1 * static_cast<double>(wounds));
 
 	return ret;
-}
+} */
+
+// Wb.140214_begin:
+/**
+ * To calculate firing accuracy. Takes health and fatal wounds into account.
+ * Formula = accuracyStat * woundsPenalty(% health) * critWoundsPenalty (-10%/wound)
+ * @param item the item we are shooting right now.
+ * @return modifier
+ */
+int BattleUnit::getAccuracyModifier(BattleItem* item)
+{
+	int wounds = _fatalWounds[BODYPART_HEAD];
+
+	if (item)
+	{
+		if (item->getRules()->isTwoHanded())
+			wounds += _fatalWounds[BODYPART_RIGHTARM] + _fatalWounds[BODYPART_LEFTARM];
+		else
+		{
+			if (getItem("STR_RIGHT_HAND") == item)
+				wounds += _fatalWounds[BODYPART_RIGHTARM];
+			else
+				wounds += _fatalWounds[BODYPART_LEFTARM];
+		}
+	}
+
+	return std::max(
+				10,
+				25 * _health / getStats()->health + 75 + -10 * wounds);
+} // Wb_end.
 
 /**
  * Calculate throwing accuracy.

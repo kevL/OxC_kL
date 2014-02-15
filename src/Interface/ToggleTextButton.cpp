@@ -18,21 +18,31 @@
  */
 
 #include "ToggleTextButton.h"
+
 #include "TextButton.h"
+
 #include "../Engine/Sound.h"
 
 
 namespace OpenXcom
 {
 
-ToggleTextButton::ToggleTextButton(int width, int height, int x, int y, bool filterSound)
+ToggleTextButton::ToggleTextButton(
+		int width,
+		int height,
+		int x,
+		int y)
 	:
-		TextButton(width, height, x, y),
-		_filterSound(filterSound),
+		TextButton(
+			width,
+			height,
+			x,
+			y),
 		_invertMid(-1),
 		_fakeGroup(0)
 {
 	_isPressed = false;
+
 	TextButton::setGroup(&_fakeGroup);
 }
 
@@ -42,18 +52,11 @@ ToggleTextButton::~ToggleTextButton(void)
 }
 
 /**
- * handle mouse clicks by toggling the button state; use _fakeGroup to trick TextButton into drawing the right thing
+ * handle mouse clicks by toggling the button state;
+ * use _fakeGroup to trick TextButton into drawing the right thing.
  */
 void ToggleTextButton::mousePress(Action* action, State* state)
 {
-	if (soundPress != 0
-		&& (! _filterSound
-			|| action->getDetails()->button.button == SDL_BUTTON_LEFT
-			|| action->getDetails()->button.button == SDL_BUTTON_RIGHT))
-	{
-		soundPress->play();
-	}
-
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT
 		|| action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{

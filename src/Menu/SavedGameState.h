@@ -26,12 +26,16 @@
 //#include "SaveState.h" // kL
 #include "OptionsBaseState.h"
 
+#include "../Engine/Options.h"
 #include "../Engine/State.h"
+
+#include "../Savegame/SavedGame.h"
 
 
 namespace OpenXcom
 {
 
+class ArrowButton;
 //class SaveState; // kL
 class Text;
 class TextButton;
@@ -58,11 +62,13 @@ class SavedGameState
 
 		OptionsOrigin _origin;
 
+		ArrowButton
+			* _sortName,
+			* _sortDate;
 //		SaveState* _saveState; // kL
 		Text
 			* _txtTitle,
 			* _txtName,
-			* _txtTime,
 			* _txtDate,
 			* _txtStatus,
 			* _txtDelete,
@@ -73,8 +79,10 @@ class SavedGameState
 		TextList* _lstSaves;
 		Window* _window;
 
-		std::vector<std::string> _saves;
-		std::vector<std::wstring> _details;
+		std::vector<SaveInfo> _saves;
+
+		///
+		void updateArrows();
 
 
 		public:
@@ -95,6 +103,10 @@ class SavedGameState
 
 			/// Updates the palette.
 			void init();
+
+			/// Sorts the savegame list.
+			void sortList(SaveSort sort);
+
 			/// Updates the savegame list.
 			virtual void updateList();
 			/// Updates the status message.
@@ -108,6 +120,11 @@ class SavedGameState
 			void lstSavesMouseOver(Action* action);
 			/// Handler for moving the mouse outside the list borders.
 			void lstSavesMouseOut(Action* action);
+
+			/// Handler for clicking the Name arrow.
+			void sortNameClick(Action* action);
+			/// Handler for clicking the Date arrow.
+			void sortDateClick(Action* action);
 };
 
 }

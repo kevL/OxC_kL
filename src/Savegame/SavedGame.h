@@ -64,6 +64,21 @@ enum GameDifficulty
 
 
 /**
+ * Container for savegame info displayed on listings.
+ */
+struct SaveInfo
+{
+	time_t timestamp;
+	std::string fileName;
+	std::wstring
+		details,
+		displayName,
+		isoDate,
+		isoTime;
+};
+
+
+/**
  * The game data that gets written to disk when the game is saved.
  * A saved game holds all the variable info in a game like funds,
  * game time, current bases and contents, world activities, score, etc.
@@ -134,10 +149,7 @@ private:
 		~SavedGame();
 
 		/// Gets list of saves in the user directory.
-		static std::vector<std::string> getList(
-				TextList* list,
-				Language* lang,
-				std::vector<std::wstring>* details);
+		static std::vector<SaveInfo> getList(Language* lang);
 
 		/// Loads a saved game from YAML.
 		void load(

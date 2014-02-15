@@ -66,7 +66,9 @@ ProjectileFlyBState::ProjectileFlyBState(
 		_projectileItem(0),
 		_origin(origin),
 		_projectileImpact(0),
-		_initialized(false)
+		_initialized(false),
+		_originVoxel(-1,-1,-1), // Wb.140214
+		_targetFloor(false) // Wb.140214
 {
 }
 
@@ -83,7 +85,10 @@ ProjectileFlyBState::ProjectileFlyBState(
 		_projectileItem(0),
 		_origin(action.actor->getPosition()),
 		_projectileImpact(0),
-		_initialized(false)
+		_initialized(false),
+		_originVoxel(-1,-1,-1), // Wb.140214
+		_targetFloor(false) // Wb.140214
+
 {
 }
 
@@ -349,7 +354,7 @@ void ProjectileFlyBState::init()
 		_targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24 + 12);
 		if (_action.type == BA_LAUNCH)
 		{
-			if (_action.target == _origin)
+			if (_targetFloor) // kL_note: was, if(_action.target == _origin)
 			{
 				// launched missiles with two waypoints placed on the same tile: target the floor.
 				_targetVoxel.z -= 10;
@@ -369,7 +374,7 @@ void ProjectileFlyBState::init()
 		// Store this target voxel.
 		Tile *targetTile = _parent->getSave()->getTile(_action.target);
 		Position hitPos;
-		int test = V_EMPTY;
+//Wb.140214		int test = V_EMPTY;
 		Position originVoxel = _parent->getTileEngine()->getOriginVoxel(_action, _parent->getSave()->getTile(_origin));
 		if (targetTile->getUnit() != 0)
 		{
@@ -497,7 +502,11 @@ bool ProjectileFlyBState::createNewProjectile()
 	{
 		_projectileImpact = projectile->calculateThrow(_unit->getFiringAccuracy(
 																			_action.type,
-																			_action.weapon));
+																			_action.weapon)
+																		/ 100.0);
+//		_projectileImpact = projectile->calculateThrow(_unit->getFiringAccuracy(
+//																			_action.type,
+//																			_action.weapon));
 		Log(LOG_INFO) << ". acid spit, part = " << _projectileImpact;
 
 		if (_projectileImpact != VOXEL_EMPTY
@@ -538,7 +547,7 @@ bool ProjectileFlyBState::createNewProjectile()
 	{
 		// validMeleeRange/target has been validated.
 //		_projectileImpact = 4;
-		_projectileImpact = projectile->calculateTrajectory(_unit->getFiringAccuracy(
+		_projectileImpact = projectile->calculateTrajectory(_unit->getFiringAccuracy( // see Wb.140214 in else, below
 																				_action.type,
 																				_action.weapon));
 		Log(LOG_INFO) << ". melee attack! part = " << _projectileImpact;
@@ -563,12 +572,30 @@ bool ProjectileFlyBState::createNewProjectile()
 	}
 	else // shoot weapon / was do melee attack too
 	{
+		// Wb.140214_begin:
+		if (_originVoxel != Position(-1,-1,-1))
+		{
+			_projectileImpact = projectile->calculateTrajectory(
+															_unit->getFiringAccuracy(
+																				_action.type,
+																				_action.weapon)
+																			/ 100.0,
+															_originVoxel);
+		}
+		else
+		{
+			_projectileImpact = projectile->calculateTrajectory(_unit->getFiringAccuracy(
+																					_action.type,
+																					_action.weapon)
+																				/ 100.0);
+		} // Wb_end.
+
 		// kL_note: what, you recalculate the trajectory after it was already done above,
 		// and, don't even use it other than to find out if it already hit or not?!??
 		// Not to mention that melee attacks ***don't even need to use a trajectory***
-		_projectileImpact = projectile->calculateTrajectory(_unit->getFiringAccuracy(
-																				_action.type,
-																				_action.weapon));
+//		_projectileImpact = projectile->calculateTrajectory(_unit->getFiringAccuracy(
+//																				_action.type,
+//																				_action.weapon));
 		Log(LOG_INFO) << ". shoot weapon, part = " << _projectileImpact;
 
 		if (_projectileImpact == VOXEL_UNIT)	// kL
@@ -728,10 +755,22 @@ void ProjectileFlyBState::think()
 				_action.target = _action.waypoints.front();
 
 				// launch the next projectile in the waypoint cascade
-				_parent->statePushNext(new ProjectileFlyBState(
-															_parent,
-															_action,
-															_origin));
+				ProjectileFlyBState* nextWaypoint = new ProjectileFlyBState(
+																		_parent,
+																		_action,
+																		_origin);
+				nextWaypoint->setOriginVoxel(_parent->getMap()->getProjectile()->getPosition(-1));
+
+				if (_origin == _action.target)
+				{
+					nextWaypoint->targetFloor();
+				}
+
+				_parent->statePushNext(nextWaypoint);
+//				_parent->statePushNext(new ProjectileFlyBState(
+//															_parent,
+//															_action,
+//															_origin));
 			}
 			else
 			{
@@ -785,10 +824,18 @@ void ProjectileFlyBState::think()
 							_projectileImpact = proj->calculateTrajectory(
 																	std::max(
 																			0.0,
-																			_unit->getFiringAccuracy(
+																			(_unit->getFiringAccuracy(
 																								_action.type,
 																								_action.weapon)
-																							- i * 0.05));
+																							/ 100.0)
+																						- i * 5.0));
+//							_projectileImpact = proj->calculateTrajectory(
+//																	std::max(
+//																			0.0,
+//																			_unit->getFiringAccuracy(
+//																								_action.type,
+//																								_action.weapon)
+//																							- i * 0.05));
 
 							if (_projectileImpact != VOXEL_EMPTY)
 							{
@@ -945,7 +992,12 @@ bool ProjectileFlyBState::validThrowRange(
 }
 
 /**
- *
+ * Validates the throwing range.
+ * @param weight the weight of the object.
+ * @param strength the strength of the thrower.
+ * @param level the difference in height between the thrower and the target.
+ * @return the maximum throwing range.
+
  */
 int ProjectileFlyBState::getMaxThrowDistance(
 		int weight,
@@ -983,6 +1035,23 @@ int ProjectileFlyBState::getMaxThrowDistance(
 
 	Log(LOG_INFO) << ". dist = " << dist / 16;
 	return dist;
+}
+
+/**
+ * Set the origin voxel, used for the blaster launcher.
+ * @param pos the origin voxel.
+ */
+void ProjectileFlyBState::setOriginVoxel(Position pos)
+{
+	_originVoxel = pos;
+}
+
+/**
+ * Set the boolean flag to angle a blaster bomb towards the floor.
+ */
+void ProjectileFlyBState::targetFloor()
+{
+	_targetFloor = true;
 }
 
 }

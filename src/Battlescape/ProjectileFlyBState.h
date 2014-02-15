@@ -42,7 +42,9 @@ class ProjectileFlyBState
 {
 
 private:
-	bool _initialized;
+	bool
+		_initialized,
+		_targetFloor; // Wb.140214
 	int _projectileImpact;
 
 	BattleItem
@@ -52,6 +54,7 @@ private:
 	Position
 		_origin;
 //kL		_targetVoxel; // Wb.140209
+		_originVoxel; // Wb.140214
 
 	/// Tries to create a projectile sprite.
 	bool createNewProjectile();
@@ -82,11 +85,16 @@ private:
 				BattleAction* action,
 				Position origin,
 				Tile* target);
-		///
+		/// Calculates the maximum throwing range.
 		static int getMaxThrowDistance(
 				int weight,
 				int strength,
 				int level);
+
+		/// Set the origin voxel, used for the blaster launcher.
+		void setOriginVoxel(Position pos);
+		/// Set the boolean flag to angle a blaster bomb towards the floor.
+		void targetFloor();
 };
 
 }

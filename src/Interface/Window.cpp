@@ -75,6 +75,7 @@ Window::Window(
 	}
 	else
 	{
+		setHidden(true);
 		_timer->start();
 
 		if (_state != 0)
@@ -100,12 +101,6 @@ Window::~Window()
  */
 void Window::setBackground(Surface* bg)
 {
-	if (_popupStep < 1.0)
-	{
-		_state->hideAll();
-		setHidden(false);
-	}
-
 	_bg = bg;
 	_redraw = true;
 }
@@ -116,12 +111,6 @@ void Window::setBackground(Surface* bg)
  */
 void Window::setColor(Uint8 color)
 {
-	if (_popupStep < 1.0)
-	{
-		_state->hideAll();
-		setHidden(false);
-	}
-
 	_color = color;
 	_redraw = true;
 }
@@ -151,6 +140,12 @@ void Window::setHighContrast(bool contrast)
  */
 void Window::think()
 {
+	if (_hidden && _popupStep < 1.0)
+	{
+		_state->hideAll();
+		setHidden(false);
+	}
+
 	_timer->think(0, this);
 }
 

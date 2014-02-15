@@ -80,6 +80,7 @@ private:
 
 		/// Calculates the trajectory for a straight path.
 		int calculateTrajectory(double accuracy);
+//kL		int calculateTrajectory(double accuracy, Position originVoxel); // <-- LoL
 		/// Calculates the trajectory for a curved path.
 		int calculateThrow(double accuracy);
 
