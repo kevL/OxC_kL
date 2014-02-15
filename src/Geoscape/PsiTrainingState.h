@@ -42,27 +42,11 @@ class PsiTrainingState
 {
 
 private:
-	TextButton
-		* _btnOk,
-		* _btnBase1,
-		* _btnBase2,
-		* _btnBase3,
-		* _btnBase4,
-		* _btnBase5,
-		* _btnBase6,
-		* _btnBase7,
-		* _btnBase8;
 	Window* _window;
 	Text* _txtTitle;
-	Base
-		* _base1,
-		* _base2,
-		* _base3,
-		* _base4,
-		* _base5,
-		* _base6,
-		* _base7,
-		* _base8;
+	TextButton* _btnOk;
+
+	std::vector<Base*> _bases;
 
 
 	public:
@@ -76,14 +60,7 @@ private:
 
 		/// Handler for clicking the OK button.
 		void btnOkClick(Action* action);
-		void btnBase1Click(Action* action);
-		void btnBase2Click(Action* action);
-		void btnBase3Click(Action* action);
-		void btnBase4Click(Action* action);
-		void btnBase5Click(Action* action);
-		void btnBase6Click(Action* action);
-		void btnBase7Click(Action* action);
-		void btnBase8Click(Action* action);
+		void btnBaseXClick(Action* action);
 };
 
 }
