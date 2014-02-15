@@ -389,11 +389,13 @@ private:
 		void clearVisibleTiles();
 
 		/// Calculate firing accuracy.
-		int getFiringAccuracy(
+//		int getFiringAccuracy( // Wb.140214
+		double getFiringAccuracy(
 				BattleActionType actionType,
 				BattleItem* item);
 		/// Calculate accuracy modifier.
-		int getAccuracyModifier();
+		double getAccuracyModifier(BattleItem* item = 0);
+//		int getAccuracyModifier(BattleItem* item = 0); // Wb.140214
 		/// Calculate throwing accuracy.
 		double getThrowingAccuracy();
 

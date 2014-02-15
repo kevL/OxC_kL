@@ -18,6 +18,7 @@
  */
 
 #include "ArrowButton.h"
+
 #include "TextList.h"
 
 #include "../Engine/Action.h"
@@ -43,15 +44,15 @@ ArrowButton::ArrowButton(
 		int y)
 	:
 		ImageButton(
-				width,
-				height,
-				x,
-				y),
+			width,
+			height,
+			x,
+			y),
 		_shape(shape),
 		_list(0)
 {
 	_timer = new Timer(50);
-	_timer->onTimer((SurfaceHandler)&ArrowButton::scroll);
+	_timer->onTimer((SurfaceHandler)& ArrowButton::scroll);
 }
 
 /**
@@ -68,13 +69,10 @@ ArrowButton::~ArrowButton()
 bool ArrowButton::isButtonHandled(Uint8 button)
 {
 	if (_list != 0)
-	{
-		return (button == SDL_BUTTON_LEFT || button == SDL_BUTTON_RIGHT);
-	}
+		return button == SDL_BUTTON_LEFT
+			|| button == SDL_BUTTON_RIGHT;
 	else
-	{
 		return ImageButton::isButtonHandled(button);
-	}
 }
 
 /**
@@ -358,13 +356,9 @@ void ArrowButton::think()
 void ArrowButton::scroll()
 {
 	if (_shape == ARROW_BIG_UP)
-	{
 		_list->scrollUp(false);
-	}
 	else if (_shape == ARROW_BIG_DOWN)
-	{
 		_list->scrollDown(false);
-	}
 }
 
 /**

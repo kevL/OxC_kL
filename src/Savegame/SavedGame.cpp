@@ -258,7 +258,7 @@ std::vector<SaveInfo> SavedGame::getList(Language* lang)
 			std::wostringstream details;
 			if (doc["turn"])
 			{
-				details << lang->getString("STR_BATTLESCAPE") << L": " << lang->getString(doc["mission"].as<std::string>()) << L", ";
+				details << lang->getString("STR_BATTLESCAPE") << L": " << lang->getString(doc["mission"].as<std::string>()) << L" ";
 				details << lang->getString("STR_TURN").arg(doc["turn"].as<int>());
 			}
 			else
@@ -266,7 +266,7 @@ std::vector<SaveInfo> SavedGame::getList(Language* lang)
 				GameTime time = GameTime(6, 1, 1, 1999, 12, 0, 0);
 				time.load(doc["time"]);
 				details << lang->getString("STR_GEOSCAPE") << L": ";
-				details << time.getDayString(lang) << L" " << lang->getString(time.getMonthString()) << L" " << time.getYear() << L", ";
+				details << time.getDayString(lang) << L" " << lang->getString(time.getMonthString()) << L" " << time.getYear() << L" ";
 				details << time.getHour() << L":" << std::setfill(L'0') << std::setw(2) << time.getMinute();
 			}
 
@@ -657,9 +657,7 @@ void SavedGame::save(const std::string& filename) const
 	}
 
 	if (_battleGame != 0)
-	{
 		node["battleGame"] = _battleGame->save();
-	}
 
 	out << node;
 	sav << out.c_str();
@@ -898,9 +896,7 @@ int SavedGame::getId(const std::string& name)
 {
 	std::map<std::string, int>::iterator i = _ids.find(name);
 	if (i != _ids.end())
-	{
 		return i->second++;
-	}
 	else
 	{
 		_ids[name] = 1;
@@ -1084,11 +1080,9 @@ void SavedGame::addFinishedResearch(
 						++iter)
 				{
 					if ((*it)->getRequirements().at(entry) == *iter)
-					{
 						addFinishedResearch(
 										*it,
 										ruleset);
-					}
 
 					entry++;
 				}
@@ -1159,9 +1153,7 @@ void SavedGame::getAvailableResearchProjects(
 		if (itDiscovered != discovered.end ())
 		{
 			if (!liveAlien)
-			{
 				continue;
-			}
 			else
 			{
 				bool cull = true;
@@ -1250,14 +1242,11 @@ void SavedGame::getAvailableResearchProjects(
 									discovered.end(),
 									ruleset->getResearch(research->getRequirements().at(itreq)));
 				if (itDiscovered != discovered.end())
-				{
 					tally++;
-				}
 			}
 
 			if (tally != research->getRequirements().size())
-
-			continue;
+				continue;
 		}
 
 		projects.push_back(research);
@@ -1284,10 +1273,7 @@ void SavedGame::getAvailableProductions(
 			++iter)
 	{
 		RuleManufacture* m = ruleset->getManufacture(*iter);
-		if (!isResearched(m->getRequirements()))
-		{
-		 	continue;
-		}
+		if (!isResearched(m->getRequirements())) continue;
 
 		if (std::find_if(
 						baseProductions.begin(),
@@ -1390,9 +1376,7 @@ bool SavedGame::isResearchAvailable(
 																				discovered.end(),
 																				research);
 		if (itDiscovered == discovered.end())
-		{
 			return false;
-		}
 	}
 
 	return true;
@@ -1478,14 +1462,13 @@ void SavedGame::getDependableResearchBasic(
 				!= (*iter)->getUnlocked().end())
 		{
 			dependables.push_back(*iter);
+
 			if ((*iter)->getCost() == 0)
-			{
 				getDependableResearchBasic(
 										dependables,
 										*iter,
 										ruleset,
 										base);
-			}
 		}
 	}
 }
@@ -1771,7 +1754,8 @@ private:
 		/// Match against stored values.
 		bool operator()(const AlienMission* mis) const
 		{
-			return mis->getRegion() == _region && mis->getType() == _type;
+			return mis->getRegion() == _region
+				&& mis->getType() == _type;
 		}
 };
 
@@ -1786,16 +1770,16 @@ AlienMission* SavedGame::getAlienMission(
 		const std::string& type) const
 {
 	std::vector<AlienMission*>::const_iterator
-			ii = std::find_if(
+			am = std::find_if(
 						_activeMissions.begin(),
 						_activeMissions.end(),
 						matchRegionAndType(
 										region,
 										type));
-	if (ii == _activeMissions.end())
+	if (am == _activeMissions.end())
 		return 0;
 
-	return *ii;
+	return *am;
 }
 
 /**
@@ -2035,9 +2019,7 @@ void SavedGame::removePoppedResearch(const RuleResearch* research)
 														_poppedResearch.end(),
 														research);
 	if (r != _poppedResearch.end())
-	{
 		_poppedResearch.erase(r);
-	}
 }
 
 /**

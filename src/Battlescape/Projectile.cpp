@@ -68,14 +68,14 @@ Projectile::Projectile(
 		ResourcePack* res,
 		SavedBattleGame* save,
 		BattleAction action,
-		Position origin)
-//kL		Position targetVoxel) // Wb.140209
+		Position origin,
+		Position targetVoxel)
 	:
 		_res(res),
 		_save(save),
 		_action(action),
 		_origin(origin),
-//kL		_targetVoxel(targetVoxel), // Wb.140209
+		_targetVoxel(targetVoxel),
 		_position(0)
 {
 	// this is the number of pixels the sprite will move between frames
@@ -92,15 +92,10 @@ Projectile::Projectile(
 		else // ba_SHOOT!! or hit, or spit.... probly Psi-attack also.
 		{
 			Log(LOG_INFO) << "Create Projectile -> not BA_THROW";
-//			_speed = std::max(
-//							1,
-//							_speed + _action.weapon->getRules()->getBulletSpeed());
 			if (_action.weapon->getRules()->getBulletSpeed() != 0)
-			{
 				_speed = std::max(
 								1,
 								_speed + _action.weapon->getRules()->getBulletSpeed());
-			}
 			else if (_action.weapon->getAmmoItem()
 				&& _action.weapon->getAmmoItem()->getRules()->getBulletSpeed() != 0)
 			{
@@ -108,7 +103,6 @@ Projectile::Projectile(
 								1,
 								_speed + _action.weapon->getAmmoItem()->getRules()->getBulletSpeed());
 			}
-
 		}
 	}
 }
@@ -127,408 +121,103 @@ Projectile::~Projectile()
  */
 int Projectile::calculateTrajectory(double accuracy)
 {
-	Log(LOG_INFO) << "Projectile::calculateTrajectory(), accuracy = " << accuracy;
+	Position originVoxel = _save->getTileEngine()->getOriginVoxel(
+															_action,
+															_save->getTile(_origin));
 
+	return calculateTrajectory(
+							accuracy,
+							originVoxel);
+}
+
+/**
+ * Calculates the trajectory for a straight path.
+ * @param accuracy, The unit's accuracy.
+ * @return, The objectnumber(0-3) or unit(4) or out of map (5) or -1 (no line of fire).
+ */
+int Projectile::calculateTrajectory(
+		double accuracy,
+		Position originVoxel)
+{
+	Tile* targetTile = _save->getTile(_action.target);
 	BattleUnit* bu = _action.actor;
-	Tile* targetTile = _save->getTile(_action.target); // Wb.140209
-//	Tile* targetTile = 0; // kL
-	Position
-		targetVoxel,
-		originVoxel = _save->getTileEngine()->getOriginVoxel(
-														_action,
-														_save->getTile(_origin));
-//kL	return calculateTrajectory(accuracy, originVoxel); // <-- LoL
 
-//	int dirYshift[24] = {1, 3, 9, 15, 15, 13, 7, 1,  1, 1, 7, 13, 15, 15, 9, 3,  1, 2, 8, 14, 15, 14, 8, 2};
-//	int dirXshift[24] = {9, 15, 15, 13, 8, 1, 1, 3,  7, 13, 15, 15, 9, 3, 1, 1,  8, 14, 15, 14, 8, 2, 1, 2};
-	// maybe if i get around to making that function to calculate a firepoint origin for fire
-	// point estimations i'll use the array above so i'll leave it commented for the time being.
-
-/* Wb.131129
-	originVoxel = Position(
-					_origin.x * 16,
-					_origin.y * 16,
-					_origin.z * 24);
-
-	// tanks etc. shoot from lower right corner(center of unit) of primary(upper left) part.
-
-	// take into account soldier height and terrain level if the projectile is launched from a soldier
-	if (_action.actor->getPosition() == _origin)
-	{
-		// calculate offset of the starting point of the projectile
-		originVoxel.z += bu->getHeight()
-						+ bu->getFloatHeight()
-						-_save->getTile(_origin)->getTerrainLevel()
-						- 4; // 2 voxels lower than LoS origin.
-
-		if (originVoxel.z >= (_origin.z + 1) * 24)
-		{
-			Tile* tileAbove = _save->getTile(_origin + Position(0, 0, 1));
-			if (tileAbove
-				&& tileAbove->hasNoFloor(0))
-			{
-				_origin.z++;
-			}
-			else
-			{
-				while (originVoxel.z >= (_origin.z + 1) * 24)
-					originVoxel.z--;
-
-				originVoxel.z -= 4; // keep originVoxel 4 voxels below any ceiling.
-			}
-		}
-
-		// originally used the dirXShift and dirYShift as detailed above, this however results in MUCH more predictable results.
-		// center Origin in the originTile (or the center of all four tiles for large units):
-		int offset = bu->getArmor()->getSize() * 8;
-		originVoxel.x += offset;
-		originVoxel.y += offset;
-	}
-	else // _action.actor is NOT in originTile.
-	{
-		// don't take into account soldier height and terrain level if the
-		// projectile is not launched from a soldier (ie. from a waypoint)
-		originVoxel.x += 8;
-		originVoxel.y += 8;
-		originVoxel.z += 12;
-	} */
-
-
-	//** TARGETTING ****
-//Wb.140209 begin deletion... moved to ProjectileFlyBState::init()
-	if (_action.type == BA_LAUNCH
-		|| (SDL_GetModState() & KMOD_CTRL) != 0
-		|| !_save->getBattleGame()->getPanicHandled())
-		// kL_note: Ctrl+LMB could check for tile-parts... cf below.
-	{
-		targetVoxel = Position( // target nothing, targets the middle of the tile
-							_action.target.x * 16 + 8,
-							_action.target.y * 16 + 8,
-							_action.target.z * 24 + 12);
-
-		if (_action.type == BA_LAUNCH)
-		{
-			if (_action.target != _origin)
-				// launched missiles go slightly higher than the middle.
-				targetVoxel.z += 4;
-			else
-				// unless two waypoints are placed on the same tile, in which case target the floor.
-				targetVoxel.z -= 10;
-		}
-	}
-	else // non-waypointed attack follows
-	{
-		// determine the target voxel.
-		// aim at the center of the unit, the object, the walls or the floor (in that priority).
-		// if there is no LOF to the center, try elsewhere outward.
-		// Then store this target voxel.
-		targetTile = _save->getTile(_action.target);
-
-//		if (targetTile->getUnit() != 0) // aiming at Unit.
-		if (targetTile->getUnit()) // aiming at Unit.
-		{
-			Log(LOG_INFO) << ". targetTile has unit";
-			if (_origin == _action.target // shot at tileSelf.
-				|| targetTile->getUnit() == _action.actor)
-			{
-				// kL_note: this shot at walls in Orig.
-				targetVoxel = Position( // don't shoot at yourself but shoot at the floor
-									_action.target.x * 16 + 8,
-									_action.target.y * 16 + 8,
-//kL									_action.target.z * 24);
-									_action.target.z * 24 + 1); // kL
-			}
-			else	// kL_note: huh? Is this for storing _trajectory??? ... no. might be
-					// setting &targetVoxel tho. Or "_action.target" ( targetTile ) even......
-				_save->getTileEngine()->canTargetUnit(
-												&originVoxel,
-												targetTile,
-												&targetVoxel,
-												bu);
-		}
-		// kL_begin: AutoShot vs. tile w/ dead or stunned Unit just sprays through the middle of the tile.
-		// note, however, this also affects attempts to target a tile where there is/was(?) a dead unit...
-		// So let's narrow it down some........... ie. to do this correctly I'd need some sort of 'autoShotKill' boolean
-		else if (_action.autoShotCount > 1
-			&& _action.autoShotKill) // note: If targetUnit is still alive after the first shot, see ABOVE^^
-//			&& targetTile->getUnit()
-//			&& targetTile->getUnit()->isOut(true, true)) // NOT Working
-//		_action.autoShotKill //_action.autoShotCount
-//			&& _action.autoShotCount < _action.weapon->getRules()->getAutoShots())
-		{
-			Log(LOG_INFO) << ". targetTile vs. Autoshot!";
-			targetVoxel = Position( // target nothing, targets the middle of the tile
-								_action.target.x * 16 + 8,
-								_action.target.y * 16 + 8,
-								_action.target.z * 24 + 12);
-		} // kL_end.
-		else if (targetTile->getMapData(MapData::O_OBJECT) != 0) // aiming at content-Object.
-		{
-			Log(LOG_INFO) << ". targetTile has content-object";
-			if (!_save->getTileEngine()->canTargetTile(
-													&originVoxel,
-													targetTile,
-													MapData::O_OBJECT,
-													&targetVoxel,
-													bu))
-			{
-				targetVoxel = Position(
-									_action.target.x * 16 + 8,
-									_action.target.y * 16 + 8,
-//kL									_action.target.z * 24 + 8);
-									_action.target.z * 24 + 6);		// kL
-			}
-		}
-		else if (targetTile->getMapData(MapData::O_NORTHWALL) != 0) // aiming at Northwall
-		{
-			Log(LOG_INFO) << ". targetTile has northwall";
-			if (!_save->getTileEngine()->canTargetTile(
-													&originVoxel,
-													targetTile,
-													MapData::O_NORTHWALL,
-													&targetVoxel,
-													bu))
-			{
-				targetVoxel = Position(
-									_action.target.x * 16 + 8,
-//kL									_action.target.y * 16,
-									_action.target.y * 16 + 1,		// kL
-//kL									_action.target.z * 24 + 9);
-									_action.target.z * 24 + 10);	// kL
-			}
-		}
-		else if (targetTile->getMapData(MapData::O_WESTWALL) != 0) // aiming at Westwall
-		{
-			Log(LOG_INFO) << ". targetTile has westwall";
-			if (!_save->getTileEngine()->canTargetTile(
-													&originVoxel,
-													targetTile,
-													MapData::O_WESTWALL,
-													&targetVoxel,
-													bu))
-			{
-				targetVoxel = Position(
-//kL									_action.target.x * 16,
-									_action.target.x * 16 + 1,		// kL
-									_action.target.y * 16 + 8,
-//kL									_action.target.z * 24 + 9);
-									_action.target.z * 24 + 10);	// kL
-			}
-		}
-		else if (targetTile->getMapData(MapData::O_FLOOR) != 0) // aiming at Floor
-		{
-			Log(LOG_INFO) << ". targetTile has floor";
-			// kL_note: This is not allowing floortiles to be targetted properly.
-			// Wb did an update, so check it out.... +2 voxels on the z-axis
-			if (!_save->getTileEngine()->canTargetTile(
-													&originVoxel,
-													targetTile,
-													MapData::O_FLOOR,
-													&targetVoxel,
-													bu))
-			{
-				//Log(LOG_INFO) << ". can't target floorTile";
-				targetVoxel = Position(
-									_action.target.x * 16 + 8,
-									_action.target.y * 16 + 8,
-//kL									_action.target.z * 24 + 2);
-									_action.target.z * 24 + 1);		// kL
-			}
-		}
-		else // aiming at empty space.
-		{
-			Log(LOG_INFO) << ". targetTile is void";
-			targetVoxel = Position( // target nothing, targets the middle of the tile
-								_action.target.x * 16 + 8,
-								_action.target.y * 16 + 8,
-								_action.target.z * 24 + 12);
-		}
-//Wb.140209 ...end deletion
-
-		// kL_begin:
-		// I believe this causes a "no LoF" warning to return: no shot allowed.
-		// taken up from all that stuff below this...
-		int test = _save->getTileEngine()->calculateLine(
+	int test = _save->getTileEngine()->calculateLine(
 												originVoxel,
-												targetVoxel,
+												_targetVoxel,
 												false,
 												&_trajectory,
 												bu);
-		Log(LOG_INFO) << ". test = " << test;
+	if (test != VOXEL_EMPTY
+		&& !_trajectory.empty()
+		&& _action.actor->getFaction() == FACTION_PLAYER // kL_note: so aLiens don't even get in here!
+		&& _action.autoShotCount == 1
+		&& (SDL_GetModState() & KMOD_CTRL) == 0
+		&& _save->getBattleGame()->getPanicHandled())
+	{
+		Position hitPos = Position(
+								_trajectory.at(0).x / 16,
+								_trajectory.at(0).y / 16,
+								_trajectory.at(0).z / 24);
 
-		if (test != VOXEL_EMPTY
-			&& !_trajectory.empty()
-//kL			&& _action.actor->getFaction() == FACTION_PLAYER
-				// will that let/stop aLiens from shooting their mates?
-				// I want them to *not* try shooting through their mates....
-			&& _action.autoShotCount == 1
-			&& (SDL_GetModState() & KMOD_CTRL) == 0
-			&& _save->getBattleGame()->getPanicHandled())
+		if (test == VOXEL_UNIT
+			&& _save->getTile(hitPos)
+			&& _save->getTile(hitPos)->getUnit() == 0)
 		{
-			Position hitPos = Position(
-									_trajectory.at(0).x / 16,
-									_trajectory.at(0).y / 16,
-									_trajectory.at(0).z / 24);
-			if (test == VOXEL_UNIT
-				&& _save->getTile(hitPos)
-				&& _save->getTile(hitPos)->getUnit() == 0)
-			{
-				hitPos = Position( // must be poking head up from the belowTile
-								hitPos.x,
-								hitPos.y,
-								hitPos.z - 1);
-			}
+			hitPos = Position( // must be poking head up from belowTile
+							hitPos.x,
+							hitPos.y,
+							hitPos.z - 1);
+		}
 
-
-			if (hitPos != _action.target
-				&& _action.result == "")
-			{
-				Log(LOG_INFO) << ". . hitPos != target";
-				if (test == VOXEL_UNIT)
-				{
-					Log(LOG_INFO) << ". . . test == 4, unit";
-					BattleUnit* hitUnit = _save->getTile(hitPos)->getUnit();
-					BattleUnit* targetUnit = targetTile->getUnit();
-
-					if (hitUnit != targetUnit
-						&& (hitUnit->getVisible()
-							|| (hitUnit->getOriginalFaction() == FACTION_HOSTILE
-								&& targetUnit->getOriginalFaction() == FACTION_HOSTILE)))
-					{
-						_trajectory.clear();
-
-						Log(LOG_INFO) << ". . . . Voxel_Empty.";
-						return VOXEL_EMPTY;
-					}
-					else if (targetUnit->getDashing())
-					{
-						accuracy -= 0.333;
-						Log(LOG_INFO) << ". . . . targetUnit is Dashing!!! accuracy = ";
-					}
-				}
-			}
-		} // kL_end.
-
-/*kL		int test = VOXEL_EMPTY;
-		test = _save->getTileEngine()->calculateLine(
-												originVoxel,
-												targetVoxel,
-												false,
-												&_trajectory,
-												bu);
-		Log(LOG_INFO) << ". test = " << test;
-
-		if (test != VOXEL_EMPTY
-			&& !_trajectory.empty()
-			&& _action.actor->getFaction() == FACTION_PLAYER // -> huh?
-			&& _action.autoShotCount == 1)
-//			&& (SDL_GetModState() & KMOD_CTRL) == 0 // Wb.add
-//			&& _save->getBattleGame()->getPanicHandled()) // Wb.add
+		if (hitPos != _action.target
+			&& _action.result == "")
 		{
-			Position hitPos = Position(
-									_trajectory.at(0).x / 16,
-									_trajectory.at(0).y / 16,
-									_trajectory.at(0).z / 24);
-			if (test == VOXEL_UNIT
-				&& _save->getTile(hitPos)
-				&& _save->getTile(hitPos)->getUnit() == 0)
+			if (test == VOXEL_NORTHWALL)
 			{
-				hitPos = Position( // must be poking head up from the belowTile
-								hitPos.x,
-								hitPos.y,
-								hitPos.z - 1);
-			}
-
-
-			if (hitPos != _action.target
-				&& _action.result == "")
-			{
-				Log(LOG_INFO) << ". . hitPos != target";
-				if (test == VOXEL_NORTHWALL) // re-calculate for Northwall south of targetTile
-				{
-					Log(LOG_INFO) << ". . . test == 2, northwall";
-					if (hitPos.y - 1 != _action.target.y)
-//					if (hitPos.y - 1 == _action.target.y)
-					{
-						//Log(LOG_INFO) << ". . . . no Acu modifi perhaps";
-						_trajectory.clear();
-
-						Log(LOG_INFO) << ". . . . Voxel_Empty.";
-						return VOXEL_EMPTY;
-//						return _save->getTileEngine()->calculateLine(
-//																originVoxel,
-//																targetVoxel,
-//																true,
-//																&_trajectory,
-//																bu);
-					}
-				}
-				else if (test == VOXEL_WESTWALL) // re-calculate for Westwall east of targetTile
-				{
-					Log(LOG_INFO) << ". . . test == 1, westwall";
-					if (hitPos.x - 1 != _action.target.x)
-//					if (hitPos.x - 1 == _action.target.x)
-					{
-						//Log(LOG_INFO) << ". . . . no Acu modifi perhaps";
-						_trajectory.clear();
-
-						Log(LOG_INFO) << ". . . . Voxel_Empty.";
-						return VOXEL_EMPTY;
-//						return _save->getTileEngine()->calculateLine(
-//																originVoxel,
-//																targetVoxel,
-//																true,
-//																&_trajectory,
-//																bu);
-					}
-				} */
-
-
-				// kL_begin: Projectile::calculateTrajectory() NOW TARGETS FLOORS.
-/*				else if (test == 0)
-				{
-					//Log(LOG_INFO) << ". . . test == 0";
-
-//					if (hitPos.x - 1 != _action.target.x)
-//					if (hitPos.z - 1 == _action.target.z)
-//					{
-						//Log(LOG_INFO) << ". . . . no Acu modifi perhaps";
-					_trajectory.clear();
-
-//					return -1;
-					return _save->getTileEngine()->calculateLine(
-															originVoxel,
-															targetVoxel,
-															true,
-															&_trajectory,
-															bu);
-//					}
-				} */ // kL_end.
-
-
-/*kL				else if (test == VOXEL_UNIT)
-				{
-					Log(LOG_INFO) << ". . . test == 4, unit";
-					BattleUnit* hitUnit = _save->getTile(hitPos)->getUnit();
-					BattleUnit* targetUnit = targetTile->getUnit();
-
-					if (hitUnit != targetUnit)
-					{
-						_trajectory.clear();
-
-						Log(LOG_INFO) << ". . . . Voxel_Empty.";
-						return VOXEL_EMPTY;
-					}
-				}
-				else // test == 3, or something much higher.
+				if (hitPos.y - 1 != _action.target.y)
 				{
 					_trajectory.clear();
 
-					Log(LOG_INFO) << ". . . Voxel_Empty.";
 					return VOXEL_EMPTY;
 				}
 			}
-		} */
+			else if (test == VOXEL_WESTWALL)
+			{
+				if (hitPos.x - 1 != _action.target.x)
+				{
+					_trajectory.clear();
+
+					return VOXEL_EMPTY;
+				}
+			}
+			else if (test == VOXEL_UNIT)
+			{
+				BattleUnit* hitUnit = _save->getTile(hitPos)->getUnit();
+				BattleUnit* targetUnit = targetTile->getUnit();
+				if (hitUnit != targetUnit
+					&& hitUnit->getVisible())
+//						|| (hitUnit->getOriginalFaction() == FACTION_HOSTILE
+//							&& targetUnit->getOriginalFaction() == FACTION_HOSTILE)))
+				{
+					_trajectory.clear();
+
+					Log(LOG_INFO) << ". . . . Voxel_Empty.";
+					return VOXEL_EMPTY;
+				}
+				else if (targetUnit->getDashing()) // <<--- This is no Good if aLiens don't even get in here!!!
+				{
+					accuracy -= 0.35;
+					Log(LOG_INFO) << ". . . . targetUnit is Dashing!!! accuracy = ";
+				}
+			}
+			else
+			{
+				_trajectory.clear();
+
+				return VOXEL_EMPTY;
+			}
+		}
 	}
 
 	_trajectory.clear();
@@ -548,28 +237,23 @@ int Projectile::calculateTrajectory(double accuracy)
 	} */
 
 	// apply some accuracy modifiers. This will result in a new target voxel:
-	if (_action.type != BA_LAUNCH) // <- what, no drift??!? Could base this on.. psiSkill, or somethin'
+	if (_action.type != BA_LAUNCH) // kL. Could base BL.. on psiSkill, or sumthin'
 		applyAccuracy(
 					originVoxel,
-					&targetVoxel, // kL
-//kL					&_targetVoxel, // Wb.140209
+					&_targetVoxel,
 					accuracy,
 					false,
 					targetTile);
-//					extendLine); // default: True
+//kL					extendLine); // default: True
 
 	//Log(LOG_INFO) << ". LoF calculated, Acu applied (if not BL)";
 	// finally do a line calculation and store this trajectory.
-	int ret = _save->getTileEngine()->calculateLine(
-												originVoxel,
-												targetVoxel, // kL
-//kL												_targetVoxel, // Wb.140209
-												true,
-												&_trajectory,
-												bu);
-
-	Log(LOG_INFO) << ". ret = " << ret;
-	return ret;
+	return _save->getTileEngine()->calculateLine(
+											originVoxel,
+											_targetVoxel,
+											true,
+											&_trajectory,
+											bu);
 }
 
 /**
@@ -582,42 +266,6 @@ int Projectile::calculateThrow(double accuracy)
 	Log(LOG_INFO) << "Projectile::calculateThrow(), cf TileEngine::validateThrow()";
 
 	// object blocking - can't throw here
-/*
-Wb.131129
-	if (_action.type == BA_THROW
-		&& _save->getTile(_action.target)
-		&& _save->getTile(_action.target)->getMapData(MapData::O_OBJECT)
-		&& _save->getTile(_action.target)->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) == 255)
-	{
-		return VOXEL_EMPTY;
-	}
-
-	Position originVoxel;
-	originVoxel = Position(
-						_origin.x * 16 + 8,
-						_origin.y * 16 + 8,
-						_origin.z * 24);
-	originVoxel.z += -_save->getTile(_origin)->getTerrainLevel();
-
-	originVoxel.z += bu->getHeight() + bu->getFloatHeight();
-	originVoxel.z -= 3;
-
-	if (originVoxel.z >= (_origin.z + 1) * 24)
-	{
-		Tile* tileAbove = _save->getTile(_origin + Position(0, 0, 1));
-		if (!tileAbove
-			|| !tileAbove->hasNoFloor(0))
-		{
-			while (originVoxel.z > (_origin.z + 1) * 24)
-				originVoxel.z--;
-
-			originVoxel.z -= 4;
-		}
-		else
-			_origin.z++;
-	}
-*/
-
 	BattleUnit* bu = 0;
 	if (_save->getTile(_origin)->getUnit())
 	{
@@ -636,7 +284,9 @@ Wb.131129
 							getUnit();
 	}
 
-	Position originVoxel = _save->getTileEngine()->getOriginVoxel(_action, 0);
+	Position originVoxel = _save->getTileEngine()->getOriginVoxel(
+																_action,
+																0);
 	Position targetVoxel = Position( // determine the target voxel; aim at the center of the floor
 					(_action.target.x * 16) + 8,
 					(_action.target.y * 16) + 8,

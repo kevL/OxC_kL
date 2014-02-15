@@ -16,44 +16,56 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "CrossPlatform.h"
+
 #include <algorithm>
 #include <iostream>
-#include <sstream>
-#include <string>
 #include <locale>
+#include <sstream>
 #include <stdint.h>
+#include <string>
+
 #include <sys/stat.h>
+
 #include "../dirent.h"
-#include "Logger.h"
+
 #include "Exception.h"
+#include "Logger.h"
 #include "Options.h"
+
 #ifdef _WIN32
 #ifndef NOMINMAX
 #define NOMINMAX
 #endif
+
 #define WIN32_LEAN_AND_MEAN
-#include <windows.h>
+
+#include <direct.h>
 #include <shlobj.h>
 #include <shlwapi.h>
-#include <direct.h>
+#include <windows.h>
+
 #ifndef SHGFP_TYPE_CURRENT
 #define SHGFP_TYPE_CURRENT 0
 #endif
+
 #ifndef __GNUC__
 #pragma comment(lib, "advapi32.lib")
 #pragma comment(lib, "shell32.lib")
 #pragma comment(lib, "shlwapi.lib")
 #endif
 #else
-#include <cstring>
 #include <cstdio>
 #include <cstdlib>
+#include <cstring>
+#include <pwd.h>
 #include <unistd.h>
+
 #include <sys/param.h>
 #include <sys/types.h>
-#include <pwd.h>
 #endif
+
 
 namespace OpenXcom
 {
@@ -70,7 +82,7 @@ namespace CrossPlatform
  * Displays a message box with an error message.
  * @param error Error message.
  */
-void showError(const std::string &error)
+void showError(const std::string& error)
 {
 #ifdef _WIN32
 	MessageBoxA(NULL, error.c_str(), "OpenXcom Error", MB_ICONERROR | MB_OK);
@@ -303,7 +315,9 @@ std::string findConfigFolder()
  * @note There's no actual method for figuring out the correct
  * filename on case-sensitive systems, this is just a workaround.
  */
-std::string caseInsensitive(const std::string &base, const std::string &path)
+std::string caseInsensitive(
+		const std::string& base,
+		const std::string& path)
 {
 	std::string fullPath = base + path, newPath = path;
 
@@ -343,7 +357,9 @@ std::string caseInsensitive(const std::string &base, const std::string &path)
  * @note There's no actual method for figuring out the correct
  * foldername on case-sensitive systems, this is just a workaround.
  */
-std::string caseInsensitiveFolder(const std::string &base, const std::string &path)
+std::string caseInsensitiveFolder(
+		const std::string& base,
+		const std::string& path)
 {
 	std::string fullPath = base + path, newPath = path;
 
@@ -355,7 +371,11 @@ std::string caseInsensitiveFolder(const std::string &base, const std::string &pa
 	}
 
 	// UPPERCASE
-	std::transform(newPath.begin(), newPath.end(), newPath.begin(), toupper);
+	std::transform(
+				newPath.begin(),
+				newPath.end(),
+				newPath.begin(),
+				toupper);
 	fullPath = base + newPath;
 	if (folderExists(fullPath.c_str()))
 	{
@@ -363,7 +383,11 @@ std::string caseInsensitiveFolder(const std::string &base, const std::string &pa
 	}
 
 	// lowercase
-	std::transform(newPath.begin(), newPath.end(), newPath.begin(), tolower);
+	std::transform(
+				newPath.begin(),
+				newPath.end(),
+				newPath.begin(),
+				tolower);
 	fullPath = base + newPath;
 	if (folderExists(fullPath.c_str()))
 	{
@@ -380,7 +404,7 @@ std::string caseInsensitiveFolder(const std::string &base, const std::string &pa
  * @param filename Original filename.
  * @return Correct filename or "" if it doesn't exist.
  */
-std::string getDataFile(const std::string &filename)
+std::string getDataFile(const std::string& filename)
 {
 	// Correct folder separator
 	std::string name = filename;
@@ -396,7 +420,10 @@ std::string getDataFile(const std::string &filename)
 	}
 
 	// Check every other path
-	for (std::vector<std::string>::iterator i = Options::getDataList()->begin(); i != Options::getDataList()->end(); ++i)
+	for (std::vector<std::string>::iterator
+			i = Options::getDataList()->begin();
+			i != Options::getDataList()->end();
+			++i)
 	{
 		std::string path = caseInsensitive(*i, name);
 		if (path != "")
@@ -416,7 +443,7 @@ std::string getDataFile(const std::string &filename)
  * @param foldername Original foldername.
  * @return Correct foldername or "" if it doesn't exist.
  */
-std::string getDataFolder(const std::string &foldername)
+std::string getDataFolder(const std::string& foldername)
 {
 	// Correct folder separator
 	std::string name = foldername;
@@ -432,7 +459,10 @@ std::string getDataFolder(const std::string &foldername)
 	}
 
 	// Check every other path
-	for (std::vector<std::string>::iterator i = Options::getDataList()->begin(); i != Options::getDataList()->end(); ++i)
+	for (std::vector<std::string>::iterator
+			i = Options::getDataList()->begin();
+			i != Options::getDataList()->end();
+			++i)
 	{
 		std::string path = caseInsensitiveFolder(*i, name);
 		if (path != "")
@@ -452,7 +482,7 @@ std::string getDataFolder(const std::string &foldername)
  * @param path Full path.
  * @return Folder created or not.
  */
-bool createFolder(const std::string &path)
+bool createFolder(const std::string& path)
 {
 #ifdef _WIN32
 	int result = CreateDirectoryA(path.c_str(), 0);
@@ -476,10 +506,11 @@ bool createFolder(const std::string &path)
  * @param path Folder path.
  * @return Terminated path.
  */
-std::string endPath(const std::string &path)
+std::string endPath(const std::string& path)
 {
 	if (!path.empty() && path.at(path.size()-1) != PATH_SEPARATOR)
 		return path + PATH_SEPARATOR;
+
 	return path;
 }
 
@@ -490,11 +521,17 @@ std::string endPath(const std::string &path)
  * @param ext Extension of files ("" if it doesn't matter).
  * @return Ordered list of all the files.
  */
-std::vector<std::string> getFolderContents(const std::string &path, const std::string &ext)
+std::vector<std::string> getFolderContents(
+		const std::string& path,
+		const std::string& ext)
 {
 	std::vector<std::string> files;
 	std::string extl = ext;
-	std::transform(extl.begin(), extl.end(), extl.begin(), ::tolower);
+	std::transform(
+				extl.begin(),
+				extl.end(),
+				extl.begin(),
+				::tolower);
 
 	DIR *dp = opendir(path.c_str());
 	if (dp == 0)
@@ -521,7 +558,11 @@ std::vector<std::string> getFolderContents(const std::string &path, const std::s
 			if (file.length() >= extl.length() + 1)
 			{
 				std::string end = file.substr(file.length() - extl.length() - 1);
-				std::transform(end.begin(), end.end(), end.begin(), ::tolower);
+				std::transform(
+							end.begin(),
+							end.end(),
+							end.begin(),
+							::tolower);
 				if (end != "." + extl)
 				{
 					continue;
@@ -547,13 +588,13 @@ std::vector<std::string> getFolderContents(const std::string &path, const std::s
  * @param path Full path to folder.
  * @return Does it exist?
  */
-bool folderExists(const std::string &path)
+bool folderExists(const std::string& path)
 {
 #ifdef _WIN32
 	return (PathIsDirectoryA(path.c_str()) != FALSE);
 #elif __MORPHOS__
 	BPTR l = Lock( path.c_str(), SHARED_LOCK );
-	if( l != NULL )
+	if (l != NULL )
 	{
 		UnLock( l );
 		return 1;
@@ -570,13 +611,13 @@ bool folderExists(const std::string &path)
  * @param path Full path to file.
  * @return Does it exist?
  */
-bool fileExists(const std::string &path)
+bool fileExists(const std::string& path)
 {
 #ifdef _WIN32
 	return (PathFileExistsA(path.c_str()) != FALSE);
 #elif __MORPHOS__
 	BPTR l = Lock( path.c_str(), SHARED_LOCK );
-	if( l != NULL )
+	if (l != NULL )
 	{
 		UnLock( l );
 		return 1;
@@ -593,7 +634,7 @@ bool fileExists(const std::string &path)
  * @param path Full path to file.
  * @return True if the operation succeeded, False otherwise.
  */
-bool deleteFile(const std::string &path)
+bool deleteFile(const std::string& path)
 {
 #ifdef _WIN32
 	return (DeleteFileA(path.c_str()) != 0);
@@ -607,7 +648,9 @@ bool deleteFile(const std::string &path)
 * @param path Full path to file.
 * @return Base filename.
 */
-std::string baseFilename(const std::string &path, int (*transform)(int))
+std::string baseFilename(
+		const std::string& path,
+		int (*transform)(int))
 {
 	size_t sep = path.find_last_of(PATH_SEPARATOR);
 	std::string filename;
@@ -621,8 +664,13 @@ std::string baseFilename(const std::string &path, int (*transform)(int))
 	}
 	if (transform != 0)
 	{
-		std::transform(filename.begin(), filename.end(), filename.begin(), transform);
+		std::transform(
+					filename.begin(),
+					filename.end(),
+					filename.begin(),
+					transform);
 	}
+
 	return filename;
 }
 
@@ -631,22 +679,26 @@ std::string baseFilename(const std::string &path, int (*transform)(int))
 * @param filename Original filename.
 * @return Filename without invalid characters
 */
-std::string sanitizeFilename(const std::string &filename)
+std::string sanitizeFilename(const std::string& filename)
 {
 	std::string newFilename = filename;
-	for (std::string::iterator i = newFilename.begin(); i != newFilename.end(); ++i)
+	for (std::string::iterator
+			i = newFilename.begin();
+			i != newFilename.end();
+			++i)
 	{
-		if ((*i) == '<' ||
-			(*i) == '>' ||
-			(*i) == ':' ||
-			(*i) == '"' ||
-			(*i) == '/' ||
-			(*i) == '?' ||
-			(*i) == '\\')
+		if ((*i) == '<'
+			|| (*i) == '>'
+			|| (*i) == ':'
+			|| (*i) == '"'
+			|| (*i) == '/'
+			|| (*i) == '?'
+			|| (*i) == '\\')
 		{
 			*i = '_';
 		}
 	}
+
 	return newFilename;
 }
 
@@ -655,13 +707,14 @@ std::string sanitizeFilename(const std::string &filename)
  * @param filename Original filename.
  * @return Filename without the extension.
  */
-std::string noExt(const std::string &filename)
+std::string noExt(const std::string& filename)
 {
 	size_t dot = filename.find_last_of('.');
 	if (dot == std::string::npos)
 	{
 		return filename;
 	}
+
 	return filename.substr(0, filename.find_last_of('.'));
 }
 
@@ -711,7 +764,7 @@ std::string getLocale()
  * @param ev SDL event.
  * @return Is quitting necessary?
  */
-bool isQuitShortcut(const SDL_Event &ev)
+bool isQuitShortcut(const SDL_Event& ev)
 {
 #ifdef _WIN32
 	// Alt + F4
@@ -731,7 +784,7 @@ bool isQuitShortcut(const SDL_Event &ev)
  * @param path Full path to file.
  * @return The timestamp in integral format.
  */
-time_t getDateModified(const std::string &path)
+time_t getDateModified(const std::string& path)
 {
 /*#ifdef _WIN32
 	WIN32_FILE_ATTRIBUTE_DATA info;
@@ -796,7 +849,9 @@ std::pair<std::wstring, std::wstring> timeToString(time_t time)
  * @param b String B.
  * @return String A comes before String B.
  */
-bool naturalCompare(const std::wstring &a, const std::wstring &b)
+bool naturalCompare(
+		const std::wstring& a,
+		const std::wstring& b)
 {
 #if defined(_WIN32) && (!defined(__MINGW32__) || defined(__MINGW64_VERSION_MAJOR))
 	return (StrCmpLogicalW(a.c_str(), b.c_str()) < 0);

@@ -60,14 +60,9 @@ SaveState::SaveState(
 		_previousSelectedRow(-1),
 		_selectedRow(-1)
 {
-//	new SavedGameState( // kL
-//			game,
-//			origin,
-//			1,
-//			this);
-
 	_edtSave		= new TextEdit(168, 9, 0, 0);
-	_btnSaveGame	= new TextButton(80, 16, 60, 172);
+//	_btnSaveGame	= new TextButton(134, 16, 170, 177);
+	_btnSaveGame	= new TextButton(134, 16, 202, 197);
 
 	add(_edtSave);
 	add(_btnSaveGame);
@@ -77,11 +72,10 @@ SaveState::SaveState(
 
 	_lstSaves->onMousePress((ActionHandler)& SaveState::lstSavesPress);
 
-	_btnCancel->setX(180); // <<--
-
 	_btnSaveGame->setColor(Palette::blockOffset(8)+5);
-	_btnSaveGame->setText(tr("STR_SAVE_GAME"));
+	_btnSaveGame->setText(tr("STR_OK"));
 	_btnSaveGame->onMouseClick((ActionHandler)& SaveState::btnSaveGameClick);
+	_btnSaveGame->setVisible(false); // kL
 
 	_edtSave->setColor(Palette::blockOffset(8)+10);
 	_edtSave->setVisible(false);
@@ -137,7 +131,7 @@ void SaveState::lstSavesPress(Action* action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		_btnOk->setVisible(true); // kL
+		_btnSaveGame->setVisible(true); // kL
 		_inEditMode = true; // kL
 
 		_previousSelectedRow = _selectedRow;
@@ -222,6 +216,14 @@ void SaveState::btnSaveGameClick(Action*)
 void SaveState::saveGame()
 {
 	updateStatus("STR_SAVING_GAME");
+
+	// kL_begin:
+	if (!_inEditMode) return;
+	else
+	{
+		_btnSaveGame->setVisible(false);
+		_inEditMode = false;
+	} // kL_end.
 
 	_game->getSavedGame()->setName(_edtSave->getText());
 	std::string
@@ -329,21 +331,5 @@ void SaveState::quickSave(const std::string& filename)
 												-1));
 	}
 }
-
-/**
- * kL. Get the currently edited slot.
- */
-/* TextEdit* SaveState::getEdit() const // kL
-{
-	return _edtSave;
-} */
-
-/**
- * kL. Get the currently selected row.
- */
-/* int SaveState::getSelectedRow() const // kL
-{
-	return _selectedRow;
-} */
 
 }

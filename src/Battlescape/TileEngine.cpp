@@ -4564,14 +4564,17 @@ int TileEngine::getDirectionTo(
 }
 
 /**
- *
+ * Get the origin-voxel of a shot or missile.
+ * @param action, Reference to the BattleAction
+ * @param tile, Pointer to the start tile
+ * @return, Position of the origin in voxel-space
  */
 Position TileEngine::getOriginVoxel(
 		BattleAction& action,
 		Tile* tile)
 {
-	const int dirYshift[24] = {1,  3,  9, 15, 15, 13, 7, 1, 1,  1,  7, 13, 15, 15, 9, 3, 1,  2,  8, 14, 15, 14, 8, 2};
 	const int dirXshift[24] = {9, 15, 15, 13,  8,  1, 1, 3, 7, 13, 15, 15,  9,  3, 1, 1, 8, 14, 15, 14,  8,  2, 1, 2};
+	const int dirYshift[24] = {1,  3,  9, 15, 15, 13, 7, 1, 1,  1,  7, 13, 15, 15, 9, 3, 1,  2,  8, 14, 15, 14, 8, 2};
 
 	if (!tile)
 		tile = action.actor->getTile();
@@ -4592,16 +4595,14 @@ Position TileEngine::getOriginVoxel(
 		originVoxel.z += action.actor->getHeight()
 						+ action.actor->getFloatHeight()
 						- tile->getTerrainLevel()
-						- 4; // for good luck.
+						- 4; // for good luck. (kL_note: look like 2 voxels lower than LoS origin or something like this.)
 
 		if (action.type == BA_THROW)	// kL
 			originVoxel.z -= 4;			// kL
-/*kL
-		if (action.type == BA_THROW)
+/*kL		if (action.type == BA_THROW)
 			originVoxel.z -= 3;
 		else
-			originVoxel.z -= 4;
-*/
+			originVoxel.z -= 4; */
 
 		if (originVoxel.z >= (origin.z + 1) * 24)
 		{
@@ -4615,9 +4616,18 @@ Position TileEngine::getOriginVoxel(
 				while (originVoxel.z >= (origin.z + 1) * 24)
 					originVoxel.z--;
 
-				originVoxel.z -= 4;
+				originVoxel.z -= 4; // keep originVoxel 4 voxels below any ceiling.
 			}
 		}
+
+		// kL_note: This is the old code that does not use the dirX/Yshift stuff...
+		//
+		// Originally used the dirXShift and dirYShift as detailed above;
+		// this however results in MUCH more predictable results.
+		// center Origin in the originTile (or the center of all four tiles for large units):
+/*		int offset = bu->getArmor()->getSize() * 8;
+		originVoxel.x += offset;
+		originVoxel.y += offset; */
 
 		int offset = 0;
 		if (action.actor->getArmor()->getSize() > 1)

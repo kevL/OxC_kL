@@ -73,7 +73,8 @@ void ToggleTextButton::mousePress(Action* action, State* state)
  */
 void ToggleTextButton::setPressed(bool pressed)
 {
-	if (_isPressed == pressed) return;
+	if (_isPressed == pressed)
+		return;
 
 	_isPressed = pressed;
 	_fakeGroup = _isPressed? this: 0;
@@ -97,11 +98,13 @@ void ToggleTextButton::setInvertColor(Uint8 mid)
  */
 void ToggleTextButton::draw()
 {
-	if (_invertMid > -1) _fakeGroup = 0; // nevermind, TextButton. We'll invert the surface ourselves.
+	if (_invertMid > -1) // nevermind, TextButton. We'll invert the surface ourselves.
+		_fakeGroup = 0;
 
 	TextButton::draw();
 
-	if (_invertMid > -1 && _isPressed)
+	if (_invertMid > -1
+		&& _isPressed)
 	{
 		this->invert(_invertMid);
 	}

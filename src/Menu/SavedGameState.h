@@ -36,7 +36,6 @@ namespace OpenXcom
 {
 
 class ArrowButton;
-//class SaveState; // kL
 class Text;
 class TextButton;
 class TextList;
@@ -50,7 +49,6 @@ class Window;
 class SavedGameState
 	:
 		public State
-//		private SaveState // kL
 {
 
 	protected:
@@ -65,7 +63,6 @@ class SavedGameState
 		ArrowButton
 			* _sortName,
 			* _sortDate;
-//		SaveState* _saveState; // kL
 		Text
 			* _txtTitle,
 			* _txtName,
@@ -74,8 +71,7 @@ class SavedGameState
 			* _txtDelete,
 			* _txtDetails;
 		TextButton
-			* _btnCancel,
-			* _btnOk; // kL
+			* _btnCancel;
 		TextList* _lstSaves;
 		Window* _window;
 
@@ -91,7 +87,6 @@ class SavedGameState
 					Game* game,
 					OptionsOrigin origin,
 					int firstValidRow);
-//					SaveState* saveState = 0); // kL
 			/// Creates the Saved Game state (autosave option).
 			SavedGameState(
 					Game* game,
@@ -114,8 +109,6 @@ class SavedGameState
 
 			/// Handler for clicking the Cancel button.
 			void btnCancelClick(Action* action);
-			/// kL. Handler for clicking the Cancel button.
-			void btnOkClick(Action* action); // kL
 			/// Handler for moving the mouse over a list item.
 			void lstSavesMouseOver(Action* action);
 			/// Handler for moving the mouse outside the list borders.

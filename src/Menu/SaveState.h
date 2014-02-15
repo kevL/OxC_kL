@@ -79,14 +79,6 @@ private:
 			void saveGame();
 			/// Quick save game.
 			void quickSave(const std::string& filename);
-
-			/// kL. Get the currently edited slot.
-//			TextEdit* getEdit() const; // kL
-			/// kL. Get the currently selected row.
-//			int getSelectedRow() const; // kL
-
-//friend void SavedGameState::btnOkClick(Action*); // kL
-
 };
 
 }

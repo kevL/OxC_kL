@@ -52,7 +52,13 @@ enum KeyboardType
 /**
  * Enumeration for the savegame sorting modes.
  */
-enum SaveSort { SORT_NAME_ASC, SORT_NAME_DESC, SORT_DATE_ASC, SORT_DATE_DESC };
+enum SaveSort
+{
+	SORT_NAME_ASC,	// 0
+	SORT_NAME_DESC,	// 1
+	SORT_DATE_ASC,	// 2
+	SORT_DATE_DESC	// 3
+};
 
 /**
  * Container for all the various global game options

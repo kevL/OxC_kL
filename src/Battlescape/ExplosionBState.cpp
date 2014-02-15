@@ -192,14 +192,15 @@ void ExplosionBState::init()
 			else
 				_parent->getResourcePack()->getSound("BATTLE.CAT", 5)->play();
 
+			// kL_begin:
 			Camera* explodeCam = _parent->getMap()->getCamera();
-			if (explodeCam->getViewLevel() != posCenter.z)	// kL
-				explodeCam->setViewLevel(posCenter.z);		// kL
-
-//			if (!explodeCam->isOnScreen(posCenter))		// kL
-			explodeCam->centerOnPosition(			// kL
-										posCenter,	// kL
-										false);		// kL
+			if (!explodeCam->isOnScreen(posCenter))
+				explodeCam->centerOnPosition(
+											posCenter,
+											false);
+			else if (explodeCam->getViewLevel() != posCenter.z)
+				explodeCam->setViewLevel(posCenter.z);
+			// kL_end.
 		}
 		else
 			_parent->popState();
@@ -210,7 +211,7 @@ void ExplosionBState::init()
 
 		_parent->setStateInterval(std::max(
 										1,
-										((BattlescapeState::DEFAULT_ANIM_SPEED * 6 / 7) - (10 * _item->getRules()->getExplosionSpeed())))); // kl
+										((BattlescapeState::DEFAULT_ANIM_SPEED * 6 / 7) - (10 * _item->getRules()->getExplosionSpeed())))); // kL
 //kL										((BattlescapeState::DEFAULT_ANIM_SPEED / 2) - (10 * _item->getRules()->getExplosionSpeed()))));
 //kL		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED / 2);
 //		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED * 6 / 7); // kL
@@ -231,18 +232,19 @@ void ExplosionBState::init()
 											_item->getRules()->getHitSound())
 										->play();
 
+		// kL_begin:
 		Camera* explodeCam = _parent->getMap()->getCamera();
-		if (explodeCam->getViewLevel() != posCenter.z)	// kL
-			explodeCam->setViewLevel(posCenter.z);		// kL
-
-		if (_parent->getSave()->getSide() == FACTION_HOSTILE	// kL
-			|| !explodeCam->isOnScreen(posCenter))				// kL
+//		if (_parent->getSave()->getSide() == FACTION_HOSTILE ||
+		if (!explodeCam->isOnScreen(posCenter))
 		{
-			explodeCam->centerOnPosition(						// kL
-										posCenter,				// kL
-										false);					// kL
+			explodeCam->centerOnPosition(
+										posCenter,
+										false);
 
 		}
+		else if (explodeCam->getViewLevel() != posCenter.z)
+			explodeCam->setViewLevel(posCenter.z);
+		// kL_end.
 	}
 	Log(LOG_INFO) << "ExplosionBState::init() EXIT";
 }

@@ -346,22 +346,19 @@ void InventoryState::updateStats()
 
 		if (!_tu) // kL
 		{
-			_txtFAcc->setText(tr("STR_ACCURACY_SHORT")
-								.arg(static_cast<int>(
-										unit->getStats()->firing * unit->getHealth())
-									/ unit->getStats()->health));
-//			_txtFAcc->setText(tr("STR_ACCURACY_SHORT")
+//			_txtFAcc->setText(tr("STR_ACCURACY_SHORT") // Wb.140214
 //								.arg(static_cast<int>(
-//										static_cast<double>(unit->getStats()->firing) * unit->getAccuracyModifier())));
+//										unit->getStats()->firing * unit->getHealth())
+//									/ unit->getStats()->health));
+			_txtFAcc->setText(tr("STR_ACCURACY_SHORT").arg(unit->getStats()->firing));
+//					static_cast<double>(unit->getStats()->firing) * unit->getAccuracyModifier())));
 
 			_txtReact->setText(tr("STR_REACTIONS_SHORT").arg(unit->getStats()->reactions));
 
 
 			int minPsi = 0;
 			if (unit->getType() == "SOLDIER")
-			{
 				minPsi = _game->getSavedGame()->getSoldier(unit->getId())->getRules()->getMinStats().psiSkill - 1;
-			}
 
 			int psiSkill = unit->getStats()->psiSkill;
 			if (psiSkill > minPsi)

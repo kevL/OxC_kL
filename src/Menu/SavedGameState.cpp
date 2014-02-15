@@ -33,11 +33,8 @@
 #include "../Interface/ArrowButton.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
-//#include "../Interface/TextEdit.h" // kL
 #include "../Interface/TextList.h"
 #include "../Interface/Window.h"
-
-//#include "../Menu/SaveState.h" // kL
 
 #include "../Resource/ResourcePack.h"
 
@@ -82,7 +79,6 @@ SavedGameState::SavedGameState(
 		Game* game,
 		OptionsOrigin origin,
 		int firstValidRow)
-//		SaveState* saveState) // kL
 	:
 		State(game),
 		_origin(origin),
@@ -90,7 +86,6 @@ SavedGameState::SavedGameState(
 		_noUI(false),
 		_firstValidRow(firstValidRow),
 		_inEditMode(false) // kL
-//		_saveState(saveState) // kL
 {
 	_screen = false;
 
@@ -113,7 +108,6 @@ SavedGameState::SavedGameState(
 	_txtDetails = new Text(288, 9, 16, 165);
 
 	_btnCancel	= new TextButton(134, 16, 16, 177);
-	_btnOk		= new TextButton(134, 16, 170, 177); // kL
 
 	if (_origin != OPT_BATTLESCAPE)
 		_game->setPalette(
@@ -132,7 +126,6 @@ SavedGameState::SavedGameState(
 	add(_txtStatus);
 	add(_txtDetails);
 	add(_btnCancel);
-	add(_btnOk);
 
 	centerAllSurfaces();
 
@@ -146,16 +139,6 @@ SavedGameState::SavedGameState(
 	_btnCancel->onKeyboardPress(
 					(ActionHandler)& SavedGameState::btnCancelClick,
 					(SDLKey) Options::getInt("keyCancel"));
-
-	// kL_begin:
-	_btnOk->setColor(Palette::blockOffset(8)+5);
-	_btnOk->setText(tr("STR_OK"));
-//	_btnOk->onMouseClick((ActionHandler)& SavedGameState::btnOkClick);
-//	_btnOk->onKeyboardPress(
-//					(ActionHandler)& SavedGameState::btnOkClick,
-//					(SDLKey) Options::getInt("keyCancel"));
-	_btnOk->setVisible(false);
-	// kL_end.
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setBig();
@@ -218,7 +201,6 @@ SavedGameState::SavedGameState(
 		_noUI(true),
 		_firstValidRow(firstValidRow),
 		_inEditMode(false) // kL
-//		_saveState(0) // kL
 {
 	if (_showMsg)
 	{
@@ -317,16 +299,28 @@ void SavedGameState::sortList(SaveSort sort)
 	switch (sort)
 	{
 		case SORT_NAME_ASC:
-			std::sort(_saves.begin(), _saves.end(), compareSaveName());
+			std::sort(
+					_saves.begin(),
+					_saves.end(),
+					compareSaveName());
 		break;
 		case SORT_NAME_DESC:
-			std::sort(_saves.rbegin(), _saves.rend(), compareSaveName());
+			std::sort(
+					_saves.rbegin(),
+					_saves.rend(),
+					compareSaveName());
 		break;
 		case SORT_DATE_ASC:
-			std::sort(_saves.begin(), _saves.end(), compareSaveTimestamp());
+			std::sort(
+					_saves.begin(),
+					_saves.end(),
+					compareSaveTimestamp());
 		break;
 		case SORT_DATE_DESC:
-			std::sort(_saves.rbegin(), _saves.rend(), compareSaveTimestamp());
+			std::sort(
+					_saves.rbegin(),
+					_saves.rend(),
+					compareSaveTimestamp());
 		break;
 	}
 
@@ -371,73 +365,6 @@ void SavedGameState::updateStatus(const std::string& msg)
 void SavedGameState::btnCancelClick(Action*)
 {
 	_game->popState();
-}
-
-/**
- * kL. Saves to the selected slot.
- * @param action Pointer to an action.
- */
-void SavedGameState::btnOkClick(Action*) // kL
-{
-/*	Log(LOG_INFO) << "SavedGameState::btnOkClick()";
-	if (!_inEditMode) return;
-	else
-	{
-		_btnOk->setVisible(false);
-		_inEditMode = false;
-	}
-
-	Log(LOG_INFO) << ". updateStatus";
-	updateStatus("STR_SAVING_GAME");
-	_game->getSavedGame()->setName(_edtSave->getText());
-	Log(LOG_INFO) << ". setName";
-//	_game->getSavedGame()->setName(_saveState->getEdit()->getText()); // kL
-
-	std::string
-		oldFilename,
-		newFilename;
-
-	Log(LOG_INFO) << ". sanitizeFilename";
-#ifdef _WIN32
-	newFilename = CrossPlatform::sanitizeFilename(Language::wstrToCp(_edtSave->getText()));
-//	newFilename = CrossPlatform::sanitizeFilename(Language::wstrToCp(_saveState->getEdit()->getText())); // kL
-#else
-	newFilename = CrossPlatform::sanitizeFilename(Language::wstrToUtf8(_edtSave->getText()));
-//	newFilename = CrossPlatform::sanitizeFilename(Language::wstrToUtf8(_saveState->getEdit()->getText())); // kL
-#endif
-
-	Log(LOG_INFO) << ". getSelectedRow";
-	if (_selectedRow > 0)
-//	if (_saveState->getSelectedRow() > 0) // kL
-	{
-		Log(LOG_INFO) << ". . CrossPlatform::noExt";
-		oldFilename = CrossPlatform::noExt(_saves[_selectedRow - 1]);
-//		oldFilename = CrossPlatform::noExt(_saves[_saveState->getSelectedRow() - 1]); // kL
-	}
-	else
-	{
-		Log(LOG_INFO) << ". . fileExists";
-		while (CrossPlatform::fileExists(Options::getUserFolder() + newFilename + ".sav"))
-			newFilename += "_";
-
-		oldFilename = newFilename;
-	}
-
-	Log(LOG_INFO) << ". quickSave";
-	quickSave(oldFilename);
-//	_saveState->quickSave(oldFilename); // kL
-	if (oldFilename != newFilename)
-	{
-		while (CrossPlatform::fileExists(Options::getUserFolder() + newFilename + ".sav"))
-			newFilename += "_";
-
-		std::string oldPath = Options::getUserFolder() + oldFilename + ".sav";
-		std::string newPath = Options::getUserFolder() + newFilename + ".sav";
-		rename(
-			oldPath.c_str(),
-			newPath.c_str());
-	}
-	Log(LOG_INFO) << "SavedGameState::btnOkClick() EXIT"; */
 }
 
 /**

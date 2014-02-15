@@ -175,15 +175,15 @@ void ActionMenuState::addItem(
 	{
 		int acc = 0;
 		if (baType == BA_THROW)
-			acc = _action->actor->getThrowingAccuracy();
-//			acc = static_cast<int>(floor(_action->actor->getThrowingAccuracy() * 100.0));
+//kL			acc = _action->actor->getThrowingAccuracy(); // Wb.140214
+			acc = static_cast<int>(floor(_action->actor->getThrowingAccuracy() * 100.0)); // kL
 		else
-			acc = _action->actor->getFiringAccuracy(
-												baType,
-												_action->weapon);
-//			acc = static_cast<int>(floor(_action->actor->getFiringAccuracy(
-//																		baType,
-//																		_action->weapon) * 100.0));
+//			acc = _action->actor->getFiringAccuracy( // Wb.140214
+//												baType,
+//												_action->weapon);
+			acc = static_cast<int>(floor(_action->actor->getFiringAccuracy( // kL
+																		baType,
+																		_action->weapon) * 100.0));
 
 //kL		s1 = tr("STR_ACCURACY_SHORT").arg(Text::formatPercentage(acc));
 		s1 = tr("STR_ACCURACY_SHORT_KL").arg(acc); // kL
@@ -214,12 +214,9 @@ void ActionMenuState::handle(Action* action)
 {
 	State::handle(action);
 
-//kL	if (action->getDetails()->type == SDL_MOUSEBUTTONDOWN
-//kL		&& action->getDetails()->button.button == SDL_BUTTON_RIGHT)
-	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT) // kL
-	{
+//kL	if (action->getDetails()->type == SDL_MOUSEBUTTONDOWN &&
+	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 		_game->popState();
-	}
 	else if (action->getDetails()->type == SDL_KEYDOWN
 		&& (action->getDetails()->key.keysym.sym == (SDLKey)Options::getInt("keyCancel")
 			|| action->getDetails()->key.keysym.sym == (SDLKey)Options::getInt("keyBattleUseLeftHand")

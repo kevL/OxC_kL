@@ -66,12 +66,10 @@ DeleteGameState::DeleteGameState(
 
 
 	if (_origin != OPT_BATTLESCAPE)
-	{
 		_game->setPalette(
 					_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)),
 					Palette::backPos,
 					16);
-	}
 
 	add(_window);
 	add(_txtMessage);
@@ -105,9 +103,7 @@ DeleteGameState::DeleteGameState(
 	_txtMessage->setText(tr("STR_IS_IT_OK_TO_DELETE_THE_SAVED_GAME"));
 
 	if (_origin == OPT_BATTLESCAPE)
-	{
 		applyBattlescapeTheme();
-	}
 }
 
 /**

@@ -44,7 +44,7 @@ class ProjectileFlyBState
 private:
 	bool
 		_initialized,
-		_targetFloor; // Wb.140214
+		_targetFloor;
 	int _projectileImpact;
 
 	BattleItem
@@ -52,9 +52,9 @@ private:
 		* _projectileItem;
 	BattleUnit* _unit;
 	Position
-		_origin;
-//kL		_targetVoxel; // Wb.140209
-		_originVoxel; // Wb.140214
+		_origin,
+		_originVoxel,
+		_targetVoxel;
 
 	/// Tries to create a projectile sprite.
 	bool createNewProjectile();

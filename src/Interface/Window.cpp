@@ -31,7 +31,7 @@
 namespace OpenXcom
 {
 
-const double Window::POPUP_SPEED = 0.07; //kL 0.08;
+const double Window::POPUP_SPEED = 0.07;
 
 Sound* Window::soundPopup[3] = {0, 0, 0};
 
@@ -70,9 +70,7 @@ Window::Window(
 	_timer->onTimer((SurfaceHandler)& Window::popup);
 
 	if (_popup == POPUP_NONE)
-	{
 		_popupStep = 1.0;
-	}
 	else
 	{
 		setHidden(true);

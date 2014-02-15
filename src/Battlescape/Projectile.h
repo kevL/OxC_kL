@@ -49,8 +49,8 @@ private:
 
 	BattleAction _action;
 	Position
-		_origin;
-//kL		_targetVoxel; // Wb.140209
+		_origin,
+		_targetVoxel;
 	ResourcePack* _res;
 	SavedBattleGame* _save;
 	Surface* _sprite;
@@ -73,14 +73,16 @@ private:
 				ResourcePack* res,
 				SavedBattleGame* save,
 				BattleAction action,
-				Position origin);
-//kL				Position target); // Wb.140209
+				Position origin,
+				Position target);
 		/// Cleans up the Projectile.
 		~Projectile();
 
 		/// Calculates the trajectory for a straight path.
 		int calculateTrajectory(double accuracy);
-//kL		int calculateTrajectory(double accuracy, Position originVoxel); // <-- LoL
+		int calculateTrajectory(
+				double accuracy,
+				Position originVoxel);
 		/// Calculates the trajectory for a curved path.
 		int calculateThrow(double accuracy);
 

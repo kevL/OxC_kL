@@ -28,13 +28,13 @@ namespace OpenXcom
 
 enum ArrowShape
 {
-	ARROW_NONE,
-	ARROW_BIG_UP,
-	ARROW_BIG_DOWN,
-	ARROW_SMALL_UP,
-	ARROW_SMALL_DOWN,
-	ARROW_SMALL_LEFT,
-	ARROW_SMALL_RIGHT
+	ARROW_NONE,			// 0
+	ARROW_BIG_UP,		// 1
+	ARROW_BIG_DOWN,		// 2
+	ARROW_SMALL_UP,		// 3
+	ARROW_SMALL_DOWN,	// 4
+	ARROW_SMALL_LEFT,	// 5
+	ARROW_SMALL_RIGHT	// 6
 };
 
 
@@ -80,8 +80,8 @@ protected:
 
 		/// Sets the arrow button's list.
 		void setTextList(TextList* list);
-		/// Handles the timers.
 
+		/// Handles the timers.
 		void think();
 		/// Scrolls the list.
 		void scroll();

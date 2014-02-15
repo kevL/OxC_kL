@@ -671,12 +671,10 @@ void BattleUnit::keepWalking(
 	}
 
 	if (_walkPhase == middle)
-	{
 		// we assume we reached our destination tile
 		// this is actually a drawing hack, so soldiers are not overlapped by floortiles
 		// kL_note: which they (large units) are half the time anyway...
 		_pos = _destination;
-	}
 
 	if (_walkPhase >= end) // officially reached the destination tile
 	{
@@ -1505,11 +1503,10 @@ int BattleUnit::getActionTUs(
 		BattleItem* item)
 {
 	if (item == 0)
-	{
 		return 0;
-	}
 
 	int cost = 0;
+
 	switch (actionType)
 	{
 		case BA_PRIME:
@@ -1732,26 +1729,29 @@ void BattleUnit::clearVisibleTiles()
  * @param item
  * @return firing Accuracy
  */
-/* double BattleUnit::getFiringAccuracy(
+double BattleUnit::getFiringAccuracy(
 		BattleActionType actionType,
 		BattleItem* item)
 {
 	//Log(LOG_INFO) << "BattleUnit::getFiringAccuracy(), unitID " << getId() << " /  getStats()->firing" << getStats()->firing;
 
-	if (actionType == BA_HIT) // quick out.
+	if (actionType == BA_LAUNCH)
+		return 1.0;
+
+	if (actionType == BA_HIT)
 		return static_cast<double>(item->getRules()->getAccuracyMelee()) / 100.0;
 //		return static_cast<double>(item->getRules()->getAccuracyMelee()) / 100.0 * getAccuracyModifier(); // kL
 
 
 	double weaponAcc = 0.0;
-	if (actionType == BA_AIMEDSHOT
-		|| actionType == BA_LAUNCH) // is this needed right now.
+	if (actionType == BA_AIMEDSHOT)
+//		|| actionType == BA_LAUNCH) // is this needed right now.
 	{
 		weaponAcc = static_cast<double>(item->getRules()->getAccuracyAimed());
 	}
 	else if (actionType == BA_AUTOSHOT)
 		weaponAcc = static_cast<double>(item->getRules()->getAccuracyAuto());
-	else
+	else // snapShot.
 		weaponAcc = static_cast<double>(item->getRules()->getAccuracySnap());
 
 	double ret = static_cast<double>(getStats()->firing) / 100.0;
@@ -1771,17 +1771,9 @@ void BattleUnit::clearVisibleTiles()
 	}
 
 	return ret * getAccuracyModifier();
-} */
-
+}
 // Wb.140214_begin:
-/**
- * Calculate firing accuracy.
- * Formula = accuracyStat * weaponAccuracy * kneelingbonus(1.15) * one-handPenalty(0.8) * woundsPenalty(% health) * critWoundsPenalty (-10%/wound)
- * @param actionType
- * @param item
- * @return firing Accuracy
- */
-int BattleUnit::getFiringAccuracy(
+/* int BattleUnit::getFiringAccuracy(
 		BattleActionType actionType,
 		BattleItem* item)
 {
@@ -1812,34 +1804,41 @@ int BattleUnit::getFiringAccuracy(
 	}
 
 	return result * getAccuracyModifier(item) / 100;
-} // Wb_end.
+} */ // Wb_end.
 
-/**
- * To calculate firing accuracy. Takes health and fatal wounds into account.
- * Formula = accuracyStat * woundsPenalty(% health) * critWoundsPenalty (-10%/wound)
- * @return modifier
- */
-/* double BattleUnit::getAccuracyModifier()
-{
-	double ret = static_cast<double>(_health) / static_cast<double>(getStats()->health);
-
-	int wounds = _fatalWounds[BODYPART_HEAD] + _fatalWounds[BODYPART_RIGHTARM];
-	if (wounds > 9)
-		wounds = 9;
-
-	ret *= 1.0 - (0.1 * static_cast<double>(wounds));
-
-	return ret;
-} */
-
-// Wb.140214_begin:
 /**
  * To calculate firing accuracy. Takes health and fatal wounds into account.
  * Formula = accuracyStat * woundsPenalty(% health) * critWoundsPenalty (-10%/wound)
  * @param item the item we are shooting right now.
  * @return modifier
  */
-int BattleUnit::getAccuracyModifier(BattleItem* item)
+double BattleUnit::getAccuracyModifier(BattleItem* item)
+{
+	Log(LOG_INFO) << "BattleUnit::getAccuracyModifier()";
+	double ret = static_cast<double>(_health) / static_cast<double>(getStats()->health);
+
+	int wounds = _fatalWounds[BODYPART_HEAD];
+
+	if (item)
+	{
+		if (item->getRules()->isTwoHanded())
+			wounds += _fatalWounds[BODYPART_RIGHTARM] + _fatalWounds[BODYPART_LEFTARM];
+		else
+		{
+			if (getItem("STR_RIGHT_HAND") == item)
+				wounds += _fatalWounds[BODYPART_RIGHTARM];
+			else
+				wounds += _fatalWounds[BODYPART_LEFTARM];
+		}
+	}
+
+	ret *= 1.0 - (0.1 * static_cast<double>(wounds));
+
+	Log(LOG_INFO) << ". ret = " << ret;
+	return ret;
+}
+// Wb.140214_begin:
+/* int BattleUnit::getAccuracyModifier(BattleItem* item)
 {
 	int wounds = _fatalWounds[BODYPART_HEAD];
 
@@ -1859,7 +1858,7 @@ int BattleUnit::getAccuracyModifier(BattleItem* item)
 	return std::max(
 				10,
 				25 * _health / getStats()->health + 75 + -10 * wounds);
-} // Wb_end.
+} */ // Wb_end.
 
 /**
  * Calculate throwing accuracy.
@@ -1880,9 +1879,7 @@ void BattleUnit::setArmor(
 		UnitSide side)
 {
 	if (armor < 0)
-	{
 		armor = 0;
-	}
 
 	_currentArmor[side] = armor;
 }

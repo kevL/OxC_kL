@@ -25,6 +25,7 @@
 
 #include "AlienBAIState.h"
 #include "Camera.h"
+#include "Explosion.h"
 #include "ExplosionBState.h"
 #include "Map.h"
 #include "Pathfinding.h"
@@ -44,7 +45,6 @@
 #include "../Savegame/BattleItem.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/SavedBattleGame.h"
-#include "Explosion.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Tile.h"
 
@@ -67,8 +67,9 @@ ProjectileFlyBState::ProjectileFlyBState(
 		_origin(origin),
 		_projectileImpact(0),
 		_initialized(false),
-		_originVoxel(-1,-1,-1), // Wb.140214
-		_targetFloor(false) // Wb.140214
+		_targetVoxel(-1,-1,-1), // kL. Why is this not initialized in the stock oXc code?
+		_originVoxel(-1,-1,-1),
+		_targetFloor(false)
 {
 }
 
@@ -86,6 +87,7 @@ ProjectileFlyBState::ProjectileFlyBState(
 		_origin(action.actor->getPosition()),
 		_projectileImpact(0),
 		_initialized(false),
+		_targetVoxel(-1,-1,-1), // kL. Why is this not initialized in the stock oXc code?
 		_originVoxel(-1,-1,-1), // Wb.140214
 		_targetFloor(false) // Wb.140214
 
@@ -346,24 +348,25 @@ void ProjectileFlyBState::init()
 		break;
 	}
 
-// Wb.140209 moved in from Projectile::calculateTrajectory()
-/*
-	if (_action.type == BA_LAUNCH || (SDL_GetModState() & KMOD_CTRL) != 0 || !_parent->getPanicHandled())
+
+	if (_action.type == BA_LAUNCH
+		|| (SDL_GetModState() & KMOD_CTRL) != 0
+		|| !_parent->getPanicHandled())
 	{
 		// target nothing, targets the middle of the tile
-		_targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24 + 12);
+		_targetVoxel = Position(
+							_action.target.x * 16 + 8,
+							_action.target.y * 16 + 8,
+							_action.target.z * 24 + 12);
+
 		if (_action.type == BA_LAUNCH)
 		{
 			if (_targetFloor) // kL_note: was, if(_action.target == _origin)
-			{
 				// launched missiles with two waypoints placed on the same tile: target the floor.
 				_targetVoxel.z -= 10;
-			}
 			else
-			{
 				// launched missiles go slightly higher than the middle.
 				_targetVoxel.z += 4;
-			}
 		}
 	}
 	else
@@ -372,58 +375,97 @@ void ProjectileFlyBState::init()
 		// aim at the center of the unit, the object, the walls or the floor (in that priority)
 		// if there is no LOF to the center, try elsewhere (more outward).
 		// Store this target voxel.
-		Tile *targetTile = _parent->getSave()->getTile(_action.target);
+		Tile* targetTile = _parent->getSave()->getTile(_action.target);
 		Position hitPos;
-//Wb.140214		int test = V_EMPTY;
-		Position originVoxel = _parent->getTileEngine()->getOriginVoxel(_action, _parent->getSave()->getTile(_origin));
+
+		Position originVoxel = _parent->getTileEngine()->getOriginVoxel(
+																	_action,
+																	_parent->getSave()->getTile(_origin));
 		if (targetTile->getUnit() != 0)
 		{
-			if (_origin == _action.target || targetTile->getUnit() == _unit)
+			if (_origin == _action.target
+				|| targetTile->getUnit() == _unit)
 			{
-				// don't shoot at yourself but shoot at the floor
-				_targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24);
+				_targetVoxel = Position( // don't shoot at yourself but shoot at the floor
+									_action.target.x * 16 + 8,
+									_action.target.y * 16 + 8,
+									_action.target.z * 24);
 			}
 			else
-			{
-				_parent->getTileEngine()->canTargetUnit(&originVoxel, targetTile, &_targetVoxel, _unit);
-			}
+				_parent->getTileEngine()->canTargetUnit(
+													&originVoxel,
+													targetTile,
+													&_targetVoxel,
+													_unit);
 		}
 		else if (targetTile->getMapData(MapData::O_OBJECT) != 0)
 		{
-			if (!_parent->getTileEngine()->canTargetTile(&originVoxel, targetTile, MapData::O_OBJECT, &_targetVoxel, _unit))
+			if (!_parent->getTileEngine()->canTargetTile(
+													&originVoxel,
+													targetTile,
+													MapData::O_OBJECT,
+													&_targetVoxel,
+													_unit))
 			{
-				_targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24 + 10);
+				_targetVoxel = Position(
+									_action.target.x * 16 + 8,
+									_action.target.y * 16 + 8,
+									_action.target.z * 24 + 10);
 			}
 		}
 		else if (targetTile->getMapData(MapData::O_NORTHWALL) != 0)
 		{
-			if (!_parent->getTileEngine()->canTargetTile(&originVoxel, targetTile, MapData::O_NORTHWALL, &_targetVoxel, _unit))
+			if (!_parent->getTileEngine()->canTargetTile(
+													&originVoxel,
+													targetTile,
+													MapData::O_NORTHWALL,
+													&_targetVoxel,
+													_unit))
 			{
-				_targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16, _action.target.z*24 + 9);
+				_targetVoxel = Position(
+									_action.target.x * 16 + 8,
+									_action.target.y * 16,
+									_action.target.z * 24 + 9);
 			}
 		}
 		else if (targetTile->getMapData(MapData::O_WESTWALL) != 0)
 		{
-			if (!_parent->getTileEngine()->canTargetTile(&originVoxel, targetTile, MapData::O_WESTWALL, &_targetVoxel, _unit))
+			if (!_parent->getTileEngine()->canTargetTile(
+													&originVoxel,
+													targetTile,
+													MapData::O_WESTWALL,
+													&_targetVoxel,
+													_unit))
 			{
-				_targetVoxel = Position(_action.target.x*16, _action.target.y*16 + 8, _action.target.z*24 + 9);
+				_targetVoxel = Position(
+									_action.target.x * 16,
+									_action.target.y * 16 + 8,
+									_action.target.z * 24 + 9);
 			}
 		}
 		else if (targetTile->getMapData(MapData::O_FLOOR) != 0)
 		{
-			if (!_parent->getTileEngine()->canTargetTile(&originVoxel, targetTile, MapData::O_FLOOR, &_targetVoxel, _unit))
+			if (!_parent->getTileEngine()->canTargetTile(
+													&originVoxel,
+													targetTile,
+													MapData::O_FLOOR,
+													&_targetVoxel,
+													_unit))
 			{
-				_targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24 + 2);
+				_targetVoxel = Position(
+									_action.target.x * 16 + 8,
+									_action.target.y * 16 + 8,
+									_action.target.z * 24 + 2);
 			}
 		}
-		else
+		else // target nothing, targets the middle of the tile
 		{
-			// target nothing, targets the middle of the tile
-			_targetVoxel = Position(_action.target.x*16 + 8, _action.target.y*16 + 8, _action.target.z*24 + 12);
+			_targetVoxel = Position(
+								_action.target.x * 16 + 8,
+								_action.target.y * 16 + 8,
+								_action.target.z * 24 + 12);
 		}
 	}
-*/
-// Wb.140209 ...end moved in from Projectile.
 
 	createNewProjectile();
 	Log(LOG_INFO) << "ProjectileFlyBState::init() EXIT";
@@ -443,20 +485,17 @@ bool ProjectileFlyBState::createNewProjectile()
 										_parent->getResourcePack(),
 										_parent->getSave(),
 										_action,
-										_origin);
-//kL										_targetVoxel); // Wb.140209
+										_origin,
+										_targetVoxel);
 
-	// add the projectile on the map
-	_parent->getMap()->setProjectile(projectile);
+	_parent->getMap()->setProjectile(projectile); // add the projectile on the map
 
-	// set the speed of the state think cycle to 16 ms (roughly one think cycle per frame)
+	// set the speed of the state think cycle to 16 ms (roughly one think-cycle per frame)
 //kL	_parent->setStateInterval(1000/60);
-//	Uint32 interval = static_cast<Uint32>(50.0 / 3.0);	// kL
 	Uint32 interval = static_cast<Uint32>(16);			// kL
 	_parent->setStateInterval(interval);				// kL
 
-	// let it calculate a trajectory
-	_projectileImpact = VOXEL_EMPTY;
+	_projectileImpact = VOXEL_EMPTY; // let it calculate a trajectory
 
 	if (_action.type == BA_THROW)
 	{
@@ -502,11 +541,8 @@ bool ProjectileFlyBState::createNewProjectile()
 	{
 		_projectileImpact = projectile->calculateThrow(_unit->getFiringAccuracy(
 																			_action.type,
-																			_action.weapon)
-																		/ 100.0);
-//		_projectileImpact = projectile->calculateThrow(_unit->getFiringAccuracy(
-//																			_action.type,
-//																			_action.weapon));
+																			_action.weapon));
+//kL																		/ 100.0); // Wb.140214
 		Log(LOG_INFO) << ". acid spit, part = " << _projectileImpact;
 
 		if (_projectileImpact != VOXEL_EMPTY
@@ -547,13 +583,15 @@ bool ProjectileFlyBState::createNewProjectile()
 	{
 		// validMeleeRange/target has been validated.
 //		_projectileImpact = 4;
-		_projectileImpact = projectile->calculateTrajectory(_unit->getFiringAccuracy( // see Wb.140214 in else, below
-																				_action.type,
-																				_action.weapon));
-		Log(LOG_INFO) << ". melee attack! part = " << _projectileImpact;
+//		_projectileImpact = projectile->calculateTrajectory(_unit->getFiringAccuracy(
+//																				_action.type,
+//																				_action.weapon));
+//kL																			/ 100.0); // Wb.140214
+		Log(LOG_INFO) << ". melee attack!";// part = " << _projectileImpact;
 
-		_unit->aim(true); // set the soldier in an aiming position
-		_parent->getMap()->cacheUnit(_unit);
+		// Can soldiers swing a club, graphically??
+//		_unit->aim(true); // set the soldier in an aiming position
+//		_parent->getMap()->cacheUnit(_unit);
 
 		// and we have a hit!
 		if (_action.weapon->getRules()->getFireSound() != -1)
@@ -561,46 +599,29 @@ bool ProjectileFlyBState::createNewProjectile()
 											"BATTLE.CAT",
 											_action.weapon->getRules()->getFireSound())
 										->play();
-
-/*		if (!_parent->getSave()->getDebugMode()
-			&& _action.type != BA_LAUNCH
-			&& _ammo->spendBullet() == false)
-		{
-			_parent->getSave()->removeItem(_ammo);
-			_action.weapon->setAmmoItem(0);
-		} */
 	}
 	else // shoot weapon / was do melee attack too
 	{
-		// Wb.140214_begin:
 		if (_originVoxel != Position(-1,-1,-1))
 		{
 			_projectileImpact = projectile->calculateTrajectory(
 															_unit->getFiringAccuracy(
 																				_action.type,
-																				_action.weapon)
-																			/ 100.0,
+																				_action.weapon),
+//kL																			/ 100.0, // Wb.140214
 															_originVoxel);
 		}
 		else
 		{
 			_projectileImpact = projectile->calculateTrajectory(_unit->getFiringAccuracy(
 																					_action.type,
-																					_action.weapon)
-																				/ 100.0);
-		} // Wb_end.
-
-		// kL_note: what, you recalculate the trajectory after it was already done above,
-		// and, don't even use it other than to find out if it already hit or not?!??
-		// Not to mention that melee attacks ***don't even need to use a trajectory***
-//		_projectileImpact = projectile->calculateTrajectory(_unit->getFiringAccuracy(
-//																				_action.type,
-//																				_action.weapon));
+																					_action.weapon));
+//kL																				/ 100.0); // Wb.140214
+		}
 		Log(LOG_INFO) << ". shoot weapon, part = " << _projectileImpact;
 
 		if (_projectileImpact == VOXEL_UNIT)	// kL
 			_action.autoShotKill = true;		// kL
-
 
 		if (_projectileImpact != VOXEL_EMPTY
 			|| _action.type == BA_LAUNCH)
@@ -762,15 +783,9 @@ void ProjectileFlyBState::think()
 				nextWaypoint->setOriginVoxel(_parent->getMap()->getProjectile()->getPosition(-1));
 
 				if (_origin == _action.target)
-				{
 					nextWaypoint->targetFloor();
-				}
 
 				_parent->statePushNext(nextWaypoint);
-//				_parent->statePushNext(new ProjectileFlyBState(
-//															_parent,
-//															_action,
-//															_origin));
 			}
 			else
 			{
@@ -805,7 +820,8 @@ void ProjectileFlyBState::think()
 																|| _action.autoShotCount == _action.weapon->getRules()->getAutoShots()
 																|| !_action.weapon->getAmmoItem()));
 
-					// special shotgun behaviour: trace extra projectile paths, and add bullet hits at their termination points.
+					// special shotgun behaviour: trace extra projectile paths,
+					// and add bullet hits at their termination points.
 					if (_ammo
 						&& _ammo->getRules()->getShotgunPellets() != 0)
 					{
@@ -817,25 +833,25 @@ void ProjectileFlyBState::think()
 														_parent->getResourcePack(),
 														_parent->getSave(),
 														_action,
-														_origin);
-//kL														_targetVoxel); // Wb.140209
+														_origin,
+														_targetVoxel);
 
 							// let it trace to the point where it hits
+//							_projectileImpact = proj->calculateTrajectory( // Wb.140214
+//																	std::max(
+//																			0.0,
+//																			(_unit->getFiringAccuracy(
+//																								_action.type,
+//																								_action.weapon)
+//																							/ 100.0)
+//																						- i * 5.0));
 							_projectileImpact = proj->calculateTrajectory(
 																	std::max(
 																			0.0,
-																			(_unit->getFiringAccuracy(
+																			_unit->getFiringAccuracy(
 																								_action.type,
 																								_action.weapon)
-																							/ 100.0)
-																						- i * 5.0));
-//							_projectileImpact = proj->calculateTrajectory(
-//																	std::max(
-//																			0.0,
-//																			_unit->getFiringAccuracy(
-//																								_action.type,
-//																								_action.weapon)
-//																							- i * 0.05));
+																							- i * 0.05));
 
 							if (_projectileImpact != VOXEL_EMPTY)
 							{
@@ -912,15 +928,17 @@ void ProjectileFlyBState::cancel()
 	{
 		_parent->getMap()->getProjectile()->skipTrajectory();
 
-		Position p = _parent->getMap()->getProjectile()->getPosition();
+		Position pos = _parent->getMap()->getProjectile()->getPosition();
 		if (!_parent->getMap()->getCamera()->isOnScreen(Position(
-																p.x / 16,
-																p.y / 16,
-																p.z / 24)))
+																pos.x / 16,
+																pos.y / 16,
+																pos.z / 24)))
+		{
 			_parent->getMap()->getCamera()->centerOnPosition(Position(
-																	p.x / 16,
-																	p.y / 16,
-																	p.z / 24));
+																	pos.x / 16,
+																	pos.y / 16,
+																	pos.z / 24));
+		}
 	}
 }
 
