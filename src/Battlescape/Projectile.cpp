@@ -475,7 +475,8 @@ void Projectile::applyAccuracy(
 //kL		&& _action.type != BA_HIT)
 //kL		&& _action.type != BA_THROW)
 	{
-		if (_action.type == BA_HIT) return;
+		if (_action.type == BA_HIT)
+			return;
 
 		double acuPenalty = 0.0;
 

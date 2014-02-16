@@ -213,7 +213,7 @@ int Unit::getAggression() const
  */
 int Unit::getSpecialAbility() const
 {
-	return (int)_specab;
+	return static_cast<int>(_specab);
 }
 
 /**

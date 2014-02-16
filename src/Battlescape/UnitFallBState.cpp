@@ -92,20 +92,13 @@ void UnitFallBState::think()
 	{
 		Log(LOG_INFO) << ". falling ID = " << (*unit)->getId();
 
-/*		if ((*unit)->getStatus() == STATUS_FLYING)					// kL, add this. Safety...
-//			|| (*unit)->getArmor()->getMovementType() == MT_FLY)	// done below
-		{
-			Log(LOG_INFO) << ". STATUS_FLYING, Erase & cont";
-
-			unit = _parent->getSave()->getFallingUnits()->erase(unit);
-			continue;
-		} */														// kL, add this. Safety... end.
-
-		if ((*unit)->getHealth() == 0
-			|| (*unit)->getStunlevel() >= (*unit)->getHealth())
+		if ((*unit)->isOut(true, true)) // kL
+//kL		if ((*unit)->getHealth() == 0
+//kL			|| (*unit)->getStunlevel() >= (*unit)->getHealth())
 		{
 			Log(LOG_INFO) << ". dead OR stunned, Erase & cont";
 			unit = _parent->getSave()->getFallingUnits()->erase(unit);
+
 			continue;
 		}
 
@@ -125,7 +118,7 @@ void UnitFallBState::think()
 						&& _parent->getMap()->getCamera()->isOnScreen((*unit)->getPosition());
 
 
-		Tile* tBelow;
+		Tile* tBelow = 0;
 
 		for (int
 				x = size; // units = 0; large = 1
@@ -162,7 +155,7 @@ void UnitFallBState::think()
 //kL					&& (*unit)->getArmor()->getMovementType() != MT_FLY // done above in fallCheck
 					&& (*unit)->getWalkingPhase() == 0;
 
-		BattleUnit* uBelow;
+		BattleUnit* uBelow = 0;
 
 		if (falling)
 		{
@@ -213,7 +206,7 @@ void UnitFallBState::think()
 
 			(*unit)->keepWalking(tBelow, true);		// advances the phase
 			_parent->getMap()->cacheUnit(*unit);	// make sure the unit sprites are up to date
-		}
+		}											// kL_note: might need set cache invalid...
 
 		falling = fallCheck
 					&& (*unit)->getPosition().z != 0
@@ -225,6 +218,7 @@ void UnitFallBState::think()
 
 
 		// The unit has moved from one tile to the other.
+		// kL_note: Can prob. use _tileSwitchDone around here...
 		if ((*unit)->getPosition() != (*unit)->getLastPosition())
 		{
 			// Reset tiles moved from
@@ -309,8 +303,7 @@ void UnitFallBState::think()
 						}
 					}
 
-					// Check in each compass direction.
-					for (int
+					for (int // Check in each compass direction.
 							dir = 0;
 							dir < Pathfinding::DIR_UP
 								&& !escape;
@@ -424,7 +417,7 @@ void UnitFallBState::think()
 			}
 		}
 
-		if ((*unit)->getStatus() == STATUS_STANDING) // we are just standing around, we are done falling.
+		if ((*unit)->getStatus() == STATUS_STANDING) // just standing around, done falling.
 		{
 			Log(LOG_INFO) << ". STATUS_STANDING";
 
@@ -452,6 +445,7 @@ void UnitFallBState::think()
 
 				if ((*unit)->getSpecialAbility() == SPECAB_BURNFLOOR) // if the unit burns floortiles, burn floortiles
 				{
+					// kL_add: Put burnedBySilacoid() here! etc
 					(*unit)->getTile()->ignite(1);
 					Position here = ((*unit)->getPosition() * Position(
 																	16,
@@ -468,7 +462,7 @@ void UnitFallBState::think()
 												*unit);
 				}
 
-				_terrain->calculateUnitLighting(); // move our personal lighting with us
+				_terrain->calculateUnitLighting(); // move personal lighting
 
 				_parent->getMap()->cacheUnit(*unit);
 				(*unit)->setCache(0);
@@ -476,6 +470,7 @@ void UnitFallBState::think()
 				_terrain->calculateFOV(*unit);
 
 				_parent->checkForProximityGrenades(*unit);
+				// kL_add: Put checkForSilacoid() here!
 
 				if (_parent->getTileEngine()->checkReactionFire(*unit))
 					_parent->getPathfinding()->abortPath();

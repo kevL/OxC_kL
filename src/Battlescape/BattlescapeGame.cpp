@@ -555,7 +555,7 @@ void BattlescapeGame::endTurn()
 	if (_save->getTileEngine()->closeUfoDoors())
 		getResourcePack()->getSound("BATTLE.CAT", 21)->play(); // ufo door closed
 
-	Position p;
+	Position pos;
 	for (int
 			i = 0;
 			i < _save->getMapSizeXYZ();
@@ -569,13 +569,13 @@ void BattlescapeGame::endTurn()
 			if ((*it)->getRules()->getBattleType() == BT_GRENADE
 				&& (*it)->getExplodeTurn() == 0) // it's a grenade to explode now
 			{
-				p.x = _save->getTiles()[i]->getPosition().x * 16 + 8;
-				p.y = _save->getTiles()[i]->getPosition().y * 16 + 8;
-				p.z = _save->getTiles()[i]->getPosition().z * 24 - _save->getTiles()[i]->getTerrainLevel();
+				pos.x = _save->getTiles()[i]->getPosition().x * 16 + 8;
+				pos.y = _save->getTiles()[i]->getPosition().y * 16 + 8;
+				pos.z = _save->getTiles()[i]->getPosition().z * 24 - _save->getTiles()[i]->getTerrainLevel();
 
 				statePushNext(new ExplosionBState(
 												this,
-												p,
+												pos,
 												*it,
 												(*it)->getPreviousOwner()));
 				_save->removeItem(*it);
@@ -595,7 +595,7 @@ void BattlescapeGame::endTurn()
 	Tile* t = _save->getTileEngine()->checkForTerrainExplosions();
 	if (t)
 	{
-		Position p = Position(
+		Position pos = Position(
 //kL							t->getPosition().x * 16,
 //kL							t->getPosition().y * 16,
 							t->getPosition().x * 16 + 8, // kL
@@ -603,7 +603,7 @@ void BattlescapeGame::endTurn()
 							t->getPosition().z * 24);
 		statePushNext(new ExplosionBState(
 										this,
-										p,
+										pos,
 										0,
 										0,
 										t));
@@ -2269,20 +2269,20 @@ void BattlescapeGame::dropItem(
 		bool newItem,
 		bool removeItem)
 {
-	Position p = position;
+	Position pos = position;
 
 	// don't spawn anything outside of bounds
-	if (_save->getTile(p) == 0)
+	if (_save->getTile(pos) == 0)
 		return;
 
 	// don't ever drop fixed items
 	if (item->getRules()->isFixed())
 		return;
 
-	_save->getTile(p)->addItem(item, getRuleset()->getInventory("STR_GROUND"));
+	_save->getTile(pos)->addItem(item, getRuleset()->getInventory("STR_GROUND"));
 
 	if (item->getUnit())
-		item->getUnit()->setPosition(p);
+		item->getUnit()->setPosition(pos);
 
 	if (newItem)
 		_save->getItems()->push_back(item);
@@ -2297,7 +2297,7 @@ void BattlescapeGame::dropItem(
 		item->setOwner(0);
 	}
 
-	getTileEngine()->applyGravity(_save->getTile(p));
+	getTileEngine()->applyGravity(_save->getTile(pos));
 
 	if (item->getRules()->getBattleType() == BT_FLARE)
 	{
@@ -2876,7 +2876,9 @@ void BattlescapeGame::tallyUnits(
 				//Log(LOG_INFO) << "BattlescapeGame::tallyUnits() " << (*j)->getId() << " : health > 0, SPECAB_RESPAWN -> converting unit!";
 
 				(*j)->setSpecialAbility(SPECAB_NONE);
-				convertUnit(*j, (*j)->getSpawnUnit());
+				convertUnit(
+						*j,
+						(*j)->getSpawnUnit());
 
 				j = _save->getUnits()->begin();
 			}
@@ -2981,14 +2983,14 @@ bool BattlescapeGame::checkForProximityGrenades(BattleUnit* unit)
 							if ((*i)->getRules()->getBattleType() == BT_PROXIMITYGRENADE
 								&& (*i)->getExplodeTurn() == 0)
 							{
-								Position p;
-								p.x = t->getPosition().x * 16 + 8;
-								p.y = t->getPosition().y * 16 + 8;
-								p.z = t->getPosition().z * 24 + t->getTerrainLevel();
+								Position pos;
+								pos.x = t->getPosition().x * 16 + 8;
+								pos.y = t->getPosition().y * 16 + 8;
+								pos.z = t->getPosition().z * 24 + t->getTerrainLevel();
 
 								statePushNext(new ExplosionBState(
 																this,
-																p,
+																pos,
 																*i,
 																(*i)->getPreviousOwner()));
 

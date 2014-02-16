@@ -1847,11 +1847,48 @@ BattleUnit* TileEngine::hit(
 													size,
 													size,
 													buTarget->getFloatHeight() - tile->getTerrainLevel());
-				Position const relPos = pTarget_voxel - targetPos - Position(0, 0, verticaloffset);
+				Position const relPos = pTarget_voxel
+									- targetPos
+									- Position(
+											0,
+											0,
+											verticaloffset);
+
+				// kL_begin: TileEngine::hit(), Silacoids can set targets on fire!!
+//kL				if (type == DT_IN)
+				if (attacker->getSpecialAbility() == SPECAB_BURNFLOOR)
+				{
+					float modifier = buTarget->getArmor()->getDamageModifier(DT_IN);
+					if (modifier > 0.f)
+					{
+						// generate(4, 11)
+						int firePower = RNG::generate( // kL: 25% - 75% / 2
+												power / 8,
+												power * 3 / 8);
+						Log(LOG_INFO) << ". . . . DT_IN : firePower = " << firePower;
+
+						// generate(5, 10)
+						int check = buTarget->damage(
+												Position(0, 0, 0),
+												firePower,
+												DT_IN,
+												true);
+						Log(LOG_INFO) << ". . . . DT_IN : " << buTarget->getId() << " takes " << check;
+
+						int burnTime = RNG::generate(
+												0,
+												static_cast<int>(5.f * modifier));
+						if (buTarget->getFire() < burnTime)
+							buTarget->setFire(burnTime); // catch fire and burn
+					}
+				} // kL_end.
 
 //kL				const int randPower	= RNG::generate(1, power * 2);	// kL_above
-				power = RNG::generate(1, power * 2);
+				power = RNG::generate(
+									1,
+									power * 2);
 				Log(LOG_INFO) << ". . . RNG::generate(power) = " << power;
+
 				bool ignoreArmor = (type == DT_STUN);	// kL. stun ignores armor... does now! UHM....
 														// note it still gets Vuln.modifier, but not armorReduction.
 				int adjustedDamage = buTarget->damage(
@@ -1862,20 +1899,16 @@ BattleUnit* TileEngine::hit(
 				Log(LOG_INFO) << ". . . adjustedDamage = " << adjustedDamage;
 
 				if (adjustedDamage > 0
-					&& !buTarget->isOut(true)) // -> do morale hit only if health still > 0.
+					&& !buTarget->isOut())
 				{
 					const int bravery = (110 - buTarget->getStats()->bravery) / 10;
 					if (bravery > 0)
 					{
 						int modifier = 100;
 						if (buTarget->getOriginalFaction() == FACTION_PLAYER)
-						{
 							modifier = _save->getMoraleModifier();
-						}
 						else if (buTarget->getOriginalFaction() == FACTION_HOSTILE)
-						{
 							modifier = _save->getMoraleModifier(0, false);
-						}
 
 						const int morale_loss = 10 * adjustedDamage * bravery / modifier;
 						Log(LOG_INFO) << ". . . . morale_loss = " << morale_loss;
@@ -1977,9 +2010,9 @@ void TileEngine::explode(
 	Log(LOG_INFO) << "TileEngine::explode() power = " << power
 		<< " ; type = " << (int)type << " ; maxRadius = " << maxRadius;
 
-	double centerZ = static_cast<double>((voxelTarget.z / 24) + 0.5);
-	double centerX = static_cast<double>((voxelTarget.x / 16) + 0.5);
-	double centerY = static_cast<double>((voxelTarget.y / 16) + 0.5);
+	double centerZ = static_cast<double>(voxelTarget.z / 24 + 0.5);
+	double centerX = static_cast<double>(voxelTarget.x / 16 + 0.5);
+	double centerY = static_cast<double>(voxelTarget.y / 16 + 0.5);
 
 	int
 		power_,

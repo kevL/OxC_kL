@@ -862,14 +862,6 @@ void ProjectileFlyBState::think()
 														_targetVoxel);
 
 							// let it trace to the point where it hits
-//							_projectileImpact = proj->calculateTrajectory( // Wb.140214
-//																	std::max(
-//																			0.0,
-//																			(_unit->getFiringAccuracy(
-//																								_action.type,
-//																								_action.weapon)
-//																							/ 100.0)
-//																						- i * 5.0));
 							_projectileImpact = proj->calculateTrajectory(
 																	std::max(
 																			0.0,
@@ -877,6 +869,8 @@ void ProjectileFlyBState::think()
 																								_action.type,
 																								_action.weapon)
 																							- i * 0.05)); // pellet spread.
+//																							/ 100.0) // Wb.140214
+//																						- i * 5.0)); // Wb.140214
 
 							if (_projectileImpact != VOXEL_EMPTY)
 							{

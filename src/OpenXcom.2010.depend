@@ -5753,7 +5753,7 @@
 1391393811 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1392490926 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1392560804 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	<cmath>
 	<sstream>
@@ -6548,7 +6548,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1392511606 source:f:\git\openxcom\src\battlescape\projectile.cpp
+1392539385 source:f:\git\openxcom\src\battlescape\projectile.cpp
 	"Projectile.h"
 	<cmath>
 	"BattlescapeGame.h"
@@ -6573,7 +6573,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1392532021 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
+1392560662 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
 	"ProjectileFlyBState.h"
 	<cmath>
 	"AlienBAIState.h"

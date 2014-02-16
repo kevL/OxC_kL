@@ -1227,7 +1227,8 @@ int BattleUnit::damage(
 	UnitSide side = SIDE_FRONT;
 	UnitBodyPart bodypart = BODYPART_TORSO;
 
-	if (power < 1) return 0;
+	if (power < 1)
+		return 0;
 
 	power = static_cast<int>(
 					floor(static_cast<float>(power) * _armor->getDamageModifier(type)));

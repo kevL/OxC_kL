@@ -849,6 +849,7 @@ bool UnitWalkBState::doStatusStand_end()
 	// if the unit burns floortiles, burn floortiles
 	if (_unit->getSpecialAbility() == SPECAB_BURNFLOOR)
 	{
+		// kL_add: Put burnedBySilacoid() here! etc
 		_unit->getTile()->ignite(1);
 
 		Position here = _unit->getPosition() * Position(16, 16, 24)
@@ -885,6 +886,7 @@ bool UnitWalkBState::doStatusStand_end()
 						&& _unit->getFaction() != FACTION_PLAYER; */
 
 	if (_parent->checkForProximityGrenades(_unit))
+	// kL_add: Put checkForSilacoid() here!
 	{
 		_parent->popState();
 
