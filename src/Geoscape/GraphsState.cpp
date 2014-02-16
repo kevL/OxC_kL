@@ -1201,7 +1201,7 @@ void GraphsState::drawCountryLines()
 		while (low < static_cast<double>(lowerLimit))
 		{
 			lowerLimit -= test;
-			upperLimit -= test;
+			upperLimit -= test; // kL
 		}
 	}
 
@@ -1460,7 +1460,7 @@ void GraphsState::drawRegionLines()
 		while (low < static_cast<double>(lowerLimit))
 		{
 			lowerLimit -= test;
-			upperLimit -= test;
+			upperLimit -= test; // kL
 		}
 	}
 
@@ -1762,7 +1762,7 @@ void GraphsState::drawFinanceLines() // Council Analytics
 		while (low < static_cast<double>(lowerLimit))
 		{
 			lowerLimit -= test;
-			upperLimit -= test;
+			upperLimit -= test; // kL
 		}
 	}
 
