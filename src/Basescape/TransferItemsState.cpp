@@ -100,7 +100,7 @@ TransferItemsState::TransferItemsState(
 {
 	_changeValueByMouseWheel			= Options::getInt("changeValueByMouseWheel");
 	_allowChangeListValuesByMouseWheel	= Options::getBool("allowChangeListValuesByMouseWheel")
-											&& _changeValueByMouseWheel;
+										&& _changeValueByMouseWheel;
 	_containmentLimit					= Options::getBool("alienContainmentLimitEnforced");
 	_canTransferCraftsWhileAirborne		= Options::getBool("canTransferCraftsWhileAirborne");
 
@@ -1026,45 +1026,27 @@ void TransferItemsState::lstItemsMousePress(Action* action)
  */
 int TransferItemsState::getCost() const
 {
-	//Log(LOG_INFO) << "TransferItemsState::getCost()";
+	// kL_note: All prices increased tenfold.
 	float cost = 0.f;
 
 	if (TRANSFER_ITEM == getType(_sel)) // Item cost
 	{
 		RuleItem* rule = _game->getRuleset()->getItem(_items[_sel - _itemOffset]);
 		if (rule->getType() == "STR_ALIEN_ALLOYS")
-		{
-			//Log(LOG_INFO) << ". transfer Alloys";
-			cost = 0.01f;
-		}
-		else if (rule->getType() == "STR_ELERIUM_115")
-		{
-			//Log(LOG_INFO) << ". transfer Elerium";
 			cost = 0.1f;
-		}
-		else
-		{
-			//Log(LOG_INFO) << ". transfer Item";
+		else if (rule->getType() == "STR_ELERIUM_115")
 			cost = 1.f;
-		}
+		else if (rule->getAlien())
+			cost = 250.f;
+		else
+			cost = 10.f;
 	}
 	else if (TRANSFER_CRAFT == getType(_sel)) // Craft cost
-	{
-		//Log(LOG_INFO) << ". transfer Craft";
-		cost = 100.f;
-	}
+		cost = 1000.f;
 	else // Personnel cost
-	{
-		//Log(LOG_INFO) << ". transfer Personel";
-		cost = 10.f;
-	}
+		cost = 100.f;
 
-//	float fCost = static_cast<float>(floor(_distance * cost));
-	int iCost = static_cast<int>(ceil(static_cast<float>(_distance) * cost));
-	//Log(LOG_INFO) << ". . _distance = " << _distance;
-	//Log(LOG_INFO) << ". . cost = " << iCost;
-
-	return iCost;
+	return static_cast<int>(ceil(static_cast<float>(_distance) * cost));
 }
 
 /**
@@ -1230,13 +1212,9 @@ void TransferItemsState::increaseByValue(int change)
 
 		int freeStoresForItem;
 		if (AreSame(storesNeededPerItem, 0.f))
-		{
 			freeStoresForItem = INT_MAX;
-		}
 		else
-		{
 			freeStoresForItem = static_cast<int>(floor(freeStores / storesNeededPerItem));
-		}
 
 		change = std::min(std::min(freeStoresForItem, getQuantity() - _transferQty[_sel]), change);
 		_iQty += (static_cast<float>(change)) * storesNeededPerItem;
@@ -1248,8 +1226,15 @@ void TransferItemsState::increaseByValue(int change)
 	else if (TRANSFER_ITEM == selType
 		&& selItem->getAlien()) // Live Aliens count
 	{
-		int freeContainment = _containmentLimit? _baseTo->getAvailableContainment() - _baseTo->getUsedContainment() - _aQty: INT_MAX;
-		change = std::min(std::min(freeContainment, getQuantity() - _transferQty[_sel]), change);
+		int freeContainment = INT_MAX;
+		if (_containmentLimit)
+			freeContainment = _baseTo->getAvailableContainment() - _baseTo->getUsedContainment() - _aQty;
+
+		change = std::min(
+						std::min(
+								freeContainment,
+								getQuantity() - _transferQty[_sel]),
+						change);
 		_aQty += change;
 		_baseQty[_sel] -= change;
 		_destQty[_sel] += change;
@@ -1280,7 +1265,6 @@ void TransferItemsState::decreaseByValue(int change)
 	if (change < 1 || _transferQty[_sel] < 1)
 		return;
 
-
 	change = std::min(
 					_transferQty[_sel],
 					change);
@@ -1304,13 +1288,9 @@ void TransferItemsState::decreaseByValue(int change)
 	{
 		const RuleItem* selItem = _game->getRuleset()->getItem(_items[getItemIndex(_sel)]);
 		if (!selItem->getAlien())
-		{
 			_iQty -= selItem->getSize() * (static_cast<float>(change));
-		}
 		else
-		{
 			_aQty -= change;
-		}
 	}
 
 	_baseQty[_sel] += change;

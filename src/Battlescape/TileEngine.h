@@ -178,16 +178,14 @@ private:
 				std::vector<Position>* trajectory,
 				BattleUnit* excludeUnit,
 				double arc,
-				double acu);
-//				const Position delta);	// Wb.131129, supercedes 'acu'
+				const Position delta);
 		/// Validates a throwing action.
-		bool validateThrow(BattleAction* action);
-/*		bool validateThrow( // Wb.131129
+		bool validateThrow(
 				BattleAction& action,
 				Position originVoxel,
 				Position targetVoxel,
 				double* curve = 0,
-				int* voxelType = 0); */
+				int* voxelType = 0);
 
 		/// Turn XCom soldier's personal lighting on or off.
 		void togglePersonalLighting();

@@ -1163,6 +1163,7 @@ void Map::drawTerrain(Surface* surface)
 //kL									_txtAccuracy->setText(Language::utf8ToWstr(ss.str().c_str()).c_str());
 								}
 
+								//Log(LOG_INFO) << "Map::drawTerrain(), accuracy = " << accuracy;
 								_txtAccuracy->setValue(static_cast<unsigned>(accuracy));
 								_txtAccuracy->setColor(color);
 								_txtAccuracy->draw();

@@ -183,7 +183,8 @@ void ActionMenuState::addItem(
 //												_action->weapon);
 			acc = static_cast<int>(floor(_action->actor->getFiringAccuracy( // kL
 																		baType,
-																		_action->weapon) * 100.0));
+																		_action->weapon)
+																	* 100.0));
 
 //kL		s1 = tr("STR_ACCURACY_SHORT").arg(Text::formatPercentage(acc));
 		s1 = tr("STR_ACCURACY_SHORT_KL").arg(acc); // kL

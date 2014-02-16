@@ -1500,7 +1500,7 @@ bool TileEngine::checkReactionFire(BattleUnit* unit)
 		return false;
 	}
 
-	bool result = false;
+	bool ret = false;
 
 	// not mind controlled, or controlled by the player
 	// kL. If spotted unit is not mind controlled,
@@ -1543,7 +1543,7 @@ bool TileEngine::checkReactionFire(BattleUnit* unit)
 					}
 				}
 
-				// avoid setting result to true, but carry on, just cause one unit can't
+				// avoid setting ret to true, but carry on, just cause one unit can't
 				// react doesn't mean the rest of the units in the vector (if any) can't
 				reactor = getReactor(spotters, unit);
 
@@ -1552,7 +1552,7 @@ bool TileEngine::checkReactionFire(BattleUnit* unit)
 			else
 			{
 				//Log(LOG_INFO) << ". . Snap by : " << reactor->getId();
-				result = true;
+				ret = true;
 			}
 
 			//Log(LOG_INFO) << ". . Snap by : " << reactor->getId();
@@ -1570,8 +1570,8 @@ bool TileEngine::checkReactionFire(BattleUnit* unit)
 		spotters.clear();	// kL
 	}
 
-	//Log(LOG_INFO) << ". . Reactor == unit, EXIT = " << result;
-	return result;
+	//Log(LOG_INFO) << ". . Reactor == unit, EXIT = " << ret;
+	return ret;
 }
 
 /**
@@ -3489,28 +3489,27 @@ int TileEngine::calculateParabola(
 				std::vector<Position>* trajectory,
 				BattleUnit* excludeUnit,
 				double arc,
-//				const Position delta // Wb.131129, supercedes 'acu'
-				double acu)
+				const Position delta)
 {
 	Log(LOG_INFO) << "TileEngine::calculateParabola()";
 
 	double
 		ro = sqrt(static_cast<double>(
-				(target.x - origin.x) * (target.x - origin.x)
+				  (target.x - origin.x) * (target.x - origin.x)
 				+ (target.y - origin.y) * (target.y - origin.y)
 				+ (target.z - origin.z) * (target.z - origin.z))),
-
-//	if (AreSame(ro, 0.0)) return VOXEL_EMPTY; // just in case. Wb.131129
-
 		fi = acos(static_cast<double>(target.z - origin.z) / ro),
 		te = atan2(
 				static_cast<double>(target.y - origin.y),
 				static_cast<double>(target.x - origin.x));
 
-	fi *= acu;
-	te *= acu;
-//	te += (delta.x / ro) / 2.0 * M_PI;							// horizontal magic value
-//	fi += ((delta.z + delta.y) / ro) / 14.0 * M_PI * curvature;	// another magic value (vertical), to make it in line with fire spread
+	if (AreSame(ro, 0.0)) // just in case.
+		return VOXEL_EMPTY;
+
+//	te *= acu;
+//	fi *= acu;
+	te += (delta.x / ro) / 2.0 * M_PI;						// horizontal magic value
+	fi += ((delta.z + delta.y) / ro) / 14.0 * M_PI * arc;	// another magic value (vertical), to make it in line with fire spread
 
 	double
 		zA = sqrt(ro) * arc,
@@ -3522,7 +3521,7 @@ int TileEngine::calculateParabola(
 		z = origin.z,
 		i = 8;
 
-//kL	Position lastPosition = Position(x, y, z);
+	Position lastPosition = Position(x, y, z);
 
 	while (z > 0)
 	{
@@ -3537,34 +3536,38 @@ int TileEngine::calculateParabola(
 			trajectory->push_back(Position(x, y, z));
 		}
 
-//kL		Position nextPosition = Position(x, y, z);
-//kL		int result = calculateLine(lastPosition, nextPosition, false, 0, excludeUnit);
-		int result = voxelCheck(Position(x, y, z), excludeUnit); // Old code, not sure it should be changed to calculateLine()...
-		if (result != VOXEL_EMPTY)
+		Position nextPosition = Position(x, y, z);
+		int test = calculateLine(
+								lastPosition,
+								nextPosition,
+								false,
+								0,
+								excludeUnit);
+//		int test = voxelCheck(
+//							Position(x, y, z),
+//							excludeUnit);
+		if (test != VOXEL_EMPTY)
 		{
-//kL			if (lastPosition.z < nextPosition.z)
-//kL			{
-//kL				result = VOXEL_OUTOFBOUNDS;
-//kL			}
+			if (lastPosition.z < nextPosition.z)
+				test = VOXEL_OUTOFBOUNDS;
 
-			if (!storeTrajectory
+			if (!storeTrajectory // store only the position of impact
 				&& trajectory != 0)
 			{
-//kL				trajectory->push_back(nextPosition);	// store the position of impact
-				trajectory->push_back(Position(x, y, z));	// kL
+				trajectory->push_back(nextPosition);
 			}
 
-			return result;
+			return test;
 		}
 
-//kL		lastPosition = Position(x, y, z);
+		lastPosition = Position(x, y, z);
 		++i;
 	}
 
-	if (!storeTrajectory
+	if (!storeTrajectory // store only the position of impact
 		&& trajectory != 0)
 	{
-		trajectory->push_back(Position(x, y, z)); // store the position of impact
+		trajectory->push_back(Position(x, y, z));
 	}
 
 	return VOXEL_EMPTY;
@@ -3572,204 +3575,86 @@ int TileEngine::calculateParabola(
 
 /**
  * Validates a throw action.
- * @param action, The action to validate
- * @return, Validity of action
+ * @param action The action to validate.
+ * @param originVoxel The origin point of the action.
+ * @param targetVoxel The target point of the action.
+ * @param curve The curvature of the throw.
+ * @param voxelType The type of voxel at which this parabola terminates.
+ * @return Validity of action.
  */
-bool TileEngine::validateThrow(BattleAction* action) // superceded by Wb.131129 below.
+bool TileEngine::validateThrow(
+						BattleAction& action,
+						Position originVoxel,
+						Position targetVoxel,
+						double* curve,
+						int* voxelType)
 {
-	Log(LOG_INFO) << "TileEngine::validateThrow(), cf Projectile::calculateThrow()";
+//kL	double arc = 0.5;
+	double arc = 1.25; // kL
 
-	bool found = false;
+	if (action.type == BA_THROW)
+	{
+		double kneel = 0.0;
+		if (action.actor->isKneeled())
+			kneel = 0.1;
 
-	Tile* tile = _save->getTile(action->target);
-	if (!tile
-		|| (action->type == BA_THROW
-			&& tile
-			&& tile->getMapData(MapData::O_OBJECT)
-			&& tile->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) == 255))
+		arc = std::max(
+					0.48,
+					1.73 / sqrt(
+								sqrt(
+									static_cast<double>(action.actor->getStats()->strength)
+										/ static_cast<double>(action.weapon->getRules()->getWeight())))
+							+ kneel);
+	}
+
+	Tile* targetTile = _save->getTile(action.target);
+	if ((action.type == BA_THROW
+			&& targetTile
+			&& targetTile->getMapData(MapData::O_OBJECT)
+			&& targetTile->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) == 255)
+		|| ProjectileFlyBState::validThrowRange(
+											&action,
+											originVoxel,
+											targetTile)
+										== false)
 	{
 		return false; // object blocking - can't throw here
 	}
 
-	Position originVoxel, targetVoxel;
-
-	Position origin = action->actor->getPosition();
-	Tile* tileAbove = _save->getTile(origin + Position(0, 0, 1));
-
-	originVoxel = Position(
-						(origin.x * 16) + 8,
-						(origin.y * 16) + 8,
-						(origin.z * 24));
-	originVoxel.z += action->actor->getHeight()
-					+ action->actor->getFloatHeight()
-					- _save->getTile(origin)->getTerrainLevel()
-					- 3;
-
-	if (originVoxel.z >= (origin.z + 1) * 24)
+	// try several different curvatures to reach our goal.
+	bool found = false;
+	while (!found && arc < 5.0)
 	{
-		if (!tileAbove
-			|| !tileAbove->hasNoFloor(0))
+		std::vector<Position> trajectory;
+		int test = VOXEL_OUTOFBOUNDS;
+		test = calculateParabola(
+							originVoxel,
+							targetVoxel,
+							false,
+							&trajectory,
+							action.actor,
+							arc,
+							Position(0, 0, 0));
+		if (test != VOXEL_OUTOFBOUNDS
+			&& (trajectory.at(0) / Position(16, 16, 24)) == (targetVoxel / Position(16, 16, 24)))
 		{
-			while (originVoxel.z > (origin.z + 1) * 24)
-				originVoxel.z--;
+			if (voxelType)
+				*voxelType = test;
 
-			originVoxel.z -= 4;
-		}
-		else
-			origin.z++;
-	}
-
-	targetVoxel = Position( // determine the target voxel; aim at the center of the floor
-						(action->target.x * 16) + 8,
-						(action->target.y * 16) + 8,
-						(action->target.z * 24) + 2);
-	targetVoxel.z -= _save->getTile(action->target)->getTerrainLevel();
-
-	if (action->type != BA_THROW)
-	{
-		BattleUnit* targetUnit = 0;
-		if (tile->getUnit())
-			targetUnit = tile->getUnit();
-
-		if (!targetUnit
-			&& action->target.z > 0
-			&& tile->hasNoFloor(0))
-		{
-			if (_save->getTile(Position(
-									action->target.x,
-									action->target.y,
-									action->target.z - 1))
-							->getUnit())
-			{
-				targetUnit = _save->getTile(Position(
-												action->target.x,
-												action->target.y,
-												action->target.z - 1))
-										->getUnit();
-			}
-		}
-
-		if (targetUnit)
-			targetVoxel.z += (targetUnit->getHeight() / 2) + targetUnit->getFloatHeight();
-	}
-
-
-	std::vector<Position> trajectory;
-
-
-	double arc = 1.0; // we try several different arcs to try and reach our goal.
-//	double arc = 0.5; // start with a low traj.5 is a bit too low
-	if (action->type == BA_THROW)
-	{
-		arc = std::max(
-					0.48,
-					(1.73 / sqrt(
-								sqrt(
-									(static_cast<double>(action->actor->getStats()->strength)
-										/ static_cast<double>(action->weapon->getRules()->getWeight())))))
-							+ (action->actor->isKneeled()? 0.1: 0.0));
-	}
-
-	while (!found
-		&& arc < 5.0)
-	{
-		int checkParab = calculateParabola(
-										originVoxel,
-										targetVoxel,
-										false,
-										&trajectory,
-										action->actor,
-										arc,
-										1.0);
-		if (checkParab != 5
-			&& trajectory.at(0).x / 16 == targetVoxel.x / 16
-			&& trajectory.at(0).y / 16 == targetVoxel.y / 16
-			&& trajectory.at(0).z / 24 == targetVoxel.z / 24)
-		{
 			found = true;
 		}
 		else
 			arc += 0.5;
-
-		trajectory.clear();
 	}
-	Log(LOG_INFO) << ". arc = " << arc;
 
 	if (arc >= 5.0)
 		return false;
 
-	return ProjectileFlyBState::validThrowRange(
-											action,
-											originVoxel,
-											tile);
-}
-
-/**
- * Validates a throw action.
- * @param action The action to validate.
- * @param originVoxel The origin point of the action.
- * @param targetVoxel The target point of the action.
- * @param curvature The curvature of the throw.
- * @param voxelType The type of voxel at which this parabola terminates.
- * @return Validity of action.
- */
-/* Wb.131129
-bool TileEngine::validateThrow(BattleAction &action, Position originVoxel, Position targetVoxel, double *curve, int *voxelType)
-{
-	bool foundCurve = false;
-	double curvature = 0.5;
-	if (action.type == BA_THROW)
-	{
-		curvature = std::max(
-						0.48,
-						(1.73 / sqrt(
-									sqrt(
-										(static_cast<double>(action->actor->getStats()->strength)
-											/ static_cast<double>(action->weapon->getRules()->getWeight())))))
-								+ (action->actor->isKneeled()? 0.1: 0.0));
-	}
-	Tile *targetTile = _save->getTile(action.target);
-	// object blocking - can't throw here
-	if ((action.type == BA_THROW
-		&& targetTile
-		&& targetTile->getMapData(MapData::O_OBJECT)
-		&& targetTile->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) == 255)
-		|| ProjectileFlyBState::validThrowRange(&action, originVoxel, targetTile) == false)
-	{
-		return false;
-	}
-
-	// we try 8 different curvatures to try and reach our goal.
-	int test = V_OUTOFBOUNDS;
-
-	while (!foundCurve && curvature < 5.0)
-	{
-		std::vector<Position> trajectory;
-		test = calculateParabola(originVoxel, targetVoxel, false, &trajectory, action.actor, curvature, Position(0,0,0));
-		if (test != V_OUTOFBOUNDS && (trajectory.at(0) / Position(16, 16, 24)) == (targetVoxel / Position(16, 16, 24)))
-		{
-			if (voxelType)
-			{
-				*voxelType = test;
-			}
-			foundCurve = true;
-		}
-		else
-		{
-			curvature += 0.5;
-		}
-	}
-	if (curvature >= 5.0)
-	{
-		return false;
-	}
 	if (curve)
-	{
-		*curve = curvature;
-	}
+		*curve = arc;
 
 	return true;
-} */
+}
 
 /**
  * Calculates z "grounded" value for a particular voxel (used for projectile shadow).
@@ -3864,7 +3749,7 @@ int TileEngine::voxelCheck(
 {
 	//Log(LOG_INFO) << "TileEngine::voxelCheck()"; // massive lag-to-file, Do not use.
 
-	if (hit) return VOXEL_UNIT;		// kL; i think Wb may have this covered now.
+	if (hit) return VOXEL_UNIT; // kL; i think Wb may have this covered now.
 
 
 	Tile* tTarget = _save->getTile(pTarget_voxel / Position(16, 16, 24)); // converts to tilespace -> Tile

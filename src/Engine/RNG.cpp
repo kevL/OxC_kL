@@ -217,7 +217,7 @@ double boxMuller(
 		{
 			x1 = 2.0 * generate(0.0, 1.0) - 1.0;
 			x2 = 2.0 * generate(0.0, 1.0) - 1.0;
-			w = x1 * x1 + x2 * x2;
+			w = (x1 * x1) + (x2 * x2);
 		}
 		while (w >= 1.0);
 

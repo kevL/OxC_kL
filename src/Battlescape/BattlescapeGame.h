@@ -68,7 +68,7 @@ enum BattleActionType
 struct BattleAction
 {
 	bool
-		autoShotKill, // kL
+//		autoShotKill, // kL
 		desperate, // ignoring newly-spotted units
 		finalAction,
 		run,
@@ -107,7 +107,7 @@ struct BattleAction
 			run(false),
 			diff(0),
 			autoShotCount(0),
-			autoShotKill(false), // kL
+//			autoShotKill(false), // kL
 			cameraPosition(0, 0, -1),
 			desperate(false),
 			finalFacing(-1),

@@ -60,7 +60,9 @@ ProjectileFlyBState::ProjectileFlyBState(
 		BattleAction action,
 		Position origin)
 	:
-		BattleState(parent, action),
+		BattleState(
+			parent,
+			action),
 		_unit(0),
 		_ammo(0),
 		_projectileItem(0),
@@ -68,7 +70,7 @@ ProjectileFlyBState::ProjectileFlyBState(
 		_projectileImpact(0),
 		_initialized(false),
 		_targetVoxel(-1,-1,-1), // kL. Why is this not initialized in the stock oXc code?
-		_originVoxel(-1,-1,-1),
+		_originVoxel(-1,-1,-1), // kL_note: for BL waypoints
 		_targetFloor(false)
 {
 }
@@ -80,7 +82,9 @@ ProjectileFlyBState::ProjectileFlyBState(
 		BattlescapeGame* parent,
 		BattleAction action)
 	:
-		BattleState(parent, action),
+		BattleState(
+			parent,
+			action),
 		_unit(0),
 		_ammo(0),
 		_projectileItem(0),
@@ -88,8 +92,8 @@ ProjectileFlyBState::ProjectileFlyBState(
 		_projectileImpact(0),
 		_initialized(false),
 		_targetVoxel(-1,-1,-1), // kL. Why is this not initialized in the stock oXc code?
-		_originVoxel(-1,-1,-1), // Wb.140214
-		_targetFloor(false) // Wb.140214
+		_originVoxel(-1,-1,-1), // kL_note: for BL waypoints
+		_targetFloor(false)
 
 {
 }
@@ -127,10 +131,10 @@ void ProjectileFlyBState::init()
 	// kL_begin:
 	BattleUnit* targetUnit = _parent->getSave()->getTile(_action.target)->getUnit();
 	if (targetUnit
-		&& targetUnit->getFaction() != _parent->getSave()->getSide())
-//		&& targetUnit->getDashing())
+		&& targetUnit->getFaction() != _parent->getSave()->getSide()
+		&& targetUnit->getDashing()) // this really doesn't have to be left here <-
 	{
-		Log(LOG_INFO) << ". targetUnit dashing, set FALSE";
+		Log(LOG_INFO) << ". targetUnit was dashing -> now set FALSE";
 		targetUnit->setDashing(false);
 	} // kL_end.
 
@@ -189,10 +193,7 @@ void ProjectileFlyBState::init()
 	}
 	else if (_unit->getFaction() != _parent->getSave()->getSide()) // reaction fire
 	{
-//kL		if (_parent->getSave()->getTile(_action.target)->getUnit())
-//kL		{
-//kL			BattleUnit* targetUnit = _parent->getSave()->getTile(_action.target)->getUnit();
-		if (targetUnit) // kL
+		if (targetUnit)
 		{
 			if (_ammo == 0
 				|| targetUnit->isOut(true, true)
@@ -286,9 +287,9 @@ void ProjectileFlyBState::init()
 		{
 			Log(LOG_INFO) << ". . BA_THROW";
 
-//Wb.			Position originVoxel = _parent->getTileEngine()->getSightOriginVoxel(_unit) - Position(0, 0, 2);
-			Position originVoxel = _parent->getTileEngine()->getOriginVoxel(_action, 0); // Wb.
-
+			Position originVoxel = _parent->getTileEngine()->getOriginVoxel(
+																		_action,
+																		0);
 			if (!validThrowRange(
 							&_action,
 							originVoxel,
@@ -383,6 +384,7 @@ void ProjectileFlyBState::init()
 																	_parent->getSave()->getTile(_origin));
 		if (targetTile->getUnit() != 0)
 		{
+			Log(LOG_INFO) << ". targetTile has unit";
 			if (_origin == _action.target
 				|| targetTile->getUnit() == _unit)
 			{
@@ -398,8 +400,25 @@ void ProjectileFlyBState::init()
 													&_targetVoxel,
 													_unit);
 		}
+		// kL_begin: AutoShot vs. tile w/ dead or stunned Unit just sprays through the middle of the tile.
+		// note, however, this also affects attempts to target a tile where there is/was(?) a dead unit...
+		// So let's narrow it down some........... ie. to do this correctly I'd need some sort of 'autoShotKill' boolean
+/*		else if (_action.autoShotCount > 1
+			&& _action.autoShotKill) // note: If targetUnit is still alive after the first shot, see ABOVE^^
+//			&& targetTile->getUnit()
+//			&& targetTile->getUnit()->isOut(true, true)) // NOT Working
+//		_action.autoShotKill //_action.autoShotCount
+//			&& _action.autoShotCount < _action.weapon->getRules()->getAutoShots())
+		{
+			Log(LOG_INFO) << ". targetTile vs. Autoshot!";
+			targetVoxel = Position( // target nothing, targets the middle of the tile
+								_action.target.x * 16 + 8,
+								_action.target.y * 16 + 8,
+								_action.target.z * 24 + 12);
+		} // kL_end. */
 		else if (targetTile->getMapData(MapData::O_OBJECT) != 0)
 		{
+			Log(LOG_INFO) << ". targetTile has content-object";
 			if (!_parent->getTileEngine()->canTargetTile(
 													&originVoxel,
 													targetTile,
@@ -415,6 +434,7 @@ void ProjectileFlyBState::init()
 		}
 		else if (targetTile->getMapData(MapData::O_NORTHWALL) != 0)
 		{
+			Log(LOG_INFO) << ". targetTile has northwall";
 			if (!_parent->getTileEngine()->canTargetTile(
 													&originVoxel,
 													targetTile,
@@ -430,6 +450,7 @@ void ProjectileFlyBState::init()
 		}
 		else if (targetTile->getMapData(MapData::O_WESTWALL) != 0)
 		{
+			Log(LOG_INFO) << ". targetTile has westwall";
 			if (!_parent->getTileEngine()->canTargetTile(
 													&originVoxel,
 													targetTile,
@@ -445,6 +466,7 @@ void ProjectileFlyBState::init()
 		}
 		else if (targetTile->getMapData(MapData::O_FLOOR) != 0)
 		{
+			Log(LOG_INFO) << ". targetTile has floor";
 			if (!_parent->getTileEngine()->canTargetTile(
 													&originVoxel,
 													targetTile,
@@ -460,6 +482,7 @@ void ProjectileFlyBState::init()
 		}
 		else // target nothing, targets the middle of the tile
 		{
+			Log(LOG_INFO) << ". targetTile is void";
 			_targetVoxel = Position(
 								_action.target.x * 16 + 8,
 								_action.target.y * 16 + 8,
@@ -583,9 +606,9 @@ bool ProjectileFlyBState::createNewProjectile()
 	{
 		// validMeleeRange/target has been validated.
 //		_projectileImpact = 4;
-//		_projectileImpact = projectile->calculateTrajectory(_unit->getFiringAccuracy(
-//																				_action.type,
-//																				_action.weapon));
+		_projectileImpact = projectile->calculateTrajectory(_unit->getFiringAccuracy(
+																				_action.type,
+																				_action.weapon));
 //kL																			/ 100.0); // Wb.140214
 		Log(LOG_INFO) << ". melee attack!";// part = " << _projectileImpact;
 
@@ -602,7 +625,7 @@ bool ProjectileFlyBState::createNewProjectile()
 	}
 	else // shoot weapon / was do melee attack too
 	{
-		if (_originVoxel != Position(-1,-1,-1))
+		if (_originVoxel != Position(-1, -1, -1)) // this i believe is BL waypoints.
 		{
 			_projectileImpact = projectile->calculateTrajectory(
 															_unit->getFiringAccuracy(
@@ -611,7 +634,7 @@ bool ProjectileFlyBState::createNewProjectile()
 //kL																			/ 100.0, // Wb.140214
 															_originVoxel);
 		}
-		else
+		else // and this is normal weapon shooting
 		{
 			_projectileImpact = projectile->calculateTrajectory(_unit->getFiringAccuracy(
 																					_action.type,
@@ -620,8 +643,8 @@ bool ProjectileFlyBState::createNewProjectile()
 		}
 		Log(LOG_INFO) << ". shoot weapon, part = " << _projectileImpact;
 
-		if (_projectileImpact == VOXEL_UNIT)	// kL
-			_action.autoShotKill = true;		// kL
+//		if (_projectileImpact == VOXEL_UNIT)	// kL
+//			_action.autoShotKill = true;		// kL
 
 		if (_projectileImpact != VOXEL_EMPTY
 			|| _action.type == BA_LAUNCH)
@@ -693,7 +716,7 @@ void ProjectileFlyBState::think()
 		{
 			createNewProjectile();
 		}
-		else
+		else // end think()
 		{
 			if (_action.cameraPosition.z != -1)
 				_parent->getMap()->getCamera()->setMapOffset(_action.cameraPosition);
@@ -755,7 +778,9 @@ void ProjectileFlyBState::think()
 				}
 				else
 				{
-					_parent->dropItem(pos, item);
+					_parent->dropItem(
+									pos,
+									item);
 
 					if (_unit->getFaction() != FACTION_PLAYER
 						&& _projectileItem->getRules()->getBattleType() == BT_GRENADE)
@@ -787,7 +812,7 @@ void ProjectileFlyBState::think()
 
 				_parent->statePushNext(nextWaypoint);
 			}
-			else
+			else // shoot.
 			{
 				if (_ammo
 					&& _action.type == BA_LAUNCH
@@ -851,7 +876,7 @@ void ProjectileFlyBState::think()
 																			_unit->getFiringAccuracy(
 																								_action.type,
 																								_action.weapon)
-																							- i * 0.05));
+																							- i * 0.05)); // pellet spread.
 
 							if (_projectileImpact != VOXEL_EMPTY)
 							{
@@ -924,20 +949,22 @@ void ProjectileFlyBState::think()
  */
 void ProjectileFlyBState::cancel()
 {
-	if (_parent->getMap()->getProjectile())
+	Projectile* projectile = _parent->getMap()->getProjectile();
+	if (projectile)
 	{
-		_parent->getMap()->getProjectile()->skipTrajectory();
+		projectile->skipTrajectory();
 
-		Position pos = _parent->getMap()->getProjectile()->getPosition();
-		if (!_parent->getMap()->getCamera()->isOnScreen(Position(
-																pos.x / 16,
-																pos.y / 16,
-																pos.z / 24)))
+		Position pos = projectile->getPosition();
+		Camera* camera = _parent->getMap()->getCamera();
+		if (!camera->isOnScreen(Position(
+										pos.x / 16,
+										pos.y / 16,
+										pos.z / 24)))
 		{
-			_parent->getMap()->getCamera()->centerOnPosition(Position(
-																	pos.x / 16,
-																	pos.y / 16,
-																	pos.z / 24));
+			camera->centerOnPosition(Position(
+											pos.x / 16,
+											pos.y / 16,
+											pos.z / 24));
 		}
 	}
 }

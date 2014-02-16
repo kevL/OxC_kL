@@ -2254,12 +2254,18 @@ void AlienBAIState::grenadeAction()
 			action.weapon	= grenade;
 			action.type		= BA_THROW;
 
-/* Wb.131129
-		Position originVoxel = _save->getTileEngine()->getOriginVoxel(action, 0);
-		Position targetVoxel = action.target * Position (16,16,24) + Position (8,8, (2 + -_save->getTile(action.target)->getTerrainLevel()));
-		if (_save->getTileEngine()->validateThrow(action, originVoxel, targetVoxel)) // are we within range
-*/
-			if (_save->getTileEngine()->validateThrow(&action)) // are we within range
+			Position originVoxel = _save->getTileEngine()->getOriginVoxel(
+																		action,
+																		0);
+			Position targetVoxel = action.target * Position(16, 16, 24)
+									+ Position(
+											8,
+											8,
+											2 - _save->getTile(action.target)->getTerrainLevel());
+			if (_save->getTileEngine()->validateThrow( // check the range
+													action,
+													originVoxel,
+													targetVoxel))
 			{
 				_attackAction->target	= action.target;
 				_attackAction->weapon	= grenade;

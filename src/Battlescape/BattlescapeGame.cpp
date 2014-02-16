@@ -2061,6 +2061,7 @@ void BattlescapeGame::primaryAction(const Position& pos)
 				_save->getPathfinding()->removePreview();
 			}
 
+			_currentAction.actor->setDashing(false); // kL
 			_currentAction.run = false;
 			_currentAction.strafe = _save->getStrafeSetting()
 									&& modifierPressed

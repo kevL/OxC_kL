@@ -1733,13 +1733,16 @@ double BattleUnit::getFiringAccuracy(
 		BattleActionType actionType,
 		BattleItem* item)
 {
-	//Log(LOG_INFO) << "BattleUnit::getFiringAccuracy(), unitID " << getId() << " /  getStats()->firing" << getStats()->firing;
+	//Log(LOG_INFO) << "BattleUnit::getFiringAccuracy() ID " << getId();
+				//<< " /  getStats()->firing" << getStats()->firing;
+	// kL_note: This is also used for MeleeAccuracy.
 
 	if (actionType == BA_LAUNCH)
 		return 1.0;
 
 	if (actionType == BA_HIT)
-		return static_cast<double>(item->getRules()->getAccuracyMelee()) / 100.0;
+		return 1.0; // kL. for now......
+//		return static_cast<double>(item->getRules()->getAccuracyMelee()) / 100.0;
 //		return static_cast<double>(item->getRules()->getAccuracyMelee()) / 100.0 * getAccuracyModifier(); // kL
 
 
@@ -1770,7 +1773,10 @@ double BattleUnit::getFiringAccuracy(
 		}
 	}
 
-	return ret * getAccuracyModifier();
+	ret *= getAccuracyModifier();
+	//Log(LOG_INFO) << ". Accuracy = " << ret;
+
+	return ret;
 }
 // Wb.140214_begin:
 /* int BattleUnit::getFiringAccuracy(
@@ -1814,7 +1820,7 @@ double BattleUnit::getFiringAccuracy(
  */
 double BattleUnit::getAccuracyModifier(BattleItem* item)
 {
-	Log(LOG_INFO) << "BattleUnit::getAccuracyModifier()";
+	//Log(LOG_INFO) << "BattleUnit::getAccuracyModifier()";
 	double ret = static_cast<double>(_health) / static_cast<double>(getStats()->health);
 
 	int wounds = _fatalWounds[BODYPART_HEAD];
@@ -1834,7 +1840,7 @@ double BattleUnit::getAccuracyModifier(BattleItem* item)
 
 	ret *= 1.0 - (0.1 * static_cast<double>(wounds));
 
-	Log(LOG_INFO) << ". ret = " << ret;
+	//Log(LOG_INFO) << ". ret = " << ret;
 	return ret;
 }
 // Wb.140214_begin:
