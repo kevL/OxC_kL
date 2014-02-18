@@ -10,11 +10,11 @@
  *
  * OpenXcom is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
+ * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #ifndef OPENXCOM_ARTICLESTATEARMOR_H
@@ -22,35 +22,55 @@
 
 #include "ArticleState.h"
 
+
 namespace OpenXcom
 {
-	class Game;
-	class Surface;
-	class Text;
-	class TextList;
-	class ArticleDefinitionArmor;
 
-	/**
-	 * ArticleStateArmor has a caption, preview image and a stats block.
-	 * The image is found using the Armor class.
-	 */
+class ArticleDefinitionArmor;
+class Game;
+class Surface;
+class Text;
+class TextList;
 
-	class ArticleStateArmor : public ArticleState
-	{
-	public:
-		ArticleStateArmor(Game *game, ArticleDefinitionArmor *article_defs);
-		virtual ~ArticleStateArmor();
+
+/**
+ * ArticleStateArmor has a caption, preview image and a stats block.
+ * The image is found using the Armor class.
+ */
+
+class ArticleStateArmor
+	:
+		public ArticleState
+{
+
+public:
+	///
+	ArticleStateArmor(
+			Game* game,
+			ArticleDefinitionArmor* article_defs);
+	///
+	virtual ~ArticleStateArmor();
+
 
 	protected:
-		void addStat(std::string label, int stat, bool plus = false);
-		void addStat(std::string label, std::wstring stat);
+		///
+		void addStat(
+				std::string label,
+				int stat,
+				bool plus = false);
+		///
+		void addStat(
+				std::string label,
+				std::wstring stat);
 
 		int _row;
-		Surface *_image;
-		Text *_txtTitle;
-		TextList *_lstInfo;
-		Text *_txtInfo;
-	};
+
+		Surface* _image;
+		Text* _txtTitle;
+		TextList* _lstInfo;
+		Text* _txtInfo;
+};
+
 }
 
 #endif

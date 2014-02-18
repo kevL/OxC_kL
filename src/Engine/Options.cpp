@@ -10,11 +10,11 @@
  *
  * OpenXcom is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
+ * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "Options.h"
@@ -75,8 +75,10 @@ void createDefault()
 	setBool("asyncBlit", false);
 	setInt("keyboardMode", KEYBOARD_OFF);
 #else
-	setInt("displayWidth", 640);
-	setInt("displayHeight", 400);
+//kL	setInt("displayWidth", 640);
+	setInt("displayWidth", 800); // kL
+//kL	setInt("displayHeight", 400);
+	setInt("displayHeight", 500); // kL
 	setBool("fullscreen", false);
 	setBool("asyncBlit", true);
 	setInt("keyboardMode", KEYBOARD_ON);
@@ -90,7 +92,8 @@ void createDefault()
 	setBool("traceAI", false);
 	setBool("sneakyAI", false);
 	setBool("weaponSelfDestruction", false);
-	setBool("researchedItemsWillSpent", false);
+//kL	setBool("researchedItemsWillSpent", false);
+	setBool("researchedItemsWillSpent", true); // kL
 	setInt("baseXResolution", 320);
 	setInt("baseYResolution", 200);
 	setBool("useScaleFilter", false);
@@ -107,21 +110,26 @@ void createDefault()
 	setBool("mute", false);
 //kL	setInt("soundVolume", MIX_MAX_VOLUME);
 //kL	setInt("musicVolume", MIX_MAX_VOLUME);
-	setInt("soundVolume", 28); // kL
+	setInt("soundVolume", 23); // kL
 	setInt("musicVolume", 75); // kL
 //kL	setString("language", "");
 	setString("language", "en-US");
-	setInt("battleScrollSpeed", 12); // 4, 8, 12, 16, 24
+//kL	setInt("battleScrollSpeed", 12); // 4, 8, 12, 16, 24
+	setInt("battleScrollSpeed", 6); // kL
 	setInt("battleScrollType", SCROLL_AUTO);
 //kL	setInt("battleScrollDragButton", SDL_BUTTON_MIDDLE);
 	setInt("battleScrollDragButton", SDL_BUTTON_RIGHT); // kL
 	setBool("battleScrollDragInvert", false); // true drags away from the cursor, false drags towards (like a grab)
-	setInt("battleScrollDragTimeTolerance", 300); // miliSecond
-	setInt("battleScrollDragPixelTolerance", 10); // count of pixels
-	setInt("battleFireSpeed", 6); // 2, 4, 6, 8, 10, 12
-	setInt("battleXcomSpeed", 30); // 40, 30, 20, 10, 5, 1
+//kL	setInt("battleScrollDragTimeTolerance", 300); // miliSecond
+	setInt("battleScrollDragTimeTolerance", 133); // kL
+//kL	setInt("battleScrollDragPixelTolerance", 10); // count of pixels
+	setInt("battleScrollDragPixelTolerance", 3); // kL
+//kL	setInt("battleFireSpeed", 6); // 2, 4, 6, 8, 10, 12
+	setInt("battleFireSpeed", 12); // kL
+//kL	setInt("battleXcomSpeed", 30); // 40, 30, 20, 10, 5, 1
+	setInt("battleXcomSpeed", 32); // kL
 //kL	setInt("battleAlienSpeed", 30); // 40, 30, 20, 10, 5, 1
-	setInt("battleAlienSpeed", 50); // 40, 30, 20, 10, 5, 1
+	setInt("battleAlienSpeed", 83); // kL
 	setBool("battleInstantGrenade", false); // set to true if you want to play with the alternative grenade handling
 //kL	setInt("battleExplosionHeight", 0); // 0, 1, 2, 3
 	setInt("battleExplosionHeight", 2); // kL: 0, 1, 2, 3
@@ -175,7 +183,8 @@ void createDefault()
 //kL	setBool("battleTooltips", true);
 	setBool("battleTooltips", false); // kL
 	setBool("battleHairBleach", true);
-	setBool("keepAspectRatio", false);
+//kL	setBool("keepAspectRatio", false);
+	setBool("keepAspectRatio", true); // kL
 	setBool("cursorInBlackBandsInFullscreen", false);
 //kL	setBool("cursorInBlackBandsInWindow", true);
 	setBool("cursorInBlackBandsInWindow", false); // kL
@@ -184,7 +193,8 @@ void createDefault()
 	setBool("skipNextTurnScreen", false);
 //kL	setBool("disableAutoEquip", false);
 	setBool("disableAutoEquip", true); // kL
-	setBool("battleUFOExtenderAccuracy", false);
+//kL	setBool("battleUFOExtenderAccuracy", false);
+	setBool("battleUFOExtenderAccuracy", true); // kL
 	setInt("saveOrder", SORT_DATE_DESC);
 
 
@@ -592,11 +602,11 @@ void save(const std::string& filename)
 	}
 
 	YAML::Emitter out;
-
 	YAML::Node node;
-	node["options"] = _options;
-	node["purchaseexclusions"] = _purchaseexclusions;
-	node["rulesets"] = _rulesets;
+
+	node["options"]				= _options;
+	node["purchaseexclusions"]	= _purchaseexclusions;
+	node["rulesets"]			= _rulesets;
 	out << node;
 
 	sav << out.c_str();

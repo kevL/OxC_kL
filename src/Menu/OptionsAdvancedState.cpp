@@ -10,11 +10,11 @@
  *
  * OpenXcom is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
+ * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "OptionsAdvancedState.h"
@@ -102,7 +102,7 @@ OptionsAdvancedState::OptionsAdvancedState(
 	_lstOptions->setColumns(2, 220, 48);
 	_lstOptions->setColor(Palette::blockOffset(8)+5);
 
-	_settingBoolSet.push_back(std::pair<std::string, bool>("aggressiveRetaliation", false));
+/*kL	_settingBoolSet.push_back(std::pair<std::string, bool>("aggressiveRetaliation", false));
 	_settingBoolSet.push_back(std::pair<std::string, bool>("alienContainmentLimitEnforced", false));
 	_settingBoolSet.push_back(std::pair<std::string, bool>("canSellLiveAliens", false));
 	_settingBoolSet.push_back(std::pair<std::string, bool>("allowAutoSellProduction", false));
@@ -129,6 +129,35 @@ OptionsAdvancedState::OptionsAdvancedState(
 	_settingBoolSet.push_back(std::pair<std::string, bool>("allowPsionicCapture", false));
 	_settingBoolSet.push_back(std::pair<std::string, bool>("psiStrengthEval", false));
 	_settingBoolSet.push_back(std::pair<std::string, bool>("anytimePsiTraining", false));
+	_settingBoolSet.push_back(std::pair<std::string, bool>("skipNextTurnScreen", false)); */
+
+	_settingBoolSet.push_back(std::pair<std::string, bool>("aggressiveRetaliation", true));
+	_settingBoolSet.push_back(std::pair<std::string, bool>("alienContainmentLimitEnforced", true));
+	_settingBoolSet.push_back(std::pair<std::string, bool>("canSellLiveAliens", true));
+	_settingBoolSet.push_back(std::pair<std::string, bool>("allowAutoSellProduction", true));
+	_settingBoolSet.push_back(std::pair<std::string, bool>("allowBuildingQueue", false));
+	_settingBoolSet.push_back(std::pair<std::string, bool>("battleAutoEnd", false));
+	_settingBoolSet.push_back(std::pair<std::string, bool>("battleInstantGrenade", false));
+	_settingBoolSet.push_back(std::pair<std::string, bool>("battleNotifyDeath", true));
+	_settingBoolSet.push_back(std::pair<std::string, bool>("battleRangeBasedAccuracy", true));
+	_settingBoolSet.push_back(std::pair<std::string, bool>("battleUFOExtenderAccuracy", true));
+	_settingBoolSet.push_back(std::pair<std::string, bool>("canManufactureMoreItemsPerHour", true));
+	_settingBoolSet.push_back(std::pair<std::string, bool>("canTransferCraftsWhileAirborne", false));
+	_settingBoolSet.push_back(std::pair<std::string, bool>("craftLaunchAlways", false));
+	_settingBoolSet.push_back(std::pair<std::string, bool>("customInitialBase", true));
+	_settingBoolSet.push_back(std::pair<std::string, bool>("globeSeasons", true));
+	_settingBoolSet.push_back(std::pair<std::string, bool>("playIntro", false));
+	_settingBoolSet.push_back(std::pair<std::string, bool>("showFundsOnGeoscape", false));
+	_settingBoolSet.push_back(std::pair<std::string, bool>("disableAutoEquip", true));
+	_settingBoolSet.push_back(std::pair<std::string, bool>("showMoreStatsInInventoryView", true));
+	_settingBoolSet.push_back(std::pair<std::string, bool>("sneakyAI", false));
+	_settingBoolSet.push_back(std::pair<std::string, bool>("strafe", true));
+	_settingBoolSet.push_back(std::pair<std::string, bool>("weaponSelfDestruction", false));
+	_settingBoolSet.push_back(std::pair<std::string, bool>("researchedItemsWillSpent", true));
+	_settingBoolSet.push_back(std::pair<std::string, bool>("battleScrollDragInvert", false));
+	_settingBoolSet.push_back(std::pair<std::string, bool>("allowPsionicCapture", false));
+	_settingBoolSet.push_back(std::pair<std::string, bool>("psiStrengthEval", false));
+	_settingBoolSet.push_back(std::pair<std::string, bool>("anytimePsiTraining", true));
 	_settingBoolSet.push_back(std::pair<std::string, bool>("skipNextTurnScreen", false));
 
 	_boolQuantity = _settingBoolSet.size();
@@ -155,9 +184,14 @@ OptionsAdvancedState::OptionsAdvancedState(
 		++sel;
 	}
 
-	_settingIntSet.push_back(std::pair<std::string, int>("battleNewPreviewPath", 0));
+/*kL	_settingIntSet.push_back(std::pair<std::string, int>("battleNewPreviewPath", 0));
 	_settingIntSet.push_back(std::pair<std::string, int>("battleExplosionHeight", 0));
 	_settingIntSet.push_back(std::pair<std::string, int>("autosave", 0));
+	_settingIntSet.push_back(std::pair<std::string, int>("maxFrameSkip", 0)); */
+
+	_settingIntSet.push_back(std::pair<std::string, int>("battleNewPreviewPath", 3));
+	_settingIntSet.push_back(std::pair<std::string, int>("battleExplosionHeight", 2));
+	_settingIntSet.push_back(std::pair<std::string, int>("autosave", 1));
 	_settingIntSet.push_back(std::pair<std::string, int>("maxFrameSkip", 0));
 
 	for (std::vector<std::pair<std::string, int> >::iterator

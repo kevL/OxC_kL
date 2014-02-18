@@ -10,11 +10,11 @@
  *
  * OpenXcom is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
+ * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "ItemsArrivingState.h"
@@ -101,10 +101,12 @@ ItemsArrivingState::ItemsArrivingState(
 	_window->setColor(Palette::blockOffset(8)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 
-	_btnOk->setColor(Palette::blockOffset(8)+5);
-	_btnOk->setText(tr("STR_OK"));
-	_btnOk->onMouseClick((ActionHandler)& ItemsArrivingState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)& ItemsArrivingState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnGotoBase->setColor(Palette::blockOffset(8)+5);
+	_btnGotoBase->setText(tr("STR_GO_TO_BASE"));
+	_btnGotoBase->onMouseClick((ActionHandler)& ItemsArrivingState::btnGotoBaseClick);
+	_btnGotoBase->onKeyboardPress(
+					(ActionHandler)& ItemsArrivingState::btnGotoBaseClick,
+					(SDLKey)Options::getInt("keyOk"));
 
 	_btnOk5Secs->setColor(Palette::blockOffset(8)+5);
 	_btnOk5Secs->setText(tr("STR_OK_5_SECONDS"));
@@ -113,12 +115,12 @@ ItemsArrivingState::ItemsArrivingState(
 					(ActionHandler)& ItemsArrivingState::btnOk5SecsClick,
 					(SDLKey)Options::getInt("keyGeoSpeed1"));
 
-	_btnGotoBase->setColor(Palette::blockOffset(8)+5);
-	_btnGotoBase->setText(tr("STR_GO_TO_BASE"));
-	_btnGotoBase->onMouseClick((ActionHandler)& ItemsArrivingState::btnGotoBaseClick);
-	_btnGotoBase->onKeyboardPress(
-					(ActionHandler)& ItemsArrivingState::btnGotoBaseClick,
-					(SDLKey)Options::getInt("keyOk"));
+	_btnOk->setColor(Palette::blockOffset(8)+5);
+	_btnOk->setText(tr("STR_OK"));
+	_btnOk->onMouseClick((ActionHandler)& ItemsArrivingState::btnOkClick);
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& ItemsArrivingState::btnOkClick,
+					(SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(8)+5);
 	_txtTitle->setBig();
@@ -194,9 +196,7 @@ ItemsArrivingState::ItemsArrivingState(
 				j = (*i)->getTransfers()->erase(j);
 			}
 			else
-			{
 				++j;
-			}
 		}
 	}
 }

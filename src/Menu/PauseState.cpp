@@ -10,11 +10,11 @@
  *
  * OpenXcom is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
+ * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "PauseState.h"
@@ -62,12 +62,12 @@ PauseState::PauseState(
 
 	_txtTitle	= new Text(206, 15, x + 5, 30);
 
-	_btnLoad	= new TextButton(180, 18, x + 18, 52);
-	_btnSave	= new TextButton(180, 18, x + 18, 74);
-	_btnAbandon	= new TextButton(180, 18, x + 18, 96);
+	_btnLoad	= new TextButton(180, 18, x + 18, 51);
+	_btnSave	= new TextButton(180, 18, x + 18, 73);
+	_btnAbandon	= new TextButton(180, 22, x + 18, 97);
 
-	_btnOptions	= new TextButton(180, 18, x + 18, 123);
-	_btnCancel	= new TextButton(180, 18, x + 18, 148);
+	_btnOptions	= new TextButton(180, 20, x + 18, 125);
+	_btnCancel	= new TextButton(180, 18, x + 18, 149);
 
 
 	if (_origin != OPT_BATTLESCAPE)

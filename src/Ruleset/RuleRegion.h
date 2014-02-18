@@ -10,19 +10,23 @@
  *
  * OpenXcom is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
+ * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_RULEREGION_H
 #define OPENXCOM_RULEREGION_H
 
 #include <string>
 #include <vector>
+
 #include <yaml-cpp/yaml.h>
+
 #include "../Savegame/WeightedOptions.h"
+
 
 namespace OpenXcom
 {
@@ -33,23 +37,33 @@ namespace OpenXcom
  */
 struct MissionArea
 {
-	double lonMin, lonMax, latMin, latMax;
+	double
+		lonMin,
+		lonMax,
+		latMin,
+		latMax;
 };
+
 
 /**
  * A zone (set of areas) on the globe.
  */
 struct MissionZone
 {
-	std::vector<MissionArea> areas;
 
-	void swap(MissionZone &other)
-	{
-		areas.swap(other.areas);
-	}
+std::vector<MissionArea> areas;
+
+///
+void swap(MissionZone& other)
+{
+	areas.swap(other.areas);
+}
+
 };
 
+
 class City;
+
 
 /**
  * Represents a specific region of the world.
@@ -58,11 +72,19 @@ class City;
  */
 class RuleRegion
 {
+
 private:
-	std::string _type;
 	int _cost;
-	std::vector<double> _lonMin, _lonMax, _latMin, _latMax;
+	std::string _type;
+
+	std::vector<double>
+		_lonMin,
+		_lonMax,
+		_latMin,
+		_latMax;
+
 	std::vector<City*> _cities;
+
 	/// Weighted list of the different mission types for this region.
 	WeightedOptions _missionWeights;
 	/// Weight of this region when selecting regions for alien missions.
@@ -71,93 +93,128 @@ private:
 	std::vector<MissionZone> _missionZones;
 	/// Do missions in the region defined by this string instead.
 	std::string _missionRegion;
-public:
-	/// Creates a blank region ruleset.
-	RuleRegion(const std::string &type);
-	/// Cleans up the region ruleset.
-	~RuleRegion();
-	/// Loads the region from YAML.
-	void load(const YAML::Node& node);
-	/// Gets the region's type.
-	std::string getType() const;
-	/// Gets the region's base cost.
-	int getBaseCost() const;
-	/// Checks if a point is inside the region.
-	bool insideRegion(double lon, double lat) const;
-	/// Gets the cities in this region.
-	std::vector<City*> *getCities();
-	/// Gets the weight of this region for mission selection.
-	unsigned getWeight() const;
-	/// Gets the weighted list of missions for this region.
-	const WeightedOptions &getAvailableMissions() const { return _missionWeights; }
-	/// Gets the substitute mission region.
-	const std::string &getMissionRegion() const { return _missionRegion; }
-	/// Gets a random point inside a mission site.
-	std::pair<double, double> getRandomPoint(unsigned site) const;
-	/// Gets the maximum longitude.
-	const std::vector<double> &getLonMax() const { return _lonMax; }
-	/// Gets the minimum longitude.
-	const std::vector<double> &getLonMin() const { return _lonMin; }
-	/// Gets the maximum latitude.
-	const std::vector<double> &getLatMax() const { return _latMax; }
-	/// Gets the minimum latitude.
-	const std::vector<double> &getLatMin() const { return _latMin; }
-	const std::vector<MissionZone> &getMissionZones() const;
+
+
+	public:
+		/// Creates a blank region ruleset.
+		RuleRegion(const std::string& type);
+		/// Cleans up the region ruleset.
+		~RuleRegion();
+
+		/// Loads the region from YAML.
+		void load(const YAML::Node& node);
+
+		/// Gets the region's type.
+		std::string getType() const;
+
+		/// Gets the region's base cost.
+		int getBaseCost() const;
+
+		/// Checks if a point is inside the region.
+		bool insideRegion(
+				double lon,
+				double lat) const;
+
+		/// Gets the cities in this region.
+		std::vector<City*>* getCities();
+
+		/// Gets the weight of this region for mission selection.
+		unsigned getWeight() const;
+		/// Gets the weighted list of missions for this region.
+		const WeightedOptions& getAvailableMissions() const
+		{
+			return _missionWeights;
+		}
+		/// Gets the substitute mission region.
+		const std::string& getMissionRegion() const
+		{
+			return _missionRegion;
+		}
+
+		/// Gets a random point inside a mission site.
+		std::pair<double, double> getRandomPoint(unsigned site) const;
+
+		/// Gets the maximum longitude.
+		const std::vector<double>& getLonMax() const
+		{
+			return _lonMax;
+		}
+		/// Gets the minimum longitude.
+		const std::vector<double>& getLonMin() const
+		{
+			return _lonMin;
+		}
+		/// Gets the maximum latitude.
+		const std::vector<double>& getLatMax() const
+		{
+			return _latMax;
+		}
+		/// Gets the minimum latitude.
+		const std::vector<double>& getLatMin() const
+		{
+			return _latMin;
+		}
+
+		///
+		const std::vector<MissionZone>& getMissionZones() const;
 };
 
 }
 
+
 namespace YAML
 {
-	template<>
-	struct convert<OpenXcom::MissionArea>
+
+template<>
+struct convert<OpenXcom::MissionArea>
+{
+	static Node encode(const OpenXcom::MissionArea& rhs)
 	{
-		static Node encode(const OpenXcom::MissionArea& rhs)
-		{
-			Node node;
-			node.push_back(rhs.lonMin);
-			node.push_back(rhs.lonMax);
-			node.push_back(rhs.latMin);
-			node.push_back(rhs.latMax);
+		Node node;
+		node.push_back(rhs.lonMin);
+		node.push_back(rhs.lonMax);
+		node.push_back(rhs.latMin);
+		node.push_back(rhs.latMax);
 
-			return node;
-		}
+		return node;
+	}
 
-		static bool decode(const Node& node, OpenXcom::MissionArea& rhs)
-		{
-			if (!node.IsSequence() || node.size() != 4)
-				return false;
-
-			rhs.lonMin = node[0].as<double>();
-			rhs.lonMax = node[1].as<double>();
-			rhs.latMin = node[2].as<double>();
-			rhs.latMax = node[3].as<double>();
-
-			return true;
-		}
-	};
-
-	template<>
-	struct convert<OpenXcom::MissionZone>
+	static bool decode(const Node& node, OpenXcom::MissionArea& rhs)
 	{
-		static Node encode(const OpenXcom::MissionZone& rhs)
-		{
-			Node node;
-			node = rhs.areas;
+		if (!node.IsSequence() || node.size() != 4)
+			return false;
 
-			return node;
-		}
+		rhs.lonMin = node[0].as<double>();
+		rhs.lonMax = node[1].as<double>();
+		rhs.latMin = node[2].as<double>();
+		rhs.latMax = node[3].as<double>();
 
-		static bool decode(const Node& node, OpenXcom::MissionZone& rhs)
-		{
-			if (!node.IsSequence())
-				return false;
+		return true;
+	}
+};
 
-			rhs.areas = node.as< std::vector<OpenXcom::MissionArea> >(rhs.areas);
+template<>
+struct convert<OpenXcom::MissionZone>
+{
+	static Node encode(const OpenXcom::MissionZone& rhs)
+	{
+		Node node;
+		node = rhs.areas;
 
-			return true;
-		}
-	};
+		return node;
+	}
+
+	static bool decode(const Node& node, OpenXcom::MissionZone& rhs)
+	{
+		if (!node.IsSequence())
+			return false;
+
+		rhs.areas = node.as< std::vector<OpenXcom::MissionArea> >(rhs.areas);
+
+		return true;
+	}
+};
+
 }
 
 #endif

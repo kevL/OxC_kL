@@ -10,11 +10,11 @@
  *
  * OpenXcom is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
+ * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "RuleItem.h"
@@ -85,11 +85,15 @@ RuleItem::RuleItem(const std::string& type)
 		_arcingShot(false),
 		_listOrder(0),
 		_maxRange(200),
-		_aimRange(200),
-		_snapRange(15),
-		_autoRange(7),
+//kL		_aimRange(200),
+//kL		_snapRange(15),
+//kL		_autoRange(7),
+		_aimRange(24),	// kL
+		_snapRange(12),	// kL
+		_autoRange(6),	// kL
 		_minRange(0),
-		_dropoff(2),
+//kL		_dropoff(2),
+		_dropoff(1),	// kL
 		_bulletSpeed(0),
 		_explosionSpeed(0),
 		_autoShots(3),

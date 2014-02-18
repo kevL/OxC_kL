@@ -10,11 +10,11 @@
  *
  * OpenXcom is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
+ * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "BattlescapeGenerator.h"
@@ -2788,10 +2788,10 @@ void BattlescapeGenerator::explodePowerSources()
 //kL			_save->getTileEngine()->explode(pos, 180+RNG::generate(0,70), DT_HE, 10);
 
 			int percDamage = _ufo->getCrashPS(); // kL ( range: 50+ to 100- )
-			Log(LOG_INFO) << ". percDamage = " << percDamage;
+			Log(LOG_INFO) << ". crashPS = " << percDamage;
 				// kL_note: that might be fetchable with the simpler _ufo->getDamagePercentage() function...!
 				// ah, but it wouldn't get written to Save..
-			if (RNG::percent(percDamage / 5)) // slight chance for Big Explosion!!!!
+			if (RNG::percent(percDamage / 2)) // chance for full range Explosion (even if crash took low damage) !!!
 			{
 				percDamage = RNG::generate(1, 100);
 				Log(LOG_INFO) << ". . Alt percDamage = " << percDamage;

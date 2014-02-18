@@ -10,11 +10,11 @@
  *
  * OpenXcom is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
+ * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #define _USE_MATH_DEFINES
@@ -325,14 +325,13 @@ void AlienBAIState::think(BattleAction* action)
 	if (_AIMode == AI_COMBAT)
 	{
 		if (_attackAction->type == BA_RETHINK)
-		{
 			evaluate = true;
-		}
 	}
 
 	if (_spottingEnemies > 2
 		|| _unit->getHealth() < 2 * _unit->getStats()->health / 3
-		|| (_aggroTarget && _aggroTarget->getTurnsExposed() > _intelligence))
+		|| (_aggroTarget
+			&& _aggroTarget->getTurnsExposed() > _intelligence))
 	{
 		evaluate = true;
 	}
@@ -2329,7 +2328,7 @@ bool AlienBAIState::psiAction()
 		{
 			if ((*i)->getOriginalFaction() == FACTION_PLAYER	// they must be player units
 				&& (*i)->getArmor()->getSize() == 1				// don't target tanks
-				&& validTarget(									// will check for Mc, etc
+				&& validTarget(									// will check for Mc, Exposed, etc.
 							*i,
 							true,
 							false))
@@ -2469,14 +2468,9 @@ void AlienBAIState::meleeAttack()
 			false);
 
 	while (_unit->getStatus() == STATUS_TURNING)
-	{
 		_unit->turn();
-	}
 
-	if (_traceAI)
-	{
-		Log(LOG_INFO) << "Attack unit: " << _aggroTarget->getId();
-	}
+	if (_traceAI) Log(LOG_INFO) << "Attack unit: " << _aggroTarget->getId();
 
 	_attackAction->target = _aggroTarget->getPosition();
 	_attackAction->type = BA_HIT;
@@ -2500,9 +2494,7 @@ bool AlienBAIState::validTarget(
 	}
 
 	if (includeCivs)
-	{
 		return true;
-	}
 
 	return unit->getFaction() == FACTION_PLAYER;
 }

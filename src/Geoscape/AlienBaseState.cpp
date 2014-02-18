@@ -10,11 +10,11 @@
  *
  * OpenXcom is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
+ * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "AlienBaseState.h"
@@ -101,7 +101,9 @@ AlienBaseState::AlienBaseState(
 			i != _game->getSavedGame()->getCountries()->end();
 			++i)
 	{
-		if ((*i)->getRules()->insideCountry(_base->getLongitude(), _base->getLatitude()))
+		if ((*i)->getRules()->insideCountry(
+										_base->getLongitude(),
+										_base->getLatitude()))
 		{
 			country = tr((*i)->getRules()->getType());
 
@@ -114,7 +116,9 @@ AlienBaseState::AlienBaseState(
 			i != _game->getSavedGame()->getRegions()->end();
 			++i)
 	{
-		if ((*i)->getRules()->insideRegion(_base->getLongitude(), _base->getLatitude()))
+		if ((*i)->getRules()->insideRegion(
+										_base->getLongitude(),
+										_base->getLatitude()))
 		{
 			region = tr((*i)->getRules()->getType());
 
@@ -126,17 +130,11 @@ AlienBaseState::AlienBaseState(
 	std::wstring location;
 
 	if (!country.empty())
-	{
 		location = tr("STR_COUNTRIES_COMMA").arg(country).arg(region);
-	}
 	else if (!region.empty())
-	{
 		location = region;
-	}
 	else
-	{
 		location = tr("STR_UNKNOWN");
-	}
 
 	_txtTitle->setText(tr("STR_XCOM_AGENTS_HAVE_LOCATED_AN_ALIEN_BASE_IN_REGION").arg(location));
 }
@@ -156,7 +154,10 @@ void AlienBaseState::btnOkClick(Action*)
 {
 	_state->timerReset();
 
-	_state->getGlobe()->center(_base->getLongitude(), _base->getLatitude());
+	_state->getGlobe()->center(
+							_base->getLongitude(),
+							_base->getLatitude());
+
 	_game->popState();
 }
 

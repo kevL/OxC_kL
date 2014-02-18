@@ -10,11 +10,11 @@
  *
  * OpenXcom is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
+ * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "ProductionCompleteState.h"
@@ -93,24 +93,26 @@ ProductionCompleteState::ProductionCompleteState(
 	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& ProductionCompleteState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)& ProductionCompleteState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& ProductionCompleteState::btnOkClick,
+					(SDLKey)Options::getInt("keyCancel"));
 
 	_btnOk5Secs->setColor(Palette::blockOffset(8)+5);
 	_btnOk5Secs->setText(tr("STR_OK_5_SECONDS"));
 	_btnOk5Secs->onMouseClick((ActionHandler)& ProductionCompleteState::btnOk5SecsClick);
-	_btnOk5Secs->onKeyboardPress((ActionHandler)& ProductionCompleteState::btnOk5SecsClick, (SDLKey)Options::getInt("keyGeoSpeed1"));
+	_btnOk5Secs->onKeyboardPress(
+					(ActionHandler)& ProductionCompleteState::btnOk5SecsClick,
+					(SDLKey)Options::getInt("keyGeoSpeed1"));
 
 	_btnGotoBase->setColor(Palette::blockOffset(8)+5);
-	if (_endType != PROGRESS_CONSTRUCTION)
-	{
+/*kL	if (_endType != PROGRESS_CONSTRUCTION)
 		_btnGotoBase->setText(tr("STR_ALLOCATE_MANUFACTURE"));
-	}
-	else
-	{
-		_btnGotoBase->setText(tr("STR_GO_TO_BASE"));
-	}
+	else */
+	_btnGotoBase->setText(tr("STR_GO_TO_BASE"));
 	_btnGotoBase->onMouseClick((ActionHandler)& ProductionCompleteState::btnGotoBaseClick);
-	_btnGotoBase->onKeyboardPress((ActionHandler)& ProductionCompleteState::btnGotoBaseClick, (SDLKey)Options::getInt("keyOk"));
+	_btnGotoBase->onKeyboardPress(
+					(ActionHandler)& ProductionCompleteState::btnGotoBaseClick,
+					(SDLKey)Options::getInt("keyOk"));
 
 	_txtMessage->setColor(Palette::blockOffset(15)-1);
 	_txtMessage->setAlign(ALIGN_CENTER);
@@ -193,19 +195,15 @@ void ProductionCompleteState::btnGotoBaseClick(Action*)
 
 	_game->popState();
 
-	if (_endType != PROGRESS_CONSTRUCTION)
-	{
+/*	if (_endType != PROGRESS_CONSTRUCTION)
 		_game->pushState(new ManufactureState(
 											_game,
 											_base));
-	}
-	else
-	{
-		_game->pushState(new BasescapeState(
-										_game,
-										_base,
-										_state->getGlobe()));
-	}
+	else // facility completed */
+	_game->pushState(new BasescapeState(
+									_game,
+									_base,
+									_state->getGlobe()));
 }
 
 }

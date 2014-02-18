@@ -10,11 +10,11 @@
  *
  * OpenXcom is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
+ * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "SavedGameState.h"
@@ -52,7 +52,9 @@ struct compareSaveName
 			const SaveInfo& a,
 			const SaveInfo& b) const
 	{
-		return CrossPlatform::naturalCompare(a.displayName, b.displayName);
+		return CrossPlatform::naturalCompare(
+											a.displayName,
+											b.displayName);
 	}
 };
 
@@ -96,11 +98,9 @@ SavedGameState::SavedGameState(
 
 	_txtName	= new Text(176, 9, 16, 32);
 	_txtDate	= new Text(84, 9, 222, 32);
-//	_txtDate	= new Text(110, 9, 204, 32); // <- new
 
 	_sortName = new ArrowButton(ARROW_NONE, 11, 8, 16, 32);
-//	_sortDate = new ArrowButton(ARROW_NONE, 11, 8, 204, 32);
-	_sortDate = new ArrowButton(ARROW_NONE, 11, 8, 222, 32); // <- new new
+	_sortDate = new ArrowButton(ARROW_NONE, 11, 8, 222, 32);
 
 	_lstSaves	= new TextList(285, 120, 16, 41); // when editing, the up/down arrow jogs a few px right.
 

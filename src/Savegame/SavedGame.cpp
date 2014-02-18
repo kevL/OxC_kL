@@ -10,11 +10,11 @@
  *
  * OpenXcom is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
+ * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "SavedGame.h"
@@ -229,8 +229,8 @@ SavedGame::~SavedGame()
 std::vector<SaveInfo> SavedGame::getList(Language* lang)
 {
 	std::vector<SaveInfo> info;
-	std::vector<std::string> saves = CrossPlatform::getFolderContents(Options::getUserFolder(), "sav");
 
+	std::vector<std::string> saves = CrossPlatform::getFolderContents(Options::getUserFolder(), "sav");
 	for (std::vector<std::string>::iterator
 			i = saves.begin();
 			i != saves.end();
@@ -256,7 +256,7 @@ std::vector<SaveInfo> SavedGame::getList(Language* lang)
 			save.isoTime = str.second;
 
 			std::wostringstream details;
-			if (doc["turn"])
+/*kL			if (doc["turn"])
 			{
 				details << lang->getString("STR_BATTLESCAPE") << L": " << lang->getString(doc["mission"].as<std::string>()) << L" ";
 				details << lang->getString("STR_TURN").arg(doc["turn"].as<int>());
@@ -268,7 +268,25 @@ std::vector<SaveInfo> SavedGame::getList(Language* lang)
 				details << lang->getString("STR_GEOSCAPE") << L": ";
 				details << time.getDayString(lang) << L" " << lang->getString(time.getMonthString()) << L" " << time.getYear() << L" ";
 				details << time.getHour() << L":" << std::setfill(L'0') << std::setw(2) << time.getMinute();
+			} */
+			// kL_begin:
+			if (doc["base"])
+			{
+				details << Language::utf8ToWstr(doc["base"].as<std::string>());
+				details << L" - ";
 			}
+
+			GameTime time = GameTime(6, 1, 1, 1999, 12, 0, 0);
+			time.load(doc["time"]);
+			details << time.getDayString(lang) << L" " << lang->getString(time.getMonthString()) << L" " << time.getYear() << L" ";
+			details << time.getHour() << L":" << std::setfill(L'0') << std::setw(2) << time.getMinute();
+
+			if (doc["turn"])
+			{
+				details << L" - ";
+				details << lang->getString(doc["mission"].as<std::string>()) << L" ";
+				details << lang->getString("STR_TURN").arg(doc["turn"].as<int>());
+			} // kL_end.
 
 			save.details = details.str();
 
@@ -529,6 +547,9 @@ void SavedGame::save(const std::string& filename) const
 	brief["version"]	= OPENXCOM_VERSION_SHORT;
 	brief["build"]		= OPENXCOM_VERSION_GIT;
 	brief["time"]		= _time->save();
+
+	Base* base			= _bases.front();							// kL
+	brief["base"]		= Language::wstrToUtf8(base->getName());	// kL
 
 	if (_battleGame != 0)
 	{

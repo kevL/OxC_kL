@@ -10,11 +10,11 @@
  *
  * OpenXcom is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
+ * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #define _USE_MATH_DEFINES
@@ -1090,17 +1090,15 @@ void Map::drawTerrain(Surface* surface)
 							if (_cursorType == CT_AIM) // kL_note: Gotta account for Throwing in here. (use throwRange.. for color, & calc. acc.)
 							{
 								BattleAction* action = _save->getBattleGame()->getCurrentAction();
-//								int accuracy = _save->getSelectedUnit()->getFiringAccuracy(
-//																						action->type,
-//																						action->weapon);
+//kL								int accuracy = _save->getSelectedUnit()->getFiringAccuracy( // Wb.140214
+//kL																						action->type,
+//kL																						action->weapon);
 								int accuracy = static_cast<int>(
 													_save->getSelectedUnit()->getFiringAccuracy(
 																						action->type,
 																						action->weapon)
 																					* 100.0);
-								Uint8 color = 51; //Palette::blockOffset(3)+3; // kL
-//kL								std::stringstream ss;
-//								std::wstringstream ss; // kL
+								Uint8 color = 51; //Palette::blockOffset(3)+3; // kL, green
 
 //kL_TEST:								if (Options::getBool("battleUFOExtenderAccuracy"))
 								{
@@ -1135,17 +1133,17 @@ void Map::drawTerrain(Surface* surface)
 
 									// first, assume shot is adjusted and set the text amber.
 //kL									_txtAccuracy->setColor(Palette::blockOffset(1)-1);
-//kL									color = 15; //Palette::blockOffset(1)-1; // kL
+//kL									color = 15; //Palette::blockOffset(1)-1; // amber
 
 									if (distance > upperLimit)
 									{
 										accuracy -= (distance - upperLimit) * weapon->getDropoff();
-										color = 19; //Palette::blockOffset(1)+3; // kL
+										color = 18; //Palette::blockOffset(1)+2; // orange
 									}
 									else if (distance < lowerLimit)
 									{
 										accuracy -= (lowerLimit - distance) * weapon->getDropoff();
-										color = 19; //Palette::blockOffset(1)+3; // kL
+										color = 18; //Palette::blockOffset(1)+2; // orange
 									}
 //kL									else // no adjustment made: set it to green.
 //kL										_txtAccuracy->setColor(Palette::blockOffset(4)-1);
@@ -1155,9 +1153,10 @@ void Map::drawTerrain(Surface* surface)
 									{
 										accuracy = 0;
 //kL										_txtAccuracy->setColor(Palette::blockOffset(2)-1);
-										color = 35; //Palette::blockOffset(2)+3;
+										color = 35; //Palette::blockOffset(2)+3; // red
 									}
 
+//kL									std::stringstream ss;
 //kL									ss << accuracy;
 //kL									ss << "%";
 //kL									_txtAccuracy->setText(Language::utf8ToWstr(ss.str().c_str()).c_str());

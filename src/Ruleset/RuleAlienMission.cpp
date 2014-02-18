@@ -10,11 +10,11 @@
  *
  * OpenXcom is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
+ * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "RuleAlienMission.h"
@@ -25,34 +25,37 @@
 namespace YAML
 {
 
-	template<>
-	struct convert<OpenXcom::MissionWave>
+template<>
+struct convert<OpenXcom::MissionWave>
+{
+	static Node encode(const OpenXcom::MissionWave& rhs)
 	{
-		static Node encode(const OpenXcom::MissionWave& rhs)
-		{
-			Node node;
+		Node node;
 
-			node["ufo"] = rhs.ufoType;
-			node["count"] = rhs.ufoCount;
-			node["trajectory"] = rhs.trajectory;
-			node["timer"] = rhs.spawnTimer;
+		node["ufo"]			= rhs.ufoType;
+		node["count"]		= rhs.ufoCount;
+		node["trajectory"]	= rhs.trajectory;
+		node["timer"]		= rhs.spawnTimer;
 
-			return node;
-		}
+		return node;
+	}
 
-		static bool decode(const Node& node, OpenXcom::MissionWave& rhs)
-		{
-			if (!node.IsMap())
-				return false;
+	static bool decode(
+			const Node& node,
+			OpenXcom::MissionWave& rhs)
+	{
+		if (!node.IsMap())
+			return false;
 
-			rhs.ufoType		= node["ufo"].as<std::string>();
-			rhs.ufoCount	= node["count"].as<unsigned>();
-			rhs.trajectory	= node["trajectory"].as<std::string>();
-			rhs.spawnTimer	= node["timer"].as<unsigned>();
+		rhs.ufoType		= node["ufo"].as<std::string>();
+		rhs.ufoCount	= node["count"].as<unsigned>();
+		rhs.trajectory	= node["trajectory"].as<std::string>();
+		rhs.spawnTimer	= node["timer"].as<unsigned>();
 
-			return true;
-		}
-	};
+		return true;
+	}
+};
+
 }
 
 
@@ -111,9 +114,7 @@ void RuleAlienMission::load(const YAML::Node& node)
 				assoc.insert(std::make_pair(month, nw.release()));
 			}
 			else // Existing entry, update it.
-			{
 				existing->second->load(nn->second);
-			}
 		}
 
 		// Now replace values in our actual member variable!
@@ -126,13 +127,9 @@ void RuleAlienMission::load(const YAML::Node& node)
 				++ii)
 		{
 			if (ii->second->empty()) // Don't keep empty lists.
-			{
 				delete ii->second;
-			}
 			else // Place it
-			{
 				_raceDistribution.push_back(*ii);
-			}
 		}
 	}
 }

@@ -10,11 +10,11 @@
  *
  * OpenXcom is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
+ * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #ifndef OPENXCOM_UFO_H
@@ -232,9 +232,9 @@ private:
 		void setHitFrame(int frame);
 
 		/// kL. Gets the UFO's powerSource explosive-power-factor.
-		int getCrashPS() const;
+		int getCrashPS() const; // kL
 		/// kL. Sets the UFO's powerSource explosive-power-factor.
-		void setCrashPS(int percDamage);
+		void setCrashPS(int percDamage); // kL
 };
 
 }

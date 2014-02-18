@@ -10,17 +10,18 @@
  *
  * OpenXcom is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
+ * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #ifndef OPENXCOM_MINIBASEVIEW_H
 #define OPENXCOM_MINIBASEVIEW_H
 
 #include <vector>
+
 #include "../Engine/InteractiveSurface.h"
 
 
@@ -29,7 +30,7 @@ namespace OpenXcom
 
 class Base;
 class SurfaceSet;
-//class GeoscapeState;	// kL
+
 
 /**
  * Mini view of a base.
@@ -38,21 +39,29 @@ class SurfaceSet;
  */
 class MiniBaseView
 	:
-	public InteractiveSurface
+		public InteractiveSurface
 {
+
 private:
-	static const unsigned int MAX_BASES = 8;
-	static const int MINI_SIZE = 14;
+	static const unsigned int MAX_BASES	= 8;
+	static const int MINI_SIZE			= 14;
+
+	unsigned
+		_base,
+		_hoverBase;
+
+	SurfaceSet* _texture;
 
 	std::vector<Base*> *_bases;
-	SurfaceSet* _texture;
-	unsigned int _base, _hoverBase;
-//	GeoscapeState* _gs;					// kL
-//	Base* _b;
+
 
 	public:
 		/// Creates a new mini base view at the specified position and size.
-		MiniBaseView(int width, int height, int x = 0, int y = 0);
+		MiniBaseView(
+				int width,
+				int height,
+				int x = 0,
+				int y = 0);
 		/// Cleans up the mini base view.
 		~MiniBaseView();
 
@@ -63,7 +72,7 @@ private:
 		/// Gets the base the mouse is over.
 		unsigned int getHoveredBase() const;
 		/// Sets the selected base for the mini base view.
-		void setSelectedBase(unsigned int base);
+		void setSelectedBase(unsigned base);
 		/// Draws the mini base view.
 		void draw();
 		/// Special handling for mouse hovers.

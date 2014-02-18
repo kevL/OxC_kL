@@ -10,11 +10,11 @@
  *
  * OpenXcom is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
+ * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #define _USE_MATH_DEFINES
@@ -443,9 +443,13 @@ void Projectile::applyAccuracy(
 
 	if (_action.type == BA_HIT)
 		maxRange = 45.0; // up to 2 tiles diagonally (as in the case of reaper vs reaper)
-	else if (Options::getBool("battleUFOExtenderAccuracy") // kL
+	else if (_save->getSide() == FACTION_PLAYER				// kL: only for xCom heheh
+		&& Options::getBool("battleUFOExtenderAccuracy")	// kL
 		&& _action.type != BA_THROW)
 	{
+		// kL_note: if distance is greater-than the weapon's
+		// max range, then ProjectileFlyBState won't allow the shot;
+		// so that's already been taken care of ....
 		RuleItem* weaponRule = _action.weapon->getRules();
 		int
 			lowerLimit = weaponRule->getMinRange(),
@@ -506,22 +510,22 @@ void Projectile::applyAccuracy(
 		// NOTE: This should be done on the weapons themselves!!!!
 		double baseDeviation = 0.0;
 		if (_action.actor->getFaction() == FACTION_PLAYER)
-			baseDeviation = 0.08; // give the poor aLiens an aiming advantage over xCom & Mc'd units
-		double baseDivisor = accuracy - acuPenalty + 0.18;
+			baseDeviation = 0.1; // give the poor aLiens an aiming advantage over xCom & Mc'd units
+		double baseDivisor = accuracy - acuPenalty + 0.17;
 		switch (_action.type)
 		{
 			case BA_AIMEDSHOT:
-				baseDeviation += 0.14 / baseDivisor;
+				baseDeviation += 0.17 / baseDivisor;
 			break;
 			case BA_SNAPSHOT:
-				baseDeviation += 0.16 / baseDivisor;
+				baseDeviation += 0.2 / baseDivisor;
 			break;
 			case BA_AUTOSHOT:
-				baseDeviation += 0.19 / baseDivisor;
+				baseDeviation += 0.23 / baseDivisor;
 			break;
 
 			default: // throw. Or hit.
-				baseDeviation += 0.16 / baseDivisor;
+				baseDeviation += 0.18 / baseDivisor;
 			break;
 		} // kL_end.
 

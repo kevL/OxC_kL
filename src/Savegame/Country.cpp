@@ -10,11 +10,11 @@
  *
  * OpenXcom is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
+ * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "Country.h"
@@ -103,6 +103,14 @@ RuleCountry* Country::getRules() const
 }
 
 /**
+ * kL. Get the country's name.
+ */
+std::string Country::getType() const // kL
+{
+	return _rules->getType();
+}
+
+/**
  * Returns the country's current monthly funding.
  * @return Monthly funding.
  */
@@ -124,7 +132,7 @@ void Country::setFunding(int funding)
  * Keith Richards would be so proud
  * @return satisfaction level, 0 = alien pact, 1 = unhappy, 2 = satisfied, 3 = happy.
  */
-int Country::getSatisfaction()
+int Country::getSatisfaction() const
 {
 	if (_pact)
 		return 0;
@@ -289,7 +297,7 @@ if (aLien < xCom + 30) // if aLien is above xCom by 30 or less
 /**
  * @return if we will sign a new pact.
  */
-bool Country::getNewPact()
+bool Country::getNewPact() const
 {
 	return _newPact;
 }
@@ -307,7 +315,7 @@ void Country::setNewPact()
  * at month's end if _newPact is set.
  * @return if we have signed a pact.
  */
-bool Country::getPact()
+bool Country::getPact() const
 {
 	return _pact;
 }

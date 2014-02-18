@@ -10,11 +10,11 @@
  *
  * OpenXcom is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
+ * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #ifndef OPENXCOM_COUNTRY_H
@@ -66,13 +66,16 @@ private:
 		/// Gets the country's ruleset.
 		RuleCountry* getRules() const;
 
+		/// kL. Get the country's name.
+		std::string getType() const; // kL
+
 		/// Gets the country's funding.
 		const std::vector<int>& getFunding() const;
 		/// Sets the country's funding.
 		void setFunding(int funding);
 
 		/// get the country's satisfaction level
-		int getSatisfaction();
+		int getSatisfaction() const;
 
 		/// add xcom activity in this country
 		void addActivityXcom(int activity);
@@ -90,11 +93,11 @@ private:
 				int diff); // kL
 
 		/// are we signing a new pact?
-		bool getNewPact();
+		bool getNewPact() const;
 		/// sign a pact at the end of this month.
 		void setNewPact();
 		/// have we signed a pact?
-		bool getPact();
+		bool getPact() const;
 };
 
 }

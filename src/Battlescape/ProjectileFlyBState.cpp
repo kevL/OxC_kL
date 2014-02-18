@@ -10,11 +10,11 @@
  *
  * OpenXcom is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
+ * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #define _USE_MATH_DEFINES
@@ -274,6 +274,13 @@ void ProjectileFlyBState::init()
 												_action.actor->getPosition(),
 												_action.target)
 											> weapon->getRules()->getMaxRange())
+/*			else // kL_begin:
+			{
+				int dist = _parent->getTileEngine()->distance(
+														_action.actor->getPosition(),
+														_action.target);
+				if (dist > weapon->getRules()->getMaxRange()
+					|| dist < weapon->getRules()->getMinRange()) */ // kL_end.
 			{
 				Log(LOG_INFO) << ". . . out of range, EXIT";
 
@@ -282,6 +289,7 @@ void ProjectileFlyBState::init()
 
 				return;
 			}
+//			}
 		break;
 		case BA_THROW:
 		{
@@ -910,7 +918,8 @@ void ProjectileFlyBState::think()
 																	_parent->getMap()->getProjectile()->getPosition(offset) / Position(16, 16, 24))
 																->getUnit();
 						if (victim
-							&& !victim->isOut()
+//kL							&& !victim->isOut()
+							&& !victim->isOut(true, true) // kL
 							&& victim->getFaction() == FACTION_HOSTILE)
 						{
 							AlienBAIState* aggro = dynamic_cast<AlienBAIState*>(victim->getCurrentAIState());

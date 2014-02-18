@@ -10,18 +10,24 @@
  *
  * OpenXcom is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
+ * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
+
 #define _USE_MATH_DEFINES
-#include <assert.h>
+
 #include "RuleRegion.h"
-#include "City.h"
-#include "../Engine/RNG.h"
+
+#include <assert.h>
 #include <math.h>
+
+#include "City.h"
+
+#include "../Engine/RNG.h"
+
 
 namespace OpenXcom
 {
@@ -30,7 +36,17 @@ namespace OpenXcom
  * Creates a blank ruleset for a certain type of region.
  * @param type String defining the type.
  */
-RuleRegion::RuleRegion(const std::string &type): _type(type), _cost(0), _lonMin(), _lonMax(), _latMin(), _latMax(), _cities(), _regionWeight(0), _missionRegion("")
+RuleRegion::RuleRegion(const std::string& type)
+	:
+		_type(type),
+		_cost(0),
+		_lonMin(),
+		_lonMax(),
+		_latMin(),
+		_latMax(),
+		_cities(),
+		_regionWeight(0),
+		_missionRegion("")
 {
 }
 
@@ -39,7 +55,10 @@ RuleRegion::RuleRegion(const std::string &type): _type(type), _cost(0), _lonMin(
  */
 RuleRegion::~RuleRegion()
 {
-	for (std::vector<City*>::iterator i = _cities.begin(); i != _cities.end(); ++i)
+	for (std::vector<City*>::iterator
+			i = _cities.begin();
+			i != _cities.end();
+			++i)
 	{
 		delete *i;
 	}
@@ -49,32 +68,40 @@ RuleRegion::~RuleRegion()
  * Loads the region type from a YAML file.
  * @param node YAML node.
  */
-void RuleRegion::load(const YAML::Node &node)
+void RuleRegion::load(const YAML::Node& node)
 {
 	_type = node["type"].as<std::string>(_type);
 	_cost = node["cost"].as<int>(_cost);
-	std::vector< std::vector<double> > areas;
-	areas = node["areas"].as< std::vector< std::vector<double> > >(areas);
-	for (size_t i = 0; i != areas.size(); ++i)
+
+	std::vector<std::vector<double> > areas;
+	areas = node["areas"].as<std::vector<std::vector<double> > >(areas);
+	for (size_t
+			i = 0;
+			i != areas.size();
+			++i)
 	{
-		_lonMin.push_back(areas[i][0] * M_PI / 180);
-		_lonMax.push_back(areas[i][1] * M_PI / 180);
-		_latMin.push_back(areas[i][2] * M_PI / 180);
-		_latMax.push_back(areas[i][3] * M_PI / 180);
+		_lonMin.push_back(areas[i][0] * M_PI / 180.0);
+		_lonMax.push_back(areas[i][1] * M_PI / 180.0);
+		_latMin.push_back(areas[i][2] * M_PI / 180.0);
+		_latMax.push_back(areas[i][3] * M_PI / 180.0);
 	}
-	if (const YAML::Node &cities = node["cities"])
+
+	if (const YAML::Node& cities = node["cities"])
 	{
-		for (YAML::const_iterator i = cities.begin(); i != cities.end(); ++i)
+		for (YAML::const_iterator
+				i = cities.begin();
+				i != cities.end();
+				++i)
 		{
-			City *rule = new City("", 0.0, 0.0);
+			City* rule = new City("", 0.0, 0.0);
 			rule->load(*i);
 			_cities.push_back(rule);
 		}
 	}
-	if (const YAML::Node &weights = node["missionWeights"])
-	{
+
+	if (const YAML::Node& weights = node["missionWeights"])
 		_missionWeights.load(weights);
-	}
+
 	_regionWeight = node["regionWeight"].as<unsigned>(_regionWeight);
 	_missionZones = node["missionZones"].as< std::vector<MissionZone> >(_missionZones);
 	_missionRegion = node["missionRegion"].as<std::string>(_missionRegion);
@@ -105,11 +132,18 @@ int RuleRegion::getBaseCost() const
  * @param lat Latitude in radians.
  * @return True if it's inside, false if it's outside.
  */
-bool RuleRegion::insideRegion(double lon, double lat) const
+bool RuleRegion::insideRegion(
+		double lon,
+		double lat) const
 {
-	for (unsigned int i = 0; i < _lonMin.size(); ++i)
+	for (unsigned int
+			i = 0;
+			i < _lonMin.size();
+			++i)
 	{
-		bool inLon, inLat;
+		bool
+			inLon,
+			inLat;
 
 		if (_lonMin[i] <= _lonMax[i])
 			inLon = (lon >= _lonMin[i] && lon < _lonMax[i]);
@@ -121,6 +155,7 @@ bool RuleRegion::insideRegion(double lon, double lat) const
 		if (inLon && inLat)
 			return true;
 	}
+
 	return false;
 }
 
@@ -155,37 +190,47 @@ std::pair<double, double> RuleRegion::getRandomPoint(unsigned zone) const
 		unsigned p = RNG::generate(0, _cities.size() - 1);
 		return std::make_pair(_cities[p]->getLongitude(), _cities[p]->getLatitude());
 	}
+
 	if (zone != 0)
 	{
 		--zone;
 	}
+
 	if (zone < _missionZones.size())
 	{
 		unsigned a = RNG::generate(0, _missionZones[zone].areas.size() - 1);
+
 		double lonMin = _missionZones[zone].areas[a].lonMin;
 		double lonMax = _missionZones[zone].areas[a].lonMax;
 		double latMin = _missionZones[zone].areas[a].latMin;
 		double latMax = _missionZones[zone].areas[a].latMax;
+
 		if (lonMin > lonMax)
 		{
 			lonMin = _missionZones[zone].areas[a].lonMax;
 			lonMax = _missionZones[zone].areas[a].lonMin;
 		}
+
 		if (latMin > latMax)
 		{
 			latMin = _missionZones[zone].areas[a].latMax;
 			latMax = _missionZones[zone].areas[a].latMin;
 		}
+
 		double lon = RNG::generate(lonMin, lonMax);
 		double lat = RNG::generate(latMin, latMax);
-		return std::make_pair(lon * M_PI / 180, lat * M_PI / 180);
+
+		return std::make_pair(lon * M_PI / 180.0, lat * M_PI / 180.0);
 	}
+
 	assert(0 && "Invalid zone number");
+
 	return std::make_pair(0.0, 0.0);
 }
 
-const std::vector<MissionZone> &RuleRegion::getMissionZones() const
+const std::vector<MissionZone>& RuleRegion::getMissionZones() const
 {
 	return _missionZones;
 }
+
 }

@@ -10,11 +10,11 @@
  *
  * OpenXcom is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
+ * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #define _USE_MATH_DEFINES
@@ -462,8 +462,9 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 								unit->addToVisibleUnits(visUnit); // kL_note: This returns a boolean; i can use that......
 								unit->addToVisibleTiles(visUnit->getTile());
 
-								if (unit->getFaction() == FACTION_HOSTILE)
-//kL									&& visUnit->getFaction() != FACTION_HOSTILE)
+								if (unit->getFaction() == FACTION_HOSTILE
+									&& visUnit->getFaction() != FACTION_HOSTILE
+									&& _save->getSide() == FACTION_HOSTILE) // kL, per Original.
 								{
 									//Log(LOG_INFO) << ". . calculateFOV(), spotted Unit FACTION_HOSTILE, setTurnsExposed()";
 									visUnit->setTurnsExposed(0);

@@ -10,11 +10,11 @@
  *
  * OpenXcom is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
+ * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #ifndef OPENXCOM_UFOPAEDIA_H
@@ -67,20 +67,30 @@ protected:
 	static int _current_index; // kL
 	/// get index of the given article id in the visible list.
 //kL	static size_t getArticleIndex(Game* game, std::string& article_id);
-	static int getArticleIndex(Game* game, std::string& article_id); // kL
+	static int getArticleIndex(
+			Game* game,
+			std::string& article_id); // kL
 	/// get list of researched articles
 	static ArticleDefinitionList getAvailableArticles(Game* game);
 	/// create a new state object from article definition.
-	static ArticleState* createArticleState(Game* game, ArticleDefinition* article);
+	static ArticleState* createArticleState(
+			Game* game,
+			ArticleDefinition* article);
 
 
 	public:
 		/// check, if a specific article is currently available.
-		static bool isArticleAvailable(Game* game, ArticleDefinition* article);
+		static bool isArticleAvailable(
+				Game* game,
+				ArticleDefinition* article);
 		/// open Ufopaedia on a certain entry.
-		static void openArticle(Game* game, std::string& article_id);
+		static void openArticle(
+				Game* game,
+				std::string& article_id);
 		/// open Ufopaedia article from a given article definition.
-		static void openArticle(Game* game, ArticleDefinition* article);
+		static void openArticle(
+				Game* game,
+				ArticleDefinition* article);
 		/// open Ufopaedia with selection dialog.
 		static void open(Game* game);
 		/// article navigation to next article.
@@ -88,11 +98,16 @@ protected:
 		/// article navigation to previous article.
 		static void prev(Game* game);
 		/// load a vector with article ids that are currently visible of a given section.
-		static void list(Game* game, const std::string& section, ArticleDefinitionList& data);
+		static void list(
+				Game* game,
+				const std::string& section,
+				ArticleDefinitionList& data);
 		/// build a text string from a string template using current game settings.
-		static std::wstring buildText(Game* game, std::string& str_template);
+		static std::wstring buildText(
+				Game* game,
+				std::string& str_template);
 		/// TO BE REMOVED! run in test mode during development only.
-		static void runStandalone(Game* game);
+//kL		static void runStandalone(Game* game);
 };
 
 }

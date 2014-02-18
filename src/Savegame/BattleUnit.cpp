@@ -10,11 +10,11 @@
  *
  * OpenXcom is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
+ * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #define _USE_MATH_DEFINES
@@ -3161,6 +3161,8 @@ void BattleUnit::setTurnsExposed(int turns)
 	if (_turnsExposed > 255) // kL
 		_turnsExposed = 255; // kL
 		// kL_note: should set this to -1 instead of 255.
+		// Note, that in the .Save file, aLiens are 0
+		// and notExposed xCom units are 255
 }
 
 /**

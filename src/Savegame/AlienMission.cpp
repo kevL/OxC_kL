@@ -10,11 +10,11 @@
  *
  * OpenXcom is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
+ * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "AlienMission.h"
@@ -69,9 +69,7 @@ std::pair<double, double> getLandPoint(
 {
 	// the last set of mission zones are WAY outside the region.
 	if (zone == region.getMissionZones().size())
-	{
 		zone--;
-	}
 
 	std::pair<double, double> pos;
 	do
@@ -120,9 +118,9 @@ class matchById: public std::unary_function<const AlienBase*, bool>
 private:
 	int _id;
 
-
 	public:
-		matchById(int id) /// Remember ID.
+		/// Remember ID.
+		matchById(int id)
 			:
 				_id(id)
 		{
@@ -208,9 +206,7 @@ const std::string& AlienMission::getType() const
 bool AlienMission::isOver() const
 {
 	if (_rule.getType() == "STR_ALIEN_INFILTRATION")
-	{
 		return false; // Infiltrations continue for ever.
-	}
 
 	if (_nextWave == _rule.getWaveCount()
 		&& !_liveUfos)
@@ -233,8 +229,8 @@ class FindMarkedXCOMBase
 private:
 	const RuleRegion& _region;
 
-
 	public:
+		///
 		FindMarkedXCOMBase(const RuleRegion& region)
 			:
 				_region(region)
@@ -242,12 +238,13 @@ private:
 			/* Empty by design. */
 		}
 
+		///
 		bool operator()(const Base* base) const
 		{
 			return _region.insideRegion(
 									base->getLongitude(),
 									base->getLatitude())
-						&& base->getRetaliationStatus();
+					&& base->getRetaliationStatus();
 		}
 };
 
@@ -283,9 +280,7 @@ void AlienMission::think(
 					ufoRule,
 					trajectory);
 	if (ufo)
-	{
 		game.getUfos()->push_back(ufo); // Some missions may not spawn a UFO!
-	}
 
 	++_nextUfoCounter;
 	if (_nextUfoCounter == wave.ufoCount)
@@ -306,12 +301,16 @@ void AlienMission::think(
 			if (!(*c)->getPact()
 				&& !(*c)->getNewPact()
 				&& ruleset.getRegion(_region)->insideRegion(
-													(*c)->getRules()->getLabelLongitude(),
-													(*c)->getRules()->getLabelLatitude()))
+														(*c)->getRules()->getLabelLongitude(),
+														(*c)->getRules()->getLabelLatitude()))
 			{
 				Log(LOG_INFO) << "AlienMission::think(), GAAH! new Pact & aLien base";
 
-				(*c)->setNewPact();
+				// kL_note: Ironically, this likely allows multiple alien
+				// bases in Russia solely because of infiltrations ...!!
+				if ((*c)->getType() != "STR_RUSSIA") // kL
+					(*c)->setNewPact();
+
 				spawnAlienBase(
 							globe,
 							engine);
@@ -445,14 +444,13 @@ Ufo* AlienMission::spawnUfo(
 				pos.second = _base->getLatitude();
 			}
 			else // Other ships can land where they want.
-			{
-				pos = getLandPoint(globe, regionRules, trajectory.getZone(1));
-			}
+				pos = getLandPoint(
+								globe,
+								regionRules,
+								trajectory.getZone(1));
 		}
 		else
-		{
 			pos = regionRules.getRandomPoint(trajectory.getZone(1));
-		}
 
 		wp->setLongitude(pos.first);
 		wp->setLatitude(pos.second);
@@ -468,13 +466,12 @@ Ufo* AlienMission::spawnUfo(
 
 	std::pair<double, double> pos;
 	if (trajectory.getAltitude(0) == "STR_GROUND")
-	{
-		pos = getLandPoint(globe, regionRules, trajectory.getZone(0));
-	}
+		pos = getLandPoint(
+						globe,
+						regionRules,
+						trajectory.getZone(0));
 	else
-	{
 		pos = regionRules.getRandomPoint(trajectory.getZone(0));
-	}
 
 	ufo->setAltitude(trajectory.getAltitude(0));
 	ufo->setSpeed(static_cast<int>(
@@ -484,7 +481,10 @@ Ufo* AlienMission::spawnUfo(
 
 	Waypoint* wp = new Waypoint();
 	if (trajectory.getAltitude(1) == "STR_GROUND")
-		pos = getLandPoint(globe, regionRules, trajectory.getZone(1));
+		pos = getLandPoint(
+						globe,
+						regionRules,
+						trajectory.getZone(1));
 	else
 		pos = regionRules.getRandomPoint(trajectory.getZone(1));
 
@@ -510,9 +510,7 @@ void AlienMission::start(unsigned initialCount)
 		_spawnCountdown = static_cast<unsigned int>(((spawnTimer / 2) + RNG::generate(0, spawnTimer)) * 30);
 	}
 	else
-	{
 		_spawnCountdown = initialCount;
-	}
 }
 
 
@@ -528,7 +526,6 @@ private:
 	double
 		_lon,
 		_lat;
-
 
 	public:
 		/// Remember the query coordinates.
@@ -563,7 +560,7 @@ private:
  */
 void AlienMission::ufoReachedWaypoint(
 		Ufo& ufo,
-		Game &engine,
+		Game& engine,
 		const Globe& globe)
 {
 	const Ruleset& rules = *engine.getRuleset();
@@ -581,9 +578,7 @@ void AlienMission::ufoReachedWaypoint(
 	if (ufo.getAltitude() != "STR_GROUND")
 	{
 		if (ufo.getLandId() != 0)
-		{
 			ufo.setLandId(0);
-		}
 
 		ufo.setTrajectoryPoint(ufo.getTrajectoryPoint() + 1);
 
@@ -603,9 +598,7 @@ void AlienMission::ufoReachedWaypoint(
 							ufo.getTrajectory().getZone(ufo.getTrajectoryPoint()));
 		}
 		else
-		{
 			pos = region->getRandomPoint(ufo.getTrajectory().getZone(ufo.getTrajectoryPoint()));
-		}
 
 		wp->setLongitude(pos.first);
 		wp->setLatitude(pos.second);
@@ -633,6 +626,7 @@ void AlienMission::ufoReachedWaypoint(
 			terrorSite->setSecondsRemaining(4 * 3600 + RNG::generate(0, 6) * 3600);	// 4hr. + (0 to 6) hrs.
 			terrorSite->setAlienRace(_race);
 
+//kL_note: not used.
 //kL			const City* city = rules.locateCity(
 //kL											ufo.getLongitude(),
 //kL											ufo.getLatitude());
@@ -653,9 +647,7 @@ void AlienMission::ufoReachedWaypoint(
 					t = ufo.getFollowers()->begin();
 				}
 				else
-				{
 					++t;
-				}
 			}
 		}
 		else if (_rule.getType() == "STR_ALIEN_RETALIATION"
@@ -680,9 +672,8 @@ void AlienMission::ufoReachedWaypoint(
 
 			ufo.setDestination(*found);
 		}
-		else
+		else // Set timer for UFO on the ground.
 		{
-			// Set timer for UFO on the ground.
 			ufo.setSecondsRemaining(ufo.getTrajectory().groundTimer());
 
 			if (ufo.getDetected()
@@ -803,9 +794,7 @@ void AlienMission::setWaveCountdown(unsigned minutes)
 	assert(minutes != 0 && minutes %30 == 0);
 
 	if (isOver())
-	{
 		return;
-	}
 
 	_spawnCountdown = minutes;
 }
@@ -943,13 +932,9 @@ void AlienMission::setRegion(
 		const Ruleset& rules)
 {
 	if (rules.getRegion(region)->getMissionRegion() != "")
-	{
 		_region = rules.getRegion(region)->getMissionRegion();
-	}
 	else
-	{
 		_region = region;
-	}
 }
 
 }

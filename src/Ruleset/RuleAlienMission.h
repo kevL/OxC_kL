@@ -10,11 +10,11 @@
  *
  * OpenXcom is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
+ * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #ifndef OPENXCOM_RULEALIENMISSION_H
@@ -38,23 +38,28 @@ class WeightedOptions;
  */
 struct MissionWave
 {
-	/// The type of the spawned UFOs.
-	std::string ufoType;
-	/// The number of UFOs that will be generated.
-	/**
-	 * The UFOs are generated sequentially, one every @a spawnTimer minutes.
-	 */
-	unsigned ufoCount;
-	/// The trajectory ID for this wave's UFOs.
-	/**
-	 * Trajectories control the way UFOs fly around the Geoscape.
-	 */
-	std::string trajectory;
-	/// Number of minutes between UFOs in the wave.
-	/**
-	 * The actual value used is spawnTimer*1/4 or spawnTimer*3/4.
-	 */
-	unsigned spawnTimer;
+
+/// The type of the spawned UFOs.
+std::string ufoType;
+
+/// The number of UFOs that will be generated.
+/**
+ * The UFOs are generated sequentially, one every @a spawnTimer minutes.
+ */
+unsigned ufoCount;
+
+/// The trajectory ID for this wave's UFOs.
+/**
+ * Trajectories control the way UFOs fly around the Geoscape.
+ */
+std::string trajectory;
+
+/// Number of minutes between UFOs in the wave.
+/**
+ * The actual value used is spawnTimer*1/4 or spawnTimer*3/4.
+ */
+unsigned spawnTimer;
+
 };
 
 

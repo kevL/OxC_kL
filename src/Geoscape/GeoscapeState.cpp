@@ -10,11 +10,11 @@
  *
  * OpenXcom is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
+ * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #define _USE_MATH_DEFINES
@@ -913,7 +913,9 @@ void GeoscapeState::time5Seconds()
 							//Log(LOG_INFO) << ". create terrorSite";
 
 							TerrorSite* ts = _game->getSavedGame()->getTerrorSites()->back();
-							const City* city = _game->getRuleset()->locateCity(ts->getLongitude(), ts->getLatitude());
+							const City* city = _game->getRuleset()->locateCity(
+																			ts->getLongitude(),
+																			ts->getLatitude());
 							assert(city);
 							// kL_note: need to delete the UFO here, before attempting to target w/ Craft.
 							// see: Globe::getTargets() for the workaround...
@@ -944,13 +946,11 @@ void GeoscapeState::time5Seconds()
 							timerReset();
 
 							if (!base->getDefenses()->empty())
-							{
 								popup(new BaseDefenseState(
 														_game,
 														base,
 														*i,
 														this));
-							}
 							else
 							{
 								handleBaseDefense(base, *i);
@@ -2821,7 +2821,6 @@ void GeoscapeState::btnBasesClick(Action*)
 		else
 		{
 			//Log(LOG_INFO) << ". . . . currentBase is VALID";
-
 			_game->pushState(new BasescapeState(
 											_game,
 											_game->getSavedGame()->getBases()->at(kL_currentBase),
@@ -2835,7 +2834,6 @@ void GeoscapeState::btnBasesClick(Action*)
 										0,
 										_globe));
 	}
-
 	//Log(LOG_INFO) << ". . exit btnBasesClick()";
 }
 
