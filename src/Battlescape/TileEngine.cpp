@@ -499,9 +499,6 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 																		yPlayer,
 																		0);
 
-// int calculateLine(const Position& origin, const Position& target, bool storeTrajectory, std::vector<Position>* trajectory,
-//		BattleUnit* excludeUnit, bool doVoxelCheck = true, bool onlyVisible = false, BattleUnit* excludeAllBut = 0);
-
 									_trajectory.clear();
 
 									//Log(LOG_INFO) << ". . calculateLine()";
@@ -566,7 +563,7 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 	if (unit->getFaction() == FACTION_PLAYER
 		&& ret == true)
 	{
-		//Log(LOG_INFO) << "TileEngine::calculateFOV() Player ret TRUE";
+		Log(LOG_INFO) << "TileEngine::calculateFOV() Player ret TRUE";
 		return true;
 	}
 	else if (unit->getFaction() != FACTION_PLAYER // kL_end.
@@ -578,11 +575,11 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 		&& !unit->getVisibleUnits()->empty()
 		&& unit->getUnitsSpottedThisTurn().size() > preVisUnits)
 	{
-		//Log(LOG_INFO) << "TileEngine::calculateFOV() Player NOT ret TRUE";
+		Log(LOG_INFO) << "TileEngine::calculateFOV() Player NOT ret TRUE";
 		return true;
 	}
 
-	//Log(LOG_INFO) << "TileEngine::calculateFOV() ret FALSE";
+	Log(LOG_INFO) << "TileEngine::calculateFOV() ret FALSE";
 	return false;
 }
 
@@ -1367,61 +1364,28 @@ std::vector<BattleUnit*> TileEngine::getSpottingUnits(BattleUnit* unit)
 			bu != _save->getUnits()->end();
 			++bu)
 	{
-//		int buIniti = static_cast<int>((*bu)->getInitiative()); // purely Debug info, here.
-
-		if (*bu != unit																		// don't put spottee unit itself in with the spotters.
-			&& !(*bu)->isOut(true, true)													// not dead/unconscious
-//			&& (*bu)->getHealth() != 0														// not dying, checked by "isOut(true)"
-//			&& (*bu)->getStunlevel() < (*bu)->getHealth()									// not about to pass out
-			&& ((*bu)->getFaction() != _save->getSide()										// not a friend, unless...
-				|| (unit->getOriginalFaction() == FACTION_HOSTILE							// aLiens will shott themselves
-					&& unit->getFaction() == FACTION_PLAYER									// when mind-controlled,
-					&& _save->getSide() == FACTION_HOSTILE)))								// but not xCom
-//			&& distance(unit->getPosition(), (*bu)->getPosition()) <= MAX_VIEW_DISTANCE)	// closer than 20 tiles, checked by "visible()"
+		if (!(*bu)->isOut(true, true)
+			&& (*bu)->getFaction() != _save->getSide())
 		{
-//			Position originVoxel = _save->getTileEngine()->getSightOriginVoxel(*bu);
-//			originVoxel.z -= 2;
-//			Position targetVoxel;
-
 			AlienBAIState* aggro = dynamic_cast<AlienBAIState*>((*bu)->getCurrentAIState());
-			if ((((*bu)->checkViewSector(unit->getPosition())			// spotter is looking in the right direction
-						|| (*bu)->getFaction() == FACTION_HOSTILE)		//		or is a psycho-aLien!
-//kL					|| (aggro != 0 && aggro->getWasHit()))
-					|| (aggro											// spotter has AIstate
-						&& aggro->getWasHit()))							// & been aggro'd.
-//				&& canTargetUnit(&originVoxel, tile, &targetVoxel, *bu)	// can actually target the unit, checked by "visible()",
-																		// although origin is placed 2 voxels lower here.
-				&& visible(*bu, tile))									// can actually see the unit through smoke/fire & within viewRange
+			if (((aggro != 0
+						&& aggro->getWasHit())
+					|| (*bu)->getFaction() == FACTION_HOSTILE
+					|| (*bu)->checkViewSector(unit->getPosition()))
+				&& visible(*bu, tile))
 			{
 				if ((*bu)->getFaction() == FACTION_PLAYER)
 					unit->setVisible(true);
 
 				(*bu)->addToVisibleUnits(unit);
 
-//				if (_save->getSide() != FACTION_NEUTRAL // no reaction on civilian turn. done in "checkReactionFire()"
 				if (canMakeSnap(*bu, unit))
 				{
 					Log(LOG_INFO) << ". . . reactID " << (*bu)->getId() << " : initi = " << (int)(*bu)->getInitiative();
-					//		<< " : ADD";
 
 					spotters.push_back(*bu);
 				}
-//				else
-				{
-					//Log(LOG_INFO) << ". . reactID " << (*bu)->getId() << " : initi = "  << buIniti
-					//		<< " : can't makeSnap.";
-				}
 			}
-//			else
-			{
-				//Log(LOG_INFO) << ". . reactID " << (*bu)->getId() << " : initi = "  << buIniti
-				//		<< " : not facing AND not aggro, OR target obscured/OoR";
-			}
-		}
-//		else
-		{
-			//Log(LOG_INFO) << ". . reactID " << (*bu)->getId() << " : initi = "  << buIniti
-			//		<< " : isOut(true, true) OR side's faction";
 		}
 	}
 
@@ -1503,14 +1467,14 @@ bool TileEngine::checkReactionFire(BattleUnit* unit)
 
 	bool ret = false;
 
-	// not mind controlled, or controlled by the player
+	// not mind controlled, or is player's side:
 	// kL. If spotted unit is not mind controlled,
 	// or is mind controlled but not an alien;
 	// ie, never reaction fire on a mind-controlled xCom soldier;
 	// but *do* reaction fire on a mind-controlled aLien (or civilian.. ruled out above).
 	if (unit->getFaction() == unit->getOriginalFaction()
 //kL		|| unit->getFaction() != FACTION_HOSTILE)
-		|| unit->getFaction() == FACTION_PLAYER)		// kL
+		|| unit->getFaction() == FACTION_PLAYER) // kL
 	{
 		//Log(LOG_INFO) << ". Target = VALID";
 		std::vector<BattleUnit*> spotters = getSpottingUnits(unit);
@@ -1551,10 +1515,8 @@ bool TileEngine::checkReactionFire(BattleUnit* unit)
 				continue;
 			}
 			else
-			{
 				//Log(LOG_INFO) << ". . Snap by : " << reactor->getId();
 				ret = true;
-			}
 
 			//Log(LOG_INFO) << ". . Snap by : " << reactor->getId();
 
@@ -1611,9 +1573,7 @@ BattleUnit* TileEngine::getReactor(
 	if (bestScore > static_cast<int>(unit->getInitiative()))
 	{
 		if (reactor->getOriginalFaction() == FACTION_PLAYER)
-		{
 			reactor->addReactionExp();
-		}
 	}
 	else
 	{
@@ -1642,27 +1602,22 @@ bool TileEngine::tryReactionSnap(
 	// note that other checks for/of weapon were done in "canMakeSnap()"
 	// redone here to fill the BattleAction object...
 	if (unit->getFaction() == FACTION_PLAYER)
-	{
 		action.weapon = unit->getItem(unit->getActiveHand());
-	}
 	else
 		action.weapon = unit->getMainHandWeapon(); // kL_note: no longer returns grenades. good
 
 	if (!action.weapon)
-	{
 		//Log(LOG_INFO) << ". no Weapon, ret FALSE";
 		return false;
-	}
 
 	action.type = BA_SNAPSHOT;									// reaction fire is ALWAYS snap shot.
 																// kL_note: not true in Orig. aliens did auto at times
 	if (action.weapon->getRules()->getBattleType() == BT_MELEE)	// unless we're a melee unit.
-																// kL_note: in which case you won't react at all. ( yet )
-	{
-		action.type = BA_HIT;
-	}
+		action.type = BA_HIT;									// kL_note: in which case you won't react at all. ( yet )
 
-	action.TU = unit->getActionTUs(action.type, action.weapon);
+	action.TU = unit->getActionTUs(
+								action.type,
+								action.weapon);
 
 	// kL_note: Does this handle melee hits, as reaction shots? really.
 //	if (action.weapon->getAmmoItem()						// lasers & melee are their own ammo-items.
@@ -1670,50 +1625,57 @@ bool TileEngine::tryReactionSnap(
 //		&& action.weapon->getAmmoItem()->getAmmoQuantity()	// returns 255 for laser; 0 for melee
 //		&& unit->getTimeUnits() >= action.TU)
 	// That's all been done!!!
+//	{
+	action.targeting = true;
+	action.target = target->getPosition();
+
+	if (unit->getFaction() == FACTION_HOSTILE) // aLien units will go into an "aggro" state when they react.
 	{
-		action.targeting = true;
-		action.target = target->getPosition();
-
-		if (unit->getFaction() == FACTION_HOSTILE) // aLien units will go into an "aggro" state when they react.
+		AlienBAIState* aggro = dynamic_cast<AlienBAIState*>(unit->getCurrentAIState());
+		if (aggro == 0) // should not happen, but just in case...
 		{
-			AlienBAIState* aggro = dynamic_cast<AlienBAIState*>(unit->getCurrentAIState());
-			if (aggro == 0) // should not happen, but just in case...
-			{
-				aggro = new AlienBAIState(_save, unit, 0);
-				unit->setAIState(aggro);
-			}
-
-			if (action.weapon->getAmmoItem()->getRules()->getExplosionRadius()
-				&& aggro->explosiveEfficacy(
-										action.target,
-										unit,
-										action.weapon->getAmmoItem()->getRules()->getExplosionRadius(),
-										-1) == false)
-			{
-				action.targeting = false;
-			}
+			aggro = new AlienBAIState(
+									_save,
+									unit,
+									0);
+			unit->setAIState(aggro);
 		}
 
-		if (action.targeting
-			&& unit->spendTimeUnits(action.TU))
+		if (action.weapon->getAmmoItem()->getRules()->getExplosionRadius()
+			&& aggro->explosiveEfficacy(
+									action.target,
+									unit,
+									action.weapon->getAmmoItem()->getRules()->getExplosionRadius(),
+									-1)
+								== false)
 		{
-			Log(LOG_INFO) << ". Reaction Fire by reactID " << unit->getId();
-
-			action.TU = 0;
-
-			action.cameraPosition = _save->getBattleState()->getMap()->getCamera()->getMapOffset();	// kL, was above under "BattleAction action;"
-			action.actor = unit;																	// kL, was above under "BattleAction action;"
-
-			_save->getBattleGame()->statePushBack(new UnitTurnBState(
-																_save->getBattleGame(),
-																action));
-			_save->getBattleGame()->statePushBack(new ProjectileFlyBState(
-																	_save->getBattleGame(),
-																	action));
-
-			return true;
+			action.targeting = false;
 		}
 	}
+
+	if (action.targeting
+		&& unit->spendTimeUnits(action.TU))
+	{
+		Log(LOG_INFO) << ". Reaction Fire by reactID " << unit->getId();
+
+		action.TU = 0;
+
+		action.cameraPosition = _save->getBattleState()->getMap()->getCamera()->getMapOffset();	// kL, was above under "BattleAction action;"
+		action.actor = unit;																	// kL, was above under "BattleAction action;"
+
+		_save->getBattleGame()->statePushBack(new UnitTurnBState(
+															_save->getBattleGame(),
+															action));
+		_save->getBattleGame()->statePushBack(new ProjectileFlyBState(
+																_save->getBattleGame(),
+																action));
+
+//		if (unit->getFaction() == FACTION_PLAYER)
+//			unit->setTurnsExposed(0); // kL: That's for giving our position away!!
+
+		return true;
+	}
+//	}
 
 	return false;
 }

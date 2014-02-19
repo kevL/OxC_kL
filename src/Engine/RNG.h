@@ -54,8 +54,8 @@ namespace RNG
 
 	/// Get normally distributed value.
 	double boxMuller(
-			double m = 0,
-			double s = 1);
+			double mean = 0,
+			double standardDeviation = 1);
 
 	/// Generates a percentage chance.
 	bool percent(int value);

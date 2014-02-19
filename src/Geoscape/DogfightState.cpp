@@ -69,7 +69,7 @@ const int DogfightState::_timeScale = 75;
 // UFO blobs graphics ...
 const int DogfightState::_ufoBlobs[8][13][13] =
 {
-		/*0 STR_VERY_SMALL */
+		/* 0 STR_VERY_SMALL */
 	{
 		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -85,7 +85,7 @@ const int DogfightState::_ufoBlobs[8][13][13] =
 		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 	},
-		/*1 STR_SMALL */
+		/* 1 STR_SMALL */
 	{
 		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -101,7 +101,7 @@ const int DogfightState::_ufoBlobs[8][13][13] =
 		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 	},
-		/*2 STR_MEDIUM_UC */
+		/* 2 STR_MEDIUM_UC */
 	{
 		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -117,7 +117,7 @@ const int DogfightState::_ufoBlobs[8][13][13] =
 		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 	},
-		/*3 STR_LARGE */
+		/* 3 STR_LARGE */
 	{
 		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 		{0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0},
@@ -133,7 +133,7 @@ const int DogfightState::_ufoBlobs[8][13][13] =
 		{0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0},
 		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 	},
-		/*4 STR_VERY_LARGE */
+		/* 4 STR_VERY_LARGE */
 	{
 		{0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0},
 		{0, 0, 0, 1, 1, 2, 2, 2, 1, 1, 0, 0, 0},
@@ -149,7 +149,7 @@ const int DogfightState::_ufoBlobs[8][13][13] =
 		{0, 0, 0, 1, 1, 2, 2, 2, 1, 1, 0, 0, 0},
 		{0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0}
 	},
-		/*5 STR_HUGE */
+		/* 5 STR_HUGE */
 	{
 		{0, 0, 0, 1, 1, 2, 2, 2, 1, 1, 0, 0, 0},
 		{0, 0, 1, 2, 2, 3, 3, 3, 2, 2, 1, 0, 0},
@@ -165,7 +165,7 @@ const int DogfightState::_ufoBlobs[8][13][13] =
 		{0, 0, 1, 2, 2, 3, 3, 3, 2, 2, 1, 0, 0},
 		{0, 0, 0, 1, 1, 2, 2, 2, 1, 1, 0, 0, 0}
 	},
-		/*6 STR_VERY_HUGE :p */
+		/* 6 STR_VERY_HUGE :p */
 	{
 		{0, 0, 0, 2, 2, 3, 3, 3, 2, 2, 0, 0, 0},
 		{0, 0, 2, 3, 3, 4, 4, 4, 3, 3, 2, 0, 0},
@@ -181,7 +181,7 @@ const int DogfightState::_ufoBlobs[8][13][13] =
 		{0, 0, 2, 3, 3, 4, 4, 4, 3, 3, 2, 0, 0},
 		{0, 0, 0, 2, 2, 3, 3, 3, 2, 2, 0, 0, 0}
 	},
-		/*7 STR_ENOURMOUS */
+		/* 7 STR_ENOURMOUS */
 	{
 		{0, 0, 0, 3, 3, 4, 4, 4, 3, 3, 0, 0, 0},
 		{0, 0, 3, 4, 4, 5, 5, 5, 4, 4, 3, 0, 0},
@@ -577,7 +577,7 @@ DogfightState::DogfightState(
 	_ufoFireInterval = reload - (2 * static_cast<Uint32>(_game->getSavedGame()->getDifficulty()));
 	reload = static_cast<Uint32>(
 					static_cast<int>(_ufoFireInterval)
-					+ RNG::generate(5, static_cast<int>(reload))
+					+ RNG::generate(2, static_cast<int>(reload)) / 2
 				* _timeScale);
 	if (reload < _timeScale)
 		reload = _timeScale;
@@ -585,10 +585,11 @@ DogfightState::DogfightState(
 
 	_ufoEscapeTimer->onTimer((StateHandler)& DogfightState::ufoBreakOff);
 	Uint32 ufoBreakOffInterval = static_cast<Uint32>(_ufo->getRules()->getBreakOffTime());
-	ufoBreakOffInterval = static_cast<Uint32>((static_cast<int>(ufoBreakOffInterval)
-													+ RNG::generate(10, static_cast<int>(ufoBreakOffInterval))
-													- (8 * static_cast<int>(_game->getSavedGame()->getDifficulty())))
-												* _timeScale);
+	ufoBreakOffInterval = static_cast<Uint32>(
+								(static_cast<int>(ufoBreakOffInterval)
+								+ RNG::generate(10, static_cast<int>(ufoBreakOffInterval)) / 2
+								- (10 * static_cast<int>(_game->getSavedGame()->getDifficulty())))
+							* _timeScale);
 	if (ufoBreakOffInterval < _timeScale * 10)
 		ufoBreakOffInterval = _timeScale * 10;
 //	else

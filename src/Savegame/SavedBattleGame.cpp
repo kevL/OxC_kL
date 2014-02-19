@@ -1502,6 +1502,8 @@ Node* SavedBattleGame::getPatrolNode(
 		BattleUnit* unit,
 		Node* fromNode)
 {
+	Log(LOG_INFO) << "SavedBattleGame::getPatrolNode()";
+
 	if (fromNode == 0)
 	{
 		if (Options::getBool("traceAI")) Log(LOG_INFO) << "This alien got lost. :(";
@@ -1574,6 +1576,8 @@ Node* SavedBattleGame::getPatrolNode(
 
 	if (legitNodes.empty())
 	{
+		//Log(LOG_INFO) << " . legitNodes is EMPTY.";
+
 		if (Options::getBool("traceAI")) Log(LOG_INFO) << (scout? "Scout ": "Guard ") << "found no patrol node! XXX XXX XXX";
 
 		if (unit->getArmor()->getSize() > 1
@@ -1586,26 +1590,40 @@ Node* SavedBattleGame::getPatrolNode(
 								fromNode); // move damnit
 		}
 		else
+		{
+			//Log(LOG_INFO) << " . legitNodes is NOT Empty.";
+			//Log(LOG_INFO) << " . return 0";
 			return 0;
+		}
 	}
 
 	if (scout) // picks a random destination
 	{
+		//Log(LOG_INFO) << " . scout";
+
 //kL		return legitNodes[RNG::generate(0, static_cast<int>(legitNodes.size()) - 1)];
 		size_t legit = static_cast<size_t>(RNG::generate(0, static_cast<int>(legitNodes.size()) - 1));
 
+		//Log(LOG_INFO) << " . return legitNodes @ " << legit;
 		return legitNodes[legit];
 	}
 	else
 	{
+		//Log(LOG_INFO) << " . !scout";
 		if (!bestNode)
+		{
+			//Log(LOG_INFO) << " . no bestNode, return 0";
 			return 0;
+		}
 
 		// non-scout patrols to highest value unoccupied node that's not fromNode
 		if (Options::getBool("traceAI")) Log(LOG_INFO) << "Choosing node flagged " << bestNode->getFlags();
 
+		//Log(LOG_INFO) << " . return bestNode";
 		return bestNode;
 	}
+
+	//Log(LOG_INFO) << "SavedBattleGame::getPatrolNode() EXIT";
 }
 
 /**

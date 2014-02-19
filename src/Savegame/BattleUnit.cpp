@@ -2112,8 +2112,12 @@ std::vector<BattleItem*>* BattleUnit::getInventory()
  */
 void BattleUnit::think(BattleAction* action)
 {
+	//Log(LOG_INFO) << "BattleUnit::think()";
+	//Log(LOG_INFO) << ". checkAmmo()";
 	checkAmmo();
+	//Log(LOG_INFO) << ". _currentAIState->think()";
 	_currentAIState->think(action);
+	//Log(LOG_INFO) << "BattleUnit::think() EXIT";
 }
 
 /**
@@ -2404,25 +2408,36 @@ BattleItem* BattleUnit::getGrenadeFromBelt() const
  */
 bool BattleUnit::checkAmmo()
 {
+	//Log(LOG_INFO) << "BattleUnit::checkAmmo()";
+
+	if (getTimeUnits() < 15)	// kL
+	{
+		//Log(LOG_INFO) << ". return FALSE, not enough TU";
+		return false;			// kL
+	}
+
 	BattleItem* weapon = getItem("STR_RIGHT_HAND");
 	if (!weapon
 		|| weapon->getAmmoItem() != 0
-		|| weapon->getRules()->getBattleType() == BT_MELEE
-		|| getTimeUnits() < 15)
+		|| weapon->getRules()->getBattleType() == BT_MELEE)
+//kL		|| getTimeUnits() < 15)
 	{
 		weapon = getItem("STR_LEFT_HAND");
 		if (!weapon
 			|| weapon->getAmmoItem() != 0
-			|| weapon->getRules()->getBattleType() == BT_MELEE
-			|| getTimeUnits() < 15)
+			|| weapon->getRules()->getBattleType() == BT_MELEE)
+//kL			|| getTimeUnits() < 15)
 		{
+			//Log(LOG_INFO) << ". return FALSE, no weapon";
 			return false;
 		}
 	}
 
-	// we have a non-melee weapon with no ammo and 15 or more TUs - we might need to look for ammo then
+	// we have a non-melee weapon with no ammo and 15 or more TUs,
+	// we might need to look for ammo then ...
+	bool wrongAmmo = true;
+
 	BattleItem* ammo = 0;
-	bool wrong = true;
 
 	for (std::vector<BattleItem*>::iterator
 			i = getInventory()->begin();
@@ -2437,22 +2452,27 @@ bool BattleUnit::checkAmmo()
 		{
 			if (*c == ammo->getRules()->getType())
 			{
-				wrong = false;
+				wrongAmmo = false;
 
 				break;
 			}
 		}
 
-		if (!wrong) break;
+		if (!wrongAmmo)
+			break;
 	}
 
-	if (wrong)
+	if (wrongAmmo)
+	{
+		//Log(LOG_INFO) << ". return FALSE, ";
 		return false; // didn't find any compatible ammo in inventory
+	}
 
 	spendTimeUnits(15);
 	weapon->setAmmoItem(ammo);
 	ammo->moveToOwner(0);
 
+	//Log(LOG_INFO) << "BattleUnit::checkAmmo() EXIT";
 	return true;
 }
 

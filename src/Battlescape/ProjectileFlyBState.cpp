@@ -269,7 +269,7 @@ void ProjectileFlyBState::init()
 
 				return;
 			}
-			else if (weapon->getRules()->getMaxRange() > 0
+			else if (weapon->getRules()->getMaxRange() > 0 // in case -1 gets used for infinite.
 				&& _parent->getTileEngine()->distance(
 												_action.actor->getPosition(),
 												_action.target)
@@ -552,7 +552,11 @@ bool ProjectileFlyBState::createNewProjectile()
 												39)
 											->play();
 
-			_unit->addThrowingExp();
+			if (_unit->getOriginalFaction() == FACTION_PLAYER	// kL
+				&& _unit->getFaction() == FACTION_PLAYER)		// kL
+			{
+				_unit->addThrowingExp();
+			}
 		}
 		else // unable to throw here
 		{

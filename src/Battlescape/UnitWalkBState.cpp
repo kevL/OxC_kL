@@ -1112,10 +1112,10 @@ void UnitWalkBState::setNormalWalkSpeed()
  */
 void UnitWalkBState::playMovementSound()
 {
-	if ((!_unit->getVisible()
+	if (!_unit->getVisible()
 			&& !_parent->getSave()->getDebugMode())
-		|| (!_walkCam->isOnScreen(_unit->getPosition())
-			&& !_walkCam->isOnScreen(_unit->getDestination())))
+//kL		|| (!_walkCam->isOnScreen(_unit->getPosition())
+//kL			&& !_walkCam->isOnScreen(_unit->getDestination())))
 	{
 		return;
 	}

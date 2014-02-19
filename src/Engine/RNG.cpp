@@ -171,6 +171,7 @@ int generate(
 	unsigned int num = random();
 
 	return static_cast<int>(num %(max - min + 1) + min);
+//	return static_cast<int>(num) %(max - min + 1) + min; // kL
 }
 
 /**
@@ -185,17 +186,18 @@ double generate(
 {
 	double num = static_cast<double>(random());
 	return static_cast<double>(num / (static_cast<double>(UINT_MAX) / (max - min)) + min);
+//	return num / (static_cast<double>(UINT_MAX) / (max - min)) + min; // kL
 }
 
 /**
  * Normal random variate generator
- * @param m mean
- * @param s standard deviation
- * @return normally distributed value.
+ * @param mean, mean
+ * @param standardDeviation, standard deviation
+ * @return, normally distributed value.
  */
 double boxMuller(
-		double m,
-		double s)
+		double mean,
+		double standardDeviation)
 {
 	static int use_last = 0;
 	static double y2;
@@ -228,7 +230,7 @@ double boxMuller(
 		use_last = 1;
 	}
 
-	return (m + (y1 * s));
+	return (mean + (y1 * standardDeviation));
 }
 
 /**

@@ -1438,11 +1438,13 @@ void Globe::drawShadow()
 										getWidth(),
 										getHeight());
 	ShaderRepeat<Sint16> noise = ShaderRepeat<Sint16>(
-										_randomNoiseData,
-										static_data.random_surf_size,
-										static_data.random_surf_size);
+											_randomNoiseData,
+											static_data.random_surf_size,
+											static_data.random_surf_size);
 
-	earth.setMove(_cenX-getWidth()/2, _cenY-getHeight()/2);
+	earth.setMove(
+			_cenX-getWidth() / 2,
+			_cenY-getHeight() / 2);
 
 	lock();
 	ShaderDraw<CreateShadow>(

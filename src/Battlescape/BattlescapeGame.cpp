@@ -239,7 +239,7 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 
 		_AIActionCounter = 0;
 
-		Log(LOG_INFO) << "BattlescapeGame::handleAI() Pre-EXIT";
+		//Log(LOG_INFO) << "BattlescapeGame::handleAI() Pre-EXIT";
 		return;
 	}
 
@@ -307,10 +307,15 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 	// this cast only works when ai was already AlienBAIState at heart
 //	AlienBAIState* aggro = dynamic_cast<AlienBAIState*>(ai);
 
+	//Log(LOG_INFO) << ". Declare action";
 	BattleAction action;
+	//Log(LOG_INFO) << ". Define action.actor";
 	action.actor = unit;
+	//Log(LOG_INFO) << ". Define action.number";
     action.number = _AIActionCounter;
+	//Log(LOG_INFO) << ". unit->think(&action)";
 	unit->think(&action);
+	//Log(LOG_INFO) << ". _unit->think() DONE";
 
 	if (action.type == BA_RETHINK)
 	{
@@ -410,7 +415,7 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 				<< " action.Weapon = " << action.weapon->getRules()->getName().c_str();
 
 
-		Log(LOG_INFO) << ". . call ProjectileFlyBState()";
+		//Log(LOG_INFO) << ". . call ProjectileFlyBState()";
 		statePushBack(new ProjectileFlyBState(
 											this,
 											action));

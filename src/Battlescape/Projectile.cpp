@@ -47,6 +47,7 @@
 #include "../Savegame/BattleItem.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/SavedBattleGame.h"
+#include "../Savegame/SavedGame.h" // kL
 #include "../Savegame/Soldier.h"
 #include "../Savegame/Tile.h"
 
@@ -302,13 +303,21 @@ int Projectile::calculateThrow(double accuracy)
 		}
 
 		if (targetUnit)
+		{
 			targetVoxel.z += targetUnit->getHeight() / 2
 						+ targetUnit->getFloatHeight()
-						- 2;
+//kL						- 2;
+						+ 2; // kL: midriff +2 voxels
+
+			if (targetUnit->getDashing())	// kL
+				accuracy -= 0.35;			// kL
+		}
 	}
 
-	double arc = 0.0;
+
 	int ret = VOXEL_OUTOFBOUNDS;
+
+	double arc = 0.0;
 	if (_save->getTileEngine()->validateThrow(
 										_action,
 										originVoxel,
@@ -320,15 +329,8 @@ int Projectile::calculateThrow(double accuracy)
 		int test = VOXEL_OUTOFBOUNDS;
 		while (test == VOXEL_OUTOFBOUNDS)
 		{
-			Position delta = targetVoxel; // apply some accuracy modifiers
-
-			if (targetUnit						// kL
-				&& targetUnit->getDashing())	// kL
-			{
-				accuracy -= 0.35;				// kL
-			}
-
-			applyAccuracy( //calling for best flavor
+			Position delta = targetVoxel;	// will apply some accuracy modifiers
+			applyAccuracy(					// calling for best flavor
 						originVoxel,
 						&delta,
 						accuracy,
@@ -408,12 +410,12 @@ int Projectile::calculateThrow(double accuracy)
 
 /**
  * Calculates the new target in voxel space, based on the given accuracy modifier.
- * @param origin, Startposition of the trajectory in voxels.
- * @param target, Endpoint of the trajectory in voxels.
+ * @param origin, Startposition of the trajectory in voxelspace.
+ * @param target, Endpoint of the trajectory in voxelspace.
  * @param accuracy, Accuracy modifier.
  * @param keepRange, Whether range affects accuracy. Default = false.
  * @param targetTile, Tile of target. Default = 0.
- * @param extendLine, should this line get extended to maximum distance. Default = false.
+ * @param extendLine, should this line get extended to maximum distance. Default = true.
  */
 void Projectile::applyAccuracy(
 		const Position& origin,
@@ -425,6 +427,10 @@ void Projectile::applyAccuracy(
 {
 	Log(LOG_INFO) << "Projectile::applyAccuracy(), accuracy = " << accuracy;
 
+	if (_action.type == BA_HIT)	// kL
+		return;					// kL
+
+
 	int
 		delta_x = origin.x - target->x,
 		delta_y = origin.y - target->y,
@@ -434,23 +440,30 @@ void Projectile::applyAccuracy(
 							  static_cast<double>(delta_x * delta_x)
 							+ static_cast<double>(delta_y * delta_y)
 							+ static_cast<double>(delta_z * delta_z)); // kL
+	Log(LOG_INFO) << ". targetDist = " << targetDist;
 
 	// maxRange is the maximum range a projectile shall ever travel in voxel space
 //kL	double maxRange = 16000.0; // vSpace == 1000 tiles in tSpace.
+	// kL_note: This is that hypothetically infinite point in space to aim for;
+	// the closer it's set, the more accurate shots become.
 	double maxRange = 3200.0; // kL. vSpace == 200 tiles in tSpace.
 	if (keepRange)
 		maxRange = targetDist;
+//kL	if (_action.type == BA_HIT)
+//kL		maxRange = 45.0; // up to 2 tiles diagonally (as in the case of reaper vs reaper)
 
-	if (_action.type == BA_HIT)
-		maxRange = 45.0; // up to 2 tiles diagonally (as in the case of reaper vs reaper)
-	else if (_save->getSide() == FACTION_PLAYER				// kL: only for xCom heheh
+
+	RuleItem* weaponRule = _action.weapon->getRules();
+	if (_save->getSide() == FACTION_PLAYER					// kL: only for xCom heheh
 		&& Options::getBool("battleUFOExtenderAccuracy")	// kL
+		&& !weaponRule->getArcingShot()						// kL
 		&& _action.type != BA_THROW)
 	{
+		Log(LOG_INFO) << ". battleUFOExtenderAccuracy";
+
 		// kL_note: if distance is greater-than the weapon's
 		// max range, then ProjectileFlyBState won't allow the shot;
 		// so that's already been taken care of ....
-		RuleItem* weaponRule = _action.weapon->getRules();
 		int
 			lowerLimit = weaponRule->getMinRange(),
 			upperLimit = weaponRule->getAimRange();
@@ -475,12 +488,15 @@ void Projectile::applyAccuracy(
 							accuracy - modifier);
 	}
 
-	if (Options::getBool("battleRangeBasedAccuracy"))
+	if (Options::getBool("battleRangeBasedAccuracy")
+		&& !weaponRule->getArcingShot()					// kL
+		&& _action.type != BA_THROW)
 //kL		&& _action.type != BA_HIT)
-//kL		&& _action.type != BA_THROW)
 	{
-		if (_action.type == BA_HIT)
-			return;
+		Log(LOG_INFO) << ". battleRangeBasedAccuracy";
+
+//kL		if (_action.type == BA_HIT)
+//kL			return;
 
 		double acuPenalty = 0.0;
 
@@ -488,22 +504,18 @@ void Projectile::applyAccuracy(
 			&& targetTile->getUnit())
 		{
 			BattleUnit* targetUnit = targetTile->getUnit();
-
-			if (targetUnit // Shade can be from 0 to 15
-				&& targetUnit->getFaction() == FACTION_HOSTILE)
+			if (targetUnit) // Shade can be from 0 (day) to 15 (night).
 			{
-				acuPenalty = 0.017 * static_cast<double>(targetTile->getShade());
-			}
+				if (targetUnit->getFaction() == FACTION_HOSTILE)
+					acuPenalty = 0.017 * static_cast<double>(targetTile->getShade());
 
-			// If targetUnit is kneeled, then accuracy reduced by ~6%.
-			// This is a compromise, because vertical deviation is 2 times less.
-			if (targetUnit
-				&& targetUnit->isKneeled())
-			{
-				acuPenalty += 0.063;
+				// If targetUnit is kneeled, then accuracy reduced by ~6%.
+				// This is a compromise, because vertical deviation is ~2 times less.
+				if (targetUnit->isKneeled())
+					acuPenalty += 0.063;
 			}
 		}
-		else // Shade can be from 0 (day) to 15 (night).
+		else // targetting tile-stuffs.
 			acuPenalty = 0.017 * static_cast<double>(_save->getGlobalShade());
 
 		// kL_begin: modify rangedBasedAccuracy (shot-modes).
@@ -511,38 +523,36 @@ void Projectile::applyAccuracy(
 		double baseDeviation = 0.0;
 		if (_action.actor->getFaction() == FACTION_PLAYER)
 			baseDeviation = 0.1; // give the poor aLiens an aiming advantage over xCom & Mc'd units
-		double baseDivisor = accuracy - acuPenalty + 0.17;
+
 		switch (_action.type)
 		{
 			case BA_AIMEDSHOT:
-				baseDeviation += 0.17 / baseDivisor;
+				baseDeviation += 0.16;
 			break;
 			case BA_SNAPSHOT:
-				baseDeviation += 0.2 / baseDivisor;
+				baseDeviation += 0.18;
 			break;
 			case BA_AUTOSHOT:
-				baseDeviation += 0.23 / baseDivisor;
+				baseDeviation += 0.22;
 			break;
 
 			default: // throw. Or hit.
-				baseDeviation += 0.18 / baseDivisor;
+				baseDeviation += 0.2;
 			break;
-		} // kL_end.
 
-		// 0.02 is the min angle deviation for best accuracy (+-3s = 0.02 radian).
-//kL		if (baseDeviation < 0.02) baseDeviation = 0.02;
-		if (baseDeviation < 0.01)
-		{
-			Log(LOG_INFO) << ". baseDeviation low-capped @ 0.01";
-			baseDeviation = 0.01; // kL
 		}
-		else Log(LOG_INFO) << ". baseDeviation = " << baseDeviation;
+		baseDeviation /= accuracy - acuPenalty + 0.16;
+		baseDeviation = std::max(
+								0.0,
+								baseDeviation); // kL_end.
 
-		// the angle deviations are spread using a normal distribution for baseDeviation (+-3s with precision 99,7%)
+		Log(LOG_INFO) << ". baseDeviation = " << baseDeviation;
+
+
+		// The angle deviations are spread using a normal distribution:
 		double
-			dH = RNG::boxMuller(0.0, baseDeviation / 6.0), // horizontal miss in radian
-			dV = RNG::boxMuller(0.0, baseDeviation / (6.0 * 1.75)), // kL
-//kL		dV = RNG::boxMuller(0.0, baseDeviation / (6.0 * 2.0));
+			dH = RNG::boxMuller(0.0, baseDeviation / 6.0),			// horizontal miss in radians
+			dV = RNG::boxMuller(0.0, baseDeviation / (6.0 * 1.78)),	// vertical miss in radians
 
 			te = atan2(
 					static_cast<double>(target->y - origin.y),
@@ -556,7 +566,7 @@ void Projectile::applyAccuracy(
 			Log(LOG_INFO) << ". . dH = " << dH;
 			Log(LOG_INFO) << ". . dV = " << dV;
 
-		if (extendLine)
+		if (extendLine) // kL_note: This is for aimed projectiles; always true in my RangedBased here.
 		{
 			// It is a simple task - to hit a target width of 5-7 voxels. Good luck!
 			target->x = static_cast<int>(static_cast<double>(origin.x) + maxRange * cos(te) * cos_fi);
@@ -568,13 +578,20 @@ void Projectile::applyAccuracy(
 		return;
 	}
 
-	// Wb's new nonRangeBased target formula. 2013 nov 12
-	// kL_note: I've bypassed all this; beware of 'extendLine' below
-	// for BLs though... comes from calculateTrajectory() above....
-	int xDist = abs(origin.x - target->x);
-	int yDist = abs(origin.y - target->y);
-	int zDist = abs(origin.z - target->z);
-	int xyShift, zShift;
+
+	// kL_note: *** This should now be for Throwing and AcidSpitting only ***
+	Log(LOG_INFO) << ". standard accuracy, Throw & AcidSpit";
+	// Wb.131112, nonRangeBased target formula.
+	// beware of 'extendLine' below for BLs though... comes from calculateTrajectory() above....
+
+/*kL okay, so this is all just garbage:
+	int
+		xDist = abs(origin.x - target->x),
+		yDist = abs(origin.y - target->y),
+		zDist = abs(origin.z - target->z),
+
+		xyShift,
+		zShift;
 
 	if (xDist / 2 <= yDist)				// yes, we need to add some x/y non-uniformity
 		xyShift = xDist / 4 + yDist;	// and don't ask why, please. it's The Commandment
@@ -586,70 +603,86 @@ void Projectile::applyAccuracy(
 	else
 		zShift = xyShift + zDist / 2;
 
-	int deviation = RNG::generate(0, 100) - (static_cast<int>(accuracy * 100.0));
+//kL	int deviation = RNG::generate(0, 100) - (static_cast<int>(accuracy * 100.0));
 
 	if (deviation > -1)
 		deviation += 50;				// add extra spread to "miss" cloud
 	else
 		deviation += 10;				// accuracy of 109 or greater will become 1 (tightest spread)
 
-	deviation = std::max(				// range ratio
+	deviation = std::max( // range ratio
 						1,
 						zShift * deviation / 200);
 
 	target->x += RNG::generate(0, deviation) - deviation / 2;
 	target->y += RNG::generate(0, deviation) - deviation / 2;
-	target->z += RNG::generate(0, deviation / 2) / 2 - deviation / 8;
+	target->z += RNG::generate(0, deviation / 4) - deviation / 8; */
 
-	if (extendLine)
+	// kL_begin:
+	int maxThrowRule = 100;
+	Soldier* soldier = _save->getGeoscapeSave()->getSoldier(_action.actor->getId());
+	if (soldier)
 	{
+		int maxThrowRule = soldier->getRules()->getStatCaps().throwing;
+
+//		int minThrowRule = _save->getGeoscapeSave()->getSoldier(_action.actor->getId())->getRules()->getMinStats().throwing;
+		//Log(LOG_INFO) << ". . minThrowRule = " << minThrowRule;
+	}
+	//Log(LOG_INFO) << ". . maxThrowRule = " << maxThrowRule;
+
+	double deviation = static_cast<double>(maxThrowRule) - (accuracy * 100.0);
+	deviation = std::max(
+						0.0,
+						deviation * targetDist / 200);
+
+	Log(LOG_INFO) << ". . deviation = " << deviation;
+
+	double
+		dx = RNG::boxMuller(0.0, deviation),
+		dy = RNG::boxMuller(0.0, deviation),
+		dz = RNG::boxMuller(0.0, deviation);
+
+	target->x += static_cast<int>(RNG::generate(0.0, dx) - dx / 2.0);
+	target->y += static_cast<int>(RNG::generate(0.0, dy) - dy / 2.0);
+	target->z += static_cast<int>(RNG::generate(0.0, dz / 4.0) - dz / 8.0);
+	// kL_end.
+
+
+	if (extendLine) // kL_note: This is for aimed projectiles; always false outside my RangedBased above.
+	{
+/*		double maxDeviation = 2.5; // maxDeviation is the max angle deviation for accuracy 0% in degrees
+		double minDeviation = 0.4; // minDeviation is the min angle deviation for accuracy 100% in degrees
+		double dRot, dTilt;
+		double rotation, tilt;
+		double baseDeviation = (maxDeviation - (maxDeviation * accuracy)) + minDeviation;
+
+		// the angle deviations are spread using a normal distribution between 0 and baseDeviation
+		if (RNG::generate(0.0, 1.0) < accuracy) // check if we hit
+		{
+			dRot = 0.0; // we hit, so no deviation
+			dTilt = 0.0;
+		}
+		else
+		{
+			dRot = RNG::boxMuller(0.0, baseDeviation);
+			dTilt = RNG::boxMuller(0.0, baseDeviation / 2.0); // tilt deviation is halved
+		}
+		rotation += dRot; // add deviations
+		tilt += dTilt; */
+
 		double
-			rotation,
-			tilt;
-
-		rotation = atan2(
-					double(target->y - origin.y),
-					double(target->x - origin.x)) * 180.0 / M_PI;
-		tilt = atan2(
-				double(target->z - origin.z),
-				sqrt(double(target->x - origin.x) * double(target->x - origin.x)
-						+ double(target->y - origin.y) * double(target->y - origin.y)))
-					* 180.0 / M_PI;
-
-/*	// maxDeviation is the max angle deviation for accuracy 0% in degrees
-	double maxDeviation = 2.5;
-	// minDeviation is the min angle deviation for accuracy 100% in degrees
-	double minDeviation = 0.4;
-	double dRot, dTilt;
-	double rotation, tilt;
-	double baseDeviation = (maxDeviation - (maxDeviation * accuracy)) + minDeviation;
-
-	// the angle deviations are spread using a normal distribution between 0 and baseDeviation
-	// check if we hit
-	if (RNG::generate(0.0, 1.0) < accuracy)
-	{
-		// we hit, so no deviation
-		dRot = 0.0;
-		dTilt = 0.0;
-	}
-	else
-	{
-		dRot = RNG::boxMuller(0.0, baseDeviation);
-		dTilt = RNG::boxMuller(0.0, baseDeviation / 2.0); // tilt deviation is halved
-	}
-
-	rotation = atan2(static_cast<double>(target->y - origin.y), static_cast<double>(target->x - origin.x)) * 180.0 / M_PI;
-	tilt = atan2(static_cast<double>(target->z - origin.z),
-			sqrt(
-					static_cast<double>(target->x - origin.x)
-							* static_cast<double>(target->x - origin.x)
-						+ static_cast<double>(target->y - origin.y)
-							* static_cast<double>(target->y - origin.y)))
+			rotation = atan2(
+						static_cast<double>(target->y - origin.y),
+						static_cast<double>(target->x - origin.x))
+						* 180.0 / M_PI,
+			tilt = atan2(
+						static_cast<double>(target->z - origin.z),
+						sqrt(
+							static_cast<double>(target->x - origin.x)
+									* static_cast<double>(target->x - origin.x)
+								+ static_cast<double>(target->y - origin.y)
+									* static_cast<double>(target->y - origin.y)))
 						* 180.0 / M_PI;
-
-	// add deviations
-	rotation += dRot;
-	tilt += dTilt; */
 
 		// calculate new target
 		// this new target can be very far out of the map, but we don't care about that right now

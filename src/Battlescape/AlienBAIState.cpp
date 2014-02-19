@@ -242,9 +242,7 @@ void AlienBAIState::think(BattleAction* action)
 				_blaster = true;
 		}
 		else if (rule->getBattleType() == BT_MELEE)
-		{
 			_melee = true;
-		}
 		else if (rule->getBattleType() == BT_GRENADE)		// kL
 			_grenade = true;								// kL, this is no longer useful since I fixed
 															// getMainHandWeapon() to not return grenades.
@@ -270,7 +268,7 @@ void AlienBAIState::think(BattleAction* action)
 	//Log(LOG_INFO) << ". . . . setupAttack()";
 	setupAttack(); // <- crash *was* here.
 	//Log(LOG_INFO) << ". . . . setupAttack() DONE, setupPatrol()";
-	setupPatrol();
+	setupPatrol(); // <- crash *now* here!
 	//Log(LOG_INFO) << ". . . . setupPatrol() DONE";
 
 	//Log(LOG_INFO) << ". . pos 4";
@@ -412,9 +410,7 @@ void AlienBAIState::think(BattleAction* action)
 				action->number -= 1;
 			}
 			else if (action->type == BA_LAUNCH)
-			{
 				action->waypoints = _attackAction->waypoints;
-			}
 		break;
 		case AI_AMBUSH:
 			//Log(LOG_INFO) << ". . . . AI_AMBUSH";
@@ -438,9 +434,7 @@ void AlienBAIState::think(BattleAction* action)
 			_ambushTUs = 0;
 		}
 		else
-		{
 			action->type = BA_NONE;
-		}
 	}
 
 	//Log(LOG_INFO) << "AlienBAIState::think() EXIT";
@@ -465,21 +459,20 @@ bool AlienBAIState::getWasHit() const
 
 /**
  * Sets up a patrol action.
- * this is mainly going from node to node, moving about the map.
- * handles node selection, and fills out the _patrolAction with useful data.
+ * This is mainly going from node to node, moving about the map.
+ * Handles node selection, and fills out the _patrolAction with useful data.
  */
 void AlienBAIState::setupPatrol()
 {
+	Log(LOG_INFO) << "AlienBAIState::setupPatrol()";
+
 	Node* node;
 	_patrolAction->TU = 0;
 
 	if (_toNode != 0
 		&& _unit->getPosition() == _toNode->getPosition())
 	{
-		if (_traceAI)
-		{
-			Log(LOG_INFO) << "Patrol destination reached!";
-		}
+		if (_traceAI) Log(LOG_INFO) << "Patrol destination reached!";
 
 		// destination reached; head off to next patrol node
 		_fromNode = _toNode;
@@ -494,9 +487,7 @@ void AlienBAIState::setupPatrol()
 			_unit->lookAt(dir);
 
 			while (_unit->getStatus() == STATUS_TURNING)
-			{
 				_unit->turn();
-			}
 		}
 	}
 
@@ -552,9 +543,7 @@ void AlienBAIState::setupPatrol()
 				scout = true;
 			}
 			else
-			{
 				scout = false;
-			}
 		}
 
 		// in base defense missions, the non-large aliens walk towards
@@ -612,7 +601,9 @@ void AlienBAIState::setupPatrol()
 						&& !(*i)->isAllocated())
 					{
 						node = *i;
-						int d = _save->getTileEngine()->distanceSq(_unit->getPosition(), node->getPosition());
+						int d = _save->getTileEngine()->distanceSq(
+																_unit->getPosition(),
+																node->getPosition());
 						if (!_toNode
 							|| (d < closest
 								&& node != _fromNode))
@@ -627,12 +618,14 @@ void AlienBAIState::setupPatrol()
 
 		if (_toNode == 0)
 		{
+			Log(LOG_INFO) << ". _toNode == 0 a -> getPatrolNode(scout)";
 			_toNode = _save->getPatrolNode(
 										scout,
 										_unit,
 										_fromNode);
 			if (_toNode == 0)
 			{
+				Log(LOG_INFO) << ". _toNode == 0 b -> getPatrolNode(!scout)";
 				_toNode = _save->getPatrolNode(
 											!scout,
 											_unit,
@@ -642,12 +635,12 @@ void AlienBAIState::setupPatrol()
 
 		if (_toNode != 0)
 		{
-			_save->getPathfinding()->calculate(_unit, _toNode->getPosition());
+			_save->getPathfinding()->calculate(
+											_unit,
+											_toNode->getPosition());
 
 			if (_save->getPathfinding()->getStartDirection() == -1)
-			{
 				_toNode = 0;
-			}
 
 			_save->getPathfinding()->abortPath();
 		}
@@ -662,9 +655,9 @@ void AlienBAIState::setupPatrol()
 		_patrolAction->target = _toNode->getPosition();
 	}
 	else
-	{
 		_patrolAction->type = BA_RETHINK;
-	}
+
+	Log(LOG_INFO) << "AlienBAIState::setupPatrol() EXIT";
 }
 
 /**
