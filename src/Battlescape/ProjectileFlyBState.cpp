@@ -583,11 +583,16 @@ bool ProjectileFlyBState::createNewProjectile()
 		if (_projectileImpact != VOXEL_EMPTY
 			 && _projectileImpact != VOXEL_OUTOFBOUNDS)
 		{
-			_unit->aim(true); // set the soldier in an aiming position
-			_parent->getMap()->cacheUnit(_unit);
+//kL			_unit->aim(true); // set the soldier in an aiming position
+//kL			_parent->getMap()->cacheUnit(_unit);
 
 			// and we have a lift-off
-			if (_action.weapon->getRules()->getFireSound() != -1)
+			if (_ammo->getRules()->getFireSound() != -1)
+				_parent->getResourcePack()->getSound(
+												"BATTLE.CAT",
+												_ammo->getRules()->getFireSound())
+											->play();
+			else if (_action.weapon->getRules()->getFireSound() != -1)
 				_parent->getResourcePack()->getSound(
 												"BATTLE.CAT",
 												_action.weapon->getRules()->getFireSound())
@@ -667,7 +672,12 @@ bool ProjectileFlyBState::createNewProjectile()
 			_parent->getMap()->cacheUnit(_unit);
 
 			// and we have a lift-off
-			if (_action.weapon->getRules()->getFireSound() != -1)
+			if (_ammo->getRules()->getFireSound() != -1)
+				_parent->getResourcePack()->getSound(
+												"BATTLE.CAT",
+												_ammo->getRules()->getFireSound())
+											->play();
+			else if (_action.weapon->getRules()->getFireSound() != -1)
 				_parent->getResourcePack()->getSound(
 												"BATTLE.CAT",
 												_action.weapon->getRules()->getFireSound())
