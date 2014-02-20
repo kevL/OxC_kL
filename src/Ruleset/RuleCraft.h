@@ -69,6 +69,7 @@ private:
 
 	RuleTerrain* _battlescapeTerrainData;
 
+	std::vector<std::vector<int> > _deployment;
 	std::vector<std::string> _requires;
 
 
@@ -140,6 +141,9 @@ private:
 
 		/// Gets the list weight for this craft.
 		int getListOrder() const;
+
+		/// Gets the deployment priority for the craft.
+		std::vector<std::vector<int> >& getDeployment();
 };
 
 }

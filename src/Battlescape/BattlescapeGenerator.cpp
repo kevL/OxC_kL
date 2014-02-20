@@ -100,6 +100,8 @@ BattlescapeGenerator::BattlescapeGenerator(Game* game)
 		_craftInventoryTile(0),
 		_alienRace(""),
 		_alienItemLevel(0),
+		_craftX(0),
+		_craftY(0),
 		_tankPos(0) // kL
 {
 	//Log(LOG_INFO) << "Create BattlescapeGenerator";
@@ -860,6 +862,33 @@ BattleUnit* BattlescapeGenerator::addXCOMUnit(BattleUnit* unit)
 			}
 		}
 	}
+	else if (_craft
+		&& !_craft->getRules()->getDeployment().empty())
+	{
+		for (std::vector<std::vector<int> >::const_iterator
+				i = _craft->getRules()->getDeployment().begin();
+				i != _craft->getRules()->getDeployment().end();
+				++i)
+		{
+			Position pos = Position(
+								(*i)[0] + (_craftX * 10),
+								(*i)[1] + (_craftY * 10),
+								(*i)[2]);
+			int dir = (*i)[3];
+
+			if (canPlaceXCOMUnit(_save->getTile(pos)))
+			{
+				if (_save->setUnitPosition(unit, pos))
+				{
+					_save->getUnits()->push_back(unit);
+					unit->setDirection(dir);
+					unit->deriveRank();
+
+					return unit;
+				}
+			}
+		}
+	}
 	else // kL_note: mission w/ transport craft
 	{
 		_tankPos = 0;
@@ -869,7 +898,7 @@ BattleUnit* BattlescapeGenerator::addXCOMUnit(BattleUnit* unit)
 				i < _mapsize_x * _mapsize_y * _mapsize_z;
 				i++)
 		{
-			// to spawn an xcom soldier, there has to be a tile, with a floor,
+/*Wb.140220			// to spawn an xcom soldier, there has to be a tile, with a floor,
 			// with the starting point attribute and no content-tileObject in the way
 			if (_save->getTiles()[i]																		// is a tile
 				&& _save->getTiles()[i]->getMapData(MapData::O_FLOOR)										// has a floor
@@ -882,11 +911,11 @@ BattleUnit* BattlescapeGenerator::addXCOMUnit(BattleUnit* unit)
 				if (_craftInventoryTile == 0)
 				{
 					_craftInventoryTile = _save->getTiles()[i];
-				}
+				} */
 
 				// for bigger units, line them up with the first tile of the craft
 				// kL_note: try the fifth tile...
-/*				if (unit->getArmor()->getSize() == 1													// is not a tank
+/*kL				if (unit->getArmor()->getSize() == 1													// is not a tank
 					|| _craftInventoryTile == 0															// or no ground-inv. has been set
 					|| _save->getTiles()[i]->getPosition().x == _craftInventoryTile->getPosition().x)	// or the ground-inv. is on x-axis
 				{
@@ -905,7 +934,7 @@ BattleUnit* BattlescapeGenerator::addXCOMUnit(BattleUnit* unit)
 					}
 				} */
 				// kL_begin: BattlescapeGenerator, set tankPosition
-				if (unit->getArmor()->getSize() > 1
+/*				if (unit->getArmor()->getSize() > 1
 					&& _save->getTiles()[i]->getPosition().x == _craftInventoryTile->getPosition().x)
 				{
 					_tankPos++;
@@ -942,6 +971,47 @@ BattleUnit* BattlescapeGenerator::addXCOMUnit(BattleUnit* unit)
 //kL	delete unit;
 
 	return 0;
+} */
+			if (canPlaceXCOMUnit(_save->getTiles()[i]))
+			{
+				if (_save->setUnitPosition(
+										unit,
+										_save->getTiles()[i]->getPosition()))
+				{
+					_save->getUnits()->push_back(unit);
+					unit->deriveRank();
+
+					return unit;
+				}
+			}
+		}
+	}
+
+	delete unit;
+
+	return 0;
+}
+
+/**
+ * Checks if a soldier/tank can be placed on a given tile.
+ * @param tile the given tile.
+ * @return whether the unit can be placed here.
+ */
+bool BattlescapeGenerator::canPlaceXCOMUnit(Tile* tile)
+{
+	// to spawn an xcom soldier, there has to be a tile, with a floor, with the starting point attribute and no object in the way
+	if (tile && 
+		tile->getMapData(MapData::O_FLOOR) && 
+		tile->getMapData(MapData::O_FLOOR)->getSpecialType() == START_POINT && 
+		!tile->getMapData(MapData::O_OBJECT) &&
+		tile->getMapData(MapData::O_FLOOR)->getTUCost(MT_WALK) < 255)
+	{
+		if (_craftInventoryTile == 0)
+			_craftInventoryTile = tile;
+
+		return true;
+	}
+	return false;
 }
 
 /**
@@ -1723,8 +1793,6 @@ void BattlescapeGenerator::generateMap()
 		x = 0,
 		y = 0,
 		blocksToDo = 0,
-		craftX = 0,
-		craftY = 0,
 		ufoX = 0,
 		ufoY = 0,
 		mapDataSetIDOffset = 0,
@@ -1800,8 +1868,8 @@ void BattlescapeGenerator::generateMap()
 
 		while (!placed)
 		{
-			craftX = RNG::generate(0, (_mapsize_x / 10) - (craftMap->getSizeX() / 10));
-			craftY = RNG::generate(0, (_mapsize_y / 10) - (craftMap->getSizeY() / 10));
+			_craftX = RNG::generate(0, (_mapsize_x / 10) - (craftMap->getSizeX() / 10));
+			_craftY = RNG::generate(0, (_mapsize_y / 10) - (craftMap->getSizeY() / 10));
 
 			placed = true;
 
@@ -1815,7 +1883,7 @@ void BattlescapeGenerator::generateMap()
 						j < craftMap->getSizeY() / 10;
 						++j)
 				{
-					if (landingzone[craftX + i][craftY + j])
+					if (landingzone[_craftX + i][_craftY + j])
 					{
 						placed = false; // whoops the ufo is already here, try again
 					}
@@ -1834,8 +1902,8 @@ void BattlescapeGenerator::generateMap()
 							j < craftMap->getSizeY() / 10;
 							++j)
 					{
-						landingzone[craftX + i][craftY + j] = true;
-						blocks[craftX + i][craftY + j] = _terrain->getRandomMapBlock(10, MT_LANDINGZONE);
+						landingzone[_craftX + i][_craftY + j] = true;
+						blocks[_craftX + i][_craftY + j] = _terrain->getRandomMapBlock(10, MT_LANDINGZONE);
 
 						blocksToDo--;
 					}
@@ -1854,12 +1922,13 @@ void BattlescapeGenerator::generateMap()
 		bool twoRoads = !EWRoad && !NSRoad;
 
 		// make sure the road(s) are not crossing the craft landing site
-		int roadX = craftX;
-		int roadY = craftY;
-		while ((roadX >= craftX
-				&& roadX < craftX + (craftMap->getSizeX() / 10))
-			|| (roadY >= craftY
-				&& roadY < craftY + (craftMap->getSizeY() / 10)))
+		int
+			roadX = _craftX,
+			roadY = _craftY;
+		while ((roadX >= _craftX
+				&& roadX < _craftX + (craftMap->getSizeX() / 10))
+			|| (roadY >= _craftY
+				&& roadY < _craftY + (craftMap->getSizeY() / 10)))
 		{
 			roadX = RNG::generate(0, (_mapsize_x / 10) - 1);
 			roadY = RNG::generate(0, (_mapsize_y / 10) - 1);
@@ -2435,15 +2504,15 @@ void BattlescapeGenerator::generateMap()
 
 		loadMAP(
 			craftMap,
-			craftX * 10,
-			craftY * 10,
+			_craftX * 10,
+			_craftY * 10,
 			_craft->getRules()->getBattlescapeTerrainData(),
 			mapDataSetIDOffset + craftDataSetIDOffset,
 			true);
 		loadRMP(
 			craftMap,
-			craftX * 10,
-			craftY * 10,
+			_craftX * 10,
+			_craftY * 10,
 			Node::CRAFTSEGMENT);
 
 		for (int
@@ -2456,7 +2525,7 @@ void BattlescapeGenerator::generateMap()
 					j < craftMap->getSizeY() / 10;
 					j++)
 			{
-				segments[craftX + i][craftY + j] = Node::CRAFTSEGMENT;
+				segments[_craftX + i][_craftY + j] = Node::CRAFTSEGMENT;
 			}
 		}
 	}

@@ -109,6 +109,9 @@ void RuleCraft::load(
 
 		rule->load(terrain, ruleset);
 		_battlescapeTerrainData = rule;
+
+		if (const YAML::Node& deployment = node["deployment"])
+			_deployment = deployment.as<std::vector<std::vector<int> > >(_deployment);
 	}
 
 	_spacecraft	= node["spacecraft"].as<bool>(_spacecraft);
@@ -318,6 +321,15 @@ bool RuleCraft::getSpacecraft() const
 int RuleCraft::getListOrder() const
 {
 	 return _listOrder;
+}
+
+/**
+ * Gets the deployment layout for this craft.
+ * @return The deployment layout.
+ */
+std::vector<std::vector<int> >& RuleCraft::getDeployment()
+{
+	return _deployment;
 }
 
 }

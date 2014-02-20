@@ -56,6 +56,8 @@ private:
 	bool _allowAutoLoadout;
 	int
 		_alienItemLevel,
+		_craftX,
+		_craftY,
 		_mapsize_x,
 		_mapsize_y,
 		_mapsize_z,
@@ -102,6 +104,8 @@ private:
 
 	/// Deploys the XCOM units on the mission.
 	void deployXCOM();
+	/// Runs necessary checks before physically setting the position.
+	bool canPlaceXCOMUnit(Tile* tile);
 	/// Adds a vehicle to the game.
 	BattleUnit* addXCOMVehicle(Vehicle* tank);
 	/// Adds a soldier to the game.
