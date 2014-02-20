@@ -143,7 +143,7 @@ private:
 	/// Shifts the red colors of the visible unit buttons backgrounds.
 	void blinkVisibleUnitButtons();
 	/// kL. Draws the kneel indicator.
-	void drawKneelIndicator();
+	void drawKneelIndicator(); // kL
 
 
 	public:

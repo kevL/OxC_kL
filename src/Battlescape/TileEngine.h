@@ -89,6 +89,9 @@ private:
 		void calculateTerrainLighting();
 		/// Recalculates lighting of the battlescape for units.
 		void calculateUnitLighting();
+		/// Turn XCom soldier's personal lighting on or off.
+		void togglePersonalLighting();
+
 
 		/// Calculates the field of view from a units view point.
 		bool calculateFOV(BattleUnit* unit);
@@ -97,19 +100,37 @@ private:
 		/// Recalculates FOV of all units in-game.
 		void recalculateFOV();
 
-		/// Gets the origin voxel of a unit's eyesight.
-		Position getSightOriginVoxel(BattleUnit* currentUnit);
 		/// Checks visibility of a unit on this tile.
 		bool visible(
 				BattleUnit* currentUnit,
 				Tile* tile);
-		/// Creates a vector of units that can spot this unit.
+		/// Gets the origin voxel of a unit's eyesight.
+		Position getSightOriginVoxel(BattleUnit* currentUnit);
+		/// Checks a unit's % exposure on a tile.
+//kL		int checkVoxelExposure(Position* originVoxel, Tile* tile, BattleUnit* excludeUnit, BattleUnit* excludeAllBut);
+		/// Checks validity for targetting a unit.
+		bool canTargetUnit(
+				Position* originVoxel,
+				Tile* tile,
+				Position* scanVoxel,
+				BattleUnit* excludeUnit,
+				BattleUnit* potentialUnit = 0);
+		/// Check validity for targetting a tile.
+		bool canTargetTile(Position* originVoxel,
+				Tile* tile,
+				int part,
+				Position* scanVoxel,
+				BattleUnit* excludeUnit);
 
-		std::vector<BattleUnit*> getSpottingUnits(BattleUnit* unit);
-		/// Checks validity of a snap shot to this position.
-		bool canMakeSnap(BattleUnit* unit, BattleUnit* target);
+
 		/// Checks reaction fire.
 		bool checkReactionFire(BattleUnit* unit);
+		/// Creates a vector of units that can spot this unit.
+		std::vector<BattleUnit*> getSpottingUnits(BattleUnit* unit);
+		/// Checks validity of a snap shot to this position.
+		bool canMakeSnap(
+				BattleUnit* unit,
+				BattleUnit* target);
 		/// Given a vector of spotters, and a unit, picks the spotter with the highest reaction score.
 		BattleUnit* getReactor(
 				std::vector<BattleUnit*> spotters,
@@ -118,6 +139,13 @@ private:
 		bool tryReactionSnap(
 				BattleUnit* unit,
 				BattleUnit* target);
+		/// kL. Tests for a fire method based on range & time units.
+		bool testFireMethod(
+				BattleUnit* unit,
+				BattleUnit* target,
+				BattleItem* weapon); // kL
+		/// kL. Selects a fire method based on range & time units.
+		BattleActionType selectFireMethod(BattleAction action); // kL
 
 		/// Handles bullet/weapon hits.
 		BattleUnit* hit(
@@ -147,6 +175,7 @@ private:
 				Tile* startTile,
 				Tile* endTile,
 				ItemDamageType type);
+
 		/// Unit opens door?
 		int unitOpensDoor(
 				BattleUnit* unit,
@@ -187,8 +216,6 @@ private:
 				double* curve = 0,
 				int* voxelType = 0);
 
-		/// Turn XCom soldier's personal lighting on or off.
-		void togglePersonalLighting();
 		/// Checks the distance between two positions.
 		int distance(
 				const Position& pos1,
@@ -198,10 +225,13 @@ private:
 				const Position& pos1,
 				const Position& pos2,
 				bool considerZ = true) const;
+
 		/// Attempts a panic or mind control action.
 		bool psiAttack(BattleAction* action);
+
 		/// Applies gravity to anything that occupy this tile.
 		Tile* applyGravity(Tile* t);
+
 		/// Returns melee validity between two units.
 		bool validMeleeRange(
 				BattleUnit* attacker,
@@ -214,25 +244,13 @@ private:
 				BattleUnit* attacker,
 				BattleUnit* target,
 				Position* dest);
+
 		/// Gets the AI to look through a window.
 		int faceWindow(const Position& position);
-		/// Checks a unit's % exposure on a tile.
-//kL		int checkVoxelExposure(Position* originVoxel, Tile* tile, BattleUnit* excludeUnit, BattleUnit* excludeAllBut);
-		/// Checks validity for targetting a unit.
-		bool canTargetUnit(
-				Position* originVoxel,
-				Tile* tile,
-				Position* scanVoxel,
-				BattleUnit* excludeUnit,
-				BattleUnit* potentialUnit = 0);
-		/// Check validity for targetting a tile.
-		bool canTargetTile(Position* originVoxel,
-				Tile* tile,
-				int part,
-				Position* scanVoxel,
-				BattleUnit* excludeUnit);
+
 		/// Calculates the z voxel for shadows.
 		int castedShade(const Position& voxel);
+
 		/// Checks the visibility of a given voxel.
 		bool isVoxelVisible(const Position& voxel);
 		/// Checks what type of voxel occupies pTarget_voxel space.
@@ -243,14 +261,17 @@ private:
 				bool onlyVisible = false,
 				BattleUnit* excludeAllBut = 0,
 				bool hit = false); // kL add.
+
 		/// Get direction to a target-point
 		int getDirectionTo(
 				const Position& origin,
 				const Position& target) const;
+
 		/// determine the origin voxel of a given action.
 		Position getOriginVoxel(
 				BattleAction& action,
 				Tile* tile);
+
 		/// mark a region of the map as "dangerous" for a turn.
 		void setDangerZone(
 				Position pos,

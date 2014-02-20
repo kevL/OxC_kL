@@ -583,7 +583,7 @@ bool ProjectileFlyBState::createNewProjectile()
 		if (_projectileImpact != VOXEL_EMPTY
 			 && _projectileImpact != VOXEL_OUTOFBOUNDS)
 		{
-//kL			_unit->aim(true); // set the soldier in an aiming position
+//kL			_unit->aim(true); // set the celatid in an aiming position <- yeah right. not.
 //kL			_parent->getMap()->cacheUnit(_unit);
 
 			// and we have a lift-off
@@ -743,16 +743,20 @@ void ProjectileFlyBState::think()
 			if (_action.cameraPosition.z != -1)
 				_parent->getMap()->getCamera()->setMapOffset(_action.cameraPosition);
 
-			if (_action.type != BA_PANIC
+			if (_action.actor->getFaction() == _parent->getSave()->getSide() // kL
+				&& _action.type != BA_PANIC
 				&& _action.type != BA_MINDCONTROL
 				&& !_parent->getSave()->getUnitsFalling())
 			{
+				//Log(LOG_INFO) << "ProjectileFlyBState::think(), checkReactionFire()"
+					//<< " ID " << _action.actor->getId()
+					//<< " type = " << _action.type
+					//<< " tu = " << _action.TU;
 				_parent->getTileEngine()->checkReactionFire(_unit);
 			}
 
 			if (!_action.actor->isOut())
-//kL				_unit->abortTurn();
-				_unit->setStatus(STATUS_STANDING); // kL
+				_unit->setStatus(STATUS_STANDING);
 
 			_parent->popState();
 		}

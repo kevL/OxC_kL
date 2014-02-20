@@ -1840,7 +1840,7 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 /**
  * kL. Draws the kneel indicator.
  */
- void BattlescapeState::drawKneelIndicator()
+ void BattlescapeState::drawKneelIndicator() // kL
  {
 	SDL_Rect square;
 	square.x = 0;

@@ -1510,7 +1510,7 @@ int BattleUnit::getActionTUs(
 
 	switch (actionType)
 	{
-		case BA_PRIME:
+		case BA_PRIME: // kL_note: Should put "tuPrime" yaml-entry in Xcom1Ruleset, under various grenade-types.
 //kL			cost = 50; // maybe this should go in the ruleset
 			cost = 45; // kL
 		break;

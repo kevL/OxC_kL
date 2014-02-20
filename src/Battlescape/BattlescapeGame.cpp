@@ -1301,14 +1301,30 @@ void BattlescapeGame::popState()
 		{
 			//Log(LOG_INFO) << ". actor -> Faction_Player";
 
-			// spend TUs of "target triggered actions" (shooting, throwing) only
-			// the other actions' TUs (healing,scanning,..) are already take care of
+			// spend TUs of "target triggered actions" (shooting, throwing) only;
+			// the other actions' TUs (healing,scanning,..) are already take care of.
+			// kL_note: But let's do this **before** checkReactionFire(), so aLiens
+			// get a chance .....! Odd thing is, though, that throwing triggers
+			// RF properly while shooting doesn't .... So, I'm going to move this
+			// to primaryAction() anyways. see what happens and what don't
+			//
+			// Note: psi-attack, mind-probe uses this also, I think.
+			// BUT, in primaryAction() below, mind-probe expends TU there, while
+			// psi-attack merely checks for TU there, and shooting/throwing
+			// didn't even Care about TU there until I put it in there, and took
+			// it out here in order to get Reactions vs. shooting to work correctly
+			// (throwing already did work to trigger reactions, somehow).
 			if (action.targeting
 				&& _save->getSelectedUnit()
 				&& !actionFailed)
 			{
 				action.actor->spendTimeUnits(action.TU);
+					// kL_query: Does this happen **before** ReactionFire/getReactor()?
+					// no. not for shooting, but for throwing it does
+					//
+					// wtf, now RF works fine.
 			}
+
 
 			if (_save->getSide() == FACTION_PLAYER)
 			{
@@ -1650,8 +1666,11 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* unit)
 {
 	UnitStatus status = unit->getStatus();
 
-	if (status != STATUS_PANICKING && status != STATUS_BERSERK)
+	if (status != STATUS_PANICKING
+		&& status != STATUS_BERSERK)
+	{
 		return false;
+	}
 
 	//Log(LOG_INFO) << "unit Panic/Berserk : " << unit->getId() << " / " << unit->getMorale();
 
@@ -1662,19 +1681,15 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* unit)
 	// show a little infobox with the name of the unit and "... is panicking"
 	Game* game = _parentState->getGame();
 	if (status == STATUS_PANICKING)
-	{
 		game->pushState(new InfoboxState(
 										game,
 										game->getLanguage()->getString("STR_HAS_PANICKED", unit->getGender())
 																	.arg(unit->getName(game->getLanguage()))));
-	}
 	else
-	{
 		game->pushState(new InfoboxState(
 										game,
 										game->getLanguage()->getString("STR_HAS_GONE_BERSERK", unit->getGender())
 																	.arg(unit->getName(game->getLanguage()))));
-	}
 
 //kL	unit->abortTurn(); // makes the unit go to status STANDING :p
 	unit->setStatus(STATUS_STANDING); // kL :P
@@ -1707,9 +1722,9 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* unit)
 				unit->setCache(0);
 
 				ba.target = Position(
-						unit->getPosition().x + RNG::generate(-5, 5),
-						unit->getPosition().y + RNG::generate(-5, 5),
-						unit->getPosition().z);
+								unit->getPosition().x + RNG::generate(-5, 5),
+								unit->getPosition().y + RNG::generate(-5, 5),
+								unit->getPosition().z);
 				if (_save->getTile(ba.target)) // only walk towards it when the place exists
 				{
 					_save->getPathfinding()->calculate(
@@ -1883,13 +1898,22 @@ bool BattlescapeGame::isBusy()
  */
 void BattlescapeGame::primaryAction(const Position& pos)
 {
-/*	std::string sUnit = "none selected";			// kL
-	if (_save->getSelectedUnit())					// kL
-	{
-		sUnit = _save->getSelectedUnit()->getId();	// kL
-	} */
-
 	Log(LOG_INFO) << "BattlescapeGame::primaryAction()"; // unitID = " << _currentAction.actor->getId();
+	// kL_debug:
+//	std::string sUnit = "none selected";
+	int iUnit = 0;
+	if (_save->getSelectedUnit())
+	{
+		iUnit = _save->getSelectedUnit()->getId();
+		Log(LOG_INFO) << ". selectedUnit " << iUnit;
+	}
+	else if (_currentAction.actor)
+	{
+		Log(LOG_INFO) << ". action.Actor " << iUnit;
+		iUnit = _currentAction.actor->getId();
+	} // kL_end.
+	Log(LOG_INFO) << ". action.TU = " << _currentAction.TU;
+
 
 	bool bPreviewed = Options::getInt("battleNewPreviewPath") > 0;
 
@@ -1899,7 +1923,7 @@ void BattlescapeGame::primaryAction(const Position& pos)
 		//Log(LOG_INFO) << ". . _currentAction.targeting";
 		_currentAction.strafe = false; // kL
 
-		if (_currentAction.type == BA_LAUNCH)
+		if (_currentAction.type == BA_LAUNCH) // click to set BL waypoints.
 		{
 			//Log(LOG_INFO) << ". . . . BA_LAUNCH";
 			_parentState->showLaunchButton(true);
@@ -1910,15 +1934,16 @@ void BattlescapeGame::primaryAction(const Position& pos)
 		else if (_currentAction.type == BA_USE
 			&& _currentAction.weapon->getRules()->getBattleType() == BT_MINDPROBE)
 		{
-			//Log(LOG_INFO) << ". . . . BA_USE -> BT_MINDPROBE";
+			Log(LOG_INFO) << ". . . . BA_USE -> BT_MINDPROBE";
 			if (_save->selectUnit(pos)
 				&& _save->selectUnit(pos)->getFaction() != _save->getSelectedUnit()->getFaction())
 			{
-				if (_currentAction.actor->spendTimeUnits(_currentAction.TU))
+				if (_currentAction.actor->spendTimeUnits(_currentAction.TU)) // kL_note: Should this be getActionTUs() to account for flatRates?
 				{
 					_parentState->getGame()->getResourcePack()->getSound(
 																	"BATTLE.CAT",
-																	_currentAction.weapon->getRules()->getHitSound())->play();
+																	_currentAction.weapon->getRules()->getHitSound())
+																->play();
 					_parentState->getGame()->pushState(new UnitInfoState(
 																	_parentState->getGame(),
 																	_save->selectUnit(pos),
@@ -1927,6 +1952,7 @@ void BattlescapeGame::primaryAction(const Position& pos)
 																	true));
 
 					cancelCurrentAction();
+					// kL_note: where is updateSoldierInfo() - is that done when unitInfoState is dismissed?
 				}
 				else
 				{
@@ -1938,7 +1964,7 @@ void BattlescapeGame::primaryAction(const Position& pos)
 		else if (_currentAction.type == BA_PANIC
 			|| _currentAction.type == BA_MINDCONTROL)
 		{
-			//Log(LOG_INFO) << ". . . . BA_PANIC or BA_MINDCONTROL";
+			Log(LOG_INFO) << ". . . . BA_PANIC or BA_MINDCONTROL";
 			if (_save->selectUnit(pos)
 				&& _save->selectUnit(pos)->getFaction() != _save->getSelectedUnit()->getFaction()
 				&& _save->selectUnit(pos)->getVisible())
@@ -1951,9 +1977,11 @@ void BattlescapeGame::primaryAction(const Position& pos)
 													_save->getCurrentItemId());
 				}
 
-				_currentAction.TU = _currentAction.weapon->getRules()->getTUUse();
+//kL				_currentAction.TU = _currentAction.weapon->getRules()->getTUUse();
+				_currentAction.TU = _currentAction.actor->getActionTUs( // kL (in case PsiAmp is not set to flatRate)
+																	BA_USE, // or, _currentAction.type
+																	_currentAction.weapon);
 				_currentAction.target = pos;
-
 				// get the sound/animation started
 				_currentAction.cameraPosition = getMap()->getCamera()->getMapOffset();
 
@@ -1962,7 +1990,16 @@ void BattlescapeGame::primaryAction(const Position& pos)
 													this,
 													_currentAction));
 
-				if (_currentAction.TU <= _currentAction.actor->getTimeUnits())
+/*				if (_currentAction.actor->spendTimeUnits(_currentAction.TU)) // kL
+				{
+					_currentAction.TU = 0;	// kL. This is drastic....! it obviates checks done in ProjectileFlyBState.
+											// But it Fucking worked. which means ProjectileFlyBState could likely be pruned;
+											// and I still don't have a Fucking clue why throwing triggers reaction fire, otherwise
+											// while shooting does not. Ie. I don't know where else to look for Tu-expenditure for
+											// those (and likely other) actions (like Psi) other than popState() above.
+											// In a word, this code was written by chimpanzees on typewriters!!!!!
+*/
+				if (_currentAction.TU <= _currentAction.actor->getTimeUnits()) // kL_note: WAIT, check this *before* all the stuff above!!!
 				{
 					if (getTileEngine()->psiAttack(&_currentAction))
 					{
@@ -1981,7 +2018,8 @@ void BattlescapeGame::primaryAction(const Position& pos)
 															game->getLanguage()->getString("STR_MIND_CONTROL_SUCCESSFUL")));
 
 						//Log(LOG_INFO) << ". . . . . . updateSoldierInfo()";
-						_parentState->updateSoldierInfo();
+//kL						_parentState->updateSoldierInfo();
+						_parentState->updateSoldierInfo(false); // kL
 						//Log(LOG_INFO) << ". . . . . . updateSoldierInfo() DONE";
 
 
@@ -2016,24 +2054,45 @@ void BattlescapeGame::primaryAction(const Position& pos)
 						_currentAction.weapon = 0;
 					}
 				}
+				// else give an Out-of-TU warning or something... or is that done elsewhere
+				// in which case don't check for TUs here!
 			}
 		}
 		else
 		{
-			//Log(LOG_INFO) << ". . . . Firing or Throwing";
-			getMap()->setCursorType(CT_NONE);
-			_parentState->getGame()->getCursor()->setVisible(false);
+			Log(LOG_INFO) << ". . . . Firing or Throwing";
 
-			_currentAction.target = pos;
-			_currentAction.cameraPosition = getMap()->getCamera()->getMapOffset();
+/*			_currentAction.TU = _currentAction.actor->getActionTUs( // kL, or is action.TU already passed in correctly, using getActionTUs() to account for flatRates?
+															_currentAction.type,
+															_currentAction.weapon);
+			if (_currentAction.actor->spendTimeUnits(_currentAction.TU)) // kL
+			{
+				_currentAction.TU = 0;	// kL. This is drastic....! it obviates checks done in ProjectileFlyBState.
+										// But it Fucking worked. which means ProjectileFlyBState could likely be pruned;
+										// and I still don't have a Fucking clue why throwing triggers reaction fire, otherwise
+										// while shooting does not. Ie. I don't know where else to look for Tu-expenditure for
+										// those (and likely other) actions (like Psi) other than popState() above.
+										// In a word, this code was written by chimpanzees on typewriters!!!!!
+										//
+										// uhh, what if the soldier, etc, has to do a swivel/turn as well...... +1 tu
+*/
+				getMap()->setCursorType(CT_NONE);
+				_parentState->getGame()->getCursor()->setVisible(false);
 
-			_states.push_back(new ProjectileFlyBState(
-													this,
-													_currentAction));
+				_currentAction.target = pos;
+				_currentAction.cameraPosition = getMap()->getCamera()->getMapOffset();
 
-			statePushFront(new UnitTurnBState( // first of all turn towards the target
-											this,
-											_currentAction));
+				_states.push_back(new ProjectileFlyBState(
+														this,
+														_currentAction));
+
+				statePushFront(new UnitTurnBState( // first of all turn towards the target
+												this,
+												_currentAction));
+//			}
+			// kL_note: else give message Out-of-TUs, or this must be done elsewhere already...
+			// probably in ProjectileFlyBState... great. not.
+			// I imagine updateSoldierInfo() is done somewhere down the line....... It's done at the end of popState()
 		}
 	}
 	else

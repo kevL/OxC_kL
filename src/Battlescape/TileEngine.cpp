@@ -241,6 +241,15 @@ void TileEngine::calculateUnitLighting()
 }
 
 /**
+ * Toggles personal lighting on / off.
+ */
+void TileEngine::togglePersonalLighting()
+{
+	_personalLighting = !_personalLighting;
+	calculateUnitLighting();
+}
+
+/**
  * Adds circular light pattern starting from voxelTarget and losing power with distance travelled.
  * @param voxelTarget, Center.
  * @param power, Power.
@@ -645,50 +654,6 @@ void TileEngine::recalculateFOV()
 }
 
 /**
- * Gets the origin voxel of a unit's LoS.
- * @param currentUnit, The watcher.
- * @return, Approximately an eyeball voxel.
- */
-Position TileEngine::getSightOriginVoxel(BattleUnit* currentUnit)
-{
-	// determine the origin (and target) voxels for calculations
-	Position originVoxel = Position(
-								currentUnit->getPosition().x * 16 + 8,
-								currentUnit->getPosition().y * 16 + 8,
-								currentUnit->getPosition().z * 24);
-
-	originVoxel.z += currentUnit->getHeight()
-					+ currentUnit->getFloatHeight()
-					- _save->getTile(currentUnit->getPosition())->getTerrainLevel()
-					- 2; // two voxels lower (nose level)
-		// kL_note: Can make this equivalent to LoF origin, perhaps.....
-		// hey, here's an idea: make Snaps & Auto shoot from hip, Aimed from shoulders or eyes.
-
-	Tile* tileAbove = _save->getTile(currentUnit->getPosition() + Position(0, 0, 1));
-
-	// kL_note: let's stop this. Tanks appear to make their FoV etc. Checks from all four quadrants anyway.
-/*	if (currentUnit->getArmor()->getSize() > 1)
-	{
-		originVoxel.x += 8;
-		originVoxel.y += 8;
-		originVoxel.z += 1; // topmost voxel
-	} */
-
-	if (originVoxel.z >= (currentUnit->getPosition().z + 1) * 24
-		&& (!tileAbove
-			|| !tileAbove->hasNoFloor(0)))
-	{
-		while (originVoxel.z >= (currentUnit->getPosition().z + 1) * 24)
-		{
-			// careful with that ceiling, Eugene.
-			originVoxel.z--;
-		}
-	}
-
-	return originVoxel;
-}
-
-/**
  * Checks for an opposing unit on this tile.
  * @param currentUnit, The watcher.
  * @param tile, The tile to check for
@@ -870,6 +835,50 @@ bool TileEngine::visible(
 
 	//Log(LOG_INFO) << ". Ret unitIsSeen = " << unitIsSeen;
 	return unitIsSeen;
+}
+
+/**
+ * Gets the origin voxel of a unit's LoS.
+ * @param currentUnit, The watcher.
+ * @return, Approximately an eyeball voxel.
+ */
+Position TileEngine::getSightOriginVoxel(BattleUnit* currentUnit)
+{
+	// determine the origin (and target) voxels for calculations
+	Position originVoxel = Position(
+								currentUnit->getPosition().x * 16 + 8,
+								currentUnit->getPosition().y * 16 + 8,
+								currentUnit->getPosition().z * 24);
+
+	originVoxel.z += currentUnit->getHeight()
+					+ currentUnit->getFloatHeight()
+					- _save->getTile(currentUnit->getPosition())->getTerrainLevel()
+					- 2; // two voxels lower (nose level)
+		// kL_note: Can make this equivalent to LoF origin, perhaps.....
+		// hey, here's an idea: make Snaps & Auto shoot from hip, Aimed from shoulders or eyes.
+
+	Tile* tileAbove = _save->getTile(currentUnit->getPosition() + Position(0, 0, 1));
+
+	// kL_note: let's stop this. Tanks appear to make their FoV etc. Checks from all four quadrants anyway.
+/*	if (currentUnit->getArmor()->getSize() > 1)
+	{
+		originVoxel.x += 8;
+		originVoxel.y += 8;
+		originVoxel.z += 1; // topmost voxel
+	} */
+
+	if (originVoxel.z >= (currentUnit->getPosition().z + 1) * 24
+		&& (!tileAbove
+			|| !tileAbove->hasNoFloor(0)))
+	{
+		while (originVoxel.z >= (currentUnit->getPosition().z + 1) * 24)
+		{
+			// careful with that ceiling, Eugene.
+			originVoxel.z--;
+		}
+	}
+
+	return originVoxel;
 }
 
 /**
@@ -1347,99 +1356,6 @@ bool TileEngine::canTargetTile(
 }
 
 /**
- * Creates a vector of units that can spot this unit.
- * @param unit, The unit to check for spotters of.
- * @return, A vector of units that can see this unit.
- */
-std::vector<BattleUnit*> TileEngine::getSpottingUnits(BattleUnit* unit)
-{
-	Log(LOG_INFO) << "TileEngine::getSpottingUnits() targetID " << (unit)->getId()
-									<< " : initi = " << (int)(unit)->getInitiative();
-
-	Tile* tile = unit->getTile();
-
-	std::vector<BattleUnit*> spotters;
-	for (std::vector<BattleUnit*>::const_iterator
-			bu = _save->getUnits()->begin();
-			bu != _save->getUnits()->end();
-			++bu)
-	{
-		if (!(*bu)->isOut(true, true)
-			&& (*bu)->getFaction() != _save->getSide())
-		{
-			AlienBAIState* aggro = dynamic_cast<AlienBAIState*>((*bu)->getCurrentAIState());
-			if (((aggro != 0
-						&& aggro->getWasHit())
-					|| (*bu)->getFaction() == FACTION_HOSTILE
-					|| (*bu)->checkViewSector(unit->getPosition()))
-				&& visible(*bu, tile))
-			{
-				if ((*bu)->getFaction() == FACTION_PLAYER)
-					unit->setVisible(true);
-
-				(*bu)->addToVisibleUnits(unit);
-
-				if (canMakeSnap(*bu, unit))
-				{
-					Log(LOG_INFO) << ". . . reactID " << (*bu)->getId() << " : initi = " << (int)(*bu)->getInitiative();
-
-					spotters.push_back(*bu);
-				}
-			}
-		}
-	}
-
-	return spotters;
-}
-
-/**
- * Checks the validity of a snap shot performed here.
- * @param unit, The unit to check sight from.
- * @param target, The unit to check sight TO.
- * @return, True if the target is valid.
- */
-bool TileEngine::canMakeSnap(
-		BattleUnit* unit,
-		BattleUnit* target)
-{
-	//Log(LOG_INFO) << "TileEngine::canMakeSnap() reactID " << unit->getId() << " vs targetID " << target->getId();
-
-	BattleItem* weapon; // = unit->getMainHandWeapon(true);
-	if (unit->getFaction() == FACTION_PLAYER
-		&& unit->getOriginalFaction() == FACTION_PLAYER)
-	{
-		weapon = unit->getItem(unit->getActiveHand());
-	}
-	else
-		weapon = unit->getMainHandWeapon(); // kL_note: no longer returns grenades. good
-
-	if (weapon																// has a weapon
-		&& ((weapon->getRules()->getBattleType() == BT_MELEE				// has a melee weapon
-				&& validMeleeRange(
-								unit,
-								target,
-								unit->getDirection()						// is in melee range
-				&& unit->getTimeUnits() >= unit->getActionTUs(
-															BA_HIT,
-															weapon))		// has enough TU
-			|| (weapon->getRules()->getBattleType() == BT_FIREARM			// has a gun
-				&& weapon->getRules()->getTUSnap()							// can make snapshot
-//				&& weapon->getAmmoItem()									// gun is loaded, checked in "getMainHandWeapon()"
-				&& unit->getTimeUnits() >= unit->getActionTUs(
-															BA_SNAPSHOT,
-															weapon))))		// has enough TU
-		&& (unit->getOriginalFaction() == FACTION_HOSTILE					// is aLien, or has researched weapon.
-			|| _save->getGeoscapeSave()->isResearched(weapon->getRules()->getRequirements())))
-	{
-		//Log(LOG_INFO) << ". ret TRUE";
-		return true;
-	}
-
-	//Log(LOG_INFO) << ". ret FALSE";
-	return false;
-}
-
-/**
  * Checks if a sniper from the opposing faction sees this unit. The unit with the
  * highest reaction score will be compared with the current unit's reaction score.
  * If it's higher, a shot is fired when enough time units, a weapon and ammo are available.
@@ -1461,7 +1377,6 @@ bool TileEngine::checkReactionFire(BattleUnit* unit)
 		|| unit->isOut(true, true))	// kL (note getTile() may return false for corpses anyway)
 	{
 		//Log(LOG_INFO) << ". ret FALSE pre";
-
 		return false;
 	}
 
@@ -1482,15 +1397,19 @@ bool TileEngine::checkReactionFire(BattleUnit* unit)
 		//Log(LOG_INFO) << ". # spotters = " << spotters.size();
 
 		// get the first man up to bat.
-		BattleUnit* reactor = getReactor(spotters, unit);
+		BattleUnit* reactor = getReactor(
+										spotters,
+										unit);
 		// start iterating through the possible reactors until the current unit is the one with the highest score.
 		while (reactor != unit)
 //			&& !unit->isOut(true, true))	// <- this doesn't want to take effect until after cycling & shots is over
 											// iow, this probably just cycles and sets up the ProjectileFlyBState()'s,
 											// leaving the kill, if any, for later.......
 		{
-			// !!!!!SHOOT!!!!!
-			if (!tryReactionSnap(reactor, unit))	// <- statePushBack(new ProjectileFlyBState()
+			// !!!!!SHOOT!!!!!!!
+			if (!tryReactionSnap(	// <- statePushBack(new ProjectileFlyBState()
+								reactor,
+								unit))
 			{
 				//Log(LOG_INFO) << ". . no Snap by : " << reactor->getId();
 
@@ -1510,9 +1429,11 @@ bool TileEngine::checkReactionFire(BattleUnit* unit)
 
 				// avoid setting ret to true, but carry on, just cause one unit can't
 				// react doesn't mean the rest of the units in the vector (if any) can't
-				reactor = getReactor(spotters, unit);
+//				reactor = getReactor(
+//									spotters,
+//									unit);
 
-				continue;
+//				continue;
 			}
 			else
 				//Log(LOG_INFO) << ". . Snap by : " << reactor->getId();
@@ -1525,7 +1446,9 @@ bool TileEngine::checkReactionFire(BattleUnit* unit)
 //				break;
 
 			// nice shot, kid. don't get too cocky.
-			reactor = getReactor(spotters, unit);
+			reactor = getReactor(
+								spotters,
+								unit);
 			//Log(LOG_INFO) << ". . NEXT AT BAT : " << reactor->getId();
 		}
 
@@ -1538,6 +1461,106 @@ bool TileEngine::checkReactionFire(BattleUnit* unit)
 }
 
 /**
+ * Creates a vector of units that can spot this unit.
+ * @param unit, The unit to check for spotters of.
+ * @return, A vector of units that can see this unit.
+ */
+std::vector<BattleUnit*> TileEngine::getSpottingUnits(BattleUnit* unit)
+{
+	Log(LOG_INFO) << "TileEngine::getSpottingUnits() vs. ID " << (unit)->getId()
+								<< " : initi = " << (int)(unit)->getInitiative();
+
+	Tile* tile = unit->getTile();
+
+	std::vector<BattleUnit*> spotters;
+	for (std::vector<BattleUnit*>::const_iterator
+			bu = _save->getUnits()->begin();
+			bu != _save->getUnits()->end();
+			++bu)
+	{
+		if ((*bu)->getFaction() != _save->getSide()
+			&& !(*bu)->isOut(true, true))
+		{
+			AlienBAIState* aggro = dynamic_cast<AlienBAIState*>((*bu)->getCurrentAIState());
+			if (((aggro != 0
+						&& aggro->getWasHit())
+					|| (*bu)->getFaction() == FACTION_HOSTILE
+					|| (*bu)->checkViewSector(unit->getPosition()))
+				&& visible(*bu, tile))
+			{
+				if ((*bu)->getFaction() == FACTION_PLAYER)
+					unit->setVisible(true);
+
+				(*bu)->addToVisibleUnits(unit);
+
+				if (canMakeSnap(*bu, unit))
+				{
+					Log(LOG_INFO) << ". . . reactor ID " << (*bu)->getId()
+							<< " : initi = " << (int)(*bu)->getInitiative();
+
+					spotters.push_back(*bu);
+				}
+			}
+		}
+	}
+
+	return spotters;
+}
+
+/**
+ * Checks the validity of a snap shot performed here.
+ * @param unit, The unit to check sight from
+ * @param target, The unit to check sight TO
+ * @return, True if a shot can happen
+ */
+bool TileEngine::canMakeSnap(
+		BattleUnit* unit,
+		BattleUnit* target)
+{
+	//Log(LOG_INFO) << "TileEngine::canMakeSnap() reactID " << unit->getId() << " vs targetID " << target->getId();
+
+	BattleItem* weapon; // = unit->getMainHandWeapon(true);
+	if (unit->getFaction() == FACTION_PLAYER
+		&& unit->getOriginalFaction() == FACTION_PLAYER)
+	{
+		weapon = unit->getItem(unit->getActiveHand());
+	}
+	else
+		weapon = unit->getMainHandWeapon(); // kL_note: no longer returns grenades. good
+
+	if (!weapon)
+		return false;
+
+	if ((unit->getOriginalFaction() == FACTION_HOSTILE				// is aLien, or has researched weapon.
+			|| _save->getGeoscapeSave()->isResearched(weapon->getRules()->getRequirements()))
+		&& (weapon->getRules()->getBattleType() == BT_MELEE			// has a melee weapon
+				&& validMeleeRange(
+								unit,
+								target,
+								unit->getDirection())					// is in melee range
+				&& unit->getTimeUnits() >= unit->getActionTUs(			// has enough TU
+															BA_HIT,
+															weapon))
+			|| (weapon->getRules()->getBattleType() == BT_FIREARM	// has a gun
+//kL				&& weapon->getRules()->getTUSnap()							// can make snapshot
+//kL				&& weapon->getAmmoItem()									// gun is loaded, checked in "getMainHandWeapon()" -> what about getActiveHand() ?
+//kL				&& unit->getTimeUnits() >= unit->getActionTUs(				// has enough TU
+//kL															BA_SNAPSHOT,
+//kL															weapon)
+				&& testFireMethod(									// kL, has enough TU for a firing method.
+								unit,
+								target,
+								weapon)))
+	{
+		//Log(LOG_INFO) << ". ret TRUE";
+		return true;
+	}
+
+	//Log(LOG_INFO) << ". ret FALSE";
+	return false;
+}
+
+/**
  * Gets the unit with the highest reaction score from the spotter vector.
  * @param spotters, The vector of spotting units.
  * @param unit, The unit to check scores against.
@@ -1547,7 +1570,7 @@ BattleUnit* TileEngine::getReactor(
 		std::vector<BattleUnit*> spotters,
 		BattleUnit* unit)
 {
-	Log(LOG_INFO) << "TileEngine::getReactor() vs targetID " << unit->getId();
+	Log(LOG_INFO) << "TileEngine::getReactor() vs ID " << unit->getId();
 
 	int bestScore = -1;
 	BattleUnit* reactor = 0;
@@ -1557,12 +1580,10 @@ BattleUnit* TileEngine::getReactor(
 			spotter != spotters.end();
 			++spotter)
 	{
-		Log(LOG_INFO) << ". . reactID " << (*spotter)->getId();
+		Log(LOG_INFO) << ". . reactor ID " << (*spotter)->getId();
 
 		if (!(*spotter)->isOut(true, true)
-//			&& canMakeSnap((*spotter), unit)				// done in "getSpottingUnits()"
 			&& (*spotter)->getInitiative() > bestScore)
-//			&& (*spotter) != bu)	// kL, stop unit from reacting twice (unless target uses more TU, hopefully)
 		{
 			bestScore = static_cast<int>((*spotter)->getInitiative());
 			reactor = *spotter;
@@ -1582,7 +1603,7 @@ BattleUnit* TileEngine::getReactor(
 		reactor = unit;
 	}
 
-	Log(LOG_INFO) << ". bestScore = " << bestScore;
+	Log(LOG_INFO) << ". bestScore (reactor) = " << bestScore;
 	return reactor;
 }
 
@@ -1610,10 +1631,16 @@ bool TileEngine::tryReactionSnap(
 		//Log(LOG_INFO) << ". no Weapon, ret FALSE";
 		return false;
 
-	action.type = BA_SNAPSHOT;									// reaction fire is ALWAYS snap shot.
+//kL	action.type = BA_SNAPSHOT;									// reaction fire is ALWAYS snap shot.
 																// kL_note: not true in Orig. aliens did auto at times
+
+	action.actor = unit; // kL, was above under "BattleAction action;"
+	action.target = target->getPosition();
+
 	if (action.weapon->getRules()->getBattleType() == BT_MELEE)	// unless we're a melee unit.
-		action.type = BA_HIT;									// kL_note: in which case you won't react at all. ( yet )
+		action.type = BA_HIT;									// kL_note: in which case you might not react at all. ( yet )
+	else
+		action.type = selectFireMethod(action); // kL, Let's try this. Might want to exclude soldiers, apply only to aLiens...
 
 	action.TU = unit->getActionTUs(
 								action.type,
@@ -1627,7 +1654,6 @@ bool TileEngine::tryReactionSnap(
 	// That's all been done!!!
 //	{
 	action.targeting = true;
-	action.target = target->getPosition();
 
 	if (unit->getFaction() == FACTION_HOSTILE) // aLien units will go into an "aggro" state when they react.
 	{
@@ -1654,14 +1680,13 @@ bool TileEngine::tryReactionSnap(
 	}
 
 	if (action.targeting
+		&& action.type != BA_NONE // kL
 		&& unit->spendTimeUnits(action.TU))
 	{
-		Log(LOG_INFO) << ". Reaction Fire by reactID " << unit->getId();
+		Log(LOG_INFO) << ". Reaction Fire by ID " << unit->getId();
 
 		action.TU = 0;
-
 		action.cameraPosition = _save->getBattleState()->getMap()->getCamera()->getMapOffset();	// kL, was above under "BattleAction action;"
-		action.actor = unit;																	// kL, was above under "BattleAction action;"
 
 		_save->getBattleGame()->statePushBack(new UnitTurnBState(
 															_save->getBattleGame(),
@@ -1678,6 +1703,155 @@ bool TileEngine::tryReactionSnap(
 //	}
 
 	return false;
+}
+
+/**
+ * kL. Tests for a fire method based on range & time units.
+ * lifted from: AlienBAIState::selectFireMethod()
+ * @param unit, Pointer to a BattleUnit
+ * @param target, Pointer to a targetUnit
+ * @param weapon, Pointer to the unit's weapon
+ * @return, True if a firing method is successfully chosen
+ */
+bool TileEngine::testFireMethod(
+		BattleUnit* unit,
+		BattleUnit* target,
+		BattleItem* weapon)
+{
+	int tuUnit = unit->getTimeUnits();
+
+	int distance = _save->getTileEngine()->distance(
+												unit->getPosition(),
+												target->getPosition());
+	if (distance < 7)
+	{
+		if (weapon->getRules()->getTUAuto()							// weapon can do this action-type
+			&& tuUnit >= unit->getActionTUs(BA_AUTOSHOT, weapon))	// accounts for flatRate or not.
+		{
+			return true;
+		}
+		else if (weapon->getRules()->getTUSnap()
+			&& tuUnit >= unit->getActionTUs(BA_SNAPSHOT, weapon))
+		{
+			return true;
+		}
+		else if (weapon->getRules()->getTUAimed()
+			&& tuUnit >= unit->getActionTUs(BA_AIMEDSHOT, weapon))
+		{
+			return true;
+		}
+	}
+	else if (distance < 13)
+	{
+		if (weapon->getRules()->getTUSnap()
+			&& tuUnit >= unit->getActionTUs(BA_SNAPSHOT, weapon))
+		{
+			return true;
+		}
+		else if (weapon->getRules()->getTUAimed()
+			&& tuUnit >= unit->getActionTUs(BA_AIMEDSHOT, weapon))
+		{
+			return true;
+		}
+		else if (weapon->getRules()->getTUAuto()
+			&& tuUnit >= unit->getActionTUs(BA_AUTOSHOT, weapon))
+		{
+			return true;
+		}
+	}
+	else // distance > 12
+	{
+		if (weapon->getRules()->getTUAimed()
+			&& tuUnit >= unit->getActionTUs(BA_AIMEDSHOT, weapon))
+		{
+			return true;
+		}
+		else if (weapon->getRules()->getTUSnap()
+			&& tuUnit >= unit->getActionTUs(BA_SNAPSHOT, weapon))
+		{
+			return true;
+		}
+		else if (weapon->getRules()->getTUAuto()
+			&& tuUnit >= unit->getActionTUs(BA_AUTOSHOT, weapon))
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+
+/**
+ * kL. Selects a fire method based on range & time units.
+ * lifted from: AlienBAIState::selectFireMethod()
+ * @param action, A BattleAction
+ * @return, The calculated BattleAction type
+ */
+BattleActionType TileEngine::selectFireMethod(BattleAction action) // could/should use a pointer for this(?)
+{
+	action.type = BA_NONE; // should never happen.
+
+	int
+		tuUnit = action.actor->getTimeUnits(),
+		distance = _save->getTileEngine()->distance(
+												action.actor->getPosition(),
+												action.target);
+	if (distance < 7)
+	{
+		if (action.weapon->getRules()->getTUAuto()									// weapon can do this action-type
+			&& tuUnit >= action.actor->getActionTUs(BA_AUTOSHOT, action.weapon))	// accounts for flatRate or not.
+		{
+			action.type = BA_AUTOSHOT;
+		}
+		else if (action.weapon->getRules()->getTUSnap()
+			&& tuUnit >= action.actor->getActionTUs(BA_SNAPSHOT, action.weapon))
+		{
+			action.type = BA_SNAPSHOT;
+		}
+		else if (action.weapon->getRules()->getTUAimed()
+			&& tuUnit >= action.actor->getActionTUs(BA_AIMEDSHOT, action.weapon))
+		{
+			action.type = BA_AIMEDSHOT;
+		}
+	}
+	else if (distance < 13)
+	{
+		if (action.weapon->getRules()->getTUSnap()
+			&& tuUnit >= action.actor->getActionTUs(BA_SNAPSHOT, action.weapon))
+		{
+			action.type = BA_SNAPSHOT;
+		}
+		else if (action.weapon->getRules()->getTUAimed()
+			&& tuUnit >= action.actor->getActionTUs(BA_AIMEDSHOT, action.weapon))
+		{
+			action.type = BA_AIMEDSHOT;
+		}
+		else if (action.weapon->getRules()->getTUAuto()
+			&& tuUnit >= action.actor->getActionTUs(BA_AUTOSHOT, action.weapon))
+		{
+			action.type = BA_AUTOSHOT;
+		}
+	}
+	else // distance > 12
+	{
+		if (action.weapon->getRules()->getTUAimed()
+			&& tuUnit >= action.actor->getActionTUs(BA_AIMEDSHOT, action.weapon))
+		{
+			action.type = BA_AIMEDSHOT;
+		}
+		else if (action.weapon->getRules()->getTUSnap()
+			&& tuUnit >= action.actor->getActionTUs(BA_SNAPSHOT, action.weapon))
+		{
+			action.type = BA_SNAPSHOT;
+		}
+		else if (action.weapon->getRules()->getTUAuto()
+			&& tuUnit >= action.actor->getActionTUs(BA_AUTOSHOT, action.weapon))
+		{
+			action.type = BA_AUTOSHOT;
+		}
+	}
+
+	return action.type;
 }
 
 /**
@@ -3861,15 +4035,6 @@ int TileEngine::voxelCheck(
 }
 
 /**
- * Toggles personal lighting on / off.
- */
-void TileEngine::togglePersonalLighting()
-{
-	_personalLighting = !_personalLighting;
-	calculateUnitLighting();
-}
-
-/**
  * Calculates the distance between 2 points. Rounded down to first INT.
  * @param pos1, Position of first square.
  * @param pos2, Position of second square.
@@ -4013,8 +4178,7 @@ bool TileEngine::psiAttack(BattleAction* action)
 				victim->setTimeUnits(victim->getStats()->tu);
 				victim->setEnergy(victim->getStats()->stamina); // kL
 				victim->allowReselect();
-//kL				victim->abortTurn(); // resets unit status to STANDING
-				victim->setStatus(STATUS_STANDING); // kL
+				victim->setStatus(STATUS_STANDING);
 
 				// if all units from either faction are mind controlled - auto-end the mission.
 				if (_save->getSide() == FACTION_PLAYER
@@ -4155,8 +4319,7 @@ Tile* TileEngine::applyGravity(Tile* t)
 									_save->getTile(occupant->getPosition() + Position(0, 0, -1)),
 									true);
 					// and set our status to standing (rather than walking or flying) to avoid weirdness.
-//kL					occupant->abortTurn();
-					occupant->setStatus(STATUS_STANDING); // kL
+					occupant->setStatus(STATUS_STANDING);
 				}
 				else
 				{

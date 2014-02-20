@@ -756,7 +756,7 @@ int Projectile::getParticle(int i) const
 }
 
 /**
- * Gets the project tile item.
+ * Gets the projectile item.
  * Returns 0 when there is no item thrown.
  * @return Pointer to BattleItem.
  */

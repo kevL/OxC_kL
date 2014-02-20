@@ -70,13 +70,11 @@ UnitTurnBState::~UnitTurnBState()
 void UnitTurnBState::init()
 {
 	Log(LOG_INFO) << "UnitTurnBState::init() unitID = "
-			<< _action.actor->getId() << "_action.strafe = " << _action.strafe;
+			<< _action.actor->getId() << " strafe = " << _action.strafe;
 	_unit = _action.actor;
 	_action.TU = 0;
 
 	_unit->setStopShot(false); // kL
-//	_unit->setShowVisUnits(false); // kL
-//	_parent->getBattlescapeState()->toggleVisUnits(false); // kL
 
 	if (_unit->getFaction() == FACTION_PLAYER)
 		_parent->setStateInterval(Options::getInt("battleXcomSpeed"));
@@ -91,9 +89,6 @@ void UnitTurnBState::init()
 	_unit->lookAt( // -> STATUS_TURNING
 				_action.target,
 				_turret);
-
-//	_unit->setCache(0);						// kL, done in UnitTurnBState::think()
-//	_parent->getMap()->cacheUnit(_unit);	// kL, done in UnitTurnBState::think()
 
 
 	if (_unit->getStatus() != STATUS_TURNING) // try to open a door
@@ -120,9 +115,6 @@ void UnitTurnBState::init()
 			else if (door == 5)
 				_action.result = "STR_TUS_RESERVED";
 		}
-
-//		_unit->setShowVisUnits(true); // kL
-//		_parent->getBattlescapeState()->toggleVisUnits(true); // kL
 
 		_parent->popState();
 	}
@@ -154,8 +146,7 @@ void UnitTurnBState::think()
 	}
 
 
-//kL	if (_unit->getFaction() == _parent->getSave()->getSide()
-	if (factSide // kL
+	if (factSide
 		&& _parent->getPanicHandled()
 		&& !_action.targeting
 		&& !_parent->checkReservedTU(
@@ -163,19 +154,11 @@ void UnitTurnBState::think()
 									tu))
 	{
 		//Log(LOG_INFO) << "UnitTurnBState::think(), abortTurn() popState()";
-//kL		_unit->abortTurn(); // -> STATUS_STANDING.
-		_unit->setStatus(STATUS_STANDING);	// kL
-//		_unit->setStopShot(false);			// kL
-
-//		_unit->setShowVisUnits(true); // kL
-//		_parent->getBattlescapeState()->toggleVisUnits(true); // kL
+		_unit->setStatus(STATUS_STANDING);
 
 		_parent->popState();
-
-//kL		return;
 	}
-	else // kL
-	if (_unit->spendTimeUnits(tu))
+	else if (_unit->spendTimeUnits(tu))
 	{
 		size_t unitsSpotted = _unit->getUnitsSpottedThisTurn().size();
 
@@ -186,35 +169,27 @@ void UnitTurnBState::think()
 		_unit->setCache(0);
 		_parent->getMap()->cacheUnit(_unit);
 
-//kL		if (_unit->getFaction() == _parent->getSave()->getSide()
 		if ((newVis
 				&& factPlayer)
-			|| (factSide													// kL
-				&& !factPlayer												// kL
+			|| (factSide
+				&& !factPlayer
 				&& _action.type == BA_NONE
 				&& _parent->getPanicHandled()
-				&& _unit->getUnitsSpottedThisTurn().size() > unitsSpotted))	// kL
+				&& _unit->getUnitsSpottedThisTurn().size() > unitsSpotted))
 		{
-			//if (_unit->getFaction() == FACTION_PLAYER)
-			//{
-				//Log(LOG_INFO) << ". . newVis = TRUE, Abort turn";
-			//}
-			//else if (_unit->getFaction() != FACTION_PLAYER)
-			//{
-				//Log(LOG_INFO) << ". . newUnitSpotted = TRUE, Abort turn";
-			//}
+			//if (_unit->getFaction() == FACTION_PLAYER) Log(LOG_INFO) << ". . newVis = TRUE, Abort turn";
+			//else if (_unit->getFaction() != FACTION_PLAYER) Log(LOG_INFO) << ". . newUnitSpotted = TRUE, Abort turn";
 
 			//Log(LOG_INFO) << "UnitTurnBState::think(), abortTurn()";
-//kL			_unit->abortTurn(); // -> STATUS_STANDING.
-			_unit->setStatus(STATUS_STANDING); // kL
+			_unit->setStatus(STATUS_STANDING);
 
 			// keep this for Faction_Player only, till I figure out the AI better:
-			if (factPlayer					// kL
-				&& factSide					// kL
-				&& _action.targeting)		// kL
+			if (factPlayer				// kL
+				&& factSide				// kL
+				&& _action.targeting)	// kL
 			{
 				Log(LOG_INFO) << "UnitTurnBState::think(), setStopShot ID = " << _unit->getId();
-				_unit->setStopShot(true);	// kL
+				_unit->setStopShot(true); // kL
 			}
 
 			// kL_note: Can i pop the state (ProjectileFlyBState) here if we came from
@@ -223,27 +198,17 @@ void UnitTurnBState::think()
 		}
 
 		if (_unit->getStatus() == STATUS_STANDING)
-		{
 			//Log(LOG_INFO) << "UnitTurnBState::think(), popState()";
-//			_unit->setShowVisUnits(true); // kL
-//			_parent->getBattlescapeState()->toggleVisUnits(true); // kL
-
 			_parent->popState();
-		}
 		else
-			_parent->getBattlescapeState()->refreshVisUnits(); // kL
+			_parent->getBattlescapeState()->refreshVisUnits();
 	}
 	else if (_parent->getPanicHandled())
 	{
 		_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
 
 		//Log(LOG_INFO) << "UnitTurnBState::think(), abortTurn() popState() 2";
-//kL		_unit->abortTurn(); // -> STATUS_STANDING.
-		_unit->setStatus(STATUS_STANDING);	// kL
-//		_unit->setStopShot(false);			// kL
-
-//		_unit->setShowVisUnits(true); // kL
-//		_parent->getBattlescapeState()->toggleVisUnits(true); // kL
+		_unit->setStatus(STATUS_STANDING);
 
 		_parent->popState();
 	}

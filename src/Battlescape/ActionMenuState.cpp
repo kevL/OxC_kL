@@ -367,9 +367,10 @@ void ActionMenuState::btnActionMenuItemClick(Action* action)
 
 			_game->popState();
 		}
-		else
+		else // shoot, throw, psi-attack, mind-probe
 		{
 			_action->targeting = true;
+
 			_game->popState();
 		}
 	}
