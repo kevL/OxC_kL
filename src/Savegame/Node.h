@@ -52,7 +52,7 @@ class Node
 private:
 	bool _allocated;
 	int
-		_flags,		// might not be used at present.
+		_flags,		// desirability of patrolling to.
 		_id,		// unique identifier
 		_priority,	// "spawn" in .Mcd
 		_rank,		// aLien rank that can spawn here
@@ -73,7 +73,8 @@ private:
 		static const int TYPE_SMALL		= 0x02;	// large unit cannot spawn here when this bit is set
 		static const int TYPE_DANGEROUS	= 0x04;	// an alien was shot here, stop patrolling to it like an idiot with a death wish
 
-		static const int nodeRank[8][7];		// maps alien ranks to node (.RMP) ranks
+//kL		static const int nodeRank[8][7];		// maps alien ranks to node (.RMP) ranks
+		static const int nodeRank[8][8];		// kL
 
 		/// Creates a Node.
 		Node();

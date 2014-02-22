@@ -37,7 +37,6 @@
 #include "../Battlescape/Pathfinding.h"
 #include "../Battlescape/Position.h"
 #include "../Battlescape/TileEngine.h"
-//#include "../Battlescape/UnitSprite.h" // kL, trying to redraw according to terrainLevel when revived.
 
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
@@ -244,15 +243,11 @@ void SavedBattleGame::load(
 	if (_missionType == "STR_BASE_DEFENSE")
 	{
 		if (node["moduleMap"])
-		{
 			_baseModules = node["moduleMap"].as<std::vector<std::vector<std::pair<int, int> > > >();
-		}
 		else
-		{
 			// backwards compatibility: imperfect solution, modules that were completely destroyed
 			// prior to saving and updating builds will be counted as indestructible.
 			calculateModuleMap();
-		}
 	}
 
 	for (YAML::const_iterator
@@ -275,12 +270,10 @@ void SavedBattleGame::load(
 
 		BattleUnit* unit;
 		if (id < BattleUnit::MAX_SOLDIER_ID) // Unit is linked to a geoscape soldier
-		{
 			// look up the matching soldier
 			unit = new BattleUnit(
 								savedGame->getSoldier(id),
 								faction);
-		}
 		else
 		{
 			std::string type = (*i)["genUnitType"].as<std::string>();
@@ -311,9 +304,7 @@ void SavedBattleGame::load(
 			// silly hack to fix mind controlled aliens
 			// TODO: save stats instead? maybe some kind of weapon will affect them at some point.
 			if (unit->getOriginalFaction() == FACTION_HOSTILE)
-			{
 				unit->adjustStats(savedGame->getDifficulty());
-			}
 		}
 
 		if (unit->getStatus() != STATUS_DEAD)
@@ -542,9 +533,7 @@ YAML::Node SavedBattleGame::save() const
 			_tiles[i]->saveBinary(&w);
 		}
 		else
-		{
 			tileDataSize -= Tile::serializationKey.totalBytes;
-		}
 	}
 
 	node["totalTiles"]	= tileDataSize / Tile::serializationKey.totalBytes; // not strictly necessary, just convenient
@@ -1197,7 +1186,9 @@ void SavedBattleGame::setDebugMode()
 			i = 0;
 			i < _mapsize_z * _mapsize_y * _mapsize_x;
 			++i)
+	{
 		_tiles[i]->setDiscovered(true, 2);
+	}
 
 	_debugMode = true;
 }
@@ -1444,9 +1435,9 @@ int* SavedBattleGame::getCurrentItemId()
 
 /**
  * Finds a fitting node where a unit can spawn.
- * @param nodeRank, Rank of the node (this is not the rank of the alien!).
- * @param unit, Pointer to the unit (to test-set its position).
- * @return, Pointer to the chosen node.
+ * @param nodeRank, Rank of the node (this is not the rank of the alien!)
+ * @param unit, Pointer to the unit (to test-set its position)
+ * @return, Pointer to the chosen node
  */
 Node* SavedBattleGame::getSpawnNode(
 		int nodeRank,
@@ -1482,7 +1473,8 @@ Node* SavedBattleGame::getSpawnNode(
 		}
 	}
 
-	if (legitNodes.empty()) return 0;
+	if (legitNodes.empty())
+		return 0;
 
 	int node = RNG::generate(
 						0,
@@ -1590,11 +1582,9 @@ Node* SavedBattleGame::getPatrolNode(
 								fromNode); // move damnit
 		}
 		else
-		{
 			//Log(LOG_INFO) << " . legitNodes is NOT Empty.";
 			//Log(LOG_INFO) << " . return 0";
 			return 0;
-		}
 	}
 
 	if (scout) // picks a random destination
@@ -1611,10 +1601,8 @@ Node* SavedBattleGame::getPatrolNode(
 	{
 		//Log(LOG_INFO) << " . !scout";
 		if (!bestNode)
-		{
 			//Log(LOG_INFO) << " . no bestNode, return 0";
 			return 0;
-		}
 
 		// non-scout patrols to highest value unoccupied node that's not fromNode
 		if (Options::getBool("traceAI")) Log(LOG_INFO) << "Choosing node flagged " << bestNode->getFlags();
@@ -1993,7 +1981,9 @@ bool SavedBattleGame::placeUnitNearPosition(
 		Tile* t = getTile(entryPoint + offset);
 		if (t
 			&& !getPathfinding()->isBlocked(getTile(entryPoint), t, dir, 0)
-			&& setUnitPosition(unit, entryPoint + offset))
+			&& setUnitPosition(
+							unit,
+							entryPoint + offset))
 		{
 			return true;
 		}
@@ -2004,7 +1994,9 @@ bool SavedBattleGame::placeUnitNearPosition(
 		Tile* t = getTile(entryPoint + Position(0, 0, 1));
 		if (t
 			&& t->hasNoFloor(getTile(entryPoint))
-			&& setUnitPosition(unit, entryPoint + Position(0, 0, 1)))
+			&& setUnitPosition(
+							unit,
+							entryPoint + Position(0, 0, 1)))
 		{
 			return true;
 		}
@@ -2094,9 +2086,7 @@ bool SavedBattleGame::addFallingUnit(BattleUnit* unit)
 			++i)
 	{
 		if (unit == *i)
-		{
 			add = false;
-		}
 	}
 
 	if (add)

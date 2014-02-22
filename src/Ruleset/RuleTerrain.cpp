@@ -18,6 +18,7 @@
  */
 
 #include "MapBlock.h"
+
 #include "MapDataSet.h"
 #include "Ruleset.h"
 #include "RuleTerrain.h"
@@ -58,7 +59,9 @@ RuleTerrain::~RuleTerrain()
  * @param node YAML node.
  * @param ruleset Ruleset for the terrain.
  */
-void RuleTerrain::load(const YAML::Node& node, Ruleset* ruleset)
+void RuleTerrain::load(
+		const YAML::Node& node,
+		Ruleset* ruleset)
 {
 	if (const YAML::Node& map = node["mapDataSets"])
 	{
@@ -173,7 +176,7 @@ MapBlock* RuleTerrain::getRandomMapBlock(
  * @param name The name of the mapblock.
  * @return Pointer to mapblock.
  */
-MapBlock* RuleTerrain::getMapBlock(const std::string &name)
+MapBlock* RuleTerrain::getMapBlock(const std::string& name)
 {
 	for (std::vector<MapBlock*>::const_iterator
 			i = _mapBlocks.begin();
@@ -207,9 +210,7 @@ MapData* RuleTerrain::getMapData(
 		mdf = *i;
 
 		if (*id - mdf->getSize() < 0)
-		{
 			break;
-		}
 
 		*id -= mdf->getSize();
 		(*mapDataSetID)++;

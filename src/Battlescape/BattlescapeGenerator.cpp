@@ -271,24 +271,25 @@ void BattlescapeGenerator::nextStage()
 					selectedFirstSoldier = true;
 				}
 
-				Node* node = _save->getSpawnNode(NR_XCOM, *j);
+				Node* node = _save->getSpawnNode(
+											NR_XCOM,
+											*j);
 				if (node)
 				{
-					_save->setUnitPosition(*j, node->getPosition());
+					_save->setUnitPosition(
+										*j,
+										node->getPosition());
 					(*j)->getVisibleTiles()->clear();
 
 					if ((*j)->getId() > highestSoldierID)
-					{
 						highestSoldierID = (*j)->getId();
-					}
 				}
 				else if (placeUnitNearFriend(*j))
 				{
 					(*j)->getVisibleTiles()->clear();
+
 					if ((*j)->getId() > highestSoldierID)
-					{
 						highestSoldierID = (*j)->getId();
-					}
 				}
 			}
 		}
@@ -1543,9 +1544,7 @@ void BattlescapeGenerator::deployAliens(
 											ruleItem,
 											_save->getCurrentItemId());
 						if (!addItem(item, unit))
-						{
 							delete item;
-						}
 					}
 				}
 				else
@@ -1564,9 +1563,7 @@ void BattlescapeGenerator::deployAliens(
 												ruleItem,
 												_save->getCurrentItemId());
 							if (!addItem(item, unit))
-							{
 								delete item;
-							}
 						}
 					}
 				}
@@ -1601,40 +1598,29 @@ BattleUnit* BattlescapeGenerator::addAlien(
 	Node* node = 0;
 
 	if (outside)
-		node = _save->getSpawnNode(0, unit); // Civ-Scout spawnpoints
+		node = _save->getSpawnNode( // Civ-Scout spawnpoints <- 'outside'
+								0,
+								unit);
 
-	if (!node)
+	if (!node) // ie. if not spawning on a Civ-Scout node
 	{
 		for (int
 				i = 0;
-				i < 7
+//kL				i < 7
+				i < 8 // kL
 					&& !node;
 				i++)
 		{
-			node = _save->getSpawnNode(Node::nodeRank[alienRank][i], unit);
+			node = _save->getSpawnNode(
+									Node::nodeRank[alienRank][i],
+									unit);
 		}
 	}
-/*kL: This code places all aliens in the UFO, for some reason.
-		Or without my addition it groups them up in a hovel...
-	for (int
-			i = 0;
-			i < 7
-				&& node == 0;
-			i++)
-	{
-		if (outside)
-			node = _save->getSpawnNode(0, unit); // Civ-Scout spawnpoints
-			// kL_begin: spawn fallbacks
-			if (node == 0)
-			{
-				node = _save->getSpawnNode(Node::nodeRank[alienRank][i], unit);
-			} // kL_end.
-		else
-			node = _save->getSpawnNode(Node::nodeRank[alienRank][i], unit);
-	} */
 
 	if (node
-		&& _save->setUnitPosition(unit, node->getPosition()))
+		&& _save->setUnitPosition(
+								unit,
+								node->getPosition()))
 	{
 		unit->setAIState(new AlienBAIState(
 										_game->getSavedGame()->getSavedBattle(),
@@ -1643,9 +1629,12 @@ BattleUnit* BattlescapeGenerator::addAlien(
 		unit->setRankInt(alienRank);
 
 		int dir = _save->getTileEngine()->faceWindow(node->getPosition());
-		Position craft = _game->getSavedGame()->getSavedBattle()->getUnits()->at(0)->getPosition();
 
-		if (_save->getTileEngine()->distance(node->getPosition(), craft) < 25
+		Position craft = _game->getSavedGame()->getSavedBattle()->getUnits()->at(0)->getPosition();
+		if (_save->getTileEngine()->distance(
+											node->getPosition(),
+											craft)
+										< 25
 			&& RNG::percent(difficulty * 20))
 		{
 			dir = unit->directionTo(craft);
@@ -1693,13 +1682,9 @@ void BattlescapeGenerator::deployCivilians(int civilians)
 					++i)
 			{
 				if (RNG::percent(50))
-				{
 					addCivilian(_game->getRuleset()->getUnit("MALE_CIVILIAN"));
-				}
 				else
-				{
 					addCivilian(_game->getRuleset()->getUnit("FEMALE_CIVILIAN"));
-				}
 			}
 		}
 	}

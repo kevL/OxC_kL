@@ -18,8 +18,9 @@
  */
 
 #include "MCDPatch.h"
-#include "MapDataSet.h"
+
 #include "MapData.h"
+#include "MapDataSet.h"
 
 
 namespace OpenXcom
@@ -48,7 +49,10 @@ void MCDPatch::load(const YAML::Node& node)
 {
 	YAML::Node data = node["data"];
 
-	for (YAML::const_iterator i = data.begin(); i != data.end(); ++i)
+	for (YAML::const_iterator
+			i = data.begin();
+			i != data.end();
+			++i)
 	{
 		size_t MCDIndex = (*i)["MCDIndex"].as<size_t>();
 
@@ -87,11 +91,13 @@ void MCDPatch::load(const YAML::Node& node)
 			int terrainHeight = (*i)["terrainHeight"].as<int>();
 			_terrainHeight.push_back(std::make_pair(MCDIndex, terrainHeight));
 		}
+
 		if ((*i)["specialType"])
 		{
 			int specialType = (*i)["specialType"].as<int>();
 			_specialTypes.push_back(std::make_pair(MCDIndex, specialType));
 		}
+
 		if ((*i)["LOFTS"])
 		{
 			std::vector<int> lofts = (*i)["LOFTS"].as< std::vector<int> >();
@@ -106,45 +112,79 @@ void MCDPatch::load(const YAML::Node& node)
  */
 void MCDPatch::modifyData(MapDataSet* dataSet) const
 {
-	for (std::vector<std::pair<size_t, int> >::const_iterator i = _bigWalls.begin(); i != _bigWalls.end(); ++i)
+	for (std::vector<std::pair<size_t, int> >::const_iterator
+			i = _bigWalls.begin();
+			i != _bigWalls.end();
+			++i)
 	{
 		dataSet->getObjects()->at(i->first)->setBigWall(i->second);
 	}
 
-	for (std::vector<std::pair<size_t, int> >::const_iterator i = _TUWalks.begin(); i != _TUWalks.end(); ++i)
+	for (std::vector<std::pair<size_t, int> >::const_iterator
+			i = _TUWalks.begin();
+			i != _TUWalks.end();
+			++i)
 	{
 		dataSet->getObjects()->at(i->first)->setTUWalk(i->second);
 	}
 
-	for (std::vector<std::pair<size_t, int> >::const_iterator i = _TUFlys.begin(); i != _TUFlys.end(); ++i)
+	for (std::vector<std::pair<size_t, int> >::const_iterator
+			i = _TUFlys.begin();
+			i != _TUFlys.end();
+			++i)
 	{
 		dataSet->getObjects()->at(i->first)->setTUFly(i->second);
 	}
 
-	for (std::vector<std::pair<size_t, int> >::const_iterator i = _TUSlides.begin(); i != _TUSlides.end(); ++i)
+	for (std::vector<std::pair<size_t, int> >::const_iterator
+			i = _TUSlides.begin();
+			i != _TUSlides.end();
+			++i)
 	{
 		dataSet->getObjects()->at(i->first)->setTUSlide(i->second);
 	}
 
-	for (std::vector<std::pair<size_t, int> >::const_iterator i = _deathTiles.begin(); i != _deathTiles.end(); ++i)
+	for (std::vector<std::pair<size_t, int> >::const_iterator
+			i = _deathTiles.begin();
+			i != _deathTiles.end();
+			++i)
 	{
 		dataSet->getObjects()->at(i->first)->setDieMCD(i->second);
 	}
 
-	for (std::vector<std::pair<size_t, int> >::const_iterator i = _terrainHeight.begin(); i != _terrainHeight.end(); ++i)
+	for (std::vector<std::pair<size_t, int> >::const_iterator
+			i = _terrainHeight.begin();
+			i != _terrainHeight.end();
+			++i)
 	{
 		dataSet->getObjects()->at(i->first)->setTerrainLevel(i->second);
 	}
-	for (std::vector<std::pair<size_t, int> >::const_iterator i = _specialTypes.begin(); i != _specialTypes.end(); ++i)
+
+	for (std::vector<std::pair<size_t, int> >::const_iterator
+			i = _specialTypes.begin();
+			i != _specialTypes.end();
+			++i)
 	{
-		dataSet->getObjects()->at(i->first)->setSpecialType(i->second, dataSet->getObjects()->at(i->first)->getObjectType());
+		dataSet->getObjects()->at(i->first)->setSpecialType(
+														i->second,
+														dataSet->getObjects()->at(i->first)->getObjectType());
 	}
-	for (std::vector<std::pair<size_t, std::vector<int> > >::const_iterator i = _LOFTS.begin(); i != _LOFTS.end(); ++i)
+
+	for (std::vector<std::pair<size_t, std::vector<int> > >::const_iterator
+			i = _LOFTS.begin();
+			i != _LOFTS.end();
+			++i)
 	{
 		int layer = 0;
-		for (std::vector<int>::const_iterator j = i->second.begin(); j != i->second.end(); ++j)
+		for (std::vector<int>::const_iterator
+				j = i->second.begin();
+				j != i->second.end();
+				++j)
 		{
-			dataSet->getObjects()->at(i->first)->setLoftID(*j, layer);
+			dataSet->getObjects()->at(i->first)->setLoftID(
+														*j,
+														layer);
+
 			++layer;
 		}
 	}

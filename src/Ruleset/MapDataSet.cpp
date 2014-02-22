@@ -298,7 +298,9 @@ void MapDataSet::loadData()
 	}
 
 	// Load terrain sprites/surfaces/PCK files into a surfaceset
-	std::ostringstream s1,s2;
+	std::ostringstream
+		s1,
+		s2;
 	s1 << "TERRAIN/" << _name << ".PCK";
 	s2 << "TERRAIN/" << _name << ".TAB";
 	_surfaceSet = new SurfaceSet(32, 40);

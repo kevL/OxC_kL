@@ -2016,13 +2016,9 @@ inline void BattlescapeState::handle(Action* action)
 		if (action->getDetails()->type == SDL_MOUSEBUTTONDOWN)
 		{
 			if (action->getDetails()->button.button == SDL_BUTTON_X1)
-			{
 				btnNextSoldierClick(action);
-			}
 			else if (action->getDetails()->button.button == SDL_BUTTON_X2)
-			{
 				btnPrevSoldierClick(action);
-			}
 		}
 
 		if (action->getDetails()->type == SDL_KEYDOWN)
@@ -2059,17 +2055,13 @@ inline void BattlescapeState::handle(Action* action)
 						{
 							(*i)->instaKill();
 							if ((*i)->getTile())
-							{
 								(*i)->getTile()->setUnit(0);
-							}
 						}
 					}
 				}
 				// f11 - voxel map dump
 				else if (action->getDetails()->key.keysym.sym == SDLK_F11)
-				{
 					saveVoxelMap();
-				}
 				// f9 - ai
 				else if (action->getDetails()->key.keysym.sym == SDLK_F9
 					&& Options::getBool("traceAI"))
@@ -2098,9 +2090,7 @@ inline void BattlescapeState::handle(Action* action)
 
 			// voxel view dump
 			if (action->getDetails()->key.keysym.sym == (SDLKey)Options::getInt("keyBattleVoxelView"))
-			{
 				saveVoxelView();
-			}
 		}
 	}
 }

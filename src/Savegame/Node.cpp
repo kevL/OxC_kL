@@ -23,7 +23,7 @@
 namespace OpenXcom
 {
 
-const int Node::nodeRank[8][7] =
+/* const int Node::nodeRank[8][7] =
 {
 	{4, 3, 5, 8, 7, 2, 0},	// commander
 	{4, 3, 5, 8, 7, 2, 0},	// leader
@@ -33,17 +33,31 @@ const int Node::nodeRank[8][7] =
 	{2, 5, 3, 4, 6, 8, 0},	// soldier
 	{2, 5, 3, 4, 6, 8, 0},	// terrorist1
 	{2, 5, 3, 4, 6, 8, 0}	// terrorist2
-};	// kL_note: The 2nd dimension holds fallbacks for spawning:
-		//0:Civ-Scout
-		//1:XCom
-		//2:Soldier
-		//3:Navigator
-		//4:Leader/Commander
-		//5:Engineer
-		//6:Misc1
-		//7:Medic
-		//8:Misc2
-	// See Node.h, enum NodeRank
+}; */
+const int Node::nodeRank[8][8] = // kL_begin:
+{
+	{4, 3, 5, 2, 7, 8, 6, 0},	// commander
+	{4, 3, 5, 2, 7, 8, 6, 0},	// leader
+	{5, 4, 3, 2, 7, 8, 6, 0},	// engineer
+	{7, 3, 5, 4, 2, 8, 6, 0},	// medic
+	{3, 4, 5, 2, 7, 8, 6, 0},	// navigator
+	{2, 5, 3, 7, 4, 8, 6, 0},	// soldier
+	{6, 8, 2, 5, 3, 4, 7, 0},	// terrorist1
+	{8, 6, 2, 5, 3, 4, 7, 0}	// terrorist2
+}; // kL_end.
+// kL_note: The 2nd dimension holds fallbacks for spawning:
+
+	// 0:Civ-Scout
+	// 1:XCom
+	// 2:Soldier
+	// 3:Navigator
+	// 4:Leader/Commander
+	// 5:Engineer
+	// 6:Misc1
+	// 7:Medic
+	// 8:Misc2
+
+// see Node.h, enum NodeRank ->
 
 
 Node::Node()

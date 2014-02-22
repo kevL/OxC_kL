@@ -77,7 +77,7 @@ const int MapData::O_OBJECT		= 3;
  * Gets the dataset this object belongs to.
  * @return Pointer to MapDataSet.
  */
-MapDataSet *MapData::getDataset() const
+MapDataSet* MapData::getDataset() const
 {
 	return _dataset;
 }
@@ -97,7 +97,9 @@ int MapData::getSprite(int frameID) const
  * @param frameID Animation frame
  * @param value The sprite index in the surfaceset of the mapdataset.
  */
-void MapData::setSprite(int frameID, int value)
+void MapData::setSprite(
+		int frameID,
+		int value)
 {
 	_sprite[frameID] = value;
 }
@@ -137,7 +139,8 @@ bool MapData::isNoFloor() const
  */
 int MapData::getBigWall() const
 {
-	if (_terrainLevel < 0) return 0; // this is a hack for eg. Skyranger Ramps
+	if (_terrainLevel < 0) // this is a hack for eg. Skyranger Ramps
+		return 0;
 
 	return _bigWall;
 }
@@ -334,9 +337,9 @@ void MapData::setTUCosts(
 		int fly,
 		int slide)
 {
-	_TUWalk = walk;
-	_TUFly = fly;
-	_TUSlide = slide;
+	_TUWalk		= walk;
+	_TUFly		= fly;
+	_TUSlide	= slide;
 }
 
 /**

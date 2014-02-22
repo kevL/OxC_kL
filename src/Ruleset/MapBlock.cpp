@@ -55,18 +55,21 @@ MapBlock::~MapBlock()
  * Loads the map block from a YAML file.
  * @param node YAML node.
  */
-void MapBlock::load(const YAML::Node &node)
+void MapBlock::load(const YAML::Node& node)
 {
-	_name = node["name"].as<std::string>(_name);
-	_size_x = node["width"].as<int>(_size_x);
-	_size_y = node["length"].as<int>(_size_y);
-	_size_z = node["height"].as<int>(_size_z);
+	_name	= node["name"].as<std::string>(_name);
+	_size_x	= node["width"].as<int>(_size_x);
+	_size_y	= node["length"].as<int>(_size_y);
+	_size_z	= node["height"].as<int>(_size_z);
+
 	_type = (MapBlockType)node["type"].as<int>(_type);
-	if (_subType == MT_UNDEFINED)
+
+	if (_subType == MT_UNDEFINED) // kL_note: huh, this seems odd
 		_subType = (MapBlockType)node["type"].as<int>(_type);
 	_subType = (MapBlockType)node["subType"].as<int>(_subType);
-	_frequency = node["frequency"].as<int>(_frequency);
-	_maxCount = node["maxCount"].as<int>(_maxCount);
+
+	_frequency	= node["frequency"].as<int>(_frequency);
+	_maxCount	= node["maxCount"].as<int>(_maxCount);
 }
 
 /**
@@ -141,9 +144,8 @@ MapBlockType MapBlock::getSubType() const
 int MapBlock::getRemainingUses()
 {
 	if (_maxCount == -1)
-	{
 		return _frequency;
-	}
+
 	return _maxCount - _timesUsed;
 }
 
@@ -153,15 +155,11 @@ int MapBlock::getRemainingUses()
 void MapBlock::markUsed()
 {
 	if (_maxCount == -1)
-	{
 		return;
-	}
 
 	_timesUsed++;
 	if (_timesUsed >= _maxCount)
-	{
 		_timesUsed = _maxCount;
-	}
 }
 
 /**

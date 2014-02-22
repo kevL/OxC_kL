@@ -21,6 +21,7 @@
 #define OPENXCOM_MCDPATCH_H
 
 #include <string>
+
 #include <yaml-cpp/yaml.h>
 
 
@@ -35,9 +36,18 @@ class MapDataSet;
  */
 class MCDPatch
 {
+
 private:
-	std::vector<std::pair<size_t, int> > _bigWalls, _TUWalks, _TUFlys, _TUSlides, _deathTiles, _terrainHeight, _specialTypes;
+	std::vector<std::pair<size_t, int> >
+		_bigWalls,
+		_TUWalks,
+		_TUFlys,
+		_TUSlides,
+		_deathTiles,
+		_terrainHeight,
+		_specialTypes;
 	std::vector<std::pair<size_t, std::vector<int> > > _LOFTS;
+
 
 	public:
 		/// Creates an MCD Patch.

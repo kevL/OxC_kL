@@ -5724,7 +5724,7 @@
 	<vector>
 	"../Engine/InteractiveSurface.h"
 
-1392594699 f:\git\openxcom\src\savegame\node.h
+1393064633 f:\git\openxcom\src\savegame\node.h
 	<yaml-cpp/yaml.h>
 	"../Battlescape/Position.h"
 
@@ -5856,7 +5856,7 @@
 	<vector>
 	<yaml-cpp/yaml.h>
 
-1392945744 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
+1393032739 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
 	"BattlescapeGenerator.h"
 	<fstream>
 	<sstream>
@@ -5928,7 +5928,7 @@
 	<vector>
 	<yaml-cpp/yaml.h>
 
-1392594693 f:\git\openxcom\src\ruleset\mapblock.h
+1393043407 f:\git\openxcom\src\ruleset\mapblock.h
 	<string>
 	<yaml-cpp/yaml.h>
 
@@ -5938,13 +5938,13 @@
 	<SDL.h>
 	<yaml-cpp/yaml.h>
 
-1392594699 f:\git\openxcom\src\ruleset\mcdpatch.h
+1393042937 f:\git\openxcom\src\ruleset\mcdpatch.h
 	<string>
 	<yaml-cpp/yaml.h>
 
-1392594691 f:\git\openxcom\src\ruleset\ruleterrain.h
-	<vector>
+1393043585 f:\git\openxcom\src\ruleset\ruleterrain.h
 	<string>
+	<vector>
 	<yaml-cpp/yaml.h>
 	"MapBlock.h"
 
@@ -5976,7 +5976,7 @@
 	<string>
 	"../Engine/Surface.h"
 
-1392946172 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1393039667 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	<cmath>
 	<sstream>
@@ -6171,7 +6171,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1392594698 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
+1393035239 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
 	"DebriefingState.h"
 	<sstream>
 	"CannotReequipState.h"
@@ -6223,7 +6223,7 @@
 	"../Engine/State.h"
 	"DebriefingState.h"
 
-1392594694 f:\git\openxcom\src\battlescape\promotionsstate.h
+1393035071 f:\git\openxcom\src\battlescape\promotionsstate.h
 	"../Engine/State.h"
 
 1392594690 f:\git\openxcom\src\menu\mainmenustate.h
@@ -6598,21 +6598,21 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1392594697 source:f:\git\openxcom\src\battlescape\promotionsstate.cpp
+1393035116 source:f:\git\openxcom\src\battlescape\promotionsstate.cpp
 	"PromotionsState.h"
 	<sstream>
 	"../Engine/Game.h"
-	"../Resource/ResourcePack.h"
 	"../Engine/Language.h"
-	"../Engine/Palette.h"
-	"../Interface/TextButton.h"
-	"../Interface/Window.h"
-	"../Interface/Text.h"
-	"../Interface/TextList.h"
-	"../Savegame/SavedGame.h"
-	"../Savegame/Base.h"
-	"../Savegame/Soldier.h"
 	"../Engine/Options.h"
+	"../Engine/Palette.h"
+	"../Interface/Text.h"
+	"../Interface/TextButton.h"
+	"../Interface/TextList.h"
+	"../Interface/Window.h"
+	"../Resource/ResourcePack.h"
+	"../Savegame/Base.h"
+	"../Savegame/SavedGame.h"
+	"../Savegame/Soldier.h"
 
 1392594691 source:f:\git\openxcom\src\battlescape\scannerstate.cpp
 	"ScannerState.h"
@@ -9441,7 +9441,7 @@
 	"SerializationHelper.h"
 	<assert.h>
 
-1392594693 source:f:\git\openxcom\src\savegame\soldier.cpp
+1393035384 source:f:\git\openxcom\src\savegame\soldier.cpp
 	"Soldier.h"
 	"SoldierDead.h"
 	"../Engine/Language.h"
