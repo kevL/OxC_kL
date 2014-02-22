@@ -1,4 +1,10 @@
 research:
+  - name: STR_MEDI_KIT
+    cost: 2100
+    points: 20
+  - name: STR_MOTION_SCANNER
+    cost: 9000
+    points: 20
   - name: STR_LASER_WEAPONS
     cost: 500
     points: 10
@@ -27,28 +33,147 @@ research:
     points: 15
     dependencies:
       - STR_LASER_CANNON
-  - name: STR_MOTION_SCANNER
-    cost: 9000
-    points: 20
-  - name: STR_MEDI_KIT
-    cost: 2100
-    points: 20
   - name: STR_ALIEN_ALLOYS
     cost: 40000
     points: 30
     needItem: true
-  - name: STR_ALIEN_ENTERTAINMENT
-    cost: 15000
+  - name: STR_ELERIUM_115
+    cost: 45000
+    points: 60
+    needItem: true
+  - name: STR_PLASMA_PISTOL
+    cost: 60000
+    points: 20
+    needItem: true
+    dependencies:
+      - STR_ALIEN_ALLOYS
+  - name: STR_PLASMA_PISTOL_CLIP
+    cost: 40000
+    points: 5
+    needItem: true
+    dependencies:
+      - STR_ELERIUM_115
+      - STR_PLASMA_PISTOL
+  - name: STR_PLASMA_RIFLE
+    cost: 70000
+    points: 25
+    needItem: true
+    dependencies:
+      - STR_PLASMA_PISTOL_CLIP
+  - name: STR_PLASMA_RIFLE_CLIP
+    cost: 40000
+    points: 6
+    needItem: true
+    dependencies:
+      - STR_PLASMA_RIFLE
+  - name: STR_HEAVY_PLASMA
+    cost: 80000
     points: 30
     needItem: true
-  - name: STR_ALIEN_FOOD
-    cost: 15000
+    dependencies:
+      - STR_PLASMA_RIFLE_CLIP
+  - name: STR_HEAVY_PLASMA_CLIP
+    cost: 40000
+    points: 7
+    needItem: true
+    dependencies:
+      - STR_HEAVY_PLASMA
+  - name: STR_PLASMA_CANNON
+    cost: 66000
+    points: 25
+    dependencies:
+      - STR_HEAVY_PLASMA_CLIP
+  - name: STR_PLASMA_DEFENSE
+    cost: 62000
+    points: 25
+    dependencies:
+      - STR_PLASMA_CANNON
+  - name: STR_BLASTER_LAUNCHER
+    cost: 90000
+    points: 10
+    needItem: true
+    dependencies:
+      - STR_ALIEN_ALLOYS
+  - name: STR_BLASTER_BOMB
+    cost: 30000
+    points: 10
+    needItem: true
+    dependencies:
+      - STR_ELERIUM_115
+  - name: STR_FUSION_MISSILE
+    cost: 88000
+    points: 25
+    dependencies:
+      - STR_BLASTER_LAUNCHER
+      - STR_BLASTER_BOMB
+  - name: STR_FUSION_DEFENSE
+    cost: 80000
+    points: 25
+    dependencies:
+      - STR_FUSION_MISSILE
+  - name: STR_SMALL_LAUNCHER
+    cost: 55000
     points: 30
     needItem: true
+    dependencies:
+      - STR_ALIEN_ALLOYS
+  - name: STR_STUN_BOMB
+    cost: 18000
+    points: 10
+    needItem: true
+    dependencies:
+      - STR_ELERIUM_115
   - name: STR_ALIEN_GRENADE
     cost: 20000
     points: 20
     needItem: true
+    dependencies:
+      - STR_ALIEN_ALLOYS
+      - STR_ELERIUM_115
+  - name: STR_PERSONAL_ARMOR
+    cost: 9000
+    points: 20
+    dependencies:
+      - STR_ALIEN_ALLOYS
+  - name: STR_POWER_SUIT
+    cost: 20500
+    points: 20
+    dependencies:
+      - STR_PERSONAL_ARMOR
+      - STR_UFO_POWER_SOURCE
+  - name: STR_FLYING_SUIT
+    cost: 33000
+    points: 20
+    dependencies:
+      - STR_POWER_SUIT
+      - STR_UFO_NAVIGATION
+  - name: STR_MIND_PROBE
+    cost: 60000
+    points: 25
+    needItem: true
+  - name: STR_PSI_AMP
+    cost: 50000
+    points: 20
+    dependencies:
+      - STR_MIND_PROBE
+      - STR_PSI_LAB
+  - name: STR_PSI_LAB
+    cost: 42000
+    points: 25
+    dependencies:
+      - STR_ETHEREAL_COMMANDER
+      - STR_ETHEREAL_ENGINEER
+      - STR_ETHEREAL_LEADER
+      - STR_ETHEREAL_MEDIC
+      - STR_ETHEREAL_NAVIGATOR
+      - STR_ETHEREAL_SOLDIER
+      - STR_SECTOID_LEADER
+      - STR_SECTOID_COMMANDER
+  - name: STR_MIND_SHIELD
+    cost: 36000
+    points: 25
+    dependencies:
+      - STR_PSI_LAB
   - name: STR_ALIEN_ORIGINS
     cost: 30000
     points: 60
@@ -82,184 +207,6 @@ research:
       - STR_FLOATER_NAVIGATOR
       - STR_FLOATER_SOLDIER
       - STR_REAPER_TERRORIST
-  - name: STR_ALIEN_REPRODUCTION
-    cost: 15000
-    points: 30
-    needItem: true
-  - name: STR_ALIEN_SURGERY
-    cost: 15000
-    points: 30
-    needItem: true
-  - name: STR_BLASTER_BOMB
-    cost: 30000
-    points: 10
-    needItem: true
-  - name: STR_BLASTER_LAUNCHER
-    cost: 90000
-    points: 10
-    needItem: true
-  - name: STR_CYDONIA_OR_BUST
-    cost: 60000
-    points: 60
-    dependencies:
-      - STR_CYDONIA_DEP
-  - name: STR_CYDONIA_DEP
-    cost: 0
-    points: 0
-    unlocks:
-      - STR_CYDONIA_OR_BUST
-    requires:
-      - STR_THE_MARTIAN_SOLUTION
-    dependencies:
-      - STR_SECTOID_COMMANDER
-      - STR_SNAKEMAN_COMMANDER
-      - STR_ETHEREAL_COMMANDER
-      - STR_FLOATER_COMMANDER
-  - name: STR_ELERIUM_115
-    cost: 45000
-    points: 60
-    needItem: true
-  - name: STR_EXAMINATION_ROOM
-    cost: 15000
-    needItem: true
-  - name: STR_FLYING_SUIT
-    cost: 33000
-    points: 20
-    dependencies:
-      - STR_POWER_SUIT
-      - STR_UFO_NAVIGATION
-  - name: STR_FUSION_DEFENSE
-    cost: 80000
-    points: 25
-    dependencies:
-      - STR_FUSION_MISSILE
-  - name: STR_FUSION_MISSILE
-    cost: 88000
-    points: 25
-    dependencies:
-      - STR_BLASTER_LAUNCHER
-      - STR_BLASTER_BOMB
-  - name: STR_GRAV_SHIELD
-    cost: 93000
-    points: 25
-    dependencies:
-      - STR_NEW_FIGHTER_TRANSPORTER
-  - name: STR_HEAVY_PLASMA
-    cost: 80000
-    points: 30
-    needItem: true
-    dependencies:
-      - STR_PLASMA_RIFLE_CLIP
-  - name: STR_HEAVY_PLASMA_CLIP
-    cost: 40000
-    points: 7
-    needItem: true
-    dependencies:
-      - STR_HEAVY_PLASMA
-  - name: STR_HYPER_WAVE_DECODER
-    cost: 67000
-    points: 25
-    dependencies:
-      - STR_FLOATER_NAVIGATOR
-      - STR_SNAKEMAN_NAVIGATOR
-      - STR_MUTON_NAVIGATOR
-      - STR_SECTOID_NAVIGATOR
-      - STR_UFO_NAVIGATION
-  - name: STR_MIND_PROBE
-    cost: 60000
-    points: 25
-    needItem: true
-  - name: STR_MIND_SHIELD
-    cost: 36000
-    points: 25
-    dependencies:
-      - STR_PSI_LAB
-  - name: STR_NEW_FIGHTER_CRAFT
-    cost: 60000
-    points: 30
-    dependencies:
-      - STR_UFO_CONSTRUCTION
-  - name: STR_NEW_FIGHTER_TRANSPORTER
-    cost: 70000
-    points: 30
-    dependencies:
-      - STR_NEW_FIGHTER_CRAFT
-  - name: STR_PERSONAL_ARMOR
-    cost: 9000
-    points: 20
-    dependencies:
-      - STR_ALIEN_ALLOYS
-  - name: STR_PLASMA_CANNON
-    cost: 66000
-    points: 25
-    dependencies:
-      - STR_PLASMA_CANNON_DEP1
-      - STR_PLASMA_CANNON_DEP2
-  - name: STR_PLASMA_DEFENSE
-    cost: 62000
-    points: 25
-    dependencies:
-      - STR_PLASMA_CANNON
-  - name: STR_PLASMA_PISTOL
-    cost: 60000
-    points: 20
-    needItem: true
-  - name: STR_PLASMA_PISTOL_CLIP
-    cost: 40000
-    points: 5
-    needItem: true
-    dependencies:
-      - STR_PLASMA_PISTOL
-  - name: STR_PLASMA_RIFLE
-    cost: 70000
-    points: 25
-    needItem: true
-    dependencies:
-      - STR_PLASMA_PISTOL_CLIP
-  - name: STR_PLASMA_RIFLE_CLIP
-    cost: 40000
-    points: 6
-    needItem: true
-    dependencies:
-      - STR_PLASMA_RIFLE
-  - name: STR_POWER_SUIT
-    cost: 20500
-    points: 20
-    dependencies:
-      - STR_ELERIUM_115
-      - STR_UFO_POWER_SOURCE
-      - STR_PERSONAL_ARMOR
-  - name: STR_PSI_AMP
-    cost: 50000
-    points: 20
-    dependencies:
-      - STR_PSI_LAB
-  - name: STR_PSI_LAB
-    cost: 42000
-    points: 25
-    dependencies:
-      - STR_ETHEREAL_COMMANDER
-      - STR_ETHEREAL_ENGINEER
-      - STR_ETHEREAL_LEADER
-      - STR_ETHEREAL_MEDIC
-      - STR_ETHEREAL_NAVIGATOR
-      - STR_ETHEREAL_SOLDIER
-      - STR_SECTOID_LEADER
-      - STR_SECTOID_COMMANDER
-  - name: STR_SMALL_LAUNCHER
-    cost: 55000
-    points: 30
-    needItem: true
-  - name: STR_STUN_BOMB
-    cost: 18000
-    points: 10
-    needItem: true
-  - name: STR_THE_MARTIAN_SOLUTION
-    cost: 50000
-    points: 60
-    dependencies:
-      - STR_ALIEN_ORIGINS
-      - STR_LEADER_PLUS
   - name: STR_LEADER_PLUS
     cost: 0
     requires:
@@ -273,6 +220,51 @@ research:
       - STR_ETHEREAL_LEADER
       - STR_FLOATER_COMMANDER
       - STR_FLOATER_LEADER
+  - name: STR_THE_MARTIAN_SOLUTION
+    cost: 50000
+    points: 60
+    dependencies:
+      - STR_ALIEN_ORIGINS
+      - STR_LEADER_PLUS
+  - name: STR_CYDONIA_DEP
+    cost: 0
+    points: 0
+    unlocks:
+      - STR_CYDONIA_OR_BUST
+    requires:
+      - STR_THE_MARTIAN_SOLUTION
+    dependencies:
+      - STR_SECTOID_COMMANDER
+      - STR_SNAKEMAN_COMMANDER
+      - STR_ETHEREAL_COMMANDER
+      - STR_FLOATER_COMMANDER
+  - name: STR_CYDONIA_OR_BUST
+    cost: 60000
+    points: 60
+    dependencies:
+      - STR_CYDONIA_DEP
+  - name: STR_HYPER_WAVE_DECODER
+    cost: 67000
+    points: 25
+    dependencies:
+      - STR_FLOATER_NAVIGATOR
+      - STR_SNAKEMAN_NAVIGATOR
+      - STR_MUTON_NAVIGATOR
+      - STR_SECTOID_NAVIGATOR
+      - STR_UFO_NAVIGATION
+  - name: STR_UFO_NAVIGATION
+    cost: 45000
+    points: 30
+    needItem: true
+    dependencies:
+      - STR_ALIEN_ALLOYS
+  - name: STR_UFO_POWER_SOURCE
+    cost: 45000
+    points: 30
+    needItem: true
+    dependencies:
+      - STR_ALIEN_ALLOYS
+      - STR_ELERIUM_115
   - name: STR_UFO_CONSTRUCTION
     cost: 45000
     points: 30
@@ -281,18 +273,45 @@ research:
       - STR_ELERIUM_115
       - STR_UFO_POWER_SOURCE
       - STR_UFO_NAVIGATION
-  - name: STR_UFO_NAVIGATION
-    cost: 45000
+  - name: STR_NEW_FIGHTER_CRAFT
+    cost: 60000
     points: 30
-    needItem: true
-  - name: STR_UFO_POWER_SOURCE
-    cost: 45000
-    needItem: true
+    dependencies:
+      - STR_UFO_CONSTRUCTION
+  - name: STR_NEW_FIGHTER_TRANSPORTER
+    cost: 70000
+    points: 30
+    dependencies:
+      - STR_NEW_FIGHTER_CRAFT
   - name: STR_ULTIMATE_CRAFT
     cost: 90000
     points: 30
     dependencies:
       - STR_NEW_FIGHTER_TRANSPORTER
+  - name: STR_GRAV_SHIELD
+    cost: 93000
+    points: 25
+    dependencies:
+      - STR_ULTIMATE_CRAFT
+  - name: STR_ALIEN_ENTERTAINMENT
+    cost: 15000
+    points: 30
+    needItem: true
+  - name: STR_ALIEN_FOOD
+    cost: 15000
+    points: 30
+    needItem: true
+  - name: STR_ALIEN_REPRODUCTION
+    cost: 15000
+    points: 30
+    needItem: true
+  - name: STR_ALIEN_SURGERY
+    cost: 15000
+    points: 30
+    needItem: true
+  - name: STR_EXAMINATION_ROOM
+    cost: 15000
+    needItem: true
   - name: STR_ZOMBIE_CORPSE
     cost: 1800
     points: 50
@@ -679,20 +698,6 @@ research:
       - STR_CYDONIA_DEP
       - STR_ALIEN_ORIGINS
       - STR_PSI_LAB
-  - name: STR_PLASMA_CANNON_DEP1
-    cost: 0
-    dependencies:
-      - STR_HEAVY_PLASMA
-      - STR_HEAVY_PLASMA_CLIP
-    unlocks:
-      - STR_PLASMA_CANNON
-  - name: STR_PLASMA_CANNON_DEP2
-    cost: 0
-    dependencies:
-      - STR_PLASMA_RIFLE
-      - STR_PLASMA_RIFLE_CLIP
-    unlocks:
-      - STR_PLASMA_CANNON
   - name: STR_SECTOID
     cost: 0
     points: 50
@@ -779,6 +784,50 @@ research:
     cost: 0
     points: 50
     needItem: true
+  - name: STR_SECTOID_AUTOPSY
+    cost: 0
+    points: 50
+    needItem: true
+  - name: STR_SNAKEMAN_AUTOPSY
+    cost: 0
+    points: 50
+    needItem: true
+  - name: STR_FLOATER_AUTOPSY
+    cost: 0
+    points: 50
+    needItem: true
+  - name: STR_MUTON_AUTOPSY
+    cost: 0
+    points: 50
+    needItem: true
+  - name: STR_ETHEREAL_AUTOPSY
+    cost: 0
+    points: 50
+    needItem: true
+  - name: STR_CYBERDISC_AUTOPSY
+    cost: 0
+    points: 50
+    needItem: true
+  - name: STR_CHRYSSALID_AUTOPSY
+    cost: 0
+    points: 50
+    needItem: true
+  - name: STR_REAPER_AUTOPSY
+    cost: 0
+    points: 50
+    needItem: true
+  - name: STR_CELATID_AUTOPSY
+    cost: 0
+    points: 50
+    needItem: true
+  - name: STR_SILACOID_AUTOPSY
+    cost: 0
+    points: 50
+    needItem: true
+  - name: STR_SECTOPOD_AUTOPSY
+    cost: 0
+    points: 50
+    needItem: true
   - name: STR_ALIEN_RESEARCH
     cost: 0
     points: 50
@@ -840,50 +889,6 @@ research:
     points: 50
     needItem: true
   - name: STR_SUPPLY_SHIP
-    cost: 0
-    points: 50
-    needItem: true
-  - name: STR_SECTOID_AUTOPSY
-    cost: 0
-    points: 50
-    needItem: true
-  - name: STR_SNAKEMAN_AUTOPSY
-    cost: 0
-    points: 50
-    needItem: true
-  - name: STR_FLOATER_AUTOPSY
-    cost: 0
-    points: 50
-    needItem: true
-  - name: STR_MUTON_AUTOPSY
-    cost: 0
-    points: 50
-    needItem: true
-  - name: STR_ETHEREAL_AUTOPSY
-    cost: 0
-    points: 50
-    needItem: true
-  - name: STR_CYBERDISC_AUTOPSY
-    cost: 0
-    points: 50
-    needItem: true
-  - name: STR_CHRYSSALID_AUTOPSY
-    cost: 0
-    points: 50
-    needItem: true
-  - name: STR_REAPER_AUTOPSY
-    cost: 0
-    points: 50
-    needItem: true
-  - name: STR_CELATID_AUTOPSY
-    cost: 0
-    points: 50
-    needItem: true
-  - name: STR_SILACOID_AUTOPSY
-    cost: 0
-    points: 50
-    needItem: true
-  - name: STR_SECTOPOD_AUTOPSY
     cost: 0
     points: 50
     needItem: true

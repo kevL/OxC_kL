@@ -523,7 +523,7 @@ UnitStatus BattleUnit::getStatus() const
  * kL. Sets a unit's status.
  * @ param status, See UnitStatus enum.
  */
-void BattleUnit::setStatus(int status)
+void BattleUnit::setStatus(int status) // kL
 {
 	switch (status)
 	{
@@ -1923,10 +1923,13 @@ int BattleUnit::getFatalWounds() const
  * Little formula to calculate initiative/reaction score.
  * @return, Reaction score; aka INITIATIVE
  */
-double BattleUnit::getInitiative()
+//kL double BattleUnit::getInitiative()
+double BattleUnit::getInitiative(int tuSpent) // kL
 {
 	// (Reactions Stat) x (Current Time Units / Max TUs)
-	return static_cast<double>(getStats()->reactions * getTimeUnits()) / static_cast<double>(getStats()->tu);
+	return static_cast<double>(
+				getStats()->reactions * (getTimeUnits() - tuSpent))
+			/ static_cast<double>(getStats()->tu);
 }
 
 /**

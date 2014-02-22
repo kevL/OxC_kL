@@ -124,7 +124,9 @@ private:
 
 
 		/// Checks reaction fire.
-		bool checkReactionFire(BattleUnit* unit);
+		bool checkReactionFire(
+							BattleUnit* unit,
+							int tuSpent = 0); // kL
 		/// Creates a vector of units that can spot this unit.
 		std::vector<BattleUnit*> getSpottingUnits(BattleUnit* unit);
 		/// Checks validity of a snap shot to this position.
@@ -134,7 +136,8 @@ private:
 		/// Given a vector of spotters, and a unit, picks the spotter with the highest reaction score.
 		BattleUnit* getReactor(
 				std::vector<BattleUnit*> spotters,
-				BattleUnit* unit);
+				BattleUnit* unit,
+				int tuSpent = 0); // kL
 		/// Tries to perform a reaction snap shot to this location.
 		bool tryReactionSnap(
 				BattleUnit* unit,

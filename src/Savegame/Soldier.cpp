@@ -332,7 +332,7 @@ std::string Soldier::getRankString() const
 /**
  * Returns a graphic representation of the soldier's military rank.
  * @note THE MEANING OF LIFE
- * @return, Sprite ID for rank.
+ * @return, Sprite ID for rank
  */
 int Soldier::getRankSprite() const
 {
@@ -353,7 +353,7 @@ SoldierRank Soldier::getRank() const
  */
 void Soldier::promoteRank()
 {
-	_rank = (SoldierRank)(static_cast<int>(_rank) + 1);
+	_rank = static_cast<SoldierRank>(static_cast<int>(_rank) + 1);
 	if (_rank > RANK_SQUADDIE) // only promotions above SQUADDIE are worth mentioning.
 		_recentlyPromoted = true;
 }

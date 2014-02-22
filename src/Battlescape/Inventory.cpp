@@ -900,6 +900,7 @@ void Inventory::mouseClick(Action* action, State* state)
 				// but Does NOT applyGravity(), so from InventoryState::btnOkClick()
 				SavedBattleGame* battleGame = _game->getSavedGame()->getSavedBattle();
 				TileEngine* tileEngine = battleGame->getTileEngine();
+
 				tileEngine->applyGravity(battleGame->getSelectedUnit()->getTile());
 				tileEngine->calculateTerrainLighting(); // dropping / picking up flares
 				tileEngine->recalculateFOV();

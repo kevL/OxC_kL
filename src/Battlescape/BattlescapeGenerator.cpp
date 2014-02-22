@@ -785,11 +785,14 @@ BattleUnit* BattlescapeGenerator::addXCOMVehicle(Vehicle* tank)
 									_game->getRuleset()->getItem(vehicle),
 									_save->getCurrentItemId());
 //kL		addItem(item, unit);
-		if (!addItem(item, tankUnit))	// kL
+		if (!addItem(			// kL
+					item,
+					tankUnit))
 		{
-			delete item;				// kL
+			delete item;		// kL
+			delete tankUnit;	// kL
 
-			return 0;					// kL
+			return 0;			// kL
 		}
 
 		if (!tank->getRules()->getCompatibleAmmo()->empty())
@@ -799,11 +802,15 @@ BattleUnit* BattlescapeGenerator::addXCOMVehicle(Vehicle* tank)
 											_game->getRuleset()->getItem(ammo),
 											_save->getCurrentItemId());
 //kL			addItem(ammoItem, unit);
-			if (!addItem(ammoItem, tankUnit))	// kL
+			if (!addItem(			// kL
+						ammoItem,
+						tankUnit))
 			{
-				delete ammoItem;				// kL
+				delete ammoItem;	// kL
+				delete item;		// kL
+				delete tankUnit;	// kL
 
-				return 0;						// kL
+				return 0;			// kL
 			}
 
 			ammoItem->setAmmoQuantity(tank->getAmmo());
@@ -813,7 +820,7 @@ BattleUnit* BattlescapeGenerator::addXCOMVehicle(Vehicle* tank)
 	}
 	else					// kL
 	{
-		delete tankUnit;	// kL
+//		delete tankUnit;	// kL
 
 		return 0;			// kL
 	}
@@ -831,20 +838,25 @@ BattleUnit* BattlescapeGenerator::addXCOMVehicle(Vehicle* tank)
 BattleUnit* BattlescapeGenerator::addXCOMUnit(BattleUnit* unit)
 {
 //	unit->setId(_unitCount++);
-
 	if (_craft == 0
 		|| _save->getMissionType() == "STR_ALIEN_BASE_ASSAULT"
 		|| _save->getMissionType() == "STR_MARS_THE_FINAL_ASSAULT")
 	{
-		Node* node = _save->getSpawnNode(NR_XCOM, unit);
+		Node* node = _save->getSpawnNode(
+									NR_XCOM,
+									unit);
 		if (node)
 		{
-			_save->setUnitPosition(unit, node->getPosition());
-			_craftInventoryTile = _save->getTile(node->getPosition());
-			unit->setDirection(RNG::generate(0, 7));
 			_save->getUnits()->push_back(unit);
-			_save->getTileEngine()->calculateFOV(unit);
+
+			_save->setUnitPosition(
+								unit,
+								node->getPosition());
+			unit->setDirection(RNG::generate(0, 7));
 			unit->deriveRank();
+//kL			_save->getTileEngine()->calculateFOV(unit);
+
+			_craftInventoryTile = _save->getTile(node->getPosition());
 
 			return unit;
 		}
@@ -852,17 +864,19 @@ BattleUnit* BattlescapeGenerator::addXCOMUnit(BattleUnit* unit)
 		{
 			if (placeUnitNearFriend(unit))
 			{
-				_craftInventoryTile = _save->getTile(unit->getPosition());
-				unit->setDirection(RNG::generate(0, 7));
 				_save->getUnits()->push_back(unit);
-				_save->getTileEngine()->calculateFOV(unit);
+
+				unit->setDirection(RNG::generate(0, 7));
 				unit->deriveRank();
+//kL				_save->getTileEngine()->calculateFOV(unit);
+
+				_craftInventoryTile = _save->getTile(unit->getPosition());
 
 				return unit;
 			}
 		}
 	}
-	else if (_craft
+	else if (_craft // Wb.140220: Transport craft deployments (Lightning & Avenger)
 		&& !_craft->getRules()->getDeployment().empty())
 	{
 		for (std::vector<std::vector<int> >::const_iterator
@@ -874,14 +888,17 @@ BattleUnit* BattlescapeGenerator::addXCOMUnit(BattleUnit* unit)
 								(*i)[0] + (_craftX * 10),
 								(*i)[1] + (_craftY * 10),
 								(*i)[2]);
-			int dir = (*i)[3];
+//kL			int dir = (*i)[3];
 
 			if (canPlaceXCOMUnit(_save->getTile(pos)))
 			{
-				if (_save->setUnitPosition(unit, pos))
+				if (_save->setUnitPosition(
+										unit,
+										pos))
 				{
 					_save->getUnits()->push_back(unit);
-					unit->setDirection(dir);
+
+					unit->setDirection((*i)[3]); // kL
 					unit->deriveRank();
 
 					return unit;
@@ -889,7 +906,7 @@ BattleUnit* BattlescapeGenerator::addXCOMUnit(BattleUnit* unit)
 			}
 		}
 	}
-	else // kL_note: mission w/ transport craft
+	else // kL_note: mission w/ transport craft that does not have ruleset Deployments.
 	{
 		_tankPos = 0;
 
@@ -898,69 +915,38 @@ BattleUnit* BattlescapeGenerator::addXCOMUnit(BattleUnit* unit)
 				i < _mapsize_x * _mapsize_y * _mapsize_z;
 				i++)
 		{
-/*Wb.140220			// to spawn an xcom soldier, there has to be a tile, with a floor,
-			// with the starting point attribute and no content-tileObject in the way
-			if (_save->getTiles()[i]																		// is a tile
-				&& _save->getTiles()[i]->getMapData(MapData::O_FLOOR)										// has a floor
-				&& _save->getTiles()[i]->getMapData(MapData::O_FLOOR)->getSpecialType() == START_POINT		// is a 'start point', ie. cargo tile
-				&& !_save->getTiles()[i]->getMapData(MapData::O_OBJECT)										// no object content
-				&& _save->getTiles()[i]->getMapData(MapData::O_FLOOR)->getTUCost(MT_WALK) < 255				// is walkable.
-				&& _save->getTiles()[i]->getUnit() == 0)													// and no unit on Tile.
+			if (canPlaceXCOMUnit(_save->getTiles()[i]))
 			{
-				// kL_note: ground inventory goes where the first xCom unit spawns
-				if (_craftInventoryTile == 0)
-				{
-					_craftInventoryTile = _save->getTiles()[i];
-				} */
-
-				// for bigger units, line them up with the first tile of the craft
-				// kL_note: try the fifth tile...
-/*kL				if (unit->getArmor()->getSize() == 1													// is not a tank
-					|| _craftInventoryTile == 0															// or no ground-inv. has been set
-					|| _save->getTiles()[i]->getPosition().x == _craftInventoryTile->getPosition().x)	// or the ground-inv. is on x-axis
-				{
-					if (_save->setUnitPosition(unit, _save->getTiles()[i]->getPosition()))		// set unit position SUCCESS
-					{
-						_save->getUnits()->push_back(unit);		// add unit to vector of Units.
-
-						if (_save->getTileEngine())
-						{
-							_save->getTileEngine()->calculateFOV(unit);		// it's all good: do Field of View for unit!
-						}
-
-						unit->deriveRank();
-
-						return unit;
-					}
-				} */
 				// kL_begin: BattlescapeGenerator, set tankPosition
-/*				if (unit->getArmor()->getSize() > 1
-					&& _save->getTiles()[i]->getPosition().x == _craftInventoryTile->getPosition().x)
+				if (unit->getArmor()->getSize() > 1														// is a tank
+					&& _save->getTiles()[i]->getPosition().x == _craftInventoryTile->getPosition().x)	// and the ground-inventory-tile is on this[i] tile's x-axis|
 				{
 					_tankPos++;
 					if (_tankPos == 3)
 					{
-						if (_save->setUnitPosition(unit, _save->getTiles()[i]->getPosition()))	// set unit position SUCCESS
+						if (_save->setUnitPosition(										// set unit position SUCCESS
+												unit,
+												_save->getTiles()[i]->getPosition()))
 						{
-							_save->getUnits()->push_back(unit);									// add unit to vector of Units.
-
-							if (_save->getTileEngine())
-								_save->getTileEngine()->calculateFOV(unit);						// it's all good: do Field of View for unit!
+							_save->getUnits()->push_back(unit);							// add unit to vector of Units.
 
 							unit->deriveRank();
+//							if (_save->getTileEngine())
+//								_save->getTileEngine()->calculateFOV(unit);				// it's all good: do Field of View for unit!
 
 							return unit;
 						}
 					}
 				}
-				else if (_save->setUnitPosition(unit, _save->getTiles()[i]->getPosition()))		// set unit position SUCCESS
+				else if (_save->setUnitPosition(										// set unit position SUCCESS
+											unit,
+											_save->getTiles()[i]->getPosition()))
 				{
-					_save->getUnits()->push_back(unit);											// add unit to vector of Units.
-
-					if (_save->getTileEngine())
-						_save->getTileEngine()->calculateFOV(unit);								// it's all good: do Field of View for unit!
+					_save->getUnits()->push_back(unit);									// add unit to vector of Units.
 
 					unit->deriveRank();
+//					if (_save->getTileEngine())
+//						_save->getTileEngine()->calculateFOV(unit);						// it's all good: do Field of View for unit!
 
 					return unit;
 				} // kL_end.
@@ -968,26 +954,7 @@ BattleUnit* BattlescapeGenerator::addXCOMUnit(BattleUnit* unit)
 		}
 	}
 
-//kL	delete unit;
-
-	return 0;
-} */
-			if (canPlaceXCOMUnit(_save->getTiles()[i]))
-			{
-				if (_save->setUnitPosition(
-										unit,
-										_save->getTiles()[i]->getPosition()))
-				{
-					_save->getUnits()->push_back(unit);
-					unit->deriveRank();
-
-					return unit;
-				}
-			}
-		}
-	}
-
-	delete unit;
+	delete unit; // fallthrough, if above fails.
 
 	return 0;
 }
@@ -999,18 +966,22 @@ BattleUnit* BattlescapeGenerator::addXCOMUnit(BattleUnit* unit)
  */
 bool BattlescapeGenerator::canPlaceXCOMUnit(Tile* tile)
 {
-	// to spawn an xcom soldier, there has to be a tile, with a floor, with the starting point attribute and no object in the way
-	if (tile && 
-		tile->getMapData(MapData::O_FLOOR) && 
-		tile->getMapData(MapData::O_FLOOR)->getSpecialType() == START_POINT && 
-		!tile->getMapData(MapData::O_OBJECT) &&
-		tile->getMapData(MapData::O_FLOOR)->getTUCost(MT_WALK) < 255)
+	// to spawn an xcom soldier, there has to be a tile, with a floor,
+	// with the starting point attribute and no objects in the way
+	if (tile																		// is a tile
+		&& tile->getMapData(MapData::O_FLOOR)										// has a floor
+		&& tile->getMapData(MapData::O_FLOOR)->getSpecialType() == START_POINT		// is a 'start point', ie. cargo tile
+		&& !tile->getMapData(MapData::O_OBJECT)										// no object content
+		&& tile->getMapData(MapData::O_FLOOR)->getTUCost(MT_WALK) < 255				// is walkable.
+		&& tile->getUnit() == 0)													// kL, and no unit on Tile.
 	{
+		// kL_note: ground inventory goes where the first xCom unit spawns
 		if (_craftInventoryTile == 0)
 			_craftInventoryTile = tile;
 
 		return true;
 	}
+
 	return false;
 }
 
@@ -2834,8 +2805,7 @@ void BattlescapeGenerator::fuelPowerSources()
 }
 
 /**
- * When a UFO crashes, there is a 75% chance for each powersource to explode.
- * kL_note: 80% -> plus explosive power depends on damage taken during dogfight!!!!
+ * When a UFO crashes, there is a chance for each powersource to explode.
  */
 void BattlescapeGenerator::explodePowerSources()
 {
@@ -2854,28 +2824,21 @@ void BattlescapeGenerator::explodePowerSources()
 			pos.y = _save->getTiles()[i]->getPosition().y * 16;
 			pos.z = _save->getTiles()[i]->getPosition().z * 24 + 12;
 
-//kL			_save->getTileEngine()->explode(pos, 180+RNG::generate(0,70), DT_HE, 10);
-
-			int percDamage = _ufo->getCrashPS(); // kL ( range: 50+ to 100- )
+			int percDamage = _ufo->getCrashPS(); // ( range: 50+ to 100- )
 			Log(LOG_INFO) << ". crashPS = " << percDamage;
-				// kL_note: that might be fetchable with the simpler _ufo->getDamagePercentage() function...!
-				// ah, but it wouldn't get written to Save..
-			if (RNG::percent(percDamage / 2)) // chance for full range Explosion (even if crash took low damage) !!!
+			if (RNG::percent(percDamage / 2)) // chance for full range Explosion (even if crash took low damage)
 			{
 				percDamage = RNG::generate(1, 100);
 				Log(LOG_INFO) << ". . Alt percDamage = " << percDamage;
 			}
-			double rand = RNG::generate(1.0, 2.0) * static_cast<double>(percDamage);	// kL
+			double rand = RNG::generate(0.0, 2.0) * static_cast<double>(percDamage);
 			Log(LOG_INFO) << ". rand = " << (int)rand;
-			int power = static_cast<int>(((pow(rand, 3)) / 32000.0) + 50.0);			// kL
 
-			// ((x^3)/32000)+50, x= 50..300
-//			int rand = RNG::generate(1, 200);														// kL
-//			int power = static_cast<int>(((pow(static_cast<double>(rand), 3)) / 32000.0) + 50.0);	// kL
-
-//			power = 300; // TEST!
+//			int power = static_cast<int>(((pow(rand, 3)) / 32000.0) + (static_cast<double>(percDamage) - 50.0));
+			int power = static_cast<int>(((pow(rand, 2)) / 160.0) + (static_cast<double>(percDamage) - 50.0));
 			Log(LOG_INFO) << ". power = " << power;
-			_save->getTileEngine()->explode( // kL
+
+			_save->getTileEngine()->explode(
 										pos,
 										power,
 										DT_HE,

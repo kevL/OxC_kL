@@ -1120,7 +1120,7 @@ void BattlescapeState::btnShowMapClick(Action*)
 
 /**
  * Toggles the current unit's kneel/standup status.
- * @param action Pointer to an action.
+ * @param action, Pointer to an action.
  */
 void BattlescapeState::btnKneelClick(Action*)
 {
@@ -1130,17 +1130,31 @@ void BattlescapeState::btnKneelClick(Action*)
 		if (bu)
 		{
 //			Log(LOG_INFO) << "BattlescapeState::btnKneelClick()";
-//kL			_battleGame->kneel(bu);
-
-			if (_battleGame->kneel(bu) // kL
-				&& _battleGame->getPathfinding()->isPathPreviewed())
-//kL				&& bu->isKneeled()) // update any path preview if unit kneels
+			if (_battleGame->kneel(bu))
 			{
-				_battleGame->getPathfinding()->calculate(
-													_battleGame->getCurrentAction()->actor,
-													_battleGame->getCurrentAction()->target);
-				_battleGame->getPathfinding()->removePreview();
-				_battleGame->getPathfinding()->previewPath();
+				updateSoldierInfo(false); // kL
+
+				_battleGame->getTileEngine()->calculateFOV(bu->getPosition()); // kL
+					// need this here, so that my newVis algorithm works without
+					// false positives, or true negatives as it were, when a soldier
+					// stands up and walks in one go via UnitWalkBState. Because if
+					// I calculate newVis in kneel() it says 'yeh you see something'
+					// but the soldier wouldn't stop - so newVis has to be calculated
+					// directly in UnitWalkBState.... yet by doing it here on the
+					// btn-press, the enemy visibility indicator should light up.
+					//
+					// Will check reactionFire in BattlescapeGame::kneel()
+					// no, no it won't.
+				_battleGame->getTileEngine()->checkReactionFire(bu); // kL
+
+				if (_battleGame->getPathfinding()->isPathPreviewed())
+				{
+					_battleGame->getPathfinding()->calculate(
+														_battleGame->getCurrentAction()->actor,
+														_battleGame->getCurrentAction()->target);
+					_battleGame->getPathfinding()->removePreview();
+					_battleGame->getPathfinding()->previewPath();
+				}
 			}
 		}
 	}

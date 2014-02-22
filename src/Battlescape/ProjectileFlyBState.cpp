@@ -123,11 +123,6 @@ void ProjectileFlyBState::init()
 	Log(LOG_INFO) << ". getStopShot() = " << _action.actor->getStopShot();
 
 
-	BattleItem* weapon = _action.weapon;
-	_ammo = weapon->getAmmoItem();
-	_unit = _action.actor;
-//kL	_projectileItem = 0; // already initialized.
-
 	// kL_begin:
 	BattleUnit* targetUnit = _parent->getSave()->getTile(_action.target)->getUnit();
 	if (targetUnit
@@ -138,6 +133,16 @@ void ProjectileFlyBState::init()
 		targetUnit->setDashing(false);
 	} // kL_end.
 
+
+//kL	BattleItem* weapon = _action.weapon; // < was a pointer!! kL_note.
+//kL	_projectileItem = 0; // already initialized.
+
+	_unit = _action.actor;
+	_ammo = _action.weapon->getAmmoItem();
+
+	// **** The first 4 of these SHOULD NEVER happen ****
+	// the 4th is wtf: tu ought be spent for this already.
+	// They should be coded with a tuRefund() function regardless.
 	if (_unit->isOut(true, true))
 //		|| _unit->getHealth() == 0
 //		|| _unit->getHealth() < _unit->getStunlevel())
@@ -149,7 +154,7 @@ void ProjectileFlyBState::init()
 
 		return;
 	}
-	else if (!weapon) // can't shoot without weapon
+	else if (!_action.weapon) // can't shoot without weapon
 	{
 		Log(LOG_INFO) << ". no weapon, EXIT";
 		_unit->setStopShot(false); // kL
@@ -159,7 +164,7 @@ void ProjectileFlyBState::init()
 	}
 	else if (!_parent->getSave()->getTile(_action.target)) // invalid target position
 	{
-		Log(LOG_INFO) << ". no target, EXIT";
+		Log(LOG_INFO) << ". no targetPos, EXIT";
 		_unit->setStopShot(false); // kL
 		_parent->popState();
 
@@ -188,7 +193,7 @@ void ProjectileFlyBState::init()
 													_action.weapon));
 		_parent->popState();
 
-		Log(LOG_INFO) << ". stopShot ID = " << _unit->getId() << ", refund TUs.";
+		Log(LOG_INFO) << ". stopShot ID = " << _unit->getId() << ", refund TUs. EXIT";
 		return;
 	}
 	else if (_unit->getFaction() != _parent->getSave()->getSide()) // reaction fire
@@ -225,7 +230,7 @@ void ProjectileFlyBState::init()
 	// autoshot will default back to snapshot if it's not possible
 	// kL_note: should this be done *before* tu expenditure?!! Ok it is,
 	// popState() does tu costs
-	if (weapon->getRules()->getAccuracyAuto() == 0
+	if (_action.weapon->getRules()->getAccuracyAuto() == 0
 		&& _action.type == BA_AUTOSHOT)
 	{
 		_action.type = BA_SNAPSHOT;
@@ -235,7 +240,7 @@ void ProjectileFlyBState::init()
 	// (in case of reaction "shots" with a melee weapon),
 	// for Silacoid attack, etc.
 	// kL_note: not sure that melee reactionFire is properly implemented...
-	if (weapon->getRules()->getBattleType() == BT_MELEE
+	if (_action.weapon->getRules()->getBattleType() == BT_MELEE
 		&& _action.type == BA_SNAPSHOT)
 	{
 		//Log(LOG_INFO) << ". convert BA_SNAPSHOT to BA_HIT";
@@ -269,18 +274,18 @@ void ProjectileFlyBState::init()
 
 				return;
 			}
-			else if (weapon->getRules()->getMaxRange() > 0 // in case -1 gets used for infinite.
+			else if (_action.weapon->getRules()->getMaxRange() > 0 // in case -1 gets used for infinite.
 				&& _parent->getTileEngine()->distance(
 												_action.actor->getPosition(),
 												_action.target)
-											> weapon->getRules()->getMaxRange())
+											> _action.weapon->getRules()->getMaxRange())
 /*			else // kL_begin:
 			{
 				int dist = _parent->getTileEngine()->distance(
 														_action.actor->getPosition(),
 														_action.target);
-				if (dist > weapon->getRules()->getMaxRange()
-					|| dist < weapon->getRules()->getMinRange()) */ // kL_end.
+				if (dist > _action.weapon->getRules()->getMaxRange()
+					|| dist < _action.weapon->getRules()->getMinRange()) */ // kL_end.
 			{
 				Log(LOG_INFO) << ". . . out of range, EXIT";
 
@@ -311,7 +316,7 @@ void ProjectileFlyBState::init()
 				return;
 			}
 
-			_projectileItem = weapon;
+			_projectileItem = _action.weapon;
 		}
 		break;
 		case BA_HIT:
@@ -342,7 +347,7 @@ void ProjectileFlyBState::init()
 															(_action.target.x * 16) + 8,
 															(_action.target.y * 16) + 8,
 															(_action.target.z * 24) + 10),
-													weapon,
+													_action.weapon,
 													_action.actor));
 
 			return;
@@ -748,11 +753,13 @@ void ProjectileFlyBState::think()
 				&& _action.type != BA_MINDCONTROL
 				&& !_parent->getSave()->getUnitsFalling())
 			{
-				//Log(LOG_INFO) << "ProjectileFlyBState::think(), checkReactionFire()"
-					//<< " ID " << _action.actor->getId()
-					//<< " type = " << _action.type
-					//<< " tu = " << _action.TU;
-				_parent->getTileEngine()->checkReactionFire(_unit);
+				Log(LOG_INFO) << "ProjectileFlyBState::think(), checkReactionFire()"
+					<< " ID " << _action.actor->getId()
+					<< " type = " << _action.type
+					<< " tu = " << _action.TU;
+				_parent->getTileEngine()->checkReactionFire(
+														_unit,
+														_action.TU); // kL
 			}
 
 			if (!_action.actor->isOut())

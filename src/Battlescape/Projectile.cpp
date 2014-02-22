@@ -633,7 +633,7 @@ void Projectile::applyAccuracy(
 	double deviation = static_cast<double>(maxThrowRule) - (accuracy * 100.0);
 	deviation = std::max(
 						0.0,
-						deviation * targetDist / 200);
+						deviation * targetDist / 100);
 
 	Log(LOG_INFO) << ". . deviation = " << deviation;
 

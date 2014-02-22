@@ -26,10 +26,11 @@
 namespace OpenXcom
 {
 
-class TextButton;
-class Window;
 class Text;
+class TextButton;
 class TextList;
+class Window;
+
 
 /**
  * Promotions screen that displays new soldier ranks.
@@ -38,11 +39,17 @@ class PromotionsState
 	:
 		public State
 {
+
 private:
+	Text
+		* _txtTitle,
+		* _txtName,
+		* _txtRank,
+		* _txtBase;
 	TextButton* _btnOk;
-	Window* _window;
-	Text* _txtTitle, * _txtName, * _txtRank, * _txtBase;
 	TextList* _lstSoldiers;
+	Window* _window;
+
 
 	public:
 		/// Creates the Promotions state.

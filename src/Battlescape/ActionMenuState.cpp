@@ -90,58 +90,95 @@ ActionMenuState::ActionMenuState(
 	int id = 0;
 
 	if (!weapon->isFixed()) // throwing (if not a fixed weapon)
-		addItem(BA_THROW, "STR_THROW", &id);
+		addItem(
+				BA_THROW,
+				"STR_THROW",
+				&id);
 
 	if ((weapon->getBattleType() == BT_GRENADE
 			|| weapon->getBattleType() == BT_PROXIMITYGRENADE)
 		&& _action->weapon->getExplodeTurn() == -1) // priming
 	{
-		addItem(BA_PRIME, "STR_PRIME_GRENADE", &id);
+		addItem(
+				BA_PRIME,
+				"STR_PRIME_GRENADE",
+				&id);
 	}
 
 	if (weapon->getBattleType() == BT_FIREARM)
 	{
-		if (weapon->isWaypoint() // kL_note: removing this might muck w/ hovertank-fusion actionMenu.
+		if (weapon->isWaypoint()
 			|| (_action->weapon->getAmmoItem()
 				&& _action->weapon->getAmmoItem()->getRules()->isWaypoint()))
-//		if (_action->weapon->getAmmoItem()
-//			&& _action->weapon->getAmmoItem()->getRules()->isWaypoint()) // kL: That really screws BL; turns launch to scope.
 		{
-			addItem(BA_LAUNCH, "STR_LAUNCH_MISSILE", &id);
+			addItem(
+					BA_LAUNCH,
+					"STR_LAUNCH_MISSILE",
+					&id);
 		}
-//kL		else
+
 		if (_action->weapon->getAmmoItem()) // kL
 		{
 			if (weapon->getAccuracyAuto() != 0)
-				addItem(BA_AUTOSHOT, "STR_AUTO_SHOT", &id);
+				addItem(
+						BA_AUTOSHOT,
+						"STR_AUTO_SHOT",
+						&id);
 
 			if (weapon->getAccuracySnap() != 0)
-				addItem(BA_SNAPSHOT, "STR_SNAP_SHOT", &id);
+				addItem(
+						BA_SNAPSHOT,
+						"STR_SNAP_SHOT",
+						&id);
 
 			if (weapon->getAccuracyAimed() != 0)
-				addItem(BA_AIMEDSHOT, "STR_AIMED_SHOT", &id);
+				addItem(
+						BA_AIMEDSHOT,
+						"STR_AIMED_SHOT",
+						&id);
 		}
 	}
 	else if (weapon->getBattleType() == BT_MELEE)
 	{
 		if (weapon->getDamageType() == DT_STUN) // stun rod
-			addItem(BA_HIT, "STR_STUN", &id);
+			addItem(
+					BA_HIT,
+					"STR_STUN",
+					&id);
 		else
-			addItem(BA_HIT, "STR_HIT_MELEE", &id); // melee weapon
+			addItem(
+					BA_HIT,
+					"STR_HIT_MELEE",
+					&id); // melee weapon
 	}
 	/** special items */
 	else if (weapon->getBattleType() == BT_MEDIKIT)
-		addItem(BA_USE, "STR_USE_MEDI_KIT", &id);
+		addItem(
+				BA_USE,
+				"STR_USE_MEDI_KIT",
+				&id);
 	else if (weapon->getBattleType() == BT_SCANNER)
-		addItem(BA_USE, "STR_USE_SCANNER", &id);
+		addItem(
+				BA_USE,
+				"STR_USE_SCANNER",
+				&id);
 	else if (weapon->getBattleType() == BT_PSIAMP
 		&& _action->actor->getStats()->psiSkill > 0)
 	{
-		addItem(BA_MINDCONTROL, "STR_MIND_CONTROL", &id);
-		addItem(BA_PANIC, "STR_PANIC_UNIT", &id);
+		addItem(
+				BA_MINDCONTROL,
+				"STR_MIND_CONTROL",
+				&id);
+		addItem(
+				BA_PANIC,
+				"STR_PANIC_UNIT",
+				&id);
 	}
 	else if (weapon->getBattleType() == BT_MINDPROBE)
-		addItem(BA_USE, "STR_USE_MIND_PROBE", &id);
+		addItem(
+				BA_USE,
+				"STR_USE_MIND_PROBE",
+				&id);
 }
 
 /**

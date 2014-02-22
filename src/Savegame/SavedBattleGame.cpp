@@ -1857,8 +1857,8 @@ void SavedBattleGame::reviveUnconsciousUnits()
 					(*i)->setDirection(RNG::generate(0, 7));		// kL
 					(*i)->setTimeUnits(0);							// kL
 
-					getTileEngine()->calculateFOV(*i);
 					getTileEngine()->calculateUnitLighting();
+					getTileEngine()->calculateFOV(*i);
 
 					removeUnconsciousBodyItem(*i);
 

@@ -65,6 +65,7 @@ AllocatePsiTrainingState::AllocatePsiTrainingState(
 
 	_window			= new Window(this, 320, 200, 0, 0);
 	_txtTitle		= new Text(300, 17, 10, 8);
+	_txtBaseLabel	= new Text(80, 9, 230, 8);
 
 	_txtRemaining	= new Text(100, 8, 12, 20);
 
@@ -85,14 +86,15 @@ AllocatePsiTrainingState::AllocatePsiTrainingState(
 				16);
 
 	add(_window);
-	add(_btnOk);
-	add(_txtName);
 	add(_txtTitle);
+	add(_txtBaseLabel);
 	add(_txtRemaining);
+	add(_txtName);
 	add(_txtPsiStrength);
 	add(_txtPsiSkill);
 	add(_txtTraining);
 	add(_lstSoldiers);
+	add(_btnOk);
 
 	centerAllSurfaces();
 
@@ -111,6 +113,10 @@ AllocatePsiTrainingState::AllocatePsiTrainingState(
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_PSIONIC_TRAINING"));
+
+	_txtBaseLabel->setColor(Palette::blockOffset(13)+10);
+	_txtBaseLabel->setAlign(ALIGN_RIGHT);
+	_txtBaseLabel->setText(base->getName(_game->getLanguage()));
 
 	_labSpace = base->getAvailablePsiLabs() - base->getUsedPsiLabs();
 	_txtRemaining->setColor(Palette::blockOffset(13)+10);
@@ -144,28 +150,28 @@ AllocatePsiTrainingState::AllocatePsiTrainingState(
 	init(); // kL
 /*kL	int row = 0;
 	for (std::vector<Soldier*>::const_iterator
-			s = base->getSoldiers()->begin();
-			s != base->getSoldiers()->end();
-			++s)
+			soldier = base->getSoldiers()->begin();
+			soldier != base->getSoldiers()->end();
+			++soldier)
 	{
-		_soldiers.push_back(*s);
+		_soldiers.push_back(*soldier);
 
 		std::wstringstream ssStr, ssSkl;
 
-		if ((*s)->getCurrentStats()->psiSkill > 0
+		if ((*soldier)->getCurrentStats()->psiSkill > 0
 			|| (Options::getBool("psiStrengthEval")
 				&& _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements())))
 		{
-			ssStr << ((*s)->getCurrentStats()->psiStrength);
+			ssStr << ((*soldier)->getCurrentStats()->psiStrength);
 		}
 		else
 		{
 			ssStr << tr("STR_UNKNOWN").c_str();
 		}
 
-		if ((*s)->getCurrentStats()->psiSkill > 0)
+		if ((*soldier)->getCurrentStats()->psiSkill > 0)
 		{
-			ssSkl << (*s)->getCurrentStats()->psiSkill; //kL << "/+" << (*s)->getImprovement();
+			ssSkl << (*soldier)->getCurrentStats()->psiSkill; //kL << "/+" << (*soldier)->getImprovement();
 		}
 		else
 		{
@@ -173,11 +179,11 @@ AllocatePsiTrainingState::AllocatePsiTrainingState(
 			ssSkl << "0";
 		}
 
-		if ((*s)->isInPsiTraining())
+		if ((*soldier)->isInPsiTraining())
 		{
 			_lstSoldiers->addRow(
 								4,
-								(*s)->getName().c_str(),
+								(*soldier)->getName().c_str(),
 								ssStr.str().c_str(),
 								ssSkl.str().c_str(),
 								tr("STR_YES").c_str());
@@ -187,7 +193,7 @@ AllocatePsiTrainingState::AllocatePsiTrainingState(
 		{
 			_lstSoldiers->addRow(
 								4,
-								(*s)->getName().c_str(),
+								(*soldier)->getName().c_str(),
 								ssStr.str().c_str(),
 								ssSkl.str().c_str(),
 								tr("STR_NO").c_str());
@@ -219,35 +225,35 @@ void AllocatePsiTrainingState::init()
 
 	int row = 0;
 	for (std::vector<Soldier*>::const_iterator
-			s = _base->getSoldiers()->begin();
-			s != _base->getSoldiers()->end();
-			++s)
+			soldier = _base->getSoldiers()->begin();
+			soldier != _base->getSoldiers()->end();
+			++soldier)
 	{
-		_soldiers.push_back(*s);
+		_soldiers.push_back(*soldier);
 
 		std::wstringstream
 			ssStr,
 			ssSkl;
 
 
-		int minPsi = (*s)->getRules()->getMinStats().psiSkill; // kL
+		int minPsi = (*soldier)->getRules()->getMinStats().psiSkill; // kL
 
-//kL		if ((*s)->getCurrentStats()->psiSkill > 0
-		if ((*s)->getCurrentStats()->psiSkill >= minPsi // kL
+//kL		if ((*soldier)->getCurrentStats()->psiSkill > 0
+		if ((*soldier)->getCurrentStats()->psiSkill >= minPsi // kL
 			|| (Options::getBool("psiStrengthEval")
 				&& _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements())))
 		{
-			ssStr << ((*s)->getCurrentStats()->psiStrength);
+			ssStr << ((*soldier)->getCurrentStats()->psiStrength);
 		}
 		else
 		{
 			ssStr << tr("STR_UNKNOWN").c_str();
 		}
 
-//kL		if ((*s)->getCurrentStats()->psiSkill > 0)
-		if ((*s)->getCurrentStats()->psiSkill >= minPsi) // kL
+//kL		if ((*soldier)->getCurrentStats()->psiSkill > 0)
+		if ((*soldier)->getCurrentStats()->psiSkill >= minPsi) // kL
 		{
-			ssSkl << (*s)->getCurrentStats()->psiSkill; //kL << "/+" << (*s)->getImprovement();
+			ssSkl << (*soldier)->getCurrentStats()->psiSkill; //kL << "/+" << (*soldier)->getImprovement();
 		}
 		else
 		{
@@ -256,11 +262,11 @@ void AllocatePsiTrainingState::init()
 			ssSkl << tr("STR_UNKNOWN").c_str(); // kL
 		}
 
-		if ((*s)->isInPsiTraining())
+		if ((*soldier)->isInPsiTraining())
 		{
 			_lstSoldiers->addRow(
 								4,
-								(*s)->getName().c_str(),
+								(*soldier)->getName().c_str(),
 								ssStr.str().c_str(),
 								ssSkl.str().c_str(),
 								tr("STR_YES").c_str());
@@ -270,7 +276,7 @@ void AllocatePsiTrainingState::init()
 		{
 			_lstSoldiers->addRow(
 								4,
-								(*s)->getName().c_str(),
+								(*soldier)->getName().c_str(),
 								ssStr.str().c_str(),
 								ssSkl.str().c_str(),
 								tr("STR_NO").c_str());
@@ -357,12 +363,12 @@ void AllocatePsiTrainingState::lstItemsLeftArrowClick_Psi(Action* action)
 		int row = _lstSoldiers->getSelectedRow();
 		if (row > 0)
 		{
-			Soldier* s = _base->getSoldiers()->at(row);
+			Soldier* soldier = _base->getSoldiers()->at(row);
 
 			if (SDL_BUTTON_LEFT == action->getDetails()->button.button)
 			{
 				_base->getSoldiers()->at(row) = _base->getSoldiers()->at(row - 1);
-				_base->getSoldiers()->at(row - 1) = s;
+				_base->getSoldiers()->at(row - 1) = soldier;
 
 				if (row != _lstSoldiers->getScroll())
 				{
@@ -378,7 +384,7 @@ void AllocatePsiTrainingState::lstItemsLeftArrowClick_Psi(Action* action)
 			else
 			{
 				_base->getSoldiers()->erase(_base->getSoldiers()->begin() + row);
-				_base->getSoldiers()->insert(_base->getSoldiers()->begin(), s);
+				_base->getSoldiers()->insert(_base->getSoldiers()->begin(), soldier);
 			}
 		}
 
@@ -402,12 +408,12 @@ void AllocatePsiTrainingState::lstItemsRightArrowClick_Psi(Action* action)
 			&& INT_MAX >= numSoldiers
 			&& row < static_cast<int>(numSoldiers) - 1)
 		{
-			Soldier* s = _base->getSoldiers()->at(row);
+			Soldier* soldier = _base->getSoldiers()->at(row);
 
 			if (SDL_BUTTON_LEFT == action->getDetails()->button.button)
 			{
 				_base->getSoldiers()->at(row) = _base->getSoldiers()->at(row + 1);
-				_base->getSoldiers()->at(row + 1) = s;
+				_base->getSoldiers()->at(row + 1) = soldier;
 
 				if (row != 15 + _lstSoldiers->getScroll())
 				{
@@ -423,7 +429,7 @@ void AllocatePsiTrainingState::lstItemsRightArrowClick_Psi(Action* action)
 			else
 			{
 				_base->getSoldiers()->erase(_base->getSoldiers()->begin() + row);
-				_base->getSoldiers()->insert(_base->getSoldiers()->end(), s);
+				_base->getSoldiers()->insert(_base->getSoldiers()->end(), soldier);
 			}
 		}
 

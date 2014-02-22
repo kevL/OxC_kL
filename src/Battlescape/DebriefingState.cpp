@@ -738,7 +738,7 @@ void DebriefingState::prepareDebriefing()
 		}
 	}
 
-	// time to care for units.
+	// time to care about units.
 	for (std::vector<BattleUnit*>::iterator
 			j = battle->getUnits()->begin();
 			j != battle->getUnits()->end();
@@ -1670,7 +1670,6 @@ void DebriefingState::recoverItems(
 			}
 		}
 	}
-
 	//Log(LOG_INFO) << "DebriefingState::recoverItems() EXIT";
 }
 

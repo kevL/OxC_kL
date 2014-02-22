@@ -544,7 +544,9 @@ bool BattleItem::getXCOMProperty() const
 /**
  * Gets the "dropped on non-player turn" flag. This is to determine whether or not aliens
  * should attempt to pick this item up, as items dropped by the player may be "honey traps".
- * kL_note: holy shit that's cynical. (or just fascits)
+ * kL_note: holy shit that's cynical. (or just fascits). Worse than 'honey traps' are
+ * players, like me, who Mc aLiens and make them drop their weapons - on the xCom turn!
+ * so, in a word or 25, TAKE THIS OUT.
  * @return True if the aliens dropped the item.
  */
 bool BattleItem::getTurnFlag() const

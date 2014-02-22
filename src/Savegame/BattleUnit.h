@@ -258,7 +258,7 @@ private:
 		/// Gets the unit's status.
 		UnitStatus getStatus() const;
 		/// kL. Sets a unit's status.
-		void setStatus(int status);
+		void setStatus(int status); // kL
 
 		/// Start the walkingPhase
 		void startWalking(
@@ -412,7 +412,8 @@ private:
 		int getFatalWounds() const;
 
 		/// Get the current reaction score.
-		double getInitiative();
+//kL		double getInitiative();
+		double getInitiative(int tuSpent = 0); // kL
 
 		/// Prepare for a new turn.
 		void prepareNewTurn();

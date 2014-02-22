@@ -597,28 +597,16 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
  * (used when terrain has changed, which can reveal new parts of terrain or units).
  * @param position, Position of the changed terrain.
  */
-/*kL void TileEngine::calculateFOV(const Position& position)
-{
-	for (std::vector<BattleUnit*>::iterator i = _save->getUnits()->begin(); i != _save->getUnits()->end(); ++i)
-	{
-		if (distance(position, (*i)->getPosition()) < MAX_VIEW_DISTANCE)
-		{
-			calculateFOV(*i);
-		}
-	}
-} */
 // kL_begin: TileEngine::calculateFOV, stop stopping my soldiers !!
 void TileEngine::calculateFOV(const Position& position)
 {
 	//Log(LOG_INFO) << "TileEngine::calculateFOV(Pos&)";
-
 	for (std::vector<BattleUnit*>::iterator
 			i = _save->getUnits()->begin();
 			i != _save->getUnits()->end();
 			++i)
 	{
 		//Log(LOG_INFO) << ". iterate ID = " << (*i)->getId();
-
 		int dist = distance(
 						position,
 						(*i)->getPosition());
@@ -630,7 +618,6 @@ void TileEngine::calculateFOV(const Position& position)
 		}
 		//else Log(LOG_INFO) << ". . Pos& out of Range, cont.";
 	}
-
 	//Log(LOG_INFO) << "TileEngine::calculateFOV(Pos&) EXIT";
 }
 
@@ -647,9 +634,7 @@ void TileEngine::recalculateFOV()
 			++bu)
 	{
 		if ((*bu)->getTile() != 0)
-		{
 			calculateFOV(*bu);
-		}
 	}
 }
 
@@ -1359,10 +1344,15 @@ bool TileEngine::canTargetTile(
  * Checks if a sniper from the opposing faction sees this unit. The unit with the
  * highest reaction score will be compared with the current unit's reaction score.
  * If it's higher, a shot is fired when enough time units, a weapon and ammo are available.
+ * NOTE: the tuSpent parameter is needed because popState() doesn't
+ * subtract TU until after the Initiative has been calculated.
  * @param unit, The unit to check reaction fire upon.
+ * @param tuSpent, The unit's expenditure of TU if firing or throwing. kL
  * @return, True if reaction fire took place.
  */
-bool TileEngine::checkReactionFire(BattleUnit* unit)
+bool TileEngine::checkReactionFire(
+		BattleUnit* unit,
+		int tuSpent) // kL
 {
 	Log(LOG_INFO) << "TileEngine::checkReactionFire() vs targetID " << unit->getId();
 
@@ -1393,26 +1383,27 @@ bool TileEngine::checkReactionFire(BattleUnit* unit)
 	{
 		//Log(LOG_INFO) << ". Target = VALID";
 		std::vector<BattleUnit*> spotters = getSpottingUnits(unit);
-
 		//Log(LOG_INFO) << ". # spotters = " << spotters.size();
 
-		// get the first man up to bat.
-		BattleUnit* reactor = getReactor(
+		// may need popState() in here:
+//		popState
+			// and take it out of post-firing/throwing State execution.
+
+
+		BattleUnit* reactor = getReactor( // get the first man up to bat.
 										spotters,
-										unit);
-		// start iterating through the possible reactors until the current unit is the one with the highest score.
+										unit,
+										tuSpent); // kL
+		// start iterating through the possible reactors until
+		// the current unit is the one with the highest score.
 		while (reactor != unit)
-//			&& !unit->isOut(true, true))	// <- this doesn't want to take effect until after cycling & shots is over
-											// iow, this probably just cycles and sets up the ProjectileFlyBState()'s,
-											// leaving the kill, if any, for later.......
 		{
 			// !!!!!SHOOT!!!!!!!
-			if (!tryReactionSnap(	// <- statePushBack(new ProjectileFlyBState()
+			if (!tryReactionSnap( // <- statePushBack(new ProjectileFlyBState()
 								reactor,
 								unit))
 			{
 				//Log(LOG_INFO) << ". . no Snap by : " << reactor->getId();
-
 				// can't make a reaction snapshot for whatever reason, boot this guy from the vector.
 				for (std::vector<BattleUnit*>::iterator
 						i = spotters.begin();
@@ -1426,37 +1417,21 @@ bool TileEngine::checkReactionFire(BattleUnit* unit)
 						break;
 					}
 				}
-
-				// avoid setting ret to true, but carry on, just cause one unit can't
-				// react doesn't mean the rest of the units in the vector (if any) can't
-//				reactor = getReactor(
-//									spotters,
-//									unit);
-
-//				continue;
 			}
 			else
 				//Log(LOG_INFO) << ". . Snap by : " << reactor->getId();
 				ret = true;
 
-			//Log(LOG_INFO) << ". . Snap by : " << reactor->getId();
-
-			// ... not working!
-//			if (unit->isOut(true, true))	// <- try this down there also.
-//				break;
-
-			// nice shot, kid. don't get too cocky.
-			reactor = getReactor(
+			reactor = getReactor( // nice shot, kid. don't get too cocky.
 								spotters,
-								unit);
+								unit,
+								tuSpent); // kL
 			//Log(LOG_INFO) << ". . NEXT AT BAT : " << reactor->getId();
 		}
 
-		//Log(LOG_INFO) << ". clear Spotters.vect";
 		spotters.clear();	// kL
 	}
 
-	//Log(LOG_INFO) << ". . Reactor == unit, EXIT = " << ret;
 	return ret;
 }
 
@@ -1467,8 +1442,8 @@ bool TileEngine::checkReactionFire(BattleUnit* unit)
  */
 std::vector<BattleUnit*> TileEngine::getSpottingUnits(BattleUnit* unit)
 {
-	Log(LOG_INFO) << "TileEngine::getSpottingUnits() vs. ID " << (unit)->getId()
-								<< " : initi = " << (int)(unit)->getInitiative();
+	Log(LOG_INFO) << "TileEngine::getSpottingUnits() vs. ID " << (unit)->getId();
+//no longer accurate			<< " : initi = " << (int)(unit)->getInitiative();
 
 	Tile* tile = unit->getTile();
 
@@ -1562,13 +1537,17 @@ bool TileEngine::canMakeSnap(
 
 /**
  * Gets the unit with the highest reaction score from the spotter vector.
+ * NOTE: the tuSpent parameter is needed because popState() doesn't
+ * subtract TU until after the Initiative has been calculated.
  * @param spotters, The vector of spotting units.
  * @param unit, The unit to check scores against.
+ * @param tuSpent, The unit's expenditure of TU if firing or throwing. kL
  * @return, The unit with initiative.
  */
 BattleUnit* TileEngine::getReactor(
 		std::vector<BattleUnit*> spotters,
-		BattleUnit* unit)
+		BattleUnit* unit,
+		int tuSpent) // kL
 {
 	Log(LOG_INFO) << "TileEngine::getReactor() vs ID " << unit->getId();
 
@@ -1590,8 +1569,29 @@ BattleUnit* TileEngine::getReactor(
 		}
 	}
 
+
+//	BattleAction action = _save->getAction();
+/*	BattleItem* weapon;// = BattleState::getAction();
+	if (unit->getFaction() == FACTION_PLAYER
+		&& unit->getOriginalFaction() == FACTION_PLAYER)
+	{
+		weapon = unit->getItem(unit->getActiveHand());
+	}
+	else
+		weapon = unit->getMainHandWeapon(); // kL_note: no longer returns grenades. good
+//	if (!weapon) return false;  // it *has* to be there by now!
+		// note these calc's should be refactored; this calc happens what 3 times now!!!
+		// Ought get the BattleAction* and just toss it around among these RF determinations.
+
+	int tuShoot = unit->getActionTUs(BA_AUTOSHOT, weapon) */
+
+
+	Log(LOG_INFO) << ". ID " << unit->getId() << " initi = " << static_cast<int>(unit->getInitiative(tuSpent));
+
 	// reactor has to *best* unit.Initi to get initiative
-	if (bestScore > static_cast<int>(unit->getInitiative()))
+	// Analysis: It appears that unit's tu for firing/throwing
+	// are not subtracted before getInitiative() is called.
+	if (bestScore > static_cast<int>(unit->getInitiative(tuSpent)))
 	{
 		if (reactor->getOriginalFaction() == FACTION_PLAYER)
 			reactor->addReactionExp();
@@ -2505,8 +2505,7 @@ void TileEngine::explode(
 	// now detonate the tiles affected with HE
 	if (type == DT_HE)
 	{
-		Log(LOG_INFO) << ". explode Tiles";
-
+		//Log(LOG_INFO) << ". explode Tiles";
 		for (std::set<Tile*>::iterator
 				i = tilesAffected.begin();
 				i != tilesAffected.end();
@@ -2521,7 +2520,7 @@ void TileEngine::explode(
 			if (j)
 				applyGravity(j);
 		}
-		Log(LOG_INFO) << ". explode Tiles DONE";
+		//Log(LOG_INFO) << ". explode Tiles DONE";
 	}
 
 	calculateSunShading();		// roofs could have been destroyed
@@ -3286,13 +3285,13 @@ int TileEngine::unitOpensDoor(
 
 				// look from the other side (may be need check reaction fire?)
 				// kL_note: and what about mutual surprise rule?
-				std::vector<BattleUnit*>* vunits = unit->getVisibleUnits();
+				std::vector<BattleUnit*>* visUnits = unit->getVisibleUnits();
 				for (size_t
 						i = 0;
-						i < vunits->size();
+						i < visUnits->size();
 						++i)
 				{
-					calculateFOV(vunits->at(i));
+					calculateFOV(visUnits->at(i));
 				}
 			}
 			else return 4;
@@ -4173,12 +4172,13 @@ bool TileEngine::psiAttack(BattleAction* action)
 				Log(LOG_INFO) << ". . . action->type == BA_MINDCONTROL";
 
 				victim->convertToFaction(action->actor->getFaction());
-				calculateFOV(victim->getPosition());
-				calculateUnitLighting();
 				victim->setTimeUnits(victim->getStats()->tu);
 				victim->setEnergy(victim->getStats()->stamina); // kL
 				victim->allowReselect();
 				victim->setStatus(STATUS_STANDING);
+
+				calculateUnitLighting();
+				calculateFOV(victim->getPosition());
 
 				// if all units from either faction are mind controlled - auto-end the mission.
 				if (_save->getSide() == FACTION_PLAYER

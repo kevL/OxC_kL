@@ -162,9 +162,8 @@ void UnitTurnBState::think()
 	{
 		size_t unitsSpotted = _unit->getUnitsSpottedThisTurn().size();
 
-		_unit->turn(_turret); // kL_note: -> STATUS_STANDING
-//kL		_parent->getTileEngine()->calculateFOV(_unit);
-		bool newVis = _parent->getTileEngine()->calculateFOV(_unit); // kL
+		_unit->turn(_turret); // -> STATUS_STANDING
+		bool newVis = _parent->getTileEngine()->calculateFOV(_unit);
 
 		_unit->setCache(0);
 		_parent->getMap()->cacheUnit(_unit);
@@ -191,10 +190,9 @@ void UnitTurnBState::think()
 				Log(LOG_INFO) << "UnitTurnBState::think(), setStopShot ID = " << _unit->getId();
 				_unit->setStopShot(true); // kL
 			}
-
 			// kL_note: Can i pop the state (ProjectileFlyBState) here if we came from
 			// BattlescapeGame::primaryAction() and as such STOP a unit from shooting
-			// elsewhere, if it was turning to do a/the shot when a newVis unit gets Spotted
+			// elsewhere, if it was turning to do the shot when a newVis unit gets Spotted
 		}
 
 		if (_unit->getStatus() == STATUS_STANDING)

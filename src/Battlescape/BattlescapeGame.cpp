@@ -192,7 +192,7 @@ void BattlescapeGame::init()
  */
 void BattlescapeGame::handleAI(BattleUnit* unit)
 {
-	Log(LOG_INFO) << "BattlescapeGame::handleAI()";
+	Log(LOG_INFO) << "BattlescapeGame::handleAI() " << unit->getId();
 
 /*	if (unit->getFaction() == FACTION_PLAYER)	// kL, try getOriginalFaction() Lol.
 	{
@@ -327,12 +327,15 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 
 	_AIActionCounter = action.number;
 
+	Log(LOG_INFO) << ". pre hunt for weapon";
 	if (!unit->getMainHandWeapon()
 		|| !unit->getMainHandWeapon()->getAmmoItem())
 	{
+		Log(LOG_INFO) << ". . no mainhand weapon or no ammo";
 		if (unit->getOriginalFaction() == FACTION_HOSTILE)
 //kL			&& unit->getVisibleUnits()->size() == 0)
 		{
+			Log(LOG_INFO) << ". . . call findItem()";
 			findItem(&action);
 		}
 	}
@@ -517,10 +520,15 @@ bool BattlescapeGame::kneel(
 //					getTileEngine()->calculateFOV(bu);
 
 					getMap()->cacheUnits();
-					_parentState->updateSoldierInfo(false); // <- also does calculateFOV() !
+//kL					_parentState->updateSoldierInfo(false); // <- also does calculateFOV() !
 						// wait... shouldn't one of those calcFoV's actually trigger!! ? !
 						// Hopefully it's done after returning, in another updateSoldierInfo... or newVis check.
-					getTileEngine()->checkReactionFire(bu);
+						// So.. I put this in BattlescapeState::btnKneelClick() instead; updates will
+						// otherwise be handled by walking or what have you. Doing it this way conforms
+						// updates/FoV checks with my newVis routines.
+
+//kL					getTileEngine()->checkReactionFire(bu);
+						// ditto..
 
 					return true;
 				}
@@ -1320,9 +1328,12 @@ void BattlescapeGame::popState()
 			{
 				action.actor->spendTimeUnits(action.TU);
 					// kL_query: Does this happen **before** ReactionFire/getReactor()?
-					// no. not for shooting, but for throwing it does
+					// no. not for shooting, but for throwing it does; actually no it doesn't.
 					//
-					// wtf, now RF works fine.
+					// wtf, now RF works fine. NO IT DOES NOT.
+				Log(LOG_INFO) << ". . ID " << action.actor->getId()
+					<< " spendTU = " << action.TU
+					<< ", currentTU = " << action.actor->getTimeUnits();
 			}
 
 
@@ -1449,16 +1460,14 @@ void BattlescapeGame::popState()
 
 	if (!_states.empty())
 	{
-		//Log(LOG_INFO) << ". NOT states.Empty";
+		Log(LOG_INFO) << ". NOT states.Empty";
 
 		if (_states.front() == 0) // end turn request?
 		{
 			//Log(LOG_INFO) << ". states.front() == 0";
-
 			while (!_states.empty())
 			{
 				//Log(LOG_INFO) << ". while (!_states.empty()";
-
 				if (_states.front() == 0)
 					_states.pop_front();
 				else
@@ -1833,8 +1842,11 @@ bool BattlescapeGame::cancelCurrentAction(bool bForce)
 
 	bool bPreviewed = Options::getInt("battleNewPreviewPath") > 0;
 
-	if (_save->getPathfinding()->removePreview() && bPreviewed)
+	if (_save->getPathfinding()->removePreview()
+		&& bPreviewed)
+	{
 		return true;
+	}
 
 	if (_states.empty() || bForce)
 	{
@@ -2235,12 +2247,11 @@ void BattlescapeGame::launchAction()
 void BattlescapeGame::psiButtonAction()
 {
 	//Log(LOG_INFO) << "BattlescapeGame::psiButtonAction()";
-
-	_currentAction.weapon = 0;
-	_currentAction.targeting = true;
-	_currentAction.type = BA_PANIC;
-	_currentAction.TU = 25;
-
+	_currentAction.weapon		= 0;
+	_currentAction.targeting	= true;
+	_currentAction.type			= BA_PANIC;
+	_currentAction.TU			= 25;	// kL_note: this is just a default i guess;
+										// otherwise it should be getActionTUs()
 	setupCursor();
 }
 
@@ -2522,7 +2533,7 @@ const Ruleset* BattlescapeGame::getRuleset() const
  */
 void BattlescapeGame::findItem(BattleAction* action)
 {
-	//Log(LOG_INFO) << "BattlescapeGame::findItem()";
+	Log(LOG_INFO) << "BattlescapeGame::findItem()";
 
 	if (action->actor->getRankString() != "STR_TERRORIST")								// terrorists don't have hands.
 	{
@@ -2555,11 +2566,13 @@ void BattlescapeGame::findItem(BattleAction* action)
  */
 BattleItem* BattlescapeGame::surveyItems(BattleAction* action)
 {
-	//Log(LOG_INFO) << "BattlescapeGame::surveyItems()";
+	Log(LOG_INFO) << "BattlescapeGame::surveyItems()";
 
 	std::vector<BattleItem*> droppedItems;
 
-	// first fill a vector with items on the ground that were dropped on the alien turn, and have an attraction value.
+	// first fill a vector with items on the ground
+	// that were dropped on the alien turn [not]
+	// and have an attraction value.
 	for (std::vector<BattleItem*>::iterator
 			i = _save->getItems()->begin();
 			i != _save->getItems()->end();
@@ -2568,7 +2581,7 @@ BattleItem* BattlescapeGame::surveyItems(BattleAction* action)
 		if ((*i)->getSlot()
 			&& (*i)->getSlot()->getId() == "STR_GROUND"
 			&& (*i)->getTile()
-			&& (*i)->getTurnFlag()
+//kL			&& (*i)->getTurnFlag()
 			&& (*i)->getRules()->getAttraction())
 		{
 			droppedItems.push_back(*i);
@@ -2588,7 +2601,9 @@ BattleItem* BattlescapeGame::surveyItems(BattleAction* action)
 				(*i)->getRules()->getAttraction() /
 					((_save->getTileEngine()->distance(
 													action->actor->getPosition(),
-													(*i)->getTile()->getPosition()) * 2) + 1);
+													(*i)->getTile()->getPosition())
+												* 2)
+											+ 1);
 		if (currentWorth > maxWorth)
 		{
 			maxWorth = currentWorth;
@@ -2613,7 +2628,7 @@ bool BattlescapeGame::worthTaking(
 		BattleItem* item,
 		BattleAction* action)
 {
-	//Log(LOG_INFO) << "BattlescapeGame::worthTaking()";
+	Log(LOG_INFO) << "BattlescapeGame::worthTaking()";
 
 	int worth = item->getRules()->getAttraction();
 	if (worth == 0)
@@ -2663,9 +2678,7 @@ bool BattlescapeGame::worthTaking(
 		}
 
 		if (!ammoFound)
-		{
 			return false;
-		}
 	}
 
 	if (item->getRules()->getBattleType() == BT_AMMO)
@@ -2697,9 +2710,7 @@ bool BattlescapeGame::worthTaking(
 		}
 
 		if (!weaponFound)
-		{
 			return false;
-		}
 	}
 //	}
 
@@ -2718,9 +2729,7 @@ bool BattlescapeGame::worthTaking(
 
 	int size = item->getRules()->getInventoryHeight() * item->getRules()->getInventoryWidth();
 	if (freeSlots < size)
-	{
 		return false;
-	}
 //	}
 
 	// return false for any item that we aren't standing directly
@@ -2762,9 +2771,7 @@ int BattlescapeGame::takeItemFromGround(
 
 	// make sure we have time units
 	if (action->actor->getTimeUnits() < 6)
-	{
 		return TAKEITEM_NOTU;
-	}
 	else
 	{
 		// check to make sure we have enough space by checking all the sizes of items in our inventory
@@ -2789,9 +2796,7 @@ int BattlescapeGame::takeItemFromGround(
 				return TAKEITEM_SUCCESS;
 			}
 			else
-			{
 				return TAKEITEM_NOFIT;
-			}
 		}
 	}
 
@@ -2809,7 +2814,7 @@ bool BattlescapeGame::takeItem(
 		BattleItem* item,
 		BattleAction* action)
 {
-	//Log(LOG_INFO) << "BattlescapeGame::takeItem()";
+	Log(LOG_INFO) << "BattlescapeGame::takeItem()";
 
 	bool placed = false;
 	Ruleset* rules = _parentState->getGame()->getRuleset();

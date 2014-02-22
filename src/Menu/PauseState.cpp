@@ -67,7 +67,7 @@ PauseState::PauseState(
 	_btnAbandon	= new TextButton(180, 22, x + 18, 97);
 
 	_btnOptions	= new TextButton(180, 20, x + 18, 125);
-	_btnCancel	= new TextButton(180, 18, x + 18, 149);
+	_btnCancel	= new TextButton(180, 18, x + 18, 150);
 
 
 	if (_origin != OPT_BATTLESCAPE)

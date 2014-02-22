@@ -5,7 +5,7 @@ fonts:
     image: FontBig.png
     width: 16
     height: 16
-    spacing: 0
+    spacing: -1
   - id: FONT_SMALL
     image: FontSmall.png
     width: 8

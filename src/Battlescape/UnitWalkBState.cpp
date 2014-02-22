@@ -277,6 +277,14 @@ bool UnitWalkBState::doStatusStand()
 
 			_unit->setCache(0);
 			_parent->getMap()->cacheUnit(_unit);
+
+			if (_terrain->checkReactionFire(_unit)) // unit got fired upon - stop.
+			{
+				_pf->abortPath();
+				_parent->popState();
+
+				return false;
+			}
 		}
 		else
 		{
@@ -804,50 +812,13 @@ bool UnitWalkBState::doStatusWalk()
 bool UnitWalkBState::doStatusStand_end()
 {
 	Log(LOG_INFO) << "***** UnitWalkBState::doStatusStand_end() : " << _unit->getId();
-// kL_begin: Try doing the _falling check at the end of each tile's walk-cycle
-/*	Tile* tileBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(0, 0, -1));
-	bool fallCheck = true;
-
-	int size = _unit->getArmor()->getSize() - 1;
-	for (int
-			x = size;
-			x > -1;
-			x--)
-	{
-		for (int
-				y = size;
-				y > -1;
-				y--)
-		{
-			Tile* otherTileBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(x, y, -1));
-
-			if (_unit->getArmor()->getMovementType() == MT_FLY
-				|| !_parent->getSave()->getTile(
-											_unit->getPosition()
-												+ Position(x, y, 0))->hasNoFloor(otherTileBelow))
-			{
-				Log(LOG_INFO) << ". . . WalkBState, hasFloor or is Flying ( fallCheck set FALSE )";
-				fallCheck = false;
-			}
-
-			Log(LOG_INFO) << ". . WalkBState, remove unit from previous tile";
-			_parent->getSave()->getTile(_unit->getLastPosition() + Position(x, y, 0))->setUnit(0);
-		}
-	}
-
-	_falling = fallCheck
-		&& _unit->getPosition().z != 0
-		&& _unit->getTile()->hasNoFloor(tileBelow)
-		&& _unit->getArmor()->getMovementType() != MT_FLY; */
-//kL		&& _unit->getWalkingPhase() == 0; // <- set @ startWalking() and @ end of keepWalking()
-// kL_end.
-//	_falling = false; <- don't forget to turn it off somewhere!!!
-
 
 	_tileSwitchDone = false; // kL
 
-	// if the unit burns floortiles, burn floortiles
-	if (_unit->getSpecialAbility() == SPECAB_BURNFLOOR)
+	if (_unit->getFaction() != FACTION_PLAYER)
+		_unit->setVisible(false);
+
+	if (_unit->getSpecialAbility() == SPECAB_BURNFLOOR) // if the unit burns floortiles, burn floortiles
 	{
 		// kL_add: Put burnedBySilacoid() here! etc
 		_unit->getTile()->ignite(1);
@@ -866,10 +837,6 @@ bool UnitWalkBState::doStatusStand_end()
 
 	_terrain->calculateUnitLighting(); // move our personal lighting with us
 
-	if (_unit->getFaction() != FACTION_PLAYER)
-		_unit->setVisible(false);
-
-
 	// This needs to be done *before* the calculateFOV(pos)
 	// or else any newVis will be marked Visible before
 	// visForUnits() catches that new unit as !Visible.
@@ -886,29 +853,26 @@ bool UnitWalkBState::doStatusStand_end()
 						&& _unit->getFaction() != FACTION_PLAYER; */
 
 	if (_parent->checkForProximityGrenades(_unit))
-	// kL_add: Put checkForSilacoid() here!
+		// kL_add: Put checkForSilacoid() here!
 	{
 		_parent->popState();
 
 		return false;
 	}
-
-	if (newVis)
+	else if (newVis)
 	{
 		if (_unit->getFaction() == FACTION_PLAYER) Log(LOG_INFO) << ". . _newVis = TRUE, Abort path";
 		else if (_unit->getFaction() != FACTION_PLAYER) Log(LOG_INFO) << ". . _newUnitSpotted = TRUE, Abort path";
 
-		_pf->abortPath();
-
 		_unit->setCache(0);
 		_parent->getMap()->cacheUnit(_unit);
 
+		_pf->abortPath();
 		_parent->popState();
 
 		return false;
 	}
-
-	if (!_falling) // check for reaction fire
+	else if (!_falling) // check for reaction fire
 	{
 		Log(LOG_INFO) << ". . WalkBState: NOT falling, checkReactionFire()";
 
@@ -925,11 +889,10 @@ bool UnitWalkBState::doStatusStand_end()
 		}
 		else Log(LOG_INFO) << ". . WalkBState: checkReactionFire() FALSE... no caching";
 	}
-	else // <<-- Looks like we gotta make it fall here!!! (if unit *ends* its total walk sequence on empty air.
+	else	// <<-- Looks like we gotta make it fall here!!! (if unit *ends* its total walk sequence on empty air.
 			// And, fall *before* spotting new units, else Abort will likely make it float...
 	{
 		Log(LOG_INFO) << ". . WalkBState: falling";
-
 //		_unit->setCache(0);
 //		_parent->getMap()->cacheUnit(_unit);
 	}
@@ -1020,12 +983,14 @@ void UnitWalkBState::postPathProcedures()
 														_unit->getDirection()))
 			{
 				BattleAction action;
-				action.actor = _unit;
-				action.target = _unit->getCharging()->getPosition();
-				action.weapon = _unit->getMainHandWeapon();
-				action.type = BA_HIT;
-				action.TU = _unit->getActionTUs(action.type, action.weapon);
-				action.targeting = true;
+				action.actor		= _unit;
+				action.target		= _unit->getCharging()->getPosition();
+				action.weapon		= _unit->getMainHandWeapon();
+				action.type			= BA_HIT;
+				action.TU			= _unit->getActionTUs(
+														action.type,
+														action.weapon);
+				action.targeting	= true;
 
 				_unit->setCharging(0);
 				_parent->statePushBack(new ProjectileFlyBState(
@@ -1038,8 +1003,7 @@ void UnitWalkBState::postPathProcedures()
 
 		if (dir != -1)
 		{
-			dir = dir %8;
-			_unit->lookAt(dir);
+			_unit->lookAt(dir %8);
 
 			while (_unit->getStatus() == STATUS_TURNING)
 			{
