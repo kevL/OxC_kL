@@ -86,13 +86,13 @@ Projectile::Projectile(
 	{
 		if (_action.type == BA_THROW)
 		{
-			Log(LOG_INFO) << "Create Projectile -> BA_THROW";
+			//Log(LOG_INFO) << "Create Projectile -> BA_THROW";
 			_speed = _speed * 4 / 7; // kL
 			_sprite =_res->getSurfaceSet("FLOOROB.PCK")->getFrame(getItem()->getRules()->getFloorSprite());
 		}
 		else // ba_SHOOT!! or hit, or spit.... probly Psi-attack also.
 		{
-			Log(LOG_INFO) << "Create Projectile -> not BA_THROW";
+			//Log(LOG_INFO) << "Create Projectile -> not BA_THROW";
 			if (_action.weapon->getRules()->getBulletSpeed() != 0)
 				_speed = std::max(
 								1,
@@ -140,7 +140,7 @@ int Projectile::calculateTrajectory(
 		double accuracy,
 		Position originVoxel)
 {
-	Log(LOG_INFO) << "Projectile::calculateTrajectory()";
+	//Log(LOG_INFO) << "Projectile::calculateTrajectory()";
 
 	Tile* targetTile = _save->getTile(_action.target);
 	BattleUnit* targetUnit = targetTile->getUnit();
@@ -237,7 +237,7 @@ int Projectile::calculateTrajectory(
 		&& targetUnit->getDashing())	// kL
 	{
 		accuracy -= 0.35;				// kL
-		Log(LOG_INFO) << ". . . . targetUnit " << targetUnit->getId() << " is Dashing!!! accuracy = " << accuracy;
+		//Log(LOG_INFO) << ". . . . targetUnit " << targetUnit->getId() << " is Dashing!!! accuracy = " << accuracy;
 	}
 
 	if (_action.type != BA_LAUNCH) // kL. Could base BL.. on psiSkill, or sumthin'
@@ -266,7 +266,7 @@ int Projectile::calculateTrajectory(
  */
 int Projectile::calculateThrow(double accuracy)
 {
-	Log(LOG_INFO) << "Projectile::calculateThrow(), cf TileEngine::validateThrow()";
+	//Log(LOG_INFO) << "Projectile::calculateThrow(), cf TileEngine::validateThrow()";
 
 	BattleUnit* bu = _save->getTile(_origin)->getUnit();
 	if (!bu)
@@ -355,7 +355,7 @@ int Projectile::calculateThrow(double accuracy)
 	double baseDeviation = std::max(
 								0.0,
 								maxDeviation - (maxDeviation * accuracy) + minDeviation);
-	Log(LOG_INFO) << ". baseDeviation = " << baseDeviation;
+	//Log(LOG_INFO) << ". baseDeviation = " << baseDeviation;
 
 
 	// finally do a line calculation and store this trajectory, make sure it's valid.
@@ -365,7 +365,7 @@ int Projectile::calculateThrow(double accuracy)
 		_trajectory.clear();
 
 		double deviation = RNG::boxMuller(0.0, baseDeviation);
-		Log(LOG_INFO) << ". . boxMuller() deviation = " << deviation + 1.0;
+		//Log(LOG_INFO) << ". . boxMuller() deviation = " << deviation + 1.0;
 		ret = _save->getTileEngine()->calculateParabola(
 													originVoxel,
 													targetVoxel,
@@ -425,7 +425,7 @@ void Projectile::applyAccuracy(
 		Tile* targetTile,
 		bool extendLine)
 {
-	Log(LOG_INFO) << "Projectile::applyAccuracy(), accuracy = " << accuracy;
+	//Log(LOG_INFO) << "Projectile::applyAccuracy(), accuracy = " << accuracy;
 
 	if (_action.type == BA_HIT)	// kL
 		return;					// kL
@@ -440,7 +440,7 @@ void Projectile::applyAccuracy(
 							  static_cast<double>(delta_x * delta_x)
 							+ static_cast<double>(delta_y * delta_y)
 							+ static_cast<double>(delta_z * delta_z)); // kL
-	Log(LOG_INFO) << ". targetDist = " << targetDist;
+	//Log(LOG_INFO) << ". targetDist = " << targetDist;
 
 	// maxRange is the maximum range a projectile shall ever travel in voxel space
 //kL	double maxRange = 16000.0; // vSpace == 1000 tiles in tSpace.
@@ -459,7 +459,7 @@ void Projectile::applyAccuracy(
 		&& !weaponRule->getArcingShot()						// kL
 		&& _action.type != BA_THROW)
 	{
-		Log(LOG_INFO) << ". battleUFOExtenderAccuracy";
+		//Log(LOG_INFO) << ". battleUFOExtenderAccuracy";
 
 		// kL_note: if distance is greater-than the weapon's
 		// max range, then ProjectileFlyBState won't allow the shot;
@@ -493,7 +493,7 @@ void Projectile::applyAccuracy(
 		&& _action.type != BA_THROW)
 //kL		&& _action.type != BA_HIT)
 	{
-		Log(LOG_INFO) << ". battleRangeBasedAccuracy";
+		//Log(LOG_INFO) << ". battleRangeBasedAccuracy";
 
 //kL		if (_action.type == BA_HIT)
 //kL			return;
@@ -546,7 +546,7 @@ void Projectile::applyAccuracy(
 								0.0,
 								baseDeviation); // kL_end.
 
-		Log(LOG_INFO) << ". baseDeviation = " << baseDeviation;
+		//Log(LOG_INFO) << ". baseDeviation = " << baseDeviation;
 
 
 		// The angle deviations are spread using a normal distribution:
@@ -563,8 +563,8 @@ void Projectile::applyAccuracy(
 					targetDist)
 				+ dV,
 			cos_fi = cos(fi);
-			Log(LOG_INFO) << ". . dH = " << dH;
-			Log(LOG_INFO) << ". . dV = " << dV;
+			//Log(LOG_INFO) << ". . dH = " << dH;
+			//Log(LOG_INFO) << ". . dV = " << dV;
 
 		if (extendLine) // kL_note: This is for aimed projectiles; always true in my RangedBased here.
 		{
@@ -574,13 +574,13 @@ void Projectile::applyAccuracy(
 			target->z = static_cast<int>(static_cast<double>(origin.z) + maxRange * sin(fi));
 		}
 
-		Log(LOG_INFO) << "Projectile::applyAccuracy() rangeBased EXIT";
+		//Log(LOG_INFO) << "Projectile::applyAccuracy() rangeBased EXIT";
 		return;
 	}
 
 
 	// kL_note: *** This should now be for Throwing and AcidSpitting only ***
-	Log(LOG_INFO) << ". standard accuracy, Throw & AcidSpit";
+	//Log(LOG_INFO) << ". standard accuracy, Throw & AcidSpit";
 	// Wb.131112, nonRangeBased target formula.
 	// beware of 'extendLine' below for BLs though... comes from calculateTrajectory() above....
 
@@ -635,7 +635,7 @@ void Projectile::applyAccuracy(
 						0.0,
 						deviation * targetDist / 100);
 
-	Log(LOG_INFO) << ". . deviation = " << deviation;
+	//Log(LOG_INFO) << ". . deviation = " << deviation;
 
 	double
 		dx = RNG::boxMuller(0.0, deviation),
@@ -697,7 +697,7 @@ void Projectile::applyAccuracy(
 		target->z = static_cast<int>(static_cast<double>(origin.z) + maxRange * sin_fi);
 	}
 
-	Log(LOG_INFO) << "Projectile::applyAccuracy() EXIT";
+	//Log(LOG_INFO) << "Projectile::applyAccuracy() EXIT";
 }
 
 /**

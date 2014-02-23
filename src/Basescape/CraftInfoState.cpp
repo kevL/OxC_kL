@@ -66,7 +66,7 @@ CraftInfoState::CraftInfoState(
 		_base(base),
 		_craft(craft)
 {
-//	Log(LOG_INFO) << "Create CraftInfoState";
+	//Log(LOG_INFO) << "Create CraftInfoState";
 
 	_window			= new Window(
 								this,
@@ -204,7 +204,7 @@ CraftInfoState::CraftInfoState(
  */
 CraftInfoState::~CraftInfoState()
 {
-//	Log(LOG_INFO) << "Delete CraftInfoState";
+	//Log(LOG_INFO) << "Delete CraftInfoState";
 }
 
 /**

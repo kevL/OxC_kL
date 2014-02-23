@@ -51,7 +51,7 @@ UnitTurnBState::UnitTurnBState(
 		_unit(0),
 		_turret(false)
 {
-	Log(LOG_INFO) << "Create UnitTurnBState";
+	//Log(LOG_INFO) << "Create UnitTurnBState";
 }
 
 /**
@@ -69,8 +69,8 @@ UnitTurnBState::~UnitTurnBState()
  */
 void UnitTurnBState::init()
 {
-	Log(LOG_INFO) << "UnitTurnBState::init() unitID = "
-			<< _action.actor->getId() << " strafe = " << _action.strafe;
+	//Log(LOG_INFO) << "UnitTurnBState::init() unitID = "
+	//		<< _action.actor->getId() << " strafe = " << _action.strafe;
 	_unit = _action.actor;
 	_action.TU = 0;
 
@@ -187,7 +187,7 @@ void UnitTurnBState::think()
 				&& factSide				// kL
 				&& _action.targeting)	// kL
 			{
-				Log(LOG_INFO) << "UnitTurnBState::think(), setStopShot ID = " << _unit->getId();
+				//Log(LOG_INFO) << "UnitTurnBState::think(), setStopShot ID = " << _unit->getId();
 				_unit->setStopShot(true); // kL
 			}
 			// kL_note: Can i pop the state (ProjectileFlyBState) here if we came from

@@ -261,9 +261,9 @@ void Tile::setMapData(
 		int mapDataSetID,
 		int part)
 {
-	_objects[part] = dat;
-	_mapDataID[part] = mapDataID;
-	_mapDataSetID[part] = mapDataSetID;
+	_objects[part]		= dat;
+	_mapDataID[part]	= mapDataID;
+	_mapDataSetID[part]	= mapDataSetID;
 }
 
 /**
@@ -276,8 +276,8 @@ void Tile::getMapData(
 		int* mapDataSetID,
 		int part) const
 {
-	*mapDataID = _mapDataID[part];
-	*mapDataSetID = _mapDataSetID[part];
+	*mapDataID		= _mapDataID[part];
+	*mapDataSetID	= _mapDataSetID[part];
 }
 
 /**
@@ -406,7 +406,8 @@ int Tile::openDoor(
 		BattleUnit* unit,
 		BattleActionType reserve)
 {
-	if (!_objects[part]) return -1;
+	if (!_objects[part])
+		return -1;
 
 	if (_objects[part]->isDoor())
 	{
@@ -964,13 +965,13 @@ void Tile::prepareNewTurn()
 
 			float modifier = _unit->getArmor()->getDamageModifier(DT_IN);
 			int burnChance = static_cast<int>(40.f * modifier);
-			Log(LOG_INFO) << "Tile::prepareNewTurn(), ID " << _unit->getId() << " burnChance = " << burnChance;
+			//Log(LOG_INFO) << "Tile::prepareNewTurn(), ID " << _unit->getId() << " burnChance = " << burnChance;
 			if (RNG::percent(burnChance)) // try to set the unit on fire.
 			{
 				int burnTime = RNG::generate(0, static_cast<int>(5.f * modifier));
 				if (burnTime > _unit->getFire())
 				{
-					Log(LOG_INFO) << ". burnTime = " << burnTime;
+					//Log(LOG_INFO) << ". burnTime = " << burnTime;
 					_unit->setFire(burnTime);
 				}
 			}
@@ -989,7 +990,7 @@ void Tile::prepareNewTurn()
 				&& _unit->getArmor()->getDamageModifier(DT_SMOKE) > 0.f) // try to knock this soldier out.
 			{
 				int smokePower = (_smoke / 4) + 1;
-				Log(LOG_INFO) << ". damage -> ID " << _unit->getId() << " smokePower = " << smokePower;
+				//Log(LOG_INFO) << ". damage -> ID " << _unit->getId() << " smokePower = " << smokePower;
 				_unit->damage(
 							Position(0, 0, 0),
 							smokePower,
@@ -1034,15 +1035,18 @@ int Tile::getMarkerColor()
 /**
  * Set the tile visible flag.
  */
-void Tile::setVisible(int visibility)
+//kL void Tile::setVisible(int visibility)
+void Tile::setVisible(bool isVis) // kL
 {
-	_visible += visibility;
+//kL	_visible += visibility;
+	_visible = isVis; // kL
 }
 
 /**
  * Get the tile visible flag.
  */
-int Tile::getVisible()
+//kL int Tile::getVisible()
+bool Tile::getVisible() // kL
 {
 	return _visible;
 }

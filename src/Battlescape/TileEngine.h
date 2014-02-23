@@ -146,7 +146,7 @@ private:
 		bool testFireMethod(
 				BattleUnit* unit,
 				BattleUnit* target,
-				BattleItem* weapon); // kL
+				BattleItem* weapon) const; // kL
 		/// kL. Selects a fire method based on range & time units.
 		BattleActionType selectFireMethod(BattleAction action); // kL
 

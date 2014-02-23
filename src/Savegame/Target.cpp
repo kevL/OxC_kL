@@ -141,13 +141,15 @@ void Target::setLatitude(double lat)
 	// keep it between -pi/2 and pi/2
 	if (_lat < -(M_PI / 2.0))
 	{
-		_lat = M_PI - _lat;
+//kL		_lat = M_PI - _lat;
+		_lat = -M_PI - _lat; // kL
 		setLongitude(_lon + M_PI);
 	}
-	else if (_lat > M_PI / 2.0)
+	else if (_lat > (M_PI / 2.0))
 	{
 //kL		_lat = -M_PI + _lat;
-		_lat = _lat - M_PI; // kL
+//		_lat = _lat - M_PI; // kL
+		_lat = M_PI - _lat; // Doug. right!
 		setLongitude(_lon - M_PI);
 	}
 }

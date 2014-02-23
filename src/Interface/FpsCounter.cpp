@@ -18,12 +18,16 @@
  */
 
 #include "FpsCounter.h"
+
 #include <cmath>
-#include "../Engine/Palette.h"
-#include "../Engine/Action.h"
-#include "../Engine/Timer.h"
-#include "../Engine/Options.h"
+
 #include "NumberText.h"
+
+#include "../Engine/Action.h"
+#include "../Engine/Options.h"
+#include "../Engine/Palette.h"
+#include "../Engine/Timer.h"
+
 
 namespace OpenXcom
 {
@@ -35,14 +39,20 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-FpsCounter::FpsCounter(int width, int height, int x, int y)
+FpsCounter::FpsCounter(
+		int width,
+		int height,
+		int x,
+		int y)
 	:
 //kL	Surface(width, height, x, y),
-	Surface(width, height, x + 1, y + 12),	// kL
-	_frames(0)								// kL
+		Surface( // kL
+			width,
+			height,
+			x + 1,
+			y + 12),
+		_frames(0) // kL
 {
-//	Log(LOG_INFO) << "Create FpsCounter";
-
 	_visible = Options::getBool("fpsCounter");
 
 	_timer = new Timer(1000);
@@ -58,8 +68,6 @@ FpsCounter::FpsCounter(int width, int height, int x, int y)
  */
 FpsCounter::~FpsCounter()
 {
-//	Log(LOG_INFO) << "Delete FpsCounter";
-
 	delete _text;
 	delete _timer;
 }
@@ -70,7 +78,10 @@ FpsCounter::~FpsCounter()
  * @param firstcolor Offset of the first color to replace.
  * @param ncolors Amount of colors to replace.
  */
-void FpsCounter::setPalette(SDL_Color* colors, int firstcolor, int ncolors)
+void FpsCounter::setPalette(
+		SDL_Color* colors,
+		int firstcolor,
+		int ncolors)
 {
 	Surface::setPalette(colors, firstcolor, ncolors);
 	_text->setPalette(colors, firstcolor, ncolors);

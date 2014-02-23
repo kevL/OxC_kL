@@ -68,7 +68,7 @@ UnitDieBState::UnitDieBState(
 		_damageType(damageType),
 		_noSound(noSound)
 {
-	Log(LOG_INFO) << "Create UnitDieBState";
+	//Log(LOG_INFO) << "Create UnitDieBState";
 
 	_unit->clearVisibleTiles();
 	_unit->clearVisibleUnits();
@@ -97,7 +97,7 @@ UnitDieBState::UnitDieBState(
 			}
 		}
 	}
-	Log(LOG_INFO) << "Create UnitDieBState EXIT cTor";
+	//Log(LOG_INFO) << "Create UnitDieBState EXIT cTor";
 }
 
 /**
@@ -105,7 +105,7 @@ UnitDieBState::UnitDieBState(
  */
 UnitDieBState::~UnitDieBState()
 {
-	Log(LOG_INFO) << "Delete UnitDieBState";
+	//Log(LOG_INFO) << "Delete UnitDieBState";
 }
 
 /**
@@ -113,7 +113,7 @@ UnitDieBState::~UnitDieBState()
  */
 void UnitDieBState::init()
 {
-	Log(LOG_INFO) << "UnitDieBState::init()";
+	//Log(LOG_INFO) << "UnitDieBState::init()";
 	if (!_noSound)
 		playDeathSound();
 
@@ -152,7 +152,7 @@ void UnitDieBState::init()
  */
 void UnitDieBState::think()
 {
-	Log(LOG_INFO) << "UnitDieBState::think() ID " << _unit->getId();
+	//Log(LOG_INFO) << "UnitDieBState::think() ID " << _unit->getId();
 // #1
 	if (_unit->getStatus() == STATUS_TURNING)
 	{
@@ -266,7 +266,7 @@ void UnitDieBState::think()
 	}
 
 	_parent->getMap()->cacheUnit(_unit);
-	Log(LOG_INFO) << "UnitDieBState::think() EXIT";
+	//Log(LOG_INFO) << "UnitDieBState::think() EXIT";
 }
 
 /**

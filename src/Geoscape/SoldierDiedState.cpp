@@ -49,7 +49,7 @@ SoldierDiedState::SoldierDiedState(
 		_name(name),
 		_base(base)
 {
-	Log(LOG_INFO) << "create SoldierDiedState";
+	//Log(LOG_INFO) << "create SoldierDiedState";
 
 	_screen = false;
 

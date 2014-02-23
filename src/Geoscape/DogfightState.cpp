@@ -443,7 +443,8 @@ DogfightState::DogfightState(
 			++i)
 	{
 		CraftWeapon* w = _craft->getWeapons()->at(i);
-		if (w == 0) continue;
+		if (w == 0)
+			continue;
 
 		Surface
 			* weapon = 0,
@@ -621,7 +622,7 @@ DogfightState::DogfightState(
 		// kL_begin:
 		Uint8 pixelColor = _damage->getPixel(11, y);
 		bool isCraftColor = pixelColor >= Palette::blockOffset(10)
-							&& pixelColor < Palette::blockOffset(11);
+						&& pixelColor < Palette::blockOffset(11);
 
 		if (_craftHeight
 			&& !isCraftColor)
@@ -1381,7 +1382,7 @@ void DogfightState::move()
 					_ufo->setCrashId(_game->getSavedGame()->getId("STR_CRASH_SITE"));
 
 				int percDamage = _ufo->getDamagePercentage(); // kL
-				Log(LOG_INFO) << "DogfightState::move(), crashPS = " << percDamage;
+				//Log(LOG_INFO) << "DogfightState::move(), crashPS = " << percDamage;
 				_ufo->setCrashPS(percDamage); // kL
 			}
 		}

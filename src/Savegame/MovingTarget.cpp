@@ -20,7 +20,9 @@
 #define _USE_MATH_DEFINES
 
 #include "MovingTarget.h"
+
 #include <cmath>
+
 #include "../aresame.h"
 
 
@@ -32,12 +34,12 @@ namespace OpenXcom
  */
 MovingTarget::MovingTarget()
 	:
-	Target(),
-	_dest(0),
-	_speedLon(0.0),
-	_speedLat(0.0),
-	_speedRadian(0.0),
-	_speed(0)
+		Target(),
+		_dest(0),
+		_speedLon(0.0),
+		_speedLat(0.0),
+		_speedRadian(0.0),
+		_speed(0)
 {
 }
 
@@ -49,11 +51,15 @@ MovingTarget::~MovingTarget()
 	if (_dest != 0
 		&& !_dest->getFollowers()->empty())
 	{
-		for (std::vector<Target*>::iterator i = _dest->getFollowers()->begin(); i != _dest->getFollowers()->end(); ++i)
+		for (std::vector<Target*>::iterator
+				i = _dest->getFollowers()->begin();
+				i != _dest->getFollowers()->end();
+				++i)
 		{
 			if (*i == this)
 			{
 				_dest->getFollowers()->erase(i);
+
 				break;
 			}
 		}
@@ -83,9 +89,7 @@ YAML::Node MovingTarget::save() const
 	YAML::Node node = Target::save();
 
 	if (_dest != 0)
-	{
 		node["dest"]	= _dest->saveId();
-	}
 
 	node["speedLon"]	= _speedLon;
 	node["speedLat"]	= _speedLat;
@@ -112,11 +116,15 @@ void MovingTarget::setDestination(Target* dest)
 {
 	if (_dest != 0) // Remove moving target from old destination's followers
 	{
-		for (std::vector<Target*>::iterator i = _dest->getFollowers()->begin(); i != _dest->getFollowers()->end(); ++i)
+		for (std::vector<Target*>::iterator
+				i = _dest->getFollowers()->begin();
+				i != _dest->getFollowers()->end();
+				++i)
 		{
 			if (*i == this)
 			{
 				_dest->getFollowers()->erase(i);
+
 				break;
 			}
 		}
@@ -124,9 +132,7 @@ void MovingTarget::setDestination(Target* dest)
 
 	_dest = dest;
 	if (_dest != 0) // Add moving target to new destination's followers
-	{
 		_dest->getFollowers()->push_back(this);
-	}
 
 	calculateSpeed();
 }
@@ -151,7 +157,7 @@ void MovingTarget::setSpeed(int speed)
 
 	// Each nautical mile is 1/60th of a degree.
 	// Each hour contains 720 5-seconds.
-	_speedRadian = _speed * (1 / 60.0) * (M_PI / 180) / 720.0;
+	_speedRadian = static_cast<double>(_speed) * (1.0 / 60.0) * (M_PI / 180.0) / 720.0;
 
 	calculateSpeed();
 }
@@ -174,7 +180,8 @@ void MovingTarget::calculateSpeed()
 		_speedLat = dLat / length * _speedRadian;
 
 		// Check for invalid speeds when a division by zero occurs due to near-zero values
-		if (_speedLon != _speedLon || _speedLat != _speedLat)
+		if (_speedLon != _speedLon
+			|| _speedLat != _speedLat)
 		{
 			_speedLon = 0;
 			_speedLat = 0;
@@ -194,11 +201,10 @@ void MovingTarget::calculateSpeed()
 bool MovingTarget::reachedDestination() const
 {
 	if (_dest == 0)
-	{
 		return false;
-	}
 
-	return AreSame(_dest->getLongitude(), _lon) && AreSame(_dest->getLatitude(), _lat);
+	return AreSame(_dest->getLongitude(), _lon)
+		&& AreSame(_dest->getLatitude(), _lat);
 }
 
 /**

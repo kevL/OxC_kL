@@ -35,21 +35,31 @@ class Action;
  */
 class FpsCounter
 	:
-	public Surface
+		public Surface
 {
-	private:
-		NumberText* _text;
-		Timer* _timer;
-		int _frames;
+
+private:
+	int _frames;
+
+	NumberText* _text;
+	Timer* _timer;
+
 
 	public:
 		/// Creates a new FPS counter linked to a game.
-		FpsCounter(int width, int height, int x, int y);
+		FpsCounter(
+				int width,
+				int height,
+				int x,
+				int y);
 		/// Cleans up all the FPS counter resources.
 		~FpsCounter();
 
 		/// Sets the FPS counter's palette.
-		void setPalette(SDL_Color* colors, int firstcolor = 0, int ncolors = 256);
+		void setPalette(
+				SDL_Color* colors,
+				int firstcolor = 0,
+				int ncolors = 256);
 		/// Sets the FpsCounter's color.
 		void setColor(Uint8 color);
 		/// Handles keyboard events.

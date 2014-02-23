@@ -116,7 +116,7 @@ BattlescapeState::BattlescapeState(Game* game)
 		_totalMouseMoveY(0),
 		_mouseMovedOverThreshold(0)
 {
-//	Log(LOG_INFO) << "Create BattlescapeState";
+	//Log(LOG_INFO) << "Create BattlescapeState";
 	std::fill_n(
 			_visibleUnit,
 			10,
@@ -683,7 +683,7 @@ BattlescapeState::BattlescapeState(Game* game)
  */
 BattlescapeState::~BattlescapeState()
 {
-//	Log(LOG_INFO) << "Delete BattlescapeState";
+	//Log(LOG_INFO) << "Delete BattlescapeState";
 	delete _animTimer;
 	delete _gameTimer;
 	delete _battleGame;
@@ -694,7 +694,7 @@ BattlescapeState::~BattlescapeState()
  */
 void BattlescapeState::init()
 {
-	Log(LOG_INFO) << "BattlescapeState::init()";
+	//Log(LOG_INFO) << "BattlescapeState::init()";
 
 	_animTimer->start();
 	_gameTimer->start();
@@ -751,7 +751,7 @@ void BattlescapeState::init()
 	}
 
 	_battleGame->setKneelReserved(_save->getKneelReserved()); */
-	Log(LOG_INFO) << "BattlescapeState::init() EXIT";
+	//Log(LOG_INFO) << "BattlescapeState::init() EXIT";
 }
 
 /**
@@ -1129,7 +1129,7 @@ void BattlescapeState::btnKneelClick(Action*)
 		BattleUnit* bu = _save->getSelectedUnit();
 		if (bu)
 		{
-//			Log(LOG_INFO) << "BattlescapeState::btnKneelClick()";
+			//Log(LOG_INFO) << "BattlescapeState::btnKneelClick()";
 			if (_battleGame->kneel(bu))
 			{
 				updateSoldierInfo(false); // kL
@@ -1344,7 +1344,7 @@ void BattlescapeState::btnHelpClick(Action*)
  */
 void BattlescapeState::btnEndTurnClick(Action*)
 {
-	Log(LOG_INFO) << "BattlescapeState::btnEndTurnClick()";
+	//Log(LOG_INFO) << "BattlescapeState::btnEndTurnClick()";
 
 	if (allowButtons())
 	{
@@ -1352,7 +1352,7 @@ void BattlescapeState::btnEndTurnClick(Action*)
 		_battleGame->requestEndTurn();
 	}
 
-	Log(LOG_INFO) << "BattlescapeState::btnEndTurnClick() EXIT";
+	//Log(LOG_INFO) << "BattlescapeState::btnEndTurnClick() EXIT";
 }
 
 /**
@@ -1592,7 +1592,7 @@ bool BattlescapeState::playableUnitSelected()
  */
 void BattlescapeState::updateSoldierInfo(bool calcFoV)
 {
-	Log(LOG_INFO) << "BattlescapeState::updateSoldierInfo( " << calcFoV << " )";
+	//Log(LOG_INFO) << "BattlescapeState::updateSoldierInfo( " << calcFoV << " )";
 
 	for (int // remove red target indicators
 			i = 0;
@@ -1673,10 +1673,8 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 
 	BattleUnit* selectedUnit = 0;
 	if (_save->getSelectedUnit())
-	{
 		selectedUnit = _save->getSelectedUnit();
 		//Log(LOG_INFO) << ". . selectedUnit ID " << selectedUnit->getId();
-	}
 	else // safety.
 		//Log(LOG_INFO) << ". . selectedUnit = 0 return";
 		return;
@@ -1684,10 +1682,6 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 
 	if (calcFoV)
 		_save->getTileEngine()->calculateFOV(selectedUnit);
-
-//	if (selectedUnit->getShowVisUnits()) // kL
-//	{
-//	Log(LOG_INFO) << ". . showVisUnits = " << selectedUnit->getShowVisUnits();
 
 	int j = 0;
 	for (std::vector<BattleUnit*>::iterator
@@ -1703,7 +1697,6 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 		_visibleUnit[j] = *i;
 
 //kL		++j;
-//		}
 	}
 
 
@@ -2104,8 +2097,8 @@ void BattlescapeState::saveAIMap()
 	Uint32 start = SDL_GetTicks();
 
 	BattleUnit* unit = _save->getSelectedUnit();
-	if (!unit) return;
-
+	if (!unit)
+		return;
 
 	int
 		w = _save->getMapSizeX(),
@@ -2123,7 +2116,6 @@ void BattlescapeState::saveAIMap()
 									0xff00,
 									0xff0000,
 									0);
-//	Log(LOG_INFO) << "unit = " << unit->getId();
 	memset(
 		img->pixels,
 		0,
@@ -2324,7 +2316,6 @@ void BattlescapeState::saveAIMap()
 	}
 
 	SDL_FreeSurface(img);
-//	Log(LOG_INFO) << "saveAIMap() completed in " << SDL_GetTicks() - start << "ms.";
 }
 
 /**
@@ -2853,7 +2844,7 @@ void BattlescapeState::toggleIcons(bool vis)
  */
 void BattlescapeState::refreshVisUnits()
 {
-	Log(LOG_INFO) << "BattlescapeState::refreshVisUnits()";
+	//Log(LOG_INFO) << "BattlescapeState::refreshVisUnits()";
 	if (!playableUnitSelected()) return;
 
 
@@ -2872,7 +2863,7 @@ void BattlescapeState::refreshVisUnits()
 	if (_save->getSelectedUnit())
 	{
 		selectedUnit = _save->getSelectedUnit();
-		Log(LOG_INFO) << ". selUnit ID " << selectedUnit->getId();
+		//Log(LOG_INFO) << ". selUnit ID " << selectedUnit->getId();
 	}
 
 	int j = 0;

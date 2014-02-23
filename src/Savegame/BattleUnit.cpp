@@ -554,8 +554,8 @@ void BattleUnit::startWalking(
 		Tile* tileBelow,
 		bool cache)
 {
-	Log(LOG_INFO) << "BattleUnit::startWalking() ID = " << getId()
-					<< " _walkPhase = 0";
+	//Log(LOG_INFO) << "BattleUnit::startWalking() ID = " << getId()
+	//				<< " _walkPhase = 0";
 	_walkPhase = 0;
 	_destination = destination;
 	_lastPos = _pos;
@@ -569,18 +569,18 @@ void BattleUnit::startWalking(
 		if (_tile->getMapData(MapData::O_FLOOR)
 			&& _tile->getMapData(MapData::O_FLOOR)->isGravLift())
 		{
-			Log(LOG_INFO) << ". STATUS_FLYING, using GravLift";
+			//Log(LOG_INFO) << ". STATUS_FLYING, using GravLift";
 			_floating = false;
 		}
 		else
 		{
-			Log(LOG_INFO) << ". STATUS_FLYING, up.down";
+			//Log(LOG_INFO) << ". STATUS_FLYING, up.down";
 			_floating = true;
 		}
 	}
 	else if (_tile->hasNoFloor(tileBelow))
 	{
-		Log(LOG_INFO) << ". STATUS_FLYING, no Floor";
+		//Log(LOG_INFO) << ". STATUS_FLYING, no Floor";
 		_status = STATUS_FLYING;
 		_floating = true;
 		_kneeled = false;
@@ -588,13 +588,13 @@ void BattleUnit::startWalking(
 	}
 	else
 	{
-		Log(LOG_INFO) << ". STATUS_WALKING";
+		//Log(LOG_INFO) << ". STATUS_WALKING";
 		_status = STATUS_WALKING;
 		_floating = false;
 		_kneeled = false;
 		_direction = direction;
 	}
-	Log(LOG_INFO) << "BattleUnit::startWalking() EXIT";
+	//Log(LOG_INFO) << "BattleUnit::startWalking() EXIT";
 }
 /*kL void BattleUnit::startWalking(int direction, const Position &destination, Tile *tileBelowMe, bool cache)
 {
@@ -639,8 +639,7 @@ void BattleUnit::keepWalking(
 {
 	_walkPhase++;
 
-	Log(LOG_INFO) << "BattleUnit::keepWalking() ID = " << getId()
-					<< " _walkPhase = " << _walkPhase;
+	//Log(LOG_INFO) << "BattleUnit::keepWalking() ID = " << getId() << " _walkPhase = " << _walkPhase;
 	int
 		middle,
 		end;
@@ -678,7 +677,7 @@ void BattleUnit::keepWalking(
 
 	if (_walkPhase >= end) // officially reached the destination tile
 	{
-		Log(LOG_INFO) << ". end -> STATUS_STANDING";
+		//Log(LOG_INFO) << ". end -> STATUS_STANDING";
 
 		_status = STATUS_STANDING;
 		_walkPhase = 0;
@@ -712,7 +711,7 @@ void BattleUnit::keepWalking(
 	}
 
 	_cacheInvalid = cache;
-	Log(LOG_INFO) << "BattleUnit::keepWalking() EXIT";
+	//Log(LOG_INFO) << "BattleUnit::keepWalking() EXIT";
 }
 /*kL void BattleUnit::keepWalking(Tile *tileBelowMe, bool cache)
 {
@@ -813,7 +812,7 @@ void BattleUnit::lookAt(
 		const Position& point,
 		bool turret)
 {
-	Log(LOG_INFO) << "BattleUnit::lookAt() #1";
+	//Log(LOG_INFO) << "BattleUnit::lookAt() #1";
 	//Log(LOG_INFO) << ". . _direction = " << _direction;
 	//Log(LOG_INFO) << ". . _toDirection = " << _toDirection;
 	//Log(LOG_INFO) << ". . _directionTurret = " << _directionTurret;
@@ -842,7 +841,7 @@ void BattleUnit::lookAt(
 		if (_toDirection != _direction)
 		{
 			_status = STATUS_TURNING;
-			Log(LOG_INFO) << ". . . . lookAt() -> STATUS_TURNING";
+			//Log(LOG_INFO) << ". . . . lookAt() -> STATUS_TURNING";
 			// kL_note: what about Forcing the faced direction instantly?
 		}
 	}
@@ -872,7 +871,7 @@ void BattleUnit::lookAt(
 		if (_toDirection != _direction)
 		{
 			_status = STATUS_TURNING;
-			Log(LOG_INFO) << ". . . . lookAt() -> STATUS_TURNING";
+			//Log(LOG_INFO) << ". . . . lookAt() -> STATUS_TURNING";
 		}
 	}
 	//Log(LOG_INFO) << "BattleUnit::lookAt() #2 EXIT";
@@ -883,7 +882,7 @@ void BattleUnit::lookAt(
  */
 void BattleUnit::turn(bool turret)
 {
-	Log(LOG_INFO) << "BattleUnit::turn()";
+	//Log(LOG_INFO) << "BattleUnit::turn()";
 	//Log(LOG_INFO) << ". . _direction = " << _direction;
 	//Log(LOG_INFO) << ". . _toDirection = " << _toDirection;
 	//Log(LOG_INFO) << ". . _directionTurret = " << _directionTurret;
@@ -1222,7 +1221,7 @@ int BattleUnit::damage(
 		ItemDamageType type,
 		bool ignoreArmor)
 {
-	Log(LOG_INFO) << "BattleUnit::damage(), ID " << getId();
+	//Log(LOG_INFO) << "BattleUnit::damage(), ID " << getId();
 
 	UnitSide side = SIDE_FRONT;
 	UnitBodyPart bodypart = BODYPART_TORSO;
@@ -1232,8 +1231,7 @@ int BattleUnit::damage(
 
 	power = static_cast<int>(
 					floor(static_cast<float>(power) * _armor->getDamageModifier(type)));
-	Log(LOG_INFO) << "BattleUnit::damage(), type = " << (int)type
-								<< " ModifiedPower " << power;
+	//Log(LOG_INFO) << "BattleUnit::damage(), type = " << (int)type << " ModifiedPower " << power;
 
 	if (type == DT_SMOKE) // smoke doesn't do real damage, but stun damage
 		type = DT_STUN;
@@ -1342,7 +1340,7 @@ int BattleUnit::damage(
 
 	if (power < 1)
 		power = 0;
-	Log(LOG_INFO) << "BattleUnit::damage() ret Penetrating Power " << power;
+	//Log(LOG_INFO) << "BattleUnit::damage() ret Penetrating Power " << power;
 
 	return power;
 }
@@ -1628,11 +1626,10 @@ bool BattleUnit::getVisible() const
 }
 
 /**
- * Add this unit to a vector of spotted and/or visible units.
+ * Add a unit to a vector of spotted and/or visible units.
  * @param unit, A seen unit.
  * @return, True if the seen unit was NOT previously flagged as visible.
- * @note, xCom soldiers are always considered "visible";
- *			only aLiens go vis/Invis
+ * @note, xCom soldiers are always considered 'visible'; only aLiens go vis/inVis
  */
 bool BattleUnit::addToVisibleUnits(BattleUnit* unit)
 {
@@ -1717,7 +1714,7 @@ void BattleUnit::clearVisibleTiles()
 			j != _visibleTiles.end();
 			++j)
 	{
-		(*j)->setVisible(-1);
+		(*j)->setVisible(false);
 	}
 
 	_visibleTiles.clear();
@@ -1937,7 +1934,7 @@ double BattleUnit::getInitiative(int tuSpent) // kL
  */
 void BattleUnit::prepareNewTurn()
 {
-	Log(LOG_INFO) << "BattleUnit::prepareNewTurn() ID " << getId();
+	//Log(LOG_INFO) << "BattleUnit::prepareNewTurn() ID " << getId();
 
 	_faction = _originalFaction;
 	//Log(LOG_INFO) << ". _stopShot is " << _stopShot << " setFALSE";
@@ -1991,7 +1988,7 @@ void BattleUnit::prepareNewTurn()
 		_fire > 0) // suffer from fire
 	{
 		int fireDam = static_cast<int>(_armor->getDamageModifier(DT_IN) * RNG::generate(2, 6));
-		Log(LOG_INFO) << ". fireDam = " << fireDam;
+		//Log(LOG_INFO) << ". fireDam = " << fireDam;
 		_health -= fireDam;
 
 		_fire--;
@@ -2030,7 +2027,7 @@ void BattleUnit::prepareNewTurn()
 	_dontReselect = false;
 	_motionPoints = 0;
 
-	Log(LOG_INFO) << "BattleUnit::prepareNewTurn() EXIT";
+	//Log(LOG_INFO) << "BattleUnit::prepareNewTurn() EXIT";
 }
 
 /**
@@ -2188,7 +2185,7 @@ void BattleUnit::setTile(
 												// Problem: when loading a save, _floating goes TRUE!
 	{
 		_floating = _tile->hasNoFloor(tileBelow);
-		Log(LOG_INFO) << ". STATUS_STANDING, _floating = " << _floating;
+		//Log(LOG_INFO) << ". STATUS_STANDING, _floating = " << _floating;
 	} */
 	else if (_status == STATUS_UNCONSCIOUS) // <- kL_note: not so sure having flying unconscious soldiers is a good deal.
 	{
@@ -2303,44 +2300,82 @@ BattleItem* BattleUnit::getItem(
  */
 BattleItem* BattleUnit::getMainHandWeapon(bool quickest) const
 {
+	//Log(LOG_INFO) << "BattleUnit::getMainHandWeapon()";
+
 	BattleItem* weaponRight = getItem("STR_RIGHT_HAND");
 	BattleItem* weaponLeft = getItem("STR_LEFT_HAND");
 
 	bool isRight = weaponRight
-			&& weaponRight->getAmmoItem()
-			&& weaponRight->getAmmoItem()->getAmmoQuantity();
-//			&& (weaponRight->getRules()->getBattleType() == BT_FIREARM
-//				|| weaponRight->getRules()->getBattleType() == BT_MELEE)
+				&& ((weaponRight->getAmmoItem()
+						&& weaponRight->getAmmoItem()->getAmmoQuantity()
+						&& weaponRight->getRules()->getBattleType() == BT_FIREARM)
+					|| weaponRight->getRules()->getBattleType() == BT_MELEE);
 	bool isLeft = weaponLeft
-			&& weaponLeft->getAmmoItem()
-			&& weaponLeft->getAmmoItem()->getAmmoQuantity();
-//			&& (weaponLeft->getRules()->getBattleType() == BT_FIREARM
-//				|| weaponLeft->getRules()->getBattleType() == BT_MELEE);
+				&& ((weaponLeft->getAmmoItem()
+						&& weaponLeft->getAmmoItem()->getAmmoQuantity()
+						&& weaponLeft->getRules()->getBattleType() == BT_FIREARM)
+					|| weaponLeft->getRules()->getBattleType() == BT_MELEE);
+	//Log(LOG_INFO) << ". isRight = " << isRight;
+	//Log(LOG_INFO) << ". isLeft = " << isLeft;
 
 	if (!isRight && !isLeft)
 		return 0;
-	else if (!isLeft && isRight)
+	else if (isRight && !isLeft)
 		return weaponRight;
 	else if (!isRight && isLeft)
 		return weaponLeft;
-	else // (isRight && isLeft).
+	else //if (isRight && isLeft).
 	{
+		//Log(LOG_INFO) << ". . isRight & isLeft VALID";
+
 		RuleItem* rightRule = weaponRight->getRules();
-		int tuRight = rightRule->getBattleType() == BT_MELEE?
-									rightRule->getTUMelee()
-								: rightRule->getTUSnap();
+		int tuRight = rightRule->getTUSnap();
+		if (!tuRight) //rightRule->getBattleType() == BT_MELEE
+			tuRight = rightRule->getTUMelee();
 
 		RuleItem* leftRule = weaponLeft->getRules();
-		int tuLeft = leftRule->getBattleType() == BT_MELEE?
-									leftRule->getTUMelee()
-								: leftRule->getTUSnap();
+		int tuLeft = leftRule->getTUSnap();
+		if (!tuLeft) //leftRule->getBattleType() == BT_MELEE
+			tuLeft = leftRule->getTUMelee();
 
-		if (tuRight <= tuLeft)
-			return quickest? weaponRight: weaponLeft;
-		else
-			return quickest? weaponLeft: weaponRight;
+		//Log(LOG_INFO) << ". . tuRight = " << tuRight;
+		//Log(LOG_INFO) << ". . tuLeft = " << tuLeft;
+
+		if (!tuRight && !tuLeft)
+			return 0;
+		else if (tuRight && !tuLeft)
+			return weaponRight;
+		else if (!tuRight && tuLeft)
+			return weaponLeft;
+		else //if (tuRight && tuLeft)
+		{
+			if (quickest)
+			{
+				if (tuRight <= tuLeft)
+					return weaponRight;
+				else
+					return weaponLeft;
+			}
+			else
+			{
+				if (tuRight >= tuLeft)
+					return weaponRight;
+				else
+					return weaponLeft;
+			}
+		}
+
+/*		int tuRight = rightRule->getBattleType() == BT_MELEE?
+									getActionTUs(BA_HIT, weaponRight)
+								: getActionTUs(BA_SNAPSHOT, weaponRight);
+
+		int tuLeft = leftRule->getBattleType() == BT_MELEE?
+									getActionTUs(BA_HIT, weaponLeft)
+								: getActionTUs(BA_SNAPSHOT, weaponLeft); */
 	}
 
+	// kL_note: should exit this by setting ActiveHand.
+	//Log(LOG_INFO) << "BattleUnit::getMainHandWeapon() EXIT 0, no weapon";
 	return 0;
 }
 /*	BattleItem *weaponRightHand = getItem("STR_RIGHT_HAND");
@@ -2364,13 +2399,9 @@ BattleItem* BattleUnit::getMainHandWeapon(bool quickest) const
 	int tuRightHand = weaponRightHand->getRules()->getTUSnap();
 	int tuLeftHand = weaponLeftHand->getRules()->getTUSnap();
 	if (tuLeftHand >= tuRightHand)
-	{
 		return quickest?weaponRightHand:weaponLeftHand;
-	}
 	else
-	{
-		return quickest?weaponLeftHand:weaponRightHand;
-	} */
+		return quickest?weaponLeftHand:weaponRightHand; */
 
 /**
  * Get a grenade from the belt (used for AI)
@@ -2411,27 +2442,20 @@ BattleItem* BattleUnit::getGrenadeFromBelt() const
  */
 bool BattleUnit::checkAmmo()
 {
-	//Log(LOG_INFO) << "BattleUnit::checkAmmo()";
-
-	if (getTimeUnits() < 15)	// kL
-	{
-		//Log(LOG_INFO) << ". return FALSE, not enough TU";
-		return false;			// kL
-	}
+	if (getTimeUnits() < 15)
+		return false;
 
 	BattleItem* weapon = getItem("STR_RIGHT_HAND");
 	if (!weapon
 		|| weapon->getAmmoItem() != 0
 		|| weapon->getRules()->getBattleType() == BT_MELEE)
-//kL		|| getTimeUnits() < 15)
 	{
 		weapon = getItem("STR_LEFT_HAND");
 		if (!weapon
 			|| weapon->getAmmoItem() != 0
 			|| weapon->getRules()->getBattleType() == BT_MELEE)
-//kL			|| getTimeUnits() < 15)
 		{
-			//Log(LOG_INFO) << ". return FALSE, no weapon";
+
 			return false;
 		}
 	}
@@ -2466,10 +2490,7 @@ bool BattleUnit::checkAmmo()
 	}
 
 	if (wrongAmmo)
-	{
-		//Log(LOG_INFO) << ". return FALSE, ";
 		return false; // didn't find any compatible ammo in inventory
-	}
 
 	spendTimeUnits(15);
 	weapon->setAmmoItem(ammo);
@@ -3455,7 +3476,7 @@ void BattleUnit::contDeathSpin()
 			dir = 7;
 	}
 
-//	Log(LOG_INFO) << ". d_final = " << dir;
+	//Log(LOG_INFO) << ". d_final = " << dir;
 	setDirection(dir);
 	_cacheInvalid = true;
 }

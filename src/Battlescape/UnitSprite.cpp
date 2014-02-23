@@ -83,7 +83,7 @@ UnitSprite::UnitSprite(
  */
 UnitSprite::~UnitSprite()
 {
-//	Log(LOG_INFO) << "Delete UnitSprite";
+	//Log(LOG_INFO) << "Delete UnitSprite";
 }
 
 /**
@@ -157,13 +157,9 @@ struct ColorFace
 			int)
 	{
 		if ((src & ColorGroup) == Hair)
-		{
 			src = hair_color + (src & ColorShade);
-		}
 		else if ((src & ColorGroup) == Face)
-		{
 			src = face_color + (src & ColorShade);
-		}
 	}
 };
 
@@ -364,7 +360,7 @@ void UnitSprite::drawRoutine0()
 
 	if (isWalking) // when walking, torso(fixed sprite) has to be animated up/down
 	{
-//		Log(LOG_INFO) << "UnitSprite::drawRoutine0() : " << _unit->getId() << " STATUS_WALKING";
+//		//Log(LOG_INFO) << "UnitSprite::drawRoutine0() : " << _unit->getId() << " STATUS_WALKING";
 
 		if (_drawingRoutine == 10) // muton
 			torso->setY(yoffWalk_alt[_unit->getWalkingPhase()]);
@@ -379,18 +375,18 @@ void UnitSprite::drawRoutine0()
 	{
 		if (isKneeled)
 		{
-//			Log(LOG_INFO) << "UnitSprite::drawRoutine0() : " << _unit->getId() << " isKneeled";
+//			//Log(LOG_INFO) << "UnitSprite::drawRoutine0() : " << _unit->getId() << " isKneeled";
 			legs = _unitSurface->getFrame(legsKneel + _unit->getDirection());
 		}
 		else if (_unit->isFloating()
 			&& _unit->getArmor()->getMovementType() == MT_FLY)
 		{
-//			Log(LOG_INFO) << "UnitSprite::drawRoutine0() : " << _unit->getId() << " isFloating in FlyingSuit";
+//			//Log(LOG_INFO) << "UnitSprite::drawRoutine0() : " << _unit->getId() << " isFloating in FlyingSuit";
 			legs = _unitSurface->getFrame(legsFloat + _unit->getDirection());
 		}
 		else
 		{
-//			Log(LOG_INFO) << "UnitSprite::drawRoutine0() : " << _unit->getId() << " etc.";
+//			//Log(LOG_INFO) << "UnitSprite::drawRoutine0() : " << _unit->getId() << " etc.";
 			legs = _unitSurface->getFrame(legsStand + _unit->getDirection());
 		}
 

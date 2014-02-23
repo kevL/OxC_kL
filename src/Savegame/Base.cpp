@@ -504,18 +504,18 @@ void Base::setEngineers(int engineers)
  */
 uint8_t Base::detect(Target* target) const
 {
-	Log(LOG_INFO) << "Base::detect() -> " << getName().c_str();
+	//Log(LOG_INFO) << "Base::detect() -> " << getName().c_str();
 	uint8_t ret = 0;
 
 	double targetDistance = insideRadarRange(target);
 	if (AreSame(targetDistance, -2.0))
 	{
-		Log(LOG_INFO) << ". not in range";
+		//Log(LOG_INFO) << ". not in range";
 		return 0;
 	}
 	else if (AreSame(targetDistance, -1.0))
 	{
-		Log(LOG_INFO) << ". hyperdetected";
+		//Log(LOG_INFO) << ". hyperdetected";
 		return 2;
 	}
 	else
@@ -535,11 +535,10 @@ uint8_t Base::detect(Target* target) const
 				if (targetDistance < radarRange)
 				{
 					chance += static_cast<float>((*f)->getRules()->getRadarChance());
-					Log(LOG_INFO) << ". . radarRange = " << (int)radarRange;
-					Log(LOG_INFO) << ". . . chance(base) = " << (int)chance;
+					//Log(LOG_INFO) << ". . radarRange = " << (int)radarRange;
+					//Log(LOG_INFO) << ". . . chance(base) = " << (int)chance;
 				}
-				else
-					Log(LOG_INFO) << ". . target out of Range";
+				//else Log(LOG_INFO) << ". . target out of Range";
 			}
 		}
 
@@ -551,7 +550,7 @@ uint8_t Base::detect(Target* target) const
 			if (u != 0)
 			{
 				chance += static_cast<float>(u->getVisibility());
-				Log(LOG_INFO) << ". . chance(base + ufo) = " << (int)chance;
+				//Log(LOG_INFO) << ". . chance(base + ufo) = " << (int)chance;
 			}
 
 			// need to divide by 3, since Geoscape-detection was moved from 30m to 10m time-slot.
@@ -564,7 +563,7 @@ uint8_t Base::detect(Target* target) const
 			else
 			{
 				ret = static_cast<uint8_t>(RNG::percent(iChance));
-				Log(LOG_INFO) << ". detected = " << (int)ret;
+				//Log(LOG_INFO) << ". detected = " << (int)ret;
 			}
 		}
 	}
@@ -583,7 +582,7 @@ double Base::insideRadarRange(Target* target) const
 	double ret = -2.0;
 
 	double targetDistance = getDistance(target) * 3440.0;
-	Log(LOG_INFO) << ". targetDistance = " << (int)targetDistance;
+	//Log(LOG_INFO) << ". targetDistance = " << (int)targetDistance;
 
 	if (targetDistance > 2400.0) // early out.
 		return ret;
@@ -596,18 +595,18 @@ double Base::insideRadarRange(Target* target) const
 		if ((*f)->getBuildTime() == 0)
 		{
 			double radarRange = static_cast<double>((*f)->getRules()->getRadarRange());
-			Log(LOG_INFO) << ". . radarRange = " << (int)radarRange;
+			//Log(LOG_INFO) << ". . radarRange = " << (int)radarRange;
 
 			if (targetDistance < radarRange)
 			{
 				if ((*f)->getRules()->isHyperwave())
 				{
-					Log(LOG_INFO) << ". . . . ret = hyperWave";
+					//Log(LOG_INFO) << ". . . . ret = hyperWave";
 					return -1.0;
 				}
 				else
 				{
-					Log(LOG_INFO) << ". . . ret = radar";
+					//Log(LOG_INFO) << ". . . ret = radar";
 					ret = targetDistance;
 				}
 			}
@@ -1357,30 +1356,30 @@ void Base::researchHelp(std::string aLien)
 				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.1f)));
 				found = true;
 
-				Log(LOG_INFO) << ". . Soldier.1 : help = " << help
-						<< ", spent = " << (int)spent
-						<< ", cost = " << (int)cost
-						<< ", newSpent = " << (*i)->getSpent();
+				//Log(LOG_INFO) << ". . Soldier.1 : help = " << help
+				//		<< ", spent = " << (int)spent
+				//		<< ", cost = " << (int)cost
+				//		<< ", newSpent = " << (*i)->getSpent();
 			}
 			else if (help == "STR_ALIEN_ORIGINS")
 			{
 				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.2f)));
 				found = true;
 
-				Log(LOG_INFO) << ". . Soldier.2 : help = " << help
-						<< ", spent = " << (int)spent
-						<< ", cost = " << (int)cost
-						<< ", newSpent = " << (*i)->getSpent();
+				//Log(LOG_INFO) << ". . Soldier.2 : help = " << help
+				//		<< ", spent = " << (int)spent
+				//		<< ", cost = " << (int)cost
+				//		<< ", newSpent = " << (*i)->getSpent();
 			}
 			else if (help == "STR_POWER_SUIT")
 			{
 				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.25f)));
 				found = true;
 
-				Log(LOG_INFO) << ". . Soldier.25 : help = " << help
-						<< ", spent = " << (int)spent
-						<< ", cost = " << (int)cost
-						<< ", newSpent = " << (*i)->getSpent();
+				//Log(LOG_INFO) << ". . Soldier.25 : help = " << help
+				//		<< ", spent = " << (int)spent
+				//		<< ", cost = " << (int)cost
+				//		<< ", newSpent = " << (*i)->getSpent();
 			}
 			else if (help == "STR_HEAVY_PLASMA_CLIP"
 				|| help == "STR_PLASMA_RIFLE_CLIP"
@@ -1389,10 +1388,10 @@ void Base::researchHelp(std::string aLien)
 				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.4f)));
 				found = true;
 
-				Log(LOG_INFO) << ". . Soldier.4 : help = " << help
-						<< ", spent = " << (int)spent
-						<< ", cost = " << (int)cost
-						<< ", newSpent = " << (*i)->getSpent();
+				//Log(LOG_INFO) << ". . Soldier.4 : help = " << help
+				//		<< ", spent = " << (int)spent
+				//		<< ", cost = " << (int)cost
+				//		<< ", newSpent = " << (*i)->getSpent();
 			}
 			else if (help == "STR_ALIEN_GRENADE"
 				|| help == "STR_ALIEN_ENTERTAINMENT"
@@ -1401,10 +1400,10 @@ void Base::researchHelp(std::string aLien)
 				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.5f)));
 				found = true;
 
-				Log(LOG_INFO) << ". . Soldier.5 : help = " << help
-						<< ", spent = " << (int)spent
-						<< ", cost = " << (int)cost
-						<< ", newSpent = " << (*i)->getSpent();
+				//Log(LOG_INFO) << ". . Soldier.5 : help = " << help
+				//		<< ", spent = " << (int)spent
+				//		<< ", cost = " << (int)cost
+				//		<< ", newSpent = " << (*i)->getSpent();
 			}
 
 			// always takes an extra day to complete (and guards vs. potential code-flow bork!)
@@ -1433,10 +1432,10 @@ void Base::researchHelp(std::string aLien)
 				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.15f)));
 				found = true;
 
-				Log(LOG_INFO) << ". . Navigator.15 : help = " << help
-						<< ", spent = " << (int)spent
-						<< ", cost = " << (int)cost
-						<< ", newSpent = " << (*i)->getSpent();
+				//Log(LOG_INFO) << ". . Navigator.15 : help = " << help
+				//		<< ", spent = " << (int)spent
+				//		<< ", cost = " << (int)cost
+				//		<< ", newSpent = " << (*i)->getSpent();
 			}
 			else if (help == "STR_HEAVY_PLASMA"
 				|| help == "STR_HEAVY_PLASMA_CLIP"
@@ -1455,10 +1454,10 @@ void Base::researchHelp(std::string aLien)
 				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.2f)));
 				found = true;
 
-				Log(LOG_INFO) << ". . Navigator.2 : help = " << help
-						<< ", spent = " << (int)spent
-						<< ", cost = " << (int)cost
-						<< ", newSpent = " << (*i)->getSpent();
+				//Log(LOG_INFO) << ". . Navigator.2 : help = " << help
+				//		<< ", spent = " << (int)spent
+				//		<< ", cost = " << (int)cost
+				//		<< ", newSpent = " << (*i)->getSpent();
 			}
 			else if (help == "STR_UFO_POWER_SOURCE"
 				|| help == "STR_UFO_CONSTRUCTION"
@@ -1467,30 +1466,30 @@ void Base::researchHelp(std::string aLien)
 				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.25f)));
 				found = true;
 
-				Log(LOG_INFO) << ". . Navigator.25: help = " << help
-						<< ", spent = " << (int)spent
-						<< ", cost = " << (int)cost
-						<< ", newSpent = " << (*i)->getSpent();
+				//Log(LOG_INFO) << ". . Navigator.25: help = " << help
+				//		<< ", spent = " << (int)spent
+				//		<< ", cost = " << (int)cost
+				//		<< ", newSpent = " << (*i)->getSpent();
 			}
 			else if (help == "STR_FLYING_SUIT")
 			{
 				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.3f)));
 				found = true;
 
-				Log(LOG_INFO) << ". . Navigator.3 : help = " << help
-						<< ", spent = " << (int)spent
-						<< ", cost = " << (int)cost
-						<< ", newSpent = " << (*i)->getSpent();
+				//Log(LOG_INFO) << ". . Navigator.3 : help = " << help
+				//		<< ", spent = " << (int)spent
+				//		<< ", cost = " << (int)cost
+				//		<< ", newSpent = " << (*i)->getSpent();
 			}
 			else if (help == "STR_ALIEN_ORIGINS")
 			{
 				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.35f)));
 				found = true;
 
-				Log(LOG_INFO) << ". . Navigator.35 : help = " << help
-						<< ", spent = " << (int)spent
-						<< ", cost = " << (int)cost
-						<< ", newSpent = " << (*i)->getSpent();
+				//Log(LOG_INFO) << ". . Navigator.35 : help = " << help
+				//		<< ", spent = " << (int)spent
+				//		<< ", cost = " << (int)cost
+				//		<< ", newSpent = " << (*i)->getSpent();
 			}
 			else if (help == "STR_GRAV_SHIELD"
 				|| help == "STR_ALIEN_ALLOYS")
@@ -1498,10 +1497,10 @@ void Base::researchHelp(std::string aLien)
 				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.4f)));
 				found = true;
 
-				Log(LOG_INFO) << ". . Navigator.4 : help = " << help
-						<< ", spent = " << (int)spent
-						<< ", cost = " << (int)cost
-						<< ", newSpent = " << (*i)->getSpent();
+				//Log(LOG_INFO) << ". . Navigator.4 : help = " << help
+				//		<< ", spent = " << (int)spent
+				//		<< ", cost = " << (int)cost
+				//		<< ", newSpent = " << (*i)->getSpent();
 			}
 			else if (help == "STR_MOTION_SCANNER"
 				|| help == "STR_ALIEN_ENTERTAINMENT")
@@ -1509,10 +1508,10 @@ void Base::researchHelp(std::string aLien)
 				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.5f)));
 				found = true;
 
-				Log(LOG_INFO) << ". . Navigator.5 : help = " << help
-						<< ", spent = " << (int)spent
-						<< ", cost = " << (int)cost
-						<< ", newSpent = " << (*i)->getSpent();
+				//Log(LOG_INFO) << ". . Navigator.5 : help = " << help
+				//		<< ", spent = " << (int)spent
+				//		<< ", cost = " << (int)cost
+				//		<< ", newSpent = " << (*i)->getSpent();
 			}
 			else if (help == "STR_HYPER_WAVE_DECODER"
 				|| help == "STR_UFO_NAVIGATION")
@@ -1520,10 +1519,10 @@ void Base::researchHelp(std::string aLien)
 				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.8f)));
 				found = true;
 
-				Log(LOG_INFO) << ". . Navigator.8 : help = " << help
-						<< ", spent = " << (int)spent
-						<< ", cost = " << (int)cost
-						<< ", newSpent = " << (*i)->getSpent();
+				//Log(LOG_INFO) << ". . Navigator.8 : help = " << help
+				//		<< ", spent = " << (int)spent
+				//		<< ", cost = " << (int)cost
+				//		<< ", newSpent = " << (*i)->getSpent();
 			}
 
 			// always takes an extra day to complete (and guards vs. potential code-flow bork!)
@@ -1549,10 +1548,10 @@ void Base::researchHelp(std::string aLien)
 				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.1f)));
 				found = true;
 
-				Log(LOG_INFO) << ". . Medic.1 : help = " << help
-						<< ", spent = " << (int)spent
-						<< ", cost = " << (int)cost
-						<< ", newSpent = " << (*i)->getSpent();
+				//Log(LOG_INFO) << ". . Medic.1 : help = " << help
+				//		<< ", spent = " << (int)spent
+				//		<< ", cost = " << (int)cost
+				//		<< ", newSpent = " << (*i)->getSpent();
 			}
 			else if (help == "STR_ALIEN_ORIGINS"
 				|| help == "STR_ALIEN_ENTERTAINMENT")
@@ -1560,20 +1559,20 @@ void Base::researchHelp(std::string aLien)
 				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.2f)));
 				found = true;
 
-				Log(LOG_INFO) << ". . Medic.2 : help = " << help
-						<< ", spent = " << (int)spent
-						<< ", cost = " << (int)cost
-						<< ", newSpent = " << (*i)->getSpent();
+				//Log(LOG_INFO) << ". . Medic.2 : help = " << help
+				//		<< ", spent = " << (int)spent
+				//		<< ", cost = " << (int)cost
+				//		<< ", newSpent = " << (*i)->getSpent();
 			}
 			else if (help == "STR_MEDI_KIT")
 			{
 				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.4f)));
 				found = true;
 
-				Log(LOG_INFO) << ". . Medic.4 : help = " << help
-						<< ", spent = " << (int)spent
-						<< ", cost = " << (int)cost
-						<< ", newSpent = " << (*i)->getSpent();
+				//Log(LOG_INFO) << ". . Medic.4 : help = " << help
+				//		<< ", spent = " << (int)spent
+				//		<< ", cost = " << (int)cost
+				//		<< ", newSpent = " << (*i)->getSpent();
 			}
 			else if (help == "STR_ETHEREAL_CORPSE"
 				|| help == "STR_SECTOPOD_CORPSE"
@@ -1590,10 +1589,10 @@ void Base::researchHelp(std::string aLien)
 				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.5f)));
 				found = true;
 
-				Log(LOG_INFO) << ". . Medic.5 : help = " << help
-						<< ", spent = " << (int)spent
-						<< ", cost = " << (int)cost
-						<< ", newSpent = " << (*i)->getSpent();
+				//Log(LOG_INFO) << ". . Medic.5 : help = " << help
+				//		<< ", spent = " << (int)spent
+				//		<< ", cost = " << (int)cost
+				//		<< ", newSpent = " << (*i)->getSpent();
 			}
 			else if (help == "STR_PSI_AMP"
 				|| help == "STR_SMALL_LAUNCHER"
@@ -1605,10 +1604,10 @@ void Base::researchHelp(std::string aLien)
 				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.6f)));
 				found = true;
 
-				Log(LOG_INFO) << ". . Medic.6 : help = " << help
-						<< ", spent = " << (int)spent
-						<< ", cost = " << (int)cost
-						<< ", newSpent = " << (*i)->getSpent();
+				//Log(LOG_INFO) << ". . Medic.6 : help = " << help
+				//		<< ", spent = " << (int)spent
+				//		<< ", cost = " << (int)cost
+				//		<< ", newSpent = " << (*i)->getSpent();
 			}
 			else if (help == "STR_ALIEN_FOOD"
 				|| help == "STR_ALIEN_SURGERY"
@@ -1618,10 +1617,10 @@ void Base::researchHelp(std::string aLien)
 				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.8f)));
 				found = true;
 
-				Log(LOG_INFO) << ". . Medic.8 : help = " << help
-						<< ", spent = " << (int)spent
-						<< ", cost = " << (int)cost
-						<< ", newSpent = " << (*i)->getSpent();
+				//Log(LOG_INFO) << ". . Medic.8 : help = " << help
+				//		<< ", spent = " << (int)spent
+				//		<< ", cost = " << (int)cost
+				//		<< ", newSpent = " << (*i)->getSpent();
 			}
 
 			// always takes an extra day to complete (and guards vs. potential code-flow bork!)
@@ -1649,10 +1648,10 @@ void Base::researchHelp(std::string aLien)
 				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.1f)));
 				found = true;
 
-				Log(LOG_INFO) << ". . Engineer.1 : help = " << help
-						<< ", spent = " << (int)spent
-						<< ", cost = " << (int)cost
-						<< ", newSpent = " << (*i)->getSpent();
+				//Log(LOG_INFO) << ". . Engineer.1 : help = " << help
+				//		<< ", spent = " << (int)spent
+				//		<< ", cost = " << (int)cost
+				//		<< ", newSpent = " << (*i)->getSpent();
 			}
 			else if (help == "STR_ALIEN_ORIGINS"
 				|| help == "STR_SMALL_LAUNCHER"
@@ -1661,10 +1660,10 @@ void Base::researchHelp(std::string aLien)
 				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.2f)));
 				found = true;
 
-				Log(LOG_INFO) << ". . Engineer.2 : help = " << help
-						<< ", spent = " << (int)spent
-						<< ", cost = " << (int)cost
-						<< ", newSpent = " << (*i)->getSpent();
+				//Log(LOG_INFO) << ". . Engineer.2 : help = " << help
+				//		<< ", spent = " << (int)spent
+				//		<< ", cost = " << (int)cost
+				//		<< ", newSpent = " << (*i)->getSpent();
 			}
 			else if (help == "STR_NEW_FIGHTER_CRAFT"
 				|| help == "STR_NEW_FIGHTER_TRANSPORTER"
@@ -1673,10 +1672,10 @@ void Base::researchHelp(std::string aLien)
 				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.3f)));
 				found = true;
 
-				Log(LOG_INFO) << ". . Engineer.3 : help = " << help
-						<< ", spent = " << (int)spent
-						<< ", cost = " << (int)cost
-						<< ", newSpent = " << (*i)->getSpent();
+				//Log(LOG_INFO) << ". . Engineer.3 : help = " << help
+				//		<< ", spent = " << (int)spent
+				//		<< ", cost = " << (int)cost
+				//		<< ", newSpent = " << (*i)->getSpent();
 			}
 			else if (help == "STR_MOTION_SCANNER"
 				|| help == "STR_HEAVY_PLASMA"
@@ -1702,10 +1701,10 @@ void Base::researchHelp(std::string aLien)
 				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.5f)));
 				found = true;
 
-				Log(LOG_INFO) << ". . Engineer.5 : help = " << help
-						<< ", spent = " << (int)spent
-						<< ", cost = " << (int)cost
-						<< ", newSpent = " << (*i)->getSpent();
+				//Log(LOG_INFO) << ". . Engineer.5 : help = " << help
+				//		<< ", spent = " << (int)spent
+				//		<< ", cost = " << (int)cost
+				//		<< ", newSpent = " << (*i)->getSpent();
 			}
 			else if (help == "STR_BLASTER_LAUNCHER"
 				|| help == "STR_BLASTER_BOMB")
@@ -1713,10 +1712,10 @@ void Base::researchHelp(std::string aLien)
 				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.7f)));
 				found = true;
 
-				Log(LOG_INFO) << ". . Engineer.7 : help = " << help
-						<< ", spent = " << (int)spent
-						<< ", cost = " << (int)cost
-						<< ", newSpent = " << (*i)->getSpent();
+				//Log(LOG_INFO) << ". . Engineer.7 : help = " << help
+				//		<< ", spent = " << (int)spent
+				//		<< ", cost = " << (int)cost
+				//		<< ", newSpent = " << (*i)->getSpent();
 			}
 
 			// always takes an extra day to complete (and guards vs. potential code-flow bork!)
@@ -1746,10 +1745,10 @@ void Base::researchHelp(std::string aLien)
 				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.1f)));
 				found = true;
 
-				Log(LOG_INFO) << ". . Leader.1 : help = " << help
-						<< ", spent = " << (int)spent
-						<< ", cost = " << (int)cost
-						<< ", newSpent = " << (*i)->getSpent();
+				//Log(LOG_INFO) << ". . Leader.1 : help = " << help
+				//		<< ", spent = " << (int)spent
+				//		<< ", cost = " << (int)cost
+				//		<< ", newSpent = " << (*i)->getSpent();
 			}
 			else if (help == "STR_HEAVY_PLASMA"
 				|| help == "STR_HEAVY_PLASMA_CLIP"
@@ -1772,60 +1771,60 @@ void Base::researchHelp(std::string aLien)
 				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.2f)));
 				found = true;
 
-				Log(LOG_INFO) << ". . Leader.2 : help = " << help
-						<< ", spent = " << (int)spent
-						<< ", cost = " << (int)cost
-						<< ", newSpent = " << (*i)->getSpent();
+				//Log(LOG_INFO) << ". . Leader.2 : help = " << help
+				//		<< ", spent = " << (int)spent
+				//		<< ", cost = " << (int)cost
+				//		<< ", newSpent = " << (*i)->getSpent();
 			}
 			else if (help == "STR_PSI_AMP")
 			{
 				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.25f)));
 				found = true;
 
-				Log(LOG_INFO) << ". . Leader.25 : help = " << help
-						<< ", spent = " << (int)spent
-						<< ", cost = " << (int)cost
-						<< ", newSpent = " << (*i)->getSpent();
+				//Log(LOG_INFO) << ". . Leader.25 : help = " << help
+				//		<< ", spent = " << (int)spent
+				//		<< ", cost = " << (int)cost
+				//		<< ", newSpent = " << (*i)->getSpent();
 			}
 			else if (help == "STR_THE_MARTIAN_SOLUTION")
 			{
 				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.3f)));
 				found = true;
 
-				Log(LOG_INFO) << ". . Leader.3 : help = " << help
-						<< ", spent = " << (int)spent
-						<< ", cost = " << (int)cost
-						<< ", newSpent = " << (*i)->getSpent();
+				//Log(LOG_INFO) << ". . Leader.3 : help = " << help
+				//		<< ", spent = " << (int)spent
+				//		<< ", cost = " << (int)cost
+				//		<< ", newSpent = " << (*i)->getSpent();
 			}
 			else if (help == "STR_ALIEN_ORIGINS")
 			{
 				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.5f)));
 				found = true;
 
-				Log(LOG_INFO) << ". . Leader.5 : help = " << help
-						<< ", spent = " << (int)spent
-						<< ", cost = " << (int)cost
-						<< ", newSpent = " << (*i)->getSpent();
+				//Log(LOG_INFO) << ". . Leader.5 : help = " << help
+				//		<< ", spent = " << (int)spent
+				//		<< ", cost = " << (int)cost
+				//		<< ", newSpent = " << (*i)->getSpent();
 			}
 			else if (help == "STR_BLASTER_LAUNCHER")
 			{
 				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.6f)));
 				found = true;
 
-				Log(LOG_INFO) << ". . Leader.6 : help = " << help
-						<< ", spent = " << (int)spent
-						<< ", cost = " << (int)cost
-						<< ", newSpent = " << (*i)->getSpent();
+				//Log(LOG_INFO) << ". . Leader.6 : help = " << help
+				//		<< ", spent = " << (int)spent
+				//		<< ", cost = " << (int)cost
+				//		<< ", newSpent = " << (*i)->getSpent();
 			}
 			else if (help == "STR_EXAMINATION_ROOM")
 			{
 				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.8f)));
 				found = true;
 
-				Log(LOG_INFO) << ". . Leader.8 : help = " << help
-						<< ", spent = " << (int)spent
-						<< ", cost = " << (int)cost
-						<< ", newSpent = " << (*i)->getSpent();
+				//Log(LOG_INFO) << ". . Leader.8 : help = " << help
+				//		<< ", spent = " << (int)spent
+				//		<< ", cost = " << (int)cost
+				//		<< ", newSpent = " << (*i)->getSpent();
 			}
 
 			// always takes an extra day to complete (and guards vs. potential code-flow bork!)
@@ -1865,10 +1864,10 @@ void Base::researchHelp(std::string aLien)
 				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.2f)));
 				found = true;
 
-				Log(LOG_INFO) << ". . Commander.2 : help = " << help
-						<< ", spent = " << (int)spent
-						<< ", cost = " << (int)cost
-						<< ", newSpent = " << (*i)->getSpent();
+				//Log(LOG_INFO) << ". . Commander.2 : help = " << help
+				//		<< ", spent = " << (int)spent
+				//		<< ", cost = " << (int)cost
+				//		<< ", newSpent = " << (*i)->getSpent();
 			}
 			else if (help == "STR_BLASTER_BOMB"
 					|| help == "STR_ELERIUM_115"
@@ -1880,10 +1879,10 @@ void Base::researchHelp(std::string aLien)
 				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.25f)));
 				found = true;
 
-				Log(LOG_INFO) << ". . Commander.25 : help = " << help
-						<< ", spent = " << (int)spent
-						<< ", cost = " << (int)cost
-						<< ", newSpent = " << (*i)->getSpent();
+				//Log(LOG_INFO) << ". . Commander.25 : help = " << help
+				//		<< ", spent = " << (int)spent
+				//		<< ", cost = " << (int)cost
+				//		<< ", newSpent = " << (*i)->getSpent();
 			}
 			else if (help == "STR_PSI_AMP"
 				|| help == "STR_CYDONIA_OR_BUST")
@@ -1891,30 +1890,30 @@ void Base::researchHelp(std::string aLien)
 				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.5f)));
 				found = true;
 
-				Log(LOG_INFO) << ". . Commander.5 : help = " << help
-						<< ", spent = " << (int)spent
-						<< ", cost = " << (int)cost
-						<< ", newSpent = " << (*i)->getSpent();
+				//Log(LOG_INFO) << ". . Commander.5 : help = " << help
+				//		<< ", spent = " << (int)spent
+				//		<< ", cost = " << (int)cost
+				//		<< ", newSpent = " << (*i)->getSpent();
 			}
 			else if (help == "STR_THE_MARTIAN_SOLUTION")
 			{
 				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.6f)));
 				found = true;
 
-				Log(LOG_INFO) << ". . Commander.6 : help = " << help
-						<< ", spent = " << (int)spent
-						<< ", cost = " << (int)cost
-						<< ", newSpent = " << (*i)->getSpent();
+				//Log(LOG_INFO) << ". . Commander.6 : help = " << help
+				//		<< ", spent = " << (int)spent
+				//		<< ", cost = " << (int)cost
+				//		<< ", newSpent = " << (*i)->getSpent();
 			}
 			else if (help == "STR_ALIEN_ORIGINS")
 			{
 				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.7f)));
 				found = true;
 
-				Log(LOG_INFO) << ". . Commander.7 : help = " << help
-						<< ", spent = " << (int)spent
-						<< ", cost = " << (int)cost
-						<< ", newSpent = " << (*i)->getSpent();
+				//Log(LOG_INFO) << ". . Commander.7 : help = " << help
+				//		<< ", spent = " << (int)spent
+				//		<< ", cost = " << (int)cost
+				//		<< ", newSpent = " << (*i)->getSpent();
 			}
 			else if (help == "STR_BLASTER_LAUNCHER"
 				|| help == "STR_EXAMINATION_ROOM")
@@ -1922,10 +1921,10 @@ void Base::researchHelp(std::string aLien)
 				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.8f)));
 				found = true;
 
-				Log(LOG_INFO) << ". . Commander.8 : help = " << help
-						<< ", spent = " << (int)spent
-						<< ", cost = " << (int)cost
-						<< ", newSpent = " << (*i)->getSpent();
+				//Log(LOG_INFO) << ". . Commander.8 : help = " << help
+				//		<< ", spent = " << (int)spent
+				//		<< ", cost = " << (int)cost
+				//		<< ", newSpent = " << (*i)->getSpent();
 			}
 
 			// always takes an extra day to complete (and guards vs. potential code-flow bork!)
@@ -2161,7 +2160,7 @@ bool isCompleted::operator()(const BaseFacility* facility) const
 // kL_begin: rewrite getDetectionChance()
 int Base::getDetectionChance(int difficulty) const
 {
-	Log(LOG_INFO) << "Base::getDetectionChance()";
+	//Log(LOG_INFO) << "Base::getDetectionChance()";
 
 	int facilities = static_cast<int>(std::count_if(
 												_facilities.begin(),
@@ -2174,12 +2173,12 @@ int Base::getDetectionChance(int difficulty) const
 
 	facilities = (facilities / 6) + 9;
 	shields = (shields * 2) + 1;
-	Log(LOG_INFO) << ". facilities = " << facilities;
-	Log(LOG_INFO) << ". shields = " << shields;
-	Log(LOG_INFO) << ". difficulty = " << difficulty;
+	//Log(LOG_INFO) << ". facilities = " << facilities;
+	//Log(LOG_INFO) << ". shields = " << shields;
+	//Log(LOG_INFO) << ". difficulty = " << difficulty;
 
 	int detchance = (facilities / shields) + difficulty;
-	Log(LOG_INFO) << ". detchance = " << detchance;
+	//Log(LOG_INFO) << ". detchance = " << detchance;
 
 	return detchance;
 }

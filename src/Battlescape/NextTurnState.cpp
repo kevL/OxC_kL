@@ -62,7 +62,7 @@ NextTurnState::NextTurnState(
 		_state(state),
 		_timer(0)
 {
-	Log(LOG_INFO) << "\nCreate NextTurnState";
+	//Log(LOG_INFO) << "\nCreate NextTurnState";
 
 	_window		= new Window(this, 320, 200, 0, 0);
 	_txtTitle	= new Text(320, 17, 0, 68);
@@ -121,7 +121,7 @@ NextTurnState::NextTurnState(
 		_timer->start();
 	}
 
-	Log(LOG_INFO) << "Create NextTurnState EXIT";
+	//Log(LOG_INFO) << "Create NextTurnState EXIT";
 }
 
 /**
@@ -147,7 +147,7 @@ void NextTurnState::handle(Action* action)
 		// That causes the aLien NextTurn screen to auto-disappear
 		// if all aLiens are Mc'd by xCom... bah!!
 	{
-		Log(LOG_INFO) << "NextTurnState::handle(RMB)";
+		//Log(LOG_INFO) << "NextTurnState::handle(RMB)";
 
 		kL_TurnCount = _battleGame->getTurn();
 
@@ -172,7 +172,7 @@ void NextTurnState::think()
  */
 void NextTurnState::close()
 {
-	Log(LOG_INFO) << "NextTurnState::close()";
+	//Log(LOG_INFO) << "NextTurnState::close()";
 
 	_game->popState();
 

@@ -188,7 +188,7 @@ void Country::newMonth(
 		int alienTotal,
 		int diff) // kL
 {
-	Log(LOG_INFO) << "Country::newMonth()";
+	//Log(LOG_INFO) << "Country::newMonth()";
 	_satisfaction = 2;
 
 	int
@@ -205,7 +205,7 @@ void Country::newMonth(
 	// kL_begin:
 	if (xCom > aLien + ((diff + 1) * 20)) // country auto. increases funding
 	{
-		Log(LOG_INFO) << ". auto funding increase";
+		//Log(LOG_INFO) << ". auto funding increase";
 		int cap = getRules()->getFundingCap() * 1000;
 
 		if (funding + newFunding > cap)
@@ -216,10 +216,10 @@ void Country::newMonth(
 	}
 	else if (xCom - (diff * 20) > aLien) // 50-50 increase/decrease funding
 	{
-		Log(LOG_INFO) << ". possible funding increase/decrease";
+		//Log(LOG_INFO) << ". possible funding increase/decrease";
 		if (RNG::generate(0, xCom) > aLien)
 		{
-			Log(LOG_INFO) << ". . funding increase";
+			//Log(LOG_INFO) << ". . funding increase";
 			int cap = getRules()->getFundingCap() * 1000;
 
 			if (funding + newFunding > cap)
@@ -231,14 +231,14 @@ void Country::newMonth(
 		else if (RNG::generate(0, aLien) > xCom
 			&& newFunding)
 		{
-			Log(LOG_INFO) << ". . funding decrease";
+			//Log(LOG_INFO) << ". . funding decrease";
 			newFunding = -newFunding;
 			_satisfaction = 1;
 		}
 	}
 	else if (newFunding) // auto. funding decrease
 	{
-		Log(LOG_INFO) << ". auto funding decrease";
+		//Log(LOG_INFO) << ". auto funding decrease";
 		newFunding = -newFunding;
 		_satisfaction = 1;
 	} // kL_end.

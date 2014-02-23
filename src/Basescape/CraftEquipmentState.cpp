@@ -810,7 +810,7 @@ void CraftEquipmentState::btnClearClick(Action*)
 */
 void CraftEquipmentState::btnInventoryClick(Action*)
 {
-	Log(LOG_INFO) << "\nCraftEquipmentState::btnInventoryClick()";
+	//Log(LOG_INFO) << "\nCraftEquipmentState::btnInventoryClick()";
 
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_4")->getColors());
 
@@ -821,17 +821,17 @@ void CraftEquipmentState::btnInventoryClick(Action*)
 
 
 	SavedBattleGame* bgame = new SavedBattleGame();
-	Log(LOG_INFO) << ". bgame = " << bgame;
+	//Log(LOG_INFO) << ". bgame = " << bgame;
 	_game->getSavedGame()->setBattleGame(bgame);
 
 	BattlescapeGenerator bgen = BattlescapeGenerator(_game);
-	Log(LOG_INFO) << ". bgen = " << &bgen;
+	//Log(LOG_INFO) << ". bgen = " << &bgen;
 	Craft* craft = _base->getCrafts()->at(_craft);
-	Log(LOG_INFO) << ". craft = " << craft;
+	//Log(LOG_INFO) << ". craft = " << craft;
 	bgen.runInventory(craft);
 
 	_game->pushState(new InventoryState(_game, false, 0));
-	Log(LOG_INFO) << "CraftEquipmentState::btnInventoryClick() EXIT";
+	//Log(LOG_INFO) << "CraftEquipmentState::btnInventoryClick() EXIT";
 }
 
 }

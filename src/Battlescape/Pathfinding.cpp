@@ -253,12 +253,8 @@ void Pathfinding::calculate(
 					&& startPosition.z == endPosition.z
 					&& abs(startPosition.x - endPosition.x) < 2
 					&& abs(startPosition.y - endPosition.y) < 2;
-/*	if (_strafeMove)
-	{
-		Log(LOG_INFO) << "Pathfinding::calculate() _strafeMove VALID";		// kL
-	}
-	else
-		Log(LOG_INFO) << "Pathfinding::calculate() _strafeMove INVALID"; */	// kL
+//	if (_strafeMove) Log(LOG_INFO) << "Pathfinding::calculate() _strafeMove VALID";
+//	else Log(LOG_INFO) << "Pathfinding::calculate() _strafeMove INVALID";
 
 	// look for a possible fast and accurate bresenham path and skip A*
 	bool sneak = _unit->getFaction() == FACTION_HOSTILE
@@ -336,9 +332,9 @@ bool Pathfinding::bresenhamPath(
 	_totalTUCost = 0;
 
 	// start and end points
-	x0 = origin.x;	x1 = target.x;
-	y0 = origin.y;	y1 = target.y;
-	z0 = origin.z;	z1 = target.z;
+	x0 = origin.x; x1 = target.x;
+	y0 = origin.y; y1 = target.y;
+	z0 = origin.z; z1 = target.z;
 
 	// 'steep' xy Line, make longest delta x plane
 	swap_xy = abs(y1 - y0) > abs(x1 - x0);
@@ -416,20 +412,25 @@ bool Pathfinding::bresenhamPath(
 								targetUnit,
 								(targetUnit && maxTUCost == 10000));
 
-			if (sneak && _save->getTile(nextPoint)->getVisible())
+			if (sneak
+				&& _save->getTile(nextPoint)->getVisible())
 			{
 				return false;
 			}
 
 			// delete the following
 			bool isDiagonal = (dir & 1);
-			int lastTUCostDiagonal = lastTUCost + lastTUCost / 2;
-			int tuCostDiagonal = tuCost + tuCost / 2;
+			int
+				lastTUCostDiagonal = lastTUCost + lastTUCost / 2,
+				tuCostDiagonal = tuCost + tuCost / 2;
+
 			if (nextPoint == realNextPoint
 				&& tuCost < 255
 				&& (tuCost == lastTUCost
-					|| (isDiagonal && tuCost == lastTUCostDiagonal)
-					|| (!isDiagonal && tuCostDiagonal == lastTUCost)
+					|| (isDiagonal
+						&& tuCost == lastTUCostDiagonal)
+					|| (!isDiagonal
+						&& tuCostDiagonal == lastTUCost)
 					|| lastTUCost == -1)
 				&& !isBlocked(
 						_save->getTile(lastPoint),
@@ -440,9 +441,7 @@ bool Pathfinding::bresenhamPath(
 				_path.push_back(dir);
 			}
 			else
-			{
 				return false;
-			}
 
 			if (targetUnit == 0
 				&& tuCost != 255)

@@ -449,11 +449,11 @@ void StartState::think()
 			{
 				Log(LOG_INFO) << "Loading ruleset...";
 				_game->loadRuleset();
-				Log(LOG_INFO) << "Ruleset loaded successfully.";
+				Log(LOG_INFO) << "Ruleset loaded.";
 
 				Log(LOG_INFO) << "Loading resources...";
 				_game->setResourcePack(new XcomResourcePack(_game->getRuleset()->getExtraSprites(), _game->getRuleset()->getExtraSounds()));
-				Log(LOG_INFO) << "Resources loaded successfully.";
+				Log(LOG_INFO) << "Resources loaded.";
 
 				Log(LOG_INFO) << "Loading language...";
 				std::string defaultLang = "en-US";
@@ -489,7 +489,7 @@ void StartState::think()
 						_game->loadLanguage(defaultLang);
 					}
 				}
-				Log(LOG_INFO) << "Language loaded successfully.";
+				Log(LOG_INFO) << "Language loaded.";
 				_load = LOADING_SUCCESSFUL;
 
 				// loading done? let's play intro!
@@ -602,7 +602,7 @@ void StartState::think()
 			_load = LOADING_STARTED;
 		break;
 		case LOADING_SUCCESSFUL:
-			Log(LOG_INFO) << "OpenXcom started successfully!";
+			Log(LOG_INFO) << "OpenXcom started!";
 
 			_game->setState(new MainMenuState(_game));
 		break;

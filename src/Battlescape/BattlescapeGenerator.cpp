@@ -444,7 +444,7 @@ void BattlescapeGenerator::run()
 */
 void BattlescapeGenerator::deployXCOM()
 {
-	Log(LOG_INFO) << "BattlescapeGenerator::deployXCOM()";
+	//Log(LOG_INFO) << "BattlescapeGenerator::deployXCOM()";
 //kL_below	if (_craft != 0) _base = _craft->getBase();
 
 	RuleInventory* ground = _game->getRuleset()->getInventory("STR_GROUND");
@@ -461,7 +461,7 @@ void BattlescapeGenerator::deployXCOM()
 				i != _craft->getVehicles()->end();
 				++i)
 		{
-			Log(LOG_INFO) << ". . isCraft: addXCOMVehicle " << (int)*i;
+			//Log(LOG_INFO) << ". . isCraft: addXCOMVehicle " << (int)*i;
 
 			BattleUnit* unit = addXCOMVehicle(*i);
 			if (unit
@@ -479,7 +479,7 @@ void BattlescapeGenerator::deployXCOM()
 				i != _base->getVehicles()->end();
 				++i)
 		{
-			Log(LOG_INFO) << ". . isBase: addXCOMVehicle " << (int)*i;
+			//Log(LOG_INFO) << ". . isBase: addXCOMVehicle " << (int)*i;
 
 			BattleUnit* unit = addXCOMVehicle(*i);
 			if (unit
@@ -503,7 +503,7 @@ void BattlescapeGenerator::deployXCOM()
 				&& ((*i)->getCraft() == 0
 					|| (*i)->getCraft()->getStatus() != "STR_OUT")))
 		{
-			Log(LOG_INFO) << ". . addXCOMUnit " << (*i)->getId();
+			//Log(LOG_INFO) << ". . addXCOMUnit " << (*i)->getId();
 
 			BattleUnit* unit = addXCOMUnit(new BattleUnit(
 														*i,
@@ -760,7 +760,7 @@ void BattlescapeGenerator::deployXCOM()
 			i = _craftInventoryTile->getInventory()->erase(i);
 	}
 
-	Log(LOG_INFO) << "BattlescapeGenerator::deployXCOM() EXIT";
+	//Log(LOG_INFO) << "BattlescapeGenerator::deployXCOM() EXIT";
 }
 
 /**
@@ -2794,7 +2794,7 @@ void BattlescapeGenerator::fuelPowerSources()
  */
 void BattlescapeGenerator::explodePowerSources()
 {
-	Log(LOG_INFO) << "BattlescapeGenerator::explodePowerSources()";
+	//Log(LOG_INFO) << "BattlescapeGenerator::explodePowerSources()";
 	for (int
 			i = 0;
 			i < _save->getMapSizeXYZ();
@@ -2810,18 +2810,18 @@ void BattlescapeGenerator::explodePowerSources()
 			pos.z = _save->getTiles()[i]->getPosition().z * 24 + 12;
 
 			int percDamage = _ufo->getCrashPS(); // ( range: 50+ to 100- )
-			Log(LOG_INFO) << ". crashPS = " << percDamage;
+			//Log(LOG_INFO) << ". crashPS = " << percDamage;
 			if (RNG::percent(percDamage / 2)) // chance for full range Explosion (even if crash took low damage)
 			{
 				percDamage = RNG::generate(1, 100);
-				Log(LOG_INFO) << ". . Alt percDamage = " << percDamage;
+				//Log(LOG_INFO) << ". . Alt percDamage = " << percDamage;
 			}
 			double rand = RNG::generate(0.0, 2.0) * static_cast<double>(percDamage);
-			Log(LOG_INFO) << ". rand = " << (int)rand;
+			//Log(LOG_INFO) << ". rand = " << (int)rand;
 
 //			int power = static_cast<int>(((pow(rand, 3)) / 32000.0) + (static_cast<double>(percDamage) - 50.0));
 			int power = static_cast<int>(((pow(rand, 2)) / 160.0) + (static_cast<double>(percDamage) - 50.0));
-			Log(LOG_INFO) << ". power = " << power;
+			//Log(LOG_INFO) << ". power = " << power;
 
 			_save->getTileEngine()->explode(
 										pos,

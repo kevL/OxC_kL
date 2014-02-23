@@ -74,14 +74,14 @@ Game::Game(const std::string& title)
 		_init(false),
 		_mouseActive(true)
 {
-//	Log(LOG_INFO) << "Create Game";
+	Log(LOG_INFO) << "Create Game";
 
 	// Initialize SDL
 	if (SDL_Init(SDL_INIT_VIDEO) < 0)
 	{
 		throw Exception(SDL_GetError());
 	}
-	Log(LOG_INFO) << "SDL initialized successfully.";
+	Log(LOG_INFO) << "SDL initialized.";
 
 	Options::setBool("mute", false);
 	// Initialize SDL_mixer
@@ -109,7 +109,7 @@ Game::Game(const std::string& title)
 		{
 			Mix_AllocateChannels(16);
 
-			Log(LOG_INFO) << "SDL_mixer initialized successfully.";
+			Log(LOG_INFO) << "SDL_mixer initialized.";
 		}
 	}
 

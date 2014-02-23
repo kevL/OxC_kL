@@ -1319,12 +1319,12 @@ void Map::drawTerrain(Surface* surface)
 												tile->getTUMarker());
 
 							// kL_note: Set pathfinder/ pathpreview number color.
-//							Log(LOG_INFO) << "Map::drawTerrain() mapname = " << _ruleTerrain->getName();
+							//Log(LOG_INFO) << "Map::drawTerrain() mapname = " << _ruleTerrain->getName();
 //							if (_ruleTerrain->getName() == "STR_POLAR")
 //								wpColor = 15;
 							_numWaypid->setColor(Palette::blockOffset(12)+8); // kL
 
-//							Log(LOG_INFO) << "Map::drawTerrain() terrain = " << _game->getRuleset()->getTerrain("POLAR")->getName();
+							//Log(LOG_INFO) << "Map::drawTerrain() terrain = " << _game->getRuleset()->getTerrain("POLAR")->getName();
 
 							_numWaypid->setValue(tuMarker);
 							_numWaypid->draw();

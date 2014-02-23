@@ -304,7 +304,7 @@ void AlienMission::think(
 														(*c)->getRules()->getLabelLongitude(),
 														(*c)->getRules()->getLabelLatitude()))
 			{
-				Log(LOG_INFO) << "AlienMission::think(), GAAH! new Pact & aLien base";
+				//Log(LOG_INFO) << "AlienMission::think(), GAAH! new Pact & aLien base";
 
 				// kL_note: Ironically, this likely allows multiple alien
 				// bases in Russia solely because of infiltrations ...!!
@@ -353,11 +353,11 @@ Ufo* AlienMission::spawnUfo(
 		const RuleUfo& ufoRule,
 		const UfoTrajectory& trajectory)
 {
-	Log(LOG_INFO) << "AlienMission::spawnUfo()";
+	//Log(LOG_INFO) << "AlienMission::spawnUfo()";
 
 	if (_rule.getType() == "STR_ALIEN_RETALIATION")
 	{
-		Log(LOG_INFO) << ". STR_ALIEN_RETALIATION";
+		//Log(LOG_INFO) << ". STR_ALIEN_RETALIATION";
 
 		const RuleRegion& regionRules = *ruleset.getRegion(_region);
 
@@ -368,7 +368,7 @@ Ufo* AlienMission::spawnUfo(
 
 		if (found != game.getBases()->end())
 		{
-			Log(LOG_INFO) << ". . xCom base found marked. Battleship INC!!!";
+			//Log(LOG_INFO) << ". . xCom base found marked. Battleship INC!!!";
 
 			// Spawn a battleship straight for the XCOM base.
 			const RuleUfo& battleshipRule = *ruleset.getUfo("STR_BATTLESHIP");
@@ -404,13 +404,13 @@ Ufo* AlienMission::spawnUfo(
 	}
 	else if (_rule.getType() == "STR_ALIEN_SUPPLY")
 	{
-		Log(LOG_INFO) << ". STR_ALIEN_SUPPLY";
+		//Log(LOG_INFO) << ". STR_ALIEN_SUPPLY";
 
 		//Log(LOG_DEBUG) << __FILE__ << ':' << __LINE__ << ' ' << _base;
 		if (ufoRule.getType() == "STR_SUPPLY_SHIP"
 			&& !_base)
 		{
-			Log(LOG_INFO) << ". . No base to supply!";
+			//Log(LOG_INFO) << ". . No base to supply!";
 
 			return 0; // No base to supply!
 		}
@@ -726,7 +726,7 @@ void AlienMission::ufoLifting(
 		Game& engine,
 		const Globe& globe)
 {
-	Log(LOG_INFO) << "AlienMission::ufoLifting()";
+	//Log(LOG_INFO) << "AlienMission::ufoLifting()";
 
 	const Ruleset& rules = *engine.getRuleset();
 
@@ -737,7 +737,7 @@ void AlienMission::ufoLifting(
 		break;
 		case Ufo::LANDED:
 			{
-				Log(LOG_INFO) << ". mission complete, addScore() + getTrajectory()";
+				//Log(LOG_INFO) << ". mission complete, addScore() + getTrajectory()";
 
 				if ((ufo.getRules()->getType() == "STR_HARVESTER"
 						&& _rule.getType() == "STR_ALIEN_HARVEST")
@@ -884,13 +884,13 @@ void AlienMission::spawnAlienBase(
 		const Globe& globe,
 		Game& engine)
 {
-	Log(LOG_INFO) << "AlienMission::spawnAlienBase()";
+	//Log(LOG_INFO) << "AlienMission::spawnAlienBase()";
 
 	SavedGame& game = *engine.getSavedGame();
 
 	if (game.getAlienBases()->size() > 8)
 	{
-		Log(LOG_INFO) << ". too many aLien bases!! EXIT";
+		//Log(LOG_INFO) << ". too many aLien bases!! EXIT";
 
 		return;
 	}

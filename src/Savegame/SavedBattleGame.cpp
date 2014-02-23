@@ -91,7 +91,7 @@ SavedBattleGame::SavedBattleGame()
 		_tuReserved(BA_NONE),
 		_kneelReserved(false)
 {
-	Log(LOG_INFO) << "\nCreate SavedBattleGame";
+	//Log(LOG_INFO) << "\nCreate SavedBattleGame";
 
 	_dragButton			= static_cast<Uint8>(Options::getInt("battleScrollDragButton"));
 	_dragInvert			= Options::getBool("battleScrollDragInvert");
@@ -118,7 +118,7 @@ SavedBattleGame::SavedBattleGame()
  */
 SavedBattleGame::~SavedBattleGame()
 {
-//	Log(LOG_INFO) << "Delete SavedBattleGame";
+	//Log(LOG_INFO) << "Delete SavedBattleGame";
 
 	for (int
 			i = 0;
@@ -1001,7 +1001,7 @@ UnitFaction SavedBattleGame::getSide() const
  */
 int SavedBattleGame::getTurn() const
 {
-//	Log(LOG_INFO) << ". getTurn()";	// kL
+	//Log(LOG_INFO) << ". getTurn()"; // kL
 	return _turn;
 }
 
@@ -1010,11 +1010,11 @@ int SavedBattleGame::getTurn() const
  */
 void SavedBattleGame::endTurn()
 {
-	Log(LOG_INFO) << "SavedBattleGame::endTurn()";
+	//Log(LOG_INFO) << "SavedBattleGame::endTurn()";
 
 	if (_side == FACTION_PLAYER) // end of Xcom turn.
 	{
-		Log(LOG_INFO) << ". end Faction_Player";
+		//Log(LOG_INFO) << ". end Faction_Player";
 
 		if (_selectedUnit
 			&& _selectedUnit->getOriginalFaction() == FACTION_PLAYER)
@@ -1037,7 +1037,7 @@ void SavedBattleGame::endTurn()
 	}
 	else if (_side == FACTION_HOSTILE) // end of Alien turn.
 	{
-		Log(LOG_INFO) << ". end Faction_Hostile";
+		//Log(LOG_INFO) << ". end Faction_Hostile";
 
 		_side = FACTION_NEUTRAL;
 
@@ -1076,7 +1076,7 @@ void SavedBattleGame::endTurn()
 	}
 	else if (_side == FACTION_NEUTRAL) // end of Civilian turn.
 	{
-		Log(LOG_INFO) << ". end Faction_Neutral";
+		//Log(LOG_INFO) << ". end Faction_Neutral";
 
 		prepareNewTurn();
 		_turn++;
@@ -1174,7 +1174,7 @@ void SavedBattleGame::endTurn()
 	if (_side != FACTION_PLAYER)
 		selectNextFactionUnit();
 
-	Log(LOG_INFO) << "SavedBattleGame::endTurn() EXIT";
+	//Log(LOG_INFO) << "SavedBattleGame::endTurn() EXIT";
 }
 
 /**
@@ -1436,6 +1436,7 @@ int* SavedBattleGame::getCurrentItemId()
 /**
  * Finds a fitting node where a unit can spawn.
  * @param nodeRank, Rank of the node (this is not the rank of the alien!)
+ * kL_note: actually, it pretty much is the rank of the aLien.
  * @param unit, Pointer to the unit (to test-set its position)
  * @return, Pointer to the chosen node
  */
@@ -1494,7 +1495,7 @@ Node* SavedBattleGame::getPatrolNode(
 		BattleUnit* unit,
 		Node* fromNode)
 {
-	Log(LOG_INFO) << "SavedBattleGame::getPatrolNode()";
+	//Log(LOG_INFO) << "SavedBattleGame::getPatrolNode()";
 
 	if (fromNode == 0)
 	{
@@ -1619,7 +1620,7 @@ Node* SavedBattleGame::getPatrolNode(
  */
 void SavedBattleGame::prepareNewTurn()
 {
-	Log(LOG_INFO) << "SavedBattleGame::prepareNewTurn()";
+	//Log(LOG_INFO) << "SavedBattleGame::prepareNewTurn()";
 	std::vector<Tile*> tilesOnFire;
 	std::vector<Tile*> tilesOnSmoke;
 
@@ -2159,7 +2160,7 @@ bool SavedBattleGame::getTraceSetting() const
  */
 BattleUnit* SavedBattleGame::getHighestRanked(bool xcom)
 {
-	Log(LOG_INFO) << "SavedBattleGame::getHighestRanked() xcom = " << xcom;
+	//Log(LOG_INFO) << "SavedBattleGame::getHighestRanked() xcom = " << xcom;
 
 	BattleUnit* leader = 0;
 
@@ -2197,8 +2198,8 @@ BattleUnit* SavedBattleGame::getHighestRanked(bool xcom)
 		}
 	}
 
-	if (leader) Log(LOG_INFO) << ". leaderID = " << leader->getId();
-	else Log(LOG_INFO) << ". leaderID = 0";
+	//if (leader) Log(LOG_INFO) << ". leaderID = " << leader->getId();
+	//else Log(LOG_INFO) << ". leaderID = 0";
 
 	return leader;
 }
@@ -2215,7 +2216,7 @@ int SavedBattleGame::getMoraleModifier(
 		BattleUnit* unit,
 		bool xcom)
 {
-	Log(LOG_INFO) << "SavedBattleGame::getMoraleModifier()";
+	//Log(LOG_INFO) << "SavedBattleGame::getMoraleModifier()";
 	int result = 100;
 
 	if (unit == 0) // leadership Bonus
@@ -2246,7 +2247,7 @@ int SavedBattleGame::getMoraleModifier(
 				}
 			}
 
-			Log(LOG_INFO) << ". . xCom leaderModifi = " << result;
+			//Log(LOG_INFO) << ". . xCom leaderModifi = " << result;
 		}
 		else // alien
 		{
@@ -2275,7 +2276,7 @@ int SavedBattleGame::getMoraleModifier(
 				}
 			}
 
-			Log(LOG_INFO) << ". . aLien leaderModifi = " << result;
+			//Log(LOG_INFO) << ". . aLien leaderModifi = " << result;
 		}
 	}
 	else // morale Loss when 'unit' slain
@@ -2300,7 +2301,7 @@ int SavedBattleGame::getMoraleModifier(
 				break;
 			}
 
-			Log(LOG_INFO) << ". . xCom lossModifi = " << result;
+			//Log(LOG_INFO) << ". . xCom lossModifi = " << result;
 		}
 		else if (unit->getFaction() == FACTION_HOSTILE) // aliens or Mind Controlled XCOM dies.
 														// note this does funny things. A low-ranked, mind-controlled xCom unit's
@@ -2329,7 +2330,7 @@ int SavedBattleGame::getMoraleModifier(
 			}
 			// else if a mind-controlled alien dies nobody cares.
 
-			Log(LOG_INFO) << ". . aLien lossModifi = " << result;
+			//Log(LOG_INFO) << ". . aLien lossModifi = " << result;
 		}
 	}
 

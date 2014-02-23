@@ -61,8 +61,7 @@ BriefingState::BriefingState(
 	:
 		State(game)
 {
-//	Log(LOG_INFO) << "Create BriefingState";
-
+	//Log(LOG_INFO) << "Create BriefingState";
 	_screen = false;
 
 	_window			= new Window(this, 320, 200, 0, 0);
@@ -106,10 +105,6 @@ BriefingState::BriefingState(
 		_game->getResourcePack()->getMusic("GMDEFEND")->play();
 	}
 
-	add(_window);
-	add(_txtTitle);
-	add(_btnOk);
-
 	if (mission == "STR_ALIEN_BASE_ASSAULT"
 		|| mission == "STR_MARS_CYDONIA_LANDING")
 	{
@@ -117,14 +112,16 @@ BriefingState::BriefingState(
 		_txtBriefing->setY(56);
 		_txtTarget->setVisible(false);
 	}
-	add(_txtTarget);
 
 	if (mission == "STR_MARS_THE_FINAL_ASSAULT")
-	{
 		_txtCraft->setVisible(false);
-	}
-	add(_txtCraft);
 
+
+	add(_window);
+	add(_txtTitle);
+	add(_btnOk);
+	add(_txtTarget);
+	add(_txtCraft);
 	add(_txtBriefing);
 
 	centerAllSurfaces();
@@ -136,8 +133,12 @@ BriefingState::BriefingState(
 	_btnOk->setText(tr("STR_OK"));
 
 	_btnOk->onMouseClick((ActionHandler)& BriefingState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)& BriefingState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
-	_btnOk->onKeyboardPress((ActionHandler)& BriefingState::btnOkClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& BriefingState::btnOkClick,
+					(SDLKey)Options::getInt("keyOk"));
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& BriefingState::btnOkClick,
+					(SDLKey)Options::getInt("keyCancel"));
 
 	_txtTitle->setColor(Palette::blockOffset(8)+5);
 	_txtTitle->setBig();
@@ -152,16 +153,12 @@ BriefingState::BriefingState(
 	if (craft)
 	{
 		if (craft->getDestination())
-		{
 			_txtTarget->setText(craft->getDestination()->getName(_game->getLanguage()));
-		}
 
 		s = tr("STR_CRAFT_").arg(craft->getName(_game->getLanguage()));
 	}
 	else if (base)
-	{
 		s = tr("STR_BASE_UC_").arg(base->getName());
-	}
 
 	_txtCraft->setText(s);
 
@@ -175,9 +172,7 @@ BriefingState::BriefingState(
 		_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 	}
 	else
-	{
 		_window->setBackground(_game->getResourcePack()->getSurface("BACK16.SCR"));
-	}
 
 	_txtTitle->setText(tr(mission));
 
@@ -186,9 +181,7 @@ BriefingState::BriefingState(
 	_txtBriefing->setText(tr(briefingtext.str()));
 
 	if (mission == "STR_BASE_DEFENSE")
-	{
 		base->setRetaliationStatus(false); // And make sure the base is unmarked.
-	}
 }
 
 /**
@@ -196,7 +189,7 @@ BriefingState::BriefingState(
  */
 BriefingState::~BriefingState()
 {
-//	Log(LOG_INFO) << "Delete BriefingState";
+	//Log(LOG_INFO) << "Delete BriefingState";
 }
 
 /**

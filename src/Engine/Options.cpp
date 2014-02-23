@@ -478,7 +478,7 @@ bool init(
 
 	Log(LOG_INFO) << "User folder is: " << _userFolder;
 	Log(LOG_INFO) << "Config folder is: " << _configFolder;
-	Log(LOG_INFO) << "Options loaded successfully.";
+	Log(LOG_INFO) << "Options loaded.";
 
 	return true;
 }

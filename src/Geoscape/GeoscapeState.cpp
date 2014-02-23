@@ -1327,7 +1327,7 @@ private:
  */
 bool DetectXCOMBase::operator()(const Ufo* ufo) const
 {
-	Log(LOG_INFO) << "DetectXCOMBase(), ufoID " << ufo->getId();
+	//Log(LOG_INFO) << "DetectXCOMBase(), ufoID " << ufo->getId();
 	//Log(LOG_INFO) << "" << _base.getName(); // not workie!
 
 	bool ret = false;
@@ -1352,7 +1352,7 @@ bool DetectXCOMBase::operator()(const Ufo* ufo) const
 	{
 		double ufoRange	= 600.0;
 		double targetDistance = _base.getDistance(ufo) * 3440.0;
-		Log(LOG_INFO) << ". . targetDistance = " << (int)targetDistance;
+		//Log(LOG_INFO) << ". . targetDistance = " << (int)targetDistance;
 
 		if (targetDistance > ufoRange)
 		{
@@ -1372,12 +1372,12 @@ bool DetectXCOMBase::operator()(const Ufo* ufo) const
 				}
 
 				ret = RNG::percent(chance);
-				Log(LOG_INFO) << ". . . chance = " << chance;
+				//Log(LOG_INFO) << ". . . chance = " << chance;
 			}
 		}
 	}
 
-	Log(LOG_INFO) << ". ret " << ret;
+	//Log(LOG_INFO) << ". ret " << ret;
 	return ret;
 }
 
@@ -1404,7 +1404,7 @@ struct SetRetaliationStatus
  */
 void GeoscapeState::time10Minutes()
 {
-	Log(LOG_INFO) << "GeoscapeState::time10Minutes()";
+	//Log(LOG_INFO) << "GeoscapeState::time10Minutes()";
 
 	for (std::vector<Base*>::iterator
 			b = _game->getSavedGame()->getBases()->begin();
@@ -1425,7 +1425,7 @@ void GeoscapeState::time10Minutes()
 					(*c)->setLowFuel(true);
 					(*c)->returnToBase();
 
-					timerReset(); // kL
+//					timerReset(); // kL, able to set 5sec in popup.
 					popup(new LowFuelState(
 										_game,
 										*c,
@@ -1445,16 +1445,16 @@ void GeoscapeState::time10Minutes()
 						// TODO: move the craftRadar range to the ruleset.
 						double craftRadar = 600.0;
 						double targetDistance = (*c)->getDistance(*ab) * 3440.0;
-						Log(LOG_INFO) << ". Patrol for alienBases, targetDistance = " << targetDistance;
+						//Log(LOG_INFO) << ". Patrol for alienBases, targetDistance = " << targetDistance;
 
 						if (targetDistance < craftRadar)
 						{
 							int chance = 50 - static_cast<int>(targetDistance / craftRadar * 50.0);
-							Log(LOG_INFO) << ". . craft in Range, chance = " << chance;
+							//Log(LOG_INFO) << ". . craft in Range, chance = " << chance;
 
 							if (RNG::percent(chance))
 							{
-								Log(LOG_INFO) << ". . . aLienBase discovered";
+								//Log(LOG_INFO) << ". . . aLienBase discovered";
 								(*ab)->setDiscovered(true);
 							}
 						}
@@ -1480,7 +1480,7 @@ void GeoscapeState::time10Minutes()
 					DetectXCOMBase(**b, diff));
 			if (u != _game->getSavedGame()->getUfos()->end())
 			{
-				Log(LOG_INFO) << ". xBase found, set RetaliationStatus";
+				//Log(LOG_INFO) << ". xBase found, set RetaliationStatus";
 				(*b)->setRetaliationStatus(true);
 			}
 		}
@@ -1526,7 +1526,7 @@ void GeoscapeState::time10Minutes()
 
 			if (!(*u)->getDetected())
 			{
-				Log(LOG_INFO) << ". handle undetected uFo";
+				//Log(LOG_INFO) << ". handle undetected uFo";
 
 				bool
 					detected = false,
@@ -1538,17 +1538,17 @@ void GeoscapeState::time10Minutes()
 							&& !hyperdet;
 						++b)
 				{
-					Log(LOG_INFO) << ". Base detection";
+					//Log(LOG_INFO) << ". Base detection";
 
 					switch (static_cast<int>((*b)->detect(*u)))
 					{
 						case 2:
-							Log(LOG_INFO) << ". detect() = 2, hyperDet";
+							//Log(LOG_INFO) << ". detect() = 2, hyperDet";
 
 							(*u)->setHyperDetected(true);
 							hyperdet = true;
 						case 1:
-							Log(LOG_INFO) << ". detect() = 1, radar";
+							//Log(LOG_INFO) << ". detect() = 1, radar";
 							detected = true;
 						break;
 					}
@@ -1562,7 +1562,7 @@ void GeoscapeState::time10Minutes()
 						if ((*c)->getStatus() == "STR_OUT"
 							&& (*c)->detect(*u))
 						{
-							Log(LOG_INFO) << ". detected by Craft";
+							//Log(LOG_INFO) << ". detected by Craft";
 							detected = true;
 
 							break;
@@ -1585,7 +1585,7 @@ void GeoscapeState::time10Minutes()
 			}
 			else // ufo is already detected
 			{
-				Log(LOG_INFO) << ". handle previously detected uFo";
+				//Log(LOG_INFO) << ". handle previously detected uFo";
 
 				bool hyperdet = false; // (*u)->getHyperDetected();
 				bool detected = false;
@@ -1596,19 +1596,19 @@ void GeoscapeState::time10Minutes()
 							&& !hyperdet;
 						++b)
 				{
-					Log(LOG_INFO) << ". Base re-detection";
+					//Log(LOG_INFO) << ". Base re-detection";
 
 					// -2.0 =outside range ; -1.0 =hyperdetected ; 0.0+ =targetDistance
 					double targetRange = (*b)->insideRadarRange(*u);
 					if (targetRange > -1.99)
 					{
-						Log(LOG_INFO) << ". . still detected";
+						//Log(LOG_INFO) << ". . still detected";
 
 						detected = true;
 
 						if (AreSame(targetRange, -1.0))
 						{
-							Log(LOG_INFO) << ". . and hyper-detected";
+							//Log(LOG_INFO) << ". . and hyper-detected";
 
 							(*u)->setHyperDetected(true);
 							hyperdet = true;
@@ -1624,7 +1624,7 @@ void GeoscapeState::time10Minutes()
 						if ((*c)->getStatus() == "STR_OUT"
 							&& (*c)->detect(*u))
 						{
-							Log(LOG_INFO) << ". detected by Craft";
+							//Log(LOG_INFO) << ". detected by Craft";
 							detected = true;
 
 							break;
@@ -1758,7 +1758,7 @@ struct expireCrashedUfo: public std::unary_function<Ufo*, void>
  */
 void GeoscapeState::time30Minutes()
 {
-	Log(LOG_INFO) << "GeoscapeState::time30Minutes()";
+	//Log(LOG_INFO) << "GeoscapeState::time30Minutes()";
 
 	// Decrease mission countdowns
 	std::for_each(
@@ -1775,7 +1775,7 @@ void GeoscapeState::time30Minutes()
 	{
 		if ((*am)->isOver())
 		{
-			Log(LOG_INFO) << ". aLienMission isOver() : " << (*am)->getType();
+			//Log(LOG_INFO) << ". aLienMission isOver() : " << (*am)->getType();
 
 			delete *am;
 			am = _game->getSavedGame()->getAlienMissions().erase(am);
@@ -1928,12 +1928,12 @@ void GeoscapeState::time30Minutes()
 						switch ((*b)->detect(*u))
 						{
 							case 2:
-								Log(LOG_INFO) << ". detect() = 2, hyperDet";
+								//Log(LOG_INFO) << ". detect() = 2, hyperDet";
 
 								(*u)->setHyperDetected(true);
 								hyperdet = true;
 							case 1:
-								Log(LOG_INFO) << ". detect() = 1, radar";
+								//Log(LOG_INFO) << ". detect() = 1, radar";
 								detected = true;
 							break;
 						}
@@ -1947,7 +1947,7 @@ void GeoscapeState::time30Minutes()
 							if ((*c)->getStatus() == "STR_OUT"
 								&& (*c)->detect(*u))
 							{
-								Log(LOG_INFO) << ". detected by Craft";
+								//Log(LOG_INFO) << ". detected by Craft";
 								detected = true;
 
 								break;
@@ -1984,13 +1984,13 @@ void GeoscapeState::time30Minutes()
 						double targetRange = (*b)->insideRadarRange(*u); // -2.0 =outside range ; -1.0 =hyperdetected ; 0.0+ =targetDistance
 						if (targetRange > -1.99)
 						{
-							Log(LOG_INFO) << ". . still detected";
+							//Log(LOG_INFO) << ". . still detected";
 
 							detected = true;
 
 							if (AreSame(targetRange, -1.0))
 							{
-								Log(LOG_INFO) << ". . and hyper-detected";
+								//Log(LOG_INFO) << ". . and hyper-detected";
 
 								(*u)->setHyperDetected(true);
 								hyperdet = true;
@@ -2006,7 +2006,7 @@ void GeoscapeState::time30Minutes()
 							if ((*c)->getStatus() == "STR_OUT"
 								&& (*c)->detect(*u))
 							{
-								Log(LOG_INFO) << ". detected by Craft";
+								//Log(LOG_INFO) << ". detected by Craft";
 								detected = true;
 
 								break;
@@ -2063,7 +2063,7 @@ void GeoscapeState::time30Minutes()
  */
 void GeoscapeState::time1Hour()
 {
-	Log(LOG_INFO) << "GeoscapeState::time1Hour()";
+	//Log(LOG_INFO) << "GeoscapeState::time1Hour()";
 
 	// Handle craft maintenance
 /*kL, moved down to time30Minutes()
@@ -2225,7 +2225,7 @@ void GenerateSupplyMission::operator()(const AlienBase* base) const
  */
 void GeoscapeState::time1Day()
 {
-	Log(LOG_INFO) << "GeoscapeState::time1Day()";
+	//Log(LOG_INFO) << "GeoscapeState::time1Day()";
 
 	for (std::vector<Base*>::iterator
 			b = _game->getSavedGame()->getBases()->begin();
@@ -2419,7 +2419,7 @@ void GeoscapeState::time1Day()
 			delete *rp;
 		}
 
-		Log(LOG_INFO) << "Base " << *(*b)->getName().c_str(); // this is weird.
+		//Log(LOG_INFO) << "Base " << *(*b)->getName().c_str(); // this is weird.
 		for (std::vector<Soldier*>::iterator // Handle soldier wounds
 				s = (*b)->getSoldiers()->begin();
 				s < (*b)->getSoldiers()->end();
@@ -2431,18 +2431,18 @@ void GeoscapeState::time1Day()
 		{
 			// kL_begin:
 			//Log(LOG_INFO) << ". Soldier = " << *(*s)->getName().c_str(); // this is weird.
-			Log(LOG_INFO) << ". Soldier = " << (*s)->getId();
+			//Log(LOG_INFO) << ". Soldier = " << (*s)->getId();
 			int wounds = (*s)->getWoundRecovery();
 			if (wounds > 0)
 			{
-				Log(LOG_INFO) << ". . wounds = " << wounds;
+				//Log(LOG_INFO) << ". . wounds = " << wounds;
 
 				int hurt = static_cast<int>(static_cast<float>(wounds) / static_cast<float>((*s)->getCurrentStats()->health) * 100.f);
-				Log(LOG_INFO) << ". . hurt = " << hurt << "%";
+				//Log(LOG_INFO) << ". . hurt = " << hurt << "%";
 				if (hurt > 10 // more than 10% wounded
 					&& RNG::percent(hurt / 5)) // %chance to die today
 				{
-					Log(LOG_INFO) << ". . . he's dead, Jim!!";
+					//Log(LOG_INFO) << ". . . he's dead, Jim!!";
 					 // kill soldier. (lifted from Battlescape/DebriefingState::prepareDebriefing()
 					timerReset();
 					popup(new SoldierDiedState(
@@ -2474,7 +2474,7 @@ void GeoscapeState::time1Day()
 				}
 				else
 				{
-					Log(LOG_INFO) << ". . heal up.";
+					//Log(LOG_INFO) << ". . heal up.";
 					(*s)->heal();
 				}
 			} // kL_end.
@@ -2554,7 +2554,7 @@ void GeoscapeState::time1Day()
  */
 void GeoscapeState::time1Month()
 {
-	Log(LOG_INFO) << "GeoscapeState::time1Month()";
+	//Log(LOG_INFO) << "GeoscapeState::time1Month()";
 
 	_game->getSavedGame()->addMonth();
 

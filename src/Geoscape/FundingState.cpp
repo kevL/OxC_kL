@@ -50,7 +50,7 @@ FundingState::FundingState(Game* game)
 	:
 		State(game)
 {
-//	Log(LOG_INFO) << "Create FundingState";
+	//Log(LOG_INFO) << "Create FundingState";
 	_screen = false;
 
 	_window			= new Window(this, 320, 200, 0, 0, POPUP_BOTH);
@@ -158,7 +158,7 @@ FundingState::FundingState(Game* game)
 					Text::formatFunding(_game->getSavedGame()->getCountryFunding()).c_str());
 	// kL_end.
 
-//	Log(LOG_INFO) << "Create FundingState DONE";
+	//Log(LOG_INFO) << "Create FundingState DONE";
 }
 
 /**

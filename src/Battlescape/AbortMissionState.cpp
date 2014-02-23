@@ -63,7 +63,7 @@ AbortMissionState::AbortMissionState(
 		_inExitArea(0),
 		_outExitArea(0)
 {
-	Log(LOG_INFO) << "Create AbortMissionState";
+	//Log(LOG_INFO) << "Create AbortMissionState";
 
 	_screen			= false;
 
@@ -165,7 +165,7 @@ AbortMissionState::AbortMissionState(
  */
 AbortMissionState::~AbortMissionState()
 {
-	Log(LOG_INFO) << "Delete AbortMissionState";
+	//Log(LOG_INFO) << "Delete AbortMissionState";
 }
 
 /**

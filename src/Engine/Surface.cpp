@@ -193,7 +193,7 @@ Surface::Surface(
  */
 Surface::Surface(const Surface& other)
 {
-//	Log(LOG_INFO) << "Create Surface 2";
+	//Log(LOG_INFO) << "Create Surface 2";
 
 	if (other._alignedBuffer) // if native OpenXcom aligned surface
 	{
@@ -262,7 +262,7 @@ Surface::Surface(const Surface& other)
  */
 Surface::~Surface()
 {
-//	Log(LOG_INFO) << "Delete Surface";
+	//Log(LOG_INFO) << "Delete Surface";
 
 	DeleteAligned(_alignedBuffer);
 
@@ -619,7 +619,7 @@ void Surface::draw()
  */
 void Surface::blit(Surface* surface)
 {
-//	Log(LOG_INFO) << "blit()";	// kL
+	//Log(LOG_INFO) << "blit()";	// kL
 
 	if (_visible
 		&& !_hidden)

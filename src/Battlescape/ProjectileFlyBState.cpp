@@ -112,15 +112,15 @@ ProjectileFlyBState::~ProjectileFlyBState()
  */
 void ProjectileFlyBState::init()
 {
-	Log(LOG_INFO) << "ProjectileFlyBState::init()";
+	//Log(LOG_INFO) << "ProjectileFlyBState::init()";
 
 	if (_initialized)
 	{
-		Log(LOG_INFO) << ". already initialized, EXIT";
+		//Log(LOG_INFO) << ". already initialized, EXIT";
 		return;
 	}
 	_initialized = true;
-	Log(LOG_INFO) << ". getStopShot() = " << _action.actor->getStopShot();
+	//Log(LOG_INFO) << ". getStopShot() = " << _action.actor->getStopShot();
 
 
 	// kL_begin:
@@ -129,7 +129,7 @@ void ProjectileFlyBState::init()
 		&& targetUnit->getFaction() != _parent->getSave()->getSide()
 		&& targetUnit->getDashing()) // this really doesn't have to be left here <-
 	{
-		Log(LOG_INFO) << ". targetUnit was dashing -> now set FALSE";
+		//Log(LOG_INFO) << ". targetUnit was dashing -> now set FALSE";
 		targetUnit->setDashing(false);
 	} // kL_end.
 
@@ -148,7 +148,7 @@ void ProjectileFlyBState::init()
 //		|| _unit->getHealth() < _unit->getStunlevel())
 	{
 		// something went wrong - we can't shoot when dead or unconscious, or if we're about to fall over.
-		Log(LOG_INFO) << ". actor is Out, EXIT";
+		//Log(LOG_INFO) << ". actor is Out, EXIT";
 		_unit->setStopShot(false); // kL
 		_parent->popState();
 
@@ -156,7 +156,7 @@ void ProjectileFlyBState::init()
 	}
 	else if (!_action.weapon) // can't shoot without weapon
 	{
-		Log(LOG_INFO) << ". no weapon, EXIT";
+		//Log(LOG_INFO) << ". no weapon, EXIT";
 		_unit->setStopShot(false); // kL
 		_parent->popState();
 
@@ -164,7 +164,7 @@ void ProjectileFlyBState::init()
 	}
 	else if (!_parent->getSave()->getTile(_action.target)) // invalid target position
 	{
-		Log(LOG_INFO) << ". no targetPos, EXIT";
+		//Log(LOG_INFO) << ". no targetPos, EXIT";
 		_unit->setStopShot(false); // kL
 		_parent->popState();
 
@@ -173,7 +173,7 @@ void ProjectileFlyBState::init()
 	else if (_parent->getPanicHandled()
 		&& _unit->getTimeUnits() < _action.TU)
 	{
-		Log(LOG_INFO) << ". not enough time units, EXIT";
+		//Log(LOG_INFO) << ". not enough time units, EXIT";
 		_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
 		_unit->setStopShot(false); // kL
 		_parent->popState();
@@ -193,7 +193,7 @@ void ProjectileFlyBState::init()
 													_action.weapon));
 		_parent->popState();
 
-		Log(LOG_INFO) << ". stopShot ID = " << _unit->getId() << ", refund TUs. EXIT";
+		//Log(LOG_INFO) << ". stopShot ID = " << _unit->getId() << ", refund TUs. EXIT";
 		return;
 	}
 	else if (_unit->getFaction() != _parent->getSave()->getSide()) // reaction fire
@@ -210,7 +210,7 @@ void ProjectileFlyBState::init()
 															_action.weapon));
 				_parent->popState();
 
-				Log(LOG_INFO) << ". . . reactionFire refund (targetUnit exists) EXIT";
+				//Log(LOG_INFO) << ". . . reactionFire refund (targetUnit exists) EXIT";
 				return;
 			}
 		}
@@ -222,7 +222,7 @@ void ProjectileFlyBState::init()
 														_action.weapon));
 			_parent->popState();
 
-			Log(LOG_INFO) << ". . reactionFire refund (no targetUnit) EXIT";
+			//Log(LOG_INFO) << ". . reactionFire refund (no targetUnit) EXIT";
 			return;
 		} // kL_end.
 	}
@@ -254,11 +254,11 @@ void ProjectileFlyBState::init()
 		case BA_AIMEDSHOT:
 		case BA_AUTOSHOT:
 		case BA_LAUNCH:
-			Log(LOG_INFO) << ". . BA_SNAPSHOT, AIMEDSHOT, AUTOSHOT, or LAUNCH";
+			//Log(LOG_INFO) << ". . BA_SNAPSHOT, AIMEDSHOT, AUTOSHOT, or LAUNCH";
 
 			if (_ammo == 0)
 			{
-				Log(LOG_INFO) << ". . . no ammo, EXIT";
+				//Log(LOG_INFO) << ". . . no ammo, EXIT";
 
 				_action.result = "STR_NO_AMMUNITION_LOADED";
 				_parent->popState();
@@ -267,7 +267,7 @@ void ProjectileFlyBState::init()
 			}
 			else if (_ammo->getAmmoQuantity() == 0)
 			{
-				Log(LOG_INFO) << ". . . no ammo Quantity, EXIT";
+				//Log(LOG_INFO) << ". . . no ammo Quantity, EXIT";
 
 				_action.result = "STR_NO_ROUNDS_LEFT";
 				_parent->popState();
@@ -287,7 +287,7 @@ void ProjectileFlyBState::init()
 				if (dist > _action.weapon->getRules()->getMaxRange()
 					|| dist < _action.weapon->getRules()->getMinRange()) */ // kL_end.
 			{
-				Log(LOG_INFO) << ". . . out of range, EXIT";
+				//Log(LOG_INFO) << ". . . out of range, EXIT";
 
 				_action.result = "STR_OUT_OF_RANGE";
 				_parent->popState();
@@ -298,7 +298,7 @@ void ProjectileFlyBState::init()
 		break;
 		case BA_THROW:
 		{
-			Log(LOG_INFO) << ". . BA_THROW";
+			//Log(LOG_INFO) << ". . BA_THROW";
 
 			Position originVoxel = _parent->getTileEngine()->getOriginVoxel(
 																		_action,
@@ -308,7 +308,7 @@ void ProjectileFlyBState::init()
 							originVoxel,
 							_parent->getSave()->getTile(_action.target)))
 			{
-				Log(LOG_INFO) << ". . . not valid throw range, EXIT";
+				//Log(LOG_INFO) << ". . . not valid throw range, EXIT";
 
 				_action.result = "STR_OUT_OF_RANGE";
 				_parent->popState();
@@ -320,7 +320,7 @@ void ProjectileFlyBState::init()
 		}
 		break;
 		case BA_HIT:
-			Log(LOG_INFO) << ". . BA_HIT";
+			//Log(LOG_INFO) << ". . BA_HIT";
 
 			if (!_parent->getTileEngine()->validMeleeRange(
 													_action.actor->getPosition(),
@@ -329,7 +329,7 @@ void ProjectileFlyBState::init()
 													0,
 													&_action.target))
 			{
-				Log(LOG_INFO) << ". . . out of hit range, EXIT";
+				//Log(LOG_INFO) << ". . . out of hit range, EXIT";
 
 				_action.result = "STR_THERE_IS_NO_ONE_THERE";
 				_parent->popState();
@@ -339,7 +339,7 @@ void ProjectileFlyBState::init()
 		break;
 		case BA_PANIC:
 		case BA_MINDCONTROL:
-			Log(LOG_INFO) << ". . BA_PANIC/MINDCONTROL, new ExplosionBState, EXIT";
+			//Log(LOG_INFO) << ". . BA_PANIC/MINDCONTROL, new ExplosionBState, EXIT";
 
 			_parent->statePushFront(new ExplosionBState(
 													_parent,
@@ -354,7 +354,7 @@ void ProjectileFlyBState::init()
 		break;
 
 		default:
-			Log(LOG_INFO) << ". . default, EXIT";
+			//Log(LOG_INFO) << ". . default, EXIT";
 
 			_parent->popState();
 
@@ -397,7 +397,7 @@ void ProjectileFlyBState::init()
 																	_parent->getSave()->getTile(_origin));
 		if (targetTile->getUnit() != 0)
 		{
-			Log(LOG_INFO) << ". targetTile has unit";
+			//Log(LOG_INFO) << ". targetTile has unit";
 			if (_origin == _action.target
 				|| targetTile->getUnit() == _unit)
 			{
@@ -423,7 +423,7 @@ void ProjectileFlyBState::init()
 //		_action.autoShotKill //_action.autoShotCount
 //			&& _action.autoShotCount < _action.weapon->getRules()->getAutoShots())
 		{
-			Log(LOG_INFO) << ". targetTile vs. Autoshot!";
+			//Log(LOG_INFO) << ". targetTile vs. Autoshot!";
 			targetVoxel = Position( // target nothing, targets the middle of the tile
 								_action.target.x * 16 + 8,
 								_action.target.y * 16 + 8,
@@ -431,7 +431,7 @@ void ProjectileFlyBState::init()
 		} // kL_end. */
 		else if (targetTile->getMapData(MapData::O_OBJECT) != 0)
 		{
-			Log(LOG_INFO) << ". targetTile has content-object";
+			//Log(LOG_INFO) << ". targetTile has content-object";
 			if (!_parent->getTileEngine()->canTargetTile(
 													&originVoxel,
 													targetTile,
@@ -447,7 +447,7 @@ void ProjectileFlyBState::init()
 		}
 		else if (targetTile->getMapData(MapData::O_NORTHWALL) != 0)
 		{
-			Log(LOG_INFO) << ". targetTile has northwall";
+			//Log(LOG_INFO) << ". targetTile has northwall";
 			if (!_parent->getTileEngine()->canTargetTile(
 													&originVoxel,
 													targetTile,
@@ -463,7 +463,7 @@ void ProjectileFlyBState::init()
 		}
 		else if (targetTile->getMapData(MapData::O_WESTWALL) != 0)
 		{
-			Log(LOG_INFO) << ". targetTile has westwall";
+			//Log(LOG_INFO) << ". targetTile has westwall";
 			if (!_parent->getTileEngine()->canTargetTile(
 													&originVoxel,
 													targetTile,
@@ -479,7 +479,7 @@ void ProjectileFlyBState::init()
 		}
 		else if (targetTile->getMapData(MapData::O_FLOOR) != 0)
 		{
-			Log(LOG_INFO) << ". targetTile has floor";
+			//Log(LOG_INFO) << ". targetTile has floor";
 			if (!_parent->getTileEngine()->canTargetTile(
 													&originVoxel,
 													targetTile,
@@ -495,7 +495,7 @@ void ProjectileFlyBState::init()
 		}
 		else // target nothing, targets the middle of the tile
 		{
-			Log(LOG_INFO) << ". targetTile is void";
+			//Log(LOG_INFO) << ". targetTile is void";
 			_targetVoxel = Position(
 								_action.target.x * 16 + 8,
 								_action.target.y * 16 + 8,
@@ -504,7 +504,7 @@ void ProjectileFlyBState::init()
 	}
 
 	createNewProjectile();
-	Log(LOG_INFO) << "ProjectileFlyBState::init() EXIT";
+	//Log(LOG_INFO) << "ProjectileFlyBState::init() EXIT";
 }
 
 /**
@@ -514,7 +514,7 @@ void ProjectileFlyBState::init()
  */
 bool ProjectileFlyBState::createNewProjectile()
 {
-	Log(LOG_INFO) << "ProjectileFlyBState::createNewProjectile() -> create Projectile";
+	//Log(LOG_INFO) << "ProjectileFlyBState::createNewProjectile() -> create Projectile";
 	++_action.autoShotCount;
 
 	Projectile* projectile = new Projectile(
@@ -536,7 +536,7 @@ bool ProjectileFlyBState::createNewProjectile()
 	if (_action.type == BA_THROW)
 	{
 		_projectileImpact = projectile->calculateThrow(_unit->getThrowingAccuracy());
-		Log(LOG_INFO) << ". BA_THROW, part = " << _projectileImpact;
+		//Log(LOG_INFO) << ". BA_THROW, part = " << _projectileImpact;
 
 		if (_projectileImpact == VOXEL_FLOOR
 			|| _projectileImpact == VOXEL_UNIT
@@ -565,7 +565,7 @@ bool ProjectileFlyBState::createNewProjectile()
 		}
 		else // unable to throw here
 		{
-			Log(LOG_INFO) << ". . no throw, Voxel_Empty or _Wall or _OutofBounds";
+			//Log(LOG_INFO) << ". . no throw, Voxel_Empty or _Wall or _OutofBounds";
 
 			delete projectile;
 
@@ -583,7 +583,7 @@ bool ProjectileFlyBState::createNewProjectile()
 																			_action.type,
 																			_action.weapon));
 //kL																		/ 100.0); // Wb.140214
-		Log(LOG_INFO) << ". acid spit, part = " << _projectileImpact;
+		//Log(LOG_INFO) << ". acid spit, part = " << _projectileImpact;
 
 		if (_projectileImpact != VOXEL_EMPTY
 			 && _projectileImpact != VOXEL_OUTOFBOUNDS)
@@ -613,7 +613,7 @@ bool ProjectileFlyBState::createNewProjectile()
 		}
 		else // no line of fire
 		{
-			Log(LOG_INFO) << ". . no spit, no LoF, Voxel_Empty";
+			//Log(LOG_INFO) << ". . no spit, no LoF, Voxel_Empty";
 
 			delete projectile;
 
@@ -632,7 +632,7 @@ bool ProjectileFlyBState::createNewProjectile()
 																				_action.type,
 																				_action.weapon));
 //kL																			/ 100.0); // Wb.140214
-		Log(LOG_INFO) << ". melee attack!";// part = " << _projectileImpact;
+		//Log(LOG_INFO) << ". melee attack!";// part = " << _projectileImpact;
 
 		// Can soldiers swing a club, graphically??
 //		_unit->aim(true); // set the soldier in an aiming position
@@ -663,7 +663,7 @@ bool ProjectileFlyBState::createNewProjectile()
 																					_action.weapon));
 //kL																				/ 100.0); // Wb.140214
 		}
-		Log(LOG_INFO) << ". shoot weapon, part = " << _projectileImpact;
+		//Log(LOG_INFO) << ". shoot weapon, part = " << _projectileImpact;
 
 //		if (_projectileImpact == VOXEL_UNIT)	// kL
 //			_action.autoShotKill = true;		// kL
@@ -671,7 +671,7 @@ bool ProjectileFlyBState::createNewProjectile()
 		if (_projectileImpact != VOXEL_EMPTY
 			|| _action.type == BA_LAUNCH)
 		{
-			Log(LOG_INFO) << ". . _projectileImpact !";
+			//Log(LOG_INFO) << ". . _projectileImpact !";
 
 			_unit->aim(true); // set the soldier in an aiming position
 			_parent->getMap()->cacheUnit(_unit);
@@ -698,7 +698,7 @@ bool ProjectileFlyBState::createNewProjectile()
 		}
 		else // VOXEL_EMPTY, no line of fire
 		{
-			Log(LOG_INFO) << ". no shot, no LoF, Voxel_Empty";
+			//Log(LOG_INFO) << ". no shot, no LoF, Voxel_Empty";
 
 			delete projectile;
 
@@ -710,7 +710,7 @@ bool ProjectileFlyBState::createNewProjectile()
 		}
 	}
 
-	Log(LOG_INFO) << ". createNewProjectile() ret TRUE";
+	//Log(LOG_INFO) << ". createNewProjectile() ret TRUE";
 	return true;
 }
 
@@ -753,10 +753,10 @@ void ProjectileFlyBState::think()
 				&& _action.type != BA_MINDCONTROL
 				&& !_parent->getSave()->getUnitsFalling())
 			{
-				Log(LOG_INFO) << "ProjectileFlyBState::think(), checkReactionFire()"
-					<< " ID " << _action.actor->getId()
-					<< " type = " << _action.type
-					<< " tu = " << _action.TU;
+				//Log(LOG_INFO) << "ProjectileFlyBState::think(), checkReactionFire()"
+				//	<< " ID " << _action.actor->getId()
+				//	<< " action.type = " << _action.type
+				//	<< " action.TU = " << _action.TU;
 				_parent->getTileEngine()->checkReactionFire(
 														_unit,
 														_action.TU); // kL
@@ -1009,7 +1009,7 @@ bool ProjectileFlyBState::validThrowRange(
 		Position origin,
 		Tile* target)
 {
-	Log(LOG_INFO) << "ProjectileFlyBState::validThrowRange()";
+	//Log(LOG_INFO) << "ProjectileFlyBState::validThrowRange()";
 
 	if (action->type != BA_THROW) // this is a celatid spit.
 //		&& target->getUnit())
@@ -1057,9 +1057,9 @@ bool ProjectileFlyBState::validThrowRange(
 	// since getMaxThrowDistance seems to return 1 less than maxDist, use "< throwDist" for this determination:
 //	bool ret = static_cast<int>(throwDist) < static_cast<int>(maxDist);
 	bool ret = throwDist < maxDist;
-	Log(LOG_INFO) << ". throwDist " << (int)throwDist
-					<< " < maxDist " << (int)maxDist
-					<< " : return " << ret;
+	//Log(LOG_INFO) << ". throwDist " << (int)throwDist
+	//				<< " < maxDist " << (int)maxDist
+	//				<< " : return " << ret;
 
 	return ret;
 }
@@ -1077,7 +1077,7 @@ int ProjectileFlyBState::getMaxThrowDistance(
 		int strength,
 		int level)
 {
-	Log(LOG_INFO) << "ProjectileFlyBState::getMaxThrowDistance()";
+	//Log(LOG_INFO) << "ProjectileFlyBState::getMaxThrowDistance()";
 
 	double curZ = static_cast<double>(level) + 0.5;
 	double delta_z = 1.0;
@@ -1106,7 +1106,7 @@ int ProjectileFlyBState::getMaxThrowDistance(
 			break;
 	}
 
-	Log(LOG_INFO) << ". dist = " << dist / 16;
+	//Log(LOG_INFO) << ". dist = " << dist / 16;
 	return dist;
 }
 

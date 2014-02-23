@@ -748,7 +748,8 @@ void Craft::checkup()
 			i != _weapons.end();
 			++i)
 	{
-		if (*i == 0) continue;
+		if (*i == 0)
+			continue;
 
 		available++;
 
@@ -773,15 +774,14 @@ void Craft::checkup()
  */
 bool Craft::detect(Target* target) const
 {
-	Log(LOG_INFO) << "Craft::detect()";
-
+	//Log(LOG_INFO) << "Craft::detect()";
 	double radarRange = static_cast<double>(_rules->getRadarRange());
 	//Log(LOG_INFO) << ". radarRange = " << radarRange;
 	if (AreSame(radarRange, 0.0))
 		return false;
 
 	double targetDistance = getDistance(target) * 3440.0;
-	Log(LOG_INFO) << ". targetDistance = " << (int)targetDistance;
+	//Log(LOG_INFO) << ". targetDistance = " << (int)targetDistance;
 
 	if (radarRange > targetDistance)
 		return true;

@@ -53,7 +53,8 @@ protected:
 
 	bool
 		_danger,
-		_discovered[3];
+		_discovered[3],
+		_visible; // kL
 	int
 		_animOffset,
 		_currFrame[4],
@@ -67,8 +68,8 @@ protected:
 		_overlaps,
 		_preview,
 		_smoke,
-		_tuMarker,
-		_visible;
+		_tuMarker;
+//kL		_visible;
 
 	BattleUnit* _unit;
 	MapData* _objects[4];
@@ -271,9 +272,11 @@ protected:
 		int getMarkerColor();
 
 		/// Set the tile visible flag.
-		void setVisible(int visibility);
+//kL		void setVisible(int visibility);
+		void setVisible(bool isVis); // kL
 		/// Get the tile visible flag.
-		int getVisible();
+//kL		int getVisible();
+		bool getVisible(); // kL
 
 		/// set the direction (used for path previewing)
 		void setPreview(int dir);

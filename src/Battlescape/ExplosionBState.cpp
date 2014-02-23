@@ -89,13 +89,13 @@ ExplosionBState::~ExplosionBState()
  */
 void ExplosionBState::init()
 {
-	Log(LOG_INFO) << "ExplosionBState::init()";
+	//Log(LOG_INFO) << "ExplosionBState::init()";
 //			<< " type = " << (int)_item->getRules()->getDamageType();
 
 	if (_item)
 	{
 		_power = _item->getRules()->getPower();
-		Log(LOG_INFO) << ". _power(_item) = " << _power;
+		//Log(LOG_INFO) << ". _power(_item) = " << _power;
 
 		// heavy explosions, incendiary, smoke or stun bombs create AOE explosions
 		// all the rest hits one point:
@@ -110,14 +110,14 @@ void ExplosionBState::init()
 	else if (_tile)
 	{
 		_power = _tile->getExplosive();
-		Log(LOG_INFO) << ". _power(_tile) = " << _power;
+		//Log(LOG_INFO) << ". _power(_tile) = " << _power;
 
 		_areaOfEffect = true;
 	}
 	else // cyberdiscs!!!
 	{
 		_power = RNG::generate(61, 135);
-		Log(LOG_INFO) << ". _power(Cyberdisc) = " << _power;
+		//Log(LOG_INFO) << ". _power(Cyberdisc) = " << _power;
 
 		_areaOfEffect = true;
 	}
@@ -131,7 +131,7 @@ void ExplosionBState::init()
 
 	if (_areaOfEffect)
 	{
-		Log(LOG_INFO) << ". . new Explosion(AoE)";
+		//Log(LOG_INFO) << ". . new Explosion(AoE)";
 
 		if (_power > 0)
 		{
@@ -145,12 +145,12 @@ void ExplosionBState::init()
 			if (_item)
 			{
 				radius = _item->getRules()->getExplosionRadius();
-				Log(LOG_INFO) << ". . . getExplosionRadius() -> " << radius;
+				//Log(LOG_INFO) << ". . . getExplosionRadius() -> " << radius;
 			}
 //			if (radius < 1)
 			else
 				radius = _power / 8; // <- for cyberdiscs & terrain expl.... CTD if using getExplosionRadius(),
-			Log(LOG_INFO) << ". . . radius = " << radius;
+			//Log(LOG_INFO) << ". . . radius = " << radius;
 
 			int offset = radius * 6, // voxelspace
 				animQty = static_cast<int>(
@@ -159,8 +159,8 @@ void ExplosionBState::init()
 			if (animQty < 1)
 				animQty = 1;
 
-			Log(LOG_INFO) << ". . . offset(total) = " << offset;
-			Log(LOG_INFO) << ". . . animQty = " << animQty;
+			//Log(LOG_INFO) << ". . . offset(total) = " << offset;
+			//Log(LOG_INFO) << ". . . animQty = " << animQty;
 			for (int
 					i = 0;
 					i < animQty;
@@ -207,7 +207,7 @@ void ExplosionBState::init()
 	}
 	else // create a bullet hit, or melee hit, or psi-hit, or acid spit
 	{
-		Log(LOG_INFO) << ". . new Explosion(point)";
+		//Log(LOG_INFO) << ". . new Explosion(point)";
 
 		_parent->setStateInterval(std::max(
 										1,
@@ -246,7 +246,7 @@ void ExplosionBState::init()
 			explodeCam->setViewLevel(posCenter.z);
 		// kL_end.
 	}
-	Log(LOG_INFO) << "ExplosionBState::init() EXIT";
+	//Log(LOG_INFO) << "ExplosionBState::init() EXIT";
 }
 
 /**
@@ -286,12 +286,12 @@ void ExplosionBState::cancel()
  */
 void ExplosionBState::explode()
 {
-	Log(LOG_INFO) << "ExplosionBState::explode()";
+	//Log(LOG_INFO) << "ExplosionBState::explode()";
 	SavedBattleGame* save = _parent->getSave();
 
 	if (_item)
 	{
-		Log(LOG_INFO) << ". _item is VALID";
+		//Log(LOG_INFO) << ". _item is VALID";
 		if (!_unit
 			&& _item->getPreviousOwner())
 		{
@@ -300,7 +300,7 @@ void ExplosionBState::explode()
 
 		if (_areaOfEffect)
 		{
-			Log(LOG_INFO) << ". . AoE, TileEngine::explode()";
+			//Log(LOG_INFO) << ". . AoE, TileEngine::explode()";
 			save->getTileEngine()->explode(
 										_center,
 										_power,
@@ -310,7 +310,7 @@ void ExplosionBState::explode()
 		}
 		else
 		{
-			Log(LOG_INFO) << ". . not AoE, TileEngine::hit()";
+			//Log(LOG_INFO) << ". . not AoE, TileEngine::hit()";
 			bool hit = _item->getRules()->getBattleType() == BT_MELEE;
 			BattleUnit* victim = save->getTileEngine()->hit(
 														_center,
@@ -407,7 +407,7 @@ void ExplosionBState::explode()
 			}
 		}
 	}
-	Log(LOG_INFO) << "ExplosionBState::explode() EXIT";
+	//Log(LOG_INFO) << "ExplosionBState::explode() EXIT";
 }
 
 }
