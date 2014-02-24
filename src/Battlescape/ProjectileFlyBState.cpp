@@ -942,18 +942,19 @@ void ProjectileFlyBState::think()
 						BattleUnit* victim = _parent->getSave()->getTile(
 																	_parent->getMap()->getProjectile()->getPosition(offset) / Position(16, 16, 24))
 																->getUnit();
-						if (victim
-//kL							&& !victim->isOut()
-							&& !victim->isOut(true, true) // kL
+/*kL						if (victim
+							&& !victim->isOut(true, true)
 							&& victim->getFaction() == FACTION_HOSTILE)
 						{
 							AlienBAIState* aggro = dynamic_cast<AlienBAIState*>(victim->getCurrentAIState());
 							if (aggro != 0)
 							{
 								aggro->setWasHit();
-								_unit->setTurnsExposed(0); // kL_note: might want to remark this!
+//kL								_unit->setTurnsExposed(0); // kL_note: might want to remark this!
+								// technically, in the original as I remember it, only
+								// a BlasterLaunch would set an xCom soldier Exposed here!
 							}
-						}
+						} */
 					}
 				}
 				else if (_action.type != BA_AUTOSHOT

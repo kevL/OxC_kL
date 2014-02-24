@@ -470,6 +470,7 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 							{
 								//Log(LOG_INFO) << ". . . opposite Factions, add Tile & visUnit to visList";
 
+								// adds visUnit to _visibleUnits *and* to _unitsSpottedThisTurn:
 								unit->addToVisibleUnits(visUnit); // kL_note: This returns a boolean; i can use that......
 								unit->addToVisibleTiles(visUnit->getTile());
 
@@ -478,7 +479,8 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 									&& _save->getSide() == FACTION_HOSTILE) // kL, per Original.
 								{
 									//Log(LOG_INFO) << ". . calculateFOV(), spotted Unit FACTION_HOSTILE, setTurnsExposed()";
-									visUnit->setTurnsExposed(0);
+									visUnit->setTurnsExposed(0);	// note that xCom can be seen by enemies but *not* be Exposed. hehe
+																	// Only reactionFire should set them Exposed during xCom's turn.
 								}
 							}
 							//Log(LOG_INFO) << ". . calculateFOV(), opposite Factions, Done";
@@ -1384,11 +1386,6 @@ bool TileEngine::checkReactionFire(
 		std::vector<BattleUnit*> spotters = getSpottingUnits(unit);
 		//Log(LOG_INFO) << ". # spotters = " << spotters.size();
 
-		// may need popState() in here:
-//		popState
-			// and take it out of post-firing/throwing State execution.
-
-
 		BattleUnit* reactor = getReactor( // get the first man up to bat.
 										spotters,
 										unit,
@@ -1455,20 +1452,29 @@ std::vector<BattleUnit*> TileEngine::getSpottingUnits(BattleUnit* unit)
 		if ((*bu)->getFaction() != _save->getSide()
 			&& !(*bu)->isOut(true, true))
 		{
-			AlienBAIState* aggro = dynamic_cast<AlienBAIState*>((*bu)->getCurrentAIState());
+/*kL			AlienBAIState* aggro = dynamic_cast<AlienBAIState*>((*bu)->getCurrentAIState());
 			if (((aggro != 0
-						&& aggro->getWasHit())
-					|| (*bu)->getFaction() == FACTION_HOSTILE
-					|| (*bu)->checkViewSector(unit->getPosition()))
+						&& aggro->getWasHit()) // set in ProjectileFlyBState...
+					|| (*bu)->getFaction() == FACTION_HOSTILE // note: doesn't this cover the aggro-thing, like totally
+					|| (*bu)->checkViewSector(unit->getPosition())) // aLiens see all directions, btw. */
+			if (((*bu)->getFaction() == FACTION_HOSTILE
+					|| ((*bu)->getFaction() == FACTION_PLAYER
+						&& (*bu)->checkViewSector(unit->getPosition())))
 				&& visible(*bu, tile))
 			{
 				//Log(LOG_INFO) << ". check ID " << (*bu)->getId();
 
+				if ((*bu)->getFaction() == FACTION_HOSTILE)
+					unit->setTurnsExposed(0);
+
 				// these two calls should already be done in calculateFOV()
 //				if ((*bu)->getFaction() == FACTION_PLAYER)
 //					unit->setVisible(true);
-
 //				(*bu)->addToVisibleUnits(unit);
+					// as long as calculateFOV is always done right between
+					// walking, kneeling, shooting, throwing .. and checkReactionFire()
+					// If so, then technically, visible() above can be replaced
+					// by checking (*bu)'s _visibleUnits vector. But this is working good per.
 
 				if (canMakeSnap(*bu, unit))
 				{
@@ -3317,9 +3323,11 @@ int TileEngine::unitOpensDoor(
 					calculateFOV(visUnits->at(i));
 				}
 			}
-			else return 4;
+			else
+				return 4;
 		}
-		else return 5;
+		else
+			return 5;
 	}
 
 // -1 there is no door, you can walk through; or you're a tank and can't do sweet shit with a door except blast the fuck out of it.

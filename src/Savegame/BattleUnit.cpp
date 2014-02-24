@@ -103,7 +103,6 @@ BattleUnit::BattleUnit(
 		_dashing(false) // kL
 {
 	//Log(LOG_INFO) << "Create BattleUnit 1 : soldier ID = " << getId();
-
 	_name			= soldier->getName();
 	_id				= soldier->getId();
 	_type			= "SOLDIER";
@@ -161,7 +160,7 @@ BattleUnit::BattleUnit(
 
 	_activeHand = "STR_RIGHT_HAND";
 
-	lastCover = Position(-1, -1, -1);
+	lastCover = Position(-1,-1,-1);
 	//Log(LOG_INFO) << "Create BattleUnit 1, DONE";
 }
 
@@ -224,7 +223,6 @@ BattleUnit::BattleUnit(
 		_dashing(false) // kL
 {
 	//Log(LOG_INFO) << "Create BattleUnit 2 : alien ID = " << getId();
-
 	_type	= unit->getType();
 	_rank	= unit->getRank();
 	_race	= unit->getRace();
@@ -282,9 +280,10 @@ BattleUnit::~BattleUnit()
 			i = 0;
 			i < 5;
 			++i)
+	{
 		if (_cache[i])
 			delete _cache[i];
-
+	}
 //	delete _currentAIState;
 }
 
@@ -383,15 +382,24 @@ YAML::Node BattleUnit::save() const
 	for (int i = 0; i < 6; i++)
 		node["fatalWounds"].push_back(_fatalWounds[i]);
 
-	if (getCurrentAIState()) node["AI"]			= getCurrentAIState()->save();
+	if (getCurrentAIState())
+		node["AI"]				= getCurrentAIState()->save();
 	if (_originalFaction != _faction)
-		node["originalFaction"]					= (int)_originalFaction;
-	if (_kills) node["kills"]					= _kills;
+		node["originalFaction"]	= (int)_originalFaction;
+	if (_kills)
+		node["kills"]			= _kills;
 	if (_faction == FACTION_PLAYER
-		&& _dontReselect) node["dontReselect"]	= _dontReselect;
-	if (!_spawnUnit.empty()) node["spawnUnit"]	= _spawnUnit;
+		&& _dontReselect)
+	{
+		node["dontReselect"]	= _dontReselect;
+	}
+	if (!_spawnUnit.empty())
+		node["spawnUnit"]		= _spawnUnit;
 
 	return node;
+		// kL_note: This doesn't save/load such things as
+		// _visibleUnits, _unitsSpottedThisTurn, _visibleTiles
+		// & AI is saved, but loaded someplace else
 }
 
 /**
@@ -573,10 +581,8 @@ void BattleUnit::startWalking(
 			_floating = false;
 		}
 		else
-		{
 			//Log(LOG_INFO) << ". STATUS_FLYING, up.down";
 			_floating = true;
-		}
 	}
 	else if (_tile->hasNoFloor(tileBelow))
 	{
@@ -596,39 +602,6 @@ void BattleUnit::startWalking(
 	}
 	//Log(LOG_INFO) << "BattleUnit::startWalking() EXIT";
 }
-/*kL void BattleUnit::startWalking(int direction, const Position &destination, Tile *tileBelowMe, bool cache)
-{
-	if (direction >= Pathfinding::DIR_UP)
-	{
-		_verticalDirection = direction;
-		_status = STATUS_FLYING;
-	}
-	else
-	{
-		_direction = direction;
-		_status = STATUS_WALKING;
-	}
-	bool floorFound = false;
-	if (!_tile->hasNoFloor(tileBelowMe))
-	{
-		floorFound = true;
-	}
-	if (!floorFound || direction >= Pathfinding::DIR_UP)
-	{
-		_status = STATUS_FLYING;
-		_floating = true;
-	}
-	else
-	{
-		_floating = false;
-	}
-
-	_walkPhase = 0;
-	_destination = destination;
-	_lastPos = _pos;
-	_cacheInvalid = cache;
-	_kneeled = false;
-} */
 
 /**
  * This will increment the walking phase.
@@ -678,7 +651,6 @@ void BattleUnit::keepWalking(
 	if (_walkPhase >= end) // officially reached the destination tile
 	{
 		//Log(LOG_INFO) << ". end -> STATUS_STANDING";
-
 		_status = STATUS_STANDING;
 		_walkPhase = 0;
 		_verticalDirection = 0;
@@ -713,78 +685,6 @@ void BattleUnit::keepWalking(
 	_cacheInvalid = cache;
 	//Log(LOG_INFO) << "BattleUnit::keepWalking() EXIT";
 }
-/*kL void BattleUnit::keepWalking(Tile *tileBelowMe, bool cache)
-{
-	int middle, end;
-	if (_verticalDirection)
-	{
-		middle = 4;
-		end = 8;
-	}
-	else
-	{
-		// diagonal walking takes double the steps
-		middle = 4 + 4 * (_direction % 2);
-		end = 8 + 8 * (_direction % 2);
-		if (_armor->getSize() > 1)
-		{
-			if (_direction < 1 || _direction > 4)
-				middle = end;
-			else
-				middle = 1;
-		}
-	}
-	if (!cache)
-	{
-		_pos = _destination;
-		end = 2;
-	}
-
-	_walkPhase++;
-
-
-	if (_walkPhase == middle)
-	{
-		// we assume we reached our destination tile
-		// this is actually a drawing hack, so soldiers are not overlapped by floortiles
-		_pos = _destination;
-	}
-
-	if (_walkPhase >= end)
-	{
-		if (_floating && !_tile->hasNoFloor(tileBelowMe))
-		{
-			_floating = false;
-		}
-		// we officially reached our destination tile
-		_status = STATUS_STANDING;
-		_walkPhase = 0;
-		_verticalDirection = 0;
-		if (_faceDirection >= 0) {
-			// Finish strafing move facing the correct way.
-			_direction = _faceDirection;
-			_faceDirection = -1;
-		}
-
-		// motion points calculation for the motion scanner blips
-		if (_armor->getSize() > 1)
-		{
-			_motionPoints += 30;
-		}
-		else
-		{
-			// sectoids actually have less motion points
-			// but instead of create yet another variable,
-			// I used the height of the unit instead (logical)
-			if (getStandHeight() > 16)
-				_motionPoints += 4;
-			else
-				_motionPoints += 3;
-		}
-	}
-
-	_cacheInvalid = cache;
-} */
 
 /**
  * Gets the walking phase for animation and sound.
@@ -869,10 +769,8 @@ void BattleUnit::lookAt(
 
 		_toDirection = direction;
 		if (_toDirection != _direction)
-		{
 			_status = STATUS_TURNING;
 			//Log(LOG_INFO) << ". . . . lookAt() -> STATUS_TURNING";
-		}
 	}
 	//Log(LOG_INFO) << "BattleUnit::lookAt() #2 EXIT";
 }

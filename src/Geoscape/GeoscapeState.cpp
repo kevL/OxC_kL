@@ -2045,13 +2045,9 @@ void GeoscapeState::time30Minutes()
 		ts != _game->getSavedGame()->getTerrorSites()->end();)
 	{
 		if (processTerrorSite(*ts))
-		{
 			ts = _game->getSavedGame()->getTerrorSites()->erase(ts);
-		}
 		else
-		{
 			++ts;
-		}
 		// kL_note: let's score TerrorSites for alien activity every hour or half-hour....
 	}
 	//Log(LOG_INFO) << ". . processed terror sites";
@@ -2121,11 +2117,9 @@ void GeoscapeState::time1Hour()
 	}
 
 	if (window)
-	{
 		popup(new ItemsArrivingState(
 								_game,
 								this));
-	}
 
 	// Handle Production
 	for (std::vector<Base*>::iterator
@@ -2488,9 +2482,15 @@ void GeoscapeState::time1Day()
 					s = (*b)->getSoldiers()->begin();
 					s != (*b)->getSoldiers()->end();
 					++s)
+			{
 				(*s)->trainPsi1Day();
+			}
 		}
 	}
+
+
+	int pts = static_cast<int>(_game->getSavedGame()->getDifficulty()) + 1;
+	pts *= 5;
 
 	for (std::vector<AlienBase*>::const_iterator // handle regional and country points for alien bases
 			b = _game->getSavedGame()->getAlienBases()->begin();
@@ -2501,37 +2501,31 @@ void GeoscapeState::time1Day()
 				r = _game->getSavedGame()->getRegions()->begin();
 				r != _game->getSavedGame()->getRegions()->end();
 				++r)
+		{
 			if ((*r)->getRules()->insideRegion(
 											(*b)->getLongitude(),
 											(*b)->getLatitude()))
 			{
-//kL				(*r)->addActivityAlien(5);
-				// kL_begin:
-				int pts = static_cast<int>(_game->getSavedGame()->getDifficulty()) + 1;
-				pts *= 5; // try 6+
 				(*r)->addActivityAlien(pts);
-				// kL_end.
 
 				break;
 			}
+		}
 
 		for (std::vector<Country*>::iterator
 				c = _game->getSavedGame()->getCountries()->begin();
 				c != _game->getSavedGame()->getCountries()->end();
 				++c)
+		{
 			if ((*c)->getRules()->insideCountry(
 											(*b)->getLongitude(),
 											(*b)->getLatitude()))
 			{
-//kL				(*c)->addActivityAlien(5);
-				// kL_begin:
-				int pts = static_cast<int>(_game->getSavedGame()->getDifficulty()) + 1;
-				pts *= 5; // try 6+
 				(*c)->addActivityAlien(pts);
-				// kL_end.
 
 				break;
 			}
+		}
 	}
 
 	std::for_each( // Handle resupply of alien bases.
@@ -2653,6 +2647,7 @@ void GeoscapeState::time1Month()
 								_globe));
 
 	// Handle Xcom Operatives discovering bases
+	// kL_note: Might want to change this to time1day() ...
 	int revDiff = 20 - (diff * 5); // kL, Superhuman == 0%
 	if (RNG::percent(revDiff + 50) // kL
 //kL	if (RNG::percent(20)

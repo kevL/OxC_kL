@@ -49,8 +49,8 @@ protected:
 		_grenade, // kL
 		_melee,
 		_rifle,
-		_traceAI,
-		_wasHit;
+		_traceAI;
+//kL		_wasHit;
 	int
 		_AIMode,
 		_closestDist,
@@ -94,10 +94,12 @@ protected:
 		void exit();
 		/// Runs state functionality every AI cycle.
 		void think(BattleAction* action);
+
 		/// Sets the "unit was hit" flag true.
-		void setWasHit();
+//kL		void setWasHit();
 		/// Gets whether the unit was hit.
-		bool getWasHit() const;
+//kL		bool getWasHit() const;
+
 		/// setup a patrol objective.
 		void setupPatrol();
 		/// setup an ambush objective.
@@ -106,10 +108,13 @@ protected:
 		void setupAttack();
 		/// setup an escape objective.
 		void setupEscape();
+
 		/// count how many xcom/civilian units are known to this unit.
 		int countKnownTargets() const;
+
 		/// count how many known XCom units are able to see this unit.
 		int getSpottingUnits(Position pos) const;
+
 		/// Selects the nearest target we can see, and return the number of viable targets.
 		int selectNearestTarget();
 		/// Selects the closest known xcom unit for ambushing.
@@ -120,10 +125,13 @@ protected:
 		bool selectPointNearTarget(
 				BattleUnit* target,
 				int maxTUs) const;
+
 		/// re-evaluate our situation, and make a decision from our available options.
 		void evaluateAIMode();
+
 		/// Selects a suitable position from which to attack.
 		bool findFirePoint();
+
 		/// Decides if we should throw a grenade/launch a missile to this position.
 		bool explosiveEfficacy(
 				Position targetPos,
@@ -131,20 +139,26 @@ protected:
 				int radius,
 				int diff) const;
 //				bool grenade = false) const;
+
 		/// Attempts to take a melee attack/charge an enemy we can see.
 		void meleeAction();
 		/// Attempts to fire a waypoint projectile at an enemy we, or one of our teammates sees.
 		void wayPointAction();
 		/// Attempts to fire at an enemy we can see.
 		void projectileAction();
+
 		/// Selects a fire method.
 		void selectFireMethod();
+
 		/// Attempts to throw a grenade at an enemy (or group of enemies) we can see.
 		void grenadeAction();
+
 		/// Performs a psionic attack.
 		bool psiAction();
+
 		/// Performs a melee attack action.
 		void meleeAttack();
+
 		///
 		bool validTarget(
 				BattleUnit* unit,

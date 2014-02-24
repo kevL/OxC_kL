@@ -415,15 +415,11 @@ bool UnitWalkBState::doStatusStand()
 			}
 			// else if (coveralls) Normal energy expenditure
 			else if (_unit->getArmor()->getType() == "STR_PERSONAL_ARMOR_UC")
-			{
 				energy += 1; // *clunk*clunk*
-			}
 		}
-		else // (gravLift)
-		{
+		else // gravLift
 			//Log(LOG_INFO) << ". . using GravLift";
 			energy = 0;
-		}
 
 
 		//Log(LOG_INFO) << ". check tu + stamina, etc.";
@@ -857,8 +853,8 @@ bool UnitWalkBState::doStatusStand_end()
 	}
 	else if (newVis)
 	{
-		if (_unit->getFaction() == FACTION_PLAYER) Log(LOG_INFO) << ". . _newVis = TRUE, Abort path";
-		else if (_unit->getFaction() != FACTION_PLAYER) Log(LOG_INFO) << ". . _newUnitSpotted = TRUE, Abort path";
+		//if (_unit->getFaction() == FACTION_PLAYER) Log(LOG_INFO) << ". . _newVis = TRUE, Abort path";
+		//else if (_unit->getFaction() != FACTION_PLAYER) Log(LOG_INFO) << ". . _newUnitSpotted = TRUE, Abort path";
 
 		_unit->setCache(0);
 		_parent->getMap()->cacheUnit(_unit);
@@ -883,7 +879,7 @@ bool UnitWalkBState::doStatusStand_end()
 
 			return false;
 		}
-		else Log(LOG_INFO) << ". . WalkBState: checkReactionFire() FALSE... no caching";
+		//else Log(LOG_INFO) << ". . WalkBState: checkReactionFire() FALSE... no caching";
 	}
 	else	// <<-- Looks like we gotta make it fall here!!! (if unit *ends* its total walk sequence on empty air.
 			// And, fall *before* spotting new units, else Abort will likely make it float...

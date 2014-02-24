@@ -153,8 +153,8 @@ private:
 	Tile* _tile;
 	UnitFaction
 		_faction,
-		_killedBy,
-		_originalFaction;
+		_originalFaction,
+		_killedBy;
 	UnitStatus _status;
 
 	std::vector<BattleItem*> _inventory;

@@ -2845,8 +2845,8 @@ void BattlescapeState::toggleIcons(bool vis)
 void BattlescapeState::refreshVisUnits()
 {
 	//Log(LOG_INFO) << "BattlescapeState::refreshVisUnits()";
-	if (!playableUnitSelected()) return;
-
+	if (!playableUnitSelected())
+		return;
 
 	for (int // remove red target indicators
 			i = 0;

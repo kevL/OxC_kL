@@ -874,13 +874,13 @@ void BattlescapeGame::checkForCasualties(
 
 							//Log(LOG_INFO) << ". . . loser -" << bravery;
 
-							if (killer
+/*kL							if (killer
 								&& killer->getFaction() == FACTION_PLAYER
 								&& victim->getFaction() == FACTION_HOSTILE)
 							{
 								killer->setTurnsExposed(0); // interesting
 								//Log(LOG_INFO) << ". . . . killer Exposed";
-							}
+							} */
 						}
 						// note this is unaffected by the rank of the dead unit...
 						else if ((victim->getOriginalFaction() == FACTION_HOSTILE
@@ -2460,8 +2460,8 @@ BattleUnit* BattlescapeGame::convertUnit(
 	bi->setSlot(getRuleset()->getInventory("STR_RIGHT_HAND"));
 	getSave()->getItems()->push_back(bi);
 
-	getTileEngine()->calculateFOV(newUnit->getPosition());
 	getTileEngine()->applyGravity(newUnit->getTile());
+	getTileEngine()->calculateFOV(newUnit->getPosition());
 //	newUnit->getCurrentAIState()->think();
 
 	return newUnit;
@@ -2527,7 +2527,6 @@ const Ruleset* BattlescapeGame::getRuleset() const
 void BattlescapeGame::findItem(BattleAction* action)
 {
 	//Log(LOG_INFO) << "BattlescapeGame::findItem()";
-
 	if (action->actor->getRankString() != "STR_TERRORIST")								// terrorists don't have hands.
 	{
 		BattleItem* targetItem = surveyItems(action);									// pick the best available item
@@ -2538,8 +2537,10 @@ void BattlescapeGame::findItem(BattleAction* action)
 			if (targetItem->getTile()->getPosition() == action->actor->getPosition())	// if we're already standing on it...
 			{
 				if (takeItemFromGround(targetItem, action) == 0)						// try to pick it up
+				{
 					if (!targetItem->getAmmoItem())										// if it isn't loaded or it is ammo
 						action->actor->checkAmmo();										// try to load our weapon
+				}
 			}
 			else if (!targetItem->getTile()->getUnit()									// if we're not standing on it, we should try to get to it.
 				|| targetItem->getTile()->getUnit()->isOut(true, true))
@@ -2560,12 +2561,12 @@ void BattlescapeGame::findItem(BattleAction* action)
 BattleItem* BattlescapeGame::surveyItems(BattleAction* action)
 {
 	//Log(LOG_INFO) << "BattlescapeGame::surveyItems()";
-
 	std::vector<BattleItem*> droppedItems;
 
 	// first fill a vector with items on the ground
 	// that were dropped on the alien turn [not]
 	// and have an attraction value.
+	// kL_note: And no one else is standing on it.
 	for (std::vector<BattleItem*>::iterator
 			i = _save->getItems()->begin();
 			i != _save->getItems()->end();
@@ -2574,6 +2575,8 @@ BattleItem* BattlescapeGame::surveyItems(BattleAction* action)
 		if ((*i)->getSlot()
 			&& (*i)->getSlot()->getId() == "STR_GROUND"
 			&& (*i)->getTile()
+			&& ((*i)->getTile()->getUnit() == 0 // kL
+				|| (*i)->getTile()->getUnit() == action->actor) // kL
 //kL			&& (*i)->getTurnFlag()
 			&& (*i)->getRules()->getAttraction())
 		{
@@ -2622,7 +2625,6 @@ bool BattlescapeGame::worthTaking(
 		BattleAction* action)
 {
 	//Log(LOG_INFO) << "BattlescapeGame::worthTaking()";
-
 	int worth = item->getRules()->getAttraction();
 	if (worth == 0)
 		return false;
@@ -2753,7 +2755,6 @@ int BattlescapeGame::takeItemFromGround(
 		BattleAction* action)
 {
 	//Log(LOG_INFO) << "BattlescapeGame::takeItemFromGround()";
-
 	const int TAKEITEM_ERROR	= -1;
 	const int TAKEITEM_SUCCESS	= 0;
 	const int TAKEITEM_NOTU		= 1;
@@ -2808,7 +2809,6 @@ bool BattlescapeGame::takeItem(
 		BattleAction* action)
 {
 	//Log(LOG_INFO) << "BattlescapeGame::takeItem()";
-
 	bool placed = false;
 	Ruleset* rules = _parentState->getGame()->getRuleset();
 
@@ -2820,9 +2820,7 @@ bool BattlescapeGame::takeItem(
 				&& action->actor->getItem("STR_RIGHT_HAND")->getAmmoItem() == 0)
 			{
 				if (action->actor->getItem("STR_RIGHT_HAND")->setAmmoItem(item) == 0)
-				{
 					placed = true;
-				}
 			}
 			else
 			{
