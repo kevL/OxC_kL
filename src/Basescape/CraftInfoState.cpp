@@ -375,10 +375,9 @@ void CraftInfoState::init()
 void CraftInfoState::btnOkClick(Action*)
 {
 	Craft* c = _base->getCrafts()->at(_craft);
+
 	if (c->getName(_game->getLanguage()) != _edtCraft->getText())
-	{
 		c->setName(_edtCraft->getText());
-	}
 
 	_game->popState();
 }
@@ -397,7 +396,6 @@ void CraftInfoState::btnW1Click(Action*)
 		SDL_Surface* dst,
 		const SDL_Rect* rect,
 		Uint32 color); */
-
 
 	_game->pushState(new CraftWeaponsState(
 										_game,

@@ -520,9 +520,9 @@ void Projectile::applyAccuracy(
 
 		// kL_begin: modify rangedBasedAccuracy (shot-modes).
 		// NOTE: This should be done on the weapons themselves!!!!
-		double baseDeviation = 0.0;
+		double baseDeviation = 0.01;
 		if (_action.actor->getFaction() == FACTION_PLAYER)
-			baseDeviation = 0.1; // give the poor aLiens an aiming advantage over xCom & Mc'd units
+			baseDeviation = 0.09; // give the poor aLiens an aiming advantage over xCom & Mc'd units
 
 		switch (_action.type)
 		{
@@ -537,13 +537,13 @@ void Projectile::applyAccuracy(
 			break;
 
 			default: // throw. Or hit.
-				baseDeviation += 0.2;
+				baseDeviation += 0.18; // Snap.
 			break;
 
 		}
-		baseDeviation /= accuracy - acuPenalty + 0.16;
+		baseDeviation /= accuracy - acuPenalty + 0.15;
 		baseDeviation = std::max(
-								0.0,
+								0.01,
 								baseDeviation); // kL_end.
 
 		//Log(LOG_INFO) << ". baseDeviation = " << baseDeviation;
@@ -552,7 +552,7 @@ void Projectile::applyAccuracy(
 		// The angle deviations are spread using a normal distribution:
 		double
 			dH = RNG::boxMuller(0.0, baseDeviation / 6.0),			// horizontal miss in radians
-			dV = RNG::boxMuller(0.0, baseDeviation / (6.0 * 1.78)),	// vertical miss in radians
+			dV = RNG::boxMuller(0.0, baseDeviation / (6.0 * 1.79)),	// vertical miss in radians
 
 			te = atan2(
 					static_cast<double>(target->y - origin.y),

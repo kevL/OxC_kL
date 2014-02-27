@@ -115,16 +115,15 @@ SurfaceSet* MapDataSet::getSurfaceset() const
  */
 void MapDataSet::loadData()
 {
-	// prevents loading twice
-	if (_loaded) return;
+	if (_loaded) // prevents loading twice
+		return;
 
 	_loaded = true;
 
 	int objNumber = 0;
 
-	// the struct below helps to read the xcom file format
 #pragma pack(push, 1)
-	struct MCD
+	struct MCD // this struct helps to read the xcom file format
 	{
 		unsigned char Frame[8];
 		unsigned char LOFT[12];
@@ -285,7 +284,6 @@ void MapDataSet::loadData()
 							armor);
 
 			if ((*i)->getDieMCD())
-			{
 				_objects.at((*i)->getDieMCD())->setBlockValue(
 															1,
 															1,
@@ -293,7 +291,6 @@ void MapDataSet::loadData()
 															1,
 															1,
 															armor);
-			}
 		}
 	}
 
@@ -333,10 +330,14 @@ void MapDataSet::unloadData()
  * @param filename, Filename of the DAT file.
  * @param voxelData, The ruleset.
  */
-void MapDataSet::loadLOFTEMPS(const std::string& filename, std::vector<Uint16>* voxelData)
+void MapDataSet::loadLOFTEMPS(
+		const std::string& filename,
+		std::vector<Uint16>* voxelData)
 {
 	// Load file
-	std::ifstream mapFile(filename.c_str(), std::ios::in | std::ios::binary);
+	std::ifstream mapFile(
+						filename.c_str(),
+						std::ios::in | std::ios::binary);
 	if (!mapFile)
 	{
 		throw Exception(filename + " not found");

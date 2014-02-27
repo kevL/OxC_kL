@@ -22,7 +22,9 @@
 
 #include <string>
 #include <vector>
+
 #include <SDL.h>
+
 #include <yaml-cpp/yaml.h>
 
 
@@ -30,8 +32,9 @@ namespace OpenXcom
 {
 
 class MapData;
-class SurfaceSet;
 class ResourcePack;
+class SurfaceSet;
+
 
 /**
  * Represents a Terrain Map Datafile.
@@ -41,23 +44,32 @@ class ResourcePack;
  */
 class MapDataSet
 {
+
 private:
-	std::string _name;
-	std::vector<MapData*> _objects;
-	SurfaceSet* _surfaceSet;
 	bool _loaded;
+
+	std::string _name;
+
 	static MapData* _blankTile;
 	static MapData* _scorchedTile;
+	SurfaceSet* _surfaceSet;
+
+	std::vector<MapData*> _objects;
+
 
 	public:
+		///
 		MapDataSet(const std::string& name);
+		///
 		~MapDataSet();
 
 		/// Loads the map data set from YAML.
 		void load(const YAML::Node& node);
 
 		/// Loads voxeldata from a DAT file.
-		static void loadLOFTEMPS(const std::string& filename, std::vector<Uint16>* voxelData);
+		static void loadLOFTEMPS(
+				const std::string& filename,
+				std::vector<Uint16>* voxelData);
 		/// Gets the dataset name (used for MAP generation).
 		std::string getName() const;
 		/// Gets the dataset size.

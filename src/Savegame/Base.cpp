@@ -455,7 +455,7 @@ std::vector<Transfer*>* Base::getTransfers()
  * Returns the list of items in the base.
  * @return Pointer to the item list.
  */
-ItemContainer *Base::getItems()
+ItemContainer* Base::getItems()
 {
 	return _items;
 }

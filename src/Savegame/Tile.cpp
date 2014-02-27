@@ -872,10 +872,13 @@ void Tile::addItem(
 		BattleItem* item,
 		RuleInventory* ground)
 {
+	//Log(LOG_INFO) << "Tile::addItem()";
 	item->setSlot(ground);
 	_inventory.push_back(item);
 
+	//Log(LOG_INFO) << ". setTile()";
 	item->setTile(this);
+	//Log(LOG_INFO) << "Tile::addItem() DONE";
 }
 
 /**

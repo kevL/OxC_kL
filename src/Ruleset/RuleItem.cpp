@@ -88,9 +88,9 @@ RuleItem::RuleItem(const std::string& type)
 //kL		_aimRange(200),
 //kL		_snapRange(15),
 //kL		_autoRange(7),
-		_aimRange(24),	// kL
-		_snapRange(12),	// kL
-		_autoRange(6),	// kL
+		_aimRange(20),	// kL
+		_snapRange(10),	// kL
+		_autoRange(5),	// kL
 		_minRange(0),
 //kL		_dropoff(2),
 		_dropoff(1),	// kL

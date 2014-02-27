@@ -750,7 +750,7 @@ bool UnitWalkBState::doStatusWalk()
 						--y)
 				{
 					tBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(x, y, -1));
-					if (tBelow) Log(LOG_INFO) << ". . otherTileBelow exists";
+					//if (tBelow) Log(LOG_INFO) << ". . otherTileBelow exists";
 
 					if (tBelow
 						&& tBelow->getUnit())
@@ -767,7 +767,7 @@ bool UnitWalkBState::doStatusWalk()
 
 						return false;
 					}
-					else Log(LOG_INFO) << ". . otherTileBelow Does NOT contain other unit";
+					//else Log(LOG_INFO) << ". . otherTileBelow Does NOT contain other unit";
 				}
 			}
 		}

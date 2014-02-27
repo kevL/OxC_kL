@@ -1496,15 +1496,11 @@ void BattlescapeState::btnVisibleUnitClick(Action* action)
 			++i)
 	{
 		if (action->getSender() == _btnVisibleUnit[i])
-		{
 			btnID = i;
-		}
 	}
 
 	if (btnID != -1)
-	{
 		_map->getCamera()->centerOnPosition(_visibleUnit[btnID]->getPosition());
-	}
 
 	action->getDetails()->type = SDL_NOEVENT; // consume the event
 }

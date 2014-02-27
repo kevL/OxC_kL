@@ -59,16 +59,17 @@ bool Explosion::animate()
 {
 	_currentFrame++;
 
-	if ((_hit && _currentFrame == 4)						// melee or psiamp
-		|| (_big && _currentFrame == 8)						// explosion
-		|| (!_big && _currentFrame == _startFrame + 10))	// bullet
+	if ((_hit // melee or psiamp
+			&& _currentFrame == 4)
+		|| (_big // explosion
+			&& _currentFrame == 8)
+		|| (!_big // bullet
+			&& _currentFrame == _startFrame + 10))
 	{
 		return false;
 	}
 	else
-	{
 		return true;
-	}
 }
 
 /**

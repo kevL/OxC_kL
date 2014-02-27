@@ -588,7 +588,8 @@ DogfightState::DogfightState(
 	Uint32 ufoBreakOffInterval = static_cast<Uint32>(_ufo->getRules()->getBreakOffTime());
 	ufoBreakOffInterval = static_cast<Uint32>(
 								(static_cast<int>(ufoBreakOffInterval)
-								+ RNG::generate(10, static_cast<int>(ufoBreakOffInterval)) / 2
+//								+ RNG::generate(10, static_cast<int>(ufoBreakOffInterval)) / 2
+								+ RNG::generate(0, static_cast<int>(ufoBreakOffInterval)) / 10
 								- (10 * static_cast<int>(_game->getSavedGame()->getDifficulty())))
 							* _timeScale);
 	if (ufoBreakOffInterval < _timeScale * 10)

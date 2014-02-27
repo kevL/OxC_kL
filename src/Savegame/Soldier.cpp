@@ -354,6 +354,7 @@ SoldierRank Soldier::getRank() const
 void Soldier::promoteRank()
 {
 	_rank = static_cast<SoldierRank>(static_cast<int>(_rank) + 1);
+
 	if (_rank > RANK_SQUADDIE) // only promotions above SQUADDIE are worth mentioning.
 		_recentlyPromoted = true;
 }

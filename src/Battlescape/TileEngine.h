@@ -92,7 +92,6 @@ private:
 		/// Turn XCom soldier's personal lighting on or off.
 		void togglePersonalLighting();
 
-
 		/// Calculates the field of view from a units view point.
 		bool calculateFOV(BattleUnit* unit);
 		/// Calculates Field of View, including line of sight of all units within range of the Position
@@ -121,7 +120,6 @@ private:
 				int part,
 				Position* scanVoxel,
 				BattleUnit* excludeUnit);
-
 
 		/// Checks reaction fire.
 		bool checkReactionFire(

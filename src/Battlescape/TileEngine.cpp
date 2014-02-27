@@ -1749,7 +1749,8 @@ bool TileEngine::testFireMethod(
 												unit->getPosition(),
 												target->getPosition());
 	//Log(LOG_INFO) << ". distance = " << distance;
-	if (distance < 7)
+//	if (distance < 7)
+	if (distance <= weapon->getRules()->getAutoRange())
 	{
 		if (weapon->getRules()->getTUAuto()							// weapon can do this action-type
 			&& tuUnit >= unit->getActionTUs(BA_AUTOSHOT, weapon))	// accounts for flatRate or not.
@@ -1767,7 +1768,8 @@ bool TileEngine::testFireMethod(
 			return true;
 		}
 	}
-	else if (distance < 13)
+//	else if (distance < 13)
+	else if (distance <= weapon->getRules()->getSnapRange())
 	{
 		if (weapon->getRules()->getTUSnap()
 			&& tuUnit >= unit->getActionTUs(BA_SNAPSHOT, weapon))
@@ -1785,7 +1787,8 @@ bool TileEngine::testFireMethod(
 			return true;
 		}
 	}
-	else // distance > 12
+//	else // distance > 12
+	else if (distance <= weapon->getRules()->getAimRange())
 	{
 		if (weapon->getRules()->getTUAimed()
 			&& tuUnit >= unit->getActionTUs(BA_AIMEDSHOT, weapon))
@@ -1823,7 +1826,8 @@ BattleActionType TileEngine::selectFireMethod(BattleAction action) // could/shou
 		distance = _save->getTileEngine()->distance(
 												action.actor->getPosition(),
 												action.target);
-	if (distance < 7)
+//	if (distance < 7)
+	if (distance <= action.weapon->getRules()->getAutoRange())
 	{
 		if (action.weapon->getRules()->getTUAuto()									// weapon can do this action-type
 			&& tuUnit >= action.actor->getActionTUs(BA_AUTOSHOT, action.weapon))	// accounts for flatRate or not.
@@ -1841,7 +1845,8 @@ BattleActionType TileEngine::selectFireMethod(BattleAction action) // could/shou
 			action.type = BA_AIMEDSHOT;
 		}
 	}
-	else if (distance < 13)
+//	else if (distance < 13)
+	else if (distance <= action.weapon->getRules()->getSnapRange())
 	{
 		if (action.weapon->getRules()->getTUSnap()
 			&& tuUnit >= action.actor->getActionTUs(BA_SNAPSHOT, action.weapon))
@@ -1859,7 +1864,8 @@ BattleActionType TileEngine::selectFireMethod(BattleAction action) // could/shou
 			action.type = BA_AUTOSHOT;
 		}
 	}
-	else // distance > 12
+//	else // distance > 12
+	else if (distance <= action.weapon->getRules()->getAimRange())
 	{
 		if (action.weapon->getRules()->getTUAimed()
 			&& tuUnit >= action.actor->getActionTUs(BA_AIMEDSHOT, action.weapon))
@@ -1890,6 +1896,7 @@ BattleActionType TileEngine::selectFireMethod(BattleAction action) // could/shou
  * @param power, Power of the hit/explosion.
  * @param type, The damage type of the hit.
  * @param attacker, The unit that caused the hit.
+ * @param hit, True if no projectile, trajectory, etc. is needed. kL
  * @return, The Unit that got hit.
  */
 BattleUnit* TileEngine::hit(
@@ -1928,13 +1935,18 @@ BattleUnit* TileEngine::hit(
 		// This is returning part < 4 when using a stunRod against a unit outside the north (or east) UFO wall. ERROR!!!
 		// later: Now it's returning VOXEL_EMPTY (-1) when a silicoid attacks a poor civvie!!!!! And on acid-spits!!!
 //kL		int const part = voxelCheck(pTarget_voxel, attacker);
-		int const part = voxelCheck(
-								pTarget_voxel,
-								attacker,
-								false,
-								false,
-								0,
-								hit); // kL
+		// kL_note: for hit==TRUE, just put part=VOXEL_UNIT here. Like,
+		// and take out the 'hit' parameter from voxelCheck() unless
+		// I want to flesh-out melee & psi attacks more than they are.
+		int part = VOXEL_UNIT; // kL, no longer const
+		if (!hit) // kL
+			part = voxelCheck(
+							pTarget_voxel,
+							attacker,
+							false,
+							false,
+							0,
+							hit); // kL
 		//Log(LOG_INFO) << ". voxelCheck() part = " << part;
 
 		if (VOXEL_EMPTY < part && part < VOXEL_UNIT	// 4 terrain parts ( 0..3 )
@@ -3436,7 +3448,7 @@ int TileEngine::closeUfoDoors()
  * @param storeTrajectory, True will store the whole trajectory - otherwise it just stores the last position.
  * @param trajectory, A vector of positions in which the trajectory is stored.
  * @param excludeUnit, Excludes this unit in the collision detection.
- * @param doVoxelCheck, Check against voxel or tile blocking? (first one for units visibility and line of fire, second one for terrain visibility).
+ * @param doVoxelCheck, Check against voxel or tile blocking? (first one for unit visibility and line of fire, second one for terrain visibility).
  * @param onlyVisible, Skip invisible units? used in FPS view.
  * @param excludeAllBut, [Optional] The only unit to be considered for ray hits.
  * @return, The objectnumber(0-3) or unit(4) or out-of-map(5) or -1(hit nothing).
@@ -3789,8 +3801,9 @@ bool TileEngine::validateThrow(
 						double* curve,
 						int* voxelType)
 {
+	//Log(LOG_INFO) << "TileEngine::validateThrow()";
 //kL	double arc = 0.5;
-	double arc = 1.25; // kL
+	double arc = 1.3; // kL
 
 	if (action.type == BA_THROW)
 	{
@@ -3806,6 +3819,7 @@ bool TileEngine::validateThrow(
 										/ static_cast<double>(action.weapon->getRules()->getWeight())))
 							+ kneel);
 	}
+	//Log(LOG_INFO) << ". starting arc = " << arc;
 
 	Tile* targetTile = _save->getTile(action.target);
 	if ((action.type == BA_THROW
@@ -3818,12 +3832,14 @@ bool TileEngine::validateThrow(
 											targetTile)
 										== false)
 	{
+		//Log(LOG_INFO) << ". . ret FALSE, validThrowRange not valid OR targetTile is nonwalkable.";
 		return false; // object blocking - can't throw here
 	}
 
 	// try several different curvatures to reach our goal.
 	bool found = false;
-	while (!found && arc < 5.0)
+	while (!found
+		&& arc < 5.0)
 	{
 		std::vector<Position> trajectory;
 		int test = VOXEL_OUTOFBOUNDS;
@@ -3838,6 +3854,8 @@ bool TileEngine::validateThrow(
 		if (test != VOXEL_OUTOFBOUNDS
 			&& (trajectory.at(0) / Position(16, 16, 24)) == (targetVoxel / Position(16, 16, 24)))
 		{
+			//Log(LOG_INFO) << ". . . Loop arc = " << arc;
+
 			if (voxelType)
 				*voxelType = test;
 
@@ -3848,11 +3866,15 @@ bool TileEngine::validateThrow(
 	}
 
 	if (arc >= 5.0)
+	{
+		//Log(LOG_INFO) << ". . ret FALSE, arc > 5";
 		return false;
+	}
 
 	if (curve)
 		*curve = arc;
 
+	//Log(LOG_INFO) << ". ret TRUE";
 	return true;
 }
 
@@ -3937,6 +3959,7 @@ bool TileEngine::isVoxelVisible(const Position& voxel)
  * @param excludeAllUnits, Don't do checks on any unit.
  * @param onlyVisible, Whether to consider only visible units.
  * @param excludeAllBut, If set, the only unit to be considered for ray hits.
+ * @param hit, True if no projectile, trajectory, etc. is needed. kL
  * @return, The objectnumber(0-3) or unit(4) or out of map (5) or -1 (hit nothing).
  */
 int TileEngine::voxelCheck(
@@ -3949,7 +3972,8 @@ int TileEngine::voxelCheck(
 {
 	//Log(LOG_INFO) << "TileEngine::voxelCheck()"; // massive lag-to-file, Do not use.
 
-	if (hit) return VOXEL_UNIT; // kL; i think Wb may have this covered now.
+	if (hit)
+		return VOXEL_UNIT; // kL; i think Wb may have this covered now.
 
 
 	Tile* tTarget = _save->getTile(pTarget_voxel / Position(16, 16, 24)); // converts to tilespace -> Tile
@@ -4659,8 +4683,8 @@ Position TileEngine::getOriginVoxel(
 		BattleAction& action,
 		Tile* tile)
 {
-	const int dirXshift[24] = {9, 15, 15, 13,  8,  1, 1, 3, 7, 13, 15, 15,  9,  3, 1, 1, 8, 14, 15, 14,  8,  2, 1, 2};
-	const int dirYshift[24] = {1,  3,  9, 15, 15, 13, 7, 1, 1,  1,  7, 13, 15, 15, 9, 3, 1,  2,  8, 14, 15, 14, 8, 2};
+//kL	const int dirXshift[24] = {9, 15, 15, 13,  8,  1, 1, 3, 7, 13, 15, 15,  9,  3, 1, 1, 8, 14, 15, 14,  8,  2, 1, 2};
+//kL	const int dirYshift[24] = {1,  3,  9, 15, 15, 13, 7, 1, 1,  1,  7, 13, 15, 15, 9, 3, 1,  2,  8, 14, 15, 14, 8, 2};
 
 	if (!tile)
 		tile = action.actor->getTile();
@@ -4679,12 +4703,13 @@ Position TileEngine::getOriginVoxel(
 	{
 		// calculate vertical offset of the starting point of the projectile
 		originVoxel.z += action.actor->getHeight()
-						+ action.actor->getFloatHeight()
-						- tile->getTerrainLevel()
-						- 4; // for good luck. (kL_note: look like 2 voxels lower than LoS origin or something like this.)
+					+ action.actor->getFloatHeight()
+					- tile->getTerrainLevel();
+//kL					- 4; // for good luck. (kL_note: looks like 2 voxels lower than LoS origin or something like it.)
+			// Ps. don't need luck - need precision.
 
-		if (action.type == BA_THROW)	// kL
-			originVoxel.z -= 4;			// kL
+//		if (action.type == BA_THROW)	// kL
+//			originVoxel.z -= 4;			// kL
 /*kL		if (action.type == BA_THROW)
 			originVoxel.z -= 3;
 		else
@@ -4711,11 +4736,13 @@ Position TileEngine::getOriginVoxel(
 		// Originally used the dirXShift and dirYShift as detailed above;
 		// this however results in MUCH more predictable results.
 		// center Origin in the originTile (or the center of all four tiles for large units):
-/*		int offset = bu->getArmor()->getSize() * 8;
+		int offset = action.actor->getArmor()->getSize() * 8;
 		originVoxel.x += offset;
-		originVoxel.y += offset; */
+		originVoxel.y += offset;
+			// screw Warboy's obscurantist glamor-elitist campaign!!!! Have fun with that!!
+			// MUCH more predictable results. <- I didn't write that; just iterating it.
 
-		int offset = 0;
+/*kL		int offset = 0;
 		if (action.actor->getArmor()->getSize() > 1)
 			offset = 16;
 		else if (action.weapon == action.weapon->getOwner()->getItem("STR_LEFT_HAND")
@@ -4728,7 +4755,7 @@ Position TileEngine::getOriginVoxel(
 									origin,
 									action.target);
 		originVoxel.x += dirXshift[direction + offset] * action.actor->getArmor()->getSize();
-		originVoxel.y += dirYshift[direction + offset] * action.actor->getArmor()->getSize();
+		originVoxel.y += dirYshift[direction + offset] * action.actor->getArmor()->getSize(); */
 	}
 	else // action.type == BA_LAUNCH
 	{

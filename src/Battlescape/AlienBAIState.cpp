@@ -2043,7 +2043,8 @@ void AlienBAIState::selectFireMethod()
 	int distance = _save->getTileEngine()->distance(
 												_unit->getPosition(),
 												_attackAction->target);
-	if (distance < 7)
+//	if (distance < 7)
+	if (distance <= _attackAction->weapon->getRules()->getAutoRange())
 	{
 		if (_attackAction->weapon->getRules()->getTUAuto()
 			&& usableTU >= _unit->getActionTUs(BA_AUTOSHOT, _attackAction->weapon))
@@ -2061,7 +2062,8 @@ void AlienBAIState::selectFireMethod()
 			_attackAction->type = BA_AIMEDSHOT;
 		}
 	}
-	else if (distance < 13)
+//	else if (distance < 13)
+	else if (distance <= _attackAction->weapon->getRules()->getSnapRange())
 	{
 		if (_attackAction->weapon->getRules()->getTUSnap()
 			&& usableTU >= _unit->getActionTUs(BA_SNAPSHOT, _attackAction->weapon))
@@ -2079,7 +2081,8 @@ void AlienBAIState::selectFireMethod()
 			_attackAction->type = BA_AUTOSHOT;
 		}
 	}
-	else // distance > 12
+//	else // distance > 12
+	else if (distance <= _attackAction->weapon->getRules()->getAimRange())
 	{
 		if (_attackAction->weapon->getRules()->getTUAimed()
 			&& usableTU >= _unit->getActionTUs(BA_AIMEDSHOT, _attackAction->weapon))
@@ -2098,22 +2101,6 @@ void AlienBAIState::selectFireMethod()
 		}
 	}
 }
-	// else, just take yer best (most TU) shot!
-/*	if (tuAimed
-		&& usableTU >= _unit->getActionTUs(BA_AIMEDSHOT, _attackAction->weapon))
-	{
-		_attackAction->type = BA_AIMEDSHOT;
-	}
-	else if (tuAuto
-		&& usableTU >= _unit->getActionTUs(BA_AUTOSHOT, _attackAction->weapon))
-	{
-		_attackAction->type = BA_AUTOSHOT;
-	}
-	else if (tuSnap
-		&& usableTU >= _unit->getActionTUs(BA_SNAPSHOT, _attackAction->weapon))
-	{
-		_attackAction->type = BA_SNAPSHOT;
-	} */
 
 /**
  * Evaluates whether to throw a grenade at an enemy (or group of enemies) we can see.
@@ -2280,9 +2267,9 @@ bool AlienBAIState::psiAction()
 			}
 		}
 
-		if (!_aggroTarget
-			|| chance < 0
-			|| RNG::percent(10))
+		if (!_aggroTarget			// if not target
+			|| chance < 20			// or chance of success is too low
+			|| RNG::percent(10))	// or aLien just don't feel like it... do FALSE.
 		{
 			//Log(LOG_INFO) << "AlienBAIState::psiAction() EXIT, False : not good.";
 			return false;

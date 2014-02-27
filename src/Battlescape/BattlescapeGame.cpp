@@ -92,18 +92,23 @@ BattlescapeGame::BattlescapeGame(
 {
 	//Log(LOG_INFO) << "Create BattlescapeGame";
 
-	_tuReserved = BA_NONE;
-	_playerTUReserved = BA_NONE;
-	_debugPlay = false;
-	_playerPanicHandled = true;
-	_AIActionCounter = 0;
-	_AISecondMove = false;
-	_currentAction.actor = 0;
+	_tuReserved				= BA_NONE;
+	_playerTUReserved		= BA_NONE;
+	_debugPlay				= false;
+	_playerPanicHandled		= true;
+	_AIActionCounter		= 0;
+	_AISecondMove			= false;
+	_currentAction.actor	= 0;
 
-	checkForCasualties(0, 0, true);
+	checkForCasualties(
+					0,
+					0,
+					true);
+
 	cancelCurrentAction();
-	_currentAction.targeting = false;
-	_currentAction.type = BA_NONE;
+
+	_currentAction.targeting	= false;
+	_currentAction.type			= BA_NONE;
 }
 
 /**
@@ -607,6 +612,9 @@ void BattlescapeGame::endTurn()
 							t->getPosition().x * 16 + 8, // kL
 							t->getPosition().y * 16 + 8, // kL
 							t->getPosition().z * 24);
+
+		// kL_note: This seems to be screwing up for preBattle powersource explosions; they
+		// wait until the first turn, either endTurn or perhaps checkForCasualties or like that.
 		statePushNext(new ExplosionBState(
 										this,
 										pos,
@@ -698,9 +706,7 @@ void BattlescapeGame::endTurn()
 
 	checkForCasualties(
 					0,
-					0,
-					false,
-					false);
+					0);
 	//Log(LOG_INFO) << ". done checkForCasualties";
 
 	// turn off MCed alien lighting.
@@ -708,7 +714,9 @@ void BattlescapeGame::endTurn()
 
 	if (_save->isObjectiveDestroyed())
 	{
-		_parentState->finishBattle(false, liveSoldiers);
+		_parentState->finishBattle(
+								false,
+								liveSoldiers);
 
 		//Log(LOG_INFO) << "BattlescapeGame::endTurn(), objectiveDestroyed EXIT";
 		return;
@@ -729,7 +737,9 @@ void BattlescapeGame::endTurn()
 	}
 	//Log(LOG_INFO) << ". done updates";
 
-	bool battleComplete = (liveAliens == 0 || liveSoldiers == 0);
+	bool battleComplete = liveAliens == 0
+						|| liveSoldiers == 0;
+
 	if (_endTurnRequested
 		&& (_save->getSide() != FACTION_NEUTRAL
 			|| battleComplete))
@@ -742,7 +752,6 @@ void BattlescapeGame::endTurn()
 	}
 
 	_endTurnRequested = false;
-
 	//Log(LOG_INFO) << "BattlescapeGame::endTurn() EXIT";
 }
 
@@ -760,7 +769,6 @@ void BattlescapeGame::checkForCasualties(
 		bool terrainExplosion)
 {
 	//Log(LOG_INFO) << "BattlescapeGame::checkForCasualties()";
-
 	for (std::vector<BattleUnit*>::iterator
 			x = _save->getUnits()->begin();
 			x != _save->getUnits()->end();
@@ -777,7 +785,6 @@ void BattlescapeGame::checkForCasualties(
 				&& killer->getTurretType() == -1) // not a Tank.
 			{
 				//Log(LOG_INFO) << ". killer = " << killer->getId();
-
 				victim->killedBy(killer->getFaction()); // used in DebriefingState.
 
 				int bonus = 100;
@@ -792,9 +799,9 @@ void BattlescapeGame::checkForCasualties(
 
 				// killer's boost
 				if ((victim->getOriginalFaction() == FACTION_PLAYER
-							&& killer->getOriginalFaction() == FACTION_HOSTILE)
-						|| (victim->getOriginalFaction() == FACTION_HOSTILE
-							&& killer->getOriginalFaction() == FACTION_PLAYER))
+						&& killer->getOriginalFaction() == FACTION_HOSTILE)
+					|| (victim->getOriginalFaction() == FACTION_HOSTILE
+						&& killer->getOriginalFaction() == FACTION_PLAYER))
 				{
 					int boost = 10 * bonus / 100;
 					killer->moraleChange(boost); // doubles what rest of squad gets below
@@ -953,8 +960,8 @@ void BattlescapeGame::checkForCasualties(
 		if (bu)
 			_parentState->showPsiButton(
 									bu->getOriginalFaction() == FACTION_HOSTILE
-										&& bu->getStats()->psiSkill > 0
-										&& !bu->isOut(true, true));
+									&& bu->getStats()->psiSkill > 0
+									&& !bu->isOut(true, true));
 	}
 
 	//Log(LOG_INFO) << "BattlescapeGame::checkForCasualties() EXIT";
@@ -969,7 +976,9 @@ void BattlescapeGame::showInfoBoxQueue()
 			i = _infoboxQueue.begin();
 			i != _infoboxQueue.end();
 			++i)
+	{
 		_parentState->getGame()->pushState(*i);
+	}
 
 	_infoboxQueue.clear();
 }

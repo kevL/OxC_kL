@@ -259,7 +259,6 @@ void ProjectileFlyBState::init()
 			if (_ammo == 0)
 			{
 				//Log(LOG_INFO) << ". . . no ammo, EXIT";
-
 				_action.result = "STR_NO_AMMUNITION_LOADED";
 				_parent->popState();
 
@@ -268,7 +267,6 @@ void ProjectileFlyBState::init()
 			else if (_ammo->getAmmoQuantity() == 0)
 			{
 				//Log(LOG_INFO) << ". . . no ammo Quantity, EXIT";
-
 				_action.result = "STR_NO_ROUNDS_LEFT";
 				_parent->popState();
 
@@ -288,7 +286,6 @@ void ProjectileFlyBState::init()
 					|| dist < _action.weapon->getRules()->getMinRange()) */ // kL_end.
 			{
 				//Log(LOG_INFO) << ". . . out of range, EXIT";
-
 				_action.result = "STR_OUT_OF_RANGE";
 				_parent->popState();
 
@@ -309,7 +306,6 @@ void ProjectileFlyBState::init()
 							_parent->getSave()->getTile(_action.target)))
 			{
 				//Log(LOG_INFO) << ". . . not valid throw range, EXIT";
-
 				_action.result = "STR_OUT_OF_RANGE";
 				_parent->popState();
 
@@ -330,7 +326,6 @@ void ProjectileFlyBState::init()
 													&_action.target))
 			{
 				//Log(LOG_INFO) << ". . . out of hit range, EXIT";
-
 				_action.result = "STR_THERE_IS_NO_ONE_THERE";
 				_parent->popState();
 
@@ -340,7 +335,6 @@ void ProjectileFlyBState::init()
 		case BA_PANIC:
 		case BA_MINDCONTROL:
 			//Log(LOG_INFO) << ". . BA_PANIC/MINDCONTROL, new ExplosionBState, EXIT";
-
 			_parent->statePushFront(new ExplosionBState(
 													_parent,
 													Position(
@@ -355,7 +349,6 @@ void ProjectileFlyBState::init()
 
 		default:
 			//Log(LOG_INFO) << ". . default, EXIT";
-
 			_parent->popState();
 
 			return;
@@ -1000,9 +993,9 @@ void ProjectileFlyBState::cancel()
 
 /**
  * Validates the throwing range.
- * @param action, The BattleAction struct
+ * @param action, Pointer to The BattleAction struct
  * @param origin, Position of origin in voxelspace
- * @param target, The target tile
+ * @param target, Pointer to the target Tile
  * @return, True if the range is valid
  */
 bool ProjectileFlyBState::validThrowRange(
@@ -1079,7 +1072,6 @@ int ProjectileFlyBState::getMaxThrowDistance(
 		int level)
 {
 	//Log(LOG_INFO) << "ProjectileFlyBState::getMaxThrowDistance()";
-
 	double curZ = static_cast<double>(level) + 0.5;
 	double delta_z = 1.0;
 

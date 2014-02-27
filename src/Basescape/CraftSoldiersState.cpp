@@ -181,7 +181,7 @@ void CraftSoldiersState::btnOkClick(Action*)
  *
  * @param action, Pointer to an action.
  */
-void CraftSoldiersState::btnUnloadClick(Action*)
+void CraftSoldiersState::btnUnloadClick(Action*) // kL
 {
 	Craft* c = _base->getCrafts()->at(_craft);
 	std::wstring craft1 = c->getName(_game->getLanguage());
@@ -198,12 +198,14 @@ void CraftSoldiersState::btnUnloadClick(Action*)
 
 	// iterate over all listRows and change their stringText and lineColor
 	Uint8 color = Palette::blockOffset(13)+10;
+	std::wstring craft2;
+
 	for (unsigned
 			r = 0;
 			r < _base->getSoldiers()->size();
 			++r)
 	{
-		std::wstring craft2 = _lstSoldiers->getCellText(r, 2);
+		craft2 = _lstSoldiers->getCellText(r, 2);
 		if (craft2 == craft1) // if row pertains to this craft
 		{
 			_lstSoldiers->setCellText(r, 2, _game->getLanguage()->getString("STR_NONE_UC"));

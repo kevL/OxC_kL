@@ -139,7 +139,8 @@ BattleUnit::BattleUnit(
 		default:				rankbonus =	0;	break;
 	}
 
-	_value		= 20 + soldier->getMissions() + rankbonus;
+	_value		= 20 + soldier->getMissions() + rankbonus; // give this a difficulty multiplier.
+		// this is not in save/load ....
 
 	_tu			= _stats.tu;
 	_energy		= _stats.stamina;

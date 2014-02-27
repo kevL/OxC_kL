@@ -201,8 +201,14 @@ void BriefingState::btnOkClick(Action*)
 	_game->popState();
 
 	BattlescapeState* bs = new BattlescapeState(_game); // <- ah there it is! kL_note
-	int liveAliens = 0, liveSoldiers = 0;
-	bs->getBattleGame()->tallyUnits(liveAliens, liveSoldiers, false);
+	int
+		liveAliens = 0,
+		liveSoldiers = 0;
+
+	bs->getBattleGame()->tallyUnits(
+								liveAliens,
+								liveSoldiers,
+								false);
 	if (liveAliens > 0)
 	{
 		_game->pushState(bs);

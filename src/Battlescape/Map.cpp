@@ -31,12 +31,14 @@
 #include "Pathfinding.h"
 #include "Position.h"
 #include "Projectile.h"
+#include "ProjectileFlyBState.h" // kL
 #include "TileEngine.h"
 #include "UnitSprite.h"
 
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
+#include "../Engine/Logger.h" // kL
 #include "../Engine/Options.h"
 #include "../Engine/Palette.h"
 #include "../Engine/RNG.h"
@@ -472,11 +474,15 @@ void Map::drawTerrain(Surface* surface)
 			{
 				_launch = false;
 
-				if (bulletPositionScreen.x < 0
+/*kL				if (bulletPositionScreen.x < 0
 						|| bulletPositionScreen.x > surface->getWidth()
 						|| bulletPositionScreen.y < 0
 						|| bulletPositionScreen.y > _visibleMapHeight)
-//kL					&& _projectileInFOV)
+					&& _projectileInFOV) */
+				if (bulletPositionScreen.x < 24									// kL, keep these in from the edges.
+						|| bulletPositionScreen.x > surface->getWidth() - 24	// kL
+						|| bulletPositionScreen.y < 24							// kL
+						|| bulletPositionScreen.y > _visibleMapHeight - 24)		// kL
 				{
 					// kL_note: this probably jumps screen back to shooter shooting.
 					_camera->centerOnPosition(Position(
@@ -1086,83 +1092,121 @@ void Map::drawTerrain(Surface* surface)
 									screenPosition.y,
 									0);
 
-							// UFO extender accuracy: display adjusted accuracy value on crosshair.
-							if (_cursorType == CT_AIM) // kL_note: Gotta account for Throwing in here. (use throwRange.. for color, & calc. acc.)
+							// UFOExtender Accuracy: display adjusted accuracy value on crosshair.
+							if (_cursorType == CT_AIM) // indicator for Firing.
 							{
+								// kL_note: Use stuff from ProjectileFlyBState::init()
+								// as well as TileEngine::canTargetUnit() & TileEngine::canTargetTile()
+								// to turn accuracy to 'red 0' if target is out of LoS/LoF.
+
 								BattleAction* action = _save->getBattleGame()->getCurrentAction();
-//kL								int accuracy = _save->getSelectedUnit()->getFiringAccuracy( // Wb.140214
-//kL																						action->type,
-//kL																						action->weapon);
 								int accuracy = static_cast<int>(
 													_save->getSelectedUnit()->getFiringAccuracy(
 																						action->type,
 																						action->weapon)
 																					* 100.0);
-								Uint8 color = 51; //Palette::blockOffset(3)+3; // kL, green
+//kL								int accuracy = _save->getSelectedUnit()->getFiringAccuracy( // Wb.140214
+//kL																						action->type,
+//kL																						action->weapon);
+//kL								if (Options::getBool("battleUFOExtenderAccuracy"))
+//								{
+								RuleItem* weapon = action->weapon->getRules();
 
-//kL_TEST:								if (Options::getBool("battleUFOExtenderAccuracy"))
+								int
+									upperLimit = 200,
+									lowerLimit = weapon->getMinRange(),
+									distance = _save->getTileEngine()->distance(
+																			Position(
+																					itX,
+																					itY,
+																					itZ),
+																			action->actor->getPosition());
+
+								switch (action->type)
 								{
-//									BattleAction* action = _save->getBattleGame()->getCurrentAction();
-									RuleItem* weapon = action->weapon->getRules();
+									case BA_AIMEDSHOT:
+										upperLimit = weapon->getAimRange();
+									break;
+									case BA_SNAPSHOT:
+										upperLimit = weapon->getSnapRange();
+									break;
+									case BA_AUTOSHOT:
+										upperLimit = weapon->getAutoRange();
+									break;
 
-									int
-										upperLimit = 200,
-										lowerLimit = weapon->getMinRange(),
-										distance = _save->getTileEngine()->distance(
-																				Position(
-																						itX,
-																						itY,
-																						itZ),
-																				action->actor->getPosition());
-
-									switch (action->type)
-									{
-										case BA_AIMEDSHOT:
-											upperLimit = weapon->getAimRange();
-										break;
-										case BA_SNAPSHOT:
-											upperLimit = weapon->getSnapRange();
-										break;
-										case BA_AUTOSHOT:
-											upperLimit = weapon->getAutoRange();
-										break;
-
-										default:
-										break;
-									}
-
-									// first, assume shot is adjusted and set the text amber.
-//kL									_txtAccuracy->setColor(Palette::blockOffset(1)-1);
-//kL									color = 15; //Palette::blockOffset(1)-1; // amber
-
-									if (distance > upperLimit)
-									{
-										accuracy -= (distance - upperLimit) * weapon->getDropoff();
-										color = 18; //Palette::blockOffset(1)+2; // orange
-									}
-									else if (distance < lowerLimit)
-									{
-										accuracy -= (lowerLimit - distance) * weapon->getDropoff();
-										color = 18; //Palette::blockOffset(1)+2; // orange
-									}
-//kL									else // no adjustment made: set it to green.
-//kL										_txtAccuracy->setColor(Palette::blockOffset(4)-1);
-
-									if (accuracy < 1 // zero accuracy or out of range: set it red.
-										|| distance > weapon->getMaxRange())
-									{
-										accuracy = 0;
-//kL										_txtAccuracy->setColor(Palette::blockOffset(2)-1);
-										color = 35; //Palette::blockOffset(2)+3; // red
-									}
-
-//kL									std::stringstream ss;
-//kL									ss << accuracy;
-//kL									ss << "%";
-//kL									_txtAccuracy->setText(Language::utf8ToWstr(ss.str().c_str()).c_str());
+									default:
+									break;
 								}
 
+								Uint8 color = 51; //Palette::blockOffset(3)+3; // green
+
+								if (distance > upperLimit)
+								{
+									accuracy -= (distance - upperLimit) * weapon->getDropoff();
+									color = 18; //Palette::blockOffset(1)+2; // orange
+								}
+								else if (distance < lowerLimit)
+								{
+									accuracy -= (lowerLimit - distance) * weapon->getDropoff();
+									color = 18; //Palette::blockOffset(1)+2; // orange
+								}
+
+								if (accuracy < 1 // zero accuracy or out of range: set it red.
+									|| distance > weapon->getMaxRange())
+								{
+									accuracy = 0;
+									color = 35; //Palette::blockOffset(2)+3; // red
+								}
+//								}
+
 								//Log(LOG_INFO) << "Map::drawTerrain(), accuracy = " << accuracy;
+								_txtAccuracy->setValue(static_cast<unsigned>(accuracy));
+								_txtAccuracy->setColor(color);
+								_txtAccuracy->draw();
+								_txtAccuracy->blitNShade(
+													surface,
+													screenPosition.x,
+													screenPosition.y,
+													0);
+							}
+							else if (_cursorType == CT_THROW) // indicator for Throwing.
+							{
+								//Log(LOG_INFO) << "Map::drawTerrain()";
+								BattleAction* action = _save->getBattleGame()->getCurrentAction();
+								Position
+									posOrigin = action->actor->getPosition(),
+									posTarget = Position(
+														itX,
+														itY,
+														itZ);
+								action->target = posTarget;
+
+								Position originVoxel = _save->getTileEngine()->getOriginVoxel(
+																							*action,
+																							0);
+								Position targetVoxel = Position(
+															itX * 16 + 8,
+															itY * 16 + 8,
+															itZ * 24 + 2);
+								targetVoxel.z -= _save->getTile(posTarget)->getTerrainLevel();
+								//Log(LOG_INFO) << ". originVoxel = " << originVoxel;
+								//Log(LOG_INFO) << ". targetVoxel = " << targetVoxel;
+
+								bool canThrow = _save->getTileEngine()->validateThrow(
+																					*action,
+																					originVoxel,
+																					targetVoxel);
+								//Log(LOG_INFO) << ". canThrow = " << canThrow;
+
+								int accuracy = static_cast<int>(_save->getSelectedUnit()->getThrowingAccuracy() * 100.0);
+								Uint8 color = 51; //Palette::blockOffset(3)+3; // green
+
+								if (!canThrow)
+								{
+									accuracy = 0;
+									color = 35; //Palette::blockOffset(2)+3; // red
+								}
+
 								_txtAccuracy->setValue(static_cast<unsigned>(accuracy));
 								_txtAccuracy->setColor(color);
 								_txtAccuracy->draw();

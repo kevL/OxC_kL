@@ -135,7 +135,7 @@ CraftArmorState::CraftArmorState(
 
 
 //kL	Craft* c = _base->getCrafts()->at(_craft);
-	Craft* c = 0;											// kL
+	Craft* c = 0;										// kL
 	bool hasCraft = _base->getCrafts()->size() > 0;		// kL
 	if (hasCraft)										// kL -> KLUDGE!!!
 		c = _base->getCrafts()->at(_craft);				// kL: This is always 0 (1st craft) when coming from SoldiersState.
@@ -157,31 +157,22 @@ CraftArmorState::CraftArmorState(
 
 		Uint8 color;
 		if (!hasCraft)
-		{
 			//Log(LOG_INFO) << ". . . . color, Base has NO craft";
 			color = Palette::blockOffset(13)+10;
-		}
 		else if ((*i)->getCraft() == c)
-		{
 			//Log(LOG_INFO) << ". . . . color, soldier is on 'this' craft";
 			color = Palette::blockOffset(13);
-		}
 		else if ((*i)->getCraft() != 0)
-		{
 			//Log(LOG_INFO) << ". . . . color, soldier is on another craft";
 			color = Palette::blockOffset(15)+6;
-		}
 		else // craft==0
-		{
 			//Log(LOG_INFO) << ". . . . color, soldier is not on a craft";
 			color = Palette::blockOffset(13)+10;
-		}
 
 		_lstSoldiers->setRowColor(row, color);
 
 		row++;
 	}
-
 	//Log(LOG_INFO) << "CraftArmorState::CraftArmorState() EXIT";
 }
 
@@ -222,25 +213,17 @@ void CraftArmorState::init()
 		// kL_begin: init Armor list, from cTor
 		Uint8 color;
 		if (!hasCraft)
-		{
 			//Log(LOG_INFO) << ". . . . color, Base has NO craft";
 			color = Palette::blockOffset(13)+10;
-		}
 		else if ((*i)->getCraft() == c)
-		{
 			//Log(LOG_INFO) << ". . . . color, soldier is on 'this' craft";
 			color = Palette::blockOffset(13);
-		}
 		else if ((*i)->getCraft() != 0)
-		{
 			//Log(LOG_INFO) << ". . . . color, soldier is on another craft";
 			color = Palette::blockOffset(15)+6;
-		}
 		else // craft==0
-		{
 			//Log(LOG_INFO) << ". . . . color, soldier is not on a craft";
 			color = Palette::blockOffset(13)+10;
-		}
 
 		_lstSoldiers->setRowColor(row, color);
 		// kL_end.
@@ -279,7 +262,10 @@ void CraftArmorState::lstSoldiersClick(Action* action) // kL
 		(s->getCraft()
 			&& s->getCraft()->getStatus() == "STR_OUT"))
 	{
-		_game->pushState(new SoldierArmorState(_game, _base, _lstSoldiers->getSelectedRow()));
+		_game->pushState(new SoldierArmorState(
+											_game,
+											_base,
+											_lstSoldiers->getSelectedRow()));
 	}
 }
 
@@ -303,15 +289,11 @@ void CraftArmorState::lstItemsLeftArrowClick_Armor(Action* action)
 				_base->getSoldiers()->at(row - 1) = s;
 
 				if (row != _lstSoldiers->getScroll())
-				{
 					SDL_WarpMouse(
 							static_cast<Uint16>(action->getXMouse()),
 							static_cast<Uint16>(action->getYMouse() - static_cast<int>(8.0 * action->getYScale())));
-				}
 				else
-				{
 					_lstSoldiers->scrollUp(false);
-				}
 			}
 			else
 			{
@@ -348,15 +330,11 @@ void CraftArmorState::lstItemsRightArrowClick_Armor(Action* action)
 				_base->getSoldiers()->at(row + 1) = s;
 
 				if (row != 15 + _lstSoldiers->getScroll())
-				{
 					SDL_WarpMouse(
 							static_cast<Uint16>(action->getXMouse()),
 							static_cast<Uint16>(action->getYMouse() + static_cast<int>(8.0 * action->getYScale())));
-				}
 				else
-				{
 					_lstSoldiers->scrollDown(false);
-				}
 			}
 			else
 			{

@@ -102,7 +102,8 @@ BattlescapeGenerator::BattlescapeGenerator(Game* game)
 		_alienItemLevel(0),
 		_craftX(0),
 		_craftY(0),
-		_tankPos(0) // kL
+		_tankPos(0), // kL
+		_baseCraftEquip(false) // kL
 {
 	//Log(LOG_INFO) << "Create BattlescapeGenerator";
 	_allowAutoLoadout = !Options::getBool("disableAutoEquip");
@@ -154,8 +155,11 @@ void BattlescapeGenerator::setWorldTexture(int texture)
  */
 void BattlescapeGenerator::setWorldShade(int shade)
 {
-	if (shade > 15) shade = 15;
-	if (shade < 0) shade = 0;
+	if (shade > 15)
+		shade = 15;
+
+	if (shade < 0)
+		shade = 0;
 
 	_worldShade = shade;
 }
@@ -224,7 +228,7 @@ void BattlescapeGenerator::nextStage()
 			(*j)->getTile()->setUnit(0);
 
 		(*j)->setTile(0);
-		(*j)->setPosition(Position(-1, -1, -1), false);
+		(*j)->setPosition(Position(-1,-1,-1), false);
 	}
 
 	while (_game->getSavedGame()->getSavedBattle()->getSide() != FACTION_PLAYER)
@@ -445,33 +449,38 @@ void BattlescapeGenerator::run()
 void BattlescapeGenerator::deployXCOM()
 {
 	//Log(LOG_INFO) << "BattlescapeGenerator::deployXCOM()";
-//kL_below	if (_craft != 0) _base = _craft->getBase();
+//kL	if (_craft != 0) _base = _craft->getBase();
 
 	RuleInventory* ground = _game->getRuleset()->getInventory("STR_GROUND");
 
 	if (_craft != 0)
 	{
-		_base = _craft->getBase(); // kL_above
+		_base = _craft->getBase();
 
-		// add all vehicles that are in the craft - a vehicle is actually an item,
-		// which you will never see as it is converted to a unit;
-		// however the item itself becomes the weapon it "holds".
-		for (std::vector<Vehicle*>::iterator
-				i = _craft->getVehicles()->begin();
-				i != _craft->getVehicles()->end();
-				++i)
+		if (!_baseCraftEquip) // kL
 		{
-			//Log(LOG_INFO) << ". . isCraft: addXCOMVehicle " << (int)*i;
+			//Log(LOG_INFO) << ". craft VALID";
 
-			BattleUnit* unit = addXCOMVehicle(*i);
-			if (unit
-				&& !_save->getSelectedUnit())
+			// add all vehicles that are in the craft - a vehicle is actually an item,
+			// which you will never see as it is converted to a unit;
+			// however the item itself becomes the weapon it "holds".
+			for (std::vector<Vehicle*>::iterator
+					i = _craft->getVehicles()->begin();
+					i != _craft->getVehicles()->end();
+					++i)
 			{
-				_save->setSelectedUnit(unit);
+				//Log(LOG_INFO) << ". . isCraft: addXCOMVehicle " << (int)*i;
+				BattleUnit* unit = addXCOMVehicle(*i);
+				if (unit
+					&& !_save->getSelectedUnit())
+				{
+					_save->setSelectedUnit(unit);
+				}
 			}
 		}
 	}
-	else if (_base != 0)
+	else if (_base != 0
+		&& !_baseCraftEquip) // kL
 	{
 		// add vehicles that are in the base inventory
 		for (std::vector<Vehicle*>::iterator
@@ -480,7 +489,6 @@ void BattlescapeGenerator::deployXCOM()
 				++i)
 		{
 			//Log(LOG_INFO) << ". . isBase: addXCOMVehicle " << (int)*i;
-
 			BattleUnit* unit = addXCOMVehicle(*i);
 			if (unit
 				&& !_save->getSelectedUnit())
@@ -504,7 +512,6 @@ void BattlescapeGenerator::deployXCOM()
 					|| (*i)->getCraft()->getStatus() != "STR_OUT")))
 		{
 			//Log(LOG_INFO) << ". . addXCOMUnit " << (*i)->getId();
-
 			BattleUnit* unit = addXCOMUnit(new BattleUnit(
 														*i,
 														FACTION_PLAYER));
@@ -534,7 +541,6 @@ void BattlescapeGenerator::deployXCOM()
 			(*i)->setVisible(false);
 		}
 	}
-
 	//Log(LOG_INFO) << ". setUnit(s) DONE";
 
 	if (_craft != 0) // add items that are in the craft
@@ -545,19 +551,21 @@ void BattlescapeGenerator::deployXCOM()
 				i != _craft->getItems()->getContents()->end();
 				++i)
 		{
+			//Log(LOG_INFO) << ". . . *i = _craft->getItems()->getContents()";
 			for (int
 					count = 0;
 					count < i->second;
 					count++)
 			{
+				//Log(LOG_INFO) << ". . . count+";
 				_craftInventoryTile->addItem(
 											new BattleItem(
 														_game->getRuleset()->getItem(i->first),
 														_save->getCurrentItemId()),
 											ground);
+				//Log(LOG_INFO) << ". . . count cycle";
 			}
 		}
-
 		//Log(LOG_INFO) << ". . addCraftItems DONE";
 	}
 	else // add items that are in the base
@@ -592,14 +600,14 @@ void BattlescapeGenerator::deployXCOM()
 				std::map<std::string, int>::iterator rem = i;
 
 				++i;
-				_base->getItems()->removeItem(rem->first, rem->second);
+				_base->getItems()->removeItem(
+											rem->first,
+											rem->second);
 			}
 			else
-			{
 				++i;
-			}
 		}
-		//Log(LOG_INFO) << ". . addBaseBaseItems DONE ; add BaseCraftItems";
+		//Log(LOG_INFO) << ". . addBaseBaseItems DONE, add BaseCraftItems";
 
 		// add items from crafts in base
 		for (std::vector<Craft*>::iterator
@@ -628,10 +636,8 @@ void BattlescapeGenerator::deployXCOM()
 				}
 			}
 		}
-
 		//Log(LOG_INFO) << ". . addBaseCraftItems DONE";
 	}
-
 	//Log(LOG_INFO) << ". addItem(s) DONE";
 
 
@@ -641,18 +647,20 @@ void BattlescapeGenerator::deployXCOM()
 	// the inventory-tile is cleaned up at the end of this function....
 	//
 	// equip soldiers based on equipment-layout
+	//Log(LOG_INFO) << ". placeItemByLayout Start";
 	for (std::vector<BattleItem*>::iterator
 			i = _craftInventoryTile->getInventory()->begin();
 			i != _craftInventoryTile->getInventory()->end();
 			++i)
 	{
 		//Log(LOG_INFO) << ". placeItemByLayout(*item)";
-
 		placeItemByLayout(*i);
 	}
+	//Log(LOG_INFO) << ". placeItemByLayout all DONE";
 
 	// auto-equip soldiers (only soldiers *without* layout)
 //	if (!Options::getBool("disableAutoEquip"))
+//	if (_allowAutoLoadout) // kL
 /*kL	{
 		for (int
 				pass = 0;
@@ -729,18 +737,17 @@ void BattlescapeGenerator::deployXCOM()
 	} */
 	// kL_note: no more auto-equip, Lolz.
 
-
-	// kL: Think I have to load ground-weapons before setting ground-tile items as xCom property..... nah.
+	//Log(LOG_INFO) << ". Load Weapons...";
 	for (std::vector<BattleItem*>::iterator
 			i = _craftInventoryTile->getInventory()->begin();
 			i != _craftInventoryTile->getInventory()->end();
 			++i)
 	{
-		//Log(LOG_INFO) << ". LOAD WEAPONS HERE";
+		//Log(LOG_INFO) << ". loading.";
 		if ((*i)->needsAmmo())
 			loadGroundWeapon(*i);
 	}
-
+	//Log(LOG_INFO) << ". loading DONE";
 
 	// clean up moved items
 	for (std::vector<BattleItem*>::iterator
@@ -759,7 +766,6 @@ void BattlescapeGenerator::deployXCOM()
 		else
 			i = _craftInventoryTile->getInventory()->erase(i);
 	}
-
 	//Log(LOG_INFO) << "BattlescapeGenerator::deployXCOM() EXIT";
 }
 
@@ -878,13 +884,17 @@ BattleUnit* BattlescapeGenerator::addXCOMUnit(BattleUnit* unit)
 		}
 	}
 	else if (_craft // Wb.140220: Transport craft deployments (Lightning & Avenger)
-		&& !_craft->getRules()->getDeployment().empty())
+		&& !_craft->getRules()->getDeployment().empty()
+//		&& !_save->getBattleState()) // kL! Or CTD if called from BaseCraftEquip->Inventory. -> not work!
+		&& !_baseCraftEquip) // kL
 	{
+		//Log(LOG_INFO) << "addXCOMUnit() - use Deployment rule";
 		for (std::vector<std::vector<int> >::const_iterator
 				i = _craft->getRules()->getDeployment().begin();
 				i != _craft->getRules()->getDeployment().end();
 				++i)
 		{
+			//Log(LOG_INFO) << ". getDeployment()+";
 			Position pos = Position(
 								(*i)[0] + (_craftX * 10),
 								(*i)[1] + (_craftY * 10),
@@ -893,10 +903,12 @@ BattleUnit* BattlescapeGenerator::addXCOMUnit(BattleUnit* unit)
 
 			if (canPlaceXCOMUnit(_save->getTile(pos)))
 			{
+				//Log(LOG_INFO) << ". canPlaceXCOMUnit()";
 				if (_save->setUnitPosition(
 										unit,
 										pos))
 				{
+					//Log(LOG_INFO) << ". setUnitPosition()";
 					_save->getUnits()->push_back(unit);
 
 					unit->setDirection((*i)[3]); // kL
@@ -909,6 +921,7 @@ BattleUnit* BattlescapeGenerator::addXCOMUnit(BattleUnit* unit)
 	}
 	else // kL_note: mission w/ transport craft that does not have ruleset Deployments.
 	{
+		//Log(LOG_INFO) << "addXCOMUnit() - NO Deployment rule";
 		_tankPos = 0;
 
 		for (int // kL_note: iterate through *all* tiles
@@ -1840,9 +1853,7 @@ void BattlescapeGenerator::generateMap()
 						++j)
 				{
 					if (landingzone[_craftX + i][_craftY + j])
-					{
 						placed = false; // whoops the ufo is already here, try again
-					}
 				}
 			}
 
@@ -1985,9 +1996,9 @@ void BattlescapeGenerator::generateMap()
 					++j)
 			{
 				if (blocks[i][j] == 0)
-				{
-					blocks[i][j] = _terrain->getRandomMapBlock(10, MT_DIRT);
-				}
+					blocks[i][j] = _terrain->getRandomMapBlock(
+															10,
+															MT_DIRT);
 			}
 		}
 
@@ -2075,7 +2086,10 @@ void BattlescapeGenerator::generateMap()
 			&& !landingzone[randX][randY + 1]
 			&& !landingzone[randX + 1][randY + 1])
 		{
-			blocks[randX][randY] = _terrain->getRandomMapBlock(20, MT_DEFAULT, true);
+			blocks[randX][randY] = _terrain->getRandomMapBlock(
+															20,
+															MT_DEFAULT,
+															true);
 			blocksToDo--;
 
 			// mark mapblocks as used
@@ -2106,17 +2120,13 @@ void BattlescapeGenerator::generateMap()
 				blocks[x][y] = _terrain->getRandomMapBlock(10, MT_CROSSING);
 			}
 			else
-			{
 				blocks[x][y] = _terrain->getRandomMapBlock(10, landingzone[x][y]? MT_LANDINGZONE: MT_DEFAULT);
-			}
 
 			blocksToDo--;
 			x++;
 		}
 		else
-		{
 			x++;
-		}
 
 		if (x >= _mapsize_x / 10) // reach the end
 		{
@@ -2136,9 +2146,7 @@ void BattlescapeGenerator::generateMap()
 		(*i)->loadData();
 
 		if (_game->getRuleset()->getMCDPatch((*i)->getName()))
-		{
 			_game->getRuleset()->getMCDPatch((*i)->getName())->modifyData(*i);
-		}
 
 		_save->getMapDataSets()->push_back(*i);
 
@@ -2403,9 +2411,7 @@ void BattlescapeGenerator::generateMap()
 		{
 			(*i)->loadData();
 			if (_game->getRuleset()->getMCDPatch((*i)->getName()))
-			{
 				_game->getRuleset()->getMCDPatch((*i)->getName())->modifyData(*i);
-			}
 
 			_save->getMapDataSets()->push_back(*i);
 
@@ -2451,9 +2457,7 @@ void BattlescapeGenerator::generateMap()
 			(*i)->loadData();
 
 			if (_game->getRuleset()->getMCDPatch((*i)->getName()))
-			{
 				_game->getRuleset()->getMCDPatch((*i)->getName())->modifyData(*i);
-			}
 
 			_save->getMapDataSets()->push_back(*i);
 		}
@@ -2643,14 +2647,19 @@ int BattlescapeGenerator::loadMAP(
 				part < 4;
 				part++)
 		{
-			terrainObjectID = (int)((unsigned char)value[part]);
+//kL			terrainObjectID = (int)((unsigned char)value[part]);
+			terrainObjectID = static_cast<int>((static_cast<unsigned char>(value[part]))); // kL
 			if (terrainObjectID > 0)
 			{
 				int mapDataSetID = mapDataSetOffset;
 				int mapDataID = terrainObjectID;
 				MapData* md = terrain->getMapData(&mapDataID, &mapDataSetID);
 
-				_save->getTile(Position(x, y, z))->setMapData(md, mapDataID, mapDataSetID, part);
+				_save->getTile(Position(x, y, z))->setMapData(
+															md,
+															mapDataID,
+															mapDataSetID,
+															part);
 			}
 
 			// if the part is empty and it's not a floor, remove it;
@@ -2658,7 +2667,7 @@ int BattlescapeGenerator::loadMAP(
 			if (terrainObjectID == 0
 				&& part > 0)
 			{
-				_save->getTile(Position(x, y, z))->setMapData(0, -1, -1, part);
+				_save->getTile(Position(x, y, z))->setMapData(0,-1,-1, part);
 			}
 				// kL_note: might want to change this to how it was in UFO:orig.
 		}
@@ -2745,9 +2754,7 @@ void BattlescapeGenerator::loadRMP(
 			{
 				int connectID = static_cast<int>(static_cast<signed char>(value[(j * 3) + 4]));
 				if (connectID > -1)
-				{
 					connectID += nodeOffset;
-				}
 
 				node->getNodeLinks()->push_back(connectID);
 			}
@@ -2881,7 +2888,9 @@ bool BattlescapeGenerator::placeUnitNearFriend(BattleUnit* unit)
  * @param lat Latitude.
  * @return Pointer to ruleterrain.
  */
-RuleTerrain* BattlescapeGenerator::getTerrain(int tex, double lat)
+RuleTerrain* BattlescapeGenerator::getTerrain(
+		int tex,
+		double lat)
 {
 	RuleTerrain* t = 0;
 
@@ -2919,6 +2928,9 @@ RuleTerrain* BattlescapeGenerator::getTerrain(int tex, double lat)
 */
 void BattlescapeGenerator::runInventory(Craft* craft)
 {
+	//Log(LOG_INFO) << "BattlescapeGenerator::runInventory()";
+	_baseCraftEquip = true;
+
 	// we need to fake a map for soldier placement
 	int soldiers = craft->getNumSoldiers();
 
@@ -2926,7 +2938,10 @@ void BattlescapeGenerator::runInventory(Craft* craft)
 	_mapsize_y = 1;
 	_mapsize_z = 1;
 
-	_save->initMap(_mapsize_x, _mapsize_y, _mapsize_z);
+	_save->initMap(
+				_mapsize_x,
+				_mapsize_y,
+				_mapsize_z);
 
 	MapDataSet* set = new MapDataSet("dummy");
 	MapData* data = new MapData(set);
@@ -2953,11 +2968,15 @@ void BattlescapeGenerator::runInventory(Craft* craft)
 	}
 
 	// ok now generate the battleitems for inventory
+	//Log(LOG_INFO) << ". setCraft()";
 	setCraft(craft);
+	//Log(LOG_INFO) << ". setCraft() DONE, deployXCOM()";
 	deployXCOM();
+	//Log(LOG_INFO) << ". deployXCOM() DONE";
 
 	delete data;
 	delete set;
+	//Log(LOG_INFO) << "BattlescapeGenerator::runInventory() EXIT";
 }
 
 }

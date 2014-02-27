@@ -74,7 +74,7 @@ Game::Game(const std::string& title)
 		_init(false),
 		_mouseActive(true)
 {
-	Log(LOG_INFO) << "Create Game";
+	//Log(LOG_INFO) << "Create Game";
 
 	// Initialize SDL
 	if (SDL_Init(SDL_INIT_VIDEO) < 0)
@@ -170,7 +170,7 @@ Game::Game(const std::string& title)
  */
 Game::~Game()
 {
-//	Log(LOG_INFO) << "Delete Game";
+	//Log(LOG_INFO) << "Delete Game";
 
 	Mix_HaltChannel(-1);
 

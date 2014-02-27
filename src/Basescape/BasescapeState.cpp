@@ -319,14 +319,24 @@ void BasescapeState::init()
 		if ((*i)->getRules()->getAliens() > 0)
 			hasAlienCont = true;
 
-		if ((*i)->getRules()->getLaboratories() > 0)
+
+		if ((*i)->getRules()->getLaboratories() > 0
+			&& (*i)->getBuildTime() == 0)
+		{
 			hasLabs = true;
+		}
 
-		if ((*i)->getRules()->getWorkshops() > 0)
+		if ((*i)->getRules()->getWorkshops() > 0
+			&& (*i)->getBuildTime() == 0)
+		{
 			hasProd = true;
+		}
 
-		if ((*i)->getRules()->getStorage() > 0)
+		if ((*i)->getRules()->getStorage() > 0
+			&& (*i)->getBuildTime() == 0)
+		{
 			hasStores = true;
+		}
 	}
 
 	_btnSoldiers->setVisible(hasQuarters);

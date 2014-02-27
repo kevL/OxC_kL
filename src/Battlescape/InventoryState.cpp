@@ -34,6 +34,7 @@
 #include "../Engine/Game.h"
 #include "../Engine/InteractiveSurface.h"
 #include "../Engine/Language.h"
+#include "../Engine/Logger.h"
 #include "../Engine/Options.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Surface.h"
@@ -311,9 +312,7 @@ void InventoryState::init()
 	{
 		Surface* armorSurface = _game->getResourcePack()->getSurface(unit->getArmor()->getSpriteInventory());
 		if (armorSurface)
-		{
 			armorSurface->blit(_soldier);
-		}
 	}
 
 	updateStats();
@@ -453,10 +452,12 @@ void InventoryState::btnOkClick(Action*)
 	{
 		saveEquipmentLayout();
 
-		// kL: This for early exit because access is via CraftEquip screen.
+		// kL_begin: This for early exit because access is via CraftEquip screen.
 		if (_parent == 0)
-			//Log(LOG_INFO) << ". early out <- CraftEquip";
+		{
+			//Log(LOG_INFO) << ". early out <- CraftEquip ( no BattlescapeState )";
 			return;
+		} // kL_end.
 
 		_battleGame->randomizeItemLocations(_battleGame->getSelectedUnit()->getTile());
 		_battleGame->resetUnitTiles();
@@ -665,13 +666,9 @@ void InventoryState::handle(Action* action)
 	if (action->getDetails()->type == SDL_MOUSEBUTTONDOWN)
 	{
 		if (action->getDetails()->button.button == SDL_BUTTON_X1)
-		{
 			btnNextClick(action);
-		}
 		else if (action->getDetails()->button.button == SDL_BUTTON_X2)
-		{
 			btnPrevClick(action);
-		}
 	}
 #endif
 }
