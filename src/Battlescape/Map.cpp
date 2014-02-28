@@ -119,11 +119,9 @@ Map::Map(
 		_projectile(0),
 		_projectileInFOV(false),
 		_explosionInFOV(false),
-		_launch(false),
 		_visibleMapHeight(visibleMapHeight),
 		_unitDying(false),
 		_reveal(0)
-//		_animUp(true) // kL
 {
 	//Log(LOG_INFO) << "Create Map";
 	_previewSetting = Options::getInt("battleNewPreviewPath");
@@ -468,16 +466,16 @@ void Map::drawTerrain(Surface* surface)
 
 		if (_projectileInFOV)
 		{
-			if (_launch)
+/*			if (_launch)
 			{
-				_launch = false;
+*/				_launch = false;
 
 /*kL				if (bulletPositionScreen.x < 0
 						|| bulletPositionScreen.x > surface->getWidth()
 						|| bulletPositionScreen.y < 0
 						|| bulletPositionScreen.y > _visibleMapHeight)
 					&& _projectileInFOV) */
-				if (bulletPositionScreen.x < 24									// kL, keep these in from the edges.
+/*				if (bulletPositionScreen.x < 24									// kL, keep these in from the edges.
 						|| bulletPositionScreen.x > surface->getWidth() - 24	// kL
 						|| bulletPositionScreen.y < 24							// kL
 						|| bulletPositionScreen.y > _visibleMapHeight - 24)		// kL
@@ -488,9 +486,9 @@ void Map::drawTerrain(Surface* surface)
 													bulletLowY,
 													bulletHighZ), false);
 				}
-			}
-			else // kL_note: and now along the projectile's trajectory.
-			{
+			} */
+//			else // kL_note: and now along the projectile's trajectory.
+//			{
 				Position newCam = _camera->getMapOffset();
 				if (newCam.z != bulletHighZ) // switch level
 				{
@@ -514,27 +512,31 @@ void Map::drawTerrain(Surface* surface)
 					{
 						_camera->jumpXY(
 								surface->getWidth() - 16,
-								_visibleMapHeight / 2 - bulletPositionScreen.y);
+//								_visibleMapHeight / 2 - bulletPositionScreen.y
+								0);
 						enough = false;
 					}
 					else if (bulletPositionScreen.x > surface->getWidth() - 8)	// projectile approaches right edge of screen
 					{
 						_camera->jumpXY(
 								-surface->getWidth() + 16,
-								_visibleMapHeight / 2 - bulletPositionScreen.y);
+//								_visibleMapHeight / 2 - bulletPositionScreen.y
+								0);
 						enough = false;
 					}
 					else if (bulletPositionScreen.y < 8)						// projectile approaches top of screen
 					{
 						_camera->jumpXY(
-								surface->getWidth() / 2 - bulletPositionScreen.x,
+//								surface->getWidth() / 2 - bulletPositionScreen.x,
+								0,
 								_visibleMapHeight - 20);
 						enough = false;
 					}
 					else if (bulletPositionScreen.y > _visibleMapHeight - 8)	// projectile approaches bottom of screen
 					{
 						_camera->jumpXY(
-								surface->getWidth() / 2 - bulletPositionScreen.x,
+//								surface->getWidth() / 2 - bulletPositionScreen.x,
+								0,
 								-_visibleMapHeight + 20);
 						enough = false;
 					}
@@ -542,8 +544,9 @@ void Map::drawTerrain(Surface* surface)
 					_camera->convertVoxelToScreen(
 											_projectile->getPosition(),
 											&bulletPositionScreen);
-				} while (!enough);
-			}
+				}
+				while (!enough);
+//			}
 		}
 	}
 
@@ -1883,7 +1886,6 @@ void Map::cacheUnit(BattleUnit* unit)
 void Map::setProjectile(Projectile* projectile)
 {
 	_projectile = projectile;
-	_launch = true;
 }
 
 /**

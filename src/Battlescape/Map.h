@@ -70,9 +70,7 @@ private:
 	static const int BULLET_SPRITES		= 35;
 
 	bool
-//		_animUp, // kL
 		_explosionInFOV,
-		_launch,
 		_projectileInFOV,
 		_unitDying;
 	int
