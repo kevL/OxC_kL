@@ -336,9 +336,7 @@ TransferItemsState::TransferItemsState(
 			{
 				std::wstring trItem = (*j)->getName(_game->getLanguage());
 				if (trItem == item)
-				{
 					tQty += (*j)->getQuantity();
-				}
 			}
 
 			// Add qty of items & vehicles on transport craft to Transfers, _baseTo screen stock.
@@ -356,9 +354,7 @@ TransferItemsState::TransferItemsState(
 					{
 						std::wstring tranItem = tr(t->first);
 						if (tranItem == item)
-						{
 							tQty += t->second;
-						}
 					}
 				}
 
@@ -371,9 +367,7 @@ TransferItemsState::TransferItemsState(
 					{
 						std::wstring tranTank = tr((*v)->getRules()->getType());
 						if (tranTank == item)
-						{
 							tQty++;
-						}
 
 						if ((*v)->getAmmo() != 255)
 						{
@@ -382,9 +376,7 @@ TransferItemsState::TransferItemsState(
 
 							std::wstring tranTank_a = tr(ammoRule->getType());
 							if (tranTank_a == item)
-							{
 								tQty += (*v)->getAmmo();
-							}
 						}
 					}
 				}
@@ -614,9 +606,7 @@ void TransferItemsState::reinit()
 			{
 				std::wstring trItem = (*j)->getName(_game->getLanguage());
 				if (trItem == item)
-				{
 					tQty += (*j)->getQuantity();
-				}
 			}
 
 			// Add qty of items & vehicles on transport craft to Transfers, _baseTo screen stock.
@@ -634,9 +624,7 @@ void TransferItemsState::reinit()
 					{
 						std::wstring tranItem = tr(t->first);
 						if (tranItem == item)
-						{
 							tQty += t->second;
-						}
 					}
 				}
 
@@ -649,9 +637,7 @@ void TransferItemsState::reinit()
 					{
 						std::wstring tranTank = tr((*v)->getRules()->getType());
 						if (tranTank == item)
-						{
 							tQty++;
-						}
 
 						if ((*v)->getAmmo() != 255)
 						{
@@ -660,9 +646,7 @@ void TransferItemsState::reinit()
 
 							std::wstring tranTank_a = tr(ammoRule->getType());
 							if (tranTank_a == item)
-							{
 								tQty += (*v)->getAmmo();
-							}
 						}
 					}
 				}

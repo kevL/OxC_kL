@@ -1405,6 +1405,7 @@ struct SetRetaliationStatus
 void GeoscapeState::time10Minutes()
 {
 	//Log(LOG_INFO) << "GeoscapeState::time10Minutes()";
+	int diff = static_cast<int>(_game->getSavedGame()->getDifficulty());
 
 	for (std::vector<Base*>::iterator
 			b = _game->getSavedGame()->getBases()->begin();
@@ -1449,7 +1450,7 @@ void GeoscapeState::time10Minutes()
 
 						if (targetDistance < craftRadar)
 						{
-							int chance = 50 - static_cast<int>(targetDistance / craftRadar * 50.0);
+							int chance = 100 - (diff * 10) - static_cast<int>(targetDistance / craftRadar * 50.0);
 							//Log(LOG_INFO) << ". . craft in Range, chance = " << chance;
 
 							if (RNG::percent(chance))
@@ -1464,7 +1465,6 @@ void GeoscapeState::time10Minutes()
 		}
 	}
 
-	int diff = static_cast<int>(_game->getSavedGame()->getDifficulty());
 	if (Options::getBool("aggressiveRetaliation"))
 	{
 		// Detect as many bases as possible.

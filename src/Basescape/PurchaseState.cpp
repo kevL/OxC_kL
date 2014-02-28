@@ -80,9 +80,8 @@ PurchaseState::PurchaseState(
 		_itemOffset(0)
 {
 	_changeValueByMouseWheel = Options::getInt("changeValueByMouseWheel");
-	_allowChangeListValuesByMouseWheel =
-							Options::getBool("allowChangeListValuesByMouseWheel")
-								&& _changeValueByMouseWheel;
+	_allowChangeListValuesByMouseWheel = Options::getBool("allowChangeListValuesByMouseWheel")
+										&& _changeValueByMouseWheel;
 
 
 	_window			= new Window(this, 320, 200, 0, 0);

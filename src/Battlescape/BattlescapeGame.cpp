@@ -1155,8 +1155,8 @@ void BattlescapeGame::setupCursor()
 bool BattlescapeGame::playableUnitSelected()
 {
 	return _save->getSelectedUnit() != 0
-			&& (_save->getSide() == FACTION_PLAYER
-				|| _save->getDebugMode());
+		&& (_save->getSide() == FACTION_PLAYER
+			|| _save->getDebugMode());
 }
 
 /**
@@ -1170,12 +1170,14 @@ void BattlescapeGame::handleState()
 		if (_states.front() == 0)
 		{
 			_states.pop_front();
+
 			endTurn();
 
 			return;
 		}
 		else
 			_states.front()->think();
+
 
 //kL		getMap()->invalidate(); // redraw map
 		getMap()->draw(); // kL, old code!! -> Map::draw()

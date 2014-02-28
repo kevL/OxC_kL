@@ -33,12 +33,16 @@
 
 #include "../Resource/ResourcePack.h"
 
+#include "../Ruleset/RuleCraft.h"
 #include "../Ruleset/RuleItem.h"
 #include "../Ruleset/Ruleset.h"
 
 #include "../Savegame/Base.h"
+#include "../Savegame/Craft.h"
 #include "../Savegame/ItemContainer.h"
 #include "../Savegame/SavedGame.h"
+#include "../Savegame/Transfer.h"
+#include "../Savegame/Vehicle.h"
 
 
 namespace OpenXcom
@@ -61,14 +65,14 @@ StoresMatrixState::StoresMatrixState(
 	_txtBaseLabel	= new Text(80, 9, 224, 8);
 
 	_txtItem		= new Text(100, 9, 16, 25);
-	_txtBase_1		= new Text(22, 9, 116, 25);
-	_txtBase_2		= new Text(22, 9, 138, 25);
-	_txtBase_3		= new Text(22, 9, 160, 25);
-	_txtBase_4		= new Text(22, 9, 182, 25);
-	_txtBase_5		= new Text(22, 9, 204, 25);
-	_txtBase_6		= new Text(22, 9, 226, 25);
-	_txtBase_7		= new Text(22, 9, 248, 25);
-	_txtBase_8		= new Text(22, 9, 270, 25);
+	_txtBase_1		= new Text(21, 9, 116, 25);
+	_txtBase_2		= new Text(21, 9, 138, 25);
+	_txtBase_3		= new Text(21, 9, 160, 25);
+	_txtBase_4		= new Text(21, 9, 182, 25);
+	_txtBase_5		= new Text(21, 9, 204, 25);
+	_txtBase_6		= new Text(21, 9, 226, 25);
+	_txtBase_7		= new Text(21, 9, 248, 25);
+	_txtBase_8		= new Text(21, 9, 270, 25);
 
 	_lstMatrix		= new TextList(285, 136, 16, 36);
 
@@ -175,26 +179,6 @@ StoresMatrixState::StoresMatrixState(
 			i != items.end();
 			++i)
 	{
-		ss1.str(L"");
-		ss2.str(L"");
-		ss3.str(L"");
-		ss4.str(L"");
-		ss5.str(L"");
-		ss6.str(L"");
-		ss7.str(L"");
-		ss8.str(L"");
-
-		qty[1] = 0;
-		qty[2] = 0;
-		qty[3] = 0;
-		qty[4] = 0;
-		qty[5] = 0;
-		qty[6] = 0;
-		qty[7] = 0;
-		qty[8] = 0;
-
-		iter = 0;
-
 		RuleItem* rule = _game->getRuleset()->getItem(*i);
 		isAmmo = false;
 
@@ -208,13 +192,82 @@ StoresMatrixState::StoresMatrixState(
 			item.insert(0, L"  ");
 		}
 
+		ss1.str(L"");	//qty[1] = 0;
+		ss2.str(L"");	//qty[2] = 0;
+		ss3.str(L"");	//qty[3] = 0;
+		ss4.str(L"");	//qty[4] = 0;
+		ss5.str(L"");	//qty[5] = 0;
+		ss6.str(L"");	//qty[6] = 0;
+		ss7.str(L"");	//qty[7] = 0;
+		ss8.str(L"");	//qty[8] = 0;
+
+		iter = 0;
+
 		for (std::vector<Base*>::const_iterator
 				b = _game->getSavedGame()->getBases()->begin();
 				b != _game->getSavedGame()->getBases()->end();
 				++b)
 		{
 			++iter;
+
 			qty[iter] = (*b)->getItems()->getItem(*i);
+
+			// Add qty of items in transit to theMatrix.
+			std::wstring item = tr(*i);
+
+			for (std::vector<Transfer*>::const_iterator
+					t = (*b)->getTransfers()->begin();
+					t != (*b)->getTransfers()->end();
+					++t)
+			{
+				std::wstring trItem = (*t)->getName(_game->getLanguage());
+				if (trItem == item)
+					qty[iter] += (*t)->getQuantity();
+			}
+
+			// Add qty of items & vehicles on transport craft to theMatrix.
+			for (std::vector<Craft*>::const_iterator
+					c = (*b)->getCrafts()->begin();
+					c != (*b)->getCrafts()->end();
+					++c)
+			{
+				if ((*c)->getRules()->getSoldiers() > 0) // is transport craft
+				{
+					for (std::map<std::string, int>::iterator
+							e = (*c)->getItems()->getContents()->begin();
+							e != (*c)->getItems()->getContents()->end();
+							++e)
+					{
+						std::wstring crItem = tr(e->first);
+						if (crItem == item)
+							qty[iter] += e->second;
+					}
+				}
+
+				if ((*c)->getRules()->getVehicles() > 0) // is transport craft capable of vehicles
+				{
+					for (std::vector<Vehicle*>::const_iterator
+							v = (*c)->getVehicles()->begin();
+							v != (*c)->getVehicles()->end();
+							++v)
+					{
+						std::wstring crVehic = tr((*v)->getRules()->getType());
+						if (crVehic == item)
+							++qty[iter];
+
+						if ((*v)->getAmmo() != 255)
+						{
+							RuleItem* tankRule = _game->getRuleset()->getItem((*v)->getRules()->getType());
+							RuleItem* ammoRule = _game->getRuleset()->getItem(tankRule->getCompatibleAmmo()->front());
+
+							std::wstring crVehic_a = tr(ammoRule->getType());
+
+							if (crVehic_a == item)
+								qty[iter] += (*v)->getAmmo();
+						}
+					}
+				}
+			}
 		}
 
 		if (qty[1] + qty[2] + qty[3] + qty[4] + qty[5] + qty[6] + qty[7] + qty[8] > 0)

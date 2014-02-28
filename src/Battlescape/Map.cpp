@@ -126,7 +126,6 @@ Map::Map(
 //		_animUp(true) // kL
 {
 	//Log(LOG_INFO) << "Create Map";
-
 	_previewSetting = Options::getInt("battleNewPreviewPath");
 
 	// turn everything on because we want to see the markers.
@@ -248,7 +247,6 @@ void Map::think()
 void Map::draw()
 {
 	//Log(LOG_INFO) << "Map::draw()";
-
 	// kL_note: removed setting this in BattlescapeGame::handleState().
 /*kL	if (!_redraw)
 		return; */
@@ -1593,7 +1591,8 @@ void Map::setSelectorPosition(
 		oldX = _selectorX,
 		oldY = _selectorY;
 
-	if (!mx && !my) return; // cursor is offscreen
+	if (!mx && !my)
+		return; // cursor is offscreen
 
 	_camera->convertScreenToMap(
 								mx,
@@ -1601,7 +1600,8 @@ void Map::setSelectorPosition(
 								&_selectorX,
 								&_selectorY);
 
-	if (oldX != _selectorX || oldY != _selectorY)
+	if (oldX != _selectorX
+		|| oldY != _selectorY)
 	{
 		_redraw = true;
 	}
@@ -1674,19 +1674,16 @@ void Map::calculateWalkingOffset(
 	{
 		if (phase < midphase)
 		{
-			int fromLevel = getTerrainLevel(unit->getPosition(), size),
+			int
+				fromLevel = getTerrainLevel(unit->getPosition(), size),
 				toLevel = getTerrainLevel(unit->getDestination(), size);
 
 			if (unit->getPosition().z > unit->getDestination().z)
-			{
 				// going down a level, so toLevel 0 becomes +24, -8 becomes  16
 				toLevel += 24*(unit->getPosition().z - unit->getDestination().z);
-			}
 			else if (unit->getPosition().z < unit->getDestination().z)
-			{
 				// going up a level, so toLevel 0 becomes -24, -8 becomes -16
 				toLevel = -24*(unit->getDestination().z - unit->getPosition().z) + abs(toLevel);
-			}
 
 			offset->y += ((fromLevel * (endphase - phase)) / endphase) + ((toLevel * phase) / endphase);
 		}
@@ -1694,27 +1691,22 @@ void Map::calculateWalkingOffset(
 		{
 			// from phase 4 onwards the unit behind the scenes already is on the destination tile
 			// we have to get its last position to calculate the correct offset
-			int fromLevel = getTerrainLevel(unit->getLastPosition(), size);
-			int toLevel = getTerrainLevel(unit->getDestination(), size);
+			int
+				fromLevel = getTerrainLevel(unit->getLastPosition(), size),
+				toLevel = getTerrainLevel(unit->getDestination(), size);
 
 			if (unit->getLastPosition().z > unit->getDestination().z)
-			{
 				// going down a level, so fromLevel 0 becomes -24, -8 becomes -32
 				fromLevel -= 24*(unit->getLastPosition().z - unit->getDestination().z);
-			}
 			else if (unit->getLastPosition().z < unit->getDestination().z)
-			{
 				// going up a level, so fromLevel 0 becomes +24, -8 becomes 16
 				fromLevel = 24*(unit->getDestination().z - unit->getLastPosition().z) - abs(fromLevel);
-			}
 
 			offset->y += ((fromLevel * (endphase - phase)) / endphase) + ((toLevel * phase) / endphase);
 		}
 	}
 	else
-	{
 		offset->y += getTerrainLevel(unit->getPosition(), size);
-	}
 }
 
 /**
