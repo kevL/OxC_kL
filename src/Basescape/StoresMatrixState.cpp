@@ -1,0 +1,267 @@
+/*
+ * Copyright 2010-2014 OpenXcom Developers.
+ *
+ * This file is part of OpenXcom.
+ *
+ * OpenXcom is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * OpenXcom is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#include "StoresMatrixState.h"
+
+#include <sstream>
+
+#include "../Engine/Game.h"
+#include "../Engine/Language.h"
+#include "../Engine/Options.h"
+#include "../Engine/Palette.h"
+
+#include "../Interface/Text.h"
+#include "../Interface/TextButton.h"
+#include "../Interface/TextList.h"
+#include "../Interface/Window.h"
+
+#include "../Resource/ResourcePack.h"
+
+#include "../Ruleset/RuleItem.h"
+#include "../Ruleset/Ruleset.h"
+
+#include "../Savegame/Base.h"
+#include "../Savegame/ItemContainer.h"
+#include "../Savegame/SavedGame.h"
+
+
+namespace OpenXcom
+{
+
+/**
+ * Initializes all the elements in the Matrix window.
+ * @param game Pointer to the core game.
+ * @param base Pointer to the base to get info from.
+ */
+StoresMatrixState::StoresMatrixState(
+		Game* game,
+		Base* base)
+	:
+		State(game),
+		_base(base)
+{
+	_window			= new Window(this, 320, 200, 0, 0);
+	_txtTitle		= new Text(300, 17, 10, 8);
+	_txtBaseLabel	= new Text(80, 9, 224, 8);
+
+	_txtItem		= new Text(100, 9, 16, 25);
+	_txtBase_1		= new Text(22, 9, 116, 25);
+	_txtBase_2		= new Text(22, 9, 138, 25);
+	_txtBase_3		= new Text(22, 9, 160, 25);
+	_txtBase_4		= new Text(22, 9, 182, 25);
+	_txtBase_5		= new Text(22, 9, 204, 25);
+	_txtBase_6		= new Text(22, 9, 226, 25);
+	_txtBase_7		= new Text(22, 9, 248, 25);
+	_txtBase_8		= new Text(22, 9, 270, 25);
+
+	_lstMatrix		= new TextList(285, 136, 16, 36);
+
+	_btnOk			= new TextButton(288, 16, 16, 177);
+
+
+	_game->setPalette(
+				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)),
+				Palette::backPos,
+				16);
+
+	add(_window);
+	add(_txtTitle);
+	add(_txtBaseLabel);
+	add(_txtItem);
+	add(_txtBase_1);
+	add(_txtBase_2);
+	add(_txtBase_3);
+	add(_txtBase_4);
+	add(_txtBase_5);
+	add(_txtBase_6);
+	add(_txtBase_7);
+	add(_txtBase_8);
+	add(_lstMatrix);
+	add(_btnOk);
+
+	centerAllSurfaces();
+
+
+	_window->setColor(Palette::blockOffset(13)+10);
+	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
+
+	_btnOk->setColor(Palette::blockOffset(13)+10);
+	_btnOk->setText(tr("STR_OK"));
+	_btnOk->onMouseClick((ActionHandler)& StoresMatrixState::btnOkClick);
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& StoresMatrixState::btnOkClick,
+					(SDLKey)Options::getInt("keyOk"));
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& StoresMatrixState::btnOkClick,
+					(SDLKey)Options::getInt("keyCancel"));
+
+	_txtTitle->setColor(Palette::blockOffset(13)+10);
+	_txtTitle->setBig();
+	_txtTitle->setText(tr("STR_MATRIX"));
+
+	_txtBaseLabel->setColor(Palette::blockOffset(13)+10);
+	_txtBaseLabel->setAlign(ALIGN_RIGHT);
+	_txtBaseLabel->setText(_base->getName(_game->getLanguage()));
+
+	_txtItem->setColor(Palette::blockOffset(13)+10);
+	_txtItem->setText(tr("STR_ITEM"));
+
+	_txtBase_1->setColor(Palette::blockOffset(13)+10);
+	_txtBase_1->setText(_game->getSavedGame()->getBases()->at(0)->getName());
+
+	_txtBase_2->setColor(Palette::blockOffset(13)+10);
+	_txtBase_2->setText(_game->getSavedGame()->getBases()->at(1)->getName());
+
+	_txtBase_3->setColor(Palette::blockOffset(13)+10);
+	_txtBase_3->setText(_game->getSavedGame()->getBases()->at(2)->getName());
+
+	_txtBase_4->setColor(Palette::blockOffset(13)+10);
+	_txtBase_4->setText(_game->getSavedGame()->getBases()->at(3)->getName());
+
+	_txtBase_5->setColor(Palette::blockOffset(13)+10);
+	_txtBase_5->setText(_game->getSavedGame()->getBases()->at(4)->getName());
+
+	_txtBase_6->setColor(Palette::blockOffset(13)+10);
+	_txtBase_6->setText(_game->getSavedGame()->getBases()->at(5)->getName());
+
+	_txtBase_7->setColor(Palette::blockOffset(13)+10);
+	_txtBase_7->setText(_game->getSavedGame()->getBases()->at(6)->getName());
+
+	_txtBase_8->setColor(Palette::blockOffset(13)+10);
+	_txtBase_8->setText(_game->getSavedGame()->getBases()->at(7)->getName());
+
+	_lstMatrix->setColor(Palette::blockOffset(13)+10);
+	_lstMatrix->setColumns(9, 100, 22, 22, 22, 22, 22, 22, 22, 22);
+	_lstMatrix->setSelectable(true);
+	_lstMatrix->setBackground(_window);
+//	_lstMatrix->setMargin(8);
+
+
+	bool isAmmo = false;
+	int
+		row		= 0,
+		iter	= 0,
+		qty[8]	= { 0, 0, 0, 0, 0, 0, 0, 0 };
+
+	std::wstringstream
+		ss1,
+		ss2,
+		ss3,
+		ss4,
+		ss5,
+		ss6,
+		ss7,
+		ss8;
+
+	const std::vector<std::string>& items = _game->getRuleset()->getItemsList();
+	for (std::vector<std::string>::const_iterator
+			i = items.begin();
+			i != items.end();
+			++i)
+	{
+		ss1.str(L"");
+		ss2.str(L"");
+		ss3.str(L"");
+		ss4.str(L"");
+		ss5.str(L"");
+		ss6.str(L"");
+		ss7.str(L"");
+		ss8.str(L"");
+
+		qty[1] = 0;
+		qty[2] = 0;
+		qty[3] = 0;
+		qty[4] = 0;
+		qty[5] = 0;
+		qty[6] = 0;
+		qty[7] = 0;
+		qty[8] = 0;
+
+		iter = 0;
+
+		RuleItem* rule = _game->getRuleset()->getItem(*i);
+		isAmmo = false;
+
+		std::wstring item = tr(*i);
+		if (rule->getBattleType() == BT_AMMO
+			 || (rule->getBattleType() == BT_NONE
+				&& rule->getClipSize() > 0))
+		{
+			isAmmo = true;
+
+			item.insert(0, L"  ");
+		}
+
+		for (std::vector<Base*>::const_iterator
+				b = _game->getSavedGame()->getBases()->begin();
+				b != _game->getSavedGame()->getBases()->end();
+				++b)
+		{
+			++iter;
+			qty[iter] = (*b)->getItems()->getItem(*i);
+		}
+
+		if (qty[1] + qty[2] + qty[3] + qty[4] + qty[5] + qty[6] + qty[7] + qty[8] > 0)
+		{
+			ss1 << qty[1];
+			ss2 << qty[2];
+			ss3 << qty[3];
+			ss4 << qty[4];
+			ss5 << qty[5];
+			ss6 << qty[6];
+			ss7 << qty[7];
+			ss8 << qty[8];
+
+			_lstMatrix->addRow(
+							9,
+							item.c_str(),
+							ss1.str().c_str(),
+							ss2.str().c_str(),
+							ss3.str().c_str(),
+							ss4.str().c_str(),
+							ss5.str().c_str(),
+							ss6.str().c_str(),
+							ss7.str().c_str(),
+							ss8.str().c_str());
+
+			if (isAmmo)
+				_lstMatrix->setRowColor(row, Palette::blockOffset(15)+6);
+
+			row++;
+		}
+	}
+}
+
+/**
+ *
+ */
+StoresMatrixState::~StoresMatrixState()
+{
+}
+
+/**
+ * Returns to the previous screen.
+ * @param action Pointer to an action.
+ */
+void StoresMatrixState::btnOkClick(Action*)
+{
+	_game->popState();
+}
+
+}

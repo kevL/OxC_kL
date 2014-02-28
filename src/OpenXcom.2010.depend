@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1392601273 source:f:\git\openxcom\src\basescape\baseinfostate.cpp
+1393543462 source:f:\git\openxcom\src\basescape\baseinfostate.cpp
 	"BaseInfoState.h"
 	<sstream>
 	"BasescapeState.h"
@@ -278,7 +278,7 @@
 1392594693 f:\git\openxcom\src\engine\action.h
 	<SDL.h>
 
-1392594694 f:\git\openxcom\src\engine\game.h
+1393543304 f:\git\openxcom\src\engine\game.h
 	<list>
 	<string>
 	<SDL.h>
@@ -4400,7 +4400,7 @@
 	<vector>
 	"../Engine/Surface.h"
 
-1392594696 f:\git\openxcom\src\interface\textbutton.h
+1393539890 f:\git\openxcom\src\interface\textbutton.h
 	"../Engine/InteractiveSurface.h"
 
 1392594691 f:\git\openxcom\src\interface\textedit.h
@@ -4516,7 +4516,7 @@
 1392594696 f:\git\openxcom\src\basescape\soldiersstate.h
 	"../Engine/State.h"
 
-1392594693 f:\git\openxcom\src\basescape\transferbasestate.h
+1393540577 f:\git\openxcom\src\basescape\transferbasestate.h
 	<vector>
 	"../Engine/State.h"
 
@@ -4565,7 +4565,7 @@
 	<vector>
 	<yaml-cpp/yaml.h>
 
-1392594691 source:f:\git\openxcom\src\basescape\baseview.cpp
+1393543876 source:f:\git\openxcom\src\basescape\baseview.cpp
 	"BaseView.h"
 	<cmath>
 	<limits>
@@ -5478,10 +5478,11 @@
 	"../Savegame/ItemContainer.h"
 	"../Savegame/SavedGame.h"
 
-1392594695 source:f:\git\openxcom\src\basescape\transferbasestate.cpp
+1393540633 source:f:\git\openxcom\src\basescape\transferbasestate.cpp
 	"TransferBaseState.h"
 	<sstream>
 	"TransferItemsState.h"
+	"../Basescape/StoresMatrixState.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
 	"../Engine/Options.h"
@@ -5856,7 +5857,7 @@
 	<vector>
 	<yaml-cpp/yaml.h>
 
-1393483516 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
+1393534625 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
 	"BattlescapeGenerator.h"
 	<fstream>
 	<sstream>
@@ -6320,7 +6321,7 @@
 	<SDL.h>
 	<yaml-cpp/yaml.h>
 
-1393478763 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
+1393534625 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
 	"InventoryState.h"
 	<sstream>
 	"BattlescapeState.h"
@@ -6551,7 +6552,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1393433335 source:f:\git\openxcom\src\battlescape\projectile.cpp
+1393538077 source:f:\git\openxcom\src\battlescape\projectile.cpp
 	"Projectile.h"
 	<cmath>
 	"BattlescapeGame.h"
@@ -6711,7 +6712,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1393167476 source:f:\git\openxcom\src\battlescape\unitfallbstate.cpp
+1393538018 source:f:\git\openxcom\src\battlescape\unitfallbstate.cpp
 	"UnitFallBState.h"
 	"BattleAIState.h"
 	"BattlescapeState.h"
@@ -11269,4 +11270,25 @@
 	"../Interface/TextButton.h"
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
+
+1393550623 source:f:\git\openxcom\src\basescape\storesmatrixstate.cpp
+	"StoresMatrixState.h"
+	<sstream>
+	"../Engine/Game.h"
+	"../Engine/Language.h"
+	"../Engine/Options.h"
+	"../Engine/Palette.h"
+	"../Interface/Text.h"
+	"../Interface/TextButton.h"
+	"../Interface/TextList.h"
+	"../Interface/Window.h"
+	"../Resource/ResourcePack.h"
+	"../Ruleset/RuleItem.h"
+	"../Ruleset/Ruleset.h"
+	"../Savegame/Base.h"
+	"../Savegame/ItemContainer.h"
+	"../Savegame/SavedGame.h"
+
+1393541770 f:\git\openxcom\src\basescape\storesmatrixstate.h
+	"../Engine/State.h"
 

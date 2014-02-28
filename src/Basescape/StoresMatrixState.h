@@ -17,10 +17,8 @@
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef OPENXCOM_TRANSFERBASESTATE_H
-#define OPENXCOM_TRANSFERBASESTATE_H
-
-#include <vector>
+#ifndef OPENXCOM_STORESMATRIXSTATE_H
+#define OPENXCOM_STORESMATRIXSTATE_H
 
 #include "../Engine/State.h"
 
@@ -36,9 +34,10 @@ class Window;
 
 
 /**
- * Window that lets the player pick the base to transfer items to.
+ * Stores window that displays all
+ * the items currently stored in a base.
  */
-class TransferBaseState
+class StoresMatrixState
 	:
 		public State
 {
@@ -46,34 +45,32 @@ class TransferBaseState
 private:
 	Base* _base;
 	Text
-		* _txtArea,
 		* _txtBaseLabel,
-		* _txtFunds,
-		* _txtName,
+		* _txtBase_1,
+		* _txtBase_2,
+		* _txtBase_3,
+		* _txtBase_4,
+		* _txtBase_5,
+		* _txtBase_6,
+		* _txtBase_7,
+		* _txtBase_8,
+		* _txtItem,
 		* _txtTitle;
-	TextButton
-		* _btnCancel,
-		* _btnMatrix;
-	TextList* _lstBases;
+	TextButton* _btnOk;
+	TextList* _lstMatrix;
 	Window* _window;
-
-	std::vector<Base*> _bases;
 
 
 	public:
-		/// Creates the Transfer Base state.
-		TransferBaseState(
+		/// Creates the Stores Matrix state.
+		StoresMatrixState(
 				Game* game,
 				Base* base);
-		/// Cleans up the Transfer Base state.
-		~TransferBaseState();
+		/// Cleans up the Stores Matrix state.
+		~StoresMatrixState();
 
-		/// Handler for clicking the Cancel button.
-		void btnCancelClick(Action* action);
-		/// Handler for clicking the Matrix button.
-		void btnMatrixClick(Action* action);
-		/// Handler for clicking the Bases list.
-		void lstBasesClick(Action* action);
+		/// Handler for clicking the OK button.
+		void btnOkClick(Action* action);
 };
 
 }

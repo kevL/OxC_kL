@@ -84,14 +84,12 @@ void UnitFallBState::init()
 void UnitFallBState::think()
 {
 	//Log(LOG_INFO) << "UnitFallBState::think()";
-
 	for (std::list<BattleUnit*>::iterator
 			unit = _parent->getSave()->getFallingUnits()->begin();
 			unit != _parent->getSave()->getFallingUnits()->end();
 			)
 	{
 		//Log(LOG_INFO) << ". falling ID = " << (*unit)->getId();
-
 		if ((*unit)->isOut(true, true)) // kL
 //kL		if ((*unit)->getHealth() == 0
 //kL			|| (*unit)->getStunlevel() >= (*unit)->getHealth())
@@ -116,7 +114,6 @@ void UnitFallBState::think()
 
 		bool onScreen = (*unit)->getVisible()
 						&& _parent->getMap()->getCamera()->isOnScreen((*unit)->getPosition());
-
 
 		Tile* tBelow = 0;
 
@@ -203,7 +200,6 @@ void UnitFallBState::think()
 			|| (*unit)->getStatus() == STATUS_FLYING)
 		{
 			//Log(LOG_INFO) << ". . call keepWalking()";
-
 			(*unit)->keepWalking(tBelow, true);		// advances the phase
 			_parent->getMap()->cacheUnit(*unit);	// make sure the unit sprites are up to date
 		}											// kL_note: might need set cache invalid...
@@ -215,7 +211,6 @@ void UnitFallBState::think()
 					&& (*unit)->getWalkingPhase() == 0;
 
 		//Log(LOG_INFO) << ". new fallCheck = " << fallCheck;
-
 
 		// The unit has moved from one tile to the other.
 		// kL_note: Can prob. use _tileSwitchDone around here...
@@ -272,7 +267,6 @@ void UnitFallBState::think()
 			if (!_unitsToMove.empty())
 			{
 				//Log(LOG_INFO) << ". unitsToMove not empty";
-
 				std::vector<Tile*> escapeTiles;
 				for (std::vector<BattleUnit*>::iterator
 						u = _unitsToMove.begin();
@@ -280,7 +274,6 @@ void UnitFallBState::think()
 						)
 				{
 					//Log(LOG_INFO) << ". moving unit ID " << (*u)->getId();
-
 					uBelow = *u;
 					bool escape = false;
 
@@ -310,7 +303,6 @@ void UnitFallBState::think()
 							dir++)
 					{
 						//Log(LOG_INFO) << ". . checking directions to move";
-
 						Position offset;
 						Pathfinding::directionToVector(dir, &offset);
 
@@ -320,7 +312,6 @@ void UnitFallBState::think()
 								)
 						{
 							//Log(LOG_INFO) << ". . . checking bodysections";
-
 							Position originalPosition = *body;
 							Tile* t = _parent->getSave()->getTile(originalPosition + offset);
 							Tile* tCurrent = _parent->getSave()->getTile(originalPosition);
@@ -364,12 +355,11 @@ void UnitFallBState::think()
 							if (body == bodySections.end())
 							{
 								//Log(LOG_INFO) << ". . . . move unit";
-
 								if (_parent->getSave()->addFallingUnit(uBelow))
 								{
 									//Log(LOG_INFO) << ". . . . . add Falling Unit";
-
 									escape = true;
+
 									// Now ensure no other unit escapes to here too.
 									for (int
 											x = uSize;
@@ -382,14 +372,12 @@ void UnitFallBState::think()
 												--y)
 										{
 											//Log(LOG_INFO) << ". . . . . . check for more escape units?";
-
 											Tile* tEscape = _parent->getSave()->getTile(t->getPosition() + Position(x, y, 0));
 											escapeTiles.push_back(tEscape);
 										}
 									}
 
 									//Log(LOG_INFO) << ". . . . startWalking() out of the way?";
-
 									Tile* tBelow3 = _parent->getSave()->getTile(originalPosition + Position(0, 0, -1));
 									uBelow->startWalking(
 													dir,
@@ -406,7 +394,6 @@ void UnitFallBState::think()
 					if (!escape)
 					{
 						//Log(LOG_INFO) << ". . . NOT escape";
-
 						uBelow->knockOut(_parent);
 						u = _unitsToMove.erase(u);
 					}
@@ -420,11 +407,9 @@ void UnitFallBState::think()
 		if ((*unit)->getStatus() == STATUS_STANDING) // just standing around, done falling.
 		{
 			//Log(LOG_INFO) << ". STATUS_STANDING";
-
 			if (falling)
 			{
 				//Log(LOG_INFO) << ". . falling (again?) -> startWalking()";
-
 				Position destination = (*unit)->getPosition() + Position(0, 0, -1);
 
 				tBelow = _parent->getSave()->getTile(destination);
@@ -442,7 +427,6 @@ void UnitFallBState::think()
 			else
 			{
 				//Log(LOG_INFO) << ". . burnFloors, checkProxies, Erase.unit";
-
 				if ((*unit)->getSpecialAbility() == SPECAB_BURNFLOOR) // if the unit burns floortiles, burn floortiles
 				{
 					// kL_add: Put burnedBySilacoid() here! etc
@@ -481,7 +465,6 @@ void UnitFallBState::think()
 		else
 		{
 			//Log(LOG_INFO) << ". not STATUS_STANDING, next unit";
-
 			++unit;
 		}
 	}
@@ -500,7 +483,6 @@ void UnitFallBState::think()
 
 		return;
 	}
-
 	//Log(LOG_INFO) << "UnitFallBState::think() EXIT";
 }
 

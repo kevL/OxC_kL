@@ -23,6 +23,8 @@
 
 #include "TransferItemsState.h"
 
+#include "../Basescape/StoresMatrixState.h"
+
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
 #include "../Engine/Options.h"
@@ -69,7 +71,9 @@ TransferBaseState::TransferBaseState(
 
 	_lstBases		= new TextList(228, 57, 46, 82);
 
-	_btnCancel		= new TextButton(228, 16, 46, 146);
+//	_btnCancel		= new TextButton(228, 16, 46, 146);
+	_btnMatrix		= new TextButton(112, 16, 46, 146);
+	_btnCancel		= new TextButton(112, 16, 162, 146);
 
 
 	_game->setPalette(
@@ -84,6 +88,7 @@ TransferBaseState::TransferBaseState(
 	add(_txtName);
 	add(_txtArea);
 	add(_lstBases);
+	add(_btnMatrix);
 	add(_btnCancel);
 
 	centerAllSurfaces();
@@ -98,6 +103,10 @@ TransferBaseState::TransferBaseState(
 	_btnCancel->onKeyboardPress(
 					(ActionHandler)& TransferBaseState::btnCancelClick,
 					(SDLKey)Options::getInt("keyCancel"));
+
+	_btnMatrix->setColor(Palette::blockOffset(13) + 5);
+	_btnMatrix->setText(tr("STR_MATRIX"));
+	_btnMatrix->onMouseClick((ActionHandler)& TransferBaseState::btnMatrixClick);
 
 	_txtTitle->setColor(Palette::blockOffset(13) + 5);
 	_txtTitle->setBig();
@@ -182,6 +191,17 @@ TransferBaseState::~TransferBaseState()
 void TransferBaseState::btnCancelClick(Action*)
 {
 	_game->popState(); // pop choose Destination (this)
+}
+
+/**
+ * Returns to the previous screen.
+ * @param action Pointer to an action.
+ */
+void TransferBaseState::btnMatrixClick(Action*)
+{
+	_game->pushState(new StoresMatrixState(
+										_game,
+										_base));
 }
 
 /**

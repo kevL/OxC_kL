@@ -494,7 +494,6 @@ void Projectile::applyAccuracy(
 //kL		&& _action.type != BA_HIT)
 	{
 		//Log(LOG_INFO) << ". battleRangeBasedAccuracy";
-
 //kL		if (_action.type == BA_HIT)
 //kL			return;
 

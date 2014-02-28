@@ -181,9 +181,7 @@ BaseInfoState::BaseInfoState(
 
 	std::ostringstream ss;
 	if (_containmentLimit)
-	{
 		ss << "ALT";
-	}
 	ss << "BACK07.SCR";
 	_game->getResourcePack()->getSurface(ss.str())->blit(_bg);
 

@@ -45,10 +45,11 @@ class TextButton
 {
 
 private:
+	bool _contrast;
 	Uint8 _color;
+
 	Text* _text;
 	TextButton** _group;
-	bool _contrast;
 
 
 	public:

@@ -76,11 +76,15 @@ BaseView::BaseView(
 			x = 0;
 			x < BASE_SIZE;
 			++x)
+	{
 		for (int
 				y = 0;
 				y < BASE_SIZE;
 				++y)
+		{
 			_facilities[x][y] = 0;
+		}
+	}
 
 	_timer = new Timer(125);
 	_timer->onTimer((SurfaceHandler)& BaseView::blink);
@@ -127,25 +131,35 @@ void BaseView::setBase(Base* base)
 			x = 0;
 			x < BASE_SIZE;
 			++x)
+	{
 		for (int
 				y = 0;
 				y < BASE_SIZE;
 				++y)
+		{
 			_facilities[x][y] = 0;
+		}
+	}
 
 	for (std::vector<BaseFacility*>::iterator // fill grid with base facilities
 			i = _base->getFacilities()->begin();
 			i != _base->getFacilities()->end();
 			++i)
+	{
 		for (int
 				y = (*i)->getY();
 				y < (*i)->getY() + (*i)->getRules()->getSize();
 				++y)
+		{
 			for (int
 					x = (*i)->getX();
 					x < (*i)->getX() + (*i)->getRules()->getSize();
 					++x)
+			{
 				_facilities[x][y] = *i;
+			}
+		}
+	}
 
 	_redraw = true;
 }
@@ -273,21 +287,21 @@ bool BaseView::isPlaceable(RuleBaseFacility* rule) const
 			++i)
 	{
 		if ((_gridX > 0
-					&& _facilities[_gridX - 1][_gridY + i] != 0
-					&& (bq
-						|| _facilities[_gridX - 1][_gridY + i]->getBuildTime() == 0))
+				&& _facilities[_gridX - 1][_gridY + i] != 0
+				&& (bq
+					|| _facilities[_gridX - 1][_gridY + i]->getBuildTime() == 0))
 			|| (_gridY > 0
-					&& _facilities[_gridX + i][_gridY - 1] != 0
-					&& (bq
-						|| _facilities[_gridX + i][_gridY - 1]->getBuildTime() == 0))
+				&& _facilities[_gridX + i][_gridY - 1] != 0
+				&& (bq
+					|| _facilities[_gridX + i][_gridY - 1]->getBuildTime() == 0))
 			|| (_gridX + rule->getSize() < BASE_SIZE
-					&& _facilities[_gridX + rule->getSize()][_gridY + i] != 0
-					&& (bq
-						|| _facilities[_gridX + rule->getSize()][_gridY + i]->getBuildTime() == 0))
+				&& _facilities[_gridX + rule->getSize()][_gridY + i] != 0
+				&& (bq
+					|| _facilities[_gridX + rule->getSize()][_gridY + i]->getBuildTime() == 0))
 			|| (_gridY + rule->getSize() < BASE_SIZE
-					&& _facilities[_gridX + i][_gridY + rule->getSize()] != 0
-					&& (bq
-						|| _facilities[_gridX + i][_gridY + rule->getSize()]->getBuildTime() == 0)))
+				&& _facilities[_gridX + i][_gridY + rule->getSize()] != 0
+				&& (bq
+					|| _facilities[_gridX + i][_gridY + rule->getSize()]->getBuildTime() == 0)))
 		{
 			return true;
 		}
@@ -358,8 +372,10 @@ void BaseView::reCalcQueuedBuildings()
 				i = facilities.begin();
 				i != facilities.end();
 				++i)
+		{
 			if ((*i)->getBuildTime() < (*min)->getBuildTime())
 				min = i;
+		}
 
 		BaseFacility* facility = *min;
 		facilities.erase(min);
@@ -375,16 +391,24 @@ void BaseView::reCalcQueuedBuildings()
 				++i)
 		{
 			if (x > 0)
-				updateNeighborFacilityBuildTime(facility,_facilities[x - 1][y + i]);
+				updateNeighborFacilityBuildTime(
+											facility,
+											_facilities[x - 1][y + i]);
 
 			if (y > 0)
-				updateNeighborFacilityBuildTime(facility,_facilities[x + i][y - 1]);
+				updateNeighborFacilityBuildTime(
+											facility,
+											_facilities[x + i][y - 1]);
 
 			if (x + rule->getSize() < BASE_SIZE)
-				updateNeighborFacilityBuildTime(facility,_facilities[x + rule->getSize()][y + i]);
+				updateNeighborFacilityBuildTime(
+											facility,
+											_facilities[x + rule->getSize()][y + i]);
 
 			if (y + rule->getSize() < BASE_SIZE)
-				updateNeighborFacilityBuildTime(facility,_facilities[x + i][y + rule->getSize()]);
+				updateNeighborFacilityBuildTime(
+											facility,
+											_facilities[x + i][y + rule->getSize()]);
 		}
 	}
 }
