@@ -883,10 +883,10 @@ BattleUnit* BattlescapeGenerator::addXCOMUnit(BattleUnit* unit)
 			}
 		}
 	}
-	else if (_craft // Wb.140220: Transport craft deployments (Lightning & Avenger)
+	else if (_craft // Transport craft deployments (Lightning & Avenger)
 		&& !_craft->getRules()->getDeployment().empty()
-//		&& !_save->getBattleState()) // kL! Or CTD if called from BaseCraftEquip->Inventory. -> not work!
 		&& !_baseCraftEquip) // kL
+//kL		&& _mapsize_y != 1) // _mapsize_y 1 means we're in the faked out base inventory
 	{
 		//Log(LOG_INFO) << "addXCOMUnit() - use Deployment rule";
 		for (std::vector<std::vector<int> >::const_iterator

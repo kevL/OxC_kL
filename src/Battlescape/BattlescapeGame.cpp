@@ -508,7 +508,9 @@ bool BattlescapeGame::kneel(
 			if (bu->isKneeled())
 				tu = 8;
 
-			if (checkReservedTU(bu, tu))
+			if (checkReservedTU(bu, tu)
+				|| (tu == 4 //kL !bu->isKneeled()
+					&& _kneelReserved))
 			{
 				if (bu->spendTimeUnits(tu))
 				{

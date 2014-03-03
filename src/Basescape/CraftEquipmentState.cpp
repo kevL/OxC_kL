@@ -32,6 +32,7 @@
 #include "../Engine/Logger.h"
 #include "../Engine/Options.h"
 #include "../Engine/Palette.h"
+#include "../Engine/Screen.h"
 #include "../Engine/Timer.h"
 
 #include "../Interface/Text.h"
@@ -763,13 +764,7 @@ void CraftEquipmentState::btnInventoryClick(Action*)
 {
 	//Log(LOG_INFO) << "CraftEquipmentState::btnInventoryClick()";
 
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_4")->getColors());
-
-//	delete _game->getSavedGame()->getSavedBattle(); // kL, didn't work
-//	_game->getSavedGame()->setBattleGame(0);		// kL, didn't work
-		// kL_note: EquipCraft->Inventory for soldiers refuses to create after a mission.
-		// Try fix
-
+//WB	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_4")->getColors());
 
 	SavedBattleGame* bgame = new SavedBattleGame();
 	//Log(LOG_INFO) << ". bgame = " << bgame;
@@ -779,8 +774,12 @@ void CraftEquipmentState::btnInventoryClick(Action*)
 	//Log(LOG_INFO) << ". bgen = " << &bgen;
 	Craft* craft = _base->getCrafts()->at(_craft);
 	//Log(LOG_INFO) << ". craft = " << craft;
+
 	bgen.runInventory(craft);
 	//Log(LOG_INFO) << ". bgen.runInventory() DONE";
+
+		_game->getScreen()->clear(); // WB
+		_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_4")->getColors()); // WB
 
 	_game->pushState(new InventoryState(
 									_game,
