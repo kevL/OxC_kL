@@ -490,6 +490,8 @@
 			<Option target="Release Win32" />
 			<Option target="Release x64" />
 		</Unit>
+		<Unit filename="Basescape/StoresMatrixState.cpp" />
+		<Unit filename="Basescape/StoresMatrixState.h" />
 		<Unit filename="Basescape/StoresState.cpp">
 			<Option target="Debug Win32" />
 			<Option target="Debug x64" />

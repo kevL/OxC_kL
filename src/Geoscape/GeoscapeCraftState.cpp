@@ -75,7 +75,7 @@ GeoscapeCraftState::GeoscapeCraftState(
 
 	_txtStatus		= new Text(192, 17, 32, 31);
 
-	_txtBase		= new Text(192, 9, 32, 44);
+	_txtBase		= new Text(192, 9, 32, 43);
 
 	_txtRedirect	= new Text(120, 17, 120, 46);
 

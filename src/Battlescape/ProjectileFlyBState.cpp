@@ -94,7 +94,6 @@ ProjectileFlyBState::ProjectileFlyBState(
 		_targetVoxel(-1,-1,-1), // kL. Why is this not initialized in the stock oXc code?
 		_originVoxel(-1,-1,-1), // kL_note: for BL waypoints
 		_targetFloor(false)
-
 {
 }
 
@@ -255,7 +254,6 @@ void ProjectileFlyBState::init()
 		case BA_AUTOSHOT:
 		case BA_LAUNCH:
 			//Log(LOG_INFO) << ". . BA_SNAPSHOT, AIMEDSHOT, AUTOSHOT, or LAUNCH";
-
 			if (_ammo == 0)
 			{
 				//Log(LOG_INFO) << ". . . no ammo, EXIT";
@@ -296,7 +294,6 @@ void ProjectileFlyBState::init()
 		case BA_THROW:
 		{
 			//Log(LOG_INFO) << ". . BA_THROW";
-
 			Position originVoxel = _parent->getTileEngine()->getOriginVoxel(
 																		_action,
 																		0);
@@ -317,7 +314,6 @@ void ProjectileFlyBState::init()
 		break;
 		case BA_HIT:
 			//Log(LOG_INFO) << ". . BA_HIT";
-
 			if (!_parent->getTileEngine()->validMeleeRange(
 													_action.actor->getPosition(),
 													_action.actor->getDirection(),

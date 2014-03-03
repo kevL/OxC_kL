@@ -2908,8 +2908,10 @@ RuleTerrain* BattlescapeGenerator::getTerrain(
 		{
 			if (*j == tex
 				&& (t->getHemisphere() == 0
-					|| (t->getHemisphere() < 0 && lat < 0.0)
-					|| (t->getHemisphere() > 0 && lat >= 0.0)))
+					|| (t->getHemisphere() < 0
+						&& lat < 0.0)
+					|| (t->getHemisphere() > 0
+						&& lat >= 0.0)))
 			{
 				return t;
 			}
@@ -2952,8 +2954,14 @@ void BattlescapeGenerator::runInventory(Craft* craft)
 			++i)
 	{
 		Tile* tile = _save->getTiles()[i];
-		tile->setMapData(data, 0, 0, MapData::O_FLOOR);
-		tile->getMapData(MapData::O_FLOOR)->setSpecialType(START_POINT, 0);
+		tile->setMapData(
+					data,
+					0,
+					0,
+					MapData::O_FLOOR);
+		tile->getMapData(MapData::O_FLOOR)->setSpecialType(
+														START_POINT,
+														0);
 		tile->getMapData(MapData::O_FLOOR)->setTUWalk(0);
 		tile->getMapData(MapData::O_FLOOR)->setFlags(
 													false,

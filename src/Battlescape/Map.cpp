@@ -121,7 +121,8 @@ Map::Map(
 		_explosionInFOV(false),
 		_visibleMapHeight(visibleMapHeight),
 		_unitDying(false),
-		_reveal(0)
+		_reveal(0),
+		_launch(false)
 {
 	//Log(LOG_INFO) << "Create Map";
 	_previewSetting = Options::getInt("battleNewPreviewPath");
@@ -135,12 +136,6 @@ Map::Map(
 
 	_save = _game->getSavedGame()->getSavedBattle();
 
-	_message = new BattlescapeMessage( // Hidden Movement... screen
-									320,
-									visibleMapHeight < 200? visibleMapHeight: 200,
-									Screen::getDX(),
-									Screen::getDY());
-
 	_camera = new Camera(
 					_spriteWidth,
 					_spriteHeight,
@@ -149,6 +144,12 @@ Map::Map(
 					_save->getMapSizeZ(),
 					this,
 					visibleMapHeight);
+
+	_message = new BattlescapeMessage( // Hidden Movement... screen
+									320,
+									visibleMapHeight < 200? visibleMapHeight: 200,
+									Screen::getDX(),
+									Screen::getDY());
 
 	_scrollMouseTimer = new Timer(SCROLL_INTERVAL);
 	_scrollMouseTimer->onTimer((SurfaceHandler)& Map::scrollMouse);
@@ -382,42 +383,43 @@ void Map::setPalette(
  */
 void Map::drawTerrain(Surface* surface)
 {
-	int frame = 0;
+	//Log(LOG_INFO) << "Map::drawTerrain()";
 
-	Surface* tmpSurface;
-	Tile* tile;
-
-	int beginX	= 0,
-		endX	= _save->getMapSizeX() - 1,
-		beginY	= 0,
-		endY	= _save->getMapSizeY() - 1,
-		beginZ	= 0,
-		endZ	= _camera->getViewLevel();
-	if (_camera->getShowAllLayers())
-		endZ	= _save->getMapSizeZ() - 1;
-
-
+	BattleUnit* unit		= 0;
+	NumberText* _numWaypid	= 0;
 	Position
 		mapPosition,
 		screenPosition,
-		bulletPositionScreen;
+		bulletPosScreen;
+	Surface* tmpSurface		= 0;
+	Tile* tile				= 0;
 
-	int bulletLowX = 16000,
+	bool invalid = false;
+	int
+		bulletLowX = 16000,
 		bulletLowY = 16000,
 		bulletLowZ = 16000,
 		bulletHighX = 0,
 		bulletHighY = 0,
-		bulletHighZ = 0;
-	int d;
+		bulletHighZ = 0,
 
-	BattleUnit* unit = 0;
-	bool invalid;
-	int
-		tileShade,
-		wallShade,
-		tileColor;
+		frame	= 0,
+		d		= 0,
 
-	NumberText* _numWaypid = 0;
+		tileShade = 0,
+		wallShade = 0,
+		tileColor = 0,
+
+		beginX	= 0,
+		beginY	= 0,
+		beginZ	= 0,
+		endX	= _save->getMapSizeX() - 1,
+		endY	= _save->getMapSizeY() - 1,
+		endZ	= _camera->getViewLevel();
+
+	if (_camera->getShowAllLayers())
+		endZ = _save->getMapSizeZ() - 1;
+
 
 	// if we got bullet, get the highest x and y tiles to draw it on
 	if (_projectile
@@ -462,92 +464,119 @@ void Map::drawTerrain(Surface* surface)
 		// if the projectile is outside the viewport - center it back on it
 		_camera->convertVoxelToScreen(
 								_projectile->getPosition(),
-								&bulletPositionScreen);
+								&bulletPosScreen);
 
 		if (_projectileInFOV)
 		{
-/*			if (_launch)
+			//Log(LOG_INFO) << ". projectileInFOV";
+			if (_launch) // kL_begin: This is now mine (120228).
 			{
-*/				_launch = false;
+				//Log(LOG_INFO) << ". . launch";
+				_launch = false;
 
-/*kL				if (bulletPositionScreen.x < 0
-						|| bulletPositionScreen.x > surface->getWidth()
-						|| bulletPositionScreen.y < 0
-						|| bulletPositionScreen.y > _visibleMapHeight)
-					&& _projectileInFOV) */
-/*				if (bulletPositionScreen.x < 24									// kL, keep these in from the edges.
-						|| bulletPositionScreen.x > surface->getWidth() - 24	// kL
-						|| bulletPositionScreen.y < 24							// kL
-						|| bulletPositionScreen.y > _visibleMapHeight - 24)		// kL
+/*				if (//_save->getSide() != FACTION_PLAYER &&
+					!_camera->isOnScreen(_unit->getPosition()))
 				{
-					// kL_note: this probably jumps screen back to shooter shooting.
+					_camera->centerOnPosition(_unit->getPosition());
+				} else */
+				// kL_note: Gota figure these out...
+				if (bulletPosScreen.x < 20							// kL, keep these in from the edges.
+					|| bulletPosScreen.x > surface->getWidth() - 20	// kL
+					|| bulletPosScreen.y < 20						// kL
+					|| bulletPosScreen.y > _visibleMapHeight - 20)	// kL
+				{
+					//Log(LOG_INFO) << ". . . centerOnPosition()";
+
+					// kL_note: this effectively jumps screen back to show shooter shooting.
 					_camera->centerOnPosition(Position(
 													bulletLowX,
 													bulletLowY,
 													bulletHighZ), false);
 				}
-			} */
-//			else // kL_note: and now along the projectile's trajectory.
-//			{
-				Position newCam = _camera->getMapOffset();
-				if (newCam.z != bulletHighZ) // switch level
+			}
+			else // kL_end. and now along the projectile's trajectory.
+			{
+				//Log(LOG_INFO) << ". . NOT launch";
+				Position bulletCam = _camera->getMapOffset();
+				if (bulletCam.z != bulletHighZ) // switch level
 				{
-					newCam.z = bulletHighZ;
+					//Log(LOG_INFO) << ". . . convertVoxelToScreen(1)";
+					bulletCam.z = bulletHighZ;
 
 //kL					if (_projectileInFOV)
 //					{
-					_camera->setMapOffset(newCam);
+					_camera->setMapOffset(bulletCam);
 					_camera->convertVoxelToScreen(
 											_projectile->getPosition(),
-											&bulletPositionScreen);
+											&bulletPosScreen);
 //					}
 				}
 
-				bool enough;
+				bool onScreen = true;
 				do
 				{
-					enough = true;
+					//Log(LOG_INFO) << ". . . do/while";
+					onScreen = true;
 
-					if (bulletPositionScreen.x < 8)								// projectile approaches left edge of screen
+					if (bulletPosScreen.x < 8) // projectile approaches left edge of screen
+//					if (bulletPosScreen.x < 20) // kL
 					{
+						//Log(LOG_INFO) << ". . . . jumpXY() 1";
 						_camera->jumpXY(
-								surface->getWidth() - 16,
-//								_visibleMapHeight / 2 - bulletPositionScreen.y
+//kL								surface->getWidth() - 16,
+								surface->getWidth() - 24, // kL
+//								_visibleMapHeight / 2 - bulletPosScreen.y // Old code.
 								0);
-						enough = false;
+						onScreen = false;
 					}
-					else if (bulletPositionScreen.x > surface->getWidth() - 8)	// projectile approaches right edge of screen
+					else if (bulletPosScreen.x > surface->getWidth() - 8) // projectile approaches right edge of screen
+//					else if (bulletPosScreen.x > surface->getWidth() - 20) // kL
 					{
+						//Log(LOG_INFO) << ". . . . jumpXY() 2";
 						_camera->jumpXY(
-								-surface->getWidth() + 16,
-//								_visibleMapHeight / 2 - bulletPositionScreen.y
+//kL								-surface->getWidth() + 16,
+								-surface->getWidth() + 24, // kL
+//								_visibleMapHeight / 2 - bulletPosScreen.y // Old code.
 								0);
-						enough = false;
+						onScreen = false;
 					}
-					else if (bulletPositionScreen.y < 8)						// projectile approaches top of screen
+					else if (bulletPosScreen.y < 8) // projectile approaches top of screen
+//					else if (bulletPosScreen.y < 20) // kL
 					{
+						//Log(LOG_INFO) << ". . . . jumpXY() 3";
 						_camera->jumpXY(
-//								surface->getWidth() / 2 - bulletPositionScreen.x,
+//								surface->getWidth() / 2 - bulletPosScreen.x, // Old code.
 								0,
-								_visibleMapHeight - 20);
-						enough = false;
+//kL								_visibleMapHeight - 20);
+								_visibleMapHeight - 28); // kL
+						onScreen = false;
 					}
-					else if (bulletPositionScreen.y > _visibleMapHeight - 8)	// projectile approaches bottom of screen
+					else if (bulletPosScreen.y > _visibleMapHeight - 8) // projectile approaches bottom of screen
+//					else if (bulletPosScreen.y > _visibleMapHeight - 20) // kL
 					{
+						//Log(LOG_INFO) << ". . . . jumpXY() 4";
 						_camera->jumpXY(
-//								surface->getWidth() / 2 - bulletPositionScreen.x,
+//								surface->getWidth() / 2 - bulletPosScreen.x, // Old code.
 								0,
-								-_visibleMapHeight + 20);
-						enough = false;
+//kL								-_visibleMapHeight + 20);
+								-_visibleMapHeight + 28); // kL
+						onScreen = false;
 					}
 
+					//Log(LOG_INFO) << ". . . . convertVoxelToScreen(2)";
+
+					// bullet moves along its trajectory, voxel by voxel or so,
+					// until one of the above conditions causes the screen to flip-next:
 					_camera->convertVoxelToScreen(
 											_projectile->getPosition(),
-											&bulletPositionScreen);
+											&bulletPosScreen);
 				}
-				while (!enough);
-//			}
+				while (!onScreen);
+				//Log(LOG_INFO) << ". . . do/while DONE";
+			}
+			//Log(LOG_INFO) << ". . launch / NOT launch Done";
 		}
+		//Log(LOG_INFO) << ". projectileInFOV DONE";
 	}
 
 	// get corner map coordinates to give rough boundaries in which tiles to redraw are
@@ -780,58 +809,58 @@ void Map::drawTerrain(Surface* surface)
 					}
 
 					// check if we got bullet && it is in Field Of View
-					if (_projectile
-						&& _projectileInFOV)
+					if (_projectile)
+//kL						&& _projectileInFOV)
 					{
 						tmpSurface = 0;
 
-						if (_projectile->getItem())
+						if (_projectile->getItem()) // thrown item ( grenade, etc.)
 						{
 							tmpSurface = _projectile->getSprite();
 
 							Position voxelPos = _projectile->getPosition();
 							// draw shadow on the floor
 							voxelPos.z = _save->getTileEngine()->castedShade(voxelPos);
-							if (voxelPos.x / 16 >= itX
+							if (   voxelPos.x / 16 >= itX
 								&& voxelPos.y / 16 >= itY
 								&& voxelPos.x / 16 <= itX + 1
 								&& voxelPos.y / 16 <= itY + 1
-								&& voxelPos.z / 24 == itZ
-								&& _save->getTileEngine()->isVoxelVisible(voxelPos))
+								&& voxelPos.z / 24 == itZ)
+//kL								&& _save->getTileEngine()->isVoxelVisible(voxelPos))
 							{
 								_camera->convertVoxelToScreen(
 															voxelPos,
-															&bulletPositionScreen);
+															&bulletPosScreen);
 								tmpSurface->blitNShade(
 										surface,
-										bulletPositionScreen.x - 16,
-										bulletPositionScreen.y - 26,
+										bulletPosScreen.x - 16,
+										bulletPosScreen.y - 26,
 										16);
 							}
 
 							voxelPos = _projectile->getPosition();
 							// draw thrown object
-							if (voxelPos.x / 16 >= itX
+							if (   voxelPos.x / 16 >= itX
 								&& voxelPos.y / 16 >= itY
 								&& voxelPos.x / 16 <= itX + 1
 								&& voxelPos.y / 16 <= itY + 1
-								&& voxelPos.z / 24 == itZ
-								&& _save->getTileEngine()->isVoxelVisible(voxelPos))
+								&& voxelPos.z / 24 == itZ)
+//kL								&& _save->getTileEngine()->isVoxelVisible(voxelPos))
 							{
 								_camera->convertVoxelToScreen(
 															voxelPos,
-															&bulletPositionScreen);
+															&bulletPosScreen);
 								tmpSurface->blitNShade(
 										surface,
-										bulletPositionScreen.x - 16,
-										bulletPositionScreen.y - 26,
+										bulletPosScreen.x - 16,
+										bulletPosScreen.y - 26,
 										0);
 							}
 						}
-						else
+						else // fired projectile ( a bullet-sprite, not a thrown item )
 						{
 							// draw bullet on the correct tile
-							if (itX >= bulletLowX
+							if (   itX >= bulletLowX
 								&& itX <= bulletHighX
 								&& itY >= bulletLowY
 								&& itY <= bulletHighY)
@@ -847,41 +876,41 @@ void Map::drawTerrain(Surface* surface)
 										Position voxelPos = _projectile->getPosition(1 - i);
 										// draw shadow on the floor
 										voxelPos.z = _save->getTileEngine()->castedShade(voxelPos);
-										if (voxelPos.x / 16 == itX
+										if (   voxelPos.x / 16 == itX
 											&& voxelPos.y / 16 == itY
-											&& voxelPos.z / 24 == itZ
-											&& _save->getTileEngine()->isVoxelVisible(voxelPos))
+											&& voxelPos.z / 24 == itZ)
+//kL											&& _save->getTileEngine()->isVoxelVisible(voxelPos))
 										{
 											_camera->convertVoxelToScreen(
 																		voxelPos,
-																		&bulletPositionScreen);
+																		&bulletPosScreen);
 
-											bulletPositionScreen.x -= tmpSurface->getWidth() / 2;
-											bulletPositionScreen.y -= tmpSurface->getHeight() / 2;
+											bulletPosScreen.x -= tmpSurface->getWidth() / 2;
+											bulletPosScreen.y -= tmpSurface->getHeight() / 2;
 											tmpSurface->blitNShade(
 													surface,
-													bulletPositionScreen.x,
-													bulletPositionScreen.y,
+													bulletPosScreen.x,
+													bulletPosScreen.y,
 													16);
 										}
 
 										// draw bullet itself
 										voxelPos = _projectile->getPosition(1 - i);
-										if (voxelPos.x / 16 == itX
+										if (   voxelPos.x / 16 == itX
 											&& voxelPos.y / 16 == itY
-											&& voxelPos.z / 24 == itZ
-											&& _save->getTileEngine()->isVoxelVisible(voxelPos))
+											&& voxelPos.z / 24 == itZ)
+//kL											&& _save->getTileEngine()->isVoxelVisible(voxelPos))
 										{
 											_camera->convertVoxelToScreen(
 																		voxelPos,
-																		&bulletPositionScreen);
+																		&bulletPosScreen);
 
-											bulletPositionScreen.x -= tmpSurface->getWidth() / 2;
-											bulletPositionScreen.y -= tmpSurface->getHeight() / 2;
+											bulletPosScreen.x -= tmpSurface->getWidth() / 2;
+											bulletPosScreen.y -= tmpSurface->getHeight() / 2;
 											tmpSurface->blitNShade(
 													surface,
-													bulletPositionScreen.x,
-													bulletPositionScreen.y,
+													bulletPosScreen.x,
+													bulletPosScreen.y,
 													0);
 										}
 									}
@@ -1431,7 +1460,7 @@ void Map::drawTerrain(Surface* surface)
 		{
 			_camera->convertVoxelToScreen(
 									(*i)->getPosition(),
-									&bulletPositionScreen);
+									&bulletPosScreen);
 			if ((*i)->isBig())
 			{
 				if ((*i)->getCurrentFrame() > -1)
@@ -1439,8 +1468,8 @@ void Map::drawTerrain(Surface* surface)
 					tmpSurface = _res->getSurfaceSet("X1.PCK")->getFrame((*i)->getCurrentFrame());
 					tmpSurface->blitNShade(
 							surface,
-							bulletPositionScreen.x - 64,
-							bulletPositionScreen.y - 64,
+							bulletPosScreen.x - 64,
+							bulletPosScreen.y - 64,
 							0);
 				}
 			}
@@ -1449,8 +1478,8 @@ void Map::drawTerrain(Surface* surface)
 				tmpSurface = _res->getSurfaceSet("HIT.PCK")->getFrame((*i)->getCurrentFrame());
 				tmpSurface->blitNShade(
 						surface,
-						bulletPositionScreen.x - 15,
-						bulletPositionScreen.y - 15,
+						bulletPosScreen.x - 15,
+						bulletPosScreen.y - 15,
 						0);
 			}
 			else
@@ -1458,13 +1487,14 @@ void Map::drawTerrain(Surface* surface)
 				tmpSurface = _res->getSurfaceSet("SMOKE.PCK")->getFrame((*i)->getCurrentFrame());
 				tmpSurface->blitNShade(
 						surface,
-						bulletPositionScreen.x - 15,
-						bulletPositionScreen.y - 15,
+						bulletPosScreen.x - 15,
+						bulletPosScreen.y - 15,
 						0);
 			}
 		}
 
 	surface->unlock();
+	//Log(LOG_INFO) << "Map::drawTerrain() EXIT";
 }
 
 /**
@@ -1678,8 +1708,12 @@ void Map::calculateWalkingOffset(
 		if (phase < midphase)
 		{
 			int
-				fromLevel = getTerrainLevel(unit->getPosition(), size),
-				toLevel = getTerrainLevel(unit->getDestination(), size);
+				fromLevel = getTerrainLevel(
+										unit->getPosition(),
+										size),
+				toLevel = getTerrainLevel(
+										unit->getDestination(),
+										size);
 
 			if (unit->getPosition().z > unit->getDestination().z)
 				// going down a level, so toLevel 0 becomes +24, -8 becomes  16
@@ -1695,8 +1729,12 @@ void Map::calculateWalkingOffset(
 			// from phase 4 onwards the unit behind the scenes already is on the destination tile
 			// we have to get its last position to calculate the correct offset
 			int
-				fromLevel = getTerrainLevel(unit->getLastPosition(), size),
-				toLevel = getTerrainLevel(unit->getDestination(), size);
+				fromLevel = getTerrainLevel(
+										unit->getLastPosition(),
+										size),
+				toLevel = getTerrainLevel(
+										unit->getDestination(),
+										size);
 
 			if (unit->getLastPosition().z > unit->getDestination().z)
 				// going down a level, so fromLevel 0 becomes -24, -8 becomes -32
@@ -1709,7 +1747,9 @@ void Map::calculateWalkingOffset(
 		}
 	}
 	else
-		offset->y += getTerrainLevel(unit->getPosition(), size);
+		offset->y += getTerrainLevel(
+								unit->getPosition(),
+								size);
 }
 
 /**
@@ -1886,6 +1926,7 @@ void Map::cacheUnit(BattleUnit* unit)
 void Map::setProjectile(Projectile* projectile)
 {
 	_projectile = projectile;
+	_launch = true; // kL
 }
 
 /**

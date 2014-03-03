@@ -308,7 +308,7 @@ void AlienMission::think(
 
 				// kL_note: Ironically, this likely allows multiple alien
 				// bases in Russia solely because of infiltrations ...!!
-				if ((*c)->getType() != "STR_RUSSIA") // kL
+				if ((*c)->getType() != "STR_RUSSIA") // kL. heh
 					(*c)->setNewPact();
 
 				spawnAlienBase(
@@ -325,7 +325,9 @@ void AlienMission::think(
 	if (_rule.getType() == "STR_ALIEN_BASE"
 		&& _nextWave == _rule.getWaveCount())
 	{
-		spawnAlienBase(globe, engine);
+		spawnAlienBase(
+					globe,
+					engine);
 	}
 
 	if (_nextWave != _rule.getWaveCount())
@@ -354,11 +356,9 @@ Ufo* AlienMission::spawnUfo(
 		const UfoTrajectory& trajectory)
 {
 	//Log(LOG_INFO) << "AlienMission::spawnUfo()";
-
 	if (_rule.getType() == "STR_ALIEN_RETALIATION")
 	{
 		//Log(LOG_INFO) << ". STR_ALIEN_RETALIATION";
-
 		const RuleRegion& regionRules = *ruleset.getRegion(_region);
 
 		std::vector<Base*>::const_iterator found = std::find_if(
@@ -388,9 +388,10 @@ Ufo* AlienMission::spawnUfo(
 				pos = regionRules.getRandomPoint(trajectory.getZone(0));
 
 //kL			ufo->setAltitude(assaultTrajectory.getAltitude(0));
+//kL			ufo->setSpeed(static_cast<int>(
+//kL							assaultTrajectory.getSpeedPercentage(0) * static_cast<float>(ufoRule.getMaxSpeed())));
 			ufo->setAltitude("STR_VERY_LOW"); // kL. heh
-			ufo->setSpeed(static_cast<int>(
-							assaultTrajectory.getSpeedPercentage(0) * static_cast<float>(ufoRule.getMaxSpeed())));
+			ufo->setSpeed(ufoRule.getMaxSpeed()); // kL. heh
 			ufo->setLongitude(pos.first);
 			ufo->setLatitude(pos.second);
 
@@ -411,7 +412,6 @@ Ufo* AlienMission::spawnUfo(
 			&& !_base)
 		{
 			//Log(LOG_INFO) << ". . No base to supply!";
-
 			return 0; // No base to supply!
 		}
 

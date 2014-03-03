@@ -837,9 +837,7 @@ std::string Craft::rearm(Ruleset* rules)
 			std::string clip = (*i)->getRules()->getClipItem();
 			int available = _base->getItems()->getItem(clip);
 			if (clip == "")
-			{
 				(*i)->rearm(0, 0);
-			}
 			else if (available > 0)
 			{
 				int used = (*i)->rearm(available, rules->getItem(clip)->getClipSize());
@@ -907,7 +905,8 @@ bool Craft::isInBattlescape() const
  */
 void Craft::setInBattlescape(bool inbattle)
 {
-	if (inbattle) setSpeed(0);
+	if (inbattle)
+		setSpeed(0);
 
 	_inBattlescape = inbattle;
 }
@@ -966,9 +965,7 @@ int Craft::getVehicleCount(const std::string& vehicle) const
 			++i)
 	{
 		if ((*i)->getRules()->getType() == vehicle)
-		{
 			total++;
-		}
 	}
 
 	return total;

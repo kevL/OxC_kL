@@ -57,6 +57,7 @@ private:
 	static const int heightFromCenter[11];
 
 	bool _personalLighting;
+	int _powerT; // kL
 	SavedBattleGame* _save;
 	std::vector<Uint16>* _voxelData;
 
@@ -70,7 +71,7 @@ private:
 			Tile* tile,
 			const int part,
 			ItemDamageType type,
-			int direction = -1);
+			int dir = -1);
 
 
 	public:

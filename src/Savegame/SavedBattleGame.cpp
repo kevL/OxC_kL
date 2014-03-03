@@ -1316,7 +1316,7 @@ void SavedBattleGame::randomizeItemLocations(Tile* t)
 
 /**
  * Removes an item from the game. Eg. when ammo item is depleted.
- * @param item The Item to remove.
+ * @param item, The Item to remove.
  */
 void SavedBattleGame::removeItem(BattleItem* item)
 {
@@ -1383,7 +1383,7 @@ void SavedBattleGame::removeItem(BattleItem* item)
 
 /**
  * Sets whether the mission was aborted or successful.
- * @param flag True, if the mission was aborted, or false, if the mission was successful.
+ * @param flag, True if the mission was aborted, or false, if the mission was successful.
  */
 void SavedBattleGame::setAborted(bool flag)
 {
@@ -1392,7 +1392,7 @@ void SavedBattleGame::setAborted(bool flag)
 
 /**
  * Returns whether the mission was aborted or successful.
- * @return True, if the mission was aborted, or false, if the mission was successful.
+ * @return, True if the mission was aborted, or false, if the mission was successful.
  */
 bool SavedBattleGame::isAborted() const
 {
@@ -1401,7 +1401,7 @@ bool SavedBattleGame::isAborted() const
 
 /**
  * Sets whether the objective is destroyed.
- * @param flag True if the objective is destroyed.
+ * @param flag, True if the objective is destroyed.
  */
 void SavedBattleGame::setObjectiveDestroyed(bool flag)
 {
@@ -1417,7 +1417,7 @@ void SavedBattleGame::setObjectiveDestroyed(bool flag)
 
 /**
  * Returns whether the objective is detroyed.
- * @return True if the objective is destroyed.
+ * @return, True if the objective is destroyed.
  */
 bool SavedBattleGame::isObjectiveDestroyed()
 {
@@ -1426,7 +1426,7 @@ bool SavedBattleGame::isObjectiveDestroyed()
 
 /**
  * Gets the current item ID.
- * @return Current item ID pointer.
+ * @return, Current item ID pointer.
  */
 int* SavedBattleGame::getCurrentItemId()
 {

@@ -38,32 +38,34 @@ const char* altitudeString[] =
 namespace YAML
 {
 
-	template<>
-	struct convert<OpenXcom::TrajectoryWaypoint>
+template<>
+struct convert<OpenXcom::TrajectoryWaypoint>
+{
+	static Node encode(const OpenXcom::TrajectoryWaypoint& rhs)
 	{
-		static Node encode(const OpenXcom::TrajectoryWaypoint& rhs)
-		{
-			Node node;
+		Node node;
 
-			node.push_back(rhs.zone);
-			node.push_back(rhs.altitude);
-			node.push_back(rhs.speed);
+		node.push_back(rhs.zone);
+		node.push_back(rhs.altitude);
+		node.push_back(rhs.speed);
 
-			return node;
-		}
+		return node;
+	}
 
-		static bool decode(const Node& node, OpenXcom::TrajectoryWaypoint& rhs)
-		{
-			if (!node.IsSequence() || node.size() != 3)
-				return false;
+	static bool decode(
+			const Node& node,
+			OpenXcom::TrajectoryWaypoint& rhs)
+	{
+		if (!node.IsSequence() || node.size() != 3)
+			return false;
 
-			rhs.zone		= node[0].as<int>();
-			rhs.altitude	= node[1].as<int>();
-			rhs.speed		= node[2].as<int>();
+		rhs.zone		= node[0].as<int>();
+		rhs.altitude	= node[1].as<int>();
+		rhs.speed		= node[2].as<int>();
 
-			return true;
-		}
-	};
+		return true;
+	}
+};
 
 }
 

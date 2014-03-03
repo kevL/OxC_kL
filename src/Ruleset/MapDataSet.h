@@ -52,6 +52,7 @@ private:
 
 	static MapData* _blankTile;
 	static MapData* _scorchedTile;
+
 	SurfaceSet* _surfaceSet;
 
 	std::vector<MapData*> _objects;

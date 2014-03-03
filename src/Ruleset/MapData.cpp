@@ -106,7 +106,7 @@ void MapData::setSprite(
 
 /**
  * Gets whether this is an animated ufo door.
- * @return True if this is an animated ufo door.
+ * @return, True if this is an animated ufo door.
  */
 bool MapData::isUFODoor() const
 {
@@ -114,8 +114,17 @@ bool MapData::isUFODoor() const
 }
 
 /**
+ * kL. Gets whether this stops LoS.
+ * @return, True if this stops LoS.
+ */
+bool MapData::stopLOS() const // kL
+{
+	return _stopLOS;
+}
+
+/**
  * Gets whether this is a floor.
- * @return True if this is a floor.
+ * @return, True if this is a floor.
  */
 bool MapData::isNoFloor() const
 {
@@ -135,7 +144,7 @@ bool MapData::isNoFloor() const
  * 6: acts as an east wall
  * 7: acts as a south wall
  * 8: acts as a south and east wall.
- * @return An integer representing what kind of bigwall this is.
+ * @return, An integer representing what kind of bigwall this is.
  */
 int MapData::getBigWall() const
 {
@@ -147,7 +156,7 @@ int MapData::getBigWall() const
 
 /**
  * Gets whether this is a normal door.
- * @return True if this is a normal door.
+ * @return, True if this is a normal door.
  */
 bool MapData::isDoor() const
 {
@@ -165,15 +174,15 @@ bool MapData::isGravLift() const
 
 /**
  * Sets all kinds of flags.
- * @param isUfoDoor True if this is a ufo door.
- * @param stopLOS True if this stops line of sight.
- * @param isNoFloor True if this is a floor.
- * @param bigWall True if this is a bigWall.
- * @param isGravLift True if this is a grav lift.
- * @param isDoor True if this is a normal door.
- * @param blockFire True if this blocks fire.
- * @param blockSmoke True if this blocks smoke.
- * @param baseModule True if this is a base module item.
+ * @param isUfoDoor, True if this is a ufo door.
+ * @param stopLOS, True if this stops line of sight.
+ * @param isNoFloor, True if this is *not* a floor.
+ * @param bigWall, Type of a bigWall.
+ * @param isGravLift, True if this is a grav lift.
+ * @param isDoor, True if this is a normal door.
+ * @param blockFire, True if this blocks fire.
+ * @param blockSmoke, True if this blocks smoke.
+ * @param baseModule, True if this is a base module (objective) item.
  */
 void MapData::setFlags(
 		bool isUfoDoor,
@@ -234,7 +243,7 @@ int MapData::getBlock(ItemDamageType type) const
  * @param fireBlock The fire blockage.
  * @param gasBlock The gas blockage.
  */
-void MapData::setBlockValue(
+void MapData::setBlock(
 		int lightBlock,
 		int visionBlock,
 		int HEBlock,
@@ -276,21 +285,21 @@ void MapData::setYOffset(int value)
 }
 
 /**
- * Gets info about special tile types.
- * @return The special tile type.
- */
-SpecialTileType MapData::getSpecialType() const
-{
-	return _specialType;
-}
-
-/**
  * Gets the type of object.
  * @return The object type (0-3).
  */
 int MapData::getObjectType() const
 {
 	return _objectType;
+}
+
+/**
+ * Gets info about special tile types.
+ * @return The special tile type.
+ */
+SpecialTileType MapData::getSpecialType() const
+{
+	return _specialType;
 }
 
 /**
@@ -302,7 +311,7 @@ void MapData::setSpecialType(
 		int value,
 		int otype)
 {
-	_specialType = (SpecialTileType)value;
+	_specialType = static_cast<SpecialTileType>(value);
 	_objectType = otype;
 }
 

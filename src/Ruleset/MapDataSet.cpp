@@ -123,7 +123,7 @@ void MapDataSet::loadData()
 	int objNumber = 0;
 
 #pragma pack(push, 1)
-	struct MCD // this struct helps to read the xcom file format
+	struct MCD // this struct helps to read the .MCD file format
 	{
 		unsigned char Frame[8];
 		unsigned char LOFT[12];
@@ -195,7 +195,9 @@ void MapDataSet::loadData()
 				frame < 8;
 				frame++)
 		{
-			to->setSprite(frame,(int)mcd.Frame[frame]);
+			to->setSprite(
+					frame,
+					(int)mcd.Frame[frame]);
 		}
 
 		to->setYOffset((int)mcd.P_Level);
@@ -220,7 +222,7 @@ void MapDataSet::loadData()
 		to->setFootstepSound((int)mcd.Footstep);
 		to->setAltMCD((int)(mcd.Alt_MCD));
 		to->setDieMCD((int)(mcd.Die_MCD));
-		to->setBlockValue(
+		to->setBlock(
 				(int)mcd.Light_Block,
 				(int)mcd.Stop_LOS,
 				(int)mcd.HE_Block,
@@ -275,22 +277,22 @@ void MapDataSet::loadData()
 			&& (*i)->getBlock(DT_HE) == 0)
 		{
 			int armor = (*i)->getArmor();
-			(*i)->setBlockValue(
-							1,
-							1,
-							armor,
-							1,
-							1,
-							armor);
+			(*i)->setBlock(
+						1,
+						1,
+						armor,
+						1,
+						1,
+						armor);
 
 			if ((*i)->getDieMCD())
-				_objects.at((*i)->getDieMCD())->setBlockValue(
-															1,
-															1,
-															armor,
-															1,
-															1,
-															armor);
+				_objects.at((*i)->getDieMCD())->setBlock(
+														1,
+														1,
+														armor,
+														1,
+														1,
+														armor);
 		}
 	}
 

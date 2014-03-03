@@ -101,11 +101,12 @@ void ExplosionBState::init()
 		// all the rest hits one point:
 		// AP, melee (stun or AP), laser, plasma, acid
 		_areaOfEffect = _item->getRules()->getBattleType() != BT_MELEE
-/*						&& (_item->getRules()->getDamageType() == DT_HE
-							|| _item->getRules()->getDamageType() == DT_IN
-							|| _item->getRules()->getDamageType() == DT_SMOKE
-							|| _item->getRules()->getDamageType() == DT_STUN); */
-						&& _item->getRules()->getExplosionRadius() != 0;
+					&& _item->getRules()->getBattleType() != BT_PSIAMP		// kL
+//					&& (_item->getRules()->getDamageType() == DT_HE			// kL, Old Code.
+//						|| _item->getRules()->getDamageType() == DT_IN		// kL
+//						|| _item->getRules()->getDamageType() == DT_SMOKE	// kL
+//						|| _item->getRules()->getDamageType() == DT_STUN);	// kL
+					&& _item->getRules()->getExplosionRadius() != 0;		// <- worrisome, kL_note.
 	}
 	else if (_tile)
 	{
@@ -116,7 +117,7 @@ void ExplosionBState::init()
 	}
 	else // cyberdiscs!!!
 	{
-		_power = RNG::generate(61, 135);
+		_power = RNG::generate(65, 135);
 		//Log(LOG_INFO) << ". _power(Cyberdisc) = " << _power;
 
 		_areaOfEffect = true;

@@ -118,18 +118,26 @@ private:
 		static const int O_NORTHWALL;
 		static const int O_OBJECT;
 
+		/// cTor.
 		MapData(MapDataSet* dataset);
+		/// dTor.
 		~MapData();
 
 
 		/// Gets the dataset this object belongs to.
 		MapDataSet* getDataset() const;
+
 		/// Gets the sprite index for a certain frame.
 		int getSprite(int frameID) const;
 		/// Sets the sprite index for a certain frame.
-		void setSprite(int frameID, int value);
+		void setSprite(
+				int frameID,
+				int value);
+
 		/// Gets whether this is an animated ufo door.
 		bool isUFODoor() const;
+		/// kL. Gets whether this stops LoS.
+		bool stopLOS() const; // kL
 		/// Gets whether this is a floor.
 		bool isNoFloor() const;
 		/// Gets whether this is a big wall, which blocks all surrounding paths.
@@ -149,38 +157,51 @@ private:
 				bool blockFire,
 				bool blockSmoke,
 				bool baseModule);
+
 		/// Gets the amount of blockage of a certain type.
 		int getBlock(ItemDamageType type) const;
 		/// Sets the amount of blockage for all types.
-		void setBlockValue(
+		void setBlock(
 				int lightBlock,
 				int visionBlock,
 				int HEBlock,
 				int smokeBlock,
 				int fireBlock,
 				int gasBlock);
+
 		/// Gets the offset on the Y axis when drawing this object.
 		int getYOffset() const;
 		/// Sets the offset on the Y axis for drawing this object.
 		void setYOffset(int value);
-		/// Gets info about special tile types
-		SpecialTileType getSpecialType() const;
+
 		/// Get the type of tile.
 		int getObjectType() const;
+
+		/// Gets info about special tile types
+		SpecialTileType getSpecialType() const;
 		/// Sets a special tile type and object type.
-		void setSpecialType(int value, int otype);
+		void setSpecialType(
+				int value,
+				int otype);
+
 		/// Gets the TU cost to move over the object.
 		int getTUCost(MovementType movementType) const;
 		/// Sets the TU cost to move over the object.
-		void setTUCosts(int walk, int fly, int slide);
+		void setTUCosts(
+				int walk,
+				int fly,
+				int slide);
+
 		/// Adds this to the graphical Y offset of units or objects on this tile.
 		int getTerrainLevel() const;
 		/// Sets Y offset for units/objects on this tile.
 		void setTerrainLevel(int value);
+
 		/// Gets the index to the footstep sound.
 		int getFootstepSound() const;
 		/// Sets the index to the footstep sound.
 		void setFootstepSound(int value);
+
 		/// Gets the alternative object ID.
 		int getAltMCD() const;
 		/// Sets the alternative object ID.
@@ -189,14 +210,17 @@ private:
 		int getDieMCD() const;
 		/// Sets the dead object ID.
 		void setDieMCD(int value);
+
 		/// Gets the amount of light the object is emitting.
 		int getLightSource() const;
 		/// Sets the amount of light the object is emitting.
 		void setLightSource(int value);
+
 		/// Gets the amount of armor.
 		int getArmor() const;
 		/// Sets the amount of armor.
 		void setArmor(int value);
+
 		/// Gets the amount of flammable.
 		int getFlammable() const;
 		/// Sets the amount of flammable.
@@ -205,26 +229,34 @@ private:
 		int getFuel() const;
 		/// Sets the amount of fuel.
 		void setFuel(int value);
+
 		/// Gets the loft index for a certain layer.
 		int getLoftID(int layer) const;
 		/// Sets the loft index for a certain layer.
-		void setLoftID(int loft, int layer);
+		void setLoftID(
+				int loft,
+				int layer);
+
 		/// Gets the amount of explosive.
 		int getExplosive() const;
 		/// Sets the amount of explosive.
 		void setExplosive(int value);
+
 		/// Sets the MiniMap index
 		void setMiniMapIndex(unsigned short i);
 		/// Gets the MiniMap index
 		unsigned short getMiniMapIndex() const;
+
 		/// Sets the bigwall value.
 		void setBigWall(const int bigWall);
+
 		/// Sets the TUWalk value.
 		void setTUWalk(const int TUWalk);
 		/// Sets the TUFly value.
 		void setTUFly(const int TUFly);
 		/// Sets the TUSlide value.
 		void setTUSlide(const int TUSlide);
+
 		/// Check if this is an xcom base object.
 		bool isBaseModule();
 };

@@ -69,7 +69,10 @@ private:
 	static const int SCROLL_INTERVAL	= 20;
 	static const int BULLET_SPRITES		= 35;
 
+	CursorType _cursorType;
+
 	bool
+		_launch, // kL
 		_explosionInFOV,
 		_projectileInFOV,
 		_unitDying;
@@ -86,22 +89,21 @@ private:
 		_spriteHeight,
 		_visibleMapHeight;
 
-	BattlescapeMessage* _message;
-	Camera* _camera;
-	CursorType _cursorType;
-	Game* _game;
-	NumberText* _txtAccuracy; // kL
-	Projectile* _projectile;
-	ResourcePack* _res;
-	SavedBattleGame* _save;
-	Surface* _arrow;
+	BattlescapeMessage	* _message;
+	Camera				* _camera;
+	Game				* _game;
+	NumberText			* _txtAccuracy; // kL
+	Projectile			* _projectile;
+	ResourcePack		* _res;
+	SavedBattleGame		* _save;
+	Surface				* _arrow;
 //kL	Text* _txtAccuracy;
 	Timer
-		* _scrollMouseTimer,
-		* _scrollKeyTimer;
+						* _scrollMouseTimer,
+						* _scrollKeyTimer;
 
-	std::set<Explosion*> _explosions;
-	std::vector<Position> _waypoints;
+	std::set<Explosion*>	_explosions;
+	std::vector<Position>	_waypoints;
 
 	///
 	void drawTerrain(Surface* surface);

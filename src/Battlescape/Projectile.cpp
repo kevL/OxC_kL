@@ -385,13 +385,13 @@ int Projectile::calculateThrow(double accuracy)
 			// _OLD: let it fly without deviation, it must land on a valid tile in that case.
 			// kL_note: Am i sure I want this? xCom_orig let stuff land on nonwalkable tiles...!!!
 			// and, uh, couldn't this lead to a potentially infinite loop???
-			if (_action.type == BA_THROW
+/*			if (_action.type == BA_THROW
 				&& endTile
 				&& endTile->getMapData(MapData::O_OBJECT)
 				&& endTile->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) == 255)
 			{
 				test = VOXEL_OUTOFBOUNDS;
-			}
+			} */
 /*_OLD			ret = _save->getTileEngine()->calculateParabola(
 					originVoxel,
 					targetVoxel,

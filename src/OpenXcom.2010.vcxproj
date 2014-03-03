@@ -257,6 +257,7 @@
     <ClCompile Include="Basescape\SoldierInfoState.cpp" />
     <ClCompile Include="Basescape\SoldierMemorialState.cpp" />
     <ClCompile Include="Basescape\SoldiersState.cpp" />
+    <ClCompile Include="Basescape\StoresMatrixState.cpp" />
     <ClCompile Include="Basescape\StoresState.cpp" />
     <ClCompile Include="Basescape\TransferBaseState.cpp" />
     <ClCompile Include="Basescape\TransferConfirmState.cpp" />
@@ -535,6 +536,7 @@
     <ClInclude Include="Basescape\SoldierInfoState.h" />
     <ClInclude Include="Basescape\SoldierMemorialState.h" />
     <ClInclude Include="Basescape\SoldiersState.h" />
+    <ClInclude Include="Basescape\StoresMatrixState.h" />
     <ClInclude Include="Basescape\StoresState.h" />
     <ClInclude Include="Basescape\TransferBaseState.h" />
     <ClInclude Include="Basescape\TransferConfirmState.h" />

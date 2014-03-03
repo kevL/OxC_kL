@@ -409,6 +409,7 @@ int Tile::openDoor(
 	if (!_objects[part])
 		return -1;
 
+
 	if (_objects[part]->isDoor())
 	{
 		if (unit
@@ -456,7 +457,7 @@ int Tile::openDoor(
  */
 int Tile::closeUfoDoor()
 {
-	int retval = 0;
+	int ret = 0;
 
 	for (int
 			part = 0;
@@ -466,11 +467,11 @@ int Tile::closeUfoDoor()
 		if (isUfoDoorOpen(part))
 		{
 			_currFrame[part] = 0;
-			retval = 1;
+			ret = 1;
 		}
 	}
 
-	return retval;
+	return ret;
 }
 
 /**
@@ -569,30 +570,39 @@ bool Tile::destroy(int part)
 	if (_objects[part])
 	{
 		//Log(LOG_INFO) << ". objects[part] is Valid";
-
-		if (_objects[part]->isGravLift())
+		if (_objects[part]->isGravLift()
+			|| _objects[part]->getArmor() == 255) // kL
+		{
 			return false;
+		}
+
 
 		_objective = _objects[part]->getSpecialType() == MUST_DESTROY;
 		MapData* originalPart = _objects[part];
 
 		int originalMapDataSetID = _mapDataSetID[part];
-		setMapData(0, -1, -1, part);
+		setMapData(
+				0,
+				-1,
+				-1,
+				part);
 
 		//Log(LOG_INFO) << ". preDie";
 		if (originalPart->getDieMCD())
 		{
 			//Log(LOG_INFO) << ". . getDieMCD()";
-
 			MapData* dead = originalPart->getDataset()->getObjects()->at(originalPart->getDieMCD());
-			setMapData(dead, originalPart->getDieMCD(), originalMapDataSetID, dead->getObjectType());
+			setMapData(
+					dead,
+					originalPart->getDieMCD(),
+					originalMapDataSetID,
+					dead->getObjectType());
 		}
 
 		//Log(LOG_INFO) << ". preExplode";
 		if (originalPart->getExplosive())
 		{
 			//Log(LOG_INFO) << ". . getExplosive()";
-
 			setExplosive(originalPart->getExplosive());
 		}
 	}
@@ -606,7 +616,11 @@ bool Tile::destroy(int part)
 		//Log(LOG_INFO) << ". . getScorchedEarthTile()";
 
 		// replace with scorched earth
-		setMapData(MapDataSet::getScorchedEarthTile(), 1, 0, MapData::O_FLOOR);
+		setMapData(
+				MapDataSet::getScorchedEarthTile(),
+				1,
+				0,
+				MapData::O_FLOOR);
 	}
 
 	//Log(LOG_INFO) << ". ret = " << _objective;

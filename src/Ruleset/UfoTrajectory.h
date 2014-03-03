@@ -22,6 +22,7 @@
 
 #include <vector>
 #include <string>
+
 #include <yaml-cpp/yaml.h>
 
 
@@ -42,8 +43,12 @@ struct TrajectoryWaypoint
 };
 
 
-YAML::Emitter &operator<<(YAML::Emitter& emitter, const TrajectoryWaypoint& wp);
-bool operator>>(const YAML::Node& node, TrajectoryWaypoint& wp);
+YAML::Emitter& operator << (
+		YAML::Emitter& emitter,
+		const TrajectoryWaypoint& wp);
+bool operator >> (
+		const YAML::Node& node,
+		TrajectoryWaypoint& wp);
 
 
 /**
@@ -52,6 +57,7 @@ bool operator>>(const YAML::Node& node, TrajectoryWaypoint& wp);
  */
 class UfoTrajectory
 {
+
 private:
 	std::string _id;
 	unsigned _groundTimer;
