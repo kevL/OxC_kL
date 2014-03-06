@@ -91,6 +91,7 @@ void createDefault()
 	setInt("maxFrameSkip", 0);
 	setBool("traceAI", false);
 	setBool("sneakyAI", false);
+	setBool("TFTDDamage", false);
 	setBool("weaponSelfDestruction", false);
 //kL	setBool("researchedItemsWillSpent", false);
 	setBool("researchedItemsWillSpent", true); // kL

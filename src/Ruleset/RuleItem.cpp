@@ -98,7 +98,8 @@ RuleItem::RuleItem(const std::string& type)
 		_explosionSpeed(0),
 		_autoShots(3),
 		_shotgunPellets(0),
-		_zombieUnit("")
+		_zombieUnit(""),
+		_strengthApplied(false)
 {
 }
 
@@ -858,6 +859,11 @@ int RuleItem::getShotgunPellets() const
 std::string RuleItem::getZombieUnit() const
 {
 	return _zombieUnit;
+}
+
+bool RuleItem::isStrengthApplied() const
+{
+	return _strengthApplied;
 }
 
 }

@@ -483,8 +483,8 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 									&& _save->getSide() == FACTION_HOSTILE) // kL, per Original.
 								{
 									//Log(LOG_INFO) << ". . calculateFOV(), spotted Unit FACTION_HOSTILE, setTurnsExposed()";
-									visUnit->setTurnsExposed(0);	// note that xCom can be seen by enemies but *not* be Exposed. hehe
-																	// Only reactionFire should set them Exposed during xCom's turn.
+									visUnit->setTurnsSinceSpotted(0);	// note that xCom can be seen by enemies but *not* be Exposed. hehe
+																		// Only reactionFire should set them Exposed during xCom's turn.
 								}
 							}
 							//Log(LOG_INFO) << ". . calculateFOV(), opposite Factions, Done";
@@ -2099,10 +2099,23 @@ BattleUnit* TileEngine::hit(
 					}
 				} // kL_end.
 
-//kL				const int randPower	= RNG::generate(1, power * 2);	// kL_above
-				power = RNG::generate(
-									1,
-									power * 2);
+//kL				int
+//kL					damageRange = (type == DT_HE || Options::getBool("TFTDDamage"))? 50: 100,
+//kL					min = power * (100 - damageRange) / 100,
+//kL					max = power * (100 + damageRange) / 100;
+//kL				const int randPower = RNG::generate(min, max);
+
+				if (type == DT_HE
+					|| Options::getBool("TFTDDamage"))
+				{
+					power = RNG::generate(
+										power / 2,
+										power * 3 / 2);
+				}
+				else
+					power = RNG::generate(
+										1,
+										power * 2);
 				//Log(LOG_INFO) << ". . . RNG::generate(power) = " << power;
 
 				bool ignoreArmor = (type == DT_STUN);	// kL. stun ignores armor... does now! UHM....
@@ -2352,6 +2365,10 @@ void TileEngine::explode(
 				if (tilePair.second) // true if a new tile was inserted.
 				{
 					//Log(LOG_INFO) << ". . new tile TRUE";
+
+//kL					int dmgRng = (type == DT_HE || Options::getBool("TFTDDamage"))? 50: 100;
+//kL					int min = power_ * (100 - dmgRng) / 100;
+//kL					int max = power_ * (100 + dmgRng) / 100;
 
 					if (origin->getPosition().z != tileZ) // 3d explosion factor
 						_powerT -= vertdec;

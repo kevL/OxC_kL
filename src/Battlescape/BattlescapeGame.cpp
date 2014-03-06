@@ -887,7 +887,7 @@ void BattlescapeGame::checkForCasualties(
 								&& killer->getFaction() == FACTION_PLAYER
 								&& victim->getFaction() == FACTION_HOSTILE)
 							{
-								killer->setTurnsExposed(0); // interesting
+								killer->setTurnsSinceSpotted(0); // interesting
 								//Log(LOG_INFO) << ". . . . killer Exposed";
 							} */
 						}

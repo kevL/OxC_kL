@@ -225,7 +225,7 @@ void ResearchInfoState::buildUi()
 
 		if (_rule->needItem()
 			&& (_game->getRuleset()->getUnit(_rule->getName())
-				|| Options::getBool("researchedItemsWillSpent")))
+				|| Options::getBool("spendResearchedItems")))
 		{
 			_base->getItems()->removeItem(_rule->getName());
 		}
@@ -299,7 +299,7 @@ void ResearchInfoState::btnCancelClick(Action*)
 
 	if (ruleResearch->needItem()
 		&& (_game->getRuleset()->getUnit(ruleResearch->getName())
-			|| Options::getBool("researchedItemsWillSpent")))
+			|| Options::getBool("spendResearchedItems")))
 	{
 		_base->getItems()->addItem(ruleResearch->getName());
 	}

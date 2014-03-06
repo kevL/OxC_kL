@@ -153,6 +153,7 @@ private:
 
 
 	std::string _zombieUnit;
+	bool _strengthApplied;
 	public:
 		/// Creates a blank item ruleset.
 		RuleItem(const std::string& type);
@@ -328,6 +329,8 @@ private:
 		int getShotgunPellets() const;
 		/// Gets a weapon's zombie unit, if any.
 		std::string getZombieUnit() const;
+		///
+		bool isStrengthApplied() const;
 };
 
 }

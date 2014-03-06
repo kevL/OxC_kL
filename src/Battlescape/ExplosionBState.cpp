@@ -95,6 +95,12 @@ void ExplosionBState::init()
 	if (_item)
 	{
 		_power = _item->getRules()->getPower();
+		// since melee aliens don't use a conventional weapon type, we use their strength instead.
+		if (_item->getRules()->getBattleType() == BT_MELEE
+			&& _item->getRules()->isStrengthApplied())
+		{
+			_power += _unit->getStats()->strength;
+		}
 		//Log(LOG_INFO) << ". _power(_item) = " << _power;
 
 		// heavy explosions, incendiary, smoke or stun bombs create AOE explosions

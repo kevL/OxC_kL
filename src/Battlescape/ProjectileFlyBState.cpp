@@ -850,8 +850,9 @@ void ProjectileFlyBState::think()
 					// projectiles generally move 2 voxels at a time
 					int offset = 0;
 					if (_ammo
-						&& (_ammo->getRules()->getDamageType() == DT_HE
-							|| _ammo->getRules()->getDamageType() == DT_IN))
+						&& _ammo->getRules()->getExplosionRadius() != 0)
+//						&& (_ammo->getRules()->getDamageType() == DT_HE			// kL
+//							|| _ammo->getRules()->getDamageType() == DT_IN))	// kL
 					{
 						offset = -2;
 					}
@@ -939,7 +940,7 @@ void ProjectileFlyBState::think()
 							if (aggro != 0)
 							{
 								aggro->setWasHit();
-//kL								_unit->setTurnsExposed(0); // kL_note: might want to remark this!
+//kL								_unit->setTurnsSinceSpotted(0); // kL_note: might want to remark this! Ok.
 								// technically, in the original as I remember it, only
 								// a BlasterLaunch would set an xCom soldier Exposed here!
 							}

@@ -1140,16 +1140,16 @@ void SavedBattleGame::endTurn()
 		if ((*i)->getFaction() == FACTION_PLAYER) // including units Mc'd by xCom
 		{
 			if ((*i)->isOut(true, true))
-				(*i)->setTurnsExposed(255);
+				(*i)->getTurnsSinceSpotted(255);
 			else if (_cheating
 				&& _side == FACTION_HOSTILE)
 			{
-				(*i)->setTurnsExposed(0); // they see you.
+				(*i)->setTurnsSinceSpotted(0); // they see you.
 			}
 			else if ((*i)->getTurnsExposed() < 255
 				&& _side == FACTION_PLAYER)
 			{
-				(*i)->setTurnsExposed((*i)->getTurnsExposed() +	1);
+				(*i)->setTurnsSinceSpotted((*i)->getTurnsSinceSpotted() + 1);
 			}
 		}
 		else
@@ -1158,8 +1158,8 @@ void SavedBattleGame::endTurn()
 //			(*i)->convertToFaction((*i)->getOriginalFaction());
 
 			if ((*i)->getOriginalFaction() == FACTION_HOSTILE)
-				(*i)->setTurnsExposed(0);	// aLiens always know where their buddies are,
-											// Mc'd or not.
+				(*i)->setTurnsSinceSpotted(0);	// aLiens always know where their buddies are,
+												// Mc'd or not.
 		}
 
 //		if ((*i)->getFaction() == _side)
