@@ -184,7 +184,7 @@ void MiniMapView::draw()
 				}
 
 				if (t->isDiscovered(2)
-					&& !t->getInventory()->empty()) // perhaps (at least one) item on this tile?
+					&& !t->getInventory()->empty()) // at least one item on this tile
 				{
 					int frame = 9 + _frame;
 

@@ -421,8 +421,7 @@ void Map::drawTerrain(Surface* surface)
 		endZ = _save->getMapSizeZ() - 1;
 
 
-	// if we got bullet, get the highest x and y tiles to draw it on
-	if (_projectile
+	if (_projectile // if we got bullet, get the highest x and y tiles to draw it on
 		&& _explosions.empty())
 	{
 		int part = BULLET_SPRITES - 1;
@@ -652,7 +651,8 @@ void Map::drawTerrain(Surface* surface)
 				{
 					tile = _save->getTile(mapPosition);
 
-					if (!tile) continue;
+					if (!tile)
+						continue;
 
 					if (tile->isDiscovered(2))
 						tileShade = tile->getShade();
@@ -955,7 +955,7 @@ void Map::drawTerrain(Surface* surface)
 					}
 
 					// if we can see through the floor, draw the soldier below it if it is on stairs
-					Tile* tileBelow = _save->getTile(mapPosition + Position(0, 0, -1));
+					Tile* tileBelow = _save->getTile(mapPosition + Position(0, 0,-1));
 
 					if (itZ > 0
 						&& tile->hasNoFloor(tileBelow))
@@ -1274,9 +1274,10 @@ void Map::drawTerrain(Surface* surface)
 					}
 
 					// Draw waypoints if any on this tile
-					int waypid = 1;
-					int waypXOff = 2;
-					int waypYOff = 2;
+					int
+						waypid = 1,
+						waypXOff = 2,
+						waypYOff = 2;
 
 					for (std::vector<Position>::const_iterator
 							i = _waypoints.begin();
@@ -1320,14 +1321,17 @@ void Map::drawTerrain(Surface* surface)
 	}
 
 	if (pathfinderTurnedOn)
+	{
 		for (int
 				itZ = beginZ;
 				itZ <= endZ;
 				itZ++)
+		{
 			for (int
 					itX = beginX;
 					itX <= endX;
 					itX++)
+			{
 				for (int
 						itY = beginY;
 						itY <= endY;
@@ -1415,6 +1419,9 @@ void Map::drawTerrain(Surface* surface)
 						}
 					}
 				}
+			}
+		}
+	}
 
 //kL	unit = (BattleUnit*)_save->getSelectedUnit();
 	unit = dynamic_cast<BattleUnit*>(_save->getSelectedUnit()); // kL
@@ -1453,6 +1460,7 @@ void Map::drawTerrain(Surface* surface)
 	delete _numWaypid;
 
 	if (_explosionInFOV) // check if we got big explosions
+	{
 		for (std::set<Explosion*>::const_iterator
 				i = _explosions.begin();
 				i != _explosions.end();
@@ -1492,6 +1500,7 @@ void Map::drawTerrain(Surface* surface)
 						0);
 			}
 		}
+	}
 
 	surface->unlock();
 	//Log(LOG_INFO) << "Map::drawTerrain() EXIT";

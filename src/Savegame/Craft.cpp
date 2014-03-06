@@ -79,9 +79,7 @@ Craft::Craft(
 	_items = new ItemContainer();
 
 	if (id != 0)
-	{
 		_id = id;
-	}
 
 	for (int
 			i = 0;
@@ -141,9 +139,7 @@ void Craft::load(
 		int id = dest["id"].as<int>();
 
 		if (type == "STR_BASE")
-		{
 			returnToBase();
-		}
 		else if (type == "STR_UFO")
 		{
 			for (std::vector<Ufo*>::iterator
@@ -239,9 +235,7 @@ void Craft::load(
 	_interceptionOrder	= node["interceptionOrder"].as<int>(_interceptionOrder);
 
 	if (const YAML::Node name = node["name"])
-	{
 		_name = Language::utf8ToWstr(name.as<std::string>());
-	}
 
 	if (_inBattlescape) setSpeed(0);
 }
@@ -267,13 +261,9 @@ YAML::Node Craft::save() const
 		YAML::Node subnode;
 
 		if (*i != 0)
-		{
 			subnode = (*i)->save();
-		}
 		else
-		{
 			subnode["type"] = "0";
-		}
 
 		node["weapons"].push_back(subnode);
 	}
@@ -440,13 +430,10 @@ std::string Craft::getAltitude() const
 
 	if (u
 		&& u->getAltitude() != "STR_GROUND")
-	{
 		return u->getAltitude();
-	}
 	else
-	{
 		return "STR_VERY_LOW";
-	}
+
 	// kL_begin: Craft::getAltitude(), add strings for based xCom craft.
 /*	if (u)
 	{
@@ -492,9 +479,7 @@ void Craft::setDestination(Target* dest)
 int Craft::getNumWeapons() const
 {
 	if (_rules->getWeapons() == 0)
-	{
 		return 0;
-	}
 
 	int total = 0;
 
@@ -504,9 +489,7 @@ int Craft::getNumWeapons() const
 			++i)
 	{
 		if (*i != 0)
-		{
 			total++;
-		}
 	}
 
 	return total;
@@ -611,7 +594,7 @@ void Craft::setFuel(int fuel)
 int Craft::getFuelPercentage() const
 {
 	return static_cast<int>(
-			floor((static_cast<double>(_fuel) / static_cast<double>(_rules->getMaxFuel())) * 100.0));
+		floor((static_cast<double>(_fuel) / static_cast<double>(_rules->getMaxFuel())) * 100.0));
 }
 
 /**
@@ -643,7 +626,7 @@ void Craft::setDamage(int damage)
 int Craft::getDamagePercentage() const
 {
 	return static_cast<int>(
-			floor((static_cast<double>(_damage) / static_cast<double>(_rules->getMaxDamage())) * 100.0));
+		floor((static_cast<double>(_damage) / static_cast<double>(_rules->getMaxDamage())) * 100.0));
 }
 
 /**
@@ -685,7 +668,7 @@ int Craft::getFuelConsumption() const
 		return 1;
 
 	return static_cast<int>(
-			floor(static_cast<double>(_speed) / 100.0));
+		floor(static_cast<double>(_speed) / 100.0));
 }
 
 /**
@@ -704,7 +687,7 @@ int Craft::getFuelLimit() const
 int Craft::getFuelLimit(Base* base) const
 {
 	return static_cast<int>(
-			floor((static_cast<double>(getFuelConsumption()) * getDistance(base)) / (_speedRadian * 120.0)));
+		floor((static_cast<double>(getFuelConsumption()) * getDistance(base)) / (_speedRadian * 120.0)));
 }
 
 /**
@@ -943,7 +926,6 @@ int Craft::getSpaceUsed() const
 			i != _vehicles.end();
 			++i)
 	{
-//		vehicleSpaceUsed += (*i)->getSize() * (*i)->getSize(); // kL
 		vehicleSpaceUsed += (*i)->getSize();
 	}
 

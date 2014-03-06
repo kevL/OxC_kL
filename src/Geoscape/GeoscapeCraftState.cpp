@@ -28,6 +28,7 @@
 #include "../Engine/Language.h"
 #include "../Engine/Options.h"
 #include "../Engine/Palette.h"
+#include "../Engine/SurfaceSet.h"
 
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
@@ -73,6 +74,8 @@ GeoscapeCraftState::GeoscapeCraftState(
 	_window			= new Window(this, 224, 174, 16, 8, POPUP_BOTH);
 	_txtTitle		= new Text(192, 17, 32, 16);
 
+	_sprite			= new Surface(32, 38, 220, -11); // kL
+
 	_txtStatus		= new Text(192, 17, 32, 31);
 
 	_txtBase		= new Text(192, 9, 32, 43);
@@ -110,6 +113,7 @@ GeoscapeCraftState::GeoscapeCraftState(
 
 	add(_window);
 	add(_txtTitle);
+	add(_sprite); // kL
 	add(_txtStatus);
 	add(_txtBase);
 	add(_txtRedirect);
@@ -373,6 +377,13 @@ void GeoscapeCraftState::init()
 				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)),
 				Palette::backPos,
 				16);
+
+	// kL_begin:
+	SurfaceSet* texture = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
+	texture->getFrame(_craft->getRules()->getSprite() + 33)->setX(0);
+	texture->getFrame(_craft->getRules()->getSprite() + 33)->setY(0);
+	texture->getFrame(_craft->getRules()->getSprite() + 33)->blit(_sprite);
+	// kL_end.
 }
 
 // kL_begin: center craft on Globe.

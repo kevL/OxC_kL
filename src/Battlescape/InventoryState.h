@@ -70,6 +70,7 @@ private:
 		* _txtTus,
 		* _txtFAcc,
 		* _txtReact,
+		* _txtThrow, // kL
 		* _txtPSkill,
 		* _txtPStr;
 

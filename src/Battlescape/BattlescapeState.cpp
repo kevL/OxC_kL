@@ -2139,7 +2139,6 @@ void BattlescapeState::saveAIMap()
 
 			if (!t)
 				continue;
-
 			if (!t->isDiscovered(2))
 				continue;
 		}
@@ -2162,8 +2161,10 @@ void BattlescapeState::saveAIMap()
 			tilePos.x = x;
 			Tile* t = _save->getTile(tilePos);
 
-			if (!t) continue;
-			if (!t->isDiscovered(2)) continue;
+			if (!t)
+				continue;
+			if (!t->isDiscovered(2))
+				continue;
 
 			r.x = x * r.w;
 			r.y = y * r.h;

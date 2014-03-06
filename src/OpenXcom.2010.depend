@@ -4680,7 +4680,7 @@
 	<vector>
 	<yaml-cpp/yaml.h>
 
-1393401331 source:f:\git\openxcom\src\basescape\craftequipmentstate.cpp
+1393888502 source:f:\git\openxcom\src\basescape\craftequipmentstate.cpp
 	"CraftEquipmentState.h"
 	<algorithm>
 	<climits>
@@ -4693,6 +4693,7 @@
 	"../Engine/Logger.h"
 	"../Engine/Options.h"
 	"../Engine/Palette.h"
+	"../Engine/Screen.h"
 	"../Engine/Timer.h"
 	"../Interface/Text.h"
 	"../Interface/TextButton.h"
@@ -4720,7 +4721,7 @@
 1393532098 f:\git\openxcom\src\battlescape\battlescapegenerator.h
 	<string>
 
-1392594698 f:\git\openxcom\src\battlescape\inventorystate.h
+1393918453 f:\git\openxcom\src\battlescape\inventorystate.h
 	"../Engine/State.h"
 
 1392594696 f:\git\openxcom\src\engine\logger.h
@@ -5673,7 +5674,7 @@
 	<yaml-cpp/yaml.h>
 	"../Battlescape/Position.h"
 
-1393120134 f:\git\openxcom\src\savegame\tile.h
+1394037062 f:\git\openxcom\src\savegame\tile.h
 	<string>
 	<vector>
 	<SDL_types.h>
@@ -5681,7 +5682,7 @@
 	"../Battlescape/Position.h"
 	"../Ruleset/MapData.h"
 
-1393434323 source:f:\git\openxcom\src\battlescape\alienbaistate.cpp
+1394005201 source:f:\git\openxcom\src\battlescape\alienbaistate.cpp
 	"AlienBAIState.h"
 	<algorithm>
 	<climits>
@@ -5754,7 +5755,7 @@
 1392734415 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1393581914 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1393888946 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	<cmath>
 	<sstream>
@@ -5857,7 +5858,7 @@
 	<vector>
 	<yaml-cpp/yaml.h>
 
-1393880452 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
+1393889159 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
 	"BattlescapeGenerator.h"
 	<fstream>
 	<sstream>
@@ -5977,7 +5978,7 @@
 	<string>
 	"../Engine/Surface.h"
 
-1393528014 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1394031736 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	<cmath>
 	<sstream>
@@ -6289,7 +6290,7 @@
 	"../Interface/Frame.h"
 	"../Interface/Text.h"
 
-1392943768 source:f:\git\openxcom\src\battlescape\inventory.cpp
+1393918312 source:f:\git\openxcom\src\battlescape\inventory.cpp
 	"Inventory.h"
 	<cmath>
 	"PrimeGrenadeState.h"
@@ -6321,7 +6322,7 @@
 	<SDL.h>
 	<yaml-cpp/yaml.h>
 
-1393534625 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
+1393919516 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
 	"InventoryState.h"
 	<sstream>
 	"BattlescapeState.h"
@@ -6355,7 +6356,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Soldier.h"
 
-1393698843 source:f:\git\openxcom\src\battlescape\map.cpp
+1394031564 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	<cmath>
 	<fstream>
@@ -6455,7 +6456,7 @@
 	"Position.h"
 	"../Engine/InteractiveSurface.h"
 
-1392594691 source:f:\git\openxcom\src\battlescape\minimapview.cpp
+1394030661 source:f:\git\openxcom\src\battlescape\minimapview.cpp
 	"MiniMapView.h"
 	<sstream>
 	"Camera.h"
@@ -6652,7 +6653,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Interface/Text.h"
 
-1393885953 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1394034560 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	<climits>
 	<cmath>
@@ -7497,7 +7498,7 @@
 1392594690 f:\git\openxcom\src\geoscape\craftpatrolstate.h
 	"../Engine/State.h"
 
-1392594690 f:\git\openxcom\src\geoscape\geoscapecraftstate.h
+1393915595 f:\git\openxcom\src\geoscape\geoscapecraftstate.h
 	"../Engine/State.h"
 
 1392594698 source:f:\git\openxcom\src\geoscape\defeatstate.cpp
@@ -7578,7 +7579,7 @@
 1392594694 f:\git\openxcom\src\geoscape\fundingstate.h
 	"../Engine/State.h"
 
-1392594692 source:f:\git\openxcom\src\geoscape\geoscapecraftstate.cpp
+1393916280 source:f:\git\openxcom\src\geoscape\geoscapecraftstate.cpp
 	"GeoscapeCraftState.h"
 	<sstream>
 	"Globe.h"
@@ -7587,6 +7588,7 @@
 	"../Engine/Language.h"
 	"../Engine/Options.h"
 	"../Engine/Palette.h"
+	"../Engine/SurfaceSet.h"
 	"../Interface/Text.h"
 	"../Interface/TextButton.h"
 	"../Interface/Window.h"
@@ -7604,7 +7606,7 @@
 1392594698 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1393624473 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1393890988 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	<assert.h>
 	<algorithm>
@@ -9292,7 +9294,7 @@
 	"../Engine/RNG.h"
 	"../Ruleset/RuleCountry.h"
 
-1393622042 source:f:\git\openxcom\src\savegame\craft.cpp
+1393915152 source:f:\git\openxcom\src\savegame\craft.cpp
 	"Craft.h"
 	<cmath>
 	<sstream>
@@ -9478,7 +9480,7 @@
 	<sstream>
 	"../Engine/Language.h"
 
-1393770841 source:f:\git\openxcom\src\savegame\tile.cpp
+1394031742 source:f:\git\openxcom\src\savegame\tile.cpp
 	"Tile.h"
 	"BattleItem.h"
 	"BattleUnit.h"

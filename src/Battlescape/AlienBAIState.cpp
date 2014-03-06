@@ -179,26 +179,25 @@ void AlienBAIState::exit()
 void AlienBAIState::think(BattleAction* action)
 {
 	//Log(LOG_INFO) << "AlienBAIState::think(), unitID = " << _unit->getId();
-
- 	action->type = BA_RETHINK;
-	action->actor = _unit;
-	action->weapon = _unit->getMainHandWeapon();	// kL_note: does not return grenades.
+ 	action->type	= BA_RETHINK;
+	action->actor	= _unit;
+	action->weapon	= _unit->getMainHandWeapon();	// kL_note: does not return grenades.
 													// *cough* Does return grenades. -> DID return grenades but i fixed it so it won't.
 
-	_attackAction->diff = static_cast<int>(_save->getBattleState()->getGame()->getSavedGame()->getDifficulty());
-	_attackAction->actor = _unit;
-	_attackAction->weapon = action->weapon;
-	_attackAction->number = action->number;
-	_escapeAction->number = action->number;
+	_attackAction->diff		= static_cast<int>(_save->getBattleState()->getGame()->getSavedGame()->getDifficulty());
+	_attackAction->actor	= _unit;
+	_attackAction->weapon	= action->weapon;
+	_attackAction->number	= action->number;
+	_escapeAction->number	= action->number;
 
-	_knownEnemies = countKnownTargets();
-	_visibleEnemies = selectNearestTarget();
-	_spottingEnemies = getSpottingUnits(_unit->getPosition());
+	_knownEnemies		= countKnownTargets();
+	_visibleEnemies		= selectNearestTarget();
+	_spottingEnemies	= getSpottingUnits(_unit->getPosition());
 
-	_melee = false;
-	_rifle = false;
-	_blaster = false;
-	_grenade = false; // kL
+	_melee		= false;
+	_rifle		= false;
+	_blaster	= false;
+	_grenade	= false; // kL
 
 	if (_traceAI)
 	{
@@ -369,24 +368,26 @@ void AlienBAIState::think(BattleAction* action)
 	{
 		case AI_ESCAPE:
 			//Log(LOG_INFO) << ". . . . AI_ESCAPE";
-			action->type = _escapeAction->type;
-			action->target = _escapeAction->target;
-			action->finalAction = true;			// end this unit's turn.
-			action->desperate = true;			// ignore new targets.
+			action->type		= _escapeAction->type;
+			action->target		= _escapeAction->target;
+			action->finalAction	= true;			// end this unit's turn.
+			action->desperate	= true;			// ignore new targets.
+
 			_unit->_hidingForTurn = true;		// spin 180 at the end of your route.
+
 			// forget about reserving TUs, we need to get out of here.
 			_save->getBattleGame()->setTUReserved(BA_NONE, false);
 		break;
 		case AI_PATROL:
 			//Log(LOG_INFO) << ". . . . AI_PATROL";
-			action->type = _patrolAction->type;
-			action->target = _patrolAction->target;
+			action->type	= _patrolAction->type;
+			action->target	= _patrolAction->target;
 		break;
 		case AI_COMBAT:
 			//Log(LOG_INFO) << ". . . . AI_COMBAT";
-			action->type = _attackAction->type;
-			action->target = _attackAction->target;
-			action->weapon = _attackAction->weapon; // this may have changed to a grenade.
+			action->type	= _attackAction->type;
+			action->target	= _attackAction->target;
+			action->weapon	= _attackAction->weapon; // this may have changed to a grenade.
 
 			if (action->weapon
 				&& action->type == BA_THROW
@@ -395,8 +396,9 @@ void AlienBAIState::think(BattleAction* action)
 				_unit->spendTimeUnits(_unit->getActionTUs(BA_PRIME, action->weapon));
 			}
 
-			action->finalFacing = _attackAction->finalFacing;									// if this is a firepoint action, set our facing.
-			action->TU = _unit->getActionTUs(_attackAction->type, _attackAction->weapon);
+			action->finalFacing	= _attackAction->finalFacing;									// if this is a firepoint action, set our facing.
+			action->TU			= _unit->getActionTUs(_attackAction->type, _attackAction->weapon);
+
 			_save->getBattleGame()->setTUReserved(BA_NONE, false);								// don't worry about reserving TUs, we've factored that in already.
 
 			if (action->type == BA_WALK															// if this is a "find fire point" action, don't increment the AI counter.
@@ -410,10 +412,11 @@ void AlienBAIState::think(BattleAction* action)
 		break;
 		case AI_AMBUSH:
 			//Log(LOG_INFO) << ". . . . AI_AMBUSH";
-			action->type = _ambushAction->type;
-			action->target = _ambushAction->target;
-			action->finalFacing = _ambushAction->finalFacing;			// face where we think our target will appear.
-			action->finalAction = true;									// end this unit's turn.
+			action->type		= _ambushAction->type;
+			action->target		= _ambushAction->target;
+			action->finalFacing	= _ambushAction->finalFacing;			// face where we think our target will appear.
+			action->finalAction	= true;									// end this unit's turn.
+
 			_save->getBattleGame()->setTUReserved(BA_NONE, false);		// we've factored in the reserved TUs already, so don't worry.
 		break;
 
@@ -1014,7 +1017,7 @@ void AlienBAIState::setupEscape()
 
 			if (_traceAI)
 			{
-				tile->setMarkerColor(score < 0? 3:(score < FAST_PASS_THRESHOLD / 2? 8:(score < FAST_PASS_THRESHOLD? 9:5)));
+				tile->setMarkerColor(score < 0? 3: (score < FAST_PASS_THRESHOLD / 2? 8: (score < FAST_PASS_THRESHOLD? 9: 5)));
 				tile->setPreview(10);
 				tile->setTUMarker(score);
 			}
@@ -1331,9 +1334,19 @@ bool AlienBAIState::selectPointNearTarget(
 			{
 				Position checkPath = target->getPosition() + Position (x, y, 0);
 
-				int dir = _save->getTileEngine()->getDirectionTo(checkPath, target->getPosition());
-				bool valid = _save->getTileEngine()->validMeleeRange(checkPath, dir, _unit, target, 0);
-				bool fitHere = _save->setUnitPosition(_unit, checkPath, true);
+				int dir = _save->getTileEngine()->getDirectionTo(
+															checkPath,
+															target->getPosition());
+				bool valid = _save->getTileEngine()->validMeleeRange(
+																checkPath,
+																dir,
+																_unit,
+																target,
+																0);
+				bool fitHere = _save->setUnitPosition(
+													_unit,
+													checkPath,
+													true);
 				if (valid
 					&& fitHere
 					&& !_save->getTile(checkPath)->getDangerous())
@@ -1341,12 +1354,17 @@ bool AlienBAIState::selectPointNearTarget(
 					_save->getPathfinding()->calculate(_unit, checkPath, 0, maxTUs);
 
 					if (_save->getPathfinding()->getStartDirection() != -1
-						&& _save->getTileEngine()->distance(checkPath, _unit->getPosition()) < distance)
+						&& _save->getTileEngine()->distance(
+														checkPath,
+														_unit->getPosition())
+													< distance)
 					{
 						returnValue = true;
 
 						_attackAction->target = checkPath;
-						distance = _save->getTileEngine()->distance(checkPath, _unit->getPosition());
+						distance = _save->getTileEngine()->distance(
+																checkPath,
+																_unit->getPosition());
 					}
 
 					_save->getPathfinding()->abortPath();
@@ -1609,7 +1627,8 @@ bool AlienBAIState::findFirePoint()
 		Position pos = _unit->getPosition() + *i;
 
 		Tile* tile = _save->getTile(pos);
-		if (tile == 0) continue;
+		if (tile == 0)
+			continue;
 
 		int score = 0;
 		// i should really make a function for this
@@ -1618,14 +1637,20 @@ bool AlienBAIState::findFirePoint()
 									8,
 									8,
 									_unit->getHeight()
-												+ _unit->getFloatHeight()
-												- tile->getTerrainLevel()
-												- 4);
+										+ _unit->getFloatHeight()
+										- tile->getTerrainLevel()
+										- 4);
 			// 4 because -2 is eyes and 2 below that is the rifle (or at least that's my understanding)
 
-		if (_save->getTileEngine()->canTargetUnit(&origin, _aggroTarget->getTile(), &target, _unit))
+		if (_save->getTileEngine()->canTargetUnit(
+												&origin,
+												_aggroTarget->getTile(),
+												&target,
+												_unit))
 		{
-			_save->getPathfinding()->calculate(_unit, pos);
+			_save->getPathfinding()->calculate(
+											_unit,
+											pos);
 
 			if (_save->getPathfinding()->getStartDirection() != -1						// can move here
 				&& _save->getPathfinding()->getTotalTUCost() <= _unit->getTimeUnits())	// can still shoot
@@ -1641,7 +1666,9 @@ bool AlienBAIState::findFirePoint()
 					bestScore = score;
 
 					_attackAction->target = pos;
-					_attackAction->finalFacing = _save->getTileEngine()->getDirectionTo(pos, _aggroTarget->getPosition());
+					_attackAction->finalFacing = _save->getTileEngine()->getDirectionTo(
+																					pos,
+																					_aggroTarget->getPosition());
 
 					if (score > FAST_PASS_THRESHOLD)
 						break;
@@ -1652,8 +1679,9 @@ bool AlienBAIState::findFirePoint()
 
 	if (bestScore > 70)
 	{
-		_attackAction->type = BA_WALK;
 		if (_traceAI) Log(LOG_INFO) << "Firepoint found at " << _attackAction->target << ", with a score of: " << bestScore;
+
+		_attackAction->type = BA_WALK;
 
 		return true;
 	}
@@ -1694,7 +1722,7 @@ bool AlienBAIState::explosiveEfficacy(
 //kL	int hurt = attackingUnit->getStats()->health - attackingUnit->getHealth();
 	int hurt = 10 -
 			static_cast<int>(
-					static_cast<float>(attackingUnit->getHealth()) / static_cast<float>(attackingUnit->getStats()->health) * 10.f);
+				static_cast<float>(attackingUnit->getHealth()) / static_cast<float>(attackingUnit->getStats()->health) * 10.f);
 //kL	if (hurt > attackingUnit->getStats()->health * 2 / 3)
 //kL		desperation += 3;
 
@@ -1734,7 +1762,10 @@ bool AlienBAIState::explosiveEfficacy(
 		if (!(*i)->isOut(true)
 			&& *i != attackingUnit
 			&& (*i)->getPosition().z == targetPos.z
-			&& _save->getTileEngine()->distance((*i)->getPosition(), targetPos) < radius + 1)
+			&& _save->getTileEngine()->distance(
+											(*i)->getPosition(),
+											targetPos)
+										< radius + 1)
 		{
 			if ((*i)->getFaction() == FACTION_PLAYER
 				&& (*i)->getTurnsExposed() > _intelligence)
@@ -1752,14 +1783,14 @@ bool AlienBAIState::explosiveEfficacy(
 									((*i)->getPosition().z * 24) + 12);
 
 			int collision = _save->getTileEngine()->calculateLine(
-														voxelPosA,
-														voxelPosB,
-														false,
-														0,
-														target,
-														true,
-														false,
-														*i);
+																voxelPosA,
+																voxelPosB,
+																false,
+																0,
+																target,
+																true,
+																false,
+																*i);
 			if (collision == VOXEL_UNIT)
 			{
 				if ((*i)->getFaction() == FACTION_PLAYER)
@@ -1767,7 +1798,7 @@ bool AlienBAIState::explosiveEfficacy(
 //kL					++eff;
 //kL					++affected;
 //kL				else if ((*i)->getFaction() == attackingUnit->getFaction())
-				else if ((*i)->getOriginalFaction() == attackingUnit->getFaction())		// kL
+				else if ((*i)->getOriginalFaction() == attackingUnit->getFaction()) // kL
 //kL					eff -= 2;	// friendlies count double
 					eff -= 5;		// true friendlies count half
 			}
@@ -1835,7 +1866,10 @@ void AlienBAIState::meleeAction()
 														_unit->getPosition(),
 														(*i)->getPosition());
 		if (newDistance > 20
-			|| !validTarget(*i, true, true))
+			|| !validTarget(
+						*i,
+						true,
+						true))
 		{
 			continue;
 		}
@@ -1860,10 +1894,10 @@ void AlienBAIState::meleeAction()
 	if (_aggroTarget != 0)
 	{
 		if (_save->getTileEngine()->validMeleeRange(
-											_unit,
-											_aggroTarget,
-											_save->getTileEngine()->getDirectionTo(_unit->getPosition(),
-											_aggroTarget->getPosition())))
+												_unit,
+												_aggroTarget,
+												_save->getTileEngine()->getDirectionTo(_unit->getPosition(),
+												_aggroTarget->getPosition())))
 		{
 			meleeAttack();
 		}
@@ -1922,7 +1956,6 @@ void AlienBAIState::wayPointAction()
 	if (_aggroTarget != 0)
 	{
 		_attackAction->type = BA_LAUNCH;
-
 		_attackAction->TU = _unit->getActionTUs(
 											BA_LAUNCH,
 											_attackAction->weapon);
@@ -2040,6 +2073,9 @@ void AlienBAIState::selectFireMethod()
 	_attackAction->type = BA_RETHINK;
 
 	int usableTU = _unit->getTimeUnits();//kL - _escapeTUs;
+	if (_unit->getAggression() < RNG::generate(0, 3)) // kL.
+		usableTU -= _escapeTUs;
+
 	int distance = _save->getTileEngine()->distance(
 												_unit->getPosition(),
 												_attackAction->target);
@@ -2047,17 +2083,23 @@ void AlienBAIState::selectFireMethod()
 	if (distance <= _attackAction->weapon->getRules()->getAutoRange())
 	{
 		if (_attackAction->weapon->getRules()->getTUAuto()
-			&& usableTU >= _unit->getActionTUs(BA_AUTOSHOT, _attackAction->weapon))
+			&& usableTU >= _unit->getActionTUs(
+											BA_AUTOSHOT,
+											_attackAction->weapon))
 		{
 			_attackAction->type = BA_AUTOSHOT;
 		}
 		else if (_attackAction->weapon->getRules()->getTUSnap()
-			&& usableTU >= _unit->getActionTUs(BA_SNAPSHOT, _attackAction->weapon))
+			&& usableTU >= _unit->getActionTUs(
+											BA_SNAPSHOT,
+											_attackAction->weapon))
 		{
 			_attackAction->type = BA_SNAPSHOT;
 		}
 		else if (_attackAction->weapon->getRules()->getTUAimed()
-			&& usableTU >= _unit->getActionTUs(BA_AIMEDSHOT, _attackAction->weapon))
+			&& usableTU >= _unit->getActionTUs(
+											BA_AIMEDSHOT,
+											_attackAction->weapon))
 		{
 			_attackAction->type = BA_AIMEDSHOT;
 		}
@@ -2066,17 +2108,23 @@ void AlienBAIState::selectFireMethod()
 	else if (distance <= _attackAction->weapon->getRules()->getSnapRange())
 	{
 		if (_attackAction->weapon->getRules()->getTUSnap()
-			&& usableTU >= _unit->getActionTUs(BA_SNAPSHOT, _attackAction->weapon))
+			&& usableTU >= _unit->getActionTUs(
+											BA_SNAPSHOT,
+											_attackAction->weapon))
 		{
 			_attackAction->type = BA_SNAPSHOT;
 		}
 		else if (_attackAction->weapon->getRules()->getTUAimed()
-			&& usableTU >= _unit->getActionTUs(BA_AIMEDSHOT, _attackAction->weapon))
+			&& usableTU >= _unit->getActionTUs(
+											BA_AIMEDSHOT,
+											_attackAction->weapon))
 		{
 			_attackAction->type = BA_AIMEDSHOT;
 		}
 		else if (_attackAction->weapon->getRules()->getTUAuto()
-			&& usableTU >= _unit->getActionTUs(BA_AUTOSHOT, _attackAction->weapon))
+			&& usableTU >= _unit->getActionTUs(
+											BA_AUTOSHOT,
+											_attackAction->weapon))
 		{
 			_attackAction->type = BA_AUTOSHOT;
 		}
@@ -2085,17 +2133,23 @@ void AlienBAIState::selectFireMethod()
 	else if (distance <= _attackAction->weapon->getRules()->getAimRange())
 	{
 		if (_attackAction->weapon->getRules()->getTUAimed()
-			&& usableTU >= _unit->getActionTUs(BA_AIMEDSHOT, _attackAction->weapon))
+			&& usableTU >= _unit->getActionTUs(
+											BA_AIMEDSHOT,
+											_attackAction->weapon))
 		{
 			_attackAction->type = BA_AIMEDSHOT;
 		}
 		else if (_attackAction->weapon->getRules()->getTUSnap()
-			&& usableTU >= _unit->getActionTUs(BA_SNAPSHOT, _attackAction->weapon))
+			&& usableTU >= _unit->getActionTUs(
+											BA_SNAPSHOT,
+											_attackAction->weapon))
 		{
 			_attackAction->type = BA_SNAPSHOT;
 		}
 		else if (_attackAction->weapon->getRules()->getTUAuto()
-			&& usableTU >= _unit->getActionTUs(BA_AUTOSHOT, _attackAction->weapon))
+			&& usableTU >= _unit->getActionTUs(
+											BA_AUTOSHOT,
+											_attackAction->weapon))
 		{
 			_attackAction->type = BA_AUTOSHOT;
 		}
@@ -2317,16 +2371,16 @@ bool AlienBAIState::psiAction()
 			//Log(LOG_INFO) << ". . panicOdds_3 = " << panicOdds;
 			if (RNG::percent(panicOdds))
 			{
-				_psiAction->target = _aggroTarget->getPosition();
-				_psiAction->type = BA_PANIC;
+				_psiAction->target	= _aggroTarget->getPosition();
+				_psiAction->type	= BA_PANIC;
 
 				//Log(LOG_INFO) << "AlienBAIState::psiAction() EXIT . do Panic vs " << _aggroTarget->getId();
 				return true;
 			}
 		}
 
-		_psiAction->target = _aggroTarget->getPosition();
-		_psiAction->type = BA_MINDCONTROL;
+		_psiAction->target	= _aggroTarget->getPosition();
+		_psiAction->type	= BA_MINDCONTROL;
 
 		//Log(LOG_INFO) << "AlienBAIState::psiAction() EXIT . do MindControl vs " << _aggroTarget->getId();
 		return true;

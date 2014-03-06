@@ -1027,7 +1027,10 @@ void Inventory::arrangeGround(bool alterOffset)
 									&& ok;
 								yd++)
 						{
-							BattleItem* item = _selUnit->getItem(ground, x + xd, y + yd);
+							BattleItem* item = _selUnit->getItem(
+																ground,
+																x + xd,
+																y + yd);
 							ok = (item == 0);
 
 							if (canBeStacked(item, *i))

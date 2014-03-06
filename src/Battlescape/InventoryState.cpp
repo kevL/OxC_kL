@@ -93,22 +93,29 @@ InventoryState::InventoryState(
 	_txtTus		= new Text(40, 9, 245, _showStats? 32: 24);
 	_txtFAcc	= new Text(40, 9, 245, 32);
 	_txtReact	= new Text(40, 9, 245, 40);
-	_txtPStr	= new Text(40, 9, 245, 48);
-	_txtPSkill	= new Text(40, 9, 245, 56);
+	_txtThrow	= new Text(40, 9, 245, 48); // kL
+	_txtPStr	= new Text(40, 9, 245, 56);
+	_txtPSkill	= new Text(40, 9, 245, 64);
 
 	_txtItem	= new Text(160, 9, 128, 140);
 	_txtAmmo	= new Text(66, 24, 254, 64);
+
 	_btnOk		= new InteractiveSurface(35, 22, 237, 0);
 	_btnPrev	= new InteractiveSurface(23, 22, 273, 0);
 	_btnNext	= new InteractiveSurface(23, 22, 297, 0);
+
 	_btnUnload	= new InteractiveSurface(32, 25, 288, 32);
+
 	_btnGround	= new InteractiveSurface(32, 15, 289, 137);
+
 	_btnRank	= new InteractiveSurface(26, 23, 0, 0);
+
 	_selAmmo	= new Surface(
 						RuleInventory::HAND_W * RuleInventory::SLOT_W,
 						RuleInventory::HAND_H * RuleInventory::SLOT_H,
 						272,
 						88);
+
 	_inv		= new Inventory(_game, 320, 200, 0, 0);
 
 	add(_bg);
@@ -119,8 +126,9 @@ InventoryState::InventoryState(
 	add(_txtTus);
 	add(_txtFAcc);
 	add(_txtReact);
-	add(_txtPSkill);
+	add(_txtThrow); // kL
 	add(_txtPStr);
+	add(_txtPSkill);
 
 	add(_txtItem);
 	add(_txtAmmo);
@@ -158,13 +166,17 @@ InventoryState::InventoryState(
 	_txtReact->setSecondaryColor(Palette::blockOffset(1));
 	_txtReact->setHighContrast(true);
 
-	_txtPSkill->setColor(Palette::blockOffset(4));
-	_txtPSkill->setSecondaryColor(Palette::blockOffset(1));
-	_txtPSkill->setHighContrast(true);
+	_txtThrow->setColor(Palette::blockOffset(4));			// kL
+	_txtThrow->setSecondaryColor(Palette::blockOffset(1));	// kL
+	_txtThrow->setHighContrast(true);						// kL
 
 	_txtPStr->setColor(Palette::blockOffset(4));
 	_txtPStr->setSecondaryColor(Palette::blockOffset(1));
 	_txtPStr->setHighContrast(true);
+
+	_txtPSkill->setColor(Palette::blockOffset(4));
+	_txtPSkill->setSecondaryColor(Palette::blockOffset(1));
+	_txtPSkill->setHighContrast(true);
 
 	_txtItem->setColor(Palette::blockOffset(3));
 	_txtItem->setHighContrast(true);
@@ -204,8 +216,9 @@ InventoryState::InventoryState(
 	_txtTus->setVisible(_tu);
 	_txtFAcc->setVisible(_showStats && !_tu);
 	_txtReact->setVisible(_showStats && !_tu);
-	_txtPSkill->setVisible(_showStats && !_tu);
+	_txtThrow->setVisible(_showStats && !_tu); // kL
 	_txtPStr->setVisible(_showStats && !_tu);
+	_txtPSkill->setVisible(_showStats && !_tu);
 
 	//Log(LOG_INFO) << "Create InventoryState EXIT";
 }
@@ -332,7 +345,6 @@ void InventoryState::updateStats()
 	if (_tu) // kL
 		_txtTus->setText(tr("STR_TIME_UNITS_SHORT").arg(unit->getTimeUnits()));
 
-
 	if (_showStats) // kL
 	{
 		int str = unit->getStats()->strength;
@@ -345,14 +357,9 @@ void InventoryState::updateStats()
 
 		if (!_tu) // kL
 		{
-//			_txtFAcc->setText(tr("STR_ACCURACY_SHORT") // Wb.140214
-//								.arg(static_cast<int>(
-//										unit->getStats()->firing * unit->getHealth())
-//									/ unit->getStats()->health));
 			_txtFAcc->setText(tr("STR_ACCURACY_SHORT").arg(unit->getStats()->firing));
-//					static_cast<double>(unit->getStats()->firing) * unit->getAccuracyModifier())));
-
 			_txtReact->setText(tr("STR_REACTIONS_SHORT").arg(unit->getStats()->reactions));
+			_txtThrow->setText(tr("STR_THROWACC_SHORT").arg(unit->getStats()->throwing)); // kL
 
 
 			int minPsi = 0;
@@ -390,7 +397,8 @@ void InventoryState::saveEquipmentLayout()
 			i != _battleGame->getUnits()->end();
 			++i)
 	{
-		if ((*i)->getGeoscapeSoldier() == 0) continue; // we need X-Com soldiers only
+		if ((*i)->getGeoscapeSoldier() == 0) // x-Com soldiers only
+			continue;
 
 
 		std::vector<EquipmentLayoutItem*>* layoutItems = (*i)->getGeoscapeSoldier()->getEquipmentLayout();
@@ -400,7 +408,9 @@ void InventoryState::saveEquipmentLayout()
 					j = layoutItems->begin();
 					j != layoutItems->end();
 					++j)
+			{
 				delete *j;
+			}
 
 			layoutItems->clear();
 		}
@@ -474,11 +484,11 @@ void InventoryState::btnOkClick(Action*)
 
 
 	TileEngine* tileEngine = _battleGame->getTileEngine();
-	if (tileEngine)
-	{
-		tileEngine->applyGravity(_battleGame->getSelectedUnit()->getTile());
-		tileEngine->calculateTerrainLighting(); // dropping / picking up flares
-		tileEngine->recalculateFOV();
+//	if (tileEngine) // kL_note: not needed, CraftEquip is handled above w/ early return.
+//	{
+	tileEngine->applyGravity(_battleGame->getSelectedUnit()->getTile());
+	tileEngine->calculateTerrainLighting(); // dropping / picking up flares
+	tileEngine->recalculateFOV();
 
 		// from BattlescapeGame::dropItem() but can't really use this because I don't know exactly what dropped...
 		// could figure it out via what's on Ground but meh.
@@ -487,7 +497,7 @@ void InventoryState::btnOkClick(Action*)
 			getTileEngine()->calculateTerrainLighting();
 			getTileEngine()->calculateFOV(position);
 		} */
-	}
+//	}
 
 	//Log(LOG_INFO) << "InventoryState::btnOkClick() EXIT";
 }
@@ -641,12 +651,10 @@ void InventoryState::invClick(Action*)
 			sAmmo = tr("STR_AMMO_ROUNDS_LEFT").arg(item->getAmmoQuantity());
 		}
 		else if (item->getRules()->getBattleType() == BT_MEDIKIT)
-		{
 			sAmmo = tr("STR_MEDI_KIT_QUANTITIES_LEFT")
 						.arg(item->getPainKillerQuantity())
 						.arg(item->getStimulantQuantity())
 						.arg(item->getHealQuantity());
-		}
 
 		_txtAmmo->setText(sAmmo);
 	}

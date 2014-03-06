@@ -46,6 +46,7 @@ class GeoscapeCraftState
 private:
 	Craft* _craft;
 	Globe* _globe;
+	Surface* _sprite; // kL
 	Text
 		* _txtAltitude,
 		* _txtBase,

@@ -207,7 +207,9 @@ YAML::Node Tile::save() const
 				i = 0;
 				i < 3;
 				i++)
+		{
 			node["discovered"].push_back(_discovered[i]);
+		}
 	}
 
 	if (isUfoDoorOpen(1))
@@ -282,7 +284,7 @@ void Tile::getMapData(
 
 /**
  * Gets whether this tile has no objects. Note that we can have a unit or smoke on this tile.
- * @return bool, True if there is nothing but air on this tile.
+ * @return, bool True if there is nothing but air on this tile.
  */
 bool Tile::isVoid() const
 {
@@ -414,16 +416,19 @@ int Tile::openDoor(
 	{
 		if (unit
 			&& unit->getTimeUnits() < _objects[part]->getTUCost(unit->getArmor()->getMovementType())
-					+ unit->getActionTUs(reserve, unit->getMainHandWeapon(false)))
+										+ unit->getActionTUs(
+															reserve,
+															unit->getMainHandWeapon(false)))
 		{
 			return 4;
 		}
 
-		setMapData(_objects[part]->getDataset()->getObjects()->at(_objects[part]->getAltMCD()),
+		setMapData(
+				_objects[part]->getDataset()->getObjects()->at(_objects[part]->getAltMCD()),
 				_objects[part]->getAltMCD(),
 				_mapDataSetID[part],
 				_objects[part]->getDataset()->getObjects()->at(_objects[part]->getAltMCD())->getObjectType());
-		setMapData(0, -1, -1, part);
+		setMapData(0,-1,-1, part);
 
 		return 0;
 	}
@@ -476,8 +481,8 @@ int Tile::closeUfoDoor()
 
 /**
  * Sets the tile's cache flag. - TODO: set this for each object separately?
- * @param flag true/false
- * @param part 0-2 westwall/northwall/content+floor
+ * @param flag, true/false
+ * @param part, 0-2 westwall/northwall/content+floor
  */
 void Tile::setDiscovered(
 		bool flag,
@@ -502,8 +507,8 @@ void Tile::setDiscovered(
 
 /**
  * Get the black fog of war state of this tile.
- * @param part 0-2 westwall/northwall/content+floor
- * @return bool True = discovered the tile.
+ * @param part, 0-2 westwall/northwall/content+floor
+ * @return, bool True = discovered the tile.
  */
 bool Tile::isDiscovered(int part) const
 {
@@ -664,7 +669,8 @@ void Tile::setExplosive(
 }
 
 /**
- *
+ * Gets if this tile is ready to explode.
+ * @return, How big the BOOM will be
  */
 int Tile::getExplosive() const
 {
@@ -1125,7 +1131,7 @@ void Tile::setDangerous()
 }
 
 /**
- * @return the danger flag for this tile.
+ * @return, the danger flag for this tile.
  */
 bool Tile::getDangerous()
 {
