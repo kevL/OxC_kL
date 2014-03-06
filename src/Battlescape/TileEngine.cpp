@@ -3393,14 +3393,15 @@ int TileEngine::blockage(
 			return 0;
 		} */
 
-		// note: upon further reflection, (dir == -1) is not possible here. Unless from light and/or LoS/LoF calculations.
-		// hypothesis: dir -1 is VERTICAL LoS INPUT ...!
-		if (dir == -1) // quick return for non-OBJECT, non-BigWall parttype. IE standard walls <- Or perhaps GZ
+		// note: upon further reflection, (dir == -1) is not possible here.
+		// hypothesis: dir -1 is LoS INPUT ...!
+		if (dir == -1) // What is this. Is this just LoS or do explosions get passed in here also.
 		{
 			//Log(LOG_INFO) << "TileEngine::blockage() dir == -1";
 
-			if (//tile->getMapData(part)->stopLOS() ||
-				tile->getMapData(part)->getObjectType() == MapData::O_FLOOR) // will a floor ever get passed in ?
+			if (tile->getMapData(part)->getObjectType() == MapData::O_FLOOR // will a floor ever get passed in ?
+				&& (type == DT_NONE //tile->getMapData(part)->stopLOS() ||
+					|| _powerT < tile->getMapData(MapData::O_FLOOR)->getArmor()))
 			{
 				return 255;
 //				int ret = tile->getMapData(part)->getBlock(type);
@@ -3548,10 +3549,24 @@ int TileEngine::blockage(
 		{
 			return 255;
 		}
-		else if (_powerT < tile->getMapData(MapData::O_OBJECT)->getArmor() // part NOT destroyed.
+		else if ((tile->getMapData(part)->getObjectType() == MapData::O_OBJECT
+				&& (bigWall
+						&& (type == DT_SMOKE
+							|| type == DT_STUN
+							|| type == DT_IN
+/*					|| (!bigWall
+						&& ((type != DT_SMOKE
+								&& type != DT_STUN
+								&& type != DT_IN) */
+							|| _powerT < tile->getMapData(MapData::O_OBJECT)->getArmor())))
+			|| (tile->getMapData(part)->getObjectType() == MapData::O_WESTWALL
+				&& _powerT < tile->getMapData(MapData::O_WESTWALL)->getArmor())
+			|| (tile->getMapData(part)->getObjectType() == MapData::O_NORTHWALL
+				&& _powerT < tile->getMapData(MapData::O_NORTHWALL)->getArmor()))
+/*		else if (_powerT < tile->getMapData(MapData::O_OBJECT)->getArmor() // part NOT destroyed.
 			|| type == DT_SMOKE
 			|| type == DT_STUN
-			|| type == DT_IN)
+			|| type == DT_IN) */
 		{
 			//Log(LOG_INFO) << "TileEngine::blockage() EXIT, ret 256 ( hardblock )";
 			return 256;
