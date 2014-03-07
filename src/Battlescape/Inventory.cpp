@@ -824,7 +824,7 @@ void Inventory::mouseClick(Action* action, State* state)
 				{
 					x += _groundOffset;
 
-					BattleItem *item = _selUnit->getItem(slot, x, y);
+					BattleItem* item = _selUnit->getItem(slot, x, y);
 					if (canBeStacked(item, _selItem))
 					{
 						if (!_tu
@@ -853,13 +853,13 @@ void Inventory::mouseClick(Action* action, State* state)
 				int x = static_cast<int>(floor(action->getAbsoluteXMouse())) - _dx,
 					y = static_cast<int>(floor(action->getAbsoluteYMouse())) - _dy;
 
-				RuleInventory *slot = getSlotInPosition(&x, &y);
+				RuleInventory* slot = getSlotInPosition(&x, &y);
 				if (slot != 0)
 				{
 					if (slot->getType() == INV_GROUND)
 						x += _groundOffset;
 
-					BattleItem *item = _selUnit->getItem(slot, x, y);
+					BattleItem* item = _selUnit->getItem(slot, x, y);
 					if (item != 0)
 					{
 						BattleType itemType = item->getRules()->getBattleType();
@@ -888,7 +888,10 @@ void Inventory::mouseClick(Action* action, State* state)
 																		item));
 							}
 							else
+							{
+								_warning->showMessage(_game->getLanguage()->getString("STR_GRENADE_IS_DEACTIVATED"));
 								item->setExplodeTurn(-1); // Unprime the grenade
+							}
 						}
 					}
 				}
