@@ -148,8 +148,8 @@ bool MapData::isNoFloor() const
  */
 int MapData::getBigWall() const
 {
-	if (_terrainLevel < 0) // this is a hack for eg. Skyranger Ramps
-		return 0;
+//kL	if (_terrainLevel < 0) // this is a hack for eg. Skyranger Ramps
+//kL		return 0;
 
 	return _bigWall;
 }

@@ -324,7 +324,7 @@ void AlienBAIState::think(BattleAction* action)
 	if (_spottingEnemies > 2
 		|| _unit->getHealth() < _unit->getStats()->health * 2 / 3
 		|| (_aggroTarget
-			&& _aggroTarget->getTurnsSinceSpotted() > _intelligence))
+			&& _aggroTarget->getTurnsExposed() > _intelligence))
 	{
 		evaluate = true;
 	}
@@ -1768,7 +1768,7 @@ bool AlienBAIState::explosiveEfficacy(
 										< radius + 1)
 		{
 			if ((*i)->getFaction() == FACTION_PLAYER
-				&& (*i)->getTurnsSinceSpotted() > _intelligence)
+				&& (*i)->getTurnsExposed() > _intelligence)
 			{
 				continue;
 			}
@@ -2421,7 +2421,7 @@ bool AlienBAIState::validTarget(
 		bool includeCivs) const
 {
 	if (unit->isOut(true, true)							// ignore units that are dead/unconscious
-		|| _intelligence < unit->getTurnsSinceSpotted()	// they must be units that we "know" about
+		|| _intelligence < unit->getTurnsExposed()	// they must be units that we "know" about
 		|| (assessDanger
 			&& unit->getTile()->getDangerous())			// they haven't been grenaded
 		|| unit->getFaction() == FACTION_HOSTILE)		// and they mustn't be on our side

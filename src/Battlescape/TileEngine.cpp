@@ -483,7 +483,7 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 									&& _save->getSide() == FACTION_HOSTILE) // kL, per Original.
 								{
 									//Log(LOG_INFO) << ". . calculateFOV(), spotted Unit FACTION_HOSTILE, setTurnsExposed()";
-									visUnit->setTurnsSinceSpotted(0);	// note that xCom can be seen by enemies but *not* be Exposed. hehe
+									visUnit->setTurnsExposed(0);	// note that xCom can be seen by enemies but *not* be Exposed. hehe
 																		// Only reactionFire should set them Exposed during xCom's turn.
 								}
 							}
@@ -576,6 +576,7 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 //														break;
 													}
 													else if (t->getMapData(part)->getObjectType() == MapData::O_OBJECT
+														&& t->getMapData(MapData::O_OBJECT)
 														&& (t->getMapData(MapData::O_OBJECT)->getBigWall() == 1			// bigBlock
 															|| t->getMapData(MapData::O_OBJECT)->getBigWall() == 4))	// westBlock
 													{
@@ -614,6 +615,7 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 //														break;
 													}
 													else if (t->getMapData(part)->getObjectType() == MapData::O_OBJECT
+														&& t->getMapData(MapData::O_OBJECT)
 														&& (t->getMapData(MapData::O_OBJECT)->getBigWall() == 1			// bigBlock
 															|| t->getMapData(MapData::O_OBJECT)->getBigWall() == 5))	// northBlock
 													{
@@ -2249,7 +2251,6 @@ void TileEngine::explode(
 	std::set<Tile*> tilesAffected;
 	std::pair<std::set<Tile*>::iterator, bool> tilePair;
 
-		_powerT		= 0;
 //		powerEff	= 0,
 
 	int
@@ -2302,6 +2303,9 @@ void TileEngine::explode(
 		cos_te,
 		sin_fi,
 		cos_fi;
+
+
+	_powerT = 0;
 
 //	for (int fi = 0; fi == 0; ++fi) // kL_note: Looks like a TEST ray. ( 0 == horizontal )
 	for (int
@@ -2625,6 +2629,8 @@ void TileEngine::explode(
 		}// 360 degrees
 
 	}// +- 90 degrees
+
+	_powerT = 0;
 
 	// now detonate the tiles affected with HE
 	if (type == DT_HE)
@@ -3567,15 +3573,15 @@ int TileEngine::blockage(
 			return 255;
 		}
 		else if ((tile->getMapData(part)->getObjectType() == MapData::O_OBJECT
-				&& (bigWall
-						&& (type == DT_SMOKE
-							|| type == DT_STUN
-							|| type == DT_IN
+				&& bigWall
+				&& (type == DT_SMOKE
+					|| type == DT_STUN
+					|| type == DT_IN
 /*					|| (!bigWall
 						&& ((type != DT_SMOKE
 								&& type != DT_STUN
 								&& type != DT_IN) */
-							|| _powerT < tile->getMapData(MapData::O_OBJECT)->getArmor())))
+					|| _powerT < tile->getMapData(MapData::O_OBJECT)->getArmor()))
 			|| (tile->getMapData(part)->getObjectType() == MapData::O_WESTWALL
 				&& _powerT < tile->getMapData(MapData::O_WESTWALL)->getArmor())
 			|| (tile->getMapData(part)->getObjectType() == MapData::O_NORTHWALL

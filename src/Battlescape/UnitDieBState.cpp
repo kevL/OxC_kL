@@ -188,8 +188,8 @@ void UnitDieBState::think()
 			_unit->instaKill();
 		}
 
-		if (_unit->getTurnsSinceSpotted() < 255)
-			_unit->setTurnsSinceSpotted(255);
+		if (_unit->getTurnsExposed() < 255)
+			_unit->setTurnsExposed(255);
 
 		if (!_unit->getSpawnUnit().empty()) // converts the dead zombie to a chryssalid
 		{

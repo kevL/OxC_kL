@@ -266,7 +266,7 @@ void BattlescapeGenerator::nextStage()
 			if (!(*j)->isOut())
 			{
 				(*j)->convertToFaction(FACTION_PLAYER);
-				(*j)->setTurnsSinceSpotted(255);
+				(*j)->setTurnsExposed(255);
 
 				if (!selectedFirstSoldier
 					&& (*j)->getGeoscapeSoldier())

@@ -139,7 +139,7 @@ private:
 		_toDirection,
 		_toDirectionTurret,
 		_tu,
-		_turnsSinceSpotted,
+		_turnsExposed,
 		_verticalDirection,
 		_walkPhase;
 
@@ -605,9 +605,9 @@ private:
 		int getCarriedWeight(BattleItem* draggingItem = 0) const;
 
 		/// Set how many turns this unit will be exposed for.
-		void setTurnsSinceSpotted(int turns);
+		void setTurnsExposed(int turns);
 		/// Set how many turns this unit will be exposed for.
-		int getTurnsSinceSpotted() const;
+		int getTurnsExposed() const;
 
 		/// call this after the default copy constructor deletes the cache
 		void invalidateCache();

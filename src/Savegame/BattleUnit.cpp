@@ -93,7 +93,7 @@ BattleUnit::BattleUnit(
 		_moraleRestored(0),
 		_coverReserve(0),
 		_charging(0),
-		_turnsSinceSpotted(255),
+		_turnsExposed(255),
 		_geoscapeSoldier(soldier),
 		_unitRules(0),
 		_rankInt(-1),
@@ -213,7 +213,7 @@ BattleUnit::BattleUnit(
 		_moraleRestored(0),
 		_coverReserve(0),
 		_charging(0),
-		_turnsSinceSpotted(255),
+		_turnsExposed(255),
 		_armor(armor),
 		_geoscapeSoldier(0),
 		_unitRules(unit),
@@ -316,7 +316,7 @@ void BattleUnit::load(const YAML::Node& node)
 	_expMelee			= node["expMelee"].as<int>(_expMelee);
 	_turretType			= node["turretType"].as<int>(_turretType);
 	_visible			= node["visible"].as<bool>(_visible);
-	_turnsSinceSpotted	= node["_turnsSinceSpotted"].as<int>(_turnsSinceSpotted);
+	_turnsExposed		= node["_turnsExposed"].as<int>(_turnsExposed);
 	_killedBy			= (UnitFaction)node["killedBy"].as<int>(_killedBy);
 	_moraleRestored		= node["moraleRestored"].as<int>(_moraleRestored);
 	_rankInt			= node["rankInt"].as<int>(_rankInt);
@@ -343,40 +343,40 @@ YAML::Node BattleUnit::save() const
 {
 	YAML::Node node;
 
-	node["id"]					= _id;
-	node["faction"]				= (int)_faction;
-	node["soldierId"]			= _id;
-	node["genUnitType"]			= _type;
-	node["genUnitArmor"]		= _armor->getType();
-	node["name"]				= Language::wstrToUtf8(getName(0));
-	node["status"]				= (int)_status;
-	node["position"]			= _pos;
-	node["direction"]			= _direction;
-	node["directionTurret"]		= _directionTurret;
-	node["tu"]					= _tu;
-	node["health"]				= _health;
-	node["stunlevel"]			= _stunlevel;
-	node["energy"]				= _energy;
-	node["morale"]				= _morale;
-	node["kneeled"]				= _kneeled;
-	node["floating"]			= _floating;
-	node["fire"]				= _fire;
-	node["expBravery"]			= _expBravery;
-	node["expReactions"]		= _expReactions;
-	node["expFiring"]			= _expFiring;
-	node["expThrowing"]			= _expThrowing;
-	node["expPsiSkill"]			= _expPsiSkill;
-	node["expMelee"]			= _expMelee;
-	node["turretType"]			= _turretType;
-	node["visible"]				= _visible;
-	node["_turnsSinceSpotted"]	= _turnsSinceSpotted;
-	node["rankInt"]				= _rankInt;
-	node["moraleRestored"]		= _moraleRestored;
-	node["killedBy"]			= (int)_killedBy;
-	node["specab"]				= (int)_specab;
-	node["motionPoints"]		= _motionPoints;
+	node["id"]				= _id;
+	node["faction"]			= (int)_faction;
+	node["soldierId"]		= _id;
+	node["genUnitType"]		= _type;
+	node["genUnitArmor"]	= _armor->getType();
+	node["name"]			= Language::wstrToUtf8(getName(0));
+	node["status"]			= (int)_status;
+	node["position"]		= _pos;
+	node["direction"]		= _direction;
+	node["directionTurret"]	= _directionTurret;
+	node["tu"]				= _tu;
+	node["health"]			= _health;
+	node["stunlevel"]		= _stunlevel;
+	node["energy"]			= _energy;
+	node["morale"]			= _morale;
+	node["kneeled"]			= _kneeled;
+	node["floating"]		= _floating;
+	node["fire"]			= _fire;
+	node["expBravery"]		= _expBravery;
+	node["expReactions"]	= _expReactions;
+	node["expFiring"]		= _expFiring;
+	node["expThrowing"]		= _expThrowing;
+	node["expPsiSkill"]		= _expPsiSkill;
+	node["expMelee"]		= _expMelee;
+	node["turretType"]		= _turretType;
+	node["visible"]			= _visible;
+	node["_turnsExposed"]	= _turnsExposed;
+	node["rankInt"]			= _rankInt;
+	node["moraleRestored"]	= _moraleRestored;
+	node["killedBy"]		= (int)_killedBy;
+	node["specab"]			= (int)_specab;
+	node["motionPoints"]	= _motionPoints;
 	// could put (if not tank) here:
-	node["activeHand"]			= _activeHand; // kL
+	node["activeHand"]		= _activeHand; // kL
 
 	for (int i = 0; i < 5; i++)
 		node["armor"].push_back(_currentArmor[i]);
@@ -3097,12 +3097,12 @@ int BattleUnit::getCarriedWeight(BattleItem* draggingItem) const
  * Set how long since this unit was last exposed.
  * @param (int)turns, Set # turns unit has been exposed
  */
-void BattleUnit::setTurnsSinceSpotted(int turns)
+void BattleUnit::setTurnsExposed(int turns)
 {
-	_turnsSinceSpotted = turns;
+	_turnsExposed = turns;
 
-	if (_turnsSinceSpotted > 255) // kL
-		_turnsSinceSpotted = 255; // kL
+	if (_turnsExposed > 255) // kL
+		_turnsExposed = 255; // kL
 		// kL_note: should set this to -1 instead of 255.
 		// Note, that in the .Save file, aLiens are 0
 		// and notExposed xCom units are 255
@@ -3112,9 +3112,9 @@ void BattleUnit::setTurnsSinceSpotted(int turns)
  * Get how long since this unit was exposed.
  * @return (int)turns, # turns unit has been exposed
  */
-int BattleUnit::getTurnsSinceSpotted() const
+int BattleUnit::getTurnsExposed() const
 {
-	return _turnsSinceSpotted;
+	return _turnsExposed;
 }
 
 /**

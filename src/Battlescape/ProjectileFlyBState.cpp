@@ -636,7 +636,7 @@ bool ProjectileFlyBState::createNewProjectile()
 	}
 	else // shoot weapon / was do melee attack too
 	{
-		if (_originVoxel != Position(-1, -1, -1)) // this i believe is BL waypoints.
+		if (_originVoxel != Position(-1,-1,-1)) // this i believe is BL waypoints.
 		{
 			_projectileImpact = projectile->calculateTrajectory(
 															_unit->getFiringAccuracy(
@@ -940,7 +940,7 @@ void ProjectileFlyBState::think()
 							if (aggro != 0)
 							{
 								aggro->setWasHit();
-//kL								_unit->setTurnsSinceSpotted(0); // kL_note: might want to remark this! Ok.
+//kL								_unit->setTurnsExposed(0); // kL_note: might want to remark this! Ok.
 								// technically, in the original as I remember it, only
 								// a BlasterLaunch would set an xCom soldier Exposed here!
 							}
