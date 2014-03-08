@@ -19,6 +19,7 @@
 #include "NewBattleState.h"
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
+#include "../Resource/XcomResourcePack.h"
 #include "../Ruleset/RuleItem.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Engine/Language.h"
@@ -291,7 +292,7 @@ void NewBattleState::init()
 	if (!_music)
 	{
 		_music = true;
-		_game->getResourcePack()->getMusic("GMSTORY")->play();
+		_game->getResourcePack()->getMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMSTORY)->play();
 	}
 
 	if (_craft == 0)

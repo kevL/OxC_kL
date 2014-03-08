@@ -32,6 +32,7 @@
 #include "../Engine/Music.h"
 #include "../Engine/Sound.h"
 #include "../Ruleset/Ruleset.h"
+#include "../Resource/XcomResourcePack.h"
 #include "MainMenuState.h"
 
 namespace OpenXcom
@@ -369,17 +370,17 @@ static struct AudioSequence
 				{
 				case 0x200:
 					Log(LOG_DEBUG) << "Playing gmintro1";
-					m = rp->getMusic("GMINTRO1");
+					m = rp->getMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMINTRO1);
 					m->play(1);
 					break;
 				case 0x201:
 					Log(LOG_DEBUG) << "Playing gmintro2";
-					m = rp->getMusic("GMINTRO2");
+					m = rp->getMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMINTRO2);
 					m->play(1);
 					break;
 				case 0x202:
 					Log(LOG_DEBUG) << "Playing gmintro3";
-					m = rp->getMusic("GMINTRO3");
+					m = rp->getMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMINTRO3);
 					m->play(1);
 					Mix_HookMusicFinished(musicDone);
 					break;
@@ -437,7 +438,8 @@ void StartState::think()
 			_game->loadRuleset();
 			Log(LOG_INFO) << "Ruleset loaded successfully.";
 			Log(LOG_INFO) << "Loading resources...";
-			_game->setResourcePack(new XcomResourcePack(_game->getRuleset()->getExtraSprites(), _game->getRuleset()->getExtraSounds()));
+			Ruleset* ruleset = _game->getRuleset();
+			_game->setResourcePack(new XcomResourcePack(ruleset->getMusic(), ruleset->getExtraSprites(), ruleset->getExtraSounds()));
 			Log(LOG_INFO) << "Resources loaded successfully.";
 			Log(LOG_INFO) << "Loading language...";
 			std::string defaultLang = "en-US";
