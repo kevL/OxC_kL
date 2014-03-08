@@ -244,7 +244,7 @@ private:
 			return _region.insideRegion(
 									base->getLongitude(),
 									base->getLatitude())
-					&& base->getRetaliationStatus();
+				&& base->getRetaliationStatus();
 		}
 };
 
@@ -365,7 +365,6 @@ Ufo* AlienMission::spawnUfo(
 															game.getBases()->begin(),
 															game.getBases()->end(),
 															FindMarkedXCOMBase(regionRules));
-
 		if (found != game.getBases()->end())
 		{
 			//Log(LOG_INFO) << ". . xCom base found marked. Battleship INC!!!";
@@ -387,11 +386,11 @@ Ufo* AlienMission::spawnUfo(
 			else
 				pos = regionRules.getRandomPoint(trajectory.getZone(0));
 
-//kL			ufo->setAltitude(assaultTrajectory.getAltitude(0));
-//kL			ufo->setSpeed(static_cast<int>(
-//kL							assaultTrajectory.getSpeedPercentage(0) * static_cast<float>(ufoRule.getMaxSpeed())));
-			ufo->setAltitude("STR_VERY_LOW"); // kL. heh
-			ufo->setSpeed(ufoRule.getMaxSpeed()); // kL. heh
+			ufo->setAltitude(assaultTrajectory.getAltitude(0));
+			ufo->setSpeed(static_cast<int>(
+							assaultTrajectory.getSpeedPercentage(0) * static_cast<float>(ufoRule.getMaxSpeed())));
+//			ufo->setAltitude("STR_VERY_LOW");		// kL. heh
+//			ufo->setSpeed(ufoRule.getMaxSpeed());	// kL. heh
 			ufo->setLongitude(pos.first);
 			ufo->setLatitude(pos.second);
 

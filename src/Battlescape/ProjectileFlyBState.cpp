@@ -526,7 +526,6 @@ bool ProjectileFlyBState::createNewProjectile()
 	{
 		_projectileImpact = projectile->calculateThrow(_unit->getThrowingAccuracy());
 		//Log(LOG_INFO) << ". BA_THROW, part = " << _projectileImpact;
-
 		if (_projectileImpact == VOXEL_FLOOR
 			|| _projectileImpact == VOXEL_UNIT
 			|| _projectileImpact == VOXEL_OBJECT)
@@ -555,7 +554,6 @@ bool ProjectileFlyBState::createNewProjectile()
 		else // unable to throw here
 		{
 			//Log(LOG_INFO) << ". . no throw, Voxel_Empty or _Wall or _OutofBounds";
-
 			delete projectile;
 
 			_parent->getMap()->setProjectile(0);
@@ -603,7 +601,6 @@ bool ProjectileFlyBState::createNewProjectile()
 		else // no line of fire
 		{
 			//Log(LOG_INFO) << ". . no spit, no LoF, Voxel_Empty";
-
 			delete projectile;
 
 			_parent->getMap()->setProjectile(0);
@@ -661,7 +658,6 @@ bool ProjectileFlyBState::createNewProjectile()
 			|| _action.type == BA_LAUNCH)
 		{
 			//Log(LOG_INFO) << ". . _projectileImpact !";
-
 			_unit->aim(true); // set the soldier in an aiming position
 			_parent->getMap()->cacheUnit(_unit);
 
@@ -688,7 +684,6 @@ bool ProjectileFlyBState::createNewProjectile()
 		else // VOXEL_EMPTY, no line of fire
 		{
 			//Log(LOG_INFO) << ". no shot, no LoF, Voxel_Empty";
-
 			delete projectile;
 
 			_parent->getMap()->setProjectile(0);
@@ -711,7 +706,6 @@ bool ProjectileFlyBState::createNewProjectile()
 void ProjectileFlyBState::think()
 {
 	//Log(LOG_INFO) << "ProjectileFlyBState::think()";
-
 	/* TODO refactoring : store the projectile in this state, instead of getting it from the map each time? */
 	if (_parent->getMap()->getProjectile() == 0)
 	{
@@ -1076,6 +1070,7 @@ int ProjectileFlyBState::getMaxThrowDistance(
 	while (dist < 4000) // just in case
 	{
 		dist += 8;
+
 		if (delta_z < -1.0)
 			curZ -= 8.0;
 		else

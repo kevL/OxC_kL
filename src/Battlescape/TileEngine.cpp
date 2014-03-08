@@ -305,7 +305,7 @@ void TileEngine::addLight(
  */
 bool TileEngine::calculateFOV(BattleUnit* unit)
 {
-	Log(LOG_INFO) << "TileEngine::calculateFOV() for ID " << unit->getId();
+	//Log(LOG_INFO) << "TileEngine::calculateFOV() for ID " << unit->getId();
 	unit->clearVisibleUnits(); // kL:below
 	unit->clearVisibleTiles(); // kL:below
 
@@ -2101,13 +2101,20 @@ BattleUnit* TileEngine::hit(
 					}
 				} // kL_end.
 
-//kL				int
-//kL					damageRange = (type == DT_HE || Options::getBool("TFTDDamage"))? 50: 100,
-//kL					min = power * (100 - damageRange) / 100,
-//kL					max = power * (100 + damageRange) / 100;
-//kL				const int randPower = RNG::generate(min, max);
-
+				double range = 100.0;
 				if (type == DT_HE
+					|| Options::getBool("TFTDDamage"))
+				{
+					range = 50.0;
+				}
+
+				int
+					min = static_cast<int>(static_cast<double>(power) * (100.0 - range) / 100.0) + 1,
+					max = static_cast<int>(static_cast<double>(power) * (100.0 + range) / 100.0);
+
+				power = RNG::generate(min, max);
+
+/*				if (type == DT_HE
 					|| Options::getBool("TFTDDamage"))
 				{
 					power = RNG::generate(
@@ -2117,7 +2124,7 @@ BattleUnit* TileEngine::hit(
 				else
 					power = RNG::generate(
 										1,
-										power * 2);
+										power * 2); */
 				//Log(LOG_INFO) << ". . . RNG::generate(power) = " << power;
 
 				bool ignoreArmor = (type == DT_STUN);	// kL. stun ignores armor... does now! UHM....
@@ -2239,7 +2246,6 @@ void TileEngine::explode(
 			BattleUnit* unit)
 {
 	//Log(LOG_INFO) << "TileEngine::explode() power = " << power << ", type = " << (int)type << ", maxRadius = " << maxRadius;
-
 	if (power == 0) // kL, quick out.
 		return;
 
@@ -2369,11 +2375,6 @@ void TileEngine::explode(
 				if (tilePair.second) // true if a new tile was inserted.
 				{
 					//Log(LOG_INFO) << ". . new tile TRUE";
-
-//kL					int dmgRng = (type == DT_HE || Options::getBool("TFTDDamage"))? 50: 100;
-//kL					int min = power_ * (100 - dmgRng) / 100;
-//kL					int max = power_ * (100 + dmgRng) / 100;
-
 					if (origin->getPosition().z != tileZ) // 3d explosion factor
 						_powerT -= vertdec;
 
@@ -2394,7 +2395,7 @@ void TileEngine::explode(
 												static_cast<int>(centerX),
 												static_cast<int>(centerY),
 												static_cast<int>(centerZ)))
-											< 2)
+										< 2)
 								{
 									//Log(LOG_INFO) << ". . . powerVsUnit = " << powerVsUnit << " DT_STUN, GZ";
 									destTile->getUnit()->damage(
@@ -2449,7 +2450,7 @@ void TileEngine::explode(
 												static_cast<int>(centerX),
 												static_cast<int>(centerY),
 												static_cast<int>(centerZ)))
-											< 2)
+										< 2)
 								{
 									// ground zero effect is in effect
 									//Log(LOG_INFO) << ". . . powerVsUnit = " << powerVsUnit << " DT_HE, GZ";
@@ -3377,7 +3378,7 @@ int TileEngine::horizontalBlockage(
 
 /**
  * Calculates the amount of damage-power that certain types of
- * wall/bigwall or floor parts of a tile blocks.
+ * wall/bigwall or floor or object parts of a tile blocks.
  * @param startTile, The tile where the power starts.
  * @param part, The part of the tile the power needs to go through.
  * @param type, The type of power/damage.
@@ -3391,216 +3392,143 @@ int TileEngine::blockage(
 		int dir)
 {
 	//Log(LOG_INFO) << "TileEngine::blockage() dir " << dir;
+
+	// open ufo doors are actually still closed behind the scenes. So a special
+	// trick is needed to see if they are open. If they are open, block=0
 	if (tile == 0 // probably outside the map here
 		|| tile->isUfoDoorOpen(part))
 	{
 		//Log(LOG_INFO) << "TileEngine::blockage() EXIT, ret 0 ( ufoDoorOpen )";
 		return 0;
 	}
-	// open ufo doors are actually still closed behind the scenes.
-	// so a special trick is needed to see if they are open,
-	// if they are, they obviously don't block anything
 
 
-	if (tile->getMapData(part)) // this effectively means 'MapData::O_OBJECT' for explosions (not for lighting/LoS etc.)
+	if (tile->getMapData(part))
 	{
 		//Log(LOG_INFO) << ". getMapData(part) stopLOS() = " << tile->getMapData(part)->stopLOS();
 
-/*		if ( -1 < dir && dir < 8
-			&& tile->getMapData(part)->stopLOS() == false)
-//			&& tile->getMapData(part)->getObjectType() == MapData::O_OBJECT)
-//			&& tile->getMapData(part)->getObjectType() != MapData::O_FLOOR)
-//			&& tile->getMapData(part)->getObjectType() == MapData::O_WESTWALL)
-//				|| tile->getMapData(part)->getObjectType() == MapData::O_NORTHWALL))
+		if (dir != -1)
 		{
-			return 0;
-		} */
+			int bigWall = tile->getMapData(MapData::O_OBJECT)->getBigWall(); // 0..8 or, per MCD.
+			//Log(LOG_INFO) << ". bigWall = " << bigWall;
 
-		// note: upon further reflection, (dir == -1) is not possible here.
-		// hypothesis: dir -1 is LoS INPUT ...!
-		if (dir == -1) // What is this. Is this just LoS or do explosions get passed in here also.
-		{
-			//Log(LOG_INFO) << "TileEngine::blockage() dir == -1";
-
-			if (tile->getMapData(part)->getObjectType() == MapData::O_FLOOR // will a floor ever get passed in ?
-				&& (type == DT_NONE //tile->getMapData(part)->stopLOS() ||
-					|| _powerT < tile->getMapData(MapData::O_FLOOR)->getArmor()))
+			switch (dir)
 			{
-				return 255;
-//				int ret = tile->getMapData(part)->getBlock(type);
-				//Log(LOG_INFO) << "TileEngine::blockage() EXIT, dir == -1, ret = " << ret;
+				case 0: // north
+					if (bigWall == Pathfinding::BIGWALLWEST
+						|| bigWall == Pathfinding::BIGWALLEAST
+						|| bigWall == Pathfinding::BIGWALLSOUTH
+						|| bigWall == Pathfinding::BIGWALLEASTANDSOUTH)
+					{
+						//Log(LOG_INFO) << "TileEngine::blockage() EXIT, ret 0 ( dir 0 north )";
+						return 0; // part By-passed.
+					}
+				break;
 
-//				return ret;
+				case 1: // north east
+					if (bigWall == Pathfinding::BIGWALLWEST
+						|| bigWall == Pathfinding::BIGWALLSOUTH)
+//						|| bigWall == Pathfinding::BIGWALLNESW) // kL
+					{
+						//Log(LOG_INFO) << "TileEngine::blockage() EXIT, ret 0 ( dir 1 northeast )";
+						return 0;
+					}
+				break;
+
+				case 2: // east
+					if (bigWall == Pathfinding::BIGWALLNORTH
+						|| bigWall == Pathfinding::BIGWALLSOUTH
+						|| bigWall == Pathfinding::BIGWALLWEST)
+					{
+						//Log(LOG_INFO) << "TileEngine::blockage() EXIT, ret 0 ( dir 2 east )";
+						return 0;
+					}
+				break;
+
+				case 3: // south east
+					if (bigWall == Pathfinding::BIGWALLNORTH
+						|| bigWall == Pathfinding::BIGWALLWEST)
+//						|| bigWall == Pathfinding::BIGWALLNWSE) // kL
+					{
+						//Log(LOG_INFO) << "TileEngine::blockage() EXIT, ret 0 ( dir 3 southeast )";
+						return 0;
+					}
+				break;
+
+				case 4: // south
+					if (bigWall == Pathfinding::BIGWALLWEST
+						|| bigWall == Pathfinding::BIGWALLEAST
+						|| bigWall == Pathfinding::BIGWALLNORTH)
+					{
+						//Log(LOG_INFO) << "TileEngine::blockage() EXIT, ret 0 ( dir 4 south )";
+						return 0;
+					}
+				break;
+
+				case 5: // south west
+					if (bigWall == Pathfinding::BIGWALLNORTH
+						|| bigWall == Pathfinding::BIGWALLEAST)
+//						|| bigWall == Pathfinding::BIGWALLNESW) // kL
+					{
+						//Log(LOG_INFO) << "TileEngine::blockage() EXIT, ret 0 ( dir 5 southwest )";
+						return 0;
+					}
+				break;
+
+				case 6: // west
+					if (bigWall == Pathfinding::BIGWALLNORTH
+						|| bigWall == Pathfinding::BIGWALLSOUTH
+						|| bigWall == Pathfinding::BIGWALLEAST
+						|| bigWall == Pathfinding::BIGWALLEASTANDSOUTH)
+					{
+						//Log(LOG_INFO) << "TileEngine::blockage() EXIT, ret 0 ( dir 6 west )";
+						return 0;
+					}
+				break;
+
+				case 7: // north west
+					if (bigWall == Pathfinding::BIGWALLSOUTH
+						|| bigWall == Pathfinding::BIGWALLEAST
+						|| bigWall == Pathfinding::BIGWALLEASTANDSOUTH)
+//						|| bigWall == Pathfinding::BIGWALLNWSE) // kL
+					{
+						//Log(LOG_INFO) << "TileEngine::blockage() EXIT, ret 0 ( dir 7 northwest )";
+						return 0;
+					}
+				break;
+
+				case 8: // up
+				case 9: // down
+					if (bigWall != Pathfinding::BLOCK)
+					{
+						//Log(LOG_INFO) << "TileEngine::blockage() EXIT, ret 0 ( dir 8,9 up,down )";
+						return 0;
+					}
+				break;
+
+				default:
+//						return 0;
+				break;
 			}
-			else
-//				return 0;
-				return tile->getMapData(part)->getBlock(type);
 		}
-		// note there are flags in the MCDs for blockSmoke & blockFire ...
-		else if (dir > 7 // up / down: These Types don't travel through floors / ceilings
-			&& tile->getMapData(part)->getObjectType() == MapData::O_FLOOR // will a floor ever get passed in ?
-			&& (type == DT_SMOKE
-				|| type == DT_STUN
-				|| type == DT_IN))
+		else //if (dir == -1) // west/north wall or floor.
 		{
-			return 256;
-		}
-		else if ((!tile->getMapData(MapData::O_OBJECT)->getBigWall()
-				&& (type == DT_SMOKE
+			if ((type == DT_NONE
+					&& (tile->getMapData(part)->getObjectType() == MapData::O_FLOOR
+						|| tile->getMapData(part)->stopLOS()))
+				|| _powerT < tile->getMapData(part)->getArmor()
+				|| (type == DT_SMOKE
 					|| type == DT_STUN
-					|| type == DT_IN)) // but they *do* travel through Objects that are not bigWalls.
-			|| (type == DT_NONE // LoS/LoF <- calculateLine/lighting.
-				&& !tile->getMapData(part)->stopLOS()))
-		{
-			return 0;
+					|| type == DT_IN))
+			{
+				return 255; // hardblock. might have to adjust this
+			}
 		}
 
+		int ret = tile->getMapData(part)->getBlock(type);
+		//Log(LOG_INFO) << "TileEngine::blockage() EXIT, ret = " << ret;
 
-		int bigWall = tile->getMapData(MapData::O_OBJECT)->getBigWall(); // [0..8] or, per MCD.
-		//Log(LOG_INFO) << ". bigWall = " << bigWall;
-
-		switch (dir)
-		{
-			case 0: // north
-				if (bigWall == Pathfinding::BIGWALLWEST
-					|| bigWall == Pathfinding::BIGWALLEAST
-					|| bigWall == Pathfinding::BIGWALLSOUTH
-					|| bigWall == Pathfinding::BIGWALLEASTANDSOUTH)
-				{
-					//Log(LOG_INFO) << "TileEngine::blockage() EXIT, ret 0 ( dir 0 north )";
-					return 0; // part By-passed.
-				}
-			break;
-
-			case 1: // north east
-				if (bigWall == Pathfinding::BIGWALLWEST
-					|| bigWall == Pathfinding::BIGWALLSOUTH)
-//					|| bigWall == Pathfinding::BIGWALLNESW) // kL
-				{
-					//Log(LOG_INFO) << "TileEngine::blockage() EXIT, ret 0 ( dir 1 northeast )";
-					return 0;
-				}
-			break;
-
-			case 2: // east
-				if (bigWall == Pathfinding::BIGWALLNORTH
-					|| bigWall == Pathfinding::BIGWALLSOUTH
-					|| bigWall == Pathfinding::BIGWALLWEST)
-				{
-					//Log(LOG_INFO) << "TileEngine::blockage() EXIT, ret 0 ( dir 2 east )";
-					return 0;
-				}
-			break;
-
-			case 3: // south east
-				if (bigWall == Pathfinding::BIGWALLNORTH
-					|| bigWall == Pathfinding::BIGWALLWEST)
-//					|| bigWall == Pathfinding::BIGWALLNWSE) // kL
-				{
-					//Log(LOG_INFO) << "TileEngine::blockage() EXIT, ret 0 ( dir 3 southeast )";
-					return 0;
-				}
-			break;
-
-			case 4: // south
-				if (bigWall == Pathfinding::BIGWALLWEST
-					|| bigWall == Pathfinding::BIGWALLEAST
-					|| bigWall == Pathfinding::BIGWALLNORTH)
-				{
-					//Log(LOG_INFO) << "TileEngine::blockage() EXIT, ret 0 ( dir 4 south )";
-					return 0;
-				}
-			break;
-
-			case 5: // south west
-				if (bigWall == Pathfinding::BIGWALLNORTH
-					|| bigWall == Pathfinding::BIGWALLEAST)
-//					|| bigWall == Pathfinding::BIGWALLNESW) // kL
-				{
-					//Log(LOG_INFO) << "TileEngine::blockage() EXIT, ret 0 ( dir 5 southwest )";
-					return 0;
-				}
-			break;
-
-			case 6: // west
-				if (bigWall == Pathfinding::BIGWALLNORTH
-					|| bigWall == Pathfinding::BIGWALLSOUTH
-					|| bigWall == Pathfinding::BIGWALLEAST
-					|| bigWall == Pathfinding::BIGWALLEASTANDSOUTH)
-				{
-					//Log(LOG_INFO) << "TileEngine::blockage() EXIT, ret 0 ( dir 6 west )";
-					return 0;
-				}
-			break;
-
-			case 7: // north west
-				if (bigWall == Pathfinding::BIGWALLSOUTH
-					|| bigWall == Pathfinding::BIGWALLEAST
-					|| bigWall == Pathfinding::BIGWALLEASTANDSOUTH)
-//					|| bigWall == Pathfinding::BIGWALLNWSE) // kL
-				{
-					//Log(LOG_INFO) << "TileEngine::blockage() EXIT, ret 0 ( dir 7 northwest )";
-					return 0;
-				}
-			break;
-
-			case 8: // up
-			case 9: // down
-				if (bigWall != Pathfinding::BLOCK)
-				{
-					//Log(LOG_INFO) << "TileEngine::blockage() EXIT, ret 0 ( dir 8,9 up,down )";
-					return 0;
-				}
-			break;
-
-			default: // (dir == -1) will slip through to here:
-//					return 0;
-			break;
-		}
-
-
-		// from MapData:
-		//	_block[0] = lightBlock; // not used...
-		//	_block[1] = visionBlock == 1? 255: 0;
-		//	_block[2] = HEBlock;
-		//	_block[3] = smokeBlock == 1? 256: 0;
-		//	_block[4] = fireBlock;
-		//	_block[5] = gasBlock;
-
-		if (type == DT_NONE) // LoS/LoF <- calculateLine/lighting.
-//			&& tile->getMapData(part)->stopLOS())
-		{
-			return 255;
-		}
-		else if ((tile->getMapData(part)->getObjectType() == MapData::O_OBJECT
-				&& bigWall
-				&& (type == DT_SMOKE
-					|| type == DT_STUN
-					|| type == DT_IN
-/*					|| (!bigWall
-						&& ((type != DT_SMOKE
-								&& type != DT_STUN
-								&& type != DT_IN) */
-					|| _powerT < tile->getMapData(MapData::O_OBJECT)->getArmor()))
-			|| (tile->getMapData(part)->getObjectType() == MapData::O_WESTWALL
-				&& _powerT < tile->getMapData(MapData::O_WESTWALL)->getArmor())
-			|| (tile->getMapData(part)->getObjectType() == MapData::O_NORTHWALL
-				&& _powerT < tile->getMapData(MapData::O_NORTHWALL)->getArmor()))
-/*		else if (_powerT < tile->getMapData(MapData::O_OBJECT)->getArmor() // part NOT destroyed.
-			|| type == DT_SMOKE
-			|| type == DT_STUN
-			|| type == DT_IN) */
-		{
-			//Log(LOG_INFO) << "TileEngine::blockage() EXIT, ret 256 ( hardblock )";
-			return 256;
-		}
-		else // DT_HE > partArmor
-		{
-			int ret = tile->getMapData(part)->getBlock(type);
-			//Log(LOG_INFO) << "TileEngine::blockage() EXIT, ret = " << ret;
-
-			return ret;
-		}
+		return ret;
 	}
 
 	//Log(LOG_INFO) << "TileEngine::blockage() EXIT, ret 0";

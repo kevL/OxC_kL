@@ -390,7 +390,7 @@ Globe::Globe(
 	_mkCity->setPixel(0, 2, 14);
 	_mkCity->setPixel(1, 2, 14);
 	_mkCity->setPixel(2, 2, 14); */
-	_mkCity->setPixel(0, 0, 86);	// blue border
+/*	_mkCity->setPixel(0, 0, 86);	// blue border
 	_mkCity->setPixel(1, 0, 86);
 	_mkCity->setPixel(2, 0, 86);
 	_mkCity->setPixel(0, 1, 86);
@@ -398,7 +398,16 @@ Globe::Globe(
 	_mkCity->setPixel(2, 1, 86);
 	_mkCity->setPixel(0, 2, 86);
 	_mkCity->setPixel(1, 2, 86);
-	_mkCity->setPixel(2, 2, 86);
+	_mkCity->setPixel(2, 2, 86); */
+	_mkCity->setPixel(0, 0, 5);	// white border
+	_mkCity->setPixel(1, 0, 5);
+	_mkCity->setPixel(2, 0, 5);
+	_mkCity->setPixel(0, 1, 5);
+	_mkCity->setPixel(1, 1, 86);		// blue center
+	_mkCity->setPixel(2, 1, 5);
+	_mkCity->setPixel(0, 2, 5);
+	_mkCity->setPixel(1, 2, 5);
+	_mkCity->setPixel(2, 2, 5);
 	_mkCity->unlock();
 
 	_mkFlyingUfo = new Surface(3, 3);
@@ -2268,7 +2277,7 @@ void Globe::drawDetail()
 
 /**
  * Draws the markers of all the various things going
- * on around the world on top of the globe.
+ * on around the world onto the globe.
  */
 void Globe::drawMarkers()
 {

@@ -87,10 +87,10 @@ AlienBAIState::AlienBAIState(
 		_toNode(0)
 {
 	//Log(LOG_INFO) << "Create AlienBAIState";
-
 	_traceAI		= _save->getTraceSetting();
 
 	_intelligence	= _unit->getIntelligence();
+
 	_escapeAction	= new BattleAction();
 	_ambushAction	= new BattleAction();
 	_attackAction	= new BattleAction();
@@ -118,7 +118,9 @@ AlienBAIState::~AlienBAIState()
  */
 void AlienBAIState::load(const YAML::Node& node)
 {
-	int fromNodeID, toNodeID;
+	int
+		fromNodeID,
+		toNodeID;
 
 	fromNodeID	= node["fromNode"].as<int>(-1);
 	toNodeID	= node["toNode"].as<int>(-1);
@@ -138,7 +140,10 @@ void AlienBAIState::load(const YAML::Node& node)
  */
 YAML::Node AlienBAIState::save() const
 {
-	int fromNodeID = -1, toNodeID = -1;
+	int
+		fromNodeID = -1,
+		toNodeID = -1;
+
 	if (_fromNode)
 		fromNodeID = _fromNode->getID();
 	if (_toNode)
@@ -181,13 +186,16 @@ void AlienBAIState::think(BattleAction* action)
 	//Log(LOG_INFO) << "AlienBAIState::think(), unitID = " << _unit->getId();
  	action->type	= BA_RETHINK;
 	action->actor	= _unit;
-	action->weapon	= _unit->getMainHandWeapon();	// kL_note: does not return grenades.
-													// *cough* Does return grenades. -> DID return grenades but i fixed it so it won't.
+//kL	action->weapon	= _unit->getMainHandWeapon();	// kL_note: does not return grenades.
+														// *cough* Does return grenades. -> DID return grenades but i fixed it so it won't.
+	action->weapon	= _unit->getMainHandWeapon(false);	// this switches BL/Pistol aLiens to use BL (when not reaction firing)
+														// It needs to be refined to account TU usage, also.
 
 	_attackAction->diff		= static_cast<int>(_save->getBattleState()->getGame()->getSavedGame()->getDifficulty());
 	_attackAction->actor	= _unit;
 	_attackAction->weapon	= action->weapon;
 	_attackAction->number	= action->number;
+
 	_escapeAction->number	= action->number;
 
 	_knownEnemies		= countKnownTargets();
@@ -393,17 +401,23 @@ void AlienBAIState::think(BattleAction* action)
 				&& action->type == BA_THROW
 				&& action->weapon->getRules()->getBattleType() == BT_GRENADE)
 			{
-				_unit->spendTimeUnits(_unit->getActionTUs(BA_PRIME, action->weapon));
+				_unit->spendTimeUnits(_unit->getActionTUs(
+													BA_PRIME,
+													action->weapon));
 			}
 
-			action->finalFacing	= _attackAction->finalFacing;									// if this is a firepoint action, set our facing.
-			action->TU			= _unit->getActionTUs(_attackAction->type, _attackAction->weapon);
+			action->finalFacing	= _attackAction->finalFacing;				// if this is a firepoint action, set our facing.
+			action->TU			= _unit->getActionTUs(
+												_attackAction->type,
+												_attackAction->weapon);
 
-			_save->getBattleGame()->setTUReserved(BA_NONE, false);								// don't worry about reserving TUs, we've factored that in already.
+			_save->getBattleGame()->setTUReserved(BA_NONE, false);			// don't worry about reserving TUs, we've factored that in already.
 
-			if (action->type == BA_WALK															// if this is a "find fire point" action, don't increment the AI counter.
+			if (action->type == BA_WALK										// if this is a "find fire point" action, don't increment the AI counter.
 				&& _rifle
-				&& _unit->getTimeUnits() > _unit->getActionTUs(BA_SNAPSHOT, action->weapon))	// so long as we can take a shot afterwards.
+				&& _unit->getTimeUnits() > _unit->getActionTUs(
+														BA_SNAPSHOT,
+														action->weapon))	// so long as we can take a shot afterwards.
 			{
 				action->number -= 1;
 			}
@@ -463,7 +477,7 @@ void AlienBAIState::think(BattleAction* action)
  */
 void AlienBAIState::setupPatrol()
 {
-	Log(LOG_INFO) << "AlienBAIState::setupPatrol()";
+	//Log(LOG_INFO) << "AlienBAIState::setupPatrol()";
 
 	Node* node;
 	_patrolAction->TU = 0;
@@ -656,7 +670,7 @@ void AlienBAIState::setupPatrol()
 	else
 		_patrolAction->type = BA_RETHINK;
 
-	Log(LOG_INFO) << "AlienBAIState::setupPatrol() EXIT";
+	//Log(LOG_INFO) << "AlienBAIState::setupPatrol() EXIT";
 }
 
 /**
@@ -1706,7 +1720,7 @@ bool AlienBAIState::explosiveEfficacy(
 		int diff) const
 //		bool grenade) const
 {
-	Log(LOG_INFO) << "AlienBAIState::explosiveEfficacy()";
+	//Log(LOG_INFO) << "AlienBAIState::explosiveEfficacy()";
 
 	if (diff == -1)
 		diff = static_cast<int>(_save->getBattleState()->getGame()->getSavedGame()->getDifficulty());

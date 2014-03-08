@@ -139,7 +139,6 @@ void ExplosionBState::init()
 	if (_areaOfEffect)
 	{
 		//Log(LOG_INFO) << ". . new Explosion(AoE)";
-
 		if (_power > 0)
 		{
 			Position posCenter_voxel = _center; // voxelspace

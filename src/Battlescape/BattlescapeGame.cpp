@@ -201,7 +201,7 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 	_tuReserved = BA_NONE;
 
 
-	if (unit->getTimeUnits() < 6)
+	if (unit->getTimeUnits() < 4) // kL
 		unit->dontReselect();
 
 	if (//kL unit->getTimeUnits() < 6 ||
@@ -349,7 +349,8 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 
 			getResourcePack()->getSound(
 									"BATTLE.CAT",
-									unit->getAggroSound())->play();
+									unit->getAggroSound())
+								->play();
 		}
 	}
 	//Log(LOG_INFO) << ". getCharging DONE";
@@ -396,7 +397,8 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 			action.TU = action.weapon->getRules()->getTUUse();
 
 			if (!action.weapon->getRules()->getFlatRate()) // kL
-				action.TU = static_cast<int>(floor(static_cast<float>(action.actor->getStats()->tu * action.TU) / 100.f)); // kL
+				action.TU = static_cast<int>(
+								floor(static_cast<float>(action.actor->getStats()->tu * action.TU) / 100.f)); // kL
 		}
 		else
 			statePushBack(new UnitTurnBState(

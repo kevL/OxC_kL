@@ -46,6 +46,7 @@ struct TrajectoryWaypoint
 YAML::Emitter& operator << (
 		YAML::Emitter& emitter,
 		const TrajectoryWaypoint& wp);
+
 bool operator >> (
 		const YAML::Node& node,
 		TrajectoryWaypoint& wp);

@@ -5682,7 +5682,7 @@
 	"../Battlescape/Position.h"
 	"../Ruleset/MapData.h"
 
-1394137985 source:f:\git\openxcom\src\battlescape\alienbaistate.cpp
+1394227959 source:f:\git\openxcom\src\battlescape\alienbaistate.cpp
 	"AlienBAIState.h"
 	<algorithm>
 	<climits>
@@ -6248,7 +6248,7 @@
 1392594698 f:\git\openxcom\src\battlescape\explosion.h
 	"Position.h"
 
-1394130283 source:f:\git\openxcom\src\battlescape\explosionbstate.cpp
+1394216611 source:f:\git\openxcom\src\battlescape\explosionbstate.cpp
 	"ExplosionBState.h"
 	"Camera.h"
 	"BattlescapeState.h"
@@ -6290,7 +6290,7 @@
 	"../Interface/Frame.h"
 	"../Interface/Text.h"
 
-1393918312 source:f:\git\openxcom\src\battlescape\inventory.cpp
+1394216356 source:f:\git\openxcom\src\battlescape\inventory.cpp
 	"Inventory.h"
 	<cmath>
 	"PrimeGrenadeState.h"
@@ -6579,7 +6579,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1394139821 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
+1394222838 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
 	"ProjectileFlyBState.h"
 	<cmath>
 	"AlienBAIState.h"
@@ -6653,7 +6653,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Interface/Text.h"
 
-1394137985 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1394232501 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	<climits>
 	<cmath>
@@ -7750,7 +7750,7 @@
 	<vector>
 	<yaml-cpp/yaml.h>
 
-1393623078 f:\git\openxcom\src\ruleset\ufotrajectory.h
+1394223193 f:\git\openxcom\src\ruleset\ufotrajectory.h
 	<vector>
 	<string>
 	<yaml-cpp/yaml.h>
@@ -7759,7 +7759,7 @@
 	<string>
 	<vector>
 
-1392704072 source:f:\git\openxcom\src\geoscape\globe.cpp
+1394223845 source:f:\git\openxcom\src\geoscape\globe.cpp
 	"Globe.h"
 	<cmath>
 	<fstream>
@@ -9179,7 +9179,7 @@
 	"../Engine/Exception.h"
 	"../Engine/CrossPlatform.h"
 
-1393623076 source:f:\git\openxcom\src\ruleset\ufotrajectory.cpp
+1394223257 source:f:\git\openxcom\src\ruleset\ufotrajectory.cpp
 	"UfoTrajectory.h"
 
 1392594695 source:f:\git\openxcom\src\ruleset\unit.cpp
@@ -9190,7 +9190,7 @@
 	<sstream>
 	"../Engine/Language.h"
 
-1393623390 source:f:\git\openxcom\src\savegame\alienmission.cpp
+1394223413 source:f:\git\openxcom\src\savegame\alienmission.cpp
 	"AlienMission.h"
 	<algorithm>
 	<functional>

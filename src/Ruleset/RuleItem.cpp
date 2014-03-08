@@ -255,7 +255,7 @@ std::string RuleItem::getName() const
 
 /**
  * Gets the list of research required to use this item.
- * @return The list of research IDs.
+ * @return, The list of research IDs.
  */
 const std::vector<std::string>& RuleItem::getRequirements() const
 {
@@ -264,7 +264,7 @@ const std::vector<std::string>& RuleItem::getRequirements() const
 
 /**
  * Gets the amount of space this item takes up in a storage facility.
- * @return The storage size.
+ * @return, The storage size.
  */
 float RuleItem::getSize() const
 {
@@ -273,7 +273,7 @@ float RuleItem::getSize() const
 
 /**
  * Gets the amount of money this item costs to purchase (0 if not purchasable).
- * @return The buy cost.
+ * @return, The buy cost.
  */
 int RuleItem::getBuyCost() const
 {
@@ -282,7 +282,7 @@ int RuleItem::getBuyCost() const
 
 /**
  * Gets the amount of money this item is worth to sell.
- * @return The sell cost.
+ * @return, The sell cost.
  */
 int RuleItem::getSellCost() const
 {
@@ -291,7 +291,7 @@ int RuleItem::getSellCost() const
 
 /**
  * Gets the amount of time this item takes to arrive at a base.
- * @return The time in hours.
+ * @return, The time in hours.
  */
 int RuleItem::getTransferTime() const
 {
@@ -300,7 +300,7 @@ int RuleItem::getTransferTime() const
 
 /**
  * Gets the weight of the item.
- * @return The weight in strength units.
+ * @return, The weight in strength units.
  */
 int RuleItem::getWeight() const
 {
@@ -309,7 +309,7 @@ int RuleItem::getWeight() const
 
 /**
  * Gets the reference in BIGOBS.PCK for use in inventory.
- * @return The sprite reference.
+ * @return, The sprite reference.
  */
 int RuleItem::getBigSprite() const
 {
@@ -318,7 +318,7 @@ int RuleItem::getBigSprite() const
 
 /**
  * Gets the reference in FLOOROB.PCK for use in inventory.
- * @return The sprite reference.
+ * @return, The sprite reference.
  */
 int RuleItem::getFloorSprite() const
 {
@@ -327,7 +327,7 @@ int RuleItem::getFloorSprite() const
 
 /**
  * Gets the reference in HANDOB.PCK for use in inventory.
- * @return The sprite reference.
+ * @return, The sprite reference.
  */
 int RuleItem::getHandSprite() const
 {
@@ -336,7 +336,7 @@ int RuleItem::getHandSprite() const
 
 /**
  * Returns whether this item is held with two hands.
- * @return True if it is two-handed.
+ * @return, True if it is two-handed.
  */
 bool RuleItem::isTwoHanded() const
 {
@@ -345,7 +345,7 @@ bool RuleItem::isTwoHanded() const
 
 /**
  * Returns whether this item uses waypoints.
- * @return True if it uses waypoints.
+ * @return, True if it uses waypoints.
  */
 bool RuleItem::isWaypoint() const
 {
@@ -364,7 +364,7 @@ bool RuleItem::isFixed() const
 
 /**
  * Gets the item's bullet sprite reference.
- * @return The sprite reference.
+ * @return, The sprite reference.
  */
 int RuleItem::getBulletSprite() const
 {
@@ -373,7 +373,7 @@ int RuleItem::getBulletSprite() const
 
 /**
  * Gets the item's fire sound.
- * @return The fire sound id.
+ * @return, The fire sound id.
  */
 int RuleItem::getFireSound() const
 {
@@ -382,7 +382,7 @@ int RuleItem::getFireSound() const
 
 /**
  * Gets the item's hit sound.
- * @return The hit sound id.
+ * @return, The hit sound id.
  */
 int RuleItem::getHitSound() const
 {
@@ -391,7 +391,7 @@ int RuleItem::getHitSound() const
 
 /**
  * Gets the item's hit animation.
- * @return The hit animation id.
+ * @return, The hit animation id.
  */
 int RuleItem::getHitAnimation() const
 {
@@ -400,7 +400,7 @@ int RuleItem::getHitAnimation() const
 
 /**
  * Gets the item's damage power.
- * @return The power.
+ * @return, The power.
  */
 int RuleItem::getPower() const
 {
@@ -409,7 +409,7 @@ int RuleItem::getPower() const
 
 /**
  * Gets the item's accuracy for snapshots.
- * @return The snapshot accuracy.
+ * @return, The snapshot accuracy.
  */
 int RuleItem::getAccuracySnap() const
 {
@@ -418,7 +418,7 @@ int RuleItem::getAccuracySnap() const
 
 /**
  * Gets the item's accuracy for autoshots.
- * @return The autoshot accuracy.
+ * @return, The autoshot accuracy.
  */
 int RuleItem::getAccuracyAuto() const
 {
@@ -427,7 +427,7 @@ int RuleItem::getAccuracyAuto() const
 
 /**
  * Gets the item's accuracy for aimed shots.
- * @return The aimed accuracy.
+ * @return, The aimed accuracy.
  */
 int RuleItem::getAccuracyAimed() const
 {
@@ -436,7 +436,7 @@ int RuleItem::getAccuracyAimed() const
 
 /**
  * Gets the item's accuracy for melee attacks.
- * @return The melee accuracy.
+ * @return, The melee accuracy.
  */
 int RuleItem::getAccuracyMelee() const
 {
@@ -445,7 +445,7 @@ int RuleItem::getAccuracyMelee() const
 
 /**
  * Gets the item's time unit percentage for snapshots.
- * @return The snapshot TU percentage.
+ * @return, The snapshot TU percentage.
  */
 int RuleItem::getTUSnap() const
 {
@@ -454,7 +454,7 @@ int RuleItem::getTUSnap() const
 
 /**
  * Gets the item's time unit percentage for autoshots.
- * @return The autoshot TU percentage.
+ * @return, The autoshot TU percentage.
  */
 int RuleItem::getTUAuto() const
 {
@@ -463,7 +463,7 @@ int RuleItem::getTUAuto() const
 
 /**
  * Gets the item's time unit percentage for aimed shots.
- * @return The aimed shot TU percentage.
+ * @return, The aimed shot TU percentage.
  */
 int RuleItem::getTUAimed() const
 {
@@ -472,7 +472,7 @@ int RuleItem::getTUAimed() const
 
 /**
  * Gets the item's time unit percentage for melee attacks.
- * @return The melee TU percentage.
+ * @return, The melee TU percentage.
  */
 int RuleItem::getTUMelee() const
 {
@@ -481,7 +481,7 @@ int RuleItem::getTUMelee() const
 
 /**
  * Gets a list of compatible ammo.
- * @return Pointer to a list of compatible ammo.
+ * @return, Pointer to a list of compatible ammo.
  */
 std::vector<std::string>* RuleItem::getCompatibleAmmo()
 {
@@ -490,7 +490,7 @@ std::vector<std::string>* RuleItem::getCompatibleAmmo()
 
 /**
  * Gets the item's damage type.
- * @return The damage type.
+ * @return, The damage type.
  */
 ItemDamageType RuleItem::getDamageType() const
 {
@@ -508,7 +508,7 @@ BattleType RuleItem::getBattleType() const
 
 /**
  * Gets the item's width in a soldier's inventory.
- * @return The width.
+ * @return, The width.
  */
 int RuleItem::getInventoryWidth() const
 {
@@ -517,7 +517,7 @@ int RuleItem::getInventoryWidth() const
 
 /**
  * Gets the item's height in a soldier's inventory.
- * @return The height.
+ * @return, The height.
  */
 int RuleItem::getInventoryHeight() const
 {
@@ -527,7 +527,7 @@ int RuleItem::getInventoryHeight() const
 /**
  * Gets the item's ammo clip size.
  * Melee items have clipsize(0), lasers have clipsize(-1)
- * @return The ammo clip size.
+ * @return, The ammo clip size.
  */
 int RuleItem::getClipSize() const
 {
@@ -553,7 +553,7 @@ void RuleItem::drawHandSprite(SurfaceSet* texture, Surface* surface) const
 
 /**
  * Gets the heal quantity of the item.
- * @return The new heal quantity.
+ * @return, The new heal quantity.
  */
 int RuleItem::getHealQuantity() const
 {
@@ -562,7 +562,7 @@ int RuleItem::getHealQuantity() const
 
 /**
  * Gets the pain killer quantity of the item.
- * @return The new pain killer quantity.
+ * @return, The new pain killer quantity.
  */
 int RuleItem::getPainKillerQuantity() const
 {
@@ -571,7 +571,7 @@ int RuleItem::getPainKillerQuantity() const
 
 /**
  * Gets the stimulant quantity of the item.
- * @return The new stimulant quantity.
+ * @return, The new stimulant quantity.
  */
 int RuleItem::getStimulantQuantity() const
 {
@@ -580,7 +580,7 @@ int RuleItem::getStimulantQuantity() const
 
 /**
  * Gets the amount of fatal wound healed per usage.
- * @return The amount of fatal wound healed.
+ * @return, The amount of fatal wound healed.
  */
 int RuleItem::getWoundRecovery() const
 {
@@ -589,7 +589,7 @@ int RuleItem::getWoundRecovery() const
 
 /**
  * Gets the amount of health added to a wounded soldier's health.
- * @return The amount of health to add.
+ * @return, The amount of health to add.
  */
 int RuleItem::getHealthRecovery() const
 {
@@ -598,7 +598,7 @@ int RuleItem::getHealthRecovery() const
 
 /**
  * Gets the amount of energy added to a soldier's energy.
- * @return The amount of energy to add.
+ * @return, The amount of energy to add.
  */
 int RuleItem::getEnergyRecovery() const
 {
@@ -607,7 +607,7 @@ int RuleItem::getEnergyRecovery() const
 
 /**
  * Gets the amount of stun removed from a soldier's stun level.
- * @return The amount of stun removed.
+ * @return, The amount of stun removed.
  */
 int RuleItem::getStunRecovery() const
 {
@@ -616,7 +616,7 @@ int RuleItem::getStunRecovery() const
 
 /**
  * Gets the number of Time Units needed to use this item.
- * @return The number of Time Units needed to use this item.
+ * @return, The number of Time Units needed to use this item.
  */
 int RuleItem::getTUUse() const
 {
@@ -628,7 +628,7 @@ int RuleItem::getTUUse() const
  * Small explosions don't have a restriction. Larger explosions are restricted
  * using a formula, with a maximum of radius 10 no matter how large the explosion.
  * kL_note: nah...
- * @return The radius.
+ * @return, The radius.
  */
 int RuleItem::getExplosionRadius() const
 {
@@ -660,7 +660,7 @@ int RuleItem::getExplosionRadius() const
 /**
  * Returns the item's recovery points.
  * This is used during the battlescape debriefing score calculation.
- * @return The recovery points.
+ * @return, The recovery points.
  */
 int RuleItem::getRecoveryPoints() const
 {
@@ -670,7 +670,7 @@ int RuleItem::getRecoveryPoints() const
 /**
  * Returns the item's armor.
  * The item is destroyed when an explosion power bigger than its armor hits it.
- * @return The armor.
+ * @return, The armor.
  */
 int RuleItem::getArmor() const
 {
@@ -679,7 +679,7 @@ int RuleItem::getArmor() const
 
 /**
  * Returns if the item should be recoverable from the battlescape.
- * @return True if it is recoverable.
+ * @return, True if it is recoverable.
  */
 bool RuleItem::isRecoverable() const
 {
@@ -688,7 +688,7 @@ bool RuleItem::isRecoverable() const
 
 /**
  * Returns the item's Turret Type.
- * @return The turret index (-1 for no turret).
+ * @return, The turret index (-1 for no turret).
  */
 int RuleItem::getTurretType() const
 {
@@ -706,7 +706,7 @@ bool RuleItem::getAlien() const
 
 /**
  * Returns whether this item charges a flat TU rate.
- * @return True if this item charges a flat TU rate.
+ * @return, True if this item charges a flat TU rate.
  */
 bool RuleItem::getFlatRate() const
 {
@@ -715,7 +715,7 @@ bool RuleItem::getFlatRate() const
 
 /**
  * Returns if this weapon should arc its shots.
- * @return True if this weapon should arc its shots.
+ * @return, True if this weapon should arc its shots.
  */
 bool RuleItem::getArcingShot() const
 {
@@ -724,7 +724,7 @@ bool RuleItem::getArcingShot() const
 
 /**
  * Gets the attraction value for this item (for AI).
- * @return The attraction value.
+ * @return, The attraction value.
  */
 int RuleItem::getAttraction() const
 {
@@ -733,7 +733,7 @@ int RuleItem::getAttraction() const
 
 /**
  * Gets the list weight for this research item
- * @return The list weight.
+ * @return, The list weight.
  */
 int RuleItem::getListOrder() const
 {
@@ -742,7 +742,7 @@ int RuleItem::getListOrder() const
 
 /**
  * Gets the maximum range of this weapon
- * @return The maximum range.
+ * @return, The maximum range.
  */
 int RuleItem::getMaxRange() const
 {
@@ -751,7 +751,7 @@ int RuleItem::getMaxRange() const
 
 /**
  * Gets the maximum effective range of this weapon when using Aimed Shot.
- * @return The maximum range.
+ * @return, The maximum range.
  */
 int RuleItem::getAimRange() const
 {
@@ -760,7 +760,7 @@ int RuleItem::getAimRange() const
 
 /**
  * Gets the maximim effective range of this weapon for Snap Shot.
- * @return The maximum range.
+ * @return, The maximum range.
  */
 int RuleItem::getSnapRange() const
 {
@@ -769,7 +769,7 @@ int RuleItem::getSnapRange() const
 
 /**
  * Gets the maximim effective range of this weapon for Auto Shot.
- * @return The maximum range.
+ * @return, The maximum range.
  */
 int RuleItem::getAutoRange() const
 {
@@ -778,7 +778,7 @@ int RuleItem::getAutoRange() const
 
 /**
  * Gets the minimum effective range of this weapon.
- * @return The minimum effective range.
+ * @return, The minimum effective range.
  */
 int RuleItem::getMinRange() const
 {
@@ -787,7 +787,7 @@ int RuleItem::getMinRange() const
 
 /**
  * Gets the accuracy dropoff value of this weapon.
- * @return The per-tile dropoff.
+ * @return, The per-tile dropoff.
  */
 int RuleItem::getDropoff() const
 {
@@ -796,7 +796,7 @@ int RuleItem::getDropoff() const
 
 /**
  * Gets the speed at which this bullet travels.
- * @return The speed.
+ * @return, The speed.
  */
 int RuleItem::getBulletSpeed() const
 {
@@ -805,7 +805,7 @@ int RuleItem::getBulletSpeed() const
 
 /**
  * Gets the speed at which this bullet explodes.
- * @return The speed.
+ * @return, The speed.
  */
 int RuleItem::getExplosionSpeed() const
 {
@@ -814,7 +814,7 @@ int RuleItem::getExplosionSpeed() const
 
 /**
 * Gets the amount of auto shots fired by this weapon.
-* @return The shots.
+* @return, The shots.
 */
 int RuleItem::getAutoShots() const
 {
@@ -823,7 +823,7 @@ int RuleItem::getAutoShots() const
 
 /**
 * is this item a rifle?
-* @return whether or not it is a rifle.
+* @return, whether or not it is a rifle.
 */
 bool RuleItem::isRifle() const
 {
@@ -834,7 +834,7 @@ bool RuleItem::isRifle() const
 
 /**
 * is this item a pistol?
-* @return whether or not it is a pistol.
+* @return, whether or not it is a pistol.
 */
 bool RuleItem::isPistol() const
 {
@@ -845,7 +845,7 @@ bool RuleItem::isPistol() const
 
 /**
  * Gets the number of projectiles this ammo shoots at once.
- * @return The number of projectiles.
+ * @return, The number of projectiles.
  */
 int RuleItem::getShotgunPellets() const
 {
@@ -854,7 +854,7 @@ int RuleItem::getShotgunPellets() const
 
 /**
  * Gets the unit that the victim is morphed into when attacked.
- * @return The weapon's zombie unit.
+ * @return, The weapon's zombie unit.
  */
 std::string RuleItem::getZombieUnit() const
 {
