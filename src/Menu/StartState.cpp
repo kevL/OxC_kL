@@ -37,6 +37,8 @@
 #include "../Engine/Sound.h"
 #include "../Engine/Surface.h"
 
+#include "../Resource/XcomResourcePack.h" // sza_MusicRules
+
 #include "../Ruleset/Ruleset.h"
 
 
@@ -377,17 +379,20 @@ static struct AudioSequence
 				{
 					case 0x200:
 						Log(LOG_DEBUG) << "Playing gmintro1";
-						m = rp->getMusic("GMINTRO1");
+//						m = rp->getMusic("GMINTRO1");
+						m = rp->getMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMINTRO1); // sza_MusicRules
 						m->play(1);
 					break;
 					case 0x201:
 						Log(LOG_DEBUG) << "Playing gmintro2";
-						m = rp->getMusic("GMINTRO2");
+//						m = rp->getMusic("GMINTRO2");
+						m = rp->getMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMINTRO2); // sza_MusicRules
 						m->play(1);
 					break;
 					case 0x202:
 						Log(LOG_DEBUG) << "Playing gmintro3";
-						m = rp->getMusic("GMINTRO3");
+//						m = rp->getMusic("GMINTRO3");
+						m = rp->getMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMINTRO3); // sza_MusicRules
 						m->play(1);
 						Mix_HookMusicFinished(musicDone);
 					break;
@@ -452,7 +457,14 @@ void StartState::think()
 				Log(LOG_INFO) << "Ruleset loaded.";
 
 				Log(LOG_INFO) << "Loading resources...";
-				_game->setResourcePack(new XcomResourcePack(_game->getRuleset()->getExtraSprites(), _game->getRuleset()->getExtraSounds()));
+//				_game->setResourcePack(new XcomResourcePack(
+//														_game->getRuleset()->getExtraSprites(),
+//														_game->getRuleset()->getExtraSounds()));
+				Ruleset* ruleset = _game->getRuleset(); // sza_MusicRules
+				_game->setResourcePack(new XcomResourcePack( // sza_MusicRules
+														ruleset->getMusic(),
+														ruleset->getExtraSprites(),
+														ruleset->getExtraSounds()));
 				Log(LOG_INFO) << "Resources loaded.";
 
 				Log(LOG_INFO) << "Loading language...";

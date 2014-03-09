@@ -42,6 +42,7 @@
 #include "RuleInventory.h"
 #include "RuleItem.h"
 #include "RuleManufacture.h"
+#include "RuleMusic.h" // sza_MusicRules
 #include "RuleRegion.h"
 #include "RuleResearch.h"
 #include "RuleSoldier.h"
@@ -179,6 +180,14 @@ Ruleset::~Ruleset()
 	for (std::map<std::string, RuleTerrain*>::iterator
 			i = _terrains.begin();
 			i != _terrains.end();
+			++i)
+	{
+		delete i->second;
+	}
+
+	for (std::vector<std::pair<std::string, RuleMusic*> >::const_iterator // sza_MusicRules
+			i = _music.begin();
+			i != _music.end();
 			++i)
 	{
 		delete i->second;
@@ -436,6 +445,18 @@ void Ruleset::loadFile(const std::string& filename)
 		RuleTerrain* rule = loadRule(*i, &_terrains, &_terrainIndex, "name");
 		if (rule != 0)
 			rule->load(*i, this);
+	}
+
+	for (YAML::const_iterator // sza_MusicRules
+			i = doc["music"].begin();
+			i != doc["music"].end();
+			++i)
+	{
+		std::string type = (*i)["type"].as<std::string>();
+		std::auto_ptr<RuleMusic> ruleMusic(new RuleMusic());
+		ruleMusic->load(*i);
+		_music.push_back(std::make_pair(type, ruleMusic.release()));
+		_musicIndex.push_back(type);
 	}
 
 	for (YAML::const_iterator
@@ -1438,6 +1459,12 @@ MCDPatch* Ruleset::getMCDPatch(const std::string id) const
 		return i->second;
 	else
 		return 0;
+}
+
+/// Gets the music rules
+std::vector<std::pair<std::string, RuleMusic*> > Ruleset::getMusic() const // sza_MusicRules
+{
+	return _music;
 }
 
 /**

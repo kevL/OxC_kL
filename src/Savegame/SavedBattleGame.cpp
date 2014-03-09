@@ -176,6 +176,7 @@ void SavedBattleGame::load(
 	_missionType		= node["missionType"].as<std::string>(_missionType);
 	_globalShade		= node["globalshade"].as<int>(_globalShade);
 	_turn				= node["turn"].as<int>(_turn);
+	_terrain			= node["terrain"].as<std::string>(_terrain); // sza_MusicRules
 	int selectedUnit	= node["selectedUnit"].as<int>();
 
 	for (YAML::const_iterator
@@ -725,6 +726,22 @@ int SavedBattleGame::getMapSizeZ() const
 int SavedBattleGame::getMapSizeXYZ() const
 {
 	return _mapsize_x * _mapsize_y * _mapsize_z;
+}
+
+/**
+ *
+ */
+void SavedBattleGame::setTerrain(std::string terrain) // sza_MusicRules
+{
+	_terrain = terrain;
+}
+
+/**
+ *
+ */
+std::string SavedBattleGame::getTerrain() const // sza_MusicRules
+{
+	return _terrain;
 }
 
 /**

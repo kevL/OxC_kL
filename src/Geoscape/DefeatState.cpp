@@ -33,6 +33,7 @@
 #include "../Menu/MainMenuState.h"
 
 #include "../Resource/ResourcePack.h"
+#include "../Resource/XcomResourcePack.h" // sza_MusicRules
 
 #include "../Savegame/SavedGame.h"
 
@@ -61,7 +62,8 @@ DefeatState::DefeatState(Game* game)
 
 	_window->onMouseClick((ActionHandler)& DefeatState::windowClick);
 
-	_game->getResourcePack()->getMusic("GMLOSE")->play();
+//	_game->getResourcePack()->getMusic("GMLOSE")->play();
+	_game->getResourcePack()->getMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMLOSE)->play(); // sza_MusicRules
 
 	for (int
 			text = 0;

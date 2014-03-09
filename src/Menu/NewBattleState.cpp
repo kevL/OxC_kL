@@ -38,6 +38,7 @@
 #include "../Interface/Window.h"
 
 #include "../Resource/ResourcePack.h"
+#include "../Resource/XcomResourcePack.h" // sza_MusicRules
 
 #include "../Ruleset/RuleCraft.h"
 #include "../Ruleset/RuleItem.h"
@@ -315,7 +316,8 @@ void NewBattleState::init()
 	if (!_music)
 	{
 		_music = true;
-		_game->getResourcePack()->getMusic("GMSTORY")->play();
+//		_game->getResourcePack()->getMusic("GMSTORY")->play();
+		_game->getResourcePack()->getMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMSTORY)->play(); // sza_MusicRules
 	}
 
 	if (_craft == 0)

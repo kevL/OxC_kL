@@ -37,6 +37,7 @@
 #include "../Interface/Window.h"
 
 #include "../Resource/ResourcePack.h"
+#include "../Resource/XcomResourcePack.h" // sza_MusicRules
 
 #include "../Savegame/Base.h"
 #include "../Savegame/GameTime.h"
@@ -78,7 +79,8 @@ SoldierMemorialState::SoldierMemorialState(Game* game)
 				16);
 
 //kL	_game->getResourcePack()->getMusic("GMLOSE")->play();
-	_game->getResourcePack()->getMusic("GMWIN")->play(); // kL
+//	_game->getResourcePack()->getMusic("GMWIN")->play(); // kL
+	_game->getResourcePack()->getMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMGRAVES)->play(); // sza_MusicRules
 
 	add(_window);
 	add(_txtTitle);
@@ -187,7 +189,8 @@ void SoldierMemorialState::btnOkClick(Action*)
 {
 	_game->popState();
 
-	_game->getResourcePack()->getRandomMusic("GMGEO")->play();
+//	_game->getResourcePack()->getRandomMusic("GMGEO")->play();
+	_game->getResourcePack()->getMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMGEO)->play(); // sza_MusicRules
 }
 
 /**

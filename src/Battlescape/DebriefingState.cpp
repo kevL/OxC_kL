@@ -45,6 +45,7 @@
 #include "../Menu/MainMenuState.h"
 
 #include "../Resource/ResourcePack.h"
+#include "../Resource/XcomResourcePack.h" // sza_MusicRules
 
 #include "../Ruleset/Armor.h"
 #include "../Ruleset/RuleCountry.h"
@@ -283,7 +284,8 @@ DebriefingState::DebriefingState(Game* game)
 	_txtRating->setText(tr("STR_RATING").arg(rating));
 
 
-	_game->getResourcePack()->getMusic("GMMARS")->play();
+//	_game->getResourcePack()->getMusic("GMMARS")->play();
+	_game->getResourcePack()->getMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMMARS)->play(); // sza_MusicRules
 
 	_game->getCursor()->setColor(Palette::blockOffset(15)+12);
 	_game->getFpsCounter()->setColor(Palette::blockOffset(15)+12);

@@ -38,6 +38,7 @@
 #include "../Interface/Window.h"
 
 #include "../Resource/ResourcePack.h"
+#include "../Resource/XcomResourcePack.h" // sza_MusicRules
 
 
 namespace OpenXcom
@@ -114,7 +115,8 @@ MainMenuState::MainMenuState(Game* game)
 	_txtTitle->setText(title.str());
 
 
-	_game->getResourcePack()->getMusic("GMSTORY")->play();
+//	_game->getResourcePack()->getMusic("GMSTORY")->play();
+	_game->getResourcePack()->getMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMSTORY)->play(); // sza_MusicRules
 
 	_game->getCursor()->setColor(Palette::blockOffset(15)+12);
 	_game->getFpsCounter()->setColor(Palette::blockOffset(15)+12);

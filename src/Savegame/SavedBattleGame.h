@@ -85,7 +85,9 @@ private:
 	Tile** _tiles;
 	TileEngine* _tileEngine;
 
-	std::string _missionType;
+	std::string
+		_missionType,
+		_terrain; // sza_MusicRules
 
 	std::list<BattleUnit*> _fallingUnits;
 
@@ -161,6 +163,10 @@ private:
 		int getMapSizeZ() const;
 		/// Gets terrain x*y*z
 		int getMapSizeXYZ() const;
+		///
+		void setTerrain(std::string terrain); // sza_MusicRules
+		///
+		std::string getTerrain() const; // sza_MusicRules
 
 		/**
 		 * Converts coordinates into a unique index.

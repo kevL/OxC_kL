@@ -70,6 +70,9 @@ private:
 		std::map<std::string, SurfaceSet*>	_sets;
 		std::map<std::string, SoundSet*>	_sounds;
 
+		std::map<std::string, Music*> _musicFile; // sza_MusicRules
+		std::map<std::string, std::map<std::string, std::vector<std::pair<std::string, int> > > > _musicAssignment; // sza_MusicRules
+
 		std::vector<Uint16> _voxelData;
 
 
@@ -92,7 +95,21 @@ private:
 			/// Gets a particular music.
 			Music* getMusic(const std::string& name) const;
 			/// Gets a random music.
-			Music* getRandomMusic(const std::string& name) const;
+//			Music* getRandomMusic(const std::string& name) const;
+			Music* getRandomMusic( // sza_MusicRules
+					const std::string& name,
+					const std::string& terrain) const;
+			/// Clear a music assignment
+			void ClearMusicAssignment( // sza_MusicRules
+					const std::string& name,
+					const std::string& terrain);
+			/// Make a music assignment
+			void MakeMusicAssignment( // sza_MusicRules
+					const std::string& name,
+					const std::string& terrain,
+					const std::vector<std::string>& filenames,
+					const std::vector<int>& midiIndexes);
+
 			/// Gets a particular sound.
 			Sound* getSound(
 					const std::string& set,

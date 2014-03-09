@@ -85,6 +85,7 @@
 #include "../Menu/SaveState.h"
 
 #include "../Resource/ResourcePack.h"
+#include "../Resource/XcomResourcePack.h" // sza_MusicRules
 
 #include "../Ruleset/AlienDeployment.h"
 #include "../Ruleset/Armor.h"
@@ -666,7 +667,13 @@ BattlescapeState::BattlescapeState(Game* game)
 	_btnZeroTUs->copy(_icons);
 	_btnZeroTUs->setColor(Palette::blockOffset(2)+3); */
 
-	_game->getResourcePack()->getRandomMusic("GMTACTIC")->play();
+//	_game->getResourcePack()->getRandomMusic("GMTACTIC")->play();
+	std::string terrain = game->getSavedGame()->getSavedBattle()->getTerrain(); // sza_MusicRules
+	_game->getResourcePack()->getRandomMusic( // sza_MusicRules
+										OpenXcom::XCOM_RESOURCE_MUSIC_GMTACTIC,
+										terrain)
+									->play();
+
 
 //kL	_animTimer = new Timer(DEFAULT_ANIM_SPEED, true);
 	_animTimer = new Timer(DEFAULT_ANIM_SPEED);

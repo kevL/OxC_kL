@@ -52,6 +52,7 @@ class RuleCraftWeapon;
 class RuleInventory;
 class RuleItem;
 class RuleManufacture;
+class RuleMusic; // sza_MusicRules
 class RuleRegion;
 class RuleResearch;
 class RuleSoldier;
@@ -110,6 +111,7 @@ protected:
 		_itemsIndex,
 		_manufactureIndex,
 		_MCDPatchesIndex,
+		_musicIndex, // sza_MusicRules
 		_regionsIndex,
 		_researchIndex,
 		_terrainIndex,
@@ -147,6 +149,7 @@ protected:
 
 	std::vector<std::pair<std::string, ExtraSounds*> > _extraSounds;
 	std::vector<std::pair<std::string, ExtraSprites*> > _extraSprites;
+	std::vector<std::pair<std::string, RuleMusic*> > _music; // sza_MusicRules
 
 
 	/// Loads a ruleset from a YAML file.
@@ -263,6 +266,8 @@ protected:
 		const YAML::Node& getStartingBase();
 		/// Gets an MCDPatch.
 		MCDPatch* getMCDPatch(const std::string name) const;
+		/// Gets the music rules
+		std::vector<std::pair<std::string, RuleMusic*> > getMusic() const; // sza_MusicRules
 		/// Gets the list of external Sprites.
 		std::vector<std::pair<std::string, ExtraSprites*> > getExtraSprites() const;
 		/// Gets the list of external Sounds.

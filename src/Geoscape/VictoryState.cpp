@@ -16,18 +16,27 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "VictoryState.h"
+
 #include <sstream>
+
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
-#include "../Engine/Language.h"
-#include "../Engine/Palette.h"
-#include "../Interface/Text.h"
 #include "../Engine/InteractiveSurface.h"
-#include "../Savegame/SavedGame.h"
-#include "../Menu/MainMenuState.h"
+#include "../Engine/Language.h"
 #include "../Engine/Music.h"
+#include "../Engine/Palette.h"
 #include "../Engine/Timer.h"
+
+#include "../Interface/Text.h"
+
+#include "../Menu/MainMenuState.h"
+
+#include "../Resource/ResourcePack.h"
+#include "../Resource/XcomResourcePack.h" // sza_MusicRules
+
+#include "../Savegame/SavedGame.h"
+
 
 namespace OpenXcom
 {
@@ -36,9 +45,11 @@ namespace OpenXcom
  * Initializes all the elements in the Victory screen.
  * @param game Pointer to the core game.
  */
-VictoryState::VictoryState(Game *game) : State(game), _screenNumber(0)
+VictoryState::VictoryState(Game *game)
+	:
+		State(game),
+		_screenNumber(0)
 {
-	// Create objects
 	_window = new InteractiveSurface(320, 200, 0, 0);
 	_txtText.push_back(new Text(195, 56, 5, 0));
 	_txtText.push_back(new Text(232, 64, 88, 136));
@@ -48,24 +59,30 @@ VictoryState::VictoryState(Game *game) : State(game), _screenNumber(0)
 	_timer = new Timer(40000);
 
 	add(_window);
-	// Set up objects
-	_window->onMouseClick((ActionHandler)&VictoryState::windowClick);
 
-	_game->getResourcePack()->getMusic("GMWIN")->play();
 
-	for (int text = 0; text != 5; ++text)
+	_window->onMouseClick((ActionHandler)& VictoryState::windowClick);
+
+//	_game->getResourcePack()->getMusic("GMWIN")->play();
+	_game->getResourcePack()->getMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMWIN)->play(); // sza_MusicRules
+
+	for (int
+			text = 0;
+			text != 5;
+			++text)
 	{
 		std::ostringstream ss2;
 		ss2 << "STR_VICTORY_" << text+1;
 		_txtText[text]->setText(tr(ss2.str()));
 		_txtText[text]->setWordWrap(true);
+
 		add(_txtText[text]);
 		_txtText[text]->setVisible(false);
 	}
 
 	centerAllSurfaces();
 
-	_timer->onTimer((StateHandler)&VictoryState::windowClick);
+	_timer->onTimer((StateHandler)& VictoryState::windowClick);
 	_timer->start();
 }
 
@@ -91,9 +108,9 @@ void VictoryState::think()
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void VictoryState::windowClick(Action *)
+void VictoryState::windowClick(Action*)
 {
-	if(_screenNumber == 5)
+	if (_screenNumber == 5)
 	{
 		_game->popState();
 		_game->setState(new MainMenuState(_game));
@@ -106,9 +123,11 @@ void VictoryState::windowClick(Action *)
 void VictoryState::nextScreen()
 {
 	++_screenNumber;
+
 	int offset = 0;
-	if(_screenNumber>3)
+	if(_screenNumber > 3)
 		offset = 2;
+
 	std::ostringstream ss;
 	ss << "PICT" << _screenNumber+offset << ".LBM";
 	_game->setPalette(_game->getResourcePack()->getSurface(ss.str())->getPalette());
@@ -117,8 +136,9 @@ void VictoryState::nextScreen()
 	_txtText[_screenNumber-1]->setPalette(_game->getResourcePack()->getSurface(ss.str())->getPalette());
 	_txtText[_screenNumber-1]->setColor(Palette::blockOffset(15)+9);
 	_txtText[_screenNumber-1]->setVisible(true);
+
 	if (_screenNumber > 1)
-		_txtText[_screenNumber-2]->setVisible(false);
+		_txtText[_screenNumber - 2]->setVisible(false);
 }
 
 }

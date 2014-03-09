@@ -87,6 +87,7 @@
 #include "../Menu/SaveState.h"
 
 #include "../Resource/ResourcePack.h"
+#include "../Resource/XcomResourcePack.h" // sza_MusicRules
 
 #include "../Ruleset/Armor.h"
 #include "../Ruleset/RuleBaseFacility.h"
@@ -694,9 +695,11 @@ void GeoscapeState::init()
 		&& !_battleMusic)
 	{
 		if (_game->getSavedGame()->getMonthsPassed() == -1)
-			_game->getResourcePack()->getMusic("GMGEO1")->play();
+//			_game->getResourcePack()->getMusic("GMGEO1")->play();
+			_game->getResourcePack()->getMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMGEO1)->play(); // sza_MusicRules
 		else
-			_game->getResourcePack()->getRandomMusic("GMGEO")->play();
+//			_game->getResourcePack()->getRandomMusic("GMGEO")->play();
+			_game->getResourcePack()->getMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMGEO)->play(); // sza_MusicRules
 
 		_music = true;
 	}
@@ -1158,7 +1161,8 @@ void GeoscapeState::time5Seconds()
 
 								if (!_battleMusic) // set music
 								{
-									_game->getResourcePack()->getMusic("GMINTER")->play();
+//									_game->getResourcePack()->getMusic("GMINTER")->play();
+									_game->getResourcePack()->getMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMINTER)->play(); // sza_MusicRules
 									_battleMusic = true;
 								}
 							}

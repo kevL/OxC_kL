@@ -20,6 +20,7 @@
 #include "ResourcePack.h"
 
 #include "../Engine/Font.h"
+#include "../Engine/Logger.h" // sza_MusicRules
 #include "../Engine/Music.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Surface.h"
@@ -49,7 +50,9 @@ ResourcePack::ResourcePack()
 		_sounds(),
 		_polygons(),
 		_polylines(),
-		_musics()
+//		_musics(),
+		_musicFile(), // sza_MusicRules
+		_musicAssignment() // sza_MusicRules
 {
 	_muteMusic = new Music();
 	_muteSound = new Sound();
@@ -112,8 +115,10 @@ ResourcePack::~ResourcePack()
 	}
 
 	for (std::map<std::string, Music*>::iterator
-			i = _musics.begin();
-			i != _musics.end();
+//			i = _musics.begin();
+//			i != _musics.end();
+			i = _musicFile.begin(); // sza_MusicRules
+			i != _musicFile.end(); // sza_MusicRules
 			++i)
 	{
 		delete i->second;
@@ -197,10 +202,10 @@ std::list<Polyline*>* ResourcePack::getPolylines()
  */
 Music* ResourcePack::getMusic(const std::string& name) const
 {
-	if (Options::getBool("mute"))
-	{
+	return getRandomMusic(name, ""); // sza_MusicRules
+
+/*	if (Options::getBool("mute"))
 		return _muteMusic;
-	}
 	else
 	{
 		std::map<std::string, Music*>::const_iterator i = _musics.find(name);
@@ -209,7 +214,7 @@ Music* ResourcePack::getMusic(const std::string& name) const
 			return i->second;
 		else
 			return 0;
-	}
+	} */
 }
 
 /**
@@ -220,27 +225,85 @@ Music* ResourcePack::getMusic(const std::string& name) const
 Music* ResourcePack::getRandomMusic(const std::string& name) const
 {
 	if (Options::getBool("mute"))
-	{
 		return _muteMusic;
-	}
 	else
-	{
-		std::vector<Music*> music;
+	{ // sza_MusicRules
+		Log(LOG_DEBUG) << "MUSIC - Request to play " << name << " '" << terrain << "'";
+
+		if (_musicAssignment.find(name) == _musicAssignment.end())
+			return _muteMusic;
+
+		std::map<std::string,std::vector<std::pair<std::string, int> > > assignment = _musicAssignment.at(name);
+		if (assignment.find(terrain) == assignment.end())
+			return _muteMusic;
+
+		std::vector<std::pair<std::string, int> > musicCodes = assignment.at(terrain);
+		std::pair<std::string, int> randomCode = musicCodes[RNG::generate(
+																		0,
+																		musicCodes.size() - 1)];
+		Log(LOG_DEBUG) << "MUSIC - Chose " << randomCode.first;
+
+		Music* music = _musicFile.at(randomCode.first);
+
+		return music;
+	}
+/*		std::vector<Music*> music;
 		for (std::map<std::string, Music*>::const_iterator
 				i = _musics.begin();
 				i != _musics.end();
 				++i)
 		{
 			if (i->first.find(name) != std::string::npos)
-			{
 				music.push_back(i->second);
-			}
 		}
 
 		if (_musics.empty())
 			return _muteMusic;
 		else
-			return music[RNG::generate(0, static_cast<int>(music.size()) - 1)];
+			return music[RNG::generate(
+									0,
+									static_cast<int>(music.size()) - 1)];
+	} */
+}
+
+/**
+ * Clear a music assignment
+ */
+void ResourcePack::ClearMusicAssignment( // sza_MusicRules
+		const std::string& name,
+		const std::string& terrain)
+{
+	if (_musicAssignment.find(name) == _musicAssignment.end())
+		return;
+
+	if (_musicAssignment.at(name).find(terrain) == _musicAssignment.at(name).end())
+		return;
+
+	_musicAssignment.at(name).at(terrain).clear();
+}
+
+/**
+ * Make a music assignment
+ */
+void ResourcePack::MakeMusicAssignment( // sza_MusicRules
+		const std::string& name,
+		const std::string& terrain,
+		const std::vector<std::string>& filenames,
+		const std::vector<int>& midiIndexes)
+{
+	if (_musicAssignment.find(name) == _musicAssignment.end())
+		_musicAssignment[name] = std::map<std::string, std::vector<std::pair<std::string, int> > > ();
+
+	if (_musicAssignment.at(name).find(terrain) == _musicAssignment.at(name).end())
+		_musicAssignment[name][terrain] = std::vector<std::pair<std::string, int> > ();
+
+	for (int
+			i = 0;
+			i < filenames.size();
+			i++)
+	{
+		std::pair<std::string, int> toAdd = std::make_pair<std::string, int>(filenames.at(i), midiIndexes.at(i));
+		_musicAssignment[name][terrain].push_back(toAdd);
 	}
 }
 
@@ -255,9 +318,7 @@ Sound* ResourcePack::getSound(
 		unsigned int sound) const
 {
 	if (Options::getBool("mute"))
-	{
 		return _muteSound;
-	}
 	else
 	{
 		std::map<std::string, SoundSet*>::const_iterator i = _sounds.find(set);

@@ -385,6 +385,7 @@ void BattlescapeGenerator::run()
 
 	// let's generate the map now and store it inside the tile objects
 	generateMap();
+	_save->setTerrain(_terrain->getName());
 
 	if (_craft != 0
 		|| _base != 0)
