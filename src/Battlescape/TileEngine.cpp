@@ -3507,14 +3507,6 @@ int TileEngine::blockage(
 						//Log(LOG_INFO) << "TileEngine::blockage() EXIT, ret 0 ( dir 7 northwest )";
 						return 0;
 					}
-					else if (type == DT_NONE
-						|| type == DT_SMOKE
-						|| type == DT_STUN
-						|| type == DT_IN
-						|| _powerT < tile->getMapData(part)->getArmor())
-					{
-						return 255;
-					}
 				break;
 
 				case 8: // up
@@ -3529,6 +3521,16 @@ int TileEngine::blockage(
 				default:
 //						return 0;
 				break;
+			}
+
+			if (bigWall
+				&& (type == DT_NONE
+					|| type == DT_SMOKE
+					|| type == DT_STUN
+					|| type == DT_IN
+					|| _powerT < tile->getMapData(part)->getArmor()))
+			{
+				return 255;
 			}
 		}
 		else //if (dir == -1) // west/north wall or floor.
