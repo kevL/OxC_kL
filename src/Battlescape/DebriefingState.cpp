@@ -104,6 +104,7 @@ DebriefingState::DebriefingState(Game* game)
 	_window			= new Window(this, 320, 200, 0, 0);
 
 	_txtTitle		= new Text(280, 17, 16, 8);
+	_txtBaseLabel	= new Text(80, 9, 216, 8);
 
 	_txtItem		= new Text(180, 9, 16, 24);
 	_txtQuantity	= new Text(60, 9, 200, 24);
@@ -128,6 +129,7 @@ DebriefingState::DebriefingState(Game* game)
 
 	add(_window);
 	add(_txtTitle);
+	add(_txtBaseLabel);
 	add(_txtItem);
 	add(_txtQuantity);
 	add(_txtScore);
@@ -188,10 +190,15 @@ DebriefingState::DebriefingState(Game* game)
 	_lstTotal->setDot(true);
 
 
-	prepareDebriefing();
+	prepareDebriefing(); // defines _base:
+
+	_txtBaseLabel->setColor(Palette::blockOffset(8)+5);
+	_txtBaseLabel->setAlign(ALIGN_RIGHT);
+	_txtBaseLabel->setText(_base->getName(_game->getLanguage()));
 
 
-	int total = 0,
+	int
+		total = 0,
 		stats_dy = 0,
 		recovery_dy = 0;
 
@@ -200,7 +207,8 @@ DebriefingState::DebriefingState(Game* game)
 			i != _stats.end();
 			++i)
 	{
-		if ((*i)->qty == 0) continue;
+		if ((*i)->qty == 0)
+			continue;
 
 
 		std::wstringstream
@@ -289,11 +297,8 @@ DebriefingState::DebriefingState(Game* game)
 DebriefingState::~DebriefingState()
 {
 	//Log(LOG_INFO) << "Delete DebriefingState";
-
 	if (_game->isQuitting())
-	{
 		_game->getSavedGame()->setBattleGame(0);
-	}
 
 	for (std::vector<DebriefingStat*>::iterator
 			i = _stats.begin();
@@ -485,8 +490,9 @@ void DebriefingState::prepareDebriefing()
 		{
 			if ((*j)->isInBattlescape())
 			{
-				double craftLon = (*j)->getLongitude();
-				double craftLat = (*j)->getLatitude();
+				double
+					craftLon = (*j)->getLongitude(),
+					craftLat = (*j)->getLatitude();
 
 				for (std::vector<Region*>::iterator
 						k = save->getRegions()->begin();

@@ -91,7 +91,6 @@ BattlescapeGame::BattlescapeGame(
 		_kneelReserved(false)
 {
 	//Log(LOG_INFO) << "Create BattlescapeGame";
-
 	_tuReserved				= BA_NONE;
 	_playerTUReserved		= BA_NONE;
 	_debugPlay				= false;

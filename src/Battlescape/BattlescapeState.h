@@ -113,6 +113,8 @@ private:
 	NumberText
 		* _numVisibleUnit[VISIBLE_MAX],
 
+		* _numTUAim,
+		* _numTUAuto,
 		* _numTUSnap,
 
 		* _numTimeUnits,

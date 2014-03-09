@@ -91,6 +91,7 @@ private:
 	Country* _country;
 	Region* _region;
 	Text
+		* _txtBaseLabel, // kL
 		* _txtItem,
 		* _txtQuantity,
 		* _txtRating,

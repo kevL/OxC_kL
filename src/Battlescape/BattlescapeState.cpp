@@ -131,43 +131,44 @@ BattlescapeState::BattlescapeState(Game* game)
 	_mouseOverIcons = false;
 
 	// Create buttonbar - this should be on the centerbottom of the screen
-	_icons				= new InteractiveSurface(
-											iconsWidth,
-											iconsHeight,
-											(screenWidth / 2) - (iconsWidth / 2),
-											screenHeight - iconsHeight);
+	_icons = new InteractiveSurface(
+								iconsWidth,
+								iconsHeight,
+								(screenWidth / 2) - (iconsWidth / 2),
+								screenHeight - iconsHeight);
 
 	// Create the battlemap view
 	// the actual map height is the total height minus the height of the buttonbar
 	int visibleMapHeight = screenHeight - iconsHeight;
 
-	_map				= new Map(
-								_game,
-								screenWidth,
-								screenHeight,
-								0,
-								0,
-								visibleMapHeight);
+	_map = new Map(
+				_game,
+				screenWidth,
+				screenHeight,
+				0,
+				0,
+				visibleMapHeight);
 
-	_numLayers			= new NumberText(3, 5, _icons->getX() + 232, _icons->getY() + 6);
-	_rank				= new Surface(26, 23, _icons->getX() + 107, _icons->getY() + 33);
-	_kneel				= new Surface(2, 2, _icons->getX() + 115, _icons->getY() + 19);
+	_numLayers	= new NumberText(3, 5, _icons->getX() + 232, _icons->getY() + 6);
+
+	_rank		= new Surface(26, 23, _icons->getX() + 107, _icons->getY() + 33);
+	_kneel		= new Surface( 2,  2, _icons->getX() + 115, _icons->getY() + 19);
 
 	// Create buttons
-	_btnUnitUp			= new InteractiveSurface(32, 16, _icons->getX() + 48, _icons->getY());
-	_btnUnitDown		= new InteractiveSurface(32, 16, _icons->getX() + 48, _icons->getY() + 16);
-	_btnMapUp			= new InteractiveSurface(32, 16, _icons->getX() + 80, _icons->getY());
-	_btnMapDown			= new InteractiveSurface(32, 16, _icons->getX() + 80, _icons->getY() + 16);
-	_btnShowMap			= new InteractiveSurface(32, 16, _icons->getX() + 112, _icons->getY());
-	_btnKneel			= new InteractiveSurface(32, 16, _icons->getX() + 112, _icons->getY() + 16);
-	_btnInventory		= new InteractiveSurface(32, 16, _icons->getX() + 144, _icons->getY());
-	_btnCenter			= new InteractiveSurface(32, 16, _icons->getX() + 144, _icons->getY() + 16);
-	_btnNextSoldier		= new InteractiveSurface(32, 16, _icons->getX() + 176, _icons->getY());
-	_btnNextStop		= new InteractiveSurface(32, 16, _icons->getX() + 176, _icons->getY() + 16);
-	_btnShowLayers		= new InteractiveSurface(32, 16, _icons->getX() + 208, _icons->getY());
-	_btnOptions			= new InteractiveSurface(32, 16, _icons->getX() + 208, _icons->getY() + 16);
-	_btnEndTurn			= new InteractiveSurface(32, 16, _icons->getX() + 240, _icons->getY());
-	_btnAbort			= new InteractiveSurface(32, 16, _icons->getX() + 240, _icons->getY() + 16);
+	_btnUnitUp			= new InteractiveSurface(32,  16, _icons->getX() +  48, _icons->getY());
+	_btnUnitDown		= new InteractiveSurface(32,  16, _icons->getX() +  48, _icons->getY() + 16);
+	_btnMapUp			= new InteractiveSurface(32,  16, _icons->getX() +  80, _icons->getY());
+	_btnMapDown			= new InteractiveSurface(32,  16, _icons->getX() +  80, _icons->getY() + 16);
+	_btnShowMap			= new InteractiveSurface(32,  16, _icons->getX() + 112, _icons->getY());
+	_btnKneel			= new InteractiveSurface(32,  16, _icons->getX() + 112, _icons->getY() + 16);
+	_btnInventory		= new InteractiveSurface(32,  16, _icons->getX() + 144, _icons->getY());
+	_btnCenter			= new InteractiveSurface(32,  16, _icons->getX() + 144, _icons->getY() + 16);
+	_btnNextSoldier		= new InteractiveSurface(32,  16, _icons->getX() + 176, _icons->getY());
+	_btnNextStop		= new InteractiveSurface(32,  16, _icons->getX() + 176, _icons->getY() + 16);
+	_btnShowLayers		= new InteractiveSurface(32,  16, _icons->getX() + 208, _icons->getY());
+	_btnOptions			= new InteractiveSurface(32,  16, _icons->getX() + 208, _icons->getY() + 16);
+	_btnEndTurn			= new InteractiveSurface(32,  16, _icons->getX() + 240, _icons->getY());
+	_btnAbort			= new InteractiveSurface(32,  16, _icons->getX() + 240, _icons->getY() + 16);
 	_btnStats			= new InteractiveSurface(164, 23, _icons->getX() + 107, _icons->getY() + 33);
 /*	_btnReserveNone		= new ImageButton(28, 11, _icons->getX() + 49, _icons->getY() + 33);
 	_btnReserveSnap		= new ImageButton(28, 11, _icons->getX() + 78, _icons->getY() + 33);
@@ -180,9 +181,9 @@ BattlescapeState::BattlescapeState(Game* game)
 	_btnReserveKneel	= new ImageButton(10, 23, _icons->getX() + 96, _icons->getY() + 33);
 	_btnZeroTUs			= new ImageButton(10, 23, _icons->getX() + 49, _icons->getY() + 33); */
 
-	_btnLeftHandItem	= new InteractiveSurface(32, 48, _icons->getX() + 8, _icons->getY() + 5);
-	_numAmmoLeft		= new NumberText(30, 5, _icons->getX() + 8, _icons->getY() + 4);
+	_btnLeftHandItem	= new InteractiveSurface(32, 48, _icons->getX() +   8, _icons->getY() + 5);
 	_btnRightHandItem	= new InteractiveSurface(32, 48, _icons->getX() + 280, _icons->getY() + 5);
+	_numAmmoLeft		= new NumberText(30, 5, _icons->getX() +   8, _icons->getY() + 4);
 	_numAmmoRight		= new NumberText(30, 5, _icons->getX() + 280, _icons->getY() + 4);
 
 	for (int
@@ -229,7 +230,11 @@ BattlescapeState::BattlescapeState(Game* game)
 
 	// Create soldier stats summary
 	_txtName		= new Text(136, 10, _icons->getX() + 135, _icons->getY() + 32);
-	_numTUSnap		= new NumberText(12, 10, _icons->getX() + 258, _icons->getY() + 34);
+
+//	_numTUSnap		= new NumberText(12, 10, _icons->getX() + 258, _icons->getY() + 34);
+	_numTUAim		= new NumberText(8, 10, _icons->getX() + 241, _icons->getY() + 34);
+	_numTUAuto		= new NumberText(8, 10, _icons->getX() + 252, _icons->getY() + 34);
+	_numTUSnap		= new NumberText(8, 10, _icons->getX() + 263, _icons->getY() + 34);
 
 	_numTimeUnits	= new NumberText(15, 5, _icons->getX() + 136, _icons->getY() + 42);
 	_barTimeUnits	= new Bar(102, 3, _icons->getX() + 170, _icons->getY() + 41);
@@ -302,6 +307,8 @@ BattlescapeState::BattlescapeState(Game* game)
 	add(_btnAbort);
 	add(_btnStats);
 	add(_txtName);
+	add(_numTUAim);
+	add(_numTUAuto);
 	add(_numTUSnap);
 	add(_numTimeUnits);
 	add(_numEnergy);
@@ -613,6 +620,8 @@ BattlescapeState::BattlescapeState(Game* game)
 
 	_txtName->setColor(Palette::blockOffset(8));
 	_txtName->setHighContrast(true);
+	_numTUAim->setColor(Palette::blockOffset(0)+7);
+	_numTUAuto->setColor(Palette::blockOffset(0)+7);
 	_numTUSnap->setColor(Palette::blockOffset(0)+7);
 	_numTimeUnits->setColor(Palette::blockOffset(4));
 	_numEnergy->setColor(Palette::blockOffset(1));
@@ -1612,6 +1621,9 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 	_numAmmoLeft		->setVisible(false);
 
 	_kneel		->setVisible(false);
+
+	_numTUAim	->setVisible(false);
+	_numTUAuto	->setVisible(false);
 	_numTUSnap	->setVisible(false);
 
 
@@ -1685,14 +1697,12 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 			i != selectedUnit->getVisibleUnits()->end()
 				&& j < VISIBLE_MAX;
 			++i,
-				++j) // kL
+				++j)
 	{
 		_btnVisibleUnit[j]->setVisible(true);
 		_numVisibleUnit[j]->setVisible(true);
 
 		_visibleUnit[j] = *i;
-
-//kL		++j;
 	}
 
 
@@ -1726,7 +1736,6 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 	int tu = selectedUnit->getTimeUnits();
 	_numTimeUnits->setValue(static_cast<unsigned>(tu));
 	_barTimeUnits->setMax(100.0);
-//	_barTimeUnits->setValue(static_cast<double>(tu) / stat * 100.0);
 	_barTimeUnits->setValue(ceil(
 							static_cast<double>(tu) / stat * 100.0));
 
@@ -1763,27 +1772,49 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 
 	if (selectedUnit->getActiveHand() != "")
 	{
+		int tuAim = 0;
+		int tuAuto = 0;
 		int tuSnap = 0;
 
 		if (selectedUnit->getActiveHand() == "STR_RIGHT_HAND"
 			&& (rtItem->getRules()->getBattleType() == BT_FIREARM
 				|| rtItem->getRules()->getBattleType() == BT_MELEE))
 		{
-//			_numTUSnap->setVisible(true);
-
+			tuAim = selectedUnit->getActionTUs(BA_AIMEDSHOT, rtItem);
+			tuAuto = selectedUnit->getActionTUs(BA_AUTOSHOT, rtItem);
 			tuSnap = selectedUnit->getActionTUs(BA_SNAPSHOT, rtItem);
-			if (!tuSnap)
+			if (tuAim == 0
+				&& tuAuto == 0
+				&& tuSnap == 0)
+			{
 				tuSnap = selectedUnit->getActionTUs(BA_HIT, rtItem);
+			}
 		}
 		else if (selectedUnit->getActiveHand() == "STR_LEFT_HAND"
 			&& (ltItem->getRules()->getBattleType() == BT_FIREARM
 				|| ltItem->getRules()->getBattleType() == BT_MELEE))
 		{
-//			_numTUSnap->setVisible(true);
-
+			tuAim = selectedUnit->getActionTUs(BA_AIMEDSHOT, ltItem);
+			tuAuto = selectedUnit->getActionTUs(BA_AUTOSHOT, ltItem);
 			tuSnap = selectedUnit->getActionTUs(BA_SNAPSHOT, ltItem);
-			if (!tuSnap)
+			if (tuAim == 0
+				&& tuAuto == 0
+				&& tuSnap == 0)
+			{
 				tuSnap = selectedUnit->getActionTUs(BA_HIT, ltItem);
+			}
+		}
+
+		if (tuAim)
+		{
+			_numTUAim->setValue(tuAim);
+			_numTUAim->setVisible(true);
+		}
+
+		if (tuAuto)
+		{
+			_numTUAuto->setValue(tuAuto);
+			_numTUAuto->setVisible(true);
 		}
 
 		if (tuSnap)
@@ -1791,8 +1822,6 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 			_numTUSnap->setValue(tuSnap);
 			_numTUSnap->setVisible(true);
 		}
-//		else
-//			_numTUSnap->setVisible(false);
 	}
 
 	if (rtItem)
@@ -1888,8 +1917,10 @@ void BattlescapeState::blinkVisibleUnitButtons()
 	}
 
 //kL	if (color == 44) delta = -2;
-	if (color == 45) delta = -1;	// reached darkish red
-	if (color == 34) delta = 1;		// reached lightest red
+	if (color == 45) // reached darkish red
+		delta = -1;
+	if (color == 34) // reached lightest red
+		delta = 1;
 
 	color += delta;
 }
@@ -2335,7 +2366,8 @@ void BattlescapeState::saveVoxelView()
 	};
 
 	BattleUnit* bu = _save->getSelectedUnit();
-	if (bu == 0) return; // no unit selected
+	if (bu == 0) // no unit selected
+		return;
 
 	bool
 		_debug = _save->getDebugMode(),
@@ -2839,7 +2871,7 @@ void BattlescapeState::toggleIcons(bool vis)
 /**
  * kL. Refreshes the visUnits indicators for UnitWalk/TurnBStates.
  */
-void BattlescapeState::refreshVisUnits()
+void BattlescapeState::refreshVisUnits() // kL
 {
 	//Log(LOG_INFO) << "BattlescapeState::refreshVisUnits()";
 	if (!playableUnitSelected())
@@ -2869,7 +2901,7 @@ void BattlescapeState::refreshVisUnits()
 			i != selectedUnit->getVisibleUnits()->end()
 				&& j < VISIBLE_MAX;
 			++i,
-				++j) // kL
+				++j)
 	{
 		_btnVisibleUnit[j]->setVisible(true);
 		_numVisibleUnit[j]->setVisible(true);

@@ -203,7 +203,9 @@ NumberText::~NumberText()
 			i = 0;
 			i < 10;
 			++i)
+	{
 		delete _chars[i];
+	}
 }
 
 /**
@@ -228,7 +230,7 @@ unsigned NumberText::getValue() const
 
 /**
  * Changes the color used to render the number.
- * @param color Color value.
+ * @param color, Color value.
  */
 void NumberText::setColor(Uint8 color)
 {
@@ -239,7 +241,7 @@ void NumberText::setColor(Uint8 color)
 
 /**
  * Returns the color used to render the number.
- * @return Color value.
+ * @return, Color value.
  */
 Uint8 NumberText::getColor() const
 {
@@ -248,9 +250,9 @@ Uint8 NumberText::getColor() const
 
 /**
  * Replaces a certain amount of colors in the number text palette.
- * @param colors Pointer to the set of colors.
- * @param firstcolor Offset of the first color to replace.
- * @param ncolors Amount of colors to replace.
+ * @param colors, Pointer to the set of colors.
+ * @param firstcolor, Offset of the first color to replace.
+ * @param ncolors, Amount of colors to replace.
  */
 void NumberText::setPalette(
 		SDL_Color* colors,
@@ -266,10 +268,12 @@ void NumberText::setPalette(
 			i = 0;
 			i < 10;
 			++i)
+	{
 		_chars[i]->setPalette(
 							colors,
 							firstcolor,
 							ncolors);
+	}
 }
 
 /**

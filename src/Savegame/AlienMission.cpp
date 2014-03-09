@@ -77,8 +77,12 @@ std::pair<double, double> getLandPoint(
 		pos = region.getRandomPoint(zone);
 	}
 	while (!
-			(globe.insideLand(pos.first, pos.second)
-				&& region.insideRegion(pos.first, pos.second)));
+			(globe.insideLand(
+							pos.first,
+							pos.second)
+				&& region.insideRegion(
+									pos.first,
+									pos.second)));
 
 	return pos;
 }
@@ -854,7 +858,9 @@ void AlienMission::addScore(
 			region != engine.getSavedGame()->getRegions()->end();
 			++region)
 	{
-		if ((*region)->getRules()->insideRegion(lon, lat))
+		if ((*region)->getRules()->insideRegion(
+											lon,
+											lat))
 		{
 			(*region)->addActivityAlien(_rule.getPoints());
 
@@ -867,7 +873,9 @@ void AlienMission::addScore(
 			country != engine.getSavedGame()->getCountries()->end();
 			++country)
 	{
-		if ((*country)->getRules()->insideCountry(lon, lat))
+		if ((*country)->getRules()->insideCountry(
+												lon,
+												lat))
 		{
 			(*country)->addActivityAlien(_rule.getPoints());
 
@@ -884,13 +892,13 @@ void AlienMission::spawnAlienBase(
 		Game& engine)
 {
 	//Log(LOG_INFO) << "AlienMission::spawnAlienBase()";
-
 	SavedGame& game = *engine.getSavedGame();
+	unsigned diff = static_cast<unsigned>(game.getDifficulty()); // kL
 
-	if (game.getAlienBases()->size() > 8)
+//kL	if (game.getAlienBases()->size() > 8)
+	if (game.getAlienBases()->size() > 8 + diff) // kL
 	{
 		//Log(LOG_INFO) << ". too many aLien bases!! EXIT";
-
 		return;
 	}
 

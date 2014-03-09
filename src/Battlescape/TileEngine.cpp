@@ -3406,8 +3406,20 @@ int TileEngine::blockage(
 	if (tile->getMapData(part))
 	{
 		//Log(LOG_INFO) << ". getMapData(part) stopLOS() = " << tile->getMapData(part)->stopLOS();
-
-		if (dir != -1)
+		if (dir == -1)
+		{
+			if ((type == DT_NONE
+					|| type == DT_SMOKE
+					|| type == DT_STUN
+					|| type == DT_IN)
+				&& !tile->getMapData(part)->stopLOS()
+				&& (tile->getMapData(part)->getObjectType() == MapData::O_WESTWALL
+					|| tile->getMapData(part)->getObjectType() == MapData::O_NORTHWALL))
+			{
+				return 0;
+			}
+		}
+		else if (dir != -1)
 		{
 			int bigWall = tile->getMapData(MapData::O_OBJECT)->getBigWall(); // 0..8 or, per MCD.
 			//Log(LOG_INFO) << ". bigWall = " << bigWall;
@@ -3495,6 +3507,14 @@ int TileEngine::blockage(
 						//Log(LOG_INFO) << "TileEngine::blockage() EXIT, ret 0 ( dir 7 northwest )";
 						return 0;
 					}
+					else if (type == DT_NONE
+						|| type == DT_SMOKE
+						|| type == DT_STUN
+						|| type == DT_IN
+						|| _powerT < tile->getMapData(part)->getArmor())
+					{
+						return 255;
+					}
 				break;
 
 				case 8: // up
@@ -3514,14 +3534,14 @@ int TileEngine::blockage(
 		else //if (dir == -1) // west/north wall or floor.
 		{
 			if ((type == DT_NONE
+						|| type == DT_SMOKE
+						|| type == DT_STUN
+						|| type == DT_IN)
 					&& (tile->getMapData(part)->getObjectType() == MapData::O_FLOOR
-						|| tile->getMapData(part)->stopLOS()))
-				|| _powerT < tile->getMapData(part)->getArmor()
-				|| (type == DT_SMOKE
-					|| type == DT_STUN
-					|| type == DT_IN))
+						|| tile->getMapData(part)->stopLOS())
+				|| _powerT < tile->getMapData(part)->getArmor())
 			{
-				return 255; // hardblock. might have to adjust this
+				return 255; // hardblock.
 			}
 		}
 

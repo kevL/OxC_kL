@@ -152,17 +152,29 @@ GeoscapeState::GeoscapeState(Game* game)
 		_interLon(0.0),	// kL
 		_interLat(0.0)	// kL
 {
-	int screenWidth = Options::getInt("baseXResolution");
-	int screenHeight = Options::getInt("baseYResolution");
+	int
+		screenWidth		= Options::getInt("baseXResolution"),
+		screenHeight	= Options::getInt("baseYResolution");
 
 	_showFundsOnGeoscape = Options::getBool("showFundsOnGeoscape");
 
 	// Create objects
-	_bg				= new Surface(320, 200, screenWidth - 320, screenHeight / 2 - 100);
-	_globe			= new Globe(_game, (screenWidth - 64) / 2, screenHeight / 2, screenWidth - 64, screenHeight, 0, 0);
+	_bg		= new Surface(
+						320,
+						200,
+						screenWidth - 320,
+						screenHeight / 2 - 100);
+	_globe	= new Globe(
+						_game,
+						(screenWidth - 64) / 2,
+						screenHeight / 2,
+						screenWidth - 64,
+						screenHeight,
+						0,
+						0);
 
 	// the old globe-view buttons are now become the Detail toggle.
-	_btnDetail		= new ImageButton(63, 46, screenWidth-63, screenHeight/2+54);
+	_btnDetail = new ImageButton(63, 46, screenWidth - 63, screenHeight / 2 + 54);
 
 /*kL	_btnIntercept	= new TextButton(63, 11, screenWidth-63, screenHeight/2-100);
 	_btnBases		= new TextButton(63, 11, screenWidth-63, screenHeight/2-88);
@@ -179,19 +191,19 @@ GeoscapeState::GeoscapeState(Game* game)
 	_btn1Day		= new TextButton(31, 13, screenWidth-31, screenHeight/2+40); */
 
 	// kL_begin: revert to ImageButtons.
-	_btnIntercept	= new ImageButton(63, 11, screenWidth-63, screenHeight/2-100);
-	_btnBases		= new ImageButton(63, 11, screenWidth-63, screenHeight/2-88);
-	_btnGraphs		= new ImageButton(63, 11, screenWidth-63, screenHeight/2-76);
-	_btnUfopaedia	= new ImageButton(63, 11, screenWidth-63, screenHeight/2-64);
-	_btnOptions		= new ImageButton(63, 11, screenWidth-63, screenHeight/2-52);
-	_btnFunding		= new ImageButton(63, 11, screenWidth-63, screenHeight/2-40);
+	_btnIntercept	= new ImageButton(63, 11, screenWidth - 63, screenHeight / 2 - 100);
+	_btnBases		= new ImageButton(63, 11, screenWidth - 63, screenHeight / 2 - 88);
+	_btnGraphs		= new ImageButton(63, 11, screenWidth - 63, screenHeight / 2 - 76);
+	_btnUfopaedia	= new ImageButton(63, 11, screenWidth - 63, screenHeight / 2 - 64);
+	_btnOptions		= new ImageButton(63, 11, screenWidth - 63, screenHeight / 2 - 52);
+	_btnFunding		= new ImageButton(63, 11, screenWidth - 63, screenHeight / 2 - 40);
 
-	_btn5Secs		= new ImageButton(31, 13, screenWidth-63, screenHeight/2+12);
-	_btn1Min		= new ImageButton(31, 13, screenWidth-31, screenHeight/2+12);
-	_btn5Mins		= new ImageButton(31, 13, screenWidth-63, screenHeight/2+26);
-	_btn30Mins		= new ImageButton(31, 13, screenWidth-31, screenHeight/2+26);
-	_btn1Hour		= new ImageButton(31, 13, screenWidth-63, screenHeight/2+40);
-	_btn1Day		= new ImageButton(31, 13, screenWidth-31, screenHeight/2+40);
+	_btn5Secs		= new ImageButton(31, 13, screenWidth - 63, screenHeight / 2 + 12);
+	_btn1Min		= new ImageButton(31, 13, screenWidth - 31, screenHeight / 2 + 12);
+	_btn5Mins		= new ImageButton(31, 13, screenWidth - 63, screenHeight / 2 + 26);
+	_btn30Mins		= new ImageButton(31, 13, screenWidth - 31, screenHeight / 2 + 26);
+	_btn1Hour		= new ImageButton(31, 13, screenWidth - 63, screenHeight / 2 + 40);
+	_btn1Day		= new ImageButton(31, 13, screenWidth - 31, screenHeight / 2 + 40);
 	// kL_end.
 
 /*kL	_btnRotateLeft	= new InteractiveSurface(12, 10, screenWidth-61, screenHeight/2+76);
@@ -207,9 +219,9 @@ GeoscapeState::GeoscapeState(Game* game)
 	_txtMinSep		= new Text(4, 17, screenWidth - 17, screenHeight / 2 - 26);
 	_txtSec			= new Text(11, 8, screenWidth - 13, screenHeight / 2 - 20); */
 	_txtHour		= new Text(19, 17, screenWidth - 61, screenHeight / 2 - 26);
-	_txtHourSep		= new Text(5, 17, screenWidth - 42, screenHeight / 2 - 26);
+	_txtHourSep		= new Text(5,  17, screenWidth - 42, screenHeight / 2 - 26);
 	_txtMin			= new Text(19, 17, screenWidth - 37, screenHeight / 2 - 26);
-	_txtMinSep		= new Text(5, 17, screenWidth - 18, screenHeight / 2 - 26);
+	_txtMinSep		= new Text(5,  17, screenWidth - 18, screenHeight / 2 - 26);
 	_txtSec			= new Text(10, 17, screenWidth - 13, screenHeight / 2 - 26);
 
 	_txtWeekday		= new Text(59, 8, screenWidth - 61, screenHeight / 2 - 13);
@@ -219,13 +231,13 @@ GeoscapeState::GeoscapeState(Game* game)
 
 	if (_showFundsOnGeoscape)
 	{
-		_txtFunds	= new Text(59, 8, screenWidth-61, screenHeight/2-27);
-		_txtHour->setY(_txtHour->getY()+6);
-		_txtHourSep->setY(_txtHourSep->getY()+6);
-		_txtMin->setY(_txtMin->getY()+6);
-		_txtMinSep->setY(_txtMinSep->getY()+6);
-		_txtMinSep->setX(_txtMinSep->getX()-10);
-		_txtSec->setX(_txtSec->getX()-10);
+		_txtFunds = new Text(59, 8, screenWidth - 61, screenHeight / 2 - 27);
+		_txtHour->		setY(_txtHour->		getY() + 6);
+		_txtHourSep->	setY(_txtHourSep->	getY() + 6);
+		_txtMin->		setY(_txtMin->		getY() + 6);
+		_txtMinSep->	setY(_txtMinSep->	getY() + 6);
+		_txtMinSep->	setX(_txtMinSep->	getX() - 10);
+		_txtSec->		setX(_txtSec->		getX() - 10);
 	}
 
 	_timeSpeed = _btn5Secs;
@@ -272,7 +284,9 @@ GeoscapeState::GeoscapeState(Game* game)
 	add(_btnZoomIn);
 	add(_btnZoomOut); */
 
-	if (_showFundsOnGeoscape) add(_txtFunds);
+	if (_showFundsOnGeoscape)
+		add(_txtFunds);
+
 	add(_txtHour);
 	add(_txtHourSep);
 	add(_txtMin);
@@ -548,7 +562,6 @@ GeoscapeState::GeoscapeState(Game* game)
 	_txtSec->setBig();
 	_txtSec->setColor(Palette::blockOffset(15)+2);
 
-
 	_txtWeekday->setSmall();
 	_txtWeekday->setColor(Palette::blockOffset(15)+2);
 	_txtWeekday->setAlign(ALIGN_CENTER);
@@ -621,6 +634,7 @@ void GeoscapeState::handle(Action* action)
 			&& (SDL_GetModState() & KMOD_CTRL) != 0)
 		{
 			_game->getSavedGame()->setDebugMode();
+
 			if (_game->getSavedGame()->getDebugMode())
 				_txtDebug->setText(L"DEBUG MODE");
 			else
@@ -758,7 +772,8 @@ void GeoscapeState::timeDisplay()
 
 	int sec = _game->getSavedGame()->getTime()->getSecond();
 	sec = sec / 30 * 5;
-	if (sec == 2) sec = 0;
+	if (sec == 2)
+		sec = 0;
 
 	std::wstringstream
 		ss1, // sec
@@ -1011,14 +1026,18 @@ void GeoscapeState::time5Seconds()
 		{
 			if ((*j)->isDestroyed())
 			{
+				double
+					lon = (*j)->getLongitude(),
+					lat = (*j)->getLatitude();
+
 				for (std::vector<Country*>::iterator
 						country = _game->getSavedGame()->getCountries()->begin();
 						country != _game->getSavedGame()->getCountries()->end();
 						++country)
 				{
 					if ((*country)->getRules()->insideCountry(
-															(*j)->getLongitude(),
-															(*j)->getLatitude()))
+															lon,
+															lat))
 					{
 						(*country)->addActivityXcom(-(*j)->getRules()->getScore());
 
@@ -1032,8 +1051,8 @@ void GeoscapeState::time5Seconds()
 						++region)
 				{
 					if ((*region)->getRules()->insideRegion(
-														(*j)->getLongitude(),
-														(*j)->getLatitude()))
+														lon,
+														lat))
 					{
 						(*region)->addActivityXcom(-(*j)->getRules()->getScore());
 
