@@ -46,6 +46,7 @@
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 
+#include "../Ruleset/ExtraMusic.h" // sza_ExtraMusic
 #include "../Ruleset/ExtraSounds.h"
 #include "../Ruleset/ExtraSprites.h"
 #include "../Ruleset/MapDataSet.h"
@@ -95,6 +96,10 @@ XcomResourcePack::XcomResourcePack( // sza_MusicRules
 		std::vector<std::pair<std::string, RuleMusic*> > musicRules,
 		std::vector<std::pair<std::string, ExtraSprites*> > extraSprites,
 		std::vector<std::pair<std::string, ExtraSounds*> > extraSounds)
+//XcomResourcePack::XcomResourcePack( // sza_ExtraMusic
+//		std::vector<std::pair<std::string, ExtraSprites*> > extraSprites,
+//		std::vector<std::pair<std::string, ExtraSounds*> > extraSounds,
+//		std::vector<std::pair<std::string, ExtraMusic*> > extraMusic)
 //XcomResourcePack::XcomResourcePack(
 //		std::vector<std::pair<std::string, ExtraSprites*> > extraSprites,
 //		std::vector<std::pair<std::string, ExtraSounds*> > extraSounds)
@@ -512,6 +517,36 @@ XcomResourcePack::XcomResourcePack( // sza_MusicRules
 				++i)
 		{
 			bool loaded = false;
+
+			// sza_ExtraMusic_BEGIN:
+			// Load alternative digital track if there is an override
+			for (std::vector<std::pair<std::string, ExtraMusic*> >::const_iterator
+					j = extraMusic.begin();
+					j != extraMusic.end();
+					++j)
+			{
+				ExtraMusic* musicRule = j->second;
+				// check if there is an entry which overrides something but does not specify the terrain
+				if (!musicRule->hasTerrainSpecification())
+				{
+					std::string overridden = musicRule->getOverridden();
+					if (!overridden.empty()
+						&& overridden.compare(mus[i]) == 0)
+					{
+						// Found one, let's use it!
+						std::ostringstream mediaFilename;
+						mediaFilename << "SOUND/" << j->first;
+						_musics[mus[i]] = new Music();
+						_musics[mus[i]]->load(CrossPlatform::getDataFile(mediaFilename.str()));
+
+						loaded = true;
+
+						break;
+					}
+				}
+			}
+
+			if (!loaded) // sza_End.
 
 			for (int // Try digital tracks
 					j = 0;

@@ -38,6 +38,7 @@ class Armor;
 class ArticleDefinition;
 class Base;
 class City;
+class ExtraMusic; // sza_ExtraMusic
 class ExtraSounds;
 class ExtraSprites;
 class ExtraStrings;
@@ -103,6 +104,7 @@ protected:
 		_craftsIndex,
 		_craftWeaponsIndex,
 		_deploymentsIndex,
+		_extraMusicIndex, // sza_ExtraMusic
 		_extraSoundsIndex,
 		_extraSpritesIndex,
 		_extraStringsIndex,
@@ -147,6 +149,7 @@ protected:
 	std::map<std::string, UfoTrajectory*> _ufoTrajectories;
 	std::map<std::string, Unit*> _units;
 
+	std::vector<std::pair<std::string, ExtraMusic*> > _extraMusic; // sza_ExtraMusic
 	std::vector<std::pair<std::string, ExtraSounds*> > _extraSounds;
 	std::vector<std::pair<std::string, ExtraSprites*> > _extraSprites;
 	std::vector<std::pair<std::string, RuleMusic*> > _music; // sza_MusicRules
@@ -272,6 +275,8 @@ protected:
 		std::vector<std::pair<std::string, ExtraSprites*> > getExtraSprites() const;
 		/// Gets the list of external Sounds.
 		std::vector<std::pair<std::string, ExtraSounds*> > getExtraSounds() const;
+		/// Gets the list of external music rules.
+		std::vector<std::pair<std::string, ExtraMusic*> > getExtraMusic() const; // sza_ExtraMusic
 		/// Gets the list of external Strings.
 		std::map<std::string, ExtraStrings*> getExtraStrings() const;
 		/// Sorts all our lists according to their weight.

@@ -26,9 +26,10 @@
 namespace OpenXcom
 {
 
+class ExtraMusic; // sza_ExtraMusic
 class ExtraSounds;
 class ExtraSprites;
-class RuleMusic;
+class RuleMusic; // sza_MusicRules
 
 static const std::string XCOM_RESOURCE_MUSIC_GMDEFEND	= "GMDEFEND";
 static const std::string XCOM_RESOURCE_MUSIC_GMENBASE	= "GMENBASE";
@@ -57,10 +58,14 @@ class XcomResourcePack
 
 public:
 	/// Creates the X-Com ruleset.
-	XcomResourcePack(
+	XcomResourcePack( // sza_MusicRules
 			std::vector<std::pair<std::string, RuleMusic*> > musicRules,
 			std::vector<std::pair<std::string, ExtraSprites*> > extraSprites,
 			std::vector<std::pair<std::string, ExtraSounds*> > extraSounds);
+//	XcomResourcePack( // sza_ExtraMusic
+//			std::vector<std::pair<std::string, ExtraSprites*> > extraSprites,
+//			std::vector<std::pair<std::string, ExtraSounds*> > extraSounds,
+//			std::vector<std::pair<std::string, ExtraMusic*> > extraMusic);
 	/// Cleans up the X-Com ruleset.
 	~XcomResourcePack();
 

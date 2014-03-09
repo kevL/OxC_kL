@@ -465,6 +465,10 @@ void StartState::think()
 														ruleset->getMusic(),
 														ruleset->getExtraSprites(),
 														ruleset->getExtraSounds()));
+//				_game->setResourcePack(new XcomResourcePack( // sza_ExtraMusic
+//														ruleset->getExtraSprites(),
+//														ruleset->getExtraSounds(),
+//														ruleset->getExtraMusic()));
 				Log(LOG_INFO) << "Resources loaded.";
 
 				Log(LOG_INFO) << "Loading language...";
