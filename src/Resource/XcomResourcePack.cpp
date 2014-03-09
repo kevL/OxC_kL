@@ -113,7 +113,10 @@ XcomResourcePack::XcomResourcePack( // sza_MusicRules
 		s1 << "GEODATA/PALETTES.DAT";
 		s2 << "PALETTES.DAT_" << i;
 		_palettes[s2.str()] = new Palette();
-		_palettes[s2.str()]->loadDat(CrossPlatform::getDataFile(s1.str()), 256, Palette::palOffset(i));
+		_palettes[s2.str()]->loadDat(
+								CrossPlatform::getDataFile(s1.str()),
+								256,
+								Palette::palOffset(i));
 	}
 
 	std::ostringstream
@@ -168,13 +171,13 @@ XcomResourcePack::XcomResourcePack( // sza_MusicRules
 	_surfaces["ALTBACK07.SCR"]->loadScr(CrossPlatform::getDataFile("GEOGRAPH/BACK07.SCR"));
 	for (int y = 172; y >= 152; --y)
 		for (int x = 5; x <= 314; ++x)
-			_surfaces["ALTBACK07.SCR"]->setPixel(x, y+4, _surfaces["ALTBACK07.SCR"]->getPixel(x,y));
+			_surfaces["ALTBACK07.SCR"]->setPixel(x, y + 4, _surfaces["ALTBACK07.SCR"]->getPixel(x, y));
 	for (int y = 147; y >= 134; --y)
 		for (int x = 5; x <= 314; ++x)
-			_surfaces["ALTBACK07.SCR"]->setPixel(x, y+9, _surfaces["ALTBACK07.SCR"]->getPixel(x,y));
+			_surfaces["ALTBACK07.SCR"]->setPixel(x, y + 9, _surfaces["ALTBACK07.SCR"]->getPixel(x, y));
 	for (int y = 132; y >= 109; --y)
 		for (int x = 5; x <= 314; ++x)
-			_surfaces["ALTBACK07.SCR"]->setPixel(x, y+10, _surfaces["ALTBACK07.SCR"]->getPixel(x,y));
+			_surfaces["ALTBACK07.SCR"]->setPixel(x, y + 10, _surfaces["ALTBACK07.SCR"]->getPixel(x, y));
 
 	std::vector<std::string> spks = CrossPlatform::getFolderContents(geograph, "SPK");
 	for (std::vector<std::string>::iterator
@@ -226,7 +229,7 @@ XcomResourcePack::XcomResourcePack( // sza_MusicRules
 		std::ostringstream s;
 		s << "GEOGRAPH/" << sets[i];
 
-		std::string ext = sets[i].substr(sets[i].find_last_of('.')+1, sets[i].length());
+		std::string ext = sets[i].substr(sets[i].find_last_of('.') + 1, sets[i].length());
 		if (ext == "PCK")
 		{
 			std::string tab = CrossPlatform::noExt(sets[i]) + ".TAB";
@@ -433,16 +436,22 @@ XcomResourcePack::XcomResourcePack( // sza_MusicRules
 				{
 					std::string filename = k->first;
 					int midiIndex = k->second;
-					
+
 //					LoadMusic(filename, midiIndex):
-					std::string exts[] = { "flac", "ogg", "mp3", "mod" };
-					
+					std::string exts[] =
+						{
+							"flac",
+							"ogg",
+							"mp3",
+							"mod"
+						};
+
 					bool loaded = false;
-					
+
 					// The file may have already been loaded because of an other assignment
 					if (_musicFile.find(filename) != _musicFile.end())
 						loaded =true;
-					
+
 					if (!loaded) // Try digital tracks
 					{
 						for (int
@@ -452,10 +461,12 @@ XcomResourcePack::XcomResourcePack( // sza_MusicRules
 						{
 							std::ostringstream s;
 							s << "SOUND/" << filename << "." << exts[exti];
+
 							if (CrossPlatform::fileExists(CrossPlatform::getDataFile(s.str())))
 							{
 								_musicFile[filename] = new Music();
 								_musicFile[filename]->load(CrossPlatform::getDataFile(s.str()));
+
 								loaded = true;
 
 								break;
@@ -476,6 +487,7 @@ XcomResourcePack::XcomResourcePack( // sza_MusicRules
 						{
 							std::ostringstream s;
 							s << "SOUND/" << filename << ".mid";
+
 							if (CrossPlatform::fileExists(CrossPlatform::getDataFile(s.str())))
 							{
 								_musicFile[filename] = new Music();
@@ -485,7 +497,7 @@ XcomResourcePack::XcomResourcePack( // sza_MusicRules
 							}
 						}
 					}
-					
+
 					if (!loaded)
 					{
 						throw Exception(filename + " music not found");
@@ -551,18 +563,29 @@ XcomResourcePack::XcomResourcePack( // sza_MusicRules
 #endif
 
 		// Load sounds
-		std::string catsId[] =  {	"GEO.CAT",
-									"BATTLE.CAT"  };
-		std::string catsDos[] = {	"SOUND2.CAT",
-									"SOUND1.CAT"  };
-		std::string catsWin[] = {	"SAMPLE.CAT",
-									"SAMPLE2.CAT" };
+		std::string catsId[] =
+			{
+				"GEO.CAT",
+				"BATTLE.CAT"
+			};
+		std::string catsDos[] =
+			{
+				"SOUND2.CAT",
+				"SOUND1.CAT"
+			};
+		std::string catsWin[] =
+			{
+				"SAMPLE.CAT",
+				"SAMPLE2.CAT"
+			};
 
 		// Check which sound version is available
 		std::string* cats = 0;
 		bool wav = true;
 
-		std::ostringstream win, dos;
+		std::ostringstream
+			win,
+			dos;
 		win << "SOUND/" << catsWin[0];
 		dos << "SOUND/" << catsDos[0];
 
@@ -592,6 +615,7 @@ XcomResourcePack::XcomResourcePack( // sza_MusicRules
 			{
 				std::ostringstream s;
 				s << "SOUND/" << cats[i];
+
 				_sounds[catsId[i]] = new SoundSet();
 				_sounds[catsId[i]]->loadCat(CrossPlatform::getDataFile(s.str()), wav);
 			}
@@ -609,7 +633,6 @@ XcomResourcePack::XcomResourcePack( // sza_MusicRules
 			wav = true;
 			s->loadCat(CrossPlatform::getDataFile("SOUND/SAMPLE3.CAT"), true);
 		}
-
 	}
 
 	TextButton::soundPress	= getSound("GEO.CAT", 0);
@@ -622,8 +645,8 @@ XcomResourcePack::XcomResourcePack( // sza_MusicRules
 	Log(LOG_INFO) << "Loading extra resources from ruleset...";
 	bool debugOutput = Options::getBool("debug");
 
-	for (
-			std::vector<std::pair<std::string, ExtraSprites*> >::const_iterator i = extraSprites.begin();
+	for (std::vector<std::pair<std::string, ExtraSprites*> >::const_iterator
+			i = extraSprites.begin();
 			i != extraSprites.end();
 			++i)
 	{
@@ -647,6 +670,7 @@ XcomResourcePack::XcomResourcePack( // sza_MusicRules
 					Log(LOG_INFO) << "Adding/Replacing single image: " << sheetName;
 
 				delete _surfaces[sheetName];
+
 				_surfaces[sheetName] = new Surface(
 												spritePack->getWidth(),
 												spritePack->getHeight());
@@ -659,6 +683,7 @@ XcomResourcePack::XcomResourcePack( // sza_MusicRules
 		else
 		{
 			bool adding = false;
+
 			if (_sets.find(sheetName) == _sets.end())
 			{
 				if (debugOutput)
@@ -667,9 +692,13 @@ XcomResourcePack::XcomResourcePack( // sza_MusicRules
 				adding = true;
 
 				if (subdivision)
-					_sets[sheetName] = new SurfaceSet(spritePack->getSubX(), spritePack->getSubY());
+					_sets[sheetName] = new SurfaceSet(
+													spritePack->getSubX(),
+													spritePack->getSubY());
 				else
-					_sets[sheetName] = new SurfaceSet(spritePack->getWidth(), spritePack->getHeight());
+					_sets[sheetName] = new SurfaceSet(
+													spritePack->getWidth(),
+													spritePack->getHeight());
 			}
 			else if (debugOutput)
 				Log(LOG_INFO) << "Adding/Replacing items in surface set: " << sheetName;
@@ -677,7 +706,7 @@ XcomResourcePack::XcomResourcePack( // sza_MusicRules
 			if (subdivision
 				&& debugOutput)
 			{
-				int frames = (spritePack->getWidth() / spritePack->getSubX())*(spritePack->getHeight() / spritePack->getSubY());
+				int frames = (spritePack->getWidth() / spritePack->getSubX()) * (spritePack->getHeight() / spritePack->getSubY());
 				Log(LOG_INFO) << "Subdividing into " << frames << " frames.";
 			}
 
@@ -686,9 +715,10 @@ XcomResourcePack::XcomResourcePack( // sza_MusicRules
 					j != spritePack->getSprites()->end();
 					++j)
 			{
-				int startFrame = j->first;
-				std:: string fileName = j->second;
 				s.str("");
+				int startFrame = j->first;
+
+				std::string fileName = j->second;
 				if (fileName.substr(fileName.length() - 1, 1) == "/")
 				{
 					if (debugOutput)
@@ -989,21 +1019,27 @@ void XcomResourcePack::loadBattlescapeResources()
 	s << "UFOGRAPH/" << "DETBLOB.DAT";
 	_sets["DETBLOB.DAT"]->loadDat (CrossPlatform::getDataFile(s.str()));
 
-	// Load Battlescape Terrain (only blacks are loaded, others are loaded just in time)
-	std::string bsets[] = {"BLANKS.PCK"};
+	// Load Battlescape Terrain (only blanks are loaded, others are loaded just in time)
+	std::string bsets[] = { "BLANKS.PCK" };
 
 	for (int
 			i = 0;
 			i < 1;
 			++i)
 	{
-		std::ostringstream s;
+		std::ostringstream
+			s,
+			s2;
+
 		s << "TERRAIN/" << bsets[i];
+
 		std::string tab = CrossPlatform::noExt(bsets[i]) + ".TAB";
-		std::ostringstream s2;
 		s2 << "TERRAIN/" << tab;
+
 		_sets[bsets[i]] = new SurfaceSet(32, 40);
-		_sets[bsets[i]]->loadPck(CrossPlatform::getDataFile(s.str()), CrossPlatform::getDataFile(s2.str()));
+		_sets[bsets[i]]->loadPck(
+							CrossPlatform::getDataFile(s.str()),
+							CrossPlatform::getDataFile(s2.str()));
 	}
 
 	// Load Battlescape units
@@ -1028,7 +1064,9 @@ void XcomResourcePack::loadBattlescapeResources()
 
 	s.str("");
 	s << "GEODATA/" << "LOFTEMPS.DAT";
-	MapDataSet::loadLOFTEMPS(CrossPlatform::getDataFile(s.str()), &_voxelData);
+	MapDataSet::loadLOFTEMPS(
+						CrossPlatform::getDataFile(s.str()),
+						&_voxelData);
 
 	std::string scrs[] =
 	{
@@ -1042,6 +1080,7 @@ void XcomResourcePack::loadBattlescapeResources()
 	{
 		std::ostringstream s;
 		s << "UFOGRAPH/" << scrs[i];
+
 		_surfaces[scrs[i]] = new Surface(320, 200);
 		_surfaces[scrs[i]]->loadScr(CrossPlatform::getDataFile(s.str()));
 	}
@@ -1064,6 +1103,7 @@ void XcomResourcePack::loadBattlescapeResources()
 	{
 		std::ostringstream s;
 		s << "UFOGRAPH/" << spks[i];
+
 		_surfaces[spks[i]] = new Surface(320, 200);
 		_surfaces[spks[i]]->loadSpk(CrossPlatform::getDataFile(s.str()));
 	}
@@ -1077,7 +1117,12 @@ void XcomResourcePack::loadBattlescapeResources()
 			++i)
 	{
 		std::string path = ufograph + *i;
-		std::transform(i->begin(), i->end(), i->begin(), toupper);
+		std::transform(
+					i->begin(),
+					i->end(),
+					i->begin(),
+					toupper);
+
 		_surfaces[*i] = new Surface(320, 200);
 		_surfaces[*i]->loadSpk(path);
 	}
@@ -1134,32 +1179,34 @@ void XcomResourcePack::loadBattlescapeResources()
  */
 bool XcomResourcePack::isImageFile(std::string extension)
 {
-	std::transform(extension.begin(), extension.end(), extension.begin(), toupper);
+	std::transform(
+				extension.begin(),
+				extension.end(),
+				extension.begin(),
+				toupper);
 
-	return (
-		// arbitrary limitation: let's not use these ones (although they're officially supported by sdl)
-		/*
-		extension == ".ICO" ||
-		extension == ".CUR" ||
-		extension == ".PNM" ||
-		extension == ".PPM" ||
-		extension == ".PGM" ||
-		extension == ".PBM" ||
-		extension == ".XPM" ||
-		extension == "ILBM" ||
-		// excluding jpeg to avoid inevitable issues due to compression
-		extension == ".JPG" ||
-		extension == "JPEG" ||
-		*/
-		extension == ".BMP" ||
-		extension == ".LBM" ||
-		extension == ".IFF" ||
-		extension == ".PCX" ||
-		extension == ".GIF" ||
-		extension == ".PNG" ||
-		extension == ".TGA" ||
-		extension == ".TIF" ||
-		extension == "TIFF"); // kL_note: why not .TIFF
+	return extension == ".BMP"
+			|| extension == ".LBM"
+			|| extension == ".IFF"
+			|| extension == ".PCX"
+			|| extension == ".GIF"
+			|| extension == ".PNG"
+			|| extension == ".TGA"
+			|| extension == ".TIF"
+			|| extension == "TIFF"; // kL_note: why not .TIFF
+
+			/* // arbitrary limitation: let's not use these ones (although they're officially supported by sdl)
+			extension == ".ICO" ||
+			extension == ".CUR" ||
+			extension == ".PNM" ||
+			extension == ".PPM" ||
+			extension == ".PGM" ||
+			extension == ".PBM" ||
+			extension == ".XPM" ||
+			extension == "ILBM" ||
+			// excluding jpeg to avoid inevitable issues due to compression
+			extension == ".JPG" ||
+			extension == "JPEG" || */
 }
 
 }

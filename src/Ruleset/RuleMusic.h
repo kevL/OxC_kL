@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -16,34 +16,53 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_RULEMUSIC_H
 #define OPENXCOM_RULEMUSIC_H
 
 #include <yaml-cpp/yaml.h>
+
 
 namespace OpenXcom
 {
 
 class RuleMusic
 {
+
 private:
-	std::string _type;
-	std::string _mode;
-	std::vector<std::string> _terrains;
 	int _midiIndex;
-	std::vector<std::string> _files;
+
+	std::string
+		_type,
+		_mode;
+
 	std::vector<int> _indexes;
-public:
-	RuleMusic();
-	virtual ~RuleMusic();
-	/// Loads the data from yaml
-	void load(const YAML::Node &node);
-	std::string getType();
-	std::string getMode();
-	std::vector<std::string> getTerrains();
-	int getMidiIndex();
-	std::vector<std::string> getFiles();
-	std::vector<int> getIndexes();
+	std::vector<std::string>
+		_files,
+		_terrains;
+
+
+	public:
+		/// cTor
+		RuleMusic();
+		/// dTor
+		virtual ~RuleMusic();
+
+		/// Loads the data from yaml
+		void load(const YAML::Node& node);
+
+		///
+		std::string getType();
+		///
+		std::string getMode();
+		///
+		std::vector<std::string> getTerrains();
+		///
+		int getMidiIndex();
+		///
+		std::vector<std::string> getFiles();
+		///
+		std::vector<int> getIndexes();
 };
 
 }
