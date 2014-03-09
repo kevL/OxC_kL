@@ -222,7 +222,10 @@ Music* ResourcePack::getMusic(const std::string& name) const
  * @param name, Name of the music to pick from.
  * @return, Pointer to the music.
  */
-Music* ResourcePack::getRandomMusic(const std::string& name) const
+// Music* ResourcePack::getRandomMusic(const std::string& name) const
+Music* ResourcePack::getRandomMusic( // sza_MusicRules
+		const std::string& name,
+		const std::string& terrain) const
 {
 	if (Options::getBool("mute"))
 		return _muteMusic;
@@ -297,7 +300,7 @@ void ResourcePack::MakeMusicAssignment( // sza_MusicRules
 	if (_musicAssignment.at(name).find(terrain) == _musicAssignment.at(name).end())
 		_musicAssignment[name][terrain] = std::vector<std::pair<std::string, int> > ();
 
-	for (int
+	for (size_t
 			i = 0;
 			i < filenames.size();
 			i++)
