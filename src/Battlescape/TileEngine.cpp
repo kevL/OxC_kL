@@ -1530,6 +1530,7 @@ std::vector<BattleUnit*> TileEngine::getSpottingUnits(BattleUnit* unit)
 
 /**
  * Checks the validity of a snap shot performed here.
+ * kL: Changed to use selectFireMethod (aimed/auto/snap).
  * @param unit, The unit to check sight from
  * @param target, The unit to check sight TO
  * @return, True if a shot can happen
@@ -1562,7 +1563,8 @@ bool TileEngine::canMakeSnap(
 		//Log(LOG_INFO) << ". . action's TU = " << unit->getActionTUs(BA_HIT, weapon);
 //	}
 
-	if ((unit->getOriginalFaction() == FACTION_HOSTILE				// is aLien, or has researched weapon.
+	if (weapon->getRules()->canReactionFire() // kL add.
+		&& (unit->getOriginalFaction() == FACTION_HOSTILE				// is aLien, or has researched weapon.
 			|| _save->getGeoscapeSave()->isResearched(weapon->getRules()->getRequirements()))
 		&& ((weapon->getRules()->getBattleType() == BT_MELEE			// has a melee weapon
 				&& validMeleeRange(
@@ -3547,10 +3549,13 @@ int TileEngine::blockage(
 			}
 		}
 
-		int ret = tile->getMapData(part)->getBlock(type);
-		//Log(LOG_INFO) << "TileEngine::blockage() EXIT, ret = " << ret;
+		if (type != DT_NONE) // FoV is blocked above, or gets a pass here
+		{
+			int ret = tile->getMapData(part)->getBlock(type);
+			//Log(LOG_INFO) << "TileEngine::blockage() EXIT, ret = " << ret;
 
-		return ret;
+			return ret;
+		}
 	}
 
 	//Log(LOG_INFO) << "TileEngine::blockage() EXIT, ret 0";

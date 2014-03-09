@@ -80,6 +80,7 @@ private:
 		_fixedWeapon,
 		_flatRate,
 		_liveAlien,
+		_noReaction,
 		_recover,
 		_twoHanded,
 		_waypoint;
@@ -331,6 +332,8 @@ private:
 		std::string getZombieUnit() const;
 		///
 		bool isStrengthApplied() const;
+		/// kL. Used to determine if a weapon is capable of Reaction Fire.
+		bool canReactionFire() const; // kL
 };
 
 }

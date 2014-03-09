@@ -523,7 +523,7 @@ void Projectile::applyAccuracy(
 		if (_action.actor->getFaction() == FACTION_PLAYER)
 			baseDeviation = 0.09; // give the poor aLiens an aiming advantage over xCom & Mc'd units
 
-		switch (_action.type)
+/*		switch (_action.type)
 		{
 			case BA_AIMEDSHOT:
 				baseDeviation += 0.16;
@@ -539,7 +539,9 @@ void Projectile::applyAccuracy(
 				baseDeviation += 0.18; // Snap.
 			break;
 
-		}
+		} */
+		baseDeviation += 0.16; // kL:instead of switch() above
+
 		baseDeviation /= accuracy - acuPenalty + 0.15;
 		baseDeviation = std::max(
 								0.01,

@@ -316,7 +316,7 @@ void BattleUnit::load(const YAML::Node& node)
 	_expMelee			= node["expMelee"].as<int>(_expMelee);
 	_turretType			= node["turretType"].as<int>(_turretType);
 	_visible			= node["visible"].as<bool>(_visible);
-	_turnsExposed		= node["_turnsExposed"].as<int>(_turnsExposed);
+	_turnsExposed		= node["turnsExposed"].as<int>(_turnsExposed);
 	_killedBy			= (UnitFaction)node["killedBy"].as<int>(_killedBy);
 	_moraleRestored		= node["moraleRestored"].as<int>(_moraleRestored);
 	_rankInt			= node["rankInt"].as<int>(_rankInt);
@@ -369,7 +369,7 @@ YAML::Node BattleUnit::save() const
 	node["expMelee"]		= _expMelee;
 	node["turretType"]		= _turretType;
 	node["visible"]			= _visible;
-	node["_turnsExposed"]	= _turnsExposed;
+	node["turnsExposed"]	= _turnsExposed;
 	node["rankInt"]			= _rankInt;
 	node["moraleRestored"]	= _moraleRestored;
 	node["killedBy"]		= (int)_killedBy;

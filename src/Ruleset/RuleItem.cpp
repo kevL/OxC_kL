@@ -99,7 +99,8 @@ RuleItem::RuleItem(const std::string& type)
 		_autoShots(3),
 		_shotgunPellets(0),
 		_zombieUnit(""),
-		_strengthApplied(false)
+		_strengthApplied(false),
+		_noReaction(false) // kL
 {
 }
 
@@ -112,9 +113,9 @@ RuleItem::~RuleItem()
 
 /**
  * Loads the item from a YAML file.
- * @param node YAML node.
- * @param modIndex Offsets the sounds and sprite values to avoid conflicts.
- * @param listOrder The list weight for this item.
+ * @param node, YAML node.
+ * @param modIndex, Offsets the sounds and sprite values to avoid conflicts.
+ * @param listOrder, The list weight for this item.
  */
 void RuleItem::load(
 		const YAML::Node& node,
@@ -229,6 +230,8 @@ void RuleItem::load(
 	_autoShots				= node["autoShots"].as<int>(_autoShots);
 	_shotgunPellets			= node["shotgunPellets"].as<int>(_shotgunPellets);
 	_zombieUnit				= node["zombieUnit"].as<std::string>(_zombieUnit);
+	_strengthApplied		= node["strengthApplied"].as<bool>(_strengthApplied); // kL
+	_noReaction				= node["noReaction"].as<bool>(_noReaction); // kL
 
 	if (!_listOrder)
 		_listOrder = listOrder;
@@ -861,9 +864,23 @@ std::string RuleItem::getZombieUnit() const
 	return _zombieUnit;
 }
 
+/**
+ * Used to determine if melee damage is based on a unit's strength
+ * instead of the melee-item damage rule.
+ * @return, bool True if melee damage is based on unit's Strength
+ */
 bool RuleItem::isStrengthApplied() const
 {
 	return _strengthApplied;
+}
+
+/**
+ * kL. Used to determine if a weapon is capable of Reaction Fire.
+ * @return, bool True if a weapon can react during opponent's turn
+ */
+bool RuleItem::canReactionFire() const // kL
+{
+	return !_noReaction;
 }
 
 }

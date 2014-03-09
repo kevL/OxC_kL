@@ -112,7 +112,6 @@ ProjectileFlyBState::~ProjectileFlyBState()
 void ProjectileFlyBState::init()
 {
 	//Log(LOG_INFO) << "ProjectileFlyBState::init()";
-
 	if (_initialized)
 	{
 		//Log(LOG_INFO) << ". already initialized, EXIT";
@@ -405,7 +404,7 @@ void ProjectileFlyBState::init()
 		// kL_begin: AutoShot vs. tile w/ dead or stunned Unit just sprays through the middle of the tile.
 		// note, however, this also affects attempts to target a tile where there is/was(?) a dead unit...
 		// So let's narrow it down some........... ie. to do this correctly I'd need some sort of 'autoShotKill' boolean
-/*		else if (_action.autoShotCount > 1
+		else if (_action.autoShotCount > 1
 			&& _action.autoShotKill) // note: If targetUnit is still alive after the first shot, see ABOVE^^
 //			&& targetTile->getUnit()
 //			&& targetTile->getUnit()->isOut(true, true)) // NOT Working
@@ -413,11 +412,11 @@ void ProjectileFlyBState::init()
 //			&& _action.autoShotCount < _action.weapon->getRules()->getAutoShots())
 		{
 			//Log(LOG_INFO) << ". targetTile vs. Autoshot!";
-			targetVoxel = Position( // target nothing, targets the middle of the tile
+			_targetVoxel = Position( // target nothing, targets the middle of the tile
 								_action.target.x * 16 + 8,
 								_action.target.y * 16 + 8,
 								_action.target.z * 24 + 12);
-		} // kL_end. */
+		} // kL_end.
 		else if (targetTile->getMapData(MapData::O_OBJECT) != 0)
 		{
 			//Log(LOG_INFO) << ". targetTile has content-object";
@@ -517,8 +516,8 @@ bool ProjectileFlyBState::createNewProjectile()
 
 	// set the speed of the state think cycle to 16 ms (roughly one think-cycle per frame)
 //kL	_parent->setStateInterval(1000/60);
-	Uint32 interval = static_cast<Uint32>(16);			// kL
-	_parent->setStateInterval(interval);				// kL
+	Uint32 interval = static_cast<Uint32>(16);	// kL
+	_parent->setStateInterval(interval);		// kL
 
 	_projectileImpact = VOXEL_EMPTY; // let it calculate a trajectory
 
@@ -639,7 +638,7 @@ bool ProjectileFlyBState::createNewProjectile()
 															_unit->getFiringAccuracy(
 																				_action.type,
 																				_action.weapon),
-//kL																			/ 100.0, // Wb.140214
+//kL																			/ 100.0,
 															_originVoxel);
 		}
 		else // and this is normal weapon shooting
@@ -647,12 +646,12 @@ bool ProjectileFlyBState::createNewProjectile()
 			_projectileImpact = projectile->calculateTrajectory(_unit->getFiringAccuracy(
 																					_action.type,
 																					_action.weapon));
-//kL																				/ 100.0); // Wb.140214
+//kL																				/ 100.0);
 		}
 		//Log(LOG_INFO) << ". shoot weapon, part = " << _projectileImpact;
 
-//		if (_projectileImpact == VOXEL_UNIT)	// kL
-//			_action.autoShotKill = true;		// kL
+		if (_projectileImpact == VOXEL_UNIT)	// kL
+			_action.autoShotKill = true;		// kL
 
 		if (_projectileImpact != VOXEL_EMPTY
 			|| _action.type == BA_LAUNCH)
