@@ -118,12 +118,4 @@ std::vector<int> RuleMusic::getIndexes()
 	return _indexes;
 }
 
-/**
- *
- */
-/* bool RuleMusic::hasTerrainSpecification()
-{
-	return !_terrains.empty();
-} */
-
 }

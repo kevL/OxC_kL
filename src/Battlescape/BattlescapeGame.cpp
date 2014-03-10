@@ -2977,13 +2977,9 @@ void BattlescapeGame::tallyUnits(
 			else if ((*j)->getOriginalFaction() == FACTION_PLAYER)
 			{
 				if ((*j)->getFaction() == FACTION_PLAYER)
-				{
 					liveSoldiers++;
-				}
 				else
-				{
 					liveAliens++;
-				}
 			}
 		}
 	}

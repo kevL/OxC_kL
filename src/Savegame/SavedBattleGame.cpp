@@ -78,7 +78,6 @@ SavedBattleGame::SavedBattleGame()
 		_side(FACTION_PLAYER),
 		_turn(1),
 		_debugMode(false),
-//		_debugMode(true),		// kL
 		_aborted(false),
 		_itemId(0),
 		_objectiveDestroyed(false),
@@ -89,10 +88,10 @@ SavedBattleGame::SavedBattleGame()
 		_traceAI(false),
 		_cheating(false),
 		_tuReserved(BA_NONE),
-		_kneelReserved(false)
+		_kneelReserved(false),
+		_terrain("") // kL sza_MusicRules
 {
 	//Log(LOG_INFO) << "\nCreate SavedBattleGame";
-
 	_dragButton			= static_cast<Uint8>(Options::getInt("battleScrollDragButton"));
 	_dragInvert			= Options::getBool("battleScrollDragInvert");
 	_dragTimeTolerance	= Options::getInt("battleScrollDragTimeTolerance");
@@ -119,7 +118,6 @@ SavedBattleGame::SavedBattleGame()
 SavedBattleGame::~SavedBattleGame()
 {
 	//Log(LOG_INFO) << "Delete SavedBattleGame";
-
 	for (int
 			i = 0;
 			i < _mapsize_z * _mapsize_y * _mapsize_x;
@@ -169,7 +167,6 @@ void SavedBattleGame::load(
 		SavedGame* savedGame)
 {
 	//Log(LOG_INFO) << "SavedBattleGame::load()";
-
 	_mapsize_x			= node["width"].as<int>(_mapsize_x);
 	_mapsize_y			= node["length"].as<int>(_mapsize_y);
 	_mapsize_z			= node["height"].as<int>(_mapsize_z);
@@ -277,8 +274,8 @@ void SavedBattleGame::load(
 								faction);
 		else
 		{
-			std::string type = (*i)["genUnitType"].as<std::string>();
-			std::string armor = (*i)["genUnitArmor"].as<std::string>();
+			std::string type	= (*i)["genUnitType"].as<std::string>();
+			std::string armor	= (*i)["genUnitArmor"].as<std::string>();
 
 			// create a new Unit.
 			unit = new BattleUnit(
@@ -449,7 +446,10 @@ void SavedBattleGame::loadMapResources(Game* game)
 				part < 4;
 				part++)
 		{
-			_tiles[i]->getMapData(&mdID, &mdsID, part);
+			_tiles[i]->getMapData(
+								&mdID,
+								&mdsID,
+								part);
 
 			if (mdID != -1
 				&& mdsID != -1)
@@ -480,9 +480,7 @@ YAML::Node SavedBattleGame::save() const
 	YAML::Node node;
 
 	if (_objectiveDestroyed)
-	{
 		node["objectiveDestroyed"] = _objectiveDestroyed;
-	}
 
 	node["width"]			= _mapsize_x;
 	node["length"]			= _mapsize_y;
@@ -490,6 +488,7 @@ YAML::Node SavedBattleGame::save() const
 	node["missionType"]		= _missionType;
 	node["globalshade"]		= _globalShade;
 	node["turn"]			= _turn;
+	node["terrain"]			= _terrain; // kL sza_MusicRules
 	node["selectedUnit"]	= (_selectedUnit? _selectedUnit->getId(): -1);
 
 	for (std::vector<MapDataSet*>::const_iterator
@@ -552,9 +551,7 @@ YAML::Node SavedBattleGame::save() const
 	}
 
 	if (_missionType == "STR_BASE_DEFENSE")
-	{
 		node["moduleMap"] = _baseModules;
-	}
 
 	for (std::vector<BattleUnit*>::const_iterator
 			i = _units.begin();

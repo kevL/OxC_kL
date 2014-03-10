@@ -191,7 +191,7 @@ static soundInFile hybridIntroSounds[] =
 
 // sample3: 18 is takeoff, 20 is landing; 19 is flyby whoosh sound, not sure for which craft
 
-static soundInFile *introSounds[] =
+static soundInFile* introSounds[] =
 {
 	hybridIntroSounds,
 	introCatOnlySounds,
@@ -457,18 +457,23 @@ void StartState::think()
 				Log(LOG_INFO) << "Ruleset loaded.";
 
 				Log(LOG_INFO) << "Loading resources...";
-//				_game->setResourcePack(new XcomResourcePack(
-//														_game->getRuleset()->getExtraSprites(),
-//														_game->getRuleset()->getExtraSounds()));
-				Ruleset* ruleset = _game->getRuleset(); // sza_MusicRules
-				_game->setResourcePack(new XcomResourcePack( // sza_MusicRules
+				Ruleset* ruleset = _game->getRuleset();
+				_game->setResourcePack(new XcomResourcePack( // kL
 														ruleset->getMusic(),
 														ruleset->getExtraSprites(),
-														ruleset->getExtraSounds()));
+														ruleset->getExtraSounds(),
+														ruleset->getExtraMusic()));
+//				_game->setResourcePack(new XcomResourcePack( // sza_MusicRules
+//														ruleset->getMusic(),
+//														ruleset->getExtraSprites(),
+//														ruleset->getExtraSounds()));
 //				_game->setResourcePack(new XcomResourcePack( // sza_ExtraMusic
 //														ruleset->getExtraSprites(),
 //														ruleset->getExtraSounds(),
 //														ruleset->getExtraMusic()));
+//				_game->setResourcePack(new XcomResourcePack(
+//														ruleset->getExtraSprites(),
+//														ruleset->getExtraSounds()));
 				Log(LOG_INFO) << "Resources loaded.";
 
 				Log(LOG_INFO) << "Loading language...";
@@ -534,13 +539,9 @@ void StartState::think()
 
 					// SDL_Mixer has trouble with native midi and volume on windows, which is the most likely use case, so f@%# it.
 					if (Mix_GetMusicType(0) != MUS_MID)
-					{
 						Mix_FadeOutMusic(45 * 20);
-					}
 					else
-					{
 						Mix_HaltMusic();
-					}
 #endif
 
 					SDL_Color pal[256];

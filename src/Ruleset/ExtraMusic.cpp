@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -19,13 +19,20 @@
 
 #include "ExtraMusic.h"
 
+
 namespace OpenXcom
 {
 
 /**
  * Creates a blank set of extra music data.
  */
-ExtraMusic::ExtraMusic() : _media(""), _overrides(""), _extends(""), _modIndex(0)
+ExtraMusic::ExtraMusic()
+	:
+		_media(""),
+		_overrides(""),
+		_extends(""),
+		_modIndex(0),
+		_terrains() // kL
 {
 }
 
@@ -38,44 +45,64 @@ ExtraMusic::~ExtraMusic()
 
 /**
  * Loads the extra music set from YAML.
- * @param node YAML node.
- * @param modIndex The internal index of the associated mod.
+ * @param node, YAML node.
+ * @param modIndex, The internal index of the associated mod.
  */
-void ExtraMusic::load(const YAML::Node &node, int modIndex)
+void ExtraMusic::load(
+		const YAML::Node& node,
+		int modIndex)
 {
 	_media = node["media"].as<std::string>(_media);
+
 	if (node["overrides"])
-	  _overrides = node["overrides"].as<std::string>(_overrides);
+		_overrides = node["overrides"].as<std::string>(_overrides);
+
 	if (node["extends"])
-	  _extends = node["extends"].as<std::string>(_extends);  
-	_terrains = node["terrain"].as< std::vector<std::string> >(_terrains);
+		_extends = node["extends"].as<std::string>(_extends);
+
+	_terrains = node["terrain"].as<std::vector<std::string> >(_terrains);
 	_modIndex = modIndex;
 }
 
 /**
  * Gets the mod index for this external music set.
- * @return The mod index for this external music set.
+ * @return, The mod index for this external music set.
  */
 int ExtraMusic::getModIndex()
 {
 	return _modIndex;
 }
 
+/**
+ *
+ */
 std::string ExtraMusic::getOverridden()
 {
-  return _overrides;
+	return _overrides;
 }
+
+/**
+ *
+ */
 std::string ExtraMusic::getExtended()
 {
-  return _extends;
+	return _extends;
 }
+
+/**
+ *
+ */
 bool ExtraMusic::hasTerrainSpecification()
 {
-  return !_terrains.empty();
+	return !_terrains.empty();
 }
+
+/**
+ *
+ */
 std::vector<std::string> ExtraMusic::getTerrains()
 {
-  return _terrains;
+	return _terrains;
 }
-	
+
 }

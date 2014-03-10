@@ -1077,7 +1077,8 @@ void BattlescapeState::btnUnitUpClick(Action*)
  */
 void BattlescapeState::btnUnitDownClick(Action*)
 {
-	if (!playableUnitSelected()) return;
+	if (!playableUnitSelected())
+		return;
 
 	int valid = _save->getPathfinding()->validateUpDown(
 												_save->getSelectedUnit(),

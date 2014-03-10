@@ -92,10 +92,15 @@ struct HairBleach
  * Initializes the resource pack by loading all the resources
  * contained in the original game folder.
  */
-XcomResourcePack::XcomResourcePack( // sza_MusicRules
+XcomResourcePack::XcomResourcePack( // kL
 		std::vector<std::pair<std::string, RuleMusic*> > musicRules,
 		std::vector<std::pair<std::string, ExtraSprites*> > extraSprites,
-		std::vector<std::pair<std::string, ExtraSounds*> > extraSounds)
+		std::vector<std::pair<std::string, ExtraSounds*> > extraSounds,
+		std::vector<std::pair<std::string, ExtraMusic*> > extraMusic)
+//XcomResourcePack::XcomResourcePack( // sza_MusicRules
+//		std::vector<std::pair<std::string, RuleMusic*> > musicRules,
+//		std::vector<std::pair<std::string, ExtraSprites*> > extraSprites,
+//		std::vector<std::pair<std::string, ExtraSounds*> > extraSounds)
 //XcomResourcePack::XcomResourcePack( // sza_ExtraMusic
 //		std::vector<std::pair<std::string, ExtraSprites*> > extraSprites,
 //		std::vector<std::pair<std::string, ExtraSounds*> > extraSounds,
@@ -357,7 +362,9 @@ XcomResourcePack::XcomResourcePack( // sza_MusicRules
 						terrain != terrains.end();
 						++terrain)
 				{
-					ClearMusicAssignment(type, *terrain);
+					ClearMusicAssignment(
+										type,
+										*terrain);
 				}
 			}
 
@@ -406,6 +413,28 @@ XcomResourcePack::XcomResourcePack( // sza_MusicRules
 		int tracks[] = { 3, 6, 0, 18,-1,-1, 2, 19, 20, 21, 10, 9, 8, 12, 17,-1, 11 }; */
 
 // #ifndef __NO_MUSIC
+		// kL_begin: from above
+		std::string mus[] =
+		{
+			"GMDEFEND",
+			"GMENBASE",
+			"GMGEO1",
+			"GMGEO2",
+//			"GMGEO3",
+//			"GMGEO4",
+			"GMINTER",
+			"GMINTRO1",
+			"GMINTRO2",
+			"GMINTRO3",
+			"GMLOSE",
+			"GMMARS",
+			"GMNEWMAR",
+			"GMSTORY",
+			"GMTACTIC",
+//			"GMTACTIC2",
+			"GMWIN"
+		}; // kL_end.
+
 		// Check which music version is available
 		// Check if GM.CAT data is available // sza_MusicRules
 		bool cat = true;
@@ -455,10 +484,52 @@ XcomResourcePack::XcomResourcePack( // sza_MusicRules
 
 					// The file may have already been loaded because of an other assignment
 					if (_musicFile.find(filename) != _musicFile.end())
-						loaded =true;
+						loaded = true;
 
 					if (!loaded) // Try digital tracks
 					{
+
+
+						// sza_ExtraMusic_BEGIN:
+
+						// kL_note: This section may well be redundant w/ sza_MusicRules!!
+						// Load alternative digital track if there is an override
+						for (int
+								l = 0;
+								l < 14;
+								++l)
+						{
+							bool loaded = false;
+
+							for (std::vector<std::pair<std::string, ExtraMusic*> >::const_iterator
+									m = extraMusic.begin();
+									m != extraMusic.end();
+									++m)
+							{
+								ExtraMusic* musicRule = m->second;
+								// check if there is an entry which overrides something but does not specify the terrain
+								if (!musicRule->hasTerrainSpecification())
+								{
+									std::string overridden = musicRule->getOverridden();
+									if (!overridden.empty()
+										&& overridden.compare(mus[l]) == 0)
+									{
+										// Found one, let's use it!
+										std::ostringstream mediaFilename;
+										mediaFilename << "SOUND/" << m->first;
+										_musics[mus[l]] = new Music();
+										_musics[mus[l]]->load(CrossPlatform::getDataFile(mediaFilename.str()));
+
+										loaded = true;
+
+										break;
+									}
+								}
+							}
+						}
+						if (!loaded) // sza_End.
+						{ // sza_Add.
+
 						for (int
 								exti = 0;
 								exti < 3;
@@ -477,6 +548,7 @@ XcomResourcePack::XcomResourcePack( // sza_MusicRules
 								break;
 							}
 						}
+						} // sza_Add.
 					}
 
 					if (!loaded) // Try Adlib music

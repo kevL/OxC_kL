@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -16,10 +16,12 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_EXTRAMUSIC_H
 #define OPENXCOM_EXTRAMUSIC_H
 
 #include <yaml-cpp/yaml.h>
+
 
 namespace OpenXcom
 {
@@ -29,25 +31,39 @@ namespace OpenXcom
  */
 class ExtraMusic
 {
+
 private:
-	std::string _media;
-	std::string _overrides;
-	std::string _extends;
-	std::vector<std::string> _terrains;
 	int _modIndex;
-public:
-	/// Creates a blank external music set.
-	ExtraMusic();
-	/// Cleans up the external music set.
-	virtual ~ExtraMusic();
-	/// Loads the data from yaml
-	void load(const YAML::Node &node, int modIndex);
-	/// get the mod index for this external music set.
-	int getModIndex();
-	std::string getOverridden();
-	std::string getExtended();
-	bool hasTerrainSpecification();
-	std::vector<std::string> getTerrains();
+
+	std::string
+		_extends,
+		_media,
+		_overrides;
+
+	std::vector<std::string> _terrains;
+
+
+	public:
+		/// Creates a blank external music set.
+		ExtraMusic();
+		/// Cleans up the external music set.
+		virtual ~ExtraMusic();
+
+		/// Loads the data from yaml
+		void load(
+				const YAML::Node& node,
+				int modIndex);
+
+		/// get the mod index for this external music set.
+		int getModIndex();
+		///
+		std::string getOverridden();
+		///
+		std::string getExtended();
+		///
+		bool hasTerrainSpecification();
+		///
+		std::vector<std::string> getTerrains();
 };
 
 }
