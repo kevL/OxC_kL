@@ -122,10 +122,12 @@ Map::Map(
 		_visibleMapHeight(visibleMapHeight),
 		_unitDying(false),
 		_reveal(0),
-		_launch(false)
+		_launch(false),
+		_smoothingEngaged(false)
 {
 	//Log(LOG_INFO) << "Create Map";
 	_previewSetting = Options::getInt("battleNewPreviewPath");
+	_smoothCamera = Options::getBool("battleSmoothCamera");
 
 	// turn everything on because we want to see the markers.
 	if (Options::getBool("traceAI")) _previewSetting = 3;
@@ -577,6 +579,65 @@ void Map::drawTerrain(Surface* surface)
 		}
 		//Log(LOG_INFO) << ". projectileInFOV DONE";
 	}
+
+// WB_begin:
+/*			if (_smoothCamera)
+			{
+				if (!_smoothingEngaged)
+				{
+					Position origin = _projectile->getOrigin();
+					Position target = _projectile->getTarget();
+					if (std::abs(origin.x - target.x) > 1 ||
+						std::abs(origin.y - target.y) > 1 || 
+						std::abs(origin.z - target.z) > 1 ||
+						bulletPositionScreen.x < 0 || bulletPositionScreen.x > surface->getWidth() ||
+						bulletPositionScreen.y < 0 || bulletPositionScreen.y > _visibleMapHeight)
+					{
+						_smoothingEngaged = true;
+					}
+				}
+				else
+				{
+					_camera->jumpXY(surface->getWidth() / 2 - bulletPositionScreen.x, _visibleMapHeight / 2 - bulletPositionScreen.y);
+				}
+			}
+			else
+			{
+				bool enough;
+				do
+				{
+					enough = true;
+					if (bulletPositionScreen.x < 0)
+					{
+						_camera->jumpXY(+surface->getWidth(), 0);
+						enough = false;
+					}
+					else if (bulletPositionScreen.x > surface->getWidth())
+					{
+						_camera->jumpXY(-surface->getWidth(), 0);
+						enough = false;
+					}
+					else if (bulletPositionScreen.y < 0)
+					{
+						_camera->jumpXY(0, +_visibleMapHeight);
+						enough = false;
+					}
+					else if (bulletPositionScreen.y > _visibleMapHeight)
+					{
+						_camera->jumpXY(0, -_visibleMapHeight);
+						enough = false;
+					}
+					_camera->convertVoxelToScreen(_projectile->getPosition(), &bulletPositionScreen);
+				}
+				while (!enough);
+			}
+		}
+	}
+	else
+	{
+		_smoothingEngaged = false;
+	} */ // WB_end.
+
 
 	// get corner map coordinates to give rough boundaries in which tiles to redraw are
 	_camera->convertScreenToMap(

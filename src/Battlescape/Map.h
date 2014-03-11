@@ -75,6 +75,8 @@ private:
 		_launch, // kL
 		_explosionInFOV,
 		_projectileInFOV,
+		_smoothCamera,
+		_smoothingEngaged,
 		_unitDying;
 	int
 		_animFrame,

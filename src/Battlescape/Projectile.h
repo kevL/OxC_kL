@@ -97,8 +97,14 @@ private:
 		BattleItem* getItem() const;
 		/// Gets the sprite.
 		Surface* getSprite() const;
+
 		/// Skips the bullet flight.
 		void skipTrajectory();
+
+		/// Gets the Position of origin for the projectile.
+		Position getOrigin();
+		/// Gets the targetted tile for the projectile.
+		Position getTarget();
 };
 
 }

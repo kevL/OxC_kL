@@ -237,7 +237,7 @@ void ExplosionBState::init()
 
 		// kL_begin:
 		Camera* explodeCam = _parent->getMap()->getCamera();
-//		if (_parent->getSave()->getSide() == FACTION_HOSTILE ||
+//		if (hit && _parent->getSave()->getSide() == FACTION_HOSTILE ||
 		if (!explodeCam->isOnScreen(posCenter))
 			explodeCam->centerOnPosition(
 										posCenter,
