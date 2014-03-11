@@ -127,6 +127,7 @@ OptionsAdvancedState::OptionsAdvancedState(
 	_settingBoolSet.push_back(std::pair<std::string, bool>("weaponSelfDestruction", false));
 	_settingBoolSet.push_back(std::pair<std::string, bool>("spendResearchedItems", false));
 	_settingBoolSet.push_back(std::pair<std::string, bool>("battleScrollDragInvert", false));
+	_settingBoolSet.push_back(std::pair<std::string, bool>("battleSmoothCamera", false));
 	_settingBoolSet.push_back(std::pair<std::string, bool>("allowPsionicCapture", false));
 	_settingBoolSet.push_back(std::pair<std::string, bool>("psiStrengthEval", false));
 	_settingBoolSet.push_back(std::pair<std::string, bool>("anytimePsiTraining", false));
