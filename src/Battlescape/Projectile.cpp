@@ -808,4 +808,13 @@ Position Projectile::getTarget()
 	return _action.target;
 }
 
+/**
+ * kL. Gets a pointer to the BattleAction actor directly.
+ * @return, Pointer to the acting Battleunit
+ */
+BattleUnit* Projectile::getActor() // kL (these could prob. be const)
+{
+	return _action.actor;
+}
+
 }

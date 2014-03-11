@@ -1898,7 +1898,7 @@ bool BattlescapeGame::cancelCurrentAction(bool bForce)
 
 /**
  * Gets a pointer to access action members directly.
- * @return Pointer to action.
+ * @return, Pointer to action.
  */
 BattleAction* BattlescapeGame::getCurrentAction()
 {
@@ -1907,7 +1907,7 @@ BattleAction* BattlescapeGame::getCurrentAction()
 
 /**
  * Determines whether an action is currently going on?
- * @return true or false.
+ * @return, true or false.
  */
 bool BattlescapeGame::isBusy()
 {

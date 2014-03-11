@@ -122,7 +122,7 @@ Map::Map(
 		_visibleMapHeight(visibleMapHeight),
 		_unitDying(false),
 		_reveal(0),
-		_launch(false),
+//		_launch(false),
 		_smoothingEngaged(false)
 {
 	//Log(LOG_INFO) << "Create Map";
@@ -467,10 +467,11 @@ void Map::drawTerrain(Surface* surface)
 								_projectile->getPosition(),
 								&bulletPosScreen);
 
-		if (_projectileInFOV)
+// kL_begin:
+/*		if (_projectileInFOV)
 		{
 			//Log(LOG_INFO) << ". projectileInFOV";
-/*TEST			if (_launch) // kL_begin: This is now mine (120228).
+			if (_launch) // kL_begin: This is now mine.
 			{
 				//Log(LOG_INFO) << ". . launch";
 				_launch = false;
@@ -578,11 +579,24 @@ void Map::drawTerrain(Surface* surface)
 			//Log(LOG_INFO) << ". . launch / NOT launch Done";
 		}
 		//Log(LOG_INFO) << ". projectileInFOV DONE";
-	} */ // TEST
+	} */
+// kL_end.
+
 
 // WB_begin:
-			if (_smoothCamera)
+		if (_projectileInFOV)
+		{
+//kL			if (_smoothCamera)
+			// kL_begin:
+			if (_projectile->getActor()->getFaction() != FACTION_PLAYER			// non-xCom projectile.
+				|| _projectile->getActor()->getFaction() != _save->getSide())	// reaction fire, xCom or not.
+//			_save->getSelectedUnit()
+//					&& _save->getSelectedUnit()->getFaction() != FACTION_PLAYER)
+//				|| _save->getSide() != _save->getSelectedUnit()->getFaction())
+//				&& !_camera->isOnScreen(_unit->getPosition()))
 			{
+//				_camera->centerOnPosition(_unit->getPosition());
+// kL_end.
 				if (!_smoothingEngaged)
 				{
 					Position origin = _projectile->getOrigin();
@@ -604,7 +618,11 @@ void Map::drawTerrain(Surface* surface)
 								surface->getWidth() / 2 - bulletPosScreen.x,
 								_visibleMapHeight / 2 - bulletPosScreen.y);
 			}
-			else
+			// kL_note: Camera remains stationary when xCom actively fires at target.
+			// That is, Target is already onScreen due to targetting cursor click!
+			// ( And, player should know what unit is shooting... )
+/*			else
+			if (_projectile->getActor()->getFaction() != FACTION_PLAYER) // kL
 			{
 				bool enough;
 				do
@@ -635,12 +653,13 @@ void Map::drawTerrain(Surface* surface)
 											&bulletPosScreen);
 				}
 				while (!enough);
-			}
+			} */
 		}
 	}
 	else
 		_smoothingEngaged = false;
 // WB_end.
+
 
 
 	// get corner map coordinates to give rough boundaries in which tiles to redraw are
@@ -2000,7 +2019,7 @@ void Map::cacheUnit(BattleUnit* unit)
 void Map::setProjectile(Projectile* projectile)
 {
 	_projectile = projectile;
-	_launch = true; // kL
+//	_launch = true; // kL
 }
 
 /**

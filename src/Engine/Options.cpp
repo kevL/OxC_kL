@@ -84,19 +84,41 @@ void createDefault()
 	setInt("keyboardMode", KEYBOARD_ON);
 #endif
 
-//kL	setBool("anytimePsiTraining", false);
-	setBool("anytimePsiTraining", true); // kL
+	/* game/meta options */
 //kL	setBool("playIntro", true);
 	setBool("playIntro", false); // kL
-	setInt("maxFrameSkip", 0);
+//kL	setString("language", "");
+	setString("language", "en-US");
+	setBool("newSeedOnLoad", false);
+	setInt("saveOrder", SORT_DATE_DESC);
+//kL	setInt("autosave", 0);
+	setInt("autosave", 1); // kL
+	setInt("pauseMode", 0);
+
+	/* debug options */
+	setBool("debug", false);
+	setBool("debugUi", false);
 	setBool("traceAI", false);
-	setBool("sneakyAI", false);
-	setBool("TFTDDamage", false);
-	setBool("weaponSelfDestruction", false);
-//kL	setBool("researchedItemsWillSpent", false);
-	setBool("researchedItemsWillSpent", true); // kL
+
+	/* graphics options */
+	setBool("fpsCounter", false);
+	setInt("maxFrameSkip", 0);
 	setInt("baseXResolution", 320);
 	setInt("baseYResolution", 200);
+	setInt("windowedModePositionX", -1);
+	setInt("windowedModePositionY", -1);
+	setBool("borderless", false);
+	setBool("allowResize", false);
+//kL	setBool("keepAspectRatio", false);
+	setBool("keepAspectRatio", true); // kL
+//kL	setBool("captureMouse", false);
+	setBool("captureMouse", true); // kL
+	setBool("cursorInBlackBandsInFullscreen", false);
+//kL	setBool("cursorInBlackBandsInWindow", true);
+	setBool("cursorInBlackBandsInWindow", false); // kL
+	setBool("cursorInBlackBandsInBorderlessWindow", false);
+
+	/* openGL options */
 	setBool("useScaleFilter", false);
 	setBool("useHQXFilter", false);
 //kL	setBool("useOpenGL", false);
@@ -106,15 +128,75 @@ void createDefault()
 	setString("useOpenGLShader", "Shaders/Raw.OpenGL.shader"); // kL
 	setBool("vSyncForOpenGL", true);
 	setBool("useOpenGLSmoothing", true);
-	setBool("debug", false);
-	setBool("debugUi", false);
-	setBool("mute", false);
+
+	/* audio options */
+//kL	setInt("audioSampleRate", 22050);
+	setInt("audioSampleRate", 11025); // kL
+	setInt("audioBitDepth", 16);
 //kL	setInt("soundVolume", MIX_MAX_VOLUME);
 //kL	setInt("musicVolume", MIX_MAX_VOLUME);
 	setInt("soundVolume", 23); // kL
 	setInt("musicVolume", 75); // kL
-//kL	setString("language", "");
-	setString("language", "en-US");
+	setBool("mute", false);
+
+	/* geoscape options */
+//kL	setBool("spendResearchedItems", false);
+	setBool("spendResearchedItems", true); // kL
+//kL	setBool("anytimePsiTraining", false);
+	setBool("anytimePsiTraining", true); // kL
+//kL	setBool("alienContainmentLimitEnforced", false);
+	setBool("alienContainmentLimitEnforced", true); // kL
+//kL	setBool("canSellLiveAliens", false);
+	setBool("canSellLiveAliens", true); // kL
+	setBool("craftLaunchAlways", false);
+	setBool("canTransferCraftsWhileAirborne", false); // When the craft can reach the destination base with its fuel
+//kL	setBool("canManufactureMoreItemsPerHour", false);
+	setBool("canManufactureMoreItemsPerHour", true); // kL
+//kL	setBool("customInitialBase", false);
+	setBool("customInitialBase", true); // kL
+//kL	setBool("aggressiveRetaliation", false);
+	setBool("aggressiveRetaliation", true); // kL
+	setBool("allowBuildingQueue", false);
+//kL	setBool("allowAutoSellProduction", false);
+	setBool("allowAutoSellProduction", true); // kL
+	setBool("showFundsOnGeoscape", false);
+	setBool("psiStrengthEval", false);
+
+	setBool("allowChangeListValuesByMouseWheel", false); // It applies only for lists, not for scientists/engineers screen
+	setInt("changeValueByMouseWheel", 10);
+//kL	setBool("globeSeasons", false);
+	setBool("globeSeasons", true); // kL
+	setBool("globeAllRadarsOnBaseBuild", true);
+
+	/* battlescape options */
+	setBool("sneakyAI", false);
+	setBool("TFTDDamage", false);
+	setBool("weaponSelfDestruction", false);
+	setBool("battleInstantGrenade", false); // set to true if you want to play with the alternative grenade handling
+//kL	setInt("battleExplosionHeight", 0); // 0, 1, 2, 3
+	setInt("battleExplosionHeight", 2); // kL
+//kL	setInt("battleNewPreviewPath", 0); // requires double-click to confirm moves 0 = none, 1 = arrows, 2 = numbers, 3 = full
+	setInt("battleNewPreviewPath", 3); // kL
+//kL	setBool("strafe", false);
+	setBool("strafe", true); // kL
+//kL	setBool("battleNotifyDeath", false);
+	setBool("battleNotifyDeath", true); // kL
+//kL	setBool("showMoreStatsInInventoryView", false);
+	setBool("showMoreStatsInInventoryView", true); // kL
+	setBool("battleAutoEnd", false);
+	setBool("allowPsionicCapture", false);
+//kL	setBool("battleTooltips", true);
+	setBool("battleTooltips", false); // kL
+	setBool("battleHairBleach", true);
+	setBool("skipNextTurnScreen", false);
+//kL	setBool("disableAutoEquip", false);
+	setBool("disableAutoEquip", true); // kL
+//kL	setBool("battleUFOExtenderAccuracy", false);
+	setBool("battleUFOExtenderAccuracy", true); // kL
+//kL	setBool("battleRangeBasedAccuracy", false);
+	setBool("battleRangeBasedAccuracy", true); // kL
+
+	/* battlescape control options */
 //kL	setInt("battleScrollSpeed", 12); // 4, 8, 12, 16, 24
 	setInt("battleScrollSpeed", 6); // kL
 	setInt("battleScrollType", SCROLL_AUTO);
@@ -128,77 +210,10 @@ void createDefault()
 //kL	setInt("battleFireSpeed", 6); // 2, 4, 6, 8, 10, 12
 	setInt("battleFireSpeed", 12); // kL
 //kL	setInt("battleXcomSpeed", 30); // 40, 30, 20, 10, 5, 1
-	setInt("battleXcomSpeed", 32); // kL
+	setInt("battleXcomSpeed", 33); // kL
 //kL	setInt("battleAlienSpeed", 30); // 40, 30, 20, 10, 5, 1
-	setInt("battleAlienSpeed", 83); // kL
-	setBool("battleInstantGrenade", false); // set to true if you want to play with the alternative grenade handling
-//kL	setInt("battleExplosionHeight", 0); // 0, 1, 2, 3
-	setInt("battleExplosionHeight", 2); // kL: 0, 1, 2, 3
-//kL	setInt("battleNewPreviewPath", 0); // requires double-click to confirm moves 0 = none, 1 = arrows, 2 = numbers, 3 = full
-	setInt("battleNewPreviewPath", 3); // kL
-//kL	setBool("battleRangeBasedAccuracy", false);
-	setBool("battleRangeBasedAccuracy", true); // kL
-	setBool("fpsCounter", false);
-	setBool("craftLaunchAlways", false);
-//kL	setBool("globeSeasons", false);
-	setBool("globeSeasons", true); // kL
-	setBool("globeAllRadarsOnBaseBuild", true);
-	setBool("allowChangeListValuesByMouseWheel", false); // It applies only for lists, not for scientists/engineers screen
-//kL	setInt("autosave", 0);
-	setInt("autosave", 1); // kL
-	setInt("changeValueByMouseWheel", 10);
-//kL	setInt("audioSampleRate", 22050);
-	setInt("audioSampleRate", 11025); // kL
-	setInt("audioBitDepth", 16);
-	setInt("pauseMode", 0);
-//kL	setBool("alienContainmentLimitEnforced", false);
-	setBool("alienContainmentLimitEnforced", true); // kL
-//kL	setBool("canSellLiveAliens", false);
-	setBool("canSellLiveAliens", true); // kL
-	setBool("canTransferCraftsWhileAirborne", false); // When the craft can reach the destination base with its fuel
-//kL	setBool("canManufactureMoreItemsPerHour", false);
-	setBool("canManufactureMoreItemsPerHour", true); // kL
-//kL	setBool("customInitialBase", false);
-	setBool("customInitialBase", true); // kL
-//kL	setBool("aggressiveRetaliation", false);
-	setBool("aggressiveRetaliation", true); // kL
-//kL	setBool("strafe", false);
-	setBool("strafe", true); // kL
-//kL	setBool("battleNotifyDeath", false);
-	setBool("battleNotifyDeath", true); // kL
-	setBool("allowBuildingQueue", false);
-//kL	setBool("allowAutoSellProduction", false);
-	setBool("allowAutoSellProduction", true); // kL
-	setBool("showFundsOnGeoscape", false);
-//kL	setBool("showMoreStatsInInventoryView", false);
-	setBool("showMoreStatsInInventoryView", true); // kL
-	setBool("allowResize", false);
-	setInt("windowedModePositionX", -1);
-	setInt("windowedModePositionY", -1);
-	setBool("battleAutoEnd", false);
-	setBool("allowPsionicCapture", false);
-	setBool("psiStrengthEval", false);
-	setBool("borderless", false);
-//kL	setBool("captureMouse", false);
-	setBool("captureMouse", true); // kL
-//kL	setBool("battleTooltips", true);
-	setBool("battleTooltips", false); // kL
-	setBool("battleHairBleach", true);
-//kL	setBool("keepAspectRatio", false);
-	setBool("keepAspectRatio", true); // kL
-	setBool("cursorInBlackBandsInFullscreen", false);
-//kL	setBool("cursorInBlackBandsInWindow", true);
-	setBool("cursorInBlackBandsInWindow", false); // kL
-	setBool("cursorInBlackBandsInBorderlessWindow", false);
-	setBool("newSeedOnLoad", false);
-	setBool("skipNextTurnScreen", false);
-//kL	setBool("disableAutoEquip", false);
-	setBool("disableAutoEquip", true); // kL
-//kL	setBool("battleUFOExtenderAccuracy", false);
-	setBool("battleUFOExtenderAccuracy", true); // kL
-	setInt("saveOrder", SORT_DATE_DESC);
-
-	setBool("battleSmoothCamera", false); // WB.140311
+	setInt("battleAlienSpeed", 70); // kL
+	setBool("battleSmoothCamera", false);
 
 	// new battle mode data
 	setInt("NewBattleMission", 0);
