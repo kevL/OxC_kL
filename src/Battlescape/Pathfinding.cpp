@@ -109,7 +109,6 @@ void Pathfinding::calculate(
 		int maxTUCost)
 {
 	//Log(LOG_INFO) << "Pathfinding::calculate()";
-
 	_totalTUCost = 0;
 	_path.clear();
 
@@ -195,8 +194,16 @@ void Pathfinding::calculate(
 				if (x || y)
 				{
 					Tile* checkTile = _save->getTile(endPosition + Position(x, y, 0));
-					if (isBlocked(destTile, checkTile, dir[i], _unit)
-						&& isBlocked(destTile, checkTile, dir[i], target))
+					if (isBlocked(
+								destTile,
+								checkTile,
+								dir[i],
+								_unit)
+						&& isBlocked(
+									destTile,
+									checkTile,
+									dir[i],
+									target))
 					{
 						return;
 					}
@@ -387,8 +394,8 @@ bool Pathfinding::bresenhamPath(
 					dir < 8;
 					++dir)
 			{
-				if (xd[dir] == cx-lastPoint.x
-					&& yd[dir] == cy-lastPoint.y)
+				if (xd[dir] == cx - lastPoint.x
+					&& yd[dir] == cy - lastPoint.y)
 				{
 					break;
 				}
@@ -769,16 +776,28 @@ int Pathfinding::getTUCost(
 				&& partsGoingUp != 0)
 			{
 				// check if we can go this way
-				if (isBlocked(startTile, destTile, direction, target))
+				if (isBlocked(
+							startTile,
+							destTile,
+							direction,
+							target))
+				{
 					return 255;
+				}
 
 				if (startTile->getTerrainLevel() - destTile->getTerrainLevel() > 8)
 					return 255;
 			}
 
 			// check if the destination tile can be walked over
-			if (isBlocked(destTile, MapData::O_FLOOR, target)
-				|| isBlocked(destTile, MapData::O_OBJECT, target))
+			if (isBlocked(
+						destTile,
+						MapData::O_FLOOR,
+						target)
+				|| isBlocked(
+							destTile,
+							MapData::O_OBJECT,
+							target))
 			{
 				return 255;
 			}
@@ -934,6 +953,7 @@ int Pathfinding::getTUCost(
 												abs(8 + _unit->getDirection() - direction)));
 					if (delta == 4)
 						delta = 2;
+
 					cost += delta;
 				} // kL_end.
 			}
@@ -1078,8 +1098,8 @@ bool Pathfinding::isBlocked(
 		int bigWallExclusion)
 {
 	//Log(LOG_INFO) << "Pathfinding::isBlocked() #2";
-	if (tile == 0)
-		return true; // probably outside the map here
+	if (tile == 0) // probably outside the map here
+		return true;
 
 	if (part == O_BIGWALL)
 	{
@@ -1633,8 +1653,8 @@ int Pathfinding::validateUpDown(
 {
 	Position endPosition;
 	directionToVector(
-				direction,
-				&endPosition);
+					direction,
+					&endPosition);
 	endPosition += startPosition;
 
 	Tile* startTile = _save->getTile(startPosition);
@@ -1652,7 +1672,7 @@ int Pathfinding::validateUpDown(
 		return -1; // stop.
 	else if (bu->getArmor()->getMovementType() == MT_FLY)
 	{
-		Tile* belowStart = _save->getTile(startPosition + Position(0, 0, -1));
+		Tile* belowStart = _save->getTile(startPosition + Position(0, 0,-1));
 
 		if ((direction == DIR_UP
 				&& destTile
@@ -1757,8 +1777,8 @@ int Pathfinding::validateUpDown(
 
 /**
  * Marks tiles for the path preview.
- * @param bRemove Remove preview?
- * @return True, if a path is previewed.
+ * @param bRemove, To remove preview or not
+ * @return, True if a path is previewed
  */
 bool Pathfinding::previewPath(bool bRemove)
 {
@@ -1773,8 +1793,9 @@ bool Pathfinding::previewPath(bool bRemove)
 
 	_pathPreviewed = !bRemove;
 
-	Position pos = _unit->getPosition();
-	Position destination;
+	Position
+		pos = _unit->getPosition(),
+		destination;
 
 	int tus = _unit->getTimeUnits();
 	if (_unit->isKneeled()) // -> and not on gravLift, and not moving an x/y direction.
@@ -1784,9 +1805,13 @@ bool Pathfinding::previewPath(bool bRemove)
 		// note: Neither is energy, below.
 
 	int
-		energy = _unit->getEnergy(),
-		size = _unit->getArmor()->getSize() - 1,
-		total = 0;
+		energy		= _unit->getEnergy(),
+		energyStop	= energy,
+		size		= _unit->getArmor()->getSize() - 1,
+		dir			= -1,
+		total		= 0,
+		tu			= 0,
+		color		= 0;
 
 	bool switchBack = false;
 	if (_save->getBattleGame()->getReservedAction() == BA_NONE)
@@ -1797,17 +1822,20 @@ bool Pathfinding::previewPath(bool bRemove)
 											false);
 	}
 
+	std::string armorType = _unit->getArmor()->getType();
+
 	_modifierUsed = (SDL_GetModState() & KMOD_CTRL) != 0;
 	bool
-		running = _save->getStrafeSetting()
-				&& _modifierUsed
-				&& !size
-				&& _path.size() > 1,	// <- not exactly true. If moving around a corner 2 tiles, it
+		dash = _save->getStrafeSetting()
+			&& _modifierUsed
+			&& !size
+			&& _path.size() > 1,	// <- not exactly true. If moving around a corner 2 tiles, it
 										// will strafe (potential conflict). See WalkBState also or ...
-		bLaden = _unit->getArmor()->getType() == "STR_PERSONAL_ARMOR_UC",
-		bPowered = _unit->getArmor()->getType() == "STR_POWER_SUIT_UC",
-		bPowered2 = _unit->getArmor()->getType() == "STR_FLYING_SUIT_UC",
-		gravLift = false;
+		bLaden		= armorType == "STR_PERSONAL_ARMOR_UC",
+		bPowered	= armorType == "STR_POWER_SUIT_UC",
+		bPowered2	= armorType == "STR_FLYING_SUIT_UC",
+		gravLift	= false,
+		reserve		= false;
 		// kL_note: Ought to create a factor for those in ruleArmor class & RuleSets ( _burden ). Or 'enum' those,
 		// as in
 /* enum ArmorBurden
@@ -1818,29 +1846,34 @@ bool Pathfinding::previewPath(bool bRemove)
 	AB_HIGH		// 2
 }; */
 
+	Tile
+		* tileLift,
+		* tile;
+
 	for (std::vector<int>::reverse_iterator
 			i = _path.rbegin();
 			i != _path.rend();
 			++i)
 	{
-		int dir = *i;
+		dir = *i;
 
 		// gets tu cost, but also gets the destination position.
-		int tu = getTUCost(
-						pos,
-						dir,
-						&destination,
-						_unit,
-						0,
-						false);
+		tu = getTUCost(
+					pos,
+					dir,
+					&destination,
+					_unit,
+					0,
+					false);
+		energyStop = energy;
 
-		Tile* tilePos = _save->getTile(pos);
-		gravLift = (dir >= DIR_UP)
-				&& tilePos->getMapData(MapData::O_FLOOR)
-				&& tilePos->getMapData(MapData::O_FLOOR)->isGravLift();
+		tileLift = _save->getTile(pos);
+		gravLift = dir >= DIR_UP
+				&& tileLift->getMapData(MapData::O_FLOOR)
+				&& tileLift->getMapData(MapData::O_FLOOR)->isGravLift();
 		if (!gravLift)
 		{
-			if (running)
+			if (dash)
 			{
 				energy -= tu * 3 / 2;
 				tu = tu * 3 / 4;
@@ -1851,9 +1884,16 @@ bool Pathfinding::previewPath(bool bRemove)
 			if (bLaden)
 				energy -= 1;
 			else if (bPowered)
+			{
 				energy += 1;
+			}
 			else if (bPowered2)
+			{
 				energy += 2;
+			}
+
+			if (energy > energyStop)
+				energy = energyStop;
 		}
 		else // gravLift
 			energy = 0;
@@ -1861,10 +1901,10 @@ bool Pathfinding::previewPath(bool bRemove)
 
 		tus -= tu;
 		total += tu;
-		bool reserve = _save->getBattleGame()->checkReservedTU(
-															_unit,
-															total,
-															true);
+		reserve = _save->getBattleGame()->checkReservedTU(
+														_unit,
+														total,
+														true);
 
 		pos = destination;
 		for (int
@@ -1877,7 +1917,7 @@ bool Pathfinding::previewPath(bool bRemove)
 					y > -1;
 					y--)
 			{
-				Tile* tile = _save->getTile(pos + Position(x, y, 0));
+				tile = _save->getTile(pos + Position(x, y, 0));
 				if (!bRemove)
 				{
 					if (i == _path.rend() - 1)
@@ -1896,7 +1936,7 @@ bool Pathfinding::previewPath(bool bRemove)
 					tile->setTUMarker(0);
 				}
 
-				int color = 0;
+				color = 0;
 				if (!bRemove)
 				{
 					if (tus > -1

@@ -123,7 +123,7 @@ void ExplosionBState::init()
 	}
 	else // cyberdiscs!!!
 	{
-		_power = RNG::generate(65, 135);
+		_power = RNG::generate(66, 138);
 		//Log(LOG_INFO) << ". _power(Cyberdisc) = " << _power;
 
 		_areaOfEffect = true;
@@ -143,25 +143,24 @@ void ExplosionBState::init()
 		{
 			Position posCenter_voxel = _center; // voxelspace
 			int
-				startFrame = 0; // less than 0 will delay anim-start (total 8 Frames)
+				startFrame = 0, // less than 0 will delay anim-start (total 8 Frames)
 //				offset = _power / 2,
 //				animQty = _power / 14;
+				radius = 0;
 
-			int radius = 0;
 			if (_item)
-			{
 				radius = _item->getRules()->getExplosionRadius();
 				//Log(LOG_INFO) << ". . . getExplosionRadius() -> " << radius;
-			}
 //			if (radius < 1)
 			else
 				radius = _power / 8; // <- for cyberdiscs & terrain expl.... CTD if using getExplosionRadius(),
 			//Log(LOG_INFO) << ". . . radius = " << radius;
 
-			int offset = radius * 6, // voxelspace
+			int
+				offset = radius * 5, // voxelspace
 				animQty = static_cast<int>(
 								sqrt(static_cast<double>(radius) * static_cast<double>(_power)))
-							/ 6;
+							/ 5;
 			if (animQty < 1)
 				animQty = 1;
 
@@ -182,7 +181,7 @@ void ExplosionBState::init()
 
 //				Explosion* explosion = new Explosion(p, startFrame, true);
 				Explosion* explosion = new Explosion( // animation
-													posCenter_voxel + Position(11, 11, 0), // jogg the anim down a few pixels. Tks.
+													posCenter_voxel + Position(10, 10, 0), // jogg the anim down a few pixels. Tks.
 													startFrame,
 													true);
 
@@ -192,7 +191,7 @@ void ExplosionBState::init()
 //kL			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED);
 			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED * 8 / 7); // kL
 
-			if (_power < 80)
+			if (_power < 76)
 				_parent->getResourcePack()->getSound("BATTLE.CAT", 12)->play();
 			else
 				_parent->getResourcePack()->getSound("BATTLE.CAT", 5)->play();

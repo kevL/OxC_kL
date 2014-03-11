@@ -2493,6 +2493,8 @@
 			<Option target="Release Win32" />
 			<Option target="Release x64" />
 		</Unit>
+		<Unit filename="Ruleset/ExtraMusic.cpp" />
+		<Unit filename="Ruleset/ExtraMusic.h" />
 		<Unit filename="Ruleset/ExtraSounds.cpp">
 			<Option target="Debug Win32" />
 			<Option target="Debug x64" />

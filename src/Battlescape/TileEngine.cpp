@@ -2343,7 +2343,7 @@ void TileEngine::explode(
 //			powerEff = _powerT;
 
 			while (_powerT > 0
-				&& r <= r_Max)
+				&& r < r_Max) // incongruous <---  kL_note.
 			{
 				vx = centerX + r * sin_te * cos_fi;
 				vy = centerY + r * cos_te * cos_fi;
@@ -2583,8 +2583,9 @@ void TileEngine::explode(
 						&& destTile->getUnit()
 						&& unit->getOriginalFaction() == FACTION_PLAYER						// kL, shooter is Xcom
 						&& unit->getFaction() == FACTION_PLAYER								// kL, shooter is not Mc'd Xcom
-						&& destTile->getUnit()->getOriginalFaction() == FACTION_HOSTILE)	// kL, target is aLien Mc'd or not.
+						&& destTile->getUnit()->getOriginalFaction() == FACTION_HOSTILE		// kL, target is aLien Mc'd or not.
 																							//		no Xp for shooting civies...
+						&& type != DT_SMOKE)												// sorry, no Xp for smoke!
 //							&& destTile->getUnit()->getFaction() != unit->getFaction())
 					{
 						unit->addFiringExp();
@@ -2608,11 +2609,10 @@ void TileEngine::explode(
 				}
 
 				// TEST:
-				int dir; // -> test result: Looks like this returns the direction *from which the blast came from*** ( ie. Opposite dir )
-				Pathfinding::vectorToDirection(
-//kL										origin->getPosition() - destTile->getPosition(),
-										destTile->getPosition() - origin->getPosition(), // kL
-										dir); // TEST_end.
+//				int dir; // -> test result: Looks like this returns the direction *from which the blast came from*** ( ie. Opposite dir )
+//				Pathfinding::vectorToDirection(
+//										destTile->getPosition() - origin->getPosition(),
+//										dir); // TEST_end.
 
 				_powerT -= (10 // explosive damage decreases by 10 per tile
 						+ horizontalBlockage( // not *2

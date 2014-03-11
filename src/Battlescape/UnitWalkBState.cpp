@@ -401,20 +401,21 @@ bool UnitWalkBState::doStatusStand()
 //						&& tileDest->getMapData(MapData::O_FLOOR)->isGravLift())
 		if (!gravLift)
 		{
-			if (_unit->getArmor()->getType() == "STR_FLYING_SUIT_UC")
+			std::string armorType = _unit->getArmor()->getType();
+			if (armorType == "STR_FLYING_SUIT_UC")
 			{
 				energy -= 2; // zippy.
 				if (energy < 0)
 					energy = 0;
 			}
-			else if (_unit->getArmor()->getType() == "STR_POWER_SUIT_UC")
+			else if (armorType == "STR_POWER_SUIT_UC")
 			{
 				energy -= 1; // good stuff
 				if (energy < 0)
 					energy = 0;
 			}
 			// else if (coveralls) Normal energy expenditure
-			else if (_unit->getArmor()->getType() == "STR_PERSONAL_ARMOR_UC")
+			else if (armorType == "STR_PERSONAL_ARMOR_UC")
 				energy += 1; // *clunk*clunk*
 		}
 		else // gravLift

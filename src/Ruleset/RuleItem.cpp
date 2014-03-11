@@ -214,7 +214,12 @@ void RuleItem::load(
 	_turretType				= node["turretType"].as<int>(_turretType);
 	_recover				= node["recover"].as<bool>(_recover);
 	_liveAlien				= node["liveAlien"].as<bool>(_liveAlien);
-	_blastRadius			= node["blastRadius"].as<int>(_blastRadius);
+
+	if (node["blastRadius"]) // kL
+		_blastRadius		= node["blastRadius"].as<int>(_blastRadius);
+//	else
+//		_blastRadius = -1; // kL: initialized @
+
 	_attraction				= node["attraction"].as<int>(_attraction);
 	_flatRate				= node["flatRate"].as<bool>(_flatRate);
 	_arcingShot				= node["arcingShot"].as<bool>(_arcingShot);
@@ -642,12 +647,12 @@ int RuleItem::getExplosionRadius() const
 		// heavy explosions, incendiary, smoke or stun bombs create AOE explosions
 		// all the rest hits one point: AP, melee (stun or AP), laser, plasma, acid.
 		if (_damageType == DT_IN)
-			radius = (_power / 30) + 1;
+			radius = _power / 30 + 1;
 		else if (_damageType == DT_HE
 			|| _damageType == DT_STUN
 			|| _damageType == DT_SMOKE)
 		{
-			radius = _power / 20;
+			radius = _power / 20 + 1;
 		}
 	}
 	else // unless a blast radius is actually defined.

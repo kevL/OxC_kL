@@ -65,12 +65,12 @@ TargetInfoState::TargetInfoState(
 	_screen = false;
 
 	_window			= new Window(this, 192, 120, 32, 40, POPUP_BOTH);
-	_txtTitle		= new Text(182, 17, 37, 53);
+	_txtTitle		= new Text(182, 17, 37, 54);
 
 	_edtBase		= new TextEdit(50, 9, 38, 46); // kL
 
 	_txtTargetted	= new Text(182, 9, 37, 71);
-	_txtFollowers	= new Text(182, 40, 37, 80);
+	_txtFollowers	= new Text(182, 40, 37, 82);
 
 	_btnIntercept	= new TextButton(160, 16, 48, 119);
 	_btnOk			= new TextButton(160, 16, 48, 137);
@@ -135,9 +135,11 @@ TargetInfoState::TargetInfoState(
 		}
 	}
 
-	_txtTargetted->setColor(Palette::blockOffset(15)-1);
-	_txtTargetted->setAlign(ALIGN_CENTER);
-	_txtTargetted->setText(tr("STR_TARGETTED_BY"));
+//	_txtTargetted->setColor(Palette::blockOffset(15)-1);
+//	_txtTargetted->setAlign(ALIGN_CENTER);
+//	_txtTargetted->setText(tr("STR_TARGETTED_BY"));
+
+	bool targeted = false;
 
 	_txtFollowers->setColor(Palette::blockOffset(15)+5);
 	_txtFollowers->setAlign(ALIGN_CENTER);
@@ -148,8 +150,20 @@ TargetInfoState::TargetInfoState(
 			++i)
 	{
 		ss << (*i)->getName(_game->getLanguage()) << L'\n';
+
+		if (!targeted)
+		{
+			targeted = true;
+
+			_txtTargetted->setColor(Palette::blockOffset(15)-1);
+			_txtTargetted->setAlign(ALIGN_CENTER);
+			_txtTargetted->setText(tr("STR_TARGETTED_BY"));
+		}
 	}
 	_txtFollowers->setText(ss.str());
+
+	if (!targeted)
+		_txtTargetted->setVisible(false);
 
 	//Log(LOG_INFO) << "Create TargetInfoState EXIT";
 }

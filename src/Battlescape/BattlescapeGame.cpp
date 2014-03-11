@@ -2296,8 +2296,8 @@ void BattlescapeGame::moveUpDown(
 	} */
 
 	_save->getPathfinding()->calculate(
-								_currentAction.actor,
-								_currentAction.target);
+									_currentAction.actor,
+									_currentAction.target);
 
 	statePushBack(new UnitWalkBState(
 									this,
