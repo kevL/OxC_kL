@@ -470,16 +470,16 @@ void Map::drawTerrain(Surface* surface)
 		if (_projectileInFOV)
 		{
 			//Log(LOG_INFO) << ". projectileInFOV";
-			if (_launch) // kL_begin: This is now mine (120228).
+/*TEST			if (_launch) // kL_begin: This is now mine (120228).
 			{
 				//Log(LOG_INFO) << ". . launch";
 				_launch = false;
 
-/*				if (//_save->getSide() != FACTION_PLAYER &&
-					!_camera->isOnScreen(_unit->getPosition()))
-				{
-					_camera->centerOnPosition(_unit->getPosition());
-				} else */
+//				if (//_save->getSide() != FACTION_PLAYER &&
+//					!_camera->isOnScreen(_unit->getPosition()))
+//				{
+//					_camera->centerOnPosition(_unit->getPosition());
+//				} else
 				// kL_note: Gota figure these out...
 				if (bulletPosScreen.x < 20							// kL, keep these in from the edges.
 					|| bulletPosScreen.x > surface->getWidth() - 20	// kL
@@ -578,28 +578,31 @@ void Map::drawTerrain(Surface* surface)
 			//Log(LOG_INFO) << ". . launch / NOT launch Done";
 		}
 		//Log(LOG_INFO) << ". projectileInFOV DONE";
-	}
+	} */ // TEST
 
 // WB_begin:
-/*			if (_smoothCamera)
+			if (_smoothCamera)
 			{
 				if (!_smoothingEngaged)
 				{
 					Position origin = _projectile->getOrigin();
 					Position target = _projectile->getTarget();
-					if (std::abs(origin.x - target.x) > 1 ||
-						std::abs(origin.y - target.y) > 1 || 
-						std::abs(origin.z - target.z) > 1 ||
-						bulletPositionScreen.x < 0 || bulletPositionScreen.x > surface->getWidth() ||
-						bulletPositionScreen.y < 0 || bulletPositionScreen.y > _visibleMapHeight)
+
+					if (   std::abs(origin.x - target.x) > 1
+						|| std::abs(origin.y - target.y) > 1
+						|| std::abs(origin.z - target.z) > 1
+						|| bulletPosScreen.x < 0
+						|| bulletPosScreen.x > surface->getWidth()
+						|| bulletPosScreen.y < 0
+						|| bulletPosScreen.y > _visibleMapHeight)
 					{
 						_smoothingEngaged = true;
 					}
 				}
 				else
-				{
-					_camera->jumpXY(surface->getWidth() / 2 - bulletPositionScreen.x, _visibleMapHeight / 2 - bulletPositionScreen.y);
-				}
+					_camera->jumpXY(
+								surface->getWidth() / 2 - bulletPosScreen.x,
+								_visibleMapHeight / 2 - bulletPosScreen.y);
 			}
 			else
 			{
@@ -607,36 +610,37 @@ void Map::drawTerrain(Surface* surface)
 				do
 				{
 					enough = true;
-					if (bulletPositionScreen.x < 0)
+					if (bulletPosScreen.x < 0)
 					{
 						_camera->jumpXY(+surface->getWidth(), 0);
 						enough = false;
 					}
-					else if (bulletPositionScreen.x > surface->getWidth())
+					else if (bulletPosScreen.x > surface->getWidth())
 					{
 						_camera->jumpXY(-surface->getWidth(), 0);
 						enough = false;
 					}
-					else if (bulletPositionScreen.y < 0)
+					else if (bulletPosScreen.y < 0)
 					{
 						_camera->jumpXY(0, +_visibleMapHeight);
 						enough = false;
 					}
-					else if (bulletPositionScreen.y > _visibleMapHeight)
+					else if (bulletPosScreen.y > _visibleMapHeight)
 					{
 						_camera->jumpXY(0, -_visibleMapHeight);
 						enough = false;
 					}
-					_camera->convertVoxelToScreen(_projectile->getPosition(), &bulletPositionScreen);
+					_camera->convertVoxelToScreen(
+											_projectile->getPosition(),
+											&bulletPosScreen);
 				}
 				while (!enough);
 			}
 		}
 	}
 	else
-	{
 		_smoothingEngaged = false;
-	} */ // WB_end.
+// WB_end.
 
 
 	// get corner map coordinates to give rough boundaries in which tiles to redraw are

@@ -5722,7 +5722,7 @@
 	<string>
 	"BattlescapeGame.h"
 
-1394398507 f:\git\openxcom\src\battlescape\map.h
+1394536101 f:\git\openxcom\src\battlescape\map.h
 	<set>
 	<vector>
 	"../Engine/InteractiveSurface.h"
@@ -6252,7 +6252,7 @@
 1394398507 f:\git\openxcom\src\battlescape\explosion.h
 	"Position.h"
 
-1394499704 source:f:\git\openxcom\src\battlescape\explosionbstate.cpp
+1394536018 source:f:\git\openxcom\src\battlescape\explosionbstate.cpp
 	"ExplosionBState.h"
 	"Camera.h"
 	"BattlescapeState.h"
@@ -6360,7 +6360,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Soldier.h"
 
-1394398507 source:f:\git\openxcom\src\battlescape\map.cpp
+1394538576 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	<cmath>
 	<fstream>
@@ -6398,7 +6398,7 @@
 	"../Ruleset/MapDataSet.h"
 	"../Ruleset/RuleItem.h"
 
-1394398507 f:\git\openxcom\src\battlescape\projectile.h
+1394537096 f:\git\openxcom\src\battlescape\projectile.h
 	<vector>
 	"BattlescapeGame.h"
 	"Position.h"
@@ -6557,7 +6557,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1394398507 source:f:\git\openxcom\src\battlescape\projectile.cpp
+1394537994 source:f:\git\openxcom\src\battlescape\projectile.cpp
 	"Projectile.h"
 	<cmath>
 	"BattlescapeGame.h"
@@ -6692,7 +6692,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1394398507 source:f:\git\openxcom\src\battlescape\unitdiebstate.cpp
+1394537527 source:f:\git\openxcom\src\battlescape\unitdiebstate.cpp
 	"UnitDieBState.h"
 	"BattlescapeState.h"
 	"Camera.h"
@@ -7026,7 +7026,7 @@
 	"OpenGL.h"
 	"Logger.h"
 
-1394398507 source:f:\git\openxcom\src\engine\options.cpp
+1394538597 source:f:\git\openxcom\src\engine\options.cpp
 	"Options.h"
 	<algorithm>
 	<fstream>
@@ -8077,7 +8077,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Craft.h"
 
-1394482550 source:f:\git\openxcom\src\geoscape\targetinfostate.cpp
+1394510254 source:f:\git\openxcom\src\geoscape\targetinfostate.cpp
 	"TargetInfoState.h"
 	"GeoscapeState.h"
 	"InterceptState.h"

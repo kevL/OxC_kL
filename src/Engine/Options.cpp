@@ -198,7 +198,7 @@ void createDefault()
 	setBool("battleUFOExtenderAccuracy", true); // kL
 	setInt("saveOrder", SORT_DATE_DESC);
 
-	setBool("battleSmoothCamera", false); WB.140311
+	setBool("battleSmoothCamera", false); // WB.140311
 
 	// new battle mode data
 	setInt("NewBattleMission", 0);
