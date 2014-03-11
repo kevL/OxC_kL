@@ -1077,7 +1077,7 @@ std::vector<Target*> Globe::getTargets(
 			continue;
 		}
 
-		if (targetNear((*i), x, y))
+		if (targetNear(*i, x, y))
 			targets.push_back(*i);
 	}
 
@@ -1086,7 +1086,7 @@ std::vector<Target*> Globe::getTargets(
 			i != _game->getSavedGame()->getWaypoints()->end();
 			++i)
 	{
-		if (targetNear((*i), x, y))
+		if (targetNear(*i, x, y))
 			targets.push_back(*i);
 	}
 
@@ -1095,7 +1095,7 @@ std::vector<Target*> Globe::getTargets(
 			i != _game->getSavedGame()->getTerrorSites()->end();
 			++i)
 	{
-		if (targetNear((*i), x, y))
+		if (targetNear(*i, x, y))
 			targets.push_back(*i);
 	}
 
@@ -1107,7 +1107,7 @@ std::vector<Target*> Globe::getTargets(
 		if (!(*i)->isDiscovered())
 			continue;
 
-		if (targetNear((*i), x, y))
+		if (targetNear(*i, x, y))
 			targets.push_back(*i);
 	}
 

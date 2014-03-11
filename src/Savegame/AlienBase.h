@@ -40,11 +40,13 @@ class AlienBase
 
 private:
 	bool
-		_inBattlescape,
-		_discovered;
+		_discovered,
+		_inBattlescape;
 	int _id;
 
-	std::string _race;
+	std::string
+		_edit, // kL
+		_race;
 
 
 	public:
@@ -66,12 +68,17 @@ private:
 		void setId(int id);
 
 		/// Gets the alien base's name.
-		std::wstring getName(Language *lang) const;
+		std::wstring getName(Language* lang) const;
 
-		/// Gets the alien base's amount of active hours..
+		/// Gets the alien base's alien race.
 		std::string getAlienRace() const;
 		/// Sets the alien base's alien race.
-		void setAlienRace(const std::string &race);
+		void setAlienRace(const std::string& race);
+
+		/// kL. Returns textedit that the player has entered.
+		std::string getEdit() const; // kL
+		/// kL. Changes textedit that the player has entered.
+		void setEdit(const std::string& edit); // kL
 
 		/// Sets the alien base's battlescape status.
 		void setInBattlescape(bool inbattle);

@@ -1855,7 +1855,8 @@ bool BattlescapeGame::cancelCurrentAction(bool bForce)
 		return true;
 	}
 
-	if (_states.empty() || bForce)
+	if (_states.empty()
+		|| bForce)
 	{
 		if (_currentAction.targeting)
 		{
@@ -1863,6 +1864,7 @@ bool BattlescapeGame::cancelCurrentAction(bool bForce)
 				&& !_currentAction.waypoints.empty())
 			{
 				_currentAction.waypoints.pop_back();
+
 				if (!getMap()->getWaypoints()->empty())
 					getMap()->getWaypoints()->pop_back();
 
@@ -1883,7 +1885,8 @@ bool BattlescapeGame::cancelCurrentAction(bool bForce)
 			}
 		}
 	}
-	else if (!_states.empty() && _states.front() != 0)
+	else if (!_states.empty()
+		&& _states.front() != 0)
 	{
 		_states.front()->cancel();
 

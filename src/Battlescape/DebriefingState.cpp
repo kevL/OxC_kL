@@ -974,11 +974,9 @@ void DebriefingState::prepareDebriefing()
 						++k)
 				{
 					if (!(*k)->getRules()->isFixed())
-					{
 						(*j)->getTile()->addItem(
 												*k,
 												_game->getRuleset()->getInventory("STR_GROUND"));
-					}
 				}
 
 				std::string corpseItem = (*j)->getArmor()->getCorpseGeoscape();
@@ -1575,8 +1573,7 @@ void DebriefingState::recoverItems(
 			++it)
 	{
 		if ((*it)->getRules()->getName() == "STR_ELERIUM_115")
-			// special case of an item counted as a stat
-			addStat(
+			addStat( // special case of an item counted as a stat
 					"STR_ELERIUM_115",
 					50,
 					100); // kL
@@ -1628,25 +1625,19 @@ void DebriefingState::recoverItems(
 							}
 						}
 						else
-						{
 							base->getItems()->addItem((*it)->getUnit()->getArmor()->getCorpseGeoscape());
-						}
 					}
 					else if ((*it)->getUnit()->getOriginalFaction() == FACTION_NEUTRAL)
-					{
 						addStat(
 								"STR_CIVILIANS_SAVED",
 								1,
 								(*it)->getUnit()->getValue()); // kL_note: duplicated above.
-					}
 				}
 				else if (!_game->getSavedGame()->isResearched((*it)->getRules()->getType()))
-				{
 					addStat( // add pts. for unresearched items only
 							"STR_ALIEN_ARTIFACTS_RECOVERED",
 							1,
 							(*it)->getRules()->getRecoveryPoints());
-				}
 			}
 
 			if ((*it)->getRules()->isRecoverable()

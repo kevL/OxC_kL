@@ -26,17 +26,18 @@
 namespace OpenXcom
 {
 
+class AlienBase; // kL
 class GeoscapeState;
 class Globe;
 class Target;
 class Text;
 class TextButton;
+class TextEdit; // kL
 class Window;
 
 
 /**
- * Generic window used to display all the
- * crafts targeting a certain point on the map.
+ * Generic window used to display all the crafts targeting a certain point on the globe.
  */
 class TargetInfoState
 	:
@@ -45,6 +46,7 @@ class TargetInfoState
 
 private:
 
+	AlienBase* _ab; // kL
 	GeoscapeState* _state;
 	Globe* _globe;
 	Target* _target;
@@ -55,6 +57,7 @@ private:
 	TextButton
 		* _btnIntercept,
 		* _btnOk;
+	TextEdit* _edtBase; // kL
 	Window* _window;
 
 
@@ -68,6 +71,9 @@ private:
 				GeoscapeState* state);
 		/// Cleans up the Target Info state.
 		~TargetInfoState();
+
+		/// kL. Handler for pressing a key on the Name edit.
+		void edtBaseKeyPress(Action* action); // kL
 
 		/// Handler for clicking the Intercept button.
 		void btnInterceptClick(Action* action);

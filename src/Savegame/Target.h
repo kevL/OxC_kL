@@ -46,8 +46,8 @@ protected:
 
 	std::vector<Target*> _followers;
 
-		/// Creates a target.
-		Target();
+	/// Creates a target.
+	Target();
 
 
 	public:

@@ -113,7 +113,9 @@ MultipleTargetsState::MultipleTargetsState(
 		_btnCancel->setColor(Palette::blockOffset(8)+5);
 		_btnCancel->setText(tr("STR_CANCEL_UC"));
 		_btnCancel->onMouseClick((ActionHandler)& MultipleTargetsState::btnCancelClick);
-		_btnCancel->onKeyboardPress((ActionHandler)& MultipleTargetsState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
+		_btnCancel->onKeyboardPress(
+						(ActionHandler)& MultipleTargetsState::btnCancelClick,
+						(SDLKey)Options::getInt("keyCancel"));
 
 		_lstTargets->setColor(Palette::blockOffset(8)+5);
 		_lstTargets->setColumns(1, 116);
@@ -127,8 +129,8 @@ MultipleTargetsState::MultipleTargetsState(
 				++i)
 		{
 			_lstTargets->addRow(
-								1,
-								(*i)->getName(_game->getLanguage()).c_str());
+							1,
+							(*i)->getName(_game->getLanguage()).c_str());
 		}
 	}
 }
@@ -151,9 +153,7 @@ void MultipleTargetsState::init()
 				16);
 
 	if (_targets.size() == 1)
-	{
 		popupTarget(*_targets.begin());
-	}
 }
 
 /**
@@ -241,8 +241,8 @@ void MultipleTargetsState::lstTargetsClick(Action*)
 {
 	//Log(LOG_INFO) << "MultipleTargetsState::lstTargetsClick()";
 
-	Target* t = _targets[_lstTargets->getSelectedRow()];
-	popupTarget(t);
+	Target* targ = _targets[_lstTargets->getSelectedRow()];
+	popupTarget(targ);
 
 	//Log(LOG_INFO) << "MultipleTargetsState::lstTargetsClick() EXIT";
 }

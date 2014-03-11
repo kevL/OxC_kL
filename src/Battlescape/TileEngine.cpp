@@ -3554,7 +3554,7 @@ int TileEngine::blockage(
 				break;
 			}
 
-			if (bigWall
+			if (tile->getMapData(part)->stopLOS() // if (bigWall && ...
 				&& (type == DT_NONE
 					|| type == DT_SMOKE
 					|| type == DT_STUN

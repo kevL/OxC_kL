@@ -22,6 +22,7 @@
 #include "GeoscapeState.h"
 #include "InterceptState.h"
 
+#include "../Engine/Action.h" // kL
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
 #include "../Engine/Options.h"
@@ -29,10 +30,13 @@
 
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
+#include "../Interface/TextEdit.h" // kL
 #include "../Interface/Window.h"
 
 #include "../Resource/ResourcePack.h"
 
+#include "../Savegame/AlienBase.h" // kL
+#include "../Savegame/SavedGame.h" // kL
 #include "../Savegame/Target.h"
 
 
@@ -41,9 +45,9 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Target Info window.
- * @param game Pointer to the core game.
- * @param target Pointer to the target to show info from.
- * @param globe Pointer to the Geoscape globe.
+ * @param game, Pointer to the core game.
+ * @param target, Pointer to the target to show info from.
+ * @param globe, Pointer to the Geoscape globe.
  */
 TargetInfoState::TargetInfoState(
 		Game* game,
@@ -54,14 +58,16 @@ TargetInfoState::TargetInfoState(
 		State(game),
 		_target(target),
 		_globe(globe),
-		_state(state)
+		_state(state),
+		_ab(0)
 {
 	//Log(LOG_INFO) << "Create TargetInfoState";
-
 	_screen = false;
 
 	_window			= new Window(this, 192, 120, 32, 40, POPUP_BOTH);
 	_txtTitle		= new Text(182, 17, 37, 53);
+
+	_edtBase		= new TextEdit(50, 9, 38, 46); // kL
 
 	_txtTargetted	= new Text(182, 9, 37, 71);
 	_txtFollowers	= new Text(182, 40, 37, 80);
@@ -77,6 +83,7 @@ TargetInfoState::TargetInfoState(
 
 	add(_window);
 	add(_txtTitle);
+	add(_edtBase); // kL
 	add(_txtTargetted);
 	add(_txtFollowers);
 	add(_btnIntercept);
@@ -106,11 +113,33 @@ TargetInfoState::TargetInfoState(
 //kL	_txtTitle->setWordWrap(true);
 	_txtTitle->setText(_target->getName(_game->getLanguage()));
 
+	_edtBase->setColor(Palette::blockOffset(15)+1);
+	_edtBase->onKeyboardPress((ActionHandler)& TargetInfoState::edtBaseKeyPress);
+
+	_edtBase->setVisible(false);
+	for (std::vector<AlienBase*>::const_iterator
+			ab = _game->getSavedGame()->getAlienBases()->begin();
+			ab != _game->getSavedGame()->getAlienBases()->end();
+			++ab)
+	{
+		if (_target->getName(_game->getLanguage()) == (*ab)->getName(_game->getLanguage()))
+		{
+			_ab = *ab;
+
+			std::wstring ws = Language::utf8ToWstr((*ab)->getEdit());
+			_edtBase->setText(ws);
+
+			_edtBase->setVisible(true);
+
+			break;
+		}
+	}
+
 	_txtTargetted->setColor(Palette::blockOffset(15)-1);
 	_txtTargetted->setAlign(ALIGN_CENTER);
 	_txtTargetted->setText(tr("STR_TARGETTED_BY"));
 
-	_txtFollowers->setColor(Palette::blockOffset(15)-1);
+	_txtFollowers->setColor(Palette::blockOffset(15)+5);
 	_txtFollowers->setAlign(ALIGN_CENTER);
 	std::wostringstream ss;
 	for (std::vector<Target*>::iterator
@@ -133,11 +162,28 @@ TargetInfoState::~TargetInfoState()
 }
 
 /**
+ * Changes the base name.
+ * @param action Pointer to an action.
+ */
+void TargetInfoState::edtBaseKeyPress(Action* action)
+{
+	if (action->getDetails()->key.keysym.sym == SDLK_RETURN
+		|| action->getDetails()->key.keysym.sym == SDLK_KP_ENTER)
+	{
+		std::string s = Language::wstrToUtf8(_edtBase->getText());
+		_ab->setEdit(s);
+	}
+}
+
+/**
  * Pick a craft to intercept the UFO.
  * @param action, Pointer to an action.
  */
 void TargetInfoState::btnInterceptClick(Action*)
 {
+	std::string s = Language::wstrToUtf8(_edtBase->getText());
+	_ab->setEdit(s);
+
 	_state->timerReset();
 
 	_game->popState();
@@ -154,6 +200,9 @@ void TargetInfoState::btnInterceptClick(Action*)
  */
 void TargetInfoState::btnOkClick(Action*)
 {
+	std::string s = Language::wstrToUtf8(_edtBase->getText());
+	_ab->setEdit(s);
+
 	_game->popState();
 }
 

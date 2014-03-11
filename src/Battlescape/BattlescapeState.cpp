@@ -1900,13 +1900,13 @@ void BattlescapeState::blinkVisibleUnitButtons()
 		delta = 1,
 		color = 34;
 
-	SDL_Rect square1;	// black border
+	SDL_Rect square1; // black border
 	square1.x = 0;
 	square1.y = 0;
 	square1.w = 15;
 	square1.h = 12;
 
-	SDL_Rect square2;	// inner red square
+	SDL_Rect square2; // inner red square
 	square2.x = 1;
 	square2.y = 1;
 	square2.w = 13;

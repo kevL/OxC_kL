@@ -2541,6 +2541,7 @@ bool BattleUnit::postMissionProcedures(SavedGame* geoscape)
 		if (soldier->getRank() == RANK_ROOKIE)
 			soldier->promoteRank();
 
+		// kL_note: The delta-bits seem odd... thought it should be only 1d6 or so.
 		int delta = caps.tu - stats->tu;
 		if (delta > 0)
 			stats->tu += RNG::generate(0, (delta / 10) + 2) - 1;
@@ -3246,7 +3247,7 @@ void BattleUnit::adjustStats(const int diff)
 	_stats.tu			+= 4 * diff * _stats.tu / 100;
 	_stats.stamina		+= 4 * diff * _stats.stamina / 100;
 	_stats.reactions	+= 6 * diff * _stats.reactions / 100;
-	_stats.firing		= (_stats.firing + 6 * diff * _stats.firing / 100) / (diff > 0 ? 1 : 2);
+	_stats.firing		= (_stats.firing + 6 * diff * _stats.firing / 100) / (diff > 0? 1: 2);
 	_stats.strength		+= 2 * diff * _stats.strength / 100;
 	_stats.melee		+= 4 * diff * _stats.melee / 100;
 	_stats.psiSkill		+= 4 * diff * _stats.psiSkill / 100;
@@ -3304,7 +3305,6 @@ int BattleUnit::getCoverReserve() const
 void BattleUnit::initDeathSpin()
 {
 	//Log(LOG_INFO) << "BattleUnit::deathPirouette()" << " [target]: " << (getId());
-
 	_status = STATUS_TURNING;
 	_spinPhase = 0;
 	_cacheInvalid = true;

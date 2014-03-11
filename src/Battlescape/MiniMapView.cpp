@@ -49,13 +49,13 @@ const int MAX_FRAME		= 2;
 
 /**
  * Initializes all the elements in the MiniMapView.
- * @param w The MiniMapView width.
- * @param h The MiniMapView height.
- * @param x The MiniMapView x origin.
- * @param y The MiniMapView y origin.
- * @param game Pointer to the core game.
- * @param camera The Battlescape camera.
- * @param battleGame Pointer to the SavedBattleGame.
+ * @param w, The MiniMapView width.
+ * @param h, The MiniMapView height.
+ * @param x, The MiniMapView x origin.
+ * @param y, The MiniMapView y origin.
+ * @param game, Pointer to the core game.
+ * @param camera, The Battlescape camera.
+ * @param battleGame, Pointer to the SavedBattleGame.
  */
 MiniMapView::MiniMapView(
 		int w,
@@ -99,7 +99,8 @@ void MiniMapView::draw()
 
 	InteractiveSurface::draw();
 
-	if (!_set) return;
+	if (!_set)
+		return;
 
 	SDL_Rect current;
 	current.x = current.y = 0;
@@ -506,6 +507,7 @@ void MiniMapView::mouseIn(Action* action, State* state)
 void MiniMapView::animate()
 {
 	_frame++;
+
 	if (_frame > MAX_FRAME)
 		_frame = 0;
 

@@ -158,7 +158,9 @@ void Soldier::load(
 				i = layout.begin();
 				i != layout.end();
 				++i)
+		{
 			_equipmentLayout.push_back(new EquipmentLayoutItem(*i));
+		}
 	}
 
 	// kL_note: This may be obsolete, since SoldierDead was put in.
@@ -202,7 +204,9 @@ YAML::Node Soldier::save() const
 				i = _equipmentLayout.begin();
 				i != _equipmentLayout.end();
 				++i)
+		{
 			node["equipmentLayout"].push_back((*i)->save());
+		}
 	}
 
 	// kL_note: This may be obsolete, since SoldierDead was put in.
@@ -569,7 +573,7 @@ void Soldier::trainPsi1Day()
 	}
 	else // start here
 	{
-		if (RNG::percent(1))
+		if (RNG::percent(2))
 			_currentStats.psiSkill = rulesMin - 1;
 //		else
 //			_currentStats.psiSkill = rulesMin - 2;

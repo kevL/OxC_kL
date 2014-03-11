@@ -35,7 +35,9 @@ AlienBase::AlienBase()
 		Target(),
 		_id(0),
 		_inBattlescape(false),
-		_discovered(false)
+		_discovered(false),
+		_race(""), // kL
+		_edit("") // kL
 {
 }
 
@@ -50,12 +52,13 @@ AlienBase::~AlienBase()
  * Loads the alien base from a YAML file.
  * @param node YAML node.
  */
-void AlienBase::load(const YAML::Node &node)
+void AlienBase::load(const YAML::Node& node)
 {
 	Target::load(node);
 
 	_id				= node["id"].as<int>(_id);
 	_race			= node["race"].as<std::string>(_race);
+	_edit			= node["edit"].as<std::string>(_edit); // kL
 	_inBattlescape	= node["inBattlescape"].as<bool>(_inBattlescape);
 	_discovered		= node["discovered"].as<bool>(_discovered);
 }
@@ -70,6 +73,7 @@ YAML::Node AlienBase::save() const
 
 	node["id"]		= _id;
 	node["race"]	= _race;
+	node["edit"]	= _edit; // kL
 
 	if (_inBattlescape)
 		node["inBattlescape"]	= _inBattlescape;
@@ -138,6 +142,24 @@ std::string AlienBase::getAlienRace() const
 void AlienBase::setAlienRace(const std::string& race)
 {
 	_race = race;
+}
+
+/**
+ * kL. Returns textedit that the player has entered.
+ * @return, Text.
+ */
+std::string AlienBase::getEdit() const // kL
+{
+	return _edit;
+}
+
+/**
+ * kL. Changes textedit that the player has entered.
+ * @param edit, User textedit.
+ */
+void AlienBase::setEdit(const std::string& edit) // kL
+{
+	_edit = edit;
 }
 
 /**

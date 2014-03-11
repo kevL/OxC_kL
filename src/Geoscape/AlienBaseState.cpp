@@ -95,6 +95,10 @@ AlienBaseState::AlienBaseState(
 
 
 	// Check location of base
+	double
+		lon = _base->getLongitude(),
+		lat = _base->getLatitude();
+
 	std::wstring region, country;
 	for (std::vector<Country*>::iterator
 			i = _game->getSavedGame()->getCountries()->begin();
@@ -102,8 +106,8 @@ AlienBaseState::AlienBaseState(
 			++i)
 	{
 		if ((*i)->getRules()->insideCountry(
-										_base->getLongitude(),
-										_base->getLatitude()))
+										lon,
+										lat))
 		{
 			country = tr((*i)->getRules()->getType());
 
@@ -117,8 +121,8 @@ AlienBaseState::AlienBaseState(
 			++i)
 	{
 		if ((*i)->getRules()->insideRegion(
-										_base->getLongitude(),
-										_base->getLatitude()))
+										lon,
+										lat))
 		{
 			region = tr((*i)->getRules()->getType());
 
