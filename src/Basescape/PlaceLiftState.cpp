@@ -37,6 +37,7 @@
 
 #include "../Savegame/Base.h"
 #include "../Savegame/BaseFacility.h"
+//kL #include "../Savegame/SavedGame.h"
 
 #include "../Ruleset/RuleBaseFacility.h"
 #include "../Ruleset/Ruleset.h"
@@ -111,6 +112,8 @@ void PlaceLiftState::viewClick(Action*)
 											_game,
 											_base,
 											_globe);
+//kL	_game->getSavedGame()->setSelectedBase(_game->getSavedGame()->getBases()->size() - 1);
+
 	_game->pushState(bState);
 
 	if (_first)

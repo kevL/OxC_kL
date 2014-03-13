@@ -125,6 +125,7 @@ SavedGame::SavedGame()
 		_graphRegionToggles(""),
 		_graphCountryToggles(""),
 		_graphFinanceToggles("")
+//kL		_selectedBase(0)
 {
 	RNG::init();
 
@@ -2054,5 +2055,27 @@ std::vector<SoldierDead*>* SavedGame::getDeadSoldiers() // kL
 
 	return &_deadSoldiers;
 }
+
+/**
+ * Returns the last selected player base.
+ * @return, Pointer to base.
+ */
+/*kL Base* SavedGame::getSelectedBase()
+{
+	// in case a base was destroyed or something...
+	if (_selectedBase < _bases.size())
+		return _bases.at(_selectedBase);
+	else
+		return _bases.front();
+} */
+
+/**
+ * Sets the last selected player base.
+ * @param base, # of the base.
+ */
+/*kL void SavedGame::setSelectedBase(int base)
+{
+	_selectedBase = base;
+} */
 
 }

@@ -94,7 +94,8 @@ private:
 		_warned;
 	int
 		_globeZoom,
-		_monthsPassed;
+		_monthsPassed,
+//kL		_selectedBase;
 	double
 		_globeLat,
 		_globeLon;
@@ -366,6 +367,11 @@ private:
 		/// Gets the list of dead soldiers.
 //kL		std::vector<Soldier*>* getDeadSoldiers();
 		std::vector<SoldierDead*>* getDeadSoldiers(); // kL
+
+		/// Gets the last selected player base.
+//kL		Base* getSelectedBase();
+		/// Set the last selected player base.
+//kL		void setSelectedBase(int base);
 };
 
 }

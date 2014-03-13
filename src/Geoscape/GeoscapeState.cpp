@@ -2674,6 +2674,7 @@ void GeoscapeState::btnBasesClick(Action*)
 	if (!_game->getSavedGame()->getBases()->empty())
 	{
 		//Log(LOG_INFO) << "GeoscapeState::btnBasesClick() getBases !empty";
+//kL		_game->pushState(new BasescapeState(_game, _game->getSavedGame()->getSelectedBase(), _globe));
 
 		unsigned int totalBases = _game->getSavedGame()->getBases()->size();
 		//Log(LOG_INFO) << ". . totalBases = " << totalBases;

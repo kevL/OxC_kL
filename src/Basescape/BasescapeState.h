@@ -119,6 +119,8 @@ private:
 		void miniClick(Action* action);
 		/// Handler for pressing a key on the Name edit.
 		void edtBaseKeyPress(Action* action);
+		/// Handler for pressing a base selection hotkey.
+		void handleKeyPress(Action* action);
 };
 
 }
