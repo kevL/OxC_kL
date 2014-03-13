@@ -2489,28 +2489,76 @@ void TileEngine::explode(
 								}
 							}
 
+							// kL_note: REVERT,
+							bool done = false;
+							while (!done)
+							{
+								done = destTile->getInventory()->empty();
+
+								for (std::vector<BattleItem*>::iterator
+										it = destTile->getInventory()->begin();
+										it != destTile->getInventory()->end();
+										)
+								{
+									if (_powerT > (*it)->getRules()->getArmor())
+									{
+										if ((*it)->getUnit()
+											&& (*it)->getUnit()->getStatus() == STATUS_UNCONSCIOUS)
+										{
+											(*it)->getUnit()->instaKill();
+										}
+
+										_save->removeItem((*it));
+
+										break;
+									}
+									else
+									{
+										++it;
+										done = (it == destTile->getInventory()->end());
+									}
+								}
+							}
+
+/*							Log(LOG_INFO) << "TileEngine::explode(), HE vs items on tile";
+							int i = 0;
 							// So i made some adjustments....
 							for (std::vector<BattleItem*>::iterator
 									item = destTile->getInventory()->begin();
 									item != destTile->getInventory()->end();
 									++item)
 							{
-								if (_powerT > (*item)->getRules()->getArmor())
+								unsigned vectSize = static_cast<unsigned>(destTile->getInventory()->size());
+//								unsigned vectIter = static_cast<unsigned>(item);
+								i++;
+								Log(LOG_INFO) << ". item #" << i << ", total items = " << vectSize;
+
+
+								if ((*item)->getRules()
+									&& (*item)->getRules()->getArmor() < _powerT)
 //									if (powerEff > (*item)->getRules()->getArmor()) // kL
 								{
+									Log(LOG_INFO) << ". . item Destroyed";
+
 									if ((*item)->getUnit()
 										&& (*item)->getUnit()->getStatus() == STATUS_UNCONSCIOUS)
 									{
-										//Log(LOG_INFO) << ". . . . Frankie blow'd up.";
+										Log(LOG_INFO) << ". . . Frankie blow'd up.";
 										(*item)->getUnit()->instaKill();
 									}
 
-									//Log(LOG_INFO) << ". . . item destroyed";
 									_save->removeItem(*item);
 
+//									if (item > 1)
 									--item;
+
+//									vectIter = item;
+									Log(LOG_INFO) << ". . next (inside removeItem)"; // = " << item;
 								}
+								Log(LOG_INFO) << ". next (outside removeItem)"; // = " << item;
 							}
+							Log(LOG_INFO) << "TileEngine::explode(), HE vs items on tile DONE"; */
+
 						}
 						break;
 						case DT_SMOKE:	// smoke from explosions always stay 6 to 14 turns - power of a smoke grenade is 60
@@ -2890,7 +2938,7 @@ int TileEngine::verticalBlockage(
 						+ blockage(
 								_save->getTile(Position(x, y, z)),
 								MapData::O_OBJECT,
-								type);
+								type); // note: no Dir vs typeOBJECT
 			}
 		}
 	}
@@ -2936,7 +2984,7 @@ int TileEngine::verticalBlockage(
 						+ blockage(
 								_save->getTile(Position(x, y, z)),
 								MapData::O_OBJECT,
-								type);
+								type); // note: no Dir vs typeOBJECT
 			}
 		}
 	}
@@ -2988,7 +3036,9 @@ int TileEngine::horizontalBlockage(
 			block = blockage(
 							startTile,
 							MapData::O_NORTHWALL,
-							type);
+							type,
+							-1, // kL
+							dir); // kL
 		break;
 		case 1: // north east
 			if (type == DT_NONE) // this is two-way diagonal visibility check, used in original game
@@ -3077,7 +3127,9 @@ int TileEngine::horizontalBlockage(
 			block = blockage(
 							endTile,
 							MapData::O_WESTWALL,
-							type);
+							type,
+							-1, // kL
+							dir); // kL
 		break;
 		case 3: // south east
 			if (type == DT_NONE)
@@ -3161,7 +3213,9 @@ int TileEngine::horizontalBlockage(
 			block = blockage(
 							endTile,
 							MapData::O_NORTHWALL,
-							type);
+							type,
+							-1, // kL
+							dir); // kL
 		break;
 		case 5: // south west
 			if (type == DT_NONE)
@@ -3250,7 +3304,9 @@ int TileEngine::horizontalBlockage(
 			block = blockage(
 							startTile,
 							MapData::O_WESTWALL,
-							type);
+							type,
+							-1, // kL
+							dir); // kL
 		break;
 		case 7: // north west
 			if (type == DT_NONE)
@@ -3379,19 +3435,21 @@ int TileEngine::horizontalBlockage(
 }
 
 /**
- * Calculates the amount of damage-power that certain types of
+ * Calculates the amount of damage-power or FoV that certain types of
  * wall/bigwall or floor or object parts of a tile blocks.
- * @param startTile, The tile where the power starts.
- * @param part, The part of the tile the power needs to go through.
- * @param type, The type of power/damage.
- * @param dir, Direction the power travels.
+ * @param startTile, The tile where the power starts
+ * @param part, The part of the tile the power needs to go through
+ * @param type, The type of power/damage
+ * @param dir, Direction the power travels (default -1)
+ * @param dirTest, Direction for not blocking FoV when gazing down a wall (default -1)
  * @return, Amount of power/damage that gets blocked.
  */
 int TileEngine::blockage(
 		Tile* tile,
 		const int part,
 		ItemDamageType type,
-		int dir)
+		int dir,
+		int dirTest) // kL_add.
 {
 	//Log(LOG_INFO) << "TileEngine::blockage() dir " << dir;
 
@@ -3410,42 +3468,47 @@ int TileEngine::blockage(
 		//Log(LOG_INFO) << ". getMapData(part) stopLOS() = " << tile->getMapData(part)->stopLOS();
 		if (dir == -1) // west/north wall or floor.
 		{
-/*			if ((type == DT_NONE
-					|| type == DT_SMOKE
-					|| type == DT_STUN
-					|| type == DT_IN)
-				&& !tile->getMapData(part)->stopLOS()
-				&& (tile->getMapData(part)->getObjectType() == MapData::O_WESTWALL
-					|| tile->getMapData(part)->getObjectType() == MapData::O_NORTHWALL))
-			{
-				return 0;
-			}
-			else if (((type == DT_NONE
-						|| type == DT_SMOKE
-						|| type == DT_STUN
-						|| type == DT_IN)
-					&& (tile->getMapData(part)->getObjectType() == MapData::O_FLOOR
-						|| tile->getMapData(part)->stopLOS()))
-				|| _powerT < tile->getMapData(part)->getArmor())
-			{
-				return 255; // hardblock.
-			} */
 			if (type == DT_NONE
 				|| type == DT_SMOKE
 				|| type == DT_STUN
 				|| type == DT_IN)
 			{
-				if (!tile->getMapData(part)->stopLOS()
-					&& (tile->getMapData(part)->getObjectType() == MapData::O_WESTWALL
-						|| tile->getMapData(part)->getObjectType() == MapData::O_NORTHWALL))
-				{
-					return 0;
-				}
-				else if (tile->getMapData(part)->getObjectType() == MapData::O_FLOOR
-					|| tile->getMapData(part)->stopLOS())
+//				int dirTest;
+//				Pathfinding::vectorToDirection(
+//										endTile->getPosition() - startTile->getPosition(),
+//										dirTest);
+
+				if (tile->getMapData(part)->stopLOS()
+					|| tile->getMapData(part)->getObjectType() == MapData::O_FLOOR)
 				{
 					return 255; // hardblock.
 				}
+				else
+					return 0;
+
+/*				if (!tile->getMapData(part)->stopLOS()
+					&& tile->getMapData(part)->getObjectType() != MapData::O_FLOOR)
+//					&& (tile->getMapData(part)->getObjectType() == MapData::O_WESTWALL
+//						|| tile->getMapData(part)->getObjectType() == MapData::O_NORTHWALL))
+				{
+					return 0;
+				}
+//				else if (tile->getMapData(part)->getObjectType() == MapData::O_FLOOR
+//					|| tile->getMapData(part)->stopLOS())
+//				{
+//					return 255; // hardblock.
+//				}
+				else if (tile->getMapData(part)->getObjectType() == MapData::O_FLOOR
+					|| tile->getMapData(part)->stopLOS())
+//						&& ((tile->getMapData(part)->getObjectType() == MapData::O_WESTWALL
+//								&& (dirTest == 0
+//									|| dirTest == 4))
+//							|| (tile->getMapData(part)->getObjectType() == MapData::O_NORTHWALL
+//								&& (dirTest == 2
+//									|| dirTest == 6)))))
+				{
+					return 255; // hardblock.
+				} */
 			}
 			else if (_powerT < tile->getMapData(part)->getArmor())
 				return 255;
@@ -3564,21 +3627,8 @@ int TileEngine::blockage(
 				return 255;
 			}
 		}
-/*		else //if (dir == -1) // west/north wall or floor.
-		{
-			if (((type == DT_NONE
-						|| type == DT_SMOKE
-						|| type == DT_STUN
-						|| type == DT_IN)
-					&& (tile->getMapData(part)->getObjectType() == MapData::O_FLOOR
-						|| tile->getMapData(part)->stopLOS()))
-				|| _powerT < tile->getMapData(part)->getArmor())
-			{
-				return 255; // hardblock.
-			}
-		} */
 
-		if (type != DT_NONE) // FoV is blocked above, or gets a pass here
+		if (type != DT_NONE) // FoV is blocked above, or gets a pass here ( ie. vs Content )
 		{
 			int ret = tile->getMapData(part)->getBlock(type);
 			//Log(LOG_INFO) << "TileEngine::blockage() EXIT, ret = " << ret;

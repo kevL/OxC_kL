@@ -113,9 +113,6 @@ TargetInfoState::TargetInfoState(
 //kL	_txtTitle->setWordWrap(true);
 	_txtTitle->setText(_target->getName(_game->getLanguage()));
 
-	_edtBase->setColor(Palette::blockOffset(15)+1);
-	_edtBase->onKeyboardPress((ActionHandler)& TargetInfoState::edtBaseKeyPress);
-
 	_edtBase->setVisible(false);
 	for (std::vector<AlienBase*>::const_iterator
 			ab = _game->getSavedGame()->getAlienBases()->begin();
@@ -128,6 +125,9 @@ TargetInfoState::TargetInfoState(
 
 			std::wstring ws = Language::utf8ToWstr((*ab)->getEdit());
 			_edtBase->setText(ws);
+
+			_edtBase->setColor(Palette::blockOffset(15)+1);
+			_edtBase->onKeyboardPress((ActionHandler)& TargetInfoState::edtBaseKeyPress);
 
 			_edtBase->setVisible(true);
 
@@ -181,6 +181,9 @@ TargetInfoState::~TargetInfoState()
  */
 void TargetInfoState::edtBaseKeyPress(Action* action)
 {
+//	if (!_ab)
+//		return;
+
 	if (action->getDetails()->key.keysym.sym == SDLK_RETURN
 		|| action->getDetails()->key.keysym.sym == SDLK_KP_ENTER)
 	{
@@ -195,8 +198,11 @@ void TargetInfoState::edtBaseKeyPress(Action* action)
  */
 void TargetInfoState::btnInterceptClick(Action*)
 {
-	std::string s = Language::wstrToUtf8(_edtBase->getText());
-	_ab->setEdit(s);
+	if (_ab)
+	{
+		std::string s = Language::wstrToUtf8(_edtBase->getText());
+		_ab->setEdit(s);
+	}
 
 	_state->timerReset();
 
@@ -214,8 +220,11 @@ void TargetInfoState::btnInterceptClick(Action*)
  */
 void TargetInfoState::btnOkClick(Action*)
 {
-	std::string s = Language::wstrToUtf8(_edtBase->getText());
-	_ab->setEdit(s);
+	if (_ab)
+	{
+		std::string s = Language::wstrToUtf8(_edtBase->getText());
+		_ab->setEdit(s);
+	}
 
 	_game->popState();
 }

@@ -554,14 +554,13 @@ bool BattlescapeGame::kneel(
 void BattlescapeGame::endTurn()
 {
 	//Log(LOG_INFO) << "BattlescapeGame::endTurn()";
-
-	_tuReserved = _playerTUReserved;
-	_debugPlay = false;
-	_AISecondMove = false;
+	_tuReserved		= _playerTUReserved;
+	_debugPlay		= false;
+	_AISecondMove	= false;
 	_parentState->showLaunchButton(false);
 
-	_currentAction.targeting = false;
-	_currentAction.type = BA_NONE;
+	_currentAction.targeting	= false;
+	_currentAction.type			= BA_NONE;
 	_currentAction.waypoints.clear();
 
 	getMap()->getWaypoints()->clear();
@@ -1566,30 +1565,34 @@ bool BattlescapeGame::checkReservedTU(
 {
     BattleActionType effectiveTuReserved = _tuReserved; // avoid changing _tuReserved in this method
 
-	if (_save->getSide() != FACTION_PLAYER) // aliens reserve TUs as a percentage rather than just enough for a single action.
+	// aLiens reserve TUs as a percentage rather than just enough for a single action.
+	if (_save->getSide() != FACTION_PLAYER)
 	{
 		if (_save->getSide() == FACTION_NEUTRAL)
-		{
-			return tu < bu->getTimeUnits();
-		}
+			return (tu < bu->getTimeUnits());
 
+		// kL_note: This could use some tweaking, for the poor aLiens:
 		switch (effectiveTuReserved)
 		{
 			case BA_SNAPSHOT:
-				return tu + (bu->getStats()->tu / 3) < bu->getTimeUnits();			// 33%
+				return (tu + (bu->getStats()->tu / 3) < bu->getTimeUnits());		// 33%
 			break;
 			case BA_AUTOSHOT:
-				return tu + ((bu->getStats()->tu / 5) * 2) < bu->getTimeUnits();	// 40%
+//kL				return (tu + ((bu->getStats()->tu / 5) * 2) < bu->getTimeUnits());
+				return (tu + ((bu->getStats()->tu * 2) / 5) < bu->getTimeUnits());	// 40%
 			break;
 			case BA_AIMEDSHOT:
-				return tu + (bu->getStats()->tu / 2) < bu->getTimeUnits();			// 50%
+				return (tu + (bu->getStats()->tu / 2) < bu->getTimeUnits());		// 50%
 			break;
 
 			default:
-				return tu < bu->getTimeUnits();
+				return (tu < bu->getTimeUnits());
 			break;
 		}
 	}
+
+	// ** Below here is for xCom soldiers exclusively ***
+	// ( which i don't care about )
 
 	// check TUs against slowest weapon if we have two weapons
 	BattleItem* slowestWeapon = bu->getMainHandWeapon(false);
@@ -1598,6 +1601,7 @@ bool BattlescapeGame::checkReservedTU(
 	// returns grenades and that can easily cause problems. Probably could cause
 	// problems for xCom too, if xCom wants to reserve TU's in this manner.
 	// note: won't return grenades anymore.
+	// note note: did more work on getMainHandWeapon()
 
 	// if the weapon has no autoshot, reserve TUs for snapshot
 	if (bu->getActionTUs(_tuReserved, slowestWeapon) == 0
@@ -1606,7 +1610,7 @@ bool BattlescapeGame::checkReservedTU(
 		effectiveTuReserved = BA_SNAPSHOT;
 	}
 
-	const int tuKneel = _kneelReserved? 4:0;
+	const int tuKneel = _kneelReserved? 4: 0;
 	if ((effectiveTuReserved != BA_NONE || _kneelReserved)
 		&& tu + tuKneel + bu->getActionTUs(effectiveTuReserved, slowestWeapon) > bu->getTimeUnits()
 		&& tuKneel + bu->getActionTUs(effectiveTuReserved, slowestWeapon) <= bu->getTimeUnits())
@@ -2230,7 +2234,6 @@ void BattlescapeGame::secondaryAction(const Position& pos)
 void BattlescapeGame::launchAction()
 {
 	//Log(LOG_INFO) << "BattlescapeGame::launchAction()";
-
 	_parentState->showLaunchButton(false);
 
 	getMap()->getWaypoints()->clear();
@@ -2916,7 +2919,7 @@ bool BattlescapeGame::takeItem(
 
 /**
  * Returns the action type that is reserved.
- * @return The type of action that is reserved.
+ * @return, The type of action that is reserved.
  */
 BattleActionType BattlescapeGame::getReservedAction()
 {

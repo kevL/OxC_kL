@@ -47,7 +47,9 @@ UnitTurnBState::UnitTurnBState(
 		BattlescapeGame* parent,
 		BattleAction action)
 	:
-		BattleState(parent, action),
+		BattleState(
+			parent,
+			action),
 		_unit(0),
 		_turret(false)
 {
@@ -86,9 +88,13 @@ void UnitTurnBState::init()
 			&& (_action.strafe
 				|| _action.targeting);
 
-	_unit->lookAt( // -> STATUS_TURNING
-				_action.target,
-				_turret);
+	if (_unit->getPosition().x != _action.target.x		// kL
+		|| _unit->getPosition().y != _action.target.y)	// kL
+	{
+		_unit->lookAt( // -> STATUS_TURNING
+					_action.target,
+					_turret);
+	}
 
 
 	if (_unit->getStatus() != STATUS_TURNING) // try to open a door

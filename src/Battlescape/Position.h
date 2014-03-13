@@ -32,7 +32,10 @@ namespace OpenXcom
 class Position
 {
 public:
-	int x, y, z;
+	int
+		x,
+		y,
+		z;
 
 	/// Null position constructor.
 	Position()
@@ -43,7 +46,10 @@ public:
 	{
 	};
 	/// X Y Z position constructor.
-	Position(int x_, int y_, int z_)
+	Position(
+			int x_,
+			int y_,
+			int z_)
 		:
 			x(x_),
 			y(y_),
@@ -61,16 +67,22 @@ public:
 
 	Position& operator= (const Position& pos)
 	{
-		x = pos.x;
-		y = pos.y;
-		z = pos.z;
+		if (this != &pos) // kL: cf. Unit.h
+		{
+			x = pos.x;
+			y = pos.y;
+			z = pos.z;
+		}
 
 		return *this;
 	}
 
 	Position operator+ (const Position& pos) const
 	{
-		return Position(x + pos.x, y + pos.y, z + pos.z);
+		return Position(
+						x + pos.x,
+						y + pos.y,
+						z + pos.z);
 	}
 	Position& operator+= (const Position& pos)
 	{
@@ -83,20 +95,26 @@ public:
 
 	Position operator- (const Position& pos) const
 	{
-		return Position(x - pos.x, y - pos.y, z - pos.z);
+		return Position(
+						x - pos.x,
+						y - pos.y,
+						z - pos.z);
 	}
 	Position& operator-= (const Position& pos)
 	{
-		x-=pos.x;
-		y-=pos.y;
-		z-=pos.z;
+		x -= pos.x;
+		y -= pos.y;
+		z -= pos.z;
 
 		return *this;
 	}
 
 	Position operator* (const Position& pos) const
 	{
-		return Position(x * pos.x, y * pos.y, z * pos.z);
+		return Position(
+						x * pos.x,
+						y * pos.y,
+						z * pos.z);
 	}
 	Position& operator*= (const Position& pos)
 	{
@@ -108,7 +126,10 @@ public:
 	}
 	Position operator* (const int v) const
 	{
-		return Position(x * v, y * v, z * v);
+		return Position(
+						x * v,
+						y * v,
+						z * v);
 	}
 	Position& operator*= (const int v)
 	{
@@ -121,7 +142,10 @@ public:
 
 	Position operator/ (const Position& pos) const
 	{
-		return Position(x / pos.x, y / pos.y, z / pos.z);
+		return Position(
+						x / pos.x,
+						y / pos.y,
+						z / pos.z);
 	}
 	Position& operator/= (const Position& pos)
 	{
@@ -133,7 +157,10 @@ public:
 	}
     Position operator/ (const int v) const
 	{
-		return Position(x / v, y / v, z / v);
+		return Position(
+						x / v,
+						y / v,
+						z / v);
 	}
 	Position& operator/= (const int v) // kL_begin:
 	{
@@ -147,24 +174,34 @@ public:
 	/// == operator
     bool operator== (const Position& pos) const
 	{
-		return x == pos.x && y == pos.y && z == pos.z;
+		return
+			   x == pos.x
+			&& y == pos.y
+			&& z == pos.z;
 	}
 
 	/// != operator
     bool operator!= (const Position& pos) const
 	{
-		return x != pos.x || y != pos.y || z != pos.z;
+		return
+			   x != pos.x
+			|| y != pos.y
+			|| z != pos.z;
 	}
 };
 
-inline std::ostream& operator<< (std::ostream& out, const Position& pos)
+inline std::ostream& operator<< (
+		std::ostream& out,
+		const Position& pos)
 {
 	out << "(" << pos.x << "," << pos.y << "," << pos.z << ")";
 
 	return out;
 }
 
-inline std::wostream& operator<< (std::wostream& wout, const Position& pos)
+inline std::wostream& operator<< (
+		std::wostream& wout,
+		const Position& pos)
 {
 	wout << "(" << pos.x << "," << pos.y << "," << pos.z << ")";
 
@@ -192,7 +229,9 @@ struct convert<OpenXcom::Position>
 		return node;
 	}
 
-	static bool decode(const Node& node, OpenXcom::Position& rhs)
+	static bool decode(
+			const Node& node,
+			OpenXcom::Position& rhs)
 	{
 		if (!node.IsSequence() || node.size() != 3)
 			return false;

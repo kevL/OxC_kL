@@ -398,12 +398,12 @@ void Map::drawTerrain(Surface* surface)
 
 	bool invalid = false;
 	int
-		bulletLowX = 16000,
-		bulletLowY = 16000,
-		bulletLowZ = 16000,
-		bulletHighX = 0,
-		bulletHighY = 0,
-		bulletHighZ = 0,
+		bulletLowX	= 16000,
+		bulletLowY	= 16000,
+		bulletLowZ	= 16000,
+		bulletHighX	= 0,
+		bulletHighY	= 0,
+		bulletHighZ	= 0,
 
 		frame	= 0,
 		d		= 0,
@@ -454,10 +454,11 @@ void Map::drawTerrain(Surface* surface)
 				bulletHighZ = _projectile->getPosition(1 - i).z;
 		}
 
-		// divide by 16 to go from voxel to tile position
-		bulletLowX = bulletLowX / 16;
-		bulletLowY = bulletLowY / 16;
-		bulletLowZ = bulletLowZ / 24;
+		// convert bullet position from voxelspace to tilespace
+		bulletLowX	= bulletLowX  / 16;
+		bulletLowY	= bulletLowY  / 16;
+		bulletLowZ	= bulletLowZ  / 24;
+
 		bulletHighX = bulletHighX / 16;
 		bulletHighY = bulletHighY / 16;
 		bulletHighZ = bulletHighZ / 24;
@@ -588,8 +589,12 @@ void Map::drawTerrain(Surface* surface)
 		{
 //kL			if (_smoothCamera)
 			// kL_begin:
-			if (_projectile->getActor()->getFaction() != FACTION_PLAYER			// non-xCom projectile.
-				|| _projectile->getActor()->getFaction() != _save->getSide())	// reaction fire, xCom or not.
+/*			if (// !_camera->isOnScreen(origin) // if one or both actor & target are offscreen
+					// || !_camera->isOnScreen(target) &&
+				_projectile->getActor()->getFaction() != FACTION_PLAYER // non-xCom projectile
+				|| _projectile->getActor()->getFaction() != _save->getSide() // reaction fire, xCom or not.
+				|| _save->getBattleGame()->getCurrentAction()->type == BA_LAUNCH
+				|| _save->getBattleGame()->getCurrentAction()->type == BA_THROW) */
 //			_save->getSelectedUnit()
 //					&& _save->getSelectedUnit()->getFaction() != FACTION_PLAYER)
 //				|| _save->getSide() != _save->getSelectedUnit()->getFaction())
@@ -597,10 +602,13 @@ void Map::drawTerrain(Surface* surface)
 			{
 //				_camera->centerOnPosition(_unit->getPosition());
 // kL_end.
+				Position origin = _projectile->getOrigin(); // kL, from below
+				Position target = _projectile->getTarget(); // kL, from below
+
 				if (!_smoothingEngaged)
 				{
-					Position origin = _projectile->getOrigin();
-					Position target = _projectile->getTarget();
+//kL					Position origin = _projectile->getOrigin();
+//kL					Position target = _projectile->getTarget();
 
 					if (   std::abs(origin.x - target.x) > 1
 						|| std::abs(origin.y - target.y) > 1
@@ -614,9 +622,30 @@ void Map::drawTerrain(Surface* surface)
 					}
 				}
 				else
+				{
 					_camera->jumpXY(
 								surface->getWidth() / 2 - bulletPosScreen.x,
 								_visibleMapHeight / 2 - bulletPosScreen.y);
+
+//					if (_camera->getViewLevel() < target.z)		// kL
+//					if (_camera->getViewLevel() != target.z)	// kL
+//						_camera->setViewLevel(target.z);		// kL
+/*					if (origin.z != target.z)
+					{
+						if (origin.z > target.z)
+							_camera->setViewLevel(origin.z);
+						else
+							_camera->setViewLevel(target.z);
+					} */
+					int posBullet_z = _projectile->getPosition().z / 24;
+					if (_camera->getViewLevel() != posBullet_z)
+					{
+						if (_camera->getViewLevel() > posBullet_z)
+							_camera->setViewLevel(posBullet_z);
+						else
+							_camera->setViewLevel(posBullet_z);
+					}
+				}
 			}
 			// kL_note: Camera remains stationary when xCom actively fires at target.
 			// That is, Target is already onScreen due to targetting cursor click!
@@ -699,7 +728,8 @@ void Map::drawTerrain(Surface* surface)
 	{
 		_numWaypid = new NumberText(15, 15, 20, 30);
 		_numWaypid->setPalette(getPalette());
-		_numWaypid->setColor(Palette::blockOffset(pathfinderTurnedOn? 0: 1));
+//kL		_numWaypid->setColor(Palette::blockOffset(pathfinderTurnedOn? 0: 1));
+		_numWaypid->setColor(16); // kL, lt.orange
 	}
 
 	surface->lock();
@@ -1476,18 +1506,16 @@ void Map::drawTerrain(Surface* surface)
 
 						if (_previewSetting > 1)
 						{
+							Uint8 wpColor = 1; // white
+							// kL_note: Set pathfinder/ pathPreview number color.
+							if (_save->getTerrain() == "POLAR")
+								wpColor = 15; // black
+							_numWaypid->setColor(wpColor); // kL
+//							_numWaypid->setColor(Palette::blockOffset(12)+8); // kL, lavender
+
 							int tuMarker = std::max(
 												0,
 												tile->getTUMarker());
-
-							// kL_note: Set pathfinder/ pathpreview number color.
-							//Log(LOG_INFO) << "Map::drawTerrain() mapname = " << _ruleTerrain->getName();
-//							if (_ruleTerrain->getName() == "STR_POLAR")
-//								wpColor = 15;
-							_numWaypid->setColor(Palette::blockOffset(12)+8); // kL
-
-							//Log(LOG_INFO) << "Map::drawTerrain() terrain = " << _game->getRuleset()->getTerrain("POLAR")->getName();
-
 							_numWaypid->setValue(tuMarker);
 							_numWaypid->draw();
 
@@ -1498,7 +1526,7 @@ void Map::drawTerrain(Surface* surface)
 							_numWaypid->blitNShade(
 									surface,
 									screenPosition.x + 16 - off,
-									screenPosition.y + (50 - adjustment),
+									screenPosition.y + 50 - adjustment,
 									0);
 						}
 					}
@@ -1754,8 +1782,8 @@ void Map::calculateWalkingOffset(
 		Position* offset)
 {
 	int
-		offsetX[8] = {1, 1,  1,  0, -1, -1, -1, 0},
-		offsetY[8] = {1, 0, -1, -1, -1,  0,  1, 1},
+		offsetX[8] = {1, 1, 1, 0,-1,-1,-1, 0},
+		offsetY[8] = {1, 0,-1,-1,-1, 0, 1, 1},
 
 		phase = unit->getWalkingPhase() + unit->getDiagonalWalkingPhase(),
 

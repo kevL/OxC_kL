@@ -727,8 +727,8 @@ bool Projectile::move()
 
 /**
  * Gets the current position in voxel space.
- * @param offset Offset.
- * @return Position in voxel space.
+ * @param offset, Offset.
+ * @return, Position in voxel space.
  */
 Position Projectile::getPosition(int offset) const
 {

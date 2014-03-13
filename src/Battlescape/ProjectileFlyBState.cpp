@@ -239,7 +239,9 @@ void ProjectileFlyBState::init()
 	// for Silacoid attack, etc.
 	// kL_note: not sure that melee reactionFire is properly implemented...
 	if (_action.weapon->getRules()->getBattleType() == BT_MELEE
-		&& _action.type == BA_SNAPSHOT)
+		&& (_action.type == BA_SNAPSHOT
+			|| _action.type == BA_AUTOSHOT		// kL
+			|| _action.type == BA_AIMEDSHOT))	// kL
 	{
 		//Log(LOG_INFO) << ". convert BA_SNAPSHOT to BA_HIT";
 		_action.type = BA_HIT;
@@ -727,8 +729,20 @@ void ProjectileFlyBState::think()
 		}
 		else // end think()
 		{
+			// kL_note: Don't return camera to its pre-firing position.
+			// that is, leave it wherever the projectile hits... (or try to.)
 			if (_action.cameraPosition.z != -1)
-				_parent->getMap()->getCamera()->setMapOffset(_action.cameraPosition);
+//kL				_parent->getMap()->getCamera()->setMapOffset(_action.cameraPosition);
+			{
+//				Position targetFinal = _action.target;
+//				targetFinal.x *= 16;
+//				targetFinal.y *= 16;
+//				targetFinal.z *= 24;
+//				targetFinal.x = -(targetFinal.x * 16) - 8;
+//				targetFinal.y = targetFinal.y * 16 + 8;
+
+				_parent->getMap()->getCamera()->setMapOffset(_parent->getMap()->getCamera()->getMapOffset()); // kL
+			}
 
 			if (_action.actor->getFaction() == _parent->getSave()->getSide() // kL
 				&& _action.type != BA_PANIC
@@ -1028,8 +1042,9 @@ bool ProjectileFlyBState::validThrowRange(
 	// Throwing Distance was roughly = 2.5 \D7 Strength / Weight
 //	double range = 2.63 * static_cast<double>(action->actor->getStats()->strength / action->weapon->getRules()->getWeight()); // old code.
 
-	int delta_x = action->actor->getPosition().x - action->target.x;
-	int delta_y = action->actor->getPosition().y - action->target.y;
+	int
+		delta_x = action->actor->getPosition().x - action->target.x,
+		delta_y = action->actor->getPosition().y - action->target.y;
 	double throwDist = sqrt(static_cast<double>((delta_x * delta_x) + (delta_y * delta_y)));
 
 	// throwing off a building of 1 level lets you throw 2 tiles further than normal range,
@@ -1062,8 +1077,9 @@ int ProjectileFlyBState::getMaxThrowDistance(
 		int level)
 {
 	//Log(LOG_INFO) << "ProjectileFlyBState::getMaxThrowDistance()";
-	double curZ = static_cast<double>(level) + 0.5;
-	double delta_z = 1.0;
+	double
+		curZ = static_cast<double>(level) + 0.5,
+		delta_z = 1.0;
 
 	int dist = 0;
 	while (dist < 4000) // just in case

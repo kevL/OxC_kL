@@ -37,13 +37,13 @@ namespace OpenXcom
 
 /**
  * Sets up a camera.
- * @param spriteWidth Width of map sprite.
- * @param spriteHeight Height of map sprite.
- * @param mapsize_x Current map size in X axis.
- * @param mapsize_y Current map size in Y axis.
- * @param mapsize_z Current map size in Z axis.
- * @param map Pointer to map surface.
- * @param visibleMapHeight Current height the view is at.
+ * @param spriteWidth, Width of map sprite.
+ * @param spriteHeight, Height of map sprite.
+ * @param mapsize_x, Current map size in X axis.
+ * @param mapsize_y, Current map size in Y axis.
+ * @param mapsize_z, Current map size in Z axis.
+ * @param map, Pointer to map surface.
+ * @param visibleMapHeight, Current height the view is at.
  */
 Camera::Camera(
 		int spriteWidth,
@@ -361,9 +361,9 @@ void Camera::scrollKey()
 
 /**
  * Handles scrolling with given deviation.
- * @param x X deviation.
- * @param y Y deviation.
- * @param redraw Redraw map or not.
+ * @param x, X deviation.
+ * @param y, Y deviation.
+ * @param redraw, Redraw map or not.
  */
 void Camera::scrollXY(
 		int x,
@@ -392,7 +392,7 @@ void Camera::scrollXY(
 			continue;
 		}
 
-		if (_center.x > _mapsize_x -1)
+		if (_center.x > _mapsize_x - 1)
 		{
 			_mapOffset.x += 2;
 			_mapOffset.y += 1;
@@ -408,7 +408,7 @@ void Camera::scrollXY(
 			continue;
 		}
 
-		if (_center.y > _mapsize_y -1)
+		if (_center.y > _mapsize_y - 1)
 		{
 			_mapOffset.x -= 2;
 			_mapOffset.y += 1;
@@ -537,7 +537,7 @@ void Camera::centerOnPosition(
 
 /**
  * Gets map's center position.
- * @return Map's center position.
+ * @return, Map's center position.
  */
 Position Camera::getCenterPosition()
 {
@@ -548,10 +548,10 @@ Position Camera::getCenterPosition()
 
 /**
  * Converts screen coordinates to map coordinates.
- * @param screenX Screen x position.
- * @param screenY Screen y position.
- * @param mapX Map x position.
- * @param mapY Map y position.
+ * @param screenX, Screen x position.
+ * @param screenY, Screen y position.
+ * @param mapX, Map x position.
+ * @param mapY, Map y position.
  */
 void Camera::convertScreenToMap(
 		int screenX,
@@ -560,12 +560,12 @@ void Camera::convertScreenToMap(
 		int* mapY) const
 {
 	// add half a tileheight to the mouseposition per layer we are above the floor
-	screenY += (-_spriteWidth/2) + (_mapOffset.z) * ((_spriteHeight + _spriteWidth / 4) / 2);
+	screenY += (-_spriteWidth / 2) + (_mapOffset.z) * ((_spriteHeight + _spriteWidth / 4) / 2);
 
 	// calculate the actual x/y pixelposition on a diamond shaped map
 	// taking the view offset into account
 	*mapY = - screenX + _mapOffset.x + 2 * screenY - 2 * _mapOffset.y;
-	*mapX = screenY - _mapOffset.y - *mapY / 4 - (_spriteWidth/4);
+	*mapX = screenY - _mapOffset.y - (*mapY) / 4 - (_spriteWidth / 4);
 
 	// to get the row&col itself, divide by the size of a tile
 	*mapX /= (_spriteWidth / 4);
@@ -583,8 +583,8 @@ void Camera::convertScreenToMap(
 
 /**
  * Converts map coordinates X,Y,Z to screen positions X, Y.
- * @param mapPos X,Y,Z coordinates on the map.
- * @param screenPos Screen position.
+ * @param mapPos, X,Y,Z coordinates on the map.
+ * @param screenPos, Screen position.
  */
 void Camera::convertMapToScreen(
 		const Position& mapPos,
@@ -597,8 +597,8 @@ void Camera::convertMapToScreen(
 
 /**
  * Converts voxel coordinates X,Y,Z to screen positions X, Y.
- * @param voxelPos X,Y,Z coordinates of the voxel.
- * @param screenPos Screen position.
+ * @param voxelPos, X,Y,Z coordinates of the voxel.
+ * @param screenPos, Screen position.
  */
 void Camera::convertVoxelToScreen(
 		const Position& voxelPos,
@@ -608,11 +608,14 @@ void Camera::convertVoxelToScreen(
 								voxelPos.x / 16,
 								voxelPos.y / 16,
 								voxelPos.z / 24);
-	convertMapToScreen(mapPosition, screenPos);
+	convertMapToScreen(
+					mapPosition,
+					screenPos);
 
-	double dx = voxelPos.x - (mapPosition.x * 16);
-	double dy = voxelPos.y - (mapPosition.y * 16);
-	double dz = voxelPos.z - (mapPosition.z * 24);
+	double
+		dx = voxelPos.x - (mapPosition.x * 16),
+		dy = voxelPos.y - (mapPosition.y * 16),
+		dz = voxelPos.z - (mapPosition.z * 24);
 
 	screenPos->x += static_cast<int>(dx - dy) + (_spriteWidth / 2);
 	screenPos->y += static_cast<int>(((static_cast<double>(_spriteHeight) / 2.0)) + (dx / 2.0) + (dy / 2.0) - dz);
@@ -622,7 +625,7 @@ void Camera::convertVoxelToScreen(
 
 /**
  * Gets the map size x.
- * @return The map size x.
+ * @return, The map size x.
  */
 int Camera::getMapSizeX() const
 {
@@ -631,7 +634,7 @@ int Camera::getMapSizeX() const
 
 /**
  * Gets the map size y.
- * @return The map size y.
+ * @return, The map size y.
  */
 int Camera::getMapSizeY() const
 {
@@ -640,7 +643,7 @@ int Camera::getMapSizeY() const
 
 /**
  * Gets the map offset.
- * @return The map offset.
+ * @return, The map offset.
  */
 Position Camera::getMapOffset()
 {
@@ -649,7 +652,7 @@ Position Camera::getMapOffset()
 
 /**
  * Sets the map offset.
- * @param pos The map offset.
+ * @param pos, The map offset.
  */
 void Camera::setMapOffset(Position pos)
 {

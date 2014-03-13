@@ -1818,7 +1818,8 @@ bool Pathfinding::previewPath(bool bRemove)
 	{
 		switchBack = true;
 		_save->getBattleGame()->setTUReserved(
-											BA_AUTOSHOT,
+//kL											BA_AUTOSHOT,
+											BA_SNAPSHOT, // kL
 											false);
 	}
 
@@ -1827,9 +1828,9 @@ bool Pathfinding::previewPath(bool bRemove)
 	_modifierUsed = (SDL_GetModState() & KMOD_CTRL) != 0;
 	bool
 		dash = _save->getStrafeSetting()
-			&& _modifierUsed
-			&& !size
-			&& _path.size() > 1,	// <- not exactly true. If moving around a corner 2 tiles, it
+				&& _modifierUsed
+				&& !size
+				&& _path.size() > 1,	// <- not exactly true. If moving around a corner 2 tiles, it
 										// will strafe (potential conflict). See WalkBState also or ...
 		bLaden		= armorType == "STR_PERSONAL_ARMOR_UC",
 		bPowered	= armorType == "STR_POWER_SUIT_UC",

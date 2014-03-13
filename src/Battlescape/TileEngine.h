@@ -71,7 +71,8 @@ private:
 			Tile* tile,
 			const int part,
 			ItemDamageType type,
-			int dir = -1);
+			int dir = -1, // kL_note: should change this to 'bool isObject'-type
+			int dirTest = -1); // kL_add.
 
 
 	public:

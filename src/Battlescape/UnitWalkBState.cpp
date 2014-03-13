@@ -1059,7 +1059,12 @@ bool UnitWalkBState::visForUnits()
 void UnitWalkBState::setNormalWalkSpeed()
 {
 	if (_unit->getFaction() == FACTION_PLAYER)
+	{
 		_parent->setStateInterval(static_cast<Uint32>(Options::getInt("battleXcomSpeed")));
+
+		if (_unit->getDashing())
+			_parent->setStateInterval(static_cast<Uint32>(Options::getInt("battleXcomSpeed") * 3 / 4)); // kL
+	}
 	else
 		_parent->setStateInterval(static_cast<Uint32>(Options::getInt("battleAlienSpeed")));
 }

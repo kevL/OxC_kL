@@ -1334,6 +1334,8 @@ void SavedBattleGame::randomizeItemLocations(Tile* t)
  */
 void SavedBattleGame::removeItem(BattleItem* item)
 {
+	//Log(LOG_INFO) << "SavedBattleGame::removeItem()";
+
 	// due to strange design, the item has to be removed from the tile it is on too (if it is on a tile)
 	BattleUnit* b = item->getOwner();
 	Tile* t = item->getTile();
@@ -1377,6 +1379,7 @@ void SavedBattleGame::removeItem(BattleItem* item)
 		{
 			_items.erase(i);
 
+			//Log(LOG_INFO) << "SavedBattleGame::removeItem() [1]EXIT";
 			return;
 		}
 	}
@@ -1393,6 +1396,7 @@ void SavedBattleGame::removeItem(BattleItem* item)
 			++it;
 		}
 	} */
+	//Log(LOG_INFO) << "SavedBattleGame::removeItem() [2]EXIT";
 }
 
 /**

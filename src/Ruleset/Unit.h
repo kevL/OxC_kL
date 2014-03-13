@@ -111,7 +111,7 @@ struct UnitStats
 
 		UnitStats& operator+=(const UnitStats& stats)
 		{
-			if (this != &stats) // kL
+			if (this != &stats) // kL: cf. Position.h
 			{
 				tu			+= stats.tu;
 				stamina		+= stats.stamina;
