@@ -147,6 +147,22 @@ research:
     dependencies:
       - STR_POWER_SUIT
       - STR_UFO_NAVIGATION
+  - name: STR_ALIEN_CONTAINMENT
+    cost: 1500
+    points: 15
+    dependencies:
+      - STR_ZOMBIE_CORPSE
+      - STR_CELATID_CORPSE
+      - STR_ETHEREAL_CORPSE
+      - STR_SILACOID_CORPSE
+      - STR_REAPER_CORPSE
+      - STR_SNAKEMAN_CORPSE
+      - STR_SECTOID_CORPSE
+      - STR_SECTOPOD_CORPSE
+      - STR_MUTON_CORPSE
+      - STR_FLOATER_CORPSE
+      - STR_CYBERDISC_CORPSE
+      - STR_CHRYSSALID_CORPSE
   - name: STR_MIND_PROBE
     cost: 60000
     points: 25
@@ -162,10 +178,7 @@ research:
     points: 25
     dependencies:
       - STR_ETHEREAL_COMMANDER
-      - STR_ETHEREAL_ENGINEER
       - STR_ETHEREAL_LEADER
-      - STR_ETHEREAL_MEDIC
-      - STR_ETHEREAL_NAVIGATOR
       - STR_ETHEREAL_SOLDIER
       - STR_SECTOID_LEADER
       - STR_SECTOID_COMMANDER
@@ -246,6 +259,8 @@ research:
   - name: STR_HYPER_WAVE_DECODER
     cost: 67000
     points: 25
+    requires:
+      - STR_UFO_NAVIGATION
     dependencies:
       - STR_FLOATER_NAVIGATOR
       - STR_SNAKEMAN_NAVIGATOR
@@ -317,61 +332,85 @@ research:
     points: 50
     lookup: STR_ZOMBIE_AUTOPSY
     needItem: true
+    unlocks:
+      - STR_ALIEN_CONTAINMENT
   - name: STR_CELATID_CORPSE
     cost: 1800
     points: 50
     lookup: STR_CELATID_AUTOPSY
     needItem: true
+    unlocks:
+      - STR_ALIEN_CONTAINMENT
   - name: STR_ETHEREAL_CORPSE
     cost: 1800
     points: 50
     lookup: STR_ETHEREAL_AUTOPSY
     needItem: true
+    unlocks:
+      - STR_ALIEN_CONTAINMENT
   - name: STR_SILACOID_CORPSE
     cost: 1800
     points: 50
     lookup: STR_SILACOID_AUTOPSY
     needItem: true
+    unlocks:
+      - STR_ALIEN_CONTAINMENT
   - name: STR_REAPER_CORPSE
     cost: 1800
     points: 50
     lookup: STR_REAPER_AUTOPSY
     needItem: true
+    unlocks:
+      - STR_ALIEN_CONTAINMENT
   - name: STR_SNAKEMAN_CORPSE
     cost: 1800
     points: 50
     lookup: STR_SNAKEMAN_AUTOPSY
     needItem: true
+    unlocks:
+      - STR_ALIEN_CONTAINMENT
   - name: STR_SECTOID_CORPSE
     cost: 1800
     points: 50
     lookup: STR_SECTOID_AUTOPSY
     needItem: true
+    unlocks:
+      - STR_ALIEN_CONTAINMENT
   - name: STR_SECTOPOD_CORPSE
     cost: 1800
     points: 50
     lookup: STR_SECTOPOD_AUTOPSY
     needItem: true
+    unlocks:
+      - STR_ALIEN_CONTAINMENT
   - name: STR_MUTON_CORPSE
     cost: 1800
     points: 50
     lookup: STR_MUTON_AUTOPSY
     needItem: true
+    unlocks:
+      - STR_ALIEN_CONTAINMENT
   - name: STR_FLOATER_CORPSE
     cost: 1800
     points: 50
     lookup: STR_FLOATER_AUTOPSY
     needItem: true
+    unlocks:
+      - STR_ALIEN_CONTAINMENT
   - name: STR_CYBERDISC_CORPSE
     cost: 1800
     points: 50
     lookup: STR_CYBERDISC_AUTOPSY
     needItem: true
+    unlocks:
+      - STR_ALIEN_CONTAINMENT
   - name: STR_CHRYSSALID_CORPSE
     cost: 1800
     points: 50
     lookup: STR_CHRYSSALID_AUTOPSY
     needItem: true
+    unlocks:
+      - STR_ALIEN_CONTAINMENT
   - name: STR_FLOATER_SOLDIER
     cost: 192
     points: 50

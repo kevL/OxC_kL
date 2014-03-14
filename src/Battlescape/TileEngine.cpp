@@ -5166,8 +5166,6 @@ Position TileEngine::getOriginVoxel(
 								origin.y * 16,
 								origin.z * 24);
 
-	Tile* tileAbove = _save->getTile(origin + Position(0, 0, 1));
-
 	// take into account soldier height and terrain level if the projectile is launched from a soldier
 	if (action.actor->getPosition() == origin
 		|| action.type != BA_LAUNCH)
@@ -5188,6 +5186,7 @@ Position TileEngine::getOriginVoxel(
 
 		if (originVoxel.z >= (origin.z + 1) * 24)
 		{
+			Tile* tileAbove = _save->getTile(origin + Position(0, 0, 1));
 			if (tileAbove
 				&& tileAbove->hasNoFloor(0))
 			{

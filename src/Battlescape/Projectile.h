@@ -104,10 +104,11 @@ private:
 		/// Gets the Position of origin for the projectile.
 		Position getOrigin();
 		/// Gets the targetted tile for the projectile.
-		Position getTarget();
+//kL		Position getTarget();
+		Position getTarget() const; // kL
 
 		/// kL. Gets a pointer to the BattleAction actor directly.
-		BattleUnit* getActor(); // kL
+		BattleUnit* getActor() const; // kL
 };
 
 }

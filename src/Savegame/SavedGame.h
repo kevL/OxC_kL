@@ -94,7 +94,7 @@ private:
 		_warned;
 	int
 		_globeZoom,
-		_monthsPassed,
+		_monthsPassed;
 //kL		_selectedBase;
 	double
 		_globeLat,

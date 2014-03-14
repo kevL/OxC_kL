@@ -803,7 +803,8 @@ Position Projectile::getOrigin()
  * of the projectile here, but rather the targetted tile.
  * @return, target as a tile position.
  */
-Position Projectile::getTarget()
+//kL Position Projectile::getTarget()
+Position Projectile::getTarget() const // kL
 {
 	return _action.target;
 }
@@ -812,7 +813,7 @@ Position Projectile::getTarget()
  * kL. Gets a pointer to the BattleAction actor directly.
  * @return, Pointer to the acting Battleunit
  */
-BattleUnit* Projectile::getActor() // kL (these could prob. be const)
+BattleUnit* Projectile::getActor() const // kL (these could prob. be const)
 {
 	return _action.actor;
 }

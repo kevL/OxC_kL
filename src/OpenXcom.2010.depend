@@ -242,7 +242,7 @@
 	"begin_code.h"
 	"close_code.h"
 
-1394398507 f:\git\openxcom\src\basescape\basescapestate.h
+1394721775 f:\git\openxcom\src\basescape\basescapestate.h
 	"../Engine/State.h"
 
 1394398507 f:\git\openxcom\src\basescape\minibaseview.h
@@ -4426,12 +4426,12 @@
 	<vector>
 	<yaml-cpp/yaml.h>
 
-1394398507 f:\git\openxcom\src\savegame\savedgame.h
+1394723083 f:\git\openxcom\src\savegame\savedgame.h
 	<map>
 	<string>
 	<vector>
 
-1394398507 source:f:\git\openxcom\src\basescape\basescapestate.cpp
+1394723519 source:f:\git\openxcom\src\basescape\basescapestate.cpp
 	"BasescapeState.h"
 	"BaseInfoState.h"
 	"BaseView.h"
@@ -5140,7 +5140,7 @@
 	"../Savegame/BaseFacility.h"
 	"../Savegame/SavedGame.h"
 
-1394398507 source:f:\git\openxcom\src\basescape\placeliftstate.cpp
+1394722130 source:f:\git\openxcom\src\basescape\placeliftstate.cpp
 	"PlaceLiftState.h"
 	<sstream>
 	"BasescapeState.h"
@@ -6130,7 +6130,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Ufo.h"
 
-1394398507 source:f:\git\openxcom\src\battlescape\camera.cpp
+1394686161 source:f:\git\openxcom\src\battlescape\camera.cpp
 	"Camera.h"
 	<cmath>
 	<fstream>
@@ -6360,7 +6360,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Soldier.h"
 
-1394585201 source:f:\git\openxcom\src\battlescape\map.cpp
+1394688342 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	<cmath>
 	<fstream>
@@ -6398,7 +6398,7 @@
 	"../Ruleset/MapDataSet.h"
 	"../Ruleset/RuleItem.h"
 
-1394546963 f:\git\openxcom\src\battlescape\projectile.h
+1394734237 f:\git\openxcom\src\battlescape\projectile.h
 	<vector>
 	"BattlescapeGame.h"
 	"Position.h"
@@ -6557,7 +6557,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1394546978 source:f:\git\openxcom\src\battlescape\projectile.cpp
+1394734244 source:f:\git\openxcom\src\battlescape\projectile.cpp
 	"Projectile.h"
 	<cmath>
 	"BattlescapeGame.h"
@@ -6583,7 +6583,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1394398507 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
+1394687248 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
 	"ProjectileFlyBState.h"
 	<cmath>
 	"AlienBAIState.h"
@@ -6657,7 +6657,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Interface/Text.h"
 
-1394597830 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1394733936 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	<climits>
 	<cmath>
@@ -6812,7 +6812,7 @@
 	"../Savegame/BattleUnit.h"
 	"../Savegame/SavedBattleGame.h"
 
-1394591658 source:f:\git\openxcom\src\battlescape\unitwalkbstate.cpp
+1394722985 source:f:\git\openxcom\src\battlescape\unitwalkbstate.cpp
 	"UnitWalkBState.h"
 	"BattleAIState.h"
 	"BattlescapeState.h"
@@ -7026,7 +7026,7 @@
 	"OpenGL.h"
 	"Logger.h"
 
-1394542480 source:f:\git\openxcom\src\engine\options.cpp
+1394721265 source:f:\git\openxcom\src\engine\options.cpp
 	"Options.h"
 	<algorithm>
 	<fstream>
@@ -7611,7 +7611,7 @@
 1394398507 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1394398507 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1394722241 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	<assert.h>
 	<algorithm>
@@ -7765,7 +7765,7 @@
 	<string>
 	<vector>
 
-1394478995 source:f:\git\openxcom\src\geoscape\globe.cpp
+1394723020 source:f:\git\openxcom\src\geoscape\globe.cpp
 	"Globe.h"
 	<cmath>
 	<fstream>
@@ -8455,7 +8455,7 @@
 1394398507 f:\git\openxcom\src\menu\optionsbattlescapestate.h
 	"OptionsBaseState.h"
 
-1394398507 source:f:\git\openxcom\src\menu\optionscontrolsstate.cpp
+1394722313 source:f:\git\openxcom\src\menu\optionscontrolsstate.cpp
 	"OptionsControlsState.h"
 	<SDL.h>
 	"../Engine/Action.h"
@@ -9396,7 +9396,7 @@
 	"../Ruleset/RuleResearch.h"
 	"../Ruleset/Ruleset.h"
 
-1394419932 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
+1394652874 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
 	<vector>
 	<deque>
 	<queue>
@@ -9426,7 +9426,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/Ruleset.h"
 
-1394398507 source:f:\git\openxcom\src\savegame\savedgame.cpp
+1394721705 source:f:\git\openxcom\src\savegame\savedgame.cpp
 	"SavedGame.h"
 	<algorithm>
 	<fstream>

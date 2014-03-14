@@ -563,12 +563,10 @@ void BasescapeState::viewRightClick(Action*)
 {
 	BaseFacility* f = _view->getSelectedFacility();
 	if (f == 0)
-	{
 		_game->pushState(new BaseInfoState(
 										_game,
 										_base,
 										this));
-	}
 	else if (f->getRules()->getCrafts() > 0)
 	{
 		if (f->getCraft() == 0)
@@ -651,10 +649,8 @@ void BasescapeState::viewMouseOver(Action*)
 			ss << tr(f->getRules()->getType());
 
 			if (f->getCraft() != 0)
-			{
 				ss << L" " << tr("STR_CRAFT_")
 								.arg(f->getCraft()->getName(_game->getLanguage()));
-			}
 		}
 	}
 
@@ -676,7 +672,7 @@ void BasescapeState::viewMouseOut(Action*)
  */
 void BasescapeState::miniClick(Action*)
 {
-	unsigned int base = _mini->getHoveredBase();
+	unsigned base = _mini->getHoveredBase();
 	if (base < _game->getSavedGame()->getBases()->size())
 	{
 		_mini->setSelectedBase(base);
@@ -717,7 +713,7 @@ void BasescapeState::handleKeyPress(Action* action)
 			base = 7;
 
 		if (base > -1
-			&& base < _game->getSavedGame()->getBases()->size())
+			&& static_cast<unsigned>(base) < _game->getSavedGame()->getBases()->size())
 		{
 			_mini->setSelectedBase(base);
 			_base = _game->getSavedGame()->getBases()->at(base);

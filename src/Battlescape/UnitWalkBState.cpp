@@ -153,7 +153,8 @@ void UnitWalkBState::think()
 			_walkCam->setViewLevel(dest_z);
 		// kL_end.
 
-		if (!doStatusWalk()) return;
+		if (!doStatusWalk())
+			return;
 
 
 	// _oO **** STATUS STANDING end **** Oo_
@@ -175,7 +176,8 @@ void UnitWalkBState::think()
 					_walkCam->setViewLevel(dest_z);
 			} // kL_end.
 
-			if (!doStatusStand_end()) return;
+			if (!doStatusStand_end())
+				return;
 			else
 				_parent->getBattlescapeState()->refreshVisUnits(); // kL
 		}
@@ -225,7 +227,8 @@ void UnitWalkBState::think()
 				_walkCam->setViewLevel(pos_z);
 		} // kL_end.
 
-		if (!doStatusStand()) return;
+		if (!doStatusStand())
+			return;
 	}
 
 

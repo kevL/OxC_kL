@@ -1072,7 +1072,8 @@ std::vector<Target*> Globe::getTargets(
 			// kL: this is a kludge; the UFO should have been deleted before
 			// creating SelectDestinationState, or MultipleTargetsState.
 			// see: GeoscapeState::time5Seconds(), case Ufo::FLYING
-			|| ((*i)->reachedDestination() && (*i)->getMissionType() == "STR_ALIEN_TERROR")) // kL
+			|| ((*i)->reachedDestination()							// kL
+				&& (*i)->getMissionType() == "STR_ALIEN_TERROR"))	// kL
 		{
 			continue;
 		}
