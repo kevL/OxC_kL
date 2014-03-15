@@ -21,6 +21,7 @@
 #define OPENXCOM_TIMER_H
 
 #include <SDL.h>
+
 #include "State.h"
 #include "Surface.h"
 
@@ -31,6 +32,7 @@ namespace OpenXcom
 typedef void (State::* StateHandler)();
 typedef void (Surface::* SurfaceHandler)();
 
+
 /**
  * Timer used to run code in fixed intervals.
  * Used for code that should run at the same fixed interval
@@ -38,22 +40,30 @@ typedef void (Surface::* SurfaceHandler)();
  */
 class Timer
 {
+
 	public:
 		static int maxFrameSkip;
 		static Uint32 gameSlowSpeed;
 
+
 private:
-	Uint32 _start;
-	Uint32 _frameSkipStart;
+	bool
+		_frameSkipping,
+		_running;
 	int _interval;
-	bool _running;
-	bool _frameSkipping;
+	Uint32
+		_frameSkipStart,
+		_start;
+
 	StateHandler _state;
 	SurfaceHandler _surface;
 
+
 	public:
 		/// Creates a stopped timer.
-		Timer(Uint32 interval, bool frameSkipping = false);
+		Timer(
+				Uint32 interval,
+				bool frameSkipping = false);
 		/// Cleans up the timer.
 		~Timer();
 
@@ -64,16 +74,23 @@ private:
 
 		/// Gets the current time interval.
 		Uint32 getTime() const;
-		/// Gets if the timer's running.
+
+		/// Gets if the timer is running.
 		bool isRunning() const;
+
 		/// Advances the timer.
-		void think(State* state, Surface* surface);
+		void think(
+				State* state,
+				Surface* surface);
+
 		/// Sets the timer's interval.
 		void setInterval(Uint32 interval);
+
 		/// Hooks a state action handler to the timer interval.
 		void onTimer(StateHandler handler);
 		/// Hooks a surface action handler to the timer interval.
 		void onTimer(SurfaceHandler handler);
+
 		/// Turns frame skipping on or off
 		void setFrameSkipping(bool skip);
 };

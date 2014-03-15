@@ -911,8 +911,8 @@ void SavedGame::setTime(GameTime time)
 
 /**
  * Returns the latest ID for the specified object and increases it.
- * @param name Object name.
- * @return Latest ID number.
+ * @param name, Object name.
+ * @return, Latest ID number.
  */
 int SavedGame::getId(const std::string& name)
 {
@@ -929,7 +929,7 @@ int SavedGame::getId(const std::string& name)
 
 /**
  * Returns the list of countries in the game world.
- * @return Pointer to country list.
+ * @return, Pointer to country list.
  */
 std::vector<Country*>* SavedGame::getCountries()
 {
@@ -938,7 +938,7 @@ std::vector<Country*>* SavedGame::getCountries()
 
 /**
  * Adds up the monthly funding of all the countries.
- * @return Total funding.
+ * @return, Total funding.
  */
 int SavedGame::getCountryFunding() const
 {
@@ -956,7 +956,7 @@ int SavedGame::getCountryFunding() const
 
 /**
  * Returns the list of world regions.
- * @return Pointer to region list.
+ * @return, Pointer to region list.
  */
 std::vector<Region*>* SavedGame::getRegions()
 {
@@ -965,7 +965,7 @@ std::vector<Region*>* SavedGame::getRegions()
 
 /**
  * Returns the list of player bases.
- * @return Pointer to base list.
+ * @return, Pointer to base list.
  */
 std::vector<Base*>* SavedGame::getBases()
 {
@@ -974,7 +974,7 @@ std::vector<Base*>* SavedGame::getBases()
 
 /**
  * Returns an immutable list of player bases.
- * @return Pointer to base list.
+ * @return, Pointer to base list.
  */
 const std::vector<Base*>* SavedGame::getBases() const
 {
@@ -983,7 +983,7 @@ const std::vector<Base*>* SavedGame::getBases() const
 
 /**
  * Adds up the monthly maintenance of all the bases.
- * @return Total maintenance.
+ * @return, Total maintenance.
  */
 int SavedGame::getBaseMaintenance() const
 {
@@ -1002,7 +1002,7 @@ int SavedGame::getBaseMaintenance() const
 
 /**
  * Returns the list of alien UFOs.
- * @return Pointer to UFO list.
+ * @return, Pointer to UFO list.
  */
 std::vector<Ufo*>* SavedGame::getUfos()
 {
@@ -1011,7 +1011,7 @@ std::vector<Ufo*>* SavedGame::getUfos()
 
 /**
  * Returns the list of craft waypoints.
- * @return Pointer to waypoint list.
+ * @return, Pointer to waypoint list.
  */
 std::vector<Waypoint*>* SavedGame::getWaypoints()
 {
@@ -1020,7 +1020,7 @@ std::vector<Waypoint*>* SavedGame::getWaypoints()
 
 /**
  * Returns the list of terror sites.
- * @return Pointer to terror site list.
+ * @return, Pointer to terror site list.
  */
 std::vector<TerrorSite*>* SavedGame::getTerrorSites()
 {
@@ -1115,7 +1115,7 @@ void SavedGame::addFinishedResearch(
 
 /**
  * Returns the list of already discovered ResearchProject
- * @return the list of already discovered ResearchProject
+ * @return, the list of already discovered ResearchProject
  */
 const std::vector<const RuleResearch*>& SavedGame::getDiscoveredResearch() const
 {

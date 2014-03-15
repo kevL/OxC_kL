@@ -37,8 +37,15 @@ class RuleRegion;
 class Region
 {
 private:
+
+	int _activityRecent; // kL
+
 	RuleRegion* _rules;
-	std::vector<int> _activityXcom, _activityAlien;
+
+	std::vector<int>
+		_activityAlien,
+		_activityXcom;
+
 
 	public:
 		/// Creates a new region of the specified type.
@@ -62,8 +69,23 @@ private:
 		const std::vector<int>& getActivityXcom() const;
 		/// get xcom activity to this region
 		const std::vector<int>& getActivityAlien() const;
+
 		/// store last month's counters, start new counters.
 		void newMonth();
+
+		/// kL. Handles recent alien activity in this region for GraphsState blink.
+		bool recentActivity( // kL
+				bool activity = true,
+				bool graphs = false);
+
+/*		/// kL. Sets recent alien activity in this region.
+		void setRecentActivity(bool activity); // kL
+		/// kL. Gets recent alien activity in this region.
+		bool getRecentActivity() const; // kL
+		/// kL. Sets last alien activity in this region.
+		void setLastActivity(int activity); // kL
+		/// kL. Gets last alien activity in this region.
+		int getLastActivity() const; // kL */
 };
 
 }

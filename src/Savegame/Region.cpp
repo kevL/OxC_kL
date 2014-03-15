@@ -31,7 +31,8 @@ namespace OpenXcom
  */
 Region::Region(RuleRegion* rules)
 	:
-		_rules(rules)
+		_rules(rules),
+		_activityRecent(-1) // kL
 {
 	_activityAlien.push_back(0);
 	_activityXcom.push_back(0);
@@ -52,6 +53,8 @@ void Region::load(const YAML::Node& node)
 {
 	_activityXcom	= node["activityXcom"].as< std::vector<int> >(_activityXcom);
 	_activityAlien	= node["activityAlien"].as< std::vector<int> >(_activityAlien);
+
+	_activityRecent	= node["activityRecent"].as<int>(_activityRecent); // kL
 }
 
 /**
@@ -65,13 +68,14 @@ YAML::Node Region::save() const
 	node["type"]			= _rules->getType();
 	node["activityXcom"]	= _activityXcom;
 	node["activityAlien"]	= _activityAlien;
+	node["activityRecent"]	= _activityRecent; // kL
 
 	return node;
 }
 
 /**
  * Returns the ruleset for the region's type.
- * @return Pointer to ruleset.
+ * @return, Pointer to ruleset.
  */
 RuleRegion* Region::getRules() const
 {
@@ -96,7 +100,7 @@ void Region::addActivityAlien(int activity)
 
 /**
  * Gets the region's xcom activity level.
- * @return activity level.
+ * @return, activity level.
  */
 const std::vector<int>& Region::getActivityXcom() const
 {
@@ -105,7 +109,7 @@ const std::vector<int>& Region::getActivityXcom() const
 
 /**
  * Gets the region's alien activity level.
- * @return activity level.
+ * @return, activity level.
  */
 const std::vector<int>& Region::getActivityAlien() const
 {
@@ -126,5 +130,65 @@ void Region::newMonth()
 	if (_activityXcom.size() > 12)
 		_activityXcom.erase(_activityXcom.begin());
 }
+
+/**
+ * kL. Handles recent alien activity in this region for GraphsState blink.
+ */
+bool Region::recentActivity( // kL
+		bool activity,
+		bool graphs)
+{
+	if (activity)
+		_activityRecent = 0;
+	else if (_activityRecent != -1)
+	{
+		if (graphs)
+			return true;
+		else
+		{
+			++_activityRecent;
+
+			if (_activityRecent == 24)
+				_activityRecent = -1;
+		}
+	}
+
+	if (_activityRecent == -1)
+		return false;
+
+	return true;
+}
+
+/**
+ * kL. Sets recent alien activity in this region.
+ */
+/* void Region::setRecentActivity(bool activity) // kL
+{
+	_activityRecent = activity;
+} */
+
+/**
+ * kL. Gets recent alien activity in this region.
+ */
+/* bool Region::getRecentActivity() const // kL
+{
+	return _activityRecent;
+} */
+
+/**
+ * kL. Sets last alien activity in this region.
+ */
+/* void Region::setLastActivity(int activity) // kL
+{
+	_activityLast = activity;
+} */
+
+/**
+ * kL. Gets last alien activity in this region.
+ */
+/* int Region::getLastActivity() const // kL
+{
+	return _activityLast;
+} */
 
 }

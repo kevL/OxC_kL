@@ -192,7 +192,7 @@ struct Ocean
 			const int&,
 			const int&)
 	{
-		dest = Palette::blockOffset(12) + 0;
+		dest = Palette::blockOffset(12);
 	}
 };
 
@@ -330,7 +330,7 @@ Globe::Globe(
 	_clipper	= new FastLineClip(x, x + width, y, y + height);
 
 	// Animation timers
-	_blinkTimer = new Timer(180);
+	_blinkTimer = new Timer(200);
 	_blinkTimer->onTimer((SurfaceHandler)& Globe::blink);
 	_blinkTimer->start();
 
@@ -599,7 +599,10 @@ void Globe::cartToPolar(
 	else
 	{
 		*lat = asin((y * sin(c) * cos(_cenLat)) / rho + cos(c) * sin(_cenLat));
-		*lon = atan2(x * sin(c),(rho * cos(_cenLat) * cos(c) - y * sin(_cenLat) * sin(c))) + _cenLon;
+		*lon = atan2(
+					x * sin(c),
+					(rho * cos(_cenLat) * cos(c) - y * sin(_cenLat) * sin(c)))
+				+ _cenLon;
 	}
 
 	// Keep between 0 and 2xPI
@@ -620,9 +623,10 @@ bool Globe::pointBack(
 		double lon,
 		double lat) const
 {
-	double c = cos(_cenLat) * cos(lat) * cos(lon - _cenLon) + sin(_cenLat) * sin(lat);
+	double c	= cos(_cenLat) * cos(lat) * cos(lon - _cenLon)
+				+ sin(_cenLat) * sin(lat);
 
-	return c < 0;
+	return c < 0.0;
 }
 
 

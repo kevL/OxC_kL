@@ -40,7 +40,9 @@ private:
 	bool
 		_newPact,
 		_pact;
-	int _satisfaction;
+	int
+		_activityRecent, // kL
+		_satisfaction;
 
 	RuleCountry* _rules;
 
@@ -98,6 +100,20 @@ private:
 		void setNewPact();
 		/// have we signed a pact?
 		bool getPact() const;
+
+		/// kL. Handles recent alien activity in this country for GraphsState blink.
+		bool recentActivity( // kL
+				bool activity = true,
+				bool graphs = false);
+
+/*		/// kL. Sets recent alien activity in this country.
+		void setRecentActivity(bool activity); // kL
+		/// kL. Gets recent alien activity in this country.
+		bool getRecentActivity() const; // kL
+		/// kL. Sets last alien activity in this country.
+		void setLastActivity(bool activity); // kL
+		/// kL. Gets last alien activity in this country.
+		int getLastActivity() const; // kL */
 };
 
 }

@@ -64,7 +64,6 @@ AbortMissionState::AbortMissionState(
 		_outExitArea(0)
 {
 	//Log(LOG_INFO) << "Create AbortMissionState";
-
 	_screen			= false;
 
 	_window			= new Window(this, 320, 144, 0, 0);
@@ -174,9 +173,14 @@ AbortMissionState::~AbortMissionState()
  */
 void AbortMissionState::btnOkClick(Action*)
 {
+	//Log(LOG_INFO) << "AbortMissionState::btnOkClick()";
 	_game->popState();
+
 	_battleGame->setAborted(true);
-	_state->finishBattle(true, _inExitArea);
+	_state->finishBattle(
+					true,
+					_inExitArea);
+	//Log(LOG_INFO) << "AbortMissionState::btnOkClick() EXIT";
 }
 
 /**

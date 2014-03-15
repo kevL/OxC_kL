@@ -601,9 +601,6 @@ void Map::drawTerrain(Surface* surface)
 //				&& !_camera->isOnScreen(_unit->getPosition()))
 			Position posProj = _projectile->getPosition();
 			posProj /= Position(16, 16, 24); // convert to tilespace.
-//			posProj.x /= 16;
-//			posProj.y /= 16;
-//			posProj.z /= 24;
 
 			if (!_camera->isOnScreen(posProj)
 				|| _smoothingEngaged)

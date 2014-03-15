@@ -2614,7 +2614,7 @@ void BattlescapeState::saveVoxelMap()
 /**
  * Adds a new popup window to the queue
  * (this prevents popups from overlapping).
- * @param state Pointer to popup state.
+ * @param state, Pointer to popup state.
  */
 void BattlescapeState::popup(State* state)
 {
@@ -2658,7 +2658,10 @@ void BattlescapeState::finishBattle(
 		bgen.nextStage();
 
 		_game->popState();
-		_game->pushState(new BriefingState(_game, 0, 0));
+		_game->pushState(new BriefingState(
+										_game,
+										0,
+										0));
 	}
 	else
 	{
@@ -2674,6 +2677,7 @@ void BattlescapeState::finishBattle(
 				&& inExitArea == 0))
 		{
 			//Log(LOG_INFO) << ". . missionAborted";
+
 			// abort was done or no player is still alive
 			// this concludes to defeat when in mars or mars landing mission
 			if ((_save->getMissionType() == "STR_MARS_THE_FINAL_ASSAULT"
@@ -2683,9 +2687,11 @@ void BattlescapeState::finishBattle(
 				_game->pushState(new DefeatState(_game));
 			}
 			else
+			{
 				//Log(LOG_INFO) << ". . . new DebriefingState";
 				_game->pushState(new DebriefingState(_game));
 				//Log(LOG_INFO) << ". . . new DebriefingState DONE";
+			}
 		}
 		else
 		{

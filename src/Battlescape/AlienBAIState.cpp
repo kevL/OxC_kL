@@ -1955,10 +1955,11 @@ void AlienBAIState::wayPointAction()
 										-1);
 
 		if (_save->getPathfinding()->getStartDirection() != -1
-			&& explosiveEfficacy((*i)->getPosition(),
-												_unit,
-												(_unit->getMainHandWeapon()->getAmmoItem()->getRules()->getPower() / 20) + 1,
-												_attackAction->diff))
+			&& explosiveEfficacy(
+							(*i)->getPosition(),
+							_unit,
+							(_unit->getMainHandWeapon()->getAmmoItem()->getRules()->getPower() / 20) + 1,
+							_attackAction->diff))
 		{
 			_aggroTarget = *i;
 		}
@@ -2194,7 +2195,9 @@ void AlienBAIState::grenadeAction()
 		int tu = 0;
 
 		if (!_grenade)
-			tu += 4; // 4TUs for picking up the grenade ( kL_note: unless it's already in-hand..... )
+			tu += 5;	// 5tu for moving grenade from belt to hand
+						// kL_note: unless it's already in-hand.....
+						// should re-implement that via think() above.
 		tu += _unit->getActionTUs(BA_PRIME, grenade);
 		tu += _unit->getActionTUs(BA_THROW, grenade);
 

@@ -732,15 +732,8 @@ void ProjectileFlyBState::think()
 			// kL_note: Don't return camera to its pre-firing position.
 			// that is, leave it wherever the projectile hits... (or try to.)
 			if (_action.cameraPosition.z != -1)
-//kL				_parent->getMap()->getCamera()->setMapOffset(_action.cameraPosition);
 			{
-//				Position targetFinal = _action.target;
-//				targetFinal.x *= 16;
-//				targetFinal.y *= 16;
-//				targetFinal.z *= 24;
-//				targetFinal.x = -(targetFinal.x * 16) - 8;
-//				targetFinal.y = targetFinal.y * 16 + 8;
-
+//kL				_parent->getMap()->getCamera()->setMapOffset(_action.cameraPosition);
 				_parent->getMap()->getCamera()->setMapOffset(_parent->getMap()->getCamera()->getMapOffset()); // kL
 			}
 

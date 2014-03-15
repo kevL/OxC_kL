@@ -863,6 +863,7 @@ void AlienMission::addScore(
 											lat))
 		{
 			(*region)->addActivityAlien(_rule.getPoints());
+			(*region)->recentActivity(); // kL
 
 			break;
 		}
@@ -878,6 +879,7 @@ void AlienMission::addScore(
 												lat))
 		{
 			(*country)->addActivityAlien(_rule.getPoints());
+			(*country)->recentActivity(); // kL
 
 			break;
 		}

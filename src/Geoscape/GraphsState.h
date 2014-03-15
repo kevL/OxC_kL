@@ -35,6 +35,7 @@ class Surface;
 class Text;
 class TextButton;
 class TextList;
+class Timer; // kL
 class ToggleTextButton;
 
 struct GraphBtnInfo;
@@ -83,7 +84,13 @@ private:
 		* _btnCountryTotal,
 		* _btnRegionTotal;
 
-	std::vector<bool> _financeToggles;
+	Timer* _blinkTimer; // kL
+
+	std::vector<bool>
+		_blinkCountry, // kL
+		_blinkRegion, // kL
+		_financeToggles;
+
 	std::vector<GraphBtnInfo*>
 		_regionToggles,
 		_countryToggles;
@@ -125,6 +132,11 @@ private:
 		GraphsState(Game* game);
 		/// Cleans up the Graphs state.
 		~GraphsState();
+
+		/// kL. Handles the blink timer.
+		void think(); // kL
+		/// kL. Blinks recent aLien activity.
+		void blink(); // kL
 
 		/// Handler for clicking the Geoscape icon.
 		void btnGeoscapeClick(Action* action);

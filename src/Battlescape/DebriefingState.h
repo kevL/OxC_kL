@@ -87,6 +87,8 @@ private:
 		_noContainment;
 	int _containmentLimit;
 
+	std::wstring _baseLabel; // kL
+
 	Base* _base;
 	Country* _country;
 	Region* _region;

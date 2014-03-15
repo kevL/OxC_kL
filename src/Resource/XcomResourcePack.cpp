@@ -530,24 +530,24 @@ XcomResourcePack::XcomResourcePack( // kL
 						if (!loaded) // sza_End.
 						{ // sza_Add.
 
-						for (int
-								exti = 0;
-								exti < 3;
-								++exti)
-						{
-							std::ostringstream s;
-							s << "SOUND/" << filename << "." << exts[exti];
-
-							if (CrossPlatform::fileExists(CrossPlatform::getDataFile(s.str())))
+							for (int
+									exti = 0;
+									exti < 3;
+									++exti)
 							{
-								_musicFile[filename] = new Music();
-								_musicFile[filename]->load(CrossPlatform::getDataFile(s.str()));
+								std::ostringstream s;
+								s << "SOUND/" << filename << "." << exts[exti];
 
-								loaded = true;
+								if (CrossPlatform::fileExists(CrossPlatform::getDataFile(s.str())))
+								{
+									_musicFile[filename] = new Music();
+									_musicFile[filename]->load(CrossPlatform::getDataFile(s.str()));
 
-								break;
+									loaded = true;
+
+									break;
+								}
 							}
-						}
 						} // sza_Add.
 					}
 
@@ -671,20 +671,20 @@ XcomResourcePack::XcomResourcePack( // kL
 
 		// Load sounds
 		std::string catsId[] =
-			{
-				"GEO.CAT",
-				"BATTLE.CAT"
-			};
+		{
+			"GEO.CAT",
+			"BATTLE.CAT"
+		};
 		std::string catsDos[] =
-			{
-				"SOUND2.CAT",
-				"SOUND1.CAT"
-			};
+		{
+			"SOUND2.CAT",
+			"SOUND1.CAT"
+		};
 		std::string catsWin[] =
-			{
-				"SAMPLE.CAT",
-				"SAMPLE2.CAT"
-			};
+		{
+			"SAMPLE.CAT",
+			"SAMPLE2.CAT"
+		};
 
 		// Check which sound version is available
 		std::string* cats = 0;

@@ -29,6 +29,7 @@
 
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
+#include "../Engine/Logger.h"
 #include "../Engine/Music.h"
 #include "../Engine/Options.h"
 #include "../Engine/Palette.h"
@@ -80,7 +81,7 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Debriefing screen.
- * @param game Pointer to the core game.
+ * @param game, Pointer to the core game.
  */
 DebriefingState::DebriefingState(Game* game)
 	:
@@ -99,8 +100,6 @@ DebriefingState::DebriefingState(Game* game)
 
 	if (Options::getBool("alienContainmentLimitEnforced"))
 		_containmentLimit = 1;
-//	else
-//		_containmentLimit = 0;
 
 	_window			= new Window(this, 320, 200, 0, 0);
 
@@ -191,11 +190,11 @@ DebriefingState::DebriefingState(Game* game)
 	_lstTotal->setDot(true);
 
 
-	prepareDebriefing(); // defines _base:
+	prepareDebriefing();
 
 	_txtBaseLabel->setColor(Palette::blockOffset(8)+5);
 	_txtBaseLabel->setAlign(ALIGN_RIGHT);
-	_txtBaseLabel->setText(_base->getName(_game->getLanguage()));
+	_txtBaseLabel->setText(_baseLabel);
 
 
 	int
@@ -261,10 +260,28 @@ DebriefingState::DebriefingState(Game* game)
 
 	// add the points to our activity score
 	if (_region)
+	{
+		//Log(LOG_INFO) << ". aLien act.ScoreREGION = " << _region->getActivityAlien().back();
 		_region->addActivityXcom(total);
 
+		if (_destroyBase) // kL ->
+		{
+			int diff = static_cast<int>(_game->getSavedGame()->getDifficulty()) + 1;
+			_region->addActivityAlien(diff * 200);
+		}
+	}
+
 	if (_country)
+	{
+		//Log(LOG_INFO) << ". aLien act.ScoreCOUNTRY = " << _country->getActivityAlien().back();
 		_country->addActivityXcom(total);
+
+		if (_destroyBase) // kL ->
+		{
+			int diff = static_cast<int>(_game->getSavedGame()->getDifficulty()) + 1;
+			_country->addActivityAlien(diff * 200);
+		}
+	}
 
 	// Calculate rating
 	std::wstring rating;
@@ -320,7 +337,6 @@ DebriefingState::~DebriefingState()
 void DebriefingState::btnOkClick(Action*)
 {
 	//Log(LOG_INFO) << "DebriefingState::btnOkClick()";
-
 	_game->getSavedGame()->setBattleGame(0);
 	_game->popState();
 
@@ -353,15 +369,14 @@ void DebriefingState::btnOkClick(Action*)
 												0));
 		}
 	}
-
 	//Log(LOG_INFO) << "DebriefingState::btnOkClick() EXIT";
 }
 
 /**
  * Adds to the debriefing stats.
- * @param name The untranslated name of the stat.
- * @param quantity The quantity to add.
- * @param score The score to add.
+ * @param name, The untranslated name of the stat.
+ * @param quantity, The quantity to add.
+ * @param score, The score to add.
  */
 void DebriefingState::addStat(
 		const std::string& name,
@@ -369,7 +384,6 @@ void DebriefingState::addStat(
 		int score)
 {
 	//Log(LOG_INFO) << "DebriefingState::addStat()";
-
 	for (std::vector<DebriefingStat*>::iterator
 			i = _stats.begin();
 			i != _stats.end();
@@ -383,7 +397,6 @@ void DebriefingState::addStat(
 			break;
 		}
 	}
-
 	//Log(LOG_INFO) << "DebriefingState::addStat() EXIT";
 }
 
@@ -422,7 +435,6 @@ private:
 void ClearAlienBase::operator()(AlienMission* am) const
 {
 	//Log(LOG_INFO) << "DebriefingState, ClearAlienBase()";
-
 	if (am->getAlienBase() == _base)
 		am->setAlienBase(0);
 }
@@ -549,8 +561,9 @@ void DebriefingState::prepareDebriefing()
 			base = *i;
 			base->setInBattlescape(false);
 
-			double baseLon = base->getLongitude();
-			double baseLat = base->getLatitude();
+			double
+				baseLon = base->getLongitude(),
+				baseLat = base->getLatitude();
 
 			for (std::vector<Region*>::iterator
 					k = save->getRegions()->begin();
@@ -607,6 +620,7 @@ void DebriefingState::prepareDebriefing()
 	}
 
 	_base = base;
+	_baseLabel = _base->getName(_game->getLanguage()); // kL
 
 	// UFO crash/landing site disappears
 	for (std::vector<Ufo*>::iterator
@@ -755,7 +769,7 @@ void DebriefingState::prepareDebriefing()
 		if (!(*j)->getTile()) // handle unconscious units; This unit is not on a tile...
 		{
 			Position pos = (*j)->getPosition();
-			if (pos == Position(-1, -1, -1)) // in fact, this Unit is in limbo...
+			if (pos == Position(-1,-1,-1)) // in fact, this Unit is in limbo...
 			{
 				for (std::vector<BattleItem*>::iterator // so look for its corpse...
 						k = battle->getItems()->begin();
@@ -1077,6 +1091,8 @@ void DebriefingState::prepareDebriefing()
 		&& mission == "STR_BASE_DEFENSE"
 		&& !base->getCrafts()->empty())
 	{
+		//Log(LOG_INFO) << ". aborted BASE_DEFENSE";
+
 		for (std::vector<Craft*>::iterator
 				i = base->getCrafts()->begin();
 				i != base->getCrafts()->end();
@@ -1220,6 +1236,8 @@ void DebriefingState::prepareDebriefing()
 	{
 		if (mission == "STR_BASE_DEFENSE")
 		{
+			//Log(LOG_INFO) << ". failed BASE_DEFENSE";
+
 			_txtTitle->setText(tr("STR_BASE_IS_LOST"));
 			_destroyBase = true;
 		}
@@ -1261,7 +1279,9 @@ void DebriefingState::prepareDebriefing()
 	{
 		int total_clips = i->second / i->first->getClipSize();
 		if (total_clips > 0)
-			base->getItems()->addItem(i->first->getType(), total_clips);
+			base->getItems()->addItem(
+									i->first->getType(),
+									total_clips);
 	}
 
 	// recover all our goodies
@@ -1273,11 +1293,14 @@ void DebriefingState::prepareDebriefing()
 				++i)
 		{
 			// alien alloys recovery values are divided by 10 or divided by 150 in case of an alien base
+			// kL_note: change to divided by 5 or divided by 100 in case of an alien base...
 			if ((*i)->item == "STR_ALIEN_ALLOYS")
 			{
-				int alloy = 10;
+//kL				int alloy = 10;
+				int alloy = 5; // kL
 				if (mission == "STR_ALIEN_BASE_ASSAULT")
-					alloy = 150;
+//kL					alloy = 100;
+					alloy = 15; // kL
 
 				(*i)->qty = (*i)->qty / alloy;
 				(*i)->score = (*i)->score / alloy;
@@ -1566,7 +1589,6 @@ void DebriefingState::recoverItems(
 		Base* base)
 {
 	//Log(LOG_INFO) << "DebriefingState::recoverItems()";
-
 	for (std::vector<BattleItem*>::iterator
 			it = from->begin();
 			it != from->end();

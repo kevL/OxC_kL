@@ -316,8 +316,8 @@ int Projectile::calculateThrow(double accuracy)
 
 
 	int ret = VOXEL_OUTOFBOUNDS;
-
 	double arc = 0.0;
+
 	if (_save->getTileEngine()->validateThrow(
 										_action,
 										originVoxel,
@@ -374,7 +374,8 @@ int Projectile::calculateThrow(double accuracy)
 													bu,
 													arc,
 													1.0 + deviation); */
-			Position endPoint = _trajectory.back();
+
+/*			Position endPoint = _trajectory.back();
 			endPoint.x /= 16;
 			endPoint.y /= 16;
 			endPoint.z /= 24;
@@ -385,13 +386,14 @@ int Projectile::calculateThrow(double accuracy)
 			// _OLD: let it fly without deviation, it must land on a valid tile in that case.
 			// kL_note: Am i sure I want this? xCom_orig let stuff land on nonwalkable tiles...!!!
 			// and, uh, couldn't this lead to a potentially infinite loop???
-/*			if (_action.type == BA_THROW
+			if (_action.type == BA_THROW
 				&& endTile
 				&& endTile->getMapData(MapData::O_OBJECT)
 				&& endTile->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) == 255)
 			{
 				test = VOXEL_OUTOFBOUNDS;
 			} */
+
 /*_OLD			ret = _save->getTileEngine()->calculateParabola(
 					originVoxel,
 					targetVoxel,
@@ -518,11 +520,11 @@ void Projectile::applyAccuracy(
 			acuPenalty = 0.017 * static_cast<double>(_save->getGlobalShade());
 
 		// kL_begin: modify rangedBasedAccuracy (shot-modes).
-		// NOTE: This should be done on the weapons themselves!!!!
-		double baseDeviation = 0.01;
+		double baseDeviation = 0.0;
 		if (_action.actor->getFaction() == FACTION_PLAYER)
-			baseDeviation = 0.09; // give the poor aLiens an aiming advantage over xCom & Mc'd units
+			baseDeviation = 0.08; // give the poor aLiens an aiming advantage over xCom & Mc'd units
 
+		// NOTE: This should be done on the weapons themselves!!!!
 /*		switch (_action.type)
 		{
 			case BA_AIMEDSHOT:
@@ -813,7 +815,7 @@ Position Projectile::getTarget() const // kL
  * kL. Gets a pointer to the BattleAction actor directly.
  * @return, Pointer to the acting Battleunit
  */
-BattleUnit* Projectile::getActor() const // kL (these could prob. be const)
+BattleUnit* Projectile::getActor() const // kL
 {
 	return _action.actor;
 }

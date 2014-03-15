@@ -41,13 +41,14 @@ Country::Country(
 		_pact(false),
 		_newPact(false),
 		_funding(0),
-		_satisfaction(2)
+		_satisfaction(2),
+		_activityRecent(-1) // kL
 {
 	if (gen)
 		_funding.push_back(_rules->generateFunding());
 
-	_activityAlien.push_back(0);
 	_activityXcom.push_back(0);
+	_activityAlien.push_back(0);
 }
 
 /**
@@ -63,13 +64,15 @@ Country::~Country()
  */
 void Country::load(const YAML::Node& node)
 {
-	_funding		= node["funding"].as< std::vector<int> >(_funding);
+	_funding		= node["funding"].as<std::vector<int> >(_funding);
 
-	_activityXcom	= node["activityXcom"].as< std::vector<int> >(_activityXcom);
-	_activityAlien	= node["activityAlien"].as< std::vector<int> >(_activityAlien);
+	_activityXcom	= node["activityXcom"].as<std::vector<int> >(_activityXcom);
+	_activityAlien	= node["activityAlien"].as<std::vector<int> >(_activityAlien);
 
-	_pact			= node["pact"].as<bool>(_pact);
-	_newPact		= node["newPact"].as<bool>(_newPact);
+	_activityRecent	= node["activityRecent"].as<int>(_activityRecent); // kL
+
+	_pact		= node["pact"].as<bool>(_pact);
+	_newPact	= node["newPact"].as<bool>(_newPact);
 }
 
 /**
@@ -84,11 +87,12 @@ YAML::Node Country::save() const
 	node["funding"]			= _funding;
 	node["activityXcom"]	= _activityXcom;
 	node["activityAlien"]	= _activityAlien;
+	node["activityRecent"]	= _activityRecent; // kL
 
 	if (_pact)
-		node["pact"]		= _pact;
+		node["pact"]	= _pact;
 	else if (_newPact)
-		node["newPact"]		= _newPact;
+		node["newPact"]	= _newPact;
 
 	return node;
 }
@@ -295,7 +299,7 @@ if (aLien < xCom + 30) // if aLien is above xCom by 30 or less
 }
 
 /**
- * @return if we will sign a new pact.
+ * @return, if we will sign a new pact.
  */
 bool Country::getNewPact() const
 {
@@ -313,11 +317,74 @@ void Country::setNewPact()
 /**
  * no setter for this one, as it gets set automatically
  * at month's end if _newPact is set.
- * @return if we have signed a pact.
+ * @return, if we have signed a pact.
  */
 bool Country::getPact() const
 {
 	return _pact;
 }
+
+/**
+ * kL. Handles recent alien activity in this country for GraphsState blink.
+ */
+bool Country::recentActivity( // kL
+		bool activity,
+		bool graphs)
+{
+	if (activity)
+		_activityRecent = 0;
+	else if (_activityRecent != -1)
+	{
+		if (graphs)
+			return true;
+		else
+		{
+			++_activityRecent;
+
+			if (_activityRecent == 24)
+				_activityRecent = -1;
+		}
+	}
+
+	if (_activityRecent == -1)
+		return false;
+
+	return true;
+}
+
+/**
+ * kL. Sets recent alien activity in this country.
+ */
+/* void Country::setRecentActivity(bool activity) // kL
+{
+	_activityRecent = activity;
+} */
+
+/**
+ * kL. Gets recent alien activity in this country.
+ */
+/* bool Country::getRecentActivity() const // kL
+{
+	return _activityRecent;
+} */
+
+/**
+ * kL. Sets last alien activity in this country.
+ */
+/* void Country::setLastActivity() // kL
+{
+	++_activityLast;
+
+	if (_activityLast > 23)
+		_activityLast = -1;
+} */
+
+/**
+ * kL. Gets last alien activity in this country.
+ */
+/* int Country::getLastActivity() const // kL
+{
+	return _activityLast;
+} */
 
 }

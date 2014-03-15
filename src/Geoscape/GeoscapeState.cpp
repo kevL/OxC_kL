@@ -1684,8 +1684,8 @@ private:
 	public:
 		/// Store the parameters.
 		/**
-		 * @param game The game engine.
-		 * @param game The globe object.
+		 * @param game, The game engine.
+		 * @param globe, The globe object.
 		 */
 		callThink(
 				Game& game,
@@ -1700,7 +1700,9 @@ private:
 		/// Call AlienMission::think() with stored parameters.
 		void operator()(AlienMission* am) const
 		{
-			am->think(_game, _globe);
+			am->think(
+					_game,
+					_globe);
 		}
 };
 
@@ -1727,7 +1729,10 @@ bool GeoscapeState::processTerrorSite(TerrorSite* ts) const
 
 	Region* region = _game->getSavedGame()->locateRegion(*ts);
 	if (region)
+	{
 		region->addActivityAlien(pts);
+		region->recentActivity(); // kL
+	}
 
 	for (std::vector<Country*>::iterator
 			k = _game->getSavedGame()->getCountries()->begin();
@@ -1739,6 +1744,7 @@ bool GeoscapeState::processTerrorSite(TerrorSite* ts) const
 										ts->getLatitude()))
 		{
 			(*k)->addActivityAlien(pts);
+			(*k)->recentActivity(); // kL
 
 			break;
 		}
@@ -1927,6 +1933,7 @@ void GeoscapeState::time30Minutes()
 												lat))
 				{
 					(*k)->addActivityAlien(pts * 2); // two points per UFO in-Region per half hour
+					(*k)->recentActivity(); // kL
 
 					break;
 				}
@@ -1944,6 +1951,7 @@ void GeoscapeState::time30Minutes()
 												lat))
 				{
 					(*k)->addActivityAlien(pts * 3); // three points per UFO in-Country per half hour
+					(*k)->recentActivity(); // kL
 
 					break;
 				}
@@ -1971,8 +1979,25 @@ void GeoscapeState::time30Minutes()
 void GeoscapeState::time1Hour()
 {
 	//Log(LOG_INFO) << "GeoscapeState::time1Hour()";
-	bool window = false;
+	// kL_begin:
+	for (std::vector<Region*>::iterator
+			k = _game->getSavedGame()->getRegions()->begin();
+			k != _game->getSavedGame()->getRegions()->end();
+			++k)
+	{
+		(*k)->recentActivity(false);
+	}
 
+	for (std::vector<Country*>::iterator
+			k = _game->getSavedGame()->getCountries()->begin();
+			k != _game->getSavedGame()->getCountries()->end();
+			++k)
+	{
+		(*k)->recentActivity(false);
+	} // kL_end.
+
+
+	bool arrivals = false;
 	for (std::vector<Base*>::iterator // handle transfers
 			i = _game->getSavedGame()->getBases()->begin();
 			i != _game->getSavedGame()->getBases()->end();
@@ -1985,15 +2010,15 @@ void GeoscapeState::time1Hour()
 		{
 			(*j)->advance(*i);
 
-			if (!window
+			if (!arrivals
 				&& (*j)->getHours() == 0)
 			{
-				window = true;
+				arrivals = true;
 			}
 		}
 	}
 
-	if (window)
+	if (arrivals)
 		popup(new ItemsArrivingState(
 								_game,
 								this));
@@ -2386,6 +2411,7 @@ void GeoscapeState::time1Day()
 											lat))
 			{
 				(*r)->addActivityAlien(pts);
+				(*r)->recentActivity(); // kL
 
 				break;
 			}
@@ -2401,6 +2427,7 @@ void GeoscapeState::time1Day()
 											lat))
 			{
 				(*c)->addActivityAlien(pts);
+				(*c)->recentActivity(); // kL
 
 				break;
 			}
