@@ -5570,7 +5570,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Transfer.h"
 
-1394843243 source:f:\git\openxcom\src\battlescape\abortmissionstate.cpp
+1394902175 source:f:\git\openxcom\src\battlescape\abortmissionstate.cpp
 	"AbortMissionState.h"
 	<sstream>
 	<vector>
@@ -6295,7 +6295,7 @@
 	"../Interface/Frame.h"
 	"../Interface/Text.h"
 
-1394398507 source:f:\git\openxcom\src\battlescape\inventory.cpp
+1394905064 source:f:\git\openxcom\src\battlescape\inventory.cpp
 	"Inventory.h"
 	<cmath>
 	"PrimeGrenadeState.h"

@@ -275,7 +275,8 @@ void Inventory::drawItems()
 				i != _selUnit->getInventory()->end();
 				++i)
 		{
-			if (*i == _selItem) continue;
+			if (*i == _selItem)
+				continue;
 
 
 			Surface* frame = texture->getFrame((*i)->getRules()->getBigSprite());
@@ -407,13 +408,9 @@ void Inventory::moveItem(
 	if (slot == 0) // Make items vanish (eg. ammo in weapons)
 	{
 		if (item->getSlot()->getType() == INV_GROUND)
-		{
 			_selUnit->getTile()->removeItem(item);
-		}
 		else
-		{
 			item->moveToOwner(0);
-		}
 	}
 	else
 	{
@@ -489,9 +486,7 @@ bool Inventory::overlapItems(
 				++i)
 		{
 			if ((*i)->occupiesSlot(x, y, item))
-			{
 				return true;
-			}
 		}
 	}
 
@@ -514,9 +509,7 @@ RuleInventory* Inventory::getSlotInPosition(
 			++i)
 	{
 		if (i->second->checkSlotInPosition(x, y))
-		{
 			return i->second;
-		}
 	}
 
 	return 0;
@@ -539,15 +532,11 @@ void Inventory::setSelectedItem(BattleItem* item)
 {
 	_selItem = (item && !item->getRules()->isFixed())? item: 0;
 	if (_selItem == 0)
-	{
 		_selection->clear();
-	}
 	else
 	{
 		if (_selItem->getSlot()->getType() == INV_GROUND)
-		{
 			_stackLevel[_selItem->getSlotX()][_selItem->getSlotY()] -= 1;
-		}
 
 		_selItem->getRules()->drawHandSprite(
 										_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"),
@@ -605,7 +594,8 @@ void Inventory::mouseClick(Action* action, State* state)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		if (_selUnit == 0) return;
+		if (_selUnit == 0)
+			return;
 
 		if (_selItem == 0) // Pickup item
 		{
@@ -618,7 +608,10 @@ void Inventory::mouseClick(Action* action, State* state)
 				if (slot->getType() == INV_GROUND)
 					x += _groundOffset;
 
-				BattleItem* item = _selUnit->getItem(slot, x, y);
+				BattleItem* item = _selUnit->getItem(
+													slot,
+													x,
+													y);
 				if (item != 0)
 				{
 					if (SDL_GetModState() & KMOD_CTRL)
@@ -630,7 +623,8 @@ void Inventory::mouseClick(Action* action, State* state)
 
 						if (slot->getType() == INV_GROUND)
 						{
-							switch (item->getRules()->getBattleType())
+							newSlot = _game->getRuleset()->getInventory("STR_RIGHT_HAND"); // kL
+/*kL							switch (item->getRules()->getBattleType())
 							{
 								case BT_FIREARM:
 									newSlot = _game->getRuleset()->getInventory("STR_RIGHT_HAND");
@@ -648,14 +642,27 @@ void Inventory::mouseClick(Action* action, State* state)
 									else
 										newSlot = _game->getRuleset()->getInventory("STR_BELT");
 								break;
-							}
+							} */
 						}
 
 						if (newSlot->getType() != INV_GROUND)
 						{
 							_stackLevel[item->getSlotX()][item->getSlotY()] -= 1;
 
-							placed = fitItem(newSlot, item, warning);
+							placed = fitItem(
+											newSlot,
+											item,
+											warning);
+
+							// kL_begin:
+							if (!placed)
+							{
+								newSlot = _game->getRuleset()->getInventory("STR_LEFT_HAND");
+								placed = fitItem(
+												newSlot,
+												item,
+												warning);
+							} // kL_end
 
 							if (!placed)
 							{
@@ -669,7 +676,10 @@ void Inventory::mouseClick(Action* action, State* state)
 									if (newSlot->getType() == INV_GROUND)
 										continue;
 
-									placed = fitItem(newSlot, item, warning);
+									placed = fitItem(
+													newSlot,
+													item,
+													warning);
 								}
 							}
 
@@ -682,7 +692,11 @@ void Inventory::mouseClick(Action* action, State* state)
 								|| _selUnit->spendTimeUnits(item->getSlot()->getCost(newSlot)))
 							{
 								placed = true;
-								moveItem(item, newSlot, 0, 0);
+								moveItem(
+										item,
+										newSlot,
+										0,
+										0);
 								_game->getResourcePack()->getSound("BATTLE.CAT", 38)->play();
 								arrangeGround(false);
 							}
@@ -732,22 +746,34 @@ void Inventory::mouseClick(Action* action, State* state)
 				if (slot->getType() == INV_GROUND)
 					x += _groundOffset;
 
-				BattleItem* item = _selUnit->getItem(slot, x, y);
+				BattleItem* item = _selUnit->getItem(
+													slot,
+													x,
+													y);
 
 				bool canStack = (slot->getType() == INV_GROUND
-									&& canBeStacked(item, _selItem));
+									&& canBeStacked(
+												item,
+												_selItem));
 
 				if (item == 0 // Put item in empty slot, or stack it, if possible.
 					|| item == _selItem
 					|| canStack)
 				{
 					if (!overlapItems(_selUnit, _selItem, slot, x, y)
-						&& slot->fitItemInSlot(_selItem->getRules(), x, y))
+						&& slot->fitItemInSlot(
+											_selItem->getRules(),
+											x,
+											y))
 					{
 						if (!_tu
 							|| _selUnit->spendTimeUnits(_selItem->getSlot()->getCost(slot)))
 						{
-							moveItem(_selItem, slot, x, y);
+							moveItem(
+									_selItem,
+									slot,
+									x,
+									y);
 
 							if (slot->getType() == INV_GROUND)
 								_stackLevel[x][y] += 1;
@@ -763,7 +789,11 @@ void Inventory::mouseClick(Action* action, State* state)
 						if (!_tu
 							|| _selUnit->spendTimeUnits(_selItem->getSlot()->getCost(slot)))
 						{
-							moveItem(_selItem, slot, item->getSlotX(), item->getSlotY());
+							moveItem(
+									_selItem,
+									slot,
+									item->getSlotX(),
+									item->getSlotY());
 							_stackLevel[item->getSlotX()][item->getSlotY()] += 1;
 							setSelectedItem(0);
 							_game->getResourcePack()->getSound("BATTLE.CAT", 38)->play();
@@ -797,7 +827,11 @@ void Inventory::mouseClick(Action* action, State* state)
 						else if (!_tu
 							|| _selUnit->spendTimeUnits(15))
 						{
-							moveItem(_selItem, 0, 0, 0);
+							moveItem(
+									_selItem,
+									0,
+									0,
+									0);
 							item->setAmmoItem(_selItem);
 							_selItem->moveToOwner(0);
 							setSelectedItem(0);
@@ -825,12 +859,18 @@ void Inventory::mouseClick(Action* action, State* state)
 					x += _groundOffset;
 
 					BattleItem* item = _selUnit->getItem(slot, x, y);
-					if (canBeStacked(item, _selItem))
+					if (canBeStacked(
+									item,
+									_selItem))
 					{
 						if (!_tu
 							|| _selUnit->spendTimeUnits(_selItem->getSlot()->getCost(slot)))
 						{
-							moveItem(_selItem, slot, item->getSlotX(), item->getSlotY());
+							moveItem(
+									_selItem,
+									slot,
+									item->getSlotX(),
+									item->getSlotY());
 							_stackLevel[item->getSlotX()][item->getSlotY()] += 1;
 							setSelectedItem(0);
 
@@ -951,9 +991,17 @@ bool Inventory::unload()
 	if (!_tu
 		|| _selUnit->spendTimeUnits(8))
 	{
-		moveItem(_selItem->getAmmoItem(), _game->getRuleset()->getInventory("STR_LEFT_HAND"), 0, 0);
+		moveItem(
+				_selItem->getAmmoItem(),
+				_game->getRuleset()->getInventory("STR_LEFT_HAND"),
+				0,
+				0);
 		_selItem->getAmmoItem()->moveToOwner(_selUnit);
-		moveItem(_selItem, _game->getRuleset()->getInventory("STR_RIGHT_HAND"), 0, 0);
+		moveItem(
+				_selItem,
+				_game->getRuleset()->getInventory("STR_RIGHT_HAND"),
+				0,
+				0);
 		_selItem->moveToOwner(_selUnit);
 		_selItem->setAmmoItem(0);
 		setSelectedItem(0);
@@ -1078,10 +1126,10 @@ void Inventory::arrangeGround(bool alterOffset)
 
 /**
  * Attempts to place the item in the inventory slot.
- * @param newSlot Where to place the item.
- * @param item Item to be placed.
- * @param warning Warning message if item could not be placed.
- * @return True, if the item was successfully placed in the inventory.
+ * @param newSlot, Where to place the item.
+ * @param item, Item to be placed.
+ * @param warning, Warning message if item could not be placed.
+ * @return, True if the item was successfully placed in the inventory.
  */
 bool Inventory::fitItem(
 		RuleInventory* newSlot,
@@ -1101,8 +1149,16 @@ bool Inventory::fitItem(
 					&& !placed;
 				++x2)
 		{
-			if (!overlapItems(_selUnit, item, newSlot, x2, y2)
-				&& newSlot->fitItemInSlot(item->getRules(), x2, y2))
+			if (!overlapItems(
+							_selUnit,
+							item,
+							newSlot,
+							x2,
+							y2)
+				&& newSlot->fitItemInSlot(
+										item->getRules(),
+										x2,
+										y2))
 			{
 				if (!_tu
 					|| _selUnit->spendTimeUnits(item->getSlot()->getCost(newSlot)))

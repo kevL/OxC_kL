@@ -177,11 +177,32 @@ void MiniMapView::draw()
 					frame += _frame * size * size;
 
 					Surface* s = _set->getFrame(frame);
-					s->blitNShade(
-								this,
-								x,
-								y,
-								0);
+					// kL_begin:
+					if (t->getUnit() == _battleGame->getSelectedUnit())
+					{
+						s->blitNShade(
+									this,
+									x,
+									y,
+									0,
+									false,
+									4); // should be same as 36.
+//									1); // white -> these numbers are blockOffsets + 1block ( ie. block 0 = block 1)
+//									17); // white again. % > 1
+//									35); // red. % > 3
+//									36); // pale green % > 4
+//									37); // paler green % > 5
+//									8); // blue again. % > 8
+//									25); // pale blue % > 9
+					}
+					else // kL_end.
+					{
+						s->blitNShade(
+									this,
+									x,
+									y,
+									0);
+					}
 				}
 
 				if (t->isDiscovered(2)
