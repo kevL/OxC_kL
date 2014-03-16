@@ -4380,7 +4380,7 @@
 	<yaml-cpp/yaml.h>
 	"../Ruleset/Unit.h"
 
-1394636771 f:\git\openxcom\src\ruleset\unit.h
+1394992077 f:\git\openxcom\src\ruleset\unit.h
 	<string>
 	<yaml-cpp/yaml.h>
 
@@ -5756,7 +5756,7 @@
 1394398507 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1394601824 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1394991549 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	<cmath>
 	<sstream>
@@ -5979,7 +5979,7 @@
 	<string>
 	"../Engine/Surface.h"
 
-1394863043 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1394942642 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	<cmath>
 	<sstream>
@@ -6361,7 +6361,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Soldier.h"
 
-1394806272 source:f:\git\openxcom\src\battlescape\map.cpp
+1394991718 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	<cmath>
 	<fstream>
@@ -6461,7 +6461,7 @@
 	"Position.h"
 	"../Engine/InteractiveSurface.h"
 
-1394464441 source:f:\git\openxcom\src\battlescape\minimapview.cpp
+1394909517 source:f:\git\openxcom\src\battlescape\minimapview.cpp
 	"MiniMapView.h"
 	<sstream>
 	"Camera.h"
@@ -6925,7 +6925,7 @@
 	"Language.h"
 	"CrossPlatform.h"
 
-1394398507 source:f:\git\openxcom\src\engine\game.cpp
+1394992871 source:f:\git\openxcom\src\engine\game.cpp
 	"Game.h"
 	<windows.h>
 	<SDL_syswm.h>
@@ -7027,7 +7027,7 @@
 	"OpenGL.h"
 	"Logger.h"
 
-1394721265 source:f:\git\openxcom\src\engine\options.cpp
+1394991783 source:f:\git\openxcom\src\engine\options.cpp
 	"Options.h"
 	<algorithm>
 	<fstream>
@@ -7189,7 +7189,7 @@
 	"Options.h"
 	<assert.h>
 
-1394398507 source:f:\git\openxcom\src\engine\zoom.cpp
+1394990957 source:f:\git\openxcom\src\engine\zoom.cpp
 	"Zoom.h"
 	"Exception.h"
 	"Logger.h"
@@ -8155,7 +8155,7 @@
 	<cmath>
 	<SDL.h>
 
-1394398507 source:f:\git\openxcom\src\interface\cursor.cpp
+1394990957 source:f:\git\openxcom\src\interface\cursor.cpp
 	"Cursor.h"
 	<cmath>
 	<SDL.h>
@@ -8411,7 +8411,7 @@
 	"../Resource/ResourcePack.h"
 	"../Ruleset/Ruleset.h"
 
-1394541839 source:f:\git\openxcom\src\menu\optionsadvancedstate.cpp
+1394990957 source:f:\git\openxcom\src\menu\optionsadvancedstate.cpp
 	"OptionsAdvancedState.h"
 	<algorithm>
 	<iostream>
@@ -9129,7 +9129,7 @@
 1394398507 source:f:\git\openxcom\src\ruleset\ruleresearch.cpp
 	"RuleResearch.h"
 
-1394400851 source:f:\git\openxcom\src\ruleset\ruleset.cpp
+1394991890 source:f:\git\openxcom\src\ruleset\ruleset.cpp
 	"Ruleset.h"
 	<algorithm>
 	<fstream>
@@ -9204,7 +9204,7 @@
 1394398507 source:f:\git\openxcom\src\ruleset\ufotrajectory.cpp
 	"UfoTrajectory.h"
 
-1394398507 source:f:\git\openxcom\src\ruleset\unit.cpp
+1394992039 source:f:\git\openxcom\src\ruleset\unit.cpp
 	"Unit.h"
 
 1394473735 source:f:\git\openxcom\src\savegame\alienbase.cpp
@@ -9399,7 +9399,7 @@
 	"../Ruleset/RuleResearch.h"
 	"../Ruleset/Ruleset.h"
 
-1394652874 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
+1394942864 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
 	<vector>
 	<deque>
 	<queue>
@@ -9491,7 +9491,7 @@
 1394398507 source:f:\git\openxcom\src\savegame\soldierdeath.cpp
 	"SoldierDeath.h"
 
-1394398507 source:f:\git\openxcom\src\savegame\target.cpp
+1394992145 source:f:\git\openxcom\src\savegame\target.cpp
 	"Target.h"
 	<cmath>
 	"Craft.h"

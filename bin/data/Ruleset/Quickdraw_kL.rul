@@ -7,10 +7,10 @@ invs:
       STR_BACK_PACK: 18
       STR_BELT: 10
       STR_LEFT_HAND: 6
-      STR_LEFT_LEG: 10
+      STR_LEFT_LEG: 8
       STR_LEFT_SHOULDER: 12
       STR_RIGHT_HAND: 6
-      STR_RIGHT_LEG: 10
+      STR_RIGHT_LEG: 8
       STR_RIGHT_SHOULDER: 12
       STR_QD: 8
   - id: STR_RIGHT_HAND
