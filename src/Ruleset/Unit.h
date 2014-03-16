@@ -187,7 +187,9 @@ private:
 		~Unit();
 
 		/// Loads the unit data from YAML.
-		void load(const YAML::Node& node);
+		void load(
+				const YAML::Node& node,
+				int modIndex);
 		/// Gets the unit's type.
 		std::string getType() const;
 		/// Gets the unit's stats.

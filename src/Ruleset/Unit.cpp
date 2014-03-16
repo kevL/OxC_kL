@@ -66,7 +66,9 @@ Unit::~Unit()
  * Loads the unit from a YAML file.
  * @param node YAML node.
  */
-void Unit::load(const YAML::Node& node)
+void Unit::load(
+		const YAML::Node& node,
+		int modIndex)
 {
 	//Log(LOG_INFO) << "Unit::load()";
 
@@ -79,14 +81,32 @@ void Unit::load(const YAML::Node& node)
 	_kneelHeight	= node["kneelHeight"].as<int>(_kneelHeight);
 	_floatHeight	= node["floatHeight"].as<int>(_floatHeight);
 	_value			= node["value"].as<int>(_value);
-	_deathSound		= node["deathSound"].as<int>(_deathSound);
-	_aggroSound		= node["aggroSound"].as<int>(_aggroSound);
-	_moveSound		= node["moveSound"].as<int>(_moveSound);
 	_intelligence	= node["intelligence"].as<int>(_intelligence);
 	_aggression		= node["aggression"].as<int>(_aggression);
 	_specab			= (SpecialAbility)node["specab"].as<int>(_specab);
 	_spawnUnit		= node["spawnUnit"].as<std::string>(_spawnUnit);
 	_livingWeapon	= node["livingWeapon"].as<bool>(_livingWeapon);
+
+	if (node["deathSound"])
+	{
+		_deathSound = node["deathSound"].as<int>(_deathSound);
+		if (_deathSound > 54) // BATTLE.CAT: 55 entries
+			_deathSound += modIndex;
+	}
+
+	if (node["aggroSound"])
+	{
+		_aggroSound = node["aggroSound"].as<int>(_aggroSound);
+		if (_aggroSound > 54) // BATTLE.CAT: 55 entries
+			_aggroSound += modIndex;
+	}
+
+	if (node["moveSound"])
+	{
+		_moveSound = node["moveSound"].as<int>(_moveSound);
+		if (_moveSound > 54) // BATTLE.CAT: 55 entries
+			_moveSound += modIndex;
+	}
 }
 
 /**

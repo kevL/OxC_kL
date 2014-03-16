@@ -1416,19 +1416,22 @@ void Map::drawTerrain(Surface* surface)
 										0);
 							}
 
-							_numWaypid->setValue(waypid);
-							_numWaypid->draw();
-							_numWaypid->blitNShade(
-									surface,
-									screenPosition.x + waypXOff,
-									screenPosition.y + waypYOff,
-									0);
-
-							waypXOff += waypid > 9? 8: 6;
-							if (waypXOff >= 26)
+							if (_save->getBattleGame()->getCurrentAction()->type == BA_LAUNCH)
 							{
-								waypXOff = 2;
-								waypYOff += 8;
+								_numWaypid->setValue(waypid);
+								_numWaypid->draw();
+								_numWaypid->blitNShade(
+										surface,
+										screenPosition.x + waypXOff,
+										screenPosition.y + waypYOff,
+										0);
+
+								waypXOff += waypid > 9? 8: 6;
+								if (waypXOff >= 26)
+								{
+									waypXOff = 2;
+									waypYOff += 8;
+								}
 							}
 						}
 

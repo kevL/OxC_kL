@@ -179,6 +179,7 @@ void createDefault()
 	setInt("battleNewPreviewPath", 3); // kL
 //kL	setBool("strafe", false);
 	setBool("strafe", true); // kL
+	setBool("battleConfirmFireMode", false);
 //kL	setBool("battleNotifyDeath", false);
 	setBool("battleNotifyDeath", true); // kL
 //kL	setBool("showMoreStatsInInventoryView", false);

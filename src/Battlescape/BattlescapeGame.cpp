@@ -1882,6 +1882,15 @@ bool BattlescapeGame::cancelCurrentAction(bool bForce)
 			}
 			else
 			{
+				if (Options::getBool("battleConfirmFireMode")
+					&& !_currentAction.waypoints.empty())
+				{
+					_currentAction.waypoints.pop_back();
+					getMap()->getWaypoints()->pop_back();
+
+					return true;
+				}
+
 				_currentAction.targeting = false;
 				_currentAction.type = BA_NONE;
 
@@ -2087,37 +2096,39 @@ void BattlescapeGame::primaryAction(const Position& pos)
 				// in which case don't check for TUs here!
 			}
 		}
+		else if (Options::getBool("battleConfirmFireMode")
+			&& (_currentAction.waypoints.empty()
+				|| pos != _currentAction.waypoints.front()))
+		{
+			_currentAction.waypoints.clear();
+			_currentAction.waypoints.push_back(pos);
+			getMap()->getWaypoints()->clear();
+			getMap()->getWaypoints()->push_back(pos);
+		}
 		else
 		{
 			//Log(LOG_INFO) << ". . . . Firing or Throwing";
 
-/*			_currentAction.TU = _currentAction.actor->getActionTUs( // kL, or is action.TU already passed in correctly, using getActionTUs() to account for flatRates?
-															_currentAction.type,
-															_currentAction.weapon);
-			if (_currentAction.actor->spendTimeUnits(_currentAction.TU)) // kL
+			getMap()->setCursorType(CT_NONE);
+
+			if (Options::getBool("battleConfirmFireMode"))
 			{
-				_currentAction.TU = 0;	// kL. This is drastic....! it obviates checks done in ProjectileFlyBState.
-										// But it Fucking worked. which means ProjectileFlyBState could likely be pruned;
-										// and I still don't have a Fucking clue why throwing triggers reaction fire, otherwise
-										// while shooting does not. Ie. I don't know where else to look for Tu-expenditure for
-										// those (and likely other) actions (like Psi) other than popState() above.
-										// In a word, this code was written by chimpanzees on typewriters!!!!!
-										//
-										// uhh, what if the soldier, etc, has to do a swivel/turn as well...... +1 tu
-*/
-				getMap()->setCursorType(CT_NONE);
-				_parentState->getGame()->getCursor()->setVisible(false);
+				_currentAction.waypoints.clear();
+				getMap()->getWaypoints()->clear();
+			}
 
-				_currentAction.target = pos;
-				_currentAction.cameraPosition = getMap()->getCamera()->getMapOffset();
+			_parentState->getGame()->getCursor()->setVisible(false);
 
-				_states.push_back(new ProjectileFlyBState(
-														this,
-														_currentAction));
+			_currentAction.target = pos;
+			_currentAction.cameraPosition = getMap()->getCamera()->getMapOffset();
 
-				statePushFront(new UnitTurnBState( // first of all turn towards the target
-												this,
-												_currentAction));
+			_states.push_back(new ProjectileFlyBState(
+													this,
+													_currentAction));
+
+			statePushFront(new UnitTurnBState( // first of all turn towards the target
+											this,
+											_currentAction));
 //			}
 			// kL_note: else give message Out-of-TUs, or this must be done elsewhere already...
 			// probably in ProjectileFlyBState... great. not.

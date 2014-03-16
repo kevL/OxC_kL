@@ -561,7 +561,9 @@ void Ruleset::loadFile(const std::string& filename)
 							*i,
 							&_units);
 		if (rule != 0)
-			rule->load(*i);
+			rule->load(
+					*i,
+					_modIndex);
 	}
 
 	for (YAML::const_iterator
