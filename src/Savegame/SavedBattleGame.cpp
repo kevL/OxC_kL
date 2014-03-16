@@ -823,7 +823,7 @@ BattleUnit* SavedBattleGame::selectNextFactionUnit(
  * @param checkReselect Whether to check if we should reselect a unit.
  * @param setDontReselect Don't reselect a unit.
  * @param checkInventory Whether to check if the unit has an inventory.
- * @return Pointer to new selected BattleUnit, NULL if none can be selected.
+ * @return, Pointer to new selected BattleUnit, NULL if none can be selected.
  */
 BattleUnit* SavedBattleGame::selectFactionUnit(
 		int dir,
@@ -832,7 +832,6 @@ BattleUnit* SavedBattleGame::selectFactionUnit(
 		bool checkInventory)
 {
 	//Log(LOG_INFO) << "SavedBattleGame::selectFactionUnit()";
-
 	if (_selectedUnit != 0
 		&& setDontReselect)
 	{
@@ -843,7 +842,6 @@ BattleUnit* SavedBattleGame::selectFactionUnit(
 	if (_units.empty())
 	{
 		//Log(LOG_INFO) << ". units.Empty, ret 0";
-
 		_selectedUnit = 0;		// kL
 		_lastSelectedUnit = 0;	// kL
 
@@ -874,7 +872,6 @@ BattleUnit* SavedBattleGame::selectFactionUnit(
 	do
 	{
 		//Log(LOG_INFO) << ". do";
-
 		if (i == _units.end()) // no unit selected
 		{
 			//Log(LOG_INFO) << ". . i = begin, continue";
@@ -898,7 +895,6 @@ BattleUnit* SavedBattleGame::selectFactionUnit(
 		if (*i == _selectedUnit)
 		{
 			//Log(LOG_INFO) << ". . *i == _selectedUnit, found one, test";
-
 			if (checkReselect
 				&& !_selectedUnit->reselectAllowed())
 			{

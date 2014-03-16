@@ -1145,6 +1145,9 @@ void BattlescapeGame::setupCursor()
 			getMap()->setCursorType(
 								CT_NORMAL,
 								_currentAction.actor->getArmor()->getSize());
+		else // kL
+			getMap()->setCursorType( // kL
+								CT_NORMAL);
 	}
 }
 
@@ -1152,7 +1155,7 @@ void BattlescapeGame::setupCursor()
  * Determines whether a playable unit is selected. Normally only player side
  * units can be selected, but in debug mode one can play with aliens too :)
  * Is used to see if stats can be displayed and action buttons will work.
- * @return Whether a playable unit is selected.
+ * @return, True if a playable unit is selected.
  */
 bool BattlescapeGame::playableUnitSelected()
 {

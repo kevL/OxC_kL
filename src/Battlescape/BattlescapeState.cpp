@@ -1592,7 +1592,7 @@ void BattlescapeState::btnPersonalLightingClick(Action*)
  * Determines whether a playable unit is selected. Normally only player side
  * units can be selected, but in debug mode one can play with aliens too :)
  * Is used to see if stats can be displayed and action buttons will work.
- * @return, Whether a playable unit is selected.
+ * @return, True if a playable unit is selected.
  */
 bool BattlescapeState::playableUnitSelected()
 {
