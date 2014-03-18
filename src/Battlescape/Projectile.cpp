@@ -544,7 +544,7 @@ void Projectile::applyAccuracy(
 		} */
 		baseDeviation += 0.16; // kL:instead of switch() above
 
-		baseDeviation /= accuracy - acuPenalty + 0.15;
+		baseDeviation /= accuracy - acuPenalty + 0.14;
 		baseDeviation = std::max(
 								0.01,
 								baseDeviation); // kL_end.

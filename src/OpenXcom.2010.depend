@@ -5592,7 +5592,7 @@
 1394398507 f:\git\openxcom\src\battlescape\abortmissionstate.h
 	"../Engine/State.h"
 
-1394398507 f:\git\openxcom\src\battlescape\battlescapestate.h
+1395004652 f:\git\openxcom\src\battlescape\battlescapestate.h
 	<string>
 	<vector>
 	"Position.h"
@@ -5979,7 +5979,7 @@
 	<string>
 	"../Engine/Surface.h"
 
-1394942642 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1395031204 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	<cmath>
 	<sstream>
@@ -6042,12 +6042,14 @@
 	"../Ruleset/Armor.h"
 	"../Ruleset/RuleItem.h"
 	"../Ruleset/Ruleset.h"
+	"../Savegame/Base.h"
+	"../Savegame/BattleItem.h"
+	"../Savegame/BattleUnit.h"
+	"../Savegame/Craft.h"
 	"../Savegame/SavedGame.h"
 	"../Savegame/SavedBattleGame.h"
-	"../Savegame/Tile.h"
-	"../Savegame/BattleUnit.h"
 	"../Savegame/Soldier.h"
-	"../Savegame/BattleItem.h"
+	"../Savegame/Tile.h"
 
 1322985608 f:\git\openxcom\deps\include\sdl\sdl_gfxprimitives.h
 	<math.h>
@@ -6130,7 +6132,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Ufo.h"
 
-1394686161 source:f:\git\openxcom\src\battlescape\camera.cpp
+1395109751 source:f:\git\openxcom\src\battlescape\camera.cpp
 	"Camera.h"
 	<cmath>
 	<fstream>
@@ -6176,7 +6178,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1394863174 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
+1395030894 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
 	"DebriefingState.h"
 	<sstream>
 	"CannotReequipState.h"
@@ -6558,7 +6560,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1394885603 source:f:\git\openxcom\src\battlescape\projectile.cpp
+1394999272 source:f:\git\openxcom\src\battlescape\projectile.cpp
 	"Projectile.h"
 	<cmath>
 	"BattlescapeGame.h"
@@ -7395,7 +7397,7 @@
 1394398507 f:\git\openxcom\src\geoscape\confirmcydoniastate.h
 	"../Engine/State.h"
 
-1394398507 source:f:\git\openxcom\src\geoscape\confirmdestinationstate.cpp
+1395083367 source:f:\git\openxcom\src\geoscape\confirmdestinationstate.cpp
 	"ConfirmDestinationState.h"
 	<sstream>
 	"../Engine/Game.h"
@@ -7503,7 +7505,7 @@
 1394398507 f:\git\openxcom\src\geoscape\craftpatrolstate.h
 	"../Engine/State.h"
 
-1394398507 f:\git\openxcom\src\geoscape\geoscapecraftstate.h
+1395081768 f:\git\openxcom\src\geoscape\geoscapecraftstate.h
 	"../Engine/State.h"
 
 1394398507 source:f:\git\openxcom\src\geoscape\defeatstate.cpp
@@ -7585,7 +7587,7 @@
 1394398507 f:\git\openxcom\src\geoscape\fundingstate.h
 	"../Engine/State.h"
 
-1394398507 source:f:\git\openxcom\src\geoscape\geoscapecraftstate.cpp
+1395081766 source:f:\git\openxcom\src\geoscape\geoscapecraftstate.cpp
 	"GeoscapeCraftState.h"
 	<sstream>
 	"Globe.h"
@@ -7609,7 +7611,7 @@
 	"../Savegame/Ufo.h"
 	"../Savegame/Waypoint.h"
 
-1394398507 f:\git\openxcom\src\geoscape\selectdestinationstate.h
+1395083509 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
 1394842497 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
@@ -7721,7 +7723,7 @@
 	<string>
 	"../Engine/State.h"
 
-1394398507 f:\git\openxcom\src\geoscape\multipletargetsstate.h
+1395087483 f:\git\openxcom\src\geoscape\multipletargetsstate.h
 	"../Engine/State.h"
 
 1394398507 f:\git\openxcom\src\geoscape\newpossiblemanufacturestate.h
@@ -7766,7 +7768,7 @@
 	<string>
 	<vector>
 
-1394812018 source:f:\git\openxcom\src\geoscape\globe.cpp
+1394996873 source:f:\git\openxcom\src\geoscape\globe.cpp
 	"Globe.h"
 	<cmath>
 	<fstream>
@@ -7847,7 +7849,7 @@
 	"../Engine/Action.h"
 	"../Engine/State.h"
 
-1394398507 source:f:\git\openxcom\src\geoscape\interceptstate.cpp
+1395082865 source:f:\git\openxcom\src\geoscape\interceptstate.cpp
 	"InterceptState.h"
 	<sstream>
 	"ConfirmDestinationState.h"
@@ -7928,7 +7930,7 @@
 	"../Savegame/Region.h"
 	"../Savegame/SavedGame.h"
 
-1394480213 source:f:\git\openxcom\src\geoscape\multipletargetsstate.cpp
+1395087871 source:f:\git\openxcom\src\geoscape\multipletargetsstate.cpp
 	"MultipleTargetsState.h"
 	<sstream>
 	"ConfirmDestinationState.h"
@@ -8058,7 +8060,7 @@
 	"../Savegame/SavedGame.h"
 	"../Engine/Options.h"
 
-1394398507 source:f:\git\openxcom\src\geoscape\selectdestinationstate.cpp
+1395083573 source:f:\git\openxcom\src\geoscape\selectdestinationstate.cpp
 	"SelectDestinationState.h"
 	<cmath>
 	"ConfirmCydoniaState.h"
@@ -8071,7 +8073,6 @@
 	"../Engine/Language.h"
 	"../Engine/Palette.h"
 	"../Engine/Surface.h"
-	"../Interface/Text.h"
 	"../Interface/TextButton.h"
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
@@ -8080,7 +8081,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Craft.h"
 
-1394577719 source:f:\git\openxcom\src\geoscape\targetinfostate.cpp
+1395080981 source:f:\git\openxcom\src\geoscape\targetinfostate.cpp
 	"TargetInfoState.h"
 	"GeoscapeState.h"
 	"InterceptState.h"

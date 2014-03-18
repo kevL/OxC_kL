@@ -33,7 +33,7 @@
 #include "../Engine/Palette.h"
 #include "../Engine/Surface.h"
 
-#include "../Interface/Text.h"
+//kL #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 
@@ -79,7 +79,7 @@ SelectDestinationState::SelectDestinationState(
 	_window		= new Window(this, 256, 30, 0 + dx, 0);
 	_window->setDY(0);
 
-	_txtTitle	= new Text(100, 9, 16 + dx, 10);
+//kL	_txtTitle	= new Text(100, 9, 16 + dx, 10);
 
 	_btnCancel	= new TextButton(60, 14, 98 + dx, 8);
 	_btnCydonia	= new TextButton(60, 14, 180 + dx, 8);
@@ -100,7 +100,7 @@ SelectDestinationState::SelectDestinationState(
 	add(_window);
 	add(_btnCancel);
 	add(_btnCydonia);
-	add(_txtTitle);
+//kL	add(_txtTitle);
 
 
 	_globe->onMouseClick((ActionHandler)& SelectDestinationState::globeClick);
@@ -147,10 +147,10 @@ SelectDestinationState::SelectDestinationState(
 	_btnCancel->onMouseClick((ActionHandler)& SelectDestinationState::btnCancelClick);
 	_btnCancel->onKeyboardPress((ActionHandler)& SelectDestinationState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
 
-	_txtTitle->setColor(Palette::blockOffset(15)-1);
-	_txtTitle->setText(tr("STR_SELECT_DESTINATION"));
-	_txtTitle->setVerticalAlign(ALIGN_MIDDLE);
-	_txtTitle->setWordWrap(true);
+//kL	_txtTitle->setColor(Palette::blockOffset(15)-1);
+//kL	_txtTitle->setText(tr("STR_SELECT_DESTINATION"));
+//kL	_txtTitle->setVerticalAlign(ALIGN_MIDDLE);
+//kL	_txtTitle->setWordWrap(true);
 
 	if (!_craft->getRules()->getSpacecraft()
 		|| !_game->getSavedGame()->isResearched("STR_CYDONIA_OR_BUST"))

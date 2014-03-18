@@ -50,10 +50,10 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Multiple Targets window.
- * @param game Pointer to the core game.
- * @param targets List of targets to display.
- * @param craft Pointer to craft to retarget (NULL if none).
- * @param state Pointer to the Geoscape state.
+ * @param game, Pointer to the core game.
+ * @param targets, List of targets to display.
+ * @param craft, Pointer to craft to retarget (NULL if none).
+ * @param state, Pointer to the Geoscape state.
  */
 MultipleTargetsState::MultipleTargetsState(
 		Game* game,
@@ -158,12 +158,12 @@ void MultipleTargetsState::init()
 
 /**
  * Displays the right popup for a specific target.
- * @param target Pointer to target.
+ * @param target, Pointer to target.
  */
 void MultipleTargetsState::popupTarget(Target* target)
 {
 	//Log(LOG_INFO) << "MultipleTargetsState::popupTarget()";
-	_game->popState();
+//kL	_game->popState();
 
 	if (_craft == 0)
 	{
@@ -177,6 +177,7 @@ void MultipleTargetsState::popupTarget(Target* target)
 		if (b != 0)
 		{
 			//Log(LOG_INFO) << ". . base";
+			_game->popState(); // kL
 			_game->pushState(new InterceptState(
 											_game,
 											_state->getGlobe(),
@@ -185,15 +186,26 @@ void MultipleTargetsState::popupTarget(Target* target)
 		else if (c != 0)
 		{
 			//Log(LOG_INFO) << ". . craft";
+			// kL_begin:
+			bool doublePop = true;
+
+			if (_targets.size() == 1)
+			{
+				doublePop = false;
+				_game->popState();
+			} // kL_end.
+
 			_game->pushState(new GeoscapeCraftState(
 												_game,
 												c,
 												_state->getGlobe(),
-												0));
+												0,
+												doublePop)); // kL_add.
 		}
 		else if (u != 0)
 		{
 			//Log(LOG_INFO) << ". . ufo";
+			_game->popState(); // kL
 			_game->pushState(new UfoDetectedState(
 												_game,
 												u,
@@ -205,6 +217,7 @@ void MultipleTargetsState::popupTarget(Target* target)
 		{
 			//Log(LOG_INFO) << ". . else...";
 //kL			_game->pushState(new TargetInfoState(_game, target, _state->getGlobe()));
+			_game->popState(); // kL
 			_game->pushState(new TargetInfoState(
 												_game,
 												target,
@@ -215,6 +228,7 @@ void MultipleTargetsState::popupTarget(Target* target)
 	else
 	{
 		//Log(LOG_INFO) << ". _craft != 0";
+		_game->popState(); // kL
 		_game->pushState(new ConfirmDestinationState(
 													_game,
 													_craft,

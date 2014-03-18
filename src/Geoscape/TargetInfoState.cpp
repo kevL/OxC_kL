@@ -135,10 +135,6 @@ TargetInfoState::TargetInfoState(
 		}
 	}
 
-//	_txtTargetted->setColor(Palette::blockOffset(15)-1);
-//	_txtTargetted->setAlign(ALIGN_CENTER);
-//	_txtTargetted->setText(tr("STR_TARGETTED_BY"));
-
 	bool targeted = false;
 
 	_txtFollowers->setColor(Palette::blockOffset(15)+5);
@@ -181,9 +177,6 @@ TargetInfoState::~TargetInfoState()
  */
 void TargetInfoState::edtBaseKeyPress(Action* action)
 {
-//	if (!_ab)
-//		return;
-
 	if (action->getDetails()->key.keysym.sym == SDLK_RETURN
 		|| action->getDetails()->key.keysym.sym == SDLK_KP_ENTER)
 	{

@@ -44,6 +44,8 @@ class GeoscapeCraftState
 {
 
 private:
+	bool _doublePop; // kL
+
 	Craft* _craft;
 	Globe* _globe;
 	Surface* _sprite; // kL
@@ -79,7 +81,8 @@ private:
 				Game* game,
 				Craft* craft,
 				Globe* globe,
-				Waypoint* waypoint);
+				Waypoint* waypoint,
+				bool doublePop = false); // kL_add.
 		/// Cleans up the Geoscape Craft state.
 		~GeoscapeCraftState();
 

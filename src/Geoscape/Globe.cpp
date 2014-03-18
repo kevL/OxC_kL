@@ -399,15 +399,24 @@ Globe::Globe(
 	_mkCity->setPixel(0, 2, 86);
 	_mkCity->setPixel(1, 2, 86);
 	_mkCity->setPixel(2, 2, 86); */
-	_mkCity->setPixel(0, 0, 5);	// white border
+/*	_mkCity->setPixel(0, 0, 5);		// white border
 	_mkCity->setPixel(1, 0, 5);
 	_mkCity->setPixel(2, 0, 5);
 	_mkCity->setPixel(0, 1, 5);
-	_mkCity->setPixel(1, 1, 86);		// blue center
+	_mkCity->setPixel(1, 1, 86);	// blue center
 	_mkCity->setPixel(2, 1, 5);
 	_mkCity->setPixel(0, 2, 5);
 	_mkCity->setPixel(1, 2, 5);
-	_mkCity->setPixel(2, 2, 5);
+	_mkCity->setPixel(2, 2, 5); */
+	_mkCity->setPixel(0, 0, 6);		// gray border
+	_mkCity->setPixel(1, 0, 6);
+	_mkCity->setPixel(2, 0, 6);
+	_mkCity->setPixel(0, 1, 6);
+	_mkCity->setPixel(1, 1, 3);		// red center
+	_mkCity->setPixel(2, 1, 6);
+	_mkCity->setPixel(0, 2, 6);
+	_mkCity->setPixel(1, 2, 6);
+	_mkCity->setPixel(2, 2, 6);
 	_mkCity->unlock();
 
 	_mkFlyingUfo = new Surface(3, 3);

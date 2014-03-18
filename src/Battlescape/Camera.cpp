@@ -687,14 +687,24 @@ bool Camera::getShowAllLayers() const
 bool Camera::isOnScreen(const Position& mapPos) const
 {
 	Position screenPos;
-	convertMapToScreen(mapPos, &screenPos);
+	convertMapToScreen(
+					mapPos,
+					&screenPos);
 	screenPos.x += _mapOffset.x;
 	screenPos.y += _mapOffset.y;
 
-	return screenPos.x >= -24
+/*kL	return screenPos.x >= -24
 			&& screenPos.x <= _screenWidth + 24
 			&& screenPos.y >= -32
-			&& screenPos.y <= _screenHeight - 48;
+			&& screenPos.y <= _screenHeight - 48; */ // kL:
+/*	return screenPos.x > -20
+			&& screenPos.x < _screenWidth + 20
+			&& screenPos.y > -28
+			&& screenPos.y < _screenHeight - 52; */
+	return screenPos.x > 0
+			&& screenPos.x < _screenWidth
+			&& screenPos.y > 0
+			&& screenPos.y < _screenHeight - 72; // <- icons.
 }
 
 }

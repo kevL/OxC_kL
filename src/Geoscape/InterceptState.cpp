@@ -318,14 +318,15 @@ void InterceptState::btnCancelClick(Action*)
  */
 void InterceptState::lstCraftsLeftClick(Action*)
 {
-	_game->popState();
+//kL	_game->popState();
 
 	Craft* c = _crafts[_lstCrafts->getSelectedRow()];
 	_game->pushState(new GeoscapeCraftState(
 										_game,
 										c,
 										_globe,
-										0));
+										0,
+										true)); // kL_add.
 }
 
 /**

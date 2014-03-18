@@ -92,12 +92,14 @@
 #include "../Ruleset/RuleItem.h"
 #include "../Ruleset/Ruleset.h"
 
+#include "../Savegame/Base.h" // kL
+#include "../Savegame/BattleItem.h"
+#include "../Savegame/BattleUnit.h"
+#include "../Savegame/Craft.h" // kL
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/SavedBattleGame.h"
-#include "../Savegame/Tile.h"
-#include "../Savegame/BattleUnit.h"
 #include "../Savegame/Soldier.h"
-#include "../Savegame/BattleItem.h"
+#include "../Savegame/Tile.h"
 
 
 namespace OpenXcom
@@ -130,6 +132,9 @@ BattlescapeState::BattlescapeState(Game* game)
 	int iconsHeight = 56;
 
 	_mouseOverIcons = false;
+
+	_txtBaseLabel = new Text(80, 9, screenWidth - 81, 0); // kL
+
 
 	// Create buttonbar - this should be on the centerbottom of the screen
 	_icons = new InteractiveSurface(
@@ -348,12 +353,57 @@ BattlescapeState::BattlescapeState(Game* game)
 	add(_btnPsi);
 	_game->getResourcePack()->getSurfaceSet("SPICONS.DAT")->getFrame(1)->blit(_btnPsi);
 
-
 	add(_turnCounter);									// kL
 	_turnCounter->setColor(Palette::blockOffset(9)+1);	// kL
 
 
 	_save = _game->getSavedGame()->getSavedBattle();
+
+	// kL_begin:
+	//Log(LOG_INFO) << "_txtBaseLabel BEGIN";
+	add(_txtBaseLabel);
+	_txtBaseLabel->setColor(Palette::blockOffset(9)+1);
+	_txtBaseLabel->setAlign(ALIGN_RIGHT);
+
+	Base* base = 0;
+	std::wstring baseLabel = L"";
+
+	//Log(LOG_INFO) << ". iterate start";
+	for (std::vector<Base*>::iterator
+			i = _game->getSavedGame()->getBases()->begin();
+			i != _game->getSavedGame()->getBases()->end();
+			++i)
+	{
+		//Log(LOG_INFO) << ". iterate bases";
+		for (std::vector<Craft*>::iterator
+				j = (*i)->getCrafts()->begin();
+				j != (*i)->getCrafts()->end();
+				++j)
+		{
+			//Log(LOG_INFO) << ". iterate craft at base";
+			if ((*j)->isInBattlescape())
+			{
+				//Log(LOG_INFO) << ". found craft in Battlescape";
+				baseLabel = (*i)->getName(_game->getLanguage());
+
+				break;
+			}
+		}
+
+		if (baseLabel != L"")
+			break;
+		else if ((*i)->isInBattlescape())
+		{
+			//Log(LOG_INFO) << ". found base in Battlescape";
+			baseLabel = (*i)->getName(_game->getLanguage());
+
+			break;
+		}
+	}
+	_txtBaseLabel->setText(baseLabel); // there'd better be a baseLabel ... or else. Pow! To the moon!!!
+	//Log(LOG_INFO) << "_txtBaseLabel DONE";
+	// kL_end.
+
 
 	_map->init();
 	_map->onMouseOver((ActionHandler)& BattlescapeState::mapOver);

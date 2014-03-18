@@ -1293,14 +1293,14 @@ void DebriefingState::prepareDebriefing()
 				++i)
 		{
 			// alien alloys recovery values are divided by 10 or divided by 150 in case of an alien base
-			// kL_note: change to divided by 5 or divided by 100 in case of an alien base...
+			// kL_note: change to divided by 6 or divided by 120 in case of an alien base.
 			if ((*i)->item == "STR_ALIEN_ALLOYS")
 			{
 //kL				int alloy = 10;
-				int alloy = 5; // kL
+				int alloy = 6; // kL
 				if (mission == "STR_ALIEN_BASE_ASSAULT")
 //kL					alloy = 100;
-					alloy = 15; // kL
+					alloy = 120; // kL
 
 				(*i)->qty = (*i)->qty / alloy;
 				(*i)->score = (*i)->score / alloy;

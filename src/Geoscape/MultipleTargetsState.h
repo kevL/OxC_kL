@@ -49,13 +49,14 @@ private:
 	static const int BORDER = 5;
 	static const int BUTTON_HEIGHT = 16;
 
-	std::vector<Target*> _targets;
 	Craft* _craft;
 	GeoscapeState* _state;
 
 	Window* _window;
 	TextButton* _btnCancel;
 	TextList* _lstTargets;
+
+	std::vector<Target*> _targets;
 
 
 	public:

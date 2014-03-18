@@ -31,7 +31,7 @@ class Globe;
 //class InteractiveSurface;
 class Timer;
 class Window;
-class Text;
+//kL class Text;
 class TextButton;
 
 /**
@@ -47,12 +47,17 @@ private:
 	Globe* _globe;
 //	InteractiveSurface* _btnRotateLeft, * _btnRotateRight, * _btnRotateUp, * _btnRotateDown, * _btnZoomIn, * _btnZoomOut;
 	Window* _window;
-	Text* _txtTitle;
-	TextButton* _btnCancel, * _btnCydonia;
+//kL	Text* _txtTitle;
+	TextButton
+		* _btnCancel,
+		* _btnCydonia;
 
 	public:
 		/// Creates the Select Destination state.
-		SelectDestinationState(Game* game, Craft* craft, Globe* globe);
+		SelectDestinationState(
+				Game* game,
+				Craft* craft,
+				Globe* globe);
 		/// Cleans up the Select Destination state.
 		~SelectDestinationState();
 

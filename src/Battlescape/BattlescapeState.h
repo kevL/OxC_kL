@@ -71,6 +71,7 @@ private:
 		_xBeforeMouseScrolling,
 		_yBeforeMouseScrolling;
 	Uint32 _mouseScrollingStartTime;
+
 	std::string _currentTooltip;
 
 	Bar
@@ -130,6 +131,7 @@ private:
 		* _rank,
 		* _kneel;
 	Text
+		* _txtBaseLabel, // kL
 		* _txtDebug, //* _txtTooltip;
 		* _txtName;
 	Timer

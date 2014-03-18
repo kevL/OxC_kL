@@ -62,12 +62,14 @@ GeoscapeCraftState::GeoscapeCraftState(
 		Game* game,
 		Craft* craft,
 		Globe* globe,
-		Waypoint* waypoint)
+		Waypoint* waypoint,
+		bool doublePop) // kL_add.
 	:
 		State(game),
 		_craft(craft),
 		_globe(globe),
-		_waypoint(waypoint)
+		_waypoint(waypoint),
+		_doublePop(doublePop) // kL_add.
 {
 	_screen = false;
 
@@ -393,8 +395,10 @@ void GeoscapeCraftState::init()
  */
 void GeoscapeCraftState::btnCenterClick(Action*)
 {
-	_game->popState();
+	if (_doublePop)			// kL
+		_game->popState();	// kL
 
+	_game->popState();
 	_globe->center(
 				_craft->getLongitude(),
 				_craft->getLatitude());
@@ -406,6 +410,9 @@ void GeoscapeCraftState::btnCenterClick(Action*)
  */
 void GeoscapeCraftState::btnBaseClick(Action*)
 {
+	if (_doublePop)			// kL
+		_game->popState();	// kL
+
 	_game->popState();
 	_craft->returnToBase();
 
@@ -418,6 +425,9 @@ void GeoscapeCraftState::btnBaseClick(Action*)
  */
 void GeoscapeCraftState::btnTargetClick(Action*)
 {
+	if (_doublePop)			// kL
+		_game->popState();	// kL
+
 	_game->popState();
 	_game->pushState(new SelectDestinationState(
 											_game,
@@ -433,6 +443,9 @@ void GeoscapeCraftState::btnTargetClick(Action*)
  */
 void GeoscapeCraftState::btnPatrolClick(Action*)
 {
+	if (_doublePop)			// kL
+		_game->popState();	// kL
+
 	_game->popState();
 	_craft->setDestination(0);
 
