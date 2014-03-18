@@ -16,10 +16,15 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "Cursor.h"
+
 #include <cmath>
+
 #include <SDL.h>
+
 #include "../Engine/Action.h"
+
 
 namespace OpenXcom
 {
@@ -34,7 +39,18 @@ namespace OpenXcom
  * @param x X position in pixels.
  * @param y Y position in pixels.
  */
-Cursor::Cursor(int width, int height, int x, int y) : Surface(width, height, x, y), _color(0)
+Cursor::Cursor(
+		int width,
+		int height,
+		int x,
+		int y)
+	:
+		Surface(
+			width,
+			height,
+			x,
+			y),
+		_color(0)
 {
 }
 
@@ -46,16 +62,15 @@ Cursor::~Cursor()
 }
 
 /**
- * Automatically updates the cursor position
- * when the mouse moves.
+ * Automatically updates the cursor position when the mouse moves.
  * @param action Pointer to an action.
  */
 void Cursor::handle(Action *action)
 {
 	if (action->getDetails()->type == SDL_MOUSEMOTION)
 	{
-		setX((int)floor((action->getDetails()->motion.x - action->getLeftBlackBand()) / action->getXScale()));
-		setY((int)floor((action->getDetails()->motion.y - action->getTopBlackBand()) / action->getYScale()));
+		setX(static_cast<int>(floor((action->getDetails()->motion.x - action->getLeftBlackBand()) / action->getXScale())));
+		setY(static_cast<int>(floor((action->getDetails()->motion.y - action->getTopBlackBand()) / action->getYScale())));
 	}
 }
 
@@ -84,24 +99,43 @@ Uint8 Cursor::getColor() const
 void Cursor::draw()
 {
 	Surface::draw();
+
 	Uint8 color = _color;
-	int x1 = 0, y1 = 0, x2 = getWidth() - 1, y2 = getHeight() - 1;
+	int
+		x1 = 0,
+		y1 = 0,
+		x2 = getWidth() - 1,
+		y2 = getHeight() - 1;
 
 	lock();
-
-	for (int i = 0; i < 4; ++i)
+	for (int
+			i = 0;
+			i < 4;
+			++i)
 	{
-		drawLine(x1, y1, x1, y2, color);
-		drawLine(x1, y1, x2, getWidth() - 1, color);
+		drawLine(
+				x1,
+				y1,
+				x1,
+				y2,
+				color);
+		drawLine(
+				x1,
+				y1,
+				x2,
+				getWidth() - 1,
+				color);
+
 		x1++;
 		y1 += 2;
+
 		y2--;
 		x2--;
+
 		color++;
 	}
 
 	this->setPixel(4, 8, --color);
-
 	unlock();
 }
 

@@ -1410,6 +1410,7 @@ void BattlescapeGame::popState()
 					}
 				} // kL_end.
 
+				getMap()->refreshSelectorPosition(); // kL
 				_parentState->getGame()->getCursor()->setVisible(true);
 				setupCursor();
 
@@ -1458,6 +1459,7 @@ void BattlescapeGame::popState()
 			}
 			else if (_debugPlay)
 			{
+				getMap()->refreshSelectorPosition(); // kL
 				_parentState->getGame()->getCursor()->setVisible(true);
 				setupCursor();
 			}
@@ -1507,12 +1509,11 @@ void BattlescapeGame::popState()
 		|| _save->getSelectedUnit()->isOut(true, true))
 	{
 		//Log(LOG_INFO) << ". huh hey wot)";
-
 		cancelCurrentAction();
-
 		_save->setSelectedUnit(0);
 
 		getMap()->setCursorType(CT_NORMAL, 1);
+		getMap()->refreshSelectorPosition(); // kL
 		_parentState->getGame()->getCursor()->setVisible(true);
 	}
 
@@ -1895,6 +1896,7 @@ bool BattlescapeGame::cancelCurrentAction(bool bForce)
 				_currentAction.type = BA_NONE;
 
 				setupCursor();
+				getMap()->refreshSelectorPosition(); // kL
 				_parentState->getGame()->getCursor()->setVisible(true);
 
 				return true;

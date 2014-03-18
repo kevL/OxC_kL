@@ -16,39 +16,53 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_CURSOR_H
 #define OPENXCOM_CURSOR_H
 
 #include "../Engine/Surface.h"
+
 
 namespace OpenXcom
 {
 
 class Action;
 
+
 /**
  * Mouse cursor that replaces the system cursor.
  * Drawn as a shaded triangle-like shape, automatically
  * matches the mouse coordinates.
  */
-class Cursor : public Surface
+class Cursor
+	:
+		public Surface
 {
+
 private:
 	Uint8 _color;
 
-public:
-	/// Creates a new cursor with the specified size and position.
-	Cursor(int width, int height, int x = 0, int y = 0);
-	/// Cleans up the cursor.
-	~Cursor();
-	/// Handles mouse events.
-	void handle(Action *action);
-	/// Sets the cursor's color.
-	void setColor(Uint8 color);
-	/// Gets the cursor's color.
-	Uint8 getColor() const;
-	/// Draws the cursor.
-	void draw();
+
+	public:
+		/// Creates a new cursor with the specified size and position.
+		Cursor(
+				int width,
+				int height,
+				int x = 0,
+				int y = 0);
+		/// Cleans up the cursor.
+		~Cursor();
+
+		/// Handles mouse events.
+		void handle(Action *action);
+
+		/// Sets the cursor's color.
+		void setColor(Uint8 color);
+		/// Gets the cursor's color.
+		Uint8 getColor() const;
+
+		/// Draws the cursor.
+		void draw();
 };
 
 }

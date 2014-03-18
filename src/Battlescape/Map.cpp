@@ -126,15 +126,15 @@ Map::Map(
 		_smoothingEngaged(false)
 {
 	//Log(LOG_INFO) << "Create Map";
-	_previewSetting = Options::getInt("battleNewPreviewPath");
-	_smoothCamera = Options::getBool("battleSmoothCamera");
+	_previewSetting	= Options::getInt("battleNewPreviewPath");
+	_smoothCamera	= Options::getBool("battleSmoothCamera");
 
 	// turn everything on because we want to see the markers.
 	if (Options::getBool("traceAI")) _previewSetting = 3;
 
-	_res = _game->getResourcePack();
-	_spriteWidth = _res->getSurfaceSet("BLANKS.PCK")->getFrame(0)->getWidth();
-	_spriteHeight = _res->getSurfaceSet("BLANKS.PCK")->getFrame(0)->getHeight();
+	_res			= _game->getResourcePack();
+	_spriteWidth	= _res->getSurfaceSet("BLANKS.PCK")->getFrame(0)->getWidth();
+	_spriteHeight	= _res->getSurfaceSet("BLANKS.PCK")->getFrame(0)->getHeight();
 
 	_save = _game->getSavedGame()->getSavedBattle();
 
@@ -254,7 +254,7 @@ void Map::draw()
 
 	Surface::draw();
 
-	Tile* t;
+	Tile* t = NULL;
 
 	_projectileInFOV = _save->getDebugMode();
 	if (_projectile)

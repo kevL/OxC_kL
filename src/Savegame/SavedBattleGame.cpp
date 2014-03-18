@@ -408,9 +408,9 @@ void SavedBattleGame::load(
 		}
 	}
 
-	_objectiveDestroyed = node["objectiveDestroyed"].as<bool>(_objectiveDestroyed);
-	_tuReserved = (BattleActionType)node["tuReserved"].as<int>(_tuReserved);
-	_kneelReserved = node["kneelReserved"].as<bool>(_kneelReserved);
+	_objectiveDestroyed	= node["objectiveDestroyed"].as<bool>(_objectiveDestroyed);
+	_tuReserved			= (BattleActionType)node["tuReserved"].as<int>(_tuReserved);
+	_kneelReserved		= node["kneelReserved"].as<bool>(_kneelReserved);
 }
 
 /**
@@ -647,8 +647,8 @@ void SavedBattleGame::initMap(
  */
 void SavedBattleGame::initUtilities(ResourcePack* res)
 {
-	_pathfinding = new Pathfinding(this);
-	_tileEngine = new TileEngine(
+	_pathfinding	= new Pathfinding(this);
+	_tileEngine		= new TileEngine(
 								this,
 								res->getVoxelData());
 }

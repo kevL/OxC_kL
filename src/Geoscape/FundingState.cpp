@@ -60,7 +60,7 @@ FundingState::FundingState(Game* game)
 	_txtFunding		= new Text(100, 9, 138, 25);
 	_txtChange		= new Text(72, 9, 238, 25);
 
-	_lstCountries	= new TextList(260, 128, 30, 34);
+	_lstCountries	= new TextList(290, 128, 24, 34);
 	_lstTotal		= new TextList(279, 9, 16, 165);
 
 	_btnOk			= new TextButton(288, 16, 16, 177);
@@ -115,7 +115,7 @@ FundingState::FundingState(Game* game)
 
 	_lstCountries->setColor(Palette::blockOffset(15)-1);
 	_lstCountries->setSecondaryColor(Palette::blockOffset(8)+10);
-	_lstCountries->setColumns(3, 108, 100, 52);
+	_lstCountries->setColumns(3, 114, 100, 52);
 	_lstCountries->setDot(true);
 	for (std::vector<Country*>::iterator
 			i = _game->getSavedGame()->getCountries()->begin();
@@ -123,7 +123,7 @@ FundingState::FundingState(Game* game)
 			++i)
 	{
 		std::wstringstream ss, ss2;
-		ss << L'\x01' << Text::formatFunding((*i)->getFunding().at((*i)->getFunding().size()-1)) << L'\x01';
+		ss << L'\x01' << Text::formatFunding((*i)->getFunding().at((*i)->getFunding().size() - 1)) << L'\x01';
 		if ((*i)->getFunding().size() > 1)
 		{
 			ss2 << L'\x01';
