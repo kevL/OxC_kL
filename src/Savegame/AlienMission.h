@@ -32,6 +32,7 @@ class AlienBase;
 class Game;
 class Globe;
 class RuleAlienMission;
+class RuleRegion;
 class Ruleset;
 class RuleUfo;
 class SavedGame;
@@ -173,6 +174,13 @@ private:
 				const double lon,
 				const double lat,
 				Game& engine);
+
+		/// Select a destination (lon/lat) based on the criteria of our trajectory and desired waypoint.
+		std::pair<double, double> getWaypoint(
+				const UfoTrajectory& trajectory,
+				const unsigned int nextWaypoint,
+				const Globe& globe,
+				const RuleRegion& region);
 };
 
 }

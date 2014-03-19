@@ -86,7 +86,7 @@ private:
 		 */
 		unsigned getWaypointCount() const
 		{
-			return _waypoints.size();
+			return _waypoints.size() - 1;
 		}
 
 		/**
