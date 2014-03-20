@@ -581,21 +581,21 @@ void AlienMission::ufoReachedWaypoint(
 		return;
 	}
 
-	ufo.setAltitude(trajectory.getAltitude(curWaypoint + 1));
+	ufo.setAltitude(trajectory.getAltitude(++curWaypoint));
+	ufo.setTrajectoryPoint(curWaypoint);
+
 	if (ufo.getAltitude() != "STR_GROUND")
 	{
 		if (ufo.getLandId() != 0)
 			ufo.setLandId(0);
 
 		// Set next waypoint.
-		ufo.setTrajectoryPoint(ufo.getTrajectoryPoint() + 1);
-		ufo.setTrajectoryPoint(++curWaypoint);
 		ufo.setSpeed(static_cast<int>(
 							(static_cast<float>(ufo.getRules()->getMaxSpeed())
 									* trajectory.getSpeedPercentage(curWaypoint))));
 		std::pair<double, double> pos = getWaypoint(
 												trajectory,
-												curWaypoint + 1,
+												curWaypoint,
 												globe,
 												*rules.getRegion(_region));
 
@@ -748,22 +748,10 @@ void AlienMission::ufoLifting(
 							engine);
 				}
 
-				assert(ufo.getTrajectoryPoint() != ufo.getTrajectory().getWaypointCount());
-				ufo.setSpeed(static_cast<int>(
-									static_cast<float>(ufo.getRules()->getMaxSpeed())
-											* ufo.getTrajectory().getSpeedPercentage(ufo.getTrajectoryPoint())));
-				ufo.setAltitude("STR_VERY_LOW");
-
-				Waypoint* wp = new Waypoint(); // Set next waypoint.
-				std::pair<double, double> pos = getWaypoint(
-														ufo.getTrajectory(),
-														ufo.getTrajectoryPoint() + 1,
-														globe,
-														*rules.getRegion(_region));
-				wp->setLongitude(pos.first);
-				wp->setLatitude(pos.second);
-				ufo.setDestination(wp);
-				ufo.setTrajectoryPoint(ufo.getTrajectoryPoint() + 1);
+				ufoReachedWaypoint(
+								ufo,
+								engine,
+								globe);
 			}
 		break;
 		case Ufo::CRASHED: // Mission expired
@@ -951,8 +939,7 @@ std::pair<double, double> AlienMission::getWaypoint(
 		const Globe& globe,
 		const RuleRegion &region)
 {
-	if (nextWaypoint != trajectory.getWaypointCount()
-		&& trajectory.getAltitude(nextWaypoint) == "STR_GROUND")
+	if (trajectory.getAltitude(nextWaypoint) == "STR_GROUND")
 	{
 		return getLandPoint(
 						globe,
