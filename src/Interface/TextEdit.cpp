@@ -114,6 +114,14 @@ void TextEdit::deFocus()
 }
 
 /**
+ * kL. Gets focus.
+ */
+bool TextEdit::getFocus() // kL
+{
+	return _isFocused;
+}
+
+/**
  * Changes the text edit to use the big-size font.
  */
 void TextEdit::setBig()
@@ -414,15 +422,11 @@ void TextEdit::mousePress(Action* action, State* state)
 					++i)
 			{
 				if (mouseX <= w)
-				{
 					break;
-				}
 
 				w += static_cast<double>(_text->getFont()->getCharSize(*i).w / 2) * scaleX;
 				if (mouseX <= w)
-				{
 					break;
-				}
 
 				c++;
 				w += static_cast<double>(_text->getFont()->getCharSize(*i).w / 2) * scaleX;

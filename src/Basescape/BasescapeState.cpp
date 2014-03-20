@@ -686,10 +686,13 @@ void BasescapeState::miniClick(Action*)
 
 /**
  * Selects a new base to display.
- * @param action Pointer to an action.
+ * @param action, Pointer to an action.
  */
 void BasescapeState::handleKeyPress(Action* action)
 {
+	if (_edtBase->getFocus()) // kL: prevent base-switching when editing Label.
+		return;
+
 	if (action->getDetails()->type == SDL_KEYDOWN)
 	{
 		int base = -1;
@@ -727,7 +730,7 @@ void BasescapeState::handleKeyPress(Action* action)
 
 /**
  * Changes the Base name.
- * @param action Pointer to an action.
+ * @param action, Pointer to an action.
  */
 void BasescapeState::edtBaseKeyPress(Action* action)
 {

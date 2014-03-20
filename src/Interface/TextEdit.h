@@ -33,8 +33,7 @@ class Timer;
 
 /**
  * Editable version of Text.
- * Receives keyboard input to allow the player
- * to change the text himself.
+ * Receives keyboard input to allow the player to change the text.
  */
 class TextEdit
 	:
@@ -45,10 +44,9 @@ private:
 	bool
 		_blink,
 		_numerical;
-
 	size_t _caretPos;
-
 	wchar_t _ascii;
+
 	std::wstring _value;
 
 	Text
@@ -74,6 +72,8 @@ private:
 		void focus();
 		/// Removes focus from this text box.
 		void deFocus();
+		/// kL. Gets focus.
+		bool getFocus(); // kL
 
 		/// Sets the text size to big.
 		void setBig();
