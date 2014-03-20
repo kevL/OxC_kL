@@ -3078,6 +3078,7 @@ void GeoscapeState::handleBaseDefense(
 		bgen.run();
 
 		musicStop();
+		_pause = true;
 		popup(new BriefingState(
 							_game,
 							0,

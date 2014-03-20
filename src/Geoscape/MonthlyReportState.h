@@ -60,7 +60,9 @@ private:
 		* _txtMonth,
 		* _txtRating,
 		* _txtTitle;
-	TextButton* _btnOk;
+	TextButton
+		* _btnOk,
+		* _btnBigOk;
 	Window* _window;
 
 	std::vector<std::string>
