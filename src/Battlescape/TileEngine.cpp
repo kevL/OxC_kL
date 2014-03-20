@@ -2343,7 +2343,7 @@ void TileEngine::explode(
 //			powerEff = _powerT;
 
 			while (_powerT > 0
-				&& r < r_Max) // incongruous <---  kL_note.
+				&& r < r_Max) // incongruous <--- kL_note.
 			{
 				vx = centerX + r * sin_te * cos_fi;
 				vy = centerY + r * cos_te * cos_fi;
@@ -2596,12 +2596,12 @@ void TileEngine::explode(
 									float modifier = targetUnit->getArmor()->getDamageModifier(DT_IN);
 									if (modifier > 0.f)
 									{
-//kL											int fire = RNG::generate(4, 11);
+//kL										int fire = RNG::generate(4, 11);
 										int firePower = RNG::generate( // kL: 25% - 75%
 																	_powerT / 4,
 																	_powerT * 3 / 4);
-//																		powerEff / 4,		// kL
-//																		powerEff * 3 / 4);	// kL
+//																	powerEff / 4,		// kL
+//																	powerEff * 3 / 4);	// kL
 
 										targetUnit->damage(
 														Position(

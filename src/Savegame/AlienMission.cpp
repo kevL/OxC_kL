@@ -546,9 +546,8 @@ private:
 		/// Match with base's coordinates.
 		bool operator()(const Base* base) const
 		{
-			return
-					AreSame(base->getLongitude(), _lon)
-					&& AreSame(base->getLatitude(), _lat);
+			return AreSame(base->getLongitude(), _lon)
+				&& AreSame(base->getLatitude(), _lat);
 		}
 };
 
