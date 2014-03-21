@@ -23,6 +23,7 @@
 #include <sstream>
 
 //#include "WarningMessage.h" // kL
+#include "Inventory.h" // kL
 
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
@@ -52,18 +53,30 @@ PrimeGrenadeState::PrimeGrenadeState(
 		Game* game,
 		BattleAction* action,
 		bool inInventoryView,
-		BattleItem* grenadeInInventory)
+		BattleItem* grenadeInInventory,
+		Inventory* inventory) // kL_add.
 	:
 		State(game),
 		_action(action),
 		_inInventoryView(inInventoryView),
-		_grenadeInInventory(grenadeInInventory)
+		_grenadeInInventory(grenadeInInventory),
+		_inventory(inventory) // kL_add.
 {
 	_screen = false;
 
-	_title	= new Text(192, 24, 65, 43);
-	_frame	= new Frame(192, 27, 65, 37);
-	_bg		= new Surface(192, 93, 65, 45);
+	_title		= new Text(192, 24, 65, 43);
+	_frame		= new Frame(192, 27, 65, 37);
+	_bg			= new Surface(192, 93, 65, 45);
+//	_warning	= new WarningMessage(224, 24, 48, 176); // kL
+
+	// kL_begin:
+/*	_warning->initText(
+					_game->getResourcePack()->getFont("FONT_BIG"),
+					_game->getResourcePack()->getFont("FONT_SMALL"),
+					_game->getLanguage());
+	_warning->setColor(Palette::blockOffset(2));
+	_warning->setTextColor(Palette::blockOffset(1) - 1); */
+	// kL_end.
 
 	int x = 67;
 	int y = 68;
@@ -147,6 +160,7 @@ PrimeGrenadeState::PrimeGrenadeState(
  */
 PrimeGrenadeState::~PrimeGrenadeState()
 {
+//	delete _warning; // kL
 }
 
 /**
@@ -185,8 +199,7 @@ void PrimeGrenadeState::btnClick(Action* action)
 		return;
 	}
 
-	// got to find out which button was pressed
-	for (int
+	for (int // got to find out which button was pressed
 			i = 0;
 			i < 24
 				&& btnID == -1;
@@ -198,8 +211,25 @@ void PrimeGrenadeState::btnClick(Action* action)
 
 	if (btnID != -1)
 	{
+		// kL_begin:
+/*		std::wstring activated = L"";
+		if (btnID > 0)
+			activated += Text::formatNumber(btnID) + L" ";
+
+		activated += _game->getLanguage()->getString("STR_GRENADE_IS_ACTIVATED");
+
+		if (btnID > 0)
+			activated += L" " + Text::formatNumber(btnID);
+
+		_warning->showMessage(activated); */
+		// kL_end.
+
 		if (_inInventoryView)
-			_grenadeInInventory->setExplodeTurn(0 + btnID);
+		{
+			_grenadeInInventory->setExplodeTurn(btnID);
+
+			_inventory->setPrimeGrenade(btnID);
+		}
 		else
 			_action->value = btnID;
 

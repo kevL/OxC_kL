@@ -78,7 +78,8 @@ Inventory::Inventory(
 		_selUnit(0),
 		_selItem(0),
 		_tu(true),
-		_groundOffset(0)
+		_groundOffset(0),
+		_primeGrenade(-1) // kL
 {
 	_grid			= new Surface(width, height, x, y);
 	_items			= new Surface(width, height, x, y);
@@ -87,8 +88,8 @@ Inventory::Inventory(
 								RuleInventory::HAND_H * RuleInventory::SLOT_H,
 								x,
 								y);
-	_warning		= new WarningMessage(224, 24, 48, 176);
 	_stackNumber	= new NumberText(15, 15, 0, 0);
+	_warning		= new WarningMessage(224, 24, 48, 176);
 
 	_warning->initText(
 					_game->getResourcePack()->getFont("FONT_BIG"),
@@ -547,10 +548,27 @@ void Inventory::setSelectedItem(BattleItem* item)
 }
 
 /**
- * Handles timers.
+ * Handles WarningMessage timer.
  */
 void Inventory::think()
 {
+	// kL_begin:
+	if (_primeGrenade > -1)
+	{
+		std::wstring activated = L"";
+		if (_primeGrenade > 0)
+			activated += Text::formatNumber(_primeGrenade) + L" ";
+
+		activated += _game->getLanguage()->getString("STR_GRENADE_IS_ACTIVATED");
+
+		if (_primeGrenade > 0)
+			activated += L" " + Text::formatNumber(_primeGrenade);
+
+		_warning->showMessage(activated);
+
+		_primeGrenade = -1;
+	} // kL_end.
+
 	_warning->think();
 }
 
@@ -599,7 +617,8 @@ void Inventory::mouseClick(Action* action, State* state)
 
 		if (_selItem == 0) // Pickup item
 		{
-			int x = static_cast<int>(floor(action->getAbsoluteXMouse())) - _dx,
+			int
+				x = static_cast<int>(floor(action->getAbsoluteXMouse())) - _dx,
 				y = static_cast<int>(floor(action->getAbsoluteYMouse())) - _dy;
 
 			RuleInventory* slot = getSlotInPosition(&x, &y);
@@ -890,7 +909,8 @@ void Inventory::mouseClick(Action* action, State* state)
 			if (!_tu)	// kL_note: ie. TurnUnits have not been instantiated yet:
 						// ergo preBattlescape inventory screen is active.
 			{
-				int x = static_cast<int>(floor(action->getAbsoluteXMouse())) - _dx,
+				int
+					x = static_cast<int>(floor(action->getAbsoluteXMouse())) - _dx,
 					y = static_cast<int>(floor(action->getAbsoluteYMouse())) - _dy;
 
 				RuleInventory* slot = getSlotInPosition(&x, &y);
@@ -925,7 +945,8 @@ void Inventory::mouseClick(Action* action, State* state)
 																		_game,
 																		0,
 																		true,
-																		item));
+																		item,
+																		this)); // kL_add.
 							}
 							else
 							{
@@ -1098,7 +1119,9 @@ void Inventory::arrangeGround(bool alterOffset)
 					if ((*i)->getRules()->getInventoryWidth())
 						_stackLevel[x][y] += 1;
 
-					xMax = std::max(xMax, x + (*i)->getRules()->getInventoryWidth());
+					xMax = std::max(
+								xMax,
+								x + (*i)->getRules()->getInventoryWidth());
 				}
 				else
 				{
@@ -1204,6 +1227,15 @@ bool Inventory::canBeStacked(
 		&& itemA->getPainKillerQuantity() == itemB->getPainKillerQuantity()								// and if it's a medkit, it has the same number of charges
 		&& itemA->getHealQuantity() == itemB->getHealQuantity()
 		&& itemA->getStimulantQuantity() == itemB->getStimulantQuantity());
+}
+
+/**
+ * kL. Set grenade to show a warning in Inventory.
+ * @param turn, Turns until grenade is ready to explode
+ */
+void Inventory::setPrimeGrenade(int turn) // kL
+{
+	_primeGrenade = turn;
 }
 
 }

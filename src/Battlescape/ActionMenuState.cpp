@@ -400,7 +400,9 @@ void ActionMenuState::btnActionMenuItemClick(Action* action)
 																					_action->actor,
 																					0,
 																					&_action->target))
+			{
 				_action->result = "STR_THERE_IS_NO_ONE_THERE";
+			}
 
 			_game->popState();
 		}

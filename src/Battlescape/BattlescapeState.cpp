@@ -1101,7 +1101,8 @@ void BattlescapeState::mapIn(Action*)
  */
 void BattlescapeState::btnUnitUpClick(Action*)
 {
-	if (!playableUnitSelected()) return;
+	if (!playableUnitSelected())
+		return;
 
 	int valid = _save->getPathfinding()->validateUpDown(
 												_save->getSelectedUnit(),
@@ -1647,7 +1648,7 @@ void BattlescapeState::btnPersonalLightingClick(Action*)
 bool BattlescapeState::playableUnitSelected()
 {
 	return _save->getSelectedUnit() != 0
-			&& allowButtons();
+		&& allowButtons();
 }
 
 /**

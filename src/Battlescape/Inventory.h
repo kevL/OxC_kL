@@ -48,7 +48,9 @@ class Inventory
 
 private:
 	bool _tu;
-	int _groundOffset;
+	int
+		_groundOffset,
+		_primeGrenade; // kL
 
 	BattleItem* _selItem;
 	BattleUnit* _selUnit;
@@ -142,6 +144,9 @@ private:
 				RuleInventory* slot,
 				int x = 0,
 				int y = 0);
+
+		/// kL. Set grenade to show a warning in Inventory.
+		void setPrimeGrenade(int turn); // kL
 };
 
 }

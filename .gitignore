@@ -20,6 +20,7 @@
 *.tlog
 *.ipch
 *.sdf
+*.cscope_file_list
 
 # -OpenXcom root
 *.ac

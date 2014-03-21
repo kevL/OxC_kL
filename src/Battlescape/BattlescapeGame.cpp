@@ -1099,7 +1099,10 @@ void BattlescapeGame::handleNonTargetAction()
 						}
 					} */
 					Position voxel = _currentAction.target * Position(16, 16, 24)
-									+ Position(8, 8, 8 - _save->getTile(_currentAction.target)->getTerrainLevel());
+									+ Position(
+											8,
+											8,
+											8 - _save->getTile(_currentAction.target)->getTerrainLevel());
 					statePushNext(new ExplosionBState(
 													this,
 													voxel,

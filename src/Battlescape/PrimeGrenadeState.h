@@ -31,8 +31,10 @@ namespace OpenXcom
 class Frame;
 class Game;
 class InteractiveSurface;
+class Inventory; // kL
 class Surface;
 class Text;
+//class WarningMessage; // kL
 
 
 /**
@@ -50,10 +52,12 @@ private:
 	BattleItem* _grenadeInInventory;
 	Frame* _frame;
 	InteractiveSurface* _button[24];
+	Inventory* _inventory; // kL
 	Surface* _bg;
 	Text
 		* _number[24],
 		* _title;
+//	WarningMessage* _warning; // kL
 
 
 	public:
@@ -62,7 +66,8 @@ private:
 				Game* game,
 				BattleAction* action,
 				bool inInventoryView,
-				BattleItem* grenadeInInventory);
+				BattleItem* grenadeInInventory,
+				Inventory* inventory = NULL); // kL_add.
 		/// Cleans up the Prime Grenade state.
 		~PrimeGrenadeState();
 
