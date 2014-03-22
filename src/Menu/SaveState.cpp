@@ -65,6 +65,8 @@ SaveState::SaveState(
 
 	add(_edtSave);
 	add(_btnSaveGame);
+	
+	centerAllSurfaces();
 
 
 	_txtTitle->setText(tr("STR_SELECT_SAVE_POSITION"));
