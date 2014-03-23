@@ -62,7 +62,6 @@ SaveState::SaveState(
 		_selectedRow(-1)
 {
 	_edtSave		= new TextEdit(168, 9, 0, 0);
-//	_btnSaveGame	= new TextButton(134, 16, 202, 197); // kL
 	_btnSaveGame	= new TextButton(134, 16, 170, 177);
 
 	add(_edtSave);
