@@ -6297,7 +6297,7 @@
 	"../Interface/Frame.h"
 	"../Interface/Text.h"
 
-1395362152 source:f:\git\openxcom\src\battlescape\inventory.cpp
+1395363248 source:f:\git\openxcom\src\battlescape\inventory.cpp
 	"Inventory.h"
 	<cmath>
 	"PrimeGrenadeState.h"
@@ -6544,7 +6544,7 @@
 1394398507 source:f:\git\openxcom\src\battlescape\position.cpp
 	"Position.h"
 
-1395362742 source:f:\git\openxcom\src\battlescape\primegrenadestate.cpp
+1395363306 source:f:\git\openxcom\src\battlescape\primegrenadestate.cpp
 	"PrimeGrenadeState.h"
 	<cmath>
 	<sstream>

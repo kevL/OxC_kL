@@ -32,6 +32,7 @@
 #include "../Engine/Logger.h"
 #include "../Engine/Options.h"
 #include "../Engine/Palette.h"
+#include "../Engine/Screen.h" // kL
 
 #include "../Interface/TextButton.h"
 #include "../Interface/TextEdit.h"
@@ -61,12 +62,16 @@ SaveState::SaveState(
 		_selectedRow(-1)
 {
 	_edtSave		= new TextEdit(168, 9, 0, 0);
-	_btnSaveGame	= new TextButton(134, 16, 202, 197);
+//	_btnSaveGame	= new TextButton(134, 16, 202, 197); // kL
+	_btnSaveGame	= new TextButton(134, 16, 170, 177);
 
 	add(_edtSave);
 	add(_btnSaveGame);
-	
-	centerAllSurfaces();
+
+
+	_btnSaveGame->setX(_btnSaveGame->getX() + Screen::getDX()); // kL
+	_btnSaveGame->setY(_btnSaveGame->getY() + Screen::getDY()); // kL
+//kL	centerAllSurfaces();
 
 
 	_txtTitle->setText(tr("STR_SELECT_SAVE_POSITION"));
