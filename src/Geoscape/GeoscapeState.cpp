@@ -118,7 +118,7 @@
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Soldier.h"
 #include "../Savegame/SoldierDead.h" // kL
-#include "../Savegame/SoldierDeath.h" // kL
+#include "../Savegame/SoldierDeath.h"
 #include "../Savegame/TerrorSite.h"
 #include "../Savegame/Transfer.h"
 #include "../Savegame/Ufo.h"
@@ -1062,6 +1062,27 @@ void GeoscapeState::time5Seconds()
 						break;
 					}
 				}
+
+				// kL_note: This needs to be updated to my SoldierDead routine:
+				// if a transport craft has been shot down, kill all the soldiers on board.
+				if ((*j)->getRules()->getSoldiers() > 0)
+				{
+					for (std::vector<Soldier*>::iterator k = (*i)->getSoldiers()->begin(); k != (*i)->getSoldiers()->end();)
+					{
+						if ((*k)->getCraft() == (*j))
+						{
+							SoldierDeath *death = new SoldierDeath();
+							death->setTime(_game->getSavedGame()->getTime());
+							(*k)->die(death);
+							_game->getSavedGame()->getDeadSoldiers()->push_back((*k));
+							k = (*i)->getSoldiers()->erase(k);
+						}
+						else
+						{
+							++k;
+						}
+					}
+				} // end kL_note.
 
 				delete *j;
 				j = (*i)->getCrafts()->erase(j);

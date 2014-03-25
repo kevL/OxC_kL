@@ -1830,7 +1830,7 @@ bool Pathfinding::previewPath(bool bRemove)
 		dash = _save->getStrafeSetting()
 				&& _modifierUsed
 				&& !size
-				&& _path.size() > 1,	// <- not exactly true. If moving around a corner 2 tiles, it
+				&& _path.size() > 1,	// <- not exactly true. If moving around a corner +2 tiles, it
 										// will strafe (potential conflict). See WalkBState also or ...
 		bLaden		= armorType == "STR_PERSONAL_ARMOR_UC",
 		bPowered	= armorType == "STR_POWER_SUIT_UC",
