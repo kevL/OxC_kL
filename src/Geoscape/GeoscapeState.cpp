@@ -1063,26 +1063,32 @@ void GeoscapeState::time5Seconds()
 					}
 				}
 
-				// kL_note: This needs to be updated to my SoldierDead routine:
 				// if a transport craft has been shot down, kill all the soldiers on board.
 				if ((*j)->getRules()->getSoldiers() > 0)
 				{
-					for (std::vector<Soldier*>::iterator k = (*i)->getSoldiers()->begin(); k != (*i)->getSoldiers()->end();)
+					for (std::vector<Soldier*>::iterator
+							soldier = (*i)->getSoldiers()->begin();
+							soldier != (*i)->getSoldiers()->end();
+							)
 					{
-						if ((*k)->getCraft() == (*j))
+						if ((*soldier)->getCraft() == (*j))
 						{
-							SoldierDeath *death = new SoldierDeath();
+							SoldierDeath* death = new SoldierDeath();
 							death->setTime(_game->getSavedGame()->getTime());
-							(*k)->die(death);
-							_game->getSavedGame()->getDeadSoldiers()->push_back((*k));
-							k = (*i)->getSoldiers()->erase(k);
+
+							SoldierDead* dead = (*soldier)->die(death); // converts Soldier to SoldierDead class instance.
+							_game->getSavedGame()->getDeadSoldiers()->push_back(dead);
+
+							int iD = (*soldier)->getId();
+
+							soldier = (*i)->getSoldiers()->erase(soldier); // erase Soldier from Base_soldiers vector.
+							delete _game->getSavedGame()->getSoldier(iD); // delete Soldier instance.
+							// note: Could return any armor the soldier was wearing to Stores.
 						}
 						else
-						{
-							++k;
-						}
+							++soldier;
 					}
-				} // end kL_note.
+				}
 
 				delete *j;
 				j = (*i)->getCrafts()->erase(j);
@@ -2341,10 +2347,9 @@ void GeoscapeState::time1Day()
 		for (std::vector<Soldier*>::iterator // handle soldier wounds
 				s = (*b)->getSoldiers()->begin();
 				s < (*b)->getSoldiers()->end();
-				++s)
+				)
 		{
 			// kL_begin:
-			//Log(LOG_INFO) << ". Soldier = " << *(*s)->getName().c_str(); // this is weird.
 			//Log(LOG_INFO) << ". Soldier = " << (*s)->getId();
 			int wounds = (*s)->getWoundRecovery();
 			if (wounds > 0)
@@ -2357,7 +2362,6 @@ void GeoscapeState::time1Day()
 					&& RNG::percent(hurt / 5)) // %chance to die today
 				{
 					//Log(LOG_INFO) << ". . . he's dead, Jim!!";
-					 // kill soldier. (lifted from Battlescape/DebriefingState::prepareDebriefing()
 					timerReset();
 
 					popup(new SoldierDiedState(
@@ -2365,32 +2369,25 @@ void GeoscapeState::time1Day()
 											(*s)->getName(),
 											(*b)->getName()));
 
-					GameTime* time = new GameTime(*_game->getSavedGame()->getTime());
-					//Log(LOG_INFO) << "year = " << time->getYear();
-					//Log(LOG_INFO) << "month = " << time->getMonth();
-					//Log(LOG_INFO) << "day = " << time->getDay();
-
+					// kill soldier. (lifted from Battlescape/DebriefingState::prepareDebriefing()
 					SoldierDeath* death = new SoldierDeath();
-					death->setTime(time);
-
-					delete time;
+					death->setTime(_game->getSavedGame()->getTime());
 
 					SoldierDead* dead = (*s)->die(death); // converts Soldier to SoldierDead class instance.
 					_game->getSavedGame()->getDeadSoldiers()->push_back(dead);
 
 					int iD = (*s)->getId();
 
-					(*b)->getSoldiers()->erase(s); // erase Soldier from Base_soldiers vector.
-
+					s = (*b)->getSoldiers()->erase(s); // erase Soldier from Base_soldiers vector.
 					delete _game->getSavedGame()->getSoldier(iD); // delete Soldier instance.
-
-					--s;
 					// note: Could return any armor the soldier was wearing to Stores.
 				}
 				else
 				{
 					//Log(LOG_INFO) << ". . heal up.";
 					(*s)->heal();
+
+					++s;
 				}
 			} // kL_end.
 		}
