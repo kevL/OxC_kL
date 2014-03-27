@@ -293,9 +293,9 @@ void Transfer::advance(Base* base)
 
 /**
  * Get a pointer to the soldier being transferred.
- * @return a pointer to the soldier being moved.
+ * @return, Pointer to the soldier being transferred.
  */
-Soldier *Transfer::getSoldier()
+Soldier* Transfer::getSoldier()
 {
 	return _soldier;
 }

@@ -109,14 +109,15 @@ void TextEdit::deFocus()
 	_timer->stop();
 
 	SDL_EnableKeyRepeat(
-				0,
-				SDL_DEFAULT_REPEAT_INTERVAL);
+					0,
+					SDL_DEFAULT_REPEAT_INTERVAL);
 }
 
 /**
- * kL. Gets focus.
+ * Check if the player is currently typing in this box.
+ * @return, True if the player is typing in this box.
  */
-bool TextEdit::getFocus() // kL
+bool TextEdit::isFocused()
 {
 	return _isFocused;
 }
@@ -533,12 +534,4 @@ void TextEdit::keyboardPress(Action* action, State* state)
 	InteractiveSurface::keyboardPress(action, state);
 }
 
-/**
- * Check if the player is currently typing in this box.
- * @return if the player is typing in this box or not.
- */
-bool TextEdit::isFocused()
-{
-	return _isFocused;
-}
 }

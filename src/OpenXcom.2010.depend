@@ -4403,7 +4403,7 @@
 1394398507 f:\git\openxcom\src\interface\textbutton.h
 	"../Engine/InteractiveSurface.h"
 
-1395251159 f:\git\openxcom\src\interface\textedit.h
+1395942725 f:\git\openxcom\src\interface\textedit.h
 	"Text.h"
 	"../Engine/InteractiveSurface.h"
 
@@ -4426,7 +4426,7 @@
 	<vector>
 	<yaml-cpp/yaml.h>
 
-1394723083 f:\git\openxcom\src\savegame\savedgame.h
+1395939324 f:\git\openxcom\src\savegame\savedgame.h
 	<map>
 	<string>
 	<vector>
@@ -5216,7 +5216,7 @@
 	<limits>
 	<cmath>
 
-1394398507 f:\git\openxcom\src\savegame\transfer.h
+1395939254 f:\git\openxcom\src\savegame\transfer.h
 	<string>
 	<yaml-cpp/yaml.h>
 
@@ -6508,7 +6508,7 @@
 	"../Interface/Text.h"
 	"../Engine/Options.h"
 
-1394583120 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
+1395767298 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
 	"Pathfinding.h"
 	<list>
 	"PathfindingNode.h"
@@ -7615,7 +7615,7 @@
 1395083509 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1395322761 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1395768639 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	<assert.h>
 	<algorithm>

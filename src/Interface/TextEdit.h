@@ -72,9 +72,6 @@ private:
 		void focus();
 		/// Removes focus from this text box.
 		void deFocus();
-		/// kL. Gets focus.
-		bool getFocus(); // kL
-
 		/// Check if the player is currently typing in this box.
 		bool isFocused();
 
