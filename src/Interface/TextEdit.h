@@ -75,6 +75,9 @@ private:
 		/// kL. Gets focus.
 		bool getFocus(); // kL
 
+		/// Check if the player is currently typing in this box.
+		bool isFocused();
+
 		/// Sets the text size to big.
 		void setBig();
 		/// Sets the text size to small.
@@ -116,7 +119,10 @@ private:
 		/// Gets the text edit's secondary color.
 		Uint8 getSecondaryColor() const;
 		/// Sets the text edit's palette.
-		void setPalette(SDL_Color *colors, int firstcolor = 0, int ncolors = 256);
+		void setPalette(
+				SDL_Color* colors,
+				int firstcolor = 0,
+				int ncolors = 256);
 
 		/// Handles the timers.
 		void think();

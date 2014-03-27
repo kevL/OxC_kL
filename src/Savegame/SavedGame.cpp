@@ -41,6 +41,7 @@
 #include "Soldier.h"
 #include "SoldierDead.h" // kL
 #include "TerrorSite.h"
+#include "Transfer.h"
 #include "Ufo.h"
 #include "Waypoint.h"
 
@@ -1636,10 +1637,12 @@ bool SavedGame::handlePromotions()
 	// now determine the number of positions we have of each rank,
 	// and the soldier with the heighest promotion score of the rank below it
 
-	size_t filledPositions = 0, filledPositions2 = 0;
+	size_t
+		filledPositions = 0,
+		filledPositions2 = 0;
+
 	inspectSoldiers(&highestRanked, &filledPositions, RANK_COMMANDER);
 	inspectSoldiers(&highestRanked, &filledPositions2, RANK_COLONEL);
-
 	if (filledPositions < 1
 		&& filledPositions2 > 0)
 	{
@@ -1668,7 +1671,6 @@ bool SavedGame::handlePromotions()
 
 	inspectSoldiers(&highestRanked, &filledPositions, RANK_SERGEANT);
 	inspectSoldiers(&highestRanked, &filledPositions2, RANK_SQUADDIE);
-
 	if (filledPositions < soldiersTotal / 5
 		&& filledPositions2 > 0)
 	{
@@ -1707,14 +1709,7 @@ void SavedGame::inspectSoldiers(
 			{
 				(*total)++;
 
-				UnitStats* s = (*j)->getCurrentStats();
-				int v1 = 2 * s->health + 2 * s->stamina + 4 * s->reactions + 4 * s->bravery;
-				int v2 = v1 + 3 * (s->tu + 2 * (s->firing));
-				int v3 = v2 + s->melee + s->throwing + s->strength;
-
-				if (s->psiSkill > 0) v3 += s->psiStrength + 2 * s->psiSkill;
-
-				int score = v3 + 10 * ((*j)->getMissions() + (*j)->getKills());
+				int score = getSoldierScore(*j);
 				if (score > highestScore)
 				{
 					highestScore = score;
@@ -1722,7 +1717,44 @@ void SavedGame::inspectSoldiers(
 				}
 			}
 		}
+
+		for (std::vector<Transfer*>::iterator
+				j = (*i)->getTransfers()->begin();
+				j != (*i)->getTransfers()->end();
+				++j)
+		{
+			if ((*j)->getType() == TRANSFER_SOLDIER
+				&& (*j)->getSoldier()->getRank() == (SoldierRank)rank)
+			{
+				(*total)++;
+
+				int score = getSoldierScore((*j)->getSoldier());
+				if (score > highestScore)
+				{
+					highestScore = score;
+					*highestRanked = (*j)->getSoldier();
+				}
+			}
+		}
 	}
+}
+
+/**
+ * Evaluate the score of a soldier based on all of his stats, missions and kills.
+ * @param soldier, Pointer to the soldier to get a score for.
+ * @return, This soldier's score.
+ */
+int SavedGame::getSoldierScore(Soldier* soldier)
+{
+	UnitStats* s = soldier->getCurrentStats();
+
+	int v1 = 2 * s->health + 2 * s->stamina + 4 * s->reactions + 4 * s->bravery;
+	int v2 = v1 + 3 * (s->tu + 2 * (s->firing));
+	int v3 = v2 + s->melee + s->throwing + s->strength;
+	if (s->psiSkill > 0)
+		v3 += s->psiStrength + 2 * s->psiSkill;
+
+	return v3 + 10 * (soldier->getMissions() + soldier->getKills());
 }
 
 /**

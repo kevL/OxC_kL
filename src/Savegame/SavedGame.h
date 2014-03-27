@@ -372,6 +372,9 @@ private:
 //kL		Base* getSelectedBase();
 		/// Set the last selected player base.
 //kL		void setSelectedBase(int base);
+
+		/// Evaluate the score of a soldier based on all of his stats, missions and kills.
+		int getSoldierScore(Soldier* soldier);
 };
 
 }
