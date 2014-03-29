@@ -1617,6 +1617,13 @@ bool BattlescapeGame::checkReservedTU(
 		effectiveTuReserved = BA_SNAPSHOT;
 	}
 
+	// likewise, if we don't have a snap shot available, try aimed.
+	if (bu->getActionTUs(effectiveTuReserved, slowestWeapon) == 0
+		&& _tuReserved == BA_SNAPSHOT)
+	{
+		effectiveTuReserved = BA_AIMEDSHOT;
+	}
+
 	const int tuKneel = _kneelReserved? 4: 0;
 	if ((effectiveTuReserved != BA_NONE || _kneelReserved)
 		&& tu + tuKneel + bu->getActionTUs(effectiveTuReserved, slowestWeapon) > bu->getTimeUnits()
