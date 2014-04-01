@@ -103,7 +103,7 @@ CraftArmorState::CraftArmorState(
 	_btnOk->onMouseClick((ActionHandler)& CraftArmorState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& CraftArmorState::btnOkClick,
-					(SDLKey)Options::getInt("keyCancel"));
+					Options::keyCancel);
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();

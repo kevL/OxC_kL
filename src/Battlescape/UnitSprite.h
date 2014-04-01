@@ -53,8 +53,6 @@ private:
 		_animationFrame,
 		_drawingRoutine,
 		_part;
-	bool
-		_hairBleach;
 
 	/// Drawing routine for XCom soldiers in overalls and Sectoids and Mutons (routine 10).
 	void drawRoutine0();

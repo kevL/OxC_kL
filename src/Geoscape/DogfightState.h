@@ -54,7 +54,6 @@ class DogfightState
 private:
 	static const int _ufoBlobs[8][13][13];
 	static const int _projectileBlobs[4][6][3];
-	static const int _timeScale;
 
 	bool
 		_end,
@@ -68,6 +67,7 @@ private:
 		_animatingHit;
 	int
 		_timeout,
+		_timeScale,
 		_currentDist,
 		_targetDist,
 

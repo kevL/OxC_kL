@@ -35,13 +35,11 @@ namespace OpenXcom
  */
 namespace RNG
 {
-	/// Initializes the generator.
-	void init();
-	/// Initializes the generator.
-	void init(unsigned int seed);
 
 	/// Gets the seed in use.
 	unsigned int getSeed();
+	/// Sets the seed in use.
+	void setSeed(unsigned int n);
 
 	/// Generates a random integer number, inclusive.
 	int generate(

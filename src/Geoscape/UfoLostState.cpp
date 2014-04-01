@@ -74,10 +74,10 @@ UfoLostState::UfoLostState(
 	_btnOk->onMouseClick((ActionHandler)& UfoLostState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& UfoLostState::btnOkClick,
-					(SDLKey)Options::getInt("keyOk"));
+					Options::keyOk);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& UfoLostState::btnOkClick,
-					(SDLKey)Options::getInt("keyCancel"));
+					Options::keyCancel);
 
 	_txtTitle->setColor(Palette::blockOffset(8)+5);
 	_txtTitle->setBig();

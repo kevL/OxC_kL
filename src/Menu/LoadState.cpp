@@ -58,6 +58,8 @@ LoadState::LoadState(
 			origin,
 			0)
 {
+	centerAllSurfaces();
+
 	_txtTitle->setText(tr("STR_SELECT_GAME_TO_LOAD"));
 
 	_lstSaves->onMousePress((ActionHandler)& LoadState::lstSavesPress);
@@ -139,7 +141,7 @@ void LoadState::quickLoad(const std::string& filename)
 	{
 		Log(LOG_ERROR) << e.what();
 
-		std::wstringstream error;
+		std::wostringstream error;
 		error << tr("STR_LOAD_UNSUCCESSFUL") << L'\x02' << Language::fsToWstr(e.what());
 
 		if (_origin != OPT_BATTLESCAPE)
@@ -166,7 +168,7 @@ void LoadState::quickLoad(const std::string& filename)
 	{
 		Log(LOG_ERROR) << e.what();
 
-		std::wstringstream error;
+		std::wostringstream error;
 		error << tr("STR_LOAD_UNSUCCESSFUL") << L'\x02' << Language::fsToWstr(e.what());
 
 		if (_origin != OPT_BATTLESCAPE)

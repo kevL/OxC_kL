@@ -120,16 +120,14 @@ SavedGame::SavedGame()
 		_battleGame(0),
 		_debug(false),
 		_warned(false),
-		_detail(true),
-		_radarLines(false),
+//		_detail(true),
+//		_radarLines(false),
 		_monthsPassed(-1),
 		_graphRegionToggles(""),
 		_graphCountryToggles(""),
 		_graphFinanceToggles("")
 //kL		_selectedBase(0)
 {
-	RNG::init();
-
 	_time = new GameTime(6, 1, 1, 1999, 12, 0, 0);
 	_alienStrategy = new AlienStrategy();
 	_funds.push_back(0);
@@ -351,14 +349,14 @@ void SavedGame::load(
 	//Log(LOG_INFO) << "SavedGame::load(), difficulty = " << _difficulty;
 
 	if (doc["rng"]
-		&& !Options::getBool("newSeedOnLoad"))
+		&& !Options::newSeedOnLoad)
 	{
-		RNG::init(doc["rng"].as<int>());
+		RNG::setSeed(doc["rng"].as<int>());
 	}
 
 	_monthsPassed			= doc["monthsPassed"].as<int>(_monthsPassed);
-	_radarLines				= doc["radarLines"].as<bool>(_radarLines);
-	_detail					= doc["detail"].as<bool>(_detail);
+//	_radarLines				= doc["radarLines"].as<bool>(_radarLines);
+//	_detail					= doc["detail"].as<bool>(_detail);
 	_graphRegionToggles		= doc["graphRegionToggles"].as<std::string>(_graphRegionToggles);
 	_graphCountryToggles	= doc["graphCountryToggles"].as<std::string>(_graphCountryToggles);
 	_graphFinanceToggles	= doc["graphFinanceToggles"].as<std::string>(_graphFinanceToggles);
@@ -568,8 +566,8 @@ void SavedGame::save(const std::string& filename) const
 
 	node["difficulty"]			= static_cast<int>(_difficulty);
 	node["monthsPassed"]		= _monthsPassed;
-	node["radarLines"]			= _radarLines;
-	node["detail"]				= _detail;
+//	node["radarLines"]			= _radarLines;
+//	node["detail"]				= _detail;
 	node["graphRegionToggles"]	= _graphRegionToggles;
 	node["graphCountryToggles"]	= _graphCountryToggles;
 	node["graphFinanceToggles"]	= _graphFinanceToggles;
@@ -1939,7 +1937,7 @@ Region* SavedGame::locateRegion(const Target& target) const
 					target.getLatitude());
 }
 
-/*
+/**
  * @return the month counter.
  */
 int SavedGame::getMonthsPassed() const
@@ -1947,7 +1945,7 @@ int SavedGame::getMonthsPassed() const
 	return _monthsPassed;
 }
 
-/*
+/**
  * @return the GraphRegionToggles.
  */
 const std::string& SavedGame::getGraphRegionToggles() const
@@ -1955,7 +1953,7 @@ const std::string& SavedGame::getGraphRegionToggles() const
 	return _graphRegionToggles;
 }
 
-/*
+/**
  * @return the GraphCountryToggles.
  */
 const std::string& SavedGame::getGraphCountryToggles() const
@@ -1963,7 +1961,7 @@ const std::string& SavedGame::getGraphCountryToggles() const
 	return _graphCountryToggles;
 }
 
-/*
+/**
  * @return the GraphFinanceToggles.
  */
 const std::string& SavedGame::getGraphFinanceToggles() const
@@ -1998,7 +1996,7 @@ void SavedGame::setGraphFinanceToggles(const std::string& value)
 	_graphFinanceToggles = value;
 }
 
-/*
+/**
  * Increment the month counter.
  */
 void SavedGame::addMonth()
@@ -2006,39 +2004,39 @@ void SavedGame::addMonth()
 	++_monthsPassed;
 }
 
-/*
+/**
  * Toggles the state of the radar line drawing.
  */
-void SavedGame::toggleRadarLines()
+/* void SavedGame::toggleRadarLines()
 {
 	_radarLines = !_radarLines;
-}
+} */
 
-/*
+/**
  * @return the state of the radar line drawing.
  */
-bool SavedGame::getRadarLines()
+/* bool SavedGame::getRadarLines()
 {
 	return _radarLines;
-}
+} */
 
-/*
+/**
  * Toggles the state of the detail drawing.
  */
-void SavedGame::toggleDetail()
+/* void SavedGame::toggleDetail()
 {
 	_detail = !_detail;
-}
+} */
 
-/*
+/**
  * @return the state of the detail drawing.
  */
-bool SavedGame::getDetail()
+/* bool SavedGame::getDetail()
 {
 	return _detail;
-}
+} */
 
-/*
+/**
  * marks a research topic as having already come up as "we can now research"
  * @param research is the project we want to add to the vector
  */
@@ -2048,7 +2046,7 @@ void SavedGame::addPoppedResearch(const RuleResearch* research)
 		_poppedResearch.push_back(research);
 }
 
-/*
+/**
  * checks if an unresearched topic has previously been popped up.
  * @param research is the project we are checking for
  * @return whether or not it has been popped up.
@@ -2062,7 +2060,7 @@ bool SavedGame::wasResearchPopped(const RuleResearch* research)
 			!= _poppedResearch.end();
 }
 
-/*
+/**
  * checks for and removes a research project from the "has been popped up" array
  * @param research is the project we are checking for and removing, if necessary.
  */

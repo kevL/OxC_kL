@@ -72,12 +72,8 @@ ManageAlienContainmentState::ManageAlienContainmentState(
 		_aliensSold(0)
 //kL		_researchAliens(0)
 {
-	_changeValueByMouseWheel = Options::getInt("changeValueByMouseWheel");
-	_allowChangeListValuesByMouseWheel = (Options::getBool("allowChangeListValuesByMouseWheel")
-											&& _changeValueByMouseWheel);
-	_containmentLimit = Options::getBool("alienContainmentLimitEnforced");
-	_overCrowded = (_containmentLimit
-						&& _base->getAvailableContainment() < _base->getUsedContainment());
+	_overCrowded = Options::alienContainmentLimitEnforced
+				&& _base->getAvailableContainment() < _base->getUsedContainment();
 
 /*kL	for (std::vector<ResearchProject*>::const_iterator
 			i = _base->getResearch().begin();
@@ -154,14 +150,14 @@ ManageAlienContainmentState::ManageAlienContainmentState(
 	_btnOk->onMouseClick((ActionHandler)& ManageAlienContainmentState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& ManageAlienContainmentState::btnOkClick,
-					(SDLKey)Options::getInt("keyOk"));
+					Options::keyOk);
 
 	_btnCancel->setColor(_color);
 	_btnCancel->setText(tr("STR_CANCEL"));
 	_btnCancel->onMouseClick((ActionHandler)& ManageAlienContainmentState::btnCancelClick);
 	_btnCancel->onKeyboardPress(
 					(ActionHandler)& ManageAlienContainmentState::btnCancelClick,
-					(SDLKey)Options::getInt("keyCancel"));
+					Options::keyCancel);
 
 	_btnOk->setVisible(false);
 	if (_overCrowded)
@@ -211,7 +207,7 @@ ManageAlienContainmentState::ManageAlienContainmentState(
 	_lstAliens->setSelectable(true);
 	_lstAliens->setBackground(_window);
 	_lstAliens->setMargin(8);
-	_lstAliens->setAllowScrollOnArrowButtons(!_allowChangeListValuesByMouseWheel);
+//	_lstAliens->setAllowScrollOnArrowButtons(!_allowChangeListValuesByMouseWheel);
 	_lstAliens->onLeftArrowPress((ActionHandler)& ManageAlienContainmentState::lstItemsLeftArrowPress);
 	_lstAliens->onLeftArrowRelease((ActionHandler)& ManageAlienContainmentState::lstItemsLeftArrowRelease);
 	_lstAliens->onLeftArrowClick((ActionHandler)& ManageAlienContainmentState::lstItemsLeftArrowClick);
@@ -233,7 +229,7 @@ ManageAlienContainmentState::ManageAlienContainmentState(
 			_qtys.push_back(0);									// put it in the _qtys<vector> as (int)
 			_aliens.push_back(*i);								// put its name in the _aliens<vector> as (string)
 
-			std::wstringstream ss;
+			std::wostringstream ss;
 			ss << qty;
 			_lstAliens->addRow(									// show its name on the list.
 							3,
@@ -423,22 +419,21 @@ void ManageAlienContainmentState::lstItemsMousePress(Action* action)
 		_timerInc->stop();
 		_timerDec->stop();
 
-		if (_allowChangeListValuesByMouseWheel
-			&& action->getAbsoluteXMouse() >= _lstAliens->getArrowsLeftEdge()
+		if (action->getAbsoluteXMouse() >= _lstAliens->getArrowsLeftEdge()
 			&& action->getAbsoluteXMouse() <= _lstAliens->getArrowsRightEdge())
 		{
-			increaseByValue(_changeValueByMouseWheel);
+			increaseByValue(Options::changeValueByMouseWheel);
 		}
 	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN)
 	{
 		_timerInc->stop();
 		_timerDec->stop();
-		if (_allowChangeListValuesByMouseWheel
-			&& action->getAbsoluteXMouse() >= _lstAliens->getArrowsLeftEdge()
+
+		if (action->getAbsoluteXMouse() >= _lstAliens->getArrowsLeftEdge()
 			&& action->getAbsoluteXMouse() <= _lstAliens->getArrowsRightEdge())
 		{
-			decreaseByValue(_changeValueByMouseWheel);
+			decreaseByValue(Options::changeValueByMouseWheel);
 		}
 	}
 }
@@ -512,7 +507,7 @@ void ManageAlienContainmentState::decreaseByValue(int change)
  */
 void ManageAlienContainmentState::updateStrings()
 {
-	std::wstringstream
+	std::wostringstream
 		ss,
 		ss2;
 
@@ -532,7 +527,7 @@ void ManageAlienContainmentState::updateStrings()
 	_txtUsed->setText(tr("STR_SPACE_USED").arg(aliens));
 
 
-//kL	bool enoughSpaceToExit = _containmentLimit? spaces > -1: true;
+//kL	bool enoughSpaceToExit = Options::alienContainmentLimitEnforced? spaces > -1: true;
 
 //kL	_btnCancel->setVisible(enoughSpaceToExit && !_overCrowded);
 //kL	_btnOk->setVisible(enoughSpaceToExit);

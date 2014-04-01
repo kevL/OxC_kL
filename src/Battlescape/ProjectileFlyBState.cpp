@@ -67,11 +67,11 @@ ProjectileFlyBState::ProjectileFlyBState(
 		_ammo(0),
 		_projectileItem(0),
 		_origin(origin),
+		_originVoxel(-1,-1,-1), // kL_note: for BL waypoints
 		_projectileImpact(0),
 		_initialized(false),
-		_targetVoxel(-1,-1,-1), // kL. Why is this not initialized in the stock oXc code?
-		_originVoxel(-1,-1,-1), // kL_note: for BL waypoints
-		_targetFloor(false)
+		_targetFloor(false),
+		_targetVoxel(-1,-1,-1) // kL. Why is this not initialized in the stock oXc code?
 {
 }
 
@@ -87,13 +87,13 @@ ProjectileFlyBState::ProjectileFlyBState(
 			action),
 		_unit(0),
 		_ammo(0),
+		_originVoxel(-1,-1,-1), // kL_note: for BL waypoints
 		_projectileItem(0),
 		_origin(action.actor->getPosition()),
 		_projectileImpact(0),
 		_initialized(false),
-		_targetVoxel(-1,-1,-1), // kL. Why is this not initialized in the stock oXc code?
-		_originVoxel(-1,-1,-1), // kL_note: for BL waypoints
-		_targetFloor(false)
+		_targetFloor(false),
+		_targetVoxel(-1,-1,-1) // kL. Why is this not initialized in the stock oXc code?
 {
 }
 
@@ -788,7 +788,7 @@ void ProjectileFlyBState::think()
 					pos.x--;
 
 				BattleItem* item = _parent->getMap()->getProjectile()->getItem();
-				if (Options::getBool("battleInstantGrenade")
+				if (Options::battleInstantGrenade
 					&& item->getRules()->getBattleType() == BT_GRENADE
 					&& item->getExplodeTurn() == 0)
 				{

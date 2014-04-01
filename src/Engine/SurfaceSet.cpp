@@ -73,7 +73,7 @@ SurfaceSet::~SurfaceSet()
 			i != _frames.end();
 			++i)
 	{
-		delete (*i).second;
+		delete i->second;
 	}
 }
 

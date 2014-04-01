@@ -86,10 +86,10 @@ PromotionsState::PromotionsState(Game* game)
 	_btnOk->onMouseClick((ActionHandler)& PromotionsState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& PromotionsState::btnOkClick,
-					(SDLKey)Options::getInt("keyOk"));
+					Options::keyOk);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& PromotionsState::btnOkClick,
-					(SDLKey)Options::getInt("keyCancel"));
+					Options::keyCancel);
 
 	_txtTitle->setColor(Palette::blockOffset(8)+5);
 	_txtTitle->setText(tr("STR_PROMOTIONS"));

@@ -296,7 +296,7 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 		_playedAggroSound = false;
 		unit->_hidingForTurn = false;
 
-		if (_save->getTraceSetting()) Log(LOG_INFO) << "#" << unit->getId() << "--" << unit->getType();
+		if (Options::traceAI) Log(LOG_INFO) << "#" << unit->getId() << "--" << unit->getType();
 	}
 	//Log(LOG_INFO) << ". _AIActionCounter DONE";
 
@@ -355,7 +355,7 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 	//Log(LOG_INFO) << ". getCharging DONE";
 
 
-	std::wstringstream ss; // debug.
+	std::wostringstream ss; // debug.
 
 	if (action.type == BA_WALK)
 	{
@@ -1253,7 +1253,7 @@ void BattlescapeGame::popState()
 {
 	//Log(LOG_INFO) << "BattlescapeGame::popState()";
 
-	if (_save->getTraceSetting())
+	if (Options::traceAI)
 	{
 		Log(LOG_INFO) << "BattlescapeGame::popState() #" << _AIActionCounter << " with "
 			<< (_save->getSelectedUnit()? _save->getSelectedUnit()->getTimeUnits(): -9999) << " TU";
@@ -1865,7 +1865,7 @@ bool BattlescapeGame::cancelCurrentAction(bool bForce)
 {
 	//Log(LOG_INFO) << "BattlescapeGame::cancelCurrentAction()";
 
-	bool bPreviewed = Options::getInt("battleNewPreviewPath") > 0;
+	bool bPreviewed = (Options::battleNewPreviewPath != PATH_NONE);
 
 	if (_save->getPathfinding()->removePreview()
 		&& bPreviewed)
@@ -1893,7 +1893,7 @@ bool BattlescapeGame::cancelCurrentAction(bool bForce)
 			}
 			else
 			{
-				if (Options::getBool("battleConfirmFireMode")
+				if (Options::battleConfirmFireMode
 					&& !_currentAction.waypoints.empty())
 				{
 					_currentAction.waypoints.pop_back();
@@ -1965,7 +1965,7 @@ void BattlescapeGame::primaryAction(const Position& pos)
 	//Log(LOG_INFO) << ". action.TU = " << _currentAction.TU;
 
 
-	bool bPreviewed = Options::getInt("battleNewPreviewPath") > 0;
+	bool bPreviewed = (Options::battleNewPreviewPath != PATH_NONE);
 
 	if (_currentAction.targeting
 		&& _save->getSelectedUnit())
@@ -2108,7 +2108,7 @@ void BattlescapeGame::primaryAction(const Position& pos)
 				// in which case don't check for TUs here!
 			}
 		}
-		else if (Options::getBool("battleConfirmFireMode")
+		else if (Options::battleConfirmFireMode
 			&& (_currentAction.waypoints.empty()
 				|| pos != _currentAction.waypoints.front()))
 		{
@@ -2123,7 +2123,7 @@ void BattlescapeGame::primaryAction(const Position& pos)
 
 			getMap()->setCursorType(CT_NONE);
 
-			if (Options::getBool("battleConfirmFireMode"))
+			if (Options::battleConfirmFireMode)
 			{
 				_currentAction.waypoints.clear();
 				getMap()->getWaypoints()->clear();
@@ -2179,7 +2179,7 @@ void BattlescapeGame::primaryAction(const Position& pos)
 
 			_currentAction.actor->setDashing(false); // kL
 			_currentAction.run = false;
-			_currentAction.strafe = _save->getStrafeSetting()
+			_currentAction.strafe = Options::strafe
 									&& modifierPressed
 									&& _save->getSelectedUnit()->getTurretType() == -1;
 
@@ -2245,7 +2245,7 @@ void BattlescapeGame::secondaryAction(const Position& pos)
 	// -= turn to or open door =-
 	_currentAction.target = pos;
 //kL	_currentAction.actor = _save->getSelectedUnit();
-	_currentAction.strafe = _save->getStrafeSetting()
+	_currentAction.strafe = Options::strafe
 								&& (SDL_GetModState() & KMOD_CTRL) != 0
 								&& _save->getSelectedUnit()->getTurretType() > -1;
 
@@ -2437,7 +2437,7 @@ BattleUnit* BattlescapeGame::convertUnit(
 //	int origDir = unit->getDirection(); // kL
 	unit->instaKill();
 
-	if (Options::getBool("battleNotifyDeath")
+	if (Options::battleNotifyDeath
 		&& unit->getFaction() == FACTION_PLAYER
 		&& unit->getOriginalFaction() == FACTION_PLAYER)
 	{
@@ -2967,7 +2967,6 @@ void BattlescapeGame::tallyUnits(
 
 	liveSoldiers = 0;
 	liveAliens = 0;
-	bool psiCapture = Options::getBool("allowPsionicCapture");
 
 	if (convert)
 	{
@@ -3000,7 +2999,7 @@ void BattlescapeGame::tallyUnits(
 		{
 			if ((*j)->getOriginalFaction() == FACTION_HOSTILE)
 			{
-				if (!psiCapture
+				if (!Options::allowPsionicCapture
 					|| (*j)->getFaction() != FACTION_PLAYER)
 				{
 					liveAliens++;

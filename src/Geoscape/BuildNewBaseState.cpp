@@ -71,16 +71,16 @@ BuildNewBaseState::BuildNewBaseState(
 		_mousex(0),
 		_mousey(0)
 {
-	int dx = Screen::getDX();
-//kL	int dy = Screen::getDY();
-
 	_screen = false;
 
-	_oldshowradar = _globe->getShowRadar();
+	_oldshowradar = Options::globeRadarLines;
 
 	if (!_oldshowradar)
-		_globe->toggleRadarLines();
+		Options::globeRadarLines = true;
 
+
+	int dx = _game->getScreen()->getDX();
+//kL	int dy = _game->getScreen()->getDY();
 
 /*	_btnRotateLeft	= new InteractiveSurface(12, 10, 259 + dx * 2, 176 + dy);
 	_btnRotateRight	= new InteractiveSurface(12, 10, 283 + dx * 2, 176 + dy);
@@ -89,7 +89,8 @@ BuildNewBaseState::BuildNewBaseState(
 	_btnZoomIn		= new InteractiveSurface(23, 23, 295 + dx * 2, 156 + dy);
 	_btnZoomOut		= new InteractiveSurface(13, 17, 300 + dx * 2, 182 + dy); */
 
-	_window			= new Window(this, 256, 29, 0 + dx, 0);
+	_window			= new Window(this, 256, 29, 0, 0);
+	_window->setX(dx);
 	_window->setDY(0);
 
 	_txtTitle		= new Text(180, 9, 8 + dx, 11);
@@ -118,31 +119,31 @@ BuildNewBaseState::BuildNewBaseState(
 
 /*	_btnRotateLeft->onMousePress((ActionHandler)&BuildNewBaseState::btnRotateLeftPress);
 	_btnRotateLeft->onMouseRelease((ActionHandler)&BuildNewBaseState::btnRotateLeftRelease);
-	_btnRotateLeft->onKeyboardPress((ActionHandler)&BuildNewBaseState::btnRotateLeftPress, (SDLKey)Options::getInt("keyGeoLeft"));
-	_btnRotateLeft->onKeyboardRelease((ActionHandler)&BuildNewBaseState::btnRotateLeftRelease, (SDLKey)Options::getInt("keyGeoLeft"));
+	_btnRotateLeft->onKeyboardPress((ActionHandler)&BuildNewBaseState::btnRotateLeftPress, Options::keyGeoLeft);
+	_btnRotateLeft->onKeyboardRelease((ActionHandler)&BuildNewBaseState::btnRotateLeftRelease, Options::keyGeoLeft);
 
 	_btnRotateRight->onMousePress((ActionHandler)&BuildNewBaseState::btnRotateRightPress);
 	_btnRotateRight->onMouseRelease((ActionHandler)&BuildNewBaseState::btnRotateRightRelease);
-	_btnRotateRight->onKeyboardPress((ActionHandler)&BuildNewBaseState::btnRotateRightPress, (SDLKey)Options::getInt("keyGeoRight"));
-	_btnRotateRight->onKeyboardRelease((ActionHandler)&BuildNewBaseState::btnRotateRightRelease, (SDLKey)Options::getInt("keyGeoRight"));
+	_btnRotateRight->onKeyboardPress((ActionHandler)&BuildNewBaseState::btnRotateRightPress, Options::keyGeoRight);
+	_btnRotateRight->onKeyboardRelease((ActionHandler)&BuildNewBaseState::btnRotateRightRelease, Options::keyGeoRight);
 
 	_btnRotateUp->onMousePress((ActionHandler)&BuildNewBaseState::btnRotateUpPress);
 	_btnRotateUp->onMouseRelease((ActionHandler)&BuildNewBaseState::btnRotateUpRelease);
-	_btnRotateUp->onKeyboardPress((ActionHandler)&BuildNewBaseState::btnRotateUpPress, (SDLKey)Options::getInt("keyGeoUp"));
-	_btnRotateUp->onKeyboardRelease((ActionHandler)&BuildNewBaseState::btnRotateUpRelease, (SDLKey)Options::getInt("keyGeoUp"));
+	_btnRotateUp->onKeyboardPress((ActionHandler)&BuildNewBaseState::btnRotateUpPress, Options::keyGeoUp);
+	_btnRotateUp->onKeyboardRelease((ActionHandler)&BuildNewBaseState::btnRotateUpRelease, Options::keyGeoUp);
 
 	_btnRotateDown->onMousePress((ActionHandler)&BuildNewBaseState::btnRotateDownPress);
 	_btnRotateDown->onMouseRelease((ActionHandler)&BuildNewBaseState::btnRotateDownRelease);
-	_btnRotateDown->onKeyboardPress((ActionHandler)&BuildNewBaseState::btnRotateDownPress, (SDLKey)Options::getInt("keyGeoDown"));
-	_btnRotateDown->onKeyboardRelease((ActionHandler)&BuildNewBaseState::btnRotateDownRelease, (SDLKey)Options::getInt("keyGeoDown"));
+	_btnRotateDown->onKeyboardPress((ActionHandler)&BuildNewBaseState::btnRotateDownPress, Options::keyGeoDown);
+	_btnRotateDown->onKeyboardRelease((ActionHandler)&BuildNewBaseState::btnRotateDownRelease, Options::keyGeoDown);
 
 	_btnZoomIn->onMouseClick((ActionHandler)&BuildNewBaseState::btnZoomInLeftClick, SDL_BUTTON_LEFT);
 	_btnZoomIn->onMouseClick((ActionHandler)&BuildNewBaseState::btnZoomInRightClick, SDL_BUTTON_RIGHT);
-	_btnZoomIn->onKeyboardPress((ActionHandler)&BuildNewBaseState::btnZoomInLeftClick, (SDLKey)Options::getInt("keyGeoZoomIn"));
+	_btnZoomIn->onKeyboardPress((ActionHandler)&BuildNewBaseState::btnZoomInLeftClick, Options::keyGeoZoomIn);
 
 	_btnZoomOut->onMouseClick((ActionHandler)&BuildNewBaseState::btnZoomOutLeftClick, SDL_BUTTON_LEFT);
 	_btnZoomOut->onMouseClick((ActionHandler)&BuildNewBaseState::btnZoomOutRightClick, SDL_BUTTON_RIGHT);
-	_btnZoomOut->onKeyboardPress((ActionHandler)&BuildNewBaseState::btnZoomOutLeftClick, (SDLKey)Options::getInt("keyGeoZoomOut"));
+	_btnZoomOut->onKeyboardPress((ActionHandler)&BuildNewBaseState::btnZoomOutLeftClick, Options::keyGeoZoomOut);
 
 	// dirty hacks to get the rotate buttons to work in "classic" style
 	_btnRotateLeft->setListButton();
@@ -158,7 +159,7 @@ BuildNewBaseState::BuildNewBaseState(
 	_btnCancel->onMouseClick((ActionHandler)& BuildNewBaseState::btnCancelClick);
 	_btnCancel->onKeyboardPress(
 					(ActionHandler)& BuildNewBaseState::btnCancelClick,
-					(SDLKey)Options::getInt("keyCancel"));
+					Options::keyCancel);
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setText(tr("STR_SELECT_SITE_FOR_NEW_BASE"));
@@ -167,9 +168,7 @@ BuildNewBaseState::BuildNewBaseState(
 //	_txtTitle->setWordWrap(true);
 
 	if (_first)
-	{
 		_btnCancel->setVisible(false);
-	}
 }
 
 /**
@@ -177,11 +176,8 @@ BuildNewBaseState::BuildNewBaseState(
  */
 BuildNewBaseState::~BuildNewBaseState()
 {
-	if (!_game->isQuitting()
-		&& _globe->getShowRadar() != _oldshowradar)
-	{
-		_globe->toggleRadarLines();
-	}
+	if (Options::globeRadarLines != _oldshowradar)
+		Options::globeRadarLines = false;
 
 	delete _hoverTimer;
 }
@@ -246,7 +242,7 @@ void BuildNewBaseState::hoverRedraw(void)
 
 	_globe->setNewBaseHover();
 
-	if (_globe->getShowRadar()
+	if (Options::globeRadarLines
 		&& !(AreSame(_oldlat, lat) && AreSame(_oldlon, lon)))
 	{
 		_oldlat = lat;

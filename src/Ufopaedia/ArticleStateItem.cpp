@@ -189,7 +189,7 @@ ArticleStateItem::ArticleStateItem(
 
 
 	// AMMO column
-	std::wstringstream ss;
+	std::wostringstream ss;
 
 	for (int
 			i = 0;

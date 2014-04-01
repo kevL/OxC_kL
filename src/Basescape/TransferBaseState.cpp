@@ -102,7 +102,7 @@ TransferBaseState::TransferBaseState(
 	_btnCancel->onMouseClick((ActionHandler)& TransferBaseState::btnCancelClick);
 	_btnCancel->onKeyboardPress(
 					(ActionHandler)& TransferBaseState::btnCancelClick,
-					(SDLKey)Options::getInt("keyCancel"));
+					Options::keyCancel);
 
 	_btnMatrix->setColor(Palette::blockOffset(13) + 5);
 	_btnMatrix->setText(tr("STR_MATRIX"));

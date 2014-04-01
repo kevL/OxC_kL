@@ -110,7 +110,7 @@ PlaceFacilityState::PlaceFacilityState(
 	_btnCancel->onMouseClick((ActionHandler)& PlaceFacilityState::btnCancelClick);
 	_btnCancel->onKeyboardPress(
 					(ActionHandler)& PlaceFacilityState::btnCancelClick,
-					(SDLKey)Options::getInt("keyCancel"));
+					Options::keyCancel);
 
 	_txtFacility->setColor(Palette::blockOffset(13)+10);
 	_txtFacility->setText(tr(_rule->getType()));
@@ -191,7 +191,7 @@ void PlaceFacilityState::viewClick(Action*)
 
 		_base->getFacilities()->push_back(fac);
 
-		if (Options::getBool("allowBuildingQueue"))
+		if (Options::allowBuildingQueue)
 		{
 			if (_view->isQueuedBuilding(_rule))
 				fac->setBuildTime(std::numeric_limits<int>::max());

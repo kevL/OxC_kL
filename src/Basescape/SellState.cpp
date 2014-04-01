@@ -76,13 +76,6 @@ SellState::SellState(
 		_hasEng(0),
 		_itemOffset(0)
 {
-	_changeValueByMouseWheel = Options::getInt("changeValueByMouseWheel");
-	_allowChangeListValuesByMouseWheel = Options::getBool("allowChangeListValuesByMouseWheel")
-											&& _changeValueByMouseWheel;
-
-	bool canSellLiveAliens=Options::getBool("canSellLiveAliens");
-
-
 	_window			= new Window(this, 320, 200, 0, 0);
 	_txtTitle		= new Text(310, 17, 5, 9);
 	_txtBaseLabel	= new Text(80, 9, 16, 9);
@@ -130,7 +123,7 @@ SellState::SellState(
 	_btnOk->onMouseClick((ActionHandler)& SellState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& SellState::btnOkClick,
-					(SDLKey)Options::getInt("keyOk"));
+					Options::keyOk);
 	_btnOk->setVisible(false);
 
 	_btnCancel->setColor(Palette::blockOffset(13)+10);
@@ -138,7 +131,7 @@ SellState::SellState(
 	_btnCancel->onMouseClick((ActionHandler)& SellState::btnCancelClick);
 	_btnCancel->onKeyboardPress(
 					(ActionHandler)& SellState::btnCancelClick,
-					(SDLKey)Options::getInt("keyCancel"));
+					Options::keyCancel);
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
@@ -176,7 +169,7 @@ SellState::SellState(
 	_lstItems->setSelectable(true);
 	_lstItems->setBackground(_window);
 	_lstItems->setMargin(8);
-	_lstItems->setAllowScrollOnArrowButtons(!_allowChangeListValuesByMouseWheel);
+//	_lstItems->setAllowScrollOnArrowButtons(!_allowChangeListValuesByMouseWheel);
 	_lstItems->onLeftArrowPress((ActionHandler)& SellState::lstItemsLeftArrowPress);
 	_lstItems->onLeftArrowRelease((ActionHandler)& SellState::lstItemsLeftArrowRelease);
 	_lstItems->onLeftArrowClick((ActionHandler)& SellState::lstItemsLeftArrowClick);
@@ -230,7 +223,7 @@ SellState::SellState(
 	{
 		_qtys.push_back(0);
 		_hasSci = 1;
-		std::wstringstream ss;
+		std::wostringstream ss;
 //kL		ss << _base->getAvailableScientists();
 		ss << _base->getScientists(); // kL
 		_lstItems->addRow(
@@ -248,7 +241,7 @@ SellState::SellState(
 	{
 		_qtys.push_back(0);
 		_hasEng = 1;
-		std::wstringstream ss;
+		std::wostringstream ss;
 //kL		ss << _base->getAvailableEngineers();
 		ss << _base->getEngineers(); // kL
 		_lstItems->addRow(
@@ -269,13 +262,13 @@ SellState::SellState(
 	{
 		int qty = _base->getItems()->getItem(*i);
 		if (qty > 0
-			&& (canSellLiveAliens
+			&& (Options::canSellLiveAliens
 				|| !_game->getRuleset()->getItem(*i)->getAlien()))
 		{
 			_qtys.push_back(0);
 			_items.push_back(*i);
 			RuleItem* rule = _game->getRuleset()->getItem(*i);
-			std::wstringstream ss;
+			std::wostringstream ss;
 			ss << qty;
 
 			std::wstring item = tr(*i);
@@ -587,11 +580,10 @@ void SellState::lstItemsMousePress(Action* action)
 		_timerInc->stop();
 		_timerDec->stop();
 
-		if (_allowChangeListValuesByMouseWheel
-			&& action->getAbsoluteXMouse() >= _lstItems->getArrowsLeftEdge()
+		if (action->getAbsoluteXMouse() >= _lstItems->getArrowsLeftEdge()
 			&& action->getAbsoluteXMouse() <= _lstItems->getArrowsRightEdge())
 		{
-			increaseByValue(_changeValueByMouseWheel);
+			increaseByValue(Options::changeValueByMouseWheel);
 		}
 	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN)
@@ -599,11 +591,10 @@ void SellState::lstItemsMousePress(Action* action)
 		_timerInc->stop();
 		_timerDec->stop();
 
-		if (_allowChangeListValuesByMouseWheel
-			&& action->getAbsoluteXMouse() >= _lstItems->getArrowsLeftEdge()
+		if (action->getAbsoluteXMouse() >= _lstItems->getArrowsLeftEdge()
 			&& action->getAbsoluteXMouse() <= _lstItems->getArrowsRightEdge())
 		{
-			decreaseByValue(_changeValueByMouseWheel);
+			decreaseByValue(Options::changeValueByMouseWheel);
 		}
 	}
 }
@@ -720,7 +711,7 @@ void SellState::decreaseByValue(int change)
  */
 void SellState::updateItemStrings()
 {
-	std::wstringstream
+	std::wostringstream
 		ss,
 		ss2;
 

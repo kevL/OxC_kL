@@ -130,6 +130,34 @@ private:
 	Cord getSunDirection(
 			double lon,
 			double lat) const;
+	/// Draw globe range circle.
+	void drawGlobeCircle(
+			double lat,
+			double lon,
+			double radius,
+			int segments);
+	/// Special "transparent" line.
+	void XuLine(
+			Surface* surface,
+			Surface* src,
+			double x1,
+			double y1,
+			double x2,
+			double y2,
+			Sint16 Color);
+	void drawVHLine(
+			double lon1,
+			double lat1,
+			double lon2,
+			double lat2,
+			int colour);
+	/// Draw flight path.
+	void drawPath(
+			Surface* surface,
+			double lon1,
+			double lat1,
+			double lon2,
+			double lat2);
 
 
 	public:
@@ -155,6 +183,7 @@ private:
 				double lat,
 				Sint16* x,
 				Sint16* y) const;
+		/// Converts polar coordinates to cartesian coordinates.
 		void polarToCart(
 				double lon,
 				double lat,
@@ -235,8 +264,10 @@ private:
 		void drawLand();
 		/// Draws the shadow.
 		void drawShadow();
-		/// Draws the country details of the globe.
+		/// Draws the radar ranges of the globe.
 		void drawRadars();
+		/// Draws the flight paths of the globe.
+		void drawFlights();
 		/// Draws the country details of the globe.
 		void drawDetail();
 		/// Draws all the markers over the globe.
@@ -274,22 +305,6 @@ private:
 				const std::string& id,
 				unsigned n) const;
 
-		/// Draw globe range circle.
-		void drawGlobeCircle(
-				double lat,
-				double lon,
-				double radius,
-				int segments);
-		/// Special "transparent" line.
-		void XuLine(
-				Surface* surface,
-				Surface* src,
-				double x1,
-				double y1,
-				double x2,
-				double y2,
-				Sint16 Color);
-
 		/// Sets hover base position.
 		void setNewBaseHoverPos(
 				double lon,
@@ -305,13 +320,6 @@ private:
 		bool getShowRadar(void);
 		/// set the _radarLines variable
 		void toggleRadarLines();
-
-		void drawVHLine(
-				double lon1,
-				double lat1,
-				double lon2,
-				double lat2,
-				int colour);
 };
 
 }

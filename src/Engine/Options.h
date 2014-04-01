@@ -23,31 +23,32 @@
 #include <string>
 #include <vector>
 
+#include <SDL.h>
+
+#include "OptionInfo.h"
 
 namespace OpenXcom
 {
 
 /**
- * Enumeration for the battlescape scrolling types.
+ * Enumeration for the battlescape drag scrolling types.
  */
 enum ScrollType
 {
-	SCROLL_TRIGGER,	// 0
-	SCROLL_AUTO,	// 1
-	SCROLL_DRAG		// 2
+	SCROLL_NONE,	// 0
+	SCROLL_TRIGGER,	// 1
+	SCROLL_AUTO		// 2
 };
 
-
 /**
- * Enumeration for the keyboard modes.
+ * Enumeration for the keyboard input modes.
  */
 enum KeyboardType
 {
-	KEYBOARD_ON,		// 0
-	KEYBOARD_VIRTUAL,	// 1
-	KEYBOARD_OFF		// 2
+	KEYBOARD_OFF,		// 0
+	KEYBOARD_ON,		// 1
+	KEYBOARD_VIRTUAL	// 2
 };
-
 
 /**
  * Enumeration for the savegame sorting modes.
@@ -60,6 +61,15 @@ enum SaveSort
 	SORT_DATE_DESC	// 3
 };
 
+/// Enumeration for the path preview modes.
+enum PathPreview
+{
+	PATH_NONE,		// 0
+	PATH_ARROWS,	// 1
+	PATH_TU_COST,	// 2
+	PATH_FULL		// 3
+};
+
 /**
  * Container for all the various global game options
  * and customizable settings.
@@ -67,12 +77,18 @@ enum SaveSort
 namespace Options
 {
 
+#define OPT extern
+#include "Options.inc.h"
+#undef OPT
+
+/// Creates the options info.
+void create();
 /// Restores default options.
-void createDefault();
+void resetDefault();
 /// Initializes the options settings.
 bool init(
 		int argc,
-		char** args);
+		char* argv[]);
 /// Loads options from YAML.
 void load(const std::string& filename = "options");
 /// Saves options to YAML.
@@ -82,36 +98,19 @@ std::string getDataFolder();
 /// Sets the game's data folder.
 void setDataFolder(const std::string& folder);
 /// Gets the game's data list.
-std::vector<std::string>* getDataList();
+const std::vector<std::string>& getDataList();
 /// Gets the game's user folder.
 std::string getUserFolder();
+/// Gets the game's config folder.
+std::string getConfigFolder();
+/// Gets the game's options.
+const std::vector<OptionInfo> &getOptionInfo();
 /// Sets the game's data, user and config folders.
 void setFolders();
 /// Update game options from config file and command line.
 void updateOptions();
-/// Gets a string option.
-std::string getString(const std::string& id);
-/// Gets an integer option.
-int getInt(const std::string& id);
-/// Gets a boolean option.
-bool getBool(const std::string& id);
-/// Sets a string option.
-void setString(
-		const std::string& id,
-		const std::string& value);
-/// Sets an integer option.
-void setInt(
-		const std::string& id,
-		int value);
-/// Sets a boolean option.
-void setBool(
-		const std::string& id,
-		bool value);
-/// Gets the list of rulesets to use.
-std::vector<std::string> getRulesets();
-/// Gets the list of rulesets to use.
-std::vector<std::string> getPurchaseExclusions();
-
+/// Switches display options.
+void switchDisplay();
 }
 
 }

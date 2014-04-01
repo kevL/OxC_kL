@@ -50,7 +50,9 @@ Game* game = 0;
 
 // If you can't tell what the main() is for you
 // should have your programming license revoked ...
-int main(int argc, char** args)
+int main(
+		int argc,
+		char *argv[])
 {
 #ifndef _DEBUG
 	try
@@ -59,7 +61,7 @@ int main(int argc, char** args)
 #else
 		Logger::reportingLevel() = LOG_DEBUG;
 #endif
-		if (!Options::init(argc, args))
+		if (!Options::init(argc, argv))
 			return EXIT_SUCCESS;
 
 		std::ostringstream title;
@@ -67,8 +69,8 @@ int main(int argc, char** args)
 		title << "openXcom " << OPENXCOM_VERSION_SHORT << OPENXCOM_VERSION_GIT; // kL
 		game = new Game(title.str());
 		game->setVolume(
-					Options::getInt("soundVolume"),
-					Options::getInt("musicVolume"));
+					Options::soundVolume,
+					Options::musicVolume);
 		game->setState(new StartState(game));
 		game->run();
 #ifndef _DEBUG

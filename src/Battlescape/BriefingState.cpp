@@ -139,10 +139,10 @@ BriefingState::BriefingState(
 	_btnOk->onMouseClick((ActionHandler)& BriefingState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& BriefingState::btnOkClick,
-					(SDLKey)Options::getInt("keyOk"));
+					Options::keyOk);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& BriefingState::btnOkClick,
-					(SDLKey)Options::getInt("keyCancel"));
+					Options::keyCancel);
 
 	_txtTitle->setColor(Palette::blockOffset(8)+5);
 	_txtTitle->setBig();

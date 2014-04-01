@@ -49,13 +49,9 @@ class ManageAlienContainmentState
 {
 
 private:
-	bool
-		_allowChangeListValuesByMouseWheel,
-		_containmentLimit,
-		_overCrowded;
+	bool _overCrowded;
 	int
-		_aliensSold,
-		_changeValueByMouseWheel;
+		_aliensSold;
 //kL		_researchAliens;
 	unsigned int _sel;
 	Uint8

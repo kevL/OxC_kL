@@ -27,6 +27,7 @@ namespace OpenXcom
 {
 
 class Base;
+class Craft;
 class Text;
 class TextButton;
 class TextEdit;
@@ -44,9 +45,10 @@ class CraftInfoState
 {
 
 private:
-	size_t _craft;
+	size_t _craftId;
 
 	Base* _base;
+	Craft* _craft;
 	TextButton
 		* _btnArmor,
 		* _btnCrew,
@@ -79,7 +81,7 @@ private:
 		CraftInfoState(
 				Game* game,
 				Base* base,
-				size_t craft);
+				size_t craftId);
 		/// Cleans up the Craft Info state.
 		~CraftInfoState();
 
@@ -98,8 +100,8 @@ private:
 		void btnEquipClick(Action* action);
 		/// Handler for clicking the Armor button.
 		void btnArmorClick(Action* action);
-		/// Handler for pressing a key on the Name edit.
-		void edtCraftKeyPress(Action* action);
+		/// Handler for changing the text on the Name edit.
+		void edtCraftChange(Action* action);
 };
 
 }

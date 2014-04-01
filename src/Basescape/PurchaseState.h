@@ -47,9 +47,7 @@ class PurchaseState
 {
 
 private:
-	bool _allowChangeListValuesByMouseWheel;
 	int
-		_changeValueByMouseWheel,
 		_cQty,
 		_pQty,
 		_total;

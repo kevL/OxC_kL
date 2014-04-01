@@ -109,10 +109,10 @@ MonthlyCostsState::MonthlyCostsState(
 	_btnOk->onMouseClick((ActionHandler)& MonthlyCostsState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& MonthlyCostsState::btnOkClick,
-					(SDLKey)Options::getInt("keyOk"));
+					Options::keyOk);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& MonthlyCostsState::btnOkClick,
-					(SDLKey)Options::getInt("keyCancel"));
+					Options::keyCancel);
 
 	_txtTitle->setColor(Palette::blockOffset(15)+1);
 	_txtTitle->setBig();
@@ -139,7 +139,7 @@ MonthlyCostsState::MonthlyCostsState(
 	_txtSalaries->setText(tr("STR_SALARIES"));
 
 	_txtIncome->setColor(Palette::blockOffset(13)+10);
-	std::wstringstream ss;
+	std::wostringstream ss;
 	ss << tr("STR_INCOME") << L" " << Text::formatFunding(_game->getSavedGame()->getCountryFunding());
 	_txtIncome->setText(ss.str());
 
@@ -157,7 +157,7 @@ MonthlyCostsState::MonthlyCostsState(
 		if (craft->getRentCost() > 0
 			&& _game->getSavedGame()->isResearched(craft->getRequirements()))
 		{
-			std::wstringstream ss2;
+			std::wostringstream ss2;
 			ss2 << _base->getCraftCount((*i));
 			_lstCrafts->addRow(
 							4,
@@ -173,7 +173,7 @@ MonthlyCostsState::MonthlyCostsState(
 	_lstSalaries->setColumns(4, 125, 70, 44, 54);
 	_lstSalaries->setDot(true);
 
-	std::wstringstream
+	std::wostringstream
 		ss4,
 		ss5,
 		ss6;

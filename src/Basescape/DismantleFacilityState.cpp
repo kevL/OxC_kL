@@ -18,18 +18,24 @@
  */
 
 #include "DismantleFacilityState.h"
+
+#include "../Basescape/BaseView.h"
+
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Options.h"
+
+#include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
-#include "../Interface/Text.h"
+
+#include "../Resource/ResourcePack.h"
+
+#include "../Ruleset/RuleBaseFacility.h"
+
 #include "../Savegame/Base.h"
 #include "../Savegame/BaseFacility.h"
-#include "../Basescape/BaseView.h"
-#include "../Ruleset/RuleBaseFacility.h"
 #include "../Savegame/SavedGame.h"
 
 
@@ -43,7 +49,11 @@ namespace OpenXcom
  * @param view Pointer to the baseview to update.
  * @param fac Pointer to the facility to dismantle.
  */
-DismantleFacilityState::DismantleFacilityState(Game* game, Base* base, BaseView* view, BaseFacility* fac)
+DismantleFacilityState::DismantleFacilityState(
+		Game* game,
+		Base* base,
+		BaseView* view,
+		BaseFacility* fac)
 	:
 		State(game),
 		_base(base),
@@ -59,7 +69,10 @@ DismantleFacilityState::DismantleFacilityState(Game* game, Base* base, BaseView*
 	_btnOk			= new TextButton(44, 16, 112, 115);
 
 
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
+	_game->setPalette(
+				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)),
+				Palette::backPos,
+				16);
 
 	add(_window);
 	add(_btnOk);
@@ -76,12 +89,16 @@ DismantleFacilityState::DismantleFacilityState(Game* game, Base* base, BaseView*
 	_btnOk->setColor(Palette::blockOffset(15)+6);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& DismantleFacilityState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)& DismantleFacilityState::btnOkClick, (SDLKey)Options::getInt("keyOk"));
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& DismantleFacilityState::btnOkClick,
+					Options::keyOk);
 
 	_btnCancel->setColor(Palette::blockOffset(15)+6);
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)& DismantleFacilityState::btnCancelClick);
-	_btnCancel->onKeyboardPress((ActionHandler)& DismantleFacilityState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnCancel->onKeyboardPress(
+					(ActionHandler)& DismantleFacilityState::btnCancelClick,
+					Options::keyCancel);
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setAlign(ALIGN_CENTER);
@@ -113,7 +130,10 @@ void DismantleFacilityState::btnOkClick(Action*)
 			_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds() + _fac->getRules()->getBuildCost());
 		}
 
-		for (std::vector<BaseFacility*>::iterator i = _base->getFacilities()->begin(); i != _base->getFacilities()->end(); ++i)
+		for (std::vector<BaseFacility*>::iterator
+				i = _base->getFacilities()->begin();
+				i != _base->getFacilities()->end();
+				++i)
 		{
 			if (*i == _fac)
 			{
@@ -121,7 +141,7 @@ void DismantleFacilityState::btnOkClick(Action*)
 				_view->resetSelectedFacility();
 				delete _fac;
 
-				if (Options::getBool("allowBuildingQueue"))
+				if (Options::allowBuildingQueue)
 					_view->reCalcQueuedBuildings();
 
 				break;
@@ -130,7 +150,10 @@ void DismantleFacilityState::btnOkClick(Action*)
 	}
 	else // Remove whole base if it's the access lift
 	{
-		for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
+		for (std::vector<Base*>::iterator
+				i = _game->getSavedGame()->getBases()->begin();
+				i != _game->getSavedGame()->getBases()->end();
+				++i)
 		{
 			if (*i == _base)
 			{

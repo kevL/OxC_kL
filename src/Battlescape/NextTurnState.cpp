@@ -114,7 +114,7 @@ NextTurnState::NextTurnState(
 	kL_preReveal = true;	// kL
 	//Log(LOG_INFO) << ". . set kL_preReveal TRUE";
 
-	if (Options::getBool("skipNextTurnScreen"))
+	if (Options::skipNextTurnScreen)
 	{
 		_timer = new Timer(NEXT_TURN_DELAY);
 		_timer->onTimer((StateHandler)& NextTurnState::close);

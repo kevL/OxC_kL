@@ -118,6 +118,9 @@ protected:
 		 */
 		MapData* getMapData(int part) const
 		{
+			if (part < 0 || 3 < part)
+				return NULL;
+
 			return _objects[part];
 		}
 

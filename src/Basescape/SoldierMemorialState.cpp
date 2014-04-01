@@ -103,7 +103,7 @@ SoldierMemorialState::SoldierMemorialState(Game* game)
 	_btnOk->onMouseClick((ActionHandler)& SoldierMemorialState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& SoldierMemorialState::btnOkClick,
-					(SDLKey)Options::getInt("keyCancel"));
+					Options::keyCancel);
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
@@ -155,7 +155,7 @@ SoldierMemorialState::SoldierMemorialState(Game* game)
 		//Log(LOG_INFO) << ". dead soldier, getSoldierDeath & addRow etc";
 		SoldierDeath* death = (*i)->getDeath();
 
-		std::wstringstream
+		std::wostringstream
 			saveDay,
 			saveMonth,
 			saveYear;

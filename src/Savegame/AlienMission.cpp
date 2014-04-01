@@ -625,12 +625,9 @@ void AlienMission::ufoReachedWaypoint(
 			terrorSite->setId(game.getId("STR_TERROR_SITE"));
 			terrorSite->setSecondsRemaining(4 * 3600 + RNG::generate(0, 6) * 3600);	// 4hr. + (0 to 6) hrs.
 			terrorSite->setAlienRace(_race);
-
-//kL_note: not used.
-//kL			const City* city = rules.locateCity(
-//kL											ufo.getLongitude(),
-//kL											ufo.getLatitude());
-//kL			assert(city);
+			assert(rules.locateCity(
+								ufo.getLongitude(),
+								ufo.getLatitude()));
 
 			game.getTerrorSites()->push_back(terrorSite);
 
@@ -727,8 +724,6 @@ void AlienMission::ufoLifting(
 		const Globe& globe)
 {
 	//Log(LOG_INFO) << "AlienMission::ufoLifting()";
-	const Ruleset& rules = *engine.getRuleset();
-
 	switch (ufo.getStatus())
 	{
 		case Ufo::FLYING:

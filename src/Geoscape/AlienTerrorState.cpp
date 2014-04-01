@@ -103,7 +103,7 @@ AlienTerrorState::AlienTerrorState(
 	_btnCancel->onMouseClick((ActionHandler)& AlienTerrorState::btnCancelClick);
 	_btnCancel->onKeyboardPress(
 					(ActionHandler)& AlienTerrorState::btnCancelClick,
-					(SDLKey)Options::getInt("keyCancel"));
+					Options::keyCancel);
 
 	_txtTitle->setColor(Palette::blockOffset(8)+5);
 	_txtTitle->setBig();

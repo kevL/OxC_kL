@@ -62,7 +62,7 @@ Timer::Timer(Uint32 interval, bool frameSkipping)
 		_state(0),
 		_surface(0)
 {
-	Timer::maxFrameSkip = Options::getInt("maxFrameSkip");
+	Timer::maxFrameSkip = Options::maxFrameSkip;
 }
 
 /**

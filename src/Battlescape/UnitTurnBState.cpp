@@ -79,9 +79,9 @@ void UnitTurnBState::init()
 	_unit->setStopShot(false); // kL
 
 	if (_unit->getFaction() == FACTION_PLAYER)
-		_parent->setStateInterval(Options::getInt("battleXcomSpeed"));
+		_parent->setStateInterval(Options::battleXcomSpeed);
 	else
-		_parent->setStateInterval(Options::getInt("battleAlienSpeed"));
+		_parent->setStateInterval(Options::battleAlienSpeed);
 
 	// if the unit has a turret and we are turning during targeting, then only the turret turns
 	_turret = _unit->getTurretType() != -1

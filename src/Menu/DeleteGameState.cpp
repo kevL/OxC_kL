@@ -58,11 +58,11 @@ DeleteGameState::DeleteGameState(
 	_screen = false;
 
 
-	_window		= new Window(this, 256, 120, 32, 40, POPUP_BOTH);
+	_window		= new Window(this, 256, 100, 32, 50, POPUP_BOTH);
 	_txtMessage	= new Text(246, 32, 37, 70);
 
-	_btnNo		= new TextButton(60, 18, 90, 112);
-	_btnYes		= new TextButton(60, 18, 170, 112);
+	_btnNo		= new TextButton(60, 18, 60, 122);
+	_btnYes		= new TextButton(60, 18, 200, 122);
 
 
 	if (_origin != OPT_BATTLESCAPE)
@@ -87,14 +87,14 @@ DeleteGameState::DeleteGameState(
 	_btnYes->onMouseClick((ActionHandler)&DeleteGameState::btnYesClick);
 	_btnYes->onKeyboardPress(
 					(ActionHandler)&DeleteGameState::btnYesClick,
-					(SDLKey)Options::getInt("keyOk"));
+					Options::keyOk);
 
 	_btnNo->setColor(Palette::blockOffset(8)+10);
 	_btnNo->setText(tr("STR_NO"));
 	_btnNo->onMouseClick((ActionHandler)&DeleteGameState::btnNoClick);
 	_btnNo->onKeyboardPress(
 					(ActionHandler)&DeleteGameState::btnNoClick,
-					(SDLKey)Options::getInt("keyCancel"));
+					Options::keyCancel);
 
 	_txtMessage->setColor(Palette::blockOffset(8)+10);
 	_txtMessage->setAlign(ALIGN_CENTER);

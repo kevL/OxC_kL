@@ -59,7 +59,6 @@ private:
 		_battleMusic,
 		_music,
 		_pause,
-		_showFundsOnGeoscape, // this is a cache for Options::getBool("showFundsOnGeoscape")
 		_zoomInEffectDone,
 		_zoomOutEffectDone;
 	int _zoomInter; // kL

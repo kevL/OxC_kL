@@ -30,6 +30,7 @@ class Font;
 class Frame;
 class Language;
 class TextButton;
+class Text;
 
 
 /**
@@ -43,15 +44,24 @@ class Slider
 private:
 	bool _pressed;
 	int
+		_textness,
 		_thickness,
 		_min,
 		_minX,
 		_max,
-		_maxX;
-	double _value;
+		_maxX,
+		_value;
+	double _pos;
 
+	ActionHandler _change;
 	Frame *_frame;
+	Text
+		* _txtMinus,
+		* _txtPlus;
 	TextButton *_button;
+
+	/// Sets the slider's position.
+	void setPosition(double pos);
 
 
 	public:
@@ -84,10 +94,14 @@ private:
 				SDL_Color* colors,
 				int firstcolor = 0,
 				int ncolors = 256);
+		/// Sets the slider's range.
+		void setRange(
+				int min,
+				int max);
 		/// Sets the slider's value.
-		void setValue(double value);
-		/// Sets the slider's value.
-		double getValue() const;
+		void setValue(int value);
+		/// Gets the slider's value.
+		int getValue() const;
 		/// Blits the slider onto another surface.
 		void blit(Surface* surface);
 		/// Moves the slider.
@@ -96,6 +110,8 @@ private:
 		void mousePress(Action* action, State* state);
 		/// Special handling for mouse releases.
 		void mouseRelease(Action* action, State* state);
+		/// Hooks an action handler to when the slider changes.
+		void onChange(ActionHandler handler);
 };
 
 }

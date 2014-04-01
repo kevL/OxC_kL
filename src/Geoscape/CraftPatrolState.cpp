@@ -89,14 +89,14 @@ CraftPatrolState::CraftPatrolState(
 	_btnOk->onMouseClick((ActionHandler)& CraftPatrolState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& CraftPatrolState::btnOkClick,
-					(SDLKey)Options::getInt("keyCancel"));
+					Options::keyCancel);
 
 	_btnRedirect->setColor(Palette::blockOffset(8)+5);
 	_btnRedirect->setText(tr("STR_REDIRECT_CRAFT"));
 	_btnRedirect->onMouseClick((ActionHandler)& CraftPatrolState::btnRedirectClick);
 	_btnRedirect->onKeyboardPress(
 					(ActionHandler)& CraftPatrolState::btnRedirectClick,
-					(SDLKey)Options::getInt("keyOk"));
+					Options::keyOk);
 
 	_txtDestination->setColor(Palette::blockOffset(15)-1);
 	_txtDestination->setBig();

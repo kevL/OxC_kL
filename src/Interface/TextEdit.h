@@ -49,6 +49,7 @@ private:
 
 	std::wstring _value;
 
+	ActionHandler _change;
 	Text
 		*_caret,
 		*_text;
@@ -69,11 +70,9 @@ private:
 		~TextEdit();
 
 		/// Sets focus on this text edit.
-		void focus();
-		/// Removes focus from this text box.
-		void deFocus();
-		/// Check if the player is currently typing in this box.
-		bool isFocused();
+		void setFocus(bool focus);
+		/// kL. Check if the player is currently typing in this box.
+		bool isFocused(); // kL, is this still needed.
 
 		/// Sets the text size to big.
 		void setBig();
@@ -132,6 +131,8 @@ private:
 		void mousePress(Action* action, State* state);
 		/// Special handling for keyboard presses.
 		void keyboardPress(Action* action, State* state);
+		/// Hooks an action handler to when the slider changes.
+		void onChange(ActionHandler handler);
 };
 
 }

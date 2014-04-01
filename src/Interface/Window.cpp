@@ -31,7 +31,7 @@
 namespace OpenXcom
 {
 
-const double Window::POPUP_SPEED = 0.07;
+const double Window::POPUP_SPEED = 0.05;
 
 Sound* Window::soundPopup[3] = {0, 0, 0};
 
@@ -58,6 +58,8 @@ Window::Window(
 			height,
 			x,
 			y),
+		_dx(-x),
+		_dy(-y),
 		_bg(0),
 		_color(0),
 		_popup(popup),
@@ -256,8 +258,8 @@ void Window::draw()
 
 	if (_bg != 0)
 	{
-		_bg->getCrop()->x = static_cast<Sint16>(getX() + static_cast<int>(square.x) - _dx);
-		_bg->getCrop()->y = static_cast<Sint16>(getY() + static_cast<int>(square.y) - _dy);
+		_bg->getCrop()->x = static_cast<Sint16>(static_cast<int>(square.x) - _dx);
+		_bg->getCrop()->y = static_cast<Sint16>(static_cast<int>(square.y) - _dy);
 		_bg->getCrop()->w = square.w;
 		_bg->getCrop()->h = square.h;
 
@@ -266,6 +268,24 @@ void Window::draw()
 
 		_bg->blit(this);
 	}
+}
+
+/**
+ * Changes the horizontal offset of the surface in the X axis.
+ * @param dx X position in pixels.
+ */
+void Window::setDX(int dx)
+{
+	_dx = dx;
+}
+
+/**
+ * Changes the vertical offset of the surface in the Y axis.
+ * @param dy Y position in pixels.
+ */
+void Window::setDY(int dy)
+{
+	_dy = dy;
 }
 
 }

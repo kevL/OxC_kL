@@ -139,9 +139,6 @@ ProdProgress Production::step(
 
 	if (done < getAmountProduced())
 	{
-		bool autoSell = Options::getBool("allowAutoSellProduction");
-		bool moreItems = Options::getBool("canManufactureMoreItemsPerHour");
-
 		// std::min is required because we don't want to overproduce
 		int produced = std::min(getAmountProduced(), _amount) - done;
 		int count = 0;
@@ -210,7 +207,7 @@ ProdProgress Production::step(
 						}
 					}
 
-					if (autoSell
+					if (Options::allowAutoSellProduction
 						&& getAmountTotal() == std::numeric_limits<int>::max())
 					{
 						g->setFunds(g->getFunds() + (r->getItem(i->first)->getSellCost() * i->second));
@@ -221,7 +218,7 @@ ProdProgress Production::step(
 				}
 			}
 
-			if (!moreItems)
+			if (!Options::canManufactureMoreItemsPerHour)
 				break;
 
 			count++;

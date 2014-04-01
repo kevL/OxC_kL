@@ -160,7 +160,7 @@ BasescapeState::BasescapeState(
 
 	_edtBase->setColor(Palette::blockOffset(15)+1);
 	_edtBase->setBig();
-	_edtBase->onKeyboardPress((ActionHandler)& BasescapeState::edtBaseKeyPress);
+	_edtBase->onChange((ActionHandler)& BasescapeState::edtBaseChange);
 
 	_txtLocation->setColor(Palette::blockOffset(15)+6);
 
@@ -215,7 +215,7 @@ BasescapeState::BasescapeState(
 	_btnGeoscape->onMouseClick((ActionHandler)& BasescapeState::btnGeoscapeClick);
 	_btnGeoscape->onKeyboardPress(
 					(ActionHandler)& BasescapeState::btnGeoscapeClick,
-					(SDLKey)Options::getInt("keyCancel"));
+					Options::keyCancel);
 }
 
 /**
@@ -535,7 +535,7 @@ void BasescapeState::viewLeftClick(Action*)
 												"BACK13.SCR",
 												6));
 		}
-		else if (_base->getDisconnectedFacilities(fac).size() > 0) // would base become disconnected...
+		else if (!_base->getDisconnectedFacilities(fac).empty()) // would base become disconnected...
 		{
 			_game->pushState(new ErrorMessageState(
 												_game,
@@ -634,7 +634,7 @@ void BasescapeState::viewRightClick(Action*)
  */
 void BasescapeState::viewMouseOver(Action*)
 {
-	std::wstringstream ss;
+	std::wostringstream ss;
 
 	BaseFacility* f = _view->getSelectedFacility();
 	if (f != 0)
@@ -696,21 +696,21 @@ void BasescapeState::handleKeyPress(Action* action)
 		int base = -1;
 
 		int key = action->getDetails()->key.keysym.sym;
-		if (key == Options::getInt("keyBaseSelect1"))
+		if (key == Options::keyBaseSelect1)
 			base = 0;
-		else if (key == Options::getInt("keyBaseSelect2"))
+		else if (key == Options::keyBaseSelect2)
 			base = 1;
-		else if (key == Options::getInt("keyBaseSelect3"))
+		else if (key == Options::keyBaseSelect3)
 			base = 2;
-		else if (key == Options::getInt("keyBaseSelect4"))
+		else if (key == Options::keyBaseSelect4)
 			base = 3;
-		else if (key == Options::getInt("keyBaseSelect5"))
+		else if (key == Options::keyBaseSelect5)
 			base = 4;
-		else if (key == Options::getInt("keyBaseSelect6"))
+		else if (key == Options::keyBaseSelect6)
 			base = 5;
-		else if (key == Options::getInt("keyBaseSelect7"))
+		else if (key == Options::keyBaseSelect7)
 			base = 6;
-		else if (key == Options::getInt("keyBaseSelect8"))
+		else if (key == Options::keyBaseSelect8)
 			base = 7;
 
 		if (base > -1
@@ -730,13 +730,9 @@ void BasescapeState::handleKeyPress(Action* action)
  * Changes the Base name.
  * @param action, Pointer to an action.
  */
-void BasescapeState::edtBaseKeyPress(Action* action)
+void BasescapeState::edtBaseChange(Action* action)
 {
-	if (action->getDetails()->key.keysym.sym == SDLK_RETURN
-		|| action->getDetails()->key.keysym.sym == SDLK_KP_ENTER)
-	{
-		_base->setName(_edtBase->getText());
-	}
+	_base->setName(_edtBase->getText());
 }
 
 }

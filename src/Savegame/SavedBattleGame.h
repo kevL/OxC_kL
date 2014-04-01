@@ -69,9 +69,6 @@ private:
 		_cheating,
 		_kneelReserved,
 		_objectiveDestroyed,
-		_sneaky,
-		_strafeEnabled,
-		_traceAI,
 		_unitsFalling;
 
 	BattleActionType _tuReserved;
@@ -279,14 +276,6 @@ private:
 				BattleUnit* unit,
 				Position entryPoint);
 
-		/// Gets DragButton.
-		Uint8 getDragButton() const;
-		/// Gets DragInverted.
-		bool isDragInverted() const;
-		/// Gets DragTimeTolerance.
-		int getDragTimeTolerance() const;
-		/// Gets DragPixelTolerance.
-		int getDragPixelTolerance() const;
 		/// Adds this unit to the vector of falling units.
 		bool addFallingUnit(BattleUnit* unit);
 		/// Gets the vector of falling units.
@@ -295,12 +284,6 @@ private:
 		void setUnitsFalling(bool fall);
 		/// Checks the status of the switch that says "there are units falling".
 		bool getUnitsFalling() const;
-		/// Checks the strafe setting.
-		bool getStrafeSetting() const;
-		/// Checks the sneaky AI setting.
-		bool getSneakySetting() const;
-		/// Checks the traceAI setting.
-		bool getTraceSetting() const;
 		/// Gets a pointer to the BattlescapeState.
 		BattlescapeState* getBattleState();
 		/// Gets a pointer to the BattlescapeGame.

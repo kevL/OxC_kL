@@ -98,7 +98,7 @@ DebriefingState::DebriefingState(Game* game)
 	// Restore the cursor in case something weird happened
 	_game->getCursor()->setVisible(true);
 
-	if (Options::getBool("alienContainmentLimitEnforced"))
+	if (Options::alienContainmentLimitEnforced)
 		_containmentLimit = 1;
 
 	_window			= new Window(this, 320, 200, 0, 0);
@@ -151,10 +151,10 @@ DebriefingState::DebriefingState(Game* game)
 	_btnOk->onMouseClick((ActionHandler)& DebriefingState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& DebriefingState::btnOkClick,
-					(SDLKey)Options::getInt("keyOk"));
+					Options::keyOk);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& DebriefingState::btnOkClick,
-					(SDLKey)Options::getInt("keyCancel"));
+					Options::keyCancel);
 
 	_txtTitle->setColor(Palette::blockOffset(8)+5);
 	_txtTitle->setBig();
@@ -211,7 +211,7 @@ DebriefingState::DebriefingState(Game* game)
 			continue;
 
 
-		std::wstringstream
+		std::wostringstream
 			ss,
 			ss2;
 
@@ -239,7 +239,7 @@ DebriefingState::DebriefingState(Game* game)
 		}
 	}
 
-	std::wstringstream ss3;
+	std::wostringstream ss3;
 	ss3 << total;
 	_lstTotal->addRow(
 					2,
@@ -824,7 +824,7 @@ void DebriefingState::prepareDebriefing()
 							(*j)->updateGeoscapeStats(*i);
 
 /*							SoldierDeath* death = new SoldierDeath();
-							death->setTime(new GameTime(*save->getTime()));
+							death->setTime(*save->getTime());
 
 //kL							(*i)->die(death);
 //kL							save->getDeadSoldiers()->push_back(*i);
@@ -836,12 +836,8 @@ void DebriefingState::prepareDebriefing()
 																	// uh, what 'bout err GeoscapeSoldier etc.
 */
 							// kL_begin: sorta mirror GeoscapeState::time1Day()
-							GameTime* time = new GameTime(*save->getTime());
-
 							SoldierDeath* death = new SoldierDeath();
-							death->setTime(time);
-
-							delete time;
+							death->setTime(*save->getTime());
 
 							SoldierDead* dead = (*i)->die(death); // converts Soldier to SoldierDead class instance.
 							save->getDeadSoldiers()->push_back(dead);
@@ -940,7 +936,7 @@ void DebriefingState::prepareDebriefing()
 								(*j)->updateGeoscapeStats(*i);
 
 /*								SoldierDeath* death = new SoldierDeath();
-								death->setTime(new GameTime(*save->getTime()));
+								death->setTime(*save->getTime());
 
 //kL								(*i)->die(death);
 //kL								save->getDeadSoldiers()->push_back(*i);
@@ -953,12 +949,8 @@ void DebriefingState::prepareDebriefing()
 
 								break; */
 								// kL_begin: sorta mirror GeoscapeState::time1Day()
-								GameTime* time = new GameTime(*save->getTime());
-
 								SoldierDeath* death = new SoldierDeath();
-								death->setTime(time);
-
-								delete time;
+								death->setTime(*save->getTime());
 
 								SoldierDead* dead = (*i)->die(death); // converts Soldier to SoldierDead class instance.
 								save->getDeadSoldiers()->push_back(dead);

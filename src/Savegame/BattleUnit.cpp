@@ -2751,7 +2751,7 @@ std::wstring BattleUnit::getName(
 
 		if (debugAppendId)
 		{
-			std::wstringstream ss;
+			std::wostringstream ss;
 			ss << ret << L" " << _id;
 			ret = ss.str();
 		}

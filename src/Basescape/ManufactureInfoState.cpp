@@ -101,8 +101,6 @@ ManufactureInfoState::~ManufactureInfoState() // not implemented yet.
  */
 void ManufactureInfoState::buildUi()
 {
-	_changeValueByMouseWheel = Options::getInt("changeValueByMouseWheel");
-
 	_screen				= false;
 
 	int width			= 320;
@@ -204,22 +202,22 @@ void ManufactureInfoState::buildUi()
 				Palette::backPos,
 				16);
 
-	_surface1 = new InteractiveSurface(
+	_surfaceEngineers = new InteractiveSurface(
 								(_btnEngineerUp->getX() + _btnEngineerUp->getWidth() + _txtUnitToProduce->getX()) / 2,
 								height,
 								start_x,
 								start_y);
-	_surface1->onMouseClick((ActionHandler)& ManufactureInfoState::handleWheelEngineer, 0);
+	_surfaceEngineers->onMouseClick((ActionHandler)& ManufactureInfoState::handleWheelEngineer, 0);
 
-	_surface2 = new InteractiveSurface(
-								_surface1->getWidth(),
+	_surfaceUnits = new InteractiveSurface(
+								_surfaceEngineers->getWidth(),
 								height,
-								start_x + _surface1->getWidth(),
+								start_x + _surfaceEngineers->getWidth(),
 								start_y);
-	_surface2->onMouseClick((ActionHandler)& ManufactureInfoState::handleWheelUnit, 0);
+	_surfaceUnits->onMouseClick((ActionHandler)& ManufactureInfoState::handleWheelUnit, 0);
 
-	add(_surface1);
-	add(_surface2);
+	add(_surfaceEngineers);
+	add(_surfaceUnits);
 	add(_window);
 	add(_txtTitle);
 	add(_txtAvailableEngineer);
@@ -306,10 +304,10 @@ void ManufactureInfoState::buildUi()
 	_btnOk->onMouseClick((ActionHandler)& ManufactureInfoState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& ManufactureInfoState::btnOkClick,
-					(SDLKey)Options::getInt("keyOk"));
+					Options::keyOk);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& ManufactureInfoState::btnOkClick,
-					(SDLKey)Options::getInt("keyCancel"));
+					Options::keyCancel);
 
 	_btnStop->setColor(Palette::blockOffset(15)+6);
 	_btnStop->setText(tr("STR_STOP_PRODUCTION"));
@@ -385,13 +383,13 @@ void ManufactureInfoState::setAssignedEngineer()
 	_txtAvailableEngineer->setText(tr("STR_ENGINEERS_AVAILABLE_UC").arg(_base->getEngineers())); // kL
 	_txtAvailableSpace->setText(tr("STR_WORKSHOP_SPACE_AVAILABLE_UC").arg(_base->getFreeWorkshops()));
 
-	std::wstringstream s3;
+	std::wostringstream s3;
 	s3 << L"> \x01" << _production->getAssignedEngineers();
 	_txtAllocated->setText(s3.str());
 
-	std::wstringstream s4;
+	std::wostringstream s4;
 	s4 << L"> \x01";
-	if (Options::getBool("allowAutoSellProduction")
+	if (Options::allowAutoSellProduction)
 		&& _production->getAmountTotal() == std::numeric_limits<int>::max())
 	{
 		s4 << "$$";
@@ -585,7 +583,7 @@ void ManufactureInfoState::moreUnitRelease(Action* action)
 void ManufactureInfoState::moreUnitClick(Action* action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
-		moreUnit(Options::getBool("allowAutoSellProduction")? std::numeric_limits<int>::max(): 999 - _production->getAmountTotal());
+		moreUnit(Options::allowAutoSellProduction? std::numeric_limits<int>::max(): 999 - _production->getAmountTotal());
 	else if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 		moreUnit(1);
 }
@@ -596,9 +594,10 @@ void ManufactureInfoState::moreUnitClick(Action* action)
  */
 void ManufactureInfoState::lessUnit(int change)
 {
-	if (change < 1) return;
+	if (change < 1)
+		return;
 
-	if (Options::getBool("allowAutoSellProduction")
+	if (Options::allowAutoSellProduction
 		&& _production->getAmountTotal() == std::numeric_limits<int>::max())
 	{
 		_production->setAmountTotal(std::max(_production->getAmountProduced() + 1, 999));
@@ -671,9 +670,9 @@ void ManufactureInfoState::onLessEngineer()
 void ManufactureInfoState::handleWheelEngineer(Action* action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
-		moreEngineer(_changeValueByMouseWheel);
+		moreEngineer(Options::changeValueByMouseWheel);
 	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN)
-		lessEngineer(_changeValueByMouseWheel);
+		lessEngineer(Options::changeValueByMouseWheel);
 }
 
 /**
@@ -701,9 +700,9 @@ void ManufactureInfoState::onLessUnit()
 void ManufactureInfoState::handleWheelUnit(Action* action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
-		moreUnit(_changeValueByMouseWheel);
+		moreUnit(Options::changeValueByMouseWheel);
 	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN)
-		lessUnit(_changeValueByMouseWheel);
+		lessUnit(Options::changeValueByMouseWheel);
 }
 
 /**

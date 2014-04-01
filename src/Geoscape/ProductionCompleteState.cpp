@@ -95,14 +95,14 @@ ProductionCompleteState::ProductionCompleteState(
 	_btnOk->onMouseClick((ActionHandler)& ProductionCompleteState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& ProductionCompleteState::btnOkClick,
-					(SDLKey)Options::getInt("keyCancel"));
+					Options::keyCancel);
 
 	_btnOk5Secs->setColor(Palette::blockOffset(8)+5);
 	_btnOk5Secs->setText(tr("STR_OK_5_SECONDS"));
 	_btnOk5Secs->onMouseClick((ActionHandler)& ProductionCompleteState::btnOk5SecsClick);
 	_btnOk5Secs->onKeyboardPress(
 					(ActionHandler)& ProductionCompleteState::btnOk5SecsClick,
-					(SDLKey)Options::getInt("keyGeoSpeed1"));
+					Options::keyGeoSpeed1);
 
 	_btnGotoBase->setColor(Palette::blockOffset(8)+5);
 /*kL	if (_endType != PROGRESS_CONSTRUCTION)
@@ -112,7 +112,7 @@ ProductionCompleteState::ProductionCompleteState(
 	_btnGotoBase->onMouseClick((ActionHandler)& ProductionCompleteState::btnGotoBaseClick);
 	_btnGotoBase->onKeyboardPress(
 					(ActionHandler)& ProductionCompleteState::btnGotoBaseClick,
-					(SDLKey)Options::getInt("keyOk"));
+					Options::keyOk);
 
 	_txtMessage->setColor(Palette::blockOffset(15)-1);
 	_txtMessage->setAlign(ALIGN_CENTER);

@@ -91,13 +91,13 @@ FundingState::FundingState(Game* game)
 	_btnOk->onMouseClick((ActionHandler)& FundingState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& FundingState::btnOkClick,
-					(SDLKey)Options::getInt("keyOk"));
+					Options::keyOk);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& FundingState::btnOkClick,
-					(SDLKey)Options::getInt("keyCancel"));
+					Options::keyCancel);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& FundingState::btnOkClick,
-					(SDLKey)Options::getInt("keyGeoFunding"));
+					Options::keyGeoFunding);
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setAlign(ALIGN_CENTER);
@@ -122,7 +122,10 @@ FundingState::FundingState(Game* game)
 			i != _game->getSavedGame()->getCountries()->end();
 			++i)
 	{
-		std::wstringstream ss, ss2;
+		std::wostringstream
+			ss,
+			ss2;
+
 		ss << L'\x01' << Text::formatFunding((*i)->getFunding().at((*i)->getFunding().size() - 1)) << L'\x01';
 		if ((*i)->getFunding().size() > 1)
 		{
@@ -134,9 +137,7 @@ FundingState::FundingState(Game* game)
 			ss2 << L'\x01';
 		}
 		else
-		{
 			ss2 << Text::formatFunding(0);
-		}
 
 		_lstCountries->addRow(
 							3,

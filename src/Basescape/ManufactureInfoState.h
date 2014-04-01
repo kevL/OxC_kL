@@ -46,8 +46,6 @@ class ManufactureInfoState
 {
 
 private:
-	int _changeValueByMouseWheel;
-
 	ArrowButton
 		* _btnEngineerDown,
 		* _btnEngineerUp,
@@ -55,8 +53,8 @@ private:
 		* _btnUnitUp;
 	Base* _base;
 	InteractiveSurface
-		* _surface1,
-		* _surface2;
+		* _surfaceEngineers,
+		* _surfaceUnits;
 	Production* _production;
 	RuleManufacture* _item;
 	Text

@@ -126,7 +126,7 @@ ResearchState::ResearchState(
 	_btnOk->onMouseClick((ActionHandler)& ResearchState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& ResearchState::btnOkClick,
-					(SDLKey)Options::getInt("keyCancel"));
+					Options::keyCancel);
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
@@ -235,7 +235,7 @@ void ResearchState::init()
 			i != baseProjects.end();
 			++i)
 	{
-		std::wstringstream sstr;
+		std::wostringstream sstr;
 		sstr << (*i)->getAssigned();
 		const RuleResearch* r = (*i)->getRules();
 

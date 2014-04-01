@@ -126,11 +126,11 @@ Map::Map(
 		_smoothingEngaged(false)
 {
 	//Log(LOG_INFO) << "Create Map";
-	_previewSetting	= Options::getInt("battleNewPreviewPath");
-	_smoothCamera	= Options::getBool("battleSmoothCamera");
+	_previewSetting	= Options::battleNewPreviewPath;
+	_smoothCamera	= Options::battleSmoothCamera;
 
 	// turn everything on because we want to see the markers.
-	if (Options::getBool("traceAI")) _previewSetting = 3;
+	if (Options::traceAI) _previewSetting = PATH_FULL;
 
 	_res			= _game->getResourcePack();
 	_spriteWidth	= _res->getSurfaceSet("BLANKS.PCK")->getFrame(0)->getWidth();
@@ -150,8 +150,10 @@ Map::Map(
 	_message = new BattlescapeMessage( // Hidden Movement... screen
 									320,
 									visibleMapHeight < 200? visibleMapHeight: 200,
-									Screen::getDX(),
-									Screen::getDY());
+									0,
+									0);
+	_message->setX(_game->getScreen()->getDX());
+	_message->setY(_game->getScreen()->getDY());
 
 	_scrollMouseTimer = new Timer(SCROLL_INTERVAL);
 	_scrollMouseTimer->onTimer((SurfaceHandler)& Map::scrollMouse);
@@ -729,7 +731,7 @@ void Map::drawTerrain(Surface* surface)
 
 	if (!_waypoints.empty()
 		|| (pathfinderTurnedOn
-			&& _previewSetting > 1))
+			&& (_previewSetting & PATH_TU_COST)))
 	{
 		_numWaypid = new NumberText(15, 15, 20, 30);
 		_numWaypid->setPalette(getPalette());
@@ -1172,7 +1174,7 @@ void Map::drawTerrain(Surface* surface)
 					// Draw Path Preview
 					if (tile->getPreview() != -1
 						&& tile->isDiscovered(0)
-						&& _previewSetting %2)
+						&& (_previewSetting & PATH_ARROWS))
 					{
 						if (itZ > 0
 							&& tile->hasNoFloor(tileBelow))
@@ -1257,7 +1259,7 @@ void Map::drawTerrain(Surface* surface)
 //kL								int accuracy = _save->getSelectedUnit()->getFiringAccuracy( // Wb.140214
 //kL																						action->type,
 //kL																						action->weapon);
-//kL								if (Options::getBool("battleUFOExtenderAccuracy"))
+//kL								if (Options::battleUFOExtenderAccuracy)
 //								{
 								RuleItem* weapon = action->weapon->getRules();
 
@@ -1484,7 +1486,7 @@ void Map::drawTerrain(Surface* surface)
 						}
 
 						int adjustment = 20 - tile->getTerrainLevel();
-						if (_previewSetting %2)
+						if (_previewSetting & PATH_ARROWS)
 						{
 							if (itZ > 0
 								&& tile->hasNoFloor(tileBelow))
@@ -1512,7 +1514,7 @@ void Map::drawTerrain(Surface* surface)
 										tile->getMarkerColor());
 						}
 
-						if (_previewSetting > 1)
+						if (_previewSetting & PATH_TU_COST)
 						{
 							Uint8 wpColor = 1; // white
 							// kL_note: Set pathfinder/ pathPreview number color.

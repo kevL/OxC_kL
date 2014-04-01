@@ -596,9 +596,9 @@ void Inventory::blit(Surface* surface)
 void Inventory::mouseOver(Action* action, State* state)
 {
 	_selection->setX(static_cast<int>(
-						floor(action->getAbsoluteXMouse())) - (_selection->getWidth() / 2) - _dx);
+						floor(action->getAbsoluteXMouse())) - (_selection->getWidth() / 2) - getX());
 	_selection->setY(static_cast<int>(
-						floor(action->getAbsoluteYMouse())) - (_selection->getHeight() / 2) - _dy);
+						floor(action->getAbsoluteYMouse())) - (_selection->getHeight() / 2) - getY());
 
 	InteractiveSurface::mouseOver(action, state);
 }
@@ -618,8 +618,8 @@ void Inventory::mouseClick(Action* action, State* state)
 		if (_selItem == 0) // Pickup item
 		{
 			int
-				x = static_cast<int>(floor(action->getAbsoluteXMouse())) - _dx,
-				y = static_cast<int>(floor(action->getAbsoluteYMouse())) - _dy;
+				x = static_cast<int>(floor(action->getAbsoluteXMouse())) - getX(),
+				y = static_cast<int>(floor(action->getAbsoluteYMouse())) - getY();
 
 			RuleInventory* slot = getSlotInPosition(&x, &y);
 			if (slot != 0)
@@ -868,8 +868,8 @@ void Inventory::mouseClick(Action* action, State* state)
 			else
 			{
 				// try again, using the position of the mouse cursor, not the item (slightly more intuitive for stacking)
-				x = static_cast<int>(floor(action->getAbsoluteXMouse())) - _dx;
-				y = static_cast<int>(floor(action->getAbsoluteYMouse())) - _dy;
+				x = static_cast<int>(floor(action->getAbsoluteXMouse())) - getX();
+				y = static_cast<int>(floor(action->getAbsoluteYMouse())) - getY();
 
 				slot = getSlotInPosition(&x, &y);
 				if (slot != 0
@@ -910,8 +910,8 @@ void Inventory::mouseClick(Action* action, State* state)
 						// ergo preBattlescape inventory screen is active.
 			{
 				int
-					x = static_cast<int>(floor(action->getAbsoluteXMouse())) - _dx,
-					y = static_cast<int>(floor(action->getAbsoluteYMouse())) - _dy;
+					x = static_cast<int>(floor(action->getAbsoluteXMouse())) - getX(),
+					y = static_cast<int>(floor(action->getAbsoluteYMouse())) - getY();
 
 				RuleInventory* slot = getSlotInPosition(&x, &y);
 				if (slot != 0)

@@ -75,7 +75,6 @@ UnitSprite::UnitSprite(
 		_animationFrame(0),
 		_drawingRoutine(0)
 {
-	_hairBleach = Options::getBool("battleHairBleach");
 }
 
 /**
@@ -185,7 +184,21 @@ void UnitSprite::draw()
 
 	_drawingRoutine = _unit->getArmor()->getDrawingRoutine();
 	//Log(LOG_INFO) << "UnitSprite::draw() Routine " << _drawingRoutine;
-	switch (_drawingRoutine)
+	// Array of drawing routines
+	void (UnitSprite::*routines[])() = {&UnitSprite::drawRoutine0,
+										&UnitSprite::drawRoutine1,
+										&UnitSprite::drawRoutine2,
+										&UnitSprite::drawRoutine3,
+										&UnitSprite::drawRoutine4,
+										&UnitSprite::drawRoutine5,
+										&UnitSprite::drawRoutine6,
+										&UnitSprite::drawRoutine7,
+										&UnitSprite::drawRoutine8,
+										&UnitSprite::drawRoutine9,
+										&UnitSprite::drawRoutine0};
+	// Call the matching routine
+	(this->*(routines[_drawingRoutine]))();
+/*	switch (_drawingRoutine)
 	{
 		case 0:
 			drawRoutine0();
@@ -220,7 +233,7 @@ void UnitSprite::draw()
 		case 10: // muton
 			drawRoutine0();
 		break;
-	}
+	} */
 }
 
 /**
@@ -300,7 +313,7 @@ void UnitSprite::drawRoutine0()
 		torso->blit(this);
 
 		if (_unit->getGeoscapeSoldier()
-			&& _hairBleach)
+			&& Options::battleHairBleach)
 		{
 			SoldierLook look = _unit->getGeoscapeSoldier()->getLook();
 
@@ -575,7 +588,7 @@ void UnitSprite::drawRoutine0()
 	Surface* newRightArm	= new Surface(*rightArm);
 
 	if (_unit->getGeoscapeSoldier()
-		&& _hairBleach)
+		&& Options::battleHairBleach)
 	{
 		SoldierLook look = _unit->getGeoscapeSoldier()->getLook();
 		if (look)

@@ -75,14 +75,14 @@ ConfirmCydoniaState::ConfirmCydoniaState(
 	_btnYes->onMouseClick((ActionHandler)& ConfirmCydoniaState::btnYesClick);
 	_btnYes->onKeyboardPress(
 					(ActionHandler)& ConfirmCydoniaState::btnYesClick,
-					(SDLKey)Options::getInt("keyOk"));
+					Options::keyOk);
 
 	_btnNo->setColor(Palette::blockOffset(8)+5);
 	_btnNo->setText(tr("STR_NO"));
 	_btnNo->onMouseClick((ActionHandler)& ConfirmCydoniaState::btnNoClick);
 	_btnNo->onKeyboardPress(
 					(ActionHandler)& ConfirmCydoniaState::btnNoClick,
-					(SDLKey)Options::getInt("keyCancel"));
+					Options::keyCancel);
 
 	_txtMessage->setAlign(ALIGN_CENTER);
 	_txtMessage->setBig();

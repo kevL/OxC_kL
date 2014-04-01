@@ -79,11 +79,6 @@ PurchaseState::PurchaseState(
 		_iQty(0.f),
 		_itemOffset(0)
 {
-	_changeValueByMouseWheel = Options::getInt("changeValueByMouseWheel");
-	_allowChangeListValuesByMouseWheel = Options::getBool("allowChangeListValuesByMouseWheel")
-										&& _changeValueByMouseWheel;
-
-
 	_window			= new Window(this, 320, 200, 0, 0);
 	_txtTitle		= new Text(310, 17, 5, 9);
 	_txtBaseLabel	= new Text(80, 9, 16, 9);
@@ -129,7 +124,7 @@ PurchaseState::PurchaseState(
 	_btnOk->onMouseClick((ActionHandler)& PurchaseState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& PurchaseState::btnOkClick,
-					(SDLKey)Options::getInt("keyOk"));
+					Options::keyOk);
 	_btnOk->setVisible(false);
 
 	_btnCancel->setColor(Palette::blockOffset(13)+10);
@@ -137,7 +132,7 @@ PurchaseState::PurchaseState(
 	_btnCancel->onMouseClick((ActionHandler)& PurchaseState::btnCancelClick);
 	_btnCancel->onKeyboardPress(
 					(ActionHandler)& PurchaseState::btnCancelClick,
-					(SDLKey)Options::getInt("keyCancel"));
+					Options::keyCancel);
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
@@ -172,7 +167,7 @@ PurchaseState::PurchaseState(
 	_lstItems->setSelectable(true);
 	_lstItems->setBackground(_window);
 	_lstItems->setMargin(8);
-	_lstItems->setAllowScrollOnArrowButtons(!_allowChangeListValuesByMouseWheel);
+//	_lstItems->setAllowScrollOnArrowButtons(!_allowChangeListValuesByMouseWheel);
 	_lstItems->onLeftArrowPress((ActionHandler)& PurchaseState::lstItemsLeftArrowPress);
 	_lstItems->onLeftArrowRelease((ActionHandler)& PurchaseState::lstItemsLeftArrowRelease);
 	_lstItems->onLeftArrowClick((ActionHandler)& PurchaseState::lstItemsLeftArrowClick);
@@ -181,7 +176,7 @@ PurchaseState::PurchaseState(
 	_lstItems->onRightArrowClick((ActionHandler)& PurchaseState::lstItemsRightArrowClick);
 	_lstItems->onMousePress((ActionHandler)& PurchaseState::lstItemsMousePress);
 
-	std::wstringstream
+	std::wostringstream
 		ss1,
 		ss2,
 		ss3,
@@ -506,23 +501,16 @@ void PurchaseState::think()
  */
 bool PurchaseState::isExcluded(std::string item)
 {
-	std::vector<std::string> excludes = Options::getPurchaseExclusions();
-
-	bool exclude = false;
 	for (std::vector<std::string>::const_iterator
-			s = excludes.begin();
-			s != excludes.end();
+			s = Options::purchaseExclusions.begin();
+			s != Options::purchaseExclusions.end();
 			++s)
 	{
-		if (item == *s)
-		{
-			exclude = true;
-
-			break;
-		}
+		if (*s == item)
+			return true;
 	}
 
-	return exclude;
+	return false;
 }
 
 /**
@@ -713,11 +701,10 @@ void PurchaseState::lstItemsMousePress(Action* action)
 		_timerInc->stop();
 		_timerDec->stop();
 
-		if (_allowChangeListValuesByMouseWheel
-			&& action->getAbsoluteXMouse() >= _lstItems->getArrowsLeftEdge()
+		if (action->getAbsoluteXMouse() >= _lstItems->getArrowsLeftEdge()
 			&& action->getAbsoluteXMouse() <= _lstItems->getArrowsRightEdge())
 		{
-			increaseByValue(_changeValueByMouseWheel);
+			increaseByValue(Options::changeValueByMouseWheel);
 		}
 	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN)
@@ -725,11 +712,10 @@ void PurchaseState::lstItemsMousePress(Action* action)
 		_timerInc->stop();
 		_timerDec->stop();
 
-		if (_allowChangeListValuesByMouseWheel
-			&& action->getAbsoluteXMouse() >= _lstItems->getArrowsLeftEdge()
+		if (action->getAbsoluteXMouse() >= _lstItems->getArrowsLeftEdge()
 			&& action->getAbsoluteXMouse() <= _lstItems->getArrowsRightEdge())
 		{
-			decreaseByValue(_changeValueByMouseWheel);
+			decreaseByValue(Options::changeValueByMouseWheel);
 		}
 	}
 }
@@ -914,7 +900,7 @@ void PurchaseState::updateItemStrings()
 	_txtPurchases->setText(tr("STR_COST_OF_PURCHASES")
 							.arg(Text::formatFunding(_total)));
 
-	std::wstringstream ss;
+	std::wostringstream ss;
 	ss << _qtys[_sel];
 	_lstItems->setCellText(_sel, 3, ss.str());
 

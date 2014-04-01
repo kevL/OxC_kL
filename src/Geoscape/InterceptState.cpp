@@ -115,13 +115,13 @@ InterceptState::InterceptState(
 	_btnCancel->onMouseClick((ActionHandler)& InterceptState::btnCancelClick);
 	_btnCancel->onKeyboardPress(
 						(ActionHandler)& InterceptState::btnCancelClick,
-						(SDLKey)Options::getInt("keyOk"));
+						Options::keyOk);
 	_btnCancel->onKeyboardPress(
 						(ActionHandler)& InterceptState::btnCancelClick,
-						(SDLKey)Options::getInt("keyCancel"));
+						Options::keyCancel);
 	_btnCancel->onKeyboardPress(
 						(ActionHandler)& InterceptState::btnCancelClick,
-						(SDLKey)Options::getInt("keyGeoIntercept"));
+						Options::keyGeoIntercept);
 
 //	_txtTitle->setColor(Palette::blockOffset(15)-1);
 //	_txtTitle->setAlign(ALIGN_CENTER);
@@ -178,7 +178,7 @@ InterceptState::InterceptState(
 			std::wstring wsBase = (*i)->getName().c_str();
 			_bases.push_back(wsBase);
 
-			std::wstringstream ss;
+			std::wostringstream ss;
 
 			if ((*j)->getNumWeapons() > 0)
 				ss << L'\x01' << (*j)->getNumWeapons() << L'\x01';
@@ -349,7 +349,8 @@ void InterceptState::lstCraftsRightClick(Action*)
  */
 void InterceptState::lstCraftsMouseOver(Action*)
 {
-	if (_base) return;
+	if (_base)
+		return;
 
 	std::wstring wsBase;
 
@@ -365,7 +366,8 @@ void InterceptState::lstCraftsMouseOver(Action*)
  */
 void InterceptState::lstCraftsMouseOut(Action*)
 {
-	if (_base) return;
+	if (_base)
+		return;
 
 //	_txtBase->setText(L"");
 	_txtBase->setText(tr("STR_INTERCEPT"));

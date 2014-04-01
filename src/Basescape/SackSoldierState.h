@@ -28,9 +28,9 @@ namespace OpenXcom
 
 class Base;
 class Soldier;
+class Text;
 class TextButton;
 class Window;
-class Text;
 
 /**
  * Window shown when the player tries to sack a soldier.
@@ -41,15 +41,22 @@ class SackSoldierState
 {
 	private:
 		Base* _base;
-		Soldier* _soldier;
+		Soldier* _soldierId;
 
-		TextButton* _btnOk, * _btnCancel;
+		Text
+			* _txtSoldier,
+			* _txtTitle;
+		TextButton
+			* _btnCancel,
+			* _btnOk;
 		Window* _window;
-		Text* _txtTitle, * _txtSoldier;
 
 	public:
 		/// Creates the Sack Soldier state.
-		SackSoldierState(Game* game, Base* base, Soldier* soldier);
+		SackSoldierState(
+				Game* game,
+				Base* base,
+				Soldier* _soldierId);
 		/// Cleans up the Sack Soldier state.
 		~SackSoldierState();
 

@@ -57,6 +57,11 @@ private:
 		/// Cleans up the Battlescape message.
 		~BattlescapeMessage();
 
+		/// Sets the X position of the surface.
+		void setX(int x);
+		/// Sets the Y position of the surface.
+		void setY(int y);
+
 		/// Sets the Battlescape message's background.
 		void setBackground(Surface* background);
 		/// Sets the Battlescape message's text.

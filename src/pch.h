@@ -10,11 +10,14 @@
 //#include <stdlib.h>
 //#include <crtdbg.h>
 
+#ifndef __NO_OPENGL
 #ifdef __APPLE__
 #include <OpenGL/gl.h>
 #include <OpenGL/glu.h>
 #include <OpenGL/glext.h>
 #include <GLUT/glut.h>
+#endif
+#include <SDL_opengl.h>
 #endif
 
 #include <algorithm>
@@ -52,7 +55,7 @@
 #include <SDL_image.h>
 #include <SDL_keysym.h>
 #include <SDL_mixer.h>
-#include <SDL_opengl.h>
+//#include <SDL_opengl.h>
 #include <SDL.h>
 #include <SDL_syswm.h>
 #include <SDL_types.h>
@@ -158,9 +161,6 @@
 #include "./Battlescape/WarningMessage.h"
 #include "./Battlescape/PathfindingOpenSet.h"
 #include "./Battlescape/TileEngine.h"
-
-#include "./Menu/OptionsBattlescapeState.h"
-
 #include "./Battlescape/ScannerView.h"
 #include "./Battlescape/Inventory.h"
 #include "./Battlescape/BattlescapeGame.h"
@@ -334,17 +334,21 @@
 #include "./Menu/ErrorMessageState.h"
 #include "./Menu/NewBattleState.h"
 #include "./Menu/StartState.h"
+#include "./Menu/IntroState.h"
 #include "./Menu/TestState.h"
-#include "./Menu/OptionsControlsState.h"
 #include "./Menu/LoadState.h"
 #include "./Menu/SavedGameState.h"
-#include "./Menu/OptionsState.h"
-#include "./Menu/OptionsLanguageState.h"
 #include "./Menu/NewGameState.h"
 #include "./Menu/MainMenuState.h"
 #include "./Menu/AbandonGameState.h"
 #include "./Menu/PauseState.h"
-
+#include "./Menu/OptionsVideoState.h"
+#include "./Menu/OptionsAudioState.h"
+#include "./Menu/OptionsAdvancedState.h"
+#include "./Menu/OptionsControlsState.h"
+#include "./Menu/OptionsGeoscapeState.h"
+#include "./Menu/OptionsBattlescapeState.h"
+#include "./Menu/OptionsModsState.h"
 #include "./Resource/ResourcePack.h"
 #include "./Resource/XcomResourcePack.h"
 #include "./Savegame/MovingTarget.h"
@@ -381,6 +385,5 @@
 #include "./Savegame/AlienStrategy.h"
 #include "./Savegame/EquipmentLayoutItem.h"
 
-#include "./Menu/OptionsAdvancedState.h" */
-
 #endif
+// kL_note: Also, MatrixState &tc.

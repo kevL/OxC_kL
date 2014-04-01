@@ -109,7 +109,7 @@ CraftWeaponsState::CraftWeaponsState(
 	_btnCancel->onMouseClick((ActionHandler)& CraftWeaponsState::btnCancelClick);
 	_btnCancel->onKeyboardPress(
 					(ActionHandler)& CraftWeaponsState::btnCancelClick,
-					(SDLKey)Options::getInt("keyCancel"));
+					Options::keyCancel);
 
 	_txtTitle->setColor(Palette::blockOffset(15)+6);
 	_txtTitle->setBig();
@@ -150,7 +150,7 @@ CraftWeaponsState::CraftWeaponsState(
 		{
 			_weapons.push_back(w);
 
-			std::wstringstream
+			std::wostringstream
 				ss,
 				ss2;
 

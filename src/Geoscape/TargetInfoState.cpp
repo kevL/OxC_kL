@@ -104,7 +104,7 @@ TargetInfoState::TargetInfoState(
 	_btnOk->onMouseClick((ActionHandler)& TargetInfoState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& TargetInfoState::btnOkClick,
-					(SDLKey)Options::getInt("keyCancel"));
+					Options::keyCancel);
 
 	_txtTitle->setColor(Palette::blockOffset(8)+10);
 	_txtTitle->setBig();

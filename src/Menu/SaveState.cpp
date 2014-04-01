@@ -68,14 +68,15 @@ SaveState::SaveState(
 	add(_btnSaveGame);
 
 
-	_btnSaveGame->setX(_btnSaveGame->getX() + Screen::getDX()); // kL
-	_btnSaveGame->setY(_btnSaveGame->getY() + Screen::getDY()); // kL
-//kL	centerAllSurfaces();
+//	_btnSaveGame->setX(_btnSaveGame->getX() + Screen::getDX()); // kL
+//	_btnSaveGame->setY(_btnSaveGame->getY() + Screen::getDY()); // kL
 
 
 	_txtTitle->setText(tr("STR_SELECT_SAVE_POSITION"));
 
 	_lstSaves->onMousePress((ActionHandler)& SaveState::lstSavesPress);
+
+//kL	_btnCancel->setX(180);
 
 	_btnSaveGame->setColor(Palette::blockOffset(8)+5);
 	_btnSaveGame->setText(tr("STR_OK"));
@@ -85,6 +86,8 @@ SaveState::SaveState(
 	_edtSave->setColor(Palette::blockOffset(8)+10);
 	_edtSave->setVisible(false);
 	_edtSave->onKeyboardPress((ActionHandler)& SaveState::edtSaveKeyPress);
+
+	centerAllSurfaces();
 }
 
 /**
@@ -179,7 +182,7 @@ void SaveState::lstSavesPress(Action* action)
 		_edtSave->setX(_lstSaves->getColumnX(0));
 		_edtSave->setY(_lstSaves->getRowY(_selectedRow));
 		_edtSave->setVisible(true);
-		_edtSave->focus();
+		_edtSave->setFocus(true);
 
 		_lstSaves->setScrolling(false);
 	}
@@ -296,7 +299,7 @@ void SaveState::quickSave(const std::string& filename)
 	catch (Exception &e)
 	{
 		Log(LOG_ERROR) << e.what();
-		std::wstringstream error;
+		std::wostringstream error;
 		error << tr("STR_SAVE_UNSUCCESSFUL") << L'\x02' << Language::fsToWstr(e.what());
 
 		if (_origin != OPT_BATTLESCAPE)
@@ -317,7 +320,7 @@ void SaveState::quickSave(const std::string& filename)
 	catch (YAML::Exception &e)
 	{
 		Log(LOG_ERROR) << e.what();
-		std::wstringstream error;
+		std::wostringstream error;
 		error << tr("STR_SAVE_UNSUCCESSFUL") << L'\x02' << Language::fsToWstr(e.what());
 
 		if (_origin != OPT_BATTLESCAPE)

@@ -20,83 +20,41 @@
 #define OPENXCOM_OPTIONSCONTROLSSTATE_H
 
 #include <string>
-
+#include <vector>
+#include "../Engine/OptionInfo.h"
 #include "OptionsBaseState.h"
-
 
 namespace OpenXcom
 {
 
-class Text;
-class TextButton;
 class TextList;
-class Window;
-
-
-struct KeyOption
-{
-	std::string option;
-	std::string name;
-	SDLKey key;
-};
-
 
 /**
  * Controls screen which allows the user to
  * customize the various key shortcuts in the game.
  */
-class OptionsControlsState
-	:
-		public OptionsBaseState
+class OptionsControlsState : public OptionsBaseState
 {
-
 private:
-	int
-		_countGeneral,
-		_countGeo,
-		_countBattle,
-		_selected;
-	Uint8
-		_colorGroup,
-		_colorSel,
-		_colorNormal;
-
-	static KeyOption
-		_controlsGeneral[],
-		_controlsGeo[],
-		_controlsBattle[];
-
-	KeyOption* _selKey;
-	Text *_txtTitle;
-	TextButton
-		*_btnOk,
-		*_btnCancel;
 	TextList *_lstControls;
-	Window *_window;
+	std::vector<OptionInfo> _controlsGeneral, _controlsGeo, _controlsBattle;
+	int _selected;
+	OptionInfo *_selKey;
+	Uint8 _colorGroup, _colorSel, _colorNormal;
 
-	void addControls(KeyOption keys[], int count);
+	void addControls(const std::vector<OptionInfo> &keys);
 	std::string ucWords(std::string str);
-
-
-	public:
-		/// Creates the Controls state.
-		OptionsControlsState(
-				Game *game,
-				OptionsOrigin origin);
-		/// Cleans up the Controls state.
-		~OptionsControlsState();
-
-		/// Fills controls list.
-		void init();
-
-		/// Handler for clicking the OK button.
-		void btnOkClick(Action *action);
-		/// Handler for clicking the Cancel button.
-		void btnCancelClick(Action *action);
-		/// Handler for clicking the Controls list.
-		void lstControlsClick(Action *action);
-		/// Handler for pressing a key in the Controls list.
-		void lstControlsKeyPress(Action *action);
+public:
+	/// Creates the Controls state.
+	OptionsControlsState(Game *game, OptionsOrigin origin);
+	/// Cleans up the Controls state.
+	~OptionsControlsState();
+	/// Fills controls list.
+	void init();
+	/// Handler for clicking the Controls list.
+	void lstControlsClick(Action *action);
+	/// Handler for pressing a key in the Controls list.
+	void lstControlsKeyPress(Action *action);
 };
 
 }

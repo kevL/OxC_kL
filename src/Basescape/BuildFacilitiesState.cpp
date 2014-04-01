@@ -92,7 +92,7 @@ BuildFacilitiesState::BuildFacilitiesState(
 	_btnOk->onMouseClick((ActionHandler)& BuildFacilitiesState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& BuildFacilitiesState::btnOkClick,
-					(SDLKey)Options::getInt("keyCancel"));
+					Options::keyCancel);
 
 	_txtTitle->setColor(Palette::blockOffset(13));
 	_txtTitle->setBig();

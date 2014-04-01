@@ -492,13 +492,13 @@ GraphsState::GraphsState(Game* game)
 		if (month > 11)
 		{
 			month = 0;
-			std::wstringstream ss;
+			std::wostringstream ss;
 			ss << _game->getSavedGame()->getTime()->getYear();
 			_txtYears->setCellText(0, iter / 2, ss.str());
 
 			if (iter > 2)
 			{
-				std::wstringstream ss2;
+				std::wostringstream ss2;
 				ss2 << (_game->getSavedGame()->getTime()->getYear() - 1);
 				_txtYears->setCellText(0, 0, ss2.str());
 			}
@@ -539,10 +539,10 @@ GraphsState::GraphsState(Game* game)
 	_btnGeoscape->onMousePress((ActionHandler)& GraphsState::btnGeoscapeClick);
 	_btnGeoscape->onKeyboardPress(
 					(ActionHandler)& GraphsState::btnGeoscapeClick,
-					(SDLKey)Options::getInt("keyCancel"));
+					Options::keyCancel);
 	_btnGeoscape->onKeyboardPress(
 					(ActionHandler)& GraphsState::btnGeoscapeClick,
-					(SDLKey)Options::getInt("keyGeoGraphs"));
+					Options::keyGeoGraphs);
 
 	centerAllSurfaces();
 }

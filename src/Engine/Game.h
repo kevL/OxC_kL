@@ -138,6 +138,9 @@ private:
 
 		/// Returns whether the game is shutting down.
 		bool isQuitting() const;
+
+		/// Sets up the default language.
+		void defaultLanguage();
 };
 
 }

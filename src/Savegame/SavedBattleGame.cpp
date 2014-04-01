@@ -83,23 +83,12 @@ SavedBattleGame::SavedBattleGame()
 		_objectiveDestroyed(false),
 		_fallingUnits(),
 		_unitsFalling(false),
-		_strafeEnabled(false),
-		_sneaky(false),
-		_traceAI(false),
 		_cheating(false),
 		_tuReserved(BA_NONE),
 		_kneelReserved(false),
 		_terrain("") // kL sza_MusicRules
 {
 	//Log(LOG_INFO) << "\nCreate SavedBattleGame";
-	_dragButton			= static_cast<Uint8>(Options::getInt("battleScrollDragButton"));
-	_dragInvert			= Options::getBool("battleScrollDragInvert");
-	_dragTimeTolerance	= Options::getInt("battleScrollDragTimeTolerance");
-	_dragPixelTolerance	= Options::getInt("battleScrollDragPixelTolerance");
-	_strafeEnabled		= Options::getBool("strafe");
-	_sneaky				= Options::getBool("sneakyAI");
-	_traceAI			= Options::getBool("traceAI");
-
 	_tileSearch.resize(11 * 11);
 
 	for (int
@@ -1422,7 +1411,7 @@ void SavedBattleGame::setObjectiveDestroyed(bool flag)
 	_objectiveDestroyed = flag;
 
 	if (flag
-		&& Options::getBool("battleAutoEnd"))
+		&& Options::battleAutoEnd)
 	{
 		setSelectedUnit(0);
 		_battleState->getBattleGame()->requestEndTurn();
@@ -1513,7 +1502,7 @@ Node* SavedBattleGame::getPatrolNode(
 
 	if (fromNode == 0)
 	{
-		if (Options::getBool("traceAI")) Log(LOG_INFO) << "This alien got lost. :(";
+		if (Options::traceAI) Log(LOG_INFO) << "This alien got lost. :(";
 
 		fromNode = getNodes()->at(RNG::generate(0, static_cast<int>(getNodes()->size()) - 1));
 	}
@@ -1585,7 +1574,7 @@ Node* SavedBattleGame::getPatrolNode(
 	{
 		//Log(LOG_INFO) << " . legitNodes is EMPTY.";
 
-		if (Options::getBool("traceAI")) Log(LOG_INFO) << (scout? "Scout ": "Guard ") << "found no patrol node! XXX XXX XXX";
+		if (Options::traceAI) Log(LOG_INFO) << (scout? "Scout ": "Guard ") << "found no patrol node! XXX XXX XXX";
 
 		if (unit->getArmor()->getSize() > 1
 			&& !scout)
@@ -1620,7 +1609,7 @@ Node* SavedBattleGame::getPatrolNode(
 			return 0;
 
 		// non-scout patrols to highest value unoccupied node that's not fromNode
-		if (Options::getBool("traceAI")) Log(LOG_INFO) << "Choosing node flagged " << bestNode->getFlags();
+		if (Options::traceAI) Log(LOG_INFO) << "Choosing node flagged " << bestNode->getFlags();
 
 		//Log(LOG_INFO) << " . return bestNode";
 		return bestNode;
@@ -2021,44 +2010,6 @@ bool SavedBattleGame::placeUnitNearPosition(
 }
 
 /**
- * Gets the scroll drag button, i.e. which mouse button is the scroll-button.
- * @return The ScrollButton.
- */
-Uint8 SavedBattleGame::getDragButton() const
-{
-	return _dragButton;
-}
-
-/**
- * Gets if the scroll drag is inverted.
- * @return True if it drags away from the cursor, false if it drags towards (like a grab).
- */
-bool SavedBattleGame::isDragInverted() const
-{
-	return _dragInvert;
-}
-
-/**
- * Gets the amount of time the button must be pushed
- * to start a drag scroll.
- * @return The time in miliseconds.
- */
-int SavedBattleGame::getDragTimeTolerance() const
-{
-	return _dragTimeTolerance;
-}
-
-/**
- * Gets the amount of pixels the mouse must move
- * to start a drag scroll.
- * @return The number of pixels.
- */
-int SavedBattleGame::getDragPixelTolerance() const
-{
-	return _dragPixelTolerance;
-}
-
-/**
  * @brief Checks whether anyone on a particular faction is looking at the unit.
  *
  * Similar to getSpottingUnits() but returns a bool and stops searching if one positive hit is found.
@@ -2138,33 +2089,6 @@ void SavedBattleGame::setUnitsFalling(bool fall)
 bool SavedBattleGame::getUnitsFalling() const
 {
 	return _unitsFalling;
-}
-
-/**
- * Checks the strafe setting.
- * @return, True if strafing has been enabled.
- */
-bool SavedBattleGame::getStrafeSetting() const
-{
-	return _strafeEnabled;
-}
-
-/**
- * Checks the sneaky AI setting.
- * @return True if sneaky AI has been enabled.
- */
-bool SavedBattleGame::getSneakySetting() const
-{
-	return _sneaky;
-}
-
-/**
- * Checks the traceAI setting.
- * @return True if the traceAI setting has been enabled.
- */
-bool SavedBattleGame::getTraceSetting() const
-{
-	return _traceAI;
 }
 
 /**

@@ -75,7 +75,7 @@ PsiTrainingState::PsiTrainingState(Game* game)
 	_btnOk->onMouseClick((ActionHandler)& PsiTrainingState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& PsiTrainingState::btnOkClick,
-					(SDLKey)Options::getInt("keyCancel"));
+					Options::keyCancel);
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();

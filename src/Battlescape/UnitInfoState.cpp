@@ -415,13 +415,13 @@ UnitInfoState::UnitInfoState(
 		_btnPrev->onMouseClick((ActionHandler)& UnitInfoState::btnPrevClick);
 		_btnPrev->onKeyboardPress(
 						(ActionHandler)& UnitInfoState::btnPrevClick,
-						(SDLKey)Options::getInt("keyBattlePrevUnit"));
+						Options::keyBattlePrevUnit);
 		_btnNext->setText(L">");
 		_btnNext->setColor(Palette::blockOffset(4)+4);
 		_btnNext->onMouseClick((ActionHandler)& UnitInfoState::btnNextClick);
 		_btnNext->onKeyboardPress(
 						(ActionHandler)& UnitInfoState::btnNextClick,
-						(SDLKey)Options::getInt("keyBattleNextUnit"));
+						Options::keyBattleNextUnit);
 	}
 
 }
@@ -438,7 +438,7 @@ UnitInfoState::~UnitInfoState()
  */
 void UnitInfoState::init()
 {
-	std::wstringstream ss;
+	std::wostringstream ss;
 	int minPsi = 0;
 
 	if (_unit->getType() == "SOLDIER")
@@ -531,7 +531,7 @@ void UnitInfoState::init()
 
 
 	if (_unit->getStats()->psiSkill > minPsi
-		|| (Options::getBool("psiStrengthEval")
+		|| (Options::psiStrengthEval
 			&& _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements())))
 	{
 		stat = _unit->getStats()->psiStrength;
@@ -643,18 +643,18 @@ void UnitInfoState::handle(Action* action)
 
 	if (action->getDetails()->type == SDL_KEYDOWN)
 	{
-		if (action->getDetails()->key.keysym.sym == Options::getInt("keyBattleNextUnit"))
+		if (action->getDetails()->key.keysym.sym == Options::keyBattleNextUnit)
 		{
 			if (!_mindProbe)
 				btnNextClick(action);
 		}
-		else if (action->getDetails()->key.keysym.sym == Options::getInt("keyBattlePrevUnit"))
+		else if (action->getDetails()->key.keysym.sym == Options::keyBattlePrevUnit)
 		{
 			if (!_mindProbe)
 				btnPrevClick(action);
 		}
-		else if (action->getDetails()->key.keysym.sym == Options::getInt("keyCancel")
-			|| action->getDetails()->key.keysym.sym == Options::getInt("keyBattleStats"))
+		else if (action->getDetails()->key.keysym.sym == Options::keyCancel
+			|| action->getDetails()->key.keysym.sym == Options::keyBattleStats)
 		{
 			if (_fromInventory
 				&& !_unit->hasInventory())

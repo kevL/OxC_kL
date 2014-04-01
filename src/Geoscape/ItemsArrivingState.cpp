@@ -106,21 +106,21 @@ ItemsArrivingState::ItemsArrivingState(
 	_btnGotoBase->onMouseClick((ActionHandler)& ItemsArrivingState::btnGotoBaseClick);
 	_btnGotoBase->onKeyboardPress(
 					(ActionHandler)& ItemsArrivingState::btnGotoBaseClick,
-					(SDLKey)Options::getInt("keyOk"));
+					Options::keyOk);
 
 	_btnOk5Secs->setColor(Palette::blockOffset(8)+5);
 	_btnOk5Secs->setText(tr("STR_OK_5_SECONDS"));
 	_btnOk5Secs->onMouseClick((ActionHandler)& ItemsArrivingState::btnOk5SecsClick);
 	_btnOk5Secs->onKeyboardPress(
 					(ActionHandler)& ItemsArrivingState::btnOk5SecsClick,
-					(SDLKey)Options::getInt("keyGeoSpeed1"));
+					Options::keyGeoSpeed1);
 
 	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& ItemsArrivingState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& ItemsArrivingState::btnOkClick,
-					(SDLKey)Options::getInt("keyCancel"));
+					Options::keyCancel);
 
 	_txtTitle->setColor(Palette::blockOffset(8)+5);
 	_txtTitle->setBig();
@@ -184,7 +184,7 @@ ItemsArrivingState::ItemsArrivingState(
 					}
 				}
 
-				std::wstringstream ss;
+				std::wostringstream ss;
 				ss << (*j)->getQuantity();
 				_lstTransfers->addRow(
 									3,

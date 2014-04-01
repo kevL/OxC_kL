@@ -318,7 +318,7 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 	//Log(LOG_INFO) << ". . . . preVisUnits = " << (int)preVisUnits;
 
 	int direction;
-	if (_save->getStrafeSetting()
+	if (Options::strafe
 		&& unit->getTurretType() > -1)
 	{
 		direction = unit->getTurretDirection();
@@ -2105,7 +2105,7 @@ BattleUnit* TileEngine::hit(
 
 				double range = 100.0;
 				if (type == DT_HE
-					|| Options::getBool("TFTDDamage"))
+					|| Options::TFTDDamage)
 				{
 					range = 50.0;
 				}
@@ -2117,7 +2117,7 @@ BattleUnit* TileEngine::hit(
 				power = RNG::generate(min, max);
 
 /*				if (type == DT_HE
-					|| Options::getBool("TFTDDamage"))
+					|| Options::TFTDDamage)
 				{
 					power = RNG::generate(
 										power / 2,
@@ -2267,7 +2267,7 @@ void TileEngine::explode(
 							0,
 							std::min(
 									3,
-									Options::getInt("battleExplosionHeight")));
+									Options::battleExplosionHeight));
 	switch (explHeight)
 	{
 		case 1:
@@ -4708,8 +4708,8 @@ bool TileEngine::psiAttack(BattleAction* action)
 
 				// if all units from either faction are mind controlled - auto-end the mission.
 				if (_save->getSide() == FACTION_PLAYER
-					&& Options::getBool("battleAutoEnd")
-					&& Options::getBool("allowPsionicCapture"))
+					&& Options::battleAutoEnd
+					&& Options::allowPsionicCapture)
 				{
 					//Log(LOG_INFO) << ". . . . inside tallyUnits codeblock";
 

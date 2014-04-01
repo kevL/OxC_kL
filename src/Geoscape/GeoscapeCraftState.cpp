@@ -164,7 +164,7 @@ GeoscapeCraftState::GeoscapeCraftState(
 	_btnCancel->onMouseClick((ActionHandler)& GeoscapeCraftState::btnCancelClick);
 	_btnCancel->onKeyboardPress(
 					(ActionHandler)& GeoscapeCraftState::btnCancelClick,
-					(SDLKey)Options::getInt("keyCancel"));
+					Options::keyCancel);
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setBig();
@@ -224,7 +224,7 @@ GeoscapeCraftState::GeoscapeCraftState(
 //kL	_txtSpeed->setText(tr("STR_SPEED_").arg(Text::formatNumber(_craft->getSpeed())));
 
 	// kL_begin: set craftSpeed to UFO when in chase.
-	std::wstringstream
+	std::wostringstream
 		ss1,
 		ss2,
 		ss3;

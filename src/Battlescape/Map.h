@@ -23,6 +23,7 @@
 #include <set>
 #include <vector>
 
+#include "../Engine/Options.h"
 #include "../Engine/InteractiveSurface.h"
 
 
@@ -83,13 +84,14 @@ private:
 		_cursorSize,
 		_mouseX,
 		_mouseY,
-		_previewSetting,
 		_reveal, // kL
 		_selectorX,
 		_selectorY,
 		_spriteWidth,
 		_spriteHeight,
 		_visibleMapHeight;
+
+	PathPreview			_previewSetting;
 
 	BattlescapeMessage	* _message;
 	Camera				* _camera;

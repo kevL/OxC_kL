@@ -50,16 +50,11 @@ class TransferItemsState
 {
 
 private:
-	bool
-		_allowChangeListValuesByMouseWheel,
-		_canTransferCraftsWhileAirborne,
-		_containmentLimit;
 	int
 		_aQty,
 		_cQty,
 		_pQty,
 		_total,
-		_changeValueByMouseWheel,
 		_hasEng,
 		_hasSci;
 	unsigned _sel;

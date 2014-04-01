@@ -23,6 +23,7 @@
 #include <cstdarg>
 
 #include "ArrowButton.h"
+#include "ComboBox.h"
 
 #include "../Engine/Action.h"
 #include "../Engine/Font.h"
@@ -78,10 +79,11 @@ TextList::TextList(
 		_leftRelease(0),
 		_rightClick(0),
 		_rightPress(0),
-		_rightRelease(0)
+		_rightRelease(0),
+		_arrowsLeftEdge(0),
+		_arrowsRightEdge(0),
+		_comboBox(0)
 {
-	_allowScrollOnArrowButtons = true;
-
 	_up = new ArrowButton(
 						ARROW_BIG_UP,
 						13,
@@ -169,15 +171,6 @@ void TextList::setY(int y)
 
 	if (_selector != 0)
 		_selector->setY(getY());
-}
-
-/**
- * Sets the allowScrollOnArrowButtons.
- * @param value new value.
- */
-void TextList::setAllowScrollOnArrowButtons(bool value)
-{
-	_allowScrollOnArrowButtons = value;
 }
 
 /**
@@ -306,6 +299,15 @@ int TextList::getColumnX(int column) const
 int TextList::getRowY(int row) const
 {
 	return getY() + _texts[row][0]->getY();
+}
+
+/**
+ * Returns the amount of text rows stored in the list.
+ * @return Number of rows.
+ */
+int TextList::getRows() const
+{
+	return _texts.size();
 }
 
 /**
@@ -1155,8 +1157,9 @@ void TextList::think()
  */
 void TextList::mousePress(Action* action, State* state)
 {
-	bool allowScroll = _allowScrollOnArrowButtons;
-	if (!allowScroll)
+	bool allowScroll = true;
+
+	if (Options::changeValueByMouseWheel != 0)
 	{
 		allowScroll = (action->getAbsoluteXMouse() < _arrowsLeftEdge
 						|| action->getAbsoluteXMouse() > _arrowsRightEdge);
@@ -1215,6 +1218,12 @@ void TextList::mouseClick(Action* action, State* state)
 		if (_selRow < _texts.size())
 		{
 			InteractiveSurface::mouseClick(action, state);
+			if (_comboBox
+				&& action->getDetails()->button.button == SDL_BUTTON_LEFT)
+			{
+				_comboBox->setSelected(_selRow);
+				_comboBox->toggle();
+			}
 		}
 	}
 	else
@@ -1293,6 +1302,15 @@ int TextList::getScroll()
 void TextList::setScroll(int scroll)
 {
 	_scroll = scroll;
+}
+
+/**
+ * Hooks up the button to work as part of an existing combobox,
+ * updating the selection when it's pressed.
+ */
+void TextList::setComboBox(ComboBox* comboBox)
+{
+	_comboBox = comboBox;
 }
 
 }

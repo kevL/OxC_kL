@@ -110,7 +110,7 @@ NewResearchListState::NewResearchListState(
 	_btnCancel->onMouseClick((ActionHandler)& NewResearchListState::btnCancelClick);
 	_btnCancel->onKeyboardPress(
 					(ActionHandler)& NewResearchListState::btnCancelClick,
-					(SDLKey)Options::getInt("keyCancel"));
+					Options::keyCancel);
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setAlign(ALIGN_CENTER);

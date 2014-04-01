@@ -31,7 +31,7 @@
 #include "../Engine/Language.h"
 #include "../Engine/Options.h"
 #include "../Engine/Palette.h"
-#include "../Engine/Screen.h"
+//kL #include "../Engine/Screen.h"
 
 #include "../Interface/Text.h"
 
@@ -54,7 +54,7 @@ namespace OpenXcom
 template<typename type>
 std::wstring toString(type t)
 {
-	std::wstringstream ss;
+	std::wostringstream ss;
 	ss << t;
 
 	return ss.str();
@@ -160,7 +160,7 @@ MedikitState::MedikitState(
 
 	_surface = new InteractiveSurface(320, 200);
 
-	if (Screen::getDY() > 50)
+	if (_game->getScreen()->getDY() > 50)
 	{
 		_screen = false;
 
@@ -222,7 +222,7 @@ MedikitState::MedikitState(
 	endButton->onMouseClick((ActionHandler)& MedikitState::onEndClick);
 	endButton->onKeyboardPress(
 					(ActionHandler)& MedikitState::onEndClick,
-					(SDLKey)Options::getInt("keyCancel"));
+					Options::keyCancel);
 	healButton->onMouseClick((ActionHandler)& MedikitState::onHealClick);
 	stimulantButton->onMouseClick((ActionHandler)& MedikitState::onStimulantClick);
 	pkButton->onMouseClick((ActionHandler)& MedikitState::onPainKillerClick);

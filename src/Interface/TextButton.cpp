@@ -21,6 +21,7 @@
 
 #include <SDL.h>
 
+#include "ComboBox.h"
 #include "Text.h"
 
 #include "../Engine/Action.h"
@@ -54,7 +55,8 @@ TextButton::TextButton(
 			y),
 		_color(0),
 		_group(0),
-		_contrast(false)
+		_contrast(false),
+		_comboBox(0)
 {
 	_text = new Text(width, height, 0, 0);
 	_text->setSmall();
@@ -69,6 +71,14 @@ TextButton::TextButton(
 TextButton::~TextButton()
 {
 	delete _text;
+}
+
+bool TextButton::isButtonHandled(Uint8 button)
+{
+	if (_comboBox != 0)
+		return (button == SDL_BUTTON_LEFT);
+	else
+		return InteractiveSurface::isButtonHandled(button);
 }
 
 /**
@@ -308,6 +318,9 @@ void TextButton::mousePress(Action* action, State* state)
 			soundPress->play();
 		}
 
+		if (_comboBox)
+			_comboBox->toggle();
+
 		draw();
 	}
 
@@ -325,6 +338,20 @@ void TextButton::mouseRelease(Action* action, State* state)
 		draw();
 
 	InteractiveSurface::mouseRelease(action, state);
+}
+
+/**
+ * Hooks up the button to work as part of an existing combobox,
+ * toggling its state when it's pressed.
+ */
+void TextButton::setComboBox(ComboBox *comboBox)
+{
+	_comboBox = comboBox;
+
+	if (_comboBox)
+		_text->setX(-8);
+	else
+		_text->setX(0);
 }
 
 }

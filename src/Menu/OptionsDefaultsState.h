@@ -16,42 +16,40 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef OPENXCOM_OPTIONSLANGUAGESTATE_H
-#define OPENXCOM_OPTIONSLANGUAGESTATE_H
+#ifndef OPENXCOM_OPTIONSDEFAULTSSTATE_H
+#define OPENXCOM_OPTIONSDEFAULTSSTATE_H
 
-#include <vector>
-#include <string>
+#include "../Engine/State.h"
 #include "OptionsBaseState.h"
 
 namespace OpenXcom
 {
 
+class TextButton;
 class Window;
 class Text;
-class TextList;
-class TextButton;
 
 /**
- * Language window that lets the player pick the language
- * used for all in-game text.
+ * Confirmation window when restoring the
+ * default game options.
  */
-class OptionsLanguageState : public OptionsBaseState
+class OptionsDefaultsState : public State
 {
 private:
-	Text *_txtTitle;
+	OptionsOrigin _origin;
+	TextButton *_btnYes, *_btnNo;
 	Window *_window;
-	TextList *_lstLanguages;
-	TextButton *_btnCancel;
-	std::vector<std::string> _langs;
+	Text *_txtTitle;
+	OptionsBaseState *_state;
 public:
-	/// Creates the Start state.
-	OptionsLanguageState(Game *game, OptionsOrigin origin);
-	/// Cleans up the Start state.
-	~OptionsLanguageState();
-	/// Handler for clicking the Language list.
-	void lstLanguagesClick(Action *action);
-	/// Handler for clicking the Cancel button.
-	void btnCancelClick(Action *action);
+	/// Creates the Restore Defaults state.
+	OptionsDefaultsState(Game *game, OptionsOrigin origin, OptionsBaseState *state);
+	/// Cleans up the Restore Defaults state.
+	~OptionsDefaultsState();
+	/// Handler for clicking the Yes button.
+	void btnYesClick(Action *action);
+	/// Handler for clicking the No button.
+	void btnNoClick(Action *action);
 };
 
 }

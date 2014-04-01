@@ -77,10 +77,6 @@ CraftEquipmentState::CraftEquipmentState(
 		_base(base),
 		_craft(craft)
 {
-	_changeValueByMouseWheel = Options::getInt("changeValueByMouseWheel");
-	_allowChangeListValuesByMouseWheel = Options::getBool("allowChangeListValuesByMouseWheel")
-										&& _changeValueByMouseWheel;
-
 	Craft* c = _base->getCrafts()->at(_craft);
 	bool craftHasCrew = c->getNumSoldiers() > 0;
 	bool newBattle = game->getSavedGame()->getMonthsPassed() == -1;
@@ -148,7 +144,7 @@ CraftEquipmentState::CraftEquipmentState(
 	_btnOk->onMouseClick((ActionHandler)& CraftEquipmentState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& CraftEquipmentState::btnOkClick,
-					(SDLKey)Options::getInt("keyCancel"));
+					Options::keyCancel);
 
 	_txtTitle->setColor(Palette::blockOffset(15)+1);
 	_txtTitle->setBig();
@@ -177,7 +173,7 @@ CraftEquipmentState::CraftEquipmentState(
 
 //kL	_txtCrew->setColor(Palette::blockOffset(15)+1);
 //kL	_txtCrew->setSecondaryColor(Palette::blockOffset(13));
-//kL	std::wstringstream ss3;
+//kL	std::wostringstream ss3;
 //kL	ss3 << tr("STR_SOLDIERS_UC") << "> " << L'\x01'<< c->getNumSoldiers();
 //kL	_txtCrew->setText(ss3.str());
 //	_txtCrew->setText(tr("STR_SOLDIERS_UC").arg(c->getNumSoldiers())); // kL
@@ -189,7 +185,7 @@ CraftEquipmentState::CraftEquipmentState(
 	_lstEquipment->setSelectable(true);
 	_lstEquipment->setBackground(_window);
 	_lstEquipment->setMargin(8);
-	_lstEquipment->setAllowScrollOnArrowButtons(!_allowChangeListValuesByMouseWheel);
+//	_lstEquipment->setAllowScrollOnArrowButtons(!_allowChangeListValuesByMouseWheel);
 
 	_lstEquipment->onLeftArrowPress((ActionHandler)& CraftEquipmentState::lstEquipmentLeftArrowPress);
 	_lstEquipment->onLeftArrowRelease((ActionHandler)& CraftEquipmentState::lstEquipmentLeftArrowRelease);
@@ -206,10 +202,6 @@ CraftEquipmentState::CraftEquipmentState(
 			i != items.end();
 			++i)
 	{
-		// CHEAP HACK TO HIDE HWP AMMO
-		if ((*i).substr(0, 8) == "STR_HWP_")
-			continue;
-
 		RuleItem* rule = _game->getRuleset()->getItem(*i);
 
 		int cQty = 0;
@@ -226,7 +218,9 @@ CraftEquipmentState::CraftEquipmentState(
 				|| cQty > 0))
 		{
 			_items.push_back(*i);
-			std::wstringstream ss, ss2;
+			std::wostringstream
+				ss,
+				ss2;
 
 			if (_game->getSavedGame()->getMonthsPassed() > -1)
 				ss << _base->getItems()->getItem(*i);
@@ -416,11 +410,10 @@ void CraftEquipmentState::lstEquipmentMousePress(Action* action)
 		_timerRight->stop();
 		_timerLeft->stop();
 
-		if (_allowChangeListValuesByMouseWheel
-			&& action->getAbsoluteXMouse() >= _lstEquipment->getArrowsLeftEdge()
+		if (action->getAbsoluteXMouse() >= _lstEquipment->getArrowsLeftEdge()
 			&& action->getAbsoluteXMouse() <= _lstEquipment->getArrowsRightEdge())
 		{
-			moveRightByValue(_changeValueByMouseWheel);
+			moveRightByValue(Options::changeValueByMouseWheel);
 		}
 	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN)
@@ -428,11 +421,10 @@ void CraftEquipmentState::lstEquipmentMousePress(Action* action)
 		_timerRight->stop();
 		_timerLeft->stop();
 
-		if (_allowChangeListValuesByMouseWheel
-			&& action->getAbsoluteXMouse() >= _lstEquipment->getArrowsLeftEdge()
+		if (action->getAbsoluteXMouse() >= _lstEquipment->getArrowsLeftEdge()
 			&& action->getAbsoluteXMouse() <= _lstEquipment->getArrowsRightEdge())
 		{
-			moveLeftByValue(_changeValueByMouseWheel);
+			moveLeftByValue(Options::changeValueByMouseWheel);
 		}
 	}
 }
@@ -452,7 +444,7 @@ void CraftEquipmentState::updateQuantity()
 		cQty = c->getItems()->getItem(_items[_sel]);
 
 
-	std::wstringstream
+	std::wostringstream
 		ss,
 		ss2;
 
@@ -581,9 +573,12 @@ void CraftEquipmentState::moveLeftByValue(int change)
 	{
 		c->getItems()->removeItem(_items[_sel], change);
 
-		if (_game->getSavedGame()->getMonthsPassed() == -1)
-			Options::setInt("NewBattle_" + _items[_sel], Options::getInt("NewBattle_" +_items[_sel]) - change);
-		else
+//kL		if (_game->getSavedGame()->getMonthsPassed() == -1)
+//kL		{
+//			Options::setInt("NewBattle_" + _items[_sel], Options::getInt("NewBattle_" +_items[_sel]) - change);
+//kL		}
+//kL		else
+		if (_game->getSavedGame()->getMonthsPassed() != -1) // kL
 			_base->getItems()->addItem(_items[_sel], change);
 	}
 

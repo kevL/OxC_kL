@@ -53,7 +53,7 @@ FpsCounter::FpsCounter(
 			y + 12),
 		_frames(0) // kL
 {
-	_visible = Options::getBool("fpsCounter");
+	_visible = Options::fpsCounter;
 
 	_timer = new Timer(1000);
 	_timer->onTimer((SurfaceHandler)& FpsCounter::update);
@@ -103,10 +103,10 @@ void FpsCounter::setColor(Uint8 color)
 void FpsCounter::handle(Action* action)
 {
 	if (action->getDetails()->type == SDL_KEYDOWN
-		&& action->getDetails()->key.keysym.sym == Options::getInt("keyFps"))
+		&& action->getDetails()->key.keysym.sym == Options::keyFps)
 	{
 		_visible = !_visible;
-		Options::setBool("fpsCounter", _visible);
+		Options::fpsCounter = _visible;
 	}
 }
 

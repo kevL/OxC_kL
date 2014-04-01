@@ -110,7 +110,7 @@ CraftSoldiersState::CraftSoldiersState(
 	_btnOk->onMouseClick((ActionHandler)& CraftSoldiersState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& CraftSoldiersState::btnOkClick,
-					(SDLKey)Options::getInt("keyCancel"));
+					Options::keyCancel);
 
 	_btnUnload->setColor(Palette::blockOffset(13)+10);
 	_btnUnload->setText(_game->getLanguage()->getString("STR_UNLOAD"));

@@ -105,12 +105,12 @@ unsigned int random()
 	{
         int kk;
 
-        if (mti == CMATH_N+1)	/* if sgenrand() has not been called,	*/
-            setSeed(4357);		/* a default initial seed is used		*/
+        if (mti == CMATH_N+1)							/* if sgenrand() has not been called,	*/
+            setSeed(static_cast<unsigned>(time(NULL)));	/* a default initial seed is used		*/
 
         for (
 				kk = 0;
-				kk < CMATH_N-CMATH_M;
+				kk < CMATH_N - CMATH_M;
 				kk++)
 		{
             y = (mt[kk] & CMATH_UPPER_MASK) | (mt[kk + 1] & CMATH_LOWER_MASK);
@@ -139,23 +139,6 @@ unsigned int random()
     y ^= CMATH_TEMPERING_SHIFT_L(y);
 
 	return y;
-}
-
-/**
-* Seeds the random generator with the current time.
-*/
-void init()
-{
-	setSeed(static_cast<unsigned int>(time(NULL)));
-}
-
-/**
-* Seeds the random generator with a new number.
-* @param seed New seed.
-*/
-void init(unsigned int seed)
-{
-	setSeed(seed);
 }
 
 /**

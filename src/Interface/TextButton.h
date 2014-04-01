@@ -26,6 +26,7 @@
 namespace OpenXcom
 {
 
+class ComboBox;
 class Font;
 class Language;
 class Sound;
@@ -48,9 +49,13 @@ private:
 	bool _contrast;
 	Uint8 _color;
 
+	ComboBox* _comboBox;
 	Text* _text;
 	TextButton** _group;
 
+
+protected:
+	bool isButtonHandled(Uint8 button = 0);
 
 	public:
 		static Sound* soundPress;
@@ -100,6 +105,8 @@ private:
 		void mousePress(Action* action, State* state);
 		/// Special handling for mouse releases.
 		void mouseRelease(Action* action, State* state);
+		/// Attaches this button to a combobox.
+		void setComboBox(ComboBox* comboBox);
 };
 
 }

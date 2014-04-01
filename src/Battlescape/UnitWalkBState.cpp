@@ -307,7 +307,7 @@ bool UnitWalkBState::doStatusStand()
 	bool newVis = visForUnits();
 	if (newVis)
 	{
-		//if (_parent->getSave()->getTraceSetting()) { Log(LOG_INFO) << "Uh-oh! Company!"; }
+		//if (Options::traceAI) { Log(LOG_INFO) << "Uh-oh! Company!"; }
 		//Log(LOG_INFO) << "Uh-oh! STATUS_STANDING or PANICKING Company!";
 		//if (_unit->getFaction() == FACTION_PLAYER) Log(LOG_INFO) << ". . _newVis = TRUE, postPathProcedures";
 		//else if (_unit->getFaction() != FACTION_PLAYER) Log(LOG_INFO) << ". . _newUnitSpotted = TRUE, postPathProcedures";
@@ -1063,13 +1063,13 @@ void UnitWalkBState::setNormalWalkSpeed()
 {
 	if (_unit->getFaction() == FACTION_PLAYER)
 	{
-		_parent->setStateInterval(static_cast<Uint32>(Options::getInt("battleXcomSpeed")));
+		_parent->setStateInterval(static_cast<Uint32>(Options::battleXcomSpeed));
 
 		if (_unit->getDashing())
-			_parent->setStateInterval(static_cast<Uint32>(Options::getInt("battleXcomSpeed") * 3 / 4)); // kL
+			_parent->setStateInterval(static_cast<Uint32>(Options::battleXcomSpeed * 3 / 4)); // kL
 	}
 	else
-		_parent->setStateInterval(static_cast<Uint32>(Options::getInt("battleAlienSpeed")));
+		_parent->setStateInterval(static_cast<Uint32>(Options::battleAlienSpeed));
 }
 
 /**

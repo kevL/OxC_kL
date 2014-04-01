@@ -107,7 +107,7 @@ AllocatePsiTrainingState::AllocatePsiTrainingState(
 	_btnOk->onMouseClick((ActionHandler)& AllocatePsiTrainingState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& AllocatePsiTrainingState::btnOkClick,
-					(SDLKey)Options::getInt("keyCancel"));
+					Options::keyCancel);
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
@@ -156,10 +156,12 @@ AllocatePsiTrainingState::AllocatePsiTrainingState(
 	{
 		_soldiers.push_back(*soldier);
 
-		std::wstringstream ssStr, ssSkl;
+		std::wostringstream
+			ssStr,
+			ssSkl;
 
 		if ((*soldier)->getCurrentStats()->psiSkill > 0
-			|| (Options::getBool("psiStrengthEval")
+			|| (Options::psiStrengthEval
 				&& _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements())))
 		{
 			ssStr << ((*soldier)->getCurrentStats()->psiStrength);
@@ -231,7 +233,7 @@ void AllocatePsiTrainingState::init()
 	{
 		_soldiers.push_back(*soldier);
 
-		std::wstringstream
+		std::wostringstream
 			ssStr,
 			ssSkl;
 
@@ -240,21 +242,17 @@ void AllocatePsiTrainingState::init()
 
 //kL		if ((*soldier)->getCurrentStats()->psiSkill > 0
 		if ((*soldier)->getCurrentStats()->psiSkill >= minPsi // kL
-			|| (Options::getBool("psiStrengthEval")
+			|| (Options::psiStrengthEval
 				&& _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements())))
 		{
 			ssStr << ((*soldier)->getCurrentStats()->psiStrength);
 		}
 		else
-		{
 			ssStr << tr("STR_UNKNOWN").c_str();
-		}
 
 //kL		if ((*soldier)->getCurrentStats()->psiSkill > 0)
 		if ((*soldier)->getCurrentStats()->psiSkill >= minPsi) // kL
-		{
 			ssSkl << (*soldier)->getCurrentStats()->psiSkill; //kL << "/+" << (*soldier)->getImprovement();
-		}
 		else
 		{
 //kL			ssSkl << "0/+0";

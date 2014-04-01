@@ -29,7 +29,10 @@
 namespace OpenXcom
 {
 
+class ComboBox;
 class Craft;
+class Frame;
+class Slider;
 class Text;
 class TextButton;
 class Window;
@@ -45,56 +48,45 @@ class NewBattleState
 
 private:
 	bool _music;
-	size_t
-		_selAlien,
-		_selCraft,
-		_selDarkness,
-		_selDifficulty,
-		_selItemLevel,
-		_selMission,
-		_selTerrain;
 
-	Window *_window;
+	Craft* _craft;
+	Frame
+		* _frameLeft,
+		* _frameRight;
 	Text
-		*_txtAlienRace,
-		*_txtCraft,
-		*_txtDarkness,
-		*_txtDifficulty,
-		*_txtItemLevel,
-		*_txtMissionType,
-		*_txtTerrainType,
-		*_txtTitle;
+		* _txtTitle,
+		* _txtMapOptions,
+		* _txtAlienOptions;
+	Text
+		* _txtMission,
+		* _txtCraft,
+		* _txtDarkness,
+		* _txtTerrain,
+		* _txtDifficulty,
+		* _txtAlienRace,
+		* _txtAlienTech;
+	ComboBox
+		* _cbxMission,
+		* _cbxCraft,
+		* _cbxTerrain,
+		* _cbxDifficulty,
+		* _cbxAlienRace;
+	Slider
+		* _slrDarkness,
+		* _slrAlienTech;
 	TextButton
-		*_btnAlienRace,
-		*_btnCancel,
-		*_btnCraft,
-		*_btnDarkness,
-		*_btnDifficulty,
-		*_btnEquip,
-		*_btnItemLevel,
-		*_btnMissionType,
-		*_btnOk,
-		*_btnRandom,
-		*_btnTerrainType;
-	Craft *_craft;
+		* _btnOk,
+		* _btnCancel,
+		* _btnEquip,
+		* _btnRandom;
+	Window* _window;
 
-	std::vector<std::string>
-		_alienRaces,
-		_crafts,
-		_darkness,
-		_difficulty,
-		_itemLevels,
-		_missionTypes,
-		_terrainTypes;
 	std::vector<int> _textures;
-
-	///
-	void updateIndex(
-			size_t& index,
-			std::vector<std::string>& list,
-			int change);
-	///
-	void updateButtons();
+	std::vector<std::string>
+		_missionTypes,
+		_terrainTypes,
+		_alienRaces,
+		_crafts;
 
 
 	public:
@@ -105,6 +97,10 @@ private:
 
 		/// Resets state.
 		void init();
+		/// Loads New Battle settings.
+		void load(const std::string& filename = "battle");
+		/// Saves New Battle settings.
+		void save(const std::string& filename = "battle");
 		/// Initializes a blank savegame.
 		void initSave();
 
@@ -116,20 +112,10 @@ private:
 		void btnRandomClick(Action *action);
 		/// Handler for clicking the Equip Craft button.
 		void btnEquipClick(Action *action);
-		/// Handler for clicking the Mission Type button.
-		void btnMissionTypeClick(Action *action);
-		/// Handler for clicking the Mission Option button.
-		void btnTerrainTypeClick(Action *action);
-		/// Handler for clicking the Alien Race button.
-		void btnAlienRaceClick(Action *action);
-		/// Handler for clicking the Difficulty button.
-		void btnDifficultyClick(Action *action);
-		/// Handler for clicking the Darkness button.
-		void btnDarknessClick(Action *action);
-		/// Handler for clicking the Craft button.
-		void btnCraftClick(Action *action);
-		///
-		void btnItemLevelClick(Action *action);
+		/// Handler for changing the Mission combobox.
+		void cbxMissionChange(Action* action);
+		/// Handler for changing the Craft combobox.
+		void cbxCraftChange(Action* action);
 };
 
 }

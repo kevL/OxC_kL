@@ -123,10 +123,10 @@ void ArticleState::initLayout()
 	_btnOk->onMouseClick((ActionHandler)& ArticleState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& ArticleState::btnOkClick,
-					(SDLKey)Options::getInt("keyOk"));
+					Options::keyOk);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& ArticleState::btnOkClick,
-					(SDLKey)Options::getInt("keyCancel"));
+					Options::keyCancel);
 
 	_btnPrev->setText(L"<");
 	_btnPrev->onMouseClick((ActionHandler)& ArticleState::btnPrevClick);

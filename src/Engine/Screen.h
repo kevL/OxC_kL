@@ -44,35 +44,30 @@ class Action;
 class Screen
 {
 
-	public:
-		static int BASE_WIDTH;
-		static int BASE_HEIGHT;
-
-
 private:
-	bool
-		_fullscreen,
-		_pushPalette;
-	int
-		_bpp,
 
+	bool _pushPalette;
+	int
+		_baseHeight,
+		_baseWidth,
+		_bpp,
+		_firstColor,
+		_numColors,
 		_topBlackBand,
 		_bottomBlackBand,
 		_leftBlackBand,
 		_rightBlackBand,
 		_cursorTopBlackBand,
-		_cursorLeftBlackBand,
-
-		_firstColor,
-		_numColors;
+		_cursorLeftBlackBand;
 	double
 		_scaleX,
 		_scaleY;
 	Uint32 _flags;
 
-	OpenGL glOutput;
 	SDL_Surface* _screen;
 	Surface* _surface;
+
+	OpenGL glOutput;
 	SDL_Color deferredPalette[256];
 
 	///
@@ -81,19 +76,21 @@ private:
 			SDL_Surface* dst,
 			int flipx,
 			int flipy);
+	/// Sets the _flags and _bpp variables based on game options; needed in more than one place now
+	void makeVideoFlags();
 
 
 	public:
-		/// Creates a new display screen with the specified resolution.
-		Screen(
-				int width,
-				int height,
-				int bpp,
-				bool fullscreen,
-				int windowedModePositionX,
-				int windowedModePositionY);
+		static const int ORIGINAL_WIDTH		= 320;
+		static const int ORIGINAL_HEIGHT	= 200;
+
+		/// Creates a new display screen.
+		Screen();
 		/// Cleans up the display screen.
 		~Screen();
+
+		int getDX();
+		int getDY();
 
 		/// Gets the internal buffer.
 		Surface* getSurface();
@@ -119,13 +116,8 @@ private:
 		int getWidth() const;
 		/// Gets the screen's height.
 		int getHeight() const;
-
-		/// Sets the screen's display resolution.
-		void setResolution(
-				int width,
-				int height);
-		/// Sets whether the screen is full-screen or windowed.
-		void setFullscreen(bool full);
+		/// Resets the screen display.
+		void resetDisplay();
 
 		/// Gets the screen's X scale.
 		double getXScale() const;
@@ -144,13 +136,6 @@ private:
 		static bool isHQXEnabled();
 		/// Checks whether OpenGL output is requested
 		static bool isOpenGLEnabled();
-
-		/// Sets the _flags and _bpp variables based on game options; needed in more than one place now
-		void makeVideoFlags();
-		/// Gets the Horizontal offset from the mid-point of the screen, in pixels.
-		static int getDX();
-		/// Gets the Vertical offset from the mid-point of the screen, in pixels.
-		static int getDY();
 };
 
 }

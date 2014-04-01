@@ -124,7 +124,7 @@ void MedikitView::draw()
 		return;
 
 
-	std::wstringstream
+	std::wostringstream
 		ss1,
 		ss2;
 

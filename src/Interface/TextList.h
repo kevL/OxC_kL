@@ -39,6 +39,7 @@ enum ArrowOrientation
 
 
 class ArrowButton;
+class ComboBox;
 
 
 /**
@@ -53,7 +54,6 @@ class TextList
 
 private:
 	bool
-		_allowScrollOnArrowButtons,
 		_condensed,
 		_contrast,
 		_dot,
@@ -84,6 +84,7 @@ private:
 		* _up,
 		* _down;
 	ArrowOrientation _arrowType;
+	ComboBox* _comboBox;
 	Font
 		* _big,
 		* _font,
@@ -120,9 +121,6 @@ private:
 		/// Sets the Y position of the surface.
 		void setY(int y);
 
-		/// Sets the allowScrollOnArrowButtons.
-		void setAllowScrollOnArrowButtons(bool value);
-
 		/// Gets the arrowsLeftEdge.
 		int getArrowsLeftEdge();
 		/// Gets the arrowsRightEdge.
@@ -155,6 +153,8 @@ private:
 		int getColumnX(int column) const;
 		/// Gets the Y position of a certain row.
 		int getRowY(int row) const;
+		/// Gets the amount of rows in the list.
+		int getRows() const;
 
 		/// Adds a new row to the text list.
 		void addRow(
@@ -279,6 +279,8 @@ private:
 		int getScroll();
 		/// set the scroll depth
 		void setScroll(int scroll);
+		/// Attaches this button to a combobox.
+		void setComboBox(ComboBox* comboBox);
 };
 
 }

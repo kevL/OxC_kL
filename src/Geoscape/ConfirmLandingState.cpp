@@ -110,14 +110,14 @@ ConfirmLandingState::ConfirmLandingState(
 	_btnYes->onMouseClick((ActionHandler)& ConfirmLandingState::btnYesClick);
 	_btnYes->onKeyboardPress(
 					(ActionHandler)& ConfirmLandingState::btnYesClick,
-					(SDLKey)Options::getInt("keyOk"));
+					Options::keyOk);
 
 	_btnNo->setColor(Palette::blockOffset(8)+5);
 	_btnNo->setText(tr("STR_NO"));
 	_btnNo->onMouseClick((ActionHandler)& ConfirmLandingState::btnNoClick);
 	_btnNo->onKeyboardPress(
 					(ActionHandler)& ConfirmLandingState::btnNoClick,
-					(SDLKey)Options::getInt("keyCancel"));
+					Options::keyCancel);
 
 	_txtMessage->setColor(Palette::blockOffset(8)+10);
 	_txtMessage->setSecondaryColor(Palette::blockOffset(8)+5);

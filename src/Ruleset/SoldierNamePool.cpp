@@ -105,7 +105,7 @@ void SoldierNamePool::load(const std::string& filename)
  */
 std::wstring SoldierNamePool::genName(SoldierGender* gender) const
 {
-	std::wstringstream name;
+	std::wostringstream name;
 
 //kL	int gen = RNG::generate(1, 10);
 //kL	if (gen <= 5)

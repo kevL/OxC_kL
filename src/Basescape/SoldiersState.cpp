@@ -136,7 +136,7 @@ SoldiersState::SoldiersState(
 	_btnOk->onMouseClick((ActionHandler)& SoldiersState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& SoldiersState::btnOkClick,
-					(SDLKey)Options::getInt("keyCancel"));
+					Options::keyCancel);
 
 	_btnMemorial->setColor(Palette::blockOffset(13)+10);
 	_btnMemorial->setText(tr("STR_MEMORIAL"));

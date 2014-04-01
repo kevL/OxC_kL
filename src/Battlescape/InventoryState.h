@@ -44,9 +44,7 @@ class InventoryState
 {
 
 private:
-	bool
-		_showStats,
-		_tu;
+	bool _tu;
 
 	BattlescapeState* _parent;
 	InteractiveSurface

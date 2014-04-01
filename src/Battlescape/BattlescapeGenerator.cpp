@@ -106,7 +106,7 @@ BattlescapeGenerator::BattlescapeGenerator(Game* game)
 		_baseCraftEquip(false) // kL
 {
 	//Log(LOG_INFO) << "Create BattlescapeGenerator";
-	_allowAutoLoadout = !Options::getBool("disableAutoEquip");
+	_allowAutoLoadout = !Options::disableAutoEquip;
 }
 
 /**

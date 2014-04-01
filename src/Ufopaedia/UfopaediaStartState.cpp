@@ -115,10 +115,10 @@ UfopaediaStartState::UfopaediaStartState(Game* game)
 	_btnOk->onMouseClick((ActionHandler)& UfopaediaStartState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& UfopaediaStartState::btnOkClick,
-					(SDLKey)Options::getInt("keyCancel"));
+					Options::keyCancel);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& UfopaediaStartState::btnOkClick,
-					(SDLKey)Options::getInt("keyGeoUfopedia"));
+					Options::keyGeoUfopedia);
 }
 
 /**

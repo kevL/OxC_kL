@@ -76,10 +76,10 @@ BaseDestroyedState::BaseDestroyedState(
 	_btnOk->onMouseClick((ActionHandler)& BaseDestroyedState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& BaseDestroyedState::btnOkClick,
-					(SDLKey)Options::getInt("keyOk"));
+					Options::keyOk);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& BaseDestroyedState::btnOkClick,
-					(SDLKey)Options::getInt("keyCancel"));
+					Options::keyCancel);
 
 	_txtMessage->setAlign(ALIGN_CENTER);
 	_txtMessage->setVerticalAlign(ALIGN_MIDDLE);

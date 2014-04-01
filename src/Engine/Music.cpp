@@ -93,7 +93,7 @@ void Music::load(
 void Music::play(int loop) const
 {
 #ifndef __NO_MUSIC
-	if (!Options::getBool("mute"))
+	if (!Options::mute)
 	{
 		Mix_HaltMusic();
 

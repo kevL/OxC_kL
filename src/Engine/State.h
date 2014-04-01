@@ -31,6 +31,7 @@ namespace OpenXcom
 
 class Action;
 class Game;
+class InteractiveSurface;
 class LocalizedText;
 class Surface;
 
@@ -48,7 +49,10 @@ class State
 
 protected:
 	bool _screen;
+
 	Game* _game;
+	InteractiveSurface* _modal;
+
 	std::vector<Surface*> _surfaces;
 
 
@@ -99,6 +103,9 @@ protected:
 		void lowerAllSurfaces();
 		/// switch the colours to use the battlescape palette.
 		void applyBattlescapeTheme();
+
+		/// Sets a modal surface.
+		void setModal(InteractiveSurface* surface);
 };
 
 }

@@ -60,6 +60,9 @@ private:
 	bool
 		_contrast,
 		_screen;
+	int
+		_dx,
+		_dy;
 	double _popupStep;
 
 	State*		_state;
@@ -99,6 +102,11 @@ private:
 		void popup();
 		/// Draws the window.
 		void draw();
+
+		///
+		void setDX(int dx);
+		///
+		void setDY(int dy);
 };
 
 }

@@ -103,7 +103,7 @@ CraftsState::CraftsState(
 	_btnOk->onMouseClick((ActionHandler)& CraftsState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& CraftsState::btnOkClick,
-					(SDLKey)Options::getInt("keyCancel"));
+					Options::keyCancel);
 
 	_txtTitle->setColor(Palette::blockOffset(15)+1);
 	_txtTitle->setBig();
@@ -167,7 +167,7 @@ void CraftsState::init()
 	{
 		std::wstring status = getAltStatus(*i);
 
-		std::wstringstream
+		std::wostringstream
 			ss,
 			ss2,
 			ss3;

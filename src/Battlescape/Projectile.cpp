@@ -80,7 +80,7 @@ Projectile::Projectile(
 		_position(0)
 {
 	// this is the number of pixels the sprite will move between frames
-	_speed = Options::getInt("battleFireSpeed");
+	_speed = Options::battleFireSpeed;
 
 	if (_action.weapon)
 	{
@@ -456,9 +456,9 @@ void Projectile::applyAccuracy(
 
 
 	RuleItem* weaponRule = _action.weapon->getRules();
-	if (_save->getSide() == FACTION_PLAYER					// kL: only for xCom heheh
-		&& Options::getBool("battleUFOExtenderAccuracy")	// kL
-		&& !weaponRule->getArcingShot()						// kL
+	if (_save->getSide() == FACTION_PLAYER		// kL: only for xCom heheh
+		&& Options::battleUFOExtenderAccuracy	// kL
+		&& !weaponRule->getArcingShot()			// kL
 		&& _action.type != BA_THROW)
 	{
 		//Log(LOG_INFO) << ". battleUFOExtenderAccuracy";
@@ -470,7 +470,7 @@ void Projectile::applyAccuracy(
 			lowerLimit = weaponRule->getMinRange(),
 			upperLimit = weaponRule->getAimRange();
 
-//kL		if (Options::getBool("battleUFOExtenderAccuracy"))
+//kL		if (Options::battleUFOExtenderAccuracy)
 //		{
 		if (_action.type == BA_SNAPSHOT)
 			upperLimit = weaponRule->getSnapRange();
@@ -490,8 +490,8 @@ void Projectile::applyAccuracy(
 							accuracy - modifier);
 	}
 
-	if (Options::getBool("battleRangeBasedAccuracy")
-		&& !weaponRule->getArcingShot()					// kL
+	if (Options::battleRangeBasedAccuracy)	// kL
+		&& !weaponRule->getArcingShot()		// kL
 		&& _action.type != BA_THROW)
 //kL		&& _action.type != BA_HIT)
 	{

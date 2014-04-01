@@ -94,10 +94,10 @@ StoresState::StoresState(
 	_btnOk->onMouseClick((ActionHandler)& StoresState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& StoresState::btnOkClick,
-					(SDLKey)Options::getInt("keyOk"));
+					Options::keyOk);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& StoresState::btnOkClick,
-					(SDLKey)Options::getInt("keyCancel"));
+					Options::keyCancel);
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
@@ -140,10 +140,9 @@ StoresState::StoresState(
 
 			RuleItem* rule = _game->getRuleset()->getItem(*i);
 
-			std::wstringstream
+			std::wostringstream
 				ss,
 				ss2;
-
 			ss << qty;
 			ss2 << qty * rule->getSize();
 

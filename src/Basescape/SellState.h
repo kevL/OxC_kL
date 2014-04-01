@@ -59,9 +59,7 @@ class SellState
 {
 
 private:
-	bool _allowChangeListValuesByMouseWheel;
 	int
-		_changeValueByMouseWheel,
 		_hasSci,
 		_hasEng,
 		_total;

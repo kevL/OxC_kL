@@ -22,7 +22,7 @@
 #include "LoadState.h"
 #include "NewBattleState.h"
 #include "NewGameState.h"
-#include "OptionsState.h"
+#include "OptionsVideoState.h"
 
 #include "../version.h"
 
@@ -108,7 +108,7 @@ MainMenuState::MainMenuState(Game* game)
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
 
-	std::wstringstream title;
+	std::wostringstream title;
 	title << tr("STR_OPENXCOM"); //kL << L"\x02";
 //kL	title << Language::utf8ToWstr(OPENXCOM_VERSION_SHORT) << Language::utf8ToWstr(OPENXCOM_VERSION_GIT);
 //	title << Language::utf8ToWstr(OPENXCOM_VERSION_GIT); // kL
@@ -176,9 +176,9 @@ void MainMenuState::btnLoadClick(Action*)
  */
 void MainMenuState::btnOptionsClick(Action*)
 {
-	_game->pushState(new OptionsState(
-									_game,
-									OPT_MENU));
+	_game->pushState(new OptionsVideoState(
+										_game,
+										OPT_MENU));
 }
 
 /**

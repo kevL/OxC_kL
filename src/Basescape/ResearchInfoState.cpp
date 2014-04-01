@@ -102,8 +102,6 @@ ResearchInfoState::~ResearchInfoState() // not implemented yet.
  */
 void ResearchInfoState::buildUi()
 {
-	_changeValueByMouseWheel = Options::getInt("changeValueByMouseWheel");
-
 	int width = 230;
 	int height = 140;
 	int max_width = 320;
@@ -111,12 +109,12 @@ void ResearchInfoState::buildUi()
 	int start_x = (max_width - width) / 2;
 	int start_y = (max_height - height) / 2;
 
-	_surface = new InteractiveSurface(
+	_surfaceScientists = new InteractiveSurface(
 									width,
 									height,
 									start_x,
 									start_y);
-	_surface->onMouseClick((ActionHandler)& ResearchInfoState::handleWheel, 0);
+	_surfaceScientists->onMouseClick((ActionHandler)& ResearchInfoState::handleWheel, 0);
 
 	int button_x_border = 16;
 	int button_y_border = 10;
@@ -177,7 +175,7 @@ void ResearchInfoState::buildUi()
 										start_x + (10 * button_x_border),
 										start_y + (9 * button_y_border));
 
-	add(_surface);
+	add(_surfaceScientists);
 	add(_window);
 	add(_btnOk);
 	add(_btnCancel);
@@ -225,7 +223,7 @@ void ResearchInfoState::buildUi()
 
 		if (_rule->needItem()
 			&& (_game->getRuleset()->getUnit(_rule->getName())
-				|| Options::getBool("spendResearchedItems")))
+				|| Options::spendResearchedItems))
 		{
 			_base->getItems()->removeItem(_rule->getName());
 		}
@@ -254,7 +252,7 @@ void ResearchInfoState::buildUi()
 	_btnOk->onMouseClick((ActionHandler)& ResearchInfoState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& ResearchInfoState::btnOkClick,
-					(SDLKey)Options::getInt("keyOk"));
+					Options::keyOk);
 
 	_btnCancel->setColor(Palette::blockOffset(13)+10);
 
@@ -265,7 +263,7 @@ void ResearchInfoState::buildUi()
 		_btnCancel->setText(tr("STR_CANCEL_UC"));
 		_btnCancel->onKeyboardPress(
 						(ActionHandler)& ResearchInfoState::btnCancelClick,
-						(SDLKey)Options::getInt("keyCancel"));
+						Options::keyCancel);
 	}
 	else
 	{
@@ -273,7 +271,7 @@ void ResearchInfoState::buildUi()
 		_btnCancel->setText(tr("STR_CANCEL_PROJECT"));
 		_btnOk->onKeyboardPress(
 						(ActionHandler)& ResearchInfoState::btnOkClick,
-						(SDLKey)Options::getInt("keyCancel"));
+						Options::keyCancel);
 	}
 
 	_btnCancel->onMouseClick((ActionHandler)& ResearchInfoState::btnCancelClick);
@@ -299,12 +297,14 @@ void ResearchInfoState::btnCancelClick(Action*)
 
 	if (ruleResearch->needItem()
 		&& (_game->getRuleset()->getUnit(ruleResearch->getName())
-			|| Options::getBool("spendResearchedItems")))
+			|| Options::spendResearchedItems))
 	{
 		_base->getItems()->addItem(ruleResearch->getName());
 	}
 
-	_base->removeResearch(_project, false);
+	_base->removeResearch(
+						_project,
+						false);
 	_game->popState();
 }
 
@@ -329,9 +329,9 @@ void ResearchInfoState::setAssignedScientist()
 void ResearchInfoState::handleWheel(Action* action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
-		moreByValue(_changeValueByMouseWheel);
+		moreByValue(Options::changeValueByMouseWheel);
 	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN)
-		lessByValue(_changeValueByMouseWheel);
+		lessByValue(Options::changeValueByMouseWheel);
 }
 
 /**

@@ -279,7 +279,7 @@ bool BaseView::isPlaceable(RuleBaseFacility* rule) const
 		}
 	}
 
-	bool bq = Options::getBool("allowBuildingQueue");
+	bool bq = Options::allowBuildingQueue;
 
 	for (int // check for another facility to connect to
 			i = 0;
@@ -662,7 +662,7 @@ void BaseView::draw()
 			text->setY((*i)->getY() * GRID_SIZE + (GRID_SIZE * (*i)->getRules()->getSize() - 16) / 2);
 			text->setBig();
 
-			std::wstringstream ss;
+			std::wostringstream ss;
 			ss << (*i)->getBuildTime();
 			text->setAlign(ALIGN_CENTER);
 			text->setColor(Palette::blockOffset(13)+5);

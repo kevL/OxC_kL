@@ -63,7 +63,7 @@ BaseInfoState::BaseInfoState(
 		_base(base),
 		_state(state)
 {
-	_containmentLimit = Options::getBool("alienContainmentLimitEnforced");
+	_containmentLimit = Options::alienContainmentLimitEnforced;
 
 
 	_bg					= new Surface(320, 200, 0, 0);
@@ -205,14 +205,14 @@ BaseInfoState::BaseInfoState(
 
 	_edtBase->setColor(Palette::blockOffset(15)+1);
 	_edtBase->setBig();
-	_edtBase->onKeyboardPress((ActionHandler)& BaseInfoState::edtBaseKeyPress);
+	_edtBase->onChange((ActionHandler)& BaseInfoState::edtBaseChange);
 
 	_btnOk->setColor(Palette::blockOffset(15)+6);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& BaseInfoState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& BaseInfoState::btnOkClick,
-					(SDLKey)Options::getInt("keyCancel"));
+					Options::keyCancel);
 
 	_btnTransfers->setColor(Palette::blockOffset(15)+6);
 	_btnTransfers->setText(tr("STR_TRANSFERS_UC"));
@@ -323,7 +323,7 @@ void BaseInfoState::init()
 {
 	_edtBase->setText(_base->getName());
 
-	std::wstringstream
+	std::wostringstream
 		ss1,
 		ss2,
 		ss3,
@@ -336,6 +336,7 @@ void BaseInfoState::init()
 		ss10,
 		ss11,
 		ss12;
+
 	int var,
 		var2;
 
@@ -436,13 +437,9 @@ void BaseInfoState::init()
  * Changes the base name.
  * @param action Pointer to an action.
  */
-void BaseInfoState::edtBaseKeyPress(Action* action)
+void BaseInfoState::edtBaseChange(Action* action)
 {
-	if (action->getDetails()->key.keysym.sym == SDLK_RETURN
-		|| action->getDetails()->key.keysym.sym == SDLK_KP_ENTER)
-	{
-		_base->setName(_edtBase->getText());
-	}
+	_base->setName(_edtBase->getText());
 }
 
 /**
@@ -468,8 +465,6 @@ void BaseInfoState::miniClick(Action*)
  */
 void BaseInfoState::btnOkClick(Action*)
 {
-	_base->setName(_edtBase->getText());
-
 	_game->popState();
 }
 

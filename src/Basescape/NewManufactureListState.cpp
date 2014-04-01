@@ -133,7 +133,7 @@ NewManufactureListState::NewManufactureListState(
 	_btnCancel->onMouseClick((ActionHandler)& NewManufactureListState::btnCancelClick);
 	_btnCancel->onKeyboardPress(
 					(ActionHandler)& NewManufactureListState::btnCancelClick,
-					(SDLKey)Options::getInt("keyCancel"));
+					Options::keyCancel);
 }
 
 /**

@@ -29,6 +29,7 @@
 #include "Surface.h"
 
 #include "../Interface/ArrowButton.h"
+#include "../Interface/ComboBox.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/TextEdit.h"
@@ -51,7 +52,8 @@ State::State(Game* game)
 	:
 		_game(game),
 		_surfaces(),
-		_screen(true)
+		_screen(true),
+		_modal(0)
 {
 	//Log(LOG_INFO) << "Create State";
 }
@@ -152,15 +154,20 @@ void State::think()
  */
 void State::handle(Action* action)
 {
-	for (std::vector<Surface*>::reverse_iterator
-			i = _surfaces.rbegin();
-			i != _surfaces.rend();
-			++i)
+	if (!_modal)
 	{
-		InteractiveSurface* j = dynamic_cast<InteractiveSurface*>(*i);
-		if (j != 0)
-			j->handle(action, this);
+		for (std::vector<Surface*>::reverse_iterator
+				i = _surfaces.rbegin();
+				i != _surfaces.rend();
+				++i)
+		{
+			InteractiveSurface* j = dynamic_cast<InteractiveSurface*>(*i);
+			if (j != 0)
+				j->handle(action, this);
+		}
 	}
+	else
+		_modal->handle(action, this);
 }
 
 /**
@@ -221,6 +228,7 @@ void State::resetAll()
 		if (s != 0)
 		{
 			s->unpress(this);
+//			s->setFocus(false);
 		}
 	}
 }
@@ -260,8 +268,8 @@ void State::centerAllSurfaces()
 			i != _surfaces.end();
 			++i)
 	{
-		(*i)->setX((*i)->getX() + Screen::getDX());
-		(*i)->setY((*i)->getY() + Screen::getDY());
+		(*i)->setX((*i)->getX() + _game->getScreen()->getDX());
+		(*i)->setY((*i)->getY() + _game->getScreen()->getDY());
 	}
 }
 
@@ -275,7 +283,7 @@ void State::lowerAllSurfaces()
 			i != _surfaces.end();
 			++i)
 	{
-		(*i)->setY((*i)->getY() + Screen::getDY() / 2);
+		(*i)->setY((*i)->getY() + _game->getScreen()->getDY() / 2);
 	}
 }
 
@@ -339,6 +347,13 @@ void State::applyBattlescapeTheme()
 			slider->setColor(Palette::blockOffset(0)-1);
 			slider->setHighContrast(true);
 		}
+
+		ComboBox* combo = dynamic_cast<ComboBox*>(*i);
+		if (combo)
+		{
+			combo->setColor(Palette::blockOffset(0)-1);
+			combo->setHighContrast(true);
+		}
 	}
 }
 
@@ -365,6 +380,18 @@ void State::redrawText()
 			(*i)->draw();
 		}
 	}
+}
+
+/**
+ * Changes the current modal surface. If a surface is modal,
+ * then only that surface can receive events. This is used
+ * when an element needs to take priority over everything else,
+ * eg. focus.
+ * @param surface Pointer to modal surface, NULL for no modal.
+ */
+void State::setModal(InteractiveSurface* surface)
+{
+	_modal = surface;
 }
 
 }

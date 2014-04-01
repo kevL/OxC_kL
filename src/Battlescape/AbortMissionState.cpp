@@ -145,7 +145,7 @@ AbortMissionState::AbortMissionState(
 	_btnOk->onMouseClick((ActionHandler)& AbortMissionState::btnOkClick);
 	_btnOk->onKeyboardPress(
                     (ActionHandler)& AbortMissionState::btnOkClick,
-                    (SDLKey)Options::getInt("keyOk"));
+                    Options::keyOk);
 
 	_btnCancel->setColor(Palette::blockOffset(0)-1);
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
@@ -153,10 +153,10 @@ AbortMissionState::AbortMissionState(
 	_btnCancel->onMouseClick((ActionHandler)& AbortMissionState::btnCancelClick);
 	_btnCancel->onKeyboardPress(
                     (ActionHandler)& AbortMissionState::btnCancelClick,
-                    (SDLKey)Options::getInt("keyCancel"));
+                    Options::keyCancel);
 	_btnCancel->onKeyboardPress(
                     (ActionHandler)& AbortMissionState::btnCancelClick,
-                    (SDLKey)Options::getInt("keyBattleAbort"));
+                    Options::keyBattleAbort);
 }
 
 /**

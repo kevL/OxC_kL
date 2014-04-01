@@ -61,7 +61,7 @@ CivilianBAIState::CivilianBAIState(
 {
 	//Log(LOG_INFO) << "Create CivilianBAIState";
 
-	_traceAI = _save->getTraceSetting();
+	_traceAI = Options::traceAI;
 
 	_escapeAction = new BattleAction();
 	_patrolAction = new BattleAction();

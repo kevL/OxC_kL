@@ -29,6 +29,7 @@
 #include "../Battlescape/TileEngine.h"
 
 #include "../Engine/Game.h"
+#include "../Engine/Options.h"
 
 #include "../Ruleset/Armor.h"
 #include "../Ruleset/MapData.h"
@@ -245,7 +246,7 @@ void Pathfinding::calculate(
 	// Strafing move allowed only to adjacent squares on same z;
 	// "same z" rule mainly to simplify walking render.
 	Position startPosition = _unit->getPosition();
-	_strafeMove = _save->getStrafeSetting()
+	_strafeMove = Options::strafe
 				&& (SDL_GetModState() & KMOD_CTRL) != 0
 				&& startPosition.z == endPosition.z
 				&& abs(startPosition.x - endPosition.x) < 2
@@ -255,7 +256,7 @@ void Pathfinding::calculate(
 
 	// look for a possible fast and accurate bresenham path and skip A*
 	bool sneak = _unit->getFaction() == FACTION_HOSTILE
-				&& _save->getSneakySetting();
+				&& Options::sneakyAI;
 
 	if (startPosition.z == endPosition.z
 		&& bresenhamPath(
@@ -916,7 +917,7 @@ int Pathfinding::getTUCost(
 
 			// Strafing costs +1 for forwards-ish or sidewards, propose +2 for backwards-ish directions
 			// Maybe if flying then it makes no difference?
-			if (_save->getStrafeSetting()
+			if (Options::strafe
 				&& _strafeMove)
 			{
 				if (size)
@@ -1827,7 +1828,7 @@ bool Pathfinding::previewPath(bool bRemove)
 
 	_modifierUsed = (SDL_GetModState() & KMOD_CTRL) != 0;
 	bool
-		dash = _save->getStrafeSetting()
+		dash = Options::strafe
 				&& _modifierUsed
 				&& !size
 				&& _path.size() > 1,	// <- not exactly true. If moving around a corner +2 tiles, it

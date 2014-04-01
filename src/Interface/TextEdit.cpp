@@ -52,7 +52,8 @@ TextEdit::TextEdit(
 		_blink(true),
 		_ascii(L'A'),
 		_caretPos(0),
-		_numerical(false)
+		_numerical(false),
+		_change(0)
 {
 	_isFocused = false;
 	_text = new Text(width, height, 0, 0);
@@ -78,42 +79,38 @@ TextEdit::~TextEdit()
 }
 
 /**
- * Starts the blinking animation when the text edit is focused.
+ * Controls the blinking animation when the text edit is focused.
+ * @param focus True if focused, false otherwise.
  */
-void TextEdit::focus()
+void TextEdit::setFocus(bool focus)
 {
-	if (!_isFocused)
+	if (focus != _isFocused)
+		_redraw = true;
+
+	InteractiveSurface::setFocus(focus);
+
+	if (_isFocused)
 	{
 		SDL_EnableKeyRepeat(
-					SDL_DEFAULT_REPEAT_DELAY,
-					SDL_DEFAULT_REPEAT_INTERVAL);
+						SDL_DEFAULT_REPEAT_DELAY,
+						SDL_DEFAULT_REPEAT_INTERVAL);
 
 		_caretPos = _value.length();
 		_blink = true;
 		_timer->start();
-		_redraw = true;
 	}
+	else
+	{
+		_blink = false;
+		_timer->stop();
 
-	InteractiveSurface::focus();
+		SDL_EnableKeyRepeat(
+						0,
+						SDL_DEFAULT_REPEAT_INTERVAL);
+	}
 }
 
-/**
- * Stops the blinking animation when the text edit is defocused.
- */
-void TextEdit::deFocus()
-{
-	InteractiveSurface::deFocus();
-
-	_blink = false;
-	_redraw = true;
-	_timer->stop();
-
-	SDL_EnableKeyRepeat(
-					0,
-					SDL_DEFAULT_REPEAT_INTERVAL);
-}
-
-/**
+/** kL_note: Is this still needed....
  * Check if the player is currently typing in this box.
  * @return, True if the player is typing in this box.
  */
@@ -325,7 +322,7 @@ void TextEdit::draw()
 
 	_text->setText(_value);
 
-	if (Options::getInt("keyboardMode") == KEYBOARD_OFF)
+	if (Options::keyboardMode == KEYBOARD_OFF)
 	{
 		std::wstring newValue = _value;
 
@@ -340,7 +337,7 @@ void TextEdit::draw()
 	clear();
 	_text->blit(this);
 
-	if (Options::getInt("keyboardMode") == KEYBOARD_ON)
+	if (Options::keyboardMode == KEYBOARD_ON)
 	{
 		if (_isFocused
 			&& _blink)
@@ -408,7 +405,7 @@ void TextEdit::mousePress(Action* action, State* state)
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
 		if (!_isFocused)
-			focus();
+			setFocus(true);
 		else
 		{
 			double
@@ -448,7 +445,7 @@ void TextEdit::mousePress(Action* action, State* state)
  */
 void TextEdit::keyboardPress(Action* action, State* state)
 {
-	if (Options::getInt("keyboardMode") == KEYBOARD_OFF)
+	if (Options::keyboardMode == KEYBOARD_OFF)
 	{
 		switch (action->getDetails()->key.keysym.sym)
 		{
@@ -475,7 +472,7 @@ void TextEdit::keyboardPress(Action* action, State* state)
 			break;
 		}
 	}
-	else if (Options::getInt("keyboardMode") == KEYBOARD_ON)
+	else if (Options::keyboardMode == KEYBOARD_ON)
 	{
 		switch (action->getDetails()->key.keysym.sym)
 		{
@@ -505,7 +502,7 @@ void TextEdit::keyboardPress(Action* action, State* state)
 			case SDLK_RETURN:
 			case SDLK_KP_ENTER:
 				if (!_value.empty())
-					deFocus();
+					setFocus(false);
 			break;
 
 			default:
@@ -531,7 +528,19 @@ void TextEdit::keyboardPress(Action* action, State* state)
 
 	_redraw = true;
 
+	if (_change)
+		(state->*_change)(action);
+
 	InteractiveSurface::keyboardPress(action, state);
+}
+
+/**
+ * Sets a function to be called every time the text changes.
+ * @param handler Action handler.
+ */
+void TextEdit::onChange(ActionHandler handler)
+{
+	_change = handler;
 }
 
 }

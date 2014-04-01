@@ -334,7 +334,7 @@ Globe::Globe(
 	_blinkTimer->onTimer((SurfaceHandler)& Globe::blink);
 	_blinkTimer->start();
 
-//kL	_rotTimer = new Timer(100); // new official value is "20"
+//kL	_rotTimer = new Timer(Options::globeScrollSpeed);
 //kL	_rotTimer->onTimer((SurfaceHandler)& Globe::rotate);
 
 	// Globe markers
@@ -981,7 +981,7 @@ bool Globe::insideLand(
  */
 void Globe::toggleDetail()
 {
-	_game->getSavedGame()->toggleDetail();
+	Options::globeDetail = !Options::globeDetail;
 
 	drawDetail();
 }
@@ -1323,6 +1323,7 @@ void Globe::draw()
 	drawShadow();
 	drawMarkers();
 	drawDetail();
+	drawFlights();
 }
 
 /**
@@ -1391,7 +1392,7 @@ Cord Globe::getSunDirection(
 		rot = curTime * 2.0 * M_PI;
 	double sun;
 
-	if (Options::getBool("globeSeasons"))
+	if (Options::globeSeasons)
 	{
 		const int
 			MonthDays1[] = {0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365},
@@ -1490,7 +1491,7 @@ void Globe::XuLine(
 		double y1,
 		double x2,
 		double y2,
-		Sint16)
+		int shade)
 {
 	if (_clipper->LineClip(&x1,&y1,&x2,&y2) != 1) return; //empty line
 
@@ -1540,11 +1541,11 @@ void Globe::XuLine(
 			if(d ==  Palette::blockOffset(12) || d ==  Palette::blockOffset(13))
 			{
 				//this pixel is ocean
-				tcol = Palette::blockOffset(12) + 12;
+				tcol = Palette::blockOffset(12) + shade + 8;
 			}
 			else
 			{
-				const int e = tcol+4;
+				const int e = tcol + shade;
 				if(e > d + helper::ColorShade)
 					tcol = d + helper::ColorShade;
 				else tcol = e;
@@ -1559,20 +1560,14 @@ void Globe::XuLine(
 }
 
 /**
- *
+ * Draws the radar ranges of player bases on the globe.
  */
 void Globe::drawRadars()
 {
 	_radars->clear();
 
-	if (!_game->getSavedGame()->getRadarLines())
+	if (!Options::globeRadarLines)
 		return;
-
-/*	Text *label = new Text(80, 9, 0, 0);
-	label->setPalette(getPalette());
-	label->initText(_game->getResourcePack()->getFont("FONT_BIG"), _game->getResourcePack()->getFont("FONT_SMALL"), _game->getLanguage());
-	label->setAlign(ALIGN_LEFT);
-	label->setColor(Palette::blockOffset(15)-1); */
 
 	double
 		x,
@@ -1584,12 +1579,11 @@ void Globe::drawRadars()
 //kL	std::vector<double>
 //kL		ranges;
 
-//	lock();
 	_radars->lock();
 
 
 	if (_hover // newBase build; store all potential radar ranges in a vector
-		&& Options::getBool("globeAllRadarsOnBaseBuild"))
+		&& Options::globeAllRadarsOnBaseBuild)
 	{
 		const std::vector<std::string>& facilities = _game->getRuleset()->getBaseFacilitiesList();
 		for (std::vector<std::string>::const_iterator
@@ -1613,7 +1607,7 @@ void Globe::drawRadars()
 							range,
 							48);
 
-//kL, above.				if (Options::getBool("globeAllRadarsOnBaseBuild"))
+//kL, above.				if (Options::globeAllRadarsOnBaseBuild)
 //kL				ranges.push_back(range);
 			}
 		}
@@ -1659,16 +1653,25 @@ void Globe::drawRadars()
 //		if (!AreSame(lon, 0.0))			// kL: an even cheaper hack..
 /*		if (!(*i)->getName().empty())	// kL. So try this <-
 		{
-			polarToCart(lon, lat, &x, &y);
+			polarToCart(
+					lon,
+					lat,
+					&x,
+					&y);
 
-			if (_hover && Options::getBool("globeAllRadarsOnBaseBuild"))
+			if (_hover
+				&& globeAllRadarsOnBaseBuild)
 			{
 				for (size_t
 						j = 0;
 						j < ranges.size();
 						j++)
 				{
-					drawGlobeCircle(lat, lon, ranges[j], 48);
+					drawGlobeCircle(
+								lat,
+								lon,
+								ranges[j],
+								48);
 				}
 			}
 			else
@@ -1777,7 +1780,7 @@ void Globe::drawGlobeCircle(
 					y,
 					x2,
 					y2,
-					249);
+					4);
 
 		x2 = x;
 		y2 = y;
@@ -1822,20 +1825,13 @@ void Globe::setNewBaseHoverPos(
 /**
  *
  */
-bool Globe::getShowRadar(void)
-{
-	return _game->getSavedGame()->getRadarLines();
-}
-
-/**
- *
- */
 void Globe::drawVHLine(
+		Surface* surface,
 		double lon1,
 		double lat1,
 		double lon2,
 		double lat2,
-		int colour)
+		Uint8 color)
 {
 	double
 		sx = lon2 - lon1,
@@ -1887,7 +1883,7 @@ void Globe::drawVHLine(
 			polarToCart(ln1, lt1, &x1, &y1);
 			polarToCart(ln2, lt2, &x2, &y2);
 
-			_countries->drawLine(x1, y1, x2, y2, colour);
+			surface->drawLine(x1, y1, x2, y2, color);
 		}
 	}
 }
@@ -1900,8 +1896,8 @@ void Globe::drawDetail()
 {
 	_countries->clear();
 
-	if (!_game->getSavedGame()->getDetail()) return;
-
+	if (!Options::globeDetail)
+		return;
 
 	// kL_begin: Draw xCom base labels.
 	Text* label = new Text(80, 9, 0, 0);
@@ -2204,10 +2200,10 @@ void Globe::drawDetail()
 					double lat2 = (*i)->getRules()->getLatMax().at(k);
 					double lat1 = (*i)->getRules()->getLatMin().at(k);
 
-					drawVHLine(lon1, lat1, lon2, lat1, color);
-					drawVHLine(lon1, lat2, lon2, lat2, color);
-					drawVHLine(lon1, lat1, lon1, lat2, color);
-					drawVHLine(lon2, lat1, lon2, lat2, color);
+					drawVHLine(_countries, lon1, lat1, lon2, lat1, color);
+					drawVHLine(_countries, lon1, lat2, lon2, lat2, color);
+					drawVHLine(_countries, lon1, lat1, lon1, lat2, color);
+					drawVHLine(_countries, lon2, lat1, lon2, lat2, color);
 				}
 			}
 		}
@@ -2230,10 +2226,10 @@ void Globe::drawDetail()
 					double lat2 = (*i)->getRules()->getLatMax().at(k);
 					double lat1 = (*i)->getRules()->getLatMin().at(k);
 
-					drawVHLine(lon1, lat1, lon2, lat1, color);
-					drawVHLine(lon1, lat2, lon2, lat2, color);
-					drawVHLine(lon1, lat1, lon1, lat2, color);
-					drawVHLine(lon2, lat1, lon2, lat2, color);
+					drawVHLine(_countries, lon1, lat1, lon2, lat1, color);
+					drawVHLine(_countries, lon1, lat2, lon2, lat2, color);
+					drawVHLine(_countries, lon1, lat1, lon1, lat2, color);
+					drawVHLine(_countries, lon2, lat1, lon2, lat2, color);
 				}
 			}
 		}
@@ -2259,18 +2255,14 @@ void Globe::drawDetail()
 							++k)
 					{
 						double lon2 = (*k).lonMax * M_PI / 180.0;
-							//(*i)->getRules()->getLonMax().at(k);
 						double lon1 = (*k).lonMin * M_PI / 180.0;
-							//(*i)->getRules()->getLonMin().at(k);
 						double lat2 = (*k).latMax * M_PI / 180.0;
-							//(*i)->getRules()->getLatMax().at(k);
 						double lat1 = (*k).latMin * M_PI / 180.0;
-							//(*i)->getRules()->getLatMin().at(k);
 
-						drawVHLine(lon1, lat1, lon2, lat1, color);
-						drawVHLine(lon1, lat2, lon2, lat2, color);
-						drawVHLine(lon1, lat1, lon1, lat2, color);
-						drawVHLine(lon2, lat1, lon2, lat2, color);
+						drawVHLine(_countries, lon1, lat1, lon2, lat1, color);
+						drawVHLine(_countries, lon1, lat2, lon2, lat2, color);
+						drawVHLine(_countries, lon1, lat1, lon1, lat2, color);
+						drawVHLine(_countries, lon2, lat1, lon2, lat2, color);
 					}
 				}
 			}
@@ -2287,6 +2279,129 @@ void Globe::drawDetail()
 			canSwitchDebugType = false;
 		}
 	}
+}
+
+/**
+ *
+ */
+void Globe::drawPath(
+		Surface* surface,
+		double lon1,
+		double lat1,
+		double lon2,
+		double lat2)
+{
+	double
+		sx = lon2 - lon1,
+		sy = lat2 - lat1,
+		ln1,
+		lt1,
+		ln2,
+		lt2,
+		dln,
+		dlt,
+		slen,dlen;
+	int seg;
+	Sint16
+		x1,
+		y1,
+		x2,
+		y2;
+
+	if (sx<0) sx += 2*M_PI;
+
+	if (fabs(sx)<0.01)
+	{
+		seg = abs( sy/(2*M_PI)*48 );
+		if (seg == 0) ++seg;
+	}
+	else
+	{
+		seg = abs( sx/(2*M_PI)*96 );
+		if (seg == 0) ++seg;
+	}
+	sx /= seg;
+	sy /= seg;
+	slen = sqrt(sx * sx + sy * sy);
+
+	ln2 = lon1;
+	lt2 = lat1;
+
+	for (int
+			i = 0;
+			i < seg;
+			++i)
+	{
+		ln1 = ln2;
+		lt1 = lt2;
+		dln = sin(lon2 - ln1) * cos(lat2);
+		dlt = cos(lt1) * sin(lat2) - sin(lt1) * cos(lat2) * cos(lon2 - ln1);
+		dlen = sqrt(dln * dln + dlt * dlt);
+		dlt = dlt / dlen * slen;
+		dln = dln / dlen * slen / cos(lt1 + dlt);
+		ln2 = ln1 + dln;
+		lt2 = lt2 + dlt;
+
+		if (M_PI - fabs(fabs(lon2 - ln2) - M_PI) < 0.05 && M_PI - fabs(fabs(lat2 - lt2) - M_PI) < 0.05)
+		{
+			ln2 = lon2;
+			lt2 = lat2;
+			i = seg;
+		}
+
+		if (!pointBack(ln2, lt2) && !pointBack(ln1, lt1))
+		{
+			polarToCart(ln1,lt1,&x1,&y1);
+			polarToCart(ln2,lt2,&x2,&y2);
+			XuLine(surface, this, x1, y1, x2, y2, 8);
+		}
+	}
+}
+
+/**
+ * Draws the flight paths of player craft flying on the globe.
+ */
+void Globe::drawFlights()
+{
+	//_radars->clear();
+
+	if (!Options::globeFlightPaths)
+		return;
+
+	// Lock the surface
+	_radars->lock();
+
+	// Draw the craft flight paths
+	for (std::vector<Base*>::iterator
+			i = _game->getSavedGame()->getBases()->begin();
+			i != _game->getSavedGame()->getBases()->end();
+			++i)
+	{
+		for (std::vector<Craft*>::iterator
+				j = (*i)->getCrafts()->begin();
+				j != (*i)->getCrafts()->end();
+				++j)
+		{
+			// Hide crafts docked at base
+			if ((*j)->getStatus() != "STR_OUT"
+				|| (*j)->getDestination() == 0 /*
+				|| pointBack((*j)->getLongitude(), (*j)->getLatitude())*/)
+			{
+				continue;
+			}
+
+			double
+				lon1 = (*j)->getLongitude(),
+				lon2 = (*j)->getDestination()->getLongitude(),
+				lat1 = (*j)->getLatitude(),
+				lat2 = (*j)->getDestination()->getLatitude();
+
+			drawPath(_radars, lon1, lat1, lon2, lat2);
+		}
+	}
+
+	// Unlock the surface
+	_radars->unlock();
 }
 
 /**
@@ -2589,15 +2704,11 @@ void Globe::keyboardPress(Action* action, State* state)
 {
 	InteractiveSurface::keyboardPress(action, state);
 
-	if (action->getDetails()->key.keysym.sym == Options::getInt("keyGeoToggleDetail"))
-	{
+	if (action->getDetails()->key.keysym.sym == Options::keyGeoToggleDetail)
 		toggleDetail();
-	}
 
-	if (action->getDetails()->key.keysym.sym == Options::getInt("keyGeoToggleRadar"))
-	{
+	if (action->getDetails()->key.keysym.sym == Options::keyGeoToggleRadar)
 		toggleRadarLines();
-	}
 }
 
 /**
@@ -2662,10 +2773,7 @@ void Globe::getPolygonTextureAndShade(
  */
 bool Globe::isZoomedInToMax() const
 {
-	if (_zoom == _radius.size() - 1)
-		return true;
-	else
-		return false;
+	return (_zoom == _radius.size() - 1);
 }
 
 /**
@@ -2674,10 +2782,7 @@ bool Globe::isZoomedInToMax() const
  */
 bool Globe::isZoomedOutToMax() const
 {
-	if (_zoom == 0)
-		return true;
-	else
-		return false;
+	return (_zoom == 0);
 }
 
 /**
@@ -2685,7 +2790,7 @@ bool Globe::isZoomedOutToMax() const
  */
 void Globe::toggleRadarLines()
 {
-	_game->getSavedGame()->toggleRadarLines();
+	Options::globeRadarLines = !Options::globeRadarLines;
 
 	drawRadars();
 }

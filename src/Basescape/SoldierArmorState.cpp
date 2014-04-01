@@ -18,22 +18,28 @@
  */
 
 #include "SoldierArmorState.h"
+
 #include <sstream>
+
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Options.h"
-#include "../Interface/TextButton.h"
-#include "../Interface/Window.h"
+
 #include "../Interface/Text.h"
+#include "../Interface/TextButton.h"
 #include "../Interface/TextList.h"
-#include "../Ruleset/Ruleset.h"
+#include "../Interface/Window.h"
+
+#include "../Resource/ResourcePack.h"
+
 #include "../Ruleset/Armor.h"
-#include "../Savegame/SavedGame.h"
-#include "../Savegame/Soldier.h"
+#include "../Ruleset/Ruleset.h"
+
 #include "../Savegame/Base.h"
 #include "../Savegame/ItemContainer.h"
+#include "../Savegame/SavedGame.h"
+#include "../Savegame/Soldier.h"
 
 
 namespace OpenXcom
@@ -45,7 +51,10 @@ namespace OpenXcom
  * @param base Pointer to the base to get info from.
  * @param soldier ID of the selected soldier.
  */
-SoldierArmorState::SoldierArmorState(Game* game, Base* base, size_t soldier)
+SoldierArmorState::SoldierArmorState(
+		Game* game,
+		Base* base,
+		size_t soldier)
 	:
 		State(game),
 		_base(base),
@@ -68,7 +77,10 @@ SoldierArmorState::SoldierArmorState(Game* game, Base* base, size_t soldier)
 	_btnCancel		= new TextButton(152, 16, 84, 136);
 
 
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)), Palette::backPos, 16);
+	_game->setPalette(
+				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)),
+				Palette::backPos,
+				16);
 
 	add(_window);
 	add(_btnCancel);
@@ -87,7 +99,9 @@ SoldierArmorState::SoldierArmorState(Game* game, Base* base, size_t soldier)
 	_btnCancel->setColor(Palette::blockOffset(13)+5);
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)& SoldierArmorState::btnCancelClick);
-	_btnCancel->onKeyboardPress((ActionHandler)& SoldierArmorState::btnCancelClick, (SDLKey)Options::getInt("keyCancel"));
+	_btnCancel->onKeyboardPress(
+					(ActionHandler)& SoldierArmorState::btnCancelClick,
+					Options::keyCancel);
 
 	Soldier* s = _base->getSoldiers()->at(_soldier);
 /*kL	_txtTitle->setColor(Palette::blockOffset(13)+5);
@@ -119,23 +133,24 @@ SoldierArmorState::SoldierArmorState(Game* game, Base* base, size_t soldier)
 		{
 			_armors.push_back(a);
 
-			std::wstringstream ss;
+			std::wostringstream ss;
 			if (_game->getSavedGame()->getMonthsPassed() > -1)
-			{
 				ss << _base->getItems()->getItem(a->getStoreItem());
-			}
 			else
-			{
 				ss << "-";
-			}
 
-			_lstArmor->addRow(2, tr(a->getType()).c_str(), ss.str().c_str());
+			_lstArmor->addRow(
+							2,
+							tr(a->getType()).c_str(),
+							ss.str().c_str());
 		}
 		else if (a->getStoreItem() == "STR_NONE")
 		{
 			_armors.push_back(a);
 
-			_lstArmor->addRow(1, tr(a->getType()).c_str());
+			_lstArmor->addRow(
+							1,
+							tr(a->getType()).c_str());
 		}
 	}
 
@@ -168,14 +183,10 @@ void SoldierArmorState::lstArmorClick(Action*)
 	if (_game->getSavedGame()->getMonthsPassed() != -1)
 	{
 		if (soldier->getArmor()->getStoreItem() != "STR_NONE")
-		{
 			_base->getItems()->addItem(soldier->getArmor()->getStoreItem());
-		}
 
 		if (_armors[_lstArmor->getSelectedRow()]->getStoreItem() != "STR_NONE")
-		{
 			_base->getItems()->removeItem(_armors[_lstArmor->getSelectedRow()]->getStoreItem());
-		}
 	}
 
 	soldier->setArmor(_armors[_lstArmor->getSelectedRow()]);

@@ -28,6 +28,7 @@ namespace OpenXcom
 
 class Bar;
 class Base;
+class Soldier;
 class Surface;
 class Text;
 class TextButton;
@@ -43,7 +44,7 @@ class SoldierInfoState
 		public State
 {
 private:
-	size_t _soldier;
+	size_t _soldierId;
 
 	Bar
 		* _barTimeUnits,
@@ -57,6 +58,7 @@ private:
 		* _barPsiStrength,
 		* _barPsiSkill;
 	Base* _base;
+	Soldier* _soldier;
 	Surface
 		* _bg,
 		* _rank;
@@ -108,15 +110,16 @@ private:
 		SoldierInfoState(
 				Game* game,
 				Base* base,
-				size_t soldier);
+				size_t soldierId);
 		/// Cleans up the Soldier Info state.
 		~SoldierInfoState();
 
 		/// Updates the soldier info.
 		void init();
 
-		/// Handler for pressing a key on the Name edit.
-		void edtSoldierKeyPress(Action* action);
+		/// Handler for changing text on the Name edit.
+		void edtSoldierChange(Action* action);
+
 		/// Handler for clicking the OK button.
 		void btnOkClick(Action* action);
 		/// Handler for clicking the Previous button.

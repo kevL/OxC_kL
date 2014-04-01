@@ -87,7 +87,7 @@ AlienBAIState::AlienBAIState(
 		_toNode(0)
 {
 	//Log(LOG_INFO) << "Create AlienBAIState";
-	_traceAI		= _save->getTraceSetting();
+	_traceAI		= Options::traceAI;
 
 	_intelligence	= _unit->getIntelligence();
 

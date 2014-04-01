@@ -173,7 +173,7 @@ void Base::load(
 	_name = Language::utf8ToWstr(node["name"].as<std::string>(""));
 
 	if (!newGame
-		|| !Options::getBool("customInitialBase")
+		|| !Options::customInitialBase
 		|| newBattleGame)
 	{
 		for (YAML::const_iterator
@@ -2023,7 +2023,7 @@ int Base::getUsedContainment() const
 		}
 	}
 
-	if (Options::getBool("alienContainmentLimitEnforced"))
+	if (Options::alienContainmentLimitEnforced)
 	{
 		for (std::vector<ResearchProject*>::const_iterator
 				i = _research.begin();
@@ -2533,11 +2533,11 @@ void Base::destroyFacility(std::vector<BaseFacility*>::iterator facility)
 			{
 				std::map<std::string, int>::iterator i = (*facility)->getCraft()->getItems()->getContents()->begin();
 				_items->addItem(
-							(*i).first,
-							(*i).second);
+							i->first,
+							i->second);
 				(*facility)->getCraft()->getItems()->removeItem(
-															(*i).first,
-															(*i).second);
+															i->first,
+															i->second);
 			}
 
 			for (std::vector<Craft*>::iterator

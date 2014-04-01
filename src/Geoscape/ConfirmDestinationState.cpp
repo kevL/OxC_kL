@@ -116,14 +116,14 @@ ConfirmDestinationState::ConfirmDestinationState(
 	_btnOk->onMouseClick((ActionHandler)& ConfirmDestinationState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& ConfirmDestinationState::btnOkClick,
-					(SDLKey)Options::getInt("keyOk"));
+					Options::keyOk);
 
 	_btnCancel->setColor(Palette::blockOffset(8)+5);
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)& ConfirmDestinationState::btnCancelClick);
 	_btnCancel->onKeyboardPress(
 					(ActionHandler)& ConfirmDestinationState::btnCancelClick,
-					(SDLKey)Options::getInt("keyCancel"));
+					Options::keyCancel);
 }
 
 /**

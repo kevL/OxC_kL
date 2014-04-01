@@ -24,6 +24,8 @@
 #include <string>
 #include <vector>
 
+#include <time.h>
+
 
 namespace OpenXcom
 {
@@ -89,8 +91,6 @@ class SavedGame
 private:
 	bool
 		_debug,
-		_detail,
-		_radarLines,
 		_warned;
 	int
 		_globeZoom,
@@ -348,14 +348,14 @@ private:
 
 		/// Increment the month counter.
 		void addMonth();
-		/// toggle the current state of the radar line drawing
+/*		/// toggle the current state of the radar line drawing
 		void toggleRadarLines();
 		/// check the current state of the radar line drawing
 		bool getRadarLines();
 		/// toggle the current state of the detail drawing
 		void toggleDetail();
 		/// check the current state of the detail drawing
-		bool getDetail();
+		bool getDetail(); */
 
 		/// add a research to the "popped up" array
 		void addPoppedResearch(const RuleResearch* research);

@@ -69,9 +69,7 @@ UfoDetectedState::UfoDetectedState(
 {
 	// Generate UFO ID
 	if (_ufo->getId() == 0)
-	{
 		_ufo->setId(_game->getSavedGame()->getId("STR_UFO"));
-	}
 
 	if (_ufo->getAltitude() == "STR_GROUND"
 		&& _ufo->getLandId() == 0)
@@ -89,9 +87,8 @@ UfoDetectedState::UfoDetectedState(
 		_lstInfo2		= new TextList(192, 33, 32, 98);
 	}
 	else
-	{
 		_window		= new Window(this, 224, 120, 16, 48, POPUP_BOTH);
-	}
+
 
 	_txtUfo			= new Text(208, 17, 32, 56);
 
@@ -153,13 +150,9 @@ UfoDetectedState::UfoDetectedState(
 
 	_txtDetected->setColor(Palette::blockOffset(8)+5);
 	if (detected)
-	{
 		_txtDetected->setText(tr("STR_DETECTED"));
-	}
 	else
-	{
 		_txtDetected->setText(L"");
-	}
 
 	_lstInfo->setColor(Palette::blockOffset(8)+5);
 	_lstInfo->setColumns(2, 80, 112);
@@ -205,14 +198,14 @@ UfoDetectedState::UfoDetectedState(
 	_btnCentre->onMouseClick((ActionHandler)& UfoDetectedState::btnCentreClick);
 	_btnCentre->onKeyboardPress(
 					(ActionHandler)& UfoDetectedState::btnCentreClick,
-					(SDLKey)Options::getInt("keyOk"));
+					Options::keyOk);
 
 	_btnCancel->setColor(Palette::blockOffset(8)+5);
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)& UfoDetectedState::btnCancelClick);
 	_btnCancel->onKeyboardPress(
 					(ActionHandler)& UfoDetectedState::btnCancelClick,
-					(SDLKey)Options::getInt("keyCancel"));
+					Options::keyCancel);
 
 	if (hyper)
 	{

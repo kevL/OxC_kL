@@ -90,7 +90,7 @@ std::wstring Text::formatNumber(
 	//setlocale(LC_CTYPE, ""); // this is necessary for mbstowcs to work correctly
 	//struct lconv* lc = localeconv();
 
-	std::wstringstream ss;
+	std::wostringstream ss;
 
 	bool negative = (value < 0);
 	ss << (negative? -value: value);
@@ -144,7 +144,7 @@ std::wstring Text::formatFunding(int funds)
  */
 std::wstring Text::formatPercentage(int value)
 {
-	std::wstringstream ss;
+	std::wostringstream ss;
 	ss << value << "%";
 
 	return ss.str();
@@ -213,7 +213,7 @@ void Text::setText(const std::wstring& text)
 
 	// If big text won't fit the space, try small text
 	if (_font == _big
-		&& !_wrap
+//		&& !_wrap
 		&& getTextWidth() > getWidth()
 		&& _text[_text.size() - 1] != L'.')
 	{
@@ -560,7 +560,7 @@ void Text::draw()
 		return;
 
 	// Show text borders for debugging
-	if (Options::getBool("debugUi"))
+	if (Options::debugUi)
 	{
 		SDL_Rect r;
 		r.w = getWidth();

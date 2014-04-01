@@ -46,13 +46,11 @@ class ResearchInfoState
 {
 
 private:
-	int _changeValueByMouseWheel;
-
 	ArrowButton
 		* _btnMore,
 		* _btnLess;
 	Base* _base;
-	InteractiveSurface* _surface;
+	InteractiveSurface* _surfaceScientists;
 	ResearchProject* _project;
 	RuleResearch* _rule;
 	Text

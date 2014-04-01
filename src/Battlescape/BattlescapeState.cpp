@@ -126,8 +126,8 @@ BattlescapeState::BattlescapeState(Game* game)
 			(BattleUnit*)(0));
 //	game->getScreen()->setScale(1.0);
 
-	int screenWidth = Options::getInt("baseXResolution");
-	int screenHeight = Options::getInt("baseYResolution");
+	int screenWidth = Options::baseXResolution;
+	int screenHeight = Options::baseYResolution;
 	int iconsWidth = 320;
 	int iconsHeight = 56;
 
@@ -452,7 +452,7 @@ BattlescapeState::BattlescapeState(Game* game)
 	_btnMapUp->onMouseClick((ActionHandler)& BattlescapeState::btnMapUpClick);
 	_btnMapUp->onKeyboardPress(
 					(ActionHandler)& BattlescapeState::btnMapUpClick,
-					(SDLKey)Options::getInt("keyBattleLevelUp"));
+					Options::keyBattleLevelUp);
 //	_btnMapUp->setTooltip("STR_VIEW_LEVEL_ABOVE");
 //	_btnMapUp->onMouseIn((ActionHandler)& BattlescapeState::txtTooltipIn);
 //	_btnMapUp->onMouseOut((ActionHandler)& BattlescapeState::txtTooltipOut);
@@ -460,7 +460,7 @@ BattlescapeState::BattlescapeState(Game* game)
 	_btnMapDown->onMouseClick((ActionHandler)& BattlescapeState::btnMapDownClick);
 	_btnMapDown->onKeyboardPress(
 					(ActionHandler)& BattlescapeState::btnMapDownClick,
-					(SDLKey)Options::getInt("keyBattleLevelDown"));
+					Options::keyBattleLevelDown);
 //	_btnMapDown->setTooltip("STR_VIEW_LEVEL_BELOW");
 //	_btnMapDown->onMouseIn((ActionHandler)& BattlescapeState::txtTooltipIn);
 //	_btnMapDown->onMouseOut((ActionHandler)& BattlescapeState::txtTooltipOut);
@@ -468,7 +468,7 @@ BattlescapeState::BattlescapeState(Game* game)
 	_btnShowMap->onMouseClick((ActionHandler)& BattlescapeState::btnShowMapClick);
 	_btnShowMap->onKeyboardPress(
 					(ActionHandler)& BattlescapeState::btnShowMapClick,
-					(SDLKey)Options::getInt("keyBattleMap"));
+					Options::keyBattleMap);
 //	_btnShowMap->setTooltip("STR_MINIMAP");
 //	_btnShowMap->onMouseIn((ActionHandler)& BattlescapeState::txtTooltipIn);
 //	_btnShowMap->onMouseOut((ActionHandler)& BattlescapeState::txtTooltipOut);
@@ -476,7 +476,7 @@ BattlescapeState::BattlescapeState(Game* game)
 	_btnKneel->onMouseClick((ActionHandler)& BattlescapeState::btnKneelClick);
 	_btnKneel->onKeyboardPress(
 					(ActionHandler)& BattlescapeState::btnKneelClick,
-					(SDLKey)Options::getInt("keyBattleKneel"));
+					Options::keyBattleKneel);
 //	_btnKneel->setTooltip("STR_KNEEL");
 //	_btnKneel->onMouseIn((ActionHandler)& BattlescapeState::txtTooltipIn);
 //	_btnKneel->onMouseOut((ActionHandler)& BattlescapeState::txtTooltipOut);
@@ -484,7 +484,7 @@ BattlescapeState::BattlescapeState(Game* game)
 	_btnInventory->onMouseClick((ActionHandler)& BattlescapeState::btnInventoryClick);
 	_btnInventory->onKeyboardPress(
 					(ActionHandler)& BattlescapeState::btnInventoryClick,
-					(SDLKey)Options::getInt("keyBattleInventory"));
+					Options::keyBattleInventory);
 //	_btnInventory->setTooltip("STR_INVENTORY");
 //	_btnInventory->onMouseIn((ActionHandler)& BattlescapeState::txtTooltipIn);
 //	_btnInventory->onMouseOut((ActionHandler)& BattlescapeState::txtTooltipOut);
@@ -492,7 +492,7 @@ BattlescapeState::BattlescapeState(Game* game)
 	_btnCenter->onMouseClick((ActionHandler)& BattlescapeState::btnCenterClick);
 	_btnCenter->onKeyboardPress(
 					(ActionHandler)& BattlescapeState::btnCenterClick,
-					(SDLKey)Options::getInt("keyBattleCenterUnit"));
+					Options::keyBattleCenterUnit);
 //	_btnCenter->setTooltip("STR_CENTER_SELECTED_UNIT");
 //	_btnCenter->onMouseIn((ActionHandler)& BattlescapeState::txtTooltipIn);
 //	_btnCenter->onMouseOut((ActionHandler)& BattlescapeState::txtTooltipOut);
@@ -506,10 +506,10 @@ BattlescapeState::BattlescapeState(Game* game)
 					SDL_BUTTON_RIGHT);	// kL
 	_btnNextSoldier->onKeyboardPress(
 					(ActionHandler)& BattlescapeState::btnNextSoldierClick,
-					(SDLKey)Options::getInt("keyBattleNextUnit"));
+					Options::keyBattleNextUnit);
 	_btnNextSoldier->onKeyboardPress(
 					(ActionHandler)& BattlescapeState::btnPrevSoldierClick,
-					(SDLKey)Options::getInt("keyBattlePrevUnit"));
+					Options::keyBattlePrevUnit);
 //	_btnNextSoldier->setTooltip("STR_NEXT_UNIT");
 //	_btnNextSoldier->onMouseIn((ActionHandler)& BattlescapeState::txtTooltipIn);
 //	_btnNextSoldier->onMouseOut((ActionHandler)& BattlescapeState::txtTooltipOut);
@@ -523,7 +523,7 @@ BattlescapeState::BattlescapeState(Game* game)
 					SDL_BUTTON_RIGHT);	// kL
 	_btnNextStop->onKeyboardPress(
 					(ActionHandler)& BattlescapeState::btnNextStopClick,
-					(SDLKey)Options::getInt("keyBattleDeselectUnit"));
+					Options::keyBattleDeselectUnit);
 //	_btnNextStop->setTooltip("STR_DESELECT_UNIT");
 //	_btnNextStop->onMouseIn((ActionHandler)& BattlescapeState::txtTooltipIn);
 //	_btnNextStop->onMouseOut((ActionHandler)& BattlescapeState::txtTooltipOut);
@@ -536,7 +536,7 @@ BattlescapeState::BattlescapeState(Game* game)
 	_btnOptions->onMouseClick((ActionHandler)& BattlescapeState::btnHelpClick);
 	_btnOptions->onKeyboardPress(
 					(ActionHandler)& BattlescapeState::btnHelpClick,
-					(SDLKey)Options::getInt("keyBattleOptions"));
+					Options::keyBattleOptions);
 //	_btnOptions->setTooltip("STR_OPTIONS");
 //	_btnOptions->onMouseIn((ActionHandler)& BattlescapeState::txtTooltipIn);
 //	_btnOptions->onMouseOut((ActionHandler)& BattlescapeState::txtTooltipOut);
@@ -544,7 +544,7 @@ BattlescapeState::BattlescapeState(Game* game)
 	_btnEndTurn->onMouseClick((ActionHandler)& BattlescapeState::btnEndTurnClick);
 	_btnEndTurn->onKeyboardPress(
 					(ActionHandler)& BattlescapeState::btnEndTurnClick,
-					(SDLKey)Options::getInt("keyBattleEndTurn"));
+					Options::keyBattleEndTurn);
 //	_btnEndTurn->setTooltip("STR_END_TURN");
 //	_btnEndTurn->onMouseIn((ActionHandler)& BattlescapeState::txtTooltipIn);
 //	_btnEndTurn->onMouseOut((ActionHandler)& BattlescapeState::txtTooltipOut);
@@ -552,7 +552,7 @@ BattlescapeState::BattlescapeState(Game* game)
 	_btnAbort->onMouseClick((ActionHandler)& BattlescapeState::btnAbortClick);
 	_btnAbort->onKeyboardPress(
 					(ActionHandler)& BattlescapeState::btnAbortClick,
-					(SDLKey)Options::getInt("keyBattleAbort"));
+					Options::keyBattleAbort);
 //	_btnAbort->setTooltip("STR_ABORT_MISSION");
 //	_btnAbort->onMouseIn((ActionHandler)& BattlescapeState::txtTooltipIn);
 //	_btnAbort->onMouseOut((ActionHandler)& BattlescapeState::txtTooltipOut);
@@ -560,7 +560,7 @@ BattlescapeState::BattlescapeState(Game* game)
 	_btnStats->onMouseClick((ActionHandler)& BattlescapeState::btnStatsClick);
 	_btnStats->onKeyboardPress(
 					(ActionHandler)& BattlescapeState::btnStatsClick,
-					(SDLKey)Options::getInt("keyBattleStats"));
+					Options::keyBattleStats);
 //	_btnStats->setTooltip("STR_UNIT_STATS");
 //	_btnStats->onMouseIn((ActionHandler)& BattlescapeState::txtTooltipIn);
 //	_btnStats->onMouseOut((ActionHandler)& BattlescapeState::txtTooltipOut);
@@ -568,7 +568,7 @@ BattlescapeState::BattlescapeState(Game* game)
 	_btnLeftHandItem->onMouseClick((ActionHandler)& BattlescapeState::btnLeftHandItemClick);
 	_btnLeftHandItem->onKeyboardPress(
 					(ActionHandler)& BattlescapeState::btnLeftHandItemClick,
-					(SDLKey)Options::getInt("keyBattleUseLeftHand"));
+					Options::keyBattleUseLeftHand);
 //	_btnLeftHandItem->setTooltip("STR_USE_LEFT_HAND");
 //	_btnLeftHandItem->onMouseIn((ActionHandler)& BattlescapeState::txtTooltipIn);
 //	_btnLeftHandItem->onMouseOut((ActionHandler)& BattlescapeState::txtTooltipOut);
@@ -576,7 +576,7 @@ BattlescapeState::BattlescapeState(Game* game)
 	_btnRightHandItem->onMouseClick((ActionHandler)& BattlescapeState::btnRightHandItemClick);
 	_btnRightHandItem->onKeyboardPress(
 					(ActionHandler)& BattlescapeState::btnRightHandItemClick,
-					(SDLKey)Options::getInt("keyBattleUseRightHand"));
+					Options::keyBattleUseRightHand);
 //	_btnRightHandItem->setTooltip("STR_USE_RIGHT_HAND");
 //	_btnRightHandItem->onMouseIn((ActionHandler)& BattlescapeState::txtTooltipIn);
 //	_btnRightHandItem->onMouseOut((ActionHandler)& BattlescapeState::txtTooltipOut);
@@ -584,7 +584,7 @@ BattlescapeState::BattlescapeState(Game* game)
 /*	_btnReserveNone->onMouseClick((ActionHandler)& BattlescapeState::btnReserveClick);
 	_btnReserveNone->onKeyboardPress(
 					(ActionHandler)& BattlescapeState::btnReserveClick,
-					(SDLKey)Options::getInt("keyBattleReserveNone"));
+					Options::keyBattleReserveNone);
 	_btnReserveNone->setTooltip("STR_DONT_RESERVE_TUS");
 	_btnReserveNone->onMouseIn((ActionHandler)& BattlescapeState::txtTooltipIn);
 	_btnReserveNone->onMouseOut((ActionHandler)& BattlescapeState::txtTooltipOut);
@@ -592,7 +592,7 @@ BattlescapeState::BattlescapeState(Game* game)
 	_btnReserveSnap->onMouseClick((ActionHandler)& BattlescapeState::btnReserveClick);
 	_btnReserveSnap->onKeyboardPress(
 					(ActionHandler)& BattlescapeState::btnReserveClick,
-					(SDLKey)Options::getInt("keyBattleReserveSnap"));
+					Options::keyBattleReserveSnap);
 	_btnReserveSnap->setTooltip("STR_RESERVE_TUS_FOR_SNAP_SHOT");
 	_btnReserveSnap->onMouseIn((ActionHandler)& BattlescapeState::txtTooltipIn);
 	_btnReserveSnap->onMouseOut((ActionHandler)& BattlescapeState::txtTooltipOut);
@@ -600,7 +600,7 @@ BattlescapeState::BattlescapeState(Game* game)
 	_btnReserveAimed->onMouseClick((ActionHandler)& BattlescapeState::btnReserveClick);
 	_btnReserveAimed->onKeyboardPress(
 					(ActionHandler)& BattlescapeState::btnReserveClick,
-					(SDLKey)Options::getInt("keyBattleReserveAimed"));
+					Options::keyBattleReserveAimed);
 	_btnReserveAimed->setTooltip("STR_RESERVE_TUS_FOR_AIMED_SHOT");
 	_btnReserveAimed->onMouseIn((ActionHandler)& BattlescapeState::txtTooltipIn);
 	_btnReserveAimed->onMouseOut((ActionHandler)& BattlescapeState::txtTooltipOut);
@@ -608,7 +608,7 @@ BattlescapeState::BattlescapeState(Game* game)
 	_btnReserveAuto->onMouseClick((ActionHandler)& BattlescapeState::btnReserveClick);
 	_btnReserveAuto->onKeyboardPress(
 					(ActionHandler)& BattlescapeState::btnReserveClick,
-					(SDLKey)Options::getInt("keyBattleReserveAuto"));
+					Options::keyBattleReserveAuto);
 	_btnReserveAuto->setTooltip("STR_RESERVE_TUS_FOR_AUTO_SHOT");
 	_btnReserveAuto->onMouseIn((ActionHandler)& BattlescapeState::txtTooltipIn);
 	_btnReserveAuto->onMouseOut((ActionHandler)& BattlescapeState::txtTooltipOut);
@@ -616,7 +616,7 @@ BattlescapeState::BattlescapeState(Game* game)
 	_btnReserveKneel->onMouseClick((ActionHandler)& BattlescapeState::btnReserveKneelClick);
 	_btnReserveKneel->onKeyboardPress(
 					(ActionHandler)& BattlescapeState::btnReserveKneelClick,
-					(SDLKey)Options::getInt("keyBattleReserveKneel"));
+					Options::keyBattleReserveKneel);
 	_btnReserveKneel->setTooltip("STR_RESERVE_TUS_FOR_KNEEL");
 	_btnReserveKneel->onMouseIn((ActionHandler)& BattlescapeState::txtTooltipIn);
 	_btnReserveKneel->onMouseOut((ActionHandler)& BattlescapeState::txtTooltipOut);
@@ -626,7 +626,7 @@ BattlescapeState::BattlescapeState(Game* game)
 					SDL_BUTTON_RIGHT);
 	_btnZeroTUs->onKeyboardPress(
 					(ActionHandler)& BattlescapeState::btnZeroTUsClick,
-					(SDLKey)Options::getInt("keyBattleZeroTUs"));
+					Options::keyBattleZeroTUs);
 	_btnZeroTUs->setTooltip("STR_EXPEND_ALL_TIME_UNITS");
 	_btnZeroTUs->onMouseIn((ActionHandler)& BattlescapeState::txtTooltipIn);
 	_btnZeroTUs->onMouseOut((ActionHandler)& BattlescapeState::txtTooltipOut); */
@@ -634,25 +634,32 @@ BattlescapeState::BattlescapeState(Game* game)
 	// shortcuts without a specific button
 //	_btnStats->onKeyboardPress(
 //				(ActionHandler)& BattlescapeState::btnReloadClick,
-//				(SDLKey)Options::getInt("keyBattleReload"));
+//				Options::keyBattleReload);
 	_btnStats->onKeyboardPress(
 					(ActionHandler)& BattlescapeState::btnPersonalLightingClick,
-					(SDLKey)Options::getInt("keyBattlePersonalLighting"));
+					Options::keyBattlePersonalLighting);
 
+	SDLKey buttons[] = {Options::keyBattleCenterEnemy1,
+						Options::keyBattleCenterEnemy2,
+						Options::keyBattleCenterEnemy3,
+						Options::keyBattleCenterEnemy4,
+						Options::keyBattleCenterEnemy5,
+						Options::keyBattleCenterEnemy6,
+						Options::keyBattleCenterEnemy7,
+						Options::keyBattleCenterEnemy8,
+						Options::keyBattleCenterEnemy9,
+						Options::keyBattleCenterEnemy10};
 	for (int
 			i = 0;
 			i < VISIBLE_MAX;
 			++i)
 	{
-		std::ostringstream
-			key;
-//			tooltip;
+//kL		std::ostringstream tooltip;
 
-		key << "keyBattleCenterEnemy" << (i + 1);
 		_btnVisibleUnit[i]->onMouseClick((ActionHandler)& BattlescapeState::btnVisibleUnitClick);
 		_btnVisibleUnit[i]->onKeyboardPress(
 						(ActionHandler)& BattlescapeState::btnVisibleUnitClick,
-						(SDLKey)Options::getInt(key.str()));
+						buttons[i]);
 
 //		tooltip << "STR_CENTER_ON_ENEMY_" << (i + 1);
 //		_btnVisibleUnit[i]->setTooltip(tooltip.str());
@@ -765,7 +772,7 @@ void BattlescapeState::init()
 	_animTimer->start();
 	_gameTimer->start();
 
-	_map->focus();
+	_map->setFocus(true);
 	_map->cacheUnits();
 	_map->draw();
 	_battleGame->init();
@@ -874,13 +881,13 @@ void BattlescapeState::mapOver(Action* action)
 		// the mouse-release event is missed for any reason.
 		// (checking: is the dragScroll-mouse-button still pressed?)
 		// However if the SDL is also missed the release event, then it is to no avail :(
-		if ((SDL_GetMouseState(0, 0) & SDL_BUTTON(_save->getDragButton())) == 0)
+		if ((SDL_GetMouseState(0, 0) & SDL_BUTTON(Options::battleScrollDragButton)))
 		// so we missed again the mouse-release :(
 		{
 			// Check if we have to revoke the scrolling, because it
 			// was too short in time, so it was a click
 			if (!_mouseMovedOverThreshold
-				&& SDL_GetTicks() - _mouseScrollingStartTime <= static_cast<Uint32>(_save->getDragTimeTolerance()))
+				&& SDL_GetTicks() - _mouseScrollingStartTime <= static_cast<Uint32>(Options::battleScrollDragTimeTolerance))
 			{
 				_map->getCamera()->setMapOffset(_mapOffsetBeforeMouseScrolling);
 			}
@@ -892,7 +899,7 @@ void BattlescapeState::mapOver(Action* action)
 
 		_isMouseScrolled = true;
 
-		if (_save->isDragInverted())
+		if (Options::battleScrollDragInvert)
 		{
 			// Set the mouse cursor back
 			SDL_EventState(SDL_MOUSEMOTION, SDL_IGNORE);
@@ -904,11 +911,11 @@ void BattlescapeState::mapOver(Action* action)
 		_totalMouseMoveX += action->getDetails()->motion.xrel;
 		_totalMouseMoveY += action->getDetails()->motion.yrel;
 		if (!_mouseMovedOverThreshold)
-			_mouseMovedOverThreshold = std::abs(_totalMouseMoveX) > _save->getDragPixelTolerance()
-										|| std::abs(_totalMouseMoveY) > _save->getDragPixelTolerance();
+			_mouseMovedOverThreshold = std::abs(_totalMouseMoveX) > Options::battleScrollDragPixelTolerance
+										|| std::abs(_totalMouseMoveY) > Options::battleScrollDragPixelTolerance;
 
 		// Scrolling
-		if (_save->isDragInverted())
+		if (Options::battleScrollDragInvert)
 		{
 			_map->getCamera()->scrollXY(
 					-action->getDetails()->motion.xrel,
@@ -952,23 +959,20 @@ void BattlescapeState::mapPress(Action* action)
 		return;
 	}
 
-	if (Options::getInt("battleScrollType") == SCROLL_DRAG)
+	if (action->getDetails()->button.button == Options::battleScrollDragButton)
 	{
-		if (action->getDetails()->button.button == _save->getDragButton())
-		{
-			_isMouseScrolling = true;
-			_isMouseScrolled = false;
+		_isMouseScrolling = true;
+		_isMouseScrolled = false;
 
-			SDL_GetMouseState(
-						&_xBeforeMouseScrolling,
-						&_yBeforeMouseScrolling);
+		SDL_GetMouseState(
+					&_xBeforeMouseScrolling,
+					&_yBeforeMouseScrolling);
 
-			_mapOffsetBeforeMouseScrolling = _map->getCamera()->getMapOffset();
-			_totalMouseMoveX = 0;
-			_totalMouseMoveY = 0;
-			_mouseMovedOverThreshold = false;
-			_mouseScrollingStartTime = SDL_GetTicks();
-		}
+		_mapOffsetBeforeMouseScrolling = _map->getCamera()->getMapOffset();
+		_totalMouseMoveX = 0;
+		_totalMouseMoveY = 0;
+		_mouseMovedOverThreshold = false;
+		_mouseScrollingStartTime = SDL_GetTicks();
 	}
 	//Log(LOG_INFO) << "BattlescapeState::mapPress() EXIT";
 }
@@ -987,13 +991,13 @@ void BattlescapeState::mapClick(Action* action)
 	// (this part handles the release if it is missed and now another button is used)
 	if (_isMouseScrolling)
 	{
-		if (action->getDetails()->button.button != _save->getDragButton()
-			&& (SDL_GetMouseState(0, 0) & SDL_BUTTON(_save->getDragButton())) == 0)
+		if (action->getDetails()->button.button != Options::battleScrollDragButton
+			&& (SDL_GetMouseState(0, 0) & SDL_BUTTON(Options::battleScrollDragButton)) == 0)
 			// so we missed again the mouse-release :(
 		{
 			// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
 			if (!_mouseMovedOverThreshold
-				&& SDL_GetTicks() - _mouseScrollingStartTime <= static_cast<Uint32>(_save->getDragTimeTolerance()))
+				&& SDL_GetTicks() - _mouseScrollingStartTime <= static_cast<Uint32>(Options::battleScrollDragTimeTolerance))
 			{
 				_map->getCamera()->setMapOffset(_mapOffsetBeforeMouseScrolling);
 			}
@@ -1006,7 +1010,7 @@ void BattlescapeState::mapClick(Action* action)
 	if (_isMouseScrolling)
 	{
 		// While scrolling, other buttons are ineffective
-		if (action->getDetails()->button.button == _save->getDragButton())
+		if (action->getDetails()->button.button == Options::battleScrollDragButton)
 			_isMouseScrolling = false;
 		else
 			//Log(LOG_INFO) << ". . isMouseScrolled = FALSE, return";
@@ -1014,7 +1018,7 @@ void BattlescapeState::mapClick(Action* action)
 
 		// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
 		if (!_mouseMovedOverThreshold
-			&& SDL_GetTicks() - _mouseScrollingStartTime <= static_cast<Uint32>(_save->getDragTimeTolerance()))
+			&& SDL_GetTicks() - _mouseScrollingStartTime <= static_cast<Uint32>(Options::battleScrollDragTimeTolerance))
 		{
 			_isMouseScrolled = false;
 			_map->getCamera()->setMapOffset(_mapOffsetBeforeMouseScrolling);
@@ -1056,7 +1060,7 @@ void BattlescapeState::mapClick(Action* action)
 
 	if (_save->getDebugMode())
 	{
-		std::wstringstream ss;
+		std::wostringstream ss;
 		ss << L"Clicked " << pos;
 		debug(ss.str());
 	}
@@ -1450,7 +1454,7 @@ void BattlescapeState::btnStatsClick(Action* action)
 	if (playableUnitSelected())
 	{
 		bool edge = false;
-		if (SCROLL_TRIGGER == Options::getInt("battleScrollType")
+		if (SCROLL_TRIGGER == Options::battleEdgeScroll
 			&& SDL_MOUSEBUTTONUP == action->getDetails()->type
 			&& SDL_BUTTON_LEFT == action->getDetails()->button.button)
 		{
@@ -2102,7 +2106,7 @@ inline void BattlescapeState::handle(Action* action)
 
 		if (action->getDetails()->type == SDL_KEYDOWN)
 		{
-			if (Options::getBool("debug"))
+			if (Options::debug)
 			{
 				// "ctrl-d" - enable debug mode
 				if (action->getDetails()->key.keysym.sym == SDLK_d
@@ -2143,23 +2147,23 @@ inline void BattlescapeState::handle(Action* action)
 					saveVoxelMap();
 				// f9 - ai
 				else if (action->getDetails()->key.keysym.sym == SDLK_F9
-					&& Options::getBool("traceAI"))
+					&& Options::traceAI)
 				{
 					saveAIMap();
 				}
 			}
 			// quick save and quick load
 			// not works in debug mode to prevent conflict in hotkeys by default
-			else if (action->getDetails()->key.keysym.sym == (SDLKey)Options::getInt("keyQuickSave")
-				&& Options::getInt("autosave") == 1)
+			else if (action->getDetails()->key.keysym.sym == Options::keyQuickSave
+				&& Options::autosave == 1)
 			{
 				_game->pushState(new SaveState(
 											_game,
 											OPT_BATTLESCAPE,
 											true));
 			}
-			else if (action->getDetails()->key.keysym.sym == (SDLKey)Options::getInt("keyQuickLoad")
-				&& Options::getInt("autosave") == 1)
+			else if (action->getDetails()->key.keysym.sym == Options::keyQuickLoad
+				&& Options::autosave == 1)
 			{
 				_game->pushState(new LoadState(
 											_game,
@@ -2168,7 +2172,7 @@ inline void BattlescapeState::handle(Action* action)
 			}
 
 			// voxel view dump
-			if (action->getDetails()->key.keysym.sym == (SDLKey)Options::getInt("keyBattleVoxelView"))
+			if (action->getDetails()->key.keysym.sym == Options::keyBattleVoxelView)
 				saveVoxelView();
 		}
 	}
@@ -2893,7 +2897,7 @@ bool BattlescapeState::allowButtons(bool allowSaving) const
 */
 /* void BattlescapeState::txtTooltipIn(Action* action)
 {
-	if (allowButtons() && Options::getBool("battleTooltips"))
+	if (allowButtons() && Options::battleTooltips)
 	{
 		_currentTooltip = action->getSender()->getTooltip();
 		_txtTooltip->setText(tr(_currentTooltip));
@@ -2906,7 +2910,7 @@ bool BattlescapeState::allowButtons(bool allowSaving) const
 */
 /* void BattlescapeState::txtTooltipOut(Action* action)
 {
-	if (allowButtons() && Options::getBool("battleTooltips"))
+	if (allowButtons() && Options::battleTooltips)
 	{
 		if (_currentTooltip == action->getSender()->getTooltip())
 		{

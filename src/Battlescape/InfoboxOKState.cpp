@@ -75,10 +75,10 @@ InfoboxOKState::InfoboxOKState(
 	_btnOk->onMouseClick((ActionHandler)& InfoboxOKState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& InfoboxOKState::btnOkClick,
-					(SDLKey)Options::getInt("keyOk"));
+					Options::keyOk);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& InfoboxOKState::btnOkClick,
-					(SDLKey)Options::getInt("keyCancel"));
+					Options::keyCancel);
 	_btnOk->setHighContrast(true);
 
 	_game->getCursor()->setVisible(true);

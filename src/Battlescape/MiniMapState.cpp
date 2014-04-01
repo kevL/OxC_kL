@@ -30,7 +30,7 @@
 #include "../Engine/InteractiveSurface.h"
 #include "../Engine/Options.h"
 #include "../Engine/Palette.h"
-#include "../Engine/Screen.h"
+//kL #include "../Engine/Screen.h"
 #include "../Engine/Timer.h"
 
 #include "../Interface/Text.h"
@@ -80,7 +80,7 @@ MiniMapState::MiniMapState(
 	centerAllSurfaces();
 
 
-	if (Screen::getDY() > 50)
+	if (_game->getScreen()->getDY() > 50)
 	{
 		_screen = false;
 
@@ -101,15 +101,15 @@ MiniMapState::MiniMapState(
 	_btnOk->onMouseClick((ActionHandler)& MiniMapState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& MiniMapState::btnOkClick,
-					(SDLKey)Options::getInt("keyCancel"));
+					Options::keyCancel);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& MiniMapState::btnOkClick,
-					(SDLKey)Options::getInt("keyBattleMap"));
+					Options::keyBattleMap);
 
 	_txtLevel->setBig();
 	_txtLevel->setColor(Palette::blockOffset(4));
 	_txtLevel->setHighContrast(true);
-	std::wstringstream s;
+	std::wostringstream s;
 	s << camera->getViewLevel();
 	_txtLevel->setText(s.str());
 
@@ -160,7 +160,7 @@ void MiniMapState::btnOkClick(Action*)
  */
 void MiniMapState::btnLevelUpClick(Action*)
 {
-	std::wstringstream s;
+	std::wostringstream s;
 	s << _miniMapView->up();
 	_txtLevel->setText(s.str());
 }
@@ -171,7 +171,7 @@ void MiniMapState::btnLevelUpClick(Action*)
  */
 void MiniMapState::btnLevelDownClick(Action*)
 {
-	std::wstringstream s;
+	std::wostringstream s;
 	s << _miniMapView->down();
 	_txtLevel->setText(s.str());
 }

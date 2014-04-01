@@ -47,8 +47,6 @@ class CraftEquipmentState
 {
 
 private:
-	bool _allowChangeListValuesByMouseWheel;
-	int _changeValueByMouseWheel;
 	unsigned int _sel;
 	size_t _craft;
 

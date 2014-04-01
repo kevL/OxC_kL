@@ -126,7 +126,7 @@ ManufactureState::ManufactureState(
 	_btnOk->onMouseClick((ActionHandler)&ManufactureState::btnOkClick);
 	_btnOk->onKeyboardPress(
 						(ActionHandler)& ManufactureState::btnOkClick,
-						(SDLKey)Options::getInt("keyCancel"));
+						Options::keyCancel);
 
 	_txtTitle->setColor(Palette::blockOffset(15)+6);
 	_txtTitle->setBig();
@@ -238,10 +238,11 @@ void ManufactureState::fillProductionList()
 			i != productions.end();
 			++i)
 	{
-		std::wstringstream
+		std::wostringstream
 			s1,
 			s2,
-			s3;
+			s3,
+			s4;
 
 		s1 << (*i)->getAssignedEngineers();
 
@@ -256,20 +257,19 @@ void ManufactureState::fillProductionList()
 
 		s3 << Text::formatFunding((*i)->getRules()->getManufactureCost());
 
-		std::wstringstream s4;
 		if ((*i)->getAssignedEngineers() > 0)
 		{
 			int timeLeft;
-			if (Options::getBool("allowAutoSellProduction")
+			if (Options::allowAutoSellProduction
 				&& (*i)->getAmountTotal() == std::numeric_limits<int>::max())
 			{
 				timeLeft = ((*i)->getAmountProduced() + 1) * (*i)->getRules()->getManufactureTime()
-								- (*i)->getTimeSpent();
+							- (*i)->getTimeSpent();
 			}
 			else
 			{
 				timeLeft = (*i)->getAmountTotal() * (*i)->getRules()->getManufactureTime()
-								- (*i)->getTimeSpent();
+							- (*i)->getTimeSpent();
 			}
 
 			timeLeft /= (*i)->getAssignedEngineers();
@@ -281,9 +281,7 @@ void ManufactureState::fillProductionList()
 			s4 << daysLeft << "/" << hoursLeft;
 		}
 		else
-		{
 			s4 << L"-";
-		}
 
 		_lstManufacture->addRow
 							(5,

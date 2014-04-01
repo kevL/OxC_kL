@@ -202,19 +202,19 @@ std::list<Polyline*>* ResourcePack::getPolylines()
  */
 Music* ResourcePack::getMusic(const std::string& name) const
 {
-	return getRandomMusic(name, ""); // sza_MusicRules
-
-/*	if (Options::getBool("mute"))
+	if (Options::mute)
 		return _muteMusic;
 	else
 	{
-		std::map<std::string, Music*>::const_iterator i = _musics.find(name);
+		return getRandomMusic(name, ""); // sza_MusicRules
+
+/*		std::map<std::string, Music*>::const_iterator i = _musics.find(name);
 
 		if (_musics.end() != i)
 			return i->second;
 		else
-			return 0;
-	} */
+			return 0; */
+	}
 }
 
 /**
@@ -227,7 +227,7 @@ Music* ResourcePack::getRandomMusic( // sza_MusicRules
 		const std::string& name,
 		const std::string& terrain) const
 {
-	if (Options::getBool("mute"))
+	if (Options::mute)
 		return _muteMusic;
 	else
 	{ // sza_MusicRules
@@ -320,7 +320,7 @@ Sound* ResourcePack::getSound(
 		const std::string& set,
 		unsigned int sound) const
 {
-	if (Options::getBool("mute"))
+	if (Options::mute)
 		return _muteSound;
 	else
 	{

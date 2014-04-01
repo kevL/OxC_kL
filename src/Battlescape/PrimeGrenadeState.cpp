@@ -139,7 +139,7 @@ PrimeGrenadeState::PrimeGrenadeState(
 		square.h = _button[i]->getHeight() - 2;
 		_button[i]->drawRect(&square, Palette::blockOffset(6)+12);
 
-		std::wstringstream ss;
+		std::wostringstream ss;
 		ss << i;
 		add(_number[i]);
 

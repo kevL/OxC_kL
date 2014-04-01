@@ -92,14 +92,14 @@ ConfirmNewBaseState::ConfirmNewBaseState(
 	_btnOk->onMouseClick((ActionHandler)& ConfirmNewBaseState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& ConfirmNewBaseState::btnOkClick,
-					(SDLKey)Options::getInt("keyOk"));
+					Options::keyOk);
 
 	_btnCancel->setColor(Palette::blockOffset(15)-1);
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)& ConfirmNewBaseState::btnCancelClick);
 	_btnCancel->onKeyboardPress(
 					(ActionHandler)& ConfirmNewBaseState::btnCancelClick,
-					(SDLKey)Options::getInt("keyCancel"));
+					Options::keyCancel);
 
 	std::wstring region;
 	for (std::vector<Region*>::iterator

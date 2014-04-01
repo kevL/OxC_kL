@@ -113,20 +113,20 @@ MonthlyReportState::MonthlyReportState(
 	_btnOk->onMouseClick((ActionHandler)& MonthlyReportState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& MonthlyReportState::btnOkClick,
-					(SDLKey)Options::getInt("keyOk"));
+					Options::keyOk);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& MonthlyReportState::btnOkClick,
-					(SDLKey)Options::getInt("keyCancel"));
+					Options::keyCancel);
 
 	_btnBigOk->setColor(Palette::blockOffset(8)+10);
 	_btnBigOk->setText(tr("STR_OK"));
 	_btnBigOk->onMouseClick((ActionHandler)& MonthlyReportState::btnOkClick);
 	_btnBigOk->onKeyboardPress(
 					(ActionHandler)& MonthlyReportState::btnOkClick,
-					(SDLKey)Options::getInt("keyOk"));
+					Options::keyOk);
 	_btnBigOk->onKeyboardPress(
 					(ActionHandler)& MonthlyReportState::btnOkClick,
-					(SDLKey)Options::getInt("keyCancel"));
+					Options::keyCancel);
 	_btnBigOk->setVisible(false);
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
@@ -210,7 +210,7 @@ MonthlyReportState::MonthlyReportState(
 	_txtRating->setSecondaryColor(Palette::blockOffset(8)+10);
 	_txtRating->setText(tr("STR_MONTHLY_RATING").arg(_ratingTotal).arg(rating));
 
-	std::wstringstream ss3;
+	std::wostringstream ss3;
 	if (_fundingDiff > 0) ss3 << '+';
 	ss3 << Text::formatFunding(_fundingDiff);
 	_txtChange->setColor(Palette::blockOffset(15)-1);
@@ -221,7 +221,7 @@ MonthlyReportState::MonthlyReportState(
 	_txtDesc->setWordWrap(true);
 
 	// calculate satisfaction
-	std::wstringstream ss4;
+	std::wostringstream ss4;
 	std::wstring satisFactionString = tr("STR_COUNCIL_IS_DISSATISFIED");
 	if (_ratingTotal > 1500)
 	{
@@ -465,7 +465,7 @@ std::wstring MonthlyReportState::countryList(
 		const std::string& singular,
 		const std::string& plural)
 {
-	std::wstringstream ss;
+	std::wostringstream ss;
 
 	if (!countries.empty())
 	{

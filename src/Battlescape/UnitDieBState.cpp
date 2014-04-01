@@ -227,7 +227,7 @@ void UnitDieBState::think()
 																					"STR_HAS_DIED_FROM_A_FATAL_WOUND",
 																					_unit->getGender())
 																				.arg(_unit->getName(game->getLanguage()))));
-					else if (Options::getBool("battleNotifyDeath"))
+					else if (Options::battleNotifyDeath)
 						game->pushState(new InfoboxOKState(
 														game,
 														game->getLanguage()->getString(
@@ -247,7 +247,7 @@ void UnitDieBState::think()
 
 		// if all units from either faction are killed - auto-end the mission.
 		if (_parent->getSave()->getSide() == FACTION_PLAYER
-			&& Options::getBool("battleAutoEnd"))
+			&& Options::battleAutoEnd)
 		{
 			int liveAliens = 0;
 			int liveSoldiers = 0;
@@ -287,7 +287,7 @@ void UnitDieBState::convertUnitToCorpse()
 	BattleItem* itemToKeep = 0;
 	int size = _unit->getArmor()->getSize();
 
-	bool dropItems = !Options::getBool("weaponSelfDestruction")
+	bool dropItems = !Options::weaponSelfDestruction
 						|| _unit->getOriginalFaction() != FACTION_HOSTILE
 						|| _unit->getStatus() == STATUS_UNCONSCIOUS;
 
