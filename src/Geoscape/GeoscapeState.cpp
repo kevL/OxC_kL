@@ -154,7 +154,7 @@ GeoscapeState::GeoscapeState(Game* game)
 		_interLat(0.0)	// kL
 {
 	int
-		screenWidth		= Options::baseXResolution;
+		screenWidth		= Options::baseXResolution,
 		screenHeight	= Options::baseYResolution;
 
 
@@ -2362,7 +2362,7 @@ void GeoscapeState::time1Day()
 
 					// kill soldier. (lifted from Battlescape/DebriefingState::prepareDebriefing()
 					SoldierDeath* death = new SoldierDeath();
-					death->setTime(_game->getSavedGame()->getTime());
+					death->setTime(*_game->getSavedGame()->getTime());
 
 					SoldierDead* dead = (*s)->die(death); // converts Soldier to SoldierDead class instance.
 					_game->getSavedGame()->getDeadSoldiers()->push_back(dead);

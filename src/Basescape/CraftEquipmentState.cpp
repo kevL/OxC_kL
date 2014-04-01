@@ -605,7 +605,6 @@ void CraftEquipmentState::moveRightByValue(int change)
 	if (change < 1)
 		return;
 
-
 	Craft* c = _base->getCrafts()->at(_craft);
 	RuleItem* itemRule = _game->getRuleset()->getItem(_items[_sel]);
 
@@ -728,9 +727,12 @@ void CraftEquipmentState::moveRightByValue(int change)
 	{
 		c->getItems()->addItem(_items[_sel],change);
 
-		if (_game->getSavedGame()->getMonthsPassed() == -1)
-				Options::setInt("NewBattle_" + _items[_sel], Options::getInt("NewBattle_" + _items[_sel]) + change);
-		else
+//kL		if (_game->getSavedGame()->getMonthsPassed() == -1)
+//kL		{
+//			Options::setInt("NewBattle_" + _items[_sel], Options::getInt("NewBattle_" + _items[_sel]) + change);
+//kL		}
+//kL		else
+		if (_game->getSavedGame()->getMonthsPassed() != -1) // kL
 			_base->getItems()->removeItem(_items[_sel],change);
 	}
 

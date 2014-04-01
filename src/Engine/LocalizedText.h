@@ -124,7 +124,7 @@ inline LocalizedText::operator std::wstring const &() const
 
 /**
  * Replace the next argument placeholder with @a val.
- * @tparam T, The type of the replacement value. It should be streamable to std::owstringstream.
+ * @tparam T, The type of the replacement value. It should be streamable to std::wostringstream.
  * @param val, The value to place in the next placeholder's position.
  * @return, A translated string with all occurences of the marker replaced by @a val.
  */
@@ -165,7 +165,7 @@ LocalizedText LocalizedText::arg(T val) const
 
 /**
  * Replace the next argument placeholder with @a val.
- * @tparam T The type of the replacement value. It should be streamable to std::owstringstream.
+ * @tparam T The type of the replacement value. It should be streamable to std::wostringstream.
  * @param val The value to place in the next placeholder's position.
  * @return The translated string with all occurences of the marker replaced by @a val.
  */

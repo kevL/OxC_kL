@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -10,29 +10,35 @@
  *
  * OpenXcom is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
+ * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "OptionsGeoscapeState.h"
+
 #include <sstream>
-#include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
-#include "../Engine/Language.h"
-#include "../Engine/Palette.h"
-#include "../Interface/TextButton.h"
-#include "../Interface/Window.h"
-#include "../Interface/Text.h"
-#include "../Interface/Slider.h"
-#include "../Interface/ToggleTextButton.h"
-#include "../Interface/TextButton.h"
-#include "../Interface/ComboBox.h"
+
 #include "../Engine/Action.h"
+#include "../Engine/Game.h"
+#include "../Engine/Language.h"
 #include "../Engine/Options.h"
+#include "../Engine/Palette.h"
+
+#include "../Interface/ComboBox.h"
+#include "../Interface/Slider.h"
+#include "../Interface/Text.h"
+#include "../Interface/TextButton.h"
+#include "../Interface/ToggleTextButton.h"
+#include "../Interface/Window.h"
+
 #include "../Menu/LoadState.h"
 #include "../Menu/SaveState.h"
+
+#include "../Resource/ResourcePack.h"
+
 
 namespace OpenXcom
 {
@@ -42,7 +48,13 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param origin Game section that originated this state.
  */
-OptionsGeoscapeState::OptionsGeoscapeState(Game *game, OptionsOrigin origin) : OptionsBaseState(game, origin)
+OptionsGeoscapeState::OptionsGeoscapeState(
+		Game* game,
+		OptionsOrigin origin)
+	:
+		OptionsBaseState(
+			game,
+			origin)
 {
 	setCategory(_btnGeoscape);
 
@@ -83,7 +95,7 @@ OptionsGeoscapeState::OptionsGeoscapeState(Game *game, OptionsOrigin origin) : O
 
 	add(_txtOptions);
 	add(_btnShowFunds);
-	
+
 	add(_txtDragScroll);
 	add(_cbxDragScroll);
 
@@ -92,7 +104,7 @@ OptionsGeoscapeState::OptionsGeoscapeState(Game *game, OptionsOrigin origin) : O
 	// Set up objects
 	_txtDragScroll->setColor(Palette::blockOffset(8)+10);
 	_txtDragScroll->setText(tr("STR_DRAG_SCROLL"));
-	
+
 	std::vector<std::string> dragScrolls;
 	dragScrolls.push_back("STR_NONE");
 	dragScrolls.push_back("STR_LEFT_MOUSE_BUTTON");
@@ -184,14 +196,13 @@ OptionsGeoscapeState::OptionsGeoscapeState(Game *game, OptionsOrigin origin) : O
  */
 OptionsGeoscapeState::~OptionsGeoscapeState()
 {
-
 }
 
 /**
  * Changes the Drag Scroll option.
  * @param action Pointer to an action.
  */
-void OptionsGeoscapeState::cbxDragScrollChange(Action *)
+void OptionsGeoscapeState::cbxDragScrollChange(Action*)
 {
 	Options::globeScrollDragButton = _cbxDragScroll->getSelected();
 }
@@ -200,7 +211,7 @@ void OptionsGeoscapeState::cbxDragScrollChange(Action *)
  * Updates the scroll speed.
  * @param action Pointer to an action.
  */
-void OptionsGeoscapeState::slrScrollSpeedChange(Action *)
+void OptionsGeoscapeState::slrScrollSpeedChange(Action*)
 {
 	Options::globeScrollSpeed = _slrScrollSpeed->getValue();
 }
@@ -209,7 +220,7 @@ void OptionsGeoscapeState::slrScrollSpeedChange(Action *)
  * Updates the dogfight speed.
  * @param action Pointer to an action.
  */
-void OptionsGeoscapeState::slrDogfightSpeedChange(Action *)
+void OptionsGeoscapeState::slrDogfightSpeedChange(Action*)
 {
 	Options::dogfightSpeed = _slrDogfightSpeed->getValue();
 }
@@ -218,7 +229,7 @@ void OptionsGeoscapeState::slrDogfightSpeedChange(Action *)
  * Updates the clock speed.
  * @param action Pointer to an action.
  */
-void OptionsGeoscapeState::slrClockSpeedChange(Action *)
+void OptionsGeoscapeState::slrClockSpeedChange(Action*)
 {
 	Options::geoClockSpeed = _slrClockSpeed->getValue();
 }
@@ -227,7 +238,7 @@ void OptionsGeoscapeState::slrClockSpeedChange(Action *)
  * Changes the Globe Country Borders option.
  * @param action Pointer to an action.
  */
-void OptionsGeoscapeState::btnGlobeCountriesClick(Action *)
+void OptionsGeoscapeState::btnGlobeCountriesClick(Action*)
 {
 	Options::globeDetail = _btnGlobeCountries->getPressed();
 }
@@ -236,7 +247,7 @@ void OptionsGeoscapeState::btnGlobeCountriesClick(Action *)
  * Changes the Globe Radar Ranges option.
  * @param action Pointer to an action.
  */
-void OptionsGeoscapeState::btnGlobeRadarsClick(Action *)
+void OptionsGeoscapeState::btnGlobeRadarsClick(Action*)
 {
 	Options::globeRadarLines = _btnGlobeRadars->getPressed();
 }
@@ -245,7 +256,7 @@ void OptionsGeoscapeState::btnGlobeRadarsClick(Action *)
  * Changes the Globe Flight Paths option.
  * @param action Pointer to an action.
  */
-void OptionsGeoscapeState::btnGlobePathsClick(Action *)
+void OptionsGeoscapeState::btnGlobePathsClick(Action*)
 {
 	Options::globeFlightPaths = _btnGlobePaths->getPressed();
 }
@@ -254,7 +265,7 @@ void OptionsGeoscapeState::btnGlobePathsClick(Action *)
  * Changes the Show Funds option.
  * @param action Pointer to an action.
  */
-void OptionsGeoscapeState::btnShowFundsClick(Action *)
+void OptionsGeoscapeState::btnShowFundsClick(Action*)
 {
 	Options::showFundsOnGeoscape = _btnShowFunds->getPressed();
 }

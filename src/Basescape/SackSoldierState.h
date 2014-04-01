@@ -27,7 +27,7 @@ namespace OpenXcom
 {
 
 class Base;
-class Soldier;
+//class Soldier;
 class Text;
 class TextButton;
 class Window;
@@ -39,24 +39,27 @@ class SackSoldierState
 	:
 		public State
 {
-	private:
-		Base* _base;
-		Soldier* _soldierId;
 
-		Text
-			* _txtSoldier,
-			* _txtTitle;
-		TextButton
-			* _btnCancel,
-			* _btnOk;
-		Window* _window;
+private:
+	size_t _soldierId;
+
+	Base* _base;
+
+	Text
+		* _txtSoldier,
+		* _txtTitle;
+	TextButton
+		* _btnCancel,
+		* _btnOk;
+	Window* _window;
+
 
 	public:
 		/// Creates the Sack Soldier state.
 		SackSoldierState(
 				Game* game,
 				Base* base,
-				Soldier* _soldierId);
+				size_t _soldierId);
 		/// Cleans up the Sack Soldier state.
 		~SackSoldierState();
 

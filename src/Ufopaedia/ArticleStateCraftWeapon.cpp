@@ -86,7 +86,7 @@ ArticleStateCraftWeapon::ArticleStateCraftWeapon(Game* game, ArticleDefinitionCr
 	_lstInfo->setCellColor(1, 1, Palette::blockOffset(15)+4);
 
 //kL	_lstInfo->addRow(2, tr("STR_ACCURACY").c_str(), Text::formatPercentage(weapon->getAccuracy()).c_str());
-	std::wstringstream ss2;
+	std::wostringstream ss2;
 	ss2 << weapon->getAccuracy();
 	_lstInfo->addRow(2, tr("STR_ACCURACY").c_str(), ss2.str().c_str());
 	_lstInfo->setCellColor(2, 1, Palette::blockOffset(15)+4);

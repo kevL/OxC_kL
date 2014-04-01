@@ -490,7 +490,7 @@ void Projectile::applyAccuracy(
 							accuracy - modifier);
 	}
 
-	if (Options::battleRangeBasedAccuracy)	// kL
+	if (Options::battleRangeBasedAccuracy	// kL
 		&& !weaponRule->getArcingShot()		// kL
 		&& _action.type != BA_THROW)
 //kL		&& _action.type != BA_HIT)

@@ -384,9 +384,9 @@ void SoldierInfoState::init()
 	UnitStats* current = _soldier->getCurrentStats();
 
 	SurfaceSet* texture = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
-	texture->getFrame(soldier->getRankSprite())->setX(0);
-	texture->getFrame(soldier->getRankSprite())->setY(0);
-	texture->getFrame(soldier->getRankSprite())->blit(_rank);
+	texture->getFrame(_soldier->getRankSprite())->setX(0);
+	texture->getFrame(_soldier->getRankSprite())->setY(0);
+	texture->getFrame(_soldier->getRankSprite())->blit(_rank);
 
 	std::wostringstream
 		ss1,
@@ -512,7 +512,7 @@ void SoldierInfoState::init()
 	_txtMissions->setText(tr("STR_MISSIONS").arg(_soldier->getMissions()));
 	_txtKills->setText(tr("STR_KILLS").arg(_soldier->getKills()));
 
-	_txtPsionic->setVisible(soldier->isInPsiTraining());
+	_txtPsionic->setVisible(_soldier->isInPsiTraining());
 
 	_btnSack->setVisible(!
 					(_soldier->getCraft()

@@ -18,9 +18,11 @@
  */
 
 #include "Timer.h"
+
+#include <assert.h>
+
 #include "Game.h"
 #include "Options.h"
-#include <assert.h>
 
 
 namespace OpenXcom
@@ -53,7 +55,9 @@ int Timer::maxFrameSkip = 8; // this is a pretty good default at 60FPS.
  * Initializes a new timer with a set interval.
  * @param interval Time interval in milliseconds.
  */
-Timer::Timer(Uint32 interval, bool frameSkipping)
+Timer::Timer(
+		Uint32 interval,
+		bool frameSkipping)
 	:
 		_start(0),
 		_interval(interval),
@@ -118,8 +122,8 @@ bool Timer::isRunning() const
  * @param surface, Surface that the action handler belongs to.
  */
 void Timer::think(
-	State* state,
-	Surface* surface)
+		State* state,
+		Surface* surface)
 {
 	// must be signed to permit negative numbers
 	Sint64 now = slowTick();

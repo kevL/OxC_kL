@@ -1320,6 +1320,8 @@
 			<Option target="Release Win32" />
 			<Option target="Release x64" />
 		</Unit>
+		<Unit filename="Engine/OptionInfo.cpp" />
+		<Unit filename="Engine/OptionInfo.h" />
 		<Unit filename="Engine/Options.cpp">
 			<Option target="Debug Win32" />
 			<Option target="Debug x64" />
@@ -1332,6 +1334,7 @@
 			<Option target="Release Win32" />
 			<Option target="Release x64" />
 		</Unit>
+		<Unit filename="Engine/Options.inc.h" />
 		<Unit filename="Engine/Palette.cpp">
 			<Option target="Debug Win32" />
 			<Option target="Debug x64" />
@@ -1680,6 +1683,7 @@
 			<Option target="Release Win32" />
 			<Option target="Release x64" />
 		</Unit>
+		<Unit filename="Geoscape/Cord.h" />
 		<Unit filename="Geoscape/CraftErrorState.cpp">
 			<Option target="Debug Win32" />
 			<Option target="Debug x64" />
@@ -2030,6 +2034,8 @@
 			<Option target="Release Win32" />
 			<Option target="Release x64" />
 		</Unit>
+		<Unit filename="Interface/ComboBox.cpp" />
+		<Unit filename="Interface/ComboBox.h" />
 		<Unit filename="Interface/Cursor.cpp">
 			<Option target="Debug Win32" />
 			<Option target="Debug x64" />
@@ -2222,6 +2228,8 @@
 			<Option target="Release Win32" />
 			<Option target="Release x64" />
 		</Unit>
+		<Unit filename="Menu/IntroState.cpp" />
+		<Unit filename="Menu/IntroState.h" />
 		<Unit filename="Menu/LoadState.cpp">
 			<Option target="Debug Win32" />
 			<Option target="Debug x64" />
@@ -2282,6 +2290,8 @@
 			<Option target="Release Win32" />
 			<Option target="Release x64" />
 		</Unit>
+		<Unit filename="Menu/OptionsAudioState.cpp" />
+		<Unit filename="Menu/OptionsAudioState.h" />
 		<Unit filename="Menu/OptionsBaseState.cpp">
 			<Option target="Debug Win32" />
 			<Option target="Debug x64" />
@@ -2306,6 +2316,8 @@
 			<Option target="Release Win32" />
 			<Option target="Release x64" />
 		</Unit>
+		<Unit filename="Menu/OptionsConfirmState.cpp" />
+		<Unit filename="Menu/OptionsConfirmState.h" />
 		<Unit filename="Menu/OptionsControlsState.cpp">
 			<Option target="Debug Win32" />
 			<Option target="Debug x64" />
@@ -2318,30 +2330,14 @@
 			<Option target="Release Win32" />
 			<Option target="Release x64" />
 		</Unit>
-		<Unit filename="Menu/OptionsLanguageState.cpp">
-			<Option target="Debug Win32" />
-			<Option target="Debug x64" />
-			<Option target="Release Win32" />
-			<Option target="Release x64" />
-		</Unit>
-		<Unit filename="Menu/OptionsLanguageState.h">
-			<Option target="Debug Win32" />
-			<Option target="Debug x64" />
-			<Option target="Release Win32" />
-			<Option target="Release x64" />
-		</Unit>
-		<Unit filename="Menu/OptionsState.cpp">
-			<Option target="Debug Win32" />
-			<Option target="Debug x64" />
-			<Option target="Release Win32" />
-			<Option target="Release x64" />
-		</Unit>
-		<Unit filename="Menu/OptionsState.h">
-			<Option target="Debug Win32" />
-			<Option target="Debug x64" />
-			<Option target="Release Win32" />
-			<Option target="Release x64" />
-		</Unit>
+		<Unit filename="Menu/OptionsDefaultsState.cpp" />
+		<Unit filename="Menu/OptionsDefaultsState.h" />
+		<Unit filename="Menu/OptionsGeoscapeState.cpp" />
+		<Unit filename="Menu/OptionsGeoscapeState.h" />
+		<Unit filename="Menu/OptionsModsState.cpp" />
+		<Unit filename="Menu/OptionsModsState.h" />
+		<Unit filename="Menu/OptionsVideoState.cpp" />
+		<Unit filename="Menu/OptionsVideoState.h" />
 		<Unit filename="Menu/PauseState.cpp">
 			<Option target="Debug Win32" />
 			<Option target="Debug x64" />

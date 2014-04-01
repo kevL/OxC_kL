@@ -144,13 +144,14 @@ private:
 			double y1,
 			double x2,
 			double y2,
-			Sint16 Color);
+			int shade);
 	void drawVHLine(
+			Surface* surface,
 			double lon1,
 			double lat1,
 			double lon2,
 			double lat2,
-			int colour);
+			Uint8 color);
 	/// Draw flight path.
 	void drawPath(
 			Surface* surface,

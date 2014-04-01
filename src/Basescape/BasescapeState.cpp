@@ -602,7 +602,7 @@ void BasescapeState::viewRightClick(Action*)
 										_game,
 										_base));
 	else if (f->getRules()->getPsiLaboratories() > 0
-			&& Options::getBool("anytimePsiTraining")
+			&& Options::anytimePsiTraining
 			&& _base->getAvailablePsiLabs() > 0)
 		_game->pushState(new AllocatePsiTrainingState(
 													_game,

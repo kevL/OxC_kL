@@ -18,17 +18,22 @@
  */
 
 #include "NewPossibleManufactureState.h"
-#include "../Engine/Game.h"
-#include "../Engine/Palette.h"
-#include "../Engine/Language.h"
-#include "../Resource/ResourcePack.h"
-#include "../Interface/TextButton.h"
-#include "../Interface/Window.h"
-#include "../Interface/Text.h"
-#include "../Interface/TextList.h"
-#include "../Ruleset/RuleManufacture.h"
+
 #include "../Basescape/ManufactureState.h"
+
+#include "../Engine/Game.h"
+#include "../Engine/Language.h"
 #include "../Engine/Options.h"
+#include "../Engine/Palette.h"
+
+#include "../Interface/Text.h"
+#include "../Interface/TextButton.h"
+#include "../Interface/TextList.h"
+#include "../Interface/Window.h"
+
+#include "../Resource/ResourcePack.h"
+
+#include "../Ruleset/RuleManufacture.h"
 
 
 namespace OpenXcom
@@ -39,7 +44,10 @@ namespace OpenXcom
  * @param base Pointer to the base to get info from.
  * @param possibilities List of newly possible ManufactureProject
  */
-NewPossibleManufactureState::NewPossibleManufactureState(Game* game, Base* base, const std::vector<RuleManufacture*>& possibilities)
+NewPossibleManufactureState::NewPossibleManufactureState(
+		Game* game,
+		Base* base,
+		const std::vector<RuleManufacture*>& possibilities)
 	:
 		State (game),
 		_base(base)
@@ -53,7 +61,10 @@ NewPossibleManufactureState::NewPossibleManufactureState(Game* game, Base* base,
 	_lstPossibilities	= new TextList(288, 80, 16, 56);
 
 
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
+	_game->setPalette(
+				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)),
+				Palette::backPos,
+				16);
 
 	add(_window);
 	add(_btnOk);
@@ -69,12 +80,18 @@ NewPossibleManufactureState::NewPossibleManufactureState(Game* game, Base* base,
 
 	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(tr("STR_OK"));
-	_btnOk->onMouseClick((ActionHandler)&NewPossibleManufactureState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&NewPossibleManufactureState::btnOkClick, Options::keyCancel);
+	_btnOk->onMouseClick((ActionHandler)& NewPossibleManufactureState::btnOkClick);
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& NewPossibleManufactureState::btnOkClick,
+					Options::keyCancel);
+
 	_btnManufacture->setColor(Palette::blockOffset(8)+5);
 	_btnManufacture->setText(tr("STR_ALLOCATE_MANUFACTURE"));
-	_btnManufacture->onMouseClick((ActionHandler)&NewPossibleManufactureState::btnManufactureClick);
-	_btnManufacture->onKeyboardPress((ActionHandler)&NewPossibleManufactureState::btnManufactureClick, Options::keyOk);
+	_btnManufacture->onMouseClick((ActionHandler)& NewPossibleManufactureState::btnManufactureClick);
+	_btnManufacture->onKeyboardPress(
+					(ActionHandler)& NewPossibleManufactureState::btnManufactureClick,
+					Options::keyOk);
+
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
@@ -84,9 +101,15 @@ NewPossibleManufactureState::NewPossibleManufactureState(Game* game, Base* base,
 	_lstPossibilities->setColumns(1, 288);
 	_lstPossibilities->setBig();
 	_lstPossibilities->setAlign(ALIGN_CENTER);
-	for (std::vector<RuleManufacture*>::const_iterator iter = possibilities.begin (); iter != possibilities.end (); ++iter)
+
+	for (std::vector<RuleManufacture*>::const_iterator
+			iter = possibilities.begin();
+			iter != possibilities.end();
+			++iter)
 	{
-		_lstPossibilities->addRow (1, tr((*iter)->getName ()).c_str());
+		_lstPossibilities->addRow(
+								1,
+								tr((*iter)->getName ()).c_str());
 	}
 }
 
@@ -96,7 +119,10 @@ NewPossibleManufactureState::NewPossibleManufactureState(Game* game, Base* base,
 void NewPossibleManufactureState::init()
 {
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
+	_game->setPalette(
+				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)),
+				Palette::backPos,
+				16);
 }
 
 /**
@@ -115,7 +141,9 @@ void NewPossibleManufactureState::btnOkClick(Action*)
 void NewPossibleManufactureState::btnManufactureClick(Action*)
 {
 	_game->popState();
-	_game->pushState (new ManufactureState(_game, _base));
+	_game->pushState(new ManufactureState(
+										_game,
+										_base));
 }
 
 }

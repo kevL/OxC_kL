@@ -579,8 +579,8 @@ DogfightState::DogfightState(
 					static_cast<int>(_ufoFireInterval)
 					+ RNG::generate(2, static_cast<int>(reload)) / 2
 				* _timeScale);
-	if (reload < _timeScale)
-		reload = _timeScale;
+	if (reload < static_cast<Uint32>(_timeScale))
+		reload = static_cast<Uint32>(_timeScale);
 	_ufoWtimer->setInterval(reload);
 
 	_ufoEscapeTimer->onTimer((StateHandler)& DogfightState::ufoBreakOff);
@@ -591,8 +591,8 @@ DogfightState::DogfightState(
 								+ RNG::generate(0, static_cast<int>(ufoBreakOffInterval)) / 10
 								- (10 * static_cast<int>(_game->getSavedGame()->getDifficulty())))
 							* _timeScale);
-	if (ufoBreakOffInterval < _timeScale * 10)
-		ufoBreakOffInterval = _timeScale * 10;
+	if (ufoBreakOffInterval < static_cast<Uint32>(_timeScale) * 10)
+		ufoBreakOffInterval = static_cast<Uint32>(_timeScale) * 10;
 //	else
 //		ufoBreakOffInterval = RNG::generate(10, ufoBreakOffInterval);
 	_ufoEscapeTimer->setInterval(ufoBreakOffInterval);
@@ -2131,8 +2131,8 @@ void DogfightState::calculateWindowPosition()
 		}
 	}
 
-	_x += _game->getScreen()getDX();
-	_y += _game->getScreen()getDY();
+	_x += _game->getScreen()->getDX();
+	_y += _game->getScreen()->getDY();
 }
 
 /**

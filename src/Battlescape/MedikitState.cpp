@@ -31,7 +31,7 @@
 #include "../Engine/Language.h"
 #include "../Engine/Options.h"
 #include "../Engine/Palette.h"
-//kL #include "../Engine/Screen.h"
+#include "../Engine/Screen.h"
 
 #include "../Interface/Text.h"
 

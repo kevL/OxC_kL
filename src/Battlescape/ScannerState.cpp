@@ -16,23 +16,32 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "ScannerState.h"
-#include "ScannerView.h"
-#include "../Engine/InteractiveSurface.h"
-#include "../Engine/Game.h"
-#include "../Engine/Language.h"
-#include "../Engine/CrossPlatform.h"
-#include "../Engine/Action.h"
-#include "../Engine/Palette.h"
-#include "../Engine/Timer.h"
-#include "../Engine/Screen.h"
-#include "../Interface/Text.h"
-#include "../Savegame/BattleItem.h"
-#include "../Savegame/BattleUnit.h"
-#include "../Ruleset/RuleItem.h"
-#include "../Resource/ResourcePack.h"
+
 #include <iostream>
 #include <sstream>
+
+#include "ScannerView.h"
+
+#include "../Engine/Action.h"
+#include "../Engine/CrossPlatform.h"
+#include "../Engine/Game.h"
+#include "../Engine/InteractiveSurface.h"
+#include "../Engine/Language.h"
+#include "../Engine/Palette.h"
+#include "../Engine/Screen.h"
+#include "../Engine/Timer.h"
+
+#include "../Interface/Text.h"
+
+#include "../Resource/ResourcePack.h"
+
+#include "../Ruleset/RuleItem.h"
+
+#include "../Savegame/BattleItem.h"
+#include "../Savegame/BattleUnit.h"
+
 
 namespace OpenXcom
 {
@@ -42,16 +51,19 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param action Pointer to an action.
  */
-ScannerState::ScannerState (Game * game, BattleAction *action) : State (game), _action(action)
+ScannerState::ScannerState(
+		Game* game,
+		BattleAction* action)
+	:
+		State(game),
+		_action(action)
 {
-	_surface1 = new InteractiveSurface(320, 200);
-	_surface2 = new InteractiveSurface(320, 200);
-	_scannerView = new ScannerView(152, 152, 56, 24, _game, _action->actor);
+	_surface1		= new InteractiveSurface(320, 200);
+	_surface2		= new InteractiveSurface(320, 200);
+	_scannerView	= new ScannerView(152, 152, 56, 24, _game, _action->actor);
 
 	if (_game->getScreen()->getDY() > 50)
-	{
 		_screen = false;
-	}
 
 	add(_surface2);
 	add(_scannerView);
@@ -78,10 +90,12 @@ ScannerState::~ScannerState()
  * Closes the window on right-click.
  * @param action Pointer to an action.
  */
-void ScannerState::handle(Action *action)
+void ScannerState::handle(Action* action)
 {
 	State::handle(action);
-	if (action->getDetails()->type == SDL_MOUSEBUTTONDOWN && action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+
+	if (action->getDetails()->type == SDL_MOUSEBUTTONDOWN
+		&& action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
 		_game->popState();
 	}

@@ -80,10 +80,10 @@ SoldierDiedState::SoldierDiedState(
 	_btnOk->onMouseClick((ActionHandler)& SoldierDiedState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& SoldierDiedState::btnOkClick,
-					(SDLKey)Options::getInt("keyOk"));
+					Options::keyOk);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& SoldierDiedState::btnOkClick,
-					(SDLKey)Options::getInt("keyCancel"));
+					Options::keyCancel);
 
 	_txtTitle->setColor(Palette::blockOffset(8)+5);
 	_txtTitle->setBig();

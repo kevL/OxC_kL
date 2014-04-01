@@ -49,26 +49,31 @@ namespace OpenXcom
 void Screen::makeVideoFlags()
 {
 	_flags = SDL_HWSURFACE|SDL_DOUBLEBUF|SDL_HWPALETTE;
+
 	if (Options::asyncBlit)
 	{
 		_flags |= SDL_ASYNCBLIT;
 	}
+
 	if (Options::allowResize)
 	{
 		_flags |= SDL_RESIZABLE;
 	}
+
 	if (isOpenGLEnabled())
 	{
 		_flags = SDL_OPENGL;
-		SDL_GL_SetAttribute( SDL_GL_RED_SIZE, 5 );
-		SDL_GL_SetAttribute( SDL_GL_GREEN_SIZE, 5 );
-		SDL_GL_SetAttribute( SDL_GL_BLUE_SIZE, 5 );
-		SDL_GL_SetAttribute( SDL_GL_DEPTH_SIZE, 16 );
-		SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER, 1 );
+
+		SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 5);
+		SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 5);
+		SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 5);
+		SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
+		SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 	}
-	
+
 	// Handle window positioning
-	if (Options::windowedModePositionX != -1 || Options::windowedModePositionY != -1)
+	if (Options::windowedModePositionX != -1
+		|| Options::windowedModePositionY != -1)
 	{
 		std::ostringstream ss;
 		ss << "SDL_VIDEO_WINDOW_POS=" << std::dec << Options::windowedModePositionX << "," << Options::windowedModePositionY;
@@ -91,6 +96,7 @@ void Screen::makeVideoFlags()
 	{
 		_flags |= SDL_FULLSCREEN;
 	}
+
 	if (Options::borderless)
 	{
 		_flags |= SDL_NOFRAME;
@@ -101,7 +107,7 @@ void Screen::makeVideoFlags()
 		SDL_putenv(const_cast<char*>("SDL_VIDEO_CENTERED="));
 	}
 
-	_bpp = (isHQXEnabled() || isOpenGLEnabled()) ? 32 : 8;
+	_bpp = (isHQXEnabled() || isOpenGLEnabled())? 32: 8;
 	_baseWidth = Options::baseXResolution;
 	_baseHeight = Options::baseYResolution;
 }
@@ -122,7 +128,7 @@ Screen::Screen()
 		_pushPalette(false),
 		_surface(0)
 {
-	resetDisplay();	
+	resetDisplay();
 	memset(
 		deferredPalette,
 		0,

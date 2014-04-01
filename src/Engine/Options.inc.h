@@ -29,7 +29,7 @@ OPT int battleScrollSpeed, battleScrollDragButton, battleScrollDragTimeTolerance
 	battleFireSpeed, battleXcomSpeed, battleAlienSpeed, battleExplosionHeight;
 OPT bool traceAI, sneakyAI, battleScrollDragInvert, battleInstantGrenade, battleNotifyDeath, battleTooltips, battleHairBleach, battleAutoEnd,
 	strafe, showMoreStatsInInventoryView, allowPsionicCapture, skipNextTurnScreen, disableAutoEquip,
-	battleUFOExtenderAccuracy, battleConfirmFireMode, battleSmoothCamera, TFTDDamage;
+	battleUFOExtenderAccuracy, battleConfirmFireMode, battleSmoothCamera, TFTDDamage, battleRangeBasedAccuracy;
 OPT SDLKey keyBattleLeft, keyBattleRight, keyBattleUp, keyBattleDown, keyBattleLevelUp, keyBattleLevelDown, keyBattleCenterUnit, keyBattlePrevUnit, keyBattleNextUnit, keyBattleDeselectUnit,
 	keyBattleUseLeftHand, keyBattleUseRightHand, keyBattleInventory, keyBattleMap, keyBattleOptions, keyBattleEndTurn, keyBattleAbort, keyBattleStats, keyBattleKneel,
 	keyBattleReserveKneel, keyBattleReload, keyBattlePersonalLighting, keyBattleReserveNone, keyBattleReserveSnap, keyBattleReserveAimed, keyBattleReserveAuto,

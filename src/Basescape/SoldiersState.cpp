@@ -116,7 +116,7 @@ SoldiersState::SoldiersState(
 
 	_txtSoldiers->setColor(Palette::blockOffset(13)+10);
 	_txtSoldiers->setAlign(ALIGN_RIGHT);
-	std::wstringstream ss;
+	std::wostringstream ss;
 	ss << _base->getTotalSoldiers();
 	_txtSoldiers->setText(ss.str());
 
@@ -124,7 +124,7 @@ SoldiersState::SoldiersState(
 	_btnPsiTrain->setText(tr("STR_PSIONIC_TRAINING"));
 	_btnPsiTrain->onMouseClick((ActionHandler)& SoldiersState::btnPsiTrainingClick);
 	_btnPsiTrain->setVisible(
-						Options::getBool("anytimePsiTraining")
+						Options::anytimePsiTraining
 						&& _base->getAvailablePsiLabs() > 0);
 
 	_btnArmor->setColor(Palette::blockOffset(13)+10);
@@ -191,9 +191,7 @@ void SoldiersState::init()
 							(*i)->getCraftString(_game->getLanguage()).c_str());
 
 		if ((*i)->getCraft() == 0)
-		{
 			_lstSoldiers->setRowColor(row, Palette::blockOffset(15)+6);
-		}
 
 		row++;
 	}

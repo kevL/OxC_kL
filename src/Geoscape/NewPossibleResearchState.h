@@ -16,40 +16,59 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_NEWPOSSIBLERESEARCHSTATE
 #define OPENXCOM_NEWPOSSIBLERESEARCHSTATE
 
 #include "../Engine/State.h"
+
+
 namespace OpenXcom
 {
-class Game;
-class Window;
-class TextButton;
-class Text;
+
 class Base;
-class TextList;
+class Game;
 class RuleResearch;
+class Text;
+class TextButton;
+class TextList;
+class Window;
+
 
 /**
-   Window which inform the player of new possible research projects.
-   Also allow to go to the ResearchState to dispatch available scientist.
+ * Window which inform the player of new possible research projects.
+ * Also allow to go to the ResearchState to dispatch available scientist.
  */
-class NewPossibleResearchState : public State
+class NewPossibleResearchState
+	:
+		public State
 {
-	Window *_window;
-	Text *_txtTitle;
-	TextList * _lstPossibilities;
-    TextButton *_btnResearch, *_btnOk;
-	Base * _base;
-public:
-	/// Creates the NewPossibleResearch state.
-	NewPossibleResearchState(Game * game, Base * base, const std::vector<RuleResearch *> & possibilities);
-	/// Updates the palette.
-	void init();
-	/// Handler for clicking the OK button.
-	void btnOkClick(Action *action);
-	/// Handler for clicking the Allocate Research button.
-	void btnResearchClick(Action *action);
+private:
+	Base* _base;
+	Text* _txtTitle;
+	TextList* _lstPossibilities;
+    TextButton
+		* _btnResearch,
+		* _btnOk;
+	Window* _window;
+
+
+	public:
+		/// Creates the NewPossibleResearch state.
+		NewPossibleResearchState(
+				Game* game,
+				Base* base,
+				const std::vector<RuleResearch*>& possibilities);
+
+		/// Updates the palette.
+		void init();
+
+		/// Handler for clicking the OK button.
+		void btnOkClick(Action* action);
+		/// Handler for clicking the Allocate Research button.
+		void btnResearchClick(Action* action);
 };
+
 }
+
 #endif

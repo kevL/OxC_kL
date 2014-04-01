@@ -16,13 +16,17 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_OPTIONSCONTROLSSTATE_H
 #define OPENXCOM_OPTIONSCONTROLSSTATE_H
 
 #include <string>
 #include <vector>
-#include "../Engine/OptionInfo.h"
+
 #include "OptionsBaseState.h"
+
+#include "../Engine/OptionInfo.h"
+
 
 namespace OpenXcom
 {
@@ -33,28 +37,44 @@ class TextList;
  * Controls screen which allows the user to
  * customize the various key shortcuts in the game.
  */
-class OptionsControlsState : public OptionsBaseState
+class OptionsControlsState
+	:
+		public OptionsBaseState
 {
-private:
-	TextList *_lstControls;
-	std::vector<OptionInfo> _controlsGeneral, _controlsGeo, _controlsBattle;
-	int _selected;
-	OptionInfo *_selKey;
-	Uint8 _colorGroup, _colorSel, _colorNormal;
 
-	void addControls(const std::vector<OptionInfo> &keys);
+private:
+	int _selected;
+	Uint8
+		_colorGroup,
+		_colorSel,
+		_colorNormal;
+
+	OptionInfo* _selKey;
+	TextList* _lstControls;
+
+	std::vector<OptionInfo>
+		_controlsGeneral,
+		_controlsGeo,
+		_controlsBattle;
 	std::string ucWords(std::string str);
-public:
-	/// Creates the Controls state.
-	OptionsControlsState(Game *game, OptionsOrigin origin);
-	/// Cleans up the Controls state.
-	~OptionsControlsState();
-	/// Fills controls list.
-	void init();
-	/// Handler for clicking the Controls list.
-	void lstControlsClick(Action *action);
-	/// Handler for pressing a key in the Controls list.
-	void lstControlsKeyPress(Action *action);
+
+	///
+	void addControls(const std::vector<OptionInfo>& keys);
+
+
+	public:
+		/// Creates the Controls state.
+		OptionsControlsState(Game *game, OptionsOrigin origin);
+		/// Cleans up the Controls state.
+		~OptionsControlsState();
+
+		/// Fills controls list.
+		void init();
+
+		/// Handler for clicking the Controls list.
+		void lstControlsClick(Action* action);
+		/// Handler for pressing a key in the Controls list.
+		void lstControlsKeyPress(Action* action);
 };
 
 }

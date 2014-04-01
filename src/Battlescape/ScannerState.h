@@ -16,41 +16,58 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_SCANNERSTATE_H
 #define OPENXCOM_SCANNERSTATE_H
 
-#include "../Engine/State.h"
 #include "BattlescapeGame.h"
+
+#include "../Engine/State.h"
+
 
 namespace OpenXcom
 {
 
 class InteractiveSurface;
-class Timer;
 class ScannerView;
+class Timer;
 
 /**
  * The Scanner User Interface.
  */
-class ScannerState : public State
+class ScannerState
+	:
+		public State
 {
-	InteractiveSurface *_surface1, *_surface2;
-	ScannerView *_scannerView;
-	BattleAction *_action;
+private:
+	BattleAction* _action;
+	InteractiveSurface
+		* _surface1,
+		* _surface2;
+	ScannerView* _scannerView;
+	Timer* _timerAnimate;
+
 	/// Updates scanner interface.
 	void update();
-	Timer *_timerAnimate;
 	/// Handles Minimap animation.
 	void animate();
-public:
-	/// Creates the ScannerState.
-	ScannerState (Game * game, BattleAction *action);
-	~ScannerState();
-	/// Handler for right-clicking anything.
-	void handle(Action *action);
-	/// Handles timers.
-	void think ();
+
+
+	public:
+		/// Creates the ScannerState.
+		ScannerState(
+				Game* game,
+				BattleAction* action);
+		///
+		~ScannerState();
+
+		/// Handler for right-clicking anything.
+		void handle(Action* action);
+
+		/// Handles timers.
+		void think ();
 };
+
 }
 
 #endif

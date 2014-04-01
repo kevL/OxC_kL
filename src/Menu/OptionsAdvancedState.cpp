@@ -16,20 +16,26 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "OptionsAdvancedState.h"
+
+#include <algorithm>
 #include <iostream>
 #include <sstream>
-#include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
-#include "../Engine/Language.h"
-#include "../Engine/Palette.h"
-#include "../Interface/TextButton.h"
-#include "../Interface/Window.h"
-#include "../Interface/Text.h"
-#include "../Interface/TextList.h"
-#include "../Engine/Options.h"
+
 #include "../Engine/Action.h"
-#include <algorithm>
+#include "../Engine/Game.h"
+#include "../Engine/Language.h"
+#include "../Engine/Options.h"
+#include "../Engine/Palette.h"
+
+#include "../Interface/Text.h"
+#include "../Interface/TextButton.h"
+#include "../Interface/TextList.h"
+#include "../Interface/Window.h"
+
+#include "../Resource/ResourcePack.h"
+
 
 namespace OpenXcom
 {
@@ -39,18 +45,22 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param origin Game section that originated this state.
  */
-OptionsAdvancedState::OptionsAdvancedState(Game *game, OptionsOrigin origin) : OptionsBaseState(game, origin)
+OptionsAdvancedState::OptionsAdvancedState(
+		Game* game,
+		OptionsOrigin origin)
+	:
+		OptionsBaseState(
+			game,
+			origin)
 {
 	setCategory(_btnAdvanced);
 
-	// Create objects
 	_lstOptions = new TextList(200, 136, 94, 8);
-	
+
 	add(_lstOptions);
 
 	centerAllSurfaces();
 
-	// Set up objects
 	_lstOptions->setAlign(ALIGN_RIGHT, 1);
 	_lstOptions->setColumns(2, 180, 20);
 	_lstOptions->setColor(Palette::blockOffset(8)+10);
@@ -84,37 +94,61 @@ OptionsAdvancedState::OptionsAdvancedState(Game *game, OptionsOrigin origin) : O
 	_settingBoolSet.push_back(std::pair<std::string, bool*>("TFTDDamage", &Options::TFTDDamage));
 	_settingBoolSet.push_back(std::pair<std::string, bool*>("battleSmoothCamera", &Options::battleSmoothCamera));
 	_settingBoolSet.push_back(std::pair<std::string, bool*>("battleConfirmFireMode", &Options::battleConfirmFireMode));
+	_settingBoolSet.push_back(std::pair<std::string, bool*>("battleRangeBasedAccuracy", &Options::battleRangeBasedAccuracy)); // kL
 
 	_boolQuantity = _settingBoolSet.size();
+
 	int sel = 0;
-	for (std::vector< std::pair<std::string, bool*> >::iterator i = _settingBoolSet.begin(); i != _settingBoolSet.end(); ++i)
+	for (std::vector<std::pair<std::string, bool*> >::iterator
+			i = _settingBoolSet.begin();
+			i != _settingBoolSet.end();
+			++i)
 	{
 		std::string settingName = i->first;
-		std::wstring setting =  *i->second ? tr("STR_YES").c_str() : tr("STR_NO").c_str();
-		transform(settingName.begin(), settingName.end(), settingName.begin(), toupper);
-		_lstOptions->addRow(2, tr("STR_" + settingName).c_str(), setting.c_str());
+		std::wstring setting =  *i->second? tr("STR_YES").c_str(): tr("STR_NO").c_str();
+		transform(
+				settingName.begin(),
+				settingName.end(),
+				settingName.begin(),
+				toupper);
+		_lstOptions->addRow(
+							2,
+							tr("STR_" + settingName).c_str(),
+							setting.c_str());
+
 		++sel;
 	}
-	
+
 	_settingIntSet.push_back(std::pair<std::string, int*>("battleExplosionHeight", &Options::battleExplosionHeight));
 	_settingIntSet.push_back(std::pair<std::string, int*>("autosave", &Options::autosave));
 	_settingIntSet.push_back(std::pair<std::string, int*>("maxFrameSkip", &Options::maxFrameSkip));
 
-	for (std::vector<std::pair<std::string, int*> >::iterator i = _settingIntSet.begin(); i != _settingIntSet.end(); ++i)
+	for (std::vector<std::pair<std::string, int*> >::iterator
+			i = _settingIntSet.begin();
+			i != _settingIntSet.end();
+			++i)
 	{
 		std::string settingName = i->first;
 		std::wostringstream ss;
 		ss << *i->second;
-		transform(settingName.begin(), settingName.end(), settingName.begin(), toupper);
-		_lstOptions->addRow(2, tr("STR_" + settingName).c_str(), ss.str().c_str());
+		transform(
+				settingName.begin(),
+				settingName.end(),
+				settingName.begin(),
+				toupper);
+		_lstOptions->addRow(
+							2,
+							tr("STR_" + settingName).c_str(),
+							ss.str().c_str());
+
 		++sel;
 	}
 
 	_lstOptions->setSelectable(true);
 	_lstOptions->setBackground(_window);
-	_lstOptions->onMousePress((ActionHandler)&OptionsAdvancedState::lstOptionsPress);
-	_lstOptions->onMouseOver((ActionHandler)&OptionsAdvancedState::lstOptionsMouseOver);
-	_lstOptions->onMouseOut((ActionHandler)&OptionsAdvancedState::lstOptionsMouseOut);
+	_lstOptions->onMousePress((ActionHandler)& OptionsAdvancedState::lstOptionsPress);
+	_lstOptions->onMouseOver((ActionHandler)& OptionsAdvancedState::lstOptionsMouseOver);
+	_lstOptions->onMouseOut((ActionHandler)& OptionsAdvancedState::lstOptionsMouseOut);
 }
 
 /**
@@ -122,15 +156,16 @@ OptionsAdvancedState::OptionsAdvancedState(Game *game, OptionsOrigin origin) : O
  */
 OptionsAdvancedState::~OptionsAdvancedState()
 {
-	
 }
 
-void OptionsAdvancedState::lstOptionsPress(Action *action)
+void OptionsAdvancedState::lstOptionsPress(Action* action)
 {
-	if (action->getDetails()->button.button != SDL_BUTTON_LEFT && action->getDetails()->button.button != SDL_BUTTON_RIGHT)
+	if (action->getDetails()->button.button != SDL_BUTTON_LEFT
+		&& action->getDetails()->button.button != SDL_BUTTON_RIGHT)
 	{
 		return;
 	}
+
 	size_t sel = _lstOptions->getSelectedRow();
 	std::wstring settingText = L"";
 	if (sel < _boolQuantity)
@@ -143,71 +178,74 @@ void OptionsAdvancedState::lstOptionsPress(Action *action)
 		size_t intSel = sel - _boolQuantity;
 		int increment = 1;
 		if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
-		{
 			increment = -1;
-		}
+
 		std::wostringstream ss;
+
 		switch (intSel)
 		{
-		case 0: // explosion height
-			*_settingIntSet.at(intSel).second += increment;
-			if (*_settingIntSet.at(intSel).second == 4)
-			{
-				*_settingIntSet.at(intSel).second = 0;
-			}
-			if (*_settingIntSet.at(intSel).second == -1)
-			{
-				*_settingIntSet.at(intSel).second = 3;
-			}
-			ss << *_settingIntSet.at(intSel).second;
+			case 0: // explosion height
+				*_settingIntSet.at(intSel).second += increment;
+				if (*_settingIntSet.at(intSel).second == 4)
+					*_settingIntSet.at(intSel).second = 0;
+
+				if (*_settingIntSet.at(intSel).second == -1)
+					*_settingIntSet.at(intSel).second = 3;
+
+				ss << *_settingIntSet.at(intSel).second;
 			break;
-		case 1: // autosave
-			*_settingIntSet.at(intSel).second = ++*_settingIntSet.at(intSel).second % 4;
-			ss << *_settingIntSet.at(intSel).second;
+			case 1: // autosave
+				*_settingIntSet.at(intSel).second = ++*_settingIntSet.at(intSel).second %4;
+				ss << *_settingIntSet.at(intSel).second;
 			break;
-		case 2: // frame skip
-			*_settingIntSet.at(intSel).second += increment;
-			if (*_settingIntSet.at(intSel).second > 10)
-			{
-				*_settingIntSet.at(intSel).second = 0;
-			}
-			if (*_settingIntSet.at(intSel).second < 0)
-			{
-				*_settingIntSet.at(intSel).second = 10;
-			}
-			ss << *_settingIntSet.at(intSel).second;
+			case 2: // frame skip
+				*_settingIntSet.at(intSel).second += increment;
+				if (*_settingIntSet.at(intSel).second > 10)
+					*_settingIntSet.at(intSel).second = 0;
+
+				if (*_settingIntSet.at(intSel).second < 0)
+					*_settingIntSet.at(intSel).second = 10;
+
+				ss << *_settingIntSet.at(intSel).second;
 			break;
-		default:
-			*_settingIntSet.at(intSel).second += increment;
-			ss << *_settingIntSet.at(intSel).second;
+			default:
+				*_settingIntSet.at(intSel).second += increment;
+				ss << *_settingIntSet.at(intSel).second;
 			break;
 		}
+
 		settingText = ss.str();
 	}
+
 	_lstOptions->setCellText(sel, 1, settingText.c_str());
 }
 
-void OptionsAdvancedState::lstOptionsMouseOver(Action *)
+void OptionsAdvancedState::lstOptionsMouseOver(Action*)
 {
 	size_t sel = _lstOptions->getSelectedRow();
 	std::ostringstream ss;
 	std::string settingName;
-	if (sel < _boolQuantity)
-	{
-		settingName = _settingBoolSet.at(sel).first;
-	}
-	else
-	{
-		settingName = _settingIntSet.at(sel - _boolQuantity).first;
-	}
 
-	transform(settingName.begin(), settingName.end(), settingName.begin(), toupper);
+	if (sel < _boolQuantity)
+		settingName = _settingBoolSet.at(sel).first;
+	else
+		settingName = _settingIntSet.at(sel - _boolQuantity).first;
+
+	transform(
+			settingName.begin(),
+			settingName.end(),
+			settingName.begin(),
+			toupper);
 	ss << "STR_" << settingName.c_str() << "_DESC";
 	_txtTooltip->setText(tr(ss.str()).c_str());
 }
 
-void OptionsAdvancedState::lstOptionsMouseOut(Action *)
+/**
+ *
+ */
+void OptionsAdvancedState::lstOptionsMouseOut(Action*)
 {
 	_txtTooltip->setText(L"");
 }
+
 }

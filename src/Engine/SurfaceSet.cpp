@@ -336,6 +336,9 @@ void SurfaceSet::setPalette(
 	}
 }
 
+/**
+ *
+ */
 std::map<int, Surface*>* SurfaceSet::getFrames()
 {
 	return &_frames;

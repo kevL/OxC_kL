@@ -52,7 +52,7 @@ protected:
 		_x,
 		_y;
 
-//kL	std::string _tooltip;
+	std::string _tooltip;
 
 	SDL_Rect _crop;
 	SDL_Surface* _surface;
@@ -321,9 +321,9 @@ protected:
 		void invalidate();
 
 		/// Gets the tooltip of the surface.
-//kL		std::string getTooltip() const;
+		std::string getTooltip() const;
 		/// Sets the tooltip of the surface.
-//kL		void setTooltip(const std::string& tooltip);
+		void setTooltip(const std::string& tooltip);
 };
 
 }

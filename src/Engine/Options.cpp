@@ -158,7 +158,8 @@ void create()
 	_info.push_back(OptionInfo("battleConfirmFireMode", &battleConfirmFireMode, false));
 	_info.push_back(OptionInfo("battleSmoothCamera", &battleSmoothCamera, false));
 	_info.push_back(OptionInfo("TFTDDamage", &TFTDDamage, false));
-	
+	_info.push_back(OptionInfo("battleRangeBasedAccuracy", &battleRangeBasedAccuracy, false));
+
 	// controls
 	_info.push_back(OptionInfo("keyOk", &keyOk, SDLK_RETURN, "STR_OK", "STR_GENERAL"));
 	_info.push_back(OptionInfo("keyCancel", &keyCancel, SDLK_ESCAPE, "STR_CANCEL", "STR_GENERAL"));
@@ -243,7 +244,10 @@ void create()
  */
 void resetDefault()
 {
-	for (std::vector<OptionInfo>::iterator i = _info.begin(); i != _info.end(); ++i)
+	for (std::vector<OptionInfo>::iterator
+			i = _info.begin();
+			i != _info.end();
+			++i)
 	{
 		i->reset();
 	}
@@ -260,51 +264,62 @@ void resetDefault()
  * @param argc Number of arguments.
  * @param argv Array of argument strings.
  */
-void loadArgs(int argc, char *argv[])
+void loadArgs(
+		int argc,
+		char *argv[])
 {
-	for (int i = 1; i < argc; ++i)
+	for (int
+			i = 1;
+			i < argc;
+			++i)
 	{
 		std::string arg = argv[i];
-		if ((arg[0] == '-' || arg[0] == '/') && arg.length() > 1)
+		if ((arg[0] == '-'
+				|| arg[0] == '/')
+			&& arg.length() > 1)
 		{
 			std::string argname;
-			if (arg[1] == '-' && arg.length() > 2)
-				argname = arg.substr(2, arg.length()-1);
+			if (arg[1] == '-'
+				&& arg.length() > 2)
+			{
+				argname = arg.substr(2, arg.length() - 1);
+			}
 			else
-				argname = arg.substr(1, arg.length()-1);
-			std::transform(argname.begin(), argname.end(), argname.begin(), ::tolower);
+				argname = arg.substr(1, arg.length() - 1);
+
+			std::transform(
+						argname.begin(),
+						argname.end(),
+						argname.begin(),
+						::tolower);
+
 			if (argc > i + 1)
 			{
 				if (argname == "data")
-				{
-					_dataFolder = CrossPlatform::endPath(argv[i+1]);
-				}
+					_dataFolder = CrossPlatform::endPath(argv[i + 1]);
 				else if (argname == "user")
-				{
-					_userFolder = CrossPlatform::endPath(argv[i+1]);
-				}
+					_userFolder = CrossPlatform::endPath(argv[i + 1]);
 				else
-				{
 					//save this command line option for now, we will apply it later
-					_commandLine[argname]= argv[i+1];
-				}
+					_commandLine[argname]= argv[i + 1];
 			}
 			else
-			{
 				Log(LOG_WARNING) << "Unknown option: " << argname;
-			}
 		}
 	}
 }
 
-/*
+/**
  * Displays command-line help when appropriate.
  * @param argc Number of arguments.
  * @param argv Array of argument strings.
  */
-bool showHelp(int argc, char *argv[])
+bool showHelp(
+		int argc,
+		char *argv[])
 {
 	std::ostringstream help;
+
 	help << "OpenXcom v" << OPENXCOM_VERSION_SHORT << std::endl;
 	help << "Usage: openxcom [OPTION]..." << std::endl << std::endl;
 	help << "-data PATH" << std::endl;
@@ -316,24 +331,42 @@ bool showHelp(int argc, char *argv[])
 	help << "-help" << std::endl;
 	help << "-?" << std::endl;
 	help << "        show command-line help" << std::endl;
-	for (int i = 1; i < argc; ++i)
+
+	for (int
+			i = 1;
+			i < argc;
+			++i)
 	{
 		std::string arg = argv[i];
-		if ((arg[0] == '-' || arg[0] == '/') && arg.length() > 1)
+		if ((arg[0] == '-'
+				|| arg[0] == '/')
+			&& arg.length() > 1)
 		{
 			std::string argname;
-			if (arg[1] == '-' && arg.length() > 2)
+			if (arg[1] == '-'
+				&& arg.length() > 2)
+			{
 				argname = arg.substr(2, arg.length()-1);
+			}
 			else
 				argname = arg.substr(1, arg.length()-1);
-			std::transform(argname.begin(), argname.end(), argname.begin(), ::tolower);
-			if (argname == "help" || argname == "?")
+
+			std::transform(
+						argname.begin(),
+						argname.end(),
+						argname.begin(),
+						::tolower);
+
+			if (argname == "help"
+				|| argname == "?")
 			{
 				std::cout << help.str();
+
 				return true;
 			}
 		}
 	}
+
 	return false;
 }
 
@@ -344,10 +377,13 @@ bool showHelp(int argc, char *argv[])
  * @param argv Array of argument strings.
  * @return Was initialized.
  */
-bool init(int argc, char *argv[])
+bool init(
+		int argc,
+		char *argv[])
 {
 	if (showHelp(argc, argv))
 		return false;
+
 	create();
 	resetDefault();
 	loadArgs(argc, argv);
@@ -362,17 +398,24 @@ bool init(int argc, char *argv[])
 	{
 		throw Exception(s + " not found");
 	}
+
 	fflush(file);
 	fclose(file);
 	Log(LOG_INFO) << "Data folder is: " << _dataFolder;
 	Log(LOG_INFO) << "Data search is: ";
-	for (std::vector<std::string>::iterator i = _dataList.begin(); i != _dataList.end(); ++i)
+
+	for (std::vector<std::string>::iterator
+			i = _dataList.begin();
+			i != _dataList.end();
+			++i)
 	{
 		Log(LOG_INFO) << "- " << *i;
 	}
+
 	Log(LOG_INFO) << "User folder is: " << _userFolder;
 	Log(LOG_INFO) << "Config folder is: " << _configFolder;
-	Log(LOG_INFO) << "Options loaded successfully.";
+	Log(LOG_INFO) << "Options loaded.";
+
 	return true;
 }
 
@@ -385,20 +428,23 @@ void setFolders()
 {
 	_dataList = CrossPlatform::findDataFolders();
     if (_dataFolder != "")
-    {
 		_dataList.insert(_dataList.begin(), _dataFolder);
-    }
+
     if (_userFolder == "")
     {
         std::vector<std::string> user = CrossPlatform::findUserFolders();
         _configFolder = CrossPlatform::findConfigFolder();
 
 		// Look for an existing user folder
-        for (std::vector<std::string>::iterator i = user.begin(); i != user.end(); ++i)
+        for (std::vector<std::string>::iterator
+				i = user.begin();
+				i != user.end();
+				++i)
 		{
 			if (CrossPlatform::folderExists(*i))
 			{
 				_userFolder = *i;
+
 				break;
 			}
 		}
@@ -406,11 +452,15 @@ void setFolders()
 		// Set up folders
 		if (_userFolder == "")
 		{
-			for (std::vector<std::string>::iterator i = user.begin(); i != user.end(); ++i)
+			for (std::vector<std::string>::iterator
+					i = user.begin();
+					i != user.end();
+					++i)
 			{
 				if (CrossPlatform::createFolder(*i))
 				{
 					_userFolder = *i;
+
 					break;
 				}
 			}
@@ -418,9 +468,7 @@ void setFolders()
 	}
 
 	if (_configFolder == "")
-	{
 		_configFolder = _userFolder;
-	}
 }
 
 /**
@@ -450,7 +498,10 @@ void updateOptions()
 
     // now apply options set on the command line, overriding defaults and those loaded from config file
 	//if (!_commandLine.empty())
-    for (std::vector<OptionInfo>::iterator i = _info.begin(); i != _info.end(); ++i)
+    for (std::vector<OptionInfo>::iterator
+			i = _info.begin();
+			i != _info.end();
+			++i)
 	{
 		i->load(_commandLine);
 	}
@@ -475,6 +526,7 @@ void load(const std::string &filename)
 		{
 			i->load(doc["options"]);
 		}
+
 		purchaseExclusions = doc["purchaseexclusions"].as< std::vector<std::string> >(purchaseExclusions);
 		rulesets = doc["rulesets"].as< std::vector<std::string> >(rulesets);
 	}
@@ -495,18 +547,26 @@ void save(const std::string &filename)
 	if (!sav)
 	{
 		Log(LOG_WARNING) << "Failed to save " << filename << ".cfg";
+
 		return;
 	}
-	YAML::Emitter out;
 
-	YAML::Node doc, node;
-	for (std::vector<OptionInfo>::iterator i = _info.begin(); i != _info.end(); ++i)
+	YAML::Emitter out;
+	YAML::Node
+		doc,
+		node;
+
+	for (std::vector<OptionInfo>::iterator
+			i = _info.begin();
+			i != _info.end();
+			++i)
 	{
 		i->save(node);
 	}
-	doc["options"] = node;
-	doc["purchaseexclusions"] = purchaseExclusions;
-	doc["rulesets"] = rulesets;
+
+	doc["options"]				= node;
+	doc["purchaseexclusions"]	= purchaseExclusions;
+	doc["rulesets"]				= rulesets;
 	out << doc;
 
 	sav << out.c_str();
@@ -528,7 +588,7 @@ std::string getDataFolder()
  * and X-Com files are loaded from.
  * @param folder Full path to Data folder.
  */
-void setDataFolder(const std::string &folder)
+void setDataFolder(const std::string& folder)
 {
 	_dataFolder = folder;
 }
@@ -537,7 +597,7 @@ void setDataFolder(const std::string &folder)
  * Returns the game's list of possible Data folders.
  * @return List of Data paths.
  */
-const std::vector<std::string> &getDataList()
+const std::vector<std::string>& getDataList()
 {
 	return _dataList;
 }
@@ -567,7 +627,7 @@ std::string getConfigFolder()
  * Returns the game's list of all available option information.
  * @return List of OptionInfo's.
  */
-const std::vector<OptionInfo> &getOptionInfo()
+const std::vector<OptionInfo>& getOptionInfo()
 {
 	return _info;
 }
@@ -577,7 +637,7 @@ const std::vector<OptionInfo> &getOptionInfo()
  * testing a new display setup.
  */
 void switchDisplay()
-{	
+{
 	std::swap(displayWidth, newDisplayWidth);
 	std::swap(displayHeight, newDisplayHeight);
 	std::swap(useOpenGL, newOpenGL);

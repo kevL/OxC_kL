@@ -110,10 +110,10 @@ StoresMatrixState::StoresMatrixState(
 	_btnOk->onMouseClick((ActionHandler)& StoresMatrixState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& StoresMatrixState::btnOkClick,
-					(SDLKey)Options::getInt("keyOk"));
+					Options::keyOk);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& StoresMatrixState::btnOkClick,
-					(SDLKey)Options::getInt("keyCancel"));
+					Options::keyCancel);
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
@@ -163,7 +163,7 @@ StoresMatrixState::StoresMatrixState(
 		iter	= 0,
 		qty[8]	= { 0, 0, 0, 0, 0, 0, 0, 0 };
 
-	std::wstringstream
+	std::wostringstream
 		ss1,
 		ss2,
 		ss3,

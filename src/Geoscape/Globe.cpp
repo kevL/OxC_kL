@@ -2312,12 +2312,14 @@ void Globe::drawPath(
 
 	if (fabs(sx)<0.01)
 	{
-		seg = abs( sy/(2*M_PI)*48 );
+//kL		seg = abs( sy/(2*M_PI)*48 );
+		seg = abs( sy / (2.0 * M_PI) * 48.0 ); // kL
 		if (seg == 0) ++seg;
 	}
 	else
 	{
-		seg = abs( sx/(2*M_PI)*96 );
+//kL		seg = abs( sx/(2*M_PI)*96 );
+		seg = abs( sx / (2.0 * M_PI) * 96.0 ); // kL
 		if (seg == 0) ++seg;
 	}
 	sx /= seg;

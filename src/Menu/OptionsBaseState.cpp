@@ -16,23 +16,12 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "OptionsBaseState.h"
+
 #include <SDL.h>
-#include "../Engine/Game.h"
-#include "../Engine/Options.h"
-#include "../Engine/Palette.h"
-#include "../Engine/Language.h"
-#include "../Engine/Screen.h"
-#include "../Resource/ResourcePack.h"
-#include "../Savegame/SavedGame.h"
-#include "../Savegame/SavedBattleGame.h"
-#include "../Interface/Window.h"
-#include "../Interface/TextButton.h"
-#include "../Interface/Text.h"
-#include "../Engine/Action.h"
+
 #include "MainMenuState.h"
-#include "../Geoscape/GeoscapeState.h"
-#include "../Battlescape/BattlescapeState.h"
 #include "OptionsVideoState.h"
 #include "OptionsAudioState.h"
 #include "OptionsControlsState.h"
@@ -44,6 +33,27 @@
 #include "OptionsConfirmState.h"
 #include "StartState.h"
 
+#include "../Battlescape/BattlescapeState.h"
+
+#include "../Engine/Action.h"
+#include "../Engine/Game.h"
+#include "../Engine/Language.h"
+#include "../Engine/Options.h"
+#include "../Engine/Palette.h"
+#include "../Engine/Screen.h"
+
+#include "../Geoscape/GeoscapeState.h"
+
+#include "../Interface/Window.h"
+#include "../Interface/TextButton.h"
+#include "../Interface/Text.h"
+
+#include "../Resource/ResourcePack.h"
+
+#include "../Savegame/SavedBattleGame.h"
+#include "../Savegame/SavedGame.h"
+
+
 namespace OpenXcom
 {
 
@@ -52,24 +62,28 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param origin Game section that originated this state.
  */
-OptionsBaseState::OptionsBaseState(Game *game, OptionsOrigin origin) : State(game), _origin(origin)
+OptionsBaseState::OptionsBaseState(
+		Game* game,
+		OptionsOrigin origin)
+	:
+		State(game),
+		_origin(origin)
 {
-	// Create objects
 	_window = new Window(this, 320, 200, 0, 0);
 
-	_btnVideo = new TextButton(80, 16, 8, 8);
-	_btnAudio = new TextButton(80, 16, 8, 28);
-	_btnControls = new TextButton(80, 16, 8, 48);
-	_btnGeoscape = new TextButton(80, 16, 8, 68);
-	_btnBattlescape = new TextButton(80, 16, 8, 88);
-	_btnAdvanced = new TextButton(80, 16, 8, 108);
-	_btnMods = new TextButton(80, 16, 8, 128);
-	
-	_btnOk = new TextButton(100, 16, 8, 176);
-	_btnCancel = new TextButton(100, 16, 110, 176);
-	_btnDefault = new TextButton(100, 16, 212, 176);
+	_btnVideo		= new TextButton(80, 16, 8, 8);
+	_btnAudio		= new TextButton(80, 16, 8, 28);
+	_btnControls	= new TextButton(80, 16, 8, 48);
+	_btnGeoscape	= new TextButton(80, 16, 8, 68);
+	_btnBattlescape	= new TextButton(80, 16, 8, 88);
+	_btnAdvanced	= new TextButton(80, 16, 8, 108);
+	_btnMods		= new TextButton(80, 16, 8, 128);
 
-	_txtTooltip = new Text(305, 25, 8, 148);
+	_btnOk			= new TextButton(100, 16, 8, 176);
+	_btnCancel		= new TextButton(100, 16, 110, 176);
+	_btnDefault		= new TextButton(100, 16, 212, 176);
+
+	_txtTooltip		= new Text(305, 25, 8, 148);
 
 	add(_window);
 
@@ -87,52 +101,51 @@ OptionsBaseState::OptionsBaseState(Game *game, OptionsOrigin origin) : State(gam
 
 	add(_txtTooltip);
 
-	// Set up objects
 	_window->setColor(Palette::blockOffset(8)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
 	_btnVideo->setColor(Palette::blockOffset(8)+5);
 	_btnVideo->setText(tr("STR_VIDEO"));
-	_btnVideo->onMouseClick((ActionHandler)&OptionsBaseState::btnGroupClick);
+	_btnVideo->onMouseClick((ActionHandler)& OptionsBaseState::btnGroupClick);
 
 	_btnAudio->setColor(Palette::blockOffset(8)+5);
 	_btnAudio->setText(tr("STR_AUDIO"));
-	_btnAudio->onMouseClick((ActionHandler)&OptionsBaseState::btnGroupClick);
+	_btnAudio->onMouseClick((ActionHandler)& OptionsBaseState::btnGroupClick);
 
 	_btnControls->setColor(Palette::blockOffset(8)+5);
 	_btnControls->setText(tr("STR_CONTROLS"));
-	_btnControls->onMouseClick((ActionHandler)&OptionsBaseState::btnGroupClick);
+	_btnControls->onMouseClick((ActionHandler)& OptionsBaseState::btnGroupClick);
 
 	_btnGeoscape->setColor(Palette::blockOffset(8)+5);
 	_btnGeoscape->setText(tr("STR_GEOSCAPE_UC"));
-	_btnGeoscape->onMouseClick((ActionHandler)&OptionsBaseState::btnGroupClick);
+	_btnGeoscape->onMouseClick((ActionHandler)& OptionsBaseState::btnGroupClick);
 
 	_btnBattlescape->setColor(Palette::blockOffset(8)+5);
 	_btnBattlescape->setText(tr("STR_BATTLESCAPE_UC"));
-	_btnBattlescape->onMouseClick((ActionHandler)&OptionsBaseState::btnGroupClick);
+	_btnBattlescape->onMouseClick((ActionHandler)& OptionsBaseState::btnGroupClick);
 
 	_btnAdvanced->setColor(Palette::blockOffset(8)+5);
 	_btnAdvanced->setText(tr("STR_ADVANCED"));
-	_btnAdvanced->onMouseClick((ActionHandler)&OptionsBaseState::btnGroupClick);
+	_btnAdvanced->onMouseClick((ActionHandler)& OptionsBaseState::btnGroupClick);
 
 	_btnMods->setColor(Palette::blockOffset(8)+5);
 	_btnMods->setText(tr("STR_MODS"));
-	_btnMods->onMouseClick((ActionHandler)&OptionsBaseState::btnGroupClick);
+	_btnMods->onMouseClick((ActionHandler)& OptionsBaseState::btnGroupClick);
 	_btnMods->setVisible(_origin == OPT_MENU);
 
 	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(tr("STR_OK"));
-	_btnOk->onMouseClick((ActionHandler)&OptionsBaseState::btnOkClick);
-	//_btnOk->onKeyboardPress((ActionHandler)&OptionsBaseState::btnOkClick, Options::keyOk);
+	_btnOk->onMouseClick((ActionHandler)& OptionsBaseState::btnOkClick);
+//	_btnOk->onKeyboardPress((ActionHandler)& OptionsBaseState::btnOkClick, Options::keyOk);
 
 	_btnCancel->setColor(Palette::blockOffset(8)+5);
 	_btnCancel->setText(tr("STR_CANCEL"));
-	_btnCancel->onMouseClick((ActionHandler)&OptionsBaseState::btnCancelClick);
-	//_btnCancel->onKeyboardPress((ActionHandler)&OptionsBaseState::btnCancelClick, Options::keyCancel);
+	_btnCancel->onMouseClick((ActionHandler)& OptionsBaseState::btnCancelClick);
+//	_btnCancel->onKeyboardPress((ActionHandler)& OptionsBaseState::btnCancelClick, Options::keyCancel);
 
 	_btnDefault->setColor(Palette::blockOffset(8)+5);
 	_btnDefault->setText(tr("STR_RESTORE_DEFAULTS"));
-	_btnDefault->onMouseClick((ActionHandler)&OptionsBaseState::btnDefaultClick);
+	_btnDefault->onMouseClick((ActionHandler)& OptionsBaseState::btnDefaultClick);
 
 	_txtTooltip->setColor(Palette::blockOffset(8)+5);
 	_txtTooltip->setWordWrap(true);
@@ -143,7 +156,6 @@ OptionsBaseState::OptionsBaseState(Game *game, OptionsOrigin origin) : State(gam
  */
 OptionsBaseState::~OptionsBaseState()
 {
-
 }
 
 /**
@@ -152,18 +164,17 @@ OptionsBaseState::~OptionsBaseState()
 void OptionsBaseState::init()
 {
 	if (_origin == OPT_BATTLESCAPE)
-	{
 		applyBattlescapeTheme();
-	}
 }
 
 /**
  * Handles the pressed-button state for the category buttons.
  * @param button Button to press.
  */
-void OptionsBaseState::setCategory(TextButton *button)
+void OptionsBaseState::setCategory(TextButton* button)
 {
 	_group = button;
+
 	_btnVideo->setGroup(&_group);
 	_btnAudio->setGroup(&_group);
 	_btnControls->setGroup(&_group);
@@ -177,45 +188,47 @@ void OptionsBaseState::setCategory(TextButton *button)
  * Saves the new options and returns to the proper origin screen..
  * @param action Pointer to an action.
  */
-void OptionsBaseState::btnOkClick(Action *)
+void OptionsBaseState::btnOkClick(Action*)
 {
 	Options::switchDisplay();
 	Options::save();
+
 	_game->loadLanguage(Options::language);
+
 	SDL_WM_GrabInput(Options::captureMouse);
+
 	_game->getScreen()->resetDisplay();
-	_game->setVolume(Options::soundVolume, Options::musicVolume);
+	_game->setVolume(
+				Options::soundVolume,
+				Options::musicVolume);
+
 	if (Options::reload)
-	{
 		_game->setState(new StartState(_game));
-	}
 	else
 	{
 		if (_origin == OPT_MENU)
-		{
 			_game->setState(new MainMenuState(_game));
-		}
 		else if (_origin == OPT_GEOSCAPE)
-		{
 			_game->setState(new GeoscapeState(_game));
-		}
 		else if (_origin == OPT_BATTLESCAPE)
 		{
 			_game->setState(new GeoscapeState(_game));
-			BattlescapeState *bs = new BattlescapeState(_game);
+			BattlescapeState* bs = new BattlescapeState(_game);
 			_game->pushState(bs);
 			_game->getSavedGame()->getSavedBattle()->setBattleState(bs);
 		}
 
 		// Confirm any video options changes
-		if (Options::displayWidth != Options::newDisplayWidth ||
-			Options::displayHeight != Options::newDisplayHeight ||
-			Options::useOpenGL != Options::newOpenGL ||
-			Options::useScaleFilter != Options::newScaleFilter ||
-			Options::useHQXFilter != Options::newHQXFilter ||
-			Options::useOpenGLShader != Options::newOpenGLShader)
+		if (Options::displayWidth != Options::newDisplayWidth
+			|| Options::displayHeight != Options::newDisplayHeight
+			|| Options::useOpenGL != Options::newOpenGL
+			|| Options::useScaleFilter != Options::newScaleFilter
+			|| Options::useHQXFilter != Options::newHQXFilter
+			|| Options::useOpenGLShader != Options::newOpenGLShader)
 		{
-			_game->pushState(new OptionsConfirmState(_game, _origin));
+			_game->pushState(new OptionsConfirmState(
+												_game,
+												_origin));
 		}
 	}
 }
@@ -224,10 +237,14 @@ void OptionsBaseState::btnOkClick(Action *)
  * Loads previous options and returns to the previous screen.
  * @param action Pointer to an action.
  */
-void OptionsBaseState::btnCancelClick(Action *)
+void OptionsBaseState::btnCancelClick(Action*)
 {
 	Options::load();
-	_game->setVolume(Options::soundVolume, Options::musicVolume);
+
+	_game->setVolume(
+				Options::soundVolume,
+				Options::musicVolume);
+
 	_game->popState();
 }
 
@@ -235,17 +252,24 @@ void OptionsBaseState::btnCancelClick(Action *)
  * Restores the Options to default settings.
  * @param action Pointer to an action.
  */
-void OptionsBaseState::btnDefaultClick(Action *action)
+void OptionsBaseState::btnDefaultClick(Action* action)
 {
-	_game->pushState(new OptionsDefaultsState(_game, _origin, this));
+	_game->pushState(new OptionsDefaultsState(
+											_game,
+											_origin,
+											this));
 }
 
-void OptionsBaseState::btnGroupClick(Action *action)
+/**
+ *
+ */
+void OptionsBaseState::btnGroupClick(Action* action)
 {
-	Surface *sender = action->getSender();
+	Surface* sender = action->getSender();
 	//if (sender != _group)
 	{
 		_game->popState();
+
 		if (sender == _btnVideo)
 		{
 			_game->pushState(new OptionsVideoState(_game, _origin));
@@ -281,7 +305,7 @@ void OptionsBaseState::btnGroupClick(Action *action)
 * Shows a tooltip for the appropriate button.
 * @param action Pointer to an action.
 */
-void OptionsBaseState::txtTooltipIn(Action *action)
+void OptionsBaseState::txtTooltipIn(Action* action)
 {
 	_currentTooltip = action->getSender()->getTooltip();
 	_txtTooltip->setText(tr(_currentTooltip));
@@ -291,7 +315,7 @@ void OptionsBaseState::txtTooltipIn(Action *action)
 * Clears the tooltip text.
 * @param action Pointer to an action.
 */
-void OptionsBaseState::txtTooltipOut(Action *action)
+void OptionsBaseState::txtTooltipOut(Action* action)
 {
 	if (_currentTooltip == action->getSender()->getTooltip())
 	{

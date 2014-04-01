@@ -57,6 +57,7 @@ protected:
 	void btnSectionClick(Action* action);
 	void btnOkClick(Action* action);
 
+
 	public:
 		UfopaediaStartState(Game* game);
 		virtual ~UfopaediaStartState();

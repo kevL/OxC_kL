@@ -58,15 +58,16 @@ SackSoldierState::SackSoldierState(
 {
 	_screen = false;
 
-	// Create objects
 	_window		= new Window(this, 152, 80, 84, 60);
 	_txtTitle	= new Text(142, 9, 89, 75);
 	_txtSoldier	= new Text(142, 9, 89, 85);
 	_btnCancel	= new TextButton(44, 16, 100, 115);
 	_btnOk		= new TextButton(44, 16, 176, 115);
 
-	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)), Palette::backPos, 16);
+	_game->setPalette(
+				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)),
+				Palette::backPos,
+				16);
 
 	add(_window);
 	add(_btnOk);
@@ -76,7 +77,6 @@ SackSoldierState::SackSoldierState(
 
 	centerAllSurfaces();
 
-	// Set up objects
 	_window->setColor(Palette::blockOffset(15)+1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 
@@ -118,11 +118,11 @@ SackSoldierState::~SackSoldierState()
 void SackSoldierState::btnOkClick(Action*)
 {
 	Soldier* soldier = _base->getSoldiers()->at(_soldierId);
-	if (_soldier->getArmor()->getStoreItem() != "STR_NONE")
-		_base->getItems()->addItem(_soldier->getArmor()->getStoreItem());
+	if (soldier->getArmor()->getStoreItem() != "STR_NONE")
+		_base->getItems()->addItem(soldier->getArmor()->getStoreItem());
 
 	_base->getSoldiers()->erase(_base->getSoldiers()->begin() + _soldierId);
-	delete _soldier;
+	delete soldier;
 
 	_game->popState();
 }

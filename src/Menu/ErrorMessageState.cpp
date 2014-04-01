@@ -42,11 +42,21 @@ namespace OpenXcom
  * @param bg Background image.
  * @param bgColor Background color (-1 for Battlescape).
  */
-ErrorMessageState::ErrorMessageState(Game* game, const std::string& id, Uint8 color, std::string bg, Uint8 bgColor)
+ErrorMessageState::ErrorMessageState(
+		Game* game,
+		const std::string& id,
+		Uint8 color,
+		std::string bg,
+		Uint8 bgColor)
 	:
 		State(game)
 {
-	create(id, L"", color, bg, bgColor);
+	create(
+		id,
+		L"",
+		color,
+		bg,
+		bgColor);
 }
 
 /**
@@ -57,11 +67,21 @@ ErrorMessageState::ErrorMessageState(Game* game, const std::string& id, Uint8 co
  * @param bg Background image.
  * @param bgColor Background color (-1 for Battlescape).
  */
-ErrorMessageState::ErrorMessageState(Game* game, const std::wstring& msg, Uint8 color, std::string bg, Uint8 bgColor)
+ErrorMessageState::ErrorMessageState(
+		Game* game,
+		const std::wstring& msg,
+		Uint8 color,
+		std::string bg,
+		Uint8 bgColor)
 	:
 		State(game)
 {
-	create("", msg, color, bg, bgColor);
+	create(
+		"",
+		msg,
+		color,
+		bg,
+		bgColor);
 }
 
 /**
@@ -74,7 +94,12 @@ ErrorMessageState::~ErrorMessageState()
 /**
  *
  */
-void ErrorMessageState::create(const std::string& str, const std::wstring& wstr, Uint8 color, std::string bg, Uint8 bgColor)
+void ErrorMessageState::create(
+		const std::string& str,
+		const std::wstring& wstr,
+		Uint8 color,
+		std::string bg,
+		Uint8 bgColor)
 {
 	_screen = false;
 
@@ -85,7 +110,10 @@ void ErrorMessageState::create(const std::string& str, const std::wstring& wstr,
 
 
 	if (bgColor != static_cast<Uint8>(-1))
-		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(bgColor)), Palette::backPos, 16);
+		_game->setPalette(
+					_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(bgColor)),
+					Palette::backPos,
+					16);
 
 	add(_window);
 	add(_btnOk);
@@ -93,21 +121,25 @@ void ErrorMessageState::create(const std::string& str, const std::wstring& wstr,
 
 	centerAllSurfaces();
 
-
 	_window->setColor(color);
 	_window->setBackground(_game->getResourcePack()->getSurface(bg));
 
 	_btnOk->setColor(color);
 	_btnOk->setText(tr("STR_OK"));
-	_btnOk->onMouseClick((ActionHandler)&ErrorMessageState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&ErrorMessageState::btnOkClick, Options::keyOk);
-	_btnOk->onKeyboardPress((ActionHandler)&ErrorMessageState::btnOkClick, Options::keyCancel);
+	_btnOk->onMouseClick((ActionHandler)& ErrorMessageState::btnOkClick);
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& ErrorMessageState::btnOkClick,
+					Options::keyOk);
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& ErrorMessageState::btnOkClick,
+					Options::keyCancel);
 
 	_txtMessage->setColor(color);
 	_txtMessage->setAlign(ALIGN_CENTER);
 	_txtMessage->setVerticalAlign(ALIGN_MIDDLE);
 	_txtMessage->setBig();
 	_txtMessage->setWordWrap(true);
+
 	if (str.empty())
 		_txtMessage->setText(wstr);
 	else

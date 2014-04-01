@@ -92,7 +92,8 @@ Slider::Slider(
 	_minX = _frame->getX();
 	_maxX = _frame->getX() + _frame->getWidth() - _button->getWidth();
 
-	setValue(_pos);
+//kL	setValue(_pos);
+	setValue(static_cast<int>(_pos)); // kL
 }
 
 /**
@@ -122,7 +123,8 @@ void Slider::setX(int x)
 	_minX = _frame->getX();
 	_maxX = _frame->getX() + _frame->getWidth() - _button->getWidth();
 
-	setValue(_pos);
+//kL	setValue(_pos);
+	setValue(static_cast<int>(_pos)); // kL
 }
 
 /**
@@ -231,10 +233,14 @@ void Slider::handle(Action* action, State* state)
 			|| action->getDetails()->type == SDL_MOUSEBUTTONDOWN))
 	{
 		int cursorX = static_cast<int>(floor(static_cast<double>(action->getDetails()->motion.x) / action->getXScale()));
-		double buttonX = static_cast<double>(std::min(std::max(_minX, cursorX - _button->getWidth() / 2), _maxX));
-		double pos = (buttonX - _minX) / (_maxX - _minX);
+		double buttonX = static_cast<double>(std::min(
+													std::max(
+															_minX,
+															cursorX - _button->getWidth() / 2),
+													_maxX));
+		double pos = (buttonX - static_cast<double>(_minX)) / static_cast<double>(_maxX - _minX);
 
-		int value = _min + (_max - _min) * pos;
+		int value = static_cast<int>(static_cast<double>(_min + (_max - _min)) * pos);
 		setValue(value);
 
 		if (_change)

@@ -386,4 +386,4 @@
 #include "./Savegame/EquipmentLayoutItem.h"
 
 #endif
-// kL_note: Also, MatrixState &tc.
+// kL_note: Also, MatrixState, SoldierDead, SoldierDiedState, &tc.

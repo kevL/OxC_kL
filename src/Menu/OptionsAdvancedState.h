@@ -16,13 +16,16 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_OPTIONSADVANCEDSTATE_H
 #define OPENXCOM_OPTIONSADVANCEDSTATE_H
 
-#include "OptionsBaseState.h"
 #include <vector>
 #include <string>
 #include <utility>
+
+#include "OptionsBaseState.h"
+
 
 namespace OpenXcom
 {
@@ -34,26 +37,35 @@ class TextList;
  * Options window that displays the
  * advanced game settings.
  */
-class OptionsAdvancedState : public OptionsBaseState
+class OptionsAdvancedState
+	:
+		public OptionsBaseState
 {
+
 private:
-	TextList *_lstOptions;
 	size_t _boolQuantity;
+
+	TextList* _lstOptions;
+
 	// intentionally avoiding using a map here, to avoid auto-sorting.
 	std::vector< std::pair<std::string, bool*> > _settingBoolSet;
 	std::vector< std::pair<std::string, int*> > _settingIntSet;
-public:
-	/// Creates the Advanced state.
-	OptionsAdvancedState(Game *game, OptionsOrigin origin);
-	/// Cleans up the Advanced state.
-	~OptionsAdvancedState();
-	/// Handler for clicking an item on the menu.
-	void lstOptionsPress(Action *action);
-	/// Handler for moving the mouse over a menu item.
-	void lstOptionsMouseOver(Action *action);
-	/// Handler for moving the mouse outside the menu borders.
-	void lstOptionsMouseOut(Action *action);
 
+
+	public:
+		/// Creates the Advanced state.
+		OptionsAdvancedState(
+				Game* game,
+				OptionsOrigin origin);
+		/// Cleans up the Advanced state.
+		~OptionsAdvancedState();
+
+		/// Handler for clicking an item on the menu.
+		void lstOptionsPress(Action* action);
+		/// Handler for moving the mouse over a menu item.
+		void lstOptionsMouseOver(Action* action);
+		/// Handler for moving the mouse outside the menu borders.
+		void lstOptionsMouseOut(Action* action);
 };
 
 }

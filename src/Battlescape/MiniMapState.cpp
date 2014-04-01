@@ -30,7 +30,7 @@
 #include "../Engine/InteractiveSurface.h"
 #include "../Engine/Options.h"
 #include "../Engine/Palette.h"
-//kL #include "../Engine/Screen.h"
+#include "../Engine/Screen.h"
 #include "../Engine/Timer.h"
 
 #include "../Interface/Text.h"

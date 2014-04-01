@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -10,25 +10,31 @@
  *
  * OpenXcom is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
+ * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "OptionsConfirmState.h"
+
 #include <sstream>
 #include <iomanip>
+
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
+#include "../Engine/Options.h"
 #include "../Engine/Palette.h"
+#include "../Engine/Screen.h"
+#include "../Engine/Timer.h"
+
+#include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
-#include "../Interface/Text.h"
-#include "../Engine/Options.h"
-#include "../Engine/Timer.h"
-#include "../Engine/Screen.h"
+
+#include "../Resource/ResourcePack.h"
+
 
 namespace OpenXcom
 {
@@ -38,7 +44,13 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param origin Game section that originated this state.
  */
-OptionsConfirmState::OptionsConfirmState(Game *game, OptionsOrigin origin) : State(game), _origin(origin), _countdown(15)
+OptionsConfirmState::OptionsConfirmState(
+		Game* game,
+		OptionsOrigin origin)
+	:
+		State(game),
+		_origin(origin),
+		_countdown(15)
 {
 	_screen = false;
 
@@ -65,12 +77,12 @@ OptionsConfirmState::OptionsConfirmState(Game *game, OptionsOrigin origin) : Sta
 	_btnYes->setColor(Palette::blockOffset(15)-1);
 	_btnYes->setText(tr("STR_YES"));
 	_btnYes->onMouseClick((ActionHandler)&OptionsConfirmState::btnYesClick);
-	//_btnYes->onKeyboardPress((ActionHandler)&OptionsConfirmState::btnYesClick, Options::keyOk);
+//	_btnYes->onKeyboardPress((ActionHandler)&OptionsConfirmState::btnYesClick, Options::keyOk);
 
 	_btnNo->setColor(Palette::blockOffset(15)-1);
 	_btnNo->setText(tr("STR_NO"));
 	_btnNo->onMouseClick((ActionHandler)&OptionsConfirmState::btnNoClick);
-	//_btnNo->onKeyboardPress((ActionHandler)&OptionsConfirmState::btnNoClick, Options::keyCancel);
+//	_btnNo->onKeyboardPress((ActionHandler)&OptionsConfirmState::btnNoClick, Options::keyCancel);
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setAlign(ALIGN_CENTER);
@@ -83,9 +95,7 @@ OptionsConfirmState::OptionsConfirmState(Game *game, OptionsOrigin origin) : Sta
 	_txtTimer->setText(tr("STR_DISPLAY_OPTIONS_REVERT").arg(_countdown));
 
 	if (_origin == OPT_BATTLESCAPE)
-	{
 		applyBattlescapeTheme();
-	}
 
 	_timer->onTimer((StateHandler)&OptionsConfirmState::countdown);
 	_timer->start();
@@ -96,7 +106,6 @@ OptionsConfirmState::OptionsConfirmState(Game *game, OptionsOrigin origin) : Sta
  */
 OptionsConfirmState::~OptionsConfirmState()
 {
-
 }
 
 /**
@@ -115,20 +124,20 @@ void OptionsConfirmState::think()
 void OptionsConfirmState::countdown()
 {
 	_countdown--;
+
 	std::wostringstream ss;
 	ss << std::setfill(L'0') << std::setw(2) << _countdown;
 	_txtTimer->setText(tr("STR_DISPLAY_OPTIONS_REVERT").arg(ss.str()));
+
 	if (_countdown == 0)
-	{
 		btnNoClick(0);
-	}
 }
 
 /**
  * Goes back to the Main Menu.
  * @param action Pointer to an action.
  */
-void OptionsConfirmState::btnYesClick(Action *)
+void OptionsConfirmState::btnYesClick(Action*)
 {
 	_game->popState();
 }
@@ -137,10 +146,11 @@ void OptionsConfirmState::btnYesClick(Action *)
  * Restores the original display options.
  * @param action Pointer to an action.
  */
-void OptionsConfirmState::btnNoClick(Action *)
+void OptionsConfirmState::btnNoClick(Action*)
 {
 	Options::switchDisplay();
 	Options::save();
+
 	_game->getScreen()->resetDisplay();
 	_game->popState();
 }

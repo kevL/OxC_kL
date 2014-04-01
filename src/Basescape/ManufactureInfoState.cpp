@@ -389,7 +389,7 @@ void ManufactureInfoState::setAssignedEngineer()
 
 	std::wostringstream s4;
 	s4 << L"> \x01";
-	if (Options::allowAutoSellProduction)
+	if (Options::allowAutoSellProduction
 		&& _production->getAmountTotal() == std::numeric_limits<int>::max())
 	{
 		s4 << "$$";

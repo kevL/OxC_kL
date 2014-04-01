@@ -33,6 +33,7 @@ namespace OpenXcom
 
 typedef void (State::*ActionHandler)(Action*);
 
+
 /**
  * Surface that the user can interact with.
  * Specialized version of the standard Surface that processes all the various

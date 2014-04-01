@@ -150,7 +150,9 @@ void UfopaediaStartState::btnSectionClick(Action* action)
 	{
 		if (action->getSender() == _btnSection[i])
 		{
-			_game->pushState(new UfopaediaSelectState(_game, SECTIONS[i]));
+			_game->pushState(new UfopaediaSelectState(
+													_game,
+													SECTIONS[i]));
 
 			break;
 		}

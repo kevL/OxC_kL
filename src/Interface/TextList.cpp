@@ -27,6 +27,7 @@
 
 #include "../Engine/Action.h"
 #include "../Engine/Font.h"
+#include "../Engine/Options.h"
 #include "../Engine/Palette.h"
 
 

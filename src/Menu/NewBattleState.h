@@ -49,6 +49,12 @@ class NewBattleState
 private:
 	bool _music;
 
+	ComboBox
+		* _cbxMission,
+		* _cbxCraft,
+		* _cbxTerrain,
+		* _cbxDifficulty,
+		* _cbxAlienRace;
 	Craft* _craft;
 	Frame
 		* _frameLeft,
@@ -56,8 +62,7 @@ private:
 	Text
 		* _txtTitle,
 		* _txtMapOptions,
-		* _txtAlienOptions;
-	Text
+		* _txtAlienOptions,
 		* _txtMission,
 		* _txtCraft,
 		* _txtDarkness,
@@ -65,12 +70,6 @@ private:
 		* _txtDifficulty,
 		* _txtAlienRace,
 		* _txtAlienTech;
-	ComboBox
-		* _cbxMission,
-		* _cbxCraft,
-		* _cbxTerrain,
-		* _cbxDifficulty,
-		* _cbxAlienRace;
 	Slider
 		* _slrDarkness,
 		* _slrAlienTech;
@@ -105,13 +104,13 @@ private:
 		void initSave();
 
 		/// Handler for clicking the OK button.
-		void btnOkClick(Action *action);
+		void btnOkClick(Action* action);
 		/// Handler for clicking the Cancel button.
-		void btnCancelClick(Action *action);
+		void btnCancelClick(Action* action);
 		/// Handler for clicking the Randomize button.
-		void btnRandomClick(Action *action);
+		void btnRandomClick(Action* action);
 		/// Handler for clicking the Equip Craft button.
-		void btnEquipClick(Action *action);
+		void btnEquipClick(Action* action);
 		/// Handler for changing the Mission combobox.
 		void cbxMissionChange(Action* action);
 		/// Handler for changing the Craft combobox.

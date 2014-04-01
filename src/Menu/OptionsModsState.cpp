@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -10,24 +10,30 @@
  *
  * OpenXcom is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
+ * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "OptionsModsState.h"
+
 #include <algorithm>
 #include <vector>
+
+#include "../Engine/Action.h"
 #include "../Engine/Game.h"
 #include "../Engine/CrossPlatform.h"
-#include "../Resource/ResourcePack.h"
-#include "../Engine/Palette.h"
 #include "../Engine/Language.h"
-#include "../Interface/Window.h"
-#include "../Interface/TextList.h"
 #include "../Engine/Options.h"
-#include "../Engine/Action.h"
+#include "../Engine/Palette.h"
+
+#include "../Interface/TextList.h"
+#include "../Interface/Window.h"
+
+#include "../Resource/ResourcePack.h"
+
 
 namespace OpenXcom
 {
@@ -37,13 +43,19 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param origin Game section that originated this state.
  */
-OptionsModsState::OptionsModsState(Game *game, OptionsOrigin origin) : OptionsBaseState(game, origin)
+OptionsModsState::OptionsModsState(
+		Game* game,
+		OptionsOrigin origin)
+	:
+		OptionsBaseState(
+			game,
+			origin)
 {
 	setCategory(_btnMods);
 
 	// Create objects
 	_lstMods = new TextList(200, 136, 94, 8);
-	
+
 	add(_lstMods);
 
 	centerAllSurfaces();
@@ -79,7 +91,6 @@ OptionsModsState::OptionsModsState(Game *game, OptionsOrigin origin) : OptionsBa
  */
 OptionsModsState::~OptionsModsState()
 {
-	
 }
 
 void OptionsModsState::lstModsClick(Action *action)

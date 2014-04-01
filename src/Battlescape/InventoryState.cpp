@@ -343,7 +343,7 @@ void InventoryState::updateStats()
 	if (_tu) // kL
 		_txtTus->setText(tr("STR_TIME_UNITS_SHORT").arg(unit->getTimeUnits()));
 
-	if (_showStats) // kL
+	if (Options::showMoreStatsInInventoryView) // kL
 	{
 		int str = unit->getStats()->strength;
 		int weight = unit->getCarriedWeight(_inv->getSelectedItem());

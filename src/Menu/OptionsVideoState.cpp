@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -10,43 +10,55 @@
  *
  * OpenXcom is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
+ * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "OptionsVideoState.h"
-#include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
-#include "../Engine/Language.h"
-#include "../Engine/Palette.h"
-#include "../Interface/TextButton.h"
+
 #include "../Engine/Action.h"
-#include "../Interface/Window.h"
+#include "../Engine/CrossPlatform.h"
+#include "../Engine/Game.h"
+#include "../Engine/Language.h"
+#include "../Engine/Logger.h"
+#include "../Engine/Options.h"
+#include "../Engine/Palette.h"
+#include "../Engine/Screen.h"
+
+#include "../Interface/ArrowButton.h"
+#include "../Interface/ComboBox.h"
 #include "../Interface/Text.h"
+#include "../Interface/TextButton.h"
 #include "../Interface/TextEdit.h"
 #include "../Interface/ToggleTextButton.h"
-#include "../Engine/Options.h"
-#include "../Engine/Screen.h"
-#include "../Interface/ArrowButton.h"
-#include "../Engine/CrossPlatform.h"
-#include "../Engine/Logger.h"
-#include "../Interface/ComboBox.h"
+#include "../Interface/Window.h"
+
+#include "../Resource/ResourcePack.h"
+
 
 namespace OpenXcom
 {
 
-const std::string OptionsVideoState::GL_EXT = "OpenGL.shader";
-const std::string OptionsVideoState::GL_FOLDER = "Shaders/";
-const std::string OptionsVideoState::GL_STRING = "*";
+const std::string OptionsVideoState::GL_EXT		= "OpenGL.shader";
+const std::string OptionsVideoState::GL_FOLDER	= "Shaders/";
+const std::string OptionsVideoState::GL_STRING	= "*";
+
 
 /**
  * Initializes all the elements in the Video Options screen.
  * @param game Pointer to the core game.
  * @param origin Game section that originated this state.
  */
-OptionsVideoState::OptionsVideoState(Game *game, OptionsOrigin origin) : OptionsBaseState(game, origin)
+OptionsVideoState::OptionsVideoState(
+		Game* game,
+		OptionsOrigin origin)
+	:
+		OptionsBaseState(
+			game,
+			origin)
 {
 	setCategory(_btnVideo);
 
@@ -118,7 +130,7 @@ OptionsVideoState::OptionsVideoState(Game *game, OptionsOrigin origin) : Options
 		_gameCurrent = 2;
 	else
 		_gameCurrent = -1;
-		
+
 	if (Options::fullscreen)
 		_displayMode = _btnFullscreen;
 	else if (Options::borderless)
@@ -139,8 +151,8 @@ OptionsVideoState::OptionsVideoState(Game *game, OptionsOrigin origin) : Options
 	add(_txtGameSize);
 	add(_btnGameResolutionUp);
 	add(_btnGameResolutionDown);
-	
-	add(_txtLanguage);	
+
+	add(_txtLanguage);
 	add(_txtFilter);
 
 	add(_txtMode);
@@ -199,7 +211,7 @@ OptionsVideoState::OptionsVideoState(Game *game, OptionsOrigin origin) : Options
 
 	_txtGameResolution->setColor(Palette::blockOffset(8)+10);
 	_txtGameResolution->setText(tr("STR_GAME_RESOLUTION"));
-	
+
 	_gameSurface->setTooltip("STR_GAME_RESOLUTION_DESC");
 	_gameSurface->onMouseIn((ActionHandler)&OptionsVideoState::txtTooltipIn);
 	_gameSurface->onMouseOut((ActionHandler)&OptionsVideoState::txtTooltipOut);
@@ -268,10 +280,10 @@ OptionsVideoState::OptionsVideoState(Game *game, OptionsOrigin origin) : Options
 	_btnLockMouse->setTooltip("STR_LOCK_MOUSE_DESC");
 	_btnLockMouse->onMouseIn((ActionHandler)&OptionsVideoState::txtTooltipIn);
 	_btnLockMouse->onMouseOut((ActionHandler)&OptionsVideoState::txtTooltipOut);
-	
+
 	_txtLanguage->setColor(Palette::blockOffset(8)+10);
 	_txtLanguage->setText(tr("STR_DISPLAY_LANGUAGE"));
-	
+
 	std::vector<std::wstring> names;
 	Language::getList(_langs, names);
     _cbxLanguage->setColor(Palette::blockOffset(15)-1);
@@ -296,7 +308,7 @@ OptionsVideoState::OptionsVideoState(Game *game, OptionsOrigin origin) : Options
 	_filters.push_back("");
 	_filters.push_back("");
 	_filters.push_back("");
-	
+
 #ifndef __NO_OPENGL
 	std::vector<std::string> filters = CrossPlatform::getFolderContents(CrossPlatform::getDataFolder(GL_FOLDER), GL_EXT);
 	for (std::vector<std::string>::iterator i = filters.begin(); i != filters.end(); ++i)
@@ -308,7 +320,7 @@ OptionsVideoState::OptionsVideoState(Game *game, OptionsOrigin origin) : Options
 		_filters.push_back(path);
 	}
 #endif
-	
+
 	int selFilter = 0;
 	if (Screen::isOpenGLEnabled())
 	{
@@ -357,7 +369,6 @@ OptionsVideoState::OptionsVideoState(Game *game, OptionsOrigin origin) : Options
  */
 OptionsVideoState::~OptionsVideoState()
 {
-
 }
 
 /**
@@ -402,13 +413,13 @@ void OptionsVideoState::btnDisplayResolutionDownClick(Action *)
  * Updates the display resolution based on the selection.
  */
 void OptionsVideoState::updateDisplayResolution()
-{	
+{
 	std::wostringstream ssW, ssH;
 	ssW << (int)_res[_resCurrent]->w;
 	ssH << (int)_res[_resCurrent]->h;
 	_txtDisplayWidth->setText(ssW.str());
 	_txtDisplayHeight->setText(ssH.str());
-	
+
 	Options::newDisplayWidth = _res[_resCurrent]->w;
 	Options::newDisplayHeight = _res[_resCurrent]->h;
 }

@@ -20,46 +20,61 @@
 #ifndef OPENXCOM_UFOPAEDIASELECTSTATE_H
 #define OPENXCOM_UFOPAEDIASELECTSTATE_H
 
-#include "../Engine/State.h"
-#include "Ufopaedia.h"
 #include <string>
+
+#include "Ufopaedia.h"
+
+#include "../Engine/State.h"
+
 
 namespace OpenXcom
 {
-	class Game;
-	class Action;
-	class Window;
-	class Text;
-	class TextButton;
-	class TextList;
 
-	/**
-	 * UfopaediaSelectState is the screen that lists articles of a given type.
-	 */
+class Action;
+class Game;
+class Text;
+class TextButton;
+class TextList;
+class Window;
 
-	class UfopaediaSelectState : public State
-	{
+
+/**
+ * UfopaediaSelectState is the screen that lists articles of a given type.
+ */
+class UfopaediaSelectState
+	:
+		public State
+{
+
+protected:
+	std::string _section;
+
+	Text* _txtTitle;
+	TextButton* _btnOk;
+	TextList* _lstSelection;
+	Window* _window;
+
+	ArticleDefinitionList _article_list;
+
+	/// Handler for clicking the OK button
+	void btnOkClick(Action* action);
+	/// Handler for clicking the selection list.
+	void lstSelectionClick(Action* action);
+
+	/// load available articles into the selection list
+	void loadSelectionList();
+	/// Initializes the state.
+	virtual void init();
+
+
 	public:
-		UfopaediaSelectState(Game *game, std::string section);
+		UfopaediaSelectState(
+				Game* game,
+				std::string section);
 		virtual ~UfopaediaSelectState();
 
-	protected:
-		std::string _section;
-		Window *_window;
-		Text *_txtTitle;
-		TextButton *_btnOk;
-		TextList *_lstSelection;
-		ArticleDefinitionList _article_list;
+};
 
-		/// Handler for clicking the OK button
-		void btnOkClick(Action *action);
-		/// Handler for clicking the selection list.
-		void lstSelectionClick(Action *action);
-		/// load available articles into the selection list
-		void loadSelectionList();
-		/// Initializes the state.
-		virtual void init();
-	};
 }
 
 #endif

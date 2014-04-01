@@ -507,7 +507,7 @@ void TransferItemsState::reinit()
 			++i)
 	{
 		if ((*i)->getStatus() != "STR_OUT"
-			|| (_canTransferCraftsWhileAirborne
+			|| (Options::canTransferCraftsWhileAirborne
 				&& (*i)->getFuel() >= (*i)->getFuelLimit(_baseTo)))
 		{
 			_baseQty.push_back(1);
@@ -533,7 +533,7 @@ void TransferItemsState::reinit()
 		_destQty.push_back(_baseTo->getTotalScientists());
 		_hasSci = 1;
 
-		std::wstringstream
+		std::wostringstream
 			ss1,
 			ss2;
 //kL		ss << _baseFrom->getAvailableScientists();
@@ -558,7 +558,7 @@ void TransferItemsState::reinit()
 		_destQty.push_back(_baseTo->getTotalEngineers());
 		_hasEng = 1;
 
-		std::wstringstream
+		std::wostringstream
 			ss1,
 			ss2;
 		ss1 << _baseFrom->getEngineers();
@@ -647,7 +647,7 @@ void TransferItemsState::reinit()
 
 			_destQty.push_back(tQty);
 
-			std::wstringstream
+			std::wostringstream
 				ss1,
 				ss2;
 			ss1 << qty;

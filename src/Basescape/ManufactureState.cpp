@@ -247,7 +247,7 @@ void ManufactureState::fillProductionList()
 		s1 << (*i)->getAssignedEngineers();
 
 		s2 << (*i)->getAmountProduced() << "/";
-		if (Options::getBool("allowAutoSellProduction")
+		if (Options::allowAutoSellProduction
 			&& (*i)->getAmountTotal() == std::numeric_limits<int>::max())
 		{
 			s2 << "$$";
