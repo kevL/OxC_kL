@@ -129,7 +129,7 @@ private:
 	std::vector<const RuleResearch*>
 		_discovered,
 		_poppedResearch;
-//kL	std::vector<Soldier*> _deadSoldiers;
+	std::vector<Soldier*> _soldiers; // kL
 	std::vector<SoldierDead*> _deadSoldiers; // kL
 	std::vector<TerrorSite*> _terrorSites;
 	std::vector<Ufo*> _ufos;

@@ -22,7 +22,7 @@
 #include <iomanip>
 #include <sstream>
 
-//kL #include "SoldierInfoState.h"
+#include "SoldierInfoState.h"
 
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
@@ -42,7 +42,7 @@
 #include "../Savegame/Base.h"
 #include "../Savegame/GameTime.h"
 #include "../Savegame/SavedGame.h"
-//kL#include "../Savegame/Soldier.h"
+//kL #include "../Savegame/Soldier.h"
 #include "../Savegame/SoldierDead.h" // kL
 #include "../Savegame/SoldierDeath.h"
 

@@ -210,14 +210,21 @@ SavedGame::~SavedGame()
 		delete *i;
 	}
 
-//kL	for (std::vector<Soldier*>::iterator
-	for (std::vector<SoldierDead*>::iterator // kL
+	for (std::vector<Soldier*>::iterator
+			i = _soldiers.begin();
+			i != _soldiers.end();
+			++i)
+	{
+		delete *i;
+	}
+
+	for (std::vector<SoldierDead*>::iterator // kL_begin:
 			i = _deadSoldiers.begin();
 			i != _deadSoldiers.end();
 			++i)
 	{
 		delete *i;
-	}
+	} // kL_end.
 
 	delete _battleGame;
 }
@@ -2076,13 +2083,12 @@ void SavedGame::removePoppedResearch(const RuleResearch* research)
 
 /**
  * Returns the list of dead soldiers.
- * @return Pointer to soldier list.
+ * @return, Pointer to soldier list.
  */
 //kL std::vector<Soldier*>* SavedGame::getDeadSoldiers()
 std::vector<SoldierDead*>* SavedGame::getDeadSoldiers() // kL
 {
 	//Log(LOG_INFO) << "SavedGame::getDeadSoldiers()";
-
 	return &_deadSoldiers;
 }
 

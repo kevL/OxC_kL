@@ -49,6 +49,7 @@
 #include "../Savegame/ItemContainer.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Soldier.h"
+#include "../Savegame/SoldierDead.h" // kL
 
 
 namespace OpenXcom
@@ -69,8 +70,12 @@ SoldierInfoState::SoldierInfoState(
 		_base(base),
 		_soldierId(soldierId)
 {
+	_list = NULL;		// kL
+	_listDead = NULL;	// kL
+
 	if (_base == 0)
-		_list = _game->getSavedGame()->getDeadSoldiers();
+//kL		_list = _game->getSavedGame()->getDeadSoldiers();
+		_listDead = _game->getSavedGame()->getDeadSoldiers(); // kL
 	else
 		_list = _base->getSoldiers();
 
@@ -194,7 +199,6 @@ SoldierInfoState::SoldierInfoState(
 	add(_barPsiSkill);
 
 	centerAllSurfaces();
-
 
 	_game->getResourcePack()->getSurface("BACK06.SCR")->blit(_bg);
 
@@ -487,26 +491,30 @@ void SoldierInfoState::init()
 	_barStrength->setValue(current->strength);
 
 
-	std::wstring
-		armor,
-		craft;
-
-	std::string armorType = _soldier->getArmor()->getType();
-	armor = tr(armorType);
-	_btnArmor->setText(armor);
-	if (_soldier->getCraft()
-		&& _soldier->getCraft()->getStatus() == "STR_OUT")
+	if (_base != 0) // kL
 	{
-		_btnArmor->setColor(Palette::blockOffset(4)+9);
-	}
-	else
-		_btnArmor->setColor(Palette::blockOffset(15)+6);
+		std::wstring
+			armor,
+			craft;
 
-	if (_soldier->getCraft() == 0)
-		craft = tr("STR_NONE_UC");
-	else
-		craft = _soldier->getCraft()->getName(_game->getLanguage());
-	_txtCraft->setText(tr("STR_CRAFT_").arg(craft));
+		std::string armorType = _soldier->getArmor()->getType();
+		armor = tr(armorType);
+		_btnArmor->setText(armor);
+		if (_soldier->getCraft()
+			&& _soldier->getCraft()->getStatus() == "STR_OUT")
+		{
+			_btnArmor->setColor(Palette::blockOffset(4)+9);
+		}
+		else
+			_btnArmor->setColor(Palette::blockOffset(15)+6);
+
+		if (_soldier->getCraft() == 0)
+			craft = tr("STR_NONE_UC");
+		else
+			craft = _soldier->getCraft()->getName(_game->getLanguage());
+		_txtCraft->setText(tr("STR_CRAFT_").arg(craft));
+	}
+
 
 	if (_soldier->getWoundRecovery() > 0)
 		_txtRecovery->setText(tr("STR_WOUND_RECOVERY")
@@ -519,11 +527,6 @@ void SoldierInfoState::init()
 	_txtKills->setText(tr("STR_KILLS").arg(_soldier->getKills()));
 
 	_txtPsionic->setVisible(_soldier->isInPsiTraining());
-
-	_btnSack->setVisible(!
-					(_soldier->getCraft()
-						&& _soldier->getCraft()->getStatus() == "STR_OUT"));
-
 
 	int minPsi = _soldier->getRules()->getMinStats().psiSkill;
 
@@ -567,11 +570,18 @@ void SoldierInfoState::init()
 		_barPsiSkill->setVisible(false);
 	}
 
+	_btnSack->setVisible(!
+					(_soldier->getCraft()
+						&& _soldier->getCraft()->getStatus() == "STR_OUT"));
+
+
 	if (_base == 0) // dead don't talk
 	{
 		_btnArmor->setVisible(false);
-		_btnSack->setVisible(false);
+//kL		_btnSack->setVisible(false);
 		_txtCraft->setVisible(false);
+
+		_btnAutoStat->setVisible(false); // kL
 	}
 }
 

@@ -32,8 +32,9 @@
 namespace OpenXcom
 {
 
-const int ComboBox::LIST_MARGIN;
-const int ComboBox::MAX_ITEMS;
+//kL const int ComboBox::LIST_MARGIN;
+//kL const int ComboBox::MAX_ITEMS;
+
 
 /**
  * Sets up a combobox with the specified size and position.

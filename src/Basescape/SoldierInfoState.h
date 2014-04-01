@@ -31,6 +31,7 @@ namespace OpenXcom
 class Bar;
 class Base;
 class Soldier;
+class SoldierDead; // kL
 class Surface;
 class Text;
 class TextButton;
@@ -38,8 +39,7 @@ class TextEdit;
 
 
 /**
- * Soldier Info screen that shows all the
- * info of a specific soldier.
+ * Soldier Info screen that shows all the info of a specific soldier.
  */
 class SoldierInfoState
 	:
@@ -49,6 +49,7 @@ private:
 	size_t _soldierId;
 
 	std::vector<Soldier*>* _list;
+	std::vector<SoldierDead*>* _listDead; // kL
 
 	Bar
 		* _barTimeUnits,

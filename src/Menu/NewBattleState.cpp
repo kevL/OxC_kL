@@ -406,8 +406,7 @@ void NewBattleState::save(const std::string& filename)
 }
 
 /**
- * Initializes a new savegame with
- * everything available.
+ * Initializes a new savegame with everything available.
  */
 void NewBattleState::initSave()
 {
@@ -486,7 +485,8 @@ void NewBattleState::initSave()
         }
 
 		UnitStats* stats = soldier->getCurrentStats();
-		stats->bravery = round(stats->bravery / 10.0) * 10; // keep it a multiple of 10
+//kL		stats->bravery = round(stats->bravery / 10.0) * 10; // keep it a multiple of 10
+		stats->bravery = static_cast<int>(floor((static_cast<double>(stats->bravery) / 10.0) + 0.5)) * 10; // kL
 
 		base->getSoldiers()->push_back(soldier);
 		if (i < _craft->getRules()->getSoldiers())
@@ -494,7 +494,7 @@ void NewBattleState::initSave()
 	}
 
 	// Generate items
-	const std::vector<std::string> &items = rule->getItemsList();
+	const std::vector<std::string>& items = rule->getItemsList();
 	for (std::vector<std::string>::const_iterator
 			i = items.begin();
 			i != items.end();
@@ -531,7 +531,7 @@ void NewBattleState::initSave()
  * Starts the battle.
  * @param action Pointer to an action.
  */
-void NewBattleState::btnOkClick(Action *)
+void NewBattleState::btnOkClick(Action*)
 {
 	save();
 	if (_missionTypes[_cbxMission->getSelected()] != "STR_BASE_DEFENSE"

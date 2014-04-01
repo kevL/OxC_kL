@@ -26,7 +26,7 @@
 namespace OpenXcom
 {
 
-class Base;
+//kL class Base;
 class Text;
 class TextButton;
 class TextList;
@@ -34,8 +34,7 @@ class Window;
 
 
 /**
- * Screen that shows all the soldiers
- * that have died throughout the game.
+ * Screen that shows all the soldiers that have died throughout the game.
  */
 class SoldierMemorialState
 	:
@@ -43,8 +42,6 @@ class SoldierMemorialState
 {
 
 private:
-	TextButton* _btnOk;
-	Window* _window;
 	Text
 		* _txtDate,
 		* _txtLost,
@@ -52,7 +49,9 @@ private:
 		* _txtRank,
 		* _txtRecruited,
 		* _txtTitle;
+	TextButton* _btnOk;
 	TextList* _lstSoldiers;
+	Window* _window;
 
 
 	public:
