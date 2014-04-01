@@ -485,8 +485,8 @@ void NewBattleState::initSave()
         }
 
 		UnitStats* stats = soldier->getCurrentStats();
-//kL		stats->bravery = round(stats->bravery / 10.0) * 10; // keep it a multiple of 10
-		stats->bravery = static_cast<int>(floor((static_cast<double>(stats->bravery) / 10.0) + 0.5)) * 10; // kL
+//kL		stats->bravery = ceil(stats->bravery / 10.0) * 10; // keep it a multiple of 10
+		stats->bravery = static_cast<int>(floor((static_cast<double>(stats->bravery) / 10.0) + 0.5)) * 10; // kL, lulzor
 
 		base->getSoldiers()->push_back(soldier);
 		if (i < _craft->getRules()->getSoldiers())

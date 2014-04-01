@@ -46,6 +46,7 @@ class CraftInfoState
 
 private:
 	size_t _craftId;
+	std::wstring _defaultName;
 
 	Base* _base;
 	Craft* _craft;

@@ -365,6 +365,10 @@ void CraftInfoState::init()
 		_txtW2Ammo->setVisible(false);
 		_txtW2Max->setVisible(false);
 	}
+
+	std::wostringstream name;
+	name << tr(_craft->getRules()->getType()) << "-" << _craft->getId();
+	_defaultName = name.str();
 }
 
 /**
@@ -458,9 +462,9 @@ void CraftInfoState::btnArmorClick(Action*)
  */
 void CraftInfoState::edtCraftChange(Action* action)
 {
-	if (_craft->getName(_game->getLanguage()) != _edtCraft->getText())
-		_craft->setName(_edtCraft->getText());
-	else
+	_craft->setName(_edtCraft->getText());
+
+	if (_craft->getName(_game->getLanguage()) == _defaultName)
 		_craft->setName(L"");
 
 	if (action->getDetails()->key.keysym.sym == SDLK_RETURN

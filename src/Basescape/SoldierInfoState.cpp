@@ -212,10 +212,16 @@ SoldierInfoState::SoldierInfoState(
 	_btnPrev->setColor(Palette::blockOffset(15)+6);
 	_btnPrev->setText(L"<");
 	_btnPrev->onMouseClick((ActionHandler)& SoldierInfoState::btnPrevClick);
+	_btnPrev->onKeyboardPress(
+					(ActionHandler)& SoldierInfoState::btnPrevClick,
+					Options::keyBattlePrevUnit);
 
 	_btnNext->setColor(Palette::blockOffset(15)+6);
 	_btnNext->setText(L">");
 	_btnNext->onMouseClick((ActionHandler)& SoldierInfoState::btnNextClick);
+	_btnNext->onKeyboardPress(
+					(ActionHandler)& SoldierInfoState::btnNextClick,
+					Options::keyBattleNextUnit);
 
 	_btnArmor->setColor(Palette::blockOffset(15)+6);
 	_btnArmor->onMouseClick((ActionHandler)& SoldierInfoState::btnArmorClick);
