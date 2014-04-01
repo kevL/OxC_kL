@@ -19,6 +19,7 @@
 
 #include "NewBattleState.h"
 
+#include <cmath>
 #include <fstream>
 
 #include <yaml-cpp/yaml.h>
@@ -474,7 +475,7 @@ void NewBattleState::initSave()
             stats->tu			+= RNG::generate(0, 5);
             stats->stamina		+= RNG::generate(0, 5);
             stats->health		+= RNG::generate(0, 5);
-            stats->bravery		+= 0; /// Later
+            stats->bravery		+= RNG::generate(0, 5);
             stats->reactions	+= RNG::generate(0, 5);
             stats->firing		+= RNG::generate(0, 5);
             stats->throwing		+= RNG::generate(0, 5);
@@ -483,6 +484,9 @@ void NewBattleState::initSave()
             stats->melee		+= RNG::generate(0, 5);
             stats->psiSkill		+= RNG::generate(0, 20);
         }
+
+		UnitStats* stats = soldier->getCurrentStats();
+		stats->bravery = round(stats->bravery / 10.0) * 10; // keep it a multiple of 10
 
 		base->getSoldiers()->push_back(soldier);
 		if (i < _craft->getRules()->getSoldiers())

@@ -20,6 +20,8 @@
 #ifndef OPENXCOM_SOLDIERINFOSTATE_H
 #define OPENXCOM_SOLDIERINFOSTATE_H
 
+#include <vector>
+
 #include "../Engine/State.h"
 
 
@@ -45,6 +47,8 @@ class SoldierInfoState
 {
 private:
 	size_t _soldierId;
+
+	std::vector<Soldier*>* _list;
 
 	Bar
 		* _barTimeUnits,
@@ -117,6 +121,8 @@ private:
 		/// Updates the soldier info.
 		void init();
 
+		/// Handler for pressing on the Name edit.
+		void edtSoldierPress(Action* action);
 		/// Handler for changing text on the Name edit.
 		void edtSoldierChange(Action* action);
 

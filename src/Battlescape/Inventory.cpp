@@ -730,7 +730,8 @@ void Inventory::mouseClick(Action* action, State* state)
 					{
 						setSelectedItem(item);
 
-						int explTurn = item->getExplodeTurn();
+//						int explTurn = item->getExplodeTurn();
+						int explTurn = item->getFuseTimer();
 						if (explTurn > -1)
 						{
 							std::wstring activated = L"";
@@ -926,11 +927,13 @@ void Inventory::mouseClick(Action* action, State* state)
 						if (BT_GRENADE == itemType
 							|| BT_PROXIMITYGRENADE == itemType)
 						{
-							if (item->getExplodeTurn() == -1) // Prime that grenade!
+//						if (item->getExplodeTurn() == -1) // Prime that grenade!
+						if (item->getFuseTimer() == -1) // Prime that grenade!
 							{
 								if (BT_PROXIMITYGRENADE == itemType)
 								{
-									item->setExplodeTurn(0);
+//									item->setExplodeTurn(0);
+									item->setFuseTimer(0);
 
 //									std::wstring activated = Text::formatNumber(0) + L" ";
 //									activated += _game->getLanguage()->getString("STR_GRENADE_IS_ACTIVATED");
@@ -951,7 +954,8 @@ void Inventory::mouseClick(Action* action, State* state)
 							else
 							{
 								_warning->showMessage(_game->getLanguage()->getString("STR_GRENADE_IS_DEACTIVATED"));
-								item->setExplodeTurn(-1); // Unprime the grenade
+//								item->setExplodeTurn(-1); // Unprime the grenade
+								item->setFuseTimer(-1); // Unprime the grenade
 							}
 						}
 					}
@@ -1222,7 +1226,8 @@ bool Inventory::canBeStacked(
 			|| (itemA->getAmmoItem() && itemB->getAmmoItem()											// or they both have ammo
 				&& itemA->getAmmoItem()->getRules() == itemB->getAmmoItem()->getRules()					// and the same ammo type
 				&& itemA->getAmmoItem()->getAmmoQuantity() == itemB->getAmmoItem()->getAmmoQuantity()))	// and the same ammo quantity
-		&& itemA->getExplodeTurn() == -1 && itemB->getExplodeTurn() == -1								// and neither is set to explode
+//		&& itemA->getExplodeTurn() == -1 && itemB->getExplodeTurn() == -1								// and neither is set to explode
+		&& itemA->getFuseTimer() == -1 && itemB->getFuseTimer() == -1									// and neither is set to explode
 		&& itemA->getUnit() == 0 && itemB->getUnit() == 0												// and neither is a corpse or unconscious unit
 		&& itemA->getPainKillerQuantity() == itemB->getPainKillerQuantity()								// and if it's a medkit, it has the same number of charges
 		&& itemA->getHealQuantity() == itemB->getHealQuantity()

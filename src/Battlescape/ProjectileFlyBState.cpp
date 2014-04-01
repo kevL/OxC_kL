@@ -534,7 +534,8 @@ bool ProjectileFlyBState::createNewProjectile()
 			if (_unit->getFaction() != FACTION_PLAYER
 				&& _projectileItem->getRules()->getBattleType() == BT_GRENADE)
 			{
-				_projectileItem->setExplodeTurn(0);
+//				_projectileItem->setExplodeTurn(0);
+				_projectileItem->setFuseTimer(0);
 			}
 
 			_projectileItem->moveToOwner(0);
@@ -790,9 +791,10 @@ void ProjectileFlyBState::think()
 				BattleItem* item = _parent->getMap()->getProjectile()->getItem();
 				if (Options::battleInstantGrenade
 					&& item->getRules()->getBattleType() == BT_GRENADE
-					&& item->getExplodeTurn() == 0)
+//					&& item->getExplodeTurn() == 0)
+					&& item->getFuseTimer() == 0)
 				{
-					_parent->statePushFront(new ExplosionBState( // it's a hot grenade to explode immediately
+					_parent->statePushFront(new ExplosionBState( // it's a hot grenade set to explode immediately
 															_parent,
 															_parent->getMap()->getProjectile()->getPosition(-1),
 															item,

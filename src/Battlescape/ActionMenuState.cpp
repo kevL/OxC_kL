@@ -97,7 +97,8 @@ ActionMenuState::ActionMenuState(
 
 	if ((weapon->getBattleType() == BT_GRENADE
 			|| weapon->getBattleType() == BT_PROXIMITYGRENADE)
-		&& _action->weapon->getExplodeTurn() == -1) // priming
+//		&& _action->weapon->getExplodeTurn() == -1) // priming
+		&& _action->weapon->getFuseTimer() == -1) // priming
 	{
 		addItem(
 				BA_PRIME,

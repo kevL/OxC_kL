@@ -37,15 +37,15 @@ EquipmentLayoutItem::EquipmentLayoutItem(
 		std::string slot,
 		int slotX,
 		int slotY,
-		std::string ammoItem,
-		int explodeTurn)
+		std::string ammoItem)
+//		int explodeTurn)
 	:
 		_itemType(itemType),
 		_slot(slot),
 		_slotX(slotX),
 		_slotY(slotY),
-		_ammoItem(ammoItem),
-		_explodeTurn(explodeTurn)
+		_ammoItem(ammoItem)
+//		_explodeTurn(explodeTurn)
 {
 }
 
@@ -76,7 +76,7 @@ void EquipmentLayoutItem::load(const YAML::Node &node)
 	_slotX			= node["slotX"].as<int>(_slotX);
 	_slotY			= node["slotY"].as<int>(_slotY);
 	_ammoItem		= node["ammoItem"].as<std::string>(_ammoItem);
-	_explodeTurn	= node["explodeTurn"].as<int>(_explodeTurn);
+//	_explodeTurn	= node["explodeTurn"].as<int>(_explodeTurn);
 }
 
 /**
@@ -92,7 +92,7 @@ YAML::Node EquipmentLayoutItem::save() const
 	node["slotX"]		= _slotX;
 	node["slotY"]		= _slotY;
 	node["ammoItem"]	= _ammoItem;
-	node["explodeTurn"]	= _explodeTurn;
+//	node["explodeTurn"]	= _explodeTurn;
 
 	return node;
 }
@@ -146,9 +146,9 @@ std::string EquipmentLayoutItem::getAmmoItem() const
  * Returns the turn when the item explodes. (if it's an activated grenade-type)
  * @return int, The half-turns left before exploding
  */
-int EquipmentLayoutItem::getExplodeTurn() const
+/* int EquipmentLayoutItem::getExplodeTurn() const
 {
 	return _explodeTurn;
-}
+} */
 
 }

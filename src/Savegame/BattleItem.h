@@ -49,7 +49,8 @@ private:
 		_XCOMProperty;
 	int
 		_ammoQuantity,
-		_explodeTurn,
+//		_explodeTurn,
+		_fuseTimer,
 		_id,
 		_inventoryX,
 		_inventoryY,
@@ -88,10 +89,12 @@ private:
 		int getAmmoQuantity() const;
 		/// Sets the item's ammo quantity.
 		void setAmmoQuantity(int qty);
-		/// Gets the turn to explode on
-		int getExplodeTurn() const;
-		/// Sets the turn to explode on.
-		void setExplodeTurn(int turn);
+		/// Gets turns until it explodes.
+//		int getExplodeTurn() const;
+		int getFuseTimer() const;
+		/// Sets turns until it explodes.
+//		void setExplodeTurn(int turn);
+		void setFuseTimer(int turn);
 		/// Spend one bullet.
 		bool spendBullet();
 		/// Gets the item's owner.

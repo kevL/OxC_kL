@@ -77,8 +77,10 @@ private:
 		/// * See, void CraftInfoState::edtCraftKeyPress(Action* action) etc.
 		void btnUnloadClick(Action* action);
 
-		/// Shows Soldiers in a list.
-		void populateList();
+		/// Updates the soldiers list.
+		void init();
+//		/// Shows Soldiers in a list.
+//		void populateList();
 		/// Handler for clicking the Soldiers reordering button.
 		void lstItemsLeftArrowClick(Action* action);
 		/// Handler for clicking the Soldiers reordering button.
