@@ -121,8 +121,8 @@ private:
 		/// Updates the soldier info.
 		void init();
 
-		/// Handler for pressing on the Name edit.
-		void edtSoldierPress(Action* action);
+		/// Handler for pressing on the Name edit (disables editing).
+//kL		void edtSoldierPress(Action* action);
 		/// Handler for changing text on the Name edit.
 		void edtSoldierChange(Action* action);
 

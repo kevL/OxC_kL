@@ -217,11 +217,15 @@ GeoscapeState::GeoscapeState(Game* game)
 	_txtMin			= new Text(20, 17, screenWidth - 37, screenHeight / 2 - 26);
 	_txtMinSep		= new Text(4, 17, screenWidth - 17, screenHeight / 2 - 26);
 	_txtSec			= new Text(11, 8, screenWidth - 13, screenHeight / 2 - 20); */
-	_txtHour		= new Text(19, 17, screenWidth - 61, screenHeight / 2 - 26);
-	_txtHourSep		= new Text(5,  17, screenWidth - 42, screenHeight / 2 - 26);
-	_txtMin			= new Text(19, 17, screenWidth - 37, screenHeight / 2 - 26);
-	_txtMinSep		= new Text(5,  17, screenWidth - 18, screenHeight / 2 - 26);
-	_txtSec			= new Text(10, 17, screenWidth - 13, screenHeight / 2 - 26);
+
+	_txtHour		= new Text(19, 17, screenWidth - 54, screenHeight / 2 - 26);
+	_txtHourSep		= new Text(5,  17, screenWidth - 35, screenHeight / 2 - 26);
+	_txtMin			= new Text(19, 17, screenWidth - 30, screenHeight / 2 - 26);
+//kL	_txtHour		= new Text(19, 17, screenWidth - 61, screenHeight / 2 - 26);
+//kL	_txtHourSep		= new Text(5,  17, screenWidth - 42, screenHeight / 2 - 26);
+//kL	_txtMin			= new Text(19, 17, screenWidth - 37, screenHeight / 2 - 26);
+//kL	_txtMinSep		= new Text(5,  17, screenWidth - 18, screenHeight / 2 - 26);
+//kL	_txtSec			= new Text(10, 17, screenWidth - 13, screenHeight / 2 - 26);
 
 	_txtWeekday		= new Text(59, 8, screenWidth - 61, screenHeight / 2 - 13);
 	_txtDay			= new Text(29, 8, screenWidth - 61, screenHeight / 2 - 6);
@@ -234,9 +238,9 @@ GeoscapeState::GeoscapeState(Game* game)
 		_txtHour->		setY(_txtHour->		getY() + 6);
 		_txtHourSep->	setY(_txtHourSep->	getY() + 6);
 		_txtMin->		setY(_txtMin->		getY() + 6);
-		_txtMinSep->	setY(_txtMinSep->	getY() + 6);
-		_txtMinSep->	setX(_txtMinSep->	getX() - 10);
-		_txtSec->		setX(_txtSec->		getX() - 10);
+//kL		_txtMinSep->	setY(_txtMinSep->	getY() + 6);
+//kL		_txtMinSep->	setX(_txtMinSep->	getX() - 10);
+//kL		_txtSec->		setX(_txtSec->		getX() - 10);
 	}
 
 
@@ -288,8 +292,8 @@ GeoscapeState::GeoscapeState(Game* game)
 	add(_txtHour);
 	add(_txtHourSep);
 	add(_txtMin);
-	add(_txtMinSep);
-	add(_txtSec);
+//kL	add(_txtMinSep);
+//kL	add(_txtSec);
 	add(_txtWeekday);
 	add(_txtDay);
 	add(_txtMonth);
@@ -524,14 +528,14 @@ GeoscapeState::GeoscapeState(Game* game)
 		_txtHour->setSmall();
 		_txtHourSep->setSmall();
 		_txtMin->setSmall();
-		_txtMinSep->setSmall();
+//kL		_txtMinSep->setSmall();
 	}
 	else						// kL
 	{
 		_txtHour->setBig();		// kL
 		_txtHourSep->setBig();	// kL
 		_txtMin->setBig();		// kL
-		_txtMinSep->setBig();	// kL
+//kL		_txtMinSep->setBig();	// kL
 	}
 
 //kL	if (Options::showFundsOnGeoscape) _txtHour->setSmall(); else _txtHour->setBig();
@@ -547,12 +551,12 @@ GeoscapeState::GeoscapeState(Game* game)
 	_txtMin->setColor(Palette::blockOffset(15)+2);
 
 //kL	if (Options::showFundsOnGeoscape) _txtMinSep->setSmall(); else _txtMinSep->setBig();
-	_txtMinSep->setColor(Palette::blockOffset(15)+2);
-	_txtMinSep->setText(L".");
+//kL	_txtMinSep->setColor(Palette::blockOffset(15)+2);
+//kL	_txtMinSep->setText(L".");
 
 //	_txtSec->setSmall();
-	_txtSec->setBig();
-	_txtSec->setColor(Palette::blockOffset(15)+2);
+//kL	_txtSec->setBig();
+//kL	_txtSec->setColor(Palette::blockOffset(15)+2);
 
 	_txtWeekday->setSmall();
 	_txtWeekday->setColor(Palette::blockOffset(15)+2);
@@ -764,20 +768,20 @@ void GeoscapeState::timeDisplay()
 	if (Options::showFundsOnGeoscape)
 		_txtFunds->setText(Text::formatFunding(_game->getSavedGame()->getFunds()));
 
-	int sec = _game->getSavedGame()->getTime()->getSecond();
+/*kL	int sec = _game->getSavedGame()->getTime()->getSecond();
 	sec = sec / 30 * 5;
 	if (sec == 2)
-		sec = 0;
+		sec = 0; */
 
 	std::wostringstream
-		ss1, // sec
+//kL		ss1, // sec
 		ss2, // min
 		ss3, // hr
 		ss4, // dy
 		ss5; // yr.
 //	ss1 << std::setfill(L'0') << std::setw(2) << _game->getSavedGame()->getTime()->getSecond();
-	ss1 << sec;
-	_txtSec->setText(ss1.str());
+//kL	ss1 << sec;
+//kL	_txtSec->setText(ss1.str());
 
 	ss2 << std::setfill(L'0') << std::setw(2) << _game->getSavedGame()->getTime()->getMinute();
 	_txtMin->setText(ss2.str());
@@ -806,30 +810,12 @@ void GeoscapeState::timeDisplay()
 void GeoscapeState::timeAdvance()
 {
 	int timeSpan = 0;
-	if (_timeSpeed == _btn5Secs)
-	{
-		timeSpan = 1;
-	}
-	else if (_timeSpeed == _btn1Min)
-	{
-		timeSpan = 12;
-	}
-	else if (_timeSpeed == _btn5Mins)
-	{
-		timeSpan = 12 * 5;
-	}
-	else if (_timeSpeed == _btn30Mins)
-	{
-		timeSpan = 12 * 5 * 6;
-	}
-	else if (_timeSpeed == _btn1Hour)
-	{
-		timeSpan = 12 * 5 * 6 * 2;
-	}
-	else if (_timeSpeed == _btn1Day)
-	{
-		timeSpan = 12 * 5 * 6 * 2 * 24;
-	}
+	if		(_timeSpeed == _btn5Secs)	timeSpan = 1;
+	else if (_timeSpeed == _btn1Min)	timeSpan = 12;
+	else if (_timeSpeed == _btn5Mins)	timeSpan = 12 * 5;
+	else if (_timeSpeed == _btn30Mins)	timeSpan = 12 * 5 * 6;
+	else if (_timeSpeed == _btn1Hour)	timeSpan = 12 * 5 * 6 * 2;
+	else if (_timeSpeed == _btn1Day)	timeSpan = 12 * 5 * 6 * 2 * 24;
 
 	for (int
 			i = 0;
@@ -840,18 +826,12 @@ void GeoscapeState::timeAdvance()
 		TimeTrigger trigger = _game->getSavedGame()->getTime()->advance();
 		switch (trigger)
 		{
-			case TIME_1MONTH:
-				time1Month();
-			case TIME_1DAY:
-				time1Day();
-			case TIME_1HOUR:
-				time1Hour();
-			case TIME_30MIN:
-				time30Minutes();
-			case TIME_10MIN:
-				time10Minutes();
-			case TIME_5SEC:
-				time5Seconds();
+			case TIME_1MONTH:	time1Month();
+			case TIME_1DAY:		time1Day();
+			case TIME_1HOUR:	time1Hour();
+			case TIME_30MIN:	time30Minutes();
+			case TIME_10MIN:	time10Minutes();
+			case TIME_5SEC:		time5Seconds();
 		}
 	}
 

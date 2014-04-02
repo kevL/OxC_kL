@@ -4531,7 +4531,7 @@
 1394398507 f:\git\openxcom\src\geoscape\buildnewbasestate.h
 	"../Engine/State.h"
 
-1396290499 f:\git\openxcom\src\geoscape\geoscapestate.h
+1396467702 f:\git\openxcom\src\geoscape\geoscapestate.h
 	<vector>
 	"../Engine/State.h"
 
@@ -5386,7 +5386,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Soldier.h"
 
-1396405798 f:\git\openxcom\src\basescape\soldierinfostate.h
+1396467217 f:\git\openxcom\src\basescape\soldierinfostate.h
 	<vector>
 	"../Engine/State.h"
 
@@ -5436,7 +5436,7 @@
 1325723722 f:\git\openxcom\deps\include\sdl\sdl_types.h
 	"SDL_stdinc.h"
 
-1396422423 f:\git\openxcom\src\savegame\soldierdead.h
+1396423748 f:\git\openxcom\src\savegame\soldierdead.h
 	<string>
 	<yaml-cpp/yaml.h>
 	"../Ruleset/Unit.h"
@@ -5989,7 +5989,7 @@
 	<string>
 	"../Engine/Surface.h"
 
-1396246088 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1396460819 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	<cmath>
 	<sstream>
@@ -6373,7 +6373,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Soldier.h"
 
-1396247898 source:f:\git\openxcom\src\battlescape\map.cpp
+1396461229 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	<cmath>
 	<fstream>
@@ -11400,12 +11400,12 @@
 	"OptionInfo.h"
 	"Exception.h"
 
-1396344063 f:\git\openxcom\src\interface\combobox.h
+1396461318 f:\git\openxcom\src\interface\combobox.h
 	<string>
 	<vector>
 	"../Engine/InteractiveSurface.h"
 
-1396419272 source:f:\git\openxcom\src\interface\combobox.cpp
+1396462361 source:f:\git\openxcom\src\interface\combobox.cpp
 	"ComboBox.h"
 	"TextButton.h"
 	"TextList.h"

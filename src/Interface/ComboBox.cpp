@@ -32,8 +32,8 @@
 namespace OpenXcom
 {
 
-const int ComboBox::LIST_MARGIN = 5;
-const int ComboBox::MAX_ITEMS = 7;
+const int ComboBox::LIST_MARGIN	= 5;
+const int ComboBox::MAX_ITEMS	= 7;
 
 /**
  * Sets up a combobox with the specified size and position.

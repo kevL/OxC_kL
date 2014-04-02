@@ -70,13 +70,13 @@ SoldierInfoState::SoldierInfoState(
 		_soldierId(soldierId),
 		_soldier(0) // kL
 {
-	_list = NULL; // kL
+//	_list = NULL; // kL
 
 //kL	if (_base == 0)
 //kL		_list = _game->getSavedGame()->getDeadSoldiers();
 //kL	else
-	if (_base != 0) // kL
-		_list = _base->getSoldiers();
+//	if (_base != 0) // kL
+	_list = _base->getSoldiers();
 
 	_bg				= new Surface(320, 200, 0, 0);
 
@@ -228,7 +228,7 @@ SoldierInfoState::SoldierInfoState(
 	_edtSoldier->setColor(Palette::blockOffset(13)+10);
 	_edtSoldier->setBig();
 	_edtSoldier->onChange((ActionHandler)& SoldierInfoState::edtSoldierChange);
-	_edtSoldier->onMousePress((ActionHandler)& SoldierInfoState::edtSoldierPress);
+//kL	_edtSoldier->onMousePress((ActionHandler)& SoldierInfoState::edtSoldierPress);
 
 	_btnSack->setColor(Palette::blockOffset(15)+6);
 	_btnSack->setText(tr("STR_SACK"));
@@ -497,29 +497,29 @@ void SoldierInfoState::init()
 	_barStrength->setValue(current->strength);
 
 
-	if (_base != 0) // kL
+//	if (_base != 0) // kL
+//	{
+	std::wstring
+		armor,
+		craft;
+
+	std::string armorType = _soldier->getArmor()->getType();
+	armor = tr(armorType);
+	_btnArmor->setText(armor);
+	if (_soldier->getCraft()
+		&& _soldier->getCraft()->getStatus() == "STR_OUT")
 	{
-		std::wstring
-			armor,
-			craft;
-
-		std::string armorType = _soldier->getArmor()->getType();
-		armor = tr(armorType);
-		_btnArmor->setText(armor);
-		if (_soldier->getCraft()
-			&& _soldier->getCraft()->getStatus() == "STR_OUT")
-		{
-			_btnArmor->setColor(Palette::blockOffset(4)+9);
-		}
-		else
-			_btnArmor->setColor(Palette::blockOffset(15)+6);
-
-		if (_soldier->getCraft() == 0)
-			craft = tr("STR_NONE_UC");
-		else
-			craft = _soldier->getCraft()->getName(_game->getLanguage());
-		_txtCraft->setText(tr("STR_CRAFT_").arg(craft));
+		_btnArmor->setColor(Palette::blockOffset(4)+9);
 	}
+	else
+		_btnArmor->setColor(Palette::blockOffset(15)+6);
+
+	if (_soldier->getCraft() == 0)
+		craft = tr("STR_NONE_UC");
+	else
+		craft = _soldier->getCraft()->getName(_game->getLanguage());
+	_txtCraft->setText(tr("STR_CRAFT_").arg(craft));
+//	}
 
 
 	if (_soldier->getWoundRecovery() > 0)
@@ -580,15 +580,14 @@ void SoldierInfoState::init()
 					(_soldier->getCraft()
 						&& _soldier->getCraft()->getStatus() == "STR_OUT"));
 
-
-	if (_base == 0) // dead don't talk
+/*kL	if (_base == 0) // dead don't talk
 	{
 		_btnArmor->setVisible(false);
 //kL		_btnSack->setVisible(false);
 		_txtCraft->setVisible(false);
 
 		_btnAutoStat->setVisible(false); // kL
-	}
+	} */
 }
 
 /**
@@ -691,11 +690,11 @@ void SoldierInfoState::btnAutoStat(Action*)
  * Disables the soldier input.
  * @param action Pointer to an action.
  */
-void SoldierInfoState::edtSoldierPress(Action* action)
+/* void SoldierInfoState::edtSoldierPress(Action* action)
 {
 	if (_base == 0) // kL_note: This should never happen, because (base=0) is handled by SoldierDeadInfoState.
 		_edtSoldier->setFocus(false);
-}
+} */
 
 /**
  * Changes the soldier's name.
@@ -751,6 +750,7 @@ void SoldierInfoState::btnNextClick(Action*)
 	_edtSoldier->setFocus(false); // kL
 
 	_soldierId++;
+
 	if (_soldierId >= _list->size())
 		_soldierId = 0;
 
@@ -792,6 +792,7 @@ void SoldierInfoState::btnSackClick(Action*)
 //	_soldier->setName(_edtSoldier->getText()); // kL
 
 	_edtSoldier->setFocus(false);
+
 	_game->pushState(new SackSoldierState(
 										_game,
 										_base,
