@@ -325,7 +325,6 @@ void SavedGame::load(
 		Ruleset* rule)
 {
 	//Log(LOG_INFO) << "SavedGame::load()";
-
 	std::string s = Options::getUserFolder() + filename + ".sav";
 
 	std::vector<YAML::Node> file = YAML::LoadAllFromFile(s);
@@ -334,8 +333,7 @@ void SavedGame::load(
 		throw Exception(filename + " is not a valid save file");
 	}
 
-	// Get brief save info
-	YAML::Node brief = file[0];
+	YAML::Node brief = file[0]; // Get brief save info
 
 /*	std::string version = brief["version"].as<std::string>();
 	if (version != OPENXCOM_VERSION_SHORT)
@@ -349,8 +347,7 @@ void SavedGame::load(
 	else
 		_name = Language::fsToWstr(filename);
 
-	// Get full save data
-	YAML::Node doc = file[1];
+	YAML::Node doc = file[1]; // Get full save data
 
 	_difficulty = (GameDifficulty)doc["difficulty"].as<int>(_difficulty);
 	//Log(LOG_INFO) << "SavedGame::load(), difficulty = " << _difficulty;
@@ -515,7 +512,9 @@ void SavedGame::load(
 										LOOK_BLONDE,
 										0,
 										0,
-										NULL);
+										NULL,
+										UnitStats(),
+										UnitStats());
 /*kL		s->load(
 				*i,
 				rule); */

@@ -63,9 +63,6 @@ BaseInfoState::BaseInfoState(
 		_base(base),
 		_state(state)
 {
-	_containmentLimit = Options::alienContainmentLimitEnforced;
-
-
 	_bg					= new Surface(320, 200, 0, 0);
 	_mini				= new MiniBaseView(128, 16, 182, 8);
 
@@ -101,26 +98,26 @@ BaseInfoState::BaseInfoState(
 	_numWorkshops		= new Text(40, 9, 126, 113);
 	_barWorkshops		= new Bar(154, 5, 166, 115);
 
-	if (_containmentLimit)
+	if (Options::alienContainmentLimitEnforced)
 	{
 		_txtContainment = new Text(114, 9, 8, 123);
 		_numContainment = new Text(40, 9, 126, 123);
 		_barContainment = new Bar(154, 5, 166, 125);
 	}
 
-	_txtHangars			= new Text(114, 9, 8, _containmentLimit? 133: 123);
-	_numHangars			= new Text(40, 9, 126, _containmentLimit? 133: 123);
-	_barHangars			= new Bar(154, 5, 166, _containmentLimit? 135: 125);
+	_txtHangars			= new Text(114, 9, 8, Options::alienContainmentLimitEnforced? 133: 123);
+	_numHangars			= new Text(40, 9, 126, Options::alienContainmentLimitEnforced? 133: 123);
+	_barHangars			= new Bar(154, 5, 166, Options::alienContainmentLimitEnforced? 135: 125);
 
-	_txtDefense			= new Text(114, 9, 8, _containmentLimit? 147: 138);
-	_numDefense			= new Text(40, 9, 126, _containmentLimit? 147: 138);
-	_barDefense			= new Bar(154, 5, 166, _containmentLimit? 149: 140);
-	_txtShortRange		= new Text(114, 9, 8, _containmentLimit? 157: 153);
-	_numShortRange		= new Text(40, 9, 126, _containmentLimit? 157: 153);
-	_barShortRange		= new Bar(154, 5, 166, _containmentLimit? 159: 155);
-	_txtLongRange		= new Text(114, 9, 8, _containmentLimit? 167: 163);
-	_numLongRange		= new Text(40, 9, 126, _containmentLimit? 167: 163);
-	_barLongRange		= new Bar(154, 5, 166, _containmentLimit? 169: 165);
+	_txtDefense			= new Text(114, 9, 8, Options::alienContainmentLimitEnforced? 147: 138);
+	_numDefense			= new Text(40, 9, 126, Options::alienContainmentLimitEnforced? 147: 138);
+	_barDefense			= new Bar(154, 5, 166, Options::alienContainmentLimitEnforced? 149: 140);
+	_txtShortRange		= new Text(114, 9, 8, Options::alienContainmentLimitEnforced? 157: 153);
+	_numShortRange		= new Text(40, 9, 126, Options::alienContainmentLimitEnforced? 157: 153);
+	_barShortRange		= new Bar(154, 5, 166, Options::alienContainmentLimitEnforced? 159: 155);
+	_txtLongRange		= new Text(114, 9, 8, Options::alienContainmentLimitEnforced? 167: 163);
+	_numLongRange		= new Text(40, 9, 126, Options::alienContainmentLimitEnforced? 167: 163);
+	_barLongRange		= new Bar(154, 5, 166, Options::alienContainmentLimitEnforced? 169: 165);
 
 	add(_bg);
 	add(_mini);
@@ -155,7 +152,7 @@ BaseInfoState::BaseInfoState(
 	add(_numWorkshops);
 	add(_barWorkshops);
 
-	if (_containmentLimit)
+	if (Options::alienContainmentLimitEnforced)
 	{
 		add(_txtContainment);
 		add(_numContainment);
@@ -180,7 +177,7 @@ BaseInfoState::BaseInfoState(
 
 
 	std::ostringstream ss;
-	if (_containmentLimit)
+	if (Options::alienContainmentLimitEnforced)
 		ss << "ALT";
 	ss << "BACK07.SCR";
 	_game->getResourcePack()->getSurface(ss.str())->blit(_bg);
@@ -275,7 +272,7 @@ BaseInfoState::BaseInfoState(
 	_barWorkshops->setColor(Palette::blockOffset(3));
 	_barWorkshops->setScale(0.5);
 
-	if (_containmentLimit)
+	if (Options::alienContainmentLimitEnforced)
 	{
 		_txtContainment->setColor(Palette::blockOffset(13)+5);
 		_txtContainment->setText(tr("STR_ALIEN_CONTAINMENT"));
@@ -395,7 +392,7 @@ void BaseInfoState::init()
 	_barWorkshops->setMax(var);
 	_barWorkshops->setValue(var2);
 
-	if (_containmentLimit)
+	if (Options::alienContainmentLimitEnforced)
 	{
 		var = _base->getAvailableContainment();
 		var2 = _base->getUsedContainment();

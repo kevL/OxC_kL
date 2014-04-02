@@ -46,8 +46,6 @@ class BaseInfoState
 {
 
 private:
-	bool _containmentLimit;
-
 	Base* _base;
 	BasescapeState* _state;
 	MiniBaseView* _mini;

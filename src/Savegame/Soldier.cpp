@@ -101,9 +101,9 @@ Soldier::Soldier(
 		}
 		else
 		{
-			_name = L"";
-			_gender = (SoldierGender)RNG::generate(0, 1);
-			_look = (SoldierLook)RNG::generate(0, 3);
+			_name	= L"";
+			_gender	= (SoldierGender)RNG::generate(0, 1);
+			_look	= (SoldierLook)RNG::generate(0, 3);
 		}
 	}
 
@@ -654,10 +654,10 @@ SoldierDead* Soldier::die(SoldierDeath* death)
 									_look,
 									_missions,
 									_kills,
-									death);
-//									_death);
-		// need to put in InitialStats & CurrentStats ...!
-		// base if I want to...
+									death,
+									_initialStats,
+									_currentStats);
+									// base if I want to...
 
 	return dead;
 //	SavedGame::getDeadSoldiers()->push_back(ds);

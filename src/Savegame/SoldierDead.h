@@ -70,16 +70,15 @@ private:
 				SoldierLook look,
 				int missions,
 				int kills,
-				SoldierDeath* death);
-				// initialStats,
-				// currentStats,
+				SoldierDeath* death,
+				UnitStats initialStats,
+				UnitStats currentStats);
 				// base if I want to...
 		/// Cleans up the dead soldier.
 		~SoldierDead();
 
 		/// Loads the dead soldier from YAML.
-		void load(
-				const YAML::Node& node);
+		void load(const YAML::Node& node);
 		/// Saves the dead soldier to YAML.
 		YAML::Node save() const;
 

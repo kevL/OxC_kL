@@ -58,26 +58,25 @@ OptionsGeoscapeState::OptionsGeoscapeState(
 {
 	setCategory(_btnGeoscape);
 
-	// Create objects
-	_txtDragScroll = new Text(110, 9, 210, 8);
-	_cbxDragScroll = new ComboBox(this, 100, 16, 210, 18);
+	_txtDragScroll		= new Text(110, 9, 210, 8);
+	_cbxDragScroll		= new ComboBox(this, 100, 16, 210, 18);
 
-	_txtScrollSpeed = new Text(110, 9, 94, 8);
-	_slrScrollSpeed = new Slider(100, 16, 94, 18);
+	_txtScrollSpeed		= new Text(110, 9, 94, 8);
+	_slrScrollSpeed		= new Slider(100, 16, 94, 18);
 
-	_txtDogfightSpeed = new Text(110, 9, 210, 40);
-	_slrDogfightSpeed = new Slider(100, 16, 210, 50);
+	_txtDogfightSpeed	= new Text(110, 9, 210, 40);
+	_slrDogfightSpeed	= new Slider(100, 16, 210, 50);
 
-	_txtClockSpeed = new Text(110, 9, 94, 40);
-	_slrClockSpeed = new Slider(100, 16, 94, 50);
+	_txtClockSpeed		= new Text(110, 9, 94, 40);
+	_slrClockSpeed		= new Slider(100, 16, 94, 50);
 
-	_txtGlobeDetails = new Text(110, 9, 94, 82);
-	_btnGlobeCountries = new ToggleTextButton(100, 16, 94, 92);
-	_btnGlobeRadars = new ToggleTextButton(100, 16, 94, 110);
-	_btnGlobePaths = new ToggleTextButton(100, 16, 94, 128);
+	_txtGlobeDetails	= new Text(110, 9, 94, 82);
+	_btnGlobeCountries	= new ToggleTextButton(100, 16, 94, 92);
+	_btnGlobeRadars		= new ToggleTextButton(100, 16, 94, 110);
+	_btnGlobePaths		= new ToggleTextButton(100, 16, 94, 128);
 
-	_txtOptions = new Text(110, 9, 210, 82);
-	_btnShowFunds = new ToggleTextButton(100, 16, 210, 92);
+	_txtOptions			= new Text(110, 9, 210, 82);
+	_btnShowFunds		= new ToggleTextButton(100, 16, 210, 92);
 
 	add(_txtScrollSpeed);
 	add(_slrScrollSpeed);
@@ -101,7 +100,6 @@ OptionsGeoscapeState::OptionsGeoscapeState(
 
 	centerAllSurfaces();
 
-	// Set up objects
 	_txtDragScroll->setColor(Palette::blockOffset(8)+10);
 	_txtDragScroll->setText(tr("STR_DRAG_SCROLL"));
 
@@ -114,10 +112,10 @@ OptionsGeoscapeState::OptionsGeoscapeState(
 	_cbxDragScroll->setColor(Palette::blockOffset(15)-1);
 	_cbxDragScroll->setOptions(dragScrolls);
 	_cbxDragScroll->setSelected(Options::globeScrollDragButton);
-	_cbxDragScroll->onChange((ActionHandler)&OptionsGeoscapeState::cbxDragScrollChange);
+	_cbxDragScroll->onChange((ActionHandler)& OptionsGeoscapeState::cbxDragScrollChange);
 	_cbxDragScroll->setTooltip("STR_DRAG_SCROLL_DESC");
-	_cbxDragScroll->onMouseIn((ActionHandler)&OptionsGeoscapeState::txtTooltipIn);
-	_cbxDragScroll->onMouseOut((ActionHandler)&OptionsGeoscapeState::txtTooltipOut);
+	_cbxDragScroll->onMouseIn((ActionHandler)& OptionsGeoscapeState::txtTooltipIn);
+	_cbxDragScroll->onMouseOut((ActionHandler)& OptionsGeoscapeState::txtTooltipOut);
 
 	_txtScrollSpeed->setColor(Palette::blockOffset(8)+10);
 	_txtScrollSpeed->setText(tr("STR_SCROLL_SPEED"));
@@ -126,9 +124,9 @@ OptionsGeoscapeState::OptionsGeoscapeState(
 	_slrScrollSpeed->setRange(100, 10);
 	_slrScrollSpeed->setValue(Options::globeScrollSpeed);
 	_slrScrollSpeed->setTooltip("STR_SCROLL_SPEED_GEO_DESC");
-	_slrScrollSpeed->onChange((ActionHandler)&OptionsGeoscapeState::slrScrollSpeedChange);
-	_slrScrollSpeed->onMouseIn((ActionHandler)&OptionsGeoscapeState::txtTooltipIn);
-	_slrScrollSpeed->onMouseOut((ActionHandler)&OptionsGeoscapeState::txtTooltipOut);
+	_slrScrollSpeed->onChange((ActionHandler)& OptionsGeoscapeState::slrScrollSpeedChange);
+	_slrScrollSpeed->onMouseIn((ActionHandler)& OptionsGeoscapeState::txtTooltipIn);
+	_slrScrollSpeed->onMouseOut((ActionHandler)& OptionsGeoscapeState::txtTooltipOut);
 
 	_txtDogfightSpeed->setColor(Palette::blockOffset(8)+10);
 	_txtDogfightSpeed->setText(tr("STR_DOGFIGHT_SPEED"));
@@ -136,10 +134,10 @@ OptionsGeoscapeState::OptionsGeoscapeState(
 	_slrDogfightSpeed->setColor(Palette::blockOffset(15)-1);
 	_slrDogfightSpeed->setRange(50, 10);
 	_slrDogfightSpeed->setValue(Options::dogfightSpeed);
-	_slrDogfightSpeed->onChange((ActionHandler)&OptionsGeoscapeState::slrDogfightSpeedChange);
+	_slrDogfightSpeed->onChange((ActionHandler)& OptionsGeoscapeState::slrDogfightSpeedChange);
 	_slrDogfightSpeed->setTooltip("STR_DOGFIGHT_SPEED_DESC");
-	_slrDogfightSpeed->onMouseIn((ActionHandler)&OptionsGeoscapeState::txtTooltipIn);
-	_slrDogfightSpeed->onMouseOut((ActionHandler)&OptionsGeoscapeState::txtTooltipOut);
+	_slrDogfightSpeed->onMouseIn((ActionHandler)& OptionsGeoscapeState::txtTooltipIn);
+	_slrDogfightSpeed->onMouseOut((ActionHandler)& OptionsGeoscapeState::txtTooltipOut);
 
 	_txtClockSpeed->setColor(Palette::blockOffset(8)+10);
 	_txtClockSpeed->setText(tr("STR_CLOCK_SPEED"));
@@ -148,9 +146,9 @@ OptionsGeoscapeState::OptionsGeoscapeState(
 	_slrClockSpeed->setRange(250, 50);
 	_slrClockSpeed->setValue(Options::geoClockSpeed);
 	_slrClockSpeed->setTooltip("STR_CLOCK_SPEED_DESC");
-	_slrClockSpeed->onChange((ActionHandler)&OptionsGeoscapeState::slrClockSpeedChange);
-	_slrClockSpeed->onMouseIn((ActionHandler)&OptionsGeoscapeState::txtTooltipIn);
-	_slrClockSpeed->onMouseOut((ActionHandler)&OptionsGeoscapeState::txtTooltipOut);
+	_slrClockSpeed->onChange((ActionHandler)& OptionsGeoscapeState::slrClockSpeedChange);
+	_slrClockSpeed->onMouseIn((ActionHandler)& OptionsGeoscapeState::txtTooltipIn);
+	_slrClockSpeed->onMouseOut((ActionHandler)& OptionsGeoscapeState::txtTooltipOut);
 
 	_txtGlobeDetails->setColor(Palette::blockOffset(8)+10);
 	_txtGlobeDetails->setText(tr("STR_GLOBE_DETAILS"));
@@ -158,26 +156,26 @@ OptionsGeoscapeState::OptionsGeoscapeState(
 	_btnGlobeCountries->setColor(Palette::blockOffset(15)-1);
 	_btnGlobeCountries->setText(tr("STR_GLOBE_COUNTRIES"));
 	_btnGlobeCountries->setPressed(Options::globeDetail);
-	_btnGlobeCountries->onMouseClick((ActionHandler)&OptionsGeoscapeState::btnGlobeCountriesClick);
+	_btnGlobeCountries->onMouseClick((ActionHandler)& OptionsGeoscapeState::btnGlobeCountriesClick);
 	_btnGlobeCountries->setTooltip("STR_GLOBE_COUNTRIES_DESC");
-	_btnGlobeCountries->onMouseIn((ActionHandler)&OptionsGeoscapeState::txtTooltipIn);
-	_btnGlobeCountries->onMouseOut((ActionHandler)&OptionsGeoscapeState::txtTooltipOut);
+	_btnGlobeCountries->onMouseIn((ActionHandler)& OptionsGeoscapeState::txtTooltipIn);
+	_btnGlobeCountries->onMouseOut((ActionHandler)& OptionsGeoscapeState::txtTooltipOut);
 
 	_btnGlobeRadars->setColor(Palette::blockOffset(15)-1);
 	_btnGlobeRadars->setText(tr("STR_GLOBE_RADARS"));
 	_btnGlobeRadars->setPressed(Options::globeRadarLines);
-	_btnGlobeRadars->onMouseClick((ActionHandler)&OptionsGeoscapeState::btnGlobeRadarsClick);
+	_btnGlobeRadars->onMouseClick((ActionHandler)& OptionsGeoscapeState::btnGlobeRadarsClick);
 	_btnGlobeRadars->setTooltip("STR_GLOBE_RADARS_DESC");
-	_btnGlobeRadars->onMouseIn((ActionHandler)&OptionsGeoscapeState::txtTooltipIn);
-	_btnGlobeRadars->onMouseOut((ActionHandler)&OptionsGeoscapeState::txtTooltipOut);
+	_btnGlobeRadars->onMouseIn((ActionHandler)& OptionsGeoscapeState::txtTooltipIn);
+	_btnGlobeRadars->onMouseOut((ActionHandler)& OptionsGeoscapeState::txtTooltipOut);
 
 	_btnGlobePaths->setColor(Palette::blockOffset(15)-1);
 	_btnGlobePaths->setText(tr("STR_GLOBE_FLIGHT_PATHS"));
 	_btnGlobePaths->setPressed(Options::globeFlightPaths);
-	_btnGlobePaths->onMouseClick((ActionHandler)&OptionsGeoscapeState::btnGlobePathsClick);
+	_btnGlobePaths->onMouseClick((ActionHandler)& OptionsGeoscapeState::btnGlobePathsClick);
 	_btnGlobePaths->setTooltip("STR_GLOBE_FLIGHT_PATHS_DESC");
-	_btnGlobePaths->onMouseIn((ActionHandler)&OptionsGeoscapeState::txtTooltipIn);
-	_btnGlobePaths->onMouseOut((ActionHandler)&OptionsGeoscapeState::txtTooltipOut);
+	_btnGlobePaths->onMouseIn((ActionHandler)& OptionsGeoscapeState::txtTooltipIn);
+	_btnGlobePaths->onMouseOut((ActionHandler)& OptionsGeoscapeState::txtTooltipOut);
 
 	_txtOptions->setColor(Palette::blockOffset(8)+10);
 	_txtOptions->setText(tr("STR_USER_INTERFACE_OPTIONS"));
@@ -185,10 +183,10 @@ OptionsGeoscapeState::OptionsGeoscapeState(
 	_btnShowFunds->setColor(Palette::blockOffset(15)-1);
 	_btnShowFunds->setText(tr("STR_SHOW_FUNDS"));
 	_btnShowFunds->setPressed(Options::showFundsOnGeoscape);
-	_btnShowFunds->onMouseClick((ActionHandler)&OptionsGeoscapeState::btnShowFundsClick);
+	_btnShowFunds->onMouseClick((ActionHandler)& OptionsGeoscapeState::btnShowFundsClick);
 	_btnShowFunds->setTooltip("STR_SHOW_FUNDS_DESC");
-	_btnShowFunds->onMouseIn((ActionHandler)&OptionsGeoscapeState::txtTooltipIn);
-	_btnShowFunds->onMouseOut((ActionHandler)&OptionsGeoscapeState::txtTooltipOut);
+	_btnShowFunds->onMouseIn((ActionHandler)& OptionsGeoscapeState::txtTooltipIn);
+	_btnShowFunds->onMouseOut((ActionHandler)& OptionsGeoscapeState::txtTooltipOut);
 }
 
 /**

@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1396234736 source:f:\git\openxcom\src\basescape\baseinfostate.cpp
+1396419964 source:f:\git\openxcom\src\basescape\baseinfostate.cpp
 	"BaseInfoState.h"
 	<sstream>
 	"BasescapeState.h"
@@ -21,7 +21,7 @@
 	"../Savegame/Base.h"
 	"../Savegame/SavedGame.h"
 
-1396234208 f:\git\openxcom\src\basescape\baseinfostate.h
+1396419955 f:\git\openxcom\src\basescape\baseinfostate.h
 	"../Engine/State.h"
 
 1396286534 f:\git\openxcom\src\engine\state.h
@@ -5359,7 +5359,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Soldier.h"
 
-1396397618 source:f:\git\openxcom\src\basescape\soldierinfostate.cpp
+1396407629 source:f:\git\openxcom\src\basescape\soldierinfostate.cpp
 	"SoldierInfoState.h"
 	<sstream>
 	"SackSoldierState.h"
@@ -5385,7 +5385,6 @@
 	"../Savegame/ItemContainer.h"
 	"../Savegame/SavedGame.h"
 	"../Savegame/Soldier.h"
-	"../Savegame/SoldierDead.h"
 
 1396405798 f:\git\openxcom\src\basescape\soldierinfostate.h
 	<vector>
@@ -5395,7 +5394,7 @@
 	<string>
 	"../Ruleset/Unit.h"
 
-1396404312 source:f:\git\openxcom\src\basescape\soldiermemorialstate.cpp
+1396421435 source:f:\git\openxcom\src\basescape\soldiermemorialstate.cpp
 	"SoldierMemorialState.h"
 	<iomanip>
 	<sstream>
@@ -5437,7 +5436,7 @@
 1325723722 f:\git\openxcom\deps\include\sdl\sdl_types.h
 	"SDL_stdinc.h"
 
-1396404348 f:\git\openxcom\src\savegame\soldierdead.h
+1396422423 f:\git\openxcom\src\savegame\soldierdead.h
 	<string>
 	<yaml-cpp/yaml.h>
 	"../Ruleset/Unit.h"
@@ -9304,7 +9303,7 @@
 	"../Ruleset/RuleRegion.h"
 	"../Ruleset/Ruleset.h"
 
-1396322517 source:f:\git\openxcom\src\savegame\base.cpp
+1396409541 source:f:\git\openxcom\src\savegame\base.cpp
 	"Base.h"
 	<algorithm>
 	<cmath>
@@ -9485,7 +9484,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/Ruleset.h"
 
-1396384577 source:f:\git\openxcom\src\savegame\savedgame.cpp
+1396423468 source:f:\git\openxcom\src\savegame\savedgame.cpp
 	"SavedGame.h"
 	<algorithm>
 	<fstream>
@@ -9526,7 +9525,7 @@
 	"SerializationHelper.h"
 	<assert.h>
 
-1396406607 source:f:\git\openxcom\src\savegame\soldier.cpp
+1396422370 source:f:\git\openxcom\src\savegame\soldier.cpp
 	"Soldier.h"
 	"SoldierDead.h"
 	"SoldierDeath.h"
@@ -9539,7 +9538,7 @@
 	"../Savegame/Craft.h"
 	"../Savegame/EquipmentLayoutItem.h"
 
-1396403381 source:f:\git\openxcom\src\savegame\soldierdead.cpp
+1396422516 source:f:\git\openxcom\src\savegame\soldierdead.cpp
 	"SoldierDead.h"
 	"Soldier.h"
 	"SoldierDeath.h"
@@ -11406,7 +11405,7 @@
 	<vector>
 	"../Engine/InteractiveSurface.h"
 
-1396391845 source:f:\git\openxcom\src\interface\combobox.cpp
+1396419272 source:f:\git\openxcom\src\interface\combobox.cpp
 	"ComboBox.h"
 	"TextButton.h"
 	"TextList.h"
@@ -11441,7 +11440,7 @@
 	<vector>
 	"OptionsBaseState.h"
 
-1396344858 f:\git\openxcom\src\menu\optionsgeoscapestate.h
+1396419618 f:\git\openxcom\src\menu\optionsgeoscapestate.h
 	"OptionsBaseState.h"
 
 1396344767 f:\git\openxcom\src\menu\optionsmodsstate.h
@@ -11483,7 +11482,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1396344954 source:f:\git\openxcom\src\menu\optionsgeoscapestate.cpp
+1396419699 source:f:\git\openxcom\src\menu\optionsgeoscapestate.cpp
 	"OptionsGeoscapeState.h"
 	<sstream>
 	"../Engine/Action.h"
@@ -11551,7 +11550,7 @@
 	"../Menu/SaveState.h"
 	"../Resource/ResourcePack.h"
 
-1396402594 source:f:\git\openxcom\src\basescape\soldierdeadinfostate.cpp
+1396407701 source:f:\git\openxcom\src\basescape\soldierdeadinfostate.cpp
 	"SoldierDeadInfoState.h"
 	<sstream>
 	"../Engine/Action.h"
@@ -11567,7 +11566,6 @@
 	"../Resource/ResourcePack.h"
 	"../Ruleset/Ruleset.h"
 	"../Ruleset/RuleSoldier.h"
-	"../Savegame/ItemContainer.h"
 	"../Savegame/SavedGame.h"
 	"../Savegame/SoldierDead.h"
 

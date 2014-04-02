@@ -34,8 +34,7 @@ class ToggleTextButton;
 
 
 /**
- * Screen that lets the user configure various
- * Geoscape options.
+ * Screen that lets the user configure various Geoscape options.
  */
 class OptionsGeoscapeState
 	:
@@ -43,14 +42,24 @@ class OptionsGeoscapeState
 {
 
 private:
-	Text *_txtDragScroll;
-	ComboBox *_cbxDragScroll;
-	Text *_txtScrollSpeed, *_txtDogfightSpeed, *_txtClockSpeed;
-	Slider *_slrScrollSpeed, *_slrDogfightSpeed, *_slrClockSpeed;
-	Text *_txtGlobeDetails;
-	ToggleTextButton *_btnGlobeCountries, *_btnGlobeRadars, *_btnGlobePaths;
-	Text *_txtOptions;
-	ToggleTextButton *_btnShowFunds;
+	ComboBox
+		* _cbxDragScroll;
+	Slider
+		* _slrScrollSpeed,
+		* _slrDogfightSpeed,
+		* _slrClockSpeed;
+	Text
+		* _txtDragScroll,
+		* _txtScrollSpeed,
+		* _txtDogfightSpeed,
+		* _txtClockSpeed,
+		* _txtGlobeDetails,
+		* _txtOptions;
+	ToggleTextButton
+		* _btnGlobeCountries,
+		* _btnGlobeRadars,
+		* _btnGlobePaths;
+	ToggleTextButton* _btnShowFunds;
 
 
 	public:
@@ -62,21 +71,21 @@ private:
 		~OptionsGeoscapeState();
 
 		/// Handler for changing the Drag Scroll combobox.
-		void cbxDragScrollChange(Action *action);
+		void cbxDragScrollChange(Action* action);
 		/// Handler for changing the scroll speed slider.
-		void slrScrollSpeedChange(Action *action);
+		void slrScrollSpeedChange(Action* action);
 		/// Handler for changing the dogfight speed slider.
-		void slrDogfightSpeedChange(Action *action);
+		void slrDogfightSpeedChange(Action* action);
 		/// Handler for changing the clock speed slider.
-		void slrClockSpeedChange(Action *action);
+		void slrClockSpeedChange(Action* action);
 		/// Handler for clicking the Country Borders button.
-		void btnGlobeCountriesClick(Action *action);
+		void btnGlobeCountriesClick(Action* action);
 		/// Handler for clicking the Radar Ranges button.
-		void btnGlobeRadarsClick(Action *action);
+		void btnGlobeRadarsClick(Action* action);
 		/// Handler for clicking the Flight Paths button.
-		void btnGlobePathsClick(Action *action);
+		void btnGlobePathsClick(Action* action);
 		/// Handler for clicking the Show Funds button.
-		void btnShowFundsClick(Action *action);
+		void btnShowFundsClick(Action* action);
 };
 
 }

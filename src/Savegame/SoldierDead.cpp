@@ -29,7 +29,7 @@ namespace OpenXcom
 {
 
 /**
- * Initializes a new dead soldier, either blank or randomly generated.
+ * Initializes a new dead soldier.
  */
 SoldierDead::SoldierDead(
 		std::wstring name,
@@ -39,7 +39,10 @@ SoldierDead::SoldierDead(
 		SoldierLook look,
 		int missions,
 		int kills,
-		SoldierDeath* death)
+		SoldierDeath* death,
+		UnitStats initialStats,
+		UnitStats currentStats)
+		// base if I want to...
 	:
 		_name(name),
 		_id(id),
@@ -49,12 +52,9 @@ SoldierDead::SoldierDead(
 		_missions(missions),
 		_kills(kills),
 		_death(death),
-
-		_initialStats(),
-		_currentStats()
+		_initialStats(initialStats),
+		_currentStats(currentStats)
 {
-//	_initialStats;
-//	_currentStats;
 }
 
 /**
@@ -225,7 +225,7 @@ UnitStats* SoldierDead::getCurrentStats()
 
 /**
  * Returns the dead soldier's time of death.
- * @return, Pointer to death data. NULL if no death has occured.
+ * @return, Pointer to death time.
  */
 SoldierDeath* SoldierDead::getDeath() const
 {
