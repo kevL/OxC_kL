@@ -585,7 +585,7 @@ BattlescapeState::BattlescapeState(Game* game)
 	_btnReserveNone->onKeyboardPress(
 					(ActionHandler)& BattlescapeState::btnReserveClick,
 					Options::keyBattleReserveNone);
-	_btnReserveNone->setTooltip("STR_DONT_RESERVE_TUS");
+	_btnReserveNone->setTooltip("STR_DONT_RESERVE_TIME_UNITS");
 	_btnReserveNone->onMouseIn((ActionHandler)& BattlescapeState::txtTooltipIn);
 	_btnReserveNone->onMouseOut((ActionHandler)& BattlescapeState::txtTooltipOut);
 
@@ -593,7 +593,7 @@ BattlescapeState::BattlescapeState(Game* game)
 	_btnReserveSnap->onKeyboardPress(
 					(ActionHandler)& BattlescapeState::btnReserveClick,
 					Options::keyBattleReserveSnap);
-	_btnReserveSnap->setTooltip("STR_RESERVE_TUS_FOR_SNAP_SHOT");
+	_btnReserveSnap->setTooltip("STR_RESERVE_TIME_UNITS_FOR_SNAP_SHOT");
 	_btnReserveSnap->onMouseIn((ActionHandler)& BattlescapeState::txtTooltipIn);
 	_btnReserveSnap->onMouseOut((ActionHandler)& BattlescapeState::txtTooltipOut);
 
@@ -601,7 +601,7 @@ BattlescapeState::BattlescapeState(Game* game)
 	_btnReserveAimed->onKeyboardPress(
 					(ActionHandler)& BattlescapeState::btnReserveClick,
 					Options::keyBattleReserveAimed);
-	_btnReserveAimed->setTooltip("STR_RESERVE_TUS_FOR_AIMED_SHOT");
+	_btnReserveAimed->setTooltip("STR_RESERVE_TIME_UNITS_FOR_AIMED_SHOT");
 	_btnReserveAimed->onMouseIn((ActionHandler)& BattlescapeState::txtTooltipIn);
 	_btnReserveAimed->onMouseOut((ActionHandler)& BattlescapeState::txtTooltipOut);
 
@@ -609,7 +609,7 @@ BattlescapeState::BattlescapeState(Game* game)
 	_btnReserveAuto->onKeyboardPress(
 					(ActionHandler)& BattlescapeState::btnReserveClick,
 					Options::keyBattleReserveAuto);
-	_btnReserveAuto->setTooltip("STR_RESERVE_TUS_FOR_AUTO_SHOT");
+	_btnReserveAuto->setTooltip("STR_RESERVE_TIME_UNITS_FOR_AUTO_SHOT");
 	_btnReserveAuto->onMouseIn((ActionHandler)& BattlescapeState::txtTooltipIn);
 	_btnReserveAuto->onMouseOut((ActionHandler)& BattlescapeState::txtTooltipOut);
 
@@ -617,7 +617,7 @@ BattlescapeState::BattlescapeState(Game* game)
 	_btnReserveKneel->onKeyboardPress(
 					(ActionHandler)& BattlescapeState::btnReserveKneelClick,
 					Options::keyBattleReserveKneel);
-	_btnReserveKneel->setTooltip("STR_RESERVE_TUS_FOR_KNEEL");
+	_btnReserveKneel->setTooltip("STR_RESERVE_TIME_UNITS_FOR_KNEEL");
 	_btnReserveKneel->onMouseIn((ActionHandler)& BattlescapeState::txtTooltipIn);
 	_btnReserveKneel->onMouseOut((ActionHandler)& BattlescapeState::txtTooltipOut);
 

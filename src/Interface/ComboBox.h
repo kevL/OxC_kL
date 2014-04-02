@@ -45,8 +45,8 @@ class ComboBox
 {
 
 private:
-	static const int LIST_MARGIN	= 5;
-	static const int MAX_ITEMS		= 7;
+	static const int LIST_MARGIN;
+	static const int MAX_ITEMS;
 
 	Surface* _arrow;
 	TextButton* _button;
