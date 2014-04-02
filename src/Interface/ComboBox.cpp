@@ -32,10 +32,6 @@
 namespace OpenXcom
 {
 
-//kL const int ComboBox::LIST_MARGIN;
-//kL const int ComboBox::MAX_ITEMS;
-
-
 /**
  * Sets up a combobox with the specified size and position.
  * @param state Pointer to state the window belongs to.
