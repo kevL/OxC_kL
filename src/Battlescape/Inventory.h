@@ -47,7 +47,9 @@ class Inventory
 {
 
 private:
-	bool _tu;
+	bool
+		_base,
+		_tu;
 	int
 		_groundOffset,
 		_primeGrenade; // kL
@@ -83,7 +85,8 @@ private:
 				int width,
 				int height,
 				int x = 0,
-				int y = 0);
+				int y = 0,
+				bool base = false);
 		/// Cleans up the inventory.
 		~Inventory();
 

@@ -114,7 +114,13 @@ InventoryState::InventoryState(
 						272,
 						88);
 
-	_inv		= new Inventory(_game, 320, 200, 0, 0);
+	_inv		= new Inventory(
+							_game,
+							320,
+							200,
+							0,
+							0,
+							_parent == 0);
 
 	add(_bg);
 	add(_soldier);

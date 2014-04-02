@@ -67,7 +67,8 @@ Inventory::Inventory(
 		int width,
 		int height,
 		int x,
-		int y)
+		int y,
+		bool base)
 	:
 		InteractiveSurface(
 			width,
@@ -907,79 +908,82 @@ void Inventory::mouseClick(Action* action, State* state)
 	{
 		if (_selItem == 0)
 		{
-			if (!_tu)	// kL_note: ie. TurnUnits have not been instantiated yet:
-						// ergo preBattlescape inventory screen is active.
+			if (!_base)
 			{
-				int
-					x = static_cast<int>(floor(action->getAbsoluteXMouse())) - getX(),
-					y = static_cast<int>(floor(action->getAbsoluteYMouse())) - getY();
-
-				RuleInventory* slot = getSlotInPosition(&x, &y);
-				if (slot != 0)
+				if (!_tu)	// kL_note: ie. TurnUnits have not been instantiated yet:
+							// ergo preBattlescape inventory screen is active.
 				{
-					if (slot->getType() == INV_GROUND)
-						x += _groundOffset;
+					int
+						x = static_cast<int>(floor(action->getAbsoluteXMouse())) - getX(),
+						y = static_cast<int>(floor(action->getAbsoluteYMouse())) - getY();
 
-					BattleItem* item = _selUnit->getItem(slot, x, y);
-					if (item != 0)
+					RuleInventory* slot = getSlotInPosition(&x, &y);
+					if (slot != 0)
 					{
-						BattleType itemType = item->getRules()->getBattleType();
-						if (BT_GRENADE == itemType
-							|| BT_PROXIMITYGRENADE == itemType)
+						if (slot->getType() == INV_GROUND)
+							x += _groundOffset;
+
+						BattleItem* item = _selUnit->getItem(slot, x, y);
+						if (item != 0)
 						{
-//						if (item->getExplodeTurn() == -1) // Prime that grenade!
-						if (item->getFuseTimer() == -1) // Prime that grenade!
+							BattleType itemType = item->getRules()->getBattleType();
+							if (BT_GRENADE == itemType
+								|| BT_PROXIMITYGRENADE == itemType)
 							{
-								if (BT_PROXIMITYGRENADE == itemType)
+//								if (item->getExplodeTurn() == -1) // Prime that grenade!
+								if (item->getFuseTimer() == -1) // Prime that grenade!
 								{
-//									item->setExplodeTurn(0);
-									item->setFuseTimer(0);
+									if (BT_PROXIMITYGRENADE == itemType)
+									{
+//										item->setExplodeTurn(0);
+										item->setFuseTimer(0);
 
-//									std::wstring activated = Text::formatNumber(0) + L" ";
-//									activated += _game->getLanguage()->getString("STR_GRENADE_IS_ACTIVATED");
-//									activated += L" " + Text::formatNumber(0);
+//										std::wstring activated = Text::formatNumber(0) + L" ";
+//										activated += _game->getLanguage()->getString("STR_GRENADE_IS_ACTIVATED");
+//										activated += L" " + Text::formatNumber(0);
 
-									std::wstring activated = _game->getLanguage()->getString("STR_GRENADE_IS_ACTIVATED");
-									_warning->showMessage(activated);
+										std::wstring activated = _game->getLanguage()->getString("STR_GRENADE_IS_ACTIVATED");
+										_warning->showMessage(activated);
+									}
+									else
+										// kL_note: This is where activation warning for nonProxy preBattle grenades goes...
+										_game->pushState(new PrimeGrenadeState(
+																			_game,
+																			0,
+																			true,
+																			item,
+																			this)); // kL_add.
 								}
 								else
-									// kL_note: This is where activation warning for nonProxy preBattle grenades goes...
-									_game->pushState(new PrimeGrenadeState(
-																		_game,
-																		0,
-																		true,
-																		item,
-																		this)); // kL_add.
-							}
-							else
-							{
-								_warning->showMessage(_game->getLanguage()->getString("STR_GRENADE_IS_DEACTIVATED"));
-//								item->setExplodeTurn(-1); // Unprime the grenade
-								item->setFuseTimer(-1); // Unprime the grenade
+								{
+									_warning->showMessage(_game->getLanguage()->getString("STR_GRENADE_IS_DEACTIVATED"));
+//									item->setExplodeTurn(-1); // Unprime the grenade
+									item->setFuseTimer(-1); // Unprime the grenade
+								}
 							}
 						}
 					}
 				}
-			}
-			else
-			{
-				_game->popState(); // Closes the inventory window on right-click (if not in preBattle equip screen!)
-
-				// but Does NOT applyGravity(), so from InventoryState::btnOkClick()
-				SavedBattleGame* battleGame = _game->getSavedGame()->getSavedBattle();
-				TileEngine* tileEngine = battleGame->getTileEngine();
-
-				tileEngine->applyGravity(battleGame->getSelectedUnit()->getTile());
-				tileEngine->calculateTerrainLighting(); // dropping / picking up flares
-				tileEngine->recalculateFOV();
-
-				// from BattlescapeGame::dropItem() but can't really use this because I don't know exactly what dropped...
-				// could figure it out via what's on Ground but meh.
-/*				if (item->getRules()->getBattleType() == BT_FLARE)
+				else
 				{
-					getTileEngine()->calculateTerrainLighting();
-					getTileEngine()->calculateFOV(position);
-				} */
+					_game->popState(); // Closes the inventory window on right-click (if not in preBattle equip screen!)
+
+					// but Does NOT applyGravity(), so from InventoryState::btnOkClick()
+					SavedBattleGame* battleGame = _game->getSavedGame()->getSavedBattle();
+					TileEngine* tileEngine = battleGame->getTileEngine();
+
+					tileEngine->applyGravity(battleGame->getSelectedUnit()->getTile());
+					tileEngine->calculateTerrainLighting(); // dropping / picking up flares
+					tileEngine->recalculateFOV();
+
+					// from BattlescapeGame::dropItem() but can't really use this because I don't know exactly what dropped...
+					// could figure it out via what's on Ground but meh.
+/*					if (item->getRules()->getBattleType() == BT_FLARE)
+					{
+						getTileEngine()->calculateTerrainLighting();
+						getTileEngine()->calculateFOV(position);
+					} */
+				}
 			}
 		}
 		else

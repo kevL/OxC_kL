@@ -2728,7 +2728,7 @@ bool TileEngine::detonate(Tile* tile)
 
 	bool objective = false;
 
-	static const int parts[7] = { 0, 1, 2, 0, 1, 2, 3 };
+	static const int parts[7] = {0, 1, 2, 0, 1, 2, 3};
 	Position pos = tile->getPosition();
 
 	Tile* tiles[7];
@@ -2826,7 +2826,9 @@ bool TileEngine::detonate(Tile* tile)
 					}
 				}
 
-				if (remainingPower > flam * 2)
+				if (remainingPower > flam * 2
+					&& (tiles[i]->getMapData(MapData::O_FLOOR)
+						|| tiles[i]->getMapData(MapData::O_OBJECT)))
 				{
 					tile->setFire(fuel);
 					tile->setSmoke(std::max(
