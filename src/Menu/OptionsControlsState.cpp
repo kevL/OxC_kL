@@ -206,19 +206,19 @@ void OptionsControlsState::lstControlsClick(Action* action)
 
 	_selected = _lstControls->getSelectedRow();
 	if (_selected > 0
-		&& _selected <= _controlsGeneral.size())
+		&& _selected <= static_cast<int>(_controlsGeneral.size()))
 	{
 		_selKey = &_controlsGeneral[_selected - 1];
 	}
-	else if (_selected > _controlsGeneral.size() + 2
-		&& _selected <= _controlsGeneral.size() + 2 + _controlsGeo.size())
+	else if (_selected > static_cast<int>(_controlsGeneral.size()) + 2
+		&& _selected <= static_cast<int>(_controlsGeneral.size()) + 2 + static_cast<int>(_controlsGeo.size()))
 	{
-		_selKey = &_controlsGeo[_selected - 1 - _controlsGeneral.size() - 2];
+		_selKey = &_controlsGeo[_selected - 1 - static_cast<int>(_controlsGeneral.size()) - 2];
 	}
-	else if (_selected > _controlsGeneral.size() + 2 + _controlsGeo.size() + 2
-		&& _selected <= _controlsGeneral.size() + 2 + _controlsGeo.size() + 2 + _controlsBattle.size())
+	else if (_selected > static_cast<int>(_controlsGeneral.size()) + 2 + static_cast<int>(_controlsGeo.size()) + 2
+		&& _selected <= static_cast<int>(_controlsGeneral.size()) + 2 + static_cast<int>(_controlsGeo.size()) + 2 + static_cast<int>(_controlsBattle.size()))
 	{
-		_selKey = &_controlsBattle[_selected - 1 - _controlsGeneral.size() - 2 - _controlsGeo.size() - 2];
+		_selKey = &_controlsBattle[_selected - 1 - static_cast<int>(_controlsGeneral.size()) - 2 - static_cast<int>(_controlsGeo.size()) - 2];
 	}
 	else
 	{

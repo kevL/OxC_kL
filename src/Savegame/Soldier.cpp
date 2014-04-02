@@ -20,7 +20,7 @@
 #include "Soldier.h"
 
 #include "SoldierDead.h" // kL
-//#include "SoldierDeath.h" // kL
+#include "SoldierDeath.h" // kL
 
 #include "../Engine/Language.h"
 #include "../Engine/RNG.h"
@@ -32,7 +32,6 @@
 
 #include "../Savegame/Craft.h"
 #include "../Savegame/EquipmentLayoutItem.h"
-#include "../Savegame/SoldierDeath.h"
 
 
 namespace OpenXcom
@@ -67,8 +66,8 @@ Soldier::Soldier(
 		_recentlyPromoted(false),
 		_psiTraining(false),
 		_armor(armor),
-		_equipmentLayout(),
-		_death(0)
+		_equipmentLayout()
+//kL		_death(0)
 {
 	if (names != 0)
 	{
@@ -125,7 +124,7 @@ Soldier::~Soldier()
 		delete *i;
 	}
 
-	delete _death;
+//kL	delete _death;
 }
 
 /**
@@ -163,18 +162,18 @@ void Soldier::load(
 		}
 	}
 
-	// kL_note: This may be obsolete, since SoldierDead was put in.
-	// ie, SoldierDeath should be part of SoldierDead, not class Soldier here.
-	if (node["death"])
+	// kL_note: This should be obsolete, since SoldierDead was put in.
+	// ie, SoldierDeath is part of SoldierDead, not class Soldier here.
+/*kL	if (node["death"])
 	{
 		_death = new SoldierDeath();
 		_death->load(node["death"]);
-	}
+	} */
 }
 
 /**
  * Saves the soldier to a YAML file.
- * @return YAML node.
+ * @return, YAML node.
  */
 YAML::Node Soldier::save() const
 {
@@ -209,17 +208,17 @@ YAML::Node Soldier::save() const
 		}
 	}
 
-	// kL_note: This may be obsolete, since SoldierDead was put in.
-	// ie, SoldierDeath should be part of SoldierDead, not class Soldier.
-	if (_death != 0)
-		node["death"] = _death->save();
+	// kL_note: This should be obsolete, since SoldierDead was put in.
+	// ie, SoldierDeath is part of SoldierDead, not class Soldier.
+/*kL	if (_death != 0)
+		node["death"] = _death->save(); */
 
 	return node;
 }
 
 /**
  * Returns the soldier's rules.
- * @return rulesoldier
+ * @return, rulesoldier
  */
 RuleSoldier* Soldier::getRules() const
 {
@@ -313,7 +312,7 @@ std::wstring Soldier::getCraftString(Language* lang) const
 /**
  * Returns a localizable-string representation of
  * the soldier's military rank.
- * @return String ID for rank.
+ * @return, String ID for rank.
  */
 std::string Soldier::getRankString() const
 {
@@ -345,7 +344,7 @@ int Soldier::getRankSprite() const
 
 /**
  * Returns the soldier's military rank.
- * @return Rank enum.
+ * @return, Rank enum.
  */
 SoldierRank Soldier::getRank() const
 {
@@ -370,7 +369,7 @@ void Soldier::addMissionCount()
 
 /**
  * Returns the soldier's amount of missions.
- * @return Missions.
+ * @return, Missions.
  */
 int Soldier::getMissions() const
 {
@@ -387,7 +386,7 @@ void Soldier::addKillCount(int count)
 
 /**
  * Returns the soldier's amount of kills.
- * @return Kills.
+ * @return, Kills.
  */
 int Soldier::getKills() const
 {
@@ -396,7 +395,7 @@ int Soldier::getKills() const
 
 /**
  * Returns the soldier's gender.
- * @return Gender.
+ * @return, Gender.
  */
 SoldierGender Soldier::getGender() const
 {
@@ -405,7 +404,7 @@ SoldierGender Soldier::getGender() const
 
 /**
  * Returns the soldier's look.
- * @return Look.
+ * @return, Look.
  */
 SoldierLook Soldier::getLook() const
 {
@@ -414,7 +413,7 @@ SoldierLook Soldier::getLook() const
 
 /**
  * Returns the unit's promotion status and resets it.
- * @return True if recently promoted, False otherwise.
+ * @return, True if recently promoted, False otherwise.
  */
 bool Soldier::isPromoted()
 {
@@ -444,7 +443,7 @@ void Soldier::setArmor(Armor* armor)
 
 /**
  * Returns the amount of time until the soldier is healed.
- * @return Number of days.
+ * @return, Number of days.
  */
 int Soldier::getWoundRecovery() const
 {
@@ -472,7 +471,7 @@ void Soldier::heal()
 
 /**
  * Returns the list of EquipmentLayoutItems of a soldier.
- * @return Pointer to the EquipmentLayoutItem list.
+ * @return, Pointer to the EquipmentLayoutItem list.
  */
 std::vector<EquipmentLayoutItem*>* Soldier::getEquipmentLayout()
 {
@@ -615,28 +614,36 @@ int Soldier::getImprovement()
 
 /**
  * Kills the soldier in the Geoscape.
- * @param, death Pointer to death data.
- * @return SoldierDead*, Pointer to a DeadSoldier template.
+ * @param death, Pointer to death data.
+ * @return, Pointer to a SoldierDead template.
  */
 //kL void Soldier::die(SoldierDeath* death)
 SoldierDead* Soldier::die(SoldierDeath* death)
 {
-	delete _death;
-	_death = death;
+//kL	delete _death;
+//kL	_death = death;
 
 	// Clean up associations
-	_craft = 0;
+/*	_craft = NULL;
+	_armor = NULL; // kL
 	_psiTraining = false;
 	_recentlyPromoted = false;
 	_recovery = 0;
+	_improvement = 0; // kL
+*/
 
 	for (std::vector<EquipmentLayoutItem*>::iterator
 			i = _equipmentLayout.begin();
 			i != _equipmentLayout.end();
 			++i)
+	{
 		delete *i;
+	}
 
 	_equipmentLayout.clear();
+	// wait a second: The soldier is about to get deleted from the Roster anyway!!!
+	// So just pass the required info into SoldierDead below and forget above stuff.
+	// _death/SoldierDeath ought be cleaned out of class_vars also
 
 	// kL_begin:
 	SoldierDead* dead = new SoldierDead(
@@ -647,15 +654,10 @@ SoldierDead* Soldier::die(SoldierDeath* death)
 									_look,
 									_missions,
 									_kills,
-									_death);
-/*										L"",
-										0,
-										RANK_ROOKIE,
-										GENDER_MALE,
-										LOOK_BLONDE,
-										0,
-										0,
-										NULL); */
+									death);
+//									_death);
+		// need to put in InitialStats & CurrentStats ...!
+		// base if I want to...
 
 	return dead;
 //	SavedGame::getDeadSoldiers()->push_back(ds);

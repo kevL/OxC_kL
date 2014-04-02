@@ -17,12 +17,9 @@
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "SoldierInfoState.h"
+#include "SoldierDeadInfoState.h"
 
 #include <sstream>
-
-#include "SackSoldierState.h"
-#include "SoldierArmorState.h"
 
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
@@ -35,48 +32,33 @@
 #include "../Interface/Bar.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
-#include "../Interface/TextEdit.h"
 
 #include "../Resource/ResourcePack.h"
 
-#include "../Ruleset/Armor.h"
-#include "../Ruleset/RuleCraft.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleSoldier.h"
 
-#include "../Savegame/Base.h"
-#include "../Savegame/Craft.h"
-#include "../Savegame/ItemContainer.h"
 #include "../Savegame/SavedGame.h"
-#include "../Savegame/Soldier.h"
+#include "../Savegame/SoldierDead.h"
 
 
 namespace OpenXcom
 {
 
 /**
- * Initializes all the elements in the Soldier Info screen.
+ * Initializes all the elements in the Soldier Dead Info screen.
  * @param game, Pointer to the core game.
- * @param base, Pointer to the base to get info from. NULL to use the dead soldiers list.
  * @param soldierId, ID of the selected soldier.
  */
-SoldierInfoState::SoldierInfoState(
+SoldierDeadInfoState::SoldierDeadInfoState(
 		Game* game,
-		Base* base,
 		size_t soldierId)
 	:
 		State(game),
-		_base(base),
 		_soldierId(soldierId),
-		_soldier(0) // kL
+		_soldier(0)
 {
-	_list = NULL; // kL
-
-//kL	if (_base == 0)
-//kL		_list = _game->getSavedGame()->getDeadSoldiers();
-//kL	else
-	if (_base != 0) // kL
-		_list = _base->getSoldiers();
+	_list = _game->getSavedGame()->getDeadSoldiers();
 
 	_bg				= new Surface(320, 200, 0, 0);
 
@@ -85,20 +67,11 @@ SoldierInfoState::SoldierInfoState(
 	_btnPrev		= new TextButton(29, 16, 0, 32);
 	_btnOk			= new TextButton(49, 16, 30, 32);
 	_btnNext		= new TextButton(29, 16, 80, 32);
-	_btnAutoStat	= new TextButton(49, 16, 112, 32);
 
-	_txtArmor		= new Text(30, 9, 208, 35);
-	_btnArmor		= new TextButton(73, 16, 240, 32);
-
-	_edtSoldier		= new TextEdit(179, 16, 40, 9);
-	_btnSack		= new TextButton(46, 17, 267, 7);
-
+	_txtSoldier		= new Text(179, 16, 40, 9);
 	_txtRank		= new Text(130, 9, 0, 49);
 	_txtMissions	= new Text(100, 9, 130, 49);
 	_txtKills		= new Text(100, 9, 230, 49);
-	_txtCraft		= new Text(130, 9, 0, 57);
-	_txtRecovery	= new Text(180, 9, 130, 57);
-	_txtPsionic		= new Text(75, 9, 5, 67);
 
 	_txtTimeUnits	= new Text(120, 9, 5, 82);
 	_numTimeUnits	= new Text(18, 9, 131, 82);
@@ -145,17 +118,10 @@ SoldierInfoState::SoldierInfoState(
 	add(_btnOk);
 	add(_btnPrev);
 	add(_btnNext);
-	add(_btnArmor);
-	add(_edtSoldier);
-	add(_btnAutoStat); // kL
-	add(_btnSack);
-	add(_txtArmor); // kL
+	add(_txtSoldier);
 	add(_txtRank);
 	add(_txtMissions);
 	add(_txtKills);
-	add(_txtCraft);
-	add(_txtRecovery);
-	add(_txtPsionic);
 
 	add(_txtTimeUnits);
 	add(_numTimeUnits);
@@ -203,43 +169,28 @@ SoldierInfoState::SoldierInfoState(
 
 	_btnOk->setColor(Palette::blockOffset(15)+6);
 	_btnOk->setText(tr("STR_OK"));
-	_btnOk->onMouseClick((ActionHandler)& SoldierInfoState::btnOkClick);
+	_btnOk->onMouseClick((ActionHandler)& SoldierDeadInfoState::btnOkClick);
 	_btnOk->onKeyboardPress(
-					(ActionHandler)& SoldierInfoState::btnOkClick,
+					(ActionHandler)& SoldierDeadInfoState::btnOkClick,
 					Options::keyCancel);
 
 	_btnPrev->setColor(Palette::blockOffset(15)+6);
 	_btnPrev->setText(L"<");
-	_btnPrev->onMouseClick((ActionHandler)& SoldierInfoState::btnPrevClick);
+	_btnPrev->onMouseClick((ActionHandler)& SoldierDeadInfoState::btnPrevClick);
 	_btnPrev->onKeyboardPress(
-					(ActionHandler)& SoldierInfoState::btnPrevClick,
+					(ActionHandler)& SoldierDeadInfoState::btnPrevClick,
 					Options::keyBattlePrevUnit);
 
 	_btnNext->setColor(Palette::blockOffset(15)+6);
 	_btnNext->setText(L">");
-	_btnNext->onMouseClick((ActionHandler)& SoldierInfoState::btnNextClick);
+	_btnNext->onMouseClick((ActionHandler)& SoldierDeadInfoState::btnNextClick);
 	_btnNext->onKeyboardPress(
-					(ActionHandler)& SoldierInfoState::btnNextClick,
+					(ActionHandler)& SoldierDeadInfoState::btnNextClick,
 					Options::keyBattleNextUnit);
 
-	_btnArmor->setColor(Palette::blockOffset(15)+6);
-	_btnArmor->onMouseClick((ActionHandler)& SoldierInfoState::btnArmorClick);
 
-	_edtSoldier->setColor(Palette::blockOffset(13)+10);
-	_edtSoldier->setBig();
-	_edtSoldier->onChange((ActionHandler)& SoldierInfoState::edtSoldierChange);
-	_edtSoldier->onMousePress((ActionHandler)& SoldierInfoState::edtSoldierPress);
-
-	_btnSack->setColor(Palette::blockOffset(15)+6);
-	_btnSack->setText(tr("STR_SACK"));
-	_btnSack->onMouseClick((ActionHandler)& SoldierInfoState::btnSackClick);
-
-	_btnAutoStat->setColor(Palette::blockOffset(15)+6);
-	_btnAutoStat->setText(tr("STR_AUTOSTAT"));
-	_btnAutoStat->onMouseClick((ActionHandler)& SoldierInfoState::btnAutoStat);
-
-	_txtArmor->setColor(Palette::blockOffset(13));
-	_txtArmor->setText(tr("STR_ARMOR"));
+	_txtSoldier->setColor(Palette::blockOffset(13)+10);
+	_txtSoldier->setBig();
 
 	_txtRank->setColor(Palette::blockOffset(13)+10);
 	_txtRank->setSecondaryColor(Palette::blockOffset(13));
@@ -249,15 +200,6 @@ SoldierInfoState::SoldierInfoState(
 
 	_txtKills->setColor(Palette::blockOffset(13)+10);
 	_txtKills->setSecondaryColor(Palette::blockOffset(13));
-
-	_txtCraft->setColor(Palette::blockOffset(13)+10);
-	_txtCraft->setSecondaryColor(Palette::blockOffset(13));
-
-	_txtRecovery->setColor(Palette::blockOffset(13)+10);
-	_txtRecovery->setSecondaryColor(Palette::blockOffset(13));
-
-	_txtPsionic->setColor(Palette::blockOffset(15)+1);
-	_txtPsionic->setText(tr("STR_IN_PSIONIC_TRAINING"));
 
 
 	_txtTimeUnits->setColor(Palette::blockOffset(15)+1);
@@ -373,14 +315,14 @@ SoldierInfoState::SoldierInfoState(
 /**
  *
  */
-SoldierInfoState::~SoldierInfoState()
+SoldierDeadInfoState::~SoldierDeadInfoState()
 {
 }
 
 /**
- * Updates soldier stats when the soldier changes.
+ * Updates soldier stats when the dead soldier changes.
  */
-void SoldierInfoState::init()
+void SoldierDeadInfoState::init()
 {
 	if (_list->empty())
 	{
@@ -393,8 +335,7 @@ void SoldierInfoState::init()
 		_soldierId = 0;
 
 	_soldier = _list->at(_soldierId);
-//kL	_edtSoldier->setBig();
-	_edtSoldier->setText(_soldier->getName());
+	_txtSoldier->setText(_soldier->getName());
 
 	UnitStats* initial = _soldier->getInitStats();
 	UnitStats* current = _soldier->getCurrentStats();
@@ -497,44 +438,13 @@ void SoldierInfoState::init()
 	_barStrength->setValue(current->strength);
 
 
-	if (_base != 0) // kL
-	{
-		std::wstring
-			armor,
-			craft;
-
-		std::string armorType = _soldier->getArmor()->getType();
-		armor = tr(armorType);
-		_btnArmor->setText(armor);
-		if (_soldier->getCraft()
-			&& _soldier->getCraft()->getStatus() == "STR_OUT")
-		{
-			_btnArmor->setColor(Palette::blockOffset(4)+9);
-		}
-		else
-			_btnArmor->setColor(Palette::blockOffset(15)+6);
-
-		if (_soldier->getCraft() == 0)
-			craft = tr("STR_NONE_UC");
-		else
-			craft = _soldier->getCraft()->getName(_game->getLanguage());
-		_txtCraft->setText(tr("STR_CRAFT_").arg(craft));
-	}
-
-
-	if (_soldier->getWoundRecovery() > 0)
-		_txtRecovery->setText(tr("STR_WOUND_RECOVERY")
-								.arg(tr("STR_DAY", _soldier->getWoundRecovery())));
-	else
-		_txtRecovery->setText(L"");
-
 	_txtRank->setText(tr("STR_RANK_").arg(tr(_soldier->getRankString())));
 	_txtMissions->setText(tr("STR_MISSIONS").arg(_soldier->getMissions()));
 	_txtKills->setText(tr("STR_KILLS").arg(_soldier->getKills()));
 
-	_txtPsionic->setVisible(_soldier->isInPsiTraining());
 
-	int minPsi = _soldier->getRules()->getMinStats().psiSkill;
+//	int minPsi = _soldier->getRules()->getMinStats().psiSkill;
+	int minPsi = _game->getRuleset()->getSoldier("XCOM")->getMinStats().psiSkill;
 
 	if (current->psiSkill >= minPsi
 		|| (Options::psiStrengthEval
@@ -575,148 +485,14 @@ void SoldierInfoState::init()
 		_numPsiSkill->setVisible(false);
 		_barPsiSkill->setVisible(false);
 	}
-
-	_btnSack->setVisible(!
-					(_soldier->getCraft()
-						&& _soldier->getCraft()->getStatus() == "STR_OUT"));
-
-
-	if (_base == 0) // dead don't talk
-	{
-		_btnArmor->setVisible(false);
-//kL		_btnSack->setVisible(false);
-		_txtCraft->setVisible(false);
-
-		_btnAutoStat->setVisible(false); // kL
-	}
-}
-
-/**
- * kL. Automatically renames a soldier according to its statistics.
- */
-void SoldierInfoState::btnAutoStat(Action*)
-{
-	//Log(LOG_INFO) << "SoldierInfoState::btnAutoStat()";
-//	Soldier* _soldier = _base->getSoldiers()->at(_soldierId);
-
-//	_edtSoldier->deFocus();
-	_edtSoldier->setFocus(false);
-	_soldier->setName(_edtSoldier->getText());
-
-	std::wostringstream stat;
-
-	int rank = _soldier->getRank();
-	switch (rank)
-	{
-		case 0: stat << "r";
-		break;
-		case 1: stat << "q";
-		break;
-		case 2: stat << "t";
-		break;
-		case 3: stat << "p";
-		break;
-		case 4: stat << "n";
-		break;
-		case 5: stat << "x";
-		break;
-
-		default: stat << "";
-		break;
-	}
-
-	UnitStats* current = _soldier->getCurrentStats();
-
-	stat << current->firing << ".";
-	stat << current->reactions << ".";
-	stat << current->strength;
-
-	int bravery = current->bravery;
-	switch (bravery)
-	{
-		case 10: stat << "a";
-		break;
-		case 20: stat << "b";
-		break;
-		case 30: stat << "c";
-		break;
-		case 40: stat << "d";
-		break;
-		case 50: stat << "e";
-		break;
-		case 60: stat << "f";
-		break;
-		case 70: stat << "g";
-		break;
-		case 80: stat << "h";
-		break;
-		case 90: stat << "i";
-		break;
-		case 100: stat << "j";
-		break;
-
-		default: stat << "";
-		break;
-	}
-
-	int minPsi = _soldier->getRules()->getMinStats().psiSkill;
-	if (current->psiSkill >= minPsi)
-	{
-		int psiStr = current->psiStrength;
-		int psiSkl = current->psiSkill;
-
-		int psiDefense = psiStr + psiSkl / 5;
-		int psiAttack = psiStr * psiSkl / 100;
-
-		stat << psiDefense;
-
-		if (psiSkl >= _soldier->getRules()->getStatCaps().psiSkill)
-			stat << ":";
-		else
-			stat << ".";
-
-		stat << psiAttack;
-	}
-
-	//Log(LOG_INFO) << ". set Soldier name : " << stat;
-//	_base->getSoldiers()->at(_soldierId)->setName(stat.str());
-	_soldier->setName(stat.str());
-
-	//Log(LOG_INFO) << ". re-init";
-	init();
-	//Log(LOG_INFO) << "SoldierInfoState::btnAutoStat() EXIT";
-}
-
-/**
- * Disables the soldier input.
- * @param action Pointer to an action.
- */
-void SoldierInfoState::edtSoldierPress(Action* action)
-{
-	if (_base == 0) // kL_note: This should never happen, because (base=0) is handled by SoldierDeadInfoState.
-		_edtSoldier->setFocus(false);
-}
-
-/**
- * Changes the soldier's name.
- * @param action Pointer to an action.
- */
-void SoldierInfoState::edtSoldierChange(Action* action)
-{
-	_soldier->setName(_edtSoldier->getText());
 }
 
 /**
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void SoldierInfoState::btnOkClick(Action*)
+void SoldierDeadInfoState::btnOkClick(Action*)
 {
-//	_edtSoldier->deFocus(); // kL
-//	_base->getSoldiers()->at(_soldierId)->setName(_edtSoldier->getText());
-
-	_edtSoldier->setFocus(false); // kL
-
 	_game->popState();
 }
 
@@ -724,13 +500,8 @@ void SoldierInfoState::btnOkClick(Action*)
  * Goes to the previous soldier.
  * @param action Pointer to an action.
  */
-void SoldierInfoState::btnPrevClick(Action*)
+void SoldierDeadInfoState::btnPrevClick(Action*)
 {
-//	_edtSoldier->deFocus();
-//	_base->getSoldiers()->at(_soldierId)->setName(_edtSoldier->getText());
-
-	_edtSoldier->setFocus(false); // kL
-
 	if (_soldierId == 0)
 		_soldierId = _list->size() - 1;
 	else
@@ -743,59 +514,14 @@ void SoldierInfoState::btnPrevClick(Action*)
  * Goes to the next soldier.
  * @param action Pointer to an action.
  */
-void SoldierInfoState::btnNextClick(Action*)
+void SoldierDeadInfoState::btnNextClick(Action*)
 {
-//	_edtSoldier->deFocus();
-//	_base->getSoldiers()->at(_soldierId)->setName(_edtSoldier->getText());
-
-	_edtSoldier->setFocus(false); // kL
-
 	_soldierId++;
+
 	if (_soldierId >= _list->size())
 		_soldierId = 0;
 
 	init();
-}
-
-/**
- * Shows the Select Armor window.
- * @param action Pointer to an action.
- */
-void SoldierInfoState::btnArmorClick(Action*)
-{
-//	_edtSoldier->deFocus();
-//	_soldier->setName(_edtSoldier->getText());
-
-	_edtSoldier->setFocus(false);
-
-//	if (!
-//		(_soldier->getCraft()
-//			&& _soldier->getCraft()->getStatus() == "STR_OUT"))
-	if (!_soldier->getCraft()
-		|| (_soldier->getCraft()
-			&& _soldier->getCraft()->getStatus() != "STR_OUT"))
-	{
-		_game->pushState(new SoldierArmorState(
-											_game,
-											_base,
-											_soldierId));
-	}
-}
-
-/**
- * Shows the Sack Soldier window.
- * @param action Pointer to an action.
- */
-void SoldierInfoState::btnSackClick(Action*)
-{
-//	_edtSoldier->deFocus(); // kL
-//	_soldier->setName(_edtSoldier->getText()); // kL
-
-	_edtSoldier->setFocus(false);
-	_game->pushState(new SackSoldierState(
-										_game,
-										_base,
-										_soldierId));
 }
 
 }

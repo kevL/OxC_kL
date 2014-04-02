@@ -26,7 +26,6 @@
 namespace OpenXcom
 {
 
-//kL class Base;
 class Text;
 class TextButton;
 class TextList;

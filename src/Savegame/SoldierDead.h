@@ -24,8 +24,7 @@
 
 #include <yaml-cpp/yaml.h>
 
-//#include "../Ruleset/RuleSoldier.h"
-//#include "../Ruleset/Unit.h"
+#include "../Ruleset/Unit.h"
 
 #include "../Savegame/Soldier.h"
 
@@ -33,15 +32,7 @@
 namespace OpenXcom
 {
 
-//class Armor;
-class Language;
-//class Ruleset;
-//class RuleSoldier;
-class Soldier;
 class SoldierDeath;
-//enum SoldierGender;
-//enum SoldierLook;
-//enum SoldierRank;
 
 
 /**
@@ -60,15 +51,13 @@ private:
 
 	std::wstring _name;
 
-//	Armor* _armor;
-//	RuleSoldier* _rules;
 	SoldierDeath* _death;
 	SoldierGender _gender;
 	SoldierLook _look;
 	SoldierRank _rank;
-//	UnitStats
-//		_initialStats,
-//		_currentStats;
+	UnitStats
+		_initialStats,
+		_currentStats;
 
 
 	public:
@@ -82,53 +71,45 @@ private:
 				int missions,
 				int kills,
 				SoldierDeath* death);
-//				RuleSoldier* rules,
-//				Armor* armor,
+				// initialStats,
+				// currentStats,
+				// base if I want to...
 		/// Cleans up the dead soldier.
 		~SoldierDead();
 
 		/// Loads the dead soldier from YAML.
 		void load(
 				const YAML::Node& node);
-//				const Ruleset* rule);
 		/// Saves the dead soldier to YAML.
 		YAML::Node save() const;
 
 		/// Gets the dead soldier's name.
 		std::wstring getName() const;
-		/// Sets the dead soldier's name.
-//		void setName(const std::wstring& name);
 
 		/// Gets a string version of the dead soldier's rank.
 		std::string getRankString() const;
 		/// Gets a sprite version of the dead soldier's rank.
-//		int getRankSprite() const;
+		int getRankSprite() const;
 		/// Gets the dead soldier's rank.
-//		SoldierRank getRank() const;
+		SoldierRank getRank() const;
 
 		/// Gets the dead soldier's missions.
-//		int getMissions() const;
+		int getMissions() const;
 		/// Gets the dead soldier's kills.
-//		int getKills() const;
+		int getKills() const;
 
 		/// Gets the dead soldier's gender.
-//		SoldierGender getGender() const;
+		SoldierGender getGender() const;
 		/// Gets the dead soldier's look.
-//		SoldierLook getLook() const;
-		/// Gets dead soldier rules.
-//		RuleSoldier* getRules() const;
+		SoldierLook getLook() const;
+
 		/// Gets the dead soldier's unique ID.
-//		int getId() const;
+		int getId() const;
 
 		/// Get pointer to initial stats.
-//		UnitStats* getInitStats();
+		UnitStats* getInitStats();
 		/// Get pointer to current stats.
-//		UnitStats* getCurrentStats();
-
-		/// Gets the dead soldier armor.
-//		Armor* getArmor() const;
-		/// Sets the dead soldier armor.
-//		void setArmor(Armor* armor);
+		UnitStats* getCurrentStats();
 
 		/// Gets the dead soldier's time of death.
 		SoldierDeath* getDeath() const;

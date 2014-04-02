@@ -57,7 +57,6 @@ OptionsAudioState::OptionsAudioState(
 {
 	setCategory(_btnAudio);
 
-	// Create objects
 	_txtMusicVolume = new Text(110, 9, 94, 8);
 	_slrMusicVolume = new Slider(100, 16, 94, 18);
 
@@ -77,14 +76,13 @@ OptionsAudioState::OptionsAudioState(
 	add(_slrSoundVolume);
 
 	add(_txtBitDepth);
-	add(_txtSampleRate);
-
-	add(_cbxSampleRate);
 	add(_cbxBitDepth);
+
+	add(_txtSampleRate);
+	add(_cbxSampleRate);
 
 	centerAllSurfaces();
 
-	// Set up objects
 	_txtMusicVolume->setColor(Palette::blockOffset(8)+10);
 	_txtMusicVolume->setText(tr("STR_MUSIC_VOLUME"));
 
@@ -112,7 +110,10 @@ OptionsAudioState::OptionsAudioState(
 	_txtBitDepth->setText(tr("STR_AUDIO_BIT_DEPTH"));
 
 	std::wostringstream ss;
-	std::vector<std::wstring> bitsText, samplesText;
+	std::vector<std::wstring>
+		bitsText,
+		samplesText;
+
 	int bits[] = {8, 16};
 
 	for (int
@@ -154,7 +155,9 @@ OptionsAudioState::OptionsAudioState(
 			_cbxSampleRate->setSelected(i);
 	}
 
-	std::vector<std::wstring> bitLabels, bitSamples;
+	std::vector<std::wstring>
+		bitLabels,
+		bitSamples;
 
 	_cbxBitDepth->setColor(Palette::blockOffset(15)-1);
 	_cbxBitDepth->setOptions(bitsText);
@@ -186,7 +189,10 @@ OptionsAudioState::~OptionsAudioState()
 void OptionsAudioState::slrMusicVolumeChange(Action*)
 {
 	Options::musicVolume = _slrMusicVolume->getValue();
-	_game->setVolume(Options::soundVolume, Options::musicVolume);
+
+	_game->setVolume(
+				Options::soundVolume,
+				Options::musicVolume);
 }
 
 /**
@@ -196,7 +202,10 @@ void OptionsAudioState::slrMusicVolumeChange(Action*)
 void OptionsAudioState::slrSoundVolumeChange(Action*)
 {
 	Options::soundVolume = _slrSoundVolume->getValue();
-	_game->setVolume(Options::soundVolume, Options::musicVolume);
+
+	_game->setVolume(
+				Options::soundVolume,
+				Options::musicVolume);
 }
 
 /**

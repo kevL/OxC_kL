@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
@@ -90,7 +90,7 @@ private:
 	Armor* _armor;
 	Craft* _craft;
 	RuleSoldier* _rules;
-	SoldierDeath* _death;
+//kL	SoldierDeath* _death;
 	SoldierGender _gender;
 	SoldierLook _look;
 	SoldierRank _rank;

@@ -22,7 +22,8 @@
 #include <iomanip>
 #include <sstream>
 
-#include "SoldierInfoState.h"
+//kL #include "SoldierInfoState.h"
+#include "SoldierDeadInfoState.h" // kL
 
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
@@ -199,10 +200,13 @@ void SoldierMemorialState::btnOkClick(Action*)
  */
 void SoldierMemorialState::lstSoldiersClick(Action*)
 {
-	_game->pushState(new SoldierInfoState(
+/*kL	_game->pushState(new SoldierInfoState(
 										_game,
 										0,
-										_lstSoldiers->getSelectedRow()));
+										_lstSoldiers->getSelectedRow())); */
+	_game->pushState(new SoldierDeadInfoState( // kL
+											_game,
+											_lstSoldiers->getSelectedRow()));
 }
 
 }

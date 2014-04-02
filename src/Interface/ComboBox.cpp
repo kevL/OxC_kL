@@ -65,11 +65,22 @@ ComboBox::ComboBox(
 	_button = new TextButton(width, height, x, y);
 	_button->setComboBox(this);
 
-	_arrow	= new Surface(11, 8, x + width - LIST_MARGIN * 3 - 1, y + 4);
-
-	_window	= new Window(state, width, MAX_ITEMS * 8 + LIST_MARGIN * 2, x, y + height);
-
-	_list	= new TextList(width - LIST_MARGIN * 5 - 1, MAX_ITEMS * 8, x + LIST_MARGIN, y + height + LIST_MARGIN);
+	_arrow	= new Surface(
+						11,
+						8,
+						x + width - LIST_MARGIN * 3 - 1,
+						y + 4);
+	_window	= new Window(
+						state,
+						width,
+						MAX_ITEMS * 8 + LIST_MARGIN * 2,
+						x,
+						y + height);
+	_list	= new TextList(
+						width - LIST_MARGIN * 5 - 1,
+						MAX_ITEMS * 8,
+						x + LIST_MARGIN,
+						y + height + LIST_MARGIN);
 	_list->setComboBox(this);
 	_list->setColumns(1, _list->getWidth());
 	_list->setSelectable(true);

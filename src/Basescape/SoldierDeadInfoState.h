@@ -17,8 +17,8 @@
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef OPENXCOM_SOLDIERINFOSTATE_H
-#define OPENXCOM_SOLDIERINFOSTATE_H
+#ifndef OPENXCOM_SOLDIERDEADINFOSTATE_H
+#define OPENXCOM_SOLDIERDEADINFOSTATE_H
 
 #include <vector>
 
@@ -29,18 +29,16 @@ namespace OpenXcom
 {
 
 class Bar;
-class Base;
-class Soldier;
+class SoldierDead;
 class Surface;
 class Text;
 class TextButton;
-class TextEdit;
 
 
 /**
- * Soldier Info screen that shows all the info of a specific soldier.
+ * Soldier Dead Info screen that shows all the info of a specific dead soldier.
  */
-class SoldierInfoState
+class SoldierDeadInfoState
 	:
 		public State
 {
@@ -48,7 +46,9 @@ class SoldierInfoState
 private:
 	size_t _soldierId;
 
-	std::vector<Soldier*>* _list;
+	std::vector<SoldierDead*>* _list;
+
+	SoldierDead* _soldier;
 
 	Bar
 		* _barTimeUnits,
@@ -61,19 +61,14 @@ private:
 		* _barStrength,
 		* _barPsiStrength,
 		* _barPsiSkill;
-	Base* _base;
-	Soldier* _soldier;
 	Surface
 		* _bg,
 		* _rank;
 	Text
-		* _txtArmor, // kL
-		* _txtCraft,
 		* _txtKills,
 		* _txtMissions,
-		* _txtPsionic,
 		* _txtRank,
-		* _txtRecovery,
+		* _txtSoldier,
 
 		* _txtTimeUnits,
 		* _txtStamina,
@@ -97,34 +92,21 @@ private:
 		* _numPsiStrength,
 		* _numPsiSkill;
 	TextButton
-		* _btnArmor,
 		* _btnNext,
 		* _btnOk,
-		* _btnPrev,
-		* _btnAutoStat, // kL
-		* _btnSack;
-	TextEdit* _edtSoldier;
-
-	/// kL. Automatically renames a soldier according to its statistics.
-	void btnAutoStat(Action* action);
+		* _btnPrev;
 
 
 	public:
-		/// Creates the Soldier Info state.
-		SoldierInfoState(
+		/// Creates the Soldier Dead Info state.
+		SoldierDeadInfoState(
 				Game* game,
-				Base* base,
 				size_t soldierId);
-		/// Cleans up the Soldier Info state.
-		~SoldierInfoState();
+		/// Cleans up the Soldier Dead Info state.
+		~SoldierDeadInfoState();
 
-		/// Updates the soldier info.
+		/// Updates the dead soldier info.
 		void init();
-
-		/// Handler for pressing on the Name edit.
-		void edtSoldierPress(Action* action);
-		/// Handler for changing text on the Name edit.
-		void edtSoldierChange(Action* action);
 
 		/// Handler for clicking the OK button.
 		void btnOkClick(Action* action);
@@ -132,10 +114,6 @@ private:
 		void btnPrevClick(Action* action);
 		/// Handler for clicking the Next button.
 		void btnNextClick(Action* action);
-		/// Handler for clicking the Armor button.
-		void btnArmorClick(Action* action);
-		/// Handler for clicking the Sack button.
-		void btnSackClick(Action* action);
 };
 
 }

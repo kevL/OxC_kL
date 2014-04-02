@@ -331,7 +331,7 @@ void SavedGame::load(
 	std::vector<YAML::Node> file = YAML::LoadAllFromFile(s);
 	if (file.empty())
 	{
-		throw Exception(filename + " is not a vaild save file");
+		throw Exception(filename + " is not a valid save file");
 	}
 
 	// Get brief save info
@@ -495,7 +495,9 @@ void SavedGame::load(
 		_poppedResearch.push_back(rule->getResearch(research));
 	}
 
-	_alienStrategy->load(rule, doc["alienStrategy"]);
+	_alienStrategy->load(
+						rule,
+						doc["alienStrategy"]);
 
 	for (YAML::const_iterator
 			i = doc["deadSoldiers"].begin();

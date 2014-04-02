@@ -1195,9 +1195,9 @@ MapDataSet* Ruleset::getMapDataSet(const std::string& name)
 }
 
 /**
- * Returns the info about a specific unit.
- * @param name Unit name.
- * @return Rules for the units.
+ * Returns the info about a specific soldier.
+ * @param name Soldier name.
+ * @return Rules for the soldiers.
  */
 RuleSoldier* Ruleset::getSoldier(const std::string& name) const
 {

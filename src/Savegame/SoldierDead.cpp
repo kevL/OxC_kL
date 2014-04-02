@@ -23,16 +23,6 @@
 #include "SoldierDeath.h"
 
 #include "../Engine/Language.h"
-//#include "../Engine/RNG.h"
-
-//#include "../Ruleset/Armor.h"
-//#include "../Ruleset/Ruleset.h"
-//#include "../Ruleset/RuleSoldier.h"
-//#include "../Ruleset/SoldierNamePool.h"
-
-//#include "../Savegame/Craft.h"
-//#include "../Savegame/EquipmentLayoutItem.h"
-//#include "../Savegame/SoldierDeath.h"
 
 
 namespace OpenXcom
@@ -50,8 +40,6 @@ SoldierDead::SoldierDead(
 		int missions,
 		int kills,
 		SoldierDeath* death)
-//		RuleSoldier* rules,
-//		Armor* armor)
 	:
 		_name(name),
 		_id(id),
@@ -60,47 +48,13 @@ SoldierDead::SoldierDead(
 		_look(look),
 		_missions(missions),
 		_kills(kills),
-		_death(death)
-/*		_name(L""),
-		_id(0),
-//		_rules(rules),
-//		_initialStats(),
-//		_currentStats(),
-		_rank(RANK_ROOKIE),
-		_gender(GENDER_MALE),
-		_look(LOOK_BLONDE),
-		_missions(0),
-		_kills(0),
-//		_armor(armor),
-		_death(0) */
+		_death(death),
+
+		_initialStats(),
+		_currentStats()
 {
-/*	UnitStats minStats = rules->getMinStats();
-	UnitStats maxStats = rules->getMaxStats();
-
-	_initialStats.tu			= RNG::generate(minStats.tu, maxStats.tu);
-	_initialStats.stamina		= RNG::generate(minStats.stamina, maxStats.stamina);
-	_initialStats.health		= RNG::generate(minStats.health, maxStats.health);
-	_initialStats.bravery		= RNG::generate(minStats.bravery/10, maxStats.bravery/10)*10;
-	_initialStats.reactions		= RNG::generate(minStats.reactions, maxStats.reactions);
-	_initialStats.firing		= RNG::generate(minStats.firing, maxStats.firing);
-	_initialStats.throwing		= RNG::generate(minStats.throwing, maxStats.throwing);
-	_initialStats.strength		= RNG::generate(minStats.strength, maxStats.strength);
-	_initialStats.psiStrength	= RNG::generate(minStats.psiStrength, maxStats.psiStrength);
-	_initialStats.melee			= RNG::generate(minStats.melee, maxStats.melee);
-
-	_initialStats.psiSkill = minStats.psiSkill;
-
-	_currentStats = _initialStats; */
-
-/*	_name = name;
-	_id = id;
-	_rank = rank;
-	_gender = gender;
-	_look = look;
-	_missions = missions;
-	_kills = kills;
-
-	_death = death; */
+//	_initialStats;
+//	_currentStats;
 }
 
 /**
@@ -118,24 +72,19 @@ SoldierDead::~SoldierDead()
  */
 void SoldierDead::load(
 		const YAML::Node& node)
-//		const Ruleset* rule)
 {
 	_name			= Language::utf8ToWstr(node["name"].as<std::string>());
 	_id				= node["id"].as<int>(_id);
-//	_initialStats	= node["initialStats"].as<UnitStats>(_initialStats);
-//	_currentStats	= node["currentStats"].as<UnitStats>(_currentStats);
+	_initialStats	= node["initialStats"].as<UnitStats>(_initialStats);
+	_currentStats	= node["currentStats"].as<UnitStats>(_currentStats);
 	_rank			= (SoldierRank)node["rank"].as<int>();
 	_gender			= (SoldierGender)node["gender"].as<int>();
 	_look			= (SoldierLook)node["look"].as<int>();
 	_missions		= node["missions"].as<int>(_missions);
 	_kills			= node["kills"].as<int>(_kills);
-//	_armor			= rule->getArmor(node["armor"].as<std::string>());
 
-//	if (node["death"])
-//	{
 	_death = new SoldierDeath();
 	_death->load(node["death"]);
-//	}
 }
 
 /**
@@ -148,24 +97,22 @@ YAML::Node SoldierDead::save() const
 
 	node["name"]			= Language::wstrToUtf8(_name);
 	node["id"]				= _id;
-//	node["initialStats"]	= _initialStats;
-//	node["currentStats"]	= _currentStats;
+	node["initialStats"]	= _initialStats;
+	node["currentStats"]	= _currentStats;
 	node["rank"]			= static_cast<int>(_rank);
 	node["gender"]			= static_cast<int>(_gender);
 	node["look"]			= static_cast<int>(_look);
 	node["missions"]		= _missions;
 	node["kills"]			= _kills;
-//	node["armor"]			= _armor->getType();
 
-//	if (_death != 0)
-	node["death"] = _death->save();
+	node["death"]			= _death->save();
 
 	return node;
 }
 
 /**
  * Returns the dead soldier's full name.
- * @return Soldier name.
+ * @return, Soldier name.
  */
 std::wstring SoldierDead::getName() const
 {
@@ -173,18 +120,9 @@ std::wstring SoldierDead::getName() const
 }
 
 /**
- * Changes the dead soldier's full name.
- * @param name Soldier name.
- */
-/* void SoldierDead::setName(const std::wstring& name)
-{
-	_name = name;
-} */
-
-/**
  * Returns a localizable-string representation of
  * the dead soldier's military rank.
- * @return String ID for rank.
+ * @return, String ID for rank.
  */
 std::string SoldierDead::getRankString() const
 {
@@ -209,108 +147,81 @@ std::string SoldierDead::getRankString() const
  * @note THE MEANING OF LIFE
  * @return, Sprite ID for rank.
  */
-/* int SoldierDead::getRankSprite() const
+int SoldierDead::getRankSprite() const
 {
 	return 42 + _rank;
-} */
+}
 
 /**
  * Returns the dead soldier's military rank.
- * @return Rank enum.
+ * @return, Rank enum.
  */
-/* SoldierRank SoldierDead::getRank() const
+SoldierRank SoldierDead::getRank() const
 {
 	return _rank;
-} */
+}
 
 /**
  * Returns the dead soldier's amount of missions.
- * @return Missions.
+ * @return, Missions.
  */
-/* int SoldierDead::getMissions() const
+int SoldierDead::getMissions() const
 {
 	return _missions;
-} */
+}
 
 /**
  * Returns the dead soldier's amount of kills.
- * @return Kills.
+ * @return, Kills.
  */
-/* int SoldierDead::getKills() const
+int SoldierDead::getKills() const
 {
 	return _kills;
-} */
+}
 
 /**
  * Returns the dead soldier's gender.
- * @return Gender.
+ * @return, Gender.
  */
-/* SoldierGender SoldierDead::getGender() const
+SoldierGender SoldierDead::getGender() const
 {
 	return _gender;
-} */
+}
 
 /**
  * Returns the dead soldier's look.
- * @return Look.
+ * @return, Look.
  */
-/* SoldierLook SoldierDead::getLook() const
+SoldierLook SoldierDead::getLook() const
 {
 	return _look;
-} */
-
-/**
- * Returns the dead soldier's rules.
- * @return rulesoldier
- */
-/* RuleSoldier* SoldierDead::getRules() const
-{
-	return _rules;
-} */
+}
 
 /**
  * Returns the dead soldier's unique ID. Each dead soldier
  * can be identified by its ID. (not it's name)
- * @return Unique ID.
+ * @return, Unique ID.
  */
-/* int SoldierDead::getId() const
+int SoldierDead::getId() const
 {
 	return _id;
-} */
+}
 
 /**
  * Get pointer to initial stats.
  */
-/* UnitStats* Soldier::getInitStats()
+UnitStats* SoldierDead::getInitStats()
 {
 	return &_initialStats;
-} */
+}
 
 /**
  * Get pointer to current stats.
  */
-/* UnitStats* Soldier::getCurrentStats()
+UnitStats* SoldierDead::getCurrentStats()
 {
 	return &_currentStats;
-} */
-
-/**
- * Returns the unit's current armor.
- * @return Pointer to armor data.
- */
-/* Armor* Soldier::getArmor() const
-{
-	return _armor;
-} */
-
-/**
- * Changes the unit's current armor.
- * @param armor Pointer to armor data.
- */
-/* void Soldier::setArmor(Armor* armor)
-{
-	_armor = armor;
-} */
+}
 
 /**
  * Returns the dead soldier's time of death.

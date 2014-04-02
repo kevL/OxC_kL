@@ -102,7 +102,6 @@ SoldiersState::SoldiersState(
 
 	centerAllSurfaces();
 
-
 	_window->setColor(Palette::blockOffset(15)+1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK02.SCR"));
 
@@ -171,8 +170,7 @@ SoldiersState::~SoldiersState()
 }
 
 /**
- * Updates the soldiers list
- * after going to other screens.
+ * Updates the soldiers list after going to other screens.
  */
 void SoldiersState::init()
 {

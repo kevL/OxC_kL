@@ -454,6 +454,8 @@
 			<Option target="Release Win32" />
 			<Option target="Release x64" />
 		</Unit>
+		<Unit filename="Basescape/SoldierDeadInfoState.cpp" />
+		<Unit filename="Basescape/SoldierDeadInfoState.h" />
 		<Unit filename="Basescape/SoldierInfoState.cpp">
 			<Option target="Debug Win32" />
 			<Option target="Debug x64" />

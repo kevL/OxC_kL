@@ -62,51 +62,57 @@ OptionsVideoState::OptionsVideoState(
 {
 	setCategory(_btnVideo);
 
-	// Create objects
-	_displaySurface = new InteractiveSurface(110, 32, 94, 18);
-	_txtDisplayResolution = new Text(110, 9, 94, 8);
-	_txtDisplayWidth = new TextEdit(40, 17, 94, 26);
-	_txtDisplayX = new Text(16, 17, 132, 26);
-	_txtDisplayHeight = new TextEdit(40, 17, 144, 26);
-	_btnDisplayResolutionUp = new ArrowButton(ARROW_BIG_UP, 14, 14, 186, 18);
-	_btnDisplayResolutionDown = new ArrowButton(ARROW_BIG_DOWN, 14, 14, 186, 36);
+	_displaySurface				= new InteractiveSurface(110, 32, 94, 18);
+	_txtDisplayResolution		= new Text(110, 9, 94, 8);
+	_txtDisplayWidth			= new TextEdit(40, 17, 94, 26);
+	_txtDisplayX				= new Text(16, 17, 132, 26);
+	_txtDisplayHeight			= new TextEdit(40, 17, 144, 26);
+	_btnDisplayResolutionUp		= new ArrowButton(ARROW_BIG_UP, 14, 14, 186, 18);
+	_btnDisplayResolutionDown	= new ArrowButton(ARROW_BIG_DOWN, 14, 14, 186, 36);
 
-	_gameSurface = new InteractiveSurface(110, 32, 210, 18);
-	_txtGameResolution = new Text(110, 9, 210, 8);
-	_txtGameSize = new Text(80, 17, 210, 26);
-	_btnGameResolutionUp = new ArrowButton(ARROW_BIG_UP, 14, 14, 296, 18);
-	_btnGameResolutionDown = new ArrowButton(ARROW_BIG_DOWN, 14, 14, 296, 36);
+	_gameSurface				= new InteractiveSurface(110, 32, 210, 18);
+	_txtGameResolution			= new Text(110, 9, 210, 8);
+	_txtGameSize				= new Text(80, 17, 210, 26);
+	_btnGameResolutionUp		= new ArrowButton(ARROW_BIG_UP, 14, 14, 296, 18);
+	_btnGameResolutionDown		= new ArrowButton(ARROW_BIG_DOWN, 14, 14, 296, 36);
 
-	_txtLanguage = new Text(110, 9, 94, 52);
-	_cbxLanguage = new ComboBox(this, 100, 16, 94, 62);
+	_txtLanguage				= new Text(110, 9, 94, 52);
+	_cbxLanguage				= new ComboBox(this, 100, 16, 94, 62);
 
-	_txtFilter = new Text(110, 9, 210, 52);
-	_cbxFilter = new ComboBox(this, 100, 16, 210, 62);
+	_txtFilter					= new Text(110, 9, 210, 52);
+	_cbxFilter					= new ComboBox(this, 100, 16, 210, 62);
 
-	_txtMode = new Text(110, 9, 94, 82);
-	_btnWindowed = new TextButton(100, 16, 94, 92);
-	_btnFullscreen = new TextButton(100, 16, 94, 110);
-	_btnBorderless = new TextButton(100, 16, 94, 128);
+	_txtMode					= new Text(110, 9, 94, 82);
+	_btnWindowed				= new TextButton(100, 16, 94, 92);
+	_btnFullscreen				= new TextButton(100, 16, 94, 110);
+	_btnBorderless				= new TextButton(100, 16, 94, 128);
 
-	_txtOptions = new Text(110, 9, 210, 82);
-	_btnLetterbox = new ToggleTextButton(100, 16, 210, 92);
-	_btnResize = new ToggleTextButton(100, 16, 210, 110);
-	_btnLockMouse = new ToggleTextButton(100, 16, 210, 128);
+	_txtOptions					= new Text(110, 9, 210, 82);
+	_btnLetterbox				= new ToggleTextButton(100, 16, 210, 92);
+	_btnResize					= new ToggleTextButton(100, 16, 210, 110);
+	_btnLockMouse				= new ToggleTextButton(100, 16, 210, 128);
 
 	/* Get available fullscreen modes */
 	_res = SDL_ListModes(NULL, SDL_FULLSCREEN);
 	if (_res > (SDL_Rect**)0)
 	{
-		int i;
 		_resCurrent = -1;
-		for (i = 0; _res[i]; ++i)
+
+		int i = 0;
+		for (
+				i = 0;
+				_res[i];
+				++i)
 		{
-			if (_resCurrent == -1 &&
-				((_res[i]->w == Options::displayWidth && _res[i]->h <= Options::displayHeight) || _res[i]->w < Options::displayWidth))
+			if (_resCurrent == -1
+				&& ((_res[i]->w == Options::displayWidth
+						&& _res[i]->h <= Options::displayHeight)
+					|| _res[i]->w < Options::displayWidth))
 			{
 				_resCurrent = i;
 			}
 		}
+
 		_resAmount = i;
 	}
 	else
@@ -122,12 +128,21 @@ OptionsVideoState::OptionsVideoState(
 	_gameRes.push_back(L"1x");
 	_gameRes.push_back(L"2x");
 
-	if (Options::baseXResolution == Screen::ORIGINAL_WIDTH && Options::baseYResolution == Screen::ORIGINAL_HEIGHT)
+	if (Options::baseXResolution == Screen::ORIGINAL_WIDTH
+		&& Options::baseYResolution == Screen::ORIGINAL_HEIGHT)
+	{
 		_gameCurrent = 0;
-	else if (Options::baseXResolution == Options::displayWidth && Options::baseYResolution == Options::displayHeight)
+	}
+	else if (Options::baseXResolution == Options::displayWidth
+		&& Options::baseYResolution == Options::displayHeight)
+	{
 		_gameCurrent = 1;
-	else if (Options::baseXResolution == Options::displayWidth/2 && Options::baseYResolution == Options::displayHeight/2)
+	}
+	else if (Options::baseXResolution == Options::displayWidth / 2
+		&& Options::baseYResolution == Options::displayHeight / 2)
+	{
 		_gameCurrent = 2;
+	}
 	else
 		_gameCurrent = -1;
 
@@ -170,20 +185,19 @@ OptionsVideoState::OptionsVideoState(
 
 	centerAllSurfaces();
 
-	// Set up objects
 	_txtDisplayResolution->setColor(Palette::blockOffset(8)+10);
 	_txtDisplayResolution->setText(tr("STR_DISPLAY_RESOLUTION"));
 
 	_displaySurface->setTooltip("STR_DISPLAY_RESOLUTION_DESC");
-	_displaySurface->onMouseIn((ActionHandler)&OptionsVideoState::txtTooltipIn);
-	_displaySurface->onMouseOut((ActionHandler)&OptionsVideoState::txtTooltipOut);
+	_displaySurface->onMouseIn((ActionHandler)& OptionsVideoState::txtTooltipIn);
+	_displaySurface->onMouseOut((ActionHandler)& OptionsVideoState::txtTooltipOut);
 
 	_txtDisplayWidth->setColor(Palette::blockOffset(15)-1);
 	_txtDisplayWidth->setAlign(ALIGN_CENTER);
 	_txtDisplayWidth->setBig();
 	_txtDisplayWidth->setNumerical(true);
-	_txtDisplayWidth->onChange((ActionHandler)&OptionsVideoState::txtDisplayWidthChange);
-	_txtDisplayWidth->onMouseClick((ActionHandler)&OptionsVideoState::txtDisplayWidthClick);
+	_txtDisplayWidth->onChange((ActionHandler)& OptionsVideoState::txtDisplayWidthChange);
+	_txtDisplayWidth->onMouseClick((ActionHandler)& OptionsVideoState::txtDisplayWidthClick);
 
 	_txtDisplayX->setColor(Palette::blockOffset(15)-1);
 	_txtDisplayX->setAlign(ALIGN_CENTER);
@@ -194,8 +208,8 @@ OptionsVideoState::OptionsVideoState(
 	_txtDisplayHeight->setAlign(ALIGN_CENTER);
 	_txtDisplayHeight->setBig();
 	_txtDisplayHeight->setNumerical(true);
-	_txtDisplayHeight->onChange((ActionHandler)&OptionsVideoState::txtDisplayHeightChange);
-	_txtDisplayHeight->onMouseClick((ActionHandler)&OptionsVideoState::txtDisplayHeightClick);
+	_txtDisplayHeight->onChange((ActionHandler)& OptionsVideoState::txtDisplayHeightChange);
+	_txtDisplayHeight->onMouseClick((ActionHandler)& OptionsVideoState::txtDisplayHeightClick);
 
 	std::wostringstream ssW, ssH;
 	ssW << Options::displayWidth;
@@ -204,28 +218,29 @@ OptionsVideoState::OptionsVideoState(
 	_txtDisplayHeight->setText(ssH.str());
 
 	_btnDisplayResolutionUp->setColor(Palette::blockOffset(15)-1);
-	_btnDisplayResolutionUp->onMouseClick((ActionHandler)&OptionsVideoState::btnDisplayResolutionUpClick);
+	_btnDisplayResolutionUp->onMouseClick((ActionHandler)& OptionsVideoState::btnDisplayResolutionUpClick);
 
 	_btnDisplayResolutionDown->setColor(Palette::blockOffset(15)-1);
-	_btnDisplayResolutionDown->onMouseClick((ActionHandler)&OptionsVideoState::btnDisplayResolutionDownClick);
+	_btnDisplayResolutionDown->onMouseClick((ActionHandler)& OptionsVideoState::btnDisplayResolutionDownClick);
 
 	_txtGameResolution->setColor(Palette::blockOffset(8)+10);
 	_txtGameResolution->setText(tr("STR_GAME_RESOLUTION"));
 
 	_gameSurface->setTooltip("STR_GAME_RESOLUTION_DESC");
-	_gameSurface->onMouseIn((ActionHandler)&OptionsVideoState::txtTooltipIn);
-	_gameSurface->onMouseOut((ActionHandler)&OptionsVideoState::txtTooltipOut);
+	_gameSurface->onMouseIn((ActionHandler)& OptionsVideoState::txtTooltipIn);
+	_gameSurface->onMouseOut((ActionHandler)& OptionsVideoState::txtTooltipOut);
 
 	_txtGameSize->setColor(Palette::blockOffset(15)-1);
 	_txtGameSize->setAlign(ALIGN_CENTER);
 	_txtGameSize->setBig();
+
 	updateGameResolution();
 
 	_btnGameResolutionUp->setColor(Palette::blockOffset(15)-1);
-	_btnGameResolutionUp->onMouseClick((ActionHandler)&OptionsVideoState::btnGameResolutionUpClick);
+	_btnGameResolutionUp->onMouseClick((ActionHandler)& OptionsVideoState::btnGameResolutionUpClick);
 
 	_btnGameResolutionDown->setColor(Palette::blockOffset(15)-1);
-	_btnGameResolutionDown->onMouseClick((ActionHandler)&OptionsVideoState::btnGameResolutionDownClick);
+	_btnGameResolutionDown->onMouseClick((ActionHandler)& OptionsVideoState::btnGameResolutionDownClick);
 
 	_txtMode->setColor(Palette::blockOffset(8)+10);
 	_txtMode->setText(tr("STR_DISPLAY_MODE"));
@@ -233,26 +248,26 @@ OptionsVideoState::OptionsVideoState(
 	_btnWindowed->setColor(Palette::blockOffset(15)-1);
 	_btnWindowed->setText(tr("STR_WINDOWED"));
 	_btnWindowed->setGroup(&_displayMode);
-	_btnWindowed->onMouseClick((ActionHandler)&OptionsVideoState::btnModeClick);
+	_btnWindowed->onMouseClick((ActionHandler)& OptionsVideoState::btnModeClick);
 	_btnWindowed->setTooltip("STR_WINDOWED_DESC");
-	_btnWindowed->onMouseIn((ActionHandler)&OptionsVideoState::txtTooltipIn);
-	_btnWindowed->onMouseOut((ActionHandler)&OptionsVideoState::txtTooltipOut);
+	_btnWindowed->onMouseIn((ActionHandler)& OptionsVideoState::txtTooltipIn);
+	_btnWindowed->onMouseOut((ActionHandler)& OptionsVideoState::txtTooltipOut);
 
 	_btnFullscreen->setColor(Palette::blockOffset(15)-1);
 	_btnFullscreen->setText(tr("STR_FULLSCREEN"));
 	_btnFullscreen->setGroup(&_displayMode);
-	_btnFullscreen->onMouseClick((ActionHandler)&OptionsVideoState::btnModeClick);
+	_btnFullscreen->onMouseClick((ActionHandler)& OptionsVideoState::btnModeClick);
 	_btnFullscreen->setTooltip("STR_FULLSCREEN_DESC");
-	_btnFullscreen->onMouseIn((ActionHandler)&OptionsVideoState::txtTooltipIn);
-	_btnFullscreen->onMouseOut((ActionHandler)&OptionsVideoState::txtTooltipOut);
+	_btnFullscreen->onMouseIn((ActionHandler)& OptionsVideoState::txtTooltipIn);
+	_btnFullscreen->onMouseOut((ActionHandler)& OptionsVideoState::txtTooltipOut);
 
 	_btnBorderless->setColor(Palette::blockOffset(15)-1);
 	_btnBorderless->setText(tr("STR_BORDERLESS"));
 	_btnBorderless->setGroup(&_displayMode);
-	_btnBorderless->onMouseClick((ActionHandler)&OptionsVideoState::btnModeClick);
+	_btnBorderless->onMouseClick((ActionHandler)& OptionsVideoState::btnModeClick);
 	_btnBorderless->setTooltip("STR_BORDERLESS_DESC");
-	_btnBorderless->onMouseIn((ActionHandler)&OptionsVideoState::txtTooltipIn);
-	_btnBorderless->onMouseOut((ActionHandler)&OptionsVideoState::txtTooltipOut);
+	_btnBorderless->onMouseIn((ActionHandler)& OptionsVideoState::txtTooltipIn);
+	_btnBorderless->onMouseOut((ActionHandler)& OptionsVideoState::txtTooltipOut);
 
 	_txtOptions->setColor(Palette::blockOffset(8)+10);
 	_txtOptions->setText(tr("STR_DISPLAY_OPTIONS"));
@@ -260,26 +275,26 @@ OptionsVideoState::OptionsVideoState(
 	_btnLetterbox->setColor(Palette::blockOffset(15)-1);
 	_btnLetterbox->setText(tr("STR_LETTERBOXED"));
 	_btnLetterbox->setPressed(Options::keepAspectRatio);
-	_btnLetterbox->onMouseClick((ActionHandler)&OptionsVideoState::btnLetterboxClick);
+	_btnLetterbox->onMouseClick((ActionHandler)& OptionsVideoState::btnLetterboxClick);
 	_btnLetterbox->setTooltip("STR_LETTERBOXED_DESC");
-	_btnLetterbox->onMouseIn((ActionHandler)&OptionsVideoState::txtTooltipIn);
-	_btnLetterbox->onMouseOut((ActionHandler)&OptionsVideoState::txtTooltipOut);
+	_btnLetterbox->onMouseIn((ActionHandler)& OptionsVideoState::txtTooltipIn);
+	_btnLetterbox->onMouseOut((ActionHandler)& OptionsVideoState::txtTooltipOut);
 
 	_btnResize->setColor(Palette::blockOffset(15)-1);
 	_btnResize->setText(tr("STR_RESIZABLE"));
 	_btnResize->setPressed(Options::allowResize);
-	_btnResize->onMouseClick((ActionHandler)&OptionsVideoState::btnResizeClick);
+	_btnResize->onMouseClick((ActionHandler)& OptionsVideoState::btnResizeClick);
 	_btnResize->setTooltip("STR_RESIZABLE_DESC");
-	_btnResize->onMouseIn((ActionHandler)&OptionsVideoState::txtTooltipIn);
-	_btnResize->onMouseOut((ActionHandler)&OptionsVideoState::txtTooltipOut);
+	_btnResize->onMouseIn((ActionHandler)& OptionsVideoState::txtTooltipIn);
+	_btnResize->onMouseOut((ActionHandler)& OptionsVideoState::txtTooltipOut);
 
 	_btnLockMouse->setColor(Palette::blockOffset(15)-1);
 	_btnLockMouse->setText(tr("STR_LOCK_MOUSE"));
 	_btnLockMouse->setPressed(Options::captureMouse);
-	_btnLockMouse->onMouseClick((ActionHandler)&OptionsVideoState::btnLockMouseClick);
+	_btnLockMouse->onMouseClick((ActionHandler)& OptionsVideoState::btnLockMouseClick);
 	_btnLockMouse->setTooltip("STR_LOCK_MOUSE_DESC");
-	_btnLockMouse->onMouseIn((ActionHandler)&OptionsVideoState::txtTooltipIn);
-	_btnLockMouse->onMouseOut((ActionHandler)&OptionsVideoState::txtTooltipOut);
+	_btnLockMouse->onMouseIn((ActionHandler)& OptionsVideoState::txtTooltipIn);
+	_btnLockMouse->onMouseOut((ActionHandler)& OptionsVideoState::txtTooltipOut);
 
 	_txtLanguage->setColor(Palette::blockOffset(8)+10);
 	_txtLanguage->setText(tr("STR_DISPLAY_LANGUAGE"));
@@ -288,18 +303,22 @@ OptionsVideoState::OptionsVideoState(
 	Language::getList(_langs, names);
     _cbxLanguage->setColor(Palette::blockOffset(15)-1);
 	_cbxLanguage->setOptions(names);
-	for (size_t i = 0; i < names.size(); ++i)
+	for (size_t
+			i = 0;
+			i < names.size();
+			++i)
 	{
 		if (_langs[i] == Options::language)
 		{
 			_cbxLanguage->setSelected(i);
+
 			break;
 		}
 	}
-    _cbxLanguage->onChange((ActionHandler)&OptionsVideoState::cbxLanguageChange);
+    _cbxLanguage->onChange((ActionHandler)& OptionsVideoState::cbxLanguageChange);
 	_cbxLanguage->setTooltip("STR_DISPLAY_LANGUAGE_DESC");
-	_cbxLanguage->onMouseIn((ActionHandler)&OptionsVideoState::txtTooltipIn);
-	_cbxLanguage->onMouseOut((ActionHandler)&OptionsVideoState::txtTooltipOut);
+	_cbxLanguage->onMouseIn((ActionHandler)& OptionsVideoState::txtTooltipIn);
+	_cbxLanguage->onMouseOut((ActionHandler)& OptionsVideoState::txtTooltipOut);
 
 	std::vector<std::wstring> filterNames;
 	filterNames.push_back(L"-");
@@ -311,7 +330,10 @@ OptionsVideoState::OptionsVideoState(
 
 #ifndef __NO_OPENGL
 	std::vector<std::string> filters = CrossPlatform::getFolderContents(CrossPlatform::getDataFolder(GL_FOLDER), GL_EXT);
-	for (std::vector<std::string>::iterator i = filters.begin(); i != filters.end(); ++i)
+	for (std::vector<std::string>::iterator
+			i = filters.begin();
+			i != filters.end();
+			++i)
 	{
 		std::string file = (*i);
 		std::string path = GL_FOLDER + file;
@@ -326,23 +348,20 @@ OptionsVideoState::OptionsVideoState(
 	{
 #ifndef __NO_OPENGL
 		std::string path = Options::useOpenGLShader;
-		for (size_t i = 0; i < _filters.size(); ++i)
+		for (size_t
+				i = 0;
+				i < _filters.size();
+				++i)
 		{
 			if (_filters[i] == path)
-			{
 				selFilter = i;
-			}
 		}
 #endif
 	}
 	else if (Options::useScaleFilter)
-	{
 		selFilter = 1;
-	}
 	else if (Options::useHQXFilter)
-	{
 		selFilter = 2;
-	}
 
 	_txtFilter->setColor(Palette::blockOffset(8)+10);
 	_txtFilter->setText(tr("STR_DISPLAY_FILTER"));
@@ -350,18 +369,18 @@ OptionsVideoState::OptionsVideoState(
     _cbxFilter->setColor(Palette::blockOffset(15)-1);
 	_cbxFilter->setOptions(filterNames);
 	_cbxFilter->setSelected(selFilter);
-	_cbxFilter->onChange((ActionHandler)&OptionsVideoState::cbxFilterChange);
+	_cbxFilter->onChange((ActionHandler)& OptionsVideoState::cbxFilterChange);
 	_cbxFilter->setTooltip("STR_DISPLAY_FILTER_DESC");
-	_cbxFilter->onMouseIn((ActionHandler)&OptionsVideoState::txtTooltipIn);
-	_cbxFilter->onMouseOut((ActionHandler)&OptionsVideoState::txtTooltipOut);
+	_cbxFilter->onMouseIn((ActionHandler)& OptionsVideoState::txtTooltipIn);
+	_cbxFilter->onMouseOut((ActionHandler)& OptionsVideoState::txtTooltipOut);
 
 	// Save old display options for safekeeping
-	Options::newDisplayWidth = Options::displayWidth;
-	Options::newDisplayHeight = Options::displayHeight;
-	Options::newOpenGL = Options::useOpenGL;
-	Options::newScaleFilter = Options::useScaleFilter;
-	Options::newHQXFilter = Options::useHQXFilter;
-	Options::newOpenGLShader = Options::useOpenGLShader;
+	Options::newDisplayWidth	= Options::displayWidth;
+	Options::newDisplayHeight	= Options::displayHeight;
+	Options::newOpenGL			= Options::useOpenGL;
+	Options::newScaleFilter		= Options::useScaleFilter;
+	Options::newHQXFilter		= Options::useHQXFilter;
+	Options::newOpenGLShader	= Options::useOpenGLShader;
 }
 
 /**
@@ -375,18 +394,16 @@ OptionsVideoState::~OptionsVideoState()
  * Selects a bigger display resolution.
  * @param action Pointer to an action.
  */
-void OptionsVideoState::btnDisplayResolutionUpClick(Action *)
+void OptionsVideoState::btnDisplayResolutionUpClick(Action*)
 {
 	if (_resAmount == 0)
 		return;
+
 	if (_resCurrent <= 0)
-	{
-		_resCurrent = _resAmount-1;
-	}
+		_resCurrent = _resAmount - 1;
 	else
-	{
 		_resCurrent--;
-	}
+
 	updateDisplayResolution();
 }
 
@@ -394,18 +411,16 @@ void OptionsVideoState::btnDisplayResolutionUpClick(Action *)
  * Selects a smaller display resolution.
  * @param action Pointer to an action.
  */
-void OptionsVideoState::btnDisplayResolutionDownClick(Action *)
+void OptionsVideoState::btnDisplayResolutionDownClick(Action*)
 {
 	if (_resAmount == 0)
 		return;
-	if (_resCurrent >= _resAmount-1)
-	{
+
+	if (_resCurrent >= _resAmount - 1)
 		_resCurrent = 0;
-	}
 	else
-	{
 		_resCurrent++;
-	}
+
 	updateDisplayResolution();
 }
 
@@ -428,12 +443,13 @@ void OptionsVideoState::updateDisplayResolution()
  * Selects a bigger game resolution.
  * @param action Pointer to an action.
  */
-void OptionsVideoState::btnGameResolutionUpClick(Action *)
+void OptionsVideoState::btnGameResolutionUpClick(Action*)
 {
 	if (_gameCurrent == _gameRes.size() - 1)
 		_gameCurrent = 0;
 	else
 		_gameCurrent++;
+
 	updateGameResolution();
 }
 
@@ -441,12 +457,13 @@ void OptionsVideoState::btnGameResolutionUpClick(Action *)
  * Selects a smaller game resolution.
  * @param action Pointer to an action.
  */
-void OptionsVideoState::btnGameResolutionDownClick(Action *)
+void OptionsVideoState::btnGameResolutionDownClick(Action*)
 {
 	if (_gameCurrent == 0)
 		_gameCurrent = _gameRes.size() - 1;
 	else
 		_gameCurrent--;
+
 	updateGameResolution();
 }
 
@@ -473,7 +490,9 @@ void OptionsVideoState::updateGameResolution()
 		_txtGameSize->setText(L"-");
 		break;
 	}
-	if (_gameCurrent >= 0 && _gameCurrent < _gameRes.size())
+
+	if (_gameCurrent > -1
+		&& _gameCurrent < static_cast<int>(_gameRes.size()))
 	{
 		_txtGameSize->setText(_gameRes[_gameCurrent]);
 	}
@@ -483,7 +502,7 @@ void OptionsVideoState::updateGameResolution()
  * Unselects the other display size.
  * @param action Pointer to an action.
  */
-void OptionsVideoState::txtDisplayWidthClick(Action *)
+void OptionsVideoState::txtDisplayWidthClick(Action*)
 {
 	_txtDisplayHeight->setFocus(false);
 }
@@ -492,7 +511,7 @@ void OptionsVideoState::txtDisplayWidthClick(Action *)
  * Changes the Display Width option.
  * @param action Pointer to an action.
  */
-void OptionsVideoState::txtDisplayWidthChange(Action *)
+void OptionsVideoState::txtDisplayWidthChange(Action*)
 {
 	std::wstringstream ss;
 	int width = 0;
@@ -505,7 +524,7 @@ void OptionsVideoState::txtDisplayWidthChange(Action *)
  * Unselects the other display size.
  * @param action Pointer to an action.
  */
-void OptionsVideoState::txtDisplayHeightClick(Action *)
+void OptionsVideoState::txtDisplayHeightClick(Action*)
 {
 	_txtDisplayWidth->setFocus(false);
 }
@@ -514,7 +533,7 @@ void OptionsVideoState::txtDisplayHeightClick(Action *)
  * Changes the Display Height option.
  * @param action Pointer to an action.
  */
-void OptionsVideoState::txtDisplayHeightChange(Action *)
+void OptionsVideoState::txtDisplayHeightChange(Action*)
 {
 	std::wstringstream ss;
 	int height = 0;
@@ -527,7 +546,7 @@ void OptionsVideoState::txtDisplayHeightChange(Action *)
  * Changes the Language option.
  * @param action Pointer to an action.
  */
-void OptionsVideoState::cbxLanguageChange(Action *)
+void OptionsVideoState::cbxLanguageChange(Action*)
 {
 	Options::language = _langs[_cbxLanguage->getSelected()];
 }
@@ -536,30 +555,31 @@ void OptionsVideoState::cbxLanguageChange(Action *)
  * Changes the Filter options.
  * @param action Pointer to an action.
  */
-void OptionsVideoState::cbxFilterChange(Action *)
+void OptionsVideoState::cbxFilterChange(Action*)
 {
 	switch (_cbxFilter->getSelected())
 	{
-	case 0:
-		Options::newOpenGL = false;
-		Options::newScaleFilter = false;
-		Options::newHQXFilter = false;
+		case 0:
+			Options::newOpenGL		= false;
+			Options::newScaleFilter	= false;
+			Options::newHQXFilter	= false;
 		break;
-	case 1:
-		Options::newOpenGL = false;
-		Options::newScaleFilter = true;
-		Options::newHQXFilter = false;
+		case 1:
+			Options::newOpenGL		= false;
+			Options::newScaleFilter	= true;
+			Options::newHQXFilter	= false;
 		break;
-	case 2:
-		Options::newOpenGL = false;
-		Options::newScaleFilter = false;
-		Options::newHQXFilter = true;
+		case 2:
+			Options::newOpenGL		= false;
+			Options::newScaleFilter	= false;
+			Options::newHQXFilter	= true;
 		break;
-	default:
-		Options::newOpenGL = true;
-		Options::newScaleFilter = false;
-		Options::newHQXFilter = false;
-		Options::newOpenGLShader = _filters[_cbxFilter->getSelected()];
+		default:
+			Options::newOpenGL		= true;
+			Options::newScaleFilter	= false;
+			Options::newHQXFilter	= false;
+
+			Options::newOpenGLShader = _filters[_cbxFilter->getSelected()];
 		break;
 	}
 }
@@ -568,7 +588,7 @@ void OptionsVideoState::cbxFilterChange(Action *)
  * Changes the Display Mode options.
  * @param action Pointer to an action.
  */
-void OptionsVideoState::btnModeClick(Action *)
+void OptionsVideoState::btnModeClick(Action*)
 {
 	if (_displayMode == _btnWindowed)
 	{
@@ -591,7 +611,7 @@ void OptionsVideoState::btnModeClick(Action *)
  * Changes the Letterboxing option.
  * @param action Pointer to an action.
  */
-void OptionsVideoState::btnLetterboxClick(Action *)
+void OptionsVideoState::btnLetterboxClick(Action*)
 {
 	Options::keepAspectRatio = _btnLetterbox->getPressed();
 }
@@ -600,7 +620,7 @@ void OptionsVideoState::btnLetterboxClick(Action *)
  * Changes the Resizable option.
  * @param action Pointer to an action.
  */
-void OptionsVideoState::btnResizeClick(Action *)
+void OptionsVideoState::btnResizeClick(Action*)
 {
 	Options::allowResize = _btnResize->getPressed();
 }
@@ -609,7 +629,7 @@ void OptionsVideoState::btnResizeClick(Action *)
  * Changes the Lock Mouse option.
  * @param action Pointer to an action.
  */
-void OptionsVideoState::btnLockMouseClick(Action *)
+void OptionsVideoState::btnLockMouseClick(Action*)
 {
 	Options::captureMouse = (SDL_GrabMode)_btnLockMouse->getPressed();
 }
