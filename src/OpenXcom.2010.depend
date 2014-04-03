@@ -5359,7 +5359,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Soldier.h"
 
-1396407629 source:f:\git\openxcom\src\basescape\soldierinfostate.cpp
+1396467352 source:f:\git\openxcom\src\basescape\soldierinfostate.cpp
 	"SoldierInfoState.h"
 	<sstream>
 	"SackSoldierState.h"
@@ -5918,7 +5918,7 @@
 	"../Savegame/Ufo.h"
 	"../Savegame/Vehicle.h"
 
-1395362071 f:\git\openxcom\src\battlescape\inventory.h
+1396469752 f:\git\openxcom\src\battlescape\inventory.h
 	<map>
 	<string>
 	"../Engine/InteractiveSurface.h"
@@ -6307,7 +6307,7 @@
 	"../Interface/Frame.h"
 	"../Interface/Text.h"
 
-1396382712 source:f:\git\openxcom\src\battlescape\inventory.cpp
+1396483440 source:f:\git\openxcom\src\battlescape\inventory.cpp
 	"Inventory.h"
 	<cmath>
 	"PrimeGrenadeState.h"
@@ -6317,6 +6317,7 @@
 	"../Engine/Font.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
+	"../Engine/Logger.h"
 	"../Engine/Options.h"
 	"../Engine/Palette.h"
 	"../Engine/Sound.h"
@@ -6339,7 +6340,7 @@
 	<SDL.h>
 	<yaml-cpp/yaml.h>
 
-1396382779 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
+1396472333 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
 	"InventoryState.h"
 	<sstream>
 	"BattlescapeState.h"
@@ -6673,7 +6674,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Interface/Text.h"
 
-1396249517 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1396471788 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	<climits>
 	<cmath>
@@ -7119,7 +7120,7 @@
 	<assert.h>
 	<stdlib.h>
 
-1396338129 source:f:\git\openxcom\src\engine\screen.cpp
+1396473842 source:f:\git\openxcom\src\engine\screen.cpp
 	"Screen.h"
 	<cmath>
 	<iomanip>
@@ -7632,7 +7633,7 @@
 1395083509 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1396342719 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1396468082 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	<assert.h>
 	<algorithm>

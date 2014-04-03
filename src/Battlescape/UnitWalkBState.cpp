@@ -136,9 +136,9 @@ void UnitWalkBState::think()
 		return;
 	}
 
-	_onScreen = _unit->getVisible()
-				&& (_walkCam->isOnScreen(_unit->getPosition())
-					|| _walkCam->isOnScreen(_unit->getDestination())); // kL
+	_onScreen = true; // _unit->getVisible()
+//				&& (_walkCam->isOnScreen(_unit->getPosition())
+//					|| _walkCam->isOnScreen(_unit->getDestination())); // kL
 	//Log(LOG_INFO) << ". _onScreen = " << _onScreen;
 
 

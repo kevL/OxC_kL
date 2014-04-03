@@ -29,6 +29,7 @@
 #include "../Engine/Font.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
+#include "../Engine/Logger.h"
 #include "../Engine/Options.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Sound.h"
@@ -56,11 +57,12 @@ namespace OpenXcom
 
 /**
  * Sets up an inventory with the specified size and position.
- * @param game Pointer to core game.
- * @param width Width in pixels.
- * @param height Height in pixels.
- * @param x X position in pixels.
- * @param y Y position in pixels.
+ * @param game, Pointer to core game.
+ * @param width, Width in pixels.
+ * @param height, Height in pixels.
+ * @param x, X position in pixels.
+ * @param y, Y position in pixels.
+ * @param base, True if being accessed from the CraftEquip screen.
  */
 Inventory::Inventory(
 		Game* game,
@@ -79,6 +81,7 @@ Inventory::Inventory(
 		_selUnit(0),
 		_selItem(0),
 		_tu(true),
+		_base(base),
 		_groundOffset(0),
 		_primeGrenade(-1) // kL
 {
@@ -906,13 +909,17 @@ void Inventory::mouseClick(Action* action, State* state)
 	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
+		//Log(LOG_INFO) << "Inventory: SDL_BUTTON_RIGHT";
 		if (_selItem == 0)
 		{
+			//Log(LOG_INFO) << ". no selected item";
 			if (!_base)
 			{
+				//Log(LOG_INFO) << ". not at base";
 				if (!_tu)	// kL_note: ie. TurnUnits have not been instantiated yet:
 							// ergo preBattlescape inventory screen is active.
 				{
+					//Log(LOG_INFO) << ". preBattle screen";
 					int
 						x = static_cast<int>(floor(action->getAbsoluteXMouse())) - getX(),
 						y = static_cast<int>(floor(action->getAbsoluteYMouse())) - getY();
@@ -966,6 +973,7 @@ void Inventory::mouseClick(Action* action, State* state)
 				}
 				else
 				{
+					//Log(LOG_INFO) << ". in Battle";
 					_game->popState(); // Closes the inventory window on right-click (if not in preBattle equip screen!)
 
 					// but Does NOT applyGravity(), so from InventoryState::btnOkClick()
@@ -985,9 +993,11 @@ void Inventory::mouseClick(Action* action, State* state)
 					} */
 				}
 			}
+			//else Log(LOG_INFO) << ". in CraftEquip";
 		}
 		else
 		{
+			//Log(LOG_INFO) << ". drop item to ground";
 			if (_selItem->getSlot()->getType() == INV_GROUND)
 				_stackLevel[_selItem->getSlotX()][_selItem->getSlotY()] += 1;
 

@@ -81,7 +81,6 @@ InventoryState::InventoryState(
 	_battleGame = _game->getSavedGame()->getSavedBattle();
 	//Log(LOG_INFO) << ". _battleGame = " << _battleGame;
 
-
 	_bg			= new Surface(320, 200, 0, 0);
 	_soldier	= new Surface(320, 200, 0, 0);
 
@@ -285,12 +284,10 @@ void InventoryState::init()
 	_soldier->clear();
 	_btnRank->clear();
 
-
 	_txtName->setBig();
 	_txtName->setText(unit->getName(_game->getLanguage()));
 
 	_inv->setSelectedUnit(unit);
-
 
 	Soldier* s = _game->getSavedGame()->getSoldier(unit->getId());
 	if (s)
@@ -306,14 +303,10 @@ void InventoryState::init()
 		else
 			look += "F";
 
-		if (s->getLook() == LOOK_BLONDE)
-			look += "0";
-		else if (s->getLook() == LOOK_BROWNHAIR)
-			look += "1";
-		else if (s->getLook() == LOOK_ORIENTAL)
-			look += "2";
-		else if (s->getLook() == LOOK_AFRICAN)
-			look += "3";
+		if		(s->getLook() == LOOK_BLONDE)		look += "0";
+		else if (s->getLook() == LOOK_BROWNHAIR)	look += "1";
+		else if (s->getLook() == LOOK_ORIENTAL)		look += "2";
+		else if (s->getLook() == LOOK_AFRICAN)		look += "3";
 
 		look += ".SPK";
 
@@ -333,7 +326,6 @@ void InventoryState::init()
 	}
 
 	updateStats();
-
 	//Log(LOG_INFO) << "InventoryState::init() EXIT";
 }
 
@@ -364,7 +356,6 @@ void InventoryState::updateStats()
 			_txtFAcc->setText(tr("STR_ACCURACY_SHORT").arg(unit->getStats()->firing));
 			_txtReact->setText(tr("STR_REACTIONS_SHORT").arg(unit->getStats()->reactions));
 			_txtThrow->setText(tr("STR_THROWACC_SHORT").arg(unit->getStats()->throwing)); // kL
-
 
 			int minPsi = 0;
 			if (unit->getType() == "SOLDIER")
@@ -403,7 +394,6 @@ void InventoryState::saveEquipmentLayout()
 	{
 		if ((*i)->getGeoscapeSoldier() == 0) // x-Com soldiers only
 			continue;
-
 
 		std::vector<EquipmentLayoutItem*>* layoutItems = (*i)->getGeoscapeSoldier()->getEquipmentLayout();
 		if (!layoutItems->empty()) // clear the previous save
@@ -502,7 +492,6 @@ void InventoryState::btnOkClick(Action*)
 			getTileEngine()->calculateFOV(position);
 		} */
 //	}
-
 	//Log(LOG_INFO) << "InventoryState::btnOkClick() EXIT";
 }
 
@@ -621,7 +610,6 @@ void InventoryState::invClick(Action*)
 			else
 				_txtItem->setText(tr("STR_ALIEN_ARTIFACT"));
 		}
-
 
 		std::wstring sAmmo;
 
