@@ -67,7 +67,7 @@ class Map
 {
 
 private:
-	static const int SCROLL_INTERVAL	= 20;
+	static const int SCROLL_INTERVAL	= 15;
 	static const int BULLET_SPRITES		= 35;
 
 	CursorType _cursorType;
