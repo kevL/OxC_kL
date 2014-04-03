@@ -2818,18 +2818,21 @@ void BattlescapeGenerator::explodePowerSources()
 			pos.y = _save->getTiles()[i]->getPosition().y * 16;
 			pos.z = _save->getTiles()[i]->getPosition().z * 24 + 12;
 
-			int percDamage = _ufo->getCrashPS(); // ( range: 50+ to 100- )
+			int
+				percDamage = _ufo->getCrashPS(), // ( range: 50+ to 100- )
+				altDamage = 0;
 			//Log(LOG_INFO) << ". crashPS = " << percDamage;
 			if (RNG::percent(percDamage / 2)) // chance for full range Explosion (even if crash took low damage)
 			{
-				percDamage = RNG::generate(1, 100);
+				altDamage = RNG::generate(1, 100);
 				//Log(LOG_INFO) << ". . Alt percDamage = " << percDamage;
 			}
-			double rand = RNG::generate(0.0, 2.0) * static_cast<double>(percDamage);
+
+			double rand = RNG::generate(0.1, 2.0) * static_cast<double>(percDamage);
 			//Log(LOG_INFO) << ". rand = " << (int)rand;
 
 //			int power = static_cast<int>(((pow(rand, 3)) / 32000.0) + (static_cast<double>(percDamage) - 50.0));
-			int power = static_cast<int>(((pow(rand, 2)) / 160.0) + (static_cast<double>(percDamage) - 50.0));
+			int power = static_cast<int>(((pow(rand, 2)) / 160.0) + (static_cast<double>(percDamage)));
 			//Log(LOG_INFO) << ". power = " << power;
 
 			_save->getTileEngine()->explode(

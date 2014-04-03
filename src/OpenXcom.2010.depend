@@ -5731,7 +5731,7 @@
 	<string>
 	"BattlescapeGame.h"
 
-1396247468 f:\git\openxcom\src\battlescape\map.h
+1396507575 f:\git\openxcom\src\battlescape\map.h
 	<set>
 	<vector>
 	"../Engine/Options.h"
@@ -5869,7 +5869,7 @@
 	<vector>
 	<yaml-cpp/yaml.h>
 
-1396382538 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
+1396556801 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
 	"BattlescapeGenerator.h"
 	<fstream>
 	<sstream>
@@ -6829,7 +6829,7 @@
 	"../Savegame/BattleUnit.h"
 	"../Savegame/SavedBattleGame.h"
 
-1396250239 source:f:\git\openxcom\src\battlescape\unitwalkbstate.cpp
+1396487298 source:f:\git\openxcom\src\battlescape\unitwalkbstate.cpp
 	"UnitWalkBState.h"
 	"BattleAIState.h"
 	"BattlescapeState.h"
