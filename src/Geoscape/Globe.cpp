@@ -1534,9 +1534,12 @@ void Globe::XuLine(
 
 	while(len>0)
 	{
-		if (x0>0 && y0>0 && x0<surface->getWidth() && y0<surface->getHeight())
+//		if (x0>0 && y0>0 && x0<surface->getWidth() && y0<surface->getHeight())
+//		{
+//			tcol=src->getPixel((int)x0,(int)y0);
+		tcol=src->getPixel((int)x0,(int)y0);
+		if (tcol)
 		{
-			tcol=src->getPixel((int)x0,(int)y0);
 			const int d = tcol & helper::ColorGroup;
 			if(d ==  Palette::blockOffset(12) || d ==  Palette::blockOffset(13))
 			{
@@ -2291,7 +2294,41 @@ void Globe::drawPath(
 		double lon2,
 		double lat2)
 {
-	double
+	double length;
+	Sint16 count;
+	Sint16 x1, y1, x2, y2;
+	CordPolar p1, p2;
+	Cord a(CordPolar(lon1, lat1));
+	Cord b(CordPolar(lon2, lat2));
+
+	if(-b == a)
+		return;
+
+	b -= a;
+
+	//longer path have more parts
+	length = b.norm();
+	length *= length*15;
+	count = length + 1;
+	b /= count;
+	p1 = CordPolar(a);
+	polarToCart(p1.lon, p1.lat, &x1, &y1);
+	for(int i = 0; i < count; ++i)
+	{
+		a += b;
+		p2 = CordPolar(a);
+		polarToCart(p2.lon, p2.lat, &x2, &y2);
+
+		if (!pointBack(p1.lon, p1.lat) && !pointBack(p2.lon, p2.lat))
+		{
+			XuLine(surface, this, x1, y1, x2, y2, 8);
+		}
+
+		p1 = p2;
+		x1 = x2;
+		y1 = y2;
+	}
+/*	double
 		sx = lon2 - lon1,
 		sy = lat2 - lat1,
 		ln1,
@@ -2300,7 +2337,8 @@ void Globe::drawPath(
 		lt2,
 		dln,
 		dlt,
-		slen,dlen;
+		slen,
+		dlen;
 	int seg;
 	Sint16
 		x1,
@@ -2357,7 +2395,7 @@ void Globe::drawPath(
 			polarToCart(ln2,lt2,&x2,&y2);
 			XuLine(surface, this, x1, y1, x2, y2, 8);
 		}
-	}
+	} */
 }
 
 /**
