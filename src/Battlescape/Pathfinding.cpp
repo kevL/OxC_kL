@@ -1897,8 +1897,8 @@ bool Pathfinding::previewPath(bool bRemove)
 			if (energy > energyStop)
 				energy = energyStop;
 		}
-		else // gravLift
-			energy = 0;
+//		else // gravLift
+//			energy = 0;
 
 
 		tus -= tu;
@@ -1945,12 +1945,12 @@ bool Pathfinding::previewPath(bool bRemove)
 						&& energy > -1)
 					{
 						if (reserve)
-							color = 4;
+							color = 4; // green
 						else
-							color = 10;
+							color = 10; // yellow
 					}
 					else
-						color = 3;
+						color = 3; // red
 				}
 
 				tile->setMarkerColor(color);

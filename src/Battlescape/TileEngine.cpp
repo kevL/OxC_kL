@@ -746,7 +746,7 @@ bool TileEngine::visible(
 	float dist = static_cast<float>(distance(
 											unit->getPosition(),
 											targetUnit->getPosition()));
-	if (dist > MAX_VIEW_DISTANCE)
+	if (static_cast<int>(dist) > MAX_VIEW_DISTANCE)
 		//Log(LOG_INFO) << ". . too far to see Tile, ret FALSE";
 		return false;
 
