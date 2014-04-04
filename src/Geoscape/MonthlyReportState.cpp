@@ -258,7 +258,9 @@ MonthlyReportState::MonthlyReportState(
 		{
 			if (_game->getSavedGame()->getWarned())
 			{
-				ss4 << "\n\n" << tr("STR_YOU_HAVE_NOT_SUCCEEDED");
+				ss4.str(L"");
+				ss4 << tr("STR_YOU_HAVE_NOT_SUCCEEDED");
+//				ss4 << "\n\n" << tr("STR_YOU_HAVE_NOT_SUCCEEDED");
 
 				_pactList.erase(
 							_pactList.begin(),

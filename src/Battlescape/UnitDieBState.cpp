@@ -154,6 +154,7 @@ void UnitDieBState::think()
 {
 	//Log(LOG_INFO) << "UnitDieBState::think() ID " << _unit->getId();
 // #1
+//kL	if (_unit->getDirection() != 3 && _damageType != DT_HE)
 	if (_unit->getStatus() == STATUS_TURNING)
 	{
 		//Log(LOG_INFO) << ". . STATUS_TURNING";
