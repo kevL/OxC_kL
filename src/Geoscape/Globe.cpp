@@ -2309,7 +2309,7 @@ void Globe::drawPath(
 	//longer path have more parts
 	length = b.norm();
 	length *= length*15;
-	count = length + 1;
+	count = static_cast<Sint16>(length) + 1;
 	b /= count;
 	p1 = CordPolar(a);
 	polarToCart(p1.lon, p1.lat, &x1, &y1);

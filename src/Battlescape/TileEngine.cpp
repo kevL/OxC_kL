@@ -2251,10 +2251,10 @@ void TileEngine::explode(
 	if (power == 0) // kL, quick out.
 		return;
 
-
-	double centerX = static_cast<double>(voxelTarget.x / 16 + 0.5);
-	double centerY = static_cast<double>(voxelTarget.y / 16 + 0.5);
-	double centerZ = static_cast<double>(voxelTarget.z / 24 + 0.5);
+	double
+		centerX = static_cast<double>(voxelTarget.x / 16 + 0.5),
+		centerY = static_cast<double>(voxelTarget.y / 16 + 0.5),
+		centerZ = static_cast<double>(voxelTarget.z / 24 + 0.5);
 
 	std::set<Tile*> tilesAffected;
 	std::pair<std::set<Tile*>::iterator, bool> tilePair;
@@ -2288,7 +2288,6 @@ void TileEngine::explode(
 	if (type == DT_IN)
 		power /= 2;
 		//Log(LOG_INFO) << ". DT_IN power = " << power;
-
 
 	Tile
 		* origin	= 0,
@@ -2363,6 +2362,38 @@ void TileEngine::explode(
 
 				//Log(LOG_INFO) << ". r = " << r;
 				r += 1.0;
+
+
+				// TEST:
+				int testPower = _powerT;
+				if (type == DT_IN)
+				{
+					int dir;
+					Pathfinding::vectorToDirection(
+											destTile->getPosition() - origin->getPosition(), // kL
+											dir);
+					if (dir != -1
+						&& dir %2)
+					{
+						testPower -= 5; // diagonal movement costs an extra 50% for fire.
+					}
+				}
+
+				testPower -= (10 // explosive damage decreases by 10 per tile
+						+ horizontalBlockage( // not *2
+										origin,
+										destTile,
+										type)
+						+ verticalBlockage( // not *2
+										origin,
+										destTile,
+										type));
+
+				if (testPower < 1)
+					break;
+				// TEST_end.
+
+
 
 //kL				if (powerEff > 0)
 //				{
@@ -2667,7 +2698,7 @@ void TileEngine::explode(
 										origin,
 										destTile,
 										type)
-						+ verticalBlockage(
+						+ verticalBlockage( // not *2
 										origin,
 										destTile,
 										type));

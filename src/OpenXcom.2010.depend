@@ -4866,8 +4866,9 @@
 	"../Engine/FastLineClip.h"
 	"../Engine/InteractiveSurface.h"
 
-1382767443 f:\git\openxcom\src\geoscape\cord.h
+1396656127 f:\git\openxcom\src\geoscape\cord.h
 	<cmath>
+	"../aresame.h"
 
 1394398507 f:\git\openxcom\src\engine\fastlineclip.h
 
@@ -5218,7 +5219,7 @@
 	"../Savegame/Transfer.h"
 	"../Savegame/Vehicle.h"
 
-1394398507 f:\git\openxcom\src\aresame.h
+1396656139 f:\git\openxcom\src\aresame.h
 	<limits>
 	<cmath>
 
@@ -6674,7 +6675,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Interface/Text.h"
 
-1396604438 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1396647645 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	<climits>
 	<cmath>
@@ -6709,7 +6710,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1396249605 source:f:\git\openxcom\src\battlescape\unitdiebstate.cpp
+1396647756 source:f:\git\openxcom\src\battlescape\unitdiebstate.cpp
 	"UnitDieBState.h"
 	"BattlescapeState.h"
 	"Camera.h"
@@ -7930,7 +7931,7 @@
 	"GeoscapeState.h"
 	"../Engine/Options.h"
 
-1396295941 source:f:\git\openxcom\src\geoscape\monthlyreportstate.cpp
+1396647906 source:f:\git\openxcom\src\geoscape\monthlyreportstate.cpp
 	"MonthlyReportState.h"
 	<cmath>
 	<sstream>
