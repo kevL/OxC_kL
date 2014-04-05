@@ -234,8 +234,6 @@ OptionsVideoState::OptionsVideoState(
 	_txtGameSize->setAlign(ALIGN_CENTER);
 	_txtGameSize->setBig();
 
-	updateGameResolution();
-
 	_btnGameResolutionUp->setColor(Palette::blockOffset(15)-1);
 	_btnGameResolutionUp->onMouseClick((ActionHandler)& OptionsVideoState::btnGameResolutionUpClick);
 
@@ -381,6 +379,8 @@ OptionsVideoState::OptionsVideoState(
 	Options::newScaleFilter		= Options::useScaleFilter;
 	Options::newHQXFilter		= Options::useHQXFilter;
 	Options::newOpenGLShader	= Options::useOpenGLShader;
+
+	updateGameResolution();
 }
 
 /**
@@ -405,6 +405,7 @@ void OptionsVideoState::btnDisplayResolutionUpClick(Action*)
 		_resCurrent--;
 
 	updateDisplayResolution();
+	updateGameResolution();
 }
 
 /**
@@ -422,6 +423,7 @@ void OptionsVideoState::btnDisplayResolutionDownClick(Action*)
 		_resCurrent++;
 
 	updateDisplayResolution();
+	updateGameResolution();
 }
 
 /**
@@ -474,20 +476,20 @@ void OptionsVideoState::updateGameResolution()
 {
 	switch (_gameCurrent)
 	{
-	case 0:
-		Options::baseXResolution = Screen::ORIGINAL_WIDTH;
-		Options::baseYResolution = Screen::ORIGINAL_HEIGHT;
+		case 0:
+			Options::baseXResolution = Screen::ORIGINAL_WIDTH;
+			Options::baseYResolution = Screen::ORIGINAL_HEIGHT;
 		break;
-	case 1:
-		Options::baseXResolution = Options::displayWidth;
-		Options::baseYResolution = Options::displayHeight;
+		case 1:
+			Options::baseXResolution = Options::newDisplayWidth;
+			Options::baseYResolution = Options::newDisplayHeight;
 		break;
-	case 2:
-		Options::baseXResolution = Options::displayWidth / 2;
-		Options::baseYResolution = Options::displayHeight / 2;
+		case 2:
+			Options::baseXResolution = Options::newDisplayWidth / 2;
+			Options::baseYResolution = Options::newDisplayHeight / 2;
 		break;
-	default:
-		_txtGameSize->setText(L"-");
+		default:
+			_txtGameSize->setText(L"-");
 		break;
 	}
 
@@ -518,6 +520,8 @@ void OptionsVideoState::txtDisplayWidthChange(Action*)
 	ss << std::dec << _txtDisplayWidth->getText();
 	ss >> std::dec >> width;
 	Options::newDisplayWidth = width;
+
+	updateGameResolution();
 }
 
 /**
@@ -540,6 +544,8 @@ void OptionsVideoState::txtDisplayHeightChange(Action*)
 	ss << std::dec << _txtDisplayHeight->getText();
 	ss >> std::dec >> height;
 	Options::newDisplayHeight = height;
+
+	updateGameResolution();
 }
 
 /**

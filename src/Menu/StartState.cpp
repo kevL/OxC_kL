@@ -142,11 +142,14 @@ void StartState::think()
 			if (!Options::reload
 				&& Options::playIntro)
 			{
-				Options::reload = false;
 				_game->setState(new IntroState(_game));
 			}
 			else
+			{
 				_game->setState(new MainMenuState(_game));
+
+				Options::reload = false;
+			}
 		break;
 		default:
 		break;

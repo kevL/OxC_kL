@@ -79,6 +79,11 @@ protected:
 		/// Cleans up the Options state.
 		~OptionsBaseState();
 
+		/// Restarts the game states.
+		static void restart(
+				Game* game,
+				OptionsOrigin origin);
+
 		/// Initializes palettes.
 		void init();
 

@@ -21,6 +21,7 @@
 #define OPENXCOM_MULTIPLETARGETSSTATE_H
 
 #include "../Engine/State.h"
+#include <vector>
 
 
 namespace OpenXcom

@@ -158,6 +158,24 @@ OptionsBaseState::~OptionsBaseState()
 {
 }
 
+void OptionsBaseState::restart(
+		Game* game,
+		OptionsOrigin origin)
+{
+	if (origin == OPT_MENU)
+		game->setState(new MainMenuState(game));
+	else if (origin == OPT_GEOSCAPE)
+		game->setState(new GeoscapeState(game));
+	else if (origin == OPT_BATTLESCAPE)
+	{
+		game->setState(new GeoscapeState(game));
+
+		BattlescapeState* bs = new BattlescapeState(game);
+		game->pushState(bs);
+		game->getSavedGame()->getSavedBattle()->setBattleState(bs);
+	}
+}
+
 /**
  * Initializes UI colors according to origin.
  */
@@ -206,18 +224,6 @@ void OptionsBaseState::btnOkClick(Action*)
 		_game->setState(new StartState(_game));
 	else
 	{
-		if (_origin == OPT_MENU)
-			_game->setState(new MainMenuState(_game));
-		else if (_origin == OPT_GEOSCAPE)
-			_game->setState(new GeoscapeState(_game));
-		else if (_origin == OPT_BATTLESCAPE)
-		{
-			_game->setState(new GeoscapeState(_game));
-			BattlescapeState* bs = new BattlescapeState(_game);
-			_game->pushState(bs);
-			_game->getSavedGame()->getSavedBattle()->setBattleState(bs);
-		}
-
 		// Confirm any video options changes
 		if (Options::displayWidth != Options::newDisplayWidth
 			|| Options::displayHeight != Options::newDisplayHeight
@@ -226,10 +232,12 @@ void OptionsBaseState::btnOkClick(Action*)
 			|| Options::useHQXFilter != Options::newHQXFilter
 			|| Options::useOpenGLShader != Options::newOpenGLShader)
 		{
-			_game->pushState(new OptionsConfirmState(
-												_game,
-												_origin));
+			_game->pushState(new OptionsConfirmState(_game, _origin));
 		}
+		else
+			restart(
+					_game,
+					_origin);
 	}
 }
 

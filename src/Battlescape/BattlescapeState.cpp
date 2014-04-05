@@ -124,7 +124,6 @@ BattlescapeState::BattlescapeState(Game* game)
 			_visibleUnit,
 			10,
 			(BattleUnit*)(0));
-//	game->getScreen()->setScale(1.0);
 
 	int screenWidth = Options::baseXResolution;
 	int screenHeight = Options::baseYResolution;

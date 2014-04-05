@@ -140,6 +140,7 @@ void OptionsConfirmState::countdown()
 void OptionsConfirmState::btnYesClick(Action*)
 {
 	_game->popState();
+	OptionsBaseState::restart(_game, _origin);
 }
 
 /**
@@ -153,6 +154,7 @@ void OptionsConfirmState::btnNoClick(Action*)
 
 	_game->getScreen()->resetDisplay();
 	_game->popState();
+	OptionsBaseState::restart(_game, _origin);
 }
 
 }

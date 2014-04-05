@@ -73,7 +73,7 @@ private:
 	CursorType _cursorType;
 
 	bool
-//		_launch, // kL
+		_launch,
 		_explosionInFOV,
 		_projectileInFOV,
 		_smoothCamera,

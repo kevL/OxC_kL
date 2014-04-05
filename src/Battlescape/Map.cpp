@@ -119,10 +119,10 @@ Map::Map(
 		_projectile(0),
 		_projectileInFOV(false),
 		_explosionInFOV(false),
+		_launch(false),
 		_visibleMapHeight(visibleMapHeight),
 		_unitDying(false),
 		_reveal(0),
-//		_launch(false),
 		_smoothingEngaged(false)
 {
 	//Log(LOG_INFO) << "Create Map";
@@ -628,6 +628,24 @@ void Map::drawTerrain(Surface* surface)
 						_smoothingEngaged = true;
 					}
 				}
+/* begin:				if (_launch)
+				{
+					_launch = false;
+					if ((bulletPositionScreen.x < 1 || bulletPositionScreen.x > surface->getWidth() - 1 ||
+						bulletPositionScreen.y < 1 || bulletPositionScreen.y > _visibleMapHeight - 1))
+					{
+						_camera->centerOnPosition(Position(bulletLowX, bulletLowY, bulletHighZ), false);
+						_camera->convertVoxelToScreen(_projectile->getPosition(), &bulletPositionScreen);
+					}
+				}
+				if (!_smoothingEngaged)
+				{
+					if (bulletPositionScreen.x < 1 || bulletPositionScreen.x > surface->getWidth() - 1 ||
+						bulletPositionScreen.y < 1 || bulletPositionScreen.y > _visibleMapHeight - 1)
+					{
+						_smoothingEngaged = true;
+					}
+				} */ // _end.
 				else
 				{
 					_camera->jumpXY(
@@ -2057,7 +2075,13 @@ void Map::cacheUnit(BattleUnit* unit)
 void Map::setProjectile(Projectile* projectile)
 {
 	_projectile = projectile;
-//	_launch = true; // kL
+
+	if (projectile
+		&& Options::battleSmoothCamera)
+	{
+		_launch = true;
+	}
+
 }
 
 /**
