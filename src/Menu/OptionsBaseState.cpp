@@ -232,12 +232,14 @@ void OptionsBaseState::btnOkClick(Action*)
 			|| Options::useHQXFilter != Options::newHQXFilter
 			|| Options::useOpenGLShader != Options::newOpenGLShader)
 		{
-			_game->pushState(new OptionsConfirmState(_game, _origin));
+			_game->pushState(new OptionsConfirmState(
+												_game,
+												_origin));
 		}
 		else
 			restart(
-					_game,
-					_origin);
+				_game,
+				_origin);
 	}
 }
 
@@ -274,39 +276,39 @@ void OptionsBaseState::btnDefaultClick(Action* action)
 void OptionsBaseState::btnGroupClick(Action* action)
 {
 	Surface* sender = action->getSender();
-	//if (sender != _group)
-	{
-		_game->popState();
+//	if (sender != _group)
+//	{
+	_game->popState();
 
-		if (sender == _btnVideo)
-		{
-			_game->pushState(new OptionsVideoState(_game, _origin));
-		}
-		else if (sender == _btnAudio)
-		{
-			_game->pushState(new OptionsAudioState(_game, _origin));
-		}
-		else if (sender == _btnControls)
-		{
-			_game->pushState(new OptionsControlsState(_game, _origin));
-		}
-		else if (sender == _btnGeoscape)
-		{
-			_game->pushState(new OptionsGeoscapeState(_game, _origin));
-		}
-		else if (sender == _btnBattlescape)
-		{
-			_game->pushState(new OptionsBattlescapeState(_game, _origin));
-		}
-		else if (sender == _btnAdvanced)
-		{
-			_game->pushState(new OptionsAdvancedState(_game, _origin));
-		}
-		else if (sender == _btnMods)
-		{
-			_game->pushState(new OptionsModsState(_game, _origin));
-		}
-	}
+	if (sender == _btnVideo)
+		_game->pushState(new OptionsVideoState(
+											_game,
+											_origin));
+	else if (sender == _btnAudio)
+		_game->pushState(new OptionsAudioState(
+											_game,
+											_origin));
+	else if (sender == _btnControls)
+		_game->pushState(new OptionsControlsState(
+											_game,
+											_origin));
+	else if (sender == _btnGeoscape)
+		_game->pushState(new OptionsGeoscapeState(
+											_game,
+											_origin));
+	else if (sender == _btnBattlescape)
+		_game->pushState(new OptionsBattlescapeState(
+											_game,
+											_origin));
+	else if (sender == _btnAdvanced)
+		_game->pushState(new OptionsAdvancedState(
+											_game,
+											_origin));
+	else if (sender == _btnMods)
+		_game->pushState(new OptionsModsState(
+											_game,
+											_origin));
+//	}
 }
 
 /**
@@ -326,9 +328,7 @@ void OptionsBaseState::txtTooltipIn(Action* action)
 void OptionsBaseState::txtTooltipOut(Action* action)
 {
 	if (_currentTooltip == action->getSender()->getTooltip())
-	{
 		_txtTooltip->setText(L"");
-	}
 }
 
 }

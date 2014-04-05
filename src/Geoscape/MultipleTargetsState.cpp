@@ -168,7 +168,6 @@ void MultipleTargetsState::popupTarget(Target* target)
 	if (_craft == 0)
 	{
 		//Log(LOG_INFO) << ". _craft == 0";
-
 		Craft* c = dynamic_cast<Craft*>(target);
 		Ufo* u = dynamic_cast<Ufo*>(target);
 		Base* b = dynamic_cast<Base*>(target);
@@ -234,7 +233,6 @@ void MultipleTargetsState::popupTarget(Target* target)
 													_craft,
 													target));
 	}
-
 	//Log(LOG_INFO) << "MultipleTargetsState::popupTarget() EXIT";
 }
 
@@ -254,10 +252,8 @@ void MultipleTargetsState::btnCancelClick(Action*)
 void MultipleTargetsState::lstTargetsClick(Action*)
 {
 	//Log(LOG_INFO) << "MultipleTargetsState::lstTargetsClick()";
-
 	Target* targ = _targets[_lstTargets->getSelectedRow()];
 	popupTarget(targ);
-
 	//Log(LOG_INFO) << "MultipleTargetsState::lstTargetsClick() EXIT";
 }
 

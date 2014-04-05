@@ -126,11 +126,11 @@ Map::Map(
 		_smoothingEngaged(false)
 {
 	//Log(LOG_INFO) << "Create Map";
-	_previewSetting	= Options::battleNewPreviewPath;
-	_smoothCamera	= Options::battleSmoothCamera;
+//kL	_smoothCamera	= Options::battleSmoothCamera;
 
-	// turn everything on because we want to see the markers.
-	if (Options::traceAI) _previewSetting = PATH_FULL;
+	_previewSetting	= Options::battleNewPreviewPath;
+	if (Options::traceAI) // turn everything on because we want to see the markers.
+		_previewSetting = PATH_FULL;
 
 	_res			= _game->getResourcePack();
 	_spriteWidth	= _res->getSurfaceSet("BLANKS.PCK")->getFrame(0)->getWidth();
@@ -388,13 +388,12 @@ void Map::setPalette(
 void Map::drawTerrain(Surface* surface)
 {
 	//Log(LOG_INFO) << "Map::drawTerrain()";
-
 	BattleUnit* unit		= 0;
 	NumberText* _numWaypid	= 0;
 	Position
 		mapPosition,
 		screenPosition,
-		bulletPosScreen;
+		bulletScreen;
 	Surface* tmpSurface		= 0;
 	Tile* tile				= 0;
 
@@ -468,200 +467,49 @@ void Map::drawTerrain(Surface* surface)
 		// if the projectile is outside the viewport - center it back on it
 		_camera->convertVoxelToScreen(
 								_projectile->getPosition(),
-								&bulletPosScreen);
+								&bulletScreen);
 
-// kL_begin:
-/*		if (_projectileInFOV)
-		{
-			//Log(LOG_INFO) << ". projectileInFOV";
-			if (_launch) // kL_begin: This is now mine.
-			{
-				//Log(LOG_INFO) << ". . launch";
-				_launch = false;
-
-//				if (//_save->getSide() != FACTION_PLAYER &&
-//					!_camera->isOnScreen(_unit->getPosition()))
-//				{
-//					_camera->centerOnPosition(_unit->getPosition());
-//				} else
-				// kL_note: Gota figure these out...
-				if (bulletPosScreen.x < 20							// kL, keep these in from the edges.
-					|| bulletPosScreen.x > surface->getWidth() - 20	// kL
-					|| bulletPosScreen.y < 20						// kL
-					|| bulletPosScreen.y > _visibleMapHeight - 20)	// kL
-				{
-					//Log(LOG_INFO) << ". . . centerOnPosition()";
-
-					// kL_note: this effectively jumps screen back to show shooter shooting.
-					_camera->centerOnPosition(Position(
-													bulletLowX,
-													bulletLowY,
-													bulletHighZ), false);
-				}
-			}
-			else // kL_end. and now along the projectile's trajectory.
-			{
-				//Log(LOG_INFO) << ". . NOT launch";
-				Position bulletCam = _camera->getMapOffset();
-				if (bulletCam.z != bulletHighZ) // switch level
-				{
-					//Log(LOG_INFO) << ". . . convertVoxelToScreen(1)";
-					bulletCam.z = bulletHighZ;
-
-//kL					if (_projectileInFOV)
-//					{
-					_camera->setMapOffset(bulletCam);
-					_camera->convertVoxelToScreen(
-											_projectile->getPosition(),
-											&bulletPosScreen);
-//					}
-				}
-
-				bool onScreen = true;
-				do
-				{
-					//Log(LOG_INFO) << ". . . do/while";
-					onScreen = true;
-
-					if (bulletPosScreen.x < 8) // projectile approaches left edge of screen
-//					if (bulletPosScreen.x < 20) // kL
-					{
-						//Log(LOG_INFO) << ". . . . jumpXY() 1";
-						_camera->jumpXY(
-//kL								surface->getWidth() - 16,
-								surface->getWidth() - 24, // kL
-//								_visibleMapHeight / 2 - bulletPosScreen.y // Old code.
-								0);
-						onScreen = false;
-					}
-					else if (bulletPosScreen.x > surface->getWidth() - 8) // projectile approaches right edge of screen
-//					else if (bulletPosScreen.x > surface->getWidth() - 20) // kL
-					{
-						//Log(LOG_INFO) << ". . . . jumpXY() 2";
-						_camera->jumpXY(
-//kL								-surface->getWidth() + 16,
-								-surface->getWidth() + 24, // kL
-//								_visibleMapHeight / 2 - bulletPosScreen.y // Old code.
-								0);
-						onScreen = false;
-					}
-					else if (bulletPosScreen.y < 8) // projectile approaches top of screen
-//					else if (bulletPosScreen.y < 20) // kL
-					{
-						//Log(LOG_INFO) << ". . . . jumpXY() 3";
-						_camera->jumpXY(
-//								surface->getWidth() / 2 - bulletPosScreen.x, // Old code.
-								0,
-//kL								_visibleMapHeight - 20);
-								_visibleMapHeight - 28); // kL
-						onScreen = false;
-					}
-					else if (bulletPosScreen.y > _visibleMapHeight - 8) // projectile approaches bottom of screen
-//					else if (bulletPosScreen.y > _visibleMapHeight - 20) // kL
-					{
-						//Log(LOG_INFO) << ". . . . jumpXY() 4";
-						_camera->jumpXY(
-//								surface->getWidth() / 2 - bulletPosScreen.x, // Old code.
-								0,
-//kL								-_visibleMapHeight + 20);
-								-_visibleMapHeight + 28); // kL
-						onScreen = false;
-					}
-
-					//Log(LOG_INFO) << ". . . . convertVoxelToScreen(2)";
-
-					// bullet moves along its trajectory, voxel by voxel or so,
-					// until one of the above conditions causes the screen to flip-next:
-					_camera->convertVoxelToScreen(
-											_projectile->getPosition(),
-											&bulletPosScreen);
-				}
-				while (!onScreen);
-				//Log(LOG_INFO) << ". . . do/while DONE";
-			}
-			//Log(LOG_INFO) << ". . launch / NOT launch Done";
-		}
-		//Log(LOG_INFO) << ". projectileInFOV DONE";
-	} */
-// kL_end.
-
-
-// WB_begin:
 		if (_projectileInFOV)
 		{
-//kL			if (_smoothCamera)
-			// kL_begin:
-/*			if (// !_camera->isOnScreen(origin) // if one or both actor & target are offscreen
-					// || !_camera->isOnScreen(target) &&
-				_projectile->getActor()->getFaction() != FACTION_PLAYER // non-xCom projectile
-				|| _projectile->getActor()->getFaction() != _save->getSide() // reaction fire, xCom or not.
-				|| _save->getBattleGame()->getCurrentAction()->type == BA_LAUNCH
-				|| _save->getBattleGame()->getCurrentAction()->type == BA_THROW) */
-//			_save->getSelectedUnit()
-//					&& _save->getSelectedUnit()->getFaction() != FACTION_PLAYER)
-//				|| _save->getSide() != _save->getSelectedUnit()->getFaction())
-//				&& !_camera->isOnScreen(_unit->getPosition()))
-			Position posProj = _projectile->getPosition();
-			posProj /= Position(16, 16, 24); // convert to tilespace.
-
-			if (!_camera->isOnScreen(posProj)
-				|| _smoothingEngaged)
+			if (Options::battleSmoothCamera)
 			{
-//				_camera->centerOnPosition(_unit->getPosition());
-// kL_end.
-				Position origin = _projectile->getOrigin(); // kL, from below
-				Position target = _projectile->getTarget(); // kL, from below
-
-				if (!_smoothingEngaged)
-				{
-//kL					Position origin = _projectile->getOrigin();
-//kL					Position target = _projectile->getTarget();
-
-					if (   std::abs(origin.x - target.x) > 1
-						|| std::abs(origin.y - target.y) > 1
-						|| std::abs(origin.z - target.z) > 1
-						|| bulletPosScreen.x < 0
-						|| bulletPosScreen.x > surface->getWidth()
-						|| bulletPosScreen.y < 0
-						|| bulletPosScreen.y > _visibleMapHeight)
-					{
-						_smoothingEngaged = true;
-					}
-				}
-/* begin:				if (_launch)
+				if (_launch)
 				{
 					_launch = false;
-					if ((bulletPositionScreen.x < 1 || bulletPositionScreen.x > surface->getWidth() - 1 ||
-						bulletPositionScreen.y < 1 || bulletPositionScreen.y > _visibleMapHeight - 1))
+
+					if (bulletScreen.x < 1
+						|| bulletScreen.x > surface->getWidth() - 1
+						|| bulletScreen.y < 1
+						|| bulletScreen.y > _visibleMapHeight - 1)
 					{
-						_camera->centerOnPosition(Position(bulletLowX, bulletLowY, bulletHighZ), false);
-						_camera->convertVoxelToScreen(_projectile->getPosition(), &bulletPositionScreen);
+						_camera->centerOnPosition(
+												Position(
+													bulletLowX,
+													bulletLowY,
+													bulletHighZ),
+												false);
+						_camera->convertVoxelToScreen(
+												_projectile->getPosition(),
+												&bulletScreen);
 					}
 				}
+
 				if (!_smoothingEngaged)
 				{
-					if (bulletPositionScreen.x < 1 || bulletPositionScreen.x > surface->getWidth() - 1 ||
-						bulletPositionScreen.y < 1 || bulletPositionScreen.y > _visibleMapHeight - 1)
+					if (bulletScreen.x < 1
+						|| bulletScreen.x > surface->getWidth() - 1
+						|| bulletScreen.y < 1
+						|| bulletScreen.y > _visibleMapHeight - 1)
 					{
 						_smoothingEngaged = true;
 					}
-				} */ // _end.
+				}
 				else
 				{
 					_camera->jumpXY(
-								surface->getWidth() / 2 - bulletPosScreen.x,
-								_visibleMapHeight / 2 - bulletPosScreen.y);
+								surface->getWidth() / 2 - bulletScreen.x,
+								_visibleMapHeight / 2 - bulletScreen.y);
 
-//					if (_camera->getViewLevel() < target.z)		// kL
-//					if (_camera->getViewLevel() != target.z)	// kL
-//						_camera->setViewLevel(target.z);		// kL
-/*					if (origin.z != target.z)
-					{
-						if (origin.z > target.z)
-							_camera->setViewLevel(origin.z);
-						else
-							_camera->setViewLevel(target.z);
-					} */
 					int posBullet_z = _projectile->getPosition().z / 24;
 					if (_camera->getViewLevel() != posBullet_z)
 					{
@@ -672,49 +520,46 @@ void Map::drawTerrain(Surface* surface)
 					}
 				}
 			}
+			else // NOT smoothCamera
 			// kL_note: Camera remains stationary when xCom actively fires at target.
 			// That is, Target is already onScreen due to targetting cursor click!
 			// ( And, player should know what unit is shooting... )
-/*			else
-			if (_projectile->getActor()->getFaction() != FACTION_PLAYER) // kL
+//			if (_projectile->getActor()->getFaction() != FACTION_PLAYER) // kL
 			{
 				bool enough;
 				do
 				{
 					enough = true;
-					if (bulletPosScreen.x < 0)
+					if (bulletScreen.x < 0)
 					{
 						_camera->jumpXY(+surface->getWidth(), 0);
 						enough = false;
 					}
-					else if (bulletPosScreen.x > surface->getWidth())
+					else if (bulletScreen.x > surface->getWidth())
 					{
 						_camera->jumpXY(-surface->getWidth(), 0);
 						enough = false;
 					}
-					else if (bulletPosScreen.y < 0)
+					else if (bulletScreen.y < 0)
 					{
 						_camera->jumpXY(0, +_visibleMapHeight);
 						enough = false;
 					}
-					else if (bulletPosScreen.y > _visibleMapHeight)
+					else if (bulletScreen.y > _visibleMapHeight)
 					{
 						_camera->jumpXY(0, -_visibleMapHeight);
 						enough = false;
 					}
 					_camera->convertVoxelToScreen(
 											_projectile->getPosition(),
-											&bulletPosScreen);
+											&bulletScreen);
 				}
 				while (!enough);
-			} */
+			}
 		}
 	}
 	else // if (no projectile OR explosions waiting)
 		_smoothingEngaged = false;
-// WB_end.
-
-
 
 	// get corner map coordinates to give rough boundaries in which tiles to redraw are
 	_camera->convertScreenToMap(
@@ -782,8 +627,7 @@ void Map::drawTerrain(Surface* surface)
 										&screenPosition);
 				screenPosition += _camera->getMapOffset();
 
-				// only render cells that are inside the surface
-				if (screenPosition.x > -_spriteWidth
+				if (screenPosition.x > -_spriteWidth // only render cells that are inside the surface
 					&& screenPosition.x < surface->getWidth() + _spriteWidth
 					&& screenPosition.y > -_spriteHeight
 					&& screenPosition.y < surface->getHeight() + _spriteHeight)
@@ -969,11 +813,11 @@ void Map::drawTerrain(Surface* surface)
 							{
 								_camera->convertVoxelToScreen(
 															voxelPos,
-															&bulletPosScreen);
+															&bulletScreen);
 								tmpSurface->blitNShade(
 										surface,
-										bulletPosScreen.x - 16,
-										bulletPosScreen.y - 26,
+										bulletScreen.x - 16,
+										bulletScreen.y - 26,
 										16);
 							}
 
@@ -988,11 +832,11 @@ void Map::drawTerrain(Surface* surface)
 							{
 								_camera->convertVoxelToScreen(
 															voxelPos,
-															&bulletPosScreen);
+															&bulletScreen);
 								tmpSurface->blitNShade(
 										surface,
-										bulletPosScreen.x - 16,
-										bulletPosScreen.y - 26,
+										bulletScreen.x - 16,
+										bulletScreen.y - 26,
 										0);
 							}
 						}
@@ -1022,14 +866,14 @@ void Map::drawTerrain(Surface* surface)
 										{
 											_camera->convertVoxelToScreen(
 																		voxelPos,
-																		&bulletPosScreen);
+																		&bulletScreen);
 
-											bulletPosScreen.x -= tmpSurface->getWidth() / 2;
-											bulletPosScreen.y -= tmpSurface->getHeight() / 2;
+											bulletScreen.x -= tmpSurface->getWidth() / 2;
+											bulletScreen.y -= tmpSurface->getHeight() / 2;
 											tmpSurface->blitNShade(
 													surface,
-													bulletPosScreen.x,
-													bulletPosScreen.y,
+													bulletScreen.x,
+													bulletScreen.y,
 													16);
 										}
 
@@ -1042,14 +886,14 @@ void Map::drawTerrain(Surface* surface)
 										{
 											_camera->convertVoxelToScreen(
 																		voxelPos,
-																		&bulletPosScreen);
+																		&bulletScreen);
 
-											bulletPosScreen.x -= tmpSurface->getWidth() / 2;
-											bulletPosScreen.y -= tmpSurface->getHeight() / 2;
+											bulletScreen.x -= tmpSurface->getWidth() / 2;
+											bulletScreen.y -= tmpSurface->getHeight() / 2;
 											tmpSurface->blitNShade(
 													surface,
-													bulletPosScreen.x,
-													bulletPosScreen.y,
+													bulletScreen.x,
+													bulletScreen.y,
 													0);
 										}
 									}
@@ -1608,7 +1452,7 @@ void Map::drawTerrain(Surface* surface)
 		{
 			_camera->convertVoxelToScreen(
 									(*i)->getPosition(),
-									&bulletPosScreen);
+									&bulletScreen);
 			if ((*i)->isBig())
 			{
 				if ((*i)->getCurrentFrame() > -1)
@@ -1616,8 +1460,8 @@ void Map::drawTerrain(Surface* surface)
 					tmpSurface = _res->getSurfaceSet("X1.PCK")->getFrame((*i)->getCurrentFrame());
 					tmpSurface->blitNShade(
 							surface,
-							bulletPosScreen.x - 64,
-							bulletPosScreen.y - 64,
+							bulletScreen.x - 64,
+							bulletScreen.y - 64,
 							0);
 				}
 			}
@@ -1626,8 +1470,8 @@ void Map::drawTerrain(Surface* surface)
 				tmpSurface = _res->getSurfaceSet("HIT.PCK")->getFrame((*i)->getCurrentFrame());
 				tmpSurface->blitNShade(
 						surface,
-						bulletPosScreen.x - 15,
-						bulletPosScreen.y - 15,
+						bulletScreen.x - 15,
+						bulletScreen.y - 15,
 						0);
 			}
 			else
@@ -1635,8 +1479,8 @@ void Map::drawTerrain(Surface* surface)
 				tmpSurface = _res->getSurfaceSet("SMOKE.PCK")->getFrame((*i)->getCurrentFrame());
 				tmpSurface->blitNShade(
 						surface,
-						bulletPosScreen.x - 15,
-						bulletPosScreen.y - 15,
+						bulletScreen.x - 15,
+						bulletScreen.y - 15,
 						0);
 			}
 		}
