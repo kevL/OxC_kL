@@ -187,18 +187,19 @@ void PauseState::btnSaveClick(Action*)
 void PauseState::btnOptionsClick(Action*)
 {
 	Options::backupDisplay();
+
 	if (_origin == OPT_GEOSCAPE)
 		_game->pushState(new OptionsGeoscapeState(
 												_game,
 												_origin));
 	else if (_origin == OPT_BATTLESCAPE)
 		_game->pushState(new OptionsBattlescapeState(
-												_game,
-												_origin));
+													_game,
+													_origin));
 	else
 		_game->pushState(new OptionsVideoState(
-												_game,
-												_origin));
+											_game,
+											_origin));
 }
 
 /**

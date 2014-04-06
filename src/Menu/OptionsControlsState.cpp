@@ -255,7 +255,7 @@ void OptionsControlsState::lstControlsKeyPress(Action* action)
 		if (key != 0)
 		{
 			*_selKey->asKey() = key;
-			std::wstring name = Language::utf8ToWstr(ucWords(SDL_GetKeyName(*_selKey->getKey())));
+			std::wstring name = Language::utf8ToWstr(ucWords(SDL_GetKeyName(*_selKey->asKey())));
 			_lstControls->setCellText(_selected, 1, name);
 		}
 

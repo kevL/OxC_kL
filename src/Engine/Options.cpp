@@ -375,11 +375,11 @@ bool showHelp(
 }
 
 /**
- * Handles the initialization of setting up default options
- * and finding and loading any existing ones.
+ * Handles the initialization of setting up default options and finding and
+ * loading any existing ones.
  * @param argc Number of arguments.
  * @param argv Array of argument strings.
- * @return Was initialized.
+ * @return, Was initialized.
  */
 bool init(
 		int argc,
@@ -424,9 +424,8 @@ bool init(
 }
 
 /**
- * Sets up the game's Data folder where the data files
- * are loaded from and the User folder and Config
- * folder where settings and saves are stored in.
+ * Sets up the game's Data folder where the data files are loaded from and the
+ * User folder and Config folder where settings and saves are stored in.
  */
 void setFolders()
 {
@@ -439,8 +438,7 @@ void setFolders()
         std::vector<std::string> user = CrossPlatform::findUserFolders();
         _configFolder = CrossPlatform::findConfigFolder();
 
-		// Look for an existing user folder
-        for (std::vector<std::string>::iterator
+        for (std::vector<std::string>::iterator // Look for an existing user folder
 				i = user.begin();
 				i != user.end();
 				++i)
@@ -453,8 +451,7 @@ void setFolders()
 			}
 		}
 
-		// Set up folders
-		if (_userFolder == "")
+		if (_userFolder == "") // Set up folders
 		{
 			for (std::vector<std::string>::iterator
 					i = user.begin();
@@ -476,8 +473,8 @@ void setFolders()
 }
 
 /**
- * Updates the game's options with those in the configuation
- * file, if it exists yet, and any supplied on the command line.
+ * Updates the game's options with those in the configuation file, if it exists
+ * yet, and any supplied on the command line.
  */
 void updateOptions()
 {
@@ -523,10 +520,12 @@ void load(const std::string &filename)
 		YAML::Node doc = YAML::LoadFile(s);
 		// Ignore old options files
 		if (doc["options"]["NewBattleMission"])
-		{
 			return;
-		}
-		for (std::vector<OptionInfo>::iterator i = _info.begin(); i != _info.end(); ++i)
+
+		for (std::vector<OptionInfo>::iterator
+				i = _info.begin();
+				i != _info.end();
+				++i)
 		{
 			i->load(doc["options"]);
 		}
@@ -578,9 +577,9 @@ void save(const std::string &filename)
 }
 
 /**
- * Returns the game's current Data folder where resources
- * and X-Com files are loaded from.
- * @return Full path to Data folder.
+ * Returns the game's current Data folder where resources and X-Com files are
+ * loaded from.
+ * @return, Full path to Data folder.
  */
 std::string getDataFolder()
 {
@@ -588,8 +587,8 @@ std::string getDataFolder()
 }
 
 /**
- * Changes the game's current Data folder where resources
- * and X-Com files are loaded from.
+ * Changes the game's current Data folder where resources and X-Com files are
+ * loaded from.
  * @param folder Full path to Data folder.
  */
 void setDataFolder(const std::string& folder)
@@ -599,7 +598,7 @@ void setDataFolder(const std::string& folder)
 
 /**
  * Returns the game's list of possible Data folders.
- * @return List of Data paths.
+ * @return, List of Data paths.
  */
 const std::vector<std::string>& getDataList()
 {
@@ -607,9 +606,8 @@ const std::vector<std::string>& getDataList()
 }
 
 /**
- * Returns the game's User folder where
- * saves are stored in.
- * @return Full path to User folder.
+ * Returns the game's User folder where saves are stored in.
+ * @return, Full path to User folder.
  */
 std::string getUserFolder()
 {
@@ -617,10 +615,9 @@ std::string getUserFolder()
 }
 
 /**
- * Returns the game's Config folder where
- * settings are stored in. Normally the same
- * as the User folder.
- * @return Full path to Config folder.
+ * Returns the game's Config folder where settings are stored in. Normally the
+ * same as the User folder.
+ * @return, Full path to Config folder.
  */
 std::string getConfigFolder()
 {
@@ -629,7 +626,7 @@ std::string getConfigFolder()
 
 /**
  * Returns the game's list of all available option information.
- * @return List of OptionInfo's.
+ * @return, List of OptionInfo's.
  */
 const std::vector<OptionInfo>& getOptionInfo()
 {
@@ -637,32 +634,31 @@ const std::vector<OptionInfo>& getOptionInfo()
 }
 
 /**
- * Saves display settings temporarily to be able
- * to revert to old ones.
+ * Saves display settings temporarily to be able to revert to old ones.
  */
 void backupDisplay()
 {
-	Options::newDisplayWidth = Options::displayWidth;
-	Options::newDisplayHeight = Options::displayHeight;
-	Options::newOpenGL = Options::useOpenGL;
-	Options::newScaleFilter = Options::useScaleFilter;
-	Options::newHQXFilter = Options::useHQXFilter;
-	Options::newOpenGLShader = Options::useOpenGLShader;
+	Options::newDisplayWidth	= Options::displayWidth;
+	Options::newDisplayHeight	= Options::displayHeight;
+	Options::newOpenGL			= Options::useOpenGL;
+	Options::newScaleFilter		= Options::useScaleFilter;
+	Options::newHQXFilter		= Options::useHQXFilter;
+	Options::newOpenGLShader	= Options::useOpenGLShader;
 }
 
 /**
- * Switches old/new display options for temporarily
- * testing a new display setup.
+ * Switches old/new display options for temporarily testing a new display setup.
  */
 void switchDisplay()
 {
-	std::swap(displayWidth, newDisplayWidth);
-	std::swap(displayHeight, newDisplayHeight);
-	std::swap(useOpenGL, newOpenGL);
-	std::swap(useScaleFilter, newScaleFilter);
-	std::swap(useHQXFilter, newHQXFilter);
-	std::swap(useOpenGLShader, newOpenGLShader);
+	std::swap(displayWidth,		newDisplayWidth);
+	std::swap(displayHeight,	newDisplayHeight);
+	std::swap(useOpenGL,		newOpenGL);
+	std::swap(useScaleFilter,	newScaleFilter);
+	std::swap(useHQXFilter,		newHQXFilter);
+	std::swap(useOpenGLShader,	newOpenGLShader);
 }
 
 }
+
 }

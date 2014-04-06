@@ -4384,7 +4384,7 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1396380714 f:\git\openxcom\src\engine\options.h
+1396745368 f:\git\openxcom\src\engine\options.h
 	<string>
 	<vector>
 	<SDL.h>
@@ -6375,7 +6375,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Soldier.h"
 
-1396689614 source:f:\git\openxcom\src\battlescape\map.cpp
+1396715839 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	<cmath>
 	<fstream>
@@ -7045,7 +7045,7 @@
 	"OpenGL.h"
 	"Logger.h"
 
-1396685874 source:f:\git\openxcom\src\engine\options.cpp
+1396746893 source:f:\git\openxcom\src\engine\options.cpp
 	"Options.h"
 	<algorithm>
 	<fstream>
@@ -7542,7 +7542,7 @@
 	"../Resource/XcomResourcePack.h"
 	"../Savegame/SavedGame.h"
 
-1396342678 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
+1396745436 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
 	"DogfightState.h"
 	<cstdlib>
 	<sstream>
@@ -8360,7 +8360,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1396317896 source:f:\git\openxcom\src\menu\mainmenustate.cpp
+1396745470 source:f:\git\openxcom\src\menu\mainmenustate.cpp
 	"MainMenuState.h"
 	"LoadState.h"
 	"NewBattleState.h"
@@ -8467,7 +8467,7 @@
 	<utility>
 	"OptionsBaseState.h"
 
-1396687640 source:f:\git\openxcom\src\menu\optionsbasestate.cpp
+1396745600 source:f:\git\openxcom\src\menu\optionsbasestate.cpp
 	"OptionsBaseState.h"
 	<SDL.h>
 	"MainMenuState.h"
@@ -11391,15 +11391,15 @@
 1394398507 f:\git\openxcom\src\ruleset\rulemusic.h
 	<yaml-cpp/yaml.h>
 
-1396341713 f:\git\openxcom\src\engine\optioninfo.h
+1396745051 f:\git\openxcom\src\engine\optioninfo.h
 	<map>
 	<string>
 	<SDL.h>
 	<yaml-cpp/yaml.h>
 
-1396685874 f:\git\openxcom\src\engine\options.inc.h
+1396744643 f:\git\openxcom\src\engine\options.inc.h
 
-1396341991 source:f:\git\openxcom\src\engine\optioninfo.cpp
+1396745312 source:f:\git\openxcom\src\engine\optioninfo.cpp
 	"OptionInfo.h"
 	"Exception.h"
 
