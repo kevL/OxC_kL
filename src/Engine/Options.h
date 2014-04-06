@@ -110,8 +110,11 @@ const std::vector<OptionInfo>& getOptionInfo();
 void setFolders();
 /// Update game options from config file and command line.
 void updateOptions();
+/// Backup display options.
+void backupDisplay();
 /// Switches display options.
 void switchDisplay();
+
 }
 
 }

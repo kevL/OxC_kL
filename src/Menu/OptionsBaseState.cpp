@@ -220,8 +220,11 @@ void OptionsBaseState::btnOkClick(Action*)
 				Options::soundVolume,
 				Options::musicVolume);
 
-	if (Options::reload)
+	if (Options::reload
+		&& _origin == OPT_MENU)
+	{
 		_game->setState(new StartState(_game));
+	}
 	else
 	{
 		// Confirm any video options changes

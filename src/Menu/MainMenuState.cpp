@@ -176,6 +176,8 @@ void MainMenuState::btnLoadClick(Action*)
  */
 void MainMenuState::btnOptionsClick(Action*)
 {
+	Options::backupDisplay();
+
 	_game->pushState(new OptionsVideoState(
 										_game,
 										OPT_MENU));

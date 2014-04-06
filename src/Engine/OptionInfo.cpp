@@ -26,7 +26,12 @@ namespace OpenXcom
 {
 
 /**
- *
+ * Creates info for a boolean option.
+ * @param id String ID used in serializing.
+ * @param option Pointer to the option.
+ * @param def Default option value.
+ * @param desc Language ID for the option description (if any).
+ * @param cat Language ID for the option category (if any).
  */
 OptionInfo::OptionInfo(
 		const std::string& id,
@@ -45,7 +50,12 @@ OptionInfo::OptionInfo(
 }
 
 /**
- *
+ * Creates info for an integer option.
+ * @param id String ID used in serializing.
+ * @param option Pointer to the option.
+ * @param def Default option value.
+ * @param desc Language ID for the option description (if any).
+ * @param cat Language ID for the option category (if any).
  */
 OptionInfo::OptionInfo(
 		const std::string& id,
@@ -64,7 +74,12 @@ OptionInfo::OptionInfo(
 }
 
 /**
- *
+ * Creates info for a keyboard shortcut option.
+ * @param id String ID used in serializing.
+ * @param option Pointer to the option.
+ * @param def Default option value.
+ * @param desc Language ID for the option description (if any).
+ * @param cat Language ID for the option category (if any).
  */
 OptionInfo::OptionInfo(
 		const std::string& id,
@@ -83,7 +98,12 @@ OptionInfo::OptionInfo(
 }
 
 /**
- *
+ * Creates info for a string option.
+ * @param id String ID used in serializing.
+ * @param option Pointer to the option.
+ * @param def Default option value.
+ * @param desc Language ID for the option description (if any).
+ * @param cat Language ID for the option category (if any).
  */
 OptionInfo::OptionInfo(
 		const std::string& id,
@@ -102,29 +122,32 @@ OptionInfo::OptionInfo(
 }
 
 /**
- *
+ * Loads an option value from the corresponding YAML.
+ * @param node Options YAML node.
  */
 void OptionInfo::load(const YAML::Node& node) const
 {
 	switch (_type)
 	{
 		case OPTION_BOOL:
-			*(_ref.b) = node[_id].as<bool>();
+			*(_ref.b) = node[_id].as<bool>(_def.b);
 		break;
 		case OPTION_INT:
-			*(_ref.i) = node[_id].as<int>();
+			*(_ref.i) = node[_id].as<int>(_def.i);
 		break;
 		case OPTION_KEY:
-			*(_ref.k) = (SDLKey)node[_id].as<int>();
+			*(_ref.k) = (SDLKey)node[_id].as<int>(_def.k);
 		break;
 		case OPTION_STRING:
-			*(_ref.s) = node[_id].as<std::string>();
+			*(_ref.s) = node[_id].as<std::string>(_def.s);
 		break;
 	}
 }
 
 /**
- *
+ * Loads an option value from the corresponding map
+ * (eg. for command-line options).
+ * @param map Options map.
  */
 void OptionInfo::load(const std::map<std::string, std::string>& map) const
 {
@@ -166,7 +189,8 @@ void OptionInfo::load(const std::map<std::string, std::string>& map) const
 }
 
 /**
- *
+ * Saves an option value to the corresponding YAML.
+ * @param node Options YAML node.
  */
 void OptionInfo::save(YAML::Node& node) const
 {
@@ -188,7 +212,7 @@ void OptionInfo::save(YAML::Node& node) const
 }
 
 /**
- *
+ * Resets an option back to its default value.
  */
 void OptionInfo::reset() const
 {
@@ -210,7 +234,8 @@ void OptionInfo::reset() const
 }
 
 /**
- *
+ * Returns the variable type of the option.
+ * @return Option type.
  */
 OptionType OptionInfo::type() const
 {
@@ -218,7 +243,9 @@ OptionType OptionInfo::type() const
 }
 
 /**
- *
+ * Returns the description of the option. Options with
+ * descriptions show up in the Options screens.
+ * @return Language string ID for the description.
  */
 std::string OptionInfo::description() const
 {
@@ -226,7 +253,9 @@ std::string OptionInfo::description() const
 }
 
 /**
- *
+ * Returns the category of the option. Options with
+ * categories show up in the Options screens.
+ * @return Language string ID for the category.
  */
 std::string OptionInfo::category() const
 {
@@ -234,9 +263,11 @@ std::string OptionInfo::category() const
 }
 
 /**
- *
+ * Returns the pointer to the boolean option,
+ * or throws an exception if it's not a boolean.
+ * @return Pointer to the option.
  */
-bool* OptionInfo::getBool() const
+bool* OptionInfo::asBool() const
 {
 	if (_type != OPTION_BOOL)
 	{
@@ -247,9 +278,11 @@ bool* OptionInfo::getBool() const
 }
 
 /**
- *
+ * Returns the pointer to the integer option,
+ * or throws an exception if it's not a integer.
+ * @return Pointer to the option.
  */
-int* OptionInfo::getInt() const
+int* OptionInfo::asInt() const
 {
 	if (_type != OPTION_INT)
 	{
@@ -260,9 +293,11 @@ int* OptionInfo::getInt() const
 }
 
 /**
- *
+ * Returns the pointer to the key option,
+ * or throws an exception if it's not a key.
+ * @return Pointer to the option.
  */
-SDLKey* OptionInfo::getKey() const
+SDLKey* OptionInfo::asKey() const
 {
 	if (_type != OPTION_KEY)
 	{
@@ -273,9 +308,11 @@ SDLKey* OptionInfo::getKey() const
 }
 
 /**
- *
+ * Returns the pointer to the string option,
+ * or throws an exception if it's not a string.
+ * @return Pointer to the option.
  */
-std::string* OptionInfo::getString() const
+std::string* OptionInfo::asString() const
 {
 	if (_type != OPTION_STRING)
 	{

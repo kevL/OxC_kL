@@ -39,6 +39,11 @@ enum OptionType
 	OPTION_KEY		// 3
 };
 
+/**
+ * Helper class that ties metadata to particular options to help in serializing
+ * and stuff. The option variable must already exist, this info just points to it.
+ * Does some special shenanigans to be able to be tied to different variable types.
+ */
 class OptionInfo
 {
 
@@ -57,6 +62,7 @@ private:
 		std::string* s;
 		SDLKey* k;
 	} _ref;
+
 	union
 	{
 		bool b;
@@ -67,28 +73,28 @@ private:
 
 
 	public:
-		///
+		/// Creates a bool option.
 		OptionInfo(
 				const std::string& id,
 				bool* option,
 				bool def,
 				const std::string& desc = "",
 				const std::string& cat = "");
-		///
+		/// Creates a int option.
 		OptionInfo(
 				const std::string& id,
 				int* option,
 				int def,
 				const std::string& desc = "",
 				const std::string& cat = "");
-		///
+		/// Creates a key option.
 		OptionInfo(
 				const std::string& id,
 				SDLKey* option,
 				SDLKey def,
 				const std::string& desc = "",
 				const std::string& cat = "");
-		///
+		/// Creates a string option.
 		OptionInfo(
 				const std::string& id,
 				std::string* option,
@@ -96,27 +102,28 @@ private:
 				const std::string& desc = "",
 				const std::string& cat = "");
 
-		///
-		bool* getBool() const;
-		///
-		int* getInt() const;
-		///
-		std::string* getString() const;
-		///
-		SDLKey* getKey() const;
-		///
+		/// Gets a bool option pointer.
+		bool* asBool() const;
+		/// Gets an int option pointer.
+		int* asInt() const;
+		/// Gets a string option pointer.
+		std::string* asString() const;
+		/// Gets a key option pointer.
+		SDLKey* asKey() const;
+
+		/// Loads the option from YAML.
 		void load(const YAML::Node& node) const;
-		///
+		/// Loads the option from a map.
 		void load(const std::map<std::string, std::string>& map) const;
-		///
+		/// Saves the option to YAML.
 		void save(YAML::Node& node) const;
-		///
+		/// Resets the option to default.
 		void reset() const;
-		///
+		/// Gets the option type.
 		OptionType type() const;
-		///
+		/// Gets the option description.
 		std::string description() const;
-		///
+		/// Gets the option category.
 		std::string category() const;
 };
 

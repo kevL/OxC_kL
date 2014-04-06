@@ -372,14 +372,6 @@ OptionsVideoState::OptionsVideoState(
 	_cbxFilter->onMouseIn((ActionHandler)& OptionsVideoState::txtTooltipIn);
 	_cbxFilter->onMouseOut((ActionHandler)& OptionsVideoState::txtTooltipOut);
 
-	// Save old display options for safekeeping
-	Options::newDisplayWidth	= Options::displayWidth;
-	Options::newDisplayHeight	= Options::displayHeight;
-	Options::newOpenGL			= Options::useOpenGL;
-	Options::newScaleFilter		= Options::useScaleFilter;
-	Options::newHQXFilter		= Options::useHQXFilter;
-	Options::newOpenGLShader	= Options::useOpenGLShader;
-
 	updateGameResolution();
 }
 
