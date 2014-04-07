@@ -28,13 +28,14 @@
 #include "TargetInfoState.h"
 #include "UfoDetectedState.h"
 
+#include "../Engine/Action.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
 #include "../Engine/Options.h"
 #include "../Engine/Palette.h"
 
 #include "../Interface/TextButton.h"
-#include "../Interface/TextList.h"
+//#include "../Interface/TextList.h"
 #include "../Interface/Window.h"
 
 #include "../Resource/ResourcePack.h"
@@ -70,27 +71,60 @@ MultipleTargetsState::MultipleTargetsState(
 
 	if (_targets.size() > 1)
 	{
-/*	static const int OUTER_MARGIN = 3;
-	static const int INNER_MARGIN = 4;
-	static const int BORDER = 5;
-	static const int BUTTON_HEIGHT = 16; */
-
-		size_t listHeight = _targets.size() * 8;
-/*		int winHeight = listHeight + BUTTON_HEIGHT + OUTER_MARGIN * 2 + INNER_MARGIN + BORDER * 2;
+		int winHeight = BUTTON_HEIGHT * _targets.size() + SPACING * (_targets.size() - 1) + MARGIN * 2;
 		int winY = (200 - winHeight) / 2;
-		int listY = winY + BORDER + OUTER_MARGIN;
-		int btnY = listY + listHeight + INNER_MARGIN;
+		int btnY = winY + MARGIN;
 
-		_window = new Window(this, 136, winHeight, 60, winY);
-		_btnCancel = new TextButton(116, BUTTON_HEIGHT, 70, btnY);
-		_lstTargets = new TextList(116, listHeight, 70, listY); */
+		// Create objects
+		_window = new Window(this, 136, winHeight, 60, winY, POPUP_VERTICAL);
 
-/*		int winHeight = listHeight + 36;
-		int winY = (236 - listHeight) / 2;
-		int listY = ((236 - listHeight) / 2) + 8;
-		int btnY = ((236 - listHeight) / 2) + listHeight + 12; */
+		// Set palette
+		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)), Palette::backPos, 16);
 
-		_window		= new Window(this, 136, listHeight + 36, 60, 118 - listHeight / 2);
+		add(_window);
+
+		// Set up objects
+		_window->setColor(Palette::blockOffset(8) + 5);
+		_window->setBackground(_game->getResourcePack()->getSurface("BACK15.SCR"));
+
+		int y = btnY;
+		for (size_t i = 0; i < _targets.size(); ++i)
+		{
+			TextButton *button = new TextButton(116, BUTTON_HEIGHT, 70, y);
+			button->setColor(Palette::blockOffset(8) + 5);
+			button->setText(_targets[i]->getName(_game->getLanguage()));
+			button->onMouseClick((ActionHandler)&MultipleTargetsState::btnTargetClick);
+			add(button);
+
+			_btnTargets.push_back(button);
+
+			y += button->getHeight() + SPACING;
+		}
+		_btnTargets[0]->onKeyboardPress((ActionHandler)&MultipleTargetsState::btnCancelClick, Options::keyCancel);
+
+		centerAllSurfaces();
+
+//	static const int OUTER_MARGIN = 3;
+//	static const int INNER_MARGIN = 4;
+//	static const int BORDER = 5;
+//	static const int BUTTON_HEIGHT = 16;
+
+/*		size_t listHeight = _targets.size() * 8; */
+//		int winHeight = listHeight + BUTTON_HEIGHT + OUTER_MARGIN * 2 + INNER_MARGIN + BORDER * 2;
+//		int winY = (200 - winHeight) / 2;
+//		int listY = winY + BORDER + OUTER_MARGIN;
+//		int btnY = listY + listHeight + INNER_MARGIN;
+
+//		_window = new Window(this, 136, winHeight, 60, winY);
+//		_btnCancel = new TextButton(116, BUTTON_HEIGHT, 70, btnY);
+//		_lstTargets = new TextList(116, listHeight, 70, listY);
+
+//		int winHeight = listHeight + 36;
+//		int winY = (236 - listHeight) / 2;
+//		int listY = ((236 - listHeight) / 2) + 8;
+//		int btnY = ((236 - listHeight) / 2) + listHeight + 12;
+
+/*		_window		= new Window(this, 136, listHeight + 36, 60, 118 - listHeight / 2);
 		_lstTargets	= new TextList(116, listHeight, 70, 126 - listHeight / 2);
 		_btnCancel	= new TextButton(116, 16, 70, 130 + listHeight / 2);
 
@@ -105,7 +139,6 @@ MultipleTargetsState::MultipleTargetsState(
 		add(_btnCancel);
 
 		centerAllSurfaces();
-
 
 		_window->setColor(Palette::blockOffset(8)+5);
 		_window->setBackground(_game->getResourcePack()->getSurface("BACK15.SCR"));
@@ -131,7 +164,7 @@ MultipleTargetsState::MultipleTargetsState(
 			_lstTargets->addRow(
 							1,
 							(*i)->getName(_game->getLanguage()).c_str());
-		}
+		} */
 	}
 }
 
@@ -249,11 +282,24 @@ void MultipleTargetsState::btnCancelClick(Action*)
  * Pick a target to display.
  * @param action Pointer to an action.
  */
-void MultipleTargetsState::lstTargetsClick(Action*)
+void MultipleTargetsState::btnTargetClick(Action*)
 {
 	//Log(LOG_INFO) << "MultipleTargetsState::lstTargetsClick()";
-	Target* targ = _targets[_lstTargets->getSelectedRow()];
-	popupTarget(targ);
+	for (size_t
+			i = 0;
+			i < _btnTargets.size();
+			++i)
+	{
+		if (action->getSender() == _btnTargets[i])
+		{
+			popupTarget(_targets[i]);
+
+			break;
+		}
+	}	
+
+//	Target* targ = _targets[_lstTargets->getSelectedRow()];
+//	popupTarget(targ);
 	//Log(LOG_INFO) << "MultipleTargetsState::lstTargetsClick() EXIT";
 }
 

@@ -74,7 +74,7 @@ private:
 		~Transfer();
 
 		/// Loads the transfer from YAML.
-		void load(
+		bool load(
 				const YAML::Node& node,
 				Base* base,
 				const Ruleset* rule);

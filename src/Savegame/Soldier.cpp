@@ -19,8 +19,10 @@
 
 #include "Soldier.h"
 
+#include "Craft.h"
 #include "SoldierDead.h" // kL
-#include "SoldierDeath.h" // kL
+#include "SoldierDeath.h"
+#include "EquipmentLayoutItem.h"
 
 #include "../Engine/Language.h"
 #include "../Engine/RNG.h"
@@ -29,9 +31,6 @@
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleSoldier.h"
 #include "../Ruleset/SoldierNamePool.h"
-
-#include "../Savegame/Craft.h"
-#include "../Savegame/EquipmentLayoutItem.h"
 
 
 namespace OpenXcom
@@ -138,7 +137,6 @@ void Soldier::load(
 {
 	_id				= node["id"].as<int>(_id);
 	_name			= Language::utf8ToWstr(node["name"].as<std::string>());
-//	_name			= Language::utf8ToWstr(node["name"].as<std::wstring>()); // kL
 	_initialStats	= node["initialStats"].as<UnitStats>(_initialStats);
 	_currentStats	= node["currentStats"].as<UnitStats>(_currentStats);
 	_rank			= (SoldierRank)node["rank"].as<int>();
@@ -147,9 +145,14 @@ void Soldier::load(
 	_missions		= node["missions"].as<int>(_missions);
 	_kills			= node["kills"].as<int>(_kills);
 	_recovery		= node["recovery"].as<int>(_recovery);
-	_armor			= rule->getArmor(node["armor"].as<std::string>());
 	_psiTraining	= node["psiTraining"].as<bool>(_psiTraining);
 	_improvement	= node["improvement"].as<int>(_improvement);
+
+	Armor* armor = rule->getArmor(node["armor"].as<std::string>());
+	if (armor == 0)
+		armor = rule->getArmor("STR_NONE_UC");
+
+	_armor = armor;
 
 	if (const YAML::Node& layout = node["equipmentLayout"])
 	{

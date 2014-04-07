@@ -67,7 +67,7 @@ Transfer::~Transfer()
  * @param base Destination base.
  * @param rule Game ruleset.
  */
-void Transfer::load(
+bool Transfer::load(
 		const YAML::Node& node,
 		Base* base,
 		const Ruleset* rule)
@@ -86,16 +86,37 @@ void Transfer::load(
 
 	if (const YAML::Node& craft = node["craft"])
 	{
-		_craft = new Craft(
-						rule->getCraft(craft["type"].as<std::string>()),
-						base);
-		_craft->load(
-					craft,
-					rule,
-					0);
+		std::string type = craft["type"].as<std::string>();
+		if (rule->getCraft(type) != 0)
+		{
+			_craft = new Craft(
+							rule->getCraft(craft["type"].as<std::string>()),
+							base);
+			_craft->load(
+						craft,
+						rule,
+						0);
+		}
+		else
+		{
+			delete this;
+
+			return false;
+		}
 	}
 
-	_itemId		= node["itemId"].as<std::string>(_itemId);
+	if (const YAML::Node& item = node["itemId"])
+	{
+		_itemId = node["itemId"].as<std::string>(_itemId);
+		if (rule->getItem(_itemId) == 0)
+		{
+			delete this;
+
+			return false;
+		}
+	}
+
+
 	_itemQty	= node["itemQty"].as<int>(_itemQty);
 	_scientists	= node["scientists"].as<int>(_scientists);
 	_engineers	= node["engineers"].as<int>(_engineers);

@@ -327,10 +327,10 @@ void SavedBattleGame::load(
 			i != node["items"].end();
 			++i)
 	{
-		std::string type = (*i)["type"].as<std::string>();
 		_itemId = (*i)["id"].as<int>(_itemId);
 
-		if (type != "0")
+		std::string type = (*i)["type"].as<std::string>();
+		if (rule->getItem(type))
 		{
 			BattleItem* item = new BattleItem(
 											rule->getItem(type),
@@ -376,24 +376,28 @@ void SavedBattleGame::load(
 	for (YAML::const_iterator
 			i = node["items"].begin();
 			i != node["items"].end();
-			++i,
-				++weaponi)
+			++i)
 	{
-		int ammo = (*i)["ammoItem"].as<int>();
-		if (ammo != -1)
+		if (rule->getItem((*i)["type"].as<std::string>()))
 		{
-			for (std::vector<BattleItem*>::iterator
-					ammoi = _items.begin();
-					ammoi != _items.end();
-					++ammoi)
+			int ammo = (*i)["ammoItem"].as<int>();
+			if (ammo != -1)
 			{
-				if ((*ammoi)->getId() == ammo)
+				for (std::vector<BattleItem*>::iterator
+						ammoi = _items.begin();
+						ammoi != _items.end();
+						++ammoi)
 				{
-					(*weaponi)->setAmmoItem((*ammoi));
+					if ((*ammoi)->getId() == ammo)
+					{
+						(*weaponi)->setAmmoItem((*ammoi));
 
-					break;
+						break;
+					}
 				}
 			}
+
+			++weaponi;
 		}
 	}
 

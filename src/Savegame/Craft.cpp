@@ -209,7 +209,8 @@ void Craft::load(
 			++i)
 	{
 		std::string type = (*i)["type"].as<std::string>();
-		if (type != "0")
+		if (type != "0"
+			&& rule->getCraftWeapon(type))
 		{
 			CraftWeapon* w = new CraftWeapon(rule->getCraftWeapon(type), 0);
 			w->load(*i);
@@ -218,15 +219,36 @@ void Craft::load(
 	}
 
 	_items->load(node["items"]);
+
+	for (std::map<std::string, int>::iterator
+			i = _items->getContents()->begin();
+			i != _items->getContents()->end();
+			)
+	{
+		if (std::find(
+					rule->getItemsList().begin(),
+					rule->getItemsList().end(),
+					i->first)
+				== rule->getItemsList().end())
+		{
+			_items->getContents()->erase(i++);
+		}
+		else
+			++i;
+	}
+
 	for (YAML::const_iterator
 			i = node["vehicles"].begin();
 			i != node["vehicles"].end();
 			++i)
 	{
 		std::string type = (*i)["type"].as<std::string>();
-		Vehicle* v = new Vehicle(rule->getItem(type), 0, 4);
-		v->load(*i);
-		_vehicles.push_back(v);
+		if (rule->getItem(type))
+		{
+			Vehicle* v = new Vehicle(rule->getItem(type), 0, 4);
+			v->load(*i);
+			_vehicles.push_back(v);
+		}
 	}
 
 	_status				= node["status"].as<std::string>(_status);

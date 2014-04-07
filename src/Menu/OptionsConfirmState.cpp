@@ -106,6 +106,7 @@ OptionsConfirmState::OptionsConfirmState(
  */
 OptionsConfirmState::~OptionsConfirmState()
 {
+	delete _timer;
 }
 
 /**

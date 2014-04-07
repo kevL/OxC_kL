@@ -58,7 +58,7 @@ private:
 		DeleteGameState(
 				Game* game,
 				OptionsOrigin origin,
-				const std::wstring& save);
+				const std::string& save);
 		/// Cleans up the Confirm state.
 		~DeleteGameState();
 

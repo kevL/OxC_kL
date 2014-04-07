@@ -297,6 +297,9 @@ std::vector<SaveInfo> SavedGame::getList(Language* lang)
 
 			save.details = details.str();
 
+			if (doc["rulesets"])
+				save.rulesets = doc["rulesets"].as<std::vector<std::string> >();
+
 			info.push_back(save);
 		}
 		catch (Exception &e)
@@ -432,12 +435,15 @@ void SavedGame::load(
 			++i)
 	{
 		std::string type = (*i)["type"].as<std::string>();
-		Ufo* u = new Ufo(rule->getUfo(type));
-		u->load(
-				*i,
-				*rule,
-				*this);
-		_ufos.push_back(u);
+		if (rule->getUfo(type))
+		{
+			Ufo* u = new Ufo(rule->getUfo(type));
+			u->load(
+					*i,
+					*rule,
+					*this);
+			_ufos.push_back(u);
+		}
 	}
 
 	for (YAML::const_iterator
@@ -564,6 +570,8 @@ void SavedGame::save(const std::string& filename) const
 		brief["mission"]	= _battleGame->getMissionType();
 		brief["turn"]		= _battleGame->getTurn();
 	}
+
+	brief["rulesets"] = Options::rulesets;
 
 	out << brief;
 

@@ -48,22 +48,19 @@ namespace OpenXcom
 DeleteGameState::DeleteGameState(
 		Game* game,
 		OptionsOrigin origin,
-		const std::wstring& save)
+		const std::string& save)
 	:
 		State(game),
 		_origin(origin)
 {
-	std::string file = Language::wstrToFs(save);
-	_filename = Options::getUserFolder() + file + ".sav";
+	_filename = Options::getUserFolder() + save + ".sav";
 	_screen = false;
-
 
 	_window		= new Window(this, 256, 100, 32, 50, POPUP_BOTH);
 	_txtMessage	= new Text(246, 32, 37, 70);
 
 	_btnNo		= new TextButton(60, 18, 60, 122);
 	_btnYes		= new TextButton(60, 18, 200, 122);
-
 
 	if (_origin != OPT_BATTLESCAPE)
 		_game->setPalette(

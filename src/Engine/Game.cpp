@@ -658,9 +658,19 @@ void Game::loadRuleset()
 	for (std::vector<std::string>::iterator
 			i = Options::rulesets.begin();
 			i != Options::rulesets.end();
-			++i)
+			)
 	{
-		_rules->load(*i);
+		try
+		{
+			_rules->load(*i);
+
+			++i;
+		}
+		catch (YAML::Exception &e)
+		{
+			Log(LOG_WARNING) << e.what();
+			i = Options::rulesets.erase(i);
+		}
 	}
 
 	_rules->sortLists();

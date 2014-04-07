@@ -77,6 +77,7 @@ struct SaveInfo
 		displayName,
 		isoDate,
 		isoTime;
+	std::vector<std::string> rulesets;
 };
 
 

@@ -182,12 +182,15 @@ void Base::load(
 				++i)
 		{
 			std::string type = (*i)["type"].as<std::string>();
-			BaseFacility* f = new BaseFacility(
-											_rule->getBaseFacility(type),
-											this);
-			f->load(*i);
+			if (_rule->getBaseFacility(type))
+			{
+				BaseFacility* f = new BaseFacility(
+												_rule->getBaseFacility(type),
+												this);
+				f->load(*i);
 
-			_facilities.push_back(f);
+				_facilities.push_back(f);
+			}
 		}
 	}
 
@@ -197,15 +200,18 @@ void Base::load(
 			++i)
 	{
 		std::string type = (*i)["type"].as<std::string>();
-		Craft* c = new Craft(
-						_rule->getCraft(type),
-						this);
-		c->load(
-				*i,
-				_rule,
-				save);
+		if (_rule->getCraft(type))
+		{
+			Craft* c = new Craft(
+							_rule->getCraft(type),
+							this);
+			c->load(
+					*i,
+					_rule,
+					save);
 
-		_crafts.push_back(c);
+			_crafts.push_back(c);
+		}
 	}
 
 	for (YAML::const_iterator
@@ -219,6 +225,7 @@ void Base::load(
 		s->load(
 				*i,
 				_rule);
+		s->setCraft(0);
 
 		if (const YAML::Node& craft = (*i)["craft"])
 		{
@@ -239,8 +246,6 @@ void Base::load(
 				}
 			}
 		}
-		else
-			s->setCraft(0);
 
 		_soldiers.push_back(s);
 	}
@@ -277,12 +282,13 @@ void Base::load(
 	{
 		int hours = (*i)["hours"].as<int>();
 		Transfer* t = new Transfer(hours);
-		t->load(
+		if (t->load(
 				*i,
 				this,
-				_rule);
-
-		_transfers.push_back(t);
+				_rule))
+		{
+			_transfers.push_back(t);
+		}
 	}
 
 	for (YAML::const_iterator
@@ -291,10 +297,13 @@ void Base::load(
 			++i)
 	{
 		std::string research = (*i)["project"].as<std::string>();
-		ResearchProject* r = new ResearchProject(_rule->getResearch(research));
-		r->load(*i);
+		if (_rule->getResearch(research))
+		{
+			ResearchProject* r = new ResearchProject(_rule->getResearch(research));
+			r->load(*i);
 
-		_research.push_back(r);
+			_research.push_back(r);
+		}
 	}
 
 	for (YAML::const_iterator
@@ -303,12 +312,15 @@ void Base::load(
 			++i)
 	{
 		std::string item = (*i)["item"].as<std::string>();
-		Production* p = new Production(
-									_rule->getManufacture(item),
-									0);
-		p->load(*i);
+		if (_rule->getManufacture(item))
+		{
+			Production* p = new Production(
+										_rule->getManufacture(item),
+										0);
+			p->load(*i);
 
-		_productions.push_back(p);
+			_productions.push_back(p);
+		}
 	}
 
 	_retaliationTarget = node["retaliationTarget"].as<bool>(_retaliationTarget);

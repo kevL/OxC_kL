@@ -841,6 +841,9 @@
     <ClCompile Include="Menu\IntroState.cpp">
       <Filter>Menu</Filter>
     </ClCompile>
+    <ClCompile Include="Menu\ConfirmLoadState.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -1700,6 +1703,9 @@
     </ClInclude>
     <ClInclude Include="Ruleset\RuleMusic.h" />
       <Filter>Ruleset</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu\ConfirmLoadState.h">
+      <Filter>Menu</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
