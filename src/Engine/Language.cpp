@@ -98,9 +98,7 @@ Language::Language()
 	}
 
 	if (_rtl.empty())
-	{
 		_rtl.push_back("he");
-	}
 
 	if (_cjk.empty())
 	{
@@ -534,9 +532,7 @@ void Language::load(
 			++i)
 	{
 		if (i->second.IsScalar()) // regular strings
-		{
 			_strings[i->first.as<std::string>()] = loadString(i->second.as<std::string>());
-		}
 		else if (i->second.IsMap()) // strings with plurality
 		{
 			for (YAML::const_iterator
@@ -573,9 +569,7 @@ void Language::load(
 		_direction = DIRECTION_LTR;
 	}
 	else
-	{
 		_direction = DIRECTION_RTL;
-	}
 
 	if (std::find(
 				_cjk.begin(),
@@ -586,9 +580,7 @@ void Language::load(
 		_wrap = WRAP_WORDS;
 	}
 	else
-	{
 		_wrap = WRAP_LETTERS;
-	}
 }
 
 /**
@@ -648,9 +640,7 @@ const LocalizedText& Language::getString(const std::string& id) const
 		return hack;
 	}
 	else
-	{
 		return s->second;
-	}
 }
 
 /**
@@ -668,17 +658,11 @@ LocalizedText Language::getString(
 	assert(!id.empty());
 
 	std::map<std::string, LocalizedText>::const_iterator s = _strings.end();
-	if (0 == n)
-	{
-		// Try specialized form.
+	if (n == 0) // Try specialized form.
 		s = _strings.find(id + "_zero");
-	}
 
-	if (s == _strings.end())
-	{
-		// Try proper form by language
+	if (s == _strings.end()) // Try proper form by language
 		s = _strings.find(id + _handler->getSuffix(n));
-	}
 
 	if (s == _strings.end())
 	{
@@ -691,9 +675,9 @@ LocalizedText Language::getString(
 	ss << n;
 
 	std::wstring
+		txt(s->second),
 		marker(L"{N}"),
-		val(ss.str()),
-		txt(s->second);
+		val(ss.str());
 	replace(
 			txt,
 			marker,
@@ -713,14 +697,11 @@ const LocalizedText& Language::getString(
 		SoldierGender gender) const
 {
 	std::string genderId;
+
 	if (gender == GENDER_MALE)
-	{
 		genderId = id + "_MALE";
-	}
 	else
-	{
 		genderId = id + "_FEMALE";
-	}
 
 	return getString(genderId);
 }
@@ -755,9 +736,7 @@ void Language::toHtml(const std::string& filename) const
 				htmlFile << "<br />";
 			}
 			else
-			{
 				htmlFile << *j;
-			}
 		}
 
 		htmlFile << "</td></tr>" << std::endl;

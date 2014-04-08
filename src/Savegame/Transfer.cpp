@@ -121,6 +121,8 @@ bool Transfer::load(
 	_scientists	= node["scientists"].as<int>(_scientists);
 	_engineers	= node["engineers"].as<int>(_engineers);
 	_delivered	= node["delivered"].as<bool>(_delivered);
+
+	return true;
 }
 
 /**

@@ -32,7 +32,6 @@ class Craft;
 class GeoscapeState;
 class Target;
 class TextButton;
-//class TextList;
 class Window;
 
 
@@ -45,19 +44,14 @@ class MultipleTargetsState
 {
 
 private:
-	static const int MARGIN		= 10;
-	static const int SPACING	= 4;
-/*	static const int OUTER_MARGIN = 3;
-	static const int INNER_MARGIN = 4;
-	static const int BORDER = 5;
-	static const int BUTTON_HEIGHT = 16; */
+	static const int BUTTON_HEIGHT	= 16;
+	static const int MARGIN			= 10;
+	static const int SPACING		= 4;
 
 	Craft* _craft;
 	GeoscapeState* _state;
 
 	Window* _window;
-//	TextButton* _btnCancel;
-//	TextList* _lstTargets;
 
 	std::vector<Target*> _targets;
 	std::vector<TextButton*> _btnTargets;

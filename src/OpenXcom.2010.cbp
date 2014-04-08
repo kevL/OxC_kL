@@ -2206,6 +2206,8 @@
 			<Option target="Release Win32" />
 			<Option target="Release x64" />
 		</Unit>
+		<Unit filename="Menu/ConfirmLoadState.cpp" />
+		<Unit filename="Menu/ConfirmLoadState.h" />
 		<Unit filename="Menu/DeleteGameState.cpp">
 			<Option target="Debug Win32" />
 			<Option target="Debug x64" />

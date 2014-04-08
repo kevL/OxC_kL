@@ -329,7 +329,11 @@ std::string caseInsensitive(
 	}
 
 	// UPPERCASE
-	std::transform(newPath.begin(), newPath.end(), newPath.begin(), toupper);
+	std::transform(
+				newPath.begin(),
+				newPath.end(),
+				newPath.begin(),
+				toupper);
 	fullPath = base + newPath;
 	if (fileExists(fullPath.c_str()))
 	{
@@ -337,7 +341,11 @@ std::string caseInsensitive(
 	}
 
 	// lowercase
-	std::transform(newPath.begin(), newPath.end(), newPath.begin(), tolower);
+	std::transform(
+				newPath.begin(),
+				newPath.end(),
+				newPath.begin(),
+				tolower);
 	fullPath = base + newPath;
 	if (fileExists(fullPath.c_str()))
 	{
@@ -687,13 +695,13 @@ std::string sanitizeFilename(const std::string& filename)
 			i != newFilename.end();
 			++i)
 	{
-		if ((*i) == '<'
-			|| (*i) == '>'
-			|| (*i) == ':'
-			|| (*i) == '"'
-			|| (*i) == '/'
-			|| (*i) == '?'
-			|| (*i) == '\\')
+		if (*i == '<'
+			|| *i == '>'
+			|| *i == ':'
+			|| *i == '"'
+			|| *i == '/'
+			|| *i == '?'
+			|| *i == '\\')
 		{
 			*i = '_';
 		}

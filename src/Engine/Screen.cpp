@@ -199,7 +199,7 @@ void Screen::handle(Action* action)
 		{
 			ss.str("");
 			ss << Options::getUserFolder() << "screen" << std::setfill('0') << std::setw(3) << i << ".png";
-			// kL_note: Set that up to append YYMMDD ...!
+			// kL_note: Set that up to append YYMMDD ...! And put them in a subfolder 'pics'
 
 			i++;
 		}

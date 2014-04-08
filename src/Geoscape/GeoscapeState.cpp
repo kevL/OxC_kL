@@ -1995,6 +1995,7 @@ void GeoscapeState::time1Hour()
 	} // kL_end.
 
 
+	//Log(LOG_INFO) << ". arrivals";
 	bool arrivals = false;
 	for (std::vector<Base*>::iterator // handle transfers
 			i = _game->getSavedGame()->getBases()->begin();
@@ -2015,6 +2016,7 @@ void GeoscapeState::time1Hour()
 			}
 		}
 	}
+	//Log(LOG_INFO) << ". arrivals DONE";
 
 	if (arrivals)
 		popup(new ItemsArrivingState(
@@ -2056,6 +2058,8 @@ void GeoscapeState::time1Hour()
 			}
 		}
 	}
+
+	//Log(LOG_INFO) << "GeoscapeState::time1Hour() EXIT";
 }
 
 
@@ -2315,9 +2319,10 @@ void GeoscapeState::time1Day()
 		}
 
 		//Log(LOG_INFO) << "Base " << *(*b)->getName().c_str(); // this is weird.
+		//Log(LOG_INFO) << ". Soldiers";
 		for (std::vector<Soldier*>::iterator // handle soldier wounds
 				s = (*b)->getSoldiers()->begin();
-				s < (*b)->getSoldiers()->end();
+				s != (*b)->getSoldiers()->end();
 				)
 		{
 			// kL_begin:
@@ -2360,7 +2365,10 @@ void GeoscapeState::time1Day()
 
 					++s;
 				}
-			} // kL_end.
+			}
+			else
+				++s;
+			// kL_end.
 		}
 		//Log(LOG_INFO) << ". iterate Soldiers DONE";
 
@@ -2436,6 +2444,8 @@ void GeoscapeState::time1Day()
 									_game,
 									OPT_GEOSCAPE,
 									false));
+
+	//Log(LOG_INFO) << "GeoscapeState::time1Day() EXIT";
 }
 
 /**
