@@ -328,7 +328,7 @@ void TextList::addRow(
 	std::vector<Text*> temp;
 	int
 		rowX = 0,
-		_rows = 1;
+		rows = 1;
 
 	for (int
 			i = 0;

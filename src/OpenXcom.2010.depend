@@ -4603,7 +4603,7 @@
 	<vector>
 	<yaml-cpp/yaml.h>
 
-1396235277 source:f:\git\openxcom\src\basescape\buildfacilitiesstate.cpp
+1397028132 source:f:\git\openxcom\src\basescape\buildfacilitiesstate.cpp
 	"BuildFacilitiesState.h"
 	"PlaceFacilityState.h"
 	"../Engine/Game.h"
@@ -4622,7 +4622,7 @@
 1394398507 f:\git\openxcom\src\basescape\placefacilitystate.h
 	"../Engine/State.h"
 
-1396316800 f:\git\openxcom\src\interface\textlist.h
+1397027351 f:\git\openxcom\src\interface\textlist.h
 	<map>
 	<vector>
 	"Text.h"
@@ -5005,7 +5005,7 @@
 1394398507 f:\git\openxcom\src\basescape\manufacturestartstate.h
 	"../Engine/State.h"
 
-1396340118 source:f:\git\openxcom\src\basescape\manufacturestate.cpp
+1397028171 source:f:\git\openxcom\src\basescape\manufacturestate.cpp
 	"ManufactureState.h"
 	<limits>
 	<sstream>
@@ -5252,7 +5252,7 @@
 1396253040 f:\git\openxcom\src\engine\rng.h
 	<algorithm>
 
-1396239441 source:f:\git\openxcom\src\basescape\researchstate.cpp
+1397028258 source:f:\git\openxcom\src\basescape\researchstate.cpp
 	"ResearchState.h"
 	<sstream>
 	"ManageAlienContainmentState.h"
@@ -6916,7 +6916,7 @@
 1394398507 source:f:\git\openxcom\src\engine\fastlineclip.cpp
 	"FastLineClip.h"
 
-1387185965 source:f:\git\openxcom\src\engine\flc.cpp
+1397027076 source:f:\git\openxcom\src\engine\flc.cpp
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
@@ -7634,7 +7634,7 @@
 1395083509 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1396912402 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1396951022 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	<assert.h>
 	<algorithm>
@@ -9577,7 +9577,7 @@
 	"../Ruleset/MapDataSet.h"
 	"../Ruleset/RuleItem.h"
 
-1396908715 source:f:\git\openxcom\src\savegame\transfer.cpp
+1396950717 source:f:\git\openxcom\src\savegame\transfer.cpp
 	"Transfer.h"
 	"Base.h"
 	"Craft.h"
