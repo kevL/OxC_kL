@@ -79,6 +79,7 @@ private:
 		_nextStage;
 
 	std::vector<int> _roadTypeOdds;
+	std::vector<std::string> _terrains;
 	std::vector<DeploymentData> _data;
 
 

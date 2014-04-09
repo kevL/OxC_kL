@@ -806,7 +806,7 @@ int TextList::getSelectedRow() const
 {
 	int selRow = std::min(
 						_selRow,
-						_rows.size());
+						static_cast<unsigned>(_rows.size()));
 
 	return _rows[selRow];
 }

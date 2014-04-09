@@ -6131,7 +6131,8 @@ alienDeployments:
     civilians: 16
     # roadTypeOdds: [EWRoad, NWRoad] (Crossroad is remainder)
     roadTypeOdds: [50, 25]
-    terrain: URBAN
+    terrains:
+      - URBAN
   - type: STR_ALIEN_BASE_ASSAULT
     data:
       - alienRank: 6 #terrorist1
@@ -6278,7 +6279,8 @@ alienDeployments:
     width: 50
     length: 50
     height: 2
-    terrain: UBASE
+    terrains:
+      - UBASE
     shade: 15
   - type: STR_BASE_DEFENSE
     data:
@@ -6440,7 +6442,8 @@ alienDeployments:
     width: 60
     length: 60
     height: 2
-    terrain: XBASE
+    terrains:
+      - XBASE
     shade: 5
   - type: STR_MARS_CYDONIA_LANDING
     data:
@@ -6520,7 +6523,8 @@ alienDeployments:
     width: 60
     length: 60
     height: 4
-    terrain: MARS
+    terrains:
+      - MARS
     shade: 15
     nextStage: STR_MARS_THE_FINAL_ASSAULT
   - type: STR_MARS_THE_FINAL_ASSAULT
@@ -6686,7 +6690,8 @@ alienDeployments:
     width: 60
     length: 60
     height: 2
-    terrain: UBASE
+    terrains:
+      - UBASE
     shade: 5
 research:
   - name: STR_LASER_WEAPONS
