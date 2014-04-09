@@ -162,6 +162,7 @@ ResearchState::ResearchState(
 	_lstResearch->setSelectable(true);
 	_lstResearch->setBackground(_window);
 	_lstResearch->setMargin(8);
+	_lstResearch->setWordWrap(true);
 	_lstResearch->onMouseClick((ActionHandler)& ResearchState::onSelectProject);
 
 	init();

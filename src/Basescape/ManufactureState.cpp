@@ -181,6 +181,7 @@ ManufactureState::ManufactureState(
 	_lstManufacture->setSelectable(true);
 	_lstManufacture->setBackground(_window);
 	_lstManufacture->setMargin(8);
+	_lstManufacture->setWordWrap(true);
 	_lstManufacture->onMouseClick((ActionHandler)& ManufactureState::lstManufactureClick);
 
 	fillProductionList();

@@ -58,7 +58,8 @@ private:
 		_contrast,
 		_dot,
 		_scrolling,
-		_selectable;
+		_selectable,
+		_wrap;
 	int
 		_arrowPos,
 		_arrowsLeftEdge,
@@ -96,7 +97,9 @@ private:
 
 	std::map<int, TextHAlign> _align;
 
-	std::vector<int> _columns;
+	std::vector<int>
+		_columns,
+		_rows;
 	std::vector<std::vector<Text*> > _texts;
 	std::vector<ArrowButton*>
 		_arrowLeft,
@@ -191,6 +194,9 @@ private:
 				int row,
 				int column,
 				bool contrast);
+
+		/// Sets the text list's wordwrap setting.
+		void setWordWrap(bool wrap);
 
 		/// Sets the text horizontal alignment of the text list.
 		void setAlign(

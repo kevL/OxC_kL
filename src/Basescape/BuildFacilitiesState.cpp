@@ -107,6 +107,7 @@ BuildFacilitiesState::BuildFacilitiesState(
 	_lstFacilities->setScrolling(false); // kL
 	_lstFacilities->setBackground(_window);
 	_lstFacilities->setMargin(3);
+	_lstFacilities->setWordWrap(true);
 	_lstFacilities->onMouseClick((ActionHandler)& BuildFacilitiesState::lstFacilitiesClick);
 
 	PopulateBuildList();

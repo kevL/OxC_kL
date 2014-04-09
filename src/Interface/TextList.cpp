@@ -64,6 +64,7 @@ TextList::TextList(
 		_selectable(false),
 		_condensed(false),
 		_contrast(false),
+		_wrap(false),
 		_selRow(0),
 		_bg(0),
 		_selector(0),
@@ -325,7 +326,9 @@ void TextList::addRow(
 	va_start(args, cols);
 
 	std::vector<Text*> temp;
-	int rowX = 0;
+	int
+		rowX = 0,
+		_rows = 1;
 
 	for (int
 			i = 0;
@@ -355,6 +358,15 @@ void TextList::addRow(
 
 		txt->setText(va_arg(args, wchar_t*));
 
+		// Wordwrap text if necessary
+		if (_wrap
+			&& txt->getTextWidth() > txt->getWidth())
+		{
+			txt->setHeight(_font->getHeight() * 2 + _font->getSpacing());
+			txt->setWordWrap(true);
+			rows = 2;
+		}
+
 		// Places dots between text
 		if (_dot
 			&& i < cols - 1)
@@ -380,6 +392,13 @@ void TextList::addRow(
 	}
 
 	_texts.push_back(temp);
+	for (int
+			i = 0;
+			i < rows;
+			++i)
+	{
+		_rows.push_back(_texts.size() - 1);
+	}
 
 	// Place arrow buttons
 	if (_arrowPos != -1)
@@ -645,6 +664,17 @@ void TextList::setHighContrast(bool contrast)
 }
 
 /**
+ * Enables/disables text wordwrapping. When enabled, rows can take up multiple
+ * lines of the list, otherwise every row is restricted to one line.
+ * @param wrap Wordwrapping setting.
+ */
+void TextList::setWordWrap(bool wrap)
+{
+	if (wrap != _wrap)
+		_wrap = wrap;
+}
+
+/**
  * Changes the contrast of a specific Text object in the list.
  * @param row, Row number.
  * @param column, Column number.
@@ -774,7 +804,11 @@ void TextList::setCondensed(bool condensed)
  */
 int TextList::getSelectedRow() const
 {
-	return _selRow;
+	int selRow = std::min(
+						_selRow,
+						_rows.size());
+
+	return _rows[selRow];
 }
 
 /**
@@ -953,6 +987,7 @@ void TextList::clearList()
 	}
 
 	_texts.clear();
+	_rows.clear();
 
 	_redraw = true;
 }
@@ -965,7 +1000,7 @@ void TextList::scrollUp(bool toMax)
 {
 	if (!_scrolling) return;
 
-	if (_texts.size() > _visibleRows
+	if (_rows.size() > _visibleRows
 		&& _scroll > 0)
 	{
 		if (toMax)
@@ -987,8 +1022,8 @@ void TextList::scrollDown(bool toMax)
 {
 	if (!_scrolling) return;
 
-	if (_texts.size() > _visibleRows
-		&& _scroll < _texts.size() - _visibleRows)
+	if (_rows.size() > _visibleRows
+		&& _scroll < _rows.size() - _visibleRows)
 	{
 		if (toMax)
 			_scroll = _texts.size()-_visibleRows;
@@ -1008,12 +1043,12 @@ void TextList::scrollDown(bool toMax)
 void TextList::updateArrows()
 {
 	_up->setVisible(
-				_texts.size() > _visibleRows
+				_rows.size() > _visibleRows
 				&& _scroll > 0);
 
 	_down->setVisible(
-				_texts.size() > _visibleRows
-				&& _scroll < _texts.size() - _visibleRows);
+				_rows.size() > _visibleRows
+				&& _scroll < _rows.size() - _visibleRows);
 }
 
 /**
@@ -1043,8 +1078,10 @@ void TextList::draw()
 {
 	Surface::draw();
 
+	int y = _scroll * -(_font->getHeight() + _font->getSpacing());
+
 	for (unsigned int
-			i = _scroll;
+			i = 0;
 			i < _texts.size()
 				&& i < _scroll + _visibleRows;
 			++i)
@@ -1054,10 +1091,11 @@ void TextList::draw()
 				j < _texts[i].end();
 				++j)
 		{
-			(*j)->setY((i - _scroll) * (_font->getHeight() + _font->getSpacing()));
-
+			(*j)->setY(y);
 			(*j)->blit(this);
 		}
+
+		y += _texts[i].front()->getHeight() + _font->getSpacing();
 	}
 }
 
@@ -1076,9 +1114,6 @@ void TextList::blit(Surface* surface)
 
 	if (_visible && !_hidden)
 	{
-		_up->blit(surface);
-		_down->blit(surface);
-
 		if (_arrowPos != -1)
 		{
 			for (unsigned int
@@ -1094,6 +1129,9 @@ void TextList::blit(Surface* surface)
 				_arrowRight[i]->blit(surface);
 			}
 		}
+
+		_up->blit(surface);
+		_down->blit(surface);
 	}
 }
 
@@ -1253,7 +1291,13 @@ void TextList::mouseOver(Action* action, State* state)
 
 		if (_selRow < _texts.size())
 		{
-			_selector->setY(getY() + (_selRow - _scroll) * y);
+			Text* selText = _texts[_rows[_selRow]].front();
+
+			_selector->setY(getY() + selText->getY());
+
+			if (_selector->getHeight() != selText->getHeight() + _font->getSpacing())
+				_selector->setHeight(selText->getHeight() + _font->getSpacing());
+
 			_selector->copy(_bg);
 
 			if (_contrast)
@@ -1264,9 +1308,7 @@ void TextList::mouseOver(Action* action, State* state)
 			_selector->setVisible(true);
 		}
 		else
-		{
 			_selector->setVisible(false);
-		}
 	}
 
 	InteractiveSurface::mouseOver(action, state);
