@@ -59,13 +59,13 @@ TextList::TextList(
 		_font(0),
 		_scroll(0),
 		_visibleRows(0),
+		_selRow(0),
 		_color(0),
 		_dot(false),
 		_selectable(false),
 		_condensed(false),
 		_contrast(false),
 		_wrap(false),
-		_selRow(0),
 		_bg(0),
 		_selector(0),
 		_margin(0),
@@ -804,9 +804,9 @@ void TextList::setCondensed(bool condensed)
  */
 int TextList::getSelectedRow() const
 {
-	int selRow = std::min(
+	size_t selRow = std::min(
 						_selRow,
-						static_cast<unsigned>(_rows.size()));
+						_rows.size());
 
 	return _rows[selRow];
 }
@@ -1080,7 +1080,7 @@ void TextList::draw()
 
 	int y = _scroll * -(_font->getHeight() + _font->getSpacing());
 
-	for (unsigned int
+	for (size_t
 			i = 0;
 			i < _texts.size()
 				&& i < _scroll + _visibleRows;
@@ -1116,7 +1116,7 @@ void TextList::blit(Surface* surface)
 	{
 		if (_arrowPos != -1)
 		{
-			for (unsigned int
+			for (size_t
 					i = _scroll;
 					i < _texts.size()
 						&& i < _scroll + _visibleRows;
@@ -1149,7 +1149,7 @@ void TextList::handle(Action* action, State* state)
 
 	if (_arrowPos != -1)
 	{
-		for (unsigned int
+		for (size_t
 				i = _scroll;
 				i < _texts.size()
 					&& i < _scroll + _visibleRows;

@@ -186,7 +186,7 @@ BaseInfoState::BaseInfoState(
 	_mini->setTexture(_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK"));
 	_mini->setBases(_game->getSavedGame()->getBases());
 
-	for (unsigned
+	for (size_t
 			i = 0;
 			i < _game->getSavedGame()->getBases()->size();
 			++i)
@@ -445,7 +445,7 @@ void BaseInfoState::edtBaseChange(Action* action)
  */
 void BaseInfoState::miniClick(Action*)
 {
-	unsigned int base = _mini->getHoveredBase();
+	size_t base = _mini->getHoveredBase();
 	if (base < _game->getSavedGame()->getBases()->size())
 	{
 		_mini->setSelectedBase(base);

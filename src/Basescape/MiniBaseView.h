@@ -43,10 +43,10 @@ class MiniBaseView
 {
 
 private:
-	static const unsigned int MAX_BASES	= 8;
-	static const int MINI_SIZE			= 14;
+	static const size_t MAX_BASES	= 8;
+	static const int MINI_SIZE		= 14;
 
-	unsigned
+	size_t
 		_base,
 		_hoverBase;
 
@@ -70,9 +70,9 @@ private:
 		/// Sets the texture for the mini base view.
 		void setTexture(SurfaceSet* texture);
 		/// Gets the base the mouse is over.
-		unsigned int getHoveredBase() const;
+		size_t getHoveredBase() const;
 		/// Sets the selected base for the mini base view.
-		void setSelectedBase(unsigned base);
+		void setSelectedBase(size_t base);
 		/// Draws the mini base view.
 		void draw();
 		/// Special handling for mouse hovers.

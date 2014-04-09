@@ -45,7 +45,7 @@ class Projectile
 
 private:
 	int _speed;
-	unsigned _position;
+	size_t _position;
 
 	BattleAction _action;
 	Position

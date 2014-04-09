@@ -30,7 +30,6 @@
 #include "../Engine/Palette.h"
 
 #include "../Interface/Text.h"
-#include "../Interface/TextButton.h"
 #include "../Interface/TextList.h"
 #include "../Interface/Window.h"
 
@@ -61,8 +60,22 @@ OptionsAdvancedState::OptionsAdvancedState(
 
 	centerAllSurfaces();
 
+	// how much room do we need for YES/NO
+	Text text = Text(100, 9, 0, 0);
+	text.initText(
+				_game->getResourcePack()->getFont("FONT_BIG"),
+				_game->getResourcePack()->getFont("FONT_SMALL"),
+				_game->getLanguage());
+	text.setText(tr("STR_YES"));
+	int yes = text.getTextWidth();
+	text.setText(tr("STR_NO"));
+	int no = text.getTextWidth();
+
+	int rightcol = std::max(yes, no) + 2;
+	int leftcol = _lstOptions->getWidth() - rightcol;
+
 	_lstOptions->setAlign(ALIGN_RIGHT, 1);
-	_lstOptions->setColumns(2, 180, 20);
+	_lstOptions->setColumns(2, leftcol, rightcol);
 	_lstOptions->setColor(Palette::blockOffset(8)+10);
 	_lstOptions->setArrowColor(Palette::blockOffset(8)+5);
 	_lstOptions->setWordWrap(true);

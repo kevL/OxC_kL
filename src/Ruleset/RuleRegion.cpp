@@ -136,7 +136,7 @@ bool RuleRegion::insideRegion(
 		double lon,
 		double lat) const
 {
-	for (unsigned int
+	for (size_t
 			i = 0;
 			i < _lonMin.size();
 			++i)
@@ -146,11 +146,16 @@ bool RuleRegion::insideRegion(
 			inLat;
 
 		if (_lonMin[i] <= _lonMax[i])
-			inLon = (lon >= _lonMin[i] && lon < _lonMax[i]);
+			inLon = (lon >= _lonMin[i]
+					&& lon < _lonMax[i]);
 		else
-			inLon = ((lon >= _lonMin[i] && lon < 6.283) || (lon >= 0 && lon < _lonMax[i]));
+			inLon = ((lon >= _lonMin[i]
+						&& lon < 6.283)
+					|| (lon >= 0
+						&& lon < _lonMax[i]));
 
-		inLat = (lat >= _latMin[i] && lat < _latMax[i]);
+		inLat = (lat >= _latMin[i]
+				&& lat < _latMax[i]);
 
 		if (inLon && inLat)
 			return true;

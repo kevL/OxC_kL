@@ -63,8 +63,9 @@ private:
 		_hasSci,
 		_hasEng,
 		_total;
-	unsigned _sel;
-	size_t _itemOffset;
+	size_t
+		_itemOffset,
+		_sel;
 
 	Base* _base;
 	Text

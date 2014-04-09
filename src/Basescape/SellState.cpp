@@ -71,10 +71,10 @@ SellState::SellState(
 		_crafts(),
 		_items(),
 		_sel(0),
+		_itemOffset(0),
 		_total(0),
 		_hasSci(0),
-		_hasEng(0),
-		_itemOffset(0)
+		_hasEng(0)
 {
 	_window			= new Window(this, 320, 200, 0, 0);
 	_txtTitle		= new Text(310, 17, 5, 9);
@@ -349,7 +349,7 @@ void SellState::btnOkClick(Action*)
 	_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds() + _total);
 	_base->setCashIncome(_total); // kL
 
-	for (unsigned int
+	for (size_t
 			i = 0;
 			i < _qtys.size();
 			++i)

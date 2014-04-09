@@ -139,7 +139,7 @@ bool RuleCountry::insideCountry(
 		double lon,
 		double lat) const
 {
-	for (unsigned
+	for (size_t
 			i = 0;
 			i < _lonMin.size();
 			++i)

@@ -357,7 +357,7 @@ void TextEdit::draw()
 				break;
 			}
 
-			for (unsigned int
+			for (size_t
 					i = 0;
 					i < _caretPos;
 					++i)

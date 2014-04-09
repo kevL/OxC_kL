@@ -47,8 +47,9 @@ class CraftEquipmentState
 {
 
 private:
-	unsigned int _sel;
-	size_t _craft;
+	size_t
+		_craft,
+		_sel;
 
 	Base* _base;
 	Text

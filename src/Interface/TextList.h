@@ -66,7 +66,7 @@ private:
 		_arrowsRightEdge,
 		_margin,
 		_scrollPos;
-	unsigned int
+	size_t
 		_scroll,
 		_selRow,
 		_visibleRows;

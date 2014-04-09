@@ -53,7 +53,7 @@ private:
 	int
 		_aliensSold;
 //kL		_researchAliens;
-	unsigned int _sel;
+	size_t _sel;
 	Uint8
 		_color,
 		_color2;

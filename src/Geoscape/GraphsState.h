@@ -51,7 +51,7 @@ class GraphsState
 {
 
 private:
-	static const unsigned int GRAPH_MAX_BUTTONS = 16;
+	static const size_t GRAPH_MAX_BUTTONS = 16;
 
 	bool
 		_alien,
@@ -59,7 +59,7 @@ private:
 		_finance,
 		_income;
 
-	unsigned int // will be only between 0 and size()
+	size_t // will be only between 0 and size()
 		_btnCountriesOffset,
 		_btnRegionsOffset;
 
@@ -117,7 +117,7 @@ private:
 	void scrollButtons(
 			std::vector<GraphBtnInfo*>& toggles,
 			std::vector<ToggleTextButton*>& buttons,
-			unsigned int& offset,
+			size_t& offset,
 			int step);
 	///
 	void updateButton(

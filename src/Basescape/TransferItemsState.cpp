@@ -85,6 +85,7 @@ TransferItemsState::TransferItemsState(
 		_crafts(),
 		_items(),
 		_sel(0),
+		_itemOffset(0),
 		_total(0),
 
 		_pQty(0),
@@ -95,8 +96,7 @@ TransferItemsState::TransferItemsState(
 		_hasSci(0),
 		_hasEng(0),
 
-		_distance(0.0),
-		_itemOffset(0)
+		_distance(0.0)
 {
 	_window					= new Window(this, 320, 200, 0, 0);
 	_txtTitle				= new Text(300, 16, 10, 9);
@@ -715,7 +715,7 @@ void TransferItemsState::completeTransfer()
 	_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds() - _total);
 	_baseFrom->setCashSpent(_total); // kL
 
-	for (unsigned int
+	for (size_t
 			i = 0;
 			i < _transferQty.size();
 			++i)

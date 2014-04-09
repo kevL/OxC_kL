@@ -809,7 +809,8 @@ bool TileEngine::visible(
 
 		Tile* t = _save->getTile(unit->getPosition()); // origin tile
 
-		for (uint16_t
+//		for (uint16_t
+		for (size_t
 				i = 0;
 				i < _trajectory.size();
 				i++)

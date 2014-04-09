@@ -475,7 +475,7 @@ Globe::Globe(
 	_earthData.resize(_radius.size());
 
 	// filling normal field for each radius
-	for (unsigned int
+	for (size_t
 			r = 0;
 			r < _radius.size();
 			++r)
@@ -504,7 +504,7 @@ Globe::Globe(
 
 	// filling random noise "texture"
 	_randomNoiseData.resize(static_data.random_surf_size * static_data.random_surf_size);
-	for (unsigned int
+	for (size_t
 			i = 0;
 			i < _randomNoiseData.size();
 			++i)

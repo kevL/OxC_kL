@@ -74,8 +74,8 @@ CraftEquipmentState::CraftEquipmentState(
 	:
 		State(game),
 		_sel(0),
-		_base(base),
-		_craft(craft)
+		_craft(craft),
+		_base(base)
 {
 	Craft* c = _base->getCrafts()->at(_craft);
 	bool craftHasCrew = c->getNumSoldiers() > 0;

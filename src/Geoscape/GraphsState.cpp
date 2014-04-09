@@ -144,7 +144,7 @@ GraphsState::GraphsState(Game* game)
 		add(_txtScale.at(scaleText));
 	}
 
-	unsigned offset = 0;
+	size_t offset = 0;
 	for (std::vector<Region*>::iterator
 			iter = _game->getSavedGame()->getRegions()->begin();
 			iter != _game->getSavedGame()->getRegions()->end();
@@ -1994,7 +1994,7 @@ void GraphsState::shiftButtons(Action* action)
 void GraphsState::scrollButtons(
 		std::vector<GraphBtnInfo*>& toggles,
 		std::vector<ToggleTextButton*>& buttons,
-		unsigned int& offset,
+		size_t& offset,
 		int step)
 {
 	// minus one, 'cause we'll already added the TOTAL button to toggles
@@ -2006,7 +2006,7 @@ void GraphsState::scrollButtons(
 
 	// set the next offset - cheaper to do it from starters
 	offset += static_cast<unsigned int>(step);
-	unsigned int i = 0;
+	size_t i = 0;
 
 	std::vector<ToggleTextButton*>::iterator iterb = buttons.begin();
 	for (std::vector<GraphBtnInfo*>::iterator

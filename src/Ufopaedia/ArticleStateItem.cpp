@@ -247,9 +247,11 @@ ArticleStateItem::ArticleStateItem(
 			}
 			else
 			{
-				for (unsigned int
+				for (size_t
 						i = 0;
-						i < std::min(ammo_data->size(), static_cast<size_t>(3));
+						i < std::min(
+									ammo_data->size(),
+									static_cast<size_t>(3));
 						++i)
 				{
 					ArticleDefinition* ammo_article = _game->getRuleset()->getUfopaediaArticle((*ammo_data)[i]);

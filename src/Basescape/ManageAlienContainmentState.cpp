@@ -272,7 +272,7 @@ void ManageAlienContainmentState::think()
  */
 void ManageAlienContainmentState::btnOkClick(Action*)
 {
-	for (unsigned int
+	for (size_t
 			i = 0;
 			i < _qtys.size();
 			++i)				// iterate as many times as there are aliens queued.

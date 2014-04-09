@@ -202,7 +202,7 @@ void Craft::load(
 		}
 	}
 
-	unsigned int j = 0;
+	size_t j = 0;
 	for (YAML::const_iterator
 			i = node["weapons"].begin();
 			i != node["weapons"].end();

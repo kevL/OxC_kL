@@ -170,6 +170,7 @@ SavedGameState::SavedGameState(
 
 	_txtDetails->setColor(Palette::blockOffset(15)-1);
 	_txtDetails->setSecondaryColor(Palette::blockOffset(8)+10);
+	_txtDetails->setWordWrap(true);
 	_txtDetails->setText(tr("STR_DETAILS").arg(L""));
 
 	_sortName->setX(_sortName->getX() + _txtName->getTextWidth() + 5);
