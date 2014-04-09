@@ -5608,7 +5608,7 @@
 	"Position.h"
 	"../Engine/State.h"
 
-1394398507 f:\git\openxcom\src\ruleset\aliendeployment.h
+1397041511 f:\git\openxcom\src\ruleset\aliendeployment.h
 	<string>
 	<vector>
 	<yaml-cpp/yaml.h>
@@ -8446,7 +8446,7 @@
 	"../Resource/ResourcePack.h"
 	"../Ruleset/Ruleset.h"
 
-1396343277 source:f:\git\openxcom\src\menu\optionsadvancedstate.cpp
+1397027080 source:f:\git\openxcom\src\menu\optionsadvancedstate.cpp
 	"OptionsAdvancedState.h"
 	<algorithm>
 	<iostream>
