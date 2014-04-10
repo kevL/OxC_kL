@@ -384,11 +384,14 @@ void SavedGame::load(
 			++i)
 	{
 		std::string type = (*i)["type"].as<std::string>();
-		Country* c = new Country(
-							rule->getCountry(type),
-							false);
-		c->load(*i);
-		_countries.push_back(c);
+		if (rule->getCountry(type))
+		{
+			Country* c = new Country(
+								rule->getCountry(type),
+								false);
+			c->load(*i);
+			_countries.push_back(c);
+		}
 	}
 
 	for (YAML::const_iterator
@@ -397,9 +400,12 @@ void SavedGame::load(
 			++i)
 	{
 		std::string type = (*i)["type"].as<std::string>();
-		Region* r = new Region(rule->getRegion(type));
-		r->load(*i);
-		_regions.push_back(r);
+		if (rule->getRegion(type))
+		{
+			Region* r = new Region(rule->getRegion(type));
+			r->load(*i);
+			_regions.push_back(r);
+		}
 	}
 
 	// Alien bases must be loaded before alien missions
@@ -485,7 +491,8 @@ void SavedGame::load(
 			++it)
 	{
 		std::string research = it->as<std::string>();
-		_discovered.push_back(rule->getResearch(research));
+		if (rule->getResearch(research))
+			_discovered.push_back(rule->getResearch(research));
 	}
 
 	const YAML::Node& research = doc["poppedResearch"];
@@ -495,7 +502,8 @@ void SavedGame::load(
 			++it)
 	{
 		std::string research = it->as<std::string>();
-		_poppedResearch.push_back(rule->getResearch(research));
+		if (rule->getResearch(research))
+			_poppedResearch.push_back(rule->getResearch(research));
 	}
 
 	_alienStrategy->load(
