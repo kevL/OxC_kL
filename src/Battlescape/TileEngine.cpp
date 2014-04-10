@@ -2297,7 +2297,8 @@ void TileEngine::explode(
 	int
 		tileX,
 		tileY,
-		tileZ;
+		tileZ,
+		testPower;
 
 	double
 		r,
@@ -2366,7 +2367,7 @@ void TileEngine::explode(
 
 
 				// TEST:
-				int testPower = _powerT;
+				testPower = _powerT;
 				if (type == DT_IN)
 				{
 					int dir;
@@ -2674,6 +2675,10 @@ void TileEngine::explode(
 				}// add a new tile.
 
 
+/*
+Do all this at the top ... w/ testPower.
+then set _powerT=testPower.
+
 				if (type == DT_IN)
 				{
 					int dir;
@@ -2687,12 +2692,12 @@ void TileEngine::explode(
 						_powerT -= 5; // diagonal movement costs an extra 50% for fire.
 					}
 				}
-
 				// TEST:
 //				int dir; // -> test result: Looks like this returns the direction *from which the blast came from*** ( ie. Opposite dir )
 //				Pathfinding::vectorToDirection(
 //										destTile->getPosition() - origin->getPosition(),
 //										dir); // TEST_end.
+
 
 				_powerT -= (10 // explosive damage decreases by 10 per tile
 						+ horizontalBlockage( // not *2
@@ -2704,7 +2709,8 @@ void TileEngine::explode(
 										destTile,
 										type));
 				//Log(LOG_INFO) << ". _powerT = " << _powerT << ", dir = " << dir << ", pos " << origin->getPosition() << " dest " << destTile->getPosition();
-
+*/
+				_powerT = testPower;
 				origin = destTile;
 
 			}// power & radius left. (length ray)
