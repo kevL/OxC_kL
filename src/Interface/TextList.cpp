@@ -1095,7 +1095,10 @@ void TextList::draw()
 			(*j)->blit(this);
 		}
 
-		y += _texts[i].front()->getHeight() + _font->getSpacing();
+		if (!_texts[i].empty())
+			y += _texts[i].front()->getHeight() + _font->getSpacing();
+		else
+			y += _font->getHeight() + _font->getSpacing();
 	}
 }
 

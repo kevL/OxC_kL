@@ -70,6 +70,7 @@
 #include <utility>
 #include <vector>
 
+/*
 #ifdef _WIN32
 	#ifndef NOMINMAX
 	#define NOMINMAX
@@ -80,7 +81,8 @@
 //	#include <shlobj.h>
 //	#include <shlwapi.h>
 	#include <direct.h>
-#else
+#else */
+#ifndef _WIN32
 	#include <unistd.h>
 	#include <sys/param.h>
 	#include <pwd.h>

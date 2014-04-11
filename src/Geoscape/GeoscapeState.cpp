@@ -141,10 +141,8 @@ GeoscapeState::GeoscapeState(Game* game)
 	:
 		State(game),
 		_pause(false),
-		_music(false),
 		_zoomInEffectDone(false),
 		_zoomOutEffectDone(false),
-		_battleMusic(false),
 		_popups(),
 		_dogfights(),
 		_dogfightsToBeStarted(),
@@ -707,17 +705,15 @@ void GeoscapeState::init()
 	_globe->draw();
 
 	// Set music if it's not already playing
-	if (!_music
-		&& !_battleMusic)
+	if (_dogfights.empty()
+		&& !_dogfightStartTimer->isRunning())
 	{
 		if (_game->getSavedGame()->getMonthsPassed() == -1)
-//			_game->getResourcePack()->getMusic("GMGEO1")->play();
-			_game->getResourcePack()->getMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMGEO1)->play(); // sza_MusicRules
+//			_game->getResourcePack()->playMusic("GMGEO1");
+			_game->getResourcePack()->playMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMGEO1); // sza_MusicRules
 		else
-//			_game->getResourcePack()->getRandomMusic("GMGEO")->play();
-			_game->getResourcePack()->getMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMGEO)->play(); // sza_MusicRules
-
-		_music = true;
+//			_game->getResourcePack()->playMusic("GMGEO", true);
+			_game->getResourcePack()->playMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMGEO); // sza_MusicRules
 	}
 
 	_globe->unsetNewBaseHover();
@@ -771,12 +767,11 @@ void GeoscapeState::think()
 		}
 	}
 
-	if (_battleMusic
-		&& _dogfights.empty()
+	if (_dogfights.empty()
 		&& !_dogfightStartTimer->isRunning())
 	{
-		_battleMusic = false;
-		musicStop();
+//		_game->getResourcePack()->playMusic("GMGEO", true);
+		_game->getResourcePack()->playMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMGEO); // sza_MusicRules
 	}
 }
 
@@ -1178,12 +1173,8 @@ void GeoscapeState::time5Seconds()
 									_dogfightStartTimer->start();
 								}
 
-								if (!_battleMusic) // set music
-								{
-//									_game->getResourcePack()->getMusic("GMINTER")->play();
-									_game->getResourcePack()->getMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMINTER)->play(); // sza_MusicRules
-									_battleMusic = true;
-								}
+//								_game->getResourcePack()->playMusic("GMINTER");
+								_game->getResourcePack()->playMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMINTER); // sza_MusicRules
 							}
 						break;
 						case Ufo::LANDED:
@@ -1207,8 +1198,7 @@ void GeoscapeState::time5Seconds()
 																_game,
 																*j,
 																texture,
-																shade,
-																this));
+																shade));
 								}
 							}
 							else if (u->getStatus() != Ufo::LANDED)
@@ -1245,8 +1235,7 @@ void GeoscapeState::time5Seconds()
 													_game,
 													*j,
 													texture,
-													shade,
-													this));
+													shade));
 					}
 					else
 						(*j)->returnToBase();
@@ -1271,8 +1260,7 @@ void GeoscapeState::time5Seconds()
 														_game,
 														*j,
 														texture,
-														shade,
-														this));
+														shade));
 						}
 						else
 							(*j)->returnToBase();
@@ -2612,18 +2600,6 @@ void GeoscapeState::timerReset()
 			_game->getScreen()->getCursorLeftBlackBand());
 
 	_btn5Secs->mousePress(&act, this);
-}
-
-/**
- * Stops the Geoscape music for when another
- * music is gonna take place, so it resumes
- * when we go back to the Geoscape.
- * @param pause True if we want to resume
- * from the same spot we left off.
- */
-void GeoscapeState::musicStop(bool)
-{
-	_music = false;
 }
 
 /**

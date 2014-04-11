@@ -84,7 +84,7 @@ private:
 		 * Gets the number of waypoints in this trajectory.
 		 * @return The number of waypoints.
 		 */
-		unsigned getWaypointCount() const
+		size_t getWaypointCount() const
 		{
 			return _waypoints.size() - 1;
 		}

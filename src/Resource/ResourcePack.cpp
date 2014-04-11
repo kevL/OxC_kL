@@ -19,8 +19,10 @@
 
 #include "ResourcePack.h"
 
+#include <SDL_mixer.h>
+
 #include "../Engine/Font.h"
-#include "../Engine/Logger.h" // sza_MusicRules
+#include "../Engine/Logger.h"
 #include "../Engine/Music.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Surface.h"
@@ -43,6 +45,7 @@ namespace OpenXcom
  */
 ResourcePack::ResourcePack()
 	:
+		_playingMusic(""),
 		_palettes(),
 		_fonts(),
 		_surfaces(),
@@ -214,6 +217,30 @@ Music* ResourcePack::getMusic(const std::string& name) const
 			return i->second;
 		else
 			return 0; */
+	}
+}
+
+/**
+ * Plays the specified track if it's not already playing.
+ * @param name Name of the music.
+ * @param random Pick a random track?
+ */
+void ResourcePack::playMusic(
+		const std::string& name,
+		bool random)
+{
+	if (!Options::mute
+		&& _playingMusic != name)
+	{
+		_playingMusic = name;
+
+		if (name == "GMGEO1")
+			_playingMusic = "GMGEO"; // hack
+
+		if (random)
+			getRandomMusic(name)->play();
+		else
+			getMusic(name)->play();
 	}
 }
 

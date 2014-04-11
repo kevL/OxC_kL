@@ -99,6 +99,7 @@ void create()
 	_info.push_back(OptionInfo("debugUi", &debugUi, false));
 	_info.push_back(OptionInfo("soundVolume", &soundVolume, MIX_MAX_VOLUME));
 	_info.push_back(OptionInfo("musicVolume", &musicVolume, MIX_MAX_VOLUME));
+	_info.push_back(OptionInfo("uiVolume", &uiVolume, MIX_MAX_VOLUME/2));
 	_info.push_back(OptionInfo("language", &language, ""));
 	_info.push_back(OptionInfo("battleScrollSpeed", &battleScrollSpeed, 8));
 	_info.push_back(OptionInfo("battleEdgeScroll", (int*)&battleEdgeScroll, SCROLL_AUTO));
@@ -255,6 +256,7 @@ void resetDefault()
 	{
 		i->reset();
 	}
+	backupDisplay();
 
 	rulesets.clear();
 	rulesets.push_back("Xcom1Ruleset");

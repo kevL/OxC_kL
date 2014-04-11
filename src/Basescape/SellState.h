@@ -96,11 +96,11 @@ private:
 	/// Gets selected quantity.
 	int getQuantity();
 	/// Gets the Type of the selected item.
-	enum SellType getType(unsigned selected) const;
+	enum SellType getType(size_t selected) const;
 	/// Gets the index of selected item.
-	int getItemIndex(unsigned selected) const;
+	int getItemIndex(size_t selected) const;
 	/// Gets the index of the selected craft.
-	int getCraftIndex(unsigned selected) const;
+	int getCraftIndex(size_t selected) const;
 
 
 	public:

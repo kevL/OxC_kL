@@ -99,11 +99,20 @@ void RuleTerrain::load(
 	_largeBlockLimit	= node["largeBlockLimit"].as<int>(_largeBlockLimit);
 	_textures			= node["textures"].as< std::vector<int> >(_textures);
 	_hemisphere			= node["hemisphere"].as<int>(_hemisphere);
+	_roadTypeOdds		= node["roadTypeOdds"].as< std::vector<int> >(_roadTypeOdds);
+
+	if (const YAML::Node& civs = node["civilianTypes"])
+		_civilianTypes = civs.as<std::vector<std::string> >(_civilianTypes);
+	else
+	{
+		_civilianTypes.push_back("MALE_CIVILIAN");
+		_civilianTypes.push_back("FEMALE_CIVILIAN");
+	}
 }
 
 /**
  * Gets the array of mapblocks.
- * @return Pointer to the array of mapblocks.
+ * @return, Pointer to the array of mapblocks.
  */
 std::vector<MapBlock*>* RuleTerrain::getMapBlocks()
 {
@@ -112,7 +121,7 @@ std::vector<MapBlock*>* RuleTerrain::getMapBlocks()
 
 /**
  * Gets the array of mapdatafiles.
- * @return Pointer to the array of mapdatafiles.
+ * @return, Pointer to the array of mapdatafiles.
  */
 std::vector<MapDataSet*>* RuleTerrain::getMapDataSets()
 {
@@ -121,7 +130,7 @@ std::vector<MapDataSet*>* RuleTerrain::getMapDataSets()
 
 /**
  * Gets the terrain name.
- * @return The terrain name.
+ * @return, The terrain name.
  */
 std::string RuleTerrain::getName() const
 {
@@ -133,7 +142,7 @@ std::string RuleTerrain::getName() const
  * @param maxsize The maximum size of the mapblock (10 or 20 or 999 - don't care).
  * @param type Whether this must be a block of a certain type.
  * @param force Whether to enforce the max size.
- * @return Pointer to the mapblock.
+ * @return, Pointer to the mapblock.
  */
 MapBlock* RuleTerrain::getRandomMapBlock(
 		int maxsize,
@@ -174,7 +183,7 @@ MapBlock* RuleTerrain::getRandomMapBlock(
 /**
  * Gets a mapblock with a given name.
  * @param name The name of the mapblock.
- * @return Pointer to mapblock.
+ * @return, Pointer to mapblock.
  */
 MapBlock* RuleTerrain::getMapBlock(const std::string& name)
 {
@@ -194,7 +203,7 @@ MapBlock* RuleTerrain::getMapBlock(const std::string& name)
  * Gets a mapdata object.
  * @param id The id in the terrain.
  * @param mapDataSetID The id of the map data set.
- * @return Pointer to MapData object.
+ * @return, Pointer to MapData object.
  */
 MapData* RuleTerrain::getMapData(
 		int* id,
@@ -221,7 +230,7 @@ MapData* RuleTerrain::getMapData(
 
 /**
  * Gets the maximum amount of large blocks in this terrain.
- * @return The maximum amount.
+ * @return, The maximum amount.
  */
 int RuleTerrain::getLargeBlockLimit() const
 {
@@ -244,7 +253,7 @@ void RuleTerrain::resetMapBlocks()
 
 /**
  * Gets the array of globe texture IDs this terrain is loaded on.
- * @return Pointer to the array of texture IDs.
+ * @return, Pointer to the array of texture IDs.
  */
 std::vector<int>* RuleTerrain::getTextures()
 {
@@ -254,11 +263,28 @@ std::vector<int>* RuleTerrain::getTextures()
 /**
  * Gets the hemishpere this terrain occurs on.
  * -1 = northern, 0 = either, 1 = southern.
- * @return The hemisphere.
+ * @return, The hemisphere.
  */
 int RuleTerrain::getHemisphere() const
 {
 	return _hemisphere;
 }
 
+/**
+ * Gets the list of civilian types to use on this terrain (default MALE_CIVILIAN and FEMALE_CIVILIAN)
+ * @return, list of civilian types to use.
+ */
+std::vector<std::string> RuleTerrain::getCivilianTypes() const
+{
+	return _civilianTypes;
+}
+
+/**
+ * Gets the road type odds.
+ * @return, The road type odds.
+ */
+std::vector<int> RuleTerrain::getRoadTypeOdds() const
+{
+	return _roadTypeOdds;
+}
 }

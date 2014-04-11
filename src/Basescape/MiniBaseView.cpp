@@ -101,7 +101,7 @@ size_t MiniBaseView::getHoveredBase() const
  * Changes the base that is currently selected on the mini base view.
  * @param base ID of base.
  */
-void MiniBaseView::setSelectedBase(unsigned base)
+void MiniBaseView::setSelectedBase(size_t base)
 {
 	_base = base;
 

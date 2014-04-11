@@ -47,8 +47,6 @@ class NewBattleState
 {
 
 private:
-	bool _music;
-
 	ComboBox
 		* _cbxMission,
 		* _cbxCraft,

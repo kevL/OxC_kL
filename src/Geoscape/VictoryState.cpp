@@ -63,8 +63,8 @@ VictoryState::VictoryState(Game *game)
 
 	_window->onMouseClick((ActionHandler)& VictoryState::windowClick);
 
-//	_game->getResourcePack()->getMusic("GMWIN")->play();
-	_game->getResourcePack()->getMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMWIN)->play(); // sza_MusicRules
+//	_game->getResourcePack()->playMusic("GMWIN");
+	_game->getResourcePack()->playMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMWIN); // sza_MusicRules
 
 	for (int
 			text = 0;

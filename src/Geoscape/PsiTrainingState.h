@@ -47,6 +47,7 @@ private:
 	TextButton* _btnOk;
 
 	std::vector<Base*> _bases;
+	std::vector<TextButton*> _btnBases;
 
 
 	public:

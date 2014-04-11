@@ -21,7 +21,9 @@
 #define OPENXCOM_OPTIONSAUDIOSTATE_H
 
 #include <vector>
+
 #include "OptionsBaseState.h"
+
 
 namespace OpenXcom
 {
@@ -41,11 +43,23 @@ class OptionsAudioState
 {
 
 private:
-	Text *_txtMusicVolume, *_txtSoundVolume;
-	Slider *_slrMusicVolume, *_slrSoundVolume;
-	Text *_txtBitDepth, *_txtSampleRate;
-	ComboBox *_cbxBitDepth, *_cbxSampleRate;
-	std::vector<int> _bitDepths, _sampleRates;
+	std::vector<int>
+		_bitDepths,
+		_sampleRates;
+
+	ComboBox
+		* _cbxBitDepth,
+		* _cbxSampleRate;
+	Slider
+		* _slrMusicVolume,
+		* _slrSoundVolume,
+		* _slrUiVolume;
+	Text
+		* _txtMusicVolume,
+		* _txtSoundVolume,
+		* _txtUiVolume,
+		* _txtBitDepth,
+		* _txtSampleRate;
 
 
 	public:
@@ -62,6 +76,10 @@ private:
 		void slrSoundVolumeChange(Action*);
 		/// Handler for sound slider button release.
 		void slrSoundVolumeRelease(Action*);
+    	/// Handler for changing the sound slider.
+	    void slrUiVolumeChange(Action*);
+		/// Handler for sound slider button release.
+	    void slrUiVolumeRelease(Action*);
 		/// Handler for changing the Language combobox.
 		void cbxBitDepthChange(Action* action);
 		/// Handler for changing the Filter combobox.

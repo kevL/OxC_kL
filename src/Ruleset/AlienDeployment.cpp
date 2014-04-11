@@ -102,7 +102,6 @@ void AlienDeployment::load(const YAML::Node& node)
 	_length			= node["length"].as<int>(_length);
 	_height			= node["height"].as<int>(_height);
 	_civilians		= node["civilians"].as<int>(_civilians);
-	_roadTypeOdds	= node["roadTypeOdds"].as< std::vector<int> >(_roadTypeOdds);
 	_terrains		= node["terrains"].as<std::vector<std::string> >(_terrains);
 	_shade			= node["shade"].as<int>(_shade);
 	_nextStage		= node["nextStage"].as<std::string>(_nextStage);
@@ -113,14 +112,14 @@ void AlienDeployment::load(const YAML::Node& node)
  * this deployment. Each deployment type has a unique name.
  * @return Deployment name.
  */
-std::string AlienDeployment::getType() const
+std::string, AlienDeployment::getType() const
 {
 	return _type;
 }
 
 /**
  * Gets a pointer to the data.
- * @return Pointer to the data.
+ * @return, Pointer to the data.
  */
 std::vector<DeploymentData>* AlienDeployment::getDeploymentData()
 {
@@ -145,7 +144,7 @@ void AlienDeployment::getDimensions(
 
 /**
  * Gets the number of civilians.
- * @return The number of civilians.
+ * @return, The number of civilians.
  */
 int AlienDeployment::getCivilians() const
 {
@@ -153,17 +152,9 @@ int AlienDeployment::getCivilians() const
 }
 
 /**
- * Gets the road type odds.
- * @return The road type odds.
- */
-std::vector<int> AlienDeployment::getRoadTypeOdds() const
-{
-	return _roadTypeOdds;
-}
-
-/**
  * Gets the terrain for battlescape generation.
- * @return The terrain.
+ * kL_note: See header note.
+ * @return, The terrain.
  */
 std::string AlienDeployment::getTerrain() const
 {
@@ -180,8 +171,17 @@ std::string AlienDeployment::getTerrain() const
 }
 
 /**
+ * Gets the terrains for battlescape generation.
+ * @return, The terrains.
+ */
+std::vector<std::string> AlienDeployment::getTerrains() const
+{
+	return _terrains;
+}
+
+/**
  * Gets the shade level for battlescape generation.
- * @return The shade level.
+ * @return, The shade level.
  */
 int AlienDeployment::getShade() const
 {
@@ -190,7 +190,7 @@ int AlienDeployment::getShade() const
 
 /**
  * Gets the next stage of the mission.
- * @return The next stage of the mission.
+ * @return, The next stage of the mission.
  */
 std::string AlienDeployment::getNextStage() const
 {

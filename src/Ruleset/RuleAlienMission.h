@@ -101,7 +101,7 @@ private:
 			return _type;
 		}
 		/// Gets the number of waves.
-		unsigned getWaveCount() const
+		size_t getWaveCount() const
 		{
 			return _waves.size();
 		}

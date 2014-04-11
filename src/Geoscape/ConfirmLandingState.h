@@ -27,7 +27,6 @@ namespace OpenXcom
 {
 
 class Craft;
-class GeoscapeState;
 class Text;
 class TextButton;
 class Window;
@@ -48,7 +47,6 @@ private:
 		_texture;
 
 	Craft* _craft;
-	GeoscapeState* _state;
 	Text
 		* _txtBegin,
 		* _txtMessage;
@@ -64,8 +62,7 @@ private:
 				Game* game,
 				Craft* craft,
 				int texture,
-				int shade,
-				GeoscapeState* state);
+				int shade);
 		/// Cleans up the Confirm Landing state.
 		~ConfirmLandingState();
 

@@ -243,7 +243,11 @@ void BattlescapeGenerator::nextStage()
 							&_mapsize_x,
 							&_mapsize_y,
 							&_mapsize_z);
-	_terrain = _game->getRuleset()->getTerrain(ruleDeploy->getTerrain());
+	size_t pick = RNG::generate(
+							0,
+							ruleDeploy->getTerrains().size() - 1);
+	_terrain = _game->getRuleset()->getTerrain(ruleDeploy->getTerrains().at(pick));
+
 	_worldShade = ruleDeploy->getShade();
 
 	_save->initMap(
@@ -360,7 +364,7 @@ void BattlescapeGenerator::run()
 
 	_unitSequence = BattleUnit::MAX_SOLDIER_ID; // geoscape soldier IDs should stay below this number
 
-	if (ruleDeploy->getTerrain().empty())
+	if (ruleDeploy->getTerrains().empty())
 	{
 		double lat = 0.0;
 		if (_ufo)
@@ -371,7 +375,13 @@ void BattlescapeGenerator::run()
 							lat);
 	}
 	else
-		_terrain = _game->getRuleset()->getTerrain(ruleDeploy->getTerrain());
+	{
+		size_t pick = RNG::generate(
+								0,
+								ruleDeploy->getTerrains().size() - 1);
+		_terrain = _game->getRuleset()->getTerrain(ruleDeploy->getTerrains().at(pick));
+	}
+
 
 	if (ruleDeploy->getShade() != -1)
 		_worldShade = ruleDeploy->getShade();
@@ -1696,10 +1706,10 @@ void BattlescapeGenerator::deployCivilians(int civilians)
 					i < rand;
 					++i)
 			{
-				if (RNG::percent(50))
-					addCivilian(_game->getRuleset()->getUnit("MALE_CIVILIAN"));
-				else
-					addCivilian(_game->getRuleset()->getUnit("FEMALE_CIVILIAN"));
+				size_t pick = RNG::generate(
+										0,
+										_terrain->getCivilianTypes().size() -1);
+				addCivilian(_game->getRuleset()->getUnit(_terrain->getCivilianTypes().at(pick)));
 			}
 		}
 	}
@@ -1885,7 +1895,7 @@ void BattlescapeGenerator::generateMap()
 	if (_save->getMissionType() == "STR_TERROR_MISSION")
 	{
 		int roadStyle = RNG::generate(0, 99);
-		std::vector<int> roadChances = _game->getRuleset()->getDeployment(_save->getMissionType())->getRoadTypeOdds();
+		std::vector<int> roadChances = _terrain->getRoadTypeOdds();
 		bool EWRoad = roadStyle < roadChances.at(0);
 		bool NSRoad = !EWRoad && roadStyle < roadChances.at(0) + roadChances.at(1);
 		bool twoRoads = !EWRoad && !NSRoad;

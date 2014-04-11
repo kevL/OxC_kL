@@ -263,8 +263,6 @@ NewBattleState::NewBattleState(Game* game)
 					(ActionHandler)& NewBattleState::btnCancelClick,
 					Options::keyCancel);
 
-	_music = true;
-
 	load();
 }
 
@@ -283,11 +281,7 @@ void NewBattleState::init()
 {
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
 
-	if (!_music)
-	{
-		_music = true;
-		_game->getResourcePack()->getMusic("GMSTORY")->play();
-	}
+	_game->getResourcePack()->playMusic("GMSTORY"); // <- needs to be sza_musicRule'd.
 
 	if (_craft == 0)
 		load();
@@ -541,8 +535,6 @@ void NewBattleState::btnOkClick(Action*)
 		return;
 	}
 
-	_music = false;
-
 	SavedBattleGame* bgame = new SavedBattleGame();
 	_game->getSavedGame()->setBattleGame(bgame);
 	bgame->setMissionType(_missionTypes[_cbxMission->getSelected()]);
@@ -674,8 +666,8 @@ void NewBattleState::cbxMissionChange(Action*)
 
 	_txtDarkness->setVisible(ruleDeploy->getShade() == -1);
 	_slrDarkness->setVisible(ruleDeploy->getShade() == -1);
-	_txtTerrain->setVisible(ruleDeploy->getTerrain().empty());
-	_cbxTerrain->setVisible(ruleDeploy->getTerrain().empty());
+	_txtTerrain->setVisible(ruleDeploy->getTerrains().empty());
+	_cbxTerrain->setVisible(ruleDeploy->getTerrains().empty());
 }
 
 /**

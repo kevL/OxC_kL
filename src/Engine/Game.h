@@ -88,7 +88,8 @@ private:
 		/// Sets the game's audio volume.
 		void setVolume(
 				int sound,
-				int music);
+				int music,
+				int ui);
 
 		/// Gets the game's display screen.
 		Screen* getScreen() const;

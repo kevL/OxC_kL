@@ -53,7 +53,10 @@ private:
 
 	std::string _name;
 
-	std::vector<int> _textures;
+	std::vector<int>
+		_roadTypeOdds,
+		_textures;
+	std::vector<std::string> _civilianTypes;
 
 	std::vector<MapBlock*> _mapBlocks;
 	std::vector<MapDataSet*> _mapDataSets;
@@ -99,6 +102,12 @@ private:
 
 		///
 		int getHemisphere() const;
+
+		/// Gets the civilian types to use.
+		std::vector<std::string> getCivilianTypes() const;
+
+		/// Gets road type odds.
+		std::vector<int> getRoadTypeOdds() const;
 };
 
 }

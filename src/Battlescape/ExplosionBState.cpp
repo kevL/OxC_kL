@@ -235,9 +235,10 @@ void ExplosionBState::init()
 											_item->getRules()->getHitSound())
 										->play();
 
+//		BattleUnit* target = _parent->getSave()->getTile(_action.target)->getUnit();
+//		if (hit && _parent->getSave()->getSide() == FACTION_HOSTILE && target && target->getFaction() == FACTION_PLAYER)
 		// kL_begin:
 		Camera* explodeCam = _parent->getMap()->getCamera();
-//		if (hit && _parent->getSave()->getSide() == FACTION_HOSTILE ||
 		if (!explodeCam->isOnScreen(posCenter))
 			explodeCam->centerOnPosition(
 										posCenter,

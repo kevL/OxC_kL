@@ -451,6 +451,8 @@ void MonthlyReportState::btnOkClick(Action*)
 
 			_txtFailure->setVisible(true);
 			_btnBigOk->setVisible(true);
+
+			_game->getResourcePack()->playMusic("GMLOSE"); // <-- needs to be sza_musicRule'd.
 		}
 	}
 }

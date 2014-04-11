@@ -29,6 +29,7 @@
 #include "../Engine/Language.h"
 #include "../Engine/Options.h"
 #include "../Engine/Palette.h"
+#include "../Engine/Screen.h"
 
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
@@ -85,7 +86,6 @@ PsiTrainingState::PsiTrainingState(Game* game)
 
 	int buttons = 0;
 
-	TextButton* _btnBase;
 	for(std::vector<Base*>::const_iterator
 			b = _game->getSavedGame()->getBases()->begin();
 			b != _game->getSavedGame()->getBases()->end();
@@ -93,18 +93,23 @@ PsiTrainingState::PsiTrainingState(Game* game)
 	{
 		if ((*b)->getAvailablePsiLabs())
 		{
+			TextButton* btnBase = new TextButton(
+											160,
+											14,
+											80,
+											40 + 16 * buttons);
+			btnBase->setColor(Palette::blockOffset(15) + 6);
+			btnBase->onMouseClick((ActionHandler)& PsiTrainingState::btnBaseXClick);
+			btnBase->setText((*b)->getName());
+			add(btnBase);
+
 			_bases.push_back(*b);
-			if (buttons < 8)
-			{
-				_btnBase = new TextButton(160, 14, 80, buttons * 16 + 40);
-				_btnBase->setColor(Palette::blockOffset(15)+6);
-				_btnBase->onMouseClick((ActionHandler)& PsiTrainingState::btnBaseXClick);
-				_btnBase->setText((*b)->getName());
+			_btnBases.push_back(btnBase);
 
-				add(_btnBase);
+			++buttons;
 
-				++buttons;
-			}
+			if (buttons > 7)
+				break;
 		}
 	}
 
@@ -144,10 +149,20 @@ void PsiTrainingState::btnOkClick(Action*)
  */
 void PsiTrainingState::btnBaseXClick(Action* action)
 {
-	int buttonIndex = (action->getSender()->getY() - 40) / 16;
-	_game->pushState (new AllocatePsiTrainingState(
-												_game,
-												_bases.at(buttonIndex)));
+	for (size_t
+			i = 0;
+			i < _btnBases.size();
+			++i)
+	{
+		if (action->getSender() == _btnBases[i])
+		{
+			_game->pushState(new AllocatePsiTrainingState(
+														_game,
+														_bases.at(i)));
+
+			break;
+		}
+	}
 }
 
 }

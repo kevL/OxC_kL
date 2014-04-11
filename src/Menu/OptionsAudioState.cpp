@@ -63,17 +63,23 @@ OptionsAudioState::OptionsAudioState(
 	_txtSoundVolume = new Text(110, 9, 210, 8);
 	_slrSoundVolume = new Slider(100, 16, 210, 18);
 
-	_txtBitDepth = new Text(110, 9, 94, 40);
-	_cbxBitDepth = new ComboBox(this, 100, 16, 94, 50);
+	_txtUiVolume = new Text(110, 9, 94, 40);
+	_slrUiVolume = new Slider(100, 16, 94, 50);
 
-	_txtSampleRate = new Text(110, 9, 210, 40);
-	_cbxSampleRate = new ComboBox(this, 100, 16, 210, 50);
+	_txtBitDepth = new Text(110, 9, 94, 72);
+	_cbxBitDepth = new ComboBox(this, 100, 16, 94, 82);
+
+	_txtSampleRate = new Text(110, 9, 210, 72);
+	_cbxSampleRate = new ComboBox(this, 100, 16, 210, 82);
 
 	add(_txtMusicVolume);
 	add(_slrMusicVolume);
 
 	add(_txtSoundVolume);
 	add(_slrSoundVolume);
+
+	add(_txtUiVolume);
+	add(_slrUiVolume);
 
 	add(_txtBitDepth);
 	add(_cbxBitDepth);
@@ -105,6 +111,18 @@ OptionsAudioState::OptionsAudioState(
 	_slrSoundVolume->setTooltip("STR_SFX_VOLUME_DESC");
 	_slrSoundVolume->onMouseIn((ActionHandler)& OptionsAudioState::txtTooltipIn);
 	_slrSoundVolume->onMouseOut((ActionHandler)& OptionsAudioState::txtTooltipOut);
+
+	_txtUiVolume->setColor(Palette::blockOffset(8)+10);
+	_txtUiVolume->setText(tr("STR_UI_VOLUME"));
+
+	_slrUiVolume->setColor(Palette::blockOffset(15)-1);
+	_slrUiVolume->setRange(0, SDL_MIX_MAXVOLUME);
+	_slrUiVolume->setValue(Options::uiVolume);
+	_slrUiVolume->onChange((ActionHandler)& OptionsAudioState::slrUiVolumeChange);
+	_slrUiVolume->onMouseRelease((ActionHandler)& OptionsAudioState::slrUiVolumeRelease);
+	_slrUiVolume->setTooltip("STR_UI_VOLUME_DESC");
+	_slrUiVolume->onMouseIn((ActionHandler)& OptionsAudioState::txtTooltipIn);
+	_slrUiVolume->onMouseOut((ActionHandler)& OptionsAudioState::txtTooltipOut);
 
 	_txtBitDepth->setColor(Palette::blockOffset(8)+10);
 	_txtBitDepth->setText(tr("STR_AUDIO_BIT_DEPTH"));
@@ -192,7 +210,8 @@ void OptionsAudioState::slrMusicVolumeChange(Action*)
 
 	_game->setVolume(
 				Options::soundVolume,
-				Options::musicVolume);
+				Options::musicVolume,
+				Options::uiVolume);
 }
 
 /**
@@ -205,16 +224,39 @@ void OptionsAudioState::slrSoundVolumeChange(Action*)
 
 	_game->setVolume(
 				Options::soundVolume,
-				Options::musicVolume);
+				Options::musicVolume,
+				Options::uiVolume);
 }
 
 /**
- * Plays a sound for volume preview.
+ * Plays a game sound for volume preview.
  * @param action Pointer to an action.
  */
 void OptionsAudioState::slrSoundVolumeRelease(Action*)
 {
-	_game->getResourcePack()->getSound("GEO.CAT", 0)->play();
+	_game->getResourcePack()->getSound("GEO.CAT", 5)->play();
+}
+
+/**
+ * Updates the UI volume with the slider.
+ * @param action Pointer to an action.
+ */
+void OptionsAudioState::slrUiVolumeChange(Action*)
+{
+	Options::uiVolume = _slrUiVolume->getValue();
+	_game->setVolume(
+				Options::soundVolume,
+				Options::musicVolume,
+				Options::uiVolume);
+}
+
+/**
+ * Plays a UI sound for volume preview.
+ * @param action Pointer to an action.
+ */
+void OptionsAudioState::slrUiVolumeRelease(Action*)
+{
+	_game->getResourcePack()->getSound("GEO.CAT", 0)->play(0);
 }
 
 /**

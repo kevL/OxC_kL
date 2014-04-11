@@ -218,7 +218,8 @@ void OptionsBaseState::btnOkClick(Action*)
 	_game->getScreen()->resetDisplay();
 	_game->setVolume(
 				Options::soundVolume,
-				Options::musicVolume);
+				Options::musicVolume,
+				Options::uiVolume);
 
 	if (Options::reload
 		&& _origin == OPT_MENU)
@@ -256,7 +257,8 @@ void OptionsBaseState::btnCancelClick(Action*)
 
 	_game->setVolume(
 				Options::soundVolume,
-				Options::musicVolume);
+				Options::musicVolume,
+				Options::uiVolume);
 
 	_game->popState();
 }

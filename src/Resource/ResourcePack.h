@@ -55,6 +55,8 @@ class ResourcePack
 {
 
 private:
+	std::string _playingMusic;
+
 	Music* _muteMusic;
 	Sound* _muteSound;
 
@@ -96,6 +98,10 @@ private:
 			Music* getMusic(const std::string& name) const;
 			/// Gets a random music.
 //			Music* getRandomMusic(const std::string& name) const;
+			/// Plays a particular music.
+			void playMusic(
+					const std::string& name,
+					bool random = false);
 			Music* getRandomMusic( // sza_MusicRules
 					const std::string& name,
 					const std::string& terrain) const;

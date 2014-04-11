@@ -78,7 +78,6 @@ private:
 		_terrain,
 		_nextStage;
 
-	std::vector<int> _roadTypeOdds;
 	std::vector<std::string> _terrains;
 	std::vector<DeploymentData> _data;
 
@@ -104,10 +103,10 @@ private:
 				int* height);
 		/// Gets civilians.
 		int getCivilians() const;
-		/// Gets road type odds.
-		std::vector<int> getRoadTypeOdds() const;
 		/// Gets the terrain for battlescape generation.
-		std::string getTerrain() const;
+		std::string getTerrain() const; // kL_note: This may still be needed for things like sza_musicRules & my pathPreview for polar expeditions. (but unlikely, since this is AlienDeployment)
+		/// Gets the terrains for battlescape generation.
+		std::vector<std::string> getTerrains() const;
 		/// Gets the shade level for battlescape generation.
 		int getShade() const;
 		/// Gets the next stage of the mission.

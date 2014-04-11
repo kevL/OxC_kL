@@ -66,11 +66,12 @@ int main(
 
 		std::ostringstream title;
 //kL		title << "OpenXcom " << OPENXCOM_VERSION_SHORT << OPENXCOM_VERSION_GIT;
-		title << "openXcom " << OPENXCOM_VERSION_SHORT << OPENXCOM_VERSION_GIT; // kL
+		title << "OxC " << OPENXCOM_VERSION_SHORT << OPENXCOM_VERSION_GIT; // kL
 		game = new Game(title.str());
 		game->setVolume(
 					Options::soundVolume,
-					Options::musicVolume);
+					Options::musicVolume,
+					Options::uiVolume);
 		game->setState(new StartState(game));
 		game->run();
 #ifndef _DEBUG
