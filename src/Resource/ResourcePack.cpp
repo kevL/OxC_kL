@@ -225,7 +225,8 @@ Music* ResourcePack::getMusic(const std::string& name) const
  * @param name Name of the music.
  * @param random Pick a random track?
  */
-void ResourcePack::playMusic(
+void ResourcePack::playMusic(	// kL_note: Should put 'terrain' string input here, for sza_MusicRules
+								// and then change all the ->play() calls to playMusic() calls
 		const std::string& name,
 		bool random)
 {

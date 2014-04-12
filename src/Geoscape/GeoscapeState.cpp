@@ -714,6 +714,7 @@ void GeoscapeState::init()
 //			_game->getResourcePack()->playMusic("GMGEO", true);
 			_game->getResourcePack()->getRandomMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMGEO, "")->play(); // sza_MusicRules
 	}
+	// kL_note: else play DogFight music ... for loading from saves, i guess
 
 	_globe->unsetNewBaseHover();
 }
@@ -1193,6 +1194,7 @@ void GeoscapeState::time5Seconds()
 																	&texture,
 																	&shade);
 									timerReset();
+
 									popup(new ConfirmLandingState(
 																_game,
 																*j,
@@ -1201,9 +1203,7 @@ void GeoscapeState::time5Seconds()
 								}
 							}
 							else if (u->getStatus() != Ufo::LANDED)
-							{
 								(*j)->returnToBase();
-							}
 						break;
 					}
 				}
@@ -1230,6 +1230,7 @@ void GeoscapeState::time5Seconds()
 														&shade);
 
 						timerReset();
+
 						popup(new ConfirmLandingState(
 													_game,
 													*j,
@@ -1255,6 +1256,7 @@ void GeoscapeState::time5Seconds()
 															&shade);
 
 							timerReset();
+
 							popup(new ConfirmLandingState(
 														_game,
 														*j,
