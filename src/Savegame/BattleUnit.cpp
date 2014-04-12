@@ -3064,7 +3064,7 @@ void BattleUnit::setCharging(BattleUnit* chargeTarget)
 
 /**
  * Get the units we are charging towards.
- * @return Charge Target
+ * @return, Charge Target
  */
 BattleUnit* BattleUnit::getCharging()
 {
@@ -3074,7 +3074,7 @@ BattleUnit* BattleUnit::getCharging()
 /**
  * Get the unit's carried weight in strength units.
  * @param draggingItem
- * @return weight
+ * @return, weight
  */
 int BattleUnit::getCarriedWeight(BattleItem* draggingItem) const
 {
@@ -3084,7 +3084,8 @@ int BattleUnit::getCarriedWeight(BattleItem* draggingItem) const
 			i != _inventory.end();
 			++i)
 	{
-		if ((*i) == draggingItem) continue;
+		if ((*i) == draggingItem)
+			continue;
 
 		weight += (*i)->getRules()->getWeight();
 
@@ -3095,7 +3096,7 @@ int BattleUnit::getCarriedWeight(BattleItem* draggingItem) const
 		}
 	}
 
-	return weight;
+	return std::max(0, weight);
 }
 
 /**
