@@ -4435,7 +4435,7 @@
 	<vector>
 	<time.h>
 
-1397080108 source:f:\git\openxcom\src\basescape\basescapestate.cpp
+1397296561 source:f:\git\openxcom\src\basescape\basescapestate.cpp
 	"BasescapeState.h"
 	"BaseInfoState.h"
 	"BaseView.h"
@@ -4570,7 +4570,7 @@
 	<vector>
 	<yaml-cpp/yaml.h>
 
-1396234814 source:f:\git\openxcom\src\basescape\baseview.cpp
+1397296191 source:f:\git\openxcom\src\basescape\baseview.cpp
 	"BaseView.h"
 	<cmath>
 	<limits>
@@ -5693,7 +5693,7 @@
 	"../Battlescape/Position.h"
 	"../Ruleset/MapData.h"
 
-1396243787 source:f:\git\openxcom\src\battlescape\alienbaistate.cpp
+1397311489 source:f:\git\openxcom\src\battlescape\alienbaistate.cpp
 	"AlienBAIState.h"
 	<algorithm>
 	<climits>
@@ -5716,7 +5716,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1394398507 f:\git\openxcom\src\battlescape\alienbaistate.h
+1397309684 f:\git\openxcom\src\battlescape\alienbaistate.h
 	<vector>
 	"BattleAIState.h"
 
@@ -6143,7 +6143,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Ufo.h"
 
-1396246492 source:f:\git\openxcom\src\battlescape\camera.cpp
+1397296878 source:f:\git\openxcom\src\battlescape\camera.cpp
 	"Camera.h"
 	<cmath>
 	<fstream>
@@ -6521,7 +6521,7 @@
 	"../Interface/Text.h"
 	"../Engine/Options.h"
 
-1396602551 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
+1397311164 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
 	"Pathfinding.h"
 	<list>
 	"PathfindingNode.h"
@@ -7045,7 +7045,7 @@
 	"OpenGL.h"
 	"Logger.h"
 
-1397258823 source:f:\git\openxcom\src\engine\options.cpp
+1397297059 source:f:\git\openxcom\src\engine\options.cpp
 	"Options.h"
 	<algorithm>
 	<fstream>
@@ -8248,7 +8248,7 @@
 	"../Engine/Options.h"
 	"../Engine/Timer.h"
 
-1397253885 source:f:\git\openxcom\src\interface\textlist.cpp
+1397297193 source:f:\git\openxcom\src\interface\textlist.cpp
 	"TextList.h"
 	<cmath>
 	<cstdarg>
@@ -8450,7 +8450,7 @@
 	"../Resource/ResourcePack.h"
 	"../Ruleset/Ruleset.h"
 
-1397081994 source:f:\git\openxcom\src\menu\optionsadvancedstate.cpp
+1397298324 source:f:\git\openxcom\src\menu\optionsadvancedstate.cpp
 	"OptionsAdvancedState.h"
 	<algorithm>
 	<iostream>
@@ -8500,7 +8500,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1396507623 source:f:\git\openxcom\src\menu\optionsbattlescapestate.cpp
+1397295957 source:f:\git\openxcom\src\menu\optionsbattlescapestate.cpp
 	"OptionsBattlescapeState.h"
 	<sstream>
 	"../Engine/Action.h"
@@ -8519,7 +8519,7 @@
 1396345320 f:\git\openxcom\src\menu\optionsbattlescapestate.h
 	"OptionsBaseState.h"
 
-1396747090 source:f:\git\openxcom\src\menu\optionscontrolsstate.cpp
+1397298710 source:f:\git\openxcom\src\menu\optionscontrolsstate.cpp
 	"OptionsControlsState.h"
 	<SDL.h>
 	"../Engine/Game.h"
@@ -9193,7 +9193,7 @@
 1394398507 source:f:\git\openxcom\src\ruleset\ruleresearch.cpp
 	"RuleResearch.h"
 
-1396401108 source:f:\git\openxcom\src\ruleset\ruleset.cpp
+1397299610 source:f:\git\openxcom\src\ruleset\ruleset.cpp
 	"Ruleset.h"
 	<algorithm>
 	<fstream>
@@ -9268,7 +9268,7 @@
 1394398507 source:f:\git\openxcom\src\ruleset\ufotrajectory.cpp
 	"UfoTrajectory.h"
 
-1394992039 source:f:\git\openxcom\src\ruleset\unit.cpp
+1397299795 source:f:\git\openxcom\src\ruleset\unit.cpp
 	"Unit.h"
 
 1394473735 source:f:\git\openxcom\src\savegame\alienbase.cpp
@@ -9352,7 +9352,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1396233090 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1397301442 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	<cmath>
 	<sstream>
@@ -11510,7 +11510,7 @@
 	"../Menu/SaveState.h"
 	"../Resource/ResourcePack.h"
 
-1397082295 source:f:\git\openxcom\src\menu\optionsmodsstate.cpp
+1397295957 source:f:\git\openxcom\src\menu\optionsmodsstate.cpp
 	"OptionsModsState.h"
 	<algorithm>
 	<vector>
@@ -11525,7 +11525,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1397258708 source:f:\git\openxcom\src\menu\optionsvideostate.cpp
+1397311391 source:f:\git\openxcom\src\menu\optionsvideostate.cpp
 	"OptionsVideoState.h"
 	"../Engine/Action.h"
 	"../Engine/CrossPlatform.h"

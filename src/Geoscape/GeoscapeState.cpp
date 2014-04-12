@@ -704,8 +704,7 @@ void GeoscapeState::init()
 	_globe->setFocus(true);
 	_globe->draw();
 
-	// Set music if it's not already playing
-	if (_dogfights.empty()
+	if (_dogfights.empty() // set music if not already playing
 		&& !_dogfightStartTimer->isRunning())
 	{
 		if (_game->getSavedGame()->getMonthsPassed() == -1)
@@ -713,7 +712,7 @@ void GeoscapeState::init()
 			_game->getResourcePack()->getMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMGEO1)->play(); // sza_MusicRules
 		else
 //			_game->getResourcePack()->playMusic("GMGEO", true);
-			_game->getResourcePack()->getMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMGEO)->play(); // sza_MusicRules
+			_game->getResourcePack()->getRandomMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMGEO, "")->play(); // sza_MusicRules
 	}
 
 	_globe->unsetNewBaseHover();
@@ -771,7 +770,7 @@ void GeoscapeState::think()
 		&& !_dogfightStartTimer->isRunning())
 	{
 //		_game->getResourcePack()->playMusic("GMGEO", true);
-		_game->getResourcePack()->getMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMGEO)->play(); // sza_MusicRules
+		_game->getResourcePack()->getRandomMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMGEO, "")->play(); // sza_MusicRules
 	}
 }
 

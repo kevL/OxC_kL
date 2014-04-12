@@ -1375,6 +1375,8 @@ bool AlienBAIState::selectPointNearTarget(
 		{
 			if (x || y) // skip the unit itself
 			{
+				Position checkPath = target->getPosition() + Position (x, y, 0);
+
 				if (std::find(
 							_reachable.begin(),
 							_reachable.end(),
@@ -1384,7 +1386,6 @@ bool AlienBAIState::selectPointNearTarget(
 					continue;
 				}
 
-				Position checkPath = target->getPosition() + Position (x, y, 0);
 				int dir = _save->getTileEngine()->getDirectionTo(
 															checkPath,
 															target->getPosition());
