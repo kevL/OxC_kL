@@ -1858,13 +1858,13 @@ void BattleUnit::prepareNewTurn()
 		int enRecovery = getStats()->stamina;
 		if (_turretType < 0) // is NOT xCom Tank (which get 4/5ths energy-recovery).
 		{
-			if (isKneeled())
-				enRecovery /= 2;					// kneeled xCom
-			else if (getFaction() == FACTION_PLAYER)
-				enRecovery /= 3;					// xCom & Mc'd aliens
-			else
-//				enRecovery = enRecovery * 2 / 3;	// non-Mc'd aLiens & civies
-				enRecovery = _unitRules->getEnergyRecovery(); // <- look into this!
+			if (isKneeled())							// kneeled xCom
+				enRecovery /= 2;
+			else if (getFaction() == FACTION_PLAYER)	// xCom & Mc'd aliens
+				enRecovery /= 3;
+			else										// non-Mc'd aLiens & civies
+//				enRecovery = enRecovery * 2 / 3;
+				enRecovery = enRecovery * _unitRules->getEnergyRecovery() / 50; // <- values in Ruleset ought be doubled, to do PERCENTs.
 		}
 		else // xCom tank.
 			enRecovery = enRecovery * 4 / 5;
@@ -1877,8 +1877,9 @@ void BattleUnit::prepareNewTurn()
 
 		_energy += enRecovery;
 
-		if (_energy > getStats()->stamina)
-			_energy = getStats()->stamina;
+		int stamina = getStats()->stamina;
+		if (_energy > stamina)
+			_energy = stamina;
 	}
 
 	_health -= getFatalWounds(); // suffer from fatal wounds

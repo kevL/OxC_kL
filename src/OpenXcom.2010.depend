@@ -245,7 +245,7 @@
 1396234863 f:\git\openxcom\src\basescape\basescapestate.h
 	"../Engine/State.h"
 
-1397080688 f:\git\openxcom\src\basescape\minibaseview.h
+1397296611 f:\git\openxcom\src\basescape\minibaseview.h
 	<vector>
 	"../Engine/InteractiveSurface.h"
 
@@ -4380,7 +4380,7 @@
 	<yaml-cpp/yaml.h>
 	"../Ruleset/Unit.h"
 
-1394992077 f:\git\openxcom\src\ruleset\unit.h
+1397299672 f:\git\openxcom\src\ruleset\unit.h
 	<string>
 	<yaml-cpp/yaml.h>
 
@@ -8465,11 +8465,11 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1396335319 f:\git\openxcom\src\menu\optionsadvancedstate.h
+1397297480 f:\git\openxcom\src\menu\optionsadvancedstate.h
 	<vector>
 	<string>
-	<utility>
 	"OptionsBaseState.h"
+	"../Engine/OptionInfo.h"
 
 1397254681 source:f:\git\openxcom\src\menu\optionsbasestate.cpp
 	"OptionsBaseState.h"
@@ -8534,7 +8534,7 @@
 	"../Engine/Logger.h"
 	"../Resource/ResourcePack.h"
 
-1396327655 f:\git\openxcom\src\menu\optionscontrolsstate.h
+1397298379 f:\git\openxcom\src\menu\optionscontrolsstate.h
 	<string>
 	<vector>
 	"OptionsBaseState.h"
@@ -9103,7 +9103,7 @@
 1394398507 f:\git\openxcom\src\ruleset\extrasounds.h
 	<yaml-cpp/yaml.h>
 
-1397041754 source:f:\git\openxcom\src\ruleset\aliendeployment.cpp
+1397263318 source:f:\git\openxcom\src\ruleset\aliendeployment.cpp
 	"AlienDeployment.h"
 	"../Engine/RNG.h"
 
@@ -9243,7 +9243,7 @@
 1394398507 source:f:\git\openxcom\src\ruleset\rulesoldier.cpp
 	"RuleSoldier.h"
 
-1394398507 source:f:\git\openxcom\src\ruleset\ruleterrain.cpp
+1397255980 source:f:\git\openxcom\src\ruleset\ruleterrain.cpp
 	"MapBlock.h"
 	"MapDataSet.h"
 	"Ruleset.h"
@@ -9493,7 +9493,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/Ruleset.h"
 
-1396905870 source:f:\git\openxcom\src\savegame\savedgame.cpp
+1397102393 source:f:\git\openxcom\src\savegame\savedgame.cpp
 	"SavedGame.h"
 	<algorithm>
 	<fstream>
