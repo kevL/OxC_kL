@@ -4460,6 +4460,7 @@ units:
     value: 25
     deathSound: 23
     moveSound: 14
+    energyRecovery: 50
   - type: STR_TANK_ROCKET_LAUNCHER
     race: STR_TANK_ROCKET_LAUNCHER
     stats:
@@ -4480,6 +4481,7 @@ units:
     value: 25
     deathSound: 23
     moveSound: 14
+    energyRecovery: 50
   - type: STR_TANK_LASER_CANNON
     race: STR_TANK_LASER_CANNON
     stats:
@@ -4500,6 +4502,7 @@ units:
     value: 25
     deathSound: 23
     moveSound: 14
+    energyRecovery: 50
   - type: STR_HOVERTANK_PLASMA
     race: STR_HOVERTANK_PLASMA
     stats:
@@ -4521,6 +4524,7 @@ units:
     value: 25
     deathSound: 23
     moveSound: 40
+    energyRecovery: 50
   - type: STR_HOVERTANK_LAUNCHER
     race: STR_HOVERTANK_LAUNCHER
     stats:
@@ -4542,6 +4546,7 @@ units:
     value: 25
     deathSound: 23
     moveSound: 40
+    energyRecovery: 50
   - type: MALE_CIVILIAN
     race: STR_CIVILIAN
     stats:

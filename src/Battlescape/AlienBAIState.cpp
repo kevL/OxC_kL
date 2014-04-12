@@ -207,6 +207,10 @@ void AlienBAIState::think(BattleAction* action)
 	_blaster	= false;
 	_grenade	= false; // kL
 
+	_reachable	= _save->getPathfinding()->findReachable(
+													_unit,
+													_unit->getTimeUnits());
+
 	if (_traceAI)
 	{
 		Log(LOG_INFO) << "Unit has " << _visibleEnemies
@@ -240,12 +244,27 @@ void AlienBAIState::think(BattleAction* action)
 		if (rule->getBattleType() == BT_FIREARM)
 		{
 			if (!rule->isWaypoint())
+			{
 				_rifle = true;
+				_reachableWithAttack = _save->getPathfinding()->findReachable(
+																			_unit,
+																			_unit->getTimeUnits() - _unit->getActionTUs(BA_SNAPSHOT, action->weapon));
+			}
 			else
+			{
 				_blaster = true;
+				_reachableWithAttack = _save->getPathfinding()->findReachable(
+																			_unit,
+																			_unit->getTimeUnits() - _unit->getActionTUs(BA_AIMEDSHOT, action->weapon));
+			}
 		}
 		else if (rule->getBattleType() == BT_MELEE)
+		{
 			_melee = true;
+			_reachableWithAttack = _save->getPathfinding()->findReachable(
+																		_unit,
+																		_unit->getTimeUnits() - _unit->getActionTUs(BA_HIT, action->weapon));
+		}
 		else if (rule->getBattleType() == BT_GRENADE)		// kL
 			_grenade = true;								// kL, this is no longer useful since I fixed
 															// getMainHandWeapon() to not return grenades.
@@ -648,14 +667,14 @@ void AlienBAIState::setupPatrol()
 
 		if (_toNode != 0)
 		{
-			_save->getPathfinding()->calculate(
-											_unit,
-											_toNode->getPosition());
-
-			if (_save->getPathfinding()->getStartDirection() == -1)
+			if (std::find(
+						_reachable.begin(),
+						_reachable.end(),
+						_save->getTileIndex(_toNode->getPosition()))
+					== _reachable.end())
+			{
 				_toNode = 0;
-
-			_save->getPathfinding()->abortPath();
+			}
 		}
 	}
 
@@ -707,25 +726,36 @@ void AlienBAIState::setupAmbush()
 			if (tile == 0
 				|| _save->getTileEngine()->distance(pos, _unit->getPosition()) > 10
 				|| pos.z != _unit->getPosition().z
-				|| tile->getDangerous())
+				|| tile->getDangerous()
+				|| std::find(
+						_reachableWithAttack.begin(),
+						_reachableWithAttack.end(),
+						_save->getTileIndex(pos))
+					== _reachableWithAttack.end())
 			{
-				continue;
+				continue; // just ignore unreachable tiles
 			}
+
 			if (_traceAI) // colour all the nodes in range purple.
 			{
 				tile->setPreview(10);
 				tile->setMarkerColor(13);
 			}
 
-			if (!_save->getTileEngine()->canTargetUnit(&origin, tile, &target, _aggroTarget, _unit)
+			if (!_save->getTileEngine()->canTargetUnit(
+													&origin,
+													tile,
+													&target,
+													_aggroTarget,
+													_unit)
 				&& !getSpottingUnits(pos))												// make sure we can't be seen here.
 			{
 				_save->getPathfinding()->calculate(_unit, pos);
 				int ambushTUs = _save->getPathfinding()->getTotalTUCost();
 
-				if (_save->getPathfinding()->getStartDirection() != -1					// make sure we can move here
-					&& ambushTUs <= _unit->getTimeUnits()
-							- _unit->getActionTUs(BA_SNAPSHOT, _attackAction->weapon))	// make sure we can still shoot
+				if (_save->getPathfinding()->getStartDirection() != -1)					// make sure we can move here
+//					&& ambushTUs <= _unit->getTimeUnits()
+//							- _unit->getActionTUs(BA_SNAPSHOT, _attackAction->weapon))	// make sure we can still shoot
 				{
 					int score = BASE_SYSTEMATIC_SUCCESS;
 					score -= ambushTUs;
@@ -926,8 +956,6 @@ void AlienBAIState::setupEscape()
 		// a score that's good enough to quit the while loop early;
 		// it's subjective, hand-tuned and may need tweaking
 
-	int tu = _unit->getTimeUnits() / 2;
-	std::vector<int> reachable = _save->getPathfinding()->findReachable(_unit, tu);
 	std::vector<Position> randomTileSearch = _save->getTileSearch();
 	RNG::shuffle(randomTileSearch);
 //	std::random_shuffle(
@@ -1006,15 +1034,16 @@ void AlienBAIState::setupEscape()
 			score = -100001; // no you can't quit the battlefield by running off the map.
 		else
 		{
-			spotters = getSpottingUnits(_escapeAction->target);
-
-			if (std::find(reachable.begin(),
-					reachable.end(),
-					_save->getTileIndex(tile->getPosition())) == reachable.end())
+			if (std::find(
+						_reachable.begin(),
+						_reachable.end(),
+						_save->getTileIndex(_escapeAction->target))
+					== _reachable.end())
 			{
 				continue; // just ignore unreachable tiles
 			}
 
+			spotters = getSpottingUnits(_escapeAction->target);
 			if (_spottingEnemies || spotters)
 			{
 				if (_spottingEnemies <= spotters)
@@ -1043,12 +1072,12 @@ void AlienBAIState::setupEscape()
 			// calculate TUs to tile; we could be getting this from findReachable() somehow but that would break something for sure...
 			_save->getPathfinding()->calculate(
 											_unit,
-											_escapeAction->target,
-											0,
-											tu);
+											_escapeAction->target);
 
 			if (_escapeAction->target == _unit->getPosition()
-				|| _save->getPathfinding()->getStartDirection() != -1)
+				|| (_save->getPathfinding()->getStartDirection() != -1
+//kL					&& _save->getPathfinding()->getTotalTUCost() / 2 <= _unit->getEnergy()))
+					&& _save->getPathfinding()->getTotalTUCost() <= _unit->getEnergy())) // kL, doesn't account for 0-energy gravLift moves...
 			{
 				bestTileScore = score;
 				bestTile = _escapeAction->target;
@@ -1346,8 +1375,16 @@ bool AlienBAIState::selectPointNearTarget(
 		{
 			if (x || y) // skip the unit itself
 			{
-				Position checkPath = target->getPosition() + Position (x, y, 0);
+				if (std::find(
+							_reachable.begin(),
+							_reachable.end(),
+							_save->getTileIndex(checkPath))
+						== _reachable.end())
+				{
+					continue;
+				}
 
+				Position checkPath = target->getPosition() + Position (x, y, 0);
 				int dir = _save->getTileEngine()->getDirectionTo(
 															checkPath,
 															target->getPosition());
@@ -1641,8 +1678,15 @@ bool AlienBAIState::findFirePoint()
 		Position pos = _unit->getPosition() + *i;
 
 		Tile* tile = _save->getTile(pos);
-		if (tile == 0)
+		if (tile == 0
+			|| std::find(
+						_reachableWithAttack.begin(),
+						_reachableWithAttack.end(),
+						_save->getTileIndex(pos))
+					== _reachableWithAttack.end())
+		{
 			continue;
+		}
 
 		int score = 0;
 		// i should really make a function for this
@@ -1666,8 +1710,8 @@ bool AlienBAIState::findFirePoint()
 											_unit,
 											pos);
 
-			if (_save->getPathfinding()->getStartDirection() != -1						// can move here
-				&& _save->getPathfinding()->getTotalTUCost() <= _unit->getTimeUnits())	// can still shoot
+			if (_save->getPathfinding()->getStartDirection() != -1)						// can move here
+//				&& _save->getPathfinding()->getTotalTUCost() <= _unit->getTimeUnits())	// can still shoot
 			{
 				score = BASE_SYSTEMATIC_SUCCESS - getSpottingUnits(pos) * 10;
 				score += _unit->getTimeUnits() - _save->getPathfinding()->getTotalTUCost();

@@ -62,6 +62,10 @@ protected:
 		_escapeTUs,
 		_reserveTUs;
 
+	std::vector<int>
+		_reachable,
+		_reachableWithAttack;
+
 	BattleUnit* _aggroTarget;
 	BattleAction
 		* _ambushAction,

@@ -133,12 +133,12 @@ OptionsVideoState::OptionsVideoState(
 	{
 		_gameCurrent = 0;
 	}
-	else if (Options::baseXResolution == Options::displayWidth
+	else if (Options::baseXResolution == Options::displayWidth - Options::displayWidth %4
 		&& Options::baseYResolution == Options::displayHeight)
 	{
 		_gameCurrent = 1;
 	}
-	else if (Options::baseXResolution == Options::displayWidth / 2
+	else if (Options::baseXResolution == (Options::displayWidth / 2) - (Options::displayWidth / 2) %4
 		&& Options::baseYResolution == Options::displayHeight / 2)
 	{
 		_gameCurrent = 2;
@@ -484,6 +484,15 @@ void OptionsVideoState::updateGameResolution()
 			_txtGameSize->setText(L"-");
 		break;
 	}
+
+	// scaler methods seem to require base res be a factor of 4
+	Options::baseXResolution -= Options::baseXResolution %4;
+	Options::baseXResolution = std::max(
+									Options::baseXResolution,
+									Screen::ORIGINAL_WIDTH);
+	Options::baseYResolution = std::max(
+									Options::baseYResolution,
+									Screen::ORIGINAL_HEIGHT);
 
 	if (_gameCurrent > -1
 		&& _gameCurrent < static_cast<int>(_gameRes.size()))
