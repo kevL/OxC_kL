@@ -20,8 +20,8 @@
 #ifndef OPENXCOM_OPTIONSMODSSTATE_H
 #define OPENXCOM_OPTIONSMODSSTATE_H
 
-#include <map>
 #include <string>
+#include <vector>
 
 #include "OptionsBaseState.h"
 
@@ -43,7 +43,8 @@ class OptionsModsState
 
 private:
 	TextList* _lstMods;
-	std::map<std::string, bool> _mods;
+
+	std::vector<std::string> _mods;
 
 
 	public:

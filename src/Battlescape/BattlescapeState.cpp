@@ -820,6 +820,7 @@ void BattlescapeState::init()
 		_btnReserveKneel->invert(_btnReserveKneel->getColor()+3);
 	}
 
+	_btnReserveKneel->toggle(_save->getKneelReserved());
 	_battleGame->setKneelReserved(_save->getKneelReserved()); */
 	//Log(LOG_INFO) << "BattlescapeState::init() EXIT";
 }
@@ -2860,7 +2861,8 @@ bool BattlescapeState::allowButtons(bool allowSaving) const
 		Action a = Action(&ev, 0.0, 0.0, 0, 0);
 		action->getSender()->mousePress(&a, this);
 		_battleGame->setKneelReserved(!_battleGame->getKneelReserved());
-		_btnReserveKneel->invert(_btnReserveKneel->getColor()+3);
+//		_btnReserveKneel->invert(_btnReserveKneel->getColor()+3);
+		_btnReserveKneel->toggle(_battleGame->getKneelReserved());
 	}
 } */
 

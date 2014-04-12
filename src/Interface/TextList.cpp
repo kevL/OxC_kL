@@ -800,15 +800,17 @@ void TextList::setCondensed(bool condensed)
 
 /**
  * Returns the currently selected row if the text list is selectable.
- * @return, Selected row.
+ * @return, Selected row, -1 if none.
  */
 int TextList::getSelectedRow() const
 {
-	size_t selRow = std::min(
-						_selRow,
-						_rows.size());
-
-	return _rows[selRow];
+	if (_rows.empty()
+		|| _selRow >= _rows.size())
+	{
+		return -1;
+	}
+	else
+		return _rows[_selRow];
 }
 
 /**
@@ -998,7 +1000,8 @@ void TextList::clearList()
  */
 void TextList::scrollUp(bool toMax)
 {
-	if (!_scrolling) return;
+	if (!_scrolling)
+		return;
 
 	if (_rows.size() > _visibleRows
 		&& _scroll > 0)
@@ -1008,7 +1011,8 @@ void TextList::scrollUp(bool toMax)
 		else
 			_scroll--;
 
-		_redraw = true;
+//		_redraw = true;
+		draw();
 	}
 
 	updateArrows();
@@ -1030,7 +1034,8 @@ void TextList::scrollDown(bool toMax)
 		else
 			_scroll++;
 
-		_redraw = true;
+//		_redraw = true;
+		draw();
 	}
 
 	updateArrows();

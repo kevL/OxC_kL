@@ -1364,62 +1364,69 @@ bool AlienBAIState::selectPointNearTarget(
 	int distance = 1000;
 
 	for (int
-			x = -size;
-			x <= targetsize;
-			++x)
+			z = -1;
+			z <= 1;
+			++z)
 	{
 		for (int
-				y = -size;
-				y <= targetsize;
-				++y)
+				x = -size;
+				x <= targetsize;
+				++x)
 		{
-			if (x || y) // skip the unit itself
+			for (int
+					y = -size;
+					y <= targetsize;
+					++y)
 			{
-				Position checkPath = target->getPosition() + Position (x, y, 0);
-
-				if (std::find(
-							_reachable.begin(),
-							_reachable.end(),
-							_save->getTileIndex(checkPath))
-						== _reachable.end())
+				if (x || y) // skip the unit itself
 				{
-					continue;
-				}
+					Position checkPath = target->getPosition() + Position (x, y, z);
 
-				int dir = _save->getTileEngine()->getDirectionTo(
-															checkPath,
-															target->getPosition());
-				bool valid = _save->getTileEngine()->validMeleeRange(
-																checkPath,
-																dir,
-																_unit,
-																target,
-																0);
-				bool fitHere = _save->setUnitPosition(
-													_unit,
-													checkPath,
-													true);
-				if (valid
-					&& fitHere
-					&& !_save->getTile(checkPath)->getDangerous())
-				{
-					_save->getPathfinding()->calculate(_unit, checkPath, 0, maxTUs);
-
-					if (_save->getPathfinding()->getStartDirection() != -1
-						&& _save->getTileEngine()->distance(
-														checkPath,
-														_unit->getPosition())
-													< distance)
+					if (_save->getTile(checkPath) == 0
+						|| std::find(
+									_reachable.begin(),
+									_reachable.end(),
+									_save->getTileIndex(checkPath))
+								== _reachable.end())
 					{
-						returnValue = true;
-
-						_attackAction->target = checkPath;
-						distance = _save->getTileEngine()->distance(
-																checkPath,
-																_unit->getPosition());
+						continue;
 					}
 
-					_save->getPathfinding()->abortPath();
+					int dir = _save->getTileEngine()->getDirectionTo(
+																checkPath,
+																target->getPosition());
+					bool valid = _save->getTileEngine()->validMeleeRange(
+																	checkPath,
+																	dir,
+																	_unit,
+																	target,
+																	0);
+					bool fitHere = _save->setUnitPosition(
+														_unit,
+														checkPath,
+														true);
+					if (valid
+						&& fitHere
+						&& !_save->getTile(checkPath)->getDangerous())
+					{
+						_save->getPathfinding()->calculate(_unit, checkPath, 0, maxTUs);
+
+						if (_save->getPathfinding()->getStartDirection() != -1
+							&& _save->getTileEngine()->distance(
+															checkPath,
+															_unit->getPosition())
+														< distance)
+						{
+							returnValue = true;
+
+							_attackAction->target = checkPath;
+							distance = _save->getTileEngine()->distance(
+																	checkPath,
+																	_unit->getPosition());
+						}
+
+						_save->getPathfinding()->abortPath();
+					}
 				}
 			}
 		}

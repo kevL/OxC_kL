@@ -136,6 +136,19 @@ void ImageButton::mouseRelease(Action* action, State* state)
 }
 
 /**
+ * Invert a button explicitly either ON or OFF and keep track of the state using our internal variables.
+ * @param press Set this button as pressed.
+ */
+void ImageButton::toggle(bool press)
+{
+	if (_inverted != press)
+	{
+		_inverted = !_inverted;
+		invert(_color + 3);
+	}
+}
+
+/**
  * kL. Releases the _mode buttons in Geoscape::DogfightState,
  * sets _btnStandoff as depressed (auto-disengage if damaged).
  */
