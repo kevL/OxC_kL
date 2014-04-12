@@ -727,7 +727,7 @@ BattlescapeState::BattlescapeState(Game* game)
 	std::string terrain = game->getSavedGame()->getSavedBattle()->getTerrain(); // sza_MusicRules
 	_game->getResourcePack()->getRandomMusic( // sza_MusicRules
 										OpenXcom::XCOM_RESOURCE_MUSIC_GMTACTIC,
-										terrain);
+										terrain)->play();
 
 //kL	_animTimer = new Timer(DEFAULT_ANIM_SPEED, true);
 	_animTimer = new Timer(DEFAULT_ANIM_SPEED);

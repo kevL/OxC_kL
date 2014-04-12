@@ -766,12 +766,12 @@ void GeoscapeState::think()
 		}
 	}
 
-	if (_dogfights.empty()
+/*	if (_dogfights.empty()
 		&& !_dogfightStartTimer->isRunning())
 	{
 //		_game->getResourcePack()->playMusic("GMGEO", true);
 		_game->getResourcePack()->getRandomMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMGEO, "")->play(); // sza_MusicRules
-	}
+	} */
 }
 
 /**
