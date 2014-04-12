@@ -165,6 +165,7 @@ private:
 		_aggression,
 		_aggroSound,
 		_deathSound,
+		_energyRecovery,
 		_intelligence,
 		_moveSound,
 		_value;
@@ -224,6 +225,8 @@ private:
 		int getAggroSound() const;
 		/// Checks if this unit has a built in weapon.
 		bool isLivingWeapon() const;
+		///
+		int getEnergyRecovery() const;
 };
 
 }

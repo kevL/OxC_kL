@@ -22,15 +22,15 @@
 
 #include <vector>
 #include <string>
-#include <utility>
 
 #include "OptionsBaseState.h"
+
+#include "../Engine/OptionInfo.h"
 
 
 namespace OpenXcom
 {
 
-class TextButton;
 class TextList;
 
 /**
@@ -44,12 +44,19 @@ class OptionsAdvancedState
 
 private:
 	size_t _boolQuantity;
+	Uint8 _colorGroup;
 
 	TextList* _lstOptions;
 
-	// intentionally avoiding using a map here, to avoid auto-sorting.
-	std::vector< std::pair<std::string, bool*> > _settingBoolSet;
-	std::vector< std::pair<std::string, int*> > _settingIntSet;
+	std::vector<OptionInfo>
+		_settingsGeneral,
+		_settingsGeo,
+		_settingsBattle;
+
+	///
+	void addSettings(const std::vector<OptionInfo> &settings);
+	///
+	OptionInfo* getSetting(size_t sel);
 
 
 	public:
@@ -60,9 +67,12 @@ private:
 		/// Cleans up the Advanced state.
 		~OptionsAdvancedState();
 
-		/// Handler for clicking an item on the menu.
-		void lstOptionsPress(Action* action);
-		/// Handler for moving the mouse over a menu item.
+		/// Fills settings list.
+		void init();
+
+		/// Handler for clicking a setting on the list.
+		void lstOptionsClick(Action* action);
+		/// Handler for moving the mouse over a setting.
 		void lstOptionsMouseOver(Action* action);
 		/// Handler for moving the mouse outside the menu borders.
 		void lstOptionsMouseOut(Action* action);

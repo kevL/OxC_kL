@@ -60,6 +60,8 @@ private:
 
 	///
 	void addControls(const std::vector<OptionInfo>& keys);
+	///
+	OptionInfo* getControl(size_t sel);
 
 
 	public:

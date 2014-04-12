@@ -1856,14 +1856,15 @@ void BattleUnit::prepareNewTurn()
 //kL		int enRecovery = getStats()->tu / 3;
 		// kL_begin: advanced Energy recovery
 		int enRecovery = getStats()->stamina;
-		if (_turretType < 0) // is NOT xCom Tank (which get full energy-recovery).
+		if (_turretType < 0) // is NOT xCom Tank (which get 4/5ths energy-recovery).
 		{
 			if (isKneeled())
 				enRecovery /= 2;					// kneeled xCom
 			else if (getFaction() == FACTION_PLAYER)
 				enRecovery /= 3;					// xCom & Mc'd aliens
 			else
-				enRecovery = enRecovery * 2 / 3;	// non-Mc'd aLiens & civies
+//				enRecovery = enRecovery * 2 / 3;	// non-Mc'd aLiens & civies
+				enRecovery = _unitRules->getEnergyRecovery(); // <- look into this!
 		}
 		else // xCom tank.
 			enRecovery = enRecovery * 4 / 5;
@@ -1871,7 +1872,9 @@ void BattleUnit::prepareNewTurn()
 
 		// Each fatal wound to the body reduces the soldier's energy recovery by 10%.
 		// kL_note: Only xCom gets fatal wounds, atm.
-		enRecovery -= (_energy * (_fatalWounds[BODYPART_TORSO] * 10)) / 100;
+		if (getFaction() == FACTION_PLAYER)
+			enRecovery -= (_energy * (_fatalWounds[BODYPART_TORSO] * 10)) / 100;
+
 		_energy += enRecovery;
 
 		if (_energy > getStats()->stamina)

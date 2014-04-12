@@ -254,7 +254,8 @@ void Camera::mouseOver(Action* action, State*)
 		if ((_scrollMouseX
 				|| _scrollMouseY)
 			&& !_scrollMouseTimer->isRunning()
-			&& !_scrollKeyTimer->isRunning())
+			&& !_scrollKeyTimer->isRunning()
+			&& (SDL_GetMouseState(0,0) & SDL_BUTTON(Options::battleScrollDragButton)) == 0)
 		{
 			_scrollMouseTimer->start();
 		}
@@ -291,7 +292,8 @@ void Camera::keyboardPress(Action* action, State*)
 	if ((_scrollKeyX
 			|| _scrollKeyY)
 		&& !_scrollKeyTimer->isRunning()
-		&& !_scrollMouseTimer->isRunning())
+		&& !_scrollMouseTimer->isRunning()
+		&& (SDL_GetMouseState(0,0) & SDL_BUTTON(Options::battleScrollDragButton)) == 0)
 	{
 		_scrollKeyTimer->start();
 	}
@@ -325,7 +327,8 @@ void Camera::keyboardRelease(Action* action, State*)
 	if ((_scrollKeyX
 			|| _scrollKeyY)
 		&& !_scrollKeyTimer->isRunning()
-		&& !_scrollMouseTimer->isRunning())
+		&& !_scrollMouseTimer->isRunning()
+		&& (SDL_GetMouseState(0,0) & SDL_BUTTON(Options::battleScrollDragButton)) == 0)
 	{
 		_scrollKeyTimer->start();
 	}
@@ -386,7 +389,7 @@ void Camera::scrollXY(
 		// Actually this should be calculated instead of slow-approximation.
 		if (_center.x < 0)
 		{
-			_mapOffset.x -= 2;
+			_mapOffset.x -= 1;
 			_mapOffset.y -= 1;
 
 			continue;
@@ -394,7 +397,7 @@ void Camera::scrollXY(
 
 		if (_center.x > _mapsize_x - 1)
 		{
-			_mapOffset.x += 2;
+			_mapOffset.x += 1;
 			_mapOffset.y += 1;
 
 			continue;
@@ -402,7 +405,7 @@ void Camera::scrollXY(
 
 		if (_center.y < 0)
 		{
-			_mapOffset.x += 2;
+			_mapOffset.x += 1;
 			_mapOffset.y -= 1;
 
 			continue;
@@ -410,7 +413,7 @@ void Camera::scrollXY(
 
 		if (_center.y > _mapsize_y - 1)
 		{
-			_mapOffset.x -= 2;
+			_mapOffset.x -= 1;
 			_mapOffset.y += 1;
 
 			continue;

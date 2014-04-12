@@ -43,8 +43,7 @@ class MiniBaseView
 {
 
 private:
-	static const size_t MAX_BASES	= 8;
-	static const int MINI_SIZE		= 14;
+	static const int MINI_SIZE = 14;
 
 	size_t
 		_base,
@@ -56,6 +55,8 @@ private:
 
 
 	public:
+		static const size_t MAX_BASES = 8;
+
 		/// Creates a new mini base view at the specified position and size.
 		MiniBaseView(
 				int width,

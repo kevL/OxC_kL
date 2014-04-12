@@ -1026,7 +1026,7 @@ void TextList::scrollDown(bool toMax)
 		&& _scroll < _rows.size() - _visibleRows)
 	{
 		if (toMax)
-			_scroll = _texts.size()-_visibleRows;
+			_scroll = _rows.size() - _visibleRows;
 		else
 			_scroll++;
 
@@ -1204,7 +1204,7 @@ void TextList::mousePress(Action* action, State* state)
 	if (Options::changeValueByMouseWheel != 0)
 	{
 		allowScroll = (action->getAbsoluteXMouse() < _arrowsLeftEdge
-						|| action->getAbsoluteXMouse() > _arrowsRightEdge);
+					|| action->getAbsoluteXMouse() > _arrowsRightEdge);
 	}
 
 	if (allowScroll)
@@ -1217,15 +1217,11 @@ void TextList::mousePress(Action* action, State* state)
 
 	if (_selectable)
 	{
-		if (_selRow < _texts.size())
-		{
+		if (_selRow < _rows.size())
 			InteractiveSurface::mousePress(action, state);
-		}
 	}
 	else
-	{
 		InteractiveSurface::mousePress(action, state);
-	}
 }
 
 /*
@@ -1237,15 +1233,11 @@ void TextList::mouseRelease(Action* action, State* state)
 {
 	if (_selectable)
 	{
-		if (_selRow < _texts.size())
-		{
+		if (_selRow < _rows.size())
 			InteractiveSurface::mouseRelease(action, state);
-		}
 	}
 	else
-	{
 		InteractiveSurface::mouseRelease(action, state);
-	}
 }
 
 /**
@@ -1257,7 +1249,7 @@ void TextList::mouseClick(Action* action, State* state)
 {
 	if (_selectable)
 	{
-		if (_selRow < _texts.size())
+		if (_selRow < _rows.size())
 		{
 			InteractiveSurface::mouseClick(action, state);
 			if (_comboBox
@@ -1269,9 +1261,7 @@ void TextList::mouseClick(Action* action, State* state)
 		}
 	}
 	else
-	{
 		InteractiveSurface::mouseClick(action, state);
-	}
 }
 
 /**

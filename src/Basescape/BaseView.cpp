@@ -486,12 +486,12 @@ void BaseView::draw()
 
 	for (int // draw grid squares
 			x = 0;
-			x < 8;
+			x < BASE_SIZE;
 			++x)
 	{
 		for (int
 				y = 0;
-				y < 8;
+				y < BASE_SIZE;
 				++y)
 		{
 			Surface* frame = _texture->getFrame(0);
