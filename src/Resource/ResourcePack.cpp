@@ -238,7 +238,8 @@ void ResourcePack::playMusic(
 			_playingMusic = "GMGEO"; // hack
 
 		if (random)
-			getRandomMusic(name)->play();
+//kL			getRandomMusic(name)->play();
+			getRandomMusic(name, "")->play(); // kL: sza_MusicRules
 		else
 			getMusic(name)->play();
 	}

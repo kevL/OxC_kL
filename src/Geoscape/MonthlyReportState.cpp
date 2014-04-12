@@ -30,6 +30,7 @@
 
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
+#include "../Engine/Music.h" // kL: sza_MusicRules
 #include "../Engine/Options.h"
 #include "../Engine/Palette.h"
 
@@ -38,6 +39,7 @@
 #include "../Interface/Window.h"
 
 #include "../Resource/ResourcePack.h"
+#include "../Resource/XcomResourcePack.h" // kL: sza_MusicRules
 
 #include "../Ruleset/RuleCountry.h"
 
@@ -452,7 +454,8 @@ void MonthlyReportState::btnOkClick(Action*)
 			_txtFailure->setVisible(true);
 			_btnBigOk->setVisible(true);
 
-			_game->getResourcePack()->playMusic("GMLOSE"); // <-- needs to be sza_musicRule'd.
+//			_game->getResourcePack()->playMusic("GMLOSE");
+			_game->getResourcePack()->getMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMLOSE)->play(); // kL: sza_MusicRules
 		}
 	}
 }

@@ -18,7 +18,6 @@
 				</Linker>
 				<ExtraCommands>
 					<Add after="cmd /c copy F:\GIT\OpenXcom\bin\Win32\Release\OpenXcom.exe F:\openXcom /y" />
-					<Mode after="always" />
 				</ExtraCommands>
 			</Target>
 			<Target title="Debug Win32">

@@ -256,6 +256,7 @@ void resetDefault()
 	{
 		i->reset();
 	}
+
 	backupDisplay();
 
 	rulesets.clear();
@@ -514,7 +515,7 @@ void updateOptions()
  * Loads options from a YAML file.
  * @param filename YAML filename.
  */
-void load(const std::string &filename)
+void load(const std::string& filename)
 {
 	std::string s = _configFolder + filename + ".cfg";
 	try
@@ -532,8 +533,8 @@ void load(const std::string &filename)
 			i->load(doc["options"]);
 		}
 
-		purchaseExclusions = doc["purchaseexclusions"].as< std::vector<std::string> >(purchaseExclusions);
-		rulesets = doc["rulesets"].as< std::vector<std::string> >(rulesets);
+		purchaseExclusions = doc["purchaseexclusions"].as<std::vector<std::string> >(purchaseExclusions);
+		rulesets = doc["rulesets"].as<std::vector<std::string> >(rulesets);
 	}
 	catch (YAML::Exception e)
 	{
@@ -545,7 +546,7 @@ void load(const std::string &filename)
  * Saves options to a YAML file.
  * @param filename YAML filename.
  */
-void save(const std::string &filename)
+void save(const std::string& filename)
 {
 	std::string s = _configFolder + filename + ".cfg";
 	std::ofstream sav(s.c_str());

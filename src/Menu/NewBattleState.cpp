@@ -47,6 +47,7 @@
 #include "../Interface/Window.h"
 
 #include "../Resource/ResourcePack.h"
+#include "../Resource/XcomResourcePack.h" // kL: sza_MusicRules
 
 #include "../Ruleset/AlienDeployment.h"
 #include "../Ruleset/RuleCraft.h"
@@ -281,7 +282,8 @@ void NewBattleState::init()
 {
 	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
 
-	_game->getResourcePack()->playMusic("GMSTORY"); // <- needs to be sza_musicRule'd.
+//	_game->getResourcePack()->playMusic("GMSTORY");
+	_game->getResourcePack()->getMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMSTORY)->play(); // kL: sza_MusicRules
 
 	if (_craft == 0)
 		load();

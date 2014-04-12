@@ -108,11 +108,11 @@ void AlienDeployment::load(const YAML::Node& node)
 }
 
 /**
- * Returns the language string that names
- * this deployment. Each deployment type has a unique name.
- * @return Deployment name.
+ * Returns the language string that names this deployment.
+ * Each deployment type has a unique name.
+ * @return, Deployment name.
  */
-std::string, AlienDeployment::getType() const
+std::string AlienDeployment::getType() const
 {
 	return _type;
 }
@@ -156,7 +156,7 @@ int AlienDeployment::getCivilians() const
  * kL_note: See header note.
  * @return, The terrain.
  */
-std::string AlienDeployment::getTerrain() const
+/* std::string AlienDeployment::getTerrain() const
 {
 	if (!_terrains.empty())
 	{
@@ -168,7 +168,7 @@ std::string AlienDeployment::getTerrain() const
 	}
 
 	return "";
-}
+} */
 
 /**
  * Gets the terrains for battlescape generation.

@@ -301,8 +301,8 @@ DebriefingState::DebriefingState(Game* game)
 	_txtRating->setText(tr("STR_RATING").arg(rating));
 
 
-	_game->getResourcePack()->playMusic("GMMARS");
-	_game->getResourcePack()->playMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMMARS); // sza_MusicRules
+//	_game->getResourcePack()->playMusic("GMMARS");
+	_game->getResourcePack()->getMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMMARS)->play(); // sza_MusicRules
 
 	_game->getCursor()->setColor(Palette::blockOffset(15)+12);
 	_game->getFpsCounter()->setColor(Palette::blockOffset(15)+12);

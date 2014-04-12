@@ -1111,7 +1111,7 @@ void XcomResourcePack::loadBattlescapeResources()
 	_sets["DETBLOB.DAT"]->loadDat (CrossPlatform::getDataFile(s.str()));
 
 	// Load Battlescape Terrain (only blanks are loaded, others are loaded just in time)
-	std::string bsets[] = { "BLANKS.PCK" };
+	std::string bsets[] = {"BLANKS.PCK"};
 
 	for (int
 			i = 0;
@@ -1218,17 +1218,15 @@ void XcomResourcePack::loadBattlescapeResources()
 		_surfaces[*i]->loadSpk(path);
 	}
 
-	// "fix" of hair color of male personal armor
-	if (Options::battleHairBleach)
+	if (Options::battleHairBleach) // "fix" of hair color of male personal armor
 	{
 		SurfaceSet* xcom_1 = _sets["XCOM_1.PCK"];
 
-		for (int
+		for (int // chest frame
 				i = 0;
 				i < 16;
 				++i)
 		{
-			// chest frame
 			Surface* surf = xcom_1->getFrame(4 * 8 + i);
 			ShaderMove<Uint8> head = ShaderMove<Uint8>(surf);
 			GraphSubset dim = head.getBaseDomain();
@@ -1244,12 +1242,11 @@ void XcomResourcePack::loadBattlescapeResources()
 			surf->unlock();
 		}
 
-		for (int
+		for (int // fall frame
 				i = 0;
 				i < 3;
 				++i)
 		{
-			// fall frame
 			Surface* surf = xcom_1->getFrame(264 + i);
 			ShaderMove<Uint8> head = ShaderMove<Uint8>(surf);
 			GraphSubset dim = head.getBaseDomain();

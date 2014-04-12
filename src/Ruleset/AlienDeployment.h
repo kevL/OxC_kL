@@ -104,7 +104,7 @@ private:
 		/// Gets civilians.
 		int getCivilians() const;
 		/// Gets the terrain for battlescape generation.
-		std::string getTerrain() const; // kL_note: This may still be needed for things like sza_musicRules & my pathPreview for polar expeditions. (but unlikely, since this is AlienDeployment)
+//		std::string getTerrain() const; // kL_note: This may still be needed for things like sza_musicRules & my pathPreview for polar expeditions. (but unlikely, since this is AlienDeployment)
 		/// Gets the terrains for battlescape generation.
 		std::vector<std::string> getTerrains() const;
 		/// Gets the shade level for battlescape generation.

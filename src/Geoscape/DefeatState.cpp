@@ -63,7 +63,7 @@ DefeatState::DefeatState(Game* game)
 	_window->onMouseClick((ActionHandler)& DefeatState::windowClick);
 
 //	_game->getResourcePack()->playMusic("GMLOSE");
-	_game->getResourcePack()->playMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMLOSE); // sza_MusicRules
+	_game->getResourcePack()->getMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMLOSE)->play(); // sza_MusicRules
 
 	for (int
 			text = 0;

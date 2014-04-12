@@ -86,22 +86,25 @@ private:
 
 			/// Gets a particular font.
 			Font* getFont(const std::string& name) const;
+
 			/// Gets a particular surface.
 			Surface* getSurface(const std::string& name) const;
 			/// Gets a particular surface set.
 			SurfaceSet* getSurfaceSet(const std::string& name) const;
+
 			/// Gets the list of world polygons.
 			std::list<Polygon*>* getPolygons();
 			/// Gets the list of world polylines.
 			std::list<Polyline*>* getPolylines();
+
 			/// Gets a particular music.
 			Music* getMusic(const std::string& name) const;
-			/// Gets a random music.
-//			Music* getRandomMusic(const std::string& name) const;
 			/// Plays a particular music.
 			void playMusic(
 					const std::string& name,
 					bool random = false);
+			/// Gets a random music.
+//			Music* getRandomMusic(const std::string& name) const;
 			Music* getRandomMusic( // sza_MusicRules
 					const std::string& name,
 					const std::string& terrain) const;
@@ -120,6 +123,7 @@ private:
 			Sound* getSound(
 					const std::string& set,
 					unsigned int sound) const;
+
 			/// Gets a particular palette.
 			Palette* getPalette(const std::string& name) const;
 			/// Sets a new palette.

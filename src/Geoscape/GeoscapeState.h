@@ -28,7 +28,7 @@
 namespace OpenXcom
 {
 
-extern unsigned int kL_currentBase;
+extern size_t kL_currentBase;
 
 
 class Base;

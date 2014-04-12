@@ -130,7 +130,7 @@
 namespace OpenXcom
 {
 
-unsigned int kL_currentBase = 0;
+size_t kL_currentBase = 0;
 
 
 /**
@@ -710,10 +710,10 @@ void GeoscapeState::init()
 	{
 		if (_game->getSavedGame()->getMonthsPassed() == -1)
 //			_game->getResourcePack()->playMusic("GMGEO1");
-			_game->getResourcePack()->playMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMGEO1); // sza_MusicRules
+			_game->getResourcePack()->getMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMGEO1)->play(); // sza_MusicRules
 		else
 //			_game->getResourcePack()->playMusic("GMGEO", true);
-			_game->getResourcePack()->playMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMGEO); // sza_MusicRules
+			_game->getResourcePack()->getMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMGEO)->play(); // sza_MusicRules
 	}
 
 	_globe->unsetNewBaseHover();
@@ -771,7 +771,7 @@ void GeoscapeState::think()
 		&& !_dogfightStartTimer->isRunning())
 	{
 //		_game->getResourcePack()->playMusic("GMGEO", true);
-		_game->getResourcePack()->playMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMGEO); // sza_MusicRules
+		_game->getResourcePack()->getMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMGEO)->play(); // sza_MusicRules
 	}
 }
 
@@ -1174,7 +1174,7 @@ void GeoscapeState::time5Seconds()
 								}
 
 //								_game->getResourcePack()->playMusic("GMINTER");
-								_game->getResourcePack()->playMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMINTER); // sza_MusicRules
+								_game->getResourcePack()->getMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMINTER)->play(); // sza_MusicRules
 							}
 						break;
 						case Ufo::LANDED:
@@ -3013,7 +3013,6 @@ void GeoscapeState::startDogfight()
 		_zoomInEffectTimer->stop();
 
 		timerReset();
-		musicStop();
 
 		while (!_dogfightsToBeStarted.empty())
 		{
@@ -3059,8 +3058,7 @@ void GeoscapeState::handleBaseDefense(
 		Base* base,
 		Ufo* ufo)
 {
-    // Whatever happens in the base defense, the UFO has finished its duty
-	ufo->setStatus(Ufo::DESTROYED);
+	ufo->setStatus(Ufo::DESTROYED); // Whatever happens in the base defense, the UFO has finished its duty
 
 	if (base->getAvailableSoldiers(true) > 0)
 	{
@@ -3073,16 +3071,15 @@ void GeoscapeState::handleBaseDefense(
 		bgen.setAlienRace(ufo->getAlienRace());
 		bgen.run();
 
-		musicStop();
 		_pause = true;
+
 		popup(new BriefingState(
 							_game,
 							0,
 							base));
 	}
 	else
-	    // Please garrison your bases in future
-		popup(new BaseDestroyedState(
+		popup(new BaseDestroyedState( // Please garrison your bases in future
 									_game,
 									base));
 }
