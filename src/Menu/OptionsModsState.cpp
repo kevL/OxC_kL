@@ -55,7 +55,6 @@ OptionsModsState::OptionsModsState(
 	setCategory(_btnMods);
 
 	_lstMods = new TextList(200, 136, 94, 8);
-
 	add(_lstMods);
 
 	centerAllSurfaces();
@@ -81,22 +80,34 @@ OptionsModsState::OptionsModsState(
 	_lstMods->setWordWrap(true);
 	_lstMods->setSelectable(true);
 	_lstMods->setBackground(_window);
-	_lstMods->onMouseClick((ActionHandler)&OptionsModsState::lstModsClick);
+	_lstMods->onMouseClick((ActionHandler)& OptionsModsState::lstModsClick);
 	_lstMods->setTooltip("STR_MODS_DESC");
-	_lstMods->onMouseIn((ActionHandler)&OptionsModsState::txtTooltipIn);
-	_lstMods->onMouseOut((ActionHandler)&OptionsModsState::txtTooltipOut);
+	_lstMods->onMouseIn((ActionHandler)& OptionsModsState::txtTooltipIn);
+	_lstMods->onMouseOut((ActionHandler)& OptionsModsState::txtTooltipOut);
 
 	std::vector<std::string> rulesets = CrossPlatform::getFolderContents(CrossPlatform::getDataFolder("Ruleset/"), "rul");
-	for (std::vector<std::string>::iterator i = rulesets.begin(); i != rulesets.end(); ++i)
+	for (std::vector<std::string>::iterator
+			i = rulesets.begin();
+			i != rulesets.end();
+			++i)
 	{
 		std::string mod = CrossPlatform::noExt(*i);
 		std::wstring modName = Language::fsToWstr(mod);
 		Language::replace(modName, L"_", L" ");
+
 		// ignore default ruleset
 		if (mod != "Xcom1Ruleset")
 		{
-			bool modEnabled = (std::find(Options::rulesets.begin(), Options::rulesets.end(), mod) != Options::rulesets.end());
-			_lstMods->addRow(2, modName.c_str(), (modEnabled ? tr("STR_YES").c_str() : tr("STR_NO").c_str()));
+			bool modEnabled = (std::find(
+										Options::rulesets.begin(),
+										Options::rulesets.end(),
+										mod)
+									!= Options::rulesets.end());
+			_lstMods->addRow(
+							2,
+							modName.c_str(),
+							(modEnabled? tr("STR_YES").c_str(): tr("STR_NO").c_str()));
+
 			_mods.push_back(mod);
 		}
 	}
@@ -109,10 +120,13 @@ OptionsModsState::~OptionsModsState()
 {
 }
 
-void OptionsModsState::lstModsClick(Action *action)
+void OptionsModsState::lstModsClick(Action* action)
 {
 	std::string selectedMod = _mods[_lstMods->getSelectedRow()];
-	std::vector<std::string>::iterator i = std::find(Options::rulesets.begin(), Options::rulesets.end(), selectedMod);
+	std::vector<std::string>::iterator i = std::find(
+													Options::rulesets.begin(),
+													Options::rulesets.end(),
+													selectedMod);
 	bool modEnabled = (i != Options::rulesets.end());
 	if (modEnabled)
 	{
@@ -124,6 +138,7 @@ void OptionsModsState::lstModsClick(Action *action)
 		_lstMods->setCellText(_lstMods->getSelectedRow(), 1, tr("STR_YES").c_str());
 		Options::rulesets.push_back(selectedMod);
 	}
+
 	Options::reload = true;
 }
 

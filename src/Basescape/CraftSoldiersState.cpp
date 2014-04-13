@@ -253,6 +253,7 @@ void CraftSoldiersState::init()
 
 		row++;
 	}
+
 	_lstSoldiers->draw();
 }
 

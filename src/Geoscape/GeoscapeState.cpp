@@ -714,7 +714,7 @@ void GeoscapeState::init()
 //			_game->getResourcePack()->playMusic("GMGEO", true);
 			_game->getResourcePack()->getRandomMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMGEO, "")->play(); // sza_MusicRules
 	}
-	// kL_note: else play DogFight music ... for loading from saves, i guess
+	// kL_note: else play DogFight music ... for loading from Saves, i guess
 
 	_globe->unsetNewBaseHover();
 }

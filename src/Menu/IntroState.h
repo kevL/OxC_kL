@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 OpenXcom Developers.
+ * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -10,16 +10,18 @@
  *
  * OpenXcom is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
+ * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_INTROSTATE_H
 #define OPENXCOM_INTROSTATE_H
 
 #include "../Engine/State.h"
+
 
 namespace OpenXcom
 {
@@ -27,17 +29,25 @@ namespace OpenXcom
 /**
  * Shows the intro cinematic.
  */
-class IntroState : public State
+class IntroState
+	:
+		public State
 {
 private:
-	std::string _introFile, _introSoundFileDOS, _introSoundFileWin;
-public:
-	/// Creates the Intro state.
-	IntroState(Game *game);
-	/// Cleans up the Intro state.
-	~IntroState();
-	/// Starts the intro.
-	void init();
+	std::string
+		_introFile,
+		_introSoundFileDOS,
+		_introSoundFileWin;
+
+
+	public:
+		/// Creates the Intro state.
+		IntroState(Game *game);
+		/// Cleans up the Intro state.
+		~IntroState();
+
+		/// Starts the intro.
+		void init();
 };
 
 }
