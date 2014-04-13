@@ -192,7 +192,7 @@ void SaveState::lstSavesPress(Action* action)
 		_game->pushState(new DeleteGameState(
 										_game,
 										_origin,
-										_saves[_lstSaves->getSelectedRow()].fileName));
+										_saves[_lstSaves->getSelectedRow() - 1].fileName));
 	}
 }
 

@@ -1075,9 +1075,7 @@ void AlienBAIState::setupEscape()
 											_escapeAction->target);
 
 			if (_escapeAction->target == _unit->getPosition()
-				|| (_save->getPathfinding()->getStartDirection() != -1
-//kL					&& _save->getPathfinding()->getTotalTUCost() / 2 <= _unit->getEnergy()))
-					&& _save->getPathfinding()->getTotalTUCost() <= _unit->getEnergy())) // kL, doesn't account for 0-energy gravLift moves...
+				|| _save->getPathfinding()->getStartDirection() != -1)
 			{
 				bestTileScore = score;
 				bestTile = _escapeAction->target;
@@ -1241,15 +1239,15 @@ int AlienBAIState::selectNearestTarget()
 													(*i)->getPosition());
 			if (dist < _closestDist)
 			{
-				bool validTarget = false;
+				bool valid = false;
 				if (_rifle
 					|| !_melee)
 				{
-					validTarget = _save->getTileEngine()->canTargetUnit(
-																	&origin,
-																	(*i)->getTile(),
-																	&target,
-																	_unit);
+					valid = _save->getTileEngine()->canTargetUnit(
+																&origin,
+																(*i)->getTile(),
+																&target,
+																_unit);
 				}
 				else
 				{
@@ -1258,16 +1256,16 @@ int AlienBAIState::selectNearestTarget()
 						int dir = _save->getTileEngine()->getDirectionTo(
 																	_attackAction->target,
 																	(*i)->getPosition());
-						validTarget = _save->getTileEngine()->validMeleeRange(
-																		_attackAction->target,
-																		dir,
-																		_unit,
-																		*i,
-																		0);
+						valid = _save->getTileEngine()->validMeleeRange(
+																	_attackAction->target,
+																	dir,
+																	_unit,
+																	*i,
+																	0);
 					}
 				}
 
-				if (validTarget)
+				if (valid)
 				{
 					_closestDist = dist;
 					_aggroTarget = *i;
