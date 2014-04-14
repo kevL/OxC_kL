@@ -149,6 +149,8 @@ UnitInfoState::UnitInfoState(
 		_btnNext	= new TextButton(17, 18, 301, 2);
 	}
 
+	setPalette("PAL_BATTLESCAPE");
+
 	add(_bg);
 	add(_txtName);
 
@@ -421,7 +423,6 @@ UnitInfoState::UnitInfoState(
 						(ActionHandler)& UnitInfoState::btnNextClick,
 						Options::keyBattleNextUnit);
 	}
-
 }
 
 /**
