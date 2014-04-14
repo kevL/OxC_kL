@@ -7780,7 +7780,7 @@
 	<vector>
 	<yaml-cpp/yaml.h>
 
-1397256010 f:\git\openxcom\src\ruleset\ufotrajectory.h
+1397426842 f:\git\openxcom\src\ruleset\ufotrajectory.h
 	<vector>
 	<string>
 	<yaml-cpp/yaml.h>
@@ -11424,19 +11424,19 @@
 	"../Engine/Language.h"
 	"../Engine/State.h"
 
-1397250599 source:f:\git\openxcom\src\menu\introstate.cpp
+1397348284 source:f:\git\openxcom\src\menu\introstate.cpp
 	"IntroState.h"
 	<SDL_mixer.h>
-	"../Engine/Logger.h"
-	"../Engine/Game.h"
-	"../Engine/Options.h"
-	"../Engine/Flc.h"
+	"MainMenuState.h"
 	"../Engine/CrossPlatform.h"
-	"../Engine/Screen.h"
+	"../Engine/Flc.h"
+	"../Engine/Game.h"
+	"../Engine/Logger.h"
 	"../Engine/Music.h"
+	"../Engine/Options.h"
+	"../Engine/Screen.h"
 	"../Engine/Sound.h"
 	"../Resource/ResourcePack.h"
-	"MainMenuState.h"
 
 1397347794 f:\git\openxcom\src\menu\introstate.h
 	"../Engine/State.h"
