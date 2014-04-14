@@ -107,6 +107,7 @@ static char const *getHome()
 		home = pwd->pw_dir;
 	}
 #endif
+
 	return home;
 }
 #endif
@@ -211,13 +212,11 @@ std::vector<std::string> findDataFolders()
 std::vector<std::string> findUserFolders()
 {
 	std::vector<std::string> list;
-
 #ifdef __MORPHOS__
 	list.push_back("PROGDIR:");
+
 	return list;
 #endif
-
-
 #ifdef _WIN32
 	char path[MAX_PATH];
 
@@ -296,11 +295,13 @@ std::string findConfigFolder()
 	if (char const *const xdg_config_home = getenv("XDG_CONFIG_HOME"))
 	{
 		snprintf(path, MAXPATHLEN, "%s/openxcom/", xdg_config_home);
+
 		return path;
 	}
 	else
 	{
 		snprintf(path, MAXPATHLEN, "%s/.config/openxcom/", home);
+
 		return path;
 	}
 #endif
@@ -319,41 +320,33 @@ std::string caseInsensitive(
 		const std::string& base,
 		const std::string& path)
 {
-	std::string fullPath = base + path, newPath = path;
+	std::string
+		fullPath = base + path,
+		newPath = path;
 
 	// Try all various case mutations
-	// Normal unmangled
-	if (fileExists(fullPath.c_str()))
-	{
+	if (fileExists(fullPath.c_str())) // Normal unmangled
 		return fullPath;
-	}
 
-	// UPPERCASE
-	std::transform(
+	std::transform( // UPPERCASE
 				newPath.begin(),
 				newPath.end(),
 				newPath.begin(),
 				toupper);
 	fullPath = base + newPath;
 	if (fileExists(fullPath.c_str()))
-	{
 		return fullPath;
-	}
 
-	// lowercase
-	std::transform(
+	std::transform( // lowercase
 				newPath.begin(),
 				newPath.end(),
 				newPath.begin(),
 				tolower);
 	fullPath = base + newPath;
 	if (fileExists(fullPath.c_str()))
-	{
 		return fullPath;
-	}
 
-	// If we got here nothing can help us
-	return "";
+	return ""; // If we got here nothing can help us
 }
 
 /**
@@ -369,41 +362,33 @@ std::string caseInsensitiveFolder(
 		const std::string& base,
 		const std::string& path)
 {
-	std::string fullPath = base + path, newPath = path;
+	std::string
+		fullPath = base + path,
+		newPath = path;
 
 	// Try all various case mutations
-	// Normal unmangled
-	if (folderExists(fullPath.c_str()))
-	{
+	if (folderExists(fullPath.c_str())) // Normal unmangled
 		return fullPath;
-	}
 
-	// UPPERCASE
-	std::transform(
+	std::transform( // UPPERCASE
 				newPath.begin(),
 				newPath.end(),
 				newPath.begin(),
 				toupper);
 	fullPath = base + newPath;
 	if (folderExists(fullPath.c_str()))
-	{
 		return fullPath;
-	}
 
-	// lowercase
-	std::transform(
+	std::transform( // lowercase
 				newPath.begin(),
 				newPath.end(),
 				newPath.begin(),
 				tolower);
 	fullPath = base + newPath;
 	if (folderExists(fullPath.c_str()))
-	{
 		return fullPath;
-	}
 
-	// If we got here nothing can help us
-	return "";
+	return ""; // If we got here nothing can help us
 }
 
 /**
@@ -414,39 +399,37 @@ std::string caseInsensitiveFolder(
  */
 std::string getDataFile(const std::string& filename)
 {
-	// Correct folder separator
-	std::string name = filename;
+	std::string name = filename; // Correct folder separator
 #ifdef _WIN32
-	std::replace(name.begin(), name.end(), '/', PATH_SEPARATOR);
+	std::replace(
+				name.begin(),
+				name.end(),
+				'/',
+				PATH_SEPARATOR);
 #endif
 
-	// Check current data path
 	std::string current = caseInsensitive(Options::getDataFolder(), name);
-	if (current != "")
-	{
+	if (current != "") // Check current data path
 		return current;
-	}
 
-	// Check every other path
-	for (std::vector<std::string>::const_iterator
+	for (std::vector<std::string>::const_iterator // Check every other path
 			i = Options::getDataList().begin();
 			i != Options::getDataList().end();
 			++i)
 	{
 		std::string path = caseInsensitive(*i, name);
 		if (path == current)
-		{
 			continue;
-		}
+
 		if (path != "")
 		{
 			Options::setDataFolder(*i);
+
 			return path;
 		}
 	}
 
-	// Give up
-	return filename;
+	return filename; // Give up
 }
 
 /**
@@ -457,39 +440,37 @@ std::string getDataFile(const std::string& filename)
  */
 std::string getDataFolder(const std::string& foldername)
 {
-	// Correct folder separator
-	std::string name = foldername;
+	std::string name = foldername; // Correct folder separator
 #ifdef _WIN32
-	std::replace(name.begin(), name.end(), '/', PATH_SEPARATOR);
+	std::replace(
+				name.begin(),
+				name.end(),
+				'/',
+				PATH_SEPARATOR);
 #endif
 
-	// Check current data path
 	std::string current = caseInsensitiveFolder(Options::getDataFolder(), name);
-	if (current != "")
-	{
+	if (current != "") // Check current data path
 		return current;
-	}
 
-	// Check every other path
-	for (std::vector<std::string>::const_iterator
+	for (std::vector<std::string>::const_iterator // Check every other path
 			i = Options::getDataList().begin();
 			i != Options::getDataList().end();
 			++i)
 	{
 		std::string path = caseInsensitiveFolder(*i, name);
 		if (path == current)
-		{
 			continue;
-		}
+
 		if (path != "")
 		{
 			Options::setDataFolder(*i);
+
 			return path;
 		}
 	}
 
-	// Give up
-	return foldername;
+	return foldername; // Give up
 }
 
 /**
@@ -524,8 +505,11 @@ bool createFolder(const std::string& path)
  */
 std::string endPath(const std::string& path)
 {
-	if (!path.empty() && path.at(path.size()-1) != PATH_SEPARATOR)
+	if (!path.empty()
+		&& path.at(path.size()-1) != PATH_SEPARATOR)
+	{
 		return path + PATH_SEPARATOR;
+	}
 
 	return path;
 }
@@ -566,9 +550,8 @@ std::vector<std::string> getFolderContents(
 		std::string file = dirp->d_name;
 
 		if (file == "." || file == "..")
-		{
 			continue;
-		}
+
 		if (!extl.empty())
 		{
 			if (file.length() >= extl.length() + 1)
@@ -580,68 +563,76 @@ std::vector<std::string> getFolderContents(
 							end.begin(),
 							::tolower);
 				if (end != "." + extl)
-				{
 					continue;
-				}
 			}
 			else
-			{
 				continue;
-			}
 		}
 
 		files.push_back(file);
 	}
+
 	closedir(dp);
 #ifndef _WIN32
 	std::sort(files.begin(), files.end());
 #endif
+
 	return files;
 }
 
 /**
- * Gets the name of all the files
- * contained in a Data subfolder.
+ * Gets the name of all the files contained in a Data subfolder.
  * Repeated files are ignored.
  * @param folder Path to the data folder.
  * @param ext Extension of files ("" if it doesn't matter).
  * @return Ordered list of all the files.
  */
-std::vector<std::string> getDataContents(const std::string &folder, const std::string &ext)
+std::vector<std::string> getDataContents(
+		const std::string& folder,
+		const std::string& ext)
 {
 	std::map<std::string, bool> unique;
 	std::vector<std::string> files;
 
-	// Check current data path
-	std::string current = caseInsensitive(Options::getDataFolder(), folder);
-	if (current != "")
+	std::string current = caseInsensitiveFolder(Options::getDataFolder(), folder);
+	if (current != "") // Check current data path
 	{
 		std::vector<std::string> contents = getFolderContents(current, ext);
-		for (std::vector<std::string>::const_iterator file = contents.begin(); file != contents.end(); ++file)
+		for (std::vector<std::string>::const_iterator
+				file = contents.begin();
+				file != contents.end();
+				++file)
 		{
 			unique[*file] = true;
 		}
 	}
 
-	// Check every other path
-	for (std::vector<std::string>::const_iterator i = Options::getDataList().begin(); i != Options::getDataList().end(); ++i)
+	for (std::vector<std::string>::const_iterator // Check every other path
+			i = Options::getDataList().begin();
+			i != Options::getDataList().end();
+			++i)
 	{
-		std::string path = caseInsensitive(*i, folder);
+		std::string path = caseInsensitiveFolder(*i, folder);
 		if (path == current)
-		{
 			continue;
-		}
+
 		if (path != "")
 		{
 			std::vector<std::string> contents = getFolderContents(path, ext);
-			for (std::vector<std::string>::const_iterator file = contents.begin(); file != contents.end(); ++file)
+			for (std::vector<std::string>::const_iterator
+					file = contents.begin();
+					file != contents.end();
+					++file)
 			{
 				unique[*file] = true;
 			}
 		}
 	}
 
-	for (std::map<std::string, bool>::const_iterator i = unique.begin(); i != unique.end(); ++i)
+	for (std::map<std::string, bool>::const_iterator
+			i = unique.begin();
+			i != unique.end();
+			++i)
 	{
 		files.push_back(i->first);
 	}
@@ -665,9 +656,11 @@ bool folderExists(const std::string& path)
 		UnLock( l );
 		return 1;
 	}
+
 	return 0;
 #else
 	struct stat info;
+
 	return (stat(path.c_str(), &info) == 0 && S_ISDIR(info.st_mode));
 #endif
 }
@@ -720,14 +713,12 @@ std::string baseFilename(
 {
 	size_t sep = path.find_last_of(PATH_SEPARATOR);
 	std::string filename;
+
 	if (sep == std::string::npos)
-	{
 		filename = path;
-	}
 	else
-	{
 		filename = path.substr(0, sep + 1);
-	}
+
 	if (transform != 0)
 	{
 		std::transform(
@@ -777,9 +768,7 @@ std::string noExt(const std::string& filename)
 {
 	size_t dot = filename.find_last_of('.');
 	if (dot == std::string::npos)
-	{
 		return filename;
-	}
 
 	return filename.substr(0, filename.find_last_of('.'));
 }
@@ -798,6 +787,7 @@ std::string getLocale()
 
 	std::ostringstream locale;
 	locale << language << "-" << country;
+
 	return locale.str();
 	/*
 	wchar_t locale[LOCALE_NAME_MAX_LENGTH];
@@ -808,23 +798,24 @@ std::string getLocale()
 #else
 	std::locale l("");
 	std::string name = l.name();
-	size_t dash = name.find_first_of('_'), dot = name.find_first_of('.');
+	size_t
+		dash = name.find_first_of('_'),
+		dot = name.find_first_of('.');
+
 	if (dot != std::string::npos)
-	{
 		name = name.substr(0, dot - 1);
-	}
+
 	if (dash != std::string::npos)
 	{
 		std::string language = name.substr(0, dash - 1);
 		std::string country = name.substr(dash - 1);
 		std::ostringstream locale;
 		locale << language << "-" << country;
+
 		return locale.str();
 	}
 	else
-	{
 		return name + "-";
-	}
 #endif
 }
 
@@ -872,13 +863,9 @@ time_t getDateModified(const std::string& path)
 #endif*/
 	struct stat info;
 	if (stat(path.c_str(), &info) == 0)
-	{
 		return info.st_mtime;
-	}
 	else
-	{
 		return 0;
-	}
 }
 
 /**
@@ -905,7 +892,7 @@ std::pair<std::wstring, std::wstring> timeToString(time_t time)
 	GetTimeFormatW(LOCALE_USER_DEFAULT, TIME_NOSECONDS, &st, NULL, localTime, 25);
 #endif*/
 
-	struct tm *timeinfo = localtime(&(time));
+	struct tm* timeinfo = localtime(&(time));
 	wcsftime(localDate, 25, L"%Y-%m-%d", timeinfo);
 	wcsftime(localTime, 25, L"%H:%M", timeinfo);
 
@@ -926,9 +913,21 @@ bool naturalCompare(
 	return (StrCmpLogicalW(a.c_str(), b.c_str()) < 0);
 #else
 	// sorry unix users you get ASCII sort
-	std::wstring::const_iterator i, j;
-	for (i = a.begin(), j = b.begin(); i != a.end() && j != b.end() && tolower(*i) == tolower(*j); i++, j++);
-	return (i != a.end() && j != b.end() && tolower(*i) < tolower(*j));
+	std::wstring::const_iterator
+		i,
+		j;
+	for (
+			i = a.begin(),
+				j = b.begin();
+			i != a.end()
+				&& j != b.end()
+				&& tolower(*i) == tolower(*j);
+			i++,
+				j++);
+
+	return (i != a.end()
+			&& j != b.end()
+			&& tolower(*i) < tolower(*j));
 #endif
 }
 

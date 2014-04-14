@@ -475,6 +475,9 @@ Ufo* AlienMission::spawnUfo(
 											regionRules);
 
 	ufo->setAltitude(trajectory.getAltitude(0));
+	if (trajectory.getAltitude(0) == "STR_GROUND")
+		ufo->setSecondsRemaining(trajectory.groundTimer());
+
 	ufo->setSpeed(static_cast<int>(
 						trajectory.getSpeedPercentage(0) * static_cast<float>(ufoRule.getMaxSpeed())));
 	ufo->setLongitude(pos.first);

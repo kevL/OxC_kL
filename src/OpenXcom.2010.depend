@@ -6755,7 +6755,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1397456140 source:f:\git\openxcom\src\battlescape\unitinfostate.cpp
+1397491097 source:f:\git\openxcom\src\battlescape\unitinfostate.cpp
 	"UnitInfoState.h"
 	<sstream>
 	"BattlescapeGame.h"
@@ -6871,7 +6871,7 @@
 1394398507 f:\git\openxcom\src\engine\catfile.h
 	<fstream>
 
-1397475935 source:f:\git\openxcom\src\engine\crossplatform.cpp
+1397513715 source:f:\git\openxcom\src\engine\crossplatform.cpp
 	"CrossPlatform.h"
 	<algorithm>
 	<iostream>
@@ -7122,7 +7122,7 @@
 	<assert.h>
 	<stdlib.h>
 
-1397442601 source:f:\git\openxcom\src\engine\screen.cpp
+1397490997 source:f:\git\openxcom\src\engine\screen.cpp
 	"Screen.h"
 	<cmath>
 	<iomanip>
@@ -8272,7 +8272,7 @@
 	"NumberText.h"
 	"../Engine/Palette.h"
 
-1397483562 source:f:\git\openxcom\src\interface\window.cpp
+1397490579 source:f:\git\openxcom\src\interface\window.cpp
 	"Window.h"
 	<SDL.h>
 	"../aresame.h"
