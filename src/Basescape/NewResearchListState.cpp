@@ -93,6 +93,7 @@ NewResearchListState::NewResearchListState(
 						start_x + button_x_border,
 						start_y + height - button_height - button_y_border);
 
+	setPalette("PAL_BASESCAPE", 1);
 
 	add(_window);
 	add(_btnCancel);
@@ -131,6 +132,8 @@ NewResearchListState::NewResearchListState(
  */
 void NewResearchListState::init()
 {
+	State::init();
+
 	fillProjectList();
 }
 

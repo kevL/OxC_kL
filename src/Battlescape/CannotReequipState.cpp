@@ -57,11 +57,8 @@ CannotReequipState::CannotReequipState(Game* game, std::vector<ReequipStat> miss
 
 	_btnOk			= new TextButton(288, 16, 16, 177);
 
+	setPalette("PAL_GEOSCAPE", 0);
 
-	_game->setPalette(
-				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)),
-				Palette::backPos,
-				16);
 	add(_window);
 	add(_btnOk);
 	add(_txtTitle);
@@ -71,7 +68,6 @@ CannotReequipState::CannotReequipState(Game* game, std::vector<ReequipStat> miss
 	add(_lstItems);
 
 	centerAllSurfaces();
-
 
 	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));

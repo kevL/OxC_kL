@@ -71,11 +71,7 @@ AlienTerrorState::AlienTerrorState(
 	_btnCentre		= new TextButton(200, 16, 28, 150);
 	_btnCancel		= new TextButton(200, 16, 28, 170);
 
-
-	_game->setPalette(
-				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(3)),
-				Palette::backPos,
-				16);
+	setPalette("PAL_GEOSCAPE", 3);
 
 	add(_window);
 	add(_btnIntercept);
@@ -85,7 +81,6 @@ AlienTerrorState::AlienTerrorState(
 	add(_txtCity);
 
 	centerAllSurfaces();
-
 
 	_window->setColor(Palette::blockOffset(8)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK03.SCR"));
@@ -122,17 +117,6 @@ AlienTerrorState::AlienTerrorState(
  */
 AlienTerrorState::~AlienTerrorState()
 {
-}
-
-/**
- * Resets the palette.
- */
-void AlienTerrorState::init()
-{
-	_game->setPalette(
-					_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(3)),
-					Palette::backPos,
-					16);
 }
 
 /**

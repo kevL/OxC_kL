@@ -63,12 +63,7 @@ MainMenuState::MainMenuState(Game* game)
 
 	_btnQuit		= new TextButton(192, 20, 64, 144);
 
-
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
-	_game->setPalette(
-					_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)),
-					Palette::backPos,
-					16);
+	setPalette("PAL_GEOSCAPE", 0);
 
 	add(_window);
 	add(_txtTitle);
@@ -79,7 +74,6 @@ MainMenuState::MainMenuState(Game* game)
 	add(_btnQuit);
 
 	centerAllSurfaces();
-
 
 	_window->setColor(Palette::blockOffset(8)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
@@ -127,18 +121,6 @@ MainMenuState::MainMenuState(Game* game)
  */
 MainMenuState::~MainMenuState()
 {
-}
-
-/**
- * Resets the palette
- * since it's bound to change on other screens.
- */
-void MainMenuState::init()
-{
-	_game->setPalette(
-				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)),
-				Palette::backPos,
-				16);
 }
 
 /**

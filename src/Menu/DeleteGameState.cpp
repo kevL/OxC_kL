@@ -62,11 +62,11 @@ DeleteGameState::DeleteGameState(
 	_btnNo		= new TextButton(60, 18, 60, 122);
 	_btnYes		= new TextButton(60, 18, 200, 122);
 
-	if (_origin != OPT_BATTLESCAPE)
-		_game->setPalette(
-					_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)),
-					Palette::backPos,
-					16);
+	if (_origin == OPT_BATTLESCAPE)
+		setPalette("PAL_BATTLESCAPE");
+	else
+		setPalette("PAL_GEOSCAPE", 6);
+
 
 	add(_window);
 	add(_txtMessage);
@@ -127,11 +127,13 @@ void DeleteGameState::btnYesClick(Action*)
 			_game->pushState(new ErrorMessageState(
 												_game,
 												error,
+												_palette,
 												Palette::blockOffset(8)+10, "BACK01.SCR", 6));
 		else
 			_game->pushState(new ErrorMessageState(
 												_game,
 												error,
+												_palette,
 												Palette::blockOffset(0), "TAC00.SCR", -1));
 	}
 }

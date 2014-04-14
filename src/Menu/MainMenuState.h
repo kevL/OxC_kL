@@ -58,9 +58,6 @@ private:
 		/// Cleans up the Main Menu state.
 		~MainMenuState();
 
-		/// Updates the palette.
-		void init();
-
 		/// Handler for clicking the New Game button.
 		void btnNewGameClick(Action* action);
 		/// Handler for clicking the New Battle button.

@@ -67,8 +67,9 @@ MiniMapState::MiniMapState(
 	_btnLvlDwn	= new InteractiveSurface(18, 20, 24, 88);
 	_btnOk		= new InteractiveSurface(32, 32, 275, 145);
 
-	_txtLevel	= new Text (20, 25, 281, 73);
+	_txtLevel	= new Text(20, 25, 281, 73);
 
+	setPalette("PAL_BATTLESCAPE");
 
 	add(_surface);
 	add(_miniMapView);

@@ -60,9 +60,6 @@ private:
 				Base* base,
 				const std::vector<RuleResearch*>& possibilities);
 
-		/// Updates the palette.
-		void init();
-
 		/// Handler for clicking the OK button.
 		void btnOkClick(Action* action);
 		/// Handler for clicking the Allocate Research button.

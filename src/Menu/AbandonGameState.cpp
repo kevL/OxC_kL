@@ -70,6 +70,16 @@ AbandonGameState::AbandonGameState(
 	_btnNo		= new TextButton(55, 20, x + 30, 132);
 	_btnYes		= new TextButton(55, 20, x + 131, 132);
 
+	// Set palette
+	if (_origin == OPT_BATTLESCAPE)
+	{
+		setPalette("PAL_BATTLESCAPE");
+	}
+	else
+	{
+		setPalette("PAL_GEOSCAPE", 0);
+	}
+
 	add(_window);
 	add(_txtTitle);
 	add(_btnNo);

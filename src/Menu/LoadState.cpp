@@ -175,6 +175,7 @@ void LoadState::quickLoad(const std::string& filename)
 			_game->pushState(new ErrorMessageState(
 												_game,
 												error.str(),
+												_palette,
 												Palette::blockOffset(8)+10,
 												"BACK01.SCR",
 												6));
@@ -182,6 +183,7 @@ void LoadState::quickLoad(const std::string& filename)
 			_game->pushState(new ErrorMessageState(
 												_game,
 												error.str(),
+												_palette,
 												Palette::blockOffset(0),
 												"TAC00.SCR",
 												-1));
@@ -202,6 +204,7 @@ void LoadState::quickLoad(const std::string& filename)
 			_game->pushState(new ErrorMessageState(
 												_game,
 												error.str(),
+												_palette,
 												Palette::blockOffset(8)+10,
 												"BACK01.SCR",
 												6));
@@ -209,6 +212,7 @@ void LoadState::quickLoad(const std::string& filename)
 			_game->pushState(new ErrorMessageState(
 												_game,
 												error.str(),
+												_palette,
 												Palette::blockOffset(0),
 												"TAC00.SCR",
 												-1));

@@ -93,15 +93,17 @@ DefeatState::~DefeatState()
 }
 
 /**
- *
+ * Shows the first slideshow frame.
  */
 void DefeatState::init()
 {
+	State::init();
+
 	nextScreen();
 }
 
 /**
- *
+ * Handle timers.
  */
 void DefeatState::think()
 {
@@ -109,12 +111,12 @@ void DefeatState::think()
 }
 
 /**
- * Returns to the previous screen.
+ * Advances the slideshow or ends the game.
  * @param action Pointer to an action.
  */
 void DefeatState::windowClick(Action*)
 {
-	if(_screenNumber == 2)
+	if (_screenNumber == 2)
 	{
 		_game->popState();
 		_game->setState(new MainMenuState(_game));
@@ -125,7 +127,7 @@ void DefeatState::windowClick(Action*)
 }
 
 /**
- *
+ * Shows the next screen in the slideshow.
  */
 void DefeatState::nextScreen()
 {
@@ -133,7 +135,7 @@ void DefeatState::nextScreen()
 
 	std::ostringstream ss;
 	ss << "PICT" << _screenNumber+3 << ".LBM";
-	_game->setPalette(_game->getResourcePack()->getSurface(ss.str())->getPalette());
+	setPalette(_game->getResourcePack()->getSurface(ss.str())->getPalette());
 	_window->setPalette(_game->getResourcePack()->getSurface(ss.str())->getPalette());
 	_game->getResourcePack()->getSurface(ss.str())->blit(_window);
 	_txtText[_screenNumber-1]->setPalette(_game->getResourcePack()->getSurface(ss.str())->getPalette());

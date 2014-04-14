@@ -286,6 +286,7 @@ void Screen::clear()
  * @param colors Pointer to the set of colors.
  * @param firstcolor Offset of the first color to replace.
  * @param ncolors Amount of colors to replace.
+ * @param immediately Apply palette changes immediately, otherwise wait for next blit.
  */
 void Screen::setPalette(
 		SDL_Color* colors,

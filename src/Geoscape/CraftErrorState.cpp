@@ -57,10 +57,7 @@ CraftErrorState::CraftErrorState(
 	_btnOk5Secs	= new TextButton(100, 18, 48, 150);
 	_btnOk		= new TextButton(100, 18, 172, 150);
 
-	_game->setPalette(
-				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)),
-				Palette::backPos,
-				16);
+	setPalette("PAL_GEOSCAPE", 4);
 
 	add(_window);
 	add(_txtMessage);
@@ -100,17 +97,6 @@ CraftErrorState::CraftErrorState(
  */
 CraftErrorState::~CraftErrorState()
 {
-}
-
-/**
- * Resets the palette.
- */
-void CraftErrorState::init()
-{
-	_game->setPalette(
-				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)),
-				Palette::backPos,
-				16);
 }
 
 /**

@@ -93,11 +93,7 @@ SellState::SellState(
 	_btnCancel		= new TextButton(134, 16, 16, 177);
 	_btnOk			= new TextButton(134, 16, 170, 177);
 
-
-	_game->setPalette(
-				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)),
-				Palette::backPos,
-				16);
+	setPalette("PAL_BASESCAPE", 0);
 
 	add(_window);
 	add(_txtTitle);
@@ -113,7 +109,6 @@ SellState::SellState(
 	add(_btnOk);
 
 	centerAllSurfaces();
-
 
 	_window->setColor(Palette::blockOffset(13)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));

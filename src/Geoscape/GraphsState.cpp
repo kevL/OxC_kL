@@ -112,8 +112,7 @@ GraphsState::GraphsState(Game* game)
 	_blinkTimer->onTimer((StateHandler)& GraphsState::blink);	// kL
 	_blinkTimer->start();										// kL
 
-
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_2")->getColors());
+	setPalette("PAL_GRAPHS");
 
 	add(_bg);
 	add(_btnUfoRegion);
@@ -128,7 +127,6 @@ GraphsState::GraphsState(Game* game)
 	add(_txtTitle);
 	add(_txtFactor);
 	add(_numScore);
-
 
 	for (int
 			scaleText = 0;

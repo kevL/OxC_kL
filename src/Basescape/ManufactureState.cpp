@@ -82,18 +82,7 @@ ManufactureState::ManufactureState(
 	_btnNew			= new TextButton(134, 16, 16, 177);
 	_btnOk			= new TextButton(134, 16, 170, 177);
 
-
-	// back up palette in case we're being called from Geoscape!
-	memcpy(
-		_oldPalette,
-		_game->getScreen()->getPalette(),
-		256 * sizeof(SDL_Color));
-
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());
-	_game->setPalette(
-				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)),
-				Palette::backPos,
-				16);
+	setPalette("PAL_BASESCAPE", 6);
 
 	add(_window);
 	add(_txtTitle);
@@ -200,6 +189,8 @@ ManufactureState::~ManufactureState()
  */
 void ManufactureState::init()
 {
+	State::init();
+
 	fillProductionList();
 }
 
@@ -209,9 +200,6 @@ void ManufactureState::init()
  */
 void ManufactureState::btnOkClick(Action*)
 {
-	// restore palette
-	_game->setPalette(_oldPalette);
-
 	_game->popState();
 }
 

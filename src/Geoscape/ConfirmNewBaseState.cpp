@@ -69,11 +69,7 @@ ConfirmNewBaseState::ConfirmNewBaseState(
 	_btnCancel	= new TextButton(54, 14, 68, 106);
 	_btnOk		= new TextButton(54, 14, 138, 106);
 
-
-	_game->setPalette(
-				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)),
-				Palette::backPos,
-				16);
+	setPalette("PAL_GEOSCAPE", 0);
 
 	add(_window);
 	add(_txtCost);
@@ -82,7 +78,6 @@ ConfirmNewBaseState::ConfirmNewBaseState(
 	add(_btnOk);
 
 	centerAllSurfaces();
-
 
 	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
@@ -157,6 +152,7 @@ void ConfirmNewBaseState::btnOkClick(Action*)
 		_game->pushState(new ErrorMessageState(
 											_game,
 											"STR_NOT_ENOUGH_MONEY",
+											_palette,
 											Palette::blockOffset(8)+10,
 											"BACK01.SCR",
 											0));

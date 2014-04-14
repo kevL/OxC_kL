@@ -61,7 +61,7 @@ private:
 		/// Cleans up the Select Destination state.
 		~SelectDestinationState();
 
-		/// Updates the palette.
+		/// Resets globe.
 		void init();
 		/// Runs the timer.
 		void think();

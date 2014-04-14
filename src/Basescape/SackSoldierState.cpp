@@ -64,10 +64,7 @@ SackSoldierState::SackSoldierState(
 	_btnCancel	= new TextButton(44, 16, 100, 115);
 	_btnOk		= new TextButton(44, 16, 176, 115);
 
-	_game->setPalette(
-				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)),
-				Palette::backPos,
-				16);
+	setPalette("PAL_BASESCAPE", 6);
 
 	add(_window);
 	add(_btnOk);

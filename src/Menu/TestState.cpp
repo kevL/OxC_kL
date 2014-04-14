@@ -64,12 +64,7 @@ TestState::TestState(Game* game)
 	_set = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
 	_set->getFrame(1);
 
-
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());
-	_game->setPalette(
-				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)),
-				Palette::backPos,
-				16);
+	setPalette("PAL_BASESCAPE", 2);
 
 	add(_window);
 	add(_button);
@@ -79,7 +74,6 @@ TestState::TestState(Game* game)
 	add(_slider);
 
 	centerAllSurfaces();
-
 
 	_window->setColor(Palette::blockOffset(15)+1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK04.SCR"));
@@ -107,10 +101,10 @@ TestState::TestState(Game* game)
 
 	_i = 0;
 
-	//_game->getResourcePack()->getPalette("PALETTES.DAT_0")->savePal("../../../Geoscape.pal");
-	//_game->getResourcePack()->getPalette("PALETTES.DAT_1")->savePal("../../../Basescape.pal");
-	//_game->getResourcePack()->getPalette("PALETTES.DAT_3")->savePal("../../../Ufopaedia.pal");
-	//_game->getResourcePack()->getPalette("PALETTES.DAT_4")->savePal("../../../Battlescape.pal");
+	//_game->getResourcePack()->getPalette("PAL_GEOSCAPE")->savePal("../../../Geoscape.pal");
+	//_game->getResourcePack()->getPalette("PAL_BASESCAPE")->savePal("../../../Basescape.pal");
+	//_game->getResourcePack()->getPalette("PAL_UFOPAEDIA")->savePal("../../../Ufopaedia.pal");
+	//_game->getResourcePack()->getPalette("PAL_BATTLESCAPE")->savePal("../../../Battlescape.pal");
 
 	//_game->getResourcePack()->getFont("FONT_BIG")->fix("../../../Big.bmp", 256);
 	//_game->getResourcePack()->getFont("FONT_SMALL")->fix("../../../Small.bmp", 128);

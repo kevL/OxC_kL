@@ -107,11 +107,7 @@ GeoscapeCraftState::GeoscapeCraftState(
 	_btnBase		= new TextButton(90, 16, 32, 157);
 	_btnCancel		= new TextButton(90, 16, 134, 157);
 
-
-	_game->setPalette(
-				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)),
-				Palette::backPos,
-				16);
+	setPalette("PAL_GEOSCAPE", 4);
 
 	add(_window);
 	add(_txtTitle);
@@ -138,7 +134,6 @@ GeoscapeCraftState::GeoscapeCraftState(
 	add(_btnCancel);
 
 	centerAllSurfaces();
-
 
 	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK12.SCR"));
@@ -361,6 +356,13 @@ GeoscapeCraftState::GeoscapeCraftState(
 	if (_craft->getRules()->getVehicles() == 0)
 		_txtHWP->setVisible(false);
 	// kL_end.
+
+	// kL_begin ( was in init() ):
+	SurfaceSet* texture = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
+	texture->getFrame(_craft->getRules()->getSprite() + 33)->setX(0);
+	texture->getFrame(_craft->getRules()->getSprite() + 33)->setY(0);
+	texture->getFrame(_craft->getRules()->getSprite() + 33)->blit(_sprite);
+	// kL_end.
 }
 
 /**
@@ -368,24 +370,6 @@ GeoscapeCraftState::GeoscapeCraftState(
  */
 GeoscapeCraftState::~GeoscapeCraftState()
 {
-}
-
-/**
- * Resets the palette.
- */
-void GeoscapeCraftState::init()
-{
-	_game->setPalette(
-				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)),
-				Palette::backPos,
-				16);
-
-	// kL_begin:
-	SurfaceSet* texture = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
-	texture->getFrame(_craft->getRules()->getSprite() + 33)->setX(0);
-	texture->getFrame(_craft->getRules()->getSprite() + 33)->setY(0);
-	texture->getFrame(_craft->getRules()->getSprite() + 33)->blit(_sprite);
-	// kL_end.
 }
 
 // kL_begin: center craft on Globe.

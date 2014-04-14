@@ -48,25 +48,28 @@ private:
 	void create(
 			const std::string& str,
 			const std::wstring& wstr,
+			SDL_Color* palette,
 			Uint8 color,
 			std::string bg,
-			Uint8 bgColor);
+			int bgColor);
 
 	public:
 		/// Creates the Error state.
 		ErrorMessageState(
 				Game* game,
 				const std::string& id,
+				SDL_Color* palette,
 				Uint8 color,
 				std::string bg,
-				Uint8 bgColor);
+				int bgColor);
 		/// Creates the Error state.
 		ErrorMessageState(
 				Game* game,
 				const std::wstring& msg,
+				SDL_Color* palette,
 				Uint8 color,
 				std::string bg,
-				Uint8 bgColor);
+				int bgColor);
 		/// Cleans up the Error state.
 		~ErrorMessageState();
 

@@ -75,11 +75,7 @@ CraftsState::CraftsState(
 
 	_btnOk		= new TextButton(288, 16, 16, 177);
 
-
-	_game->setPalette(
-				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(3)),
-				Palette::backPos,
-				16);
+	setPalette("PAL_BASESCAPE", 3);
 
 	add(_window);
 	add(_txtTitle);
@@ -156,6 +152,8 @@ CraftsState::~CraftsState()
  */
 void CraftsState::init()
 {
+	State::init();
+
 	_lstCrafts->clearList();
 
 	int r = 0;

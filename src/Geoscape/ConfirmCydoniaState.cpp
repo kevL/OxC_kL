@@ -59,13 +59,14 @@ ConfirmCydoniaState::ConfirmCydoniaState(
 	_btnNo		= new TextButton(80, 20, 70, 142);
 	_btnYes		= new TextButton(80, 20, 170, 142);
 
+	setPalette("PAL_GEOSCAPE", 5);
+
 	add(_window);
 	add(_btnYes);
 	add(_btnNo);
 	add(_txtMessage);
 
 	centerAllSurfaces();
-
 
 	_window->setColor(Palette::blockOffset(8)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK12.SCR"));
@@ -99,13 +100,6 @@ ConfirmCydoniaState::~ConfirmCydoniaState()
 }
 
 /**
- *
- */
-void ConfirmCydoniaState::init()
-{
-}
-
-/**
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
@@ -135,11 +129,6 @@ void ConfirmCydoniaState::btnYesClick(Action*)
  */
 void ConfirmCydoniaState::btnNoClick(Action*)
 {
-	_game->setPalette(
-				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)),
-				Palette::backPos,
-				16);
-
 	_game->popState();
 }
 

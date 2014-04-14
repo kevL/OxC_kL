@@ -129,8 +129,8 @@ private:
 			/// Sets a new palette.
 			void setPalette(
 					SDL_Color* colors,
-					int firstcolor,
-					int ncolors);
+					int firstcolor = 0,
+					int ncolors = 256);
 			/// Gets list of voxel data.
 			std::vector<Uint16>* getVoxelData();
 };

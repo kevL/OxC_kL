@@ -418,6 +418,8 @@ static void audioHandler()
  */
 void IntroState::init()
 {
+	State::init();
+
 	if (CrossPlatform::fileExists(_introFile)
 		&& (CrossPlatform::fileExists(_introSoundFileDOS)
 			|| CrossPlatform::fileExists(_introSoundFileWin)))

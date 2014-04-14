@@ -67,11 +67,7 @@ BaseNameState::BaseNameState(
 	_edtName	= new TextEdit(127, 16, 59, 94);
 	_btnOk		= new TextButton(162, 16, 47, 118);
 
-
-	_game->setPalette(
-				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)),
-				Palette::backPos,
-				16);
+	setPalette("PAL_GEOSCAPE", 0);
 
 	add(_window);
 	add(_txtTitle);
@@ -79,7 +75,6 @@ BaseNameState::BaseNameState(
 	add(_btnOk);
 
 	centerAllSurfaces();
-
 
 	_window->setColor(Palette::blockOffset(8)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));

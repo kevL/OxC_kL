@@ -33,6 +33,9 @@
 #include "../Engine/Screen.h"
 #include "../Engine/Surface.h"
 
+#include "../Interface/FpsCounter.h"
+#include "../Interface/Cursor.h"
+
 #include "../Resource/XcomResourcePack.h"
 
 #include "../Ruleset/Ruleset.h"
@@ -65,11 +68,14 @@ StartState::StartState(Game *game)
 	bnw[2].g = 255;
 	bnw[2].b = 0;
 
-	_game->setPalette(bnw, 0, 3);
+	setPalette(bnw, 0, 3);
 
 	add(_surface);
 
 	_surface->drawString(120, 96, "Loading...", 1);
+
+	_game->getCursor()->setVisible(false);
+	_game->getFpsCounter()->setVisible(false);
 }
 
 /**
@@ -150,6 +156,9 @@ void StartState::think()
 
 				Options::reload = false;
 			}
+
+			_game->getCursor()->setVisible(true);
+			_game->getFpsCounter()->setVisible(Options::fpsCounter);
 		break;
 		default:
 		break;

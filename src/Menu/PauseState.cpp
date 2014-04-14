@@ -72,11 +72,11 @@ PauseState::PauseState(
 	_btnCancel	= new TextButton(180, 18, x + 18, 150);
 
 
-	if (_origin != OPT_BATTLESCAPE)
-		_game->setPalette(
-					_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)),
-					Palette::backPos,
-					16);
+	if (_origin == OPT_BATTLESCAPE)
+		setPalette("PAL_BATTLESCAPE");
+	else
+		setPalette("PAL_GEOSCAPE", 0);
+
 
 	add(_window);
 	add(_txtTitle);
@@ -143,19 +143,6 @@ PauseState::PauseState(
  */
 PauseState::~PauseState()
 {
-}
-
-/**
- * Resets the palette
- * since it's bound to change on other screens.
- */
-void PauseState::init()
-{
-	if (_origin != OPT_BATTLESCAPE)
-		_game->setPalette(
-					_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)),
-					Palette::backPos,
-					16);
 }
 
 /**

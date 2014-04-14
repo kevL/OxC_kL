@@ -17,11 +17,11 @@
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "Ufopaedia.h"
+#include "ArticleStateVehicle.h"
 
 #include <sstream>
 
-#include "ArticleStateVehicle.h"
+#include "Ufopaedia.h"
 
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
@@ -60,16 +60,13 @@ ArticleStateVehicle::ArticleStateVehicle(
 	_txtInfo	= new Text(300, 150, 10, 122);
 	_lstStats	= new TextList(300, 89, 10, 48);
 
-
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_3")->getColors());
-//	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)), Palette::backPos, 16);
+	setPalette("PAL_UFOPAEDIA");
 
 	ArticleState::initLayout();
 
 	add(_txtTitle);
 	add(_txtInfo);
 	add(_lstStats);
-
 
 	_game->getResourcePack()->getSurface("BACK10.SCR")->blit(_bg);
 	_btnOk->setColor(Palette::blockOffset(5));

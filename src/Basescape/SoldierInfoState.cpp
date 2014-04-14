@@ -140,6 +140,8 @@ SoldierInfoState::SoldierInfoState(
 	_numPsiSkill	= new Text(18, 9, 131, 190);
 	_barPsiSkill	= new Bar(170, 7, 150, 190);
 
+	setPalette("PAL_BASESCAPE");
+
 	add(_bg);
 	add(_rank);
 	add(_btnOk);
@@ -382,6 +384,8 @@ SoldierInfoState::~SoldierInfoState()
  */
 void SoldierInfoState::init()
 {
+	State::init();
+
 	if (_list->empty())
 	{
 		_game->popState();

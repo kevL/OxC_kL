@@ -142,8 +142,6 @@ void ArticleState::initLayout()
 void ArticleState::btnOkClick(Action*)
 {
 	_game->popState();
-
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
 }
 
 /**

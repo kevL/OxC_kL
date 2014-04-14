@@ -75,11 +75,7 @@ TransferBaseState::TransferBaseState(
 	_btnMatrix		= new TextButton(112, 16, 46, 146);
 	_btnCancel		= new TextButton(112, 16, 162, 146);
 
-
-	_game->setPalette(
-				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)),
-				Palette::backPos,
-				16);
+	setPalette("PAL_BASESCAPE", 4);
 
 	add(_window);
 	add(_txtTitle);
@@ -92,7 +88,6 @@ TransferBaseState::TransferBaseState(
 	add(_btnCancel);
 
 	centerAllSurfaces();
-
 
 	_window->setColor(Palette::blockOffset(13) + 5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));

@@ -60,7 +60,6 @@ VictoryState::VictoryState(Game *game)
 
 	add(_window);
 
-
 	_window->onMouseClick((ActionHandler)& VictoryState::windowClick);
 
 //	_game->getResourcePack()->playMusic("GMWIN");
@@ -94,18 +93,26 @@ VictoryState::~VictoryState()
 	delete _timer;
 }
 
+/**
+ * Shows the first slideshow frame.
+ */
 void VictoryState::init()
 {
+	State::init();
+
 	nextScreen();
 }
 
+/**
+ * Handle timers.
+ */
 void VictoryState::think()
 {
 	_timer->think(this, 0);
 }
 
 /**
- * Returns to the previous screen.
+ * Advances the slideshow or ends the game.
  * @param action Pointer to an action.
  */
 void VictoryState::windowClick(Action*)
@@ -120,6 +127,9 @@ void VictoryState::windowClick(Action*)
 		nextScreen();
 }
 
+/**
+ * Shows the next screen in the slideshow.
+ */
 void VictoryState::nextScreen()
 {
 	++_screenNumber;
@@ -130,7 +140,7 @@ void VictoryState::nextScreen()
 
 	std::ostringstream ss;
 	ss << "PICT" << _screenNumber+offset << ".LBM";
-	_game->setPalette(_game->getResourcePack()->getSurface(ss.str())->getPalette());
+	setPalette(_game->getResourcePack()->getSurface(ss.str())->getPalette());
 	_window->setPalette(_game->getResourcePack()->getSurface(ss.str())->getPalette());
 	_game->getResourcePack()->getSurface(ss.str())->blit(_window);
 	_txtText[_screenNumber-1]->setPalette(_game->getResourcePack()->getSurface(ss.str())->getPalette());

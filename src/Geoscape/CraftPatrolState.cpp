@@ -66,11 +66,7 @@ CraftPatrolState::CraftPatrolState(
 	_btnOk			= new TextButton(144, 16, 58, 140);
 	_btnRedirect	= new TextButton(144, 16, 58, 159);
 
-
-	_game->setPalette(
-				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)),
-				Palette::backPos,
-				16);
+	setPalette("PAL_GEOSCAPE", 4);
 
 	add(_window);
 	add(_txtDestination);
@@ -79,7 +75,6 @@ CraftPatrolState::CraftPatrolState(
 	add(_btnRedirect);
 
 	centerAllSurfaces();
-
 
 	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK12.SCR"));
@@ -117,17 +112,6 @@ CraftPatrolState::CraftPatrolState(
  */
 CraftPatrolState::~CraftPatrolState()
 {
-}
-
-/**
- * Resets the palette.
- */
-void CraftPatrolState::init()
-{
-	_game->setPalette(
-				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)),
-				Palette::backPos,
-				16);
 }
 
 /**

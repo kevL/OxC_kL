@@ -56,17 +56,13 @@ BaseDestroyedState::BaseDestroyedState(
 	_txtMessage	= new Text(224, 120, 48, 30);
 	_btnOk		= new TextButton(100, 16, 110, 156);
 
-	_game->setPalette(
-				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)),
-				Palette::backPos,
-				16);
+	setPalette("PAL_GEOSCAPE", 7);
 
 	add(_window);
 	add(_txtMessage);
 	add(_btnOk);
 
 	centerAllSurfaces();
-
 
 	_window->setColor(Palette::blockOffset(8)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK15.SCR"));
@@ -139,17 +135,6 @@ BaseDestroyedState::BaseDestroyedState(
  */
 BaseDestroyedState::~BaseDestroyedState()
 {
-}
-
-/**
- * Resets the palette.
- */
-void BaseDestroyedState::init()
-{
-	_game->setPalette(
-				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)),
-				Palette::backPos,
-				16);
 }
 
 /**

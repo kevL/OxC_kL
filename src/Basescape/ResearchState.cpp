@@ -80,18 +80,7 @@ ResearchState::ResearchState(
 	_btnNew			= new TextButton(92, 16, 114, 177);
 	_btnOk			= new TextButton(92, 16, 212, 177);
 
-	// back up palette in case we're being called from Geoscape!
-	memcpy(
-		_oldPalette,
-		_game->getScreen()->getPalette(),
-		256 * sizeof(SDL_Color));
-
-
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());
-	_game->setPalette(
-				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(1)),
-				Palette::backPos,
-				16);
+	setPalette("PAL_BASESCAPE", 1);
 
 	add(_window);
 	add(_txtTitle);
@@ -108,7 +97,6 @@ ResearchState::ResearchState(
 	add(_btnOk);
 
 	centerAllSurfaces();
-
 
 	_window->setColor(Palette::blockOffset(13)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK05.SCR"));
@@ -181,8 +169,6 @@ ResearchState::~ResearchState()
  */
 void ResearchState::btnOkClick(Action*)
 {
-	_game->setPalette(_oldPalette);
-
 	_game->popState();
 }
 
@@ -228,6 +214,8 @@ void ResearchState::onSelectProject(Action*)
  */
 void ResearchState::init()
 {
+	State::init();
+
 	_lstResearch->clearList();
 
 	const std::vector<ResearchProject*>& baseProjects(_base->getResearch());

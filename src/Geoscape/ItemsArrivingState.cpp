@@ -82,11 +82,7 @@ ItemsArrivingState::ItemsArrivingState(
 	_btnOk5Secs		= new TextButton(90, 16, 118, 169);
 	_btnOk			= new TextButton(90, 16, 220, 169);
 
-
-	_game->setPalette(
-				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)),
-				Palette::backPos,
-				16);
+	setPalette("PAL_GEOSCAPE", 6);
 
 	add(_window);
 	add(_txtTitle);
@@ -99,7 +95,6 @@ ItemsArrivingState::ItemsArrivingState(
 	add(_btnOk);
 
 	centerAllSurfaces();
-
 
 	_window->setColor(Palette::blockOffset(8)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
@@ -238,17 +233,6 @@ ItemsArrivingState::ItemsArrivingState(
  */
 ItemsArrivingState::~ItemsArrivingState()
 {
-}
-
-/**
- * Resets the palette.
- */
-void ItemsArrivingState::init()
-{
-	_game->setPalette(
-				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)),
-				Palette::backPos,
-				16);
 }
 
 /**

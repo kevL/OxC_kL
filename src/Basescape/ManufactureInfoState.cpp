@@ -196,12 +196,6 @@ void ManufactureInfoState::buildUi()
 									width - 5 * button_x_border,
 									start_y + 4 * button_height);
 
-
-	_game->setPalette(
-				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)),
-				Palette::backPos,
-				16);
-
 	_surfaceEngineers = new InteractiveSurface(
 								(_btnEngineerUp->getX() + _btnEngineerUp->getWidth() + _txtUnitToProduce->getX()) / 2,
 								height,
@@ -215,6 +209,8 @@ void ManufactureInfoState::buildUi()
 								start_x + _surfaceEngineers->getWidth(),
 								start_y);
 	_surfaceUnits->onMouseClick((ActionHandler)& ManufactureInfoState::handleWheelUnit, 0);
+
+	setPalette("PAL_BASESCAPE", 6);
 
 	add(_surfaceEngineers);
 	add(_surfaceUnits);
@@ -532,6 +528,7 @@ void ManufactureInfoState::moreUnit(int change)
 		_game->pushState(new ErrorMessageState(
 											_game,
 											"STR_NO_FREE_HANGARS_FOR_CRAFT_PRODUCTION",
+											_palette,
 											Palette::blockOffset(15)+1,
 											"BACK17.SCR",
 											6));

@@ -113,11 +113,7 @@ TransferItemsState::TransferItemsState(
 	_btnCancel				= new TextButton(134, 16, 16, 177);
 	_btnOk					= new TextButton(134, 16, 170, 177);
 
-
-	_game->setPalette(
-				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)),
-				Palette::backPos,
-				16);
+	setPalette("PAL_BASESCAPE", 0);
 
 	add(_window);
 	add(_txtTitle);
@@ -132,7 +128,6 @@ TransferItemsState::TransferItemsState(
 	add(_btnOk);
 
 	centerAllSurfaces();
-
 
 	_window->setColor(Palette::blockOffset(13)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
@@ -434,26 +429,12 @@ TransferItemsState::~TransferItemsState()
 }
 
 /**
- * Resets the palette since it's bound to change on other screens.
- */
-void TransferItemsState::init()
-{
-	_game->setPalette(
-				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)),
-				Palette::backPos,
-				16);
-}
-
-/**
  * Re-initialize the Transfer menu.
  * Called when cancelling TransferConfirmState.
  */
 void TransferItemsState::reinit()
 {
-	_game->setPalette(
-				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)),
-				Palette::backPos,
-				16);
+	// kL, does a setPallete() or State->init() have to go in here? prob not.
 
 	_lstItems->clearList();
 
@@ -1083,6 +1064,7 @@ void TransferItemsState::increaseByValue(int change)
 		_game->pushState(new ErrorMessageState(
 											_game,
 											"STR_NO_FREE_ACCOMODATION",
+											_palette,
 											Palette::blockOffset(15) + 1,
 											"BACK13.SCR",
 											0));
@@ -1100,6 +1082,7 @@ void TransferItemsState::increaseByValue(int change)
 			_game->pushState(new ErrorMessageState(
 												_game,
 												"STR_NO_FREE_HANGARS_FOR_TRANSFER",
+												_palette,
 												Palette::blockOffset(15) + 1,
 												"BACK13.SCR",
 												0));
@@ -1113,6 +1096,7 @@ void TransferItemsState::increaseByValue(int change)
 			_game->pushState(new ErrorMessageState(
 												_game,
 												"STR_NO_FREE_ACCOMODATION_CREW",
+												_palette,
 												Palette::blockOffset(15) + 1,
 												"BACK13.SCR",
 												0));
@@ -1129,6 +1113,7 @@ void TransferItemsState::increaseByValue(int change)
 		_game->pushState(new ErrorMessageState(
 											_game,
 											"STR_NOT_ENOUGH_STORE_SPACE",
+											_palette,
 											Palette::blockOffset(15)+1,
 											"BACK13.SCR",
 											0));
@@ -1144,6 +1129,7 @@ void TransferItemsState::increaseByValue(int change)
 		_game->pushState(new ErrorMessageState(
 											_game,
 											"STR_NO_ALIEN_CONTAINMENT_FOR_TRANSFER",
+											_palette,
 											Palette::blockOffset(15)+1,
 											"BACK13.SCR",
 											0));

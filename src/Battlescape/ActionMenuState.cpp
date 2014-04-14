@@ -69,6 +69,8 @@ ActionMenuState::ActionMenuState(
 {
 	_screen = false;
 
+	setPalette("PAL_BATTLESCAPE");
+
 	for (int
 			i = 0;
 			i < 6;

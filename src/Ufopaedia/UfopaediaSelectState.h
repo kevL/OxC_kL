@@ -63,8 +63,6 @@ protected:
 
 	/// load available articles into the selection list
 	void loadSelectionList();
-	/// Initializes the state.
-	virtual void init();
 
 
 	public:

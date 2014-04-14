@@ -103,12 +103,7 @@ CraftInfoState::CraftInfoState(
 
 	_btnOk			= new TextButton(288, 16, 16, 177);
 
-
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());
-	_game->setPalette(
-				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(3)),
-				Palette::backPos,
-				16);
+	setPalette("PAL_BASESCAPE", 3);
 
 	add(_window);
 	add(_edtCraft);
@@ -212,10 +207,7 @@ CraftInfoState::~CraftInfoState()
  */
 void CraftInfoState::init()
 {
-	_game->setPalette(
-				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(3)),
-				Palette::backPos,
-				16);
+	State::init();
 
 	_craft = _base->getCrafts()->at(_craftId);
 	_edtCraft->setText(_craft->getName(_game->getLanguage()));

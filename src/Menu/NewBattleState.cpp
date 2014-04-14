@@ -110,6 +110,8 @@ NewBattleState::NewBattleState(Game* game)
 	_btnCancel			= new TextButton(100, 16, 110, 176);
 	_btnRandom			= new TextButton(100, 16, 212, 176);
 
+	setPalette("PAL_GEOSCAPE", 0);
+
 	add(_window);
 	add(_txtTitle);
 	add(_txtMapOptions);
@@ -280,10 +282,7 @@ NewBattleState::~NewBattleState()
  */
 void NewBattleState::init()
 {
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
-
-//	_game->getResourcePack()->playMusic("GMSTORY");
-	_game->getResourcePack()->getMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMSTORY)->play(); // kL: sza_MusicRules
+	State::init();
 
 	if (_craft == 0)
 		load();

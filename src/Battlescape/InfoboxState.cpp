@@ -49,6 +49,9 @@ InfoboxState::InfoboxState(
 	_frame	= new Frame(260, 90, 30, 27);
 	_text	= new Text(250, 80, 35, 32);
 
+	// Set palette
+	setPalette("PAL_BATTLESCAPE");
+
 	add(_frame);
 	add(_text);
 

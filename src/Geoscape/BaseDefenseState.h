@@ -26,14 +26,15 @@
 namespace OpenXcom
 {
 
-class TextButton;
-class Window;
-class Text;
 class Base;
-class Ufo;
-class TextList;
 class GeoscapeState;
+class Text;
+class TextButton;
+class TextList;
 class Timer;
+class Ufo;
+class Window;
+
 
 enum BaseDefenseActionType
 {
@@ -44,6 +45,7 @@ enum BaseDefenseActionType
 	BDA_END
 };
 
+
 /**
  * Base Defense Screen for when ufos try to attack.
  */
@@ -51,30 +53,45 @@ class BaseDefenseState
 	:
 		public State
 {
+
 private:
-	TextButton* _btnOk;
-	Window* _window;
-	Text* _txtTitle, * _txtInit;
-	TextList* _lstDefenses;
-	Base* _base;
-	Ufo* _ufo;
-	int _thinkcycles, _row, _passes, _gravShields, _defenses, _attacks;
+	int
+		_thinkcycles,
+		_row,
+		_passes,
+		_gravShields,
+		_defenses,
+		_attacks;
+
 	BaseDefenseActionType _action;
-	Timer* _timer;
+
+	Base* _base;
 	GeoscapeState* _state;
+	Text
+		* _txtInit,
+		* _txtTitle;
+	TextButton* _btnOk;
+	TextList* _lstDefenses;
+	Timer* _timer;
+	Ufo* _ufo;
+	Window* _window;
+
 
 	public:
 		/// Creates the Base Defense state.
-		BaseDefenseState(Game* game, Base* base, Ufo* ufo, GeoscapeState* state);
+		BaseDefenseState(
+				Game* game,
+				Base* base,
+				Ufo* ufo,
+				GeoscapeState* state);
 		/// Cleans up the Base Defense state.
 		~BaseDefenseState();
 
-		/// Updates the palette.
-		void init();
 		/// Handle the Timer.
 		void think();
 		/// do the next step.
 		void nextStep();
+
 		/// Handler for clicking the OK button.
 		void btnOkClick(Action* action);
 };

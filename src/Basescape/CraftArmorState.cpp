@@ -77,11 +77,7 @@ CraftArmorState::CraftArmorState(
 
 	_btnOk			= new TextButton(288, 16, 16, 177);
 
-
-	_game->setPalette(
-				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)),
-				Palette::backPos,
-				16);
+	setPalette("PAL_BASESCAPE", 4);
 
 	add(_window);
 	add(_txtTitle);
@@ -189,6 +185,8 @@ CraftArmorState::~CraftArmorState()
  */
 void CraftArmorState::init()
 {
+	State::init();
+
 	_lstSoldiers->clearList(); // kL
 
 	// kL_begin: init Armor list, from cTor

@@ -438,6 +438,7 @@ UnitInfoState::~UnitInfoState()
  */
 void UnitInfoState::init()
 {
+	State::init();
 	std::wostringstream ss;
 	int minPsi = 0;
 

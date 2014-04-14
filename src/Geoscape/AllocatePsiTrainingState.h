@@ -36,6 +36,7 @@ class Window;
 
 /**
  * Screen that allocates soldiers to psionic training.
+ * Shown monthly to allow changing soldiers currently in psi training.
  */
 class AllocatePsiTrainingState
 	:
@@ -70,21 +71,19 @@ private:
 		/// Cleans up the Psi Training state.
 		~AllocatePsiTrainingState();
 
-		/// Updates the palette.
-		void init();
+		/// refreshes the soldier-list.
+		void init(); // kL
 
 		/// Handler for clicking the OK button.
 		void btnOkClick(Action* action);
-//kL		void btnBase1Click();
-//kL		void lstSoldiersPress(Action* action);
-//kL		void lstSoldiersRelease(Action* action);
+		/// Handler for clicking the Soldiers list.
 		void lstSoldiersClick(Action* action);
 
 		// kL_begin: re-order soldiers, taken from CraftSoldiersState.
-		/// Handler for clicking the Soldiers reordering button.
-		void lstItemsLeftArrowClick_Psi(Action* action);
-		/// Handler for clicking the Soldiers reordering button.
-		void lstItemsRightArrowClick_Psi(Action* action);
+		/// kL. Handler for clicking the Soldiers reordering button.
+		void lstItemsLeftArrowClick_Psi(Action* action); // kL
+		/// kL. Handler for clicking the Soldiers reordering button.
+		void lstItemsRightArrowClick_Psi(Action* action); // kL
 		// kL_end.
 };
 

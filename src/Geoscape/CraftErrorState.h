@@ -45,7 +45,9 @@ class CraftErrorState
 private:
 	GeoscapeState* _state;
 	Text* _txtMessage;
-	TextButton* _btnOk, * _btnOk5Secs;
+	TextButton
+		* _btnOk,
+		* _btnOk5Secs;
 	Window* _window;
 
 
@@ -57,9 +59,6 @@ private:
 				const std::wstring& msg);
 		/// Cleans up the Craft Error state.
 		~CraftErrorState();
-
-		/// Updates the palette.
-		void init();
 
 		/// Handler for clicking the OK button.
 		void btnOkClick(Action* action);

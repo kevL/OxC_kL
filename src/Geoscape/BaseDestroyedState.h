@@ -55,9 +55,6 @@ private:
 		/// Cleans up the Select Destination state.
 		~BaseDestroyedState();
 
-		/// Updates the palette.
-		void init();
-
 		/// Handler for clicking the Cydonia mission button.
 		void btnOkClick(Action* action);
 };

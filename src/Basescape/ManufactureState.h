@@ -20,8 +20,6 @@
 #ifndef OPENXCOM_MANUFACTURESTATE_H
 #define OPENXCOM_MANUFACTURESTATE_H
 
-#include <SDL.h>
-
 #include "../Engine/State.h"
 
 
@@ -46,7 +44,6 @@ class ManufactureState
 
 private:
 	Base* _base;
-	SDL_Color _oldPalette[256];
 	Text
 		* _txtAvailable,
 		* _txtAllocated,

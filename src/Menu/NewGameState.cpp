@@ -57,6 +57,9 @@ NewGameState::NewGameState(Game* game)
 	_btnSuperhuman	= new TextButton(160, 18, 80, 130);
 	_btnCancel		= new TextButton(160, 18, 80, 158);
 
+	// Set palette
+	setPalette("PAL_GEOSCAPE", 0);
+
 	add(_window);
 	add(_txtTitle);
 	add(_btnBeginner);

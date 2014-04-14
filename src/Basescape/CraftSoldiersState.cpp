@@ -83,11 +83,7 @@ CraftSoldiersState::CraftSoldiersState(
 	_btnUnload		= new TextButton(134, 16, 16, 177);
 	_btnOk			= new TextButton(134, 16, 170, 177);
 
-
-	_game->setPalette(
-				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)),
-				Palette::backPos,
-				16);
+	setPalette("PAL_BASESCAPE", 2);
 
 	add(_window);
 	add(_txtTitle);
@@ -225,6 +221,8 @@ void CraftSoldiersState::btnUnloadClick(Action*) // kL
 //void CraftSoldiersState::populateList()
 void CraftSoldiersState::init()
 {
+	State::init();
+
 	Craft* c = _base->getCrafts()->at(_craft);
 	_lstSoldiers->clearList();
 

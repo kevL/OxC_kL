@@ -70,9 +70,6 @@ private:
 		/// Cleans up the Production Complete state.
 		~ProductionCompleteState();
 
-		/// Updates the palette.
-		void init();
-
 		/// Handler for clicking the OK button.
 		void btnOkClick(Action* action);
 		/// Handler for clicking the Ok 5sec button.

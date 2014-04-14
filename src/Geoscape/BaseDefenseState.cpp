@@ -18,30 +18,38 @@
  */
 
 #include "BaseDefenseState.h"
+
 #include <sstream>
+
+#include "BaseDestroyedState.h"
+#include "GeoscapeState.h"
+
+#include "../Battlescape/BattlescapeGenerator.h"
+#include "../Battlescape/BriefingState.h"
+
+#include "../Engine/Action.h"
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
+#include "../Engine/Options.h"
 #include "../Engine/Palette.h"
-#include "../Interface/TextButton.h"
-#include "../Interface/Window.h"
+#include "../Engine/RNG.h"
+#include "../Engine/Sound.h"
+#include "../Engine/Timer.h"
+
 #include "../Interface/Text.h"
-#include "../Savegame/SavedGame.h"
+#include "../Interface/TextButton.h"
+#include "../Interface/TextList.h"
+#include "../Interface/Window.h"
+
+#include "../Resource/ResourcePack.h"
+
+#include "../Ruleset/RuleBaseFacility.h"
+#include "../Ruleset/Ruleset.h"
+
 #include "../Savegame/Base.h"
 #include "../Savegame/BaseFacility.h"
-#include "../Ruleset/Ruleset.h"
-#include "../Ruleset/RuleBaseFacility.h"
+#include "../Savegame/SavedGame.h"
 #include "../Savegame/Ufo.h"
-#include "../Interface/TextList.h"
-#include "GeoscapeState.h"
-#include "../Engine/Action.h"
-#include "../Engine/RNG.h"
-#include "../Battlescape/BriefingState.h"
-#include "../Battlescape/BattlescapeGenerator.h"
-#include "../Engine/Sound.h"
-#include "BaseDestroyedState.h"
-#include "../Engine/Timer.h"
-#include "../Engine/Options.h"
 
 
 namespace OpenXcom
@@ -54,29 +62,29 @@ namespace OpenXcom
  * @param ufo Pointer to the attacking ufo.
  * @param state Pointer to the Geoscape.
  */
-BaseDefenseState::BaseDefenseState(Game* game, Base* base, Ufo* ufo, GeoscapeState* state)
+BaseDefenseState::BaseDefenseState(
+		Game* game,
+		Base* base,
+		Ufo* ufo,
+		GeoscapeState* state)
 	:
 		State(game),
-		_state(state)
+		_state(state),
+		_base(base),
+		_action(),
+		_row(-1),
+		_passes(0),
+		_attacks(0),
+		_thinkcycles(0),
+		_ufo(ufo)
 {
-	_base = base;
-	_action = BDA_NONE;
-	_row = -1;
-	_passes = 0;
-	_attacks = 0;
-	_thinkcycles = 0;
-	_ufo = ufo;
-
-
 	_window			= new Window(this, 320, 200, 0, 0);
 	_txtTitle		= new Text(300, 17, 16, 6);
 	_txtInit		= new Text(300, 10, 16, 24);
 	_lstDefenses	= new TextList(300, 130, 16, 40);
 	_btnOk			= new TextButton(120, 16, 100, 170);
 
-
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors(Palette::blockOffset(14)), Palette::backPos, 16);
+	setPalette("PAL_BASESCAPE", 2);
 
 	add(_window);
 	add(_btnOk);
@@ -85,7 +93,6 @@ BaseDefenseState::BaseDefenseState(Game* game, Base* base, Ufo* ufo, GeoscapeSta
 	add(_lstDefenses);
 
 	centerAllSurfaces();
-
 
 	_window->setColor(Palette::blockOffset(15)+6);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK04.SCR"));
@@ -124,15 +131,6 @@ BaseDefenseState::BaseDefenseState(Game* game, Base* base, Ufo* ufo, GeoscapeSta
 BaseDefenseState::~BaseDefenseState()
 {
 	delete _timer;
-}
-
-/**
- * Resets the palette.
- */
-void BaseDefenseState::init()
-{
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors(Palette::blockOffset(14)), Palette::backPos, 16);
 }
 
 /**
@@ -252,14 +250,16 @@ void BaseDefenseState::btnOkClick(Action*)
 {
 	_timer->stop();
 
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
 	_game->popState();
 
 	if (_ufo->getStatus() != Ufo::DESTROYED)
 	{
-		// Whatever happens in the base defense, the UFO has finished its duty
+		// the UFO has finished its duty, whatever happens in the base defense
 		_ufo->setStatus(Ufo::DESTROYED);
-        _state->handleBaseDefense(_base, _ufo);
+
+		_state->handleBaseDefense(
+								_base,
+								_ufo);
 	}
 }
 

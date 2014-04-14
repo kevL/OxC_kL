@@ -66,18 +66,13 @@ AlienBaseState::AlienBaseState(
 	_txtTitle	= new Text(308, 60, 6, 60);
 	_btnOk		= new TextButton(50, 12, 135, 180);
 
+	setPalette("PAL_GEOSCAPE", 3);
+
 	add(_window);
 	add(_txtTitle);
 	add(_btnOk);
 
-
 	centerAllSurfaces();
-
-	_game->setPalette(
-				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(3)),
-				Palette::backPos,
-				16);
-
 
 	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
@@ -97,9 +92,7 @@ AlienBaseState::AlienBaseState(
 	_txtTitle->setBig();
 	_txtTitle->setWordWrap(true);
 
-
-	// Check location of base
-	double
+	double // Check location of base
 		lon = _base->getLongitude(),
 		lat = _base->getLatitude();
 

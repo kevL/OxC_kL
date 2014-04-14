@@ -65,6 +65,9 @@ ScannerState::ScannerState(
 	if (_game->getScreen()->getDY() > 50)
 		_screen = false;
 
+	// Set palette
+	setPalette("PAL_BATTLESCAPE");
+
 	add(_surface2);
 	add(_scannerView);
 	add(_surface1);

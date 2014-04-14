@@ -17,39 +17,42 @@
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "Ufopaedia.h"
-#include "../Ruleset/ArticleDefinition.h"
 #include "ArticleStateText.h"
+
+#include "Ufopaedia.h"
+
 #include "../Engine/Game.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Surface.h"
-#include "../Resource/ResourcePack.h"
+
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
+
+#include "../Resource/ResourcePack.h"
+
+#include "../Ruleset/ArticleDefinition.h"
 
 
 namespace OpenXcom
 {
 
-ArticleStateText::ArticleStateText(Game* game, ArticleDefinitionText* defs)
+ArticleStateText::ArticleStateText(
+		Game* game,
+		ArticleDefinitionText* defs)
 	:
 		ArticleState(game, defs->id)
 {
 	_txtTitle	= new Text(296, 17, 5, 23);
 	_txtInfo	= new Text(296, 150, 10, 48);
 
-
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_3")->getColors());
-//	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)), Palette::backPos, 16);
+	setPalette("PAL_UFOPAEDIA");
 
 	ArticleState::initLayout();
-
 
 	add(_txtTitle);
 	add(_txtInfo);
 
 	centerAllSurfaces();
-
 
 	_game->getResourcePack()->getSurface("BACK10.SCR")->blit(_bg);
 	_btnOk->setColor(Palette::blockOffset(5));

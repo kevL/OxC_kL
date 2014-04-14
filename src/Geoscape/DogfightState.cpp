@@ -320,6 +320,9 @@ DogfightState::DogfightState(
 	_ufoEscapeTimer			= new Timer(0);
 	_craftDamageAnimTimer	= new Timer(500);
 
+	// Set palette
+	setPalette("PAL_GEOSCAPE");
+
 	add(_window);
 	add(_battle);
 	add(_weapon1);

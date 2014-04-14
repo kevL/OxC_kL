@@ -97,6 +97,7 @@ PrimeGrenadeState::PrimeGrenadeState(
 							y + ((i / 8) * 25) - 3);
 	}
 
+	setPalette("PAL_BATTLESCAPE");
 
 	SDL_Rect square;
 	square.x = 0;

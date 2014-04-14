@@ -75,8 +75,7 @@ UfopaediaStartState::UfopaediaStartState(Game* game)
 	}
 	_btnOk = new TextButton(112, 16, 104, y + 3);
 
-
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
+	setPalette("PAL_GEOSCAPE", 0);
 
 	add(_window);
 	add(_txtTitle);
@@ -134,7 +133,6 @@ UfopaediaStartState::~UfopaediaStartState()
 void UfopaediaStartState::btnOkClick(Action*)
 {
 	_game->popState();
-//	_game->quit();
 }
 
 /**

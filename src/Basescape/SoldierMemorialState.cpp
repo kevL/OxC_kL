@@ -73,11 +73,7 @@ SoldierMemorialState::SoldierMemorialState(Game* game)
 
 	_btnOk			= new TextButton(288, 16, 16, 177);
 
-
-	_game->setPalette(
-				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)),
-				Palette::backPos,
-				16);
+	setPalette("PAL_BASESCAPE", 7);
 
 //kL	_game->getResourcePack()->playMusic("GMLOSE");
 //	_game->getResourcePack()->playMusic("GMWIN"); // kL
@@ -94,7 +90,6 @@ SoldierMemorialState::SoldierMemorialState(Game* game)
 	add(_btnOk);
 
 	centerAllSurfaces();
-
 
 	_window->setColor(Palette::blockOffset(13)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK02.SCR"));

@@ -53,18 +53,13 @@ UfoLostState::UfoLostState(
 	_txtTitle	= new Text(160, 30, 48, 72);
 	_btnOk		= new TextButton(80, 14, 88, 114);
 
-
-	_game->setPalette(
-				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)),
-				Palette::backPos,
-				16);
+	setPalette("PAL_GEOSCAPE", 7);
 
 	add(_window);
 	add(_txtTitle);
 	add(_btnOk);
 
 	centerAllSurfaces();
-
 
 	_window->setColor(Palette::blockOffset(8)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK15.SCR"));
@@ -93,17 +88,6 @@ UfoLostState::UfoLostState(
  */
 UfoLostState::~UfoLostState()
 {
-}
-
-/**
- * Resets the palette.
- */
-void UfoLostState::init()
-{
-	_game->setPalette(
-				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)),
-				Palette::backPos,
-				16);
 }
 
 /**

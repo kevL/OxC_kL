@@ -82,29 +82,23 @@ BriefingState::BriefingState(
 	if (mission == "STR_TERROR_MISSION"
 		|| mission == "STR_BASE_DEFENSE")
 	{
-		_game->setPalette(
-					_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)),
-					Palette::backPos,
-					16);
+		setPalette("PAL_GEOSCAPE", 2);
+
 //		_game->getResourcePack()->playMusic("GMENBASE");
 		_game->getResourcePack()->getMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMENBASE)->play(); // sza_MusicRules
 	}
 	else if (mission == "STR_MARS_CYDONIA_LANDING"
 		|| mission == "STR_MARS_THE_FINAL_ASSAULT")
 	{
-		_game->setPalette(
-					_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)),
-					Palette::backPos,
-					16);
+		setPalette("PAL_GEOSCAPE", 6);
+
 //		_game->getResourcePack()->playMusic("GMNEWMAR");
 		_game->getResourcePack()->getMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMNEWMAR)->play(); // sza_MusicRules
 	}
 	else
 	{
-		_game->setPalette(
-					_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)),
-					Palette::backPos,
-					16);
+		setPalette("PAL_GEOSCAPE", 0);
+
 //		_game->getResourcePack()->playMusic("GMDEFEND");
 		_game->getResourcePack()->getMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMDEFEND)->play(); // sza_MusicRules
 	}

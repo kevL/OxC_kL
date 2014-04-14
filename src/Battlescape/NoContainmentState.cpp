@@ -43,14 +43,13 @@ NoContainmentState::NoContainmentState(Game* game)
 	_txtTitle	= new Text(300, 160, 10, 8);
 	_btnOk		= new TextButton(120, 16, 100, 177);
 
+	setPalette("PAL_GEOSCAPE", 0);
 
-	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
 	add(_window);
 	add(_txtTitle);
 	add(_btnOk);
 
 	centerAllSurfaces();
-
 
 	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));

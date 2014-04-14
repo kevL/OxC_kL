@@ -86,9 +86,7 @@ private:
 		/// Cleans up the Monthly Report state.
 		~MonthlyReportState();
 
-		/// Updates the palette.
-		void init();
-		///
+		/// Calculate monthly scores.
 		void calculateChanges();
 
 		/// Handler for clicking the OK button.

@@ -67,11 +67,7 @@ TransfersState::TransfersState(
 
 	_btnOk			= new TextButton(288, 16, 16, 169);
 
-
-	_game->setPalette(
-				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)),
-				Palette::backPos,
-				16);
+	setPalette("PAL_BASESCAPE", 6);
 
 	add(_window);
 	add(_txtTitle);
@@ -83,7 +79,6 @@ TransfersState::TransfersState(
 	add(_btnOk);
 
 	centerAllSurfaces();
-
 
 	_window->setColor(Palette::blockOffset(15)+6);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));

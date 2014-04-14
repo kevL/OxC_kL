@@ -54,6 +54,16 @@ ConfirmLoadState::ConfirmLoadState(
 	_btnNo		= new TextButton(50, 20, 200, 120);
 	_txtText	= new Text(204, 58, 58, 60);
 
+	// Set palette
+	if (_origin == OPT_BATTLESCAPE)
+	{
+		setPalette("PAL_BATTLESCAPE");
+	}
+	else
+	{
+		setPalette("PAL_GEOSCAPE", 0);
+	}
+
 	add(_window);
 	add(_btnYes);
 	add(_btnNo);

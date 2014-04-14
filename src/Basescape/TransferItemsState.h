@@ -112,8 +112,6 @@ private:
 		/// Cleans up the Transfer Items state.
 		~TransferItemsState();
 
-		/// Updates the palette.
-		void init();
 		/// Re-initialize the Transfer menu, when cancelling TransferConfirmState.
 		void reinit();
 

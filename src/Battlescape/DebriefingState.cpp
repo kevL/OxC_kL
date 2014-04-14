@@ -120,12 +120,7 @@ DebriefingState::DebriefingState(Game* game)
 	_btnOk			= new TextButton(176, 16, 16, 177);
 	_txtRating		= new Text(100, 9, 212, 180);
 
-
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
-	_game->setPalette(
-				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)),
-				Palette::backPos,
-				16);
+	setPalette("PAL_GEOSCAPE", 0);
 
 	add(_window);
 	add(_txtTitle);
@@ -141,7 +136,6 @@ DebriefingState::DebriefingState(Game* game)
 	add(_txtRating);
 
 	centerAllSurfaces();
-
 
 	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
@@ -300,7 +294,6 @@ DebriefingState::DebriefingState(Game* game)
 
 	_txtRating->setText(tr("STR_RATING").arg(rating));
 
-
 //	_game->getResourcePack()->playMusic("GMMARS");
 	_game->getResourcePack()->getMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMMARS)->play(); // sza_MusicRules
 
@@ -364,6 +357,7 @@ void DebriefingState::btnOkClick(Action*)
 												_game,
 												tr("STR_CONTAINMENT_EXCEEDED")
 													.arg(_base->getName()).c_str(),
+												_palette,
 												Palette::blockOffset(8)+5,
 												"BACK01.SCR",
 												0));

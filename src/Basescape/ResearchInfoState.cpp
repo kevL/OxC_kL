@@ -175,6 +175,9 @@ void ResearchInfoState::buildUi()
 										start_x + (10 * button_x_border),
 										start_y + (9 * button_y_border));
 
+	// Set palette
+	setPalette("PAL_BASESCAPE", 1);
+
 	add(_surfaceScientists);
 	add(_window);
 	add(_btnOk);

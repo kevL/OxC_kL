@@ -95,11 +95,7 @@ PurchaseState::PurchaseState(
 	_btnCancel		= new TextButton(134, 16, 16, 177);
 	_btnOk			= new TextButton(134, 16, 170, 177);
 
-
-	_game->setPalette(
-				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)),
-				Palette::backPos,
-				16);
+	setPalette("PAL_BASESCAPE", 0);
 
 	add(_window);
 	add(_txtTitle);
@@ -114,7 +110,6 @@ PurchaseState::PurchaseState(
 	add(_btnOk);
 
 	centerAllSurfaces();
-
 
 	_window->setColor(Palette::blockOffset(13)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
@@ -773,6 +768,7 @@ void PurchaseState::increaseByValue(int change)
 		_game->pushState(new ErrorMessageState(
 											_game,
 											"STR_NOT_ENOUGH_MONEY",
+											_palette,
 											Palette::blockOffset(15)+1,
 											"BACK13.SCR",
 											0));
@@ -784,6 +780,7 @@ void PurchaseState::increaseByValue(int change)
 		_game->pushState(new ErrorMessageState(
 											_game,
 											"STR_NOT_ENOUGH_LIVING_SPACE",
+											_palette,
 											Palette::blockOffset(15)+1,
 											"BACK13.SCR",
 											0));
@@ -796,6 +793,7 @@ void PurchaseState::increaseByValue(int change)
 		_game->pushState(new ErrorMessageState(
 											_game,
 											"STR_NO_FREE_HANGARS_FOR_PURCHASE",
+											_palette,
 											Palette::blockOffset(15)+1,
 											"BACK13.SCR",
 											0));
@@ -808,6 +806,7 @@ void PurchaseState::increaseByValue(int change)
 		_game->pushState(new ErrorMessageState(
 											_game,
 											"STR_NOT_ENOUGH_STORE_SPACE",
+											_palette,
 											Palette::blockOffset(15)+1,
 											"BACK13.SCR",
 											0));

@@ -85,11 +85,7 @@ SelectDestinationState::SelectDestinationState(
 	_btnCancel	= new TextButton(60, 14, 98 + dx, 8);
 	_btnCydonia	= new TextButton(60, 14, 180 + dx, 8);
 
-
-	_game->setPalette(
-					_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)),
-					Palette::backPos,
-					16);
+	setPalette("PAL_GEOSCAPE", 0);
 
 /*	add(_btnRotateLeft);
 	add(_btnRotateRight);
@@ -102,7 +98,6 @@ SelectDestinationState::SelectDestinationState(
 	add(_btnCancel);
 	add(_btnCydonia);
 //kL	add(_txtTitle);
-
 
 	_globe->onMouseClick((ActionHandler)& SelectDestinationState::globeClick);
 
@@ -176,11 +171,12 @@ SelectDestinationState::~SelectDestinationState()
 }
 
 /**
- * Resets the palette since it's bound to change on other screens.
+ * Stop the globe movement.
  */
 void SelectDestinationState::init()
 {
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
+	State::init();
+
 //	_globe->rotateStop();
 }
 
@@ -372,8 +368,6 @@ void SelectDestinationState::btnCydoniaClick(Action*)
 	if (_craft->getNumSoldiers() > 0
 		|| _craft->getNumVehicles() > 0)
 	{
-		_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(5)), Palette::backPos, 16);
-
 		_game->pushState(new ConfirmCydoniaState(_game, _craft));
 	}
 }

@@ -76,11 +76,7 @@ SoldierArmorState::SoldierArmorState(
 
 	_btnCancel		= new TextButton(152, 16, 84, 136);
 
-
-	_game->setPalette(
-				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)),
-				Palette::backPos,
-				16);
+	setPalette("PAL_BASESCAPE", 4);
 
 	add(_window);
 	add(_btnCancel);
@@ -91,7 +87,6 @@ SoldierArmorState::SoldierArmorState(
 	add(_lstArmor);
 
 	centerAllSurfaces();
-
 
 	_window->setColor(Palette::blockOffset(13)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK14.SCR"));

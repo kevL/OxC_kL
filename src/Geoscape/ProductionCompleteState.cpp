@@ -72,11 +72,7 @@ ProductionCompleteState::ProductionCompleteState(
 	_btnOk5Secs		= new TextButton(72, 16, 124, 154);
 	_btnOk			= new TextButton(72, 16, 200, 154);
 
-
-	_game->setPalette(
-				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)),
-				Palette::backPos,
-				16);
+	setPalette("PAL_GEOSCAPE", 6);
 
 	add(_window);
 	add(_txtMessage);
@@ -85,7 +81,6 @@ ProductionCompleteState::ProductionCompleteState(
 	add(_btnOk);
 
 	centerAllSurfaces();
-
 
 	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK17.SCR"));
@@ -152,17 +147,6 @@ ProductionCompleteState::ProductionCompleteState(
  */
 ProductionCompleteState::~ProductionCompleteState()
 {
-}
-
-/**
- * Resets the palette.
- */
-void ProductionCompleteState::init()
-{
-	_game->setPalette(
-				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)),
-				Palette::backPos,
-				16);
 }
 
 /**

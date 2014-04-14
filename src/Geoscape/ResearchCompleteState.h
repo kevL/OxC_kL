@@ -48,11 +48,12 @@ class ResearchCompleteState
 
 public:
 	/// Creates the EndResearch state.
-	ResearchCompleteState(Game* game, const RuleResearch* research, const RuleResearch* bonus);
-	// kL_note: WHERE IS THE DESTRUCTOR????
+	ResearchCompleteState(
+			Game* game,
+			const RuleResearch* research,
+			const RuleResearch* bonus);
+	// kL_note: WHERE IS THE dTor???
 
-	/// Updates the palette.
-	void init();
 	/// Handler for clicking the OK button.
 	void btnOkClick(Action* action);
 	/// Handler for clicking the Report button.

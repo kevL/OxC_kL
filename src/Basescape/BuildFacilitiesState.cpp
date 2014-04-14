@@ -71,10 +71,7 @@ BuildFacilitiesState::BuildFacilitiesState(
 	_lstFacilities	= new TextList(112, 104, 200, 64);
 	_btnOk			= new TextButton(112, 16, 200, 176);
 
-	_game->setPalette(
-				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)),
-				Palette::backPos,
-				16);
+	setPalette("PAL_BASESCAPE", 6);
 
 	add(_window);
 	add(_txtTitle);
@@ -157,6 +154,8 @@ void BuildFacilitiesState::PopulateBuildList()
  */
 void BuildFacilitiesState::init()
 {
+	State::init();
+
 	_state->init();
 }
 

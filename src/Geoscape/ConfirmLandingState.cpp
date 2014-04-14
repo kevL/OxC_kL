@@ -84,11 +84,7 @@ ConfirmLandingState::ConfirmLandingState(
 	_btnNo		= new TextButton(80, 18, 40, 151);
 	_btnYes		= new TextButton(80, 18, 136, 151);
 
-
-	_game->setPalette(
-					_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(3)),
-					Palette::backPos,
-					16);
+	setPalette("PAL_GEOSCAPE", 3);
 
 	add(_window);
 	add(_txtMessage);
@@ -97,7 +93,6 @@ ConfirmLandingState::ConfirmLandingState(
 	add(_btnYes);
 
 	centerAllSurfaces();
-
 
 	_window->setColor(Palette::blockOffset(8)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK15.SCR"));
@@ -143,6 +138,8 @@ ConfirmLandingState::~ConfirmLandingState()
  */
 void ConfirmLandingState::init()
 {
+	State::init();
+
 	Base* b = dynamic_cast<Base*>(_craft->getDestination());
 	if (b == _craft->getBase())
 	{

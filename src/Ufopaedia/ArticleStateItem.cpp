@@ -54,20 +54,18 @@ ArticleStateItem::ArticleStateItem(
 
 	_txtTitle = new Text(148, 32, 5, 24);
 
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_4")->getColors());
-
+	setPalette("PAL_BATTLEPEDIA");
 
 	ArticleState::initLayout();
 
 	add(_txtTitle);
-
 
 	_game->getResourcePack()->getSurface("BACK08.SCR")->blit(_bg);
 	_btnOk->setColor(Palette::blockOffset(9));
 	_btnPrev->setColor(Palette::blockOffset(9));
 	_btnNext->setColor(Palette::blockOffset(9));
 
-	_txtTitle->setColor(Palette::blockOffset(14) + 15);
+	_txtTitle->setColor(Palette::blockOffset(14)+15);
 	_txtTitle->setBig();
 	_txtTitle->setWordWrap(true);
 	_txtTitle->setText(Ufopaedia::buildText(_game, defs->title));
@@ -85,13 +83,13 @@ ArticleStateItem::ArticleStateItem(
 	{
 		_txtShotType = new Text(100, 17, 8, 66);
 		add(_txtShotType);
-		_txtShotType->setColor(Palette::blockOffset(14) + 15);
+		_txtShotType->setColor(Palette::blockOffset(14)+15);
 		_txtShotType->setWordWrap(true);
 		_txtShotType->setText(tr("STR_SHOT_TYPE"));
 
 		_txtAccuracy = new Text(50, 17, 108, 66);
 		add(_txtAccuracy);
-		_txtAccuracy->setColor(Palette::blockOffset(14) + 15);
+		_txtAccuracy->setColor(Palette::blockOffset(14)+15);
 		_txtAccuracy->setWordWrap(true);
 		_txtAccuracy->setText(tr("STR_ACCURACY_UC"));
 
@@ -103,7 +101,7 @@ ArticleStateItem::ArticleStateItem(
 
 		_lstInfo = new TextList(204, 55, 8, 82);
 		add(_lstInfo);
-		_lstInfo->setColor(Palette::blockOffset(15) + 4); // color for %-data!
+		_lstInfo->setColor(Palette::blockOffset(15)+4); // color for %-data!
 		_lstInfo->setColumns(3, 100, 52, 52);
 		_lstInfo->setBig();
 
@@ -147,7 +145,7 @@ ArticleStateItem::ArticleStateItem(
 //kL							Text::formatPercentage(item->getAccuracySnap()).c_str(),
 							shotsnap.c_str(),		// kL
 							tu.c_str());
-			_lstInfo->setCellColor(current_row, 0, Palette::blockOffset(14) + 15);
+			_lstInfo->setCellColor(current_row, 0, Palette::blockOffset(14)+15);
 
 			current_row++;
 		}
@@ -169,7 +167,7 @@ ArticleStateItem::ArticleStateItem(
 //kL							Text::formatPercentage(item->getAccuracyAimed()).c_str(),
 							shotaimed.c_str(),		// kL
 							tu.c_str());
-			_lstInfo->setCellColor(current_row, 0, Palette::blockOffset(14) + 15);
+			_lstInfo->setCellColor(current_row, 0, Palette::blockOffset(14)+15);
 
 			current_row++;
 		}
@@ -265,7 +263,7 @@ ArticleStateItem::ArticleStateItem(
 						ss.clear();
 						ss << ammo_rule->getPower();
 						if (ammo_rule->getShotgunPellets())
-							ss << L"x" << ammo_rule->getShotgunPellets();
+						ss << L"x" << ammo_rule->getShotgunPellets();
 
 						_txtAmmoDamage[i]->setText(ss.str());
 

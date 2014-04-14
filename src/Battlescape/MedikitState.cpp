@@ -160,6 +160,9 @@ MedikitState::MedikitState(
 
 	_surface = new InteractiveSurface(320, 200);
 
+	// Set palette
+	setPalette("PAL_BATTLESCAPE");
+
 	if (_game->getScreen()->getDY() > 50)
 	{
 		_screen = false;

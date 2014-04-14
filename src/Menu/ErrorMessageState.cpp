@@ -38,6 +38,7 @@ namespace OpenXcom
  * Initializes all the elements in an error window.
  * @param game Pointer to the core game.
  * @param id Language ID for the message to display.
+ * @param palette Parent state palette.
  * @param color Color of the UI controls.
  * @param bg Background image.
  * @param bgColor Background color (-1 for Battlescape).
@@ -45,15 +46,17 @@ namespace OpenXcom
 ErrorMessageState::ErrorMessageState(
 		Game* game,
 		const std::string& id,
+		SDL_Color* palette,
 		Uint8 color,
 		std::string bg,
-		Uint8 bgColor)
+		int bgColor)
 	:
 		State(game)
 {
 	create(
 		id,
 		L"",
+		palette,
 		color,
 		bg,
 		bgColor);
@@ -63,6 +66,7 @@ ErrorMessageState::ErrorMessageState(
  * Initializes all the elements in an error window.
  * @param game Pointer to the core game.
  * @param msg Text string for the message to display.
+ * @param palette Parent state palette.
  * @param color Color of the UI controls.
  * @param bg Background image.
  * @param bgColor Background color (-1 for Battlescape).
@@ -70,15 +74,17 @@ ErrorMessageState::ErrorMessageState(
 ErrorMessageState::ErrorMessageState(
 		Game* game,
 		const std::wstring& msg,
+		SDL_Color* palette,
 		Uint8 color,
 		std::string bg,
-		Uint8 bgColor)
+		int bgColor)
 	:
 		State(game)
 {
 	create(
 		"",
 		msg,
+		palette,
 		color,
 		bg,
 		bgColor);
@@ -92,14 +98,22 @@ ErrorMessageState::~ErrorMessageState()
 }
 
 /**
- *
+ * Creates the elements in an error window.
+ * @param msg Language ID for the message to display.
+ * @param wmsg Text string for the message to display.
+ * @param palette Parent state palette.
+ * @param color Color of the UI controls.
+ * @param bg Background image.
+ * @param bgColor Background color (-1 for Battlescape).
+
  */
 void ErrorMessageState::create(
 		const std::string& str,
 		const std::wstring& wstr,
+		SDL_Color* palette,
 		Uint8 color,
 		std::string bg,
-		Uint8 bgColor)
+		int bgColor)
 {
 	_screen = false;
 
@@ -108,12 +122,12 @@ void ErrorMessageState::create(
 	_txtMessage	= new Text(200, 120, 60, 30);
 	_btnOk		= new TextButton(120, 18, 100, 154);
 
-
-	if (bgColor != static_cast<Uint8>(-1))
-		_game->setPalette(
-					_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(bgColor)),
-					Palette::backPos,
-					16);
+	setPalette(palette);
+	if (bgColor != -1)
+		setPalette(
+				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(bgColor)),
+				Palette::backPos,
+				16);
 
 	add(_window);
 	add(_btnOk);
@@ -145,7 +159,7 @@ void ErrorMessageState::create(
 	else
 		_txtMessage->setText(tr(str));
 
-	if (bgColor == static_cast<Uint8>(-1))
+	if (bgColor == -1)
 	{
 		_window->setHighContrast(true);
 		_btnOk->setHighContrast(true);

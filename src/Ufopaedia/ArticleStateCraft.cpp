@@ -17,20 +17,25 @@
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "ArticleStateCraft.h"
+
 #include <sstream>
 
 #include "Ufopaedia.h"
-#include "ArticleStateCraft.h"
-#include "../Ruleset/ArticleDefinition.h"
-#include "../Ruleset/Ruleset.h"
-#include "../Ruleset/RuleCraft.h"
+
 #include "../Engine/Game.h"
+#include "../Engine/Language.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Surface.h"
-#include "../Engine/Language.h"
-#include "../Resource/ResourcePack.h"
+
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
+
+#include "../Resource/ResourcePack.h"
+
+#include "../Ruleset/ArticleDefinition.h"
+#include "../Ruleset/RuleCraft.h"
+#include "../Ruleset/Ruleset.h"
 
 
 namespace OpenXcom
@@ -42,18 +47,14 @@ ArticleStateCraft::ArticleStateCraft(Game* game, ArticleDefinitionCraft* defs)
 {
 	RuleCraft* craft = _game->getRuleset()->getCraft(defs->id);
 
-	// add screen elements
 	_txtTitle = new Text(155, 32, 5, 24);
 
-	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_3")->getColors());
+	setPalette("PAL_UFOPAEDIA");
 
 	ArticleState::initLayout();
 
-	// add other elements
 	add(_txtTitle);
 
-	// Set up objects
 	_game->getResourcePack()->getSurface(defs->image_id)->blit(_bg);
 	_btnOk->setColor(Palette::blockOffset(15)-1);
 	_btnPrev->setColor(Palette::blockOffset(15)-1);

@@ -43,6 +43,7 @@ class NewPossibleManufactureState
 	:
 		public State
 {
+
 private:
 	Base* _base;
 	Text* _txtTitle;
@@ -59,9 +60,6 @@ private:
 				Game* game,
 				Base* base,
 				const std::vector<RuleManufacture*>& possibilities);
-
-		/// Updates the palette.
-		void init();
 
 		/// Handler for clicking the OK button.
 		void btnOkClick(Action* action);

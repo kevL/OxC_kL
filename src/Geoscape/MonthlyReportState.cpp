@@ -88,11 +88,7 @@ MonthlyReportState::MonthlyReportState(
 	_txtFailure	= new Text(288, 160, 16, 10);
 	_btnBigOk	= new TextButton(120, 18, 100, 175);
 
-
-	_game->setPalette(
-				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(3)),
-				Palette::backPos,
-				16);
+	setPalette("PAL_GEOSCAPE", 3);
 
 	add(_window);
 	add(_txtTitle);
@@ -105,7 +101,6 @@ MonthlyReportState::MonthlyReportState(
 	add(_btnBigOk);
 
 	centerAllSurfaces();
-
 
 	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
@@ -313,17 +308,6 @@ MonthlyReportState::MonthlyReportState(
  */
 MonthlyReportState::~MonthlyReportState()
 {
-}
-
-/**
- * Resets the palette.
- */
-void MonthlyReportState::init()
-{
-	_game->setPalette(
-					_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(3)),
-					Palette::backPos,
-					16);
 }
 
 /**

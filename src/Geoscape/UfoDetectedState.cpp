@@ -110,17 +110,11 @@ UfoDetectedState::UfoDetectedState(
 		_btnIntercept->setY(155);
 		_btnCancel->setY(155);
 
-		_game->setPalette(
-					_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)),
-					Palette::backPos,
-					16);
+		setPalette("PAL_GEOSCAPE", 2);
 	}
 	else
 	{
-		_game->setPalette(
-					_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)),
-					Palette::backPos,
-					16);
+		setPalette("PAL_GEOSCAPE", 7);
 	}
 
 
@@ -245,27 +239,6 @@ UfoDetectedState::UfoDetectedState(
  */
 UfoDetectedState::~UfoDetectedState()
 {
-}
-
-/**
- * Resets the palette.
- */
-void UfoDetectedState::init()
-{
-	if (_hyperwave)
-	{
-		_game->setPalette(
-					_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)),
-					Palette::backPos,
-					16);
-	}
-	else
-	{
-		_game->setPalette(
-					_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)),
-					Palette::backPos,
-					16);
-	}
 }
 
 /**

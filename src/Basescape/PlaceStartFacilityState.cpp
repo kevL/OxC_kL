@@ -84,6 +84,7 @@ void PlaceStartFacilityState::viewClick(Action*)
 		_game->pushState(new ErrorMessageState(
 											_game,
 											"STR_CANNOT_BUILD_HERE",
+											_palette,
 											Palette::blockOffset(15)+1,
 											"BACK01.SCR",
 											6));

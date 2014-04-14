@@ -84,11 +84,7 @@ CraftWeaponsState::CraftWeaponsState(
 
 	_btnCancel		= new TextButton(140, 16, 90, 156);
 
-
-	_game->setPalette(
-					_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)),
-					Palette::backPos,
-					16);
+	setPalette("PAL_BASESCAPE", 4);
 
 	add(_window);
 	add(_txtTitle);

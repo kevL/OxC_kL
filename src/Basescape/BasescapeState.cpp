@@ -105,7 +105,7 @@ BasescapeState::BasescapeState(
 	_btnGeoscape	= new TextButton(128, 12, 192, 188);
 
 
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());
+	setPalette("PAL_BASESCAPE");
 
 	add(_view);
 	add(_mini);
@@ -249,6 +249,8 @@ BasescapeState::~BasescapeState()
  */
 void BasescapeState::init()
 {
+	State::init();
+
 	if (!_game->getSavedGame()->getBases()->empty())
 	{
 		bool exists = false;
@@ -511,10 +513,6 @@ void BasescapeState::btnTransferClick(Action*)
 void BasescapeState::btnGeoscapeClick(Action*)
 {
 	_game->popState();
-
-	// kL_note: try to get the geoscape colors to correct themselves after "GoToBase" option.
-	// Could do it universally, via above _game->popState() i guess
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors()); // kL
 }
 
 /**
@@ -531,6 +529,7 @@ void BasescapeState::viewLeftClick(Action*)
 			_game->pushState(new ErrorMessageState(
 												_game,
 												"STR_FACILITY_IN_USE",
+												_palette,
 												Palette::blockOffset(15)+1,
 												"BACK13.SCR",
 												6));
@@ -540,6 +539,7 @@ void BasescapeState::viewLeftClick(Action*)
 			_game->pushState(new ErrorMessageState(
 												_game,
 												"STR_CANNOT_DISMANTLE_FACILITY",
+												_palette,
 												Palette::blockOffset(15)+1,
 												"BACK13.SCR",
 												6));

@@ -78,12 +78,7 @@ AllocatePsiTrainingState::AllocatePsiTrainingState(
 
 	_btnOk			= new TextButton(288, 16, 16, 177);
 
-
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());
-	_game->setPalette(
-				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)),
-				Palette::backPos,
-				16);
+	setPalette("PAL_BASESCAPE", 7);
 
 	add(_window);
 	add(_txtTitle);
@@ -97,7 +92,6 @@ AllocatePsiTrainingState::AllocatePsiTrainingState(
 	add(_btnOk);
 
 	centerAllSurfaces();
-
 
 	_window->setColor(Palette::blockOffset(13)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
@@ -167,19 +161,13 @@ AllocatePsiTrainingState::AllocatePsiTrainingState(
 			ssStr << ((*soldier)->getCurrentStats()->psiStrength);
 		}
 		else
-		{
 			ssStr << tr("STR_UNKNOWN").c_str();
-		}
 
 		if ((*soldier)->getCurrentStats()->psiSkill > 0)
-		{
 			ssSkl << (*soldier)->getCurrentStats()->psiSkill; //kL << "/+" << (*soldier)->getImprovement();
-		}
 		else
-		{
 //kL			ssSkl << "0/+0";
 			ssSkl << "0";
-		}
 
 		if ((*soldier)->isInPsiTraining())
 		{
@@ -214,14 +202,11 @@ AllocatePsiTrainingState::~AllocatePsiTrainingState()
 }
 
 /**
- * Resets the palette.
+ * Resets the palette. uh, not really.
  */
 void AllocatePsiTrainingState::init()
 {
-	_game->setPalette(
-				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)),
-				Palette::backPos,
-				16);
+	// does this need setPallette() or maybe State->init() ? doubt it.
 
 	_lstSoldiers->clearList();
 
@@ -295,21 +280,8 @@ void AllocatePsiTrainingState::btnOkClick(Action*)
 }
 
 /**
- *
- */
-/*kL void AllocatePsiTrainingState::lstSoldiersPress(Action*)
-{
-} */
-
-/**
- *
- */
-/*kL void AllocatePsiTrainingState::lstSoldiersRelease(Action*)
-{
-} */
-
-/**
- *
+ * Assigns / removes a soldier from Psi Training.
+ * @param action Pointer to an action.
  */
 void AllocatePsiTrainingState::lstSoldiersClick(Action* action)
 {

@@ -35,6 +35,8 @@
 #include "../Engine/Screen.h"
 #include "../Engine/Timer.h"
 
+#include "../Interface/Cursor.h"
+#include "../Interface/FpsCounter.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/TextList.h"
@@ -101,12 +103,7 @@ CraftEquipmentState::CraftEquipmentState(
 //kL	_btnOk			= new TextButton((craftHasCrew || newBattle) ? 148 : 288, 16, (craftHasCrew || newBattle) ? 164 : 16, 176);
 	_btnOk			= new TextButton(94, 16, 210, 177);
 
-
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());
-	_game->setPalette(
-				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)),
-				Palette::backPos,
-				16);
+	setPalette("PAL_BASESCAPE", 2);
 
 	add(_window);
 	add(_txtTitle);
@@ -278,16 +275,16 @@ CraftEquipmentState::~CraftEquipmentState()
 */
 void CraftEquipmentState::init()
 {
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());
-	_game->setPalette(
-				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)),
-				Palette::backPos,
-				16);
+	State::init();
 
 	_game->getSavedGame()->setBattleGame(0);
 
 	Craft* c = _base->getCrafts()->at(_craft);
 	c->setInBattlescape(false);
+
+	// Restore system colors
+	_game->getCursor()->setColor(Palette::blockOffset(15)+12);
+	_game->getFpsCounter()->setColor(Palette::blockOffset(15)+12);
 }
 
 /**
@@ -696,7 +693,10 @@ void CraftEquipmentState::moveRightByValue(int change)
 					_game->pushState(new ErrorMessageState(
 														_game,
 														msg,
-														Palette::blockOffset(15)+1, "BACK04.SCR", 2));
+														_palette,
+														Palette::blockOffset(15)+1,
+														"BACK04.SCR",
+														2));
 				}
 			}
 			else // no ammo required.
@@ -750,9 +750,6 @@ void CraftEquipmentState::btnClearClick(Action*)
 void CraftEquipmentState::btnInventoryClick(Action*)
 {
 	//Log(LOG_INFO) << "CraftEquipmentState::btnInventoryClick()";
-
-//WB	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_4")->getColors());
-
 	SavedBattleGame* bgame = new SavedBattleGame();
 	//Log(LOG_INFO) << ". bgame = " << bgame;
 	_game->getSavedGame()->setBattleGame(bgame);
@@ -765,8 +762,12 @@ void CraftEquipmentState::btnInventoryClick(Action*)
 	bgen.runInventory(craft);
 	//Log(LOG_INFO) << ". bgen.runInventory() DONE";
 
-		_game->getScreen()->clear(); // WB
-		_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_4")->getColors()); // WB
+	// Fix system colors
+	_game->getCursor()->setColor(Palette::blockOffset(9));
+	_game->getFpsCounter()->setColor(Palette::blockOffset(9));
+
+	_game->getScreen()->clear();
+
 
 	_game->pushState(new InventoryState(
 									_game,

@@ -70,6 +70,9 @@ NextTurnState::NextTurnState(
 	_txtSide	= new Text(320, 17, 0, 109);
 	_txtMessage	= new Text(320, 17, 0, 149);
 
+	// Set palette
+	setPalette("PAL_BATTLESCAPE");
+
 	add(_window);
 	add(_txtTitle);
 	add(_txtTurn);

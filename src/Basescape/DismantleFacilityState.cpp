@@ -68,11 +68,7 @@ DismantleFacilityState::DismantleFacilityState(
 	_btnCancel		= new TextButton(44, 16, 36, 115);
 	_btnOk			= new TextButton(44, 16, 112, 115);
 
-
-	_game->setPalette(
-				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)),
-				Palette::backPos,
-				16);
+	setPalette("PAL_BASESCAPE", 6);
 
 	add(_window);
 	add(_btnOk);
@@ -81,7 +77,6 @@ DismantleFacilityState::DismantleFacilityState(
 	add(_txtFacility);
 
 	centerAllSurfaces();
-
 
 	_window->setColor(Palette::blockOffset(15)+1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));

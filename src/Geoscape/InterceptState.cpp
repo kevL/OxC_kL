@@ -89,11 +89,7 @@ InterceptState::InterceptState(
 
 	_btnCancel	= new TextButton(288, 16, 16, 151);
 
-
-	_game->setPalette(
-				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)),
-				Palette::backPos,
-				16);
+	setPalette("PAL_GEOSCAPE", 4);
 
 	add(_window);
 //	add(_txtTitle);
@@ -105,7 +101,6 @@ InterceptState::InterceptState(
 	add(_btnCancel);
 
 	centerAllSurfaces();
-
 
 	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK12.SCR"));

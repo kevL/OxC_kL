@@ -17,44 +17,49 @@
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <sstream>
-#include "Ufopaedia.h"
 #include "ArticleStateCraftWeapon.h"
-#include "../Ruleset/ArticleDefinition.h"
-#include "../Ruleset/Ruleset.h"
-#include "../Ruleset/RuleCraftWeapon.h"
+
+#include <sstream>
+
+#include "Ufopaedia.h"
+
 #include "../Engine/Game.h"
+#include "../Engine/Language.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Surface.h"
-#include "../Engine/Language.h"
-#include "../Resource/ResourcePack.h"
+
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/TextList.h"
+
+#include "../Resource/ResourcePack.h"
+
+#include "../Ruleset/ArticleDefinition.h"
+#include "../Ruleset/RuleCraftWeapon.h"
+#include "../Ruleset/Ruleset.h"
 
 
 namespace OpenXcom
 {
 
-ArticleStateCraftWeapon::ArticleStateCraftWeapon(Game* game, ArticleDefinitionCraftWeapon* defs)
+ArticleStateCraftWeapon::ArticleStateCraftWeapon(
+		Game* game,
+		ArticleDefinitionCraftWeapon* defs)
 	:
 		ArticleState(game, defs->id)
 {
 	RuleCraftWeapon* weapon = _game->getRuleset()->getCraftWeapon(defs->id);
 
-	// add screen elements
 	_txtTitle = new Text(200, 32, 5, 24);
 
-	// Set palette
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_4")->getColors());
+	setPalette("PAL_BATTLEPEDIA");
 
 	ArticleState::initLayout();
 
-	// add other elements
 	add(_txtTitle);
 
-	// Set up objects
 	_game->getResourcePack()->getSurface(defs->image_id)->blit(_bg);
+
 	_btnOk->setColor(Palette::blockOffset(1));
 	_btnPrev->setColor(Palette::blockOffset(1));
 	_btnNext->setColor(Palette::blockOffset(1));

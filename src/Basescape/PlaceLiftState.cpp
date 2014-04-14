@@ -67,14 +67,12 @@ PlaceLiftState::PlaceLiftState(
 	_view		= new BaseView(192, 192, 0, 8);
 	_txtTitle	= new Text(320, 9, 0, 0);
 
-
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_1")->getColors());
+	setPalette("PAL_BASESCAPE");
 
 	add(_view);
 	add(_txtTitle);
 
 	centerAllSurfaces();
-
 
 	_view->setTexture(_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK"));
 	_view->setBase(_base);

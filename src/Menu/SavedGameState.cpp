@@ -109,11 +109,10 @@ SavedGameState::SavedGameState(
 
 	_btnCancel	= new TextButton(134, 16, 16, 177);
 
-	if (_origin != OPT_BATTLESCAPE)
-		_game->setPalette(
-					_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)),
-					Palette::backPos,
-					16);
+	if (_origin == OPT_BATTLESCAPE)
+		setPalette("PAL_BATTLESCAPE");
+	else
+		setPalette("PAL_GEOSCAPE", 6);
 
 	add(_window);
 	add(_txtTitle);
@@ -245,14 +244,11 @@ void SavedGameState::init()
 		return;
 	}
 
+	State::init();
+
 	_txtStatus->setText(L"");
 
-	if (_origin != OPT_BATTLESCAPE)
-		_game->setPalette(
-					_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)),
-					Palette::backPos,
-					16);
-	else
+	if (_origin == OPT_BATTLESCAPE)
 		applyBattlescapeTheme();
 
 	try

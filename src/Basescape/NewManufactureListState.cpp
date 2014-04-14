@@ -89,11 +89,7 @@ NewManufactureListState::NewManufactureListState(
 
 	_btnCancel		= new TextButton(288, 16, 16, 147);
 
-
-	_game->setPalette(
-				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)),
-				Palette::backPos,
-				16);
+	setPalette("PAL_BASESCAPE", 6);
 
 	add(_window);
 	add(_txtTitle);
@@ -141,6 +137,8 @@ NewManufactureListState::NewManufactureListState(
  */
 void NewManufactureListState::init()
 {
+	State::init();
+
 	fillProductionList();
 }
 
@@ -166,6 +164,7 @@ void NewManufactureListState::lstProdClick(Action*)
 		_game->pushState(new ErrorMessageState(
 											_game,
 											"STR_NO_FREE_HANGARS_FOR_CRAFT_PRODUCTION",
+											_palette,
 											Palette::blockOffset(15)+1,
 											"BACK17.SCR",
 											6));
@@ -175,6 +174,7 @@ void NewManufactureListState::lstProdClick(Action*)
 		_game->pushState(new ErrorMessageState(
 											_game,
 											"STR_NOT_ENOUGH_WORK_SPACE",
+											_palette,
 											Palette::blockOffset(15)+1,
 											"BACK17.SCR",
 											6));

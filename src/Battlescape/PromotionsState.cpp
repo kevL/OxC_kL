@@ -61,11 +61,7 @@ PromotionsState::PromotionsState(Game* game)
 
 	_btnOk			= new TextButton(288, 16, 16, 177);
 
-
-	_game->setPalette(
-				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)),
-				Palette::backPos,
-				16);
+	setPalette("PAL_GEOSCAPE", 0);
 
 	add(_window);
 	add(_txtTitle);
@@ -76,7 +72,6 @@ PromotionsState::PromotionsState(Game* game)
 	add(_btnOk);
 
 	centerAllSurfaces();
-
 
 	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));

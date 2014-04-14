@@ -64,11 +64,7 @@ TransferConfirmState::TransferConfirmState(
 	_btnCancel	= new TextButton(134, 16, 16, 115);
 	_btnOk		= new TextButton(134, 16, 170, 115);
 
-
-	_game->setPalette(
-				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)),
-				Palette::backPos,
-				16);
+	setPalette("PAL_BASESCAPE", 6);
 
 	add(_window);
 	add(_txtTitle);
@@ -78,7 +74,6 @@ TransferConfirmState::TransferConfirmState(
 	add(_btnOk);
 
 	centerAllSurfaces();
-
 
 	_window->setColor(Palette::blockOffset(13)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));

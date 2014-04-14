@@ -77,11 +77,7 @@ PlaceFacilityState::PlaceFacilityState(
 	_numMaintenance	= new Text(110, 17, 202, 126);
 	_btnCancel		= new TextButton(112, 16, 200, 176);
 
-
-	_game->setPalette(
-				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)),
-				Palette::backPos,
-				16);
+	setPalette("PAL_BASESCAPE", 6);
 
 	add(_window);
 	add(_view);
@@ -165,6 +161,7 @@ void PlaceFacilityState::viewClick(Action*)
 		_game->pushState(new ErrorMessageState(
 											_game,
 											"STR_CANNOT_BUILD_HERE",
+											_palette,
 											Palette::blockOffset(15)+1,
 											"BACK01.SCR",
 											6));
@@ -175,6 +172,7 @@ void PlaceFacilityState::viewClick(Action*)
 		_game->pushState(new ErrorMessageState(
 											_game,
 											"STR_NOT_ENOUGH_MONEY",
+											_palette,
 											Palette::blockOffset(15)+1,
 											"BACK01.SCR",
 											6));

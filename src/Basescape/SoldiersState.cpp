@@ -81,11 +81,7 @@ SoldiersState::SoldiersState(
 	_btnArmor		= new TextButton(71, 16, 162, 177);
 	_btnOk			= new TextButton(72, 16, 237, 177);
 
-
-	_game->setPalette(
-				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(2)),
-				Palette::backPos,
-				16);
+	setPalette("PAL_BASESCAPE", 2);
 
 	add(_window);
 	add(_txtTitle);
@@ -174,6 +170,8 @@ SoldiersState::~SoldiersState()
  */
 void SoldiersState::init()
 {
+	State::init();
+
 	_lstSoldiers->clearList();
 
 	int row = 0;

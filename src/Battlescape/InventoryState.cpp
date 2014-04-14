@@ -121,6 +121,8 @@ InventoryState::InventoryState(
 							0,
 							_parent == 0);
 
+	setPalette("PAL_BATTLESCAPE");
+
 	add(_bg);
 	add(_soldier);
 	add(_txtName);
@@ -239,6 +241,7 @@ InventoryState::~InventoryState()
 void InventoryState::init()
 {
 	//Log(LOG_INFO) << "InventoryState::init()";
+	State::init();
 
 	BattleUnit* unit = _battleGame->getSelectedUnit();
 	if (unit == 0) // no selected unit, close inventory

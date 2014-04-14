@@ -46,19 +46,20 @@ class Surface;
  */
 class State
 {
+	friend class Timer;
+
 
 protected:
 	bool _screen;
 
 	Game* _game;
 	InteractiveSurface* _modal;
+	SDL_Color _palette[256];
 
 	std::vector<Surface*> _surfaces;
 
 
 	public:
-		friend class Timer;
-
 		/// Creates a new state linked to a game.
 		State(Game* game);
 		/// Cleans up the state.
@@ -106,6 +107,19 @@ protected:
 
 		/// Sets a modal surface.
 		void setModal(InteractiveSurface* surface);
+
+		/// Changes a set of colors on the state's 8bpp palette.
+		void setPalette(
+				SDL_Color* colors,
+				int firstcolor = 0,
+				int ncolors = 256,
+				bool immediately = true);
+		/// Changes the state's 8bpp palette with certain resources.
+		void setPalette(
+				const std::string& palette,
+				int backpals = -1);
+		/// Gets the state's 8bpp palette.
+		const SDL_Color* const getPalette() const;
 };
 
 }

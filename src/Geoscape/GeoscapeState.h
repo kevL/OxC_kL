@@ -20,7 +20,7 @@
 #ifndef OPENXCOM_GEOSCAPESTATE_H
 #define OPENXCOM_GEOSCAPESTATE_H
 
-#include <vector>
+#include <list>
 
 #include "../Engine/State.h"
 
@@ -102,8 +102,8 @@ private:
 		* _zoomOutEffectTimer,
 		* _dogfightStartTimer;
 
-	std::vector<State*> _popups;
-	std::vector<DogfightState*>
+	std::list<State*> _popups;
+	std::list<DogfightState*>
 		_dogfights,
 		_dogfightsToBeStarted;
 

@@ -20,8 +20,6 @@
 #ifndef OPENXCOM_RESEARCHSTATE_H
 #define OPENXCOM_RESEARCHSTATE_H
 
-#include <SDL.h>
-
 #include "../Engine/State.h"
 
 
@@ -46,7 +44,6 @@ class ResearchState
 
 private:
 	Base* _base;
-	SDL_Color _oldPalette[256];
 	Text
 		* _txtAllocated,
 		* _txtAvailable,

@@ -142,11 +142,7 @@ ManufactureStartState::ManufactureStartState(
 										width - button_width - button_x_border,
 										start_y + height - button_height - button_y_border); */
 
-
-	_game->setPalette(
-				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(6)),
-				Palette::backPos,
-				16);
+	setPalette("PAL_BASESCAPE", 6);
 
 	add(_window);
 	add(_txtTitle);

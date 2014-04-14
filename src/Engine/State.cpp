@@ -30,6 +30,8 @@
 
 #include "../Interface/ArrowButton.h"
 #include "../Interface/ComboBox.h"
+#include "../Interface/Cursor.h"
+#include "../Interface/FpsCounter.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/TextEdit.h"
@@ -84,7 +86,7 @@ State::~State()
  */
 void State::add(Surface* surface)
 {
-	surface->setPalette(_game->getScreen()->getPalette());
+	surface->setPalette(_palette);
 
 	if (_game->getLanguage()
 		&& _game->getResourcePack())
@@ -130,6 +132,16 @@ void State::toggleScreen()
  */
 void State::init()
 {
+	_game->getScreen()->setPalette(_palette);
+
+	_game->getCursor()->setPalette(_palette);
+	_game->getCursor()->draw();
+
+	_game->getFpsCounter()->setPalette(_palette);
+	_game->getFpsCounter()->draw();
+
+	if (_game->getResourcePack() != 0)
+		_game->getResourcePack()->setPalette(_palette);
 }
 
 /**
@@ -392,6 +404,71 @@ void State::redrawText()
 void State::setModal(InteractiveSurface* surface)
 {
 	_modal = surface;
+}
+
+/**
+ * Replaces a certain amount of colors in the state's palette.
+ * @param colors Pointer to the set of colors.
+ * @param firstcolor Offset of the first color to replace.
+ * @param ncolors Amount of colors to replace.
+ * @param immediately Apply changes immediately, otherwise wait in case of multiple setPalettes.
+ */
+void State::setPalette(
+		SDL_Color* colors,
+		int firstcolor,
+		int ncolors,
+		bool immediately)
+{
+	memcpy(
+			_palette + firstcolor,
+			colors,
+			ncolors * sizeof(SDL_Color));
+
+	if (immediately)
+	{
+		_game->getCursor()->setPalette(_palette);
+		_game->getCursor()->draw();
+
+		_game->getFpsCounter()->setPalette(_palette);
+		_game->getFpsCounter()->draw();
+
+		if (_game->getResourcePack() != 0)
+			_game->getResourcePack()->setPalette(_palette);
+	}
+}
+
+/**
+ * Loads palettes from the game resources into the state.
+ * @param palette String ID of the palette to load.
+ * @param backpals BACKPALS.DAT offset to use.
+ */
+void State::setPalette(
+		const std::string& palette,
+		int backpals)
+{
+	setPalette(
+			_game->getResourcePack()->getPalette(palette)->getColors(),
+			0,
+			256,
+			false);
+
+	if (backpals != -1)
+		setPalette(
+				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(backpals)),
+				Palette::backPos,
+				16,
+				false);
+
+	setPalette(_palette); // delay actual update to the end
+}
+
+/**
+ * Returns the state's 8bpp palette.
+ * @return, Pointer to the palette's colors.
+ */
+const SDL_Color* const State::getPalette() const
+{
+	return _palette;
 }
 
 }
