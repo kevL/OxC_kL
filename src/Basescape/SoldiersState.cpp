@@ -45,6 +45,7 @@
 
 #include "../Savegame/Base.h"
 #include "../Savegame/Craft.h"
+#include "../Savegame/SavedGame.h" // kL
 #include "../Savegame/Soldier.h"
 
 #include "../Ruleset/RuleCraft.h"
@@ -136,6 +137,7 @@ SoldiersState::SoldiersState(
 	_btnMemorial->setColor(Palette::blockOffset(13)+10);
 	_btnMemorial->setText(tr("STR_MEMORIAL"));
 	_btnMemorial->onMouseClick((ActionHandler)& SoldiersState::btnMemorialClick);
+	_btnMemorial->setVisible(!_game->getSavedGame()->getDeadSoldiers()->empty()); // kL
 
 	_txtName->setColor(Palette::blockOffset(15)+1);
 	_txtName->setText(tr("STR_NAME_UC"));

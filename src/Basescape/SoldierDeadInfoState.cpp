@@ -47,6 +47,7 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Soldier Dead Info screen.
+ * kL: based on SoldierInfoState (see, if/when having issues)
  * @param game, Pointer to the core game.
  * @param soldierId, ID of the selected soldier.
  */
@@ -112,6 +113,8 @@ SoldierDeadInfoState::SoldierDeadInfoState(
 	_txtPsiSkill	= new Text(120, 9, 6, 190);
 	_numPsiSkill	= new Text(18, 9, 131, 190);
 	_barPsiSkill	= new Bar(170, 7, 150, 190);
+
+	setPalette("PAL_BASESCAPE");
 
 	add(_bg);
 	add(_rank);
@@ -324,6 +327,8 @@ SoldierDeadInfoState::~SoldierDeadInfoState()
  */
 void SoldierDeadInfoState::init()
 {
+	State::init();
+
 	if (_list->empty())
 	{
 		_game->popState();

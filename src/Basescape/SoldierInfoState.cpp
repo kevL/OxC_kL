@@ -70,8 +70,6 @@ SoldierInfoState::SoldierInfoState(
 		_soldierId(soldierId),
 		_soldier(0) // kL
 {
-//	_list = NULL; // kL
-
 /*	if (_base == 0)
 		_list = _game->getSavedGame()->getDeadSoldiers();
 	{

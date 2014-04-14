@@ -119,7 +119,6 @@ BaseInfoState::BaseInfoState(
 	_numLongRange		= new Text(40, 9, 126, Options::alienContainmentLimitEnforced? 167: 163);
 	_barLongRange		= new Bar(154, 5, 166, Options::alienContainmentLimitEnforced? 169: 165);
 
-	// Set palette
 	setPalette("PAL_BASESCAPE");
 
 	add(_bg);
@@ -178,17 +177,14 @@ BaseInfoState::BaseInfoState(
 
 	centerAllSurfaces();
 
-
 	std::ostringstream ss;
 	if (Options::alienContainmentLimitEnforced)
 		ss << "ALT";
 	ss << "BACK07.SCR";
 	_game->getResourcePack()->getSurface(ss.str())->blit(_bg);
 
-
 	_mini->setTexture(_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK"));
 	_mini->setBases(_game->getSavedGame()->getBases());
-
 	for (size_t
 			i = 0;
 			i < _game->getSavedGame()->getBases()->size();
@@ -322,6 +318,7 @@ BaseInfoState::~BaseInfoState()
 void BaseInfoState::init()
 {
 	State::init();
+
 	_edtBase->setText(_base->getName());
 
 	std::wostringstream
