@@ -160,8 +160,7 @@ void Window::popup()
 	{
 		int sound = RNG::generate(0, 2);
 		if (soundPopup[sound] != 0)
-//kL			soundPopup[sound]->play();
-//			soundPopup[sound]->play(0); // kL: UI Fx channel
+//kL			soundPopup[sound]->play(0); // UI Fx channel
 			soundPopup[sound]->play(1); // yeeeeeeahhhh. Cool, it works!
 	}
 
