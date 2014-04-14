@@ -56,15 +56,10 @@ OptionsDefaultsState::OptionsDefaultsState(
 	_btnNo		= new TextButton(60, 18, 200, 122);
 	_txtTitle	= new Text(246, 32, 37, 70);
 
-	// Set palette
 	if (_origin == OPT_BATTLESCAPE)
-	{
 		setPalette("PAL_BATTLESCAPE");
-	}
 	else
-	{
 		setPalette("PAL_GEOSCAPE", 0);
-	}
 
 	add(_window);
 	add(_btnYes);

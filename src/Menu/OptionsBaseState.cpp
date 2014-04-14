@@ -69,7 +69,7 @@ OptionsBaseState::OptionsBaseState(
 		State(game),
 		_origin(origin)
 {
-	_window = new Window(this, 320, 200, 0, 0);
+	_window			= new Window(this, 320, 200, 0, 0);
 
 	_btnVideo		= new TextButton(80, 16, 8, 8);
 	_btnAudio		= new TextButton(80, 16, 8, 28);
@@ -85,15 +85,10 @@ OptionsBaseState::OptionsBaseState(
 
 	_txtTooltip		= new Text(305, 25, 8, 148);
 
-	// Set palette
 	if (_origin == OPT_BATTLESCAPE)
-	{
 		setPalette("PAL_BATTLESCAPE");
-	}
 	else
-	{
 		setPalette("PAL_GEOSCAPE", 0);
-	}
 
 	add(_window);
 
@@ -192,6 +187,7 @@ void OptionsBaseState::restart(
 void OptionsBaseState::init()
 {
 	State::init();
+
 	if (_origin == OPT_BATTLESCAPE)
 		applyBattlescapeTheme();
 }
@@ -252,9 +248,7 @@ void OptionsBaseState::btnOkClick(Action*)
 												_origin));
 		}
 		else
-			restart(
-				_game,
-				_origin);
+			restart(_game, _origin);
 	}
 }
 

@@ -73,6 +73,7 @@ UfopaediaStartState::UfopaediaStartState(Game* game)
 		_btnSection[i] = new TextButton(224, 12, 48, y);
 		y += 13;
 	}
+
 	_btnOk = new TextButton(112, 16, 104, y + 3);
 
 	setPalette("PAL_GEOSCAPE", 0);

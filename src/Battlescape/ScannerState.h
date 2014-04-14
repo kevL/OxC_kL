@@ -32,6 +32,7 @@ class InteractiveSurface;
 class ScannerView;
 class Timer;
 
+
 /**
  * The Scanner User Interface.
  */
@@ -39,6 +40,7 @@ class ScannerState
 	:
 		public State
 {
+
 private:
 	BattleAction* _action;
 	InteractiveSurface
@@ -65,7 +67,7 @@ private:
 		void handle(Action* action);
 
 		/// Handles timers.
-		void think ();
+		void think();
 };
 
 }

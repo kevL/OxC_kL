@@ -16,33 +16,47 @@
 * You should have received a copy of the GNU General Public License
 * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
 */
+
 #ifndef OPENXCOM_RESEARCHREQUIREDSTATE
 #define OPENXCOM_RESEARCHREQUIREDSTATE
 
 #include "../Engine/State.h"
 
+
 namespace OpenXcom
 {
+
 class Game;
-class Window;
-class TextButton;
-class Text;
 class RuleItem;
+class Text;
+class TextButton;
+class Window;
+
 
 /**
- * Window shown when the player researches a weapon
- * before the respective clip.
+ * Window shown when the player researches a weapon before the respective clip.
  */
-class ResearchRequiredState : public State
+class ResearchRequiredState
+	:
+		public State
 {
-	Window *_window;
-	Text *_txtTitle;
-	TextButton *_btnOk;
-public:
-	/// Creates the ResearchRequired state.
-	ResearchRequiredState(Game *game, RuleItem *item);
-	/// Handler for clicking the OK button.
-	void btnOkClick(Action *action);
+
+private:
+	Text* _txtTitle;
+	TextButton* _btnOk;
+	Window* _window;
+
+
+	public:
+		/// Creates the ResearchRequired state.
+		ResearchRequiredState(
+				Game* game,
+				RuleItem* item);
+
+		/// Handler for clicking the OK button.
+		void btnOkClick(Action* action);
 };
+
 }
+
 #endif

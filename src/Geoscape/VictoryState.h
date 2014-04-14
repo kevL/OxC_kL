@@ -16,10 +16,12 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_VICTORYSTATE_H
 #define OPENXCOM_VICTORYSTATE_H
 
 #include "../Engine/State.h"
+
 
 namespace OpenXcom
 {
@@ -28,29 +30,40 @@ class InteractiveSurface;
 class Text;
 class Timer;
 
+
 /**
  * Game Over Screens.
  */
-class VictoryState : public State
+class VictoryState
+	:
+		public State
 {
+
 private:
-	InteractiveSurface *_window;
-	std::vector<Text*> _txtText;
 	int _screenNumber;
+
+	InteractiveSurface *_window;
 	Timer *_timer;
-public:
-	/// Creates the Victory state.
-	VictoryState(Game *game);
-	/// Cleans up the Victory state.
-	~VictoryState();
-	/// Initializes the slideshow.
-	void init();
-	/// Handle timers.
-	void think();
-	/// Handler for clicking the screen.
-	void windowClick(Action *action);
-	/// Moves to the next screen.
-	void nextScreen();
+
+	std::vector<Text*> _txtText;
+
+
+	public:
+		/// Creates the Victory state.
+		VictoryState(Game* game);
+		/// Cleans up the Victory state.
+		~VictoryState();
+
+		/// Initializes the slideshow.
+		void init();
+		/// Handle timers.
+		void think();
+
+		/// Handler for clicking the screen.
+		void windowClick(Action* action);
+
+		/// Moves to the next screen.
+		void nextScreen();
 };
 
 }

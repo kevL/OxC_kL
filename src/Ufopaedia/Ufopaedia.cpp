@@ -124,53 +124,53 @@ ArticleState* Ufopaedia::createArticleState(
 			return new ArticleStateCraft(
 									game,
 									static_cast<ArticleDefinitionCraft*>(article));
-		break;
+//		break;
 		case UFOPAEDIA_TYPE_CRAFT_WEAPON:
 			return new ArticleStateCraftWeapon(
 									game,
 									static_cast<ArticleDefinitionCraftWeapon*>(article));
-		break;
+//		break;
 		case UFOPAEDIA_TYPE_VEHICLE:
 			return new ArticleStateVehicle(
 									game,
 									static_cast<ArticleDefinitionVehicle*>(article));
-		break;
+//		break;
 		case UFOPAEDIA_TYPE_ITEM:
 			return new ArticleStateItem(
 									game,
 									static_cast<ArticleDefinitionItem*>(article));
-		break;
+//		break;
 		case UFOPAEDIA_TYPE_ARMOR:
 			return new ArticleStateArmor(
 									game,
 									static_cast<ArticleDefinitionArmor*>(article));
-		break;
+//		break;
 		case UFOPAEDIA_TYPE_BASE_FACILITY:
 			return new ArticleStateBaseFacility(
 									game,
 									static_cast<ArticleDefinitionBaseFacility*>(article));
-		break;
+//		break;
 		case UFOPAEDIA_TYPE_TEXT:
 			return new ArticleStateText(
 									game,
 									static_cast<ArticleDefinitionText*>(article));
-		break;
+//		break;
 		case UFOPAEDIA_TYPE_TEXTIMAGE:
 			return new ArticleStateTextImage(
 									game,
 									static_cast<ArticleDefinitionTextImage*>(article));
-		break;
+//		break;
 		case UFOPAEDIA_TYPE_UFO:
 			return new ArticleStateUfo(
 									game,
 									static_cast<ArticleDefinitionUfo*>(article));
-		break;
+//		break;
 
 		default:
 		break;
 	}
 
-	return 0;
+	return NULL;
 }
 
 /**
@@ -230,7 +230,9 @@ void Ufopaedia::next(Game* game)
 		_current_index++;
 
 	game->popState();
-	game->pushState(createArticleState(game, articles[_current_index]));
+	game->pushState(createArticleState(
+									game,
+									articles[_current_index]));
 }
 
 /**

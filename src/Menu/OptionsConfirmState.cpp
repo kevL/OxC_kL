@@ -54,23 +54,17 @@ OptionsConfirmState::OptionsConfirmState(
 {
 	_screen = false;
 
-	// Create objects
-	_window = new Window(this, 216, 100, 52, 50, POPUP_BOTH);
-	_btnYes = new TextButton(50, 20, 70, 120);
-	_btnNo = new TextButton(50, 20, 200, 120);
-	_txtTitle = new Text(206, 20, 57, 70);
-	_txtTimer = new Text(206, 20, 57, 100);
-	_timer = new Timer(1000);
+	_window		= new Window(this, 216, 100, 52, 50, POPUP_BOTH);
+	_btnYes		= new TextButton(50, 20, 70, 120);
+	_btnNo		= new TextButton(50, 20, 200, 120);
+	_txtTitle	= new Text(206, 20, 57, 70);
+	_txtTimer	= new Text(206, 20, 57, 100);
+	_timer		= new Timer(1000);
 
-	// Set palette
 	if (_origin == OPT_BATTLESCAPE)
-	{
 		setPalette("PAL_BATTLESCAPE");
-	}
 	else
-	{
 		setPalette("PAL_GEOSCAPE", 0);
-	}
 
 	add(_window);
 	add(_btnYes);
@@ -80,19 +74,18 @@ OptionsConfirmState::OptionsConfirmState(
 
 	centerAllSurfaces();
 
-	// Set up objects
 	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
 	_btnYes->setColor(Palette::blockOffset(15)-1);
 	_btnYes->setText(tr("STR_YES"));
-	_btnYes->onMouseClick((ActionHandler)&OptionsConfirmState::btnYesClick);
-//	_btnYes->onKeyboardPress((ActionHandler)&OptionsConfirmState::btnYesClick, Options::keyOk);
+	_btnYes->onMouseClick((ActionHandler)& OptionsConfirmState::btnYesClick);
+//	_btnYes->onKeyboardPress((ActionHandler)& OptionsConfirmState::btnYesClick, Options::keyOk);
 
 	_btnNo->setColor(Palette::blockOffset(15)-1);
 	_btnNo->setText(tr("STR_NO"));
-	_btnNo->onMouseClick((ActionHandler)&OptionsConfirmState::btnNoClick);
-//	_btnNo->onKeyboardPress((ActionHandler)&OptionsConfirmState::btnNoClick, Options::keyCancel);
+	_btnNo->onMouseClick((ActionHandler)& OptionsConfirmState::btnNoClick);
+//	_btnNo->onKeyboardPress((ActionHandler)& OptionsConfirmState::btnNoClick, Options::keyCancel);
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setAlign(ALIGN_CENTER);
@@ -107,7 +100,7 @@ OptionsConfirmState::OptionsConfirmState(
 	if (_origin == OPT_BATTLESCAPE)
 		applyBattlescapeTheme();
 
-	_timer->onTimer((StateHandler)&OptionsConfirmState::countdown);
+	_timer->onTimer((StateHandler)& OptionsConfirmState::countdown);
 	_timer->start();
 }
 

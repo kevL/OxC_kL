@@ -65,7 +65,6 @@ ScannerState::ScannerState(
 	if (_game->getScreen()->getDY() > 50)
 		_screen = false;
 
-	// Set palette
 	setPalette("PAL_BATTLESCAPE");
 
 	add(_surface2);
@@ -123,7 +122,7 @@ void ScannerState::animate()
 /**
  * Handles timers.
 */
-void ScannerState::think ()
+void ScannerState::think()
 {
 	State::think();
 	_timerAnimate->think(this, 0);

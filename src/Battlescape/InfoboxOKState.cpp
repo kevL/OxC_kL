@@ -50,7 +50,6 @@ InfoboxOKState::InfoboxOKState(
 	_txtTitle	= new Text(250, 60, 35, 32);
 	_btnOk		= new TextButton(120, 16, 100, 94);
 
-	// Set palette
 	setPalette("PAL_BATTLESCAPE");
 
 	add(_frame);
@@ -58,7 +57,6 @@ InfoboxOKState::InfoboxOKState(
 	add(_btnOk);
 
 	centerAllSurfaces();
-
 
 	_frame->setColor(Palette::blockOffset(6)+3);
 	_frame->setBackground(Palette::blockOffset(6)+12);

@@ -16,16 +16,22 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "AliensCrashState.h"
+
 #include "DebriefingState.h"
+
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
+#include "../Engine/Options.h"
 #include "../Engine/Palette.h"
+
+#include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
-#include "../Interface/Text.h"
-#include "../Engine/Options.h"
+
+#include "../Resource/ResourcePack.h"
+
 
 namespace OpenXcom
 {
@@ -34,14 +40,15 @@ namespace OpenXcom
  * Initializes all the elements in the Aliens Crash screen.
  * @param game Pointer to the core game.
  */
-AliensCrashState::AliensCrashState(Game *game) : State(game)
+AliensCrashState::AliensCrashState(
+		Game* game)
+	:
+		State(game)
 {
-	// Create objects
-	_window = new Window(this, 256, 160, 32, 20);
-	_btnOk = new TextButton(120, 18, 100, 154);
-	_txtTitle = new Text(246, 80, 37, 50);
+	_window		= new Window(this, 256, 160, 32, 20);
+	_btnOk		= new TextButton(120, 18, 100, 154);
+	_txtTitle	= new Text(246, 80, 37, 50);
 
-	// Set palette
 	setPalette("PAL_BATTLESCAPE");
 
 	add(_window);
@@ -50,7 +57,6 @@ AliensCrashState::AliensCrashState(Game *game) : State(game)
 
 	centerAllSurfaces();
 
-	// Set up objects
 	_window->setColor(Palette::blockOffset(0)-1);
 	_window->setHighContrast(true);
 	_window->setBackground(_game->getResourcePack()->getSurface("TAC00.SCR"));
@@ -58,9 +64,13 @@ AliensCrashState::AliensCrashState(Game *game) : State(game)
 	_btnOk->setColor(Palette::blockOffset(0)-1);
 	_btnOk->setHighContrast(true);
 	_btnOk->setText(tr("STR_OK"));
-	_btnOk->onMouseClick((ActionHandler)&AliensCrashState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&AliensCrashState::btnOkClick, Options::keyOk);
-	_btnOk->onKeyboardPress((ActionHandler)&AliensCrashState::btnOkClick, Options::keyCancel);
+	_btnOk->onMouseClick((ActionHandler)& AliensCrashState::btnOkClick);
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& AliensCrashState::btnOkClick,
+					Options::keyOk);
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& AliensCrashState::btnOkClick,
+					Options::keyCancel);
 
 	_txtTitle->setColor(Palette::blockOffset(0)-1);
 	_txtTitle->setHighContrast(true);
@@ -82,7 +92,7 @@ AliensCrashState::~AliensCrashState()
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void AliensCrashState::btnOkClick(Action *)
+void AliensCrashState::btnOkClick(Action*)
 {
 	_game->popState();
 	_game->pushState(new DebriefingState(_game));

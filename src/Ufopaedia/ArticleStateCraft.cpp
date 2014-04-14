@@ -41,7 +41,9 @@
 namespace OpenXcom
 {
 
-ArticleStateCraft::ArticleStateCraft(Game* game, ArticleDefinitionCraft* defs)
+ArticleStateCraft::ArticleStateCraft(
+		Game* game,
+		ArticleDefinitionCraft* defs)
 	:
 		ArticleState(game, defs->id)
 {
@@ -65,14 +67,22 @@ ArticleStateCraft::ArticleStateCraft(Game* game, ArticleDefinitionCraft* defs)
 	_txtTitle->setWordWrap(true);
 	_txtTitle->setText(Ufopaedia::buildText(_game, defs->title));
 
-	_txtInfo = new Text(defs->rect_text.width, defs->rect_text.height, defs->rect_text.x, defs->rect_text.y);
+	_txtInfo = new Text(
+					defs->rect_text.width,
+					defs->rect_text.height,
+					defs->rect_text.x,
+					defs->rect_text.y);
 	add(_txtInfo);
 
 	_txtInfo->setColor(Palette::blockOffset(14)+15);
 	_txtInfo->setWordWrap(true);
 	_txtInfo->setText(Ufopaedia::buildText(_game, defs->text));
 
-	_txtStats = new Text(defs->rect_stats.width, defs->rect_stats.height, defs->rect_stats.x, defs->rect_stats.y);
+	_txtStats = new Text(
+						defs->rect_stats.width,
+						defs->rect_stats.height,
+						defs->rect_stats.x,
+						defs->rect_stats.y);
 	add(_txtStats);
 
 	_txtStats->setColor(Palette::blockOffset(14)+15);

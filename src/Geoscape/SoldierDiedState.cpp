@@ -50,7 +50,6 @@ SoldierDiedState::SoldierDiedState(
 		_base(base)
 {
 	//Log(LOG_INFO) << "create SoldierDiedState";
-
 	_screen = false;
 
 	_window		= new Window(this, 192, 104, 32, 48, POPUP_BOTH);
@@ -58,11 +57,7 @@ SoldierDiedState::SoldierDiedState(
 	_txtBase	= new Text(160, 9, 48, 104);
 	_btnOk		= new TextButton(80, 16, 88, 126);
 
-
-	_game->setPalette(
-				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)),
-				Palette::backPos,
-				16);
+	setPalette("PAL_GEOSCAPE", 7);
 
 	add(_window);
 	add(_txtTitle);
@@ -70,7 +65,6 @@ SoldierDiedState::SoldierDiedState(
 	add(_btnOk);
 
 	centerAllSurfaces();
-
 
 	_window->setColor(Palette::blockOffset(8)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK15.SCR"));
@@ -98,7 +92,6 @@ SoldierDiedState::SoldierDiedState(
 	_txtBase->setSmall();
 	_txtBase->setAlign(ALIGN_CENTER);
 	_txtBase->setText(_base);
-
 	//Log(LOG_INFO) << "create SoldierDiedState EXIT";
 }
 
@@ -107,17 +100,6 @@ SoldierDiedState::SoldierDiedState(
  */
 SoldierDiedState::~SoldierDiedState()
 {
-}
-
-/**
- * Resets the palette.
- */
-void SoldierDiedState::init()
-{
-	_game->setPalette(
-				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(7)),
-				Palette::backPos,
-				16);
 }
 
 /**

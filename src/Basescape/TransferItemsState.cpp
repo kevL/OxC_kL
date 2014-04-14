@@ -398,7 +398,7 @@ TransferItemsState::TransferItemsState(
 								ss1.str().c_str(),
 								L"0",
 								ss2.str().c_str());
-				_lstItems->setRowColor(_baseQty.size() - 1, Palette::blockOffset(15) + 6);
+				_lstItems->setRowColor(_baseQty.size() - 1, Palette::blockOffset(15)+6);
 			}
 			else
 				_lstItems->addRow(
@@ -434,8 +434,6 @@ TransferItemsState::~TransferItemsState()
  */
 void TransferItemsState::reinit()
 {
-	// kL, does a setPallete() or State->init() have to go in here? prob not.
-
 	_lstItems->clearList();
 
 	_baseQty.clear();
@@ -651,7 +649,7 @@ void TransferItemsState::reinit()
 								ss1.str().c_str(),
 								L"0",
 								ss2.str().c_str());
-				_lstItems->setRowColor(_baseQty.size() - 1, Palette::blockOffset(15) + 6);
+				_lstItems->setRowColor(_baseQty.size() - 1, Palette::blockOffset(15)+6);
 			}
 			else
 				_lstItems->addRow(
@@ -843,11 +841,6 @@ void TransferItemsState::completeTransfer()
  */
 void TransferItemsState::btnCancelClick(Action*)
 {
-	_game->setPalette( // kL, from TransferBaseState
-				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)),
-				Palette::backPos,
-				16);
-
 	_game->popState(); // pop main Transfer (this)
 //kL	_game->popState(); // pop choose Destination
 }
@@ -874,9 +867,7 @@ void TransferItemsState::lstItemsLeftArrowPress(Action* action)
 void TransferItemsState::lstItemsLeftArrowRelease(Action* action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
-	{
 		_timerInc->stop();
-	}
 }
 
 /**
@@ -920,9 +911,7 @@ void TransferItemsState::lstItemsRightArrowPress(Action* action)
 void TransferItemsState::lstItemsRightArrowRelease(Action* action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
-	{
 		_timerDec->stop();
-	}
 }
 
 /**

@@ -55,14 +55,9 @@ AbandonGameState::AbandonGameState(
 
 	int x;
 	if (_origin == OPT_GEOSCAPE)
-	{
 		x = 20;
-	}
 	else
-	{
 		x = 52;
-	}
-
 
 	_window		= new Window(this, 216, 160, x, 20, POPUP_BOTH);
 	_txtTitle	= new Text(206, 33, x + 5, 73);
@@ -70,15 +65,10 @@ AbandonGameState::AbandonGameState(
 	_btnNo		= new TextButton(55, 20, x + 30, 132);
 	_btnYes		= new TextButton(55, 20, x + 131, 132);
 
-	// Set palette
 	if (_origin == OPT_BATTLESCAPE)
-	{
 		setPalette("PAL_BATTLESCAPE");
-	}
 	else
-	{
 		setPalette("PAL_GEOSCAPE", 0);
-	}
 
 	add(_window);
 	add(_txtTitle);
@@ -86,7 +76,6 @@ AbandonGameState::AbandonGameState(
 	add(_btnYes);
 
 	centerAllSurfaces();
-
 
 	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
@@ -133,6 +122,7 @@ void AbandonGameState::btnYesClick(Action*)
 									_game,
 									_origin,
 									false);
+
 		delete ss;
 	}
 

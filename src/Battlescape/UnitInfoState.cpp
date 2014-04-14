@@ -72,7 +72,6 @@ UnitInfoState::UnitInfoState(
 {
 	_battleGame = _game->getSavedGame()->getSavedBattle();
 
-
 	_bg				= new Surface(320, 200, 0, 0);
 	_txtName		= new Text(288, 17, 16, 4);
 
@@ -228,7 +227,6 @@ UnitInfoState::UnitInfoState(
 	}
 
 	centerAllSurfaces();
-
 
 	_game->getResourcePack()->getSurface("UNIBORD.PCK")->blit(_bg);
 
@@ -439,6 +437,7 @@ UnitInfoState::~UnitInfoState()
 void UnitInfoState::init()
 {
 	State::init();
+
 	std::wostringstream ss;
 	int minPsi = 0;
 

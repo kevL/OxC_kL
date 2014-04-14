@@ -78,11 +78,7 @@ StoresMatrixState::StoresMatrixState(
 
 	_btnOk			= new TextButton(288, 16, 16, 177);
 
-
-	_game->setPalette(
-				_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)),
-				Palette::backPos,
-				16);
+	setPalette("PAL_BASESCAPE", 0);
 
 	add(_window);
 	add(_txtTitle);
@@ -100,7 +96,6 @@ StoresMatrixState::StoresMatrixState(
 	add(_btnOk);
 
 	centerAllSurfaces();
-
 
 	_window->setColor(Palette::blockOffset(13)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
@@ -156,12 +151,11 @@ StoresMatrixState::StoresMatrixState(
 	_lstMatrix->setBackground(_window);
 //	_lstMatrix->setMargin(8);
 
-
 	bool isAmmo = false;
 	int
 		row		= 0,
 		iter	= 0,
-		qty[8]	= { 0, 0, 0, 0, 0, 0, 0, 0 };
+		qty[8]	= {0, 0, 0, 0, 0, 0, 0, 0};
 
 	std::wostringstream
 		ss1,
@@ -192,14 +186,14 @@ StoresMatrixState::StoresMatrixState(
 			item.insert(0, L"  ");
 		}
 
-		ss1.str(L"");	//qty[1] = 0;
-		ss2.str(L"");	//qty[2] = 0;
-		ss3.str(L"");	//qty[3] = 0;
-		ss4.str(L"");	//qty[4] = 0;
-		ss5.str(L"");	//qty[5] = 0;
-		ss6.str(L"");	//qty[6] = 0;
-		ss7.str(L"");	//qty[7] = 0;
-		ss8.str(L"");	//qty[8] = 0;
+		ss1.str(L"");
+		ss2.str(L"");
+		ss3.str(L"");
+		ss4.str(L"");
+		ss5.str(L"");
+		ss6.str(L"");
+		ss7.str(L"");
+		ss8.str(L"");
 
 		iter = 0;
 

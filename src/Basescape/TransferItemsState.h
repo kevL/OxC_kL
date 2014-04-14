@@ -112,8 +112,8 @@ private:
 		/// Cleans up the Transfer Items state.
 		~TransferItemsState();
 
-		/// Re-initialize the Transfer menu, when cancelling TransferConfirmState.
-		void reinit();
+		/// kL. Re-initialize the Transfer menu, when cancelling TransferConfirmState.
+		void reinit(); // kL
 
 		/// Runs the timers.
 		void think();

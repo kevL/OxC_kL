@@ -64,7 +64,7 @@ AbortMissionState::AbortMissionState(
 		_outExitArea(0)
 {
 	//Log(LOG_INFO) << "Create AbortMissionState";
-	_screen			= false;
+	_screen = false;
 
 	_window			= new Window(this, 320, 144, 0, 0);
 
@@ -76,7 +76,6 @@ AbortMissionState::AbortMissionState(
 	_btnCancel		= new TextButton(134, 16, 16, 118);
 	_btnOk			= new TextButton(134, 16, 170, 118);
 
-	// Set palette
 	setPalette("PAL_BATTLESCAPE");
 
 	add(_window);

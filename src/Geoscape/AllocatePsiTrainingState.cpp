@@ -141,7 +141,8 @@ AllocatePsiTrainingState::AllocatePsiTrainingState(
 	_lstSoldiers->onRightArrowClick((ActionHandler)& AllocatePsiTrainingState::lstItemsRightArrowClick_Psi);
 	_lstSoldiers->onMouseClick((ActionHandler)& AllocatePsiTrainingState::lstSoldiersClick);
 
-	init(); // kL
+	reinit(); // kL
+
 /*kL	int row = 0;
 	for (std::vector<Soldier*>::const_iterator
 			soldier = base->getSoldiers()->begin();
@@ -166,7 +167,6 @@ AllocatePsiTrainingState::AllocatePsiTrainingState(
 		if ((*soldier)->getCurrentStats()->psiSkill > 0)
 			ssSkl << (*soldier)->getCurrentStats()->psiSkill; //kL << "/+" << (*soldier)->getImprovement();
 		else
-//kL			ssSkl << "0/+0";
 			ssSkl << "0";
 
 		if ((*soldier)->isInPsiTraining())
@@ -204,10 +204,8 @@ AllocatePsiTrainingState::~AllocatePsiTrainingState()
 /**
  * Resets the palette. uh, not really.
  */
-void AllocatePsiTrainingState::init()
+void AllocatePsiTrainingState::reinit()
 {
-	// does this need setPallette() or maybe State->init() ? doubt it.
-
 	_lstSoldiers->clearList();
 
 	int row = 0;
@@ -358,7 +356,7 @@ void AllocatePsiTrainingState::lstItemsLeftArrowClick_Psi(Action* action)
 			}
 		}
 
-		init();
+		reinit();
 	}
 }
 
@@ -403,7 +401,7 @@ void AllocatePsiTrainingState::lstItemsRightArrowClick_Psi(Action* action)
 			}
 		}
 
-		init();
+		reinit();
 	}
 }
 

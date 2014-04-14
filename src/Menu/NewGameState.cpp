@@ -57,7 +57,6 @@ NewGameState::NewGameState(Game* game)
 	_btnSuperhuman	= new TextButton(160, 18, 80, 130);
 	_btnCancel		= new TextButton(160, 18, 80, 158);
 
-	// Set palette
 	setPalette("PAL_GEOSCAPE", 0);
 
 	add(_window);
@@ -70,7 +69,6 @@ NewGameState::NewGameState(Game* game)
 	add(_btnCancel);
 
 	centerAllSurfaces();
-
 
 	_window->setColor(Palette::blockOffset(8)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));

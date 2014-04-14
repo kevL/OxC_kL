@@ -320,7 +320,6 @@ DogfightState::DogfightState(
 	_ufoEscapeTimer			= new Timer(0);
 	_craftDamageAnimTimer	= new Timer(500);
 
-	// Set palette
 	setPalette("PAL_GEOSCAPE");
 
 	add(_window);
@@ -344,7 +343,6 @@ DogfightState::DogfightState(
 	add(_txtStatus);
 	add(_btnMinimizedIcon);
 	add(_txtInterceptionNumber);
-
 
 	Surface* graphic;
 	graphic = _game->getResourcePack()->getSurface("INTERWIN.DAT");
@@ -726,76 +724,52 @@ void DogfightState::animateCraftDamage()
  */
 void DogfightState::drawCraftDamage()
 {
-	if (_minimized) return;
+	if (_minimized)
+		return;
 
-	//Log(LOG_INFO) << "DogfightState::drawCraftDamage()";
 	int damagePercent = _craft->getDamagePercentage();
-	//Log(LOG_INFO) << ". percDamage = " << damagePercent;
 	if (damagePercent > 0)
 	{
 		if (!_craftDamageAnimTimer->isRunning())
 			_craftDamageAnimTimer->start();
 
 		int rowsToColor = static_cast<int>(
-								floor(static_cast<double>(_craftHeight * damagePercent) / 100.0));
-//								ceil(static_cast<double>(_craftHeight * damagePercent) / 100.0)); // kL
+							floor(static_cast<double>(_craftHeight * damagePercent) / 100.0));
 
-		if (rowsToColor == 0) return;
+		if (rowsToColor == 0)
+			return;
 		else if (damagePercent > 99)
 			rowsToColor += 1;
 
-//kL		int rowsColored = 0;
-//kL		bool rowColored = false;
-
 		for (int
-//kL				y = 0;
-				y = _craftHeight_pre; // kL
-//kL				y < _damage->getHeight();
-//				y < _craftHeight_pre + _craftHeight + 1; // kL
-				y < _craftHeight_pre + rowsToColor; // kL
+				y = _craftHeight_pre;
+				y < _craftHeight_pre + rowsToColor;
 				++y)
 		{
-//kL			rowColored = false;
-
 			for (int
-//kL					x = 0;
-					x = 1; // kL
-//kL					x < _damage->getWidth();
-					x < 23; // kL
+					x = 1;
+					x < 23;
 					++x)
 			{
 				int pixelColor = _damage->getPixel(x, y);
 
-				// cycle color of already damaged bits
-//kL				if (pixelColor == 13		// red
-//kL					|| pixelColor == 14)	// red darker
-				if (pixelColor > 10		// kL (v. animateCraftDamage(), above)
-					&& pixelColor < 16)	// kL psychedelic.
+				if (pixelColor > 10
+					&& pixelColor < 16)
 				{
 					_damage->setPixel(
 									x,
 									y,
 									_currentCraftDamageColor);
-
-//kL					rowColored = true;
 				}
-				else // kL
-				if (pixelColor >= Palette::blockOffset(10)
+				else if (pixelColor >= Palette::blockOffset(10)
 					&& pixelColor < Palette::blockOffset(11))
 				{
 					_damage->setPixel(
 									x,
 									y,
 									_currentCraftDamageColor);
-
-//kL					rowColored = true;
 				}
 			}
-
-//kL			if (rowColored)
-//kL				++rowsColored;
-
-//kL			if (rowsColored == rowsToColor) break;
 		}
 	}
 }
@@ -805,10 +779,10 @@ void DogfightState::drawCraftDamage()
  */
 void DogfightState::animate()
 {
-	if (_minimized) return;
+	if (_minimized)
+		return;
 
-	// Animate radar waves and other stuff.
-	for (int
+	for (int // Animate radar waves and other stuff.
 			x = 0;
 			x < _window->getWidth();
 			++x)
@@ -820,13 +794,11 @@ void DogfightState::animate()
 		{
 			Uint8 radarPixelColor = _window->getPixel(x, y);
 			if (radarPixelColor >= Palette::blockOffset(7)
-//kL				&& radarPixelColor < Palette::blockOffset(7) + 16)
-				&& radarPixelColor < Palette::blockOffset(8)) // kL
+				&& radarPixelColor < Palette::blockOffset(8))
 			{
 				++radarPixelColor;
 
-//kL				if (radarPixelColor >= Palette::blockOffset(7) + 16)
-				if (radarPixelColor >= Palette::blockOffset(8)) // kL
+				if (radarPixelColor >= Palette::blockOffset(8))
 					radarPixelColor = Palette::blockOffset(7);
 
 				_window->setPixel(
@@ -839,11 +811,9 @@ void DogfightState::animate()
 
 	_battle->clear();
 
-	// Draw UFO.
 	if (!_ufo->isDestroyed())
 		drawUfo();
 
-	// Draw projectiles.
 	for (std::vector<CraftWeaponProjectile*>::iterator
 			it = _projectiles.begin();
 			it != _projectiles.end();
@@ -852,15 +822,13 @@ void DogfightState::animate()
 		drawProjectile(*it);
 	}
 
-	// Clears text after a while
-	if (_timeout == 0)
+	if (_timeout == 0) // Clears text after a while
 		_txtStatus->setText(L"");
 	else
 		_timeout--;
 
-	// Animate UFO hit.
 	bool lastHitAnimFrame = false;
-	if (_animatingHit
+	if (_animatingHit // Animate UFO hit.
 		&& _ufo->getHitFrame() > 0)
 	{
 		_ufo->setHitFrame(_ufo->getHitFrame() - 1);
@@ -872,8 +840,7 @@ void DogfightState::animate()
 		}
 	}
 
-	// Animate UFO crash landing.
-	if (_ufo->isCrashed()
+	if (_ufo->isCrashed() // Animate UFO crash landing.
 		&& _ufo->getHitFrame() == 0
 		&& !lastHitAnimFrame)
 	{
@@ -925,10 +892,7 @@ void DogfightState::move()
 			setStatus("STR_UFO_OUTRUNNING_INTERCEPTOR");
 		}
 		else // ufo cannot break off, because it's too slow
-		{
 			_ufoBreakingOff = false;
-		}
-
 	}
 
 	bool projectileInFlight = false;
@@ -945,9 +909,7 @@ void DogfightState::move()
 				distanceChange = 4;
 
 				if (_currentDist + distanceChange >_targetDist)
-				{
 					distanceChange = _targetDist - _currentDist;
-				}
 			}
 			else if (_currentDist > _targetDist
 				&& !_ufo->isCrashed()
@@ -1080,14 +1042,12 @@ void DogfightState::move()
 									&& !_craft->isDestroyed()
 									&& !_ufoBreakingOff)
 								{
-//									_mode = _btnStandoff; // kL_add
 									_btnStandoff->releaseDogfight(); // kL_add
 
 									_end = false;
 									setStatus("STR_STANDOFF");
 									_targetDist = STANDOFF_DIST;
 								} // kL_end.
-//								_targetDist = STANDOFF_DIST;
 							}
 						}
 					}
@@ -1397,8 +1357,8 @@ void DogfightState::move()
 			_ufo->setHitFrame(3);
 		}
 
-//		_ufoBreakingOff = false;
 		finalRun = true;
+//		_ufoBreakingOff = false;
 //		_ufo->setSpeed(0);
 	}
 
@@ -1543,7 +1503,8 @@ void DogfightState::maximumDistance()
 			i < _craft->getWeapons()->end();
 			++i)
 	{
-		if (*i == 0) continue;
+		if (*i == 0)
+			continue;
 
 		if ((*i)->getRules()->getRange() < min
 			&& (*i)->getAmmo() > 0)
@@ -1580,8 +1541,6 @@ void DogfightState::btnMinimizeClick(Action*)
 	{
 		if (_currentDist >= STANDOFF_DIST)
 		{
-//			GeoscapeState::getZoomOutTimer()->start(); // kL
-
 			setMinimized(true);
 
 			_window->setVisible(false);
@@ -1822,9 +1781,7 @@ void DogfightState::drawUfo()
 		{
 			Uint8 pixelOffset = _ufoBlobs[_ufoSize + _ufo->getHitFrame()][y][x];
 			if (pixelOffset == 0)
-			{
 				continue;
-			}
 			else
 			{
 				if (_ufo->isCrashed()
@@ -1838,9 +1795,7 @@ void DogfightState::drawUfo()
 													currentUfoYposition + y + 3); // + 3 'cause of the window frame
 				Uint8 color = radarPixelColor - pixelOffset;
 				if (color < 108)
-				{
 					color = 108;
-				}
 
 				_battle->setPixel(
 							currentUfoXposition + x,
@@ -1878,9 +1833,7 @@ void DogfightState::drawProjectile(const CraftWeaponProjectile* p)
 			{
 				int pixelOffset = _projectileBlobs[p->getType()][y][x];
 				if (pixelOffset == 0)
-				{
 					continue;
-				}
 				else
 				{
 					Uint8 radarPixelColor = _window->getPixel(
@@ -1888,9 +1841,7 @@ void DogfightState::drawProjectile(const CraftWeaponProjectile* p)
 															yPos + y + 3); // + 3 cause of the window frame
 					Uint8 color = radarPixelColor - pixelOffset;
 					if (color < 108)
-					{
 						color = 108;
-					}
 
 					_battle->setPixel(
 									xPos + x,
@@ -1914,9 +1865,7 @@ void DogfightState::drawProjectile(const CraftWeaponProjectile* p)
 			Uint8 radarPixelColor = _window->getPixel(xPos + 3, y + 3);
 			Uint8 color = radarPixelColor - pixelOffset;
 			if (color < 108)
-			{
 				color = 108;
-			}
 
 			_battle->setPixel(xPos, y, color);
 		}
@@ -1973,9 +1922,7 @@ void DogfightState::recolor(
 		range = _range2;
 	}
 	else
-	{
 		return;
-	}
 
 	if (enabled)
 	{
@@ -2081,7 +2028,6 @@ void DogfightState::calculateWindowPosition()
 		else // 2
 		{
 			_x = 80;
-//			_y = (_game->getScreen()->getHeight() / 2) - 96;
 			_y = 200 - _window->getHeight(); // 96;
 		}
 	}
@@ -2095,13 +2041,10 @@ void DogfightState::calculateWindowPosition()
 		else if (_interceptionNumber == 2)
 		{
 			_x = 0;
-//			_y = (_game->getScreen()->getHeight() / 2) - 96;
 			_y = 200 - _window->getHeight(); // 96;
 		}
 		else // 3
 		{
-//			_x = (_game->getScreen()->getWidth() / 2) - 160;
-//			_y = (_game->getScreen()->getHeight() / 2) - 96;
 			_x = 320 - _window->getWidth(); // 160;
 			_y = 200 - _window->getHeight(); // 96;
 		}
@@ -2115,20 +2058,16 @@ void DogfightState::calculateWindowPosition()
 		}
 		else if (_interceptionNumber == 2)
 		{
-//			_x = (_game->getScreen()->getWidth() / 2) - 160;
 			_x = 320 - _window->getWidth(); // 160;
 			_y = 0;
 		}
 		else if (_interceptionNumber == 3)
 		{
 			_x = 0;
-//			_y = (_game->getScreen()->getHeight() / 2) - 96;
 			_y = 200 - _window->getHeight(); // 96;
 		}
 		else // 4
 		{
-//			_x = (_game->getScreen()->getWidth() / 2) - 160;
-//			_y = (_game->getScreen()->getHeight() / 2) - 96;
 			_x = 320 - _window->getWidth(); // 160;
 			_y = 200 - _window->getHeight(); // 96;
 		}

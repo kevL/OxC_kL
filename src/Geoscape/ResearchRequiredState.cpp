@@ -16,36 +16,46 @@
 * You should have received a copy of the GNU General Public License
 * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
 */
+
 #include "ResearchRequiredState.h"
+
 #include "../Engine/Game.h"
-#include "../Engine/Palette.h"
 #include "../Engine/Language.h"
-#include "../Resource/ResourcePack.h"
+#include "../Engine/Options.h"
+#include "../Engine/Palette.h"
+
+#include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
-#include "../Interface/Text.h"
-#include "../Ruleset/Ruleset.h"
+
+#include "../Resource/ResourcePack.h"
+
 #include "../Ruleset/RuleItem.h"
+#include "../Ruleset/Ruleset.h"
+
 #include "../Savegame/SavedGame.h"
-#include "../Engine/Options.h"
+
 
 namespace OpenXcom
 {
+
 /**
  * Initializes all the elements in the Research Required screen.
  * @param game Pointer to the core game.
  * @param item Pointer to the researched weapon.
  */
-ResearchRequiredState::ResearchRequiredState(Game *game, RuleItem *item) : State(game)
+ResearchRequiredState::ResearchRequiredState(
+		Game* game,
+		RuleItem* item)
+	:
+		State(game)
 {
 	_screen = false;
 
-	// Create objects
-	_window = new Window(this, 288, 180, 16, 10);
-	_btnOk = new TextButton(160, 18, 80, 150);
-	_txtTitle = new Text(288, 80, 16, 50);
+	_window		= new Window(this, 288, 180, 16, 10);
+	_btnOk		= new TextButton(160, 18, 80, 150);
+	_txtTitle	= new Text(288, 80, 16, 50);
 
-	// Set palette
 	setPalette("PAL_GEOSCAPE", 0);
 
 	add(_window);
@@ -57,15 +67,18 @@ ResearchRequiredState::ResearchRequiredState(Game *game, RuleItem *item) : State
 	std::string weapon = item->getType();
 	std::string clip = item->getCompatibleAmmo()->front();
 
-	// Set up objects
 	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK05.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(tr("STR_OK"));
-	_btnOk->onMouseClick((ActionHandler)&ResearchRequiredState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&ResearchRequiredState::btnOkClick, Options::keyCancel);
-	_btnOk->onKeyboardPress((ActionHandler)&ResearchRequiredState::btnOkClick, Options::keyOk);
+	_btnOk->onMouseClick((ActionHandler)& ResearchRequiredState::btnOkClick);
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& ResearchRequiredState::btnOkClick,
+					Options::keyCancel);
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& ResearchRequiredState::btnOkClick,
+					Options::keyOk);
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setBig();
@@ -80,7 +93,7 @@ ResearchRequiredState::ResearchRequiredState(Game *game, RuleItem *item) : State
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void ResearchRequiredState::btnOkClick(Action *)
+void ResearchRequiredState::btnOkClick(Action*)
 {
 	_game->popState();
 }

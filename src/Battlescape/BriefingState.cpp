@@ -75,9 +75,6 @@ BriefingState::BriefingState(
 
 	_btnOk			= new TextButton(288, 16, 16, 177);
 
-
-	_game->setPalette(_game->getResourcePack()->getPalette("PALETTES.DAT_0")->getColors());
-
 	std::string mission = _game->getSavedGame()->getSavedBattle()->getMissionType();
 	if (mission == "STR_TERROR_MISSION"
 		|| mission == "STR_BASE_DEFENSE")

@@ -62,15 +62,13 @@ NextTurnState::NextTurnState(
 		_state(state),
 		_timer(0)
 {
-	//Log(LOG_INFO) << "\nCreate NextTurnState";
-
+	//Log(LOG_INFO) << "Create NextTurnState";
 	_window		= new Window(this, 320, 200, 0, 0);
 	_txtTitle	= new Text(320, 17, 0, 68);
 	_txtTurn	= new Text(320, 17, 0, 93);
 	_txtSide	= new Text(320, 17, 0, 109);
 	_txtMessage	= new Text(320, 17, 0, 149);
 
-	// Set palette
 	setPalette("PAL_BATTLESCAPE");
 
 	add(_window);
@@ -80,7 +78,6 @@ NextTurnState::NextTurnState(
 	add(_txtMessage);
 
 	centerAllSurfaces();
-
 
 	_window->setColor(Palette::blockOffset(0)-1);
 	_window->setHighContrast(true);
@@ -97,7 +94,6 @@ NextTurnState::NextTurnState(
 	_txtTurn->setAlign(ALIGN_CENTER);
 	_txtTurn->setHighContrast(true);
 	_txtTurn->setText(tr("STR_TURN").arg(_battleGame->getTurn()));
-	//Log(LOG_INFO) << ". NextTurnState -> SavedBattleGame::getTurn() : " << _battleGame->getTurn();
 
 	_txtSide->setColor(Palette::blockOffset(0)-1);
 	_txtSide->setBig();
@@ -114,8 +110,7 @@ NextTurnState::NextTurnState(
 
 	_state->clearMouseScrollingState();
 
-	kL_preReveal = true;	// kL
-	//Log(LOG_INFO) << ". . set kL_preReveal TRUE";
+	kL_preReveal = true; // kL
 
 	if (Options::skipNextTurnScreen)
 	{
@@ -123,7 +118,6 @@ NextTurnState::NextTurnState(
 		_timer->onTimer((StateHandler)& NextTurnState::close);
 		_timer->start();
 	}
-
 	//Log(LOG_INFO) << "Create NextTurnState EXIT";
 }
 
@@ -132,7 +126,6 @@ NextTurnState::NextTurnState(
  */
 NextTurnState::~NextTurnState()
 {
-	//Log(LOG_INFO) << "Delete NextTurnState";
 	delete _timer;
 }
 
@@ -146,12 +139,7 @@ void NextTurnState::handle(Action* action)
 
 	if (action->getDetails()->type == SDL_KEYDOWN
 		|| action->getDetails()->type == SDL_MOUSEBUTTONDOWN)
-//	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT) // kL
-		// That causes the aLien NextTurn screen to auto-disappear
-		// if all aLiens are Mc'd by xCom... bah!!
 	{
-		//Log(LOG_INFO) << "NextTurnState::handle(RMB)";
-
 		kL_TurnCount = _battleGame->getTurn();
 
 		_turnCounter = _state->getTurnCounter();
@@ -175,8 +163,6 @@ void NextTurnState::think()
  */
 void NextTurnState::close()
 {
-	//Log(LOG_INFO) << "NextTurnState::close()";
-
 	_game->popState();
 
 	int liveAliens = 0;
@@ -193,9 +179,7 @@ void NextTurnState::close()
 		_state->finishBattle(false, liveSoldiers);
 	}
 	else
-	{
 		_state->btnCenterClick(0);
-	}
 }
 
 }

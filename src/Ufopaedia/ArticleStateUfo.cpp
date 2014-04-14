@@ -71,7 +71,7 @@ ArticleStateUfo::ArticleStateUfo(
 	_image = new Surface(160, 52, 160, 6);
 	add(_image);
 
-	Surface *graphic = _game->getResourcePack()->getSurface("INTERWIN.DAT");
+	Surface* graphic = _game->getResourcePack()->getSurface("INTERWIN.DAT");
 	graphic->setX(0);
 	graphic->setY(0);
 	graphic->getCrop()->x = 0;

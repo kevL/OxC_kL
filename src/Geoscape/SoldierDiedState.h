@@ -63,9 +63,6 @@ private:
 		/// Cleans up the Soldier Died state.
 		~SoldierDiedState();
 
-		/// Updates the palette.
-		void init();
-
 		/// Handler for clicking the OK button.
 		void btnOkClick(Action* action);
 };

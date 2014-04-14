@@ -16,18 +16,26 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "LowFuelState.h"
+
 #include <sstream>
+
+#include "GeoscapeState.h"
+
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
+#include "../Engine/Options.h"
 #include "../Engine/Palette.h"
+
+#include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
-#include "../Interface/Text.h"
+
+#include "../Resource/ResourcePack.h"
+
 #include "../Savegame/Craft.h"
-#include "GeoscapeState.h"
-#include "../Engine/Options.h"
+
 
 namespace OpenXcom
 {
@@ -38,18 +46,23 @@ namespace OpenXcom
  * @param craft Pointer to the craft to display.
  * @param state Pointer to the Geoscape.
  */
-LowFuelState::LowFuelState(Game *game, Craft *craft, GeoscapeState *state) : State(game), _craft(craft), _state(state)
+LowFuelState::LowFuelState(
+		Game* game,
+		Craft* craft,
+		GeoscapeState* state)
+	:
+		State(game),
+		_craft(craft),
+		_state(state)
 {
 	_screen = false;
 
-	// Create objects
-	_window = new Window(this, 224, 120, 16, 40, POPUP_BOTH);
-	_btnOk = new TextButton(90, 18, 30, 120);
-	_btnOk5Secs = new TextButton(90, 18, 136, 120);
-	_txtTitle = new Text(214, 17, 21, 60);
-	_txtMessage = new Text(214, 17, 21, 90);
+	_window		= new Window(this, 224, 120, 16, 40, POPUP_BOTH);
+	_btnOk		= new TextButton(90, 18, 30, 120);
+	_btnOk5Secs	= new TextButton(90, 18, 136, 120);
+	_txtTitle	= new Text(214, 17, 21, 60);
+	_txtMessage	= new Text(214, 17, 21, 90);
 
-	// Set palette
 	setPalette("PAL_GEOSCAPE", 4);
 
 	add(_window);
@@ -60,19 +73,22 @@ LowFuelState::LowFuelState(Game *game, Craft *craft, GeoscapeState *state) : Sta
 
 	centerAllSurfaces();
 
-	// Set up objects
 	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK12.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(tr("STR_OK"));
-	_btnOk->onMouseClick((ActionHandler)&LowFuelState::btnOkClick);
-	_btnOk->onKeyboardPress((ActionHandler)&LowFuelState::btnOkClick, Options::keyCancel);
+	_btnOk->onMouseClick((ActionHandler)& LowFuelState::btnOkClick);
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& LowFuelState::btnOkClick,
+					Options::keyCancel);
 
 	_btnOk5Secs->setColor(Palette::blockOffset(8)+5);
 	_btnOk5Secs->setText(tr("STR_OK_5_SECONDS"));
-	_btnOk5Secs->onMouseClick((ActionHandler)&LowFuelState::btnOk5SecsClick);
-	_btnOk5Secs->onKeyboardPress((ActionHandler)&LowFuelState::btnOk5SecsClick, Options::keyOk);
+	_btnOk5Secs->onMouseClick((ActionHandler)& LowFuelState::btnOk5SecsClick);
+	_btnOk5Secs->onKeyboardPress(
+					(ActionHandler)& LowFuelState::btnOk5SecsClick,
+					Options::keyOk);
 
 	_txtTitle->setColor(Palette::blockOffset(8)+10);
 	_txtTitle->setAlign(ALIGN_CENTER);
@@ -98,7 +114,7 @@ LowFuelState::~LowFuelState()
  * Closes the window.
  * @param action Pointer to an action.
  */
-void LowFuelState::btnOkClick(Action *)
+void LowFuelState::btnOkClick(Action*)
 {
 	_game->popState();
 }
@@ -107,7 +123,7 @@ void LowFuelState::btnOkClick(Action *)
  * Closes the window and sets the timer to 5 Secs.
  * @param action Pointer to an action.
  */
-void LowFuelState::btnOk5SecsClick(Action *)
+void LowFuelState::btnOk5SecsClick(Action*)
 {
 	_state->timerReset();
 	_game->popState();
