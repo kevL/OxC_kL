@@ -1184,9 +1184,19 @@ bool Pathfinding::isBlocked(
 			{
 				return true;
 			}
+
+			if (_unit
+				&& _unit->getFaction() == FACTION_HOSTILE
+				&& std::find(
+						_unit->getVisibleUnits()->begin(),
+						_unit->getVisibleUnits()->end(),
+						unit)
+					!= _unit->getVisibleUnits()->end())
+			{
+				return true;
+			}
 		}
-		// this whole section is devoted to making large units not take part in any kind of falling behaviour
-		else if (tile->hasNoFloor(0)
+		else if (tile->hasNoFloor(0) // this whole section is devoted to making large units not take part in any kind of falling behaviour
 			&& _movementType != MT_FLY)
 		{
 			Position pos = tile->getPosition();

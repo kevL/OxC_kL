@@ -421,10 +421,10 @@ std::string getDataFile(const std::string& filename)
 #endif
 
 	// Check current data path
-	std::string path = caseInsensitive(Options::getDataFolder(), name);
-	if (path != "")
+	std::string current = caseInsensitive(Options::getDataFolder(), name);
+	if (current != "")
 	{
-		return path;
+		return current;
 	}
 
 	// Check every other path
@@ -434,6 +434,10 @@ std::string getDataFile(const std::string& filename)
 			++i)
 	{
 		std::string path = caseInsensitive(*i, name);
+		if (path == current)
+		{
+			continue;
+		}
 		if (path != "")
 		{
 			Options::setDataFolder(*i);
@@ -460,10 +464,10 @@ std::string getDataFolder(const std::string& foldername)
 #endif
 
 	// Check current data path
-	std::string path = caseInsensitiveFolder(Options::getDataFolder(), name);
-	if (path != "")
+	std::string current = caseInsensitiveFolder(Options::getDataFolder(), name);
+	if (current != "")
 	{
-		return path;
+		return current;
 	}
 
 	// Check every other path
@@ -473,6 +477,10 @@ std::string getDataFolder(const std::string& foldername)
 			++i)
 	{
 		std::string path = caseInsensitiveFolder(*i, name);
+		if (path == current)
+		{
+			continue;
+		}
 		if (path != "")
 		{
 			Options::setDataFolder(*i);
@@ -588,6 +596,56 @@ std::vector<std::string> getFolderContents(
 #ifndef _WIN32
 	std::sort(files.begin(), files.end());
 #endif
+	return files;
+}
+
+/**
+ * Gets the name of all the files
+ * contained in a Data subfolder.
+ * Repeated files are ignored.
+ * @param folder Path to the data folder.
+ * @param ext Extension of files ("" if it doesn't matter).
+ * @return Ordered list of all the files.
+ */
+std::vector<std::string> getDataContents(const std::string &folder, const std::string &ext)
+{
+	std::map<std::string, bool> unique;
+	std::vector<std::string> files;
+
+	// Check current data path
+	std::string current = caseInsensitive(Options::getDataFolder(), folder);
+	if (current != "")
+	{
+		std::vector<std::string> contents = getFolderContents(current, ext);
+		for (std::vector<std::string>::const_iterator file = contents.begin(); file != contents.end(); ++file)
+		{
+			unique[*file] = true;
+		}
+	}
+
+	// Check every other path
+	for (std::vector<std::string>::const_iterator i = Options::getDataList().begin(); i != Options::getDataList().end(); ++i)
+	{
+		std::string path = caseInsensitive(*i, folder);
+		if (path == current)
+		{
+			continue;
+		}
+		if (path != "")
+		{
+			std::vector<std::string> contents = getFolderContents(path, ext);
+			for (std::vector<std::string>::const_iterator file = contents.begin(); file != contents.end(); ++file)
+			{
+				unique[*file] = true;
+			}
+		}
+	}
+
+	for (std::map<std::string, bool>::const_iterator i = unique.begin(); i != unique.end(); ++i)
+	{
+		files.push_back(i->first);
+	}
+
 	return files;
 }
 

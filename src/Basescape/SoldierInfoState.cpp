@@ -72,10 +72,15 @@ SoldierInfoState::SoldierInfoState(
 {
 //	_list = NULL; // kL
 
-//kL	if (_base == 0)
-//kL		_list = _game->getSavedGame()->getDeadSoldiers();
-//kL	else
-//	if (_base != 0) // kL
+/*	if (_base == 0)
+		_list = _game->getSavedGame()->getDeadSoldiers();
+	{
+		if (_soldierId >= _list->size())
+			_soldierId = 0;
+		else
+			_soldierId = _list->size() - (1 + _soldierId);
+	}
+	else */
 	_list = _base->getSoldiers();
 
 	_bg				= new Surface(320, 200, 0, 0);
@@ -212,17 +217,33 @@ SoldierInfoState::SoldierInfoState(
 
 	_btnPrev->setColor(Palette::blockOffset(15)+6);
 	_btnPrev->setText(L"<");
+/*	if (_base == 0)
+	{
+		_btnPrev->onMouseClick((ActionHandler)& SoldierInfoState::btnNextClick);
+		_btnPrev->onKeyboardPress((ActionHandler)& SoldierInfoState::btnNextClick, Options::keyBattlePrevUnit);
+	}
+	else
+	{ */
 	_btnPrev->onMouseClick((ActionHandler)& SoldierInfoState::btnPrevClick);
 	_btnPrev->onKeyboardPress(
 					(ActionHandler)& SoldierInfoState::btnPrevClick,
 					Options::keyBattlePrevUnit);
+//	}
 
 	_btnNext->setColor(Palette::blockOffset(15)+6);
 	_btnNext->setText(L">");
+/*	if (_base == 0)
+	{
+		_btnNext->onMouseClick((ActionHandler)& SoldierInfoState::btnPrevClick);
+		_btnNext->onKeyboardPress((ActionHandler)& SoldierInfoState::btnPrevClick, Options::keyBattleNextUnit);
+	}
+	else
+	{ */
 	_btnNext->onMouseClick((ActionHandler)& SoldierInfoState::btnNextClick);
 	_btnNext->onKeyboardPress(
 					(ActionHandler)& SoldierInfoState::btnNextClick,
 					Options::keyBattleNextUnit);
+//	}
 
 	_btnArmor->setColor(Palette::blockOffset(15)+6);
 	_btnArmor->onMouseClick((ActionHandler)& SoldierInfoState::btnArmorClick);

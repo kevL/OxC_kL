@@ -112,7 +112,7 @@ XcomResourcePack::XcomResourcePack( // kL
 		ResourcePack()
 {
 	// Load palettes
-	char* pal[] =
+	const char* pal[] =
 	{
 		"PAL_GEOSCAPE",
 		"PAL_BASESCAPE",

@@ -1818,6 +1818,12 @@ bool AlienBAIState::explosiveEfficacy(
 //kL	int affected = 0;
 
 	BattleUnit* target = _save->getTile(targetPos)->getUnit();
+/*	if (target)
+	{
+		++enemiesAffected;
+		++efficacy;
+	} */
+
 	for (std::vector<BattleUnit*>::iterator
 			i = _save->getUnits()->begin();
 			i != _save->getUnits()->end();
@@ -1846,7 +1852,7 @@ bool AlienBAIState::explosiveEfficacy(
 									((*i)->getPosition().y * 16) + 8,
 									((*i)->getPosition().z * 24) + 12);
 
-			int collision = _save->getTileEngine()->calculateLine(
+/*			int collision = _save->getTileEngine()->calculateLine(
 																voxelPosA,
 																voxelPosB,
 																false,
@@ -1854,8 +1860,19 @@ bool AlienBAIState::explosiveEfficacy(
 																target,
 																true,
 																false,
+																*i); */
+			std::vector<Position> traj;
+			int collision = _save->getTileEngine()->calculateLine(
+																voxelPosA,
+																voxelPosB,
+																false,
+																&traj,
+																target,
+																true,
+																false,
 																*i);
-			if (collision == VOXEL_UNIT)
+			if (collision == VOXEL_UNIT
+				&& traj.front() / Position(16, 16, 24) == (*i)->getPosition())
 			{
 				if ((*i)->getFaction() == FACTION_PLAYER)
 					eff += 10;
@@ -1884,8 +1901,8 @@ bool AlienBAIState::explosiveEfficacy(
 //kL		return false;
 //kL	}
 
-	if (eff > 0					// kL
-		&& RNG::percent(eff))	// kL
+//	if (//eff > 0 &&		// kL
+	if (RNG::percent(eff))	// kL
 	{
 		//Log(LOG_INFO) << "AlienBAIState::explosiveEfficacy() EXIT true, eff = " << eff;
 		return true;
