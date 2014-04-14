@@ -36,7 +36,7 @@ class Sound
 {
 
 private:
-	Mix_Chunk *_sound;
+	Mix_Chunk* _sound;
 
 
 	public:

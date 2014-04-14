@@ -81,6 +81,7 @@ Window::Window(
 		if (_state != 0)
 		{
 			_screen = state->isScreen();
+
 			if (_screen)
 				_state->toggleScreen();
 		}
@@ -140,7 +141,8 @@ void Window::setHighContrast(bool contrast)
  */
 void Window::think()
 {
-	if (_hidden && _popupStep < 1.0)
+	if (_hidden
+		&& _popupStep < 1.0)
 	{
 		_state->hideAll();
 		setHidden(false);
@@ -156,24 +158,19 @@ void Window::popup()
 {
 	if (AreSame(_popupStep, 0.0))
 	{
-//kL		int sound = RNG::generate(0, 2);
-		int sound = RNG::generate(1, 2); // kL
-//kL		if (soundPopup[sound] != 0)
-//		{
-		soundPopup[sound]->play();
-//		}
+		int sound = RNG::generate(0, 2);
+		if (soundPopup[sound] != 0)
+//kL			soundPopup[sound]->play();
+//			soundPopup[sound]->play(0); // kL: UI Fx channel
+			soundPopup[sound]->play(1); // yeeeeeeahhhh. Cool, it works!
 	}
 
 	if (_popupStep < 1.0)
-	{
 		_popupStep += POPUP_SPEED;
-	}
 	else
 	{
 		if (_screen)
-		{
 			_state->toggleScreen();
-		}
 
 		_state->showAll();
 		_popupStep = 1.0;
@@ -193,7 +190,6 @@ void Window::popup()
 void Window::draw()
 {
 	Surface::draw();
-
 
 	SDL_Rect square;
 
@@ -225,9 +221,8 @@ void Window::draw()
 
 	Uint8 mult = 1;
 	if (_contrast)
-	{
 		mult = 2;
-	}
+
 	Uint8 color = _color + 3 * mult;
 
 	for (int

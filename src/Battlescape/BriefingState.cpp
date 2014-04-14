@@ -82,7 +82,8 @@ BriefingState::BriefingState(
 		setPalette("PAL_GEOSCAPE", 2);
 
 //		_game->getResourcePack()->playMusic("GMENBASE");
-		_game->getResourcePack()->getMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMENBASE)->play(); // sza_MusicRules
+//		_game->getResourcePack()->getMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMENBASE)->play(); // sza_MusicRules
+		_game->getResourcePack()->playMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMENBASE); // kL, sza_MusicRules
 	}
 	else if (mission == "STR_MARS_CYDONIA_LANDING"
 		|| mission == "STR_MARS_THE_FINAL_ASSAULT")
@@ -90,14 +91,16 @@ BriefingState::BriefingState(
 		setPalette("PAL_GEOSCAPE", 6);
 
 //		_game->getResourcePack()->playMusic("GMNEWMAR");
-		_game->getResourcePack()->getMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMNEWMAR)->play(); // sza_MusicRules
+//		_game->getResourcePack()->getMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMNEWMAR)->play(); // sza_MusicRules
+		_game->getResourcePack()->playMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMNEWMAR); // kL, sza_MusicRules
 	}
 	else
 	{
 		setPalette("PAL_GEOSCAPE", 0);
 
 //		_game->getResourcePack()->playMusic("GMDEFEND");
-		_game->getResourcePack()->getMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMDEFEND)->play(); // sza_MusicRules
+//		_game->getResourcePack()->getMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMDEFEND)->play(); // sza_MusicRules
+		_game->getResourcePack()->playMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMDEFEND); // kL, sza_MusicRules
 	}
 
 	if (mission == "STR_ALIEN_BASE_ASSAULT"

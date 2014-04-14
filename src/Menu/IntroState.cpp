@@ -234,11 +234,11 @@ static introSoundEffect introSoundTrack[] =
 	{487, 0x13}, // ufo detected
 	{495, 0x16}, // voice
 	{501, 0x16},
-	{512, 0xd},  // feet -- not in original
-	{514, 0xd},  // feet -- not in original
+//kL	{512, 0xd},  // feet -- not in original
+//kL	{514, 0xd},  // feet -- not in original
 	{522, 0x0B}, // rifle grab
-	{523, 0xd},  // feet -- not in original
-	{525, 0xd},  // feet -- not in original
+//kL	{523, 0xd},  // feet -- not in original
+//kL	{525, 0xd},  // feet -- not in original
 	{534, 0x18},
 	{535, 0x405},
 	{560, 0x407},
@@ -327,84 +327,89 @@ static void musicDone()
 
 static struct AudioSequence
 {
-	ResourcePack *rp;
-	Music *m;
-	Sound *s;
-	int trackPosition;
 
-	AudioSequence(ResourcePack* resources)
-		:
-			rp(resources),
-			m(0),
-			s(0),
-			trackPosition(0)
-	{
-	}
+ResourcePack *rp;
+Music *m;
+Sound *s;
+int trackPosition;
 
-	void operator ()()
+
+AudioSequence(ResourcePack* resources)
+	:
+		rp(resources),
+		m(0),
+		s(0),
+		trackPosition(0)
+{
+}
+
+void operator ()()
+{
+	while (Flc::flc.FrameCount >= introSoundTrack[trackPosition].frameNumber)
 	{
-		while (Flc::flc.FrameCount >= introSoundTrack[trackPosition].frameNumber)
+		int command = introSoundTrack[trackPosition].sound;
+		if (command & 0x200)
 		{
-			int command = introSoundTrack[trackPosition].sound;
-			if (command & 0x200)
-			{
 #ifndef __NO_MUSIC
-				switch(command)
-				{
-					case 0x200:
-						Log(LOG_DEBUG) << "Playing gmintro1";
-						m = rp->getMusic("GMINTRO1");
-						m->play(1);
-					break;
-					case 0x201:
-						Log(LOG_DEBUG) << "Playing gmintro2";
-						m = rp->getMusic("GMINTRO2");
-						m->play(1);
-					break;
-					case 0x202:
-						Log(LOG_DEBUG) << "Playing gmintro3";
-						m = rp->getMusic("GMINTRO3");
-						m->play(1);
-						Mix_HookMusicFinished(musicDone);
-					break;
-				}
+			switch(command)
+			{
+				case 0x200:
+					Log(LOG_DEBUG) << "Playing gmintro1";
+					m = rp->getMusic("GMINTRO1");
+					m->play(1);
+				break;
+				case 0x201:
+					Log(LOG_DEBUG) << "Playing gmintro2";
+					m = rp->getMusic("GMINTRO2");
+					m->play(1);
+				break;
+				case 0x202:
+					Log(LOG_DEBUG) << "Playing gmintro3";
+					m = rp->getMusic("GMINTRO3");
+					m->play(1);
+					Mix_HookMusicFinished(musicDone);
+				break;
+			}
 #endif
-			}
-			else if (command & 0x400)
-			{
-				Flc::flc.HeaderSpeed = (1000.0 / 70.0) * (command & 0xff);
-				Log(LOG_DEBUG) << "Frame delay now: " << Flc::flc.HeaderSpeed;
-			}
-			else if (command <= 0x19)
-			{
-				for (soundInFile**
-						sounds = introSounds;
-						*sounds;
-						++sounds) // try hybrid sound set, then intro.cat or sample3.cat alone
-				{
-					soundInFile* sf = (*sounds) + command;
-					Log(LOG_DEBUG) << "playing: " << sf->catFile << ":" << sf->sound << " for index " << command;
-
-					int channel = trackPosition %4; // use at most four channels to play sound effects
-					double ratio = static_cast<double>(Options::soundVolume) / static_cast<double>(MIX_MAX_VOLUME);
-
-					s = rp->getSound(
-									sf->catFile,
-									sf->sound);
-					if (s)
-					{
-						s->play(channel);
-						Mix_Volume(channel, static_cast<int>(static_cast<double>(sf->volume) * ratio));
-
-						break;
-					}
-					else Log(LOG_DEBUG) << "Couldn't play " << sf->catFile << ":" << sf->sound;
-				}
-			}
-
-			++trackPosition;
 		}
+		else if (command & 0x400)
+		{
+			Flc::flc.HeaderSpeed = (1000.0 / 70.0) * (command & 0xff);
+			Log(LOG_DEBUG) << "Frame delay now: " << Flc::flc.HeaderSpeed;
+		}
+		else if (command <= 0x19)
+		{
+			for (soundInFile**
+					sounds = introSounds;
+					*sounds;
+					++sounds) // try hybrid sound set, then intro.cat or sample3.cat alone
+			{
+				soundInFile* sf = (*sounds) + command;
+				Log(LOG_DEBUG) << "playing: " << sf->catFile << ":" << sf->sound << " for index " << command;
+
+				// kL_note: uh, I think the SoundFx should play on channel -1 period.....
+//kL					int channel = trackPosition %4; // use at most four channels to play sound effects
+//kL					double ratio = static_cast<double>(Options::soundVolume) / static_cast<double>(MIX_MAX_VOLUME);
+
+				s = rp->getSound(
+								sf->catFile,
+								sf->sound);
+				if (s)
+				{
+					s->play(-1);
+//kL						s->play(channel);
+//kL						Mix_Volume(channel, static_cast<int>(static_cast<double>(sf->volume) * ratio));
+
+					break;
+				}
+				else Log(LOG_DEBUG) << "Couldn't play " << sf->catFile << ":" << sf->sound;
+			}
+		}
+
+		++trackPosition;
 	}
+}
+
 } *audioSequence;
 
 
@@ -412,6 +417,7 @@ static void audioHandler()
 {
 	(*audioSequence)();
 }
+
 
 /**
  * Play the intro.

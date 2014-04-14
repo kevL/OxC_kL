@@ -662,7 +662,6 @@ BattlescapeState::BattlescapeState(Game* game)
 	_barHealth->setColor(Palette::blockOffset(2));
 	_barHealth->setColor2(Palette::blockOffset(5)+2);
 	_barHealth->setScale(1.0);
-//	_barHealth->setScale(0.75); // kL
 	_barMorale->setColor(Palette::blockOffset(12));
 	_barMorale->setScale(1.0);
 

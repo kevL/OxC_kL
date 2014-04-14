@@ -277,8 +277,7 @@ DebriefingState::DebriefingState(Game* game)
 		}
 	}
 
-	// Calculate rating
-	std::wstring rating;
+	std::wstring rating; // Calculate rating
 	if (total < -99)
 		rating = tr("STR_RATING_TERRIBLE");
 	else if (total < 51)
@@ -295,7 +294,8 @@ DebriefingState::DebriefingState(Game* game)
 	_txtRating->setText(tr("STR_RATING").arg(rating));
 
 //	_game->getResourcePack()->playMusic("GMMARS");
-	_game->getResourcePack()->getMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMMARS)->play(); // sza_MusicRules
+//	_game->getResourcePack()->getMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMMARS)->play(); // sza_MusicRules
+	_game->getResourcePack()->playMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMMARS); // kL, sza_MusicRules
 
 	_game->getCursor()->setColor(Palette::blockOffset(15)+12);
 	_game->getFpsCounter()->setColor(Palette::blockOffset(15)+12);

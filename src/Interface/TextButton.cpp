@@ -315,7 +315,7 @@ void TextButton::mousePress(Action* action, State* state)
 			&& action->getDetails()->button.button != SDL_BUTTON_WHEELUP
 			&& action->getDetails()->button.button != SDL_BUTTON_WHEELDOWN)
 		{
-			soundPress->play(0);
+			soundPress->play(0); // UI Fx channel
 		}
 
 		if (_comboBox)

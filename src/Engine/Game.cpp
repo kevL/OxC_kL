@@ -457,8 +457,7 @@ void Game::quit()
 }
 
 /**
- * Changes the audio volume of the music and
- * sound effect channels.
+ * Changes the audio volume of the music and sound effect channels.
  * @param sound Sound volume, from 0 to MIX_MAX_VOLUME.
  * @param music Music volume, from 0 to MIX_MAX_VOLUME.
  * @param ui UI volume, from 0 to MIX_MAX_VOLUME.
@@ -471,13 +470,13 @@ void Game::setVolume(
 	if (!Options::mute)
 	{
 		if (sound >= 0)
-			Mix_Volume(-1, sound);
+			Mix_Volume(-1, sound); // kL_note: this, supposedly, sets volume on *all channels*
 
 		if (music >= 0)
 			Mix_VolumeMusic(music);
 
 		if (ui >= 0)
-			Mix_Volume(0, ui);
+			Mix_Volume(0, ui); // kL_note: then this sets channel-0 to ui-Volume ...
 	}
 }
 

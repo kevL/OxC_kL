@@ -111,8 +111,7 @@ XcomResourcePack::XcomResourcePack( // kL
 	:
 		ResourcePack()
 {
-	// Load palettes
-	const char* pal[] =
+	const char* pal[] = // Load palettes
 	{
 		"PAL_GEOSCAPE",
 		"PAL_BASESCAPE",
@@ -142,9 +141,8 @@ XcomResourcePack::XcomResourcePack( // kL
 							CrossPlatform::getDataFile(s1),
 							128);
 	}
-	
-	// Correct Battlescape palette
-	{
+
+	{ // Correct Battlescape palette
 		std::string s1 = "GEODATA/PALETTES.DAT";
 		std::string s2 = "PAL_BATTLESCAPE";
 		_palettes[s2] = new Palette();
@@ -197,8 +195,7 @@ XcomResourcePack::XcomResourcePack( // kL
 		_fonts[id] = font;
 	}
 
-	// Load surfaces
-	{
+	{ // Load surfaces
 		std::ostringstream s;
 		s << "GEODATA/" << "INTERWIN.DAT";
 		_surfaces["INTERWIN.DAT"] = new Surface(160, 556);
@@ -251,8 +248,7 @@ XcomResourcePack::XcomResourcePack( // kL
 		_surfaces[*i]->loadSpk(path);
 	}
 
-	// Load intro
-	std::string ufointro = CrossPlatform::getDataFolder("UFOINTRO/");
+	std::string ufointro = CrossPlatform::getDataFolder("UFOINTRO/"); // Load intro
 	std::vector<std::string> lbms = CrossPlatform::getFolderContents(ufointro, "LBM");
 	for (std::vector<std::string>::iterator
 			i = lbms.begin();
@@ -269,8 +265,7 @@ XcomResourcePack::XcomResourcePack( // kL
 		_surfaces[*i]->loadImage(path);
 	}
 
-	// Load surface sets
-	std::string sets[] =
+	std::string sets[] = // Load surface sets
 	{
 		"BASEBITS.PCK",
 		"INTICON.PCK",
@@ -306,8 +301,7 @@ XcomResourcePack::XcomResourcePack( // kL
 	scang << "GEODATA/" << "SCANG.DAT";
 	_sets["SCANG.DAT"]->loadDat (CrossPlatform::getDataFile(scang.str()));
 
-	// Load polygons
-	std::ostringstream s;
+	std::ostringstream s; // Load polygons
 	s << "GEODATA/" << "WORLD.DAT";
 	Globe::loadDat(CrossPlatform::getDataFile(s.str()), &_polygons);
 
@@ -403,7 +397,7 @@ XcomResourcePack::XcomResourcePack( // kL
 			std::string mode = musicRule->getMode();
 			if (mode == "replace")
 			{
-				for(std::vector<std::string>::const_iterator
+				for (std::vector<std::string>::const_iterator
 						terrain = terrains.begin();
 						terrain != terrains.end();
 						++terrain)
@@ -414,7 +408,7 @@ XcomResourcePack::XcomResourcePack( // kL
 				}
 			}
 
-			for(std::vector<std::string>::const_iterator
+			for (std::vector<std::string>::const_iterator
 					terrain = terrains.begin();
 					terrain != terrains.end();
 					++terrain)
@@ -519,12 +513,12 @@ XcomResourcePack::XcomResourcePack( // kL
 
 //					LoadMusic(filename, midiIndex):
 					std::string exts[] =
-						{
-							"flac",
-							"ogg",
-							"mp3",
-							"mod"
-						};
+					{
+						"flac",
+						"ogg",
+						"mp3",
+						"mod"
+					};
 
 					bool loaded = false;
 
@@ -788,10 +782,10 @@ XcomResourcePack::XcomResourcePack( // kL
 		}
 	}
 
-	TextButton::soundPress	= getSound("GEO.CAT", 0);
-	Window::soundPopup[0]	= getSound("GEO.CAT", 1);
-	Window::soundPopup[1]	= getSound("GEO.CAT", 2);
-	Window::soundPopup[2]	= getSound("GEO.CAT", 3);
+	TextButton::soundPress	= getSound("GEO.CAT", 0); // bleep
+	Window::soundPopup[0]	= getSound("GEO.CAT", 1); // wahahahah
+	Window::soundPopup[1]	= getSound("GEO.CAT", 2); // swish1
+	Window::soundPopup[2]	= getSound("GEO.CAT", 3); // swish2
 
 	loadBattlescapeResources(); // TODO load this at battlescape start, unload at battlescape end?
 

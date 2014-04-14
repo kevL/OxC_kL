@@ -226,7 +226,7 @@ Music* ResourcePack::getMusic(const std::string& name) const
  * @param random Pick a random track?
  */
 void ResourcePack::playMusic(	// kL_note: Should put 'terrain' string input here, for sza_MusicRules
-								// and then change all the ->play() calls to playMusic() calls
+								// and then change the BattlescapeState ->play() call to a regular playMusic() call.
 		const std::string& name,
 		bool random)
 {
@@ -236,7 +236,7 @@ void ResourcePack::playMusic(	// kL_note: Should put 'terrain' string input here
 		_playingMusic = name;
 
 		if (name == "GMGEO1")
-			_playingMusic = "GMGEO"; // hack
+			_playingMusic = "GMGEO"; // hack (kL_note: for non-campaign Battles i guess)
 
 		if (random)
 //kL			getRandomMusic(name)->play();
@@ -258,9 +258,12 @@ Music* ResourcePack::getRandomMusic( // sza_MusicRules
 {
 	if (Options::mute)
 		return _muteMusic;
-	else
-	{ // sza_MusicRules
-		Log(LOG_DEBUG) << "MUSIC - Request to play " << name << " '" << terrain << "'";
+	else // sza_MusicRules
+	{
+		if (terrain == "")
+			Log(LOG_DEBUG) << "MUSIC - Request to play ( " << name << " )";
+		else
+			Log(LOG_DEBUG) << "MUSIC - Request to play ( " << name << " ) for terrainType: " << terrain;
 
 		if (_musicAssignment.find(name) == _musicAssignment.end())
 			return _muteMusic;

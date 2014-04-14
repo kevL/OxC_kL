@@ -38,6 +38,7 @@ grt,
 #include "Zoom.h"
 #include "../aresame.h"
 
+
 namespace OpenXcom
 {
 
@@ -83,7 +84,7 @@ void SDLInit(char *header)
 #endif
 
 void FlcReadFile(Uint32 size)
-{ 
+{
 if(size>flc.membufSize) {
     if(!(flc.pMembuf=(Uint8*)realloc(flc.pMembuf, size+1))) {
       //printf("Realloc failed: %d\n", size);
@@ -100,7 +101,7 @@ if(size>flc.membufSize) {
 } /* FlcReadFile */
 
 int FlcCheckHeader(const char *filename)
-{ 
+{
 if((flc.file=fopen(filename, "rb"))==NULL) {
     Log(LOG_ERROR) << "Could not open flx file: " << filename;
 		return -1;
@@ -127,7 +128,7 @@ if((flc.file=fopen(filename, "rb"))==NULL) {
 #endif
 
 
-  if((flc.HeaderCheck==SDL_SwapLE16(0x0AF12)) || (flc.HeaderCheck==SDL_SwapLE16(0x0AF11))) { 
+  if((flc.HeaderCheck==SDL_SwapLE16(0x0AF12)) || (flc.HeaderCheck==SDL_SwapLE16(0x0AF11))) {
     flc.screen_w=flc.HeaderWidth;
     flc.screen_h=flc.HeaderHeight;
 	Log(LOG_INFO) << "Playing flx, " << flc.screen_w << "x" << flc.screen_h << ", " << flc.HeaderFrames << " frames";
@@ -142,7 +143,7 @@ if((flc.file=fopen(filename, "rb"))==NULL) {
 } /* FlcCheckHeader */
 
 int FlcCheckFrame()
-{ 
+{
 flc.pFrame=flc.pMembuf+flc.FrameSize-16;
   ReadU32(&flc.FrameSize, flc.pFrame+0);
   ReadU16(&flc.FrameCheck, flc.pFrame+4);
@@ -157,16 +158,16 @@ flc.pFrame=flc.pMembuf+flc.FrameSize-16;
 #endif
 
   flc.pFrame+=16;
-  if(flc.FrameCheck==0x0f1fa) { 
+  if(flc.FrameCheck==0x0f1fa) {
     return(0);
   }
 
   flc.DelayOverride = 0; // not FRAME_TYPE means the value we read wasn't a delay at all
 
-  if(flc.FrameCheck==0x0f100) { 
+  if(flc.FrameCheck==0x0f100) {
 #ifdef DEBUG
     printf("Ani info!!!\n");
-#endif	
+#endif
     return(0);
   }
 
@@ -213,20 +214,20 @@ void SS2()
   pSrc=flc.pChunk+6;
   pDst=(Uint8*)flc.mainscreen->pixels + flc.offset;
   ReadU16(&Lines, pSrc);
-  
+
   pSrc+=2;
   while(Lines--) {
     ReadU16(&Count, pSrc);
     pSrc+=2;
 
     while(Count & 0xc000) {
-/* Upper bits 11 - Lines skip 
+/* Upper bits 11 - Lines skip
 */
-      if((Count & 0xc000)==0xc000) {  // 0xc000h = 1100000000000000
+      if((Count & 0xc000)==0xc000) { // 0xc000h = 1100000000000000
         pDst+=(0x10000-Count)*flc.mainscreen->pitch;
       }
 
-      if((Count & 0xc000)==0x4000) {  // 0x4000h = 0100000000000000
+      if((Count & 0xc000)==0x4000) { // 0x4000h = 0100000000000000
 /* Upper bits 01 - Last pixel
 */
 #ifdef DEBUG
@@ -237,7 +238,7 @@ void SS2()
       pSrc+=2;
     }
 
-	if((Count & SDL_SwapLE16(0xc000))==0x0000) {      // 0xc000h = 1100000000000000
+	if((Count & SDL_SwapLE16(0xc000))==0x0000) { // 0xc000h = 1100000000000000
       pTmpDst=pDst;
       while(Count--) {
         ColumSkip=*(pSrc++);
@@ -248,7 +249,7 @@ void SS2()
             *(pTmpDst++)=*(pSrc++);
             *(pTmpDst++)=*(pSrc++);
           }
-        } else { 
+        } else {
           if(CountData<0) {
             CountData=(0x100-CountData);
             Fill1=*(pSrc++);
@@ -261,7 +262,7 @@ void SS2()
         }
       }
       pDst+=flc.mainscreen->pitch;
-    } 
+    }
   }
 } /* SS2 */
 
@@ -283,7 +284,7 @@ void DECODE_BRUN()
         while(CountData--) {
           *(pTmpDst++)=Fill;
         }
-      } else { 
+      } else {
         if(CountData<0) {
           CountData=(0x100-CountData);
           while(CountData--) {
@@ -297,7 +298,7 @@ void DECODE_BRUN()
 } /* DECODE_BRUN */
 
 
-void DECODE_LC() 
+void DECODE_LC()
 { Uint8 *pSrc, *pDst, *pTmpDst;
   Sint8 CountData;
   Uint8 CountSkip;
@@ -324,7 +325,7 @@ void DECODE_LC()
         while(CountData--) {
           *(pTmpDst++)=*(pSrc++);
         }
-      } else { 
+      } else {
         if(CountData<0) {
           CountData=(0x100-CountData);
           Fill=*(pSrc++);
@@ -390,7 +391,7 @@ void BLACK()
 
 
 void FlcDoOneFrame()
-{ int ChunkCount; 
+{ int ChunkCount;
   ChunkCount=flc.FrameChunks;
   flc.pChunk=flc.pMembuf;
   if ( SDL_LockSurface(flc.mainscreen) < 0 )
@@ -442,7 +443,7 @@ void FlcDoOneFrame()
 } /* FlcDoOneFrame */
 
 void SDLWaitFrame(void)
-{ 
+{
 //#ifndef __NO_FLC
 static double oldTick=0.0;
   Uint32 currentTick;
@@ -451,7 +452,7 @@ static double oldTick=0.0;
 
 	if ( AreSame(oldTick, 0.0) ) oldTick = SDL_GetTicks();
 
-	currentTick=SDL_GetTicks(); 
+	currentTick=SDL_GetTicks();
 	waitTicks=(oldTick+=(delay))-currentTick;
 
 
@@ -462,7 +463,7 @@ static double oldTick=0.0;
 			//SDL_Delay(floor(waitTicks + 0.5)); // biased rounding? mehhh?
 			SDL_Delay(1);
 		}
-	} while (waitTicks > 0.0); 
+	} while (waitTicks > 0.0);
 //#endif
 } /* SDLWaitFrame */
 
@@ -497,7 +498,7 @@ int FlcInit(const char *filename)
 } /* FlcInit */
 
 void FlcDeInit()
-{ 
+{
 	if (flc.mainscreen != flc.realscreen->getSurface()->getSurface()) SDL_FreeSurface(flc.mainscreen);
 	fclose(flc.file);
 	free(flc.pMembuf);
@@ -506,7 +507,7 @@ void FlcDeInit()
 void FlcMain(void (*frameCallBack)())
 { flc.quit=false;
   SDL_Event event;
-  
+
   FlcInitFirstFrame();
   flc.offset = flc.dy * flc.mainscreen->pitch + flc.mainscreen->format->BytesPerPixel * flc.dx;
   while(!flc.quit) {
@@ -543,7 +544,7 @@ void FlcMain(void (*frameCallBack)())
 	Uint32 pauseStart = 0;
 	if (finalFrame) pauseStart = SDL_GetTicks();
 
-	do 
+	do
 	{
 		while(SDL_PollEvent(&event)) {
 		  switch(event.type) {

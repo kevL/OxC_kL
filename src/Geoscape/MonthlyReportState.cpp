@@ -439,7 +439,8 @@ void MonthlyReportState::btnOkClick(Action*)
 			_btnBigOk->setVisible(true);
 
 //			_game->getResourcePack()->playMusic("GMLOSE");
-			_game->getResourcePack()->getMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMLOSE)->play(); // kL: sza_MusicRules
+//			_game->getResourcePack()->getMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMLOSE)->play(); // kL: sza_MusicRules
+			_game->getResourcePack()->playMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMLOSE); // kL, sza_MusicRules
 		}
 	}
 }
