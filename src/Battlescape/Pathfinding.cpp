@@ -1188,10 +1188,10 @@ bool Pathfinding::isBlocked(
 			if (_unit
 				&& _unit->getFaction() == FACTION_HOSTILE
 				&& std::find(
-						_unit->getVisibleUnits()->begin(),
-						_unit->getVisibleUnits()->end(),
+						_unit->getUnitsSpottedThisTurn()->begin(),
+						_unit->getUnitsSpottedThisTurn()->end(),
 						unit)
-					!= _unit->getVisibleUnits()->end())
+					!= _unit->getUnitsSpottedThisTurn()->end())
 			{
 				return true;
 			}
