@@ -40,12 +40,14 @@ class VictoryState
 {
 
 private:
-	int _screenNumber;
+	static const int SCREENS = 5;
 
-	InteractiveSurface *_window;
+	InteractiveSurface* _bg[SCREENS];
+	Text* _text[SCREENS];
+
+	int _screen;
+
 	Timer *_timer;
-
-	std::vector<Text*> _txtText;
 
 
 	public:
@@ -54,16 +56,11 @@ private:
 		/// Cleans up the Victory state.
 		~VictoryState();
 
-		/// Initializes the slideshow.
-		void init();
 		/// Handle timers.
 		void think();
 
 		/// Handler for clicking the screen.
-		void windowClick(Action* action);
-
-		/// Moves to the next screen.
-		void nextScreen();
+		void screenClick(Action* action);
 };
 
 }

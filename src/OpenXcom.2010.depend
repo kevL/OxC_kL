@@ -6084,7 +6084,7 @@
 	<iostream>
 	"lodepng.h"
 
-1397448344 f:\git\openxcom\src\geoscape\defeatstate.h
+1397530687 f:\git\openxcom\src\geoscape\defeatstate.h
 	"../Engine/State.h"
 
 1397454974 f:\git\openxcom\src\geoscape\victorystate.h
@@ -7230,7 +7230,7 @@
 
 1394398507 f:\git\openxcom\src\engine\scalers\scalebit.h
 
-1397446590 source:f:\git\openxcom\src\geoscape\alienbasestate.cpp
+1397512787 source:f:\git\openxcom\src\geoscape\alienbasestate.cpp
 	"AlienBaseState.h"
 	<sstream>
 	"GeoscapeState.h"
@@ -8272,7 +8272,7 @@
 	"NumberText.h"
 	"../Engine/Palette.h"
 
-1397490579 source:f:\git\openxcom\src\interface\window.cpp
+1397514442 source:f:\git\openxcom\src\interface\window.cpp
 	"Window.h"
 	<SDL.h>
 	"../aresame.h"
@@ -9281,7 +9281,7 @@
 	<sstream>
 	"../Engine/Language.h"
 
-1397427509 source:f:\git\openxcom\src\savegame\alienmission.cpp
+1397512870 source:f:\git\openxcom\src\savegame\alienmission.cpp
 	"AlienMission.h"
 	<algorithm>
 	<functional>
@@ -11408,7 +11408,7 @@
 	<SDL.h>
 	<yaml-cpp/yaml.h>
 
-1397250605 f:\git\openxcom\src\engine\options.inc.h
+1397528622 f:\git\openxcom\src\engine\options.inc.h
 
 1396745312 source:f:\git\openxcom\src\engine\optioninfo.cpp
 	"OptionInfo.h"

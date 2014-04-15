@@ -22,6 +22,7 @@
 #include <algorithm>
 #include <iostream>
 #include <locale>
+#include <set>
 #include <sstream>
 #include <stdint.h>
 #include <string>
@@ -408,19 +409,17 @@ std::string getDataFile(const std::string& filename)
 				PATH_SEPARATOR);
 #endif
 
-	std::string current = caseInsensitive(Options::getDataFolder(), name);
-	if (current != "") // Check current data path
-		return current;
+	std::string path = caseInsensitive(Options::getDataFolder(), name);
+	if (path != "") // Check current data path
+		return path;
 
 	for (std::vector<std::string>::const_iterator // Check every other path
 			i = Options::getDataList().begin();
 			i != Options::getDataList().end();
 			++i)
 	{
-		std::string path = caseInsensitive(*i, name);
-		if (path == current)
-			continue;
-
+//kL		std::string path = caseInsensitive(*i, name);
+		path = caseInsensitive(*i, name); // kL
 		if (path != "")
 		{
 			Options::setDataFolder(*i);
@@ -449,19 +448,17 @@ std::string getDataFolder(const std::string& foldername)
 				PATH_SEPARATOR);
 #endif
 
-	std::string current = caseInsensitiveFolder(Options::getDataFolder(), name);
-	if (current != "") // Check current data path
-		return current;
+	std::string path = caseInsensitiveFolder(Options::getDataFolder(), name);
+	if (path != "") // Check current data path
+		return path;
 
 	for (std::vector<std::string>::const_iterator // Check every other path
 			i = Options::getDataList().begin();
 			i != Options::getDataList().end();
 			++i)
 	{
-		std::string path = caseInsensitiveFolder(*i, name);
-		if (path == current)
-			continue;
-
+//kL		std::string path = caseInsensitiveFolder(*i, name);
+		path = caseInsensitiveFolder(*i, name); // kL
 		if (path != "")
 		{
 			Options::setDataFolder(*i);
@@ -591,8 +588,8 @@ std::vector<std::string> getDataContents(
 		const std::string& folder,
 		const std::string& ext)
 {
-	std::map<std::string, bool> unique;
-	std::vector<std::string> files;
+	std::set<std::string> unique;
+//kL	std::vector<std::string> files;
 
 	std::string current = caseInsensitiveFolder(Options::getDataFolder(), folder);
 	if (current != "") // Check current data path
@@ -603,7 +600,7 @@ std::vector<std::string> getDataContents(
 				file != contents.end();
 				++file)
 		{
-			unique[*file] = true;
+			unique.insert(*file);
 		}
 	}
 
@@ -624,20 +621,15 @@ std::vector<std::string> getDataContents(
 					file != contents.end();
 					++file)
 			{
-				unique[*file] = true;
+				unique.insert(*file);
 			}
 		}
 	}
 
-	for (std::map<std::string, bool>::const_iterator
-			i = unique.begin();
-			i != unique.end();
-			++i)
-	{
-		files.push_back(i->first);
-	}
+//kL	files = std::vector<std::string>(unique.begin(), unique.end());
+//kL	return files;
 
-	return files;
+	return std::vector<std::string>(unique.begin(), unique.end());
 }
 
 /**

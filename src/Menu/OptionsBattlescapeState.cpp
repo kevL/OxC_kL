@@ -136,7 +136,7 @@ OptionsBattlescapeState::OptionsBattlescapeState(
 
 	_cbxDragScroll->setColor(Palette::blockOffset(15)-1);
 	_cbxDragScroll->setOptions(dragScrolls);
-	_cbxDragScroll->setSelected(Options::battleScrollDragButton);
+	_cbxDragScroll->setSelected(Options::battleDragScrollButton);
 	_cbxDragScroll->onChange((ActionHandler)& OptionsBattlescapeState::cbxDragScrollChange);
 	_cbxDragScroll->setTooltip("STR_DRAG_SCROLL_DESC");
 	_cbxDragScroll->onMouseIn((ActionHandler)& OptionsBattlescapeState::txtTooltipIn);
@@ -248,7 +248,7 @@ void OptionsBattlescapeState::cbxEdgeScrollChange(Action*)
  */
 void OptionsBattlescapeState::cbxDragScrollChange(Action*)
 {
-	Options::battleScrollDragButton = _cbxDragScroll->getSelected();
+	Options::battleDragScrollButton = _cbxDragScroll->getSelected();
 }
 
 /**
