@@ -50,7 +50,7 @@ DefeatState::DefeatState(Game* game)
 		State(game),
 		_screen(-1)
 {
-	char* files[] =
+	const char* files[] =
 	{
 		"PICT4.LBM",
 		"PICT5.LBM"

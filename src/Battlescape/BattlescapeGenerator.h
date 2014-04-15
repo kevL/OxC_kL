@@ -60,6 +60,7 @@ private:
 		_alienItemLevel,
 		_craftX,
 		_craftY,
+		_craftZ,
 		_mapsize_x,
 		_mapsize_y,
 		_mapsize_z,
@@ -96,7 +97,8 @@ private:
 			int yoff,
 			RuleTerrain* terrain,
 			int objectIDOffset,
-			bool discovered = false);
+			bool discovered = false,
+			bool craft = false);
 	/// Loads an XCom RMP file.
 	void loadRMP(
 			MapBlock* mapblock,

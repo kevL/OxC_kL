@@ -1584,6 +1584,13 @@ void BattlescapeState::btnPsiClick(Action* action)
 		else if (_reserve == _btnReserveSnap)	_battleGame->setTUReserved(BA_SNAPSHOT, true);
 		else if (_reserve == _btnReserveAimed)	_battleGame->setTUReserved(BA_AIMEDSHOT, true);
 		else if (_reserve == _btnReserveAuto)	_battleGame->setTUReserved(BA_AUTOSHOT, true);
+
+		// update any path preview
+		if (_battleGame->getPathfinding()->isPathPreviewed())
+		{
+			_battleGame->getPathfinding()->removePreview();
+			_battleGame->getPathfinding()->previewPath();
+		}
 	}
 } */
 
@@ -2834,6 +2841,13 @@ bool BattlescapeState::allowButtons(bool allowSaving) const
 		_battleGame->setKneelReserved(!_battleGame->getKneelReserved());
 //		_btnReserveKneel->invert(_btnReserveKneel->getColor()+3);
 		_btnReserveKneel->toggle(_battleGame->getKneelReserved());
+
+		// update any path preview
+		if (_battleGame->getPathfinding()->isPathPreviewed())
+		{
+			_battleGame->getPathfinding()->removePreview();
+			_battleGame->getPathfinding()->previewPath();
+		}
 	}
 } */
 

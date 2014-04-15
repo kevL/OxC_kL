@@ -1689,7 +1689,7 @@ double BattleUnit::getFiringAccuracy(
 	else if (actionType == BA_AUTOSHOT)
 		weaponAcc = item->getRules()->getAccuracyAuto();
 	else if (actionType == BA_HIT)
-		return item->getRules()->getAccuracyMelee();
+		return getStats()->melee * (item->getRules()->getAccuracyMelee() / 100) * (getAccuracyModifier(item) / 100);
 
 	int result = getStats()->firing * weaponAcc / 100;
 
@@ -3153,7 +3153,7 @@ void BattleUnit::invalidateCache()
  * ie, what has *this* soldier spotted this turn.
  * Update: now pertains only to aLien units.
  */
-std::vector<BattleUnit*> BattleUnit::getUnitsSpottedThisTurn()
+std::vector<BattleUnit*>& BattleUnit::getUnitsSpottedThisTurn()
 {
 	return _unitsSpottedThisTurn;
 }

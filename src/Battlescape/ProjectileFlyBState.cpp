@@ -561,6 +561,7 @@ bool ProjectileFlyBState::createNewProjectile()
 			_parent->getMap()->setProjectile(0);
 			_action.result = "STR_UNABLE_TO_THROW_HERE";
 			_action.TU = 0;
+			_unit->setStatus(STATUS_STANDING); // kL
 			_parent->popState();
 
 			return false;
@@ -607,6 +608,9 @@ bool ProjectileFlyBState::createNewProjectile()
 
 			_parent->getMap()->setProjectile(0);
 			_action.result = "STR_NO_LINE_OF_FIRE";
+			_action.TU = 0; // kL
+//kL			_unit->abortTurn();
+			_unit->setStatus(STATUS_STANDING); // kL
 			_parent->popState();
 
 			return false;
@@ -690,6 +694,9 @@ bool ProjectileFlyBState::createNewProjectile()
 
 			_parent->getMap()->setProjectile(0);
 			_action.result = "STR_NO_LINE_OF_FIRE";
+			_action.TU = 0; // kL
+//kL			_unit->abortTurn();
+			_unit->setStatus(STATUS_STANDING); // kL
 			_parent->popState();
 
 			return false;

@@ -102,6 +102,7 @@ BattlescapeGenerator::BattlescapeGenerator(Game* game)
 		_alienItemLevel(0),
 		_craftX(0),
 		_craftY(0),
+		_craftZ(0),
 		_tankPos(0), // kL
 		_baseCraftEquip(false) // kL
 {
@@ -910,7 +911,7 @@ BattleUnit* BattlescapeGenerator::addXCOMUnit(BattleUnit* unit)
 			Position pos = Position(
 								(*i)[0] + (_craftX * 10),
 								(*i)[1] + (_craftY * 10),
-								(*i)[2]);
+								(*i)[2] + _craftZ);
 //kL			int dir = (*i)[3];
 
 			if (canPlaceXCOMUnit(_save->getTile(pos)))
@@ -2480,6 +2481,7 @@ void BattlescapeGenerator::generateMap()
 			_craftY * 10,
 			_craft->getRules()->getBattlescapeTerrainData(),
 			mapDataSetIDOffset + craftDataSetIDOffset,
+			true,
 			true);
 		loadRMP(
 			craftMap,
@@ -2578,13 +2580,13 @@ void BattlescapeGenerator::generateMap()
 
 /**
  * Loads an XCom format MAP file into the tiles of the battlegame.
- * @param mapblock Pointer to MapBlock.
- * @param xoff Mapblock offset in X direction.
- * @param yoff Mapblock offset in Y direction.
- * @param save Pointer to the current SavedBattleGame.
- * @param terrain Pointer to the Terrain rule.
- * @param discovered Whether or not this mapblock is discovered (eg. landingsite of the XCom plane).
- * @return int Height of the loaded mapblock (this is needed for spawpoint calculation...)
+ * @param mapblock, Pointer to MapBlock.
+ * @param xoff, Mapblock offset in X direction.
+ * @param yoff, Mapblock offset in Y direction.
+ * @param terrain, Pointer to the Terrain rule.
+ * @param discovered, Whether or not this mapblock is discovered (eg. landingsite of the XCom plane).
+ * @param craft,
+ * @return, Height of the loaded mapblock (this is needed for spawpoint calculation...)
  * @sa http://www.ufopaedia.org/index.php?title=MAPS
  * @note Y-axis is in reverse order.
  */
@@ -2594,7 +2596,8 @@ int BattlescapeGenerator::loadMAP(
 		int yoff,
 		RuleTerrain* terrain,
 		int mapDataSetOffset,
-		bool discovered)
+		bool discovered,
+		bool craft)
 {
 	int
 		sizex,
@@ -2642,6 +2645,9 @@ int BattlescapeGenerator::loadMAP(
 		if (floor != 0)
 		{
 			z += i;
+
+			if (craft)
+				_craftZ = i;
 
 			break;
 		}

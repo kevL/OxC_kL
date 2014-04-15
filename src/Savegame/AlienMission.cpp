@@ -63,10 +63,6 @@ std::pair<double, double> getLandPoint(
 		const OpenXcom::RuleRegion& region,
 		unsigned zone)
 {
-	// the last set of mission zones are WAY outside the region.
-	if (zone == region.getMissionZones().size())
-		zone--;
-
 	std::pair<double, double> pos;
 	do
 	{
@@ -929,6 +925,7 @@ std::pair<double, double> AlienMission::getWaypoint(
 		const Globe& globe,
 		const RuleRegion &region)
 {
+	/* LOOK MA! NO HANDS!
 	if (trajectory.getAltitude(nextWaypoint) == "STR_GROUND")
 	{
 		return getLandPoint(
@@ -936,8 +933,8 @@ std::pair<double, double> AlienMission::getWaypoint(
 						region,
 						trajectory.getZone(nextWaypoint));
 	}
-	else
-		return region.getRandomPoint(trajectory.getZone(nextWaypoint));
+	else */
+	return region.getRandomPoint(trajectory.getZone(nextWaypoint));
 }
 
 }

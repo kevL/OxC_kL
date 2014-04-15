@@ -4542,7 +4542,7 @@
 	<vector>
 	<yaml-cpp/yaml.h>
 
-1394398507 f:\git\openxcom\src\ruleset\ruleregion.h
+1397603382 f:\git\openxcom\src\ruleset\ruleregion.h
 	<string>
 	<vector>
 	<yaml-cpp/yaml.h>
@@ -4723,7 +4723,7 @@
 	<vector>
 	"../Engine/State.h"
 
-1394398507 f:\git\openxcom\src\battlescape\battlescapegenerator.h
+1397602702 f:\git\openxcom\src\battlescape\battlescapegenerator.h
 	<string>
 
 1396247195 f:\git\openxcom\src\battlescape\inventorystate.h
@@ -4750,7 +4750,7 @@
 	<yaml-cpp/yaml.h>
 	"BattleUnit.h"
 
-1394398507 f:\git\openxcom\src\savegame\battleunit.h
+1397603731 f:\git\openxcom\src\savegame\battleunit.h
 	<string>
 	<vector>
 	"Soldier.h"
@@ -7843,7 +7843,7 @@
 	<vector>
 	"ShaderDraw.h"
 
-1397449343 source:f:\git\openxcom\src\geoscape\graphsstate.cpp
+1397532875 source:f:\git\openxcom\src\geoscape\graphsstate.cpp
 	"GraphsState.h"
 	<sstream>
 	"../Engine/Action.h"
@@ -8273,7 +8273,7 @@
 	"NumberText.h"
 	"../Engine/Palette.h"
 
-1397514442 source:f:\git\openxcom\src\interface\window.cpp
+1397533181 source:f:\git\openxcom\src\interface\window.cpp
 	"Window.h"
 	<SDL.h>
 	"../aresame.h"

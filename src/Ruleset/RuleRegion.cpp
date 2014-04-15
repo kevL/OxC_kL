@@ -86,6 +86,8 @@ void RuleRegion::load(const YAML::Node& node)
 		_latMax.push_back(areas[i][3] * M_PI / 180.0);
 	}
 
+	_missionZones = node["missionZones"].as<std::vector<MissionZone> >(_missionZones);
+
 	if (const YAML::Node& cities = node["cities"])
 	{
 		for (YAML::const_iterator
@@ -93,6 +95,21 @@ void RuleRegion::load(const YAML::Node& node)
 				i != cities.end();
 				++i)
 		{
+			if (_missionZones.size() > 1)
+			{
+				MissionArea ma;
+				ma.lonMin = ma.lonMax = (*i)["lon"].as<double>(0.0);
+				ma.latMin = ma.latMax = (*i)["lat"].as<double>(0.0);
+				if (std::find(
+							_missionZones.at(3).areas.begin(),
+							_missionZones.at(3).areas.end(),
+							ma)
+						== _missionZones.at(3).areas.end())
+				{
+					_missionZones.at(3).areas.push_back(ma);
+				}
+			}
+
 			City* rule = new City("", 0.0, 0.0);
 			rule->load(*i);
 			_cities.push_back(rule);
@@ -103,7 +120,6 @@ void RuleRegion::load(const YAML::Node& node)
 		_missionWeights.load(weights);
 
 	_regionWeight = node["regionWeight"].as<unsigned>(_regionWeight);
-	_missionZones = node["missionZones"].as< std::vector<MissionZone> >(_missionZones);
 	_missionRegion = node["missionRegion"].as<std::string>(_missionRegion);
 }
 
@@ -190,17 +206,6 @@ unsigned RuleRegion::getWeight() const
  */
 std::pair<double, double> RuleRegion::getRandomPoint(unsigned zone) const
 {
-	if (zone == 0 && !_cities.empty())
-	{
-		unsigned p = RNG::generate(0, _cities.size() - 1);
-		return std::make_pair(_cities[p]->getLongitude(), _cities[p]->getLatitude());
-	}
-
-	if (zone != 0)
-	{
-		--zone;
-	}
-
 	if (zone < _missionZones.size())
 	{
 		unsigned a = RNG::generate(0, _missionZones[zone].areas.size() - 1);

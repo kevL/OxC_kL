@@ -50,7 +50,7 @@ VictoryState::VictoryState(Game *game)
 		State(game),
 		_screen(-1)
 {
-	char* files[] =
+	const char* files[] =
 	{
 		"PICT1.LBM",
 		"PICT2.LBM",

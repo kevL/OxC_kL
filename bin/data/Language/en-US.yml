@@ -242,6 +242,7 @@ en-US:
   STR_SELL_SACK: "yP"
   STR_VALUE: "Value"
   STR_CRAFT_: "CRAFT> {ALT}{0}"
+  STR_CRAFTNAME: "{0}-{1}"
   STR_UFO_CRASH_RECOVERY: "uFo CRASH RECOVERY"
   STR_UFO_CRASH_RECOVERY_BRIEFING: "{NEWLINE}> EXERCISE CAUTION <{NEWLINE}{NEWLINE}There may be operatives in the uFo or around the crash site. Mission will be successful when all enemy units have been eliminated or neutralised. Recovery of uFo artifacts and aLien corpses can then be initiated. To abort mission return xCom operatives to the transport vehicle and click the 'Abort Mission' icon."
   STR_UFO_GROUND_ASSAULT: "uFo GROUND ASSAULT"

@@ -619,7 +619,7 @@ private:
 		}
 
 		/// get the vector of units we've seen this turn.
-		std::vector<BattleUnit*> getUnitsSpottedThisTurn();
+		std::vector<BattleUnit*>& getUnitsSpottedThisTurn();
 
 		/// set the rank integer
 		void setRankInt(int rank);
