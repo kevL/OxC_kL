@@ -5991,7 +5991,7 @@
 	<string>
 	"../Engine/Surface.h"
 
-1397487213 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1397529570 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	<cmath>
 	<sstream>
@@ -6087,7 +6087,7 @@
 1397530687 f:\git\openxcom\src\geoscape\defeatstate.h
 	"../Engine/State.h"
 
-1397454974 f:\git\openxcom\src\geoscape\victorystate.h
+1397531143 f:\git\openxcom\src\geoscape\victorystate.h
 	"../Engine/State.h"
 
 1394398507 f:\git\openxcom\src\interface\fpscounter.h
@@ -6144,7 +6144,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Ufo.h"
 
-1397296878 source:f:\git\openxcom\src\battlescape\camera.cpp
+1397529707 source:f:\git\openxcom\src\battlescape\camera.cpp
 	"Camera.h"
 	<cmath>
 	<fstream>
@@ -6476,7 +6476,7 @@
 	"Position.h"
 	"../Engine/InteractiveSurface.h"
 
-1396248546 source:f:\git\openxcom\src\battlescape\minimapview.cpp
+1397529955 source:f:\git\openxcom\src\battlescape\minimapview.cpp
 	"MiniMapView.h"
 	<sstream>
 	"Camera.h"
@@ -6871,11 +6871,12 @@
 1394398507 f:\git\openxcom\src\engine\catfile.h
 	<fstream>
 
-1397513715 source:f:\git\openxcom\src\engine\crossplatform.cpp
+1397530453 source:f:\git\openxcom\src\engine\crossplatform.cpp
 	"CrossPlatform.h"
 	<algorithm>
 	<iostream>
 	<locale>
+	<set>
 	<sstream>
 	<stdint.h>
 	<string>
@@ -7046,7 +7047,7 @@
 	"OpenGL.h"
 	"Logger.h"
 
-1397488771 source:f:\git\openxcom\src\engine\options.cpp
+1397528622 source:f:\git\openxcom\src\engine\options.cpp
 	"Options.h"
 	<algorithm>
 	<fstream>
@@ -7530,7 +7531,7 @@
 1397448505 f:\git\openxcom\src\geoscape\geoscapecraftstate.h
 	"../Engine/State.h"
 
-1397487122 source:f:\git\openxcom\src\geoscape\defeatstate.cpp
+1397531053 source:f:\git\openxcom\src\geoscape\defeatstate.cpp
 	"DefeatState.h"
 	<sstream>
 	"../Engine/Game.h"
@@ -7935,7 +7936,7 @@
 	"../Resource/ResourcePack.h"
 	"../Savegame/Craft.h"
 
-1397487122 source:f:\git\openxcom\src\geoscape\monthlyreportstate.cpp
+1397528622 source:f:\git\openxcom\src\geoscape\monthlyreportstate.cpp
 	"MonthlyReportState.h"
 	<cmath>
 	<sstream>
@@ -8160,7 +8161,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1397487122 source:f:\git\openxcom\src\geoscape\victorystate.cpp
+1397531344 source:f:\git\openxcom\src\geoscape\victorystate.cpp
 	"VictoryState.h"
 	<sstream>
 	"../Engine/Game.h"
@@ -8453,7 +8454,7 @@
 	"../Resource/ResourcePack.h"
 	"../Ruleset/Ruleset.h"
 
-1397298324 source:f:\git\openxcom\src\menu\optionsadvancedstate.cpp
+1397531523 source:f:\git\openxcom\src\menu\optionsadvancedstate.cpp
 	"OptionsAdvancedState.h"
 	<algorithm>
 	<iostream>
@@ -8503,7 +8504,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1397295957 source:f:\git\openxcom\src\menu\optionsbattlescapestate.cpp
+1397531568 source:f:\git\openxcom\src\menu\optionsbattlescapestate.cpp
 	"OptionsBattlescapeState.h"
 	<sstream>
 	"../Engine/Action.h"
