@@ -5768,7 +5768,7 @@
 1394398507 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1396382414 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1397602598 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	<cmath>
 	<sstream>
@@ -5871,7 +5871,7 @@
 	<vector>
 	<yaml-cpp/yaml.h>
 
-1397251553 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
+1397602997 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
 	"BattlescapeGenerator.h"
 	<fstream>
 	<sstream>
@@ -5991,7 +5991,7 @@
 	<string>
 	"../Engine/Surface.h"
 
-1397529570 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1397603154 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	<cmath>
 	<sstream>
@@ -6267,7 +6267,7 @@
 1394398507 f:\git\openxcom\src\battlescape\explosion.h
 	"Position.h"
 
-1397252276 source:f:\git\openxcom\src\battlescape\explosionbstate.cpp
+1397603238 source:f:\git\openxcom\src\battlescape\explosionbstate.cpp
 	"ExplosionBState.h"
 	"Camera.h"
 	"BattlescapeState.h"
@@ -6602,7 +6602,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1396383008 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
+1397604686 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
 	"ProjectileFlyBState.h"
 	<cmath>
 	"AlienBAIState.h"
@@ -7531,7 +7531,7 @@
 1397448505 f:\git\openxcom\src\geoscape\geoscapecraftstate.h
 	"../Engine/State.h"
 
-1397531053 source:f:\git\openxcom\src\geoscape\defeatstate.cpp
+1397603268 source:f:\git\openxcom\src\geoscape\defeatstate.cpp
 	"DefeatState.h"
 	<sstream>
 	"../Engine/Game.h"
@@ -8161,7 +8161,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1397531344 source:f:\git\openxcom\src\geoscape\victorystate.cpp
+1397603304 source:f:\git\openxcom\src\geoscape\victorystate.cpp
 	"VictoryState.h"
 	<sstream>
 	"../Engine/Game.h"
@@ -9189,7 +9189,7 @@
 1394398507 source:f:\git\openxcom\src\ruleset\rulemanufacture.cpp
 	"RuleManufacture.h"
 
-1397082672 source:f:\git\openxcom\src\ruleset\ruleregion.cpp
+1397603559 source:f:\git\openxcom\src\ruleset\ruleregion.cpp
 	"RuleRegion.h"
 	<assert.h>
 	<math.h>
@@ -9282,7 +9282,7 @@
 	<sstream>
 	"../Engine/Language.h"
 
-1397512870 source:f:\git\openxcom\src\savegame\alienmission.cpp
+1397603681 source:f:\git\openxcom\src\savegame\alienmission.cpp
 	"AlienMission.h"
 	<algorithm>
 	<functional>
@@ -9358,7 +9358,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1397315361 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1397603932 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	<cmath>
 	<sstream>
@@ -9386,7 +9386,7 @@
 	"../Engine/RNG.h"
 	"../Ruleset/RuleCountry.h"
 
-1397082698 source:f:\git\openxcom\src\savegame\craft.cpp
+1397604090 source:f:\git\openxcom\src\savegame\craft.cpp
 	"Craft.h"
 	<cmath>
 	<sstream>

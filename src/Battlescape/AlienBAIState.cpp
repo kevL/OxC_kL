@@ -2312,7 +2312,6 @@ void AlienBAIState::grenadeAction()
 bool AlienBAIState::psiAction()
 {
 	//Log(LOG_INFO) << "AlienBAIState::psiAction()";
-
 	if (_didPsi												// didn't already do a psi action this round
 		|| _unit->getOriginalFaction() != FACTION_HOSTILE)	// don't let any faction but HOSTILE mind-control others.
 	{
@@ -2370,7 +2369,7 @@ bool AlienBAIState::psiAction()
 															(*i)->getPosition(),
 															_unit->getPosition())
 														* 2,
-					rand = RNG::generate(1, 50);
+					rand = RNG::generate(1, 35);
 
 				//Log(LOG_INFO) << ". . . ";
 				//Log(LOG_INFO) << ". . . targetID = " << (*i)->getId();
@@ -2378,7 +2377,6 @@ bool AlienBAIState::psiAction()
 				//Log(LOG_INFO) << ". . . dist = " << dist;
 				//Log(LOG_INFO) << ". . . rand = " << rand;
 				//Log(LOG_INFO) << ". . . LoS = " << (int)LoS * 35;
-
 
 				chance2 = attackStr
 							- defense
@@ -2392,21 +2390,20 @@ bool AlienBAIState::psiAction()
 						|| noTarget))
 				{
 					noTarget = false;
-
 					_aggroTarget = *i;
 				}
 				else if (chance2 > chance)
 				{
-					noTarget = false;
-
 					chance = chance2;
+
+					noTarget = false;
 					_aggroTarget = *i;
 				}
 			}
 		}
 
 		if (!_aggroTarget			// if not target
-			|| chance < 20			// or chance of success is too low
+			|| chance < 25			// or chance of success is too low
 			|| RNG::percent(10))	// or aLien just don't feel like it... do FALSE.
 		{
 			//Log(LOG_INFO) << "AlienBAIState::psiAction() EXIT, False : not good.";
@@ -2451,7 +2448,7 @@ bool AlienBAIState::psiAction()
 				panicOdds -= bravery * 2;
 
 			//Log(LOG_INFO) << ". . panicOdds_2 = " << panicOdds;
-			panicOdds += (RNG::generate(26, 75) - (attackStr / 5));
+			panicOdds += (RNG::generate(51, 100) - (attackStr / 5));
 			//Log(LOG_INFO) << ". . panicOdds_3 = " << panicOdds;
 			if (RNG::percent(panicOdds))
 			{
