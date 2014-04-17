@@ -2192,6 +2192,7 @@ BattleUnit* TileEngine::hit(
 				}
 
 				if (buTarget->getOriginalFaction() == FACTION_HOSTILE	// target is aLien Mc'd or not.
+					&& attacker											// shooter exists
 					&& attacker->getOriginalFaction() == FACTION_PLAYER	// shooter is Xcom
 					&& attacker->getFaction() == FACTION_PLAYER)		// shooter is not Mc'd Xcom
 //					&& type != DT_NONE)

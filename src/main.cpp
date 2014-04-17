@@ -64,6 +64,9 @@ int main(
 		if (!Options::init(argc, argv))
 			return EXIT_SUCCESS;
 
+		Options::baseXResolution = Options::baseXGeoscape;
+		Options::baseYResolution = Options::baseYGeoscape;
+
 		std::ostringstream title;
 //kL		title << "OpenXcom " << OPENXCOM_VERSION_SHORT << OPENXCOM_VERSION_GIT;
 		title << "OxC " << OPENXCOM_VERSION_SHORT << OPENXCOM_VERSION_GIT; // kL

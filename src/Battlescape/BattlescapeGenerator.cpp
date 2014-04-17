@@ -1133,8 +1133,13 @@ bool BattlescapeGenerator::placeItemByLayout(BattleItem* item)
 					item->setSlotX((*j)->getSlotX());
 					item->setSlotY((*j)->getSlotY());
 
-//					item->setExplodeTurn((*j)->getExplodeTurn());
-
+					if (Options::includePrimeStateInSavedLayout
+						&& (item->getRules()->getBattleType() == BT_GRENADE
+							|| item->getRules()->getBattleType() == BT_PROXIMITYGRENADE))
+					{
+						item->setFuseTimer((*j)->getFuseTimer());
+//						item->setExplodeTurn((*j)->getExplodeTurn());
+					}
 					_save->getItems()->push_back(item);
 
 					return true;

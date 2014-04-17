@@ -32,6 +32,7 @@
 #include "../Engine/Language.h"
 #include "../Engine/Logger.h"
 #include "../Engine/Palette.h"
+#include "../Engine/Screen.h"
 
 #include "../Interface/Text.h"
 #include "../Interface/TextList.h"
@@ -153,11 +154,20 @@ void LoadState::quickLoad(const std::string& filename)
 				_game->getRuleset());
 
 		_game->setSavedGame(s);
+
+		Options::baseXResolution = Options::baseXGeoscape;
+		Options::baseYResolution = Options::baseYGeoscape;
+		_game->getScreen()->resetDisplay();
+
 		_game->setState(new GeoscapeState(_game));
 
 		if (_game->getSavedGame()->getSavedBattle() != 0)
 		{
 			_game->getSavedGame()->getSavedBattle()->loadMapResources(_game);
+
+			Options::baseXResolution = Options::baseXBattlescape;
+			Options::baseYResolution = Options::baseYBattlescape;
+			_game->getScreen()->resetDisplay();
 
 			BattlescapeState* bs = new BattlescapeState(_game);
 			_game->pushState(bs);

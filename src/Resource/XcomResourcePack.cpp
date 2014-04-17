@@ -442,12 +442,27 @@ XcomResourcePack::XcomResourcePack( // kL
 			"GMWIN"
 		};
 
+		std::string musOptional[] =
+		{
+			"GMGEO5",
+			"GMGEO6",
+			"GMGEO7",
+			"GMGEO8",
+			"GMGEO9",
+			"GMTACTIC3",
+			"GMTACTIC4",
+			"GMTACTIC5",
+			"GMTACTIC6",
+			"GMTACTIC7",
+			"GMTACTIC8",
+			"GMTACTIC9"};
 		std::string exts[] =
 		{
 			"flac",
 			"ogg",
 			"mp3",
-			"mod"
+			"mod",
+			"wav"
 		};
 
 		int tracks[] = { 3, 6, 0, 18,-1,-1, 2, 19, 20, 21, 10, 9, 8, 12, 17,-1, 11 }; */
@@ -517,7 +532,8 @@ XcomResourcePack::XcomResourcePack( // kL
 						"flac",
 						"ogg",
 						"mp3",
-						"mod"
+						"mod",
+						"wav" // kL_add
 					};
 
 					bool loaded = false;
@@ -707,6 +723,85 @@ XcomResourcePack::XcomResourcePack( // kL
 		} */
 
 		delete gmcat;
+
+/*kL -> THEIR STUFF 2014 apr 17 ( goes up above )
+		for (int i = 0; i < sizeof(mus)/sizeof(mus[0]); ++i)
+		{
+			bool loaded = false;
+			// Try digital tracks
+			for (int j = 0; j < sizeof(exts)/sizeof(exts[0]); ++j)
+			{
+				std::ostringstream s;
+				s << "SOUND/" << mus[i] << "." << exts[j];
+				if (CrossPlatform::fileExists(CrossPlatform::getDataFile(s.str())))
+				{
+					_musics[mus[i]] = new Music();
+					_musics[mus[i]]->load(CrossPlatform::getDataFile(s.str()));
+					loaded = true;
+					break;
+				}
+			}
+			if (!loaded)
+			{
+				// Try Adlib music
+				if (cat && tracks[i] != -1)
+				{
+					_musics[mus[i]] = gmcat->loadMIDI(tracks[i]);
+					loaded = true;
+				}
+				// Try MIDI music
+				else
+				{
+					std::ostringstream s;
+					s << "SOUND/" << mus[i] << ".mid";
+					if (CrossPlatform::fileExists(CrossPlatform::getDataFile(s.str())))
+					{
+						_musics[mus[i]] = new Music();
+						_musics[mus[i]]->load(CrossPlatform::getDataFile(s.str()));
+						loaded = true;
+					}
+				}
+			}
+			if (!loaded && tracks[i] != -1)
+			{
+				throw Exception(mus[i] + " not found");
+			}
+		}
+		delete gmcat;
+
+		// Ok, now try to load the optional musics
+		for (int i = 0; i < sizeof(musOptional)/sizeof(musOptional[0]); ++i)
+		{
+			bool loaded = false;
+			// Try digital tracks
+			for (int j = 0; j < sizeof(exts)/sizeof(exts[0]); ++j)
+			{
+				std::ostringstream s;
+				s << "SOUND/" << musOptional[i] << "." << exts[j];
+				if (CrossPlatform::fileExists(CrossPlatform::getDataFile(s.str())))
+				{
+					_musics[musOptional[i]] = new Music();
+					_musics[musOptional[i]]->load(CrossPlatform::getDataFile(s.str()));
+					loaded = true;
+					break;
+				}
+			}
+			if (!loaded)
+			{
+				// Try MIDI music
+				std::ostringstream s;
+				s << "SOUND/" << musOptional[i] << ".mid";
+				if (CrossPlatform::fileExists(CrossPlatform::getDataFile(s.str())))
+				{
+					_musics[musOptional[i]] = new Music();
+					_musics[musOptional[i]]->load(CrossPlatform::getDataFile(s.str()));
+					loaded = true;
+				}
+			}
+		}
+#endif		
+*/
+
 #endif
 
 		// Load sounds
@@ -1151,11 +1246,14 @@ void XcomResourcePack::loadBattlescapeResources()
 	_sets["DETBLOB.DAT"]->loadDat (CrossPlatform::getDataFile(s.str()));
 
 	// Load Battlescape Terrain (only blanks are loaded, others are loaded just in time)
-	std::string bsets[] = {"BLANKS.PCK"};
+	std::string bsets[] =
+	{
+		"BLANKS.PCK"
+	};
 
 	for (int
 			i = 0;
-			i < 1;
+			i < sizeof(bsets) / sizeof(bsets[0]);
 			++i)
 	{
 		std::ostringstream
@@ -1206,7 +1304,7 @@ void XcomResourcePack::loadBattlescapeResources()
 
 	for (int
 			i = 0;
-			i < 1;
+			i < sizeof(scrs) / sizeof(scrs[0]);
 			++i)
 	{
 		std::ostringstream s;
@@ -1229,7 +1327,7 @@ void XcomResourcePack::loadBattlescapeResources()
 
 	for (int
 			i = 0;
-			i < 7;
+			i < sizeof(spks) / sizeof(spks[0]);
 			++i)
 	{
 		std::ostringstream s;

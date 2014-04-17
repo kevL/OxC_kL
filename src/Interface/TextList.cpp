@@ -91,7 +91,7 @@ TextList::TextList(
 						13,
 						13,
 						getX() + getWidth() + _scrollPos,
-						getY()); // - 2
+						getY());
 	_up->setVisible(false);
 	_up->setTextList(this);
 
@@ -168,8 +168,8 @@ void TextList::setY(int y)
 {
 	Surface::setY(y);
 
-	_up->setY(getY() + 1);
-	_down->setY(getY() + getHeight() - 12);
+	_up->setY(getY());
+	_down->setY(getY() + getHeight() - 12); // - 13
 
 	if (_selector != 0)
 		_selector->setY(getY());

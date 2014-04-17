@@ -36,6 +36,16 @@ enum OptionsOrigin
 };
 
 
+enum ScaleType
+{
+	SCALE_ORIGINAL,	// 0
+	SCALE_15X,		// 1
+	SCALE_2X,		// 2
+	SCALE_3X,		// 3
+	SCALE_SCREEN	// 4
+};
+
+
 class Text;
 class TextButton;
 class Window;
@@ -101,6 +111,14 @@ protected:
 		void txtTooltipIn(Action* action);
 		/// Handler for hiding tooltip.
 		void txtTooltipOut(Action* action);
+
+		///
+		void updateScale(
+				int& type,
+				int selection,
+				int& x,
+				int& y,
+				bool change);
 };
 
 }

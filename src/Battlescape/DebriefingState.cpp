@@ -34,6 +34,7 @@
 #include "../Engine/Options.h"
 #include "../Engine/Palette.h"
 #include "../Engine/RNG.h"
+#include "../Engine/Screen.h"
 
 #include "../Interface/Cursor.h"
 #include "../Interface/FpsCounter.h"
@@ -94,6 +95,9 @@ DebriefingState::DebriefingState(Game* game)
 		_containmentLimit(0)
 {
 	//Log(LOG_INFO) << "Create DebriefingState";
+	Options::baseXResolution = Options::baseXGeoscape;
+	Options::baseYResolution = Options::baseYGeoscape;
+	_game->getScreen()->resetDisplay();
 
 	// Restore the cursor in case something weird happened
 	_game->getCursor()->setVisible(true);

@@ -76,8 +76,8 @@ ComboBox::ComboBox(
 						x,
 						y + height);
 	_list	= new TextList(
-						width - LIST_MARGIN * 5 - 1,
-						MAX_ITEMS * 8,
+						width - LIST_MARGIN * 5 + 2,
+						MAX_ITEMS * 8 - 1,
 						x + LIST_MARGIN,
 						y + height + LIST_MARGIN);
 	_list->setComboBox(this);
@@ -282,6 +282,7 @@ void ComboBox::setDropdown(int options)
 	int h = _button->getFont()->getHeight() + _button->getFont()->getSpacing();
 	_window->setHeight(items * h + LIST_MARGIN * 2);
 	_list->setHeight(items * h);
+	_list->setScrolling(options > MAX_ITEMS, 0);
 }
 
 /**

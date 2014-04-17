@@ -158,7 +158,8 @@ int Projectile::calculateTrajectory(
 		&& _action.actor->getFaction() == FACTION_PLAYER // kL_note: so aLiens don't even get in here!
 		&& _action.autoShotCount == 1
 		&& (SDL_GetModState() & KMOD_CTRL) == 0
-		&& _save->getBattleGame()->getPanicHandled())
+		&& _save->getBattleGame()->getPanicHandled()
+		&& _action.type != BA_LAUNCH)
 	{
 		Position hitPos = Position(
 								_trajectory.at(0).x / 16,

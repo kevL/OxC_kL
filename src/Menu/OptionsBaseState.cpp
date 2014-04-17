@@ -215,6 +215,19 @@ void OptionsBaseState::setCategory(TextButton* button)
  */
 void OptionsBaseState::btnOkClick(Action*)
 {
+	updateScale(
+			Options::battlescapeScale,
+			Options::newBattlescapeScale,
+			Options::baseXBattlescape,
+			Options::baseYBattlescape,
+			_origin == OPT_BATTLESCAPE);
+	updateScale(
+			Options::geoscapeScale,
+			Options::newGeoscapeScale,
+			Options::baseXGeoscape,
+			Options::baseYGeoscape,
+			_origin != OPT_BATTLESCAPE);
+
 	Options::switchDisplay();
 	Options::save();
 
@@ -235,7 +248,7 @@ void OptionsBaseState::btnOkClick(Action*)
 	}
 	else
 	{
-		// Confirm any video options changes
+		// Confirm any video option changes
 		if (Options::displayWidth != Options::newDisplayWidth
 			|| Options::displayHeight != Options::newDisplayHeight
 			|| Options::useOpenGL != Options::newOpenGL
@@ -248,7 +261,9 @@ void OptionsBaseState::btnOkClick(Action*)
 												_origin));
 		}
 		else
-			restart(_game, _origin);
+			restart(
+					_game,
+					_origin);
 	}
 }
 
@@ -339,6 +354,62 @@ void OptionsBaseState::txtTooltipOut(Action* action)
 {
 	if (_currentTooltip == action->getSender()->getTooltip())
 		_txtTooltip->setText(L"");
+}
+
+/**
+* Changes a given scale, and if necessary, switch the current base resolution.
+* @param type reference to which scale option we are using, battlescape or geoscape.
+* @param selection the new scale level.
+* @param width reference to which x scale to adjust.
+* @param height reference to which y scale to adjust.
+* @param change should we change the current scale.
+*/
+void OptionsBaseState::updateScale(
+		int& type,
+		int selection,
+		int& width,
+		int& height,
+		bool change)
+{
+	type = selection;
+	switch (type)
+	{
+		case SCALE_15X:
+			width = Screen::ORIGINAL_WIDTH * 1.5;
+			height = Screen::ORIGINAL_HEIGHT * 1.5;
+		break;
+		case SCALE_2X:
+			width = Screen::ORIGINAL_WIDTH * 2;
+			height = Screen::ORIGINAL_HEIGHT * 2;
+		break;
+		case SCALE_3X:
+			width = Screen::ORIGINAL_WIDTH * 3;
+			height = Screen::ORIGINAL_HEIGHT * 3;
+		break;
+		case SCALE_SCREEN:
+			width = Options::newDisplayWidth;
+			height = Options::newDisplayHeight;
+		break;
+		case SCALE_ORIGINAL:
+		default:
+			width = Screen::ORIGINAL_WIDTH;
+			height = Screen::ORIGINAL_HEIGHT;
+		break;
+	}
+
+	// don't go under minimum resolution... it's bad, mmkay?
+	width = std::max(width, Screen::ORIGINAL_WIDTH);
+	height = std::max(height, Screen::ORIGINAL_HEIGHT);
+	// scaler methods seem to require base res be a factor of 4
+	width -= width %4;
+
+	if (change
+		&& (Options::baseXResolution != width
+			|| Options::baseYResolution != height))
+	{
+		Options::baseXResolution = width;
+		Options::baseYResolution = height;
+	}
 }
 
 }

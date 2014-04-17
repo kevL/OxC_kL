@@ -923,7 +923,7 @@ void ProjectileFlyBState::think()
 																			proj->getPosition(1),
 																			_ammo->getRules()->getPower(),
 																			_ammo->getRules()->getDamageType(),
-																			_unit);
+																			0); // kL_note: was _unit
 								}
 
 								++i;

@@ -56,6 +56,7 @@
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Soldier.h"
+#include "../Savegame/Tile.h"
 
 
 namespace OpenXcom
@@ -434,8 +435,8 @@ void InventoryState::saveEquipmentLayout()
 														(*j)->getSlot()->getId(),
 														(*j)->getSlotX(),
 														(*j)->getSlotY(),
-														ammo));
-//														(*j)->getExplodeTurn()));
+														ammo,
+														(*j)->getExplodeTurn()));
 		}
 	}
 
@@ -455,6 +456,8 @@ void InventoryState::btnOkClick(Action*)
 
 	_game->popState();
 
+	Tile* inventoryTile = _battleGame->getSelectedUnit()->getTile();
+
 	if (!_tu) // pre-Battle inventory equip.
 	{
 		saveEquipmentLayout();
@@ -466,24 +469,25 @@ void InventoryState::btnOkClick(Action*)
 			return;
 		} // kL_end.
 
-		_battleGame->randomizeItemLocations(_battleGame->getSelectedUnit()->getTile());
 		_battleGame->resetUnitTiles();
 
-/*		for (std::vector<BattleUnit*>::iterator
-				i = _battleGame->getUnits()->begin();
-				i != _battleGame->getUnits()->end();
-				++i)
+		if (_battleGame->getTurn() == 1)
 		{
-			if ((*i)->getFaction() == _battleGame->getSide())
-				(*i)->prepareNewTurn();
-		} */
+			_battleGame->randomizeItemLocations(inventoryTile);
+			if (inventoryTile->getUnit())
+			{
+				// make sure we select the unit closest to the ramp.
+				_battleGame->setSelectedUnit(inventoryTile->getUnit());
+			}
+		}
 	}
 
 
 	TileEngine* tileEngine = _battleGame->getTileEngine();
 //	if (tileEngine) // kL_note: not needed, CraftEquip is handled above w/ early return.
 //	{
-	tileEngine->applyGravity(_battleGame->getSelectedUnit()->getTile());
+//	tileEngine->applyGravity(_battleGame->getSelectedUnit()->getTile());
+	tileEngine->applyGravity(inventoryTile);
 	tileEngine->calculateTerrainLighting(); // dropping / picking up flares
 	tileEngine->recalculateFOV();
 

@@ -40,8 +40,7 @@ class ToggleTextButton;
 
 
 /**
- * Screen that lets the user configure various
- * Video options.
+ * Screen that lets the user configure various Video options.
  */
 class OptionsVideoState
 	:
@@ -49,67 +48,97 @@ class OptionsVideoState
 {
 
 private:
-	static const std::string GL_EXT, GL_FOLDER, GL_STRING;
+	static const std::string
+		GL_EXT,
+		GL_FOLDER,
+		GL_STRING;
 
-	InteractiveSurface *_displaySurface;
-	Text *_txtDisplayResolution, *_txtDisplayX;
-	TextEdit *_txtDisplayWidth, *_txtDisplayHeight;
-	ArrowButton *_btnDisplayResolutionUp, *_btnDisplayResolutionDown;
+	int
+		_gameCurrent,
+		_resAmount,
+		_resCurrent;
 
-	InteractiveSurface *_gameSurface;
-	Text *_txtGameResolution, *_txtGameSize;
-	ArrowButton *_btnGameResolutionUp, *_btnGameResolutionDown;
-
-	Text *_txtLanguage, *_txtFilter;
-	ComboBox *_cbxLanguage, *_cbxFilter;
-	Text *_txtMode;
-	TextButton *_displayMode, *_btnWindowed, *_btnFullscreen, *_btnBorderless;
-	Text *_txtOptions;
-	ToggleTextButton *_btnLetterbox, *_btnResize, *_btnLockMouse;
-
-	SDL_Rect** _res;
-	int _resAmount, _resCurrent;
+	std::vector<std::string>
+		_langs,
+		_filters;
 	std::vector<std::wstring> _gameRes;
-	int _gameCurrent;
-	std::vector<std::string> _langs, _filters;
 
+	ArrowButton
+		* _btnDisplayResolutionUp,
+		* _btnDisplayResolutionDown;
+	ComboBox
+		* _cbxLanguage,
+		* _cbxFilter,
+		* _cbxDisplayMode,
+		* _cbxGeoScale,
+		* _cbxBattleScale;
+	Text
+		* _txtDisplayResolution,
+		* _txtDisplayX,
+		* _txtLanguage,
+		* _txtFilter,
+		* _txtGeoScale,
+		* _txtBattleScale,
+		* _txtMode,
+		* _txtOptions;
+	TextButton
+		* _displayMode,
+		* _btnWindowed,
+		* _btnFullscreen,
+		* _btnBorderless;
+	TextEdit
+		* _txtDisplayWidth,
+		* _txtDisplayHeight;
+	ToggleTextButton
+		* _btnLetterbox,
+		* _btnResize,
+		* _btnLockMouse;
+
+	InteractiveSurface* _displaySurface;
+	SDL_Rect** _res;
+
+	///
 	void updateDisplayResolution();
+	///
 	void updateGameResolution();
 
 
 	public:
 		/// Creates the Options state.
-		OptionsVideoState(Game *game, OptionsOrigin origin);
+		OptionsVideoState(
+				Game* game,
+				OptionsOrigin origin);
 		/// Cleans up the Options state.
 		~OptionsVideoState();
+
 		/// Handler for clicking the Next Resolution button.
-		void btnDisplayResolutionUpClick(Action *action);
+		void btnDisplayResolutionUpClick(Action* action);
 		/// Handler for clicking the Previous Resolution button.
-		void btnDisplayResolutionDownClick(Action *action);
+		void btnDisplayResolutionDownClick(Action* action);
 		/// Handler for clicking the Display Width text.
-		void txtDisplayWidthClick(Action *action);
+		void txtDisplayWidthClick(Action* action);
 		/// Handler for changing the Display Width text.
-		void txtDisplayWidthChange(Action *action);
+		void txtDisplayWidthChange(Action* action);
 		/// Handler for clicking the Display Height text.
-		void txtDisplayHeightClick(Action *action);
+		void txtDisplayHeightClick(Action* action);
 		/// Handler for changing the Display Height text.
-		void txtDisplayHeightChange(Action *action);
-		/// Handler for clicking the Next Resolution button.
-		void btnGameResolutionUpClick(Action *action);
-		/// Handler for clicking the Previous Resolution button.
-		void btnGameResolutionDownClick(Action *action);
+		void txtDisplayHeightChange(Action* action);
 		/// Handler for changing the Language combobox.
-		void cbxLanguageChange(Action *action);
+		void cbxLanguageChange(Action* action);
 		/// Handler for changing the Filter combobox.
-		void cbxFilterChange(Action *action);
+		void cbxFilterChange(Action* action);
 		/// Handler for clicking the Display Mode button.
-		void btnModeClick(Action *action);
+		void btnModeClick(Action* action);
 		/// Handler for clicking the Letterboxed button.
-		void btnLetterboxClick(Action *action);
+		void btnLetterboxClick(Action* action);
 		/// Handler for clicking the Resizable button.
-		void btnResizeClick(Action *action);
+		void btnResizeClick(Action* action);
 		/// Handler for clicking the Lock Mouse button.
-		void btnLockMouseClick(Action *action);
+		void btnLockMouseClick(Action* action);
+		///
+		void updateBattlescapeScale(Action*);
+		///
+		void updateGeoscapeScale(Action*);
 };
 
 }

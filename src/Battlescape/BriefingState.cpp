@@ -31,6 +31,7 @@
 #include "../Engine/Music.h"
 #include "../Engine/Options.h"
 #include "../Engine/Palette.h"
+#include "../Engine/Screen.h"
 
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
@@ -198,6 +199,10 @@ void BriefingState::btnOkClick(Action*)
 {
 	_game->popState();
 
+	Options::baseXResolution = Options::baseXBattlescape;
+	Options::baseYResolution = Options::baseYBattlescape;
+	_game->getScreen()->resetDisplay();
+
 	BattlescapeState* bs = new BattlescapeState(_game); // <- ah there it is! kL_note
 	int
 		liveAliens = 0,
@@ -222,6 +227,10 @@ void BriefingState::btnOkClick(Action*)
 	}
 	else
 	{
+		Options::baseXResolution = Options::baseXGeoscape;
+		Options::baseYResolution = Options::baseYGeoscape;
+		_game->getScreen()->resetDisplay();
+
 		delete bs;
 		_game->pushState(new AliensCrashState(_game));
 	}

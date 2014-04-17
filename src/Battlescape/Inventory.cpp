@@ -913,7 +913,8 @@ void Inventory::mouseClick(Action* action, State* state)
 		if (_selItem == 0)
 		{
 			//Log(LOG_INFO) << ". no selected item";
-			if (!_base)
+			if (!_base
+				|| Options::includePrimeStateInSavedLayout)
 			{
 				//Log(LOG_INFO) << ". not at base";
 				if (!_tu)	// kL_note: ie. TurnUnits have not been instantiated yet:
