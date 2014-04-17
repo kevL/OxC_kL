@@ -72,7 +72,8 @@ private:
 			const int part,
 			ItemDamageType type,
 			int dir = -1, // kL_note: should change this to 'bool isObject'-type
-			int dirTest = -1); // kL_add.
+			int dirTest = -1, // kL_add.
+			bool checkingFromOrigin = false);
 
 
 	public:

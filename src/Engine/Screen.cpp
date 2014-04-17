@@ -59,11 +59,6 @@ void Screen::makeVideoFlags()
 		_flags |= SDL_ASYNCBLIT;
 	}
 
-	if (Options::allowResize)
-	{
-		_flags |= SDL_RESIZABLE;
-	}
-
 	if (isOpenGLEnabled())
 	{
 		_flags = SDL_OPENGL;
@@ -74,6 +69,8 @@ void Screen::makeVideoFlags()
 		SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
 		SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 	}
+	if (Options::allowResize)
+		_flags |= SDL_RESIZABLE;
 
 	// Handle window positioning
 	if (Options::windowedModePositionX != -1

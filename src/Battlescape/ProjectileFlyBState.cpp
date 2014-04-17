@@ -851,15 +851,16 @@ void ProjectileFlyBState::think()
 					_action.weapon->setAmmoItem(0);
 				}
 
-				if (_projectileImpact != 5) // NOT out of map
+				if (_projectileImpact != VOXEL_OUTOFBOUNDS) // NOT out of map
 				{
 					// explosions impact not inside the voxel but two steps back;
 					// projectiles generally move 2 voxels at a time
 					int offset = 0;
 					if (_ammo
-						&& _ammo->getRules()->getExplosionRadius() != 0)
+						&& _ammo->getRules()->getExplosionRadius() != 0
 //						&& (_ammo->getRules()->getDamageType() == DT_HE			// kL
-//							|| _ammo->getRules()->getDamageType() == DT_IN))	// kL
+//							|| _ammo->getRules()->getDamageType() == DT_IN)		// kL
+						&& _projectileImpact != VOXEL_UNIT)
 					{
 						offset = -2;
 					}

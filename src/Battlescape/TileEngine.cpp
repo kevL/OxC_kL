@@ -3437,7 +3437,9 @@ int TileEngine::horizontalBlockage(
 					startTile,
 					MapData::O_OBJECT,
 					type,
-					dir);
+					dir,
+					-1,
+					true);
 
 	if (type != DT_NONE)
 	{
@@ -3491,7 +3493,8 @@ int TileEngine::blockage(
 		const int part,
 		ItemDamageType type,
 		int dir,
-		int dirTest) // kL_add.
+		int dirTest, // kL_add.
+		bool checkingFromOrigin)
 {
 	//Log(LOG_INFO) << "TileEngine::blockage() dir " << dir;
 
@@ -3503,7 +3506,6 @@ int TileEngine::blockage(
 		//Log(LOG_INFO) << "TileEngine::blockage() EXIT, ret 0 ( ufoDoorOpen )";
 		return 0;
 	}
-
 
 	if (tile->getMapData(part))
 	{
@@ -3559,6 +3561,13 @@ int TileEngine::blockage(
 		{
 			int bigWall = tile->getMapData(MapData::O_OBJECT)->getBigWall(); // 0..8 or, per MCD.
 			//Log(LOG_INFO) << ". bigWall = " << bigWall;
+
+			if (checkingFromOrigin
+				&& (bigWall == Pathfinding::BIGWALLNESW
+					|| bigWall == Pathfinding::BIGWALLNWSE))
+			{
+				return 0;
+			}
 
 			switch (dir)
 			{
