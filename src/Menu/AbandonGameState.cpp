@@ -24,9 +24,7 @@
 
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Options.h"
 #include "../Engine/Palette.h"
-#include "../Engine/Screen.h"
 
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
@@ -126,10 +124,6 @@ void AbandonGameState::btnYesClick(Action*)
 
 		delete ss;
 	}
-
-	Options::baseXResolution = Options::baseXGeoscape;
-	Options::baseYResolution = Options::baseYGeoscape;
-	_game->getScreen()->resetDisplay();
 
 	_game->setState(new MainMenuState(_game));
 	_game->setSavedGame(0);

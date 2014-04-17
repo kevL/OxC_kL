@@ -415,7 +415,7 @@ void OptionsVideoState::updateGameResolution()
 	{
 		Options::baseXGeoscape = std::max(
 										Screen::ORIGINAL_WIDTH,
-										(Options::newDisplayWidth - Options::newDisplayWidth) %4);
+										Options::newDisplayWidth - (Options::newDisplayWidth %4));
 		Options::baseYGeoscape = std::max(
 										Screen::ORIGINAL_HEIGHT,
 										Options::newDisplayHeight);

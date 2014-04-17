@@ -26,6 +26,7 @@
 #include "Engine/Game.h"
 #include "Engine/Logger.h"
 #include "Engine/Options.h"
+#include "Engine/Screen.h"
 
 #include "Menu/StartState.h"
 
@@ -64,8 +65,8 @@ int main(
 		if (!Options::init(argc, argv))
 			return EXIT_SUCCESS;
 
-		Options::baseXResolution = Options::baseXGeoscape;
-		Options::baseYResolution = Options::baseYGeoscape;
+		Options::baseXResolution = Screen::ORIGINAL_WIDTH;
+		Options::baseYResolution = Screen::ORIGINAL_HEIGHT;
 
 		std::ostringstream title;
 //kL		title << "OpenXcom " << OPENXCOM_VERSION_SHORT << OPENXCOM_VERSION_GIT;

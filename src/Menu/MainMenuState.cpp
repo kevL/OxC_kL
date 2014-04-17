@@ -30,6 +30,7 @@
 #include "../Engine/Language.h"
 #include "../Engine/Music.h"
 #include "../Engine/Palette.h"
+#include "../Engine/Screen.h"
 
 #include "../Interface/Cursor.h"
 #include "../Interface/FpsCounter.h"
@@ -52,6 +53,10 @@ MainMenuState::MainMenuState(Game* game)
 	:
 		State(game)
 {
+	Options::baseXResolution = Options::baseXGeoscape;
+	Options::baseYResolution = Options::baseYGeoscape;
+	_game->getScreen()->resetDisplay();
+
 	_window			= new Window(this, 256, 160, 32, 20, POPUP_BOTH);
 	_txtTitle		= new Text(256, 30, 32, 56);
 

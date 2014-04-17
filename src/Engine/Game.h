@@ -67,10 +67,13 @@ private:
 		_deleted,
 		_states;
 
+// not sure if i can remove this ifdef, morphos users please advise.
 #ifdef __MORPHOS__
-	Sint32 delaytime;
 	Uint32 framestarttime;// = 0;
-	Uint32 waittime;// = 1000.0f/FPS;
+	Sint32 delaytime;
+#else
+	unsigned int framestarttime;
+	int delaytime;
 #endif
 
 
