@@ -375,8 +375,8 @@ void OptionsBaseState::updateScale(
 	switch (type)
 	{
 		case SCALE_15X:
-			width = Screen::ORIGINAL_WIDTH * 1.5;
-			height = Screen::ORIGINAL_HEIGHT * 1.5;
+			width = static_cast<int>(static_cast<double>(Screen::ORIGINAL_WIDTH) * 1.5);
+			height = static_cast<int>(static_cast<double>(Screen::ORIGINAL_HEIGHT) * 1.5);
 		break;
 		case SCALE_2X:
 			width = Screen::ORIGINAL_WIDTH * 2;
@@ -397,9 +397,13 @@ void OptionsBaseState::updateScale(
 		break;
 	}
 
-	// don't go under minimum resolution... it's bad, mmkay?
-	width = std::max(width, Screen::ORIGINAL_WIDTH);
-	height = std::max(height, Screen::ORIGINAL_HEIGHT);
+	// don't go under minimum resolution... it's bad
+	width = std::max(
+					width,
+					Screen::ORIGINAL_WIDTH);
+	height = std::max(
+					height,
+					Screen::ORIGINAL_HEIGHT);
 	// scaler methods seem to require base res be a factor of 4
 	width -= width %4;
 

@@ -580,7 +580,6 @@ void BattlescapeGame::endTurn()
 				)
 		{
 			if ((*it)->getRules()->getBattleType() == BT_GRENADE
-//				&& (*it)->getExplodeTurn() == 0) // it's a grenade to explode now
 				&& (*it)->getFuseTimer() == 0) // it's a grenade to explode now
 			{
 				pos.x = _save->getTiles()[i]->getPosition().x * 16 + 8;
@@ -644,10 +643,8 @@ void BattlescapeGame::endTurn()
 			if ((*grenade)->getOwner() == 0 // kL
 				&& (*grenade)->getRules()->getBattleType() == BT_GRENADE
 //kL					|| (*grenade)->getRules()->getBattleType() == BT_PROXIMITYGRENADE)
-//				&& (*grenade)->getExplodeTurn() > 0)
 				&& (*grenade)->getFuseTimer() > 0)
 			{
-//				(*grenade)->setExplodeTurn((*grenade)->getExplodeTurn() - 1);
 				(*grenade)->setFuseTimer((*grenade)->getFuseTimer() - 1);
 			}
 		}
@@ -1004,7 +1001,6 @@ void BattlescapeGame::handleNonTargetAction()
 			//Log(LOG_INFO) << "BattlescapeGame::handleNonTargetAction() BA_PRIME";
 			if (_currentAction.actor->spendTimeUnits(_currentAction.TU))
 			{
-//				_currentAction.weapon->setExplodeTurn(_currentAction.value);
 				_currentAction.weapon->setFuseTimer(_currentAction.value);
 
 /* kL_begin: This might be useful ...
@@ -1017,7 +1013,6 @@ void BattlescapeGame::handleNonTargetAction()
 					_warning->showMessage(activated);
 				} */
 //kL				_parentState->warning("STR_GRENADE_IS_ACTIVATED");
-//				int explTurn = _currentAction.weapon->getExplodeTurn();	// kL
 				int explTurn = _currentAction.weapon->getFuseTimer();	// kL
 				if (!explTurn)											// kL
 					_parentState->warning("STR_GRENADE_IS_ACTIVATED");	// kL
@@ -1833,10 +1828,7 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* unit)
 					}
 					else if (ba.weapon->getRules()->getBattleType() == BT_GRENADE)
 					{
-//						if (ba.weapon->getExplodeTurn() == -1)
 						if (ba.weapon->getFuseTimer() == -1)
-
-//							ba.weapon->setExplodeTurn(0);
 							ba.weapon->setFuseTimer(0);
 
 						ba.type = BA_THROW;
@@ -1855,8 +1847,7 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* unit)
 		break;
 	}
 
-	// Time units can only be reset after everything else occurs
-	statePushBack(new UnitPanicBState(
+	statePushBack(new UnitPanicBState( // Time units can only be reset after everything else occurs
 									this,
 									ba.actor));
 
@@ -3092,7 +3083,6 @@ bool BattlescapeGame::checkForProximityGrenades(BattleUnit* unit)
 								++i)
 						{
 							if ((*i)->getRules()->getBattleType() == BT_PROXIMITYGRENADE
-//								&& (*i)->getExplodeTurn() == 0)
 								&& (*i)->getFuseTimer() == 0)
 							{
 								Position pos;

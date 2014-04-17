@@ -127,8 +127,8 @@ private:
 		void cbxLanguageChange(Action* action);
 		/// Handler for changing the Filter combobox.
 		void cbxFilterChange(Action* action);
-		/// Handler for clicking the Display Mode button.
-		void btnModeClick(Action* action);
+		///Handler for clicking the Display Mode combobox.
+		void updateDisplayMode(Action* action);
 		/// Handler for clicking the Letterboxed button.
 		void btnLetterboxClick(Action* action);
 		/// Handler for clicking the Resizable button.

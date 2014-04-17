@@ -2410,7 +2410,6 @@ bool AlienBAIState::psiAction()
 			return false;
 		}
 
-
 /*		if (_visibleEnemies
 			&& _attackAction->weapon
 			&& _attackAction->weapon->getAmmoItem())

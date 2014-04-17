@@ -77,8 +77,7 @@ InventoryState::InventoryState(
 		_tu(tu),
 		_parent(parent)
 {
-	//Log(LOG_INFO) << "\nCreate InventoryState";
-
+	//Log(LOG_INFO) << "Create InventoryState";
 	_battleGame = _game->getSavedGame()->getSavedBattle();
 	//Log(LOG_INFO) << ". _battleGame = " << _battleGame;
 
@@ -339,7 +338,6 @@ void InventoryState::init()
 void InventoryState::updateStats()
 {
 	//Log(LOG_INFO) << "InventoryState::updateStats()";
-
 	BattleUnit* unit = _battleGame->getSelectedUnit();
 
 	if (_tu) // kL
@@ -390,7 +388,6 @@ void InventoryState::updateStats()
 void InventoryState::saveEquipmentLayout()
 {
 	//Log(LOG_INFO) << "InventoryState::saveEquipmentLayout()";
-
 	for (std::vector<BattleUnit*>::iterator
 			i = _battleGame->getUnits()->begin();
 			i != _battleGame->getUnits()->end();
@@ -436,10 +433,9 @@ void InventoryState::saveEquipmentLayout()
 														(*j)->getSlotX(),
 														(*j)->getSlotY(),
 														ammo,
-														(*j)->getExplodeTurn()));
+														(*j)->getFuseTimer()));
 		}
 	}
-
 	//Log(LOG_INFO) << "InventoryState::saveEquipmentLayout() EXIT";
 }
 
@@ -450,7 +446,6 @@ void InventoryState::saveEquipmentLayout()
 void InventoryState::btnOkClick(Action*)
 {
 	//Log(LOG_INFO) << "InventoryState::btnOkClick()";
-
 	if (_inv->getSelectedItem() != 0)
 		return;
 

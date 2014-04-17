@@ -227,7 +227,6 @@ void PrimeGrenadeState::btnClick(Action* action)
 
 		if (_inInventoryView)
 		{
-//			_grenadeInInventory->setExplodeTurn(btnID);
 			_grenadeInInventory->setFuseTimer(btnID);
 
 			_inventory->setPrimeGrenade(btnID); // kL
