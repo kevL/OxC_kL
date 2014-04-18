@@ -4481,7 +4481,7 @@
 	<vector>
 	"../Engine/State.h"
 
-1396389376 f:\git\openxcom\src\basescape\craftinfostate.h
+1397816107 f:\git\openxcom\src\basescape\craftinfostate.h
 	"../Engine/State.h"
 
 1394398507 f:\git\openxcom\src\basescape\craftsstate.h
@@ -6948,7 +6948,7 @@
 	"Language.h"
 	"Surface.h"
 
-1397749545 source:f:\git\openxcom\src\engine\game.cpp
+1397781963 source:f:\git\openxcom\src\engine\game.cpp
 	"Game.h"
 	<windows.h>
 	<SDL_syswm.h>
@@ -9060,7 +9060,7 @@
 1394398507 f:\git\openxcom\src\savegame\serializationhelper.h
 	<SDL_types.h>
 
-1397487511 source:f:\git\openxcom\src\resource\resourcepack.cpp
+1397781645 source:f:\git\openxcom\src\resource\resourcepack.cpp
 	"ResourcePack.h"
 	<SDL_mixer.h>
 	"../Engine/Font.h"

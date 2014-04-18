@@ -67,7 +67,6 @@ CraftInfoState::CraftInfoState(
 		_craftId(craftId)
 {
 	//Log(LOG_INFO) << "Create CraftInfoState";
-
 	_window			= new Window(
 								this,
 								320,
@@ -230,7 +229,7 @@ void CraftInfoState::init()
 								/ static_cast<double>(_craft->getRules()->getRepairRate())
 								/ 2.0));
 //		ss1 << L"\n" << tr("STR_HOUR", damageHrs);
-		ss << formatTime(damageHrs);
+		ss1 << formatTime(damageHrs);
 	}
 	_txtDamage->setText(ss1.str());
 
@@ -319,7 +318,7 @@ void CraftInfoState::init()
 			{
 				int rearmHours = static_cast<int>(
 									ceil(static_cast<double>(w1->getRules()->getAmmoMax() - w1->getAmmo())
-									/ static_cast<double>(w1->getRules()->getRearmRate())));
+										/ static_cast<double>(w1->getRules()->getRearmRate())));
 				ss << formatTime(rearmHours);
 			}
 			_txtW1Ammo->setText(ss.str());
@@ -362,7 +361,7 @@ void CraftInfoState::init()
 			{
 				int rearmHours = static_cast<int>(
 									ceil(static_cast<double>(w2->getRules()->getAmmoMax() - w2->getAmmo())
-									/ static_cast<double>(w2->getRules()->getRearmRate())));
+										/ static_cast<double>(w2->getRules()->getRearmRate())));
 				ss << formatTime(rearmHours);
 			}
 			_txtW2Ammo->setText(ss.str());
@@ -394,7 +393,7 @@ void CraftInfoState::init()
 
 /**
  * Turns an amount of time into a day/hour string.
- * @param total 
+ * @param total
  */
 std::wstring CraftInfoState::formatTime(int total)
 {
@@ -429,15 +428,6 @@ void CraftInfoState::btnOkClick(Action*)
  */
 void CraftInfoState::btnW1Click(Action*)
 {
-//	_game->setPalette( // kL
-//					_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)),
-//					Palette::backPos,
-//					16);
-/* int SDL_FillRect(
-		SDL_Surface* dst,
-		const SDL_Rect* rect,
-		Uint32 color); */
-
 	_game->pushState(new CraftWeaponsState(
 										_game,
 										_base,
@@ -451,11 +441,6 @@ void CraftInfoState::btnW1Click(Action*)
  */
 void CraftInfoState::btnW2Click(Action*)
 {
-//	_game->setPalette( // kL
-//					_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(4)),
-//					Palette::backPos,
-//					16);
-
 	_game->pushState(new CraftWeaponsState(
 										_game,
 										_base,
