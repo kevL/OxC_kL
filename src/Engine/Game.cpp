@@ -426,9 +426,12 @@ void Game::run()
 						Options::useOpenGL
 							&& Options::vSyncForOpenGL))
 				{
-					delaytime = (1000.0f / Options::FPS) - (SDL_GetTicks() - framestarttime);
-					if(delaytime > 0)
+					delaytime = static_cast<int>(
+									(1000.0f / static_cast<float>(Options::FPS))
+									- static_cast<float>(SDL_GetTicks() - static_cast<Uint32>(framestarttime)));
+					if (delaytime > 0)
 						SDL_Delay((Uint32)delaytime);
+
 					framestarttime = SDL_GetTicks();
 				}
 				else

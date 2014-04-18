@@ -53,7 +53,7 @@ ResourcePack::ResourcePack()
 		_sounds(),
 		_polygons(),
 		_polylines(),
-//		_musics(),
+		_musics(),
 		_musicFile(), // sza_MusicRules
 		_musicAssignment() // sza_MusicRules
 {
@@ -118,8 +118,14 @@ ResourcePack::~ResourcePack()
 	}
 
 	for (std::map<std::string, Music*>::iterator
-//			i = _musics.begin();
-//			i != _musics.end();
+			i = _musics.begin();
+			i != _musics.end();
+			++i)
+	{
+		delete i->second;
+	}
+
+	for (std::map<std::string, Music*>::iterator
 			i = _musicFile.begin(); // sza_MusicRules
 			i != _musicFile.end(); // sza_MusicRules
 			++i)
@@ -139,7 +145,7 @@ ResourcePack::~ResourcePack()
 /**
  * Returns a specific font from the resource set.
  * @param name Name of the font.
- * @return Pointer to the font.
+ * @return, Pointer to the font.
  */
 Font* ResourcePack::getFont(const std::string& name) const
 {
@@ -153,7 +159,7 @@ Font* ResourcePack::getFont(const std::string& name) const
 /**
  * Returns a specific surface from the resource set.
  * @param name Name of the surface.
- * @return Pointer to the surface.
+ * @return, Pointer to the surface.
  */
 Surface* ResourcePack::getSurface(const std::string& name) const
 {
@@ -168,7 +174,7 @@ Surface* ResourcePack::getSurface(const std::string& name) const
 /**
  * Returns a specific surface set from the resource set.
  * @param name Name of the surface set.
- * @return Pointer to the surface set.
+ * @return, Pointer to the surface set.
  */
 SurfaceSet* ResourcePack::getSurfaceSet(const std::string& name) const
 {
@@ -182,7 +188,7 @@ SurfaceSet* ResourcePack::getSurfaceSet(const std::string& name) const
 
 /**
  * Returns the list of polygons in the resource set.
- * @return Pointer to the list of polygons.
+ * @return, Pointer to the list of polygons.
  */
 std::list<Polygon*>* ResourcePack::getPolygons()
 {
@@ -191,7 +197,7 @@ std::list<Polygon*>* ResourcePack::getPolygons()
 
 /**
  * Returns the list of polylines in the resource set.
- * @return Pointer to the list of polylines.
+ * @return, Pointer to the list of polylines.
  */
 std::list<Polyline*>* ResourcePack::getPolylines()
 {
@@ -201,7 +207,7 @@ std::list<Polyline*>* ResourcePack::getPolylines()
 /**
  * Returns a specific music from the resource set.
  * @param name, Name of the music.
- * @return, Pointer to the music.
+ * @return,, Pointer to the music.
  */
 Music* ResourcePack::getMusic(const std::string& name) const
 {
@@ -302,7 +308,7 @@ Music* ResourcePack::getRandomMusic( // sza_MusicRules
 }
 
 /**
- * Clear a music assignment
+ * Clear a music assignment.
  */
 void ResourcePack::ClearMusicAssignment( // sza_MusicRules
 		const std::string& name,
@@ -318,7 +324,7 @@ void ResourcePack::ClearMusicAssignment( // sza_MusicRules
 }
 
 /**
- * Make a music assignment
+ * Make a music assignment.
  */
 void ResourcePack::MakeMusicAssignment( // sza_MusicRules
 		const std::string& name,
@@ -327,17 +333,19 @@ void ResourcePack::MakeMusicAssignment( // sza_MusicRules
 		const std::vector<int>& midiIndexes)
 {
 	if (_musicAssignment.find(name) == _musicAssignment.end())
-		_musicAssignment[name] = std::map<std::string, std::vector<std::pair<std::string, int> > > ();
+		_musicAssignment[name] = std::map<std::string, std::vector<std::pair<std::string, int> > >();
 
 	if (_musicAssignment.at(name).find(terrain) == _musicAssignment.at(name).end())
-		_musicAssignment[name][terrain] = std::vector<std::pair<std::string, int> > ();
+		_musicAssignment[name][terrain] = std::vector<std::pair<std::string, int> >();
 
 	for (size_t
 			i = 0;
 			i < filenames.size();
 			i++)
 	{
-		std::pair<std::string, int> toAdd = std::make_pair<std::string, int>(filenames.at(i), midiIndexes.at(i));
+		std::pair<std::string, int> toAdd = std::make_pair<std::string, int>(
+																		filenames.at(i),
+																		midiIndexes.at(i));
 		_musicAssignment[name][terrain].push_back(toAdd);
 	}
 }
@@ -368,7 +376,7 @@ Sound* ResourcePack::getSound(
 /**
  * Returns a specific palette from the resource set.
  * @param name Name of the palette.
- * @return Pointer to the palette.
+ * @return, Pointer to the palette.
  */
 Palette* ResourcePack::getPalette(const std::string& name) const
 {

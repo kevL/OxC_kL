@@ -16,10 +16,12 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_EXTRASOUNDS_H
 #define OPENXCOM_EXTRASOUNDS_H
 
 #include <yaml-cpp/yaml.h>
+
 
 namespace OpenXcom
 {
@@ -29,20 +31,29 @@ namespace OpenXcom
  */
 class ExtraSounds
 {
+
 private:
-	std::map<int, std::string> _sounds;
 	int _modIndex;
-public:
-	/// Creates a blank external sound set.
-	ExtraSounds();
-	/// Cleans up the external sound set.
-	virtual ~ExtraSounds();
-	/// Loads the data from yaml
-	void load(const YAML::Node &node, int modIndex);
-	/// Gets the list of sounds defined by this mod
-	std::map<int, std::string> *getSounds();
-	/// get the mod index for this external sound set.
-	int getModIndex();
+
+	std::map<int, std::string> _sounds;
+
+
+	public:
+		/// Creates a blank external sound set.
+		ExtraSounds();
+		/// Cleans up the external sound set.
+		virtual ~ExtraSounds();
+
+		/// Loads the data from yaml
+		void load(
+				const YAML::Node& node,
+				int modIndex);
+
+		/// Gets the list of sounds defined by this mod
+		std::map<int, std::string>* getSounds();
+
+		/// get the mod index for this external sound set.
+		int getModIndex();
 };
 
 }

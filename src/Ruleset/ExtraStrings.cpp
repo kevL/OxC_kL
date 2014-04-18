@@ -19,6 +19,7 @@
 
 #include "ExtraStrings.h"
 
+
 namespace OpenXcom
 {
 
@@ -40,9 +41,12 @@ ExtraStrings::~ExtraStrings()
  * Loads the extra strings set from YAML.
  * @param node YAML node.
  */
-void ExtraStrings::load(const YAML::Node &node)
+void ExtraStrings::load(const YAML::Node& node)
 {
-	for (YAML::const_iterator i = node["strings"].begin(); i != node["strings"].end(); ++i)
+	for (YAML::const_iterator
+			i = node["strings"].begin();
+			i != node["strings"].end();
+			++i)
 	{
 		_strings[i->first.as<std::string>()] = i->second.as<std::string>();
 	}
@@ -50,10 +54,11 @@ void ExtraStrings::load(const YAML::Node &node)
 
 /**
  * Gets the list of strings defined my this mod.
- * @return The list of strings.
+ * @return, The list of strings.
  */
-std::map<std::string, std::string> *ExtraStrings::getStrings()
+std::map<std::string, std::string>* ExtraStrings::getStrings()
 {
 	return &_strings;
 }
+
 }

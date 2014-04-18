@@ -74,7 +74,7 @@ void RuleMusic::load(const YAML::Node& node)
 	if (_indexes.empty())
 		_indexes.push_back(_midiIndex);
 
-	while(_indexes.size() < _files.size())
+	while (_indexes.size() < _files.size())
 		_indexes.push_back(-1);
 }
 

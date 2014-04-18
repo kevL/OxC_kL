@@ -31,6 +31,7 @@ class ExtraSounds;
 class ExtraSprites;
 class RuleMusic; // sza_MusicRules
 
+
 static const std::string XCOM_RESOURCE_MUSIC_GMDEFEND	= "GMDEFEND";
 static const std::string XCOM_RESOURCE_MUSIC_GMENBASE	= "GMENBASE";
 static const std::string XCOM_RESOURCE_MUSIC_GMGEO1		= "GMGEO1";
@@ -76,6 +77,7 @@ public:
 
 	/// Loads battlescape specific resources
 	void loadBattlescapeResources();
+
 	///
 	bool isImageFile(std::string extension);
 };

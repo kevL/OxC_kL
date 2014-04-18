@@ -19,13 +19,21 @@
 
 #include "ExtraSprites.h"
 
+
 namespace OpenXcom
 {
 
 /**
  * Creates a blank set of extra sprite data.
  */
-ExtraSprites::ExtraSprites() : _width(320), _height(200), _singleImage(false), _modIndex(0), _subX(0), _subY(0)
+ExtraSprites::ExtraSprites()
+	:
+		_width(320),
+		_height(200),
+		_singleImage(false),
+		_modIndex(0),
+		_subX(0),
+		_subY(0)
 {
 }
 
@@ -41,29 +49,31 @@ ExtraSprites::~ExtraSprites()
  * @param node YAML node.
  * @param modIndex the internal index of the associated mod.
  */
-void ExtraSprites::load(const YAML::Node &node, int modIndex)
+void ExtraSprites::load(
+		const YAML::Node& node,
+		int modIndex)
 {
-	_sprites = node["files"].as< std::map<int, std::string> >(_sprites);
-	_width = node["width"].as<int>(_width);
-	_height = node["height"].as<int>(_height);
-	_singleImage = node["singleImage"].as<bool>(_singleImage);
-	_subX = node["subX"].as<int>(_subX);
-	_subY = node["subY"].as<int>(_subY);
-	_modIndex = modIndex;
+	_sprites		= node["files"].as< std::map<int, std::string> >(_sprites);
+	_width			= node["width"].as<int>(_width);
+	_height			= node["height"].as<int>(_height);
+	_singleImage	= node["singleImage"].as<bool>(_singleImage);
+	_subX			= node["subX"].as<int>(_subX);
+	_subY			= node["subY"].as<int>(_subY);
+	_modIndex		= modIndex;
 }
 
 /**
  * Gets the list of sprites defined my this mod.
- * @return The list of sprites.
+ * @return, The list of sprites.
  */
-std::map<int, std::string> *ExtraSprites::getSprites()
+std::map<int, std::string>* ExtraSprites::getSprites()
 {
 	return &_sprites;
 }
 
 /**
  * Gets the width of the surfaces (used for single images and new spritesets).
- * @return The width of the surfaces.
+ * @return, The width of the surfaces.
  */
 int ExtraSprites::getWidth() const
 {
@@ -72,7 +82,7 @@ int ExtraSprites::getWidth() const
 
 /**
  * Gets the height of the surfaces (used for single images and new spritesets).
- * @return The height of the surfaces.
+ * @return, The height of the surfaces.
  */
 int ExtraSprites::getHeight() const
 {
@@ -81,7 +91,7 @@ int ExtraSprites::getHeight() const
 
 /**
  * Returns whether this is a single surface as opposed to a set of surfaces.
- * @return True if this is a single surface.
+ * @return, True if this is a single surface.
  */
 bool ExtraSprites::getSingleImage() const
 {
@@ -90,7 +100,7 @@ bool ExtraSprites::getSingleImage() const
 
 /**
  * Gets the mod index for this external sprite set.
- * @return The mod index.
+ * @return, The mod index.
  */
 int ExtraSprites::getModIndex() const
 {
@@ -99,7 +109,7 @@ int ExtraSprites::getModIndex() const
 
 /**
  * Gets the x subdivision.
- * @return The x subdivision.
+ * @return, The x subdivision.
  */
 int ExtraSprites::getSubX() const
 {
@@ -108,7 +118,7 @@ int ExtraSprites::getSubX() const
 
 /**
  * Gets the y subdivision.
- * @return The y subdivision.
+ * @return, The y subdivision.
  */
 int ExtraSprites::getSubY() const
 {

@@ -44,9 +44,8 @@ class SurfaceSet;
 
 /**
  * Packs of external game media.
- * Resource packs contain all the game media that's
- * loaded externally, like graphics, fonts, languages,
- * audio and world map.
+ * Resource packs contain all the game media that's loaded externally,
+ * like graphics, fonts, languages, audio and world map.
  * @note The game is still hardcoded to X-Com resources,
  * so for now this just serves to keep all the file loading
  * in one place.

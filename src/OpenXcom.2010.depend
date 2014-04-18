@@ -4410,7 +4410,7 @@
 	"Text.h"
 	"../Engine/InteractiveSurface.h"
 
-1397451743 f:\git\openxcom\src\resource\resourcepack.h
+1397779486 f:\git\openxcom\src\resource\resourcepack.h
 	<map>
 	<list>
 	<string>
@@ -5936,7 +5936,7 @@
 	<exception>
 	<string>
 
-1394402901 f:\git\openxcom\src\resource\xcomresourcepack.h
+1397779543 f:\git\openxcom\src\resource\xcomresourcepack.h
 	"ResourcePack.h"
 
 1394398507 f:\git\openxcom\src\ruleset\alienrace.h
@@ -6606,7 +6606,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1397750516 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
+1397774327 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
 	"ProjectileFlyBState.h"
 	<cmath>
 	"AlienBAIState.h"
@@ -6680,7 +6680,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Interface/Text.h"
 
-1397745655 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1397774285 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	<climits>
 	<cmath>
@@ -7022,10 +7022,10 @@
 	<map>
 	<string>
 
-1394398507 f:\git\openxcom\src\ruleset\extrastrings.h
-	<yaml-cpp/yaml.h>
-	<string>
+1397777814 f:\git\openxcom\src\ruleset\extrastrings.h
 	<map>
+	<string>
+	<yaml-cpp/yaml.h>
 
 1394398507 source:f:\git\openxcom\src\engine\languageplurality.cpp
 	"LanguagePlurality.h"
@@ -7127,7 +7127,7 @@
 	<assert.h>
 	<stdlib.h>
 
-1397490997 source:f:\git\openxcom\src\engine\screen.cpp
+1397773125 source:f:\git\openxcom\src\engine\screen.cpp
 	"Screen.h"
 	<cmath>
 	<iomanip>
@@ -9076,7 +9076,7 @@
 	"../Engine/Sound.h"
 	"../Engine/SoundSet.h"
 
-1397748080 source:f:\git\openxcom\src\resource\xcomresourcepack.cpp
+1397781418 source:f:\git\openxcom\src\resource\xcomresourcepack.cpp
 	"XcomResourcePack.h"
 	<sstream>
 	"../Battlescape/Position.h"
@@ -9109,10 +9109,10 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1394398507 f:\git\openxcom\src\ruleset\extrasprites.h
+1397777682 f:\git\openxcom\src\ruleset\extrasprites.h
 	<yaml-cpp/yaml.h>
 
-1394398507 f:\git\openxcom\src\ruleset\extrasounds.h
+1397777569 f:\git\openxcom\src\ruleset\extrasounds.h
 	<yaml-cpp/yaml.h>
 
 1397263318 source:f:\git\openxcom\src\ruleset\aliendeployment.cpp
@@ -9132,13 +9132,13 @@
 	"City.h"
 	<math.h>
 
-1394398507 source:f:\git\openxcom\src\ruleset\extrasounds.cpp
+1397777602 source:f:\git\openxcom\src\ruleset\extrasounds.cpp
 	"ExtraSounds.h"
 
-1394398507 source:f:\git\openxcom\src\ruleset\extrasprites.cpp
+1397777768 source:f:\git\openxcom\src\ruleset\extrasprites.cpp
 	"ExtraSprites.h"
 
-1394398507 source:f:\git\openxcom\src\ruleset\extrastrings.cpp
+1397777848 source:f:\git\openxcom\src\ruleset\extrastrings.cpp
 	"ExtraStrings.h"
 
 1394398507 source:f:\git\openxcom\src\ruleset\mapblock.cpp
@@ -11403,7 +11403,7 @@
 1394402682 f:\git\openxcom\src\ruleset\extramusic.h
 	<yaml-cpp/yaml.h>
 
-1394806541 source:f:\git\openxcom\src\ruleset\rulemusic.cpp
+1397777969 source:f:\git\openxcom\src\ruleset\rulemusic.cpp
 	"RuleMusic.h"
 
 1394398507 f:\git\openxcom\src\ruleset\rulemusic.h
