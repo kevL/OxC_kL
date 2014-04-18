@@ -36,8 +36,7 @@ class Window;
 
 
 /**
- * Craft Info screen that shows all the
- * info of a specific craft.
+ * Craft Info screen that shows all the info of a specific craft.
  */
 class CraftInfoState
 	:
@@ -63,10 +62,8 @@ private:
 		* _txtDamage,
 		* _txtFuel,
 		* _txtW1Ammo,
-		* _txtW1Max,
 		* _txtW1Name,
 		* _txtW2Ammo,
-		* _txtW2Max,
 		* _txtW2Name;
 	Surface
 		* _sprite,
@@ -75,6 +72,9 @@ private:
 		* _crew,
 		* _equip;
 	Window* _window;
+
+	/// Formats an amount of time.
+	std::wstring formatTime(int time);
 
 
 	public:
