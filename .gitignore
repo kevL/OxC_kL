@@ -49,12 +49,12 @@ CMakeLists.txt
 
 # -install
 /install/
+/install/win/
 #/install/debian/
 #/install/debian/patches/
 #/install/debian/source/
 #/install/gentoo/
 #/install/opensuse/
-#/install/win/
 
 # -m4
 /m4/
