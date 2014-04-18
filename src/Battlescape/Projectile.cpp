@@ -786,7 +786,7 @@ Surface* Projectile::getSprite() const
  */
 void Projectile::skipTrajectory()
 {
-	_position = _trajectory.size() - 2;
+	_position = _trajectory.size() - 1;
 }
 
 /**
