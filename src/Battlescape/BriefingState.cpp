@@ -201,7 +201,7 @@ void BriefingState::btnOkClick(Action*)
 
 	Options::baseXResolution = Options::baseXBattlescape;
 	Options::baseYResolution = Options::baseYBattlescape;
-	_game->getScreen()->resetDisplay();
+	_game->getScreen()->resetDisplay(false);
 
 	BattlescapeState* bs = new BattlescapeState(_game); // <- ah there it is! kL_note
 	int
@@ -229,7 +229,7 @@ void BriefingState::btnOkClick(Action*)
 	{
 		Options::baseXResolution = Options::baseXGeoscape;
 		Options::baseYResolution = Options::baseYGeoscape;
-		_game->getScreen()->resetDisplay();
+		_game->getScreen()->resetDisplay(false);;
 
 		delete bs;
 		_game->pushState(new AliensCrashState(_game));

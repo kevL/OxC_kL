@@ -55,7 +55,7 @@ MainMenuState::MainMenuState(Game* game)
 {
 	Options::baseXResolution = Options::baseXGeoscape;
 	Options::baseYResolution = Options::baseYGeoscape;
-	_game->getScreen()->resetDisplay();
+	_game->getScreen()->resetDisplay(false);
 
 	_window			= new Window(this, 256, 160, 32, 20, POPUP_BOTH);
 	_txtTitle		= new Text(256, 30, 32, 56);

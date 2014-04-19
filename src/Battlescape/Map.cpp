@@ -1471,7 +1471,7 @@ void Map::drawTerrain(Surface* surface)
 				tmpSurface->blitNShade(
 						surface,
 						bulletScreen.x - 15,
-						bulletScreen.y - 15,
+						bulletScreen.y - 25,
 						0);
 			}
 			else

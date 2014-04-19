@@ -157,7 +157,7 @@ void LoadState::quickLoad(const std::string& filename)
 
 		Options::baseXResolution = Options::baseXGeoscape;
 		Options::baseYResolution = Options::baseYGeoscape;
-		_game->getScreen()->resetDisplay();
+		_game->getScreen()->resetDisplay(false);
 
 		_game->setState(new GeoscapeState(_game));
 
@@ -167,7 +167,7 @@ void LoadState::quickLoad(const std::string& filename)
 
 			Options::baseXResolution = Options::baseXBattlescape;
 			Options::baseYResolution = Options::baseYBattlescape;
-			_game->getScreen()->resetDisplay();
+			_game->getScreen()->resetDisplay(false);
 
 			BattlescapeState* bs = new BattlescapeState(_game);
 			_game->pushState(bs);

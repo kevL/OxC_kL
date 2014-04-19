@@ -100,7 +100,9 @@ RuleItem::RuleItem(const std::string& type)
 		_shotgunPellets(0),
 		_zombieUnit(""),
 		_strengthApplied(false),
-		_noReaction(false) // kL
+		_noReaction(false), // kL
+		_meleeSound(39),
+		_meleePower(0)
 {
 }
 
@@ -235,8 +237,10 @@ void RuleItem::load(
 	_autoShots				= node["autoShots"].as<int>(_autoShots);
 	_shotgunPellets			= node["shotgunPellets"].as<int>(_shotgunPellets);
 	_zombieUnit				= node["zombieUnit"].as<std::string>(_zombieUnit);
-	_strengthApplied		= node["strengthApplied"].as<bool>(_strengthApplied); // kL
+	_strengthApplied		= node["strengthApplied"].as<bool>(_strengthApplied);
 	_noReaction				= node["noReaction"].as<bool>(_noReaction); // kL
+	_meleeSound				= node["meleeSound"].as<int>(_meleeSound);
+	_meleePower				= node["meleePower"].as<int>(_meleePower);
 
 	if (!_listOrder)
 		_listOrder = listOrder;
@@ -886,6 +890,24 @@ bool RuleItem::isStrengthApplied() const
 bool RuleItem::canReactionFire() const // kL
 {
 	return !_noReaction;
+}
+
+/**
+ * The sound this weapon makes when you punch someone in the face with it.
+ * @return, The weapon's melee sound.
+ */
+int RuleItem::getMeleeSound() const
+{
+	return _meleeSound;
+}
+
+/**
+ * The damage this weapon does when you punch someone in the face with it.
+ * @return, The weapon's melee power.
+ */
+int RuleItem::getMeleePower() const
+{
+	return _meleePower;
 }
 
 }

@@ -1053,56 +1053,13 @@ void BattlescapeGame::handleNonTargetAction()
 			{
 				if (_currentAction.actor->spendTimeUnits(_currentAction.TU))
 				{
-/*OLD_code					Position pAttack_vector;
-					Pathfinding::directionToVector(_currentAction.actor->getDirection(), &pAttack_vector);
-					Tile* tTarget; //kL = _save->getTile(_currentAction.actor->getPosition() + pAttack_vector);
-
-					for (int
-							x = 0;
-							x != _currentAction.actor->getArmor()->getSize();
-							++x)
-					{
-						for (int
-								y = 0;
-								y != _currentAction.actor->getArmor()->getSize();
-								++y)
-						{
-							tTarget = _save->getTile(Position(
-															_currentAction.actor->getPosition().x + x,
-															_currentAction.actor->getPosition().y + y,
-															_currentAction.actor->getPosition().z)
-														+ pAttack_vector);
-							if (tTarget->getUnit()
-								&& tTarget->getUnit() != _currentAction.actor)
-							{
-								Position pTarget_voxel = Position( // converts position to voxelspace
-										tTarget->getPosition().x * 16,
-										tTarget->getPosition().y * 16,
-										tTarget->getPosition().z * 24);
-								pTarget_voxel.x += 8;
-								pTarget_voxel.y += 8;
-//kL								pTarget_voxel.z += 8;
-								pTarget_voxel.z += 10;		// kL
-
-								//Log(LOG_INFO) << ". . new ExplosionBState() tTarget " << tTarget->getPosition()
-												<< " pTarget_voxel " << pTarget_voxel;
-								statePushNext(new ExplosionBState(this, pTarget_voxel, _currentAction.weapon, _currentAction.actor));
-
-								break;
-							}
-						}
-
-						if (tTarget->getUnit()
-							&& tTarget->getUnit() != _currentAction.actor) // <- enemy within!
-						{
-							break; // already found one, Thanks.
-						}
-					} */
+					BattleUnit* target = _save->getTile(_currentAction.target)->getUnit();
+					int height = target->getFloatHeight() + (target->getHeight() / 2);
 					Position voxel = _currentAction.target * Position(16, 16, 24)
 									+ Position(
 											8,
 											8,
-											8 - _save->getTile(_currentAction.target)->getTerrainLevel());
+											height - _save->getTile(_currentAction.target)->getTerrainLevel());
 					statePushNext(new ExplosionBState(
 													this,
 													voxel,
@@ -1696,7 +1653,7 @@ bool BattlescapeGame::handlePanickingPlayer()
 
 /**
  * Common function for handling panicking units.
- * @return False when unit not in panicking mode.
+ * @return, False when unit not in panicking mode.
  */
 bool BattlescapeGame::handlePanickingUnit(BattleUnit* unit)
 {
@@ -1709,23 +1666,28 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* unit)
 	}
 
 	//Log(LOG_INFO) << "unit Panic/Berserk : " << unit->getId() << " / " << unit->getMorale();
-
-	unit->setVisible(true);
-	getMap()->getCamera()->centerOnPosition(unit->getPosition());
 	_save->setSelectedUnit(unit);
+
+//	unit->setVisible(true); // kL
 
 	// show a little infobox with the name of the unit and "... is panicking"
 	Game* game = _parentState->getGame();
-	if (status == STATUS_PANICKING)
-		game->pushState(new InfoboxState(
-										game,
-										game->getLanguage()->getString("STR_HAS_PANICKED", unit->getGender())
-																	.arg(unit->getName(game->getLanguage()))));
-	else
-		game->pushState(new InfoboxState(
-										game,
-										game->getLanguage()->getString("STR_HAS_GONE_BERSERK", unit->getGender())
-																	.arg(unit->getName(game->getLanguage()))));
+	if (unit->getVisible()
+		|| !Options::noAlienPanicMessages)
+	{
+		getMap()->getCamera()->centerOnPosition(unit->getPosition());
+
+		if (status == STATUS_PANICKING)
+			game->pushState(new InfoboxState(
+											game,
+											game->getLanguage()->getString("STR_HAS_PANICKED", unit->getGender())
+																		.arg(unit->getName(game->getLanguage()))));
+		else
+			game->pushState(new InfoboxState(
+											game,
+											game->getLanguage()->getString("STR_HAS_GONE_BERSERK", unit->getGender())
+																		.arg(unit->getName(game->getLanguage()))));
+	}
 
 //kL	unit->abortTurn(); // makes the unit go to status STANDING :p
 	unit->setStatus(STATUS_STANDING); // kL :P

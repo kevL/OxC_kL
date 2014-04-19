@@ -107,6 +107,51 @@ ActionMenuState::ActionMenuState(
 				&id);
 	}
 
+	if (weapon->getTUMelee())
+	{
+		if (weapon->getBattleType() == BT_MELEE
+			&& weapon->getDamageType() == DT_STUN)
+		{
+			addItem( // stun rod
+					BA_HIT,
+					"STR_STUN",
+					&id);
+		}
+		else
+			addItem( // melee weapon
+					BA_HIT,
+					"STR_HIT_MELEE",
+					&id);
+	}
+	/** special items */
+	else if (weapon->getBattleType() == BT_MEDIKIT)
+		addItem(
+				BA_USE,
+				"STR_USE_MEDI_KIT",
+				&id);
+	else if (weapon->getBattleType() == BT_SCANNER)
+		addItem(
+				BA_USE,
+				"STR_USE_SCANNER",
+				&id);
+	else if (weapon->getBattleType() == BT_PSIAMP
+		&& _action->actor->getStats()->psiSkill > 0)
+	{
+		addItem(
+				BA_MINDCONTROL,
+				"STR_MIND_CONTROL",
+				&id);
+		addItem(
+				BA_PANIC,
+				"STR_PANIC_UNIT",
+				&id);
+	}
+	else if (weapon->getBattleType() == BT_MINDPROBE)
+		addItem(
+				BA_USE,
+				"STR_USE_MIND_PROBE",
+				&id);
+
 	if (weapon->getBattleType() == BT_FIREARM)
 	{
 		if (weapon->isWaypoint()
@@ -140,47 +185,6 @@ ActionMenuState::ActionMenuState(
 						&id);
 		}
 	}
-	else if (weapon->getBattleType() == BT_MELEE)
-	{
-		if (weapon->getDamageType() == DT_STUN) // stun rod
-			addItem(
-					BA_HIT,
-					"STR_STUN",
-					&id);
-		else
-			addItem(
-					BA_HIT,
-					"STR_HIT_MELEE",
-					&id); // melee weapon
-	}
-	/** special items */
-	else if (weapon->getBattleType() == BT_MEDIKIT)
-		addItem(
-				BA_USE,
-				"STR_USE_MEDI_KIT",
-				&id);
-	else if (weapon->getBattleType() == BT_SCANNER)
-		addItem(
-				BA_USE,
-				"STR_USE_SCANNER",
-				&id);
-	else if (weapon->getBattleType() == BT_PSIAMP
-		&& _action->actor->getStats()->psiSkill > 0)
-	{
-		addItem(
-				BA_MINDCONTROL,
-				"STR_MIND_CONTROL",
-				&id);
-		addItem(
-				BA_PANIC,
-				"STR_PANIC_UNIT",
-				&id);
-	}
-	else if (weapon->getBattleType() == BT_MINDPROBE)
-		addItem(
-				BA_USE,
-				"STR_USE_MIND_PROBE",
-				&id);
 }
 
 /**
@@ -392,9 +396,8 @@ void ActionMenuState::btnActionMenuItemClick(Action* action)
 
 			_game->popState();
 		}
-		else if ((_action->type == BA_STUN
+		else if (_action->type == BA_STUN
 				|| _action->type == BA_HIT)
-			&& weapon->getBattleType() == BT_MELEE)
 		{
 			if (!_game->getSavedGame()->getSavedBattle()->getTileEngine()->validMeleeRange(
 																					_action->actor->getPosition(),

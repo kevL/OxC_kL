@@ -117,7 +117,7 @@ private:
 		/// Gets the screen's height.
 		int getHeight() const;
 		/// Resets the screen display.
-		void resetDisplay();
+		void resetDisplay(bool resetVideo = true);
 
 		/// Gets the screen's X scale.
 		double getXScale() const;

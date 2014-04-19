@@ -70,7 +70,8 @@ ExplosionBState::ExplosionBState(
 		_tile(tile),
 		_power(0),
 		_areaOfEffect(false),
-		_lowerWeapon(lowerWeapon)
+		_lowerWeapon(lowerWeapon),
+		_pistolWhip(false)
 {
 }
 
@@ -95,6 +96,14 @@ void ExplosionBState::init()
 	if (_item)
 	{
 		_power = _item->getRules()->getPower();
+
+		_pistolWhip = _item->getRules()->getBattleType() != BT_MELEE
+					&& _parent->getCurrentAction()->type == BA_HIT;
+		if (_pistolWhip)
+		{
+			_power = _item->getRules()->getMeleePower();
+		}
+
 		// since melee aliens don't use a conventional weapon type, we use their strength instead.
 		if ( //_item->getRules()->getBattleType() == BT_MELEE &&
 			_item->getRules()->isStrengthApplied())
@@ -107,12 +116,9 @@ void ExplosionBState::init()
 		// all the rest hits one point:
 		// AP, melee (stun or AP), laser, plasma, acid
 		_areaOfEffect = _item->getRules()->getBattleType() != BT_MELEE
-					&& _item->getRules()->getBattleType() != BT_PSIAMP		// kL
-//					&& (_item->getRules()->getDamageType() == DT_HE			// kL, Old Code.
-//						|| _item->getRules()->getDamageType() == DT_IN		// kL
-//						|| _item->getRules()->getDamageType() == DT_SMOKE	// kL
-//						|| _item->getRules()->getDamageType() == DT_STUN);	// kL
-					&& _item->getRules()->getExplosionRadius() != 0;		// <- worrisome, kL_note.
+					&& _item->getRules()->getBattleType() != BT_PSIAMP	// kL
+					&& _item->getRules()->getExplosionRadius() != 0		// <- worrisome, kL_note.
+					&& !_pistolWhip;
 	}
 	else if (_tile)
 	{
@@ -219,12 +225,22 @@ void ExplosionBState::init()
 //kL		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED / 2);
 //		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED * 6 / 7); // kL
 
-		bool hit = _item->getRules()->getBattleType() == BT_MELEE
+		bool hit = _pistolWhip
+				|| _item->getRules()->getBattleType() == BT_MELEE
 				|| _item->getRules()->getBattleType() == BT_PSIAMP; // includes aLien psi-weapon.
+		int
+			anim = _item->getRules()->getHitAnimation(),
+			sound = _item->getRules()->getHitSound();
+
+		if (hit)
+		{
+			anim = 0;
+			sound = _item->getRules()->getMeleeSound();
+		}
 
 		Explosion* explosion = new Explosion( // animation.
 										_center,
-										_item->getRules()->getHitAnimation(),
+										anim,
 										false,
 										hit);
 
@@ -232,7 +248,7 @@ void ExplosionBState::init()
 
 		_parent->getResourcePack()->getSound(
 											"BATTLE.CAT",
-											_item->getRules()->getHitSound())
+											sound)
 										->play();
 
 //		BattleUnit* target = _parent->getSave()->getTile(_action.target)->getUnit();
@@ -313,13 +329,19 @@ void ExplosionBState::explode()
 		else
 		{
 			//Log(LOG_INFO) << ". . not AoE, TileEngine::hit()";
-			bool hit = _item->getRules()->getBattleType() == BT_MELEE	// kL
+			bool hit = _pistolWhip										// kL
+					|| _item->getRules()->getBattleType() == BT_MELEE	// kL
 					|| _item->getRules()->getBattleType() == BT_PSIAMP;	// kL
 				// kL_note: basically, PsiAmp is needed 'round here only for its animation to play.
+
+			ItemDamageType type = _item->getRules()->getDamageType();
+			if (_pistolWhip)
+				type = DT_STUN;
+
 			BattleUnit* victim = tileEngine->hit(
 												_center,
 												_power,
-												_item->getRules()->getDamageType(),
+												type,
 												_unit,
 												hit); // kL add.
 

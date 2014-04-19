@@ -36,6 +36,7 @@
 
 #include "../Engine/Language.h"
 #include "../Engine/Logger.h"
+#include "../Engine/Options.h"
 #include "../Engine/Palette.h"
 #include "../Engine/RNG.h"
 #include "../Engine/Surface.h"
@@ -2848,7 +2849,10 @@ int BattleUnit::getMoveSound() const
  */
 bool BattleUnit::isWoundable() const
 {
-	return (_type == "SOLDIER");
+	return _type=="SOLDIER"
+			|| (Options::alienBleeding
+				&& _faction != FACTION_PLAYER
+				&& _armor->getSize() == 1);
 }
 
 /**

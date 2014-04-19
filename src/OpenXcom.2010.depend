@@ -4679,7 +4679,7 @@
 1394398507 f:\git\openxcom\src\ruleset\mapdata.h
 	"RuleItem.h"
 
-1394398507 f:\git\openxcom\src\ruleset\ruleitem.h
+1397873808 f:\git\openxcom\src\ruleset\ruleitem.h
 	<string>
 	<vector>
 	<yaml-cpp/yaml.h>
@@ -5032,7 +5032,7 @@
 	<vector>
 	"../Engine/State.h"
 
-1397344569 f:\git\openxcom\src\engine\screen.h
+1397873141 f:\git\openxcom\src\engine\screen.h
 	<SDL.h>
 	<string>
 	"OpenGL.h"
@@ -5820,7 +5820,7 @@
 	"BattleAIState.h"
 	"BattlescapeGame.h"
 
-1394398507 f:\git\openxcom\src\battlescape\explosionbstate.h
+1397872200 f:\git\openxcom\src\battlescape\explosionbstate.h
 	<string>
 	"BattleState.h"
 	"Position.h"
@@ -6580,7 +6580,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1397745317 source:f:\git\openxcom\src\battlescape\projectile.cpp
+1397834550 source:f:\git\openxcom\src\battlescape\projectile.cpp
 	"Projectile.h"
 	<cmath>
 	"BattlescapeGame.h"
@@ -11415,7 +11415,7 @@
 	<SDL.h>
 	<yaml-cpp/yaml.h>
 
-1397744419 f:\git\openxcom\src\engine\options.inc.h
+1397873115 f:\git\openxcom\src\engine\options.inc.h
 
 1396745312 source:f:\git\openxcom\src\engine\optioninfo.cpp
 	"OptionInfo.h"

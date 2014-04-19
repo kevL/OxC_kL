@@ -47,7 +47,8 @@ class ExplosionBState
 private:
 	bool
 		_areaOfEffect,
-		_lowerWeapon;
+		_lowerWeapon,
+		_pistolWhip;
 	int _power;
 
 	BattleItem* _item;
