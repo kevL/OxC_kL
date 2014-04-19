@@ -32,7 +32,6 @@
 #include "CrossPlatform.h"
 #include "Exception.h"
 #include "Logger.h"
-#include "OpenGL.h"
 #include "Options.h"
 #include "Surface.h"
 #include "Timer.h"

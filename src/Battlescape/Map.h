@@ -23,6 +23,8 @@
 #include <set>
 #include <vector>
 
+#include "Position.h"
+
 #include "../Engine/Options.h"
 #include "../Engine/InteractiveSurface.h"
 
@@ -38,7 +40,6 @@ class BattleUnit;
 class Camera;
 class Explosion;
 class NumberText; // kL
-class Position;
 class Projectile;
 class ResourcePack;
 class SavedBattleGame;

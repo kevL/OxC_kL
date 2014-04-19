@@ -20,8 +20,6 @@
 #ifndef OPENXCOM_MEDIKITSTATE_H
 #define OPENXCOM_MEDIKITSTATE_H
 
-#include "BattlescapeGame.h"
-
 #include "../Engine/State.h"
 
 
@@ -33,6 +31,8 @@ class BattleUnit;
 class InteractiveSurface;
 class MedikitView;
 class Text;
+
+struct BattleAction;
 
 
 /**

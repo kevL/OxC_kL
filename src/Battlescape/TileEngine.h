@@ -27,9 +27,7 @@
 #include "BattlescapeGame.h"
 #include "Position.h"
 
-#include "../Ruleset/MapData.h"
-
-#include "../Savegame/BattleUnit.h"
+#include "../Ruleset/RuleItem.h"
 
 
 namespace OpenXcom
@@ -39,6 +37,8 @@ class BattleItem;
 class BattleUnit;
 class SavedBattleGame;
 class Tile;
+
+struct BattleAction;
 
 
 /**

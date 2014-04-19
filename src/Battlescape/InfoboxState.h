@@ -20,8 +20,6 @@
 #ifndef OPENXCOM_INFOBOXSTATE_H
 #define OPENXCOM_INFOBOXSTATE_H
 
-#include "BattlescapeState.h"
-
 #include "../Engine/State.h"
 
 

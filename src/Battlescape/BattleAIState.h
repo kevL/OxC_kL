@@ -22,14 +22,14 @@
 
 #include <yaml-cpp/yaml.h>
 
-#include "BattlescapeGame.h"
-
 
 namespace OpenXcom
 {
 
 class BattleUnit;
 class SavedBattleGame;
+
+struct BattleAction;
 
 
 enum AIMode

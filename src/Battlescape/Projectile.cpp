@@ -23,8 +23,6 @@
 
 #include <cmath>
 
-#include "BattlescapeGame.h"
-#include "Position.h"
 #include "TileEngine.h"
 
 #include "../aresame.h"

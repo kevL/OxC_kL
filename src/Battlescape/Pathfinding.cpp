@@ -32,7 +32,6 @@
 #include "../Engine/Options.h"
 
 #include "../Ruleset/Armor.h"
-#include "../Ruleset/MapData.h"
 #include "../Ruleset/Ruleset.h"
 
 #include "../Savegame/BattleItem.h"

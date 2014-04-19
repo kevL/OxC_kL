@@ -18,7 +18,9 @@
  */
 
 #include "CatFile.h"
-#include "SDL.h"
+
+#include <SDL.h>
+
 
 namespace OpenXcom
 {
@@ -29,16 +31,24 @@ namespace OpenXcom
  * of a filename followed by its contents.
  * @param path Full path to CAT file.
  */
-CatFile::CatFile(const char *path) : std::ifstream(path, std::ios::in | std::ios::binary), _amount(0), _offset(0), _size(0)
+CatFile::CatFile(const char* path)
+	:
+		std::ifstream(
+			path,
+			std::ios::in | std::ios::binary),
+		_amount(0),
+		_offset(0),
+		_size(0)
 {
 	if (!this)
 		return;
 
-
 	// Get amount of files
-	read((char*)&_amount, sizeof(_amount));
+	read(
+		(char*)&_amount,
+		sizeof(_amount));
 
-	_amount = (unsigned int)SDL_SwapLE32(_amount);
+	_amount = static_cast<unsigned>(SDL_SwapLE32(_amount));
 	_amount /= 2 * sizeof(_amount);
 
 	// Get object offsets
@@ -47,12 +57,20 @@ CatFile::CatFile(const char *path) : std::ifstream(path, std::ios::in | std::ios
 	_offset = new unsigned int[_amount];
 	_size   = new unsigned int[_amount];
 
-	for (unsigned int i = 0; i < _amount; ++i)
+	for (unsigned
+			i = 0;
+			i < _amount;
+			++i)
 	{
-		read((char*)&_offset[i], sizeof(*_offset));
-		_offset[i] = (unsigned int)SDL_SwapLE32(_offset[i]);
-		read((char*)&_size[i],   sizeof(*_size));
-		_size[i] = (unsigned int)SDL_SwapLE32(_size[i]);
+		read(
+			(char*)&_offset[i],
+			sizeof(*_offset));
+		_offset[i] = static_cast<unsigned>(SDL_SwapLE32(_offset[i]));
+
+		read(
+			(char*)&_size[i],
+			sizeof(*_size));
+		_size[i] = static_cast<unsigned>(SDL_SwapLE32(_size[i]));
 	}
 }
 
@@ -72,21 +90,27 @@ CatFile::~CatFile()
  * @param i Object number to load.
  * @return Pointer to the loaded object.
  */
-char *CatFile::load(unsigned int i)
+char* CatFile::load(unsigned i)
 {
 	if (i >= _amount)
 		return 0;
 
-	seekg(_offset[i], std::ios::beg);
+	seekg(
+		_offset[i],
+		std::ios::beg);
 
 	// Skip filename
 	char namesize;
 	read(&namesize, 1);
-	seekg(namesize, std::ios::cur);
+	seekg(
+		namesize,
+		std::ios::cur);
 
 	// Read object
-	char *object = new char[_size[i]];
-	read(object, _size[i]);
+	char* object = new char[_size[i]];
+	read(
+		object,
+		_size[i]);
 
 	return object;
 }

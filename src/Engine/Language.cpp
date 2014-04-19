@@ -28,7 +28,6 @@
 #include "CrossPlatform.h"
 #include "Exception.h"
 #include "LanguagePlurality.h"
-#include "LocalizedText.h"
 #include "Logger.h"
 #include "Options.h"
 

@@ -1,24 +1,29 @@
-// This file was copied from the bsnes project. 
+// This file was copied from the bsnes project.
 
 // This is the license info, from ruby.hpp:
 
 /*
-  ruby
-  version: 0.08 (2011-11-25)
-  license: public domain
+	ruby
+	version: 0.08 (2011-11-25)
+	license: public domain
 */
+
 #ifndef OXC_OPENGL_H
 #define OXC_OPENGL_H
 
 #ifndef __NO_OPENGL
 
+#include <string>
+
 #include <SDL.h>
 #include <SDL_opengl.h>
 
-#include "Surface.h"
 
-namespace OpenXcom 
+namespace OpenXcom
 {
+
+class Surface;
+
 
 #ifndef __APPLE__
 extern PFNGLCREATEPROGRAMPROC glCreateProgram;
@@ -53,29 +58,45 @@ std::string strGLError(GLenum glErr);
 }
 
 
-class OpenGL {
+class OpenGL
+{
+
 public:
-  GLuint gltexture;
-  GLuint glprogram;
-  GLuint fragmentshader;
-  bool linear;
-  GLuint vertexshader;
-  bool shader_support;
+	static bool checkErrors;
 
-  uint32_t *buffer;
-  Surface *buffer_surface;
-  unsigned iwidth, iheight, iformat, ibpp;
+	bool
+		linear,
+		shader_support;
+	unsigned
+		iwidth,
+		iheight,
+		iformat,
+		ibpp;
 
-  static bool checkErrors;
+	uint32_t* buffer;
 
-  /// call to resize internal buffer; internal use
-  void resize(unsigned width, unsigned height);
-  /// actually returns pointer to data buffer where one is to write the image
-  bool lock(uint32_t *&data, unsigned &pitch);
-  /// make all the pixels go away
-  void clear();
-  /// make the buffer show up on screen
-  void refresh(
+	GLuint
+		gltexture,
+		glprogram,
+		fragmentshader,
+		vertexshader;
+
+	Surface* buffer_surface;
+
+	/// call to resize internal buffer; internal use
+	void resize(
+			unsigned width,
+			unsigned height);
+
+	/// actually returns pointer to data buffer where one is to write the image
+	bool lock(
+			uint32_t* &data,
+			unsigned &pitch);
+
+	/// make all the pixels go away
+	void clear();
+	/// make the buffer show up on screen
+	void refresh(
 			bool smooth,
 			unsigned inwidth,
 			unsigned inheight,
@@ -85,29 +106,40 @@ public:
 			int bottomBlackBand,
 			int leftBlackBand,
 			int rightBlackBand);
-  /// set a shader! but what kind?
-  void set_shader(const char *source);
-  /// same but for fragment shader?
-  void set_fragment_shader(const char *source);
-  /// and vertex?
-  void set_vertex_shader(const char *source); 
-  /// init(), because we're too cool to initialize everything in the constructor
-  void init(int width, int height); 
-  /// more like exit, because destructors are for uncool people
-  void term(); 
-  /// Try to set VSync!
-  void setVSync(bool sync);
 
-  /// constructor -- like we said, we're too cool to actually construct things
-  OpenGL();
-  ~OpenGL();
+	/// set a shader! but what kind?
+	void set_shader(const char* source);
+	/// same but for fragment shader?
+	void set_fragment_shader(const char* source);
+	/// and vertex?
+	void set_vertex_shader(const char* source);
+
+	/// init(), because we're too cool to initialize everything in the constructor
+	void init(
+			int width,
+			int height);
+	/// more like exit, because destructors are for uncool people
+	void term();
+
+	/// Try to set VSync!
+	void setVSync(bool sync);
+
+	/// constructor -- like we said, we're too cool to actually construct things
+	OpenGL();
+	/// dTor
+	~OpenGL();
 };
 
 }
 
 #else
 
-namespace OpenXcom { class OpenGL {}; }
+namespace OpenXcom
+{
+
+class OpenGL{};
+
+}
 
 #endif
 

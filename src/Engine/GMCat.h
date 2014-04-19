@@ -21,22 +21,31 @@
 #define OPENXCOM_GMCAT_H
 
 #include "CatFile.h"
-#include "Music.h"
 
 namespace OpenXcom
 {
 
+class Music;
+
+
 /**
- * Subclass of CatFile to handle gm.cat files
- * that contain MIDI music streams.
+ * Subclass of CatFile to handle gm.cat files that contain MIDI music streams.
  */
-class GMCatFile : public CatFile
+class GMCatFile
+	:
+		public CatFile
 {
+
 public:
 	/// Inherit constructor.
-	GMCatFile(const char *path) : CatFile(path) { }
+	GMCatFile(const char* path)
+		:
+			CatFile(path)
+	{
+	}
+
 	/// Loads a stream as a MIDI file.
-	Music *loadMIDI(unsigned int i);
+	Music* loadMIDI(unsigned int i);
 };
 
 }

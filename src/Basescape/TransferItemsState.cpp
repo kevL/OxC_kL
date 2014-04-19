@@ -55,7 +55,6 @@
 #include "../Savegame/ItemContainer.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Soldier.h"
-#include "../Savegame/Transfer.h"
 #include "../Savegame/Vehicle.h"
 
 

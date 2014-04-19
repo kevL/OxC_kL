@@ -21,37 +21,37 @@
 #define OPENXCOM_NOCONTAINMENTSTATE_H
 
 #include "../Engine/State.h"
-#include "DebriefingState.h"
 
 
 namespace OpenXcom
 {
 
+class Text;
 class TextButton;
 class Window;
-class Text;
+
 
 /**
- * Screen shown when there's not enough containment
- * to capture a live alien after a mission.
+ * Screen shown when there's not enough containment to capture a live alien after a mission.
  */
 class NoContainmentState
 	:
 		public State
 {
+
 private:
 	TextButton* _btnOk;
 	Window* _window;
 	Text* _txtTitle;
 
-public:
-	/// Creates the No Containment state.
-	NoContainmentState(Game* game);
-	/// Cleans up the No Containment state.
-	~NoContainmentState();
+	public:
+		/// Creates the No Containment state.
+		NoContainmentState(Game* game);
+		/// Cleans up the No Containment state.
+		~NoContainmentState();
 
-	/// Handler for clicking the OK button.
-	void btnOkClick(Action* action);
+		/// Handler for clicking the OK button.
+		void btnOkClick(Action* action);
 };
 
 }

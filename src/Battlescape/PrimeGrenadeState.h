@@ -20,21 +20,21 @@
 #ifndef OPENXCOM_PRIMEGRENADESTATE_H
 #define OPENXCOM_PRIMEGRENADESTATE_H
 
-#include "BattlescapeGame.h"
-
 #include "../Engine/State.h"
 
 
 namespace OpenXcom
 {
 
+class BattleItem;
 class Frame;
 class Game;
 class InteractiveSurface;
 class Inventory; // kL
 class Surface;
 class Text;
-//class WarningMessage; // kL
+
+struct BattleAction;
 
 
 /**
@@ -57,7 +57,6 @@ private:
 	Text
 		* _number[24],
 		* _title;
-//	WarningMessage* _warning; // kL
 
 
 	public:

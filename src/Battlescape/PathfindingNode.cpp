@@ -21,8 +21,6 @@
 
 #include <math.h>
 
-#include "Position.h"
-
 
 namespace OpenXcom
 {

@@ -18,14 +18,17 @@
  */
 
 #include "NoContainmentState.h"
+
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
+#include "../Engine/Options.h"
 #include "../Engine/Palette.h"
+
+#include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
-#include "../Interface/Text.h"
-#include "../Engine/Options.h"
+
+#include "../Resource/ResourcePack.h"
 
 
 namespace OpenXcom

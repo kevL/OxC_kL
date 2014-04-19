@@ -22,6 +22,7 @@
 
 #include <vector>
 
+#include "PathfindingNode.h"
 #include "Position.h"
 
 #include "../Ruleset/MapData.h"
@@ -32,7 +33,6 @@ namespace OpenXcom
 
 class BattleUnit;
 class SavedBattleGame;
-class PathfindingNode;
 class Tile;
 
 

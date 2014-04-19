@@ -23,6 +23,7 @@
 #include <vector>
 
 #include "BattleAIState.h"
+#include "Position.h"
 
 
 namespace OpenXcom

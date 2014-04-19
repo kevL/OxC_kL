@@ -23,7 +23,7 @@
 #include <yaml-cpp/yaml.h>
 
 #include "BattleAIState.h"
-#include "BattlescapeGame.h"
+#include "Position.h"
 
 
 namespace OpenXcom
@@ -32,6 +32,8 @@ namespace OpenXcom
 class BattleUnit;
 class Node;
 class SavedBattleGame;
+
+struct BattleAction;
 
 
 /**

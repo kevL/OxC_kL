@@ -18,38 +18,60 @@
  */
 
 #include "GMCat.h"
+
 #include <vector>
+
+#include "Music.h"
+
 
 namespace OpenXcom
 {
 
-static inline unsigned read_uint32_le (const unsigned char *p)
+static inline unsigned read_uint32_le (const unsigned char* p)
 {
-return ((unsigned) p[0]) + (((unsigned) p[1]) << 8)
-	+ (((unsigned) p[2]) << 16) + (((unsigned) p[3]) << 24);
+	return static_cast<unsigned>(p[0])
+		+ (static_cast<unsigned>(p[1]) << 8)
+		+ (static_cast<unsigned>(p[2]) << 16)
+		+ (static_cast<unsigned>(p[3]) << 24);
 }
 
+
 /// MIDI sequence.
-struct seq {
+struct seq
+{
 	unsigned size;
-	const unsigned char *data;
+	const unsigned char* data;
 };
 
+
 /// MIDI track.
-struct track {
+struct track
+{
 	struct seq seq;
 	unsigned channel;
 };
 
+
 /// MIDI stream.
-struct gmstream {
-	int tempo, nsubs, ntracks;
-	struct seq subs [256];
-	struct track tracks [256];
+struct gmstream\
+{
+	int
+		tempo,
+		nsubs,
+		ntracks;
+
+	struct seq subs[256];
+	struct track tracks[256];
 };
 
-static int gmext_read_stream (struct gmstream *p,
-	unsigned int n, const unsigned char *data)
+
+/**
+ *
+ */
+static int gmext_read_stream(
+		struct gmstream* p,
+		unsigned int n,
+		const unsigned char* data)
 {
 	if (!n--)
 		return -1;
@@ -93,14 +115,20 @@ static int gmext_read_stream (struct gmstream *p,
 	return n ? -1 : 0;
 }
 
-static inline void gmext_write_int16 (std::vector<unsigned char> &midi,
+/**
+ *
+ */
+static inline void gmext_write_int16 (std::vector<unsigned char>& midi,
 	unsigned int n)
 {
 	midi.push_back(n >> 8);
 	midi.push_back(n);
 }
 
-static inline void gmext_write_delta (std::vector<unsigned char> &midi,
+/**
+ *
+ */
+static inline void gmext_write_delta (std::vector<unsigned char>& midi,
 	unsigned int delta)
 {
 	unsigned char data[4];
@@ -118,7 +146,10 @@ static inline void gmext_write_delta (std::vector<unsigned char> &midi,
 	midi.push_back(data[0]);
 }
 
-static inline void gmext_write_tempo_ev (std::vector<unsigned char> &midi,
+/**
+ *
+ */
+static inline void gmext_write_tempo_ev (std::vector<unsigned char>& midi,
 	unsigned int tempo)
 {
 	midi.push_back(0xFF);
@@ -130,14 +161,18 @@ static inline void gmext_write_tempo_ev (std::vector<unsigned char> &midi,
 	midi.push_back(tempo);
 }
 
-static inline void gmext_write_end_ev (std::vector<unsigned char> &midi)
+/**
+ *
+ */
+static inline void gmext_write_end_ev (std::vector<unsigned char>& midi)
 {
 	midi.push_back(0xFF);
 	midi.push_back(0x2F);
 	midi.push_back(0);
 }
 
-static const unsigned int volume [0x80] = {
+static const unsigned int volume [0x80] =
+{
 	100,100,100,100,100, 90,100,100,100,100,100, 90,100,100,100,100,
 	100,100, 85,100,100,100,100,100,100,100,100,100, 90,90, 110, 80,
 	100,100,100, 90, 70,100,100,100,100,100,100,100,100,100,100,100,
@@ -148,16 +183,25 @@ static const unsigned int volume [0x80] = {
 	100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,
 };
 
+
 /// Output status.
-struct output_status {
+struct output_status
+{
 	unsigned int delta;
 	unsigned int patch;
 	unsigned char prevcmd;
 };
 
-static int gmext_write_sequence (std::vector<unsigned char> &midi,
-	const struct gmstream *stream, unsigned int channel,
-	const struct seq *seq, struct output_status *status)
+
+/**
+ *
+ */
+static int gmext_write_sequence(
+		std::vector<unsigned char>& midi,
+		const struct gmstream* stream,
+		unsigned int channel,
+		const struct seq* seq,
+		struct output_status* status)
 {
 	const unsigned char *data = seq->data;
 	unsigned int left = seq->size;
@@ -285,8 +329,12 @@ static int gmext_write_sequence (std::vector<unsigned char> &midi,
 	return 0;
 }
 
-static int gmext_write_midi (const struct gmstream *stream,
-	std::vector<unsigned char> &midi)
+/**
+ *
+ */
+static int gmext_write_midi(
+		const struct gmstream* stream,
+		std::vector<unsigned char>& midi)
 {
 	// write MIDI file header
 	static const unsigned char midi_file_signature[8] =
@@ -352,21 +400,23 @@ static int gmext_write_midi (const struct gmstream *stream,
 /**
  * Loads a MIDI object into memory.
  * @param i Music number to load.
- * @return Pointer to the loaded music.
+ * @return, Pointer to the loaded music.
  */
-Music *GMCatFile::loadMIDI(unsigned int i)
+Music* GMCatFile::loadMIDI(unsigned int i)
 {
-	Music *music = new Music;
+	Music* music = new Music;
 
-	unsigned char *raw = static_cast<unsigned char*> ((void*)load(i));
+	unsigned char* raw = static_cast<unsigned char*>((void*)load(i));
 
 	if (!raw)
 		return music;
 
 	// stream info
 	struct gmstream stream;
-	if (gmext_read_stream(&stream, getObjectSize(i), raw) == -1) {
+	if (gmext_read_stream(&stream, getObjectSize(i), raw) == -1)
+	{
 		delete[] raw;
+
 		return music;
 	}
 
@@ -374,14 +424,18 @@ Music *GMCatFile::loadMIDI(unsigned int i)
 	midi.reserve(65536);
 
 	// fields in stream still point into raw
-	if (gmext_write_midi(&stream, midi) == -1) {
+	if (gmext_write_midi(&stream, midi) == -1)
+	{
 		delete[] raw;
+
 		return music;
 	}
 
 	delete[] raw;
 
-	music->load(&midi[0], midi.size());
+	music->load(
+				&midi[0],
+				midi.size());
 
 	return music;
 }
