@@ -4775,7 +4775,7 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1397443527 source:f:\git\openxcom\src\basescape\craftinfostate.cpp
+1397816137 source:f:\git\openxcom\src\basescape\craftinfostate.cpp
 	"CraftInfoState.h"
 	<sstream>
 	"CraftArmorState.h"
@@ -9205,7 +9205,7 @@
 1394398507 source:f:\git\openxcom\src\ruleset\ruleresearch.cpp
 	"RuleResearch.h"
 
-1397299610 source:f:\git\openxcom\src\ruleset\ruleset.cpp
+1397814865 source:f:\git\openxcom\src\ruleset\ruleset.cpp
 	"Ruleset.h"
 	<algorithm>
 	<fstream>
