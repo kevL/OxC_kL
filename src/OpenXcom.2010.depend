@@ -5532,7 +5532,7 @@
 1394398507 f:\git\openxcom\src\basescape\transferconfirmstate.h
 	"../Engine/State.h"
 
-1397458100 source:f:\git\openxcom\src\basescape\transferitemsstate.cpp
+1397875331 source:f:\git\openxcom\src\basescape\transferitemsstate.cpp
 	"TransferItemsState.h"
 	<climits>
 	<cmath>
@@ -5562,7 +5562,6 @@
 	"../Savegame/ItemContainer.h"
 	"../Savegame/SavedGame.h"
 	"../Savegame/Soldier.h"
-	"../Savegame/Transfer.h"
 	"../Savegame/Vehicle.h"
 
 1397445349 source:f:\git\openxcom\src\basescape\transfersstate.cpp
@@ -6141,12 +6140,11 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Ufo.h"
 
-1397529707 source:f:\git\openxcom\src\battlescape\camera.cpp
+1397875498 source:f:\git\openxcom\src\battlescape\camera.cpp
 	"Camera.h"
 	<cmath>
 	<fstream>
 	"Map.h"
-	"Position.h"
 	"../Engine/Action.h"
 	"../Engine/Options.h"
 	"../Engine/Timer.h"
@@ -6374,7 +6372,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1396715839 source:f:\git\openxcom\src\battlescape\map.cpp
+1397875149 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	<cmath>
 	<fstream>
@@ -6509,18 +6507,18 @@
 	"../Resource/ResourcePack.h"
 	"../Savegame/SavedBattleGame.h"
 
-1397445955 source:f:\git\openxcom\src\battlescape\nocontainmentstate.cpp
+1397881291 source:f:\git\openxcom\src\battlescape\nocontainmentstate.cpp
 	"NoContainmentState.h"
 	"../Engine/Game.h"
-	"../Resource/ResourcePack.h"
 	"../Engine/Language.h"
+	"../Engine/Options.h"
 	"../Engine/Palette.h"
+	"../Interface/Text.h"
 	"../Interface/TextButton.h"
 	"../Interface/Window.h"
-	"../Interface/Text.h"
-	"../Engine/Options.h"
+	"../Resource/ResourcePack.h"
 
-1397479210 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
+1397875723 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
 	"Pathfinding.h"
 	<list>
 	"PathfindingNode.h"
@@ -6531,7 +6529,6 @@
 	"../Engine/Game.h"
 	"../Engine/Options.h"
 	"../Ruleset/Armor.h"
-	"../Ruleset/MapData.h"
 	"../Ruleset/Ruleset.h"
 	"../Savegame/BattleItem.h"
 	"../Savegame/BattleUnit.h"
@@ -6544,10 +6541,9 @@
 1394398507 f:\git\openxcom\src\battlescape\pathfindingopenset.h
 	<queue>
 
-1394398507 source:f:\git\openxcom\src\battlescape\pathfindingnode.cpp
+1397875803 source:f:\git\openxcom\src\battlescape\pathfindingnode.cpp
 	"PathfindingNode.h"
 	<math.h>
-	"Position.h"
 
 1394398507 source:f:\git\openxcom\src\battlescape\pathfindingopenset.cpp
 	"PathfindingOpenSet.h"
@@ -6574,11 +6570,9 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1397834550 source:f:\git\openxcom\src\battlescape\projectile.cpp
+1397875939 source:f:\git\openxcom\src\battlescape\projectile.cpp
 	"Projectile.h"
 	<cmath>
-	"BattlescapeGame.h"
-	"Position.h"
 	"TileEngine.h"
 	"../aresame.h"
 	"../Engine/Game.h"
@@ -6862,9 +6856,9 @@
 1394398507 source:f:\git\openxcom\src\engine\action.cpp
 	"Action.h"
 
-1394398507 source:f:\git\openxcom\src\engine\catfile.cpp
+1397881190 source:f:\git\openxcom\src\engine\catfile.cpp
 	"CatFile.h"
-	"SDL.h"
+	<SDL.h>
 
 1397881047 f:\git\openxcom\src\engine\catfile.h
 	<fstream>
@@ -6916,16 +6910,19 @@
 1394398507 source:f:\git\openxcom\src\engine\fastlineclip.cpp
 	"FastLineClip.h"
 
-1397481165 source:f:\git\openxcom\src\engine\flc.cpp
+1397875149 source:f:\git\openxcom\src\engine\flc.cpp
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
 	<math.h>
-	"SDL.h"
+	<SDL.h>
 	"Flc.h"
 	"Logger.h"
 	"Exception.h"
 	"Zoom.h"
+	"Screen.h"
+	"Surface.h"
+	"Options.h"
 	"../aresame.h"
 
 1397875148 f:\git\openxcom\src\engine\flc.h
@@ -6995,7 +6992,7 @@
 	"Action.h"
 	"Options.h"
 
-1396913071 source:f:\git\openxcom\src\engine\language.cpp
+1397876059 source:f:\git\openxcom\src\engine\language.cpp
 	"Language.h"
 	<locale>
 	<fstream>
@@ -7004,7 +7001,6 @@
 	"CrossPlatform.h"
 	"Exception.h"
 	"LanguagePlurality.h"
-	"LocalizedText.h"
 	"Logger.h"
 	"Options.h"
 	"../Interface/TextList.h"
@@ -7121,7 +7117,7 @@
 	<assert.h>
 	<stdlib.h>
 
-1397773125 source:f:\git\openxcom\src\engine\screen.cpp
+1397876098 source:f:\git\openxcom\src\engine\screen.cpp
 	"Screen.h"
 	<cmath>
 	<iomanip>
@@ -7133,7 +7129,6 @@
 	"CrossPlatform.h"
 	"Exception.h"
 	"Logger.h"
-	"OpenGL.h"
 	"Options.h"
 	"Surface.h"
 	"Timer.h"
