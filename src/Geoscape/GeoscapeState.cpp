@@ -152,9 +152,8 @@ GeoscapeState::GeoscapeState(Game* game)
 		_interLat(0.0)	// kL
 {
 	int
-		screenWidth		= Options::baseXResolution,
-		screenHeight	= Options::baseYResolution;
-
+		screenWidth		= Options::baseXGeoscape - Options::baseXGeoscape %4,
+		screenHeight	= Options::baseYGeoscape;
 
 	_bg		= new Surface(
 						320,

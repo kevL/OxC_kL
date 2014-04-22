@@ -24,6 +24,7 @@
 #include <cmath>
 
 #include "AlienBAIState.h"
+#include "BattlescapeState.h"
 #include "Camera.h"
 #include "Explosion.h"
 #include "ExplosionBState.h"
@@ -493,7 +494,8 @@ void ProjectileFlyBState::init()
 		}
 	}
 
-	createNewProjectile();
+	if (createNewProjectile())
+		_parent->getMap()->setCursorType(CT_NONE);
 	//Log(LOG_INFO) << "ProjectileFlyBState::init() EXIT";
 }
 
@@ -714,6 +716,7 @@ bool ProjectileFlyBState::createNewProjectile()
 void ProjectileFlyBState::think()
 {
 	//Log(LOG_INFO) << "ProjectileFlyBState::think()";
+	_parent->getSave()->getBattleState()->clearMouseScrollingState();
 	/* TODO refactoring : store the projectile in this state, instead of getting it from the map each time? */
 	if (_parent->getMap()->getProjectile() == 0)
 	{
@@ -760,6 +763,9 @@ void ProjectileFlyBState::think()
 
 			if (!_action.actor->isOut())
 				_unit->setStatus(STATUS_STANDING);
+
+			if (_parent->getSave()->getSide() == FACTION_PLAYER)
+				_parent->setupCursor();
 
 			_parent->popState();
 		}

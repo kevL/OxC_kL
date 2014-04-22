@@ -64,7 +64,7 @@ BaseNameState::BaseNameState(
 
 	_window		= new Window(this, 192, 88, 32, 60, POPUP_BOTH);
 	_txtTitle	= new Text(182, 17, 37, 70);
-	_edtName	= new TextEdit(127, 16, 59, 94);
+	_edtName	= new TextEdit(this, 127, 16, 59, 94);
 	_btnOk		= new TextButton(162, 16, 47, 118);
 
 	setPalette("PAL_GEOSCAPE", 0);
@@ -96,7 +96,7 @@ BaseNameState::BaseNameState(
 
 	_edtName->setColor(Palette::blockOffset(8)+5);
 	_edtName->setBig();
-	_edtName->setFocus(true);
+	_edtName->setFocus(true, false);
 	_edtName->onChange((ActionHandler)& BaseNameState::edtNameChange);
 }
 

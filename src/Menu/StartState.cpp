@@ -48,16 +48,28 @@ namespace OpenXcom
  * Initializes all the elements in the Loading screen.
  * @param game Pointer to the core game.
  */
-StartState::StartState(Game *game)
+StartState::StartState(Game* game)
 	:
 		State(game),
 		_load(LOADING_NONE)
 {
-	int dx = (Options::baseXResolution - 320) / 2;
-	int dy = (Options::baseYResolution - 200) / 2;
+	int
+		dx = (Options::baseXResolution - 320) / 2,
+		dy = (Options::baseYResolution - 200) / 2;
+
+	_wasLetterBoxed = Options::keepAspectRatio;
+
+	if (!Options::useOpenGL)
+	{
+		Options::keepAspectRatio = false;
+		game->getScreen()->resetDisplay(false);
+	}
+
 	_surface = new Surface(320, 200, dx, dy);
 
-	SDL_Color bnw[3];
+	// Set palette (set to {0} here to ensure all fields are initialized)
+	SDL_Color bnw[3] = {{0}};
+
 	bnw[0].r = 0;
 	bnw[0].g = 0;
 	bnw[0].b = 0;
@@ -163,6 +175,8 @@ void StartState::think()
 		default:
 		break;
 	}
+
+	Options::keepAspectRatio = _wasLetterBoxed;
 }
 
 /**

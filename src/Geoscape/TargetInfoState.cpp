@@ -67,7 +67,7 @@ TargetInfoState::TargetInfoState(
 	_window			= new Window(this, 192, 120, 32, 40, POPUP_BOTH);
 	_txtTitle		= new Text(182, 17, 37, 54);
 
-	_edtBase		= new TextEdit(50, 9, 38, 46); // kL
+	_edtBase		= new TextEdit(this, 50, 9, 38, 46); // kL
 
 	_txtTargetted	= new Text(182, 9, 37, 71);
 	_txtFollowers	= new Text(182, 40, 37, 82);
@@ -95,7 +95,8 @@ TargetInfoState::TargetInfoState(
 	_btnIntercept->onMouseClick((ActionHandler)& TargetInfoState::btnInterceptClick);
 
 	_btnOk->setColor(Palette::blockOffset(8)+5);
-	_btnOk->setText(tr("STR_CANCEL_UC"));
+//kL	_btnOk->setText(tr("STR_CANCEL_UC"));
+	_btnOk->setText(tr("STR_OK")); // kL
 	_btnOk->onMouseClick((ActionHandler)& TargetInfoState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& TargetInfoState::btnOkClick,

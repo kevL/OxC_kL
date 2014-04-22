@@ -71,7 +71,7 @@ BaseInfoState::BaseInfoState(
 	_btnStores			= new TextButton(72, 14, 162, 179);
 	_btnOk				= new TextButton(72, 14, 238, 179);
 
-	_edtBase			= new TextEdit(127, 16, 8, 9);
+	_edtBase			= new TextEdit(this, 127, 16, 8, 9);
 
 	_txtPersonnel		= new Text(300, 9, 8, 30);
 	_txtSoldiers		= new Text(114, 9, 8, 41);

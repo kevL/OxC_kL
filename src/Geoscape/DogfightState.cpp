@@ -373,7 +373,7 @@ DogfightState::DogfightState(
 	{
 		graphic = _game->getResourcePack()->getSurface(ufo->getRules()->getModSprite());
 		graphic->setX(0);
-		graphic->setY(0);
+		graphic->setY(15);
 	}
 	graphic->blit(_preview);
 	_preview->setVisible(false);

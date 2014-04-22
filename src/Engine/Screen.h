@@ -64,6 +64,7 @@ private:
 		_scaleY;
 	Uint32 _flags;
 
+	SDL_Rect _clear;
 	SDL_Surface* _screen;
 	Surface* _surface;
 

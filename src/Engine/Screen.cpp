@@ -108,7 +108,7 @@ void Screen::makeVideoFlags()
 	}
 
 	_bpp = (isHQXEnabled() || isOpenGLEnabled())? 32: 8;
-	_baseWidth = Options::baseXResolution;
+	_baseWidth = Options::baseXResolution - (Options::baseXResolution %4);
 	_baseHeight = Options::baseYResolution;
 }
 
@@ -275,6 +275,17 @@ void Screen::flip()
 void Screen::clear()
 {
 	_surface->clear();
+
+	if (_screen->flags & SDL_SWSURFACE)
+		memset(
+			_screen->pixels,
+			0,
+			_screen->h*_screen->pitch);
+	else
+		SDL_FillRect(
+				_screen,
+				&_clear,
+				0);
 }
 
 /**
@@ -429,12 +440,19 @@ void Screen::resetDisplay(bool resetVideo)
 			}
 		}
 	}
+	else
+		clear();
 
 	Options::displayWidth = getWidth();
 	Options::displayHeight = getHeight();
 
 	_scaleX = getWidth() / (double)_baseWidth;
 	_scaleY = getHeight() / (double)_baseHeight;
+
+	_clear.x = 0;
+	_clear.y = 0;
+	_clear.w = getWidth();
+	_clear.h = getHeight();
 
 	bool cursorInBlackBands;
 	if (!Options::keepAspectRatio)
@@ -503,13 +521,10 @@ void Screen::resetDisplay(bool resetVideo)
 #endif
 	}
 
-	if (resetVideo)
-	{
-		Log(LOG_INFO) << "Display set to " << getWidth() << "x" << getHeight() << "x" << (int)_screen->format->BitsPerPixel << ".";
+	Log(LOG_INFO) << "Display set to " << getWidth() << "x" << getHeight() << "x" << (int)_screen->format->BitsPerPixel << ".";
 
-		if (_screen->format->BitsPerPixel == 8)
-			setPalette(getPalette());
-	}
+	if (_screen->format->BitsPerPixel == 8)
+		setPalette(getPalette());
 }
 
 /**

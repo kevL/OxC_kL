@@ -1576,6 +1576,8 @@ void BattlescapeGenerator::deployAliens(
 											_save->getCurrentItemId());
 						if (!addItem(item, unit))
 							delete item;
+						else
+							unit->setTurretType(item->getRules()->getTurretType());
 					}
 				}
 				else
@@ -3007,6 +3009,21 @@ void BattlescapeGenerator::runInventory(Craft* craft)
 	//Log(LOG_INFO) << ". setCraft() DONE, deployXCOM()";
 	deployXCOM();
 	//Log(LOG_INFO) << ". deployXCOM() DONE";
+
+	// ok, now remove any vehicles that may have somehow ended up in our battlescape
+	for (std::vector<BattleUnit*>::iterator
+			i = _save->getUnits()->begin();
+			i != _save->getUnits()->end();
+			)
+	{
+		if ((*i)->getGeoscapeSoldier())
+			++i;
+		else
+		{
+			delete *i;
+			i = _save->getUnits()->erase(i);
+		}
+	}
 
 	delete data;
 	delete set;

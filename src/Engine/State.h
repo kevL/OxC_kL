@@ -120,6 +120,9 @@ protected:
 				int backpals = -1);
 		/// Gets the state's 8bpp palette.
 		const SDL_Color* const getPalette() const;
+
+		/// Let the state know the window has been resized.
+		virtual void resize();
 };
 
 }

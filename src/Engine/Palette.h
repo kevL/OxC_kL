@@ -34,9 +34,11 @@ namespace OpenXcom
  */
 class Palette
 {
+
 private:
 	SDL_Color* _colors;
 	int _count;
+
 
 	public:
 		/// Creates a blank palette.
@@ -45,20 +47,25 @@ private:
 		~Palette();
 
 		/// Loads the colors from an X-Com palette.
-		void loadDat(const std::string& filename, int ncolors, int offset = 0);
+		void loadDat(
+				const std::string& filename,
+				int ncolors,
+				int offset = 0);
 		/// Gets a certain color from the palette.
 		SDL_Color* getColors(int offset = 0) const;
 		///
 		void savePal(const std::string& file) const;
 		/// Converts a given color into a RGBA color value.
-		static Uint32 getRGBA(SDL_Color* pal, Uint8 color);
+		static Uint32 getRGBA(
+				SDL_Color* pal,
+				Uint8 color);
 
 		/// Gets the position of a given palette.
 		/**
 		 * Returns the position of a palette inside an X-Com palette file (each is a 768-byte chunks).
 		 * Handy for loading the palettes from the game files.
 		 * @param palette Requested palette.
-		 * @return Palette position in bytes.
+		 * @return, Palette position in bytes.
 		 */
 		static inline int palOffset(int palette)
 		{
@@ -70,7 +77,7 @@ private:
 		 * Returns the position of a certain color block in an X-Com palette (they're usually split in 16-color gradients).
 		 * Makes setting element colors a lot easier than determining the exact color position.
 		 * @param block Requested block.
-		 * @return Color position.
+		 * @return, Color position.
 		 */
 		static inline Uint8 blockOffset(Uint8 block)
 		{

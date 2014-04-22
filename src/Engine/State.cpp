@@ -58,6 +58,11 @@ State::State(Game* game)
 		_modal(0)
 {
 	//Log(LOG_INFO) << "Create State";
+	// initialize palette to all black
+	memset(
+		_palette,
+		0,
+		sizeof(_palette));
 }
 
 /**
@@ -419,10 +424,11 @@ void State::setPalette(
 		int ncolors,
 		bool immediately)
 {
-	memcpy(
-			_palette + firstcolor,
-			colors,
-			ncolors * sizeof(SDL_Color));
+	if (colors)
+		memcpy(
+				_palette + firstcolor,
+				colors,
+				ncolors * sizeof(SDL_Color));
 
 	if (immediately)
 	{
@@ -459,7 +465,7 @@ void State::setPalette(
 				16,
 				false);
 
-	setPalette(_palette); // delay actual update to the end
+	setPalette(NULL); // delay actual update to the end
 }
 
 /**
@@ -469,6 +475,14 @@ void State::setPalette(
 const SDL_Color* const State::getPalette() const
 {
 	return _palette;
+}
+
+/**
+ * Each state will probably need its own resize handling,
+ * so this space intentionally left blank
+ */
+void State::resize()
+{
 }
 
 }

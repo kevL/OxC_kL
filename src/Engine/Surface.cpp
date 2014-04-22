@@ -182,6 +182,11 @@ Surface::Surface(
 	_crop.h = 0;
 	_crop.x = 0;
 	_crop.y = 0;
+
+	_clear.x = 0;
+	_clear.y = 0;
+	_clear.w = getWidth();
+	_clear.h = getHeight();
 }
 
 /**
@@ -212,7 +217,7 @@ Surface::Surface(const Surface& other)
 										0);
 
 		SDL_SetColorKey(_surface, SDL_SRCCOLORKEY, 0);
-		//can't call 'setPalette' because it's a vitual function and it don't work correctly in constructor
+		//can't call 'setPalette' because it's a virtual function and it don't work correctly in constructor
 		SDL_SetColors(
 				_surface,
 				other.getPalette(),
@@ -245,6 +250,11 @@ Surface::Surface(const Surface& other)
 	_crop.h = other._crop.h;
 	_crop.x = other._crop.x;
 	_crop.y = other._crop.y;
+
+	_clear.w = other._clear.w;
+	_clear.h = other._clear.h;
+	_clear.x = other._clear.x;
+	_clear.y = other._clear.y;
 
 	_visible = other._visible;
 	_hidden = other._hidden;
@@ -480,12 +490,6 @@ void Surface::loadBdy(const std::string& filename)
  */
 void Surface::clear()
 {
-	SDL_Rect square;
-	square.x = 0;
-	square.y = 0;
-	square.w = getWidth();
-	square.h = getHeight();
-
 	if (_surface->flags & SDL_SWSURFACE)
 	{
 		memset(
@@ -496,7 +500,7 @@ void Surface::clear()
 	else
 		SDL_FillRect(
 				_surface,
-				&square,
+				&_clear,
 				0);
 }
 
@@ -1106,6 +1110,9 @@ void Surface::resize(int width, int height)
 
 	_alignedBuffer = alignedBuffer;
 	_surface = surface;
+
+	_clear.w = getWidth();
+	_clear.h = getHeight();
 }
 
 /**

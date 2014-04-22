@@ -43,6 +43,7 @@ class TextEdit
 private:
 	bool
 		_blink,
+		_modal,
 		_numerical;
 	size_t _caretPos;
 	wchar_t _ascii;
@@ -50,6 +51,7 @@ private:
 	std::wstring _value;
 
 	ActionHandler _change;
+	State* _state;
 	Text
 		*_caret,
 		*_text;
@@ -62,6 +64,7 @@ private:
 	public:
 		/// Creates a new text edit with the specified size and position.
 		TextEdit(
+				State* state,
 				int width,
 				int height,
 				int x = 0,
@@ -69,8 +72,14 @@ private:
 		/// Cleans up the text edit.
 		~TextEdit();
 
+		/// Handle focus.
+		void handle(
+				Action* action,
+				State* state);
 		/// Sets focus on this text edit.
-		void setFocus(bool focus);
+		void setFocus(
+				bool focus,
+				bool modal = true);
 		/// kL. Check if the player is currently typing in this box.
 		bool isFocused(); // kL, is this still needed.
 

@@ -334,6 +334,16 @@ DebriefingState::~DebriefingState()
 void DebriefingState::btnOkClick(Action*)
 {
 	//Log(LOG_INFO) << "DebriefingState::btnOkClick()";
+	std::vector<Soldier*> participants;
+	for (std::vector<BattleUnit*>::const_iterator
+			i = _game->getSavedGame()->getSavedBattle()->getUnits()->begin();
+			i != _game->getSavedGame()->getSavedBattle()->getUnits()->end();
+			++i)
+	{
+		if ((*i)->getGeoscapeSoldier())
+			participants.push_back((*i)->getGeoscapeSoldier());
+	}
+
 	_game->getSavedGame()->setBattleGame(0);
 	_game->popState();
 
@@ -341,7 +351,7 @@ void DebriefingState::btnOkClick(Action*)
 		_game->setState(new MainMenuState(_game));
 	else if (!_destroyBase)
 	{
-		if (_game->getSavedGame()->handlePromotions())
+		if (_game->getSavedGame()->handlePromotions(participants))
 			_game->pushState(new PromotionsState(_game));
 
 		if (!_missingItems.empty())

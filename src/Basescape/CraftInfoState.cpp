@@ -75,7 +75,7 @@ CraftInfoState::CraftInfoState(
 								0,
 								POPUP_BOTH);
 
-	_edtCraft		= new TextEdit(160, 16, 80, 10);
+	_edtCraft		= new TextEdit(this, 160, 16, 80, 10);
 	_txtBaseLabel	= new Text(80, 9, 16, 10);
 
 	_txtFuel		= new Text(82, 17, 16, 28);

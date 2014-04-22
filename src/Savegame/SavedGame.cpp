@@ -1638,9 +1638,10 @@ Soldier* SavedGame::getSoldier(int id) const
 
 /**
  * Handles the higher promotions (not the rookie-squaddie ones).
- * @return Whether or not some promotions happened - to show the promotions screen.
+ * @param participants a list of soldiers that were actually present at the battle.
+ * @return, Whether or not some promotions happened - to show the promotions screen.
  */
-bool SavedGame::handlePromotions()
+bool SavedGame::handlePromotions(std::vector<Soldier*>& participants)
 {
 	size_t
 		soldiersPromoted = 0,
@@ -1662,39 +1663,96 @@ bool SavedGame::handlePromotions()
 	size_t
 		filledPositions = 0,
 		filledPositions2 = 0;
+	std::vector<Soldier*>::const_iterator
+		soldier,
+		stayedHome;
 
-	inspectSoldiers(&highestRanked, &filledPositions, RANK_COMMANDER);
-	inspectSoldiers(&highestRanked, &filledPositions2, RANK_COLONEL);
+	stayedHome = participants.end();
+
+	inspectSoldiers(
+				&highestRanked,
+				&filledPositions,
+				RANK_COMMANDER);
+	inspectSoldiers(
+				&highestRanked,
+				&filledPositions2,
+				RANK_COLONEL);
+	soldier = std::find(
+					participants.begin(),
+					participants.end(),
+					highestRanked);
+
 	if (filledPositions < 1
-		&& filledPositions2 > 0)
+		&& filledPositions2 > 0
+		&& (!Options::fieldPromotions
+			|| soldier != stayedHome))
 	{
 		// only promote one colonel to commander
 		highestRanked->promoteRank();
 		soldiersPromoted++;
 	}
 
-	inspectSoldiers(&highestRanked, &filledPositions, RANK_COLONEL);
-	inspectSoldiers(&highestRanked, &filledPositions2, RANK_CAPTAIN);
+	inspectSoldiers(
+				&highestRanked,
+				&filledPositions,
+				RANK_COLONEL);
+	inspectSoldiers(
+				&highestRanked,
+				&filledPositions2,
+				RANK_CAPTAIN);
+	soldier = std::find(
+					participants.begin(),
+					participants.end(),
+					highestRanked);
+
 	if (filledPositions < soldiersTotal / 23
-		&& filledPositions2 > 0)
+		&& filledPositions2 > 0
+		&& (!Options::fieldPromotions
+			|| soldier != stayedHome))
 	{
 		highestRanked->promoteRank();
 		soldiersPromoted++;
 	}
 
-	inspectSoldiers(&highestRanked, &filledPositions, RANK_CAPTAIN);
-	inspectSoldiers(&highestRanked, &filledPositions2, RANK_SERGEANT);
+	inspectSoldiers(
+				&highestRanked,
+				&filledPositions,
+				RANK_CAPTAIN);
+	inspectSoldiers(
+				&highestRanked,
+				&filledPositions2,
+				RANK_SERGEANT);
+	soldier = std::find(
+					participants.begin(),
+					participants.end(),
+					highestRanked);
+
 	if (filledPositions < soldiersTotal / 11
-		&& filledPositions2 > 0)
+		&& filledPositions2 > 0
+		&& (!Options::fieldPromotions
+			|| soldier != stayedHome))
 	{
 		highestRanked->promoteRank();
 		soldiersPromoted++;
 	}
 
-	inspectSoldiers(&highestRanked, &filledPositions, RANK_SERGEANT);
-	inspectSoldiers(&highestRanked, &filledPositions2, RANK_SQUADDIE);
+	inspectSoldiers(
+				&highestRanked,
+				&filledPositions,
+				RANK_SERGEANT);
+	inspectSoldiers(
+				&highestRanked,
+				&filledPositions2,
+				RANK_SQUADDIE);
+	soldier = std::find(
+					participants.begin(),
+					participants.end(),
+					highestRanked);
+
 	if (filledPositions < soldiersTotal / 5
-		&& filledPositions2 > 0)
+		&& filledPositions2 > 0
+		&& (!Options::fieldPromotions
+			|| soldier != stayedHome))
 	{
 		highestRanked->promoteRank();
 		soldiersPromoted++;

@@ -59,7 +59,9 @@ private:
 		* _txtStatus,
 //		* _txtTitle,
 		* _txtWeapons;
-	TextButton* _btnCancel;
+	TextButton
+		* _btnCancel,
+		*_btnGotoBase;
 	TextList* _lstCrafts;
 	Window* _window;
 
@@ -84,6 +86,8 @@ private:
 		/// Handler for clicking the Cancel button.
 		void btnCancelClick(Action* action);
 
+		/// Handler for clicking the Go To Base button.
+		void btnGotoBaseClick(Action* action);
 		/// Handler for clicking the Crafts list.
 		void lstCraftsLeftClick(Action* action);
 		/// Handler for right clicking the Crafts list.

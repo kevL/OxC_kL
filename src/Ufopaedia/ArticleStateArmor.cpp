@@ -114,7 +114,8 @@ ArticleStateArmor::ArticleStateArmor(
 			++i)
 	{
 		ItemDamageType dType = static_cast<ItemDamageType>(i);
-		int vuln = static_cast<int>(armor->getDamageModifier(dType) * 100.f);
+//kL		int vuln = (int)ceil(armor->getDamageModifier(dt) * 100);
+		int vuln = static_cast<int>(armor->getDamageModifier(dType) * 100.f); // kL
 		std::string damage = getDamageTypeText(dType);
 		if (//kL percentage != 100 &&
 			damage != "STR_UNKNOWN")

@@ -111,42 +111,46 @@ OptionsBaseState::OptionsBaseState(
 
 	_btnVideo->setColor(Palette::blockOffset(8)+5);
 	_btnVideo->setText(tr("STR_VIDEO"));
-	_btnVideo->onMouseClick((ActionHandler)& OptionsBaseState::btnGroupClick);
+	_btnVideo->onMousePress((ActionHandler)& OptionsBaseState::btnGroupPress);
 
 	_btnAudio->setColor(Palette::blockOffset(8)+5);
 	_btnAudio->setText(tr("STR_AUDIO"));
-	_btnAudio->onMouseClick((ActionHandler)& OptionsBaseState::btnGroupClick);
+	_btnAudio->onMousePress((ActionHandler)& OptionsBaseState::btnGroupPress);
 
 	_btnControls->setColor(Palette::blockOffset(8)+5);
 	_btnControls->setText(tr("STR_CONTROLS"));
-	_btnControls->onMouseClick((ActionHandler)& OptionsBaseState::btnGroupClick);
+	_btnControls->onMousePress((ActionHandler)& OptionsBaseState::btnGroupPress);
 
 	_btnGeoscape->setColor(Palette::blockOffset(8)+5);
 	_btnGeoscape->setText(tr("STR_GEOSCAPE_UC"));
-	_btnGeoscape->onMouseClick((ActionHandler)& OptionsBaseState::btnGroupClick);
+	_btnGeoscape->onMousePress((ActionHandler)& OptionsBaseState::btnGroupPress);
 
 	_btnBattlescape->setColor(Palette::blockOffset(8)+5);
 	_btnBattlescape->setText(tr("STR_BATTLESCAPE_UC"));
-	_btnBattlescape->onMouseClick((ActionHandler)& OptionsBaseState::btnGroupClick);
+	_btnBattlescape->onMousePress((ActionHandler)& OptionsBaseState::btnGroupPress);
 
 	_btnAdvanced->setColor(Palette::blockOffset(8)+5);
 	_btnAdvanced->setText(tr("STR_ADVANCED"));
-	_btnAdvanced->onMouseClick((ActionHandler)& OptionsBaseState::btnGroupClick);
+	_btnAdvanced->onMousePress((ActionHandler)& OptionsBaseState::btnGroupPress);
 
 	_btnMods->setColor(Palette::blockOffset(8)+5);
 	_btnMods->setText(tr("STR_MODS"));
-	_btnMods->onMouseClick((ActionHandler)& OptionsBaseState::btnGroupClick);
+	_btnMods->onMousePress((ActionHandler)& OptionsBaseState::btnGroupPress);
 	_btnMods->setVisible(_origin == OPT_MENU);
 
 	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& OptionsBaseState::btnOkClick);
-//	_btnOk->onKeyboardPress((ActionHandler)& OptionsBaseState::btnOkClick, Options::keyOk);
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& OptionsBaseState::btnOkClick,
+					Options::keyOk);
 
 	_btnCancel->setColor(Palette::blockOffset(8)+5);
 	_btnCancel->setText(tr("STR_CANCEL"));
 	_btnCancel->onMouseClick((ActionHandler)& OptionsBaseState::btnCancelClick);
-//	_btnCancel->onKeyboardPress((ActionHandler)& OptionsBaseState::btnCancelClick, Options::keyCancel);
+	_btnCancel->onKeyboardPress(
+					(ActionHandler)& OptionsBaseState::btnCancelClick,
+					Options::keyCancel);
 
 	_btnDefault->setColor(Palette::blockOffset(8)+5);
 	_btnDefault->setText(tr("STR_RESTORE_DEFAULTS"));
@@ -298,7 +302,7 @@ void OptionsBaseState::btnDefaultClick(Action* action)
 /**
  *
  */
-void OptionsBaseState::btnGroupClick(Action* action)
+void OptionsBaseState::btnGroupPress(Action* action)
 {
 	Surface* sender = action->getSender();
 //	if (sender != _group)
@@ -382,9 +386,13 @@ void OptionsBaseState::updateScale(
 			width = Screen::ORIGINAL_WIDTH * 2;
 			height = Screen::ORIGINAL_HEIGHT * 2;
 		break;
-		case SCALE_3X:
-			width = Screen::ORIGINAL_WIDTH * 3;
-			height = Screen::ORIGINAL_HEIGHT * 3;
+		case SCALE_SCREEN_DIV_3:
+			width = Options::newDisplayWidth / 3;
+			height = Options::newDisplayHeight / 3;
+		break;
+		case SCALE_SCREEN_DIV_2:
+			width = Options::newDisplayWidth / 2;
+			height = Options::newDisplayHeight / 2;
 		break;
 		case SCALE_SCREEN:
 			width = Options::newDisplayWidth;
@@ -404,8 +412,6 @@ void OptionsBaseState::updateScale(
 	height = std::max(
 					height,
 					Screen::ORIGINAL_HEIGHT);
-	// scaler methods seem to require base res be a factor of 4
-	width -= width %4;
 
 	if (change
 		&& (Options::baseXResolution != width
@@ -414,6 +420,12 @@ void OptionsBaseState::updateScale(
 		Options::baseXResolution = width;
 		Options::baseYResolution = height;
 	}
+}
+
+void OptionsBaseState::resize()
+{
+	Options::newDisplayWidth = Options::displayWidth;
+	Options::newDisplayHeight = Options::displayHeight;
 }
 
 }

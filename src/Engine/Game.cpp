@@ -239,8 +239,7 @@ void Game::run()
 		PAUSED		// 2
 	};
 
-//	int pauseMode = Options::getInt("pauseMode");
-//	if (pauseMode > 3) pauseMode = 3;
+	bool stupidityFlag = Options::allowResize;
 
 	while (!_quit)
 	{
@@ -304,10 +303,22 @@ void Game::run()
 				case SDL_VIDEORESIZE:
 					if (Options::allowResize)
 					{
-						Options::displayWidth = _event.resize.w;
-						Options::displayHeight = _event.resize.h;
+						if (!stupidityFlag)
+						{
+							Options::displayWidth = _event.resize.w;
+							Options::displayHeight = _event.resize.h;
+							for (std::list<State*>::iterator
+									i = _states.begin();
+									i != _states.end();
+									++i)
+							{
+								(*i)->resize();
+							}
 
-						_screen->resetDisplay();
+							_screen->resetDisplay();
+						}
+						else
+							stupidityFlag = false;
 					}
 				break;
 				case SDL_MOUSEMOTION:

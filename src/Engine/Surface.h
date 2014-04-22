@@ -54,7 +54,9 @@ protected:
 
 	std::string _tooltip;
 
-	SDL_Rect _crop;
+	SDL_Rect
+		_crop,
+		_clear;
 	SDL_Surface* _surface;
 	void* _alignedBuffer;
 

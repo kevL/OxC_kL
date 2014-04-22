@@ -93,7 +93,7 @@ SoldierInfoState::SoldierInfoState(
 	_txtArmor		= new Text(30, 9, 208, 35);
 	_btnArmor		= new TextButton(73, 16, 240, 32);
 
-	_edtSoldier		= new TextEdit(179, 16, 40, 9);
+	_edtSoldier		= new TextEdit(this, 179, 16, 40, 9);
 	_btnSack		= new TextButton(46, 17, 267, 7);
 
 	_txtRank		= new Text(130, 9, 0, 49);
@@ -622,7 +622,7 @@ void SoldierInfoState::btnAutoStat(Action*)
 //	Soldier* _soldier = _base->getSoldiers()->at(_soldierId);
 
 //	_edtSoldier->deFocus();
-	_edtSoldier->setFocus(false);
+//	_edtSoldier->setFocus(false);
 	_soldier->setName(_edtSoldier->getText());
 
 	std::wostringstream stat;
@@ -737,7 +737,7 @@ void SoldierInfoState::btnOkClick(Action*)
 //	_edtSoldier->deFocus(); // kL
 //	_base->getSoldiers()->at(_soldierId)->setName(_edtSoldier->getText());
 
-	_edtSoldier->setFocus(false); // kL
+//	_edtSoldier->setFocus(false); // kL
 
 	_game->popState();
 }
@@ -751,7 +751,7 @@ void SoldierInfoState::btnPrevClick(Action*)
 //	_edtSoldier->deFocus();
 //	_base->getSoldiers()->at(_soldierId)->setName(_edtSoldier->getText());
 
-	_edtSoldier->setFocus(false); // kL
+//	_edtSoldier->setFocus(false); // kL
 
 	if (_soldierId == 0)
 		_soldierId = _list->size() - 1;
@@ -770,7 +770,7 @@ void SoldierInfoState::btnNextClick(Action*)
 //	_edtSoldier->deFocus();
 //	_base->getSoldiers()->at(_soldierId)->setName(_edtSoldier->getText());
 
-	_edtSoldier->setFocus(false); // kL
+//	_edtSoldier->setFocus(false); // kL
 
 	_soldierId++;
 
@@ -786,14 +786,6 @@ void SoldierInfoState::btnNextClick(Action*)
  */
 void SoldierInfoState::btnArmorClick(Action*)
 {
-//	_edtSoldier->deFocus();
-//	_soldier->setName(_edtSoldier->getText());
-
-	_edtSoldier->setFocus(false);
-
-//	if (!
-//		(_soldier->getCraft()
-//			&& _soldier->getCraft()->getStatus() == "STR_OUT"))
 	if (!_soldier->getCraft()
 		|| (_soldier->getCraft()
 			&& _soldier->getCraft()->getStatus() != "STR_OUT"))
@@ -811,11 +803,6 @@ void SoldierInfoState::btnArmorClick(Action*)
  */
 void SoldierInfoState::btnSackClick(Action*)
 {
-//	_edtSoldier->deFocus(); // kL
-//	_soldier->setName(_edtSoldier->getText()); // kL
-
-	_edtSoldier->setFocus(false);
-
 	_game->pushState(new SackSoldierState(
 										_game,
 										_base,

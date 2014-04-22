@@ -61,7 +61,7 @@ SaveState::SaveState(
 		_previousSelectedRow(-1),
 		_selectedRow(-1)
 {
-	_edtSave		= new TextEdit(168, 9, 0, 0);
+	_edtSave		= new TextEdit(this, 168, 9, 0, 0);
 	_btnSaveGame	= new TextButton(134, 16, 170, 177);
 
 	add(_edtSave);
@@ -182,7 +182,7 @@ void SaveState::lstSavesPress(Action* action)
 		_edtSave->setX(_lstSaves->getColumnX(0));
 		_edtSave->setY(_lstSaves->getRowY(_selectedRow));
 		_edtSave->setVisible(true);
-		_edtSave->setFocus(true);
+		_edtSave->setFocus(true, false);
 
 		_lstSaves->setScrolling(false);
 	}

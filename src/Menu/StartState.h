@@ -47,6 +47,8 @@ class StartState
 {
 
 private:
+	bool _wasLetterBoxed;
+
 	Surface *_surface;
 	LoadingPhase _load;
 

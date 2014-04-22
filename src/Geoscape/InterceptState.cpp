@@ -26,6 +26,8 @@
 #include "Globe.h"
 #include "SelectDestinationState.h"
 
+#include "../Basescape/BasescapeState.h"
+
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
 #include "../Engine/Options.h"
@@ -78,16 +80,17 @@ InterceptState::InterceptState(
 							0,
 							30,
 							POPUP_HORIZONTAL);
-//	_txtTitle	= new Text(240, 17, 70, 40);
-	_txtBase	= new Text(288, 17, 16, 41); // might do getRegion in here also.
+//	_txtTitle		= new Text(240, 17, 70, 40);
+	_txtBase		= new Text(288, 17, 16, 41); // might do getRegion in here also.
 
-	_txtCraft	= new Text(86, 9, 16, 64);
-	_txtStatus	= new Text(53, 9, 117, 64);
-	_txtWeapons	= new Text(67, 17, 243, 56);
+	_txtCraft		= new Text(86, 9, 16, 64);
+	_txtStatus		= new Text(53, 9, 117, 64);
+	_txtWeapons		= new Text(67, 17, 243, 56);
 
-	_lstCrafts	= new TextList(285, 72, 16, 74);
+	_lstCrafts		= new TextList(285, 72, 16, 74);
 
-	_btnCancel	= new TextButton(288, 16, 16, 151);
+	_btnGotoBase	= new TextButton(142, 16, 16, 151);
+	_btnCancel		= new TextButton(142, 16, 162, 151);
 
 	setPalette("PAL_GEOSCAPE", 4);
 
@@ -98,6 +101,7 @@ InterceptState::InterceptState(
 	add(_txtStatus);
 	add(_txtWeapons);
 	add(_lstCrafts);
+	add(_btnGotoBase);
 	add(_btnCancel);
 
 	centerAllSurfaces();
@@ -105,12 +109,14 @@ InterceptState::InterceptState(
 	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK12.SCR"));
 
+	_btnGotoBase->setColor(Palette::blockOffset(8)+5);
+	_btnGotoBase->setText(tr("STR_GO_TO_BASE"));
+	_btnGotoBase->onMouseClick((ActionHandler)& InterceptState::btnGotoBaseClick);
+	_btnGotoBase->setVisible(_base != 0);
+
 	_btnCancel->setColor(Palette::blockOffset(8)+5);
 	_btnCancel->setText(tr("STR_CANCEL"));
 	_btnCancel->onMouseClick((ActionHandler)& InterceptState::btnCancelClick);
-	_btnCancel->onKeyboardPress(
-						(ActionHandler)& InterceptState::btnCancelClick,
-						Options::keyOk);
 	_btnCancel->onKeyboardPress(
 						(ActionHandler)& InterceptState::btnCancelClick,
 						Options::keyCancel);
@@ -305,6 +311,20 @@ std::wstring InterceptState::getAltStatus(Craft* craft)
 void InterceptState::btnCancelClick(Action*)
 {
 	_game->popState();
+}
+
+/**
+ * Goes to the base for the respective craft.
+ * @param action Pointer to an action.
+ */
+void InterceptState::btnGotoBaseClick(Action*)
+{
+	_game->popState();
+
+	_game->pushState(new BasescapeState(
+									_game,
+									_base,
+									_globe));
 }
 
 /**

@@ -932,6 +932,7 @@ void AlienBAIState::setupEscape()
 		tries = -1;
 
 	selectNearestTarget();
+	_escapeTUs = 0;
 
 	int dist = 0;
 	if (_aggroTarget)
@@ -1439,8 +1440,15 @@ bool AlienBAIState::selectPointNearTarget(
  */
 void AlienBAIState::evaluateAIMode()
 {
-	// we don't run and hide on our first action.
-	float escapeOdds = _escapeAction->number == 1? 0.f: 15.f;
+	float escapeOdds = 15.f;
+	if (_melee)
+		escapeOdds = 12.f;
+	if (_unit->getTimeUnits() > _unit->getStats()->tu / 2
+		|| _unit->getCharging())
+	{
+		escapeOdds = 5.f;
+	}
+
 	float ambushOdds = 12.f;
 	float combatOdds = 20.f;
 
@@ -1463,9 +1471,7 @@ void AlienBAIState::evaluateAIMode()
 
 		if (_melee)
 		{
-//kL			escapeOdds = 12.f;
-//kL			combatOdds *= 1.3f;
-			escapeOdds = 10.f; // kL
+//			escapeOdds = 10.f; // kL
 			combatOdds *= 1.2f; // kL
 		}
 	}
@@ -1552,6 +1558,19 @@ void AlienBAIState::evaluateAIMode()
 //kL			escapeOdds *= 0.7f;
 			combatOdds *= 1.5f; // kL
 			escapeOdds *= 0.5f; // kL
+		break;
+
+		default:
+			combatOdds *= std::max(
+								0.1f,
+								std::min(
+										2.f,
+										1.2f + (static_cast<float>(_unit->getAggression()) / 10.f)));
+			escapeOdds *= std::min(
+								2.f,
+								std::max(
+										0.1f,
+										0.9f - (static_cast<float>(_unit->getAggression()) / 10.f)));
 		break;
 	}
 
@@ -2154,7 +2173,7 @@ void AlienBAIState::selectFireMethod()
 {
 	_attackAction->type = BA_RETHINK;
 
-	int usableTU = _unit->getTimeUnits();//kL - _escapeTUs;
+	int usableTU = _unit->getTimeUnits();// - _escapeTUs;
 	if (_unit->getAggression() < RNG::generate(0, 3)) // kL.
 		usableTU -= _escapeTUs;
 

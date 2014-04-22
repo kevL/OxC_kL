@@ -21,6 +21,7 @@
 *.ipch
 *.sdf
 *.cscope_file_list
+*.nsh
 
 # -OpenXcom root
 *.ac
