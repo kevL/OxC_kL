@@ -104,7 +104,6 @@ BasescapeState::BasescapeState(
 	_btnNewBase		= new TextButton(128, 12, 192, 176);
 	_btnGeoscape	= new TextButton(128, 12, 192, 188);
 
-
 	setPalette("PAL_BASESCAPE");
 
 	add(_view);
@@ -128,7 +127,6 @@ BasescapeState::BasescapeState(
 
 	centerAllSurfaces();
 
-
 	_view->setTexture(_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK"));
 	_view->onMouseClick(
 					(ActionHandler)& BasescapeState::viewLeftClick,
@@ -142,18 +140,6 @@ BasescapeState::BasescapeState(
 
 	_mini->setTexture(_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK"));
 	_mini->setBases(_game->getSavedGame()->getBases());
-	for (size_t
-			i = 0;
-			i < _game->getSavedGame()->getBases()->size();
-			++i)
-	{
-		if (_game->getSavedGame()->getBases()->at(i) == _base)
-		{
-			_mini->setSelectedBase(i);
-
-			break;
-		}
-	}
 	_mini->onMouseClick((ActionHandler)& BasescapeState::miniClick);
 
 	_txtFacility->setColor(Palette::blockOffset(13)+10);
@@ -223,9 +209,7 @@ BasescapeState::BasescapeState(
  */
 BasescapeState::~BasescapeState()
 {
-	// Clean up any temporary bases
-	bool exists = false;
-
+	bool exists = false; // Clean up any temporary bases
 	for (std::vector<Base*>::iterator
 			i = _game->getSavedGame()->getBases()->begin();
 			i != _game->getSavedGame()->getBases()->end()
@@ -251,29 +235,7 @@ void BasescapeState::init()
 {
 	State::init();
 
-	if (!_game->getSavedGame()->getBases()->empty())
-	{
-		bool exists = false;
-
-		for (std::vector<Base*>::iterator
-				i = _game->getSavedGame()->getBases()->begin();
-				i != _game->getSavedGame()->getBases()->end()
-					&& !exists;
-				++i)
-		{
-			if (*i == _base)
-				exists = true;
-		}
-
-		if (!exists) // If base was removed, select first one
-		{
-			_base = _game->getSavedGame()->getBases()->front();
-			_mini->setSelectedBase(0);
-		}
-	}
-	else // Use a blank base for special case when player has no bases
-		_base = new Base(_game->getRuleset());
-
+	setBase(_base);
 
 	_view->setBase(_base);
 	_mini->draw();
@@ -300,13 +262,13 @@ void BasescapeState::init()
 	_btnNewBase->setVisible(_game->getSavedGame()->getBases()->size() < MiniBaseView::MAX_BASES);
 
 	// kL_begin:
-	bool hasFunds = (_game->getSavedGame()->getFunds() > 0);
-	bool hasQuarters = false;
-	bool hasHangar = false;
-	bool hasAlienCont = false;
-	bool hasLabs = false;
-	bool hasProd = false;
-	bool hasStores = false;
+	bool hasFunds		= (_game->getSavedGame()->getFunds() > 0);
+	bool hasQuarters	= false;
+	bool hasHangar		= false;
+	bool hasAlienCont	= false;
+	bool hasLabs		= false;
+	bool hasProd		= false;
+	bool hasStores		= false;
 
 	for (std::vector<BaseFacility*>::iterator
 			i = _base->getFacilities()->begin();
@@ -359,22 +321,38 @@ void BasescapeState::init()
  */
 void BasescapeState::setBase(Base* base)
 {
-	_base = base;
-
-	for (size_t
-			i = 0;
-			i < _game->getSavedGame()->getBases()->size();
-			++i)
+	if (!_game->getSavedGame()->getBases()->empty())
 	{
-		if (_game->getSavedGame()->getBases()->at(i) == _base)
+		bool exists = false; // Check if base still exists
+		for (size_t
+				i = 0;
+				i < _game->getSavedGame()->getBases()->size();
+				++i)
 		{
-			_mini->setSelectedBase(i);
+			if (_game->getSavedGame()->getBases()->at(i) == base)
+			{
+				_base = base;
+				_mini->setSelectedBase(i);
+//kL				_game->getSavedGame()->setSelectedBase(i);
+				exists = true;
 
-			break;
+				break;
+			}
+		}
+
+		if (!exists) // If base was removed, select first one
+		{
+			_base = _game->getSavedGame()->getBases()->front();
+			_mini->setSelectedBase(0);
+//kL			_game->getSavedGame()->setSelectedBase(0);
 		}
 	}
-
-	init();
+	else // Use a blank base for special case when player has no bases
+	{
+		_base = new Base(_game->getRuleset());
+		_mini->setSelectedBase(0);
+//kL		_game->getSavedGame()->setSelectedBase(0);
+	}
 }
 
 /**
@@ -675,10 +653,7 @@ void BasescapeState::miniClick(Action*)
 	size_t base = _mini->getHoveredBase();
 	if (base < _game->getSavedGame()->getBases()->size())
 	{
-		_mini->setSelectedBase(base);
 		_base = _game->getSavedGame()->getBases()->at(base);
-
-//kL		_game->getSavedGame()->setSelectedBase(base);
 
 		init();
 	}
@@ -724,10 +699,7 @@ void BasescapeState::handleKeyPress(Action* action)
 		if (base > -1
 			&& static_cast<size_t>(base) < _game->getSavedGame()->getBases()->size())
 		{
-			_mini->setSelectedBase(base);
 			_base = _game->getSavedGame()->getBases()->at(base);
-
-//kL			_game->getSavedGame()->setSelectedBase(base);
 
 			init();
 		}

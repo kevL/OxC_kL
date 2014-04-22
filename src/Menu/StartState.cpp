@@ -160,10 +160,15 @@ void StartState::think()
 			if (!Options::reload
 				&& Options::playIntro)
 			{
-				_game->setState(new IntroState(_game));
+				Options::keepAspectRatio = true;
+				_game->setState(new IntroState(
+											_game,
+											_wasLetterBoxed));
 			}
 			else
 			{
+				Options::keepAspectRatio = _wasLetterBoxed;
+
 				_game->setState(new MainMenuState(_game));
 
 				Options::reload = false;
@@ -172,11 +177,10 @@ void StartState::think()
 			_game->getCursor()->setVisible(true);
 			_game->getFpsCounter()->setVisible(Options::fpsCounter);
 		break;
+
 		default:
 		break;
 	}
-
-	Options::keepAspectRatio = _wasLetterBoxed;
 }
 
 /**

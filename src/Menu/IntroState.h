@@ -33,7 +33,10 @@ class IntroState
 	:
 		public State
 {
+
 private:
+	bool _wasLetterBoxed;
+
 	std::string
 		_introFile,
 		_introSoundFileDOS,
@@ -42,7 +45,9 @@ private:
 
 	public:
 		/// Creates the Intro state.
-		IntroState(Game *game);
+		IntroState(
+				Game* game,
+				bool wasLetterBoxed);
 		/// Cleans up the Intro state.
 		~IntroState();
 

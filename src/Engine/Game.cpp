@@ -239,6 +239,7 @@ void Game::run()
 		PAUSED		// 2
 	};
 
+	// this will avoid processing SDL's resize event on startup, workaround for the heap allocation error it causes.
 	bool stupidityFlag = Options::allowResize;
 
 	while (!_quit)

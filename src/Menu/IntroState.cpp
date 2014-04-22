@@ -42,9 +42,12 @@ namespace OpenXcom
  * Initializes all the elements in the Intro screen.
  * @param game Pointer to the core game.
  */
-IntroState::IntroState(Game* game)
+IntroState::IntroState(
+		Game* game,
+		bool wasLetterBoxed)
 	:
-		State(game)
+		State(game),
+		_wasLetterBoxed(wasLetterBoxed)
 {
 	_introFile			= CrossPlatform::getDataFile("UFOINTRO/UFOINT.FLI");
 	_introSoundFileDOS	= CrossPlatform::getDataFile("SOUND/INTRO.CAT");
@@ -498,6 +501,8 @@ void IntroState::init()
 		Mix_HaltMusic();
 #endif
 	}
+
+	Options::keepAspectRatio = _wasLetterBoxed;
 
 	_game->setState(new MainMenuState(_game));
 }

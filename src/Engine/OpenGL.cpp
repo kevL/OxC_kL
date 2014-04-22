@@ -175,12 +175,15 @@ bool OpenGL::lock(
 	return (data = buffer);
 }
 
+/**
+ *
+ */
 void OpenGL::clear()
 {
-	memset(
-		buffer,
-		0,
-		iwidth * iheight * ibpp);
+//	memset(
+//		buffer,
+//		0,
+//		iwidth * iheight * ibpp);
 
 	glClearColor(
 				0.0,
@@ -190,6 +193,8 @@ void OpenGL::clear()
 
 	glClear(GL_COLOR_BUFFER_BIT);
 	glFlush();
+
+	glErrorCheck();
 }
 
 /**
@@ -207,6 +212,8 @@ void OpenGL::refresh(
 			int rightBlackBand)
 {
 	while (glGetError() != GL_NO_ERROR); // clear possible error from who knows where
+
+	clear();
 
 	if (shader_support
 		&& (fragmentshader
