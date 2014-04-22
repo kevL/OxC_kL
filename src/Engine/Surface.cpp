@@ -17,6 +17,8 @@
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "Surface.h"
+
 #include <fstream>
 #include <vector>
 
@@ -31,19 +33,18 @@
 #include "Screen.h"
 #include "ShaderDraw.h"
 #include "ShaderMove.h"
-#include "Surface.h"
 
 #ifdef _WIN32
-#include <malloc.h>
+	#include <malloc.h>
 #endif
 
 #if defined(__MINGW32__) && !defined(__MINGW64_VERSION_MAJOR)
-#define _aligned_malloc __mingw_aligned_malloc
-#define _aligned_free   __mingw_aligned_free
-#endif //MINGW
+	#define _aligned_malloc __mingw_aligned_malloc
+	#define _aligned_free   __mingw_aligned_free
+#endif
 
 #ifdef __MORPHOS__
-#include <ppcinline/exec.h>
+	#include <ppcinline/exec.h>
 #endif
 
 
@@ -196,7 +197,6 @@ Surface::Surface(
 Surface::Surface(const Surface& other)
 {
 	//Log(LOG_INFO) << "Create Surface 2";
-
 	if (other._alignedBuffer) // if native OpenXcom aligned surface
 	{
 		Uint8 bpp = other._surface->format->BitsPerPixel;
@@ -267,7 +267,6 @@ Surface::Surface(const Surface& other)
 Surface::~Surface()
 {
 	//Log(LOG_INFO) << "Delete Surface";
-
 	DeleteAligned(_alignedBuffer);
 
 	SDL_FreeSurface(_surface);
@@ -293,9 +292,7 @@ void Surface::loadScr(const std::string& filename)
 						(std::istreambuf_iterator<char>(imgFile)),
 						(std::istreambuf_iterator<char>()));
 
-	// Lock the surface
-	lock();
-
+	lock(); // Lock the surface
 	int
 		x = 0,
 		y = 0;
@@ -307,9 +304,7 @@ void Surface::loadScr(const std::string& filename)
 	{
 		setPixelIterative(&x, &y, *i);
 	}
-
-	// Unlock the surface
-	unlock();
+	unlock(); // Unlock the surface
 }
 
 /**
@@ -356,9 +351,7 @@ void Surface::loadSpk(const std::string& filename)
 		throw Exception(filename + " not found");
 	}
 
-	// Lock the surface
-	lock();
-
+	lock(); // Lock the surface
 	Uint16 flag;
 	Uint8 value;
 	int
@@ -405,9 +398,7 @@ void Surface::loadSpk(const std::string& filename)
 			}
 		}
 	}
-
-	// Unlock the surface
-	unlock();
+	unlock(); // Unlock the surface
 
 	imgFile.close();
 }
@@ -429,9 +420,7 @@ void Surface::loadBdy(const std::string& filename)
 		throw Exception(filename + " not found");
 	}
 
-	// Lock the surface
-	lock();
-
+	lock(); // Lock the surface
 	Uint8 dataByte;
 	int pixelCnt;
 	int
@@ -478,9 +467,7 @@ void Surface::loadBdy(const std::string& filename)
 			}
 		}
 	}
-
-	// Unlock the surface
-	unlock();
+	unlock(); // Unlock the surface
 
 	imgFile.close();
 }
@@ -562,9 +549,7 @@ void Surface::offset(
  */
 void Surface::invert(Uint8 mid)
 {
-	// Lock the surface
-	lock();
-
+	lock(); // Lock the surface
 	for (int
 			x = 0,
 				y = 0;
@@ -582,9 +567,7 @@ void Surface::invert(Uint8 mid)
 		else
 			setPixelIterative(&x, &y, 0);
 	}
-
-	// Unlock the surface
-	unlock();
+	unlock(); // Unlock the surface
 }
 
 /**
@@ -617,8 +600,7 @@ void Surface::draw()
  */
 void Surface::blit(Surface* surface)
 {
-	//Log(LOG_INFO) << "blit()";	// kL
-
+	//Log(LOG_INFO) << "blit()";
 	if (_visible
 		&& !_hidden)
 	{
@@ -706,8 +688,8 @@ void Surface::drawLine(
 			x2,
 			y2,
 			Palette::getRGBA(
-				getPalette(),
-				color));
+						getPalette(),
+						color));
 }
 
 /**
@@ -729,8 +711,8 @@ void Surface::drawCircle(
 					y,
 					r,
 					Palette::getRGBA(
-						getPalette(),
-						color));
+								getPalette(),
+								color));
 }
 
 /**
@@ -752,8 +734,8 @@ void Surface::drawPolygon(
 					y,
 					n,
 					Palette::getRGBA(
-						getPalette(),
-						color));
+								getPalette(),
+								color));
 }
 
 /**
@@ -802,8 +784,8 @@ void Surface::drawString(
 			y,
 			s,
 			Palette::getRGBA(
-				getPalette(),
-				color));
+						getPalette(),
+						color));
 }
 
 /**
@@ -939,8 +921,7 @@ static inline void func(
 	if (src)
 	{
 		const int newShade = (src & 15) + shade;
-		if (newShade > 15)
-			// so dark it would flip over to another color - make it black instead
+		if (newShade > 15) // so dark it would flip over to another color - make it black instead
 			dest = 15;
 		else
 			dest = newColor | newShade;
@@ -973,8 +954,7 @@ static inline void func(
 	if (src)
 	{
 		const int newShade = (src & 15) + shade;
-		if (newShade > 15)
-			// so dark it would flip over to another color - make it black instead
+		if (newShade > 15) // so dark it would flip over to another color - make it black instead
 			dest = 15;
 		else
 			dest = (src & (15 << 4)) | newShade;

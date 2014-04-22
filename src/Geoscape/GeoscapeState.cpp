@@ -82,9 +82,9 @@
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 
-#include "../Menu/LoadState.h"
 #include "../Menu/PauseState.h"
-#include "../Menu/SaveState.h"
+#include "../Menu/ListLoadState.h"
+#include "../Menu/ListSaveState.h"
 
 #include "../Resource/ResourcePack.h"
 #include "../Resource/XcomResourcePack.h" // sza_MusicRules
@@ -655,18 +655,18 @@ void GeoscapeState::handle(Action* action)
 		else if (action->getDetails()->key.keysym.sym == Options::keyQuickSave
 			&& Options::autosave == 1)
 		{
-			_game->pushState(new SaveState(
-										_game,
-										OPT_GEOSCAPE,
-										true));
+			_game->pushState(new ListSaveState(
+											_game,
+											OPT_GEOSCAPE,
+											true));
 		}
 		else if (action->getDetails()->key.keysym.sym == Options::keyQuickLoad
 			&& Options::autosave == 1)
 		{
-			_game->pushState(new LoadState(
-										_game,
-										OPT_GEOSCAPE,
-										true));
+			_game->pushState(new ListLoadState(
+											_game,
+											OPT_GEOSCAPE,
+											true));
 		}
 	}
 
@@ -2442,10 +2442,10 @@ void GeoscapeState::time1Day()
 
 
 	if (Options::autosave > 1) // Autosave
-		_game->pushState(new SaveState(
-									_game,
-									OPT_GEOSCAPE,
-									false));
+		_game->pushState(new ListSaveState(
+										_game,
+										OPT_GEOSCAPE,
+										false));
 
 	//Log(LOG_INFO) << "GeoscapeState::time1Day() EXIT";
 }

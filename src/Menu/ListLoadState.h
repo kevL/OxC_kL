@@ -17,10 +17,10 @@
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef OPENXCOM__LOADSTATE_H
-#define OPENXCOM__LOADSTATE_H
+#ifndef OPENXCOM__LISTLOADSTATE_H
+#define OPENXCOM__LISTLOADSTATE_H
 
-#include "SavedGameState.h"
+#include "ListGamesState.h"
 
 
 namespace OpenXcom
@@ -29,23 +29,23 @@ namespace OpenXcom
 /**
  * Load Game screen for listing info on available saved games and loading them.
  */
-class LoadState
+class ListLoadState
 	:
-		public SavedGameState
+		public ListGamesState
 {
 
 public:
 	/// Creates the Load Game state.
-	LoadState(
+	ListLoadState(
 			Game* game,
 			OptionsOrigin origin);
 	/// Creates the Quick Load Game state.
-	LoadState(
+	ListLoadState(
 			Game* game,
 			OptionsOrigin origin,
 			bool showMsg);
 	/// Cleans up the Load Game state.
-	~LoadState();
+	~ListLoadState();
 
 	/// Handler for clicking the Saves list.
 	void lstSavesPress(Action* action);

@@ -17,7 +17,7 @@
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "SavedGameState.h"
+#include "ListGamesState.h"
 
 #include <utility>
 
@@ -77,7 +77,7 @@ struct compareSaveTimestamp
  * @param game, Pointer to the core game.
  * @param origin, Game section that originated this state.
  */
-SavedGameState::SavedGameState(
+ListGamesState::ListGamesState(
 		Game* game,
 		OptionsOrigin origin,
 		int firstValidRow)
@@ -134,9 +134,9 @@ SavedGameState::SavedGameState(
 
 	_btnCancel->setColor(Palette::blockOffset(8)+5);
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
-	_btnCancel->onMouseClick((ActionHandler)& SavedGameState::btnCancelClick);
+	_btnCancel->onMouseClick((ActionHandler)& ListGamesState::btnCancelClick);
 	_btnCancel->onKeyboardPress(
-					(ActionHandler)& SavedGameState::btnCancelClick,
+					(ActionHandler)& ListGamesState::btnCancelClick,
 					Options::keyCancel);
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
@@ -164,8 +164,8 @@ SavedGameState::SavedGameState(
 	_lstSaves->setSelectable(true);
 	_lstSaves->setBackground(_window);
 	_lstSaves->setMargin(8);
-	_lstSaves->onMouseOver((ActionHandler)& SavedGameState::lstSavesMouseOver);
-	_lstSaves->onMouseOut((ActionHandler)& SavedGameState::lstSavesMouseOut);
+	_lstSaves->onMouseOver((ActionHandler)& ListGamesState::lstSavesMouseOver);
+	_lstSaves->onMouseOut((ActionHandler)& ListGamesState::lstSavesMouseOut);
 
 	_txtDetails->setColor(Palette::blockOffset(15)-1);
 	_txtDetails->setSecondaryColor(Palette::blockOffset(8)+10);
@@ -174,11 +174,11 @@ SavedGameState::SavedGameState(
 
 	_sortName->setX(_sortName->getX() + _txtName->getTextWidth() + 5);
 	_sortName->setColor(Palette::blockOffset(15)-1);
-	_sortName->onMouseClick((ActionHandler)&SavedGameState::sortNameClick);
+	_sortName->onMouseClick((ActionHandler)& ListGamesState::sortNameClick);
 
 	_sortDate->setX(_sortDate->getX() + _txtDate->getTextWidth() + 5);
 	_sortDate->setColor(Palette::blockOffset(15)-1);
-	_sortDate->onMouseClick((ActionHandler)&SavedGameState::sortDateClick);
+	_sortDate->onMouseClick((ActionHandler)& ListGamesState::sortDateClick);
 
 	updateArrows();
 }
@@ -189,7 +189,7 @@ SavedGameState::SavedGameState(
  * @param origin, Game section that originated this state.
  * @param showMsg, True if need to show messages like "Loading game" or "Saving game".
  */
-SavedGameState::SavedGameState(
+ListGamesState::ListGamesState(
 		Game* game,
 		OptionsOrigin origin,
 		int firstValidRow,
@@ -228,14 +228,14 @@ SavedGameState::SavedGameState(
 /**
  *
  */
-SavedGameState::~SavedGameState()
+ListGamesState::~ListGamesState()
 {
 }
 
 /**
  * Resets the palette and refreshes saves.
  */
-void SavedGameState::init()
+void ListGamesState::init()
 {
 	if (_noUI)
 	{
@@ -266,7 +266,7 @@ void SavedGameState::init()
 /**
  * Updates the sorting arrows based on the current setting.
  */
-void SavedGameState::updateArrows()
+void ListGamesState::updateArrows()
 {
 	_sortName->setShape(ARROW_NONE);
 	_sortDate->setShape(ARROW_NONE);
@@ -291,7 +291,7 @@ void SavedGameState::updateArrows()
 /**
  * Updates the save game list with the current list of available savegames.
  */
-void SavedGameState::sortList(SaveSort sort)
+void ListGamesState::sortList(SaveSort sort)
 {
 	switch (sort)
 	{
@@ -327,7 +327,7 @@ void SavedGameState::sortList(SaveSort sort)
 /**
  * Updates the save game list with a current list of available savegames.
  */
-void SavedGameState::updateList()
+void ListGamesState::updateList()
 {
 	for (std::vector<SaveInfo>::const_iterator
 			i = _saves.begin();
@@ -346,7 +346,7 @@ void SavedGameState::updateList()
  * Updates the status message in the center of the screen.
  * @param msg New message ID.
  */
-void SavedGameState::updateStatus(const std::string& msg)
+void ListGamesState::updateStatus(const std::string& msg)
 {
 	_txtStatus->setText(tr(msg));
 
@@ -359,7 +359,7 @@ void SavedGameState::updateStatus(const std::string& msg)
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void SavedGameState::btnCancelClick(Action*)
+void ListGamesState::btnCancelClick(Action*)
 {
 	_game->popState();
 }
@@ -368,7 +368,7 @@ void SavedGameState::btnCancelClick(Action*)
  * Shows the details of the currently hovered save.
  * @param action Pointer to an action.
  */
-void SavedGameState::lstSavesMouseOver(Action*)
+void ListGamesState::lstSavesMouseOver(Action*)
 {
 	if (!_inEditMode) // kL
 	{
@@ -388,7 +388,7 @@ void SavedGameState::lstSavesMouseOver(Action*)
 /**
  *
  */
-void SavedGameState::lstSavesMouseOut(Action*)
+void ListGamesState::lstSavesMouseOut(Action*)
 {
 	if (!_inEditMode) // kL
 		_txtDetails->setText(tr("STR_DETAILS").arg(L""));
@@ -398,7 +398,7 @@ void SavedGameState::lstSavesMouseOut(Action*)
  * Sorts the saves by name.
  * @param action Pointer to an action.
  */
-void SavedGameState::sortNameClick(Action*)
+void ListGamesState::sortNameClick(Action*)
 {
 	if (Options::saveOrder == SORT_NAME_ASC)
 		Options::saveOrder = SORT_NAME_DESC;
@@ -415,7 +415,7 @@ void SavedGameState::sortNameClick(Action*)
  * Sorts the saves by date.
  * @param action Pointer to an action.
  */
-void SavedGameState::sortDateClick(Action*)
+void ListGamesState::sortDateClick(Action*)
 {
 	if (Options::saveOrder == SORT_DATE_ASC)
 		Options::saveOrder = SORT_DATE_DESC;

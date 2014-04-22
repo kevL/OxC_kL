@@ -20,11 +20,11 @@
 #include "PauseState.h"
 
 #include "AbandonGameState.h"
-#include "LoadState.h"
+#include "ListLoadState.h"
+#include "ListSaveState.h"
 #include "OptionsBattlescapeState.h"
 #include "OptionsGeoscapeState.h"
 #include "OptionsVideoState.h"
-#include "SaveState.h"
 
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
@@ -151,9 +151,9 @@ PauseState::~PauseState()
  */
 void PauseState::btnLoadClick(Action*)
 {
-	_game->pushState(new LoadState(
-								_game,
-								_origin));
+	_game->pushState(new ListLoadState(
+									_game,
+									_origin));
 }
 
 /**
@@ -162,9 +162,9 @@ void PauseState::btnLoadClick(Action*)
  */
 void PauseState::btnSaveClick(Action*)
 {
-	_game->pushState(new SaveState(
-								_game,
-								_origin));
+	_game->pushState(new ListSaveState(
+									_game,
+									_origin));
 }
 
 /**

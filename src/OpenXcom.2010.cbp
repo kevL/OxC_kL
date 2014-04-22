@@ -3,6 +3,7 @@
 	<FileVersion major="1" minor="6" />
 	<Project>
 		<Option title="OpenXcom" />
+		<Option pch_mode="2" />
 		<Option compiler="msvc10" />
 		<Build>
 			<Target title="Release Win32">
@@ -2233,18 +2234,12 @@
 		</Unit>
 		<Unit filename="Menu/IntroState.cpp" />
 		<Unit filename="Menu/IntroState.h" />
-		<Unit filename="Menu/LoadState.cpp">
-			<Option target="Debug Win32" />
-			<Option target="Debug x64" />
-			<Option target="Release Win32" />
-			<Option target="Release x64" />
-		</Unit>
-		<Unit filename="Menu/LoadState.h">
-			<Option target="Debug Win32" />
-			<Option target="Debug x64" />
-			<Option target="Release Win32" />
-			<Option target="Release x64" />
-		</Unit>
+		<Unit filename="Menu/ListGamesState.cpp" />
+		<Unit filename="Menu/ListGamesState.h" />
+		<Unit filename="Menu/ListLoadState.cpp" />
+		<Unit filename="Menu/ListLoadState.h" />
+		<Unit filename="Menu/ListSaveState.cpp" />
+		<Unit filename="Menu/ListSaveState.h" />
 		<Unit filename="Menu/MainMenuState.cpp">
 			<Option target="Debug Win32" />
 			<Option target="Debug x64" />
@@ -2348,30 +2343,6 @@
 			<Option target="Release x64" />
 		</Unit>
 		<Unit filename="Menu/PauseState.h">
-			<Option target="Debug Win32" />
-			<Option target="Debug x64" />
-			<Option target="Release Win32" />
-			<Option target="Release x64" />
-		</Unit>
-		<Unit filename="Menu/SaveState.cpp">
-			<Option target="Debug Win32" />
-			<Option target="Debug x64" />
-			<Option target="Release Win32" />
-			<Option target="Release x64" />
-		</Unit>
-		<Unit filename="Menu/SaveState.h">
-			<Option target="Debug Win32" />
-			<Option target="Debug x64" />
-			<Option target="Release Win32" />
-			<Option target="Release x64" />
-		</Unit>
-		<Unit filename="Menu/SavedGameState.cpp">
-			<Option target="Debug Win32" />
-			<Option target="Debug x64" />
-			<Option target="Release Win32" />
-			<Option target="Release x64" />
-		</Unit>
-		<Unit filename="Menu/SavedGameState.h">
 			<Option target="Debug Win32" />
 			<Option target="Debug x64" />
 			<Option target="Release Win32" />

@@ -80,9 +80,9 @@
 #include "../Interface/Text.h"
 #include "../Interface/TurnCounter.h" // kL
 
-#include "../Menu/LoadState.h"
+#include "../Menu/ListLoadState.h"
+#include "../Menu/ListSaveState.h"
 #include "../Menu/PauseState.h"
-#include "../Menu/SaveState.h"
 
 #include "../Resource/ResourcePack.h"
 #include "../Resource/XcomResourcePack.h" // sza_MusicRules
@@ -2133,18 +2133,18 @@ inline void BattlescapeState::handle(Action* action)
 			else if (action->getDetails()->key.keysym.sym == Options::keyQuickSave
 				&& Options::autosave == 1)
 			{
-				_game->pushState(new SaveState(
-											_game,
-											OPT_BATTLESCAPE,
-											true));
+				_game->pushState(new ListSaveState(
+												_game,
+												OPT_BATTLESCAPE,
+												true));
 			}
 			else if (action->getDetails()->key.keysym.sym == Options::keyQuickLoad
 				&& Options::autosave == 1)
 			{
-				_game->pushState(new LoadState(
-											_game,
-											OPT_BATTLESCAPE,
-											true));
+				_game->pushState(new ListLoadState(
+												_game,
+												OPT_BATTLESCAPE,
+												true));
 			}
 
 			// voxel view dump

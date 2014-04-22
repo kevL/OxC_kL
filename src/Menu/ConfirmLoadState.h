@@ -22,7 +22,7 @@
 
 #include <string>
 
-#include "LoadState.h"
+#include "ListLoadState.h"
 #include "OptionsBaseState.h"
 
 #include "../Engine/State.h"
@@ -46,7 +46,7 @@ private:
 
 	std::string _fileName;
 
-	LoadState* _parent;
+	ListLoadState* _parent;
 	Text* _txtText;
 	TextButton
 		* _btnYes,
@@ -58,7 +58,7 @@ private:
 		ConfirmLoadState(
 				Game* game,
 				OptionsOrigin origin,
-				LoadState* parent,
+				ListLoadState* parent,
 				std::string fileName);
 		/// Cleans up the confirmation state.
 		virtual ~ConfirmLoadState();

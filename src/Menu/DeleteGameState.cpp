@@ -20,7 +20,7 @@
 #include "DeleteGameState.h"
 
 #include "ErrorMessageState.h"
-#include "SavedGameState.h"
+#include "ListGamesState.h"
 
 #include "../Engine/CrossPlatform.h"
 #include "../Engine/Exception.h"

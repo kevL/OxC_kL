@@ -39,7 +39,7 @@ namespace OpenXcom
 ConfirmLoadState::ConfirmLoadState(
 		Game* game,
 		OptionsOrigin origin,
-		LoadState* parent,
+		ListLoadState* parent,
 		std::string fileName)
 	:
 		State(game),

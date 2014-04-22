@@ -11,13 +11,14 @@
 //#include <crtdbg.h>
 
 #ifndef __NO_OPENGL
-#ifdef __APPLE__
-#include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
-#include <OpenGL/glext.h>
-#include <GLUT/glut.h>
-#endif
-#include <SDL_opengl.h>
+	#ifdef __APPLE__
+		#include <OpenGL/gl.h>
+		#include <OpenGL/glu.h>
+		#include <OpenGL/glext.h>
+		#include <GLUT/glut.h>
+	#endif
+
+	#include <SDL_opengl.h>
 #endif
 
 #include <algorithm>
@@ -44,7 +45,7 @@
 #include <locale>
 
 #ifndef __APPLE__
-#include <stdlib.h>
+	#include <stdlib.h>
 #endif
 
 #include <map>
@@ -55,7 +56,7 @@
 #include <SDL_image.h>
 #include <SDL_keysym.h>
 #include <SDL_mixer.h>
-//#include <SDL_opengl.h>
+//#include <SDL_opengl.h> // kL_seeAbove.
 #include <SDL.h>
 #include <SDL_syswm.h>
 #include <SDL_types.h>
@@ -70,26 +71,26 @@
 #include <utility>
 #include <vector>
 
-/*
+// kL_reinstate begin:
 #ifdef _WIN32
 	#ifndef NOMINMAX
-	#define NOMINMAX
+		#define NOMINMAX
 	#endif
 
 	#define WIN32_LEAN_AND_MEAN
 	#include <windows.h>
-//	#include <shlobj.h>
-//	#include <shlwapi.h>
+//	#include <shlobj.h> // kL_reinstate
+//	#include <shlwapi.h> // kL_reinstate
 	#include <direct.h>
-#else */
-#ifndef _WIN32
+#else // kL_reinstate end.
+//kL #ifndef _WIN32
 	#include <unistd.h>
 	#include <sys/param.h>
 	#include <pwd.h>
 #endif
 
 #ifdef __MORPHOS__
-#undef Insert
+	#undef Insert
 #endif
 
 #include <yaml-cpp/yaml.h>
@@ -102,10 +103,10 @@
 
 // uncomment to check memory leaks in VS
 //#ifdef _DEBUG
-//#ifndef DBG_NEW
-//#define DBG_NEW new ( _NORMAL_BLOCK , __FILE__ , __LINE__ )
-//#define new DBG_NEW
-//#endif
+//	#ifndef DBG_NEW
+//		#define DBG_NEW new ( _NORMAL_BLOCK , __FILE__ , __LINE__ )
+//		#define new DBG_NEW
+//	#endif
 //#endif
 
 /*
@@ -331,7 +332,7 @@
 
 //kL #include "./lodepng.h"
 
-#include "./Menu/SaveState.h"
+#include "./Menu/ListSaveState.h"
 #include "./Menu/DeleteGameState.h"
 #include "./Menu/ErrorMessageState.h"
 #include "./Menu/NewBattleState.h"
@@ -339,8 +340,8 @@
 #include "./Menu/IntroState.h"
 #include "./Menu/TestState.h"
 #include "./Menu/ConfirmLoadState.h"
-#include "./Menu/LoadState.h"
-#include "./Menu/SavedGameState.h"
+#include "./Menu/ListLoadState.h"
+#include "./Menu/ListGamesState.h"
 #include "./Menu/NewGameState.h"
 #include "./Menu/MainMenuState.h"
 #include "./Menu/AbandonGameState.h"
@@ -387,6 +388,7 @@
 #include "./Savegame/SoldierDead.h" // kL
 #include "./Savegame/AlienStrategy.h"
 #include "./Savegame/EquipmentLayoutItem.h"
+*/
+// kL_note: Also, MatrixState, SoldierDead, SoldierDiedState, &tc.
 
 #endif
-// kL_note: Also, MatrixState, SoldierDead, SoldierDiedState, &tc.

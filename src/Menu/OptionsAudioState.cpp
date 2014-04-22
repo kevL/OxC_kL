@@ -33,9 +33,6 @@
 #include "../Interface/Text.h"
 #include "../Interface/Window.h"
 
-#include "../Menu/LoadState.h"
-#include "../Menu/SaveState.h"
-
 #include "../Resource/ResourcePack.h"
 
 

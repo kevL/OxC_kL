@@ -19,7 +19,7 @@
 
 #include "MainMenuState.h"
 
-#include "LoadState.h"
+#include "ListLoadState.h"
 #include "NewBattleState.h"
 #include "NewGameState.h"
 #include "OptionsVideoState.h"
@@ -153,9 +153,9 @@ void MainMenuState::btnNewBattleClick(Action*)
  */
 void MainMenuState::btnLoadClick(Action*)
 {
-	_game->pushState(new LoadState(
-								_game,
-								OPT_MENU));
+	_game->pushState(new ListLoadState(
+									_game,
+									OPT_MENU));
 }
 
 /**

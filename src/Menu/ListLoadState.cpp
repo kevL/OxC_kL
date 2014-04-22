@@ -17,7 +17,7 @@
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "LoadState.h"
+#include "ListLoadState.h"
 
 #include "ConfirmLoadState.h"
 #include "DeleteGameState.h"
@@ -51,11 +51,11 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param origin Game section that originated this state.
  */
-LoadState::LoadState(
+ListLoadState::ListLoadState(
 		Game* game,
 		OptionsOrigin origin)
 	:
-		SavedGameState(
+		ListGamesState(
 			game,
 			origin,
 			0)
@@ -64,7 +64,7 @@ LoadState::LoadState(
 
 	_txtTitle->setText(tr("STR_SELECT_GAME_TO_LOAD"));
 
-	_lstSaves->onMousePress((ActionHandler)& LoadState::lstSavesPress);
+	_lstSaves->onMousePress((ActionHandler)& ListLoadState::lstSavesPress);
 }
 
 /**
@@ -73,12 +73,12 @@ LoadState::LoadState(
  * @param origin Game section that originated this state.
  * @param showMsg True if need to show messages like "Loading game" or "Saving game".
  */
-LoadState::LoadState(
+ListLoadState::ListLoadState(
 		Game* game,
 		OptionsOrigin origin,
 		bool showMsg)
 	:
-		SavedGameState(
+		ListGamesState(
 			game,
 			origin,
 			0,
@@ -90,7 +90,7 @@ LoadState::LoadState(
 /**
  *
  */
-LoadState::~LoadState()
+ListLoadState::~ListLoadState()
 {
 }
 
@@ -98,7 +98,7 @@ LoadState::~LoadState()
  * Loads the selected save.
  * @param action Pointer to an action.
  */
-void LoadState::lstSavesPress(Action* action)
+void ListLoadState::lstSavesPress(Action* action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
@@ -141,7 +141,7 @@ void LoadState::lstSavesPress(Action* action)
  * Quick load game.
  * @param filename name of file without ".sav"
  */
-void LoadState::quickLoad(const std::string& filename)
+void ListLoadState::quickLoad(const std::string& filename)
 {
 	if (_showMsg)
 		updateStatus("STR_LOADING_GAME");

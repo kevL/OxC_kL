@@ -43,7 +43,7 @@
 #include "../Interface/Cursor.h"
 #include "../Interface/FpsCounter.h"
 
-#include "../Menu/SaveState.h"
+#include "../Menu/ListSaveState.h"
 #include "../Menu/TestState.h"
 
 #include "../Resource/ResourcePack.h"
@@ -463,10 +463,10 @@ void Game::run()
 		&& _save->getMonthsPassed() > -1
 		&& Options::autosave == 3)
 	{
-		SaveState ss = SaveState(
-								this,
-								OPT_MENU,
-								false);
+		ListSaveState ss = ListSaveState(
+										this,
+										OPT_MENU,
+										false);
 	}
 
 	Options::save();

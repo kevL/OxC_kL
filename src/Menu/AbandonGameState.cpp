@@ -19,8 +19,8 @@
 
 #include "AbandonGameState.h"
 
+#include "ListSaveState.h"
 #include "MainMenuState.h"
-#include "SaveState.h"
 
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
@@ -117,10 +117,10 @@ void AbandonGameState::btnYesClick(Action*)
 {
 	if (Options::autosave == 3)
 	{
-		SaveState* ss = new SaveState(
-									_game,
-									_origin,
-									false);
+		ListSaveState* ss = new ListSaveState(
+											_game,
+											_origin,
+											false);
 
 		delete ss;
 	}

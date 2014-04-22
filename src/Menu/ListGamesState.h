@@ -17,13 +17,12 @@
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef OPENXCOM__SAVEDGAMESTATE_H
-#define OPENXCOM__SAVEDGAMESTATE_H
+#ifndef OPENXCOM__LISTGAMESSTATE
+#define OPENXCOM__LISTGAMESSTATE
 
 #include <string>
 #include <vector>
 
-//#include "SaveState.h" // kL
 #include "OptionsBaseState.h"
 
 #include "../Engine/Options.h"
@@ -46,7 +45,7 @@ class Window;
  * Base class for saved game screens which
  * provides the common layout and listing.
  */
-class SavedGameState
+class ListGamesState
 	:
 		public State
 {
@@ -83,18 +82,18 @@ class SavedGameState
 
 		public:
 			/// Creates the Saved Game state.
-			SavedGameState(
+			ListGamesState(
 					Game* game,
 					OptionsOrigin origin,
 					int firstValidRow);
 			/// Creates the Saved Game state (autosave option).
-			SavedGameState(
+			ListGamesState(
 					Game* game,
 					OptionsOrigin origin,
 					int firstValidRow,
 					bool showMsg);
 			/// Cleans up the Saved Game state.
-			virtual ~SavedGameState();
+			virtual ~ListGamesState();
 
 			/// Updates the palette.
 			void init();
