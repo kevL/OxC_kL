@@ -6988,7 +6988,7 @@
 1397879173 f:\git\openxcom\src\engine\gmcat.h
 	"CatFile.h"
 
-1396251312 source:f:\git\openxcom\src\engine\interactivesurface.cpp
+1398215471 source:f:\git\openxcom\src\engine\interactivesurface.cpp
 	"InteractiveSurface.h"
 	"Action.h"
 	"Options.h"
@@ -9116,7 +9116,7 @@
 1394398507 source:f:\git\openxcom\src\ruleset\armor.cpp
 	"Armor.h"
 
-1394398507 source:f:\git\openxcom\src\ruleset\articledefinition.cpp
+1398216490 source:f:\git\openxcom\src\ruleset\articledefinition.cpp
 	"ArticleDefinition.h"
 
 1394398507 source:f:\git\openxcom\src\ruleset\city.cpp
@@ -9780,7 +9780,7 @@
 	"../Ruleset/Ruleset.h"
 	"../Ruleset/Unit.h"
 
-1397454397 source:f:\git\openxcom\src\ufopaedia\ufopaedia.cpp
+1398215743 source:f:\git\openxcom\src\ufopaedia\ufopaedia.cpp
 	"Ufopaedia.h"
 	"ArticleState.h"
 	"ArticleStateArmor.h"
